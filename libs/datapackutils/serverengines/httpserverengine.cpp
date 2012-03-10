@@ -124,7 +124,7 @@ HttpServerEngine::HttpServerEngine(QObject *parent)  :
 //        LOG_ERROR("No internet connection available.");
 //    }
 
-    // Connect authentification request
+    // Connect authentication request
     connect(m_NetworkAccessManager, SIGNAL(authenticationRequired(QNetworkReply*,QAuthenticator*)), this, SLOT(authenticationRequired(QNetworkReply*,QAuthenticator*)));
     connect(m_NetworkAccessManager, SIGNAL(proxyAuthenticationRequired(QNetworkProxy,QAuthenticator*)), this, SLOT(proxyAuthenticationRequired(QNetworkProxy,QAuthenticator*)));
 }
@@ -257,16 +257,16 @@ void HttpServerEngine::downloadProgress(qint64 bytesRead, qint64 totalBytes)
 
 void HttpServerEngine::authenticationRequired(QNetworkReply *reply, QAuthenticator *authenticator)
 {
-    LOG("Server authentification requiered: " +  reply->url().toString());
+    LOG("Server authentication requiered: " +  reply->url().toString());
     const QString &host = reply->url().toString();
     m_AuthTimes.insert(host, m_AuthTimes.value(host, 0) + 1);
     if (m_AuthTimes.value(host) > MAX_AUTHENTIFICATION_TRIES) {
-        LOG_ERROR("Server authentification max tries achieved. " +  host);
+        LOG_ERROR("Server authentication max tries achieved. " +  host);
         return;
     }
     Utils::BasicLoginDialog dlg;
     dlg.setModal(true);
-    dlg.setTitle(tr("Server authentification requiered"));
+    dlg.setTitle(tr("Server authentication requiered"));
     dlg.setToggleViewIcon(core().icon(ICONEYES));
     if (dlg.exec()==QDialog::Accepted) {
         authenticator->setUser(dlg.login());
@@ -277,11 +277,11 @@ void HttpServerEngine::authenticationRequired(QNetworkReply *reply, QAuthenticat
 
 void HttpServerEngine::proxyAuthenticationRequired(const QNetworkProxy &proxy, QAuthenticator *authenticator)
 {
-    LOG("Proxy authentification requiered: " +  proxy.hostName());
+    LOG("Proxy authentication requiered: " +  proxy.hostName());
     const QString &host = proxy.hostName();
     m_AuthTimes.insert(host, m_AuthTimes.value(host, 0) + 1);
     if (m_AuthTimes.value(host) > MAX_AUTHENTIFICATION_TRIES) {
-        LOG_ERROR("Server authentification max tries achieved. " +  host);
+        LOG_ERROR("Proxy authentication max tries achieved. " +  host);
         return;
     }
     if (!proxy.user().isEmpty() && !proxy.password().isEmpty()) {
@@ -291,7 +291,7 @@ void HttpServerEngine::proxyAuthenticationRequired(const QNetworkProxy &proxy, Q
         // Ask user for identification
         Utils::BasicLoginDialog dlg;
         dlg.setModal(true);
-        dlg.setTitle(tr("Proxy authentification requiered"));
+        dlg.setTitle(tr("Proxy authentication requiered"));
         dlg.setToggleViewIcon(core().icon(ICONEYES));
         if (dlg.exec()==QDialog::Accepted) {
             authenticator->setUser(dlg.login());
