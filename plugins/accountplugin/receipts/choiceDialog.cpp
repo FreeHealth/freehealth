@@ -79,7 +79,7 @@ void treeViewsActions::mousePressEvent(QMouseEvent *event){
 void treeViewsActions::deleteBox(bool b){
     Q_UNUSED(b);
     QMessageBox msgBox;
-            msgBox.setText("Do you want to delete choosen item ?");
+            msgBox.setText("Do you want to delete chosen item ?");
             msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
             msgBox.setDefaultButton(QMessageBox::Yes);
             int ret = msgBox.exec();

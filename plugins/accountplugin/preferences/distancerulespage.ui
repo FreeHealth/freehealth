@@ -151,7 +151,7 @@
    <item row="4" column="0">
     <widget class="QLabel" name="preferedLabel">
      <property name="text">
-      <string>Prefered: 
+      <string>Preferred: 
 yes = 1
 no = 0</string>
      </property>
