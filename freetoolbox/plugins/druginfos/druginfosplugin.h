@@ -21,7 +21,7 @@
 /***************************************************************************
  *   Main Developper : Eric MAEKER, <eric.maeker@gmail.com>                *
  *   Contributors :                                                        *
- *       NAME <MAIL@ADRESS>                                                *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #ifndef FREEICD_DrugInfosPlugin_H
 #define FREEICD_DrugInfosPlugin_H

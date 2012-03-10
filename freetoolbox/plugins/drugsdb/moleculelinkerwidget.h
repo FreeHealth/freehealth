@@ -21,8 +21,8 @@
 /***************************************************************************
  *   Main Developper : Eric MAEKER, MD <eric.maeker@gmail.com>             *
  *   Contributors :                                                        *
- *       NAME <MAIL@ADRESS>                                                *
- *       NAME <MAIL@ADRESS>                                                *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #ifndef MOLECULELINKERWIDGET_H
 #define MOLECULELINKERWIDGET_H

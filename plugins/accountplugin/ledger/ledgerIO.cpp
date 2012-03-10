@@ -27,7 +27,7 @@
  *  Main Developers : Pierre-Marie DESOMBRE <pm.desombre@medsyn.fr>,      *
  *                     Eric MAEKER, <eric.maeker@gmail.com>                *
  *  Contributors :                                                         *
- *      NAME <MAIL@ADRESS>                                                 *
+ *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
 #include "ledgerIO.h"
 #include <coreplugin/icore.h>
@@ -552,6 +552,7 @@ QList<QVector<QString> > LedgerIO::getDatasMovementsInVector(const QString &date
 }
 
 double LedgerIO::getMovementSum(QObject * parent,QString & month, QString & year){
+    Q_UNUSED(parent);
     double totalValue = 0.00;
     QString dateBeginStr ;
     QDate dateBegin ;

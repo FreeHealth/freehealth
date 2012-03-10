@@ -19,9 +19,9 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developer : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
  *   Contributors :                                                        *
- *       NAME <MAIL@ADRESS>                                                *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #ifndef CORE_CONSTANTS_TOKENS_SETTINGS_H
 #define CORE_CONSTANTS_TOKENS_SETTINGS_H
@@ -73,14 +73,14 @@ const char * const  TOKEN_USERFIRSTNAME      = "USERFIRSTNAME";
 const char * const  TOKEN_USERSPECIALITIES   = "USERSPECIALITIES";
 const char * const  TOKEN_USERIDENTIFIER     = "USERIDENTIFIANTS";
 const char * const  TOKEN_USERQUALIFICATIONS = "USERQUALIFICATIONS";
-const char * const  TOKEN_USERADRESS         = "USERADRESS";
+const char * const  TOKEN_USERADDRESS        = "USERADDRESS";
 const char * const  TOKEN_USERMAIL           = "USERMAIL";
 const char * const  TOKEN_USERTEL1           = "USERTEL1";
 const char * const  TOKEN_USERTEL2           = "USERTEL2";
 const char * const  TOKEN_USERTEL3           = "USERTEL3";
 const char * const  TOKEN_USERFAX            = "USERFAX";
 
-const char * const  TOKEN_USERFULLADRESS     = "USERFULLADRESS";
+const char * const  TOKEN_USERFULLADDRESS    = "USERFULLADDRESS";
 const char * const  TOKEN_USERFULLCONTACT    = "USERFULLCONTACT";
 
 // Some path tags

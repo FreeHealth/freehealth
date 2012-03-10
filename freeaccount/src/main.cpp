@@ -23,7 +23,7 @@
  *   Main Developper : Eric MAEKER, <eric.maeker@gmail.com>                *
  *   Contributors :                                                        *
  *       Pierre-Marie DESOMBRE <pm.desombre@medsyn.fr>                     *
- *       NAME <MAIL@ADRESS>                                                *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include <QtPlugin>
 #include <QApplication>

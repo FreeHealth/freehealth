@@ -19,10 +19,10 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developer : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
  *   Contributors :                                                        *
- *       NAME <MAIL@ADRESS>                                                *
- *       NAME <MAIL@ADRESS>                                                *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #ifndef IUSER_H
 #define IUSER_H
@@ -73,8 +73,8 @@ public:
         PersonalLinkId,
         FullName,
         GenderIndex, TitleIndex, Gender, Title,
-        Adress, Zipcode, City, Country, IsoCountry,
-        FullHtmlAdress,
+        Address, Zipcode, City, Country, IsoCountry,
+        FullHtmlAddress,
         Tel1, Tel2, Tel3, Fax, PractitionerId,
         FullHtmlContact,
         Specialities, Qualifications, Preferences,  // 31

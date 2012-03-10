@@ -35,7 +35,7 @@
 /***************************************************************************
  *   Main Developper : Eric MAEKER, <eric.maeker@gmail.com>                *
  *   Contributors :                                                        *
- *       NAME <MAIL@ADRESS>                                                *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "tkUserManager.h"
 #include "tkUserManager_p.h"

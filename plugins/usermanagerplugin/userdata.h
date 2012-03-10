@@ -19,10 +19,10 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developer : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
  *   Contributors :                                                        *
- *       NAME <MAIL@ADRESS>                                                *
- *       NAME <MAIL@ADRESS>                                                *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #ifndef USERDATA_H
 #define USERDATA_H
@@ -162,7 +162,7 @@ public:
     void  setLocaleLanguage(QLocale::Language lang)    { setValue(Table_USERS, USER_LANGUAGE, QLocale(lang).name().left(2)); }
     void  setMail(const QVariant & val)                { setValue(Table_USERS, USER_MAIL, val); }
 
-    void  setAddress(const QVariant & val)             { setDynamicDataValue(USER_DATAS_ADRESS , val); }
+    void  setAddress(const QVariant & val)             { setDynamicDataValue(USER_DATAS_ADDRESS , val); }
     void  setZipcode(const QVariant & val)             { setDynamicDataValue(USER_DATAS_ZIPCODE , val); }
     void  setCity(const QVariant & val)                { setDynamicDataValue(USER_DATAS_CITY , val); }
     void  setCountry(const QVariant & val)             { setDynamicDataValue(USER_DATAS_COUNTRY , val); }
@@ -216,7 +216,7 @@ public:
     QLocale::Language localeLanguage() const {return QLocale(languageIso()).language(); }
     QString mail() const                 { return value(Table_USERS, USER_MAIL).toString(); }
 
-    QString adress() const               { return dynamicDataValue(USER_DATAS_ADRESS).toString(); }
+    QString address() const              { return dynamicDataValue(USER_DATAS_ADDRESS).toString(); }
     QString zipcode() const              { return dynamicDataValue(USER_DATAS_ZIPCODE).toString(); }
     QString city() const                 { return dynamicDataValue(USER_DATAS_CITY).toString(); }
     QString country() const              { return dynamicDataValue(USER_DATAS_COUNTRY).toString(); }

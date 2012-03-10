@@ -95,7 +95,7 @@
       <item row="3" column="0">
        <widget class="QLabel" name="adressLabel">
         <property name="text">
-         <string>Owner adress</string>
+         <string>Owner address</string>
         </property>
        </widget>
       </item>

@@ -27,7 +27,7 @@
  *  Main Developers : Pierre-Marie DESOMBRE <pm.desombre@medsyn.fr>,      *
  *                     Eric MAEKER, <eric.maeker@gmail.com>                *
  *  Contributors :                                                         *
- *      NAME <MAIL@ADRESS>                                                 *
+ *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
 #include "movementsviewer.h"
 #include "movementsIO.h"
@@ -281,6 +281,7 @@ void MovementsViewer::changeEvent(QEvent * e){
 }
 
 void MovementsViewer::setYearIsChanged(int row){
+    Q_UNUSED(row);
     if (WarnDebugMessage)
     qDebug() << __FILE__ << QString::number(__LINE__) << " in setYearIsChanged ";
     if (!showMovements())

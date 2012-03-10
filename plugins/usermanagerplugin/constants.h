@@ -19,10 +19,10 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developer : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
  *   Contributors :                                                        *
- *       NAME <MAIL@ADRESS>                                                *
- *       NAME <MAIL@ADRESS>                                                *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #ifndef USERCONSTANTS_H
 #define USERCONSTANTS_H
@@ -42,7 +42,7 @@ namespace Constants {
     const char * const USER_DB_VERSION              = "0.4";
 
     // constants for DATAS table represent DATANAME field
-    const char * const USER_DATAS_ADRESS            = "identity.adress";
+    const char * const USER_DATAS_ADDRESS           = "identity.adress";
     const char * const USER_DATAS_ZIPCODE           = "identity.zip";
     const char * const USER_DATAS_CITY              = "identity.city";
     const char * const USER_DATAS_COUNTRY           = "identity.country";
@@ -85,7 +85,7 @@ namespace Constants {
     const char * const DEFAULT_USER_CLEARPASSWORD  = "fmf_admin";
     const char * const DEFAULT_USER_NAME      = "ADMINISTRATOR";
     const char * const DEFAULT_USER_FIRSTNAME = "Admin";
-    const char * const DEFAULT_USER_ADRESS    = "You should change the login/password of this user.";
+    const char * const DEFAULT_USER_ADDRESS   = "You should change the login/password of this user.";
 
     const char * const DEFAULT_USER_ROLE      = USER_ROLE_USERMANAGER;
     int const          DEFAULT_USER_RIGHT     = -1;

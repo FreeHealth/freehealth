@@ -19,10 +19,10 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developer : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
  *   Contributors :                                                        *
- *       NAME <MAIL@ADRESS>                                                *
- *       NAME <MAIL@ADRESS>                                                *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 
 /**
@@ -872,6 +872,8 @@ QString DrugsIO::prescriptionToHtml(DrugsDB::DrugsModel *m, const QString &xmlEx
 */
 QString DrugsIO::prescriptionToXml(DrugsDB::DrugsModel *m, const QString &xmlExtraData)
 {
+    Q_UNUSED(xmlExtraData);
+    /** \todo manage xmlExtraData */
     Q_ASSERT(m);
     if (!m->testingDrugsAreVisible()) {
         bool yes = Utils::yesNoMessageBox(tr("Save test only drugs too ?"),

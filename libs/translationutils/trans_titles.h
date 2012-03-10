@@ -19,9 +19,9 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developer : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
  *   Contributors :                                                        *
- *       NAME <MAIL@ADRESS>                                                *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #ifndef CONSTANTTRANSLATIONS_TITLES_H
 #define CONSTANTTRANSLATIONS_TITLES_H
@@ -43,7 +43,7 @@ enum TitleInterpret {
 
 // Genders
 const char* const GENDER        = QT_TRANSLATE_NOOP("tkConstants", "Gender");
-const char* const ADRESS        = QT_TRANSLATE_NOOP("tkConstants", "Address");
+const char* const ADDRESS       = QT_TRANSLATE_NOOP("tkConstants", "Address");
 const char* const MALE          = QT_TRANSLATE_NOOP("tkConstants", "Male");
 const char* const FEMALE        = QT_TRANSLATE_NOOP("tkConstants", "Female");
 const char* const HERMAPHRODISM = QT_TRANSLATE_NOOP("tkConstants", "Hermaphrodism");

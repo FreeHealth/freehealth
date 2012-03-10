@@ -29,7 +29,7 @@
 /***************************************************************************
  *   Adaptation to FreeMedForms : Eric MAEKER, <eric.maeker@gmail.com>     *
  *   Contributors :                                                        *
- *       NAME <MAIL@ADRESS>                                                *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "basemode.h"
 

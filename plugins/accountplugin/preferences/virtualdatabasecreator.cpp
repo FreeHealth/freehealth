@@ -27,7 +27,7 @@
  *  Main Developers : Pierre-Marie DESOMBRE <pm.desombre@medsyn.fr>,      *
  *                     Eric MAEKER, <eric.maeker@gmail.com>                *
  *  Contributors :                                                         *
- *      NAME <MAIL@ADRESS>                                                 *
+ *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
 #include "virtualdatabasecreator.h"
 #include "ui_virtualdatabasecreator.h"
@@ -231,6 +231,7 @@ void VirtualDatabaseCreator::saveToSettings(Core::ISettings *sets)
 
 void VirtualDatabaseCreator::writeDefaultSettings(Core::ISettings *s)
 {
+    Q_UNUSED(s);
 //    qWarning() << "---------> writedefaults";
     LOG_FOR("VirtualDatabaseCreator", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("VirtualDatabaseCreator"));
 //    s->sync();

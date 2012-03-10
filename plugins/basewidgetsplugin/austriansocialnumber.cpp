@@ -19,10 +19,10 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developer : Eric MAEKER, MD <eric.maeker@gmail.com>              *
+ *   Main developers : Eric MAEKER, MD <eric.maeker@gmail.com>              *
  *   Contributors :                                                        *
  *       Christian A. Reiter <christian.a.reiter@gmail.com>                *
- *       NAME <MAIL@ADRESS>                                                *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "austriansocialnumber.h"
 #include "ui_austriansocialnumber.h"
@@ -488,6 +488,7 @@ bool AustrianSocialNumberFormData::isModified() const
 
 bool AustrianSocialNumberFormData::setData(const int ref, const QVariant &data, const int role)
 {
+    Q_UNUSED(ref);
     qWarning() << "AustrianSocialNumberFormData::setData" << data << role;
 //    if (role==Qt::EditRole || role==Qt::DisplayRole) {
 //        if (data.canConvert(QVariant::Int))  { // Tristate
@@ -499,6 +500,8 @@ bool AustrianSocialNumberFormData::setData(const int ref, const QVariant &data, 
 
 QVariant AustrianSocialNumberFormData::data(const int ref, const int role) const
 {
+    Q_UNUSED(ref);
+    Q_UNUSED(role);
     return m_Widget->number();
 }
 

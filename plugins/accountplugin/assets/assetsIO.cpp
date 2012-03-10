@@ -27,7 +27,7 @@
  *  Main Developers : Pierre-Marie DESOMBRE <pm.desombre@medsyn.fr>,      *
  *                     Eric MAEKER, <eric.maeker@gmail.com>                *
  *  Contributors :                                                         *
- *      NAME <MAIL@ADRESS>                                                 *
+ *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
 #include "assetsIO.h"
 
@@ -360,6 +360,7 @@ bool AssetsIO::deleteOneYearToRun(int row){
 }
 
 double AssetsIO::getRate(const QDate &date, double duration) {
+    Q_UNUSED(date);
     double rate = 0.00;
     QHash<QString,QDate> hashRatesDates;
     QStringList listChosenOfRanges;

@@ -19,10 +19,10 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developer : Eric MAEKER, MD <eric.maeker@gmail.com>             *
+ *   Main developers : Eric MAEKER, MD <eric.maeker@gmail.com>             *
  *   Contributors :                                                        *
- *       NAME <MAIL@ADRESS>                                                *
- *       NAME <MAIL@ADRESS>                                                *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "frenchsocialnumber.h"
 #include "ui_frenchsocialnumber.h"
@@ -563,7 +563,7 @@ bool FrenchSocialNumberFormData::isModified() const
 
 bool FrenchSocialNumberFormData::setData(const int ref, const QVariant &data, const int role)
 {
-    qWarning() << "FrenchSocialNumberFormData::setData" << data << role;
+    qWarning() << "FrenchSocialNumberFormData::setData" << data << role << ref;
 //    if (role==Qt::EditRole || role==Qt::DisplayRole) {
 //        if (data.canConvert(QVariant::Int))  { // Tristate
 //            m_Check->setCheckState(Qt::CheckState(data.toInt()));
@@ -574,6 +574,8 @@ bool FrenchSocialNumberFormData::setData(const int ref, const QVariant &data, co
 
 QVariant FrenchSocialNumberFormData::data(const int ref, const int role) const
 {
+    Q_UNUSED(ref);
+    Q_UNUSED(role);
     return m_Widget->numberWithControlKey();
 }
 

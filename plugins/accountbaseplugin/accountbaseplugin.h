@@ -27,7 +27,7 @@
  *  Main Developers : Pierre-Marie DESOMBRE <pm.desombre@medsyn.fr>,      *
  *                     Eric MAEKER, <eric.maeker@gmail.com>                *
  *  Contributors :                                                         *
- *      NAME <MAIL@ADRESS>                                                 *
+ *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
 #ifndef ACCOUNTBASETPLUGIN_H
 #define ACCOUNTBASETPLUGIN_H

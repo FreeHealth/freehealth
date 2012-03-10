@@ -19,10 +19,10 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developer : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
  *   Contributors :                                                        *
- *       NAME <MAIL@ADRESS>                                                *
- *       NAME <MAIL@ADRESS>                                                *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 
 /**
@@ -708,7 +708,7 @@ bool UserBase::createDefaultUser()
     user->setFirstname(DEFAULT_USER_FIRSTNAME);
     user->setLocaleLanguage(QLocale().language());
     user->setSpecialty(QStringList() << DEFAULT_USER_SPECIALTY);
-    user->setAddress(DEFAULT_USER_ADRESS);
+    user->setAddress(DEFAULT_USER_ADDRESS);
     user->setRights(Constants::USER_ROLE_USERMANAGER, Core::IUser::ReadOwn | Core::IUser::ReadDelegates | Core::IUser::ReadAll | Core::IUser::WriteAll | Core::IUser::Create | Core::IUser::Delete | Core::IUser::Print);
     user->setRights(Constants::USER_ROLE_MEDICAL, Core::IUser::ReadAll | Core::IUser::WriteAll | Core::IUser::Create | Core::IUser::Delete | Core::IUser::Print);
     user->setRights(Constants::USER_ROLE_ADMINISTRATIVE, Core::IUser::ReadAll | Core::IUser::WriteAll | Core::IUser::Create | Core::IUser::Delete | Core::IUser::Print);

@@ -27,7 +27,7 @@
  *  Main Developers : Pierre-Marie DESOMBRE <pm.desombre@medsyn.fr>,      *
  *                     Eric MAEKER, <eric.maeker@gmail.com>                *
  *  Contributors :                                                         *
- *      NAME <MAIL@ADRESS>                                                 *
+ *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
 #include "findReceiptsValues.h"
 #include "constants.h"
@@ -223,6 +223,7 @@ void findReceiptsValues::deleteValue()
 }
 
 void findReceiptsValues::setModifSpinBox(QWidget*old,QWidget*newWidget){
+    Q_UNUSED(old);
     if (newWidget == ui->modifSpinBox)
     {
     	  if (ui->modifSpinBox->value()== 1.0)

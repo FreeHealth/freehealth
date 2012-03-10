@@ -21,7 +21,7 @@
 /***************************************************************************
  *   Main Developper : Eric MAEKER, <eric.maeker@gmail.com>                *
  *   Contributors :                                                        *
- *       NAME <MAIL@ADRESS>                                                *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #ifndef CONSTANTTRANSLATIONS_GLOBAL_H
 #define CONSTANTTRANSLATIONS_GLOBAL_H

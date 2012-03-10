@@ -21,7 +21,7 @@
 /***************************************************************************
  *   Main Developer : Eric MAEKER, <eric.maeker@free.fr>                  *
  *   Contributors :                                                        *
- *       NAME <MAIL@ADRESS>                                                *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "iconbadgealert.h"
 #include <QString>

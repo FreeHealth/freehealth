@@ -5,9 +5,9 @@
  *  All rights reserved.                                                   *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developer : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
  *   Contributors :                                                        *
- *       NAME <MAIL@ADRESS>                                                *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #ifndef DRUGINTERACTIONS_PLUGIN_H
 #define DRUGINTERACTIONS_PLUGIN_H

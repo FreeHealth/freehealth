@@ -36,7 +36,7 @@
  *   Main Developper : Eric MAEKER, <eric.maeker@gmail.com>                *
  *   Contributors :                                                        *
  *       Guillaume DENRY <guillaume.denry@gmail.com>                       *
- *       NAME <MAIL@ADRESS>                                                *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #ifndef MFBASEFORMWIDGET_H
 #define MFBASEFORMWIDGET_H

@@ -19,10 +19,10 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developer : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
  *   Contributors :                                                        *
- *       NAME <MAIL@ADRESS>                                                *
- *       NAME <MAIL@ADRESS>                                                *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 /**
   \class Core::IUser
@@ -49,7 +49,7 @@ void IUser::replaceTokens(QString &stringWillBeModified)
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_USERIDENTIFIER, value(IUser::PractitionerId).toStringList().join("<br />") );
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_USERQUALIFICATIONS, value(IUser::Qualifications).toStringList().join("<br />") );
 
-    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_USERADRESS,   value(IUser::Adress).toString());
+    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_USERADDRESS,   value(IUser::Address).toString());
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_USERMAIL,   value(IUser::Mail).toString());
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_USERTEL1,   value(IUser::Tel1).toString());
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_USERTEL2,   value(IUser::Tel2).toString());
@@ -58,7 +58,7 @@ void IUser::replaceTokens(QString &stringWillBeModified)
 
 
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_USERFULLCONTACT,   value(IUser::FullHtmlContact).toString());
-    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_USERFULLADRESS,   value(IUser::FullHtmlAdress).toString());
+    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_USERFULLADDRESS,   value(IUser::FullHtmlAddress).toString());
 
 //    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_USERDATEOFBIRTH, value(IUser::DateOfBirth).toString() );
     /** \todo improve manage of token mail, tels, faxes */

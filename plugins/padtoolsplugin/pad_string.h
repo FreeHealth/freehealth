@@ -22,7 +22,7 @@
  *  Main Developers : Eric Maeker <eric.maeker@gmail.com>,                *
  *                    Guillaume Denry <guillaume.denry@gmail.com>          *
  *  Contributors :                                                         *
- *      NAME <MAIL@ADRESS>                                                 *
+ *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
 #ifndef MASK_STRING_H
 #define MASK_STRING_H

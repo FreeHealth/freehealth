@@ -22,7 +22,7 @@
  *  Main Developers : Eric Maeker <eric.maeker@gmail.com>,                *
  *                    Guillaume Denry <guillaume.denry@gmail.com>          *
  *  Contributors :                                                         *
- *      NAME <MAIL@ADRESS>                                                 *
+ *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
 #include "pad_core.h"
 

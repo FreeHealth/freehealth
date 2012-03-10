@@ -19,10 +19,10 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developer : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
  *   Contributors :                                                        *
- *       NAME <MAIL@ADRESS>                                                *
- *       NAME <MAIL@ADRESS>                                                *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "allergyengine.h"
 
@@ -188,6 +188,7 @@ public:
 
     QString message(const IDrug *drug, const DrugInteractionInformationQuery &query) const
     {
+        Q_UNUSED(query);
         Q_UNUSED(drug);
 //        QString toReturn;
 //        if (!m_Result->testedDrugs().contains((IDrug*)drug))

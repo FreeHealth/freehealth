@@ -19,10 +19,10 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developer : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
  *   Contributors :                                                        *
- *       NAME <MAIL@ADRESS>                                                *
- *       NAME <MAIL@ADRESS>                                                *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 /**
   \class UserPlugin::UserRightsWidget
@@ -62,7 +62,7 @@ UserRightsModel::UserRightsModel(QObject *parent) :
     m_NameToRole.insert(10, Core::IUser::Delete);
 }
 
-int UserRightsModel::rowCount(const QModelIndex &parent) const
+int UserRightsModel::rowCount(const QModelIndex &) const
 {
     return m_RightsName.count();
 }

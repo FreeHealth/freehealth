@@ -27,7 +27,7 @@
  *  Main Developers : Pierre-Marie DESOMBRE <pm.desombre@medsyn.fr>,      *
  *                     Eric MAEKER, <eric.maeker@gmail.com>                *
  *  Contributors :                                                         *
- *      NAME <MAIL@ADRESS>                                                 *
+ *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
 #include "accountbase.h"
 #include "constants.h"
@@ -597,15 +597,15 @@ bool AccountBase::init()
     return true;
 }
 
-void AccountBase::logChronos(bool state)
+void AccountBase::logChronos(bool )
 {}
 
 bool AccountBase::createDatabase(const QString &connectionName , const QString &dbName,
                     const QString &pathOrHostName,
-                    TypeOfAccess access, AvailableDrivers driver,
+                    TypeOfAccess , AvailableDrivers driver,
                     const QString & login, const QString & pass,
                     const int port,
-                    CreationOption createOption
+                    CreationOption
                    )
 {
     /** \todo manage createOption */

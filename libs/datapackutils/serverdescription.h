@@ -22,7 +22,7 @@
  *   Main Developers :                                                    *
  *       Eric MAEKER, MD <eric.maeker@gmail.com>                           *
  *   Contributors :                                                        *
- *       NAME <MAIL@ADRESS>                                                *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #ifndef DATAPACK_SERVERDESCRIPTION_H
 #define DATAPACK_SERVERDESCRIPTION_H

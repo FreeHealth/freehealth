@@ -19,10 +19,10 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developer : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
  *   Contributors :                                                        *
- *       NAME <MAIL@ADRESS>                                                *
- *       NAME <MAIL@ADRESS>                                                *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "defautuserviewerpages.h"
 #include "userpassworddialog.h"
@@ -200,7 +200,7 @@ void DefaultUserContactWidget::setUserModel(UserModel *model)
     }
     m_Mapper->setModel(model);
     m_Mapper->setSubmitPolicy(QDataWidgetMapper::AutoSubmit);
-    m_Mapper->addMapping(ui->adressTextEdit, Core::IUser::Adress, "plainText");
+    m_Mapper->addMapping(ui->adressTextEdit, Core::IUser::Address, "plainText");
     m_Mapper->addMapping(ui->country, Core::IUser::IsoCountry, "currentIsoCountry");
     m_Mapper->addMapping(ui->zipcodeLineEdit, Core::IUser::Zipcode);
     m_Mapper->addMapping(ui->cityLineEdit, Core::IUser::City);

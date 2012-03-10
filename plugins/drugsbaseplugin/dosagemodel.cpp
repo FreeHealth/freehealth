@@ -19,10 +19,10 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developer : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
  *   Contributors :                                                        *
- *       NAME <MAIL@ADRESS>                                                *
- *       NAME <MAIL@ADRESS>                                                *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 
 /**
@@ -575,6 +575,7 @@ QString DosageModel::toXml(const int row)
 */
 bool DosageModel::addFromXml(const QString &xml)
 {
+    Q_UNUSED(xml);
     /** \todo here */
     //    QHash<QString, QString> datas;
     //    int n = xml.count("<"+XML_DOSAGE_MAINTAG+">");

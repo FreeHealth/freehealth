@@ -19,9 +19,9 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developer : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
  *   Contributors :                                                        *
- *       NAME <MAIL@ADRESS>                                                *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "icdsearchmodel.h"
 #include "icddatabase.h"
@@ -166,12 +166,12 @@ void IcdSearchModel::setSearchMethod(SearchModes mode)
     // update model ?
 }
 
-int IcdSearchModel::rowCount(const QModelIndex &parent) const
+int IcdSearchModel::rowCount(const QModelIndex &) const
 {
     return d->m_IcdMaster->rowCount();
 }
 
-int IcdSearchModel::columnCount(const QModelIndex &parent) const
+int IcdSearchModel::columnCount(const QModelIndex &) const
 {
     return ColumnCount;
 }
@@ -205,22 +205,34 @@ QVariant IcdSearchModel::data(const QModelIndex &index, int role) const
 
 bool IcdSearchModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
+    Q_UNUSED(index);
+    Q_UNUSED(value);
+    Q_UNUSED(role);
     return false;
 }
 
 
 QVariant IcdSearchModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
+    Q_UNUSED(section);
+    Q_UNUSED(orientation);
+    Q_UNUSED(role);
     return QVariant();
 }
 
 bool IcdSearchModel::insertRows(int row, int count, const QModelIndex &parent)
 {
+    Q_UNUSED(row);
+    Q_UNUSED(count);
+    Q_UNUSED(parent);
     return false;
 }
 
 bool IcdSearchModel::removeRows(int row, int count, const QModelIndex &parent)
 {
+    Q_UNUSED(row);
+    Q_UNUSED(count);
+    Q_UNUSED(parent);
     return false;
 }
 

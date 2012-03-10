@@ -19,10 +19,10 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developer : Eric MAEKER, MD <eric.maeker@gmail.com>              *
+ *   Main developers : Eric MAEKER, MD <eric.maeker@gmail.com>              *
  *   Contributors :                                                        *
  *       Christian A. Reiter <christian.a.reiter@gmail.com>                *
- *       NAME <MAIL@ADRESS>                                                *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #ifndef BASEWIDGETS_INTERNAL_AUSTRIANSOCIALNUMBER_H
 #define BASEWIDGETS_INTERNAL_AUSTRIANSOCIALNUMBER_H

@@ -19,7 +19,7 @@
  * If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main Developer : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *  Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
  *  Contributors :                                                        *
  *      NAME <MAIL@Address>                                                *
  *      NAME <MAIL@Address>                                                *
@@ -520,7 +520,7 @@ void UserLastPage::initializePage()
 
     QTreeWidgetItem *contact = new QTreeWidgetItem(tree, QStringList() << tr("Contact"));
     contact->setFont(0, bold);
-    new QTreeWidgetItem(contact, QStringList() << tkTr(Trans::Constants::ADRESS) << field("Address").toString());
+    new QTreeWidgetItem(contact, QStringList() << tkTr(Trans::Constants::ADDRESS) << field("Address").toString());
     new QTreeWidgetItem(contact, QStringList() << tkTr(Trans::Constants::ZIP_CODES) << field("Zipcode").toString());
     new QTreeWidgetItem(contact, QStringList() << tr("City") << field("City").toString());
     new QTreeWidgetItem(contact, QStringList() << tr("Country") << field("Country").toString());

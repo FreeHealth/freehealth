@@ -19,9 +19,9 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developer : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
  *   Contributors :                                                        *
- *       NAME <MAIL@ADRESS>                                                *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #ifndef CONSTANTTRANSLATIONS_MSGERROR_H
 #define CONSTANTTRANSLATIONS_MSGERROR_H
@@ -64,7 +64,7 @@ const char* const ERROR_1_FROM_DATABASE_2            = QT_TRANSLATE_NOOP("tkCons
 const char* const NO_OBJECT_TO_TRANSLATE             = QT_TRANSLATE_NOOP("tkConstants", "No object to translate");
 const char* const NO_1_FOUND                         = QT_TRANSLATE_NOOP("tkConstants", "No %1 found.");
 const char* const PLEASE_DESCRIBE_PROBLEM            = QT_TRANSLATE_NOOP("tkConstants", "Please describe your problem.");
-const char* const YOUR_MAIL_ADRESS                   = QT_TRANSLATE_NOOP("tkConstants", "Your email.");
+const char* const YOUR_MAIL_ADDRESS                  = QT_TRANSLATE_NOOP("tkConstants", "Your email.");
 const char* const YES                                = QT_TRANSLATE_NOOP("tkConstants", "Yes");
 const char* const NO                                 = QT_TRANSLATE_NOOP("tkConstants", "No");
 const char* const GENERAL                            = QT_TRANSLATE_NOOP("tkConstants", "General");

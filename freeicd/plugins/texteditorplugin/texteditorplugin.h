@@ -22,7 +22,7 @@
  *   Main Developper : Eric MAEKER, <eric.maeker@gmail.com>                *
  *   Contributors :                                                        *
  *       Guillaume DENRY <guillaume.denry@gmail.com>                       *
- *       NAME <MAIL@ADRESS>                                                *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #ifndef TEXTEDITORTPLUGIN_H
 #define TEXTEDITORTPLUGIN_H

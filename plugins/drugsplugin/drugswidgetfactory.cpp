@@ -33,10 +33,10 @@
  *   POSSIBILITY OF SUCH DAMAGE.                                           *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developer : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
  *   Contributors :                                                        *
- *       NAME <MAIL@ADRESS>                                                *
- *       NAME <MAIL@ADRESS>                                                *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "drugswidgetfactory.h"
 
@@ -276,6 +276,9 @@ bool DrugsWidgetData::isModified() const
 
 bool DrugsWidgetData::setData(const int ref, const QVariant &data, const int role)
 {
+    Q_UNUSED(ref);
+    Q_UNUSED(data);
+    Q_UNUSED(role);
     return true;
 }
 

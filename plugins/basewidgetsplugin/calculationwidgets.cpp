@@ -19,9 +19,9 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developer : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
  *   Contributors :                                                        *
- *       NAME <MAIL@ADRESS>                                                *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "calculationwidgets.h"
 
@@ -136,6 +136,7 @@ QStringList CalculationWidgetsFactory::providedWidgets() const
 
 bool CalculationWidgetsFactory::isContainer(const int idInStringList) const
 {
+    Q_UNUSED(idInStringList);
     return false;
 }
 

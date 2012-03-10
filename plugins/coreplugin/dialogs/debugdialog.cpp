@@ -97,7 +97,7 @@ void DebugDialog::on_butSend_clicked()
     msg += "===== USER OUTPUT =====\n\n";
     msg += Utils::askUser(tkTr(Trans::Constants::START_MESSAGE_SENDING), tkTr(Trans::Constants::PLEASE_DESCRIBE_PROBLEM));
     msg += "\n";
-    msg += Utils::askUser(tkTr(Trans::Constants::START_MESSAGE_SENDING), tkTr(Trans::Constants::YOUR_MAIL_ADRESS));
+    msg += Utils::askUser(tkTr(Trans::Constants::START_MESSAGE_SENDING), tkTr(Trans::Constants::YOUR_MAIL_ADDRESS));
 
     // get full log including settings and logs
     msg += "\n\n" + Utils::Log::toString( Core::ICore::instance()->settings()->toString() );

@@ -22,7 +22,7 @@
  *  Main Developers : Eric Maeker <eric.maeker@gmail.com>,                *
  *                    Guillaume Denry <guillaume.denry@gmail.com>          *
  *  Contributors :                                                         *
- *      NAME <MAIL@ADRESS>                                                 *
+ *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
 #ifndef PAD_ANALYZER_H
 #define PAD_ANALYZER_H

@@ -19,10 +19,10 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developer : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
  *   Contributors :                                                        *
- *       NAME <MAIL@ADRESS>                                                *
- *       NAME <MAIL@ADRESS>                                                *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 
 /**
@@ -189,7 +189,7 @@ bool PmhBase::init()
 
 bool PmhBase::createDatabase(const QString &connectionName , const QString &dbName,
                     const QString &pathOrHostName,
-                    TypeOfAccess access, AvailableDrivers driver,
+                    TypeOfAccess , AvailableDrivers driver,
                     const QString & login, const QString & pass,
                     const int port,
                     CreationOption /*createOption*/

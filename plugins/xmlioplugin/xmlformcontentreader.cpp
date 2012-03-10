@@ -19,10 +19,10 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developer : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
  *   Contributors :                                                        *
- *       NAME <MAIL@ADRESS>                                                *
- *       NAME <MAIL@ADRESS>                                                *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "xmlformcontentreader.h"
 #include "constants.h"
@@ -350,6 +350,7 @@ Form::FormIODescription *XmlFormContentReader::readFileInformations(const QStrin
 
 QList<Form::FormIODescription *> XmlFormContentReader::getFormFileDescriptions(const Form::FormIOQuery &query)
 {
+    Q_UNUSED(query);
     QList<Form::FormIODescription *> toReturn;
 
     /** \todo code here */
@@ -835,6 +836,7 @@ bool XmlFormContentReader::createWidgets(const Form::FormMain *rootForm)
 
 bool XmlFormContentReader::loadPmhCategories(const QString &uuidOrAbsPath)
 {
+    Q_UNUSED(uuidOrAbsPath);
 //    QString file = QFileInfo(uuidOrAbsPath).absolutePath() + "/pmhcategories.xml";
 //    // replace path TAGs
 //    file.replace(Core::Constants::TAG_APPLICATION_COMPLETEFORMS_PATH, settings()->path(Core::ISettings::CompleteFormsPath));
@@ -868,6 +870,8 @@ bool XmlFormContentReader::loadPmhCategories(const QString &uuidOrAbsPath)
 
 bool XmlFormContentReader::createCategory(const QDomElement &element, Category::CategoryItem *parent)
 {
+    Q_UNUSED(element);
+    Q_UNUSED(parent);
 //    // create the category
 //    Category::CategoryItem *item = new Category::CategoryItem;
 //    item->setData(Category::CategoryItem::DbOnly_Mime, "PMHx");

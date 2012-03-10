@@ -22,7 +22,7 @@
  *   Main Developers :                                                    *
  *       Eric MAEKER, MD <eric.maeker@gmail.com>                           *
  *   Contributors :                                                        *
- *       NAME <MAIL@ADRESS>                                                *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #ifndef TEMPLATES_TEMPLATESCORE_H
 #define TEMPLATES_TEMPLATESCORE_H

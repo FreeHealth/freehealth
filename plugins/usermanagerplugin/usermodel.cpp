@@ -19,10 +19,10 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developer : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
  *   Contributors :                                                        *
- *       NAME <MAIL@ADRESS>                                                *
- *       NAME <MAIL@ADRESS>                                                *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 /**
   \class UserPlugin::UserModel
@@ -251,17 +251,17 @@ public:
         case Core::IUser::LanguageISO : toReturn = user->languageIso(); break;
         case Core::IUser::LocaleCodedLanguage: toReturn = user->localeLanguage(); break;
 
-        case Core::IUser::Adress : toReturn = user->adress(); break;
+        case Core::IUser::Address : toReturn = user->address(); break;
         case Core::IUser::Zipcode : toReturn = user->zipcode(); break;
         case Core::IUser::City : toReturn = user->city(); break;
         case Core::IUser::Country : toReturn = user->country(); break;
         case Core::IUser::IsoCountry : toReturn = user->countryIso(); break;
-        case Core::IUser::FullHtmlAdress :
+        case Core::IUser::FullHtmlAddress :
         {
             QString t;
-            if (!user->adress().isEmpty())
+            if (!user->address().isEmpty())
                 toReturn = QString("%1<br />%2 %3, %4")
-                        .arg(user->adress())
+                        .arg(user->address())
                         .arg(user->zipcode())
                         .arg(user->city())
                         .arg(user->country()).simplified();
@@ -970,7 +970,7 @@ bool UserModel::setData(const QModelIndex &item, const QVariant &value, int role
     case Core::IUser::Mail :  user->setMail(value); break;
     case Core::IUser::LanguageISO :  user->setLanguageIso(value); break;
     case Core::IUser::LocaleCodedLanguage: user->setLocaleLanguage(QLocale::Language(value.toInt())); break;
-    case Core::IUser::Adress :  user->setAddress(value); break;
+    case Core::IUser::Address :  user->setAddress(value); break;
     case Core::IUser::Zipcode :  user->setZipcode(value); break;
     case Core::IUser::City :  user->setCity(value); break;
     case Core::IUser::Country :  user->setCountry(value); break;

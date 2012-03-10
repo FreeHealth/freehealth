@@ -36,7 +36,7 @@
  *   Main Developper : Guillaume DENRY <guillaume.denry@gmail.com>         *
  *   Contributors :                                                        *
  *       Eric MAEKER <eric.maeker@gmail.com>                               *
- *       NAME <MAIL@ADRESS>                                                *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #ifndef MFXMLIO_H
 #define MFXMLIO_H

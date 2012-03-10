@@ -19,10 +19,10 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developer : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
  *   Contributors :                                                        *
- *       NAME <MAIL@ADRESS>                                                *
- *       NAME <MAIL@ADRESS>                                                *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "interactionsynthesisdialog.h"
 
@@ -263,7 +263,6 @@ void InteractionSynthesisDialog::on_getBiblio_clicked()
     DrugsDB::IDrugInteraction *interaction = d->m_InteractionResult->interactions().at(id);
 
     // Populate models with EbmData
-    bool show = false;
     if (d->m_Biblio.values(interaction).count()==0) {
         foreach(const DrugsDB::IDrug *drug, interaction->drugs()) {
             QVector<MedicalUtils::EbmData *> v = drugsBase().getAllBibliographyFromTree(drug->allInnAndInteractingClassesIds().toList());

@@ -19,9 +19,9 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developer : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
  *   Contributors :                                                        *
- *       NAME <MAIL@ADRESS>                                                *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "datapackpreference.h"
 
@@ -150,6 +150,7 @@ void DataPackPreferenceWidget::setDatasToUi()
 
 void DataPackPreferenceWidget::writeDefaultSettings(Core::ISettings *s)
 {
+    Q_UNUSED(s);
 //    Core::ISettings *set = s;
 //    if (!set) {
 //        set = settings();
