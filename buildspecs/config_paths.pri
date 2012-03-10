@@ -88,7 +88,7 @@ UI_DIR	           = $${SOURCES_BUILD_PATH}/.ui
 MOC_DIR	           = $${SOURCES_BUILD_PATH}/$${BINARY_TARGET}/.moc
 RCC_DIR	           = $${SOURCES_BUILD_PATH}/$${BINARY_TARGET}/.rcc
 
-# define some usefull values
+# define some useful values
 QMAKE_TARGET_COMPANY       = "Eric MAEKER and the FreeMedForms Team"
 QMAKE_TARGET_PRODUCT       = $${BINARY_TARGET}
 QMAKE_TARGET_DESCRIPTION   = "Crossplatform Medical Forms Generator"

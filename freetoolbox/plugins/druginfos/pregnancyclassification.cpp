@@ -209,8 +209,8 @@ bool PregnancyDatatabaseStep::createDatabase()
 
 bool PregnancyDatatabaseStep::populateDatabase()
 {
-//    if (!Core::Tools::connectDatabase(Core::Constants::MASTER_DATABASE_NAME, databaseAbsPath()))
-//        return false;
+    if (!Core::Tools::connectDatabase(Core::Constants::MASTER_DATABASE_NAME, databaseAbsPath()))
+        return false;
 
     Q_EMIT progressLabelChanged(tr("Reading downloaded files"));
     Q_EMIT progressRangeChanged(0, 1);

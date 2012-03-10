@@ -128,7 +128,7 @@
 /**
   \fn static QStringList Print::Printer::presencesAvailable()
   \brief Returns the QStringList of the availables Presence in the order of the enum QPrinterEasy::Presence
-  Usefull for populating a QComboBox for example.
+  useful for populating a QComboBox for example.
 */
 
 static const int FOOTER_BOTTOM_MARGIN = 15;

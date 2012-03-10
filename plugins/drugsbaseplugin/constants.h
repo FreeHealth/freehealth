@@ -271,7 +271,7 @@ namespace Constants {
     /*: This is the short name of the Potentially inappropriate medications engine. */
     const char * const  ALLERGY_TEXT = QT_TRANSLATE_NOOP("mfDrugsConstants", "Allergy");
 
-    // Some usefull enums
+    // Some useful enums
     enum LevelOfInteractionWarnings {
         MaximumLevelOfWarning = 0,
         ModerateLevelOfWarning,

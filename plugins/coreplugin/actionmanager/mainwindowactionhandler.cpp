@@ -886,7 +886,7 @@ void MainWindowActionHandler::createEditActions()
     a->setEnabled(false);
 }
 
-/** \todo actually does nothing usefull */
+/** \todo actually does nothing useful */
 void MainWindowActionHandler::connectEditActions()
 {
 //    if (aUndo) {}

@@ -267,7 +267,7 @@ void InsuranceWidget::on_addButton_clicked()
         qDebug() << __FILE__ << QString::number(__LINE__) << " currentIndex =" << QString::number(m_Mapper->currentIndex());
     }
     /*nameEdit->setText("name");
-    adressEdit->setText("adress");
+    adressEdit->setText("address");
     cityEdit->setText("city");
     countryComboBox->addItem("country");
     countryComboBox->setFocus();

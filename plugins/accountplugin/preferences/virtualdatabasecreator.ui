@@ -64,7 +64,7 @@
      </property>
      <property name="text">
       <string>This widget will create a fake database and populate it with virtual datas.
-This feature is usefull for testers and should not be used by current users.</string>
+This feature is useful for testers and should not be used by current users.</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>

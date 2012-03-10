@@ -95,7 +95,7 @@ public:
     void createFormatActions();
     void createUpdateActions();
 
-public Q_SLOTS: // Usefull slots that interactions with actions and menus
+public Q_SLOTS: // useful slots that interactions with actions and menus
     virtual bool updateFound();
     virtual void updateCheckerEnd(bool error);
 

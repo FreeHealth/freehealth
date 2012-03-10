@@ -43,7 +43,7 @@ enum TitleInterpret {
 
 // Genders
 const char* const GENDER        = QT_TRANSLATE_NOOP("tkConstants", "Gender");
-const char* const ADRESS        = QT_TRANSLATE_NOOP("tkConstants", "Adress");
+const char* const ADRESS        = QT_TRANSLATE_NOOP("tkConstants", "Address");
 const char* const MALE          = QT_TRANSLATE_NOOP("tkConstants", "Male");
 const char* const FEMALE        = QT_TRANSLATE_NOOP("tkConstants", "Female");
 const char* const HERMAPHRODISM = QT_TRANSLATE_NOOP("tkConstants", "Hermaphrodism");
