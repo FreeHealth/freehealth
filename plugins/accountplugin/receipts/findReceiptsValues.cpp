@@ -56,30 +56,9 @@ findReceiptsValues::findReceiptsValues(QWidget * parent):QDialog(parent){
     	      qDebug() << __FILE__ << QString::number(__LINE__)   ;
   QString comboValue = ui->comboBoxCategories->currentText().trimmed();
 
+  fillListViewValues(comboValue);
 
-
-  // *******************************************************************************
-  // *******************************************************************************
-  // Emit a slot is not possible !!!!
-//  Q_EMIT fillListViewValues(comboValue);
-  // *******************************************************************************
-  // *******************************************************************************
-
-
-
-
-  if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__)   ;
-
-
-  // *******************************************************************************
-  // *******************************************************************************
-  // Connect a slot is Ok.
   connect(ui->comboBoxCategories,SIGNAL(activated(const QString&)),this,SLOT(fillListViewValues(const QString&)));
-  // *******************************************************************************
-  // *******************************************************************************
-
-
   //connect(ui->tableViewOfValues,SIGNAL(pressed(const QModelIndex&)),this,SLOT(chooseValue(const QModelIndex&)));
   connect(ui->plusButton,SIGNAL(pressed()),this,SLOT(chooseValue()));
   connect(ui->lessButton,SIGNAL(pressed()),this,SLOT(deleteValue()));
@@ -87,11 +66,10 @@ findReceiptsValues::findReceiptsValues(QWidget * parent):QDialog(parent){
   connect(ui->nextButton,SIGNAL(pressed()),this,SLOT(showNext()));
   connect(qApp,SIGNAL(focusChanged(QWidget*,QWidget*)),this,SLOT(setModifSpinBox(QWidget*,QWidget*)));
   connect(ui->modifSpinBox,SIGNAL(valueChanged(double)),this,SLOT(setModifier(double)));
-  
-  
 }
 
-findReceiptsValues::~findReceiptsValues(){
+findReceiptsValues::~findReceiptsValues()
+{
   delete m_xmlParser;
   ui->listChoosenWidget->clear();
 }
