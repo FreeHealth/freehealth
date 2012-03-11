@@ -100,6 +100,9 @@
              <property name="text">
               <string/>
              </property>
+             <property name="wordWrap">
+              <bool>true</bool>
+             </property>
             </widget>
            </item>
           </layout>
@@ -176,6 +179,9 @@
                 <property name="text">
                  <string/>
                 </property>
+                <property name="wordWrap">
+                 <bool>true</bool>
+                </property>
                </widget>
               </item>
               <item row="2" column="0">
@@ -201,6 +207,9 @@
                 </property>
                 <property name="text">
                  <string/>
+                </property>
+                <property name="wordWrap">
+                 <bool>true</bool>
                 </property>
                </widget>
               </item>
@@ -228,6 +237,9 @@
                 <property name="text">
                  <string/>
                 </property>
+                <property name="wordWrap">
+                 <bool>true</bool>
+                </property>
                </widget>
               </item>
               <item row="4" column="0">
@@ -254,6 +266,9 @@
                 <property name="text">
                  <string/>
                 </property>
+                <property name="wordWrap">
+                 <bool>true</bool>
+                </property>
                </widget>
               </item>
               <item row="0" column="0" colspan="2">
@@ -269,6 +284,9 @@
                 </property>
                 <property name="text">
                  <string/>
+                </property>
+                <property name="wordWrap">
+                 <bool>true</bool>
                 </property>
                </widget>
               </item>
@@ -289,6 +307,9 @@
                <widget class="QLabel" name="lastUpdateDate">
                 <property name="text">
                  <string/>
+                </property>
+                <property name="wordWrap">
+                 <bool>true</bool>
                 </property>
                </widget>
               </item>

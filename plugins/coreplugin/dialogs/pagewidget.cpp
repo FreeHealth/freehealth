@@ -239,6 +239,7 @@ QWidget *PageWidget::createPageWidget(IGenericPage *page)
     QLabel *title = new QLabel(w);
     title->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
     title->setFont(bold);
+    title->setWordWrap(true);
     title->setText(page->title());
     title->setStyleSheet(::CSS);
     m_Labels.insert(page, title);
