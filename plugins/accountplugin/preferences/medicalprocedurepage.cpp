@@ -157,12 +157,6 @@ MedicalProcedureWidget::MedicalProcedureWidget(QWidget *parent) :
     /*const QString filterMaxNumber = QString("%1 < '%2'").arg("MP_ID","10");
     modelMP->setFilter(filterMaxNumber);
     modelMP->select();*/
-//    if (modelMP->rowCount() < 1) {
-//        if (!fillEmptyMPModel()) {
-//            QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Unable to fill medicalprocedure whith local .csv"),
-//                                 QMessageBox::Ok);
-//        }
-//    }
     userUidLabel->setText(m_user_uid);
      //mpComboBox->setModel(modelMP);
     //mpComboBox->setMaxCount(20);
@@ -615,8 +609,6 @@ QHash<int,QString> MedicalProcedureWidget::fillHashOfInsurances(){
 //    	      qDebug() << __FILE__ << QString::number(__LINE__) << " i =" << QString::number(i) ;
 //        if (!modelMP->insertRows(modelMP->rowCount(),1,QModelIndex())) {
 //            qWarning() << __FILE__ << QString::number(__LINE__) << QString::number(modelMP->rowCount()) ;
-//            /*QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Unable to insert row \n")
-//    	  			  +__FILE__+QString::number(__LINE__),QMessageBox::Ok);*/
 //        }
 //        QString strValues;
 //        for (int j = 0; j < AccountDB::Constants::MP_MaxParam ; j += 1) {

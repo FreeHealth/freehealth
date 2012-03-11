@@ -144,12 +144,6 @@ void AvailableMovementWidget::fillParentCombo(){
 
 void AvailableMovementWidget::fillHugeWidgets(){
      m_Model = new AccountDB::AvailableMovementModel(this);
-//    if (m_Model->rowCount() < 1) {
-//        if (!fillEmptyAvailableModel()) {
-//            QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Unable to fill availablemodel whith local .csv"),
-//                                 QMessageBox::Ok);
-//        }
-//    }
     /** \todo  m_Model->setUserUuid(); */
     m_Mapper = new QDataWidgetMapper(this);
     m_Mapper->setSubmitPolicy(QDataWidgetMapper::AutoSubmit);

@@ -146,12 +146,6 @@ InsuranceWidget::InsuranceWidget(QWidget *parent) :
     c->setCountryComboBox(ui->countryComboBox);
 
     m_Model = new AccountDB::InsuranceModel(this);
-//    if (m_Model->rowCount() < 1)  {
-//        if (!fillEmptyAvailableModel()) {
-//            QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Unable to fill availablemodel whith local .csv"),
-//                                 QMessageBox::Ok);
-//        }
-//    }
 
     /** \todo  m_Model->setUserUuid(); */
     m_insuranceUidLabel = new QSpinBox(this);
@@ -490,8 +484,6 @@ int InsuranceWidget::calcInsuranceUid(){
 //    for (int i = 0; i < availModelRows; i += 1){
 //        if (!m_Model->insertRows(m_Model->rowCount(),1,QModelIndex()))
 //    	  		{qWarning() << __FILE__ << QString::number(__LINE__) << QString::number(m_Model->rowCount()) ;
-//    	  			  /*QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Unable to insert row \n")
-//    	  			  +__FILE__+QString::number(__LINE__),QMessageBox::Ok);*/
 //    	  		    }
 //    	  		    QString strValues;
 //    	  	for (int j = 0; j < AccountDB::Constants::INSURANCE_MaxParam ; j += 1){

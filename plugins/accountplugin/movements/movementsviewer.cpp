@@ -37,21 +37,25 @@
 #include <accountbaseplugin/constants.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/iuser.h>
+
 #include <utils/global.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_msgerror.h>
 
 #include "ui_movementsviewer.h"
 
-#include <QMessageBox>
 #include <QDebug>
-enum { WarnDebugMessage = false };
-/*********************/
-//todo bank system et deposit
-/********************/
 
 using namespace AccountDB;
 //using namespace Account;
 using namespace Constants;
-using namespace Utils;
+using namespace Trans::ConstantTranslations;
+
+enum { WarnDebugMessage = false };
+
+/*********************/
+/** \todo bank system et deposit */
+/********************/
 static inline Core::IUser *user() { return  Core::ICore::instance()->user(); }
 
 MovementsViewer::MovementsViewer(QWidget * parent) :
@@ -69,7 +73,7 @@ MovementsViewer::MovementsViewer(QWidget * parent) :
     fillBankComboBox();
     ui->valAndRecButton->setShortcut(QKeySequence::InsertParagraphSeparator);
     if(!showMovements())
-    warningMessageBox( tr("Unable to show movements correctly."), tr("Contact the development team."),
+    Utils::warningMessageBox( tr("Unable to show movements correctly."), tr("Contact the development team."),
     QString(), QString() );
     connect(ui->quitButton,SIGNAL(pressed()),this,SLOT(close()));
     connect(ui->recordButton,SIGNAL(pressed()),this,SLOT(recordMovement()));
@@ -164,9 +168,9 @@ void MovementsViewer::recordMovement()
                                          details);
     
     if (!mov.insertIntoMovements(hashValues)) {
-        QMessageBox::warning(0,trUtf8("Error"),trUtf8("Movement not inserted."),QMessageBox::Ok);
+        Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("Movement not inserted."));
     } else {
-        QMessageBox::information(0,trUtf8("Information"),trUtf8("Movement is inserted."),QMessageBox::Ok);
+        Utils::informativeMessageBox(tkTr(Trans::Constants::INFORMATIONS), tr("Movement deleted."));
     }
     showMovements();
 }
@@ -176,22 +180,20 @@ void MovementsViewer::deleteMovement()
     QModelIndex index = ui->tableView->QAbstractItemView::currentIndex();
     QString year = ui->yearComboBox->currentText();
     if(!index.isValid()) {
-        QMessageBox::warning(0,trUtf8("Error"),trUtf8("You forgot to select a line."),QMessageBox::Ok);
+        Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("Select a line."));
     }
     int row = index.row(); 
     if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " row =" << QString::number(row) ;
     MovementsIODb  mov(this) ;
-    if (mov.containsFixAsset(row))
-    {
-    	  QMessageBox::warning(0,trUtf8("Error"),trUtf8("This fixed asset cannot be deleted.\nDo it in assets."),
-    	                       QMessageBox::Ok);
+    if (mov.containsFixAsset(row)) {
+        Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("This fixed asset cannot be deleted.\nDo it in assets."));
     	  return;
-        }
+    }
     if (!mov.deleteMovement(row,year)) {
-    	QMessageBox::warning(0,trUtf8("Error"),trUtf8("Movement is not deleted."),QMessageBox::Ok);
+        Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("Movement is not deleted."));
     }  else {
-        QMessageBox::information(0,trUtf8("Information"),trUtf8("Movement is deleted."),QMessageBox::Ok);
+        Utils::informativeMessageBox(tkTr(Trans::Constants::INFORMATIONS), tr("Movement deleted."));
     }
     showMovements();
 }
@@ -200,14 +202,14 @@ void MovementsViewer::validMovement()
 {
     QModelIndex index = ui->tableView->QAbstractItemView::currentIndex();
     if (!index.isValid()) {
-        QMessageBox::warning(0,trUtf8("Error"),trUtf8("You forgot to select a line."),QMessageBox::Ok);
+        Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("Select a line."));
     }
     int row = index.row(); 
     MovementsIODb  mov(this) ;
     if (!mov.validMovement(row)) {
-    	QMessageBox::warning(0,trUtf8("Error"),trUtf8("Movement is not validated."),QMessageBox::Ok);
+        Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("Movement is not validated."));
     } else {
-        QMessageBox::information(0,trUtf8("Information"),trUtf8("Movement is validated."),QMessageBox::Ok);
+        Utils::informativeMessageBox(tkTr(Trans::Constants::INFORMATIONS), tr("Movement validated."));
     }
     showMovements();
 }

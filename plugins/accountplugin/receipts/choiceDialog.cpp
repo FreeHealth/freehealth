@@ -34,11 +34,15 @@
 #include "receiptsIO.h"
 #include "ui_ChoiceDialog.h"
 #include "constants.h"
+
 #include <coreplugin/icore.h>
 #include <coreplugin/iuser.h>
 
+#include <utils/log.h>
+#include <utils/global.h>
+#include <translationutils/constanttranslations.h>
+
 #include <QRadioButton>
-#include <QMessageBox>
 #include <QBrush>
 #include <QColor>
 #include <QMouseEvent>
@@ -46,6 +50,7 @@
 enum { WarnDebugMessage = false };
 
 using namespace ChoiceActions;
+using namespace Trans::ConstantTranslations;
 
 static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
 
@@ -78,54 +83,34 @@ void treeViewsActions::mousePressEvent(QMouseEvent *event){
 
 void treeViewsActions::deleteBox(bool b){
     Q_UNUSED(b);
-    QMessageBox msgBox;
-            msgBox.setText("Do you want to delete chosen item ?");
-            msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-            msgBox.setDefaultButton(QMessageBox::Yes);
-            int ret = msgBox.exec();
-            QModelIndex index;
-            switch(ret){
-                case QMessageBox::Yes :
-                    index = currentIndex();
-                    deleteItemFromThesaurus(index);
-                    break;
-                case QMessageBox::No :
-                    break;
-            }
+    bool yes = Utils::yesNoMessageBox(tr("Do you want to delete selected item ?"),
+                           tr("Do you want to delete selected item ?"));
+    if (yes) {
+        QModelIndex index = currentIndex();
+        deleteItemFromThesaurus(index);
+    }
 }
 
 void treeViewsActions::choosePreferedValue(bool b){
     Q_UNUSED(b);
-    QMessageBox msgBox;
-            msgBox.setText("Do you want to choose this item as preferred value ?");
-            msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-            msgBox.setDefaultButton(QMessageBox::Yes);
-            int ret = msgBox.exec();
-            QModelIndex index;
-            switch(ret){
-                case QMessageBox::Yes :
-                    index = currentIndex();
-                    if (!addPreferedItem(index))
-                    {
-                    	  QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Unable to choose this item."),
-                    	                       QMessageBox::Ok);
-                        }
-                    break;
-                case QMessageBox::No :
-                    break;
-            }
+    bool yes = Utils::yesNoMessageBox(tr("Do you want to set this item as preferred value ?"),
+                           tr("Do you want to set this item as preferred value ?"));
+    if (yes) {
+        QModelIndex index = currentIndex();
+        if (!addPreferedItem(index)) {
+            Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("Unable to set this item as the preferred one."));
+        }
+    }
 } 
 
 bool treeViewsActions::addPreferedItem(QModelIndex &index){
     bool ret = true;
     QString data = index.data().toString();
     receiptsEngine r;
-    if (!r.addBoolTrue(data))
-    {
-    	  QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Cannot change value bool in thesaurus :")+data,
-    	                       QMessageBox::Ok);
-    	  ret = false;
-        }
+    if (!r.addBoolTrue(data)) {
+        Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("Cannot change value bool in thesaurus :")+data);
+        ret = false;
+    }
     fillActionTreeView();
     return ret;
 }
@@ -278,11 +263,10 @@ bool treeViewsActions::deleteItemFromThesaurus(QModelIndex &index){
     QString data = index.data().toString();
     receiptsEngine r;
     const QString userUid = user()->uuid();
-    if (!r.deleteFromThesaurus(data,userUid))
-    {
-    	  QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Cannot delete in thesaurus :")+data,QMessageBox::Ok);
-    	  ret = false;
-        }
+    if (!r.deleteFromThesaurus(data,userUid)) {
+        Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("Cannot delete in thesaurus : ")+data);
+        ret = false;
+    }
     fillActionTreeView();
     return ret;
 }
@@ -459,54 +443,35 @@ QList<double> choiceDialog::listOfPercentValues(){
 void choiceDialog::beforeAccepted(){
      receiptsEngine rIO;
      if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " m_insuranceUid =" << QString::number(m_insuranceUid.toInt()) ;
+         qDebug() << __FILE__ << QString::number(__LINE__) << " m_insuranceUid =" << QString::number(m_insuranceUid.toInt()) ;
      QString debtor = rIO.getStringFromInsuranceUid(m_insuranceUid);
      if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " debtor =" << debtor ;
+         qDebug() << __FILE__ << QString::number(__LINE__) << " debtor =" << debtor ;
      m_modelChoicePercentDebtorSiteDistruleValues->insertRows(m_row,1,QModelIndex());
      
-     if (m_percent!=100.00)
-     {
-     	   QMessageBox msgBox;
-           msgBox.setText(trUtf8("Choose another percentage value."));
-           msgBox.setInformativeText(trUtf8("Do you want to choose another percentage ?"));
-           msgBox.setStandardButtons(QMessageBox::Ok | QMessageBox::No);
-           msgBox.setDefaultButton(QMessageBox::Ok);
-           int ret = msgBox.exec();
-           
-           switch(ret){
-               case QMessageBox::Ok :
-                   if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " m_row =" << QString::number(m_row) ;
-                   m_modelChoicePercentDebtorSiteDistruleValues->setData(m_modelChoicePercentDebtorSiteDistruleValues->index(m_row,TYPE_OF_CHOICE),returnChoiceDialog(),Qt::EditRole);
-                   m_modelChoicePercentDebtorSiteDistruleValues->setData(m_modelChoicePercentDebtorSiteDistruleValues->index(m_row,PERCENTAGE),m_percent,Qt::EditRole);
-                   m_modelChoicePercentDebtorSiteDistruleValues->setData(m_modelChoicePercentDebtorSiteDistruleValues->index(m_row,DEBTOR),debtor,Qt::EditRole);
-                   m_modelChoicePercentDebtorSiteDistruleValues->setData(m_modelChoicePercentDebtorSiteDistruleValues->index(m_row,SITE),m_siteUid,Qt::EditRole);
-                   m_modelChoicePercentDebtorSiteDistruleValues->setData(m_modelChoicePercentDebtorSiteDistruleValues->index(m_row,DISTRULES),m_distanceRuleType,Qt::EditRole);
-                   ++m_row;
-                   return;
-                   break;
-               case QMessageBox::No :
-                   m_modelChoicePercentDebtorSiteDistruleValues->setData(m_modelChoicePercentDebtorSiteDistruleValues->index(m_row,TYPE_OF_CHOICE),returnChoiceDialog(),Qt::EditRole);
-                   m_modelChoicePercentDebtorSiteDistruleValues->setData(m_modelChoicePercentDebtorSiteDistruleValues->index(m_row,PERCENTAGE),m_percent,Qt::EditRole);
-                   m_modelChoicePercentDebtorSiteDistruleValues->setData(m_modelChoicePercentDebtorSiteDistruleValues->index(m_row,DEBTOR),debtor,Qt::EditRole);
-                   m_modelChoicePercentDebtorSiteDistruleValues->setData(m_modelChoicePercentDebtorSiteDistruleValues->index(m_row,SITE),m_siteUid,Qt::EditRole);
-                   m_modelChoicePercentDebtorSiteDistruleValues->setData(m_modelChoicePercentDebtorSiteDistruleValues->index(m_row,DISTRULES),m_distanceRuleType,Qt::EditRole);
-                   accept();
-                   break;
-               default :
-                   break;    
-               }
+     if (m_percent!=100.00) {
+         bool yes = Utils::yesNoMessageBox(tr("Choose another percentage value."), tr("Do you want to choose another percentage ?"));
+         if (yes) {
+             if (WarnDebugMessage)
+                 qDebug() << __FILE__ << QString::number(__LINE__) << " m_row =" << QString::number(m_row) ;
+             m_modelChoicePercentDebtorSiteDistruleValues->setData(m_modelChoicePercentDebtorSiteDistruleValues->index(m_row,TYPE_OF_CHOICE),returnChoiceDialog(),Qt::EditRole);
+             m_modelChoicePercentDebtorSiteDistruleValues->setData(m_modelChoicePercentDebtorSiteDistruleValues->index(m_row,PERCENTAGE),m_percent,Qt::EditRole);
+             m_modelChoicePercentDebtorSiteDistruleValues->setData(m_modelChoicePercentDebtorSiteDistruleValues->index(m_row,DEBTOR),debtor,Qt::EditRole);
+             m_modelChoicePercentDebtorSiteDistruleValues->setData(m_modelChoicePercentDebtorSiteDistruleValues->index(m_row,SITE),m_siteUid,Qt::EditRole);
+             m_modelChoicePercentDebtorSiteDistruleValues->setData(m_modelChoicePercentDebtorSiteDistruleValues->index(m_row,DISTRULES),m_distanceRuleType,Qt::EditRole);
+             ++m_row;
+             return;
          }
+     }
      else
      {
-        m_modelChoicePercentDebtorSiteDistruleValues->setData(m_modelChoicePercentDebtorSiteDistruleValues->index(m_row,TYPE_OF_CHOICE),returnChoiceDialog(),Qt::EditRole);
-        m_modelChoicePercentDebtorSiteDistruleValues->setData(m_modelChoicePercentDebtorSiteDistruleValues->index(m_row,PERCENTAGE),m_percent,Qt::EditRole);
-        m_modelChoicePercentDebtorSiteDistruleValues->setData(m_modelChoicePercentDebtorSiteDistruleValues->index(m_row,DEBTOR),debtor,Qt::EditRole);
-        m_modelChoicePercentDebtorSiteDistruleValues->setData(m_modelChoicePercentDebtorSiteDistruleValues->index(m_row,SITE),m_siteUid,Qt::EditRole);
-        m_modelChoicePercentDebtorSiteDistruleValues->setData(m_modelChoicePercentDebtorSiteDistruleValues->index(m_row,DISTRULES),m_distanceRuleType,Qt::EditRole);
-     	accept();
-         }
+         m_modelChoicePercentDebtorSiteDistruleValues->setData(m_modelChoicePercentDebtorSiteDistruleValues->index(m_row,TYPE_OF_CHOICE),returnChoiceDialog(),Qt::EditRole);
+         m_modelChoicePercentDebtorSiteDistruleValues->setData(m_modelChoicePercentDebtorSiteDistruleValues->index(m_row,PERCENTAGE),m_percent,Qt::EditRole);
+         m_modelChoicePercentDebtorSiteDistruleValues->setData(m_modelChoicePercentDebtorSiteDistruleValues->index(m_row,DEBTOR),debtor,Qt::EditRole);
+         m_modelChoicePercentDebtorSiteDistruleValues->setData(m_modelChoicePercentDebtorSiteDistruleValues->index(m_row,SITE),m_siteUid,Qt::EditRole);
+         m_modelChoicePercentDebtorSiteDistruleValues->setData(m_modelChoicePercentDebtorSiteDistruleValues->index(m_row,DISTRULES),m_distanceRuleType,Qt::EditRole);
+         accept();
+     }
 }
 
 QStandardItemModel * choiceDialog::getChoicePercentageDebtorSiteDistruleModel(){

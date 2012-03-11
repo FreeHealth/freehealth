@@ -278,11 +278,10 @@ void AccountDatabaseDefautsWidget::on_createButton_clicked()
 //              }
 //    }
     QApplication::restoreOverrideCursor ();
-    if (success)
-    {
+    if (success) {
     	  qWarning() << __FILE__ << QString::number(__LINE__) << "Defaults have been created." ;
-    	  QMessageBox::information(0,trUtf8("Information"),trUtf8("Defaults have been created. "),QMessageBox::Ok);
-        }
+          Utils::informativeMessageBox(tkTr(Trans::Constants::INFORMATIONS), tr("Defaults have been created."));
+    }
 }
 
 void AccountDatabaseDefautsWidget::setDatasToUi()

@@ -132,12 +132,6 @@ AssetsRatesWidget::AssetsRatesWidget(QWidget *parent) :
     rateDoubleSpinBox->setRange(0.00,1000.00);
     rateDoubleSpinBox->setSingleStep(0.01);
     m_Model = new AccountDB::AssetsRatesModel(this);
-//    if (m_Model->rowCount() < 1) {
-//        if (!writeDefaultsWithLocale()) {
-//            QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Unable to fill assetsratesmodel whith local .csv"),
-//                                 QMessageBox::Ok);
-//        }
-//    }
     assetsRatesUidLabel->setText("");
     m_Mapper = new QDataWidgetMapper(this);
     m_Mapper->setSubmitPolicy(QDataWidgetMapper::AutoSubmit);
