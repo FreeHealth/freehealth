@@ -101,13 +101,13 @@
     </message>
     <message>
         <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="269"/>
-        <source>Server authentification requiered</source>
-        <translation>Authentification sur le serveur requise</translation>
+        <source>Server authentication requiered</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="294"/>
-        <source>Proxy authentification requiered</source>
-        <translation>Authentification du proxy requise</translation>
+        <source>Proxy authentication requiered</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="323"/>
@@ -166,8 +166,8 @@
     </message>
     <message>
         <location filename="../../libs/datapackutils/serverengines/localserverengine.cpp" line="138"/>
-        <source>Pack file does not exists.</source>
-        <translation>Le fichier du paquet n&apos;existe pas.</translation>
+        <source>Pack file does not exist.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -213,8 +213,8 @@
     </message>
     <message>
         <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="162"/>
-        <source>The following packs will be processed. Please verify all informations.</source>
-        <translation>Les paquets suivants vont être traités. Veuillez vérifier les informations.</translation>
+        <source>The following packs will be processed. Please verify all information.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="188"/>
@@ -281,8 +281,8 @@
     <message>
         <location filename="../../libs/datapackutils/packmanager.cpp" line="271"/>
         <location filename="../../libs/datapackutils/packmanager.cpp" line="272"/>
-        <source>Unable to remove pack %1, unzip path does not exists (%2)</source>
-        <translation>Impossible de supprimer le paquet %1, le chemin d&apos;installation n&apos;existe pas (%2)</translation>
+        <source>Unable to remove pack %1, unzip path does not exist (%2)</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/packmanager.cpp" line="285"/>

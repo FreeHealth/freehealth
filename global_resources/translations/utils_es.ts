@@ -131,12 +131,6 @@
 <context>
     <name>Utils</name>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="394"/>
-        <location filename="../../libs/utils/global.cpp" line="396"/>
-        <source>Error while retrieve informations of uname under %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../libs/utils/global.cpp" line="517"/>
         <source>%1 : %2 does not exist. Trying to create it.</source>
         <translation type="unfinished"></translation>
@@ -180,8 +174,14 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../libs/utils/global.cpp" line="394"/>
+        <location filename="../../libs/utils/global.cpp" line="396"/>
+        <source>Error while retrieve information of uname under %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../libs/utils/global.cpp" line="631"/>
-        <source>File %1 does not exists or is not readable.</source>
+        <source>File %1 does not exist or is not readable.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -356,23 +356,24 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="194"/>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="199"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="195"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="200"/>
         <source>HTTP</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="195"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="194"/>
         <source>Download failed: %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="200"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="198"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="199"/>
         <source>Redirect to %1 ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="211"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="210"/>
         <source>Downloaded %1 to current directory.</source>
         <translation type="unfinished"></translation>
     </message>

@@ -4,19 +4,19 @@
 <context>
     <name>MedinTux::Configuration</name>
     <message>
-        <location filename="../../libs/medintuxutils/configuration.cpp" line="456"/>
-        <source>Unable to configure MedinTux : Menus path does not exists and can not be created. Path to DrTux binary : %1</source>
-        <translation>Impossible de configurer MedinTux : le répertoire des menus n&apos;existe pas et ne peut pas être créé. Chemin vers le binaire de DrTux : %1</translation>
-    </message>
-    <message>
         <location filename="../../libs/medintuxutils/configuration.cpp" line="460"/>
         <source>MedinTux Configuration : resources user menus path correctly created  %1.</source>
         <translation>Configuration de MedinTux : répertoire des menus utilisateur correctement créé %1.</translation>
     </message>
     <message>
+        <location filename="../../libs/medintuxutils/configuration.cpp" line="456"/>
+        <source>Unable to configure MedinTux : Menus path does not exist and can not be created. Path to DrTux binary : %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../libs/medintuxutils/configuration.cpp" line="469"/>
-        <source>Unable to configure MedinTux : %1 menu does not exists and can not be created. Path to DrTux binary : %2</source>
-        <translation>Impossible de configurer MedinTux : le menus %1 n&apos;existe pas et ne peut pas être créé. Chemin vers le binaire de DrTux : %2</translation>
+        <source>Unable to configure MedinTux : %1 menu does not exist and can not be created. Path to DrTux binary : %2</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/medintuxutils/configuration.cpp" line="474"/>
@@ -35,8 +35,8 @@
     </message>
     <message>
         <location filename="../../libs/medintuxutils/configuration.cpp" line="500"/>
-        <source>Unable to configure MedinTux : icon %1 does not exists.</source>
-        <translation>Impossible de configurer MedinTux : l&apos;icône %1 n&apos;existe pas.</translation>
+        <source>Unable to configure MedinTux : icon %1 does not exist.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

@@ -9,40 +9,15 @@
         <translation>Français</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="38"/>
-        <source>File</source>
-        <translation>Fichier</translation>
-    </message>
-    <message>
         <location filename="../../libs/translationutils/trans_menu.h" line="39"/>
         <source>Recent files</source>
         <translation>Récents</translation>
-    </message>
-    <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="41"/>
-        <source>Edit</source>
-        <translation>Éditer</translation>
-    </message>
-    <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="42"/>
-        <source>Selection</source>
-        <translation>Sélection</translation>
-    </message>
-    <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="43"/>
-        <source>List</source>
-        <translation>Liste</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_menu.h" line="44"/>
         <location filename="../../libs/translationutils/trans_menu.h" line="98"/>
         <source>Templates</source>
         <translation>Modèles</translation>
-    </message>
-    <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="45"/>
-        <source>Format</source>
-        <translation>Format</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_menu.h" line="46"/>
@@ -55,50 +30,12 @@
         <translation>Paragraphes</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="48"/>
-        <source>Table</source>
-        <translation>Tableau</translation>
-    </message>
-    <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="49"/>
-        <source>Image</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="50"/>
-        <source>Tools</source>
-        <translation>Outils</translation>
-    </message>
-    <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="51"/>
         <location filename="../../libs/translationutils/trans_menu.h" line="165"/>
         <source>Plugins</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="52"/>
-        <source>Configuration</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="53"/>
-        <source>Toolbars</source>
-        <translation>Boîtes à outils</translation>
-    </message>
-    <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="54"/>
-        <source>Languages</source>
-        <translation>Langages</translation>
-    </message>
-    <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="55"/>
-        <location filename="../../libs/translationutils/trans_menu.h" line="146"/>
-        <source>Interpretor</source>
-        <translation>Interpréteur</translation>
-    </message>
-    <message>
         <location filename="../../libs/translationutils/trans_menu.h" line="56"/>
-        <location filename="../../libs/translationutils/trans_menu.h" line="138"/>
         <source>About</source>
         <translation>À propos</translation>
     </message>
@@ -109,63 +46,14 @@
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_menu.h" line="58"/>
+        <location filename="../../libs/translationutils/trans_spashandupdate.h" line="74"/>
         <source>Update available</source>
         <translation>Mise à jour disponible</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="61"/>
-        <source>New</source>
-        <translation>Nouveau</translation>
-    </message>
-    <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="62"/>
-        <source>Open</source>
-        <translation>Ouvrir</translation>
-    </message>
-    <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="63"/>
-        <source>Save</source>
-        <translation>Sauvegarder</translation>
-    </message>
-    <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="64"/>
-        <source>Save as</source>
-        <translation>Sauvegarder sous</translation>
-    </message>
-    <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="65"/>
-        <source>Print...</source>
-        <translation>Imprimer...</translation>
-    </message>
-    <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="66"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="152"/>
         <source>Print preview</source>
         <translation>Prévisualisation</translation>
-    </message>
-    <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="67"/>
-        <source>Exit</source>
-        <translation>Quitter</translation>
-    </message>
-    <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="68"/>
-        <source>Search...</source>
-        <translation>Rechercher...</translation>
-    </message>
-    <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="70"/>
-        <source>New Patient</source>
-        <translation>Nouveau Patient</translation>
-    </message>
-    <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="71"/>
-        <source>Remove Patient</source>
-        <translation>Effacer Patient</translation>
-    </message>
-    <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="72"/>
-        <source>View Patient Identity</source>
-        <translation>Voir l&apos;identité du patient</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_menu.h" line="73"/>
@@ -216,11 +104,6 @@
         <location filename="../../libs/translationutils/trans_menu.h" line="84"/>
         <source>Redo</source>
         <translation>Refaire</translation>
-    </message>
-    <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="85"/>
-        <source>Select All</source>
-        <translation>Sélectionner tout</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_menu.h" line="86"/>
@@ -445,22 +328,6 @@
         <translation>Eclater la cellule</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="139"/>
-        <source>About Plugins</source>
-        <translation>À propos des plugins</translation>
-    </message>
-    <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="140"/>
-        <source>About Qt</source>
-        <translation>À propos de Qt</translation>
-    </message>
-    <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="141"/>
-        <source>About this form</source>
-        <translation>À propos de ce formulaire</translation>
-    </message>
-    <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="142"/>
         <location filename="../../libs/translationutils/trans_menu.h" line="145"/>
         <source>Help</source>
         <translation>Aide</translation>
@@ -469,6 +336,162 @@
         <location filename="../../libs/translationutils/trans_menu.h" line="143"/>
         <source>Debugging tools</source>
         <translation>Outils de déboggage</translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_menu.h" line="38"/>
+        <source>&amp;File</source>
+        <translation>&amp;Fichier</translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_menu.h" line="40"/>
+        <source>&amp;Patient navigation</source>
+        <translation>&amp;Navigation patient</translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_menu.h" line="41"/>
+        <source>&amp;Edit</source>
+        <translation>&amp;Editer</translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_menu.h" line="42"/>
+        <source>&amp;Selection</source>
+        <translation>&amp;Sélection</translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_menu.h" line="43"/>
+        <source>&amp;List</source>
+        <translation>&amp;Liste</translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_menu.h" line="45"/>
+        <source>&amp;Format</source>
+        <translation>&amp;Format</translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_menu.h" line="48"/>
+        <source>&amp;Table</source>
+        <translation>&amp;Tableau</translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_menu.h" line="49"/>
+        <source>&amp;Image</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_menu.h" line="50"/>
+        <source>T&amp;ools</source>
+        <translation>&amp;Outils</translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_menu.h" line="51"/>
+        <source>Pl&amp;ugins</source>
+        <translation>&amp;Greffons</translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_menu.h" line="52"/>
+        <source>&amp;Configuration</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_menu.h" line="53"/>
+        <source>&amp;Toolbars</source>
+        <translation>&amp;Boîtes à outils</translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_menu.h" line="54"/>
+        <source>Lan&amp;guages</source>
+        <translation>Lan&amp;gages</translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_menu.h" line="55"/>
+        <location filename="../../libs/translationutils/trans_menu.h" line="146"/>
+        <source>Interpreter</source>
+        <translation>Interpréteur</translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_menu.h" line="61"/>
+        <source>&amp;New</source>
+        <translation>&amp;Nouveau</translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_menu.h" line="62"/>
+        <source>&amp;Open</source>
+        <translation>&amp;Ouvrir</translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_menu.h" line="63"/>
+        <source>&amp;Save</source>
+        <translation>&amp;Sauvegarder</translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_menu.h" line="64"/>
+        <source>Save &amp;as</source>
+        <translation>Sauvegarder &amp;sous</translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_menu.h" line="65"/>
+        <source>&amp;Print...</source>
+        <translation>&amp;Imprimer...</translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_menu.h" line="66"/>
+        <source>Print pre&amp;view</source>
+        <translation>&amp;Prévisulisation de l&apos;impression</translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_menu.h" line="67"/>
+        <source>&amp;Exit</source>
+        <translation>&amp;Quitter</translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_menu.h" line="68"/>
+        <source>Sea&amp;rch...</source>
+        <translation>&amp;Rechercher...</translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_menu.h" line="70"/>
+        <source>New patient</source>
+        <translation>Nouveau patient</translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_menu.h" line="71"/>
+        <source>Remove patient</source>
+        <translation>Supprimer le patient</translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_menu.h" line="72"/>
+        <source>View patient identity</source>
+        <translation>Voir l&apos;identité du patient</translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_menu.h" line="85"/>
+        <source>Select all</source>
+        <translation>Tout sélectionner</translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_menu.h" line="138"/>
+        <source>&amp;About</source>
+        <translation>&amp;A propos</translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_menu.h" line="139"/>
+        <source>About &amp;Plugins</source>
+        <translation>&amp;A propos des greffons</translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_menu.h" line="140"/>
+        <source>About &amp;Qt</source>
+        <translation>A propos de Qt</translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_menu.h" line="141"/>
+        <source>About this &amp;form</source>
+        <translation>A propos des formulaires</translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_menu.h" line="142"/>
+        <source>&amp;Help</source>
+        <translation>&amp;Aide</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_menu.h" line="144"/>
@@ -499,11 +522,6 @@
         <location filename="../../libs/translationutils/trans_menu.h" line="151"/>
         <source>View update information</source>
         <translation>Voir les informations de mise à jour</translation>
-    </message>
-    <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="152"/>
-        <source>Print Preview</source>
-        <translation>Prévisulisation de l&apos;impression</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_menu.h" line="153"/>
@@ -993,19 +1011,9 @@
         <translation>prendre avec ou sans aliments</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_spashandupdate.h" line="43"/>
-        <source>Using library : %1</source>
-        <translation>Utilise la librairie : %1</translation>
-    </message>
-    <message>
         <location filename="../../libs/translationutils/trans_spashandupdate.h" line="44"/>
         <source>Starting application at %1</source>
         <translation>Démarre l&apos;application %1</translation>
-    </message>
-    <message>
-        <location filename="../../libs/translationutils/trans_spashandupdate.h" line="45"/>
-        <source>Initializing Translations...</source>
-        <translation>Intialise les traductions...</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_spashandupdate.h" line="46"/>
@@ -1013,29 +1021,44 @@
         <translation>Initialise les librairies...</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_spashandupdate.h" line="47"/>
-        <source>Needed Licence Agreement...</source>
-        <translation>Acceptation de la license requise...</translation>
-    </message>
-    <message>
         <location filename="../../libs/translationutils/trans_spashandupdate.h" line="48"/>
         <source>Checking directory structure...</source>
         <translation>Vérifie la structure du répertoire...</translation>
     </message>
     <message>
+        <location filename="../../libs/translationutils/trans_spashandupdate.h" line="43"/>
+        <source>Using library: %1</source>
+        <translation>Utilise les bibliothèques : %1</translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_spashandupdate.h" line="45"/>
+        <source>Initializing translations...</source>
+        <translation>Initialisation des traductions...</translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_spashandupdate.h" line="47"/>
+        <source>Needed licence agreement...</source>
+        <translation>Acceptation de la license attendue...</translation>
+    </message>
+    <message>
         <location filename="../../libs/translationutils/trans_spashandupdate.h" line="49"/>
-        <source>Initializing Default Parameters...</source>
-        <translation>Initialise les paramètres par défaut...</translation>
+        <source>Initializing default parameters...</source>
+        <translation>Initialisation des paramètres par défaut...</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_spashandupdate.h" line="50"/>
-        <source>Initializing Plugins...</source>
-        <translation>Initialise les plugins...</translation>
+        <source>Initializing plugins...</source>
+        <translation>Initialisation des greffons...</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_spashandupdate.h" line="51"/>
         <source>First time running</source>
         <translation>Premier démarrage</translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_spashandupdate.h" line="53"/>
+        <source>Raising application...</source>
+        <translation>Met l&apos;application au premier plan...</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_spashandupdate.h" line="57"/>
@@ -1054,23 +1077,43 @@
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_spashandupdate.h" line="61"/>
-        <source>Each weeks</source>
+        <source>Each week</source>
         <translation>Toutes les semaines</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_spashandupdate.h" line="62"/>
-        <source>Each months</source>
+        <source>Each month</source>
         <translation>Tous les mois</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_spashandupdate.h" line="63"/>
-        <source>Each quarters</source>
+        <source>Each quarter</source>
         <translation>Tous les trimestres</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_spashandupdate.h" line="64"/>
         <source>Never automatically</source>
         <translation>Jamais automatiquement</translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_spashandupdate.h" line="68"/>
+        <source>Message sent without error.</source>
+        <translation>Message envoyé sans erreur.</translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_spashandupdate.h" line="69"/>
+        <source>An error occured, message was not sent.</source>
+        <translation>Une erreur est survenue lors de l&apos;envoie du message.</translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_spashandupdate.h" line="72"/>
+        <source>Current version:</source>
+        <translation>Version actuelle :</translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_spashandupdate.h" line="73"/>
+        <source>Latest version:</source>
+        <translation>Dernière version :</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_spashandupdate.h" line="75"/>
@@ -1314,37 +1357,37 @@
         <translation>Type de document discordant.</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_msgerror.h" line="71"/>
+        <location filename="../../libs/translationutils/trans_msgerror.h" line="72"/>
         <source>General preferences</source>
         <translation>Préférences générales</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_msgerror.h" line="72"/>
+        <location filename="../../libs/translationutils/trans_msgerror.h" line="73"/>
         <source>User preferences</source>
         <translation>Préférences de l&apos;utilisateur</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_msgerror.h" line="74"/>
+        <location filename="../../libs/translationutils/trans_msgerror.h" line="75"/>
         <source>Internet connection preferences</source>
         <translation>Préférences de la connexion internet</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_msgerror.h" line="75"/>
+        <location filename="../../libs/translationutils/trans_msgerror.h" line="76"/>
         <source>Proxy</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_msgerror.h" line="77"/>
+        <location filename="../../libs/translationutils/trans_msgerror.h" line="78"/>
         <source>Last check</source>
         <translation>Dernière vérification</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_msgerror.h" line="78"/>
+        <location filename="../../libs/translationutils/trans_msgerror.h" line="79"/>
         <source>Connected</source>
         <translation>Connecté</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_msgerror.h" line="79"/>
+        <location filename="../../libs/translationutils/trans_msgerror.h" line="80"/>
         <source>Not connected</source>
         <translation>Non connecté</translation>
     </message>
@@ -1524,11 +1567,6 @@
         <translation>Genre</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_titles.h" line="46"/>
-        <source>Adress</source>
-        <translation>Adresse</translation>
-    </message>
-    <message>
         <location filename="../../libs/translationutils/trans_titles.h" line="58"/>
         <source>Nurse</source>
         <translation>Infirmière</translation>
@@ -1572,11 +1610,6 @@
         <location filename="../../libs/translationutils/trans_spashandupdate.h" line="52"/>
         <source>This feature is not yet implemented.</source>
         <translation>Cette fonctionnalité n&apos;est pas encore disponible.</translation>
-    </message>
-    <message>
-        <location filename="../../libs/translationutils/trans_spashandupdate.h" line="53"/>
-        <source>Raising Application...</source>
-        <translation>Application au premier plan...</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_spashandupdate.h" line="58"/>
@@ -1700,71 +1733,71 @@
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_msgerror.h" line="50"/>
+        <source>Error</source>
+        <translation>Erreur</translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_msgerror.h" line="51"/>
         <source>Logged Errors</source>
         <translation>Erreurs enregistrées</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_msgerror.h" line="51"/>
+        <location filename="../../libs/translationutils/trans_msgerror.h" line="52"/>
         <source>Informative message : %1</source>
         <translation>Information : %1</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_msgerror.h" line="52"/>
+        <location filename="../../libs/translationutils/trans_msgerror.h" line="53"/>
         <source>Starting task : %1</source>
         <translation>Débute la tâche : %1</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_msgerror.h" line="53"/>
+        <location filename="../../libs/translationutils/trans_msgerror.h" line="54"/>
         <source>posting message to : %1</source>
         <translation>envoie le message à : %1</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_msgerror.h" line="54"/>
+        <location filename="../../libs/translationutils/trans_msgerror.h" line="55"/>
         <source>Error %1 occured while %2</source>
         <translation>L&apos;erreur %1 est survenue durant %2</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_msgerror.h" line="55"/>
+        <location filename="../../libs/translationutils/trans_msgerror.h" line="56"/>
         <source>Error %1 : line %2, column %3</source>
         <translation>Erreur %1 : ligne %2, colonne %3</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_msgerror.h" line="56"/>
+        <location filename="../../libs/translationutils/trans_msgerror.h" line="57"/>
         <source>Can not create %1 : it already exists</source>
         <translation>Impossible de créer %1 : il existe déjà</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_msgerror.h" line="57"/>
-        <source>Can not return %1 : it does not exists</source>
-        <translation>Impossible de retourner %1 : il n&apos;existe pas</translation>
-    </message>
-    <message>
-        <location filename="../../libs/translationutils/trans_msgerror.h" line="58"/>
+        <location filename="../../libs/translationutils/trans_msgerror.h" line="59"/>
         <source>Can not create %1 : no parent founded</source>
         <translation>Impossible de créer %1 : aucun parent trouvé</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_msgerror.h" line="59"/>
+        <location filename="../../libs/translationutils/trans_msgerror.h" line="60"/>
         <source>%1 is not avaible</source>
         <translation>%1 n&apos;est pas disponible</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_msgerror.h" line="60"/>
+        <location filename="../../libs/translationutils/trans_msgerror.h" line="61"/>
         <source>%1 is not avaible and can not be created</source>
         <translation>%1 n&apos;est pas disponible et ne peut pas être créé</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_msgerror.h" line="61"/>
+        <location filename="../../libs/translationutils/trans_msgerror.h" line="62"/>
         <source>%1 are not avaible</source>
         <translation>%1 ne sont pas disponibles</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_msgerror.h" line="62"/>
+        <location filename="../../libs/translationutils/trans_msgerror.h" line="63"/>
         <source>Setting %1 path to %2</source>
         <translation>Définit le répertoire de %1 à %2</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_msgerror.h" line="63"/>
+        <location filename="../../libs/translationutils/trans_msgerror.h" line="64"/>
         <source>Error %1 from database %2</source>
         <translation>L&apos;erreur %1 est survenue depuis la base de données %2</translation>
     </message>
@@ -1772,11 +1805,6 @@
         <location filename="../../libs/translationutils/trans_current.h" line="70"/>
         <source>Creating default settings for %1</source>
         <translation>Création des paramètres par défaut pour %1</translation>
-    </message>
-    <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="40"/>
-        <source>Patient navigation</source>
-        <translation>Navigation patient</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_menu.h" line="91"/>
@@ -1911,42 +1939,47 @@
         <translation>Indisponible</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_msgerror.h" line="64"/>
+        <location filename="../../libs/translationutils/trans_msgerror.h" line="58"/>
+        <source>Can not return %1 : it does not exist</source>
+        <translation>Impossible de retourner %1 : n&apos;existe pas</translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_msgerror.h" line="65"/>
         <source>No object to translate</source>
         <translation>Pas d&apos;objet à traduite</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_msgerror.h" line="65"/>
+        <location filename="../../libs/translationutils/trans_msgerror.h" line="66"/>
         <source>No %1 found.</source>
         <translation>Aucun %1 trouvé.</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_msgerror.h" line="66"/>
+        <location filename="../../libs/translationutils/trans_msgerror.h" line="67"/>
         <source>Please describe your problem.</source>
         <translation>Décrivez votre problème.</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_msgerror.h" line="67"/>
+        <location filename="../../libs/translationutils/trans_msgerror.h" line="68"/>
         <source>Your email.</source>
         <translation>Votre courriel</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_msgerror.h" line="68"/>
+        <location filename="../../libs/translationutils/trans_msgerror.h" line="69"/>
         <source>Yes</source>
         <translation>Oui</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_msgerror.h" line="69"/>
+        <location filename="../../libs/translationutils/trans_msgerror.h" line="70"/>
         <source>No</source>
         <translation>Non</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_msgerror.h" line="70"/>
+        <location filename="../../libs/translationutils/trans_msgerror.h" line="71"/>
         <source>General</source>
         <translation>Général</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_msgerror.h" line="73"/>
+        <location filename="../../libs/translationutils/trans_msgerror.h" line="74"/>
         <source>Fatal error : Application failure. Please restart application.</source>
         <translation>Erreur fatale. Veuillez redémarrer l&apos;application.</translation>
     </message>
@@ -1983,16 +2016,6 @@ Localisation : %2</translation>
         <translation>Envoie du message.</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_spashandupdate.h" line="68"/>
-        <source>Message sended without error.</source>
-        <translation>Message envoyé sans erreur.</translation>
-    </message>
-    <message>
-        <location filename="../../libs/translationutils/trans_spashandupdate.h" line="69"/>
-        <source>An error occured, message was not sended.</source>
-        <translation>Une erreur est survenue, le message n&apos;a pas été envoyé.</translation>
-    </message>
-    <message>
         <location filename="../../libs/translationutils/trans_spashandupdate.h" line="70"/>
         <source>Checking for updates from %1</source>
         <translation>Vérifie les mises à jour depuis %1</translation>
@@ -2001,21 +2024,6 @@ Localisation : %2</translation>
         <location filename="../../libs/translationutils/trans_spashandupdate.h" line="71"/>
         <source>Version up to date</source>
         <translation>Version à jour</translation>
-    </message>
-    <message>
-        <location filename="../../libs/translationutils/trans_spashandupdate.h" line="72"/>
-        <source>Current version :</source>
-        <translation>Version courante :</translation>
-    </message>
-    <message>
-        <location filename="../../libs/translationutils/trans_spashandupdate.h" line="73"/>
-        <source>Lastest version :</source>
-        <translation>Dernière version :</translation>
-    </message>
-    <message>
-        <location filename="../../libs/translationutils/trans_spashandupdate.h" line="74"/>
-        <source>Update Available</source>
-        <translation>Mise à jour disponible</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_team.h" line="37"/>
@@ -2069,8 +2077,23 @@ Localisation : %2</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_team.h" line="48"/>
-        <source>Build information</source>
+        <source>Built information</source>
         <translation>Information de compilation</translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_team.h" line="51"/>
+        <source>Build version: %1</source>
+        <translation>Version compilée : %1</translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_team.h" line="54"/>
+        <source>Built in debug mode</source>
+        <translation>Compilation en mode déboggage</translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_team.h" line="55"/>
+        <source>Built in release mode</source>
+        <translation>Compilation en mode binaire</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_team.h" line="49"/>
@@ -2083,11 +2106,6 @@ Localisation : %2</translation>
         <translation>Compilé : %1 %2</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_team.h" line="51"/>
-        <source>Build version : %1</source>
-        <translation>Version de compilation : %1</translation>
-    </message>
-    <message>
         <location filename="../../libs/translationutils/trans_team.h" line="52"/>
         <source>Full application</source>
         <translation>Application complète</translation>
@@ -2096,16 +2114,6 @@ Localisation : %2</translation>
         <location filename="../../libs/translationutils/trans_team.h" line="53"/>
         <source>SVN application</source>
         <translation>Application SVN</translation>
-    </message>
-    <message>
-        <location filename="../../libs/translationutils/trans_team.h" line="54"/>
-        <source>Build in debug mode</source>
-        <translation>Compilé en mode de déboggage</translation>
-    </message>
-    <message>
-        <location filename="../../libs/translationutils/trans_team.h" line="55"/>
-        <source>Build in release mode</source>
-        <translation>Compilé en mode stable</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_current.h" line="76"/>
@@ -2181,6 +2189,11 @@ Localisation : %2</translation>
         <location filename="../../libs/translationutils/trans_patient.h" line="41"/>
         <source>Toggle patient&apos;s information</source>
         <translation>Afficher/cacher les informations concernant le patient</translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_titles.h" line="46"/>
+        <source>Address</source>
+        <translation>Adresse</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_titles.h" line="47"/>

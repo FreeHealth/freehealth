@@ -9,7 +9,7 @@
         <location filename="../../plugins/templatesplugin/templatebase.cpp" line="328"/>
         <location filename="../../plugins/templatesplugin/templatebase.cpp" line="338"/>
         <source>Please contact dev team.</source>
-        <translation type="unfinished">Veuillez contacter l&apos;équipe de développement.</translation>
+        <translation>Veuillez contacter l&apos;équipe de développement.</translation>
     </message>
 </context>
 <context>

@@ -5,8 +5,8 @@
     <name>AboutDialog</name>
     <message>
         <location filename="../../plugins/fmfcoreplugin/appaboutpage.cpp" line="38"/>
-        <source>&lt;p align=center&gt;&lt;b&gt;Welcome to FreeMedForms&lt;/b&gt;&lt;br /&gt;(C) 2008-%1 by Eric MAEKER, MD&lt;/p&gt;&lt;p align=left&gt;This software is release without any warranty and only for test purposal.&lt;br /&gt;Please refer to web site for more informations.&lt;br /&gt;&lt;a href=&quot;%2&quot;&gt;Web site&lt;/a&gt;&lt;/p&gt;</source>
-        <translation>&lt;p align=center&gt;&lt;b&gt;Bienvenu sur FreeMedForms&lt;/b&gt;&lt;br /&gt;(C) 2008-%1 par Dr Eric MAEKER&lt;/p&gt;&lt;p align=left&gt;Ce logiciel est fourni sans aucune garantie et pour uniquement à des fins de test.&lt;br /&gt;Veuillez vous reférer au site internet du projet pour plus d&apos;informations.&lt;br /&gt;&lt;a href=&quot;%2&quot;&gt;Web site&lt;/a&gt;&lt;/p&gt;</translation>
+        <source>&lt;p align=center&gt;&lt;b&gt;Welcome to FreeMedForms&lt;/b&gt;&lt;br /&gt;(C) 2008-%1 by Eric MAEKER, MD&lt;/p&gt;&lt;p align=left&gt;This software is release without any warranty and only for test purposal.&lt;br /&gt;Please refer to web site for more information.&lt;br /&gt;&lt;a href=&quot;%2&quot;&gt;Web site&lt;/a&gt;&lt;/p&gt;</source>
+        <translation>&lt;p align=center&gt;&lt;b&gt;Bienvenue au projet FreeMedForms&lt;/b&gt;&lt;br /&gt;(C) 2008-%1 Eric MAEKER, MD&lt;/p&gt;&lt;p align=left&gt;Ce logiciele est distribué sans aucune garantie et uniquement pour tests.&lt;br /&gt;Veuillez vous référer au site internet pour plus d&apos;informations.&lt;br /&gt;&lt;a href=&quot;%2&quot;&gt;Site internet&lt;/a&gt;&lt;/p&gt;</translation>
     </message>
 </context>
 <context>
@@ -682,13 +682,13 @@ Url: %1
         <location filename="../../plugins/coreplugin/settings.cpp" line="1006"/>
         <location filename="../../plugins/coreplugin/settings.cpp" line="1138"/>
         <source>Datapack persistent temporary path</source>
-        <translation type="unfinished"></translation>
+        <translation>Répertoire temporaire persistant des paquets de données</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="1007"/>
         <location filename="../../plugins/coreplugin/settings.cpp" line="1139"/>
         <source>Datapack installation path</source>
-        <translation type="unfinished"></translation>
+        <translation>Répertoire d&apos;installation des paquets de données</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="1142"/>
@@ -709,31 +709,31 @@ Url: %1
         <location filename="../../plugins/coreplugin/settings.cpp" line="987"/>
         <location filename="../../plugins/coreplugin/settings.cpp" line="1120"/>
         <source>UserResourcesPath</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="1003"/>
         <location filename="../../plugins/coreplugin/settings.cpp" line="1135"/>
         <source>UserCompleteFormsPath</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="1004"/>
         <location filename="../../plugins/coreplugin/settings.cpp" line="1136"/>
         <source>UserSubFormsPath</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="1008"/>
         <location filename="../../plugins/coreplugin/settings.cpp" line="1140"/>
         <source>Datapack Complete Forms installation path</source>
-        <translation type="unfinished"></translation>
+        <translation>Répertoire d&apos;installation des paquets de données des formulaires complets</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="1009"/>
         <location filename="../../plugins/coreplugin/settings.cpp" line="1141"/>
         <source>Datapack SubForms installation path</source>
-        <translation type="unfinished"></translation>
+        <translation>Répertoire d&apos;installation des paquets de données des sous-formulaires</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="1011"/>

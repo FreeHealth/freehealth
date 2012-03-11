@@ -101,12 +101,12 @@
     </message>
     <message>
         <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="269"/>
-        <source>Server authentification requiered</source>
+        <source>Server authentication requiered</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="294"/>
-        <source>Proxy authentification requiered</source>
+        <source>Proxy authentication requiered</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -166,7 +166,7 @@
     </message>
     <message>
         <location filename="../../libs/datapackutils/serverengines/localserverengine.cpp" line="138"/>
-        <source>Pack file does not exists.</source>
+        <source>Pack file does not exist.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -213,7 +213,7 @@
     </message>
     <message>
         <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="162"/>
-        <source>The following packs will be processed. Please verify all informations.</source>
+        <source>The following packs will be processed. Please verify all information.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -281,7 +281,7 @@
     <message>
         <location filename="../../libs/datapackutils/packmanager.cpp" line="271"/>
         <location filename="../../libs/datapackutils/packmanager.cpp" line="272"/>
-        <source>Unable to remove pack %1, unzip path does not exists (%2)</source>
+        <source>Unable to remove pack %1, unzip path does not exist (%2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

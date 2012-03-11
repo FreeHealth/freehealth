@@ -12,10 +12,6 @@
         <translation>Recréer la base de données CIM10</translation>
     </message>
     <message>
-        <source>ICD10 database informations</source>
-        <translation>Information base de données: CIM10</translation>
-    </message>
-    <message>
         <source>ICD10 search method</source>
         <translation>Mode de recherche dans la CIM10</translation>
     </message>
@@ -57,7 +53,11 @@
     </message>
     <message>
         <source>ICD10 code collection</source>
-        <translation type="unfinished"></translation>
+        <translation>Collection de codes CIM10</translation>
+    </message>
+    <message>
+        <source>ICD10 database information</source>
+        <translation>Information de la base de données CIM10</translation>
     </message>
 </context>
 <context>
@@ -129,19 +129,20 @@
     <message>
         <source>The ICD10 database can not be created. The application will not work properly.
 Please contact the dev team.</source>
-        <translation type="unfinished"></translation>
+        <translation>La base de données CIM10 ne peut pas être créé. L&apos;application ne fonctionnera pas normalement.
+Veuillez contacter l&apos;équipe de développement.</translation>
     </message>
     <message>
         <source>Downloading ICD10 raw sources...</source>
-        <translation type="unfinished"></translation>
+        <translation>Téléchargement des sources brutes CIM10...</translation>
     </message>
     <message>
         <source>Starting ICD10 database creation</source>
-        <translation type="unfinished"></translation>
+        <translation>Création de la base de données CIM10</translation>
     </message>
     <message>
         <source>Unable to unzip ICD10 raw sources (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible de décompresser les données brutes de la CIM10 (%1)</translation>
     </message>
 </context>
 <context>

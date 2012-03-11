@@ -57,17 +57,17 @@ Répondre &apos;non&apos; causera une perte de données irréversible.</translat
         <translation>Ajouter ce formulaire</translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formeditordialog.cpp" line="77"/>
+        <location filename="../../plugins/formmanagerplugin/formeditordialog.cpp" line="79"/>
         <source>Form Editor</source>
         <translation>Editeur de formulaire</translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formeditordialog.cpp" line="92"/>
+        <location filename="../../plugins/formmanagerplugin/formeditordialog.cpp" line="94"/>
         <source>Insert as root form ?</source>
         <translation>Insérer le formulaire en tant que formulaire racine ?</translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formeditordialog.cpp" line="92"/>
+        <location filename="../../plugins/formmanagerplugin/formeditordialog.cpp" line="94"/>
         <source>You did not selected a form, do you want to add the sub-form as root form ?</source>
         <translation>Vous n&apos;avez pas sélectionné de formulaire, voulez-vous ajouter le sous-formulaire à la racine ?</translation>
     </message>
@@ -377,18 +377,18 @@ Répondre &apos;non&apos; causera une perte de données irréversible.</translat
     </message>
     <message>
         <location filename="../../plugins/formmanagerplugin/constants_db.h" line="114"/>
-        <source>Show patient synthesis</source>
-        <translation>Montrer la synthèse du dossier patient</translation>
+        <source>Show patients&apos; synthesis</source>
+        <translation>Montrer la synthèse du patient</translation>
     </message>
     <message>
         <location filename="../../plugins/formmanagerplugin/constants_db.h" line="115"/>
-        <source>Show patient last episodes</source>
-        <translation>Montrer le dernier épisode</translation>
+        <source>Show patients&apos; last episodes</source>
+        <translation>Montrer le dernier épisode du patient</translation>
     </message>
     <message>
         <location filename="../../plugins/formmanagerplugin/constants_db.h" line="116"/>
-        <source>Patient last episodes</source>
-        <translation>Synthèse des derniers épisodes</translation>
+        <source>Patients&apos; last episodes</source>
+        <translation>Derniers épisodes pour la patient</translation>
     </message>
 </context>
 </TS>

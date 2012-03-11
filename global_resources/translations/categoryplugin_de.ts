@@ -12,10 +12,10 @@
 <context>
     <name>Category::Internal::CategoryBase</name>
     <message>
-        <location filename="../../plugins/categoryplugin/categorybase.cpp" line="198"/>
-        <location filename="../../plugins/categoryplugin/categorybase.cpp" line="206"/>
-        <location filename="../../plugins/categoryplugin/categorybase.cpp" line="212"/>
-        <location filename="../../plugins/categoryplugin/categorybase.cpp" line="222"/>
+        <location filename="../../plugins/categoryplugin/categorybase.cpp" line="199"/>
+        <location filename="../../plugins/categoryplugin/categorybase.cpp" line="207"/>
+        <location filename="../../plugins/categoryplugin/categorybase.cpp" line="213"/>
+        <location filename="../../plugins/categoryplugin/categorybase.cpp" line="223"/>
         <source>Please contact dev team.</source>
         <translation type="unfinished"></translation>
     </message>

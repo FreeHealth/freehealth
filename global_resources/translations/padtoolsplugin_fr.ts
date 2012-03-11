@@ -2,7 +2,7 @@
 <!DOCTYPE TS>
 <TS version="2.0" language="fr_FR">
 <context>
-    <name>PadTools::PadWriter</name>
+    <name>PadTools::Internal::PadWriter</name>
     <message>
         <source>Form</source>
         <translation type="unfinished"></translation>

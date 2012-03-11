@@ -65,84 +65,74 @@
 <context>
     <name>Account::AccountView</name>
     <message>
-        <location filename="../../plugins/accountplugin/accountview.cpp" line="101"/>
+        <location filename="../../plugins/accountplugin/accountview.cpp" line="108"/>
         <source>Name</source>
         <translation>Nom</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/accountview.cpp" line="102"/>
+        <location filename="../../plugins/accountplugin/accountview.cpp" line="109"/>
         <source>Site id</source>
         <translation>Site id</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/accountview.cpp" line="103"/>
+        <location filename="../../plugins/accountplugin/accountview.cpp" line="110"/>
         <source>Date</source>
         <translation>Date</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/accountview.cpp" line="104"/>
+        <location filename="../../plugins/accountplugin/accountview.cpp" line="111"/>
         <source>Act</source>
         <translation>Acte</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/accountview.cpp" line="105"/>
+        <location filename="../../plugins/accountplugin/accountview.cpp" line="112"/>
         <source>Comment</source>
         <translation>Commentaire</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/accountview.cpp" line="106"/>
+        <location filename="../../plugins/accountplugin/accountview.cpp" line="113"/>
         <source>Cash</source>
         <translation>Espèce</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/accountview.cpp" line="107"/>
+        <location filename="../../plugins/accountplugin/accountview.cpp" line="114"/>
         <source>Check</source>
         <translation>Chèques</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/accountview.cpp" line="108"/>
+        <location filename="../../plugins/accountplugin/accountview.cpp" line="115"/>
         <source>Credit Card</source>
         <translation>Carte bancaire</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/accountview.cpp" line="109"/>
+        <location filename="../../plugins/accountplugin/accountview.cpp" line="116"/>
         <source>Banking</source>
         <translation>Virement</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/accountview.cpp" line="110"/>
+        <location filename="../../plugins/accountplugin/accountview.cpp" line="117"/>
         <source>Other</source>
         <translation>Autre</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/accountview.cpp" line="111"/>
+        <location filename="../../plugins/accountplugin/accountview.cpp" line="118"/>
         <source>Due</source>
         <translation>Du</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/accountview.cpp" line="112"/>
+        <location filename="../../plugins/accountplugin/accountview.cpp" line="119"/>
         <source>Due by</source>
         <translation>Du par</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/accountview.cpp" line="171"/>
-        <source>Error</source>
-        <translation>Erreur</translation>
+        <location filename="../../plugins/accountplugin/accountview.cpp" line="184"/>
+        <source>Line deleted.</source>
+        <translation>Ligne supprimée.</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/accountview.cpp" line="171"/>
+        <location filename="../../plugins/accountplugin/accountview.cpp" line="178"/>
         <source>Please select a line to delete.</source>
         <translation>Sélectionnez une ligne à effacer, s&apos;il vous plaît.</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/accountplugin/accountview.cpp" line="177"/>
-        <source>Information</source>
-        <translation>Information</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/accountplugin/accountview.cpp" line="177"/>
-        <source>Line is deleted.</source>
-        <translation>La ligne est effacée.</translation>
     </message>
 </context>
 <context>
@@ -194,15 +184,6 @@
     </message>
     <message>
         <location filename="../../plugins/accountplugin/preferences/accountpreferences.cpp" line="246"/>
-        <location filename="../../plugins/accountplugin/preferences/accountpreferences.cpp" line="252"/>
-        <location filename="../../plugins/accountplugin/preferences/accountpreferences.cpp" line="258"/>
-        <location filename="../../plugins/accountplugin/preferences/accountpreferences.cpp" line="264"/>
-        <location filename="../../plugins/accountplugin/preferences/accountpreferences.cpp" line="270"/>
-        <source>beuh</source>
-        <translation>Beuh</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/accountplugin/preferences/accountpreferences.cpp" line="246"/>
         <source>Medical procedure defaults can not be included.</source>
         <translation>Les valeurs par défaut des recettes-type ne peuvent pas être incluses dans la base de donnée.</translation>
     </message>
@@ -227,45 +208,44 @@
         <translation>Les valeurs par défaut d&apos;assurances ne peuvent pas être intégrées.</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/accountpreferences.cpp" line="284"/>
-        <source>Information</source>
-        <translation>Information</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/accountplugin/preferences/accountpreferences.cpp" line="284"/>
-        <source>Defaults have been created. </source>
+        <location filename="../../plugins/accountplugin/preferences/accountpreferences.cpp" line="283"/>
+        <source>Defaults have been created.</source>
         <translation>Les valeurs par défaut ont été créées.</translation>
     </message>
 </context>
 <context>
     <name>Account::Internal::AccountMode</name>
     <message>
-        <location filename="../../plugins/accountplugin/accountmode.cpp" line="79"/>
+        <location filename="../../plugins/accountplugin/accountmode.cpp" line="82"/>
         <source>Accountancy</source>
         <translation>Comptabilité</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/accountmode.cpp" line="106"/>
+        <location filename="../../plugins/accountplugin/accountmode.cpp" line="109"/>
         <source>Please read this explanation before using FreeAccount.
 FreeAccount is composed of:
-Receipts to get your earnings,
-Movements in your accountancy,
-Asset for your assets,
-Ledger to analyse your accountancy and produce and print your ledger.
-The shortcuts for those programs are:
-for your rapid receipt, CTRL+R,
-for the receipts widget, Maj+R,
-for the movements widget, CTRL+M,
-for assets widget, ALT+Z,
-for ledger and analysis widget, ALT+L.
+  - Receipts to get your earnings,
+  - Movements in your accountancy,
+  - Asset for your assets,
+  - Ledger to analyse your accountancy and produce and print your ledger.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/accountmode.cpp" line="115"/>
+        <source>The shortcuts for those programs are:
+  - for your rapid receipt, CTRL+R,
+  - for the receipts widget, Maj+R,
+  - for the movements widget, CTRL+M,
+  - for assets widget, ALT+Z,
+  - for ledger and analysis widget, ALT+L.
 Before the first use, open Configuration &gt; Preferences &gt; Accountancy &gt; Defaults,
 and create defaults.
 Then parametrize your user, sites, bank and so on.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/accountmode.cpp" line="123"/>
-        <source>Read me</source>
+        <location filename="../../plugins/accountplugin/accountmode.cpp" line="127"/>
+        <source>Ok</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -351,30 +331,30 @@ p, li { white-space: pre-wrap; }
         <translation>Date</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/assetsratespage.cpp" line="175"/>
+        <location filename="../../plugins/accountplugin/preferences/assetsratespage.cpp" line="169"/>
         <source>Save changes ?</source>
         <translation>Sauvegarder les changements ?</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/assetsratespage.cpp" line="176"/>
+        <location filename="../../plugins/accountplugin/preferences/assetsratespage.cpp" line="170"/>
         <source>You make changes into the assetsrates table.
 Do you want to save them ?</source>
         <translation>Vous avez modifé la table taux d&apos;immobilisation.
 Voulez vous la sauvegarder ?</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/assetsratespage.cpp" line="181"/>
-        <location filename="../../plugins/accountplugin/preferences/assetsratespage.cpp" line="228"/>
+        <location filename="../../plugins/accountplugin/preferences/assetsratespage.cpp" line="175"/>
+        <location filename="../../plugins/accountplugin/preferences/assetsratespage.cpp" line="222"/>
         <source>assetsrates</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/assetsratespage.cpp" line="229"/>
+        <location filename="../../plugins/accountplugin/preferences/assetsratespage.cpp" line="223"/>
         <source>Can not submit assetsrates to your personnal database.</source>
         <translation>Ne peut pas soumettre les taux d&apos;immobilisation dans votre base personnelle.</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/assetsratespage.cpp" line="230"/>
+        <location filename="../../plugins/accountplugin/preferences/assetsratespage.cpp" line="224"/>
         <source>An error occured during assetsrates saving. Datas are corrupted.</source>
         <translation>Une erreur est survenue lors de la sauvegarde des taux d&apos;immobilisation. Les données sont corrompues.</translation>
     </message>
@@ -442,30 +422,30 @@ Voulez vous la sauvegarder ?</translation>
         <translation>Recettes</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/availablemovementpage.cpp" line="172"/>
+        <location filename="../../plugins/accountplugin/preferences/availablemovementpage.cpp" line="166"/>
         <source>Save changes ?</source>
         <translation>Sauver les changements ?</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/availablemovementpage.cpp" line="173"/>
+        <location filename="../../plugins/accountplugin/preferences/availablemovementpage.cpp" line="167"/>
         <source>You make changes into available movements.
 Do you want to save them ?</source>
         <translation>Vous avez modifé les mouvements disponibles.
 Voulez vous les sauvegarder ?</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/availablemovementpage.cpp" line="178"/>
-        <location filename="../../plugins/accountplugin/preferences/availablemovementpage.cpp" line="222"/>
+        <location filename="../../plugins/accountplugin/preferences/availablemovementpage.cpp" line="172"/>
+        <location filename="../../plugins/accountplugin/preferences/availablemovementpage.cpp" line="216"/>
         <source>available_movement</source>
         <translation>available_movement</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/availablemovementpage.cpp" line="223"/>
+        <location filename="../../plugins/accountplugin/preferences/availablemovementpage.cpp" line="217"/>
         <source>Can not submit available movements to your personnal database.</source>
         <translation>Impossible d&apos;intégrer les mouvements disponibles dans votre base de données.</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/availablemovementpage.cpp" line="224"/>
+        <location filename="../../plugins/accountplugin/preferences/availablemovementpage.cpp" line="218"/>
         <source>An error occured during available movements saving. Datas are corrupted.</source>
         <translation>Une erreur est apparue pendant l&apos;intégration de mouvements disponibles.Les données sont corrompues.</translation>
     </message>
@@ -486,11 +466,6 @@ Voulez vous les sauvegarder ?</translation>
         <location filename="../../plugins/accountplugin/preferences/bankdetailspage.ui" line="88"/>
         <source>Owner</source>
         <translation>Possesseur</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/accountplugin/preferences/bankdetailspage.ui" line="98"/>
-        <source>Owner adress</source>
-        <translation>Adresse du possesseur</translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/preferences/bankdetailspage.ui" line="108"/>
@@ -521,6 +496,11 @@ Voulez vous les sauvegarder ?</translation>
         <location filename="../../plugins/accountplugin/preferences/bankdetailspage.ui" line="78"/>
         <source>Label</source>
         <translation>Dénomination</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/preferences/bankdetailspage.ui" line="98"/>
+        <source>Owner address</source>
+        <translation>Adresse du propriétaire</translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/preferences/bankdetailspage.ui" line="162"/>
@@ -599,6 +579,13 @@ Voulez vous les sauvegarder ?</translation>
         <translation>Uid</translation>
     </message>
     <message>
+        <location filename="../../plugins/accountplugin/preferences/distancerulespage.ui" line="154"/>
+        <source>Preferred: 
+yes = 1
+no = 0</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../plugins/accountplugin/preferences/distancerulespage.ui" line="177"/>
         <source>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
@@ -618,15 +605,6 @@ p, li { white-space: pre-wrap; }
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans&apos;; font-size:10pt;&quot;&gt;distance in this area,&lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans&apos;; font-size:10pt;&quot;&gt;value : 0,6 &lt;/span&gt;&lt;/p&gt;
 &lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:&apos;Sans&apos;; font-size:10pt;&quot;&gt;it&apos;s mean 0,6 euro (or local currency) / kilometer.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/accountplugin/preferences/distancerulespage.ui" line="154"/>
-        <source>Prefered: 
-yes = 1
-no = 0</source>
-        <translation>Préféré :
-oui = 1
-non = 0</translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/preferences/distancerulespage.ui" line="166"/>
@@ -732,30 +710,30 @@ Voulez-vous les sauvegarder ?</translation>
         <translation>Contact</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/insurancepage.cpp" line="229"/>
+        <location filename="../../plugins/accountplugin/preferences/insurancepage.cpp" line="223"/>
         <source>Save changes ?</source>
         <translation>Sauvegarder les changements ?</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/insurancepage.cpp" line="230"/>
+        <location filename="../../plugins/accountplugin/preferences/insurancepage.cpp" line="224"/>
         <source>You make changes into the insurance table.
 Do you want to save them ?</source>
         <translation>Vous avez modifié la table Assurances.
 Voulez-vous sauvegarder ?</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/insurancepage.cpp" line="235"/>
-        <location filename="../../plugins/accountplugin/preferences/insurancepage.cpp" line="295"/>
+        <location filename="../../plugins/accountplugin/preferences/insurancepage.cpp" line="229"/>
+        <location filename="../../plugins/accountplugin/preferences/insurancepage.cpp" line="289"/>
         <source>insurance</source>
         <translation>Assurance</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/insurancepage.cpp" line="296"/>
+        <location filename="../../plugins/accountplugin/preferences/insurancepage.cpp" line="290"/>
         <source>Can not submit insurance to your personnal database.</source>
         <translation>Ne peut pas intégrer Assurance dans votre base de données.</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/insurancepage.cpp" line="297"/>
+        <location filename="../../plugins/accountplugin/preferences/insurancepage.cpp" line="291"/>
         <source>An error occured during insurance saving. Datas are corrupted.</source>
         <translation>Une erreur est survenue durand la sauvegarde d&apos;Assurances. Les données sont corrompues.</translation>
     </message>
@@ -833,17 +811,12 @@ Voulez-vous sauvegarder ?</translation>
         <translation>Assurances a été créée dans une autre dfenêtre de préférences.</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.cpp" line="272"/>
-        <source>Information</source>
-        <translation>Information</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.cpp" line="272"/>
+        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.cpp" line="266"/>
         <source> has been deleted.</source>
         <translation>a été effacé.</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.cpp" line="396"/>
+        <location filename="../../plugins/accountplugin/preferences/medicalprocedurepage.cpp" line="390"/>
         <source>medical_procedure</source>
         <translation></translation>
     </message>
@@ -911,17 +884,17 @@ Voulez vous les sauvegarder ?</translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/preferences/percentagespage.cpp" line="183"/>
-        <location filename="../../plugins/accountplugin/preferences/percentagespage.cpp" line="233"/>
+        <location filename="../../plugins/accountplugin/preferences/percentagespage.cpp" line="234"/>
         <source>percentages</source>
         <translation>Pourcentages</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/percentagespage.cpp" line="234"/>
+        <location filename="../../plugins/accountplugin/preferences/percentagespage.cpp" line="235"/>
         <source>Can not submit percentages to your personnal database.</source>
         <translation>Ne peut pas intégrer pourcentages dans votre base de données.</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/percentagespage.cpp" line="235"/>
+        <location filename="../../plugins/accountplugin/preferences/percentagespage.cpp" line="236"/>
         <source>An error occured during percentages saving. Datas are corrupted.</source>
         <translation>Une erreur est survenue pendant la sauvegarde de pourcentages. Les données sont corrompues.</translation>
     </message>
@@ -1033,8 +1006,8 @@ Voulez vous les sauvegarder ?</translation>
     <message>
         <location filename="../../plugins/accountplugin/preferences/virtualdatabasecreator.ui" line="66"/>
         <source>This widget will create a fake database and populate it with virtual datas.
-This feature is usefull for testers and should not be used by current users.</source>
-        <translation></translation>
+This feature is useful for testers and should not be used by current users.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/preferences/virtualdatabasecreator.ui" line="77"/>
@@ -1072,12 +1045,12 @@ This feature is usefull for testers and should not be used by current users.</so
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/virtualdatabasecreator.cpp" line="245"/>
+        <location filename="../../plugins/accountplugin/preferences/virtualdatabasecreator.cpp" line="246"/>
         <source>Creating virtual database (%1 items to create)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/virtualdatabasecreator.cpp" line="245"/>
+        <location filename="../../plugins/accountplugin/preferences/virtualdatabasecreator.cpp" line="246"/>
         <source>Cancel</source>
         <translation></translation>
     </message>
@@ -1197,58 +1170,33 @@ This feature is usefull for testers and should not be used by current users.</so
 <context>
     <name>AssetsIO</name>
     <message>
-        <location filename="../../plugins/accountplugin/assets/assetsIO.cpp" line="92"/>
-        <source>Warning AssetsIO : </source>
-        <translation></translation>
+        <location filename="../../plugins/accountplugin/assets/assetsIO.cpp" line="100"/>
+        <location filename="../../plugins/accountplugin/assets/assetsIO.cpp" line="145"/>
+        <source>AssetsIO error: </source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/assets/assetsIO.cpp" line="92"/>
-        <source>Error = </source>
-        <translation>Erreur = </translation>
+        <location filename="../../plugins/accountplugin/assets/assetsIO.cpp" line="176"/>
+        <source>Two or more records with the same bank name.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/assets/assetsIO.cpp" line="139"/>
-        <location filename="../../plugins/accountplugin/assets/assetsIO.cpp" line="174"/>
-        <location filename="../../plugins/accountplugin/assets/assetsIO.cpp" line="314"/>
-        <location filename="../../plugins/accountplugin/assets/assetsIO.cpp" line="333"/>
-        <location filename="../../plugins/accountplugin/assets/assetsIO.cpp" line="387"/>
-        <source>Warning</source>
-        <translation>Attention</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/accountplugin/assets/assetsIO.cpp" line="140"/>
-        <source>
-Error = </source>
-        <translation>
-Erreur = </translation>
-    </message>
-    <message>
-        <location filename="../../plugins/accountplugin/assets/assetsIO.cpp" line="175"/>
-        <source>You have two or more records with the same bank name ! Risk of errors!</source>
-        <translation>Vous avez deux ou plus enregistrements avec le même nom de banque! Risque d&apos;erreurs!</translation>
+        <location filename="../../plugins/accountplugin/assets/assetsIO.cpp" line="306"/>
+        <source>Credited value = </source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/assets/assetsIO.cpp" line="309"/>
-        <source>Information</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/accountplugin/assets/assetsIO.cpp" line="309"/>
-        <source>Value credited = </source>
-        <translation>Valeur créditée = </translation>
-    </message>
-    <message>
-        <location filename="../../plugins/accountplugin/assets/assetsIO.cpp" line="314"/>
         <source>Unable to delete movement of this asset.</source>
         <translation>Incapable d&apos;effacer le mouvement de cette immobilisation.</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/assets/assetsIO.cpp" line="333"/>
+        <location filename="../../plugins/accountplugin/assets/assetsIO.cpp" line="327"/>
         <source>Unable to credit the value in bank balance.</source>
         <translation>Incapable de créditer la valeur dans la balance bancaire.</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/assets/assetsIO.cpp" line="387"/>
+        <location filename="../../plugins/accountplugin/assets/assetsIO.cpp" line="379"/>
         <source>You have to fill defaults for assets rates.
 Go in Configuration&gt;Preferences to do so.
 Otherwise result will be wrong !</source>
@@ -1273,125 +1221,109 @@ Autrement le résultat sera faux!</translation>
 <context>
     <name>AssetsViewer</name>
     <message>
-        <location filename="../../plugins/accountplugin/assets/assetsViewer.cpp" line="83"/>
+        <location filename="../../plugins/accountplugin/assets/assetsViewer.cpp" line="95"/>
         <source>Account id</source>
         <translation>Compte id</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/assets/assetsViewer.cpp" line="84"/>
+        <location filename="../../plugins/accountplugin/assets/assetsViewer.cpp" line="96"/>
         <source>Label</source>
         <translation>Dénomination</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/assets/assetsViewer.cpp" line="85"/>
+        <location filename="../../plugins/accountplugin/assets/assetsViewer.cpp" line="97"/>
         <source>Date</source>
         <translation>Date</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/assets/assetsViewer.cpp" line="86"/>
+        <location filename="../../plugins/accountplugin/assets/assetsViewer.cpp" line="98"/>
         <source>Duration</source>
         <translation>Durée</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/assets/assetsViewer.cpp" line="87"/>
+        <location filename="../../plugins/accountplugin/assets/assetsViewer.cpp" line="99"/>
         <source>Mode</source>
         <translation>Mode</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/assets/assetsViewer.cpp" line="88"/>
+        <location filename="../../plugins/accountplugin/assets/assetsViewer.cpp" line="100"/>
         <source>Value</source>
         <translation>Valeur</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/assets/assetsViewer.cpp" line="89"/>
+        <location filename="../../plugins/accountplugin/assets/assetsViewer.cpp" line="101"/>
         <source>Yearly value</source>
         <translation>Valeur annuelle</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/assets/assetsViewer.cpp" line="90"/>
+        <location filename="../../plugins/accountplugin/assets/assetsViewer.cpp" line="102"/>
         <source>Residual value</source>
         <translation>Valeur résiduelle</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/assets/assetsViewer.cpp" line="91"/>
+        <location filename="../../plugins/accountplugin/assets/assetsViewer.cpp" line="103"/>
         <source>Years to run</source>
         <translation>Années à courir</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/assets/assetsViewer.cpp" line="92"/>
+        <location filename="../../plugins/accountplugin/assets/assetsViewer.cpp" line="104"/>
         <source>Rate</source>
         <translation>Taux</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/assets/assetsViewer.cpp" line="93"/>
+        <location filename="../../plugins/accountplugin/assets/assetsViewer.cpp" line="105"/>
         <source>Movement</source>
         <translation>Mouvement</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/assets/assetsViewer.cpp" line="94"/>
+        <location filename="../../plugins/accountplugin/assets/assetsViewer.cpp" line="106"/>
         <source>Comment</source>
         <translation>Commentaire</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/assets/assetsViewer.cpp" line="139"/>
+        <location filename="../../plugins/accountplugin/assets/assetsViewer.cpp" line="151"/>
         <source>Fixed Asset</source>
         <translation>Immobilisation</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/assets/assetsViewer.cpp" line="161"/>
-        <location filename="../../plugins/accountplugin/assets/assetsViewer.cpp" line="166"/>
-        <location filename="../../plugins/accountplugin/assets/assetsViewer.cpp" line="187"/>
-        <location filename="../../plugins/accountplugin/assets/assetsViewer.cpp" line="199"/>
-        <location filename="../../plugins/accountplugin/assets/assetsViewer.cpp" line="210"/>
-        <location filename="../../plugins/accountplugin/assets/assetsViewer.cpp" line="214"/>
-        <source>Error</source>
-        <translation>Erreur</translation>
+        <location filename="../../plugins/accountplugin/assets/assetsViewer.cpp" line="207"/>
+        <source>Select a line.</source>
+        <translation>Sélectionnez une ligne.</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/assets/assetsViewer.cpp" line="161"/>
+        <location filename="../../plugins/accountplugin/assets/assetsViewer.cpp" line="222"/>
+        <source>Asset deleted.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/assets/assetsViewer.cpp" line="172"/>
         <source>Asset is not recorded in movements.</source>
         <translation>L&apos;immobilisation n&apos;est pas enregistrée dans la table Mouvements.</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/assets/assetsViewer.cpp" line="166"/>
+        <location filename="../../plugins/accountplugin/assets/assetsViewer.cpp" line="176"/>
         <source>Unable to get last movement id.</source>
         <translation>Impossible d&apos;obtenir le dernier id de la table Mouvements.</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/assets/assetsViewer.cpp" line="187"/>
+        <location filename="../../plugins/accountplugin/assets/assetsViewer.cpp" line="196"/>
         <source>Asset not recorded.</source>
         <translation>Immobilisation non enrgistrée.</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/assets/assetsViewer.cpp" line="190"/>
+        <location filename="../../plugins/accountplugin/assets/assetsViewer.cpp" line="198"/>
         <source>Asset recorded.</source>
         <translation>Immobilisation enregistrée.</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/assets/assetsViewer.cpp" line="199"/>
-        <source>You forgot to select a line.</source>
-        <translation>Vous avez oublié de sélectionner une ligne.</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/accountplugin/assets/assetsViewer.cpp" line="210"/>
+        <location filename="../../plugins/accountplugin/assets/assetsViewer.cpp" line="217"/>
         <source>Asset is not deleted.</source>
         <translation>L&apos;immobilisation n&apos;a pas été effacée.</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/assets/assetsViewer.cpp" line="214"/>
+        <location filename="../../plugins/accountplugin/assets/assetsViewer.cpp" line="220"/>
         <source>Movement of asset is not deleted.</source>
         <translation>Le mouvement immobilisation n&apos;a pas été effacé.</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/accountplugin/assets/assetsViewer.cpp" line="190"/>
-        <location filename="../../plugins/accountplugin/assets/assetsViewer.cpp" line="217"/>
-        <source>Information</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/accountplugin/assets/assetsViewer.cpp" line="217"/>
-        <source>Asset is deleted.</source>
-        <translation>L&apos;immobilisation a été effacée.</translation>
     </message>
 </context>
 <context>
@@ -1470,57 +1402,62 @@ Autrement le résultat sera faux!</translation>
 <context>
     <name>ChoiceActions::treeViewsActions</name>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="53"/>
+        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="58"/>
         <source>Delete this value.</source>
         <translation>Effacer cette valeur.</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="54"/>
+        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="59"/>
         <source>Choose this value like the preferred.</source>
         <translation>Choisir cette valeur comme préférentielle.</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="110"/>
-        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="125"/>
-        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="283"/>
-        <source>Warning</source>
-        <translation>Attention</translation>
+        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="86"/>
+        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="87"/>
+        <source>Do you want to delete selected item ?</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="110"/>
-        <source>Unable to choose this item.</source>
-        <translation>Impossible de choisir cet item.</translation>
+        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="96"/>
+        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="97"/>
+        <source>Do you want to set this item as preferred value ?</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="125"/>
+        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="101"/>
+        <source>Unable to set this item as the preferred one.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="111"/>
         <source>Cannot change value bool in thesaurus :</source>
         <translation>Ne peut pas changer la valeur bool dans le thésaurus :</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="152"/>
-        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="176"/>
-        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="209"/>
+        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="137"/>
+        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="161"/>
+        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="194"/>
         <source>Debtor</source>
         <translation>Débiteur</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="155"/>
-        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="186"/>
-        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="226"/>
+        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="140"/>
+        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="171"/>
+        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="211"/>
         <source>Sites</source>
         <translation>Sites</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="158"/>
-        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="191"/>
-        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="246"/>
+        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="143"/>
+        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="176"/>
+        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="231"/>
         <source>Distance rules</source>
         <translation>Règles de distance</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="283"/>
-        <source>Cannot delete in thesaurus :</source>
-        <translation>Ne peut pas effacer dans le thésaurus : </translation>
+        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="267"/>
+        <source>Cannot delete in thesaurus : </source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1617,155 +1554,150 @@ Autrement le résultat sera faux!</translation>
     </message>
 </context>
 <context>
+    <name>ChoosenListView</name>
+    <message>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="589"/>
+        <source>Delete this item</source>
+        <translation>Supprimer cet élément</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="590"/>
+        <source>Clear all.</source>
+        <translation>Effacer tout.</translation>
+    </message>
+</context>
+<context>
     <name>ControlReceipts</name>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="265"/>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="281"/>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="291"/>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="295"/>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="302"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="268"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="284"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="294"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="298"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="305"/>
         <source>Patient</source>
         <translation>Patient</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="269"/>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="307"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="272"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="310"/>
         <source>Date</source>
         <translation>Date</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="270"/>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="308"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="273"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="311"/>
         <source>Acts</source>
         <translation>Actes</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="271"/>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="309"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="274"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="312"/>
         <source>Comment</source>
         <translation>Commentaire</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="186"/>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="272"/>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="282"/>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="310"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="189"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="275"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="285"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="313"/>
         <source>Cash</source>
         <translation>Espèces</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="187"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="124"/>
+        <source>Select a line.</source>
+        <translation>Sélectionnez une ligne.</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="135"/>
+        <source>Line deleted.</source>
+        <translation>Ligne supprimée.</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="190"/>
         <source>Chq</source>
         <translation>Chq</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="188"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="191"/>
         <source>CB</source>
         <translation>CB</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="190"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="193"/>
         <source>Others</source>
         <translation>Autres</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="191"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="194"/>
         <source>Dues</source>
         <translation>Dus</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="273"/>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="311"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="276"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="314"/>
         <source>Checks</source>
         <translation>Chèques</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="274"/>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="284"/>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="312"/>
-        <source>Credit card</source>
-        <translation>Carte bancaire</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="275"/>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="313"/>
-        <source>Insurance</source>
-        <translation>Assurance</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="276"/>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="286"/>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="314"/>
-        <source>Other</source>
-        <translation>Autre</translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="277"/>
         <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="287"/>
         <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="315"/>
-        <source>Due</source>
-        <translation>Du</translation>
+        <source>Credit card</source>
+        <translation>Carte bancaire</translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="278"/>
         <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="316"/>
+        <source>Insurance</source>
+        <translation>Assurance</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="279"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="289"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="317"/>
+        <source>Other</source>
+        <translation>Autre</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="280"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="290"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="318"/>
+        <source>Due</source>
+        <translation>Du</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="281"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="319"/>
         <source>by</source>
         <translation>par</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="279"/>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="317"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="282"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="320"/>
         <source>Valid</source>
         <translation>Valider</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="55"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="60"/>
         <source>Euros</source>
         <translation>Euros</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="283"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="286"/>
         <source>Check</source>
         <translation>Chèques</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="189"/>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="285"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="192"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="288"/>
         <source>Banking</source>
         <translation>Virement</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="288"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="291"/>
         <source>Due by</source>
         <translation>Du par</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="119"/>
-        <source>Error</source>
-        <translation>Erreur</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="119"/>
-        <source>Please select a line to delete.</source>
-        <translation>Veuillez sélectionner une ligne,s&apos;il vous plaît.</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="131"/>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="206"/>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="210"/>
-        <source>Information</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="131"/>
-        <source>Line is deleted.</source>
-        <translation>La ligne est effacée.</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="206"/>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="210"/>
-        <source>Not yet</source>
-        <translation>Pas encore</translation>
     </message>
 </context>
 <context>
@@ -1886,127 +1818,122 @@ Autrement le résultat sera faux!</translation>
 <context>
     <name>LedgerViewer</name>
     <message>
-        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="42"/>
+        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="50"/>
         <source>euro</source>
         <translation>euro</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="114"/>
+        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="122"/>
         <source>E&amp;xit</source>
         <translation>&amp;Sortir</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="116"/>
+        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="124"/>
         <source>Close Ledger</source>
         <translation>Quitter Grand Livre</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="120"/>
+        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="128"/>
         <source>Receipts by month</source>
         <translation>Recettes par mois</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="121"/>
-        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="136"/>
+        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="129"/>
+        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="144"/>
         <source>See receipts by month.</source>
         <translation>Voir les recettes par mois.</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="125"/>
+        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="133"/>
         <source>Receipts by month and type</source>
         <translation>Recettes par mois et type</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="126"/>
-        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="141"/>
+        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="134"/>
+        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="149"/>
         <source>See receipts by month and type.</source>
         <translation>Voir les recettes par mois et type.</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="130"/>
+        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="138"/>
         <source>Receipts by year and type</source>
         <translation>Recettes par année et type</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="131"/>
-        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="146"/>
+        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="139"/>
+        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="154"/>
         <source>See receipts by year and type.</source>
         <translation>Voir les recettes par année et type.</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="135"/>
+        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="143"/>
         <source>Movements by month</source>
         <translation>Mouvements par mois</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="140"/>
+        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="148"/>
         <source>Movements by month and type</source>
         <translation>Mouvements par mois et type</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="145"/>
+        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="153"/>
         <source>Movements by year and type</source>
         <translation>Mouvements par année et type</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="108"/>
-        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="150"/>
+        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="116"/>
+        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="158"/>
         <source>&amp;Ledger</source>
         <translation>Grand &amp;Livre</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="101"/>
+        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="109"/>
         <source>&amp;Analyse</source>
         <translation>&amp;Analyse</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="151"/>
+        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="159"/>
         <source>See ledger.</source>
         <translation>Voir le Grand Livre.</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="164"/>
+        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="172"/>
         <source>PATIENT NAME</source>
         <translation>NOM DU PATIENT</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="165"/>
+        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="173"/>
         <source>SITE ID</source>
         <translation>ID DU SITE</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="166"/>
+        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="174"/>
         <source>INSURANCE ID</source>
         <translation>ID DE L&apos;ASSURANCE</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="167"/>
+        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="175"/>
         <source>TEXT</source>
         <translation>TEXTE</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="195"/>
-        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="206"/>
-        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="239"/>
-        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="250"/>
+        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="203"/>
+        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="214"/>
+        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="247"/>
+        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="258"/>
         <source>TYPE</source>
         <translation>TYPE</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="196"/>
-        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="207"/>
-        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="240"/>
-        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="251"/>
+        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="204"/>
+        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="215"/>
+        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="248"/>
+        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="259"/>
         <source>VALUE</source>
         <translation>VALEUR</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="276"/>
-        <source>Warning</source>
-        <translation>Attention</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="276"/>
+        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="283"/>
         <source>Choose an action.</source>
         <translation>Choisissez une action.</translation>
     </message>
@@ -2042,33 +1969,19 @@ Autrement le résultat sera faux!</translation>
 <context>
     <name>MovementsIODb</name>
     <message>
-        <location filename="../../plugins/accountplugin/movements/movementsIO.cpp" line="140"/>
+        <location filename="../../plugins/accountplugin/movements/movementsIO.cpp" line="146"/>
         <source>No available movement available.
 Please create defaults in Configuration &gt; Preferences.</source>
         <translation>Par de mouvement type disponible.
 Créez s&apos;ils vous plaît les mouvements par défaut dans Configuration &gt; Preferences.</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/movements/movementsIO.cpp" line="142"/>
-        <location filename="../../plugins/accountplugin/movements/movementsIO.cpp" line="259"/>
-        <location filename="../../plugins/accountplugin/movements/movementsIO.cpp" line="369"/>
-        <source>Warning</source>
-        <translation>Attention</translation>
+        <location filename="../../plugins/accountplugin/movements/movementsIO.cpp" line="371"/>
+        <source>Two or more records with the same bank name.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/movements/movementsIO.cpp" line="260"/>
-        <source>
-Error = </source>
-        <translation>
-Erreur = </translation>
-    </message>
-    <message>
-        <location filename="../../plugins/accountplugin/movements/movementsIO.cpp" line="370"/>
-        <source>You have two or more records with the same bank name ! Risk of errors!</source>
-        <translation>Vous avez deux ou plus enregistrements avec le même nom de banque ! Risque d&apos;erreurs !</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/accountplugin/movements/movementsIO.cpp" line="393"/>
+        <location filename="../../plugins/accountplugin/movements/movementsIO.cpp" line="394"/>
         <source>Fixed Asset</source>
         <translation>Immobilisation</translation>
     </message>
@@ -2076,109 +1989,88 @@ Erreur = </translation>
 <context>
     <name>MovementsViewer</name>
     <message>
-        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="72"/>
+        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="76"/>
         <source>Contact the development team.</source>
         <translation>Contacter l&apos;équipe de développement.</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="72"/>
+        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="76"/>
         <source>Unable to show movements correctly.</source>
         <translation>Incapable de montrer les mouvements correctement.</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="105"/>
+        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="109"/>
         <source>Label</source>
         <translation>Dénomination</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="107"/>
+        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="111"/>
         <source>Date</source>
         <translation>Date</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="108"/>
+        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="112"/>
         <source>Date of value</source>
         <translation>Date de valeur</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="109"/>
+        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="113"/>
         <source>Acts</source>
         <translation>Actes</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="110"/>
+        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="114"/>
         <source>Validity</source>
         <translation>Validité</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="111"/>
+        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="115"/>
         <source>Valid</source>
         <translation>Valider</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="112"/>
+        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="116"/>
         <source>Details</source>
         <translation>Détails</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="167"/>
-        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="179"/>
-        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="187"/>
-        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="192"/>
-        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="203"/>
-        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="208"/>
-        <source>Error</source>
-        <translation>Erreur</translation>
+        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="173"/>
+        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="196"/>
+        <source>Movement deleted.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="167"/>
+        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="183"/>
+        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="205"/>
+        <source>Select a line.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="212"/>
+        <source>Movement validated.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="171"/>
         <source>Movement not inserted.</source>
         <translation>Mouvement à insérer.</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="169"/>
-        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="194"/>
-        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="210"/>
-        <source>Information</source>
-        <translation>Information</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="169"/>
-        <source>Movement is inserted.</source>
-        <translation>Le mouvement est inséré.</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="179"/>
-        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="203"/>
-        <source>You forgot to select a line.</source>
-        <translation>Vous avez oublié de sélectionner une ligne.</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="187"/>
+        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="190"/>
         <source>This fixed asset cannot be deleted.
 Do it in assets.</source>
         <translation>Cette immobilisation ne peut pas être effacée.
 Faites le dans Immobilisations.</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="192"/>
+        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="194"/>
         <source>Movement is not deleted.</source>
         <translation>Le mouvement n&apos;a pas été effacé.</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="194"/>
-        <source>Movement is deleted.</source>
-        <translation>Le mouvement est effacé.</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="208"/>
+        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="210"/>
         <source>Movement is not validated.</source>
         <translation>Le mouvement n&apos;est pas validé.</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="210"/>
-        <source>Movement is validated.</source>
-        <translation>Le mouvement est validé.</translation>
     </message>
 </context>
 <context>
@@ -2248,18 +2140,12 @@ Faites le dans Immobilisations.</translation>
 <context>
     <name>PreferedReceipts</name>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/preferedreceipts.cpp" line="74"/>
+        <location filename="../../plugins/accountplugin/receipts/preferedreceipts.cpp" line="79"/>
         <source>euros</source>
         <translation>euros</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/preferedreceipts.cpp" line="112"/>
-        <location filename="../../plugins/accountplugin/receipts/preferedreceipts.cpp" line="129"/>
-        <source>Warning</source>
-        <translation>Attention</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/accountplugin/receipts/preferedreceipts.cpp" line="112"/>
+        <location filename="../../plugins/accountplugin/receipts/preferedreceipts.cpp" line="117"/>
         <source>You should create a preferedValue like this:
 Take a value in thesaurus list with a RIGHT clic,
 if you don&apos;t have one, save the next value in thesaurus and chose it in the same way</source>
@@ -2268,17 +2154,17 @@ prenez une valeur dans le thésaurus avec un clic droit,
 si vous n&apos;en n&apos;avez pas, sauvegarder la valeur suivante dans le thésaurus et choisissez la de la même façon</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/preferedreceipts.cpp" line="129"/>
+        <location filename="../../plugins/accountplugin/receipts/preferedreceipts.cpp" line="132"/>
         <source>Unable to insert datas into account</source>
         <translation>Impossible d&apos;insérer les données dans la comptabilité</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/preferedreceipts.cpp" line="138"/>
+        <location filename="../../plugins/accountplugin/receipts/preferedreceipts.cpp" line="140"/>
         <source>The value </source>
         <translation>La valeur </translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/preferedreceipts.cpp" line="143"/>
+        <location filename="../../plugins/accountplugin/receipts/preferedreceipts.cpp" line="145"/>
         <source> has been inserted.</source>
         <translation> a été insérée.</translation>
     </message>
@@ -2462,7 +2348,7 @@ rapide</translation>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="99"/>
+        <location filename="../../plugins/accountplugin/ledger/ledgerviewer.cpp" line="107"/>
         <source>&amp;Program</source>
         <comment>Ledger file</comment>
         <translation>&amp;Programme</translation>
@@ -2476,22 +2362,22 @@ rapide</translation>
         <translation>Formulaire</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.ui" line="74"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.ui" line="68"/>
         <source>Values</source>
         <translation>Valeur</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.ui" line="87"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.ui" line="81"/>
         <source>Dates</source>
         <translation>Dates</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.ui" line="95"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.ui" line="89"/>
         <source>Execution</source>
         <translation>Exécution</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.ui" line="115"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.ui" line="109"/>
         <source>Payment</source>
         <translation>Paiement</translation>
     </message>
@@ -2501,86 +2387,85 @@ rapide</translation>
         <translation>Montant</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.ui" line="138"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.ui" line="129"/>
         <source>Input</source>
         <translation>Entrée</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.ui" line="145"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.ui" line="136"/>
         <source>View</source>
         <translation>Vue</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.ui" line="162"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.ui" line="153"/>
         <source>Save in thesaurus</source>
         <translation>Sauvegarder dans le thésaurus</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.ui" line="169"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.ui" line="160"/>
         <source>&amp;Save</source>
         <translation>&amp;Sauver</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.ui" line="179"/>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="631"/>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="747"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.ui" line="170"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="655"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="777"/>
         <source>Other</source>
         <translation>Autre</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.ui" line="186"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.ui" line="177"/>
         <source>Sa&amp;ve and quit</source>
         <translation>Sau&amp;ver et quitter</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.ui" line="202"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.ui" line="193"/>
         <source>&amp;Quit</source>
         <translation>&amp;Quitter</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="627"/>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="743"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.ui" line="211"/>
+        <source>Choosen Values</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="651"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="773"/>
         <source>Cash</source>
         <translation>Espèces</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="628"/>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="744"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="652"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="774"/>
         <source>Check</source>
         <translation>Chèques</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="629"/>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="745"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="653"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="775"/>
         <source>Visa</source>
         <translation>Carte bancaire</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="630"/>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="746"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="654"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="776"/>
         <source>Banking</source>
         <translation>Virement</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="632"/>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="748"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="656"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="778"/>
         <source>Du</source>
         <translation>Du</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="689"/>
-        <source>Clear all.</source>
-        <translation>Effacer tout.</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="842"/>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="885"/>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="1113"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="909"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="1129"/>
         <source>Warning</source>
         <translation>Attention</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="842"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="866"/>
         <source>You have to insert your preferred value
 in thesaurus
 and choose it as preferred.</source>
@@ -2589,65 +2474,66 @@ dans le thésaurus
 et choisir la valeur préférée.</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="883"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="657"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="779"/>
+        <source>Act</source>
+        <translation>Acte</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="907"/>
         <source>No distance rule value available !
 You should create one in Preferences.</source>
         <translation>Pas de règle de distance disponible !
 Vous devriez en créer une dans Préférences.</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="898"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="922"/>
         <source>Kilometers</source>
         <translation>Kilomètres</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="1141"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="1147"/>
         <source> has been saved in thesaurus !</source>
         <translation> a été sauvegardé dans le thésaurus !</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="945"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="958"/>
         <source>thesaurus</source>
         <translation>thésaurus</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="1113"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="1129"/>
         <source>Error inserting into AccountModel!</source>
         <translation>Erreur d&apos;insertion dans AccountModel !</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="1141"/>
-        <source>Information</source>
-        <translation>Information</translation>
     </message>
 </context>
 <context>
     <name>choiceDialog</name>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="471"/>
+        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="453"/>
         <source>Choose another percentage value.</source>
         <translation>Choisissez une autre pourcentage.</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="472"/>
+        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="453"/>
         <source>Do you want to choose another percentage ?</source>
         <translation>Voulez vous choisir un autre pourcentage ?</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="329"/>
-        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="521"/>
+        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="313"/>
+        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="486"/>
         <source>Distance rules</source>
         <translation>Règles de distance</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="328"/>
-        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="525"/>
+        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="312"/>
+        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="490"/>
         <source>Sites</source>
         <translation>Sites</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="330"/>
-        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="529"/>
+        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="314"/>
+        <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="494"/>
         <source>Debtor</source>
         <translation>Débiteur</translation>
     </message>
@@ -2655,22 +2541,16 @@ Vous devriez en créer une dans Préférences.</translation>
 <context>
     <name>findReceiptsValues</name>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/findReceiptsValues.cpp" line="191"/>
+        <location filename="../../plugins/accountplugin/receipts/findReceiptsValues.cpp" line="151"/>
         <source>The medical procedure database is empty.
 You should create defaults in Configuration &gt; Preference &gt; Accountancy.</source>
         <translation>La base médical procédure est vide.
 Vous devriez créer les valeurs par défaut dans Configuration &gt; Preference &gt; Accountancy.</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/findReceiptsValues.cpp" line="193"/>
-        <location filename="../../plugins/accountplugin/receipts/findReceiptsValues.cpp" line="298"/>
-        <source>Warning</source>
-        <translation>Attention</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/accountplugin/receipts/findReceiptsValues.cpp" line="298"/>
-        <source>Check a radioButton.</source>
-        <translation>Choisissez.</translation>
+        <location filename="../../plugins/accountplugin/receipts/findReceiptsValues.cpp" line="328"/>
+        <source>Check a button.</source>
+        <translation>Cocher un bouton.</translation>
     </message>
 </context>
 <context>
@@ -2681,37 +2561,47 @@ Vous devriez créer les valeurs par défaut dans Configuration &gt; Preference &
         <translation>Trouvez vos valeurs </translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/findValuesGUI.ui" line="25"/>
+        <location filename="../../plugins/accountplugin/receipts/findValuesGUI.ui" line="82"/>
+        <source>+</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/receipts/findValuesGUI.ui" line="99"/>
+        <source>-</source>
+        <translation></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/receipts/findValuesGUI.ui" line="162"/>
         <source>Categories</source>
         <translation>Catégories</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/findValuesGUI.ui" line="35"/>
+        <location filename="../../plugins/accountplugin/receipts/findValuesGUI.ui" line="172"/>
         <source>Filter</source>
         <translation>Filtre</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/findValuesGUI.ui" line="51"/>
+        <location filename="../../plugins/accountplugin/receipts/findValuesGUI.ui" line="52"/>
         <source>Choose your values</source>
         <translation>Choisissez vos valeurs</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/findValuesGUI.ui" line="125"/>
+        <location filename="../../plugins/accountplugin/receipts/findValuesGUI.ui" line="39"/>
         <source>with abstract</source>
         <translation>avec résumé</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/findValuesGUI.ui" line="132"/>
+        <location filename="../../plugins/accountplugin/receipts/findValuesGUI.ui" line="32"/>
         <source>with name</source>
         <translation>avec nom</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/findValuesGUI.ui" line="145"/>
+        <location filename="../../plugins/accountplugin/receipts/findValuesGUI.ui" line="65"/>
         <source>List of values choosen</source>
         <translation>Liste des valeurs choisies</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/findValuesGUI.ui" line="103"/>
+        <location filename="../../plugins/accountplugin/receipts/findValuesGUI.ui" line="134"/>
         <source>Next</source>
         <translation>Suivant</translation>
     </message>
@@ -2719,23 +2609,12 @@ Vous devriez créer les valeurs par défaut dans Configuration &gt; Preference &
 <context>
     <name>receiptsEngine</name>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptsIO.cpp" line="105"/>
-        <source>Warning ReceiptsEngine : </source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptsIO.cpp" line="105"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptsIO.cpp" line="108"/>
         <source>Error = </source>
         <translation>Erreur = </translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptsIO.cpp" line="260"/>
-        <location filename="../../plugins/accountplugin/receipts/receiptsIO.cpp" line="352"/>
-        <source>Warning</source>
-        <translation>Attention</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptsIO.cpp" line="260"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptsIO.cpp" line="262"/>
         <source>You have to insert your preferred value
 in thesaurus
 and choose it as preferred.</source>
@@ -2744,12 +2623,12 @@ dans le thésaurus
 et la choisir comme préférée.</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptsIO.cpp" line="290"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptsIO.cpp" line="292"/>
         <source>preferred act</source>
         <translation>Acte préféré</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptsIO.cpp" line="352"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptsIO.cpp" line="353"/>
         <source>More than one value</source>
         <translation>Plus d&apos;une valeur</translation>
     </message>
@@ -2757,17 +2636,12 @@ et la choisir comme préférée.</translation>
 <context>
     <name>receiptsManager</name>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptsmanager.cpp" line="309"/>
-        <source>You have to create a preferred value in Thesaurus. </source>
-        <translation>Vous devez créer une valeur préférée dans Thésaurus.</translation>
+        <location filename="../../plugins/accountplugin/receipts/receiptsmanager.cpp" line="312"/>
+        <source>You have to create a preferred value in Thesaurus.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptsmanager.cpp" line="310"/>
-        <source>Warning</source>
-        <translation>Attention</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptsmanager.cpp" line="524"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptsmanager.cpp" line="529"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
@@ -2775,62 +2649,67 @@ et la choisir comme préférée.</translation>
 <context>
     <name>treeViewsActions</name>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="306"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="314"/>
         <source>Delete this value.</source>
         <translation>Effacer cette valeur.</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="307"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="315"/>
         <source>Choose this value like the preferred.</source>
         <translation>Choisissez cette valeur comme la préférée.</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="405"/>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="420"/>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="576"/>
-        <source>Warning</source>
-        <translation>Attention</translation>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="383"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="384"/>
+        <source>Do you want to delete selected item ?</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="405"/>
-        <source>Unable to choose this item.</source>
-        <translation>Impossible de choisir cet item.</translation>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="393"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="394"/>
+        <source>Do you want to set this item as preferred value ?</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="420"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="398"/>
+        <source>Unable to set this item as the preferred one.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="408"/>
         <source>Cannot change value bool in thesaurus :</source>
         <translation>Impossible de changer la valeur bool dans thésaurus :</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="436"/>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="448"/>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="475"/>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="478"/>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="479"/>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="510"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="423"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="435"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="462"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="465"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="466"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="497"/>
         <source>Thesaurus</source>
         <translation>Thésaurus</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="449"/>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="515"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="436"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="502"/>
         <source>Values</source>
         <translation>Valeurs</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="450"/>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="505"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="437"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="492"/>
         <source>Preferred Value</source>
         <translation>Valeur préférentielle</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="451"/>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="520"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="438"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="507"/>
         <source>Round trip</source>
         <translation>Déplacement</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="576"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="563"/>
         <source>Cannot delete in thesaurus :</source>
         <translation>Impossible d&apos;effacer dans thésaurus :</translation>
     </message>
@@ -2838,24 +2717,17 @@ et la choisir comme préférée.</translation>
 <context>
     <name>xmlCategoriesParser</name>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/xmlcategoriesparser.cpp" line="58"/>
-        <location filename="../../plugins/accountplugin/receipts/xmlcategoriesparser.cpp" line="61"/>
         <location filename="../../plugins/accountplugin/receipts/xmlcategoriesparser.cpp" line="65"/>
-        <source>Error</source>
-        <translation>Erreur</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/accountplugin/receipts/xmlcategoriesparser.cpp" line="58"/>
         <source> does not exist.</source>
         <translation> n&apos;existe pas.</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/xmlcategoriesparser.cpp" line="61"/>
+        <location filename="../../plugins/accountplugin/receipts/xmlcategoriesparser.cpp" line="68"/>
         <source>xmlEchangeFile.xml not found.</source>
         <translation>xmlEchangeFile.xml non trouvé.</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/xmlcategoriesparser.cpp" line="65"/>
+        <location filename="../../plugins/accountplugin/receipts/xmlcategoriesparser.cpp" line="72"/>
         <source>xmlEchangeFile.xml cannot be parsed.</source>
         <translatorcomment>xmlEchangeFile.xml ne peut pas être parcouru.</translatorcomment>
         <translation></translation>

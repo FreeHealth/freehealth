@@ -141,25 +141,25 @@ Ligne : %2, colonne : %3</translation>
         <translation>Aucun nom de fichier donné pour l&apos;ouverture d&apos;une prescription</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="877"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="879"/>
         <source>Save test only drugs too ?</source>
         <translation>Sauvegarder les médicaments tests aussi ?</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="878"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="880"/>
         <source>Drugs added for testing only are actually hidden in this prescription.
 Do you want to add them to the file ?</source>
         <translation>Les médicaments tests sont actuellement cachés dans la prescription.
 Voulez-vous les ajouter au fichier ?</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="880"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="882"/>
         <source>Answering &apos;no&apos; will cause definitive lost of test only drugs when reloading this file.</source>
         <translation>Répondre &apos;non&apos; peut causer une perte définitive d&apos;informations des médicaments tests lors de la prochaine ouverture.</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="1099"/>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="1113"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="1101"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="1115"/>
         <source>Drugs Prescription</source>
         <translation>Prescription Medicamenteuse</translation>
     </message>
@@ -376,7 +376,7 @@ Voulez-vous les ajouter au fichier ?</translation>
     <message>
         <location filename="../../plugins/drugsbaseplugin/protocolsbase.cpp" line="397"/>
         <source>Standardized protocols database can not be correctly updated</source>
-        <translation type="unfinished"></translation>
+        <translation>La base de données des protocoles ne peut être mise à jour correctement</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsbaseplugin/protocolsbase.cpp" line="462"/>

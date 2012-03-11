@@ -4,18 +4,18 @@
 <context>
     <name>MedinTux::Configuration</name>
     <message>
-        <location filename="../../libs/medintuxutils/configuration.cpp" line="456"/>
-        <source>Unable to configure MedinTux : Menus path does not exists and can not be created. Path to DrTux binary : %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../libs/medintuxutils/configuration.cpp" line="460"/>
         <source>MedinTux Configuration : resources user menus path correctly created  %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../libs/medintuxutils/configuration.cpp" line="456"/>
+        <source>Unable to configure MedinTux : Menus path does not exist and can not be created. Path to DrTux binary : %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../libs/medintuxutils/configuration.cpp" line="469"/>
-        <source>Unable to configure MedinTux : %1 menu does not exists and can not be created. Path to DrTux binary : %2</source>
+        <source>Unable to configure MedinTux : %1 menu does not exist and can not be created. Path to DrTux binary : %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -35,7 +35,7 @@
     </message>
     <message>
         <location filename="../../libs/medintuxutils/configuration.cpp" line="500"/>
-        <source>Unable to configure MedinTux : icon %1 does not exists.</source>
+        <source>Unable to configure MedinTux : icon %1 does not exist.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -12,10 +12,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>ICD10 database informations</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>ICD10 search method</source>
         <translation type="unfinished"></translation>
     </message>
@@ -57,6 +53,10 @@
     </message>
     <message>
         <source>ICD10 code collection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ICD10 database information</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

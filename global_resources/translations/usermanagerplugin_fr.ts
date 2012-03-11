@@ -33,7 +33,7 @@
     <message>
         <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="257"/>
         <source>You can proceed with this user or connect with another one.</source>
-        <translation type="unfinished"></translation>
+        <translation>Vous pouvez continuer avec votre utilisateur ou vous connecter avec un autre.</translation>
     </message>
     <message>
         <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="259"/>
@@ -221,8 +221,8 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="../../plugins/usermanagerplugin/widgets/useridentifier.cpp" line="120"/>
-        <source>Incorrect login/password informations.</source>
-        <translation>Login / mot de passe incorrects.</translation>
+        <source>Incorrect login/password information.</source>
+        <translation>Informations d&apos;identification incorrectes.</translation>
     </message>
     <message>
         <location filename="../../plugins/usermanagerplugin/widgets/useridentifier.cpp" line="121"/>
@@ -346,7 +346,8 @@ seul les nombres et les lettres sont autorisées</translation>
         <location filename="../../plugins/usermanagerplugin/widgets/useridentityandloginpage.cpp" line="188"/>
         <source>All users must have at least a name and a first name.
 You can not proceed with an anonymous user.</source>
-        <translation type="unfinished"></translation>
+        <translation>Tous les utilisateurs doivent avoir au moins un nom et un prénom.
+Vous ne pouvez pas continuer avec un utilisateur anonyme.</translation>
     </message>
     <message>
         <location filename="../../plugins/usermanagerplugin/widgets/useridentityandloginpage.cpp" line="194"/>
@@ -356,7 +357,7 @@ You can not proceed with an anonymous user.</source>
     <message>
         <location filename="../../plugins/usermanagerplugin/widgets/useridentityandloginpage.cpp" line="195"/>
         <source>You must correctly confirm your password to go through this page.</source>
-        <translation type="unfinished"></translation>
+        <translation>Vous devez correctement confirmer votre mot de passe pour continuer.</translation>
     </message>
     <message>
         <location filename="../../plugins/usermanagerplugin/widgets/useridentityandloginpage.cpp" line="196"/>
@@ -383,7 +384,7 @@ You can not proceed with an anonymous user.</source>
     <message>
         <location filename="../../plugins/usermanagerplugin/widgets/useridentityandloginpage.cpp" line="207"/>
         <source>You must specify a valid login. Login must be more than 6 characters.</source>
-        <translation type="unfinished"></translation>
+        <translation>Vous devez spécifier un identifiant valide (au moins 6 caractères).</translation>
     </message>
     <message>
         <location filename="../../plugins/usermanagerplugin/widgets/useridentityandloginpage.cpp" line="214"/>
@@ -994,43 +995,43 @@ L&apos;application va s&apos;arrêter.</translation>
 <context>
     <name>UserPlugin::UserModel</name>
     <message>
-        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="522"/>
+        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="525"/>
         <source>Unable to retreive user into the model using login and password.</source>
         <translation>Impossible de récupérer les utilisateur avec l&apos;identifiant et le mot de passe.</translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="653"/>
-        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="680"/>
+        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="656"/>
+        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="683"/>
         <source>Database server administrator</source>
         <translation>Administrateur de la base de données</translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="793"/>
+        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="796"/>
         <source>You can not delete your own user.</source>
         <translation>Vous ne pouvez pas effacer votre propre utilisateur.</translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="792"/>
+        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="795"/>
         <source>User can not be deleted.</source>
         <translation>L&apos;utilisateur ne peut pas être effacé.</translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="533"/>
+        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="536"/>
         <source>Setting current user uuid to 			 %1</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="666"/>
+        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="669"/>
         <source>Setting current user uuid to %1 (su)</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="803"/>
+        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="806"/>
         <source>You can not delete a modified user, save it before.</source>
         <translation>Vous ne pouvez pas effacer un utilisateur modifié, vous devez d&apos;abord le sauvegarder.</translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="815"/>
+        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="818"/>
         <source>User can not be deleted from database.</source>
         <translation>L&apos;utilisateur ne peut pas être effacé de la base de données.</translation>
     </message>
@@ -1060,7 +1061,7 @@ L&apos;application va s&apos;arrêter.</translation>
     </message>
 </context>
 <context>
-    <name>UserPlugin::UserProfilPage</name>
+    <name>UserPlugin::UserProfilePage</name>
     <message>
         <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="342"/>
         <source>Select a profile</source>
@@ -1069,7 +1070,7 @@ L&apos;application va s&apos;arrêter.</translation>
     <message>
         <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="343"/>
         <source>FreeMedForms allows you to create users using predefined profiles. Select your profile and options.</source>
-        <translation type="unfinished"></translation>
+        <translation>FreeMedForms vous permet de créer des utilisateurs en utilisant des profils prédéfinis. Sélectionnez votre profil et vos options.</translation>
     </message>
     <message>
         <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="361"/>
@@ -1166,17 +1167,17 @@ L&apos;application va s&apos;arrêter.</translation>
     <message>
         <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="202"/>
         <source>WARNING! You did not save this user. If you continue without saving, all changes will be lost.</source>
-        <translation type="unfinished"></translation>
+        <translation>ATTENTION ! Vous n&apos;avez pas sauvegardé cet utilisateur. Si vous continuez sans sauvegarder, tous les changements seront perdus.</translation>
     </message>
     <message>
         <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="204"/>
         <source>Do you really want to close this dialog?</source>
-        <translation type="unfinished"></translation>
+        <translation>Voulez-vous réellement fermer ce dialogue ?</translation>
     </message>
     <message>
         <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="205"/>
         <source>User not saved</source>
-        <translation type="unfinished"></translation>
+        <translation>Utilisateur non sauvegarder</translation>
     </message>
     <message>
         <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="260"/>
@@ -1216,7 +1217,7 @@ L&apos;application va s&apos;arrêter.</translation>
 <context>
     <name>tkUser</name>
     <message>
-        <location filename="../../plugins/usermanagerplugin/userdata.cpp" line="847"/>
+        <location filename="../../plugins/usermanagerplugin/userdata.cpp" line="848"/>
         <source>User logged at %1
 </source>
         <translation>Utilisateur connecté à %1

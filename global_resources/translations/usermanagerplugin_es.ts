@@ -215,7 +215,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="../../plugins/usermanagerplugin/widgets/useridentifier.cpp" line="120"/>
-        <source>Incorrect login/password informations.</source>
+        <source>Incorrect login/password information.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -985,43 +985,43 @@ Application will stop.</source>
 <context>
     <name>UserPlugin::UserModel</name>
     <message>
-        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="522"/>
+        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="525"/>
         <source>Unable to retreive user into the model using login and password.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="653"/>
-        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="680"/>
+        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="656"/>
+        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="683"/>
         <source>Database server administrator</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="793"/>
+        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="796"/>
         <source>You can not delete your own user.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="792"/>
+        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="795"/>
         <source>User can not be deleted.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="533"/>
+        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="536"/>
         <source>Setting current user uuid to 			 %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="666"/>
+        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="669"/>
         <source>Setting current user uuid to %1 (su)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="803"/>
+        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="806"/>
         <source>You can not delete a modified user, save it before.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="815"/>
+        <location filename="../../plugins/usermanagerplugin/usermodel.cpp" line="818"/>
         <source>User can not be deleted from database.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1051,7 +1051,7 @@ Application will stop.</source>
     </message>
 </context>
 <context>
-    <name>UserPlugin::UserProfilPage</name>
+    <name>UserPlugin::UserProfilePage</name>
     <message>
         <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="342"/>
         <source>Select a profile</source>
@@ -1207,7 +1207,7 @@ Application will stop.</source>
 <context>
     <name>tkUser</name>
     <message>
-        <location filename="../../plugins/usermanagerplugin/userdata.cpp" line="847"/>
+        <location filename="../../plugins/usermanagerplugin/userdata.cpp" line="848"/>
         <source>User logged at %1
 </source>
         <translation type="unfinished"></translation>

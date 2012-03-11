@@ -240,7 +240,7 @@ Référez-vous à la documentation de votre système d&apos;exploitation.</trans
     <message>
         <location filename="../../plugins/printerplugin/printerpreviewer_p.ui" line="72"/>
         <source>Show Duplicates</source>
-        <translation type="unfinished"></translation>
+        <translation>Montrer les duplicatas</translation>
     </message>
     <message>
         <location filename="../../plugins/printerplugin/printerpreviewer_p.ui" line="79"/>

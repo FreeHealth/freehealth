@@ -131,12 +131,6 @@
 <context>
     <name>Utils</name>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="394"/>
-        <location filename="../../libs/utils/global.cpp" line="396"/>
-        <source>Error while retrieve informations of uname under %1</source>
-        <translation>Erreur lors de la récupération des informations de uname sous %1</translation>
-    </message>
-    <message>
         <location filename="../../libs/utils/global.cpp" line="517"/>
         <source>%1 : %2 does not exist. Trying to create it.</source>
         <translation>%1 : %2 n&apos;existe pas. Tentative de création.</translation>
@@ -180,9 +174,15 @@
         <translation>Sauvegarde dans le fichier</translation>
     </message>
     <message>
+        <location filename="../../libs/utils/global.cpp" line="394"/>
+        <location filename="../../libs/utils/global.cpp" line="396"/>
+        <source>Error while retrieve information of uname under %1</source>
+        <translation>Erreur en récupérant les données de uname sous %1</translation>
+    </message>
+    <message>
         <location filename="../../libs/utils/global.cpp" line="631"/>
-        <source>File %1 does not exists or is not readable.</source>
-        <translation>Fichier %1 n&apos;existe pas et n&apos;est pas lisible.</translation>
+        <source>File %1 does not exist or is not readable.</source>
+        <translation>Le fichier %1 n&apos;existe pas ou n&apos;est pas lisible.</translation>
     </message>
     <message>
         <location filename="../../libs/utils/global.cpp" line="637"/>
@@ -202,7 +202,7 @@
     <message>
         <location filename="../../libs/utils/global.cpp" line="878"/>
         <source>You can send an email to developers and explain your difficulties : freemedforms@googlegroups.com.</source>
-        <translation type="unfinished"></translation>
+        <translation>Vous pouvez envoyer un courriel aux développeurs et expliquer vos difficultés : freemedforms@googlegroups.com.</translation>
     </message>
     <message>
         <location filename="../../libs/utils/global.cpp" line="919"/>
@@ -356,23 +356,24 @@
         <translation>Téléchargement terminé.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="194"/>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="199"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="195"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="200"/>
         <source>HTTP</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="195"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="194"/>
         <source>Download failed: %1.</source>
         <translation>Le téléchargement a échoué %1.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="200"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="198"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="199"/>
         <source>Redirect to %1 ?</source>
         <translation>Rediriger vers %1 ?</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="211"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="210"/>
         <source>Downloaded %1 to current directory.</source>
         <translation>Téléchargement terminé de %1 dans le répertoire courant.</translation>
     </message>

@@ -134,24 +134,24 @@ Line: %2, Column: %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="877"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="879"/>
         <source>Save test only drugs too ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="878"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="880"/>
         <source>Drugs added for testing only are actually hidden in this prescription.
 Do you want to add them to the file ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="880"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="882"/>
         <source>Answering &apos;no&apos; will cause definitive lost of test only drugs when reloading this file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="1099"/>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="1113"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="1101"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="1115"/>
         <source>Drugs Prescription</source>
         <translation type="unfinished"></translation>
     </message>

@@ -56,17 +56,17 @@ Answering &apos;No&apos; will cause definitve data lose.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formeditordialog.cpp" line="77"/>
+        <location filename="../../plugins/formmanagerplugin/formeditordialog.cpp" line="79"/>
         <source>Form Editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formeditordialog.cpp" line="92"/>
+        <location filename="../../plugins/formmanagerplugin/formeditordialog.cpp" line="94"/>
         <source>Insert as root form ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formeditordialog.cpp" line="92"/>
+        <location filename="../../plugins/formmanagerplugin/formeditordialog.cpp" line="94"/>
         <source>You did not selected a form, do you want to add the sub-form as root form ?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -376,17 +376,17 @@ Answering &apos;No&apos; will cause definitve data lose.</source>
     </message>
     <message>
         <location filename="../../plugins/formmanagerplugin/constants_db.h" line="114"/>
-        <source>Show patient synthesis</source>
+        <source>Show patients&apos; synthesis</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/formmanagerplugin/constants_db.h" line="115"/>
-        <source>Show patient last episodes</source>
+        <source>Show patients&apos; last episodes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/formmanagerplugin/constants_db.h" line="116"/>
-        <source>Patient last episodes</source>
+        <source>Patients&apos; last episodes</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
