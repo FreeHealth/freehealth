@@ -980,15 +980,39 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex & index) {
                     	  qWarning() << __FILE__ << QString::number(__LINE__) << "no thesaurus value available" ;
                     	  return;
                         }
-                    hashFromMp = r.getFilteredValueFromMedicalProcedure(str,field);
+                    QStringList modifDataList = str.split("*");
+                    QString modifier;
+                    if (modifDataList.size() < 2)
+                    {
+                    	  modifier = "1.0";
+                        }
+                    else{
+                          modifier = modifDataList[1];
+                        }
+                    double modifDouble = modifier.toDouble();
+                    QString data = modifDataList[0];
+                    hashFromMp = r.getFilteredValueFromMedicalProcedure(data,field);
                     if (WarnDebugMessage)
                     qDebug() << __FILE__ << QString::number(__LINE__) << " hashFromMp.size() " << QString::number(hashFromMp.size());
-                    QString value = QString::number(hashFromMp.value(str));
+                    QString value = QString::number(hashFromMp.value(data));
                     if (WarnDebugMessage)
                     qDebug() << __FILE__ << QString::number(__LINE__) << value;
                     if (WarnDebugMessage)
                     qDebug() << __FILE__ << QString::number(__LINE__) << QString::number(percentage);
-                    hashOfValues.insertMulti(str,value);
+                    if (value.toDouble() == 0.0)
+                    {
+        	        if (value.contains(","))
+        	        {
+        	  	    value.replace(",",QLocale::c().decimalPoint ());
+        	            }
+        	        else if (value.contains("."))
+        	        {
+        	  	  value.replace(".",QLocale::c().decimalPoint ());
+        	          }
+                        }
+                    double valueDouble = value.toDouble();
+                    double valueModified = valueDouble * modifDouble;
+                    hashOfValues.insertMulti(str,QString::number(valueModified));
                     if (WarnDebugMessage)
                     qDebug() << __FILE__ << QString::number(__LINE__) << " hashOfValues.size() in getHashOfThesaurus " << QString::number(hashOfValues.size());
                     m_listOfValues << str;

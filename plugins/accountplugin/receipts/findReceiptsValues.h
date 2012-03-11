@@ -63,6 +63,7 @@ private:
     xmlCategoriesParser * m_xmlParser;
     QSqlDatabase m_db;
     double m_modifier;
+    QHash<int,QString> m_hashExplanations;
     QHash<QString,QString> m_hashValuesChoosen;
     void initialize();
     void fillComboCategories();
@@ -75,6 +76,7 @@ private slots:
     void chooseValue();
     void deleteValue();
 //    void supprItemChoosen(QListWidgetItem * item);
+    void showToolTip(const QModelIndex & index);
     void on_lineEditFilter_textChanged(const QString & text);
     void showNext();
     void setModifSpinBox(QWidget*,QWidget*);

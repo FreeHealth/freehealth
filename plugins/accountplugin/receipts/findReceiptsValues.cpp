@@ -33,7 +33,7 @@
 #include "constants.h"
 #include <QSqlQuery>
 #include <QSqlTableModel>
-enum{WarnDebugMessage = true};
+enum{WarnDebugMessage = false};
 using namespace AccountDB;
 using namespace Constants;
 
@@ -62,10 +62,10 @@ findReceiptsValues::findReceiptsValues(QWidget * parent):QDialog(parent){
   fillListViewValues(comboValue);
 
   connect(ui->comboBoxCategories,SIGNAL(activated(const QString&)),this,SLOT(fillListViewValues(const QString&)));
-  //connect(ui->tableViewOfValues,SIGNAL(pressed(const QModelIndex&)),this,SLOT(chooseValue(const QModelIndex&)));
+  connect(ui->tableViewOfValues,SIGNAL(pressed(const QModelIndex&)),this,SLOT(showToolTip(const QModelIndex&)));
   connect(ui->plusButton,SIGNAL(pressed()),this,SLOT(chooseValue()));
   connect(ui->lessButton,SIGNAL(pressed()),this,SLOT(deleteValue()));
-  connect(ui->listChoosenWidget,SIGNAL(itemClicked(QListWidgetItem *)),this,SLOT(supprItemChoosen(QListWidgetItem *)));
+  //connect(ui->listChoosenWidget,SIGNAL(itemClicked(QListWidgetItem *)),this,SLOT(supprItemChoosen(QListWidgetItem *)));
   connect(ui->nextButton,SIGNAL(pressed()),this,SLOT(showNext()));
   connect(qApp,SIGNAL(focusChanged(QWidget*,QWidget*)),this,SLOT(setModifSpinBox(QWidget*,QWidget*)));
   connect(ui->modifSpinBox,SIGNAL(valueChanged(double)),this,SLOT(setModifier(double)));
@@ -117,9 +117,10 @@ void findReceiptsValues::fillListViewValues(const QString & comboItem){
     	      qDebug() << __FILE__ << QString::number(__LINE__) << strItem  ;
     const QString name = "NAME";
     const QString amount = "AMOUNT";
+    const QString explanation = "ABSTRACT";
     const QString type = "TYPE";
     QString filter = QString("WHERE %1 = '%2'").arg(type,strItem);
-    QString req = QString("SELECT %1,%2 FROM %3 ").arg(name,amount,baseName )+filter;
+    QString req = QString("SELECT %1,%2,%3 FROM %4 ").arg(name,amount,explanation,baseName )+filter;
     QStandardItemModel *model = new QStandardItemModel(0,2,this);
     int row = 0;
     QSqlQuery q(m_db);
@@ -132,10 +133,12 @@ void findReceiptsValues::fillListViewValues(const QString & comboItem){
     {
     	QString n = q.value(0).toString();
     	QString a = q.value(1).toString();
+    	QString expl = q.value(2).toString();
     	model->insertRows(row,1,QModelIndex());
     	model->setData(model->index(row,0),n,Qt::EditRole);
         model->setData(model->index(row,1),a,Qt::EditRole);
         model->submit();
+        m_hashExplanations.insert(row,expl);
         ++row;
         counterList << row;
         }
@@ -151,6 +154,16 @@ void findReceiptsValues::fillListViewValues(const QString & comboItem){
     ui->tableViewOfValues->horizontalHeader()->setStretchLastSection ( true );
     ui->tableViewOfValues->setGridStyle(Qt::NoPen);
 
+}
+
+void findReceiptsValues::showToolTip(const QModelIndex & index)
+{
+    int row = index.row();
+    QString explanation = m_hashExplanations.value(row);
+    const QAbstractItemModel *abstractModel = index.model();
+    const QStandardItemModel * model = static_cast<const QStandardItemModel*>(abstractModel) ;
+    QStandardItem *item = model->itemFromIndex(index);
+    item->setToolTip(explanation);
 }
 
 /*void findReceiptsValues::chooseValue(const QModelIndex& index){
@@ -175,6 +188,13 @@ void findReceiptsValues::chooseValue()
     //get datas
     QAbstractItemModel * model = ui->tableViewOfValues->model();
     QModelIndex inIndex = ui->tableViewOfValues->currentIndex();
+    if (!inIndex.isValid())
+    {
+    	  qWarning() << __FILE__ << QString::number(__LINE__) << "index not valid" ;
+    	  QMessageBox::warning(0,trUtf8("Warning"),trUtf8("You have to choose a value !"),
+    	  QMessageBox::Ok);
+    	  return;  
+        }
     int row = inIndex.row();
     QModelIndex indexData = model->index(row,0,QModelIndex());
     QModelIndex indexAmount = model->index(row,1,QModelIndex());
@@ -214,6 +234,15 @@ void findReceiptsValues::chooseValue()
 void findReceiptsValues::deleteValue()
 {
     QListWidgetItem * item;
+    if (WarnDebugMessage)
+    qDebug() << __FILE__ << QString::number(__LINE__) << " in deleteValue " ;
+    if (!ui->listChoosenWidget->currentIndex().isValid())
+    {
+    	  qWarning() << __FILE__ << QString::number(__LINE__) << "index not valid" ;
+    	  QMessageBox::warning(0,trUtf8("Warning"),trUtf8("You have to choose a value !"),
+    	  QMessageBox::Ok);
+    	  return;
+        }
     item = ui->listChoosenWidget->currentItem();
     if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " item = " << item->text();
