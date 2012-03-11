@@ -4,7 +4,7 @@
 
 # var: keep the project order (should begin with freemedforms) 
 #FREEMEDFORMS_PROJECTS := freemedforms freediams freeicd freeaccount
-PROJECT := freemedforms
+PROJECTS := freemedforms freediams
 QMAKE := qmake-qt4
 QMAKE_CONFIG := "CONFIG+=release" "CONFIG+=LINUX_INTEGRATED" -r
 QMAKE_IPATH := "INSTALL_ROOT_PATH=$(CURDIR)/debian/tmp/usr/"
@@ -22,8 +22,8 @@ MAKEINSTALL_PROJ = make install -C $(PROJECT) -f Makefile
 #    so that the freemedforms project is the last configured one (for the libs)
 override_dh_auto_configure:
 	lrelease global_resources/translations/*.ts
-	$(call QMAKE_PROJ,$(PROJECT))
-#	$(foreach PROJECT,$(call reverse,$(FREEMEDFORMS_PROJECTS)),$(QMAKE_PROJ) && ) echo .
+#	$(call QMAKE_PROJ,$(PROJECT))
+	$(foreach PROJECT,$(call reverse,$(PROJECTS)),$(QMAKE_PROJ) && ) echo .
 	
 # Clean build path
 override_dh_auto_clean:
@@ -34,13 +34,13 @@ override_dh_auto_clean:
 
 # Make all projects
 override_dh_auto_build:
-	$(call MAKE_PROJ,$(PROJECT))
-#	$(foreach PROJECT,$(FREEMEDFORMS_PROJECTS),$(MAKE_PROJ) && ) echo .
+#	$(call MAKE_PROJ,$(PROJECT))
+	$(foreach PROJECT,$(PROJECTS),$(MAKE_PROJ) && ) echo .
 
 # Install all projects
 override_dh_auto_install:
-	$(call MAKEINSTALL_PROJ,$(PROJECT))
-#	$(foreach PROJECT,$(FREEMEDFORMS_PROJECTS),$(MAKEINSTALL_PROJ) && ) echo .
+#	$(call MAKEINSTALL_PROJ,$(PROJECT))
+	$(foreach PROJECT,$(PROJECTS),$(MAKEINSTALL_PROJ) && ) echo .
 
 override_dh_install:	
 	dh_install
