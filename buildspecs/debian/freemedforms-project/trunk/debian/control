@@ -13,13 +13,15 @@ Vcs-Svn: svn://svn.debian.org/debian-med/trunk/packages/freemedforms/trunk/
 
 Package: freemedforms-project
 Architecture: all
-Depends: ${shlibs:Depends}, ${misc:Depends}
-Description: The FreeMedForms project virtual package
+Depends: ${misc:Depends}
+Description: FreeMedForms project
  The FreeMedForms project is a set of free and open source
  medical application used to help health professionals
  in their current practice.
  It is developed by a international community of medical
  doctors and computer workers.
+ .
+ This virtual package contains all version information.
 
 Package: freemedforms-libs
 Architecture: any
@@ -66,14 +68,14 @@ Description: Theme for the FreeMedForms project
 Package: freemedforms-common-resources
 Architecture: all
 Depends: ${misc:Depends}, freemedforms-theme (= ${source:Version}), freemedforms-i18n (= ${source:Version})
-Description: Metapackage for the common data for the FreeMedForms project
+Description: Common data for the FreeMedForms project
  The FreeMedForms project is a set of free and open source
  medical application used to help health professionals
  in their current practice.
  It is developed by a international community of medical
  doctors and computer workers.
  .
- This package contains the architecture independent data.
+ This metapackage contains the architecture independent data.
 
 Package: freemedforms-emr-resources
 Architecture: all
@@ -134,7 +136,7 @@ Description: Data for FreeMedForms Electronic Medical Record Manager
 
 Package: freemedforms-i18n
 Architecture: all
-Depends: ${shlibs:Depends}, ${misc:Depends}
+Depends: ${misc:Depends}
 Description: Translations of the FreeMedForms project
  The FreeMedForms project is a set of free and open source
  medical application used to help health professionals
@@ -147,8 +149,8 @@ Description: Translations of the FreeMedForms project
 Package: freediams
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends},
- freemedforms-freedata (= ${source:Version}), freemedforms-common-resources (${source:Version}),
- freemedforms-libs (= ${source:Version}), freemedforms-common-resources (${source:Version})
+ freemedforms-freedata (= ${source:Version}), freemedforms-common-resources (= ${source:Version}),
+ freemedforms-libs (= ${source:Version}), freemedforms-common-resources (= ${source:Version})
 Suggests: freediams-doc, ttf-mscorefonts-installer
 Conflicts: freediams-data
 Description: Pharmaceutical drugs prescriptor and interactions checker

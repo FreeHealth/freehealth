@@ -3,15 +3,21 @@
 # The @ in front of a command prevents make from displaying
 
 # var: keep the project order (should begin with freemedforms) 
-#FREEMEDFORMS_PROJECTS := freemedforms freediams freeicd freeaccount
-PROJECTS := freemedforms freediams
+FREEMEDFORMS_PROJECTS := freemedforms
+#SUB_PROJECTS := freediams freeicd freeaccount
+SUB_PROJECTS := freediams
 QMAKE := qmake-qt4
 QMAKE_CONFIG := "CONFIG+=release" "CONFIG+=LINUX_INTEGRATED" -r
+QMAKE_SUBPROJECT_CONFIG := "CONFIG+=dontbuildlibs" "CONFIG+=dontinstallresources" "CONFIG+=dontinstalllibs"
 QMAKE_IPATH := "INSTALL_ROOT_PATH=$(CURDIR)/debian/tmp/usr/"
 # func
-QMAKE_PROJ = cd $(PROJECT) && $(QMAKE) $(QMAKE_CONFIG) $(QMAKE_IPATH) LOWERED_APPNAME="$(PROJECT)" $(PROJECT).pro && cd ..
+QMAKE_MAIN_PROJ = cd $(1) && $(QMAKE) $(QMAKE_CONFIG) $(QMAKE_IPATH) LOWERED_APPNAME="$(1)" $(1).pro && cd ..
+QMAKE_SUB_PROJ = cd $(PROJECT) && $(QMAKE) $(QMAKE_CONFIG) $(QMAKE_SUBPROJECT_CONFIG) $(QMAKE_IPATH) LOWERED_APPNAME="$(PROJECT)" $(PROJECT).pro && cd ..
+MAKE_MAIN_PROJ = make -C $(1) -f Makefile
 MAKE_PROJ = make -C $(PROJECT) -f Makefile
+MAKEINSTALL_MAIN_PROJ = make install -C $(1) -f Makefile
 MAKEINSTALL_PROJ = make install -C $(PROJECT) -f Makefile
+reverse = $(if $(1),$(call reverse,$(wordlist 2,$(words $(1)),$(1)))) $(firstword $(1))
 
 %:
 	dh $@
@@ -22,25 +28,27 @@ MAKEINSTALL_PROJ = make install -C $(PROJECT) -f Makefile
 #    so that the freemedforms project is the last configured one (for the libs)
 override_dh_auto_configure:
 	lrelease global_resources/translations/*.ts
-#	$(call QMAKE_PROJ,$(PROJECT))
-	$(foreach PROJECT,$(call reverse,$(PROJECTS)),$(QMAKE_PROJ) && ) echo .
+	$(call QMAKE_MAIN_PROJ,$(FREEMEDFORMS_PROJECTS))
+	$(foreach PROJECT,$(SUB_PROJECTS),$(QMAKE_SUB_PROJ) && ) echo .
 	
 # Clean build path
 override_dh_auto_clean:
 	rm -Rf bin
-	rm -Rf build
+#	rm -Rf build
 	rm -f global_resources/translations/[a-ps-z]*.qm
-	dh_auto_clean
+#	dh_auto_clean
 
 # Make all projects
 override_dh_auto_build:
 #	$(call MAKE_PROJ,$(PROJECT))
-	$(foreach PROJECT,$(PROJECTS),$(MAKE_PROJ) && ) echo .
+	$(call MAKE_MAIN_PROJ,$(FREEMEDFORMS_PROJECTS))
+	$(foreach PROJECT,$(SUB_PROJECTS),$(MAKE_PROJ) && ) echo .
 
 # Install all projects
 override_dh_auto_install:
 #	$(call MAKEINSTALL_PROJ,$(PROJECT))
-	$(foreach PROJECT,$(PROJECTS),$(MAKEINSTALL_PROJ) && ) echo .
+	$(call MAKEINSTALL_MAIN_PROJ,$(FREEMEDFORMS_PROJECTS))
+	$(foreach PROJECT,$(SUB_PROJECTS),$(MAKEINSTALL_PROJ) && ) echo .
 
 override_dh_install:	
 	dh_install
