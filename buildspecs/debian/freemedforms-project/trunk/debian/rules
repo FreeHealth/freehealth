@@ -1,0 +1,52 @@
+#!/usr/bin/make -f
+# (c) 2012, Eric Maeker, MD (fr), The FreeMedForms project, BSD revised license
+# The @ in front of a command prevents make from displaying
+
+# var: keep the project order (should begin with freemedforms) 
+#FREEMEDFORMS_PROJECTS := freemedforms freediams freeicd freeaccount
+PROJECT := freemedforms
+QMAKE := qmake-qt4
+QMAKE_CONFIG := "CONFIG+=release" "CONFIG+=LINUX_INTEGRATED" -r
+QMAKE_IPATH := "INSTALL_ROOT_PATH=$(CURDIR)/debian/tmp/usr/"
+# func
+QMAKE_PROJ = cd $(PROJECT) && $(QMAKE) $(QMAKE_CONFIG) $(QMAKE_IPATH) LOWERED_APPNAME="$(PROJECT)" $(PROJECT).pro && cd ..
+MAKE_PROJ = make -C $(PROJECT) -f Makefile
+MAKEINSTALL_PROJ = make install -C $(PROJECT) -f Makefile
+
+%:
+	dh $@
+
+# create translations
+# process every project files without any Makefile conflict
+# process project files in reverse order 
+#    so that the freemedforms project is the last configured one (for the libs)
+override_dh_auto_configure:
+	lrelease global_resources/translations/*.ts
+	$(call QMAKE_PROJ,$(PROJECT))
+#	$(foreach PROJECT,$(call reverse,$(FREEMEDFORMS_PROJECTS)),$(QMAKE_PROJ) && ) echo .
+	
+# Clean build path
+override_dh_auto_clean:
+	rm -Rf bin
+	rm -Rf build
+	rm -f global_resources/translations/[a-ps-z]*.qm
+	dh_auto_clean
+
+# Make all projects
+override_dh_auto_build:
+	$(call MAKE_PROJ,$(PROJECT))
+#	$(foreach PROJECT,$(FREEMEDFORMS_PROJECTS),$(MAKE_PROJ) && ) echo .
+
+# Install all projects
+override_dh_auto_install:
+	$(call MAKEINSTALL_PROJ,$(PROJECT))
+#	$(foreach PROJECT,$(FREEMEDFORMS_PROJECTS),$(MAKEINSTALL_PROJ) && ) echo .
+
+override_dh_install:	
+	dh_install
+
+#override_dh_shlibdeps:
+#	LD_LIBRARY_PATH=debian/tmp/usr/lib/freemedforms dh_shlibdeps -l/usr/lib/freemedforms
+
+
+

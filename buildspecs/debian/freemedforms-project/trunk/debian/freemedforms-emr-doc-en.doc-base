@@ -1,0 +1,18 @@
+Document: freemedforms-emr-doc-en
+Title: FreeDiams user's manual in Englisch language
+Author: Eric Maeker
+Abstract: Electronic Medical Record Manager
+ The FreeMedForms project is a set of free and open source
+ medical application used to help health professionals
+ in their current pratice.
+ It is developed by a international community of medical
+ doctors and computer workers.
+ .
+ The main objective of FreeMedForms electronic medical
+ records is to manage the EMR based on your medical
+ practice or the practice of clinical research groups.
+Section: Science/Medicine
+
+Format: HTML
+Index: /usr/share/doc/freemedforms-project/freemedforms/en/toc.html
+Files: /usr/share/doc/freemedforms-project/freemedforms/en/*

@@ -1,0 +1,3 @@
+shlibs:Depends=libqtcore4 (>= 4.7.0), libqtgui4 (>= 4.7.0), libqt4-sql-sqlite, libqt4-xml,
+ libqt4-network, libqt4-svg
+misc:Depends=

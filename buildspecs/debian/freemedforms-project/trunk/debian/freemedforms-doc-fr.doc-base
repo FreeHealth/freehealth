@@ -1,0 +1,20 @@
+Document: freemedforms-doc-fr
+Title: FreeMedForms user's manual in French language
+Author: Eric Maeker
+Abstract: Electronic Medical Record Manager
+ FreeMedForms is developed by a international community of
+ medical doctors and computer workers and is
+ mainly intended for health professionals.
+ .
+ The main objective of FreeMedForms is to manage the
+ electronic medical records based on your
+ medical practice or the practice of clinical
+ research groups.
+ .
+ Your records will be fully customizable through the
+ use of XML architecture and the use of plugins.
+Section: Science/Medicine
+
+Format: HTML
+Index: /usr/share/doc/freemedforms/fr/toc.html
+Files: /usr/share/doc/freemedforms/fr/*
