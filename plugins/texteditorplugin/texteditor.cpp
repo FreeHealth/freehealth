@@ -73,7 +73,6 @@
 #include <QToolBar>
 #include <QTextList>
 #include <QTextCursor>
-#include <QMessageBox>
 #include <QTextCharFormat>
 #include <QVBoxLayout>
 #include <QStringList>
@@ -673,12 +672,6 @@ void TextEditor::addPatientName()
 {
     textEdit()->insertHtml(patient()->data(Core::IPatient::FullName).toString());
 }
-
-//void TextEditorPrivate::about()
-//{
-//    QMessageBox::about(m_Parent, tkTr(ABOUT_TEXT),
-//                        tr("This rich text editor is part of FreeMedForms Project. "));
-//}
 
 
 //void TextEditorPrivate::colorChanged(const QColor &c)

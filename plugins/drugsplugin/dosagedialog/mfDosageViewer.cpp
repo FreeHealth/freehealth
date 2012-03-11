@@ -63,7 +63,6 @@
 #include <QTableWidget>
 #include <QSpinBox>
 #include <QDataWidgetMapper>
-#include <QMessageBox>
 #include <QDesktopServices>
 #include <QUrl>
 #include <QMenu>

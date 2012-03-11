@@ -31,15 +31,25 @@
  ***************************************************************************/
 #include "accountview.h"
 #include "ui_accountview.h"
-#include <utils/log.h>
 
 #include <coreplugin/icore.h>
 
 #include <accountbaseplugin/constants.h>
 
+#include <utils/log.h>
+#include <utils/global.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_msgerror.h>
+
 #include <QTableView>
-#include <QMessageBox>
+
 #include <QDebug>
+
+using namespace AccountDB;
+using namespace Account;
+using namespace Trans::ConstantTranslations;
+
+enum { WarnDebugMessage = false };
 
 /*namespace Account {
 namespace Internal {
@@ -67,9 +77,6 @@ private:
 };
 }
 }*/
-using namespace AccountDB;
-using namespace Account;
-enum { WarnDebugMessage = false };
 AccountView::AccountView(QWidget *parent) :
         QWidget(parent), m_ui(new Ui::AccountViewWidget)//, d(new Internal::AccountViewPrivate(this))
 {
@@ -167,15 +174,15 @@ void AccountView::filterChanged()
 
 void AccountView::deleteLine(){
     QModelIndex index = m_ui->tableView->QAbstractItemView::currentIndex();
-    if(!index.isValid()){
-        QMessageBox::warning(0,trUtf8("Error"),trUtf8("Please select a line to delete."),QMessageBox::Ok);
+    if(!index.isValid()) {
+        Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("Please select a line to delete."));
         return;
-        }
+    }
     int i = index.row();
     QAbstractItemModel *model = m_ui->tableView->model();
-    if(model->removeRows(i,1,QModelIndex())){
-          QMessageBox::information(0,trUtf8("Information"),trUtf8("Line is deleted."),QMessageBox::Ok);
-        }
+    if (model->removeRows(i,1,QModelIndex())) {
+        Utils::informativeMessageBox(tkTr(Trans::Constants::INFORMATIONS), tr("Line deleted."));
+    }
     refresh();
 }
 

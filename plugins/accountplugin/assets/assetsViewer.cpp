@@ -33,15 +33,25 @@
 #include "assetsmanager.h"
 #include "assetsIO.h"
 #include "ui_assetsviewer.h"
+
 #include <accountbaseplugin/assetmodel.h>
 #include <accountbaseplugin/constants.h>
+
 #include <coreplugin/icore.h>
 #include <coreplugin/iuser.h>
-#include <QMessageBox>
+
+#include <utils/global.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_msgerror.h>
+
 #include <QDebug>
+
 enum { WarnDebugMessage = true };
+
 using namespace AccountDB;
 using namespace Constants;
+using namespace Trans::ConstantTranslations;
+
 static inline Core::IUser *user() { return  Core::ICore::instance()->user(); }
 
 AssetsViewer::AssetsViewer(QWidget * parent):QWidget(parent),ui(new Ui::AssetsViewerWidget){
@@ -80,6 +90,8 @@ void AssetsViewer::showAssets()
 {
     AssetsIO  mov(this) ;
     AssetModel * model = mov.getModelAssets();
+
+    /** \todo move header naming into the model */
     model->setHeaderData(ASSETS_ACCOUNT_ID,Qt::Horizontal,trUtf8("Account id"));
     model->setHeaderData(ASSETS_LABEL,Qt::Horizontal,trUtf8("Label"));
     model->setHeaderData(ASSETS_DATE,Qt::Horizontal,trUtf8("Date"));
@@ -156,15 +168,13 @@ void AssetsViewer::recordAsset(){
                                          traceMov ,
                                          isValid ,
                                          comments);
-    if (!asIO.insertIntoMovements(hashValuesMovements))
-    {
-    	  QMessageBox::warning(0,trUtf8("Error"),trUtf8("Asset is not recorded in movements."),QMessageBox::Ok);
-        }  
+    if (!asIO.insertIntoMovements(hashValuesMovements))  {
+        Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("Asset is not recorded in movements."));
+    }
     int movementLastId = asIO.getLastMovementId();
-    if (movementLastId == -1)
-    {
-    	  QMessageBox::warning(0,trUtf8("Error"),trUtf8("Unable to get last movement id."),QMessageBox::Ok);
-        }
+    if (movementLastId == -1) {
+        Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("Unable to get last movement id."));
+    }
     movement = QVariant(movementLastId);                                        
     hashValues = manager.getHashOfValues(userUid,
                                          accountId,
@@ -182,12 +192,10 @@ void AssetsViewer::recordAsset(){
                                          comments,
                                          trace);
     
-    if (!asIO.insertIntoAssets(hashValues))
-    {
-    	  QMessageBox::warning(0,trUtf8("Error"),trUtf8("Asset not recorded."),QMessageBox::Ok);
-        }
-    else{
-          QMessageBox::information(0,trUtf8("Information"),trUtf8("Asset recorded."),QMessageBox::Ok);
+    if (!asIO.insertIntoAssets(hashValues)) {
+        Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("Asset not recorded."));
+    } else {
+        Utils::informativeMessageBox(tkTr(Trans::Constants::INFORMATIONS), tr("Asset recorded."));
     }
     showAssets();
     yearDateChanged(year);
@@ -195,8 +203,8 @@ void AssetsViewer::recordAsset(){
 
 void AssetsViewer::deleteAsset(){
     QModelIndex index = ui->tableView->QAbstractItemView::currentIndex();
-    if(!index.isValid()){
-        QMessageBox::warning(0,trUtf8("Error"),trUtf8("You forgot to select a line."),QMessageBox::Ok);
+    if (!index.isValid()) {
+        Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("Select a line."));
     }
     QString bankName = ui->bankComboBox->currentText();
     int row = index.row(); 
@@ -205,21 +213,18 @@ void AssetsViewer::deleteAsset(){
     int idBank = assetIO.getIdFromBankName(bankName);
     if (WarnDebugMessage)
         qDebug() << __FILE__ << QString::number(__LINE__) << " idMovement =" << QString::number(idMovement) ;
-    if (!assetIO.deleteAsset(row))
-    {
-    	QMessageBox::warning(0,trUtf8("Error"),trUtf8("Asset is not deleted."),QMessageBox::Ok);
-        }
-    if (!assetIO.deleteMovement(idMovement,idBank))
-    {
-    	  QMessageBox::warning(0,trUtf8("Error"),trUtf8("Movement of asset is not deleted."),QMessageBox::Ok);
-        }
-    else{
-        QMessageBox::information(0,trUtf8("Information"),trUtf8("Asset is deleted."),QMessageBox::Ok);
+    if (!assetIO.deleteAsset(row)) {
+        Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("Asset is not deleted."));
+    }
+    if (!assetIO.deleteMovement(idMovement,idBank)) {
+        Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("Movement of asset is not deleted."));
+    } else {
+        Utils::informativeMessageBox(tkTr(Trans::Constants::INFORMATIONS), tr("Asset deleted."));
     }
     showAssets();
 }
 
-void AssetsViewer::fillModeComboBox(){
+void AssetsViewer::fillModeComboBox() {
     AssetsManager manager;
     QStringList list = manager.getHashForModeComboBox().values();
     ui->modeComboBox->clear();

@@ -46,7 +46,6 @@
 #include <translationutils/trans_filepathxml.h>
 
 #include <QStringList>
-#include <QMessageBox>
 #include <QGroupBox>
 #include <QGridLayout>
 #include <QCheckBox>

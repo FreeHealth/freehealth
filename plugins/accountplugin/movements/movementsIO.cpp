@@ -42,12 +42,19 @@
 #include <coreplugin/iuser.h>
 #include <coreplugin/constants_icons.h>
 
-#include <QMessageBox>
-#include <QDebug>
+#include <utils/global.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_msgerror.h>
+
 #include <QDate>
+
+#include <QDebug>
+
 enum { WarnDebugMessage = false };
+
 using namespace AccountDB;
 using namespace Constants;
+using namespace Trans::ConstantTranslations;
 
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline Core::IUser *user() { return  Core::ICore::instance()->user(); }
@@ -136,10 +143,9 @@ QStandardItemModel  *MovementsIODb::getMovementsComboBoxModel(QObject *parent)
     int avMovRows = availablemodel.rowCount();
     if (avMovRows < 1)
     {
-    	  qWarning() << __FILE__ << QString::number(__LINE__) << "no availableMovement available" ;
-    	  const QString information = trUtf8("No available movement available.\n"
-    	                             "Please create defaults in Configuration > Preferences.");
-    	  QMessageBox::warning(0,trUtf8("Warning"),information,QMessageBox::Ok);
+          const QString &information = tr("No available movement available.\n"
+                                          "Please create defaults in Configuration > Preferences.");
+          Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), information);
         }
     for (int i = 0; i < avMovRows ; i += 1) {
         int type = availablemodel.data(availablemodel.index(i,AVAILMOV_TYPE),Qt::DisplayRole).toInt();
@@ -256,10 +262,7 @@ bool MovementsIODb::insertIntoMovements(QHash<int,QVariant> &hashValues)
     }
     m_modelMovements->submit();
     if (m_modelMovements->rowCount(QModelIndex()) == rowBefore) {
-        QMessageBox::warning(0,trUtf8("Warning"),__FILE__+QString::number(__LINE__)
-                             + trUtf8("\nError = ") 
-                             + m_modelMovements->lastError().text(),
-                             QMessageBox::Ok);
+        Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), m_modelMovements->lastError().text());
         ret = false;
     }
     if (type < 1)
@@ -364,11 +367,9 @@ bool MovementsIODb::debitOrCreditInBankBalance(const QString & bank, double & va
     		  rowsTestList << i;
     	    }
         }
-    if (rowsTestList.size()>1)
-    {
-    	  QMessageBox::warning(0,trUtf8("Warning"),
-    	             trUtf8("You have two or more records with the same bank name ! Risk of errors!"),QMessageBox::Ok);
-        }
+    if (rowsTestList.size()>1) {
+        Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("Two or more records with the same bank name."));
+    }
     double balance = model.data(model.index(row,BANKDETAILS_BALANCE),Qt::DisplayRole).toDouble();
     double newBalance = balance + value;
     QDate date = QDate::currentDate();

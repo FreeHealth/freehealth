@@ -36,17 +36,25 @@
 #include <accountbaseplugin/bankaccountmodel.h>
 #include <accountbaseplugin/assetsratesmodel.h>
 #include <accountbaseplugin/constants.h>
+
 #include <coreplugin/icore.h>
 #include <coreplugin/iuser.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/constants_icons.h>
 
-#include <QDebug>
-#include <QMessageBox>
+#include <utils/global.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_msgerror.h>
+
 #include <QDate>
+
+#include <QDebug>
+
 enum { WarnDebugMessage = true };
+
 using namespace AccountDB;
 using namespace Constants;
+using namespace Trans::ConstantTranslations;
 
 static inline Core::IUser *user() { return  Core::ICore::instance()->user(); }
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
@@ -89,9 +97,7 @@ bool AssetsIO::insertIntoAssets(const QHash<int,QVariant> &hashValues)
     }
     m_assetModel->submit();
     if (m_assetModel->rowCount(QModelIndex()) == rowBefore) {
-        QMessageBox::warning(0,trUtf8("Warning AssetsIO : "),trUtf8("Error = ") 
-                             + m_assetModel->lastError().text(),
-                             QMessageBox::Ok);
+        Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("AssetsIO error: ") + m_assetModel->lastError().text());
         ret = false;
     }
     return ret;
@@ -136,10 +142,7 @@ bool AssetsIO::insertIntoMovements(const QHash<int,QVariant> &hashValues)
     }
     modelMovements.submit();
     if (modelMovements.rowCount(QModelIndex()) == rowBefore) {
-        QMessageBox::warning(0,trUtf8("Warning"),__FILE__+QString::number(__LINE__)
-                             + trUtf8("\nError = ") 
-                             + modelMovements.lastError().text(),
-                             QMessageBox::Ok);
+        Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("AssetsIO error: ") + modelMovements.lastError().text());
         ret = false;
     }
     if (type < 1)
@@ -169,26 +172,21 @@ bool AssetsIO::debitOrCreditInBankBalance(const QString &bank, double value){
     		  rowsTestList << i;
     	    }
         }
-    if (rowsTestList.size()>1)
-    {
-    	  QMessageBox::warning(0,trUtf8("Warning"),
-    	             trUtf8("You have two or more records with the same bank name ! Risk of errors!"),QMessageBox::Ok);
-        }
+    if (rowsTestList.size()>1) {
+        Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("Two or more records with the same bank name."));
+    }
     double balance = model.data(model.index(row,BANKDETAILS_BALANCE),Qt::DisplayRole).toDouble();
     double newBalance = balance + value;
     QDate date = QDate::currentDate();
-    if (!model.setData(model.index(row,BANKDETAILS_BALANCE),newBalance,Qt::EditRole))
-    {
-    	  qWarning() << __FILE__ << QString::number(__LINE__) << "Unable to insert balance data !" ;
-        }
-    if (!model.setData(model.index(row,BANKDETAILS_BALANCEDATE),date,Qt::EditRole))
-    {
-          qWarning() << __FILE__ << QString::number(__LINE__) << "Unable to insert balance new date !" ;
-        }
-    if (!model.submit())
-    {
-    	  ret = false;
-        }
+    if (!model.setData(model.index(row,BANKDETAILS_BALANCE),newBalance,Qt::EditRole))  {
+        qWarning() << __FILE__ << QString::number(__LINE__) << "Unable to insert balance data !" ;
+    }
+    if (!model.setData(model.index(row,BANKDETAILS_BALANCEDATE),date,Qt::EditRole)) {
+        qWarning() << __FILE__ << QString::number(__LINE__) << "Unable to insert balance new date !" ;
+    }
+    if (!model.submit()) {
+        ret = false;
+    }
     return ret;
 }
 
@@ -304,17 +302,14 @@ bool AssetsIO::deleteMovement(int idMovement,int idBank){
     QString filter = QString("%1 = '%2'").arg("MOV_ID",QString::number(idMovement));
     movModel.setFilter(filter);
     double value = movModel.data(movModel.index(0,MOV_AMOUNT),Qt::DisplayRole).toDouble();
-    if (creditValueDeletedToBankAccount(value,idBank))
-    {
-    	  QMessageBox::information(0,trUtf8("Information"),trUtf8("Value credited = ")+QString::number(value),
-    	                           QMessageBox::Ok);
-        }
-    if (!movModel.removeRows(0,1,QModelIndex()))
-    {
-    	  QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Unable to delete movement of this asset."),QMessageBox::Ok);
-    	  ret = false;
-        }
-    //todo : add value deleted to bank and delete asset without delete movement ?
+    if (creditValueDeletedToBankAccount(value,idBank)) {
+        Utils::informativeMessageBox(tkTr(Trans::Constants::INFORMATIONS), tr("Credited value = ") + QString::number(value));
+    }
+    if (!movModel.removeRows(0,1,QModelIndex())) {
+        Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("Unable to delete movement of this asset."));
+        ret = false;
+    }
+    /** \todo : add value deleted to bank and delete asset without delete movement ? */
     return ret;
 }
 
@@ -328,11 +323,9 @@ bool AssetsIO::creditValueDeletedToBankAccount(double value, int idBank){
     QString filter = QString("%1 = '%2'").arg("BD_ID",QString::number(idBank));
     bankmodel.setFilter(filter);
     double newvalue = bankmodel.data(bankmodel.index(0,BANKDETAILS_BALANCE),Qt::DisplayRole).toDouble() + value;
-    if (!bankmodel.setData(bankmodel.index(0,BANKDETAILS_BALANCE),newvalue,Qt::EditRole))
-    {
-    	  QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Unable to credit the value in bank balance.")+
-    	  __FILE__+QString::number(__LINE__),QMessageBox::Ok);
-        }    
+    if (!bankmodel.setData(bankmodel.index(0,BANKDETAILS_BALANCE),newvalue,Qt::EditRole)) {
+        Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("Unable to credit the value in bank balance."));
+    }
     return ret;
 }
 
@@ -367,27 +360,25 @@ double AssetsIO::getRate(const QDate &date, double duration) {
     AssetsRatesModel model(this);
     if (WarnDebugMessage)
         qDebug() << __FILE__ << QString::number(__LINE__) << " model.rowCount() =" << QString::number(model.rowCount()) ;
-    for (int i = 0; i < model.rowCount(); i += 1)
-    {
+    for (int i = 0; i < model.rowCount(); i += 1) {
     	QDate dateRequest = model.data(model.index(i,ASSETSRATES_DATE),Qt::DisplayRole).toDate();
     	QString rangeReq = model.data(model.index(i,ASSETSRATES_YEARS),Qt::DisplayRole).toString();
     	QString rate = model.data(model.index(i,ASSETSRATES_RATES),Qt::DisplayRole).toString();
     	if (WarnDebugMessage)
     	    qDebug() << __FILE__ << QString::number(__LINE__) << " rangeReq and rate =" << rangeReq+" "+rate ;
     	QStringList listOfRanges = rangeReq.split("_");
-    	if (int(duration) >= listOfRanges[0].toInt() && int(duration) <= listOfRanges[1].toInt())
-    	{
+        if (int(duration) >= listOfRanges[0].toInt() && int(duration) <= listOfRanges[1].toInt()) {
     		hashRatesDates.insertMulti(rate,dateRequest) ;
-    	    }
         }
+    }
     QList<QDate> valuesOfDates = hashRatesDates.values();
     if (WarnDebugMessage)
         qDebug() << __FILE__ << QString::number(__LINE__) << " valuesOfDates size =" << QString::number(valuesOfDates.size()) ;
-    if (hashRatesDates.size()< 1)
-    {
-    	  QMessageBox::warning(0,trUtf8("Warning"),trUtf8("You have to fill defaults for assets rates.\nGo "
-    	                                       "in Configuration>Preferences to do so.\n"
-    	                                       "Otherwise result will be wrong !"),QMessageBox::Ok);
+    if (hashRatesDates.size() < 1) {
+        Utils::warningMessageBox(tkTr(Trans::Constants::ERROR),
+                                 tr("You have to fill defaults for assets rates.\nGo "
+                                    "in Configuration>Preferences to do so.\n"
+                                    "Otherwise result will be wrong !"));
     	  return 1.00;                                     
         }
     qSort(valuesOfDates.begin(),valuesOfDates.end());

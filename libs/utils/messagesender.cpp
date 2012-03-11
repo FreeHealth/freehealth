@@ -36,7 +36,6 @@
 #include <translationutils/trans_spashandupdate.h>
 #include <translationutils/trans_msgerror.h>
 
-#include <QMessageBox>
 #include <QHttp>
 #include <QtNetwork>
 #include <QBuffer>

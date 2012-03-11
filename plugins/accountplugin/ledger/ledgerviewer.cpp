@@ -33,10 +33,18 @@
 #include "ui_ledgerviewer.h"
 #include "ledgerIO.h"
 
-#include <QDebug>
+#include <utils/global.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_msgerror.h>
+
 #include <QRect>
-#include <QMessageBox>
+
+#include <QDebug>
+
+using namespace Trans::ConstantTranslations;
+
 enum { WarnDebugMessage = true };
+
 LedgerViewer::LedgerViewer(QWidget * parent): QWidget(parent),ui(new Ui::LedgerViewerWidget){
     ui->setupUi(this);
     m_currency = tr("euro");
@@ -271,12 +279,10 @@ void LedgerViewer::monthsComboBoxcurrentIndexChanged(const QString& month){
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " in monthsComboBoxcurrentIndexChanged , month = "+month  ;
     if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " m_actionText =" << m_actionText ;
-    if (m_actionText.isEmpty())
-    {
-    	  QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Choose an action."),QMessageBox::Ok);
-    	  return;
-        }
-    else{
+    if (m_actionText.isEmpty()) {
+        Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("Choose an action."));
+        return;
+    } else {
         QAction * choosenAction = m_hashTextAndAction.value(m_actionText);
         choosenAction->activate(QAction::Trigger);
     }

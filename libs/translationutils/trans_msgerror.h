@@ -47,6 +47,7 @@ const char* const UNAVAILABLE                        = QT_TRANSLATE_NOOP("tkCons
 const char* const MESSAGES                           = QT_TRANSLATE_NOOP("tkConstants", "Messages");
 const char* const LOGGED_MESSAGES                    = QT_TRANSLATE_NOOP("tkConstants", "Logged Messages");
 const char* const ERRORS                             = QT_TRANSLATE_NOOP("tkConstants", "Errors");
+const char* const ERROR                              = QT_TRANSLATE_NOOP("tkConstants", "Error");
 const char* const LOGGED_ERRORS                      = QT_TRANSLATE_NOOP("tkConstants", "Logged Errors");
 const char* const INFORMATIVE_MESSAGE_1              = QT_TRANSLATE_NOOP("tkConstants", "Informative message : %1");
 const char* const STARTING_TASK_1                    = QT_TRANSLATE_NOOP("tkConstants", "Starting task : %1");

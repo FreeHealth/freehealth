@@ -191,14 +191,13 @@ void HttpDownloader::httpFinished()
     QVariant redirectionTarget = reply->attribute(QNetworkRequest::RedirectionTargetAttribute);
     if (reply->error()) {
         file->remove();
-        QMessageBox::information(0, tr("HTTP"),
-                                 tr("Download failed: %1.")
-                                 .arg(reply->errorString()));
+        Utils::informativeMessageBox(tr("Download failed: %1.")
+                                     .arg(reply->errorString()), "", "", tr("HTTP"));
     } else if (!redirectionTarget.isNull()) {
         QUrl newUrl = m_Url.resolved(redirectionTarget.toUrl());
-        if (QMessageBox::question(0, tr("HTTP"),
-                                  tr("Redirect to %1 ?").arg(newUrl.toString()),
-                                  QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) {
+        if (Utils::yesNoMessageBox(tr("Redirect to %1 ?").arg(newUrl.toString()),
+                                   tr("Redirect to %1 ?").arg(newUrl.toString()),
+                                   "", tr("HTTP"))) {
             m_Url = newUrl;
             reply->deleteLater();
             file->open(QIODevice::WriteOnly);

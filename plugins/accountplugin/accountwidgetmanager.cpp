@@ -57,8 +57,6 @@
 #include <utils/log.h>
 #include <translationutils/constanttranslations.h>
 
-#include <QMessageBox>
-
 using namespace Account::Constants;
 using namespace Account;
 using namespace Account::Internal;
