@@ -263,7 +263,7 @@ void MedicalProcedureWidget::on_removeButton_clicked()
     if (!q.exec(req)) {
         LOG_QUERY_ERROR(q);
     } else {
-        QMessageBox::information(0,trUtf8("Information"),nameStr+trUtf8(" has been deleted."),QMessageBox::Ok);
+        Utils::informativeMessageBox(tkTr(Trans::Constants::INFORMATIONS), nameStr+tr(" has been deleted."));
         fillMPCombo();
     }
 

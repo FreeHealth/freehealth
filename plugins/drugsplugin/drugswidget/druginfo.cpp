@@ -40,7 +40,8 @@
 #include <drugsplugin/drugswidgetmanager.h>
 #include <drugsplugin/constants.h>
 
-#include <QMessageBox>
+#include <utils/global.h>
+
 #include <QApplication>
 
 using namespace DrugsWidget::Internal;
@@ -105,12 +106,12 @@ bool DrugInfoPrivate::checkSent()
 
 
     if (((rbINNOk->isChecked()) ||
-           (rbINNWrong->isChecked()) ||
-           (!INNMessage->toPlainText().isEmpty())) &&
+         (rbINNWrong->isChecked()) ||
+         (!INNMessage->toPlainText().isEmpty())) &&
          (!m_INNSent)) {
-        if (QMessageBox::warning(m_Parent, qApp->applicationName(),
-                                   tr("INN Information will be lost.\nDo you want to send them ?"),
-                                   QMessageBox::No | QMessageBox::Yes) == QMessageBox::Yes) {
+        bool yes = Utils::yesNoMessageBox(tr("INN Information will be lost.\nDo you want to send them ?"),
+                                          tr("INN Information will be lost.\nDo you want to send them ?"));
+        if (yes) {
             on_butIAMSend_clicked();
             sendingMessage = true;
         }

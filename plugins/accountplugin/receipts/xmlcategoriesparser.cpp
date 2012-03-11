@@ -34,11 +34,18 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
 
-#include <QMessageBox>
+#include <utils/global.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_msgerror.h>
+
 #include <QFile>
 #include <QtXml>
 #include <QLocale>
+
 enum { WarnDebugMessage = true };
+
+using namespace Trans::ConstantTranslations;
+
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 
 
@@ -55,14 +62,14 @@ QList<QHash<QString,QString> > xmlCategoriesParser::readXmlFile()
 
     QFile xmlFile(xmlFilePath);
     if(xmlFile.exists() == false) {
-        QMessageBox::warning(0,trUtf8("Error"),xmlFilePath+trUtf8(" does not exist."),QMessageBox::Ok);
+        Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), xmlFilePath+tr(" does not exist."));
     } else {
         if(!xmlFile.open(QIODevice::ReadOnly)) {
-            QMessageBox::warning(0,trUtf8("Error"),trUtf8("xmlEchangeFile.xml not found."),QMessageBox::Ok);
+            Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("xmlEchangeFile.xml not found."));
         }
         if(!doc.setContent(&xmlFile)) {
             xmlFile.close();
-            QMessageBox::warning(0,trUtf8("Error"),trUtf8("xmlEchangeFile.xml cannot be parsed."),QMessageBox::Ok);
+            Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("xmlEchangeFile.xml cannot be parsed."));
             QHash<QString,QString> xmlHashZero;
             xmlHashZero.insert("error","error");
             xmlHashList << xmlHashZero;

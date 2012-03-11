@@ -243,37 +243,37 @@ void AccountDatabaseDefautsWidget::on_createButton_clicked()
     bool success = true;
     if (medicalProcedure->isChecked()) {
         if (!createDefaultsFor("medical_procedure_6957", AccountDB::Constants::Table_MedicalProcedure))
-            {Utils::warningMessageBox(tr("beuh"), tr("Medical procedure defaults can not be included."));
+            {Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("Medical procedure defaults can not be included."));
              success = false;
              }
     }
     if (assetsRates->isChecked()) {
         if (!createDefaultsFor("assets_rates", AccountDB::Constants::Table_AssetsRates))
-            {Utils::warningMessageBox(tr("beuh"), tr("Assets Rates defaults can not be included."));
+            {Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("Assets Rates defaults can not be included."));
              success = false;
              }
     }
     if (available_movements->isChecked()) {
         if (!createDefaultsFor("available_movement", AccountDB::Constants::Table_AvailableMovement))
-            {Utils::warningMessageBox(tr("beuh"), tr("Movements defaults can not be included."));
+            {Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("Movements defaults can not be included."));
              success = false;
              }
     }
     if (distance->isChecked()) {
         if (!createDefaultsFor("distance_rules", AccountDB::Constants::Table_DistanceRules))
-            {Utils::warningMessageBox(tr("beuh"), tr("Distance rules defaults can not be included."));
+            {Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("Distance rules defaults can not be included."));
              success = false;
              }
     }
     if (insurance->isChecked()) {
         if (!createDefaultsFor("insurances", AccountDB::Constants::Table_Insurance))
-            {Utils::warningMessageBox(tr("beuh"), tr("Insurance defaults can not be included."));
+            {Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("Insurance defaults can not be included."));
              success = false;
              }
     }
 //    if (others->isChecked()) {
 //        if (!createDefaultsFor("assets_rates", AccountDB::Constants::Table_AssetsRates))
-//            {Utils::warningMessageBox(tr("beuh"), tr("Assets Rates defaults can not be included."));
+//            {Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("Assets Rates defaults can not be included."));
 //             success = false;
 //              }
 //    }

@@ -61,7 +61,6 @@
 #include <coreplugin/dialogs/helpdialog.h>
 #include <coreplugin/constants_icons.h>
 
-#include <QMessageBox>
 #include <QModelIndex>
 #include <QToolBar>
 #include <QMenu>
@@ -195,7 +194,7 @@ public:
                                      .arg(m_DosageModel->lastError().text()), __FILE__, __LINE__);
         } else {
             m_DosageModel->database().rollback();
-            QMessageBox::warning(q, QCoreApplication::translate("DosageCreatorDialog", "Drug Dosage Creator"),
+            Utils::warningMessageBox(QCoreApplication::translate("DosageCreatorDialog", "Drug Dosage Creator"),
                                  tkTr(Trans::Constants::ERROR_1_FROM_DATABASE_2)
                                  .arg(m_DosageModel->lastError().text() + m_DosageModel->query().executedQuery())
                                  .arg(m_DosageModel->database().connectionName()));

@@ -51,10 +51,12 @@
 #include <coreplugin/isettings.h>
 
 #include <utils/widgets/spinboxdelegate.h>
+#include <utils/global.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_msgerror.h>
 
 #include <QAbstractItemModel>
 #include <QDebug>
-#include <QMessageBox>
 #include <QFrame>
 #include <QPushButton>
 #include <QKeySequence>
@@ -64,12 +66,13 @@
 
 enum { WarnDebugMessage = false };
 
+using namespace ReceiptsConstants;
+using namespace Constants;
+using namespace Trans::ConstantTranslations;
+
 static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
 static inline Core::IPatient *patient() { return Core::ICore::instance()->patient(); }
 static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
-
-using namespace ReceiptsConstants;
-using namespace Constants;
 
 namespace InternalAmount {
 
@@ -377,42 +380,23 @@ void treeViewsActions::mouseReleaseEvent(QMouseEvent *event){
 
 void treeViewsActions::deleteBox(bool b){
     Q_UNUSED(b);
-    QMessageBox msgBox;
-    msgBox.setText("Do you want to delete chosen item ?");
-    msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-    msgBox.setDefaultButton(QMessageBox::Yes);
-    int ret = msgBox.exec();
-    QModelIndex index;
-    switch(ret){
-    case QMessageBox::Yes :
-        index = currentIndex();
+    bool yes = Utils::yesNoMessageBox(tr("Do you want to delete selected item ?"),
+                           tr("Do you want to delete selected item ?"));
+    if (yes) {
+        QModelIndex index = currentIndex();
         deleteItemFromThesaurus(index);
-        break;
-    case QMessageBox::No :
-        break;
     }
 }
 
 void treeViewsActions::choosePreferedValue(bool b){
     Q_UNUSED(b);
-    qDebug() << __FILE__ << QString::number(__LINE__) << "in choosePreferedValue";
-    QMessageBox msgBox;
-    msgBox.setText("Do you want to choose this item as preferred value ?");
-    msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-    msgBox.setDefaultButton(QMessageBox::Yes);
-    int ret = msgBox.exec();
-    QModelIndex index;
-    switch(ret){
-    case QMessageBox::Yes :
-        index = currentIndex();
-        if (!addPreferedItem(index))
-        {
-            QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Unable to choose this item."),
-                                 QMessageBox::Ok);
+    bool yes = Utils::yesNoMessageBox(tr("Do you want to set this item as preferred value ?"),
+                           tr("Do you want to set this item as preferred value ?"));
+    if (yes) {
+        QModelIndex index = currentIndex();
+        if (!addPreferedItem(index)) {
+            Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("Unable to set this item as the preferred one."));
         }
-        break;
-    case QMessageBox::No :
-        break;
     }
 } 
 
@@ -420,10 +404,8 @@ bool treeViewsActions::addPreferedItem(QModelIndex &index){
     bool ret = true;
     QString data = index.data().toString();
     receiptsEngine r;
-    if (!r.addBoolTrue(data))
-    {
-        QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Cannot change value bool in thesaurus :")+data,
-                             QMessageBox::Ok);
+    if (!r.addBoolTrue(data)) {
+        Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("Cannot change value bool in thesaurus :")+data);
         ret = false;
     }
     fillActionTreeView();
@@ -578,7 +560,7 @@ bool treeViewsActions::deleteItemFromThesaurus(QModelIndex &index){
     const QString userUid = user()->uuid();
     receiptsEngine r;
     if (!r.deleteFromThesaurus(data,userUid)) {
-        QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Cannot delete in thesaurus :")+data,QMessageBox::Ok);
+        Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("Cannot delete in thesaurus :")+data);
         ret = false;
     }
     fillActionTreeView();
@@ -635,7 +617,6 @@ void ChoosenListView::deleteItem(bool b)
     int row = index.row();
     model()->removeRows(row,1,QModelIndex());
     m_amountModel->removeRows(row,1,QModelIndex());
-    //QMessageBox::information(0,"try","delete line",QMessageBox::Ok);
 }
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -880,12 +861,11 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex & index) {
                 	  qWarning() << __FILE__ << QString::number(__LINE__) << "preferredAct == NULL" ;
                 	  return;
                     }
-                if (hashOfValues.size() < 1)
-                {
+                if (hashOfValues.size() < 1)  {
             	    hashOfValues.insertMulti("NULL","0");//preferential act
-            	    QMessageBox::warning(0,trUtf8("Warning"),trUtf8("You have to insert your preferred "
-            	                 	  "value\nin thesaurus\nand choose it as preferred."),QMessageBox::Ok);
-                    }           
+                    Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("You have to insert your preferred "
+                                                                               "value\nin thesaurus\nand choose it as preferred."));
+                }
                 m_listOfValues << hashOfValues.keys();
                 //m_listOfValues.removeDuplicates();
                 m_modelReturnedList->setStringList(m_listOfValues);
@@ -1188,8 +1168,8 @@ void ReceiptViewer::saveInThesaurus(){
     QString listOfValuesStr = m_listOfValues.join("+");
     receiptsEngine r;
     if(r.insertInThesaurus(listOfValuesStr,m_userUuid)){
-        QMessageBox::information(0,trUtf8("Information"),listOfValuesStr+"\n"+trUtf8(" has been saved in thesaurus !"),QMessageBox::Ok);
-        }
+        Utils::informativeMessageBox(tkTr(Trans::Constants::INFORMATIONS), listOfValuesStr+"\n"+trUtf8(" has been saved in thesaurus !"));
+    }
     m_actionTreeView->fillActionTreeView();
 }
 

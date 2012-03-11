@@ -33,13 +33,18 @@
 #include "constants.h"
 #include "ui_controlreceipts.h"
 
-#include <QMessageBox>
+#include <utils/global.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_msgerror.h>
+#include <translationutils/trans_spashandupdate.h>
+
 #include <QDebug>
 
 enum { WarnDebugMessage = false };
 
 using namespace AccountDB;
 using namespace Constants;
+using namespace Trans::ConstantTranslations;
 
 ControlReceipts::ControlReceipts(QWidget * parent):QWidget(parent),ui(new Ui::ControlReceiptsWidget)
 {
@@ -115,22 +120,20 @@ void ControlReceipts::search(){
 
 void ControlReceipts::deleteLine(){
   QModelIndex index = ui->tableView->QAbstractItemView::currentIndex();
-  if(!index.isValid()){
-      QMessageBox::warning(0,trUtf8("Error"),trUtf8("Please select a line to delete."),QMessageBox::Ok);
+  if (!index.isValid()) {
+      Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("Select a line."));
       return;
-      }
+  }
   int rowToDelete = index.row();
   if(m_accountModel->getDoublesRows.contains(rowToDelete)){
-          m_accountModel->getDoublesRows.removeAll(rowToDelete);
-          if (m_accountModel->getDoublesRows.size()<1)
-          {
-          	m_accountModel->getDoublesRows.clear();
-                }
-          }
-  if(m_accountModel->removeRows(rowToDelete,1,QModelIndex())){
-          QMessageBox::information(0,trUtf8("Information"),trUtf8("Line is deleted."),QMessageBox::Ok);
-                   
+      m_accountModel->getDoublesRows.removeAll(rowToDelete);
+      if (m_accountModel->getDoublesRows.size()<1) {
+          m_accountModel->getDoublesRows.clear();
       }
+  }
+  if(m_accountModel->removeRows(rowToDelete,1,QModelIndex())) {
+      Utils::informativeMessageBox(tkTr(Trans::Constants::INFORMATIONS), tr("Line deleted."));
+  }
   QString textResult = textOfSums(m_accountModel);
   ui->resultLabel->setText(textResult);
   //const QString filter = m_accountModel->filter();
@@ -203,11 +206,11 @@ QString ControlReceipts::textOfSums(AccountModel * model){
     }
 
 void ControlReceipts::printDues(){
-    QMessageBox::information(0,trUtf8("Information"),trUtf8("Not yet"),QMessageBox::Ok);
+    Utils::informativeMessageBox(tkTr(Trans::Constants::INFORMATIONS), tkTr(Trans::Constants::FEATURE_NOT_IMPLEMENTED));
 }
 
 void ControlReceipts::print(){
-    QMessageBox::information(0,trUtf8("Information"),trUtf8("Not yet"),QMessageBox::Ok);	
+    Utils::informativeMessageBox(tkTr(Trans::Constants::INFORMATIONS), tkTr(Trans::Constants::FEATURE_NOT_IMPLEMENTED));
 }
 
 void ControlReceipts::coloringDoubles(){

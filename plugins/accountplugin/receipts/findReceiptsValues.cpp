@@ -31,11 +31,19 @@
  ***************************************************************************/
 #include "findReceiptsValues.h"
 #include "constants.h"
+
+#include <utils/global.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_msgerror.h>
+
 #include <QSqlQuery>
 #include <QSqlTableModel>
-enum{WarnDebugMessage = false};
+
+enum { WarnDebugMessage = false };
+
 using namespace AccountDB;
 using namespace Constants;
+using namespace Trans::ConstantTranslations;
 
 findReceiptsValues::findReceiptsValues(QWidget * parent):QDialog(parent){
   ui = new Ui::findValueDialog;
@@ -142,12 +150,11 @@ void findReceiptsValues::fillListViewValues(const QString & comboItem){
         ++row;
         counterList << row;
         }
-    if (counterList.size()<1)
-    {
-    	  const QString explanationText = trUtf8("The medical procedure database is empty.\n"
-    	                                  "You should create defaults in Configuration > Preference > Accountancy.");
-    	  QMessageBox::warning(0,trUtf8("Warning"),explanationText,QMessageBox::Ok);
-        }
+    if (counterList.size()<1) {
+        const QString &explanationText = tr("The medical procedure database is empty.\n"
+                                            "You should create defaults in Configuration > Preference > Accountancy.");
+        Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), explanationText);
+    }
     ui->tableViewOfValues->setModel(model);
     ui->tableViewOfValues-> setSelectionBehavior(QAbstractItemView::SelectRows);
     ui->tableViewOfValues-> setSelectionMode(QAbstractItemView::SingleSelection);
@@ -347,7 +354,7 @@ void findReceiptsValues::on_lineEditFilter_textChanged(const QString & text){
     	  filter = QString("WHERE %1 LIKE '%2' AND %3 LIKE '%4'").arg("TYPE",comboChoice,"ABSTRACT",filterText); 
         }
     else{
-    	QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Check a radioButton."),QMessageBox::Ok);
+        Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("Check a button."));
     }
     QString req = QString("SELECT %1,%2 FROM %3 ").arg(name,amount,baseName )+filter;
     QStandardItemModel *model = new QStandardItemModel(1,2,this);

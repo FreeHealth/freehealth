@@ -325,8 +325,6 @@ void AvailableMovementWidget::showEvent(QShowEvent *event){
 //    for (int i = 0; i < availModelRows; i += 1){
 //        if (!m_Model->insertRows(m_Model->rowCount(),1,QModelIndex()))
 //    	  		{qWarning() << __FILE__ << QString::number(__LINE__) << QString::number(m_Model->rowCount()) ;
-//    	  			  /*QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Unable to insert row \n")
-//    	  			  +__FILE__+QString::number(__LINE__),QMessageBox::Ok);*/
 //    	  		    }
 //    	  		    QString strValues;
 //    	  	for (int j = 0; j < AccountDB::Constants::AVAILMOV_MaxParam ; j += 1){

@@ -46,8 +46,10 @@
 #include <accountbaseplugin/medicalproceduremodel.h>
 
 #include <utils/log.h>
+#include <utils/global.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_msgerror.h>
 
-#include <QMessageBox>
 #include <QSqlDatabase>
 #include <QSqlQuery>
 
@@ -56,6 +58,7 @@ enum { WarnDebugMessage = false };
 static  QString freeaccount = "freeaccount";
 using namespace AccountDB;
 using namespace Constants;
+using namespace Trans::ConstantTranslations;
 
 receiptsManager::receiptsManager()
 {
@@ -306,9 +309,9 @@ QHash<QString,QString> receiptsManager::getPreferentialActFromThesaurus(const QS
     	data = "NULL";
     	value = 0.00;
     	hash.insert(data,QString::number(value));
-    	const QString information = trUtf8("You have to create a preferred value in Thesaurus. ");
-        QMessageBox::warning(0,trUtf8("Warning"),information,QMessageBox::Ok);
-        }
+        const QString information = trUtf8("You have to create a preferred value in Thesaurus.");
+        Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), information);
+    }
     return hash;
 }
 
@@ -514,9 +517,11 @@ QStringList receiptsManager::getChoiceFromCategories(QString & categoriesItem){
     QString item = categoriesItem;
     if (WarnDebugMessage)
     	      qDebug()  << __FILE__ << QString::number(__LINE__) << " categories item ="+item;
-    if(item == "thesaurus"){QMessageBox::information(0,"Info","item = "+item,QMessageBox::Ok);}
-    else if(item == "CCAM"){QMessageBox::information(0,"Info","show CCAM widget",QMessageBox::Ok);}
-    else{
+    if (item == "thesaurus") {
+        Utils::informativeMessageBox(tkTr(Trans::Constants::INFORMATIONS), "item = "+item);
+    } else if (item == "CCAM") {
+        Utils::informativeMessageBox(tkTr(Trans::Constants::INFORMATIONS), "show CCAM widget");
+    } else {
         QString req = QString("SELECT %1 FROM %2 WHERE %3 = '%4'").arg("NAME","medical_procedure","TYPE",item);
         QSqlQuery q(db);
         if(!q.exec(req)){

@@ -38,9 +38,14 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/iuser.h>
 #include <coreplugin/ipatient.h>
+
 #include <accountbaseplugin/constants.h>
 
-#include <QMessageBox>
+#include <utils/global.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_msgerror.h>
+
+using namespace Trans::ConstantTranslations;
 
 enum { WarnDebugMessage = false };
 
@@ -109,12 +114,11 @@ void PreferedReceipts::insertPreferedValuesIntoAccount(){
         if (preferedValue == -1.13)//means does not exist
         {
         	  qWarning() << __FILE__ << QString::number(__LINE__) << "no preferred value" ;
-        	  QMessageBox::warning(0,trUtf8("Warning"),trUtf8("You should create a preferedValue like this:\n"
-        	                                          "Take a value in thesaurus list with a RIGHT clic,\n"
-        	                                          "if you don't have one, save the next value"
-        	                                          " in thesaurus and chose it in the same way"),
-        	                                          QMessageBox::Ok);
-        	  return;
+              Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("You should create a preferedValue like this:\n"
+                                                                         "Take a value in thesaurus list with a RIGHT clic,\n"
+                                                                         "if you don't have one, save the next value"
+                                                                         " in thesaurus and chose it in the same way"));
+              return;
             }
 
         if (m_percent!=100.00)
@@ -124,11 +128,9 @@ void PreferedReceipts::insertPreferedValuesIntoAccount(){
             hashOfPrefValues.insert(Constants::ACCOUNT_DUEBY,debtor);
             }
                                    
-       if (!receiptsIO.insertIntoAccount(hashOfPrefValues,userUuid))
-       {
-    	    QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Unable to insert datas into account")
-    	                                     +__FILE__+QString::number(__LINE__),QMessageBox::Ok);
-           }
+       if (!receiptsIO.insertIntoAccount(hashOfPrefValues,userUuid)) {
+           Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("Unable to insert datas into account"));
+       }
        else{
            listOfValues << QString::number(preferedValue*listOfPercentages[i]/100.00);
            }

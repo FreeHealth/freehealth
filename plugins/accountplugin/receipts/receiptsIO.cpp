@@ -34,9 +34,11 @@
 #include <accountbaseplugin/constants.h>
 
 #include <utils/database.h>
+#include <utils/global.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_msgerror.h>
 
 #include <QSqlDriver>
-#include <QMessageBox>
 #include <QDate>
 #include <QSqlQuery>
 
@@ -46,6 +48,7 @@ enum { WarnDebugMessage = true };
 
 using namespace AccountDB;
 using namespace Constants;
+using namespace Trans::ConstantTranslations;
 
 receiptsEngine::receiptsEngine()
 {
@@ -102,8 +105,7 @@ bool receiptsEngine::insertIntoAccount(const QHash<int,QVariant> &hashValues, co
 
 
     if (m_mpmodel->rowCount(QModelIndex()) == rowBefore) {
-        QMessageBox::warning(0,trUtf8("Warning ReceiptsEngine : "),trUtf8("Error = ") + m_mpmodel->lastError().text(),
-                             QMessageBox::Ok);
+        Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("Error = ") + m_mpmodel->lastError().text());
         ret = false;
     }
     return ret;
@@ -237,30 +239,30 @@ QHash<int,QVariant> receiptsEngine::getListOfPreferedValues(QString & userUuid,
     QString MPfilter ;
     QStringList list;
     if(!data.isEmpty()){
-    if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " data is not empty " ;
+        if (WarnDebugMessage)
+            qDebug() << __FILE__ << QString::number(__LINE__) << " data is not empty " ;
         if (data.contains("+"))
         {
-    	    list = data.split("+");
-          }
+            list = data.split("+");
+        }
         else{
-              list << data;
-            }
+            list << data;
+        }
         QString str;
         foreach(str,list){
             str = str.trimmed();
             QString field = "NAME";
-            QHash<QString,double> hashTypeAndValue = getFilteredValueFromMedicalProcedure(str,field); 
+            QHash<QString,double> hashTypeAndValue = getFilteredValueFromMedicalProcedure(str,field);
             double val = hashTypeAndValue.value(str);
             value += val;
-            }
+        }
     }
     else
     {
-            	  QMessageBox::warning(0,trUtf8("Warning"),trUtf8("You have to insert your preferred "
-            	                 	  "value\nin thesaurus\nand choose it as preferred."),QMessageBox::Ok);
-            	  value = -1.13;
-        }
+        Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("You have to insert your preferred "
+                                                                   "value\nin thesaurus\nand choose it as preferred."));
+        value = -1.13;
+    }
     QVariant preferedAct = QVariant(data);
     double preferedValue = value;
     switch(choice){
@@ -347,11 +349,9 @@ QHash<QString,double> receiptsEngine::getFilteredValueFromMedicalProcedure(const
     	double amount = valueStr.toDouble();
         hash.insertMulti(act,amount);
         } 
-    if (hash.size()>1)
-    {
-    	  QMessageBox::warning(0,trUtf8("Warning"),trUtf8("More than one value")+__FILE__+QString::number(__LINE__),
-    	  	                                     QMessageBox::Ok);
-        }   
+    if (hash.size()>1) {
+        Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("More than one value")+__FILE__+QString::number(__LINE__));
+    }
     return hash;
 }
 
