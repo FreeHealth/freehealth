@@ -34,9 +34,9 @@ override_dh_auto_configure:
 # Clean build path
 override_dh_auto_clean:
 	rm -Rf bin
-#	rm -Rf build
+	rm -Rf build
 	rm -f global_resources/translations/[a-ps-z]*.qm
-#	dh_auto_clean
+	dh_auto_clean
 
 # Make all projects
 override_dh_auto_build:
