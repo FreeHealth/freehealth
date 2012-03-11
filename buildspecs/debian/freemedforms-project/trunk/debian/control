@@ -11,6 +11,16 @@ Homepage: http://www.freemedforms.com/
 Vcs-Browser: http://svn.debian.org/wsvn/debian-med/trunk/packages/freemedforms/
 Vcs-Svn: svn://svn.debian.org/debian-med/trunk/packages/freemedforms/trunk/
 
+Package: freemedforms-project
+Architecture: all
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: The FreeMedForms project virtual package
+ The FreeMedForms project is a set of free and open source
+ medical application used to help health professionals
+ in their current practice.
+ It is developed by a international community of medical
+ doctors and computer workers.
+
 Package: freemedforms-libs
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
