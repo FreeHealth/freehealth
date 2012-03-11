@@ -70,7 +70,7 @@ protected Q_SLOTS:
     void comboBoxCurrentIndexChanged(int id);
 
 Q_SIGNALS:
-    void currentLanguageChanged(QLocale::Language country);
+    void currentLanguageChanged(QLocale::Language language);
     void currentLanguageNameChanged(const QString &name);
 
 private:
