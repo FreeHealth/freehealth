@@ -212,7 +212,7 @@ void IdentityWidget::setCurrentIndex(const QModelIndex &patientIndex)
     }
 }
 
-/** \brief Test the validity of the "actually showning" identity. */
+/** \brief Test the validity of the "actually shown" identity. */
 bool IdentityWidget::isIdentityValid() const
 {
     if (d->editUi->birthName->text().isEmpty()) {
@@ -253,7 +253,7 @@ bool IdentityWidget::isIdentityAlreadyInDatabase() const
     return (patientBase()->count(Constants::Table_IDENT, Constants::IDENTITY_NAME, where)>0);
 }
 
-/** \brief Identity has been modified bu te user ? */
+/** \brief Identity has been modified by the user? */
 bool IdentityWidget::isModified() const
 {
     if (d->m_EditMode==ReadOnlyMode)
