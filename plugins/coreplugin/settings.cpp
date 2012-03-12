@@ -35,7 +35,7 @@
         - getTreeWidget() returns a treeWidget containing all values of the QSettings\n
         - toString() is idem but returns a QString formatted.
 
-    You can store extra-datas such as webSiteUrl().
+    You can store extra-data such as webSiteUrl().
 
     getTreeWidget() mechanism :\n
     - if *parent is a QTreeWidget, just populate it with infos\n
