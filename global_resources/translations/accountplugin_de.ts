@@ -2438,7 +2438,7 @@ if you don&apos;t have one, save the next value in thesaurus and chose it in the
     </message>
     <message>
         <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="909"/>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="1129"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="1153"/>
         <source>Warning</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2472,12 +2472,12 @@ You should create one in Preferences.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="1129"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="1153"/>
         <source>Error inserting into AccountModel!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="1147"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="1171"/>
         <source> has been saved in thesaurus !</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2516,13 +2516,25 @@ You should create one in Preferences.</source>
 <context>
     <name>findReceiptsValues</name>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/findReceiptsValues.cpp" line="151"/>
+        <location filename="../../plugins/accountplugin/receipts/findReceiptsValues.cpp" line="154"/>
         <source>The medical procedure database is empty.
 You should create defaults in Configuration &gt; Preference &gt; Accountancy.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/findReceiptsValues.cpp" line="328"/>
+        <location filename="../../plugins/accountplugin/receipts/findReceiptsValues.cpp" line="201"/>
+        <location filename="../../plugins/accountplugin/receipts/findReceiptsValues.cpp" line="249"/>
+        <source>Warning</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/receipts/findReceiptsValues.cpp" line="201"/>
+        <location filename="../../plugins/accountplugin/receipts/findReceiptsValues.cpp" line="249"/>
+        <source>You have to choose a value !</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/receipts/findReceiptsValues.cpp" line="357"/>
         <source>Check a button.</source>
         <translation type="unfinished"></translation>
     </message>

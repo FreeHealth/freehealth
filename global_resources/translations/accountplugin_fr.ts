@@ -228,7 +228,12 @@ FreeAccount is composed of:
   - Movements in your accountancy,
   - Asset for your assets,
   - Ledger to analyse your accountancy and produce and print your ledger.</source>
-        <translation type="unfinished"></translation>
+        <translation>Lisez je vous prie cette explication avant d&apos;utiliser FreeAccount.
+FreeAccount est composé de :
+Recettes pour enregistrer vos gains,
+Mouvements pour enregistrer vos mouvements comptables,
+Immobilisations pour gérer vos immobilisations,
+Grand livre pour analyser votre comptabilité et produire et imprimer le GrandLivre.</translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/accountmode.cpp" line="115"/>
@@ -241,17 +246,25 @@ FreeAccount is composed of:
 Before the first use, open Configuration &gt; Preferences &gt; Accountancy &gt; Defaults,
 and create defaults.
 Then parametrize your user, sites, bank and so on.</source>
-        <translation type="unfinished"></translation>
+        <translation>Les raccourcis pour ces programmes sont :
+- pour la prise rapide de votre recette préférée, CTRL+R,
+- pour le programme recettes, Maj+R,
+- pour la fenêtre des mouvements,CTRL+M,
+- pour la fenêtre immobilisations, ALT+Z,
+- pour la fenêtre Grand-Livre and la fenêtre d&apos;analyse, ALT+L.
+Avant la première utilisation, ouvrez Configuration &gt; Préférences &gt; Comptabilité &gt; Défauts,
+et créez les valeurs par défaut.
+Ensuite paramétrez votre utilisateur, sites de travail, comptes bancaires et tout ça.</translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/accountmode.cpp" line="127"/>
         <source>Ok</source>
-        <translation type="unfinished"></translation>
+        <translation>Ok</translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/accountmode.cpp" line="127"/>
         <source>Do not show this message again</source>
-        <translation type="unfinished"></translation>
+        <translation>Ne me montrez pas ce message de nouveau</translation>
     </message>
 </context>
 <context>
@@ -583,7 +596,9 @@ Voulez vous les sauvegarder ?</translation>
         <source>Preferred: 
 yes = 1
 no = 0</source>
-        <translation type="unfinished"></translation>
+        <translation>Préféré :
+oui = 1
+non = 0</translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/preferences/distancerulespage.ui" line="177"/>
@@ -1007,7 +1022,8 @@ Voulez vous les sauvegarder ?</translation>
         <location filename="../../plugins/accountplugin/preferences/virtualdatabasecreator.ui" line="66"/>
         <source>This widget will create a fake database and populate it with virtual datas.
 This feature is useful for testers and should not be used by current users.</source>
-        <translation type="unfinished"></translation>
+        <translation>Cette fenêtre va créer une fausse base de données et la peupler avec des données virtuelles.
+Ce mécanisme est utile pour les testeurs et ne devrait pas être utilisé par les utilisateurs courrants.</translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/preferences/virtualdatabasecreator.ui" line="77"/>
@@ -1173,17 +1189,17 @@ This feature is useful for testers and should not be used by current users.</sou
         <location filename="../../plugins/accountplugin/assets/assetsIO.cpp" line="100"/>
         <location filename="../../plugins/accountplugin/assets/assetsIO.cpp" line="145"/>
         <source>AssetsIO error: </source>
-        <translation type="unfinished"></translation>
+        <translation>AssetsIO error: </translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/assets/assetsIO.cpp" line="176"/>
         <source>Two or more records with the same bank name.</source>
-        <translation type="unfinished"></translation>
+        <translation>Il y a deux ou plus enregistrements avec le même nom de compte en banque.</translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/assets/assetsIO.cpp" line="306"/>
         <source>Credited value = </source>
-        <translation type="unfinished"></translation>
+        <translation>Valeur créditée = </translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/assets/assetsIO.cpp" line="309"/>
@@ -1293,7 +1309,7 @@ Autrement le résultat sera faux!</translation>
     <message>
         <location filename="../../plugins/accountplugin/assets/assetsViewer.cpp" line="222"/>
         <source>Asset deleted.</source>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;immobilisation est effacée.</translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/assets/assetsViewer.cpp" line="172"/>
@@ -1415,18 +1431,18 @@ Autrement le résultat sera faux!</translation>
         <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="86"/>
         <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="87"/>
         <source>Do you want to delete selected item ?</source>
-        <translation type="unfinished"></translation>
+        <translation>Voulez vous effacer l&apos;item sélectionné ?</translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="96"/>
         <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="97"/>
         <source>Do you want to set this item as preferred value ?</source>
-        <translation type="unfinished"></translation>
+        <translation>Voulez vous choisir cet item comme valeur préférée ?</translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="101"/>
         <source>Unable to set this item as the preferred one.</source>
-        <translation type="unfinished"></translation>
+        <translation>Je ne peux pas déclarer cet item comme valeur préférée.</translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="111"/>
@@ -1457,7 +1473,7 @@ Autrement le résultat sera faux!</translation>
     <message>
         <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="267"/>
         <source>Cannot delete in thesaurus : </source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible d&apos;effacer dans le thésaurus la valeur : </translation>
     </message>
 </context>
 <context>
@@ -1550,7 +1566,7 @@ Autrement le résultat sera faux!</translation>
     <message>
         <location filename="../../plugins/accountplugin/receipts/ChoiceDialog.ui" line="170"/>
         <source>TextLabel</source>
-        <translation type="unfinished"></translation>
+        <translation>Texte label</translation>
     </message>
 </context>
 <context>
@@ -1978,7 +1994,7 @@ Créez s&apos;ils vous plaît les mouvements par défaut dans Configuration &gt;
     <message>
         <location filename="../../plugins/accountplugin/movements/movementsIO.cpp" line="371"/>
         <source>Two or more records with the same bank name.</source>
-        <translation type="unfinished"></translation>
+        <translation>Il y a deux enregistrements ou plus avec le même nom de compte bancaire.</translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/movements/movementsIO.cpp" line="394"/>
@@ -2037,18 +2053,18 @@ Créez s&apos;ils vous plaît les mouvements par défaut dans Configuration &gt;
         <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="173"/>
         <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="196"/>
         <source>Movement deleted.</source>
-        <translation type="unfinished"></translation>
+        <translation>Mouvement effacé.</translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="183"/>
         <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="205"/>
         <source>Select a line.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sélectionnez une ligne.</translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="212"/>
         <source>Movement validated.</source>
-        <translation type="unfinished"></translation>
+        <translation>Mouvement validé.</translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/movements/movementsviewer.cpp" line="171"/>
@@ -2426,7 +2442,7 @@ rapide</translation>
     <message>
         <location filename="../../plugins/accountplugin/receipts/receiptviewer.ui" line="211"/>
         <source>Choosen Values</source>
-        <translation type="unfinished"></translation>
+        <translation>Valeurs choisies</translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="651"/>
@@ -2460,7 +2476,7 @@ rapide</translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="909"/>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="1129"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="1153"/>
         <source>Warning</source>
         <translation>Attention</translation>
     </message>
@@ -2492,7 +2508,7 @@ Vous devriez en créer une dans Préférences.</translation>
         <translation>Kilomètres</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="1147"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="1171"/>
         <source> has been saved in thesaurus !</source>
         <translation> a été sauvegardé dans le thésaurus !</translation>
     </message>
@@ -2502,7 +2518,7 @@ Vous devriez en créer une dans Préférences.</translation>
         <translation>thésaurus</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="1129"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="1153"/>
         <source>Error inserting into AccountModel!</source>
         <translation>Erreur d&apos;insertion dans AccountModel !</translation>
     </message>
@@ -2541,14 +2557,26 @@ Vous devriez en créer une dans Préférences.</translation>
 <context>
     <name>findReceiptsValues</name>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/findReceiptsValues.cpp" line="151"/>
+        <location filename="../../plugins/accountplugin/receipts/findReceiptsValues.cpp" line="154"/>
         <source>The medical procedure database is empty.
 You should create defaults in Configuration &gt; Preference &gt; Accountancy.</source>
         <translation>La base médical procédure est vide.
 Vous devriez créer les valeurs par défaut dans Configuration &gt; Preference &gt; Accountancy.</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/findReceiptsValues.cpp" line="328"/>
+        <location filename="../../plugins/accountplugin/receipts/findReceiptsValues.cpp" line="201"/>
+        <location filename="../../plugins/accountplugin/receipts/findReceiptsValues.cpp" line="249"/>
+        <source>Warning</source>
+        <translation>Attention</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/receipts/findReceiptsValues.cpp" line="201"/>
+        <location filename="../../plugins/accountplugin/receipts/findReceiptsValues.cpp" line="249"/>
+        <source>You have to choose a value !</source>
+        <translation>Vous devez choisir une valeur !</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/receipts/findReceiptsValues.cpp" line="357"/>
         <source>Check a button.</source>
         <translation>Cocher un bouton.</translation>
     </message>
@@ -2638,7 +2666,7 @@ et la choisir comme préférée.</translation>
     <message>
         <location filename="../../plugins/accountplugin/receipts/receiptsmanager.cpp" line="312"/>
         <source>You have to create a preferred value in Thesaurus.</source>
-        <translation type="unfinished"></translation>
+        <translation>Vous devez créer une valeur préférée par le Thésaurus.</translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/receipts/receiptsmanager.cpp" line="529"/>
@@ -2662,18 +2690,18 @@ et la choisir comme préférée.</translation>
         <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="383"/>
         <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="384"/>
         <source>Do you want to delete selected item ?</source>
-        <translation type="unfinished"></translation>
+        <translation>Voulez vous effacer l&apos;item sélectionné ?</translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="393"/>
         <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="394"/>
         <source>Do you want to set this item as preferred value ?</source>
-        <translation type="unfinished"></translation>
+        <translation>Voulez vous désigner cet item comme la valeur préférée ?</translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="398"/>
         <source>Unable to set this item as the preferred one.</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible de désigner cet item comme la valeur préférée.</translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="408"/>
