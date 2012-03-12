@@ -72,7 +72,6 @@ ZipCountryModel::ZipCountryModel(QObject *parent, QSqlDatabase _db, bool dbAvail
 
     if (m_DbAvailable) {  // BUG with if (m_DbAvailable && db.isOpen()) --> returning false with (true && true) ????
         if (db.isOpen()) {
-            LOG("OK");
             setQuery("SELECT ZIP, CITY FROM ZIPS LIMIT 0, 1", _db);
             if (!query().isActive()) {
                 LOG_QUERY_ERROR(query());

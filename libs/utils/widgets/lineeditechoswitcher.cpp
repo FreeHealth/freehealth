@@ -36,6 +36,7 @@
 #include <QPushButton>
 #include <QHBoxLayout>
 #include <QApplication>
+#include <QToolButton>
 
 using namespace Utils;
 using namespace Utils::Internal;
@@ -45,90 +46,57 @@ namespace Internal {
 class LineEditEchoSwitcherPrivate
 {
 public:
-    LineEditEchoSwitcherPrivate( QWidget *parent ) : m_Parent(parent), toogler(0),lineEdit(0)
+    LineEditEchoSwitcherPrivate()
     {
-        toogler = new QPushButton(parent);
-        toogler->setFocusPolicy(Qt::ClickFocus);
-//        toogler->setIcon( tkTheme::icon(ICONEYES) );
-        toogler->setSizePolicy( QSizePolicy::Fixed , QSizePolicy::Fixed );
-        toogler->setFlat(true);
-        toogler->setMaximumSize(QSize(22, 22));
-        lineEdit = new QLineEdit(parent);
-        lineEdit->setSizePolicy( QSizePolicy::Expanding , QSizePolicy::Fixed );
     }
 
-    void retranslate()
+    void switchEchoMode(QLineEdit *l)
     {
-        toogler->setToolTip( QCoreApplication::translate("LineEditEchoSwitcher","Display/Hide text") );
-    }
-
-    void switchEchoMode( QLineEdit * l )
-    {
-        if ( l->echoMode() == QLineEdit::Normal )
-            l->setEchoMode( QLineEdit::Password );
+        if (l->echoMode() == QLineEdit::Normal)
+            l->setEchoMode(QLineEdit::Password);
         else
-            l->setEchoMode( QLineEdit::Normal );
+            l->setEchoMode(QLineEdit::Normal);
     }
 
-
-    QWidget *m_Parent;
-    QPushButton *toogler;
-    QLineEdit *lineEdit;
+    QToolButton *m_ToolButton;
 };
 }  // End Internal
 }  // End Utils
 
 LineEditEchoSwitcher::LineEditEchoSwitcher(QWidget *parent) :
-        QWidget(parent), d(0)
+        QButtonLineEdit(parent), d(0)
 {
     setObjectName("LineEditEchoSwitcher");
-    d = new LineEditEchoSwitcherPrivate(this);
-    QHBoxLayout *layout = new QHBoxLayout(this);
-    layout->setSpacing(0);
-    layout->setMargin(0);
-    layout->addWidget(d->lineEdit);
-    layout->addWidget(d->toogler);
-    connect( d->toogler, SIGNAL(clicked()), this, SLOT(toogleEchoMode()));
-
+    d = new LineEditEchoSwitcherPrivate;
+    d->m_ToolButton = new QToolButton(this);
+    d->m_ToolButton->setToolTip(QCoreApplication::translate("LineEditEchoSwitcher","Display/Hide text"));
+    setRightButton(d->m_ToolButton);
+    connect(d->m_ToolButton, SIGNAL(clicked()), this, SLOT(toogleEchoMode()));
 }
 
-    /** \brief Set the text of the line edit. */
-void LineEditEchoSwitcher::setText( const QString & text )
+LineEditEchoSwitcher::~LineEditEchoSwitcher()
 {
-    d->lineEdit->setText(text);
+    if (d) {
+        delete d;
+        d = 0;
+    }
 }
 
-    /** \brief Returns the line edit text. */
-QString LineEditEchoSwitcher::text()
-{
-    return d->lineEdit->text();
-}
 
 /** \brief Toogle the echo mode of the line edit. */
 void LineEditEchoSwitcher::toogleEchoMode()
 {
-    d->switchEchoMode(d->lineEdit);
-}
-
-void LineEditEchoSwitcher::setEchoMode(QLineEdit::EchoMode mode)
-{
-    d->lineEdit->setEchoMode(mode);
+    d->switchEchoMode(this);
 }
 
 void LineEditEchoSwitcher::setIcon(const QIcon &icon)
 {
-    d->toogler->setIcon(icon);
+    d->m_ToolButton->setIcon(icon);
 }
 
-void LineEditEchoSwitcher::changeEvent( QEvent *e )
+void LineEditEchoSwitcher::changeEvent(QEvent *e)
 {
-    Q_UNUSED(e);
-    d->retranslate();
+    if (e->type()==QEvent::LanguageChange) {
+        d->m_ToolButton->setToolTip(QCoreApplication::translate("LineEditEchoSwitcher","Display/Hide text"));
+    }
 }
-
-    /** \brief return the line edit pointer. */
-QLineEdit *LineEditEchoSwitcher::lineEdit()
-{
-    return d->lineEdit;
-}
-

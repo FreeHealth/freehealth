@@ -27,6 +27,7 @@
 #define LINEEDITECHOSWITCHER_H
 
 #include <utils/global_exporter.h>
+#include <utils/widgets/qbuttonlineedit.h>
 
 /**
  * \file lineeditechoswitcher.h
@@ -45,27 +46,22 @@ namespace Internal {
 class LineEditEchoSwitcherPrivate;
 }
 
-class UTILS_EXPORT LineEditEchoSwitcher : public QWidget
+class UTILS_EXPORT LineEditEchoSwitcher : public QButtonLineEdit
 {
     Q_OBJECT
     Q_PROPERTY( QString text READ text WRITE setText USER true)
 
 public:
-    LineEditEchoSwitcher( QWidget *parent = 0 );
-    ~LineEditEchoSwitcher() {}
+    LineEditEchoSwitcher(QWidget *parent = 0);
+    ~LineEditEchoSwitcher();
 
-    QLineEdit *lineEdit();
-    void setText( const QString & text );
-    QString text();
     void setIcon(const QIcon &icon);
-    void clear() {lineEdit()->clear();}
 
 public Q_SLOTS:
     void toogleEchoMode();
-    void setEchoMode(QLineEdit::EchoMode mode);
 
 protected:
-    void changeEvent( QEvent *e );
+    void changeEvent(QEvent *e);
 
 private:
     Internal::LineEditEchoSwitcherPrivate *d;

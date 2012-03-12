@@ -24,24 +24,23 @@
  *       Christian A. Reiter <christian.a.reiter@gmail.com>>               *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
+#include "useridentityandloginpage.h"
+#include <usermanagerplugin/usermodel.h>
+
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/constants_icons.h>
 #include <coreplugin/translators.h>
 
-
-#include "useridentityandloginpage.h"
-#include "ui_useridentityandloginpage.h"
+#include <listviewplugin/languagecombobox.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
-#include <listviewplugin/languagecombobox.h>
-#include "utils/widgets/uppercasevalidator.h"
+#include <utils/widgets/uppercasevalidator.h>
 #include <translationutils/constanttranslations.h>
 
-#include "coreplugin/translators.h"
+#include "ui_useridentityandloginpage.h"
 
-#include <usermanagerplugin/usermodel.h>
 
 using namespace UserPlugin;
 using namespace Internal;
@@ -55,6 +54,7 @@ UserIdentityAndLoginPage::UserIdentityAndLoginPage(QWidget *parent) :
     ui(new Ui::UserIdentityAndLoginPage)
 {
     ui->setupUi(this);
+    qWarning() << "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
 
     ui->cbLanguage->setDisplayMode(Views::LanguageComboBox::AvailableTranslations);
     ui->cbLanguage->setCurrentLanguage(QLocale().language());
@@ -73,12 +73,13 @@ UserIdentityAndLoginPage::UserIdentityAndLoginPage(QWidget *parent) :
     registerField("Gender", ui->cbGender);
 
     // TODO: centralize login/password length with a constant!
-    ui->leLogin->setValidator(new QRegExpValidator(QRegExp("[A-Za-z0-9]{6,}"), this));
+    ui->leLogin->setValidator(new QRegExpValidator(QRegExp("^[a-zA-Z0-9\\.\\-_]{6,}"), this));
     ui->leLogin->setToolTip(tr("minimum: 6 characters\nonly characters and digits allowed"));
+    ui->leLogin->setIcon(theme()->icon(Core::Constants::ICONEYES));
 
     // TODO: centralize login/password length with a constant!
-    ui->lePassword->lineEdit()->setValidator(new QRegExpValidator(QRegExp(".{6,}"),this));
-    ui->lePassword->lineEdit()->setToolTip(tr("minimum: 6 characters"));
+    ui->lePassword->setValidator(new QRegExpValidator(QRegExp("^[a-zA-Z0-9\\.\\-_]{6,}"),this));
+    ui->lePassword->setToolTip(tr("minimum: 6 characters"));
     ui->lePassword->toogleEchoMode();
     ui->lePassword->setIcon(theme()->icon(Core::Constants::ICONEYES));
 
@@ -86,14 +87,14 @@ UserIdentityAndLoginPage::UserIdentityAndLoginPage(QWidget *parent) :
     ui->lePasswordConfirm->setIcon(theme()->icon(Core::Constants::ICONEYES));
 
     registerField("Login*", ui->leLogin);
-    registerField("Password*", ui->lePassword->lineEdit());
-    registerField("ConfirmPassword*", ui->lePasswordConfirm->lineEdit());
+    registerField("Password*", ui->lePassword);
+    registerField("ConfirmPassword*", ui->lePasswordConfirm);
 
     retranslate();
 
     connect(ui->leLogin, SIGNAL(editingFinished()), this, SLOT(checkLogin()));
-    connect(ui->lePasswordConfirm->lineEdit(), SIGNAL(textChanged(QString)), this, SLOT(checkControlPassword(QString)));
-    connect(ui->lePassword->lineEdit(), SIGNAL(textChanged(QString)), this, SLOT(checkControlPassword(QString)));
+    connect(ui->lePasswordConfirm, SIGNAL(textChanged(QString)), this, SLOT(checkControlPassword(QString)));
+    connect(ui->lePassword, SIGNAL(textChanged(QString)), this, SLOT(checkControlPassword(QString)));
 
     // set right stylesheets to the labels
     checkControlPassword("");

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>538</width>
-    <height>407</height>
+    <width>396</width>
+    <height>371</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -118,7 +118,7 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QLineEdit" name="leLogin">
+       <widget class="Utils::LineEditEchoSwitcher" name="leLogin">
         <property name="toolTip">
          <string>minimum: 5 characters</string>
         </property>
@@ -139,14 +139,10 @@
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="Utils::LineEditEchoSwitcher" name="lePassword" native="true">
-        <property name="toolTip">
-         <string>minimum: 6 characters</string>
-        </property>
-       </widget>
+       <widget class="Utils::LineEditEchoSwitcher" name="lePassword"/>
       </item>
       <item row="2" column="1">
-       <widget class="Utils::LineEditEchoSwitcher" name="lePasswordConfirm" native="true"/>
+       <widget class="Utils::LineEditEchoSwitcher" name="lePasswordConfirm"/>
       </item>
      </layout>
     </widget>
@@ -155,18 +151,17 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>Utils::LineEditEchoSwitcher</class>
-   <extends>QWidget</extends>
-   <header location="global">utils/widgets/lineeditechoswitcher.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>Views::LanguageComboBox</class>
    <extends>QComboBox</extends>
    <header location="global">listviewplugin/languagecombobox.h</header>
    <slots>
     <signal>currentLanguageChanged(QLocale::Language)</signal>
    </slots>
+  </customwidget>
+  <customwidget>
+   <class>Utils::LineEditEchoSwitcher</class>
+   <extends>QLineEdit</extends>
+   <header location="global">utils/widgets/lineeditechoswitcher.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

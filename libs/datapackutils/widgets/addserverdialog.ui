@@ -85,9 +85,6 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="1">
-       <widget class="Utils::LineEditEchoSwitcher" name="userLogin" native="true"/>
-      </item>
       <item row="1" column="0">
        <widget class="QLabel" name="label_5">
         <property name="text">
@@ -96,7 +93,10 @@
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="Utils::LineEditEchoSwitcher" name="userPassword" native="true"/>
+       <widget class="Utils::LineEditEchoSwitcher" name="userPassword"/>
+      </item>
+      <item row="0" column="1">
+       <widget class="Utils::LineEditEchoSwitcher" name="userLogin"/>
       </item>
      </layout>
     </widget>
@@ -135,9 +135,8 @@
  <customwidgets>
   <customwidget>
    <class>Utils::LineEditEchoSwitcher</class>
-   <extends>QWidget</extends>
+   <extends>QLineEdit</extends>
    <header location="global">utils/widgets/lineeditechoswitcher.h</header>
-   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>

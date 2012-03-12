@@ -76,10 +76,10 @@ UserPasswordDialog::UserPasswordDialog(const QString &actualCryptedPassword, QWi
 
    // connect buttons
    connect(m_ui->buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
-   m_ui->oldPass->lineEdit()->setFocus();
+   m_ui->oldPass->setFocus();
 
-   connect(m_ui->newControl->lineEdit(), SIGNAL(textChanged(QString)), this, SLOT(checkControlPassword(QString)));
-   connect(m_ui->newPass->lineEdit(), SIGNAL(textChanged(QString)), this, SLOT(checkNewPassword(QString)));
+   connect(m_ui->newControl, SIGNAL(textChanged(QString)), this, SLOT(checkControlPassword(QString)));
+   connect(m_ui->newPass, SIGNAL(textChanged(QString)), this, SLOT(checkNewPassword(QString)));
    checkNewPassword("");
 }
 
@@ -102,11 +102,11 @@ void UserPasswordDialog::checkNewPassword(const QString &text)
     if (text.size() >= 5) {
         m_ui->labelNewPassword->setStyleSheet("color:black");
         m_ui->labelNewPassword->setToolTip("");
-        m_ui->newPass->lineEdit()->setToolTip("");
+        m_ui->newPass->setToolTip("");
     } else {
         m_ui->labelNewPassword->setStyleSheet("color:red");
         m_ui->labelNewPassword->setToolTip(tr("Password must have at least 5 chars."));
-        m_ui->newPass->lineEdit()->setToolTip(tr("Password must have at least 5 chars."));
+        m_ui->newPass->setToolTip(tr("Password must have at least 5 chars."));
     }
     checkControlPassword(m_ui->newControl->text());
 }
@@ -129,7 +129,7 @@ QString UserPasswordDialog::cryptedPassword() const
 QString UserPasswordDialog::clearPassword() const
 {
     if (m_AllIsGood)
-        return m_ui->newPass->lineEdit()->text();
+        return m_ui->newPass->text();
     return QString();
 }
 
@@ -149,11 +149,11 @@ void UserPasswordDialog::accept()
     if (m_ui->newPass->text().size()<5) {
         return;
     }
-    const QString &cryptedNewPass = Utils::cryptPassword(m_ui->newPass->lineEdit()->text());
-    const QString &oldPass = Utils::cryptPassword(m_ui->oldPass->lineEdit()->text());
+    const QString &cryptedNewPass = Utils::cryptPassword(m_ui->newPass->text());
+    const QString &oldPass = Utils::cryptPassword(m_ui->oldPass->text());
 
     if ((oldPass == m_ActualPass) &&
-        (m_ui->newPass->lineEdit()->text() == m_ui->newControl->lineEdit()->text())) {
+        (m_ui->newPass->text() == m_ui->newControl->text())) {
         m_AllIsGood = true;
         m_CryptedNewPass = cryptedNewPass;
         QDialog::accept();
