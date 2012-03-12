@@ -25,7 +25,7 @@
       <icon>__theme__/drugs.png</icon>
       <options>DontPrintEmptyValues</options>
       <Item name="GP::Basic::Drugs::Allergies::Content" type="drugselector">
-        <label lang="xx">Known drugs allergies</label>
+        <label lang="xx">Known drug allergies</label>
         <label lang="fr">Allergies médicamenteuses connues</label>
         <options>hideselector;nointeractionchecking;DontPrintEmptyValues</options>
         <patientdata>drugs::allergies</patientdata>
