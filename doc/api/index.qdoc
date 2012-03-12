@@ -1,5 +1,5 @@
 /*!
-    \mainpage FreeMedForms a free and open source medical files manager.
+    \mainpage FreeMedForms - a free and open source medical files manager.
     \author   Main author, administrator: Eric Maeker, MD
     \author   Accountancy: Pierre-Marie Desombre, MD
     \author   Agenda, padtools: Guillaume Denry
@@ -26,7 +26,7 @@ Il peut être utilisé seul pour prescrire et/ou tester les interactions médica
 Il peut être lié à n'importe quelle application grâce à ses paramétres de ligne de commande. La base de données
 thérapeutique et des interactions est synchronisée aux données de l'AFSSAPS.
 
-    \subsection intro_en Anglais
+    \subsection intro_en English
 
 FreeMedForms (FMF) is a multi-platform software (available on MacOS, Linux, FreeBSD, Windows), multilingual,
 free and open source, released under the GPLv3 license. FreeMedForms is developed by medical doctors and is
@@ -45,29 +45,29 @@ command line parameters. The therapeutic and interactions database are synchroni
 
     \subsection intro_de Deutsch
 
-FreeMedForms (FMF) ist eine multiplattform Software (verfügbar auf
-MacOS, Linux, FreeBSD und Windows), sie ist multilingual, ist free und
-open Source und veröffentlicht unter der GPLv3 Lizenz. FreeMedForms wurde
-von Medizinern entwickelt und richtet sich an professionelle im
+FreeMedForms (FMF) ist eine Multiplattform-Software (verfügbar auf 
+MacOS, Linux, FreeBSD und Windows), sie ist multilingual, ist frei und
+Open-Source und veröffentlicht unter der GPLv3-Lizenz. FreeMedForms wurde
+von Medizinern entwickelt und richtet sich an Professionelle im
 Gesundheitswesen.
-Momentan ist die Sofware in Entwicklung, und steht momentan nur zu
-testzwecken zur Verfügung. Das erklärte Hauptziel von FreeMedForms ist
+Momentan ist die Sofware in Entwicklung, und steht nur zu
+Testzwecken zur Verfügung. Das erklärte Hauptziel von FreeMedForms ist
 die Verwaltung von elektronischen medizinischen Daten, basierend auf
 unserer medizinischen Praxis oder der Praxis die wir in klinischen
-Studien erworben haben. Ihre Eingaben sind voll anpassbar durch die
+Studien erworben haben. Die Eingaben sind voll anpassbar durch die
 Benutzung von Plugins. Einige Teile der Suite sind bereits voll
-benutzbar und auch in der Praxis zum Verschreiben der Rezepte nutzbar
+benutzbar und auch in der Praxis zum Verschreiben von Rezepten nutzbar
 (FreeDiams).
 
-FreeDiams ist das Resultat der FreeMedForms Rezept Plugins, die als
+FreeDiams ist das Resultat des FreeMedForms-Rezept-Plugins, das als
 eigenständige Applikation designed wurde. FreeDiams ist eine multi-
-Plattform (MacOS, Linux, FreeBSD, Windows) Free- und Opensource
-Anwendung, die unter der GPLv3 Lizenz veröffentlicht wurde. Es ist
+Plattform (MacOS, Linux, FreeBSD, Windows) freie und Open-Source
+Anwendung, die unter der GPLv3-Lizenz veröffentlicht wurde. Sie wird
 von Medizinern entwickelt, und richtet sich an das professionelle
 Umfeld. Es kann benutzt werden, um Rezepte zu verschreiben, oder aber
-zum testen von Wechselwirkungen verschiedener Medikamente. Es kann dank
-der Kommandozeile mit jedwedem Programm verknüpft werden. Die
-therapeutische und Neben/Wechselwirkungsdatenbank wird mit den Daten des
+zum Testen von Wechselwirkungen verschiedener Medikamente. Es kann dank
+der Kommandozeile mit jedem Programm verknüpft werden. Die
+therapeutische und Neben-/Wechselwirkungsdatenbank wird mit den Daten des
 französischen AFSSAPS synchronisiert.
 
     \subsection intro_platforms Availables platforms
@@ -102,7 +102,7 @@ FreeMedForms and derivatives use :
    \section testing Testing and bug submition
     <b>Please, before sending us a bug verify that you are using the LATEST version.</b> \n
     You have three possibilities for bug submition :
-    - Web site : Issues
+    - Web site: Issues
     - Debug dialog inside the application, information sending is available only if the application detects an error
     - The mailing list
 
