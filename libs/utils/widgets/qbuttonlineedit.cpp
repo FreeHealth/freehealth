@@ -192,6 +192,8 @@ void QButtonLineEdit::keyPressEvent(QKeyEvent *event)
         m_Timer->stop();
 
     if (event->modifiers() & Qt::AltModifier) {
+        if (!m_leftButton)
+            return;
         const QList<QAction *> &list = m_leftButton->actions();
 
         if (list.count()) {
