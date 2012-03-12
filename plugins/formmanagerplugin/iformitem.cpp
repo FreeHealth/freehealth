@@ -39,7 +39,7 @@
   - createChildItem() to create a new Form::FormItem
   - createPage() to create a new Form::FormPage
  You can get all its children by calling: formItemChildren().\n
- You can define extra-datas (options) with the addExtraData(), extraDatas() and clearExtraDatas().
+ You can define extra-data (options) with the addExtraData(), extraData() and clearExtraData().
  You can define the Core::IPatient representation of this Form::FormItem with setPatientDataRepresentation(),
  patientDataRepresentation().
 
@@ -64,7 +64,7 @@
   (including sub-trees) using the flattenFormMainChildren() member or the formMainChild() if you want a specific child.\n
   setEpisodePossibilities() and episodePossibilities() are used in the Form::EpisodeModel when creating the tree model.\n
   When a mode creates a root Form::FormMain it should declare the main empty root object
-  it in the plugin manager object pool to allow other object to access the datas of forms (eg: PatientModelWrapper).\n
+  it in the plugin manager object pool to allow other object to access the data of forms (eg: PatientModelWrapper).\n
   \code
   ExtensionSystem::PluginManager::instance()->addObject(myRootFormMain);
   \endcode
