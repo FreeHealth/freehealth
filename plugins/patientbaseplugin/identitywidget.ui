@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>369</width>
-    <height>548</height>
+    <width>338</width>
+    <height>448</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -49,6 +49,9 @@
           <width>64</width>
           <height>64</height>
          </size>
+        </property>
+        <property name="focusPolicy">
+         <enum>Qt::ClickFocus</enum>
         </property>
         <property name="toolTip">
          <string>Click to add/change the photo</string>
@@ -168,7 +171,11 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QTextEdit" name="street"/>
+       <widget class="QTextEdit" name="street">
+        <property name="tabChangesFocus">
+         <bool>true</bool>
+        </property>
+       </widget>
       </item>
       <item row="3" column="1">
        <widget class="Views::CountryComboBox" name="country"/>
