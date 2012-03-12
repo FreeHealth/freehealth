@@ -153,7 +153,7 @@ private:
 }  // End namespace Patients
 
 /**
-  \brief Create a Identity viewer with the specific \e mode of edition.
+  \brief Create an Identity viewer with the specific \e mode of edition.
   You must specify the PatientModel to use
   \sa IdentityWidget::EditMode, IdentityWidget::setCurrentPatientModel
 */
