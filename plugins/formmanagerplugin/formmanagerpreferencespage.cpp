@@ -170,7 +170,7 @@ void FormPreferencesPage::resetToDefaults()
     defaultvalues.insert(Constants::S_EPISODEMODEL_LONGDATEFORMAT, QLocale().dateTimeFormat(QLocale::ShortFormat));
     defaultvalues.insert(Constants::S_EPISODEMODEL_SHORTDATEFORMAT, QLocale().dateFormat(QLocale::ShortFormat));
     defaultvalues.insert(Constants::S_EPISODEMODEL_EPISODE_FOREGROUND, "darkblue");
-    defaultvalues.insert(Constants::S_EPISODEMODEL_FORM_FOREGROUND, "dark");
+    defaultvalues.insert(Constants::S_EPISODEMODEL_FORM_FOREGROUND, "black");
 
     foreach(const QString &k, defaultvalues.keys()) {
         settings()->setValue(k, defaultvalues.value(k));
@@ -199,12 +199,16 @@ void FormPreferencesPage::checkSettingsValidity()
     defaultvalues.insert(Constants::S_EPISODEMODEL_LONGDATEFORMAT, QLocale().dateTimeFormat(QLocale::ShortFormat));
     defaultvalues.insert(Constants::S_EPISODEMODEL_SHORTDATEFORMAT, QLocale().dateFormat(QLocale::ShortFormat));
     defaultvalues.insert(Constants::S_EPISODEMODEL_EPISODE_FOREGROUND, "darkblue");
-    defaultvalues.insert(Constants::S_EPISODEMODEL_FORM_FOREGROUND, "dark");
+    defaultvalues.insert(Constants::S_EPISODEMODEL_FORM_FOREGROUND, "black");
 
     foreach(const QString &k, defaultvalues.keys()) {
         if (settings()->value(k) == QVariant())
             settings()->setValue(k, defaultvalues.value(k));
     }
+
+    // manage a bug on previous freemedforms versions (< 0.7.0 stable)
+    if (settings()->value(Constants::S_EPISODEMODEL_FORM_FOREGROUND).toString() == "dark")
+        settings()->setValue(Constants::S_EPISODEMODEL_FORM_FOREGROUND, "black");
 }
 
 QWidget *FormPreferencesPage::createPage(QWidget *parent)
