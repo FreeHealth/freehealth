@@ -150,7 +150,7 @@ public:
         if (!m_ExtraFilter.isEmpty())
             filter += QString(" AND (%1)").arg(m_ExtraFilter);
 
-        filter += QString(" ORDER BY lower(`%1`) ASC").arg(patientBase()->fieldName(Constants::Table_IDENT, Constants::IDENTITY_NAME));
+        filter += QString(" ORDER BY lower(`%1`) ASC").arg(patientBase()->fieldName(Constants::Table_IDENT, Constants::IDENTITY_BIRTHNAME));
 
         if (WarnDatabaseFilter)
             LOG_FOR(q, "Filtering patient database with: " + filter);
@@ -345,7 +345,7 @@ int PatientModel::columnCount(const QModelIndex &) const
 
 int PatientModel::numberOfFilteredPatients() const
 {
-    return patientBase()->count(Constants::Table_IDENT, Constants::IDENTITY_NAME, d->m_SqlPatient->filter());
+    return patientBase()->count(Constants::Table_IDENT, Constants::IDENTITY_BIRTHNAME, d->m_SqlPatient->filter());
 }
 
 bool PatientModel::hasChildren(const QModelIndex &) const
@@ -367,7 +367,7 @@ QVariant PatientModel::data(const QModelIndex &index, int role) const
         case IPatient::Id :           col = Constants::IDENTITY_ID;         break;
         case IPatient::Uid:           col = Constants::IDENTITY_UID;        break;
         case IPatient::FamilyUid:     col = Constants::IDENTITY_FAMILY_UID; break;
-        case IPatient::BirthName:     col = Constants::IDENTITY_NAME;       break;
+        case IPatient::BirthName:     col = Constants::IDENTITY_BIRTHNAME;       break;
         case IPatient::SecondName:    col = Constants::IDENTITY_SECONDNAME;        break;
         case IPatient::Firstname:     col = Constants::IDENTITY_FIRSTNAME;           break;
         case IPatient::Gender:        col = Constants::IDENTITY_GENDER;            break;
@@ -412,7 +412,7 @@ QVariant PatientModel::data(const QModelIndex &index, int role) const
             }
         case IPatient::FullName:
             {
-                const QString &name = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_NAME)).toString();
+                const QString &name = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_BIRTHNAME)).toString();
                 const QString &sec = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_SECONDNAME)).toString();
                 const QString &first = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_FIRSTNAME)).toString();
                 QString title;
@@ -510,7 +510,7 @@ bool PatientModel::setData(const QModelIndex &index, const QVariant &value, int 
         case IPatient::Id :           col = Constants::IDENTITY_ID;               break;
         case IPatient::Uid:           col = Constants::IDENTITY_UID;              break;
         case IPatient::FamilyUid:     col = Constants::IDENTITY_FAMILY_UID;       break;
-        case IPatient::BirthName:     col = Constants::IDENTITY_NAME;             break;
+        case IPatient::BirthName:     col = Constants::IDENTITY_BIRTHNAME;             break;
         case IPatient::SecondName:    col = Constants::IDENTITY_SECONDNAME;       break;
         case IPatient::Firstname:     col = Constants::IDENTITY_FIRSTNAME;        break;
         case IPatient::GenderIndex:
@@ -670,7 +670,7 @@ void PatientModel::setFilter(const QString &name, const QString &firstname, cons
     case FilterOnFullName :
         {
             // WHERE (NAME || SECONDNAME || SURNAME LIKE '%') OR (NAME LIKE '%')
-            const QString &nameField = patientBase()->fieldName(Constants::Table_IDENT, Constants::IDENTITY_NAME);
+            const QString &nameField = patientBase()->fieldName(Constants::Table_IDENT, Constants::IDENTITY_BIRTHNAME);
             const QString &secondField = patientBase()->fieldName(Constants::Table_IDENT, Constants::IDENTITY_SECONDNAME);
             const QString &surField = patientBase()->fieldName(Constants::Table_IDENT, Constants::IDENTITY_FIRSTNAME);
             d->m_ExtraFilter.clear();
@@ -709,7 +709,7 @@ void PatientModel::setFilter(const QString &name, const QString &firstname, cons
         {
             // WHERE NAME LIKE '%'
             d->m_ExtraFilter.clear();
-            d->m_ExtraFilter = patientBase()->fieldName(Constants::Table_IDENT, Constants::IDENTITY_NAME) + " ";
+            d->m_ExtraFilter = patientBase()->fieldName(Constants::Table_IDENT, Constants::IDENTITY_BIRTHNAME) + " ";
             d->m_ExtraFilter += QString("LIKE '%%1%'").arg(name);
             break;
         }
@@ -852,7 +852,7 @@ QHash<QString, QString> PatientModel::patientName(const QList<QString> &uuids)
             continue;
         QHash<int, QString> where;
         where.insert(Constants::IDENTITY_UID, QString("='%1'").arg(u));
-        QString req = patientBase()->select(Constants::Table_IDENT, QList<int>() << Constants::IDENTITY_TITLE << Constants::IDENTITY_NAME << Constants::IDENTITY_SECONDNAME << Constants::IDENTITY_FIRSTNAME, where);
+        QString req = patientBase()->select(Constants::Table_IDENT, QList<int>() << Constants::IDENTITY_TITLE << Constants::IDENTITY_BIRTHNAME << Constants::IDENTITY_SECONDNAME << Constants::IDENTITY_FIRSTNAME, where);
         if (query.exec(req)) {
             if (query.next()) {
                 if (!query.value(1).toString().isEmpty())

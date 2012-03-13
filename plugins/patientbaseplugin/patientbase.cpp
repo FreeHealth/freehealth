@@ -110,7 +110,7 @@ PatientBase::PatientBase(QObject *parent) :
     addIndex(Table_IDENT, IDENTITY_FAMILY_UID);
 
     // Identity
-    addField(Table_IDENT, IDENTITY_NAME, "NAME", FieldIsShortText);
+    addField(Table_IDENT, IDENTITY_BIRTHNAME, "NAME", FieldIsShortText);
     addField(Table_IDENT, IDENTITY_FIRSTNAME, "SURNAME", FieldIsShortText);
     addField(Table_IDENT, IDENTITY_SECONDNAME, "SECONDNAME", FieldIsShortText);
     addField(Table_IDENT, IDENTITY_GENDER, "GENDER", FieldIsOneChar);
@@ -119,7 +119,7 @@ PatientBase::PatientBase(QObject *parent) :
     addField(Table_IDENT, IDENTITY_MARITAL_STATUS, "MARITAL_STATUS", FieldIsOneChar, "NULL");
     addField(Table_IDENT, IDENTITY_DATEOFDEATH, "DATEOFDEATH", FieldIsDate, "NULL");
     addField(Table_IDENT, IDENTITY_PROFESSION, "PROFESSION", FieldIsShortText, "NULL");
-    addIndex(Table_IDENT, IDENTITY_NAME);
+    addIndex(Table_IDENT, IDENTITY_BIRTHNAME);
     addIndex(Table_IDENT, IDENTITY_FIRSTNAME);
     addIndex(Table_IDENT, IDENTITY_SECONDNAME);
     addIndex(Table_IDENT, IDENTITY_DOB);
@@ -230,7 +230,7 @@ void PatientBase::createVirtualPatient(const QString &name, const QString &secon
     query.bindValue(IDENTITY_LK_TOPRACT_LKID, lkid);
     query.bindValue(IDENTITY_FAMILY_UID, "Not yet implemented");
     query.bindValue(IDENTITY_ISVIRTUAL, 1);
-    query.bindValue(IDENTITY_NAME, name);
+    query.bindValue(IDENTITY_BIRTHNAME, name);
     query.bindValue(IDENTITY_FIRSTNAME, firstname);
     if (secondname.isEmpty())
         query.bindValue(IDENTITY_SECONDNAME, QVariant());
