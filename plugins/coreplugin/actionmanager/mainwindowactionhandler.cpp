@@ -245,6 +245,7 @@ void MainWindowActionHandler::createGeneralActions(const int actions)
         a->setIcon(theme()->icon(Constants::ICONQUIT));
         cmd = actionManager()->registerAction(a, Constants::A_FILE_EXIT, ctx);
         cmd->setTranslations(Trans::Constants::FILEEXIT_TEXT );
+        cmd->setDefaultKeySequence(QKeySequence::Quit);
         cmd->action()->setMenuRole(QAction::QuitRole);
         menu->addAction(cmd, group);
     }
