@@ -41,47 +41,30 @@
     <Item type="group" name="FrGroup">
       <uilink widget="frenchGroup"/>
       <country>FR</country>
-      <label lang="xx">Extras</label>
-      <label lang="fr">Extras</label>
+      <label lang="xx">Social insurance</label>
+      <label lang="fr">Sécurité sociale</label>
       <column>1</column>
       <options>DontPrintEmptyValues</options>
 
       <Item type="frenchnss" name="FrGroup::NSS">
-        <uilink label="nssLabel" widget="" layout="nssLayout"/>
-        <label lang="xx">Social number</label>
+        <uilink label="socialNumberLabel" widget="" layout="socialNumberLayout"/>
+        <label lang="xx">Social insurance number</label>
         <label lang="fr">Numéro de sécurité sociale</label>
         <options>DontPrintEmptyValues</options>
       </Item>
 
       <Item type="check" name="FrGroup::IsNSSOwner">
-        <uilink widget="isNssOwnerCheck"/>
-        <label lang="xx">Is the social number owner</label>
+        <uilink widget="isSINOwnerCheck"/>
+        <label lang="xx">Patient is the social insurance number owner</label>
         <label lang="fr">Est le propriétaire du numéro de sécurité sociale</label>
         <options>DontPrintEmptyValues</options>
+        <value><default>1</default></value>
       </Item>
 
       <Item type="shorttext" name="FrGroup::OwnerName">
         <uilink label="ownerLabel" widget="ownerEdit"/>
         <label lang="xx">Social number owner</label>
         <label lang="fr">Propriétaire</label>
-        <options>DontPrintEmptyValues</options>
-      </Item>
-    </Item>
-
-    <Item type="group" name="AtGroup">
-      <uilink widget="austrianGroup"/>
-      <country>FR</country>
-      <label lang="xx">Extras2</label>
-      <label lang="fr">Extras2</label>
-      <label lang="de">Extras2</label>
-      <column>1</column>
-      <options>DontPrintEmptyValues</options>
-
-      <Item type="austriansvnr" name="AtGroup::SVNR">
-        <uilink label="svnrLabel" widget="" layout="svnrLayout"/>
-        <label lang="xx">Social number</label>
-        <label lang="fr">Numéro de sécurité sociale</label>
-	<label lang="de">Sozialversicherungsnummer</label>
         <options>DontPrintEmptyValues</options>
       </Item>
     </Item>

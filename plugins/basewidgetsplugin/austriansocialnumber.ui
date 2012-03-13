@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>BaseWidgets::Internal::AustrianSocialNumber</class>
- <widget class="QWidget" name="BaseWidgets::Internal::AustrianSocialNumber">
+ <class>BaseWidgets::Internal::AustrianSocialNumberEdit</class>
+ <widget class="QWidget" name="BaseWidgets::Internal::AustrianSocialNumberEdit">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>212</width>
+    <width>357</width>
     <height>24</height>
    </rect>
   </property>
@@ -33,7 +33,7 @@
    <item row="0" column="1">
     <widget class="QLineEdit" name="leBirthDate">
      <property name="maxLength">
-      <number>8</number>
+      <number>6</number>
      </property>
     </widget>
    </item>
@@ -59,6 +59,10 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>leSVNR</tabstop>
+  <tabstop>leBirthDate</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>

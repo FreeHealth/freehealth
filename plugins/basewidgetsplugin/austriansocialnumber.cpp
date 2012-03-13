@@ -31,12 +31,14 @@
 
 #include <coreplugin/icore.h>
 #include <coreplugin/ipatient.h>
+#include <datapackutils/datapackcore.h>
 
 #include <utils/log.h>
 
 #include <QEvent>
 #include <QKeyEvent>
 #include <QRegExpValidator>
+#include <QIcon>
 
 #include <QDebug>
 
@@ -62,9 +64,9 @@ inline static QLabel *findLabel(Form::FormItem *item)
     return l;
 }
 
-AustrianSocialNumber::AustrianSocialNumber(QWidget *parent) :
+AustrianSocialNumberEdit::AustrianSocialNumberEdit(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::AustrianSocialNumber),
+    ui(new Ui::AustrianSocialNumberEdit),
     m_CursorPos(0)
 {
     ui->setupUi(this);
@@ -98,14 +100,18 @@ AustrianSocialNumber::AustrianSocialNumber(QWidget *parent) :
     /** \bug ? how can one be sure that m_FullNumber is empty here? */
     if (m_FullNumber.isEmpty())
         populateWithPatientData();
+    connect(ui->leSVNR, SIGNAL(textChanged(QString)), this, SLOT(updateStatus()));
+    connect(ui->leSVNR, SIGNAL(textChanged(QString)), this, SLOT(checkIfEditFull(QString&)));
+    connect(ui->leBirthDate, SIGNAL(textChanged(QString)), this, SLOT(updateStatus()));
+    connect(ui->leBirthDate, SIGNAL(textChanged(QString)), this, SLOT(checkIfEditFull(QString&)));
 }
 
-AustrianSocialNumber::~AustrianSocialNumber()
+AustrianSocialNumberEdit::~AustrianSocialNumberEdit()
 {
     delete ui;
 }
 
-void AustrianSocialNumber::setNumber(const QString &number)
+void AustrianSocialNumberEdit::setNumber(const QString &number)
 {
     m_FullNumber = isValid(number)? number : QString();
     if (m_FullNumber.isEmpty())
@@ -113,14 +119,14 @@ void AustrianSocialNumber::setNumber(const QString &number)
     populateLineEdits();
 }
 
-bool AustrianSocialNumber::isValid() const
+bool AustrianSocialNumberEdit::isValid() const
 {
     return isValid(m_FullNumber);
 }
 
-/** \brief checks if the given full SVNR is valid. Therefore the checksum is calculated
+/** checks if the given full SVNR is valid. Therefore the checksum is calculated
  and compared with the 4th position */
-bool AustrianSocialNumber::isValid(const QString &number) const
+bool AustrianSocialNumberEdit::isValid(const QString &number) const
 {
     const QString nString = number.trimmed().simplified().replace(" ","");
 
@@ -155,12 +161,12 @@ bool AustrianSocialNumber::isValid(const QString &number) const
     return (nString.at(3).digitValue() == controlSum);
 }
 
-QString AustrianSocialNumber::number() const
+QString AustrianSocialNumberEdit::number() const
 {
     return m_FullNumber;
 }
 
-QString AustrianSocialNumber::emptyHtmlMask() const
+QString AustrianSocialNumberEdit::emptyHtmlMask() const
 {
     QStringList html;
     for(int i = 0; i < m_NbChars.count(); ++i) {
@@ -169,7 +175,7 @@ QString AustrianSocialNumber::emptyHtmlMask() const
     return html.join("&nbsp;");
 }
 
-QString AustrianSocialNumber::toHtml() const
+QString AustrianSocialNumberEdit::toHtml() const
 {
     QStringList html;
     for(int i = 0; i < m_Edits.count(); ++i) {
@@ -178,7 +184,7 @@ QString AustrianSocialNumber::toHtml() const
     return html.join("&nbsp;");
 }
 
-void AustrianSocialNumber::populateLineEdits(QString number)
+void AustrianSocialNumberEdit::populateLineEdits(QString number)
 {
     if (number.isEmpty()) {
         number = m_FullNumber;
@@ -192,7 +198,7 @@ void AustrianSocialNumber::populateLineEdits(QString number)
     }
 }
 
-void AustrianSocialNumber::addChar(const QString &c, int currentLineEditId, int pos)
+void AustrianSocialNumberEdit::addChar(const QString &c, int currentLineEditId, int pos)
 {
     qWarning() << "add" << c << currentLineEditId << pos;
     int fullPos = pos;
@@ -213,7 +219,7 @@ void AustrianSocialNumber::addChar(const QString &c, int currentLineEditId, int 
     }
 }
 
-void AustrianSocialNumber::removeChar(int currentLineEditId, int pos)
+void AustrianSocialNumberEdit::removeChar(int currentLineEditId, int pos)
 {
     qWarning()<<"remove" << currentLineEditId << pos;
     if (currentLineEditId==0 && pos==0)
@@ -229,7 +235,7 @@ void AustrianSocialNumber::removeChar(int currentLineEditId, int pos)
 }
 
 
-void AustrianSocialNumber::setCursorPosition(int currentLineEditId, int pos)
+void AustrianSocialNumberEdit::setCursorPosition(int currentLineEditId, int pos)
 {
     qWarning() << "setPos" << currentLineEditId << pos;
     if (pos==-1 && currentLineEditId > 0) {
@@ -249,8 +255,21 @@ void AustrianSocialNumber::setCursorPosition(int currentLineEditId, int pos)
     }
 }
 
+void AustrianSocialNumberEdit::checkIfEditFull(QString &str) {
+    QLineEdit *edit = qobject_cast<QLineEdit*>(sender());
+    if (!edit) {
+        return;
+    }
+
+    if (str.length() == edit->maxLength() && edit != m_Edits.last()) {
+        focusNextChild();
+    } else if (str.isEmpty() && edit != m_Edits.first()) {
+        focusPreviousChild();
+    }
+}
+
 /** Filter the Keyboard events of QLineEdit composing the widget. */
-bool AustrianSocialNumber::eventFilter(QObject *obj, QEvent *e)
+bool AustrianSocialNumberEdit::eventFilter(QObject *obj, QEvent *e)
 {
     if (e->type()!=QEvent::KeyPress && e->type()!=QEvent::KeyRelease)
         return false;
@@ -259,11 +278,11 @@ bool AustrianSocialNumber::eventFilter(QObject *obj, QEvent *e)
     if (!kevent)
         return false;
 
-    QLineEdit *l = static_cast<QLineEdit*>(obj);
-    if (!l)
+    QLineEdit *lineEdit = static_cast<QLineEdit*>(obj);
+    if (!lineEdit)
         return false;
 
-    int currentId = m_Edits.indexOf(l);
+    int currentId = m_Edits.indexOf(lineEdit);
     if (currentId==-1)
         return false;
     int nextTab = -1;
@@ -281,37 +300,44 @@ bool AustrianSocialNumber::eventFilter(QObject *obj, QEvent *e)
         case Qt::Key_6:
         case Qt::Key_7:
         case Qt::Key_8:
-        case Qt::Key_9:
+        case Qt::Key_9: return false;
+            if(lineEdit->cursorPosition() == lineEdit->maxLength()-1) {
+                focusNextChild();
+                return false;
+            }
+        case Qt::Key_Right:  // Ok
+            if (lineEdit->cursorPosition()==lineEdit->maxLength()  // if we are at the end of the edit
+                    && currentId != m_Edits.count()-1) {            // and it's not the last edit in the Widget
+                focusNextChild();
+            }
+            return true;
         case Qt::Key_Left:
             // Manage autoRepeat keys
-            if (l->cursorPosition()==0)
-                setCursorPosition(currentId, -1);
-            break;
-        case Qt::Key_Right:  // Ok
-            if (l->cursorPosition()==m_NbChars.at(currentId)) {
-                nextTab = currentId+1;
-                if (nextTab >= m_Edits.count())
-                    return true;
-                setCursorPosition(nextTab, 0);
-                return true;
+            if (lineEdit->cursorPosition()==0  // if we are at the beginning of the edit
+                    && currentId != 0) {    // and it's not the first edit in the widget
+                focusPreviousChild(); // -> go one edit left
             }
-            break;
+            return true;
         case Qt::Key_Backspace:
         {
-            if (kevent->isAutoRepeat()) {
-                int pos = l->cursorPosition();
-                removeChar(currentId, pos);
-                --pos;
-                if (pos==0) --pos;
-                setCursorPosition(currentId, pos);
+            if (lineEdit->cursorPosition() == 0 // if we are at the beginning of the edit
+                    && currentId != 0) {         // and it's not the first edit in the widget
+                focusPreviousChild();
+                return false;   // process Backspace as usual
+//            if (kevent->isAutoRepeat()) {
+//                int pos = lineEdit->cursorPosition();
+//                removeChar(currentId, pos);
+//                --pos;
+//                if (pos==0) --pos;
+//                setCursorPosition(currentId, pos);
             }
-            e->ignore();
-            return true;
-            break;
+//            e->ignore();
+            return false;
+//            break;
         }
         case Qt::Key_Delete:
             if (kevent->isAutoRepeat()) {
-                int pos = l->cursorPosition();
+                int pos = lineEdit->cursorPosition();
                 ++pos;
                 removeChar(currentId, pos);
                 setCursorPosition(currentId, pos-1);
@@ -320,67 +346,68 @@ bool AustrianSocialNumber::eventFilter(QObject *obj, QEvent *e)
             return true;
         default: return false;
         }
-    } else if (kevent->type()==QKeyEvent::KeyRelease) {
-        //        qWarning() << "KeyReleased"  << kevent->text() << kevent->key();
-
-        switch (kevent->key()) {
-        case Qt::Key_0:
-        case Qt::Key_1:
-        case Qt::Key_2:
-        case Qt::Key_3:
-        case Qt::Key_4:
-        case Qt::Key_5:
-        case Qt::Key_6:
-        case Qt::Key_7:
-        case Qt::Key_8:
-        case Qt::Key_9:
-        {
-            addChar(kevent->text(), currentId, l->cursorPosition());
-            return true;
-            break;
-        }
-        case Qt::Key_Home:
-            nextTab = 0;
-            break;
-        case Qt::Key_End:
-            nextTab = m_Edits.count()-2;
-            break;
-        case Qt::Key_Left:
-//            if (l->cursorPosition()==0) {
-//                setCursorPosition(currentId, -1);
-                return true;
-//            }
-            break;
-        case Qt::Key_Right:
-            return true;
-            break;
-        case Qt::Key_Delete:
-        {
-            // remove char at
-            int pos = l->cursorPosition();
-            ++pos;
-            removeChar(currentId, pos);
-            setCursorPosition(currentId, pos-1);
-            return true;
-        }
-        case Qt::Key_Backspace:
-        {
-            // remove char at
-            int pos = l->cursorPosition();
-            removeChar(currentId, pos);
-            --pos;
-            if (pos==0) --pos;
-            setCursorPosition(currentId, pos);
-            return true;
-        }
-        default: return false;
-        }
     }
+//    else if (kevent->type()==QKeyEvent::KeyRelease) {
+//        //        qWarning() << "KeyReleased"  << kevent->text() << kevent->key();
+
+//        switch (kevent->key()) {
+//        case Qt::Key_0:
+//        case Qt::Key_1:
+//        case Qt::Key_2:
+//        case Qt::Key_3:
+//        case Qt::Key_4:
+//        case Qt::Key_5:
+//        case Qt::Key_6:
+//        case Qt::Key_7:
+//        case Qt::Key_8:
+//        case Qt::Key_9:
+//        {
+//            addChar(kevent->text(), currentId, lineEdit->cursorPosition());
+//            return true;
+//            break;
+//        }
+//        case Qt::Key_Home:
+//            nextTab = 0;
+//            break;
+//        case Qt::Key_End:
+//            nextTab = m_Edits.count()-2;
+//            break;
+//        case Qt::Key_Left:
+////            if (l->cursorPosition()==0) {
+////                setCursorPosition(currentId, -1);
+//                return true;
+////            }
+//            break;
+//        case Qt::Key_Right:
+//            return true;
+//            break;
+//        case Qt::Key_Delete:
+//        {
+//            // remove char at
+//            int pos = lineEdit->cursorPosition();
+//            ++pos;
+//            removeChar(currentId, pos);
+//            setCursorPosition(currentId, pos-1);
+//            return true;
+//        }
+//        case Qt::Key_Backspace:
+//        {
+//            // remove char at
+//            int pos = lineEdit->cursorPosition();
+//            removeChar(currentId, pos);
+//            --pos;
+//            if (pos==0) --pos;
+//            setCursorPosition(currentId, pos);
+//            return true;
+//        }
+//        default: return false;
+//        }
+//    }
 
     return false;
 }
 
-void AustrianSocialNumber::populateWithPatientData()
+void AustrianSocialNumberEdit::populateWithPatientData()
 {
     // already data here? then exit.
     if (!m_FullNumber.isEmpty())
@@ -396,14 +423,19 @@ void AustrianSocialNumber::populateWithPatientData()
     /** \bug there should be no whitespace in m_Fullnumber */
 }
 
+void AustrianSocialNumberEdit::updateStatus()
+{
+    const QPixmap pixmap= this->isValid()? QPixmap(DataPack::DataPackCore::instance().icon("warning.png", DataPack::DataPackCore::SmallPixmaps)) : 0;
+    ui->labelNumberOk->setPixmap(pixmap);
+}
 
 ////////////////////////////////////////// FormItem /////////////////////////////////////////////
 AustrianSocialNumberFormWidget::AustrianSocialNumberFormWidget(Form::FormItem *formItem, QWidget *parent) :
     Form::IFormWidget(formItem,parent), m_SVNR(0)
 {
     // Create SVNR widget
-    m_SVNR = new AustrianSocialNumber(this);
-    m_SVNR->setObjectName("AustrianSocialNumber_" + m_FormItem->uuid());
+    m_SVNR = new AustrianSocialNumberEdit(this);
+    m_SVNR->setObjectName("AustrianSocialNumberEdit_" + m_FormItem->uuid());
 
     // QtUi Loaded?
     const QString &layout = formItem->spec()->value(Form::FormItemSpec::Spec_UiInsertIntoLayout).toString();
@@ -413,7 +445,7 @@ AustrianSocialNumberFormWidget::AustrianSocialNumberFormWidget(Form::FormItem *f
         if (lay) {
             lay->addWidget(m_SVNR);
         } else {
-            LOG_ERROR("Using the QtUiLinkage, layout not found in the ui: " + formItem->uuid());
+            LOG_ERROR("Using the QtUiLinkage, layout was not found in the ui: " + formItem->uuid());
         }
         m_Label = findLabel(formItem);
     } else {
@@ -446,11 +478,11 @@ QString AustrianSocialNumberFormWidget::printableHtml(bool withValues) const
 
     QString content;
     if (!withValues) {
-        content += QString("%1&nbsp;:&nbsp;%2")
+        content += QString("%1:&nbsp;%2")
                 .arg(m_FormItem->spec()->label())
                 .arg(m_SVNR->emptyHtmlMask());
     } else {
-        content += QString("%1&nbsp;:&nbsp;%2")
+        content += QString("%1:&nbsp;%2")
                 .arg(m_FormItem->spec()->label())
                 .arg(m_SVNR->toHtml());
     }
@@ -462,6 +494,7 @@ void AustrianSocialNumberFormWidget::retranslate()
     if (m_Label)
         m_Label->setText(m_FormItem->spec()->label());
 }
+
 
 ////////////////////////////////////////// ItemData /////////////////////////////////////////////
 AustrianSocialNumberFormData::AustrianSocialNumberFormData(Form::FormItem *item) :

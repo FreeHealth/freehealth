@@ -38,16 +38,16 @@ namespace BaseWidgets {
 namespace Internal {
 
 namespace Ui {
-class AustrianSocialNumber;
+class AustrianSocialNumberEdit;
 }
 
-class AustrianSocialNumber : public QWidget
+class AustrianSocialNumberEdit : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit AustrianSocialNumber(QWidget *parent = 0);
-    ~AustrianSocialNumber();
+    explicit AustrianSocialNumberEdit(QWidget *parent = 0);
+    ~AustrianSocialNumberEdit();
 
     void setNumber(const QString &number);
 
@@ -63,6 +63,9 @@ public:
 public Q_SLOTS:
     void populateWithPatientData();
 
+    /** \brief updates the status label (valid social number?)*/
+    void updateStatus();
+
 private:
     void populateLineEdits(QString number = QString::null);
     void addChar(const QString &c, int currentLineEditId, int pos);
@@ -74,7 +77,7 @@ protected:
     bool eventFilter(QObject *obj, QEvent *e);
 
 private:
-    Ui::AustrianSocialNumber *ui;
+    Ui::AustrianSocialNumberEdit *ui;
     QList<QLineEdit *> m_Edits;
     QList<int> m_NbChars;
     QString m_FullNumber;
@@ -86,11 +89,11 @@ private:
 //forward declaration of form data
 class AustrianSocialNumberFormData;
 
-class AustrianSocialNumberFormWidget : public Form::IFormWidget
+class AustrianSocialNumberFormWidget: public Form::IFormWidget
 {
     Q_OBJECT
 public:
-    AustrianSocialNumberFormWidget(Form::FormItem *linkedObject, QWidget *parent = 0);
+    AustrianSocialNumberFormWidget(Form::FormItem *formItem, QWidget *parent = 0);
     ~AustrianSocialNumberFormWidget();
 
     QString printableHtml(bool withValues = true) const;
@@ -98,12 +101,13 @@ public:
     void addWidgetToContainer(Form::IFormWidget *) {}
     bool isContainer() const {return false;}
 
+
 public Q_SLOTS:
     void retranslate();
 
 private:
     AustrianSocialNumberFormData *m_ItemData;
-    Internal::AustrianSocialNumber *m_SVNR;
+    Internal::AustrianSocialNumberEdit *m_SVNR;
 };
 
 class AustrianSocialNumberFormData : public Form::IFormItemData
@@ -112,7 +116,7 @@ public:
     AustrianSocialNumberFormData(Form::FormItem *item);
     ~AustrianSocialNumberFormData();
 
-    void setWidget(Internal::AustrianSocialNumber *w) {m_Widget = w; clear();}
+    void setWidget(Internal::AustrianSocialNumberEdit *w) {m_Widget = w; clear();}
     void clear();
 
     Form::FormItem *parentItem() const {return m_FormItem;}
@@ -127,7 +131,7 @@ public:
 
 private:
     Form::FormItem *m_FormItem;
-    Internal::AustrianSocialNumber *m_Widget;
+    Internal::AustrianSocialNumberEdit *m_Widget;
     QString m_OriginalValue;
 };
 
