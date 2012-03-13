@@ -63,8 +63,8 @@
       <enum>QFrame::WinPanel</enum>
      </property>
      <property name="text">
-      <string>This widget will create a fake database and populate it with virtual datas.
-This feature is useful for testers and should not be used by current users.</string>
+      <string>This widget will create a fake database and populate it with virtual data.
+This feature is useful for testers and should not be used by normal users.</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -80,7 +80,7 @@ This feature is useful for testers and should not be used by current users.</str
       <item row="0" column="0" colspan="2">
        <widget class="QCheckBox" name="checkBox">
         <property name="text">
-         <string>Delete actual database (datas will be definitively lost)</string>
+         <string>Delete actual database (data will be definitively lost)</string>
         </property>
        </widget>
       </item>

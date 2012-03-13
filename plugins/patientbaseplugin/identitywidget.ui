@@ -2,14 +2,6 @@
 <ui version="4.0">
  <class>Patients::Internal::IdentityWidget</class>
  <widget class="QWidget" name="Patients::Internal::IdentityWidget">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>338</width>
-    <height>448</height>
-   </rect>
-  </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
