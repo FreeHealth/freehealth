@@ -414,7 +414,7 @@ QVariant PatientModel::data(const QModelIndex &index, int role) const
             {
                 const QString &name = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_NAME)).toString();
                 const QString &sec = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_SECONDNAME)).toString();
-                const QString &sur = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_FIRSTNAME)).toString();
+                const QString &first = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_FIRSTNAME)).toString();
                 QString title;
                 // add title
                 int titleIndex = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_TITLE)).toInt();
@@ -430,9 +430,9 @@ QVariant PatientModel::data(const QModelIndex &index, int role) const
                     title.append(" ");
 
                 if (!sec.isEmpty()) {
-                    return QString("%1 - %2 %3").arg(title+name, sec, sur);
+                    return QString("%1 - %2 %3").arg(title+name, sec, first);
                 } else {
-                    return QString("%1 %2").arg(title+name, sur);
+                    return QString("%1 %2").arg(title+name, first);
                 }
                 break;
             }
