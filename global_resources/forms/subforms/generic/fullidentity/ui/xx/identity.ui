@@ -20,18 +20,28 @@
    <item row="1" column="0">
     <widget class="QGroupBox" name="frenchGroup">
      <property name="title">
-      <string>NSS</string>
+      <string>Social insurance</string>
      </property>
      <layout class="QFormLayout" name="formLayout">
+      <property name="fieldGrowthPolicy">
+       <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+      </property>
       <item row="0" column="0">
-       <widget class="QLabel" name="nssLabel">
+       <widget class="QLabel" name="socialNumberLabel">
         <property name="text">
-         <string>NSS</string>
+         <string>Social insurance number</string>
         </property>
        </widget>
       </item>
       <item row="0" column="1">
-       <layout class="QHBoxLayout" name="nssLayout"/>
+       <layout class="QHBoxLayout" name="socialNumberLayout"/>
+      </item>
+      <item row="1" column="0" colspan="2">
+       <widget class="QCheckBox" name="isSINOwnerCheck">
+        <property name="text">
+         <string>isOwner</string>
+        </property>
+       </widget>
       </item>
       <item row="2" column="0">
        <widget class="QLabel" name="ownerLabel">
@@ -46,17 +56,10 @@
       <item row="2" column="1">
        <widget class="QLineEdit" name="ownerEdit"/>
       </item>
-      <item row="1" column="0" colspan="2">
-       <widget class="QCheckBox" name="isNssOwnerCheck">
-        <property name="text">
-         <string>isOwner</string>
-        </property>
-       </widget>
-      </item>
      </layout>
     </widget>
    </item>
-   <item row="3" column="0">
+   <item row="2" column="0">
     <widget class="QGroupBox" name="contactGroup">
      <property name="title">
       <string>Contact</string>
@@ -106,42 +109,39 @@
      </layout>
     </widget>
    </item>
-   <item row="2" column="0">
-    <widget class="QGroupBox" name="austrianGroup">
-     <property name="title">
-      <string>SVNR</string>
-     </property>
-     <layout class="QGridLayout" name="gridLayout">
-      <item row="0" column="0">
-       <widget class="QLabel" name="svnrLabel">
-        <property name="text">
-         <string>Österreichische SVNR</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1">
-       <layout class="QHBoxLayout" name="svnrLayout"/>
-      </item>
-     </layout>
-    </widget>
-   </item>
   </layout>
  </widget>
  <resources/>
  <connections>
   <connection>
-   <sender>isNssOwnerCheck</sender>
+   <sender>isSINOwnerCheck</sender>
    <signal>toggled(bool)</signal>
    <receiver>ownerEdit</receiver>
-   <slot>setEnabled(bool)</slot>
+   <slot>setDisabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>73</x>
-     <y>84</y>
+     <x>99</x>
+     <y>176</y>
     </hint>
     <hint type="destinationlabel">
-     <x>193</x>
-     <y>113</y>
+     <x>345</x>
+     <y>206</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>isSINOwnerCheck</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>ownerLabel</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>62</x>
+     <y>163</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>50</x>
+     <y>197</y>
     </hint>
    </hints>
   </connection>
