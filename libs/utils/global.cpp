@@ -345,6 +345,14 @@ bool isAlpha()
 {
     return qApp->applicationVersion().contains("alpha", Qt::CaseInsensitive);
 }
+bool isBeta()
+{
+    return qApp->applicationVersion().contains("beta", Qt::CaseInsensitive);
+}
+bool isReleaseCandidate()
+{
+    return qApp->applicationVersion().contains("rc", Qt::CaseInsensitive);
+}
 bool isRunningOnMac()
 {
 #ifdef Q_OS_MAC

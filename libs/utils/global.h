@@ -84,6 +84,10 @@ UTILS_EXPORT bool isSvnBuild();
 UTILS_EXPORT bool isFullApplication();
 /** \brief Return true if the application is an alpha build (release or debug). */
 UTILS_EXPORT bool isAlpha();
+/** \brief Return true if the application is a beta. */
+UTILS_EXPORT bool isBeta();
+/** \brief Return true if the application is a release candidate. */
+UTILS_EXPORT bool isReleaseCandidate();
 /** \brief Return true if the application is running on MacOs. */
 UTILS_EXPORT bool isRunningOnMac();
 /** \brief Return true if the application is running on Windows. */

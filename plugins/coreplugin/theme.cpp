@@ -38,6 +38,7 @@
 
 #include <translationutils/constanttranslations.h>
 #include <utils/log.h>
+#include <utils/global.h>
 
 #include <QCache>
 #include <QString>
@@ -204,13 +205,17 @@ QString ThemePrivate::iconFullPath(const QString &fileName, IconSize size)
 QPixmap ThemePrivate::splashScreenPixmap(const QString &fileName, const IconSize size)
 {
     QString file = fileName;
-    QString extra;
-    switch (QDate::currentDate().month()) {
-    case 1: extra = "-birthday"; break;
-    case 7:
-    case 8: extra = "-summer"; break;
-    case 10 : extra = "-halloween"; break;
-    case 12 : extra = "-christmas"; break;
+    QString extra = "-stable";
+    if (Utils::isBeta()) {
+        extra = "-beta";
+    } else {
+        switch (QDate::currentDate().month()) {
+        case 1: extra = "-birthday"; break;
+        case 7:
+        case 8: extra = "-summer"; break;
+        case 10 : extra = "-halloween"; break;
+        case 12 : extra = "-christmas"; break;
+        }
     }
     // Append size
     QFileInfo fi(file);
@@ -226,14 +231,18 @@ QPixmap ThemePrivate::splashScreenPixmap(const QString &fileName, const IconSize
                 file = fileName;
             }
         }
+    } else {
+        QString tmp = fi.baseName() + extra + "." + fi.completeSuffix();
+        if (QFile(m_AbsolutePath + "/pixmap/splashscreens/" + tmp).exists()) {
+            file = tmp;
+        }
     }
 
     // return themed splashscreen
     if (QFile(m_AbsolutePath + "/pixmap/splashscreens/" + file).exists())
         return QPixmap(m_AbsolutePath + "/pixmap/splashscreens/" + file);
     else
-        Utils::Log::addError("ThemePrivate", QString("SplashScreen file does not exist %1").arg(m_AbsolutePath + "/pixmap/splashscreens/" + fileName),
-                              __FILE__, __LINE__);
+        LOG_ERROR_FOR("ThemePrivate", QString("SplashScreen file does not exist %1").arg(m_AbsolutePath + "/pixmap/splashscreens/" + fileName));
     return QPixmap();
 }
 
