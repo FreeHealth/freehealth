@@ -26,7 +26,7 @@
  ***************************************************************************/
 #include "baseformwidgets.h"
 #include "frenchsocialnumber.h"
-#include "austriansocialnumber.h"
+//#include "austriansocialnumber.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
@@ -297,7 +297,7 @@ Form::IFormWidget *BaseWidgetsFactory::createWidget(const QString &name, Form::F
     case ::Type_DoubleSpin : return new BaseSpin(formItem,parent,true);
     case ::Type_Button : return new BaseButton(formItem,parent);
     case ::Type_FrenchNSS : return new FrenchSocialNumberFormWidget(formItem,parent);
-    case ::Type_AustrianSVNR : return new AustrianSocialNumberFormWidget(formItem,parent);
+//    case ::Type_AustrianSVNR : return new AustrianSocialNumberFormWidget(formItem,parent);
     default: return 0;
     }
     return 0;

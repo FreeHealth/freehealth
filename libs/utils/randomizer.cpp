@@ -28,6 +28,34 @@
   Randomizer can be used for populating database with random: names, firstnames, zipcodes and cities, strings, numbers, dates...
 */
 
+// Words database creation
+// sqlite3 words.db
+// CREATE TABLE WORDS (
+// ID integer primary key autoincrement,
+// LANG char(2) DEFAULT 'fr',
+// WORD char(255) NOT NULL
+// );
+// CREATE TABLE TMP (W char(255));
+// .import listemotsfr.txt TMP
+// INSERT INTO WORDS (WORD) SELECT upper(W) FROM TMP;
+// DROP TABLE TMP;
+
+// FirstNames database creation
+// sqlite3 firstnames.db
+// CREATE TABLE FIRSTNAMES (
+// ID integer primary key autoincrement,
+// LANG char(2) DEFAULT 'fr',
+// FEMALE bool DEFAULT 0,
+// FIRSTNAME char(255) NOT NULL
+// );
+// CREATE TABLE TMP (W char(255));
+// .import boys_surnames.csv TMP
+// INSERT INTO FIRSTNAMES (FEMALE, FIRSTNAME) SELECT 0, upper(W) FROM TMP;
+// DELETE FROM TMP;
+// .import girls_surnames.csv TMP
+// INSERT INTO FIRSTNAMES (FEMALE, FIRSTNAME) SELECT 1, upper(W) FROM TMP;
+// DROP TABLE TMP;
+
 #include "randomizer.h"
 #include "global.h"
 #include "log.h"
@@ -59,31 +87,31 @@ public:
         girlsFirstnames.clear();
     }
 
-    void readBoysFirstnames()
-    {
-        if (!boysFirstnames.isEmpty())
-            return;
-        QString c = Utils::readTextFile(m_Path + "/boys_surnames.csv");
-        if (c.isEmpty())
-            Utils::Log::addError("Randomizer", "Can not read boy firstnames.",
-                                 __FILE__, __LINE__);
-        foreach(const QString &s, c.split("\n", QString::SkipEmptyParts)) {
-            boysFirstnames.append(s);
-        }
-    }
+//    void readBoysFirstnames()
+//    {
+//        if (!boysFirstnames.isEmpty())
+//            return;
+//        QString c = Utils::readTextFile(m_Path + "/boys_surnames.csv");
+//        if (c.isEmpty())
+//            Utils::Log::addError("Randomizer", "Can not read boy firstnames.",
+//                                 __FILE__, __LINE__);
+//        foreach(const QString &s, c.split("\n", QString::SkipEmptyParts)) {
+//            boysFirstnames.append(s);
+//        }
+//    }
 
-    void readGirlsFirstnames()
-    {
-        if (!girlsFirstnames.isEmpty())
-            return;
-        QString c = Utils::readTextFile(m_Path + "/girls_surnames.csv");
-        if (c.isEmpty())
-            Utils::Log::addError("Randomizer", "Can not read boy firtsnames.",
-                                 __FILE__, __LINE__);
-        foreach(const QString &s, c.split("\n", QString::SkipEmptyParts)) {
-            girlsFirstnames.append(s);
-        }
-    }
+//    void readGirlsFirstnames()
+//    {
+//        if (!girlsFirstnames.isEmpty())
+//            return;
+//        QString c = Utils::readTextFile(m_Path + "/girls_surnames.csv");
+//        if (c.isEmpty())
+//            Utils::Log::addError("Randomizer", "Can not read boy firtsnames.",
+//                                 __FILE__, __LINE__);
+//        foreach(const QString &s, c.split("\n", QString::SkipEmptyParts)) {
+//            girlsFirstnames.append(s);
+//        }
+//    }
 
     void readZipCodes()
     {
@@ -101,17 +129,17 @@ public:
         }
     }
 
-    void readFrenchWords()
-    {
-        if (!words.isEmpty())
-            return;
-        QString c = Utils::readTextFile(m_Path + "/listemotsfr.txt");
-        if (c.isEmpty())
-            LOG_ERROR_FOR("Randomizer", "Can not read french words.");
-        foreach(const QString &s, c.split("\n", QString::SkipEmptyParts)) {
-            words.append(s.toUpper());
-        }
-    }
+//    void readFrenchWords()
+//    {
+//        if (!words.isEmpty())
+//            return;
+//        QString c = Utils::readTextFile(m_Path + "/listemotsfr.txt");
+//        if (c.isEmpty())
+//            LOG_ERROR_FOR("Randomizer", "Can not read french words.");
+//        foreach(const QString &s, c.split("\n", QString::SkipEmptyParts)) {
+//            words.append(s.toUpper());
+//        }
+//    }
 
 
 public:
@@ -147,13 +175,52 @@ void Randomizer::setPathToFiles(const QString &p)
 
 QString Randomizer::getRandomFirstname(bool male)
 {
-    if (d->boysFirstnames.isEmpty())
-        d->readBoysFirstnames();
-    if (d->girlsFirstnames.isEmpty())
-        d->readGirlsFirstnames();
-    if (male)
-        return d->boysFirstnames.at(makeRand(d->boysFirstnames.size() - 1));
-    return d->girlsFirstnames.at(makeRand(d->girlsFirstnames.size() - 1));
+    // Get the database && open it
+    QSqlDatabase db;
+    if (!QSqlDatabase::connectionNames().contains("__RANDOM__FIRSTNAMES__")) {
+        db = QSqlDatabase::addDatabase("QSQLITE", "__RANDOM__FIRSTNAMES__");
+        db.setDatabaseName(d->m_Path + "firstnames.db");
+    } else {
+        db = QSqlDatabase::database("__RANDOM__FIRSTNAMES__");
+    }
+    if (!db.isOpen()) {
+        if (!db.open()) {
+            LOG_ERROR_FOR("Randomizer", "Unable to connect to database: " + db.databaseName());
+            return QString::null;
+        }
+    }
+    // Request the firstname according to the sex
+    int sex;
+    (male) ? sex=0 : sex=1;  // female
+
+    // Get words count
+    int max = 255;
+    db.transaction();
+    QSqlQuery query(db);
+    QString req = QString("SELECT count(ID) FROM FIRSTNAMES WHERE LANG='%1' AND FEMALE=%2;")
+            .arg("fr") /** \todo manage multiple languages */
+            .arg(sex);
+    if (query.exec(req)) {
+        if (query.next()) {
+            max = query.value(0).toInt() - 1;
+        }
+    } else {
+        LOG_QUERY_ERROR_FOR("Randomizer", query);
+    }
+    query.finish();
+
+    req = QString("SELECT FIRSTNAME FROM FIRSTNAMES WHERE (LANG='%1' AND FEMALE=%2) LIMIT %3,1;")
+            .arg("fr") /** \todo manage multiple languages */
+            .arg(sex)
+            .arg(randomInt(0, max));
+    if (query.exec(req)) {
+        if (query.next()) {
+            return query.value(0).toString().toUpper();
+        }
+    } else {
+        LOG_QUERY_ERROR_FOR("Randomizer", query);
+    }
+    return QString::null;
 }
 
 QString Randomizer::getRandomString(int length)
@@ -191,17 +258,56 @@ QPair<int, QString> Randomizer::getRandomFrenchCity()
 
 QString Randomizer::getRandomName()
 {
-    if (d->words.isEmpty())
-        d->readFrenchWords();
-    return d->words.at(makeRand(d->words.count() - 1));
+    return randomWords(randomInt(1, 2));
 }
 
+/** Returns a fake sentence composed of \e nbOfWords words. */
 QString Randomizer::randomWords(int nbOfWords)
 {
+    // Get the database && open it
+    QSqlDatabase db;
+    if (!QSqlDatabase::connectionNames().contains("__RANDOM__WORDS__")) {
+        db = QSqlDatabase::addDatabase("QSQLITE", "__RANDOM__WORDS__");
+        db.setDatabaseName(d->m_Path + "words.db");
+    } else {
+        db = QSqlDatabase::database("__RANDOM__WORDS__");
+    }
+    if (!db.isOpen()) {
+        if (!db.open()) {
+            LOG_ERROR_FOR("Randomizer", "Unable to connect to database: " + db.databaseName());
+            return QString::null;
+        }
+    }
+    // Get words count
+    int max = 255;
+    db.transaction();
+    QSqlQuery query(db);
+    QString req = QString("SELECT max(ID) FROM WORDS WHERE LANG='%1';")
+            .arg("fr"); /** \todo manage multiple languages */
+    if (query.exec(req)) {
+        if (query.next()) {
+            max = query.value(0).toInt();
+        }
+    } else {
+        LOG_QUERY_ERROR_FOR("Randomizer", query);
+    }
+    query.finish();
+
+    // Request the words
     QStringList t;
     for(int i=0; i < nbOfWords; ++i) {
-        t <<  getRandomName();
+        QString req = QString("SELECT WORD FROM WORDS WHERE LANG='%1' AND ID='%2';")
+                .arg("fr") /** \todo manage multiple languages */
+                .arg(randomInt(0, max));
+        if (query.exec(req)) {
+            if (query.next()) {
+                t << query.value(0).toString().toUpper();
+            }
+        } else {
+            LOG_QUERY_ERROR_FOR("Randomizer", query);
+        }
     }
+    db.commit();
     return t.join(" ");
 }
 
