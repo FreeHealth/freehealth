@@ -21,7 +21,7 @@
      int columnCount() const;
      QVariant data(int column) const;
      QVector<QVariant> datas(int columns);
-     bool insertChildren(int position, int count, int columns , bool empty);
+     bool insertChildren(int position, int count, int columns);
      bool insertColumns(int position, int columns);
      TreeItem *parent();
      bool removeChildren(int position, int count);
@@ -30,9 +30,9 @@
      bool setData(int column, const QVariant &value);
 
  private:
-     int getNextIdPrimkey();
-     int findNextId();
-     bool insertANewLineInModel();
+     //int getNextIdPrimkey();
+     //int findNextId();
+     //bool insertANewLineInModel();
      QList<TreeItem*> m_childItems;
      QHash<QString,TreeItem*> m_treeItemsHash;
      QVector<QVariant> m_itemData;
@@ -120,13 +120,14 @@ class VariantItemModel : public QAbstractItemModel
      void setupModelData(QSqlTableModel *model, TreeItem *parent);
      void setRootItem (const QStringList headers);
      TreeItem *getItem(const QModelIndex &index) const;
+     int findNextId();
+     int getNextIdPrimkey();
  private:
      //TreeItem *getItem(const QModelIndex &index) const;
      int getSqlTableRow(int idOfItem);
-     int findNextId();
-     int getNextIdPrimkey();     
      TreeItem *m_rootItem;
      QSqlTableModel *m_modelSql;
+     QSqlDatabase m_db;
  };
 
 class PreventIO : public QObject {

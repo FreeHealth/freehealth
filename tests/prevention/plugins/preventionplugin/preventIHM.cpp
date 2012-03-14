@@ -82,6 +82,9 @@ void TreeViewOfPrevention::addAValue(bool b)
     Q_UNUSED(b);
     QModelIndex index = currentIndex();
     QModelIndex parent = model()->parent(index);
+    qDebug() << __FILE__ << QString::number(__LINE__) << " index row =" <<  QString::number(index.row());
+    qDebug() << __FILE__ << QString::number(__LINE__) << " parent row =" << QString::number(parent.row()) ;
+    
     PreventIO io;
     if (io.addAnItemAccordingToIndex(index,parent,this))
     {

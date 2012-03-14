@@ -239,7 +239,7 @@ bool Connexion::createDatabaseSchema(int driver)
     name_sql.insert("Table prevention",
                     "CREATE TABLE IF NOT EXISTS prevention ("
                     "ID_Primkey bigint(20) UNSIGNED  NOT NULL  auto_increment ,"
-                    "ITEM longtext COLLATE utf8_unicode_ci NOT NULL,"
+                    "ITEM longtext COLLATE utf8_unicode_ci NULL,"
                     "TYPE tinyint(1) NOT NULL,"
                     "PARENT longtext COLLATE utf8_unicode_ci NOT NULL,"
                     "PARENT_OR_CHILD tinyint(1) NOT NULL,"
@@ -256,7 +256,7 @@ bool Connexion::createDatabaseSchema(int driver)
     name_sql.insert("Table prevention",
                     "CREATE TABLE IF NOT EXISTS	prevention  ("
                     "ID_Primkey   INTEGER PRIMARY KEY,"
-                    "ITEM longtext COLLATE utf8_unicode_ci NOT NULL,"
+                    "ITEM longtext COLLATE utf8_unicode_ci NULL,"
                     "TYPE tinyint(1) NOT NULL,"
                     "PARENT longtext COLLATE utf8_unicode_ci NOT NULL,"
                     "PARENT_OR_CHILD tinyint(1) NOT NULL,"
@@ -314,7 +314,7 @@ bool Connexion::createDatabaseSchema(int driver)
                  +trUtf8(" tables."));
                mess.setInformativeText(trUtf8("Do you want to install default values ?"));
                mess.setStandardButtons(QMessageBox::Ok | QMessageBox::Close);
-               mess.setDefaultButton(QMessageBox::Close);
+               mess.setDefaultButton(QMessageBox::Ok);
                int r = mess.exec();
                switch(r){
                    case QMessageBox::Ok :
@@ -434,7 +434,7 @@ bool Connexion::setFirstDefaultValues(){
                mess.setText(trUtf8("Default categories have been installed"));
                mess.setInformativeText(trUtf8("Do you want to install default values for testing ?"));
                mess.setStandardButtons(QMessageBox::Ok | QMessageBox::Close);
-               mess.setDefaultButton(QMessageBox::Close);
+               mess.setDefaultButton(QMessageBox::Ok);
                int r = mess.exec();
                switch(r){
                    case QMessageBox::Ok :
