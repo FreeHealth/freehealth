@@ -103,23 +103,24 @@ void ScriptPlugin::postCoreInitialization()
 
     // TEST
 
-    Core::ActionContainer *menu = actionManager()->actionContainer(Core::Constants::M_GENERAL);
-    Q_ASSERT(menu);
-    if (!menu)
-        return;
-    QList<int> ctx = QList<int>() << Core::Constants::C_GLOBAL_ID;
-    // renew script test
-    QAction *a = new QAction(this);
-    a->setObjectName("aTestScript");
-    Core::Command *cmd = actionManager()->registerAction(a, "aTestScript", ctx);
-    Q_ASSERT(cmd);
-    cmd->setTranslations("Test Script");
-    menu->addAction(cmd);
-    cmd->retranslate();
-    connect(a, SIGNAL(triggered()), this, SLOT(patientSelected()));
+//    Core::ActionContainer *menu = actionManager()->actionContainer(Core::Constants::M_GENERAL);
+//    Q_ASSERT(menu);
+//    if (!menu)
+//        return;
+//    QList<int> ctx = QList<int>() << Core::Constants::C_GLOBAL_ID;
 
-    connect(Core::ICore::instance()->patient(), SIGNAL(currentPatientChanged()),
-            this, SLOT(patientSelected()));
+//    // renew script test
+//    QAction *a = new QAction(this);
+//    a->setObjectName("aTestScript");
+//    Core::Command *cmd = actionManager()->registerAction(a, "aTestScript", ctx);
+//    Q_ASSERT(cmd);
+//    cmd->setTranslations("Test Script");
+//    menu->addAction(cmd);
+//    cmd->retranslate();
+//    connect(a, SIGNAL(triggered()), this, SLOT(patientSelected()));
+
+//    connect(Core::ICore::instance()->patient(), SIGNAL(currentPatientChanged()),
+//            this, SLOT(patientSelected()));
     // END
 }
 
