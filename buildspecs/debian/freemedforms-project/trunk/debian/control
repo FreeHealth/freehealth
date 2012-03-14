@@ -8,8 +8,8 @@ DM-Upload-Allowed: yes
 Build-Depends: debhelper (>= 8), libqt4-dev (>= 4.7.0), libxext-dev, zlib1g-dev
 Standards-Version: 3.9.3
 Homepage: http://www.freemedforms.com/
-Vcs-Browser: http://svn.debian.org/wsvn/debian-med/trunk/packages/freemedforms/
-Vcs-Svn: svn://svn.debian.org/debian-med/trunk/packages/freemedforms/trunk/
+Vcs-Browser: http://svn.debian.org/wsvn/debian-med/trunk/packages/freemedforms-project/
+Vcs-Svn: svn://svn.debian.org/debian-med/trunk/packages/freemedforms-project/trunk/
 
 Package: freemedforms-project
 Architecture: all
