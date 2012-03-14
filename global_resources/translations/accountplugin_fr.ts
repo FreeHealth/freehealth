@@ -1019,21 +1019,20 @@ Voulez vous les sauvegarder ?</translation>
         <translation>Formulaire</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/virtualdatabasecreator.ui" line="66"/>
-        <source>This widget will create a fake database and populate it with virtual datas.
-This feature is useful for testers and should not be used by current users.</source>
-        <translation>Cette fenêtre va créer une fausse base de données et la peupler avec des données virtuelles.
-Ce mécanisme est utile pour les testeurs et ne devrait pas être utilisé par les utilisateurs courrants.</translation>
-    </message>
-    <message>
         <location filename="../../plugins/accountplugin/preferences/virtualdatabasecreator.ui" line="77"/>
         <source>Use virtual features for testing purpose only</source>
         <translation></translation>
     </message>
     <message>
+        <location filename="../../plugins/accountplugin/preferences/virtualdatabasecreator.ui" line="66"/>
+        <source>This widget will create a fake database and populate it with virtual data.
+This feature is useful for testers and should not be used by normal users.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../plugins/accountplugin/preferences/virtualdatabasecreator.ui" line="83"/>
-        <source>Delete actual database (datas will be definitively lost)</source>
-        <translation></translation>
+        <source>Delete actual database (data will be definitively lost)</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/preferences/virtualdatabasecreator.ui" line="90"/>

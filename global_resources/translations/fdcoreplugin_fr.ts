@@ -757,7 +757,7 @@ URL : %1
 <context>
     <name>Core::PageWidget</name>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/pagewidget.cpp" line="347"/>
+        <location filename="../../plugins/coreplugin/dialogs/pagewidget.cpp" line="348"/>
         <source>Full view</source>
         <translation>Vue étendue</translation>
     </message>
@@ -883,7 +883,7 @@ URL : %1
 <context>
     <name>ThemePrivate</name>
     <message>
-        <location filename="../../plugins/coreplugin/theme.cpp" line="171"/>
+        <location filename="../../plugins/coreplugin/theme.cpp" line="172"/>
         <source>ERROR - Theme : Unable to load icon file %1</source>
         <translation>ERREUR - Thème : impossible de charger l&apos;icône %1</translation>
     </message>

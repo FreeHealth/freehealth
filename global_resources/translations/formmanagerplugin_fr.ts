@@ -245,37 +245,37 @@ Répondre &apos;non&apos; causera une perte de données irréversible.</translat
         <translation>Format de date court</translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="223"/>
+        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="227"/>
         <source>Label</source>
         <translation>Libellé</translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="224"/>
+        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="228"/>
         <source>Label - User date (small)</source>
         <translation>Libellé - Date (courte)</translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="225"/>
+        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="229"/>
         <source>Label - User date (full)</source>
         <translation>Libellé - Date (longue)</translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="226"/>
+        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="230"/>
         <source>User date (small)</source>
         <translation>Date (courte)</translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="227"/>
+        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="231"/>
         <source>User date (full)</source>
         <translation>Date( longue)</translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="228"/>
+        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="232"/>
         <source>User date (small) - Label</source>
         <translation>Date (courte) - Libellé</translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="229"/>
+        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="233"/>
         <source>User date (full) - Label</source>
         <translation>Date (longue) - Libellé</translation>
     </message>

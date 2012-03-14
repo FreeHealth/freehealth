@@ -52,7 +52,8 @@
 <context>
     <name>LineEditEchoSwitcher</name>
     <message>
-        <location filename="../../libs/utils/widgets/lineeditechoswitcher.cpp" line="62"/>
+        <location filename="../../libs/utils/widgets/lineeditechoswitcher.cpp" line="72"/>
+        <location filename="../../libs/utils/widgets/lineeditechoswitcher.cpp" line="100"/>
         <source>Display/Hide text</source>
         <translation>Text anzeigen/nicht anzeigen</translation>
     </message>
@@ -131,107 +132,107 @@
 <context>
     <name>Utils</name>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="517"/>
+        <location filename="../../libs/utils/global.cpp" line="525"/>
         <source>%1 : %2 does not exist. Trying to create it.</source>
         <translation>%1 %2 existiert nicht. Versuchen sie es neu anzulegen.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="520"/>
+        <location filename="../../libs/utils/global.cpp" line="528"/>
         <source>Unable to create the %1 : %2.</source>
         <translation>Kann leider nicht angelegt werden %1 %2.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="525"/>
+        <location filename="../../libs/utils/global.cpp" line="533"/>
         <source>%1 : %2 does not exist.</source>
         <translation>%1 %2 existiert nicht.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="556"/>
+        <location filename="../../libs/utils/global.cpp" line="564"/>
         <source>File %1 already exists. Do you want de replace it ?</source>
         <translation>Datei %1 existiert bereits. Möchten Sie es ersetzen?</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="561"/>
-        <location filename="../../libs/utils/global.cpp" line="566"/>
-        <location filename="../../libs/utils/global.cpp" line="581"/>
+        <location filename="../../libs/utils/global.cpp" line="569"/>
+        <location filename="../../libs/utils/global.cpp" line="574"/>
+        <location filename="../../libs/utils/global.cpp" line="589"/>
         <source>Error %1 while trying to save file %2</source>
         <translation>Error %1 während dem Versuch die Datei %2 zu speichern</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="573"/>
-        <location filename="../../libs/utils/global.cpp" line="585"/>
+        <location filename="../../libs/utils/global.cpp" line="581"/>
+        <location filename="../../libs/utils/global.cpp" line="593"/>
         <source>%1 correctly saved</source>
         <translation>%1 korrekt gespeichert</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="575"/>
+        <location filename="../../libs/utils/global.cpp" line="583"/>
         <source>Save file aborted by user (file already exists) : </source>
         <translation>Speicherung vom Benutzer abgebrochen: {datei existiert bereits}:</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="597"/>
+        <location filename="../../libs/utils/global.cpp" line="605"/>
         <source>Save to file</source>
         <translation>Speichern als Datei</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="394"/>
-        <location filename="../../libs/utils/global.cpp" line="396"/>
+        <location filename="../../libs/utils/global.cpp" line="402"/>
+        <location filename="../../libs/utils/global.cpp" line="404"/>
         <source>Error while retrieve information of uname under %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="631"/>
+        <location filename="../../libs/utils/global.cpp" line="639"/>
         <source>File %1 does not exist or is not readable.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="637"/>
+        <location filename="../../libs/utils/global.cpp" line="645"/>
         <source>Error %1 while trying to open file %2</source>
         <translation>Error %1 während des schreibens auf Datei %2</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="802"/>
+        <location filename="../../libs/utils/global.cpp" line="810"/>
         <source>Cancel</source>
         <translation>Abbrechen</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="877"/>
+        <location filename="../../libs/utils/global.cpp" line="885"/>
         <source>This function is not available in this version.</source>
         <translation>Diese Funktion ist nicht verfügbar in dieser Version.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="878"/>
+        <location filename="../../libs/utils/global.cpp" line="886"/>
         <source>You can send an email to developers and explain your difficulties : freemedforms@googlegroups.com.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="919"/>
-        <location filename="../../libs/utils/global.cpp" line="920"/>
+        <location filename="../../libs/utils/global.cpp" line="927"/>
+        <location filename="../../libs/utils/global.cpp" line="928"/>
         <source>License agreement acceptation</source>
         <translation>Nehme die Lizenz an</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="931"/>
+        <location filename="../../libs/utils/global.cpp" line="939"/>
         <source>&lt;b&gt;Before you can use this software, you must agree its license terms&lt;/b&gt;</source>
         <translation>&lt;b&gt;Bevor sie diese Software nutzen können, müssen sie die Lizenzbestimmungen annehmen&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="939"/>
+        <location filename="../../libs/utils/global.cpp" line="947"/>
         <source>Do you agree these terms ?</source>
         <translation>Nehmen Sie diese Lizenz an?</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1009"/>
+        <location filename="../../libs/utils/global.cpp" line="1017"/>
         <source>%1 is now in fullScreen Mode.</source>
         <translation>%1 ist nun im Vollbildmodus.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1014"/>
+        <location filename="../../libs/utils/global.cpp" line="1022"/>
         <source>%1 is now in non fullScreen Mode.</source>
         <translation>%1 ist nun in keinem Vollbildmodus.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1526"/>
+        <location filename="../../libs/utils/global.cpp" line="1534"/>
         <source>Token replacement error (%1). Wrong number of parentheses.</source>
         <translation>Token ersetzungs Error (%1) Falsche Anzahl an Eltern.</translation>
     </message>
@@ -573,7 +574,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/widgets/loginwidget.ui" line="55"/>
+        <location filename="../../libs/utils/widgets/loginwidget.ui" line="39"/>
         <source>Password</source>
         <translation type="unfinished"></translation>
     </message>

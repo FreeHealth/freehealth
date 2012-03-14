@@ -217,22 +217,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.ui" line="94"/>
+        <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.ui" line="104"/>
         <source>minutes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.ui" line="101"/>
+        <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.ui" line="111"/>
         <source>Default location</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.ui" line="127"/>
+        <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.ui" line="137"/>
         <source>Do you want to create an agenda for this user ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.ui" line="133"/>
+        <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.ui" line="143"/>
         <source>Create an agenda</source>
         <translation type="unfinished"></translation>
     </message>

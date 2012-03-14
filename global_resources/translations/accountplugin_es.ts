@@ -989,19 +989,19 @@ Do you want to save them ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/virtualdatabasecreator.ui" line="66"/>
-        <source>This widget will create a fake database and populate it with virtual datas.
-This feature is useful for testers and should not be used by current users.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../plugins/accountplugin/preferences/virtualdatabasecreator.ui" line="77"/>
         <source>Use virtual features for testing purpose only</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../plugins/accountplugin/preferences/virtualdatabasecreator.ui" line="66"/>
+        <source>This widget will create a fake database and populate it with virtual data.
+This feature is useful for testers and should not be used by normal users.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../plugins/accountplugin/preferences/virtualdatabasecreator.ui" line="83"/>
-        <source>Delete actual database (datas will be definitively lost)</source>
+        <source>Delete actual database (data will be definitively lost)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

@@ -172,72 +172,72 @@
 <context>
     <name>Patients::Internal::IdentityWidget</name>
     <message>
-        <location filename="../../plugins/patientbaseplugin/identitywidget.ui" line="14"/>
+        <location filename="../../plugins/patientbaseplugin/identitywidget.ui" line="6"/>
         <source>Form</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/identitywidget.ui" line="20"/>
+        <location filename="../../plugins/patientbaseplugin/identitywidget.ui" line="12"/>
         <source>Identity</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/identitywidget.ui" line="26"/>
+        <location filename="../../plugins/patientbaseplugin/identitywidget.ui" line="18"/>
         <source>Title</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/identitywidget.ui" line="54"/>
+        <location filename="../../plugins/patientbaseplugin/identitywidget.ui" line="49"/>
         <source>Click to add/change the photo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/identitywidget.ui" line="73"/>
+        <location filename="../../plugins/patientbaseplugin/identitywidget.ui" line="68"/>
         <source>Birth name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/identitywidget.ui" line="93"/>
+        <location filename="../../plugins/patientbaseplugin/identitywidget.ui" line="88"/>
         <source>First name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/identitywidget.ui" line="133"/>
+        <location filename="../../plugins/patientbaseplugin/identitywidget.ui" line="128"/>
         <source>Address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/identitywidget.ui" line="83"/>
+        <location filename="../../plugins/patientbaseplugin/identitywidget.ui" line="78"/>
         <source>Second name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/identitywidget.ui" line="103"/>
+        <location filename="../../plugins/patientbaseplugin/identitywidget.ui" line="98"/>
         <source>Gender</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/identitywidget.ui" line="113"/>
+        <location filename="../../plugins/patientbaseplugin/identitywidget.ui" line="108"/>
         <source>Date of birth</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/identitywidget.ui" line="139"/>
+        <location filename="../../plugins/patientbaseplugin/identitywidget.ui" line="134"/>
         <source>Street</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/identitywidget.ui" line="146"/>
+        <location filename="../../plugins/patientbaseplugin/identitywidget.ui" line="141"/>
         <source>City</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/identitywidget.ui" line="156"/>
+        <location filename="../../plugins/patientbaseplugin/identitywidget.ui" line="151"/>
         <source>Zipcode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/identitywidget.ui" line="166"/>
+        <location filename="../../plugins/patientbaseplugin/identitywidget.ui" line="161"/>
         <source>Country</source>
         <translation type="unfinished"></translation>
     </message>

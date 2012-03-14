@@ -818,7 +818,7 @@ Using Url : %1
 <context>
     <name>Core::PageWidget</name>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/pagewidget.cpp" line="347"/>
+        <location filename="../../plugins/coreplugin/dialogs/pagewidget.cpp" line="348"/>
         <source>Full view</source>
         <translation type="unfinished"></translation>
     </message>
@@ -952,7 +952,7 @@ Please contact your server administrator.</source>
 <context>
     <name>ThemePrivate</name>
     <message>
-        <location filename="../../plugins/coreplugin/theme.cpp" line="171"/>
+        <location filename="../../plugins/coreplugin/theme.cpp" line="172"/>
         <source>ERROR - Theme : Unable to load icon file %1</source>
         <translation type="unfinished"></translation>
     </message>

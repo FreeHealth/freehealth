@@ -77,7 +77,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/addserverdialog.ui" line="94"/>
+        <location filename="../../libs/datapackutils/widgets/addserverdialog.ui" line="91"/>
         <source>Password</source>
         <translation type="unfinished"></translation>
     </message>
@@ -312,32 +312,32 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.ui" line="149"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.ui" line="152"/>
         <source>Identification</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.ui" line="167"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.ui" line="170"/>
         <source>Authors</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.ui" line="193"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.ui" line="199"/>
         <source>Vendor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.ui" line="219"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.ui" line="228"/>
         <source>Version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.ui" line="245"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.ui" line="257"/>
         <source>Creation date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.ui" line="284"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.ui" line="302"/>
         <source>Last updated</source>
         <translation type="unfinished"></translation>
     </message>
