@@ -595,6 +595,17 @@ ChoosenListView::ChoosenListView(QObject * parent,InternalAmount::AmountModel *a
 
 ChoosenListView::~ChoosenListView(){}
 
+void ChoosenListView::changeEvent(QEvent *e) {
+    QWidget::changeEvent(e);
+    if (e->type()==QEvent::LanguageChange) {
+        m_deleteInReturnedList = new QAction(trUtf8("Delete this item"),this);
+        m_clear = new QAction(trUtf8("Clear all."),this);
+        //connect(m_clear,SIGNAL(triggered(bool)),parent,SLOT(clearAll(bool)));
+        //connect(m_deleteInReturnedList,SIGNAL(triggered(bool)),this,SLOT(deleteItem(bool)));
+        reset();
+        }
+}
+
 void ChoosenListView::mousePressEvent(QMouseEvent *event){
   if(event->button() == Qt::RightButton){
     if (WarnDebugMessage)

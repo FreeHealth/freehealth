@@ -118,6 +118,7 @@ class ChoosenListView: public QListView{
     private Q_SLOTS:
         void deleteItem(bool b);
     private:
+        void changeEvent(QEvent *e);
         void mousePressEvent(QMouseEvent *event);
         QAction *m_clear;
         QAction * m_deleteInReturnedList;

@@ -66,6 +66,8 @@
 #include <QFileInfo>
 #include <QDir>
 #include <QVector>
+#include <QVariant>
+
 
 #include <time.h>
 

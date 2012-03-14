@@ -30,8 +30,12 @@
 #include <QDebug>
 
 static const QString PREVENT = QString("prevention");
+static inline QString pixmaps() 
+{ 
+    return QString(qApp->applicationDirPath()+"/../../global_resources/pixmap");
+};
 
-bool WarnDebugMessage = true;
+bool WarnDebugMessage = false;
 using namespace Common;
 
 Connexion::Connexion(QObject *parent) : QObject(parent),
@@ -518,11 +522,11 @@ bool Connexion::fillWithValuesForTesting(){
 		          data = listOfDatas[it];
 		          if (data.toString().contains("GREEN"))
 		          {
-		          	  data = qApp->applicationDirPath()+"/preventOk.png";
+		          	  data = pixmaps()+"/preventOk.png";
 		              }
 		          else
 		          {
-		          	data = qApp->applicationDirPath()+"/preventWarning.png";
+		          	data = pixmaps()+"/preventWarning.png";
 		              }
 		          success = model.setData(model.index(row,it),data,Qt::EditRole);
 		          break;
