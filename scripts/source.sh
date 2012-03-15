@@ -235,7 +235,7 @@ done
 
 echo "   * ADDING LIBRARY VERSION NUMBER"
 cd $PACKPATH/libs
-find . -type f -name '*.pro' -exec sed -i bkup 's/# VERSION=1.0.0/VERSION='$NON_ALPHABETA_PROJECT_VERSION'/' {} \;
+find . -type f -name '*.pro' -exec sed -i bkup 's/# VERSION=1.0.0/!win32:{VERSION='$NON_ALPHABETA_PROJECT_VERSION'}/' {} \;
 find . -type f -name '*.probkup' -exec rm {} \;
 
 echo "   * ADDING SVN VERSION NUMBER"
