@@ -81,6 +81,12 @@ class VariantItemModel : public QAbstractItemModel
           SECONDARY_PREVENTION_ITEM,
           Types_Of_Items_MaxParam
           };
+      enum Icons {
+          PREVENT_OK = 0,
+          PREVENT_WARNING,
+          PREVENT_PAST,
+          Icons_MaxParam
+          };
      VariantItemModel(const QStringList headers = QStringList(), QSqlTableModel *model = 0,
                QObject *parent = 0);
      ~VariantItemModel();
@@ -135,7 +141,7 @@ class PreventIO : public QObject {
     public:
         PreventIO(QObject * object = 0);
         ~PreventIO();
-        //QVector<QVector<QVariant> > getItemsDatas();
+        QSqlDatabase getDatabase();
         QString correct(QVariant variant);
         const QStringList setHeadersDatas();
         bool addAnItemAccordingToIndex(QModelIndex & index,QModelIndex & parent, QObject * parentObject);

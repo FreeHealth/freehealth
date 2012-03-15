@@ -21,6 +21,7 @@ HEADERS += preventionplugin.h\
            preventIO.h \
            treeviewdelegate.h \
            moreIHM.h \
+           survey.h \
            connexion.h
 
 SOURCES += preventionplugin.cpp \
@@ -29,6 +30,7 @@ SOURCES += preventionplugin.cpp \
            preventIO.cpp \
            treeviewdelegate.cpp \
            moreIHM.cpp \
+           survey.cpp \
            connexion.cpp
 FORMS += prevent.ui \
          moreIHM.ui

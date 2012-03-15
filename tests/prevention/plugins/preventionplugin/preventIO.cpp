@@ -664,4 +664,8 @@ QSqlTableModel * PreventIO::getModel()
     return m_model;
 }
 
+QSqlDatabase PreventIO::getDatabase()
+{
+    return m_db;
+}
 
