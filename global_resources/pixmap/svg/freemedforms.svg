@@ -608,8 +608,8 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="11.2"
-     inkscape:cx="28.522379"
-     inkscape:cy="38.666718"
+     inkscape:cx="31.800812"
+     inkscape:cy="29.705636"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -617,7 +617,7 @@
      inkscape:window-height="752"
      inkscape:window-x="0"
      inkscape:window-y="0"
-     inkscape:window-maximized="0" />
+     inkscape:window-maximized="1" />
   <metadata
      id="metadata2463">
     <rdf:RDF>
@@ -626,7 +626,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -883,5 +883,31 @@
        id="path3008"
        d="m 39.248745,44.707754 a 14.802531,1.9999933 0 0 1 -29.6050586,0 14.802531,1.9999933 0 1 1 29.6050586,0 z"
        inkscape:connector-curvature="0" />
+    <text
+       xml:space="preserve"
+       style="font-size:5.31441021000000013px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#515151;fill-opacity:1;stroke:none;font-family:Georgia;-inkscape-font-specification:Sans Bold"
+       x="18.602587"
+       y="2.8977151"
+       id="text3113"
+       sodipodi:linespacing="125%"
+       transform="matrix(0.94624348,0.3234552,-0.3234552,0.94624348,0,0)"><tspan
+         sodipodi:role="line"
+         id="tspan3115"
+         x="18.602587"
+         y="2.8977151"
+         style="font-size:4.78296899999999958px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;font-family:Casual;-inkscape-font-specification:Casual;fill:#515151;fill-opacity:1">FreeMedForms</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:5.31441069px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;line-height:125%;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#909090;fill-opacity:1;stroke:none;font-family:Georgia;-inkscape-font-specification:Sans Bold"
+       x="18.798162"
+       y="2.8193586"
+       id="text3908"
+       sodipodi:linespacing="125%"
+       transform="matrix(0.94385511,0.33035971,-0.33035971,0.94385511,0,0)"><tspan
+         sodipodi:role="line"
+         id="tspan3910"
+         x="18.798162"
+         y="2.8193586"
+         style="font-size:4.78296947px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-align:start;line-height:125%;writing-mode:lr-tb;text-anchor:start;fill:#909090;fill-opacity:1;font-family:Casual;-inkscape-font-specification:Casual">FreeMedForms</tspan></text>
   </g>
 </svg>
