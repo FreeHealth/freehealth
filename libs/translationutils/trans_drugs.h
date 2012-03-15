@@ -33,10 +33,10 @@ namespace Constants {
 
 // Drugs
 const char* const DRUGS_DATABASE                = QT_TRANSLATE_NOOP("tkConstants", "Drugs database");
-const char* const DRUGS_DATABASE_INFORMATIONS   = QT_TRANSLATE_NOOP("tkConstants", "Drugs database information");
-const char* const DOSAGES_DATABASE_INFORMATIONS   = QT_TRANSLATE_NOOP("tkConstants", "Protocols database information");
-const char* const INTERACTIONS_DATABASE_INFORMATIONS   = QT_TRANSLATE_NOOP("tkConstants", "Interactions database information");
-const char* const PMH_DATABASE_INFORMATIONS     = QT_TRANSLATE_NOOP("tkConstants", "Past medical history database information");
+const char* const DRUGS_DATABASE_INFORMATION   = QT_TRANSLATE_NOOP("tkConstants", "Drugs database information");
+const char* const DOSAGES_DATABASE_INFORMATION   = QT_TRANSLATE_NOOP("tkConstants", "Protocols database information");
+const char* const INTERACTIONS_DATABASE_INFORMATION   = QT_TRANSLATE_NOOP("tkConstants", "Interactions database information");
+const char* const PMH_DATABASE_INFORMATION     = QT_TRANSLATE_NOOP("tkConstants", "Past medical history database information");
 const char* const INTERACTIONS_DATABASE         = QT_TRANSLATE_NOOP("tkConstants", "Interactions database");
 const char* const DRUGS                         = QT_TRANSLATE_NOOP("tkConstants", "Drugs");
 const char* const PROTOCOLS                     = QT_TRANSLATE_NOOP("tkConstants", "Protocols");
@@ -58,7 +58,6 @@ const char* const CONTRAINDICATION              = QT_TRANSLATE_NOOP("tkConstants
 const char* const P450_IAM                      = QT_TRANSLATE_NOOP("tkConstants", "Cytochrome P450 interaction");
 const char* const GPG_IAM                       = QT_TRANSLATE_NOOP("tkConstants", "Glycoprotein-P interaction");
 const char* const PRECAUTION_FOR_USE            = QT_TRANSLATE_NOOP("tkConstants", "Precaution for use");
-const char* const INFORMATION                   = QT_TRANSLATE_NOOP("tkConstants", "Information");
 const char* const DRUG_DUPLICATION              = QT_TRANSLATE_NOOP("tkConstants", "Drug duplication");
 const char* const INN_DUPLICATION               = QT_TRANSLATE_NOOP("tkConstants", "Molecule duplication");
 const char* const CLASS_DUPLICATION             = QT_TRANSLATE_NOOP("tkConstants", "Therapeutic class duplication");

@@ -303,7 +303,7 @@ bool AssetsIO::deleteMovement(int idMovement,int idBank){
     movModel.setFilter(filter);
     double value = movModel.data(movModel.index(0,MOV_AMOUNT),Qt::DisplayRole).toDouble();
     if (creditValueDeletedToBankAccount(value,idBank)) {
-        Utils::informativeMessageBox(tkTr(Trans::Constants::INFORMATIONS), tr("Credited value = ") + QString::number(value));
+        Utils::informativeMessageBox(tkTr(Trans::Constants::INFORMATION), tr("Credited value = ") + QString::number(value));
     }
     if (!movModel.removeRows(0,1,QModelIndex())) {
         Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("Unable to delete movement of this asset."));

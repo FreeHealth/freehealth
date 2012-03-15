@@ -181,7 +181,7 @@ void AccountView::deleteLine(){
     int i = index.row();
     QAbstractItemModel *model = m_ui->tableView->model();
     if (model->removeRows(i,1,QModelIndex())) {
-        Utils::informativeMessageBox(tkTr(Trans::Constants::INFORMATIONS), tr("Line deleted."));
+        Utils::informativeMessageBox(tkTr(Trans::Constants::INFORMATION), tr("Line deleted."));
     }
     refresh();
 }

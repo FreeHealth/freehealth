@@ -154,8 +154,8 @@ ItemEditorWidget::ItemEditorWidget(QWidget *parent) :
     d->populateStatusCombo();
     connect(d->ui->durationCombo, SIGNAL(activated(int)), this, SLOT(changeDuration(int)));
 
-    // hide extra infos
-    toogleExtraInformations();
+    // hide extra information
+    toogleExtraInformation();
 
     adjustSize();
 }
@@ -215,16 +215,16 @@ Calendar::CalendarItem ItemEditorWidget::calendarEvent() const
     return d->m_Item;
 }
 
-/** Hide/show the extra informations. */
-void ItemEditorWidget::toogleExtraInformations()
+/** Hide/show the extra information. */
+void ItemEditorWidget::toogleExtraInformation()
 {
     d->m_ShowingExtra = !d->m_ShowingExtra;
     d->ui->tabWidget->setVisible(d->m_ShowingExtra);
     adjustSize();
 }
 
-/** Return true is the view is showing the extra informations. */
-bool ItemEditorWidget::isShowingExtraInformations() const
+/** Return true is the view is showing the extra information. */
+bool ItemEditorWidget::isShowingExtraInformation() const
 {
     return d->m_ShowingExtra;
 }

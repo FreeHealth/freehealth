@@ -114,7 +114,7 @@ void DrugSearchEngine::setDrug(const IDrug *drug)
     // - [[ATC_CODES]] --> all know ATC Codes of the drug (and its molecular components)
     // - [[ATC_LABELS]] --> all known ATC Label of the drug (and its molecular components)
     // - [[DRUG_NAME]] --> exact value of the DRUGS.NAME field
-    // - [[CONSTRUCTED_DRUG_NAME]] --> the constructed drug name like inform in the INFORMATIONS table
+    // - [[CONSTRUCTED_DRUG_NAME]] --> the constructed drug name like inform in the INFORMATION table
     // - [[DRUG_UID]] --> the uid of the drug
     const QVector<int> &atc_ids = d->m_Drug->allAtcIds();
     QHash<int, QString> atcCodes;

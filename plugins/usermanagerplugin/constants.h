@@ -132,7 +132,7 @@ namespace Constants {
         Table_RIGHTS,
         Table_GROUPS,
         Table_USER_LK_ID,
-        Table_INFORMATIONS,
+        Table_INFORMATION,
         Table_MaxParam
     };
 

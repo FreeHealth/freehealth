@@ -73,7 +73,7 @@ private Q_SLOTS:
     void prescribeRequested();
     void saveAndPrescribeRequested();
     void helpRequested();
-    void drugsInformationsRequested();
+    void drugsInformationRequested();
     void addTestOnlyRequested();
     void showInteractionSynthesisRequested();
 

@@ -244,7 +244,7 @@ bool XmlIOBase::createDatabase(const QString &connectionName , const QString &db
         return false;
     }
 
-    // Table INFORMATIONS
+    // Table INFORMATION
     QSqlQuery query(DB);
     query.prepare(prepareInsertQuery(Constants::Table_VERSION));
     query.bindValue(Constants::VERSION_ACTUAL, Constants::DB_VERSION);

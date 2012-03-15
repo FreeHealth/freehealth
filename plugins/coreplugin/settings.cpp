@@ -967,7 +967,7 @@ QTreeWidget* SettingsPrivate::getTreeWidget(QWidget *parent) const
 #endif
 
     // add compilation information
-    QTreeWidgetItem * compilItem = new QTreeWidgetItem(tree, QStringList() << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_INFORMATIONS));
+    QTreeWidgetItem * compilItem = new QTreeWidgetItem(tree, QStringList() << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_INFORMATION));
     compilItem->setFont(0,bold);
     new QTreeWidgetItem(compilItem, QStringList() << tr("Compilation Date") << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_DATE_TIME_1_2).arg(__DATE__, __TIME__));
     new QTreeWidgetItem(compilItem, QStringList() << tr("Compile Qt version") << QString("%1").arg(QT_VERSION_STR));
@@ -1023,7 +1023,7 @@ QTreeWidget* SettingsPrivate::getTreeWidget(QWidget *parent) const
     new QTreeWidgetItem(relPathsItem, QStringList() << tr("WebSiteUrl") << path(WebSiteUrl));
     new QTreeWidgetItem(absPathsItem, QStringList() << tr("WebSiteUrl") << path(WebSiteUrl));
 
-    //add library informations
+    //add library information
 //    new QTreeWidgetItem(tree, QStringList() << tr("Libs") << Utils::getLibraryInformation());
 
     // add settings

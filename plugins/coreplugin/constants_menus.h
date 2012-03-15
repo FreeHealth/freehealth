@@ -120,7 +120,7 @@ const char * const G_EDIT_OTHER          = "grEdit.Other";     /*!< \brief Defau
 // patients menu groups
 const char * const G_PATIENTS             = "grPatients";     /*!< \brief Default group name  \ingroup constants_actionmanager */
 const char * const G_PATIENT_NAVIGATION   = "grPatientsNavigation";
-const char * const G_PATIENT_INFORMATIONS = "grPatientsInfos";
+const char * const G_PATIENT_INFORMATION  = "grPatientsInfo";
 
 // format menu groups
 const char * const G_FORMAT              = "grFormat";            /*!< \brief Default group name  \ingroup constants_actionmanager */
@@ -237,7 +237,7 @@ const char * const  A_CATEGORY_REMOVE     = "actionCategoryRemove";   /*!< \brie
 const char * const  A_TEMPLATE_EDIT       = "actionTemplateEdit";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
 const char * const  A_CATEGORY_EDIT       = "actionCategoryEdit";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
 const char * const  A_TEMPLATE_LOCK       = "actionTemplateLock";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
-const char * const  A_TEMPLATE_DATABASEINFORMATIONS       = "actionTemplateDBInfos";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
+const char * const  A_TEMPLATE_DATABASEINFORMATION = "actionTemplateDBInfo";     /*!< \brief Default action object name  \ingroup constants_actionmanager */
 
 // Format Menu Action's name  (find icon default into tkTheme.h)
 const char * const  A_FORMAT_BOLD         = "actionFormatBold";       /*!< \brief Default action object name  \ingroup constants_actionmanager */

@@ -147,7 +147,7 @@ private:
   Un descripteur rapide de la classe est écrit en anglais dans la partie supérieure de l'entête (.h). Ex :
 \verbatim
 /**
-  \brief This class owns all informations about the structure of the drugs database.
+  \brief This class owns all information about the structure of the drugs database.
   All tables are described into an enum and a static stringlist.
   Get fields and tables using : getFields() and getTables().
   Get where clauses using getWhereClause( )

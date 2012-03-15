@@ -454,7 +454,7 @@ void DrugsBase::logChronos(bool state)
     d->m_LogChrono = state;
 }
 
-const DatabaseInfos *DrugsBase::actualDatabaseInformations() const
+const DatabaseInfos *DrugsBase::actualDatabaseInformation() const
 {
     if (!d->m_ActualDBInfos)
         return new DatabaseInfos;
@@ -509,14 +509,14 @@ bool DrugsBase::refreshDrugsBase()
         d->m_IsDefaultDB = false;
     }
 
-    d->m_ActualDBInfos = getDrugSourceInformations(drugSource);
+    d->m_ActualDBInfos = getDrugSourceInformation(drugSource);
     if (!d->m_ActualDBInfos) {
 //        Utils::warningMessageBox(tr("Drug database source does not exist."),
 //                                 tr("Switching to the default drugs database source."));
-        d->m_ActualDBInfos = getDrugSourceInformations(DrugsDB::Constants::DB_DEFAULT_IDENTIFIANT);
+        d->m_ActualDBInfos = getDrugSourceInformation(DrugsDB::Constants::DB_DEFAULT_IDENTIFIANT);
         if (!d->m_ActualDBInfos) {
             // get the first available from the database
-            d->m_ActualDBInfos = getDrugSourceInformations();
+            d->m_ActualDBInfos = getDrugSourceInformation();
             LOG(QString("%1 %2")
                 .arg(tr("Switching to the default drugs database source."))
                 .arg(d->m_ActualDBInfos->identifier));
@@ -531,11 +531,11 @@ bool DrugsBase::refreshDrugsBase()
 bool DrugsBase::changeCurrentDrugSourceUid(const QVariant &uid)
 {
     Q_EMIT drugsBaseIsAboutToChange();
-    d->m_ActualDBInfos = getDrugSourceInformations(uid.toString());
+    d->m_ActualDBInfos = getDrugSourceInformation(uid.toString());
     if (!d->m_ActualDBInfos) {
         LOG_ERROR(QString("No drug source uid %1.").arg(uid.toString()));
         LOG_ERROR("Switching to the default one.");
-        d->m_ActualDBInfos = getDrugSourceInformations(Constants::DB_DEFAULT_IDENTIFIANT);
+        d->m_ActualDBInfos = getDrugSourceInformation(Constants::DB_DEFAULT_IDENTIFIANT);
     }
     LOG("Changing current drug source uid to " + uid.toString());
     Q_EMIT drugsBaseHasChanged();
@@ -553,7 +553,7 @@ bool DrugsBase::changeCurrentDrugSourceUid(const QVariant &uid)
 //    return r;
 //}
 
-QVector<DatabaseInfos *> DrugsBase::getAllDrugSourceInformations()
+QVector<DatabaseInfos *> DrugsBase::getAllDrugSourceInformation()
 {
     QVector<DatabaseInfos *> infos;
     QString req = select(Constants::Table_SOURCES);
@@ -593,7 +593,7 @@ QVector<DatabaseInfos *> DrugsBase::getAllDrugSourceInformations()
     return infos;
 }
 
-DatabaseInfos *DrugsBase::getDrugSourceInformations(const QString &drugSourceUid)
+DatabaseInfos *DrugsBase::getDrugSourceInformation(const QString &drugSourceUid)
 {
     DatabaseInfos *info = 0;
     QHash<int, QString> where;
@@ -605,7 +605,7 @@ DatabaseInfos *DrugsBase::getDrugSourceInformations(const QString &drugSourceUid
     QSqlQuery q(req, QSqlDatabase::database(Constants::DB_DRUGS_NAME));
     if (q.isActive()) {
         if (q.next()) {
-            LOG("Drugs database informations correctly read " + q.value(Constants::SOURCES_DBUID).toString());
+            LOG("Drugs database information correctly read " + q.value(Constants::SOURCES_DBUID).toString());
             info = new DatabaseInfos;
             info->version = q.value(Constants::SOURCES_VERSION).toString();
             info->sid = q.value(Constants::SOURCES_SID).toInt();
@@ -885,7 +885,7 @@ void DrugsBase::onCoreDatabaseServerChanged()
 //    QList<QVariant> toReturn;
 //    /** \todo recode this */
 
-//    if (!actualDatabaseInformations())
+//    if (!actualDatabaseInformation())
 //        return toReturn;
 
 //    QSqlDatabase DosageDB = QSqlDatabase::database(Dosages::Constants::DB_DOSAGES_NAME);
@@ -898,7 +898,7 @@ void DrugsBase::onCoreDatabaseServerChanged()
 //              .arg(Constants::DB_DEFAULT_IDENTIFIANT);
 //    } else {
 //        req = QString("SELECT DISTINCT `DRUG_UID_LK` FROM `DOSAGE` WHERE `DRUGS_DATABASE_IDENTIFIANT` = \"%1\";")
-//              .arg(actualDatabaseInformations()->identifiant);
+//              .arg(actualDatabaseInformation()->identifiant);
 //    }
 //    {
 //        QSqlQuery query(req,DosageDB);
@@ -1004,7 +1004,7 @@ void DrugsBase::onCoreDatabaseServerChanged()
 //              .arg(Constants::DB_DEFAULT_IDENTIFIANT);
 //    } else {
 //        req = QString("SELECT DISTINCT `INN_LK`, `INN_DOSAGE` FROM `DOSAGE` WHERE `DRUGS_DATABASE_IDENTIFIANT` = \"%1\";")
-//              .arg(actualDatabaseInformations()->identifiant);
+//              .arg(actualDatabaseInformation()->identifiant);
 //    }
 //    QSqlQuery query(req,DB);
 //    if (query.isActive()) {

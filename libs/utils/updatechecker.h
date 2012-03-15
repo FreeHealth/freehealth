@@ -88,7 +88,7 @@ public:
     QProgressBar *progressBar(QWidget *parent);
 
 public Q_SLOTS:
-    void showUpdateInformations();
+    void showUpdateInformation();
 
 Q_SIGNALS:
     void updateFound(const QString &updateText);

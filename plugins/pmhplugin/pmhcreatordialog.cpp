@@ -55,7 +55,7 @@ PmhCreatorDialog::PmhCreatorDialog(QWidget *parent) :
     setWindowTitle(tr("Past Medical History Creator"));
     ui->pmhViewer->setEditMode(PmhViewer::ReadWriteMode);
     ui->pmhViewer->createNewPmh();
-    ui->pmhViewer->setShowPatientInformations(true);
+    ui->pmhViewer->setShowPatientInformation(true);
     // Get selected category id
 //    if (modeManager()->currentMode()->uniqueModeName()==Core::Constants::MODE_PATIENT_HISTORY) {
 //        Internal::PmhMode *mode = qobject_cast<Internal::PmhMode*>(modeManager()->currentMode());

@@ -107,13 +107,13 @@ public:
         q->connect(help, SIGNAL(triggered()), q, SLOT(helpRequested()));
 
         // Show database COMPLEMENTARY_WEBSITE
-        if (drugsBase().actualDatabaseInformations()) {
-            const QString &url = drugsBase().actualDatabaseInformations()->complementaryWebsite;
+        if (drugsBase().actualDatabaseInformation()) {
+            const QString &url = drugsBase().actualDatabaseInformation()->complementaryWebsite;
             if (!url.isEmpty()) {
                 QAction *drugsDbWeb = new QAction(drugDBLabel, m_HelpMenu);
                 drugsDbWeb->setData(url);
                 m_HelpMenu->addAction(drugsDbWeb);
-                q->connect(drugsDbWeb, SIGNAL(triggered()), q, SLOT(drugsInformationsRequested()));
+                q->connect(drugsDbWeb, SIGNAL(triggered()), q, SLOT(drugsInformationRequested()));
             }
         }
 
@@ -411,7 +411,7 @@ void DosageCreatorDialog::helpRequested()
 }
 
 /** \brief Open the drug information dialog */
-void DosageCreatorDialog::drugsInformationsRequested()
+void DosageCreatorDialog::drugsInformationRequested()
 {
     QAction *action = qobject_cast<QAction *>(sender());
     if (action)

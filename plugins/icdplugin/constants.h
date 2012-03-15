@@ -209,7 +209,7 @@ namespace Constants {
     const char * const  M_ICD_SEARCH       = "mICDSearch";
     const char * const  M_ICD_MODES        = "mICDModes";
     const char * const  A_RECREATE_ICD_DB  = "aRecreateICDDatabase";
-    const char * const  A_DATABASE_INFOS   = "aICDDbInformations";
+    const char * const  A_DATABASE_INFOS   = "aICDDbInformation";
     const char * const  A_SEARCH_LABEL     = "aICDSearchLabel";
     const char * const  A_SEARCH_CODE      = "aICDSearchCode";
 

@@ -1,8 +1,10 @@
 # toolkit library project file
 TEMPLATE         = lib
 TARGET           = MedinTux
-PACKAGE_VERSION  = 0.1.0
-#!win32:VERSION   = $${PACKAGE_VERSION}
+
+# The version number is defined by the scripts/source.sh script, keep this line unchanged
+# NOT USED
+# VERSION=1.0.0
 
 # include config file
 include( ../libsworkbench.pri )

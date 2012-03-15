@@ -115,7 +115,7 @@ IcdCentralWidget *IcdWidgetManager::currentView() const
 IcdActionHandler::IcdActionHandler(QObject *parent) :
         QObject(parent),
         aRecreateDatabase(0),
-        aShowDatabaseInformations(0),
+        aShowDatabaseInformation(0),
         aSearchByLabel(0),
         aSearchByCode(0),
         gSearchMethod(0), gModes(0),
@@ -159,14 +159,14 @@ IcdActionHandler::IcdActionHandler(QObject *parent) :
     connect(a, SIGNAL(triggered()), this, SLOT(recreateDatabase()));
 #endif
 
-    // Show Databases informations
-    a = aShowDatabaseInformations = new QAction(this);
+    // Show Databases information
+    a = aShowDatabaseInformation = new QAction(this);
     a->setIcon(th->icon(Core::Constants::ICONHELP));
     cmd = actionManager()->registerAction(a, Constants::A_DATABASE_INFOS, QList<int>() << Core::Constants::C_GLOBAL_ID);
     cmd->setTranslations(Constants::DATABASE_INFOS_TEXT, Constants::DATABASE_INFOS_TEXT, Constants::ICDCONSTANTS_TR_CONTEXT);
     cmd->retranslate();
     hmenu->addAction(cmd, Core::Constants::G_HELP_DATABASES);
-    connect(aShowDatabaseInformations,SIGNAL(triggered()), this, SLOT(showDatabaseInformations()));
+    connect(aShowDatabaseInformation,SIGNAL(triggered()), this, SLOT(showDatabaseInformation()));
 
     // Search method menu
     Core::ActionContainer *menu = actionManager()->actionContainer(Core::Constants::M_EDIT);
@@ -379,7 +379,7 @@ void IcdActionHandler::recreateDatabase()
     connect(m_Downloader, SIGNAL(processEnded()), m_Downloader, SLOT(deleteLater()));
 }
 
-void IcdActionHandler::showDatabaseInformations()
+void IcdActionHandler::showDatabaseInformation()
 {
     QDialog dlg(qApp->activeWindow(), Qt::Window | Qt::CustomizeWindowHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint | Qt::WindowMinMaxButtonsHint);
     QGridLayout lay(&dlg);

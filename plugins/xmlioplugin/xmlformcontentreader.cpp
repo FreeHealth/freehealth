@@ -296,7 +296,7 @@ Form::FormIODescription *XmlFormContentReader::readXmlDescription(const QDomElem
 }
 
 /** Return the Form description. Call this member just after the checkFormFileContent() so that the form xml content will be cached */
-Form::FormIODescription *XmlFormContentReader::readFileInformations(const QString &formUidOrFullAbsPath, const Form::FormIOQuery &query)
+Form::FormIODescription *XmlFormContentReader::readFileInformation(const QString &formUidOrFullAbsPath, const Form::FormIOQuery &query)
 {
     Form::FormIODescription *toReturn = 0;
     // Get the QDomDocument from cache

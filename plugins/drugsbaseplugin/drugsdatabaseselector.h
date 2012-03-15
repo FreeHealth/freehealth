@@ -77,7 +77,7 @@ public:
     static DrugsDatabaseSelector *instance();
     ~DrugsDatabaseSelector();
 
-    void getAllDatabaseInformations() const;
+    void getAllDatabaseInformation() const;
     bool setCurrentDatabase(const QString &dbUid);
     DatabaseInfos currentDatabase() const;
     QVector<DatabaseInfos *> availableDatabases() const;

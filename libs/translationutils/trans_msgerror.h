@@ -32,7 +32,7 @@ namespace Trans {
 namespace Constants {
 
 // Messages and errors
-const char* const INFORMATIONS                       = QT_TRANSLATE_NOOP("tkConstants", "Information");
+const char* const INFORMATION                        = QT_TRANSLATE_NOOP("tkConstants", "Information");
 const char* const CANCEL                             = QT_TRANSLATE_NOOP("tkConstants", "Cancel");
 const char* const CLEAR                              = QT_TRANSLATE_NOOP("tkConstants", "Clear");
 const char* const VERSION                            = QT_TRANSLATE_NOOP("tkConstants", "Version");

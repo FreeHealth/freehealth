@@ -123,7 +123,7 @@ AgendaActionHandler::AgendaActionHandler(QObject *parent) :
         aNewEvent(0),
         aPrintSelection(0),
         aPrintPreviewSelection(0),
-        aAgendaDatabaseInformations(0),
+        aAgendaDatabaseInformation(0),
         m_CurrentView(0)
 {
     setObjectName("AgendaActionHandler");
@@ -239,15 +239,15 @@ AgendaActionHandler::AgendaActionHandler(QObject *parent) :
 
     // Databases information
     Core::ActionContainer *hmenu = actionManager()->actionContainer(Core::Constants::M_HELP_DATABASES);
-    a = aAgendaDatabaseInformations = new QAction(this);
+    a = aAgendaDatabaseInformation = new QAction(this);
     a->setIcon(th->icon(Core::Constants::ICONHELP));
-    cmd = actionManager()->registerAction(a, Constants::A_AGENDADATABASE_INFORMATIONS, globalcontext);
-    cmd->setTranslations(Trans::Constants::AGENDA_DATABASE_INFORMATIONS);
+    cmd = actionManager()->registerAction(a, Constants::A_AGENDADATABASE_INFORMATION, globalcontext);
+    cmd->setTranslations(Trans::Constants::AGENDA_DATABASE_INFORMATION);
     cmd->retranslate();
     if (hmenu) {
         hmenu->addAction(cmd, Core::Constants::G_HELP_DATABASES);
     }
-    connect(aAgendaDatabaseInformations,SIGNAL(triggered()), this, SLOT(showAgendaDatabaseInformations()));
+    connect(aAgendaDatabaseInformation,SIGNAL(triggered()), this, SLOT(showAgendaDatabaseInformation()));
 
     contextManager()->updateContext();
     actionManager()->retranslateMenusAndActions();
@@ -328,7 +328,7 @@ void AgendaActionHandler::printPreviewSelection()
 //    }
 }
 
-void AgendaActionHandler::showAgendaDatabaseInformations()
+void AgendaActionHandler::showAgendaDatabaseInformation()
 {
     QDialog dlg(qApp->activeWindow(), Qt::Window | Qt::CustomizeWindowHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint | Qt::WindowMinMaxButtonsHint);
     QGridLayout lay(&dlg);

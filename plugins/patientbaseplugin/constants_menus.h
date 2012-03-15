@@ -39,7 +39,7 @@ namespace Constants {
     const char * const  G_PATIENTS_MODE         = "Patients.groupModes";
     const char * const  G_PATIENTS_NEW          = "Patients.groupNew";
     const char * const  G_PATIENTS_HISTORY      = "Patients.groupHistory";
-    const char * const  G_PATIENTS_INFORMATIONS = "Patients.groupInfos";
+    const char * const  G_PATIENTS_INFORMATION  = "Patients.groupInfo";
 
     const char * const  A_SEARCH_PATIENTS_BY_NAME         = "Patients.SearchByName";
     const char * const  A_SEARCH_PATIENTS_BY_FIRSTNAME    = "Patients.SearchFirstname";

@@ -75,7 +75,7 @@ private Q_SLOTS:
     void printSelection();
     void printPreviewSelection();
 
-    void showAgendaDatabaseInformations();
+    void showAgendaDatabaseInformation();
 
 private:
     void updateActions();
@@ -85,7 +85,7 @@ protected:
     QAction *aNewEvent;
     QAction *aPrintSelection;
     QAction *aPrintPreviewSelection;
-    QAction *aAgendaDatabaseInformations;
+    QAction *aAgendaDatabaseInformation;
 
     QPointer<QWidget> m_CurrentView;
 };

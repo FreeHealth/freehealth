@@ -80,8 +80,8 @@ public:
     void printPreview();
     bool createTemplate();
 
-    void showDrugsDatabaseInformations();
-    void showDosagesDatabaseInformations();
+    void showDrugsDatabaseInformation();
+    void showDosagesDatabaseInformation();
 
 protected:
     void createConnections();

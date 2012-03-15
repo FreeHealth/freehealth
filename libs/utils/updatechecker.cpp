@@ -28,7 +28,7 @@
       // OR
       connect( Utils::UpdateChecker::instance(), SIGNAL(updateFound(const QString &)), this, SLOT(on_UpdateFound(const QString &)));
       // OR
-      connect( Utils::UpdateChecker::instance(), SIGNAL(updateFound()), UpdateChecker::instance(), SLOT(showUpdateInformations()));
+      connect( Utils::UpdateChecker::instance(), SIGNAL(updateFound()), UpdateChecker::instance(), SLOT(showUpdateInformation()));
   \endcode
 
   - You can :
@@ -271,7 +271,7 @@ void UpdateChecker::emitSignals()
 /**
   \brief Opens a dialog window that show all the update text available
 */
-void UpdateChecker::showUpdateInformations()
+void UpdateChecker::showUpdateInformation()
 {
     QDialog *dialog = new QDialog;
     dialog->setWindowTitle( tkTr(Trans::Constants::UPDATE_AVAILABLE) + " - " + qApp->applicationName() );

@@ -71,10 +71,10 @@ public:
 
 private Q_SLOTS:
     void searchActionChanged(QAction *action);
-    void viewPatientInformations();
-    void printPatientsInformations();
+    void viewPatientInformation();
+    void printPatientsInformation();
 
-    void showPatientDatabaseInformations();
+    void showPatientDatabaseInformation();
 
 private:
     void updateActions();
@@ -84,9 +84,9 @@ protected:
     QAction *aSearchFirstname;
     QAction *aSearchNameFirstname;
     QAction *aSearchDob;
-    QAction *aViewPatientInformations;
-    QAction *aPrintPatientInformations;
-    QAction *aShowPatientDatabaseInformations;
+    QAction *aViewPatientInformation;
+    QAction *aPrintPatientInformation;
+    QAction *aShowPatientDatabaseInformation;
 
     QActionGroup *gSearchMethod;
 

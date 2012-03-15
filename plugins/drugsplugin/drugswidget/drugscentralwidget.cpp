@@ -251,9 +251,9 @@ bool DrugsCentralWidget::createTemplate()
     return true;
 }
 
-void DrugsCentralWidget::showDrugsDatabaseInformations()
+void DrugsCentralWidget::showDrugsDatabaseInformation()
 {
-    const DrugsDB::DatabaseInfos *info = drugsBase().actualDatabaseInformations();
+    const DrugsDB::DatabaseInfos *info = drugsBase().actualDatabaseInformation();
     if (!info)
         return;
     QDialog dlg(this, Qt::Window | Qt::CustomizeWindowHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint | Qt::WindowMinMaxButtonsHint);
@@ -275,7 +275,7 @@ void DrugsCentralWidget::showDrugsDatabaseInformations()
     dlg.exec();
 }
 
-void DrugsCentralWidget::showDosagesDatabaseInformations()
+void DrugsCentralWidget::showDosagesDatabaseInformation()
 {
     QDialog dlg(this, Qt::Window | Qt::CustomizeWindowHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint | Qt::WindowMinMaxButtonsHint);
     QGridLayout lay(&dlg);

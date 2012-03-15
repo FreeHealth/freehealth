@@ -185,9 +185,9 @@ UserBase::UserBase(QObject *parent)
     addIndex(Table_USER_LK_ID, LK_LKID);
 
     // information
-    addTable(Table_INFORMATIONS, "INFORMATIONS");
-    addField(Table_INFORMATIONS, INFO_VERSION,  "VERSION", FieldIsShortText);
-    addField(Table_INFORMATIONS, INFO_MAX_LKID, "MAX_LK_ID", FieldIsInteger);
+    addTable(Table_INFORMATION, "INFORMATIONS");
+    addField(Table_INFORMATION, INFO_VERSION,  "VERSION", FieldIsShortText);
+    addField(Table_INFORMATION, INFO_MAX_LKID, "MAX_LK_ID", FieldIsInteger);
 
     initialize(Core::ICore::instance()->settings());
 }
@@ -679,9 +679,9 @@ bool UserBase::createDatabase(const QString &connectionName , const QString &dbN
     // add general administrator
     createDefaultUser();
 
-    // Table INFORMATIONS
+    // Table INFORMATION
     QSqlQuery query(DB);
-    query.prepare(prepareInsertQuery(Constants::Table_INFORMATIONS));
+    query.prepare(prepareInsertQuery(Constants::Table_INFORMATION));
     query.bindValue(Constants::INFO_VERSION, Constants::USER_DB_VERSION);
     query.bindValue(Constants::INFO_MAX_LKID, 1);
     if (!query.exec()) {
@@ -1316,7 +1316,7 @@ int UserBase::getMaxLinkId()
     if (!testConnexion())
         return -1;
     QSqlQuery query(database());
-    if (!query.exec(select(Constants::Table_INFORMATIONS, Constants::INFO_MAX_LKID))) {
+    if (!query.exec(select(Constants::Table_INFORMATION, Constants::INFO_MAX_LKID))) {
         LOG_QUERY_ERROR(query);
         return -1;
     } else {
@@ -1331,7 +1331,7 @@ void UserBase::updateMaxLinkId(const int max)
     if (!testConnexion())
         return;
     QSqlQuery query(database());
-    query.prepare(prepareUpdateQuery(Constants::Table_INFORMATIONS, Constants::INFO_MAX_LKID));
+    query.prepare(prepareUpdateQuery(Constants::Table_INFORMATION, Constants::INFO_MAX_LKID));
     query.bindValue(0, max);
     if (!query.exec())
         LOG_QUERY_ERROR(query);

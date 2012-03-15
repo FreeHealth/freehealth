@@ -169,8 +169,8 @@ DatabaseSelectorWidget::~DatabaseSelectorWidget()
 void DatabaseSelectorWidget::setDatasToUi()
 {
     ui->databaseList->clear();
-    d->m_Infos = drugsBase().getAllDrugSourceInformations();
-    const DrugsDB::DatabaseInfos *actual = drugsBase().actualDatabaseInformations();
+    d->m_Infos = drugsBase().getAllDrugSourceInformation();
+    const DrugsDB::DatabaseInfos *actual = drugsBase().actualDatabaseInformation();
     if (!actual)
         return;
     int row = 0;

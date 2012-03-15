@@ -127,7 +127,7 @@ PmhActionHandler::PmhActionHandler(QObject *parent) :
         aAddPmh(0),aRemovePmh(0),
         aAddCat(0),
         aCategoryManager(0),
-        aPmhDatabaseInformations(0),
+        aPmhDatabaseInformation(0),
         m_CurrentView(0)
 {
     setObjectName("PmhActionHandler");
@@ -192,16 +192,16 @@ PmhActionHandler::PmhActionHandler(QObject *parent) :
     connect(a, SIGNAL(triggered()), this, SLOT(categoryManager()));
 
     Core::ActionContainer *hmenu = actionManager()->actionContainer(Core::Constants::M_HELP_DATABASES);
-    a = aPmhDatabaseInformations = new QAction(this);
+    a = aPmhDatabaseInformation = new QAction(this);
     a->setObjectName("aPmhDatabaseInformation");
     a->setIcon(th->icon(Core::Constants::ICONHELP));
     cmd = actionManager()->registerAction(a, Constants::A_PMH_SHOWDBINFOS, globalcontext);
-    cmd->setTranslations(Trans::Constants::PMH_DATABASE_INFORMATIONS);
+    cmd->setTranslations(Trans::Constants::PMH_DATABASE_INFORMATION);
     cmd->retranslate();
     if (hmenu) {
         hmenu->addAction(cmd, Core::Constants::G_HELP_DATABASES);
     }
-    connect(aPmhDatabaseInformations, SIGNAL(triggered()), this, SLOT(showPmhDatabaseInformations()));
+    connect(aPmhDatabaseInformation, SIGNAL(triggered()), this, SLOT(showPmhDatabaseInformation()));
 
     contextManager()->updateContext();
     actionManager()->retranslateMenusAndActions();
@@ -254,9 +254,8 @@ void PmhActionHandler::patientChanged()
     aAddPmh->setEnabled(true);
 }
 
-void PmhActionHandler::showPmhDatabaseInformations()
+void PmhActionHandler::showPmhDatabaseInformation()
 {
-    qWarning() << Q_FUNC_INFO;
     QDialog dlg(mainWindow(), Qt::Window | Qt::CustomizeWindowHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint | Qt::WindowMinMaxButtonsHint);
     QGridLayout lay(&dlg);
     QTreeWidget tree(&dlg);

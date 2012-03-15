@@ -1180,7 +1180,7 @@ void ReceiptViewer::saveInThesaurus(){
     QString listOfValuesStr = m_listOfValues.join("+");
     receiptsEngine r;
     if(r.insertInThesaurus(listOfValuesStr,m_userUuid)){
-        Utils::informativeMessageBox(tkTr(Trans::Constants::INFORMATIONS), listOfValuesStr+"\n"+trUtf8(" has been saved in thesaurus !"));
+        Utils::informativeMessageBox(tkTr(Trans::Constants::INFORMATION), listOfValuesStr+"\n"+trUtf8(" has been saved in thesaurus !"));
     }
     m_actionTreeView->fillActionTreeView();
 }

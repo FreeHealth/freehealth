@@ -39,7 +39,7 @@
 
 namespace Core {
 
-/** Use this class to pass informations on the desired actions to be created by the
+/** Use this class to pass information on the desired actions to be created by the
    Core::IMainWindow.
 
    The general menu accept all actions.

@@ -49,7 +49,7 @@ public:
 
 private Q_SLOTS:
     void patientChanged();
-    void showPmhDatabaseInformations();
+    void showPmhDatabaseInformation();
     void categoryManager();
 
 private:
@@ -60,7 +60,7 @@ protected:
     QAction *aRemovePmh;
     QAction *aAddCat;
     QAction *aCategoryManager;
-    QAction *aPmhDatabaseInformations;
+    QAction *aPmhDatabaseInformation;
     QPointer<PmhContextualWidget> m_CurrentView;
 };
 

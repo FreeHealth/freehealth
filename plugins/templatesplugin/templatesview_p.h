@@ -80,7 +80,7 @@ private Q_SLOTS:
     void saveModel();
     void print();
     void lock();
-    void databaseInformations();
+    void databaseInformation();
     void templatesViewItemChanged();
 
 private:

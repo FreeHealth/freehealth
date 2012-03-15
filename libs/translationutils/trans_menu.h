@@ -105,7 +105,7 @@ const char * const  LOCK_TEXT             = QT_TRANSLATE_NOOP("tkConstants", "Lo
 const char * const  UNLOCK_TEXT           = QT_TRANSLATE_NOOP("tkConstants", "Unlock");
 const char * const  LOCKED_TEXT           = QT_TRANSLATE_NOOP("tkConstants", "Locked");
 const char * const  UNLOCKED_TEXT         = QT_TRANSLATE_NOOP("tkConstants", "Unlocked");
-const char * const  TEMPLATES_DATABASE_INFORMATIONS_TEXT         = QT_TRANSLATE_NOOP("tkConstants", "Templates database information");
+const char * const  TEMPLATES_DATABASE_INFORMATION_TEXT         = QT_TRANSLATE_NOOP("tkConstants", "Templates database information");
 
 const char * const  PMHX                  = QT_TRANSLATE_NOOP("tkConstants", "PMHx");
 const char * const  PASTMEDICALHISTORY    = QT_TRANSLATE_NOOP("tkConstants", "Past medical history");

@@ -175,7 +175,7 @@ namespace Constants {
     const char * const A_NEW_AGENDAEVENT = "agendaNewEvent";
     const char * const A_PRINT_SELECTION = "agendaPrintSelection";
     const char * const A_PRINT_PREVIEW_SELECTION = "agendaPreviewSelection";
-    const char * const A_AGENDADATABASE_INFORMATIONS = "agendaDbInfos";
+    const char * const A_AGENDADATABASE_INFORMATION = "agendaDbInfo";
 
     // Icons
     const char * const I_NEW_AGENDAEVENT = "agenda_newevent.png";

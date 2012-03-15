@@ -518,9 +518,9 @@ QStringList receiptsManager::getChoiceFromCategories(QString & categoriesItem){
     if (WarnDebugMessage)
     	      qDebug()  << __FILE__ << QString::number(__LINE__) << " categories item ="+item;
     if (item == "thesaurus") {
-        Utils::informativeMessageBox(tkTr(Trans::Constants::INFORMATIONS), "item = "+item);
+        Utils::informativeMessageBox(tkTr(Trans::Constants::INFORMATION), "item = "+item);
     } else if (item == "CCAM") {
-        Utils::informativeMessageBox(tkTr(Trans::Constants::INFORMATIONS), "show CCAM widget");
+        Utils::informativeMessageBox(tkTr(Trans::Constants::INFORMATION), "show CCAM widget");
     } else {
         QString req = QString("SELECT %1 FROM %2 WHERE %3 = '%4'").arg("NAME","medical_procedure","TYPE",item);
         QSqlQuery q(db);

@@ -176,7 +176,7 @@ public:
 
     virtual bool canReadForms(const QString &uuidOrAbsPath) const = 0;
 
-    virtual FormIODescription *readFileInformations(const QString &uuidOrAbsPath) const = 0;
+    virtual FormIODescription *readFileInformation(const QString &uuidOrAbsPath) const = 0;
     virtual QList<FormIODescription *> getFormFileDescriptions(const FormIOQuery &query) const = 0;
 
     virtual QList<Form::FormMain *> loadAllRootForms(const QString &uuidOrAbsPath = QString::null) const = 0;

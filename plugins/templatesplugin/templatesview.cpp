@@ -210,15 +210,15 @@ TemplatesViewActionHandler::TemplatesViewActionHandler(QObject *parent) :
                            Trans::Constants::UNLOCKED_TEXT, lockContext, this);
     connect(aLocker, SIGNAL(triggered()), this, SLOT(lock()));
 
-    // Database informations
+    // Database information
     Core::ActionContainer *hmenu = actionManager()->actionContainer(Core::Constants::M_HELP_DATABASES);
     if (hmenu) {
         aDatabaseInfos = registerAction("TemplatesView.aDbInfos", hmenu, Core::Constants::ICONABOUT,
-                                        Core::Constants::A_TEMPLATE_DATABASEINFORMATIONS,
+                                        Core::Constants::A_TEMPLATE_DATABASEINFORMATION,
                                         Core::Constants::G_HELP_DATABASES,
-                                        Trans::Constants::TEMPLATES_DATABASE_INFORMATIONS_TEXT,
+                                        Trans::Constants::TEMPLATES_DATABASE_INFORMATION_TEXT,
                                         QList<int>() << Core::Constants::C_GLOBAL_ID, this);
-        connect(aDatabaseInfos, SIGNAL(triggered()), this, SLOT(databaseInformations()));
+        connect(aDatabaseInfos, SIGNAL(triggered()), this, SLOT(databaseInformation()));
 //        contextManager()->updateContext();
     }
 
@@ -308,7 +308,7 @@ void TemplatesViewActionHandler::lock()
     }
 }
 
-void TemplatesViewActionHandler::databaseInformations()
+void TemplatesViewActionHandler::databaseInformation()
 {
     QDialog dlg(qApp->activeWindow(), Qt::Window | Qt::CustomizeWindowHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint | Qt::WindowMinMaxButtonsHint);
     QGridLayout lay(&dlg);

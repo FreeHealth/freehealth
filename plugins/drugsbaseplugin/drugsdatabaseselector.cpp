@@ -217,10 +217,10 @@ DrugsDatabaseSelector::~DrugsDatabaseSelector()
     }
 }
 
-void DrugsDatabaseSelector::getAllDatabaseInformations() const
+void DrugsDatabaseSelector::getAllDatabaseInformation() const
 {
     d->m_Infos.clear();
-    d->m_Infos = drugsBase().getAllDrugSourceInformations();
+    d->m_Infos = drugsBase().getAllDrugSourceInformation();
 }
 
 bool DrugsDatabaseSelector::setCurrentDatabase(const QString &dbUid)

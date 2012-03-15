@@ -116,7 +116,7 @@ public:
         m_SourceFilter = QString(" `%1`.`%2`=%3 ")
                          .arg(drugsBase().table(Constants::Table_DRUGS))
                          .arg(drugsBase().fieldName(Constants::Table_DRUGS, Constants::DRUGS_SID))
-                         .arg(drugsBase().actualDatabaseInformations()->sid);
+                         .arg(drugsBase().actualDatabaseInformation()->sid);
     }
 
     void setQueryModelSearchMode(const int searchMode)
@@ -231,8 +231,8 @@ public:
     QString getConstructedDrugName(const int row)
     {
         const QString &drugName = q->QSqlQueryModel::data(q->index(row, Priv_BrandName)).toString();
-        if (drugsBase().actualDatabaseInformations()) {
-            QString tmp = drugsBase().actualDatabaseInformations()->drugsNameConstructor;
+        if (drugsBase().actualDatabaseInformation()) {
+            QString tmp = drugsBase().actualDatabaseInformation()->drugsNameConstructor;
             if (!tmp.isEmpty()) {
                 tmp.replace("NAME", drugName);
                 tmp.replace("FORM", q->data(q->index(row, GlobalDrugsModel::Forms)).toString());
@@ -408,9 +408,9 @@ QVariant GlobalDrugsModel::data(const QModelIndex &item, int role) const
         if (!atc.isEmpty())
             atc.prepend(" ; ATC: ");
         QString uidName = "UID";
-        if (drugsBase().actualDatabaseInformations()) {
-            if (!drugsBase().actualDatabaseInformations()->drugsUidName.isEmpty())
-                uidName = drugsBase().actualDatabaseInformations()->drugsUidName;
+        if (drugsBase().actualDatabaseInformation()) {
+            if (!drugsBase().actualDatabaseInformation()->drugsUidName.isEmpty())
+                uidName = drugsBase().actualDatabaseInformation()->drugsUidName;
         }
         // Marketed infos
         QString mark;

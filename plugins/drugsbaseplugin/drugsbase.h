@@ -75,12 +75,12 @@ public:
     // Initializer / Checkers
     bool isInitialized();
     void logChronos(bool state);
-    const DatabaseInfos *actualDatabaseInformations() const;
+    const DatabaseInfos *actualDatabaseInformation() const;
     bool isDatabaseTheDefaultOne() const;
     bool isRoutesAvailable() const;
 
-    QVector<DatabaseInfos *> getAllDrugSourceInformations();
-    DatabaseInfos *getDrugSourceInformations(const QString &drugSourceUid = QString::null);
+    QVector<DatabaseInfos *> getAllDrugSourceInformation();
+    DatabaseInfos *getDrugSourceInformation(const QString &drugSourceUid = QString::null);
 
     // OBSOLETE
     bool refreshAllDatabases();

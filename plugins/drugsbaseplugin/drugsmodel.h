@@ -100,7 +100,7 @@ public:
     DrugInteractionQuery *drugInteractionQuery() const;
     DrugInteractionResult *drugInteractionResult() const;
 
-    // ALLERGIES INFORMATIONS
+    // ALLERGIES INFORMATION
     bool prescriptionHasAllergies();
 
     // ADD / REMOVE DRUGS

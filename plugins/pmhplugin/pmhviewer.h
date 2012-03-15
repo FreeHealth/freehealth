@@ -56,7 +56,7 @@ public:
     PmhViewer(QWidget *parent = 0, EditMode editMode = ReadOnlyMode, ViewMode viewMode = SimpleMode);
     ~PmhViewer();
 
-    void setShowPatientInformations(bool show);
+    void setShowPatientInformation(bool show);
     void setEditMode(EditMode mode);
     void setPmhData(Internal::PmhData *pmh);
     void setCategoryForPmh(Category::CategoryItem *category);

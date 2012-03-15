@@ -65,7 +65,7 @@ public:
 
 private Q_SLOTS:
     void recreateDatabase();
-    void showDatabaseInformations();
+    void showDatabaseInformation();
     void searchActionChanged(QAction*);
     void modeActionChanged(QAction*);
     void toggleSelector();
@@ -78,7 +78,7 @@ private:
 
 protected:
     QAction *aRecreateDatabase;
-    QAction *aShowDatabaseInformations;
+    QAction *aShowDatabaseInformation;
     QAction *aSearchByLabel, *aSearchByCode;
     QActionGroup *gSearchMethod, *gModes;
     QAction *aSelectorSimpleMode, *aSelectorFullMode;

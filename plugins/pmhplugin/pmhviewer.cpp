@@ -177,7 +177,7 @@ PmhViewer::PmhViewer(QWidget *parent, EditMode editMode, ViewMode viewMode) :
 
     // Manage the Edit Mode
     d->setEditMode(editMode);
-    setShowPatientInformations(d->m_ShowPatient);
+    setShowPatientInformation(d->m_ShowPatient);
 
     // Manage View Mode
     d->m_ViewMode = viewMode;
@@ -204,7 +204,7 @@ PmhViewer::~PmhViewer()
 }
 
 /** \brief Show or hide the patient information (title, name, age) inside the dialog. */
-void PmhViewer::setShowPatientInformations(bool show)
+void PmhViewer::setShowPatientInformation(bool show)
 {
     if (show) {
         d->ui->patientGroup->show();

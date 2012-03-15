@@ -280,7 +280,7 @@ void AccountDatabaseDefautsWidget::on_createButton_clicked()
     QApplication::restoreOverrideCursor ();
     if (success) {
     	  qWarning() << __FILE__ << QString::number(__LINE__) << "Defaults have been created." ;
-          Utils::informativeMessageBox(tkTr(Trans::Constants::INFORMATIONS), tr("Defaults have been created."));
+          Utils::informativeMessageBox(tkTr(Trans::Constants::INFORMATION), tr("Defaults have been created."));
     }
 }
 

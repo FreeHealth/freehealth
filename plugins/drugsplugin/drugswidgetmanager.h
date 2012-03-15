@@ -102,8 +102,8 @@ private Q_SLOTS:
     void createTemplate();
     void printPreview();
 
-    void showDrugsDatabaseInformations();
-    void showDosagesDatabaseInformations();
+    void showDrugsDatabaseInformation();
+    void showDosagesDatabaseInformation();
 
     void modeActionChanged(QAction *a);
     void openDosageDialog();
@@ -139,8 +139,8 @@ protected:
     QAction *aToggleTestingDrugs;
     QAction *aChangeDuration;
     QAction *aToTemplate;
-    QAction *aDrugsDatabaseInformations;
-    QAction *aDosagesDatabaseInformations;
+    QAction *aDrugsDatabaseInformation;
+    QAction *aDosagesDatabaseInformation;
     QActionGroup *gModes;
     QAction *aPrescriberMode;
     QAction *aSelectOnlyMode;

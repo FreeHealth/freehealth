@@ -93,7 +93,7 @@ QWidget *PluginAboutPage::createPage(QWidget *parent)
     QFont f;
     f.setBold(true);
     QTreeWidgetItem *i = 0;
-    i = new QTreeWidgetItem(tree, QStringList() << tkTr(Trans::Constants::INFORMATIONS));
+    i = new QTreeWidgetItem(tree, QStringList() << tkTr(Trans::Constants::INFORMATION));
     i->setFont(0,f);
     new QTreeWidgetItem(i, QStringList() << tkTr(Trans::Constants::VERSION) + " " + m_Spec->version() );
     new QTreeWidgetItem( i, QStringList() << tkTr(Trans::Constants::BUILD_DATE_TIME_1_2).arg(__DATE__, __TIME__));

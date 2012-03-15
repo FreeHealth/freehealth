@@ -41,7 +41,10 @@
 #include <utils/log.h>
 #include <utils/global.h>
 
-#include <translationutils/constanttranslations.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_msgerror.h>
+#include <translationutils/trans_drugs.h>
+#include <translationutils/trans_database.h>
 
 #include <QVector>
 #include <QCoreApplication>

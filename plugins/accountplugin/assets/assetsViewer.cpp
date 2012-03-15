@@ -195,7 +195,7 @@ void AssetsViewer::recordAsset(){
     if (!asIO.insertIntoAssets(hashValues)) {
         Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("Asset not recorded."));
     } else {
-        Utils::informativeMessageBox(tkTr(Trans::Constants::INFORMATIONS), tr("Asset recorded."));
+        Utils::informativeMessageBox(tkTr(Trans::Constants::INFORMATION), tr("Asset recorded."));
     }
     showAssets();
     yearDateChanged(year);
@@ -219,7 +219,7 @@ void AssetsViewer::deleteAsset(){
     if (!assetIO.deleteMovement(idMovement,idBank)) {
         Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("Movement of asset is not deleted."));
     } else {
-        Utils::informativeMessageBox(tkTr(Trans::Constants::INFORMATIONS), tr("Asset deleted."));
+        Utils::informativeMessageBox(tkTr(Trans::Constants::INFORMATION), tr("Asset deleted."));
     }
     showAssets();
 }

@@ -63,8 +63,8 @@ public:
     void setCalendarItem(const Calendar::CalendarItem &item);
     Calendar::CalendarItem calendarEvent() const;
 
-    void toogleExtraInformations();
-    bool isShowingExtraInformations() const;
+    void toogleExtraInformation();
+    bool isShowingExtraInformation() const;
 
 //    void setAvailableUserCalendar(const QList<Calendar::UserCalendar *> &userCals);
 

@@ -473,7 +473,7 @@ QList<QVariant> ProtocolsBase::getAllUIDThatHaveRecordedDosages() const
 {
     QList<QVariant> toReturn;
 
-    if (!drugsBase().actualDatabaseInformations())
+    if (!drugsBase().actualDatabaseInformation())
         return toReturn;
 
     QSqlDatabase DosageDB = QSqlDatabase::database(Dosages::Constants::DB_DOSAGES_NAME);
@@ -482,7 +482,7 @@ QList<QVariant> ProtocolsBase::getAllUIDThatHaveRecordedDosages() const
 
     QString req;
     req = QString("SELECT DISTINCT `DRUG_UID_LK` FROM `DOSAGE` WHERE `DRUGS_DATABASE_IDENTIFIANT` = \"%1\";")
-            .arg(drugsBase().actualDatabaseInformations()->identifier);
+            .arg(drugsBase().actualDatabaseInformation()->identifier);
 
     QSqlQuery query(req, DosageDB);
     if (query.isActive()) {
@@ -585,7 +585,7 @@ QMultiHash<int,QString> ProtocolsBase::getAllINNThatHaveRecordedDosages() const
 
     QString req;
     req = QString("SELECT DISTINCT `INN_LK`, `INN_DOSAGE` FROM `DOSAGE` WHERE `DRUGS_DATABASE_IDENTIFIANT` = \"%1\";")
-            .arg(drugsBase().actualDatabaseInformations()->identifier);
+            .arg(drugsBase().actualDatabaseInformation()->identifier);
     QSqlQuery query(req,DB);
     if (query.isActive()) {
         while (query.next()) {

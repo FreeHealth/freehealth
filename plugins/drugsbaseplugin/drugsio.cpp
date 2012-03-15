@@ -375,22 +375,22 @@ public:
         // Add drugsBase information
         QString dbName;
         QString dbInfoAttribs;
-        if (drugsBase().actualDatabaseInformations()) {
-            dbName = drugsBase().actualDatabaseInformations()->identifier;
-            QString t = drugsBase().actualDatabaseInformations()->version;
+        if (drugsBase().actualDatabaseInformation()) {
+            dbName = drugsBase().actualDatabaseInformation()->identifier;
+            QString t = drugsBase().actualDatabaseInformation()->version;
             dbInfoAttribs += QString("version=\"%1\" ").arg(t.replace("\"","'"));
-            t = drugsBase().actualDatabaseInformations()->compatVersion;
+            t = drugsBase().actualDatabaseInformation()->compatVersion;
             dbInfoAttribs += QString("compatWithFreeDiamsVersion=\"%1\" ").arg(t.replace("\"","'"));
-            t = drugsBase().actualDatabaseInformations()->complementaryWebsite;
+            t = drugsBase().actualDatabaseInformation()->complementaryWebsite;
             dbInfoAttribs += QString("complementaryWebSite=\"%1\" ").arg(t.replace("\"","'"));
-            dbInfoAttribs += QString("date=\"%1\" ").arg(drugsBase().actualDatabaseInformations()->date.toString(Qt::ISODate));
-            t = drugsBase().actualDatabaseInformations()->provider;
+            dbInfoAttribs += QString("date=\"%1\" ").arg(drugsBase().actualDatabaseInformation()->date.toString(Qt::ISODate));
+            t = drugsBase().actualDatabaseInformation()->provider;
             dbInfoAttribs += QString("provider=\"%1\" ").arg(t.replace("\"","'"));
-            t = drugsBase().actualDatabaseInformations()->weblink;
+            t = drugsBase().actualDatabaseInformation()->weblink;
             dbInfoAttribs += QString("webLink=\"%1\" ").arg(t.replace("\"","'"));
-            t = drugsBase().actualDatabaseInformations()->packUidName;
+            t = drugsBase().actualDatabaseInformation()->packUidName;
             dbInfoAttribs += QString("packUidName=\"%1\" ").arg(t.replace("\"","'"));
-            t = drugsBase().actualDatabaseInformations()->drugsUidName;
+            t = drugsBase().actualDatabaseInformation()->drugsUidName;
             dbInfoAttribs += QString("drugUidName=\"%1\" ").arg(t.replace("\"","'"));
         } else {
             dbName = Constants::DB_DEFAULT_IDENTIFIANT;
@@ -1006,22 +1006,22 @@ QString DrugsIO::prescriptionToXml(DrugsDB::DrugsModel *m, const QString &xmlExt
 //    // Add drugsBase information
 //    QString dbName;
 //    QString dbInfoAttribs;
-//    if (drugsBase().actualDatabaseInformations()) {
-//        dbName = drugsBase().actualDatabaseInformations()->identifiant;
-//        QString t = drugsBase().actualDatabaseInformations()->version;
+//    if (drugsBase().actualDatabaseInformation()) {
+//        dbName = drugsBase().actualDatabaseInformation()->identifiant;
+//        QString t = drugsBase().actualDatabaseInformation()->version;
 //        dbInfoAttribs += QString("version=\"%1\" ").arg(t.replace("\"","'"));
-//        t = drugsBase().actualDatabaseInformations()->compatVersion;
+//        t = drugsBase().actualDatabaseInformation()->compatVersion;
 //        dbInfoAttribs += QString("compatWithFreeDiamsVersion=\"%1\" ").arg(t.replace("\"","'"));
-//        t = drugsBase().actualDatabaseInformations()->complementaryWebsite;
+//        t = drugsBase().actualDatabaseInformation()->complementaryWebsite;
 //        dbInfoAttribs += QString("complementaryWebSite=\"%1\" ").arg(t.replace("\"","'"));
-//        dbInfoAttribs += QString("date=\"%1\" ").arg(drugsBase().actualDatabaseInformations()->date.toString(Qt::ISODate));
-//        t = drugsBase().actualDatabaseInformations()->provider;
+//        dbInfoAttribs += QString("date=\"%1\" ").arg(drugsBase().actualDatabaseInformation()->date.toString(Qt::ISODate));
+//        t = drugsBase().actualDatabaseInformation()->provider;
 //        dbInfoAttribs += QString("provider=\"%1\" ").arg(t.replace("\"","'"));
-//        t = drugsBase().actualDatabaseInformations()->weblink;
+//        t = drugsBase().actualDatabaseInformation()->weblink;
 //        dbInfoAttribs += QString("webLink=\"%1\" ").arg(t.replace("\"","'"));
-//        t = drugsBase().actualDatabaseInformations()->packUidName;
+//        t = drugsBase().actualDatabaseInformation()->packUidName;
 //        dbInfoAttribs += QString("packUidName=\"%1\" ").arg(t.replace("\"","'"));
-//        t = drugsBase().actualDatabaseInformations()->drugsUidName;
+//        t = drugsBase().actualDatabaseInformation()->drugsUidName;
 //        dbInfoAttribs += QString("drugUidName=\"%1\" ").arg(t.replace("\"","'"));
 //    } else {
 //        dbName = Constants::DB_DEFAULT_IDENTIFIANT;

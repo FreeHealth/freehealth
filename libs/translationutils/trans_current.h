@@ -69,8 +69,8 @@ const char* const LOADING_SETTINGS                  = QT_TRANSLATE_NOOP("tkConst
 const char* const SAVING_SETTINGS                   = QT_TRANSLATE_NOOP("tkConstants", "Settings recovered" );
 const char* const CREATING_DEFAULT_SETTINGS_FOR_1   = QT_TRANSLATE_NOOP("tkConstants", "Creating default settings for %1");
 const char* const SHOW_DETAILS                      = QT_TRANSLATE_NOOP("tkConstants", "Show details");
-const char* const MORE_INFORMATIONS                 = QT_TRANSLATE_NOOP("tkConstants", "More information");
-const char* const HIDE_EXTRA_INFORMATIONS           = QT_TRANSLATE_NOOP("tkConstants", "Hide extra information");
+const char* const MORE_INFORMATION                  = QT_TRANSLATE_NOOP("tkConstants", "More information");
+const char* const HIDE_EXTRA_INFORMATION            = QT_TRANSLATE_NOOP("tkConstants", "Hide extra information");
 
 // Print related
 const char* const HEADER                            = QT_TRANSLATE_NOOP("tkConstants", "Header");

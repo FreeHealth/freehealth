@@ -132,7 +132,7 @@ void ControlReceipts::deleteLine(){
       }
   }
   if(m_accountModel->removeRows(rowToDelete,1,QModelIndex())) {
-      Utils::informativeMessageBox(tkTr(Trans::Constants::INFORMATIONS), tr("Line deleted."));
+      Utils::informativeMessageBox(tkTr(Trans::Constants::INFORMATION), tr("Line deleted."));
   }
   QString textResult = textOfSums(m_accountModel);
   ui->resultLabel->setText(textResult);
@@ -206,11 +206,11 @@ QString ControlReceipts::textOfSums(AccountModel * model){
     }
 
 void ControlReceipts::printDues(){
-    Utils::informativeMessageBox(tkTr(Trans::Constants::INFORMATIONS), tkTr(Trans::Constants::FEATURE_NOT_IMPLEMENTED));
+    Utils::informativeMessageBox(tkTr(Trans::Constants::INFORMATION), tkTr(Trans::Constants::FEATURE_NOT_IMPLEMENTED));
 }
 
 void ControlReceipts::print(){
-    Utils::informativeMessageBox(tkTr(Trans::Constants::INFORMATIONS), tkTr(Trans::Constants::FEATURE_NOT_IMPLEMENTED));
+    Utils::informativeMessageBox(tkTr(Trans::Constants::INFORMATION), tkTr(Trans::Constants::FEATURE_NOT_IMPLEMENTED));
 }
 
 void ControlReceipts::coloringDoubles(){

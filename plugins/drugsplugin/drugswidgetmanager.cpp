@@ -146,8 +146,8 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
         aToggleTestingDrugs(0),
         aChangeDuration(0),
         aToTemplate(0),
-        aDrugsDatabaseInformations(0),
-        aDosagesDatabaseInformations(0),
+        aDrugsDatabaseInformation(0),
+        aDosagesDatabaseInformation(0),
         gModes(0),
         aPrescriberMode(0),
         aSelectOnlyMode(0),
@@ -345,27 +345,27 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
     cmd->setTranslations(Trans::Constants::DURATION);
     connect(aChangeDuration,SIGNAL(triggered()),this,SLOT(changeDuration()));
 
-    // Databases informations
+    // Databases information
     Core::ActionContainer *hmenu = actionManager()->actionContainer(Core::Constants::M_HELP_DATABASES);
-    a = aDrugsDatabaseInformations = new QAction(this);
+    a = aDrugsDatabaseInformation = new QAction(this);
     a->setIcon(th->icon(Core::Constants::ICONHELP));
-    cmd = actionManager()->registerAction(a, DrugsWidget::Constants::A_DRUGSDATABASE_INFORMATIONS, QList<int>() << Core::Constants::C_GLOBAL_ID);
-    cmd->setTranslations(Trans::Constants::DRUGS_DATABASE_INFORMATIONS);
+    cmd = actionManager()->registerAction(a, DrugsWidget::Constants::A_DRUGSDATABASE_INFORMATION, QList<int>() << Core::Constants::C_GLOBAL_ID);
+    cmd->setTranslations(Trans::Constants::DRUGS_DATABASE_INFORMATION);
     cmd->retranslate();
     if (hmenu) {
         hmenu->addAction(cmd, Core::Constants::G_HELP_DATABASES);
     }
-    connect(aDrugsDatabaseInformations,SIGNAL(triggered()), this, SLOT(showDrugsDatabaseInformations()));
+    connect(aDrugsDatabaseInformation,SIGNAL(triggered()), this, SLOT(showDrugsDatabaseInformation()));
 
-    a = aDosagesDatabaseInformations = new QAction(this);
+    a = aDosagesDatabaseInformation = new QAction(this);
     a->setIcon(th->icon(Core::Constants::ICONHELP));
-    cmd = actionManager()->registerAction(a, DrugsWidget::Constants::A_DOSAGESDATABASE_INFORMATIONS, QList<int>() << Core::Constants::C_GLOBAL_ID);
-    cmd->setTranslations(Trans::Constants::DOSAGES_DATABASE_INFORMATIONS);
+    cmd = actionManager()->registerAction(a, DrugsWidget::Constants::A_DOSAGESDATABASE_INFORMATION, QList<int>() << Core::Constants::C_GLOBAL_ID);
+    cmd->setTranslations(Trans::Constants::DOSAGES_DATABASE_INFORMATION);
     cmd->retranslate();
     if (hmenu) {
         hmenu->addAction(cmd, Core::Constants::G_HELP_DATABASES);
     }
-    connect(aDosagesDatabaseInformations,SIGNAL(triggered()), this, SLOT(showDosagesDatabaseInformations()));
+    connect(aDosagesDatabaseInformation,SIGNAL(triggered()), this, SLOT(showDosagesDatabaseInformation()));
 
     // Mode menu
     Core::ActionContainer *modemenu = actionManager()->actionContainer(DrugsWidget::Constants::M_PLUGINS_MODES);
@@ -626,17 +626,17 @@ void DrugsActionHandler::printPreview()
     }
 }
 
-void DrugsActionHandler::showDrugsDatabaseInformations()
+void DrugsActionHandler::showDrugsDatabaseInformation()
 {
     if (m_CurrentView) {
-        m_CurrentView->showDrugsDatabaseInformations();
+        m_CurrentView->showDrugsDatabaseInformation();
     }
 }
 
-void DrugsActionHandler::showDosagesDatabaseInformations()
+void DrugsActionHandler::showDosagesDatabaseInformation()
 {
     if (m_CurrentView) {
-        m_CurrentView->showDosagesDatabaseInformations();
+        m_CurrentView->showDosagesDatabaseInformation();
     }
 }
 

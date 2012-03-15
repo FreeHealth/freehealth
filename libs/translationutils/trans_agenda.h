@@ -35,7 +35,7 @@ namespace Constants {
 const char * const AGENDA = QT_TRANSLATE_NOOP("tkConstants", "Agenda");
 const char * const AGENDA_EVENT = QT_TRANSLATE_NOOP("tkConstants", "Agenda event");
 const char * const AGENDA_EVENTS = QT_TRANSLATE_NOOP("tkConstants", "Agenda events");
-const char * const AGENDA_DATABASE_INFORMATIONS = QT_TRANSLATE_NOOP("tkConstants", "Agenda database information");
+const char * const AGENDA_DATABASE_INFORMATION = QT_TRANSLATE_NOOP("tkConstants", "Agenda database information");
 const char * const NO_AVAILABILITY = QT_TRANSLATE_NOOP("tkConstants", "No availability");
 const char * const ATTENDEE = QT_TRANSLATE_NOOP("tkConstants", "Attendee");
 const char * const ATTENDEES = QT_TRANSLATE_NOOP("tkConstants", "Attendees");

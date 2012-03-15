@@ -70,7 +70,7 @@ QWidget *BuildAboutPage::createPage(QWidget *parent)
     tree->clear();
     QFont f;
     f.setBold(true);
-    QTreeWidgetItem *compilItem = new QTreeWidgetItem( tree, QStringList() << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_INFORMATIONS) );
+    QTreeWidgetItem *compilItem = new QTreeWidgetItem( tree, QStringList() << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_INFORMATION) );
     compilItem->setFont(0,f);
     new QTreeWidgetItem( compilItem, QStringList() << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_DATE_TIME_1_2).arg(__DATE__, __TIME__));
     if (Utils::isDebugCompilation()) {
@@ -79,7 +79,7 @@ QWidget *BuildAboutPage::createPage(QWidget *parent)
         new QTreeWidgetItem( compilItem, QStringList() << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_RELEASE) );
     }
 
-    QTreeWidgetItem *versionItem = new QTreeWidgetItem( tree, QStringList() << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_VERSION_INFORMATIONS) );
+    QTreeWidgetItem *versionItem = new QTreeWidgetItem( tree, QStringList() << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_VERSION_INFORMATION) );
     versionItem->setFont(0,f);
     new QTreeWidgetItem( versionItem, QStringList() << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_VERSION_1).arg(qApp->applicationVersion()));
     if (Utils::isFullApplication()) {

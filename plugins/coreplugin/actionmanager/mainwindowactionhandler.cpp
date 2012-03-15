@@ -589,7 +589,7 @@ void MainWindowActionHandler::createPatientMenu()
     ActionContainer *menu = actionManager()->createMenu(Constants::M_PATIENTS);
     menu->appendGroup(Core::Constants::G_PATIENTS);
     menu->appendGroup(Core::Constants::G_PATIENT_NAVIGATION);
-    menu->appendGroup(Core::Constants::G_PATIENT_INFORMATIONS);
+    menu->appendGroup(Core::Constants::G_PATIENT_INFORMATION);
 
     menubar->addMenu(menu, Constants::G_PATIENTS);
     menu->setTranslations(Trans::Constants::PATIENTS);
@@ -1283,7 +1283,7 @@ bool MainWindowActionHandler::updateFound()
     cmd->retranslate();
     Core::ICore::instance()->contextManager()->updateContext();
     if (up)
-        connect(a, SIGNAL(triggered()), up, SLOT(showUpdateInformations()));
+        connect(a, SIGNAL(triggered()), up, SLOT(showUpdateInformation()));
     return true;
 }
 

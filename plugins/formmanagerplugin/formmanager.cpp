@@ -463,7 +463,7 @@ FormActionHandler::FormActionHandler(QObject *parent) :
     cmd->setTranslations(Constants::SHOWPATIENTSYNTHESIS_TEXT, Constants::SHOWPATIENTSYNTHESIS_TEXT, Constants::FORM_TR_CONTEXT);
     Core::ActionContainer *menu = actionManager()->actionContainer(Core::Constants::M_PATIENTS);
     if (menu)
-        menu->addAction(cmd, Patients::Constants::G_PATIENTS_INFORMATIONS);
+        menu->addAction(cmd, Patients::Constants::G_PATIENTS_INFORMATION);
 //    connect(cmd->action(), SIGNAL(triggered()), this, SLOT(showPatientSynthesis()));
 
     a = aShowPatientLastEpisode = new QAction(this);
@@ -473,7 +473,7 @@ FormActionHandler::FormActionHandler(QObject *parent) :
     cmd = am->registerAction(a, Constants::A_SHOWPATIENTLASTEPISODES, globalcontext);
     cmd->setTranslations(Constants::SHOWPATIENTLASTEPISODES_TEXT, Constants::SHOWPATIENTLASTEPISODES_TEXT, Constants::FORM_TR_CONTEXT);
     if (menu)
-        menu->addAction(cmd, Patients::Constants::G_PATIENTS_INFORMATIONS);
+        menu->addAction(cmd, Patients::Constants::G_PATIENTS_INFORMATION);
     connect(cmd->action(), SIGNAL(triggered()), this, SLOT(showPatientLastEpisode()));
 
     contextManager()->updateContext();

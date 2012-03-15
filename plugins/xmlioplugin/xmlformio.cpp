@@ -220,9 +220,9 @@ bool XmlFormIO::canReadScripts(const Form::FormIOQuery &query) const
     return true;
 }
 
-Form::FormIODescription *XmlFormIO::readFileInformations(const QString &uuidOrAbsPath) const
+Form::FormIODescription *XmlFormIO::readFileInformation(const QString &uuidOrAbsPath) const
 {
-    return reader()->readFileInformations(uuidOrAbsPath);
+    return reader()->readFileInformation(uuidOrAbsPath);
 }
 
 QList<Form::FormIODescription *> XmlFormIO::getFormFileDescriptions(const Form::FormIOQuery &query) const
@@ -246,7 +246,7 @@ QList<Form::FormIODescription *> XmlFormIO::getFormFileDescriptions(const Form::
         XmlFormName &form = formName(query.formUuid(), m_FormNames);
 //        XmlFormName form(query.formUuid());
         if (canReadForms(query)) {
-            Form::FormIODescription *desc = reader()->readFileInformations(form.absFileName, query);
+            Form::FormIODescription *desc = reader()->readFileInformation(form.absFileName, query);
             if (desc) {
                 desc->setData(Form::FormIODescription::IsCompleteForm, true);
                 toReturn.append(desc);
@@ -272,7 +272,7 @@ QList<Form::FormIODescription *> XmlFormIO::getFormFileDescriptions(const Form::
                     continue;
 
                 if (canReadForms(fileName)) {
-                    Form::FormIODescription *desc = reader()->readFileInformations(fileName);
+                    Form::FormIODescription *desc = reader()->readFileInformation(fileName);
                     if (desc) {
                         desc->setData(Form::FormIODescription::IsCompleteForm, true);
                         toReturn.append(desc);
@@ -295,7 +295,7 @@ QList<Form::FormIODescription *> XmlFormIO::getFormFileDescriptions(const Form::
                     continue;
 
                 if (canReadForms(fileName)) {
-                    Form::FormIODescription *desc = reader()->readFileInformations(fileName);
+                    Form::FormIODescription *desc = reader()->readFileInformation(fileName);
                     if (desc) {
                         desc->setData(Form::FormIODescription::IsSubForm, true);
                         toReturn.append(desc);

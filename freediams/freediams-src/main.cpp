@@ -131,7 +131,7 @@ int main( int argc, char *argv[] )
 
     // --exchange-in=../../../../global_resources/textfiles/dataintest.xml --config=../../../../global_resources/config.ini
 
-    // Add some debugging informations
+    // Add some debugging information
     defineLibraryPaths();
     LOG_FOR("Main","looking for libraries in path : " + qApp->libraryPaths().join(";"));
     LOG_FOR("Main","Command line : " + qApp->arguments().join(" "));

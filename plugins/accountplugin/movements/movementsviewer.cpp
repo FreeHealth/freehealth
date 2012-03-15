@@ -170,7 +170,7 @@ void MovementsViewer::recordMovement()
     if (!mov.insertIntoMovements(hashValues)) {
         Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("Movement not inserted."));
     } else {
-        Utils::informativeMessageBox(tkTr(Trans::Constants::INFORMATIONS), tr("Movement deleted."));
+        Utils::informativeMessageBox(tkTr(Trans::Constants::INFORMATION), tr("Movement deleted."));
     }
     showMovements();
 }
@@ -193,7 +193,7 @@ void MovementsViewer::deleteMovement()
     if (!mov.deleteMovement(row,year)) {
         Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("Movement is not deleted."));
     }  else {
-        Utils::informativeMessageBox(tkTr(Trans::Constants::INFORMATIONS), tr("Movement deleted."));
+        Utils::informativeMessageBox(tkTr(Trans::Constants::INFORMATION), tr("Movement deleted."));
     }
     showMovements();
 }
@@ -209,7 +209,7 @@ void MovementsViewer::validMovement()
     if (!mov.validMovement(row)) {
         Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("Movement is not validated."));
     } else {
-        Utils::informativeMessageBox(tkTr(Trans::Constants::INFORMATIONS), tr("Movement validated."));
+        Utils::informativeMessageBox(tkTr(Trans::Constants::INFORMATION), tr("Movement validated."));
     }
     showMovements();
 }

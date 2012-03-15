@@ -213,7 +213,7 @@ void DrugSelector::refreshAvailableDrugsDatabaseButtons()
 
     // Create drug database selector toolbutton
     QAction *defaultAction = 0;
-    QVector<DrugsDB::DatabaseInfos *> list = drugsBase().getAllDrugSourceInformations();
+    QVector<DrugsDB::DatabaseInfos *> list = drugsBase().getAllDrugSourceInformation();
     for(int i=0; i < list.count(); ++i) {
         DrugsDB::DatabaseInfos *info = list.at(i);
         QAction *a = new QAction(this);
@@ -222,7 +222,7 @@ void DrugSelector::refreshAvailableDrugsDatabaseButtons()
         a->setData(info->identifier);
         a->setIcon(theme()->icon("/flags/"+info->lang_country.mid(3)+".png"));
         drugsDatabaseSelectorButton->addAction(a);
-        if (info->identifier==drugsBase().actualDatabaseInformations()->identifier) {
+        if (info->identifier==drugsBase().actualDatabaseInformation()->identifier) {
             defaultAction = a;
         }
     }

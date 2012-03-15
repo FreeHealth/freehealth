@@ -60,9 +60,9 @@ namespace Constants {
     const char* const   A_SEARCH_INN            = "a.Drugs.SearchINN";
     const char* const   A_PRINT_PRESCRIPTION    = "a.Drugs.PrintPrescr";
     const char* const   A_TOGGLE_TESTINGDRUGS   = "a.Drugs.ToggleTestings";
-    const char* const   A_DRUGSDATABASE_INFORMATIONS = "a.Drugs.DrugsDbInfos";
-    const char* const   A_DOSAGESDATABASE_INFORMATIONS = "a.Drugs.ProtocolDbInfos";
-    const char* const   A_IAMDATABASE_INFORMATIONS = "a.Drugs.IAMDbInfos";
+    const char* const   A_DRUGSDATABASE_INFORMATION = "a.Drugs.DrugsDbInfo";
+    const char* const   A_DOSAGESDATABASE_INFORMATION = "a.Drugs.ProtocolDbInfo";
+    const char* const   A_IAMDATABASE_INFORMATION = "a.Drugs.IAMDbInfo";
     const char* const   A_PRESCRIBERMODE        = "a.Drugs.PrescriberMode";
     const char* const   A_SELECTONLYMODE        = "a.Drugs.SelectOnlyMode";
     const char* const   A_OPENDOSAGEDIALOG      = "a.Drugs.OpenDosage";

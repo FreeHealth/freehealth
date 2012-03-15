@@ -391,8 +391,8 @@ void MainWindow::extensionsInitialized()
 
     // Manage patient datas
     m_ui->morePatientInfoButton->setIcon(theme()->icon(Core::Constants::ICONADD));
-    m_ui->morePatientInfoButton->setToolTip(tkTr(Trans::Constants::TOGGLE_PATIENT_INFORMATIONS));
-    m_ui->patientInformations->hide();
+    m_ui->morePatientInfoButton->setToolTip(tkTr(Trans::Constants::TOGGLE_PATIENT_INFORMATION));
+    m_ui->patientInformation->hide();
     m_ui->clearPatient->setIcon(theme()->icon(Core::Constants::ICONCLEAR));
     m_ui->clearPatient->setToolTip(tkTr(Trans::Constants::CLEAR_PATIENT_INFOS));
     connect(m_ui->clearPatient, SIGNAL(clicked()), this, SLOT(clearPatientInfos()));
@@ -625,7 +625,7 @@ void MainWindow::changeEvent(QEvent *event)
         m_ui->m_CentralWidget->blockSignals(state);
         m_ui->patientClCr->blockSignals(state);
         m_ui->patientCreatinin->blockSignals(state);
-        m_ui->patientInformations->blockSignals(state);
+        m_ui->patientInformation->blockSignals(state);
         m_ui->patientName->blockSignals(state);
         m_ui->patientSize->blockSignals(state);
         m_ui->patientFirstname->blockSignals(state);
@@ -644,7 +644,7 @@ void MainWindow::changeEvent(QEvent *event)
         m_ui->m_CentralWidget->blockSignals(state);
         m_ui->patientClCr->blockSignals(state);
         m_ui->patientCreatinin->blockSignals(state);
-        m_ui->patientInformations->blockSignals(state);
+        m_ui->patientInformation->blockSignals(state);
         m_ui->patientName->blockSignals(state);
         m_ui->patientSize->blockSignals(state);
         m_ui->patientFirstname->blockSignals(state);
