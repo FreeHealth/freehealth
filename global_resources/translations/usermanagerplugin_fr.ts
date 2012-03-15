@@ -907,7 +907,7 @@ Vous devez en utiliser un différent.</translation>
     <message>
         <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="515"/>
         <source>%1 chars</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 caractères</translation>
     </message>
     <message>
         <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="521"/>
