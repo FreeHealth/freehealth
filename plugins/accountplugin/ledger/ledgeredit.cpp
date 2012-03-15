@@ -71,7 +71,7 @@ LedgerEdit::LedgerEdit(QWidget * parent):QWidget(parent),ui(new Ui::LedgerEditWi
         }
     ui->yearComboBox->addItems(listOfYears);
     ui->infoLabel->setText("");
-    emit choosenDate(currentDate);
+    emit chosenDate(currentDate);
     fillInfoLabel("");
     m_doc = new QTextDocument(ui->textEdit);
     QPalette p = palette();
@@ -85,7 +85,7 @@ LedgerEdit::LedgerEdit(QWidget * parent):QWidget(parent),ui(new Ui::LedgerEditWi
     connect(ui->quitButton,SIGNAL(pressed()),this,SLOT(close()));
     connect(ui->showButton,SIGNAL(pressed()),this,SLOT(showLedger()));
     connect(ui->printButton,SIGNAL(pressed()),this,SLOT(printLedger()));
-    connect(ui->yearComboBox,SIGNAL(currentIndexChanged(const QString &)),this,SLOT(choosenDate(const QString &)));
+    connect(ui->yearComboBox,SIGNAL(currentIndexChanged(const QString &)),this,SLOT(chosenDate(const QString &)));
 }
 
 LedgerEdit::~LedgerEdit(){
@@ -129,7 +129,7 @@ void LedgerEdit::printLedger(){
     p->print(m_doc, m_typeOfPaper, m_duplicata);    
 }
 
-void LedgerEdit::choosenDate(const QString & dateText){
+void LedgerEdit::chosenDate(const QString & dateText){
     ////qDebug() << __FILE__ << QString::number(__LINE__) << " dateText =" << dateText ;
     m_date = QDate::fromString(dateText,"yyyy");
 }

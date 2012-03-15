@@ -53,17 +53,17 @@ class ACCOUNT_EXPORT receiptsManager : public QObject
   QHash<QString,QVariant> getDistanceRules();
   QHash<QString,QVariant> getHashOfThesaurus();
   QHash<QString,QString> getPreferentialActFromThesaurus(const QString & userUuid);
-  bool getPreferedValues();
-  QVariant getPreferedDistanceRule();
+  bool getpreferredValues();
+  QVariant getpreferredDistanceRule();
   //QString createTablesAndFields();
   //bool writeAllDefaultsValues();
   QStringList getChoiceFromCategories(QString &);
   QString getStringPerferedActAndValues(const QString & act);
-  QVariant m_preferedInsurance;
-  QVariant m_preferedSite;
-  QVariant m_preferedDistanceRule;
-  QVariant m_preferedDistanceValue;
-  QVariant m_preferedInsuranceUid;
+  QVariant m_preferredInsurance;
+  QVariant m_preferredSite;
+  QVariant m_preferredDistanceRule;
+  QVariant m_preferredDistanceValue;
+  QVariant m_preferredInsuranceUid;
   QString m_rbmReq;
 
 };

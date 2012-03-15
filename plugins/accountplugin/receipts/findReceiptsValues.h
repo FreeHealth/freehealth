@@ -56,7 +56,7 @@ public:
     QHash<QString,QString> returnValuesHash();
     findReceiptsValues(QWidget * parent = 0);
     ~findReceiptsValues();
-    QHash<QString,QString> getChoosenValues();
+    QHash<QString,QString> getchosenValues();
     void clear();
 private:
     Ui::findValueDialog * ui;
@@ -64,7 +64,7 @@ private:
     QSqlDatabase m_db;
     double m_modifier;
     QHash<int,QString> m_hashExplanations;
-    QHash<QString,QString> m_hashValuesChoosen;
+    QHash<QString,QString> m_hashValueschosen;
     void initialize();
     void fillComboCategories();
     bool tableViewIsFull(QAbstractItemModel * model);
@@ -75,7 +75,7 @@ private slots:
 //    void chooseValue(const QModelIndex& index);
     void chooseValue();
     void deleteValue();
-//    void supprItemChoosen(QListWidgetItem * item);
+//    void supprItemchosen(QListWidgetItem * item);
     void showToolTip(const QModelIndex & index);
     void on_lineEditFilter_textChanged(const QString & text);
     void showNext();

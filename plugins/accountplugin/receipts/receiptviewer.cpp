@@ -312,9 +312,9 @@ namespace InternalAmount {
 
 treeViewsActions::treeViewsActions(QWidget *parent):QTreeView(parent){
     m_deleteThesaurusValue = new QAction(trUtf8("Delete this value."),this);
-    m_choosePreferedValue = new QAction(trUtf8("Choose this value like the preferred."),this);
+    m_choosepreferredValue = new QAction(trUtf8("Choose this value like the preferred."),this);
     m_userUuid = user()->uuid();
-    connect(m_choosePreferedValue,SIGNAL(triggered(bool)),this,SLOT(choosePreferedValue(bool)));
+    connect(m_choosepreferredValue,SIGNAL(triggered(bool)),this,SLOT(choosepreferredValue(bool)));
     connect(m_deleteThesaurusValue,SIGNAL(triggered(bool)),this,SLOT(deleteBox(bool)));
     connect(user(), SIGNAL(userChanged()), this, SLOT(userIsChanged()));
     }
@@ -338,7 +338,7 @@ void treeViewsActions::userIsChanged(){
             if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " in treeview right button " ;
             m_menuRightClic = new QMenu(this); 
-            m_menuRightClic -> addAction(m_choosePreferedValue);
+            m_menuRightClic -> addAction(m_choosepreferredValue);
             m_menuRightClic-> addAction(m_deleteThesaurusValue);
             m_menuRightClic->exec(event->globalPos());
             blockSignals(false);
@@ -362,7 +362,7 @@ void treeViewsActions::mouseReleaseEvent(QMouseEvent *event){
             if (WarnDebugMessage)
                 qDebug() << __FILE__ << QString::number(__LINE__) << " in treeview release right button " ;
             m_menuRightClic = new QMenu(this);
-            m_menuRightClic -> addAction(m_choosePreferedValue);
+            m_menuRightClic -> addAction(m_choosepreferredValue);
             m_menuRightClic-> addAction(m_deleteThesaurusValue);
             m_menuRightClic->exec(event->globalPos());
             blockSignals(false);
@@ -388,19 +388,19 @@ void treeViewsActions::deleteBox(bool b){
     }
 }
 
-void treeViewsActions::choosePreferedValue(bool b){
+void treeViewsActions::choosepreferredValue(bool b){
     Q_UNUSED(b);
     bool yes = Utils::yesNoMessageBox(tr("Do you want to set this item as preferred value ?"),
                            tr("Do you want to set this item as preferred value ?"));
     if (yes) {
         QModelIndex index = currentIndex();
-        if (!addPreferedItem(index)) {
+        if (!addpreferredItem(index)) {
             Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("Unable to set this item as the preferred one."));
         }
     }
 } 
 
-bool treeViewsActions::addPreferedItem(QModelIndex &index){
+bool treeViewsActions::addpreferredItem(QModelIndex &index){
     bool ret = true;
     QString data = index.data().toString();
     receiptsEngine r;
@@ -585,7 +585,8 @@ void treeViewsActions::changeEvent(QEvent *e) {
 ///LISTVIEW
 ///////////////////////////////////////////////////////////////
 
-ChoosenListView::ChoosenListView(QObject * parent,InternalAmount::AmountModel *amountModel){
+ChosenListView::ChosenListView(QObject * parent,InternalAmount::AmountModel *amountModel) {
+    setObjectName("ChosenListView");
     m_deleteInReturnedList = new QAction(trUtf8("Delete this item"),this);
     m_clear = new QAction(trUtf8("Clear all."),this);
     m_amountModel = amountModel;
@@ -593,9 +594,9 @@ ChoosenListView::ChoosenListView(QObject * parent,InternalAmount::AmountModel *a
     connect(m_deleteInReturnedList,SIGNAL(triggered(bool)),this,SLOT(deleteItem(bool)));
 }
 
-ChoosenListView::~ChoosenListView(){}
+ChosenListView::~ChosenListView(){}
 
-void ChoosenListView::changeEvent(QEvent *e) {
+void ChosenListView::changeEvent(QEvent *e) {
     QWidget::changeEvent(e);
     if (e->type()==QEvent::LanguageChange) {
         m_deleteInReturnedList = new QAction(trUtf8("Delete this item"),this);
@@ -606,7 +607,7 @@ void ChoosenListView::changeEvent(QEvent *e) {
         }
 }
 
-void ChoosenListView::mousePressEvent(QMouseEvent *event){
+void ChosenListView::mousePressEvent(QMouseEvent *event){
   if(event->button() == Qt::RightButton){
     if (WarnDebugMessage)
     	      qDebug() << "in right clic" << __FILE__ << QString::number(__LINE__) ;
@@ -621,7 +622,7 @@ void ChoosenListView::mousePressEvent(QMouseEvent *event){
       }
 }
 
-void ChoosenListView::deleteItem(bool b)
+void ChosenListView::deleteItem(bool b)
 {
     Q_UNUSED(b);
     QModelIndex index = currentIndex();
@@ -702,11 +703,11 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
         if (WarnDebugMessage)
                 qWarning() << __FILE__ << QString::number(__LINE__) << "index is not valid";
         }
-    m_returnedListView = new ChoosenListView(this,m_model);
+    m_returnedListView = new ChosenListView(this,m_model);
     m_returnedListView->setStyleSheet("background-color: rgb(201, 201, 201)");
     m_vboxForList = new QVBoxLayout;
     m_vboxForList->addWidget(m_returnedListView);
-    ui->choosenValuesBox->setLayout(m_vboxForList);
+    ui->chosenValuesBox->setLayout(m_vboxForList);
     m_modelReturnedList = new QStringListModel;
     m_returnedListView->setModel(m_modelReturnedList);
     m_returnedListView->setEnabled(true);
@@ -715,10 +716,10 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
     QString site = QString("Sites");
     QString distRule = QString("Distance rules");
     QString debtor = QString("Debtor");
-    m_siteUid = firstItemChoosenAsPreferential(site);
-    m_distanceRuleValue = firstItemChoosenAsPreferential(distRule).toDouble();
-    m_distanceRuleType = rManager.getPreferedDistanceRule().toString();
-    m_insuranceUid = firstItemChoosenAsPreferential(debtor);
+    m_siteUid = firstItemchosenAsPreferential(site);
+    m_distanceRuleValue = firstItemchosenAsPreferential(distRule).toDouble();
+    m_distanceRuleType = rManager.getpreferredDistanceRule().toString();
+    m_insuranceUid = firstItemchosenAsPreferential(debtor);
     if (WarnDebugMessage)
         qDebug() << __FILE__ << QString::number(__LINE__)
                  << " site,dist,ins preferred =" << m_siteUid.toString()
@@ -818,7 +819,7 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex & index) {
         if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " in findReceiptsValues AND VALUES "  ;
         if(rv->exec() == QDialog::Accepted) {
-            hashOfValues = rv -> getChoosenValues();
+            hashOfValues = rv -> getchosenValues();
             choiceDialog choice(rv,false);
             if(hashOfValues.keys().size() > 0){
                 if(choice.exec() == QDialog::Accepted){
@@ -1197,21 +1198,21 @@ void ReceiptViewer::clearAll(bool b)
     m_model->removeRows(0,m_model->rowCount(QModelIndex()),QModelIndex());
 }
 
-QVariant ReceiptViewer::firstItemChoosenAsPreferential(QString & item)
+QVariant ReceiptViewer::firstItemchosenAsPreferential(QString & item)
 {
     QVariant variantValue = QVariant("No item");
     receiptsManager manager;
     if (item == "Distance rules")
     {
-    	  variantValue = manager.m_preferedDistanceValue;
+    	  variantValue = manager.m_preferredDistanceValue;
         }
     if (manager.getHashOfSites().keys().contains(item))
     {
-    	  variantValue = manager.m_preferedSite;
+    	  variantValue = manager.m_preferredSite;
         }
     if (manager.getHashOfInsurance().keys().contains(item))
     {
-    	  variantValue = manager.m_preferedInsurance;
+    	  variantValue = manager.m_preferredInsurance;
         }
     return variantValue;
 }

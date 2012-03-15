@@ -149,7 +149,7 @@
     </spacer>
    </item>
    <item row="4" column="0">
-    <widget class="QLabel" name="preferedLabel">
+    <widget class="QLabel" name="preferredLabel">
      <property name="text">
       <string>Preferred: 
 yes = 1
@@ -158,7 +158,7 @@ no = 0</string>
     </widget>
    </item>
    <item row="4" column="1">
-    <widget class="QSpinBox" name="preferedSpinBox"/>
+    <widget class="QSpinBox" name="preferredSpinBox"/>
    </item>
    <item row="5" column="0">
     <widget class="QLabel" name="minKmLabel">

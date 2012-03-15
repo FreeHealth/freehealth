@@ -33,7 +33,7 @@
 #include "constants.h"
 #include "accountcontextualwidget.h"
 
-#include <accountplugin/receipts/preferedreceipts.h>
+#include <accountplugin/receipts/preferredreceipts.h>
 #include <accountplugin/receipts/receiptviewer.h>
 #include <accountplugin/assets/assetsViewer.h>
 #include <accountplugin/ledger/ledgerviewer.h>
@@ -267,7 +267,7 @@ void AccountActionHandler::addReceipts()
     QWidget *w = mainWindow()->centralWidget();
     delete w;
     w = 0;
-    mainWindow()->setCentralWidget(new PreferedReceipts(mainWindow()));   
+    mainWindow()->setCentralWidget(new preferredReceipts(mainWindow()));   
 }
 
 void AccountActionHandler::receipts()
@@ -312,7 +312,7 @@ void AccountActionHandler::account(){
 void AccountActionHandler::addReceipts()
 {
     AccountMode *accMode = qobject_cast<AccountMode*>(modeManager()->mode(Core::Constants::MODE_ACCOUNT));
-    accMode->setCentralWidget(new PreferedReceipts(mainWindow()));
+    accMode->setCentralWidget(new preferredReceipts(mainWindow()));
     modeManager()->activateMode(Core::Constants::MODE_ACCOUNT);
 }
 

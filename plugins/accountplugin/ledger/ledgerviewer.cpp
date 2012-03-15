@@ -283,7 +283,7 @@ void LedgerViewer::monthsComboBoxcurrentIndexChanged(const QString& month){
         Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("Choose an action."));
         return;
     } else {
-        QAction * choosenAction = m_hashTextAndAction.value(m_actionText);
-        choosenAction->activate(QAction::Trigger);
+        QAction * chosenAction = m_hashTextAndAction.value(m_actionText);
+        chosenAction->activate(QAction::Trigger);
     }
 }

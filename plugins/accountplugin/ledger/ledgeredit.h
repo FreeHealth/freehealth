@@ -49,7 +49,7 @@ class LedgerEdit : public QWidget {
     private slots :
         void showLedger();
         void printLedger();
-        void choosenDate(const QString & dateText);
+        void chosenDate(const QString & dateText);
         void fillInfoLabel(const QString & textFromThread);
         void inThread();
         void getDocument();

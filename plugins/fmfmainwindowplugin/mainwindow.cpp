@@ -368,7 +368,7 @@ void MainWindow::changeEvent(QEvent *event)
         if (actionManager())
             actionManager()->retranslateMenusAndActions();
         // Save last used language
-        settings()->setValue(Core::Constants::S_PREFEREDLANGUAGE, QLocale().name().left(2));
+        settings()->setValue(Core::Constants::S_PREFERREDLANGUAGE, QLocale().name().left(2));
         settings()->sync();
     }
 }

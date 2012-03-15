@@ -63,16 +63,16 @@ public:
 private:
     void mousePressEvent(QMouseEvent *event);
     bool deleteItemFromThesaurus(QModelIndex &index);
-    bool addPreferedItem(QModelIndex &index);
+    bool addpreferredItem(QModelIndex &index);
     bool isChildOfThesaurus();
 
 private Q_SLOTS:
-    void choosePreferedValue(bool b);
+    void choosepreferredValue(bool b);
     void deleteBox(bool b);
 
 private:
     /** \create a pimpl */
-    QAction *m_choosePreferedValue;
+    QAction *m_choosepreferredValue;
     QAction *m_deleteThesaurusValue;
     QMenu *m_menuRightClic;
     QStandardItemModel *m_actionsTreeModel;
@@ -91,7 +91,7 @@ public:
       DISTRULES,
       returningModel_MaxParam
       };
-  choiceDialog(QWidget *parent = 0,bool roundtrip = false, QString preferedValue = QString());
+  choiceDialog(QWidget *parent = 0,bool roundtrip = false, QString preferredValue = QString());
   ~choiceDialog();
   double getDistanceNumber(const QString & data);
   int returnChoiceDialog();
@@ -126,7 +126,7 @@ private:
   int m_quickInt;
   QHash<int,QString> m_hashPercentages;
 private:
-  QVariant firstItemChoosenAsPreferential(QString &item);
+  QVariant firstItemchosenAsPreferential(QString &item);
 
 };
 

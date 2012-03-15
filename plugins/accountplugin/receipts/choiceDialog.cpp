@@ -56,8 +56,8 @@ static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
 
 treeViewsActions::treeViewsActions(QWidget *parent):QTreeView(parent){
     m_deleteThesaurusValue = new QAction(trUtf8("Delete this value."),this);
-    m_choosePreferedValue = new QAction(trUtf8("Choose this value like the preferred."),this);
-    connect(m_choosePreferedValue,SIGNAL(triggered(bool)),this,SLOT(choosePreferedValue(bool)));
+    m_choosepreferredValue = new QAction(trUtf8("Choose this value like the preferred."),this);
+    connect(m_choosepreferredValue,SIGNAL(triggered(bool)),this,SLOT(choosepreferredValue(bool)));
     connect(m_deleteThesaurusValue,SIGNAL(triggered(bool)),this,SLOT(deleteBox(bool)));
     }
     
@@ -68,7 +68,7 @@ void treeViewsActions::mousePressEvent(QMouseEvent *event){
         if(isChildOfThesaurus()){
             blockSignals(true);
             m_menuRightClic = new QMenu(this); 
-            m_menuRightClic -> addAction(m_choosePreferedValue);
+            m_menuRightClic -> addAction(m_choosepreferredValue);
             m_menuRightClic-> addAction(m_deleteThesaurusValue);
             m_menuRightClic->exec(event->globalPos());
             blockSignals(false);
@@ -91,19 +91,19 @@ void treeViewsActions::deleteBox(bool b){
     }
 }
 
-void treeViewsActions::choosePreferedValue(bool b){
+void treeViewsActions::choosepreferredValue(bool b){
     Q_UNUSED(b);
     bool yes = Utils::yesNoMessageBox(tr("Do you want to set this item as preferred value ?"),
                            tr("Do you want to set this item as preferred value ?"));
     if (yes) {
         QModelIndex index = currentIndex();
-        if (!addPreferedItem(index)) {
+        if (!addpreferredItem(index)) {
             Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("Unable to set this item as the preferred one."));
         }
     }
 } 
 
-bool treeViewsActions::addPreferedItem(QModelIndex &index){
+bool treeViewsActions::addpreferredItem(QModelIndex &index){
     bool ret = true;
     QString data = index.data().toString();
     receiptsEngine r;
@@ -200,10 +200,10 @@ void treeViewsActions::fillActionTreeView()
     QString site = QString("Sites");
     QString distRule = QString("Distance rules");
     QString debtor = QString("Debtor");
-    m_siteUidUid = firstItemChoosenAsPreferential(site);
-    m_distanceRuleValue = firstItemChoosenAsPreferential(distRule).toDouble();
-    m_distanceRuleType = rManager.m_preferedDistanceRule.toString();
-    m_insuranceUid = firstItemChoosenAsPreferential(debtor);else if (strMainActions == "Preferred Value")
+    m_siteUidUid = firstItemchosenAsPreferential(site);
+    m_distanceRuleValue = firstItemchosenAsPreferential(distRule).toDouble();
+    m_distanceRuleType = rManager.m_preferredDistanceRule.toString();
+    m_insuranceUid = firstItemchosenAsPreferential(debtor);else if (strMainActions == "Preferred Value")
         {
         	  QBrush red(Qt::red);
                   actionItem->setForeground(red);
@@ -273,19 +273,19 @@ bool treeViewsActions::deleteItemFromThesaurus(QModelIndex &index){
 
 
 using namespace ReceiptsConstants;
-choiceDialog::choiceDialog(QWidget * parent,bool roundtrip, QString preferedValue):QDialog(parent),ui(new Ui::ChoiceDialog){
+choiceDialog::choiceDialog(QWidget * parent,bool roundtrip, QString preferredValue):QDialog(parent),ui(new Ui::ChoiceDialog){
     ui->setupUi(this);
     ui->distanceDoubleSpinBox->hide();
     ui->distanceGroupBox->hide();
     m_percent = 100.00;
     m_percentValue = 100.00;
     receiptsManager manager;
-    manager.getPreferedValues();
+    manager.getpreferredValues();
     m_hashPercentages = manager.getPercentages();
     m_quickInt = m_hashPercentages.keys().last();
-    QString textOfPrefValue = manager.getStringPerferedActAndValues(preferedValue);
+    QString textOfPrefValue = manager.getStringPerferedActAndValues(preferredValue);
     QString labelText = "<html><body><font color = red  font size = 3>"+textOfPrefValue+"</font></body></html>";
-    if (preferedValue.isEmpty())
+    if (preferredValue.isEmpty())
     {
     	  labelText = QString("");
         }
@@ -312,11 +312,11 @@ choiceDialog::choiceDialog(QWidget * parent,bool roundtrip, QString preferedValu
     QString site = trUtf8("Sites");
     QString distRule = trUtf8("Distance rules");
     QString debtor = trUtf8("Debtor");
-    m_siteUid = firstItemChoosenAsPreferential(site);
-    m_distanceRuleValue = firstItemChoosenAsPreferential(distRule).toDouble();
-    m_distanceRuleType = manager.getPreferedDistanceRule().toString();
-    m_insurance = firstItemChoosenAsPreferential(debtor);
-    m_insuranceUid = manager.m_preferedInsuranceUid;
+    m_siteUid = firstItemchosenAsPreferential(site);
+    m_distanceRuleValue = firstItemchosenAsPreferential(distRule).toDouble();
+    m_distanceRuleType = manager.getpreferredDistanceRule().toString();
+    m_insurance = firstItemchosenAsPreferential(debtor);
+    m_insuranceUid = manager.m_preferredInsuranceUid;
     if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " m_insuranceUid =" << m_insuranceUid.toString() ;
     m_modelChoicePercentDebtorSiteDistruleValues = new QStandardItemModel(0,returningModel_MaxParam);
@@ -478,22 +478,22 @@ QStandardItemModel * choiceDialog::getChoicePercentageDebtorSiteDistruleModel(){
      return m_modelChoicePercentDebtorSiteDistruleValues;
 }
 
-QVariant choiceDialog::firstItemChoosenAsPreferential(QString & item)
+QVariant choiceDialog::firstItemchosenAsPreferential(QString & item)
 {if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " item =" << item ;
     QVariant variantValue = QVariant("No item");
     receiptsManager manager;
     if (item == trUtf8("Distance rules"))
     {
-    	  variantValue = manager.m_preferedDistanceValue;
+    	  variantValue = manager.m_preferredDistanceValue;
         }
     if (item == trUtf8("Sites"))
     {
-    	  variantValue = manager.m_preferedSite;
+    	  variantValue = manager.m_preferredSite;
         }
     if (item== trUtf8("Debtor"))
     {
-    	  variantValue = manager.m_preferedInsurance;
+    	  variantValue = manager.m_preferredInsurance;
         }
     return variantValue;
 }

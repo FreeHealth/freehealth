@@ -210,7 +210,7 @@ double receiptsEngine::getMinDistanceValue(const QString & data){
     return minDistance;
 }
 
-QHash<int,QVariant> receiptsEngine::getListOfPreferedValues(QString & userUuid,
+QHash<int,QVariant> receiptsEngine::getListOfpreferredValues(QString & userUuid,
                                                            QString & patientUid,
                                                            QString & patientName,
                                                            int choice){
@@ -223,11 +223,11 @@ QHash<int,QVariant> receiptsEngine::getListOfPreferedValues(QString & userUuid,
     double due = 0.00;
     WorkingPlacesModel modelWP(this);
     modelWP.setFilter("PREFERRED = '1'");
-    QVariant preferedSiteUid = modelWP.data(modelWP.index(0,SITES_UID),Qt::DisplayRole);
+    QVariant preferredSiteUid = modelWP.data(modelWP.index(0,SITES_UID),Qt::DisplayRole);
     InsuranceModel modelINS(this);
     modelINS.setFilter("PREFERRED = '1'");
-    QVariant preferedInsurance = modelINS.data(modelINS.index(0,INSURANCE_NAME),Qt::DisplayRole);
-    QVariant preferedInsuranceUid = modelINS.data(modelINS.index(0,INSURANCE_UID),Qt::DisplayRole);
+    QVariant preferredInsurance = modelINS.data(modelINS.index(0,INSURANCE_NAME),Qt::DisplayRole);
+    QVariant preferredInsuranceUid = modelINS.data(modelINS.index(0,INSURANCE_UID),Qt::DisplayRole);
     QVariant dateThisDay = QVariant(QDate::currentDate().toString("yyyy-MM-dd"));
     ThesaurusModel model(this);
     QString filter = QString("%1 = '%2'").arg("PREFERRED",QString::number(true));
@@ -263,26 +263,26 @@ QHash<int,QVariant> receiptsEngine::getListOfPreferedValues(QString & userUuid,
                                                                    "value\nin thesaurus\nand choose it as preferred."));
         value = -1.13;
     }
-    QVariant preferedAct = QVariant(data);
-    double preferedValue = value;
+    QVariant preferredAct = QVariant(data);
+    double preferredValue = value;
     switch(choice){
         case CASH :
-            cash = preferedValue;
+            cash = preferredValue;
             break;
         case CHECK :
-            check = preferedValue;
+            check = preferredValue;
             break;
         case VISA :
-            visa = preferedValue;
+            visa = preferredValue;
             break;
         case BANKING :
-            banking = preferedValue;
+            banking = preferredValue;
             break;
         case OTHER :
-            other = preferedValue;
+            other = preferredValue;
             break;
         case DUE :
-            due = preferedValue;
+            due = preferredValue;
             break;
         default :
             break;    
@@ -294,11 +294,11 @@ QHash<int,QVariant> receiptsEngine::getListOfPreferedValues(QString & userUuid,
     hash.insert(ACCOUNT_USER_UID,userUuid);
     hash.insert(ACCOUNT_PATIENT_UID,patientUid);
     hash.insert(ACCOUNT_PATIENT_NAME,patientName);
-    hash.insert(ACCOUNT_SITE_ID,preferedSiteUid);//AccountDB::Constants::SITES_UID
-    hash.insert(ACCOUNT_INSURANCE_ID,preferedInsuranceUid);
+    hash.insert(ACCOUNT_SITE_ID,preferredSiteUid);//AccountDB::Constants::SITES_UID
+    hash.insert(ACCOUNT_INSURANCE_ID,preferredInsuranceUid);
     hash.insert(ACCOUNT_DATE,dateThisDay);
     hash.insert(ACCOUNT_MEDICALPROCEDURE_XML, QVariant());
-    hash.insert(ACCOUNT_MEDICALPROCEDURE_TEXT,preferedAct);
+    hash.insert(ACCOUNT_MEDICALPROCEDURE_TEXT,preferredAct);
     hash.insert(ACCOUNT_COMMENT, comment);
     hash.insert(ACCOUNT_CASHAMOUNT,cash);
     hash.insert(ACCOUNT_CHEQUEAMOUNT,check);
@@ -306,7 +306,7 @@ QHash<int,QVariant> receiptsEngine::getListOfPreferedValues(QString & userUuid,
     hash.insert(ACCOUNT_INSURANCEAMOUNT,banking);
     hash.insert(ACCOUNT_OTHERAMOUNT,other);
     hash.insert(ACCOUNT_DUEAMOUNT,due);
-    hash.insert(ACCOUNT_DUEBY,preferedInsurance);
+    hash.insert(ACCOUNT_DUEBY,preferredInsurance);
     hash.insert(ACCOUNT_ISVALID,0);
     hash.insert(ACCOUNT_TRACE, QVariant());
     return hash;
@@ -417,8 +417,8 @@ QVariant receiptsEngine::getInsuranceUidFromInsurance(const QString & insurance)
     return uid;
 }
 
-QString receiptsEngine::getStringOfPreferedActAndHisValue(const QString & preferedAct){
-    QString data = preferedAct;
+QString receiptsEngine::getStringOfpreferredActAndHisValue(const QString & preferredAct){
+    QString data = preferredAct;
     if (WarnDebugMessage)
     qDebug() << __FILE__ << QString::number(__LINE__) << " prefact=" << data ;
     QStringList listOfActs;

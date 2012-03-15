@@ -126,7 +126,7 @@ DistanceRulesWidget::DistanceRulesWidget(QWidget *parent) :
     setupUi(this);
     addButton->setIcon(theme()->icon(Core::Constants::ICONADD));
     deleteButton->setIcon(theme()->icon(Core::Constants::ICONREMOVE));
-    preferedSpinBox->setRange(0,1);
+    preferredSpinBox->setRange(0,1);
     
     m_Model = new AccountDB::DistanceRulesModel(this);
     /** \todo  m_Model->setUserUuid(); */
@@ -138,7 +138,7 @@ DistanceRulesWidget::DistanceRulesWidget(QWidget *parent) :
     m_Mapper->addMapping(distanceRulesUidLabel,AccountDB::Constants::DISTRULES_UID);
     m_Mapper->addMapping(typeEdit, AccountDB::Constants::DISTRULES_TYPE);
     m_Mapper->addMapping(valueDoubleSpinBox, AccountDB::Constants::DISTRULES_VALUES);
-    m_Mapper->addMapping(preferedSpinBox, AccountDB::Constants::DISTRULES_PREF);
+    m_Mapper->addMapping(preferredSpinBox, AccountDB::Constants::DISTRULES_PREF);
     m_Mapper->addMapping(minKmDoubleSpinBox, AccountDB::Constants::DISTRULES_MIN_KM);
     //m_Mapper->toFirst();
     distanceRulesComboBox->setModel(m_Model);

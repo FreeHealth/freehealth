@@ -62,7 +62,7 @@ using namespace Trans::ConstantTranslations;
 
 receiptsManager::receiptsManager()
 {
-    if (!getPreferedValues()) {
+    if (!getpreferredValues()) {
         if (WarnDebugMessage)
             qWarning() << __FILE__ << QString::number(__LINE__) << "Unable to get preferred values !" ;
     }
@@ -490,22 +490,22 @@ QHash<QString,QString> receiptsManager::getPreferentialActFromThesaurus(const QS
    return ret;
 }*/
 
-bool receiptsManager::getPreferedValues(){
+bool receiptsManager::getpreferredValues(){
     bool b = true;
     DistanceRulesModel modelDR(this);
     modelDR.setFilter("PREFERRED = '1'");
-    m_preferedDistanceRule = modelDR.data(modelDR.index(0,DISTRULES_TYPE),Qt::DisplayRole);
-    m_preferedDistanceValue = modelDR.data(modelDR.index(0,DISTRULES_VALUES),Qt::DisplayRole);
+    m_preferredDistanceRule = modelDR.data(modelDR.index(0,DISTRULES_TYPE),Qt::DisplayRole);
+    m_preferredDistanceValue = modelDR.data(modelDR.index(0,DISTRULES_VALUES),Qt::DisplayRole);
     if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " m_preferedDistanceRule =" << m_preferedDistanceRule.toString() ;
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " m_preferredDistanceRule =" << m_preferredDistanceRule.toString() ;
     WorkingPlacesModel modelWP(this);
     modelWP.setFilter("PREFERRED = '1'");
-    m_preferedSite = modelWP.data(modelWP.index(0,SITES_NAME),Qt::DisplayRole);
+    m_preferredSite = modelWP.data(modelWP.index(0,SITES_NAME),Qt::DisplayRole);
     InsuranceModel modelINS(this);
     modelINS.setFilter("PREFERRED = '1'");
-    m_preferedInsurance = modelINS.data(modelINS.index(0,INSURANCE_NAME),Qt::DisplayRole);
-    m_preferedInsuranceUid = modelINS.data(modelINS.index(0,INSURANCE_UID),Qt::DisplayRole);
-    if(m_preferedDistanceRule.isNull() || m_preferedInsurance.isNull() || m_preferedSite.isNull()){
+    m_preferredInsurance = modelINS.data(modelINS.index(0,INSURANCE_NAME),Qt::DisplayRole);
+    m_preferredInsuranceUid = modelINS.data(modelINS.index(0,INSURANCE_UID),Qt::DisplayRole);
+    if(m_preferredDistanceRule.isNull() || m_preferredInsurance.isNull() || m_preferredSite.isNull()){
         b = false;
         }
     return b;
@@ -538,12 +538,12 @@ QStringList receiptsManager::getChoiceFromCategories(QString & categoriesItem){
     return listOfItems;
 }
 
-QVariant receiptsManager::getPreferedDistanceRule(){
-      return m_preferedDistanceRule;
+QVariant receiptsManager::getpreferredDistanceRule(){
+      return m_preferredDistanceRule;
   }
   
 QString receiptsManager::getStringPerferedActAndValues(const QString & act){
     receiptsEngine r;
-    return r.getStringOfPreferedActAndHisValue(act);
+    return r.getStringOfpreferredActAndHisValue(act);
 }
 

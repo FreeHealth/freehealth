@@ -84,14 +84,14 @@ private:
     //void mousePressEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
     bool deleteItemFromThesaurus(QModelIndex &index);
-    bool addPreferedItem(QModelIndex &index);
+    bool addpreferredItem(QModelIndex &index);
     bool isChildOfThesaurus();
     
 /*Q_SIGNALS :
     void pressed(const QModelIndex&) { emit QAbstractItemView::pressed(const QModelIndex&);}*/
 
 private Q_SLOTS:
-    void choosePreferedValue(bool b);
+    void choosepreferredValue(bool b);
     void deleteBox(bool b);
     void userIsChanged();
 
@@ -100,7 +100,7 @@ private:
 
 private:
     /** \create a pimpl */
-    QAction *m_choosePreferedValue;
+    QAction *m_choosepreferredValue;
     QAction *m_deleteThesaurusValue;
     QMenu *m_menuRightClic;
     QStandardItemModel *m_actionsTreeModel;
@@ -109,11 +109,11 @@ private:
     QMap<int,QStandardItem*> m_mapOfMainItems;
 };
 
-class ChoosenListView: public QListView{
+class ChosenListView: public QListView{
     Q_OBJECT
     public:
-        ChoosenListView(QObject *parent ,InternalAmount::AmountModel *amountModel);
-        ~ChoosenListView();
+        ChosenListView(QObject *parent ,InternalAmount::AmountModel *amountModel);
+        ~ChosenListView();
         InternalAmount::AmountModel * m_amountModel;
     private Q_SLOTS:
         void deleteItem(bool b);
@@ -138,7 +138,7 @@ public:
     
     QString m_userUuid;
     treeViewsActions *m_actionTreeView;
-    ChoosenListView *m_returnedListView;
+    ChosenListView *m_returnedListView;
 
 protected:
     void changeEvent(QEvent *e);
@@ -156,7 +156,7 @@ protected:
 
 private:
     
-    QVariant firstItemChoosenAsPreferential(QString &item);
+    QVariant firstItemchosenAsPreferential(QString &item);
     void resizeEvent(QResizeEvent *event);
 
 private Q_SLOTS:

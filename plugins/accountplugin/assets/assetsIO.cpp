@@ -222,7 +222,7 @@ int AssetsIO::getIdFromBankName(const QString & bankName){
 QStandardItemModel * AssetsIO::getBankComboBoxModel(QObject * parent){
     QStandardItemModel *model = new QStandardItemModel(parent);
     BankAccountModel bankmodel(this);
-    QString filterUserAndPrefered = QString("BD_USER_UID = '%1' AND BD_ISDEFAULT = '%2'").arg(m_user_uid,1);
+    QString filterUserAndpreferred = QString("BD_USER_UID = '%1' AND BD_ISDEFAULT = '%2'").arg(m_user_uid,1);
     QString filterUser = QString("BD_USER_UID = '%1'").arg(m_user_uid);
     int rows = bankmodel.rowCount();
     for (int i = 0; i < rows; i += 1)

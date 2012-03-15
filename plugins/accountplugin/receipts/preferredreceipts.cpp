@@ -29,9 +29,9 @@
  *  Contributors :                                                         *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
-#include "preferedreceipts.h"
+#include "preferredreceipts.h"
 #include "receiptsmanager.h"
-#include "ui_preferedreceipts.h"
+#include "ui_preferredreceipts.h"
 #include "choiceDialog.h"
 #include "receiptsIO.h"
 
@@ -52,7 +52,7 @@ enum { WarnDebugMessage = false };
 static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
 static inline Core::IPatient *patient() { return Core::ICore::instance()->patient(); }
 
-PreferedReceipts::PreferedReceipts(QWidget * parent):QWidget(parent),ui(new Ui::PreferedReceiptsWidget){
+preferredReceipts::preferredReceipts(QWidget * parent):QWidget(parent),ui(new Ui::preferredReceiptsWidget){
     ui->setupUi(this);
     ui->resultLabel->setText("");
     m_typeOfChoice = 0;
@@ -62,20 +62,20 @@ PreferedReceipts::PreferedReceipts(QWidget * parent):QWidget(parent),ui(new Ui::
     listOfActs = manager.getPreferentialActFromThesaurus(userUuid).keys();
     if (listOfActs.size()>0)
     {
-    	  m_preferedAct = listOfActs[0];
+    	  m_preferredAct = listOfActs[0];
         }
     else
     {
-    	m_preferedAct = "";
+    	m_preferredAct = "";
         }
     
     QTimer::singleShot(100,this,SLOT(showChoiceDialog())) ;
     
 }
 
-PreferedReceipts::~PreferedReceipts(){}
+preferredReceipts::~preferredReceipts(){}
 
-void PreferedReceipts::insertPreferedValuesIntoAccount(){
+void preferredReceipts::insertpreferredValuesIntoAccount(){
     QString currency = trUtf8("euros");
     receiptsEngine receiptsIO;
     QString userUuid = user()->uuid();
@@ -102,19 +102,19 @@ void PreferedReceipts::insertPreferedValuesIntoAccount(){
     for (int i = 0; i < listOfPercentages.size(); i += 1)
     {
     	int typeOfChoice = m_choiceAndPercentagesHash.key(listOfPercentages[i]);
-    	QHash <int,QVariant> hashOfPrefValues = receiptsIO.getListOfPreferedValues(userUuid,
+    	QHash <int,QVariant> hashOfPrefValues = receiptsIO.getListOfpreferredValues(userUuid,
     	                                                                           patientUid,
     	                                                                           patientName,
     	                                                                           typeOfChoice); 
     	
-        double preferedValue = hashOfPrefValues.value(Constants::ACCOUNT_CHEQUEAMOUNT+typeOfChoice-1).toDouble();
+        double preferredValue = hashOfPrefValues.value(Constants::ACCOUNT_CHEQUEAMOUNT+typeOfChoice-1).toDouble();
         if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " preferedValue =" << QString::number(preferedValue) ;
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " preferredValue =" << QString::number(preferredValue) ;
         QVariant debtor = m_choiceAndDebtorHash.value(typeOfChoice);
-        if (preferedValue == -1.13)//means does not exist
+        if (preferredValue == -1.13)//means does not exist
         {
         	  qWarning() << __FILE__ << QString::number(__LINE__) << "no preferred value" ;
-              Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("You should create a preferedValue like this:\n"
+              Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("You should create a preferredValue like this:\n"
                                                                          "Take a value in thesaurus list with a RIGHT clic,\n"
                                                                          "if you don't have one, save the next value"
                                                                          " in thesaurus and chose it in the same way"));
@@ -123,7 +123,7 @@ void PreferedReceipts::insertPreferedValuesIntoAccount(){
 
         if (m_percent!=100.00)
         {
-    	    hashOfPrefValues.insert(Constants::ACCOUNT_CHEQUEAMOUNT+typeOfChoice-1,preferedValue*listOfPercentages[i]/100.00);
+    	    hashOfPrefValues.insert(Constants::ACCOUNT_CHEQUEAMOUNT+typeOfChoice-1,preferredValue*listOfPercentages[i]/100.00);
             hashOfPrefValues.insert(Constants::ACCOUNT_INSURANCE_ID,debtor);
             hashOfPrefValues.insert(Constants::ACCOUNT_DUEBY,debtor);
             }
@@ -132,13 +132,13 @@ void PreferedReceipts::insertPreferedValuesIntoAccount(){
            Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("Unable to insert datas into account"));
        }
        else{
-           listOfValues << QString::number(preferedValue*listOfPercentages[i]/100.00);
+           listOfValues << QString::number(preferredValue*listOfPercentages[i]/100.00);
            }
         }
     listOfValuesStr = listOfValues.join("+") ;
         
     const QString resultText = trUtf8("The value ")
-                               +m_preferedAct
+                               +m_preferredAct
                                +" : "
                                +listOfValuesStr
                                +" "+currency
@@ -148,8 +148,8 @@ void PreferedReceipts::insertPreferedValuesIntoAccount(){
     ui->resultLabel->setText(resultTextHtml);
 }
 
-void PreferedReceipts::showChoiceDialog(){
-    choiceDialog * choice = new choiceDialog(this,false,m_preferedAct);
+void preferredReceipts::showChoiceDialog(){
+    choiceDialog * choice = new choiceDialog(this,false,m_preferredAct);
     if (choice->exec() == QDialog::Accepted)
     {
     	  m_typeOfChoice = choice->returnChoiceDialog();
@@ -168,7 +168,7 @@ void PreferedReceipts::showChoiceDialog(){
     	        m_choiceAndPercentagesHash.insertMulti(typeOfChoice,percentage);
     	        m_choiceAndDebtorHash.insertMulti(typeOfChoice,debtor);
     	      }
-    	  insertPreferedValuesIntoAccount();
+    	  insertpreferredValuesIntoAccount();
     	  delete model;
     	  delete choice;
         }    

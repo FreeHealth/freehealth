@@ -62,7 +62,7 @@
        </size>
       </property>
       <property name="text">
-       <string>List of values choosen</string>
+       <string>List of values chosen</string>
       </property>
      </widget>
     </item>
@@ -84,7 +84,7 @@
      </widget>
     </item>
     <item row="6" column="3" rowspan="3" colspan="2">
-     <widget class="QListWidget" name="listChoosenWidget">
+     <widget class="QListWidget" name="listchosenWidget">
       <property name="minimumSize">
        <size>
         <width>150</width>

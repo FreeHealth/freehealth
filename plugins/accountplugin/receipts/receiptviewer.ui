@@ -200,7 +200,7 @@
       </layout>
      </item>
      <item row="2" column="1">
-      <widget class="QGroupBox" name="choosenValuesBox">
+      <widget class="QGroupBox" name="chosenValuesBox">
        <property name="minimumSize">
         <size>
          <width>0</width>
@@ -208,7 +208,7 @@
         </size>
        </property>
        <property name="title">
-        <string>Choosen Values</string>
+        <string>chosen Values</string>
        </property>
       </widget>
      </item>

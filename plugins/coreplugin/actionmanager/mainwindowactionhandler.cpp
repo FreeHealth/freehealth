@@ -122,7 +122,7 @@ MainWindowActionHandler::MainWindowActionHandler(QWidget *parent) :
 MainWindowActionHandler::~MainWindowActionHandler()
 {
     // Save last used language
-    settings()->setValue(Constants::S_PREFEREDLANGUAGE, QLocale().name().left(2));
+    settings()->setValue(Constants::S_PREFERREDLANGUAGE, QLocale().name().left(2));
 }
 
 void MainWindowActionHandler::createGeneralMenu()
@@ -1014,7 +1014,7 @@ void MainWindowActionHandler::createConfigurationActions(int actions)
         QMap<QString, QString> loc_lang = Core::ICore::instance()->translators()->availableLocalesAndLanguages();
         int i = 0;
 
-        QString lang = settings()->value(Constants::S_PREFEREDLANGUAGE, QLocale().name().left(2)).toString();
+        QString lang = settings()->value(Constants::S_PREFERREDLANGUAGE, QLocale().name().left(2)).toString();
         foreach( const QString &loc, loc_lang.keys() ) {
             ++i;
             QAction *action = new QAction(this);  // QString("&%1 %2").arg(QString::number(i), loc_lang.value(loc)), this);

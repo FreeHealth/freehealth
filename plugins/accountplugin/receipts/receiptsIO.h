@@ -57,7 +57,7 @@ public:
     bool deleteFromThesaurus(const QString & data , const QString & userUid );
     bool addBoolTrue(QString & data);
     double getMinDistanceValue(const QString & data);
-    QHash<int,QVariant> getListOfPreferedValues(QString & userUuid,
+    QHash<int,QVariant> getListOfpreferredValues(QString & userUuid,
                                                 QString & patientUid,
                                                 QString & patientName,
                                                 int choice);
@@ -65,7 +65,7 @@ public:
     QString getStringFromInsuranceUid(const QVariant & insuranceUid);
     QVariant getSiteUidFromSite(const QString & site);
     QVariant getInsuranceUidFromInsurance(const QString & insurance);
-    QString getStringOfPreferedActAndHisValue(const QString & preferedAct);
+    QString getStringOfpreferredActAndHisValue(const QString & preferredAct);
 
 private:
     enum typeOfChoice {

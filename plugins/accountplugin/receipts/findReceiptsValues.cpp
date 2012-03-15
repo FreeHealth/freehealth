@@ -73,7 +73,7 @@ findReceiptsValues::findReceiptsValues(QWidget * parent):QDialog(parent){
   connect(ui->tableViewOfValues,SIGNAL(pressed(const QModelIndex&)),this,SLOT(showToolTip(const QModelIndex&)));
   connect(ui->plusButton,SIGNAL(pressed()),this,SLOT(chooseValue()));
   connect(ui->lessButton,SIGNAL(pressed()),this,SLOT(deleteValue()));
-  //connect(ui->listChoosenWidget,SIGNAL(itemClicked(QListWidgetItem *)),this,SLOT(supprItemChoosen(QListWidgetItem *)));
+  //connect(ui->listchosenWidget,SIGNAL(itemClicked(QListWidgetItem *)),this,SLOT(supprItemchosen(QListWidgetItem *)));
   connect(ui->nextButton,SIGNAL(pressed()),this,SLOT(showNext()));
   connect(qApp,SIGNAL(focusChanged(QWidget*,QWidget*)),this,SLOT(setModifSpinBox(QWidget*,QWidget*)));
   connect(ui->modifSpinBox,SIGNAL(valueChanged(double)),this,SLOT(setModifier(double)));
@@ -82,20 +82,20 @@ findReceiptsValues::findReceiptsValues(QWidget * parent):QDialog(parent){
 findReceiptsValues::~findReceiptsValues()
 {
   delete m_xmlParser;
-  ui->listChoosenWidget->clear();
+  ui->listchosenWidget->clear();
 }
 
 void findReceiptsValues::initialize(){
     m_xmlParser = new xmlCategoriesParser;
 ;
-    if(m_hashValuesChoosen.size()>0){
-        m_hashValuesChoosen.clear();
+    if(m_hashValueschosen.size()>0){
+        m_hashValueschosen.clear();
         }
 }
 
 void findReceiptsValues::clear(){
-    ui->listChoosenWidget->clear();
-    m_hashValuesChoosen.clear();
+    ui->listchosenWidget->clear();
+    m_hashValueschosen.clear();
 }
 
 void findReceiptsValues::fillComboCategories(){
@@ -186,8 +186,8 @@ void findReceiptsValues::showToolTip(const QModelIndex & index)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " data = " << data;
     if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " amount = " << amount;
-    ui->listChoosenWidget->addItem(data);
-    m_hashValuesChoosen.insert(data,amount);
+    ui->listchosenWidget->addItem(data);
+    m_hashValueschosen.insert(data,amount);
 }*/
 
 void findReceiptsValues::chooseValue()
@@ -234,8 +234,8 @@ void findReceiptsValues::chooseValue()
     	  amount = QString::number(amountDouble * m_modifier);
         }
     	      
-    ui->listChoosenWidget->addItem(data);
-    m_hashValuesChoosen.insert(data,amount);
+    ui->listchosenWidget->addItem(data);
+    m_hashValueschosen.insert(data,amount);
 }
 
 void findReceiptsValues::deleteValue()
@@ -243,18 +243,18 @@ void findReceiptsValues::deleteValue()
     QListWidgetItem * item;
     if (WarnDebugMessage)
     qDebug() << __FILE__ << QString::number(__LINE__) << " in deleteValue " ;
-    if (!ui->listChoosenWidget->currentIndex().isValid())
+    if (!ui->listchosenWidget->currentIndex().isValid())
     {
     	  qWarning() << __FILE__ << QString::number(__LINE__) << "index not valid" ;
     	  QMessageBox::warning(0,trUtf8("Warning"),trUtf8("You have to choose a value !"),
     	  QMessageBox::Ok);
     	  return;
         }
-    item = ui->listChoosenWidget->currentItem();
+    item = ui->listchosenWidget->currentItem();
     if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " item = " << item->text();
     QString dataToRemove = item->data(Qt::DisplayRole).toString();
-    m_hashValuesChoosen.remove(dataToRemove);
+    m_hashValueschosen.remove(dataToRemove);
     delete item;
 }
 
@@ -279,16 +279,16 @@ void findReceiptsValues::setModifier(double modif)
     m_modifier = modif;
 }
 
-/*void findReceiptsValues::supprItemChoosen(QListWidgetItem * item){
+/*void findReceiptsValues::supprItemchosen(QListWidgetItem * item){
     if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " item = " << item->text();
     QString dataToRemove = item->data(Qt::DisplayRole).toString();
-    m_hashValuesChoosen.remove(dataToRemove);
+    m_hashValueschosen.remove(dataToRemove);
     delete item;
 }*/
 
-QHash<QString,QString> findReceiptsValues::getChoosenValues(){
-    return m_hashValuesChoosen;
+QHash<QString,QString> findReceiptsValues::getchosenValues(){
+    return m_hashValueschosen;
 }
 
 /*void findReceiptsValues::on_lineEditFilter_textChanged(const QString & text){
