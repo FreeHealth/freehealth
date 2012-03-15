@@ -121,12 +121,16 @@ patchChangelog()
 svnBuildPackage()
 {
   cd $PACKDIR
-  svn checkout svn://svn.debian.org/svn/debian-med/trunk/packages/$APP_NAME/ ./
+  echo "    * Fecthing svn debian files"
+  #echo "      from Debian Med"
+  # svn checkout svn://svn.debian.org/svn/debian-med/trunk/packages/$APP_NAME/ ./
+  echo "       from FreeMedForms project"
+  svn checkout https://freemedforms.googlecode.com/svn/trunk/buildspecs/debian/freemedforms-project ./
   cp "./trunk/debian/changelog" $PACKDIR"/changelog.bkup"
   SOURCEDIR=$PACKDIR"/trunk"
   patchChangelog
-  echo "    * Building DSC file: svn-buildpackage --svn-download-orig -k$PGP_KEY -S $DEBUILD_SOURCE --svn-ignore"
   cd $PACKDIR"/trunk"
+  echo "    * Building DSC file: svn-buildpackage --svn-download-orig -k$PGP_KEY -S $DEBUILD_SOURCE --svn-ignore"
   svn-buildpackage --svn-download-orig -k$PGP_KEY -S $DEBUILD_SOURCE --svn-ignore
 }
 
