@@ -604,7 +604,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_drugs.h" line="61"/>
         <location filename="../../libs/translationutils/trans_msgerror.h" line="35"/>
         <source>Information</source>
         <translation type="unfinished"></translation>
@@ -852,27 +851,27 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_drugs.h" line="62"/>
+        <location filename="../../libs/translationutils/trans_drugs.h" line="61"/>
         <source>Drug duplication</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_drugs.h" line="63"/>
+        <location filename="../../libs/translationutils/trans_drugs.h" line="62"/>
         <source>Molecule duplication</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_drugs.h" line="64"/>
+        <location filename="../../libs/translationutils/trans_drugs.h" line="63"/>
         <source>Therapeutic class duplication</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_drugs.h" line="67"/>
+        <location filename="../../libs/translationutils/trans_drugs.h" line="66"/>
         <source>Drug database with interaction database</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_drugs.h" line="68"/>
+        <location filename="../../libs/translationutils/trans_drugs.h" line="67"/>
         <source>Drug database without interaction database</source>
         <translation type="unfinished"></translation>
     </message>

@@ -1570,16 +1570,16 @@ Autrement le résultat sera faux!</translation>
     </message>
 </context>
 <context>
-    <name>ChoosenListView</name>
+    <name>ChosenListView</name>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="589"/>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="601"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="590"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="602"/>
         <source>Delete this item</source>
         <translation>Supprimer cet élément</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="590"/>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="602"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="591"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="603"/>
         <source>Clear all.</source>
         <translation>Effacer tout.</translation>
     </message>
@@ -2156,57 +2156,6 @@ Faites le dans Immobilisations.</translation>
     </message>
 </context>
 <context>
-    <name>PreferedReceipts</name>
-    <message>
-        <location filename="../../plugins/accountplugin/receipts/preferedreceipts.cpp" line="79"/>
-        <source>euros</source>
-        <translation>euros</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/accountplugin/receipts/preferedreceipts.cpp" line="117"/>
-        <source>You should create a preferedValue like this:
-Take a value in thesaurus list with a RIGHT clic,
-if you don&apos;t have one, save the next value in thesaurus and chose it in the same way</source>
-        <translation>Vous devriez créer une valeur préférée ainsi :
-prenez une valeur dans le thésaurus avec un clic droit,
-si vous n&apos;en n&apos;avez pas, sauvegarder la valeur suivante dans le thésaurus et choisissez la de la même façon</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/accountplugin/receipts/preferedreceipts.cpp" line="132"/>
-        <source>Unable to insert datas into account</source>
-        <translation>Impossible d&apos;insérer les données dans la comptabilité</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/accountplugin/receipts/preferedreceipts.cpp" line="140"/>
-        <source>The value </source>
-        <translation>La valeur </translation>
-    </message>
-    <message>
-        <location filename="../../plugins/accountplugin/receipts/preferedreceipts.cpp" line="145"/>
-        <source> has been inserted.</source>
-        <translation> a été insérée.</translation>
-    </message>
-</context>
-<context>
-    <name>PreferedReceiptsWidget</name>
-    <message>
-        <location filename="../../plugins/accountplugin/receipts/preferedreceipts.ui" line="14"/>
-        <source>prefered receipt</source>
-        <translation>recette préférée</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/accountplugin/receipts/preferedreceipts.ui" line="38"/>
-        <source>Add a rapid receipts</source>
-        <translation>Ajouter une recette pour insertion
-rapide</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/accountplugin/receipts/preferedreceipts.ui" line="67"/>
-        <source>result</source>
-        <translation>résultat</translation>
-    </message>
-</context>
-<context>
     <name>ProduceDoc</name>
     <message>
         <location filename="../../plugins/accountplugin/ledger/mythread.cpp" line="64"/>
@@ -2426,8 +2375,8 @@ rapide</translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/receipts/receiptviewer.ui" line="170"/>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="666"/>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="788"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="667"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="789"/>
         <source>Other</source>
         <translation>Autre</translation>
     </message>
@@ -2443,47 +2392,47 @@ rapide</translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/receipts/receiptviewer.ui" line="211"/>
-        <source>Choosen Values</source>
-        <translation>Valeurs choisies</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="662"/>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="784"/>
-        <source>Cash</source>
-        <translation>Espèces</translation>
+        <source>chosen Values</source>
+        <translation>Valeurs sélectionnées</translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="663"/>
         <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="785"/>
-        <source>Check</source>
-        <translation>Chèques</translation>
+        <source>Cash</source>
+        <translation>Espèces</translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="664"/>
         <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="786"/>
-        <source>Visa</source>
-        <translation>Carte bancaire</translation>
+        <source>Check</source>
+        <translation>Chèques</translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="665"/>
         <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="787"/>
+        <source>Visa</source>
+        <translation>Carte bancaire</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="666"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="788"/>
         <source>Banking</source>
         <translation>Virement</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="667"/>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="789"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="668"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="790"/>
         <source>Du</source>
         <translation>Du</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="920"/>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="1164"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="921"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="1165"/>
         <source>Warning</source>
         <translation>Attention</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="877"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="878"/>
         <source>You have to insert your preferred value
 in thesaurus
 and choose it as preferred.</source>
@@ -2492,35 +2441,35 @@ dans le thésaurus
 et choisir la valeur préférée.</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="668"/>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="790"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="669"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="791"/>
         <source>Act</source>
         <translation>Acte</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="918"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="919"/>
         <source>No distance rule value available !
 You should create one in Preferences.</source>
         <translation>Pas de règle de distance disponible !
 Vous devriez en créer une dans Préférences.</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="933"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="934"/>
         <source>Kilometers</source>
         <translation>Kilomètres</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="1182"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="1183"/>
         <source> has been saved in thesaurus !</source>
         <translation> a été sauvegardé dans le thésaurus !</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="969"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="970"/>
         <source>thesaurus</source>
         <translation>thésaurus</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="1164"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="1165"/>
         <source>Error inserting into AccountModel!</source>
         <translation>Erreur d&apos;insertion dans AccountModel !</translation>
     </message>
@@ -2591,6 +2540,11 @@ Vous devriez créer les valeurs par défaut dans Configuration &gt; Preference &
         <translation>Trouvez vos valeurs </translation>
     </message>
     <message>
+        <location filename="../../plugins/accountplugin/receipts/findValuesGUI.ui" line="65"/>
+        <source>List of values chosen</source>
+        <translation>Liste des valeurs sélectionnées</translation>
+    </message>
+    <message>
         <location filename="../../plugins/accountplugin/receipts/findValuesGUI.ui" line="82"/>
         <source>+</source>
         <translation></translation>
@@ -2626,14 +2580,58 @@ Vous devriez créer les valeurs par défaut dans Configuration &gt; Preference &
         <translation>avec nom</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/findValuesGUI.ui" line="65"/>
-        <source>List of values choosen</source>
-        <translation>Liste des valeurs choisies</translation>
-    </message>
-    <message>
         <location filename="../../plugins/accountplugin/receipts/findValuesGUI.ui" line="134"/>
         <source>Next</source>
         <translation>Suivant</translation>
+    </message>
+</context>
+<context>
+    <name>preferredReceipts</name>
+    <message>
+        <location filename="../../plugins/accountplugin/receipts/preferredreceipts.cpp" line="79"/>
+        <source>euros</source>
+        <translation>euros</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/receipts/preferredreceipts.cpp" line="117"/>
+        <source>You should create a preferredValue like this:
+Take a value in thesaurus list with a RIGHT clic,
+if you don&apos;t have one, save the next value in thesaurus and chose it in the same way</source>
+        <translation>Vous pouvez créer une valeur préférentielle en prenant une valeur dans le thésaurus à l&apos;aide d&apos;un clique-droit,
+si vous n&apos;en avez pas, sauvegardez la prochaine valeur dans le thésaurus et sélectionnez la à nouveau</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/receipts/preferredreceipts.cpp" line="132"/>
+        <source>Unable to insert datas into account</source>
+        <translation>Impossible d&apos;insérer les données dans la comptabilité</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/receipts/preferredreceipts.cpp" line="140"/>
+        <source>The value </source>
+        <translation>La valeur </translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/receipts/preferredreceipts.cpp" line="145"/>
+        <source> has been inserted.</source>
+        <translation> a été insérée.</translation>
+    </message>
+</context>
+<context>
+    <name>preferredReceiptsWidget</name>
+    <message>
+        <location filename="../../plugins/accountplugin/receipts/preferredreceipts.ui" line="14"/>
+        <source>preferred receipt</source>
+        <translation>Recette préférée</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/receipts/preferredreceipts.ui" line="38"/>
+        <source>Add a rapid receipts</source>
+        <translation>Ajouter une recette pour insertion rapide</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/receipts/preferredreceipts.ui" line="67"/>
+        <source>result</source>
+        <translation>résultat</translation>
     </message>
 </context>
 <context>

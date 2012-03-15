@@ -481,12 +481,12 @@
     <message>
         <location filename="../../libs/translationutils/trans_menu.h" line="140"/>
         <source>About &amp;Qt</source>
-        <translation>A propos de Qt</translation>
+        <translation>A propos de &amp;Qt</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_menu.h" line="141"/>
         <source>About this &amp;form</source>
-        <translation>A propos des formulaires</translation>
+        <translation>A propos des &amp;formulaires</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_menu.h" line="142"/>
@@ -690,33 +690,32 @@
         <translation>Précaution d&apos;utilisation</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_drugs.h" line="61"/>
         <location filename="../../libs/translationutils/trans_msgerror.h" line="35"/>
         <source>Information</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_drugs.h" line="62"/>
+        <location filename="../../libs/translationutils/trans_drugs.h" line="61"/>
         <source>Drug duplication</source>
         <translation>Duplication de médicament</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_drugs.h" line="63"/>
+        <location filename="../../libs/translationutils/trans_drugs.h" line="62"/>
         <source>Molecule duplication</source>
         <translation>Duplication de molécule</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_drugs.h" line="64"/>
+        <location filename="../../libs/translationutils/trans_drugs.h" line="63"/>
         <source>Therapeutic class duplication</source>
         <translation>Duplication de classe thérapeutique</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_drugs.h" line="67"/>
+        <location filename="../../libs/translationutils/trans_drugs.h" line="66"/>
         <source>Drug database with interaction database</source>
         <translation>Base de données thérapeutique avec gestion des interactions</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_drugs.h" line="68"/>
+        <location filename="../../libs/translationutils/trans_drugs.h" line="67"/>
         <source>Drug database without interaction database</source>
         <translation>Base de données thérapeutique sans gestion des interactions</translation>
     </message>
@@ -1961,7 +1960,7 @@
     <message>
         <location filename="../../libs/translationutils/trans_msgerror.h" line="68"/>
         <source>Your email.</source>
-        <translation>Votre courriel</translation>
+        <translation>Votre courriel.</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_msgerror.h" line="69"/>
