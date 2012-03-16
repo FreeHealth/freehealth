@@ -6,7 +6,7 @@
   <!-- Non translatable values -->
   <authors>Eric Maeker, MD</authors>
   <version>test</version>
-  <compatversion>0.6.0</compatversion>
+  <fmfv>0.6.0</fmfv>
   <cdate>2011-12-21</cdate>
   <lmdate>2011-12-21</lmdate>
   <icon></icon>
@@ -14,7 +14,7 @@
   <bibliography pmid=""></bibliography>
 
   <!-- Translatable values -->
-  <licence>GPLv3</licence>
+  <license>GPLv3</license>
   <description lang="fr">Test des widgets existants</description>
   <description lang="xx">Existing widgets testing</description>
   <category lang="xx">Test</category>
@@ -36,7 +36,7 @@
   <authors lang="fr">Dr Eric Maeker</authors>
   <description lang="fr">Petite description ici</description>
   <bibliography lang="fr">Bibliographie ici</bibliography>
-  <licence lang="fr">Termes de la license</licence>
+  <license lang="fr">Termes de la license</license>
 
   <column>1</column>
   <option>compact</option>

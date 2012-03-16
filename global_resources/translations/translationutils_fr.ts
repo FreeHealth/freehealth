@@ -1036,7 +1036,7 @@
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_spashandupdate.h" line="47"/>
-        <source>Needed licence agreement...</source>
+        <source>Needed license agreement...</source>
         <translation>Acceptation de la license attendue...</translation>
     </message>
     <message>

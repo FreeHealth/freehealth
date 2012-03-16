@@ -6,7 +6,7 @@
   <description lang="fr"></description>
   <description lang="en"></description>
   <bibliography>Small bibliography</bibliography>
-  <licence>Licence terms here</licence>
+  <license>Licence terms here</license>
 
 <MedForm>
   <name>baseWidgetsFormSample</name>
@@ -20,7 +20,7 @@
   <authors lang="fr">Dr Eric Maeker</authors>
   <description lang="fr">Petite description ici</description>
   <bibliography lang="fr">Bibliographie ici</bibliography>
-  <licence lang="fr">Termes de la license</licence>
+  <licence lang="fr">Termes de la license</license>
 
   <column>1</column>
   <option>compact</option>

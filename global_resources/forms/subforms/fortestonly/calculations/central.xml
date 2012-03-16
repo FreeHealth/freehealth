@@ -7,7 +7,7 @@
     <!-- Non translatable values -->
     <authors>Eric Maeker, MD</authors>
     <version>test</version>
-    <fmfversion>0.6.0</fmfversion>
+    <fmfv>0.6.0</fmfv>
     <cdate>2011-12-21</cdate>
     <lmdate>2011-12-21</lmdate>
     <icon>geriatrics.png</icon>
@@ -15,7 +15,7 @@
     <bibliography pmid=""></bibliography>
 
     <!-- Translatable values -->
-    <licence>GPLv3</licence>
+    <license>GPLv3</license>
     <description lang="fr">Test des widgets de calcul</description>
     <description lang="xx">Calcul widget test</description>
     <category lang="xx">Test</category>

@@ -90,9 +90,9 @@ QString Pack::serverFileName() const
     return m_descr.data(PackDescription::AbsFileName).toString();
 }
 
-QString Pack::serverLicenceFileName() const
+QString Pack::serverLicenseFileName() const
 {
-//    return m_descr.data(PackDescription::LicenceFileName).toString();
+//    return m_descr.data(PackDescription::LicenseFileName).toString();
     return QString();
 }
 

@@ -23,7 +23,7 @@
     <datatype>ICD</datatype>
 
     <!-- Translatable values -->
-    <licence>GPLv3</licence>
+    <license>GPLv3</license>
     <label lang="fr">Classification internationale des maladies</label>
     <label lang="xx">International classification of diseases</label>
     <description lang="fr">Données par défaut pour FreeMedForms (classification internationale des maladies)</description>

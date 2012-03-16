@@ -10,14 +10,14 @@
   <authors>Eric Maeker, MD</authors>
   <description>Small description here</description>
   <bibliography>Small bibliography</bibliography>
-  <licence>Licence terms here</licence>
+  <license>Licence terms here</license>
 
   <label lang="fr">Exemple SOAP</label>
   <categorie lang="fr">samples</categorie>
   <authors lang="fr">Dr Eric Maeker</authors>
   <description lang="fr">Petite description ici</description>
   <bibliography lang="fr">Bibliographie ici</bibliography>
-  <licence lang="fr">Termes de la license</licence>
+  <licence lang="fr">Termes de la license</license>
 
   <Item>
     <name>S</name>

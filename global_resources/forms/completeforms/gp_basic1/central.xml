@@ -15,7 +15,7 @@
     <bibliography/>
 
     <!-- Translatable values -->
-    <licence>GPLv3</licence>
+    <license>GPLv3</license>
     <description lang="fr">Dossier médical générique avec page médicaments</description>
     <description lang="xx">Generic patient file with drugs page</description>
     <category lang="xx">General practice</category>

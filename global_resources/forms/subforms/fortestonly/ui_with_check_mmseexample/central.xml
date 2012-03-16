@@ -4,16 +4,17 @@
     <formdescription>
         <!-- Non translatable values -->
         <authors>Eric Maeker, MD</authors>
-        <version>0.6.2</version>
-        <fmfversion>0.6.2</fmfversion>
+        <version>test</version>
+        <fmfv>0.7.0</fmfv>
         <cdate>2012-01-05</cdate>
         <lmdate>2012-01-08</lmdate>
         <icon>test.png</icon>
         <weblink/>
         <bibliography/>
         <!-- Translatable values -->
-        <licence>GPLv3</licence>
-        <description>Test check/ui/script/shots : the MMSE example</description>
+        <license>GPLv3</license>
+        <description lang="xx">Test check/ui/script/shots: the MMSE example</description>
+        <description lang="fr">Teste les cases à cocher, l'interface QtUi, le script et les captures d'écran : L'exemple du MMSE</description>
         <category lang="xx">Test</category>
         <category lang="fr">Test</category>
         <specialties lang="fr">Test</specialties>

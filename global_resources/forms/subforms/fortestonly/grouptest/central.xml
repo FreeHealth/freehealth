@@ -7,7 +7,7 @@
     <!-- Non translatable values -->
     <authors>Eric Maeker, MD</authors>
     <version>test</version>
-    <fmfversion>0.6.2</fmfversion>
+    <fmfv>0.7.0</fmfv>
     <cdate>2012-01-17</cdate>
     <lmdate>2012-01-17</lmdate>
     <icon>test.png</icon>
@@ -15,7 +15,7 @@
     <bibliography pmid=""></bibliography>
 
     <!-- Translatable values -->
-    <licence>GPLv3</licence>
+    <license>GPLv3</license>
     <description lang="fr">Test du group widget</description>
     <description lang="xx">Group widget test</description>
     <category lang="xx">Test</category>

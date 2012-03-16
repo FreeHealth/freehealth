@@ -15,7 +15,7 @@
     <bibliography pmid="6418786">Katz S. Assessing self-maintenance: activities of daily living, mobility, and instrumental activities of daily living. J Am Geriatr Soc. 1983 Dec;31(12):721-7.</bibliography>
 
     <!-- Translatable values -->
-    <licence>GPLv3</licence>
+    <license>GPLv3</license>
     <description lang="fr">Activités instrumentales de la vie quotidienne (IADL)</description>
     <description lang="xx">Instrumental Activities of Daily Living</description>
     <category lang="xx">Geriatrics</category>

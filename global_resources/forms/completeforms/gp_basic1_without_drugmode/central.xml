@@ -7,7 +7,7 @@
     <!-- Non translatable values -->
     <authors>Eric Maeker, MD</authors>
     <version>0.7.0</version>
-    <fmfversion>0.7.0</fmfversion>
+    <fmfv>0.7.0</fmfv>
     <cdate>2011-03-15</cdate>
     <lmdate>2012-02-26</lmdate>
     <icon>generalpractitioner.png</icon>
@@ -15,7 +15,7 @@
     <bibliography/>
 
     <!-- Translatable values -->
-    <licence>GPLv3</licence>
+    <license>GPLv3</license>
     <description lang="fr">Dossier médical générique en page unique</description>
     <description lang="xx">Generic patient file in one unique page</description>
     <category lang="xx">General practice</category>

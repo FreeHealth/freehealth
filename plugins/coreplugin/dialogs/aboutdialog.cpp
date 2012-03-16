@@ -20,11 +20,11 @@
  ***************************************************************************/
 /**
   \class Core::AboutDialog
-  \brief This dialog shows a complete About dialog with a tabwidget containing : a short about text, a complete team list, a full licence text.
+  \brief This dialog shows a complete About dialog with a tabwidget containing : a short about text, a complete team list, a full license text.
    It also shows the compilation date and time and the actual version of the application. \n
    The name of the application is picked into qApp->applicationName() and the version into qApp->applicationVersion(). \n
    You can inform the team using the addTeamList().\n
-   You can get the default licence terms using the static getLicenceTerms() function. This function manages english and french language by looking the default QLocale()::name().\n
+   You can get the default license terms using the static getLicenseTerms() function. This function manages english and french language by looking the default QLocale()::name().\n
 */
 
 #include "aboutdialog.h"

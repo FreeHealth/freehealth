@@ -461,7 +461,7 @@ These header and footer will be used by default while printing prescriptions.
     </message>
     <message>
         <location filename="../../drugsinteractions/diMainWindow.cpp" line="189"/>
-        <source>&lt;p align=center&gt;&lt;b&gt;Drugs interactions tester&lt;/b&gt;&lt;/p&gt;&lt;p&gt;%1 is part of FreeMedForms project.&lt;br&gt;Find it on http://code.google.com/p/freemedforms&lt;br&gt;&lt;br&gt;The drugs database was created with datas from AFSSAPS organization.&lt;br&gt;&lt;b&gt;The author DOES NOT warranty exactitude of the drugs database.&lt;/b&gt;&lt;br&gt;You use this software at your own risk.&lt;br&gt;&lt;br&gt;Open source software, released under GPL licence.&lt;/p&gt;</source>
+        <source>&lt;p align=center&gt;&lt;b&gt;Drugs interactions tester&lt;/b&gt;&lt;/p&gt;&lt;p&gt;%1 is part of FreeMedForms project.&lt;br&gt;Find it on http://code.google.com/p/freemedforms&lt;br&gt;&lt;br&gt;The drugs database was created with datas from AFSSAPS organization.&lt;br&gt;&lt;b&gt;The author DOES NOT warranty exactitude of the drugs database.&lt;/b&gt;&lt;br&gt;You use this software at your own risk.&lt;br&gt;&lt;br&gt;Open source software, released under GPL license.&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

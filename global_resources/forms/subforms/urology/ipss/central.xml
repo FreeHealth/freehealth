@@ -14,7 +14,7 @@
     <bibliography>Barry MJ, Fowler FJ Jr, O'Leary MP, et al; The American Urological Association symptom index for benign prostatic hyperplasia. The Measurement Committee of the American Urological Association. J Urol. 1992 Nov;148(5):1549-57; discussion 1564.</bibliography>
  
     <!-- Translatable values -->
-    <licence>GPLv3</licence>
+    <license>GPLv3</license>
     <description lang="fr">Score IPSS: Score international des Symptômes de Prostatisme</description>
     <description lang="xx">IPSS: International Prostate Symptom Score </description>
     <category lang="xx">Urology</category>

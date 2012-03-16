@@ -11,7 +11,7 @@
     <icon>xray.png</icon>
     <weblink>http://www.freemedforms.com</weblink>
     <!-- Translatable values -->
-    <licence>GPLv3</licence>
+    <license>GPLv3</license>
     <description lang="fr">Assistant à la prescription d'examens de radiologie</description>
     <description lang="xx">Radiographs prescription assistant</description>
     <category lang="xx">Radiology</category>

@@ -32,7 +32,7 @@
     </message>
     <message>
         <location filename="../../plugins/faccountcoreplugin/coreimpl.cpp" line="249"/>
-        <source>You are running a new version of %1, you need to renew the licence agreement.</source>
+        <source>You are running a new version of %1, you need to renew the license agreement.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -14,7 +14,7 @@
     <lmdate>2011-12-12</lmdate>
     <weblink>http://www.fda.gov/Drugs/</weblink>
     <copyright>(c) Eric Maeker (FDA's data are public domain)</copyright>
-    <licence>GPLv3</licence>
+    <license>GPLv3</license>
     <druguidbname>DRUG_CODE</druguidbname>
     <atcvalid>true</atcvalid>
     <interactionvalid>true</interactionvalid>

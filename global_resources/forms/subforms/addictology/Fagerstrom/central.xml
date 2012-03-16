@@ -15,7 +15,7 @@
     <bibliography pmid="1932883">Heatherton TF, Kozlowski LT, Frecker RC, Fagerstrom KO. The Fagerstrom Test for Nicotine Dependence : a revision of the Fagerstrom Tolerance Questionnaire. Br J Addict 1991;86(9):1119-27.</bibliography>
 
     <!-- Translatable values -->
-    <licence>GPLv3</licence>
+    <license>GPLv3</license>
     <description lang="fr">Test de Fagerström</description>
     <description lang="en">Fagerström test</description>
     <category lang="en">Addictology</category>

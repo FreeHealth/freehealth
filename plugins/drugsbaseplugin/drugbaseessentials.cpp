@@ -94,7 +94,7 @@ DrugBaseEssentials::DrugBaseEssentials():
     types.insertMulti(i, ftype(SOURCES_LANG, FieldIsLanguageText));
     types.insertMulti(i, ftype(SOURCES_WEB, FieldIsShortText));
     types.insertMulti(i, ftype(SOURCES_COPYRIGHT, FieldIsShortText));
-    types.insertMulti(i, ftype(SOURCES_LICENCE, FieldIsShortText));
+    types.insertMulti(i, ftype(SOURCES_LICENSE, FieldIsShortText));
     types.insertMulti(i, ftype(SOURCES_DATE, FieldIsDateTime));
     types.insertMulti(i, ftype(SOURCES_DRUGS_VERSION,FieldIsShortText));
     types.insertMulti(i, ftype(SOURCES_AUTHORS, FieldIsShortText));

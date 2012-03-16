@@ -95,7 +95,7 @@ const char* const ATTRIB_UUID_EQUIVALENCE_VERSION = "setInVersion";
 
 const char* const TAG_SPEC_AUTHORS      = "authors";
 const char* const TAG_SPEC_CATEGORY     = "category";
-const char* const TAG_SPEC_LICENSE      = "licence";
+const char* const TAG_SPEC_LICENSE      = "license";
 const char* const TAG_SPEC_SPECIALTIES  = "specialties";
 const char* const TAG_SPEC_CREATIONDATE = "cdate";
 const char* const TAG_SPEC_LASTMODIFDATE= "lmdate";

@@ -914,7 +914,7 @@ void quickDebugDialog(const QStringList &texts)
 }
 
 /** \brief Shows a default dialog with \e license terms and a small \e message. */
-bool defaultLicenceAgreementDialog(const QString &message, Utils::LicenseTerms::AvailableLicense license)
+bool defaultLicenseAgreementDialog(const QString &message, Utils::LicenseTerms::AvailableLicense license)
 {
     QDialog dlg;
     QGridLayout layout(&dlg);

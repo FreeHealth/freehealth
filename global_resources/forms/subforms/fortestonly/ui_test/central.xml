@@ -7,7 +7,7 @@
     <!-- Non translatable values -->
     <authors>Eric Maeker, MD</authors>
     <version>test</version>
-    <fmfversion>0.6.2</fmfversion>
+    <fmfv>0.7.0</fmfv>
     <cdate>2011-12-29</cdate>
     <lmdate>2011-12-29</lmdate>
     <icon>test.png</icon>
@@ -15,8 +15,9 @@
     <bibliography pmid=""></bibliography>
 
     <!-- Translatable values -->
-    <licence>GPLv3</licence>
+    <license>GPLv3</license>
     <description lang="xx">Test UI file access and usage</description>
+    <description lang="fr">Teste l'accès et l'utilisation d'interface QtUi</description>
     <category lang="xx">Test</category>
     <category lang="fr">Test</category>
     <specialties lang="fr">Test</specialties>

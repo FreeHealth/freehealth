@@ -116,7 +116,7 @@ UTILS_EXPORT int withButtonsMessageBox( const QString &text, const QString&infoT
 UTILS_EXPORT bool okCancelMessageBox( const QString &text, const QString&infoText, const QString&detail = QString::null, const QString &title = QString::null );
 UTILS_EXPORT bool functionNotAvailableMessageBox( const QString &functionText );
 UTILS_EXPORT void quickDebugDialog( const QStringList &texts);
-UTILS_EXPORT bool defaultLicenceAgreementDialog(const QString &message, Utils::LicenseTerms::AvailableLicense licence);
+UTILS_EXPORT bool defaultLicenseAgreementDialog(const QString &message, Utils::LicenseTerms::AvailableLicense license);
 
 // Dialogs for user input
 UTILS_EXPORT QString askUser( const QString &title, const QString &question );

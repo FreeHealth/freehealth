@@ -7,7 +7,7 @@
     <!-- Non translatable values -->
     <authors>Eric Maeker, MD</authors>
     <version>test</version>
-    <fmfversion>0.6.2</fmfversion>
+    <fmfv>0.7.0</fmfv>
     <cdate>2011-12-21</cdate>
     <lmdate>2011-12-21</lmdate>
     <icon>geriatrics.png</icon>
@@ -15,7 +15,7 @@
     <bibliography pmid=""></bibliography>
 
     <!-- Translatable values -->
-    <licence>GPLv3</licence>
+    <license>GPLv3</license>
     <description lang="xx">Test script: onValueChanged</description>
     <category lang="xx">Test</category>
     <category lang="fr">Test</category>

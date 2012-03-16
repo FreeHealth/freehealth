@@ -14,7 +14,7 @@
     <bibliography pmid="7440521">Hamilton M. Rating depressive patients. J Clin Psychiatry. 1980 Dec;41(12 Pt 2):21-4.</bibliography>
 
     <!-- Translatable values -->
-    <licence>GPLv3</licence>
+    <license>GPLv3</license>
     <description lang="fr">Échelle de dépression de Hamilton</description>
     <description lang="en">Hamilton Rating Scale for Depression</description>
     <description lang="de">Hamilton-Skala</description>

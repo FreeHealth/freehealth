@@ -60,7 +60,7 @@ public:
     QString name() const;
     QString vendor() const;
     QString serverFileName() const;
-    QString serverLicenceFileName() const;
+    QString serverLicenseFileName() const;
 
     // Path && file name
     QString originalXmlConfigFileName() const;

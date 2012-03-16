@@ -18,7 +18,7 @@
     <bibliography/>
 
     <!-- Translatable values -->
-    <licence>GPLv3</licence>
+    <license>GPLv3</license>
     <label lang="fr">Données locales du projet FreeMedForms</label>
     <label lang="xx">FreeMedForms project local data</label>
     <description lang="fr">Données par défaut pour FreeMedForms</description>

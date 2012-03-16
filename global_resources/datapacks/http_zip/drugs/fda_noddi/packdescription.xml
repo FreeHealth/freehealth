@@ -23,7 +23,7 @@
     <datatype>DrugsWithoutInteractions</datatype>
 
     <!-- Translatable values -->
-    <licence>GPLv3</licence>
+    <license>GPLv3</license>
     <label lang="fr">Base de données thérapeutique américaine (sans interactions)</label>
     <label lang="xx">USA pharmaceutical drug database (without interactions)</label>
     <description lang="fr">Données thérapeutiques américaine pour FreeMedForms (sans interactions)</description>

@@ -616,7 +616,7 @@ DatabaseInfos *DrugsBase::getDrugSourceInformation(const QString &drugSourceUid)
             info->weblink = q.value(Constants::SOURCES_WEBLINK).toString();
             info->author = q.value(Constants::SOURCES_AUTHORS).toString();
             info->copyright = q.value(Constants::SOURCES_COPYRIGHT).toString();
-            info->license = q.value(Constants::SOURCES_LICENCE).toString();
+            info->license = q.value(Constants::SOURCES_LICENSE).toString();
             info->date = q.value(Constants::SOURCES_DATE).toDate();
             info->drugsUidName = q.value(Constants::SOURCES_DRUGUID_NAME).toString();
             info->packUidName = q.value(Constants::SOURCES_PACKUID_NAME).toString();

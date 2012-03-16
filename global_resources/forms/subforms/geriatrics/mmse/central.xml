@@ -12,7 +12,7 @@
         <weblink/>
         <bibliography/>
         <!-- Translatable values -->
-        <licence>GPLv3</licence>
+        <license>GPLv3</license>
         <description>MMSE</description>
         <category lang="en">Geriatrics</category>
         <category lang="fr">Gériatrie</category>

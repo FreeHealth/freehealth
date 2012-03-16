@@ -13,7 +13,7 @@
         <bibliography pmid="1202204">Folstein MF, Folstein SE, McHugh PR. "Mini-mental state". A practical method for grading the cognitive state of patients for the clinician. J Psychiatr Res. 1975 Nov;12(3):189-98.</bibliography>
 
         <!-- Translatable values -->
-        <licence>GPLv3</licence>
+        <license>GPLv3</license>
         <description lang="xx">MMSE using checkboxes</description>
         <description lang="fr">MMSE utilisant des cases à cocher</description>
         <description lang="de">MMSE mit checkboxen</description>

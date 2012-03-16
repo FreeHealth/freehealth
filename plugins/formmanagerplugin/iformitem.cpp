@@ -29,7 +29,7 @@
  \class Form::FormItem
  This object represents one element of the patient file form.\n
  It contains:
-  - one Form::FormItemSpec with description of the item: author, version, licence...
+  - one Form::FormItemSpec with description of the item: author, version, license...
   - one Form::FormItemScripts for the script management
   - one Form::FormItemValues
   - you can set its Form::IFormItemData for the database access

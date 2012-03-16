@@ -15,7 +15,7 @@
     <bibliography/>
 
     <!-- Translatable values -->
-    <licence>GPLv3</licence>
+    <license>GPLv3</license>
     <description lang="fr">Dossier médical ultra-simplifié</description>
     <description lang="xx">Generic ultra-simplified patient file</description>
     <category lang="xx">General practice</category>

@@ -14,7 +14,7 @@
     <bibliography pmid=" 12485966">National Cholesterol Education Program (NCEP) Expert Panel on Detection, Evaluation, and Treatment of High Blood Cholesterol in Adults (Adult Treatment Panel III). Third Report of the National Cholesterol Education Program (NCEP) Expert Panel on Detection, Evaluation, and Treatment of High Blood Cholesterol in Adults (Adult Treatment Panel III) final report. Circulation. 2002 Dec 17;106(25):3143-421.</bibliography>
 
     <!-- Translatable values -->
-    <licence>GPLv3</licence>
+    <license>GPLv3</license>
     <description lang="fr">Score de risque cardio-vasculaire de Framingham</description>
     <description lang="xx">Framingham Cardiovascular risk score</description>
     <category lang="xx">Cardiology</category>
