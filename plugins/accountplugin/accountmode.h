@@ -48,6 +48,14 @@ public:
     
     QString name() const;
 
+public Q_SLOTS:
+    void showAddReceipts();
+    void showReceipts();
+    void showLedger();
+    void showMovements();
+    void showAssets();
+    void showAccount();
+
 private Q_SLOTS:
     void postCoreInitialization();
     void modeActivated(Core::IMode *mode);

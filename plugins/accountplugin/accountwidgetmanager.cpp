@@ -62,7 +62,7 @@ using namespace Account;
 using namespace Account::Internal;
 using namespace Trans::ConstantTranslations;
 
-inline static Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
+static inline Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
 static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
 static inline Core::IMainWindow *mainWindow() { return Core::ICore::instance()->mainWindow(); }
 static inline Core::ModeManager *modeManager() {return Core::ICore::instance()->modeManager();}
@@ -267,7 +267,7 @@ void AccountActionHandler::addReceipts()
     QWidget *w = mainWindow()->centralWidget();
     delete w;
     w = 0;
-    mainWindow()->setCentralWidget(new preferredReceipts(mainWindow()));   
+    mainWindow()->setCentralWidget(new PreferredReceipts(mainWindow()));
 }
 
 void AccountActionHandler::receipts()
@@ -311,47 +311,56 @@ void AccountActionHandler::account(){
 #else
 void AccountActionHandler::addReceipts()
 {
-    AccountMode *accMode = qobject_cast<AccountMode*>(modeManager()->mode(Core::Constants::MODE_ACCOUNT));
-    accMode->setCentralWidget(new preferredReceipts(mainWindow()));
-    modeManager()->activateMode(Core::Constants::MODE_ACCOUNT);
+    AccountMode *accountMode = qobject_cast<AccountMode*>(modeManager()->mode(Core::Constants::MODE_ACCOUNT));
+    Q_ASSERT(accountMode);
+    accountMode->showAddReceipts();
+//    accMode->setCentralWidget(new PreferredReceipts(mainWindow()));
+//    modeManager()->activateMode(Core::Constants::MODE_ACCOUNT);
 }
 
 void AccountActionHandler::receipts()
 {
-    AccountMode *accMode = qobject_cast<AccountMode*>(modeManager()->mode(Core::Constants::MODE_ACCOUNT));
-    accMode->setCentralWidget(new ReceiptViewer(mainWindow()));
-    modeManager()->activateMode(Core::Constants::MODE_ACCOUNT);
+    AccountMode *accountMode = qobject_cast<AccountMode*>(modeManager()->mode(Core::Constants::MODE_ACCOUNT));
+    Q_ASSERT(accountMode);
+    accountMode->showReceipts();
+//    accMode->setCentralWidget(new ReceiptViewer(mainWindow()));
+//    modeManager()->activateMode(Core::Constants::MODE_ACCOUNT);
 }
 
 void AccountActionHandler::ledger()
 {
-    AccountMode *accMode = qobject_cast<AccountMode*>(modeManager()->mode(Core::Constants::MODE_ACCOUNT));
-    accMode->setCentralWidget(new LedgerViewer(mainWindow()));
-    modeManager()->activateMode(Core::Constants::MODE_ACCOUNT);
+    AccountMode *accountMode = qobject_cast<AccountMode*>(modeManager()->mode(Core::Constants::MODE_ACCOUNT));
+    Q_ASSERT(accountMode);
+    accountMode->showLedger();
+//    accMode->setCentralWidget(new LedgerViewer(mainWindow()));
+//    modeManager()->activateMode(Core::Constants::MODE_ACCOUNT);
 }
 
 void AccountActionHandler::movements()
 {
-    AccountMode *accMode = qobject_cast<AccountMode*>(modeManager()->mode(Core::Constants::MODE_ACCOUNT));
-    accMode->setCentralWidget(new MovementsViewer(mainWindow()));
-    modeManager()->activateMode(Core::Constants::MODE_ACCOUNT);
+    AccountMode *accountMode = qobject_cast<AccountMode*>(modeManager()->mode(Core::Constants::MODE_ACCOUNT));
+    Q_ASSERT(accountMode);
+    accountMode->showMovements();
+//    accMode->setCentralWidget(new MovementsViewer(mainWindow()));
+//    modeManager()->activateMode(Core::Constants::MODE_ACCOUNT);
 }
 
 void AccountActionHandler::assets()
 {
-    AccountMode *accMode = qobject_cast<AccountMode*>(modeManager()->mode(Core::Constants::MODE_ACCOUNT));
-    accMode->setCentralWidget(new AssetsViewer(mainWindow()));
-    modeManager()->activateMode(Core::Constants::MODE_ACCOUNT);
+    AccountMode *accountMode = qobject_cast<AccountMode*>(modeManager()->mode(Core::Constants::MODE_ACCOUNT));
+    Q_ASSERT(accountMode);
+    accountMode->showAssets();
+//    accMode->setCentralWidget(new AssetsViewer(mainWindow()));
+//    modeManager()->activateMode(Core::Constants::MODE_ACCOUNT);
 }
 
-void AccountActionHandler::account(){
-    AccountMode *accMode = qobject_cast<AccountMode*>(modeManager()->mode(Core::Constants::MODE_ACCOUNT));
-    accMode->setCentralWidget(new AccountView(mainWindow()));
-    modeManager()->activateMode(Core::Constants::MODE_ACCOUNT);
-    /*QWidget *w = mainWindow()->centralWidget();
-    delete w;
-    w = 0;
-    mainWindow()->setCentralWidget(new AccountView(mainWindow()));    */
+void AccountActionHandler::account()
+{
+    AccountMode *accountMode = qobject_cast<AccountMode*>(modeManager()->mode(Core::Constants::MODE_ACCOUNT));
+    Q_ASSERT(accountMode);
+    accountMode->showAccount();
+//    accMode->setCentralWidget(new AccountView(mainWindow()));
+//    modeManager()->activateMode(Core::Constants::MODE_ACCOUNT);
 }
 #endif
 

@@ -29,8 +29,8 @@
  *  Contributors :                                                         *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
-#ifndef preferredRECEIPTS_H
-#define preferredRECEIPTS_H
+#ifndef PREFERREDRECEIPTS_H
+#define PREFERREDRECEIPTS_H
 
 #include <accountbaseplugin/accountmodel.h>
 #include <accountbaseplugin/constants.h>
@@ -40,25 +40,28 @@
 #include <QHash>
 
 namespace Ui{
-    class preferredReceiptsWidget;
+    class PreferredReceiptsWidget;
 }
 
-class ACCOUNT_EXPORT preferredReceipts: public QWidget {
+class ACCOUNT_EXPORT PreferredReceipts: public QWidget {
     Q_OBJECT
-    public :
-        preferredReceipts(QWidget * parent);
-        ~preferredReceipts();
-    private :
-        void insertpreferredValuesIntoAccount();
-        Ui::preferredReceiptsWidget *ui;
-        int m_typeOfChoice;
-        double m_percent;
-        QHash<int,double> m_choiceAndPercentagesHash;
-        QHash<int,QVariant> m_choiceAndDebtorHash;
-        QString m_preferredAct;
-    private Q_SLOTS :
-        void showChoiceDialog();
+
+public:
+    PreferredReceipts(QWidget * parent);
+    ~PreferredReceipts();
+
+private:
+    void insertpreferredValuesIntoAccount();
+    Ui::PreferredReceiptsWidget *ui;
+    int m_typeOfChoice;
+    double m_percent;
+    QHash<int,double> m_choiceAndPercentagesHash;
+    QHash<int,QVariant> m_choiceAndDebtorHash;
+    QString m_preferredAct;
+
+private Q_SLOTS:
+    void showChoiceDialog();
 };
 
-#endif
+#endif  // PREFERREDRECEIPTS_H
 

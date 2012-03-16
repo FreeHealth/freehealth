@@ -31,11 +31,18 @@
  ***************************************************************************/
 #include "accountmode.h"
 #include "accountview.h"
-#include "receipts/receiptviewer.h"
+
+#include <accountplugin/receipts/preferredreceipts.h>
+#include <accountplugin/receipts/receiptviewer.h>
+#include <accountplugin/assets/assetsViewer.h>
+#include <accountplugin/ledger/ledgerviewer.h>
+#include <accountplugin/movements/movementsviewer.h>
+#include <accountplugin/accountview.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/itheme.h>
+#include <coreplugin/imainwindow.h>
 #include <coreplugin/iuser.h>
 #include <coreplugin/constants_menus.h>
 #include <coreplugin/constants_icons.h>
@@ -55,6 +62,7 @@ using namespace Trans::ConstantTranslations;
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
 static inline Core::ModeManager *modeManager() {return Core::ICore::instance()->modeManager();}
+static inline Core::IMainWindow *mainWindow() { return Core::ICore::instance()->mainWindow(); }
 
 AccountMode::AccountMode(QObject *parent) :
     Core::BaseMode(parent)
@@ -132,4 +140,46 @@ void AccountMode::modeActivated(Core::IMode *mode)
             settings()->noMoreFirstTimeRunning(Core::Constants::MODE_ACCOUNT);
         }
     }
+}
+
+void AccountMode::showAddReceipts()
+{
+    setPatientBarVisibility(true);
+    setCentralWidget(new PreferredReceipts(mainWindow()));
+    modeManager()->activateMode(Core::Constants::MODE_ACCOUNT);
+}
+
+void AccountMode::showReceipts()
+{
+    setPatientBarVisibility(true);
+    setCentralWidget(new ReceiptViewer(mainWindow()));
+    modeManager()->activateMode(Core::Constants::MODE_ACCOUNT);
+}
+
+void AccountMode::showLedger()
+{
+    setPatientBarVisibility(false);
+    setCentralWidget(new LedgerViewer(mainWindow()));
+    modeManager()->activateMode(Core::Constants::MODE_ACCOUNT);
+}
+
+void AccountMode::showMovements()
+{
+    setPatientBarVisibility(false);
+    setCentralWidget(new MovementsViewer(mainWindow()));
+    modeManager()->activateMode(Core::Constants::MODE_ACCOUNT);
+}
+
+void AccountMode::showAssets()
+{
+    setPatientBarVisibility(false);
+    setCentralWidget(new AssetsViewer(mainWindow()));
+    modeManager()->activateMode(Core::Constants::MODE_ACCOUNT);
+}
+
+void AccountMode::showAccount()
+{
+    setPatientBarVisibility(false);
+    setCentralWidget(new AccountView(mainWindow()));
+    modeManager()->activateMode(Core::Constants::MODE_ACCOUNT);
 }

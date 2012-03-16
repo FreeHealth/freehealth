@@ -52,7 +52,8 @@ enum { WarnDebugMessage = false };
 static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
 static inline Core::IPatient *patient() { return Core::ICore::instance()->patient(); }
 
-preferredReceipts::preferredReceipts(QWidget * parent):QWidget(parent),ui(new Ui::preferredReceiptsWidget){
+PreferredReceipts::PreferredReceipts(QWidget * parent):QWidget(parent),ui(new Ui::PreferredReceiptsWidget){
+    setObjectName("PreferredReceipts");
     ui->setupUi(this);
     ui->resultLabel->setText("");
     m_typeOfChoice = 0;
@@ -73,9 +74,9 @@ preferredReceipts::preferredReceipts(QWidget * parent):QWidget(parent),ui(new Ui
     
 }
 
-preferredReceipts::~preferredReceipts(){}
+PreferredReceipts::~PreferredReceipts(){}
 
-void preferredReceipts::insertpreferredValuesIntoAccount(){
+void PreferredReceipts::insertpreferredValuesIntoAccount(){
     QString currency = trUtf8("euros");
     receiptsEngine receiptsIO;
     QString userUuid = user()->uuid();
@@ -148,7 +149,7 @@ void preferredReceipts::insertpreferredValuesIntoAccount(){
     ui->resultLabel->setText(resultTextHtml);
 }
 
-void preferredReceipts::showChoiceDialog(){
+void PreferredReceipts::showChoiceDialog(){
     choiceDialog * choice = new choiceDialog(this,false,m_preferredAct);
     if (choice->exec() == QDialog::Accepted)
     {
