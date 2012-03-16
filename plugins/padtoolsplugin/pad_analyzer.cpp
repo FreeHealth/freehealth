@@ -31,13 +31,15 @@
 
 #include "pad_analyzer.h"
 
+#include <QDebug>
+
 PadAnalyzer::PadAnalyzer()
 	: _curPos(-1) // _curPos == -1 means no current analyze
 {
 	_lexemNull.type = Lexem_Null;
 }
 
-/** Analyzes a mask \e text. */
+/** Analyzes a mask \e text and return a \e PadTools::Pad pointer. */
 Pad *PadAnalyzer::analyze(const QString &text)
 {
 	Lexem lex;

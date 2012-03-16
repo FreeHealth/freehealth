@@ -131,13 +131,12 @@ TokenModel::TokenModel(QObject *parent) :
     d->m_Tokens.insert("Prescription.Drug.MEAL", "meal");
     d->m_Tokens.insert("PERIOD", "period");
     d->m_Tokens.insert("PERIOD_SCHEME", "period scheme");
-//    d->m_Tokens.insert("D_FROM", "d_from");
-//    d->m_Tokens.insert("D_TO", "d_to");
-//    d->m_Tokens.insert("D_SCHEME", "d_scheme");
-//    d->m_Tokens.insert("ROUTE", "route");
-//    d->m_Tokens.insert("DISTRIBUTED_DAILY_SCHEME", "distributed daily scheme");
-//    d->m_Tokens.insert("MIN_INTERVAL", "min interval");
-//    d->m_Tokens.insert("NOTE", "note");
+    d->m_Tokens.insert("A", "A");
+    d->m_Tokens.insert("B", "B");
+    d->m_Tokens.insert("C", "C");
+    d->m_Tokens.insert("D", "D");
+    d->m_Tokens.insert("NULL", "");
+    d->m_Tokens.insert("HTMLTOKEN", "<b>htmlToken</b>");
 
     d->createTree();
 }

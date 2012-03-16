@@ -25,17 +25,28 @@
         <widget class="QLineEdit" name="search"/>
        </item>
        <item>
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <item>
+          <widget class="QToolButton" name="analyse">
+           <property name="text">
+            <string>Analyse</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
         <widget class="QTreeView" name="treeView"/>
        </item>
       </layout>
      </widget>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>1</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="writerTab">
        <attribute name="title">
-        <string>Tab 1</string>
+        <string>Result</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_2">
         <item row="0" column="0">
@@ -45,11 +56,21 @@
       </widget>
       <widget class="QWidget" name="sourceTab">
        <attribute name="title">
-        <string>Tab 2</string>
+        <string>Raw source</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout">
         <item row="0" column="0">
          <widget class="QPlainTextEdit" name="rawSource"/>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tab">
+       <attribute name="title">
+        <string>Errors</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_4">
+        <item row="0" column="0">
+         <widget class="QListWidget" name="listWidgetErrors"/>
         </item>
        </layout>
       </widget>

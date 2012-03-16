@@ -48,7 +48,9 @@ public:
     QString htmlResult() const;
     QString rawSource() const;
 
-    
+private Q_SLOTS:
+    void on_analyse_clicked();
+
 private:
     Internal::PadWriterPrivate *d;
 

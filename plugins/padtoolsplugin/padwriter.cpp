@@ -32,12 +32,19 @@
 #include "padwriter.h"
 #include "tokenmodel.h"
 
+#include <coreplugin/icore.h>
+#include <coreplugin/ipadtools.h>
+
+#include <utils/log.h>
+
 #include "ui_padwriter.h"
 
 #include <QDebug>
 
 using namespace PadTools;
 using namespace Internal;
+
+static inline Core::IPadTools *padTools() {return Core::ICore::instance()->padTools();}
 
 namespace PadTools {
 namespace Internal {
@@ -62,14 +69,33 @@ PadWriter::PadWriter(QWidget *parent) :
 {
     d->ui = new Ui::PadWriter;
     d->ui->setupUi(this);
+    d->ui->tabWidget->setCurrentIndex(0);
 
     // create tokenmodel
     d->m_TokenModel = new TokenModel(this);
-//    d->ui->treeView->header()->hide();
     d->ui->treeView->setModel(d->m_TokenModel);
 
-//    ui->wysiwyg
-//    ui->rawSource
+    // TEST
+    d->ui->rawSource->setPlainText(
+                "[before 'a'  ~A~  after 'a']\n"
+                "[before 'b'  ~B~  after 'b']\n"
+                "[before 'c'  ~C~  after 'c']\n"
+                "[before 'html'  ~HTMLTOKEN~  after 'html']\n"
+                "\n\n"
+                "---------- TESTING NESTED ----------\n"
+                "[ba [bb ~B~ ab] ~A~  aa]  -----> ba bb B ab A aa\n"
+                "[bb ~B~ ab [ba ~A~  aa]]  -----> bb B ab ba A aa\n"
+                "[[bb ~B~ ab ba ~NULL~  aa]]  -----> \n"
+                "[bb ~B~ ab [ba ~NULL~  aa]]  -----> bb B ab\n"
+                "\n"
+                "[ab ~A~ aa [ba [nnn ~NULL~ nnn [ac ~C~ bc]] ~B~  aa]]  -----> ab A aa ba B aa\n"
+                "[ab ~A~ aa [ba [[nnn ~NULL~ nnn ] ac ~C~ bc ] ~B~  aa]]  -----> ab A aa ba B aa\n"
+                "\n"
+                "\n"
+                "---------- TESTING INSIDE HTML CODE ----------\n"
+                "[<p>Test a  ~A~ is Ok </p>]"
+                );
+    // END TEST
 }
 
 PadWriter::~PadWriter()
@@ -90,22 +116,24 @@ QString PadWriter::rawSource() const
     return d->ui->rawSource->toPlainText();
 }
 
-//void PadWriter::rawSourceTextChanged()
-//{
-//    QList<Core::PadAnalyzerError> errors;
-//    // TODO : use a timer based on key strokes instead of realtime analysis
-////**    m_ui->previewTextEdit->setPlainText(m_padTools->parse(m_ui->padTextEdit->textEdit()->toPlainText(), m_TokenModel->tokens(), errors));
+void PadWriter::on_analyse_clicked()
+{
+    QList<Core::PadAnalyzerError> errors;
+    const QString &parsed = padTools()->parse(d->ui->rawSource->toPlainText(), d->m_TokenModel->tokens(), errors);
+    if (Qt::mightBeRichText(parsed))
+        d->ui->wysiwyg->setHtml(parsed);
+    else
+        d->ui->wysiwyg->setPlainText(parsed);
 
-////**	m_ui->listWidgetErrors->clear();
-//    foreach (const Core::PadAnalyzerError &error, errors) {
-//        switch (error.errorType()) {
-//        case Core::PadAnalyzerError::Error_UnexpectedChar:
-////**			m_ui->listWidgetErrors->addItem(tr("Unexpected '%1' found at line %2 and pos %3").arg(error.errorTokens()["char"].toString()).arg(error.line()).arg(error.pos()));
-//            break;
-//        case Core::PadAnalyzerError::Error_CoreDelimiterExpected:
-////**			m_ui->listWidgetErrors->addItem(tr("Expected '%1' at line %2 and pos %3").arg(error.errorTokens()["char"].toString()).arg(error.line()).arg(error.pos()));
-//            break;
-//        }
-//    }
-//}
-
+    d->ui->listWidgetErrors->clear();
+    foreach (const Core::PadAnalyzerError &error, errors) {
+        switch (error.errorType()) {
+        case Core::PadAnalyzerError::Error_UnexpectedChar:
+            d->ui->listWidgetErrors->addItem(tr("Unexpected '%1' found at line %2 and pos %3").arg(error.errorTokens()["char"].toString()).arg(error.line()).arg(error.pos()));
+            break;
+        case Core::PadAnalyzerError::Error_CoreDelimiterExpected:
+            d->ui->listWidgetErrors->addItem(tr("Expected '%1' at line %2 and pos %3").arg(error.errorTokens()["char"].toString()).arg(error.line()).arg(error.pos()));
+            break;
+        }
+    }
+}

@@ -24,9 +24,18 @@
  *  Contributors :                                                         *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
+/**
+  \class PadTools::PadItem
+  Represents a full token including:
+  - a PadCore (the token name)
+  - fragments of conditional texts (before and after)
+*/
+
 #include <QString>
 
 #include "pad_item.h"
+
+#include <QDebug>
 
 PadItem::~PadItem()
 {
@@ -43,18 +52,18 @@ void PadItem::print(int indent) const
 	QString str(indent, ' ');
 	str += "[padItem]";
 	qDebug("%s", qPrintable(str));
-	foreach (PadFragment *fragment, _fragments){
+    foreach (PadFragment *fragment, _fragments) {
 		fragment->print(indent + 2);
 	}
 }
 
+/** Find nested PadItem in conditional texts (before and after) */
 QList<PadFragment*> PadItem::getAllFragments() const
 {
 	QList<PadFragment*> fragments;
 	PadItem *padItem;
 	fragments.append(_fragments);
-	foreach (PadFragment *fragment, _fragments)
-	{
+    foreach (PadFragment *fragment, _fragments) {
 		padItem = dynamic_cast<PadItem*>(fragment);
 		if (padItem)
 			fragments.append(padItem->getAllFragments());
@@ -71,8 +80,7 @@ QString PadItem::run(QMap<QString,QVariant> &tokens) const
 	QString coreValue;
 
 	// if a core exists, the entire pad expression is optional, depending on the core emptiness
-	if (core)
-	{
+    if (core) {
 		coreValue = core->run(tokens);
 		if (coreValue.isEmpty()) // core empty? so the entire pad will be empty too
 			return "";
@@ -87,8 +95,7 @@ QString PadItem::run(QMap<QString,QVariant> &tokens) const
 PadCore *PadItem::getCore() const
 {
 	PadCore *core;
-	foreach (PadFragment *fragment, _fragments)
-	{
+    foreach (PadFragment *fragment, _fragments) {
 		core = dynamic_cast<PadCore*>(fragment);
 		if (core)
 			return core;

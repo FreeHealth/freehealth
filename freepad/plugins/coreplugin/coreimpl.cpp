@@ -120,9 +120,6 @@ CoreImpl::CoreImpl(QObject *parent) :
     // initialize the settings
     m_Theme->messageSplashScreen(tkTr(Trans::Constants::LOADING_SETTINGS));
 
-	// pad
-	m_padTools = ExtensionSystem::PluginManager::instance()->getObject<IPadTools>();
-
     // WINE compatibility (only for testing under ubuntu when crosscompiling)
 //#ifdef Q_OS_WIN
 //    // For WINE testings
@@ -223,6 +220,8 @@ bool CoreImpl::initialize(const QStringList &arguments, QString *errorString)
 
 void CoreImpl::extensionsInitialized()
 {
+    // pad
+    m_padTools = ExtensionSystem::PluginManager::instance()->getObject<IPadTools>();
     Q_EMIT coreOpened();
 }
 

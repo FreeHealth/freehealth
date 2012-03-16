@@ -48,8 +48,6 @@
 
 using namespace PadTools;
 
-//static inline Core::IMainWindow *mainWindow() {return Core::ICore::instance()->mainWindow();}
-
 PadToolsPlugin::PadToolsPlugin()
 {
     if (Utils::Log::warnPluginsCreation())
