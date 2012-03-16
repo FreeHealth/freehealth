@@ -142,7 +142,11 @@ void PatientModelWrapper::hidePatientBar()
 
 void PatientModelWrapper::showPatientBar()
 {
-    Patients::PatientBar::instance()->show();
+    // Show only if a patient is currently selected
+    if (m_Model->currentPatient().isValid())
+        Patients::PatientBar::instance()->show();
+    else
+        Patients::PatientBar::instance()->hide();
 }
 
 bool PatientModelWrapper::isPatientBarVisible() const
