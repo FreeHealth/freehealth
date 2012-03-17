@@ -2160,30 +2160,30 @@ Faites le dans Immobilisations.</translation>
     <message>
         <location filename="../../plugins/accountplugin/receipts/preferredreceipts.cpp" line="80"/>
         <source>euros</source>
-        <translation type="unfinished">euros</translation>
+        <translation>euros</translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/receipts/preferredreceipts.cpp" line="118"/>
         <source>You should create a preferredValue like this:
 Take a value in thesaurus list with a RIGHT clic,
 if you don&apos;t have one, save the next value in thesaurus and chose it in the same way</source>
-        <translation type="unfinished">Vous pouvez créer une valeur préférentielle en prenant une valeur dans le thésaurus à l&apos;aide d&apos;un clique-droit,
+        <translation>Vous pouvez créer une valeur préférentielle en prenant une valeur dans le thésaurus à l&apos;aide d&apos;un clique-droit,
 si vous n&apos;en avez pas, sauvegardez la prochaine valeur dans le thésaurus et sélectionnez la à nouveau</translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/receipts/preferredreceipts.cpp" line="133"/>
         <source>Unable to insert datas into account</source>
-        <translation type="unfinished">Impossible d&apos;insérer les données dans la comptabilité</translation>
+        <translation>Impossible d&apos;insérer les données dans la comptabilité</translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/receipts/preferredreceipts.cpp" line="141"/>
         <source>The value </source>
-        <translation type="unfinished">La valeur </translation>
+        <translation>La valeur </translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/receipts/preferredreceipts.cpp" line="146"/>
         <source> has been inserted.</source>
-        <translation type="unfinished"> a été insérée.</translation>
+        <translation> a été insérée.</translation>
     </message>
 </context>
 <context>
@@ -2191,17 +2191,17 @@ si vous n&apos;en avez pas, sauvegardez la prochaine valeur dans le thésaurus e
     <message>
         <location filename="../../plugins/accountplugin/receipts/preferredreceipts.ui" line="14"/>
         <source>preferred receipt</source>
-        <translation type="unfinished">Recette préférée</translation>
+        <translation>Recette préférée</translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/receipts/preferredreceipts.ui" line="38"/>
         <source>Add a rapid receipts</source>
-        <translation type="unfinished">Ajouter une recette pour insertion rapide</translation>
+        <translation>Ajouter une recette pour insertion rapide</translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/receipts/preferredreceipts.ui" line="67"/>
         <source>result</source>
-        <translation type="unfinished">résultat</translation>
+        <translation>résultat</translation>
     </message>
 </context>
 <context>
