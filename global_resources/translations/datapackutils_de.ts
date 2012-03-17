@@ -173,12 +173,12 @@
 <context>
     <name>DataPack::Internal::PackDownloadPage</name>
     <message>
-        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="226"/>
+        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="324"/>
         <source>Downloading packs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="227"/>
+        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="325"/>
         <source>You just have to wait until all packs are downloaded.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -186,7 +186,7 @@
 <context>
     <name>DataPack::Internal::PackEndPage</name>
     <message>
-        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="578"/>
+        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="676"/>
         <source>Pack(s) processed.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -194,12 +194,12 @@
 <context>
     <name>DataPack::Internal::PackInstallPage</name>
     <message>
-        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="375"/>
+        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="473"/>
         <source>Installing pack(s)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="376"/>
+        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="474"/>
         <source>Wait until all installations are done.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -207,28 +207,46 @@
 <context>
     <name>DataPack::Internal::PackIntroPage</name>
     <message>
-        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="161"/>
+        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="164"/>
         <source>Pack processing</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="162"/>
+        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="165"/>
         <source>The following packs will be processed. Please verify all information.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="188"/>
+        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="191"/>
         <source>Pack(s) to install</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="190"/>
+        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="193"/>
         <source>Pack(s) to update</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="192"/>
+        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="195"/>
         <source>Pack(s) to remove</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>DataPack::Internal::PackLicensePage</name>
+    <message>
+        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="229"/>
+        <source>License agreement</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="230"/>
+        <source>The following packs need a license agreement.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="233"/>
+        <source>Accept all license terms</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -294,12 +312,12 @@
 <context>
     <name>DataPack::Internal::PackRemovePage</name>
     <message>
-        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="503"/>
+        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="601"/>
         <source>Removing pack(s)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="504"/>
+        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="602"/>
         <source>Wait until all removal are done.</source>
         <translation type="unfinished"></translation>
     </message>

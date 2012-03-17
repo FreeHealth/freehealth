@@ -8,11 +8,30 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Tab 1</source>
+        <source>Analyse</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Tab 2</source>
+        <source>Result</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Raw source</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Errors</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>PadTools::PadWriter</name>
+    <message>
+        <source>Unexpected &apos;%1&apos; found at line %2 and pos %3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Expected &apos;%1&apos; at line %2 and pos %3</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

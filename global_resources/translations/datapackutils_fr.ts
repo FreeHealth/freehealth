@@ -102,12 +102,12 @@
     <message>
         <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="269"/>
         <source>Server authentication requiered</source>
-        <translation type="unfinished"></translation>
+        <translation>Le serveur requière une authentification</translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="294"/>
         <source>Proxy authentication requiered</source>
-        <translation type="unfinished"></translation>
+        <translation>Le proxy requière une authentification</translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="323"/>
@@ -167,18 +167,18 @@
     <message>
         <location filename="../../libs/datapackutils/serverengines/localserverengine.cpp" line="138"/>
         <source>Pack file does not exist.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le fichier de données n&apos;existe pas.</translation>
     </message>
 </context>
 <context>
     <name>DataPack::Internal::PackDownloadPage</name>
     <message>
-        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="226"/>
+        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="324"/>
         <source>Downloading packs</source>
         <translation>Téléchargement des paquets</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="227"/>
+        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="325"/>
         <source>You just have to wait until all packs are downloaded.</source>
         <translation>Attendez jusque la fin des tâches de téléchargement.</translation>
     </message>
@@ -186,7 +186,7 @@
 <context>
     <name>DataPack::Internal::PackEndPage</name>
     <message>
-        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="578"/>
+        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="676"/>
         <source>Pack(s) processed.</source>
         <translation>Paquet(s) traité(s).</translation>
     </message>
@@ -194,12 +194,12 @@
 <context>
     <name>DataPack::Internal::PackInstallPage</name>
     <message>
-        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="375"/>
+        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="473"/>
         <source>Installing pack(s)</source>
         <translation>Installation du(des) paquet(s)</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="376"/>
+        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="474"/>
         <source>Wait until all installations are done.</source>
         <translation>Attendez la fin de la tâche d&apos;installation.</translation>
     </message>
@@ -207,29 +207,47 @@
 <context>
     <name>DataPack::Internal::PackIntroPage</name>
     <message>
-        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="161"/>
+        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="164"/>
         <source>Pack processing</source>
         <translation>Traitement des paquets</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="162"/>
+        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="165"/>
         <source>The following packs will be processed. Please verify all information.</source>
-        <translation type="unfinished"></translation>
+        <translation>Les paquets de données suivants vont être traités. Veuillez vérifier les informations ci-dessous.</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="188"/>
+        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="191"/>
         <source>Pack(s) to install</source>
         <translation>Paquet(s) à installer</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="190"/>
+        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="193"/>
         <source>Pack(s) to update</source>
         <translation>Paquet(s) à mettre à jour</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="192"/>
+        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="195"/>
         <source>Pack(s) to remove</source>
         <translation>Paquet(s) à supprimer</translation>
+    </message>
+</context>
+<context>
+    <name>DataPack::Internal::PackLicensePage</name>
+    <message>
+        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="229"/>
+        <source>License agreement</source>
+        <translation>Accord de licence</translation>
+    </message>
+    <message>
+        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="230"/>
+        <source>The following packs need a license agreement.</source>
+        <translation>Les paquets de données suivant nécessitent un accord de licence.</translation>
+    </message>
+    <message>
+        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="233"/>
+        <source>Accept all license terms</source>
+        <translation>Accepter les termes des licences.</translation>
     </message>
 </context>
 <context>
@@ -282,7 +300,7 @@
         <location filename="../../libs/datapackutils/packmanager.cpp" line="271"/>
         <location filename="../../libs/datapackutils/packmanager.cpp" line="272"/>
         <source>Unable to remove pack %1, unzip path does not exist (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible de supprimer le paquet de données %1, le répertoire de décompression n&apos;existe pas (%2)</translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/packmanager.cpp" line="285"/>
@@ -294,12 +312,12 @@
 <context>
     <name>DataPack::Internal::PackRemovePage</name>
     <message>
-        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="503"/>
+        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="601"/>
         <source>Removing pack(s)</source>
         <translation>Suppression de(s) paquet(s)</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="504"/>
+        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="602"/>
         <source>Wait until all removal are done.</source>
         <translation>Attendez la fin de la suppression.</translation>
     </message>
@@ -400,7 +418,7 @@
     <message>
         <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="394"/>
         <source>Unzip pack to path</source>
-        <translation type="unfinished"></translation>
+        <translation>Décompression du paquet de données dans le répertoire</translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="423"/>

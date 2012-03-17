@@ -216,12 +216,12 @@
 <context>
     <name>Account::Internal::AccountMode</name>
     <message>
-        <location filename="../../plugins/accountplugin/accountmode.cpp" line="82"/>
+        <location filename="../../plugins/accountplugin/accountmode.cpp" line="90"/>
         <source>Accountancy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/accountmode.cpp" line="109"/>
+        <location filename="../../plugins/accountplugin/accountmode.cpp" line="117"/>
         <source>Please read this explanation before using FreeAccount.
 FreeAccount is composed of:
   - Receipts to get your earnings,
@@ -231,7 +231,7 @@ FreeAccount is composed of:
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/accountmode.cpp" line="115"/>
+        <location filename="../../plugins/accountplugin/accountmode.cpp" line="123"/>
         <source>The shortcuts for those programs are:
   - for your rapid receipt, CTRL+R,
   - for the receipts widget, Maj+R,
@@ -244,12 +244,12 @@ Then parametrize your user, sites, bank and so on.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/accountmode.cpp" line="127"/>
+        <location filename="../../plugins/accountplugin/accountmode.cpp" line="135"/>
         <source>Ok</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/accountmode.cpp" line="127"/>
+        <location filename="../../plugins/accountplugin/accountmode.cpp" line="135"/>
         <source>Do not show this message again</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2121,6 +2121,54 @@ Do it in assets.</source>
     </message>
 </context>
 <context>
+    <name>PreferredReceipts</name>
+    <message>
+        <location filename="../../plugins/accountplugin/receipts/preferredreceipts.cpp" line="80"/>
+        <source>euros</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/receipts/preferredreceipts.cpp" line="118"/>
+        <source>You should create a preferredValue like this:
+Take a value in thesaurus list with a RIGHT clic,
+if you don&apos;t have one, save the next value in thesaurus and chose it in the same way</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/receipts/preferredreceipts.cpp" line="133"/>
+        <source>Unable to insert datas into account</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/receipts/preferredreceipts.cpp" line="141"/>
+        <source>The value </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/receipts/preferredreceipts.cpp" line="146"/>
+        <source> has been inserted.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>PreferredReceiptsWidget</name>
+    <message>
+        <location filename="../../plugins/accountplugin/receipts/preferredreceipts.ui" line="14"/>
+        <source>preferred receipt</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/receipts/preferredreceipts.ui" line="38"/>
+        <source>Add a rapid receipts</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/receipts/preferredreceipts.ui" line="67"/>
+        <source>result</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>ProduceDoc</name>
     <message>
         <location filename="../../plugins/accountplugin/ledger/mythread.cpp" line="64"/>
@@ -2543,54 +2591,6 @@ You should create defaults in Configuration &gt; Preference &gt; Accountancy.</s
     <message>
         <location filename="../../plugins/accountplugin/receipts/findValuesGUI.ui" line="134"/>
         <source>Next</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>preferredReceipts</name>
-    <message>
-        <location filename="../../plugins/accountplugin/receipts/preferredreceipts.cpp" line="79"/>
-        <source>euros</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/accountplugin/receipts/preferredreceipts.cpp" line="117"/>
-        <source>You should create a preferredValue like this:
-Take a value in thesaurus list with a RIGHT clic,
-if you don&apos;t have one, save the next value in thesaurus and chose it in the same way</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/accountplugin/receipts/preferredreceipts.cpp" line="132"/>
-        <source>Unable to insert datas into account</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/accountplugin/receipts/preferredreceipts.cpp" line="140"/>
-        <source>The value </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/accountplugin/receipts/preferredreceipts.cpp" line="145"/>
-        <source> has been inserted.</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>preferredReceiptsWidget</name>
-    <message>
-        <location filename="../../plugins/accountplugin/receipts/preferredreceipts.ui" line="14"/>
-        <source>preferred receipt</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/accountplugin/receipts/preferredreceipts.ui" line="38"/>
-        <source>Add a rapid receipts</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/accountplugin/receipts/preferredreceipts.ui" line="67"/>
-        <source>result</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

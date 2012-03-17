@@ -47,13 +47,13 @@
     </message>
     <message>
         <location filename="../../freediams/plugins/coreplugin/coreimpl.cpp" line="214"/>
-        <source>You are running FreeDiams for the first time. You need to approve the license terms.</source>
-        <translation>FreeDiams démarre pour la première fois sur cet ordinateur. Vous devez accepter les termes de la licence.</translation>
+        <source>You are running FreeDiams for the first time. You need to approve the licence terms.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../freediams/plugins/coreplugin/coreimpl.cpp" line="217"/>
-        <source>You are running a new version of FreeDiams, you need to renew the license agreement.</source>
-        <translation>Nouvelle version de FreeDiams détectée, vous devez renouveler l&apos;agrément de licence.</translation>
+        <source>You are running a new version of FreeDiams, you need to renew the licence agreement.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../freediams/plugins/coreplugin/coreimpl.cpp" line="227"/>
