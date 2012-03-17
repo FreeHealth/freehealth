@@ -131,7 +131,7 @@ void GenericDescriptionEditor::on_langSelector_activated(const QString &text)
         // Save changes to our private description
         m_desc.setData(Utils::GenericDescription::Category, ui->category->text(), m_PreviousLang);
         m_desc.setData(Utils::GenericDescription::HtmlDescription, ui->htmlDescr->toHtml(), m_PreviousLang);
-        m_desc.setData(Utils::GenericDescription::GlobalLicense, ui->license->toPlainText(), m_PreviousLang);
+        m_desc.setData(Utils::GenericDescription::LicenseName, ui->license->toPlainText(), m_PreviousLang);
         m_desc.setData(Utils::GenericDescription::ShortDescription, ui->shortDescr->toPlainText(), m_PreviousLang);
         m_desc.setData(Utils::GenericDescription::Specialties, ui->spe->text(), m_PreviousLang);
         m_desc.setData(Utils::GenericDescription::ToolTip, ui->tooltip->text(), m_PreviousLang);
@@ -139,7 +139,7 @@ void GenericDescriptionEditor::on_langSelector_activated(const QString &text)
     }
     ui->category->setText(m_desc.data(Utils::GenericDescription::Category, text).toString());
     ui->htmlDescr->setHtml(m_desc.data(Utils::GenericDescription::HtmlDescription, text).toString());
-    ui->license->setPlainText(m_desc.data(Utils::GenericDescription::GlobalLicense, text).toString());
+    ui->license->setPlainText(m_desc.data(Utils::GenericDescription::LicenseName, text).toString());
     ui->shortDescr->setPlainText(m_desc.data(Utils::GenericDescription::ShortDescription, text).toString());
     ui->spe->setText(m_desc.data(Utils::GenericDescription::Specialties, text).toString());
     ui->tooltip->setText(m_desc.data(Utils::GenericDescription::ToolTip, text).toString());
@@ -185,7 +185,7 @@ Utils::GenericDescription GenericDescriptionEditor::submit()
 
     m_desc.setData(Utils::GenericDescription::Category, ui->category->text(), ui->langSelector->currentText());
     m_desc.setData(Utils::GenericDescription::HtmlDescription, ui->htmlDescr->toHtml(), ui->langSelector->currentText());
-    m_desc.setData(Utils::GenericDescription::GlobalLicense, ui->license->toPlainText(), ui->langSelector->currentText());
+    m_desc.setData(Utils::GenericDescription::LicenseName, ui->license->toPlainText(), ui->langSelector->currentText());
     m_desc.setData(Utils::GenericDescription::ShortDescription, ui->shortDescr->toPlainText(), ui->langSelector->currentText());
     m_desc.setData(Utils::GenericDescription::Specialties, ui->spe->text(), ui->langSelector->currentText());
     m_desc.setData(Utils::GenericDescription::ToolTip, ui->tooltip->text(), ui->langSelector->currentText());

@@ -37,12 +37,13 @@ struct DATAPACK_EXPORT ServerEngineStatus {
     ServerEngineStatus() :
         hasError(false),
         isSuccessful(false),
+        isLicenseAccepted(true),
         downloadCorrectlyFinished(false),
         proxyIdentificationError(false),
         serverIdentificationError(false)
     {}
 
-    bool hasError, isSuccessful;
+    bool hasError, isSuccessful, isLicenseAccepted;
     bool downloadCorrectlyFinished;
     bool proxyIdentificationError, serverIdentificationError;
     QStringList errorMessages, engineMessages;

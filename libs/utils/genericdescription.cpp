@@ -64,7 +64,8 @@ const char* const TAG_AUTHORS          = "authors";
 const char* const TAG_VENDOR           = "vendor";
 const char* const TAG_VALIDITY         = "validity";
 const char* const TAG_CATEGORY         = "category";
-const char* const TAG_LICENSE          = "license";
+const char* const TAG_LICENSE_NAME     = "license";
+const char* const TAG_LICENSE_TERMS    = "licenseterms";
 const char* const TAG_SPECIALTIES      = "specialties";
 const char* const TAG_CREATIONDATE     = "cdate";
 const char* const TAG_LASTMODIFDATE    = "lmdate";
@@ -396,7 +397,8 @@ QHash<int, QString> GenericDescription::translatableTagsDataReference() const
     elements.insert(GenericDescription::ShortDescription, TAG_DESCRIPTION);
     elements.insert(GenericDescription::HtmlDescription, TAG_HTMLDESCRIPTION);
     elements.insert(GenericDescription::HtmlSynthesis, TAG_HTMLSYNTHESIS);
-    elements.insert(GenericDescription::GlobalLicense, TAG_LICENSE);
+    elements.insert(GenericDescription::LicenseName, TAG_LICENSE_NAME);
+    elements.insert(GenericDescription::LicenseTerms, TAG_LICENSE_TERMS);
     elements.insert(GenericDescription::WebLink, TAG_WEBLINK);
     // add extra tags
     QHashIterator<int, QString> i(m_TranslatableExtra);

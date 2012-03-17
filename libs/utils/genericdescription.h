@@ -81,7 +81,8 @@ public:
         ShortDescription,
         HtmlDescription,
         HtmlSynthesis,
-        GlobalLicense,
+        LicenseName,
+        LicenseTerms,
         WebLink,
         MaxParam
     };

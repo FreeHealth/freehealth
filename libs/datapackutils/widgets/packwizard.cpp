@@ -38,6 +38,7 @@
 #include <datapackutils/serverenginestatus.h>
 
 #include <utils/log.h>
+#include <utils/licenseterms.h>
 
 #include <QTextBrowser>
 #include <QVBoxLayout>
@@ -48,6 +49,7 @@
 #include <QProgressBar>
 #include <QMovie>
 #include <QAbstractButton>
+#include <QCheckBox>
 #include <QTimer>
 
 #include <QDebug>
@@ -78,6 +80,7 @@ PackWizard::PackWizard(QWidget *parent) :
 {
     setPage(IntroPage, new PackIntroPage(this));
     setPage(RemovePacks, new PackRemovePage(this));
+    setPage(LicensePacks, new PackLicensePage(this));
     setPage(DownloadPacks, new PackDownloadPage(this));
     setPage(InstallPacks, new PackInstallPage(this));
     setPage(EndPage, new PackEndPage(this));
@@ -213,6 +216,101 @@ int PackIntroPage::nextId() const
 {
     if (!packWizard()->removePacks().isEmpty())
         return PackWizard::RemovePacks;
+    return PackWizard::LicensePacks;
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////  PackLicensePage  //////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////
+PackLicensePage::PackLicensePage(QWidget *parent) :
+    PackPage(parent)
+{
+    setObjectName("PackLicensePage");
+    setTitle(tr("License agreement"));
+    setSubTitle(tr("The following packs need a license agreement."));
+    m_Browser = new QTextBrowser(this);
+    m_AgreeBox = new QCheckBox(this);
+    m_AgreeBox->setText(tr("Accept all license terms"));
+    m_AgreeBox->setToolTip(m_AgreeBox->text());
+    QVBoxLayout *lay = new QVBoxLayout(this);
+    setLayout(lay);
+    lay->addWidget(m_Browser);
+    lay->addWidget(m_AgreeBox);
+    connect(m_AgreeBox, SIGNAL(clicked()), this, SIGNAL(completeChanged()));
+}
+
+static QString toHtml(const QList<Pack> &packs)
+{
+    if (packs.isEmpty())
+        return QString();
+    QString html;
+    for(int i = 0; i < packs.count(); ++i) {
+        const Pack &pack = packs.at(i);
+        html += QString("<p><span style=\"font-weight:bold;font-size:x-large;text-transform:uppercase;background:qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0.464 rgba(255, 255, 176, 149), stop:1 rgba(255, 255, 255, 0))\">%1 (%2)</span></p>").arg(pack.name()).arg(pack.version());
+
+        // Get license agreement
+        QString licenseTerms;
+        const QString &licenseName = pack.description().data(PackDescription::LicenseName).toString().toLower();
+        const QString &extraTerms = pack.description().data(PackDescription::LicenseTerms).toString().toLower();
+        if ((licenseName.compare("gpl-3")==0) ||
+                (licenseName.compare("gplv3")==0) ||
+                (licenseName.compare("gpl3")==0)) {
+            licenseTerms = Utils::LicenseTerms::getTranslatedLicenseTerms(Utils::LicenseTerms::GPLv3);
+        } else if ((licenseName.compare("bsd")==0)) {
+            licenseTerms = Utils::LicenseTerms::getTranslatedLicenseTerms(Utils::LicenseTerms::BSD);
+        } else if ((licenseName.compare("bsdnew")==0) ||
+                   (licenseName.compare("bsd-new")==0) ||
+                   (licenseName.compare("bsd new")==0) ||
+                   (licenseName.compare("bsdrevised")==0) ||
+                   (licenseName.compare("bsd-revised")==0) ||
+                   (licenseName.compare("bsd revised")==0)) {
+            licenseTerms = Utils::LicenseTerms::getTranslatedLicenseTerms(Utils::LicenseTerms::BSDModified);
+        } else if ((licenseName.compare("lgpl")==0) ||
+                   (licenseName.compare("lgpl2.1")==0) ||
+                   (licenseName.compare("lgpl-2.1")==0) ||
+                   (licenseName.compare("lgplv2.1")==0) ||
+                   (licenseName.compare("lgpl 2.1")==0)) {
+            licenseTerms = Utils::LicenseTerms::getTranslatedLicenseTerms(Utils::LicenseTerms::LGPL);
+        }
+
+        if (!licenseTerms.isEmpty())
+            html += QString("<p style=\"margin-left:10px;\">%1</p>").arg(licenseTerms);
+
+        if (!extraTerms.isEmpty()) {
+            html += QString("<p style=\"margin-left:10px;\">%1</p>").arg(extraTerms);
+        }
+    }
+    return html;
+}
+
+void PackLicensePage::initializePage()
+{
+    m_Browser->clear();
+    // Create the HTML output of processing packs
+    QString html = "<p>";
+    // install
+    html += toHtml(packWizard()->installPacks());
+    html += "</p>";
+    m_Browser->setHtml(html);
+}
+
+//void PackLicensePage::cleanupPage()
+//{
+//    initializePage();
+//}
+
+bool PackLicensePage::validatePage()
+{
+    return m_AgreeBox->isChecked();
+}
+
+bool PackLicensePage::isComplete() const
+{
+    return m_AgreeBox->isChecked();
+}
+
+int PackLicensePage::nextId() const
+{
     return PackWizard::DownloadPacks;
 }
 
@@ -565,7 +663,7 @@ bool PackRemovePage::isComplete() const
 int PackRemovePage::nextId() const
 {
     if (!packWizard()->installPacks().isEmpty() || !packWizard()->updatePacks().isEmpty())
-        return PackWizard::DownloadPacks;
+        return PackWizard::LicensePacks;
     return PackWizard::EndPage;
 }
 

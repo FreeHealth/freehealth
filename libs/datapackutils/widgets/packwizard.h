@@ -40,6 +40,7 @@ class QScrollArea;
 class QLabel;
 class QProgressBar;
 class QGridLayout;
+class QCheckBox;
 QT_END_NAMESPACE
 
 /**
@@ -65,6 +66,7 @@ public:
     enum {
         IntroPage = 0,
         RemovePacks,
+        LicensePacks,
         DownloadPacks,
         InstallPacks,
         UpdatePacks,
@@ -119,6 +121,23 @@ public:
 
 private:
     QTextBrowser *m_Browser;
+};
+
+class PackLicensePage : public PackPage
+{
+    Q_OBJECT
+public:
+    PackLicensePage(QWidget *parent = 0);
+
+    void initializePage();
+    bool validatePage();
+    bool isComplete() const;
+    int nextId() const;
+
+private:
+    QTextBrowser *m_Browser;
+    QCheckBox *m_AgreeBox;
+    QGridLayout *m_Grid;
 };
 
 class PackDownloadPage : public PackPage

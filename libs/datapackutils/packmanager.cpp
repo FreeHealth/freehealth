@@ -29,8 +29,8 @@
 #include "iserverengine.h"
 #include "servermanager.h"
 
-#include <utils/global.h>
 #include <utils/log.h>
+#include <utils/global.h>
 #include <translationutils/constants.h>
 #include <translationutils/trans_filepathxml.h>
 #include <quazip/global.h>
