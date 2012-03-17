@@ -50,8 +50,7 @@
 
   <ServerContents>
     <Pack serverFileName="./icd10/packdescription.xml"/>
-    <Pack serverFileName="./drugs/all/packdescription.xml"/>
-    <Pack serverFileName="./drugs/fr-only/packdescription.xml"/>
+    <Pack serverFileName="./drugs/fda_noddi/packdescription.xml"/>
     <Pack serverFileName="./forms/geriatrics/packdescription.xml"/>
   </ServerContents>
 
