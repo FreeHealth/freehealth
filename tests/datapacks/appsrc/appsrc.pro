@@ -3,7 +3,7 @@ TARGET = datapacks
 
 QT += xml network core gui
 
-include(../../../config.pri)
+include(../../../buildspecs/config.pri)
 include(../../../libs/utils.pri)
 include(../../../libs/translationutils.pri)
 include(../../../libs/datapack.pri)
