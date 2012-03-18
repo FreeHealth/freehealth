@@ -251,7 +251,7 @@ bool PackManager::installDownloadedPack(const Pack &pack, QProgressBar *bar)
 
     if (error)
         m_Errors << tr("An error was detected during installation of %1.").arg(pack.name());
-    else
+    else /** \todo correctly -> successfully */
         m_Msg << tr("Pack %1 was correctly installed.").arg(pack.name());
 
     Q_EMIT packInstalled(pack);
@@ -282,8 +282,8 @@ bool PackManager::removePack(const Pack &pack)
         }
     }
 
-    m_Msg << tr("Pack %1 correctly removed.").arg(pack.name());
-    LOG(tr("Pack %1 correctly removed.").arg(pack.name()));
+    m_Msg << tr("Pack %1 correctly removed.").arg(pack.name()); /** \todo correctly -> successfully */
+    LOG(tr("Pack %1 correctly removed.").arg(pack.name())); /** \todo correctly -> successfully */
     Q_EMIT packRemoved(pack);
     return true;
 }

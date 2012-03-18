@@ -257,7 +257,7 @@ void HttpServerEngine::downloadProgress(qint64 bytesRead, qint64 totalBytes)
 
 void HttpServerEngine::authenticationRequired(QNetworkReply *reply, QAuthenticator *authenticator)
 {
-    LOG("Server authentication requiered: " +  reply->url().toString());
+    LOG("Server authentication required: " +  reply->url().toString());
     const QString &host = reply->url().toString();
     m_AuthTimes.insert(host, m_AuthTimes.value(host, 0) + 1);
     if (m_AuthTimes.value(host) > MAX_AUTHENTIFICATION_TRIES) {
@@ -266,7 +266,7 @@ void HttpServerEngine::authenticationRequired(QNetworkReply *reply, QAuthenticat
     }
     Utils::BasicLoginDialog dlg;
     dlg.setModal(true);
-    dlg.setTitle(tr("Server authentication requiered"));
+    dlg.setTitle(tr("Server authentication required"));
     dlg.setToggleViewIcon(core().icon(ICONEYES));
     if (dlg.exec()==QDialog::Accepted) {
         authenticator->setUser(dlg.login());
@@ -277,7 +277,7 @@ void HttpServerEngine::authenticationRequired(QNetworkReply *reply, QAuthenticat
 
 void HttpServerEngine::proxyAuthenticationRequired(const QNetworkProxy &proxy, QAuthenticator *authenticator)
 {
-    LOG("Proxy authentication requiered: " +  proxy.hostName());
+    LOG("Proxy authentication required: " +  proxy.hostName());
     const QString &host = proxy.hostName();
     m_AuthTimes.insert(host, m_AuthTimes.value(host, 0) + 1);
     if (m_AuthTimes.value(host) > MAX_AUTHENTIFICATION_TRIES) {
@@ -291,7 +291,7 @@ void HttpServerEngine::proxyAuthenticationRequired(const QNetworkProxy &proxy, Q
         // Ask user for identification
         Utils::BasicLoginDialog dlg;
         dlg.setModal(true);
-        dlg.setTitle(tr("Proxy authentication requiered"));
+        dlg.setTitle(tr("Proxy authentication required"));
         dlg.setToggleViewIcon(core().icon(ICONEYES));
         if (dlg.exec()==QDialog::Accepted) {
             authenticator->setUser(dlg.login());
@@ -521,7 +521,7 @@ void HttpServerEngine::afterPackFileDownload(const ReplyData &data)
         status->engineMessages.append(tr("Pack file can not be created in the persistent cache."));
         status->hasError = true;
         status->isSuccessful = false;
-        /** \todo a better management of error is requiered */
+        /** \todo a better management of error is required */
         return;
     }
     LOG("Writing pack content to " + toPersistentCache.absoluteFilePath());
