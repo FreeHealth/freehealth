@@ -6,7 +6,7 @@
     <message>
         <location filename="../../plugins/datapackplugin/constants.h" line="34"/>
         <source>Data pack manager</source>
-        <translation type="unfinished"></translation>
+        <translation>Datenpaket-Verwaltung</translation>
     </message>
 </context>
 <context>
@@ -14,7 +14,7 @@
     <message>
         <location filename="../../plugins/datapackplugin/datapackplugin.cpp" line="132"/>
         <source>Initializing DataPackPlugin...</source>
-        <translation type="unfinished"></translation>
+        <translation>Datenpaket-Verwaltung wird inialisiert...</translation>
     </message>
 </context>
 <context>
@@ -22,7 +22,8 @@
     <message>
         <location filename="../../plugins/datapackplugin/datapackpreference.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>???</translatorcomment>
+        <translation>Formular</translation>
     </message>
 </context>
 </TS>

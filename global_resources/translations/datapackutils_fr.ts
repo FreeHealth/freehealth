@@ -101,12 +101,12 @@
     </message>
     <message>
         <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="269"/>
-        <source>Server authentication requiered</source>
+        <source>Server authentication required</source>
         <translation>Le serveur requière une authentification</translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="294"/>
-        <source>Proxy authentication requiered</source>
+        <source>Proxy authentication required</source>
         <translation>Le proxy requière une authentification</translation>
     </message>
     <message>

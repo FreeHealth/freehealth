@@ -6,37 +6,37 @@
     <message>
         <location filename="../../libs/datapackutils/widgets/addserverdialog.cpp" line="57"/>
         <source>Default FreeMedForms server (mirror)</source>
-        <translation type="unfinished"></translation>
+        <translation>Standard-FreemedForms-Server (Spiegelserver)</translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/widgets/addserverdialog.cpp" line="58"/>
         <source>Local file</source>
-        <translation type="unfinished"></translation>
+        <translation>Lokale Datei</translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/widgets/addserverdialog.cpp" line="59"/>
         <source>HTTP (standard mode)</source>
-        <translation type="unfinished"></translation>
+        <translation>HTTP (Standardmodus)</translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/widgets/addserverdialog.cpp" line="60"/>
         <source>FTP (standard mode)</source>
-        <translation type="unfinished"></translation>
+        <translation>FTP (Standardmodus)</translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/widgets/addserverdialog.cpp" line="61"/>
         <source>Protected HTTP with zipped content</source>
-        <translation type="unfinished"></translation>
+        <translation>gesichertes HTTP mit komprimiertem Inhalt</translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/widgets/addserverdialog.cpp" line="62"/>
         <source>Protected HTTP non-zipped</source>
-        <translation type="unfinished"></translation>
+        <translation>gesichertes HTTP, nicht komprimiert</translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/widgets/addserverdialog.cpp" line="63"/>
         <source>FTP with zipped content</source>
-        <translation type="unfinished"></translation>
+        <translation>FTP mit komprimiertem Inhalt</translation>
     </message>
 </context>
 <context>
@@ -44,52 +44,52 @@
     <message>
         <location filename="../../libs/datapackutils/widgets/addserverdialog.ui" line="14"/>
         <source>Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation>Dialog</translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/widgets/addserverdialog.ui" line="32"/>
         <source>Datapack server editor</source>
-        <translation type="unfinished"></translation>
+        <translation>Datenpaket-Server-Editor</translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/widgets/addserverdialog.ui" line="49"/>
         <source>Server params</source>
-        <translation type="unfinished"></translation>
+        <translation>Servereinstellungen</translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/widgets/addserverdialog.ui" line="55"/>
         <source>Server URL</source>
-        <translation type="unfinished"></translation>
+        <translation>Server-URL</translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/widgets/addserverdialog.ui" line="65"/>
         <source>Server type</source>
-        <translation type="unfinished"></translation>
+        <translation>Servertyp</translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/widgets/addserverdialog.ui" line="78"/>
         <source>User params</source>
-        <translation type="unfinished"></translation>
+        <translation>Benutzereinstellungen</translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/widgets/addserverdialog.ui" line="84"/>
         <source>Login</source>
-        <translation type="unfinished"></translation>
+        <translation>Benutzername</translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/widgets/addserverdialog.ui" line="91"/>
         <source>Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Passwort</translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/widgets/addserverdialog.ui" line="107"/>
         <source>Update checking</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktualisierungen</translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/widgets/addserverdialog.ui" line="113"/>
         <source>Check for update</source>
-        <translation type="unfinished"></translation>
+        <translation>nach neuen Aktualisierungen suchen</translation>
     </message>
 </context>
 <context>
@@ -97,17 +97,17 @@
     <message>
         <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="230"/>
         <source>Abort</source>
-        <translation type="unfinished"></translation>
+        <translation>Abbruch</translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="269"/>
-        <source>Server authentication requiered</source>
-        <translation type="unfinished"></translation>
+        <source>Server authentication required</source>
+        <translation>Server-Authentifizierung erforderlich</translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="294"/>
-        <source>Proxy authentication requiered</source>
-        <translation type="unfinished"></translation>
+        <source>Proxy authentication required</source>
+        <translation>Proxy-Authentifizierung erforderlich</translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="323"/>
@@ -157,17 +157,17 @@
     <message>
         <location filename="../../libs/datapackutils/serverengines/localserverengine.cpp" line="101"/>
         <source>Server configuration correctly downloaded.</source>
-        <translation type="unfinished"></translation>
+        <translation>Serverkonfiguration erfolgreich heruntergeladen.</translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/serverengines/localserverengine.cpp" line="126"/>
         <source>Pack correctly downloaded.</source>
-        <translation type="unfinished"></translation>
+        <translation>Paket erfolgreich heruntergeladen.</translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/serverengines/localserverengine.cpp" line="138"/>
         <source>Pack file does not exist.</source>
-        <translation type="unfinished"></translation>
+        <translation>Paketdatei existiert nicht.</translation>
     </message>
 </context>
 <context>
@@ -500,7 +500,7 @@
     <message>
         <location filename="../../libs/datapackutils/server.cpp" line="193"/>
         <source>FTP (standard mode)</source>
-        <translation type="unfinished"></translation>
+        <translation>FTP (Standardmodus)</translation>
     </message>
 </context>
 </TS>
