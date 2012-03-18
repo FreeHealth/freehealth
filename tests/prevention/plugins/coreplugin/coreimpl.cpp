@@ -203,13 +203,13 @@ bool CoreImpl::initialize(const QStringList &arguments, QString *errorString)
 
     if (!msg.isEmpty()) {
 #ifndef LINUX_INTEGRATED
-       // if (!Utils::defaultLicenceAgreementDialog(msg, Utils::LicenseTerms::GPLv3))
-        //    return false;
+        if (!Utils::defaultLicenseAgreementDialog(msg, Utils::LicenseTerms::GPLv3))
+            return false;
 #endif
         // update some preferences ?
         bool yes = Utils::yesNoMessageBox(
-                QCoreApplication::translate("Core", "You are updating FreeICD, do you want to update your personnal preferences ?"),
-                QCoreApplication::translate("Core", "With the new version some preferences should be outdated. Answering yes will allow FreeICD to update your personnal preferences."));
+                QCoreApplication::translate("Core", "You are updating Prevention, do you want to update your personnal preferences ?"),
+                QCoreApplication::translate("Core", "With the new version some preferences should be outdated. Answering yes will allow Prevention to update your personnal preferences."));
         if (yes) {
             m_UpdatePreferences = true;
         }
