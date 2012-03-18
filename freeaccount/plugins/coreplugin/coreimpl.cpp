@@ -195,7 +195,7 @@ bool CoreImpl::initialize(const QStringList &arguments, QString *errorString)
     if (m_Settings->firstTimeRunning()) {
         // show the license agreement dialog
 #ifndef LINUX_INTEGRATED
-        if (!Utils::defaultLicenceAgreementDialog("", Utils::LicenseTerms::BSD))
+        if (!Utils::defaultLicenseAgreementDialog("", Utils::LicenseTerms::BSD))
             return false;
 #endif
         m_Settings->noMoreFirstTimeRunning();
