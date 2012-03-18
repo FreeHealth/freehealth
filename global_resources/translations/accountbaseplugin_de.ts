@@ -41,7 +41,8 @@
     <message>
         <location filename="../../plugins/accountbaseplugin/constants.h" line="329"/>
         <source>Due</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>maybe bad translation maybe &quot;Abgabe&quot;?</translatorcomment>
+        <translation>Gebühr</translation>
     </message>
     <message>
         <location filename="../../plugins/accountbaseplugin/constants.h" line="330"/>
@@ -61,6 +62,7 @@
         <location filename="../../plugins/accountbaseplugin/accountbase.cpp" line="648"/>
         <location filename="../../plugins/accountbaseplugin/accountbase.cpp" line="654"/>
         <source>Please contact dev team.</source>
+        <translatorcomment>bad string.</translatorcomment>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -115,12 +117,12 @@
     <message>
         <location filename="../../plugins/accountbaseplugin/amountmodel.cpp" line="104"/>
         <source>Due</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Gebühr</translation>
     </message>
     <message>
         <location filename="../../plugins/accountbaseplugin/amountmodel.cpp" line="108"/>
         <source>Value</source>
-        <translation type="unfinished"></translation>
+        <translation>Wert</translation>
     </message>
     <message>
         <location filename="../../plugins/accountbaseplugin/amountmodel.cpp" line="109"/>

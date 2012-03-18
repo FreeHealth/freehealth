@@ -2746,8 +2746,8 @@ et la choisir comme préférée.</translation>
     <name>xmlCategoriesParser</name>
     <message>
         <location filename="../../plugins/accountplugin/receipts/xmlcategoriesparser.cpp" line="65"/>
-        <source> does not exist.</source>
-        <translation> n&apos;existe pas.</translation>
+        <source>%1 does not exist.</source>
+        <translation>%1 n&apos;existe pas.</translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/receipts/xmlcategoriesparser.cpp" line="68"/>

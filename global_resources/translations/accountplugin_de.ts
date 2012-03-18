@@ -6,32 +6,32 @@
     <message>
         <location filename="../../plugins/accountplugin/constants.h" line="77"/>
         <source>Account</source>
-        <translation type="unfinished"></translation>
+        <translation>Abrechnung</translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/constants.h" line="78"/>
         <source>Receipts</source>
-        <translation type="unfinished"></translation>
+        <translation>Rezepte</translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/constants.h" line="79"/>
         <source>Add receipts</source>
-        <translation type="unfinished"></translation>
+        <translation>Rezept hinzufügen</translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/constants.h" line="80"/>
         <source>Account book</source>
-        <translation type="unfinished"></translation>
+        <translation>Abrechnungsbuch</translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/constants.h" line="81"/>
         <source>Revenues</source>
-        <translation type="unfinished"></translation>
+        <translation>Einnahmen</translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/constants.h" line="82"/>
         <source>Expenses</source>
-        <translation type="unfinished"></translation>
+        <translation>Ausgaben</translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/constants.h" line="83"/>
@@ -46,7 +46,7 @@
     <message>
         <location filename="../../plugins/accountplugin/constants.h" line="85"/>
         <source>Movements</source>
-        <translation type="unfinished"></translation>
+        <translation>Bewegungen</translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/constants.h" line="86"/>
@@ -418,7 +418,7 @@ Do you want to save them ?</source>
     <message>
         <location filename="../../plugins/accountplugin/preferences/availablemovementpage.cpp" line="129"/>
         <source>Receipts</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Rezepte</translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/preferences/availablemovementpage.cpp" line="166"/>
@@ -1943,7 +1943,7 @@ Otherwise result will be wrong !</source>
     <message>
         <location filename="../../plugins/accountplugin/ledger/ledgerviewer.ui" line="94"/>
         <source>Receipts</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Rezepte</translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/ledger/ledgerviewer.ui" line="122"/>
@@ -2062,7 +2062,7 @@ Do it in assets.</source>
         <location filename="../../plugins/accountplugin/movements/movementsviewer.ui" line="14"/>
         <location filename="../../plugins/accountplugin/movements/movementsviewer.ui" line="53"/>
         <source>Movements</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bewegungen</translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/movements/movementsviewer.ui" line="24"/>
@@ -2265,12 +2265,12 @@ if you don&apos;t have one, save the next value in thesaurus and chose it in the
     <message>
         <location filename="../../plugins/accountplugin/ledger/mythread.cpp" line="373"/>
         <source>Receipts</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Rezepte</translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/ledger/mythread.cpp" line="377"/>
         <source>Movements</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bewegungen</translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/ledger/mythread.cpp" line="388"/>
@@ -2704,8 +2704,8 @@ and choose it as preferred.</source>
     <name>xmlCategoriesParser</name>
     <message>
         <location filename="../../plugins/accountplugin/receipts/xmlcategoriesparser.cpp" line="65"/>
-        <source> does not exist.</source>
-        <translation type="unfinished"></translation>
+        <source>%1 does not exist.</source>
+        <translation>%1 existiert nicht.</translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/receipts/xmlcategoriesparser.cpp" line="68"/>
@@ -2715,7 +2715,7 @@ and choose it as preferred.</source>
     <message>
         <location filename="../../plugins/accountplugin/receipts/xmlcategoriesparser.cpp" line="72"/>
         <source>xmlEchangeFile.xml cannot be parsed.</source>
-        <translation type="unfinished"></translation>
+        <translation>xmlExchangeFile.xml kann nicht analysiert werden.</translation>
     </message>
 </context>
 </TS>

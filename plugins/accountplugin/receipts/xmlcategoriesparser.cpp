@@ -62,7 +62,7 @@ QList<QHash<QString,QString> > xmlCategoriesParser::readXmlFile()
 
     QFile xmlFile(xmlFilePath);
     if(xmlFile.exists() == false) {
-        Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), xmlFilePath+tr(" does not exist.")); /** \todo better: "%1 does not exist." */
+        Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("%1 does not exist.").arg(xmlFilePath));
     } else {
         if(!xmlFile.open(QIODevice::ReadOnly)) {
             Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("xmlEchangeFile.xml not found."));
