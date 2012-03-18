@@ -144,7 +144,7 @@ linkQtLibs()
      echo "moving to cd $PACKAGES_PATH/mac/$BUNDLE_NAME"
    fi
 
-   MAKE_STEP=`$MAC_SCRIPTS_PATH/macDeploy.sh -a $BUNDLE_NAME -p imageformats -p sqldrivers -p accessible`
+   MAKE_STEP=`$MAC_SCRIPTS_PATH/macDeploy.sh -a $BUNDLE_NAME -p iconengines -p imageformats -p sqldrivers -p accessible`
    MAKE_STEP=$?
    if [ ! $MAKE_STEP = 0 ]; then
    echo "*** Error: Deployement step wrong ***"
@@ -198,7 +198,7 @@ createDmg()
 
 while getopts "b:sh" option
 do
-echo "(-- option:$option  $OPTIND - '$OPTARG' --)"
+#echo "(-- option:$option  $OPTIND - '$OPTARG' --)"
         case $option in
                 b) BUNDLE_NAME=$OPTARG;
                 ;;
@@ -236,7 +236,10 @@ echo "      * to package path $PACKAGES_PATH"
 
 buildTranslations
 
-for i in $BUNDLE_NAME; do
+# build all projects
+TMP=$BUNDLE_NAME
+for i in $TMP; do
+  BUNDLE_NAME=$i
   PROJECT=`echo $i | tr '[A-Z]' '[a-z]'`;
   PROJECT_FILE=$SOURCES_PATH$PROJECT/$PROJECT.pro;
   buildApp
@@ -244,5 +247,8 @@ for i in $BUNDLE_NAME; do
   linkMySqlLib
   createDmg
 done
+
+# move dmg files to script path
+cp $PACKAGES_PATH/*.dmg $SCRIPT_PATH
 
 exit 0

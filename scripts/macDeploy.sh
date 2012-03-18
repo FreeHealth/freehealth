@@ -89,6 +89,7 @@ copyPlugins()
 		echo "Copying $1 plugins..."
 		mkdir -p "${path}"
 		cp -R "$QT_PLUGINS_PATH/${1}" "${2}"
+                rm "${path}"/*_debug.*
 	fi
 }
 
