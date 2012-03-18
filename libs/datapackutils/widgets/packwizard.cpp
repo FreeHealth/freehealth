@@ -162,6 +162,7 @@ PackIntroPage::PackIntroPage(QWidget *parent) :
     PackPage(parent)
 {
     setTitle(tr("Pack processing"));
+    /** \todo better English: "...all informations."*/
     setSubTitle(tr("The following packs will be processed. Please verify all information."));
     m_Browser = new QTextBrowser(this);
     QVBoxLayout *lay = new QVBoxLayout(this);
@@ -188,6 +189,7 @@ void PackIntroPage::initializePage()
     // Create the HTML output of processing packs
     QString html = "<p>";
     // install
+    /** \todo better would be tr(" %1 Pack(s) to install/update/remove").arg(packWizard()->installPacks()) to reflect other languages. */
     html += toHtml(packWizard()->installPacks(), tr("Pack(s) to install"));
     // update
     html += toHtml(packWizard()->updatePacks(), tr("Pack(s) to update"));
@@ -472,6 +474,7 @@ PackInstallPage::PackInstallPage(QWidget *parent) :
     PackPage(parent)
 {
     setTitle(tr("Installing pack(s)"));
+    /** \todo better: "Please wait until all packs are installed." Be nice to the users ;-) */
     setSubTitle(tr("Wait until all installations are done."));
     m_Area = new QScrollArea(this);
     m_Grid = new QGridLayout(m_Area);
