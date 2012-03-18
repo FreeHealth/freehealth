@@ -5,10 +5,22 @@
 #include <QDateEdit>
 #include <QMessageBox>
 
-static inline QString pixmaps() 
-{ 
-    return QString(qApp->applicationDirPath()+"/../../global_resources/pixmap");
-};
+// Block pour l'utilisation des pixmaps du theme de FreeMedForms
+#include <coreplugin/icore.h>
+#include <coreplugin/itheme.h>
+#include <coreplugin/constants_icons.h>
+
+static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
+
+// Pour récupérer le chemin vers un pixmap
+//     theme()->iconFullPath(Core::Constants::ICONABOUT); // sous entendu Core::ITheme::SmallSize
+//     theme()->iconFullPath(Core::Constants::ICONABOUT, Core::ITheme::MediumSize);
+//     theme()->iconFullPath(Core::Constants::ICONABOUT, Core::ITheme::BigSize);
+
+// Pour récupérer l'icône
+//     theme()->icon(Core::Constants::ICONABOUT); // sous entendu Core::ITheme::SmallSize
+//     theme()->icon(Core::Constants::ICONABOUT, Core::ITheme::MediumSize);
+//     theme()->icon(Core::Constants::ICONABOUT, Core::ITheme::BigSize);
 
 
 ///////////////////////////////////////////////////////
