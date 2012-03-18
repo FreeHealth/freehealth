@@ -145,7 +145,7 @@ void FormIODescription::toTreeWidget(QTreeWidget *tree) const
     general->setFont(0, bold);
     new QTreeWidgetItem(general, QStringList() << "Uuid" << data(FormIODescription::UuidOrAbsPath).toString());
     new QTreeWidgetItem(general, QStringList() << tkTr(Trans::Constants::AUTHOR) << data(FormIODescription::Author).toString());
-    new QTreeWidgetItem(general, QStringList() << QCoreApplication::translate("Forms", "License") << data(FormIODescription::GlobalLicense).toString());
+    new QTreeWidgetItem(general, QStringList() << QCoreApplication::translate("Forms", "License") << data(FormIODescription::LicenseName).toString());
     new QTreeWidgetItem(general, QStringList() << tkTr(Trans::Constants::DESCRIPTION) << data(FormIODescription::ShortDescription).toString());
     const QStringList &keys = m_Shots.keys();
     new QTreeWidgetItem(general, QStringList() << tkTr(Trans::Constants::SCREENSHOTS) << keys.join(";"));
@@ -185,7 +185,7 @@ QString FormIODescription::toHtml() const
             .arg(QCoreApplication::translate("Forms", "Last modification date"))
             .arg(data(FormIODescription::LastModificationDate).toDate().toString(QLocale().dateFormat(QLocale::ShortFormat)))
             .arg(QCoreApplication::translate("Forms", "License"))
-            .arg(data(FormIODescription::GlobalLicense).toString())
+            .arg(data(FormIODescription::LicenseName).toString())
             ;
     // Long description
     const QString &hmltDescr = data(FormIODescription::HtmlDescription).toString();
@@ -222,7 +222,7 @@ QDebug operator<<(QDebug dbg, const Form::FormIODescription &c)
     attribs << "ludate: " + c.data(Form::FormIODescription::LastModificationDate).toString();
     attribs << "cat: " + c.data(Form::FormIODescription::Category).toString();
     attribs << "spe: " + c.data(Form::FormIODescription::Specialties).toString();
-    attribs << "license: " + c.data(Form::FormIODescription::GlobalLicense).toString();
+    attribs << "license: " + c.data(Form::FormIODescription::LicenseName).toString();
     attribs << "icon: " + c.data(Form::FormIODescription::GeneralIcon).toString();
     attribs << "web: " + c.data(Form::FormIODescription::WebLink).toString();
     attribs << "shotpath: " + c.data(Form::FormIODescription::ScreenShotsPath).toString();
