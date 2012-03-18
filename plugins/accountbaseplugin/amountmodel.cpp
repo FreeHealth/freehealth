@@ -58,7 +58,7 @@ QVariant AmountModel::data(const QModelIndex &index, int role) const
 //            case Row_Banking: return m_AccountData->value(AccountData::);
             case Row_Insurance: return m_AccountData->value(AccountData::Insurance);
             case Row_Other: return m_AccountData->value(AccountData::Other);
-            case Row_Du: return m_AccountData->value(AccountData::DueAmount);
+            case Row_Due: return m_AccountData->value(AccountData::DueAmount);
             }
         }
     }
@@ -81,7 +81,7 @@ bool AmountModel::setData(const QModelIndex &index, const QVariant &value, int r
 //            case Row_Banking:  m_AccountData->setValue(AccountData::); break;
                 case Row_Insurance:  m_AccountData->setValue(AccountData::Insurance, value); break;
                 case Row_Other:  m_AccountData->setValue(AccountData::Other, value); break;
-                case Row_Du:  m_AccountData->setValue(AccountData::DueAmount, value); break;
+                case Row_Due:  m_AccountData->setValue(AccountData::DueAmount, value); break;
                 }
                 Q_EMIT dataChanged(index, index);
                 return true;
@@ -101,7 +101,7 @@ QVariant AmountModel::headerData(int section, Qt::Orientation orientation, int r
             case Row_Cheque: return tr("Cheque");
             case Row_Banking: return tr("Banking");
             case Row_Other: return tr("Other");
-            case Row_Du: return tr("Du");
+            case Row_Due: return tr("Due");
             }
         } else if (orientation==Qt::Horizontal) {
             switch (section) {

@@ -55,7 +55,7 @@ public:
         Row_Banking,  // Virement banquaire
         Row_Insurance,
         Row_Other,
-        Row_Du,
+        Row_Due,
         RowCount
     };
 

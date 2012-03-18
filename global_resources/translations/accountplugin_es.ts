@@ -1133,7 +1133,7 @@ This feature is useful for testers and should not be used by normal users.</sour
     </message>
     <message>
         <location filename="../../plugins/accountplugin/accountview.ui" line="152"/>
-        <source>Du</source>
+        <source>Due</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2435,7 +2435,7 @@ if you don&apos;t have one, save the next value in thesaurus and chose it in the
     <message>
         <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="668"/>
         <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="790"/>
-        <source>Du</source>
+        <source>Due</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

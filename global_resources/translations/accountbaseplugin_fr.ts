@@ -114,7 +114,7 @@
     </message>
     <message>
         <location filename="../../plugins/accountbaseplugin/amountmodel.cpp" line="104"/>
-        <source>Du</source>
+        <source>Due</source>
         <translation>Du</translation>
     </message>
     <message>

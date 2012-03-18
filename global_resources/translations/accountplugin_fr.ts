@@ -1164,7 +1164,7 @@ Ce mécanisme est utile pour les testeurs et ne devrait pas être utilisé pour 
     </message>
     <message>
         <location filename="../../plugins/accountplugin/accountview.ui" line="152"/>
-        <source>Du</source>
+        <source>Due</source>
         <translation></translation>
     </message>
     <message>
@@ -2471,7 +2471,7 @@ si vous n&apos;en avez pas, sauvegardez la prochaine valeur dans le thésaurus e
     <message>
         <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="668"/>
         <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="790"/>
-        <source>Du</source>
+        <source>Due</source>
         <translation>Du</translation>
     </message>
     <message>

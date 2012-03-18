@@ -85,7 +85,7 @@ namespace InternalAmount {
             Col_Visa,
             Col_Banking,
             Col_Other,
-            Col_Du,
+            Col_Due,
             Col_Debtor,
             Col_Site,
             Col_DistRule,
@@ -202,8 +202,8 @@ namespace InternalAmount {
                 case Col_Other :
                     list.replace(Col_Other,value);
                     break;
-                case Col_Du :
-                    list.replace(Col_Du,value);
+                case Col_Due :
+                    list.replace(Col_Due,value);
                     break;
                 case Col_Debtor :
                     list.replace(Col_Debtor,value);
@@ -236,7 +236,7 @@ namespace InternalAmount {
                     case Col_Visa: return m_headersColumns.value(Col_Visa);//return "Visa";
                     case Col_Banking: return m_headersColumns.value(Col_Banking);//"Banking";
                     case Col_Other: return m_headersColumns.value(Col_Other);//"Other";
-                    case Col_Du: return m_headersColumns.value(Col_Du);//"Du";
+                    case Col_Due: return m_headersColumns.value(Col_Due);//"Due";
                     case Col_Debtor : return m_headersColumns.value(Col_Debtor);//"debtor";
                     case Col_Site : return m_headersColumns.value(Col_Site);//"site";
                     case Col_DistRule : return m_headersColumns.value(Col_DistRule);//"distRule";
@@ -284,7 +284,7 @@ namespace InternalAmount {
                 || index.column()==Col_Visa
                 || index.column()==Col_Banking
                 || index.column()==Col_Other 
-                || index.column()==Col_Du
+                || index.column()==Col_Due
                 || index.column()==Col_Debtor
                 || index.column()==Col_Site
                 || index.column()==Col_DistRule
@@ -665,7 +665,7 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
     m_model->setHeaderData(HDVisa,Qt::Horizontal,tr("Visa"));
     m_model->setHeaderData(HDBanking,Qt::Horizontal,tr("Banking"));
     m_model->setHeaderData(HDOther,Qt::Horizontal,tr("Other"));
-    m_model->setHeaderData(HDDue,Qt::Horizontal,tr("Du"));
+    m_model->setHeaderData(HDDue,Qt::Horizontal,tr("Due"));
     m_model->setHeaderData(HDAct,Qt::Horizontal,tr("Act"));
     
 
@@ -787,7 +787,7 @@ void ReceiptViewer::changeEvent(QEvent *e)
         m_model->setHeaderData(HDVisa,Qt::Horizontal,tr("Visa"));
         m_model->setHeaderData(HDBanking,Qt::Horizontal,tr("Banking"));
         m_model->setHeaderData(HDOther,Qt::Horizontal,tr("Other"));
-        m_model->setHeaderData(HDDue,Qt::Horizontal,tr("Du"));
+        m_model->setHeaderData(HDDue,Qt::Horizontal,tr("Due"));
         m_model->setHeaderData(HDAct,Qt::Horizontal,tr("Act"));
         break;
     default:
@@ -1111,7 +1111,7 @@ void ReceiptViewer::save()
         double visa = m_model->data(m_model->index(row,InternalAmount::AmountModel::Col_Visa)).toDouble();
         double banking = m_model->data(m_model->index(row,InternalAmount::AmountModel::Col_Banking)).toDouble();
         double other = m_model->data(m_model->index(row,InternalAmount::AmountModel::Col_Other)).toDouble();
-        double due = m_model->data(m_model->index(row,InternalAmount::AmountModel::Col_Du)).toDouble();
+        double due = m_model->data(m_model->index(row,InternalAmount::AmountModel::Col_Due)).toDouble();
         QVariant insurance = m_model->data(m_model->index(row,InternalAmount::AmountModel::Col_Debtor));
         QVariant insuranceUid = rIO.getInsuranceUidFromInsurance(insurance.toString());
         QVariant site = m_model->data(m_model->index(row,InternalAmount::AmountModel::Col_Site));
