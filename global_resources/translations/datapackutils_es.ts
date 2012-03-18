@@ -155,17 +155,18 @@
 <context>
     <name>DataPack::Internal::LocalServerEngine</name>
     <message>
-        <location filename="../../libs/datapackutils/serverengines/localserverengine.cpp" line="101"/>
+        <location filename="../../libs/datapackutils/serverengines/localserverengine.cpp" line="102"/>
         <source>Server configuration correctly downloaded.</source>
+        <extracomment>better would be &quot;successfully downloaded&quot;</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/serverengines/localserverengine.cpp" line="126"/>
+        <location filename="../../libs/datapackutils/serverengines/localserverengine.cpp" line="127"/>
         <source>Pack correctly downloaded.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/serverengines/localserverengine.cpp" line="138"/>
+        <location filename="../../libs/datapackutils/serverengines/localserverengine.cpp" line="139"/>
         <source>Pack file does not exist.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -173,12 +174,12 @@
 <context>
     <name>DataPack::Internal::PackDownloadPage</name>
     <message>
-        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="324"/>
+        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="326"/>
         <source>Downloading packs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="325"/>
+        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="328"/>
         <source>You just have to wait until all packs are downloaded.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -186,7 +187,7 @@
 <context>
     <name>DataPack::Internal::PackEndPage</name>
     <message>
-        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="676"/>
+        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="682"/>
         <source>Pack(s) processed.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -194,12 +195,12 @@
 <context>
     <name>DataPack::Internal::PackInstallPage</name>
     <message>
-        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="473"/>
+        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="476"/>
         <source>Installing pack(s)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="474"/>
+        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="478"/>
         <source>Wait until all installations are done.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -212,22 +213,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="165"/>
+        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="166"/>
         <source>The following packs will be processed. Please verify all information.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="191"/>
+        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="193"/>
         <source>Pack(s) to install</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="193"/>
+        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="195"/>
         <source>Pack(s) to update</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="195"/>
+        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="197"/>
         <source>Pack(s) to remove</source>
         <translation type="unfinished"></translation>
     </message>
@@ -235,17 +236,17 @@
 <context>
     <name>DataPack::Internal::PackLicensePage</name>
     <message>
-        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="229"/>
+        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="231"/>
         <source>License agreement</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="230"/>
+        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="232"/>
         <source>The following packs need a license agreement.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="233"/>
+        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="235"/>
         <source>Accept all license terms</source>
         <translation type="unfinished"></translation>
     </message>
@@ -312,12 +313,12 @@
 <context>
     <name>DataPack::Internal::PackRemovePage</name>
     <message>
-        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="601"/>
+        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="606"/>
         <source>Removing pack(s)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="602"/>
+        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="608"/>
         <source>Wait until all removal are done.</source>
         <translation type="unfinished"></translation>
     </message>

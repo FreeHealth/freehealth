@@ -115,10 +115,6 @@
         <translation>Montrer occupé</translation>
     </message>
     <message>
-        <source>dd/MM/yyyy</source>
-        <translation type="obsolete">dd/MM/yyyy</translation>
-    </message>
-    <message>
         <location filename="../../libs/calendar/item_editor_widget.ui" line="223"/>
         <source>Password</source>
         <translation>Mot de passe</translation>

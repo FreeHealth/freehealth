@@ -12,11 +12,12 @@
 <context>
     <name>Category::Internal::CategoryBase</name>
     <message>
-        <location filename="../../plugins/categoryplugin/categorybase.cpp" line="199"/>
-        <location filename="../../plugins/categoryplugin/categorybase.cpp" line="207"/>
-        <location filename="../../plugins/categoryplugin/categorybase.cpp" line="213"/>
-        <location filename="../../plugins/categoryplugin/categorybase.cpp" line="223"/>
+        <location filename="../../plugins/categoryplugin/categorybase.cpp" line="203"/>
+        <location filename="../../plugins/categoryplugin/categorybase.cpp" line="211"/>
+        <location filename="../../plugins/categoryplugin/categorybase.cpp" line="217"/>
+        <location filename="../../plugins/categoryplugin/categorybase.cpp" line="227"/>
         <source>Please contact dev team.</source>
+        <extracomment>better translation would be &quot;Please contact the development team &lt;a href=&apos;mailto:mail address&apos;&gt;mail address&lt;/a&gt;&quot; or a link to the bug tracker. &quot;please contact dev team&quot; is not very preofessional, a bit geeky</extracomment>
         <translation>Bitte kontaktieren Sie das Entwicklerteam.</translation>
     </message>
 </context>

@@ -29,27 +29,27 @@
         <translation>Chèques</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountbaseplugin/constants.h" line="326"/>
+        <location filename="../../plugins/accountbaseplugin/constants.h" line="327"/>
         <source>VISA</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountbaseplugin/constants.h" line="327"/>
+        <location filename="../../plugins/accountbaseplugin/constants.h" line="328"/>
         <source>Money</source>
         <translation>Espèce</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountbaseplugin/constants.h" line="328"/>
+        <location filename="../../plugins/accountbaseplugin/constants.h" line="329"/>
         <source>Due</source>
         <translation>Due</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountbaseplugin/constants.h" line="329"/>
+        <location filename="../../plugins/accountbaseplugin/constants.h" line="330"/>
         <source>Insurance</source>
         <translation>Assurance</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountbaseplugin/constants.h" line="330"/>
+        <location filename="../../plugins/accountbaseplugin/constants.h" line="331"/>
         <source>Other</source>
         <translation>Autre</translation>
     </message>
