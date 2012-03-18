@@ -191,16 +191,16 @@ bool CoreImpl::initialize(const QStringList &arguments, QString *errorString)
     QString msg;
     bool first = false;
     if (m_Settings->firstTimeRunning()) {
-        msg = QCoreApplication::translate("Core", "You are running FreeICD for the first time. You need to approve the licence terms.");
+        msg = QCoreApplication::translate("Core", "You are running FreeICD for the first time. You need to approve the license terms.");
         first = true;
 
     } else if (m_Settings->licenseApprovedApplicationNumber() != qApp->applicationVersion()) {
-        msg = QCoreApplication::translate("Core", "You are running a new version of FreeICD, you need to renew the licence agreement.");
+        msg = QCoreApplication::translate("Core", "You are running a new version of FreeICD, you need to renew the license agreement.");
     }
 
     if (!msg.isEmpty()) {
 #ifndef LINUX_INTEGRATED
-        if (!Utils::defaultLicenceAgreementDialog(msg, Utils::LicenseTerms::GPLv3))
+        if (!Utils::defaultLicenseAgreementDialog(msg, Utils::LicenseTerms::GPLv3))
             return false;
 #endif
         // update some preferences ?
