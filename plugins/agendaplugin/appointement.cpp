@@ -146,19 +146,10 @@ QDebug operator<<(QDebug dbg, const Agenda::Internal::Appointement &c)
 
 QDebug operator<<(QDebug dbg, const Agenda::Internal::Appointement *c)
 {
-    dbg.nospace() << "Appointement("
-                  << c->beginning().toString(QLocale().dateTimeFormat(QLocale::ShortFormat))
-                  << ", "
-                  << c->ending().toString(QLocale().dateTimeFormat(QLocale::ShortFormat))
-                  << ", "
-                  << "Valid:" << c->isValid()
-                  << ", "
-                  << "Virtual:" << c->data(Agenda::Constants::Db_IsVirtual).toBool()
-                  << ", "
-                  << "CalId:" << c->calendarId()
-                  << ", "
-                  << "Peoples:" << c->peopleUids(Calendar::People::PeopleAttendee).join(",")
-                  << ")";
-    return dbg.space();
+    if (!c) {
+        dbg.nospace() << "Appointement(0x0)";
+        return dbg.space();
+    }
+    return operator<<(dbg, *c);
 }
 

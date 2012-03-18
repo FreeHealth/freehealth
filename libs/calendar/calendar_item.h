@@ -143,8 +143,10 @@ private:
 
 bool calendarItemLessThan(const CalendarItem &item1, const CalendarItem &item2);
 
-CALENDAR_EXPORT QDebug operator<<(QDebug dbg, const Calendar::CalendarItem &c);
-
 }  // End namespace Calendar
+
+CALENDAR_EXPORT QDebug operator<<(QDebug dbg, const Calendar::CalendarItem &c);
+CALENDAR_EXPORT QDebug operator<<(QDebug dbg, const Calendar::CalendarItem *c);
+
 
 #endif

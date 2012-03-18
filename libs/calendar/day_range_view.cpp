@@ -35,6 +35,8 @@
 #include "day_node.h"
 #include "day_range_view.h"
 
+#include <utils/log.h>
+
 #include <QRect>
 #include <QPainter>
 #include <QDate>
@@ -247,7 +249,8 @@ QDate DayRangeHeader::getDate(int x) const {
 }
 
 void DayRangeHeader::mousePressEvent(QMouseEvent *event) {
-	if (event->pos().x() < 60 || event->pos().y() < getScaleHeight()) {
+
+    if (event->pos().x() < 60 || event->pos().y() < getScaleHeight()) {
 		QWidget::mousePressEvent(event);
 		return;
 	}
@@ -272,7 +275,8 @@ void DayRangeHeader::mousePressEvent(QMouseEvent *event) {
 }
 
 void DayRangeHeader::mouseMoveEvent(QMouseEvent *event) {
-	if (m_mouseMode == MouseMode_None) {
+
+    if (m_mouseMode == MouseMode_None) {
 		QWidget::mouseMoveEvent(event);
 		return;
 	}
@@ -592,7 +596,8 @@ QDateTime DayRangeBody::quantized(const QDateTime &dateTime) const {
 }
 
 void DayRangeBody::mousePressEvent(QMouseEvent *event) {
-	if (event->pos().x() < m_leftScaleWidth) {
+
+    if (event->pos().x() < m_leftScaleWidth) {
 		QWidget::mousePressEvent(event);
 		return;
 	}
@@ -620,12 +625,12 @@ void DayRangeBody::mousePressEvent(QMouseEvent *event) {
 }
 
 void DayRangeBody::mouseMoveEvent(QMouseEvent *event) {
-	QDateTime dateTime = quantized(getDateTime(event->pos()));
+    QDateTime dateTime = quantized(getDateTime(event->pos()));
 	QRect rect;
 	int seconds, limits;
 	QDateTime beginning, ending;
 
-	if (m_mouseMode == MouseMode_None) {
+    if (m_mouseMode == MouseMode_None || !m_pressItemWidget) {
 		QWidget::mouseMoveEvent(event);
 		return;
 	}

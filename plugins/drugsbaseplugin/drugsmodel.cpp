@@ -1104,6 +1104,10 @@ bool DrugsModel::dropMimeData(const QMimeData *data, Qt::DropAction action, int 
 
 QDebug operator<<(QDebug dbg, const DrugsDB::DrugsModel *c)
 {
+    if (!c) {
+        dbg.nospace() << "DrugsModel(0x0)";
+        return dbg.space();
+    }
     dbg.nospace() << "DrugsModel("
                   << "Memory: " << c->drugsList().count()
                   << ")";

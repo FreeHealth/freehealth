@@ -135,8 +135,11 @@ QString DrugInteractionQuery::warnText() const
 
 QDebug operator<<(QDebug dbg, const DrugsDB::DrugInteractionQuery *c)
 {
-    dbg.nospace() << c->warnText();
-    return dbg.space();
+    if (!c) {
+        dbg.nospace() << "DrugInteractionQuery(0x0)";
+        return dbg.space();
+    }
+    return operator<<(dbg, *c);
 }
 
 QDebug operator<<(QDebug dbg, const DrugsDB::DrugInteractionQuery &c)

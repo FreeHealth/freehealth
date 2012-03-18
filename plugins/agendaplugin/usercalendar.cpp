@@ -249,5 +249,9 @@ QDebug operator<<(QDebug dbg, const Agenda::DayAvailability &c)
 
 QDebug operator<<(QDebug dbg, const Agenda::DayAvailability *c)
 {
+    if (!c) {
+        dbg.nospace() << "DayAvailability(0x0)";
+        return dbg.space();
+    }
     return operator<<(dbg, *c);
 }

@@ -279,29 +279,10 @@ QDebug DrugsDB::operator<<(QDebug dbg, const DrugsDB::DatabaseInfos &c)
 
 QDebug DrugsDB::operator<<(QDebug dbg, const DrugsDB::DatabaseInfos *c)
 {
-    QString tmp;
-    foreach(const QString &lang, c->names.keys()) {
-        tmp += QString("%1 - %2; ").arg(lang).arg(c->names.value(lang));
+    if (!c) {
+        dbg.nospace() << "DatabaseInfos(0x0)";
+        return dbg.space();
     }
-    tmp.chop(2);
-    dbg.nospace() << "DatabaseInfos("
-                  << c->identifier
-                  << "; "  << c->translatedName()
-                  << "; " << c->lang_country
-                  << "\n  FileName: " << c->fileName
-                  << "\n  Version: " << c->version
-                  << "\n  CompatVersion: " << c->compatVersion
-                  << "\n  Provider: " << c->provider
-                  << "\n  Author: " << c->author
-                  << "\n  License: " << c->license
-                  << "\n  licenseTerms: " << c->licenseTerms
-                  << "\n  packUidName: " << c->packUidName
-                  << "\n  weblink: " << c->weblink
-                  << "\n  atcCompatible: " << c->atcCompatible
-                  << "\n  iamCompatible: " << c->iamCompatible
-                  << "\n  date: " << c->date
-                  << ")"
-                  ;
-    return dbg.space();
+    return operator<<(dbg, *c);
 }
 

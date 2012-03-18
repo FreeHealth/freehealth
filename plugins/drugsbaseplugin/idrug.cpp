@@ -1108,8 +1108,11 @@ QString IVirtualDrug::toXml() const
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 QDebug operator<<(QDebug dbg, const DrugsDB::IDrug *c)
 {
-    dbg.nospace() << c->warnText();
-    return dbg.space();
+    if (!c) {
+        dbg.nospace() << "IDrug(0x0)";
+        return dbg.space();
+    }
+    return operator<<(dbg, *c);
 }
 
 QDebug operator<<(QDebug dbg, const DrugsDB::IDrug &c)

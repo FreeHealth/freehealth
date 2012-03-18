@@ -231,7 +231,7 @@ bool Calendar::calendarItemLessThan(const CalendarItem &item1, const CalendarIte
         return item1.uid() > item2.uid();
 }
 
-QDebug Calendar::operator<<(QDebug dbg, const Calendar::CalendarItem &c)
+QDebug operator<<(QDebug dbg, const Calendar::CalendarItem &c)
 {
     dbg.nospace() << "CalendarItem("
                   << c.beginning().toString(QLocale().dateTimeFormat(QLocale::ShortFormat))
@@ -239,5 +239,14 @@ QDebug Calendar::operator<<(QDebug dbg, const Calendar::CalendarItem &c)
                   << c.ending().toString(QLocale().dateTimeFormat(QLocale::ShortFormat))
                   << ", " << c.model() << ")";
     return dbg.space();
+}
+
+QDebug operator<<(QDebug dbg, const Calendar::CalendarItem *c)
+{
+    if (!c) {
+        dbg.nospace() << "CalendarItem(0x0)";
+        return dbg.space();
+    }
+    return operator<<(dbg, *c);
 }
 

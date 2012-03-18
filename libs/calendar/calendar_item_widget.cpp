@@ -77,10 +77,9 @@ QDebug Calendar::operator<<(QDebug dbg, const Calendar::CalendarItemWidget &c)
 
 QDebug Calendar::operator<<(QDebug dbg, const Calendar::CalendarItemWidget *c)
 {
-    dbg.nospace() << "CalendarItemWidget("
-                  << c->beginDateTime().toString(QLocale().dateTimeFormat(QLocale::ShortFormat))
-                  << ", "
-                  << c->endDateTime().toString(QLocale().dateTimeFormat(QLocale::ShortFormat))
-                  << ", " << c->durationInSeconds() << "s, " << c->durationInSeconds()/60 << "m)";
-    return dbg.space();
+    if (!c) {
+        dbg.nospace() << "CalendarItemWidget(0x0)";
+        return dbg.space();
+    }
+    return operator<<(dbg, *c);
 }

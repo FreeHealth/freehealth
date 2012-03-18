@@ -420,8 +420,9 @@ QDebug operator<<(QDebug dbg, const MedicalUtils::EbmData &c)
 
 QDebug operator<<(QDebug dbg, const MedicalUtils::EbmData *c)
 {
-    dbg.nospace() << QString("EbmData(%1; Ref: %2chars; Abstract: %3chars; Xml: %4chars;")
-                     .arg(c->data(MedicalUtils::EbmData::ShortReferences)).arg(c->references().size()).arg(c->abstract().size()).arg(c->xmlEncoded().size())
-                  << ")";
-    return dbg.space();
+    if (!c) {
+        dbg.nospace() << "EbmData(0x0)";
+        return dbg.space();
+    }
+    return operator<<(dbg, *c);
 }
