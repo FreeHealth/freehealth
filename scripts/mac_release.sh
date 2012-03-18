@@ -22,7 +22,7 @@ PACKAGES_PATH=""
 
 # Qt Prject file to build (contains absolute file path)
 PROJECT_FILE=""
-BUNDLE_NAME=""
+BUNDLE_NAME="FreeMedForms FreeDiams"
 PROJECT="" # lowered case of BundleName
 
 # Get scripts names and paths
@@ -36,27 +36,29 @@ fi
 MAC_SCRIPTS_PATH=$SCRIPT_PATH
 SOURCES_PATH=$SCRIPT_PATH"../"
 PACKAGES_PATH=$SCRIPT_PATH"../packages"
+# get version number from the project file
+VERSION=`cat $SOURCES_PATH$PROJECT/buildspecs/projectversion.pri | grep "PACKAGE_VERSION" -m 1 | cut -d = -s -f2 | tr -d ' '`
 
 showHelp()
 {
   echo $SCRIPT_NAME" builds FreeMedForms applications into Mac bundle in release mode."
   echo "Usage : $SCRIPT_NAME -b CaseSensitiveBundle <options>"
   echo "Options :"
-  echo "          -b  Bundle name"
-  echo "          -s  Build from source package (you need to create the source package)"
-  echo "          -h  show this help"
+  echo " -b  Bundle name (optionnal)"
+  echo " -s  Build from source package (you need to create the source package)"
+  echo " -h  show this help"
   echo "Win32 port can be build under Linux using crosscompilation"
 }
 
 buildFromSourcePackage()
 {
-  SOURCE_PACKAGE=$SOURCES_PATH$PROJECT"fullsources-"$VERSION".tgz"
+  SOURCE_PACKAGE=$SOURCES_PATH"freemedformsfullsources-"$VERSION".tgz"
   # test source package
   if [ ! -e $SOURCE_PACKAGE ] ; then
       echo $SOURCE_PACKAGE" not found"
       exit 123;
   fi
-  SOURCES_PATH=$SCRIPT_PATH$PROJECT"-"$VERSION"/"
+  SOURCES_PATH=$SCRIPT_PATH"freemedforms-"$VERSION"/"
 #  if [ -e $SOURCES_PATH ] ; then
 #    rm -Rf $SOURCES_PATH
 #  fi
@@ -98,7 +100,7 @@ buildApp()
   #####################################
   # build app
   echo "*** Building "$BUNDLE_NAME" "$VERSION
-  cd $SOURCES_PATH
+  cd $SOURCES_PATH/$PROJECT
   QMAKE_SPEC="-r -spec macx-g++ CONFIG+=release CONFIG-=debug_and_release LOWERED_APPNAME=$PROJECT"
 
    MAKE_STEP=`$QMAKE_BIN $PROJECT_FILE $QMAKE_SPEC`
@@ -199,10 +201,6 @@ do
 echo "(-- option:$option  $OPTIND - '$OPTARG' --)"
         case $option in
                 b) BUNDLE_NAME=$OPTARG;
-                   PROJECT=`echo $OPTARG | tr '[A-Z]' '[a-z]'`;
-                   PROJECT_FILE=$SOURCES_PATH$PROJECT.pro;
-                   # get version number of FreeDiams from the project file
-                   VERSION=`cat $SOURCES_PATH$PROJECT/$PROJECT.pro | grep "PACKAGE_VERSION" -m 1 | cut -d = -s -f2 | tr -d ' '`
                 ;;
                 h) showHelp
                     exit 0
@@ -237,9 +235,14 @@ echo "      * from source path $SOURCES_PATH"
 echo "      * to package path $PACKAGES_PATH"
 
 buildTranslations
-buildApp
-linkQtLibs
-linkMySqlLib
-createDmg
+
+for i in $BUNDLE_NAME; do
+  PROJECT=`echo $i | tr '[A-Z]' '[a-z]'`;
+  PROJECT_FILE=$SOURCES_PATH$PROJECT/$PROJECT.pro;
+  buildApp
+  linkQtLibs
+  linkMySqlLib
+  createDmg
+done
 
 exit 0

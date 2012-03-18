@@ -102,7 +102,6 @@ global_resources/textfiles/default_user_header.htm \
 global_resources/textfiles/girls_surnames.csv \
 global_resources/textfiles/listemotsfr.txt \
 global_resources/textfiles/surnames.txt \
-global_resources/textfiles/pays.txt \
 global_resources/textfiles/*.db \
 global_resources/translations/*.ts \
 global_resources/translations/qt*.qm \

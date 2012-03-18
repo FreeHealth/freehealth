@@ -96,10 +96,11 @@ copyAllPlugins()
 {
 	copyPlugins "accessible" "$APP_QT_PLUGINS_PATH"
 	copyPlugins "codecs" "$APP_QT_PLUGINS_PATH"
-	copyPlugins "designer" "$APP_QT_PLUGINS_PATH"
+        copyPlugins "designer" "$APP_QT_PLUGINS_PATH"
+        copyPlugins "graphicssystems" "$APP_QT_PLUGINS_PATH"
 	copyPlugins "iconengines" "$APP_QT_PLUGINS_PATH"
 	copyPlugins "imageformats" "$APP_QT_PLUGINS_PATH"
-	copyPlugins "inputmethods" "$APP_QT_PLUGINS_PATH"
+#	copyPlugins "inputmethods" "$APP_QT_PLUGINS_PATH"
 	copyPlugins "phonon_backend" "$APP_QT_PLUGINS_PATH"
 	copyPlugins "script" "$APP_QT_PLUGINS_PATH"
 	copyPlugins "sqldrivers" "$APP_QT_PLUGINS_PATH"
