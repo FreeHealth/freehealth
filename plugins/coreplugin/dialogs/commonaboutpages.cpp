@@ -160,6 +160,13 @@ static const QList<Team> m_Team = QList<Team>()
                 )
 
         << Team( Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_DEVELOPERS_CONTRIBUTORS),
+                 "Christian A. Reiter, MD",
+                 Trans::ConstantTranslations::tkTr(Trans::Constants::COUNTRY_AUSTRIA),
+                 "christian.a.reiter@gmail.com",
+                 Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_DEVELOPER_AND_DEBUGGER)
+                )
+
+        << Team( Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_DEVELOPERS_CONTRIBUTORS),
                  "Filipe Azevedo",
                  Trans::ConstantTranslations::tkTr(Trans::Constants::COUNTRY_FRANCE),
                  "pasnox@gmail.com",
@@ -222,6 +229,13 @@ static const QList<Team> m_Team = QList<Team>()
                  Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_MEDICAL_ADVISOR)
                 )
 
+        << Team( Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_MEDICAL_ADVISORS),
+                 "Christian A. Reiter, MD",
+                 Trans::ConstantTranslations::tkTr(Trans::Constants::COUNTRY_AUSTRIA),
+                 "christian.a.reiter@gmail.com",
+                 Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_DEVELOPER_AND_DEBUGGER)
+                )
+
         << Team( Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_WEBMASTER),
                  "Vincent Perez, MD",
                   Trans::ConstantTranslations::tkTr(Trans::Constants::COUNTRY_FRANCE),
@@ -273,7 +287,7 @@ static const QList<Team> m_Team = QList<Team>()
 
         << Team( Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_PACKAGER),
                  "Debian Med Team",
-                 "jbusser@interchange.ubc.ca",
+                 "",
                  "debian-med@lists.debian.org",
                  Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_PACKAGER_FOR_1).arg("Debian")
                 )
@@ -298,6 +312,14 @@ static const QList<Team> m_Team = QList<Team>()
 		 "eric.maeker@gmail.com",
 		 "French / English"
 		)
+
+        << Team( Trans::ConstantTranslations::tkTr(Trans::Constants::TEAM_TRANSLATORS),
+                 "Christian A. Reiter, MD",
+                 Trans::ConstantTranslations::tkTr(Trans::Constants::COUNTRY_AUSTRIA),
+                 "christian.a.reiter@gmail.com",
+                 "English / Deutsch"
+                )
+
 	;
 
 

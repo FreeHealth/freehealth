@@ -35,6 +35,7 @@ namespace Constants {
 const char* const COUNTRY_FRANCE      = QT_TRANSLATE_NOOP( "tkConstants", "France" );
 const char* const COUNTRY_GERMANY     = QT_TRANSLATE_NOOP( "tkConstants", "Germany" );
 const char* const COUNTRY_CANADA      = QT_TRANSLATE_NOOP( "tkConstants", "Canada" );
+const char* const COUNTRY_AUSTRIA     = QT_TRANSLATE_NOOP( "tkConstants", "Austria" );
 
 } // end Constants
 } // end TranslationUtils
