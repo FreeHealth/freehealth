@@ -73,7 +73,7 @@
     <name>Calendar::Internal::BasicItemEditionDialog</name>
     <message>
         <location filename="../../libs/calendar/basic_item_edition_dialog.ui" line="14"/>
-        <source>Calendar item edition</source>
+        <source>Calendar item editor</source>
         <translation>Editeur de rendez-vous</translation>
     </message>
     <message>
@@ -111,8 +111,12 @@
     </message>
     <message>
         <location filename="../../libs/calendar/item_editor_widget.ui" line="158"/>
-        <source>Show busy</source>
+        <source>show as busy</source>
         <translation>Montrer occupé</translation>
+    </message>
+    <message>
+        <source>dd/MM/yyyy</source>
+        <translation type="obsolete">dd/MM/yyyy</translation>
     </message>
     <message>
         <location filename="../../libs/calendar/item_editor_widget.ui" line="223"/>
@@ -131,7 +135,7 @@
     </message>
     <message>
         <location filename="../../libs/calendar/item_editor_widget.ui" line="305"/>
-        <source>Is a private</source>
+        <source>is private</source>
         <translation>Est privé</translation>
     </message>
     <message>

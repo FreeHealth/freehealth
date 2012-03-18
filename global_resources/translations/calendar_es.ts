@@ -73,7 +73,7 @@
     <name>Calendar::Internal::BasicItemEditionDialog</name>
     <message>
         <location filename="../../libs/calendar/basic_item_edition_dialog.ui" line="14"/>
-        <source>Calendar item edition</source>
+        <source>Calendar item editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -111,7 +111,7 @@
     </message>
     <message>
         <location filename="../../libs/calendar/item_editor_widget.ui" line="158"/>
-        <source>Show busy</source>
+        <source>show as busy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -131,7 +131,7 @@
     </message>
     <message>
         <location filename="../../libs/calendar/item_editor_widget.ui" line="305"/>
-        <source>Is a private</source>
+        <source>is private</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

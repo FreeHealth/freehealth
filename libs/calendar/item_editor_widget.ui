@@ -155,7 +155,7 @@
          </size>
         </property>
         <property name="text">
-         <string>Show busy</string>
+         <string>show as busy</string>
         </property>
        </widget>
       </item>
@@ -302,7 +302,7 @@
          </size>
         </property>
         <property name="text">
-         <string>Is a private</string>
+         <string>is private</string>
         </property>
        </widget>
       </item>

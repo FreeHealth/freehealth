@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Calendar item edition</string>
+   <string>Calendar item editor</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="3" column="0" colspan="2">
