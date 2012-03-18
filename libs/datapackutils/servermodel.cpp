@@ -129,11 +129,11 @@ QVariant ServerModel::data(const QModelIndex &index, int role) const
     case Qt::ToolTipRole:
         {
             QString toolTip = QString("<b>%1</b>:&nbsp;%2<br/><b>%3</b>:&nbsp;%4<br/><b>%5</b>:&nbsp;%6")
-                .arg(tr("Native Url").replace(" ", "&nbsp;"))
+                .arg(tr("Native Url").replace(" ", "&nbsp;")) /** \todo maybe use URL instead of Url */
                 .arg(s.nativeUrl())
-                .arg(tr("Recommended update checking"))
+                .arg(tr("Recommended update checking")) /** \todo maybe better: "Recommended update check frequency" */
                 .arg(Trans::ConstantTranslations::checkUpdateLabel(s.recommendedUpdateFrequency()))
-                .arg(tr("Url Style"))
+                .arg(tr("Url Style")) /** \todo maybe use URL instead of Url */
                 .arg(s.urlStyleName());
             return toolTip.replace(" ", "&nbsp;");
         }
