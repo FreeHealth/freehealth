@@ -788,7 +788,7 @@ QString PimEngine::shortName() const
 }
 
 QString PimEngine::tooltip() const
-{
+{ /** \todo this is not a real good English sentence - not translatable neither... */
     return tr("Detects interaction between drugs and patient in elderly");
 }
 
