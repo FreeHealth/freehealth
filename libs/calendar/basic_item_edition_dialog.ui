@@ -42,7 +42,7 @@
       </font>
      </property>
      <property name="text">
-      <string>Appointement edition</string>
+      <string>Appointment editor</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>

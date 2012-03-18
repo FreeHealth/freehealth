@@ -78,7 +78,7 @@
     </message>
     <message>
         <location filename="../../libs/calendar/basic_item_edition_dialog.ui" line="45"/>
-        <source>Appointement edition</source>
+        <source>Appointment editor</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
