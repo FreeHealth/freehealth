@@ -21,10 +21,10 @@ ChangesAssociations=yes
 ;LicenseFile=
 ;OutputDir=SourceDir
 ;WizardSmallImageFile=mysmallimage.bmp
-SourceDir=e:\freediams-__version__\packages\win\freediams
-SetupIconFile=e:\freediams-__version__\freediams\freediams.ico
-WizardSmallImageFile=e:\freediams-__version__\global_resources\pixmap\svg\freediams-128.bmp
-WizardImageFile=e:\freediams-__version__\global_resources\pixmap\svg\freediams-128.bmp
+SourceDir=e:\freemedforms-__version__\packages\win\freediams
+SetupIconFile=e:\freemedforms-__version__\freediams\freediams-src\freediams.ico
+WizardSmallImageFile=e:\freemedforms-__version__\global_resources\pixmap\svg\freediams-128.bmp
+WizardImageFile=e:\freemedforms-__version__\global_resources\pixmap\svg\freediams-128.bmp
 ;WizardImageStretch=no
 Compression=lzma/normal
 

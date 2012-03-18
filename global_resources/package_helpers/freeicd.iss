@@ -21,10 +21,10 @@ ChangesAssociations=yes
 ;LicenseFile=
 ;OutputDir=SourceDir
 ;WizardSmallImageFile=mysmallimage.bmp
-SourceDir=e:\FreeICD-__version__\packages\win\FreeICD
-SetupIconFile=e:\FreeICD-__version__\FreeICD\freeicd.ico
-WizardSmallImageFile=e:\FreeICD-__version__\global_resources\pixmap\svg\freeicd-128.bmp
-WizardImageFile=e:\FreeICD-__version__\global_resources\pixmap\svg\freeicd-128.bmp
+SourceDir=e:\freemedforms-__version__\packages\win\FreeICD
+SetupIconFile=e:\freemedforms-__version__\freeicd\freeicd-src\freeicd.ico
+WizardSmallImageFile=e:\freemedforms-__version__\global_resources\pixmap\svg\freeicd-128.bmp
+WizardImageFile=e:\freemedforms-__version__\global_resources\pixmap\svg\freeicd-128.bmp
 ;WizardImageStretch=no
 Compression=lzma/normal
 
