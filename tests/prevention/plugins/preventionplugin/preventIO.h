@@ -30,9 +30,6 @@
      bool setData(int column, const QVariant &value);
 
  private:
-     //int getNextIdPrimkey();
-     //int findNextId();
-     //bool insertANewLineInModel();
      QList<TreeItem*> m_childItems;
      QHash<QString,TreeItem*> m_treeItemsHash;
      QVector<QVariant> m_itemData;
@@ -81,7 +78,7 @@ class VariantItemModel : public QAbstractItemModel
           SECONDARY_PREVENTION_ITEM,
           Types_Of_Items_MaxParam
           };
-      enum Icons {
+      enum Icons {//see enum in treeviewdelegate
           PREVENT_OK = 0,
           PREVENT_WARNING,
           PREVENT_PAST,

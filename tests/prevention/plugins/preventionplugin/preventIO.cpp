@@ -139,7 +139,6 @@ static inline QString pixmaps()
  {
      if (column < 0 || column >= m_itemData.size())
          return false;
-
      m_itemData[column] = value;
      return true;
  }
@@ -200,16 +199,18 @@ VariantItemModel::VariantItemModel(const QStringList headers, QSqlTableModel * m
      if (!index.isValid()){
          return QVariant();
          }
-     if (role != Qt::DisplayRole  && index.column()!= ICON_H){
+     if (role != Qt::DisplayRole /* && index.column()!= ICON_H*/){
          return QVariant();
          }
      TreeItem *item = getItem(index);
      QVariant itemData = item->data(index.column());
      if (index.column() == ICON_H)
      {
-     	  if(role == Qt::DecorationRole)
-     	     return QIcon(itemData.toString());
+     	 if(role == Qt::DecorationRole || role == Qt::DisplayRole)
+     	     return itemData;
      	  return QVariant();
+    	 
+     	     
          }
 
      return itemData;
@@ -472,8 +473,6 @@ QHash<int,QVariant> VariantItemModel::childs(QModelIndex &parent){
 
      	 int parentOrChild = 0;
      	 parentOrChild = items.value(PARENT_OR_CHILD).toInt();
-    	 
-     	 //insertChildren(int position, int count, int columns)
      	 TreeItem * itemParent;
      	 QString parentName;
      	 switch(parentOrChild){
@@ -494,7 +493,6 @@ QHash<int,QVariant> VariantItemModel::childs(QModelIndex &parent){
      	         		}
      	         	parent->child(parent->childCount() - 1)->setData(i-1,itemData);
      	               }
-     	         //parent->appendChild(new TreeItem(items,parent));
      	         break;
      	     case CHILD :
      	         itemParent = parent->child(items[PARENT_ITEM].toString());
@@ -513,7 +511,6 @@ QHash<int,QVariant> VariantItemModel::childs(QModelIndex &parent){
 
 QStringList VariantItemModel::getListOfMainItems(){
     QStringList list;
-    //list << "Vaccinations" << "Coloscopies" << "Mammographies";
     return list;
 }
 
@@ -586,7 +583,6 @@ bool PreventIO::addAnItemAccordingToIndex(QModelIndex & index,QModelIndex & pare
     	 {
     	 	  qWarning() << __FILE__ << QString::number(__LINE__) << "UNABLE TO SET PRIMKEY" ;
     	     }
-    	// m_model->submit();
     	 for (int col = 0; col < VariantItemModel::Headers_MaxParam; col += 1)
     	 {
     	         int role = Qt::EditRole;
@@ -610,7 +606,7 @@ bool PreventIO::addAnItemAccordingToIndex(QModelIndex & index,QModelIndex & pare
     	 	         break;
     	 	     case VariantItemModel::ICON_H :
     	 	         role = Qt::DecorationRole;
-    	 	         value = QVariant(pixmaps()+"/preventWarning.png");
+    	 	         value = QIcon(pixmaps()+"/preventOk.png");
     	 	         break;
     	 	     case VariantItemModel::DATE_DONE_H :
     	 	         role = Qt::EditRole;
@@ -639,10 +635,11 @@ bool PreventIO::addAnItemAccordingToIndex(QModelIndex & index,QModelIndex & pare
     	 	     }
     	 	  
     	 	  item->child(item->childCount() -1)->setData(col,value);   
-    	 	  if (!m_model->setData(m_model->index(newModelRow,col+1),value,Qt::EditRole))
-    	 	  {
-    	 	  	  qWarning() << __FILE__ << QString::number(__LINE__) << "UNABLE TO SET NEW DATA" ;
-    	 	      }
+
+  	  	  if (!m_model->setData(m_model->index(newModelRow,col+1),value,role))
+    	 	          {
+    	 	  	      qWarning() << __FILE__ << QString::number(__LINE__) << "UNABLE TO SET NEW DATA" ;
+    	 	              }
     	 	      
     	          }
     	          if (!m_model->submitAll())

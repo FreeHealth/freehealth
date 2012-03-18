@@ -4,6 +4,7 @@
 #include "preventIO.h"
 #include "ui_prevent.h"
 #include "moreIHM.h"
+#include "survey.h"
 
 #include <QWidget>
 #include <QTreeView>
@@ -65,13 +66,14 @@ class PreventIHM : public QWidget, public Ui::PreventWidget {
         PreventIO *m_io;
         QSqlTableModel * m_model;
         QSqlTableModel * m_newModel;
-        
-        //QStringList setHeadersDatas();
-        //QVector<QVector<QVariant> > getItemsDatas();
     
+    private slots :
+        void iconsResetIfDateNextOvertaken(const QHash<int,QVariant>&);    
     private :
         QVBoxLayout *m_vbox;
         TreeViewOfPrevention *m_TreeViewOfPrevention; 
+        Survey * m_survey;
+        void changeIconWidget();
     
 
 };

@@ -1,10 +1,10 @@
 TEMPLATE = lib
 TARGET = Core
 
-DEFINES += FREEICD
-FREEICD = 1
+DEFINES += PREVENTION
+#PREVENTION = 1
 
-BUILD_PATH_POSTFIXE = FreeICD
+BUILD_PATH_POSTFIXE = Prevention
 
 include(../../../../plugins/coreplugin/common_core.pri)
 

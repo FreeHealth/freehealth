@@ -14,6 +14,8 @@ class Survey : public QObject
         Survey(QObject * parent = 0);
         ~Survey();
         QHash<int,QVariant> getHashIconDate();
+    signals :
+        void iconsReset(const QHash<int,QVariant> & hash);
     private Q_SLOTS:
         void resetIcons();
     private:

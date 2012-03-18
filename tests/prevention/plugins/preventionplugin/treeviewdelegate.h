@@ -4,13 +4,14 @@
 #include <QStyledItemDelegate>
 #include <QDateEdit>
 #include <QWidget>
+#include <QHash>
 
-
-class TreeViewDelegate : public QStyledItemDelegate{
+class DateEditTreeViewDelegate : public QStyledItemDelegate
+{
     Q_OBJECT
     public :
-    TreeViewDelegate();
-    ~TreeViewDelegate();
+    DateEditTreeViewDelegate();
+    ~DateEditTreeViewDelegate();
 
 
     QSize sizeHint(const QStyleOptionViewItem &option,
@@ -21,7 +22,30 @@ class TreeViewDelegate : public QStyledItemDelegate{
     void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const;
 };
 
+class ComboTreeViewDelegate : public QStyledItemDelegate
+{
+    Q_OBJECT
+    enum Icons {//see enum in preventIO
+          PREVENT_OK = 0,
+          PREVENT_WARNING,
+          PREVENT_PAST,
+          Icons_MaxParam
+          };
+    public :
+    ComboTreeViewDelegate();
+    ~ComboTreeViewDelegate();
 
+
+    QSize sizeHint(const QStyleOptionViewItem &option,
+                   const QModelIndex &index ) const;
+    QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option,
+                           const QModelIndex &index) const;
+    void setEditorData(QWidget *editor, const QModelIndex &index) const;
+    void setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const;
+
+    private :
+        QHash<int,QString> m_hashIcons;
+};
 
 #endif
 

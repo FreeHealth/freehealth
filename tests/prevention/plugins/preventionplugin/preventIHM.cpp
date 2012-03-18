@@ -5,6 +5,11 @@
 #include <QDateEdit>
 #include <QMessageBox>
 
+static inline QString pixmaps() 
+{ 
+    return QString(qApp->applicationDirPath()+"/../../global_resources/pixmap");
+};
+
 
 ///////////////////////////////////////////////////////
 // TREEVIEWOFPREVENTION ///////////////////////////////
@@ -31,14 +36,13 @@ void TreeViewOfPrevention::mouseReleaseEvent(QMouseEvent *event){
             m_menuRightClic->addAction(m_addValue);
             m_menuRightClic->exec(event->globalPos());
             blockSignals(false);
-        }
+            }
 
     }
     if(event->button() == Qt::LeftButton) {
         blockSignals(false);
         QTreeView::mouseReleaseEvent(event);
-        
-    }
+        }
 }
 
 bool TreeViewOfPrevention::isChild(){
@@ -109,22 +113,53 @@ QStringList headers;
     m_io = new PreventIO;
     headers = m_io->setHeadersDatas() ;
     m_model = m_io->getModel();
+    m_survey = new Survey(this);
     m_modelOfItems = new VariantItemModel(headers,m_model,this);
     m_TreeViewOfPrevention = new TreeViewOfPrevention(this);
     m_vbox = new QVBoxLayout(this);
     m_vbox->addWidget(m_TreeViewOfPrevention);
     setLayout(m_vbox);
+
     m_TreeViewOfPrevention->setModel(m_modelOfItems);
-    m_TreeViewOfPrevention->getModel(m_modelOfItems) ;
+    
     m_TreeViewOfPrevention->header()->hideSection(VariantItemModel::TYPE_OF_ITEM_H);
     m_TreeViewOfPrevention->header()->hideSection(VariantItemModel::PARENT_ITEM_H);
     m_TreeViewOfPrevention->header()->hideSection(VariantItemModel::PARENT_OR_CHILD_H);
     m_TreeViewOfPrevention->header()->hideSection(VariantItemModel::RESULT_H);
-    //m_TreeViewOfPrevention->setItemDelegate(new TreeViewDelegate);
-    m_TreeViewOfPrevention->setItemDelegateForColumn(VariantItemModel::DATE_DONE_H,new TreeViewDelegate);
-    m_TreeViewOfPrevention->setItemDelegateForColumn(VariantItemModel::DATE_NEXT_H,new TreeViewDelegate);
+    m_TreeViewOfPrevention->setItemDelegateForColumn(VariantItemModel::DATE_DONE_H,new DateEditTreeViewDelegate);
+    m_TreeViewOfPrevention->setItemDelegateForColumn(VariantItemModel::DATE_NEXT_H,new DateEditTreeViewDelegate);
+    m_TreeViewOfPrevention->setItemDelegateForColumn(VariantItemModel::ICON_H,new ComboTreeViewDelegate);
+    changeIconWidget();
     
-    }
+    connect(m_survey,SIGNAL(iconsReset(const QHash<int,QVariant>&)),this,
+                     SLOT(iconsResetIfDateNextOvertaken(const QHash<int,QVariant>&)));
+    
+
+}
 
 PreventIHM::~PreventIHM(){}
 
+void PreventIHM::changeIconWidget()
+{
+    for (int row = 0; row < m_modelOfItems->rowCount(); row += 1)
+    {
+    	  QModelIndex parent = m_modelOfItems->index(row,0);
+    	  
+    	  for (int underRow = 0; underRow < m_modelOfItems->rowCount(parent); underRow += 1)
+    	  {
+    	  	 QModelIndex indexChild = m_modelOfItems->index(underRow,VariantItemModel::ICON_H,parent);
+    	  	 qDebug() << __FILE__ << QString::number(__LINE__) << " row Child =" 
+    	  	          << QString::number(indexChild.row()) ;
+    	  	 
+    	  	 QString data = m_modelOfItems->data(indexChild,Qt::DisplayRole).toString();
+    	  	 qDebug() << __FILE__ << QString::number(__LINE__) << " indexChild.data().toString() =" 
+    	  	          << data ;
+    	  	 m_TreeViewOfPrevention->openPersistentEditor (indexChild);
+                }
+     }
+}
+
+void PreventIHM::iconsResetIfDateNextOvertaken(const QHash<int,QVariant> & hashOfOvertakenItems)
+{
+    QMessageBox::information(0,trUtf8("Info"),trUtf8("ESSAI"),QMessageBox::Ok);
+}
