@@ -6,7 +6,7 @@
     <message>
         <location filename="../../plugins/druginteractionsplugin/allergyengine.cpp" line="523"/>
         <source>Detects allergies and intolerances to medications</source>
-        <translation type="unfinished"></translation>
+        <translation>Détecte les allergies et les intolérances médicamenteuses</translation>
     </message>
 </context>
 <context>
@@ -14,7 +14,7 @@
     <message>
         <location filename="../../plugins/druginteractionsplugin/drugdruginteractionengine.cpp" line="873"/>
         <source>Detects interaction between drugs</source>
-        <translation type="unfinished"></translation>
+        <translation>Détecte les interactions entre médicaments</translation>
     </message>
 </context>
 <context>
@@ -22,7 +22,7 @@
     <message>
         <location filename="../../plugins/druginteractionsplugin/druginteractionsplugin.cpp" line="89"/>
         <source>Initializing drugs interactions plugin...</source>
-        <translation type="unfinished"></translation>
+        <translation>Initialisation du greffon des interactions médicamenteuses...</translation>
     </message>
 </context>
 <context>
@@ -30,12 +30,12 @@
     <message>
         <location filename="../../plugins/druginteractionsplugin/pimengine.cpp" line="782"/>
         <source>(Experimental)</source>
-        <translation type="unfinished"></translation>
+        <translation>(Expérimental)</translation>
     </message>
     <message>
         <location filename="../../plugins/druginteractionsplugin/pimengine.cpp" line="792"/>
         <source>Detects interaction between drugs and patient in elderly</source>
-        <translation type="unfinished"></translation>
+        <translation>Détecte les interactions médicamenteuses avec les personnes âgées</translation>
     </message>
 </context>
 <context>
@@ -44,7 +44,7 @@
         <location filename="../../plugins/druginteractionsplugin/drugdruginteractionengine.cpp" line="1030"/>
         <location filename="../../plugins/druginteractionsplugin/drugdruginteractionengine.cpp" line="1052"/>
         <source>FreeDiams Interactions Engine</source>
-        <translation type="unfinished"></translation>
+        <translation>Moteurs d&apos;interaction de FreeDiams</translation>
     </message>
 </context>
 </TS>
