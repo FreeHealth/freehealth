@@ -2710,7 +2710,7 @@ and choose it as preferred.</source>
     <message>
         <location filename="../../plugins/accountplugin/receipts/xmlcategoriesparser.cpp" line="68"/>
         <source>xmlEchangeFile.xml not found.</source>
-        <translation type="unfinished"></translation>
+        <translation>xmlEchangeFile.xml nicht gefunden.</translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/receipts/xmlcategoriesparser.cpp" line="72"/>

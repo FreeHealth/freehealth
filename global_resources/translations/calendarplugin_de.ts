@@ -33,7 +33,7 @@
     <message>
         <location filename="../../plugins/calendarplugin/calendar_navbar.cpp" line="135"/>
         <source>d MMM</source>
-        <translation type="unfinished">d.MMM.</translation>
+        <translation>d.MMM.</translation>
     </message>
     <message>
         <location filename="../../plugins/calendarplugin/calendar_navbar.cpp" line="137"/>
