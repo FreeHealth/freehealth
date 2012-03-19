@@ -36,6 +36,7 @@
 
 #include <coreplugin/dialogs/pluginaboutpage.h>
 #include <coreplugin/icore.h>
+#include <coreplugin/iuser.h>
 #include <coreplugin/translators.h>
 #include <coreplugin/itheme.h>
 
@@ -44,6 +45,7 @@
 
 using namespace AccountDB;
 
+static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline void messageSplash(const QString &s) {theme()->messageSplashScreen(s); }
 
@@ -75,6 +77,11 @@ void AccountBasePlugin::extensionsInitialized()
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "AccountBasePlugin::extensionsInitialized";
+
+    if (!user())
+        return;
+    if (user()->uuid().isEmpty())
+        return;
 
     messageSplash(tr("Initializing accountancy plugin..."));
 
