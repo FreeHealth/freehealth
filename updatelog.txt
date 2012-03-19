@@ -1,0 +1,40 @@
+FreeMedForms
+0.7.1
+===== News =====
+
+  * FreeAccount
+    * Windows compatibility improved  (installer, icon, application)
+
+===== Bug correction =====
+
+
+===== Packaging and documentation ====
+
+  * Sources
+    * FreeICD and FreeAccount translated to the new source tree
+  * Packaging
+  * Compilation
+  * Documentation
+    * Updating the FreeDiams documentation [French section only]
+    * First version of the FreeMedForms documentation
+
+*********************************************************************************************
+===== Nouveautés =====
+
+  * FreeAccount
+    * Compatible windows (installateur, icône, application)
+
+===== Corrections de bug =====
+
+
+===== Packaging et documentation ====
+
+  * Sources
+    * Sources de FreeICD et FreeAccount inclus dans le nouvelle arborescence des sources
+  * Packaging
+  * Compilation
+  * Documentation
+    * Updating the FreeDiams documentation [French section only]
+    * First version of the FreeMedForms documentation
+
+
