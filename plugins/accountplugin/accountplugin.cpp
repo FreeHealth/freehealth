@@ -86,18 +86,19 @@ AccountPlugin::~AccountPlugin()
 {
     qWarning() << "AccountPlugin::~AccountPlugin()";
     // Remove preferences pages to plugins manager object pool
-    if (m_UserPage)
+    if (m_UserPage) {
         removeObject(m_UserPage);
-    removeObject(m_BankPage);
-    removeObject(m_AvMovPage);
-    removeObject(m_MPPage);
-    removeObject(m_VirtPage);
-    removeObject(m_SitesPage);
-    removeObject(m_InsurPage);
-    removeObject(m_PercentPage);
-    removeObject(m_DistancePage);
-    removeObject(m_AssetsRatesPage);
-    removeObject(m_DefaultPage);
+        removeObject(m_BankPage);
+        removeObject(m_AvMovPage);
+        removeObject(m_MPPage);
+        removeObject(m_VirtPage);
+        removeObject(m_SitesPage);
+        removeObject(m_InsurPage);
+        removeObject(m_PercentPage);
+        removeObject(m_DistancePage);
+        removeObject(m_AssetsRatesPage);
+        removeObject(m_DefaultPage);
+    }
 }
 
 bool AccountPlugin::initialize(const QStringList &arguments, QString *errorString)
@@ -119,6 +120,8 @@ void AccountPlugin::extensionsInitialized()
         qWarning() << "AccountPlugin::extensionsInitialized";
 
     if (!user())
+        return;
+    if (user()->uuid().isEmpty())
         return;
 
     // Add Translator to the Application
