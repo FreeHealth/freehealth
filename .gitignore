@@ -25,6 +25,7 @@ global_resources/sql/*.xml
 global_resources/sql/ia/*
 
 # Databases
+global_resources/databases/*
 global_resources/datapacks/http_zip/drugs/*/*.db
 global_resources/datapacks/http_zip/drugs/*/*db.zip
 
