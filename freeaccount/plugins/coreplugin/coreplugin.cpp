@@ -29,6 +29,8 @@
 #include <extensionsystem/pluginmanager.h>
 #include <utils/log.h>
 
+#include <coreplugin/icore.h>
+#include <coreplugin/iuser.h>
 #include <coreplugin/appaboutpage.h>
 #include <coreplugin/dialogs/commonaboutpages.h>
 #include <coreplugin/dialogs/commondebugpages.h>
@@ -39,6 +41,8 @@
 #include <QDebug>
 
 using namespace Core::Internal;
+
+static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
 
 CorePlugin::CorePlugin() : m_CoreImpl(new CoreImpl(this))
 {
@@ -62,6 +66,12 @@ void CorePlugin::extensionsInitialized()
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "CorePlugin::extensionsInitialized";
+
+    if (!user())
+        return;
+    if (user()->uuid().isEmpty())
+        return;
+
     m_CoreImpl->extensionsInitialized();
     // add about pages
     addAutoReleasedObject(new AppAboutPage(this));

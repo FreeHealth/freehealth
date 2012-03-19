@@ -37,6 +37,7 @@
 #include "mainwindowpreferences.h"
 
 #include <coreplugin/icore.h>
+#include <coreplugin/iuser.h>
 #include <coreplugin/translators.h>
 
 #include <utils/log.h>
@@ -46,6 +47,8 @@
 #include <QDebug>
 
 using namespace MainWin;
+
+static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
 
 MainWinPlugin::MainWinPlugin() :
         m_MainWindow(0), prefPage(0)
@@ -85,6 +88,11 @@ void MainWinPlugin::extensionsInitialized()
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "MainWinPlugin::extensionsInitialized";
+
+    if (!user())
+        return;
+    if (user()->uuid().isEmpty())
+        return;
 
     // Add preferences pages
     prefPage = new Internal::MainWindowPreferencesPage();

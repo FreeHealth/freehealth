@@ -161,7 +161,9 @@ bool UserManagerPlugin::initialize(const QStringList &arguments, QString *errorS
 
     // Ask for User login
     if (!identifyUser()) {
-        *errorString = tr("User is not identified.");
+        if (!errorString)
+            errorString = new QString();
+        errorString->append(tr("User is not identified."));
         return false;
     }
 
