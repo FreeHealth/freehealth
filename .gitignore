@@ -4,6 +4,11 @@ global_resources/translations/*.qm
 # Config files
 global_resources/*.ini
 
+# Drafts
+*~
+*bak
+*bkup
+
 # Non Free content
 global_resources/pixmap/*.svg
 global_resources/pixmap/*.png
@@ -18,7 +23,11 @@ global_resources/sql/ia/*
 
 # Databases
 global_resources/datapacks/http_zip/drugs/*/*.db
+global_resources/datapacks/http_zip/drugs/*/*db.zip
 
 # Docs imported from the project wiki
 global_resources/doc/*/*/html/*
 
+# Working places
+global_resources/datapacks/install/*
+global_resources/datapacks/tmp/*
