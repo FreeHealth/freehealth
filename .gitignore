@@ -1,13 +1,23 @@
 # Translations
-*.ts
+global_resources/translations/*.qm
 
 # Config files
-*.ini
+global_resources/*.ini
 
 # Non Free content
 global_resources/pixmap/*.svg
 global_resources/pixmap/*.png
 global_resources/pixmap/*.jpg
+global_resources/pixmap/*.tiff
+global_resources/pixmap/*.gif
 *nonfree*
 *non-free*
+global_resources/sql/*.xml
+global_resources/sql/ia/*.xml
+
+# Databases
+global_resources/datapacks/http_zip/drugs/*/*.db
+
+# Docs imported from the project wiki
+global_resources/doc/*/*/html/*
 
