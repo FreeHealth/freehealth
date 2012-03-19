@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FreeMedForms>
+
+<DrugDbDescriptor>
+
+  <description>
+    <lang>xx</lang>
+    <version>0.7.0</version>
+    <authors>Eric Maeker, MD (Fr)</authors>
+    <fmfv>0.7.0</fmfv>
+    <fdv>0.7.0</fdv>
+    <vendor></vendor>
+    <cdate>2012-02-26</cdate>
+    <lmdate>2012-02-26</lmdate>
+    <weblink>http://www.tga.gov.au/hp/medicines-pregnancy.htm</weblink>
+    <copyright>?????</copyright>
+    <atcvalid>true</atcvalid>
+    <interactionvalid>true</interactionvalid>
+    <complementweblink></complementweblink>
+    <uuid>TGA_PREG</uuid>
+  </description>
+
+</DrugDbDescriptor>
