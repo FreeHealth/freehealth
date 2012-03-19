@@ -12,6 +12,7 @@ global_resources/pixmap/*.tiff
 global_resources/pixmap/*.gif
 *nonfree*
 *non-free*
+_protected*
 global_resources/sql/*.xml
 global_resources/sql/ia/*
 
