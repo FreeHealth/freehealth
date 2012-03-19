@@ -15,6 +15,7 @@ global_resources/*.ini
 # bin files
 build/*
 bin/*
+Makefile
 
 # Non Free content
 global_resources/pixmap/*.svg
