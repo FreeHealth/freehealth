@@ -1,0 +1,73 @@
+<?xml version="0.0.8" encoding="UTF-8"?>
+<FullPrescription>
+<Prescription>
+    <SpecifyPresentation></SpecifyPresentation>
+    <OnlyForTest></OnlyForTest>
+    <IntakeIntervalTime>0</IntakeIntervalTime>
+    <DurationFromTo>false</DurationFromTo>
+    <DurationFrom>1</DurationFrom>
+    <Daily>&lt;Repeat/>&lt;wakeup value=2/>&lt;morning value=2/>&lt;midday value=2/></Daily>
+    <MealTime>2</MealTime>
+    <SpecifyForm></SpecifyForm>
+    <Period>1</Period>
+    <CIP></CIP>
+    <IsTextual>false</IsTextual>
+    <CIS>63068541</CIS>
+    <IntakeIntervalScheme>3</IntakeIntervalScheme>
+    <IntakeFrom>1</IntakeFrom>
+    <IntakeFullString></IntakeFullString>
+    <IntakeTo></IntakeTo>
+    <DurationTo></DurationTo>
+    <IntakeFromTo>false</IntakeFromTo>
+    <Note>qsdfsdf</Note>
+    <IsAld></IsAld>
+    <DurationScheme>mois</DurationScheme>
+    <RefDosage>{502c5bf9-b1bf-40fa-9bae-449823278241}</RefDosage>
+    <IntakeScheme>prise(s)</IntakeScheme>
+    <PeriodScheme>jour(s)</PeriodScheme>
+    <INN>false</INN>
+</Prescription>
+<Prescription>
+    <TextualDrugName>sfqdsfqsdsdf (((
+!!è</TextualDrugName>
+    <SpecifyPresentation></SpecifyPresentation>
+    <OnlyForTest></OnlyForTest>
+    <IntakeIntervalTime></IntakeIntervalTime>
+    <DurationFromTo></DurationFromTo>
+    <DurationFrom></DurationFrom>
+    <Daily></Daily>
+    <MealTime></MealTime>
+    <SpecifyForm></SpecifyForm>
+    <Period></Period>
+    <CIP></CIP>
+    <IsTextual>true</IsTextual>
+    <CIS>-1</CIS>
+    <IntakeIntervalScheme></IntakeIntervalScheme>
+    <IntakeFrom></IntakeFrom>
+    <IntakeFullString></IntakeFullString>
+    <IntakeTo></IntakeTo>
+    <DurationTo></DurationTo>
+    <IntakeFromTo></IntakeFromTo>
+    <Note>lkoij(mtàça qsdf qsdf
+qsdfqsdf</Note>
+    <IsAld>false</IsAld>
+    <DurationScheme></DurationScheme>
+    <RefDosage></RefDosage>
+    <IntakeScheme></IntakeScheme>
+    <PeriodScheme></PeriodScheme>
+    <INN></INN>
+</Prescription>
+</FullPrescription>
+
+<ExtraDatas>
+<PatientDatas>
+    <Sex>SW5jb25udQ==</Sex>
+    <DateOfbirth></DateOfbirth>
+    <CreatinClearance></CreatinClearance>
+    <Size>MTIz</Size>
+    <Creatinin></Creatinin>
+    <Weight>OTE=</Weight>
+    <Name></Name>
+</PatientDatas>
+
+</ExtraDatas>

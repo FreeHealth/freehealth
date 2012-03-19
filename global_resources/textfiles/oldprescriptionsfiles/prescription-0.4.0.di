@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<FreeDiams>
+<DrugsDatabaseName>FR_AFSSAPS</DrugsDatabaseName>
+<FullPrescription version="0.4.0">
+<Prescription>
+    <SpecifyPresentation/>
+    <Drug_UID>63068541</Drug_UID>
+    <OnlyForTest/>
+    <IntakeIntervalTime>0</IntakeIntervalTime>
+    <DurationFromTo>false</DurationFromTo>
+    <DurationFrom>1</DurationFrom>
+    <Pack_UID/>
+    <Daily>&lt;Distribute/></Daily>
+    <MealTime>0</MealTime>
+    <SpecifyForm/>
+    <Period>1</Period>
+    <IsTextual>false</IsTextual>
+    <IntakeIntervalScheme>3</IntakeIntervalScheme>
+    <IntakeFrom>1</IntakeFrom>
+    <IntakeFullString/>
+    <IntakeTo/>
+    <DurationTo/>
+    <IntakeFromTo>false</IntakeFromTo>
+    <Note/>
+    <IsAld/>
+    <DurationScheme>mois</DurationScheme>
+    <RefDosage>{846cdbe2-3c55-427c-8d04-a477fe09e5d6}</RefDosage>
+    <IntakeScheme>prise(s)</IntakeScheme>
+    <PeriodScheme>jour(s)</PeriodScheme>
+    <INN>true</INN>
+</Prescription>
+<Prescription>
+    <SpecifyPresentation/>
+    <Drug_UID>68166740</Drug_UID>
+    <OnlyForTest/>
+    <IntakeIntervalTime>0</IntakeIntervalTime>
+    <DurationFromTo>true</DurationFromTo>
+    <DurationFrom>1</DurationFrom>
+    <Pack_UID/>
+    <Daily>&lt;Distribute/></Daily>
+    <MealTime>0</MealTime>
+    <SpecifyForm/>
+    <Period>1</Period>
+    <IsTextual>false</IsTextual>
+    <IntakeIntervalScheme>3</IntakeIntervalScheme>
+    <IntakeFrom>1</IntakeFrom>
+    <IntakeFullString/>
+    <IntakeTo>4</IntakeTo>
+    <DurationTo>4</DurationTo>
+    <IntakeFromTo>true</IntakeFromTo>
+    <Note/>
+    <IsAld>true</IsAld>
+    <DurationScheme>mois</DurationScheme>
+    <RefDosage>{846cdbe2-3c55-427c-8d04-a477fe09e5d6}</RefDosage>
+    <IntakeScheme>prise(s)</IntakeScheme>
+    <PeriodScheme>jour(s)</PeriodScheme>
+    <INN>false</INN>
+</Prescription>
+</FullPrescription>
+
+
+<ExtraDatas>
+<PatientDatas>
+    <DateOfbirth/>
+    <CreatinClearance>MTAw</CreatinClearance>
+    <DrugsUidAllergies/>
+    <DrugsAtcAllergies>RDEwQUQwMg==</DrugsAtcAllergies>
+    <DrugsInnAllergies/>
+    <Height>MTcw</Height>
+    <WeightUnit>a2c=</WeightUnit>
+    <Surname>SmFtZXM=</Surname>
+    <Weight>NzA=</Weight>
+    <Creatinine>MTIsMDA=</Creatinine>
+    <Name>S0lSSw==</Name>
+    <UID>RU1SIFBhdGllbnQncyBVSUQ=</UID>
+    <HeightUnit>Y20=</HeightUnit>
+    <Gender>TQ==</Gender>
+    <CreatinineUnit>bWcvbA==</CreatinineUnit>
+</PatientDatas>
+<EMR name="EMRName" uid="SessionUIDWillBeReturnedInOutputFile"/>
+</ExtraDatas>
+</FreeDiams>

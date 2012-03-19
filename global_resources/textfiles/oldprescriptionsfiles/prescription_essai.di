@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<FreeDiams>
+<DateOfGeneration>2010-08-22T17:48:41</DateOfGeneration>
+<DrugsDatabaseName>FR_AFSSAPS</DrugsDatabaseName>
+<FullPrescription version="0.4.0">
+<Prescription>
+    <SpecifyPresentation/>
+    <Drug_UID>61855042</Drug_UID>
+    <OnlyForTest/>
+    <IntakeIntervalTime>0</IntakeIntervalTime>
+    <DurationFromTo>false</DurationFromTo>
+    <DurationFrom>1</DurationFrom>
+    <Pack_UID/>
+    <Daily>&lt;Distribute/></Daily>
+    <MealTime>0</MealTime>
+    <SpecifyForm/>
+    <Period>1</Period>
+    <IsTextual>false</IsTextual>
+    <IntakeIntervalScheme>3</IntakeIntervalScheme>
+    <IntakeFrom>1</IntakeFrom>
+    <IntakeFullString/>
+    <IntakeTo/>
+    <DurationTo/>
+    <IntakeFromTo>false</IntakeFromTo>
+    <Note/>
+    <IsAld/>
+    <DurationScheme>mois</DurationScheme>
+    <RefDosage>{00fc4111-3747-43cd-a2db-6c84553c7c42}</RefDosage>
+    <IntakeScheme>sdfdfa z r</IntakeScheme>
+    <PeriodScheme>jour(s)</PeriodScheme>
+    <INN>false</INN>
+</Prescription>
+<Prescription>
+    <SpecifyPresentation/>
+    <Drug_UID>66207341</Drug_UID>
+    <OnlyForTest/>
+    <IntakeIntervalTime>0</IntakeIntervalTime>
+    <DurationFromTo>false</DurationFromTo>
+    <DurationFrom>1</DurationFrom>
+    <Pack_UID/>
+    <Daily>&lt;Distribute/></Daily>
+    <MealTime>0</MealTime>
+    <SpecifyForm/>
+    <Period>1</Period>
+    <IsTextual>false</IsTextual>
+    <IntakeIntervalScheme>3</IntakeIntervalScheme>
+    <IntakeFrom>1</IntakeFrom>
+    <IntakeFullString/>
+    <IntakeTo/>
+    <DurationTo/>
+    <IntakeFromTo>false</IntakeFromTo>
+    <Note/>
+    <IsAld/>
+    <DurationScheme>mois</DurationScheme>
+    <RefDosage>{c37266f5-8b05-4718-912b-e8d754498e88}</RefDosage>
+    <IntakeScheme>QQs</IntakeScheme>
+    <PeriodScheme>jour(s)</PeriodScheme>
+    <INN>false</INN>
+</Prescription>
+<Prescription>
+    <SpecifyPresentation/>
+    <Drug_UID>65693157</Drug_UID>
+    <OnlyForTest/>
+    <IntakeIntervalTime>0</IntakeIntervalTime>
+    <DurationFromTo>false</DurationFromTo>
+    <DurationFrom>1</DurationFrom>
+    <Pack_UID/>
+    <Daily>&lt;Distribute/></Daily>
+    <MealTime>0</MealTime>
+    <SpecifyForm/>
+    <Period>1</Period>
+    <IsTextual>false</IsTextual>
+    <IntakeIntervalScheme>3</IntakeIntervalScheme>
+    <IntakeFrom>1</IntakeFrom>
+    <IntakeFullString/>
+    <IntakeTo/>
+    <DurationTo/>
+    <IntakeFromTo>false</IntakeFromTo>
+    <Note/>
+    <IsAld/>
+    <DurationScheme>mois</DurationScheme>
+    <RefDosage>{00fc4111-3747-43cd-a2db-6c84553c7c42}</RefDosage>
+    <IntakeScheme>solution pour application</IntakeScheme>
+    <PeriodScheme>jour(s)</PeriodScheme>
+    <INN>false</INN>
+</Prescription>
+</FullPrescription>
+
+
+<ExtraDatas>
+<PatientDatas>
+    <DrugsUidIntolerances/>
+    <DrugsAtcIntolerances/>
+    <HeightUnit>Y20=</HeightUnit>
+    <Height>MTcw</Height>
+    <WeightUnit>a2c=</WeightUnit>
+    <UID>RU1SIFBhdGllbnQncyBVSUQ=</UID>
+    <Creatinine>MTI=</Creatinine>
+    <Weight>NzA=</Weight>
+    <CreatinClearance>MTAw</CreatinClearance>
+    <DateOfbirth>MTk2MC0xMi0wMQ==</DateOfbirth>
+    <DrugsInnAllergies/>
+    <Surname>SmFtZXM=</Surname>
+    <Name>S0lSSw==</Name>
+    <CreatinineUnit>bWcvbA==</CreatinineUnit>
+    <Gender>TQ==</Gender>
+    <DrugsUidAllergies/>
+    <DrugsAtcAllergies/>
+</PatientDatas>
+<EMR name="EMRName" uid="SessionUIDWillBeReturnedInOutputFile"/>
+</ExtraDatas>
+</FreeDiams>

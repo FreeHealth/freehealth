@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<DrugsDatabaseName>FR_AFSSAPS</DrugsDatabaseName>
+<FullPrescription version="0.4.0">
+<Prescription>
+    <SpecifyPresentation/>
+    <Drug_UID>69681953</Drug_UID>
+    <OnlyForTest/>
+    <IntakeIntervalTime>0</IntakeIntervalTime>
+    <DurationFromTo>false</DurationFromTo>
+    <DurationFrom>1</DurationFrom>
+    <Pack_UID/>
+    <Daily>&lt;Repeat/></Daily>
+    <MealTime>1</MealTime>
+    <SpecifyForm/>
+    <Period>1</Period>
+    <IsTextual>false</IsTextual>
+    <IntakeIntervalScheme>3</IntakeIntervalScheme>
+    <IntakeFrom>1</IntakeFrom>
+    <IntakeFullString/>
+    <IntakeTo/>
+    <DurationTo/>
+    <IntakeFromTo>false</IntakeFromTo>
+    <Note/>
+    <IsAld/>
+    <DurationScheme>mois</DurationScheme>
+    <RefDosage>{7526bb8e-4bb3-414b-b1e5-a782823ec353}</RefDosage>
+    <IntakeScheme>prise(s)</IntakeScheme>
+    <PeriodScheme>jour(s)</PeriodScheme>
+    <INN>false</INN>
+</Prescription>
+<Prescription>
+    <SpecifyPresentation/>
+    <Drug_UID>62869109</Drug_UID>
+    <OnlyForTest/>
+    <IntakeIntervalTime>0</IntakeIntervalTime>
+    <DurationFromTo>false</DurationFromTo>
+    <DurationFrom>1</DurationFrom>
+    <Pack_UID/>
+    <Daily>&lt;Distribute/></Daily>
+    <MealTime>0</MealTime>
+    <SpecifyForm/>
+    <Period>1</Period>
+    <IsTextual>false</IsTextual>
+    <IntakeIntervalScheme>3</IntakeIntervalScheme>
+    <IntakeFrom>1</IntakeFrom>
+    <IntakeFullString/>
+    <IntakeTo/>
+    <DurationTo/>
+    <IntakeFromTo>false</IntakeFromTo>
+    <Note/>
+    <IsAld/>
+    <DurationScheme>mois</DurationScheme>
+    <RefDosage>{846cdbe2-3c55-427c-8d04-a477fe09e5d6}</RefDosage>
+    <IntakeScheme>prise(s)</IntakeScheme>
+    <PeriodScheme>jour(s)</PeriodScheme>
+    <INN>false</INN>
+</Prescription>
+</FullPrescription>
+
+<ExtraDatas>
+<PatientDatas>
+    <Sex>TQ==</Sex>
+    <DateOfbirth>MTk0MC0xMS0wNw==</DateOfbirth>
+    <CreatinClearance/>
+    <Creatinin/>
+    <Height/>
+    <Weight>OTE=</Weight>
+    <Name>R2xvdWJpIGJvdWwgZ2Fo</Name>
+</PatientDatas>
+
+</ExtraDatas>
