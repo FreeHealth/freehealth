@@ -1,6 +1,13 @@
 # Translations
 *.ts
+
+# Config files
+*.ini
+
 # Non Free content
+global_resources/pixmap/*.svg
+global_resources/pixmap/*.png
+global_resources/pixmap/*.jpg
 *nonfree*
 *non-free*
 
