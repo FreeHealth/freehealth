@@ -45,7 +45,7 @@ de.FreeDiamsSetup=Freie Arzt-und pharmazeutischen Medikamenten Wechselwirkungen 
 
 en.FreeMedFormsProject=The FreeMedForms project
 fr.FreeMedFormsProject=Le projet FreeMedForms
-en.FreeMedFormsProject=Das Projekt FreeMedForms
+de.FreeMedFormsProject=Das Projekt FreeMedForms
 
 en.FullInstall=Full Install
 de.FullInstall=Vollständige Installation
