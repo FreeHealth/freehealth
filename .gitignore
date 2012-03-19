@@ -12,6 +12,10 @@ global_resources/*.ini
 # QtCreator files
 *.pro.user
 
+# bin files
+build/*
+bin/*
+
 # Non Free content
 global_resources/pixmap/*.svg
 global_resources/pixmap/*.png
