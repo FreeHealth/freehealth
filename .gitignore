@@ -13,7 +13,7 @@ global_resources/pixmap/*.gif
 *nonfree*
 *non-free*
 global_resources/sql/*.xml
-global_resources/sql/ia/*.xml
+global_resources/sql/ia/*
 
 # Databases
 global_resources/datapacks/http_zip/drugs/*/*.db
