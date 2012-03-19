@@ -5,4 +5,4 @@ TEMPLATE = subdirs
 # (ex: linux integrated of apps dependent of the freemedforms-libs package)
 !CONFIG(dontbuildlibs):SUBDIRS=libs
 
-SUBDIRS += plugins src
+SUBDIRS += plugins freeaccount-src
