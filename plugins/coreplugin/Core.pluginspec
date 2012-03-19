@@ -1,4 +1,4 @@
-<plugin name="Core" version="0.0.9" compatVersion="0.0.9">
+<plugin name="Core" version="0.0.1" compatVersion="0.0.1">
     <vendor>FreeMedForms</vendor>
     <copyright>(C) 2008-2009 Eric Maeker, MD</copyright>
     <license>Released under new BSD license.</license>
