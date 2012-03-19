@@ -216,6 +216,13 @@ for f in $FILES; do
   sed -i "bkup" 's#__version__#'$PROJECT_VERSION'#' $f
 done
 rm *.*bkup
+echo "   * DEFINING *.BAT FILES APP VERSION"
+cd $PACKPATH/scripts
+FILES=`find ./ -type f -name '*.bat'`
+for f in $FILES; do
+  sed -i "bkup" 's#__version__#'$PROJECT_VERSION'#' $f
+done
+rm *.*bkup
 
 echo "   * DEFINING *.PLUGINSPEC FILES APP VERSION"
 cd $PACKPATH
