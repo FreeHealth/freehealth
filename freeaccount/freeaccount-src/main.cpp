@@ -256,6 +256,11 @@ int main( int argc, char *argv[] )
         return 1;
     }
 
+    if (usermanagerplugin->hasError()) {
+        qWarning() << "main" << usermanagerplugin->errorString();
+        return 1;
+    }
+
 
 //    if (isFirstInstance) {
 //        // Set up lock and remote arguments for the first instance only.
