@@ -9,6 +9,9 @@ global_resources/*.ini
 *bak
 *bkup
 
+# QtCreator files
+*.pro.user
+
 # Non Free content
 global_resources/pixmap/*.svg
 global_resources/pixmap/*.png
