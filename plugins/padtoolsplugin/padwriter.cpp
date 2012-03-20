@@ -74,6 +74,10 @@ PadWriter::PadWriter(QWidget *parent) :
     // create tokenmodel
     d->m_TokenModel = new TokenModel(this);
     d->ui->treeView->setModel(d->m_TokenModel);
+    d->ui->treeView->setDragEnabled(true);
+    d->ui->treeView->setAcceptDrops(false);
+    d->ui->treeView->setDropIndicatorShown(false);
+    d->ui->treeView->setDragDropMode(QAbstractItemView::DragOnly);
 
     // TEST
     d->ui->rawSource->setPlainText(

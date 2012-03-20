@@ -194,5 +194,20 @@ bool TokenModel::setData(const QModelIndex &index, const QVariant &value, int ro
 
 Qt::ItemFlags TokenModel::flags(const QModelIndex &index) const
 {
-    return QAbstractItemModel::flags(index) | Qt::ItemIsEditable;
+    Qt::ItemFlags defaultFlags = QAbstractItemModel::flags(index);
+    if (index.isValid() && !hasChildren(index))
+        return Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled | defaultFlags;
+    return defaultFlags;
 }
+
+Qt::DropActions TokenModel::supportedDropActions() const
+{
+    return Qt::CopyAction;
+}
+
+QStringList TokenModel::mimeTypes() const
+ {
+     QStringList types;
+     types << "application/vnd.text.list";
+     return types;
+ }

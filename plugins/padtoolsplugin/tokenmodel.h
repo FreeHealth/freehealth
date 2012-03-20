@@ -57,6 +57,8 @@ public:
     bool setData(const QModelIndex &index, const QVariant &value, int role);
     
     Qt::ItemFlags flags(const QModelIndex &index) const;
+    Qt::DropActions supportedDropActions() const;
+    QStringList mimeTypes() const;
 
 Q_SIGNALS:
     void tokenChanged(const QString &token, const QString &value);
