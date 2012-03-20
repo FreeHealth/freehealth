@@ -244,8 +244,13 @@ cd $PACKPATH/libs
 find . -type f -name '*.pro' -exec sed -i bkup 's/# VERSION=1.0.0/!win32:{VERSION='$NON_ALPHABETA_PROJECT_VERSION'}/' {} \;
 find . -type f -name '*.probkup' -exec rm {} \;
 
-#echo "   * ADDING GIT revision hash"
-#### should be done automatically by the git_revision_hash.pri file
+# git version is computed in the buildspecs/githash.pri
+# but the source package needs a static reference
+# while source package does not include the git logs
+GITHASH=`git rev-parse HEAD`
+echo "   * SETTING GIT revision hash to " $GITHASH
+sed -i bkup 's/GIT_HASH=.*/GIT_HASH='$GITHASH'/' $PACKPATH/buildspecs/githash.pri
+rm $PACKPATH/buildspecs/githash.pribkup
 
 echo "**** REPACK SOURCES PACKAGE FROM CREATED DIR ****"
 cd $SCRIPT_PATH
