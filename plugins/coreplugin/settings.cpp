@@ -767,7 +767,7 @@ QString SettingsPrivate::getIniFile(const QString & appName, const QString & fil
     if (index != -1) {
         QString iniFileName = list[index];
         iniFileName = iniFileName.mid(iniFileName.indexOf("=") + 1);
-        LOG_FOR("Settings", tr("Passing command line ini file : %1").arg(iniFileName));
+        LOG_FOR("Settings", tr("Passing command line ini file: %1").arg(iniFileName));
 
         if (QDir::isRelativePath(iniFileName))
             iniFileName.prepend(qApp->applicationDirPath() + QDir::separator());
@@ -789,7 +789,7 @@ QString SettingsPrivate::getIniFile(const QString & appName, const QString & fil
                 return iniFileName;
             }
             else
-                LOG_FOR("Settings", tr("WARNING : Ini file %1 can not be used.").arg(iniFileName));
+                LOG_FOR("Settings", tr("WARNING: Ini file %1 can not be used.").arg(iniFileName));
         }
     }
 
@@ -818,7 +818,7 @@ QString SettingsPrivate::getIniFile(const QString & appName, const QString & fil
                     return content;
                 }
                 else
-                    LOG_FOR("Settings", tr("WARNING : Ini file %1 can not be used.").arg(content));
+                    LOG_FOR("Settings", tr("WARNING: Ini file %1 can not be used.").arg(content));
             }
         }
     }
@@ -852,7 +852,7 @@ QString SettingsPrivate::getIniFile(const QString & appName, const QString & fil
     if (!dir.exists()) {
         dir.cdUp();
         if (!dir.mkdir(tmpAppName)) {
-            LOG_ERROR_FOR("Settings" , tr("Unable to create dir : %1, no Ini File can be used.").arg(dir.absolutePath() + QDir::separator() + tmpAppName));
+            LOG_ERROR_FOR("Settings" , tr("Unable to create dir: %1, no Ini File can be used.").arg(dir.absolutePath() + QDir::separator() + tmpAppName));
             return QString::null;
         }
     }
@@ -1087,26 +1087,26 @@ QString SettingsPrivate::toString() const
 
     // add building information
     tmp += "\n^ Object ^ Value ^";
-    tmp += "\n| " + tr("Running version : %1").arg(qApp->applicationName()).replace(":", "|") + " |";
+    tmp += "\n| " + tr("Running version: %1").arg(qApp->applicationName()).replace(":", "|") + " |";
     tmp += "\n| " + tr("Build date | %1 %2").arg(__DATE__, __TIME__) + " |";
-    tmp += "\n| " + tr("Qt Build version : %1").arg(QT_VERSION_STR).replace(":", "|") + " |";
-    tmp += "\n| " + tr("Qt running version : %1").arg(qVersion()).replace(":", "|") + " |";
-    tmp += "\n| " + tr("Application Version : %1").arg(qApp->applicationVersion()).replace(":", "|") + " |";
+    tmp += "\n| " + tr("Qt Build version: %1").arg(QT_VERSION_STR).replace(":", "|") + " |";
+    tmp += "\n| " + tr("Qt running version: %1").arg(qVersion()).replace(":", "|") + " |";
+    tmp += "\n| " + tr("Application Version: %1").arg(qApp->applicationVersion()).replace(":", "|") + " |";
     if (Utils::isDebugCompilation())
-        tmp += "\n| " + tr("Actual build : Debug").replace(":", "|") + " |";
+        tmp += "\n| " + tr("Actual build: Debug").replace(":", "|") + " |";
     else
-        tmp += "\n| " + tr("Actual build : Release").replace(":", "|") + " |";
-    tmp += "\n| " + tr("SVN version : %1").arg(SVN_VERSION).replace(":", "|") + " |";
-    tmp += "\n| " + tr("Application path : %1").arg(qApp->applicationDirPath()).replace(":", "|") + " |";
-    tmp += "\n| " + QString("Ini File Name : %2").arg(fileName()).replace(":", "|") + " |";
+        tmp += "\n| " + tr("Actual build: Release").replace(":", "|") + " |";
+    tmp += "\n| " + tr("SVN version: %1").arg(SVN_VERSION).replace(":", "|") + " |";
+    tmp += "\n| " + tr("Application path: %1").arg(qApp->applicationDirPath()).replace(":", "|") + " |";
+    tmp += "\n| " + QString("Ini File Name: %2").arg(fileName()).replace(":", "|") + " |";
     tmp += "\n| " + tr("Using Ini File") + " | " + fileName() + " |";
     if (Utils::isRunningOnLinux()) {
         tmp.append("\n| " + tr("Running on Linux"));
-        tmp += "| " + tr("uname returns : %1").arg(Utils::uname()).replace("\n"," ") + " |";
+        tmp += "| " + tr("uname returns: %1").arg(Utils::uname()).replace("\n"," ") + " |";
     }
     else if (Utils::isRunningOnMac()) {
         tmp.append("\n| " + tr("Running on MacOs"));
-        tmp += "| " + tr("uname returns : %1").arg(Utils::uname()).replace("\n"," ") + " |";
+        tmp += "| " + tr("uname returns: %1").arg(Utils::uname()).replace("\n"," ") + " |";
     }
     else if (Utils::isRunningOnWin())
         tmp.append("| " + tr("Running on Windows"))+ " | |";

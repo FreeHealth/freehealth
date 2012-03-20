@@ -258,7 +258,7 @@ void AgendaPlugin::createVirtualAppointements(UserCalendar *calendar)
         ok = false;
 
     if (ok)
-        qWarning() << nbEvents << "events correctly created and saved";
+        qWarning() << nbEvents << "events successfully created and saved";
 }
 
 void AgendaPlugin::testDatabase()
@@ -297,7 +297,7 @@ void AgendaPlugin::testDatabase()
                 ucal->addAvailabilities(av);
             }
             if (base->saveUserCalendar(ucal))
-                qWarning() << "user calendar correctly saved to database";
+                qWarning() << "user calendar successfully saved to database";
             cals << ucal;
         }
         // one must be the default
@@ -394,7 +394,7 @@ void AgendaPlugin::testDatabase()
             list << ev;
         }
         if (ok)
-            qWarning() << nbEvents << "events correctly created and saved in" << chrono.elapsed() << "ms";
+            qWarning() << nbEvents << "events successfully created and saved in" << chrono.elapsed() << "ms";
     }
     ev = list.at(0);
 

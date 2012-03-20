@@ -271,9 +271,9 @@ void UserWizard::done(int r)
                     m_ExtraPages.at(i)->submit(m_User->uuid());
                 }
 
-                Utils::informativeMessageBox(tr("User correctly saved into database."),
-                                             tr("The user was correctly created and saved into database."),
-                                             "", tr("User correctly saved into database."));
+                Utils::informativeMessageBox(tr("User successfully saved into database."),
+                                             tr("The user was successfully created and saved into database."),
+                                             "", tr("User successfully saved into database."));
                 m_Saved = true;
                 QDialog::done(r);
             }

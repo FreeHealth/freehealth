@@ -267,7 +267,7 @@ QString DailySchemeModel::humanReadableDistributedDailyScheme() const
     const QStringList &schemes = Trans::ConstantTranslations::dailySchemeList();
     foreach(int k, d->m_DailySchemes.keys()) {
         if (d->m_DailySchemes.value(k))
-            toReturn +=  schemes.at(k) + " : " + QString::number(d->m_DailySchemes.value(k)) + "; ";
+            toReturn +=  schemes.at(k) + ": " + QString::number(d->m_DailySchemes.value(k)) + "; ";
     }
     toReturn.chop(2);
     return toReturn;

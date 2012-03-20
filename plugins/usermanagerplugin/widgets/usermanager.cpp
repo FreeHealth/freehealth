@@ -352,7 +352,7 @@ UserManagerWidget::~UserManagerWidget()
 bool UserManagerWidget::canCloseParent()
 {
     if (UserModel::instance()->hasUserToSave()) {
-        int ret = Utils::withButtonsMessageBox(tr("You've modified the users' list."), tr("Do you want to save your changes ?"), "",
+        int ret = Utils::withButtonsMessageBox(tr("You've modified the users list."), tr("Do you want to save your changes?"), "",
                                          QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel,
                                          QMessageBox::Save, windowTitle());
         if (ret == QMessageBox::Discard)
@@ -360,10 +360,10 @@ bool UserManagerWidget::canCloseParent()
         else if (ret == QMessageBox::Cancel)
             return false;
         else if (UserModel::instance()->submitAll()) {
-            QMessageBox::information(this, windowTitle(), tr("Changes have been correctly saved."));
+            QMessageBox::information(this, windowTitle(), tr("Changes have been saved successfully."));
             return true;
         } else {
-            QMessageBox::information(this, windowTitle(), tr("Changes can not be correctly saved."));
+            QMessageBox::information(this, windowTitle(), tr("Changes can not be saved successfully."));
             return false;
         }
     }
@@ -431,7 +431,7 @@ void UserManagerWidget::onCreateUserRequested()
 {
     int createdRow = ui->userTableView->model()->rowCount();
     if (!ui->userTableView->model()->insertRows(createdRow, 1)) {
-        LOG_ERROR("Cannot create new user : can not add row to model");
+        LOG_ERROR("Error creating new user: cannot add row to model");
         return;
     }
     QModelIndex index = ui->userTableView->model()->index(createdRow, USER_NAME);
@@ -441,7 +441,7 @@ void UserManagerWidget::onCreateUserRequested()
     int r = wiz.exec();
     if (r == QDialog::Rejected) {
         if (!ui->userTableView->model()->removeRows(createdRow, 1)) {
-            LOG_ERROR("Cannot delete new user : can not delete row to model");
+            LOG_ERROR("Error deleting new user: cannot delete row from model");
             return;
         }
     } else {

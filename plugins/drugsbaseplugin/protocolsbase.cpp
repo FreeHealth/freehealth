@@ -394,7 +394,7 @@ void ProtocolsBase::checkDosageDatabaseVersion()
 {
     if (!versionUpdater().isDosageDatabaseUpToDate())
         if (!versionUpdater().updateDosageDatabase())
-            LOG_ERROR(tr("Standardized protocols database can not be correctly updated"));
+            LOG_ERROR(tr("Standardized protocols database can not be updated successfully"));
 }
 
 /** \brief Returns hash that contains dosage uuid has key and the xml'd dosage to transmit as value */

@@ -137,7 +137,7 @@ int MedicalProcedureModel::rowCount(const QModelIndex &parent) const
     if (!q.exec(req))
     {
     	  qWarning() << __FILE__ << QString::number(__LINE__) << q.lastError().text()
-    	             <<" : "
+                     <<": "
     	             << q.lastQuery() ;
         }
     while (q.next())

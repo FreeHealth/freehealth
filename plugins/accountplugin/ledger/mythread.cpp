@@ -276,7 +276,7 @@ bool ProduceDoc::modele(QString & month,
                   if(vector[ACTS]== typeRecettes && ((vector[j+PLACE_OF_CASH] == QString::number(0)) == false))
                   {
                       QVector<QString> vectorLibelle;
-                      emit recupSlot(thisMonth+" : "+vector[DATE]);//renseigne le QLabel label_5
+                      emit recupSlot(thisMonth+": "+vector[DATE]);//renseigne le QLabel label_5
                       vectorLibelle           << vector[DATE] 
                                               << vector[PATIENT_NAME] 
                                               << vector[j+PLACE_OF_CASH] 
@@ -439,7 +439,7 @@ void ProduceDoc::fillTable(QList<QVector<QString> > & tableau,
        //centrer                       .setBackground(Qt::yellow) ;
        centrer                        .setAlignment(Qt::AlignCenter) ;
        cursortrieinfunction         -> insertBlock(centrer);
-       cursortrieinfunction         -> insertText("\n \n");
+       cursortrieinfunction         -> insertText("\n\n");
 //----------------insertion fin de table-------------------------------------------
     if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << "total  =" << total ;

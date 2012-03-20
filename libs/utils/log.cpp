@@ -111,12 +111,12 @@ void Log::addQueryError(const QObject *o, const QSqlQuery &q, const QString &fil
 void Log::addQueryError(const QString &o, const QSqlQuery &q, const QString &file, const int line, bool forceWarning)
 {
     if (!m_MuteConsole || forceWarning) {
-        qWarning() << QCoreApplication::translate("Log", "SQL Error : Driver : %1, Database : %2, Query : %3")
+        qWarning() << QCoreApplication::translate("Log", "SQL Error: Driver: %1, Database: %2, Query: %3")
                       .arg(q.lastError().driverText())
                       .arg(q.lastError().databaseText())
                       .arg(q.lastQuery());
     }
-    addError(o, QCoreApplication::translate("Log", "%1 : %2 - SQL Error : Driver : %3, Database : %4, Query : %5")
+    addError(o, QCoreApplication::translate("Log", "%1: %2 - SQL Error: Driver: %3, Database: %4, Query: %5")
              .arg(o, QDateTime::currentDateTime().toString())
              .arg(q.lastError().driverText())
              .arg(q.lastError().databaseText())
@@ -133,7 +133,7 @@ void Log::addDatabaseLog( const QString & o, const QSqlDatabase & q, const QStri
     if (!m_MuteConsole || forceWarning) {
         qWarning() << q << "user" << q.userName() << "pass" << q.password();
     }
-    addError(o, QCoreApplication::translate("Log", "%1 : %2 - Database: %3, Host: %4, Port: %5, User:%6, Pass:%7")
+    addError(o, QCoreApplication::translate("Log", "%1: %2 - Database: %3, Host: %4, Port: %5, User:%6, Pass:%7")
              .arg(o, QDateTime::currentDateTime().toString())
              .arg(q.driverName())
              .arg(q.hostName())
@@ -147,7 +147,7 @@ void Log::addDatabaseLog( const QString & o, const QSqlDatabase & q, const QStri
 /** \brief Add a message to tkLog containing the elapsed time of \t and restart it. Used for debugging purpose. */
 void Log::logTimeElapsed(QTime &t, const QString &object, const QString &forDoingThis)
 {
-    addMessage("Chrono - " + object, QCoreApplication::translate("Log", "%1 ms : %2")
+    addMessage("Chrono - " + object, QCoreApplication::translate("Log", "%1 ms: %2")
                .arg(t.elapsed()).arg(forDoingThis));
     t.restart();
 }
@@ -220,7 +220,7 @@ QString Log::saveLog(const QString &fileName)
 
     QFile file(f);
     if (!file.open(QFile::WriteOnly)) {
-        Log::addError("Log", QCoreApplication::translate("Log", "Unable to save %1 : Error %2").arg(f , file.errorString()));
+        Log::addError("Log", QCoreApplication::translate("Log", "Unable to save %1: Error %2").arg(f , file.errorString()));
         return QString::null;
     }
 
@@ -241,7 +241,7 @@ QString Log::toString(const QString &settingsLog)
     // add logs
     tmp.append("====");
     tmp.append(QCoreApplication::translate("Log", "ERRORS"));
-    tmp.append("==== \n");
+    tmp.append("====\n");
     QString prec;
 
     tmp += "\n^ Object ^ Message ^ Date ^";

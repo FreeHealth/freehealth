@@ -1055,7 +1055,7 @@ QString IDrug::warnText() const
     tmp.chop(1);
 
 //    foreach(const int i, d->m_PrescriptionValues.keys())
-//        tmp += QString("    Prescription : %1 == %2\n")
+//        tmp += QString("    Prescription: %1 == %2\n")
 //                           .arg(i)
 //                           .arg(d->m_PrescriptionValues[i].toString());
     tmp += QString("~IDrug");

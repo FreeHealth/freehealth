@@ -172,7 +172,7 @@ DrugInteractionResult *InteractionManager::checkInteractions(const DrugInteracti
         result->addInteractionAlerts(engine->getAllAlerts(result));
 
         if (d->m_LogChrono)
-            Utils::Log::logTimeElapsed(t, engine->name(), QString("calculateInteractions() : Engine %1").arg(engine->name()));
+            Utils::Log::logTimeElapsed(t, engine->name(), QString("calculateInteractions(): Engine %1").arg(engine->name()));
     }
 
     return result;

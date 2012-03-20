@@ -89,7 +89,7 @@ QHash<QString,QVariant> receiptsManager::getParametersDatas(QString & userUid , 
 {
    QHash<QString,QVariant> hashForReturn;
    if (WarnDebugMessage)
-       qDebug() << __FILE__ << QString::number(__LINE__) << " receiptsManager : in getComboBoxesDatas";
+       qDebug() << __FILE__ << QString::number(__LINE__) << " receiptsManager: in getComboBoxesDatas";
    if (table == "insurance") {
        InsuranceModel  model(this);
        for (int row = 0; row < model.rowCount(); row += 1) {

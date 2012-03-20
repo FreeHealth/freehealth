@@ -635,7 +635,7 @@ QHash<int,QString> MedicalProcedureWidget::fillHashOfInsurances(){
 
 //    //m_progressDialog->close();
 //    //if (WarnDebugMessage)
-//    	      qDebug() << __FILE__ << QString::number(__LINE__) << " values = \n" << strList;
+//    	      qDebug() << __FILE__ << QString::number(__LINE__) << " values =\n" << strList;
 //    QApplication::restoreOverrideCursor();
 //    return test;
 //}

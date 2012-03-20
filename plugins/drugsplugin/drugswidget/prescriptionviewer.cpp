@@ -93,7 +93,7 @@ void PrescriptionViewer::initialize()
 /** \brief Defines the model to use. */
 void PrescriptionViewer::setModel(DrugsDB::DrugsModel *model)
 {
-    Q_ASSERT_X(model, "PrescriptionViewer::setModel", "Model must be correctly set");
+    Q_ASSERT_X(model, "PrescriptionViewer::setModel", "Model must be set correctly");
     listView->setModel(model);
     listView->setModelColumn(DrugsDB::Constants::Drug::FullPrescription);
 }

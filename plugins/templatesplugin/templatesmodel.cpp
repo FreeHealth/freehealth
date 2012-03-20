@@ -111,7 +111,7 @@ public:
         if (m_Model->isDirty()) {
             bool yes = Utils::yesNoMessageBox(tr("Save templates ."),
                                    tr("Some data are not actually saved into database."
-                                      "Do you want to save them ?\n Answering 'No' will cause definitive data lose."),
+                                      "Do you want to save them?\n Answering 'No' will cause definitive data loss."),
                                    "");
             if (yes) {
                 return m_Model->submit();
@@ -456,7 +456,7 @@ public:
     void saveModelDatas(const QModelIndex &start = QModelIndex())
     {
         if (WarnDatabaseSaving)
-            qWarning() << "saveModelDatas :" << start.data().toString();
+            qWarning() << "saveModelDatas: " << start.data().toString();
 
         QSqlDatabase DB = QSqlDatabase::database(Constants::DB_TEMPLATES_NAME);
         if (!DB.isOpen()) {
@@ -888,7 +888,7 @@ bool TemplatesModel::reparentIndex(const QModelIndex &item, const QModelIndex &p
     }
 
     if (WarnReparentItem)
-        qWarning() << "End reparent \n";
+        qWarning() << "End reparent\n";
     return true;
 }
 

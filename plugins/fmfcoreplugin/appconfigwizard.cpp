@@ -393,7 +393,7 @@ bool ServerConfigPage::validatePage()
         if (!Utils::Database::executeSqlFile("__APP_CONNECTION_TESTER", serverConfigurationSqlScript()))
             LOG_ERROR("Server configuration script not processed");
         else
-            LOG("Server correctly configurated");
+            LOG("Server successfully configurated");
 
 //        // recreate server connector
 //        Utils::DatabaseConnector connector;

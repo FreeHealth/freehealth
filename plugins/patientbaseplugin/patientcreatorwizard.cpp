@@ -124,7 +124,7 @@ bool IdentityPage::validatePage()
     connect(m_Model, SIGNAL(patientCreated(QString)), Patients::PatientModel::activeModel(), SIGNAL(patientCreated(QString)));
     if (m_Identity->submit()) {
         Patients::PatientModel::activeModel()->refreshModel();
-        LOG("Patient correctly created");
+        LOG("Patient successfully created");
     } else {
         LOG_ERROR("Unable to create patient. IdentityPage::validatePage()");
         ok = false;

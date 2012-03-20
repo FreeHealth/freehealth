@@ -53,7 +53,7 @@ using namespace Templates;
 //    while (!n.isNull()) {
 //        QDomElement e = n.toElement();
 //        if (!e.isNull()) {
-////            qWarning() << QString().fill(' ', indent) + "  " + e.tagName() + " : " + e.text().mid(14, e.text().indexOf(")#", 14) - 14) << e.childNodes().count();
+////            qWarning() << QString().fill(' ', indent) + "  " + e.tagName() + ": " + e.text().mid(14, e.text().indexOf(")#", 14) - 14) << e.childNodes().count();
 //            // Manage templates
 //            if (e.tagName().compare("Template", Qt::CaseInsensitive) == 0) {
 //                QHash<int, QVariant> datas = Utils::Serializer::toVariantHash(e.attribute("content"), base64MimeDatas);

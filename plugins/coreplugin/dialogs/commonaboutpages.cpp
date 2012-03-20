@@ -87,7 +87,7 @@ QWidget *BuildAboutPage::createPage(QWidget *parent)
     } else {
         new QTreeWidgetItem( versionItem, QStringList() << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_SVNAPP));
     }
-    new QTreeWidgetItem( versionItem, QStringList() << tr("Actual Qt version : %1").arg( qVersion() ));
+    new QTreeWidgetItem( versionItem, QStringList() << tr("Current Qt version: %1").arg( qVersion() ));
     tree->expandAll();
 
     return w;

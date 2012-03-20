@@ -91,7 +91,7 @@ void ThemePrivate::setThemeRootPath(const QString &absPath)
     // guesses all pixmap size paths
     if (QDir(absPath).exists()) {
         m_AbsolutePath = QDir::cleanPath(absPath);
-        LOG(QString("Setting theme path to : %1").arg(m_AbsolutePath));
+        LOG(QString("Setting theme path to: %1").arg(m_AbsolutePath));
     }
     else
         LOG_ERROR(Trans::ConstantTranslations::tkTr(Trans::Constants::PATH_1_DOESNOT_EXISTS).arg(absPath));
@@ -103,7 +103,7 @@ void ThemePrivate::setThemeRelativeRootPath(const QString &relPathFromAppBinary)
     QString path = QDir::cleanPath(qApp->applicationDirPath() + QDir::separator() + relPathFromAppBinary);
     if (QDir(path).exists()) {
         m_AbsolutePath = path;
-        Utils::Log::addMessage(this, QString("INFO : theme path set to : %1").arg(path));
+        Utils::Log::addMessage(this, QString("INFO: theme path set to: %1").arg(path));
     }
     else
         LOG_ERROR(Trans::ConstantTranslations::tkTr(Trans::Constants::PATH_1_DOESNOT_EXISTS).arg(relPathFromAppBinary));
@@ -126,7 +126,7 @@ void ThemePrivate::setSmallIconPath(const QString &absPath)
     if (QDir(absPath).exists())
         m_SmallIconPath = absPath;
     else
-        LOG_ERROR(Trans::ConstantTranslations::tkTr(Trans::Constants::PATH_1_DOESNOT_EXISTS).arg("SmallIcon : "+absPath));
+        LOG_ERROR(Trans::ConstantTranslations::tkTr(Trans::Constants::PATH_1_DOESNOT_EXISTS).arg("SmallIcon: "+absPath));
 }
 
 /** \brief Set the specific medium icon path - should not be used */
@@ -135,7 +135,7 @@ void ThemePrivate::setMediumIconPath(const QString &absPath)
     if (QDir(absPath).exists())
         m_MediumIconPath = absPath;
     else
-        LOG_ERROR(Trans::ConstantTranslations::tkTr(Trans::Constants::PATH_1_DOESNOT_EXISTS).arg("MediumIcon : "+absPath));
+        LOG_ERROR(Trans::ConstantTranslations::tkTr(Trans::Constants::PATH_1_DOESNOT_EXISTS).arg("MediumIcon: "+absPath));
 }
 
 /** \brief Set the specific big icon path - should not be used */
@@ -144,7 +144,7 @@ void ThemePrivate::setBigIconPath(const QString &absPath)
     if (QDir(absPath).exists())
         m_BigIconPath = absPath;
     else
-        LOG_ERROR(Trans::ConstantTranslations::tkTr(Trans::Constants::PATH_1_DOESNOT_EXISTS).arg("BigIcon : "+absPath));
+        LOG_ERROR(Trans::ConstantTranslations::tkTr(Trans::Constants::PATH_1_DOESNOT_EXISTS).arg("BigIcon: "+absPath));
 }
 
 /** \brief Returns the icon corresponding to the themed file name \e fileName and the size \e size */
@@ -169,7 +169,7 @@ QIcon ThemePrivate::icon(const QString &fileName, IconSize size)
             m_IconCache.insert(transformedFileName, i);
             return QIcon(*i);
         } else {
-            LOG_ERROR(QCoreApplication::translate("ThemePrivate", "ERROR - Theme : Unable to load icon file %1").arg(fileName));
+            LOG_ERROR(QCoreApplication::translate("ThemePrivate", "ERROR - Theme: Unable to load icon file %1").arg(fileName));
         }
     }
     return QIcon();

@@ -250,9 +250,9 @@ bool Configuration::applicationIsAMedintuxPlugins() const
         }
     }
     if (d->m_IsMedintuxPlugins) {
-        Utils::Log::addMessage( "tkMedintuxConfiguration", QCoreApplication::translate( "diMedinTux", "MedinTux Detected : Starting as a MedinTux Plugin" ) );
+        Utils::Log::addMessage( "tkMedintuxConfiguration", QCoreApplication::translate( "diMedinTux", "MedinTux Detected: Starting as a MedinTux Plugin" ) );
         d->m_MedintuxPluginIniFileName = args[ PlugIn_IniFile ];
-        Utils::Log::addMessage( "tkMedintuxConfiguration", QCoreApplication::translate( "diMedinTux", "MedinTux Detected : Using ini file %1" ).arg(d->m_MedintuxPluginIniFileName) );
+        Utils::Log::addMessage( "tkMedintuxConfiguration", QCoreApplication::translate( "diMedinTux", "MedinTux Detected: Using ini file %1" ).arg(d->m_MedintuxPluginIniFileName) );
     }
     d->m_IsMedintuxPluginsTested = true;
     return d->m_IsMedintuxPlugins;
@@ -296,7 +296,7 @@ QString Configuration::askUserForManagerBinary() const
 {
     if (d->m_ManagerPath.isEmpty())
         findManagerBinaryPath();
-    // msgbox --> automatically founded, keep it ?
+    // msgbox --> automatically found, keep it?
     // msgbox if not --> qfiledialog
     return QString();
 }
@@ -453,11 +453,11 @@ bool Configuration::addUserMenu(const QString &shortTitle, const QString &title,
     // test drtux' users' menu path
     if (!binDir.exists(DRTUX_USERMENU_PATH)) {
         if (!binDir.mkdir(DRTUX_USERMENU_PATH) ) {
-            Utils::Log::addError( this, tr( "Unable to configure MedinTux : Menus path does not exist and can not be created. Path to DrTux binary : %1").arg(binDir.path()),
+            Utils::Log::addError( this, tr( "Unable to configure MedinTux: Menues path does not exist and can not be created. Path to DrTux binary: %1").arg(binDir.path()),
                                   __FILE__, __LINE__);
             toReturn = false;
         } else {
-            Utils::Log::addMessage( this, tr( "MedinTux Configuration : resources user menus path correctly created  %1.")
+            Utils::Log::addMessage( this, tr( "MedinTux Configuration: resources user menus path successfully created  %1.")
                              .arg(binDir.path() + QDir::separator() + DRTUX_USERMENU_PATH ));
         }
     }
@@ -466,12 +466,12 @@ bool Configuration::addUserMenu(const QString &shortTitle, const QString &title,
     // test users' menu path
     if (!binDir.cd(shortTitle)) {
         if (!binDir.mkdir(shortTitle)) {
-            Utils::Log::addError( this, tr( "Unable to configure MedinTux : %1 menu does not exist and can not be created. Path to DrTux binary : %2")
+            Utils::Log::addError( this, tr( "Unable to configure MedinTux: %1 menu does not exist and can not be created. Path to DrTux binary: %2")
                              .arg(shortTitle).arg(binDir.path() ),
                              __FILE__, __LINE__ );
             toReturn = false;
         } else
-            Utils::Log::addMessage( this, tr( "MedinTux Configuration : users' menu path correctly created %1.")
+            Utils::Log::addMessage( this, tr( "MedinTux Configuration: users' menu path successfully created %1.")
                              .arg(binDir.path() + QDir::separator() + shortTitle  ) );
     }
     binDir.cd(shortTitle);
@@ -490,14 +490,14 @@ bool Configuration::addUserMenu(const QString &shortTitle, const QString &title,
     to = QString("%1/%2").arg(binDir.path(), iconFile.fileName() );
     if ( iconFile.exists() ) {
         if (QFile::copy( iconAbsPath , to) || QFile(to).exists())
-            Utils::Log::addMessage( this, tr( "MedinTux Configuration : user's menu icon correctly installed %1.")
+            Utils::Log::addMessage( this, tr( "MedinTux Configuration: user's menu icon successfully installed %1.")
                                .arg(iconAbsPath) );
         else
-            Utils::Log::addError( this, tr( "Unable to configure MedinTux : icon %1 can not be copied to %2.")
+            Utils::Log::addError( this, tr( "Unable to configure MedinTux: icon %1 can not be copied to %2.")
                              .arg(iconAbsPath,to),
                              __FILE__, __LINE__ );
     } else {
-        Utils::Log::addError( this, tr( "Unable to configure MedinTux : icon %1 does not exist.")
+        Utils::Log::addError( this, tr( "Unable to configure MedinTux: icon %1 does not exist.")
                          .arg(iconAbsPath),
                          __FILE__, __LINE__ );
         toReturn = false;

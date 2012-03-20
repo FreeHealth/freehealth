@@ -140,7 +140,7 @@ void PreferredReceipts::insertpreferredValuesIntoAccount(){
         
     const QString resultText = trUtf8("The value ")
                                +m_preferredAct
-                               +" : "
+                               +": "
                                +listOfValuesStr
                                +" "+currency
                                +trUtf8(" has been inserted.");

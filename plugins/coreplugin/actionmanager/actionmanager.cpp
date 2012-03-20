@@ -418,7 +418,7 @@ Command *ActionManagerPrivate::command(const QString &id) const
     const IdCmdMap::const_iterator it = m_idCmdMap.constFind(uid);
     if (it == m_idCmdMap.constEnd()) {
         if (warnAboutFindFailures)
-            qWarning() << "ActionManagerPrivate::command(): failed to find :" << id << '/' << uid;
+            qWarning() << "ActionManagerPrivate::command(): failed to find: " << id << '/' << uid;
         return 0;
     }
     return it.value();
@@ -434,7 +434,7 @@ ActionContainer *ActionManagerPrivate::actionContainer(const QString &id) const
     const IdContainerMap::const_iterator it = m_idContainerMap.constFind(uid);
     if (it == m_idContainerMap.constEnd()) {
         if (warnAboutFindFailures)
-            qWarning() << "ActionManagerPrivate::actionContainer(): failed to find :" << id << '/' << uid;
+            qWarning() << "ActionManagerPrivate::actionContainer(): failed to find: " << id << '/' << uid;
         return 0;
     }
     return it.value();
@@ -445,7 +445,7 @@ Command *ActionManagerPrivate::command(int uid) const
     const IdCmdMap::const_iterator it = m_idCmdMap.constFind(uid);
     if (it == m_idCmdMap.constEnd()) {
         if (warnAboutFindFailures)
-            qWarning() << "ActionManagerPrivate::command(): failed to find :" <<  UniqueIDManager::instance()->stringForUniqueIdentifier(uid) << '/' << uid;
+            qWarning() << "ActionManagerPrivate::command(): failed to find: " <<  UniqueIDManager::instance()->stringForUniqueIdentifier(uid) << '/' << uid;
         return 0;
     }
     return it.value();
@@ -456,7 +456,7 @@ ActionContainer *ActionManagerPrivate::actionContainer(int uid) const
     const IdContainerMap::const_iterator it = m_idContainerMap.constFind(uid);
     if (it == m_idContainerMap.constEnd()) {
         if (warnAboutFindFailures)
-            qWarning() << "ActionManagerPrivate::actionContainer(): failed to find :" << UniqueIDManager::instance()->stringForUniqueIdentifier(uid) << uid;
+            qWarning() << "ActionManagerPrivate::actionContainer(): failed to find: " << UniqueIDManager::instance()->stringForUniqueIdentifier(uid) << uid;
         return 0;
     }
     return it.value();

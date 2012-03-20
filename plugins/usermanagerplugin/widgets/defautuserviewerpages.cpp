@@ -117,7 +117,7 @@ void DefaultUserIdentityWidget::on_but_changePassword_clicked()
         if (!d.canGetNewPassword())
             return;
         if (d.applyChanges(m_Model, row)) {
-            Utils::informativeMessageBox(tr("Password saved"), tr("Password correctly modified and saved into database."), "", tr("Password saved"));
+            Utils::informativeMessageBox(tr("Password saved"), tr("Password successfully modified and saved into database."), "", tr("Password saved"));
         }
     }
 }
@@ -126,7 +126,7 @@ void DefaultUserIdentityWidget::on_but_viewHistory_clicked()
 {
     int row = m_Mapper->currentIndex();
     Utils::informativeMessageBox(tr("Login history."),
-                                     tr("User %1\nLast connection : %2")
+                                     tr("User %1\nLast connection: %2")
                            .arg(m_Model->index(row,Core::IUser::Name).data().toString())
                            .arg(m_Model->index(row,Core::IUser::LastLogin).data().toDateTime().toString()),
                             m_Model->index(row,Core::IUser::LoginHistory).data().toString(),

@@ -380,8 +380,8 @@ void treeViewsActions::mouseReleaseEvent(QMouseEvent *event){
 
 void treeViewsActions::deleteBox(bool b){
     Q_UNUSED(b);
-    bool yes = Utils::yesNoMessageBox(tr("Do you want to delete selected item ?"),
-                           tr("Do you want to delete selected item ?"));
+    bool yes = Utils::yesNoMessageBox(tr("Do you want to delete selected item?"),
+                           tr("Do you want to delete selected item?"));
     if (yes) {
         QModelIndex index = currentIndex();
         deleteItemFromThesaurus(index);
@@ -390,8 +390,8 @@ void treeViewsActions::deleteBox(bool b){
 
 void treeViewsActions::choosepreferredValue(bool b){
     Q_UNUSED(b);
-    bool yes = Utils::yesNoMessageBox(tr("Do you want to set this item as preferred value ?"),
-                           tr("Do you want to set this item as preferred value ?"));
+    bool yes = Utils::yesNoMessageBox(tr("Do you want to set this item as preferred value?"),
+                           tr("Do you want to set this item as preferred value?"));
     if (yes) {
         QModelIndex index = currentIndex();
         if (!addpreferredItem(index)) {
@@ -405,7 +405,7 @@ bool treeViewsActions::addpreferredItem(QModelIndex &index){
     QString data = index.data().toString();
     receiptsEngine r;
     if (!r.addBoolTrue(data)) {
-        Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("Cannot change value bool in thesaurus :")+data);
+        Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("Cannot change boolean value in thesaurus: %1").arg(data));
         ret = false;
     }
     fillActionTreeView();

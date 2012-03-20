@@ -48,7 +48,7 @@ static const char* USERPLUGINSNAME = "UserManager";
 static const QString VERSION_MESSAGE =
         QString("FreeMedForms\n"
                 "     Version: %1 (%2 compilation)\n"
-                "     Build on %3 %4 \n"
+                "     Built on %3 %4\n"
                 "     SVN version: %5\n"
                 "     Compiled with Qt: %6\n"
                 "     Running with Qt: %7\n")
@@ -72,7 +72,7 @@ static const QString VERSION_MESSAGE =
         .arg(qVersion());
 
 static const QString HELP_MESSAGE =
-        QString("FreeMedForms %1 (%2 compilation) \n"
+        QString("FreeMedForms %1 (%2 compilation)\n"
                 "Usage: freemedforms [--clear-user-databases] [--create-virtuals] [--config=...]\n"
                 "                    [--version,-version,-v] [--help,-help,-h]\n\n"
                 "FreeMedForms is free and open source an Electronic Medical Record manager.\n\n"
@@ -184,7 +184,7 @@ int main(int argc, char *argv[])
     pluginManager.setPluginPaths(QStringList() << pluginPaths);
 
     // Add some debugging information
-    LOG_FOR("Main","Command line : " + qApp->arguments().join(" "));
+    LOG_FOR("Main","Command line: " + qApp->arguments().join(" "));
 #ifdef DEBUG
     LOG_FOR("Main", "Running debug version");
 #else
@@ -195,7 +195,7 @@ int main(int argc, char *argv[])
 #endif
 
     defineLibraryPaths();
-    LOG_FOR("Main","looking for libraries in path : " + qApp->libraryPaths().join(";"));
+    LOG_FOR("Main","looking for libraries in path: " + qApp->libraryPaths().join(";"));
 
 //    const QStringList arguments = app.arguments();
 //    QMap<QString, QString> foundAppOptions;

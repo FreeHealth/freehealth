@@ -23,7 +23,7 @@
 
 /**
   \class DrugInfo
-  \brief Show a dialog with drugs information and interactions founded.
+  \brief Show a dialog with drugs information and interactions found.
   This dialog allows user to send debugging data.
   \ingroup freediams drugswidget
 */
@@ -96,7 +96,7 @@ bool DrugInfoPrivate::checkSent()
     //               (!m_InteractSent))
     //     {
     //          if (QMessageBox::warning(this, qApp->applicationName(),
-    //                                     tr("Interactions Information will be lost.\nDo you want to send them ?"),
+    //                                     tr("Interactions Information will be lost.\nDo you want to send them?"),
     //                                     QMessageBox::No | QMessageBox::Yes) == QMessageBox::Yes)
     //          {
     //               on_butIAMSend_clicked();
@@ -109,8 +109,8 @@ bool DrugInfoPrivate::checkSent()
          (rbINNWrong->isChecked()) ||
          (!INNMessage->toPlainText().isEmpty())) &&
          (!m_INNSent)) {
-        bool yes = Utils::yesNoMessageBox(tr("INN Information will be lost.\nDo you want to send them ?"),
-                                          tr("INN Information will be lost.\nDo you want to send them ?"));
+        bool yes = Utils::yesNoMessageBox(tr("INN Information will be lost.\nDo you want to send them?"),
+                                          tr("INN Information will be lost.\nDo you want to send them?"));
         if (yes) {
             on_butIAMSend_clicked();
             sendingMessage = true;
@@ -153,7 +153,7 @@ void DrugInfo::setDrug(const QVariant &drugUid)
     if (drugModel()->drugData(d->m_DrugUid, Drug::Interacts).toBool()) { //mfDrugsBase::instance()->drugHaveInteraction(m_Drug)) {
         /** \todo code here */
 //        d->m_InteractionsList = DrugsWidget::DrugsWidgetManager::instance()->currentInteractionManager()->getAllInteractionsFound();
-        // populate the listwidget with founded interactions
+        // populate the listwidget with found interactions
 //        foreach(DrugsDB::IDrugInteraction *di , d->m_InteractionsList) {
 //            new QListWidgetItem(drugModel()->drugData(d->m_DrugUid, Interaction::Icon).value<QIcon>(), di->header(), d->listWidgetInteractions);
 //        }
@@ -175,7 +175,7 @@ void DrugInfoPrivate::on_butIAMSend_clicked()
 
     // prepare message to send
     QString msg;
-    msg = tr("Testing : ") + "\n";
+    msg = tr("Testing: ") + "\n";
     foreach(DrugsDB::IDrug * drug, drugModel()->drugsList())
         msg += drug->brandName() + "\n";
 
@@ -204,13 +204,13 @@ void DrugInfoPrivate::on_butIAMSend_clicked()
         msg += tr("*** CAT Text is incorrect.\n");
     }
 
-    msg += tr("Message : ") + InteractMessage->toPlainText() + "\n";
+    msg += tr("Message: ") + InteractMessage->toPlainText() + "\n";
 
     if ((chkAllInteractionsFound->isChecked()) &&
         (chkAllInteractionsOK->isChecked()) &&
         (chkAllIAMTextsOK->isChecked()) &&
         (chkAllCATTextsOK->isChecked())) {
-        msg += "\n" + tr("Checked interactions : ") + "\n";
+        msg += "\n" + tr("Checked interactions: ") + "\n";
         foreach(DrugsDB::IDrug *drug, drugModel()->drugsList()) {
             Q_UNUSED(drug);
             foreach(QVariant code, drugModel()->drugData(m_DrugUid,DrugsDB::Constants::Drug::CodeMoleculesList).toList())
@@ -236,7 +236,7 @@ void DrugInfoPrivate::on_butSendINN_clicked()
             msg +=  code.toString() + "\n";
         t = Utils::MessageSender::CorrectDrugsCoding;
     } else {
-        msg.append(tr("ERROR : %1\n").arg(drugModel()->drugData(m_DrugUid, DrugsDB::Constants::Drug::Denomination).toString()));
+        msg.append(tr("ERROR: %1\n").arg(drugModel()->drugData(m_DrugUid, DrugsDB::Constants::Drug::Denomination).toString()));
         msg.append(QString("{\n %1 \n}\n").arg(INNMessage->toPlainText()));
         t = Utils::MessageSender::UncorrectDrugsCoding;
     }

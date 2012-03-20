@@ -116,7 +116,7 @@ void PrintDialog::accept()
         LOG_FOR("Printer", "Printing error on device " + m_Printer->printer()->printerName());
         return;
     } else {
-        LOG_FOR("Printer", "Printing correctly on device " + m_Printer->printer()->printerName());
+        LOG_FOR("Printer", "Printing on device successful" + m_Printer->printer()->printerName());
     }
 
     // Duplicate to a pdf file
@@ -124,8 +124,7 @@ void PrintDialog::accept()
         QString uid = Utils::Database::createUid();
         QString docName = QString("%1_%2.pdf")
                           .arg(qApp->applicationName())
-                          .arg(uid)
-                          ;
+                          .arg(uid);
 
         QString fileName = settings()->value(Constants::S_PDF_FOLDER).toString();
         if (fileName.isEmpty())

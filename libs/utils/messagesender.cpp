@@ -183,7 +183,7 @@ bool MessageSender::postMessage()
 
 /**
   \brief Slot connected to the http object.
-  If the message is correctly sended a message box shows the result sended by the server (see showResultingMessageBox()). \n
+  If the message is sent successfully, a message box shows the result sent by the server (see showResultingMessageBox()). \n
   Then the signal sent() is emitted.
 */
 void MessageSender::httpDone(bool error)

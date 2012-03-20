@@ -199,7 +199,7 @@ bool UserIdentityAndLoginPage::validatePage()
     }
     if (field("Login").toString().isEmpty()) {
         Utils::warningMessageBox(tr("Login error."),
-                                 tr("You must specify a valid login. Empty login is forbidden."),
+                                 tr("You must specify a valid login. An empty login is forbidden."),
                                  "", tr("Wrong login"));
         return false;
     }

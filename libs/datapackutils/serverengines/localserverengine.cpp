@@ -98,7 +98,7 @@ bool LocalServerEngine::startDownloadQueue()
             // Create the status of the server
             ServerEngineStatus status;
             status.downloadCorrectlyFinished = true;
-            status.engineMessages << tr("Server configuration correctly downloaded.");
+            status.engineMessages << tr("Server configuration successfully downloaded.");
             status.hasError = false;
             status.isSuccessful = true;
             status.proxyIdentificationError = false;
@@ -123,7 +123,7 @@ bool LocalServerEngine::startDownloadQueue()
                 // Create the status of the server
                 ServerEngineStatus status;
                 status.downloadCorrectlyFinished = true;
-                status.engineMessages << tr("Pack correctly downloaded.");
+                status.engineMessages << tr("Pack successfully downloaded.");
                 status.hasError = false;
                 status.isSuccessful = true;
                 status.proxyIdentificationError = false;

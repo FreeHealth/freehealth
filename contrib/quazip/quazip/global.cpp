@@ -105,7 +105,7 @@ bool unzipFile(const QString &fileName, const QString &pathToUnZippedFiles, QPro
         out.setFileName(outputPath + QDir::separator() + name);
 
         // inform user
-        qWarning() << QString("Zip : extracting : %1").arg(out.fileName());
+        qWarning() << QString("Zip: extracting: %1").arg(out.fileName());
 
         // create path if not exists
         if (!QDir(QFileInfo(out).absolutePath()).exists())

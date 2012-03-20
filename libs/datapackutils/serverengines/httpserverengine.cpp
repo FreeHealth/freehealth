@@ -332,7 +332,7 @@ void HttpServerEngine::serverFinished()
 {
     QNetworkReply *reply = qobject_cast<QNetworkReply*>(sender());
 
-    qWarning() << "HTTP : serverFinished" << reply->request().url() << reply->error();
+    qWarning() << "HTTP: serverFinished" << reply->request().url() << reply->error();
     if (reply->error() != QNetworkReply::NoError) {
         reply->deleteLater(); // we don't need reply anymore
         m_replyToData.remove(reply);
@@ -413,7 +413,7 @@ void HttpServerEngine::afterServerConfigurationDownload(const ReplyData &data)
         // Read the XML from the buffer
         server->fromXml(data.response);
 //        downloadPackDescriptionNeeded = true;
-        status->engineMessages << tr("Server description file correctly downloaded.");
+        status->engineMessages << tr("Server description file successfully downloaded.");
         break;
     }
     case Server::HttpPseudoSecuredAndZipped:
@@ -490,14 +490,14 @@ void HttpServerEngine::afterPackDescriptionFileDownload(const ReplyData &data)
     desc.fromXmlContent(data.response);
     ServerEngineStatus *status = getStatus(data);
     Q_ASSERT(status);
-    status->engineMessages.append(tr("Pack description correctly downloaded."));
+    status->engineMessages.append(tr("Pack description successfully downloaded."));
 }
 
 void HttpServerEngine::afterPackFileDownload(const ReplyData &data)
 {
     ServerEngineStatus *status = getStatus(data);
     Q_ASSERT(status);
-    status->engineMessages.append(tr("Pack correctly downloaded."));
+    status->engineMessages.append(tr("Pack successfully downloaded."));
 
     // Save downladed content to persistently pack cache
     const Pack &pack = data.pack;

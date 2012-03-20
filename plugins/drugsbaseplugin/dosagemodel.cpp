@@ -342,7 +342,7 @@ bool DosageModel::insertRows(int row, int count, const QModelIndex & parent)
     for (i=0; i < count; ++i) {
         createdRow = row+i;
         if (!QSqlTableModel::insertRows(createdRow, 1, parent)) {
-            Utils::Log::addError(this, tr("Model Error : unable to insert a row"),__FILE__, __LINE__);
+            Utils::Log::addError(this, tr("Model Error: unable to insert a row"),__FILE__, __LINE__);
             toReturn = false;
         } else {
             setData(index(createdRow, Dosages::Constants::Uuid), Utils::Database::createUid());

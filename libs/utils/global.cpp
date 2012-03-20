@@ -522,15 +522,15 @@ bool checkDir(const QString &absPath, bool createIfNotExist, const QString &logD
 {
     if (!QFile::exists(absPath)) {
         if (createIfNotExist) {
-            LOG_FOR("Utils", QCoreApplication::translate("Utils", "%1 : %2 does not exist. Trying to create it.")
+            LOG_FOR("Utils", QCoreApplication::translate("Utils", "%1: %2 does not exist. Trying to create it.")
                                .arg(logDirName, absPath));
             if (!QDir().mkpath(absPath)) {
-                LOG_ERROR_FOR("Utils", QCoreApplication::translate("Utils", "Unable to create the %1 : %2.")
+                LOG_ERROR_FOR("Utils", QCoreApplication::translate("Utils", "Unable to create the %1: %2.")
                               .arg(logDirName, absPath));
                 return false;
             }
         } else {
-            LOG_FOR("Utils", QCoreApplication::translate("Utils", "%1 : %2 does not exist.")
+            LOG_FOR("Utils", QCoreApplication::translate("Utils", "%1: %2 does not exist.")
                                .arg(logDirName, absPath));
             return false;
         }
@@ -542,7 +542,7 @@ bool checkDir(const QString &absPath, bool createIfNotExist, const QString &logD
 bool saveStringToFile(const QString &toSave, const QString &toFile, IOMode iomode, const Warn warnUser, QWidget *parent)
 {
     if (toFile.isEmpty()) {
-        LOG_ERROR_FOR("Utils", "saveStringToFile() : fileName is empty");
+        LOG_ERROR_FOR("Utils", "saveStringToFile(): fileName is empty");
         return false;
     }
     QWidget *wgt = parent;
@@ -562,7 +562,7 @@ bool saveStringToFile(const QString &toSave, const QString &toFile, IOMode iomod
     if (info.exists() && (info.isWritable() && warnUser == WarnUser)) {
         if (QMessageBox::warning(wgt, qApp->applicationName(),
                                    QCoreApplication::translate("Utils" ,
-                                                                "File %1 already exists. Do you want de replace it ?").arg(info.fileName()),
+                                                                "File %1 already exists. Do you want de replace it?").arg(info.fileName()),
                                    QMessageBox::Cancel | QMessageBox::Ok) == QMessageBox::Ok) {
             if (iomode == Overwrite) {
                 if (!file.open(QFile::WriteOnly | QIODevice::Text)) {
@@ -578,9 +578,9 @@ bool saveStringToFile(const QString &toSave, const QString &toFile, IOMode iomod
                 return false;
             }
             file.write(toSave.toUtf8());
-            LOG_FOR("Utils", QCoreApplication::translate("Utils", "%1 correctly saved").arg(file.fileName()));
+            LOG_FOR("Utils", QCoreApplication::translate("Utils", "%1 successfully saved").arg(file.fileName()));
         } else {
-            LOG_FOR("Utils", QCoreApplication::translate("Utils", "Save file aborted by user (file already exists) : ") + file.fileName());
+            LOG_FOR("Utils", QCoreApplication::translate("Utils", "Save file aborted by user (file already exists): ") + file.fileName());
             return false;
         }
     } else {
@@ -590,7 +590,7 @@ bool saveStringToFile(const QString &toSave, const QString &toFile, IOMode iomod
             return false;
         }
         file.write(toSave.toUtf8());
-        LOG_FOR("Utils", QCoreApplication::translate("Utils", "%1 correctly saved").arg(file.fileName()));
+        LOG_FOR("Utils", QCoreApplication::translate("Utils", "%1 successfully saved").arg(file.fileName()));
     }
     return true;
 }
@@ -882,8 +882,8 @@ bool okCancelMessageBox(const QString &text, const QString&infoText, const QStri
 bool functionNotAvailableMessageBox(const QString &functionText)
 {
     informativeMessageBox(functionText,
-                           QCoreApplication::translate("Utils","This function is not available in this version."),
-                           QCoreApplication::translate("Utils","You can send an email to developers and explain your difficulties : freemedforms@googlegroups.com.")
+                           QCoreApplication::translate("Utils", "This function is not available in this version."),
+                           QCoreApplication::translate("Utils", "You can send an email to developers and explain your difficulties: freemedforms@googlegroups.com.")
                         );
 //                           .arg(qApp->organizationDomain()));
 //                         .arg(tkSettings::instance()->path(tkSettings::WebSiteUrl)));
@@ -944,7 +944,7 @@ bool defaultLicenseAgreementDialog(const QString &message, Utils::LicenseTerms::
     centered.setAlignment(Qt::AlignCenter);
     tbrowse.setText(Utils::LicenseTerms::getTranslatedLicenseTerms(license));
     // Question yes/no
-    QLabel question(QCoreApplication::translate("Utils", "Do you agree these terms ?"));
+    QLabel question(QCoreApplication::translate("Utils", "Do you agree these terms?"));
     layout.addWidget(&appname);
     layout.addWidget(&centered);
     layout.addWidget(&tbrowse);
@@ -1384,7 +1384,7 @@ QString createXml(const QString &mainTag, const QHash<QString,QString> &datas, c
 bool readXml(const QString &xmlContent, const QString &generalTag, QHash<QString,QString> &readDatas, const bool valueFromBase64)
 {
     if (!xmlContent.contains(generalTag)) {
-        Utils::Log::addError("Utils::readXml",QString("Error while reading Xml : tag %1 not found").arg(generalTag),
+        Utils::Log::addError("Utils::readXml",QString("Error while reading Xml: tag %1 not found").arg(generalTag),
                              __FILE__, __LINE__);
         return false;
     }

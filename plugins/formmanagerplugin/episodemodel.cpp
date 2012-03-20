@@ -564,8 +564,8 @@ public:
             episode->setData(EpisodeData::UserDate, form->itemDatas()->data(IFormItemData::ID_EpisodeDate));
             LOG_FOR("EpisodeModel", "Save episode: " + episode->data(EpisodeData::Label).toString());
             if (!settings()->value(Core::Constants::S_ALWAYS_SAVE_WITHOUT_PROMPTING, true).toBool()) {
-                bool yes = Utils::yesNoMessageBox(QCoreApplication::translate("EpisodeModel", "Save episode ?"),
-                                                  QCoreApplication::translate("EpisodeModel", "The actual episode has been modified. Do you want to save changes in your database ?\n"
+                bool yes = Utils::yesNoMessageBox(QCoreApplication::translate("EpisodeModel", "Save episode?"),
+                                                  QCoreApplication::translate("EpisodeModel", "The actual episode has been modified. Do you want to save changes in your database?\n"
                                                      "Answering 'No' will cause definitve data lose."),
                                                   "", QCoreApplication::translate("EpisodeModel", "Save episode"));
                 if (!yes) {
@@ -633,7 +633,7 @@ public:
         // feed the formitemdatas for this form and get the data for the patientmodel
         foreach(FormItem *it, items.values()) {
             if (!it) {
-                qWarning() << "FormManager::activateForm :: ERROR : no item :" << items.key(it);
+                qWarning() << "FormManager::activateForm :: ERROR: no item: " << items.key(it);
                 continue;
             }
             if (!it->itemDatas())
@@ -1344,13 +1344,13 @@ bool EpisodeModel::activateEpisode(const QModelIndex &index, const QString &form
     foreach(const QString &s, datas.keys()) {
         FormItem *it = items.value(s, 0);
         if (!it) {
-            qWarning() << "FormManager::activateForm :: ERROR : no item :" << s;
+            qWarning() << "FormManager::activateForm :: ERROR: no item: " << s;
             continue;
         }
         if (it->itemDatas())
             it->itemDatas()->setStorableData(datas.value(s));
         else
-            qWarning() << "FormManager::activateForm :: ERROR : no itemData :" << s;
+            qWarning() << "FormManager::activateForm :: ERROR: no itemData: " << s;
     }
     return true;
 }
