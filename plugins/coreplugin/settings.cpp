@@ -977,7 +977,7 @@ QTreeWidget* SettingsPrivate::getTreeWidget(QWidget *parent) const
         new QTreeWidgetItem(compilItem, QStringList() << tr("Compile mode") << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_DEBUG));
     else
         new QTreeWidgetItem(compilItem, QStringList() << tr("Compile mode") << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_RELEASE));
-    new QTreeWidgetItem(compilItem, QStringList() << tr("SVN version") << QString(SVN_VERSION));
+    new QTreeWidgetItem(compilItem, QStringList() << tr("GIT revision") << QString(GIT_REVISION_HASH));
 
 
     // add paths
@@ -1096,7 +1096,7 @@ QString SettingsPrivate::toString() const
         tmp += "\n| " + tr("Actual build: Debug").replace(":", "|") + " |";
     else
         tmp += "\n| " + tr("Actual build: Release").replace(":", "|") + " |";
-    tmp += "\n| " + tr("SVN version: %1").arg(SVN_VERSION).replace(":", "|") + " |";
+    tmp += "\n| " + tr("GIT revision: %1").arg(GIT_REVISION_HASH).replace(":", "|") + " |";
     tmp += "\n| " + tr("Application path: %1").arg(qApp->applicationDirPath()).replace(":", "|") + " |";
     tmp += "\n| " + QString("Ini File Name: %2").arg(fileName()).replace(":", "|") + " |";
     tmp += "\n| " + tr("Using Ini File") + " | " + fileName() + " |";

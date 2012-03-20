@@ -325,7 +325,7 @@ bool isDebugCompilation()
 #endif
 }
 bool isReleaseCompilation() {return !isDebugCompilation();}
-bool isSvnBuild()
+bool isGitBuild()
 {
 #ifdef FULLAPPLICATION_BUILD
     return false;

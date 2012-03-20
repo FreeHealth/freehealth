@@ -78,8 +78,8 @@ enum DirSearchType {
 UTILS_EXPORT bool isDebugCompilation();
 /** \brief Return true if the application was built in release mode. */
 UTILS_EXPORT bool isReleaseCompilation();
-/** \brief Return true if the application was built using the SVN. */
-UTILS_EXPORT bool isSvnBuild();
+/** \brief Return true if the application was built using a GIT checkout. */
+UTILS_EXPORT bool isGitBuild();
 /** \brief Return true if the application was built with all private parts. */
 UTILS_EXPORT bool isFullApplication();
 /** \brief Return true if the application is an alpha build (release or debug). */

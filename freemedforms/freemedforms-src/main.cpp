@@ -49,7 +49,7 @@ static const QString VERSION_MESSAGE =
         QString("FreeMedForms\n"
                 "     Version: %1 (%2 compilation)\n"
                 "     Built on %3 %4\n"
-                "     SVN version: %5\n"
+                "     GIT revision: %5\n"
                 "     Compiled with Qt: %6\n"
                 "     Running with Qt: %7\n")
         .arg(PACKAGE_VERSION)
@@ -67,7 +67,7 @@ static const QString VERSION_MESSAGE =
 #  endif
 #endif
         .arg(__DATE__, __TIME__)
-        .arg(SVN_VERSION)
+        .arg(GIT_REVISION_HASH)
         .arg(QT_VERSION_STR)
         .arg(qVersion());
 

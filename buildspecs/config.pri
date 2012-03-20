@@ -9,7 +9,11 @@ isEmpty(LOWERED_APPNAME) {
 # include the generic configuration file (define some paths)
 SOURCES_ROOT_PATH        = $${PWD}/..
 include(config_paths.pri)
-include(svnversion.pri)
+
+# add git revision hash dynamically
+GIT_REVISION_HASH=$$system(git rev-parse HEAD)
+DEFINES *= "GIT_REVISION_HASH=\"\\\"$${GIT_REVISION_HASH}\\\"\""
+
 exists(__nonfree__):include(__nonfree__/config_nonfree.pri)
 
 macx:include(config_mac.pri)
@@ -48,3 +52,7 @@ CONFIG( debug, debug|release ) {
 
 TARGET   = $${BINARY_TARGET}
 DESTDIR  = $${BUILD_BINARY_PATH}
+
+OTHER_FILES += \
+    ../../buildspecs/svnversion.pri \
+    ../../buildspecs/git_revision_hash.pri
