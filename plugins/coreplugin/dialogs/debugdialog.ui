@@ -25,7 +25,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Send to dev team</string>
+        <string>Send to development team</string>
        </property>
       </widget>
      </item>

@@ -342,18 +342,18 @@ bool ProtocolsBase::createDatabase(const QString &connectionName , const QString
             db.setPassword(pass);
             db.setPort(port);
             if (!db.open()) {
-                Utils::warningMessageBox(tr("Unable to create the Protocol database."),tr("Please contact dev team."));
+                Utils::warningMessageBox(tr("Unable to create the Protocol database."),tr("Please contact the development team."));
                 return false;
             }
             QSqlQuery q(QString("CREATE DATABASE `%1`").arg(dbName), db);
             if (!q.isActive()) {
                 LOG_QUERY_ERROR(q);
-                Utils::warningMessageBox(tr("Unable to create the Protocol database."),tr("Please contact dev team."));
+                Utils::warningMessageBox(tr("Unable to create the Protocol database."),tr("Please contact the development team."));
                 return false;
             }
             DB.setDatabaseName(dbName);
             if (!DB.open()) {
-                Utils::warningMessageBox(tr("Unable to create the Protocol database."),tr("Please contact dev team."));
+                Utils::warningMessageBox(tr("Unable to create the Protocol database."),tr("Please contact the development team."));
                 return false;
             }
             DB.setDatabaseName(dbName);

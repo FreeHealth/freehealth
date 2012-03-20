@@ -196,11 +196,7 @@ bool CategoryBase::createDatabase(const QString &connectionName , const QString 
             if (!d.open()) {
                 Utils::warningMessageBox(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
                                          .arg(DB.connectionName()).arg(DB.lastError().text()),
-                                     /*: better translation would be
-                                     "Please contact the development team <a href='mailto:mail address'>mail address</a>"
-                                     or a link to the bug tracker.
-                                    "please contact dev team" is not very preofessional, a bit geeky */
-                                         tr("Please contact dev team."));
+                                         tr("Please contact the development team."));
                 return false;
             }
             QSqlQuery q(QString("CREATE DATABASE `%1`").arg(dbName), d);
@@ -208,13 +204,13 @@ bool CategoryBase::createDatabase(const QString &connectionName , const QString 
                 LOG_QUERY_ERROR(q);
                 Utils::warningMessageBox(tkTr(Trans::Constants::DATABASE_1_CANNOT_BE_CREATED_ERROR_2)
                                          .arg(DB.connectionName()).arg(DB.lastError().text()),
-                                         tr("Please contact dev team."));
+                                         tr("Please contact the development team."));
                 return false;
             }
             if (!DB.open()) {
                 Utils::warningMessageBox(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
                                          .arg(DB.connectionName()).arg(DB.lastError().text()),
-                                         tr("Please contact dev team."));
+                                         tr("Please contact the development team."));
                 return false;
             }
             DB.setDatabaseName(dbName);

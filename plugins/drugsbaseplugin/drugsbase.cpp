@@ -737,18 +737,18 @@ DatabaseInfos *DrugsBase::getDrugSourceInformation(const QString &drugSourceUid)
 //            d.setPassword(pass);
 //            d.setPort(port);
 //            if (!d.open()) {
-//                Utils::warningMessageBox(tr("Unable to create the Protocol database."),tr("Please contact dev team."));
+//                Utils::warningMessageBox(tr("Unable to create the Protocol database."),tr("Please contact the development team."));
 //                return false;
 //            }
 //            QSqlQuery q(QString("CREATE DATABASE `%1`").arg(dbName), d);
 //            if (!q.isActive()) {
 //                LOG_QUERY_ERROR(q);
-//                Utils::warningMessageBox(tr("Unable to create the Protocol database."),tr("Please contact dev team."));
+//                Utils::warningMessageBox(tr("Unable to create the Protocol database."),tr("Please contact the development team."));
 //                return false;
 //            }
 //            DB.setDatabaseName(dbName);
 //            if (!DB.open()) {
-//                Utils::warningMessageBox(tr("Unable to create the Protocol database."),tr("Please contact dev team."));
+//                Utils::warningMessageBox(tr("Unable to create the Protocol database."),tr("Please contact the development team."));
 //                return false;
 //            }
 //            DB.setDatabaseName(dbName);

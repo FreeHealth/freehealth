@@ -97,7 +97,7 @@ bool IcdDownloader::createDatabase()
     if (!sqlFile.exists()) {
         Utils::warningMessageBox(tkTr(Trans::Constants::FILE_1_DOESNOT_EXISTS).arg(sqlFile.fileName()),
                                  tr("The ICD10 database can not be created. The application will not work properly.\n"
-                                    "Please contact the dev team."));
+                                    "Please contact the development team."));
         return false;
     }
 
