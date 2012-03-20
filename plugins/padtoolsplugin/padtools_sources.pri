@@ -15,7 +15,8 @@ HEADERS +=  \
     $${PWD}/pad_core.h \
     $${PWD}/pad_item.h \
     $${PWD}/tokenmodel.h \
-    $${PWD}/padwriter.h
+    $${PWD}/padwriter.h \
+    $${PWD}/constants.h
 
 SOURCES += \
     $${PWD}/padtoolsplugin.cpp \
@@ -29,16 +30,6 @@ SOURCES += \
     $${PWD}/pad_item.cpp \
     $${PWD}/tokenmodel.cpp \
     $${PWD}/padwriter.cpp
-
-#    $${PWD}/editoractionhandler.cpp \
-#    $${PWD}/editormanager.cpp \
-#    $${PWD}/tableeditor.cpp \
-#    $${PWD}/texteditor.cpp \
-#    $${PWD}/tablepropertieswidget.cpp
-
-#FORMS += $${PWD}/tabledialog.ui \
-#    $${PWD}/tablepropertieswidget.ui \
-#    $${PWD}/tablepropertiesdialog.ui
 
 FORMS += \
     $${PWD}/padwriter.ui
