@@ -49,10 +49,5 @@ CONFIG( debug, debug|release ) {
 #              QT_NO_DEBUG
 }
 
-
 TARGET   = $${BINARY_TARGET}
 DESTDIR  = $${BUILD_BINARY_PATH}
-
-OTHER_FILES += \
-    ../../buildspecs/svnversion.pri \
-    ../../buildspecs/git_revision_hash.pri
