@@ -2103,6 +2103,11 @@ Place : %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../libs/translationutils/trans_countries.h" line="38"/>
+        <source>Austria</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../libs/translationutils/trans_current.h" line="53"/>
         <source>Name</source>
         <translation type="unfinished"></translation>
