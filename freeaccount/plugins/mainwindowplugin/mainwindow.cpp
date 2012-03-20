@@ -227,13 +227,12 @@ void MainWindow::extensionsInitialized()
 
     // Here we set the UI according to the commandline parser
     if (commandLine()->value(Core::Internal::CommandLine::CL_ReceiptsCreator).toBool()) {
-        setCentralWidget(new ReceiptViewer::ReceiptViewer(this));
         setCentralWidget(new ReceiptViewer(this));
         if (WarnLogMessage)
             LOG("receiptGUI initialized");
     } else {
         //setCentralWidget(new Account::AccountView(this));
-        setCentralWidget(new ReceiptViewer::ReceiptViewer(this));
+        setCentralWidget(new ReceiptViewer(this));
     }
 
     userChanged();
