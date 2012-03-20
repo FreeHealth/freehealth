@@ -2163,6 +2163,11 @@ Place : %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../libs/translationutils/trans_countries.h" line="38"/>
+        <source>Austria</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../libs/translationutils/trans_patient.h" line="35"/>
         <source>Patient Name</source>
         <translation>Patienten Name</translation>

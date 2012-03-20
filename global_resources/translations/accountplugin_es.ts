@@ -57,7 +57,7 @@
 <context>
     <name>Account::AccountPlugin</name>
     <message>
-        <location filename="../../plugins/accountplugin/accountplugin.cpp" line="126"/>
+        <location filename="../../plugins/accountplugin/accountplugin.cpp" line="129"/>
         <source>Initializing accountancy plugin...</source>
         <translation type="unfinished"></translation>
     </message>

@@ -31,17 +31,17 @@
 <context>
     <name>UserManagerPlugin</name>
     <message>
-        <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="257"/>
+        <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="259"/>
         <source>You can proceed with this user or connect with another one.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="259"/>
+        <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="261"/>
         <source>Stay connected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="260"/>
+        <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="262"/>
         <source>Change the current user</source>
         <translation type="unfinished"></translation>
     </message>
@@ -960,7 +960,7 @@ You must specify a different login/password.</source>
     <name>UserPlugin::UserManagerPlugin</name>
     <message>
         <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="118"/>
-        <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="176"/>
+        <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="178"/>
         <source>Initializing user manager plugin...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -976,12 +976,12 @@ Application will stop.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="164"/>
+        <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="166"/>
         <source>User is not identified.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="226"/>
+        <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="228"/>
         <source>Change current user</source>
         <translation type="unfinished"></translation>
     </message>
