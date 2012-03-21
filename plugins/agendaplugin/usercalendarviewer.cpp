@@ -164,8 +164,10 @@ UserCalendarViewer::UserCalendarViewer(QWidget *parent) :
     Agenda::UserCalendar *cal = d->m_UserCalendarModel->defaultUserCalendar();
     if (cal && cal->isValid()) {
         d->ui->description->setHtml(cal->data(Agenda::UserCalendar::Description).toString());
-        d->ui->defaultDurationButton->setStatusTip(cal->data(Agenda::UserCalendar::DefaultDuration).toString());
+        resetDefaultDuration();
     }
+    d->ui->defaultDurationButton->setText("80");
+    d->ui->defaultDurationButton->setIcon(theme()->icon("reset-to-default.png"));
 
     int width = size().width();
     int third = width/3;
@@ -175,7 +177,7 @@ UserCalendarViewer::UserCalendarViewer(QWidget *parent) :
     connect(d->ui->availabilitiesView, SIGNAL(activated(QModelIndex)), this, SLOT(newEventAtAvailabity(QModelIndex)));
     connect(d->ui->availableAgendasCombo, SIGNAL(currentIndexChanged(int)), this, SLOT(on_availableAgendasCombo_activated(int)));
     connect(d->ui->refreshAvailabilities, SIGNAL(clicked()), this, SLOT(refreshAvailabilities()));
-    connect(d->ui->defaultDurationButton,SIGNAL(clicked()), this, SLOT(refreshDefaultDuration()));
+    connect(d->ui->defaultDurationButton,SIGNAL(clicked()), this, SLOT(resetDefaultDuration()));
     connect(d->ui->startDate, SIGNAL(dateChanged(QDate)), this, SLOT(onStartDateChanged(QDate)));
     userChanged();
 
@@ -203,7 +205,8 @@ void UserCalendarViewer::newEvent()
     newEventAtAvailabity(QModelIndex());
 }
 
-/** When the user selects an availability in the toolButton, this slot is activated. Open a EventEditor dialog and save the item in the CalendarItemModel if the dialog is accepted. */
+/** When the user selects an availability in the toolButton, this slot is activated.
+Opens an EventEditor dialog and saves the item in the CalendarItemModel if the dialog is accepted. */
 void UserCalendarViewer::newEventAtAvailabity(const QModelIndex &index)
 {
     QModelIndex idx = index;
@@ -238,10 +241,12 @@ void UserCalendarViewer::refreshAvailabilities()
     recalculateAvailabilitiesWithDurationIndex(d->ui->availDurationCombo->currentIndex());
 }
 
-/** \brief sets the default duration set in the settings to the combo box */
-void UserCalendarViewer::refreshDefaultDuration()
-{
-    d->ui->availDurationCombo->setCurrentIndex(0);
+/** Resets the duration in the ComboBox to the default duration set in the Agenda config. */
+void UserCalendarViewer::resetDefaultDuration() {
+    int currentCalendarIndex = d->ui->availableAgendasCombo->currentIndex();
+
+    QModelIndex index = d->m_UserCalendarModel->index(currentCalendarIndex, UserCalendarModel::DefaultDuration);
+    updateCalendarData(index,QModelIndex());
 }
 
 void UserCalendarViewer::quickDateSelection(QAction *a)
@@ -272,7 +277,7 @@ void UserCalendarViewer::recalculateAvailabilitiesWithDurationIndex(const int in
     if (index<0)
         return;
 
-    // get current selected calendar
+    // get currently selected calendar
     int calId = d->ui->availableAgendasCombo->currentIndex();
     Agenda::UserCalendar *cal = 0;
     if (calId > 0)
@@ -344,7 +349,9 @@ void UserCalendarViewer::on_availableAgendasCombo_activated(const int index)
         d->ui->calendarViewer->setDayScaleHourDivider(defaultDuration/60);
         d->ui->calendarViewer->setDayItemDefaultDuration(defaultDuration);
 
-//        d->ui->defaultDurationButton->setText(QString::number(defaultDuration) + " " + tkTr(Trans::Constants::MINUTES));
+        //: default agenda duration time (in minutes)
+        d->ui->defaultDurationButton->setToolTip(tr("Set back to default: ") +
+                                                 QString::number(defaultDuration) + " " + tkTr(Trans::Constants::MINUTES));
         d->ui->description->setHtml(d->m_UserCalendarModel->index(index, UserCalendarModel::Description).data().toString());
     }
 //    d->populateCalendarWithCurrentWeek(d->m_UserCals.at(index));
@@ -357,7 +364,7 @@ void UserCalendarViewer::userChanged()
     if (d->m_UserCalendarModel) {
         disconnect(d->m_UserCalendarModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(updateCalendarData(QModelIndex,QModelIndex)));
     }
-    // model is automatically updated and reseted but the userCalendar combo model
+    // model is automatically updated and resetted but the userCalendar combo model
     d->m_UserCalendarModel = agendaCore()->userCalendarModel();
     connect(d->m_UserCalendarModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(updateCalendarData(QModelIndex,QModelIndex)));
     d->ui->availableAgendasCombo->setModel(d->m_UserCalendarModel);
@@ -370,18 +377,9 @@ void UserCalendarViewer::userChanged()
     d->ui->availabilitiesView->expandAll();
 
     // Next available dates
-    Agenda::UserCalendar *cal = d->m_UserCalendarModel->defaultUserCalendar();
-    int duration = 5;
-    if (cal) {
-        duration = cal->data(Agenda::UserCalendar::DefaultDuration).toInt();
-    }
-    if (duration%5)
-        duration = (duration/5);
-    else
-        duration = (duration/5 - 1);
-    d->ui->availDurationCombo->setCurrentIndex(duration);
-    recalculateAvailabilitiesWithDurationIndex(duration);
+    resetDefaultDuration();
 
+    Agenda::UserCalendar *cal = d->m_UserCalendarModel->defaultUserCalendar();
     if (cal) {
         d->m_CalendarItemModel = agendaCore()->calendarItemModel(cal->uid());
     } else {
@@ -408,16 +406,19 @@ void UserCalendarViewer::userChanged()
     }
 }
 
+
 void UserCalendarViewer::updateCalendarData(const QModelIndex &top, const QModelIndex &bottom)
 {
-    Q_UNUSED(top);
     Q_UNUSED(bottom);
     if (top.column()==UserCalendarModel::DefaultDuration) {
+        // get default duration of given calendar
         int defaultDuration = d->m_UserCalendarModel->index(top.row(), UserCalendarModel::DefaultDuration, top.parent()).data().toInt();
         d->ui->calendarViewer->setDayScaleHourDivider(defaultDuration/60);
         d->ui->calendarViewer->setDayItemDefaultDuration(defaultDuration);
-        d->ui->defaultDurationButton->setText(QString::number(defaultDuration) + " " + tkTr(Trans::Constants::MINUTES));
-        if (defaultDuration%5)
+        //: default agenda duration time (in minutes)
+        d->ui->defaultDurationButton->setToolTip(tr("Set back to default: ") +
+                                                 QString::number(defaultDuration) + " " + tkTr(Trans::Constants::MINUTES));
+        if (defaultDuration % 5)
             defaultDuration = (defaultDuration/5);
         else
             defaultDuration = (defaultDuration/5 - 1);
