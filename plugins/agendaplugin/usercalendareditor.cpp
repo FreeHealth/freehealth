@@ -53,6 +53,7 @@ UserCalendarEditorWidget::UserCalendarEditorWidget(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->clearAvail->setVisible(false);
+    ui->tabWidget->setCurrentIndex(0);
     connect(ui->buttonBox, SIGNAL(clicked(QAbstractButton*)), this, SLOT(setFocus()));
     connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(submit()));
     connect(ui->buttonBox, SIGNAL(rejected()), this, SLOT(revert()));
