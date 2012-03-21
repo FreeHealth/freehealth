@@ -111,7 +111,10 @@ QVariant UserCalendarModel::data(const QModelIndex &index, int role) const
         return QVariant();
 
     const UserCalendar *u = d->m_UserCalendars.at(index.row());
-    if (role==Qt::DisplayRole || role==Qt::EditRole) {
+    switch (role) {
+    case Qt::DisplayRole:
+    case Qt::EditRole:
+    {
         switch (index.column()) {
         case Uid: return u->data(Constants::Db_CalId);
         case Label: return u->data(UserCalendar::Label);
@@ -120,6 +123,10 @@ QVariant UserCalendarModel::data(const QModelIndex &index, int role) const
             if (u->isDelegated()) {
                 return QString("[%1] %2")
                         .arg(u->data(UserCalendar::UserOwnerFullName).toString())
+                        .arg(u->data(UserCalendar::Label).toString());
+            }
+            if (u->isDefault()) {
+                return QString("%1 *")
                         .arg(u->data(UserCalendar::Label).toString());
             }
             return u->data(UserCalendar::Label);
@@ -133,11 +140,17 @@ QVariant UserCalendarModel::data(const QModelIndex &index, int role) const
         case LocationUid: return u->data(UserCalendar::LocationUid);
         case DefaultDuration: return u->data(UserCalendar::DefaultDuration);
         }
-    } else if (role==Qt::ToolTipRole) {
+        break;
+    }
+    case Qt::ToolTipRole:
+    {
         switch (index.column()) {
         case Label: return u->data(UserCalendar::Label);
         }
-    } else if (role==Qt::FontRole) {
+        break;
+    }
+    case Qt::FontRole:
+    {
         if (u->isDelegated()) {
             QFont italic;
             italic.setItalic(true);
@@ -147,11 +160,17 @@ QVariant UserCalendarModel::data(const QModelIndex &index, int role) const
             bold.setBold(true);
             return bold;
         }
-    } else if (role==Qt::DecorationRole) {
+        break;
+    }
+    case Qt::DecorationRole:
+    {
         if (!u->data(UserCalendar::AbsPathIcon).isNull()) {
             return theme()->icon(u->data(UserCalendar::AbsPathIcon).toString());
         }
+        break;
     }
+    default: return QVariant();
+    } // End switch role
 
     return QVariant();
 }
