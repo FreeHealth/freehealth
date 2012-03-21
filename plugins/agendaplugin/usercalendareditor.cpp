@@ -99,6 +99,7 @@ void UserCalendarEditorWidget::setCurrentIndex(const QModelIndex &index)
         m_Mapper->addMapping(ui->defaultLocation, UserCalendarModel::LocationUid);
         m_Mapper->addMapping(ui->description, UserCalendarModel::Description);
         m_Mapper->addMapping(ui->defaultDuration, UserCalendarModel::DefaultDuration);
+        /** \todo wrong mapping with QCheckBoxes */
         m_Mapper->addMapping(ui->isDefaultCheck, UserCalendarModel::IsDefault, "checked");
         m_Mapper->addMapping(ui->isPrivateCheck, UserCalendarModel::IsPrivate, "checked");
         m_Mapper->addMapping(ui->password, UserCalendarModel::Password);

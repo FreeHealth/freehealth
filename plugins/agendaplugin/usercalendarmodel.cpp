@@ -158,7 +158,7 @@ QVariant UserCalendarModel::data(const QModelIndex &index, int role) const
 
 bool UserCalendarModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-    WARN_FUNC << index << value << role;
+//    WARN_FUNC << index << value << role;
     if (!index.isValid())
         return false;
 
@@ -173,14 +173,24 @@ bool UserCalendarModel::setData(const QModelIndex &index, const QVariant &value,
         case Description: u->setData(UserCalendar::Description, value); break;
         case Type: u->setData(UserCalendar::Type, value); break;
         case Status: u->setData(UserCalendar::Status, value); break;
-        case IsDefault: u->setData(UserCalendar::IsDefault, value); break;
+        case IsDefault:
+        {
+            bool isDefault = value.toBool();
+            if (isDefault) {
+                // All calendars -> not default
+                foreach(UserCalendar *u, d->m_UserCalendars)
+                    u->setData(UserCalendar::IsDefault, false);
+            }
+            u->setData(UserCalendar::IsDefault, value);
+            break;
+        }
         case IsPrivate: u->setData(UserCalendar::IsPrivate, value); break;
         case Password: u->setData(UserCalendar::Password, value); break;
         case LocationUid: u->setData(UserCalendar::LocationUid, value); break;
         case DefaultDuration: u->setData(UserCalendar::DefaultDuration, value); break;
         default: return false;
         }
-        qWarning() << "DONE";
+//        qWarning() << "DONE";
         Q_EMIT dataChanged(index, index);
         return true;
     }
