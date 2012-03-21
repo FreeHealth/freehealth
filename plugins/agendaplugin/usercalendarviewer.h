@@ -76,6 +76,7 @@ private Q_SLOTS:
     void updateCalendarData(const QModelIndex &top, const QModelIndex &bottom);
 
 protected:
+    void clear();
     bool event(QEvent *e);
 
 private:
