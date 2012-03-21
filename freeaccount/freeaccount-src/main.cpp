@@ -125,6 +125,7 @@ inline static void defineLibraryPaths()
 
 int main( int argc, char *argv[] )
 {
+    
     QApplication app(argc, argv);
 
     QTextCodec::setCodecForTr( QTextCodec::codecForName("UTF-8"));
@@ -141,6 +142,7 @@ int main( int argc, char *argv[] )
         std::cout << qPrintable(VERSION_MESSAGE);
         return 0;
     }
+    
     ExtensionSystem::PluginManager pluginManager;
     pluginManager.setFileExtension(QString("pluginspec"));
 

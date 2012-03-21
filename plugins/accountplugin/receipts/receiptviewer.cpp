@@ -1102,6 +1102,7 @@ void ReceiptViewer::save()
 {
     using namespace ::Internal;
     receiptsEngine rIO;
+    receiptsManager manager;
     QString userUuid = user()->uuid();
     QString textOfListOfActs = m_listOfValues.join("+");
     for (int row = 0; row < m_model->rowCount(QModelIndex()); row += 1)
@@ -1139,7 +1140,10 @@ void ReceiptViewer::save()
     {
     	  patientName = "Patient Name";
         }
-
+    if (manager.isMedintuxArg())
+    {
+    	patientName = manager.getFullName();
+        }
     QHash<int,QVariant> hash;
     hash.insert(ACCOUNT_UID,"UID");
     hash.insert(ACCOUNT_USER_UID,userUuid);

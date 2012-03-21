@@ -547,3 +547,26 @@ QString receiptsManager::getStringPerferedActAndValues(const QString & act){
     return r.getStringOfpreferredActAndHisValue(act);
 }
 
+bool receiptsManager::isMedintuxArg()
+{
+    bool answer = false;
+    QString medintuxArg = qApp->arguments()[MEDINTUX];
+    if (medintuxArg.contains("--medintux"))
+    {
+    	answer = true;
+        }
+    return answer;
+}
+
+QString receiptsManager::getFullName()
+{
+    QString medintuxFullName;
+    QString medintuxPatientName = qApp->arguments()[MEDINTUX_PATIENT_NAME];
+    medintuxPatientName.remove("--patientname=");
+    QString medintuxPatientFirstName = qApp->arguments()[MEDINTUX_PATIENT_FIRSTNAME];
+    medintuxPatientFirstName.remove("--patientfirstname=");
+    medintuxFullName = medintuxPatientName+","+medintuxPatientFirstName;
+    return medintuxFullName;
+}
+
+

@@ -65,6 +65,16 @@ class ACCOUNT_EXPORT receiptsManager : public QObject
   QVariant m_preferredDistanceValue;
   QVariant m_preferredInsuranceUid;
   QString m_rbmReq;
+  //medintux
+  QString getFullName();
+  bool isMedintuxArg();
+    enum Medintux
+{
+    MEDINTUX = 1,
+    MEDINTUX_PATIENT_NAME,
+    MEDINTUX_PATIENT_FIRSTNAME,
+    Medintux_MaxParam
+};
 
 };
 
