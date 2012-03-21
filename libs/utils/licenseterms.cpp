@@ -163,7 +163,7 @@ static const char* const BSD_EN =
 
 static const char* const BSD_FR =
   "<p align=center><b>Termes de la licence BSD.</b></p><p&nbsp;</p>"
-  "<p>La redistribution et l'utilisation sous forme binaire ou de code source, avec ou sans modification, sont autoris&eacute;es &agrave; condition que les conditions suivantes soient respect&eacute;es :</p>"
+  "<p>La redistribution et l'utilisation sous forme binaire ou de code source, avec ou sans modification, sont autoris&eacute;es &agrave; condition que les conditions suivantes soient respect&eacute;es:</p>"
   "<ul><li>Les redistributions du code source doivent conserver l'indication de copyright ci-dessus, cette liste de conditions et la renonciation suivante.</li>"
   "<li>Les redistributions sous forme binaire doivent reproduire l'indication de copyright ci-dessus, cette liste de conditions et la renonciation suivante dans la documentation et/ou les autres accessoires fournis avec la distribution.</li>"
   "<li>Ni le nom de l'organisation ni les noms de ses collaborateurs ne peuvent &ecirc;tre utilis&eacute;s pour approuver ou promouvoir les produits d&eacute;riv&eacute;s de ce logiciel sans une permission &eacute;crite sp&eacute;cifique pr&eacute;alable.</li>"

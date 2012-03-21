@@ -50,7 +50,7 @@ const char* const BUILD_VERSION_INFORMATION = QT_TRANSLATE_NOOP("tkConstants", "
 const char* const BUILD_DATE_TIME_1_2 = QT_TRANSLATE_NOOP("tkConstants", "Build on %1 %2");
 const char* const BUILD_VERSION_1 = QT_TRANSLATE_NOOP("tkConstants", "Build version: %1");
 const char* const BUILD_FULLAPP = QT_TRANSLATE_NOOP("tkConstants", "Full application");
-const char* const BUILD_SVNAPP = QT_TRANSLATE_NOOP("tkConstants", "SVN application");
+const char* const BUILD_GITAPP = QT_TRANSLATE_NOOP("tkConstants", "GIT application");
 const char* const BUILD_DEBUG = QT_TRANSLATE_NOOP("tkConstants", "Built in debug mode");
 const char* const BUILD_RELEASE = QT_TRANSLATE_NOOP("tkConstants", "Built in release mode");
 

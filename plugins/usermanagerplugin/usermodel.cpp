@@ -1313,7 +1313,7 @@ void UserModel::setFilter(const QHash<int,QString> &conditions)
         default: break;
         }
         if (baseField.isEmpty()) continue;
-        filter += QString("(`%1` %2) AND \n").arg(baseField, conditions.value(r));
+        filter += QString("(`%1` %2) AND\n").arg(baseField, conditions.value(r));
     }
     filter.chop(5);
     d->m_Sql->setFilter(filter);

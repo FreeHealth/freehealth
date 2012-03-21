@@ -723,7 +723,7 @@ bool XmlFormContentReader::addFile(const QDomElement &element, const XmlFormName
 
     QString content = base()->getFormContent(form.uid, basetype, fileName);
     if (content.isEmpty()) {
-        LOG_ERROR_FOR("XmlReader", "Content not in base ??? " + form.uid + "; mode:" + form.modeName + ";filename:" + fileName);
+        LOG_ERROR_FOR("XmlReader", "Content not in base??? " + form.uid + "; mode:" + form.modeName + ";filename:" + fileName);
         Q_ASSERT(false);
     }
 

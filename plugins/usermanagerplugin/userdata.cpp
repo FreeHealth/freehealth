@@ -370,7 +370,7 @@ void UserDynamicData::warn() const
 QString UserDynamicData::warnText() const
 {
     QString tmp;
-    tmp = QString("Name : %1, Type : %2, Size : %3, Lang : %4, Dirt %5 Null %6 , UserUuid : %7, Id : %8")
+    tmp = QString("Name: %1, Type: %2, Size: %3, Lang: %4, Dirt %5, Null %6, UserUuid: %7, Id: %8")
           .arg(name())
           .arg(type())
           .arg(value().toString().size())
@@ -1094,9 +1094,9 @@ QStringList UserData::warnText() const
         list <<  "    /!\\ NO RIGHTS RECORDED /!\\ " ;
     else
         foreach(const QString & id, d->m_Role_Rights.keys()){
-            tmp += "\n\nRIGHT : " + id + "\n";
+            tmp += "\n\nRIGHT: " + id + "\n";
             for (i = 0; i < RIGHTS_MaxParam; i++)
-                tmp += QString("%1 : %2 = %3\n")
+                tmp += QString("%1: %2 = %3\n")
                                    .arg(id)
                                    .arg(tkb->fieldName(Table_RIGHTS , i))
                                    .arg(d->m_Role_Rights.value(id).value(i).toString());
@@ -1104,7 +1104,7 @@ QStringList UserData::warnText() const
     list << tmp;
     tmp.clear();
 
-    tmp += "  *Values * \n";
+    tmp += "  *Values *\n";
     tmp += QString("%1 = %2\n").arg("m_Modifiable").arg(isModifiable());
     tmp += QString("%1 = %2\n").arg("m_Modified").arg(isModified());
     tmp += QString("%1 = %2\n").arg("m_IsNull").arg(d->m_IsNull);

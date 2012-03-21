@@ -220,9 +220,9 @@ void InsuranceWidget::saveModel()
     if (WarnDebugMessage)
         LOG("currentIndex = " + QString::number(m_Mapper->currentIndex()));
     if (m_Model->isDirty()) {
-        bool yes = Utils::yesNoMessageBox(tr("Save changes ?"),
+        bool yes = Utils::yesNoMessageBox(tr("Save changes?"),
                                           tr("You make changes into the insurance table.\n"
-                                             "Do you want to save them ?"));
+                                             "Do you want to save them?"));
         if (yes) {
             if (!m_Model->submit()) {
                 LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_SAVE_DATA_IN_DATABASE_1).
@@ -509,7 +509,7 @@ int InsuranceWidget::calcInsuranceUid(){
 //    	      test = m_Model->submit();
 //    	      }
 //    	      if (WarnDebugMessage)
-//    	      qDebug() << __FILE__ << QString::number(__LINE__) << " values = \n" << strList;
+//    	      qDebug() << __FILE__ << QString::number(__LINE__) << " values =\n" << strList;
 
 //    return test;
 //}

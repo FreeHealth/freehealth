@@ -95,8 +95,8 @@ void PrinterPlugin::extensionsInitialized()
 //    if (QPrinterInfo::availablePrinters().isEmpty()) {
 //        LOG_ERROR("No printer installed in this system.");
 //        Utils::warningMessageBox(tr("No printer"),
-//                                 tr("No printer is configured in your system. The print preview and printing will not work."),
-//                                 tr("You must configure at least on printer. Please refer to your system documentation. \n"),
+//                                 tr("No printer is configured in your system. The printing preview and printing will not work."),
+//                                 tr("You must configure at least one printer. Please refer to your system documentation\n""),
 //                                 qApp->applicationName());
 //    }
 }

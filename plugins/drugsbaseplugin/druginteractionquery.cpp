@@ -125,7 +125,7 @@ QString DrugInteractionQuery::warnText() const
     if (tmp.isEmpty())
         tmp = "  !! No drug\n";
     tmp = QString("DrugInteractionQuery: testing\n%1"
-                  "  * TestDDI: %2 \n"
+                  "  * TestDDI: %2\n"
                   "  * TestPDI: %3")
           .arg(tmp)
           .arg(m_TestDDI)

@@ -74,8 +74,8 @@ public:
                      .arg(icdBase()->table(Constants::Table_System))
                      .arg(icdBase()->fieldName(Constants::Table_System, Constants::SYSTEM_LID));
 
-            req = QString("SELECT %1 \nFROM %2 \n"
-                          "LEFT JOIN %3 ON %2.%4=%3.%5 \n")
+            req = QString("SELECT %1 \nFROM %2\n"
+                          "LEFT JOIN %3 ON %2.%4=%3.%5\n")
                     .arg(fields)
                     .arg(icdBase()->table(Constants::Table_System))
                     // join libelle
@@ -92,9 +92,9 @@ public:
                      .arg(icdBase()->fieldName(Constants::Table_Master, Constants::MASTER_SID))
                      .arg(icdBase()->table(Constants::Table_System))
                      .arg(icdBase()->fieldName(Constants::Table_System, Constants::SYSTEM_LID));
-            req = QString("SELECT %1 \n"
-                          "FROM %2, %3  \n"
-                          "WHERE %2.%5 = %3.%6 \n")
+            req = QString("SELECT %1\n"
+                          "FROM %2, %3\n"
+                          "WHERE %2.%5 = %3.%6\n")
                     .arg(fields)
                     .arg(icdBase()->table(Constants::Table_Master))
                     .arg(icdBase()->table(Constants::Table_System))

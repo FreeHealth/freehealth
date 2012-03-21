@@ -85,9 +85,9 @@ QWidget *BuildAboutPage::createPage(QWidget *parent)
     if (Utils::isFullApplication()) {
         new QTreeWidgetItem( versionItem, QStringList() << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_FULLAPP));
     } else {
-        new QTreeWidgetItem( versionItem, QStringList() << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_SVNAPP));
+        new QTreeWidgetItem( versionItem, QStringList() << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_GITAPP));
     }
-    new QTreeWidgetItem( versionItem, QStringList() << tr("Actual Qt version : %1").arg( qVersion() ));
+    new QTreeWidgetItem( versionItem, QStringList() << tr("Current Qt version: %1").arg( qVersion() ));
     tree->expandAll();
 
     return w;

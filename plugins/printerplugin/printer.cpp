@@ -927,7 +927,7 @@ bool Printer::preparePages()
         return d->simpleDraw();
     }
     else {
-        Utils::Log::addMessage(this, "WARNING : Printing using complexDraw method (should be buggy).");
+        Utils::Log::addMessage(this, "WARNING: Printing using complexDraw method (should be buggy).");
         return d->complexDraw();
     }
 }

@@ -407,8 +407,8 @@ bool AgendaBase::createDatabase(const QString &connectionName, const QString &db
         return false;
 
     LOG(QCoreApplication::translate("AgendaBase",
-                                    "Trying to create empty database. \n"
-                                    "       Location : %1 \n"
+                                    "Trying to create empty database.\n"
+                                    "       Location: %1\n"
                                     "       FileName: %2\n"
                                     "       Driver: %3")
         .arg(pathOrHostName, dbName).arg(driver));

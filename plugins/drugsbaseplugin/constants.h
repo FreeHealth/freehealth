@@ -70,9 +70,9 @@ namespace Constants {
     const char * const  S_DEF_USERHEADER             = "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\np, li { white-space: pre-wrap; }\n</style></head><body>\n"
                                                                  "<table border=\"1\" width=\"100%\" cellspacing=\"0\" cellpadding=\"0\">\n<tr>\n"
                                                                  "<td width=\"33%\">\n<p align=\"center\"><span style=\" font-weight:600;\">Dr TRUCMUCHE Bidulle</span>\n<br /><span style=\" font-weight:600;\">M&eacute;decine Machin</span><\n<br /><br /><span style=\" font-size:10pt; font-style:italic;\">Ancien Assistant des h&ocirc;pitaux</span>\n<br /><span style=\" font-size:10pt; font-style:italic;\">Tous mes dipl&ocirc;mes</span>\n<br />----------<br />\n<span style=\" font-size:10pt;\">Mes Consultations sur rendez-vous</span>\n<br />----------\n<br /><span style=\" font-size:10pt; font-style:italic;\">Mon ADELI</span></p></td>\n<td width=\"33%\"></td>\n"
-                                                                 "<td width=\"33%\">\n<p align=\"center\"><span style=\" font-size:9pt;\">2, rue de la M&eacute;decine\n<br />62 223 SAINT-LAURENT-BLANGY<br />docteur@trucmuche.fr<br />T&eacute;l : 03.21.00.00.00<br />Fax : 03.21.00.00.06<br />----------<br /></span>"
+                                                                 "<td width=\"33%\">\n<p align=\"center\"><span style=\" font-size:9pt;\">2, rue de la M&eacute;decine\n<br />62 223 SAINT-LAURENT-BLANGY<br />docteur@trucmuche.fr<br />T&eacute;l: 03.21.00.00.00<br />Fax: 03.21.00.00.06<br />----------<br /></span>"
                                                                  "<span style=\" font-size:12pt;font-weight:bold;\">[[PATIENTTITLE] ][[PATIENTFULLNAME]<br />][Le [DATE]]</span></p></td></tr></table></body></html>";              /*!< \brief Default value for settings. */
-//    const char * const  MFDRUGS_DEFAULT_USERFOOTER             = "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\np, li { white-space: pre-wrap; }\n</style></head><body style=\" font-family:'Lucida Grande'; font-size:13pt; font-weight:400; font-style:normal;\">\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10pt;\">En cas d'urgence applez le SAMU : 112</span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10pt;\">Veuillez signalez les demandes de visites &agrave; domicile, tant que possible, avant 10h.</span></p></body></html>";
+//    const char * const  MFDRUGS_DEFAULT_USERFOOTER             = "<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\np, li { white-space: pre-wrap; }\n</style></head><body style=\" font-family:'Lucida Grande'; font-size:13pt; font-weight:400; font-style:normal;\">\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10pt;\">En cas d'urgence applez le SAMU: 112</span></p>\n<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-size:10pt;\">Veuillez signalez les demandes de visites &agrave; domicile, tant que possible, avant 10h.</span></p></body></html>";
 
 
     const char * const S_PRESCRIPTIONFORMATTING_HTML      = "DrugsWidget/print/prescription/HtmlFormatting";      /*!< \brief Key for settings. */
@@ -160,7 +160,7 @@ namespace Constants {
             "  <meta name=\"qrichtext\" content=\"1\" />\n"
             "  <meta name=\"charset\" content=\"UTF-8\" />\n"
             "  <meta name=\"generator\" content=\"{GENERATOR}\" />\n"
-            "  <title>FreeDiams : Prescription</title>\n"
+            "  <title>FreeDiams: Prescription</title>\n"
             "  <style type=\"text/css\">\n"
             "    A:link {text-decoration: none}\n"
             "    A:visited {text-decoration: none}\n"
@@ -182,7 +182,7 @@ namespace Constants {
                 "  <meta name=\"charset\" content=\"UTF-8\" />\n"
                 "  <meta name=\"generator\" content=\"{GENERATOR}\" />\n"
                 "  <meta name=\"prescription\" content=\"{ENCODEDPRESCRIPTION}\" />\n"
-                "  <title>FreeDiams : Prescription</title>\n"
+                "  <title>FreeDiams: Prescription</title>\n"
                 "  <style type=\"text/css\">\n"
                 "    A:link {text-decoration: none}\n"
                 "    A:visited {text-decoration: none}\n"
@@ -256,19 +256,19 @@ namespace Constants {
     const char * const  MANAGEMENT = QT_TRANSLATE_NOOP("mfDrugsConstants", "Management");
     const char * const  DDI_TEXT = QT_TRANSLATE_NOOP("mfDrugsConstants", "Drug-drug interactions");
 
-     /*: This is the short name of the Drug-drug interactions engine. */
+     /*: This is the short name of the drug-drug interactions engine. */
     const char * const  DDI_SHORT_TEXT = QT_TRANSLATE_NOOP("mfDrugsConstants", "DDI");
 
     const char * const  PIMENGINE_TEXT = QT_TRANSLATE_NOOP("mfDrugsConstants", "Potentially inappropriate medications");
 
-    /*: This is the short name of the Potentially inappropriate medications engine. */
+    /*: This is the short name of the potentially inappropriate medications engine. */
     const char * const  PIMENGINE_SHORT_TEXT = QT_TRANSLATE_NOOP("mfDrugsConstants", "PIM");
     const char * const  PIM_TEXT = QT_TRANSLATE_NOOP("mfDrugsConstants", "Potentially inappropriate medications");
 
 
     const char * const  ALLERGYENGINE_TEXT = QT_TRANSLATE_NOOP("mfDrugsConstants", "Allergy / Intolerances to medications");
 
-    /*: This is the short name of the Potentially inappropriate medications engine. */
+    /*: This is the short name of the potentially inappropriate medications engine. */
     const char * const  ALLERGY_TEXT = QT_TRANSLATE_NOOP("mfDrugsConstants", "Allergy");
 
     // Some useful enums

@@ -30,8 +30,8 @@
   \brief Dialog for password changing.
   With this dialog, user can change its password. He's asked of the actual password once, and of the new password
   twice. When user accept the dialog a verification is done, no changes are saved into database or users' model. \n
-  - canGetNewPassword() return the verification state. If it's true, all is good : old password was verified, and
-  new password was correctly confirmed.
+  - canGetNewPassword() return the verification state. If it's true, all is good: old password was verified, and
+  new password was confirmed correctly.
   - cryptedPassword() return the crypted new password to use.
   - clearPassword() return the new password (non crypted).
   - applyChanges() call it after dialog validation to submit the new password to the database and server.

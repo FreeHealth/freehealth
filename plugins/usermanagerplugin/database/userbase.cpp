@@ -412,7 +412,7 @@ bool UserBase::checkLogin(const QString &clearLogin, const QString &clearPasswor
             connectionTest.setPassword(clearPassword);
             if (!connectionTest.open()) {
                 qWarning() << connectionTest << clearLogin << clearPassword << database().lastError().text();
-                LOG_ERROR(QString("Unable to connect to the MySQL server, with user %1 : %2").arg(clearLogin).arg(clearPassword));
+                LOG_ERROR(QString("Unable to connect to the MySQL server, with user %1: %2").arg(clearLogin).arg(clearPassword));
                 LOG_ERROR(database().lastError().text());
                 return false;
             }
@@ -621,8 +621,8 @@ bool UserBase::createDatabase(const QString &connectionName , const QString &dbN
         return false;
 
     LOG(QCoreApplication::translate("UserBase",
-                                    "Trying to create empty user database. \n"
-                                    "       Location : %1 \n"
+                                    "Trying to create empty user database.\n"
+                                    "       Location: %1\n"
                                     "       FileName: %2\n"
                                     "       Driver: %3")
         .arg(pathOrHostName, dbName).arg(driver));
@@ -1010,7 +1010,7 @@ bool UserBase::saveUser(UserData *user)
         /** \todo code here : --> update UserLkId */
 
         if (!error) {
-            LOG(QCoreApplication::translate("UserBase", "User %1 correctly updated.").arg(user->uuid()));
+            LOG(QCoreApplication::translate("UserBase", "User %1 successfully updated.").arg(user->uuid()));
             user->setModified(false);
         }
     } else {
@@ -1174,7 +1174,7 @@ bool UserBase::saveUserPreferences(const QString &uid, const QString &content)
 
     if (saveUserDynamicData(uid, Constants::USER_DATAS_PREFERENCES, content)) {
         if (WarnUserPreferences)
-            qWarning() << "    Correctly saved";
+            qWarning() << "    successfully saved";
         return true;
     }
 

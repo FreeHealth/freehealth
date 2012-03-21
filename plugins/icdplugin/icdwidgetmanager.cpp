@@ -321,7 +321,7 @@ void IcdActionHandler::setCurrentView(IcdCentralWidget *view)
 {
     Q_ASSERT(view);
     if (!view) { // this should never be the case
-        Utils::Log::addError(this, "setCurrentView : no view", __FILE__, __LINE__);
+        Utils::Log::addError(this, "setCurrentView: no view", __FILE__, __LINE__);
         return;
     }
     //    qWarning() << "IcdActionHandler::setCurrentView(IcdContextualWidget *view)";

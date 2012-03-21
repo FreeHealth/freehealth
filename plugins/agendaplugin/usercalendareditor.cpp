@@ -152,7 +152,7 @@ void UserCalendarEditorWidget::removeAvailabilities()
             }
             bool yes = Utils::yesNoMessageBox(tr("Delete full day."),
                                               tr("You are about to delete all recorded time range for one specific day of the week (%1). "
-                                                 "Do you really want to delete all time range ?").arg(idx.data().toString()));
+                                                 "Do you really want to delete all time range?").arg(idx.data().toString()));
             if (!yes)
                 return;
         } else {

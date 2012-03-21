@@ -249,9 +249,9 @@ void IcdCentralWidget::openFile(const QString &file)
 {
     if (d->m_CollectionModel->rowCount() > 0) {
         int r = Utils::withButtonsMessageBox(
-                tr("Opening an ICD Collection : merge or replace ?"),
-                tr("There is an ICD Collection inside the editor, "
-                   "do you to replace it or to add the opened collection ?"),
+                tr("Opening an ICD collection: merge or replace?"),
+                tr("There is an ICD collection inside the editor, "
+                   "do you to replace it or to add the opened collection?"),
                 QString(), QStringList() << tr("Replace collection") << tr("Add to collection"),
                 tr("Open a collection") + " - " + qApp->applicationName());
         if (r == 0) {

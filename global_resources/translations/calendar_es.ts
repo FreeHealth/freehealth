@@ -30,12 +30,12 @@
 <context>
     <name>Calendar::DayRangeBody</name>
     <message>
-        <location filename="../../libs/calendar/day_range_view.cpp" line="744"/>
+        <location filename="../../libs/calendar/day_range_view.cpp" line="749"/>
         <source>modify</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/calendar/day_range_view.cpp" line="746"/>
+        <location filename="../../libs/calendar/day_range_view.cpp" line="751"/>
         <source>remove</source>
         <translation type="unfinished"></translation>
     </message>
@@ -43,12 +43,12 @@
 <context>
     <name>Calendar::DayRangeHeader</name>
     <message>
-        <location filename="../../libs/calendar/day_range_view.cpp" line="319"/>
+        <location filename="../../libs/calendar/day_range_view.cpp" line="323"/>
         <source>modify</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/calendar/day_range_view.cpp" line="321"/>
+        <location filename="../../libs/calendar/day_range_view.cpp" line="325"/>
         <source>remove</source>
         <translation type="unfinished"></translation>
     </message>

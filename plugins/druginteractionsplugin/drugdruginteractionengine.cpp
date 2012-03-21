@@ -261,7 +261,7 @@ public:
                 return dr;
             }
         }
-        LOG_ERROR_FOR("DDI", "No interactor found ?");
+        LOG_ERROR_FOR("DDI", "No interactor found?");
         return 0;
     }
 
@@ -967,7 +967,7 @@ bool DrugDrugInteractionEngine::checkDrugInteraction(IDrug *drug, const QVector<
     }
 
     if (d->m_LogChrono)
-        Utils::Log::logTimeElapsed(t, "DrugDrugInteractionEngine", QString("checkDrugInteraction : %1 ; %2")
+        Utils::Log::logTimeElapsed(t, "DrugDrugInteractionEngine", QString("checkDrugInteraction: %1 ; %2")
                                    .arg(drug->brandName()).arg(drugsList.count()));
 
     //      qWarning() << "checkDrugInteraction" << m_DDIFound;
@@ -991,7 +991,7 @@ int DrugDrugInteractionEngine::calculateInteractions(const QVector<IDrug *> &dru
         checkDrugInteraction(drug, drugs);
     }
     if (d->m_LogChrono)
-        Utils::Log::logTimeElapsed(t, "DrugDrugInteractionEngine", QString("interactions() : %1 drugs").arg(drugs.count()));
+        Utils::Log::logTimeElapsed(t, "DrugDrugInteractionEngine", QString("interactions(): %1 drugs").arg(drugs.count()));
 
 //    qWarning() << "DDIEngine::foundATCtoATC DDI" << d->m_DDIFound;
 //    qWarning() << "DDIEngine::found" << d->m_FirstPassInteractions.count();
@@ -1160,7 +1160,7 @@ QVector<IDrugInteraction *> DrugDrugInteractionEngine::getAllInteractionsFound()
     qSort(toReturn.begin(), toReturn.end(), IDrugInteraction::greaterThan);
     d->m_Interactions = toReturn;
     if (d->m_LogChrono)
-        Utils::Log::logTimeElapsed(t, "DrugDrugInteractionEngine", QString("getAllInteractions : %1 drugs")
+        Utils::Log::logTimeElapsed(t, "DrugDrugInteractionEngine", QString("getAllInteractions: %1 drugs")
                                    .arg(d->m_TestedDrugs.count()));
 
     return toReturn;

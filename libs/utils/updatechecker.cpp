@@ -129,7 +129,7 @@ void UpdateCheckerPrivate::httpDone(bool error)
         if ( qApp->applicationVersion() < lastVersion ) {
             int begin = update.indexOf( "{", idLast ) + 1;
             int end = update.indexOf( "}", begin );
-            m_UpdateText.append( tr( "* Updates of version : %1" ).arg( lastVersion ) );
+            m_UpdateText.append( tr( "* Updates of version: %1" ).arg( lastVersion ) );
             m_UpdateText.append( update.mid( begin, end - begin ) + "\n" );
             forLog += lastVersion + "; ";
             if (m_LastVersion.isEmpty())
@@ -253,7 +253,7 @@ bool UpdateChecker::hasUpdate()
 }
 
 /**
-  \brief Returns true if the update file was correctly downloaded
+  \brief Returns true if the update file was successfully downloaded
 */
 bool UpdateChecker::fileRetreived()
 {
@@ -277,7 +277,7 @@ void UpdateChecker::showUpdateInformation()
     dialog->setWindowTitle( tkTr(Trans::Constants::UPDATE_AVAILABLE) + " - " + qApp->applicationName() );
     dialog->resize( 500, 400 );
     QGridLayout *layout = new QGridLayout(dialog);
-    QLabel *intro = new QLabel( "<b>" + tr("An update is available. Please check the web site : <a href=\"%1\">%1</a>")
+    QLabel *intro = new QLabel( "<b>" + tr("An update is available. Please check the web site: <a href=\"%1\">%1</a>")
                                 .arg(qApp->organizationDomain()) + "</b> " , dialog );
     intro->setWordWrap(true);
     intro->setAlignment(Qt::AlignHCenter|Qt::AlignVCenter);

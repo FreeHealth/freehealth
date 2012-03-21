@@ -90,9 +90,9 @@ void DebugDialog::on_butSend_clicked()
 
     msg += "{{tag>bugreport}}\n\n";
     msg += "====== BUG REPORT ======\n\n";
-    msg += "  * Date of report: $<%DATE%>$ \n";
-    msg += "  * User: " + user()->value(Core::IUser::FullName).toString() + " \n";
-    msg += "  * User Uid: " + user()->uuid() + " \n";
+    msg += "  * Date of report: $<%DATE%>$\n";
+    msg += "  * User: " + user()->value(Core::IUser::FullName).toString() + "\n";
+    msg += "  * User Uid: " + user()->uuid() + "\n";
 
     msg += "===== USER OUTPUT =====\n\n";
     msg += Utils::askUser(tkTr(Trans::Constants::START_MESSAGE_SENDING), tkTr(Trans::Constants::PLEASE_DESCRIBE_PROBLEM));
@@ -110,9 +110,9 @@ void DebugDialog::on_butSend_clicked()
         m_sending = true;
         // showing a messagebox
         m_infoMessageBox = new QMessageBox(this);
-        m_infoMessageBox->setText( tr( "Sending debugging information to dev team") );
-        m_infoMessageBox->setInformativeText( tr("Trying to send information to dev team.\n"
-                                                 "Using Url : %1 \n"
+        m_infoMessageBox->setText( tr( "Sending debugging information to the development team") );
+        m_infoMessageBox->setInformativeText( tr("Trying to send information to the development team.\n"
+                                                 "Using URL: %1\n"
                                                  "Please wait..." ).arg( m_sender.usedUrl() ) );
         m_infoMessageBox->setWindowTitle( qApp->applicationName() );
         m_infoMessageBox->setStandardButtons( QMessageBox::Ok );
@@ -132,10 +132,10 @@ bool DebugDialog::on_butSave_clicked()
 
 void DebugDialog::onSendMessage_done()
 {
-    LOG(tr("Debugging information correctly sent."));
+    LOG(tr("Debugging information successfully sent."));
     if (m_infoMessageBox) {
-        m_infoMessageBox->setInformativeText( tr("Debugging information correctly send to dev team.\n"
-                                             "Using Url : %1 \n"
+        m_infoMessageBox->setInformativeText( tr("Debugging information successfully send to the development team.\n"
+                                             "Using Url: %1\n"
                                              "%2" ).arg( m_sender.usedUrl(), m_sender.resultMessage() ) );
         m_infoMessageBox->exec();
         delete m_infoMessageBox;

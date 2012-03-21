@@ -429,7 +429,7 @@ bool Database::changeMySQLUserPassword(const QString &login, const QString &newP
 //        LOG_ERROR_FOR("Database", "Trying to create user, no suffisant rights.");
 //        return false;
 //    }
-    LOG_FOR("Database", QString("Trying to change MySQL user password: \n"
+    LOG_FOR("Database", QString("Trying to change MySQL user password:\n"
                                 "       user: %1\n"
                                 "       host: %2(%3)\n"
                                 "       new password: %4")
@@ -497,7 +497,7 @@ bool Database::createConnection(const QString &connectionName, const QString &no
     if (QSqlDatabase::contains(connectionName)) {
         if (WarnLogMessages)
             LOG_FOR("Database", QCoreApplication::translate("Database",
-                                                            "WARNING : %1 database already in use")
+                                                            "WARNING: %1 database already in use")
                     .arg(connectionName));
         d->m_ConnectionName = connectionName;
         return true;
@@ -638,7 +638,7 @@ bool Database::createConnection(const QString &connectionName, const QString &no
     case SQLite:
         {
             if (!sqliteFileInfo.isReadable()) {
-                LOG_ERROR_FOR("Database", QCoreApplication::translate("Database", "ERROR : Database `%1` is not readable. Path : %2")
+                LOG_ERROR_FOR("Database", QCoreApplication::translate("Database", "ERROR: Database `%1` is not readable. Path: %2")
                               .arg(dbName, sqliteFileInfo.absoluteFilePath()));
                 toReturn = false;
             }
@@ -649,7 +649,7 @@ bool Database::createConnection(const QString &connectionName, const QString &no
             if (!DB.isOpen()) {
                 if (!DB.open()) {
                     LOG_ERROR_FOR("Database", QCoreApplication::translate("Database",
-                                                                          "ERROR : Database %1 is not readable. Host: %2")
+                                                                          "ERROR: Database %1 is not readable. Host: %2")
                                   .arg(dbName, connector.host()));
                     return false;
                 }
@@ -657,7 +657,7 @@ bool Database::createConnection(const QString &connectionName, const QString &no
             QSqlQuery query("SHOW GRANTS FOR CURRENT_USER;", DB);
             if (!query.isActive()) {
                 LOG_ERROR_FOR("Database", QCoreApplication::translate("Database",
-                                                                      "ERROR : Database %1 is not readable. Path : %2")
+                                                                      "ERROR: Database %1 is not readable. Path: %2")
                               .arg(dbName, connector.host()));
                 LOG_QUERY_ERROR_FOR("Database", query);
                 return false;
@@ -684,7 +684,7 @@ bool Database::createConnection(const QString &connectionName, const QString &no
             {
                 if (!sqliteFileInfo.isWritable()) {
                     LOG_ERROR_FOR("Database", QCoreApplication::translate("Database",
-                                  "ERROR : Database %1 is not writable. Path : %2.")
+                                  "ERROR: Database %1 is not writable. Path: %2.")
                                   .arg(dbName, fileName));
                     toReturn = false;
                 }
@@ -724,7 +724,7 @@ bool Database::createConnection(const QString &connectionName, const QString &no
 
     DB.open();
     if (WarnLogMessages)
-        LOG_FOR("Database", QCoreApplication::translate("Database",  "INFO : database %1 connection = %2")
+        LOG_FOR("Database", QCoreApplication::translate("Database",  "INFO: database %1 connection = %2")
                        .arg(dbName).arg(DB.isOpen()));
 
     // test connection
@@ -809,7 +809,7 @@ Database::Grants Database::getConnectionGrants(const QString &connectionName) //
         QStringList grants;
         QSqlQuery query("SHOW GRANTS FOR CURRENT_USER;", DB);
         if (!query.isActive()) {
-            LOG_ERROR_FOR("Database", "No grants for user on database ?");
+            LOG_ERROR_FOR("Database", "No grants for user on database?");
             LOG_QUERY_ERROR_FOR("Database", query);
             return Grant_NoGrant;
         } else {
@@ -914,7 +914,7 @@ bool Database::checkDatabaseScheme()
     foreach(int i, list) {
         QSqlRecord rec = DB.record(d->m_Tables.value(i));
         if (rec.count() != d->m_Tables_Fields.values(i).count()) {
-            LOG_ERROR_FOR("Database", QCoreApplication::translate("Database", "Database Scheme Error : wrong number of fields for table %1")
+            LOG_ERROR_FOR("Database", QCoreApplication::translate("Database", "Database Scheme Error: wrong number of fields for table %1")
                                    .arg(d->m_Tables.value(i)));
             return false;
         }
@@ -923,7 +923,7 @@ bool Database::checkDatabaseScheme()
         int id = 0;
         foreach(int f, fields) {
             if (d->m_Fields.value(f)!= rec.field(id).name()) {
-                LOG_ERROR_FOR("Database", QCoreApplication::translate("Database", "Database Scheme Error : field number %1 differs : %2 instead of %3 in table %4")
+                LOG_ERROR_FOR("Database", QCoreApplication::translate("Database", "Database Scheme Error: field number %1 differs: %2 instead of %3 in table %4")
                                    .arg(id).arg(d->m_Fields.value(f), rec.field(id).name(), d->m_Tables.value(i)));
                 return false;
             }
@@ -1687,7 +1687,7 @@ QString Database::prepareUpdateQuery(const int tableref, const QList<int> &field
 QString Database::prepareUpdateQuery(const int tableref, const int fieldref)
 {
     QString toReturn;
-    toReturn = QString("UPDATE `%1` SET `%2` = ?")
+    toReturn = QString("UPDATE `%1` SET `%2` =?")
                .arg(table(tableref))
                .arg(fieldName(tableref, fieldref));
     // UPDATE tbl_name [, tbl_name ...]
@@ -1874,7 +1874,7 @@ bool Database::executeSqlFile(const QString &connectionName, const QString &file
         if (s.startsWith("--")) {
             continue;
         }
-        req += s + " \n";
+        req += s + "\n";
         if (s.endsWith(";")) {
             queries.append(req);
             req.clear();
@@ -2008,11 +2008,11 @@ QStringList DatabasePrivate::getSQLCreateTable(const int &tableref)
         // Manage NULL value
         if (m_DefaultFieldValue.value(i) == "NULL") {
             if (Database::TypeOfField(m_TypeOfField.value(i)) != Database::FieldIsUniquePrimaryKey) {
-                toReturn.append(QString("%1 \t %2 DEFAULT NULL, \n")
+                toReturn.append(QString("%1 \t %2 DEFAULT NULL,\n")
                                 .arg(QString("`%1`").arg(m_Fields.value(i)))//.leftJustified(55, ' '))
                                 .arg(getTypeOfField(i)));// .leftJustified(20, ' '))
             } else {
-                toReturn.append(QString("%1 \t %2, \n")
+                toReturn.append(QString("%1 \t %2,\n")
                                 .arg(QString("`%1`").arg(m_Fields.value(i)))//.leftJustified(55, ' '))
                                 .arg(getTypeOfField(i)));// .leftJustified(20, ' '))
             }
@@ -2026,7 +2026,7 @@ QStringList DatabasePrivate::getSQLCreateTable(const int &tableref)
             case Database::FieldIsShortText :
             case Database::FieldIsLanguageText :
             case Database::FieldIsBlob :
-                toReturn.append(QString("%1 \t %2 DEFAULT '%3', \n")
+                toReturn.append(QString("%1 \t %2 DEFAULT '%3',\n")
                                 .arg(QString("`%1`").arg(m_Fields.value(i)))//.leftJustified(55, ' '))
                                 .arg(getTypeOfField(i))// .leftJustified(20, ' '))
                                 .arg(m_DefaultFieldValue.value(i)));
@@ -2041,13 +2041,13 @@ QStringList DatabasePrivate::getSQLCreateTable(const int &tableref)
                         } else if (defVal.endsWith("()")) {
                             defVal = defVal.remove("()");
                         }
-                        toReturn.append(QString("%1 \t %2 DEFAULT %3, \n")
+                        toReturn.append(QString("%1 \t %2 DEFAULT %3,\n")
                                         .arg(QString("`%1`").arg(m_Fields.value(i)))//.leftJustified(55, ' '))
                                         .arg(getTypeOfField(i))// .leftJustified(20, ' '))
                                         .arg(defVal));
                     }
                     else
-                        toReturn.append(QString("%1 \t %2 DEFAULT '%3', \n")
+                        toReturn.append(QString("%1 \t %2 DEFAULT '%3',\n")
                                         .arg(QString("`%1`").arg(m_Fields.value(i)))//.leftJustified(55, ' '))
                                         .arg(getTypeOfField(i))// .leftJustified(20, ' '))
                                         .arg(m_DefaultFieldValue.value(i)));
@@ -2057,13 +2057,13 @@ QStringList DatabasePrivate::getSQLCreateTable(const int &tableref)
             case Database::FieldIsInteger :
             case Database::FieldIsLongInteger :
             case Database::FieldIsReal :
-                toReturn.append(QString("%1 \t %2 DEFAULT %3, \n")
+                toReturn.append(QString("%1 \t %2 DEFAULT %3,\n")
                                 .arg(QString("`%1`").arg(m_Fields.value(i)))//.leftJustified(55, ' '))
                                 .arg(getTypeOfField(i))// .leftJustified(20, ' '))
                                 .arg(m_DefaultFieldValue.value(i)));
                 break;
             default :
-                    toReturn.append(QString("%1 \t %2 DEFAULT '%3', \n")
+                    toReturn.append(QString("%1 \t %2 DEFAULT '%3',\n")
                                     .arg(QString("`%1`").arg(m_Fields.value(i)))//.leftJustified(55, ' '))
                                     .arg(getTypeOfField(i))// .leftJustified(20, ' '))
                                     .arg(m_DefaultFieldValue.value(i)));
@@ -2081,7 +2081,7 @@ QStringList DatabasePrivate::getSQLCreateTable(const int &tableref)
         }
     }
 
-    toReturn.append("\n); \n");
+    toReturn.append("\n);\n");
 
     QStringList indexes;
     for(int i = 0; i < m_DbIndexes.count(); ++i) {
@@ -2162,7 +2162,7 @@ void Database::warn() const
 {
     QSqlDatabase DB = QSqlDatabase::database(d->m_ConnectionName);
     if (WarnLogMessages)
-        Log::addMessage("Database", QString("Connection name : %1, Database Name : %2, Driver : %3, Opened : %4, Can open : %5 ")
+        Log::addMessage("Database", QString("Connection name: %1, Database Name: %2, Driver: %3, Opened: %4, Can open: %5 ")
                        .arg(d->m_ConnectionName, DB.databaseName(), DB.driverName())
                        .arg(DB.isOpen())
                        .arg(DB.open()));
@@ -2170,12 +2170,12 @@ void Database::warn() const
     foreach(int i, d->m_Tables.keys())
     {
         if (WarnLogMessages)
-            Log::addMessage("Database", QString("Tables = %1 : %2").arg(i).arg(d->m_Tables[i]));
+            Log::addMessage("Database", QString("Tables = %1: %2").arg(i).arg(d->m_Tables[i]));
         QList<int> list = d->m_Tables_Fields.values(i);
         qSort(list);
         foreach(int f, list)
             if (WarnLogMessages)
-                Log::addMessage("Database", QString("    Fields = %1 : %2 %3 %4")
+                Log::addMessage("Database", QString("    Fields = %1: %2 %3 %4")
                                .arg(f)
                                .arg(d->m_Fields[f], d->getTypeOfField(f), d->m_DefaultFieldValue[i]));
 

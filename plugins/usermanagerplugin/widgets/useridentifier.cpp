@@ -31,7 +31,7 @@
  You can show some information on the left using the first parameter of the constructor.
  If there is not information to show, the information's groupBox is hidden.
 
- When the user is correctly identified on the server and/or the database:
+ When the user is successfully identified on the server and/or the database:
    - the dialog result() is set to QDialog::Accepted,
    - current user is set into user's model with the current login and password,
    - the login history is completed,

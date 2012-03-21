@@ -195,8 +195,8 @@ void HttpDownloader::httpFinished()
                                      .arg(reply->errorString()), "", "", tr("HTTP"));
     } else if (!redirectionTarget.isNull()) {
         QUrl newUrl = m_Url.resolved(redirectionTarget.toUrl());
-        if (Utils::yesNoMessageBox(tr("Redirect to %1 ?").arg(newUrl.toString()),
-                                   tr("Redirect to %1 ?").arg(newUrl.toString()),
+        if (Utils::yesNoMessageBox(tr("Redirect to %1?").arg(newUrl.toString()),
+                                   tr("Redirect to %1?").arg(newUrl.toString()),
                                    "", tr("HTTP"))) {
             m_Url = newUrl;
             reply->deleteLater();

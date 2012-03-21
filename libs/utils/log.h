@@ -87,7 +87,7 @@ public:
     }
     QString toString() const
     {
-        return QString("%1 - %2 : %3").arg(object).arg(date.toString(), message);
+        return QString("%1 - %2: %3").arg(object).arg(date.toString(), message);
     }
 
     // Datas

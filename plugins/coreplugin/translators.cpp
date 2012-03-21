@@ -136,7 +136,7 @@ void Translators::changeLanguage(const QString &lang)
 
             if (!m_Translators[fileMask]->load(f.fileName() + "_" + lang, path)) {
                 if (WarnTranslatorsErrors)
-                    LOG_ERROR(tr("Can not load %1, path : %2").arg(f.fileName() + "_" + lang , path));
+                    LOG_ERROR(tr("Can not load %1, path: %2").arg(f.fileName() + "_" + lang , path));
             } else {
                 if (WarnTranslatorsErrors) {
                     LOG(Trans::ConstantTranslations::tkTr(Trans::Constants::FILE_1_LOADED).arg(f.fileName() + "_" + lang));
@@ -186,7 +186,7 @@ bool Translators::addNewTranslator(const QString & fileMask, bool fromDefaultPat
     }
     else {
         if (WarnTranslatorsErrors) {
-            LOG(tr("WARNING : Can not be loaded %1 or already loaded.").arg(file.absoluteFilePath() + "_" + lang));
+            LOG(tr("WARNING: %1 can not be loaded or is already loaded.").arg(file.absoluteFilePath() + "_" + lang));
         }
     }
 

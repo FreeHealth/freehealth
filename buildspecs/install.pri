@@ -24,7 +24,7 @@ else:linux*:include(install_linux.pri)
 else:win32:include(install_win.pri)
 else:freebsd*:include(install_freebsd.pri)
 
-# by default package is constructed inside the svn trunk under
+# by default package is constructed inside the git trunk under
 # packages/yourOs/Application
 isEmpty(INSTALL_ROOT_PATH):     INSTALL_ROOT_PATH      = $${RELEASE_BINARY_PATH}/$${INSTALL_BASENAME_PATH}/$${BINARY_TARGET}
 isEmpty(INSTALL_BINARY_PATH):   INSTALL_BINARY_PATH    = $${INSTALL_ROOT_PATH}

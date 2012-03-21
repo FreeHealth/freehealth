@@ -31,17 +31,17 @@
 <context>
     <name>UserManagerPlugin</name>
     <message>
-        <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="257"/>
+        <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="259"/>
         <source>You can proceed with this user or connect with another one.</source>
         <translation>Vous pouvez continuer avec votre utilisateur ou vous connecter avec un autre.</translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="259"/>
+        <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="261"/>
         <source>Stay connected</source>
         <translation>Rester connecté</translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="260"/>
+        <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="262"/>
         <source>Change the current user</source>
         <translation>Changer d&apos;utilisateur</translation>
     </message>
@@ -969,7 +969,7 @@ Vous devez en utiliser un différent.</translation>
     <name>UserPlugin::UserManagerPlugin</name>
     <message>
         <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="118"/>
-        <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="176"/>
+        <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="178"/>
         <source>Initializing user manager plugin...</source>
         <translation>Initialisation de gestionnaire des utilisateurs...</translation>
     </message>
@@ -986,12 +986,12 @@ Application will stop.</source>
 L&apos;application va s&apos;arrêter.</translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="164"/>
+        <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="166"/>
         <source>User is not identified.</source>
         <translation>Utilisateur non identifié.</translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="226"/>
+        <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="228"/>
         <source>Change current user</source>
         <translation>Changer l&apos;utilisateur courant</translation>
     </message>

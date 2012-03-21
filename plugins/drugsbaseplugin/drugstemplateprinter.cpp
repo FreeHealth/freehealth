@@ -63,7 +63,7 @@ bool DrugsTemplatePrinter::printTemplates(const QList<const Templates::ITemplate
         bool interactions = model->prescriptionHasInteractions();
         bool allergy = model->prescriptionHasAllergies();
         if (interactions || allergy) {
-            QString title = tr("Warning : ");
+            QString title = tr("Warning: ");
             if (interactions)
                 title += tr("Interactions found. ");
             if (allergy)
@@ -72,12 +72,12 @@ bool DrugsTemplatePrinter::printTemplates(const QList<const Templates::ITemplate
             while (r!=0) {
                 if (interactions) {
                     r = Utils::withButtonsMessageBox(title,
-                                                     tr("What do you want to do ?"), "",
+                                                     tr("What do you want to do?"), "",
                                                      QStringList() << tkTr(Trans::Constants::FILEPRINT_TEXT) << tkTr(Trans::Constants::VIEWINTERACTIONS_TEXT) << tkTr(Trans::Constants::CANCEL));
                     cancel = 2;
                 } else {
                     r = Utils::withButtonsMessageBox(title,
-                                                     tr("What do you want to do ?"), "",
+                                                     tr("What do you want to do?"), "",
                                                      QStringList() << tkTr(Trans::Constants::FILEPRINT_TEXT) << tkTr(Trans::Constants::CANCEL));
                     cancel = 1;
                 }
@@ -101,7 +101,7 @@ bool DrugsTemplatePrinter::printTemplates(const QList<const Templates::ITemplate
         r = Utils::withButtonsMessageBox(tr("Print separately or merge printing."),
                                tr("You have selected multiple templates, would you "
                                   "print them separately or merge templates for printing "
-                                  "on a single order ?"), "",
+                                  "on a single order?"), "",
                                QStringList() << tr("Print separately") << tr("Merge and print") << tkTr(Trans::Constants::CANCEL));
         if (r==1) {
             DrugsIO io;

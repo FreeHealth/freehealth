@@ -85,7 +85,7 @@ PadWriter::PadWriter(QWidget *parent) :
                 "---------- TESTING NESTED ----------\n"
                 "[ba [bb ~B~ ab] ~A~  aa]  -----> ba bb B ab A aa\n"
                 "[bb ~B~ ab [ba ~A~  aa]]  -----> bb B ab ba A aa\n"
-                "[[bb ~B~ ab ba ~NULL~  aa]]  -----> \n"
+                "[[bb ~B~ ab ba ~NULL~  aa]]  ----->\n"
                 "[bb ~B~ ab [ba ~NULL~  aa]]  -----> bb B ab\n"
                 "\n"
                 "[ab ~A~ aa [ba [nnn ~NULL~ nnn [ac ~C~ bc]] ~B~  aa]]  -----> ab A aa ba B aa\n"

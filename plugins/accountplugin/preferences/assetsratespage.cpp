@@ -166,9 +166,9 @@ void AssetsRatesWidget::saveModel()
     if (WarnDebugMessage)
         qDebug() << __FILE__ << QString::number(__LINE__) << " currentIndex =" << QString::number(m_Mapper->currentIndex());
     if (m_Model->isDirty()) {
-        bool yes = Utils::yesNoMessageBox(tr("Save changes ?"),
+        bool yes = Utils::yesNoMessageBox(tr("Save changes?"),
                                           tr("You make changes into the assetsrates table.\n"
-                                             "Do you want to save them ?"));
+                                             "Do you want to save them?"));
         if (yes) {
            if (!m_Model->submit()) {if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " assetsrates no submit ";
@@ -331,7 +331,7 @@ bool AssetsRatesWidget::insertYearsRange()
 //        test = m_Model->submit();
 //    }
 //    if (WarnDebugMessage)
-//    	      qDebug() << __FILE__ << QString::number(__LINE__) << " values = \n" << strList;
+//    	      qDebug() << __FILE__ << QString::number(__LINE__) << " values =\n" << strList;
 
 //    return test;
 //}

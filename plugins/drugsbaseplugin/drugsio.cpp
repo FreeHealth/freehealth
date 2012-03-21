@@ -543,7 +543,7 @@ void DrugsIO::dosageTransmissionDone()
         LOG(tr("Dosages transmitted."));
         protocolsBase().markAllDosageTransmitted(d->m_Datas.keys());
     } else {
-        LOG_ERROR(tr("Dosage not correctly transmitted"));
+        LOG_ERROR(tr("Dosage not successfully transmitted"));
     }
     d->m_Datas.clear();
     Q_EMIT transmissionDone();
@@ -574,7 +574,7 @@ bool DrugsIO::prescriptionFromXml(DrugsDB::DrugsModel *m, const QString &xmlCont
     QString version;
     if (needUpdate) {
         version = versionUpdater().xmlVersion(xmlContent);
-        LOG_FOR("DrugsIO::prescriptionFromXml", "Reading old prescription file : version " + version);
+        LOG_FOR("DrugsIO::prescriptionFromXml", "Reading old prescription file: version " + version);
         xml = versionUpdater().updateXmlIOContent(xmlContent);
 //        Utils::Log::logTimeElapsed(time, "DrugsIO", "Updating XML prescription");
     }
@@ -604,7 +604,7 @@ bool DrugsIO::prescriptionFromXml(DrugsDB::DrugsModel *m, const QString &xmlCont
     // retreive the prescription (inside the XML_FULLPRESCRIPTION_TAG tags)
     QDomElement fullPrescription = root.firstChildElement(XML_FULLPRESCRIPTION_TAG);
     if (fullPrescription.isNull()) {
-        LOG_ERROR_FOR("DrugsIO", tr("Unable to load XML prescription : tag %1 is missing").arg(XML_FULLPRESCRIPTION_TAG));
+        LOG_ERROR_FOR("DrugsIO", tr("Unable to load XML prescription: tag %1 is missing").arg(XML_FULLPRESCRIPTION_TAG));
         Utils::warningMessageBox(tr("You are trying to read a corrupted XML file."),
                                  tr("Missing tag: %1").arg(XML_FULLPRESCRIPTION_TAG));
         return false;
@@ -668,7 +668,7 @@ bool DrugsIO::prescriptionFromXml(DrugsDB::DrugsModel *m, const QString &xmlCont
 //    Utils::Log::logTimeElapsed(time, "DrugsIO", "Reading prescription");
 
     // small debug information
-    LOG_FOR("DrugsIO", tr("Xml prescription correctly read."));
+    LOG_FOR("DrugsIO", tr("Xml prescription successfully read."));
     return true;
 }
 
@@ -876,9 +876,9 @@ QString DrugsIO::prescriptionToXml(DrugsDB::DrugsModel *m, const QString &xmlExt
     /** \todo manage xmlExtraData */
     Q_ASSERT(m);
     if (!m->testingDrugsAreVisible()) {
-        bool yes = Utils::yesNoMessageBox(tr("Save test only drugs too ?"),
+        bool yes = Utils::yesNoMessageBox(tr("Save test only drugs too?"),
                                   tr("Drugs added for testing only are actually hidden in this prescription.\n"
-                                     "Do you want to add them to the file ?"),
+                                     "Do you want to add them to the file?"),
                                   tr("Answering 'no' will cause definitive lost of test only drugs when "
                                      "reloading this file."));
         if (yes)

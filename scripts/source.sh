@@ -8,7 +8,7 @@
 #
 
 BUNDLE_NAME=""
-SVN_REVISION=""
+GIT_REVISION=""
 PROJECT_VERSION=""
 PACKPATH=""
 SOURCES_ROOT_PATH=""
@@ -27,8 +27,8 @@ PROJECT_VERSION=`cat $SOURCES_ROOT_PATH/buildspecs/projectversion.pri | grep "PA
 
 showHelp()
 {
-echo $SCRIPT_NAME" builds FreeMedForms source package, svn braches and tags."
-echo "Project version: "$PROJECT_VERSION
+echo "$SCRIPT_NAME builds FreeMedForms source package, GIT branches and tags."
+echo "Project version: $PROJECT_VERSION"
 echo
 echo "Usage: $SCRIPT_NAME -r 123"
 echo "Options:"
@@ -191,7 +191,7 @@ fi
 mkdir $PACKPATH
 
 tar -cf $PACKPATH/sources.tar \
---exclude '.svn' --exclude '.cvsignore' --exclude 'qtc-gdbmacros' \
+--exclude '.git' --exclude '.svn' --exclude '.cvsignore' --exclude 'qtc-gdbmacros' \
 --exclude '_protected' --exclude '__nonfree__' --exclude 'nonfree' \
 --exclude 'build' --exclude 'bin' --exclude 'packages' --exclude 'zlib-1.2.3' \
 --exclude 'rushes' --exclude 'doxygen' \
@@ -244,12 +244,13 @@ cd $PACKPATH/libs
 find . -type f -name '*.pro' -exec sed -i bkup 's/# VERSION=1.0.0/!win32:{VERSION='$NON_ALPHABETA_PROJECT_VERSION'}/' {} \;
 find . -type f -name '*.probkup' -exec rm {} \;
 
-echo "   * ADDING SVN VERSION NUMBER"
-cd $PACKPATH/buildspecs
-SVN=`svn info -r HEAD $SCRIPT_PATH"/.." | grep 'Changed\ Rev' | cut -b 19-`
-echo "SVN_VERSION=$SVN"  > svnversion.pri
-echo 'DEFINES *= "SVN_VERSION=\"\\\\\"$${SVN_VERSION}\\\\\"\""'  >> svnversion.pri
-echo ""  >> svnversion.pri
+# git version is computed in the buildspecs/githash.pri
+# but the source package needs a static reference
+# while source package does not include the git logs
+GITHASH=`git rev-parse HEAD`
+echo "   * SETTING GIT revision hash to " $GITHASH
+sed -i bkup 's/GIT_HASH=.*/GIT_HASH='$GITHASH'/' $PACKPATH/buildspecs/githash.pri
+rm $PACKPATH/buildspecs/githash.pribkup
 
 echo "**** REPACK SOURCES PACKAGE FROM CREATED DIR ****"
 cd $SCRIPT_PATH
@@ -261,7 +262,6 @@ rm -R $PACKPATH
 PWD=`pwd`
 
 echo "*** Source package successfully created at"
-echo "SVN version: "$SVN
 }
 
 # params:

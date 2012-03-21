@@ -636,7 +636,7 @@ inline static void itemToTree(FormItem *item, QTreeWidgetItem *tree)
 /** For debugging purpose. */
 void FormMain::toTreeWidget(QTreeWidget *tree)
 {
-    QTreeWidgetItem *i = new QTreeWidgetItem(tree, QStringList() << tr("Form : ") + spec()->label());
+    QTreeWidgetItem *i = new QTreeWidgetItem(tree, QStringList() << tr("Form: ") + spec()->label());
     QFont bold;
     bold.setBold(true);
     i->setFont(0,bold);
@@ -762,7 +762,7 @@ QString FormMainDebugPage::name() const
 { return objectName(); }
 
 QString FormMainDebugPage::category() const
-{ return tr("Forms : ") + m_Form->spec()->label(); }
+{ return tr("Forms: ") + m_Form->spec()->label(); }
 
 void FormMainDebugPage::refreshContents()
 {

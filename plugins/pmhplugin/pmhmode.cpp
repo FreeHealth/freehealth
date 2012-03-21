@@ -366,7 +366,7 @@ void PmhModeWidget::removeItem()
 
     // Ask user
     bool yes = Utils::yesNoMessageBox(tr("Remove PMHx"),
-                                      tr("Do you really want to remove the PMHx called <br />&nbsp;&nbsp;&nbsp;<b>%1</b> ?").arg(item.data().toString()));
+                                      tr("Do you really want to remove the PMHx called <br />&nbsp;&nbsp;&nbsp;<b>%1</b>?").arg(item.data().toString()));
     if (yes)
         catModel()->removeRow(item.row(), item.parent());
 }

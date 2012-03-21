@@ -264,7 +264,7 @@ bool EpisodeBase::createDatabase(const QString &connectionName , const QString &
             if (!d.open()) {
                 Utils::warningMessageBox(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
                                          .arg(DB.connectionName()).arg(DB.lastError().text()),
-                                         tr("Please contact dev team."));
+                                         tr("Please contact the development team."));
                 return false;
             }
             QSqlQuery q(QString("CREATE DATABASE `%1`").arg(dbName), d);
@@ -272,13 +272,13 @@ bool EpisodeBase::createDatabase(const QString &connectionName , const QString &
                 LOG_QUERY_ERROR(q);
                 Utils::warningMessageBox(tkTr(Trans::Constants::DATABASE_1_CANNOT_BE_CREATED_ERROR_2)
                                          .arg(DB.connectionName()).arg(DB.lastError().text()),
-                                         tr("Please contact dev team."));
+                                         tr("Please contact the development team."));
                 return false;
             }
             if (!DB.open()) {
                 Utils::warningMessageBox(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
                                          .arg(DB.connectionName()).arg(DB.lastError().text()),
-                                         tr("Please contact dev team."));
+                                         tr("Please contact the development team."));
                 return false;
             }
             DB.setDatabaseName(dbName);
@@ -288,7 +288,7 @@ bool EpisodeBase::createDatabase(const QString &connectionName , const QString &
         if (!DB.open()) {
             Utils::warningMessageBox(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
                                      .arg(DB.connectionName()).arg(DB.lastError().text()),
-                                     tr("Please contact dev team."));
+                                     tr("Please contact the development team."));
             return false;
         }
         setDriver(Utils::Database::MySQL);
@@ -784,9 +784,9 @@ QList<EpisodeData *> EpisodeBase::getEpisodes(const EpisodeBaseQuery &baseQuery)
 
 //        joins << Utils::Join(Table_VALIDATION, VALIDATION_EPISODE_ID, Table_EPISODES, EPISODES_ID);
 
-    order = QString(" ORDER BY `%1`.`%2` DESC \n").arg(table(Table_EPISODES)).arg(fieldName(Table_EPISODES, EPISODES_USERDATE));
+    order = QString(" ORDER BY `%1`.`%2` DESC\n").arg(table(Table_EPISODES)).arg(fieldName(Table_EPISODES, EPISODES_USERDATE));
     if (baseQuery.useLimit()) {
-        limit = QString(" LIMIT %1, %2 \n").arg(baseQuery.limitStart()).arg(baseQuery.limitEnd());
+        limit = QString(" LIMIT %1, %2\n").arg(baseQuery.limitStart()).arg(baseQuery.limitEnd());
     }
 
     req = select(get, joins, conds) + order + limit;

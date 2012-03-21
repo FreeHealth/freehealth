@@ -455,7 +455,7 @@ void DrugsActionHandler::setCurrentView(DrugsCentralWidget *view)
 {
     Q_ASSERT(view);
     if (!view) { // this should never be the case
-        Utils::Log::addError(this, "setCurrentView : no view", __FILE__, __LINE__);
+        Utils::Log::addError(this, "setCurrentView: no view", __FILE__, __LINE__);
         return;
     }
     //    qWarning() << "DrugsActionHandler::setCurrentView(DrugsCentralWidget *view)";
@@ -651,10 +651,10 @@ void DrugsActionHandler::setEditMode(const Modes mode)
     // ask user
     if (DrugsDB::DrugsModel::activeModel()->rowCount() > 0) {
         bool yes;
-        yes = Utils::yesNoMessageBox(tr("Prescription is not empty. Clear it ?"),
+        yes = Utils::yesNoMessageBox(tr("Prescription is not empty. Clear it?"),
                                      tr("You select another editing mode than the actual one. "
                                         "Changing of mode during edition may cause prescription lose.\n"
-                                        "Do you really want to change the editing mode ?"));
+                                        "Do you really want to change the editing mode?"));
         if (yes) {
            DrugsDB::DrugsModel::activeModel()->clearDrugsList();
        } else {

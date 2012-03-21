@@ -212,7 +212,7 @@ static void changeDrugsDatabase(Core::ISettings *set, const QString &drugBaseUid
             bool yes = Utils::yesNoMessageBox(
                     QCoreApplication::translate("DatabaseSelectorWidget", "Reset actual prescription"),
                 QCoreApplication::translate("DatabaseSelectorWidget", "You have selected a different drugs database than the currently-opened one. "
-                   "Your actual prescription will be reset. Do you want to continue ?"),
+                   "Your actual prescription will be reset. Do you want to continue?"),
                 "", QCoreApplication::translate("DatabaseSelectorWidget", "Drugs database selection"));
             if (!yes) {
                 return;

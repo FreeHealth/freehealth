@@ -213,7 +213,7 @@ void PmhActionHandler::setCurrentView(PmhContextualWidget *view)
 {
     Q_ASSERT(view);
     if (!view) { // this should never be the case
-        LOG_ERROR("setCurrentView : no view");
+        LOG_ERROR("setCurrentView: no view");
         return;
     }
     //    qWarning() << "PmhActionHandler::setCurrentView(DrugsCentralWidget *view)";

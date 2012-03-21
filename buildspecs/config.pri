@@ -9,13 +9,14 @@ isEmpty(LOWERED_APPNAME) {
 # include the generic configuration file (define some paths)
 SOURCES_ROOT_PATH        = $${PWD}/..
 include(config_paths.pri)
-include(svnversion.pri)
+
 exists(__nonfree__):include(__nonfree__/config_nonfree.pri)
 
 macx:include(config_mac.pri)
 else:linux*:include(config_linux.pri)
 else:freebsd*:include(config_freebsd.pri)
 else:win32:include(config_win.pri)
+include(githash.pri)
 
 INCLUDEPATH += \
     $${SOURCES_PLUGINS_PATH} \
@@ -44,7 +45,6 @@ CONFIG( debug, debug|release ) {
 #              QT_NO_WARNING_OUTPUT \
 #              QT_NO_DEBUG
 }
-
 
 TARGET   = $${BINARY_TARGET}
 DESTDIR  = $${BUILD_BINARY_PATH}

@@ -545,7 +545,7 @@ bool XmlFormIO::checkDatabaseFormFileForUpdates() const
     if (!readError && !formsToUpdate.isEmpty()) {
         // Ask user for update
         bool yes = Utils::yesNoMessageBox(tr("Form update detected."),
-                                          tr("A form update has been detected. Do you want to update the forms ?"),
+                                          tr("A form update has been detected. Do you want to update the forms?"),
                                           msg.join("<br><br>"));
         if (yes) {
             // Update all checked forms

@@ -605,7 +605,7 @@ DatabaseInfos *DrugsBase::getDrugSourceInformation(const QString &drugSourceUid)
     QSqlQuery q(req, QSqlDatabase::database(Constants::DB_DRUGS_NAME));
     if (q.isActive()) {
         if (q.next()) {
-            LOG("Drugs database information correctly read " + q.value(Constants::SOURCES_DBUID).toString());
+            LOG("Drugs database information successfully read " + q.value(Constants::SOURCES_DBUID).toString());
             info = new DatabaseInfos;
             info->version = q.value(Constants::SOURCES_VERSION).toString();
             info->sid = q.value(Constants::SOURCES_SID).toInt();
@@ -737,18 +737,18 @@ DatabaseInfos *DrugsBase::getDrugSourceInformation(const QString &drugSourceUid)
 //            d.setPassword(pass);
 //            d.setPort(port);
 //            if (!d.open()) {
-//                Utils::warningMessageBox(tr("Unable to create the Protocol database."),tr("Please contact dev team."));
+//                Utils::warningMessageBox(tr("Unable to create the Protocol database."),tr("Please contact the development team."));
 //                return false;
 //            }
 //            QSqlQuery q(QString("CREATE DATABASE `%1`").arg(dbName), d);
 //            if (!q.isActive()) {
 //                LOG_QUERY_ERROR(q);
-//                Utils::warningMessageBox(tr("Unable to create the Protocol database."),tr("Please contact dev team."));
+//                Utils::warningMessageBox(tr("Unable to create the Protocol database."),tr("Please contact the development team."));
 //                return false;
 //            }
 //            DB.setDatabaseName(dbName);
 //            if (!DB.open()) {
-//                Utils::warningMessageBox(tr("Unable to create the Protocol database."),tr("Please contact dev team."));
+//                Utils::warningMessageBox(tr("Unable to create the Protocol database."),tr("Please contact the development team."));
 //                return false;
 //            }
 //            DB.setDatabaseName(dbName);
@@ -794,7 +794,7 @@ void DrugsBase::onCoreDatabaseServerChanged()
 //{
 //    if (!DrugsDB::VersionUpdater::instance()->isDosageDatabaseUpToDate())
 //        if (!DrugsDB::VersionUpdater::instance()->updateDosageDatabase())
-//            Utils::Log::addError(this, "Dosage database can not be correctly updated",
+//            Utils::Log::addError(this, "Dosage database can not be successfully updated",
 //                                 __FILE__, __LINE__);
 //}
 
@@ -1061,38 +1061,38 @@ QString DrugsBase::getDrugName(const QString &uid1, const QString &uid2, const Q
 IDrug *DrugsBase::getDrugByUID(const QVariant &uid1, const QVariant &uid2, const QVariant &uid3, const QVariant &oldUid, const QString &srcUid)
 {
     // Before SID caching
-//    "Chrono - DrugsIO" "1 ms : xxxxx"
-//    "Chrono - DrugsBase" "0 ms : Reading drug"
-//    "Chrono - DrugsBase" "0 ms : Prepare query"
-//    "Chrono - DrugsBase" "60 ms : Query.next()"
-//    "Chrono - DrugsBase" "1 ms : Query.finish"
-//    "Chrono - DrugsBase" "22 ms : Get Compo"
-//    "Chrono - DrugsIO" "95 ms : Reading drug0.30% POTASSIUM CHLORIDE IN 5% DEXTROSE AND 0.45% SODIUM CHLORIDE INJECTION"
-//    "Chrono - DrugsIO" "0 ms : Reading dose0.30% POTASSIUM CHLORIDE IN 5% DEXTROSE AND 0.45% SODIUM CHLORIDE INJECTION"
-//    "Chrono - DrugsBase" "0 ms : Reading drug"
-//    "Chrono - DrugsBase" "1 ms : Prepare query"
-//    "Chrono - DrugsBase" "60 ms : Query.next()"
-//    "Chrono - DrugsBase" "0 ms : Query.finish"
-//    "Chrono - DrugsBase" "9 ms : Get Compo"
-//    "Chrono - DrugsIO" "71 ms : Reading drugALDACTAZIDE 25"
-//    "Chrono - DrugsIO" "0 ms : Reading doseALDACTAZIDE 25"
+//    "Chrono - DrugsIO" "1 ms: xxxxx"
+//    "Chrono - DrugsBase" "0 ms: Reading drug"
+//    "Chrono - DrugsBase" "0 ms: Prepare query"
+//    "Chrono - DrugsBase" "60 ms: Query.next()"
+//    "Chrono - DrugsBase" "1 ms: Query.finish"
+//    "Chrono - DrugsBase" "22 ms: Get Compo"
+//    "Chrono - DrugsIO" "95 ms: Reading drug0.30% POTASSIUM CHLORIDE IN 5% DEXTROSE AND 0.45% SODIUM CHLORIDE INJECTION"
+//    "Chrono - DrugsIO" "0 ms: Reading dose0.30% POTASSIUM CHLORIDE IN 5% DEXTROSE AND 0.45% SODIUM CHLORIDE INJECTION"
+//    "Chrono - DrugsBase" "0 ms: Reading drug"
+//    "Chrono - DrugsBase" "1 ms: Prepare query"
+//    "Chrono - DrugsBase" "60 ms: Query.next()"
+//    "Chrono - DrugsBase" "0 ms: Query.finish"
+//    "Chrono - DrugsBase" "9 ms: Get Compo"
+//    "Chrono - DrugsIO" "71 ms: Reading drugALDACTAZIDE 25"
+//    "Chrono - DrugsIO" "0 ms: Reading doseALDACTAZIDE 25"
 
     // After SID caching
-//    "Chrono - DrugsIO" "1 ms : xxxxx"
-//    "Chrono - DrugsBase" "0 ms : Reading drug"
-//    "Chrono - DrugsBase" "1 ms : Prepare query"
-//    "Chrono - DrugsBase" "20 ms : Query.next()"
-//    "Chrono - DrugsBase" "1 ms : Query.finish"
-//    "Chrono - DrugsBase" "39 ms : Get Compo"
-//    "Chrono - DrugsIO" "71 ms : Reading drug0.30% POTASSIUM CHLORIDE IN 5% DEXTROSE AND 0.45% SODIUM CHLORIDE INJECTION"
-//    "Chrono - DrugsIO" "0 ms : Reading dose0.30% POTASSIUM CHLORIDE IN 5% DEXTROSE AND 0.45% SODIUM CHLORIDE INJECTION"
-//    "Chrono - DrugsBase" "0 ms : Reading drug"
-//    "Chrono - DrugsBase" "0 ms : Prepare query"
-//    "Chrono - DrugsBase" "11 ms : Query.next()"
-//    "Chrono - DrugsBase" "0 ms : Query.finish"
-//    "Chrono - DrugsBase" "4 ms : Get Compo"
-//    "Chrono - DrugsIO" "15 ms : Reading drugALDACTAZIDE 25"
-//    "Chrono - DrugsIO" "0 ms : Reading doseALDACTAZIDE 25"
+//    "Chrono - DrugsIO" "1 ms: xxxxx"
+//    "Chrono - DrugsBase" "0 ms: Reading drug"
+//    "Chrono - DrugsBase" "1 ms: Prepare query"
+//    "Chrono - DrugsBase" "20 ms: Query.next()"
+//    "Chrono - DrugsBase" "1 ms: Query.finish"
+//    "Chrono - DrugsBase" "39 ms: Get Compo"
+//    "Chrono - DrugsIO" "71 ms: Reading drug0.30% POTASSIUM CHLORIDE IN 5% DEXTROSE AND 0.45% SODIUM CHLORIDE INJECTION"
+//    "Chrono - DrugsIO" "0 ms: Reading dose0.30% POTASSIUM CHLORIDE IN 5% DEXTROSE AND 0.45% SODIUM CHLORIDE INJECTION"
+//    "Chrono - DrugsBase" "0 ms: Reading drug"
+//    "Chrono - DrugsBase" "0 ms: Prepare query"
+//    "Chrono - DrugsBase" "11 ms: Query.next()"
+//    "Chrono - DrugsBase" "0 ms: Query.finish"
+//    "Chrono - DrugsBase" "4 ms: Get Compo"
+//    "Chrono - DrugsIO" "15 ms: Reading drugALDACTAZIDE 25"
+//    "Chrono - DrugsIO" "0 ms: Reading doseALDACTAZIDE 25"
 
 //    QTime time;
 //    time.start();

@@ -594,7 +594,7 @@ void TemplatesView::removeItem()
     bool yes = true;
     if (settings()->value(Constants::S_PROMPTFORDELETION).toBool()) {
         yes = Utils::yesNoMessageBox(tr("About to delete %1.").arg(names),
-                                          tr("Do you really want to remove %1 from your templates' list ?").arg(names),
+                                          tr("Do you really want to remove %1 from your templates' list?").arg(names),
                                           tr("This action is definitive and all information will be lost. Children of this item"
                                              " will be deleted as well."));
     }

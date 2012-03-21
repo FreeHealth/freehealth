@@ -57,10 +57,10 @@ namespace {
 
     // Checks
     const char * const NFP = "Ne fait pas";
-    const char * const S = "Spontanément : si la case est coché, signifie que le patient ne fait pas spontanément";
-    const char * const T = "Totalement : si la case est coché, signifie que le patient ne fait pas totalement";
-    const char * const H = "Habituellement : si la case est coché, signifie que le patient ne fait pas habituellement";
-    const char * const C = "Correctement : si la case est coché, signifie que le patient ne fait pas correctement";
+    const char * const S = "Spontanément: si la case est coché, signifie que le patient ne fait pas spontanément";
+    const char * const T = "Totalement: si la case est coché, signifie que le patient ne fait pas totalement";
+    const char * const H = "Habituellement: si la case est coché, signifie que le patient ne fait pas habituellement";
+    const char * const C = "Correctement: si la case est coché, signifie que le patient ne fait pas correctement";
     const char * const NOPB = "Aucun problème";
 
     // Datas references

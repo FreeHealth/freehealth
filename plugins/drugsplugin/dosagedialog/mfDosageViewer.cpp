@@ -643,9 +643,9 @@ void DosageViewer::on_dosageForAllInnCheck_stateChanged(int state)
                 d->m_DosageModel->setData(d->m_DosageModel->index(row, Dosages::Constants::InnLinkedDosage), "");
             }
         innCompositionLabel->show();
-        innCompositionLabel->setText(tr("Linking to : ")
+        innCompositionLabel->setText(tr("Linking to: ")
                                       + drugModel()->drugData(d->m_DrugId, DrugsDB::Constants::Drug::MainInnName).toString() + " "
-//                                      + tr("Dosage of molecule : ")
+//                                      + tr("Dosage of molecule: ")
                                       + drugModel()->drugData(d->m_DrugId, DrugsDB::Constants::Drug::MainInnDosage).toString());
     } else
         innCompositionLabel->hide();

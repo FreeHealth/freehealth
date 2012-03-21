@@ -3,7 +3,7 @@
     \author   Main author, administrator: Eric Maeker, MD
     \author   Accountancy: Pierre-Marie Desombre, MD
     \author   Agenda, padtools: Guillaume Denry
-    \version  FreeMedForms: SVN version
+    \version  FreeMedForms: GIT version
 
 
     \section introduction Introduction
@@ -74,7 +74,7 @@ französischen AFSSAPS synchronisiert.
 
 FreeMedForms and derivatives are availables for :
   - Linux
-  - FreeBSD (need some adaptation, please contact dev team)
+  - FreeBSD (need some adaptation, please contact development team)
   - MacOs X universal
   - Windows
 
@@ -111,10 +111,10 @@ FreeMedForms and derivatives use :
 /** \page getting_latest_version Getting the latest version
 
     FreeMedForms and derivatives include an automatic update checking over the web.\n
-    While you are running applications of FreeMedForms suite, if an update is found the menubar shows 'Update available'.\n
+    While you are running applications of FreeMedForms suite, if an update is found, the menubar shows 'Update available'.\n
 
-    If you want to test the latest development snapshot please checkout our SVN.
-    \htmlonly <a href="http://code.google.com/p/freemedforms/source/checkout">Checkout the SVN</a> \endhtmlonly
+    If you want to test the latest development snapshot please checkout our GIT repository.
+    \htmlonly <a href="http://code.google.com/p/freemedforms/source/checkout">GIT checkout</a> \endhtmlonly
     \latexonly http://code.google.com/p/freemedforms/source/checkout \endlatexonly
 
     \ref index

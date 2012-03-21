@@ -500,10 +500,10 @@ void TextEditor::saveAs()
                                     fileName, Utils::Overwrite, Utils::WarnUser, this))
             textEdit()->document()->setModified(false);
     } else if (selected==tkTr(Trans::Constants::FILE_FILTER_TXT)) {
-        bool yes = Utils::yesNoMessageBox(tr("Save in pure textual format ?"),
+        bool yes = Utils::yesNoMessageBox(tr("Save in pure textual format?"),
                                           tr("The conversion of the document to a pure textual format will cause "
                                              "the lost of the paragraph and characters format. Do you really want "
-                                             "to save in pure textual format ?"));
+                                             "to save in pure textual format?"));
         if (yes) {
             if (Utils::saveStringToFile(textEdit()->document()->toPlainText(),
                                         fileName, Utils::Overwrite, Utils::WarnUser, this))

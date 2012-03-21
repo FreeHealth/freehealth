@@ -241,7 +241,7 @@ void HelpDialog::showIndex() { showPage(QString(::INDEX_FILENAME)); }
 /** \brief Slot called when text browser source changes --> update the window title. */
 void HelpDialog::updateWindowTitle()
 {
-    setWindowTitle( tkTr(Trans::Constants::HELP_TEXT) + " : " + d->m_Browser->documentTitle());
+    setWindowTitle( tkTr(Trans::Constants::HELP_TEXT) + ": " + d->m_Browser->documentTitle());
 //    d->m_Combo->setCurrentIndex( d->m_Combo->findText(d->m_Browser->documentTitle()) );
     QList<QTreeWidgetItem *> list = d->m_Tree->findItems(d->m_Browser->documentTitle(),Qt::MatchExactly,0);
     if (list.count())

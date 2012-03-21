@@ -163,9 +163,9 @@ void AvailableMovementWidget::fillHugeWidgets(){
 void AvailableMovementWidget::saveModel()
 {
     if (m_Model->isDirty()) {
-        bool yes = Utils::yesNoMessageBox(tr("Save changes ?"),
+        bool yes = Utils::yesNoMessageBox(tr("Save changes?"),
                                           tr("You make changes into available movements.\n"
-                                             "Do you want to save them ?"));
+                                             "Do you want to save them?"));
         if (yes) {
             if (!m_Model->submit()) {
                 qWarning() << __FILE__ << QString::number(__LINE__) << "model error = "<< m_Model->lastError().text() ;
