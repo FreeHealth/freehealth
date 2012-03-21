@@ -183,6 +183,7 @@ namespace Constants {
     const char * const I_DAYVIEWMODE = "agenda_viewmode_day.png";
     const char * const I_MONTHVIEWMODE = "agenda_viewmode_month.png";
     const char * const I_WEEKVIEWMODE = "agenda_viewmode_week.png";
+    const char * const I_RESET_TO_DEFAULT = "reset-to-default.png";
 
     // Translations
     const char * const AGENDA_TR_CONTEXT = "Agenda";

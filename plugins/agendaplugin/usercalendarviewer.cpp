@@ -167,7 +167,7 @@ UserCalendarViewer::UserCalendarViewer(QWidget *parent) :
         resetDefaultDuration();
     }
     d->ui->defaultDurationButton->setText("80");
-    d->ui->defaultDurationButton->setIcon(theme()->icon("reset-to-default.png"));
+    d->ui->defaultDurationButton->setIcon(theme()->icon(Constants::I_RESET_TO_DEFAULT));
 
     int width = size().width();
     int third = width/3;
