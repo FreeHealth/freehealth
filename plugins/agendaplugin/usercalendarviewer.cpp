@@ -103,6 +103,7 @@ public:
 
     void populateCalendarWithCurrentWeek(Agenda::UserCalendar *calendar)
     {
+        Q_UNUSED(calendar);
         ui->calendarViewer->setModel(m_CalendarItemModel);
     }
 
@@ -264,6 +265,7 @@ void UserCalendarViewer::quickDateSelection(QAction *a)
 
 void UserCalendarViewer::onStartDateChanged(const QDate &start)
 {
+    Q_UNUSED(start);
     recalculateAvailabilitiesWithDurationIndex(d->ui->availDurationCombo->currentIndex());
 }
 

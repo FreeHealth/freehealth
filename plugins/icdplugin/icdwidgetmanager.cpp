@@ -275,14 +275,14 @@ IcdActionHandler::IcdActionHandler(QObject *parent) :
 //    menu->addAction(cmd, DrugsWidget::Constants::G_PLUGINS_DRUGS);
     connect(a, SIGNAL(triggered()), this, SLOT(removeItem()));
 
-#ifdef FREEMEDFORMS
-    const char * const filemenuId = Core::Constants::M_GENERAL;
-    const char * const printGroupId = Core::Constants::G_GENERAL_PRINT;
-#else
-    const char * const filemenuId = Core::Constants::M_FILE;
-    const char * const printGroupId = Core::Constants::G_FILE_PRINT;
-#endif
     /** \todo code here */
+//#ifdef FREEMEDFORMS
+//    const char * const filemenuId = Core::Constants::M_GENERAL;
+//    const char * const printGroupId = Core::Constants::G_GENERAL_PRINT;
+//#else
+//    const char * const filemenuId = Core::Constants::M_FILE;
+//    const char * const printGroupId = Core::Constants::G_FILE_PRINT;
+//#endif
 //    Core::ActionContainer *fmenu = actionManager()->actionContainer(filemenuId);
 //    Q_ASSERT(fmenu);
 //    if (!fmenu)

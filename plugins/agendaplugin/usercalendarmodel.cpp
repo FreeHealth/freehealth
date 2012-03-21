@@ -92,12 +92,12 @@ UserCalendarModel::~UserCalendarModel()
     d = 0;
 }
 
-int UserCalendarModel::rowCount(const QModelIndex &parent) const
+int UserCalendarModel::rowCount(const QModelIndex &) const
 {
     return d->m_UserCalendars.count();
 }
 
-int UserCalendarModel::columnCount(const QModelIndex &parent) const
+int UserCalendarModel::columnCount(const QModelIndex &) const
 {
     return ColumnCount;
 }
@@ -265,6 +265,7 @@ QModelIndex UserCalendarModel::defaultUserCalendarModelIndex() const
 /** Update models if UserCalendar was modified outside of the model. The calendar will be saved to the database. */
 void UserCalendarModel::updateUserCalendarChanged(const int row)
 {
+    Q_UNUSED(row);
     reset();
     /** \todo update availabities model */
 }

@@ -540,10 +540,12 @@ int PmhCategoryModel::columnCount(const QModelIndex &) const
 
 void PmhCategoryModel::fetchMore(const QModelIndex &parent)
 {
+    Q_UNUSED(parent);
 }
 
 bool PmhCategoryModel::canFetchMore(const QModelIndex &parent) const
 {
+    Q_UNUSED(parent);
     return false;
 }
 
