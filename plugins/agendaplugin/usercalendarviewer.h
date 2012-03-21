@@ -67,6 +67,7 @@ private Q_SLOTS:
     void newEvent();
     void newEventAtAvailabity(const QModelIndex &index);
     void refreshAvailabilities();
+    void refreshDefaultDuration();
     void quickDateSelection(QAction *a);
     void onStartDateChanged(const QDate &start);
     void recalculateAvailabilitiesWithDurationIndex(const int index);

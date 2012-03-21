@@ -162,11 +162,9 @@ UserCalendarViewer::UserCalendarViewer(QWidget *parent) :
     connect(d->ui->availDurationCombo, SIGNAL(activated(int)), this, SLOT(recalculateAvailabilitiesWithDurationIndex(int)));
 
     Agenda::UserCalendar *cal = d->m_UserCalendarModel->defaultUserCalendar();
-    if (cal) {
-        if (cal->isValid()) {
-            d->ui->description->setHtml(cal->data(Agenda::UserCalendar::Description).toString());
-            d->ui->durationLabel->setText(cal->data(Agenda::UserCalendar::DefaultDuration).toString());
-        }
+    if (cal && cal->isValid()) {
+        d->ui->description->setHtml(cal->data(Agenda::UserCalendar::Description).toString());
+        d->ui->defaultDurationButton->setStatusTip(cal->data(Agenda::UserCalendar::DefaultDuration).toString());
     }
 
     int width = size().width();
@@ -177,6 +175,7 @@ UserCalendarViewer::UserCalendarViewer(QWidget *parent) :
     connect(d->ui->availabilitiesView, SIGNAL(activated(QModelIndex)), this, SLOT(newEventAtAvailabity(QModelIndex)));
     connect(d->ui->availableAgendasCombo, SIGNAL(currentIndexChanged(int)), this, SLOT(on_availableAgendasCombo_activated(int)));
     connect(d->ui->refreshAvailabilities, SIGNAL(clicked()), this, SLOT(refreshAvailabilities()));
+    connect(d->ui->defaultDurationButton,SIGNAL(clicked()), this, SLOT(refreshDefaultDuration()));
     connect(d->ui->startDate, SIGNAL(dateChanged(QDate)), this, SLOT(onStartDateChanged(QDate)));
     userChanged();
 
@@ -204,7 +203,7 @@ void UserCalendarViewer::newEvent()
     newEventAtAvailabity(QModelIndex());
 }
 
-/** When the user select an availability in the toolButton, this slot is activated. Open a EventEditor dialog and save the item in the CalendarItemModel if the dialog is accepted. */
+/** When the user selects an availability in the toolButton, this slot is activated. Open a EventEditor dialog and save the item in the CalendarItemModel if the dialog is accepted. */
 void UserCalendarViewer::newEventAtAvailabity(const QModelIndex &index)
 {
     QModelIndex idx = index;
@@ -237,6 +236,12 @@ void UserCalendarViewer::newEventAtAvailabity(const QModelIndex &index)
 void UserCalendarViewer::refreshAvailabilities()
 {
     recalculateAvailabilitiesWithDurationIndex(d->ui->availDurationCombo->currentIndex());
+}
+
+/** \brief sets the default duration set in the settings to the combo box */
+void UserCalendarViewer::refreshDefaultDuration()
+{
+    d->ui->availDurationCombo->setCurrentIndex(0);
 }
 
 void UserCalendarViewer::quickDateSelection(QAction *a)
@@ -339,7 +344,7 @@ void UserCalendarViewer::on_availableAgendasCombo_activated(const int index)
         d->ui->calendarViewer->setDayScaleHourDivider(defaultDuration/60);
         d->ui->calendarViewer->setDayItemDefaultDuration(defaultDuration);
 
-        d->ui->durationLabel->setText(QString::number(defaultDuration) + " " + tkTr(Trans::Constants::MINUTES));
+//        d->ui->defaultDurationButton->setText(QString::number(defaultDuration) + " " + tkTr(Trans::Constants::MINUTES));
         d->ui->description->setHtml(d->m_UserCalendarModel->index(index, UserCalendarModel::Description).data().toString());
     }
 //    d->populateCalendarWithCurrentWeek(d->m_UserCals.at(index));
@@ -411,7 +416,7 @@ void UserCalendarViewer::updateCalendarData(const QModelIndex &top, const QModel
         int defaultDuration = d->m_UserCalendarModel->index(top.row(), UserCalendarModel::DefaultDuration, top.parent()).data().toInt();
         d->ui->calendarViewer->setDayScaleHourDivider(defaultDuration/60);
         d->ui->calendarViewer->setDayItemDefaultDuration(defaultDuration);
-        d->ui->durationLabel->setText(QString::number(defaultDuration) + " " + tkTr(Trans::Constants::MINUTES));
+        d->ui->defaultDurationButton->setText(QString::number(defaultDuration) + " " + tkTr(Trans::Constants::MINUTES));
         if (defaultDuration%5)
             defaultDuration = (defaultDuration/5);
         else
