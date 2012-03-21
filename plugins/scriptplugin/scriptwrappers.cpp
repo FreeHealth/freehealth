@@ -48,26 +48,27 @@ static inline Form::FormManager *formManager() { return Form::FormManager::insta
 static inline Core::IScriptManager *scriptManager() { return Core::ICore::instance()->scriptManager(); }
 static inline Core::Translators *translators() { return Core::ICore::instance()->translators(); }
 
-static Form::FormItem *getFormItem(const QString &ns, const QString &uuid)
-{
-    foreach(Form::FormMain *main, formManager()->forms()) {
-        if (main->uuid().startsWith(ns)) {
-            QList<Form::FormItem *> items = main->flattenFormItemChildren();
-            for(int i=0; i < items.count(); ++i) {
-                Form::FormItem *item = items.at(i);
-                if (item->uuid().compare(uuid, Qt::CaseInsensitive)) {
-                    return item;
-                }
-            }
-        }
-    }
-    return 0;
-}
+//static Form::FormItem *getFormItem(const QString &ns, const QString &uuid)
+//{
+//    foreach(Form::FormMain *main, formManager()->forms()) {
+//        if (main->uuid().startsWith(ns)) {
+//            QList<Form::FormItem *> items = main->flattenFormItemChildren();
+//            for(int i=0; i < items.count(); ++i) {
+//                Form::FormItem *item = items.at(i);
+//                if (item->uuid().compare(uuid, Qt::CaseInsensitive)) {
+//                    return item;
+//                }
+//            }
+//        }
+//    }
+//    return 0;
+//}
 
 /////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////    FORM MANAGER    ////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
 FormManagerScriptWrapper::FormManagerScriptWrapper(QObject *parent) :
+    QObject(parent),
     m_LogItemSearch(false)
 {
     connect(translators(), SIGNAL(languageChanged()), this, SIGNAL(languageChanged()));
@@ -145,6 +146,7 @@ QScriptValue FormManagerScriptWrapper::item(const QString &uuid)
 ///////////////////////////////    FORMITEMS    /////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
 FormItemScriptWrapper::FormItemScriptWrapper(QObject *parent) :
+    QObject(parent),
     m_Item(0)
 {
     setObjectName("FormItemScriptWrapper");
