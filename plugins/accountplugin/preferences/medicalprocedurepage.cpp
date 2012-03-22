@@ -373,7 +373,7 @@ void  MedicalProcedureWidget::fillMPCombo(){
 }
 
 void MedicalProcedureWidget::save(){
-    const QString nameStr = name->text();
+    const QString nameStr = name->text().trimmed();
     bool test = false;
     QSqlQuery q(m_db);
     const QString req = QString("SELECT %1 FROM %2").arg("NAME","medical_procedure");
@@ -381,7 +381,7 @@ void MedicalProcedureWidget::save(){
         LOG_QUERY_ERROR(q);
     while (q.next()) {
     	QString str = q.value(0).toString();
-        if (str == nameStr) {
+        if (str.contains(nameStr)) {
     		  test = true;
         }
     }
@@ -415,7 +415,11 @@ void MedicalProcedureWidget::save(){
         QVariant rate =  rateSpin->value();
         QVariant date =   dateEdit->date();
         bool test = true;
-        int numberOfRows = modelMP->rowCount() -1 ;
+        int numberOfRows = modelMP->rowCount()  ;
+        if (!modelMP->insertRows(numberOfRows,1,QModelIndex()))
+        {
+        	  qWarning() << __FILE__ << QString::number(__LINE__) << "unable to insert row to MP" ;
+            }
         if (WarnDebugMessage)
             qDebug() << __FILE__ << QString::number(__LINE__) << " numberOfRows =" << QString::number(numberOfRows) ;
         if (!modelMP->setData(modelMP->index(numberOfRows,MP_USER_UID),owner,Qt::EditRole)) {
