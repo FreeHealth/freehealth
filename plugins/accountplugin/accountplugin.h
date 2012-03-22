@@ -67,6 +67,9 @@ public:
     void extensionsInitialized();
 
 private:
+    void removeAndDelete(QObject *o);
+
+private:
     AccountUserOptionsPage *m_UserPage;
     BankDetailsPage *m_BankPage;
     AvailableMovementPage *m_AvMovPage;

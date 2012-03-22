@@ -275,7 +275,7 @@ bool AssetsRatesWidget::insertYearsRange()
     
     if (!m_Model->setData(m_Model->index(m_Model->rowCount()-1,AccountDB::Constants::ASSETSRATES_YEARS),
                           yearRange,Qt::EditRole)) {
-        LOG_ERROR("unable to insert years range " + m_Model->lastError().text());
+        LOG_ERROR("unable to insert years range: " + m_Model->lastError().text());
     }
     return ret;
 }

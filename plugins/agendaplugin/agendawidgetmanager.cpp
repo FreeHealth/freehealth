@@ -77,6 +77,7 @@ AgendaWidgetManager::AgendaWidgetManager(QObject *parent) : AgendaActionHandler(
 
 void AgendaWidgetManager::updateContext(Core::IContext *object)
 {
+    Q_UNUSED(object);
     //    qWarning() << "DrugsManager::updateContext(Core::IContext *object)";
     //    if (object)
     //        qWarning() << "DrugsManager::updateContext(Core::IContext *object)" << object->widget();

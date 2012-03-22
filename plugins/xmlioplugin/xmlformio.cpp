@@ -481,6 +481,7 @@ bool XmlFormIO::createCategory(const QDomElement &element, Category::CategoryIte
 
 QList<QPixmap> XmlFormIO::screenShots(const QString &uuidOrAbsPath) const
 {
+    Q_UNUSED(uuidOrAbsPath);
     QList<QPixmap> toReturn;
     return toReturn;
 }

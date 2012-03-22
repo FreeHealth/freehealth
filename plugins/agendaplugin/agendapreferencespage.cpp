@@ -146,7 +146,7 @@ void AgendaPreferencesWidget::saveToSettings(Core::ISettings *sets)
 //    s->setValue(Constants::S_PATIENTBARCOLOR, patientBarColor->color());
 }
 
-void AgendaPreferencesWidget::writeDefaultSettings(Core::ISettings *s)
+void AgendaPreferencesWidget::writeDefaultSettings(Core::ISettings *)
 {
     //    qWarning() << "---------> writedefaults";
 //    Utils::Log::addMessage("AgendaPreferencesWidget", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("FreeDiamsMainWindow"));

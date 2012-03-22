@@ -155,7 +155,9 @@ int MedicalProcedureModel::rowCount(const QModelIndex &parent) const
     return rows;
 }
 
-int MedicalProcedureModel::rowCountWithFilter(const QModelIndex &parent, const QString & filter) {
+int MedicalProcedureModel::rowCountWithFilter(const QModelIndex &parent, const QString & filter)
+{
+    Q_UNUSED(filter);
     int rows = 0;
     //d->m_SqlTable->setFilter(filter);
     //d->m_SqlTable->select();

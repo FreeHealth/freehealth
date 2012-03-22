@@ -652,6 +652,7 @@ bool XmlFormContentReader::createElement(Form::FormItem *item, QDomElement &elem
 /** Read the values of an element. */
 bool XmlFormContentReader::populateValues(Form::FormItem *item, const QDomElement &root, const XmlFormName &form)
 {
+    Q_UNUSED(form);
     QDomElement element = root.firstChildElement();
     while (!element.isNull()) {
         const QString &lang = element.attribute(Constants::ATTRIB_LANGUAGE, Trans::Constants::ALL_LANGUAGE);

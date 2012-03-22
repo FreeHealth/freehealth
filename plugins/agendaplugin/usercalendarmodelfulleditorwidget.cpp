@@ -77,7 +77,7 @@ UserCalendarModelFullEditorWidget::UserCalendarModelFullEditorWidget(QWidget *pa
 
 //    modeManager()->addAction(actionManager()->command(Core::Constants::A_PATIENT_NEW), 0);
 
-    connect(ui->listView, SIGNAL(activated(QModelIndex)), this, SLOT(setCurrentIndex(QModelIndex)));
+    connect(ui->listView, SIGNAL(clicked(QModelIndex)), this, SLOT(setCurrentIndex(QModelIndex)));
 //    connect(ui->listView, SIGNAL(addRequested), ui->editor, SLOT(addUserCalendar()));
 }
 

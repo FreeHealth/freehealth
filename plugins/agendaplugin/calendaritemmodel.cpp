@@ -524,6 +524,7 @@ int CalendarItemModel::createUid() const
 
 void CalendarItemModel::getItemFromDatabase(const QDate &from, const QDate &to, const int calendarId) const
 {
+    Q_UNUSED(calendarId);
     /** \todo code here: manage calendarId ? */
     // appointements are already available ?
     QDate testDate = from;

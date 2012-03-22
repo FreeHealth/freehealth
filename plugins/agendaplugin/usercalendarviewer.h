@@ -67,6 +67,7 @@ private Q_SLOTS:
     void newEvent();
     void newEventAtAvailabity(const QModelIndex &index);
     void refreshAvailabilities();
+    void resetDefaultDuration();
     void quickDateSelection(QAction *a);
     void onStartDateChanged(const QDate &start);
     void recalculateAvailabilitiesWithDurationIndex(const int index);
@@ -75,6 +76,7 @@ private Q_SLOTS:
     void updateCalendarData(const QModelIndex &top, const QModelIndex &bottom);
 
 protected:
+    void clear();
     bool event(QEvent *e);
 
 private:

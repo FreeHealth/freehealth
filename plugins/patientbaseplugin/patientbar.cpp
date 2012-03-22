@@ -155,17 +155,17 @@ void PatientBar::onCurrentPatientChanged()
     setCurrentIndex(d->m_Model->currentPatient());
 }
 
-static bool indexesIncludeColumn(const QModelIndex &left, const QModelIndex &right, int column)
-{
-    if (left.column()==column || right.column()==column) {
-        return true;
-    }
-    if (left.column() < column)
-        return false;
-    if (right.column() > column)
-        return false;
-    return true;
-}
+//static bool indexesIncludeColumn(const QModelIndex &left, const QModelIndex &right, int column)
+//{
+//    if (left.column()==column || right.column()==column) {
+//        return true;
+//    }
+//    if (left.column() < column)
+//        return false;
+//    if (right.column() > column)
+//        return false;
+//    return true;
+//}
 
 //void PatientBar::patientDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight)
 //{

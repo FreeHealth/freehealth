@@ -1054,6 +1054,7 @@ void switchEchoMode(QLineEdit * l)
 /** Rounds the \e date to the number of minutes \e minutesRound. */
 QDateTime roundDateTime(const QDateTime &date, const int minutesRound)
 {
+    Q_ASSERT(minutesRound != 0);
     if (date.isNull())
         return QDateTime();
     if (date.time().minute() % minutesRound == 0)
