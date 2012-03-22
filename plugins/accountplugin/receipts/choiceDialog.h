@@ -53,12 +53,18 @@ class treeViewsActions: public QTreeView
     Q_OBJECT
 
 public:
+    enum Actions{
+        DEBTOR = 0,
+        DISTRULES,
+        SITES        
+    };
     treeViewsActions(QWidget *parent);
     ~treeViewsActions();
 
     void reset() {QTreeView::reset();}
     void fillActionTreeView();
     QStandardItemModel *treeModel() const {return m_actionsTreeModel;}
+    QModelIndex indexWithItem(int row);
 
 private:
     void mousePressEvent(QMouseEvent *event);

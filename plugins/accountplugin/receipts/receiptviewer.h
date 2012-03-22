@@ -163,6 +163,7 @@ private Q_SLOTS:
     //void deleteLine();
     void save();
     void saveAndQuit();
+    void quitFreeAccount();
     void actionsOfTreeView(const QModelIndex& );
     void saveInThesaurus();
     void showControlReceipts(bool b);
