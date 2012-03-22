@@ -331,15 +331,16 @@ bool IcdDatabase::init()
          d->m_DownloadAndPopulate = true;
      }
 
-     if (!checkDatabaseScheme()) {
-         LOG_ERROR(tr("ICD10 database corrupted, please contact your administrator."));
-     }
-
      if (!database().isOpen()) {
          if (!database().open()) {
              LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_ICD10).arg(database().lastError().text()));
-         } else {
+         } else { // db successfully opened
              LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(database().connectionName()).arg(database().driverName()));
+
+             // check database scheme
+             if (!checkDatabaseScheme()) {
+                 LOG_ERROR(tr("ICD10 database corrupted, please contact your administrator."));
+             }
          }
      } else {
          LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(database().connectionName()).arg(database().driverName()));
