@@ -1383,6 +1383,9 @@ QList<QDateTime> AgendaBase::nextAvailableTime(const QDateTime &startSearch, con
         return toReturn;
     if (calendar.data(Constants::Db_CalId).toString()=="-1")
         return toReturn;
+    // prevent division by 0
+    if (calendar.data(UserCalendar::DefaultDuration).toInt() == 0)
+        return toReturn;
 
     if (!connectDatabase(Constants::DB_NAME, __LINE__))
         return toReturn;
