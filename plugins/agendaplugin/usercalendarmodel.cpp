@@ -125,7 +125,8 @@ QVariant UserCalendarModel::data(const QModelIndex &index, int role) const
                         .arg(u->data(UserCalendar::UserOwnerFullName).toString())
                         .arg(u->data(UserCalendar::Label).toString());
             }
-            if (u->isDefault()) {
+            //mark default calendar with an * if there are shown more than one
+            if (u->isDefault() && d->m_UserCalendars.count() > 1) {
                 return QString("%1 *")
                         .arg(u->data(UserCalendar::Label).toString());
             }
