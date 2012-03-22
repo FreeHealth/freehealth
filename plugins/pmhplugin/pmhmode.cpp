@@ -268,6 +268,7 @@ int PmhModeWidget::currentSelectedCategory() const
 
 void PmhModeWidget::currentChanged(const QModelIndex &current, const QModelIndex &previous)
 {
+    Q_UNUSED(previous);
     if (!current.isValid())
         return;
 

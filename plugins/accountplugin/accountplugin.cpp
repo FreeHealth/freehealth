@@ -82,23 +82,31 @@ AccountPlugin::AccountPlugin() :
         qWarning() << "creating AccountPlugin";
 }
 
+void AccountPlugin::removeAndDelete(QObject *o)
+{
+    if (o) {
+        removeObject(o);
+        delete o;
+        o = 0;
+    }
+}
+
 AccountPlugin::~AccountPlugin()
 {
     qWarning() << "AccountPlugin::~AccountPlugin()";
     // Remove preferences pages to plugins manager object pool
-    if (m_UserPage) {
-        removeObject(m_UserPage);
-        removeObject(m_BankPage);
-        removeObject(m_AvMovPage);
-        removeObject(m_MPPage);
-        removeObject(m_VirtPage);
-        removeObject(m_SitesPage);
-        removeObject(m_InsurPage);
-        removeObject(m_PercentPage);
-        removeObject(m_DistancePage);
-        removeObject(m_AssetsRatesPage);
-        removeObject(m_DefaultPage);
-    }
+    removeAndDelete(m_UserPage);
+    removeAndDelete(m_UserPage);
+    removeAndDelete(m_BankPage);
+    removeAndDelete(m_AvMovPage);
+    removeAndDelete(m_MPPage);
+    removeAndDelete(m_VirtPage);
+    removeAndDelete(m_SitesPage);
+    removeAndDelete(m_InsurPage);
+    removeAndDelete(m_PercentPage);
+    removeAndDelete(m_DistancePage);
+    removeAndDelete(m_AssetsRatesPage);
+    removeAndDelete(m_DefaultPage);
 }
 
 bool AccountPlugin::initialize(const QStringList &arguments, QString *errorString)

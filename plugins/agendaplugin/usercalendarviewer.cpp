@@ -103,6 +103,7 @@ public:
 
     void populateCalendarWithCurrentWeek(Agenda::UserCalendar *calendar)
     {
+        Q_UNUSED(calendar);
         ui->calendarViewer->setModel(m_CalendarItemModel);
     }
 
@@ -167,7 +168,7 @@ UserCalendarViewer::UserCalendarViewer(QWidget *parent) :
         resetDefaultDuration();
     }
     d->ui->defaultDurationButton->setText("80");
-    d->ui->defaultDurationButton->setIcon(theme()->icon("reset-to-default.png"));
+    d->ui->defaultDurationButton->setIcon(theme()->icon(Constants::I_RESET_TO_DEFAULT));
 
     int width = size().width();
     int third = width/3;
@@ -264,6 +265,7 @@ void UserCalendarViewer::quickDateSelection(QAction *a)
 
 void UserCalendarViewer::onStartDateChanged(const QDate &start)
 {
+    Q_UNUSED(start);
     recalculateAvailabilitiesWithDurationIndex(d->ui->availDurationCombo->currentIndex());
 }
 
@@ -329,8 +331,19 @@ void UserCalendarViewer::recalculateAvailabilitiesWithDurationIndex(const int in
 //    }
 }
 
+/** Clear the view. */
+void UserCalendarViewer::clear()
+{
+    d->ui->calendarViewer->setModel(0);
+    d->ui->availabilitiesView->setModel(0);
+    d->ui->availDurationCombo->setCurrentIndex(-1);
+    d->ui->defaultDurationButton->setToolTip("");
+    d->ui->description->setHtml("");
+}
+
 void UserCalendarViewer::on_availableAgendasCombo_activated(const int index)
 {
+    clear();
     if (index >= 0 && index < d->m_UserCalendarModel->rowCount()) {
         QModelIndex calIndex = d->m_UserCalendarModel->index(index, UserCalendarModel::Uid);
         QVariant calUid = calIndex.data();

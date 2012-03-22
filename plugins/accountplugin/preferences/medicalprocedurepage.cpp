@@ -467,7 +467,7 @@ void MedicalProcedureWidget::save(){
             test = false;
         }
         if (test == false) {
-            LOG_ERROR("Error inserting datas " + modelMP->lastError().text());
+            LOG_ERROR("Error inserting data: " + modelMP->lastError().text());
         }
         fillMPCombo();
     }

@@ -174,6 +174,7 @@ bool ActsModel::setData(const QModelIndex &index, const QVariant &value, int rol
 
 QVariant ActsModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
+    Q_UNUSED(role);
     if (orientation==Qt::Horizontal) {
         switch (section) {
         /** \todo remove tr translations use tkTr*/

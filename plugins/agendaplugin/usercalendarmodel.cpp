@@ -92,12 +92,12 @@ UserCalendarModel::~UserCalendarModel()
     d = 0;
 }
 
-int UserCalendarModel::rowCount(const QModelIndex &parent) const
+int UserCalendarModel::rowCount(const QModelIndex &) const
 {
     return d->m_UserCalendars.count();
 }
 
-int UserCalendarModel::columnCount(const QModelIndex &parent) const
+int UserCalendarModel::columnCount(const QModelIndex &) const
 {
     return ColumnCount;
 }
@@ -111,7 +111,10 @@ QVariant UserCalendarModel::data(const QModelIndex &index, int role) const
         return QVariant();
 
     const UserCalendar *u = d->m_UserCalendars.at(index.row());
-    if (role==Qt::DisplayRole || role==Qt::EditRole) {
+    switch (role) {
+    case Qt::DisplayRole:
+    case Qt::EditRole:
+    {
         switch (index.column()) {
         case Uid: return u->data(Constants::Db_CalId);
         case Label: return u->data(UserCalendar::Label);
@@ -120,6 +123,11 @@ QVariant UserCalendarModel::data(const QModelIndex &index, int role) const
             if (u->isDelegated()) {
                 return QString("[%1] %2")
                         .arg(u->data(UserCalendar::UserOwnerFullName).toString())
+                        .arg(u->data(UserCalendar::Label).toString());
+            }
+            //mark default calendar with an * if there are shown more than one
+            if (u->isDefault() && d->m_UserCalendars.count() > 1) {
+                return QString("%1 *")
                         .arg(u->data(UserCalendar::Label).toString());
             }
             return u->data(UserCalendar::Label);
@@ -133,11 +141,17 @@ QVariant UserCalendarModel::data(const QModelIndex &index, int role) const
         case LocationUid: return u->data(UserCalendar::LocationUid);
         case DefaultDuration: return u->data(UserCalendar::DefaultDuration);
         }
-    } else if (role==Qt::ToolTipRole) {
+        break;
+    }
+    case Qt::ToolTipRole:
+    {
         switch (index.column()) {
         case Label: return u->data(UserCalendar::Label);
         }
-    } else if (role==Qt::FontRole) {
+        break;
+    }
+    case Qt::FontRole:
+    {
         if (u->isDelegated()) {
             QFont italic;
             italic.setItalic(true);
@@ -147,18 +161,24 @@ QVariant UserCalendarModel::data(const QModelIndex &index, int role) const
             bold.setBold(true);
             return bold;
         }
-    } else if (role==Qt::DecorationRole) {
+        break;
+    }
+    case Qt::DecorationRole:
+    {
         if (!u->data(UserCalendar::AbsPathIcon).isNull()) {
             return theme()->icon(u->data(UserCalendar::AbsPathIcon).toString());
         }
+        break;
     }
+    default: return QVariant();
+    } // End switch role
 
     return QVariant();
 }
 
 bool UserCalendarModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
-    WARN_FUNC << index << value << role;
+//    WARN_FUNC << index << value << role;
     if (!index.isValid())
         return false;
 
@@ -173,14 +193,24 @@ bool UserCalendarModel::setData(const QModelIndex &index, const QVariant &value,
         case Description: u->setData(UserCalendar::Description, value); break;
         case Type: u->setData(UserCalendar::Type, value); break;
         case Status: u->setData(UserCalendar::Status, value); break;
-        case IsDefault: u->setData(UserCalendar::IsDefault, value); break;
+        case IsDefault:
+        {
+            bool isDefault = value.toBool();
+            if (isDefault) {
+                // All calendars -> not default
+                foreach(UserCalendar *u, d->m_UserCalendars)
+                    u->setData(UserCalendar::IsDefault, false);
+            }
+            u->setData(UserCalendar::IsDefault, value);
+            break;
+        }
         case IsPrivate: u->setData(UserCalendar::IsPrivate, value); break;
         case Password: u->setData(UserCalendar::Password, value); break;
         case LocationUid: u->setData(UserCalendar::LocationUid, value); break;
         case DefaultDuration: u->setData(UserCalendar::DefaultDuration, value); break;
         default: return false;
         }
-        qWarning() << "DONE";
+//        qWarning() << "DONE";
         Q_EMIT dataChanged(index, index);
         return true;
     }
@@ -192,6 +222,7 @@ bool UserCalendarModel::setData(const QModelIndex &index, const QVariant &value,
 bool UserCalendarModel::insertRows(int row, int count, const QModelIndex &parent)
 {
     beginInsertRows(parent, row, row+count);
+    bool newIsDefault = (rowCount() == 0); // check if there already is an Agenda
     for(int i = 0 ; i < count; ++i) {
         UserCalendar *u = new UserCalendar();
         u->setData(UserCalendar::Label, tr("New calendar"));
@@ -199,6 +230,7 @@ bool UserCalendarModel::insertRows(int row, int count, const QModelIndex &parent
         u->setData(UserCalendar::UserOwnerUid, d->m_UserUid);
         u->setData(Constants::Db_IsValid, 1);
         u->setData(Constants::Db_UserCalId, -1);
+        u->setData(UserCalendar::IsDefault, newIsDefault);
         for(int j=1; j < 8; ++j) {
             DayAvailability av;
             av.addTimeRange(QTime(06,00,00), QTime(20,00,00));
@@ -265,6 +297,7 @@ QModelIndex UserCalendarModel::defaultUserCalendarModelIndex() const
 /** Update models if UserCalendar was modified outside of the model. The calendar will be saved to the database. */
 void UserCalendarModel::updateUserCalendarChanged(const int row)
 {
+    Q_UNUSED(row);
     reset();
     /** \todo update availabities model */
 }
@@ -365,7 +398,7 @@ public:
         q->clear();
         QFont bold;
         bold.setBold(true);
-        // Create on item foreach week of day
+        // Create one item foreach week of day
         QVector<QStandardItem *> days;
         for(int i = 1; i < 8; ++i) {
             QStandardItem *day = new QStandardItem(QDate::longDayName(i));

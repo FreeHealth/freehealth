@@ -53,6 +53,7 @@ UserCalendarEditorWidget::UserCalendarEditorWidget(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->clearAvail->setVisible(false);
+    ui->tabWidget->setCurrentIndex(0);
     connect(ui->buttonBox, SIGNAL(clicked(QAbstractButton*)), this, SLOT(setFocus()));
     connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(submit()));
     connect(ui->buttonBox, SIGNAL(rejected()), this, SLOT(revert()));
@@ -98,6 +99,7 @@ void UserCalendarEditorWidget::setCurrentIndex(const QModelIndex &index)
         m_Mapper->addMapping(ui->defaultLocation, UserCalendarModel::LocationUid);
         m_Mapper->addMapping(ui->description, UserCalendarModel::Description);
         m_Mapper->addMapping(ui->defaultDuration, UserCalendarModel::DefaultDuration);
+        /** \todo wrong mapping with QCheckBoxes */
         m_Mapper->addMapping(ui->isDefaultCheck, UserCalendarModel::IsDefault, "checked");
         m_Mapper->addMapping(ui->isPrivateCheck, UserCalendarModel::IsPrivate, "checked");
         m_Mapper->addMapping(ui->password, UserCalendarModel::Password);

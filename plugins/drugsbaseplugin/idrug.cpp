@@ -352,6 +352,7 @@ IVirtualComponent::IVirtualComponent(IVirtualDrug *parent) :
 
 IVirtualComponent *IVirtualComponent::fromXml(const QString &xml)
 {
+    Q_UNUSED(xml);
     return 0;
 }
 
@@ -885,6 +886,7 @@ QString IDrug::toHtml() const
 
 QString IDrug::drugsListToHtml(const QList<IDrug*> &list)
 {
+    Q_UNUSED(list);
     QString msg;
 
     /** \todo code here */
@@ -1096,6 +1098,7 @@ QVariant ITextualDrug::prescriptionValue(const int fieldref) const
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 IVirtualDrug *IVirtualDrug::fromXml(const QString &xml)
 {
+    Q_UNUSED(xml);
     return 0;
 }
 

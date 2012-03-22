@@ -87,6 +87,7 @@ PmhEpisodeModel::~PmhEpisodeModel()
 
 int PmhEpisodeModel::rowCount(const QModelIndex &parent) const
 {
+    Q_UNUSED(parent);
     if (d->m_Pmh)
         return d->m_Pmh->episodes().count();
     return 0;
@@ -94,6 +95,7 @@ int PmhEpisodeModel::rowCount(const QModelIndex &parent) const
 
 int PmhEpisodeModel::columnCount(const QModelIndex &parent) const
 {
+    Q_UNUSED(parent);
     return ColumnCount;
 }
 
