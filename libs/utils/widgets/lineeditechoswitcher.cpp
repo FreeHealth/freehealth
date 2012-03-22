@@ -70,6 +70,7 @@ LineEditEchoSwitcher::LineEditEchoSwitcher(QWidget *parent) :
     d = new LineEditEchoSwitcherPrivate;
     d->m_ToolButton = new QToolButton(this);
     d->m_ToolButton->setToolTip(QCoreApplication::translate("LineEditEchoSwitcher","Display/Hide text"));
+    d->m_ToolButton->setFocusPolicy(Qt::ClickFocus);
     setRightButton(d->m_ToolButton);
     connect(d->m_ToolButton, SIGNAL(clicked()), this, SLOT(toogleEchoMode()));
 }
