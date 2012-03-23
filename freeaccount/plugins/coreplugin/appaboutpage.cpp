@@ -136,6 +136,7 @@ QWidget *CommandLineAboutPage::createPage(QWidget *parent)
         }
     }
     tree->addTopLevelItems(defined);
+    tree->sortItems(0, Qt::AscendingOrder);
     tree->addTopLevelItems(undefined);
 
     tree->resizeColumnToContents(0);
