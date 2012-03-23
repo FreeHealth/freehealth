@@ -42,7 +42,6 @@ LoginWidget::LoginWidget(QWidget *parent) :
     layout()->setMargin(2);
     ui->loginLabel->setText(tkTr(Trans::Constants::LOGIN));
     ui->passwordLabel->setText(tkTr(Trans::Constants::PASSWORD));
-    setTabOrder(ui->login, ui->password);
 }
 
 LoginWidget::~LoginWidget()
