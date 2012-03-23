@@ -37,6 +37,8 @@
 
 #include <QDebug>
 
+using namespace PadTools;
+
 PadItem::~PadItem()
 {
 	qDeleteAll(_fragments);

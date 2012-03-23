@@ -29,6 +29,8 @@
 #include "pad.h"
 #include "pad_item.h"
 
+using namespace PadTools;
+
 Pad::~Pad()
 {
 	qDeleteAll(_fragments);

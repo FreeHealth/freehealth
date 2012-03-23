@@ -28,6 +28,8 @@
 
 #include <texteditorplugin/texteditor.h>
 
+namespace PadTools {
+
 class DragDropTextEdit : public Editor::TextEditor
 {
 public:
@@ -40,5 +42,7 @@ public:
     void dropEvent(QDropEvent *event);
 
 };
+
+}  // PadTools
 
 #endif // DRAGDROPTEXTEDIT_H

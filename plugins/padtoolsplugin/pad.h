@@ -34,6 +34,9 @@
 #include "pad_fragment.h"
 #include "pad_core.h"
 
+namespace PadTools {
+
+
 /**
  * Contains an entire pad i.e. a list of fragments
  * @class
@@ -58,5 +61,8 @@ public:
 private:
 	QList<PadFragment*> _fragments;
 };
+
+}  // PadTools
+
 
 #endif

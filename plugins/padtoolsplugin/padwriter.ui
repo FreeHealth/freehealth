@@ -71,7 +71,7 @@
          </item>
         </layout>
        </widget>
-       <widget class="DragDropTextEdit" name="rawSource"/>
+       <widget class="PadTools::DragDropTextEdit" name="rawSource"/>
       </widget>
       <widget class="QListWidget" name="listWidgetErrors"/>
      </widget>
@@ -81,7 +81,7 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>DragDropTextEdit</class>
+   <class>PadTools::DragDropTextEdit</class>
    <extends>QTextEdit</extends>
    <header location="global">padtoolsplugin/dragdroptextedit.h</header>
   </customwidget>

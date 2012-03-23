@@ -34,6 +34,8 @@
 #include "pad_fragment.h"
 #include "pad_core.h"
 
+namespace PadTools {
+
 /**
  * Contains an entire pad item i.e. a list of fragments
  * @class
@@ -61,5 +63,7 @@ private:
 	// return the core of the pad (can be 0)
 	PadCore *getCore() const;
 };
+
+}  // PadTools
 
 #endif
