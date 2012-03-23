@@ -118,7 +118,7 @@ CoreImpl::CoreImpl(QObject *parent) :
     m_FileManager = new FileManager(this);
     m_UpdateChecker = new Utils::UpdateChecker(this);
 
-    Utils::Log::addMessage("Core" , tkTr(Trans::Constants::STARTING_APPLICATION_AT_1).arg(QDateTime::currentDateTime().toString()));
+    LOG(tkTr(Trans::Constants::STARTING_APPLICATION_AT_1).arg(QDateTime::currentDateTime().toString()));
 
     // initialize the settings
     m_Theme->messageSplashScreen(tkTr(Trans::Constants::LOADING_SETTINGS));
@@ -134,7 +134,7 @@ CoreImpl::CoreImpl(QObject *parent) :
 #endif
 
     foreach(const QString &l, QCoreApplication::libraryPaths()) {
-        Utils::Log::addMessage("Core" , tkTr(Trans::Constants::USING_LIBRARY_1).arg(l));
+        LOG(tkTr(Trans::Constants::USING_LIBRARY_1).arg(l));
     }
 
 //    m_FormManager = new FormManager(this);
@@ -148,7 +148,7 @@ CoreImpl::CoreImpl(QObject *parent) :
     // ready
     m_Theme->messageSplashScreen(QCoreApplication::translate("Core", "Core intialization finished..."));
 
-    Utils::Log::addMessage("Core" , QCoreApplication::translate("Core", "Core intialization finished..."));
+    LOG(QCoreApplication::translate("Core", "Core intialization finished..."));
     if (logChrono)
         Utils::Log::logTimeElapsed(chrono, "Core", "end of core intialization");
 

@@ -4,6 +4,11 @@
  *  (C) 2008-2012 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
  *  All rights reserved.                                                   *
  *                                                                         *
+ *  The FreeAccount plugins are free, open source FreeMedForms' plugins.   *
+ *  (C) 2010-2011 by Pierre-Marie Desombre, MD <pm.desombre@medsyn.fr>     *
+ *  and Eric Maeker, MD <eric.maeker@gmail.com>                            *
+ *  All rights reserved.                                                   *
+ *                                                                         *
  *  This program is free software: you can redistribute it and/or modify   *
  *  it under the terms of the GNU General Public License as published by   *
  *  the Free Software Foundation, either version 3 of the License, or      *
@@ -19,48 +24,49 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
- *   Contributors :                                                        *
- *       NAME <MAIL@ADDRESS.COM>                                           *
+ *  Main Developers : Pierre-Marie DESOMBRE <pm.desombre@medsyn.fr>,      *
+ *                     Eric MAEKER, <eric.maeker@gmail.com>                *
+ *  Contributors :                                                         *
+ *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
-#ifndef ICOMMANDLINE_H
-#define ICOMMANDLINE_H
+#ifndef FREEACCOUNT_CONSTANTS_H
+#define FREEACCOUNT_CONSTANTS_H
 
-#include <coreplugin/core_exporter.h>
-
-#include <QVariant>
 /**
- * \file icommandline.h
+ * \file accountwidgetmanager.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.0
- * \date 09 Aug 2011
- * \class Core::ICommandLine
- * \brief Command line parser interface.
+ * \version 0.7.1
+ * \date 23 Mar 2012
+ * \internal
 */
 
 namespace Core {
+namespace Constants {
 
-class CORE_EXPORT ICommandLine : public QObject
-{
-    Q_OBJECT
-public:
-    enum Params {
-        Chrono = 1000,
-        ConfigFile,
-        RunningUnderWine,
-        ClearUserDatabases,
-        CreateVirtuals,
-        ResetUserPreferences,
-        MaxParam
-    };
-
-    ICommandLine(QObject *parent = 0) : QObject(parent) {}
-    virtual ~ICommandLine() {}
-
-    virtual QVariant value(int param, const QVariant &def = QVariant()) const = 0;
-    virtual QString paramName(int param) const = 0;
+// Enum for the command line params that can be used with
+// Core::ICore::instance()->commandLine()
+// Anywhere in the freeaccount code
+enum FreeAccountCommandLine {
+    CL_MedinTux = 0,
+    CL_Test,
+    CL_ReceiptsCreator,
+    CL_EMR_Name,
+    CL_EMR_Uid,
+    CL_SelectionOnly,
+    CL_ExchangeOutFile,
+    CL_ExchangeOutFileFormat,
+    CL_ExchangeInFile,
+    CL_PatientName,
+    CL_PatientFirstname,
+    CL_PatientUid,
+    CL_PatientGender,
+    CL_DateOfBirth,
+    CL_BlockPatientDatas,
+    CL_MaxParam
 };
 
-} // end Core
 
-#endif // ITHEME_H
+}
+}
+
+#endif // FREEACCOUNT_CONSTANTS_H

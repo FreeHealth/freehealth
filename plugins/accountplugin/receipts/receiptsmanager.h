@@ -40,12 +40,13 @@
 #include <QString>
 #include <QStringList>
 
-class ACCOUNT_EXPORT receiptsManager : public QObject
+class ACCOUNT_EXPORT ReceiptsManager : public QObject
 {
   Q_OBJECT
   public :
-  receiptsManager();
-  ~receiptsManager();
+  ReceiptsManager(QObject *parent = 0);
+  ~ReceiptsManager();
+
   QHash<int,QString> getPercentages();
   QHash<QString,QVariant> getParametersDatas(QString & userUid , const QString & table);//name,uid
   QHash<QString,QVariant> getHashOfSites();
@@ -65,16 +66,10 @@ class ACCOUNT_EXPORT receiptsManager : public QObject
   QVariant m_preferredDistanceValue;
   QVariant m_preferredInsuranceUid;
   QString m_rbmReq;
+
   //medintux
-  QString getFullName();
   bool isMedintuxArg();
-    enum Medintux
-{
-    MEDINTUX = 1,
-    MEDINTUX_PATIENT_NAME,
-    MEDINTUX_PATIENT_FIRSTNAME,
-    Medintux_MaxParam
-};
+  QString getFullName();
 
 };
 

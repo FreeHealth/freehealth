@@ -48,26 +48,7 @@ class CommandLinePrivate;
 class CommandLine  : public Core::ICommandLine
 {
 public:
-    enum Param {
-        CL_MedinTux = 0,
-        CL_Test,
-        CL_ReceiptsCreator,
-        CL_EMR_Name,
-        CL_EMR_Uid,
-        CL_SelectionOnly,
-        CL_ExchangeOutFile,
-        CL_ExchangeOutFileFormat,
-        CL_ExchangeInFile,
-        CL_PatientName,
-        CL_PatientFirstname,
-        CL_PatientUid,
-        CL_PatientGender,
-        CL_DateOfBirth,
-        CL_BlockPatientDatas,
-        CL_MaxParam
-    };
-
-    CommandLine();
+    CommandLine(QObject *parent = 0);
     ~CommandLine();
 
     QVariant value(int param, const QVariant &def = QVariant()) const;
