@@ -198,36 +198,6 @@ QVariant Patient::data(const QModelIndex &index, int role) const
                         .arg(d->m_Values.value(Firstname).toString());
                 return r;
             }
-//        case DrugsAllergiesWithoutPrecision:
-//            {
-//                QString allergies;
-//                const QStringList &drug = d->m_Values.value(Core::IPatient::DrugsUidAllergies).toStringList();
-//                if (!drug.isEmpty())
-//                    allergies += tr("Drugs(%1), ").arg(drug.join(";"));
-//                const QStringList &inns = d->m_Values.value(Core::IPatient::DrugsInnAllergies).toStringList();
-//                if (!inns.isEmpty())
-//                    allergies += tr("INN(%1), ").arg(inns.join(";"));
-//                const QStringList &atc = d->m_Values.value(Core::IPatient::DrugsAtcAllergies).toStringList();
-//                if (!atc.isEmpty())
-//                    allergies += tr("ATC(%1), ").arg(atc.join(";"));
-//                allergies.chop(2);
-//                return allergies;
-//            }
-//        case DrugsIntolerancesWithoutPrecision:
-//            {
-//                QString intolerances;
-//                const QStringList &drug = d->m_Values.value(Core::IPatient::DrugsUidIntolerances).toStringList();
-//                if (!drug.isEmpty())
-//                    intolerances += tr("Drugs(%1), ").arg(drug.join(";"));
-//                const QStringList &inns = d->m_Values.value(Core::IPatient::DrugsInnIntolerances).toStringList();
-//                if (!inns.isEmpty())
-//                    intolerances += tr("INN(%1), ").arg(inns.join(";"));
-//                const QStringList &atc = d->m_Values.value(Core::IPatient::DrugsAtcIntolerances).toStringList();
-//                if (!atc.isEmpty())
-//                    intolerances += tr("ATC(%1), ").arg(atc.join(";"));
-//                intolerances.chop(2);
-//                return intolerances;
-//            }
         default:
             {
                 return d->m_Values.value(ref, QVariant());
@@ -249,19 +219,14 @@ QVariant Patient::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
-/** \todo code here **/
 QVariant Patient::data(int column) const
 {
-    Q_UNUSED(column);
-    return QVariant();
+    return data(index(0,column));
 }
 
-/** \todo code here **/
 bool Patient::setValue(int ref, const QVariant &value)
 {
-    Q_UNUSED(ref);
-    Q_UNUSED(value);
-    return false;
+    return setData(index(0,ref), value);
 }
 
 
