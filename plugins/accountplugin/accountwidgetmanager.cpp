@@ -79,6 +79,15 @@ AccountWidgetManager *AccountWidgetManager::instance()
     return m_Instance;
 }
 
+AccountWidgetManager::~AccountWidgetManager()
+{
+    if (m_Instance)
+    {
+    	m_Instance == NULL;
+        }
+}
+
+
 AccountWidgetManager::AccountWidgetManager(QObject *parent) : AccountActionHandler(parent)
 {
     connect(Core::ICore::instance()->contextManager(), SIGNAL(contextChanged(Core::IContext*)),

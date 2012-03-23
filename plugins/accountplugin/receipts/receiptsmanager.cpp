@@ -561,10 +561,17 @@ bool receiptsManager::isMedintuxArg()
 QString receiptsManager::getFullName()
 {
     QString medintuxFullName;
-    QString medintuxPatientName = qApp->arguments()[MEDINTUX_PATIENT_NAME];
-    medintuxPatientName.remove("--patientname=");
-    QString medintuxPatientFirstName = qApp->arguments()[MEDINTUX_PATIENT_FIRSTNAME];
-    medintuxPatientFirstName.remove("--patientfirstname=");
+    QString medintuxPatientName;
+    QString medintuxPatientFirstName;
+    QStringList args = qApp->arguments();
+    if (args.size()>MEDINTUX_PATIENT_NAME)
+    {
+    	medintuxPatientName = args[MEDINTUX_PATIENT_NAME];
+    	medintuxPatientName.remove("--patientname=");
+    	medintuxPatientFirstName = args[MEDINTUX_PATIENT_FIRSTNAME];
+    	medintuxPatientFirstName.remove("--patientfirstname=");
+    	
+        }
     medintuxFullName = medintuxPatientName+","+medintuxPatientFirstName;
     return medintuxFullName;
 }

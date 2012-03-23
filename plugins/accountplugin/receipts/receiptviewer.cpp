@@ -655,7 +655,7 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
     {
     	ui->saveAndQuitButton->show();
         ui->quitButton->show();
-        //ui->setWidgetAttribute(Qt::WA_DeleteOnClose);
+        setAttribute(Qt::WA_DeleteOnClose);
         }
     ui->amountsView->setShowGrid(false);
     /*ui->amountsView->verticalHeader()->setResizeMode(QHeaderView::Interactive);
@@ -762,7 +762,9 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
 
 ReceiptViewer::~ReceiptViewer()
 {
-    delete ui;
+    /*delete m_returnedListView;
+    delete m_actionTreeView;
+    delete ui;*/
 }
 
 void ReceiptViewer::changeEvent(QEvent *e)

@@ -100,7 +100,7 @@ class ACCOUNT_EXPORT AccountWidgetManager : public Internal::AccountActionHandle
     Q_OBJECT
 public:
     static AccountWidgetManager *instance();
-    ~AccountWidgetManager() {}
+    ~AccountWidgetManager() ;
 
     Account::AccountContextualWidget *currentView() const;
 
