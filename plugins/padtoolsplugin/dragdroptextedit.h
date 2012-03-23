@@ -19,50 +19,26 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main Developers : Eric Maeker <eric.maeker@gmail.com>,                *
- *                    Guillaume Denry <guillaume.denry@gmail.com>          *
+ *  Main Developers : Eric Maeker <eric.maeker@gmail.com>                  *
  *  Contributors :                                                         *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
-#ifndef PADTOOLS_PADWRITER_H
-#define PADTOOLS_PADWRITER_H
+#ifndef DRAGDROPTEXTEDIT_H
+#define DRAGDROPTEXTEDIT_H
 
-#include <QWidget>
+#include <texteditorplugin/texteditor.h>
 
-namespace PadTools {
-namespace Internal {
-class PadWriterPrivate;
-namespace Ui {
-class PadWriter;
-}
-}
-
-class PadWriter : public QWidget
+class DragDropTextEdit : public Editor::TextEditor
 {
-    Q_OBJECT
-    
 public:
-    explicit PadWriter(QWidget *parent = 0);
-    ~PadWriter();
+    DragDropTextEdit(QWidget *parent = 0);
+    ~DragDropTextEdit();
 
-    QString htmlResult() const;
-    QString rawSource() const;
-
-private Q_SLOTS:
-    void analyseRawSource();
-    void viewErrors();
-
-//private:
-//    void dragEnterEvent(QDragEnterEvent *event);
-//    void dragMoveEvent(QDragMoveEvent *event);
-//    void dragLeaveEvent(QDragLeaveEvent *event);
-//    void dropEvent(QDropEvent *event);
-
-private:
-    Internal::PadWriterPrivate *d;
+    void dragEnterEvent(QDragEnterEvent *event);
+    void dragMoveEvent(QDragMoveEvent *event);
+    void dragLeaveEvent(QDragLeaveEvent *event);
+    void dropEvent(QDropEvent *event);
 
 };
 
-} // namespace PadTools
-
-#endif // PADTOOLS_PADWRITER_H
+#endif // DRAGDROPTEXTEDIT_H

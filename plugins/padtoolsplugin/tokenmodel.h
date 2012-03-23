@@ -59,6 +59,7 @@ public:
     Qt::ItemFlags flags(const QModelIndex &index) const;
     Qt::DropActions supportedDropActions() const;
     QStringList mimeTypes() const;
+    QMimeData *mimeData(const QModelIndexList &indexes) const;
 
 Q_SIGNALS:
     void tokenChanged(const QString &token, const QString &value);
