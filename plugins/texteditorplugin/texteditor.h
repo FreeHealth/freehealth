@@ -44,8 +44,8 @@ class QMenu;
 /**
  * \file texteditor.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.2.1
- * \date 25 Oct 2009
+ * \version 0.7.1
+ * \date 23 Mar 2012
 */
 
 namespace Editor {
@@ -78,9 +78,18 @@ public:
 
     virtual QTextEdit *textEdit() const;
 
+    void setTextCursor(const QTextCursor &cursor) {textEdit()->setTextCursor(cursor);}
+    QTextCursor textCursor() const {return textEdit()->textCursor();}
+    void ensureCursorVisible() {textEdit()->ensureCursorVisible();}
+    QTextCursor cursorForPosition(const QPoint &pos) const {return textEdit()->cursorForPosition(pos);}
+
     QString getHtml()                        { return textEdit()->toHtml(); }
     void    setHtml(const QString & html)    { textEdit()->setHtml( html ); }
     void    setTypes(Types type);
+
+    QString toHtml() const {return textEdit()->toHtml();}
+    void setPlainText(const QString &s) {textEdit()->setPlainText(s);}
+    QString toPlainText() const {return textEdit()->toPlainText();}
 
 public Q_SLOTS:
     virtual void toogleToolbar(bool state);
