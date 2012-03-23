@@ -249,11 +249,20 @@ QVariant Patient::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
-/** \todo wrong code here */
-QVariant Patient::data(int column) const {return QVariant();}
+/** \todo code here **/
+QVariant Patient::data(int column) const
+{
+    Q_UNUSED(column);
+    return QVariant();
+}
 
-/** \todo remove this and use setData instead **/
-bool Patient::setValue(int ref, const QVariant &value) {return false;}
+/** \todo code here **/
+bool Patient::setValue(int ref, const QVariant &value)
+{
+    Q_UNUSED(ref);
+    Q_UNUSED(value);
+    return false;
+}
 
 
 /** \brief Defines a value of the patient according to the enumerator Patient::Reference. */
