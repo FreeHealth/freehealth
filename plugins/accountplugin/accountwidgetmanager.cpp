@@ -81,10 +81,6 @@ AccountWidgetManager *AccountWidgetManager::instance()
 
 AccountWidgetManager::~AccountWidgetManager()
 {
-    if (m_Instance)
-    {
-    	m_Instance == NULL;
-        }
 }
 
 
