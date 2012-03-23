@@ -17,7 +17,7 @@ HEADERS +=  \
     $${PWD}/tokenmodel.h \
     $${PWD}/padwriter.h \
     $${PWD}/constants.h \
-    ../../../plugins/padtoolsplugin/dragdroptextedit.h
+    $${PWD}/dragdroptextedit.h
 
 SOURCES += \
     $${PWD}/padtoolsplugin.cpp \
@@ -31,7 +31,7 @@ SOURCES += \
     $${PWD}/pad_item.cpp \
     $${PWD}/tokenmodel.cpp \
     $${PWD}/padwriter.cpp \
-    ../../../plugins/padtoolsplugin/dragdroptextedit.cpp
+    $${PWD}/dragdroptextedit.cpp
 
 FORMS += \
     $${PWD}/padwriter.ui
