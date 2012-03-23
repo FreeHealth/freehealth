@@ -45,6 +45,15 @@
 #include <accountbaseplugin/thesaurusmodel.h>
 #include <accountbaseplugin/medicalproceduremodel.h>
 
+#include <coreplugin/icore.h>
+#include <coreplugin/ipatient.h>
+
+#ifndef FREEMEDFORMS
+#include <coreplugin/icommandline.h>
+#include <coreplugin/freeaccount_constants.h>
+static inline Core::ICommandLine *commandLine() {return Core::ICore::instance()->commandLine();}
+#endif
+
 #include <utils/log.h>
 #include <utils/global.h>
 #include <translationutils/constants.h>
@@ -55,10 +64,16 @@
 
 enum { WarnDebugMessage = false };
 
+/***********************************************************************/
+/** \todo this conflicts with the AccountDb::Constants::DB_ACCOUNTANCY */
 static  QString freeaccount = "freeaccount";
+/***********************************************************************/
+
 using namespace AccountDB;
 using namespace Constants;
 using namespace Trans::ConstantTranslations;
+
+static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 
 receiptsManager::receiptsManager()
 {
@@ -549,31 +564,18 @@ QString receiptsManager::getStringPerferedActAndValues(const QString & act){
 
 bool receiptsManager::isMedintuxArg()
 {
-    bool answer = false;
-    QString medintuxArg = qApp->arguments()[MEDINTUX];
-    if (medintuxArg.contains("--medintux"))
-    {
-    	answer = true;
-        }
-    return answer;
+#ifdef FREEMEDFORMS
+    return false;
+#else
+    return commandLine()->value(Core::Constants::CL_MedinTux).toBool();
+#endif
 }
 
 QString receiptsManager::getFullName()
 {
-    QString medintuxFullName;
-    QString medintuxPatientName;
-    QString medintuxPatientFirstName;
-    QStringList args = qApp->arguments();
-    if (args.size()>MEDINTUX_PATIENT_NAME)
-    {
-    	medintuxPatientName = args[MEDINTUX_PATIENT_NAME];
-    	medintuxPatientName.remove("--patientname=");
-    	medintuxPatientFirstName = args[MEDINTUX_PATIENT_FIRSTNAME];
-    	medintuxPatientFirstName.remove("--patientfirstname=");
-    	
-        }
-    medintuxFullName = medintuxPatientName+","+medintuxPatientFirstName;
-    return medintuxFullName;
+    // Simply use the coreplugin IPatient to get these data.
+    // CommandLineParser feed this object
+    return patient()->data(Core::IPatient::FullName).toString();
 }
 
 
