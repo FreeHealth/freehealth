@@ -52,6 +52,7 @@
 
 #include <utils/widgets/spinboxdelegate.h>
 #include <utils/global.h>
+#include <utils/log.h>
 #include <translationutils/constants.h>
 #include <translationutils/trans_msgerror.h>
 
@@ -64,7 +65,7 @@
 #include <QBrush>
 #include <QColor>
 
-enum { WarnDebugMessage = false };
+enum { WarnDebugMessage = true };
 
 using namespace ReceiptsConstants;
 using namespace Constants;
@@ -650,6 +651,12 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
     ui->setupUi(this);
     ui->saveAndQuitButton->hide();
     ui->quitButton->hide();
+    if (rManager.isMedintuxArg())
+    {
+    	ui->saveAndQuitButton->show();
+        ui->quitButton->show();
+        //ui->setWidgetAttribute(Qt::WA_DeleteOnClose);
+        }
     ui->amountsView->setShowGrid(false);
     /*ui->amountsView->verticalHeader()->setResizeMode(QHeaderView::Interactive);
     ui->amountsView->verticalHeader()->setDefaultSectionSize(10);
@@ -734,7 +741,7 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
     ui->othersBox->hide();
     ui->othersLabel->hide();
     ui->displayRadioButton->setCheckable(true);
-    connect(ui->quitButton,SIGNAL(pressed()),this,SLOT(close()));
+    connect(ui->quitButton,SIGNAL(pressed()),this,SLOT(quitFreeAccount()));
     connect(ui->saveButton,SIGNAL(pressed()),this,SLOT(save()));
     //connect(ui->othersBox,SIGNAL(activated(const QString&)),this,SLOT(othersWidgets(const QString&)));
     connect(ui->saveAndQuitButton,SIGNAL(pressed()),this,SLOT(saveAndQuit()));
@@ -832,6 +839,8 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex & index) {
                         distrules = model->data(model->index(i,choice.DISTRULES),Qt::DisplayRole);
                        /*QStringList*/ m_listOfValues << hashOfValues.keys();
                        //m_listOfValues.removeDuplicates();
+                       if (WarnDebugMessage)
+                           LOG_ERROR("percentages = "+QString::number(percentage));
                        m_modelReturnedList->setStringList(m_listOfValues);
                        fillModel(hashOfValues,typeOfPayment,percentage,debtor,site,distrules,i);
                      }
@@ -1102,6 +1111,7 @@ void ReceiptViewer::save()
 {
     using namespace ::Internal;
     receiptsEngine rIO;
+    receiptsManager manager;
     QString userUuid = user()->uuid();
     QString textOfListOfActs = m_listOfValues.join("+");
     for (int row = 0; row < m_model->rowCount(QModelIndex()); row += 1)
@@ -1139,7 +1149,10 @@ void ReceiptViewer::save()
     {
     	  patientName = "Patient Name";
         }
-
+    if (manager.isMedintuxArg())
+    {
+    	patientName = manager.getFullName();
+        }
     QHash<int,QVariant> hash;
     hash.insert(ACCOUNT_UID,"UID");
     hash.insert(ACCOUNT_USER_UID,userUuid);
@@ -1171,10 +1184,13 @@ void ReceiptViewer::save()
 void ReceiptViewer::saveAndQuit()
 {
     save();
-    close();
+    QApplication::closeAllWindows();
 }
 
-
+void ReceiptViewer::quitFreeAccount()
+{
+    QApplication::closeAllWindows();
+}
   
 void ReceiptViewer::saveInThesaurus(){
     QString listOfValuesStr = m_listOfValues.join("+");

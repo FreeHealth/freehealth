@@ -81,6 +81,7 @@ void PreferredReceipts::insertpreferredValuesIntoAccount(){
     receiptsEngine receiptsIO;
     QString userUuid = user()->uuid();
     QString patientUid = patient()->uuid();
+    receiptsManager manager;
     if (patientUid.isEmpty())
     {
     	  patientUid = "no-patient-uid";
@@ -95,6 +96,11 @@ void PreferredReceipts::insertpreferredValuesIntoAccount(){
     {
     	  patientName = "Patient Name";
     	  qWarning() << __FILE__ << QString::number(__LINE__) << " Patient Name";
+        }
+    //medintux
+    if (manager.isMedintuxArg())
+    {
+    	patientName = manager.getFullName();
         }
     QList<double> listOfPercentages;
     listOfPercentages = m_choiceAndPercentagesHash.values();
