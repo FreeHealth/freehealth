@@ -19,60 +19,81 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main Developers : Eric Maeker <eric.maeker@gmail.com>,                *
- *                    Guillaume Denry <guillaume.denry@gmail.com>          *
+ *  Main Developers : Eric Maeker <eric.maeker@gmail.com>                  *
  *  Contributors :                                                         *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
-#include <QString>
+#include "dragdroptextedit.h"
+#include "constants.h"
 
-#include "pad.h"
-#include "pad_item.h"
+#include <QDebug>
 
 using namespace PadTools;
 
-Pad::~Pad()
+DragDropTextEdit::DragDropTextEdit(QWidget *parent) :
+    TextEditor(parent, DragDropTextEdit::Full)
 {
-	qDeleteAll(_fragments);
 }
 
-void Pad::addFragment(PadFragment *fragment)
+DragDropTextEdit::~DragDropTextEdit()
 {
-	_fragments << fragment;
 }
 
-void Pad::print(int indent) const
+void DragDropTextEdit::dragEnterEvent(QDragEnterEvent *event)
 {
-	QString str(indent, ' ');
-	str += "[pad]";
-	qDebug("%s", qPrintable(str));
-	foreach (PadFragment *fragment, _fragments){
-		fragment->print(indent + 2);
-	}
+    qWarning() << "E";
+    if (underMouse() &&
+            event->mimeData()->hasFormat(Constants::TOKENVALUE_MIME)) {
+        qWarning() << "    accept";
+        event->acceptProposedAction();
+        event->accept();
+    } else {
+        qWarning() << "    ignore";
+        event->ignore();
+    }
 }
 
-QList<PadFragment*> Pad::getAllFragments() const
+void DragDropTextEdit::dragMoveEvent(QDragMoveEvent *event)
 {
-	QList<PadFragment*> fragments;
-	PadItem *item;
-	fragments.append(_fragments);
-	foreach (PadFragment *fragment, _fragments)
-	{
-		item = dynamic_cast<PadItem*>(fragment);
-		if (item)
-			fragments.append(item->getAllFragments());
-	}
-	return fragments;
+
+    if (underMouse() &&
+            event->mimeData()->hasFormat(Constants::TOKENVALUE_MIME)) {
+        qWarning() << "M" << event->pos();
+        textEdit()->setFocus();
+//        qWarning() << event->pos();
+
+        QTextCursor cursor = cursorForPosition(event->pos());
+        setTextCursor(cursor);
+        ensureCursorVisible();
+        // if event pos y <=10 scroll up
+        event->acceptProposedAction();
+        event->accept();
+    } else {
+        event->ignore();
+    }
 }
 
-QString Pad::run(QMap<QString,QVariant> &tokens) const
+void DragDropTextEdit::dragLeaveEvent(QDragLeaveEvent *event)
 {
-	Q_UNUSED(tokens);
+    qWarning() << "L";
+    if (underMouse()) {
+        event->ignore();
+    } else {
+        event->accept();
+    }
+}
 
-	QString value;
+void DragDropTextEdit::dropEvent(QDropEvent *event)
+{
+    qWarning() << "Drop" << event->pos() << event->mimeData()->formats();
+    if (underMouse()) {
+        qWarning() << "UNDER MOUSE";
+        setFocus();
+        QTextCursor cursor = cursorForPosition(event->pos());
+        qWarning() << cursor.position() << event->mimeData()->data(Constants::TOKENVALUE_MIME);
+        cursor.insertText(event->mimeData()->data(Constants::TOKENVALUE_MIME));
+    }
 
-	foreach (PadFragment *fragment, _fragments)
-		value += fragment->run(tokens);
-
-	return value;
+    event->acceptProposedAction();
+    event->accept();
 }

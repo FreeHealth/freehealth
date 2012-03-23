@@ -31,6 +31,8 @@
 
 #include "pad_analyzer.h"
 
+namespace PadTools {
+
 struct BlockData : public QTextBlockUserData
 {
 	enum TokenType {
@@ -73,5 +75,8 @@ private:
 
 	void init();
 };
+
+}  // PadTools
+
 
 #endif

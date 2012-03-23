@@ -28,6 +28,8 @@
 
 #include <QDebug>
 
+using namespace PadTools;
+
 void PadCore::print(int indent) const
 {
 	QString str(indent, ' ');

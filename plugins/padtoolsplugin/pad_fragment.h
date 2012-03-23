@@ -31,6 +31,8 @@
 #include <QMap>
 #include <QVariant>
 
+namespace PadTools {
+
 /**
  * Represent a string or a token
  */
@@ -59,5 +61,7 @@ private:
 	int _end; // index of the last char in the text
 	QString _rawValue;
 };
+
+}  // PadTools
 
 #endif

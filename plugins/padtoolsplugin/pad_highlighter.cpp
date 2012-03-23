@@ -25,6 +25,9 @@
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
 #include "pad_highlighter.h"
+#include "constants.h"
+
+using namespace PadTools;
 
 void BlockData::eatClosePad() {
 	int offset = -1;
@@ -61,13 +64,13 @@ void PadHighlighter::highlightBlock(const QString &text)
 	}
 
 	for (int i = 0; i < text.count(); ++i) {
-		if (text[i] == PadAnalyzer::padOpenDelimiter) {
+        if (text[i] == QString(Constants::TOKEN_OPEN_DELIMITER).at(0)) {
 			setFormat(i, 1, _padDelimiterFormat);
 			newBlockData->tokens << BlockData::Token_OpenPad;
-		} else if (text[i] == PadAnalyzer::padCloseDelimiter) {
+        } else if (text[i] == QString(Constants::TOKEN_CLOSE_DELIMITER).at(0)) {
 			setFormat(i, 1, _padDelimiterFormat);
 			newBlockData->eatClosePad();
-		} else if (text[i] == PadAnalyzer::coreDelimiter) {
+        } else if (text[i] == QString(Constants::TOKEN_CORE_DELIMITER).at(0)) {
 			setFormat(i, 1, _coreDelimiterFormat);
 			newBlockData->eatCoreDelimiter();
 		} else if (newBlockData->tokens.count() && newBlockData->tokens.last() == BlockData::Token_OpenPad)

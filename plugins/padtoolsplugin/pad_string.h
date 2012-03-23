@@ -29,7 +29,9 @@
 
 #include <QString>
 
-#include "pad_fragment.h"
+#include <padtoolsplugin/pad_fragment.h>
+
+namespace PadTools {
 
 class PadString : public PadFragment
 {
@@ -45,5 +47,7 @@ public:
 private:
 	QString _string;
 };
+
+}  // PadTools
 
 #endif

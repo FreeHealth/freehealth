@@ -31,6 +31,8 @@
 
 #include "pad_fragment.h"
 
+namespace PadTools {
+
 class PadCore : public PadFragment
 {
 public:
@@ -50,5 +52,7 @@ public:
 private:
 	QString _value;
 };
+
+}  // PadTools
 
 #endif

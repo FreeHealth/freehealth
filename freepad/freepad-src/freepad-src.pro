@@ -23,10 +23,10 @@ QT *= sql \
 DEFINES *= FREEPAD
 
 macx {
-#  ICON=$${SOURCES_GLOBAL_RESOURCES}/pixmap/svg/freepad.icns
-#  QMAKE_INFO_PLIST=Info.plist
+  ICON=$${SOURCES_GLOBAL_RESOURCES}/pixmap/svg/freepad.icns
+  QMAKE_INFO_PLIST=Info.plist
 }
-#win32:RC_FILE=freepad_win32_icon.rc
+win32:RC_FILE=freepad_win32_icon.rc
 
 # sources
 SOURCES += \

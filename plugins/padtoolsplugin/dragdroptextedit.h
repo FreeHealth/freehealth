@@ -19,51 +19,30 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main Developers : Eric Maeker <eric.maeker@gmail.com>,                *
- *                    Guillaume Denry <guillaume.denry@gmail.com>          *
+ *  Main Developers : Eric Maeker <eric.maeker@gmail.com>                  *
  *  Contributors :                                                         *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
-#ifndef PAD_ITEM_H
-#define PAD_ITEM_H
+#ifndef DRAGDROPTEXTEDIT_H
+#define DRAGDROPTEXTEDIT_H
 
-#include <QList>
-#include <QMap>
-#include <QVariant>
-
-#include "pad_fragment.h"
-#include "pad_core.h"
+#include <texteditorplugin/texteditor.h>
 
 namespace PadTools {
 
-/**
- * Contains an entire pad item i.e. a list of fragments
- * @class
- */
-class PadItem : public PadFragment
+class DragDropTextEdit : public Editor::TextEditor
 {
 public:
-	PadItem(){}
-	virtual ~PadItem();
+    DragDropTextEdit(QWidget *parent = 0);
+    ~DragDropTextEdit();
 
-	void addFragment(PadFragment *fragment);
+    void dragEnterEvent(QDragEnterEvent *event);
+    void dragMoveEvent(QDragMoveEvent *event);
+    void dragLeaveEvent(QDragLeaveEvent *event);
+    void dropEvent(QDropEvent *event);
 
-	QList<PadFragment*> getAllFragments() const;
-
-	void print(int indent = 0) const;
-
-	/**
-	 * Run this pad over some tokens and returns the result text
-	 */
-	QString run(QMap<QString,QVariant> &tokens) const;
-
-private:
-	QList<PadFragment*> _fragments;
-
-	// return the core of the pad (can be 0)
-	PadCore *getCore() const;
 };
 
 }  // PadTools
 
-#endif
+#endif // DRAGDROPTEXTEDIT_H

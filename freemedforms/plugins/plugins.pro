@@ -44,6 +44,7 @@ texteditor.depends += core
 
 padtools.subdir = ../../plugins/padtoolsplugin
 padtools.depends += core
+padtools.depends += texteditor
 
 saverestore.subdir   = ../../plugins/saverestoreplugin
 saverestore.depends += core

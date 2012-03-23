@@ -30,8 +30,12 @@
 */
 
 #include "pad_analyzer.h"
+#include "constants.h"
 
 #include <QDebug>
+enum { WarnLexemMatching = false };
+
+using namespace PadTools;
 
 PadAnalyzer::PadAnalyzer()
 	: _curPos(-1) // _curPos == -1 means no current analyze
@@ -72,7 +76,7 @@ Pad *PadAnalyzer::analyze(const QString &text)
 			break;
 		case Lexem_PadCloseDelimiter:
 			// raise an error (unexpected close delimiter)
-			errorTokens.insert("char", QString(padCloseDelimiter));
+            errorTokens.insert("char", QString(Constants::TOKEN_CLOSE_DELIMITER));// padCloseDelimiter));
 			_lastErrors << Core::PadAnalyzerError(Core::PadAnalyzerError::Error_UnexpectedChar,
 												  getLine(_curPos - 1),
 												  getPos(_curPos - 1),
@@ -87,7 +91,7 @@ Pad *PadAnalyzer::analyze(const QString &text)
 			break;
 		case Lexem_CoreDelimiter:
 			// raise an error (unexpected core delimiter)
-			errorTokens.insert("char", QString(coreDelimiter));
+            errorTokens.insert("char", QString(Constants::TOKEN_CORE_DELIMITER));
 			_lastErrors << Core::PadAnalyzerError(Core::PadAnalyzerError::Error_UnexpectedChar,
 												  getLine(_curPos - 1),
 												  getPos(_curPos - 1),
@@ -154,11 +158,6 @@ PadItem *PadAnalyzer::nextPadItem()
 	return 0;
 }
 
-bool PadAnalyzer::atEnd()
-{
-	return _curPos >= _length;
-}
-
 PadCore *PadAnalyzer::nextCore()
 {
 	const QString &text = *_text;
@@ -177,7 +176,7 @@ PadCore *PadAnalyzer::nextCore()
 	// then comes the core end delimiter
 	if (lex.type != Lexem_CoreDelimiter) {
 		// raise an error (unexpected core delimiter)
-		errorTokens.insert("char", QString(coreDelimiter));
+        errorTokens.insert("char", QString(Constants::TOKEN_CORE_DELIMITER));
 		_lastErrors << Core::PadAnalyzerError(Core::PadAnalyzerError::Error_CoreDelimiterExpected,
 											  getLine(_curPos - 1),
 											  getPos(_curPos - 1),
@@ -194,15 +193,51 @@ PadCore *PadAnalyzer::nextCore()
 
 bool PadAnalyzer::isSpecial(const QChar &c)
 {
-	return c == padOpenDelimiter ||
-		c == padCloseDelimiter ||
-		c == coreDelimiter;
+    return c == QString(Constants::TOKEN_OPEN_DELIMITER).at(0) ||
+            c == QString(Constants::TOKEN_CLOSE_DELIMITER).at(0) ||
+            c == QString(Constants::TOKEN_CORE_DELIMITER).at(0);
+}
+
+/** Returns true if the string is a delimiter. */
+bool PadAnalyzer::isDelimiter(int pos, const QString &c, int *delimiterSize, LexemType *type)
+{
+    Q_ASSERT(delimiterSize);
+    *delimiterSize = 0;
+    *type = Lexem_Null;
+    if (pos<0 || pos>=c.size())
+        return false;
+
+    if (c.at(pos) == Constants::TOKEN_OPEN_DELIMITER[0]) {
+        if (c.mid(pos, QString(Constants::TOKEN_OPEN_DELIMITER).size()) == Constants::TOKEN_OPEN_DELIMITER) {
+            *delimiterSize = QString(Constants::TOKEN_OPEN_DELIMITER).size();
+            *type = Lexem_PadOpenDelimiter;
+            return true;
+        }
+    }
+    if (c.at(pos) == Constants::TOKEN_CLOSE_DELIMITER[0]) {
+        if (c.mid(pos, QString(Constants::TOKEN_CLOSE_DELIMITER).size()) == Constants::TOKEN_CLOSE_DELIMITER) {
+            *delimiterSize = QString(Constants::TOKEN_CLOSE_DELIMITER).size();
+            *type = Lexem_PadCloseDelimiter;
+            return true;
+        }
+    }
+    if (c.at(pos) == Constants::TOKEN_CORE_DELIMITER[0]) {
+        if (c.mid(pos, QString(Constants::TOKEN_CORE_DELIMITER).size()) == Constants::TOKEN_CORE_DELIMITER) {
+            *delimiterSize = QString(Constants::TOKEN_CORE_DELIMITER).size();
+            *type = Lexem_CoreDelimiter;
+            return true;
+        }
+    }
+    return false;
 }
 
 /** Returns the next lexem in the stream */
 PadAnalyzer::Lexem PadAnalyzer::nextLexem()
 {
-	if (atEnd()) // no more lexem to read
+    if (WarnLexemMatching)
+        qWarning() << "Next Lexem" << _curPos << atEnd();
+
+    if (atEnd())
 		return _lexemNull;
 
 	Lexem lexem;
@@ -210,39 +245,75 @@ PadAnalyzer::Lexem PadAnalyzer::nextLexem()
 	lexem.end = _curPos;
 
 	const QString &text = *_text;
-	if (text[_curPos] == padOpenDelimiter) {
-		_curPos++;
-		lexem.type = Lexem_PadOpenDelimiter;
-		lexem.rawValue = padOpenDelimiter;
-		return lexem;
-	} else if (text[_curPos] == padCloseDelimiter) {
-		_curPos++;
-		lexem.type = Lexem_PadCloseDelimiter;
-		lexem.rawValue = padCloseDelimiter;
-		return lexem;
-	} else if (text[_curPos] == coreDelimiter) {
-		_curPos++;
-		lexem.type = Lexem_CoreDelimiter;
-		lexem.rawValue = coreDelimiter;
-		return lexem;
-	}
+    int size = 0;
+    LexemType type;
+    if (isDelimiter(_curPos, text, &size, &type)) {
+        if (WarnLexemMatching)
+            qWarning() << "    isDelimiter" << _curPos << size << type;
+
+        _curPos += size;
+        lexem.type = type;
+        lexem.end = _curPos;
+        switch (type) {
+        case Lexem_PadOpenDelimiter: lexem.rawValue = QString(Constants::TOKEN_OPEN_DELIMITER); break;
+        case Lexem_PadCloseDelimiter: lexem.rawValue = QString(Constants::TOKEN_CLOSE_DELIMITER); break;
+        case Lexem_CoreDelimiter: lexem.rawValue = QString(Constants::TOKEN_CORE_DELIMITER); break;
+        default: break;
+        }
+        if (WarnLexemMatching)
+            qWarning() << "  found delim" << lexem.rawValue << lexem.start << lexem.end;
+        return lexem;
+    }
+//    if (text[_curPos] == QString(Constants::TOKEN_OPEN_DELIMITER).at(0)) {
+//		_curPos++;
+//		lexem.type = Lexem_PadOpenDelimiter;
+//        lexem.rawValue = Constants::TOKEN_OPEN_DELIMITER;
+//		return lexem;
+//    } else if (text[_curPos] == QString(Constants::TOKEN_CLOSE_DELIMITER).at(0)) {
+//		_curPos++;
+//		lexem.type = Lexem_PadCloseDelimiter;
+//        lexem.rawValue = Constants::TOKEN_CLOSE_DELIMITER;
+//		return lexem;
+//    } else if (text[_curPos] == QString(Constants::TOKEN_CORE_DELIMITER).at(0)) {
+//		_curPos++;
+//		lexem.type = Lexem_CoreDelimiter;
+//        lexem.rawValue = Constants::TOKEN_CORE_DELIMITER;
+//		return lexem;
+//	}
 
 	// string?
 	lexem.type = Lexem_String;
-	while (!atEnd() && !isSpecial(text[_curPos])) {
-		// special escape char?
-		if (text[_curPos] == '\\') {
-			_curPos++;
-			if (_curPos < _length && isSpecial(text[_curPos])) { // we've got a special char to escape
-				lexem.value += text[_curPos];
-				_curPos++;
-			} else { // no special => store the '\' itself
-				lexem.value += '\\';
-			}
-		} else
-			lexem.value += text[_curPos++];
-	}
-	lexem.end = _curPos - 1;
+    if (WarnLexemMatching)
+        qWarning() << "  isString";
+    while (!atEnd() && !isDelimiter(_curPos, text, &size, &type)) {
+        // special escape char?
+        if (text[_curPos] == '\\') {
+            _curPos++;
+            if (_curPos < _length && isDelimiter(_curPos, text, &size, &type)) { // we've got a special char to escape
+                lexem.value += text[_curPos];
+                _curPos++;
+            } else { // no special => store the '\' itself
+                lexem.value += '\\';
+            }
+        } else
+            lexem.value += text[_curPos++];
+    }
+//    while (!atEnd() && !isSpecial(text[_curPos])) {
+//		// special escape char?
+//		if (text[_curPos] == '\\') {
+//			_curPos++;
+//			if (_curPos < _length && isSpecial(text[_curPos])) { // we've got a special char to escape
+//				lexem.value += text[_curPos];
+//				_curPos++;
+//			} else { // no special => store the '\' itself
+//				lexem.value += '\\';
+//			}
+//		} else
+//			lexem.value += text[_curPos++];
+//	}
+    if (WarnLexemMatching)
+        qWarning() << "  * value" << lexem.value << "_curPos" << _curPos;
+    lexem.end = _curPos - 1;
 	return lexem;
 }
 

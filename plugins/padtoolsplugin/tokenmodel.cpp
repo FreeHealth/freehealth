@@ -25,9 +25,11 @@
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
 #include "tokenmodel.h"
+#include "constants.h"
 
 #include <QStandardItem>
 #include <QStringList>
+#include <QMimeData>
 
 #include <QDebug>
 
@@ -53,7 +55,7 @@ public:
             sep = ":";
         QStringList ns;
         if (!sep.isEmpty())
-             ns = token.split(sep, QString::SkipEmptyParts);
+            ns = token.split(sep, QString::SkipEmptyParts);
         else
             ns << token;
         return ns;
@@ -94,9 +96,9 @@ public:
                 if (!item) {
                     item = new QStandardItem(n);
                     m_TokensToItem.insert(i.key(), item);
-//                    if (n==ns.last()) {
-//                        item->setToolTip(i.value().toString());
-//                    }
+                    //                    if (n==ns.last()) {
+                    //                        item->setToolTip(i.value().toString());
+                    //                    }
                     m_TokensNamespaceToItem.insert(fullNs, item);
                     parent->appendRow(QList<QStandardItem*>() << item << new QStandardItem());
                 }
@@ -131,10 +133,10 @@ TokenModel::TokenModel(QObject *parent) :
     d->m_Tokens.insert("Prescription.Drug.MEAL", "meal");
     d->m_Tokens.insert("PERIOD", "period");
     d->m_Tokens.insert("PERIOD_SCHEME", "period scheme");
-    d->m_Tokens.insert("A", "A");
-    d->m_Tokens.insert("B", "B");
-    d->m_Tokens.insert("C", "C");
-    d->m_Tokens.insert("D", "D");
+    d->m_Tokens.insert("A", "This is A");
+    d->m_Tokens.insert("B", "This is B");
+    d->m_Tokens.insert("C", "This is C");
+    d->m_Tokens.insert("D", "This is D");
     d->m_Tokens.insert("NULL", "");
     d->m_Tokens.insert("HTMLTOKEN", "<b>htmlToken</b>");
 
@@ -162,37 +164,68 @@ QMap<QString, QVariant> &TokenModel::tokens()
 QVariant TokenModel::data(const QModelIndex &index, int role) const
 {
     return QStandardItemModel::data(index, role);
-//    if (!index.isValid())
-//        return QVariant();
-//    if (role==Qt::DisplayRole || role==Qt::EditRole) {
-//        const QString &k = d->m_Tokens.keys().at(index.row());
-//        switch (index.column()) {
-//        case TokenName: return k;
-//        case TokenValue: return d->m_Tokens.value(k);
-//        }
-//    }
-//    return QVariant();
+    //    if (!index.isValid())
+    //        return QVariant();
+    //    if (role==Qt::DisplayRole || role==Qt::EditRole) {
+    //        const QString &k = d->m_Tokens.keys().at(index.row());
+    //        switch (index.column()) {
+    //        case TokenName: return k;
+    //        case TokenValue: return d->m_Tokens.value(k);
+    //        }
+    //    }
+    //    return QVariant();
 }
 
 bool TokenModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
     return QStandardItemModel::setData(index, value, role);
-//    if (!index.isValid())
-//        return false;
-//    if (role==Qt::EditRole) {
-//        const QString &k = d->m_Tokens.keys().at(index.row());
-//        switch (index.column()) {
-//        case TokenName: break;
-//        case TokenValue: d->m_Tokens.insert(k, value); break;
-//        }
+    //    if (!index.isValid())
+    //        return false;
+    //    if (role==Qt::EditRole) {
+    //        const QString &k = d->m_Tokens.keys().at(index.row());
+    //        switch (index.column()) {
+    //        case TokenName: break;
+    //        case TokenValue: d->m_Tokens.insert(k, value); break;
+    //        }
 
-//        Q_EMIT dataChanged(index, index);
-//        Q_EMIT tokenChanged(k, value.toString());
-//    }
-//    return true;
+    //        Q_EMIT dataChanged(index, index);
+    //        Q_EMIT tokenChanged(k, value.toString());
+    //    }
+    //    return true;
 }
 
 Qt::ItemFlags TokenModel::flags(const QModelIndex &index) const
 {
-    return QAbstractItemModel::flags(index) | Qt::ItemIsEditable;
+    Qt::ItemFlags defaultFlags = QAbstractItemModel::flags(index);
+    if (index.isValid() && !hasChildren(index))
+        return Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled | defaultFlags;
+    return defaultFlags;
+}
+
+Qt::DropActions TokenModel::supportedDropActions() const
+{
+    return Qt::CopyAction;
+}
+
+QStringList TokenModel::mimeTypes() const
+{
+    QStringList types;
+    types << Constants::TOKENVALUE_MIME;
+    return types;
+}
+
+QMimeData *TokenModel::mimeData(const QModelIndexList &indexes) const
+{
+    QMimeData *mimeData = new QMimeData();
+    QString dt;
+
+    // TODO : dt == token source
+    foreach (const QModelIndex &index, indexes) {
+        if (index.isValid()) {
+            dt += data(index, Qt::DisplayRole).toString();
+        }
+    }
+
+    mimeData->setData(Constants::TOKENVALUE_MIME, dt.toUtf8());
+    return mimeData;
 }

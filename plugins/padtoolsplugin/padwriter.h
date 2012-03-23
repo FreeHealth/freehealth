@@ -49,7 +49,14 @@ public:
     QString rawSource() const;
 
 private Q_SLOTS:
-    void on_analyse_clicked();
+    void analyseRawSource();
+    void viewErrors();
+
+//private:
+//    void dragEnterEvent(QDragEnterEvent *event);
+//    void dragMoveEvent(QDragMoveEvent *event);
+//    void dragLeaveEvent(QDragLeaveEvent *event);
+//    void dropEvent(QDropEvent *event);
 
 private:
     Internal::PadWriterPrivate *d;

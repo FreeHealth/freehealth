@@ -38,13 +38,11 @@
 #include "pad.h"
 #include "pad_item.h"
 
+namespace PadTools {
+
 class PadAnalyzer
 {
 public:
-	static const char coreDelimiter = '~';
-	static const char padOpenDelimiter = '[';
-	static const char padCloseDelimiter = ']';
-
 	PadAnalyzer();
 
 	Pad *analyze(const QString &text);
@@ -53,7 +51,7 @@ public:
 
 private:
 	enum LexemType {
-		Lexem_Null = 0,
+        Lexem_Null = 0,
 		Lexem_String,
 		Lexem_PadOpenDelimiter,
 		Lexem_PadCloseDelimiter,
@@ -75,16 +73,22 @@ private:
 	int _curPos; // contains the current position in the analyzed text
 	QList<Core::PadAnalyzerError> _lastErrors;
 
-	bool atEnd(); // returns true if current position is at the text end
+    inline bool atEnd();
 	PadItem *nextPadItem();
 	PadCore *nextCore(); // tries to parse a core ("~...~")
 
 	int getLine(int curPos = -1) const;
 	int getPos(int curPos = -1) const;
 
-	static bool isSpecial(const QChar &c);
+    static bool isSpecial(const QChar &c);
+    bool isDelimiter(int pos, const QString &c, int *delimiterSize, LexemType *type);
 
 	Lexem nextLexem();
 };
+
+/** Returns true if current position reaches the end of the text. */
+bool PadAnalyzer::atEnd() {return _curPos >= _length;}
+
+} // PadTools
 
 #endif
