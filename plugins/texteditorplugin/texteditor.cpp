@@ -275,12 +275,15 @@ TextEditor::TextEditor(QWidget *parent, Types type)
 TextEditor::~TextEditor()
 {
     // unreg context
-    Core::ICore::instance()->contextManager()->removeContextObject(d->m_Context);
-    if (d) delete d;
-    d=0;
+    /** \todo manage a segfault with freepad when updating context. */
+//    Core::ICore::instance()->contextManager()->removeContextObject(d->m_Context);
+    if (d) {
+        delete d;
+        d=0;
+    }
 }
 
-QTextEdit * TextEditor::textEdit() const
+QTextEdit *TextEditor::textEdit() const
 {
     return d->textEdit;
 }
