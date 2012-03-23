@@ -133,10 +133,10 @@ TokenModel::TokenModel(QObject *parent) :
     d->m_Tokens.insert("Prescription.Drug.MEAL", "meal");
     d->m_Tokens.insert("PERIOD", "period");
     d->m_Tokens.insert("PERIOD_SCHEME", "period scheme");
-    d->m_Tokens.insert("A", "A");
-    d->m_Tokens.insert("B", "B");
-    d->m_Tokens.insert("C", "C");
-    d->m_Tokens.insert("D", "D");
+    d->m_Tokens.insert("A", "This is A");
+    d->m_Tokens.insert("B", "This is B");
+    d->m_Tokens.insert("C", "This is C");
+    d->m_Tokens.insert("D", "This is D");
     d->m_Tokens.insert("NULL", "");
     d->m_Tokens.insert("HTMLTOKEN", "<b>htmlToken</b>");
 

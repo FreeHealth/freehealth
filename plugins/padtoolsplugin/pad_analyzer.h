@@ -51,7 +51,7 @@ public:
 
 private:
 	enum LexemType {
-		Lexem_Null = 0,
+        Lexem_Null = 0,
 		Lexem_String,
 		Lexem_PadOpenDelimiter,
 		Lexem_PadCloseDelimiter,
@@ -81,7 +81,7 @@ private:
 	int getPos(int curPos = -1) const;
 
     static bool isSpecial(const QChar &c);
-    bool isDelimiter(int pos, const QString &c, int *delimiterSize);
+    bool isDelimiter(int pos, const QString &c, int *delimiterSize, LexemType *type);
 
 	Lexem nextLexem();
 };
