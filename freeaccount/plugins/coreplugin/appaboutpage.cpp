@@ -115,10 +115,14 @@ QWidget *CommandLineAboutPage::createPage(QWidget *parent)
     tree->setColumnCount(2);
     layout->addWidget(tree);
 
-    for(int i=0; i<CommandLine::CL_MaxParam;++i) {
-        new QTreeWidgetItem(tree, QStringList()
-                            << CoreImpl::instance()->commandLine()->paramName(i)
-                            << CoreImpl::instance()->commandLine()->value(i, QString("not defined")).toString());
+    for(int i=0; i< Core::ICommandLine::MaxParam; ++i) {
+        const QString &name = CoreImpl::instance()->commandLine()->paramName(i);
+        const QString &value = CoreImpl::instance()->commandLine()->value(i, QString("not defined")).toString();
+        if (!name.isEmpty()) {
+            new QTreeWidgetItem(tree, QStringList()
+                                << name
+                                << value);
+        }
     }
     tree->resizeColumnToContents(0);
     tree->resizeColumnToContents(1);

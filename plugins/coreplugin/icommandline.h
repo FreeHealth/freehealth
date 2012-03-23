@@ -50,7 +50,8 @@ public:
         RunningUnderWine,
         ClearUserDatabases,
         CreateVirtuals,
-        ResetUserPreferences
+        ResetUserPreferences,
+        MaxParam
     };
 
     ICommandLine(QObject *parent = 0) : QObject(parent) {}
