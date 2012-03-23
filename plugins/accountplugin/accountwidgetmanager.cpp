@@ -89,7 +89,7 @@ AccountWidgetManager::AccountWidgetManager(QObject *parent) : AccountActionHandl
     connect(Core::ICore::instance()->contextManager(), SIGNAL(contextChanged(Core::IContext*)),
             this, SLOT(updateContext(Core::IContext*)));
     setObjectName("AccountWidgetManager");
-    Utils::Log::addMessage(this, "Instance created");
+    LOG("Instance created");
 }
 
 void AccountWidgetManager::updateContext(Core::IContext *object)
@@ -145,7 +145,7 @@ AccountActionHandler::AccountActionHandler(QObject *parent) :
         m_CurrentView(0)
 {
     setObjectName("AccountActionHandler");
-    Utils::Log::addMessage(this, "Instance created");
+    LOG("Instance created");
 
     Core::UniqueIDManager *uid = Core::ICore::instance()->uniqueIDManager();
     Core::ITheme *th = Core::ICore::instance()->theme();
@@ -233,7 +233,7 @@ void AccountActionHandler::setCurrentView(AccountContextualWidget *view)
 {
     Q_ASSERT(view);
     if (!view) { // this should never be the case
-        Utils::Log::addError(this, "setCurrentView: no view");
+        LOG_ERROR("setCurrentView: no view");
         return;
     }
 //    qWarning() << "AccountActionHandler::setCurrentView(AccountCentralWidget *view)";
@@ -319,8 +319,6 @@ void AccountActionHandler::addReceipts()
     AccountMode *accountMode = qobject_cast<AccountMode*>(modeManager()->mode(Core::Constants::MODE_ACCOUNT));
     Q_ASSERT(accountMode);
     accountMode->showAddReceipts();
-//    accMode->setCentralWidget(new PreferredReceipts(mainWindow()));
-//    modeManager()->activateMode(Core::Constants::MODE_ACCOUNT);
 }
 
 void AccountActionHandler::receipts()
@@ -328,8 +326,6 @@ void AccountActionHandler::receipts()
     AccountMode *accountMode = qobject_cast<AccountMode*>(modeManager()->mode(Core::Constants::MODE_ACCOUNT));
     Q_ASSERT(accountMode);
     accountMode->showReceipts();
-//    accMode->setCentralWidget(new ReceiptViewer(mainWindow()));
-//    modeManager()->activateMode(Core::Constants::MODE_ACCOUNT);
 }
 
 void AccountActionHandler::ledger()
@@ -337,8 +333,6 @@ void AccountActionHandler::ledger()
     AccountMode *accountMode = qobject_cast<AccountMode*>(modeManager()->mode(Core::Constants::MODE_ACCOUNT));
     Q_ASSERT(accountMode);
     accountMode->showLedger();
-//    accMode->setCentralWidget(new LedgerViewer(mainWindow()));
-//    modeManager()->activateMode(Core::Constants::MODE_ACCOUNT);
 }
 
 void AccountActionHandler::movements()
@@ -346,8 +340,6 @@ void AccountActionHandler::movements()
     AccountMode *accountMode = qobject_cast<AccountMode*>(modeManager()->mode(Core::Constants::MODE_ACCOUNT));
     Q_ASSERT(accountMode);
     accountMode->showMovements();
-//    accMode->setCentralWidget(new MovementsViewer(mainWindow()));
-//    modeManager()->activateMode(Core::Constants::MODE_ACCOUNT);
 }
 
 void AccountActionHandler::assets()
@@ -355,8 +347,6 @@ void AccountActionHandler::assets()
     AccountMode *accountMode = qobject_cast<AccountMode*>(modeManager()->mode(Core::Constants::MODE_ACCOUNT));
     Q_ASSERT(accountMode);
     accountMode->showAssets();
-//    accMode->setCentralWidget(new AssetsViewer(mainWindow()));
-//    modeManager()->activateMode(Core::Constants::MODE_ACCOUNT);
 }
 
 void AccountActionHandler::account()
@@ -364,8 +354,6 @@ void AccountActionHandler::account()
     AccountMode *accountMode = qobject_cast<AccountMode*>(modeManager()->mode(Core::Constants::MODE_ACCOUNT));
     Q_ASSERT(accountMode);
     accountMode->showAccount();
-//    accMode->setCentralWidget(new AccountView(mainWindow()));
-//    modeManager()->activateMode(Core::Constants::MODE_ACCOUNT);
 }
 #endif
 
