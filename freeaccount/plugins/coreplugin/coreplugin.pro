@@ -15,7 +15,8 @@ HEADERS += coreplugin.h \
     coreimpl.h \
     appaboutpage.h \
     commandlineparser.h \
-    patient.h
+    patient.h \
+    freeaccount_constants.h
 
 SOURCES += coreplugin.cpp \
     coreimpl.cpp \
