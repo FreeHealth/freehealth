@@ -442,7 +442,7 @@ bool treeViewsActions::fillActionTreeView()
     //insert items from tables if available
     //QMap<QString,QString> m_mapSubItems;
     m_mapSubItems.clear();
-    receiptsManager manager;
+    ReceiptsManager manager;
     QString strKeysParameters;
     foreach(strKeysParameters,listOfMainActions){
         QString table = parametersMap.value(strKeysParameters);
@@ -643,7 +643,7 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
 {
     if (user())
         m_userUuid = user()->uuid();
-    receiptsManager rManager;
+    ReceiptsManager rManager;
     m_kilometers = 0.00 ;
     m_distanceRuleValue = 0.00;
     m_insuranceUid = 0;
@@ -816,7 +816,7 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex & index) {
     QString data = index.data(Qt::DisplayRole).toString();
     if (WarnDebugMessage)
         qDebug() << __FILE__ << QString::number(__LINE__) << " DATA =" << data;
-    receiptsManager manager;
+    ReceiptsManager manager;
     QHash<QString,QString> hashOfValues;
     int typeOfPayment = ReceiptsConstants::Cash;
     double percentage = 100.00;
@@ -1113,7 +1113,7 @@ void ReceiptViewer::save()
 {
     using namespace ::Internal;
     receiptsEngine rIO;
-    receiptsManager manager;
+    ReceiptsManager manager;
     QString userUuid = user()->uuid();
     QString textOfListOfActs = m_listOfValues.join("+");
     for (int row = 0; row < m_model->rowCount(QModelIndex()); row += 1)
@@ -1219,7 +1219,7 @@ void ReceiptViewer::clearAll(bool b)
 QVariant ReceiptViewer::firstItemchosenAsPreferential(QString & item)
 {
     QVariant variantValue = QVariant("No item");
-    receiptsManager manager;
+    ReceiptsManager manager;
     if (item == "Distance rules")
     {
     	  variantValue = manager.m_preferredDistanceValue;

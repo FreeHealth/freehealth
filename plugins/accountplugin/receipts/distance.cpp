@@ -46,7 +46,7 @@ distance::distance(QWidget * parent):QDialog(parent),ui(new Ui::ChoiceDialog){
     setWindowTitle("Round trip.");
     m_percent = 100.00;
     m_percentValue = 100.00;
-    receiptsManager manager;
+    ReceiptsManager manager;
     m_hashPercentages = manager.getPercentages();
     m_quickInt = m_hashPercentages.keys().last();
     ui->percentDoubleSpinBox->setRange(0.00,100.00);
