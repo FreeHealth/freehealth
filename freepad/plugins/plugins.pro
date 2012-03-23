@@ -23,3 +23,4 @@ texteditor.depends += core
 
 padtools.subdir   = padtoolsplugin
 padtools.depends += core
+padtools.depends += texteditor
