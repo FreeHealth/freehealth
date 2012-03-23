@@ -55,6 +55,8 @@ const char* const TITLE                              = QT_TRANSLATE_NOOP("tkCons
 const char* const UNKNOWN_SERVER                     = QT_TRANSLATE_NOOP("tkConstants", "Unknown server");
 const char* const INSTALLED                          = QT_TRANSLATE_NOOP("tkConstants", "Installed");
 const char* const CURRENTLY_INSTALLED                = QT_TRANSLATE_NOOP("tkConstants", "Currently installed");
+const char* const UNDEFINED                          = QT_TRANSLATE_NOOP("tkConstants", "Undefined");
+
 
 const char* const FROM                          = QT_TRANSLATE_NOOP("tkConstants", "from");
 const char* const TO                            = QT_TRANSLATE_NOOP("tkConstants", "to");
