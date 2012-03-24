@@ -52,13 +52,16 @@ enum { WarnDebugMessage = false };
 static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
 static inline Core::IPatient *patient() { return Core::ICore::instance()->patient(); }
 
-PreferredReceipts::PreferredReceipts(QWidget * parent):QWidget(parent),ui(new Ui::PreferredReceiptsWidget){
+PreferredReceipts::PreferredReceipts(QWidget * parent) :
+    QWidget(parent),
+    ui(new Ui::PreferredReceiptsWidget)
+{
     setObjectName("PreferredReceipts");
     ui->setupUi(this);
     ui->resultLabel->setText("");
     m_typeOfChoice = 0;
     QString userUuid = user()->uuid();
-    receiptsManager manager;
+    ReceiptsManager manager;
     QStringList listOfActs;
     listOfActs = manager.getPreferentialActFromThesaurus(userUuid).keys();
     if (listOfActs.size()>0)
@@ -81,7 +84,7 @@ void PreferredReceipts::insertpreferredValuesIntoAccount(){
     receiptsEngine receiptsIO;
     QString userUuid = user()->uuid();
     QString patientUid = patient()->uuid();
-    receiptsManager manager;
+    ReceiptsManager manager;
     if (patientUid.isEmpty())
     {
     	  patientUid = "no-patient-uid";

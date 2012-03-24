@@ -115,11 +115,30 @@ QWidget *CommandLineAboutPage::createPage(QWidget *parent)
     tree->setColumnCount(2);
     layout->addWidget(tree);
 
-    for(int i=0; i<CommandLine::CL_MaxParam;++i) {
-        new QTreeWidgetItem(tree, QStringList()
-                            << CoreImpl::instance()->commandLine()->paramName(i)
-                            << CoreImpl::instance()->commandLine()->value(i, QString("not defined")).toString());
+    QFont bold;
+    bold.setBold(true);
+    const QString &defaultValue = tkTr(Trans::Constants::UNDEFINED);
+    QList<QTreeWidgetItem *> defined, undefined;
+
+    for(int i=0; i< Core::ICommandLine::MaxParam; ++i) {
+        const QString &name = CoreImpl::instance()->commandLine()->paramName(i);
+        const QString &value = CoreImpl::instance()->commandLine()->value(i, defaultValue).toString();
+        if (!name.isEmpty()) {
+            QTreeWidgetItem *item = new QTreeWidgetItem(QStringList() << name << value);
+            if (value != defaultValue) {
+                item->setFont(0, bold);
+                defined << item;
+            } else {
+                item->setForeground(0, QBrush(QColor("lightgray")));
+                item->setForeground(1, QBrush(QColor("lightgray")));
+                undefined << item;
+            }
+        }
     }
+    tree->addTopLevelItems(defined);
+    tree->sortItems(0, Qt::AscendingOrder);
+    tree->addTopLevelItems(undefined);
+
     tree->resizeColumnToContents(0);
     tree->resizeColumnToContents(1);
     return w;

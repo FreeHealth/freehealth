@@ -140,7 +140,7 @@ void treeViewsActions::fillActionTreeView()
     listOfMainActions = parametersMap.keys();
     //insert items from tables if available
     QMap<QString,QString> mapSubItems;
-    receiptsManager manager;
+    ReceiptsManager manager;
     QString strKeysParameters;
     foreach(strKeysParameters,listOfMainActions){
         QString table = parametersMap.value(strKeysParameters);
@@ -257,7 +257,7 @@ choiceDialog::choiceDialog(QWidget * parent,bool roundtrip, QString preferredVal
     ui->distanceGroupBox->hide();
     m_percent = 100.00;
     m_percentValue = 100.00;
-    receiptsManager manager;
+    ReceiptsManager manager;
     manager.getpreferredValues();
     m_hashPercentages = manager.getPercentages();
     m_quickInt = m_hashPercentages.keys().last();
@@ -484,7 +484,7 @@ QVariant choiceDialog::firstItemchosenAsPreferential(QString & item)
 {if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " item =" << item ;
     QVariant variantValue = QVariant("No item");
-    receiptsManager manager;
+    ReceiptsManager manager;
     if (item == trUtf8("Distance rules"))
     {
     	  variantValue = manager.m_preferredDistanceValue;
@@ -504,7 +504,7 @@ void choiceDialog::actionsOfTreeView(const QModelIndex &index){
     QString data = index.data(Qt::DisplayRole).toString();
     if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " data =" << data;
-    receiptsManager manager;
+    ReceiptsManager manager;
     QHash<QString,QString> hashOfValues;
     //int typeOfPayment = ReceiptsConstants::Cash;
     //double percentage = 100.00;

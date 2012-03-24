@@ -34,7 +34,6 @@
 #include "ui_findValuesGUI.h"
 
 #include <accountplugin/account_exporter.h>
-#include <accountplugin/receipts/receiptsmanager.h>
 #include <accountplugin/receipts/xmlcategoriesparser.h>
 
 #include <accountbaseplugin/medicalproceduremodel.h>

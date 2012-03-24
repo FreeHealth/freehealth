@@ -45,6 +45,15 @@
 #include <accountbaseplugin/thesaurusmodel.h>
 #include <accountbaseplugin/medicalproceduremodel.h>
 
+#include <coreplugin/icore.h>
+#include <coreplugin/ipatient.h>
+
+#ifndef FREEMEDFORMS
+#include <coreplugin/icommandline.h>
+#include <coreplugin/freeaccount_constants.h>
+static inline Core::ICommandLine *commandLine() {return Core::ICore::instance()->commandLine();}
+#endif
+
 #include <utils/log.h>
 #include <utils/global.h>
 #include <translationutils/constants.h>
@@ -55,24 +64,32 @@
 
 enum { WarnDebugMessage = false };
 
+/***********************************************************************/
+/** \todo this conflicts with the AccountDb::Constants::DB_ACCOUNTANCY */
 static  QString freeaccount = "freeaccount";
+/***********************************************************************/
+
 using namespace AccountDB;
 using namespace Constants;
 using namespace Trans::ConstantTranslations;
 
-receiptsManager::receiptsManager()
+static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
+
+ReceiptsManager::ReceiptsManager(QObject *parent) :
+    QObject(parent)
 {
+    setObjectName("ReceiptsManager");
     if (!getpreferredValues()) {
         if (WarnDebugMessage)
             qWarning() << __FILE__ << QString::number(__LINE__) << "Unable to get preferred values !" ;
     }
 }
 
-receiptsManager::~receiptsManager()
+ReceiptsManager::~ReceiptsManager()
 {
 }
 
-QHash<int,QString> receiptsManager::getPercentages()
+QHash<int,QString> ReceiptsManager::getPercentages()
 {
   QHash<int,QString> hash;
   hash.insert(1,"0.00");
@@ -85,18 +102,18 @@ QHash<int,QString> receiptsManager::getPercentages()
   return hash;
 }
 
-QHash<QString,QVariant> receiptsManager::getParametersDatas(QString & userUid , const QString & table)
+QHash<QString,QVariant> ReceiptsManager::getParametersDatas(QString & userUid , const QString & table)
 {
    QHash<QString,QVariant> hashForReturn;
    if (WarnDebugMessage)
-       qDebug() << __FILE__ << QString::number(__LINE__) << " receiptsManager: in getComboBoxesDatas";
+       qDebug() << __FILE__ << QString::number(__LINE__) << " ReceiptsManager: in getComboBoxesDatas";
    if (table == "insurance") {
        InsuranceModel  model(this);
        for (int row = 0; row < model.rowCount(); row += 1) {
            QString str = model.data(model.index(row,INSURANCE_NAME),Qt::DisplayRole).toString();
            QVariant uid = model.data(model.index(row,INSURANCE_UID),Qt::DisplayRole);
            if (WarnDebugMessage)
-               qDebug() << __FILE__ << QString::number(__LINE__) << " receiptsManager list = " << str;
+               qDebug() << __FILE__ << QString::number(__LINE__) << " ReceiptsManager list = " << str;
            hashForReturn.insert(str,uid);
        }
        if (hashForReturn.size()< 1){
@@ -109,7 +126,7 @@ QHash<QString,QVariant> receiptsManager::getParametersDatas(QString & userUid , 
            QString str = model.data(model.index(row,SITES_NAME),Qt::DisplayRole).toString();
            QVariant uid = model.data(model.index(row,SITES_UID),Qt::DisplayRole);
            if (WarnDebugMessage)
-               qDebug() << __FILE__ << QString::number(__LINE__) << " receiptsManager list = " << str;
+               qDebug() << __FILE__ << QString::number(__LINE__) << " ReceiptsManager list = " << str;
            if (WarnDebugMessage)
                qDebug() << __FILE__ << QString::number(__LINE__) << " uid =" << uid.toString() ;
            hashForReturn.insert(str,uid);
@@ -127,7 +144,7 @@ QHash<QString,QVariant> receiptsManager::getParametersDatas(QString & userUid , 
            QString str = model.data(model.index(row,BANKDETAILS_LABEL),Qt::DisplayRole).toString();
            QVariant uid = model.data(model.index(row,BANKDETAILS_ID),Qt::DisplayRole);
            if (WarnDebugMessage)
-               qDebug() << __FILE__ << QString::number(__LINE__) << " receiptsManager list = " << str;
+               qDebug() << __FILE__ << QString::number(__LINE__) << " ReceiptsManager list = " << str;
            hashForReturn.insert(str,uid);
        }
        if(hashForReturn.size()< 1){
@@ -143,7 +160,7 @@ QHash<QString,QVariant> receiptsManager::getParametersDatas(QString & userUid , 
            QString str = model.data(model.index(row,RULES_TYPE),Qt::DisplayRole).toString();
            QVariant uid = model.data(model.index(row,RULES_UID),Qt::DisplayRole);
            if (WarnDebugMessage)
-               qDebug() << __FILE__ << QString::number(__LINE__) << " receiptsManager list = " << str;
+               qDebug() << __FILE__ << QString::number(__LINE__) << " ReceiptsManager list = " << str;
            hashForReturn.insert(str,uid);
        }
        if(hashForReturn.size()< 1){
@@ -161,7 +178,7 @@ QHash<QString,QVariant> receiptsManager::getParametersDatas(QString & userUid , 
            QString str = model.data(model.index(row,DISTRULES_TYPE),Qt::DisplayRole).toString();
            QVariant uid = model.data(model.index(row,DISTRULES_UID),Qt::DisplayRole);
            if (WarnDebugMessage)
-               qDebug() << __FILE__ << QString::number(__LINE__) << " receiptsManager list = " << str;
+               qDebug() << __FILE__ << QString::number(__LINE__) << " ReceiptsManager list = " << str;
            hashForReturn.insertMulti(str,uid);
        }
        if(hashForReturn.size()< 1){
@@ -179,7 +196,7 @@ QHash<QString,QVariant> receiptsManager::getParametersDatas(QString & userUid , 
            QString str = model.data(model.index(row,THESAURUS_VALUES),Qt::DisplayRole).toString();
            QVariant uid = model.data(model.index(row,THESAURUS_UID),Qt::DisplayRole);
            if (WarnDebugMessage)
-               qDebug() << __FILE__ << QString::number(__LINE__) << " receiptsManager list = " << str;
+               qDebug() << __FILE__ << QString::number(__LINE__) << " ReceiptsManager list = " << str;
            hashForReturn.insert(str,uid);
            }
        if(hashForReturn.size()< 1){
@@ -191,7 +208,7 @@ QHash<QString,QVariant> receiptsManager::getParametersDatas(QString & userUid , 
    return hashForReturn;;
 }
 
-QHash<QString,QVariant> receiptsManager::getHashOfSites(){
+QHash<QString,QVariant> ReceiptsManager::getHashOfSites(){
     QHash<QString,QVariant> hash;
     WorkingPlacesModel model(this);
     for (int row = 0; row < model.rowCount(); row += 1)
@@ -199,7 +216,7 @@ QHash<QString,QVariant> receiptsManager::getHashOfSites(){
         QString str = model.data(model.index(row,SITES_NAME),Qt::DisplayRole).toString();
         QVariant uid = model.data(model.index(row,SITES_UID),Qt::DisplayRole);
         //if (WarnDebugMessage)
-        qDebug() << __FILE__ << QString::number(__LINE__) << " receiptsManager list = " << str;
+        qDebug() << __FILE__ << QString::number(__LINE__) << " ReceiptsManager list = " << str;
         //if (WarnDebugMessage)
         qDebug() << __FILE__ << QString::number(__LINE__) << " uid =" << uid.toString() ;
         hash.insertMulti(str,uid);
@@ -212,7 +229,7 @@ QHash<QString,QVariant> receiptsManager::getHashOfSites(){
     return hash; 
 }
 
-QHash<QString,QVariant> receiptsManager::getHashOfInsurance()
+QHash<QString,QVariant> ReceiptsManager::getHashOfInsurance()
 {
     QHash<QString,QVariant> hash;
     InsuranceModel model(this);
@@ -229,7 +246,7 @@ QHash<QString,QVariant> receiptsManager::getHashOfInsurance()
     return hash; 
 }
 
-QHash<QString,QVariant> receiptsManager::getDistanceRules()
+QHash<QString,QVariant> ReceiptsManager::getDistanceRules()
 {
     QHash<QString,QVariant> hash;
     DistanceRulesModel model(this);
@@ -244,7 +261,7 @@ QHash<QString,QVariant> receiptsManager::getDistanceRules()
     return hash;
 }
 
-QHash<QString,QVariant> receiptsManager::getHashOfThesaurus()
+QHash<QString,QVariant> ReceiptsManager::getHashOfThesaurus()
 {
     QHash<QString,QVariant> hash;
     ThesaurusModel model(this);
@@ -253,7 +270,7 @@ QHash<QString,QVariant> receiptsManager::getHashOfThesaurus()
         QString str = model.data(model.index(row,THESAURUS_VALUES),Qt::DisplayRole).toString();
         QVariant uid = model.data(model.index(row,THESAURUS_USERUID),Qt::DisplayRole);
         if (WarnDebugMessage)
-            qDebug() << __FILE__ << QString::number(__LINE__) << " receiptsManager list = " << str;
+            qDebug() << __FILE__ << QString::number(__LINE__) << " ReceiptsManager list = " << str;
         if (WarnDebugMessage)
             qDebug() << __FILE__ << QString::number(__LINE__) << " uid =" << uid.toString() ;
         hash.insertMulti(str,uid);
@@ -264,7 +281,7 @@ QHash<QString,QVariant> receiptsManager::getHashOfThesaurus()
     return hash;
 }
 
-QHash<QString,QString> receiptsManager::getPreferentialActFromThesaurus(const QString & userUuid){
+QHash<QString,QString> ReceiptsManager::getPreferentialActFromThesaurus(const QString & userUuid){
     QHash<QString,QString> hash;
     receiptsEngine rIO;
     ThesaurusModel model(this);
@@ -315,7 +332,7 @@ QHash<QString,QString> receiptsManager::getPreferentialActFromThesaurus(const QS
     return hash;
 }
 
-/*QString receiptsManager::createTablesAndFields(){
+/*QString ReceiptsManager::createTablesAndFields(){
     QString result = "Ok";
     if (WarnDebugMessage)
     	      qDebug() <<  __FILE__ << QString::number(__LINE__) ;
@@ -433,7 +450,7 @@ QHash<QString,QString> receiptsManager::getPreferentialActFromThesaurus(const QS
         return result;
 }*/
 
-/*bool receiptsManager::writeAllDefaultsValues(){
+/*bool ReceiptsManager::writeAllDefaultsValues(){
   bool ret = true;
   QSqlDatabase db = QSqlDatabase::database(freeaccount);
   xmlCategoriesParser xml;
@@ -490,7 +507,7 @@ QHash<QString,QString> receiptsManager::getPreferentialActFromThesaurus(const QS
    return ret;
 }*/
 
-bool receiptsManager::getpreferredValues(){
+bool ReceiptsManager::getpreferredValues(){
     bool b = true;
     DistanceRulesModel modelDR(this);
     modelDR.setFilter("PREFERRED = '1'");
@@ -511,7 +528,7 @@ bool receiptsManager::getpreferredValues(){
     return b;
 }
 
-QStringList receiptsManager::getChoiceFromCategories(QString & categoriesItem){
+QStringList ReceiptsManager::getChoiceFromCategories(QString & categoriesItem){
     QStringList listOfItems;
     QSqlDatabase db = QSqlDatabase::database(freeaccount);
     QString item = categoriesItem;
@@ -538,42 +555,29 @@ QStringList receiptsManager::getChoiceFromCategories(QString & categoriesItem){
     return listOfItems;
 }
 
-QVariant receiptsManager::getpreferredDistanceRule(){
+QVariant ReceiptsManager::getpreferredDistanceRule(){
       return m_preferredDistanceRule;
   }
   
-QString receiptsManager::getStringPerferedActAndValues(const QString & act){
+QString ReceiptsManager::getStringPerferedActAndValues(const QString & act){
     receiptsEngine r;
     return r.getStringOfpreferredActAndHisValue(act);
 }
 
-bool receiptsManager::isMedintuxArg()
+bool ReceiptsManager::isMedintuxArg()
 {
-    bool answer = false;
-    QString medintuxArg = qApp->arguments()[MEDINTUX];
-    if (medintuxArg.contains("--medintux"))
-    {
-    	answer = true;
-        }
-    return answer;
+#ifdef FREEMEDFORMS
+    return false;
+#else
+    return commandLine()->value(Core::Constants::CL_MedinTux).toBool();
+#endif
 }
 
-QString receiptsManager::getFullName()
+QString ReceiptsManager::getFullName()
 {
-    QString medintuxFullName;
-    QString medintuxPatientName;
-    QString medintuxPatientFirstName;
-    QStringList args = qApp->arguments();
-    if (args.size()>MEDINTUX_PATIENT_NAME)
-    {
-    	medintuxPatientName = args[MEDINTUX_PATIENT_NAME];
-    	medintuxPatientName.remove("--patientname=");
-    	medintuxPatientFirstName = args[MEDINTUX_PATIENT_FIRSTNAME];
-    	medintuxPatientFirstName.remove("--patientfirstname=");
-    	
-        }
-    medintuxFullName = medintuxPatientName+","+medintuxPatientFirstName;
-    return medintuxFullName;
+    // Simply use the coreplugin IPatient to get these data.
+    // CommandLineParser feed this object
+    return patient()->data(Core::IPatient::FullName).toString();
 }
 
 

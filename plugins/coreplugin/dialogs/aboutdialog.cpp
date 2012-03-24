@@ -35,12 +35,15 @@
 #include <coreplugin/iaboutpage.h>
 
 #include <utils/global.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_menu.h>
 
 #include <QStackedLayout>
 #include <QHeaderView>
 
 using namespace Core;
-using namespace Core::Internal;
+using namespace Internal;
+using namespace Trans::ConstantTranslations;
 
 AboutDialog::AboutDialog(QWidget *parent) :
     QDialog(parent), m_ui(new Core::Internal::Ui::AboutDialog)
@@ -56,6 +59,8 @@ AboutDialog::AboutDialog(QWidget *parent) :
     m_ui->widget->setSettingKey("Dialogs/About");
     m_ui->widget->setupUi();
     m_ui->widget->expandAllCategories();
+
+    setWindowTitle(tkTr(Trans::Constants::ABOUT_TEXT).remove("&"));
 
     // resize and center window
     Utils::resizeAndCenter(this);

@@ -80,6 +80,18 @@ AccountPlugin::AccountPlugin() :
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating AccountPlugin";
+
+    // Add pages to plugins manager object pool
+    addObject(m_BankPage);
+    addObject(m_AvMovPage);
+    addObject(m_MPPage);
+    addObject(m_VirtPage);
+    addObject(m_SitesPage);
+    addObject(m_InsurPage);
+    addObject(m_PercentPage);
+    addObject(m_DistancePage);
+    addObject(m_AssetsRatesPage);
+    addObject(m_DefaultPage);
 }
 
 void AccountPlugin::removeAndDelete(QObject *o)
@@ -95,7 +107,6 @@ AccountPlugin::~AccountPlugin()
 {
     qWarning() << "AccountPlugin::~AccountPlugin()";
     // Remove preferences pages to plugins manager object pool
-    removeAndDelete(m_UserPage);
     removeAndDelete(m_UserPage);
     removeAndDelete(m_BankPage);
     removeAndDelete(m_AvMovPage);
@@ -161,18 +172,6 @@ void AccountPlugin::extensionsInitialized()
     m_DistancePage->checkSettingsValidity();
     m_AssetsRatesPage->checkSettingsValidity();
     m_DefaultPage->checkSettingsValidity();
-
-    // Add pages to plugins manager object pool
-    addObject(m_BankPage);
-    addObject(m_AvMovPage);
-    addObject(m_MPPage);
-    addObject(m_VirtPage);
-    addObject(m_SitesPage);
-    addObject(m_InsurPage);
-    addObject(m_PercentPage);
-    addObject(m_DistancePage);
-    addObject(m_AssetsRatesPage);
-    addObject(m_DefaultPage);
 }
 
 

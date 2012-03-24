@@ -34,6 +34,7 @@
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
+#include <coreplugin/icommandline.h>
 #include <coreplugin/constants.h>
 #include <coreplugin/translators.h>
 #include <coreplugin/itheme.h>
@@ -50,7 +51,7 @@
 #include <coreplugin/dialogs/settingsdialog.h>
 #include <coreplugin/dialogs/helpdialog.h>
 
-#include <coreplugin/commandlineparser.h>
+#include <coreplugin/freeaccount_constants.h>
 
 #include <accountplugin/constants.h>
 #include <accountplugin/accountview.h>
@@ -179,14 +180,14 @@ void MainWindow::extensionsInitialized()
         setWindowTitle(qApp->applicationName() + " - " + qApp->applicationVersion());
 
     // Disable some actions when starting as medintux plugin
-    if (commandLine()->value(Core::Internal::CommandLine::CL_MedinTux).toBool()) {
+    if (commandLine()->value(Core::Constants::CL_MedinTux).toBool()) {
 //        this->aNew->setEnabled(false);
 //        this->aSave->setEnabled(false);
 //        this->aMedinTux->setEnabled(false);
     }
 
     // If needed read exchange out file
-    const QString &exfile = commandLine()->value(Core::Internal::CommandLine::CL_ExchangeOutFile).toString();
+    const QString &exfile = commandLine()->value(Core::Constants::CL_ExchangeOutFile).toString();
     if (!exfile.isEmpty()) {
         messageSplash(tr("Reading exchange file..."));
 //        if (commandLine()->value(Core::Internal::CommandLine::CL_MedinTux).toBool()) {
@@ -226,12 +227,11 @@ void MainWindow::extensionsInitialized()
 
 
     // Here we set the UI according to the commandline parser
-    if (commandLine()->value(Core::Internal::CommandLine::CL_ReceiptsCreator).toBool()) {
+    if (commandLine()->value(Core::Constants::CL_ReceiptsCreator).toBool()) {
         setCentralWidget(new ReceiptViewer(this));
         if (WarnLogMessage)
             LOG("receiptGUI initialized");
     } else {
-        //setCentralWidget(new Account::AccountView(this));
         setCentralWidget(new ReceiptViewer(this));
     }
 
@@ -248,10 +248,15 @@ void MainWindow::extensionsInitialized()
 
 MainWindow::~MainWindow()
 {
+    if (Utils::Log::warnPluginsCreation())
+        qWarning() << "MainWindow::~MainWindow()";
 }
 
 void MainWindow::postCoreOpened()
 {
+    if (Utils::Log::warnPluginsCreation())
+        qWarning() << "MainWindow::postCoreOpened()";
+
     finishSplash(this);
     actionManager()->retranslateMenusAndActions();
     contextManager()->updateContext();
@@ -273,7 +278,7 @@ void MainWindow::refreshPatient()
 */
 void MainWindow::closeEvent( QCloseEvent *event )
 {
-    Utils::Log::addMessage(this, "Closing MainWindow");
+    LOG("Closing MainWindow");
     Core::ICore::instance()->requestSaveSettings();
 
     //    const QList<ICoreListener *> listeners =
@@ -405,8 +410,9 @@ bool MainWindow::applicationPreferences()
 }
 
 /** \brief Change the font of the viewing widget */
-void MainWindow::changeFontTo( const QFont &font )
+void MainWindow::changeFontTo(const QFont &font)
 {
+    Q_UNUSED(font);
 //    m_ui->m_CentralWidget->changeFontTo(font);
 //    m_ui->patientName->setFont(font);
 }
@@ -445,13 +451,11 @@ bool MainWindow::saveFile()
     return savePrescription();
 }
 
-/**
-  \brief Saves a prescription. If fileName is empty, user is ask about a file name.
-  \sa openPrescription()
-  \sa DrugsIO
-*/
+/** Saves a prescription. If fileName is empty, user is ask about a file name. */
 bool MainWindow::savePrescription(const QString &fileName)
 {
+    Q_UNUSED(fileName);
+    /** \todo code here */
 //    QString xmlExtra = patient()->toXml();
 //    if (commandLine()->value(Core::Internal::CommandLine::CL_EMR_Name).isValid()) {
 //        xmlExtra.append(QString("<EMR name=\"%1\"").arg(commandLine()->value(Core::Internal::CommandLine::CL_EMR_Name).toString()));
@@ -487,6 +491,8 @@ bool MainWindow::openFile()
 
 void MainWindow::readFile(const QString &file)
 {
+    Q_UNUSED(file);
+    /** \todo code here */
 //    QString datas;
 //    if (drugModel()->rowCount() > 0) {
 //        int r = Utils::withButtonsMessageBox(
