@@ -208,6 +208,9 @@ bool PadAnalyzer::isDelimiter(int pos, const QString &c, int *delimiterSize, Lex
         return false;
 
     if (c.at(pos) == Constants::TOKEN_OPEN_DELIMITER[0]) {
+
+//        qWarning() << "  isDelimiter:: OpenDelim found" << c.mid(pos, QString(Constants::TOKEN_OPEN_DELIMITER).size());
+
         if (c.mid(pos, QString(Constants::TOKEN_OPEN_DELIMITER).size()) == Constants::TOKEN_OPEN_DELIMITER) {
             *delimiterSize = QString(Constants::TOKEN_OPEN_DELIMITER).size();
             *type = Lexem_PadOpenDelimiter;
@@ -215,6 +218,9 @@ bool PadAnalyzer::isDelimiter(int pos, const QString &c, int *delimiterSize, Lex
         }
     }
     if (c.at(pos) == Constants::TOKEN_CLOSE_DELIMITER[0]) {
+
+//        qWarning() << "  isDelimiter:: OpenDelim found" << c.mid(pos, QString(Constants::TOKEN_OPEN_DELIMITER).size());
+
         if (c.mid(pos, QString(Constants::TOKEN_CLOSE_DELIMITER).size()) == Constants::TOKEN_CLOSE_DELIMITER) {
             *delimiterSize = QString(Constants::TOKEN_CLOSE_DELIMITER).size();
             *type = Lexem_PadCloseDelimiter;
