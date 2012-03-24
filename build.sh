@@ -21,12 +21,17 @@ SPEC=""
 # get version number of FreeDiams from the project file
 PROJECT_VERSION=`cat $SCRIPT_PATH/buildspecs/projectversion.pri | grep "PACKAGE_VERSION" -m 1 | cut -d = -s -f2 | tr -d ' '`
 
-# get the default spec file
-sys=`uname -s`
-if [ "$sys" == "Linux" ] ; then
-    SPEC="linux-g++"
-elif [ "$sys" == "Darwin" ] ; then
-    SPEC="macx-g++"
+if [[ $OSTYPE == linux-gnu ]]; then
+  SPEC="linux-g++"
+  echo "Linux OS detected; setting qmake spec to "$SPEC
+elif [[ $OSTYPE == darwin* ]]; then
+  SPEC="macx-g++"
+  echo "Mac OS detected; setting qmake spec to "$SPEC
+elif [[ $OSTYPE == freebsd ]]; then
+  SPEC="linux-g++"
+  echo "FreeBSD OS detected; setting qmake spec to "$SPEC
+else
+  echo "   * Unknow OS"
 fi
 
 showHelp()
