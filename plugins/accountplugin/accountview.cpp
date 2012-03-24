@@ -94,6 +94,7 @@ AccountView::AccountView(QWidget *parent) :
 
 AccountView::~AccountView()
 {
+        qWarning() << "AccountView::~AccountView()" ;
         if (m_ui) {
             
             delete m_ui;

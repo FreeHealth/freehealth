@@ -92,6 +92,7 @@ AccountContextualWidget::AccountContextualWidget(QWidget *parent) :
 AccountContextualWidget::~AccountContextualWidget()
 {
     // Remove contextual object
+    qWarning() << "AccountContextualWidget::~AccountContextualWidget()" ;
     contextManager()->removeContextObject(m_Context);
 }
 

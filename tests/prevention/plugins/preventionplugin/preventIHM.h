@@ -68,14 +68,12 @@ class PreventIHM : public QWidget, public Ui::PreventWidget {
         QSqlTableModel * m_newModel;
     
     private slots :
-        void iconsResetIfDateNextOvertaken(const QHash<int,QVariant>&);    
+        void iconsResetIfDateNextOvertaken(const QHash<int,QVariant>&);   
+        void changeIconWidget(); 
     private :
         QVBoxLayout *m_vbox;
         TreeViewOfPrevention *m_TreeViewOfPrevention; 
         Survey * m_survey;
-        void changeIconWidget();
-    
-
 };
 
 #endif

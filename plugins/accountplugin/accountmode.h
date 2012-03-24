@@ -44,6 +44,7 @@ class AccountMode : public Core::BaseMode
     Q_OBJECT
 public:
     explicit AccountMode(QObject *parent = 0);
+    ~AccountMode();
     void setCentralWidget(QWidget *widget);
     
     QString name() const;

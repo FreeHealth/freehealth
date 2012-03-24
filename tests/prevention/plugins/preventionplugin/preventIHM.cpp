@@ -145,6 +145,8 @@ QStringList headers;
     
     connect(m_survey,SIGNAL(iconsReset(const QHash<int,QVariant>&)),this,
                      SLOT(iconsResetIfDateNextOvertaken(const QHash<int,QVariant>&)));
+    connect(m_modelOfItems,SIGNAL(layoutChanged()),this,SLOT(changeIconWidget()));
+    
     
 
 }
@@ -166,6 +168,7 @@ void PreventIHM::changeIconWidget()
     	  	 QString data = m_modelOfItems->data(indexChild,Qt::DisplayRole).toString();
     	  	 qDebug() << __FILE__ << QString::number(__LINE__) << " indexChild.data().toString() =" 
     	  	          << data ;
+    	  	 m_TreeViewOfPrevention->closePersistentEditor(indexChild);
     	  	 m_TreeViewOfPrevention->openPersistentEditor (indexChild);
                 }
      }
@@ -173,5 +176,12 @@ void PreventIHM::changeIconWidget()
 
 void PreventIHM::iconsResetIfDateNextOvertaken(const QHash<int,QVariant> & hashOfOvertakenItems)
 {
-    QMessageBox::information(0,trUtf8("Info"),trUtf8("ESSAI"),QMessageBox::Ok);
+    QList<QVariant> listOfId = hashOfOvertakenItems.values();
+    for (int i = 0; i < listOfId.size(); i += 1)
+    {
+    	  QVariant idItem = listOfId[i];
+    	  m_modelOfItems->setIconWarning(idItem);
+    	  update();
+        }
+    
 }

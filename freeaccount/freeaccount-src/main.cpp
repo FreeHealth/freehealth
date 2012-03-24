@@ -142,13 +142,11 @@ int main( int argc, char *argv[] )
         std::cout << qPrintable(VERSION_MESSAGE);
         return 0;
     }
-    
     ExtensionSystem::PluginManager pluginManager;
     pluginManager.setFileExtension(QString("pluginspec"));
 
     QString pluginPaths = getPluginPaths();
     pluginManager.setPluginPaths(QStringList() << pluginPaths);
-
     // Add some debugging informations
     Utils::Log::addMessage("Main","Command line : " + qApp->arguments().join(" "));
 #ifdef DEBUG
@@ -193,7 +191,6 @@ int main( int argc, char *argv[] )
             qWarning() << "PluginSpecs :::"<< spec->filePath() << spec->name() << spec->version();
         }
     }
-
     foreach (ExtensionSystem::PluginSpec *spec, plugins) {
         if (spec->name() == QString(COREPLUGINSNAME)) {
             coreplugin = spec;
@@ -224,9 +221,7 @@ int main( int argc, char *argv[] )
 //        displayError(msgCoreLoadFailure(coreplugin->errorString()));
         return 123;
     }
-
-
-
+    
 //    if (foundAppOptions.contains(QLatin1String(VERSION_OPTION))) {
 //        printVersion(coreplugin, pluginManager);
 //        return 0;
@@ -246,7 +241,6 @@ int main( int argc, char *argv[] )
 //    foreach (ExtensionSystem::PluginSpec *spec, plugins) {
 //        qWarning() << "PlugInSpec" << spec->name() << spec->errorString() << spec->state();
 //    }
-
     pluginManager.loadPlugins();
     if (WarnAllPluginSpecs) {
         foreach (ExtensionSystem::PluginSpec *spec, plugins) {
@@ -257,7 +251,6 @@ int main( int argc, char *argv[] )
         qWarning() << "main" << coreplugin->errorString();
         return 1;
     }
-
     if (usermanagerplugin->hasError()) {
         qWarning() << "main" << usermanagerplugin->errorString();
         return 1;

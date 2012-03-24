@@ -18,7 +18,7 @@ void Survey::setTimer()
 {
      m_timer = new QTimer(this);
      connect(m_timer, SIGNAL(timeout()), this, SLOT(resetIcons()));
-     m_timer->start(2000);
+     m_timer->start(200000);
 }
 
 //void Survey::iconsReset(const QHash<int,QVariant> &){}
@@ -27,13 +27,19 @@ void Survey::resetIcons()
 {
     m_hashIconIdItem.clear();
     QSqlDatabase db = m_io->getDatabase();
+    const QString warning = pixmaps()+"/preventWarning";
     QSqlQuery q(db);
-    const QString req = QString("SELECT %1,%2 FROM %3 WHERE %4 < '%5'")
+    const QString req = QString("SELECT %1,%2 FROM %3 WHERE %4 < '%5' AND %6 NOT LIKE '%7' AND %8 NOT LIKE '%9'")
                         .arg("ICON",
                              "ID_ITEM",
                              "prevention",
                              "DATE_NEXT",
-                             QDate::currentDate().toString("yyyy-MM-dd"));
+                             QDate::currentDate().toString("yyyy-MM-dd"),
+                             "PARENT",
+                             "ROOT",
+                             "ICON",
+                             warning
+                             );
     if (!q.exec(req))
     {
     	  qWarning() << __FILE__ << QString::number(__LINE__) << q.lastError().text() ;

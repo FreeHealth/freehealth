@@ -557,6 +557,7 @@ AccountBase::AccountBase(QObject *parent)
 /** \brief Destructor. */
 AccountBase::~AccountBase()
 {
+    qWarning() << "AccountBase::~AccountBase()" ;
     if (d) delete d;
     d=0;
 }
