@@ -65,7 +65,7 @@
 #include <QBrush>
 #include <QColor>
 
-enum { WarnDebugMessage = true };
+enum { WarnDebugMessage = false };
 
 using namespace ReceiptsConstants;
 using namespace Constants;
@@ -320,7 +320,10 @@ treeViewsActions::treeViewsActions(QWidget *parent):QTreeView(parent){
     connect(user(), SIGNAL(userChanged()), this, SLOT(userIsChanged()));
     }
     
-treeViewsActions::~treeViewsActions(){}
+treeViewsActions::~treeViewsActions()
+{
+    qWarning() << "treeViewsActions::~treeViewsActions()" ;
+}
 
 void treeViewsActions::userIsChanged(){
     m_userUuid = user()->uuid();
@@ -595,7 +598,9 @@ ChosenListView::ChosenListView(QObject * parent,InternalAmount::AmountModel *amo
     connect(m_deleteInReturnedList,SIGNAL(triggered(bool)),this,SLOT(deleteItem(bool)));
 }
 
-ChosenListView::~ChosenListView(){}
+ChosenListView::~ChosenListView(){
+    qWarning() << "ChosenListView::~ChosenListView()" ;
+}
 
 void ChosenListView::changeEvent(QEvent *e) {
     QWidget::changeEvent(e);
@@ -657,6 +662,8 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
         ui->quitButton->show();
         setAttribute(Qt::WA_DeleteOnClose);
         }
+    if (WarnDebugMessage)
+    qWarning() << __FILE__ << QString::number(__LINE__) << "ReceiptViewer" ;
     ui->amountsView->setShowGrid(false);
     /*ui->amountsView->verticalHeader()->setResizeMode(QHeaderView::Interactive);
     ui->amountsView->verticalHeader()->setDefaultSectionSize(10);
@@ -762,6 +769,7 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
 
 ReceiptViewer::~ReceiptViewer()
 {
+    qWarning() << "ReceiptViewer::~ReceiptViewer()" ;
     /*delete m_returnedListView;
     delete m_actionTreeView;
     delete ui;*/
