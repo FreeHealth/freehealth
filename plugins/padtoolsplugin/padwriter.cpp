@@ -74,35 +74,30 @@ PadWriter::PadWriter(QWidget *parent) :
     // create tokenmodel
     d->m_TokenModel = new TokenModel(this);
     d->ui->treeView->setModel(d->m_TokenModel);
-    d->ui->treeView->setDragEnabled(true);
-    d->ui->treeView->setAcceptDrops(false);
-    d->ui->treeView->setDropIndicatorShown(false);
-    d->ui->treeView->setDragDropMode(QAbstractItemView::DragOnly);
+    d->ui->treeView->header()->setResizeMode(0, QHeaderView::Stretch);
 
-    this->setAcceptDrops(true);
-    d->ui->rawSource->setAcceptDrops(true);
     connect(d->ui->viewResult, SIGNAL(clicked()), this, SLOT(analyseRawSource()));
     connect(d->ui->viewError, SIGNAL(clicked()), this, SLOT(viewErrors()));
 
     // TEST
     d->ui->rawSource->setPlainText(
-                "$<before 'a'  ~A~  after 'a'>$\n"
-                "$<before 'b'  ~B~  after 'b'>$\n"
-                "$<before 'c'  ~C~  after 'c'>$\n"
-                "$<before 'html'  ~HTMLTOKEN~  after 'html'>$\n"
+                "<$before 'a'  ~A~  after 'a'$>\n"
+                "<$before 'b'  ~B~  after 'b'$>\n"
+                "<$before 'c'  ~C~  after 'c'$>\n"
+                "<$before 'html'  ~HTMLTOKEN~  after 'html'$>\n"
                 "\n\n"
                 "---------- TESTING NESTED ----------\n"
-                "$<ba $<bb ~B~ ab>$ ~A~  aa>$  -----> ba bb B ab A aa\n"
-                "$<bb ~B~ ab $<ba ~A~  aa>$>$  -----> bb B ab ba A aa\n"
-                "$<$<bb ~B~ ab ba ~NULL~  aa>$>$  -----> \n"
-                "$<bb ~B~ ab $<ba ~NULL~  aa>$>$  -----> bb B ab\n"
+                "<$ba <$bb ~B~ ab$> ~A~  aa$>  -----> ba bb B ab A aa\n"
+                "<$bb ~B~ ab <$ba ~A~  aa$>$>  -----> bb B ab ba A aa\n"
+                "<$<$bb ~B~ ab ba ~NULL~  aa$>$>  -----> \n"
+                "<$bb ~B~ ab <$ba ~NULL~  aa$>$>  -----> bb B ab\n"
                 "\n"
-                "$<ab ~A~ aa $<ba $<nnn ~NULL~ nnn $<ac ~C~ bc>$>$ ~B~  aa>$>$  -----> ab A aa ba B aa\n"
-                "$<ab ~A~ aa $<ba $<$<nnn ~NULL~ nnn >$ ac ~C~ bc >$ ~B~  aa>$>$  -----> ab A aa ba B aa\n"
+                "<$ab ~A~ aa <$ba <$nnn ~NULL~ nnn <$ac ~C~ bc$>$> ~B~  aa$>$>  -----> ab A aa ba B aa\n"
+                "<$ab ~A~ aa <$ba <$<$nnn ~NULL~ nnn $> ac ~C~ bc $> ~B~  aa$>$>  -----> ab A aa ba B aa\n"
                 "\n"
                 "\n"
                 "---------- TESTING INSIDE HTML CODE ----------\n"
-                "[<p>Test a  ~A~ is Ok </p>]"
+                "<$<p><i><b>Test</b></i> a  ~A~ is Ok </p>$>"
                 );
     // END TEST
 }
@@ -128,7 +123,7 @@ QString PadWriter::rawSource() const
 void PadWriter::analyseRawSource()
 {
     QList<Core::PadAnalyzerError> errors;
-    const QString &parsed = padTools()->parse(d->ui->rawSource->toPlainText(), d->m_TokenModel->tokens(), errors);
+    const QString &parsed = padTools()->parse(d->ui->rawSource->toHtml(), d->m_TokenModel->tokens(), errors);
     if (Qt::mightBeRichText(parsed))
         d->ui->wysiwyg->setHtml(parsed);
     else
@@ -150,72 +145,3 @@ void PadWriter::analyseRawSource()
 void PadWriter::viewErrors()
 {
 }
-
-//void PadWriter::dragEnterEvent(QDragEnterEvent *event)
-//{
-//    qWarning() << "E";
-//    if (event->source() != d->ui->treeView) {
-//        event->ignore();
-//        return;
-//    }
-
-//    if (d->ui->rawSource->underMouse() &&
-//            event->mimeData()->hasFormat(Constants::TOKENVALUE_MIME)) {
-//        qWarning() << "    accept";
-//        event->acceptProposedAction();
-//        event->accept();
-//    } else {
-//        qWarning() << "    ignore";
-//        event->ignore();
-//    }
-//}
-
-//void PadWriter::dragMoveEvent(QDragMoveEvent *event)
-//{
-//    qWarning() << "M" << event->pos();
-//    if (event->source() != d->ui->treeView) {
-//        event->ignore();
-//        return;
-//    }
-
-
-//    if (d->ui->rawSource->underMouse() &&
-//            event->mimeData()->hasFormat(Constants::TOKENVALUE_MIME)) {
-////        d->ui->rawSource->setFocus();
-////        qWarning() << event->pos();
-
-//        QTextCursor cursor = d->ui->rawSource->cursorForPosition(event->pos());
-//        d->ui->rawSource->setTextCursor(cursor);
-//        d->ui->rawSource->ensureCursorVisible();
-//        // if event pos y <=10 scroll up
-//        event->acceptProposedAction();
-//        event->accept();
-//    } else {
-//        event->ignore();
-//    }
-//}
-
-//void PadWriter::dragLeaveEvent(QDragLeaveEvent *event)
-//{
-//    qWarning() << "L";
-//    if (d->ui->rawSource->underMouse()) {
-//        event->ignore();
-//    } else {
-//        event->accept();
-//    }
-//}
-
-//void PadWriter::dropEvent(QDropEvent *event)
-//{
-//    qWarning() << "Drop" << event->pos() << event->mimeData()->formats();
-//    if (d->ui->rawSource->underMouse()) {
-//        qWarning() << "UNDER MOUSE";
-//        d->ui->rawSource->setFocus();
-//        QTextCursor cursor = d->ui->rawSource->cursorForPosition(event->pos());
-//        qWarning() << cursor.position() << event->mimeData()->data(Constants::TOKENVALUE_MIME);
-//        cursor.insertText(event->mimeData()->data(Constants::TOKENVALUE_MIME));
-//    }
-
-//    event->acceptProposedAction();
-//    event->accept();
-//}

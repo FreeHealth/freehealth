@@ -33,6 +33,7 @@ using namespace PadTools;
 DragDropTextEdit::DragDropTextEdit(QWidget *parent) :
     TextEditor(parent, DragDropTextEdit::Full)
 {
+    setAcceptDrops(true);
 }
 
 DragDropTextEdit::~DragDropTextEdit()
