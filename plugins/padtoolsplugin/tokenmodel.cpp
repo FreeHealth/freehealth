@@ -207,9 +207,12 @@ bool TokenModel::setData(const QModelIndex &index, const QVariant &value, int ro
 
 Qt::ItemFlags TokenModel::flags(const QModelIndex &index) const
 {
-    Qt::ItemFlags defaultFlags = QAbstractItemModel::flags(index);
-    if (index.isValid() && !hasChildren(index))
-        return Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled | defaultFlags;
+    Qt::ItemFlags defaultFlags = Qt::ItemIsEnabled | Qt::ItemIsSelectable;
+    if (index.isValid()) {
+        if (!hasChildren(this->index(index.row(), 0, index.parent()))) {
+            return Qt::ItemIsDragEnabled | Qt::ItemIsDropEnabled | defaultFlags;
+        }
+    }
     return defaultFlags;
 }
 
