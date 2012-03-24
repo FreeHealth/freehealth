@@ -42,7 +42,11 @@ QString PadToolsImpl::parse(const QString &templ, QMap<QString,QVariant> &tokens
 	Q_UNUSED(tokens); //TMP
 
 	PadAnalyzer analyzer;
-	Pad *pad = analyzer.analyze(templ);
+    QString t = templ;
+    if (t.contains("&lt;")) {
+        t = t.replace("&lt;","<").replace("&gt;",">");
+    }
+    Pad *pad = analyzer.analyze(t);
 	errors = analyzer.lastErrors();
 
 	return pad->run(tokens);
