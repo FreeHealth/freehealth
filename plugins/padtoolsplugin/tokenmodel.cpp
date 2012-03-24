@@ -163,6 +163,17 @@ QMap<QString, QVariant> &TokenModel::tokens()
 
 QVariant TokenModel::data(const QModelIndex &index, int role) const
 {
+    if (!index.isValid())
+        return QVariant();
+
+    if (!index.parent().isValid() &&
+            hasChildren(index) &&
+            role==Qt::FontRole) {
+        QFont bold;
+        bold.setBold(true);
+        return bold;
+    }
+
     return QStandardItemModel::data(index, role);
     //    if (!index.isValid())
     //        return QVariant();
@@ -210,22 +221,31 @@ Qt::DropActions TokenModel::supportedDropActions() const
 QStringList TokenModel::mimeTypes() const
 {
     QStringList types;
-    types << Constants::TOKENVALUE_MIME;
+    types << Constants::TOKENVALUE_MIME << Constants::TOKENRAWSOURCE_MIME;
     return types;
 }
 
 QMimeData *TokenModel::mimeData(const QModelIndexList &indexes) const
 {
     QMimeData *mimeData = new QMimeData();
-    QString dt;
+    if (indexes.isEmpty())
+        return mimeData;
 
-    // TODO : dt == token source
-    foreach (const QModelIndex &index, indexes) {
-        if (index.isValid()) {
-            dt += data(index, Qt::DisplayRole).toString();
-        }
-    }
+    /** \todo code multiple line selection ? */
+//    foreach (const QModelIndex &index, indexes) {
+//        if (index.isValid()) {
+//            dt += data(index, Qt::DisplayRole).toString();
+//        }
+//    }
 
-    mimeData->setData(Constants::TOKENVALUE_MIME, dt.toUtf8());
+    QString name = d->m_TokensToItem.key(itemFromIndex(indexes.at(0))); // d->m_Tokens.keys().at(indexes.at(0).row());
+    const QVariant &value = d->m_Tokens.value(name);;
+    mimeData->setData(Constants::TOKENVALUE_MIME, value.toByteArray());
+    name = QString("%1%2%3%2%4")
+            .arg(Constants::TOKEN_OPEN_DELIMITER)
+            .arg(Constants::TOKEN_CORE_DELIMITER)
+            .arg(name)
+            .arg(Constants::TOKEN_CLOSE_DELIMITER);
+    mimeData->setData(Constants::TOKENRAWSOURCE_MIME, name.toUtf8());
     return mimeData;
 }

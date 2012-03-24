@@ -33,6 +33,7 @@ using namespace PadTools;
 DragDropTextEdit::DragDropTextEdit(QWidget *parent) :
     TextEditor(parent, DragDropTextEdit::Full)
 {
+    setAcceptDrops(true);
 }
 
 DragDropTextEdit::~DragDropTextEdit()
@@ -41,27 +42,20 @@ DragDropTextEdit::~DragDropTextEdit()
 
 void DragDropTextEdit::dragEnterEvent(QDragEnterEvent *event)
 {
-    qWarning() << "E";
     if (underMouse() &&
             event->mimeData()->hasFormat(Constants::TOKENVALUE_MIME)) {
-        qWarning() << "    accept";
         event->acceptProposedAction();
         event->accept();
     } else {
-        qWarning() << "    ignore";
         event->ignore();
     }
 }
 
 void DragDropTextEdit::dragMoveEvent(QDragMoveEvent *event)
 {
-
     if (underMouse() &&
-            event->mimeData()->hasFormat(Constants::TOKENVALUE_MIME)) {
-        qWarning() << "M" << event->pos();
+            event->mimeData()->hasFormat(Constants::TOKENRAWSOURCE_MIME)) {
         textEdit()->setFocus();
-//        qWarning() << event->pos();
-
         QTextCursor cursor = cursorForPosition(event->pos());
         setTextCursor(cursor);
         ensureCursorVisible();
@@ -75,7 +69,6 @@ void DragDropTextEdit::dragMoveEvent(QDragMoveEvent *event)
 
 void DragDropTextEdit::dragLeaveEvent(QDragLeaveEvent *event)
 {
-    qWarning() << "L";
     if (underMouse()) {
         event->ignore();
     } else {
@@ -85,15 +78,13 @@ void DragDropTextEdit::dragLeaveEvent(QDragLeaveEvent *event)
 
 void DragDropTextEdit::dropEvent(QDropEvent *event)
 {
-    qWarning() << "Drop" << event->pos() << event->mimeData()->formats();
     if (underMouse()) {
-        qWarning() << "UNDER MOUSE";
         setFocus();
         QTextCursor cursor = cursorForPosition(event->pos());
-        qWarning() << cursor.position() << event->mimeData()->data(Constants::TOKENVALUE_MIME);
-        cursor.insertText(event->mimeData()->data(Constants::TOKENVALUE_MIME));
+        cursor.insertText(event->mimeData()->data(Constants::TOKENRAWSOURCE_MIME));
+        event->acceptProposedAction();
+        event->accept();
+    } else {
+        event->ignore();
     }
-
-    event->acceptProposedAction();
-    event->accept();
 }

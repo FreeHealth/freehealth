@@ -34,8 +34,8 @@ const char * const TOKENVALUE_MIME = "freepad/token/value";
 const char * const TOKENRAWSOURCE_MIME = "freepad/token/rawsource";
 
 const char * const TOKEN_CORE_DELIMITER  = "~";
-const char * const TOKEN_OPEN_DELIMITER  = "$<";
-const char * const TOKEN_CLOSE_DELIMITER = ">$";
+const char * const TOKEN_OPEN_DELIMITER  = "<$";
+const char * const TOKEN_CLOSE_DELIMITER = "$>";
 
 }
 }
