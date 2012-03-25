@@ -101,6 +101,9 @@
         <property name="toolTip">
          <string>Resulting interpretation of tokens</string>
         </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
        </widget>
       </widget>
       <widget class="QListWidget" name="listWidgetErrors">
