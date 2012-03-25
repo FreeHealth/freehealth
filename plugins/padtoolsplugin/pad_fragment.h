@@ -43,17 +43,22 @@ public:
 
 	virtual void print(int indent = 0) const = 0;
 
+    /** Returns the start position in the raw source string */
 	int start() const { return _start; }
-	void setStart(int start) { _start = start; }
-	int end() const { return _end; }
-	void setEnd(int end) { _end = end; }
+    /** Defines the start position in the raw source string */
+    void setStart(int start) { _start = start; }
 
-	const QString &rawValue() const { return _rawValue; }
-	void setRawValue(const QString &value) { _rawValue = value; }
+    /** Returns the end position in the raw source string */
+    int end() const { return _end; }
+    /** Defines the end position in the raw source string */
+    void setEnd(int end) { _end = end; }
 
-	/**
-	 * Run this fragment over some tokens and returns the result text
-	 */
+//    /** Returns the raw value of the fragment */
+//    const QString &rawValue() const { return _rawValue; }
+//    /** Defines the raw value of the fragment */
+//    void setRawValue(const QString &value) { _rawValue = value; }
+
+    /**  Run this fragment over some tokens and returns the result text */
 	virtual QString run(QMap<QString,QVariant> &tokens) const = 0;
 
 private:

@@ -24,18 +24,31 @@
  *  Contributors :                                                         *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
-#include <QString>
+
+/**
+ * \class PadTools::Pad
+ * Contains all the PadTools::PadFragment of the analyzed \e rawSource.
+ */
 
 #include "pad.h"
 #include "pad_item.h"
 
+#include <QString>
+
 using namespace PadTools;
+
+/** Construct an empty PadTools::Pad with the \e rawSource text (text is not analyzed). */
+Pad::Pad(const QString &rawSource) :
+    _rawSource(rawSource)
+{
+}
 
 Pad::~Pad()
 {
 	qDeleteAll(_fragments);
 }
 
+/** Add string fragment to the object. */
 void Pad::addFragment(PadFragment *fragment)
 {
 	_fragments << fragment;
@@ -51,6 +64,7 @@ void Pad::print(int indent) const
 	}
 }
 
+/** Returns all fragment of the analyzed raw source string. \sa PadTools::PadAnalyzer::analyze() */
 QList<PadFragment*> Pad::getAllFragments() const
 {
 	QList<PadFragment*> fragments;
@@ -65,14 +79,11 @@ QList<PadFragment*> Pad::getAllFragments() const
 	return fragments;
 }
 
+/** Run this pad over some tokens and returns the result text */
 QString Pad::run(QMap<QString,QVariant> &tokens) const
 {
-	Q_UNUSED(tokens);
-
 	QString value;
-
 	foreach (PadFragment *fragment, _fragments)
 		value += fragment->run(tokens);
-
 	return value;
 }

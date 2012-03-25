@@ -36,30 +36,24 @@
 
 namespace PadTools {
 
-
-/**
- * Contains an entire pad i.e. a list of fragments
- * @class
- */
 class Pad : public PadFragment
 {
 public:
-	Pad(){}
+    Pad(const QString &rawSource = QString::null);
+
 	virtual ~Pad();
 
-	void addFragment(PadFragment *fragment);
+    void addFragment(PadFragment *fragment);
 
 	QList<PadFragment*> getAllFragments() const;
 
 	void print(int indent = 0) const;
 
-	/**
-	 * Run this pad over some tokens and returns the result text
-	 */
 	QString run(QMap<QString,QVariant> &tokens) const;
 
 private:
 	QList<PadFragment*> _fragments;
+    QString _rawSource;
 };
 
 }  // PadTools

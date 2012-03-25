@@ -47,7 +47,7 @@ PadAnalyzer::PadAnalyzer()
 Pad *PadAnalyzer::analyze(const QString &text)
 {
 	Lexem lex;
-	Pad *pad = new Pad;
+    Pad *pad = new Pad(text);
 	PadFragment *fragment;
 	int pos;
 	QMap<QString,QVariant> errorTokens;
@@ -69,7 +69,7 @@ Pad *PadAnalyzer::analyze(const QString &text)
 			fragment = nextPadItem();
 			if (!fragment) { // bad pad item => turn it into a string fragment
 				fragment = new PadString(text.mid(pos, _curPos - pos));
-				fragment->setRawValue(text.mid(pos, _curPos - pos));
+//				fragment->setRawValue(text.mid(pos, _curPos - pos));
 				fragment->setStart(pos);
 				fragment->setEnd(_curPos - 1);
 			}
@@ -85,7 +85,7 @@ Pad *PadAnalyzer::analyze(const QString &text)
 			// turn it into a string fragment
 			pos = _curPos - 1;
 			fragment = new PadString(text.mid(pos, _curPos - pos));
-			fragment->setRawValue(text.mid(pos, _curPos - pos));
+//			fragment->setRawValue(text.mid(pos, _curPos - pos));
 			fragment->setStart(pos);
 			fragment->setEnd(_curPos - 1);
 			break;
@@ -99,7 +99,7 @@ Pad *PadAnalyzer::analyze(const QString &text)
 			// turn it into a string fragment
 			pos = _curPos - 1;
 			fragment = new PadString(text.mid(pos, _curPos - pos));
-			fragment->setRawValue(text.mid(pos, _curPos - pos));
+//			fragment->setRawValue(text.mid(pos, _curPos - pos));
 			fragment->setStart(pos);
 			fragment->setEnd(_curPos - 1);
 			break;
@@ -115,7 +115,7 @@ Pad *PadAnalyzer::analyze(const QString &text)
 
 PadItem *PadAnalyzer::nextPadItem()
 {
-	const QString &text = *_text;
+//	const QString &text = *_text;
 	PadFragment *fragment;
 	Lexem lex;
 	PadItem *padItem = new PadItem;
@@ -138,7 +138,7 @@ PadItem *PadAnalyzer::nextPadItem()
 			break;
 		case Lexem_PadCloseDelimiter:
 			padItem->setEnd(_curPos - 1);
-			padItem->setRawValue(text.mid(padItem->start(), padItem->end() - padItem->start() + 1));
+//			padItem->setRawValue(text.mid(padItem->start(), padItem->end() - padItem->start() + 1));
 			return padItem;
 		case Lexem_CoreDelimiter:
 			// TODO: raise an error when a core has already been defined
@@ -186,7 +186,7 @@ PadCore *PadAnalyzer::nextCore()
 	}
 
 	core->setEnd(_curPos - 1);
-	core->setRawValue(text.mid(core->start(), core->end() - core->start() + 1));
+//	core->setRawValue(text.mid(core->start(), core->end() - core->start() + 1));
 
 	return core;
 }
