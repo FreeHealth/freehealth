@@ -308,7 +308,7 @@ QMenu *TextEditor::getContextMenu()
 {
     QMenu *mc = new QMenu(this);
     Core::ActionManager *am = Core::ICore::instance()->actionManager();
-    mc->setTitle(tkTr(Trans::Constants::EDITORMENU_TEXT));
+    mc->setTitle(tkTr(Trans::Constants::EDITORMENU_TEXT).remove("&"));
 
 //    Core::ActionContainer *cMenu = am->actionContainer(Core::Constants::M_EDITOR_CONTEXT);
 //    if (cMenu) {
@@ -326,7 +326,7 @@ QMenu *TextEditor::getContextMenu()
 
     if (d->m_Type & WithTextCompleter) {
         QMenu *m = new QMenu(this);
-        m->setTitle(tkTr(Trans::Constants::EDITOR_ADDTEXTMENU_TEXT));
+        m->setTitle(tkTr(Trans::Constants::EDITOR_ADDTEXTMENU_TEXT).remove("&"));
         actions << Core::Constants::A_EDITOR_ADDDATE
                 << Core::Constants::A_EDITOR_ADDUSERNAME
                 << Core::Constants::A_EDITOR_ADDPATIENTNAME
@@ -345,7 +345,7 @@ QMenu *TextEditor::getContextMenu()
 
     if (d->m_Type & WithIO) {
         QMenu *m = new QMenu(this);
-        m->setTitle(tkTr(Trans::Constants::M_FILE_TEXT));
+        m->setTitle(tkTr(Trans::Constants::M_FILE_TEXT).remove("&"));
         actions << Core::Constants::A_EDITOR_FILEOPEN
                 << Core::Constants::A_EDITOR_FILESAVE
                 << Core::Constants::A_FILE_PRINT
@@ -361,7 +361,7 @@ QMenu *TextEditor::getContextMenu()
 
     actions.clear();
     QMenu *medit = new QMenu(this);
-    medit->setTitle(tkTr(Trans::Constants::M_EDIT_TEXT));
+    medit->setTitle(tkTr(Trans::Constants::M_EDIT_TEXT).remove("&"));
     actions << Core::Constants::A_EDIT_COPY
             << Core::Constants::A_EDIT_PASTE
             << Core::Constants::A_EDIT_CUT

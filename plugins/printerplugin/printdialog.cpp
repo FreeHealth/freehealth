@@ -89,7 +89,7 @@ PrintDialog::PrintDialog(QWidget *parent) :
     ui->copies->setText("1");
 
     // Change the buttons of the dialog
-    ui->buttonBox->addButton(tkTr(Trans::Constants::FILEPRINT_TEXT), QDialogButtonBox::YesRole);
+    ui->buttonBox->addButton(tkTr(Trans::Constants::FILEPRINT_TEXT).remove("&"), QDialogButtonBox::YesRole);
     QPushButton *topdf = ui->buttonBox->addButton("PDF", QDialogButtonBox::ActionRole);
     connect(topdf, SIGNAL(clicked()), this, SLOT(toPdf()));
 }
