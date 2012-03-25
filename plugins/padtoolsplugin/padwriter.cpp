@@ -34,7 +34,11 @@
 #include "constants.h"
 
 #include <coreplugin/icore.h>
+#include <coreplugin/constants_menus.h>
 #include <coreplugin/ipadtools.h>
+#include <coreplugin/itheme.h>
+#include <coreplugin/uniqueidmanager.h>
+#include <coreplugin/actionmanager/actionmanager.h>
 
 #include <utils/log.h>
 
@@ -45,6 +49,9 @@
 using namespace PadTools;
 using namespace Internal;
 
+static inline Core::UniqueIDManager *uid() { return Core::ICore::instance()->uniqueIDManager(); }
+static inline Core::ActionManager *actionManager() { return Core::ICore::instance()->actionManager(); }
+static inline Core::ITheme *theme() { return Core::ICore::instance()->theme(); }
 static inline Core::IPadTools *padTools() {return Core::ICore::instance()->padTools();}
 
 namespace PadTools {
@@ -57,6 +64,7 @@ public:
 public:
     Ui::PadWriter *ui;
     TokenModel *m_TokenModel;
+    QAction *aFollowCursor, *aAutoUpdate, *aSetDefaultValues;
 
 private:
     PadWriter *q;
@@ -76,6 +84,42 @@ PadWriter::PadWriter(QWidget *parent) :
     d->ui->treeView->setModel(d->m_TokenModel);
     d->ui->treeView->header()->setResizeMode(0, QHeaderView::Stretch);
 
+    // Add options action
+    QList<int> context = QList<int>() << Core::Constants::C_GLOBAL_ID;
+    QAction *a;
+    Core::Command *cmd;
+
+    d->aFollowCursor = a = new QAction(parent);
+    a->setObjectName("PadWriter.aFollowCursor");
+//    a->setIcon(theme()->icon(icon));
+    a->setCheckable(true);
+    a->setChecked(false);
+    cmd = actionManager()->registerAction(a, a->objectName(), context);
+    cmd->setTranslations(Constants::FOLLOW_CURSOR_IN_RESULT_OUTPUT, Constants::FOLLOW_CURSOR_IN_RESULT_OUTPUT, Constants::PADWRITER_TRANS_CONTEXT);
+    connect(cmd->action(), SIGNAL(triggered(bool)), this, SLOT(setFollowCursorInResultOutput(bool)));
+    d->ui->optionsButton->addAction(cmd->action());
+
+    d->aAutoUpdate = a = new QAction(parent);
+    a->setObjectName("PadWriter.aAutoUpdate");
+//    a->setIcon(theme()->icon(icon));
+    a->setCheckable(true);
+    a->setChecked(false);
+    cmd = actionManager()->registerAction(a, a->objectName(), context);
+    cmd->setTranslations(Constants::AUTO_UPDATE_RESULT, Constants::AUTO_UPDATE_RESULT, Constants::PADWRITER_TRANS_CONTEXT);
+    connect(cmd->action(), SIGNAL(triggered(bool)), this, SLOT(setAutoUpdateOfResult(bool)));
+    d->ui->optionsButton->addAction(cmd->action());
+
+    d->aSetDefaultValues = a = new QAction(parent);
+    a->setObjectName("PadWriter.aSetDefaultValues");
+//    a->setIcon(theme()->icon(icon));
+    a->setCheckable(true);
+    a->setChecked(false);
+    cmd = actionManager()->registerAction(a, a->objectName(), context);
+    cmd->setTranslations(Constants::SET_TEST_VALUE_TO_TOKENS, Constants::SET_TEST_VALUE_TO_TOKENS, Constants::PADWRITER_TRANS_CONTEXT);
+    connect(cmd->action(), SIGNAL(triggered(bool)), this, SLOT(setTestValues(bool)));
+    d->ui->optionsButton->addAction(cmd->action());
+
+    // Connect buttons
     connect(d->ui->viewResult, SIGNAL(clicked()), this, SLOT(analyseRawSource()));
     connect(d->ui->viewError, SIGNAL(clicked()), this, SLOT(viewErrors()));
 
@@ -144,4 +188,24 @@ void PadWriter::analyseRawSource()
 
 void PadWriter::viewErrors()
 {
+}
+
+void PadWriter::setFollowCursorInResultOutput(bool state)
+{
+}
+
+
+void PadWriter::setAutoUpdateOfResult(bool state)
+{
+    if (state) {
+        connect(d->ui->rawSource->textEdit(), SIGNAL(textChanged()), this, SLOT(analyseRawSource()));
+        analyseRawSource();
+    } else {
+        disconnect(d->ui->rawSource->textEdit(), SIGNAL(textChanged()), this, SLOT(analyseRawSource()));
+    }
+}
+
+void PadWriter::setTestValues(bool state)
+{
+    analyseRawSource();
 }

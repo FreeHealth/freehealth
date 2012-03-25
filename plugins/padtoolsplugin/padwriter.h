@@ -51,16 +51,12 @@ public:
 private Q_SLOTS:
     void analyseRawSource();
     void viewErrors();
-
-//private:
-//    void dragEnterEvent(QDragEnterEvent *event);
-//    void dragMoveEvent(QDragMoveEvent *event);
-//    void dragLeaveEvent(QDragLeaveEvent *event);
-//    void dropEvent(QDropEvent *event);
+    void setFollowCursorInResultOutput(bool state);
+    void setAutoUpdateOfResult(bool state);
+    void setTestValues(bool state);
 
 private:
     Internal::PadWriterPrivate *d;
-
 };
 
 } // namespace PadTools
