@@ -39,7 +39,7 @@ namespace PadTools {
 class PadFragment
 {
 public:
-	PadFragment() {}
+    PadFragment(): _start(-1), _end(-1) {}
 
 	virtual void print(int indent = 0) const = 0;
 
