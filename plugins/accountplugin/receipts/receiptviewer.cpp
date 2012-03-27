@@ -685,12 +685,12 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
     
 
     ui->amountsView->setModel(m_model);
-    ui->amountsView->setItemDelegateForColumn(Cash, new Utils::SpinBoxDelegate(this,0.00,100.00,true));
-    ui->amountsView->setItemDelegateForColumn(Check, new Utils::SpinBoxDelegate(this,0.00,100.00,true));
-    ui->amountsView->setItemDelegateForColumn(Visa, new Utils::SpinBoxDelegate(this,0.00,100.00,true));
-    ui->amountsView->setItemDelegateForColumn(Banking, new Utils::SpinBoxDelegate(this,0.00,100.00,true));
-    ui->amountsView->setItemDelegateForColumn(Other, new Utils::SpinBoxDelegate(this,0.00,100.00,true));
-    ui->amountsView->setItemDelegateForColumn(Due, new Utils::SpinBoxDelegate(this,0.00,100.00,true));
+    ui->amountsView->setItemDelegateForColumn(Cash, new Utils::SpinBoxDelegate(this,0.00,100000.00,true));
+    ui->amountsView->setItemDelegateForColumn(Check, new Utils::SpinBoxDelegate(this,0.00,100000.00,true));
+    ui->amountsView->setItemDelegateForColumn(Visa, new Utils::SpinBoxDelegate(this,0.00,100000.00,true));
+    ui->amountsView->setItemDelegateForColumn(Banking, new Utils::SpinBoxDelegate(this,0.00,100000.00,true));
+    ui->amountsView->setItemDelegateForColumn(Other, new Utils::SpinBoxDelegate(this,0.00,100000.00,true));
+    ui->amountsView->setItemDelegateForColumn(Due, new Utils::SpinBoxDelegate(this,0.00,100000.00,true));
     ui->amountsView->setColumnHidden(InternalAmount::AmountModel::Col_Debtor,true);
     ui->amountsView->setColumnHidden(InternalAmount::AmountModel::Col_Site,true);
     ui->amountsView->setColumnHidden(InternalAmount::AmountModel::Col_DistRule,true);
