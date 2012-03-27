@@ -35,6 +35,7 @@
 #include "findReceiptsValues.h"
 #include "choiceDialog.h"
 #include "distance.h"
+#include "freetext.h"
 
 #include "constants.h"
 
@@ -1162,6 +1163,15 @@ void ReceiptViewer::save()
     if (manager.isMedintuxArg())
     {
     	patientName = manager.getFullName();
+        }
+    if (ui->freeTextCheckBox->isChecked())
+    {
+    	FreeText freeTextDialog(this);
+    	if (freeTextDialog.exec()==QDialog::Accepted)
+    	{
+    		patientName = freeTextDialog.getFreeText();
+    	    }
+    	ui->freeTextCheckBox->setChecked(false);
         }
     QHash<int,QVariant> hash;
     hash.insert(ACCOUNT_UID,"UID");
