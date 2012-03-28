@@ -35,6 +35,7 @@
 #include "findReceiptsValues.h"
 #include "choiceDialog.h"
 #include "distance.h"
+#include "freetext.h"
 
 #include "constants.h"
 
@@ -65,7 +66,7 @@
 #include <QBrush>
 #include <QColor>
 
-enum { WarnDebugMessage = true };
+enum { WarnDebugMessage = false };
 
 using namespace ReceiptsConstants;
 using namespace Constants;
@@ -320,7 +321,10 @@ treeViewsActions::treeViewsActions(QWidget *parent):QTreeView(parent){
     connect(user(), SIGNAL(userChanged()), this, SLOT(userIsChanged()));
     }
     
-treeViewsActions::~treeViewsActions(){}
+treeViewsActions::~treeViewsActions()
+{
+    qWarning() << "treeViewsActions::~treeViewsActions()" ;
+}
 
 void treeViewsActions::userIsChanged(){
     m_userUuid = user()->uuid();
@@ -595,7 +599,9 @@ ChosenListView::ChosenListView(QObject * parent,InternalAmount::AmountModel *amo
     connect(m_deleteInReturnedList,SIGNAL(triggered(bool)),this,SLOT(deleteItem(bool)));
 }
 
-ChosenListView::~ChosenListView(){}
+ChosenListView::~ChosenListView(){
+    qWarning() << "ChosenListView::~ChosenListView()" ;
+}
 
 void ChosenListView::changeEvent(QEvent *e) {
     QWidget::changeEvent(e);
@@ -657,6 +663,8 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
         ui->quitButton->show();
         setAttribute(Qt::WA_DeleteOnClose);
         }
+    if (WarnDebugMessage)
+    qWarning() << __FILE__ << QString::number(__LINE__) << "ReceiptViewer" ;
     ui->amountsView->setShowGrid(false);
     /*ui->amountsView->verticalHeader()->setResizeMode(QHeaderView::Interactive);
     ui->amountsView->verticalHeader()->setDefaultSectionSize(10);
@@ -677,12 +685,12 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
     
 
     ui->amountsView->setModel(m_model);
-    ui->amountsView->setItemDelegateForColumn(Cash, new Utils::SpinBoxDelegate(this,0.00,100.00,true));
-    ui->amountsView->setItemDelegateForColumn(Check, new Utils::SpinBoxDelegate(this,0.00,100.00,true));
-    ui->amountsView->setItemDelegateForColumn(Visa, new Utils::SpinBoxDelegate(this,0.00,100.00,true));
-    ui->amountsView->setItemDelegateForColumn(Banking, new Utils::SpinBoxDelegate(this,0.00,100.00,true));
-    ui->amountsView->setItemDelegateForColumn(Other, new Utils::SpinBoxDelegate(this,0.00,100.00,true));
-    ui->amountsView->setItemDelegateForColumn(Due, new Utils::SpinBoxDelegate(this,0.00,100.00,true));
+    ui->amountsView->setItemDelegateForColumn(Cash, new Utils::SpinBoxDelegate(this,0.00,100000.00,true));
+    ui->amountsView->setItemDelegateForColumn(Check, new Utils::SpinBoxDelegate(this,0.00,100000.00,true));
+    ui->amountsView->setItemDelegateForColumn(Visa, new Utils::SpinBoxDelegate(this,0.00,100000.00,true));
+    ui->amountsView->setItemDelegateForColumn(Banking, new Utils::SpinBoxDelegate(this,0.00,100000.00,true));
+    ui->amountsView->setItemDelegateForColumn(Other, new Utils::SpinBoxDelegate(this,0.00,100000.00,true));
+    ui->amountsView->setItemDelegateForColumn(Due, new Utils::SpinBoxDelegate(this,0.00,100000.00,true));
     ui->amountsView->setColumnHidden(InternalAmount::AmountModel::Col_Debtor,true);
     ui->amountsView->setColumnHidden(InternalAmount::AmountModel::Col_Site,true);
     ui->amountsView->setColumnHidden(InternalAmount::AmountModel::Col_DistRule,true);
@@ -762,6 +770,7 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
 
 ReceiptViewer::~ReceiptViewer()
 {
+    qWarning() << "ReceiptViewer::~ReceiptViewer()" ;
     /*delete m_returnedListView;
     delete m_actionTreeView;
     delete ui;*/
@@ -1154,6 +1163,15 @@ void ReceiptViewer::save()
     if (manager.isMedintuxArg())
     {
     	patientName = manager.getFullName();
+        }
+    if (ui->freeTextCheckBox->isChecked())
+    {
+    	FreeText freeTextDialog(this);
+    	if (freeTextDialog.exec()==QDialog::Accepted)
+    	{
+    		patientName = freeTextDialog.getFreeText();
+    	    }
+    	ui->freeTextCheckBox->setChecked(false);
         }
     QHash<int,QVariant> hash;
     hash.insert(ACCOUNT_UID,"UID");

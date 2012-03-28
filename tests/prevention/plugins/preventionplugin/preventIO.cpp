@@ -519,6 +519,56 @@ TreeItem * VariantItemModel::getRootItem()
     return m_rootItem;
 }
 
+TreeItem * VariantItemModel::findTreeItemWithIdItem(QVariant & idItem)
+{
+    TreeItem * itemWithIdItem;
+    for (int rowParent = 0; rowParent < rowCount(QModelIndex()); rowParent += 1)
+    {
+    	  QModelIndex parent = VariantItemModel::index(rowParent,0,QModelIndex());
+    	  TreeItem * parentItem = m_rootItem->child(rowParent);
+    	  for (int rowChild = 0; rowChild < rowCount(parent); rowChild += 1)
+    	  {
+    	  	  TreeItem * item = parentItem->child(rowChild);
+    	  	  QVariant idOfThisItem = item->data(ID_ITEM_H);
+    	  	  if (idOfThisItem == idItem)
+    	  	  {
+    	  	  	  itemWithIdItem = item;
+    	  	      }
+    	      }
+        }
+    return itemWithIdItem;
+}
+
+QModelIndex VariantItemModel::indexOfIconOfItem(TreeItem * item)
+{
+    QModelIndex index;
+    TreeItem * parentItem = item->parent();
+    int rowParent = parentItem->childNumber();
+    QModelIndex parentIndex = VariantItemModel::index(rowParent,0) ; 
+    int rowChild = item->childNumber();
+    index = VariantItemModel::index(rowChild,int(VariantItemModel::ICON_H),parentIndex);
+    return index;
+}
+
+void VariantItemModel::setIconWarning(QVariant & idItem)
+{
+    QVariant preventWarningIcon = QVariant(pixmaps()+"/preventWarning.png");
+    const QString filter = QString("%1='%2'").arg("ID_ITEM",idItem.toString());
+    m_modelSql->setFilter(filter);
+    m_modelSql->select();
+    m_modelSql->setData(m_modelSql->index(0,ICON),preventWarningIcon,Qt::EditRole);
+    m_modelSql->submitAll();
+    m_modelSql->setFilter("");
+    m_modelSql->select();
+    
+    emit layoutAboutToBeChanged();
+    TreeItem * itemChanged = findTreeItemWithIdItem(idItem);
+    itemChanged->setData(ICON_H,preventWarningIcon);
+    QModelIndex index = indexOfIconOfItem(itemChanged);
+    emit dataChanged(index,index);
+    emit layoutChanged();
+}
+
 
 PreventIO::PreventIO(QObject * parent){
     m_db = QSqlDatabase::database("prevention");

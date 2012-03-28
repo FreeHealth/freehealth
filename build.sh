@@ -1,4 +1,4 @@
-#! /bin/sh
+#!/bin/bash
 
 # This script is part of FreeMedForms project : http://www.freemedforms.com
 # (c) 2008 - 2012  Eric MAEKER, MD

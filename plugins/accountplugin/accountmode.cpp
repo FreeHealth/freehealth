@@ -55,6 +55,7 @@
 
 #include <QFile>
 #include <QPushButton>
+#include <QDebug>
 
 using namespace Account::Internal;
 using namespace Trans::ConstantTranslations;
@@ -63,6 +64,11 @@ static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); 
 static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
 static inline Core::ModeManager *modeManager() {return Core::ICore::instance()->modeManager();}
 static inline Core::IMainWindow *mainWindow() { return Core::ICore::instance()->mainWindow(); }
+
+AccountMode::~AccountMode()
+{
+    qWarning() << "AccountMode::~AccountMode()"  ;
+}
 
 AccountMode::AccountMode(QObject *parent) :
     Core::BaseMode(parent)

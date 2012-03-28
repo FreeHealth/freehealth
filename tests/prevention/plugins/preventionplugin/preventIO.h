@@ -125,9 +125,12 @@ class VariantItemModel : public QAbstractItemModel
      TreeItem *getItem(const QModelIndex &index) const;
      int findNextId();
      int getNextIdPrimkey();
+     //change icon
+     void setIconWarning(QVariant & idItem);
  private:
-     //TreeItem *getItem(const QModelIndex &index) const;
      int getSqlTableRow(int idOfItem);
+     TreeItem * findTreeItemWithIdItem(QVariant & idItem);
+     QModelIndex indexOfIconOfItem(TreeItem * item);
      TreeItem *m_rootItem;
      QSqlTableModel *m_modelSql;
      QSqlDatabase m_db;

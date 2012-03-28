@@ -170,7 +170,7 @@ void MovementsViewer::recordMovement()
     if (!mov.insertIntoMovements(hashValues)) {
         Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("Movement not inserted."));
     } else {
-        Utils::informativeMessageBox(tkTr(Trans::Constants::INFORMATION), tr("Movement deleted."));
+        Utils::informativeMessageBox(tkTr(Trans::Constants::INFORMATION), tr("Movement inserted."));
     }
     showMovements();
 }
