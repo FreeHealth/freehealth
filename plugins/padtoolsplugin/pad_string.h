@@ -44,6 +44,8 @@ public:
 	void print(int indent = 0) const;
 
 	QString run(QMap<QString,QVariant> &) const;
+    void run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out) const;
+
 private:
 	QString _string;
 };

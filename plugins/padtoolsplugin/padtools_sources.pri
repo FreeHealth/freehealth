@@ -9,7 +9,7 @@ HEADERS +=  \
     $${PWD}/pad_analyzer.h \
     $${PWD}/padtoolsimpl.h \
     $${PWD}/pad_highlighter.h \
-    $${PWD}/pad.h \
+    $${PWD}/pad_document.h \
     $${PWD}/pad_fragment.h \
     $${PWD}/pad_string.h \
     $${PWD}/pad_core.h \
@@ -24,7 +24,7 @@ SOURCES += \
     $${PWD}/pad_analyzer.cpp \
     $${PWD}/padtoolsimpl.cpp \
     $${PWD}/pad_highlighter.cpp \
-    $${PWD}/pad.cpp \
+    $${PWD}/pad_document.cpp \
     $${PWD}/pad_fragment.cpp \
     $${PWD}/pad_string.cpp \
     $${PWD}/pad_core.cpp \

@@ -32,6 +32,8 @@
 #include "padwriter.h"
 #include "tokenmodel.h"
 #include "constants.h"
+#include "pad_analyzer.h"
+#include "pad_highlighter.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/constants_menus.h>
@@ -65,6 +67,7 @@ public:
     Ui::PadWriter *ui;
     TokenModel *m_TokenModel;
     QAction *aFollowCursor, *aAutoUpdate, *aSetDefaultValues;
+    PadDocument *m_Pad;
 
 private:
     PadWriter *q;
@@ -79,10 +82,13 @@ PadWriter::PadWriter(QWidget *parent) :
     d->ui = new Ui::PadWriter;
     d->ui->setupUi(this);
 
-    // create tokenmodel
+    // Create TokenModel
     d->m_TokenModel = new TokenModel(this);
     d->ui->treeView->setModel(d->m_TokenModel);
     d->ui->treeView->header()->setResizeMode(0, QHeaderView::Stretch);
+
+    // Create PadHighlighter
+    PadHighlighter *highlight = new PadHighlighter(d->ui->rawSource->textEdit());
 
     // Add options action
     QList<int> context = QList<int>() << Core::Constants::C_GLOBAL_ID;
@@ -124,6 +130,7 @@ PadWriter::PadWriter(QWidget *parent) :
     connect(d->ui->viewError, SIGNAL(clicked()), this, SLOT(viewErrors()));
 
     // TEST
+    setFollowCursorInResultOutput(true);
     d->ui->rawSource->setPlainText(
                 "<$before 'a'  ~A~  after 'a'$>\n"
                 "<$before 'b'  ~B~  after 'b'$>\n"
@@ -167,11 +174,25 @@ QString PadWriter::rawSource() const
 void PadWriter::analyseRawSource()
 {
     QList<Core::PadAnalyzerError> errors;
-    const QString &parsed = padTools()->parse(d->ui->rawSource->toHtml(), d->m_TokenModel->tokens(), errors);
-    if (Qt::mightBeRichText(parsed))
-        d->ui->wysiwyg->setHtml(parsed);
-    else
-        d->ui->wysiwyg->setPlainText(parsed);
+    if (d->m_Pad) {
+        delete d->m_Pad;
+        d->m_Pad = 0;
+    }
+//    d->m_Pad = PadAnalyzer().analyze(d->ui->rawSource->toHtml().replace("&lt;","<").replace("&gt;",">"));
+//    const QString &parsed = d->m_Pad->run(d->m_TokenModel->tokens());
+////    const QString &parsed = padTools()->parse(d->ui->rawSource->toHtml(), d->m_TokenModel->tokens(), errors);
+
+//    qWarning() << "\n\n";
+//    qWarning() << parsed;
+//    qWarning() << "\n\n";
+
+//    if (Qt::mightBeRichText(parsed))
+//        d->ui->wysiwyg->setHtml(parsed);
+//    else
+//        d->ui->wysiwyg->setPlainText(parsed);
+
+    d->m_Pad = PadAnalyzer().analyze(d->ui->rawSource->textEdit()->document());
+    d->m_Pad->run(d->m_TokenModel->tokens(), d->ui->rawSource->textEdit()->document(), d->ui->wysiwyg->document());
 
     d->ui->listWidgetErrors->clear();
     foreach (const Core::PadAnalyzerError &error, errors) {
@@ -192,8 +213,35 @@ void PadWriter::viewErrors()
 
 void PadWriter::setFollowCursorInResultOutput(bool state)
 {
+    if (state) {
+        connect(d->ui->rawSource->textEdit(), SIGNAL(cursorPositionChanged()), this, SLOT(findCursorPositionInOutput()));
+    } else {
+        disconnect(d->ui->rawSource->textEdit(), SIGNAL(cursorPositionChanged()), this, SLOT(findCursorPositionInOutput()));
+    }
 }
 
+void PadWriter::findCursorPositionInOutput()
+{
+    WARN_FUNC << d->ui->rawSource->textEdit()->textCursor().position();
+    if (!d->m_Pad)
+        return;
+
+    // Find corresponding fragment Id
+//    const int cursorPos = d->ui->rawSource->textEdit()->textCursor().position();
+//    const QList<PadFragment *> &fragments = d->m_Pad->getAllFragments();
+//    QList<PadFragment *> currentFragments;
+//    for(int i = 0; i < fragments.count(); ++i) {
+//        PadFragment *fragment = fragments.at(i);
+//        qWarning() << "TEST" << fragment->start() << fragment->end();
+//        if (fragment->start() >= cursorPos && fragment->end() <= cursorPos) {
+//            currentFragments << fragment;
+//            qWarning() << "FOUND" << fragment->start() << fragment->end();
+//        }
+//    }
+
+    // Find the block in the QTextDocument
+
+}
 
 void PadWriter::setAutoUpdateOfResult(bool state)
 {

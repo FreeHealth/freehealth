@@ -52,6 +52,7 @@ private Q_SLOTS:
     void analyseRawSource();
     void viewErrors();
     void setFollowCursorInResultOutput(bool state);
+    void findCursorPositionInOutput();
     void setAutoUpdateOfResult(bool state);
     void setTestValues(bool state);
 

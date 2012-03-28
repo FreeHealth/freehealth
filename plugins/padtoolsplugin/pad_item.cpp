@@ -73,10 +73,22 @@ QList<PadFragment*> PadItem::getAllFragments() const
 	return fragments;
 }
 
+PadCore *PadItem::getCore() const
+{
+    PadCore *core;
+    foreach (PadFragment *fragment, _fragments) {
+        core = dynamic_cast<PadCore*>(fragment);
+        if (core)
+            return core;
+    }
+    return 0;
+}
+
+/**
+ * Run this pad over some tokens and returns the result text
+ */
 QString PadItem::run(QMap<QString,QVariant> &tokens) const
 {
-	Q_UNUSED(tokens);
-
 	QString value;
 	PadCore *core = getCore();
 	QString coreValue;
@@ -94,13 +106,20 @@ QString PadItem::run(QMap<QString,QVariant> &tokens) const
 	return value;
 }
 
-PadCore *PadItem::getCore() const
+void PadItem::run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out) const
 {
-	PadCore *core;
-    foreach (PadFragment *fragment, _fragments) {
-		core = dynamic_cast<PadCore*>(fragment);
-		if (core)
-			return core;
-	}
-	return 0;
+    PadCore *core = getCore();
+    QString coreValue;
+
+    // if a core exists, the entire pad expression is optional, depending on the core emptiness
+    if (core) {
+        coreValue = core->name();
+        if (coreValue.isEmpty())
+            return;
+    }
+
+    foreach (PadFragment *fragment, _fragments)
+        fragment->run(tokens, source, out);
+
+    return;
 }

@@ -35,7 +35,7 @@
 #include "pad_fragment.h"
 #include "pad_core.h"
 #include "pad_string.h"
-#include "pad.h"
+#include "pad_document.h"
 #include "pad_item.h"
 
 namespace PadTools {
@@ -45,7 +45,8 @@ class PadAnalyzer
 public:
 	PadAnalyzer();
 
-	Pad *analyze(const QString &text);
+    PadDocument *analyze(const QString &text);
+    PadDocument *analyze(QTextDocument *document);
 
 	const QList<Core::PadAnalyzerError> lastErrors() const { return _lastErrors; }
 
@@ -66,28 +67,35 @@ private:
 		int end;			// end index in the analyzed text
 	};
 
-	Lexem _lexemNull;
+    PadDocument *startAnalyze();
 
-	const QString *_text;
-	int _length;
-	int _curPos; // contains the current position in the analyzed text
-	QList<Core::PadAnalyzerError> _lastErrors;
-
-    inline bool atEnd();
+    bool atEnd();
 	PadItem *nextPadItem();
 	PadCore *nextCore(); // tries to parse a core ("~...~")
 
 	int getLine(int curPos = -1) const;
 	int getPos(int curPos = -1) const;
 
-    static bool isSpecial(const QChar &c);
-    bool isDelimiter(int pos, const QString &c, int *delimiterSize, LexemType *type);
+    bool isDelimiter(int pos, int *delimiterSize, LexemType *type);
 
 	Lexem nextLexem();
-};
 
-/** Returns true if current position reaches the end of the text. */
-bool PadAnalyzer::atEnd() {return _curPos >= _length;}
+    inline int nextId();
+    inline void resetId();
+
+private: // Data
+    Lexem _lexemNull;
+
+    const QString *_text;
+    QTextDocument *_document;
+    int _length;
+    int _curPos; // contains the current position in the analyzed text
+    uint _id;
+    QList<Core::PadAnalyzerError> _lastErrors;
+
+};
+int PadAnalyzer::nextId() {return ++_id;}
+void PadAnalyzer::resetId() {_id=0;}
 
 } // PadTools
 

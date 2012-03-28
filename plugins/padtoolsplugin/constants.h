@@ -39,6 +39,9 @@ const char * const TOKEN_CLOSE_DELIMITER = "$>";
 
 const char * const C_PADWRITER_CONTEXT = "cPadWriter";
 
+const char * const TOKEN_AND_POSITION_TAG = "\n<!--%2-->%1<!--%2-->\n";
+
+
 // Translations
 const char * const PADWRITER_TRANS_CONTEXT = "PadWriter";
 

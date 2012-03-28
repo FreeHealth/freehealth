@@ -52,10 +52,8 @@ public:
 
 	void print(int indent = 0) const;
 
-	/**
-	 * Run this pad over some tokens and returns the result text
-	 */
 	QString run(QMap<QString,QVariant> &tokens) const;
+    void run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out) const;
 
 private:
 	QList<PadFragment*> _fragments;

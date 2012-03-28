@@ -25,3 +25,39 @@
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
 #include "pad_fragment.h"
+
+#include <QTextDocument>
+#include <QTextCursor>
+#include <QTextDocumentFragment>
+
+#include <QDebug>
+
+using namespace PadTools;
+
+PadFragment::PadFragment() :
+    _start(-1),
+    _end(-1),
+    _id(-1)
+{
+}
+
+void PadFragment::insertFragment(QTextDocument *source, QTextDocument *out) const
+{
+    if (_start>=0) {
+        QTextCursor cursor(source);
+        cursor.setPosition(_start, QTextCursor::MoveAnchor);
+        cursor.setPosition(_end, QTextCursor::KeepAnchor);
+        QTextCursor toCursor(out);
+        toCursor.movePosition(QTextCursor::End);
+        toCursor.insertFragment(cursor.selection());
+    }
+}
+
+void PadFragment::insertText(QTextDocument *out, const QString &text) const
+{
+    if (_start>=0) {
+        QTextCursor toCursor(out);
+        toCursor.movePosition(QTextCursor::End);
+        toCursor.insertText(text);
+    }
+}

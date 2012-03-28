@@ -30,6 +30,7 @@
 #include <QString>
 #include <QMap>
 #include <QVariant>
+#include <QTextDocument>
 
 namespace PadTools {
 
@@ -39,32 +40,38 @@ namespace PadTools {
 class PadFragment
 {
 public:
-    PadFragment(): _start(-1), _end(-1) {}
+    PadFragment();
 
 	virtual void print(int indent = 0) const = 0;
 
-    /** Returns the start position in the raw source string */
+    /** Returns the start position in the raw source string/document */
+    int id() const { return _id; }
+    /** Defines the start position in the raw source string/document */
+    void setId(int id) { _id = id; }
+
+    /** Returns the start position in the raw source string/document */
 	int start() const { return _start; }
-    /** Defines the start position in the raw source string */
+    /** Defines the start position in the raw source string/document */
     void setStart(int start) { _start = start; }
 
-    /** Returns the end position in the raw source string */
+    /** Returns the end position in the raw source string/document */
     int end() const { return _end; }
-    /** Defines the end position in the raw source string */
+    /** Defines the end position in the raw source string/document */
     void setEnd(int end) { _end = end; }
-
-//    /** Returns the raw value of the fragment */
-//    const QString &rawValue() const { return _rawValue; }
-//    /** Defines the raw value of the fragment */
-//    void setRawValue(const QString &value) { _rawValue = value; }
 
     /**  Run this fragment over some tokens and returns the result text */
 	virtual QString run(QMap<QString,QVariant> &tokens) const = 0;
 
+    /**  Run this fragment over some tokens inside QTextDocuments */
+    virtual void run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out) const = 0;
+
+    void insertFragment(QTextDocument *source, QTextDocument *out) const;
+    void insertText(QTextDocument *out, const QString &text) const;
+
 private:
 	int _start; // index of the first char in the text
 	int _end; // index of the last char in the text
-	QString _rawValue;
+    long long _id; // unique identifier
 };
 
 }  // PadTools
