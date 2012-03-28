@@ -24,8 +24,8 @@
  *  Contributors :                                                         *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
-#ifndef PAD_H
-#define PAD_H
+#ifndef PAD_DOCUMENT_H
+#define PAD_DOCUMENT_H
 
 #include <QList>
 #include <QMap>
@@ -36,27 +36,32 @@
 
 namespace PadTools {
 
-class Pad : public PadFragment
+class PadDocument : public PadFragment
 {
 public:
-    Pad(const QString &rawSource = QString::null);
+    PadDocument(const QString &rawSource);
+    PadDocument(QTextDocument *source);
+    PadDocument();
+    virtual ~PadDocument();
 
-	virtual ~Pad();
+    QString rawSource() const {return _rawSource;}
+    QTextDocument *outputDocument() const {return _docOutput;}
 
     void addFragment(PadFragment *fragment);
-
-	QList<PadFragment*> getAllFragments() const;
+    QList<PadFragment*> getAllFragments() const;
 
 	void print(int indent = 0) const;
 
-	QString run(QMap<QString,QVariant> &tokens) const;
+    QString run(QMap<QString,QVariant> &tokens) const;
+    void run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out) const;
 
 private:
 	QList<PadFragment*> _fragments;
     QString _rawSource;
+    mutable QTextDocument *_docSource, *_docOutput;
 };
 
 }  // PadTools
 
 
-#endif
+#endif  // PAD_DOCUMENT_H

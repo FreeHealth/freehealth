@@ -30,31 +30,43 @@
  * Contains all the PadTools::PadFragment of the analyzed \e rawSource.
  */
 
-#include "pad.h"
+#include "pad_document.h"
 #include "pad_item.h"
 
 #include <QString>
 
 using namespace PadTools;
 
-/** Construct an empty PadTools::Pad with the \e rawSource text (text is not analyzed). */
-Pad::Pad(const QString &rawSource) :
-    _rawSource(rawSource)
+/** Construct an empty PadTools::PadDocument with the \e rawSource text (text is not analyzed). */
+PadDocument::PadDocument(const QString &rawSource) :
+    _rawSource(rawSource),
+    _docSource(0),
+    _docOutput(0)
 {
 }
 
-Pad::~Pad()
+PadDocument::PadDocument(QTextDocument *output) :
+    _docSource(output),
+    _docOutput(0)
+{}
+
+PadDocument::PadDocument() :
+    _docSource(0),
+    _docOutput(0)
+{}
+
+PadDocument::~PadDocument()
 {
 	qDeleteAll(_fragments);
 }
 
 /** Add string fragment to the object. */
-void Pad::addFragment(PadFragment *fragment)
+void PadDocument::addFragment(PadFragment *fragment)
 {
 	_fragments << fragment;
 }
 
-void Pad::print(int indent) const
+void PadDocument::print(int indent) const
 {
 	QString str(indent, ' ');
 	str += "[pad]";
@@ -65,13 +77,12 @@ void Pad::print(int indent) const
 }
 
 /** Returns all fragment of the analyzed raw source string. \sa PadTools::PadAnalyzer::analyze() */
-QList<PadFragment*> Pad::getAllFragments() const
+QList<PadFragment*> PadDocument::getAllFragments() const
 {
 	QList<PadFragment*> fragments;
 	PadItem *item;
 	fragments.append(_fragments);
-	foreach (PadFragment *fragment, _fragments)
-	{
+    foreach (PadFragment *fragment, _fragments) {
 		item = dynamic_cast<PadItem*>(fragment);
 		if (item)
 			fragments.append(item->getAllFragments());
@@ -80,10 +91,18 @@ QList<PadFragment*> Pad::getAllFragments() const
 }
 
 /** Run this pad over some tokens and returns the result text */
-QString Pad::run(QMap<QString,QVariant> &tokens) const
+QString PadDocument::run(QMap<QString,QVariant> &tokens) const
 {
 	QString value;
 	foreach (PadFragment *fragment, _fragments)
 		value += fragment->run(tokens);
 	return value;
+}
+
+void PadDocument::run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out) const
+{
+    print();
+    foreach (PadFragment *fragment, _fragments)
+        fragment->run(tokens, source, out);
+    _docOutput = out;
 }
