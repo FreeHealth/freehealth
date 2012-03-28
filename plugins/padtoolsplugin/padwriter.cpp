@@ -134,8 +134,8 @@ public:
     TokenModel *m_TokenModel;
     QAction *aFollowCursor, *aAutoUpdate, *aSetDefaultValues;
     PadDocument *m_Pad;
-    PadItem *m_LastHoveredItem; // should not be deleted
-    QList<QTextCharFormat> m_LastHoveredItemCharFormats;
+    PadItem *m_LastHoveredItem, *m_LastFollowedItem; // should not be deleted
+    QList<QTextCharFormat> m_LastHoveredItemCharFormats, m_LastFollowedItemCharFormats;
 
 private:
     PadWriter *q;
@@ -174,7 +174,8 @@ PadWriter::PadWriter(QWidget *parent) :
     // TEST
     setFollowCursorInResultOutput(true);
     d->ui->rawSource->setHtml(
-                "<p><b>&lt;$ <span style=' text-decoration: underline; color:#0000ff;'>before </span> 'a'  ~A~  after 'a'$&gt; qdsfsdqf qdf qsdf </b>"
+                "<p><b>&lt;$ <span style=' text-decoration: underline; color:#0000ff;'>before </span> 'a'  ~A~  after 'a'$&gt; qdsfsdqf qdf qsdf </b><br />"
+                "&lt;$ <span style=' text-decoration: underline; color:#0000ff;'>before</span><span style=' text-decoration: underline;'> </span>'b' ~B~ after 'b'$&gt;<br />"
 //                "<table border='1' width='100%' cellspacing='0' cellpadding='0'>"
 //                "<tr>"
 //                "<td width='50%'>"
@@ -298,20 +299,26 @@ void PadWriter::findCursorPositionInOutput()
         return;
 
     // Find corresponding fragment Id
-//    const int cursorPos = d->ui->rawSource->textEdit()->textCursor().position();
-//    const QList<PadFragment *> &fragments = d->m_Pad->getAllFragments();
-//    QList<PadFragment *> currentFragments;
-//    for(int i = 0; i < fragments.count(); ++i) {
-//        PadFragment *fragment = fragments.at(i);
-//        qWarning() << "TEST" << fragment->start() << fragment->end();
-//        if (fragment->start() >= cursorPos && fragment->end() <= cursorPos) {
-//            currentFragments << fragment;
-//            qWarning() << "FOUND" << fragment->start() << fragment->end();
-//        }
-//    }
+    const int cursorPos = d->ui->rawSource->textEdit()->textCursor().position();
+    PadItem *item = d->m_Pad->padItemForSourcePosition(cursorPos);
+    QTextDocument *doc = d->ui->wysiwyg->document();
+    if (!item) {
+        if (d->m_LastFollowedItem) {
+            removeTokenFormat(d->m_LastFollowedItem->outputStart(), d->m_LastFollowedItem->outputEnd(), doc, d->m_LastFollowedItemCharFormats);
+            d->m_LastFollowedItem = 0;
+        }
+        return;
+    }
 
-    // Find the block in the QTextDocument
-
+    if (d->m_LastFollowedItem) {
+        if (d->m_LastFollowedItem == item)
+            return;
+        removeTokenFormat(d->m_LastFollowedItem->outputStart(), d->m_LastFollowedItem->outputEnd(), doc, d->m_LastFollowedItemCharFormats);
+        d->m_LastFollowedItem = item;
+    } else {
+        d->m_LastFollowedItem = item;
+    }
+    setTokenFormat(d->m_LastFollowedItem->outputStart(), d->m_LastFollowedItem->outputEnd(), doc, d->m_LastFollowedItemCharFormats);
 }
 
 void PadWriter::setAutoUpdateOfResult(bool state)

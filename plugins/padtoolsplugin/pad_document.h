@@ -51,6 +51,7 @@ public:
     void addFragment(PadFragment *fragment);
     QList<PadFragment*> getAllFragments() const;
     PadItem *padItemForOutputPosition(int positionInOutputQTextDocument) const;
+    PadItem *padItemForSourcePosition(int positionInSourceQTextDocument) const;
 
 	void print(int indent = 0) const;
 

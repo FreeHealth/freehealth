@@ -98,7 +98,16 @@ QList<PadFragment*> PadDocument::getAllFragments() const
 PadItem *PadDocument::padItemForOutputPosition(int p) const
 {
     foreach(PadItem *item, _items) {
-        if (item->outputStart() < p && item->outputEnd() > p)
+        if (item->outputStart() <= p && item->outputEnd() >= p)
+            return item;
+    }
+    return 0;
+}
+
+PadItem *PadDocument::padItemForSourcePosition(int p) const
+{
+    foreach(PadItem *item, _items) {
+        if (item->start() <= p && item->end() >= p)
             return item;
     }
     return 0;
