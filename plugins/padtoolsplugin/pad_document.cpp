@@ -35,6 +35,8 @@
 
 #include <QString>
 
+#include <QDebug>
+
 using namespace PadTools;
 
 /** Construct an empty PadTools::PadDocument with the \e rawSource text (text is not analyzed). */
@@ -64,6 +66,9 @@ PadDocument::~PadDocument()
 void PadDocument::addFragment(PadFragment *fragment)
 {
 	_fragments << fragment;
+    PadItem *item = dynamic_cast<PadItem *>(fragment);
+    if (item)
+        _items << item;
 }
 
 void PadDocument::print(int indent) const
@@ -88,6 +93,15 @@ QList<PadFragment*> PadDocument::getAllFragments() const
 			fragments.append(item->getAllFragments());
 	}
 	return fragments;
+}
+
+PadItem *PadDocument::padItemForOutputPosition(int p) const
+{
+    foreach(PadItem *item, _items) {
+        if (item->outputStart() < p && item->outputEnd() > p)
+            return item;
+    }
+    return 0;
 }
 
 /** Run this pad over some tokens and returns the result text */

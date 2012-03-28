@@ -58,7 +58,7 @@ void PadFragment::insertFragment(QTextDocument *source, QTextDocument *out) cons
         toCursor.movePosition(QTextCursor::End);
         _outputEnd = toCursor.position();
 
-        qWarning() << "insert " << _outputStart << _outputEnd;
+//        qWarning() << "insert " << _outputStart << _outputEnd;
     }
 }
 
@@ -68,7 +68,7 @@ void PadFragment::insertText(QTextDocument *out, const QString &text) const
         QTextCursor toCursor(out);
         toCursor.movePosition(QTextCursor::End);
         _outputStart = toCursor.position();
-        toCursor.insertText(text);
+        toCursor.insertHtml(text);
         toCursor.movePosition(QTextCursor::End);
         _outputEnd = toCursor.position();
     }

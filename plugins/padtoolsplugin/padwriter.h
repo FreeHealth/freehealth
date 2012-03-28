@@ -57,6 +57,10 @@ private Q_SLOTS:
     void setTestValues(bool state);
 
 private:
+    bool eventFilter(QObject *obj, QEvent *event);
+//    void mouseMoveEvent(QMouseEvent *e);
+
+private:
     Internal::PadWriterPrivate *d;
 };
 

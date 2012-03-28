@@ -37,6 +37,13 @@ QTextCharFormat tokenCharFormat()
     return format;
 }
 
+QTextCharFormat removeTokenCharFormat(const QTextCharFormat &format)
+{
+    QTextCharFormat f = format;
+    f.setFontUnderline(false);
+    return f;
+}
+
 QTextFrameFormat tokenFrameFormat()
 {
     return QTextFrameFormat();

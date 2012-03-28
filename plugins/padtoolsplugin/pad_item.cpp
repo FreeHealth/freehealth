@@ -142,7 +142,7 @@ void PadItem::run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDo
     cursor.setPosition(start);
     cursor.setPosition(end, QTextCursor::KeepAnchor);
 
-    QTextCharFormat format = Constants::tokenCharFormat();
+    QTextCharFormat format;// = Constants::tokenCharFormat();
     format.setToolTip("Token: " + coreValue);
     cursor.setCharFormat(format);
     return;

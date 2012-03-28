@@ -53,6 +53,8 @@ const char * const AUTO_UPDATE_RESULT = QT_TRANSLATE_NOOP("PadWriter", "Automati
 const char * const SET_TEST_VALUE_TO_TOKENS = QT_TRANSLATE_NOOP("PadWriter", "Set a test value to all available tokens");
 
 QTextCharFormat tokenCharFormat();
+QTextCharFormat removeTokenCharFormat(const QTextCharFormat &format);
+
 QTextFrameFormat tokenFrameFormat();
 QTextFrameFormat tokenBeforeFrameFormat();
 QTextFrameFormat tokenAfterFrameFormat();

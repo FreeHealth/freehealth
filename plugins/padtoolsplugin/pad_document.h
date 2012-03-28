@@ -33,6 +33,7 @@
 
 #include "pad_fragment.h"
 #include "pad_core.h"
+#include "pad_item.h"
 
 namespace PadTools {
 
@@ -49,6 +50,7 @@ public:
 
     void addFragment(PadFragment *fragment);
     QList<PadFragment*> getAllFragments() const;
+    PadItem *padItemForOutputPosition(int positionInOutputQTextDocument) const;
 
 	void print(int indent = 0) const;
 
@@ -57,6 +59,7 @@ public:
 
 private:
 	QList<PadFragment*> _fragments;
+    QList<PadItem*> _items;
     QString _rawSource;
     mutable QTextDocument *_docSource, *_docOutput;
 };

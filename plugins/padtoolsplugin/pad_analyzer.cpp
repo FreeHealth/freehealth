@@ -168,7 +168,6 @@ PadDocument *PadAnalyzer::startAnalyze()
 
 PadItem *PadAnalyzer::nextPadItem()
 {
-//	const QString &text = *_text;
 	PadFragment *fragment;
 	Lexem lex;
 	PadItem *padItem = new PadItem;
@@ -227,7 +226,6 @@ PadCore *PadAnalyzer::nextCore()
 	lex = nextLexem();
 	if (lex.type == Lexem_String) {
         core->setName(lex.value);
-        qWarning() << "xxxxxxxxxxxxxxx" << core->name();
 		lex = nextLexem();
 	}
 

@@ -61,13 +61,20 @@ namespace Internal {
 class PadWriterPrivate
 {
 public:
-    PadWriterPrivate(PadWriter *parent) : q(parent) {}
+    PadWriterPrivate(PadWriter *parent) :
+        ui(0),
+        m_TokenModel(0),
+        m_Pad(0),
+        m_LastHoveredItem(0),
+        q(parent)
+    {}
 
 public:
     Ui::PadWriter *ui;
     TokenModel *m_TokenModel;
     QAction *aFollowCursor, *aAutoUpdate, *aSetDefaultValues;
     PadDocument *m_Pad;
+    PadItem *m_LastHoveredItem; // should not be deleted
 
 private:
     PadWriter *q;
@@ -128,6 +135,11 @@ PadWriter::PadWriter(QWidget *parent) :
     // Connect buttons
     connect(d->ui->viewResult, SIGNAL(clicked()), this, SLOT(analyseRawSource()));
     connect(d->ui->viewError, SIGNAL(clicked()), this, SLOT(viewErrors()));
+
+    // Catch events for all ui widgets
+//    setMouseTracking(true);
+    d->ui->wysiwyg->installEventFilter(this);
+    d->ui->wysiwyg->setAttribute(Qt::WA_Hover);
 
     // TEST
     setFollowCursorInResultOutput(true);
@@ -257,4 +269,39 @@ void PadWriter::setAutoUpdateOfResult(bool state)
 void PadWriter::setTestValues(bool state)
 {
     analyseRawSource();
+}
+
+bool PadWriter::eventFilter(QObject *obj, QEvent *event)
+{
+    if (obj!=d->ui->wysiwyg)
+        return QObject::eventFilter(obj, event);
+    if (!d->m_Pad)
+        return QObject::eventFilter(obj, event);
+
+    if (event->type()==QEvent::HoverMove) {
+        QHoverEvent *me = static_cast<QHoverEvent*>(event);
+        int position = d->ui->wysiwyg->cursorForPosition(me->pos()).position();
+        PadItem *item = d->m_Pad->padItemForOutputPosition(position);
+        if (!item)
+            return QObject::eventFilter(obj, event);
+
+        QTextCursor cursor(d->ui->wysiwyg->document());
+        if (d->m_LastHoveredItem) {
+            if (d->m_LastHoveredItem == item)
+                return true;
+            // remove token char format
+            cursor.setPosition(d->m_LastHoveredItem->outputStart());
+            cursor.setPosition(d->m_LastHoveredItem->outputEnd(), QTextCursor::KeepAnchor);
+            cursor.setCharFormat(Constants::removeTokenCharFormat(cursor.charFormat()));
+            d->m_LastHoveredItem = item;
+        } else {
+            d->m_LastHoveredItem = item;
+        }
+        cursor.setPosition(item->outputStart());
+        cursor.setPosition(item->outputEnd(), QTextCursor::KeepAnchor);
+        cursor.setCharFormat(Constants::tokenCharFormat());
+        me->accept();
+        return true;
+    }
+    return false;
 }
