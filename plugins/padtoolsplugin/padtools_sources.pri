@@ -31,7 +31,8 @@ SOURCES += \
     $${PWD}/pad_item.cpp \
     $${PWD}/tokenmodel.cpp \
     $${PWD}/padwriter.cpp \
-    $${PWD}/dragdroptextedit.cpp
+    $${PWD}/dragdroptextedit.cpp \
+    ../../../plugins/padtoolsplugin/constants.cpp
 
 FORMS += \
     $${PWD}/padwriter.ui

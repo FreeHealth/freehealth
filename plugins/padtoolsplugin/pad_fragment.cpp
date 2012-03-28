@@ -49,12 +49,16 @@ void PadFragment::insertFragment(QTextDocument *source, QTextDocument *out) cons
         QTextCursor cursor(source);
         cursor.setPosition(_start, QTextCursor::MoveAnchor);
         cursor.setPosition(_end, QTextCursor::KeepAnchor);
+
         QTextCursor toCursor(out);
         toCursor.movePosition(QTextCursor::End);
         _outputStart = toCursor.position();
+
         toCursor.insertFragment(cursor.selection());
         toCursor.movePosition(QTextCursor::End);
         _outputEnd = toCursor.position();
+
+        qWarning() << "insert " << _outputStart << _outputEnd;
     }
 }
 

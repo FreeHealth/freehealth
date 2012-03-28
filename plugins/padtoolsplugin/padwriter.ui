@@ -105,9 +105,6 @@
         </layout>
        </widget>
        <widget class="QTextEdit" name="wysiwyg">
-        <property name="toolTip">
-         <string>Resulting interpretation of tokens</string>
-        </property>
         <property name="readOnly">
          <bool>true</bool>
         </property>

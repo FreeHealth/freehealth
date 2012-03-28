@@ -36,7 +36,7 @@
 
 #include <QDebug>
 
-enum { WarnLexemMatching = true, WarnIsDelimiterDebug = false };
+enum { WarnLexemMatching = false, WarnIsDelimiterDebug = false };
 
 using namespace PadTools;
 

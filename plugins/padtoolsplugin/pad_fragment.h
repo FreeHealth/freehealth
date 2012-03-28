@@ -78,8 +78,10 @@ private:
 	int _start; // index of the first char in the text
 	int _end; // index of the last char in the text
     long long _id; // unique identifier
-    mutable int _outputStart, _outputEnd;
     QString _toolTip;
+
+protected:
+    mutable int _outputStart, _outputEnd;
 };
 
 }  // PadTools

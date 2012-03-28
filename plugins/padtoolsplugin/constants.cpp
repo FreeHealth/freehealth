@@ -24,40 +24,33 @@
  *  Contributors :                                                         *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
-#ifndef PADTOOLS_CONSTANTS_H
-#define PADTOOLS_CONSTANTS_H
-
-#include <QTextCharFormat>
-#include <QTextFrameFormat>
+#include "constants.h"
 
 namespace PadTools {
 namespace Constants {
 
-const char * const TOKENVALUE_MIME = "freepad/token/value";
-const char * const TOKENRAWSOURCE_MIME = "freepad/token/rawsource";
+QTextCharFormat tokenCharFormat()
+{
+    QTextCharFormat format;
+    format.setUnderlineColor(Qt::darkBlue);
+    format.setUnderlineStyle(QTextCharFormat::WaveUnderline);
+    return format;
+}
 
-const char * const TOKEN_CORE_DELIMITER  = "~";
-const char * const TOKEN_OPEN_DELIMITER  = "<$";
-const char * const TOKEN_CLOSE_DELIMITER = "$>";
+QTextFrameFormat tokenFrameFormat()
+{
+    return QTextFrameFormat();
+}
 
-const char * const C_PADWRITER_CONTEXT = "cPadWriter";
+QTextFrameFormat tokenBeforeFrameFormat()
+{
+    return QTextFrameFormat();
+}
 
-const char * const TOKEN_AND_POSITION_TAG = "\n<!--%2-->%1<!--%2-->\n";
-
-
-// Translations
-const char * const PADWRITER_TRANS_CONTEXT = "PadWriter";
-
-const char * const FOLLOW_CURSOR_IN_RESULT_OUTPUT = QT_TRANSLATE_NOOP("PadWriter", "Follow cursor in result output");
-const char * const AUTO_UPDATE_RESULT = QT_TRANSLATE_NOOP("PadWriter", "Automatic update of results");
-const char * const SET_TEST_VALUE_TO_TOKENS = QT_TRANSLATE_NOOP("PadWriter", "Set a test value to all available tokens");
-
-QTextCharFormat tokenCharFormat();
-QTextFrameFormat tokenFrameFormat();
-QTextFrameFormat tokenBeforeFrameFormat();
-QTextFrameFormat tokenAfterFrameFormat();
+QTextFrameFormat tokenAfterFrameFormat()
+{
+    return QTextFrameFormat();
+}
 
 }
 }
-
-#endif // PADTOOLS_CONSTANTS_H

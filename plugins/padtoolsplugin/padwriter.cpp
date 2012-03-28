@@ -192,6 +192,7 @@ void PadWriter::analyseRawSource()
 //        d->ui->wysiwyg->setPlainText(parsed);
 
     d->m_Pad = PadAnalyzer().analyze(d->ui->rawSource->textEdit()->document());
+    d->ui->wysiwyg->document()->clear();
     d->m_Pad->run(d->m_TokenModel->tokens(), d->ui->rawSource->textEdit()->document(), d->ui->wysiwyg->document());
 
     d->ui->listWidgetErrors->clear();
@@ -222,7 +223,7 @@ void PadWriter::setFollowCursorInResultOutput(bool state)
 
 void PadWriter::findCursorPositionInOutput()
 {
-    WARN_FUNC << d->ui->rawSource->textEdit()->textCursor().position();
+//    WARN_FUNC << d->ui->rawSource->textEdit()->textCursor().position();
     if (!d->m_Pad)
         return;
 

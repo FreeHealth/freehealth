@@ -31,9 +31,12 @@
   - fragments of conditional texts (before and after)
 */
 
-#include <QString>
-
 #include "pad_item.h"
+#include "constants.h"
+
+#include <QString>
+#include <QTextCursor>
+#include <QTextDocumentFragment>
 
 #include <QDebug>
 
@@ -52,7 +55,9 @@ void PadItem::addFragment(PadFragment *fragment)
 void PadItem::print(int indent) const
 {
 	QString str(indent, ' ');
-	str += "[padItem]";
+    str += QString("[padItem:Source(%1;%2);Output(%3;%4)]")
+            .arg(start()).arg(end())
+            .arg(outputStart()).arg(outputEnd());
 	qDebug("%s", qPrintable(str));
     foreach (PadFragment *fragment, _fragments) {
 		fragment->print(indent + 2);
@@ -118,8 +123,27 @@ void PadItem::run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDo
             return;
     }
 
-    foreach (PadFragment *fragment, _fragments)
+    int start = -1;
+    int end = -1;
+    foreach(PadFragment *fragment, _fragments) {
         fragment->run(tokens, source, out);
+        if (fragment->outputStart() < start || start == -1)
+            start = fragment->outputStart();
+        if (fragment->outputEnd() > end)
+            end = fragment->outputEnd();
+    }
 
+    // Trace position in output
+    _outputStart = start;
+    _outputEnd = end;
+
+    // Add the format && tooltip
+    QTextCursor cursor(out);
+    cursor.setPosition(start);
+    cursor.setPosition(end, QTextCursor::KeepAnchor);
+
+    QTextCharFormat format = Constants::tokenCharFormat();
+    format.setToolTip("Token: " + coreValue);
+    cursor.setCharFormat(format);
     return;
 }

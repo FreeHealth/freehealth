@@ -101,7 +101,6 @@ QString PadDocument::run(QMap<QString,QVariant> &tokens) const
 
 void PadDocument::run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out) const
 {
-    print();
     foreach (PadFragment *fragment, _fragments)
         fragment->run(tokens, source, out);
     _docOutput = out;
