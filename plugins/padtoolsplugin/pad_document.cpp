@@ -118,4 +118,9 @@ void PadDocument::run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTe
     foreach (PadFragment *fragment, _fragments)
         fragment->run(tokens, source, out);
     _docOutput = out;
+
+//    foreach(PadFragment *i, _fragments) {
+//        i->print();
+//        qWarning() << "\n\n";
+//    }
 }

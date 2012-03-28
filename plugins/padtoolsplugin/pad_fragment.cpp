@@ -29,6 +29,9 @@
 #include <QTextDocument>
 #include <QTextCursor>
 #include <QTextDocumentFragment>
+#include <QTextBlock>
+#include <QClipboard>
+#include <QApplication>
 
 #include <QDebug>
 
@@ -54,11 +57,15 @@ void PadFragment::insertFragment(QTextDocument *source, QTextDocument *out) cons
         toCursor.movePosition(QTextCursor::End);
         _outputStart = toCursor.position();
 
-        toCursor.insertFragment(cursor.selection());
+//        toCursor.insertFragment(cursor.selection());
+//        toCursor.insertBlock(cursor.blockFormat(), cursor.blockCharFormat());
+        toCursor.insertHtml(cursor.selection().toHtml());
+
         toCursor.movePosition(QTextCursor::End);
         _outputEnd = toCursor.position();
 
-//        qWarning() << "insert " << _outputStart << _outputEnd;
+//        qWarning() << "insert id" << _id << _outputStart << _outputEnd << cursor.selection().toHtml() << "\n";
+//                      << html;
     }
 }
 

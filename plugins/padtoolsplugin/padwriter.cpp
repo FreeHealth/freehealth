@@ -69,12 +69,49 @@ public:
         q(parent)
     {}
 
+    void createActions(QToolButton *button)
+    {
+        // Add options action
+        QList<int> context = QList<int>() << Core::Constants::C_GLOBAL_ID;
+        QAction *a;
+        Core::Command *cmd;
+
+        aFollowCursor = a = new QAction(q);
+        a->setObjectName("PadWriter.aFollowCursor");
+    //    a->setIcon(theme()->icon(icon));
+        a->setCheckable(true);
+        a->setChecked(false);
+        cmd = actionManager()->registerAction(a, a->objectName(), context);
+        cmd->setTranslations(Constants::FOLLOW_CURSOR_IN_RESULT_OUTPUT, Constants::FOLLOW_CURSOR_IN_RESULT_OUTPUT, Constants::PADWRITER_TRANS_CONTEXT);
+        button->addAction(cmd->action());
+
+        aAutoUpdate = a = new QAction(q);
+        a->setObjectName("PadWriter.aAutoUpdate");
+    //    a->setIcon(theme()->icon(icon));
+        a->setCheckable(true);
+        a->setChecked(false);
+        cmd = actionManager()->registerAction(a, a->objectName(), context);
+        cmd->setTranslations(Constants::AUTO_UPDATE_RESULT, Constants::AUTO_UPDATE_RESULT, Constants::PADWRITER_TRANS_CONTEXT);
+        button->addAction(cmd->action());
+
+        aSetDefaultValues = a = new QAction(q);
+        a->setObjectName("PadWriter.aSetDefaultValues");
+    //    a->setIcon(theme()->icon(icon));
+        a->setCheckable(true);
+        a->setChecked(false);
+        cmd = actionManager()->registerAction(a, a->objectName(), context);
+        cmd->setTranslations(Constants::SET_TEST_VALUE_TO_TOKENS, Constants::SET_TEST_VALUE_TO_TOKENS, Constants::PADWRITER_TRANS_CONTEXT);
+        button->addAction(cmd->action());
+    }
+
+
 public:
     Ui::PadWriter *ui;
     TokenModel *m_TokenModel;
     QAction *aFollowCursor, *aAutoUpdate, *aSetDefaultValues;
     PadDocument *m_Pad;
     PadItem *m_LastHoveredItem; // should not be deleted
+    QList<QTextCharFormat> m_LastHoveredItemCharFormats;
 
 private:
     PadWriter *q;
@@ -95,44 +132,13 @@ PadWriter::PadWriter(QWidget *parent) :
     d->ui->treeView->header()->setResizeMode(0, QHeaderView::Stretch);
 
     // Create PadHighlighter
-    PadHighlighter *highlight = new PadHighlighter(d->ui->rawSource->textEdit());
+//    PadHighlighter *highlight = new PadHighlighter(d->ui->rawSource->textEdit());
 
     // Add options action
-    QList<int> context = QList<int>() << Core::Constants::C_GLOBAL_ID;
-    QAction *a;
-    Core::Command *cmd;
-
-    d->aFollowCursor = a = new QAction(parent);
-    a->setObjectName("PadWriter.aFollowCursor");
-//    a->setIcon(theme()->icon(icon));
-    a->setCheckable(true);
-    a->setChecked(false);
-    cmd = actionManager()->registerAction(a, a->objectName(), context);
-    cmd->setTranslations(Constants::FOLLOW_CURSOR_IN_RESULT_OUTPUT, Constants::FOLLOW_CURSOR_IN_RESULT_OUTPUT, Constants::PADWRITER_TRANS_CONTEXT);
-    connect(cmd->action(), SIGNAL(triggered(bool)), this, SLOT(setFollowCursorInResultOutput(bool)));
-    d->ui->optionsButton->addAction(cmd->action());
-
-    d->aAutoUpdate = a = new QAction(parent);
-    a->setObjectName("PadWriter.aAutoUpdate");
-//    a->setIcon(theme()->icon(icon));
-    a->setCheckable(true);
-    a->setChecked(false);
-    cmd = actionManager()->registerAction(a, a->objectName(), context);
-    cmd->setTranslations(Constants::AUTO_UPDATE_RESULT, Constants::AUTO_UPDATE_RESULT, Constants::PADWRITER_TRANS_CONTEXT);
-    connect(cmd->action(), SIGNAL(triggered(bool)), this, SLOT(setAutoUpdateOfResult(bool)));
-    d->ui->optionsButton->addAction(cmd->action());
-
-    d->aSetDefaultValues = a = new QAction(parent);
-    a->setObjectName("PadWriter.aSetDefaultValues");
-//    a->setIcon(theme()->icon(icon));
-    a->setCheckable(true);
-    a->setChecked(false);
-    cmd = actionManager()->registerAction(a, a->objectName(), context);
-    cmd->setTranslations(Constants::SET_TEST_VALUE_TO_TOKENS, Constants::SET_TEST_VALUE_TO_TOKENS, Constants::PADWRITER_TRANS_CONTEXT);
-    connect(cmd->action(), SIGNAL(triggered(bool)), this, SLOT(setTestValues(bool)));
-    d->ui->optionsButton->addAction(cmd->action());
-
-    // Connect buttons
+    d->createActions(d->ui->optionsButton);
+    connect(d->aFollowCursor, SIGNAL(triggered(bool)), this, SLOT(setFollowCursorInResultOutput(bool)));
+    connect(d->aAutoUpdate, SIGNAL(triggered(bool)), this, SLOT(setAutoUpdateOfResult(bool)));
+    connect(d->aSetDefaultValues, SIGNAL(triggered(bool)), this, SLOT(setTestValues(bool)));
     connect(d->ui->viewResult, SIGNAL(clicked()), this, SLOT(analyseRawSource()));
     connect(d->ui->viewError, SIGNAL(clicked()), this, SLOT(viewErrors()));
 
@@ -143,25 +149,53 @@ PadWriter::PadWriter(QWidget *parent) :
 
     // TEST
     setFollowCursorInResultOutput(true);
-    d->ui->rawSource->setPlainText(
-                "<$before 'a'  ~A~  after 'a'$>\n"
-                "<$before 'b'  ~B~  after 'b'$>\n"
-                "<$before 'c'  ~C~  after 'c'$>\n"
-                "<$before 'html'  ~HTMLTOKEN~  after 'html'$>\n"
-                "\n\n"
-                "---------- TESTING NESTED ----------\n"
-                "<$ba <$bb ~B~ ab$> ~A~  aa$>  -----> ba bb B ab A aa\n"
-                "<$bb ~B~ ab <$ba ~A~  aa$>$>  -----> bb B ab ba A aa\n"
-                "<$<$bb ~B~ ab ba ~NULL~  aa$>$>  -----> \n"
-                "<$bb ~B~ ab <$ba ~NULL~  aa$>$>  -----> bb B ab\n"
-                "\n"
-                "<$ab ~A~ aa <$ba <$nnn ~NULL~ nnn <$ac ~C~ bc$>$> ~B~  aa$>$>  -----> ab A aa ba B aa\n"
-                "<$ab ~A~ aa <$ba <$<$nnn ~NULL~ nnn $> ac ~C~ bc $> ~B~  aa$>$>  -----> ab A aa ba B aa\n"
-                "\n"
-                "\n"
-                "---------- TESTING INSIDE HTML CODE ----------\n"
-                "<$<p><i><b>Test</b></i> a  ~A~ is Ok </p>$>"
+    d->ui->rawSource->setHtml(
+                "<p><b>&lt;$ <span style=' text-decoration: underline; color:#0000ff;'>before </span> 'a'  ~A~  after 'a'$&gt; qdsfsdqf qdf qsdf </b>"
+//                "<table border='1' width='100%' cellspacing='0' cellpadding='0'>"
+//                "<tr>"
+//                "<td width='50%'>"
+//                "<p style=' margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;'>&lt;$ <span style=' text-decoration: underline; color:#0000ff;'>before</span><span style=' text-decoration: underline;'> </span>'b' ~B~ after 'b'$&gt;</p></td>"
+//                "<td width='50%'></td></tr>"
+//                "<tr>"
+//                "<td></td>"
+//                "<td></td></tr></table>"
+//                ""
+//                "<$before 'b'  ~B~  after 'b'$>\n"
+//                "<$before 'c'  ~C~  after 'c'$>\n"
+//                "<$before 'html'  ~HTMLTOKEN~  after 'html'$>\n"
+//                "\n\n"
+//                "---------- TESTING NESTED ----------\n"
+//                "<$ba <$bb ~B~ ab$> ~A~  aa$>  -----> ba bb B ab A aa\n"
+//                "<$bb ~B~ ab <$ba ~A~  aa$>$>  -----> bb B ab ba A aa\n"
+//                "<$ <$bb ~B~ ab ba ~NULL~  aa$> $>  -----> \n"
+//                "<$bb ~B~ ab <$ba ~NULL~  aa$>$>  -----> bb B ab\n"
+//                "\n"
+//                "<$ab ~A~ aa <$ba <$nnn ~NULL~ nnn <$ac ~C~ bc$>$> ~B~  aa$>$>  -----> ab A aa ba B aa\n"
+//                "<$ab ~A~ aa <$ba <$<$nnn ~NULL~ nnn $> ac ~C~ bc $> ~B~  aa$>$>  -----> ab A aa ba B aa\n"
+//                "\n"
+//                "\n"
+//                "---------- TESTING INSIDE HTML CODE ----------\n"
+//                "<$<p><i><b>Test</b></i> a  ~A~ is Ok </p>$>"
                 );
+//    d->ui->rawSource->setPlainText(
+//                "<$before 'a'  ~A~  after 'a'$>\n"
+//                "<$before 'b'  ~B~  after 'b'$>\n"
+//                "<$before 'c'  ~C~  after 'c'$>\n"
+//                "<$before 'html'  ~HTMLTOKEN~  after 'html'$>\n"
+//                "\n\n"
+//                "---------- TESTING NESTED ----------\n"
+//                "<$ba <$bb ~B~ ab$> ~A~  aa$>  -----> ba bb B ab A aa\n"
+//                "<$bb ~B~ ab <$ba ~A~  aa$>$>  -----> bb B ab ba A aa\n"
+//                "<$ <$bb ~B~ ab ba ~NULL~  aa$> $>  -----> \n"
+//                "<$bb ~B~ ab <$ba ~NULL~  aa$>$>  -----> bb B ab\n"
+//                "\n"
+//                "<$ab ~A~ aa <$ba <$nnn ~NULL~ nnn <$ac ~C~ bc$>$> ~B~  aa$>$>  -----> ab A aa ba B aa\n"
+//                "<$ab ~A~ aa <$ba <$<$nnn ~NULL~ nnn $> ac ~C~ bc $> ~B~  aa$>$>  -----> ab A aa ba B aa\n"
+//                "\n"
+//                "\n"
+//                "---------- TESTING INSIDE HTML CODE ----------\n"
+//                "<$<p><i><b>Test</b></i> a  ~A~ is Ok </p>$>"
+//                );
     // END TEST
 }
 
@@ -271,6 +305,30 @@ void PadWriter::setTestValues(bool state)
     analyseRawSource();
 }
 
+static void setTokenFormat(int s, int e, QTextDocument *doc, QList<QTextCharFormat> &formats)
+{
+    QTextCursor cursor(doc);
+     int count = e-s;
+     for(int i=0; i < count; ++i) {
+         cursor.setPosition(s + i);
+         cursor.setPosition(s + i + 1, QTextCursor::KeepAnchor);
+         formats << cursor.charFormat();
+         cursor.setCharFormat(Constants::setTokenCharFormat(cursor.charFormat()));
+     }
+}
+
+static void removeTokenFormat(int s, int e, QTextDocument *doc, QList<QTextCharFormat> &formats)
+{
+    QTextCursor cursor(doc);
+    int count = e-s;
+    for(int i=0; i < count; ++i) {
+        cursor.setPosition(s + i);
+        cursor.setPosition(s + i + 1, QTextCursor::KeepAnchor);
+        cursor.setCharFormat(formats.at(i));
+    }
+    formats.clear();
+}
+
 bool PadWriter::eventFilter(QObject *obj, QEvent *event)
 {
     if (obj!=d->ui->wysiwyg)
@@ -282,26 +340,28 @@ bool PadWriter::eventFilter(QObject *obj, QEvent *event)
         QHoverEvent *me = static_cast<QHoverEvent*>(event);
         int position = d->ui->wysiwyg->cursorForPosition(me->pos()).position();
         PadItem *item = d->m_Pad->padItemForOutputPosition(position);
-        if (!item)
+        QTextDocument *doc = d->ui->wysiwyg->document();
+        if (!item) {
+            if (d->m_LastHoveredItem) {
+                removeTokenFormat(d->m_LastHoveredItem->outputStart(), d->m_LastHoveredItem->outputEnd(), doc, d->m_LastHoveredItemCharFormats);
+                d->m_LastHoveredItem = 0;
+            }
             return QObject::eventFilter(obj, event);
+        }
 
-        QTextCursor cursor(d->ui->wysiwyg->document());
         if (d->m_LastHoveredItem) {
             if (d->m_LastHoveredItem == item)
                 return true;
-            // remove token char format
-            cursor.setPosition(d->m_LastHoveredItem->outputStart());
-            cursor.setPosition(d->m_LastHoveredItem->outputEnd(), QTextCursor::KeepAnchor);
-            cursor.setCharFormat(Constants::removeTokenCharFormat(cursor.charFormat()));
+            removeTokenFormat(d->m_LastHoveredItem->outputStart(), d->m_LastHoveredItem->outputEnd(), doc, d->m_LastHoveredItemCharFormats);
             d->m_LastHoveredItem = item;
         } else {
             d->m_LastHoveredItem = item;
         }
-        cursor.setPosition(item->outputStart());
-        cursor.setPosition(item->outputEnd(), QTextCursor::KeepAnchor);
-        cursor.setCharFormat(Constants::tokenCharFormat());
+        setTokenFormat(d->m_LastHoveredItem->outputStart(), d->m_LastHoveredItem->outputEnd(), doc, d->m_LastHoveredItemCharFormats);
         me->accept();
         return true;
+    } else {
+        return QObject::eventFilter(obj, event);
     }
     return false;
 }

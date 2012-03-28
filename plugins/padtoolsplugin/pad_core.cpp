@@ -52,7 +52,6 @@ QString PadCore::run(QMap<QString,QVariant> &tokens) const
 void PadCore::run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *output) const
 {
     const QString &value = tokens[_name].toString();
-    qWarning() << "PadCore; name" << _name << "value" << value;
     if (!value.isEmpty())
         insertText(output, value);
 }

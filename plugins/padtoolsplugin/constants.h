@@ -52,8 +52,7 @@ const char * const FOLLOW_CURSOR_IN_RESULT_OUTPUT = QT_TRANSLATE_NOOP("PadWriter
 const char * const AUTO_UPDATE_RESULT = QT_TRANSLATE_NOOP("PadWriter", "Automatic update of results");
 const char * const SET_TEST_VALUE_TO_TOKENS = QT_TRANSLATE_NOOP("PadWriter", "Set a test value to all available tokens");
 
-QTextCharFormat tokenCharFormat();
-QTextCharFormat removeTokenCharFormat(const QTextCharFormat &format);
+QTextCharFormat setTokenCharFormat(const QTextCharFormat &format);
 
 QTextFrameFormat tokenFrameFormat();
 QTextFrameFormat tokenBeforeFrameFormat();

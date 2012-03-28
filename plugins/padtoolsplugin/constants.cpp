@@ -29,18 +29,11 @@
 namespace PadTools {
 namespace Constants {
 
-QTextCharFormat tokenCharFormat()
-{
-    QTextCharFormat format;
-    format.setUnderlineColor(Qt::darkBlue);
-    format.setUnderlineStyle(QTextCharFormat::WaveUnderline);
-    return format;
-}
-
-QTextCharFormat removeTokenCharFormat(const QTextCharFormat &format)
+QTextCharFormat setTokenCharFormat(const QTextCharFormat &format)
 {
     QTextCharFormat f = format;
-    f.setFontUnderline(false);
+    f.setUnderlineColor(Qt::darkBlue);
+    f.setUnderlineStyle(QTextCharFormat::WaveUnderline);
     return f;
 }
 
