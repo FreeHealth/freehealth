@@ -59,6 +59,12 @@ public:
     /** Defines the end position in the raw source string/document */
     void setEnd(int end) { _end = end; }
 
+    int outputStart() const {return _outputStart;}
+    int outputEnd() const {return _outputEnd;}
+
+    void setToolTip(const QString &tooltip) {_toolTip = tooltip;}
+    const QString &toolTip() const {return _toolTip;}
+
     /**  Run this fragment over some tokens and returns the result text */
 	virtual QString run(QMap<QString,QVariant> &tokens) const = 0;
 
@@ -72,6 +78,8 @@ private:
 	int _start; // index of the first char in the text
 	int _end; // index of the last char in the text
     long long _id; // unique identifier
+    mutable int _outputStart, _outputEnd;
+    QString _toolTip;
 };
 
 }  // PadTools

@@ -37,7 +37,9 @@ using namespace PadTools;
 PadFragment::PadFragment() :
     _start(-1),
     _end(-1),
-    _id(-1)
+    _id(-1),
+    _outputStart(-1),
+    _outputEnd(-1)
 {
 }
 
@@ -49,7 +51,10 @@ void PadFragment::insertFragment(QTextDocument *source, QTextDocument *out) cons
         cursor.setPosition(_end, QTextCursor::KeepAnchor);
         QTextCursor toCursor(out);
         toCursor.movePosition(QTextCursor::End);
+        _outputStart = toCursor.position();
         toCursor.insertFragment(cursor.selection());
+        toCursor.movePosition(QTextCursor::End);
+        _outputEnd = toCursor.position();
     }
 }
 
@@ -58,6 +63,9 @@ void PadFragment::insertText(QTextDocument *out, const QString &text) const
     if (_start>=0) {
         QTextCursor toCursor(out);
         toCursor.movePosition(QTextCursor::End);
+        _outputStart = toCursor.position();
         toCursor.insertText(text);
+        toCursor.movePosition(QTextCursor::End);
+        _outputEnd = toCursor.position();
     }
 }
