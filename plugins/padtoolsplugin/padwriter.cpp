@@ -56,6 +56,30 @@ static inline Core::ActionManager *actionManager() { return Core::ICore::instanc
 static inline Core::ITheme *theme() { return Core::ICore::instance()->theme(); }
 static inline Core::IPadTools *padTools() {return Core::ICore::instance()->padTools();}
 
+static void setTokenFormat(int s, int e, QTextDocument *doc, QList<QTextCharFormat> &formats)
+{
+    QTextCursor cursor(doc);
+     int count = e-s;
+     for(int i=0; i < count; ++i) {
+         cursor.setPosition(s + i);
+         cursor.setPosition(s + i + 1, QTextCursor::KeepAnchor);
+         formats << cursor.charFormat();
+         cursor.setCharFormat(Constants::setTokenCharFormat(cursor.charFormat()));
+     }
+}
+
+static void removeTokenFormat(int s, int e, QTextDocument *doc, QList<QTextCharFormat> &formats)
+{
+    QTextCursor cursor(doc);
+    int count = e-s;
+    for(int i=0; i < count; ++i) {
+        cursor.setPosition(s + i);
+        cursor.setPosition(s + i + 1, QTextCursor::KeepAnchor);
+        cursor.setCharFormat(formats.at(i));
+    }
+    formats.clear();
+}
+
 namespace PadTools {
 namespace Internal {
 class PadWriterPrivate
@@ -303,30 +327,6 @@ void PadWriter::setAutoUpdateOfResult(bool state)
 void PadWriter::setTestValues(bool state)
 {
     analyseRawSource();
-}
-
-static void setTokenFormat(int s, int e, QTextDocument *doc, QList<QTextCharFormat> &formats)
-{
-    QTextCursor cursor(doc);
-     int count = e-s;
-     for(int i=0; i < count; ++i) {
-         cursor.setPosition(s + i);
-         cursor.setPosition(s + i + 1, QTextCursor::KeepAnchor);
-         formats << cursor.charFormat();
-         cursor.setCharFormat(Constants::setTokenCharFormat(cursor.charFormat()));
-     }
-}
-
-static void removeTokenFormat(int s, int e, QTextDocument *doc, QList<QTextCharFormat> &formats)
-{
-    QTextCursor cursor(doc);
-    int count = e-s;
-    for(int i=0; i < count; ++i) {
-        cursor.setPosition(s + i);
-        cursor.setPosition(s + i + 1, QTextCursor::KeepAnchor);
-        cursor.setCharFormat(formats.at(i));
-    }
-    formats.clear();
 }
 
 bool PadWriter::eventFilter(QObject *obj, QEvent *event)
