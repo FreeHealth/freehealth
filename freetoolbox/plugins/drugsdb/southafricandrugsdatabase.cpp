@@ -108,7 +108,7 @@ bool ZaDrugDatatabaseStep::createDir()
     if (!QDir().mkpath(workingPath()))
         LOG_ERROR("Unable to create ZA Working Path :" + workingPath());
     else
-        Utils::Log::addMessage(this, "Tmp dir created");
+        LOG("Tmp dir created");
     // Create database output dir
     const QString &dbpath = QFileInfo(databaseAbsPath()).absolutePath();
     if (!QDir().exists(dbpath)) {
@@ -248,7 +248,7 @@ bool ZaDrugDatatabaseStep::prepareDatas()
         }
 
         // read file
-        Utils::Log::addMessage(this, "Processing file :" + fileName);
+        LOG("Processing file :" + fileName);
         QString content = Utils::readTextFile(workingPath() + fileName);
         if (content.isEmpty()) {
             LOG_ERROR("no content");
@@ -530,7 +530,7 @@ static int readUids(QHash<QString, int> &drugs_uids)
     int lastUid = 20100001;
     QString content = Utils::readTextFile(uidFile());
     if (content.isEmpty())
-        LOG_ERROR("ZaDrugDatatabaseStep", "Unable to read UIDs file");
+        LOG_ERROR_FOR("ZaDrugDatatabaseStep", "Unable to read UIDs file");
     foreach(const QString &line, content.split("\n", QString::SkipEmptyParts)) {
         if (line.startsWith("//"))
             continue;
@@ -542,7 +542,7 @@ static int readUids(QHash<QString, int> &drugs_uids)
                 lastUid = uid;
             drugs_uids.insert(drugname, uid);
         } else {
-            LOG_ERROR("ZaDrugDatatabaseStep", QString("Line : %1 , does not contains 2 values").arg(line));
+            LOG_ERROR_FOR("ZaDrugDatatabaseStep", QString("Line : %1 , does not contains 2 values").arg(line));
         }
     }
     return lastUid;
@@ -573,7 +573,7 @@ static bool saveUids(const QHash<QString, int> &drugs_uids)
         content += drug + ";" + QString::number(drugs_uids.value(drug)) + "\n";
     }
     if (!Utils::saveStringToFile(content.toUtf8(), uidFile())) {
-        LOG_ERROR("ZaDrugDatatabaseStep", "Unable to save UID file");
+        LOG_ERROR_FOR("ZaDrugDatatabaseStep", "Unable to save UID file");
         return false;
     }
     return true;
