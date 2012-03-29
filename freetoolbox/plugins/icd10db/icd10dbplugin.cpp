@@ -48,7 +48,7 @@ Icd10DbPlugin::~Icd10DbPlugin()
     qWarning() << "Icd10DbPlugin::~Icd10DbPlugin()";
 }
 
-bool Icd10DbPlugin::initialize(const QStringList &arguments, QString *errorMessage)
+bool Icd10DbPlugin::initialize(const QStringList &/*arguments*/, QString */*errorMessage*/)
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "Icd10DbPlugin::initialize";

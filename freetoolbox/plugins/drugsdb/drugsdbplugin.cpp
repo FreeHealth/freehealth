@@ -62,6 +62,8 @@ DrugsDbPlugin::~DrugsDbPlugin()
 
 bool DrugsDbPlugin::initialize(const QStringList &arguments, QString *errorMessage)
 {
+    Q_UNUSED(arguments);
+    Q_UNUSED(errorMessage);
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "DrugsDbPlugin::initialize";
 

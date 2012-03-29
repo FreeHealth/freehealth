@@ -102,9 +102,9 @@ bool BiblioBase::init()
 
 bool BiblioBase::createDatabase(const QString &connectionName , const QString &dbName,
                     const QString &pathOrHostName,
-                    TypeOfAccess access, AvailableDrivers driver,
-                    const QString & login, const QString & pass,
-                    const int port,
+                    TypeOfAccess /*access*/, AvailableDrivers driver,
+                    const QString & /*login*/, const QString & /*pass*/,
+                    const int /*port*/,
                     CreationOption /*createOption*/
                    )
 {

@@ -151,7 +151,8 @@ void PortugueseDrugsDatabase::changeEvent(QEvent *e)
 
 
 PtDrugDatatabaseStep::PtDrugDatatabaseStep(QObject *parent) :
-        m_WithProgress(false)
+    Core::IFullReleaseStep(parent),
+    m_WithProgress(false)
 {
 }
 
@@ -186,7 +187,8 @@ bool PtDrugDatatabaseStep::cleanFiles()
 
 bool PtDrugDatatabaseStep::downloadFiles(QProgressBar *bar)
 {
-
+    Q_UNUSED(bar);
+    /** \todo add progress download */
     Utils::HttpDownloader *dld = new Utils::HttpDownloader(this);
     //    dld->setMainWindow(mainwindow());
     dld->setOutputPath(workingPath());

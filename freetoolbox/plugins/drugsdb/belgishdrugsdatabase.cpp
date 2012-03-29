@@ -140,7 +140,8 @@ void BelgishDrugsDatabase::changeEvent(QEvent *e)
 
 
 BeDrugDatatabaseStep::BeDrugDatatabaseStep(QObject *parent) :
-        m_WithProgress(false)
+    Core::IFullReleaseStep(parent),
+    m_WithProgress(false)
 {
     setObjectName("BeDrugDatatabaseStep");
 }
@@ -176,6 +177,7 @@ bool BeDrugDatatabaseStep::cleanFiles()
 
 bool BeDrugDatatabaseStep::downloadFiles(QProgressBar *bar)
 {
+    Q_UNUSED(bar);
     Q_EMIT downloadFinished();
     return true;
 }

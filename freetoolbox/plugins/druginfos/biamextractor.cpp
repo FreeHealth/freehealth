@@ -196,12 +196,12 @@ public:
         // read content
         QString content = Utils::readTextFile(absPath, "ISO 8859-1");
         if (content.isEmpty()) {
-            Utils::Log::addError("BIAM", "Unable to read file: "+absPath);
+            LOG_ERROR_FOR("BIAM", "Unable to read file: "+absPath);
             return;
         }
 
         int begin = 0;
-        int end = 0;
+//        int end = 0;
 
         // Get substance name
         // <h1 align=center>OXYTOCINE</h1>
@@ -380,7 +380,7 @@ public:
 
         // create database structure
         if (!Core::Tools::executeSqlFile(DATABASE_NAME, drugInfosDatabaseSqlSchema())) {
-            Utils::Log::addError("BIAM", "Can not create BIAM DB.", __FILE__, __LINE__);
+            LOG_ERROR_FOR("BIAM", "Can not create BIAM DB.");
             return false;
         }
 
@@ -422,14 +422,14 @@ BiamExtractor::BiamExtractor(QWidget *parent) :
     d->ui->setupUi(this);
     d->m_WorkingPath = workingPath();
     if (!QDir().mkpath(d->m_WorkingPath))
-        Utils::Log::addError(this, "Unable to create BIAM Working Path :" + d->m_WorkingPath, __FILE__, __LINE__);
+        LOG_ERROR("Unable to create BIAM Working Path :" + d->m_WorkingPath);
     else
         LOG("Tmp dir created");
     // Create database output dir
     const QString &dbpath = QFileInfo(databaseAbsPath()).absolutePath();
     if (!QDir().exists(dbpath)) {
         if (!QDir().mkpath(dbpath))
-            Utils::Log::addError(this, "Unable to create BIAM database output path :" + dbpath, __FILE__, __LINE__);
+            LOG_ERROR("Unable to create BIAM database output path :" + dbpath);
         else
             LOG("BIAM database output dir created");
     }
@@ -515,7 +515,7 @@ void BiamExtractor::substancePageDownloaded(QNetworkReply *reply)
     }
 
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-        Utils::Log::addError(this, QString("ERROR : Unable to save %1").arg(file.fileName()));
+        LOG_ERROR(QString("ERROR : Unable to save %1").arg(file.fileName()));
         return;
     }
     file.write(reply->readAll());

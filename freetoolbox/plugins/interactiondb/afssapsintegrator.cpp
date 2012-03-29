@@ -559,6 +559,7 @@ QVariant AfssapsLinkerModel::headerData(int section, Qt::Orientation orientation
 
 bool AfssapsLinkerModel::addUnreviewedMolecules(const QString &dbUid, const QStringList &molecules)
 {
+    Q_UNUSED(dbUid);
     QDomElement el = d->m_RootNode.firstChildElement("Labels");
     if (el.isNull())
         return false;
@@ -592,6 +593,7 @@ bool AfssapsLinkerModel::addUnreviewedMolecules(const QString &dbUid, const QStr
 
 bool AfssapsLinkerModel::addAutoFoundMolecules(const QMultiHash<QString, QString> &mol_atc, bool removeFromModel)
 {
+    Q_UNUSED(removeFromModel);
     int nb = 0;
     foreach(const QString &mol, mol_atc.keys()) {
         QDomNode n = d->m_RootItem->node().firstChild();

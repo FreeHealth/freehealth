@@ -78,43 +78,43 @@ static inline QString afssapsNewIamXmlFile()  {return QDir::cleanPath(settings()
 static inline QString atcCsvFile()          {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + Core::Constants::ATC_FILENAME);}
 
 
-static QString typeToString(const QString &type)
-{
-    QStringList tmp;
-    if (type.contains("C")) {
-        tmp << tkTr(Trans::Constants::CONTRAINDICATION);
-    }
-    if (type.contains("D")) {
-        tmp << tkTr(Trans::Constants::DISCOURAGED);
-    }
-    if (type.contains("T")) {
-        tmp << tkTr(Trans::Constants::TAKE_INTO_ACCOUNT);
-    }
-    if (type.contains("P")) {
-        tmp << tkTr(Trans::Constants::PRECAUTION_FOR_USE);
-    }
-    if (type.contains("I")) {
-        tmp << tkTr(Trans::Constants::INFORMATION);
-    }
+//static QString typeToString(const QString &type)
+//{
+//    QStringList tmp;
+//    if (type.contains("C")) {
+//        tmp << tkTr(Trans::Constants::CONTRAINDICATION);
+//    }
+//    if (type.contains("D")) {
+//        tmp << tkTr(Trans::Constants::DISCOURAGED);
+//    }
+//    if (type.contains("T")) {
+//        tmp << tkTr(Trans::Constants::TAKE_INTO_ACCOUNT);
+//    }
+//    if (type.contains("P")) {
+//        tmp << tkTr(Trans::Constants::PRECAUTION_FOR_USE);
+//    }
+//    if (type.contains("I")) {
+//        tmp << tkTr(Trans::Constants::INFORMATION);
+//    }
 
-    return tmp.join( ", " );
-}
+//    return tmp.join( ", " );
+//}
 
 
-static QIcon typeToIcon(const QString &type)
-{
-    if (type.contains("C"))
-        return theme()->icon("critical.png");
-    if (type.contains("D"))
-        return theme()->icon("deconseille.png");
-    if (type.contains("T"))
-        return theme()->icon("warning.png");
-    if (type.contains("P"))
-        return theme()->icon("info.png");
-    if (type.contains("I"))
-        return theme()->icon("info.png");
-    return QIcon();
-}
+//static QIcon typeToIcon(const QString &type)
+//{
+//    if (type.contains("C"))
+//        return theme()->icon("critical.png");
+//    if (type.contains("D"))
+//        return theme()->icon("deconseille.png");
+//    if (type.contains("T"))
+//        return theme()->icon("warning.png");
+//    if (type.contains("P"))
+//        return theme()->icon("info.png");
+//    if (type.contains("I"))
+//        return theme()->icon("info.png");
+//    return QIcon();
+//}
 
 
 QWidget *InteractionsDatabaseCreatorPage::createPage(QWidget *parent)

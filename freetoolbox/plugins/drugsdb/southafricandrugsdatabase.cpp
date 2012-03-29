@@ -93,7 +93,8 @@ QWidget *SouthAfricanDrugsDatabasePage::createPage(QWidget *parent)
 static char letters[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 ZaDrugDatatabaseStep::ZaDrugDatatabaseStep(QObject *parent) :
-        m_Progress(0), m_WithProgress(false)
+    Core::IFullReleaseStep(parent),
+    m_Progress(0), m_WithProgress(false)
 {
 }
 
@@ -130,6 +131,7 @@ bool ZaDrugDatatabaseStep::cleanFiles()
 
 bool ZaDrugDatatabaseStep::downloadFiles(QProgressBar *bar)
 {
+    Q_UNUSED(bar);
     // get all tradename html pages from the site
     manager = new QNetworkAccessManager(this);
     connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(replyFinished(QNetworkReply*)));
@@ -326,7 +328,7 @@ public:
 //        }
     }
 
-    void getFormParagraph(const QString &fullContent)
+    void getFormParagraph(const QString &)
     {
     }
 
@@ -367,11 +369,11 @@ public:
         }
     }
 
-    void getClassificationParagraph(const QString &fullContent)
+    void getClassificationParagraph(const QString &)
     {
     }
 
-    void getPresentationParagraph(const QString &fullContent)
+    void getPresentationParagraph(const QString &)
     {
     }
 
@@ -440,11 +442,11 @@ public:
                     foreach(const QString &word, name.split(" ", QString::SkipEmptyParts)) {
                         test += " " + word;
                         test = test.trimmed();
-                        if (tmp.count(test, Qt::CaseInsensitive) == 1) {
-                            int b = tmp.indexOf(test) + test.length();
-                            int e = tmp.indexOf("<BR>");
-//                            qWarning() << "COMPLEX" << tmp << tmp.mid(b, e-b).trimmed();
-                        }
+//                        if (tmp.count(test, Qt::CaseInsensitive) == 1) {
+//                            int b = tmp.indexOf(test) + test.length();
+//                            int e = tmp.indexOf("<BR>");
+////                            qWarning() << "COMPLEX" << tmp << tmp.mid(b, e-b).trimmed();
+//                        }
                     }
                 }
 

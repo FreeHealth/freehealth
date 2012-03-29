@@ -40,7 +40,8 @@ static inline QString treeXmlFile() {return QDir::cleanPath(settings()->value(Co
 
 
 PimStep::PimStep(QObject *parent) :
-        m_UseProgressDialog(false), m_ActiveDownloadId(-1), m_Downloader(0)
+    Core::IFullReleaseStep(parent),
+    m_UseProgressDialog(false), m_ActiveDownloadId(-1), m_Downloader(0)
 {
     setObjectName("PimStep");
 }
@@ -70,6 +71,7 @@ bool PimStep::cleanFiles()
 
 bool PimStep::downloadFiles(QProgressBar *bar)
 {
+    Q_UNUSED(bar);
     Q_EMIT downloadFinished();
     return true;
 }
