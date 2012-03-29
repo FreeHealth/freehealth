@@ -230,7 +230,7 @@ bool PtDrugDatatabaseStep::createDatabase()
         return false;
 
     QMultiHash<QString, QVariant> labels;
-    labels.insert("fr","Base de données thérapeutiques du portugaise");
+    labels.insert("fr","Base de données thérapeutique du portugaise");
     labels.insert("en","Portuguese therapeutic database");
     labels.insert("de","Portugiesisch therapeutischen database");
 

@@ -293,7 +293,7 @@ bool BeDrugDatatabaseStep::createDatabase()
         return false;
 
     QMultiHash<QString, QVariant> labels;
-    labels.insert("fr","Base de données thérapeutiques belge");
+    labels.insert("fr","Base de données thérapeutique belge");
     labels.insert("en","Belgium therapeutic database");
     labels.insert("de","Belgien therapeutischen database");
 
