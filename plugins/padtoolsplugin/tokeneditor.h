@@ -28,8 +28,10 @@
 #define PADTOOLS_TOKENEDITOR_H
 
 #include <QDialog>
+#include <QModelIndex>
 
 namespace PadTools {
+class TokenModel;
 
 namespace Ui {
 class TokenEditor;
@@ -43,10 +45,13 @@ public:
     explicit TokenEditor(QWidget *parent = 0);
     ~TokenEditor();
     
+    void setTokenModel(TokenModel *model) ;
+    void editIndex(const QModelIndex &index);
+
 private:
     Ui::TokenEditor *ui;
 };
 
-
 } // namespace PadTools
+
 #endif // PADTOOLS_TOKENEDITOR_H

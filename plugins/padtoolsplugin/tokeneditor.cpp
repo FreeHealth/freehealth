@@ -27,7 +27,7 @@
 #include "tokeneditor.h"
 #include "ui_tokeneditor.h"
 
-namespace PadTools {
+using namespace PadTools;
 
 TokenEditor::TokenEditor(QWidget *parent) :
     QDialog(parent),
@@ -41,4 +41,10 @@ TokenEditor::~TokenEditor()
     delete ui;
 }
 
-} // namespace PadTools
+void TokenEditor::setTokenModel(TokenModel *model)
+{
+}
+
+void TokenEditor::editIndex(const QModelIndex &index)
+{
+}

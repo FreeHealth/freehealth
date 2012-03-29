@@ -25,6 +25,7 @@
  ***************************************************************************/
 #include "dragdroptextedit.h"
 #include "constants.h"
+#include "tokeneditor.h"
 
 #include <QDebug>
 
@@ -79,12 +80,16 @@ void DragDropTextEdit::dragLeaveEvent(QDragLeaveEvent *event)
 void DragDropTextEdit::dropEvent(QDropEvent *event)
 {
     if (underMouse()) {
-        setFocus();
-        QTextCursor cursor = cursorForPosition(event->pos());
-        cursor.insertText(event->mimeData()->data(Constants::TOKENRAWSOURCE_MIME));
-        event->acceptProposedAction();
-        event->accept();
-    } else {
-        event->ignore();
+        TokenEditor editor(this);
+        int r = editor.exec();
+        if (r == QDialog::Accepted) {
+            setFocus();
+            QTextCursor cursor = cursorForPosition(event->pos());
+            cursor.insertText(event->mimeData()->data(Constants::TOKENRAWSOURCE_MIME));
+            event->acceptProposedAction();
+            event->accept();
+            return;
+        }
     }
+    event->ignore();
 }

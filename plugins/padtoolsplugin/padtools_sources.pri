@@ -18,7 +18,8 @@ HEADERS +=  \
     $${PWD}/padwriter.h \
     $${PWD}/constants.h \
     $${PWD}/dragdroptextedit.h \
-    $${PWD}/tokeneditorwidget.h
+    $${PWD}/tokeneditorwidget.h \
+    $${PWD}/tokeneditor.h
 
 SOURCES += \
     $${PWD}/padtoolsplugin.cpp \
@@ -34,11 +35,13 @@ SOURCES += \
     $${PWD}/padwriter.cpp \
     $${PWD}/dragdroptextedit.cpp \
     $${PWD}/constants.cpp \
-    $${PWD}/tokeneditorwidget.cpp
+    $${PWD}/tokeneditorwidget.cpp \
+    $${PWD}/tokeneditor.cpp
 
 FORMS += \
     $${PWD}/padwriter.ui \
-    $${PWD}/tokeneditorwidget.ui
+    $${PWD}/tokeneditorwidget.ui \
+    $${PWD}/tokeneditor.ui
 
 TRANSLATIONS += $${SOURCES_TRANSLATIONS_PATH}/padtoolsplugin_fr.ts \
                 $${SOURCES_TRANSLATIONS_PATH}/padtoolsplugin_de.ts \
