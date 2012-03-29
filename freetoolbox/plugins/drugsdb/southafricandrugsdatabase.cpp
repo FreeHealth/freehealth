@@ -106,17 +106,17 @@ ZaDrugDatatabaseStep::~ZaDrugDatatabaseStep()
 bool ZaDrugDatatabaseStep::createDir()
 {
     if (!QDir().mkpath(workingPath()))
-        Utils::Log::addError(this, "Unable to create ZA Working Path :" + workingPath(), __FILE__, __LINE__);
+        LOG_ERROR("Unable to create ZA Working Path :" + workingPath());
     else
         Utils::Log::addMessage(this, "Tmp dir created");
     // Create database output dir
     const QString &dbpath = QFileInfo(databaseAbsPath()).absolutePath();
     if (!QDir().exists(dbpath)) {
         if (!QDir().mkpath(dbpath)) {
-            Utils::Log::addError(this, "Unable to create Canadian database output path :" + dbpath, __FILE__, __LINE__);
+            LOG_ERROR("Unable to create Canadian database output path :" + dbpath);
             m_Errors << tr("Unable to create Canadian database output path :") + dbpath;
         } else {
-            Utils::Log::addMessage(this, "Drugs database output dir created");
+            LOG("Drugs database output dir created");
         }
     }
     return true;
@@ -163,7 +163,7 @@ void ZaDrugDatatabaseStep::replyFinished(QNetworkReply *reply)
         }
 
         if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-            Utils::Log::addError(this, QString("ERROR : Enable to save %1. ZADrugsDB::replyFinished").arg(file.fileName()));
+            LOG_ERROR(QString("ERROR : Enable to save %1. ZADrugsDB::replyFinished").arg(file.fileName()));
             return;
         }
         file.write(content.toAscii());
@@ -243,7 +243,7 @@ bool ZaDrugDatatabaseStep::prepareDatas()
         // check files
         QString fileName = QString("index_T_%1.shtml").arg(letters[i]);
         if (!QFile::exists(workingPath() + fileName)) {
-            Utils::Log::addError(this, QString("Missing " + workingPath() + fileName + " file. ZADrugsDB::prepareDatas()"));
+            LOG_ERROR(QString("Missing " + workingPath() + fileName + " file. ZADrugsDB::prepareDatas()"));
             continue;
         }
 
@@ -251,7 +251,7 @@ bool ZaDrugDatatabaseStep::prepareDatas()
         Utils::Log::addMessage(this, "Processing file :" + fileName);
         QString content = Utils::readTextFile(workingPath() + fileName);
         if (content.isEmpty()) {
-            Utils::Log::addError(this, "", __FILE__, __LINE__);
+            LOG_ERROR("no content");
             return false;
         }
 
@@ -298,16 +298,16 @@ bool ZaDrugDatatabaseStep::createDatabase()
         return false;
 
     QMultiHash<QString, QVariant> labels;
-    labels.insert("fr","Base de données thérapeutiques Sud Africaine");
+    labels.insert("fr","Base de données thérapeutique Sud Africaine");
     labels.insert("en","South African therapeutic database");
     labels.insert("de","South African therapeutischen database");
 
     if (Core::Tools::createNewDrugsSource(Core::Constants::MASTER_DATABASE_NAME, ZA_DRUGS_DATABASE_NAME, labels) == -1) {
-        Utils::Log::addError(this, "Unable to create the French drugs sources");
+        LOG_ERROR("Unable to create the French drugs sources");
         return false;
     }
 
-    Utils::Log::addMessage(this, QString("Database schema created"));
+    LOG(QString("Database schema created"));
     return true;
 }
 
@@ -530,7 +530,7 @@ static int readUids(QHash<QString, int> &drugs_uids)
     int lastUid = 20100001;
     QString content = Utils::readTextFile(uidFile());
     if (content.isEmpty())
-        Utils::Log::addError("ZaDrugDatatabaseStep", "Unable to read UIDs file", __FILE__, __LINE__);
+        LOG_ERROR("ZaDrugDatatabaseStep", "Unable to read UIDs file");
     foreach(const QString &line, content.split("\n", QString::SkipEmptyParts)) {
         if (line.startsWith("//"))
             continue;
@@ -542,7 +542,7 @@ static int readUids(QHash<QString, int> &drugs_uids)
                 lastUid = uid;
             drugs_uids.insert(drugname, uid);
         } else {
-            Utils::Log::addError("ZaDrugDatatabaseStep", QString("Line : %1 , does not contains 2 values").arg(line));
+            LOG_ERROR("ZaDrugDatatabaseStep", QString("Line : %1 , does not contains 2 values").arg(line));
         }
     }
     return lastUid;
@@ -573,7 +573,7 @@ static bool saveUids(const QHash<QString, int> &drugs_uids)
         content += drug + ";" + QString::number(drugs_uids.value(drug)) + "\n";
     }
     if (!Utils::saveStringToFile(content.toUtf8(), uidFile())) {
-        Utils::Log::addError("ZaDrugDatatabaseStep", "Unable to save UID file", __FILE__, __LINE__);
+        LOG_ERROR("ZaDrugDatatabaseStep", "Unable to save UID file");
         return false;
     }
     return true;
@@ -666,7 +666,7 @@ bool ZaDrugDatatabaseStep::populateDatabase()
     // Run SQL commands one by one
     Q_EMIT progressLabelChanged(tr("Running database finalization script"));
     if (!Core::Tools::executeSqlFile(Core::Constants::MASTER_DATABASE_NAME, databaseFinalizationScript())) {
-        Utils::Log::addError(this, "Can not create ZA DB.", __FILE__, __LINE__);
+        LOG_ERROR("Can not create ZA DB.");
         return false;
     }
 
