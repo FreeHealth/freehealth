@@ -45,7 +45,7 @@ public:
         setObjectName("EditorContext");
     }
 
-    void addContext( int uid )
+    void addContext(int uid)
     {
         if (!m_Context.contains(uid))
             m_Context.append(uid);
