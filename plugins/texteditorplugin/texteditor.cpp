@@ -133,7 +133,7 @@ public:
         m_ToolBar->setIconSize(QSize(16,16));
 #endif
         m_ToolBar->setFocusPolicy(Qt::ClickFocus);
-        populateToolbar();
+//        populateToolbar();
     }
 
     void populateToolbar()
@@ -156,19 +156,26 @@ public:
             m_ToolBar->addSeparator();
         }
 
-        actions.clear();
-        actions
-                << Core::Constants::A_FILE_PRINT
-                << Core::Constants::A_EDIT_COPY
-                << Core::Constants::A_EDIT_PASTE
-                << Core::Constants::A_EDIT_CUT
-                ;
-        foreach(const QString &a, actions) {
-            Core::Command *cmd = am->command(a);
-            if (cmd)
-                m_ToolBar->addAction(cmd->action());
+        Core::Command *cmd = am->command(Core::Constants::A_FILE_PRINT);
+        if (cmd) {
+            m_ToolBar->addAction(cmd->action());
+            m_ToolBar->addSeparator();
         }
-        m_ToolBar->addSeparator();
+
+        actions.clear();
+        if (m_Type & TextEditor::Clipboard) {
+            actions
+                    << Core::Constants::A_EDIT_COPY
+                    << Core::Constants::A_EDIT_PASTE
+                    << Core::Constants::A_EDIT_CUT
+                       ;
+            foreach(const QString &a, actions) {
+                Core::Command *cmd = am->command(a);
+                if (cmd)
+                    m_ToolBar->addAction(cmd->action());
+            }
+            m_ToolBar->addSeparator();
+        }
 
         actions.clear();
         actions << Core::Constants::A_EDIT_UNDO
@@ -182,15 +189,15 @@ public:
         m_ToolBar->addSeparator();
 
         QAction *previous = 0;
+        actions.clear();
+        if (m_Type & TextEditor::CharFormat) {
+            actions << Core::Constants::M_FORMAT_FONT;
+        }
+        if (m_Type & TextEditor::ParagraphFormat) {
+            actions << Core::Constants::M_FORMAT_PARAGRAPH;
+        }
         if (m_Type & TextEditor::WithTables) {
-            actions << Core::Constants::M_FORMAT_FONT
-                    << Core::Constants::M_FORMAT_PARAGRAPH
-                    << Core::Constants::M_FORMAT_TABLE
-                    ;
-        } else {
-            actions << Core::Constants::M_FORMAT_FONT
-                    << Core::Constants::M_FORMAT_PARAGRAPH
-                    ;
+            actions << Core::Constants::M_FORMAT_TABLE;
         }
 
         foreach(const QString &m, actions) {
@@ -249,18 +256,17 @@ TextEditor::TextEditor(QWidget *parent, Types type)
 
     // instanciate private part
     d = new TextEditorPrivate(this, type);
-
-    // instanciate context for actions
-    d->m_Context = new EditorContext(this);
-    setTypes(type);
-    Core::ICore::instance()->contextManager()->addContextObject(d->m_Context);
-
     // instanciate editor manager
     EditorManager::instance();
 
     // create ToolBar
     d->createToolBar();
     toogleToolbar(false);
+
+    // instanciate context for actions
+    d->m_Context = new EditorContext(this);
+    setTypes(type);
+    Core::ICore::instance()->contextManager()->addContextObject(d->m_Context);
 
     // create QWidget
     QVBoxLayout * vb = new QVBoxLayout(this);
@@ -290,9 +296,20 @@ QTextEdit *TextEditor::textEdit() const
 
 void TextEditor::setTypes(Types type)
 {
+    d->m_Type = type;
     d->m_Context->clearContext();
     Core::UniqueIDManager *uid = Core::ICore::instance()->uniqueIDManager();
     d->m_Context->addContext(uid->uniqueIdentifier(Core::Constants::C_EDITOR_BASIC));
+    if (type & TextEditor::CharFormat) {
+        d->m_Context->addContext(uid->uniqueIdentifier(Core::Constants::C_EDITOR_CHAR_FORMAT));
+    }
+    if (type & TextEditor::ParagraphFormat) {
+        d->m_Context->addContext(uid->uniqueIdentifier(Core::Constants::C_EDITOR_PARAGRAPH));
+    }
+    if (type & TextEditor::Clipboard) {
+        d->m_Context->addContext(uid->uniqueIdentifier(Core::Constants::C_EDITOR_CLIPBOARD));
+    }
+
     if (type & TextEditor::WithTables) {
         d->m_Context->addContext(uid->uniqueIdentifier(Core::Constants::C_EDITOR_TABLE));
     }
@@ -302,6 +319,8 @@ void TextEditor::setTypes(Types type)
     if (type & TextEditor::WithTextCompleter) {
         d->m_Context->addContext(uid->uniqueIdentifier(Core::Constants::C_EDITOR_ADDTEXT));
     }
+    // update toolbar
+    d->populateToolbar();
 }
 
 QMenu *TextEditor::getContextMenu()

@@ -19,77 +19,32 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main Developers : Eric Maeker <eric.maeker@gmail.com>                  *
+ *  Main Developers : Eric Maeker <eric.maeker@gmail.com>,                *
+ *                    Guillaume Denry <guillaume.denry@gmail.com>          *
  *  Contributors :                                                         *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
-#include "dragdroptextedit.h"
-#include "constants.h"
 #include "tokeneditor.h"
-
-#include <QDebug>
+#include "ui_tokeneditor.h"
 
 using namespace PadTools;
 
-DragDropTextEdit::DragDropTextEdit(QWidget *parent) :
-    TextEditor(parent, DragDropTextEdit::Full)
+TokenEditor::TokenEditor(QWidget *parent) :
+    QDialog(parent),
+    ui(new Ui::TokenEditor)
 {
-    setAcceptDrops(true);
+    ui->setupUi(this);
 }
 
-DragDropTextEdit::~DragDropTextEdit()
+TokenEditor::~TokenEditor()
+{
+    delete ui;
+}
+
+void TokenEditor::setTokenModel(TokenModel *model)
 {
 }
 
-void DragDropTextEdit::dragEnterEvent(QDragEnterEvent *event)
+void TokenEditor::editIndex(const QModelIndex &index)
 {
-    if (underMouse() &&
-            event->mimeData()->hasFormat(Constants::TOKENVALUE_MIME)) {
-        event->acceptProposedAction();
-        event->accept();
-    } else {
-        event->ignore();
-    }
-}
-
-void DragDropTextEdit::dragMoveEvent(QDragMoveEvent *event)
-{
-    if (underMouse() &&
-            event->mimeData()->hasFormat(Constants::TOKENRAWSOURCE_MIME)) {
-        textEdit()->setFocus();
-        QTextCursor cursor = cursorForPosition(event->pos());
-        setTextCursor(cursor);
-        ensureCursorVisible();
-        // if event pos y <=10 scroll up
-        event->acceptProposedAction();
-        event->accept();
-    } else {
-        event->ignore();
-    }
-}
-
-void DragDropTextEdit::dragLeaveEvent(QDragLeaveEvent *event)
-{
-    if (underMouse()) {
-        event->ignore();
-    } else {
-        event->accept();
-    }
-}
-
-void DragDropTextEdit::dropEvent(QDropEvent *event)
-{
-    if (underMouse()) {
-        TokenEditor editor(this);
-        int r = editor.exec();
-        if (r == QDialog::Accepted) {
-            setFocus();
-            QTextCursor cursor = cursorForPosition(event->pos());
-            cursor.insertText(event->mimeData()->data(Constants::TOKENRAWSOURCE_MIME));
-            event->acceptProposedAction();
-            event->accept();
-            return;
-        }
-    }
-    event->ignore();
 }
