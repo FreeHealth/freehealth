@@ -172,6 +172,7 @@ PadItem *PadAnalyzer::nextPadItem()
 	Lexem lex;
 	PadItem *padItem = new PadItem;
 	padItem->setStart(_curPos - 1);
+    int previousType = PadItem::ConditionnalBeforeText;
 
 	// we expect strings, pad item, core (uniq) or close delimiter
 	while ((lex = nextLexem()).type != Lexem_Null) {
@@ -182,7 +183,7 @@ PadItem *PadAnalyzer::nextPadItem()
             fragment->setStart(lex.start);
             fragment->setEnd(lex.end);
             fragment->setId(nextId());
-            padItem->addFragment(fragment);
+            padItem->addFragment(fragment, previousType);
             break;
 		case Lexem_PadOpenDelimiter:
 			fragment = nextPadItem();
@@ -202,7 +203,8 @@ PadItem *PadAnalyzer::nextPadItem()
 				delete padItem;
 				return 0;
 			}
-			padItem->addFragment(fragment);
+            padItem->addFragment(fragment, PadItem::Core);
+            previousType = PadItem::ConditionnalAfterText;
 			break;
 		default:
 			// TODO: raise an error (unknown lexem)
