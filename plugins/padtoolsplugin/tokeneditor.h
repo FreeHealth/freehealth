@@ -45,8 +45,18 @@ public:
     explicit TokenEditor(QWidget *parent = 0);
     ~TokenEditor();
     
-    void setTokenModel(TokenModel *model) ;
-    void editIndex(const QModelIndex &index);
+    void setTokenModel(TokenModel *model);
+    void setCurrentIndex(const QModelIndex &index);
+
+    void setTokenName(const QString &name);
+
+    void setConditionnalHtml(const QString &before, const QString &after);
+    void setConditionnalPlainText(const QString &before, const QString &after);
+
+    QString toHtml() const;
+
+protected:
+    void done(int result);
 
 private:
     Ui::TokenEditor *ui;

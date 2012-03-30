@@ -44,7 +44,7 @@
     </widget>
    </item>
    <item row="2" column="0">
-    <widget class="PadTools::TokenEditorWidget" name="widget" native="true">
+    <widget class="PadTools::TokenEditorWidget" name="tokenEditor" native="true">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
        <horstretch>0</horstretch>
