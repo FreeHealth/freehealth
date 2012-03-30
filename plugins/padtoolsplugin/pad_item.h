@@ -43,12 +43,19 @@ namespace PadTools {
 class PadItem : public PadFragment
 {
 public:
+    enum PadStringType {
+        NoType = 0,
+        Core,
+        ConditionnalBeforeText,
+        ConditionnalAfterText
+    };
+
 	PadItem(){}
 	virtual ~PadItem();
 
-	void addFragment(PadFragment *fragment);
-
+    void addFragment(PadFragment *fragment, int type = NoType);
 	QList<PadFragment*> getAllFragments() const;
+    PadFragment *fragment(const int type) const;
 
 	void print(int indent = 0) const;
 
@@ -58,7 +65,6 @@ public:
 private:
 	QList<PadFragment*> _fragments;
 
-	// return the core of the pad (can be 0)
 	PadCore *getCore() const;
 };
 
