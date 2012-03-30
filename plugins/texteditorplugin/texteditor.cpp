@@ -321,6 +321,7 @@ void TextEditor::setTypes(Types type)
     }
     // update toolbar
     d->populateToolbar();
+    Core::ICore::instance()->contextManager()->updateContext();
 }
 
 QMenu *TextEditor::getContextMenu()
