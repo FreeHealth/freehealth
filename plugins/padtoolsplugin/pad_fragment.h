@@ -67,8 +67,8 @@ public:
     void setToolTip(const QString &tooltip) {_toolTip = tooltip;}
     const QString &toolTip() const {return _toolTip;}
 
-    void setUserData(const int ref, const QVariant &value) {_userData.insert(ref, value);}
-    QVariant userData(const int ref) const {return _userData.value(ref);}
+    void setUserData(const QString &key, const QVariant &value) {_userData.insert(key, value);}
+    QVariant userData(const QString &key) const {return _userData.value(key);}
 
     /**  Run this fragment over some tokens and returns the result text */
 	virtual QString run(QMap<QString,QVariant> &tokens) const = 0;
@@ -84,7 +84,7 @@ private:
 	int _end; // index of the last char in the text
     long long _id; // unique identifier
     QString _toolTip;
-    QHash<int, QVariant> _userData;
+    QHash<QString, QVariant> _userData;
 
 protected:
     mutable int _outputStart, _outputEnd;

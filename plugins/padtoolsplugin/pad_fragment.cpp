@@ -46,6 +46,7 @@ PadFragment::PadFragment() :
 {
 }
 
+/** Insert the content of the PadFragment rawSource to the output */
 void PadFragment::insertFragment(QTextDocument *source, QTextDocument *out) const
 {
     if (_start>=0) {
