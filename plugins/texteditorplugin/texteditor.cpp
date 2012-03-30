@@ -247,8 +247,8 @@ public:
 //--------------------------------------------------------------------------------------------------------
 //------------------------------------ TextEditor implementation -----------------------------------
 //--------------------------------------------------------------------------------------------------------
-TextEditor::TextEditor(QWidget *parent, Types type)
-          : TableEditor(parent), d(0)
+TextEditor::TextEditor(QWidget *parent, Types type) :
+    TableEditor(parent), d(0)
 {
     static int handler = 0;
     handler++;
