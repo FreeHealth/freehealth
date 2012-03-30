@@ -244,6 +244,7 @@ QMimeData *TokenModel::mimeData(const QModelIndexList &indexes) const
     QString name = d->m_TokensToItem.key(itemFromIndex(indexes.at(0))); // d->m_Tokens.keys().at(indexes.at(0).row());
     const QVariant &value = d->m_Tokens.value(name);;
     mimeData->setData(Constants::TOKENVALUE_MIME, value.toByteArray());
+    mimeData->setData(Constants::TOKENNAME_MIME, name.toUtf8());
     name = QString("%1%2%3%2%4")
             .arg(Constants::TOKEN_OPEN_DELIMITER)
             .arg(Constants::TOKEN_CORE_DELIMITER)
