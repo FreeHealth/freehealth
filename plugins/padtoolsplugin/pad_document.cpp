@@ -34,6 +34,9 @@
 #include "pad_item.h"
 
 #include <QString>
+#include <QTextCursor>
+#include <QTextDocument>
+#include <QTextDocumentFragment>
 
 #include <QDebug>
 
@@ -60,6 +63,32 @@ PadDocument::PadDocument() :
 PadDocument::~PadDocument()
 {
 	qDeleteAll(_fragments);
+}
+
+QString PadDocument::fragmentRawSource(PadFragment *fragment) const
+{
+    if (!fragment)
+        return QString::null;
+    if (!_rawSource.isEmpty()) {
+        return _rawSource.mid(fragment->start(), fragment->end() - fragment->start());
+    }
+    if (_docSource) {
+        return _docSource->toPlainText().mid(fragment->start(), fragment->end() - fragment->start());
+    }
+    return QString::null;
+}
+
+QString PadDocument::fragmentHtmlOutput(PadFragment *fragment) const
+{
+    if (!fragment)
+        return QString::null;
+    if (_docOutput) {
+        QTextCursor cursor(_docOutput);
+        cursor.setPosition(fragment->outputStart());
+        cursor.setPosition(fragment->outputEnd(), QTextCursor::KeepAnchor);
+        return cursor.selection().toHtml();
+    }
+    return QString::null;
 }
 
 /** Add string fragment to the object. */
