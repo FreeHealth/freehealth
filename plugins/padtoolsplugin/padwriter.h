@@ -56,8 +56,8 @@ private Q_SLOTS:
     void setAutoUpdateOfResult(bool state);
     void setTestValues(bool state);
 
-private:
-    bool eventFilter(QObject *obj, QEvent *event);
+//private:
+//    bool eventFilter(QObject *obj, QEvent *event);
 //    void mouseMoveEvent(QMouseEvent *e);
 
 private:
