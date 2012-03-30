@@ -28,7 +28,7 @@
 #define PAD_FRAGMENT_H
 
 #include <QString>
-#include <QMap>
+#include <QHash>
 #include <QVariant>
 #include <QTextDocument>
 
@@ -59,11 +59,16 @@ public:
     /** Defines the end position in the raw source string/document */
     void setEnd(int end) { _end = end; }
 
+    /** Returns the start position in the output QTextDocument. This is defined only after the calling run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out) const. */
     int outputStart() const {return _outputStart;}
+    /** Returns the end position in the output QTextDocument. This is defined only after the calling run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out) const. */
     int outputEnd() const {return _outputEnd;}
 
     void setToolTip(const QString &tooltip) {_toolTip = tooltip;}
     const QString &toolTip() const {return _toolTip;}
+
+    void setUserData(const int ref, const QVariant &value) {_userData.insert(ref, value);}
+    QVariant userData(const int ref) const {return _userData.value(ref);}
 
     /**  Run this fragment over some tokens and returns the result text */
 	virtual QString run(QMap<QString,QVariant> &tokens) const = 0;
@@ -79,6 +84,7 @@ private:
 	int _end; // index of the last char in the text
     long long _id; // unique identifier
     QString _toolTip;
+    QHash<int, QVariant> _userData;
 
 protected:
     mutable int _outputStart, _outputEnd;
