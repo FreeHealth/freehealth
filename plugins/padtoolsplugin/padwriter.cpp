@@ -169,12 +169,12 @@ PadWriter::PadWriter(QWidget *parent) :
     // TEST
     setFollowCursorInResultOutput(true);
     d->ui->rawSource->setHtml(
-                "<p><b>&lt;$ <span style=' text-decoration: underline; color:#0000ff;'>before </span> 'a'  ~A~  after 'a'$&gt; qdsfsdqf qdf qsdf </b><br />"
-                "&lt;$ <span style=' text-decoration: underline; color:#0000ff;'>before</span><span style=' text-decoration: underline;'> </span>'b' ~B~ after 'b'$&gt;<br />"
+                "<p><b>^$ <span style=' text-decoration: underline; color:#0000ff;'>before </span> 'a'  ~A~  after 'a'$^ qdsfsdqf qdf qsdf </b><br />"
+                "^$ <span style=' text-decoration: underline; color:#0000ff;'>before</span><span style=' text-decoration: underline;'> </span>'b' ~B~ after 'b'$^<br />"
 //                "<table border='1' width='100%' cellspacing='0' cellpadding='0'>"
 //                "<tr>"
 //                "<td width='50%'>"
-//                "<p style=' margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;'>&lt;$ <span style=' text-decoration: underline; color:#0000ff;'>before</span><span style=' text-decoration: underline;'> </span>'b' ~B~ after 'b'$&gt;</p></td>"
+//                "<p style=' margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;'>^$ <span style=' text-decoration: underline; color:#0000ff;'>before</span><span style=' text-decoration: underline;'> </span>'b' ~B~ after 'b'$^</p></td>"
 //                "<td width='50%'></td></tr>"
 //                "<tr>"
 //                "<td></td>"
