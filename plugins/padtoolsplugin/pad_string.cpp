@@ -33,8 +33,12 @@ using namespace PadTools;
 
 void PadString::print(int indent) const
 {
-	QString str(indent, ' ');
-	str += _string;
+    QString i(indent, ' ');
+    QString str;
+    str += i+ QString("[padString:Source(%1;%2);Output(%3;%4)]\n")
+            .arg(start()).arg(end())
+            .arg(outputStart()).arg(outputEnd());
+    str += i+ _string;
     qWarning() << str;
 }
 
