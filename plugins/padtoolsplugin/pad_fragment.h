@@ -59,6 +59,11 @@ public:
     /** Defines the end position in the raw source string/document */
     void setEnd(int end) { _end = end; }
 
+    /** Return the length of the fragment in the raw source string/document */
+    int rawLength() const {return _end - _start;}
+    /** Return the length of the fragment in the output string/document */
+    int outputLength() const {return _outputEnd - _outputStart;}
+
     /** Returns the start position in the output QTextDocument. This is defined only after the calling run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out) const. */
     int outputStart() const {return _outputStart;}
     /** Returns the end position in the output QTextDocument. This is defined only after the calling run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out) const. */
