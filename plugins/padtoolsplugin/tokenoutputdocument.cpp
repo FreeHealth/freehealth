@@ -107,6 +107,7 @@ TokenOutputDocument::TokenOutputDocument(QWidget *parent) :
     setAttribute(Qt::WA_Hover);
     setAcceptDrops(true);
     setContextMenuPolicy(Qt::CustomContextMenu);
+    textEdit()->viewport()->installEventFilter(this);
 }
 
 TokenOutputDocument::~TokenOutputDocument()
@@ -248,32 +249,17 @@ bool TokenOutputDocument::event(QEvent *event)
 
 bool TokenOutputDocument::eventFilter(QObject *o, QEvent *e)
 {
-//    if (!d->_pad) {
-//        return false;
-//    }
+    if (!d->_pad || o!=textEdit()->viewport())
+        return false;
 
-//    if (o!=textEdit()) {
-//        return false;
-//    }
-
-////    qWarning() << "filter" << o << e->type();
-
-//    if (e->type()==QEvent::MouseButtonDblClick) {
-//    // get the PadItem under mouse
-//        QMouseEvent *me = static_cast<QMouseEvent*>(e);
-//        int position = cursorForPosition(me->pos()).position();
-//        PadItem *item = d->_pad->padItemForOutputPosition(position);
-//        if (item) {
-//            TokenEditor editor(this);
-//            PadFragment *f = item->fragment(PadItem::Core);
-//            editor.setTokenName(d->_pad->fragmentRawSource(f));
-//            PadFragment *bef = item->fragment(PadItem::ConditionnalBeforeText);
-//            PadFragment *aft = item->fragment(PadItem::ConditionnalAfterText);
-//            editor.setConditionnalHtml(d->_pad->fragmentHtmlOutput(bef), d->_pad->fragmentHtmlOutput(aft));
-//        }
-//        e->accept();
-//        return true;
-//    }
+    if (e->type()==QEvent::MouseButtonDblClick) {
+//        qWarning() << "filter" << o << e->type();
+        // get the PadItem under mouse
+        QMouseEvent *me = static_cast<QMouseEvent*>(e);
+        setTextCursor(cursorForPosition(me->pos()));
+        editTokenUnderCursor();
+        return true;
+    }
 //    e->ignore();
-    return false;
+    return QWidget::eventFilter(o, e);
 }
