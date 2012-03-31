@@ -172,6 +172,7 @@ PadItem *PadAnalyzer::nextPadItem()
 	Lexem lex;
 	PadItem *padItem = new PadItem;
 	padItem->setStart(_curPos - 1);
+    padItem->setId(nextId());
     int previousType = PadItem::ConditionnalBeforeText;
 
 	// we expect strings, pad item, core (uniq) or close delimiter
