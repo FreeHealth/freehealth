@@ -178,61 +178,61 @@ void PadDocument::run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTe
 
 void PadDocument::rawSourceContentsChanged(int from, int charsRemoves, int charsAdded)
 {
-    qWarning() << "rawChange"<< from << charsRemoves << charsAdded;
-    PadFragment *fragment = padFragmentForSourcePosition(from);
-    Q_ASSERT(fragment);
-    if (!fragment) {
-        LOG_ERROR("No PadFragment ???");
-        return;
-    }
+//    qWarning() << "rawChange"<< from << charsRemoves << charsAdded;
+//    PadFragment *fragment = padFragmentForSourcePosition(from);
+//    Q_ASSERT(fragment);
+//    if (!fragment) {
+//        LOG_ERROR("No PadFragment ???");
+//        return;
+//    }
 
-    int lengthOfChange = charsAdded - charsRemoves;
-    int fragmentLength = fragment->rawLength();
+//    int lengthOfChange = charsAdded - charsRemoves;
+//    int fragmentLength = fragment->rawLength();
 
-    qWarning() << "changeLength" << lengthOfChange << "frag" << fragmentLength;
+//    qWarning() << "changeLength" << lengthOfChange << "frag" << fragmentLength;
 
-    // Mirror changes in the output document
-    QTextCursor cursor(_docSource);
-    QTextCursor toCursor(_docOutput);
-    // Remove
-    // Add
-    cursor.setPosition(from, QTextCursor::MoveAnchor);
-    cursor.setPosition(from + charsAdded, QTextCursor::KeepAnchor);
-    int startPosInFragment = from - fragment->start();
-    toCursor.setPosition(fragment->outputStart() + startPosInFragment);
-    toCursor.insertHtml(cursor.selection().toHtml());
-    // Add chars from raw to output
-    if (charsRemoves==0) {
-        if (charsAdded>0) {
-            fragment->moveEnd(charsAdded);
-            foreach(PadFragment *f, _fragments) {
-                if (fragment!=f) {
-                    if (f->start() > from) {
-                        f->move(lengthOfChange);
-                        qWarning() << "MOVE" << f->id();
-                        f->print(10);
-                    }
-                    else if (f->end() >= from && f->end() < (from + lengthOfChange)) {
-                        qWarning() << "MOVE END" << f->id();
-                        // for nested pads
-                        //       ---x--  fragment
-                        // -----------   f
-                        f->moveEnd(lengthOfChange);
-                        PadString *s = dynamic_cast<PadString*>(f);
-                        if (s) {
-                            s->print(20);
-                            QTextCursor cursor(_docSource);
-                            cursor.setPosition(f->start());
-                            cursor.setPosition(f->end(), QTextCursor::KeepAnchor);
-                            s->setValue(cursor.selectedText());
-                            s->print(20);
-                        }
-                    }
-                }
-            }
-            print();
-        }
-    }
+//    // Mirror changes in the output document
+//    QTextCursor cursor(_docSource);
+//    QTextCursor toCursor(_docOutput);
+//    // Remove
+//    // Add
+//    cursor.setPosition(from, QTextCursor::MoveAnchor);
+//    cursor.setPosition(from + charsAdded, QTextCursor::KeepAnchor);
+//    int startPosInFragment = from - fragment->start();
+//    toCursor.setPosition(fragment->outputStart() + startPosInFragment);
+//    toCursor.insertHtml(cursor.selection().toHtml());
+//    // Add chars from raw to output
+//    if (charsRemoves==0) {
+//        if (charsAdded>0) {
+//            fragment->moveEnd(charsAdded);
+//            foreach(PadFragment *f, _fragments) {
+//                if (fragment!=f) {
+//                    if (f->start() > from) {
+//                        f->move(lengthOfChange);
+//                        qWarning() << "MOVE" << f->id();
+//                        f->print(10);
+//                    }
+//                    else if (f->end() >= from && f->end() < (from + lengthOfChange)) {
+//                        qWarning() << "MOVE END" << f->id();
+//                        // for nested pads
+//                        //       ---x--  fragment
+//                        // -----------   f
+//                        f->moveEnd(lengthOfChange);
+//                        PadString *s = dynamic_cast<PadString*>(f);
+//                        if (s) {
+//                            s->print(20);
+//                            QTextCursor cursor(_docSource);
+//                            cursor.setPosition(f->start());
+//                            cursor.setPosition(f->end(), QTextCursor::KeepAnchor);
+//                            s->setValue(cursor.selectedText());
+//                            s->print(20);
+//                        }
+//                    }
+//                }
+//            }
+//            print();
+//        }
+//    }
 
     // Si sélectionne plusieurs fragments et efface ?
 }
