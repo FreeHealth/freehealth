@@ -244,19 +244,6 @@ void PadWriter::analyseRawSource()
         delete d->m_Pad;
         d->m_Pad = 0;
     }
-//    d->m_Pad = PadAnalyzer().analyze(d->ui->rawSource->toHtml().replace("&lt;","<").replace("&gt;",">"));
-//    const QString &parsed = d->m_Pad->run(d->m_TokenModel->tokens());
-////    const QString &parsed = padTools()->parse(d->ui->rawSource->toHtml(), d->m_TokenModel->tokens(), errors);
-
-//    qWarning() << "\n\n";
-//    qWarning() << parsed;
-//    qWarning() << "\n\n";
-
-//    if (Qt::mightBeRichText(parsed))
-//        d->ui->wysiwyg->setHtml(parsed);
-//    else
-//        d->ui->wysiwyg->setPlainText(parsed);
-
     d->m_Pad = PadAnalyzer().analyze(d->ui->rawSource->document());
     d->ui->wysiwyg->document()->clear();
     d->m_Pad->run(d->m_TokenModel->tokens(), d->ui->rawSource->document(), d->ui->wysiwyg->document());
@@ -332,39 +319,3 @@ void PadWriter::setTestValues(bool state)
     analyseRawSource();
 }
 
-//bool PadWriter::eventFilter(QObject *obj, QEvent *event)
-//{
-//    if (obj!=d->ui->wysiwyg)
-//        return QObject::eventFilter(obj, event);
-//    if (!d->m_Pad)
-//        return QObject::eventFilter(obj, event);
-
-//    if (event->type()==QEvent::HoverMove) {
-//        QHoverEvent *me = static_cast<QHoverEvent*>(event);
-//        int position = d->ui->wysiwyg->cursorForPosition(me->pos()).position();
-//        PadItem *item = d->m_Pad->padItemForOutputPosition(position);
-//        QTextDocument *doc = d->ui->wysiwyg->document();
-//        if (!item) {
-//            if (d->m_LastHoveredItem) {
-//                removeTokenFormat(d->m_LastHoveredItem->outputStart(), d->m_LastHoveredItem->outputEnd(), doc, d->m_LastHoveredItemCharFormats);
-//                d->m_LastHoveredItem = 0;
-//            }
-//            return QObject::eventFilter(obj, event);
-//        }
-
-//        if (d->m_LastHoveredItem) {
-//            if (d->m_LastHoveredItem == item)
-//                return true;
-//            removeTokenFormat(d->m_LastHoveredItem->outputStart(), d->m_LastHoveredItem->outputEnd(), doc, d->m_LastHoveredItemCharFormats);
-//            d->m_LastHoveredItem = item;
-//        } else {
-//            d->m_LastHoveredItem = item;
-//        }
-//        setTokenFormat(d->m_LastHoveredItem->outputStart(), d->m_LastHoveredItem->outputEnd(), doc, d->m_LastHoveredItemCharFormats);
-//        me->accept();
-//        return true;
-//    } else {
-//        return QObject::eventFilter(obj, event);
-//    }
-//    return false;
-//}
