@@ -58,15 +58,10 @@ void PadFragment::insertFragment(QTextDocument *source, QTextDocument *out) cons
         toCursor.movePosition(QTextCursor::End);
         _outputStart = toCursor.position();
 
-//        toCursor.insertFragment(cursor.selection());
-//        toCursor.insertBlock(cursor.blockFormat(), cursor.blockCharFormat());
         toCursor.insertHtml(cursor.selection().toHtml());
 
         toCursor.movePosition(QTextCursor::End);
         _outputEnd = toCursor.position();
-
-//        qWarning() << "insert id" << _id << _outputStart << _outputEnd << cursor.selection().toHtml() << "\n";
-//                      << html;
     }
 }
 
@@ -80,4 +75,23 @@ void PadFragment::insertText(QTextDocument *out, const QString &text) const
         toCursor.movePosition(QTextCursor::End);
         _outputEnd = toCursor.position();
     }
+}
+
+/** Moves the PadTools::PadFragment from \e nbChars. \e nbChars can be a positive (mocving forward) or a negative int (moving backward). */
+void PadFragment::move(int nbChars)
+{
+    _start+=nbChars;
+    _outputStart+=nbChars;
+    _end+=nbChars;
+    _outputEnd+=nbChars;
+    foreach(PadFragment *f, _fragments)
+        f->move(nbChars);
+}
+
+void PadFragment::moveEnd(int nbOfChars)
+{
+    _end += nbOfChars;
+    _outputEnd += nbOfChars;
+    foreach(PadFragment *f, _fragments)
+        f->moveEnd(nbOfChars);
 }

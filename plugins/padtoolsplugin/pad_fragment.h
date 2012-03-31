@@ -64,6 +64,9 @@ public:
     /** Return the length of the fragment in the output string/document */
     int outputLength() const {return _outputEnd - _outputStart;}
 
+    void move(int nbChars);
+    void moveEnd(int nbOfChars);
+
     /** Returns the start position in the output QTextDocument. This is defined only after the calling run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out) const. */
     int outputStart() const {return _outputStart;}
     /** Returns the end position in the output QTextDocument. This is defined only after the calling run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out) const. */
@@ -81,8 +84,15 @@ public:
     /**  Run this fragment over some tokens inside QTextDocuments */
     virtual void run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out) const = 0;
 
+    virtual void addChild(PadFragment *fragment) {_fragments << fragment;}
+    virtual QList<PadFragment*> children() const {return _fragments;}
+
+
     void insertFragment(QTextDocument *source, QTextDocument *out) const;
     void insertText(QTextDocument *out, const QString &text) const;
+
+protected:
+    QList<PadFragment *> _fragments;
 
 private:
 	int _start; // index of the first char in the text

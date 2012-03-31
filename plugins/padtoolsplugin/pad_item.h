@@ -50,21 +50,19 @@ public:
         ConditionnalAfterText
     };
 
-	PadItem(){}
+    PadItem(){}
 	virtual ~PadItem();
 
-    void addFragment(PadFragment *fragment, int type = NoType);
-	QList<PadFragment*> getAllFragments() const;
     PadFragment *fragment(const int type) const;
 
-	void print(int indent = 0) const;
+    void print(int indent = 0) const;
 
 	QString run(QMap<QString,QVariant> &tokens) const;
     void run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out) const;
 
-private:
-	QList<PadFragment*> _fragments;
+    QList<PadFragment*> children() const;
 
+private:
 	PadCore *getCore() const;
 };
 

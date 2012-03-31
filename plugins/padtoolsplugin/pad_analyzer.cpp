@@ -160,9 +160,10 @@ PadDocument *PadAnalyzer::startAnalyze()
 			// TODO: raise an error (unknown lexem)
 			break;
 		}
-		pad->addFragment(fragment);
+        pad->addChild(fragment);
 	}
 
+    pad->print();
 	return pad;
 }
 
@@ -184,7 +185,8 @@ PadItem *PadAnalyzer::nextPadItem()
             fragment->setStart(lex.start);
             fragment->setEnd(lex.end);
             fragment->setId(nextId());
-            padItem->addFragment(fragment, previousType);
+            fragment->setUserData(Constants::USERDATA_KEY_PADITEM, previousType);
+            padItem->addChild(fragment);
             break;
 		case Lexem_PadOpenDelimiter:
 			fragment = nextPadItem();
@@ -192,7 +194,7 @@ PadItem *PadAnalyzer::nextPadItem()
 				delete padItem;
 				return 0;
 			}
-			padItem->addFragment(fragment);
+            padItem->addChild(fragment);
 			break;
 		case Lexem_PadCloseDelimiter:
 			padItem->setEnd(_curPos - 1);
@@ -204,7 +206,7 @@ PadItem *PadAnalyzer::nextPadItem()
 				delete padItem;
 				return 0;
 			}
-            padItem->addFragment(fragment, PadItem::Core);
+            fragment->setUserData(Constants::USERDATA_KEY_PADITEM, PadItem::Core);
             previousType = PadItem::ConditionnalAfterText;
 			break;
 		default:

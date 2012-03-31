@@ -128,7 +128,6 @@ public:
         button->addAction(cmd->action());
     }
 
-
 public:
     Ui::PadWriter *ui;
     TokenModel *m_TokenModel;

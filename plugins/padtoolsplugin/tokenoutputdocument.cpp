@@ -153,6 +153,7 @@ void TokenOutputDocument::editTokenUnderCursor()
         editor.setConditionnalHtml(d->_pad->fragmentHtmlOutput(bef), d->_pad->fragmentHtmlOutput(aft));
         if (editor.exec()==QDialog::Accepted) {
             // Update before && after pads
+//            d->_pad->rawSource();
             // Update formatting of token value/core
         }
     }

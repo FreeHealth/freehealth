@@ -30,6 +30,7 @@
 #include <QList>
 #include <QMap>
 #include <QVariant>
+#include <QObject>
 
 #include "pad_fragment.h"
 #include "pad_core.h"
@@ -37,8 +38,9 @@
 
 namespace PadTools {
 
-class PadDocument : public PadFragment
+class PadDocument : public QObject, public PadFragment
 {
+    Q_OBJECT
 public:
     PadDocument(const QString &rawSource);
     PadDocument(QTextDocument *source);
@@ -46,23 +48,32 @@ public:
     virtual ~PadDocument();
 
     QString rawSource() const {return _rawSource;}
+    QTextDocument *rawSourceDocument() const {return _docSource;}
     QTextDocument *outputDocument() const {return _docOutput;}
 
     QString fragmentRawSource(PadFragment *fragment) const;
     QString fragmentHtmlOutput(PadFragment *fragment) const;
 
-    void addFragment(PadFragment *fragment);
-    QList<PadFragment*> getAllFragments() const;
+    void addChild(PadFragment *fragment);
     PadItem *padItemForOutputPosition(int positionInOutputQTextDocument) const;
     PadItem *padItemForSourcePosition(int positionInSourceQTextDocument) const;
+    PadFragment *padFragmentForSourcePosition(int p) const;
+    PadFragment *padFragmentForOutputPosition(int p) const;
+
+//    void updateFragmentRange(PadFragment *fragment, const int newstart, const int newend);
 
 	void print(int indent = 0) const;
 
     QString run(QMap<QString,QVariant> &tokens) const;
     void run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out) const;
 
+    // do not return children padfragment
+    virtual QList<PadFragment*> children() const {return QList<PadFragment*>();}
+
+private Q_SLOTS:
+    void rawSourceContentsChanged(int from, int charsRemoves, int charsAdded);
+
 private:
-	QList<PadFragment*> _fragments;
     QList<PadItem*> _items;
     QString _rawSource;
     mutable QTextDocument *_docSource, *_docOutput;
