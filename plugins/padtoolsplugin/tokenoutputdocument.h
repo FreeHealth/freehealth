@@ -19,47 +19,50 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main Developers : Eric Maeker <eric.maeker@gmail.com>,                *
- *                    Guillaume Denry <guillaume.denry@gmail.com>          *
+ *  Main Developers : Eric Maeker <eric.maeker@gmail.com>                  *
  *  Contributors :                                                         *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
-#ifndef PADTOOLS_CONSTANTS_H
-#define PADTOOLS_CONSTANTS_H
+#ifndef TOKENOUTPUTDOCUMENT_H
+#define TOKENOUTPUTDOCUMENT_H
 
-#include <QTextCharFormat>
-#include <QTextFrameFormat>
+#include <texteditorplugin/texteditor.h>
 
 namespace PadTools {
-namespace Constants {
+class PadDocument;
 
-const char * const TOKENVALUE_MIME = "freepad/token/value";
-const char * const TOKENRAWSOURCE_MIME = "freepad/token/rawsource";
-const char * const TOKENNAME_MIME = "freepad/token/name";
-
-const char * const TOKEN_CORE_DELIMITER  = "~";
-const char * const TOKEN_OPEN_DELIMITER  = "<$";
-const char * const TOKEN_CLOSE_DELIMITER = "$>";
-
-const char * const C_PADWRITER_CONTEXT = "cPadWriter";
-
-const char * const TOKEN_AND_POSITION_TAG = "\n<!--%2-->%1<!--%2-->\n";
-
-
-// Translations
-const char * const PADWRITER_TRANS_CONTEXT = "PadWriter";
-
-const char * const FOLLOW_CURSOR_IN_RESULT_OUTPUT = QT_TRANSLATE_NOOP("PadWriter", "Follow cursor in result output");
-const char * const AUTO_UPDATE_RESULT = QT_TRANSLATE_NOOP("PadWriter", "Automatic update of results");
-const char * const SET_TEST_VALUE_TO_TOKENS = QT_TRANSLATE_NOOP("PadWriter", "Set a test value to all available tokens");
-
-QTextCharFormat setTokenCharFormat(const QTextCharFormat &format);
-
-QTextFrameFormat tokenFrameFormat();
-QTextFrameFormat tokenBeforeFrameFormat();
-QTextFrameFormat tokenAfterFrameFormat();
-
-}
+namespace Internal {
+class TokenOutputDocumentPrivate;
 }
 
-#endif // PADTOOLS_CONSTANTS_H
+class TokenOutputDocument : public Editor::TextEditor
+{
+    Q_OBJECT
+public:
+    TokenOutputDocument(QWidget *parent = 0);
+    ~TokenOutputDocument();
+
+    void setPadDocument(PadDocument *pad);
+
+    void dragEnterEvent(QDragEnterEvent *event);
+    void dragMoveEvent(QDragMoveEvent *event);
+    void dragLeaveEvent(QDragLeaveEvent *event);
+    void dropEvent(QDropEvent *event);
+
+private Q_SLOTS:
+    void contextMenu(const QPoint &pos);
+    void editTokenUnderCursor();
+
+protected:
+    bool event(QEvent *event);
+
+    bool eventFilter(QObject *o, QEvent *e);
+
+private:
+    Internal::TokenOutputDocumentPrivate *d;
+};
+
+}  // PadTools
+
+#endif // TOKENOUTPUTDOCUMENT_H
+

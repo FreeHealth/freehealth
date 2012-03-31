@@ -48,6 +48,9 @@ public:
     QString rawSource() const {return _rawSource;}
     QTextDocument *outputDocument() const {return _docOutput;}
 
+    QString fragmentRawSource(PadFragment *fragment) const;
+    QString fragmentHtmlOutput(PadFragment *fragment) const;
+
     void addFragment(PadFragment *fragment);
     QList<PadFragment*> getAllFragments() const;
     PadItem *padItemForOutputPosition(int positionInOutputQTextDocument) const;

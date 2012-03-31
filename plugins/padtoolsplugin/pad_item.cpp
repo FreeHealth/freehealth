@@ -42,16 +42,23 @@
 
 using namespace PadTools;
 
+namespace {
+const char * const DATA_KEY = "PadItem::Data";
+}
+
 PadItem::~PadItem()
 {
 	qDeleteAll(_fragments);
 }
 
-void PadItem::addFragment(PadFragment *fragment)
+/** Add a PadTools::PadFragment to this object. */
+void PadItem::addFragment(PadFragment *fragment, int type)
 {
+    fragment->setUserData(::DATA_KEY, type);
 	_fragments << fragment;
 }
 
+/** Debug to console */
 void PadItem::print(int indent) const
 {
 	QString str(indent, ' ');
@@ -78,6 +85,17 @@ QList<PadFragment*> PadItem::getAllFragments() const
 	return fragments;
 }
 
+/** Find PadFragment according to its \e type. \sa PadItem::PadStringType */
+PadFragment *PadItem::fragment(const int type) const
+{
+    foreach (PadFragment *fragment, _fragments) {
+        if (fragment->userData(::DATA_KEY).toInt() == type)
+            return fragment;
+    }
+    return 0;
+}
+
+/** Returns the PadTools::PadCore of the PadTools::PadItem. If no core is found, 0 is returned. */
 PadCore *PadItem::getCore() const
 {
     PadCore *core;
@@ -89,9 +107,7 @@ PadCore *PadItem::getCore() const
     return 0;
 }
 
-/**
- * Run this pad over some tokens and returns the result text
- */
+/** Run this pad over some tokens and returns the result text */
 QString PadItem::run(QMap<QString,QVariant> &tokens) const
 {
 	QString value;

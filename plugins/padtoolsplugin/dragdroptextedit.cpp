@@ -32,7 +32,7 @@
 using namespace PadTools;
 
 DragDropTextEdit::DragDropTextEdit(QWidget *parent) :
-    TextEditor(parent, DragDropTextEdit::Full)
+    Editor::TextEditor(parent, DragDropTextEdit::Full)
 {
     setAcceptDrops(true);
 }
@@ -81,11 +81,13 @@ void DragDropTextEdit::dropEvent(QDropEvent *event)
 {
     if (underMouse()) {
         TokenEditor editor(this);
+//        editor.setCurrentIndex();
+        editor.setTokenName(event->mimeData()->data(Constants::TOKENNAME_MIME));
         int r = editor.exec();
         if (r == QDialog::Accepted) {
             setFocus();
             QTextCursor cursor = cursorForPosition(event->pos());
-            cursor.insertText(event->mimeData()->data(Constants::TOKENRAWSOURCE_MIME));
+            cursor.insertHtml(editor.toHtml());
             event->acceptProposedAction();
             event->accept();
             return;

@@ -82,6 +82,8 @@ public:
 
     virtual QTextEdit *textEdit() const;
 
+    // some QTextEdit wrappers for code simplification
+    QTextDocument *document() const {return textEdit()->document();}
     void setTextCursor(const QTextCursor &cursor) {textEdit()->setTextCursor(cursor);}
     QTextCursor textCursor() const {return textEdit()->textCursor();}
     void ensureCursorVisible() {textEdit()->ensureCursorVisible();}
@@ -95,6 +97,8 @@ public:
     QString toPlainText() const {return textEdit()->toPlainText();}
 
 public Q_SLOTS:
+    void setReadOnly(bool ro) {textEdit()->setReadOnly(ro);}
+    void clear() {textEdit()->clear();}
     virtual void toogleToolbar(bool state);
 
 protected Q_SLOTS:

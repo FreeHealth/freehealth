@@ -104,7 +104,7 @@
          </item>
         </layout>
        </widget>
-       <widget class="QTextEdit" name="wysiwyg">
+       <widget class="PadTools::TokenOutputDocument" name="wysiwyg">
         <property name="readOnly">
          <bool>true</bool>
         </property>
@@ -125,6 +125,11 @@
    <class>PadTools::DragDropTextEdit</class>
    <extends>QTextEdit</extends>
    <header location="global">padtoolsplugin/dragdroptextedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>PadTools::TokenOutputDocument</class>
+   <extends>QTextEdit</extends>
+   <header location="global">padtoolsplugin/tokenoutputdocument.cpp</header>
   </customwidget>
  </customwidgets>
  <resources/>

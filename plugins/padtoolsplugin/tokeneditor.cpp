@@ -41,10 +41,43 @@ TokenEditor::~TokenEditor()
     delete ui;
 }
 
-void TokenEditor::setTokenModel(TokenModel *model)
+void TokenEditor::done(int result)
 {
+//    if (result==QDialog::Accepted) {
+//        ui->tokenEditor->toHtml();
+//    }
+    QDialog::done(result);
 }
 
-void TokenEditor::editIndex(const QModelIndex &index)
+void TokenEditor::setTokenModel(TokenModel *model)
 {
+    ui->tokenEditor->setTokenModel(model);
+}
+
+void TokenEditor::setCurrentIndex(const QModelIndex &index)
+{
+    ui->tokenEditor->setCurrentIndex(index);
+}
+
+void TokenEditor::setTokenName(const QString &name)
+{
+    ui->tokenEditor->setTokenName(name);
+}
+
+void TokenEditor::setConditionnalHtml(const QString &before, const QString &after)
+{
+    ui->tokenEditor->setConditionnalBeforeHtml(before);
+    ui->tokenEditor->setConditionnalAfterHtml(after);
+}
+
+void TokenEditor::setConditionnalPlainText(const QString &before, const QString &after)
+{
+    ui->tokenEditor->setConditionnalBeforePlainText(before);
+    ui->tokenEditor->setConditionnalAfterPlainText(after);
+}
+
+
+QString TokenEditor::toHtml() const
+{
+    return ui->tokenEditor->toHtml();
 }

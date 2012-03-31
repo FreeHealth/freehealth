@@ -122,8 +122,10 @@ public:
 
     ~TextEditorPrivate()
     {
-        delete m_Context;
-        m_Context = 0;
+        if (m_Context) {
+            delete m_Context;
+            m_Context = 0;
+        }
     }
 
     void createToolBar()
@@ -247,8 +249,8 @@ public:
 //--------------------------------------------------------------------------------------------------------
 //------------------------------------ TextEditor implementation -----------------------------------
 //--------------------------------------------------------------------------------------------------------
-TextEditor::TextEditor(QWidget *parent, Types type)
-          : TableEditor(parent), d(0)
+TextEditor::TextEditor(QWidget *parent, Types type) :
+    TableEditor(parent), d(0)
 {
     static int handler = 0;
     handler++;
@@ -321,6 +323,7 @@ void TextEditor::setTypes(Types type)
     }
     // update toolbar
     d->populateToolbar();
+    Core::ICore::instance()->contextManager()->updateContext();
 }
 
 QMenu *TextEditor::getContextMenu()

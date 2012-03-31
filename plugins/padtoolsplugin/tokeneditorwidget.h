@@ -29,7 +29,12 @@
 
 #include <QWidget>
 
+QT_BEGIN_NAMESPACE
+class QModelIndex;
+QT_END_NAMESPACE
+
 namespace PadTools {
+class TokenModel;
 
 namespace Ui {
 class TokenEditorWidget;
@@ -43,8 +48,26 @@ public:
     explicit TokenEditorWidget(QWidget *parent = 0);
     ~TokenEditorWidget();
     
+    void setTokenModel(TokenModel *model);
+
+public Q_SLOTS:
+    void clear();
+
+    void setCurrentIndex(const QModelIndex &index);
+    void setTokenName(const QString &name);
+
+    void setConditionnalBeforeHtml(const QString &html);
+    void setConditionnalAfterHtml(const QString &html);
+
+    void setConditionnalBeforePlainText(const QString &txt);
+    void setConditionnalAfterPlainText(const QString &txt);
+
+    QString toHtml() const;
+
 private:
     Ui::TokenEditorWidget *ui;
+    QString _tokenName;
+    TokenModel *_model;
 };
 
 
