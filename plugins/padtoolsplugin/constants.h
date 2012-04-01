@@ -56,13 +56,10 @@ const char * const FOLLOW_CURSOR_IN_RESULT_OUTPUT = QT_TRANSLATE_NOOP("PadWriter
 const char * const AUTO_UPDATE_RESULT = QT_TRANSLATE_NOOP("PadWriter", "Automatic update of results");
 const char * const SET_TEST_VALUE_TO_TOKENS = QT_TRANSLATE_NOOP("PadWriter", "Set a test value to all available tokens");
 
-QTextCharFormat setTokenCharFormat(const QTextCharFormat &format);
+void setPadFragmentFormat(const QString &tag, int s, int e, QTextDocument *doc, QList<QTextCharFormat> &formats, QTextCharFormat mergeFormat);
+void removePadFragmentFormat(const QString &tag, QTextDocument *doc, QList<QTextCharFormat> &formats);
 
-QTextFrameFormat tokenFrameFormat();
-QTextFrameFormat tokenBeforeFrameFormat();
-QTextFrameFormat tokenAfterFrameFormat();
-
-}
-}
+}  // namespace Constants
+}  // namespace PadTools
 
 #endif // PADTOOLS_CONSTANTS_H
