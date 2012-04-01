@@ -127,7 +127,7 @@ void PadFragment::insertText(QTextDocument *out, const QString &text) const
     }
 }
 
-/** Moves the PadTools::PadFragment from \e nbChars. \e nbChars can be a positive (mocving forward) or a negative int (moving backward). */
+/** Moves the PadTools::PadFragment from \e nbChars. \e nbChars can be a positive (moving forward) or a negative int (moving backward). Manages children too.*/
 void PadFragment::move(int nbChars)
 {
     _start+=nbChars;
@@ -138,10 +138,11 @@ void PadFragment::move(int nbChars)
         f->move(nbChars);
 }
 
+/** Move the end tag of the fragment in rawsource and output. Manages parent end too. */
 void PadFragment::moveEnd(int nbOfChars)
 {
     _end += nbOfChars;
     _outputEnd += nbOfChars;
-    foreach(PadFragment *f, _fragments)
-        f->moveEnd(nbOfChars);
+    if (_parent)
+        _parent->moveEnd(nbOfChars);
 }
