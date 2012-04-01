@@ -4,7 +4,7 @@
 <context>
     <name>Agenda</name>
     <message>
-        <location filename="../../plugins/agendaplugin/constants.h" line="189"/>
+        <location filename="../../plugins/agendaplugin/constants.h" line="190"/>
         <source>Print current selection</source>
         <translation type="unfinished"></translation>
     </message>
@@ -169,13 +169,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendarviewer.ui" line="109"/>
-        <source>Duration (mins)</source>
+        <location filename="../../plugins/agendaplugin/usercalendarviewer.ui" line="172"/>
+        <source>Duration</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendarviewer.ui" line="191"/>
+        <location filename="../../plugins/agendaplugin/usercalendarviewer.ui" line="214"/>
         <source>Description</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/agendaplugin/usercalendarviewer.cpp" line="366"/>
+        <location filename="../../plugins/agendaplugin/usercalendarviewer.cpp" line="432"/>
+        <source>Set back to default: </source>
+        <extracomment>default agenda duration time (in minutes)
+----------
+default agenda duration time (in minutes)</extracomment>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -364,32 +373,32 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendareditor.cpp" line="148"/>
-        <location filename="../../plugins/agendaplugin/usercalendareditor.cpp" line="160"/>
+        <location filename="../../plugins/agendaplugin/usercalendareditor.cpp" line="150"/>
+        <location filename="../../plugins/agendaplugin/usercalendareditor.cpp" line="162"/>
         <source>Can not delete all availabilities</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendareditor.cpp" line="149"/>
-        <location filename="../../plugins/agendaplugin/usercalendareditor.cpp" line="161"/>
+        <location filename="../../plugins/agendaplugin/usercalendareditor.cpp" line="151"/>
+        <location filename="../../plugins/agendaplugin/usercalendareditor.cpp" line="163"/>
         <source>Agenda must have at least one availability. You can not delete all its availabilities.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendareditor.cpp" line="153"/>
+        <location filename="../../plugins/agendaplugin/usercalendareditor.cpp" line="155"/>
         <source>Delete full day.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendareditor.cpp" line="154"/>
-        <source>You are about to delete all recorded time range for one specific day of the week (%1). Do you really want to delete all time range ?</source>
+        <location filename="../../plugins/agendaplugin/usercalendareditor.cpp" line="156"/>
+        <source>You are about to delete all recorded time range for one specific day of the week (%1). Do you really want to delete all time range?</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>Agenda::UserCalendarModel</name>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendarmodel.cpp" line="197"/>
+        <location filename="../../plugins/agendaplugin/usercalendarmodel.cpp" line="228"/>
         <source>New calendar</source>
         <translation type="unfinished"></translation>
     </message>
@@ -412,8 +421,8 @@
     <name>AgendaBase</name>
     <message>
         <location filename="../../plugins/agendaplugin/agendabase.cpp" line="409"/>
-        <source>Trying to create empty database. 
-       Location : %1 
+        <source>Trying to create empty database.
+       Location: %1
        FileName: %2
        Driver: %3</source>
         <translation type="unfinished"></translation>

@@ -10,7 +10,7 @@
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/drugspreferences/databaseselectorwidget.cpp" line="214"/>
-        <source>You have selected a different drugs database than the currently-opened one. Your actual prescription will be reset. Do you want to continue ?</source>
+        <source>You have selected a different drugs database than the currently-opened one. Your actual prescription will be reset. Do you want to continue?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -34,12 +34,12 @@
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.cpp" line="191"/>
-        <source>Dosage correctly saved to base</source>
+        <source>Dosage successfully saved to base</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.cpp" line="193"/>
-        <source>SQL Error : Dosage can not be added to database : %1</source>
+        <source>SQL Error: Dosage can not be added to database: %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -700,7 +700,7 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.cpp" line="646"/>
-        <source>Linking to : </source>
+        <source>Linking to: </source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -828,12 +828,12 @@ p, li { white-space: pre-wrap; }
         <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="112"/>
         <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="113"/>
         <source>INN Information will be lost.
-Do you want to send them ?</source>
+Do you want to send them?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="178"/>
-        <source>Testing : </source>
+        <source>Testing: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -886,17 +886,17 @@ Do you want to send them ?</source>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="207"/>
-        <source>Message : </source>
+        <source>Message: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="213"/>
-        <source>Checked interactions : </source>
+        <source>Checked interactions: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="239"/>
-        <source>ERROR : %1
+        <source>ERROR: %1
 </source>
         <translation type="unfinished"></translation>
     </message>
@@ -918,13 +918,13 @@ Do you want to send them ?</source>
     <name>DrugsWidget::Internal::DrugsActionHandler</name>
     <message>
         <location filename="../../plugins/drugsplugin/drugswidgetmanager.cpp" line="654"/>
-        <source>Prescription is not empty. Clear it ?</source>
+        <source>Prescription is not empty. Clear it?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/drugswidgetmanager.cpp" line="655"/>
         <source>You select another editing mode than the actual one. Changing of mode during edition may cause prescription lose.
-Do you really want to change the editing mode ?</source>
+Do you really want to change the editing mode?</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

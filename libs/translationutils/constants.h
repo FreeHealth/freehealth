@@ -46,11 +46,11 @@ const char* const ALL_OTHER_LANGUAGES_TEXT = QT_TRANSLATE_NOOP("tkConstants", "A
 // App dateFormat for editors
 
 //: This date format will be used in every QDateEdit only
-const char* const DATEFORMAT_FOR_EDITOR = QT_TRANSLATE_NOOP("tkConstants", "dd MM yyyy");
-const char* const DATEFORMAT_FOR_MODEL = QT_TRANSLATE_NOOP("tkConstants", "dd-MM-yyyy");
+const char* const DATEFORMAT_FOR_EDITOR = QT_TRANSLATE_NOOP("tkConstants", "MM dd yyyy");
+const char* const DATEFORMAT_FOR_MODEL = QT_TRANSLATE_NOOP("tkConstants", "MM-dd-yyyy");
 
 //: This date time format will be used in every QDateTimeEdit only
-const char* const DATETIMEFORMAT_FOR_EDITOR = QT_TRANSLATE_NOOP("tkConstants", "dd MM yyyy hh:mm");
+const char* const DATETIMEFORMAT_FOR_EDITOR = QT_TRANSLATE_NOOP("tkConstants", "MM dd yyyy hh:mm");
 
 //: This time format will be used in every QTimeEdit only
 const char* const TIMEFORMAT_FOR_EDITOR = QT_TRANSLATE_NOOP("tkConstants", "hh:mm");

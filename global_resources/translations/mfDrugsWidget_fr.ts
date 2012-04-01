@@ -10,8 +10,8 @@
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/drugspreferences/databaseselectorwidget.cpp" line="214"/>
-        <source>You have selected a different drugs database than the currently-opened one. Your actual prescription will be reset. Do you want to continue ?</source>
-        <translation>Vous avez sélectionné une base de données thérapeutique différente de celle en cours d&apos;utilisation. Votre prescription actuelle va être effacée. Voulez-vous poursuivre ?</translation>
+        <source>You have selected a different drugs database than the currently-opened one. Your actual prescription will be reset. Do you want to continue?</source>
+        <translation>Vous avez sélectionné une base de données différent que celle en cours d&apos;utilisation. Votre prescription va être effacer. Voulez-vous poursuivre ?</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/drugspreferences/databaseselectorwidget.cpp" line="216"/>
@@ -34,13 +34,13 @@
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.cpp" line="191"/>
-        <source>Dosage correctly saved to base</source>
-        <translation>Posologie correctement sauvegardée dans la base</translation>
+        <source>Dosage successfully saved to base</source>
+        <translation>Protocole correctement sauvegardé</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageCreatorDialog.cpp" line="193"/>
-        <source>SQL Error : Dosage can not be added to database : %1</source>
-        <translation>Erreur SQL : le dosage ne peut pas être ajouté à la base de données : %1</translation>
+        <source>SQL Error: Dosage can not be added to database: %1</source>
+        <translation>Erreur SQL : Protocole n&apos;a pas pu être ajouté dans la base de données : %1</translation>
     </message>
 </context>
 <context>
@@ -700,8 +700,8 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.cpp" line="646"/>
-        <source>Linking to : </source>
-        <translation>Lier avec : </translation>
+        <source>Linking to: </source>
+        <translation>Lié à : </translation>
     </message>
 </context>
 <context>
@@ -828,14 +828,14 @@ p, li { white-space: pre-wrap; }
         <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="112"/>
         <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="113"/>
         <source>INN Information will be lost.
-Do you want to send them ?</source>
-        <translation>Les informations DCI seront perdues.
+Do you want to send them?</source>
+        <translation>L&apos;information de DCI va être êrdue.
 Voulez-vous les envoyer ?</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="178"/>
-        <source>Testing : </source>
-        <translation>Test : </translation>
+        <source>Testing: </source>
+        <translation>Teste : </translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="184"/>
@@ -895,20 +895,19 @@ Voulez-vous les envoyer ?</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="207"/>
-        <source>Message : </source>
-        <translation></translation>
+        <source>Message: </source>
+        <translation>Message : </translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="213"/>
-        <source>Checked interactions : </source>
-        <translation>Interactions vérifiées : </translation>
+        <source>Checked interactions: </source>
+        <translation>Interactions vérifiées :</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/drugswidget/druginfo.cpp" line="239"/>
-        <source>ERROR : %1
+        <source>ERROR: %1
 </source>
-        <translation>ERREUR : %1
-</translation>
+        <translation>Erreur : %1</translation>
     </message>
 </context>
 <context>
@@ -928,14 +927,14 @@ Voulez-vous les envoyer ?</translation>
     <name>DrugsWidget::Internal::DrugsActionHandler</name>
     <message>
         <location filename="../../plugins/drugsplugin/drugswidgetmanager.cpp" line="654"/>
-        <source>Prescription is not empty. Clear it ?</source>
-        <translation>La prescription n&apos;est pas vide. Voulez-vous l&apos;effacer ?</translation>
+        <source>Prescription is not empty. Clear it?</source>
+        <translation>La prescription n&apos;est pas vide. L&apos;effacer ?</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/drugswidgetmanager.cpp" line="655"/>
         <source>You select another editing mode than the actual one. Changing of mode during edition may cause prescription lose.
-Do you really want to change the editing mode ?</source>
-        <translation>Vous avez sélectionné un autre mode d&apos;édition que le mode actuel. Changer de mode d&apos;édition va causer la perte de la prescription.
+Do you really want to change the editing mode?</source>
+        <translation>Vous avez sélectionné un autre mode d&apos;édition que celui en cours. Changer le mode d&apos;édition fera disparaître votre prescription actuelle.
 Voulez-vous réellement changer de mode d&apos;édition ?</translation>
     </message>
 </context>

@@ -115,72 +115,72 @@
         <translation>Montrer occupé</translation>
     </message>
     <message>
-        <location filename="../../libs/calendar/item_editor_widget.ui" line="223"/>
+        <location filename="../../libs/calendar/item_editor_widget.ui" line="229"/>
         <source>Password</source>
         <translation>Mot de passe</translation>
     </message>
     <message>
-        <location filename="../../libs/calendar/item_editor_widget.ui" line="276"/>
+        <location filename="../../libs/calendar/item_editor_widget.ui" line="282"/>
         <source>Label</source>
         <translation>Libellé</translation>
     </message>
     <message>
-        <location filename="../../libs/calendar/item_editor_widget.ui" line="283"/>
+        <location filename="../../libs/calendar/item_editor_widget.ui" line="289"/>
         <source>Status</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../libs/calendar/item_editor_widget.ui" line="305"/>
+        <location filename="../../libs/calendar/item_editor_widget.ui" line="311"/>
         <source>is private</source>
         <translation>Est privé</translation>
     </message>
     <message>
-        <location filename="../../libs/calendar/item_editor_widget.ui" line="319"/>
+        <location filename="../../libs/calendar/item_editor_widget.ui" line="325"/>
         <source>Extra</source>
         <translation>Extra</translation>
     </message>
     <message>
-        <location filename="../../libs/calendar/item_editor_widget.ui" line="332"/>
+        <location filename="../../libs/calendar/item_editor_widget.ui" line="338"/>
         <source>General information</source>
         <translation>Informations générales</translation>
     </message>
     <message>
-        <location filename="../../libs/calendar/item_editor_widget.ui" line="338"/>
+        <location filename="../../libs/calendar/item_editor_widget.ui" line="344"/>
         <source>Type</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../libs/calendar/item_editor_widget.ui" line="348"/>
+        <location filename="../../libs/calendar/item_editor_widget.ui" line="354"/>
         <source>Location</source>
         <translation>Localisation</translation>
     </message>
     <message>
-        <location filename="../../libs/calendar/item_editor_widget.ui" line="358"/>
+        <location filename="../../libs/calendar/item_editor_widget.ui" line="364"/>
         <source>Calendar</source>
         <translation>Calendrier</translation>
     </message>
     <message>
-        <location filename="../../libs/calendar/item_editor_widget.ui" line="379"/>
+        <location filename="../../libs/calendar/item_editor_widget.ui" line="385"/>
         <source>Description</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../libs/calendar/item_editor_widget.ui" line="388"/>
+        <location filename="../../libs/calendar/item_editor_widget.ui" line="394"/>
         <source>Extended description</source>
         <translation>Description étendue</translation>
     </message>
     <message>
-        <location filename="../../libs/calendar/item_editor_widget.ui" line="406"/>
+        <location filename="../../libs/calendar/item_editor_widget.ui" line="412"/>
         <source>Full information</source>
         <translation>Information complète</translation>
     </message>
     <message>
-        <location filename="../../libs/calendar/item_editor_widget.ui" line="441"/>
+        <location filename="../../libs/calendar/item_editor_widget.ui" line="447"/>
         <source>Icon</source>
         <translation>Icône</translation>
     </message>
     <message>
-        <location filename="../../libs/calendar/item_editor_widget.ui" line="461"/>
+        <location filename="../../libs/calendar/item_editor_widget.ui" line="467"/>
         <source>Select icon</source>
         <translation>Sélectionner une icône</translation>
     </message>

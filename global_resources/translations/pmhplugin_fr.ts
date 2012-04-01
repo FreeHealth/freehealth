@@ -80,7 +80,7 @@
         <location filename="../../plugins/pmhplugin/pmhbase.cpp" line="225"/>
         <location filename="../../plugins/pmhplugin/pmhbase.cpp" line="233"/>
         <location filename="../../plugins/pmhplugin/pmhbase.cpp" line="239"/>
-        <source>Please contact dev team.</source>
+        <source>Please contact the development team.</source>
         <translation>Veuillez contacter l&apos;équipe de développement.</translation>
     </message>
 </context>
@@ -92,14 +92,14 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhmode.cpp" line="368"/>
+        <location filename="../../plugins/pmhplugin/pmhmode.cpp" line="369"/>
         <source>Remove PMHx</source>
         <translation>Effacer un antécédent</translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhmode.cpp" line="369"/>
-        <source>Do you really want to remove the PMHx called &lt;br /&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;b&gt;%1&lt;/b&gt; ?</source>
-        <translation>Voulez-vous vraiment effacer l&apos;antécédent libellé &lt;br /&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;b&gt;%1&lt;/b&gt; ?</translation>
+        <location filename="../../plugins/pmhplugin/pmhmode.cpp" line="370"/>
+        <source>Do you really want to remove the PMHx called &lt;br /&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;b&gt;%1&lt;/b&gt;?</source>
+        <translation>Voulez)vous réellement effacer l&apos;antécédent nommé &lt;br /&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;b&gt;%1&lt;/b&gt;?</translation>
     </message>
 </context>
 <context>
@@ -234,12 +234,7 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="218"/>
-        <source>dd/MM/yyyy</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="228"/>
+        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="225"/>
         <source>Manage ICD10 Codes</source>
         <translation>Gérer les codes CIM10</translation>
     </message>
@@ -285,22 +280,22 @@
 <context>
     <name>PMH::PmhEpisodeModel</name>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhepisodemodel.cpp" line="263"/>
+        <location filename="../../plugins/pmhplugin/pmhepisodemodel.cpp" line="265"/>
         <source>Starting date</source>
         <translation>Date de début</translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhepisodemodel.cpp" line="264"/>
+        <location filename="../../plugins/pmhplugin/pmhepisodemodel.cpp" line="266"/>
         <source>Ending date</source>
         <translation>Date de fin</translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhepisodemodel.cpp" line="265"/>
+        <location filename="../../plugins/pmhplugin/pmhepisodemodel.cpp" line="267"/>
         <source>Label</source>
         <translation>Libellé</translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhepisodemodel.cpp" line="266"/>
+        <location filename="../../plugins/pmhplugin/pmhepisodemodel.cpp" line="268"/>
         <source>ICD10 coding</source>
         <translation>Codage CIM10</translation>
     </message>
@@ -325,7 +320,7 @@
 <context>
     <name>PMH::PmhViewer</name>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhviewer.cpp" line="257"/>
+        <location filename="../../plugins/pmhplugin/pmhviewer.cpp" line="261"/>
         <source>Replacing pmh data</source>
         <translation>Remplacement des données de l&apos;antécédent</translation>
     </message>

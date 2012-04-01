@@ -8,7 +8,7 @@
         <location filename="../../plugins/templatesplugin/templatebase.cpp" line="322"/>
         <location filename="../../plugins/templatesplugin/templatebase.cpp" line="328"/>
         <location filename="../../plugins/templatesplugin/templatebase.cpp" line="338"/>
-        <source>Please contact dev team.</source>
+        <source>Please contact the development team.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -30,8 +30,8 @@
     </message>
     <message>
         <location filename="../../plugins/templatesplugin/templatesmodel.cpp" line="113"/>
-        <source>Some data are not actually saved into database.Do you want to save them ?
- Answering &apos;No&apos; will cause definitive data lose.</source>
+        <source>Some data are not actually saved into database.Do you want to save them?
+ Answering &apos;No&apos; will cause definitive data loss.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -203,7 +203,7 @@
     </message>
     <message>
         <location filename="../../plugins/templatesplugin/templatesview.cpp" line="597"/>
-        <source>Do you really want to remove %1 from your templates&apos; list ?</source>
+        <source>Do you really want to remove %1 from your templates&apos; list?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

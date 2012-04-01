@@ -5,15 +5,14 @@
     <name>EpisodeModel</name>
     <message>
         <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="567"/>
-        <source>Save episode ?</source>
+        <source>Save episode?</source>
         <translation>Sauvegarder l&apos;épisode ?</translation>
     </message>
     <message>
         <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="568"/>
-        <source>The actual episode has been modified. Do you want to save changes in your database ?
+        <source>The actual episode has been modified. Do you want to save changes in your database?
 Answering &apos;No&apos; will cause definitve data lose.</source>
-        <translation>L&apos;épisode actuel a été modifié. Voulez-vous sauvegarder les modifications dans la base de données ?
-Répondre &apos;non&apos; causera une perte de données irréversible.</translation>
+        <translation>L&apos;épisode actuel a été modifié. Voulez-vous sauvegardé les modifications dans la base de données ? Répondre &quot;non&quot; provoquera des pertes de données irrémédiables.</translation>
     </message>
     <message>
         <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="570"/>
@@ -63,13 +62,13 @@ Répondre &apos;non&apos; causera une perte de données irréversible.</translat
     </message>
     <message>
         <location filename="../../plugins/formmanagerplugin/formeditordialog.cpp" line="94"/>
-        <source>Insert as root form ?</source>
-        <translation>Insérer le formulaire en tant que formulaire racine ?</translation>
+        <source>Insert as root form?</source>
+        <translation>Inséré comme formulaire racine ?</translation>
     </message>
     <message>
         <location filename="../../plugins/formmanagerplugin/formeditordialog.cpp" line="94"/>
-        <source>You did not selected a form, do you want to add the sub-form as root form ?</source>
-        <translation>Vous n&apos;avez pas sélectionné de formulaire, voulez-vous ajouter le sous-formulaire à la racine ?</translation>
+        <source>You did not selected a form, do you want to add the sub-form as root form?</source>
+        <translation>Vous n&apos;avez pas sélectionné de formulaire, voulez)cous ajouter ce formulaire comme formulaire racine ?</translation>
     </message>
 </context>
 <context>
@@ -94,7 +93,7 @@ Répondre &apos;non&apos; causera une perte de données irréversible.</translat
     <name>Form::FormMain</name>
     <message>
         <location filename="../../plugins/formmanagerplugin/iformitem.cpp" line="639"/>
-        <source>Form : </source>
+        <source>Form: </source>
         <translation>Formulaire : </translation>
     </message>
 </context>
@@ -102,8 +101,8 @@ Répondre &apos;non&apos; causera une perte de données irréversible.</translat
     <name>Form::FormMainDebugPage</name>
     <message>
         <location filename="../../plugins/formmanagerplugin/iformitem.cpp" line="765"/>
-        <source>Forms : </source>
-        <translation>Formulaires : </translation>
+        <source>Forms: </source>
+        <translation>Formuaires : </translation>
     </message>
 </context>
 <context>
@@ -113,7 +112,7 @@ Répondre &apos;non&apos; causera une perte de données irréversible.</translat
         <location filename="../../plugins/formmanagerplugin/episodebase.cpp" line="275"/>
         <location filename="../../plugins/formmanagerplugin/episodebase.cpp" line="281"/>
         <location filename="../../plugins/formmanagerplugin/episodebase.cpp" line="291"/>
-        <source>Please contact dev team.</source>
+        <source>Please contact the development team.</source>
         <translation>Veuillez contacter l&apos;équipe de développement.</translation>
     </message>
 </context>
@@ -332,12 +331,6 @@ Répondre &apos;non&apos; causera une perte de données irréversible.</translat
 </context>
 <context>
     <name>Forms</name>
-    <message>
-        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="148"/>
-        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="187"/>
-        <source>License</source>
-        <translation>Licence</translation>
-    </message>
     <message>
         <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="157"/>
         <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="183"/>

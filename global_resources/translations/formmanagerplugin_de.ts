@@ -5,12 +5,12 @@
     <name>EpisodeModel</name>
     <message>
         <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="567"/>
-        <source>Save episode ?</source>
+        <source>Save episode?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="568"/>
-        <source>The actual episode has been modified. Do you want to save changes in your database ?
+        <source>The actual episode has been modified. Do you want to save changes in your database?
 Answering &apos;No&apos; will cause definitve data lose.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -62,12 +62,12 @@ Answering &apos;No&apos; will cause definitve data lose.</source>
     </message>
     <message>
         <location filename="../../plugins/formmanagerplugin/formeditordialog.cpp" line="94"/>
-        <source>Insert as root form ?</source>
+        <source>Insert as root form?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/formmanagerplugin/formeditordialog.cpp" line="94"/>
-        <source>You did not selected a form, do you want to add the sub-form as root form ?</source>
+        <source>You did not selected a form, do you want to add the sub-form as root form?</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -93,7 +93,7 @@ Answering &apos;No&apos; will cause definitve data lose.</source>
     <name>Form::FormMain</name>
     <message>
         <location filename="../../plugins/formmanagerplugin/iformitem.cpp" line="639"/>
-        <source>Form : </source>
+        <source>Form: </source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -101,7 +101,7 @@ Answering &apos;No&apos; will cause definitve data lose.</source>
     <name>Form::FormMainDebugPage</name>
     <message>
         <location filename="../../plugins/formmanagerplugin/iformitem.cpp" line="765"/>
-        <source>Forms : </source>
+        <source>Forms: </source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -112,7 +112,7 @@ Answering &apos;No&apos; will cause definitve data lose.</source>
         <location filename="../../plugins/formmanagerplugin/episodebase.cpp" line="275"/>
         <location filename="../../plugins/formmanagerplugin/episodebase.cpp" line="281"/>
         <location filename="../../plugins/formmanagerplugin/episodebase.cpp" line="291"/>
-        <source>Please contact dev team.</source>
+        <source>Please contact the development team.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -331,12 +331,6 @@ Answering &apos;No&apos; will cause definitve data lose.</source>
 </context>
 <context>
     <name>Forms</name>
-    <message>
-        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="148"/>
-        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="187"/>
-        <source>License</source>
-        <translation type="unfinished"></translation>
-    </message>
     <message>
         <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="157"/>
         <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="183"/>

@@ -91,11 +91,6 @@ Veuillez vérifier vos répartitions journalières et vos relations avec le repa
         <translation>Posologies transmises.</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="546"/>
-        <source>Dosage not correctly transmitted</source>
-        <translation>Posologies incorrectement transmises</translation>
-    </message>
-    <message>
         <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="589"/>
         <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="608"/>
         <source>You are trying to read a corrupted XML file.</source>
@@ -109,9 +104,14 @@ Line: %2, Column: %3</source>
 Ligne : %2, colonne : %3</translation>
     </message>
     <message>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="546"/>
+        <source>Dosage not successfully transmitted</source>
+        <translation>Protocole non correctement transmit</translation>
+    </message>
+    <message>
         <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="607"/>
-        <source>Unable to load XML prescription : tag %1 is missing</source>
-        <translation>Impossible d&apos;ouvrir la prescription XML : le tag %1 est manquant</translation>
+        <source>Unable to load XML prescription: tag %1 is missing</source>
+        <translation>Impossible de lire la prescription XML : tag %1 manquant</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="609"/>
@@ -132,25 +132,25 @@ Ligne : %2, colonne : %3</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="671"/>
-        <source>Xml prescription correctly read.</source>
-        <translation>Prescription XML correctement ouverte.</translation>
+        <source>Xml prescription successfully read.</source>
+        <translation>Prescription XML correctement lu.</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="879"/>
+        <source>Save test only drugs too?</source>
+        <translation>Sauvagegarder les médicaments tests aussi ?</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="880"/>
+        <source>Drugs added for testing only are actually hidden in this prescription.
+Do you want to add them to the file?</source>
+        <translation>Des médicaments ajoutés à des fins de test d&apos;interaction sont actuellement cachés.
+Voulez-vous les sauvegarder aussi ?</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="703"/>
         <source>No file name passed to load prescription</source>
         <translation>Aucun nom de fichier donné pour l&apos;ouverture d&apos;une prescription</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="879"/>
-        <source>Save test only drugs too ?</source>
-        <translation>Sauvegarder les médicaments tests aussi ?</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="880"/>
-        <source>Drugs added for testing only are actually hidden in this prescription.
-Do you want to add them to the file ?</source>
-        <translation>Les médicaments tests sont actuellement cachés dans la prescription.
-Voulez-vous les ajouter au fichier ?</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="882"/>
@@ -289,8 +289,8 @@ Voulez-vous les ajouter au fichier ?</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="345"/>
-        <source>Model Error : unable to insert a row</source>
-        <translation>Erreur du modèle : Impossible d&apos;insérer une ligne</translation>
+        <source>Model Error: unable to insert a row</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="509"/>
@@ -312,7 +312,7 @@ Voulez-vous les ajouter au fichier ?</translation>
     <name>DrugsDB::Internal::DrugsTemplatePrinter</name>
     <message>
         <location filename="../../plugins/drugsbaseplugin/drugstemplateprinter.cpp" line="66"/>
-        <source>Warning : </source>
+        <source>Warning: </source>
         <translation>Attention : </translation>
     </message>
     <message>
@@ -328,8 +328,13 @@ Voulez-vous les ajouter au fichier ?</translation>
     <message>
         <location filename="../../plugins/drugsbaseplugin/drugstemplateprinter.cpp" line="75"/>
         <location filename="../../plugins/drugsbaseplugin/drugstemplateprinter.cpp" line="80"/>
-        <source>What do you want to do ?</source>
+        <source>What do you want to do?</source>
         <translation>Que voulez-vous faire ?</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsbaseplugin/drugstemplateprinter.cpp" line="102"/>
+        <source>You have selected multiple templates, would you print them separately or merge templates for printing on a single order?</source>
+        <translation>Vous avez sélectionné plusieurs modèles, voulez-vous les imprimer séparément ou les fusionner pour les imprimer sur une seule feuille ?</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsbaseplugin/drugstemplateprinter.cpp" line="88"/>
@@ -340,11 +345,6 @@ Voulez-vous les ajouter au fichier ?</translation>
         <location filename="../../plugins/drugsbaseplugin/drugstemplateprinter.cpp" line="101"/>
         <source>Print separately or merge printing.</source>
         <translation>Imprimer séparemment ou fusionner pour l&apos;impression.</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsbaseplugin/drugstemplateprinter.cpp" line="102"/>
-        <source>You have selected multiple templates, would you print them separately or merge templates for printing on a single order ?</source>
-        <translation>Vous avez sélectionné plusieurs modèles, voulez-vous les imprimer séparément ou les fusionner pour les imprimer sur la même ordonnance ?</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsbaseplugin/drugstemplateprinter.cpp" line="105"/>
@@ -370,13 +370,13 @@ Voulez-vous les ajouter au fichier ?</translation>
         <location filename="../../plugins/drugsbaseplugin/protocolsbase.cpp" line="345"/>
         <location filename="../../plugins/drugsbaseplugin/protocolsbase.cpp" line="351"/>
         <location filename="../../plugins/drugsbaseplugin/protocolsbase.cpp" line="356"/>
-        <source>Please contact dev team.</source>
+        <source>Please contact the development team.</source>
         <translation>Veuillez contacter l&apos;équipe de développement.</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsbaseplugin/protocolsbase.cpp" line="397"/>
-        <source>Standardized protocols database can not be correctly updated</source>
-        <translation>La base de données des protocoles ne peut être mise à jour correctement</translation>
+        <source>Standardized protocols database can not be updated successfully</source>
+        <translation>La base de données des protocoles standardisés ne peut pas être mise à jour correctement</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsbaseplugin/protocolsbase.cpp" line="462"/>
@@ -387,27 +387,27 @@ Voulez-vous les ajouter au fichier ?</translation>
 <context>
     <name>DrugsData</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/idrug.cpp" line="813"/>
+        <location filename="../../plugins/drugsbaseplugin/idrug.cpp" line="814"/>
         <source>No INN found.</source>
         <translation>Pas de DCI connue.</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/idrug.cpp" line="818"/>
+        <location filename="../../plugins/drugsbaseplugin/idrug.cpp" line="819"/>
         <source>No interaction class found.</source>
         <translation>Pas de classe d&apos;interaction connue.</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/idrug.cpp" line="856"/>
+        <location filename="../../plugins/drugsbaseplugin/idrug.cpp" line="857"/>
         <source>Form(s): </source>
         <translation>Forme(s) : </translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/idrug.cpp" line="857"/>
+        <location filename="../../plugins/drugsbaseplugin/idrug.cpp" line="858"/>
         <source>Route(s): </source>
         <translation>Voie(s) d&apos;administration : </translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/idrug.cpp" line="858"/>
+        <location filename="../../plugins/drugsbaseplugin/idrug.cpp" line="859"/>
         <source>Identifier(s): </source>
         <translation>Identifiant(s) : </translation>
     </message>
@@ -465,7 +465,7 @@ Intervalle minimum entre les prises : [MIN_INTERVAL]][
     <message>
         <location filename="../../plugins/drugsbaseplugin/constants.h" line="260"/>
         <source>DDI</source>
-        <extracomment>This is the short name of the Drug-drug interactions engine.</extracomment>
+        <extracomment>This is the short name of the drug-drug interactions engine.</extracomment>
         <translation>IAM</translation>
     </message>
     <message>
@@ -477,7 +477,7 @@ Intervalle minimum entre les prises : [MIN_INTERVAL]][
     <message>
         <location filename="../../plugins/drugsbaseplugin/constants.h" line="265"/>
         <source>PIM</source>
-        <extracomment>This is the short name of the Potentially inappropriate medications engine.</extracomment>
+        <extracomment>This is the short name of the potentially inappropriate medications engine.</extracomment>
         <translation>MPI</translation>
     </message>
     <message>
@@ -488,7 +488,7 @@ Intervalle minimum entre les prises : [MIN_INTERVAL]][
     <message>
         <location filename="../../plugins/drugsbaseplugin/constants.h" line="272"/>
         <source>Allergy</source>
-        <extracomment>This is the short name of the Potentially inappropriate medications engine.</extracomment>
+        <extracomment>This is the short name of the potentially inappropriate medications engine.</extracomment>
         <translation>Allergies</translation>
     </message>
 </context>

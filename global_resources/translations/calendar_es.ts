@@ -115,72 +115,72 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/calendar/item_editor_widget.ui" line="223"/>
+        <location filename="../../libs/calendar/item_editor_widget.ui" line="229"/>
         <source>Password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/calendar/item_editor_widget.ui" line="276"/>
+        <location filename="../../libs/calendar/item_editor_widget.ui" line="282"/>
         <source>Label</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/calendar/item_editor_widget.ui" line="283"/>
+        <location filename="../../libs/calendar/item_editor_widget.ui" line="289"/>
         <source>Status</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/calendar/item_editor_widget.ui" line="305"/>
+        <location filename="../../libs/calendar/item_editor_widget.ui" line="311"/>
         <source>is private</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/calendar/item_editor_widget.ui" line="319"/>
+        <location filename="../../libs/calendar/item_editor_widget.ui" line="325"/>
         <source>Extra</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/calendar/item_editor_widget.ui" line="332"/>
+        <location filename="../../libs/calendar/item_editor_widget.ui" line="338"/>
         <source>General information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/calendar/item_editor_widget.ui" line="338"/>
+        <location filename="../../libs/calendar/item_editor_widget.ui" line="344"/>
         <source>Type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/calendar/item_editor_widget.ui" line="348"/>
+        <location filename="../../libs/calendar/item_editor_widget.ui" line="354"/>
         <source>Location</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/calendar/item_editor_widget.ui" line="358"/>
+        <location filename="../../libs/calendar/item_editor_widget.ui" line="364"/>
         <source>Calendar</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/calendar/item_editor_widget.ui" line="379"/>
+        <location filename="../../libs/calendar/item_editor_widget.ui" line="385"/>
         <source>Description</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/calendar/item_editor_widget.ui" line="388"/>
+        <location filename="../../libs/calendar/item_editor_widget.ui" line="394"/>
         <source>Extended description</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/calendar/item_editor_widget.ui" line="406"/>
+        <location filename="../../libs/calendar/item_editor_widget.ui" line="412"/>
         <source>Full information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/calendar/item_editor_widget.ui" line="441"/>
+        <location filename="../../libs/calendar/item_editor_widget.ui" line="447"/>
         <source>Icon</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/calendar/item_editor_widget.ui" line="461"/>
+        <location filename="../../libs/calendar/item_editor_widget.ui" line="467"/>
         <source>Select icon</source>
         <translation type="unfinished"></translation>
     </message>

@@ -79,14 +79,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Opening an ICD Collection : merge or replace ?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>There is an ICD Collection inside the editor, do you to replace it or to add the opened collection ?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Replace collection</source>
         <translation type="unfinished"></translation>
     </message>
@@ -96,6 +88,14 @@
     </message>
     <message>
         <source>Open a collection</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Opening an ICD collection: merge or replace?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>There is an ICD collection inside the editor, do you to replace it or to add the opened collection?</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -127,11 +127,6 @@
 <context>
     <name>ICD::IcdDownloader</name>
     <message>
-        <source>The ICD10 database can not be created. The application will not work properly.
-Please contact the dev team.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Downloading ICD10 raw sources...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -141,6 +136,11 @@ Please contact the dev team.</source>
     </message>
     <message>
         <source>Unable to unzip ICD10 raw sources (%1)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The ICD10 database can not be created. The application will not work properly.
+Please contact the development team.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

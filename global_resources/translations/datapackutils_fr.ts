@@ -117,8 +117,18 @@
     </message>
     <message>
         <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="416"/>
-        <source>Server description file correctly downloaded.</source>
-        <translation>Description du serveur correctement téléchargée.</translation>
+        <source>Server description file successfully downloaded.</source>
+        <translation>La description du serveur a été correctement téléchargée.</translation>
+    </message>
+    <message>
+        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="493"/>
+        <source>Pack description successfully downloaded.</source>
+        <translation>La description du paquet de données a été correctement téléchargée.</translation>
+    </message>
+    <message>
+        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="500"/>
+        <source>Pack successfully downloaded.</source>
+        <translation>Paquet de données correctement téléchargé.</translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="432"/>
@@ -137,16 +147,6 @@
         <translation>Ajout du fichier descriptif du paquet à la liste des téléchargements.</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="493"/>
-        <source>Pack description correctly downloaded.</source>
-        <translation>Description du paquet correctement téléchargée.</translation>
-    </message>
-    <message>
-        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="500"/>
-        <source>Pack correctly downloaded.</source>
-        <translation>Paquet correctement téléchargé.</translation>
-    </message>
-    <message>
         <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="521"/>
         <source>Pack file can not be created in the persistent cache.</source>
         <translation>Le paquet ne peut pas être créé dans le répertoire de cache persistant.</translation>
@@ -155,18 +155,17 @@
 <context>
     <name>DataPack::Internal::LocalServerEngine</name>
     <message>
-        <location filename="../../libs/datapackutils/serverengines/localserverengine.cpp" line="102"/>
-        <source>Server configuration correctly downloaded.</source>
-        <extracomment>better would be &quot;successfully downloaded&quot;</extracomment>
-        <translation>Configuration du serveur correctement téléchargée.</translation>
+        <location filename="../../libs/datapackutils/serverengines/localserverengine.cpp" line="101"/>
+        <source>Server configuration successfully downloaded.</source>
+        <translation>La configuration du serveur a été correctement téléchargée.</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/serverengines/localserverengine.cpp" line="127"/>
-        <source>Pack correctly downloaded.</source>
-        <translation>Paquet correctement téléchargé.</translation>
+        <location filename="../../libs/datapackutils/serverengines/localserverengine.cpp" line="126"/>
+        <source>Pack successfully downloaded.</source>
+        <translation>Le paquet de données a été correctement téléchargée.</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/serverengines/localserverengine.cpp" line="139"/>
+        <location filename="../../libs/datapackutils/serverengines/localserverengine.cpp" line="138"/>
         <source>Pack file does not exist.</source>
         <translation>Le fichier de données n&apos;existe pas.</translation>
     </message>
@@ -248,7 +247,7 @@
     <message>
         <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="235"/>
         <source>Accept all license terms</source>
-        <translation>Accepter les termes des licences.</translation>
+        <translation>Accepter les termes des licences</translation>
     </message>
 </context>
 <context>
@@ -294,20 +293,20 @@
     </message>
     <message>
         <location filename="../../libs/datapackutils/packmanager.cpp" line="255"/>
-        <source>Pack %1 was correctly installed.</source>
-        <translation>Paquet %1 a été correctement installé.</translation>
+        <source>Pack %1 was installed successfully.</source>
+        <translation>Paquet de données %1 a été correctement installé.</translation>
+    </message>
+    <message>
+        <location filename="../../libs/datapackutils/packmanager.cpp" line="285"/>
+        <location filename="../../libs/datapackutils/packmanager.cpp" line="286"/>
+        <source>Pack %1 successfully removed.</source>
+        <translation>Paquet de données %1 a été correctement supprimé.</translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/packmanager.cpp" line="271"/>
         <location filename="../../libs/datapackutils/packmanager.cpp" line="272"/>
         <source>Unable to remove pack %1, unzip path does not exist (%2)</source>
         <translation>Impossible de supprimer le paquet de données %1, le répertoire de décompression n&apos;existe pas (%2)</translation>
-    </message>
-    <message>
-        <location filename="../../libs/datapackutils/packmanager.cpp" line="285"/>
-        <location filename="../../libs/datapackutils/packmanager.cpp" line="286"/>
-        <source>Pack %1 correctly removed.</source>
-        <translation>Paquet %1 correctement enlevé.</translation>
     </message>
 </context>
 <context>

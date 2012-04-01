@@ -117,7 +117,17 @@
     </message>
     <message>
         <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="416"/>
-        <source>Server description file correctly downloaded.</source>
+        <source>Server description file successfully downloaded.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="493"/>
+        <source>Pack description successfully downloaded.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="500"/>
+        <source>Pack successfully downloaded.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -137,16 +147,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="493"/>
-        <source>Pack description correctly downloaded.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="500"/>
-        <source>Pack correctly downloaded.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="521"/>
         <source>Pack file can not be created in the persistent cache.</source>
         <translation type="unfinished"></translation>
@@ -155,18 +155,17 @@
 <context>
     <name>DataPack::Internal::LocalServerEngine</name>
     <message>
-        <location filename="../../libs/datapackutils/serverengines/localserverengine.cpp" line="102"/>
-        <source>Server configuration correctly downloaded.</source>
-        <extracomment>better would be &quot;successfully downloaded&quot;</extracomment>
+        <location filename="../../libs/datapackutils/serverengines/localserverengine.cpp" line="101"/>
+        <source>Server configuration successfully downloaded.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/serverengines/localserverengine.cpp" line="127"/>
-        <source>Pack correctly downloaded.</source>
+        <location filename="../../libs/datapackutils/serverengines/localserverengine.cpp" line="126"/>
+        <source>Pack successfully downloaded.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/serverengines/localserverengine.cpp" line="139"/>
+        <location filename="../../libs/datapackutils/serverengines/localserverengine.cpp" line="138"/>
         <source>Pack file does not exist.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -294,19 +293,19 @@
     </message>
     <message>
         <location filename="../../libs/datapackutils/packmanager.cpp" line="255"/>
-        <source>Pack %1 was correctly installed.</source>
+        <source>Pack %1 was installed successfully.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/datapackutils/packmanager.cpp" line="285"/>
+        <location filename="../../libs/datapackutils/packmanager.cpp" line="286"/>
+        <source>Pack %1 successfully removed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/packmanager.cpp" line="271"/>
         <location filename="../../libs/datapackutils/packmanager.cpp" line="272"/>
         <source>Unable to remove pack %1, unzip path does not exist (%2)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/datapackutils/packmanager.cpp" line="285"/>
-        <location filename="../../libs/datapackutils/packmanager.cpp" line="286"/>
-        <source>Pack %1 correctly removed.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

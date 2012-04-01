@@ -16,16 +16,16 @@
     </message>
     <message>
         <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="623"/>
-        <source>Trying to create empty user database. 
-       Location : %1 
+        <source>Trying to create empty user database.
+       Location: %1
        FileName: %2
        Driver: %3</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="1013"/>
-        <source>User %1 correctly updated.</source>
-        <translation>Utilisateur %1 correctement mis ) jour.</translation>
+        <source>User %1 successfully updated.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -116,20 +116,19 @@
     </message>
     <message>
         <location filename="../../plugins/usermanagerplugin/widgets/defautuserviewerpages.cpp" line="120"/>
-        <source>Password correctly modified and saved into database.</source>
-        <translation>Le mot de passe a été correctement sauvegardé dans la base de données.</translation>
+        <source>Password successfully modified and saved into database.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/usermanagerplugin/widgets/defautuserviewerpages.cpp" line="129"/>
+        <source>User %1
+Last connection: %2</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/usermanagerplugin/widgets/defautuserviewerpages.cpp" line="128"/>
         <source>Login history.</source>
         <translation>Historique des connexions.</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/defautuserviewerpages.cpp" line="129"/>
-        <source>User %1
-Last connection : %2</source>
-        <translation>Utilisateur : %1
-Dernière connexion : %2</translation>
     </message>
 </context>
 <context>
@@ -371,8 +370,8 @@ Vous ne pouvez pas continuer avec un utilisateur anonyme.</translation>
     </message>
     <message>
         <location filename="../../plugins/usermanagerplugin/widgets/useridentityandloginpage.cpp" line="202"/>
-        <source>You must specify a valid login. Empty login is forbidden.</source>
-        <translation>Vous devez specifier un login valid. Les logins vides sont interdits.</translation>
+        <source>You must specify a valid login. An empty login is forbidden.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/usermanagerplugin/widgets/useridentityandloginpage.cpp" line="203"/>
@@ -462,23 +461,23 @@ Vous devez en utiliser un différent.</translation>
     <name>UserPlugin::Internal::UserManagerWidget</name>
     <message>
         <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="355"/>
-        <source>You&apos;ve modified the users&apos; list.</source>
-        <translation>Vous avez modifier la liste des utilisateurs.</translation>
+        <source>You&apos;ve modified the users list.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="355"/>
-        <source>Do you want to save your changes ?</source>
-        <translation>Voulez-vous sauvegarder les modifications ?</translation>
+        <source>Do you want to save your changes?</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="363"/>
-        <source>Changes have been correctly saved.</source>
-        <translation>Les modifications ont été correctement sauvegardées.</translation>
+        <source>Changes have been saved successfully.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="366"/>
-        <source>Changes can not be correctly saved.</source>
-        <translation>Les modifications n&apos;ont pas pu être sauvegardées.</translation>
+        <source>Changes can not be saved successfully.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="487"/>
@@ -980,10 +979,9 @@ Vous devez en utiliser un différent.</translation>
     </message>
     <message>
         <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="124"/>
-        <source>The user database is not reachable. Please check your configuration. 
+        <source>The user database is not reachable. Please check your configuration.
 Application will stop.</source>
-        <translation>La base de données utilisateur n&apos;est pas joignable. Veuillez vérifier votre configuration.
-L&apos;application va s&apos;arrêter.</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="166"/>
@@ -1201,13 +1199,13 @@ L&apos;application va s&apos;arrêter.</translation>
     <message>
         <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="274"/>
         <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="276"/>
-        <source>User correctly saved into database.</source>
-        <translation>Utilisateur correctement sauvegardé dans la base de données.</translation>
+        <source>User successfully saved into database.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="275"/>
-        <source>The user was correctly created and saved into database.</source>
-        <translation>L&apos;utilisateur a été correctement créé et sauvegardé dans la base de données.</translation>
+        <source>The user was successfully created and saved into database.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

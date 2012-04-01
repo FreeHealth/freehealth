@@ -57,11 +57,11 @@
 <context>
     <name>AccountDB::AccountBase</name>
     <message>
-        <location filename="../../plugins/accountbaseplugin/accountbase.cpp" line="640"/>
-        <location filename="../../plugins/accountbaseplugin/accountbase.cpp" line="648"/>
-        <location filename="../../plugins/accountbaseplugin/accountbase.cpp" line="654"/>
-        <source>Please contact dev team.</source>
-        <translation>Veuillez contacter l&apos;équipe de développement.</translation>
+        <location filename="../../plugins/accountbaseplugin/accountbase.cpp" line="641"/>
+        <location filename="../../plugins/accountbaseplugin/accountbase.cpp" line="649"/>
+        <location filename="../../plugins/accountbaseplugin/accountbase.cpp" line="655"/>
+        <source>Please contact the development team.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -75,12 +75,12 @@
 <context>
     <name>AccountDB::ActsModel</name>
     <message>
-        <location filename="../../plugins/accountbaseplugin/actsmodel.cpp" line="180"/>
+        <location filename="../../plugins/accountbaseplugin/actsmodel.cpp" line="181"/>
         <source>Comments</source>
         <translation>Commentaires</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountbaseplugin/actsmodel.cpp" line="181"/>
+        <location filename="../../plugins/accountbaseplugin/actsmodel.cpp" line="182"/>
         <source>Date</source>
         <translation></translation>
     </message>

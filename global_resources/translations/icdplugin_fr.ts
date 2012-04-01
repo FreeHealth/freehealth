@@ -79,14 +79,6 @@
         <translation>Ce code est déjà inclus ou est exclus par la collection actuelle.</translation>
     </message>
     <message>
-        <source>Opening an ICD Collection : merge or replace ?</source>
-        <translation>Ouverture d&apos;une collection CIM10 : ajouter ou remplacer ?</translation>
-    </message>
-    <message>
-        <source>There is an ICD Collection inside the editor, do you to replace it or to add the opened collection ?</source>
-        <translation>L&apos;éditeur contient déjà une collection CIM10, voulez-vous la remplacer ou l&apos;ajouter à la collection préexistante ?</translation>
-    </message>
-    <message>
         <source>Replace collection</source>
         <translation>Remplacer la collection</translation>
     </message>
@@ -97,6 +89,14 @@
     <message>
         <source>Open a collection</source>
         <translation>Ouvrir la collection</translation>
+    </message>
+    <message>
+        <source>Opening an ICD collection: merge or replace?</source>
+        <translation>Ouverture d&apos;une collection de codes : fusionner ou remplacer ?</translation>
+    </message>
+    <message>
+        <source>There is an ICD collection inside the editor, do you to replace it or to add the opened collection?</source>
+        <translation>Il existe une collection de codes dans l&apos;éditeur, voulez-vous remplacer les données de l&apos;éditeur par cette collection ou la fusionner ?</translation>
     </message>
 </context>
 <context>
@@ -127,12 +127,6 @@
 <context>
     <name>ICD::IcdDownloader</name>
     <message>
-        <source>The ICD10 database can not be created. The application will not work properly.
-Please contact the dev team.</source>
-        <translation>La base de données CIM10 ne peut pas être créé. L&apos;application ne fonctionnera pas normalement.
-Veuillez contacter l&apos;équipe de développement.</translation>
-    </message>
-    <message>
         <source>Downloading ICD10 raw sources...</source>
         <translation>Téléchargement des sources brutes CIM10...</translation>
     </message>
@@ -143,6 +137,11 @@ Veuillez contacter l&apos;équipe de développement.</translation>
     <message>
         <source>Unable to unzip ICD10 raw sources (%1)</source>
         <translation>Impossible de décompresser les données brutes de la CIM10 (%1)</translation>
+    </message>
+    <message>
+        <source>The ICD10 database can not be created. The application will not work properly.
+Please contact the development team.</source>
+        <translation>La base de données CIM10 ne peut pas être créée. L&apos;application ne fonctionnera pas correctement. Veuillez contacter l&apos;équipe de développement.</translation>
     </message>
 </context>
 <context>
