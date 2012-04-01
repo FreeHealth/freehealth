@@ -65,31 +65,6 @@ public:
 
     }
 
-    void setTokenFormat(int s, int e, QTextDocument *doc, QList<QTextCharFormat> &formats)
-    {
-        QTextCursor cursor(doc);
-         int count = e-s;
-         for(int i=0; i < count; ++i) {
-             cursor.setPosition(s + i);
-             cursor.setPosition(s + i + 1, QTextCursor::KeepAnchor);
-             formats << cursor.charFormat();
-             cursor.mergeCharFormat(_hoveredCharFormat);
-
-         }
-    }
-
-    void removeTokenFormat(int s, int e, QTextDocument *doc, QList<QTextCharFormat> &formats)
-    {
-        QTextCursor cursor(doc);
-        int count = e-s;
-        for(int i=0; i < count; ++i) {
-            cursor.setPosition(s + i);
-            cursor.setPosition(s + i + 1, QTextCursor::KeepAnchor);
-            cursor.setCharFormat(formats.at(i));
-        }
-        formats.clear();
-    }
-
 public:
     PadDocument *_pad;
     PadItem *m_LastHoveredItem, *m_LastFollowedItem; // should not be deleted
@@ -226,7 +201,7 @@ bool TokenOutputDocument::event(QEvent *event)
         QTextDocument *doc = document();
         if (!item) {
             if (d->m_LastHoveredItem) {
-                d->removeTokenFormat(d->m_LastHoveredItem->outputStart(), d->m_LastHoveredItem->outputEnd(), doc, d->m_LastHoveredItemCharFormats);
+                Constants::removePadFragmentFormat("Hover", doc, d->m_LastHoveredItemCharFormats);
                 d->m_LastHoveredItem = 0;
             }
             return QObject::event(event);
@@ -235,15 +210,21 @@ bool TokenOutputDocument::event(QEvent *event)
         if (d->m_LastHoveredItem) {
             if (d->m_LastHoveredItem == item)
                 return true;
-            d->removeTokenFormat(d->m_LastHoveredItem->outputStart(), d->m_LastHoveredItem->outputEnd(), doc, d->m_LastHoveredItemCharFormats);
+            Constants::removePadFragmentFormat("Hover", doc, d->m_LastHoveredItemCharFormats);
             d->m_LastHoveredItem = item;
         } else {
             d->m_LastHoveredItem = item;
         }
-        d->setTokenFormat(d->m_LastHoveredItem->outputStart(), d->m_LastHoveredItem->outputEnd(), doc, d->m_LastHoveredItemCharFormats);
+        Constants::setPadFragmentFormat("Hover", d->m_LastHoveredItem->outputStart(), d->m_LastHoveredItem->outputEnd(), doc, d->m_LastHoveredItemCharFormats, d->_hoveredCharFormat);
         me->accept();
         return true;
+    } else if (event->type()==QEvent::HoverLeave && d->m_LastHoveredItem) {
+        Constants::removePadFragmentFormat("Hover", document(), d->m_LastHoveredItemCharFormats);
+        d->m_LastHoveredItem = 0;
+        event->accept();
+        return true;
     }
+
 
     return QObject::event(event);
 }

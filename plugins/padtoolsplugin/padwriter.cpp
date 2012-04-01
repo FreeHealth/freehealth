@@ -56,30 +56,6 @@ static inline Core::ActionManager *actionManager() { return Core::ICore::instanc
 static inline Core::ITheme *theme() { return Core::ICore::instance()->theme(); }
 static inline Core::IPadTools *padTools() {return Core::ICore::instance()->padTools();}
 
-static void setTokenFormat(int s, int e, QTextDocument *doc, QList<QTextCharFormat> &formats)
-{
-    QTextCursor cursor(doc);
-     int count = e-s;
-     for(int i=0; i < count; ++i) {
-         cursor.setPosition(s + i);
-         cursor.setPosition(s + i + 1, QTextCursor::KeepAnchor);
-         formats << cursor.charFormat();
-         cursor.setCharFormat(Constants::setTokenCharFormat(cursor.charFormat()));
-     }
-}
-
-static void removeTokenFormat(int s, int e, QTextDocument *doc, QList<QTextCharFormat> &formats)
-{
-    QTextCursor cursor(doc);
-    int count = e-s;
-    for(int i=0; i < formats.count(); ++i) {
-        cursor.setPosition(s + i);
-        cursor.setPosition(s + i + 1, QTextCursor::KeepAnchor);
-        cursor.setCharFormat(formats.at(i));
-    }
-    formats.clear();
-}
-
 namespace PadTools {
 namespace Internal {
 class PadWriterPrivate
@@ -89,9 +65,12 @@ public:
         ui(0),
         m_TokenModel(0),
         m_Pad(0),
-        m_LastHoveredItem(0),
+        m_LastFollowedItem(0),
         q(parent)
-    {}
+    {
+        _followedCharFormat.setUnderlineColor(QColor(Qt::cyan));
+        _followedCharFormat.setUnderlineStyle(QTextCharFormat::WaveUnderline);
+    }
 
     void createActions(QToolButton *button)
     {
@@ -134,10 +113,9 @@ public:
     QAction *aFollowCursor, *aAutoUpdate, *aSetDefaultValues;
     QAction *aTest1, *aTest2, *aTest3; // actions used to test different rawsource scenari
     PadDocument *m_Pad;
-//    PadItem *m_LastHoveredItem, *m_LastFollowedItem; // should not be deleted
-    PadItem *m_LastHoveredItem ; // should not be deleted
     PadFragment *m_LastFollowedItem; // should not be deleted
     QList<QTextCharFormat> m_LastHoveredItemCharFormats, m_LastFollowedItemCharFormats;
+    QTextCharFormat _followedCharFormat;
 
 private:
     PadWriter *q;
@@ -275,12 +253,10 @@ void PadWriter::findCursorPositionInOutput()
     const int cursorPos = d->ui->rawSource->textEdit()->textCursor().position();
 //    PadItem *item = d->m_Pad->padItemForSourcePosition(cursorPos);
     PadFragment *item = d->m_Pad->padFragmentForSourcePosition(cursorPos);
-    if (!item)
-        return;
     QTextDocument *doc = d->ui->wysiwyg->document();
     if (!item) {
         if (d->m_LastFollowedItem) {
-            removeTokenFormat(d->m_LastFollowedItem->outputStart(), d->m_LastFollowedItem->outputEnd(), doc, d->m_LastFollowedItemCharFormats);
+            Constants::removePadFragmentFormat("Follow", doc, d->m_LastFollowedItemCharFormats);
             d->m_LastFollowedItem = 0;
         }
         return;
@@ -289,12 +265,12 @@ void PadWriter::findCursorPositionInOutput()
     if (d->m_LastFollowedItem) {
         if (d->m_LastFollowedItem == item)
             return;
-        removeTokenFormat(d->m_LastFollowedItem->outputStart(), d->m_LastFollowedItem->outputEnd(), doc, d->m_LastFollowedItemCharFormats);
+        Constants::removePadFragmentFormat("Follow", doc, d->m_LastFollowedItemCharFormats);
         d->m_LastFollowedItem = item;
     } else {
         d->m_LastFollowedItem = item;
     }
-    setTokenFormat(d->m_LastFollowedItem->outputStart(), d->m_LastFollowedItem->outputEnd(), doc, d->m_LastFollowedItemCharFormats);
+    Constants::setPadFragmentFormat("Follow", d->m_LastFollowedItem->outputStart(), d->m_LastFollowedItem->outputEnd(), doc, d->m_LastFollowedItemCharFormats, d->_followedCharFormat);
 }
 
 void PadWriter::setAutoUpdateOfResult(bool state)
