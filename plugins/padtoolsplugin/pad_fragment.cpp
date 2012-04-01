@@ -37,7 +37,8 @@
 
 using namespace PadTools;
 
-PadFragment::PadFragment() :
+PadFragment::PadFragment(PadFragment *parent) :
+    _parent(parent),
     _start(-1),
     _end(-1),
     _id(-1),
@@ -45,6 +46,55 @@ PadFragment::PadFragment() :
     _outputEnd(-1)
 {
 }
+
+/** When deleting an object, all its children will be deleted */
+PadFragment::~PadFragment()
+{
+    qDeleteAll(_fragments);
+    _fragments.clear();
+    _parent = 0;
+}
+
+void PadFragment::addChild(PadFragment *fragment)
+{
+    fragment->setParent(this);
+    _fragments << fragment;
+}
+
+/** Return the smallest PadTools::PadFragment that include the position. All children are checked. Return 0 if the pos is not included in the fragment. */
+PadFragment *PadFragment::padFragmentForSourcePosition(int pos) const
+{
+    if (_start > pos || _end < pos)
+        return 0;
+    if (_fragments.isEmpty())
+        return (PadFragment*)(this);
+    // check all children
+    PadFragment *child = 0;
+    foreach(PadFragment *frag, _fragments) {
+        PadFragment *test = frag->padFragmentForSourcePosition(pos);
+        if (test)
+            child = test;
+    }
+    return child;
+}
+
+/** Return the smallest PadTools::PadFragment that include the position. All children are checked. Return 0 if the pos is not included in the fragment. */
+PadFragment *PadFragment::padFragmentForOutputPosition(int pos) const
+{
+    if (_outputStart > pos || _outputEnd < pos)
+        return 0;
+    if (_fragments.isEmpty())
+        return (PadFragment*)(this);
+    // check all children
+    PadFragment *child = 0;
+    foreach(PadFragment *frag, _fragments) {
+        PadFragment *test = frag->padFragmentForOutputPosition(pos);
+        if (test)
+            child = test;
+    }
+    return child;
+}
+
 
 /** Insert the content of the PadFragment rawSource to the output */
 void PadFragment::insertFragment(QTextDocument *source, QTextDocument *out) const

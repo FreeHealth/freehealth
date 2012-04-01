@@ -40,7 +40,11 @@ namespace PadTools {
 class PadFragment
 {
 public:
-    PadFragment();
+    PadFragment(PadFragment *parent = 0);
+    virtual ~PadFragment();
+
+    virtual void setParent(PadFragment *parent) {_parent = parent;}
+    virtual PadFragment *parent() const {return _parent;}
 
 	virtual void print(int indent = 0) const = 0;
 
@@ -84,9 +88,11 @@ public:
     /**  Run this fragment over some tokens inside QTextDocuments */
     virtual void run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out) const = 0;
 
-    virtual void addChild(PadFragment *fragment) {_fragments << fragment;}
+    virtual void addChild(PadFragment *fragment);
     virtual QList<PadFragment*> children() const {return _fragments;}
 
+    virtual PadFragment *padFragmentForSourcePosition(int pos) const;
+    virtual PadFragment *padFragmentForOutputPosition(int pos) const;
 
     void insertFragment(QTextDocument *source, QTextDocument *out) const;
     void insertText(QTextDocument *out, const QString &text) const;
@@ -95,7 +101,8 @@ protected:
     QList<PadFragment *> _fragments;
 
 private:
-	int _start; // index of the first char in the text
+    PadFragment *_parent;
+    int _start; // index of the first char in the text
 	int _end; // index of the last char in the text
     long long _id; // unique identifier
     QString _toolTip;

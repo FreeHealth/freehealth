@@ -36,7 +36,7 @@ namespace PadTools {
 class PadCore : public PadFragment
 {
 public:
-    PadCore() {}
+    PadCore() : PadFragment() {}
 
     const QString &name() const { return _name; }
     void setName(const QString &name) { _name = name; }

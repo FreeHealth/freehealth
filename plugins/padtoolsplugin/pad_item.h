@@ -50,7 +50,7 @@ public:
         ConditionnalAfterText
     };
 
-    PadItem(){}
+    PadItem() : PadFragment() {}
 	virtual ~PadItem();
 
     PadFragment *fragment(const int type) const;
