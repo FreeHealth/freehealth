@@ -209,6 +209,7 @@ IcdActionHandler::IcdActionHandler(QObject *parent) :
         modesmenu->appendGroup(Constants::G_ICD_COLLECTIONMODE);
         modesmenu->setTranslations(Constants::MODESMENU_TEXT, Constants::ICDCONSTANTS_TR_CONTEXT);
 #ifndef FREETOOLBOX
+        Core::ActionContainer *menu = actionManager()->actionContainer(Core::Constants::M_EDIT);
         menu->addMenu(modesmenu, Core::Constants::G_EDIT_OTHER);
 #endif
     }
