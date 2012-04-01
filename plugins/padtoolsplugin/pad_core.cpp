@@ -34,7 +34,7 @@ using namespace PadTools;
 void PadCore::print(int indent) const
 {
 	QString str(indent, ' ');
-    str += QString("%1%2%1").arg(Constants::TOKEN_CORE_DELIMITER).arg(_name);
+    str += QString("[padCore]:%1%2%1").arg(Constants::TOKEN_CORE_DELIMITER).arg(_name);
     qWarning() << str;
 }
 
