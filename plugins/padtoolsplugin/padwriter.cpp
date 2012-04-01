@@ -133,7 +133,9 @@ public:
     TokenModel *m_TokenModel;
     QAction *aFollowCursor, *aAutoUpdate, *aSetDefaultValues;
     PadDocument *m_Pad;
-    PadItem *m_LastHoveredItem, *m_LastFollowedItem; // should not be deleted
+//    PadItem *m_LastHoveredItem, *m_LastFollowedItem; // should not be deleted
+    PadItem *m_LastHoveredItem ; // should not be deleted
+    PadFragment *m_LastFollowedItem; // should not be deleted
     QList<QTextCharFormat> m_LastHoveredItemCharFormats, m_LastFollowedItemCharFormats;
 
 private:
@@ -276,13 +278,15 @@ void PadWriter::setFollowCursorInResultOutput(bool state)
 
 void PadWriter::findCursorPositionInOutput()
 {
-//    WARN_FUNC << d->ui->rawSource->textEdit()->textCursor().position();
     if (!d->m_Pad)
         return;
 
     // Find corresponding fragment Id
     const int cursorPos = d->ui->rawSource->textEdit()->textCursor().position();
-    PadItem *item = d->m_Pad->padItemForSourcePosition(cursorPos);
+//    PadItem *item = d->m_Pad->padItemForSourcePosition(cursorPos);
+    PadFragment *item = d->m_Pad->padFragmentForSourcePosition(cursorPos);
+    if (!item)
+        return;
     QTextDocument *doc = d->ui->wysiwyg->document();
     if (!item) {
         if (d->m_LastFollowedItem) {

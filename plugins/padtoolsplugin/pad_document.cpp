@@ -137,7 +137,7 @@ PadFragment *PadDocument::padFragmentForSourcePosition(int p) const
 {
     foreach(PadFragment *fragment, _fragments) {
         if (fragment->start() <= p && fragment->end() >= p)
-            return fragment;
+            return fragment->padFragmentForSourcePosition(p);
     }
     return 0;
 }
@@ -146,7 +146,7 @@ PadFragment *PadDocument::padFragmentForOutputPosition(int p) const
 {
     foreach(PadFragment *fragment, _fragments) {
         if (fragment->outputStart() <= p && fragment->outputEnd() >= p)
-            return fragment;
+            return fragment->padFragmentForOutputPosition(p);
     }
     return 0;
 }

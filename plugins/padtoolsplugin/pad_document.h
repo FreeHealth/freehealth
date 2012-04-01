@@ -55,6 +55,7 @@ public:
     QString fragmentHtmlOutput(PadFragment *fragment) const;
 
     void addChild(PadFragment *fragment);
+
     PadItem *padItemForOutputPosition(int positionInOutputQTextDocument) const;
     PadItem *padItemForSourcePosition(int positionInSourceQTextDocument) const;
     PadFragment *padFragmentForSourcePosition(int p) const;
