@@ -72,7 +72,7 @@ static void removeTokenFormat(int s, int e, QTextDocument *doc, QList<QTextCharF
 {
     QTextCursor cursor(doc);
     int count = e-s;
-    for(int i=0; i < count; ++i) {
+    for(int i=0; i < formats.count(); ++i) {
         cursor.setPosition(s + i);
         cursor.setPosition(s + i + 1, QTextCursor::KeepAnchor);
         cursor.setCharFormat(formats.at(i));
@@ -132,6 +132,7 @@ public:
     Ui::PadWriter *ui;
     TokenModel *m_TokenModel;
     QAction *aFollowCursor, *aAutoUpdate, *aSetDefaultValues;
+    QAction *aTest1, *aTest2, *aTest3; // actions used to test different rawsource scenari
     PadDocument *m_Pad;
 //    PadItem *m_LastHoveredItem, *m_LastFollowedItem; // should not be deleted
     PadItem *m_LastHoveredItem ; // should not be deleted
@@ -169,54 +170,26 @@ PadWriter::PadWriter(QWidget *parent) :
 
     // TEST
     setFollowCursorInResultOutput(true);
-    d->ui->rawSource->setHtml(
-                "<p><b>^$ <span style=' text-decoration: underline; color:#0000ff;'>before </span> 'a'  ~A~  after 'a'$^ qdsfsdqf qdf qsdf </b><br />"
-                "^$ <span style=' text-decoration: underline; color:#0000ff;'>before</span><span style=' text-decoration: underline;'> </span>'b' ~B~ after 'b'$^<br />"
-//                "<table border='1' width='100%' cellspacing='0' cellpadding='0'>"
-//                "<tr>"
-//                "<td width='50%'>"
-//                "<p style=' margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;'>^$ <span style=' text-decoration: underline; color:#0000ff;'>before</span><span style=' text-decoration: underline;'> </span>'b' ~B~ after 'b'$^</p></td>"
-//                "<td width='50%'></td></tr>"
-//                "<tr>"
-//                "<td></td>"
-//                "<td></td></tr></table>"
-//                ""
-//                "<$before 'b'  ~B~  after 'b'$>\n"
-//                "<$before 'c'  ~C~  after 'c'$>\n"
-//                "<$before 'html'  ~HTMLTOKEN~  after 'html'$>\n"
-//                "\n\n"
-//                "---------- TESTING NESTED ----------\n"
-//                "<$ba <$bb ~B~ ab$> ~A~  aa$>  -----> ba bb B ab A aa\n"
-//                "<$bb ~B~ ab <$ba ~A~  aa$>$>  -----> bb B ab ba A aa\n"
-//                "<$ <$bb ~B~ ab ba ~NULL~  aa$> $>  -----> \n"
-//                "<$bb ~B~ ab <$ba ~NULL~  aa$>$>  -----> bb B ab\n"
-//                "\n"
-//                "<$ab ~A~ aa <$ba <$nnn ~NULL~ nnn <$ac ~C~ bc$>$> ~B~  aa$>$>  -----> ab A aa ba B aa\n"
-//                "<$ab ~A~ aa <$ba <$<$nnn ~NULL~ nnn $> ac ~C~ bc $> ~B~  aa$>$>  -----> ab A aa ba B aa\n"
-//                "\n"
-//                "\n"
-//                "---------- TESTING INSIDE HTML CODE ----------\n"
-//                "<$<p><i><b>Test</b></i> a  ~A~ is Ok </p>$>"
-                );
-//    d->ui->rawSource->setPlainText(
-//                "<$before 'a'  ~A~  after 'a'$>\n"
-//                "<$before 'b'  ~B~  after 'b'$>\n"
-//                "<$before 'c'  ~C~  after 'c'$>\n"
-//                "<$before 'html'  ~HTMLTOKEN~  after 'html'$>\n"
-//                "\n\n"
-//                "---------- TESTING NESTED ----------\n"
-//                "<$ba <$bb ~B~ ab$> ~A~  aa$>  -----> ba bb B ab A aa\n"
-//                "<$bb ~B~ ab <$ba ~A~  aa$>$>  -----> bb B ab ba A aa\n"
-//                "<$ <$bb ~B~ ab ba ~NULL~  aa$> $>  -----> \n"
-//                "<$bb ~B~ ab <$ba ~NULL~  aa$>$>  -----> bb B ab\n"
-//                "\n"
-//                "<$ab ~A~ aa <$ba <$nnn ~NULL~ nnn <$ac ~C~ bc$>$> ~B~  aa$>$>  -----> ab A aa ba B aa\n"
-//                "<$ab ~A~ aa <$ba <$<$nnn ~NULL~ nnn $> ac ~C~ bc $> ~B~  aa$>$>  -----> ab A aa ba B aa\n"
-//                "\n"
-//                "\n"
-//                "---------- TESTING INSIDE HTML CODE ----------\n"
-//                "<$<p><i><b>Test</b></i> a  ~A~ is Ok </p>$>"
-//                );
+    QAction *a;
+    a = d->aTest1 = new QAction(this);
+    a->setText("Test raw source 1");
+    a->setToolTip("Two tokens, some strings, no nested tokens");
+    d->ui->scenari->addAction(a);
+
+    a = d->aTest2 = new QAction(this);
+    a->setText("Test raw source 2");
+    a->setToolTip("Simple nested tokens with extra strings");
+    d->ui->scenari->addAction(a);
+
+    a = d->aTest3 = new QAction(this);
+    a->setText("Test raw source 1");
+    a->setToolTip("Multinested tokens with extra strings");
+    d->ui->scenari->addAction(a);
+
+    connect(d->ui->scenari, SIGNAL(triggered(QAction*)), this, SLOT(changeRawSourceScenario(QAction*)));
+    d->ui->scenari->setDefaultAction(d->aTest1);
+    d->aTest1->trigger();
+
     // END TEST
 }
 
@@ -226,6 +199,23 @@ PadWriter::~PadWriter()
         delete d;
         d = 0;
     }
+}
+void PadWriter::changeRawSourceScenario(QAction *a)
+{
+    QString source;
+    if (a == d->aTest1) {
+        source = "<p><b>^$ <span style=' text-decoration: underline; color:#0000ff;'>before </span> 'a'  ~A~  after 'a'$^ qdsfsdqf qdf qsdf </b><br />"
+                 "^$ <span style=' text-decoration: underline; color:#0000ff;'>before</span> 'b' ~B~ after 'b'$^<br />";
+    } else if (a == d->aTest2) {
+        source = "<p><b>^$ <span style=' text-decoration: underline; color:#0000ff;'>before </span> 'a'  ~A~  after 'a'$^ qdsfsdqf qdf qsdf </b><br />"
+                 "^$ <span style=' text-decoration: underline; color:#0000ff;'>before</span> ^$ Before nested C ~C~ After nested C $^ 'b' ~B~ after 'b'$^<br />";
+    } else if (a == d->aTest3) {
+    } else if (a == d->aTest2) {
+        source = "<p><b>^$ <span style=' text-decoration: underline; color:#0000ff;'>before </span> 'a'  ~A~  after 'a'$^ qdsfsdqf qdf qsdf </b><br />"
+                 "^$ <span style=' text-decoration: underline; color:#0000ff;'>before</span> ^$ Before nested C ~C~ After ^$ Before D ~D~ After D $^nested C $^ 'b' ~B~ after 'b'$^<br />";
+    }
+    d->ui->rawSource->setHtml(source);
+    analyseRawSource();
 }
 
 QString PadWriter::htmlResult() const

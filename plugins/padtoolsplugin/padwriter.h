@@ -49,6 +49,7 @@ public:
     QString rawSource() const;
 
 private Q_SLOTS:
+    void changeRawSourceScenario(QAction*);
     void analyseRawSource();
     void viewErrors();
     void setFollowCursorInResultOutput(bool state);

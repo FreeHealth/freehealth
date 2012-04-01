@@ -61,7 +61,7 @@
        </property>
        <widget class="QWidget" name="layoutWidget_2">
         <layout class="QGridLayout" name="gridLayout">
-         <item row="1" column="0" colspan="5">
+         <item row="1" column="0" colspan="6">
           <widget class="PadTools::DragDropTextEdit" name="rawSource">
            <property name="toolTip">
             <string>Raw source</string>
@@ -88,7 +88,7 @@
            </property>
           </spacer>
          </item>
-         <item row="2" column="4">
+         <item row="2" column="5">
           <widget class="QToolButton" name="viewResult">
            <property name="text">
             <string>View result</string>
@@ -99,6 +99,13 @@
           <widget class="QToolButton" name="optionsButton">
            <property name="text">
             <string>Options</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="4">
+          <widget class="QToolButton" name="scenari">
+           <property name="text">
+            <string>Scenari</string>
            </property>
           </widget>
          </item>
