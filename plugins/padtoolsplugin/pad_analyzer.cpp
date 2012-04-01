@@ -206,7 +206,7 @@ PadItem *PadAnalyzer::nextPadItem()
 				delete padItem;
 				return 0;
 			}
-            fragment->setUserData(Constants::USERDATA_KEY_PADITEM, PadItem::Core);
+            padItem->addChild(fragment);
             previousType = PadItem::ConditionnalAfterText;
 			break;
 		default:
@@ -226,6 +226,7 @@ PadCore *PadAnalyzer::nextCore()
     PadCore *core = new PadCore;
 	core->setStart(_curPos - 1);
     core->setId(nextId());
+    core->setUserData(Constants::USERDATA_KEY_PADITEM, PadItem::Core);
 
 	// first, we expect string (or not)
 	lex = nextLexem();
