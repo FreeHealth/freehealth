@@ -16,6 +16,8 @@ global_resources/*.ini
 build/*
 bin/*
 Makefile
+*.o
+moc_*
 
 # Non Free content
 global_resources/pixmap/*.svg
