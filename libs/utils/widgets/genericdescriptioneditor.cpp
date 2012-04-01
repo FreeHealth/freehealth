@@ -45,6 +45,9 @@ GenericDescriptionEditor::GenericDescriptionEditor(QWidget *parent) :
     m_LastEditingUpdateIndex(-1)
 {
     ui->setupUi(this);
+    ui->creationDate->setDisplayFormat(tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR));
+    ui->date->setDisplayFormat(tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR));
+
     // populate combo
     ui->langSelector->addItems(QStringList() << "xx" << "en" << "fr" << "de" << "es");
     ui->langSelectorUpdate->addItems(QStringList() << "xx" << "en" << "fr" << "de" << "es");

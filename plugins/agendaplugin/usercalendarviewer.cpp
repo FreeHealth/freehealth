@@ -133,7 +133,7 @@ UserCalendarViewer::UserCalendarViewer(QWidget *parent) :
     d->ui->setupUi(this);
     this->layout()->setMargin(0);
     d->ui->startDate->setDate(QDate::currentDate());
-    d->ui->startDate->setDisplayFormat(QLocale().dateFormat(QLocale::LongFormat));
+    d->ui->startDate->setDisplayFormat(tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR));
 
     d->aToday = new QAction(this);
     d->aTomorrow = new QAction(this);

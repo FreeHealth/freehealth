@@ -655,6 +655,8 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
     m_insuranceUid = 0;
     m_model = new InternalAmount::AmountModel(this);
     ui->setupUi(this);
+    ui->dateExecution->setDisplayFormat(tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR));
+    ui->datePayment->setDisplayFormat(tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR));
     ui->saveAndQuitButton->hide();
     ui->quitButton->hide();
     if (rManager.isMedintuxArg())

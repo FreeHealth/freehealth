@@ -15,6 +15,7 @@ QT *= network
 HEADERS += \
     translationutils_exporter.h \
     constanttranslations.h \
+    constants.h \
     multilingualclasstemplate.h \
     googletranslator.h \
     trans_account.h \

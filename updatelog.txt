@@ -7,6 +7,7 @@ FreeMedForms
 
 ===== Bug correction =====
 
+  * Date format is no standardized in all the application and correctly translated
 
 ===== Packaging and documentation ====
 
@@ -26,6 +27,7 @@ FreeMedForms
 
 ===== Corrections de bug =====
 
+  * Le format de date est maintenant standardisé dans l'application et correctement traduit
 
 ===== Packaging et documentation ====
 

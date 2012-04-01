@@ -62,6 +62,8 @@ MovementsViewer::MovementsViewer(QWidget * parent) :
         QWidget(parent),ui(new Ui::MovementsViewerWidget)
 {
     ui->setupUi(this);
+    ui->dateEdit->setDisplayFormat(tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR));
+
     //instanciate
     m_valid = 0; //bill not received
     ui->valueDoubleSpinBox->setRange(0.00,999999999999999.00);

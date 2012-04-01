@@ -25,15 +25,20 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "genericupdateinformationeditor.h"
+
+#include <translationutils/constants.h>
+
 #include "ui_genericupdateinformationeditor.h"
 
 using namespace Utils;
+using namespace Trans::ConstantTranslations;
 
 GenericUpdateInformationEditor::GenericUpdateInformationEditor(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::GenericUpdateInformationEditor)
 {
     ui->setupUi(this);
+    ui->date->setDisplayFormat(tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR));
     ui->langSelector->addItems(QStringList() << "xx" << "en" << "fr" << "de" << "es");
 }
 

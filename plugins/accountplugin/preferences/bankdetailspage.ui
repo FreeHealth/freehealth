@@ -152,7 +152,11 @@
          </widget>
         </item>
         <item>
-         <widget class="QDateEdit" name="balanceDate"/>
+         <widget class="QDateEdit" name="balanceDate">
+          <property name="displayFormat">
+           <string notr="true">dd/MM/yy</string>
+          </property>
+         </widget>
         </item>
        </layout>
       </item>

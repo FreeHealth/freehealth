@@ -47,7 +47,7 @@
 
 #include <utils/global.h>
 #include <utils/widgets/uppercasevalidator.h>
-#include <translationutils/constanttranslations.h>
+#include <translationutils/constants.h>
 
 #include <QDataWidgetMapper>
 #include <QDir>
@@ -82,6 +82,7 @@ public:
         } else {
             editUi = new Ui::IdentityWidget;
             editUi->setupUi(q);
+            editUi->dob->setDisplayFormat(tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR));
             editUi->genderCombo->addItems(genders());
             editUi->titleCombo->addItems(titles());
             Utils::UpperCaseValidator *val = new Utils::UpperCaseValidator(q);
@@ -92,8 +93,6 @@ public:
             zipCompleter->setCityLineEdit(editUi->city);
             zipCompleter->setZipLineEdit(editUi->zipcode);
             zipCompleter->setCountryComboBox(editUi->country);
-
-//            editUi->dob->setDisplayFormat(QLocale().dateFormat(QLocale::LongFormat));
             q->connect(editUi->photoButton, SIGNAL(clicked()), q, SLOT(photoButton_clicked()));
         }
     }

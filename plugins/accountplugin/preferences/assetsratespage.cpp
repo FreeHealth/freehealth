@@ -37,7 +37,11 @@
 #include <utils/log.h>
 #include <utils/global.h>
 #include <utils/database.h>
-#include <translationutils/constanttranslations.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_account.h>
+#include <translationutils/trans_database.h>
+#include <translationutils/trans_msgerror.h>
+#include <translationutils/trans_menu.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
@@ -56,7 +60,7 @@
 enum { WarnDebugMessage = false };
 
 using namespace Account;
-using namespace Account::Internal;
+using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
 static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
@@ -124,6 +128,8 @@ AssetsRatesWidget::AssetsRatesWidget(QWidget *parent) :
     //QCoreApplication::processEvents(QEventLoop::AllEvents);
     setObjectName("AssetsRatesWidget");
     setupUi(this);
+    dateEdit->setDisplayFormat(tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR));
+
     m_user_uid = user()->uuid();
     addButton->setIcon(theme()->icon(Core::Constants::ICONADD));
     deleteButton->setIcon(theme()->icon(Core::Constants::ICONREMOVE));

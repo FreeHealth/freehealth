@@ -85,6 +85,8 @@ AccountView::AccountView(QWidget *parent) :
     setHeadersOfTable();
 
     m_userUuid = m_Model->getUserUuid();
+    m_ui->startDate->setDisplayFormat(tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR));
+    m_ui->endDate->setDisplayFormat(tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR));
     m_ui->startDate->setDate(QDate(2000,01,01));
     m_ui->endDate->setDate(QDate::currentDate()); 
     refresh();

@@ -2,6 +2,14 @@
 <ui version="4.0">
  <class>Patients::Internal::IdentityWidget</class>
  <widget class="QWidget" name="Patients::Internal::IdentityWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>369</width>
+    <height>576</height>
+   </rect>
+  </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
@@ -113,6 +121,9 @@
        <widget class="QDateEdit" name="dob">
         <property name="buttonSymbols">
          <enum>QAbstractSpinBox::NoButtons</enum>
+        </property>
+        <property name="displayFormat">
+         <string notr="true">dd/MM/yy</string>
         </property>
         <property name="calendarPopup">
          <bool>false</bool>

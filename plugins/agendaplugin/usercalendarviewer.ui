@@ -148,6 +148,9 @@
                     <verstretch>0</verstretch>
                    </sizepolicy>
                   </property>
+                  <property name="displayFormat">
+                   <string notr="true">dd/MM/yy</string>
+                  </property>
                   <property name="calendarPopup">
                    <bool>true</bool>
                   </property>

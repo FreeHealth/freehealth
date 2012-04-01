@@ -56,6 +56,8 @@ static inline Core::IUser *user() { return  Core::ICore::instance()->user(); }
 
 AssetsViewer::AssetsViewer(QWidget * parent):QWidget(parent),ui(new Ui::AssetsViewerWidget){
     ui->setupUi(this);
+    ui->dateEdit->setDisplayFormat(tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR));
+
     //instanciate
     ui->valueDoubleSpinBox->setRange(0.00,999999999999999.00);
     ui->recordButton->setShortcut(QKeySequence::InsertParagraphSeparator);

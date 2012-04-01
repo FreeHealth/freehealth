@@ -331,7 +331,8 @@ BaseForm::BaseForm(Form::FormItem *formItem, QWidget *parent) :
     m_Header->setupUi(header);
 
     m_EpisodeDate = m_Header->dateEdit;
-    m_EpisodeDate->setDisplayFormat(QLocale().dateFormat(QLocale::LongFormat));
+    m_EpisodeDate->setDisplayFormat(tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR));
+
     m_EpisodeDate->setEnabled(false);
     m_EpisodeDate->setCalendarPopup(true);
 
