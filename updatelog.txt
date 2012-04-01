@@ -4,10 +4,12 @@ FreeMedForms
 
   * FreeAccount
     * Windows compatibility improved  (installer, icon, application)
+    * Many bug fixes
 
 ===== Bug correction =====
 
   * Date format is no standardized in all the application and correctly translated
+  * Many typos corrected
 
 ===== Packaging and documentation ====
 
@@ -24,10 +26,12 @@ FreeMedForms
 
   * FreeAccount
     * Compatible windows (installateur, icône, application)
+    * Beaucoup de correction de bogues
 
 ===== Corrections de bug =====
 
   * Le format de date est maintenant standardisé dans l'application et correctement traduit
+  * Beaucoup de traductions corrigées
 
 ===== Packaging et documentation ====
 
