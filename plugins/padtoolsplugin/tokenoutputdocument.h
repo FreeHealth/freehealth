@@ -50,6 +50,7 @@ public:
     void dropEvent(QDropEvent *event);
 
 private Q_SLOTS:
+    void onPadCleared();
     void contextMenu(const QPoint &pos);
     void editTokenUnderCursor();
 

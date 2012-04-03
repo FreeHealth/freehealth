@@ -96,6 +96,15 @@ TokenOutputDocument::~TokenOutputDocument()
 void TokenOutputDocument::setPadDocument(PadDocument *pad)
 {
     d->_pad = pad;
+    connect(pad, SIGNAL(cleared()), this, SLOT(onPadCleared()));
+}
+
+void TokenOutputDocument::onPadCleared()
+{
+    if (!d->m_LastHoveredItem)
+        return;
+    Constants::removePadFragmentFormat("Hover", document(), d->m_LastHoveredItemCharFormats);
+    d->m_LastHoveredItem = 0;
 }
 
 void TokenOutputDocument::contextMenu(const QPoint &pos)
@@ -215,6 +224,9 @@ bool TokenOutputDocument::event(QEvent *event)
         } else {
             d->m_LastHoveredItem = item;
         }
+
+        qWarning() << d->m_LastHoveredItem->id();
+
         Constants::setPadFragmentFormat("Hover", d->m_LastHoveredItem->outputStart(), d->m_LastHoveredItem->outputEnd(), doc, d->m_LastHoveredItemCharFormats, d->_hoveredCharFormat);
         me->accept();
         return true;
