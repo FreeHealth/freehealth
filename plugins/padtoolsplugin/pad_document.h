@@ -88,7 +88,7 @@ private:
 
 private Q_SLOTS:
     void reset();
-    void rawSourceContentsChanged(int from, int charsRemoves, int charsAdded);
+//    void rawSourceContentsChanged(int from, int charsRemoves, int charsAdded);
 
 private:
     QList<PadItem*> _items;
