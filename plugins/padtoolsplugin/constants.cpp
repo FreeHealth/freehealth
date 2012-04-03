@@ -42,7 +42,8 @@ namespace Constants {
 void setPadFragmentFormat(const QString &tag, int s, int e, QTextDocument *doc, QList<QTextCharFormat> &formats, QTextCharFormat mergeFormat)
 {
     QTime c;
-    c.start();
+    if (WarnChrono)
+        c.start();
 
     QTextCursor cursor(doc);
     int count = e-s;
@@ -63,7 +64,8 @@ void setPadFragmentFormat(const QString &tag, int s, int e, QTextDocument *doc, 
 void removePadFragmentFormat(const QString &tag, QTextDocument *doc, QList<QTextCharFormat> &formats)
 {
     QTime c;
-    c.start();
+    if (WarnChrono)
+        c.start();
 
     QTextCursor cursor(doc);
     // scan the whole document and remove format (using the anchorNames)
