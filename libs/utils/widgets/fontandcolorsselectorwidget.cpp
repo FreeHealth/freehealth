@@ -36,10 +36,13 @@ using namespace Utils;
 
 FontAndColorsSelectorWidget::FontAndColorsSelectorWidget(QWidget *parent) :
     QWidget(parent),
-    _fontButton(0)
+    _fontButton(0),
+    _label(0),
+    _colorButton(0)
 {
     QHBoxLayout *lay = new QHBoxLayout(this);
     setLayout(lay);
+    lay->setMargin(0);
     _label = new QLabel(this);
     _fontButton = new FontSelectorButton(this);
     _colorButton = new ColorButtonChooser(this);
@@ -52,6 +55,7 @@ void FontAndColorsSelectorWidget::setLabelText(const QString &unTranslatedText, 
 {
     _unTrLabel = unTranslatedText;
     _trContext = translationContext;
+    retranslate();
 }
 
 void FontAndColorsSelectorWidget::setDefaultFont(const QFont &font)
@@ -70,14 +74,17 @@ void FontAndColorsSelectorWidget::setDefaultColor(const QColor &color)
 
 void FontAndColorsSelectorWidget::setCurrentColor(const QColor &color)
 {
+    _colorButton->setColor(color);
 }
 
 QFont FontAndColorsSelectorWidget::currentFont() const
 {
+    return _fontButton->currentFont();
 }
 
 QColor FontAndColorsSelectorWidget::currentColor() const
 {
+    return _colorButton->color();
 }
 
 void FontAndColorsSelectorWidget::retranslate()
