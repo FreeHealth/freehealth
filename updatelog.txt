@@ -4,14 +4,15 @@ FreeMedForms
 
   * FreeAccount
     * Windows compatibility improved  (installer, icon, application)
-    * Many bug fixes
+  * FreeMedForms
+    * Allow user to select his preferred font for the form/episode tree view
 
 ===== Bug correction =====
 
   * Date format is no standardized in all the application and correctly translated
-  * Many typos corrected
   * Update progress bar was not deleted at the end of the process
-  * Allow user to select his preferred font for the form/episode tree view
+  * Many typos corrected
+  * Many bug fixes
 
 ===== Packaging and documentation ====
 
@@ -28,15 +29,15 @@ FreeMedForms
 
   * FreeAccount
     * Compatible windows (installateur, icône, application)
-    * Beaucoup de correction de bogues
+  * FreeMedForms
+    * Permet à l'utilisateur de sélectionner sa police de caractère préférée pour l'arborescence des formulaire et des épisodes dans la page Dossier patient
 
 ===== Corrections de bug =====
 
   * Le format de date est maintenant standardisé dans l'application et correctement traduit
-  * Beaucoup de traductions corrigées
   * La barre de progression de la recherche de mise à jour n'était pas supprimée
- de Allow user to select his preferred font for the form/episode tree view
-  * Permet à l'utilisateur de sélectionner sa police de caractère préférée pour l'arborescence des formulaire et des épisodes dans la page Dossier patient
+  * Beaucoup de correction de bogues
+  * Beaucoup de traductions corrigées
 
 ===== Packaging et documentation ====
 
