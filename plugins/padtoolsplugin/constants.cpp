@@ -26,14 +26,24 @@
  ***************************************************************************/
 #include "constants.h"
 
+#include <utils/log.h>
+
+#include <QTextDocument>
 #include <QTextCursor>
+#include <QTime>
+
 #include <QDebug>
+
+enum { WarnChrono = false };
 
 namespace PadTools {
 namespace Constants {
 
 void setPadFragmentFormat(const QString &tag, int s, int e, QTextDocument *doc, QList<QTextCharFormat> &formats, QTextCharFormat mergeFormat)
 {
+    QTime c;
+    c.start();
+
     QTextCursor cursor(doc);
     int count = e-s;
     for(int i=0; i < count; ++i) {
@@ -46,10 +56,15 @@ void setPadFragmentFormat(const QString &tag, int s, int e, QTextDocument *doc, 
         mergeFormat.setAnchorNames(QStringList() << tag << QString::number(i));
         cursor.mergeCharFormat(mergeFormat);
     }
+    if (WarnChrono)
+        Utils::Log::logTimeElapsed(c, "PadTools", "setTokenCharFormat");
 }
 
 void removePadFragmentFormat(const QString &tag, QTextDocument *doc, QList<QTextCharFormat> &formats)
 {
+    QTime c;
+    c.start();
+
     QTextCursor cursor(doc);
     // scan the whole document and remove format (using the anchorNames)
     cursor.movePosition(QTextCursor::End);
@@ -60,7 +75,7 @@ void removePadFragmentFormat(const QString &tag, QTextDocument *doc, QList<QText
         const QStringList &an = cursor.charFormat().anchorNames();
         if (an.isEmpty())
             continue;
-        if (an.contains(tag)) {
+        if (an.at(0).contains(tag)) {
             // restore format
             QTextCharFormat f = formats.at(an.at(1).toInt());
             // remove anchors
@@ -70,6 +85,8 @@ void removePadFragmentFormat(const QString &tag, QTextDocument *doc, QList<QText
         }
     }
     formats.clear();
+    if (WarnChrono)
+        Utils::Log::logTimeElapsed(c, "PadTools", "removeTokenCharFormat");
 }
 
 }  // namespace Constants
