@@ -66,6 +66,7 @@ public:
         m_TokenModel(0),
         m_Pad(0),
         m_LastFollowedItem(0),
+        _followRawSourceCursor(false),
         q(parent)
     {
         _followedCharFormat.setUnderlineColor(QColor(Qt::cyan));
@@ -116,6 +117,7 @@ public:
     PadFragment *m_LastFollowedItem; // should not be deleted
     QList<QTextCharFormat> m_LastHoveredItemCharFormats, m_LastFollowedItemCharFormats;
     QTextCharFormat _followedCharFormat;
+    bool _followRawSourceCursor;
 
 private:
     PadWriter *q;
@@ -145,6 +147,7 @@ PadWriter::PadWriter(QWidget *parent) :
     connect(d->aSetDefaultValues, SIGNAL(triggered(bool)), this, SLOT(setTestValues(bool)));
     connect(d->ui->viewResult, SIGNAL(clicked()), this, SLOT(analyseRawSource()));
     connect(d->ui->viewError, SIGNAL(clicked()), this, SLOT(viewErrors()));
+    connect(d->ui->findCursor, SIGNAL(clicked()), this, SLOT(highlightCursor()));
 
     // TEST
     setFollowCursorInResultOutput(true);
@@ -182,18 +185,31 @@ void PadWriter::changeRawSourceScenario(QAction *a)
 {
     QString source;
     if (a == d->aTest1) {
-        source = "<p><b>^$ <span style=' text-decoration: underline; color:#0000ff;'>before </span> 'a'  ~A~  after 'a'$^ qdsfsdqf qdf qsdf </b><br />"
+        source = "<p><b>^$ <span style=' text-decoration: underline; color:#ff00ff;'>before </span> 'a'  ~A~  after 'a'$^ qdsfsdqf qdf qsdf </b><br />"
                  "^$ <span style=' text-decoration: underline; color:#0000ff;'>before</span> 'b' ~B~ after 'b'$^<br />";
     } else if (a == d->aTest2) {
-        source = "<p><b>^$ <span style=' text-decoration: underline; color:#0000ff;'>before </span> 'a'  ~A~  after 'a'$^ qdsfsdqf qdf qsdf </b><br />"
+        source = "<p><b>^$ <span style=' text-decoration: underline; color:#ff00ff;'>before </span> 'a'  ~A~  after 'a'$^ qdsfsdqf qdf qsdf </b><br />"
                  "^$ <span style=' text-decoration: underline; color:#0000ff;'>before</span> ^$ Before nested C ~C~ After nested C $^ 'b' ~B~ after 'b'$^<br />";
     } else if (a == d->aTest3) {
     } else if (a == d->aTest2) {
-        source = "<p><b>^$ <span style=' text-decoration: underline; color:#0000ff;'>before </span> 'a'  ~A~  after 'a'$^ qdsfsdqf qdf qsdf </b><br />"
+        source = "<p><b>^$ <span style=' text-decoration: underline; color:#ff00ff;'>before </span> 'a'  ~A~  after 'a'$^ qdsfsdqf qdf qsdf </b><br />"
                  "^$ <span style=' text-decoration: underline; color:#0000ff;'>before</span> ^$ Before nested C ~C~ After ^$ Before D ~D~ After D $^nested C $^ 'b' ~B~ after 'b'$^<br />";
     }
+
+    bool b = d->_followRawSourceCursor;
+    if (b)
+        setFollowCursorInResultOutput(false);
+
+    if (d->m_Pad) {
+        delete d->m_Pad;
+        d->m_Pad = 0;
+    }
+
     d->ui->rawSource->setHtml(source);
     analyseRawSource();
+
+    if (b)
+        setFollowCursorInResultOutput(true);
 }
 
 QString PadWriter::htmlResult() const
@@ -209,13 +225,19 @@ QString PadWriter::rawSource() const
 void PadWriter::analyseRawSource()
 {
     QList<Core::PadAnalyzerError> errors;
+    d->ui->wysiwyg->document()->clear();
+
+    // recreate PadDocument
     if (d->m_Pad) {
         delete d->m_Pad;
         d->m_Pad = 0;
     }
     d->m_Pad = PadAnalyzer().analyze(d->ui->rawSource->document());
-    d->ui->wysiwyg->document()->clear();
+    d->m_Pad->setTokenModel(d->m_TokenModel);
     d->m_Pad->run(d->m_TokenModel->tokens(), d->ui->rawSource->document(), d->ui->wysiwyg->document());
+    connect(d->m_Pad, SIGNAL(padFragmentChanged(PadFragment*)), this, SLOT(onPadFragmentChanged(PadFragment*)));
+
+    // Setup ui
     d->ui->wysiwyg->setPadDocument(d->m_Pad);
 
     d->ui->listWidgetErrors->clear();
@@ -237,11 +259,19 @@ void PadWriter::viewErrors()
 
 void PadWriter::setFollowCursorInResultOutput(bool state)
 {
+    if (d->_followRawSourceCursor==state)
+        return;
+
+    d->_followRawSourceCursor = state;
     if (state) {
         connect(d->ui->rawSource->textEdit(), SIGNAL(cursorPositionChanged()), this, SLOT(findCursorPositionInOutput()));
     } else {
         disconnect(d->ui->rawSource->textEdit(), SIGNAL(cursorPositionChanged()), this, SLOT(findCursorPositionInOutput()));
     }
+}
+
+void PadWriter::highlightCursor()
+{
 }
 
 void PadWriter::findCursorPositionInOutput()
@@ -283,8 +313,19 @@ void PadWriter::setAutoUpdateOfResult(bool state)
     }
 }
 
-void PadWriter::setTestValues(bool state)
+void PadWriter::setTestValues(bool /*state*/)
 {
     analyseRawSource();
 }
 
+void PadWriter::onPadFragmentChanged(PadFragment *fragment)
+{
+    if (!d->m_LastFollowedItem)
+        return;
+    if (d->m_LastFollowedItem!=fragment)
+        return;
+    // The followed fragment was modified
+    QTextDocument *doc = d->ui->wysiwyg->document();
+    Constants::removePadFragmentFormat("Follow", doc, d->m_LastFollowedItemCharFormats);
+    Constants::setPadFragmentFormat("Follow", d->m_LastFollowedItem->outputStart(), d->m_LastFollowedItem->outputEnd(), doc, d->m_LastFollowedItemCharFormats, d->_followedCharFormat);
+}
