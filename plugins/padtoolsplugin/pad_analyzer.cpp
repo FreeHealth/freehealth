@@ -32,7 +32,10 @@
 #include "pad_analyzer.h"
 #include "constants.h"
 
+#include <utils/log.h>
+
 #include <QTextCursor>
+#include <QTime>
 
 #include <QDebug>
 
@@ -80,22 +83,32 @@ PadDocument *PadAnalyzer::analyze(const QString &text)
     return startAnalyze();
 }
 
-PadDocument *PadAnalyzer::analyze(QTextDocument *document)
+PadDocument *PadAnalyzer::analyze(QTextDocument *document, PadDocument *padDocument)
 {
     _document = document;
     _text = 0;
     _length = -1;
-    return startAnalyze();
+    return startAnalyze(padDocument);
 }
 
-PadDocument *PadAnalyzer::startAnalyze()
+PadDocument *PadAnalyzer::startAnalyze(PadDocument *padDocument)
 {
-	Lexem lex;
+    QTime c;
+    c.start();
+
+    Lexem lex;
     PadDocument *pad;
+    if (padDocument) {
+        pad = padDocument;
+    } else {
+        pad = new PadDocument();
+    }
+
     if (_text)
-        pad = new PadDocument(*_text);
+        pad->setSource(*_text);
     else
-        pad = new PadDocument(_document);
+        pad->setSource(_document);
+
 	PadFragment *fragment;
 	int pos;
 	QMap<QString,QVariant> errorTokens;
@@ -162,6 +175,8 @@ PadDocument *PadAnalyzer::startAnalyze()
 		}
         pad->addChild(fragment);
 	}
+
+    Utils::Log::logTimeElapsed(c, "Analyzer", "analyze");
 
     pad->print();
 	return pad;

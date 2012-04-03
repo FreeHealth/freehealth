@@ -46,7 +46,7 @@ public:
 	PadAnalyzer();
 
     PadDocument *analyze(const QString &text);
-    PadDocument *analyze(QTextDocument *document);
+    PadDocument *analyze(QTextDocument *document, PadDocument *padDocument = 0);
 
 	const QList<Core::PadAnalyzerError> lastErrors() const { return _lastErrors; }
 
@@ -67,7 +67,7 @@ private:
 		int end;			// end index in the analyzed text
 	};
 
-    PadDocument *startAnalyze();
+    PadDocument *startAnalyze(PadDocument *padDocument = 0);
 
     bool atEnd();
 	PadItem *nextPadItem();
