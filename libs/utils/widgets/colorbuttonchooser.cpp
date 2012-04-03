@@ -39,6 +39,8 @@ ColorButtonChooser::ColorButtonChooser(QWidget *parent)
         : QPushButton(parent)
 {
     connect(this, SIGNAL(clicked()), this, SLOT(onClicked()));
+    setMinimumSize(22,22);
+    setMaximumSize(22,22);
     setColor(QColor(Qt::black));
 }
 
