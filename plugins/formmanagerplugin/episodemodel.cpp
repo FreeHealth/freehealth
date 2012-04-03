@@ -913,9 +913,9 @@ QVariant EpisodeModel::data(const QModelIndex &item, int role) const
             break;
         case Qt::FontRole:
         {
-            QFont bold;
-            bold.setBold(true);
-            return bold;
+            QFont f;
+            f.fromString(settings()->value(Constants::S_EPISODEMODEL_FORM_FONT).toString());
+            return f;
         }
         case Qt::DecorationRole:
             return theme()->icon(Core::Constants::ICONPATIENTSYNTHESIS);
@@ -1010,9 +1010,13 @@ QVariant EpisodeModel::data(const QModelIndex &item, int role) const
     case Qt::FontRole :
     {
         if (form) {
-            QFont bold;
-            bold.setBold(true);
-            return bold;
+            QFont f;
+            f.fromString(settings()->value(Constants::S_EPISODEMODEL_FORM_FONT).toString());
+            return f;
+        } else {
+            QFont f;
+            f.fromString(settings()->value(Constants::S_EPISODEMODEL_EPISODE_FONT).toString());
+            return f;
         }
         return QFont();
     }

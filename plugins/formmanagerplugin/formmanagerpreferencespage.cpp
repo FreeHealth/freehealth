@@ -147,7 +147,13 @@ void FormPreferencesFileSelectorWidget::saveToSettings(Core::ISettings *)
 
 FormPreferencesPage::FormPreferencesPage(QObject *parent) :
         IOptionsPage(parent), m_Widget(0)
-{ setObjectName("FormPreferencesPage"); }
+{
+    setObjectName("FormPreferencesPage");
+    _defaultFormFont.setBold(true);
+    _defaultFormFont.setCapitalization(QFont::SmallCaps);
+
+//    _defaultEpisodeFont;
+}
 
 FormPreferencesPage::~FormPreferencesPage()
 {
@@ -169,6 +175,9 @@ void FormPreferencesPage::resetToDefaults()
     defaultvalues.insert(Constants::S_EPISODELABELCONTENT, QString("[[%1]]").arg(Constants::T_LABEL));
     defaultvalues.insert(Constants::S_EPISODEMODEL_LONGDATEFORMAT, QLocale().dateTimeFormat(QLocale::ShortFormat));
     defaultvalues.insert(Constants::S_EPISODEMODEL_SHORTDATEFORMAT, QLocale().dateFormat(QLocale::ShortFormat));
+
+    defaultvalues.insert(Constants::S_EPISODEMODEL_FORM_FONT, _defaultFormFont.toString());
+    defaultvalues.insert(Constants::S_EPISODEMODEL_EPISODE_FONT, _defaultEpisodeFont);
     defaultvalues.insert(Constants::S_EPISODEMODEL_EPISODE_FOREGROUND, "darkblue");
     defaultvalues.insert(Constants::S_EPISODEMODEL_FORM_FOREGROUND, "black");
 
@@ -198,6 +207,8 @@ void FormPreferencesPage::checkSettingsValidity()
     defaultvalues.insert(Constants::S_EPISODELABELCONTENT, QString("[[%1]]").arg(Constants::T_LABEL));
     defaultvalues.insert(Constants::S_EPISODEMODEL_LONGDATEFORMAT, QLocale().dateTimeFormat(QLocale::ShortFormat));
     defaultvalues.insert(Constants::S_EPISODEMODEL_SHORTDATEFORMAT, QLocale().dateFormat(QLocale::ShortFormat));
+    defaultvalues.insert(Constants::S_EPISODEMODEL_FORM_FONT, _defaultFormFont.toString());
+    defaultvalues.insert(Constants::S_EPISODEMODEL_EPISODE_FONT, _defaultEpisodeFont);
     defaultvalues.insert(Constants::S_EPISODEMODEL_EPISODE_FOREGROUND, "darkblue");
     defaultvalues.insert(Constants::S_EPISODEMODEL_FORM_FOREGROUND, "black");
 
@@ -224,6 +235,8 @@ FormPreferencesWidget::FormPreferencesWidget(QWidget *parent) :
         QWidget(parent), ui(new Ui::FormPreferencesWidget)
 {
     ui->setupUi(this);
+    ui->formFont->setLabelText(Constants::FORMS_FONT, Constants::FORM_TR_CONTEXT);
+    ui->episodeFont->setLabelText(Constants::EPISODES_FONT, Constants::FORM_TR_CONTEXT);
     ui->episodeLabelContent->addItem(tr("Label"), QString("[[%1]]").arg(Constants::T_LABEL));
     ui->episodeLabelContent->addItem(tr("Label - User date (small)"), QString("[[%1]] - [[%2]]").arg(Constants::T_LABEL).arg(Constants::T_SMALLDATE));
     ui->episodeLabelContent->addItem(tr("Label - User date (full)"), QString("[[%1]] - [[%2]]").arg(Constants::T_LABEL).arg(Constants::T_FULLDATE));
@@ -246,10 +259,16 @@ void FormPreferencesWidget::setupUiData()
     ui->rootBackgroundButton->setColor(QColor(settings()->value(Constants::S_FOREGROUNDCOLORFORROOTS).toString()));
     ui->useAlternateRowColor->setChecked(settings()->value(Constants::S_USEALTERNATEROWCOLOR).toBool());
     ui->episodeLabelContent->setCurrentIndex(ui->episodeLabelContent->findData(settings()->value(Constants::S_EPISODELABELCONTENT).toString(), Qt::UserRole));
-    ui->defaultFormForegroundColor->setColor(QColor(settings()->value(Constants::S_EPISODEMODEL_FORM_FOREGROUND).toString()));
-    ui->episodeForegroundColor->setColor(QColor(settings()->value(Constants::S_EPISODEMODEL_EPISODE_FOREGROUND).toString()));
     ui->longDateFormat->setText(settings()->value(Constants::S_EPISODEMODEL_LONGDATEFORMAT).toString());
     ui->shortDateFormat->setText(settings()->value(Constants::S_EPISODEMODEL_SHORTDATEFORMAT).toString());
+
+    QFont f;
+    f.fromString(settings()->value(Constants::S_EPISODEMODEL_FORM_FONT).toString());
+    ui->formFont->setCurrentFont(f);
+    ui->formFont->setCurrentColor(QColor(settings()->value(Constants::S_EPISODEMODEL_FORM_FOREGROUND).toString()));
+    f.fromString(settings()->value(Constants::S_EPISODEMODEL_EPISODE_FONT).toString());
+    ui->episodeFont->setCurrentFont(f);
+    ui->episodeFont->setCurrentColor(QColor(settings()->value(Constants::S_EPISODEMODEL_EPISODE_FOREGROUND).toString()));
 }
 
 void FormPreferencesWidget::saveToSettings(Core::ISettings *)
@@ -258,11 +277,14 @@ void FormPreferencesWidget::saveToSettings(Core::ISettings *)
     settings()->setValue(Constants::S_FOREGROUNDCOLORFORROOTS, ui->rootBackgroundButton->color().name());
     settings()->setValue(Constants::S_USEALTERNATEROWCOLOR, ui->useAlternateRowColor->isChecked());
     settings()->setValue(Constants::S_EPISODELABELCONTENT, ui->episodeLabelContent->itemData(ui->episodeLabelContent->currentIndex()));
-    settings()->setValue(Constants::S_EPISODEMODEL_FORM_FOREGROUND, ui->defaultFormForegroundColor->color().name());
-    settings()->setValue(Constants::S_EPISODEMODEL_EPISODE_FOREGROUND, ui->episodeForegroundColor->color().name());
     settings()->setValue(Constants::S_EPISODEMODEL_LONGDATEFORMAT, ui->longDateFormat->text());
     settings()->setValue(Constants::S_EPISODEMODEL_SHORTDATEFORMAT, ui->shortDateFormat->text());
     settings()->setValue(Constants::S_EPISODELABELCONTENT, ui->episodeLabelContent->itemData(ui->episodeLabelContent->currentIndex()));
+
+    settings()->setValue(Constants::S_EPISODEMODEL_FORM_FONT, ui->formFont->currentFont().toString());
+    settings()->setValue(Constants::S_EPISODEMODEL_FORM_FOREGROUND, ui->formFont->currentColor().name());
+    settings()->setValue(Constants::S_EPISODEMODEL_EPISODE_FONT, ui->episodeFont->currentFont().toString());
+    settings()->setValue(Constants::S_EPISODEMODEL_EPISODE_FOREGROUND, ui->episodeFont->currentColor().name());
 }
 
 //void FormPreferencesWidget::changeEvent(QEvent *e)
