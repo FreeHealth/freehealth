@@ -25,14 +25,21 @@
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
 #include "tokeneditor.h"
+
+#include <translationutils/constants.h>
+#include <translationutils/trans_current.h>
+
 #include "ui_tokeneditor.h"
 
 using namespace PadTools;
+using namespace Trans::ConstantTranslations;
 
 TokenEditor::TokenEditor(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::TokenEditor)
 {
+    setWindowModality(Qt::WindowModal);
+    setWindowTitle(tkTr(Trans::Constants::EDIT_TOKEN));
     ui->setupUi(this);
 }
 

@@ -45,12 +45,16 @@ TokenEditorWidget::TokenEditorWidget(QWidget *parent) :
     ui->setupUi(this);
     ui->tokenValueFormatting->setTypes(Editor::TextEditor::CharFormat);
     ui->tokenValueFormatting->toogleToolbar(true);
-
     ui->before->setTypes(Editor::TextEditor::Simple);
+    ui->before->toogleToolbar(true);
     ui->after->setTypes(Editor::TextEditor::Simple);
+    ui->after->toogleToolbar(true);
 
     layout()->setMargin(0);
     clear();
+
+    // As this object is a dialog, the edit actions are unabled by default
+    // We have to manage here to reset them enable in the editors
 }
 
 TokenEditorWidget::~TokenEditorWidget()
