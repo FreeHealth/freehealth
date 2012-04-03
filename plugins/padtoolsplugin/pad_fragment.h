@@ -49,9 +49,9 @@ public:
 	virtual void print(int indent = 0) const = 0;
 
     /** Returns the start position in the raw source string/document */
-    int id() const { return _id; }
+    virtual int id() const { return _id; }
     /** Defines the start position in the raw source string/document */
-    void setId(int id) { _id = id; }
+    virtual void setId(int id) { _id = id; }
 
     /** Returns the start position in the raw source string/document */
 	int start() const { return _start; }

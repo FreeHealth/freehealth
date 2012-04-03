@@ -55,6 +55,7 @@ PadFragment::~PadFragment()
     _parent = 0;
 }
 
+/** Add a PadTools::PadFragment as a direct child of this object. Children are stored in an ordered list. */
 void PadFragment::addChild(PadFragment *fragment)
 {
     fragment->setParent(this);
@@ -143,6 +144,6 @@ void PadFragment::moveEnd(int nbOfChars)
 {
     _end += nbOfChars;
     _outputEnd += nbOfChars;
-    if (_parent)
+    if (_parent && _parent->id()>=0)
         _parent->moveEnd(nbOfChars);
 }
