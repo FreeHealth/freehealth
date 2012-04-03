@@ -30,42 +30,72 @@
 #include <QList>
 #include <QMap>
 #include <QVariant>
+#include <QObject>
+#include <QTimer>
 
 #include "pad_fragment.h"
 #include "pad_core.h"
 #include "pad_item.h"
 
 namespace PadTools {
+class TokenModel;
 
-class PadDocument : public PadFragment
+class PadDocument : public QObject, public PadFragment
 {
+    Q_OBJECT
 public:
     PadDocument(const QString &rawSource);
     PadDocument(QTextDocument *source);
     PadDocument();
     virtual ~PadDocument();
 
+    int id() const {return -1;}
+    void setId(int) {}
+
+    void clear();
+    void setSource(const QString &rawSource);
+    void setSource(QTextDocument *source);
+    void setTokenModel(TokenModel *model);
+
     QString rawSource() const {return _rawSource;}
+    QTextDocument *rawSourceDocument() const {return _docSource;}
     QTextDocument *outputDocument() const {return _docOutput;}
 
     QString fragmentRawSource(PadFragment *fragment) const;
     QString fragmentHtmlOutput(PadFragment *fragment) const;
 
-    void addFragment(PadFragment *fragment);
-    QList<PadFragment*> getAllFragments() const;
+    void addChild(PadFragment *fragment);
+
     PadItem *padItemForOutputPosition(int positionInOutputQTextDocument) const;
     PadItem *padItemForSourcePosition(int positionInSourceQTextDocument) const;
+    PadFragment *padFragmentForSourcePosition(int p) const;
+    PadFragment *padFragmentForOutputPosition(int p) const;
 
 	void print(int indent = 0) const;
 
     QString run(QMap<QString,QVariant> &tokens) const;
     void run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out) const;
 
+    // do not return children padfragment
+    virtual QList<PadFragment*> children() const {return QList<PadFragment*>();}
+
+Q_SIGNALS:
+    void cleared();
+    void padFragmentChanged(PadFragment *fragment);
+
 private:
-	QList<PadFragment*> _fragments;
+//    void createTimerForDelayedResetOnRawSourceChanged();
+
+private Q_SLOTS:
+    void reset();
+//    void rawSourceContentsChanged(int from, int charsRemoves, int charsAdded);
+
+private:
     QList<PadItem*> _items;
     QString _rawSource;
     mutable QTextDocument *_docSource, *_docOutput;
+    TokenModel *_tokenModel;
+    QTimer *_timer;
 };
 
 }  // PadTools

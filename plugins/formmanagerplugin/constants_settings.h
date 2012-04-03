@@ -47,6 +47,9 @@ namespace Constants {
     // Settings
     const char * const  S_EPISODEMODEL_FORM_FOREGROUND    = "EpisodeModel/FormForeGround";
     const char * const  S_EPISODEMODEL_EPISODE_FOREGROUND = "EpisodeModel/EpisodeForeGround";
+    const char * const  S_EPISODEMODEL_FORM_FONT    = "EpisodeModel/Font/Form";
+    const char * const  S_EPISODEMODEL_EPISODE_FONT = "EpisodeModel/Font/Episode";
+
     const char * const  S_EPISODEMODEL_LONGDATEFORMAT         = "EpisodeModel/LongDateFormat";
     const char * const  S_EPISODEMODEL_SHORTDATEFORMAT         = "EpisodeModel/ShortDateFormat";
     const char * const  S_PLACEHOLDERSPLITTER_SIZES       = "Splitters/PlaceHolderSizes";

@@ -26,31 +26,70 @@
  ***************************************************************************/
 #include "constants.h"
 
+#include <utils/log.h>
+
+#include <QTextDocument>
+#include <QTextCursor>
+#include <QTime>
+
+#include <QDebug>
+
+enum { WarnChrono = false };
+
 namespace PadTools {
 namespace Constants {
 
-QTextCharFormat setTokenCharFormat(const QTextCharFormat &format)
+void setPadFragmentFormat(const QString &tag, int s, int e, QTextDocument *doc, QList<QTextCharFormat> &formats, QTextCharFormat mergeFormat)
 {
-    QTextCharFormat f = format;
-    f.setUnderlineColor(Qt::darkBlue);
-    f.setUnderlineStyle(QTextCharFormat::WaveUnderline);
-    return f;
+    QTime c;
+    if (WarnChrono)
+        c.start();
+
+    QTextCursor cursor(doc);
+    int count = e-s;
+    for(int i=0; i < count; ++i) {
+        cursor.setPosition(s + i);
+        cursor.setPosition(s + i + 1, QTextCursor::KeepAnchor);
+        // store the original format
+        formats << cursor.charFormat();
+        // apply anchor && charFormat
+        mergeFormat.setAnchor(true);
+        mergeFormat.setAnchorNames(QStringList() << tag << QString::number(i));
+        cursor.mergeCharFormat(mergeFormat);
+    }
+    if (WarnChrono)
+        Utils::Log::logTimeElapsed(c, "PadTools", "setTokenCharFormat");
 }
 
-QTextFrameFormat tokenFrameFormat()
+void removePadFragmentFormat(const QString &tag, QTextDocument *doc, QList<QTextCharFormat> &formats)
 {
-    return QTextFrameFormat();
+    QTime c;
+    if (WarnChrono)
+        c.start();
+
+    QTextCursor cursor(doc);
+    // scan the whole document and remove format (using the anchorNames)
+    cursor.movePosition(QTextCursor::End);
+    int count = cursor.position();
+    for(int i=0; i < count; ++i) {
+        cursor.setPosition(i);
+        cursor.setPosition(i+1, QTextCursor::KeepAnchor);
+        const QStringList &an = cursor.charFormat().anchorNames();
+        if (an.isEmpty())
+            continue;
+        if (an.at(0).contains(tag)) {
+            // restore format
+            QTextCharFormat f = formats.at(an.at(1).toInt());
+            // remove anchors
+            f.setAnchor(false);
+            f.setAnchorNames(QStringList());
+            cursor.setCharFormat(f);
+        }
+    }
+    formats.clear();
+    if (WarnChrono)
+        Utils::Log::logTimeElapsed(c, "PadTools", "removeTokenCharFormat");
 }
 
-QTextFrameFormat tokenBeforeFrameFormat()
-{
-    return QTextFrameFormat();
-}
-
-QTextFrameFormat tokenAfterFrameFormat()
-{
-    return QTextFrameFormat();
-}
-
-}
-}
+}  // namespace Constants
+}  // namespace PadTools

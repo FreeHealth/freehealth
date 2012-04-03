@@ -64,8 +64,25 @@ using namespace Trans::ConstantTranslations;
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 
+
 namespace UserPlugin {
 namespace Internal {
+
+UserViewerModelCoreListener::UserViewerModelCoreListener(UserPlugin::UserViewer *parent) :
+        Core::ICoreListener(parent)
+{
+    Q_ASSERT(parent);
+    _viewer = parent;
+}
+UserViewerModelCoreListener::~UserViewerModelCoreListener() {}
+
+bool UserViewerModelCoreListener::coreAboutToClose()
+{
+    qWarning() << Q_FUNC_INFO;
+    _viewer->disconnectPluginManager();
+    return true;
+}
+
 class UserViewerPrivate
 {
 public:
@@ -89,6 +106,7 @@ public:
     UserModel *m_Model;
     Core::PageWidget *m_Widget;
     QList<IUserViewerPage*> m_pages;
+    UserViewerModelCoreListener *m_Listener;
     int m_CurrentRow;
     bool m_CanRead;
 };
@@ -101,6 +119,9 @@ UserViewer::UserViewer(QWidget *parent) :
     d(new UserViewerPrivate)
 {
     setObjectName("UserViewer");
+    d->m_Listener = new UserViewerModelCoreListener(this);
+    pluginManager()->addObject(d->m_Listener);
+
     d->m_Model = UserModel::instance(); //new UserModel(this);
     QHBoxLayout *layout = new QHBoxLayout(this);
     layout->setMargin(0);
@@ -142,13 +163,21 @@ UserViewer::UserViewer(QWidget *parent) :
     connect(pluginManager(), SIGNAL(objectAdded(QObject*)), this, SLOT(pluginManagerObjectAdded(QObject*)));
     connect(pluginManager(), SIGNAL(aboutToRemoveObject(QObject*)), this, SLOT(pluginManagerObjectRemoved(QObject*)));
 //    connect(user(), SIGNAL(userChanged()), this, SLOT(userChanged()));
+    connect(Core::ICore::instance(), SIGNAL(coreAboutToClose()), this, SLOT(coreAboutToClose()));
 }
 
 UserViewer::~UserViewer()
 {
+    pluginManager()->removeObject(d->m_Listener);
     if (d)
         delete d;
     d = 0;
+}
+
+void UserViewer::disconnectPluginManager()
+{
+    // Disconnect all pluginmanager signals
+    pluginManager()->disconnect(this);
 }
 
 /** \brief Change current viewing user to \e modelRow from UserModel */

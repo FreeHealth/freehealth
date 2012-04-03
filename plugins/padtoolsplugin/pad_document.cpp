@@ -26,12 +26,22 @@
  ***************************************************************************/
 
 /**
- * \class PadTools::Pad
+ * \class PadTools::PadDocument
  * Contains all the PadTools::PadFragment of the analyzed \e rawSource.
+ */
+
+/**
+ * \fn void padFragmentChanged(PadFragment *fragment)
+ * Signal emitted when a PadTools::PadFragment ranges or position was internally changed.
  */
 
 #include "pad_document.h"
 #include "pad_item.h"
+#include "pad_string.h"
+#include "pad_analyzer.h"
+#include "tokenmodel.h"
+
+#include <utils/log.h>
 
 #include <QString>
 #include <QTextCursor>
@@ -42,29 +52,86 @@
 
 using namespace PadTools;
 
-/** Construct an empty PadTools::PadDocument with the \e rawSource text (text is not analyzed). */
+/**
+ * Construct an empty PadTools::PadDocument with the \e rawSource text (text is not analyzed).
+ * All PadTools::PadDocument must not have any id set. It should always be equal to '-1'.
+ */
 PadDocument::PadDocument(const QString &rawSource) :
     _rawSource(rawSource),
     _docSource(0),
-    _docOutput(0)
+    _docOutput(0),
+    _tokenModel(0),
+    _timer(0)
 {
 }
 
-PadDocument::PadDocument(QTextDocument *output) :
-    _docSource(output),
-    _docOutput(0)
-{}
+/**
+ * Construct an empty PadTools::PadDocument with the \e source QTextDocument (document is not analyzed).
+ * All PadTools::PadDocument must not have any id set. It should always be equal to '-1'.
+ */
+PadDocument::PadDocument(QTextDocument *source) :
+    _docSource(source),
+    _docOutput(0),
+    _tokenModel(0),
+    _timer(0)
+{
+//    connect(_docSource, SIGNAL(contentsChange(int,int,int)), this, SLOT(rawSourceContentsChanged(int,int,int)));
+}
 
+/**
+ * Construct an empty PadTools::PadDocument.
+ * All PadTools::PadDocument must not have any id set. It should always be equal to '-1'.
+ */
 PadDocument::PadDocument() :
     _docSource(0),
-    _docOutput(0)
-{}
-
-PadDocument::~PadDocument()
+    _docOutput(0),
+    _tokenModel(0),
+    _timer(0)
 {
-	qDeleteAll(_fragments);
 }
 
+/** Destructor, deletes all included PadTools::PadFragment objects */
+PadDocument::~PadDocument()
+{
+}
+
+/** Clear the current PadTools::PadDocument. */
+void PadDocument::clear()
+{
+    qDeleteAll(_fragments);
+    _fragments.clear();
+    if (_rawSource.isEmpty()) {
+//        disconnect(_docSource, SIGNAL(contentsChange(int,int,int)), this, SLOT(rawSourceContentsChanged(int,int,int)));
+        _docSource = 0;
+    }
+    if (_docOutput)
+        _docOutput->clear();
+    Q_EMIT cleared();
+}
+
+/** Defines the source to use as a QString \e rawSource */
+void PadDocument::setSource(const QString &rawSource)
+{
+    clear();
+    _rawSource = rawSource;
+    _docSource = 0;
+}
+
+/** Defines the source to use as a QTextDocument \e source */
+void PadDocument::setSource(QTextDocument *source)
+{
+    clear();
+    _docSource = source;
+//    connect(_docSource, SIGNAL(contentsChange(int,int,int)), this, SLOT(rawSourceContentsChanged(int,int,int)));
+}
+
+/** Set the PadTools::TokenModel to use in this object. The model is mainly used by reset(). */
+void PadDocument::setTokenModel(TokenModel *model)
+{
+    _tokenModel = model;
+}
+
+/** Returns the raw content of a fragment (extracted from the raw source). */
 QString PadDocument::fragmentRawSource(PadFragment *fragment) const
 {
     if (!fragment)
@@ -78,6 +145,7 @@ QString PadDocument::fragmentRawSource(PadFragment *fragment) const
     return QString::null;
 }
 
+/** Returns the html output content of a fragment (extracted from the output document). */
 QString PadDocument::fragmentHtmlOutput(PadFragment *fragment) const
 {
     if (!fragment)
@@ -92,14 +160,15 @@ QString PadDocument::fragmentHtmlOutput(PadFragment *fragment) const
 }
 
 /** Add string fragment to the object. */
-void PadDocument::addFragment(PadFragment *fragment)
+void PadDocument::addChild(PadFragment *fragment)
 {
-	_fragments << fragment;
     PadItem *item = dynamic_cast<PadItem *>(fragment);
     if (item)
         _items << item;
+    PadFragment::addChild(fragment);
 }
 
+/** Debug to console. */
 void PadDocument::print(int indent) const
 {
 	QString str(indent, ' ');
@@ -110,20 +179,7 @@ void PadDocument::print(int indent) const
 	}
 }
 
-/** Returns all fragment of the analyzed raw source string. \sa PadTools::PadAnalyzer::analyze() */
-QList<PadFragment*> PadDocument::getAllFragments() const
-{
-	QList<PadFragment*> fragments;
-	PadItem *item;
-	fragments.append(_fragments);
-    foreach (PadFragment *fragment, _fragments) {
-		item = dynamic_cast<PadItem*>(fragment);
-		if (item)
-			fragments.append(item->getAllFragments());
-	}
-	return fragments;
-}
-
+/** Find the PadTools::PadItem for the QTextCursor position in output document. */
 PadItem *PadDocument::padItemForOutputPosition(int p) const
 {
     foreach(PadItem *item, _items) {
@@ -133,6 +189,7 @@ PadItem *PadDocument::padItemForOutputPosition(int p) const
     return 0;
 }
 
+/** Find the PadTools::PadItem for the QTextCursor position in raw source document. */
 PadItem *PadDocument::padItemForSourcePosition(int p) const
 {
     foreach(PadItem *item, _items) {
@@ -142,23 +199,66 @@ PadItem *PadDocument::padItemForSourcePosition(int p) const
     return 0;
 }
 
+/** Find fragment for the QTextCursor position in raw source document. */
+PadFragment *PadDocument::padFragmentForSourcePosition(int p) const
+{
+    foreach(PadFragment *fragment, _fragments) {
+        if (fragment->start() <= p && fragment->end() >= p)
+            return fragment->padFragmentForSourcePosition(p);
+    }
+    return 0;
+}
+
+/** Find fragment for the QTextCursor position in output document. */
+PadFragment *PadDocument::padFragmentForOutputPosition(int p) const
+{
+    foreach(PadFragment *fragment, _fragments) {
+        if (fragment->outputStart() <= p && fragment->outputEnd() >= p)
+            return fragment->padFragmentForOutputPosition(p);
+    }
+    return 0;
+}
+
 /** Run this pad over some tokens and returns the result text */
 QString PadDocument::run(QMap<QString,QVariant> &tokens) const
 {
+    /** \todo use QtConcurrent to run this part into a specific thread */
 	QString value;
 	foreach (PadFragment *fragment, _fragments)
 		value += fragment->run(tokens);
 	return value;
 }
 
+/** Run this pad over some tokens and set the result to the \e out QTextDocument */
 void PadDocument::run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out) const
 {
     foreach (PadFragment *fragment, _fragments)
         fragment->run(tokens, source, out);
     _docOutput = out;
+}
 
-//    foreach(PadFragment *i, _fragments) {
-//        i->print();
-//        qWarning() << "\n\n";
-//    }
+//void PadDocument::createTimerForDelayedResetOnRawSourceChanged()
+//{
+//    if (_timer)
+//        return;
+//    _timer = new QTimer(this);
+//    _timer->setSingleShot(true);
+//    _timer->stop();
+//    connect(_timer, SIGNAL(timeout()), this, SLOT(reset()));
+//}
+
+/** Renew the analyze of the source and update the output */
+void PadDocument::reset()
+{
+    QTime c;
+    c.start();
+
+    clear();
+    PadAnalyzer a;
+    a.analyze(_docSource, this);
+    if (_tokenModel)
+        run(_tokenModel->tokens(), _docSource, _docOutput);
+
+    Utils::Log::logTimeElapsed(c, "PadDocument", "reset");
+    return;
 }

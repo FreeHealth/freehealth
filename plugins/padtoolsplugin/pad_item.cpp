@@ -42,20 +42,8 @@
 
 using namespace PadTools;
 
-namespace {
-const char * const DATA_KEY = "PadItem::Data";
-}
-
 PadItem::~PadItem()
 {
-	qDeleteAll(_fragments);
-}
-
-/** Add a PadTools::PadFragment to this object. */
-void PadItem::addFragment(PadFragment *fragment, int type)
-{
-    fragment->setUserData(::DATA_KEY, type);
-	_fragments << fragment;
 }
 
 /** Debug to console */
@@ -72,7 +60,7 @@ void PadItem::print(int indent) const
 }
 
 /** Find nested PadItem in conditional texts (before and after) */
-QList<PadFragment*> PadItem::getAllFragments() const
+QList<PadFragment*> PadItem::children() const
 {
 	QList<PadFragment*> fragments;
 	PadItem *padItem;
@@ -80,7 +68,7 @@ QList<PadFragment*> PadItem::getAllFragments() const
     foreach (PadFragment *fragment, _fragments) {
 		padItem = dynamic_cast<PadItem*>(fragment);
 		if (padItem)
-			fragments.append(padItem->getAllFragments());
+            fragments.append(padItem->children());
 	}
 	return fragments;
 }
@@ -89,7 +77,7 @@ QList<PadFragment*> PadItem::getAllFragments() const
 PadFragment *PadItem::fragment(const int type) const
 {
     foreach (PadFragment *fragment, _fragments) {
-        if (fragment->userData(::DATA_KEY).toInt() == type)
+        if (fragment->userData(Constants::USERDATA_KEY_PADITEM).toInt() == type)
             return fragment;
     }
     return 0;
@@ -153,15 +141,23 @@ void PadItem::run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDo
     _outputStart = start;
     _outputEnd = end;
 
-    // Add the format && tooltip
+    // Add anchors to the output QTextDocument
     QTextCursor cursor(out);
+    cursor.setPosition(_outputStart);
+    cursor.setPosition(_outputEnd, QTextCursor::KeepAnchor);
+    QTextCharFormat f;
+    f.setAnchor(true);
+    f.setAnchorNames(QStringList() << Constants::ANCHOR_ITEM << QString::number(id()));
+    cursor.mergeCharFormat(f);
+
+    // Add the format && tooltip
     int count = _outputEnd - _outputStart;
     for(int i=0; i < count; ++i) {
         cursor.setPosition(start + i);
         cursor.setPosition(start + i + 1, QTextCursor::KeepAnchor);
-        QTextCharFormat format = cursor.charFormat();// = Constants::tokenCharFormat();
+        QTextCharFormat format;
         format.setToolTip("Token: " + coreValue);
-        cursor.setCharFormat(format);
+        cursor.mergeCharFormat(format);
     }
 
     return;

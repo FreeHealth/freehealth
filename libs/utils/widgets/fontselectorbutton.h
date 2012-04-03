@@ -19,53 +19,53 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main Developers : Eric Maeker <eric.maeker@gmail.com>,                *
- *                    Guillaume Denry <guillaume.denry@gmail.com>          *
- *  Contributors :                                                         *
- *      NAME <MAIL@ADDRESS.COM>                                            *
+ *   Main Developers :                                                     *
+ *       Eric MAEKER, MD <eric.maeker@gmail.com>                           *
+ *   Contributors :                                                        *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef PAD_ITEM_H
-#define PAD_ITEM_H
+#ifndef FONTSELECTORBUTTON_H
+#define FONTSELECTORBUTTON_H
 
-#include <QList>
-#include <QMap>
-#include <QVariant>
+#include <utils/global_exporter.h>
 
-#include "pad_fragment.h"
-#include "pad_core.h"
+QT_BEGIN_NAMESPACE
+class QAction;
+QT_END_NAMESPACE
 
-namespace PadTools {
+#include <QToolButton>
 
-/**
- * Contains an entire pad item i.e. a list of fragments
- * @class
- */
-class PadItem : public PadFragment
+namespace Utils {
+
+class UTILS_EXPORT FontSelectorButton : public QToolButton
 {
+    Q_OBJECT
 public:
-    enum PadStringType {
-        NoType = 0,
-        Core,
-        ConditionnalBeforeText,
-        ConditionnalAfterText
-    };
+    explicit FontSelectorButton(QWidget *parent = 0);
+    
+public Q_SLOTS:
+    void setDefaultFont(const QFont &font);
+    void setCurrentFont(const QFont &font);
+    QFont currentFont();
+    bool fontChanged() {return _fontChanged;}
 
-    PadItem() : PadFragment() {}
-	virtual ~PadItem();
+    void resetToDefaultFont();
 
-    PadFragment *fragment(const int type) const;
-
-    void print(int indent = 0) const;
-
-	QString run(QMap<QString,QVariant> &tokens) const;
-    void run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out) const;
-
-    QList<PadFragment*> children() const;
+private Q_SLOTS:
+    void editFont();
 
 private:
-	PadCore *getCore() const;
+    void applyFont(const QFont &font);
+    void retranslate();
+    void changeEvent(QEvent *event);
+
+private:
+    QAction *aEditFont, *aResetToDefault;
+    bool _fontChanged, _currentDefined;
+    QFont _default;
+    QFont _current;
 };
 
-}  // PadTools
+}  // end Utils
 
-#endif
+#endif // FONTSELECTORBUTTON_H

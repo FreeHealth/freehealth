@@ -32,7 +32,10 @@
 #include "pad_analyzer.h"
 #include "constants.h"
 
+#include <utils/log.h>
+
 #include <QTextCursor>
+#include <QTime>
 
 #include <QDebug>
 
@@ -80,22 +83,32 @@ PadDocument *PadAnalyzer::analyze(const QString &text)
     return startAnalyze();
 }
 
-PadDocument *PadAnalyzer::analyze(QTextDocument *document)
+PadDocument *PadAnalyzer::analyze(QTextDocument *document, PadDocument *padDocument)
 {
     _document = document;
     _text = 0;
     _length = -1;
-    return startAnalyze();
+    return startAnalyze(padDocument);
 }
 
-PadDocument *PadAnalyzer::startAnalyze()
+PadDocument *PadAnalyzer::startAnalyze(PadDocument *padDocument)
 {
-	Lexem lex;
+    QTime c;
+    c.start();
+
+    Lexem lex;
     PadDocument *pad;
+    if (padDocument) {
+        pad = padDocument;
+    } else {
+        pad = new PadDocument();
+    }
+
     if (_text)
-        pad = new PadDocument(*_text);
+        pad->setSource(*_text);
     else
-        pad = new PadDocument(_document);
+        pad->setSource(_document);
+
 	PadFragment *fragment;
 	int pos;
 	QMap<QString,QVariant> errorTokens;
@@ -160,9 +173,12 @@ PadDocument *PadAnalyzer::startAnalyze()
 			// TODO: raise an error (unknown lexem)
 			break;
 		}
-		pad->addFragment(fragment);
+        pad->addChild(fragment);
 	}
 
+    Utils::Log::logTimeElapsed(c, "Analyzer", "analyze");
+
+    pad->print();
 	return pad;
 }
 
@@ -172,6 +188,7 @@ PadItem *PadAnalyzer::nextPadItem()
 	Lexem lex;
 	PadItem *padItem = new PadItem;
 	padItem->setStart(_curPos - 1);
+    padItem->setId(nextId());
     int previousType = PadItem::ConditionnalBeforeText;
 
 	// we expect strings, pad item, core (uniq) or close delimiter
@@ -183,7 +200,8 @@ PadItem *PadAnalyzer::nextPadItem()
             fragment->setStart(lex.start);
             fragment->setEnd(lex.end);
             fragment->setId(nextId());
-            padItem->addFragment(fragment, previousType);
+            fragment->setUserData(Constants::USERDATA_KEY_PADITEM, previousType);
+            padItem->addChild(fragment);
             break;
 		case Lexem_PadOpenDelimiter:
 			fragment = nextPadItem();
@@ -191,7 +209,7 @@ PadItem *PadAnalyzer::nextPadItem()
 				delete padItem;
 				return 0;
 			}
-			padItem->addFragment(fragment);
+            padItem->addChild(fragment);
 			break;
 		case Lexem_PadCloseDelimiter:
 			padItem->setEnd(_curPos - 1);
@@ -203,7 +221,7 @@ PadItem *PadAnalyzer::nextPadItem()
 				delete padItem;
 				return 0;
 			}
-            padItem->addFragment(fragment, PadItem::Core);
+            padItem->addChild(fragment);
             previousType = PadItem::ConditionnalAfterText;
 			break;
 		default:
@@ -223,6 +241,7 @@ PadCore *PadAnalyzer::nextCore()
     PadCore *core = new PadCore;
 	core->setStart(_curPos - 1);
     core->setId(nextId());
+    core->setUserData(Constants::USERDATA_KEY_PADITEM, PadItem::Core);
 
 	// first, we expect string (or not)
 	lex = nextLexem();

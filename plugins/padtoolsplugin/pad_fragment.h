@@ -40,14 +40,18 @@ namespace PadTools {
 class PadFragment
 {
 public:
-    PadFragment();
+    PadFragment(PadFragment *parent = 0);
+    virtual ~PadFragment();
+
+    virtual void setParent(PadFragment *parent) {_parent = parent;}
+    virtual PadFragment *parent() const {return _parent;}
 
 	virtual void print(int indent = 0) const = 0;
 
     /** Returns the start position in the raw source string/document */
-    int id() const { return _id; }
+    virtual int id() const { return _id; }
     /** Defines the start position in the raw source string/document */
-    void setId(int id) { _id = id; }
+    virtual void setId(int id) { _id = id; }
 
     /** Returns the start position in the raw source string/document */
 	int start() const { return _start; }
@@ -58,6 +62,14 @@ public:
     int end() const { return _end; }
     /** Defines the end position in the raw source string/document */
     void setEnd(int end) { _end = end; }
+
+    /** Return the length of the fragment in the raw source string/document */
+    int rawLength() const {return _end - _start;}
+    /** Return the length of the fragment in the output string/document */
+    int outputLength() const {return _outputEnd - _outputStart;}
+
+    void move(int nbChars);
+    void moveEnd(int nbOfChars);
 
     /** Returns the start position in the output QTextDocument. This is defined only after the calling run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out) const. */
     int outputStart() const {return _outputStart;}
@@ -76,11 +88,21 @@ public:
     /**  Run this fragment over some tokens inside QTextDocuments */
     virtual void run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out) const = 0;
 
+    virtual void addChild(PadFragment *fragment);
+    virtual QList<PadFragment*> children() const {return _fragments;}
+
+    virtual PadFragment *padFragmentForSourcePosition(int pos) const;
+    virtual PadFragment *padFragmentForOutputPosition(int pos) const;
+
     void insertFragment(QTextDocument *source, QTextDocument *out) const;
     void insertText(QTextDocument *out, const QString &text) const;
 
+protected:
+    QList<PadFragment *> _fragments;
+
 private:
-	int _start; // index of the first char in the text
+    PadFragment *_parent;
+    int _start; // index of the first char in the text
 	int _end; // index of the last char in the text
     long long _id; // unique identifier
     QString _toolTip;

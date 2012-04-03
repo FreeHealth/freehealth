@@ -37,7 +37,8 @@
 
 using namespace PadTools;
 
-PadFragment::PadFragment() :
+PadFragment::PadFragment(PadFragment *parent) :
+    _parent(parent),
     _start(-1),
     _end(-1),
     _id(-1),
@@ -45,6 +46,56 @@ PadFragment::PadFragment() :
     _outputEnd(-1)
 {
 }
+
+/** When deleting an object, all its children will be deleted */
+PadFragment::~PadFragment()
+{
+    qDeleteAll(_fragments);
+    _fragments.clear();
+    _parent = 0;
+}
+
+/** Add a PadTools::PadFragment as a direct child of this object. Children are stored in an ordered list. */
+void PadFragment::addChild(PadFragment *fragment)
+{
+    fragment->setParent(this);
+    _fragments << fragment;
+}
+
+/** Return the smallest PadTools::PadFragment that include the position. All children are checked. Return 0 if the pos is not included in the fragment. */
+PadFragment *PadFragment::padFragmentForSourcePosition(int pos) const
+{
+    if (_start > pos || _end < pos)
+        return 0;
+    if (_fragments.isEmpty())
+        return (PadFragment*)(this);
+    // check all children
+    PadFragment *child = 0;
+    foreach(PadFragment *frag, _fragments) {
+        PadFragment *test = frag->padFragmentForSourcePosition(pos);
+        if (test)
+            child = test;
+    }
+    return child;
+}
+
+/** Return the smallest PadTools::PadFragment that include the position. All children are checked. Return 0 if the pos is not included in the fragment. */
+PadFragment *PadFragment::padFragmentForOutputPosition(int pos) const
+{
+    if (_outputStart > pos || _outputEnd < pos)
+        return 0;
+    if (_fragments.isEmpty())
+        return (PadFragment*)(this);
+    // check all children
+    PadFragment *child = 0;
+    foreach(PadFragment *frag, _fragments) {
+        PadFragment *test = frag->padFragmentForOutputPosition(pos);
+        if (test)
+            child = test;
+    }
+    return child;
+}
+
 
 /** Insert the content of the PadFragment rawSource to the output */
 void PadFragment::insertFragment(QTextDocument *source, QTextDocument *out) const
@@ -58,15 +109,10 @@ void PadFragment::insertFragment(QTextDocument *source, QTextDocument *out) cons
         toCursor.movePosition(QTextCursor::End);
         _outputStart = toCursor.position();
 
-//        toCursor.insertFragment(cursor.selection());
-//        toCursor.insertBlock(cursor.blockFormat(), cursor.blockCharFormat());
         toCursor.insertHtml(cursor.selection().toHtml());
 
         toCursor.movePosition(QTextCursor::End);
         _outputEnd = toCursor.position();
-
-//        qWarning() << "insert id" << _id << _outputStart << _outputEnd << cursor.selection().toHtml() << "\n";
-//                      << html;
     }
 }
 
@@ -80,4 +126,24 @@ void PadFragment::insertText(QTextDocument *out, const QString &text) const
         toCursor.movePosition(QTextCursor::End);
         _outputEnd = toCursor.position();
     }
+}
+
+/** Moves the PadTools::PadFragment from \e nbChars. \e nbChars can be a positive (moving forward) or a negative int (moving backward). Manages children too.*/
+void PadFragment::move(int nbChars)
+{
+    _start+=nbChars;
+    _outputStart+=nbChars;
+    _end+=nbChars;
+    _outputEnd+=nbChars;
+    foreach(PadFragment *f, _fragments)
+        f->move(nbChars);
+}
+
+/** Move the end tag of the fragment in rawsource and output. Manages parent end too. */
+void PadFragment::moveEnd(int nbOfChars)
+{
+    _end += nbOfChars;
+    _outputEnd += nbOfChars;
+    if (_parent && _parent->id()>=0)
+        _parent->moveEnd(nbOfChars);
 }

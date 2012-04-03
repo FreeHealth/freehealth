@@ -159,6 +159,8 @@ public:
     QWidget *createPage(QWidget *parent = 0);
 private:
     QPointer<FormPreferencesWidget> m_Widget;
+    QFont _defaultFormFont;
+    QFont _defaultEpisodeFont;
 };
 
 

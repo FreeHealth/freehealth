@@ -19,53 +19,48 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main Developers : Eric Maeker <eric.maeker@gmail.com>,                *
- *                    Guillaume Denry <guillaume.denry@gmail.com>          *
- *  Contributors :                                                         *
- *      NAME <MAIL@ADDRESS.COM>                                            *
+ *   Main Developers:                                                      *
+ *       Eric MAEKER, MD <eric.maeker@gmail.com>                           *
+ *   Contributors:                                                         *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef PAD_ITEM_H
-#define PAD_ITEM_H
+#ifndef FONTANDCOLORSSELECTORWIDGET_H
+#define FONTANDCOLORSSELECTORWIDGET_H
 
-#include <QList>
-#include <QMap>
-#include <QVariant>
+#include <utils/global_exporter.h>
+#include <QWidget>
+#include <QLabel>
 
-#include "pad_fragment.h"
-#include "pad_core.h"
+namespace Utils {
+class FontSelectorButton;
+class ColorButtonChooser;
 
-namespace PadTools {
-
-/**
- * Contains an entire pad item i.e. a list of fragments
- * @class
- */
-class PadItem : public PadFragment
+class UTILS_EXPORT FontAndColorsSelectorWidget : public QWidget
 {
+    Q_OBJECT
 public:
-    enum PadStringType {
-        NoType = 0,
-        Core,
-        ConditionnalBeforeText,
-        ConditionnalAfterText
-    };
+    explicit FontAndColorsSelectorWidget(QWidget *parent = 0);
+    
+    void setLabelText(const QString &unTranslatedText, const QString &translationContext);
+    void setDefaultFont(const QFont &font);
+    void setCurrentFont(const QFont &font);
+    void setDefaultColor(const QColor &color);
+    void setCurrentColor(const QColor &color);
 
-    PadItem() : PadFragment() {}
-	virtual ~PadItem();
-
-    PadFragment *fragment(const int type) const;
-
-    void print(int indent = 0) const;
-
-	QString run(QMap<QString,QVariant> &tokens) const;
-    void run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out) const;
-
-    QList<PadFragment*> children() const;
+    QFont currentFont() const;
+    QColor currentColor() const;
 
 private:
-	PadCore *getCore() const;
+    void retranslate();
+    void changeEvent(QEvent *event);
+
+private:
+    FontSelectorButton *_fontButton;
+    QLabel *_label;
+    ColorButtonChooser *_colorButton;
+    QString _unTrLabel, _trContext;
 };
 
-}  // PadTools
+}  // namespace Utils
 
-#endif
+#endif // FONTANDCOLORSSELECTORWIDGET_H
