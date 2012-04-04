@@ -78,12 +78,12 @@
     <message>
         <location filename="../../libs/utils/log.cpp" line="150"/>
         <source>%1 ms: %2</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../libs/utils/log.cpp" line="223"/>
         <source>Unable to save %1: Error %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible de sauvegarder %1 : Erreur %2</translation>
     </message>
     <message>
         <location filename="../../libs/utils/log.cpp" line="238"/>
@@ -152,33 +152,33 @@
     <message>
         <location filename="../../libs/utils/global.cpp" line="525"/>
         <source>%1: %2 does not exist. Trying to create it.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 : %2 n&apos;existe pas. Tentative de création.</translation>
     </message>
     <message>
         <location filename="../../libs/utils/global.cpp" line="528"/>
         <source>Unable to create the %1: %2.</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible de créer %1 : %2.</translation>
     </message>
     <message>
         <location filename="../../libs/utils/global.cpp" line="533"/>
         <source>%1: %2 does not exist.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 : %2 n&apos;existe pas.</translation>
     </message>
     <message>
         <location filename="../../libs/utils/global.cpp" line="564"/>
         <source>File %1 already exists. Do you want de replace it?</source>
-        <translation type="unfinished"></translation>
+        <translation>Fichier %1 existe déjà. Voulez-vous le remplacer ?</translation>
     </message>
     <message>
         <location filename="../../libs/utils/global.cpp" line="581"/>
         <location filename="../../libs/utils/global.cpp" line="593"/>
         <source>%1 successfully saved</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 correctement sauvegardé</translation>
     </message>
     <message>
         <location filename="../../libs/utils/global.cpp" line="583"/>
         <source>Save file aborted by user (file already exists): </source>
-        <translation type="unfinished"></translation>
+        <translation>Sauvegarde annulée par l&apos;utilisateur (le fichier existe déjà) : </translation>
     </message>
     <message>
         <location filename="../../libs/utils/global.cpp" line="639"/>
@@ -203,12 +203,12 @@
     <message>
         <location filename="../../libs/utils/global.cpp" line="886"/>
         <source>You can send an email to developers and explain your difficulties: freemedforms@googlegroups.com.</source>
-        <translation type="unfinished"></translation>
+        <translation>Vous pouvez envoyer un courriel aux développeurs et expliquer vos difficultées : freemedforms@googlegroups.com.</translation>
     </message>
     <message>
         <location filename="../../libs/utils/global.cpp" line="947"/>
         <source>Do you agree these terms?</source>
-        <translation type="unfinished"></translation>
+        <translation>Acceptez vous ces termes ?</translation>
     </message>
     <message>
         <location filename="../../libs/utils/global.cpp" line="927"/>
@@ -271,6 +271,19 @@
         <location filename="../../libs/utils/widgets/filenamevalidatinglineedit.cpp" line="127"/>
         <source>Name matches MS Windows device. (%1).</source>
         <translation>Le nom correspond à l&apos;appareil (%1).</translation>
+    </message>
+</context>
+<context>
+    <name>Utils::FontSelectorButton</name>
+    <message>
+        <location filename="../../libs/utils/widgets/fontselectorbutton.cpp" line="116"/>
+        <source>Edit font</source>
+        <translation>Éditer la police</translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/fontselectorbutton.cpp" line="117"/>
+        <source>Reset to default</source>
+        <translation>Remettre la valeur par défaut</translation>
     </message>
 </context>
 <context>
@@ -366,7 +379,7 @@
         <location filename="../../libs/utils/httpdownloader.cpp" line="198"/>
         <location filename="../../libs/utils/httpdownloader.cpp" line="199"/>
         <source>Redirect to %1?</source>
-        <translation type="unfinished"></translation>
+        <translation>Redirigé vers %1 ?</translation>
     </message>
     <message>
         <location filename="../../libs/utils/httpdownloader.cpp" line="194"/>
@@ -558,7 +571,7 @@
     <message>
         <location filename="../../libs/utils/updatechecker.cpp" line="132"/>
         <source>* Updates of version: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>* Mises à jour de la version : %1</translation>
     </message>
 </context>
 <context>
@@ -571,12 +584,12 @@
     <message>
         <location filename="../../libs/utils/widgets/loginwidget.ui" line="20"/>
         <source>&amp;Login</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Identifiant</translation>
     </message>
     <message>
         <location filename="../../libs/utils/widgets/loginwidget.ui" line="33"/>
         <source>&amp;Password</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Mot de passe</translation>
     </message>
 </context>
 <context>
@@ -641,7 +654,7 @@
     <message>
         <location filename="../../libs/utils/updatechecker.cpp" line="280"/>
         <source>An update is available. Please check the web site: &lt;a href=&quot;%1&quot;&gt;%1&lt;/a&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Une mise à jour est disponible. Veuillez vérifier sur le site internet de l&apos;application : &lt;a href=&quot;%1&quot;&gt;%1&lt;/a&gt;</translation>
     </message>
 </context>
 </TS>

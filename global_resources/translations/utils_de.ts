@@ -274,6 +274,19 @@
     </message>
 </context>
 <context>
+    <name>Utils::FontSelectorButton</name>
+    <message>
+        <location filename="../../libs/utils/widgets/fontselectorbutton.cpp" line="116"/>
+        <source>Edit font</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/fontselectorbutton.cpp" line="117"/>
+        <source>Reset to default</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Utils::GenericInformationEditorDialog</name>
     <message>
         <location filename="../../libs/utils/widgets/genericinformationeditordialog.ui" line="14"/>

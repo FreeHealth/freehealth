@@ -20,11 +20,23 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>View result</source>
+        <source>Options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Options</source>
+        <source>Scenari</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>raw to output</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>output to raw</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Find cursor</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

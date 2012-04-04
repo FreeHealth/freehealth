@@ -5,38 +5,50 @@
     <name>PadTools::Internal::PadWriter</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Raw source</source>
-        <translation type="unfinished"></translation>
+        <translation>Source</translation>
     </message>
     <message>
         <source>Errors</source>
-        <translation type="unfinished"></translation>
+        <translation>Erreurs</translation>
     </message>
     <message>
         <source>View errors</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>View result</source>
-        <translation type="unfinished"></translation>
+        <translation>Voir les erreurs</translation>
     </message>
     <message>
         <source>Options</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Scenari</source>
+        <translation>Scénari</translation>
+    </message>
+    <message>
+        <source>raw to output</source>
+        <translation>Source vers sortie</translation>
+    </message>
+    <message>
+        <source>output to raw</source>
+        <translation>Sortie vers source</translation>
+    </message>
+    <message>
+        <source>Find cursor</source>
+        <translation>Trouver le curseur</translation>
     </message>
 </context>
 <context>
     <name>PadTools::PadWriter</name>
     <message>
         <source>Unexpected &apos;%1&apos; found at line %2 and pos %3</source>
-        <translation type="unfinished"></translation>
+        <translation>&apos;%1&apos; non attendu à la ligne %2, colonne %3</translation>
     </message>
     <message>
         <source>Expected &apos;%1&apos; at line %2 and pos %3</source>
-        <translation type="unfinished"></translation>
+        <translation>&apos;%1&apos; attendu à la ligne %2, colonne %3</translation>
     </message>
 </context>
 <context>
@@ -58,11 +70,11 @@
     </message>
     <message>
         <source>Token</source>
-        <translation type="unfinished"></translation>
+        <translation>Étiquette</translation>
     </message>
     <message>
         <source>Current value</source>
-        <translation type="unfinished"></translation>
+        <translation>Valeur courante</translation>
     </message>
     <message>
         <source>Text value</source>
@@ -74,15 +86,15 @@
     </message>
     <message>
         <source>Conditionnal texts</source>
-        <translation type="unfinished"></translation>
+        <translation>Textes conditionnels</translation>
     </message>
     <message>
         <source>Before</source>
-        <translation type="unfinished"></translation>
+        <translation>Avant</translation>
     </message>
     <message>
         <source>After</source>
-        <translation type="unfinished"></translation>
+        <translation>Après</translation>
     </message>
 </context>
 <context>
