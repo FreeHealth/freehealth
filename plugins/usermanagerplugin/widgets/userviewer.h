@@ -28,6 +28,7 @@
 #define USERVIEWER_H
 
 #include <usermanagerplugin/usermanager_exporter.h>
+#include <coreplugin/icorelistener.h>
 
 #include <QWidget>
 #include <QObject>
@@ -35,17 +36,34 @@
 /**
  * \file userviewer.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.0
- * \date 13 Jul 2011
+ * \version 0.7.1
+ * \date 03 Apr 2012
 */
 
 namespace UserPlugin {
+class UserViewer;
+
 namespace Internal {
 class UserViewerPrivate;
+
+class UserViewerModelCoreListener : public Core::ICoreListener
+{
+    Q_OBJECT
+public:
+    UserViewerModelCoreListener(UserPlugin::UserViewer *parent);
+    ~UserViewerModelCoreListener();
+
+    bool coreAboutToClose();
+
+private:
+    UserPlugin::UserViewer *_viewer;
+};
+
 }  // End Internal
 
 class USER_EXPORT UserViewer : public QWidget
 {
+    friend class UserPlugin::Internal::UserViewerModelCoreListener;
     Q_OBJECT
     Q_DISABLE_COPY(UserViewer)
 public:
@@ -54,6 +72,9 @@ public:
 
     void changeUserTo(const int modelRow);
     void submitChangesToModel();
+
+protected:
+    void disconnectPluginManager();
 
 private Q_SLOTS:
     void pluginManagerObjectAdded(QObject *o);

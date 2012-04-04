@@ -25,13 +25,14 @@
  ***************************************************************************/
 #include "dragdroptextedit.h"
 #include "constants.h"
+#include "tokeneditor.h"
 
 #include <QDebug>
 
 using namespace PadTools;
 
 DragDropTextEdit::DragDropTextEdit(QWidget *parent) :
-    TextEditor(parent, DragDropTextEdit::Full)
+    Editor::TextEditor(parent, DragDropTextEdit::Full)
 {
     setAcceptDrops(true);
 }
@@ -79,12 +80,18 @@ void DragDropTextEdit::dragLeaveEvent(QDragLeaveEvent *event)
 void DragDropTextEdit::dropEvent(QDropEvent *event)
 {
     if (underMouse()) {
-        setFocus();
-        QTextCursor cursor = cursorForPosition(event->pos());
-        cursor.insertText(event->mimeData()->data(Constants::TOKENRAWSOURCE_MIME));
-        event->acceptProposedAction();
-        event->accept();
-    } else {
-        event->ignore();
+        TokenEditor editor(this);
+//        editor.setCurrentIndex();
+        editor.setTokenName(event->mimeData()->data(Constants::TOKENNAME_MIME));
+        int r = editor.exec();
+        if (r == QDialog::Accepted) {
+            setFocus();
+            QTextCursor cursor = cursorForPosition(event->pos());
+            cursor.insertHtml(editor.toHtml());
+            event->acceptProposedAction();
+            event->accept();
+            return;
+        }
     }
+    event->ignore();
 }

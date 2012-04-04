@@ -125,6 +125,7 @@ MedicalProcedureWidget::MedicalProcedureWidget(QWidget *parent) :
 //    QCoreApplication::processEvents(QEventLoop::AllEvents);
     setObjectName("MedicalProcedureWidget");
     setupUi(this);
+    dateEdit->setDisplayFormat(tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR));
     m_db = QSqlDatabase::database(AccountDB::Constants::DB_ACCOUNTANCY);
     m_index = 0;
     m_user_uid = user()->uuid();

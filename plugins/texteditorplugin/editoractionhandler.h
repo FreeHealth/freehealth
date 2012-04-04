@@ -169,7 +169,7 @@ private:
     Core::ActionContainer *m_TableMenu;
     Core::ActionContainer *m_AddTextMenu;
 
-    QList<int> basicContext, ioContext, tableContext, textAdderContext, allContexts;
+    QList<int> charContext, paragraphContext, clipboardContext, basicContext, ioContext, tableContext, textAdderContext, allContexts;
 
 private:
     void createContexts();

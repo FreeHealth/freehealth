@@ -43,24 +43,26 @@ namespace PadTools {
 class PadItem : public PadFragment
 {
 public:
-	PadItem(){}
+    enum PadStringType {
+        NoType = 0,
+        Core,
+        ConditionnalBeforeText,
+        ConditionnalAfterText
+    };
+
+    PadItem() : PadFragment() {}
 	virtual ~PadItem();
 
-	void addFragment(PadFragment *fragment);
+    PadFragment *fragment(const int type) const;
 
-	QList<PadFragment*> getAllFragments() const;
+    void print(int indent = 0) const;
 
-	void print(int indent = 0) const;
-
-	/**
-	 * Run this pad over some tokens and returns the result text
-	 */
 	QString run(QMap<QString,QVariant> &tokens) const;
+    void run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out) const;
+
+    QList<PadFragment*> children() const;
 
 private:
-	QList<PadFragment*> _fragments;
-
-	// return the core of the pad (can be 0)
 	PadCore *getCore() const;
 };
 

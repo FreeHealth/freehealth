@@ -149,7 +149,10 @@ EditorActionHandler::~EditorActionHandler()
 
 void EditorActionHandler::createContexts()
 {
-    basicContext = QList<int>() << uid()->uniqueIdentifier(Core::Constants::C_EDITOR_BASIC);
+    charContext = QList<int>() << uid()->uniqueIdentifier(Core::Constants::C_EDITOR_CHAR_FORMAT);
+    paragraphContext = QList<int>() << uid()->uniqueIdentifier(Core::Constants::C_EDITOR_PARAGRAPH);
+    clipboardContext = QList<int>() << uid()->uniqueIdentifier(Core::Constants::C_EDITOR_CLIPBOARD);
+    basicContext = QList<int>() << uid()->uniqueIdentifier(Core::Constants::C_EDITOR_BASIC) << charContext << paragraphContext << clipboardContext;
     ioContext = QList<int>() << uid()->uniqueIdentifier(Core::Constants::C_EDITOR_IO);
     tableContext = QList<int>() << uid()->uniqueIdentifier(Core::Constants::C_EDITOR_TABLE);
     textAdderContext = QList<int>() << uid()->uniqueIdentifier(Core::Constants::C_EDITOR_ADDTEXT);
@@ -275,33 +278,33 @@ void EditorActionHandler::createActions()
         aRedo = registerAction(Core::Constants::A_EDIT_REDO, allContexts, this);
     }
     if (!actionManager()->command(Core::Constants::A_EDIT_CUT)) {
-        aCut = createAction(this, "aCut", ICONCUT, A_EDIT_CUT, allContexts, EDITCUT_TEXT, cmd, m_EditMenu, G_EDIT_COPYPASTE, QKeySequence::Cut);
+        aCut = createAction(this, "aCut", ICONCUT, A_EDIT_CUT, clipboardContext, EDITCUT_TEXT, cmd, m_EditMenu, G_EDIT_COPYPASTE, QKeySequence::Cut);
         aCut->setEnabled(false);
     } else {
-        aCut = registerAction(Core::Constants::A_EDIT_CUT, allContexts, this);
+        aCut = registerAction(Core::Constants::A_EDIT_CUT, clipboardContext, this);
     }
     if (!actionManager()->command(Core::Constants::A_EDIT_COPY)) {
-        aCopy = createAction(this, "aCopy", ICONCOPY, A_EDIT_COPY, allContexts, EDITCOPY_TEXT, cmd, m_EditMenu, G_EDIT_COPYPASTE, QKeySequence::Copy);
+        aCopy = createAction(this, "aCopy", ICONCOPY, A_EDIT_COPY, clipboardContext, EDITCOPY_TEXT, cmd, m_EditMenu, G_EDIT_COPYPASTE, QKeySequence::Copy);
         aCopy->setEnabled(false);
     } else {
-        aCopy = registerAction(Core::Constants::A_EDIT_COPY, allContexts, this);
+        aCopy = registerAction(Core::Constants::A_EDIT_COPY, clipboardContext, this);
     }
     if (!actionManager()->command(Core::Constants::A_EDIT_PASTE)) {
-        aPaste = createAction(this, "aPaste", ICONPASTE, A_EDIT_PASTE, allContexts, EDITPASTE_TEXT, cmd, m_EditMenu, G_EDIT_COPYPASTE, QKeySequence::Paste);
+        aPaste = createAction(this, "aPaste", ICONPASTE, A_EDIT_PASTE, clipboardContext, EDITPASTE_TEXT, cmd, m_EditMenu, G_EDIT_COPYPASTE, QKeySequence::Paste);
         aPaste->setEnabled(false);
     } else {
-        aPaste = registerAction(Core::Constants::A_EDIT_PASTE, allContexts, this);
+        aPaste = registerAction(Core::Constants::A_EDIT_PASTE, clipboardContext, this);
     }
 
     // Font actions
-    aBold = createAction(this, "aBold", ICONBOLD, A_FORMAT_BOLD, allContexts, FORMATBOLD_TEXT, cmd, m_FontMenu, G_FORMAT_FONT_BASE, QKeySequence::Bold, true);
-    aItalic = createAction(this, "aItalic", ICONITALIC, A_FORMAT_ITALIC, allContexts, FORMATITALIC_TEXT, cmd, m_FontMenu, G_FORMAT_FONT_BASE, QKeySequence::Italic, true);
-    aUnderline = createAction(this, "aUnderline", ICONUNDERLINE, A_FORMAT_UNDERLINE, allContexts, FORMATUNDERLINE_TEXT, cmd, m_FontMenu, G_FORMAT_FONT_BASE, QKeySequence::Underline, true);
-    aStrike = createAction(this, "aStrike", ICONSTRIKE, A_FORMAT_STRIKE, allContexts, FORMATSTRIKE_TEXT, cmd, m_FontMenu, G_FORMAT_FONT_BASE, QKeySequence::UnknownKey, true);
-    aFontBigger = createAction(this, "aFontBigger", ICONFONTBIGGER, A_FORMAT_BIGGER, allContexts, FORMATBIGGER_TEXT, cmd, m_FontMenu, G_FORMAT_FONT_SIZE);
-    aFontSmaller = createAction(this, "aFontSmaller", ICONFONTSMALLER, A_FORMAT_SMALLER, allContexts, FORMATSMALLER_TEXT, cmd, m_FontMenu, G_FORMAT_FONT_SIZE);
-    aFontFormat = createAction(this, "aFontFormat", ICONFONTFORMAT, A_FORMAT_FONT, allContexts, FORMATFONT_TEXT, cmd, m_FontMenu, G_FORMAT_FONT_EXTRAS);
-    aColor = createAction(this, "aColor", "", A_FORMAT_FONTCOLOR, allContexts, FORMATFONTCOLOR_TEXT, cmd, m_FontMenu, G_FORMAT_FONT_EXTRAS);
+    aBold = createAction(this, "aBold", ICONBOLD, A_FORMAT_BOLD, charContext, FORMATBOLD_TEXT, cmd, m_FontMenu, G_FORMAT_FONT_BASE, QKeySequence::Bold, true);
+    aItalic = createAction(this, "aItalic", ICONITALIC, A_FORMAT_ITALIC, charContext, FORMATITALIC_TEXT, cmd, m_FontMenu, G_FORMAT_FONT_BASE, QKeySequence::Italic, true);
+    aUnderline = createAction(this, "aUnderline", ICONUNDERLINE, A_FORMAT_UNDERLINE, charContext, FORMATUNDERLINE_TEXT, cmd, m_FontMenu, G_FORMAT_FONT_BASE, QKeySequence::Underline, true);
+    aStrike = createAction(this, "aStrike", ICONSTRIKE, A_FORMAT_STRIKE, charContext, FORMATSTRIKE_TEXT, cmd, m_FontMenu, G_FORMAT_FONT_BASE, QKeySequence::UnknownKey, true);
+    aFontBigger = createAction(this, "aFontBigger", ICONFONTBIGGER, A_FORMAT_BIGGER, charContext, FORMATBIGGER_TEXT, cmd, m_FontMenu, G_FORMAT_FONT_SIZE);
+    aFontSmaller = createAction(this, "aFontSmaller", ICONFONTSMALLER, A_FORMAT_SMALLER, charContext, FORMATSMALLER_TEXT, cmd, m_FontMenu, G_FORMAT_FONT_SIZE);
+    aFontFormat = createAction(this, "aFontFormat", ICONFONTFORMAT, A_FORMAT_FONT, charContext, FORMATFONT_TEXT, cmd, m_FontMenu, G_FORMAT_FONT_EXTRAS);
+    aColor = createAction(this, "aColor", "", A_FORMAT_FONTCOLOR, charContext, FORMATFONTCOLOR_TEXT, cmd, m_FontMenu, G_FORMAT_FONT_EXTRAS);
     actionManager()->command(A_FORMAT_FONTCOLOR)->setAttribute(Core::Command::CA_UpdateIcon);
     QPixmap p(16,16);
     p.fill(Qt::black);
@@ -309,27 +312,27 @@ void EditorActionHandler::createActions()
 
     // Paragraph actions
 #ifdef Q_OS_MAC
-    aLeft = createAction(this, "aLeft", ICONALIGNLEFT, A_ALIGN_LEFT, allContexts, ALIGNLEFT_TEXT, cmd, m_ParagraphMenu, G_FORMAT_PARAGRAPH, K_ALIGNLEFT_MAC);
+    aLeft = createAction(this, "aLeft", ICONALIGNLEFT, A_ALIGN_LEFT, paragraphContext, ALIGNLEFT_TEXT, cmd, m_ParagraphMenu, G_FORMAT_PARAGRAPH, K_ALIGNLEFT_MAC);
 #else
-    aLeft = createAction(this, "aLeft", ICONALIGNLEFT, A_ALIGN_LEFT, allContexts, ALIGNLEFT_TEXT, cmd, m_ParagraphMenu, G_FORMAT_PARAGRAPH, K_ALIGNLEFT);
+    aLeft = createAction(this, "aLeft", ICONALIGNLEFT, A_ALIGN_LEFT, paragraphContext, ALIGNLEFT_TEXT, cmd, m_ParagraphMenu, G_FORMAT_PARAGRAPH, K_ALIGNLEFT);
 #endif
 
 #ifdef Q_OS_MAC
-    aRight = createAction(this, "aRight", ICONALIGNRIGHT, A_ALIGN_RIGHT, allContexts, ALIGNRIGHT_TEXT, cmd, m_ParagraphMenu, G_FORMAT_PARAGRAPH, K_ALIGNRIGHT_MAC);
+    aRight = createAction(this, "aRight", ICONALIGNRIGHT, A_ALIGN_RIGHT, paragraphContext, ALIGNRIGHT_TEXT, cmd, m_ParagraphMenu, G_FORMAT_PARAGRAPH, K_ALIGNRIGHT_MAC);
 #else
-    aRight = createAction(this, "aRight", ICONALIGNRIGHT, A_ALIGN_RIGHT, allContexts, ALIGNRIGHT_TEXT, cmd, m_ParagraphMenu, G_FORMAT_PARAGRAPH, K_ALIGNRIGHT);
+    aRight = createAction(this, "aRight", ICONALIGNRIGHT, A_ALIGN_RIGHT, paragraphContext, ALIGNRIGHT_TEXT, cmd, m_ParagraphMenu, G_FORMAT_PARAGRAPH, K_ALIGNRIGHT);
 #endif
 
 #ifdef Q_OS_MAC
-    aCenter = createAction(this, "aCenter", ICONALIGNCENTER, A_ALIGN_CENTER, allContexts, ALIGNCENTER_TEXT, cmd, m_ParagraphMenu, G_FORMAT_PARAGRAPH, K_ALIGNCENTER_MAC);
+    aCenter = createAction(this, "aCenter", ICONALIGNCENTER, A_ALIGN_CENTER, paragraphContext, ALIGNCENTER_TEXT, cmd, m_ParagraphMenu, G_FORMAT_PARAGRAPH, K_ALIGNCENTER_MAC);
 #else
-    aCenter = createAction(this, "aCenter", ICONALIGNCENTER, A_ALIGN_CENTER, allContexts, ALIGNCENTER_TEXT, cmd, m_ParagraphMenu, G_FORMAT_PARAGRAPH, K_ALIGNCENTER);
+    aCenter = createAction(this, "aCenter", ICONALIGNCENTER, A_ALIGN_CENTER, paragraphContext, ALIGNCENTER_TEXT, cmd, m_ParagraphMenu, G_FORMAT_PARAGRAPH, K_ALIGNCENTER);
 #endif
 
 #ifdef Q_OS_MAC
-    aJustify = createAction(this, "aJustify", ICONALIGNJUSTIFY, A_ALIGN_JUSTIFY, allContexts, ALIGNJUSTIFY_TEXT, cmd, m_ParagraphMenu, G_FORMAT_PARAGRAPH, K_ALIGNJUSTIFY_MAC);
+    aJustify = createAction(this, "aJustify", ICONALIGNJUSTIFY, A_ALIGN_JUSTIFY, paragraphContext, ALIGNJUSTIFY_TEXT, cmd, m_ParagraphMenu, G_FORMAT_PARAGRAPH, K_ALIGNJUSTIFY_MAC);
 #else
-    aJustify = createAction(this, "aJustify", ICONALIGNJUSTIFY, A_ALIGN_JUSTIFY, allContexts, ALIGNJUSTIFY_TEXT, cmd, m_ParagraphMenu, G_FORMAT_PARAGRAPH, K_ALIGNJUSTIFY);
+    aJustify = createAction(this, "aJustify", ICONALIGNJUSTIFY, A_ALIGN_JUSTIFY, paragraphContext, ALIGNJUSTIFY_TEXT, cmd, m_ParagraphMenu, G_FORMAT_PARAGRAPH, K_ALIGNJUSTIFY);
 #endif
 
     // Table actions
@@ -349,6 +352,7 @@ void EditorActionHandler::createActions()
 ////    connect(aNew, SIGNAL(triggered()), this, SLOT(newFile()));
 
     // File Actions
+    /** \todo change the group for apps that do not use the GeneralMenu */
     aOpen = createAction(this, "aOpen", Core::Constants::ICONOPEN, A_EDITOR_FILEOPEN, ioContext, EDITOR_FILEOPEN_TEXT, cmd, m_FileMenu, G_GENERAL_FILE);
     aSave = createAction(this, "aSave", ICONSAVE, A_EDITOR_FILESAVE, ioContext, EDITOR_FILESAVE_TEXT, cmd, m_FileMenu, G_GENERAL_FILE);
     actionManager()->command(A_FORMAT_FONTCOLOR)->setAttribute(Core::Command::CA_UpdateText);

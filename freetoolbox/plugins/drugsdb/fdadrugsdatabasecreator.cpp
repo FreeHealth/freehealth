@@ -293,7 +293,7 @@ bool FdaDrugDatatabaseStep::createDatabase()
         return false;
 
     QMultiHash<QString, QVariant> labels;
-    labels.insert("fr","Base de données thérapeutiques américaine");
+    labels.insert("fr","Base de données thérapeutique américaine");
     labels.insert("en","USA therapeutic database");
     labels.insert("de","Therapeutische Datenbank USA");
 

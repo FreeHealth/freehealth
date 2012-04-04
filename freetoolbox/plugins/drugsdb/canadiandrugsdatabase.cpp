@@ -184,7 +184,7 @@ bool CaDrugDatatabaseStep::createDatabase()
         return false;
 
     QMultiHash<QString, QVariant> labels;
-    labels.insert("fr","Base de données thérapeutiques Canadienne");
+    labels.insert("fr","Base de données thérapeutique Canadienne");
     labels.insert("en","Canadian therapeutic database");
     labels.insert("de","Kanadierin therapeutischen database");
 

@@ -1056,7 +1056,7 @@ bool saveDrugDatabaseDescription(const QString &fileName, const int completion)
                                                               << DrugsDB::Constants::SOURCES_LANG
                                                               << DrugsDB::Constants::SOURCES_WEB
                                                               << DrugsDB::Constants::SOURCES_COPYRIGHT
-                                                              << DrugsDB::Constants::SOURCES_LICENCE
+                                                              << DrugsDB::Constants::SOURCES_LICENSE
                                                               << DrugsDB::Constants::SOURCES_DATE
                                                               << DrugsDB::Constants::SOURCES_DRUGS_VERSION
                                                               << DrugsDB::Constants::SOURCES_AUTHORS
@@ -1078,7 +1078,7 @@ bool saveDrugDatabaseDescription(const QString &fileName, const int completion)
     query.bindValue(i, descr.data(Core::DrugDatabaseDescription::Language));
     query.bindValue(++i, descr.data(Core::DrugDatabaseDescription::WebLink));
     query.bindValue(++i, descr.data(Core::DrugDatabaseDescription::Copyright));
-    query.bindValue(++i, descr.data(Core::DrugDatabaseDescription::GlobalLicense));
+    query.bindValue(++i, descr.data(Core::DrugDatabaseDescription::LicenseName));
     query.bindValue(++i, QDateTime::currentDateTime().toString(Qt::ISODate));
     query.bindValue(++i, descr.data(Core::DrugDatabaseDescription::Version));
     query.bindValue(++i, descr.data(Core::DrugDatabaseDescription::Author));

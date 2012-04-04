@@ -193,7 +193,7 @@ bool FrDrugDatatabaseStep::createDatabase()
         return false;
 
     QMultiHash<QString, QVariant> labels;
-    labels.insert("fr","Base de données thérapeutiques française");
+    labels.insert("fr","Base de données thérapeutique française");
     labels.insert("en","French therapeutic database");
     labels.insert("de","Französisch therapeutischen database");
 

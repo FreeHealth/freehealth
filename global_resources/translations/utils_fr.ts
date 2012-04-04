@@ -5,43 +5,43 @@
     <name>Database</name>
     <message>
         <location filename="../../libs/utils/database.cpp" line="499"/>
-        <source>WARNING : %1 database already in use</source>
-        <translation>ATTENTION : la base de données %1 est déjà en cours d&apos;utilisation</translation>
-    </message>
-    <message>
-        <location filename="../../libs/utils/database.cpp" line="659"/>
-        <source>ERROR : Database %1 is not readable. Path : %2</source>
-        <translation>ERREUR : La base de données %1 n&apos;est pas lisible. Chemin : %2</translation>
-    </message>
-    <message>
-        <location filename="../../libs/utils/database.cpp" line="651"/>
-        <source>ERROR : Database %1 is not readable. Host: %2</source>
-        <translation>ERREUR : La base de données %1 n&apos;est pas lisible. Hôte : %2</translation>
+        <source>WARNING: %1 database already in use</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/utils/database.cpp" line="641"/>
-        <source>ERROR : Database `%1` is not readable. Path : %2</source>
-        <translation>ERREUR : La base %1 n&apos;est pas lisible. Chemin %2</translation>
+        <source>ERROR: Database `%1` is not readable. Path: %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/database.cpp" line="651"/>
+        <source>ERROR: Database %1 is not readable. Host: %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/database.cpp" line="659"/>
+        <source>ERROR: Database %1 is not readable. Path: %2</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/utils/database.cpp" line="686"/>
-        <source>ERROR : Database %1 is not writable. Path : %2.</source>
-        <translation>ERREUR : La base de données %1 n&apos;est pas inscriptible. Chemin : %2.</translation>
+        <source>ERROR: Database %1 is not writable. Path: %2.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/utils/database.cpp" line="727"/>
-        <source>INFO : database %1 connection = %2</source>
-        <translation>INFO : Base de données %1 connexion : %2</translation>
+        <source>INFO: database %1 connection = %2</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/utils/database.cpp" line="917"/>
-        <source>Database Scheme Error : wrong number of fields for table %1</source>
-        <translation>Erreur de schéma de base de données : nombre de champs incorrect, table %1</translation>
+        <source>Database Scheme Error: wrong number of fields for table %1</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/utils/database.cpp" line="926"/>
-        <source>Database Scheme Error : field number %1 differs : %2 instead of %3 in table %4</source>
-        <translation>Erreur de schéma de base de données : champs numéro %1 différe : %2 au lieu de %3 dans la table %4</translation>
+        <source>Database Scheme Error: field number %1 differs: %2 instead of %3 in table %4</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/utils/database.cpp" line="1794"/>
@@ -53,7 +53,7 @@
     <name>LineEditEchoSwitcher</name>
     <message>
         <location filename="../../libs/utils/widgets/lineeditechoswitcher.cpp" line="72"/>
-        <location filename="../../libs/utils/widgets/lineeditechoswitcher.cpp" line="100"/>
+        <location filename="../../libs/utils/widgets/lineeditechoswitcher.cpp" line="101"/>
         <source>Display/Hide text</source>
         <translation>Afficher/cacher le texte</translation>
     </message>
@@ -62,27 +62,27 @@
     <name>Log</name>
     <message>
         <location filename="../../libs/utils/log.cpp" line="114"/>
-        <source>SQL Error : Driver : %1, Database : %2, Query : %3</source>
-        <translation>SQL Erreur : pilote %1, base %2, requête %3</translation>
+        <source>SQL Error: Driver: %1, Database: %2, Query: %3</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/utils/log.cpp" line="119"/>
-        <source>%1 : %2 - SQL Error : Driver : %3, Database : %4, Query : %5</source>
-        <translation>%1 : %2 - SQL Erreur : Pilote : %3, Base : %4, Requête : %5</translation>
+        <source>%1: %2 - SQL Error: Driver: %3, Database: %4, Query: %5</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/utils/log.cpp" line="136"/>
-        <source>%1 : %2 - Database: %3, Host: %4, Port: %5, User:%6, Pass:%7</source>
-        <translation>%1 : %2 - Base : %3, Hôte : %4, Port : %5, Utilisateur : %6, Mot de passe : %7</translation>
+        <source>%1: %2 - Database: %3, Host: %4, Port: %5, User:%6, Pass:%7</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/utils/log.cpp" line="150"/>
-        <source>%1 ms : %2</source>
+        <source>%1 ms: %2</source>
         <translation></translation>
     </message>
     <message>
         <location filename="../../libs/utils/log.cpp" line="223"/>
-        <source>Unable to save %1 : Error %2</source>
+        <source>Unable to save %1: Error %2</source>
         <translation>Impossible de sauvegarder %1 : Erreur %2</translation>
     </message>
     <message>
@@ -132,42 +132,11 @@
 <context>
     <name>Utils</name>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="525"/>
-        <source>%1 : %2 does not exist. Trying to create it.</source>
-        <translation>%1 : %2 n&apos;existe pas. Tentative de création.</translation>
-    </message>
-    <message>
-        <location filename="../../libs/utils/global.cpp" line="528"/>
-        <source>Unable to create the %1 : %2.</source>
-        <translation>Impossible de créer %1 : %2.</translation>
-    </message>
-    <message>
-        <location filename="../../libs/utils/global.cpp" line="533"/>
-        <source>%1 : %2 does not exist.</source>
-        <translation>%1 : %2 n&apos;existe pas.</translation>
-    </message>
-    <message>
-        <location filename="../../libs/utils/global.cpp" line="564"/>
-        <source>File %1 already exists. Do you want de replace it ?</source>
-        <translation>Le fichier %1 existe déjà. Voulez-vous le remplacer ?</translation>
-    </message>
-    <message>
         <location filename="../../libs/utils/global.cpp" line="569"/>
         <location filename="../../libs/utils/global.cpp" line="574"/>
         <location filename="../../libs/utils/global.cpp" line="589"/>
         <source>Error %1 while trying to save file %2</source>
         <translation>Erreur %1 en tentant de sauvegarder le fichier %2</translation>
-    </message>
-    <message>
-        <location filename="../../libs/utils/global.cpp" line="581"/>
-        <location filename="../../libs/utils/global.cpp" line="593"/>
-        <source>%1 correctly saved</source>
-        <translation>%1 correctement sauvegardé</translation>
-    </message>
-    <message>
-        <location filename="../../libs/utils/global.cpp" line="583"/>
-        <source>Save file aborted by user (file already exists) : </source>
-        <translation>Sauvegarde annulée par l&apos;utilisateur (le fichier existe déjà) : </translation>
     </message>
     <message>
         <location filename="../../libs/utils/global.cpp" line="605"/>
@@ -179,6 +148,37 @@
         <location filename="../../libs/utils/global.cpp" line="404"/>
         <source>Error while retrieve information of uname under %1</source>
         <translation>Erreur en récupérant les données de uname sous %1</translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/global.cpp" line="525"/>
+        <source>%1: %2 does not exist. Trying to create it.</source>
+        <translation>%1 : %2 n&apos;existe pas. Tentative de création.</translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/global.cpp" line="528"/>
+        <source>Unable to create the %1: %2.</source>
+        <translation>Impossible de créer %1 : %2.</translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/global.cpp" line="533"/>
+        <source>%1: %2 does not exist.</source>
+        <translation>%1 : %2 n&apos;existe pas.</translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/global.cpp" line="564"/>
+        <source>File %1 already exists. Do you want de replace it?</source>
+        <translation>Fichier %1 existe déjà. Voulez-vous le remplacer ?</translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/global.cpp" line="581"/>
+        <location filename="../../libs/utils/global.cpp" line="593"/>
+        <source>%1 successfully saved</source>
+        <translation>%1 correctement sauvegardé</translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/global.cpp" line="583"/>
+        <source>Save file aborted by user (file already exists): </source>
+        <translation>Sauvegarde annulée par l&apos;utilisateur (le fichier existe déjà) : </translation>
     </message>
     <message>
         <location filename="../../libs/utils/global.cpp" line="639"/>
@@ -202,8 +202,13 @@
     </message>
     <message>
         <location filename="../../libs/utils/global.cpp" line="886"/>
-        <source>You can send an email to developers and explain your difficulties : freemedforms@googlegroups.com.</source>
-        <translation>Vous pouvez envoyer un courriel aux développeurs et expliquer vos difficultés : freemedforms@googlegroups.com.</translation>
+        <source>You can send an email to developers and explain your difficulties: freemedforms@googlegroups.com.</source>
+        <translation>Vous pouvez envoyer un courriel aux développeurs et expliquer vos difficultées : freemedforms@googlegroups.com.</translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/global.cpp" line="947"/>
+        <source>Do you agree these terms?</source>
+        <translation>Acceptez vous ces termes ?</translation>
     </message>
     <message>
         <location filename="../../libs/utils/global.cpp" line="927"/>
@@ -217,11 +222,6 @@
         <translation>&lt;b&gt;Avant d&apos;utiliser ce logiciel, vous devez accepter les termes de la licence.&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="947"/>
-        <source>Do you agree these terms ?</source>
-        <translation>Acceptez-vous les termes de la licence ?</translation>
-    </message>
-    <message>
         <location filename="../../libs/utils/global.cpp" line="1017"/>
         <source>%1 is now in fullScreen Mode.</source>
         <translation>%1 est mode plein écran.</translation>
@@ -232,7 +232,7 @@
         <translation>%1 n&apos;est plus en mode plein écran.</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1534"/>
+        <location filename="../../libs/utils/global.cpp" line="1535"/>
         <source>Token replacement error (%1). Wrong number of parentheses.</source>
         <translation>Erreur lors du remplacement du repère (%1). Nombre incorrect de parenthèses.</translation>
     </message>
@@ -271,6 +271,19 @@
         <location filename="../../libs/utils/widgets/filenamevalidatinglineedit.cpp" line="127"/>
         <source>Name matches MS Windows device. (%1).</source>
         <translation>Le nom correspond à l&apos;appareil (%1).</translation>
+    </message>
+</context>
+<context>
+    <name>Utils::FontSelectorButton</name>
+    <message>
+        <location filename="../../libs/utils/widgets/fontselectorbutton.cpp" line="116"/>
+        <source>Edit font</source>
+        <translation>Éditer la police</translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/fontselectorbutton.cpp" line="117"/>
+        <source>Reset to default</source>
+        <translation>Remettre la valeur par défaut</translation>
     </message>
 </context>
 <context>
@@ -363,15 +376,15 @@
         <translation></translation>
     </message>
     <message>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="198"/>
+        <location filename="../../libs/utils/httpdownloader.cpp" line="199"/>
+        <source>Redirect to %1?</source>
+        <translation>Redirigé vers %1 ?</translation>
+    </message>
+    <message>
         <location filename="../../libs/utils/httpdownloader.cpp" line="194"/>
         <source>Download failed: %1.</source>
         <translation>Le téléchargement a échoué %1.</translation>
-    </message>
-    <message>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="198"/>
-        <location filename="../../libs/utils/httpdownloader.cpp" line="199"/>
-        <source>Redirect to %1 ?</source>
-        <translation>Rediriger vers %1 ?</translation>
     </message>
     <message>
         <location filename="../../libs/utils/httpdownloader.cpp" line="210"/>
@@ -557,7 +570,7 @@
     </message>
     <message>
         <location filename="../../libs/utils/updatechecker.cpp" line="132"/>
-        <source>* Updates of version : %1</source>
+        <source>* Updates of version: %1</source>
         <translation>* Mises à jour de la version : %1</translation>
     </message>
 </context>
@@ -569,14 +582,14 @@
         <translation></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/widgets/loginwidget.ui" line="26"/>
-        <source>Login</source>
-        <translation>Identifiant</translation>
+        <location filename="../../libs/utils/widgets/loginwidget.ui" line="20"/>
+        <source>&amp;Login</source>
+        <translation>&amp;Identifiant</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/widgets/loginwidget.ui" line="39"/>
-        <source>Password</source>
-        <translation>Mot de passe</translation>
+        <location filename="../../libs/utils/widgets/loginwidget.ui" line="33"/>
+        <source>&amp;Password</source>
+        <translation>&amp;Mot de passe</translation>
     </message>
 </context>
 <context>
@@ -640,8 +653,8 @@
     <name>Utils::UpdateChecker</name>
     <message>
         <location filename="../../libs/utils/updatechecker.cpp" line="280"/>
-        <source>An update is available. Please check the web site : &lt;a href=&quot;%1&quot;&gt;%1&lt;/a&gt;</source>
-        <translation>Une mise à jour est disponible. Veuillez vous rendre sur le site internet &lt;a href=&quot;%1&quot;&gt;%1&lt;/a&gt;</translation>
+        <source>An update is available. Please check the web site: &lt;a href=&quot;%1&quot;&gt;%1&lt;/a&gt;</source>
+        <translation>Une mise à jour est disponible. Veuillez vérifier sur le site internet de l&apos;application : &lt;a href=&quot;%1&quot;&gt;%1&lt;/a&gt;</translation>
     </message>
 </context>
 </TS>

@@ -51,7 +51,7 @@ DrugInfosPlugin::~DrugInfosPlugin()
     qWarning() << "DrugInfosPlugin::~DrugInfosPlugin()";
 }
 
-bool DrugInfosPlugin::initialize(const QStringList &arguments, QString *errorMessage)
+bool DrugInfosPlugin::initialize(const QStringList &/*arguments*/, QString */*errorMessage*/)
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "DrugInfosPlugin::initialize";

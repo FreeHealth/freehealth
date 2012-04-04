@@ -194,7 +194,7 @@ bool CoreImpl::initialize(const QStringList &arguments, QString *errorString)
 
     if (!msg.isEmpty()) {
 #ifndef LINUX_INTEGRATED
-        if (!Utils::defaultLicenceAgreementDialog(msg, Utils::LicenseTerms::GPLv3))
+        if (!Utils::defaultLicenseAgreementDialog(msg, Utils::LicenseTerms::GPLv3))
             return false;
 #endif
         // update some preferences ?

@@ -169,13 +169,13 @@ IcdActionHandler::IcdActionHandler(QObject *parent) :
     connect(aShowDatabaseInformation,SIGNAL(triggered()), this, SLOT(showDatabaseInformation()));
 
     // Search method menu
-    Core::ActionContainer *menu = actionManager()->actionContainer(Core::Constants::M_EDIT);
     Core::ActionContainer *searchmenu = actionManager()->actionContainer(Constants::M_ICD_SEARCH);
     if (!searchmenu) {
         searchmenu = actionManager()->createMenu(Constants::M_ICD_SEARCH);
         searchmenu->appendGroup(Constants::G_ICD_SEARCH);
         searchmenu->setTranslations(Constants::SEARCHMENU_TEXT, Constants::ICDCONSTANTS_TR_CONTEXT);
 #ifndef FREETOOLBOX
+        Core::ActionContainer *menu = actionManager()->actionContainer(Core::Constants::M_EDIT);
         menu->addMenu(searchmenu, Core::Constants::G_EDIT_FIND);
 #endif
     }
@@ -209,6 +209,7 @@ IcdActionHandler::IcdActionHandler(QObject *parent) :
         modesmenu->appendGroup(Constants::G_ICD_COLLECTIONMODE);
         modesmenu->setTranslations(Constants::MODESMENU_TEXT, Constants::ICDCONSTANTS_TR_CONTEXT);
 #ifndef FREETOOLBOX
+        Core::ActionContainer *menu = actionManager()->actionContainer(Core::Constants::M_EDIT);
         menu->addMenu(modesmenu, Core::Constants::G_EDIT_OTHER);
 #endif
     }

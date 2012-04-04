@@ -78,7 +78,7 @@ SimpleTextDialog::SimpleTextDialog(const QString &title, const QString &zoomSett
     setWindowTitle(title);
     ui->label->setText(title);
 
-    QPushButton *printButton = new QPushButton(tkTr(Trans::Constants::FILEPRINT_TEXT), this);
+    QPushButton *printButton = new QPushButton(tkTr(Trans::Constants::FILEPRINT_TEXT).remove("&"), this);
     printButton->setIcon(theme()->icon(Core::Constants::ICONPRINT));
     ui->buttonBox->addButton(printButton, QDialogButtonBox::ActionRole);
 

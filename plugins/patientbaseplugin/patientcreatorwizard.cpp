@@ -40,7 +40,6 @@
 
 #include <QLabel>
 #include <QLineEdit>
-#include <QDateEdit>
 #include <QComboBox>
 #include <QGridLayout>
 

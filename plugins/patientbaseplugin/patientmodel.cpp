@@ -475,7 +475,14 @@ QVariant PatientModel::data(const QModelIndex &index, int role) const
         }
         case IPatient::PractitionnerLkID: return d->m_LkIds;
         }
-        return d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), col), role);
+        QVariant r = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), col), role);
+        switch (index.column()) {
+        case Core::IPatient::DateOfBirth:
+        case Core::IPatient::DateOfDeath:
+            return r.toDate().toString(tkTr(Trans::Constants::DATEFORMAT_FOR_MODEL));
+        default:
+            return r;
+        }
     }
     else if (role==Qt::DecorationRole) {
         switch (index.column()) {

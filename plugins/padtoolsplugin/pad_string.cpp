@@ -25,6 +25,7 @@
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
 #include "pad_string.h"
+#include "constants.h"
 
 #include <QDebug>
 
@@ -32,12 +33,29 @@ using namespace PadTools;
 
 void PadString::print(int indent) const
 {
-	QString str(indent, ' ');
-	str += _string;
+    QString i(indent, ' ');
+    QString str;
+    str += i+ QString("[padString:Source(%1;%2);Output(%3;%4)]\n")
+            .arg(start()).arg(end())
+            .arg(outputStart()).arg(outputEnd());
+    str += i+ _string;
     qWarning() << str;
 }
 
+/** Paste the content of a string fragment in the output. */
 QString PadString::run(QMap<QString,QVariant> &) const
 {
-	return _string;
+    /** \todo use this output only if HTML is requested */
+    if (start() > 0) {
+        return QString(Constants::TOKEN_AND_POSITION_TAG)
+                .arg(_string).arg(id());
+    }
+    return _string;
+}
+
+/** Paste the content of a string fragment in the output. */
+void PadString::run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out) const
+{
+    Q_UNUSED(tokens);
+    insertFragment(source, out);
 }

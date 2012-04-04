@@ -145,7 +145,7 @@ void FormIODescription::toTreeWidget(QTreeWidget *tree) const
     general->setFont(0, bold);
     new QTreeWidgetItem(general, QStringList() << "Uuid" << data(FormIODescription::UuidOrAbsPath).toString());
     new QTreeWidgetItem(general, QStringList() << tkTr(Trans::Constants::AUTHOR) << data(FormIODescription::Author).toString());
-    new QTreeWidgetItem(general, QStringList() << QCoreApplication::translate("Forms", "License") << data(FormIODescription::LicenseName).toString());
+    new QTreeWidgetItem(general, QStringList() << tkTr(Trans::Constants::LICENSE) << data(FormIODescription::LicenseName).toString());
     new QTreeWidgetItem(general, QStringList() << tkTr(Trans::Constants::DESCRIPTION) << data(FormIODescription::ShortDescription).toString());
     const QStringList &keys = m_Shots.keys();
     new QTreeWidgetItem(general, QStringList() << tkTr(Trans::Constants::SCREENSHOTS) << keys.join(";"));
@@ -184,7 +184,7 @@ QString FormIODescription::toHtml() const
             .arg(data(FormIODescription::CreationDate).toDate().toString(QLocale().dateFormat(QLocale::ShortFormat)))
             .arg(QCoreApplication::translate("Forms", "Last modification date"))
             .arg(data(FormIODescription::LastModificationDate).toDate().toString(QLocale().dateFormat(QLocale::ShortFormat)))
-            .arg(QCoreApplication::translate("Forms", "License"))
+            .arg(tkTr(Trans::Constants::LICENSE))
             .arg(data(FormIODescription::LicenseName).toString())
             ;
     // Long description

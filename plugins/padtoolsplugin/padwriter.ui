@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>571</width>
+    <width>638</width>
     <height>307</height>
    </rect>
   </property>
@@ -61,14 +61,21 @@
        </property>
        <widget class="QWidget" name="layoutWidget_2">
         <layout class="QGridLayout" name="gridLayout">
-         <item row="0" column="0">
-          <widget class="QToolButton" name="viewResult">
-           <property name="text">
-            <string>View result</string>
+         <item row="1" column="0" colspan="9">
+          <widget class="PadTools::DragDropTextEdit" name="rawSource">
+           <property name="toolTip">
+            <string>Raw source</string>
            </property>
           </widget>
          </item>
-         <item row="0" column="1">
+         <item row="2" column="2">
+          <widget class="QToolButton" name="viewError">
+           <property name="text">
+            <string>View errors</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="1">
           <spacer name="horizontalSpacer">
            <property name="orientation">
             <enum>Qt::Horizontal</enum>
@@ -81,21 +88,51 @@
            </property>
           </spacer>
          </item>
-         <item row="0" column="2">
-          <widget class="QToolButton" name="viewError">
+         <item row="2" column="3">
+          <widget class="QToolButton" name="optionsButton">
            <property name="text">
-            <string>View error</string>
+            <string>Options</string>
            </property>
           </widget>
          </item>
-         <item row="1" column="0" colspan="3">
-          <widget class="QTextEdit" name="wysiwyg"/>
+         <item row="2" column="4">
+          <widget class="QToolButton" name="scenari">
+           <property name="text">
+            <string>Scenari</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="6">
+          <widget class="QToolButton" name="viewResult">
+           <property name="text">
+            <string>raw to output</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="7">
+          <widget class="QToolButton" name="toolButton">
+           <property name="text">
+            <string>output to raw</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="5">
+          <widget class="QToolButton" name="findCursor">
+           <property name="text">
+            <string>Find cursor</string>
+           </property>
+          </widget>
          </item>
         </layout>
        </widget>
-       <widget class="PadTools::DragDropTextEdit" name="rawSource"/>
+       <widget class="PadTools::TokenOutputDocument" name="wysiwyg"/>
+       <widget class="Editor::TextEditor" name="textEdit"/>
       </widget>
-      <widget class="QListWidget" name="listWidgetErrors"/>
+      <widget class="QListWidget" name="listWidgetErrors">
+       <property name="toolTip">
+        <string>Errors</string>
+       </property>
+      </widget>
      </widget>
     </widget>
    </item>
@@ -106,6 +143,16 @@
    <class>PadTools::DragDropTextEdit</class>
    <extends>QTextEdit</extends>
    <header location="global">padtoolsplugin/dragdroptextedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>PadTools::TokenOutputDocument</class>
+   <extends>QTextEdit</extends>
+   <header location="global">padtoolsplugin/tokenoutputdocument.cpp</header>
+  </customwidget>
+  <customwidget>
+   <class>Editor::TextEditor</class>
+   <extends>QTextEdit</extends>
+   <header location="global">texteditorplugin/texteditor.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

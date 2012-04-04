@@ -28,7 +28,8 @@
 
 using namespace IAMDb;
 
-AvailableFormalizedItemNameModel::AvailableFormalizedItemNameModel(QObject *parent)
+AvailableFormalizedItemNameModel::AvailableFormalizedItemNameModel(QObject *parent) :
+    QAbstractListModel(parent)
 {
     m_ItemNames.append("bleeding");
     m_ItemNamesTooltip.append(tr("Risk for bleeding (1 to 3, 3 is the highest risk)."));
@@ -122,8 +123,10 @@ AvailableFormalizedItemNameModel::AvailableFormalizedItemNameModel(QObject *pare
 AvailableFormalizedItemNameModel::~AvailableFormalizedItemNameModel()
 {}
 
-QVariant AvailableFormalizedItemNameModel::data(const QModelIndex &index, int role) const
-{}
+QVariant AvailableFormalizedItemNameModel::data(const QModelIndex &/*index*/, int /*role*/) const
+{
+    return QVariant();
+}
 
 
 //FormalizedItemModel::FormalizedItemModel(QObject *parent) :

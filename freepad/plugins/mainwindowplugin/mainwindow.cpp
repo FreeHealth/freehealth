@@ -149,9 +149,6 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
 //    m_ui->splitterMain->setSizes(QList<int>() << 150);
 //    m_ui->splitterErrors->setSizes(QList<int>() << 0 << 100);
 
-    m_Writer = new PadTools::PadWriter(this);
-    setCentralWidget(m_Writer);
-
     return true;
 }
 
@@ -159,6 +156,9 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
 */
 void MainWindow::extensionsInitialized()
 {
+    m_Writer = new PadTools::PadWriter(this);
+    setCentralWidget(m_Writer);
+
     finishSplash(this);
     readSettings();
     show();

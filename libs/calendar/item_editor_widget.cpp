@@ -149,7 +149,10 @@ ItemEditorWidget::ItemEditorWidget(QWidget *parent) :
     d(new Internal::ItemEditorWidgetPrivate(this))
 {
     d->ui->setupUi(this);
+    d->ui->startDate->setDisplayFormat(tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR));
+    d->ui->endDate->setDisplayFormat(tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR));
     d->ui->tabWidget->setCurrentIndex(0);
+
     d->populateDurationCombo();
     d->populateStatusCombo();
     connect(d->ui->durationCombo, SIGNAL(activated(int)), this, SLOT(changeDuration(int)));

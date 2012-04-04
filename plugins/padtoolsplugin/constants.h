@@ -27,17 +27,39 @@
 #ifndef PADTOOLS_CONSTANTS_H
 #define PADTOOLS_CONSTANTS_H
 
+#include <QTextCharFormat>
+#include <QTextFrameFormat>
+
 namespace PadTools {
 namespace Constants {
 
 const char * const TOKENVALUE_MIME = "freepad/token/value";
 const char * const TOKENRAWSOURCE_MIME = "freepad/token/rawsource";
+const char * const TOKENNAME_MIME = "freepad/token/name";
 
 const char * const TOKEN_CORE_DELIMITER  = "~";
-const char * const TOKEN_OPEN_DELIMITER  = "<$";
-const char * const TOKEN_CLOSE_DELIMITER = "$>";
+const char * const TOKEN_OPEN_DELIMITER  = "^$";
+const char * const TOKEN_CLOSE_DELIMITER = "$^";
 
-}
-}
+const char * const C_PADWRITER_CONTEXT = "cPadWriter";
+
+const char * const TOKEN_AND_POSITION_TAG = "\n<!--%2-->%1<!--%2-->\n";
+const char * const ANCHOR_ITEM = "item";
+
+const char * const USERDATA_KEY_PADITEM = "PadItem";
+
+
+// Translations
+const char * const PADWRITER_TRANS_CONTEXT = "PadWriter";
+
+const char * const FOLLOW_CURSOR_IN_RESULT_OUTPUT = QT_TRANSLATE_NOOP("PadWriter", "Follow cursor in result output");
+const char * const AUTO_UPDATE_RESULT = QT_TRANSLATE_NOOP("PadWriter", "Automatic update of results");
+const char * const SET_TEST_VALUE_TO_TOKENS = QT_TRANSLATE_NOOP("PadWriter", "Set a test value to all available tokens");
+
+void setPadFragmentFormat(const QString &tag, int s, int e, QTextDocument *doc, QList<QTextCharFormat> &formats, QTextCharFormat mergeFormat);
+void removePadFragmentFormat(const QString &tag, QTextDocument *doc, QList<QTextCharFormat> &formats);
+
+}  // namespace Constants
+}  // namespace PadTools
 
 #endif // PADTOOLS_CONSTANTS_H

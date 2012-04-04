@@ -4,7 +4,7 @@
 <context>
     <name>Agenda</name>
     <message>
-        <location filename="../../plugins/agendaplugin/constants.h" line="189"/>
+        <location filename="../../plugins/agendaplugin/constants.h" line="190"/>
         <source>Print current selection</source>
         <translation>Auswahl drucken</translation>
     </message>
@@ -177,15 +177,23 @@
         <translation>Suchparameter</translation>
     </message>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendarviewer.ui" line="109"/>
-        <source>Duration (mins)</source>
-        <translatorcomment>&quot;(min)&quot; is redundant! &quot;Duration&quot; would be enough.</translatorcomment>
-        <translation>Dauer (min)</translation>
+        <location filename="../../plugins/agendaplugin/usercalendarviewer.ui" line="172"/>
+        <source>Duration</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendarviewer.ui" line="191"/>
+        <location filename="../../plugins/agendaplugin/usercalendarviewer.ui" line="214"/>
         <source>Description</source>
         <translation>Beschreibung</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/agendaplugin/usercalendarviewer.cpp" line="366"/>
+        <location filename="../../plugins/agendaplugin/usercalendarviewer.cpp" line="432"/>
+        <source>Set back to default: </source>
+        <extracomment>default agenda duration time (in minutes)
+----------
+default agenda duration time (in minutes)</extracomment>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -379,34 +387,32 @@
         <translation>Entfernen</translation>
     </message>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendareditor.cpp" line="148"/>
-        <location filename="../../plugins/agendaplugin/usercalendareditor.cpp" line="160"/>
+        <location filename="../../plugins/agendaplugin/usercalendareditor.cpp" line="150"/>
+        <location filename="../../plugins/agendaplugin/usercalendareditor.cpp" line="162"/>
         <source>Can not delete all availabilities</source>
         <translation>Alle Verfügbarkeiten können nicht gelöscht werden</translation>
     </message>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendareditor.cpp" line="149"/>
-        <location filename="../../plugins/agendaplugin/usercalendareditor.cpp" line="161"/>
+        <location filename="../../plugins/agendaplugin/usercalendareditor.cpp" line="151"/>
+        <location filename="../../plugins/agendaplugin/usercalendareditor.cpp" line="163"/>
         <source>Agenda must have at least one availability. You can not delete all its availabilities.</source>
         <translation>Es muss mindestens eine Verfügbarkeit in der Agenda vorhanden sein. Sie können nicht alle Verfügbarkeiten löschen.</translation>
     </message>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendareditor.cpp" line="153"/>
+        <location filename="../../plugins/agendaplugin/usercalendareditor.cpp" line="155"/>
         <source>Delete full day.</source>
         <translation>Ganzen Tag löschen</translation>
     </message>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendareditor.cpp" line="154"/>
-        <source>You are about to delete all recorded time range for one specific day of the week (%1). Do you really want to delete all time range ?</source>
-        <translatorcomment>??? Error in english sentence!. should be &quot;...all time ranges...&quot; 2x - or is it one time range? then it should be &quot;the whole time range&quot;
-BTW - &quot;time ranges&quot; is maybe a liitle bad. other word?</translatorcomment>
-        <translation>Sie sind gerade dabei, alle Zeiträume eines Wochentages (%1) zu löschen. Wollen Sie wirklich alle löschen?</translation>
+        <location filename="../../plugins/agendaplugin/usercalendareditor.cpp" line="156"/>
+        <source>You are about to delete all recorded time range for one specific day of the week (%1). Do you really want to delete all time range?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>Agenda::UserCalendarModel</name>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendarmodel.cpp" line="197"/>
+        <location filename="../../plugins/agendaplugin/usercalendarmodel.cpp" line="228"/>
         <source>New calendar</source>
         <translation>Neuer Kalender</translation>
     </message>
@@ -430,14 +436,11 @@ BTW - &quot;time ranges&quot; is maybe a liitle bad. other word?</translatorcomm
     <name>AgendaBase</name>
     <message>
         <location filename="../../plugins/agendaplugin/agendabase.cpp" line="409"/>
-        <source>Trying to create empty database. 
-       Location : %1 
+        <source>Trying to create empty database.
+       Location: %1
        FileName: %2
        Driver: %3</source>
-        <translation>Es wird versucht, eine leere Datanbank zu erzeugen.
-	Ort: %1
-	Dateiname: %2
-	Treiber: %3</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

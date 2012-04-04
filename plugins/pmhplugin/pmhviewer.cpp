@@ -51,6 +51,7 @@
 
 #include <utils/global.h>
 #include <utils/log.h>
+#include <translationutils/constants.h>
 
 #include "ui_pmhviewer.h"
 
@@ -58,6 +59,7 @@
 
 using namespace PMH;
 using namespace Internal;
+using namespace Trans::ConstantTranslations;
 
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 static inline PMH::PmhCore *pmhCore() { return PMH::PmhCore::instance(); }
@@ -165,6 +167,8 @@ PmhViewer::PmhViewer(QWidget *parent, EditMode editMode, ViewMode viewMode) :
     // Create Ui
     d->ui = new Internal::Ui::PmhViewer;
     d->ui->setupUi(this);
+    d->ui->simple_date->setDisplayFormat(tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR));
+
     d->m_IcdLabelModel = new QStringListModel(this);
 
     // Populate combos

@@ -64,7 +64,7 @@ InteractionPlugin::~InteractionPlugin()
     }
 }
 
-bool InteractionPlugin::initialize(const QStringList &arguments, QString *errorMessage)
+bool InteractionPlugin::initialize(const QStringList &/*arguments*/, QString */*errorMessage*/)
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "InteractionPlugin::initialize";

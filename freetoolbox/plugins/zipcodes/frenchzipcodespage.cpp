@@ -81,6 +81,7 @@ QWidget *FrenchZipCodesPage::createPage(QWidget *parent)
 
 
 FrenchZipCodesStep::FrenchZipCodesStep(QObject *parent) :
+    Core::IFullReleaseStep(parent),
     m_WithProgress(false)
 {
     setObjectName("FrenchZipCodesStep");
@@ -118,6 +119,8 @@ bool FrenchZipCodesStep::cleanFiles()
 
 bool FrenchZipCodesStep::downloadFiles(QProgressBar *bar)
 {
+    Q_UNUSED(bar);
+    /** \todo manage progress download */
     Utils::HttpDownloader *dld = new Utils::HttpDownloader(this);
     dld->setOutputPath(workingPath());
     dld->setUrl(QUrl(FRENCH_URL));

@@ -5,12 +5,12 @@
     <name>EpisodeModel</name>
     <message>
         <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="567"/>
-        <source>Save episode ?</source>
+        <source>Save episode?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="568"/>
-        <source>The actual episode has been modified. Do you want to save changes in your database ?
+        <source>The actual episode has been modified. Do you want to save changes in your database?
 Answering &apos;No&apos; will cause definitve data lose.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -28,12 +28,12 @@ Answering &apos;No&apos; will cause definitve data lose.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="1102"/>
+        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="1106"/>
         <source>New episode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="1313"/>
+        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="1317"/>
         <source>No user</source>
         <translation type="unfinished"></translation>
     </message>
@@ -62,12 +62,12 @@ Answering &apos;No&apos; will cause definitve data lose.</source>
     </message>
     <message>
         <location filename="../../plugins/formmanagerplugin/formeditordialog.cpp" line="94"/>
-        <source>Insert as root form ?</source>
+        <source>Insert as root form?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/formmanagerplugin/formeditordialog.cpp" line="94"/>
-        <source>You did not selected a form, do you want to add the sub-form as root form ?</source>
+        <source>You did not selected a form, do you want to add the sub-form as root form?</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -93,7 +93,7 @@ Answering &apos;No&apos; will cause definitve data lose.</source>
     <name>Form::FormMain</name>
     <message>
         <location filename="../../plugins/formmanagerplugin/iformitem.cpp" line="639"/>
-        <source>Form : </source>
+        <source>Form: </source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -101,7 +101,7 @@ Answering &apos;No&apos; will cause definitve data lose.</source>
     <name>Form::FormMainDebugPage</name>
     <message>
         <location filename="../../plugins/formmanagerplugin/iformitem.cpp" line="765"/>
-        <source>Forms : </source>
+        <source>Forms: </source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -112,7 +112,7 @@ Answering &apos;No&apos; will cause definitve data lose.</source>
         <location filename="../../plugins/formmanagerplugin/episodebase.cpp" line="275"/>
         <location filename="../../plugins/formmanagerplugin/episodebase.cpp" line="281"/>
         <location filename="../../plugins/formmanagerplugin/episodebase.cpp" line="291"/>
-        <source>Please contact dev team.</source>
+        <source>Please contact the development team.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -181,7 +181,7 @@ Answering &apos;No&apos; will cause definitve data lose.</source>
 <context>
     <name>Form::Internal::FormPreferencesPage</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="161"/>
+        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="167"/>
         <source>Form and episode tree viewer</source>
         <translation type="unfinished"></translation>
     </message>
@@ -214,67 +214,62 @@ Answering &apos;No&apos; will cause definitve data lose.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formpreferenceswidget.ui" line="69"/>
-        <source>Select a foreground color for episodes</source>
+        <location filename="../../plugins/formmanagerplugin/formpreferenceswidget.ui" line="85"/>
+        <source>Fonts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formpreferenceswidget.ui" line="95"/>
-        <source>Select a foreground color for all forms</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formmanagerplugin/formpreferenceswidget.ui" line="124"/>
+        <location filename="../../plugins/formmanagerplugin/formpreferenceswidget.ui" line="129"/>
         <source>Episode presentation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formpreferenceswidget.ui" line="130"/>
+        <location filename="../../plugins/formmanagerplugin/formpreferenceswidget.ui" line="135"/>
         <source>Select label content</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formpreferenceswidget.ui" line="147"/>
+        <location filename="../../plugins/formmanagerplugin/formpreferenceswidget.ui" line="152"/>
         <source>Long date format</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formpreferenceswidget.ui" line="157"/>
+        <location filename="../../plugins/formmanagerplugin/formpreferenceswidget.ui" line="162"/>
         <source>Short date format</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="227"/>
+        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="240"/>
         <source>Label</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="228"/>
+        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="241"/>
         <source>Label - User date (small)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="229"/>
+        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="242"/>
         <source>Label - User date (full)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="230"/>
+        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="243"/>
         <source>User date (small)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="231"/>
+        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="244"/>
         <source>User date (full)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="232"/>
+        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="245"/>
         <source>User date (small) - Label</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="233"/>
+        <location filename="../../plugins/formmanagerplugin/formmanagerpreferencespage.cpp" line="246"/>
         <source>User date (full) - Label</source>
         <translation type="unfinished"></translation>
     </message>
@@ -332,12 +327,6 @@ Answering &apos;No&apos; will cause definitve data lose.</source>
 <context>
     <name>Forms</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="148"/>
-        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="187"/>
-        <source>License</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="157"/>
         <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="183"/>
         <source>Creation date</source>
@@ -387,6 +376,16 @@ Answering &apos;No&apos; will cause definitve data lose.</source>
     <message>
         <location filename="../../plugins/formmanagerplugin/constants_db.h" line="116"/>
         <source>Patients&apos; last episodes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="118"/>
+        <source>Forms font</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="119"/>
+        <source>Episodes font</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

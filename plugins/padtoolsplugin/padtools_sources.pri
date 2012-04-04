@@ -9,7 +9,7 @@ HEADERS +=  \
     $${PWD}/pad_analyzer.h \
     $${PWD}/padtoolsimpl.h \
     $${PWD}/pad_highlighter.h \
-    $${PWD}/pad.h \
+    $${PWD}/pad_document.h \
     $${PWD}/pad_fragment.h \
     $${PWD}/pad_string.h \
     $${PWD}/pad_core.h \
@@ -17,24 +17,33 @@ HEADERS +=  \
     $${PWD}/tokenmodel.h \
     $${PWD}/padwriter.h \
     $${PWD}/constants.h \
-    $${PWD}/dragdroptextedit.h
+    $${PWD}/dragdroptextedit.h \
+    $${PWD}/tokeneditorwidget.h \
+    $${PWD}/tokeneditor.h \
+    $${PWD}/tokenoutputdocument.h
 
 SOURCES += \
     $${PWD}/padtoolsplugin.cpp \
     $${PWD}/pad_analyzer.cpp \
     $${PWD}/padtoolsimpl.cpp \
     $${PWD}/pad_highlighter.cpp \
-    $${PWD}/pad.cpp \
+    $${PWD}/pad_document.cpp \
     $${PWD}/pad_fragment.cpp \
     $${PWD}/pad_string.cpp \
     $${PWD}/pad_core.cpp \
     $${PWD}/pad_item.cpp \
     $${PWD}/tokenmodel.cpp \
     $${PWD}/padwriter.cpp \
-    $${PWD}/dragdroptextedit.cpp
+    $${PWD}/dragdroptextedit.cpp \
+    $${PWD}/constants.cpp \
+    $${PWD}/tokeneditorwidget.cpp \
+    $${PWD}/tokeneditor.cpp \
+    $${PWD}/tokenoutputdocument.cpp
 
 FORMS += \
-    $${PWD}/padwriter.ui
+    $${PWD}/padwriter.ui \
+    $${PWD}/tokeneditorwidget.ui \
+    $${PWD}/tokeneditor.ui
 
 TRANSLATIONS += $${SOURCES_TRANSLATIONS_PATH}/padtoolsplugin_fr.ts \
                 $${SOURCES_TRANSLATIONS_PATH}/padtoolsplugin_de.ts \

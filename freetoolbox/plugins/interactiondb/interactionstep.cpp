@@ -80,7 +80,8 @@ namespace  {
 }
 
 InteractionStep::InteractionStep(QObject *parent) :
-        m_UseProgressDialog(false), m_Downloader(0)
+    Core::IFullReleaseStep(parent),
+    m_UseProgressDialog(false), m_Downloader(0)
 {
     setObjectName("InteractionStep");
 }
@@ -110,6 +111,7 @@ bool InteractionStep::cleanFiles()
 
 bool InteractionStep::downloadFiles(QProgressBar *bar)
 {
+    Q_UNUSED(bar);
     Q_EMIT downloadFinished();
     return true;
 }

@@ -91,7 +91,7 @@ void SearchAtcInDatabaseDialog::on_lang_currentIndexChanged(const QString &)
 //    // update tableView visible columns
 }
 
-void SearchAtcInDatabaseDialog::on_tableView_activated(const QModelIndex &index)
+void SearchAtcInDatabaseDialog::on_tableView_activated(const QModelIndex &)
 {
     QDialog::done(QDialog::Accepted);
 }

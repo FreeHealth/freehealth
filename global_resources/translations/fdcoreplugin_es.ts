@@ -146,11 +146,6 @@
 <context>
     <name>Core::Internal::BuildAboutPage</name>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/commonaboutpages.cpp" line="90"/>
-        <source>Actual Qt version : %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../plugins/coreplugin/dialogs/commonaboutpages.h" line="43"/>
         <source>4. Build information</source>
         <translation type="unfinished"></translation>
@@ -158,6 +153,11 @@
     <message>
         <location filename="../../plugins/coreplugin/dialogs/commonaboutpages.h" line="44"/>
         <source>Application</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/coreplugin/dialogs/commonaboutpages.cpp" line="90"/>
+        <source>Current Qt version: %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -183,7 +183,7 @@
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/debugdialog.ui" line="28"/>
-        <source>Send to dev team</source>
+        <source>Send to development team</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -203,25 +203,25 @@
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="113"/>
-        <source>Sending debugging information to dev team</source>
+        <source>Sending debugging information to the development team</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="114"/>
-        <source>Trying to send information to dev team.
-Using Url : %1 
+        <source>Trying to send information to the development team.
+Using URL: %1
 Please wait...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="135"/>
-        <source>Debugging information correctly sent.</source>
+        <source>Debugging information successfully sent.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="137"/>
-        <source>Debugging information correctly send to dev team.
-Using Url : %1 
+        <source>Debugging information successfully send to the development team.
+Using Url: %1
 %2</source>
         <translation type="unfinished"></translation>
     </message>
@@ -373,11 +373,6 @@ Using Url : %1
 <context>
     <name>Core::Internal::SettingsPrivate</name>
     <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="770"/>
-        <source>Passing command line ini file : %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="779"/>
         <location filename="../../plugins/coreplugin/settings.cpp" line="808"/>
         <source>Using ini file %1.</source>
@@ -397,19 +392,8 @@ Using Url : %1
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="792"/>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="821"/>
-        <source>WARNING : Ini file %1 can not be used.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="849"/>
         <source>Trying ini file %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="855"/>
-        <source>Unable to create dir : %1, no Ini File can be used.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -451,6 +435,11 @@ Using Url : %1
         <location filename="../../plugins/coreplugin/settings.cpp" line="977"/>
         <location filename="../../plugins/coreplugin/settings.cpp" line="979"/>
         <source>Compile mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="980"/>
+        <source>GIT revision</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -548,54 +537,8 @@ Using Url : %1
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1090"/>
-        <source>Running version : %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="1091"/>
         <source>Build date | %1 %2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1092"/>
-        <source>Qt Build version : %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1093"/>
-        <source>Qt running version : %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1094"/>
-        <source>Application Version : %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1096"/>
-        <source>Actual build : Debug</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1098"/>
-        <source>Actual build : Release</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1099"/>
-        <source>SVN version : %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1100"/>
-        <source>Application path : %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1105"/>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1109"/>
-        <source>uname returns : %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -607,6 +550,22 @@ Using Url : %1
         <location filename="../../plugins/coreplugin/settings.cpp" line="1005"/>
         <location filename="../../plugins/coreplugin/settings.cpp" line="1137"/>
         <source>Default installed datapack path</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="770"/>
+        <source>Passing command line ini file: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="792"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="821"/>
+        <source>WARNING: Ini file %1 can not be used.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="855"/>
+        <source>Unable to create dir: %1, no Ini File can be used.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -629,11 +588,6 @@ Using Url : %1
     <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="962"/>
         <source>System information</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="980"/>
-        <source>SVN version</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -701,8 +655,54 @@ Using Url : %1
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1090"/>
+        <source>Running version: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1092"/>
+        <source>Qt Build version: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1093"/>
+        <source>Qt running version: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1094"/>
+        <source>Application Version: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1096"/>
+        <source>Actual build: Debug</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1098"/>
+        <source>Actual build: Release</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1099"/>
+        <source>GIT revision: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1100"/>
+        <source>Application path: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="1104"/>
         <source>Running on Linux</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1105"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1109"/>
+        <source>uname returns: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -862,7 +862,7 @@ Using Url : %1
     <name>Core::Translators</name>
     <message>
         <location filename="../../plugins/coreplugin/translators.cpp" line="139"/>
-        <source>Can not load %1, path : %2</source>
+        <source>Can not load %1, path: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -872,7 +872,7 @@ Using Url : %1
     </message>
     <message>
         <location filename="../../plugins/coreplugin/translators.cpp" line="189"/>
-        <source>WARNING : Can not be loaded %1 or already loaded.</source>
+        <source>WARNING: %1 can not be loaded or is already loaded.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -880,7 +880,7 @@ Using Url : %1
     <name>ThemePrivate</name>
     <message>
         <location filename="../../plugins/coreplugin/theme.cpp" line="172"/>
-        <source>ERROR - Theme : Unable to load icon file %1</source>
+        <source>ERROR - Theme: Unable to load icon file %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

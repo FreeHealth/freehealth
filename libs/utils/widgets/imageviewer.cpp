@@ -60,12 +60,12 @@ ImageViewer::ImageViewer(QWidget *parent) :
     scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 
     m_ButBox = new QDialogButtonBox(this);
-    //    QAbstractButton *zin = m_ButBox->addButton(tkTr(Trans::Constants::ZOOMIN_TEXT), QDialogButtonBox::ActionRole);
-    //    QAbstractButton *zout = m_ButBox->addButton(tkTr(Trans::Constants::ZOOMOUT_TEXT), QDialogButtonBox::ActionRole);
+    //    QAbstractButton *zin = m_ButBox->addButton(tkTr(Trans::Constants::ZOOMIN_TEXT).remove("&"), QDialogButtonBox::ActionRole);
+    //    QAbstractButton *zout = m_ButBox->addButton(tkTr(Trans::Constants::ZOOMOUT_TEXT).remove("&"), QDialogButtonBox::ActionRole);
 
-    QAbstractButton *previous = m_ButBox->addButton(tkTr(Trans::Constants::PREVIOUS_TEXT), QDialogButtonBox::ActionRole);
-    QAbstractButton *next = m_ButBox->addButton(tkTr(Trans::Constants::NEXT_TEXT), QDialogButtonBox::ActionRole);
-//    QAbstractButton *full = m_ButBox->addButton(tkTr(Trans::Constants::FULLSCREEN_TEXT), QDialogButtonBox::ActionRole);
+    QAbstractButton *previous = m_ButBox->addButton(tkTr(Trans::Constants::PREVIOUS_TEXT).remove("&"), QDialogButtonBox::ActionRole);
+    QAbstractButton *next = m_ButBox->addButton(tkTr(Trans::Constants::NEXT_TEXT).remove("&"), QDialogButtonBox::ActionRole);
+//    QAbstractButton *full = m_ButBox->addButton(tkTr(Trans::Constants::FULLSCREEN_TEXT).remove("&"), QDialogButtonBox::ActionRole);
     QAbstractButton *close = m_ButBox->addButton(QDialogButtonBox::Close);
 
     QVBoxLayout *l = new QVBoxLayout(this);

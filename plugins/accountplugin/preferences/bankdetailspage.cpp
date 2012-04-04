@@ -117,6 +117,7 @@ BankDetailsWidget::BankDetailsWidget(QWidget *parent) :
 {
     setObjectName("BankDetailWidget");
     setupUi(this);
+    balanceDate->setDisplayFormat(tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR));
     balanceDate->setDate(QDate::currentDate());
     m_user_uid = user()->uuid();
     m_user_fullName = user()->value(Core::IUser::FullName).toString();

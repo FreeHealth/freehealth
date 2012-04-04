@@ -28,8 +28,9 @@
 #define PAD_FRAGMENT_H
 
 #include <QString>
-#include <QMap>
+#include <QHash>
 #include <QVariant>
+#include <QTextDocument>
 
 namespace PadTools {
 
@@ -39,27 +40,76 @@ namespace PadTools {
 class PadFragment
 {
 public:
-	PadFragment() {}
+    PadFragment(PadFragment *parent = 0);
+    virtual ~PadFragment();
+
+    virtual void setParent(PadFragment *parent) {_parent = parent;}
+    virtual PadFragment *parent() const {return _parent;}
 
 	virtual void print(int indent = 0) const = 0;
 
+    /** Returns the start position in the raw source string/document */
+    virtual int id() const { return _id; }
+    /** Defines the start position in the raw source string/document */
+    virtual void setId(int id) { _id = id; }
+
+    /** Returns the start position in the raw source string/document */
 	int start() const { return _start; }
-	void setStart(int start) { _start = start; }
-	int end() const { return _end; }
-	void setEnd(int end) { _end = end; }
+    /** Defines the start position in the raw source string/document */
+    void setStart(int start) { _start = start; }
 
-	const QString &rawValue() const { return _rawValue; }
-	void setRawValue(const QString &value) { _rawValue = value; }
+    /** Returns the end position in the raw source string/document */
+    int end() const { return _end; }
+    /** Defines the end position in the raw source string/document */
+    void setEnd(int end) { _end = end; }
 
-	/**
-	 * Run this fragment over some tokens and returns the result text
-	 */
+    /** Return the length of the fragment in the raw source string/document */
+    int rawLength() const {return _end - _start;}
+    /** Return the length of the fragment in the output string/document */
+    int outputLength() const {return _outputEnd - _outputStart;}
+
+    void move(int nbChars);
+    void moveEnd(int nbOfChars);
+
+    /** Returns the start position in the output QTextDocument. This is defined only after the calling run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out) const. */
+    int outputStart() const {return _outputStart;}
+    /** Returns the end position in the output QTextDocument. This is defined only after the calling run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out) const. */
+    int outputEnd() const {return _outputEnd;}
+
+    void setToolTip(const QString &tooltip) {_toolTip = tooltip;}
+    const QString &toolTip() const {return _toolTip;}
+
+    void setUserData(const QString &key, const QVariant &value) {_userData.insert(key, value);}
+    QVariant userData(const QString &key) const {return _userData.value(key);}
+
+    /**  Run this fragment over some tokens and returns the result text */
 	virtual QString run(QMap<QString,QVariant> &tokens) const = 0;
 
+    /**  Run this fragment over some tokens inside QTextDocuments */
+    virtual void run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out) const = 0;
+
+    virtual void addChild(PadFragment *fragment);
+    virtual QList<PadFragment*> children() const {return _fragments;}
+
+    virtual PadFragment *padFragmentForSourcePosition(int pos) const;
+    virtual PadFragment *padFragmentForOutputPosition(int pos) const;
+
+    void insertFragment(QTextDocument *source, QTextDocument *out) const;
+    void insertText(QTextDocument *out, const QString &text) const;
+
+protected:
+    QList<PadFragment *> _fragments;
+
 private:
-	int _start; // index of the first char in the text
+    PadFragment *_parent;
+    int _start; // index of the first char in the text
 	int _end; // index of the last char in the text
-	QString _rawValue;
+    long long _id; // unique identifier
+    QString _toolTip;
+    QHash<QString, QVariant> _userData;
+
+protected:
+    mutable int _outputStart, _outputEnd;
 };
 
 }  // PadTools

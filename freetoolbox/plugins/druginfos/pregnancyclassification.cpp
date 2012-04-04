@@ -139,7 +139,8 @@ QWidget *PregnancyClassificationPage::createPage(QWidget *parent)
 
 
 PregnancyDatatabaseStep::PregnancyDatatabaseStep(QObject *parent) :
-        m_WithProgress(false)
+    Core::IFullReleaseStep(parent),
+    m_WithProgress(false)
 {
     setObjectName("PregnancyDatatabaseStep");
 }

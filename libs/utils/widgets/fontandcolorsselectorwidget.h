@@ -19,60 +19,48 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main Developers : Eric Maeker <eric.maeker@gmail.com>,                *
- *                    Guillaume Denry <guillaume.denry@gmail.com>          *
- *  Contributors :                                                         *
- *      NAME <MAIL@ADDRESS.COM>                                            *
+ *   Main Developers:                                                      *
+ *       Eric MAEKER, MD <eric.maeker@gmail.com>                           *
+ *   Contributors:                                                         *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#include <QString>
+#ifndef FONTANDCOLORSSELECTORWIDGET_H
+#define FONTANDCOLORSSELECTORWIDGET_H
 
-#include "pad.h"
-#include "pad_item.h"
+#include <utils/global_exporter.h>
+#include <QWidget>
+#include <QLabel>
 
-using namespace PadTools;
+namespace Utils {
+class FontSelectorButton;
+class ColorButtonChooser;
 
-Pad::~Pad()
+class UTILS_EXPORT FontAndColorsSelectorWidget : public QWidget
 {
-	qDeleteAll(_fragments);
-}
+    Q_OBJECT
+public:
+    explicit FontAndColorsSelectorWidget(QWidget *parent = 0);
+    
+    void setLabelText(const QString &unTranslatedText, const QString &translationContext);
+    void setDefaultFont(const QFont &font);
+    void setCurrentFont(const QFont &font);
+    void setDefaultColor(const QColor &color);
+    void setCurrentColor(const QColor &color);
 
-void Pad::addFragment(PadFragment *fragment)
-{
-	_fragments << fragment;
-}
+    QFont currentFont() const;
+    QColor currentColor() const;
 
-void Pad::print(int indent) const
-{
-	QString str(indent, ' ');
-	str += "[pad]";
-	qDebug("%s", qPrintable(str));
-	foreach (PadFragment *fragment, _fragments){
-		fragment->print(indent + 2);
-	}
-}
+private:
+    void retranslate();
+    void changeEvent(QEvent *event);
 
-QList<PadFragment*> Pad::getAllFragments() const
-{
-	QList<PadFragment*> fragments;
-	PadItem *item;
-	fragments.append(_fragments);
-	foreach (PadFragment *fragment, _fragments)
-	{
-		item = dynamic_cast<PadItem*>(fragment);
-		if (item)
-			fragments.append(item->getAllFragments());
-	}
-	return fragments;
-}
+private:
+    FontSelectorButton *_fontButton;
+    QLabel *_label;
+    ColorButtonChooser *_colorButton;
+    QString _unTrLabel, _trContext;
+};
 
-QString Pad::run(QMap<QString,QVariant> &tokens) const
-{
-	Q_UNUSED(tokens);
+}  // namespace Utils
 
-	QString value;
-
-	foreach (PadFragment *fragment, _fragments)
-		value += fragment->run(tokens);
-
-	return value;
-}
+#endif // FONTANDCOLORSSELECTORWIDGET_H

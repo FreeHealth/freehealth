@@ -36,7 +36,7 @@ namespace PadTools {
 class PadString : public PadFragment
 {
 public:
-	PadString(const QString &string = "") : PadFragment(), _string(string) {}
+    PadString(const QString &string = "") : PadFragment(), _string(string) {}
 
 	const QString &string() const { return _string; }
 	void setValue(const QString &string) { _string = string; }
@@ -44,6 +44,8 @@ public:
 	void print(int indent = 0) const;
 
 	QString run(QMap<QString,QVariant> &) const;
+    void run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out) const;
+
 private:
 	QString _string;
 };

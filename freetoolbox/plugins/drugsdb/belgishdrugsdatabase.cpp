@@ -140,7 +140,8 @@ void BelgishDrugsDatabase::changeEvent(QEvent *e)
 
 
 BeDrugDatatabaseStep::BeDrugDatatabaseStep(QObject *parent) :
-        m_WithProgress(false)
+    Core::IFullReleaseStep(parent),
+    m_WithProgress(false)
 {
     setObjectName("BeDrugDatatabaseStep");
 }
@@ -176,6 +177,7 @@ bool BeDrugDatatabaseStep::cleanFiles()
 
 bool BeDrugDatatabaseStep::downloadFiles(QProgressBar *bar)
 {
+    Q_UNUSED(bar);
     Q_EMIT downloadFinished();
     return true;
 }
@@ -293,7 +295,7 @@ bool BeDrugDatatabaseStep::createDatabase()
         return false;
 
     QMultiHash<QString, QVariant> labels;
-    labels.insert("fr","Base de données thérapeutiques belge");
+    labels.insert("fr","Base de données thérapeutique belge");
     labels.insert("en","Belgium therapeutic database");
     labels.insert("de","Belgien therapeutischen database");
 

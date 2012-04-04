@@ -24,45 +24,67 @@
  *  Contributors :                                                         *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
-#ifndef PAD_H
-#define PAD_H
+#include "tokeneditor.h"
 
-#include <QList>
-#include <QMap>
-#include <QVariant>
+#include <translationutils/constants.h>
+#include <translationutils/trans_current.h>
 
-#include "pad_fragment.h"
-#include "pad_core.h"
+#include "ui_tokeneditor.h"
 
-namespace PadTools {
+using namespace PadTools;
+using namespace Trans::ConstantTranslations;
 
-
-/**
- * Contains an entire pad i.e. a list of fragments
- * @class
- */
-class Pad : public PadFragment
+TokenEditor::TokenEditor(QWidget *parent) :
+    QDialog(parent),
+    ui(new Ui::TokenEditor)
 {
-public:
-	Pad(){}
-	virtual ~Pad();
+    setWindowModality(Qt::WindowModal);
+    setWindowTitle(tkTr(Trans::Constants::EDIT_TOKEN));
+    ui->setupUi(this);
+}
 
-	void addFragment(PadFragment *fragment);
+TokenEditor::~TokenEditor()
+{
+    delete ui;
+}
 
-	QList<PadFragment*> getAllFragments() const;
+void TokenEditor::done(int result)
+{
+//    if (result==QDialog::Accepted) {
+//        ui->tokenEditor->toHtml();
+//    }
+    QDialog::done(result);
+}
 
-	void print(int indent = 0) const;
+void TokenEditor::setTokenModel(TokenModel *model)
+{
+    ui->tokenEditor->setTokenModel(model);
+}
 
-	/**
-	 * Run this pad over some tokens and returns the result text
-	 */
-	QString run(QMap<QString,QVariant> &tokens) const;
+void TokenEditor::setCurrentIndex(const QModelIndex &index)
+{
+    ui->tokenEditor->setCurrentIndex(index);
+}
 
-private:
-	QList<PadFragment*> _fragments;
-};
+void TokenEditor::setTokenName(const QString &name)
+{
+    ui->tokenEditor->setTokenName(name);
+}
 
-}  // PadTools
+void TokenEditor::setConditionnalHtml(const QString &before, const QString &after)
+{
+    ui->tokenEditor->setConditionnalBeforeHtml(before);
+    ui->tokenEditor->setConditionnalAfterHtml(after);
+}
+
+void TokenEditor::setConditionnalPlainText(const QString &before, const QString &after)
+{
+    ui->tokenEditor->setConditionnalBeforePlainText(before);
+    ui->tokenEditor->setConditionnalAfterPlainText(after);
+}
 
 
-#endif
+QString TokenEditor::toHtml() const
+{
+    return ui->tokenEditor->toHtml();
+}

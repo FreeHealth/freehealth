@@ -380,7 +380,7 @@ QStatusBar *MainWindow::statusBar()
 
 void MainWindow::updateCheckerEnd()
 {
-//    delete statusBar();
+    delete statusBar();
 }
 
 /** \brief Load a patient XML file into the FormManager. */

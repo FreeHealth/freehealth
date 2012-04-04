@@ -26,6 +26,8 @@
  ***************************************************************************/
 #include "datetimedelegate.h"
 
+#include <translationutils/constants.h>
+
 #include <QDate>
 #include <QDateTime>
 #include <QDateEdit>
@@ -34,6 +36,7 @@
 #include <QDebug>
 
 using namespace Utils;
+using namespace Trans::ConstantTranslations;
 
 DateTimeDelegate::DateTimeDelegate(QObject *parent, bool dateOnly) :
         QItemDelegate(parent), m_IsDateOnly(dateOnly)
@@ -77,14 +80,14 @@ QWidget *DateTimeDelegate::createEditor(QWidget *parent,
         editor->setMinimumDate(m_MinDate);
         editor->setMaximumDate(m_MaxDate);
         editor->setCalendarPopup(true);
-        editor->setDisplayFormat(QLocale().dateFormat());
+        editor->setDisplayFormat(tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR));
         editor->setDate(index.data(Qt::EditRole).toDate());
         return editor;
     } else {
         QDateTimeEdit *editor = new QDateTimeEdit(parent);
         editor->setMinimumDateTime(QDateTime(m_MinDate, m_MinTime));
         editor->setMaximumDateTime(QDateTime(m_MaxDate, m_MaxTime));
-        editor->setDisplayFormat(QLocale().timeFormat());
+        editor->setDisplayFormat(tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR));
         editor->setDateTime(index.data().toDateTime());
         return editor;
     }

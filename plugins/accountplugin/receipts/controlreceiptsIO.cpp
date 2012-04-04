@@ -49,6 +49,8 @@ using namespace Trans::ConstantTranslations;
 ControlReceipts::ControlReceipts(QWidget * parent):QWidget(parent),ui(new Ui::ControlReceiptsWidget)
 {
     ui->setupUi(this);
+    ui->beginDateEdit->setDisplayFormat(tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR));
+    ui->endDateEdit->setDisplayFormat(tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR));
     int h = parent->height();
     int w = parent->width();
     resize(w,h);

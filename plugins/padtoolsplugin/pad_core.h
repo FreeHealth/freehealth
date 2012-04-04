@@ -36,21 +36,18 @@ namespace PadTools {
 class PadCore : public PadFragment
 {
 public:
-/*	enum Type {
-		Type_Value
-		};*/
+    PadCore() : PadFragment() {}
 
-	PadCore(){}
-
-	const QString &value() const { return _value; }
-	void setValue(const QString &value) { _value = value; }
+    const QString &name() const { return _name; }
+    void setName(const QString &name) { _name = name; }
 
 	void print(int indent = 0) const;
 
 	QString run(QMap<QString,QVariant> &tokens) const;
+    void run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *output) const;
 
 private:
-	QString _value;
+    QString _name;
 };
 
 }  // PadTools

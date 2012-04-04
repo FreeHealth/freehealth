@@ -25,38 +25,35 @@ Erreur : %2</translation>
         <translation>Pas de nom de formulaire</translation>
     </message>
     <message>
-        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="534"/>
+        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="535"/>
         <source>Form: </source>
         <translation>Formulaire : </translation>
     </message>
     <message>
-        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="535"/>
+        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="536"/>
         <source>Database version: %1</source>
         <translation>Version en base de données : %1</translation>
     </message>
     <message>
-        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="547"/>
+        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="548"/>
         <source>Form update detected.</source>
         <translation>Mise à jour de formulaire détectée.</translation>
     </message>
     <message>
-        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="548"/>
-        <source>A form update has been detected. Do you want to update the forms ?</source>
-        <translation>Une mise à jour formulaire a été détectée. Voulez-vous mettre à jour les formulaires ?</translation>
+        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="549"/>
+        <source>A form update has been detected. Do you want to update the forms?</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>XmlIOBase</name>
     <message>
         <location filename="../../plugins/xmlioplugin/xmliobase.cpp" line="191"/>
-        <source>Trying to create empty database. 
-       Location : %1 
+        <source>Trying to create empty database.
+       Location: %1
        FileName: %2
        Driver: %3</source>
-        <translation>Essaie de créer une base de données vierge.
-       Répertoire : %1 
-       Nom de fichier: %2
-       Pilote: %3</translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

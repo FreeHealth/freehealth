@@ -486,7 +486,10 @@ void InteractorEditorWidget::save()
 }
 
 void InteractorEditorWidget::filterDrugInteractorModel(const QString &text)
-{}
+{
+    Q_UNUSED(text);
+    /** \todo code here ??? */
+}
 
 void InteractorEditorWidget::createButtonActivated(QAction *selected)
 {

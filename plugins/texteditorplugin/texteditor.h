@@ -65,19 +65,25 @@ class EDITOR_EXPORT TextEditor : public TableEditor
 public:
     enum Type
     {
-        Simple            = 0x01,
-        WithTables        = 0x02,
-        WithIO            = 0x04,
-        WithTextCompleter = 0x08,
-        Full       = Simple | WithTables | WithIO | WithTextCompleter
+        CharFormat        = 0x0001,
+        ParagraphFormat   = 0x0002,
+        Clipboard         = 0x0004,
+        WithTables        = 0x0020,
+        WithIO            = 0x0040,
+        WithTextCompleter = 0x0080,
+        Simple            = CharFormat | ParagraphFormat | Clipboard,
+        Full              = Simple | WithTables | WithIO | WithTextCompleter
     };
     Q_DECLARE_FLAGS(Types, Type)
 
     TextEditor(QWidget *parent = 0, Types type = Simple);
     ~TextEditor();
+    void setTypes(Types type);
 
     virtual QTextEdit *textEdit() const;
 
+    // some QTextEdit wrappers for code simplification
+    QTextDocument *document() const {return textEdit()->document();}
     void setTextCursor(const QTextCursor &cursor) {textEdit()->setTextCursor(cursor);}
     QTextCursor textCursor() const {return textEdit()->textCursor();}
     void ensureCursorVisible() {textEdit()->ensureCursorVisible();}
@@ -85,13 +91,14 @@ public:
 
     QString getHtml()                        { return textEdit()->toHtml(); }
     void    setHtml(const QString & html)    { textEdit()->setHtml( html ); }
-    void    setTypes(Types type);
 
     QString toHtml() const {return textEdit()->toHtml();}
     void setPlainText(const QString &s) {textEdit()->setPlainText(s);}
     QString toPlainText() const {return textEdit()->toPlainText();}
 
 public Q_SLOTS:
+    void setReadOnly(bool ro) {textEdit()->setReadOnly(ro);}
+    void clear() {textEdit()->clear();}
     virtual void toogleToolbar(bool state);
 
 protected Q_SLOTS:

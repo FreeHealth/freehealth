@@ -206,11 +206,6 @@
 <context>
     <name>Core::Internal::BuildAboutPage</name>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/commonaboutpages.cpp" line="90"/>
-        <source>Actual Qt version : %1</source>
-        <translation>Version actuelle de Qt : %1</translation>
-    </message>
-    <message>
         <location filename="../../plugins/coreplugin/dialogs/commonaboutpages.h" line="43"/>
         <source>4. Build information</source>
         <translation>4. Informations de compilation</translation>
@@ -219,6 +214,11 @@
         <location filename="../../plugins/coreplugin/dialogs/commonaboutpages.h" line="44"/>
         <source>Application</source>
         <translation></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/coreplugin/dialogs/commonaboutpages.cpp" line="90"/>
+        <source>Current Qt version: %1</source>
+        <translation>Version courante de Qt : %1</translation>
     </message>
 </context>
 <context>
@@ -248,7 +248,7 @@
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/debugdialog.ui" line="28"/>
-        <source>Send to dev team</source>
+        <source>Send to development team</source>
         <translation>Envoyer à l&apos;équipe de développement</translation>
     </message>
     <message>
@@ -268,30 +268,30 @@
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="113"/>
-        <source>Sending debugging information to dev team</source>
-        <translation>Envoyer les informations de déboggage à l&apos;équipe de développement</translation>
+        <source>Sending debugging information to the development team</source>
+        <translation>Envoie d&apos;une information de déboggage à l&apos;équipe de développement</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="114"/>
-        <source>Trying to send information to dev team.
-Using Url : %1 
+        <source>Trying to send information to the development team.
+Using URL: %1
 Please wait...</source>
-        <translation>Essaye d&apos;envoyer les informations à l&apos;équipe de développement.
+        <translation>Essaie d&apos;envoyer d&apos;une information de déboggage à l&apos;équipe de développement.
 Url : %1
 Veuillez patienter...</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="135"/>
-        <source>Debugging information correctly sent.</source>
+        <source>Debugging information successfully sent.</source>
         <translation>Informations de déboggage correctement envoyées.</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/debugdialog.cpp" line="137"/>
-        <source>Debugging information correctly send to dev team.
-Using Url : %1 
+        <source>Debugging information successfully send to the development team.
+Using Url: %1
 %2</source>
         <translation>Informations de déboggage correctement envoyées à l&apos;équipe de développement.
-Url: %1
+Url : %1
 %2</translation>
     </message>
 </context>
@@ -442,11 +442,6 @@ Url: %1
 <context>
     <name>Core::Internal::SettingsPrivate</name>
     <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="770"/>
-        <source>Passing command line ini file : %1</source>
-        <translation>Fichier INI spécifié : %1</translation>
-    </message>
-    <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="779"/>
         <location filename="../../plugins/coreplugin/settings.cpp" line="808"/>
         <source>Using ini file %1.</source>
@@ -466,20 +461,9 @@ Url: %1
         <translation>Utilise le fichier INI %1</translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="792"/>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="821"/>
-        <source>WARNING : Ini file %1 can not be used.</source>
-        <translation>ATTENTION : fichier INI %1 ne peut pas être utiliser.</translation>
-    </message>
-    <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="849"/>
         <source>Trying ini file %1</source>
         <translation>Essaie le fichier INI %1</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="855"/>
-        <source>Unable to create dir : %1, no Ini File can be used.</source>
-        <translation>Impossible de créer le répertoire %1, aucun fichier INI ne peut être utiliser.</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="957"/>
@@ -521,6 +505,11 @@ Url: %1
         <location filename="../../plugins/coreplugin/settings.cpp" line="979"/>
         <source>Compile mode</source>
         <translation>Mode de compilation</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="980"/>
+        <source>GIT revision</source>
+        <translation>Révision git</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="986"/>
@@ -617,55 +606,9 @@ Url: %1
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1090"/>
-        <source>Running version : %1</source>
-        <translation>Version en cours : %1</translation>
-    </message>
-    <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="1091"/>
         <source>Build date | %1 %2</source>
         <translation>Date de compilation | %1 %2</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1092"/>
-        <source>Qt Build version : %1</source>
-        <translation>Version de Qt à la compilation : %1</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1093"/>
-        <source>Qt running version : %1</source>
-        <translation>Version de Qt en cours : %1</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1094"/>
-        <source>Application Version : %1</source>
-        <translation>Version de l&apos;application : %1</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1096"/>
-        <source>Actual build : Debug</source>
-        <translation>Compilation actuelle : Déboggage</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1098"/>
-        <source>Actual build : Release</source>
-        <translation>Compilation actuelle : Release</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1099"/>
-        <source>SVN version : %1</source>
-        <translation>Version SVN: %1</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1100"/>
-        <source>Application path : %1</source>
-        <translation>Chemin de l&apos;application : %1</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1105"/>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="1109"/>
-        <source>uname returns : %1</source>
-        <translation>Retour de &apos;uname&quot; : %1</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="1134"/>
@@ -677,6 +620,22 @@ Url: %1
         <location filename="../../plugins/coreplugin/settings.cpp" line="1137"/>
         <source>Default installed datapack path</source>
         <translation>Répertoire d&apos;installation des paquets de données distribués par défaut</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="770"/>
+        <source>Passing command line ini file: %1</source>
+        <translation>Passe les paramètres en ligne de commande : %1</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="792"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="821"/>
+        <source>WARNING: Ini file %1 can not be used.</source>
+        <translation>Attention : fichier ini %1 ne peut pas être utiliser.</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="855"/>
+        <source>Unable to create dir: %1, no Ini File can be used.</source>
+        <translation>Impossible de créer le répertoire %1, pas de fichier ini trouvé.</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="1006"/>
@@ -699,11 +658,6 @@ Url: %1
         <location filename="../../plugins/coreplugin/settings.cpp" line="962"/>
         <source>System information</source>
         <translation>Informations système</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/coreplugin/settings.cpp" line="980"/>
-        <source>SVN version</source>
-        <translation>Version SVN</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="987"/>
@@ -770,9 +724,55 @@ Url: %1
         <translation>Paramètres orphelins</translation>
     </message>
     <message>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1090"/>
+        <source>Running version: %1</source>
+        <translation>Version courante : %1</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1092"/>
+        <source>Qt Build version: %1</source>
+        <translation>Version de Qt pour la compilation : %1</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1093"/>
+        <source>Qt running version: %1</source>
+        <translation>Version de Qt en cours d&apos;utilisation : %1</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1094"/>
+        <source>Application Version: %1</source>
+        <translation>Version de l&apos;application : %1</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1096"/>
+        <source>Actual build: Debug</source>
+        <translation>Compilation de déboggage</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1098"/>
+        <source>Actual build: Release</source>
+        <translation>Compilation pour utilisation en production</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1099"/>
+        <source>GIT revision: %1</source>
+        <translation>Révision git : %1</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1100"/>
+        <source>Application path: %1</source>
+        <translation>Chemin de l&apos;application : %1</translation>
+    </message>
+    <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="1104"/>
         <source>Running on Linux</source>
         <translation>Utilisation sur Linux</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1105"/>
+        <location filename="../../plugins/coreplugin/settings.cpp" line="1109"/>
+        <source>uname returns: %1</source>
+        <translation>retour de uname : %1</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="1108"/>
@@ -940,7 +940,7 @@ Veuillez contacter votre administrateur réseau.</translation>
     <name>Core::Translators</name>
     <message>
         <location filename="../../plugins/coreplugin/translators.cpp" line="139"/>
-        <source>Can not load %1, path : %2</source>
+        <source>Can not load %1, path: %2</source>
         <translation>Impossible de charger %1, chemin %2</translation>
     </message>
     <message>
@@ -950,16 +950,16 @@ Veuillez contacter votre administrateur réseau.</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/translators.cpp" line="189"/>
-        <source>WARNING : Can not be loaded %1 or already loaded.</source>
-        <translation>Attention : impossible de charger %1 ou déjà chargé.</translation>
+        <source>WARNING: %1 can not be loaded or is already loaded.</source>
+        <translation>Attention : impossible de charger %1 ou est déjà chargé.</translation>
     </message>
 </context>
 <context>
     <name>ThemePrivate</name>
     <message>
         <location filename="../../plugins/coreplugin/theme.cpp" line="172"/>
-        <source>ERROR - Theme : Unable to load icon file %1</source>
-        <translation>ERREUR - Thème : impossible de charger l&apos;icône %1</translation>
+        <source>ERROR - Theme: Unable to load icon file %1</source>
+        <translation>Erreur - Thème: impossible de charger l&apos;icône %1</translation>
     </message>
 </context>
 <context>

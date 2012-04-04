@@ -30,6 +30,8 @@
 #include <QWidget>
 
 namespace PadTools {
+class PadFragment;
+
 namespace Internal {
 class PadWriterPrivate;
 namespace Ui {
@@ -49,18 +51,22 @@ public:
     QString rawSource() const;
 
 private Q_SLOTS:
+    void changeRawSourceScenario(QAction*);
     void analyseRawSource();
     void viewErrors();
+    void setFollowCursorInResultOutput(bool state);
+    void highlightCursor();
+    void findCursorPositionInOutput();
+    void setAutoUpdateOfResult(bool state);
+    void setTestValues(bool state);
+    void onPadFragmentChanged(PadFragment *fragment);
 
 //private:
-//    void dragEnterEvent(QDragEnterEvent *event);
-//    void dragMoveEvent(QDragMoveEvent *event);
-//    void dragLeaveEvent(QDragLeaveEvent *event);
-//    void dropEvent(QDropEvent *event);
+//    bool eventFilter(QObject *obj, QEvent *event);
+//    void mouseMoveEvent(QMouseEvent *e);
 
 private:
     Internal::PadWriterPrivate *d;
-
 };
 
 } // namespace PadTools

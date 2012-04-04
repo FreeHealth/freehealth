@@ -46,7 +46,7 @@ QString PadToolsImpl::parse(const QString &templ, QMap<QString,QVariant> &tokens
     if (t.contains("&lt;")) {
         t = t.replace("&lt;","<").replace("&gt;",">");
     }
-    Pad *pad = analyzer.analyze(t);
+    PadDocument *pad = analyzer.analyze(t);
 	errors = analyzer.lastErrors();
 
 	return pad->run(tokens);

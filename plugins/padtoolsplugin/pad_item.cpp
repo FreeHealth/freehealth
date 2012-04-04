@@ -31,9 +31,12 @@
   - fragments of conditional texts (before and after)
 */
 
-#include <QString>
-
 #include "pad_item.h"
+#include "constants.h"
+
+#include <QString>
+#include <QTextCursor>
+#include <QTextDocumentFragment>
 
 #include <QDebug>
 
@@ -41,18 +44,15 @@ using namespace PadTools;
 
 PadItem::~PadItem()
 {
-	qDeleteAll(_fragments);
 }
 
-void PadItem::addFragment(PadFragment *fragment)
-{
-	_fragments << fragment;
-}
-
+/** Debug to console */
 void PadItem::print(int indent) const
 {
 	QString str(indent, ' ');
-	str += "[padItem]";
+    str += QString("[padItem:Source(%1;%2);Output(%3;%4)]")
+            .arg(start()).arg(end())
+            .arg(outputStart()).arg(outputEnd());
 	qDebug("%s", qPrintable(str));
     foreach (PadFragment *fragment, _fragments) {
 		fragment->print(indent + 2);
@@ -60,7 +60,7 @@ void PadItem::print(int indent) const
 }
 
 /** Find nested PadItem in conditional texts (before and after) */
-QList<PadFragment*> PadItem::getAllFragments() const
+QList<PadFragment*> PadItem::children() const
 {
 	QList<PadFragment*> fragments;
 	PadItem *padItem;
@@ -68,15 +68,36 @@ QList<PadFragment*> PadItem::getAllFragments() const
     foreach (PadFragment *fragment, _fragments) {
 		padItem = dynamic_cast<PadItem*>(fragment);
 		if (padItem)
-			fragments.append(padItem->getAllFragments());
+            fragments.append(padItem->children());
 	}
 	return fragments;
 }
 
+/** Find PadFragment according to its \e type. \sa PadItem::PadStringType */
+PadFragment *PadItem::fragment(const int type) const
+{
+    foreach (PadFragment *fragment, _fragments) {
+        if (fragment->userData(Constants::USERDATA_KEY_PADITEM).toInt() == type)
+            return fragment;
+    }
+    return 0;
+}
+
+/** Returns the PadTools::PadCore of the PadTools::PadItem. If no core is found, 0 is returned. */
+PadCore *PadItem::getCore() const
+{
+    PadCore *core;
+    foreach (PadFragment *fragment, _fragments) {
+        core = dynamic_cast<PadCore*>(fragment);
+        if (core)
+            return core;
+    }
+    return 0;
+}
+
+/** Run this pad over some tokens and returns the result text */
 QString PadItem::run(QMap<QString,QVariant> &tokens) const
 {
-	Q_UNUSED(tokens);
-
 	QString value;
 	PadCore *core = getCore();
 	QString coreValue;
@@ -94,13 +115,50 @@ QString PadItem::run(QMap<QString,QVariant> &tokens) const
 	return value;
 }
 
-PadCore *PadItem::getCore() const
+void PadItem::run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out) const
 {
-	PadCore *core;
-    foreach (PadFragment *fragment, _fragments) {
-		core = dynamic_cast<PadCore*>(fragment);
-		if (core)
-			return core;
-	}
-	return 0;
+    PadCore *core = getCore();
+    QString coreValue;
+
+    // if a core exists, the entire pad expression is optional, depending on the core emptiness
+    if (core) {
+        coreValue = core->name();
+        if (coreValue.isEmpty())
+            return;
+    }
+
+    int start = -1;
+    int end = -1;
+    foreach(PadFragment *fragment, _fragments) {
+        fragment->run(tokens, source, out);
+        if (fragment->outputStart() < start || start == -1)
+            start = fragment->outputStart();
+        if (fragment->outputEnd() > end)
+            end = fragment->outputEnd();
+    }
+
+    // Trace position in output
+    _outputStart = start;
+    _outputEnd = end;
+
+    // Add anchors to the output QTextDocument
+    QTextCursor cursor(out);
+    cursor.setPosition(_outputStart);
+    cursor.setPosition(_outputEnd, QTextCursor::KeepAnchor);
+    QTextCharFormat f;
+    f.setAnchor(true);
+    f.setAnchorNames(QStringList() << Constants::ANCHOR_ITEM << QString::number(id()));
+    cursor.mergeCharFormat(f);
+
+    // Add the format && tooltip
+    int count = _outputEnd - _outputStart;
+    for(int i=0; i < count; ++i) {
+        cursor.setPosition(start + i);
+        cursor.setPosition(start + i + 1, QTextCursor::KeepAnchor);
+        QTextCharFormat format;
+        format.setToolTip("Token: " + coreValue);
+        cursor.mergeCharFormat(format);
+    }
+
+    return;
 }

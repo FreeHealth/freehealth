@@ -55,7 +55,7 @@ bool BiblioPlugin::initialize(const QStringList &arguments, QString *errorMessag
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "BiblioPlugin::initialize";
 
-    BiblioCore *c = new BiblioCore(this);
+    /*BiblioCore *c = */new BiblioCore(this);
 
     // add plugin info page
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));

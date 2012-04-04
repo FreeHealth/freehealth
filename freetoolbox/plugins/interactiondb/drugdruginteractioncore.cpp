@@ -171,10 +171,10 @@ QList<DrugInteractor *> DrugDrugInteractionCore::getDrugInteractors() const
 }
 
 /** Update the XML file for the specified DrugDrugInteraction pointer. This pointer should be extracted from the list created using the getDrugDrugInteractions(). \sa getDrugDrugInteractions() */
-void DrugDrugInteractionCore::updateXmlFileForDrugDrugInteraction(DrugDrugInteraction *ddi)
+void DrugDrugInteractionCore::updateXmlFileForDrugDrugInteraction(DrugDrugInteraction */*ddi*/)
 {
     // Populate the DomNode
-
+    /** \todo code here ??? */
 }
 
 /** Will overwrite the thesaurus file with a new one created on the basis of the \e ddis. All precedent datas will be lost. */

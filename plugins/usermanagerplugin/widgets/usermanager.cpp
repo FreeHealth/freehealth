@@ -182,7 +182,7 @@ UserManagerDialog::UserManagerDialog(QWidget * parent) :
 bool UserManagerDialog::initialize()
 {
     m_Widget->initialize();
-    setWindowTitle(tkTr(Trans::Constants::USERMANAGER_TEXT));
+    setWindowTitle(tkTr(Trans::Constants::USERMANAGER_TEXT).remove("&"));
     setWindowIcon(theme()->icon(Core::Constants::ICONUSERMANAGER));
     return true;
 }

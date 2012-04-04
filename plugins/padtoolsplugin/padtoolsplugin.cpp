@@ -29,7 +29,8 @@
   \brief Namespace reserved for the PadTools plugin.
   The PadTools namespace includes:
   - Token engine
-  - Pad creator
+  - PadDocument creator
+  - PadWriter
 */
 
 #include "padtoolsplugin.h"
