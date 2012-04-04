@@ -115,14 +115,17 @@ class ChosenListView: public QListView{
         ChosenListView(QObject *parent ,InternalAmount::AmountModel *amountModel);
         ~ChosenListView();
         InternalAmount::AmountModel * m_amountModel;
+    protected:
+    void mouseReleaseEvent(QMouseEvent *event);
     private Q_SLOTS:
         void deleteItem(bool b);
     private:
         void changeEvent(QEvent *e);
-        void mousePressEvent(QMouseEvent *event);
+        
         QAction *m_clear;
         QAction * m_deleteInReturnedList;
         QMenu *m_menu;
+        QObject *m_parent;
         
 };
 

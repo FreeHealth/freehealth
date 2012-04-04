@@ -10,7 +10,7 @@ class DateEditTreeViewDelegate : public QStyledItemDelegate
 {
     Q_OBJECT
     public :
-    DateEditTreeViewDelegate();
+    DateEditTreeViewDelegate(QObject * parent = 0);
     ~DateEditTreeViewDelegate();
 
 
@@ -32,7 +32,7 @@ class ComboTreeViewDelegate : public QStyledItemDelegate
           Icons_MaxParam
           };
     public :
-    ComboTreeViewDelegate();
+    ComboTreeViewDelegate(QObject * parent = 0);
     ~ComboTreeViewDelegate();
 
 

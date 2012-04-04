@@ -360,7 +360,6 @@ bool Connexion::setFirstDefaultValues(){
            qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount =" << QString::number(model.rowCount()) ;
 	for (int it = 0; it < listOfDatas.size(); it += 1)
 	{
-		  qDebug() << __FILE__ << QString::number(__LINE__) << " it =" << QString::number(it) ;
 		  QVariant data;
 		  switch(it){
 		      case VariantItemModel::ID_PREVENTION :

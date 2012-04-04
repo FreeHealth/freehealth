@@ -5,6 +5,7 @@
 #include "ui_prevent.h"
 #include "moreIHM.h"
 #include "survey.h"
+#include "treeviewdelegate.h"
 
 #include <QWidget>
 #include <QTreeView>
@@ -22,7 +23,7 @@ class TreeViewOfPrevention: public QTreeView
 
 public:
     
-    TreeViewOfPrevention(QWidget *parent = 0);
+    TreeViewOfPrevention(QObject *parent = 0);
     ~TreeViewOfPrevention();
 
     void reset() {QTreeView::reset();}
@@ -35,12 +36,12 @@ private:
     bool deleteItemAccordingToIndex(QModelIndex & index);
     bool isChild();
 
-
-
 private Q_SLOTS:
     void deleteItem(bool);
     void showMore(bool);
     void addAValue(bool);
+    void addAGroup(bool);
+    void deleteGroup(bool);
     //void userIsChanged(); TODO
 
 private:
@@ -50,11 +51,12 @@ private:
     QAction *m_showMore;
     QAction *m_deleteValue;
     QAction *m_addValue;
+    QAction *m_addGroup;
+    QAction *m_deleteGroup;
     QMenu *m_menuRightClic;
     QString m_userUuid;
-    
     VariantItemModel *m_model;
-
+    PreventIO *m_io;
 };
 
 class PreventIHM : public QWidget, public Ui::PreventWidget {
@@ -63,17 +65,18 @@ class PreventIHM : public QWidget, public Ui::PreventWidget {
         PreventIHM(QWidget * parent = 0);
         ~PreventIHM();
         VariantItemModel * m_modelOfItems;
-        PreventIO *m_io;
-        QSqlTableModel * m_model;
-        QSqlTableModel * m_newModel;
-    
-    private slots :
+        
+    public Q_SLOTS :
+        void changeIconWidget();
+    private Q_SLOTS :
         void iconsResetIfDateNextOvertaken(const QHash<int,QVariant>&);   
-        void changeIconWidget(); 
+        
     private :
+        PreventIO *m_io;
         QVBoxLayout *m_vbox;
         TreeViewOfPrevention *m_TreeViewOfPrevention; 
         Survey * m_survey;
+         
 };
 
 #endif

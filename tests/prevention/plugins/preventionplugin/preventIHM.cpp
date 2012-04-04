@@ -1,5 +1,4 @@
 #include "preventIHM.h"
-#include "treeviewdelegate.h"
 
 #include <QLabel>
 #include <QDateEdit>
@@ -27,15 +26,20 @@ static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 // TREEVIEWOFPREVENTION ///////////////////////////////
 ///////////////////////////////////////////////////////
 
-TreeViewOfPrevention::TreeViewOfPrevention(QWidget * parent){
+TreeViewOfPrevention::TreeViewOfPrevention(QObject * parent){
+    m_io = new PreventIO(parent);
     m_deleteValue = new QAction(trUtf8("Delete this value."),this);
     m_showMore = new QAction(trUtf8("More."),this);
     m_addValue = new QAction(trUtf8("Add a value."),this);
+    m_addGroup = new QAction(trUtf8("Add a group."),this);
+    m_deleteGroup = new QAction(trUtf8("Delete this group."),this);
     connect(m_deleteValue,SIGNAL(triggered(bool)),this,SLOT(deleteItem(bool)));
     connect(m_showMore,SIGNAL(triggered(bool)),this,SLOT(showMore(bool)));
     connect(m_addValue,SIGNAL(triggered(bool)),this,SLOT(addAValue(bool)));
-    
+    connect(m_addGroup,SIGNAL(triggered(bool)),this,SLOT(addAGroup(bool)));
+    connect(m_deleteGroup,SIGNAL(triggered(bool)),this,SLOT(deleteGroup(bool)));
 }
+
 TreeViewOfPrevention::~TreeViewOfPrevention(){}
 
 void TreeViewOfPrevention::mouseReleaseEvent(QMouseEvent *event){
@@ -46,6 +50,8 @@ void TreeViewOfPrevention::mouseReleaseEvent(QMouseEvent *event){
             m_menuRightClic -> addAction(m_showMore);
             m_menuRightClic-> addAction(m_deleteValue);
             m_menuRightClic->addAction(m_addValue);
+            m_menuRightClic->addAction(m_addGroup);
+            m_menuRightClic->addAction(m_deleteGroup);
             m_menuRightClic->exec(event->globalPos());
             blockSignals(false);
             }
@@ -82,7 +88,12 @@ void TreeViewOfPrevention::deleteItem(bool b){
 
 bool TreeViewOfPrevention::deleteItemAccordingToIndex(QModelIndex & index){
     bool success = true;
-    QMessageBox::information(0,trUtf8("TODO"),trUtf8("In delete"),QMessageBox::Ok);
+    QModelIndex indexInside = currentIndex();
+    QModelIndex parent = model()->parent(indexInside);
+    if (m_model->deleteItemAccordingToIndex(indexInside,parent,this))
+    {
+    	  qWarning() << __FILE__ << QString::number(__LINE__) << "succeed in deleting row" ;
+        }
     return success;
 }
 
@@ -98,12 +109,36 @@ void TreeViewOfPrevention::addAValue(bool b)
     Q_UNUSED(b);
     QModelIndex index = currentIndex();
     QModelIndex parent = model()->parent(index);
-    PreventIO io;
-    if (io.addAnItemAccordingToIndex(index,parent,this))
+    if (m_model->addAnItemAccordingToIndex(index,parent,this))
     {
     	  qWarning() << __FILE__ << QString::number(__LINE__) << "row inserted" ;
         }
-    
+}
+
+void TreeViewOfPrevention::addAGroup(bool b)
+{
+    Q_UNUSED(b);
+    QModelIndex index = currentIndex();
+    QModelIndex parent = model()->parent(index);
+    if (m_model->addAGroupItem(index,parent,this))
+    {
+    	  qWarning() << __FILE__ << QString::number(__LINE__) << "group inserted" ;
+        }
+}
+
+void TreeViewOfPrevention::deleteGroup(bool b)
+{
+    Q_UNUSED(b);
+    QModelIndex index = currentIndex();
+    if (!index.parent().isValid())
+    {
+    	  m_model->deleteGroupOfItems(index);
+        }
+    else
+    {
+    	QMessageBox::warning(0,trUtf8("warning"),trUtf8("It is not a group."),QMessageBox::Ok);
+    	return;
+        }
 }
 
 void TreeViewOfPrevention::getModel(VariantItemModel * model){
@@ -121,33 +156,37 @@ VariantItemModel * TreeViewOfPrevention::model(){
 
 PreventIHM::PreventIHM(QWidget * parent):QWidget(parent){
     setupUi(this);
-QStringList headers;
-    m_io = new PreventIO;
-    headers = m_io->setHeadersDatas() ;
-    m_model = m_io->getModel();
     m_survey = new Survey(this);
-    m_modelOfItems = new VariantItemModel(headers,m_model,this);
-    m_TreeViewOfPrevention = new TreeViewOfPrevention(this);
+    m_io = new PreventIO(this);
     m_vbox = new QVBoxLayout(this);
-    m_vbox->addWidget(m_TreeViewOfPrevention);
-    setLayout(m_vbox);
-
-    m_TreeViewOfPrevention->setModel(m_modelOfItems);
+    //m_dateEditDelegate = new DateEditTreeViewDelegate(this);
+    //m_iconComboDelegate = new ComboTreeViewDelegate(this);
+    m_TreeViewOfPrevention = new TreeViewOfPrevention(this);
+    //QSqlTableModel *model = io.getModel();
     
+    //m_modelOfItems = new VariantItemModel(this);
+    
+    m_modelOfItems = m_io->getVariantItemModel();
+    
+    m_TreeViewOfPrevention->setModel(m_modelOfItems);
+    m_TreeViewOfPrevention->getModel(m_modelOfItems);
+    /*m_TreeViewOfPrevention->setItemDelegateForColumn(VariantItemModel::DATE_DONE_H,m_dateEditDelegate);
+    m_TreeViewOfPrevention->setItemDelegateForColumn(VariantItemModel::DATE_NEXT_H,m_dateEditDelegate);
+    m_TreeViewOfPrevention->setItemDelegateForColumn(VariantItemModel::ICON_H,m_iconComboDelegate);*/
+    m_TreeViewOfPrevention->setItemDelegateForColumn(VariantItemModel::DATE_DONE_H,new DateEditTreeViewDelegate);
+    m_TreeViewOfPrevention->setItemDelegateForColumn(VariantItemModel::DATE_NEXT_H,new DateEditTreeViewDelegate);
+    m_TreeViewOfPrevention->setItemDelegateForColumn(VariantItemModel::ICON_H,new ComboTreeViewDelegate);
     m_TreeViewOfPrevention->header()->hideSection(VariantItemModel::TYPE_OF_ITEM_H);
     m_TreeViewOfPrevention->header()->hideSection(VariantItemModel::PARENT_ITEM_H);
     m_TreeViewOfPrevention->header()->hideSection(VariantItemModel::PARENT_OR_CHILD_H);
     m_TreeViewOfPrevention->header()->hideSection(VariantItemModel::RESULT_H);
-    m_TreeViewOfPrevention->setItemDelegateForColumn(VariantItemModel::DATE_DONE_H,new DateEditTreeViewDelegate);
-    m_TreeViewOfPrevention->setItemDelegateForColumn(VariantItemModel::DATE_NEXT_H,new DateEditTreeViewDelegate);
-    m_TreeViewOfPrevention->setItemDelegateForColumn(VariantItemModel::ICON_H,new ComboTreeViewDelegate);
+    //refresh();
+    m_vbox->addWidget(m_TreeViewOfPrevention);
+    setLayout(m_vbox);
     changeIconWidget();
-    
     connect(m_survey,SIGNAL(iconsReset(const QHash<int,QVariant>&)),this,
                      SLOT(iconsResetIfDateNextOvertaken(const QHash<int,QVariant>&)));
     connect(m_modelOfItems,SIGNAL(layoutChanged()),this,SLOT(changeIconWidget()));
-    
-    
 
 }
 
@@ -155,17 +194,19 @@ PreventIHM::~PreventIHM(){}
 
 void PreventIHM::changeIconWidget()
 {
-    for (int row = 0; row < m_modelOfItems->rowCount(); row += 1)
+    qDebug() << __FILE__ << QString::number(__LINE__) << "changeIconWidget()" ;
+    VariantItemModel * modelOfItems = m_TreeViewOfPrevention->model();//m_modelOfItems;
+    for (int row = 0; row < modelOfItems->rowCount(); row += 1)
     {
-    	  QModelIndex parent = m_modelOfItems->index(row,0);
+    	  QModelIndex parent = modelOfItems->index(row,0);
     	  
-    	  for (int underRow = 0; underRow < m_modelOfItems->rowCount(parent); underRow += 1)
+    	  for (int underRow = 0; underRow < modelOfItems->rowCount(parent); underRow += 1)
     	  {
-    	  	 QModelIndex indexChild = m_modelOfItems->index(underRow,VariantItemModel::ICON_H,parent);
+    	  	 QModelIndex indexChild = modelOfItems->index(underRow,VariantItemModel::ICON_H,parent);
     	  	 qDebug() << __FILE__ << QString::number(__LINE__) << " row Child =" 
     	  	          << QString::number(indexChild.row()) ;
     	  	 
-    	  	 QString data = m_modelOfItems->data(indexChild,Qt::DisplayRole).toString();
+    	  	 QString data = modelOfItems->data(indexChild,Qt::DisplayRole).toString();
     	  	 qDebug() << __FILE__ << QString::number(__LINE__) << " indexChild.data().toString() =" 
     	  	          << data ;
     	  	 m_TreeViewOfPrevention->closePersistentEditor(indexChild);
@@ -181,7 +222,6 @@ void PreventIHM::iconsResetIfDateNextOvertaken(const QHash<int,QVariant> & hashO
     {
     	  QVariant idItem = listOfId[i];
     	  m_modelOfItems->setIconWarning(idItem);
-    	  update();
+    	  //update();
         }
-    
 }

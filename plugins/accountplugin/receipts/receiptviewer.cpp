@@ -592,8 +592,14 @@ void treeViewsActions::changeEvent(QEvent *e) {
 
 ChosenListView::ChosenListView(QObject * parent,InternalAmount::AmountModel *amountModel) {
     setObjectName("ChosenListView");
-    m_deleteInReturnedList = new QAction(trUtf8("Delete this item"),this);
-    m_clear = new QAction(trUtf8("Clear all."),this);
+    m_parent = parent;
+    m_deleteInReturnedList = new QAction(trUtf8("Delete this item"),parent);
+    m_clear = new QAction(trUtf8("Clear all."),parent);
+    //m_deleteInReturnedList->setCheckable(true);
+    m_deleteInReturnedList->setEnabled(true);
+    m_clear->setEnabled(true);
+    //m_deleteInReturnedList->setCheckable(true);
+    //m_clear->setCheckable(true);
     m_amountModel = amountModel;
     connect(m_clear,SIGNAL(triggered(bool)),parent,SLOT(clearAll(bool)));
     connect(m_deleteInReturnedList,SIGNAL(triggered(bool)),this,SLOT(deleteItem(bool)));
@@ -606,26 +612,31 @@ ChosenListView::~ChosenListView(){
 void ChosenListView::changeEvent(QEvent *e) {
     QWidget::changeEvent(e);
     if (e->type()==QEvent::LanguageChange) {
-        m_deleteInReturnedList = new QAction(trUtf8("Delete this item"),this);
-        m_clear = new QAction(trUtf8("Clear all."),this);
-        //connect(m_clear,SIGNAL(triggered(bool)),parent,SLOT(clearAll(bool)));
-        //connect(m_deleteInReturnedList,SIGNAL(triggered(bool)),this,SLOT(deleteItem(bool)));
+        m_deleteInReturnedList = new QAction(trUtf8("Delete this item"),m_parent);
+        m_clear = new QAction(trUtf8("Clear all."),m_parent);
+        m_deleteInReturnedList->setEnabled(true);
+        m_clear->setEnabled(true);
+        //m_deleteInReturnedList->setCheckable(true);
+        //m_clear->setCheckable(true);
+        connect(m_clear,SIGNAL(triggered(bool)),m_parent,SLOT(clearAll(bool)));
+        connect(m_deleteInReturnedList,SIGNAL(triggered(bool)),this,SLOT(deleteItem(bool)));
         reset();
         }
 }
 
-void ChosenListView::mousePressEvent(QMouseEvent *event){
+void ChosenListView::mouseReleaseEvent(QMouseEvent *event){
   if(event->button() == Qt::RightButton){
-    if (WarnDebugMessage)
-    	      qDebug() << "in right clic" << __FILE__ << QString::number(__LINE__) ;
-    m_menu  = new QMenu(this);
-    m_menu  -> addAction(m_clear);
-    m_menu  -> addAction (m_deleteInReturnedList);
-    m_menu  ->exec(event->globalPos());
+        blockSignals(true);
+        m_menu  = new QMenu(this);
+        m_menu  -> addAction(m_clear);
+        m_menu  -> addAction (m_deleteInReturnedList);
+        m_menu  ->exec(event->globalPos());
+        blockSignals(false);
   }
   else
   {
-  	QListView::mousePressEvent(event);
+  	blockSignals(false);
+  	QListView::mouseReleaseEvent(event);
       }
 }
 
@@ -1231,7 +1242,6 @@ void ReceiptViewer::clearAll(bool b)
         qWarning() << __FILE__ << QString::number(__LINE__) << "Clear all is uncheckable." ;
     }
     m_listOfValues.clear();
-    QMessageBox::information(0,"info","in clearAll",QMessageBox::Ok);
     if (!m_modelReturnedList->removeRows(0,m_modelReturnedList->rowCount(),QModelIndex()))
     {
     	LOG_ERROR("unable to remove rows");

@@ -10,7 +10,9 @@ static inline QString pixmaps()
  //DATEEDIT DELEGATE FOR TREEVIEW
  ///////////////////////////////////////////
 
-DateEditTreeViewDelegate::DateEditTreeViewDelegate(){}
+DateEditTreeViewDelegate::DateEditTreeViewDelegate(QObject * parent)
+{
+}
 
 DateEditTreeViewDelegate::~DateEditTreeViewDelegate(){}
 
@@ -56,8 +58,9 @@ QWidget *DateEditTreeViewDelegate::createEditor(QWidget *parent, const QStyleOpt
  //COMBOBOX DELEGATE FOR TREEVIEW
  ///////////////////////////////////////////
  
- ComboTreeViewDelegate::ComboTreeViewDelegate()
+ ComboTreeViewDelegate::ComboTreeViewDelegate(QObject * parent)
  {
+     qDebug() << __FILE__ << QString::number(__LINE__) << "ComboTreeViewDelegate::ComboTreeViewDelegate" ;
      m_hashIcons.insert(PREVENT_OK,pixmaps()+"/preventOk.png");
      m_hashIcons.insert(PREVENT_WARNING,pixmaps()+"/preventWarning.png");
      m_hashIcons.insert(PREVENT_PAST,pixmaps()+"/past.png");
@@ -81,7 +84,7 @@ QWidget *ComboTreeViewDelegate::createEditor(QWidget *parent, const QStyleOption
    	  QComboBox * combo = new QComboBox(parent);
     	  return combo;
         }
-          return QStyledItemDelegate::createEditor(parent, option, index);
+   return QStyledItemDelegate::createEditor(parent, option, index);
 }
 
  void ComboTreeViewDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
