@@ -1229,9 +1229,16 @@ void ReceiptViewer::clearAll(bool b)
         qWarning() << __FILE__ << QString::number(__LINE__) << "Clear all is uncheckable." ;
     }
     m_listOfValues.clear();
-    m_modelReturnedList->removeRows(0,m_modelReturnedList->rowCount(),QModelIndex());
+    QMessageBox::information(0,"info","in clearAll",QMessageBox::Ok);
+    if (!m_modelReturnedList->removeRows(0,m_modelReturnedList->rowCount(),QModelIndex()))
+    {
+    	LOG_ERROR("unable to remove rows");
+        }
     //clear accountmodel
-    m_model->removeRows(0,m_model->rowCount(QModelIndex()),QModelIndex());
+    if (!m_model->removeRows(0,m_model->rowCount(QModelIndex()),QModelIndex()))
+    {
+    	LOG_ERROR("unable to remove row in accountmodel");
+        }
 }
 
 QVariant ReceiptViewer::firstItemchosenAsPreferential(QString & item)
