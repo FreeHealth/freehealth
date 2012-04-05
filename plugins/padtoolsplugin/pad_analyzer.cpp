@@ -187,7 +187,7 @@ PadItem *PadAnalyzer::nextPadItem()
 	PadFragment *fragment;
 	Lexem lex;
 	PadItem *padItem = new PadItem;
-	padItem->setStart(_curPos - 1);
+    padItem->setStart(_curPos - QString(Constants::TOKEN_OPEN_DELIMITER).size());
     padItem->setId(nextId());
     int previousType = PadItem::ConditionnalBeforeText;
 
@@ -212,7 +212,7 @@ PadItem *PadAnalyzer::nextPadItem()
             padItem->addChild(fragment);
 			break;
 		case Lexem_PadCloseDelimiter:
-			padItem->setEnd(_curPos - 1);
+            padItem->setEnd(_curPos);
 			return padItem;
 		case Lexem_CoreDelimiter:
 			// TODO: raise an error when a core has already been defined
