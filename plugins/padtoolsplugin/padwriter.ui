@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>638</width>
-    <height>307</height>
+    <height>392</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -25,7 +25,7 @@
         <widget class="QLineEdit" name="search"/>
        </item>
        <item>
-        <widget class="QTreeView" name="treeView">
+        <widget class="TokenTreeView" name="treeView">
          <property name="editTriggers">
           <set>QAbstractItemView::NoEditTriggers</set>
          </property>
@@ -153,6 +153,11 @@
    <class>Editor::TextEditor</class>
    <extends>QTextEdit</extends>
    <header location="global">texteditorplugin/texteditor.h</header>
+  </customwidget>
+  <customwidget>
+   <class>TokenTreeView</class>
+   <extends>QTreeView</extends>
+   <header location="global">padtoolsplugin/tokentreeview.h</header>
   </customwidget>
  </customwidgets>
  <resources/>
