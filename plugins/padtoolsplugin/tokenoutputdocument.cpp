@@ -213,7 +213,7 @@ void TokenOutputDocument::dropEvent(QDropEvent *event)
         int pos = cursor.position();
         int dropRawPosition = pos;
 
-        qWarning() << "DROP AT OUTPUT:"<<this->cursorForPosition(event->pos()).position() << "RAW" << pos;
+//        qWarning() << "DROP AT OUTPUT:"<<this->cursorForPosition(event->pos()).position() << "RAW" << pos;
 
         PadItem *item = d->_pad->padItemForSourcePosition(pos);
         if (item) {
@@ -267,10 +267,10 @@ void TokenOutputDocument::dropEvent(QDropEvent *event)
         int r = editor.exec();
         if (r == QDialog::Accepted) {
             setFocus();
-            qWarning() << "INSERT" << "rawPos" << dropRawPosition << "outputPos" << this->cursorForPosition(event->pos()).position();
+//            qWarning() << "INSERT" << "rawPos" << dropRawPosition << "outputPos" << this->cursorForPosition(event->pos()).position();
             cursor.setPosition(dropRawPosition);
             cursor.insertHtml(editor.toRawSourceHtml());
-            //            d->_pad->softReset();
+            d->_pad->softReset();
             event->acceptProposedAction();
             event->accept();
             return;
