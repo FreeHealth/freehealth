@@ -49,46 +49,50 @@ public:
     PadDocument();
     virtual ~PadDocument();
 
+    // PadDocument must always have an Id == -1
     int id() const {return -1;}
     void setId(int) {}
 
+    // Manage data source
     void clear();
     void setSource(const QString &rawSource);
     void setSource(QTextDocument *source);
     void setTokenModel(TokenModel *model);
-
     QString rawSource() const {return _rawSource;}
     QTextDocument *rawSourceDocument() const {return _docSource;}
     QTextDocument *outputDocument() const {return _docOutput;}
+    void addChild(PadFragment *fragment);
 
+    // Extract text from source
     QString fragmentRawSource(PadFragment *fragment) const;
     QString fragmentHtmlOutput(PadFragment *fragment) const;
 
-    void addChild(PadFragment *fragment);
-
+    // PadFragment/Cursor hunting
     PadItem *padItemForOutputPosition(int positionInOutputQTextDocument) const;
     PadItem *padItemForSourcePosition(int positionInSourceQTextDocument) const;
     PadFragment *padFragmentForSourcePosition(int p) const;
     PadFragment *padFragmentForOutputPosition(int p) const;
+    QTextCursor rawSourceCursorForOutputPosition(int p) const;
 
-	void print(int indent = 0) const;
-
+    // Start replacement of tokens
     QString run(QMap<QString,QVariant> &tokens) const;
     void run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out) const;
 
     // do not return children padfragment
     virtual QList<PadFragment*> children() const {return QList<PadFragment*>();}
 
+    // Debug
+    void print(int indent = 0) const;
+
 Q_SIGNALS:
     void cleared();
     void padFragmentChanged(PadFragment *fragment);
 
 private:
-//    void createTimerForDelayedResetOnRawSourceChanged();
 
-private Q_SLOTS:
+public Q_SLOTS:
+    void softReset();
     void reset();
-//    void rawSourceContentsChanged(int from, int charsRemoves, int charsAdded);
 
 private:
     QList<PadItem*> _items;

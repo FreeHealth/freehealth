@@ -53,6 +53,7 @@ const char * const USERDATA_KEY_PADITEM = "PadItem";
 const char * const PADWRITER_TRANS_CONTEXT = "PadWriter";
 
 const char * const FOLLOW_CURSOR_IN_RESULT_OUTPUT = QT_TRANSLATE_NOOP("PadWriter", "Follow cursor in result output");
+const char * const FIND_CURSOR_IN_RESULT = QT_TRANSLATE_NOOP("PadWriter", "Find cursor");
 const char * const AUTO_UPDATE_RESULT = QT_TRANSLATE_NOOP("PadWriter", "Automatic update of results");
 const char * const SET_TEST_VALUE_TO_TOKENS = QT_TRANSLATE_NOOP("PadWriter", "Set a test value to all available tokens");
 

@@ -44,17 +44,17 @@ public:
 
     void setPadDocument(PadDocument *pad);
 
-    void dragEnterEvent(QDragEnterEvent *event);
-    void dragMoveEvent(QDragMoveEvent *event);
-    void dragLeaveEvent(QDragLeaveEvent *event);
-    void dropEvent(QDropEvent *event);
-
 private Q_SLOTS:
     void onPadCleared();
     void contextMenu(const QPoint &pos);
     void editTokenUnderCursor();
 
 protected:
+    void dragEnterEvent(QDragEnterEvent *event);
+    void dragMoveEvent(QDragMoveEvent *event);
+    void dragLeaveEvent(QDragLeaveEvent *event);
+    void dropEvent(QDropEvent *event);
+
     bool event(QEvent *event);
 
     bool eventFilter(QObject *o, QEvent *e);

@@ -43,8 +43,8 @@ DragDropTextEdit::~DragDropTextEdit()
 
 void DragDropTextEdit::dragEnterEvent(QDragEnterEvent *event)
 {
-    if (underMouse() &&
-            event->mimeData()->hasFormat(Constants::TOKENVALUE_MIME)) {
+    if (textEdit()->underMouse() &&
+            event->mimeData()->hasFormat(Constants::TOKENRAWSOURCE_MIME)) {
         event->acceptProposedAction();
         event->accept();
     } else {
@@ -54,7 +54,7 @@ void DragDropTextEdit::dragEnterEvent(QDragEnterEvent *event)
 
 void DragDropTextEdit::dragMoveEvent(QDragMoveEvent *event)
 {
-    if (underMouse() &&
+    if (textEdit()->underMouse() &&
             event->mimeData()->hasFormat(Constants::TOKENRAWSOURCE_MIME)) {
         textEdit()->setFocus();
         QTextCursor cursor = cursorForPosition(event->pos());
@@ -70,7 +70,7 @@ void DragDropTextEdit::dragMoveEvent(QDragMoveEvent *event)
 
 void DragDropTextEdit::dragLeaveEvent(QDragLeaveEvent *event)
 {
-    if (underMouse()) {
+    if (textEdit()->underMouse()) {
         event->ignore();
     } else {
         event->accept();
@@ -79,15 +79,13 @@ void DragDropTextEdit::dragLeaveEvent(QDragLeaveEvent *event)
 
 void DragDropTextEdit::dropEvent(QDropEvent *event)
 {
-    if (underMouse()) {
+    if (textEdit()->underMouse()) {
         TokenEditor editor(this);
-//        editor.setCurrentIndex();
         editor.setTokenName(event->mimeData()->data(Constants::TOKENNAME_MIME));
-        int r = editor.exec();
-        if (r == QDialog::Accepted) {
+        if (editor.exec() == QDialog::Accepted) {
             setFocus();
             QTextCursor cursor = cursorForPosition(event->pos());
-            cursor.insertHtml(editor.toHtml());
+            cursor.insertHtml(editor.toRawSourceHtml());
             event->acceptProposedAction();
             event->accept();
             return;

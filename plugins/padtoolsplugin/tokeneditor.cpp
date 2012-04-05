@@ -84,7 +84,7 @@ void TokenEditor::setConditionnalPlainText(const QString &before, const QString 
 }
 
 
-QString TokenEditor::toHtml() const
+QString TokenEditor::toRawSourceHtml() const
 {
     return ui->tokenEditor->toHtml();
 }

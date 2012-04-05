@@ -53,7 +53,7 @@ public:
     void setConditionnalHtml(const QString &before, const QString &after);
     void setConditionnalPlainText(const QString &before, const QString &after);
 
-    QString toHtml() const;
+    QString toRawSourceHtml() const;
 
 protected:
     void done(int result);

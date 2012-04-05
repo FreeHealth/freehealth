@@ -76,6 +76,11 @@ public:
     /** Returns the end position in the output QTextDocument. This is defined only after the calling run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out) const. */
     int outputEnd() const {return _outputEnd;}
 
+    /** Contains raw source \e position */
+    bool containsRawPosition(const int pos) const {return (_start <= pos && _end >= pos);}
+    /** Contains output \e position */
+    bool containsOutputPosition(const int pos) const {return (_outputStart <= pos && _outputEnd >= pos);}
+
     void setToolTip(const QString &tooltip) {_toolTip = tooltip;}
     const QString &toolTip() const {return _toolTip;}
 

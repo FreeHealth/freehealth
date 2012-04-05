@@ -44,6 +44,8 @@
 
 #include <utils/log.h>
 
+#include <QTimer>
+
 #include "ui_padwriter.h"
 
 #include <QDebug>
@@ -63,14 +65,17 @@ class PadWriterPrivate
 public:
     PadWriterPrivate(PadWriter *parent) :
         ui(0),
-        m_TokenModel(0),
-        m_Pad(0),
-        m_LastFollowedItem(0),
-        _followRawSourceCursor(false),
+        _tokenModel(0),
+        _pad(0),
+        _followedItem(0),
+        _cursorHighlighTimer(0),
         q(parent)
     {
         _followedCharFormat.setUnderlineColor(QColor(Qt::cyan));
         _followedCharFormat.setUnderlineStyle(QTextCharFormat::WaveUnderline);
+
+        _cursorHighlighTimer = new QTimer(q);
+        _cursorHighlighTimer->setSingleShot(true);
     }
 
     void createActions(QToolButton *button)
@@ -80,13 +85,13 @@ public:
         QAction *a;
         Core::Command *cmd;
 
-        aFollowCursor = a = new QAction(q);
-        a->setObjectName("PadWriter.aFollowCursor");
+        aFindCursor = a = new QAction(q);
+        a->setObjectName("PadWriter.aFindCursor");
     //    a->setIcon(theme()->icon(icon));
         a->setCheckable(true);
         a->setChecked(false);
         cmd = actionManager()->registerAction(a, a->objectName(), context);
-        cmd->setTranslations(Constants::FOLLOW_CURSOR_IN_RESULT_OUTPUT, Constants::FOLLOW_CURSOR_IN_RESULT_OUTPUT, Constants::PADWRITER_TRANS_CONTEXT);
+        cmd->setTranslations(Constants::FIND_CURSOR_IN_RESULT, Constants::FIND_CURSOR_IN_RESULT, Constants::PADWRITER_TRANS_CONTEXT);
         button->addAction(cmd->action());
 
         aAutoUpdate = a = new QAction(q);
@@ -110,14 +115,14 @@ public:
 
 public:
     Ui::PadWriter *ui;
-    TokenModel *m_TokenModel;
-    QAction *aFollowCursor, *aAutoUpdate, *aSetDefaultValues;
+    TokenModel *_tokenModel;
+    QAction *aFindCursor, *aAutoUpdate, *aSetDefaultValues;
     QAction *aTest1, *aTest2, *aTest3; // actions used to test different rawsource scenari
-    PadDocument *m_Pad;
-    PadFragment *m_LastFollowedItem; // should not be deleted
-    QList<QTextCharFormat> m_LastHoveredItemCharFormats, m_LastFollowedItemCharFormats;
+    PadDocument *_pad;
+    PadFragment *_followedItem; // should not be deleted
+    QList<QTextCharFormat> m_LastHoveredItemCharFormats, _followedItemCharFormats;
     QTextCharFormat _followedCharFormat;
-    bool _followRawSourceCursor;
+    QTimer *_cursorHighlighTimer;
 
 private:
     PadWriter *q;
@@ -133,8 +138,8 @@ PadWriter::PadWriter(QWidget *parent) :
     d->ui->setupUi(this);
 
     // Create TokenModel
-    d->m_TokenModel = new TokenModel(this);
-    d->ui->treeView->setModel(d->m_TokenModel);
+    d->_tokenModel = new TokenModel(this);
+    d->ui->treeView->setModel(d->_tokenModel);
     d->ui->treeView->header()->setResizeMode(0, QHeaderView::Stretch);
 
     // Create PadHighlighter
@@ -142,7 +147,7 @@ PadWriter::PadWriter(QWidget *parent) :
 
     // Add options action
     d->createActions(d->ui->optionsButton);
-    connect(d->aFollowCursor, SIGNAL(triggered(bool)), this, SLOT(setFollowCursorInResultOutput(bool)));
+    connect(d->aFindCursor, SIGNAL(triggered()), this, SLOT(highlightCursor()));
     connect(d->aAutoUpdate, SIGNAL(triggered(bool)), this, SLOT(setAutoUpdateOfResult(bool)));
     connect(d->aSetDefaultValues, SIGNAL(triggered(bool)), this, SLOT(setTestValues(bool)));
     connect(d->ui->viewResult, SIGNAL(clicked()), this, SLOT(analyseRawSource()));
@@ -150,7 +155,6 @@ PadWriter::PadWriter(QWidget *parent) :
     connect(d->ui->findCursor, SIGNAL(clicked()), this, SLOT(highlightCursor()));
 
     // TEST
-    setFollowCursorInResultOutput(true);
     QAction *a;
     a = d->aTest1 = new QAction(this);
     a->setText("Test raw source 1");
@@ -196,20 +200,12 @@ void PadWriter::changeRawSourceScenario(QAction *a)
                  "^$ <span style=' text-decoration: underline; color:#0000ff;'>before</span> ^$ Before nested C ~C~ After ^$ Before D ~D~ After D $^nested C $^ 'b' ~B~ after 'b'$^<br />";
     }
 
-    bool b = d->_followRawSourceCursor;
-    if (b)
-        setFollowCursorInResultOutput(false);
-
-    if (d->m_Pad) {
-        delete d->m_Pad;
-        d->m_Pad = 0;
+    if (d->_pad) {
+        delete d->_pad;
+        d->_pad = 0;
     }
-
     d->ui->rawSource->setHtml(source);
     analyseRawSource();
-
-    if (b)
-        setFollowCursorInResultOutput(true);
 }
 
 QString PadWriter::htmlResult() const
@@ -228,17 +224,17 @@ void PadWriter::analyseRawSource()
     d->ui->wysiwyg->document()->clear();
 
     // recreate PadDocument
-    if (d->m_Pad) {
-        delete d->m_Pad;
-        d->m_Pad = 0;
+    if (d->_pad) {
+        delete d->_pad;
+        d->_pad = 0;
     }
-    d->m_Pad = PadAnalyzer().analyze(d->ui->rawSource->document());
-    d->m_Pad->setTokenModel(d->m_TokenModel);
-    d->m_Pad->run(d->m_TokenModel->tokens(), d->ui->rawSource->document(), d->ui->wysiwyg->document());
-    connect(d->m_Pad, SIGNAL(padFragmentChanged(PadFragment*)), this, SLOT(onPadFragmentChanged(PadFragment*)));
+    d->_pad = PadAnalyzer().analyze(d->ui->rawSource->document());
+    d->_pad->setTokenModel(d->_tokenModel);
+    d->_pad->run(d->_tokenModel->tokens(), d->ui->rawSource->document(), d->ui->wysiwyg->document());
+    connect(d->_pad, SIGNAL(padFragmentChanged(PadFragment*)), this, SLOT(onPadFragmentChanged(PadFragment*)));
 
     // Setup ui
-    d->ui->wysiwyg->setPadDocument(d->m_Pad);
+    d->ui->wysiwyg->setPadDocument(d->_pad);
 
     d->ui->listWidgetErrors->clear();
     foreach (const Core::PadAnalyzerError &error, errors) {
@@ -257,50 +253,66 @@ void PadWriter::viewErrors()
 {
 }
 
-void PadWriter::setFollowCursorInResultOutput(bool state)
-{
-    if (d->_followRawSourceCursor==state)
-        return;
-
-    d->_followRawSourceCursor = state;
-    if (state) {
-        connect(d->ui->rawSource->textEdit(), SIGNAL(cursorPositionChanged()), this, SLOT(findCursorPositionInOutput()));
-    } else {
-        disconnect(d->ui->rawSource->textEdit(), SIGNAL(cursorPositionChanged()), this, SLOT(findCursorPositionInOutput()));
-    }
-}
-
 void PadWriter::highlightCursor()
 {
+//    int cursorPos;
+//    // highlight cursor in output textdocument
+//    cursorPos = d->ui->wysiwyg->textEdit()->textCursor().position();
+//    PadFragment *outputFragment = d->_pad->padFragmentForOutputPosition(cursorPos);
+
+//    // highlight cursor in source textdocument
+//    cursorPos = d->ui->rawSource->textEdit()->textCursor().position();
+//    PadFragment *rawFragment = d->_pad->padFragmentForSourcePosition(cursorPos);
+
+//    QTextDocument *doc = d->ui->wysiwyg->document();
+//    if (!item) {
+//        if (d->_followedItem) {
+//            Constants::removePadFragmentFormat("Follow", doc, d->_followedItemCharFormats);
+//            d->_followedItem = 0;
+//        }
+//        return;
+//    }
+
+//    if (d->_followedItem) {
+//        if (d->_followedItem == item)
+//            return;
+//        Constants::removePadFragmentFormat("Follow", doc, d->_followedItemCharFormats);
+//        d->_followedItem = item;
+//    } else {
+//        d->_followedItem = item;
+//    }
+//    Constants::setPadFragmentFormat("Follow", d->_followedItem->outputStart(), d->_followedItem->outputEnd(), doc, d->_followedItemCharFormats, d->_followedCharFormat);
+
+    // set timer
 }
 
 void PadWriter::findCursorPositionInOutput()
 {
-    if (!d->m_Pad)
+    if (!d->_pad)
         return;
 
     // Find corresponding fragment Id
     const int cursorPos = d->ui->rawSource->textEdit()->textCursor().position();
-//    PadItem *item = d->m_Pad->padItemForSourcePosition(cursorPos);
-    PadFragment *item = d->m_Pad->padFragmentForSourcePosition(cursorPos);
+//    PadItem *item = d->_pad->padItemForSourcePosition(cursorPos);
+    PadFragment *item = d->_pad->padFragmentForSourcePosition(cursorPos);
     QTextDocument *doc = d->ui->wysiwyg->document();
     if (!item) {
-        if (d->m_LastFollowedItem) {
-            Constants::removePadFragmentFormat("Follow", doc, d->m_LastFollowedItemCharFormats);
-            d->m_LastFollowedItem = 0;
+        if (d->_followedItem) {
+            Constants::removePadFragmentFormat("Follow", doc, d->_followedItemCharFormats);
+            d->_followedItem = 0;
         }
         return;
     }
 
-    if (d->m_LastFollowedItem) {
-        if (d->m_LastFollowedItem == item)
+    if (d->_followedItem) {
+        if (d->_followedItem == item)
             return;
-        Constants::removePadFragmentFormat("Follow", doc, d->m_LastFollowedItemCharFormats);
-        d->m_LastFollowedItem = item;
+        Constants::removePadFragmentFormat("Follow", doc, d->_followedItemCharFormats);
+        d->_followedItem = item;
     } else {
-        d->m_LastFollowedItem = item;
+        d->_followedItem = item;
     }
-    Constants::setPadFragmentFormat("Follow", d->m_LastFollowedItem->outputStart(), d->m_LastFollowedItem->outputEnd(), doc, d->m_LastFollowedItemCharFormats, d->_followedCharFormat);
+    Constants::setPadFragmentFormat("Follow", d->_followedItem->outputStart(), d->_followedItem->outputEnd(), doc, d->_followedItemCharFormats, d->_followedCharFormat);
 }
 
 void PadWriter::setAutoUpdateOfResult(bool state)
@@ -320,12 +332,12 @@ void PadWriter::setTestValues(bool /*state*/)
 
 void PadWriter::onPadFragmentChanged(PadFragment *fragment)
 {
-    if (!d->m_LastFollowedItem)
+    if (!d->_followedItem)
         return;
-    if (d->m_LastFollowedItem!=fragment)
+    if (d->_followedItem!=fragment)
         return;
     // The followed fragment was modified
     QTextDocument *doc = d->ui->wysiwyg->document();
-    Constants::removePadFragmentFormat("Follow", doc, d->m_LastFollowedItemCharFormats);
-    Constants::setPadFragmentFormat("Follow", d->m_LastFollowedItem->outputStart(), d->m_LastFollowedItem->outputEnd(), doc, d->m_LastFollowedItemCharFormats, d->_followedCharFormat);
+    Constants::removePadFragmentFormat("Follow", doc, d->_followedItemCharFormats);
+    Constants::setPadFragmentFormat("Follow", d->_followedItem->outputStart(), d->_followedItem->outputEnd(), doc, d->_followedItemCharFormats, d->_followedCharFormat);
 }

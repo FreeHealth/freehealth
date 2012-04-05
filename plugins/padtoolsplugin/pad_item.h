@@ -61,8 +61,6 @@ public:
     void run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out) const;
 
     QList<PadFragment*> children() const;
-
-private:
 	PadCore *getCore() const;
 };
 

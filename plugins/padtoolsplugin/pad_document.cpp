@@ -95,7 +95,7 @@ PadDocument::~PadDocument()
 {
 }
 
-/** Clear the current PadTools::PadDocument. */
+/** Clear the current PadTools::PadDocument. Removes all fragments && sources. */
 void PadDocument::clear()
 {
     qDeleteAll(_fragments);
@@ -175,28 +175,34 @@ void PadDocument::print(int indent) const
 	str += "[pad]";
 	qDebug("%s", qPrintable(str));
 	foreach (PadFragment *fragment, _fragments){
-		fragment->print(indent + 2);
+        fragment->print(indent + 2);
 	}
 }
 
 /** Find the PadTools::PadItem for the QTextCursor position in output document. */
 PadItem *PadDocument::padItemForOutputPosition(int p) const
 {
-    foreach(PadItem *item, _items) {
-        if (item->outputStart() <= p && item->outputEnd() >= p)
-            return item;
+    PadFragment *fragment = padFragmentForOutputPosition(p);
+    PadItem *item = dynamic_cast<PadItem*>(fragment);
+    PadFragment *parent = fragment;
+    while (parent && !item) {
+        parent = parent->parent();
+        item = dynamic_cast<PadItem*>(parent);
     }
-    return 0;
+    return item;
 }
 
 /** Find the PadTools::PadItem for the QTextCursor position in raw source document. */
 PadItem *PadDocument::padItemForSourcePosition(int p) const
 {
-    foreach(PadItem *item, _items) {
-        if (item->start() <= p && item->end() >= p)
-            return item;
+    PadFragment *fragment = padFragmentForSourcePosition(p);
+    PadItem *item = dynamic_cast<PadItem*>(fragment);
+    PadFragment *parent = fragment;
+    while (parent && !item) {
+        parent = parent->parent();
+        item = dynamic_cast<PadItem*>(parent);
     }
-    return 0;
+    return item;
 }
 
 /** Find fragment for the QTextCursor position in raw source document. */
@@ -219,6 +225,42 @@ PadFragment *PadDocument::padFragmentForOutputPosition(int p) const
     return 0;
 }
 
+/** Returns the QTextCursor in the rawSource corresponding to the position \e p in the output document. */
+QTextCursor PadDocument::rawSourceCursorForOutputPosition(int p) const
+{
+    Q_ASSERT(_docSource);
+    Q_ASSERT(_docOutput);
+
+    PadFragment *outFragment = padFragmentForOutputPosition(p);
+    if (!outFragment) {
+        // return start or end
+        QTextCursor cursor(_docSource);
+        QTextCursor out(_docOutput);
+        out.setPosition(p);
+        out.atEnd() ? cursor.movePosition(QTextCursor::End) : cursor.movePosition(QTextCursor::Start);
+        return cursor;
+    }
+
+    int posInFragment = p - outFragment->outputStart();
+    PadFragment *sourceFragment = padFragmentForSourcePosition(outFragment->start());
+    int posInRaw = sourceFragment->start() + posInFragment;
+    if (!sourceFragment) {
+        // return start or end
+        QTextCursor cursor(_docSource);
+        QTextCursor out(_docOutput);
+        out.setPosition(p);
+        if (out.atEnd())
+            cursor.movePosition(QTextCursor::End);
+        else
+            cursor.movePosition(QTextCursor::Start);
+        return cursor;
+    }
+
+    QTextCursor cursor(_docSource);
+    cursor.setPosition(posInRaw);
+    return cursor;
+}
+
 /** Run this pad over some tokens and returns the result text */
 QString PadDocument::run(QMap<QString,QVariant> &tokens) const
 {
@@ -235,6 +277,8 @@ void PadDocument::run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTe
     foreach (PadFragment *fragment, _fragments)
         fragment->run(tokens, source, out);
     _docOutput = out;
+
+    print();
 }
 
 //void PadDocument::createTimerForDelayedResetOnRawSourceChanged()
@@ -247,18 +291,28 @@ void PadDocument::run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTe
 //    connect(_timer, SIGNAL(timeout()), this, SLOT(reset()));
 //}
 
-/** Renew the analyze of the source and update the output */
-void PadDocument::reset()
+void PadDocument::softReset()
 {
     QTime c;
     c.start();
 
-    clear();
+    qDeleteAll(_fragments);
+    _fragments.clear();
+    _docOutput->clear();
+
     PadAnalyzer a;
     a.analyze(_docSource, this);
     if (_tokenModel)
         run(_tokenModel->tokens(), _docSource, _docOutput);
 
     Utils::Log::logTimeElapsed(c, "PadDocument", "reset");
+}
+
+/** Renew the analyze of the source and update the output. Clears the object first \sa clear(), softReset() */
+void PadDocument::reset()
+
+{
+    clear();
+    softReset();
     return;
 }

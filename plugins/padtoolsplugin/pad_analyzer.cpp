@@ -128,7 +128,7 @@ PadDocument *PadAnalyzer::startAnalyze(PadDocument *padDocument)
             fragment->setId(nextId());
 			break;
 		case Lexem_PadOpenDelimiter:
-			pos = _curPos - 1;
+            pos = _curPos - QString(Constants::TOKEN_OPEN_DELIMITER).size();
 			fragment = nextPadItem();
 			if (!fragment) { // bad pad item => turn it into a string fragment
                 /** \todo manage error here */
@@ -147,7 +147,7 @@ PadDocument *PadAnalyzer::startAnalyze(PadDocument *padDocument)
 												  errorTokens);
 
 			// turn it into a string fragment
-			pos = _curPos - 1;
+            pos = _curPos - QString(Constants::TOKEN_CLOSE_DELIMITER).size();
             /** \todo manage error here */
             fragment = new PadString();//text.mid(pos, _curPos - pos));
 			fragment->setStart(pos);
@@ -178,7 +178,7 @@ PadDocument *PadAnalyzer::startAnalyze(PadDocument *padDocument)
 
     Utils::Log::logTimeElapsed(c, "Analyzer", "analyze");
 
-    pad->print();
+//    pad->print();
 	return pad;
 }
 
@@ -261,7 +261,7 @@ PadCore *PadAnalyzer::nextCore()
 		delete core;
 		return 0;
 	}
-	core->setEnd(_curPos - 1);
+    core->setEnd(_curPos);
 	return core;
 }
 
