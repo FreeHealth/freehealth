@@ -62,6 +62,16 @@ void PadFragment::addChild(PadFragment *fragment)
     _fragments << fragment;
 }
 
+/** Removes a PadTools::PadFragment from the object children. Children are stored in an ordered list. */
+void PadFragment::removeAndDeleteFragment(PadFragment *fragment)
+{
+    if (_fragments.contains(fragment)) {
+        _fragments.removeAll(fragment);
+        delete fragment;
+        fragment = 0;
+    }
+}
+
 /** Return the smallest PadTools::PadFragment that include the position. All children are checked. Return 0 if the pos is not included in the fragment. */
 PadFragment *PadFragment::padFragmentForSourcePosition(int pos) const
 {

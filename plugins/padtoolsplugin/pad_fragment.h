@@ -94,6 +94,8 @@ public:
     virtual void run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out) const = 0;
 
     virtual void addChild(PadFragment *fragment);
+    virtual void removeAndDeleteFragment(PadFragment *fragment);
+    /** Returns the list of PadTools::PadFragment children */
     virtual QList<PadFragment*> children() const {return _fragments;}
 
     virtual PadFragment *padFragmentForSourcePosition(int pos) const;
