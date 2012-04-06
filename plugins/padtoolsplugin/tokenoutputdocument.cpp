@@ -40,6 +40,8 @@
 #include <QLinearGradient>
 #include <QGradientStops>
 #include <QMenu>
+#include <QKeyEvent>
+#include <QApplication>
 
 #include <QDebug>
 
@@ -65,6 +67,23 @@ public:
         _hoveredTokenCoreCharFormat.setUnderlineStyle(QTextCharFormat::WaveUnderline);
     }
 
+    bool deletePadCoreAt(int pos)
+    {
+        PadCore *core = dynamic_cast<PadCore*>(_pad->padFragmentForOutputPosition(pos));
+        return (core!=0);
+    }
+
+    bool userWantsToDeletePadItem(int pos)
+    {
+        PadCore *core = dynamic_cast<PadCore*>(_pad->padFragmentForOutputPosition(pos));
+        if (!core)
+            return false;
+        bool yes = Utils::yesNoMessageBox(QApplication::translate(Constants::PADWRITER_TRANS_CONTEXT, "Remove token “<b>%1</b>”?").arg(core->name()),
+                                          QApplication::translate(Constants::PADWRITER_TRANS_CONTEXT, "You are about to remove token: “<b>%1</b>”. "
+                                                                  "Do you really want to continue?").arg(core->name()));
+        return yes;
+    }
+
 public:
     PadDocument *_pad;
     PadItem *_lastHoveredItem; // should not be deleted
@@ -84,6 +103,7 @@ TokenOutputDocument::TokenOutputDocument(QWidget *parent) :
     setAcceptDrops(true);
     setContextMenuPolicy(Qt::CustomContextMenu);
     textEdit()->viewport()->installEventFilter(this);
+    textEdit()->installEventFilter(this);
 }
 
 TokenOutputDocument::~TokenOutputDocument()
@@ -94,12 +114,14 @@ TokenOutputDocument::~TokenOutputDocument()
     }
 }
 
+/** Define the PadTools::PadDocument to use with this object */
 void TokenOutputDocument::setPadDocument(PadDocument *pad)
 {
     d->_pad = pad;
     connect(pad, SIGNAL(cleared()), this, SLOT(onPadCleared()));
 }
 
+/** Manage PadTools::PadDocument clear signal */
 void TokenOutputDocument::onPadCleared()
 {
     if (!d->_lastHoveredItem)
@@ -108,6 +130,7 @@ void TokenOutputDocument::onPadCleared()
     d->_lastHoveredItem = 0;
 }
 
+/** Overwrite the context menu (add token editor action is mouse under a PadTools::PadItem */
 void TokenOutputDocument::contextMenu(const QPoint &pos)
 {
     QTextCursor c = textEdit()->cursorForPosition(pos);
@@ -128,6 +151,7 @@ void TokenOutputDocument::contextMenu(const QPoint &pos)
     }
 }
 
+/** Start edition of the PadTools::PadItem under the QTextCursor */
 void TokenOutputDocument::editTokenUnderCursor()
 {
     if (!d->_pad)
@@ -281,7 +305,6 @@ void TokenOutputDocument::dropEvent(QDropEvent *event)
 
 bool TokenOutputDocument::event(QEvent *event)
 {
-    static int i = 0;
     if (!d->_pad)
         return Editor::TextEditor::event(event);
 
@@ -332,14 +355,118 @@ bool TokenOutputDocument::event(QEvent *event)
 
 bool TokenOutputDocument::eventFilter(QObject *o, QEvent *e)
 {
-    if (!d->_pad || o!=textEdit()->viewport())
+    if (!d->_pad)
         return false;
 
-    if (e->type()==QEvent::MouseButtonDblClick) {
-        // get the PadItem under mouse
-        QMouseEvent *me = static_cast<QMouseEvent*>(e);
-        setTextCursor(cursorForPosition(me->pos()));
-        editTokenUnderCursor();
+    // Catch mouse actions on viewport
+    if (o==textEdit()->viewport()) {
+        if (e->type()==QEvent::MouseButtonDblClick) {
+            // get the PadItem under mouse
+            QMouseEvent *me = static_cast<QMouseEvent*>(e);
+            setTextCursor(cursorForPosition(me->pos()));
+            editTokenUnderCursor();
+        }
+        return QWidget::eventFilter(o, e);
+    }
+
+    // Catch KeyEvent in QTextEdit
+    if (o==textEdit()) {
+        if (e->type()==QEvent::KeyPress) {
+            QKeyEvent *kevent = static_cast<QKeyEvent*>(e);
+            if (!kevent)
+                return false;
+
+            // Manage autoRepeat keys
+            switch (kevent->key()) {
+            //        case Qt::Key_Left:
+            //            if (l->cursorPosition()==0)
+            //                setCursorPosition(currentId, -1);
+            //            break;
+            //        case Qt::Key_Right:  // Ok
+            //            if (l->cursorPosition()==m_NbChars.at(currentId)) {
+            //                nextTab = currentId+1;
+            //                if (nextTab >= m_Edits.count())
+            //                    return true;
+            //                setCursorPosition(nextTab, 0);
+            //                return true;
+            //            }
+            //            break;
+            case Qt::Key_Backspace:
+            {
+                qWarning() << "BACKSPACE PRESSED" << textCursor().position() << kevent->isAutoRepeat();
+                if (kevent->isAutoRepeat()) {
+                    // if the next deleted char == PadCore
+                    // ask user if he wants to totally removed the PadItem
+                    //                int pos = l->cursorPosition();
+                    //                removeChar(currentId, pos);
+                    //                --pos;
+                    //                if (pos==0) --pos;
+                    //                setCursorPosition(currentId, pos);
+                }
+                e->ignore();
+                return true;
+                break;
+            }
+            case Qt::Key_Delete:
+                qWarning() << "DEL PRESSED" << textCursor().position() << kevent->isAutoRepeat();
+                if (kevent->isAutoRepeat()) {
+                    // if the next deleted char == PadCore
+                    // ask user if he wants to totally removed the PadItem
+                    //                int pos = l->cursorPosition();
+                    //                ++pos;
+                    //                removeChar(currentId, pos);
+                    //                setCursorPosition(currentId, pos-1);
+                }
+                e->ignore();
+                return true;
+            default: return false;
+            }
+
+        } else if (e->type()==QEvent::KeyRelease) {
+            QKeyEvent *kevent = static_cast<QKeyEvent*>(e);
+            if (!kevent)
+                return false;
+                    switch (kevent->key()) {
+            //        case Qt::Key_Left:
+            ////            if (l->cursorPosition()==0) {
+            ////                setCursorPosition(currentId, -1);
+            //                return true;
+            ////            }
+            //            break;
+            //        case Qt::Key_Right:
+            //            return true;
+            //            break;
+                    case Qt::Key_Delete:
+                    {
+                        qWarning() << "DEL RELEASED" << textCursor().position() << kevent->isAutoRepeat();
+                        int newPosition = textCursor().position()+1;
+                        if (d->deletePadCoreAt(newPosition)) {
+                            if (d->userWantsToDeletePadItem(newPosition)) {
+                                PadItem *item = d->_pad->padItemForOutputPosition(newPosition);
+                                d->_pad->removeAndDeleteFragment(item);
+                                d->_pad->softReset();
+                            }
+                        } else {
+                            d->_pad->removeOutputCharAt(newPosition);
+                        }
+                        return true;
+                    }
+                    case Qt::Key_Backspace:
+                    {
+                        qWarning() << "BACKSPACE RELEASED" << textCursor().position() << kevent->isAutoRepeat();
+                        int newPosition = textCursor().position()-1;
+                        if (d->deletePadCoreAt(newPosition)) {
+                            if (d->userWantsToDeletePadItem(newPosition)) {
+                                PadItem *item = d->_pad->padItemForOutputPosition(newPosition);
+                                d->_pad->removeAndDeleteFragment(item);
+                                d->_pad->softReset();
+                            }
+                        }
+                        return true;
+                    }
+                    default: return false;
+                    }
+        }
     }
 
     return QWidget::eventFilter(o, e);

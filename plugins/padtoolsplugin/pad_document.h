@@ -62,6 +62,7 @@ public:
     QTextDocument *rawSourceDocument() const {return _docSource;}
     QTextDocument *outputDocument() const {return _docOutput;}
     void addChild(PadFragment *fragment);
+    void removeAndDeleteFragment(PadFragment *fragment);
 
     // Extract text from source
     QString fragmentRawSource(PadFragment *fragment) const;

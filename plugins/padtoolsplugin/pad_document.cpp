@@ -168,6 +168,36 @@ void PadDocument::addChild(PadFragment *fragment)
     PadFragment::addChild(fragment);
 }
 
+/** Remove \e fragment content in raw source && in output and delete the fragment */
+void PadDocument::removeAndDeleteFragment(PadFragment *fragment)
+{
+    if (_docSource) {
+        QTextCursor cursor(_docSource);
+        cursor.setPosition(fragment->start());
+        cursor.setPosition(fragment->end(), QTextCursor::KeepAnchor);
+        cursor.removeSelectedText();
+    } else if (!_rawSource.isEmpty()) {
+        _rawSource.remove(fragment->start(), fragment->rawLength());
+    }
+    if (_docOutput) {
+        QTextCursor cursor(_docOutput);
+        cursor.setPosition(fragment->outputStart());
+        cursor.setPosition(fragment->outputEnd(), QTextCursor::KeepAnchor);
+        cursor.removeSelectedText();
+    }
+    PadFragment::removeAndDeleteFragment(fragment);
+}
+
+/** Removes char at \e position in output and keep raw source sync */
+void PadDocument::removeOutputCharAt(int position, int length)
+{
+}
+
+/** Inserts char at \e position in output and keep raw source sync */
+void PadDocument::insertOutputCharAt(const QChar &c,int position)
+{
+}
+
 /** Debug to console. */
 void PadDocument::print(int indent) const
 {
