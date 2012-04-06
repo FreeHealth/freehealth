@@ -30,20 +30,57 @@
 #include <listviewplugin/constants.h>
 
 #include <QObject>
+#include <QWidget>
+#include <QAbstractItemView>
 
-class QAbstractItemView;
+QT_BEGIN_NAMESPACE
 class QMenu;
 class QPoint;
+class QToolBar;
+QT_END_NAMESPACE
 
 namespace Views {
 namespace Internal {
 class ExtendedViewPrivate;
 }
 
+class LISTVIEW_EXPORT IView : public QWidget
+{
+    Q_OBJECT
+public:
+    IView(QWidget *parent);
+    virtual ~IView() {}
+
+    virtual QAbstractItemView *itemView() const = 0;
+    virtual void addToolBar(QToolBar *bar);
+
+    void setCurrentIndex(const QModelIndex &index) {itemView()->setCurrentIndex(index);}
+    QModelIndex currentIndex() const {return itemView()->currentIndex();}
+    void setModel(QAbstractItemModel *model) {itemView()->setModel(model);}
+    QItemSelectionModel *selectionModel() const {return itemView()->selectionModel();}
+    QAbstractItemModel *model() const {return itemView()->model();}
+    void setEditTriggers(QAbstractItemView::EditTriggers trig) {itemView()->setEditTriggers(trig);}
+    QModelIndex indexAt(const QPoint &point) const {return itemView()->indexAt(point);}
+
+    QAbstractItemView::SelectionMode selectionMode() const {return itemView()->selectionMode();}
+    void setSelectionMode(QAbstractItemView::SelectionMode mode) {itemView()->setSelectionMode(mode);}
+
+    QAbstractItemView::SelectionBehavior selectionBehavior() const {return itemView()->selectionBehavior();}
+    void setSelectionBehavior(QAbstractItemView::SelectionBehavior behavior) {itemView()->setSelectionBehavior(behavior);}
+
+    void setAlternatingRowColors(bool enable) {itemView()->setAlternatingRowColors(enable);}
+
+protected:
+    void setItemView(QAbstractItemView *view);
+
+private:
+    QList<QToolBar*> m_AddedToolBars;
+};
+
 class LISTVIEW_EXPORT ExtendedView
 {
 public:
-    ExtendedView(QAbstractItemView *parent = 0, Constants::AvailableActions actions = Constants::DefaultActions);
+    ExtendedView(IView *parent = 0, Constants::AvailableActions actions = Constants::DefaultActions);
     virtual ~ExtendedView();
 
     void setActions(Constants::AvailableActions actions);

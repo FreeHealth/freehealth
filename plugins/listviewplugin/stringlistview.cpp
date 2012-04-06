@@ -46,8 +46,8 @@
 
 using namespace Views;
 
-StringListView::StringListView( QWidget * parent )
-        : ListView(parent)
+StringListView::StringListView(QWidget *parent) :
+    ListView(parent)
 {
 }
 

@@ -31,10 +31,10 @@
 #include <QtCore/QObject>
 
 /**
- * \file emptyplugin.h
+ * \file listviewplugin.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.0.4
- * \date 11 Aug 2009
+ * \version 0.7.1
+ * \date 06 Apr 2012
 */
 
 namespace Views {

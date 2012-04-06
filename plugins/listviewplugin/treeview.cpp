@@ -40,18 +40,17 @@ using namespace Internal;
 static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
 static inline Core::ActionManager *actionManager() { return Core::ICore::instance()->actionManager(); }
 
-
 namespace Views {
 namespace Internal {
-
 class TreeViewPrivate
 {
 public:
     TreeViewPrivate(QWidget *parent, Constants::AvailableActions actions) :
-            m_Parent(parent),
-            m_Actions(actions),
-            m_Context(0),
-            m_ExtView(0)
+        m_Parent(parent),
+        m_TreeView(0),
+        m_Actions(actions),
+        m_Context(0),
+        m_ExtView(0)
     {
     }
 
@@ -74,10 +73,12 @@ public:
 
 public:
     QWidget *m_Parent;
+    QTreeView *m_TreeView;
     Constants::AvailableActions m_Actions;
     ViewContext *m_Context;
     QString m_ContextName;
     ExtendedView *m_ExtView;
+    bool m_IsDeselectable;
 };
 
 }  // End Internal
@@ -86,7 +87,7 @@ public:
 
 /** \brief Constructor */
 TreeView::TreeView(QWidget *parent, Constants::AvailableActions actions) :
-        DeselectableTreeView(parent),
+        IView(parent),
         d(0)
 {
     static int handler = 0;
@@ -94,6 +95,12 @@ TreeView::TreeView(QWidget *parent, Constants::AvailableActions actions) :
     QObject::setObjectName("TreeView_"+QString::number(handler));
     setProperty(Constants::HIDDEN_ID, "xx");
     d = new Internal::TreeViewPrivate(this, actions);
+    d->m_IsDeselectable = false;
+
+    // Create the treeview && the widget content
+    d->m_TreeView = new QTreeView(this);
+    setItemView(d->m_TreeView);
+    d->m_TreeView->viewport()->installEventFilter(this);
 
     // Create the Manager instance and context
     ViewManager::instance();
@@ -108,6 +115,24 @@ TreeView::TreeView(QWidget *parent, Constants::AvailableActions actions) :
 TreeView::~TreeView()
 {
     contextManager()->removeContextObject(d->m_Context);
+    if (d)
+        delete d;
+    d = 0;
+}
+
+QAbstractItemView *TreeView::itemView() const
+{
+    return d->m_TreeView;
+}
+
+QTreeView *TreeView::treeView() const
+{
+    return d->m_TreeView;
+}
+
+void TreeView::setDeselectable(bool deselectable)
+{
+    d->m_IsDeselectable = deselectable;
 }
 
 void TreeView::setActions(Constants::AvailableActions actions)
@@ -189,3 +214,32 @@ void TreeView::moveUp()
     Q_EMIT moveUpRequested();
 }
 
+bool TreeView::eventFilter(QObject *o, QEvent *event)
+{
+    if (o!=d->m_TreeView->viewport())
+        return QWidget::eventFilter(o, event);
+
+    if (d->m_IsDeselectable && selectionModel() && event->type() == QEvent::MouseButtonPress) {
+        QWidget::eventFilter(o, event);
+        QMouseEvent *me = static_cast<QMouseEvent*>(event);
+        QModelIndex item = indexAt(me->pos());
+        bool selected = selectionModel()->isSelected(indexAt(me->pos()));
+//        IView::mousePressEvent(event);
+        if (selected) {
+            if (selectionBehavior()==QAbstractItemView::SelectItems) {
+                selectionModel()->select(item, QItemSelectionModel::Deselect);
+            } else if (selectionBehavior()==QAbstractItemView::SelectRows) {
+                //                    QModelIndexList items = selectionModel()->selectedColumns(item.row());
+                for(int i=0; i<selectionModel()->model()->columnCount(item); ++i) {
+                    selectionModel()->select(selectionModel()->model()->index(item.row(), i, item.parent()), QItemSelectionModel::Deselect);
+                }
+            } else if (selectionBehavior()==QAbstractItemView::SelectColumns) {
+                for(int i=0; i<selectionModel()->model()->rowCount(item); ++i) {
+                    selectionModel()->select(selectionModel()->model()->index(i, item.column(), item.parent()), QItemSelectionModel::Deselect);
+                }
+            }
+        }
+    }
+
+    return QWidget::eventFilter(o, event);
+}

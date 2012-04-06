@@ -143,16 +143,17 @@ FancyTreeView::FancyTreeView(QWidget *parent) :
     d(new Internal::FancyTreeViewPrivate)
 {
     ui->setupUi(this);
+    QTreeView *tree = ui->widget->treeView();
 
-    ui->treeView->viewport()->setAttribute(Qt::WA_Hover);
-    ui->treeView->setItemDelegate((d->m_Delegate = new Internal::TreeItemDelegate(this)));
-    ui->treeView->setFrameStyle(QFrame::NoFrame);
-    ui->treeView->setAttribute(Qt::WA_MacShowFocusRect, false);
-    ui->treeView->setSelectionMode(QAbstractItemView::SingleSelection);
-    ui->treeView->setSelectionBehavior(QAbstractItemView::SelectRows);
+    tree->viewport()->setAttribute(Qt::WA_Hover);
+    tree->setItemDelegate((d->m_Delegate = new Internal::TreeItemDelegate(this)));
+    tree->setFrameStyle(QFrame::NoFrame);
+    tree->setAttribute(Qt::WA_MacShowFocusRect, false);
+    tree->setSelectionMode(QAbstractItemView::SingleSelection);
+    tree->setSelectionBehavior(QAbstractItemView::SelectRows);
 
-    connect(ui->treeView, SIGNAL(clicked(QModelIndex)), this, SLOT(handleClicked(QModelIndex)));
-    connect(ui->treeView, SIGNAL(pressed(QModelIndex)), this, SLOT(handlePressed(QModelIndex)));
+    connect(tree, SIGNAL(clicked(QModelIndex)), this, SLOT(handleClicked(QModelIndex)));
+    connect(tree, SIGNAL(pressed(QModelIndex)), this, SLOT(handlePressed(QModelIndex)));
 }
 
 FancyTreeView::~FancyTreeView()
@@ -163,7 +164,7 @@ FancyTreeView::~FancyTreeView()
 
 QTreeView *FancyTreeView::treeView() const
 {
-    return ui->treeView;
+    return ui->widget->treeView();
 }
 
 QToolButton *FancyTreeView::button()
@@ -261,9 +262,9 @@ void FancyTreeView::setItemMenu(QMenu *menu)
 void FancyTreeView::useContextMenu(bool state)
 {
     if (state)
-        ui->treeView->setContextMenuPolicy(Qt::CustomContextMenu);
+        ui->widget->treeView()->setContextMenuPolicy(Qt::CustomContextMenu);
     else
-        ui->treeView->setContextMenuPolicy(Qt::NoContextMenu);
+        ui->widget->treeView()->setContextMenuPolicy(Qt::NoContextMenu);
 }
 
 /**
@@ -272,12 +273,13 @@ void FancyTreeView::useContextMenu(bool state)
 */
 void FancyTreeView::setModel(QAbstractItemModel *model, const int columnForFancyButton)
 {
+    QTreeView *tree = ui->widget->treeView();
     d->m_Model = model;
-    ui->treeView->setModel(model);
-    ui->treeView->header()->setStretchLastSection(false);
-    ui->treeView->header()->setResizeMode(0, QHeaderView::Stretch);
-    ui->treeView->header()->setResizeMode(columnForFancyButton, QHeaderView::Fixed);
-    ui->treeView->setColumnWidth(columnForFancyButton, 16);
+    tree->setModel(model);
+    tree->header()->setStretchLastSection(false);
+    tree->header()->setResizeMode(0, QHeaderView::Stretch);
+    tree->header()->setResizeMode(columnForFancyButton, QHeaderView::Fixed);
+    tree->setColumnWidth(columnForFancyButton, 16);
 
     d->m_Delegate->setModel(model);
     d->m_Delegate->setFancyColumn(columnForFancyButton);
@@ -287,7 +289,7 @@ void FancyTreeView::setModel(QAbstractItemModel *model, const int columnForFancy
 void FancyTreeView::hideColumn(int column)
 {
     if (ui)
-        ui->treeView->hideColumn(column);
+        ui->widget->treeView()->hideColumn(column);
 }
 
 /** \brief Show context menu of the treeview. */
@@ -295,7 +297,7 @@ void FancyTreeView::on_treeView_customContextMenuRequested(const QPoint &pos)
 {
     QMenu *pop = new QMenu(this);
     pop->addActions(ui->button->actions());
-    pop->exec(ui->treeView->mapToGlobal(pos));
+    pop->exec(ui->widget->treeView()->mapToGlobal(pos));
     delete pop;
 }
 
@@ -308,9 +310,9 @@ void FancyTreeView::handlePressed(const QModelIndex &index)
 
 void FancyTreeView::handleClicked(const QModelIndex &index)
 {
-    qWarning() << index << ui->treeView->selectionModel()->isSelected(index);
-//    if (ui->treeView->selectionModel()->isSelected(index))
-//        ui->treeView->clearSelection();
+    qWarning() << index << ui->widget->treeView()->selectionModel()->isSelected(index);
+//    if (ui->widget->treeView()->selectionModel()->isSelected(index))
+//        ui->widget->treeView()->clearSelection();
     if (index.column() == d->m_Delegate->fancyColumn()) { // the fancy button
         qWarning() << "Fancy button called" << index;
         // Header ?
@@ -325,7 +327,7 @@ void FancyTreeView::handleClicked(const QModelIndex &index)
         }
 //        // work around a bug in itemviews where the delegate wouldn't get the QStyle::State_MouseOver
 //        QPoint cursorPos = QCursor::pos();
-//        QWidget *vp = ui->treeView->viewport();
+//        QWidget *vp = ui->widget->treeView()->viewport();
 //        QMouseEvent e(QEvent::MouseMove, vp->mapFromGlobal(cursorPos), cursorPos, Qt::NoButton, 0, 0);
 //        QCoreApplication::sendEvent(vp, &e);
     }
@@ -337,7 +339,7 @@ void FancyTreeView::save()
     if (!d->m_Model)
         return;
     if (!d->m_Model->submit())
-        Utils::Log::addError(this, "Unable to save model.", __FILE__, __LINE__);
+        LOG_ERROR("Unable to save model.");
 
 }
 
@@ -345,8 +347,8 @@ void FancyTreeView::save()
 void FancyTreeView::addItem()
 {
     QModelIndex parent = QModelIndex();
-    if (ui->treeView->selectionModel()->hasSelection())
-        parent = ui->treeView->selectionModel()->currentIndex();
+    if (ui->widget->treeView()->selectionModel()->hasSelection())
+        parent = ui->widget->treeView()->selectionModel()->currentIndex();
 //    SimpleCategoryCreator dlg(this);
 //    dlg.setModel(d->m_Model, parent);
 //    dlg.setLabelColumn(0);
@@ -355,9 +357,9 @@ void FancyTreeView::addItem()
     if (!d->m_Model->insertRow(d->m_Model->rowCount(parent), parent))
         return;
     // expand item
-    ui->treeView->expand(parent);
+    ui->widget->treeView()->expand(parent);
     // open edit item
-    ui->treeView->edit(d->m_Model->index(d->m_Model->rowCount(parent)-1, parent.column(), parent));
+    ui->widget->treeView()->edit(d->m_Model->index(d->m_Model->rowCount(parent)-1, parent.column(), parent));
 }
 
 void FancyTreeView::changeEvent(QEvent *e)

@@ -18,7 +18,6 @@ HEADERS += \
     $${PWD}/treeview.h \
     $${PWD}/languagecombobox.h \
     $${PWD}/languagecomboboxdelegate.h \
-    $${PWD}/deselectabletreeview.h \
     $${PWD}/countrycombobox.h
 
 
