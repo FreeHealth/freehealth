@@ -16,12 +16,14 @@ static inline QString pixmaps()
  {
      m_parentItem = parent;
      m_itemData = data;
+     m_parenthood = data[PARENT_OR_CHILD_H].toInt();
  }
 
  TreeItem::~TreeItem()
  {
      qDeleteAll(m_childItems);
      qDeleteAll(m_treeItemsHash);
+     //m_itemData.clear();
  }
  
   void TreeItem::appendChild(TreeItem *item)
@@ -31,7 +33,10 @@ static inline QString pixmaps()
  
  void TreeItem::fillParentsHash(const QString & parentName, TreeItem * item)
  {
-     m_treeItemsHash.insert(parentName,item);
+     if(m_parenthood == PARENT || m_itemData[ID_ITEM_H].toString().contains(trUtf8("ID of Item")))
+     {
+         m_treeItemsHash.insert(parentName,item);
+     }
  }
  
 
@@ -40,7 +45,7 @@ static inline QString pixmaps()
      return m_childItems.value(number);
  }
  
- TreeItem *TreeItem::child(const QString & parentName)
+TreeItem *TreeItem::child(const QString & parentName)
  {
      QString p = parentName.trimmed();
      return m_treeItemsHash.value(p);
@@ -48,14 +53,13 @@ static inline QString pixmaps()
  
  int TreeItem::childCount() const
  {
-     //qDebug() << __FILE__ << QString::number(__LINE__) << " childCount() =" << QString::number(m_childItems.count()) ;
      return m_childItems.count();
  }
 
  int TreeItem::childNumber() const
  {
      if (m_parentItem)
-         return m_parentItem->m_childItems.indexOf(const_cast<TreeItem*>(this));
+     	return m_parentItem->m_childItems.indexOf(const_cast<TreeItem*>(this));
      return 0;
  }
 
@@ -91,7 +95,7 @@ static inline QString pixmaps()
              QVector<QVariant> datasVector = datas(columns);
              TreeItem *item = new TreeItem(datasVector, this);
              m_childItems.insert(position, item);
-             m_treeItemsHash.insert(datasVector[VariantItemModel::ITEM].toString(),item);
+             //m_treeItemsHash.insert(datasVector[VariantItemModel::ITEM].toString(),item);
          }
      return true;
  }
@@ -119,14 +123,22 @@ static inline QString pixmaps()
  {
      if (position < 0 || position + count > m_childItems.size())
          return false;
-     qDebug() << __FILE__ << QString::number(__LINE__) << "position = " << QString::number(position);
-     for (int row = 0; row < count; ++row)
+     for (int row = position; row < position+count; ++row)
      {
-         if(m_childItems.value(position))
-             delete m_childItems.takeAt(position);
-         }
-      qDebug() << __FILE__ << QString::number(__LINE__);   
-
+         if(m_childItems.value(row)){
+             
+             if (child(row))
+             {
+             	  int parentOrChild = child(row)->data(PARENT_OR_CHILD_H).toInt();
+             	  if(parentOrChild == PARENT)
+             	  {
+             	      int ret = m_treeItemsHash.remove(m_treeItemsHash.key(m_childItems.at(row)));
+             	      }
+                  if (!m_childItems.isEmpty())
+                      delete m_childItems.takeAt(row);
+                  }
+              }
+          }
      return true;
  }
  
@@ -151,6 +163,12 @@ static inline QString pixmaps()
      m_itemData[column] = value;
      return true;
  }
+ 
+ QHash<QString,TreeItem*> TreeItem::treeParentItems()
+ {
+     return m_treeItemsHash;
+ }
+ 
  
 //end of TREEITEM
 //VARIANTITEMMODEL UNDER THE TREEVIEW
@@ -181,7 +199,7 @@ VariantItemModel::VariantItemModel(QSqlTableModel * model, QObject *parent)
      	  rootData << listHeaders[i];
          }
         
-     m_rootItem = new TreeItem(rootData);
+     m_rootItem = new TreeItem(rootData,0);
      m_db = QSqlDatabase::database("prevention");
      
      setupModelData(m_modelSql, m_rootItem);
@@ -201,7 +219,7 @@ VariantItemModel::VariantItemModel(QSqlTableModel * model, QObject *parent)
      	  rootData << headers[i];
          }
         
-     m_rootItem = new TreeItem(rootData);
+     m_rootItem = new TreeItem(rootData,0);
  }
  
  bool VariantItemModel::clear()
@@ -422,10 +440,9 @@ QHash<int,QVariant> VariantItemModel::childs(QModelIndex &parent){
 
      TreeItem *childItem = getItem(index);
      TreeItem *parentItem = childItem->parent();
-
+     
      if (parentItem == m_rootItem)
          return QModelIndex();
-
      return createIndex(parentItem->childNumber(), 0, parentItem);
  }
  
@@ -452,12 +469,9 @@ QHash<int,QVariant> VariantItemModel::childs(QModelIndex &parent){
      	  parentItem = getRootItem();
          }
      beginRemoveRows(parent, position, position + rows - 1);
-     qDebug() << __FILE__ << QString::number(__LINE__)  ;
      for (int pos = position; pos < rows+position ; pos += 1)
      {
-     	  qDebug() << __FILE__ << QString::number(__LINE__) << "position" +QString::number(position);
      	  QString itemId = parentItem->child(position)->data(ID_ITEM_H).toString();
-     	  qDebug() << __FILE__ << QString::number(__LINE__) << itemId;
           QSqlQuery q(m_db);
           QString req = QString("DELETE FROM %1 WHERE %2 LIKE '%3'")
           .arg("prevention","ID_ITEM",itemId);
@@ -465,14 +479,10 @@ QHash<int,QVariant> VariantItemModel::childs(QModelIndex &parent){
           {
           	  qWarning() << __FILE__ << QString::number(__LINE__) << q.lastError().text() ;
               }
-          qDebug() << __FILE__ << QString::number(__LINE__)  ;
           success = parentItem->removeChildren(position, 1);
-
-          qDebug() << __FILE__ << QString::number(__LINE__);
-         }
-
+          }
      endRemoveRows();
-
+     
      return success;
  }
 
@@ -501,7 +511,6 @@ QHash<int,QVariant> VariantItemModel::childs(QModelIndex &parent){
  {
      //ID ITEM TYPE_OF_ITEM PARENT_ITEM PARENT_OR_CHILD ICON DATE_DONE DATE_NEXT ABSTRACT ID_ITEM RESULT 
      //N  Y    N            Y           N               Y    Y         Y         Y        Y       N
-     qWarning() << __FILE__ << QString::number(__LINE__) << " model rowCount =" << model->rowCount() ;
      if (model->rowCount()< 1)
      {
      	  return;
@@ -518,7 +527,6 @@ QHash<int,QVariant> VariantItemModel::childs(QModelIndex &parent){
      	 parentOrChild = items.value(PARENT_OR_CHILD).toInt();
      	 TreeItem * itemParent;
      	 QString parentName;
-     	 qDebug() << __FILE__ << QString::number(__LINE__) << " row =" <<QString::number(row)  ;
      	 int childCount = 0;
      	 switch(parentOrChild){
      	     case PARENT :
@@ -526,7 +534,7 @@ QHash<int,QVariant> VariantItemModel::childs(QModelIndex &parent){
      	         if(parent){
      	             childCount = parent->childCount();
      	             parent->insertChildren(childCount, 1, Prevention_Items_MaxParam);
-     	             parent->fillParentsHash(parentName, parent->child(parent->childCount() - 1));
+     	             parent->fillParentsHash(parentName,parent->child(parent->childCount()-1));
      	             for (int i = 1; i < parent->columnCount()+1; i += 1)
      	             {
      	         	  QVariant itemData;
@@ -549,22 +557,19 @@ QHash<int,QVariant> VariantItemModel::childs(QModelIndex &parent){
      	         itemParent = parent->child(items[PARENT_ITEM].toString());
      	         
      	         if(itemParent)     	         
-     	             {childCount = itemParent->childCount();
-     	              qDebug() << __FILE__ << QString::number(__LINE__) << " childCount =" << QString::number(childCount) ;
+     	             {
+     	              childCount = itemParent->childCount();
      	              itemParent->insertChildren(childCount,1,Prevention_Items_MaxParam);
-     	              
      	              for (int i = 1; i < itemParent->columnCount()-1; i += 1)
      	              {
      	         	  itemParent->child(itemParent->childCount() -1)->setData(i-1,items[i]);
      	                  }
      	                  }
-     	             
      	         break;
      	     default :
      	         break;    
      	     }
          }
-     
  }
 
 QStringList VariantItemModel::getListOfMainItems(){
@@ -716,9 +721,6 @@ bool VariantItemModel::addAnItemAccordingToIndex(QModelIndex & index,QModelIndex
     	     {
     	         qWarning() << __FILE__ << QString::number(__LINE__) << "unable to set data" ;
     	         }   
-             /*QModelIndex newIndex (variantModelRowCount,col,inIndex);
-             qDebug() << __FILE__ << QString::number(__LINE__) << " row =" 
-                  << QString::number(newIndex.row())<< " col = " << QString::number(newIndex.column()) ;*/
   	  	  if (!m_modelSql->setData(m_modelSql->index(newModelRow,col+1),value,role))
     	 	          {
     	 	  	   qWarning() << __FILE__ << QString::number(__LINE__) << "UNABLE TO SET NEW DATA"
@@ -857,9 +859,6 @@ bool VariantItemModel::addAGroupItem(QModelIndex & index,QModelIndex & parent,QO
     	 	  {
     	 	  	  qWarning() << __FILE__ << QString::number(__LINE__) << "unable to set item data" ;
     	 	      }
-    	 	  /*QModelIndex newIndex = m_variantModel->index(variantModelRowCount,col,rootIndex);
-                  qDebug() << __FILE__ << QString::number(__LINE__) << " row =" 
-                  << QString::number(newIndex.row())<< " col = " << QString::number(newIndex.column()) ;*/   
 
   	  	  if (!m_modelSql->setData(m_modelSql->index(newModelRow,col+1),value,role))
     	 	          {
@@ -886,9 +885,7 @@ bool VariantItemModel::deleteGroupOfItems(QModelIndex & index)
     bool success = true;
     TreeItem * itemParent = getItem(index);
     int position = itemParent->childNumber();
-    qDebug() << __FILE__ << QString::number(__LINE__) << " position =" << QString::number(position) ;
     int childCount = itemParent->childCount();
-    qDebug() << __FILE__ << QString::number(__LINE__) << " childCount =" << QString::number(childCount) ;
     if (!removeRows(0,childCount,index))
     {
     	  qWarning() << __FILE__ << QString::number(__LINE__) << "unable to delete rows of this parent." ;
@@ -900,7 +897,7 @@ bool VariantItemModel::deleteGroupOfItems(QModelIndex & index)
     		  qWarning() << __FILE__ << QString::number(__LINE__) << "unable to remove this group." ;
     	    }
     	else{
-    	    qDebug() << __FILE__ << QString::number(__LINE__)  ;
+    	    qWarning() << __FILE__ << QString::number(__LINE__) << "rows deleted" ;
     	    }
         }
     return success;
@@ -929,235 +926,6 @@ QString PreventIO::correct(QVariant variant)
     QString string = codec->toUnicode(b);
     return string;
 }
-
-/*bool PreventIO::addAGroupItem(QModelIndex & index,QModelIndex & parent,QObject * parentObject)
-{
-    PreventIHM * parentOfIO = static_cast<PreventIHM*>(m_model->QObject::parent());
-    //TreeViewOfPrevention *treeView = new TreeViewOfPrevention(parentOfIO);
-    TreeViewOfPrevention *treeView = static_cast<TreeViewOfPrevention*>(parentObject);
-    TreeItem * item = m_variantModel->getRootItem();
-    QModelIndex rootIndex;
-    if (!parent.isValid())
-    {
-    	  rootIndex = parent;
-        }
-    else
-    {
-    	rootIndex = parent.parent();
-        }
-    int variantModelRowCount = m_variantModel->rowCount(rootIndex);
-    QString parentName = trUtf8("new group");
-    bool success = true;
-    	 int nextIdPrimkey = m_variantModel->getNextIdPrimkey();
-    	 success = m_variantModel->insertRows(variantModelRowCount,1,rootIndex);
-    	 qDebug() << __FILE__ << QString::number(__LINE__) << " item NEW childCount() ="
-         <<  QString::number(item->childCount());
-    	 TreeItem * newItem = item->child(item->childCount() -1);// = new TreeItem(datas,item);
-         item->fillParentsHash(parentName,newItem );
-    	 int newModelRow = m_model->rowCount()-1;
-    	 if (!m_model->setData(m_model->index(newModelRow,VariantItemModel::ID_PREVENTION),
-    	          nextIdPrimkey,Qt::EditRole))
-    	 {
-    	 	  qWarning() << __FILE__ << QString::number(__LINE__) << "UNABLE TO SET PRIMKEY" ;
-    	 	  success = false;
-    	     }
-    	 for (int col = 0; col < VariantItemModel::Headers_MaxParam; col += 1)
-    	 {
-    	         int role = Qt::EditRole;
-    	 	 QVariant value;
-    	 	 switch(col){
-    	 	     case VariantItemModel::ITEM_H:
-    	 	         role = Qt::EditRole;
-    	 	         value = QVariant("new group");
-    	 	         break;
-    	 	     case VariantItemModel::TYPE_OF_ITEM_H :
-    	 	         role = Qt::EditRole;
-    	 	         value = QVariant(VariantItemModel::PRIMARY_PREVENTION_ITEM);
-    	 	         break;
-    	 	     case VariantItemModel::PARENT_ITEM_H :
-    	 	         role = Qt::EditRole;
-    	 	         value = QVariant("ROOT");
-    	 	         break;
-    	 	     case VariantItemModel::PARENT_OR_CHILD_H :
-    	 	         role = Qt::EditRole;
-    	 	         value = QVariant(VariantItemModel::PARENT);
-    	 	         break;
-    	 	     case VariantItemModel::ICON_H :
-    	 	         role = Qt::EditRole;
-    	 	         value = QVariant();
-    	 	         break;
-    	 	     case VariantItemModel::DATE_DONE_H :
-    	 	         role = Qt::EditRole;
-    	 	         value = QVariant(QDate::currentDate().toString("yyyy-MM-dd"));
-    	 	         break;
-    	 	     case VariantItemModel::DATE_NEXT_H :
-    	 	         role = Qt::EditRole;
-    	 	         value = QVariant(QDate::currentDate().toString("yyyy-MM-dd"));
-    	 	         break;
-    	 	     case VariantItemModel::ABSTRACT_H :
-    	 	         role = Qt::EditRole;
-    	 	         value = QVariant();
-    	 	         break;
-    	 	     case VariantItemModel::ID_ITEM_H :
-    	 	         role = Qt::EditRole;
-    	 	         value = QVariant(m_variantModel->findNextId());
-    	 	         break;
-    	 	     case VariantItemModel::RESULT_H :
-    	 	         role = Qt::EditRole;
-    	 	         value = QVariant();
-    	 	         break;
-    	 	     default :
-    	 	         break;    
-    	 	     }
-    	 	  if (!newItem->setData(col,value))
-    	 	  {
-    	 	  	  qWarning() << __FILE__ << QString::number(__LINE__) << "unable to set item data" ;
-    	 	      }
-    	 	  QModelIndex newIndex = m_variantModel->index(variantModelRowCount,col,rootIndex);
-                  qDebug() << __FILE__ << QString::number(__LINE__) << " row =" 
-                  << QString::number(newIndex.row())<< " col = " << QString::number(newIndex.column()) ;   
-
-  	  	  if (!m_model->setData(m_model->index(newModelRow,col+1),value,role))
-    	 	          {
-    	 	  	      qWarning() << __FILE__ << QString::number(__LINE__) << "UNABLE TO SET NEW DATA" ;
-    	 	              }
-    	 	      
-    	              }//for
-    	          if (!m_model->submitAll())
-    	          {
-    	          	  qWarning() << __FILE__ << QString::number(__LINE__) 
-    	          	             << "CANNOT SUBMIT ALL : "
-    	          	             << m_model->lastError().text() ;
-    	          	  success = false;
-    	          	  
-    	              }
-    qWarning() << __FILE__ << QString::number(__LINE__) << "group is added" ;
-    treeView->setModel(m_variantModel);
-    treeView->getModel(m_variantModel);
-    return success;
-}*/
-
-
-/*bool PreventIO::addAnItemAccordingToIndex(QModelIndex & index,QModelIndex & parent, QObject * parentObject)
-{
-    bool success = true;
-    PreventIHM * parentOfIO = static_cast<PreventIHM*>(m_model->QObject::parent());
-    //TreeViewOfPrevention *treeView = new TreeViewOfPrevention(parentOfIO);
-    TreeViewOfPrevention *treeView = static_cast<TreeViewOfPrevention*>(parentObject);
-    
-    TreeItem * parentItem = m_variantModel->getItem(parent);
-    TreeItem * child = m_variantModel->getItem(index);
-    TreeItem * item;
-    TreeItem * itemNew;
-    
-    QModelIndex inIndex;
-    if(!parent.isValid()){
-        qDebug() << __FILE__ << QString::number(__LINE__) << " parent = QModelIndex()"  ;
-        inIndex = index;
-        item = child;
-        }
-    else
-    {
-    	inIndex = parent;
-        item = parentItem;
-        }
-         
-    	 int variantModelRowCount = m_variantModel->rowCount(inIndex);
-    	 qDebug() << __FILE__ << QString::number(__LINE__) << " variantModelRowCount =" << QString::number(variantModelRowCount) ;
-    	 int nextIdPrimkey = m_variantModel->getNextIdPrimkey();
-    	 success = m_variantModel->insertRows(variantModelRowCount,1,inIndex);
-    	 if (!success)
-    	 {
-    	 	  qWarning() << __FILE__ << QString::number(__LINE__) 
-    	 	  << "unable to insert rows in the treeview" ;
-    	     }
-    	 int newModelRow = m_model->rowCount()-1;
-    	 if (!m_model->setData(m_model->index(newModelRow,VariantItemModel::ID_PREVENTION),
-    	          nextIdPrimkey,Qt::EditRole))
-    	 {
-    	 	  qWarning() << __FILE__ << QString::number(__LINE__) << "UNABLE TO SET PRIMKEY" ;
-    	     }
-    	 itemNew = item->child(item->childCount() -1);
-    	 for (int col = 0; col < VariantItemModel::Headers_MaxParam; col += 1)
-    	 {
-    	         int role = Qt::EditRole;
-    	 	 QVariant value;
-    	 	 switch(col){
-    	 	     case VariantItemModel::ITEM_H:
-    	 	         role = Qt::EditRole;
-    	 	         value = QVariant();
-    	 	         break;
-    	 	     case VariantItemModel::TYPE_OF_ITEM_H :
-    	 	         role = Qt::EditRole;
-    	 	         value = QVariant(VariantItemModel::PRIMARY_PREVENTION_ITEM);
-    	 	         break;
-    	 	     case VariantItemModel::PARENT_ITEM_H :
-    	 	         role = Qt::EditRole;
-    	 	         value = item->data(VariantItemModel::ITEM_H);
-    	 	         break;
-    	 	     case VariantItemModel::PARENT_OR_CHILD_H :
-    	 	         role = Qt::EditRole;
-    	 	         value = QVariant(VariantItemModel::CHILD);
-    	 	         break;
-    	 	     case VariantItemModel::ICON_H :
-    	 	         role = Qt::EditRole;
-    	 	         value = pixmaps()+"/preventOk.png";
-    	 	         break;
-    	 	     case VariantItemModel::DATE_DONE_H :
-    	 	         role = Qt::EditRole;
-    	 	         value = QVariant(QDate::currentDate().toString("yyyy-MM-dd"));
-    	 	         break;
-    	 	     case VariantItemModel::DATE_NEXT_H :
-    	 	         role = Qt::EditRole;
-    	 	         value = QVariant(QDate::currentDate().toString("yyyy-MM-dd"));
-    	 	         break;
-    	 	     case VariantItemModel::ABSTRACT_H :
-    	 	         role = Qt::EditRole;
-    	 	         value = QVariant();
-    	 	         break;
-    	 	     case VariantItemModel::ID_ITEM_H :
-    	 	         role = Qt::EditRole;
-    	 	         value = QVariant(m_variantModel->findNextId());
-    	 	         break;
-    	 	     case VariantItemModel::RESULT_H :
-    	 	         role = Qt::EditRole;
-    	 	         value = QVariant();
-    	 	         break;
-    	 	     default :
-    	 	         break;    
-    	 	     }
-    	     if (!itemNew->setData(col,value))
-    	     {
-    	         qWarning() << __FILE__ << QString::number(__LINE__) << "unable to set data" ;
-    	         }   
-             QModelIndex newIndex = m_variantModel->index(variantModelRowCount,col,inIndex);
-             qDebug() << __FILE__ << QString::number(__LINE__) << " row =" 
-                  << QString::number(newIndex.row())<< " col = " << QString::number(newIndex.column()) ;
-  	  	  if (!m_model->setData(m_model->index(newModelRow,col+1),value,role))
-    	 	          {
-    	 	  	   qWarning() << __FILE__ << QString::number(__LINE__) << "UNABLE TO SET NEW DATA"
-    	 	  	         << " for value =" << value.toString() << " and col :" << QString::number(col);
-    	 	  	      }
-    	 	      
-    	          }
-    if (!m_model->submitAll())
-    {
-        qWarning() << __FILE__ << QString::number(__LINE__) 
-    	          	       << "CANNOT SUBMIT ALL : "
-    	          	       << m_model->lastError().text() ;
-    	}
-     if (m_variantModel->submit())
-     {
-     	  qWarning() << __FILE__ << QString::number(__LINE__) << "treeview model cannot submit" ;
-         }
-    	 qDebug() << __FILE__ << QString::number(__LINE__) << "next variantModelRowCount =" << QString::number(variantModelRowCount) ;          
-    	 treeView->collapse(inIndex);
-    	 //treeView->setModel(m_variantModel);
-    	 treeView->getModel(m_variantModel);
-    	 treeView->expand(inIndex);
-    	 parentOfIO->changeIconWidget();
-    return success;
-}*/
 
 QSqlTableModel * PreventIO::getModel()
 {
