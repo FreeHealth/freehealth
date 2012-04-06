@@ -9,6 +9,7 @@ FreeMedForms
 
 ===== Bug correction =====
 
+  * New presentation of actions in views (toolbar was not visible with ubuntu)
   * Date format is no standardized in all the application and correctly translated
   * Update progress bar was not deleted at the end of the process
   * Many typos corrected
@@ -34,6 +35,7 @@ FreeMedForms
 
 ===== Corrections de bug =====
 
+  * Nouvelle présentation des actions dans les vues (n'étaient pas visible sous ubuntu)
   * Le format de date est maintenant standardisé dans l'application et correctement traduit
   * La barre de progression de la recherche de mise à jour n'était pas supprimée
   * Beaucoup de correction de bogues
