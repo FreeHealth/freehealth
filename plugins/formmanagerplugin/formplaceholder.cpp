@@ -349,26 +349,28 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
     d->m_FileTree->setDeselectable(false);
     d->m_FileTree->disconnectActionsToDefaultSlots();
     d->m_FileTree->setObjectName("FormTree");
-//    d->m_FileTree->setIndentation(10);
-    d->m_FileTree->viewport()->setAttribute(Qt::WA_Hover);
-    d->m_FileTree->setItemDelegate((d->m_Delegate = new Internal::FormItemDelegate(d->m_FileTree)));
-    d->m_FileTree->setFrameStyle(QFrame::NoFrame);
-    d->m_FileTree->setAttribute(Qt::WA_MacShowFocusRect, false);
-    d->m_FileTree->setSelectionMode(QAbstractItemView::SingleSelection);
-    d->m_FileTree->setSelectionBehavior(QAbstractItemView::SelectRows);
-    d->m_FileTree->setAlternatingRowColors(settings()->value(Constants::S_USEALTERNATEROWCOLOR).toBool());
-//    d->m_FileTree->setRootIsDecorated(false);
+
+    QTreeView *tree = d->m_FileTree->treeView();
+//    tree->setIndentation(10);
+    tree->viewport()->setAttribute(Qt::WA_Hover);
+    tree->setItemDelegate((d->m_Delegate = new Internal::FormItemDelegate(d->m_FileTree)));
+    tree->setFrameStyle(QFrame::NoFrame);
+    tree->setAttribute(Qt::WA_MacShowFocusRect, false);
+    tree->setSelectionMode(QAbstractItemView::SingleSelection);
+    tree->setSelectionBehavior(QAbstractItemView::SelectRows);
+    tree->setAlternatingRowColors(settings()->value(Constants::S_USEALTERNATEROWCOLOR).toBool());
+//    tree->setRootIsDecorated(false);
     QString css = ::TREEVIEW_SHEET;
 //    if (settings()->value(Constants::S_USESPECIFICCOLORFORROOTS).toBool()) {
 //        css += QString("QTreeView:item:top {background:%1;}")
 ////                       "QTreeView::branch:top {background:%1;}")
 //                .arg(settings()->value(Constants::S_FOREGROUNDCOLORFORROOTS).toString());
 //    }
-    d->m_FileTree->setStyleSheet(css);
+    tree->setStyleSheet(css);
 
-    connect(d->m_FileTree, SIGNAL(clicked(QModelIndex)), this, SLOT(handleClicked(QModelIndex)));
-    connect(d->m_FileTree, SIGNAL(pressed(QModelIndex)), this, SLOT(handlePressed(QModelIndex)));
-    connect(d->m_FileTree, SIGNAL(activated(QModelIndex)), this, SLOT(setCurrentEpisode(QModelIndex)));
+    connect(tree, SIGNAL(clicked(QModelIndex)), this, SLOT(handleClicked(QModelIndex)));
+    connect(tree, SIGNAL(pressed(QModelIndex)), this, SLOT(handlePressed(QModelIndex)));
+    connect(tree, SIGNAL(activated(QModelIndex)), this, SLOT(setCurrentEpisode(QModelIndex)));
 //    connect(d->m_FileTree, SIGNAL(addRequested()), this, SLOT(newEpisode()));
 //    connect(d->m_FileTree, SIGNAL(removeRequested()), this, SLOT(removeEpisode()));
 
@@ -486,27 +488,29 @@ void FormPlaceHolder::setRootForm(Form::FormMain *rootForm)
     d->m_EpisodeModel = new EpisodeModel(rootForm, this);
     d->m_EpisodeModel->setObjectName(objectName()+"EpisodeModel");
     d->m_Delegate->setEpisodeModel(d->m_EpisodeModel);
-    d->m_FileTree->setModel(d->m_EpisodeModel);
-    d->m_FileTree->setSelectionMode(QAbstractItemView::SingleSelection);
-    d->m_FileTree->setSelectionBehavior(QAbstractItemView::SelectRows);
-    for(int i=0; i < Form::EpisodeModel::MaxData; ++i)
-        d->m_FileTree->setColumnHidden(i, true);
-    d->m_FileTree->setColumnHidden(Form::EpisodeModel::Label, false);
-    d->m_FileTree->setColumnHidden(Form::EpisodeModel::EmptyColumn1, false);
-    d->m_FileTree->header()->hide();
-    d->m_FileTree->header()->setStretchLastSection(false);
-    d->m_FileTree->header()->setResizeMode(Form::EpisodeModel::Label, QHeaderView::Stretch);
-    d->m_FileTree->header()->setResizeMode(Form::EpisodeModel::EmptyColumn1, QHeaderView::Fixed);
-    d->m_FileTree->header()->resizeSection(Form::EpisodeModel::EmptyColumn1, 16);
 
-    d->m_FileTree->expandAll();
+    QTreeView *tree = d->m_FileTree->treeView();
+    tree->setModel(d->m_EpisodeModel);
+    tree->setSelectionMode(QAbstractItemView::SingleSelection);
+    tree->setSelectionBehavior(QAbstractItemView::SelectRows);
+    for(int i=0; i < Form::EpisodeModel::MaxData; ++i)
+        tree->setColumnHidden(i, true);
+    tree->setColumnHidden(Form::EpisodeModel::Label, false);
+    tree->setColumnHidden(Form::EpisodeModel::EmptyColumn1, false);
+    tree->header()->hide();
+    tree->header()->setStretchLastSection(false);
+    tree->header()->setResizeMode(Form::EpisodeModel::Label, QHeaderView::Stretch);
+    tree->header()->setResizeMode(Form::EpisodeModel::EmptyColumn1, QHeaderView::Fixed);
+    tree->header()->resizeSection(Form::EpisodeModel::EmptyColumn1, 16);
+
+    tree->expandAll();
     d->populateStackLayout();
 
     Core::Command *cmd = actionManager()->command(Constants::A_SHOWPATIENTLASTEPISODES);
     connect(cmd->action(), SIGNAL(triggered()), this, SLOT(showLastEpisodeSynthesis()));
 
     // start on the Last Episode Synthesis view
-    d->m_FileTree->setCurrentIndex(d->m_EpisodeModel->index(0,0));
+    tree->setCurrentIndex(d->m_EpisodeModel->index(0,0));
     setCurrentForm(Constants::PATIENTLASTEPISODES_UUID);
 }
 
@@ -531,7 +535,8 @@ void FormPlaceHolder::handleClicked(const QModelIndex &index)
 
         // work around a bug in itemviews where the delegate wouldn't get the QStyle::State_MouseOver
         QPoint cursorPos = QCursor::pos();
-        QWidget *vp = d->m_FileTree->viewport();
+        QTreeView *tree = d->m_FileTree->treeView();
+        QWidget *vp = tree->viewport();
         QMouseEvent e(QEvent::MouseMove, vp->mapFromGlobal(cursorPos), cursorPos, Qt::NoButton, 0, 0);
         QCoreApplication::sendEvent(vp, &e);
     }
@@ -539,7 +544,7 @@ void FormPlaceHolder::handleClicked(const QModelIndex &index)
 
 QTreeView *FormPlaceHolder::formTree() const
 {
-    return d->m_FileTree;
+    return d->m_FileTree->treeView();
 }
 
 QStackedLayout *FormPlaceHolder::formStackLayout() const
@@ -686,7 +691,7 @@ void FormPlaceHolder::addForm()
         // refresh stack widget
         d->populateStackLayout();
         // activate last episode synthesis
-        d->m_FileTree->setCurrentIndex(d->m_EpisodeModel->index(0,0));
+        d->m_FileTree->treeView()->setCurrentIndex(d->m_EpisodeModel->index(0,0));
         showLastEpisodeSynthesis();
 //        d->m_Stack->setCurrentIndex(d->m_StackId_FormUuid.key(dlg.lastInsertedFormUid()));
     }
@@ -699,9 +704,10 @@ void FormPlaceHolder::printCurrentItem()
         return;
 
     // get the current index
-    QModelIndex index = d->m_FileTree->rootIndex();
-    if (d->m_FileTree->selectionModel()->hasSelection())
-        index = d->m_FileTree->selectionModel()->selectedIndexes().at(0);
+    QTreeView *tree = d->m_FileTree->treeView();
+    QModelIndex index = tree->rootIndex();
+    if (tree->selectionModel()->hasSelection())
+        index = tree->selectionModel()->selectedIndexes().at(0);
     QModelIndex form = index;
     while (!d->m_EpisodeModel->isForm(form)) {
         form = form.parent();
@@ -766,8 +772,9 @@ void FormPlaceHolder::changeEvent(QEvent *event)
 {
     if (event->type()==QEvent::LanguageChange) {
         // if showing patient synthesis or last episode -> retranslate by querying the model
-        if (d->m_FileTree->selectionModel()) {
-            QModelIndex index = d->m_FileTree->selectionModel()->currentIndex();
+        QTreeView *tree = d->m_FileTree->treeView();
+        if (tree->selectionModel()) {
+            QModelIndex index = tree->selectionModel()->currentIndex();
             const QString &formUuid = d->m_EpisodeModel->index(index.row(), EpisodeModel::FormUuid, index.parent()).data().toString();
             if (formUuid==Constants::PATIENTLASTEPISODES_UUID) {
                 setCurrentForm(formUuid);

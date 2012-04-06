@@ -90,8 +90,8 @@ void PmhEpisodeViewer::setPmhData(Internal::PmhData *pmh)
         // Create date delegates
         Utils::DateTimeDelegate *start = new Utils::DateTimeDelegate(this, true);
         Utils::DateTimeDelegate *end = new Utils::DateTimeDelegate(this, true);
-        ui->tableView->setItemDelegateForColumn(PmhEpisodeModel::DateStart, start);
-        ui->tableView->setItemDelegateForColumn(PmhEpisodeModel::DateEnd, end);
+        ui->tableView->tableView()->setItemDelegateForColumn(PmhEpisodeModel::DateStart, start);
+        ui->tableView->tableView()->setItemDelegateForColumn(PmhEpisodeModel::DateEnd, end);
 
         QDate birth = patient()->data(Core::IPatient::DateOfBirth).toDate();
         if (birth.isValid()) {
