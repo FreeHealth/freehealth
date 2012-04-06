@@ -6,11 +6,12 @@
 #include <QAbstractItemModel>
 #include <QDebug>
 
+
  class TreeItem:public QObject
  {
  Q_OBJECT
  public:
-     TreeItem(const QVector<QVariant> &data, TreeItem *parent = 0);
+     TreeItem(const QVector<QVariant> &data = QVector<QVariant>(), TreeItem *parent = 0);
      ~TreeItem();
      
      void appendChild(TreeItem *item);
@@ -84,8 +85,7 @@ class VariantItemModel : public QAbstractItemModel
           PREVENT_PAST,
           Icons_MaxParam
           };
-     VariantItemModel(const QStringList headers = QStringList(), QSqlTableModel *model = 0,
-               QObject *parent = 0);
+     VariantItemModel(QSqlTableModel *model = 0, QObject *parent = 0);
      ~VariantItemModel();
 
      QVariant data(const QModelIndex &index, int role) const;
@@ -120,13 +120,18 @@ class VariantItemModel : public QAbstractItemModel
      QStringList getListOfMainItems();
      bool clear();
      TreeItem *getRootItem();
-     void setupModelData(QSqlTableModel *model, TreeItem *parent);
+     void setupModelData(QSqlTableModel *model = 0, TreeItem *parent = 0);
      void setRootItem (const QStringList headers);
      TreeItem *getItem(const QModelIndex &index) const;
      int findNextId();
      int getNextIdPrimkey();
      //change icon
      void setIconWarning(QVariant & idItem);
+     //add and delete rows     
+     bool addAnItemAccordingToIndex(QModelIndex & index,QModelIndex & parent, QObject * parentObject);
+     bool addAGroupItem(QModelIndex & index,QModelIndex & parent,QObject * parentObject);
+     bool deleteItemAccordingToIndex(QModelIndex & index,QModelIndex & parent, QObject * parentObject);
+     bool deleteGroupOfItems(QModelIndex & index);
  private:
      int getSqlTableRow(int idOfItem);
      TreeItem * findTreeItemWithIdItem(QVariant & idItem);
@@ -143,11 +148,13 @@ class PreventIO : public QObject {
         ~PreventIO();
         QSqlDatabase getDatabase();
         QString correct(QVariant variant);
-        const QStringList setHeadersDatas();
-        bool addAnItemAccordingToIndex(QModelIndex & index,QModelIndex & parent, QObject * parentObject);
+        //bool addAnItemAccordingToIndex(QModelIndex & index,QModelIndex & parent, QObject * parentObject);
+        //bool addAGroupItem(QModelIndex & index,QModelIndex & parent,QObject * parentObject);
         QSqlTableModel * getModel();
+        VariantItemModel *getVariantItemModel();
         QSqlDatabase m_db;
         VariantItemModel *m_variantModel;
+
     private:
         QSqlTableModel * m_model;
     
