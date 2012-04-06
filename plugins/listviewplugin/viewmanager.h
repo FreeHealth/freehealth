@@ -40,20 +40,20 @@ class QAction;
 
 #include <coreplugin/contextmanager/contextmanager.h>
 #include <coreplugin/contextmanager/icontext.h>
+#include <listviewplugin/extendedview.h>
 
 #include <QDebug>
 
 
 namespace Views {
-
 namespace Internal {
 
 class ViewContext : public Core::IContext
 {
 public:
-    ViewContext(QAbstractItemView *parent) : Core::IContext(parent), w(parent)
+    ViewContext(IView *parent) : Core::IContext(parent), w(parent)
     {
-        setObjectName("ListViewContext");
+        setObjectName("IViewContext");
     }
 
     void addContext(int uid)
@@ -67,7 +67,7 @@ public:
     QWidget *widget()          { return w; }
 
 private:
-    QAbstractItemView *w;
+    IView *w;
     QList<int> m_Context;
 };
 

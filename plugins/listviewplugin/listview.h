@@ -40,8 +40,8 @@
 /**
  * \file listview.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.5.0
- * \date 03 Feb 2011
+ * \version 0.7.1
+ * \date 06 Apr 2012
 */
 
 namespace Views {
@@ -49,7 +49,7 @@ namespace Internal {
 class ListViewPrivate;
 }
 
-class LISTVIEW_EXPORT ListView : public QListView
+class LISTVIEW_EXPORT ListView : public IView
 {
     Q_OBJECT
     friend class ListViewPrivate;
@@ -57,6 +57,11 @@ class LISTVIEW_EXPORT ListView : public QListView
 public:
     ListView(QWidget *parent = 0, Views::Constants::AvailableActions actions = Views::Constants::DefaultActions);
     virtual ~ListView();
+
+    // IView
+    QAbstractItemView *itemView() const;
+
+    void setModelColumn(int column);
 
     void setActions(Views::Constants::AvailableActions actions);
     void setCommands(const QStringList &commandsUid);

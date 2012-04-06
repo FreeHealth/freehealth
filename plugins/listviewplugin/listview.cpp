@@ -49,8 +49,7 @@
 #include <coreplugin/constants_menus.h>
 #include <coreplugin/constants_icons.h>
 
-#include <QVBoxLayout>
-#include <QGridLayout>
+#include <QLayout>
 #include <QAction>
 #include <QMenu>
 #include <QWidget>
@@ -75,10 +74,11 @@ class ListViewPrivate
 {
 public:
     ListViewPrivate(QWidget *parent, Constants::AvailableActions actions) :
-            m_Parent(parent),
-            m_Actions(actions),
-            m_Context(0),
-            m_ExtView(0)
+        m_Parent(parent),
+        m_ListView(0),
+        m_Actions(actions),
+        m_Context(0),
+        m_ExtView(0)
     {
     }
 
@@ -101,6 +101,7 @@ public:
 
 public:
     QWidget *m_Parent;
+    QListView *m_ListView;
     Constants::AvailableActions m_Actions;
     ViewContext *m_Context;
     QToolBar *m_ToolBar;
@@ -114,7 +115,7 @@ public:
 
 /** \brief Constructor */
 ListView::ListView(QWidget *parent, Constants::AvailableActions actions) :
-        QListView(parent),
+        IView(parent),
         d(0)
 {
     static int handler = 0;
@@ -122,6 +123,10 @@ ListView::ListView(QWidget *parent, Constants::AvailableActions actions) :
     QObject::setObjectName("ListView_"+QString::number(handler));
     setProperty(Constants::HIDDEN_ID, "xx");
     d = new Internal::ListViewPrivate(this, actions);
+
+    // Create the listview && the widget content
+    d->m_ListView = new QListView(this);
+    setItemView(d->m_ListView);
 
     // Create the Manager instance and context
     d->m_Context = new ViewContext(this);
@@ -135,6 +140,20 @@ ListView::ListView(QWidget *parent, Constants::AvailableActions actions) :
 ListView::~ListView()
 {
     contextManager()->removeContextObject(d->m_Context);
+    if (d) {
+        delete d;
+        d = 0;
+    }
+}
+
+QAbstractItemView *ListView::itemView() const
+{
+    return d->m_ListView;
+}
+
+void ListView::setModelColumn(int column)
+{
+    d->m_ListView->setModelColumn(column);
 }
 
 void ListView::setActions(Constants::AvailableActions actions)

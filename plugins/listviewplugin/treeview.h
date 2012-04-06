@@ -27,7 +27,6 @@
 #define TREEVIEW_H
 
 #include <listviewplugin/listview_exporter.h>
-#include <listviewplugin/deselectabletreeview.h>
 #include <listviewplugin/extendedview.h>
 #include <listviewplugin/constants.h>
 
@@ -36,12 +35,13 @@
 #include <QAbstractItemView>
 #include <QFlags>
 #include <QMenu>
+#include <QTreeView>
 
 /**
  * \file treeview.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.5.0
- * \date 22 Feb 2011
+ * \version 0.7.1
+ * \date 06 Apr 2012
 */
 
 
@@ -50,7 +50,7 @@ namespace Internal {
 class TreeViewPrivate;
 }
 
-class LISTVIEW_EXPORT TreeView : public DeselectableTreeView
+class LISTVIEW_EXPORT TreeView : public IView
 {
     Q_OBJECT
     friend class TreeViewPrivate;
@@ -58,6 +58,11 @@ public:
     TreeView(QWidget *parent = 0, Constants::AvailableActions actions = Constants::DefaultActions);
     virtual ~TreeView();
 
+    // IView
+    QAbstractItemView *itemView() const;
+    QTreeView *treeView() const;
+
+    void setDeselectable(bool deselectable);
     void setActions(Constants::AvailableActions actions);
     void setCommands(const QStringList &commandsUid);
     void addContext(const int id);
@@ -68,6 +73,14 @@ public:
     void hideButtons() const;
     void showButtons();
     void useContextMenu(bool state = true);
+
+    // QTreeView overload
+    void setHeaderHidden(bool hide) {treeView()->setHeaderHidden(hide);}
+    QHeaderView *header() const {return treeView()->header();}
+    void hideColumn(int col) {treeView()->hideColumn(col);}
+    void showColumn(int col) {treeView()->showColumn(col);}
+    void expandAll() {treeView()->expandAll();}
+    void expand(const QModelIndex &index) {treeView()->expand(index);}
 
 public Q_SLOTS:
     virtual void addItem();
@@ -86,6 +99,9 @@ Q_SIGNALS:
 
     void moveUpRequested();
     void moveDownRequested();
+
+protected:
+    bool eventFilter(QObject * o, QEvent * event);
 
 private:
     Internal::TreeViewPrivate *d;

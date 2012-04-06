@@ -160,7 +160,7 @@ void CategoryDialog::editItem(const QModelIndex &current, const QModelIndex &pre
     }
     d->m_CatLabelsModel->setCategoryItem(cat);
     d->populateUiWithCategory();
-    d->ui->tableView->setItemDelegateForColumn(CategoryLabelsModel::Lang, new Views::LanguageComboBoxDelegate(this));
+    d->ui->tableView->tableView()->setItemDelegateForColumn(CategoryLabelsModel::Lang, new Views::LanguageComboBoxDelegate(this));
 }
 
 void CategoryDialog::done(int r)

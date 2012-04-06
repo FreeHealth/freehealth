@@ -48,6 +48,9 @@
 #include <QStringListModel>
 #include <QToolButton>
 #include <QToolBar>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
+#include <QGridLayout>
 
 using namespace Views;
 using namespace Views::Internal;
@@ -56,17 +59,41 @@ using namespace Trans::ConstantTranslations;
 static inline Core::ActionManager *actionManager() { return Core::ICore::instance()->actionManager(); }
 static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
 
+IView::IView(QWidget *parent) :
+    QWidget(parent)
+{
+    // Create the listview && the widget content
+    QVBoxLayout *lay = new QVBoxLayout(this);
+    lay->setMargin(0);
+    lay->setSpacing(0);
+    setLayout(lay);
+}
+
+void IView::addToolBar(QToolBar *bar)
+{
+    Q_ASSERT(bar);
+    if (!bar)
+        return;
+    if (m_AddedToolBars.contains(bar))
+        return;
+    m_AddedToolBars << bar;
+    layout()->addWidget(bar);
+}
+
+void IView::setItemView(QAbstractItemView *view)
+{
+    layout()->addWidget(view);
+}
 
 namespace Views {
 namespace Internal {
-
 class ExtendedViewPrivate
 {
 public:
-    ExtendedViewPrivate(QAbstractItemView *parent, Constants::AvailableActions actions) :
-            m_Parent(parent),
-            m_Actions(actions),
-            m_DefaultSlots(true)
+    ExtendedViewPrivate(IView *parent, Constants::AvailableActions actions) :
+        m_Parent(parent),
+        m_Actions(actions),
+        m_DefaultSlots(true)
     {
     }
 
@@ -94,7 +121,7 @@ public:
     }
 
 public:
-    QAbstractItemView *m_Parent;
+    IView *m_Parent;
     Constants::AvailableActions m_Actions;
     QToolBar *m_ToolBar;
     QString m_ContextName;
@@ -106,8 +133,8 @@ public:
 
 
 /** \brief Constructor */
-ExtendedView::ExtendedView(QAbstractItemView *parent, Constants::AvailableActions actions) :
-        d(0)
+ExtendedView::ExtendedView(IView *parent, Constants::AvailableActions actions) :
+    d(0)
 {
     static int handler = 0;
     ++handler;
@@ -116,19 +143,19 @@ ExtendedView::ExtendedView(QAbstractItemView *parent, Constants::AvailableAction
 
     // Add toolbar to the horizontal scroolbar
     ViewManager::instance();
-    parent->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOn);
     d->m_ToolBar = new QToolBar(parent);
     d->m_ToolBar->setMinimumHeight(20);
     d->m_ToolBar->setIconSize(QSize(16,16));
     d->m_ToolBar->setFocusPolicy(Qt::ClickFocus);
     d->m_ToolBar->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     d->populateToolbar();
-    parent->addScrollBarWidget(d->m_ToolBar, Qt::AlignLeft);
-    if (!Utils::isRunningOnMac()) {
-        QWidget *w = parent->scrollBarWidgets(Qt::AlignLeft).at(0);
-        w->layout()->setMargin(0);
-        w->layout()->setSpacing(0);
-    }
+    parent->addToolBar(d->m_ToolBar);
+//    parent->addScrollBarWidget(d->m_ToolBar, Qt::AlignLeft);
+//    if (!Utils::isRunningOnMac()) {
+//        QWidget *w = parent->scrollBarWidgets(Qt::AlignLeft).at(0);
+//        w->layout()->setMargin(0);
+//        w->layout()->setSpacing(0);
+//    }
 
     // Manage context menu
     parent->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -177,10 +204,11 @@ void ExtendedView::showButtons()
 
 void ExtendedView::useContextMenu(bool state)
 {
+    QAbstractItemView *view = d->m_Parent->itemView();
     if (state)
-        d->m_Parent->setContextMenuPolicy(Qt::CustomContextMenu);
+        view->setContextMenuPolicy(Qt::CustomContextMenu);
     else
-        d->m_Parent->setContextMenuPolicy(Qt::NoContextMenu);
+        view->setContextMenuPolicy(Qt::NoContextMenu);
 }
 
 QMenu *ExtendedView::getContextMenu()
@@ -192,67 +220,69 @@ QMenu *ExtendedView::getContextMenu()
 
 /**
   \brief Add a row to the model in two ways: list way, tree way.
-  In the list way \e hasChildOfCurrentIndex is \e false, the new item is added under the current item.\n
-  In the tree way \e hasChildOfCurrentIndex is \e true, the new item is added as a child of the current item.
+  In the list way \e asChildOfCurrentIndex is \e false, the new item is added under the current item.\n
+  In the tree way \e asChildOfCurrentIndex is \e true, the new item is added as a child of the current item.
 */
-void ExtendedView::addItem(bool hasChildOfCurrentIndex)
+void ExtendedView::addItem(bool asChildOfCurrentIndex)
 {
     if (!d->m_DefaultSlots) {
         return;
     }
-    if (!d->m_Parent->model())
+    QAbstractItemView *view = d->m_Parent->itemView();
+    if (!view->model())
         return;
 
     // insert a row into model
     int row = 0;
     int col = 0;
     QModelIndex parentIndex;
-    if (d->m_Parent->selectionModel()->hasSelection()) {
-        if (hasChildOfCurrentIndex) {
-            parentIndex = d->m_Parent->currentIndex();
+    if (view->selectionModel()->hasSelection()) {
+        if (asChildOfCurrentIndex) {
+            parentIndex = view->currentIndex();
         } else {
-            row = d->m_Parent->currentIndex().row() + 1;
-            col = d->m_Parent->currentIndex().column();
-            parentIndex = d->m_Parent->currentIndex().parent();
+            row = view->currentIndex().row() + 1;
+            col = view->currentIndex().column();
+            parentIndex = view->currentIndex().parent();
         }
     } else {
-        row = d->m_Parent->model()->rowCount();
+        row = view->model()->rowCount();
         if (row<0)
             row = 0;
     }
-    if (!d->m_Parent->model()->insertRows(row, 1, parentIndex))
-        Utils::Log::addError("ExtendedView", QString("Can not add a row to the model %1").arg(d->m_Parent->model()->objectName()),
-                             __FILE__, __LINE__);
+    if (!view->model()->insertRows(row, 1, parentIndex))
+        LOG_ERROR_FOR("ExtendedView", QString("Can not add a row to the model %1").arg(view->model()->objectName()));
 
     // select inserted row and edit it
-    QModelIndex index = d->m_Parent->model()->index(row, col, parentIndex);
-    d->m_Parent->setCurrentIndex(index);
-    if (d->m_Parent->editTriggers() != QAbstractItemView::NoEditTriggers) {
-        d->m_Parent->edit(index);
+    QModelIndex index = view->model()->index(row, col, parentIndex);
+    view->setCurrentIndex(index);
+    if (view->editTriggers() != QAbstractItemView::NoEditTriggers) {
+        view->edit(index);
     }
 //    Q_EMIT addRequested();
 }
 
 void ExtendedView::removeItem()
 {
-    if (!d->m_DefaultSlots) {
+    if (!d->m_DefaultSlots)
         return;
-    }
-    if (!d->m_Parent->model())
+
+    QAbstractItemView *view = d->m_Parent->itemView();
+    if (!view->model())
         return;
-    if (!d->m_Parent->selectionModel()->hasSelection())
+    if (!view->selectionModel()->hasSelection())
         return;
-    const QModelIndex &idx = d->m_Parent->currentIndex();
+
+    const QModelIndex &idx = view->currentIndex();
     if (idx.isValid()) {
         // Do this to keep QDataWidgetMapper informed of the modification
-        d->m_Parent->edit(idx);
-        d->m_Parent->closePersistentEditor(idx);
+        view->edit(idx);
+        view->closePersistentEditor(idx);
         // Now delete row
         int row = idx.row();
-        if (!d->m_Parent->model()->removeRow(row, idx.parent())) {
+        if (!view->model()->removeRow(row, idx.parent())) {
             Utils::Log::addError("ExtendedView", QString("Can not remove row %1 to the model %2")
                              .arg(row)
-                             .arg(d->m_Parent->model()->objectName()),
+                             .arg(view->model()->objectName()),
                              __FILE__, __LINE__);
         }
     }
@@ -267,15 +297,16 @@ void ExtendedView::moveDown()
 //    if (!d->canMoveDown())
 //        return;
 
-    QModelIndex idx = d->m_Parent->currentIndex();
+    QAbstractItemView *view = d->m_Parent->itemView();
+    QModelIndex idx = view->currentIndex();
     bool moved = false;
 
-    StringListModel *m = qobject_cast<StringListModel*>(d->m_Parent->model());
+    StringListModel *m = qobject_cast<StringListModel*>(view->model());
     if (m) {
         m->moveDown(idx);
         moved = true;
     } else {
-        QStringListModel *strModel = qobject_cast<QStringListModel*>(d->m_Parent->model());
+        QStringListModel *strModel = qobject_cast<QStringListModel*>(view->model());
         if (strModel) {
             QStringList list = strModel->stringList();
             list.move(idx.row(), idx.row()+1);
@@ -283,28 +314,29 @@ void ExtendedView::moveDown()
             moved=true;
         }
     }
-    // TODO : else swap the two rows.
+    /** \todo else swap the two rows.*/
 
     if (moved)
-        d->m_Parent->setCurrentIndex(d->m_Parent->model()->index(idx.row()+1,0));
+        view->setCurrentIndex(view->model()->index(idx.row()+1,0));
 //    Q_EMIT moveDownRequested();
 }
 
 void ExtendedView::moveUp()
 {
-    if (!d->m_DefaultSlots) {
+    if (!d->m_DefaultSlots)
         return;
-    }
-    QModelIndex idx = d->m_Parent->currentIndex();
+
+    QAbstractItemView *view = d->m_Parent->itemView();
+    QModelIndex idx = view->currentIndex();
 //    closePersistentEditor(idx);
     bool moved = false;
 
-    StringListModel *m = qobject_cast<StringListModel*>(d->m_Parent->model());
+    StringListModel *m = qobject_cast<StringListModel*>(view->model());
     if (m) {
         m->moveUp(idx);
         moved = true;
     } else {
-        QStringListModel *strModel = qobject_cast<QStringListModel*>(d->m_Parent->model());
+        QStringListModel *strModel = qobject_cast<QStringListModel*>(view->model());
         if (strModel) {
             QStringList list = strModel->stringList();
             list.move(idx.row(), idx.row()-1);
@@ -316,24 +348,24 @@ void ExtendedView::moveUp()
     /** \todo else swap the two rows. */
 
     if (moved)
-        d->m_Parent->setCurrentIndex(d->m_Parent->model()->index(idx.row()-1,0));
+        view->setCurrentIndex(view->model()->index(idx.row()-1,0));
 //    Q_EMIT moveUpRequested();
 }
 
 void ExtendedView::on_edit_triggered()
 {
-    if (!d->m_DefaultSlots) {
+    if (!d->m_DefaultSlots)
         return;
-    }
 }
 
 void ExtendedView::contextMenu(const QPoint &p)
 {
-    QMenu *pop = getContextMenu();
-    pop->popup(d->m_Parent->mapToGlobal(p));
-    pop->exec();
-    delete pop;
-    pop = 0;
+    /** \todo improve this */
+//    QMenu *pop = getContextMenu();
+//    pop->popup(view->mapToGlobal(p));
+//    pop->exec();
+//    delete pop;
+//    pop = 0;
 }
 
 

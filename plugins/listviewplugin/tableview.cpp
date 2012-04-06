@@ -32,24 +32,24 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/uniqueidmanager.h>
 
+#include <QLayout>
 
 using namespace Views;
 using namespace Internal;
 
 static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
 
-
 namespace Views {
 namespace Internal {
-
 class TableViewPrivate
 {
 public:
     TableViewPrivate(QWidget *parent, Constants::AvailableActions actions) :
-            m_Parent(parent),
-            m_Actions(actions),
-            m_Context(0),
-            m_ExtView(0)
+        m_Parent(parent),
+        m_TableView(0),
+        m_Actions(actions),
+        m_Context(0),
+        m_ExtView(0)
     {
     }
 
@@ -72,6 +72,7 @@ public:
 
 public:
     QWidget *m_Parent;
+    QTableView *m_TableView;
     Constants::AvailableActions m_Actions;
     ViewContext *m_Context;
     QToolBar *m_ToolBar;
@@ -85,14 +86,18 @@ public:
 
 /** \brief Constructor */
 TableView::TableView(QWidget *parent, Constants::AvailableActions actions) :
-        QTableView(parent),
-        d(0)
+    IView(parent),
+    d(0)
 {
     static int handler = 0;
     ++handler;
     QObject::setObjectName("TableView_"+QString::number(handler));
     setProperty(Constants::HIDDEN_ID, "xx");
     d = new Internal::TableViewPrivate(this, actions);
+
+    // Create the listview && the widget content
+    d->m_TableView = new QTableView(this);
+    setItemView(d->m_TableView);
 
     // Create the Manager instance and context
     ViewManager::instance();
@@ -107,6 +112,19 @@ TableView::TableView(QWidget *parent, Constants::AvailableActions actions) :
 TableView::~TableView()
 {
     contextManager()->removeContextObject(d->m_Context);
+    if (d)
+        delete d;
+    d = 0;
+}
+
+QAbstractItemView *TableView::itemView() const
+{
+    return d->m_TableView;
+}
+
+QTableView *TableView::tableView() const
+{
+    return d->m_TableView;
 }
 
 void TableView::setActions(Constants::AvailableActions actions)

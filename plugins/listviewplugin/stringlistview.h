@@ -37,8 +37,8 @@
 /**
  * \file stringlistview.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.0.3
- * \date 08 March 2009
+ * \version 0.7.1
+ * \date 06 Apr 2012
 */
 
 namespace Views {

@@ -40,10 +40,9 @@
 /**
  * \file tableview.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.5.0
- * \date 19 Feb 2011
+ * \version 0.7.1
+ * \date 06 Apr 2012
 */
-
 
 namespace Views {
 namespace Internal {
@@ -51,13 +50,17 @@ class TableViewPrivate;
 class ExtendedViewPrivate;
 }
 
-class LISTVIEW_EXPORT TableView : public QTableView
+class LISTVIEW_EXPORT TableView : public IView
 {
     Q_OBJECT
     friend class TableViewPrivate;
 public:
     TableView(QWidget *parent = 0, Constants::AvailableActions actions = Constants::DefaultActions);
     virtual ~TableView();
+
+    // IView
+    QAbstractItemView *itemView() const;
+    QTableView *tableView() const;
 
     void setActions(Constants::AvailableActions actions);
     void setCommands(const QStringList &commandsUid);
@@ -67,6 +70,11 @@ public:
     void hideButtons() const;
     void showButtons();
     void useContextMenu(bool state = true);
+
+    QHeaderView *horizontalHeader() const {return tableView()->horizontalHeader();}
+    QHeaderView *verticalHeader() const {return tableView()->verticalHeader();}
+    void hideColumn(int col) {tableView()->hideColumn(col);}
+    void showColumn(int col) {tableView()->showColumn(col);}
 
 public Q_SLOTS:
     virtual void addItem();
