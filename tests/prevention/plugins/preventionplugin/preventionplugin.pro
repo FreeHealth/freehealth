@@ -8,6 +8,7 @@ BUILD_PATH_POSTFIXE = Prevention
 
 include(../../../../plugins/fmf_plugins.pri)
 include(preventionplugin_dependencies.pri)
+include(preferences/prevention_preferences.pri)
 
 QT += sql
 

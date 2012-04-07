@@ -107,7 +107,7 @@ bool Connexion::connect(){
               }
             QStringList tables = m_db.tables();
             qDebug() << "tables "+QString::number(tables.size());
-            dbTest = (tables.size() < 1);
+            dbTest = (tables.size() < 2);
             break;
         }
         case Driver_PostGreSQL :
@@ -155,10 +155,8 @@ bool Connexion::isDatabaseCorrupted(const int driverType,QSqlDatabase &m_db)
     qDebug() << __FILE__ << " driverName ="+driverName;
     qDebug() << __FILE__ << " database ="+m_db.connectionName();
 
-    int tablesCount = 10;
-    QSqlTableModel model(this,m_db);
-    model.setTable("prevention");
-    int count = model.columnCount();
+    int tablesCount = 2;
+    int count = m_db.tables().size();
     qDebug() << __FILE__ << QString::number(__LINE__) 
     << " count =" << QString::number(count);
     qDebug() << __FILE__ << QString::number(__LINE__) 
@@ -254,12 +252,23 @@ bool Connexion::createDatabaseSchema(int driver)
                     "RESULT	BLOB  NULL,"
                     "ID_ITEM    bigint NOT NULL,"
                     "PRIMARY KEY(ID_Primkey));");
+    
+    name_sql.insert("Table nexdate",
+                    "CREATE TABLE IF NOT EXISTS nextdate ("
+                    "ID_Primkey bigint(20) UNSIGNED NOT NULL auto_increment,"
+                    "ITEM longtext COLLATE utf8_unicode_ci NULL,"
+                    "YEAR int(4) NULL,"
+                    "MONTH int(2) NULL,"
+                    "DAY int(2) NULL,"
+                    "HOURS int(2) NULL,"
+                    "MIN int(2) NULL,"
+                    "PRIMARY KEY(ID_Primkey));");
 
     }
     else if(driver==Driver_SQLite) {
     name_sql.insert("Table prevention",
                     "CREATE TABLE IF NOT EXISTS	prevention  ("
-                    "ID_Primkey   INTEGER PRIMARY KEY,"
+                    "ID_Primkey  INTEGER PRIMARY KEY,"
                     "ITEM longtext COLLATE utf8_unicode_ci NULL,"
                     "TYPE tinyint(1) NOT NULL,"
                     "PARENT longtext COLLATE utf8_unicode_ci NOT NULL,"
@@ -271,6 +280,15 @@ bool Connexion::createDatabaseSchema(int driver)
                     "ID_ITEM    bigint NOT NULL,"
                     "RESULT	BLOB  NULL);");
                     
+    name_sql.insert("Table nextdate",
+                    "CREATE TABLE IF NOT EXISTS	nextdate  ("
+                    "ID_Primkey  INTEGER PRIMARY KEY,"
+                    "ITEM longtext COLLATE utf8_unicode_ci NULL,"
+                    "YEAR int(4) NULL,"
+                    "MONTH int(2) NULL,"
+                    "DAY int(2) NULL,"
+                    "HOURS int(2) NULL,"
+                    "MIN int(2) NULL);");                  
     }
 
     // Mass execute SQL queries
@@ -282,6 +300,7 @@ bool Connexion::createDatabaseSchema(int driver)
         result = false;
     }
     qDebug() << __FILE__ << QString::number(__LINE__) <<  "Hash Size "+QString::number(name_sql.size());
+    
     QHashIterator<QString, QString> it(name_sql);
      while (it.hasNext()) {
          it.next();
@@ -310,8 +329,7 @@ bool Connexion::createDatabaseSchema(int driver)
          }
      }
      //-------table paiements et remplissage des bases d'initialisation ----------------------------------
-   int numberOfTables = 1;
-
+   int numberOfTables = m_db.tables().size();
    QMessageBox mess;
                mess.setText(trUtf8("La base  a été installée "
                  "avec ")+QString::number(numberOfTables)
@@ -331,9 +349,7 @@ bool Connexion::createDatabaseSchema(int driver)
                    default :
                        break;    
                    }
-               
-                   
-              
+   
     return result;
 }
 

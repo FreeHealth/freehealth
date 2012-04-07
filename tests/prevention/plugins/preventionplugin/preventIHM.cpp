@@ -1,5 +1,8 @@
 #include "preventIHM.h"
 
+#include <preferences/dateOfNextAction.h>
+
+
 #include <QLabel>
 #include <QDateEdit>
 #include <QMessageBox>
@@ -33,11 +36,13 @@ TreeViewOfPrevention::TreeViewOfPrevention(QObject * parent){
     m_addValue = new QAction(trUtf8("Add a value."),this);
     m_addGroup = new QAction(trUtf8("Add a group."),this);
     m_deleteGroup = new QAction(trUtf8("Delete this group."),this);
+    m_defineNextDate = new QAction(trUtf8("Add a rule."),this);
     connect(m_deleteValue,SIGNAL(triggered(bool)),this,SLOT(deleteItem(bool)));
     connect(m_showMore,SIGNAL(triggered(bool)),this,SLOT(showMore(bool)));
     connect(m_addValue,SIGNAL(triggered(bool)),this,SLOT(addAValue(bool)));
     connect(m_addGroup,SIGNAL(triggered(bool)),this,SLOT(addAGroup(bool)));
     connect(m_deleteGroup,SIGNAL(triggered(bool)),this,SLOT(deleteGroup(bool)));
+    connect(m_defineNextDate,SIGNAL(triggered(bool)),this,SLOT(addPreventionPreferences(bool)));
 }
 
 TreeViewOfPrevention::~TreeViewOfPrevention(){}
@@ -52,6 +57,7 @@ void TreeViewOfPrevention::mouseReleaseEvent(QMouseEvent *event){
             m_menuRightClic->addAction(m_addValue);
             m_menuRightClic->addAction(m_addGroup);
             m_menuRightClic->addAction(m_deleteGroup);
+            m_menuRightClic->addAction(m_defineNextDate);
             m_menuRightClic->exec(event->globalPos());
             blockSignals(false);
             }
@@ -66,6 +72,13 @@ void TreeViewOfPrevention::mouseReleaseEvent(QMouseEvent *event){
 bool TreeViewOfPrevention::isChild(){
     bool success = true;
     return success;
+}
+
+void TreeViewOfPrevention::addPreventionPreferences(bool b)
+{
+    Q_UNUSED(b);
+    Prevention::Internal::NextAction * a = new Prevention::Internal::NextAction(this);
+    a->show();
 }
 
 void TreeViewOfPrevention::deleteItem(bool b){
@@ -174,7 +187,6 @@ PreventIHM::PreventIHM(QWidget * parent):QWidget(parent){
     m_vbox = new QVBoxLayout(this);
     m_TreeViewOfPrevention = new TreeViewOfPrevention(this);
     m_modelOfItems = m_io->getVariantItemModel();
-    
     m_TreeViewOfPrevention->setModel(m_modelOfItems);
     m_TreeViewOfPrevention->getModel(m_modelOfItems);
     m_TreeViewOfPrevention->setItemDelegateForColumn(VariantItemModel::DATE_DONE_H,new DateEditTreeViewDelegate);

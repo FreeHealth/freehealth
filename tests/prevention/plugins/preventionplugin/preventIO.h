@@ -172,9 +172,10 @@ class PreventIO : public QObject {
         //bool addAGroupItem(QModelIndex & index,QModelIndex & parent,QObject * parentObject);
         QSqlTableModel * getModel();
         VariantItemModel *getVariantItemModel();
+        QSqlTableModel * getNextDateModel();
         QSqlDatabase m_db;
         VariantItemModel *m_variantModel;
-
+        QSqlTableModel *m_NextDateModel;
     private:
         QSqlTableModel * m_model;
     

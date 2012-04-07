@@ -132,7 +132,7 @@ TreeItem *TreeItem::child(const QString & parentName)
              	  int parentOrChild = child(row)->data(PARENT_OR_CHILD_H).toInt();
              	  if(parentOrChild == PARENT)
              	  {
-             	      int ret = m_treeItemsHash.remove(m_treeItemsHash.key(m_childItems.at(row)));
+             	      m_treeItemsHash.remove(m_treeItemsHash.key(m_childItems.at(row)));
              	      }
                   if (!m_childItems.isEmpty())
                       delete m_childItems.takeAt(row);
@@ -748,9 +748,9 @@ bool VariantItemModel::addAnItemAccordingToIndex(QModelIndex & index,QModelIndex
 
 bool VariantItemModel::deleteItemAccordingToIndex(QModelIndex & index,QModelIndex & parent, QObject * parentObject)
 {
+    Q_UNUSED(parentObject);
     bool success = true;
-    TreeViewOfPrevention *treeView = static_cast<TreeViewOfPrevention*>(parentObject);
-    
+    //TreeViewOfPrevention *treeView = static_cast<TreeViewOfPrevention*>(parentObject);
     TreeItem * parentItem = getItem(parent);
     TreeItem * child = getItem(index);
     TreeItem * item;
@@ -776,6 +776,7 @@ bool VariantItemModel::deleteItemAccordingToIndex(QModelIndex & index,QModelInde
 
 bool VariantItemModel::addAGroupItem(QModelIndex & index,QModelIndex & parent,QObject * parentObject)
 {
+    Q_UNUSED(index);
     //PreventIHM * parentOfIO = static_cast<PreventIHM*>(m_modelSql->QObject::parent());
     TreeViewOfPrevention *treeView = static_cast<TreeViewOfPrevention*>(parentObject);
     TreeItem * item = getRootItem();
@@ -915,6 +916,10 @@ PreventIO::PreventIO(QObject * parent){
     m_model->setEditStrategy(QSqlTableModel::OnManualSubmit);
     m_model->select();
     m_variantModel = new VariantItemModel(m_model,parent);
+    m_NextDateModel = new QSqlTableModel(this,m_db);
+    m_NextDateModel->setTable("nextdate");
+    m_NextDateModel->setEditStrategy(QSqlTableModel::OnFieldChange);
+    m_NextDateModel->select();
 }
 
 PreventIO::~PreventIO(){}
@@ -931,6 +936,12 @@ QSqlTableModel * PreventIO::getModel()
 {
     return m_model;
 }
+
+QSqlTableModel * PreventIO::getNextDateModel()
+{
+    return m_NextDateModel;
+}
+
 
 QSqlDatabase PreventIO::getDatabase()
 {
