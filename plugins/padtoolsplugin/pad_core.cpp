@@ -27,6 +27,8 @@
 #include "pad_core.h"
 #include "constants.h"
 
+#include <QTextCursor>
+
 #include <QDebug>
 
 using namespace PadTools;
@@ -52,6 +54,17 @@ QString PadCore::run(QMap<QString,QVariant> &tokens) const
 void PadCore::run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *output) const
 {
     const QString &value = tokens[_name].toString();
-    if (!value.isEmpty())
+    if (!value.isEmpty()) {
+        // insert core value
         insertText(output, value);
+        // apply charFormat from the source
+        QTextCursor cursor(source);
+        cursor.setPosition(_start);
+        cursor.setPosition(_end, QTextCursor::KeepAnchor);
+        QTextCharFormat format = cursor.charFormat();
+        QTextCursor cout(output);
+        cout.setPosition(_outputStart);
+        cout.setPosition(_outputEnd, QTextCursor::KeepAnchor);
+        cout.setCharFormat(format);
+    }
 }
