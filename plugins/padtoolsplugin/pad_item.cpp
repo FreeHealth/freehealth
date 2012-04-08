@@ -159,6 +159,4 @@ void PadItem::run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDo
         format.setToolTip("Token: " + coreValue);
         cursor.mergeCharFormat(format);
     }
-
-    return;
 }
