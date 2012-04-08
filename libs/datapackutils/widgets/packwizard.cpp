@@ -189,11 +189,11 @@ void PackIntroPage::initializePage()
     QString html = "<p>";
     // install
     /** \todo better would be tr(" %1 Pack(s) to install/update/remove").arg(packWizard()->installPacks()) to reflect other languages. */
-    html += toHtml(packWizard()->installPacks(), tr("Pack(s) to install"));
+    html += toHtml(packWizard()->installPacks(), tr("%1 Pack(s) to install").arg(packWizard()->installPacks().count()));
     // update
-    html += toHtml(packWizard()->updatePacks(), tr("Pack(s) to update"));
+    html += toHtml(packWizard()->updatePacks(), tr("%1 Pack(s) to update").arg(packWizard()->updatePacks().count()));
     // remove
-    html += toHtml(packWizard()->removePacks(), tr("Pack(s) to remove"));
+    html += toHtml(packWizard()->removePacks(), tr("%1 Pack(s) to remove").arg(packWizard()->removePacks().count()));
     html += "</p>";
     m_Browser->setHtml(html);
 }
