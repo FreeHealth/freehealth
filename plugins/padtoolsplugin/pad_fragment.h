@@ -106,17 +106,15 @@ public:
 
 protected:
     QList<PadFragment *> _fragments;
+    int _start; // index of the first char in the text
+    int _end; // index of the last char in the text
+    mutable int _outputStart, _outputEnd;
 
 private:
     PadFragment *_parent;
-    int _start; // index of the first char in the text
-	int _end; // index of the last char in the text
     long long _id; // unique identifier
     QString _toolTip;
     QHash<QString, QVariant> _userData;
-
-protected:
-    mutable int _outputStart, _outputEnd;
 };
 
 }  // PadTools

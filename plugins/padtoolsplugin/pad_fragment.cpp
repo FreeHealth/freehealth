@@ -38,12 +38,12 @@
 using namespace PadTools;
 
 PadFragment::PadFragment(PadFragment *parent) :
-    _parent(parent),
     _start(-1),
     _end(-1),
     _id(-1),
     _outputStart(-1),
-    _outputEnd(-1)
+    _outputEnd(-1),
+    _parent(parent)
 {
 }
 
@@ -106,7 +106,6 @@ PadFragment *PadFragment::padFragmentForOutputPosition(int pos) const
     return child;
 }
 
-
 /** Insert the content of the PadFragment rawSource to the output */
 void PadFragment::insertFragment(QTextDocument *source, QTextDocument *out) const
 {
@@ -126,6 +125,7 @@ void PadFragment::insertFragment(QTextDocument *source, QTextDocument *out) cons
     }
 }
 
+/** Insert html at the end of the output \e out QTextDocument and compute fragment output range */
 void PadFragment::insertText(QTextDocument *out, const QString &text) const
 {
     if (_start>=0) {
