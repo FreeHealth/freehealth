@@ -162,8 +162,7 @@ PackIntroPage::PackIntroPage(QWidget *parent) :
     PackPage(parent)
 {
     setTitle(tr("Pack processing"));
-    /** \todo better English: "...all informations."*/
-    setSubTitle(tr("The following packs will be processed. Please verify all information."));
+    setSubTitle(tr("The following packs will be processed. Please verify all informations."));
     m_Browser = new QTextBrowser(this);
     QVBoxLayout *lay = new QVBoxLayout(this);
     setLayout(lay);
