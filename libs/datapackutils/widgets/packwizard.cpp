@@ -38,6 +38,7 @@
 #include <datapackutils/serverenginestatus.h>
 
 #include <utils/log.h>
+#include <utils/global.h>
 #include <utils/licenseterms.h>
 
 #include <QTextBrowser>
@@ -443,6 +444,7 @@ void PackDownloadPage::packDownloaded(const DataPack::Pack &pack, const DataPack
     if (status.hasError || !status.isSuccessful) {
         processLabel->setPixmap(QPixmap(iconFullPath("warning.png", DataPackCore::SmallPixmaps)));
         processLabel->setToolTip(status.errorMessages.join("\n"));
+        Utils::warningMessageBox(tr("Download failed"), status.errorMessages.join("\n"));
         LOG_ERROR(status.errorMessages.join("\n"));
     } else {
         processLabel->setPixmap(icon("ok.png", DataPackCore::SmallPixmaps).pixmap(16,16));
