@@ -55,6 +55,8 @@
 #include <utils/global.h>
 #include <utils/log.h>
 #include <translationutils/constants.h>
+#include <translationutils/trans_current.h>
+#include <translationutils/trans_database.h>
 #include <translationutils/trans_msgerror.h>
 
 #include <QAbstractItemModel>
@@ -1207,7 +1209,7 @@ void ReceiptViewer::save()
     hash.insert(ACCOUNT_TRACE, QVariant());
     receiptsEngine r;
     if (!r.insertIntoAccount(hash,userUuid)) {
-        Utils::warningMessageBox(tr("Error inserting into AccountModel!"), tr("Please contact the development team."));
+        Utils::warningMessageBox(tr("Error inserting into AccountModel!"), tkTr(Trans::Constants::CONTACT_DEV_TEAM));
     }
     }
     clearAll(true);

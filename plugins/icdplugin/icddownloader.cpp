@@ -34,8 +34,10 @@
 #include <utils/global.h>
 #include <utils/httpdownloader.h>
 #include <utils/database.h>
-
-#include <translationutils/constanttranslations.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_current.h>
+#include <translationutils/trans_database.h>
+#include <translationutils/trans_msgerror.h>
 
 #include <quazip/global.h>
 
@@ -96,8 +98,8 @@ bool IcdDownloader::createDatabase()
     QFile sqlFile(::sqlSchemaAbsFileName());
     if (!sqlFile.exists()) {
         Utils::warningMessageBox(tkTr(Trans::Constants::FILE_1_DOESNOT_EXISTS).arg(sqlFile.fileName()),
-                                 tr("The ICD10 database can not be created. The application will not work properly.\n"
-                                    "Please contact the development team."));
+                                 tr("The ICD10 database can not be created. The application will not work properly.\n") +
+                                 tkTr(Trans::Constants::CONTACT_DEV_TEAM));
         return false;
     }
 

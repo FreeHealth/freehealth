@@ -67,6 +67,7 @@
 #include <translationutils/trans_database.h>
 #include <translationutils/trans_drugs.h>
 #include <translationutils/trans_msgerror.h>
+#include <translationutils/trans_current.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
@@ -342,18 +343,18 @@ bool ProtocolsBase::createDatabase(const QString &connectionName , const QString
             db.setPassword(pass);
             db.setPort(port);
             if (!db.open()) {
-                Utils::warningMessageBox(tr("Unable to create the Protocol database."),tr("Please contact the development team."));
+                Utils::warningMessageBox(tr("Unable to create the Protocol database."), tkTr(Trans::Constants::CONTACT_DEV_TEAM));
                 return false;
             }
             QSqlQuery q(QString("CREATE DATABASE `%1`").arg(dbName), db);
             if (!q.isActive()) {
                 LOG_QUERY_ERROR(q);
-                Utils::warningMessageBox(tr("Unable to create the Protocol database."),tr("Please contact the development team."));
+                Utils::warningMessageBox(tr("Unable to create the Protocol database."), tkTr(Trans::Constants::CONTACT_DEV_TEAM));
                 return false;
             }
             DB.setDatabaseName(dbName);
             if (!DB.open()) {
-                Utils::warningMessageBox(tr("Unable to create the Protocol database."),tr("Please contact the development team."));
+                Utils::warningMessageBox(tr("Unable to create the Protocol database."), tkTr(Trans::Constants::CONTACT_DEV_TEAM));
                 return false;
             }
             DB.setDatabaseName(dbName);

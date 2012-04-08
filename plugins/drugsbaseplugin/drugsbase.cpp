@@ -64,6 +64,10 @@
 #include <utils/global.h>
 #include <utils/log.h>
 #include <utils/databaseconnector.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_current.h>
+#include <translationutils/trans_database.h>
+#include <translationutils/trans_msgerror.h>
 
 #include <medicalutils/ebmdata.h>
 
@@ -737,18 +741,18 @@ DatabaseInfos *DrugsBase::getDrugSourceInformation(const QString &drugSourceUid)
 //            d.setPassword(pass);
 //            d.setPort(port);
 //            if (!d.open()) {
-//                Utils::warningMessageBox(tr("Unable to create the Protocol database."),tr("Please contact the development team."));
+//                Utils::warningMessageBox(tr("Unable to create the Protocol database."),tkTr(Trans::Constants::CONTACT_DEV_TEAM));
 //                return false;
 //            }
 //            QSqlQuery q(QString("CREATE DATABASE `%1`").arg(dbName), d);
 //            if (!q.isActive()) {
 //                LOG_QUERY_ERROR(q);
-//                Utils::warningMessageBox(tr("Unable to create the Protocol database."),tr("Please contact the development team."));
+//                Utils::warningMessageBox(tr("Unable to create the Protocol database."),tkTr(Trans::Constants::CONTACT_DEV_TEAM));
 //                return false;
 //            }
 //            DB.setDatabaseName(dbName);
 //            if (!DB.open()) {
-//                Utils::warningMessageBox(tr("Unable to create the Protocol database."),tr("Please contact the development team."));
+//                Utils::warningMessageBox(tr("Unable to create the Protocol database."),tkTr(Trans::Constants::CONTACT_DEV_TEAM));
 //                return false;
 //            }
 //            DB.setDatabaseName(dbName);

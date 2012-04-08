@@ -36,7 +36,10 @@
 #include <utils/global.h>
 #include <utils/log.h>
 #include <utils/databaseconnector.h>
-#include <translationutils/constanttranslations.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_current.h>
+#include <translationutils/trans_database.h>
+#include <translationutils/trans_msgerror.h>
 
 #include <coreplugin/isettings.h>
 #include <coreplugin/icore.h>
@@ -638,7 +641,7 @@ bool AccountBase::createDatabase(const QString &connectionName , const QString &
             if (!d.open()) {
                 Utils::warningMessageBox(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
                                          .arg(DB.connectionName()).arg(DB.lastError().text()),
-                                         tr("Please contact the development team."));
+                                         tkTr(Trans::Constants::CONTACT_DEV_TEAM));
                 return false;
             }
             QSqlQuery q(QString("CREATE DATABASE `%1`").arg(dbName), d);
@@ -646,13 +649,13 @@ bool AccountBase::createDatabase(const QString &connectionName , const QString &
                 LOG_QUERY_ERROR(q);
                 Utils::warningMessageBox(tkTr(Trans::Constants::DATABASE_1_CANNOT_BE_CREATED_ERROR_2)
                                          .arg(DB.connectionName()).arg(DB.lastError().text()),
-                                         tr("Please contact the development team."));
+                                         tkTr(Trans::Constants::CONTACT_DEV_TEAM));
                 return false;
             }
             if (!DB.open()) {
                 Utils::warningMessageBox(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
                                          .arg(DB.connectionName()).arg(DB.lastError().text()),
-                                         tr("Please contact the development team."));
+                                         tkTr(Trans::Constants::CONTACT_DEV_TEAM));
                 return false;
             }
             DB.setDatabaseName(dbName);
