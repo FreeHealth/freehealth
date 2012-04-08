@@ -475,8 +475,7 @@ PackInstallPage::PackInstallPage(QWidget *parent) :
     PackPage(parent)
 {
     setTitle(tr("Installing pack(s)"));
-    /** \todo better: "Please wait until all packs are installed." Be nice to the users ;-) */
-    setSubTitle(tr("Wait until all installations are done."));
+    setSubTitle(tr("Please wait until all packs are installed."));
     m_Area = new QScrollArea(this);
     m_Grid = new QGridLayout(m_Area);
     m_Area->setLayout(m_Grid);
