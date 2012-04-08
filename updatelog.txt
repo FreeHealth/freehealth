@@ -6,6 +6,8 @@ FreeMedForms
     * Windows compatibility improved  (installer, icon, application)
   * FreeMedForms
     * Allow user to select his preferred font for the form/episode tree view
+  * DataPacks
+    * Raise a warning dialog on download fail
 
 ===== Bug correction =====
 
@@ -32,6 +34,8 @@ FreeMedForms
     * Compatible windows (installateur, icône, application)
   * FreeMedForms
     * Permet à l'utilisateur de sélectionner sa police de caractère préférée pour l'arborescence des formulaire et des épisodes dans la page Dossier patient
+  * Gestionnaires de paquets de données
+    * Affiche un dialogue d'alerte en cas d'erreur lors du téléchargement
 
 ===== Corrections de bug =====
 
