@@ -10,6 +10,24 @@
  class TreeItem:public QObject
  {
  Q_OBJECT
+      enum Parenthood {
+          PARENT = 0,
+          CHILD,
+          Parenthood_MaxParam
+          };
+      enum Headers {
+          ITEM_H = 0,
+          TYPE_OF_ITEM_H,
+          PARENT_ITEM_H,
+          PARENT_OR_CHILD_H,
+          ICON_H,
+          DATE_DONE_H,
+          DATE_NEXT_H,
+          ABSTRACT_H,
+          ID_ITEM_H,
+          RESULT_H,
+          Headers_MaxParam
+          };
  public:
      TreeItem(const QVector<QVariant> &data = QVector<QVariant>(), TreeItem *parent = 0);
      ~TreeItem();
@@ -31,10 +49,12 @@
      bool setData(int column, const QVariant &value);
 
  private:
+     QHash<QString,TreeItem*> treeParentItems();
      QList<TreeItem*> m_childItems;
      QHash<QString,TreeItem*> m_treeItemsHash;
      QVector<QVariant> m_itemData;
      TreeItem *m_parentItem;
+     int m_parenthood;
  };
 
 class VariantItemModel : public QAbstractItemModel
@@ -152,9 +172,10 @@ class PreventIO : public QObject {
         //bool addAGroupItem(QModelIndex & index,QModelIndex & parent,QObject * parentObject);
         QSqlTableModel * getModel();
         VariantItemModel *getVariantItemModel();
+        QSqlTableModel * getNextDateModel();
         QSqlDatabase m_db;
         VariantItemModel *m_variantModel;
-
+        QSqlTableModel *m_NextDateModel;
     private:
         QSqlTableModel * m_model;
     

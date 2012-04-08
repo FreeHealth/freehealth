@@ -42,6 +42,7 @@ private Q_SLOTS:
     void addAValue(bool);
     void addAGroup(bool);
     void deleteGroup(bool);
+    void addPreventionPreferences(bool);
     //void userIsChanged(); TODO
 
 private:
@@ -53,6 +54,7 @@ private:
     QAction *m_addValue;
     QAction *m_addGroup;
     QAction *m_deleteGroup;
+    QAction *m_defineNextDate;
     QMenu *m_menuRightClic;
     QString m_userUuid;
     VariantItemModel *m_model;

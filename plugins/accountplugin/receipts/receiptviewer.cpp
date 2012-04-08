@@ -1239,7 +1239,7 @@ void ReceiptViewer::clearAll(bool b)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " in clearAll ";
     if (b==false) {
         qWarning() << __FILE__ << QString::number(__LINE__) << "Clear all is uncheckable." ;
-    }
+        }
     m_listOfValues.clear();
     if (!m_modelReturnedList->removeRows(0,m_modelReturnedList->rowCount(),QModelIndex()))
     {

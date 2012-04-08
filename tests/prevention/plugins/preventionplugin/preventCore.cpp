@@ -9,11 +9,10 @@
 static inline Core::ICore *core() {return Core::ICore::instance();}
 static inline Core::IMainWindow *mainWindow() {return core()->mainWindow();}
 
-
 PreventCore::PreventCore(QObject * object) 
 {
     qWarning() << "Processing PreventCore" ;
-    QWidget * parent = QApplication::desktop()->screen();
+    //QWidget * parent = QApplication::desktop()->screen();
     m_ihm = new PreventIHM(mainWindow());
     mainWindow()->setCentralWidget(m_ihm);
 }
