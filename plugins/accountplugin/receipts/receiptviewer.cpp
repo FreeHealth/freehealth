@@ -946,14 +946,13 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex & index) {
                   double value = m_kilometers *m_distanceRuleValue;
                   if (WarnDebugMessage)
                     qDebug() << __FILE__ << QString::number(__LINE__) << " m_distanceRuleValue =" << QString::number(m_distanceRuleValue) ;
-                  if (m_distanceRuleValue == 0.00)
-                  {
-                  	  qWarning() << __FILE__ << QString::number(__LINE__) << "no m_distanceRuleValue available" ;
-                  	  const QString information = trUtf8("No distance rule value available !\n"
-                  	                                     "You should create one in Preferences.");
-                  	  QMessageBox::warning(0,trUtf8("Warning"),information,QMessageBox::Ok);
-                  	  return;
-                      }
+                  if (m_distanceRuleValue == 0.00) {
+                      qWarning() << __FILE__ << QString::number(__LINE__) << "no m_distanceRuleValue available" ;
+                      QString information = tr("There are no distance rule value available.\n"
+                                               "You can create one in Preferences.");
+                      Utils::warningMessageBox(tr("No distance rule."), information);
+                      return;
+                  }
                   typeOfPayment = model->data(model->index(i,dist.TYPE_OF_CHOICE),Qt::DisplayRole).toInt();
                   percentage = model->data(model->index(i,dist.PERCENTAGE),Qt::DisplayRole).toDouble();
                   debtor = model->data(model->index(i,dist.DEBTOR),Qt::DisplayRole);
@@ -1208,7 +1207,7 @@ void ReceiptViewer::save()
     hash.insert(ACCOUNT_TRACE, QVariant());
     receiptsEngine r;
     if (!r.insertIntoAccount(hash,userUuid)) {
-        QMessageBox::warning(0,trUtf8("Warning"),trUtf8("Error inserting into AccountModel!"),QMessageBox::Ok);
+        Utils::warningMessageBox(tr("Error inserting into AccountModel!"), tr("Please contact the development team."));
     }
     }
     clearAll(true);

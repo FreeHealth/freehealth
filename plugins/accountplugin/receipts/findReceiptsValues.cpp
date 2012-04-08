@@ -195,13 +195,10 @@ void findReceiptsValues::chooseValue()
     //get datas
     QAbstractItemModel * model = ui->tableViewOfValues->model();
     QModelIndex inIndex = ui->tableViewOfValues->currentIndex();
-    if (!inIndex.isValid())
-    {
-    	  qWarning() << __FILE__ << QString::number(__LINE__) << "index not valid" ;
-    	  QMessageBox::warning(0,trUtf8("Warning"),trUtf8("You have to choose a value !"),
-    	  QMessageBox::Ok);
-    	  return;  
-        }
+    if (!inIndex.isValid()) {
+        Utils::warningMessageBox(tr("No value selected."), tr("Please select a value."));
+        return;
+    }
     int row = inIndex.row();
     QModelIndex indexData = model->index(row,0,QModelIndex());
     QModelIndex indexAmount = model->index(row,1,QModelIndex());
@@ -243,13 +240,10 @@ void findReceiptsValues::deleteValue()
     QListWidgetItem * item;
     if (WarnDebugMessage)
     qDebug() << __FILE__ << QString::number(__LINE__) << " in deleteValue " ;
-    if (!ui->listchosenWidget->currentIndex().isValid())
-    {
-    	  qWarning() << __FILE__ << QString::number(__LINE__) << "index not valid" ;
-    	  QMessageBox::warning(0,trUtf8("Warning"),trUtf8("You have to choose a value !"),
-    	  QMessageBox::Ok);
-    	  return;
-        }
+    if (!ui->listchosenWidget->currentIndex().isValid()) {
+        Utils::warningMessageBox(tr("No value selected."), tr("Please select a value."));
+        return;
+    }
     item = ui->listchosenWidget->currentItem();
     if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " item = " << item->text();
