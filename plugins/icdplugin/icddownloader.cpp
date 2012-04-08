@@ -38,6 +38,7 @@
 #include <translationutils/trans_current.h>
 #include <translationutils/trans_database.h>
 #include <translationutils/trans_msgerror.h>
+#include <translationutils/trans_filepathxml.h>
 
 #include <quazip/global.h>
 
@@ -67,6 +68,7 @@ namespace {
 IcdDownloader::IcdDownloader(QObject *parent) :
         QObject(parent), m_Downloader(0)
 {
+    setObjectName("IcdDownloader");
 }
 
 IcdDownloader::~IcdDownloader()
@@ -90,7 +92,7 @@ bool IcdDownloader::createDatabase()
             tkTr(Trans::Constants::_1_ISNOT_AVAILABLE_CANNOTBE_CREATED).arg(pathOrHostName);
     DB.setDatabaseName(absFileName);
     if (!DB.open()) {
-        Utils::Log::addError(this, DB.lastError().text(), __FILE__, __LINE__);
+        LOG_ERROR(DB.lastError().text());
         return false;
     }
 
@@ -105,10 +107,10 @@ bool IcdDownloader::createDatabase()
 
     // Create SQL Schema
     if (Utils::Database::executeSqlFile(Constants::DB_ICD10, QFileInfo(sqlFile).absoluteFilePath())) {
-        Utils::Log::addMessage(this, tkTr(Trans::Constants::DATABASE_1_CORRECTLY_CREATED).arg(Constants::DB_ICD10));
+        LOG(tkTr(Trans::Constants::DATABASE_1_CORRECTLY_CREATED).arg(Constants::DB_ICD10));
     } else {
-        Utils::Log::addError(this, tkTr(Trans::Constants::DATABASE_1_CANNOT_BE_CREATED_ERROR_2)
-                             .arg(Constants::DB_ICD10).arg(DB.lastError().text()), __FILE__, __LINE__);
+        LOG_ERROR(tkTr(Trans::Constants::DATABASE_1_CANNOT_BE_CREATED_ERROR_2)
+                  .arg(Constants::DB_ICD10).arg(DB.lastError().text()));
         return false;
     }
 
@@ -121,7 +123,7 @@ bool IcdDownloader::downloadRawSources()
 {
     QString path = ::tmpPath();
     if (!QDir().mkpath(path)) {
-        Utils::Log::addError(this, tkTr(Trans::Constants::PATH_1_CANNOT_BE_CREATED));
+        LOG_ERROR(tkTr(Trans::Constants::PATH_1_CANNOT_BE_CREATED));
         return false;
     }
     m_Downloader = new Utils::HttpDownloader(this);
@@ -142,7 +144,7 @@ bool IcdDownloader::downloadFinished()
     QString path = ::tmpPath();
     if (QString(::RAWSOURCES_URL).endsWith(".zip", Qt::CaseInsensitive)) {
         if (!QuaZipTools::unzipAllFilesIntoDirs(QStringList() << path)) {
-            Utils::Log::addError(this, tr("Unable to unzip ICD10 raw sources (%1)").arg(path), __FILE__, __LINE__);
+            LOG_ERROR(tr("Unable to unzip ICD10 raw sources (%1)").arg(path));
             return false;
         }
     }
@@ -153,7 +155,7 @@ bool IcdDownloader::downloadFinished()
 
 bool IcdDownloader::populateDatabaseWithRawSources()
 {
-    qWarning() <<"populate";
+//    qWarning() <<"populate";
     QStringList files;
     files
             << "CHAPTER"
@@ -188,8 +190,8 @@ bool IcdDownloader::populateDatabaseWithRawSources()
 
     if (!DB.isOpen()) {
         if (!DB.open()) {
-            Utils::Log::addError(this, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
-                                 .arg(DB.connectionName()).arg(DB.lastError().text()), __FILE__, __LINE__);
+            LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+                      .arg(DB.connectionName()).arg(DB.lastError().text()));
             return false;
         }
     }
@@ -220,7 +222,7 @@ bool IcdDownloader::populateDatabaseWithRawSources()
 
         // import files
         if (!Utils::Database::importCsvToDatabase(Constants::DB_ICD10, path + file + "-utf8.txt", file.toLower(), "¦", true)) {
-            Utils::Log::addError(this, "Error", __FILE__, __LINE__);
+            LOG_ERROR("Error");
             continue;
         }
 
