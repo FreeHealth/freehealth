@@ -98,16 +98,8 @@ PadDocument *PadAnalyzer::startAnalyze(PadDocument *padDocument)
 
     Lexem lex;
     PadDocument *pad;
-    if (padDocument) {
-        pad = padDocument;
-    } else {
-        pad = new PadDocument();
-    }
-
-    if (_text)
-        pad->setSource(*_text);
-    else
-        pad->setSource(_document);
+    padDocument ? pad = padDocument : pad = new PadDocument();
+    _text ? pad->setSource(*_text) : pad->setSource(_document);
 
 	PadFragment *fragment;
 	int pos;
