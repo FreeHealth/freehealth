@@ -61,12 +61,17 @@ public:
     QString rawSource() const {return _rawSource;}
     QTextDocument *rawSourceDocument() const {return _docSource;}
     QTextDocument *outputDocument() const {return _docOutput;}
+
+    // Manage children fragments
     void addChild(PadFragment *fragment);
     void removeAndDeleteFragment(PadFragment *fragment);
 
-    // Extract text from source
+    // Extract text from source && output
     QString fragmentRawSource(PadFragment *fragment) const;
     QString fragmentHtmlOutput(PadFragment *fragment) const;
+
+    // Reconstruction of rawsource from output
+//    QTextDocument constructSourceFromOutput() const;
 
     // PadFragment/Cursor hunting
     PadItem *padItemForOutputPosition(int positionInOutputQTextDocument) const;

@@ -447,7 +447,8 @@ bool TokenOutputDocument::eventFilter(QObject *o, QEvent *e)
                                 d->_pad->softReset();
                             }
                         } else {
-                            d->_pad->removeOutputCharAt(newPosition);
+                            //////////////// HERE /////////////
+//                            d->_pad->removeOutputCharAt(newPosition);
                         }
                         return true;
                     }

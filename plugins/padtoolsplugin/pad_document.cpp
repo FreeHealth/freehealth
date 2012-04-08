@@ -188,15 +188,15 @@ void PadDocument::removeAndDeleteFragment(PadFragment *fragment)
     PadFragment::removeAndDeleteFragment(fragment);
 }
 
-/** Removes char at \e position in output and keep raw source sync */
-void PadDocument::removeOutputCharAt(int position, int length)
-{
-}
+///** Removes char at \e position in output and keep raw source sync */
+//void PadDocument::removeOutputCharAt(int position, int length)
+//{
+//}
 
-/** Inserts char at \e position in output and keep raw source sync */
-void PadDocument::insertOutputCharAt(const QChar &c,int position)
-{
-}
+///** Inserts char at \e position in output and keep raw source sync */
+//void PadDocument::insertOutputCharAt(const QChar &c,int position)
+//{
+//}
 
 /** Debug to console. */
 void PadDocument::print(int indent) const
