@@ -33,10 +33,8 @@
 #include <QTextDocument>
 
 namespace PadTools {
+class PadDocument;
 
-/**
- * Represent a string or a token
- */
 class PadFragment
 {
 public:
@@ -48,37 +46,28 @@ public:
 
 	virtual void print(int indent = 0) const = 0;
 
-    /** Returns the start position in the raw source string/document */
     virtual int id() const { return _id; }
-    /** Defines the start position in the raw source string/document */
     virtual void setId(int id) { _id = id; }
 
-    /** Returns the start position in the raw source string/document */
 	int start() const { return _start; }
-    /** Defines the start position in the raw source string/document */
     void setStart(int start) { _start = start; }
 
-    /** Returns the end position in the raw source string/document */
     int end() const { return _end; }
-    /** Defines the end position in the raw source string/document */
     void setEnd(int end) { _end = end; }
 
-    /** Return the length of the fragment in the raw source string/document */
     int rawLength() const {return _end - _start;}
-    /** Return the length of the fragment in the output string/document */
     int outputLength() const {return _outputEnd - _outputStart;}
 
     void move(int nbChars);
     void moveEnd(int nbOfChars);
 
-    /** Returns the start position in the output QTextDocument. This is defined only after the calling run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out) const. */
+    void setOutputStart(const int pos) {_outputStart = pos;}
+    void setOutputEnd(const int pos) {_outputEnd = pos;}
     int outputStart() const {return _outputStart;}
-    /** Returns the end position in the output QTextDocument. This is defined only after the calling run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out) const. */
     int outputEnd() const {return _outputEnd;}
+    void resetOutputRange() {_outputStart=-1; _outputEnd=-1; foreach(PadFragment*f,_fragments) f->resetOutputRange();}
 
-    /** Contains raw source \e position */
     bool containsRawPosition(const int pos) const {return (_start <= pos && _end >= pos);}
-    /** Contains output \e position */
     bool containsOutputPosition(const int pos) const {return (_outputStart <= pos && _outputEnd >= pos);}
 
     void setToolTip(const QString &tooltip) {_toolTip = tooltip;}
@@ -87,15 +76,12 @@ public:
     void setUserData(const QString &key, const QVariant &value) {_userData.insert(key, value);}
     QVariant userData(const QString &key) const {return _userData.value(key);}
 
-    /**  Run this fragment over some tokens and returns the result text */
 	virtual QString run(QMap<QString,QVariant> &tokens) const = 0;
-
-    /**  Run this fragment over some tokens inside QTextDocuments */
     virtual void run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out) const = 0;
+//    virtual void run(QMap<QString,QVariant> &tokens, PadDocument *document) = 0;
 
     virtual void addChild(PadFragment *fragment);
     virtual void removeAndDeleteFragment(PadFragment *fragment);
-    /** Returns the list of PadTools::PadFragment children */
     virtual QList<PadFragment*> children() const {return _fragments;}
 
     virtual PadFragment *padFragmentForSourcePosition(int pos) const;
