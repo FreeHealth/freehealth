@@ -1,6 +1,10 @@
 #include "preventIO.h"
 #include "preventIHM.h"
 
+#include <coreplugin/icore.h>
+#include <coreplugin/iuser.h>
+#include <coreplugin/ipatient.h>
+
 #include <QAbstractItemModel>
 #include <QMessageBox>
 
@@ -9,6 +13,25 @@ static inline QString pixmaps()
 { 
     return QString(qApp->applicationDirPath()+"/../../global_resources/pixmap");
 };
+static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
+static inline Core::IPatient *patient() { return Core::ICore::instance()->patient(); }
+
+static inline QStringList patientAndUserUuid() //TODO
+{
+     QStringList listOfUuids;
+     QString patientUuid = "111111111111111111111111111111";
+     QString userUuid = "1";
+     if (patient())
+     {
+     	  //patientUuid = patient()->uuid();
+         }
+     if (user())
+     {
+     	  //userUuid = user()->uuid();
+         }
+     listOfUuids << patientUuid << userUuid;
+     return listOfUuids;
+}
 
 //BEGIN OF TREEITEM = ITEMS FOR THE TREEVIEW
 
@@ -192,6 +215,8 @@ VariantItemModel::VariantItemModel(QSqlTableModel * model, QObject *parent)
                 << trUtf8("Date next")
                 << trUtf8("Abstract")
                 << trUtf8("ID of Item")
+                << trUtf8("Patient_uid")
+                << trUtf8("User_uid")
                 ;
      QVector<QVariant> rootData;
      for (int i = 0; i < listHeaders.size(); i += 1)
@@ -286,9 +311,13 @@ VariantItemModel::VariantItemModel(QSqlTableModel * model, QObject *parent)
  int VariantItemModel::getSqlTableRow(int idOfItem){
      int tableRow = 0;
      int row = 0; 
+     QString patientUuid = patientAndUserUuid()[PATIENT];
+     QString userUuid = patientAndUserUuid()[USER];
      QSqlDatabase db = QSqlDatabase::database("prevention");
      QSqlQuery q(db);
      QString req = QString("SELECT %1 FROM %2").arg("ID_ITEM","prevention");
+     req += QString(" WHERE %1 LIKE '%2' AND %3 LIKE '%4'")
+               .arg("PATIENT_UID",patientUuid,"USER_UID",userUuid);
      if (!q.exec(req))
      {
      	  qWarning() << __FILE__ << QString::number(__LINE__) << q.lastError().text() ;
@@ -509,8 +538,14 @@ QHash<int,QVariant> VariantItemModel::childs(QModelIndex &parent){
 //FEEL THE MODEL WITH :
  void VariantItemModel::setupModelData(QSqlTableModel *model, TreeItem *parent)
  {
-     //ID ITEM TYPE_OF_ITEM PARENT_ITEM PARENT_OR_CHILD ICON DATE_DONE DATE_NEXT ABSTRACT ID_ITEM RESULT 
+     //ID ITEM TYPE_OF_ITEM PARENT_ITEM PARENT_OR_CHILD ICON DATE_DONE DATE_NEXT ABSTRACT ID_ITEM PATIENT_UID USER_UID RESULT 
      //N  Y    N            Y           N               Y    Y         Y         Y        Y       N
+     QString patientUuid = patientAndUserUuid()[PATIENT];
+     QString userUuid = patientAndUserUuid()[USER];
+     QString patientAndUserFilter = QString("%1 LIKE '%2' AND %3 LIKE '%4'")
+                                   .arg("PATIENT_UID",patientUuid,"USER_UID",userUuid);
+     model->setFilter(patientAndUserFilter);
+     model->select();
      if (model->rowCount()< 1)
      {
      	  return;
@@ -637,7 +672,8 @@ bool VariantItemModel::addAnItemAccordingToIndex(QModelIndex & index,QModelIndex
     bool success = true;
     PreventIHM * parentOfIO = static_cast<PreventIHM*>(m_modelSql->QObject::parent());
     TreeViewOfPrevention *treeView = static_cast<TreeViewOfPrevention*>(parentObject);
-    
+    QString patientUuid = patientAndUserUuid()[PATIENT];
+    QString userUuid = patientAndUserUuid()[USER];    
     TreeItem * parentItem = getItem(parent);
     TreeItem * child = getItem(index);
     TreeItem * item;
@@ -710,6 +746,14 @@ bool VariantItemModel::addAnItemAccordingToIndex(QModelIndex & index,QModelIndex
     	 	         role = Qt::EditRole;
     	 	         value = QVariant(findNextId());
     	 	         break;
+    	 	     case VariantItemModel::PATIENT_UID_H :
+    	 	         role = Qt::EditRole;
+    	 	         value = QVariant(patientUuid);
+    	 	         break;
+    	 	     case VariantItemModel::USER_UID_H :
+    	 	         role = Qt::EditRole;
+    	 	         value = QVariant(userUuid);
+    	 	         break;      	 	         
     	 	     case VariantItemModel::RESULT_H :
     	 	         role = Qt::EditRole;
     	 	         value = QVariant();
@@ -777,6 +821,8 @@ bool VariantItemModel::deleteItemAccordingToIndex(QModelIndex & index,QModelInde
 bool VariantItemModel::addAGroupItem(QModelIndex & index,QModelIndex & parent,QObject * parentObject)
 {
     Q_UNUSED(index);
+    QString patientUuid = patientAndUserUuid()[PATIENT];
+    QString userUuid = patientAndUserUuid()[USER];
     //PreventIHM * parentOfIO = static_cast<PreventIHM*>(m_modelSql->QObject::parent());
     TreeViewOfPrevention *treeView = static_cast<TreeViewOfPrevention*>(parentObject);
     TreeItem * item = getRootItem();
@@ -849,6 +895,14 @@ bool VariantItemModel::addAGroupItem(QModelIndex & index,QModelIndex & parent,QO
     	 	         role = Qt::EditRole;
     	 	         value = QVariant(findNextId());
     	 	         break;
+    	 	     case VariantItemModel::PATIENT_UID_H :
+    	 	         role = Qt::EditRole;
+    	 	         value = QVariant(patientUuid);
+    	 	         break;
+    	 	     case VariantItemModel::USER_UID_H :
+    	 	         role = Qt::EditRole;
+    	 	         value = QVariant(userUuid);
+    	 	         break;     	 	         
     	 	     case VariantItemModel::RESULT_H :
     	 	         role = Qt::EditRole;
     	 	         value = QVariant();

@@ -15,8 +15,6 @@
 #include <QVBoxLayout>
 #include <QSqlTableModel>
 
-
-
 class TreeViewOfPrevention: public QTreeView
 {
     Q_OBJECT
@@ -78,7 +76,6 @@ class PreventIHM : public QWidget, public Ui::PreventWidget {
         QVBoxLayout *m_vbox;
         TreeViewOfPrevention *m_TreeViewOfPrevention; 
         Survey * m_survey;
-         
 };
 
 #endif

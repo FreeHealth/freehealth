@@ -249,8 +249,10 @@ bool Connexion::createDatabaseSchema(int driver)
                     "DATE_DONE	datetime   NULL,"
                     "DATE_NEXT	datetime   NULL,"
                     "ABSTRACT	longtext  NULL,"
-                    "RESULT	BLOB  NULL,"
                     "ID_ITEM    bigint NOT NULL,"
+                    "PATIENT_UID varchar(32) COLLATE utf8_unicode_ci NULL ,"
+                    "USER_UID int(11) NULL,"
+                    "RESULT	BLOB  NULL,"
                     "PRIMARY KEY(ID_Primkey));");
     
     name_sql.insert("Table nexdate",
@@ -262,6 +264,7 @@ bool Connexion::createDatabaseSchema(int driver)
                     "DAY int(2) NULL,"
                     "HOURS int(2) NULL,"
                     "MIN int(2) NULL,"
+                    "USER_UID int(11) NULL,"
                     "PRIMARY KEY(ID_Primkey));");
 
     }
@@ -278,6 +281,8 @@ bool Connexion::createDatabaseSchema(int driver)
                     "DATE_NEXT	datetime   NULL,"
                     "ABSTRACT	longtext  NULL,"
                     "ID_ITEM    bigint NOT NULL,"
+                    "PATIENT_UID varchar(32) COLLATE utf8_unicode_ci NULL ,"
+                    "USER_UID int(11) NULL,"
                     "RESULT	BLOB  NULL);");
                     
     name_sql.insert("Table nextdate",
@@ -288,7 +293,8 @@ bool Connexion::createDatabaseSchema(int driver)
                     "MONTH int(2) NULL,"
                     "DAY int(2) NULL,"
                     "HOURS int(2) NULL,"
-                    "MIN int(2) NULL);");                  
+                    "MIN int(2) NULL,"
+                    "USER_UID int(11) NULL);");                  
     }
 
     // Mass execute SQL queries
@@ -358,11 +364,11 @@ bool Connexion::setFirstDefaultValues(){
     QSqlTableModel model(this,m_db);
     model.setTable(PREVENT);
     model.select();
-    //ID_PREVENTION ITEM TYPE_OF_ITEM PARENT_ITEM PARENT_OR_CHILD ICON DATE_DONE DATE_NEXT ABSTRACT RESULT ID_ITEM
+    //ITEM TYPE_OF_ITEM PARENT_ITEM PARENT_OR_CHILD ICON DATE_DONE DATE_NEXT ABSTRACT ID_ITEM  RESULT  PATIENT_UID USER_UID
     const QString textOfDatas =
-    "vaccinations,PRIMARY_PREVENTION_ITEM,ROOT,PARENT,NULL,NULL,NULL,NULL,1,NULL\n"
-    "coloscopie,SECONDARY_PREVENTION_ITEM,ROOT,PARENT,NULL,NULL,NULL,NULL,2,NULL\n"
-    "mammographie,SECONDARY_PREVENTION_ITEM,ROOT,PARENT,NULL,NULL,NULL,NULL,3,NULL";
+    "vaccinations,PRIMARY_PREVENTION_ITEM,ROOT,PARENT,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL\n"
+    "coloscopie,SECONDARY_PREVENTION_ITEM,ROOT,PARENT,NULL,NULL,NULL,NULL,2,NULL,NULL,NULL\n"
+    "mammographie,SECONDARY_PREVENTION_ITEM,ROOT,PARENT,NULL,NULL,NULL,NULL,3,NULL,NULL,NULL";
     QStringList linesList;
     linesList = textOfDatas.split("\n")  ;
     for(int row = 0; row < linesList.size(); row += 1){
@@ -438,6 +444,12 @@ bool Connexion::setFirstDefaultValues(){
 		          data = listOfDatas[it];
 		          success = model.setData(model.index(row,it),data,Qt::EditRole);
 		          break;
+    	 	      case VariantItemModel::PATIENT_UID :
+    	 	         success = model.setData(model.index(row,it),"111111111111111111111111111111",Qt::EditRole);
+    	 	         break;
+    	 	      case VariantItemModel::USER_UID :
+    	 	         success = model.setData(model.index(row,it),QVariant(1),Qt::EditRole);
+    	 	         break;		         
 		      default :
 		          break;    
 		      }
@@ -475,12 +487,12 @@ bool Connexion::fillWithValuesForTesting(){
     QSqlTableModel model(this,m_db);
     model.setTable(PREVENT);
     model.select();
-    //ITEM TYPE_OF_ITEM PARENT_ITEM PARENT_OR_CHILD ICON DATE_DONE DATE_NEXT ABSTRACT RESULT
+    //ITEM TYPE_OF_ITEM PARENT_ITEM PARENT_OR_CHILD ICON DATE_DONE DATE_NEXT ABSTRACT RESULT PATIENT_UID USER_UID
     const QString textOfDatas =
-    "coloscopie,SECONDARY_PREVENTION_ITEM,coloscopie,CHILD,GREEN,1988-12-O1,2030-12-01,normale,4,NULL\n"
-    "coloscopie,SECONDARY_PREVENTION_ITEM,coloscopie, CHILD,RED,2000-01-01,2003-O1-01,polypes adénomateux,5,NULL\n"
-    "mammographie,SECONDARY_PREVENTION_ITEM,mammographie, CHILD,GREEN,2001-03-06,2003-06-02,ACR2,6,NULL\n"
-    "dtp,SECONDARY_PREVENTION_ITEM,vaccinations,CHILD,GREEN,1988-12-O1,2030-12-01,RAS,7,NULL";
+    "coloscopie,SECONDARY_PREVENTION_ITEM,coloscopie,CHILD,GREEN,1988-12-O1,2030-12-01,normale,4,NULL,NULL,NULL\n"
+    "coloscopie,SECONDARY_PREVENTION_ITEM,coloscopie, CHILD,RED,2000-01-01,2003-O1-01,polypes adénomateux,5,NULL,NULL,NULL\n"
+    "mammographie,SECONDARY_PREVENTION_ITEM,mammographie, CHILD,GREEN,2001-03-06,2003-06-02,ACR2,6,NULL,NULL,NULL\n"
+    "dtp,SECONDARY_PREVENTION_ITEM,vaccinations,CHILD,GREEN,1988-12-O1,2030-12-01,RAS,7,NULL,NULL,NULL";
     QStringList linesList;
     linesList = textOfDatas.split("\n")  ;
     int lastRow = model.rowCount();
@@ -565,6 +577,12 @@ bool Connexion::fillWithValuesForTesting(){
 		          data = listOfDatas[it];
 		          success = model.setData(model.index(row,it),data,Qt::EditRole);
 		          break;
+    	 	      case VariantItemModel::PATIENT_UID :
+    	 	         success = model.setData(model.index(row,it),"111111111111111111111111111111",Qt::EditRole);
+    	 	         break;
+    	 	      case VariantItemModel::USER_UID :
+    	 	         success = model.setData(model.index(row,it),QVariant(1),Qt::EditRole);
+    	 	         break;	
 		      default :
 		          break;    
 		      }

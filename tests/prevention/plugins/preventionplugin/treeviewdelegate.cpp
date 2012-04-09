@@ -12,6 +12,7 @@ static inline QString pixmaps()
 
 DateEditTreeViewDelegate::DateEditTreeViewDelegate(QObject * parent)
 {
+    Q_UNUSED(parent);
 }
 
 DateEditTreeViewDelegate::~DateEditTreeViewDelegate(){}
@@ -19,7 +20,8 @@ DateEditTreeViewDelegate::~DateEditTreeViewDelegate(){}
 QSize DateEditTreeViewDelegate::sizeHint(const QStyleOptionViewItem &  option ,
                               const QModelIndex & index) const
 {
-   
+    Q_UNUSED(option);
+    Q_UNUSED(index);
     return QSize(40,25);
 
 }
@@ -55,12 +57,12 @@ QWidget *DateEditTreeViewDelegate::createEditor(QWidget *parent, const QStyleOpt
  }
  
  ////////////////////////////////////////////
- //COMBOBOX DELEGATE FOR TREEVIEW
+ //COMBOBOX DELEGATE FOR ICONS OF TREEVIEW
  ///////////////////////////////////////////
  
  ComboTreeViewDelegate::ComboTreeViewDelegate(QObject * parent)
  {
-     qDebug() << __FILE__ << QString::number(__LINE__) << "ComboTreeViewDelegate::ComboTreeViewDelegate" ;
+     Q_UNUSED(parent);
      m_hashIcons.insert(PREVENT_OK,pixmaps()+"/preventOk.png");
      m_hashIcons.insert(PREVENT_WARNING,pixmaps()+"/preventWarning.png");
      m_hashIcons.insert(PREVENT_PAST,pixmaps()+"/past.png");
@@ -71,9 +73,9 @@ ComboTreeViewDelegate::~ComboTreeViewDelegate(){}
 QSize ComboTreeViewDelegate::sizeHint(const QStyleOptionViewItem &  option ,
                               const QModelIndex & index) const
 {
-   
+    Q_UNUSED(option);
+    Q_UNUSED(index);
     return QSize(40,25);
-
 }
 
 QWidget *ComboTreeViewDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option,
@@ -124,4 +126,78 @@ QWidget *ComboTreeViewDelegate::createEditor(QWidget *parent, const QStyleOption
       
  }
  
+//////////////////////////////////////////////////////
+//// COMBODELEGATE FOR ITEMS OF TREEVIEW
+/////////////////////////////////////////////////////
 
+ComboTreeViewItemDelegate::ComboTreeViewItemDelegate(QObject * parent)
+{
+    Q_UNUSED(parent);
+    QSqlDatabase db = QSqlDatabase::database("prevention");    
+    const QString filterUserUuid; 
+    m_modelNextDate = new QSqlTableModel(this,db);
+    m_modelNextDate->setTable("nextdate");
+    m_modelNextDate->setFilter(filterUserUuid);
+    m_modelNextDate->select();
+    for (int row = 0; row < m_modelNextDate->rowCount(); ++row)
+    {
+    	  QString item = m_modelNextDate->data(m_modelNextDate->index(row,PreventIO::ND_ITEM),Qt::DisplayRole).toString();
+    	  int primkey = m_modelNextDate->data(m_modelNextDate->index(row,PreventIO::ID_NEXTDATE),Qt::DisplayRole).toInt();
+          m_mapNextdateItems.insert(primkey,item);
+        }
+     m_rowAndItemModel = new QStandardItemModel(0,2);
+}
+
+ComboTreeViewItemDelegate::~ComboTreeViewItemDelegate(){}
+
+QSize ComboTreeViewItemDelegate::sizeHint(const QStyleOptionViewItem &  option ,
+                              const QModelIndex & index) const
+{
+    Q_UNUSED(option);
+    Q_UNUSED(index);
+    return QSize(40,25);
+}
+
+QWidget *ComboTreeViewItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option,
+                           const QModelIndex &index) const
+{
+   if (  index.column() == VariantItemModel::ITEM_H )
+    {
+   	  QComboBox * combo = new QComboBox(parent);
+    	  return combo;
+        }
+   return QStyledItemDelegate::createEditor(parent, option, index);
+}
+
+ void ComboTreeViewItemDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
+ {
+     QComboBox * combo = static_cast<QComboBox*>(editor);
+     combo->setEditable(true);
+     int row = 0;
+     const QString itemOfModel = index.model()->data(index,Qt::DisplayRole).toString();
+     m_rowAndItemModel->insertRows(0,1);
+     m_rowAndItemModel->setData(m_rowAndItemModel->index(0,ROW),row,Qt::EditRole);
+     m_rowAndItemModel->setData(m_rowAndItemModel->index(0,ITEM),itemOfModel,Qt::EditRole);
+     QMapIterator<int,QString> it(m_mapNextdateItems);
+     while(it.hasNext())
+     {
+    	  ++row;
+    	  it.next();
+     	  QString item = it.value();
+     	  combo->addItem(item);
+          m_rowAndItemModel->setData(m_rowAndItemModel->index(row,ROW),row,Qt::EditRole);
+          m_rowAndItemModel->setData(m_rowAndItemModel->index(row,ITEM),item,Qt::EditRole);
+         }
+     combo->setModel(m_rowAndItemModel);
+     combo->setModelColumn(ITEM);
+     combo->setCurrentIndex(combo->findText(itemOfModel));
+ }
+ 
+ void ComboTreeViewItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
+                                      const QModelIndex &index) const
+ {
+     QComboBox * combo = static_cast<QComboBox*>(editor);
+     QString value = combo->currentText();
+     model->setData(index, value, Qt::EditRole);
+ }
+ 

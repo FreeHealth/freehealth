@@ -1,7 +1,9 @@
 #include "preventIHM.h"
-
 #include <preferences/dateOfNextAction.h>
 
+#include <coreplugin/icore.h>
+#include <coreplugin/iuser.h>
+#include <coreplugin/ipatient.h>
 
 #include <QLabel>
 #include <QDateEdit>
@@ -13,6 +15,8 @@
 #include <coreplugin/constants_icons.h>
 
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
+static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
+static inline Core::IPatient *patient() { return Core::ICore::instance()->patient(); }
 
 // Pour récupérer le chemin vers un pixmap
 //     theme()->iconFullPath(Core::Constants::ICONABOUT); // sous entendu Core::ITheme::SmallSize
@@ -185,17 +189,20 @@ PreventIHM::PreventIHM(QWidget * parent):QWidget(parent){
     m_survey = new Survey(this);
     m_io = new PreventIO(this);
     m_vbox = new QVBoxLayout(this);
-    m_TreeViewOfPrevention = new TreeViewOfPrevention(this);
+    m_TreeViewOfPrevention = new TreeViewOfPrevention(this); 
     m_modelOfItems = m_io->getVariantItemModel();
     m_TreeViewOfPrevention->setModel(m_modelOfItems);
     m_TreeViewOfPrevention->getModel(m_modelOfItems);
     m_TreeViewOfPrevention->setItemDelegateForColumn(VariantItemModel::DATE_DONE_H,new DateEditTreeViewDelegate);
     m_TreeViewOfPrevention->setItemDelegateForColumn(VariantItemModel::DATE_NEXT_H,new DateEditTreeViewDelegate);
     m_TreeViewOfPrevention->setItemDelegateForColumn(VariantItemModel::ICON_H,new ComboTreeViewDelegate);
+    m_TreeViewOfPrevention->setItemDelegateForColumn(VariantItemModel::ITEM_H,new ComboTreeViewItemDelegate);
     m_TreeViewOfPrevention->header()->hideSection(VariantItemModel::TYPE_OF_ITEM_H);
     m_TreeViewOfPrevention->header()->hideSection(VariantItemModel::PARENT_ITEM_H);
     m_TreeViewOfPrevention->header()->hideSection(VariantItemModel::PARENT_OR_CHILD_H);
     m_TreeViewOfPrevention->header()->hideSection(VariantItemModel::RESULT_H);
+    m_TreeViewOfPrevention->header()->hideSection(VariantItemModel::PATIENT_UID_H);
+    m_TreeViewOfPrevention->header()->hideSection(VariantItemModel::USER_UID_H);
     m_vbox->addWidget(m_TreeViewOfPrevention);
     setLayout(m_vbox);
     changeIconWidget();

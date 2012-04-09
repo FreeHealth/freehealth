@@ -25,6 +25,8 @@
           DATE_NEXT_H,
           ABSTRACT_H,
           ID_ITEM_H,
+          PATIENT_UID_H,
+          USER_UID_H,           
           RESULT_H,
           Headers_MaxParam
           };
@@ -60,7 +62,10 @@
 class VariantItemModel : public QAbstractItemModel
  {
      Q_OBJECT
-
+  enum Uuid_List {
+      PATIENT = 0,
+      USER
+      };
   public:
       enum Parenthood {
           PARENT = 0,
@@ -78,6 +83,8 @@ class VariantItemModel : public QAbstractItemModel
           DATE_NEXT,
           ABSTRACT,
           ID_ITEM,
+          PATIENT_UID,
+          USER_UID,          
           RESULT,
           Prevention_Items_MaxParam
           };
@@ -91,6 +98,8 @@ class VariantItemModel : public QAbstractItemModel
           DATE_NEXT_H,
           ABSTRACT_H,
           ID_ITEM_H,
+          PATIENT_UID_H,
+          USER_UID_H,          
           RESULT_H,
           Headers_MaxParam
           };
@@ -164,6 +173,17 @@ class VariantItemModel : public QAbstractItemModel
 class PreventIO : public QObject {
     Q_OBJECT
     public:
+        enum NextDateItems {
+            ID_NEXTDATE = 0,
+            ND_ITEM,
+            ND_YEAR,
+            ND_MONTH,
+            ND_DAY,
+            ND_HOURS,
+            ND_MIN,
+            ND_USER_UID,
+            NextDateItems_MaxParam
+            };
         PreventIO(QObject * object = 0);
         ~PreventIO();
         QSqlDatabase getDatabase();
