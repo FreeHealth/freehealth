@@ -142,6 +142,9 @@ PadWriter::PadWriter(QWidget *parent) :
     d->ui->treeView->setModel(d->_tokenModel);
     d->ui->treeView->header()->setResizeMode(0, QHeaderView::Stretch);
 
+    // Create PadDocument object
+    d->_pad = new PadDocument();
+
     // Create PadHighlighter
 //    PadHighlighter *highlight = new PadHighlighter(d->ui->rawSource->textEdit());
 
@@ -156,6 +159,12 @@ PadWriter::PadWriter(QWidget *parent) :
 
     // TEST
     QAction *a;
+
+    d->ui->nextBlock->setText(tr("Next block"));
+    connect(d->ui->nextBlock, SIGNAL(clicked()), this, SLOT(highLightNextBlock()));
+    d->ui->prevBlock->setText(tr("Previous block"));
+    connect(d->ui->prevBlock, SIGNAL(clicked()), this, SLOT(highLightPreviousBlock()));
+
     a = d->aTest1 = new QAction(this);
     a->setText("Test raw source 1");
     a->setToolTip("Two tokens, some strings, no nested tokens");
@@ -167,7 +176,7 @@ PadWriter::PadWriter(QWidget *parent) :
     d->ui->scenari->addAction(a);
 
     a = d->aTest3 = new QAction(this);
-    a->setText("Test raw source 1");
+    a->setText("Test raw source 3");
     a->setToolTip("Multinested tokens with extra strings");
     d->ui->scenari->addAction(a);
 
@@ -189,21 +198,22 @@ void PadWriter::changeRawSourceScenario(QAction *a)
 {
     QString source;
     if (a == d->aTest1) {
-        source = "<p><b>^$ <span style=' text-decoration: underline; color:#ff00ff;'>before </span> 'a'  ~A~  after 'a'$^ qdsfsdqf qdf qsdf </b><br />"
-                 "^$ <span style=' text-decoration: underline; color:#0000ff;'>before</span> 'b' ~B~ after 'b'$^<br />";
+        source = "<p><b>^$_<span style=' text-decoration: underline; color:#ff00ff;'>A_</span> ~A~ _A_$^ 10 chars </b><br />"
+                 "^$ <span style=' text-decoration: underline; color:#0000ff;'>_B_</span> ~B~ _B_$^ 10 chars <br />"
+                 " 10 chars ^$ _C_ ~C~ _C_$^<br />"
+                 " 10 chars ^$ _D_ ~D~ _D_$^<br />";
     } else if (a == d->aTest2) {
         source = "<p><b>^$ <span style=' text-decoration: underline; color:#ff00ff;'>before </span> 'a'  ~A~  after 'a'$^ qdsfsdqf qdf qsdf </b><br />"
                  "^$ <span style=' text-decoration: underline; color:#0000ff;'>before</span> ^$ Before nested C ~C~ After nested C $^ 'b' ~B~ after 'b'$^<br />";
     } else if (a == d->aTest3) {
-    } else if (a == d->aTest2) {
         source = "<p><b>^$ <span style=' text-decoration: underline; color:#ff00ff;'>before </span> 'a'  ~A~  after 'a'$^ qdsfsdqf qdf qsdf </b><br />"
                  "^$ <span style=' text-decoration: underline; color:#0000ff;'>before</span> ^$ Before nested C ~C~ After ^$ Before D ~D~ After D $^nested C $^ 'b' ~B~ after 'b'$^<br />";
     }
 
-    if (d->_pad) {
-        delete d->_pad;
-        d->_pad = 0;
-    }
+//    if (d->_pad) {
+//        delete d->_pad;
+//        d->_pad = 0;
+//    }
     d->ui->rawSource->setHtml(source);
     analyseRawSource();
 }
@@ -220,17 +230,16 @@ QString PadWriter::rawSource() const
 
 void PadWriter::analyseRawSource()
 {
+    // clear PadDocument && views
     QList<Core::PadAnalyzerError> errors;
     d->ui->wysiwyg->document()->clear();
+    d->_pad->clear();
 
-    // recreate PadDocument
-    if (d->_pad) {
-        delete d->_pad;
-        d->_pad = 0;
-    }
-    d->_pad = PadAnalyzer().analyze(d->ui->rawSource->document());
+    // Start analyze && token replacement
+    PadAnalyzer().analyze(d->ui->rawSource->document(), d->_pad);
     d->_pad->setTokenModel(d->_tokenModel);
-    d->_pad->run(d->_tokenModel->tokens(), d->ui->rawSource->document(), d->ui->wysiwyg->document());
+    d->_pad->run(d->_tokenModel->tokens());
+
     connect(d->_pad, SIGNAL(padFragmentChanged(PadFragment*)), this, SLOT(onPadFragmentChanged(PadFragment*)));
 
     // Setup ui
@@ -240,10 +249,10 @@ void PadWriter::analyseRawSource()
     foreach (const Core::PadAnalyzerError &error, errors) {
         switch (error.errorType()) {
         case Core::PadAnalyzerError::Error_UnexpectedChar:
-            d->ui->listWidgetErrors->addItem(tr("Unexpected '%1' found at line %2 and pos %3").arg(error.errorTokens()["char"].toString()).arg(error.line()).arg(error.pos()));
+            d->ui->listWidgetErrors->addItem(tr("Unexpected '%1' found at pos %2").arg(error.errorTokens()["char"].toString()).arg(error.pos()));
             break;
         case Core::PadAnalyzerError::Error_CoreDelimiterExpected:
-            d->ui->listWidgetErrors->addItem(tr("Expected '%1' at line %2 and pos %3").arg(error.errorTokens()["char"].toString()).arg(error.line()).arg(error.pos()));
+            d->ui->listWidgetErrors->addItem(tr("Expected '%1' at pos %2").arg(error.errorTokens()["char"].toString()).arg(error.pos()));
             break;
         }
     }
@@ -340,4 +349,32 @@ void PadWriter::onPadFragmentChanged(PadFragment *fragment)
     QTextDocument *doc = d->ui->wysiwyg->document();
     Constants::removePadFragmentFormat("Follow", doc, d->_followedItemCharFormats);
     Constants::setPadFragmentFormat("Follow", d->_followedItem->outputStart(), d->_followedItem->outputEnd(), doc, d->_followedItemCharFormats, d->_followedCharFormat);
+}
+
+void PadWriter::highLightNextBlock()
+{
+    WARN_FUNC;
+    QTextCursor c(d->ui->wysiwyg->document());
+    qWarning() << c.blockNumber();
+    QTextBlockFormat f;
+    f.setBackground(QBrush(QColor(Qt::white)));
+    c.blockFormat().merge(f);
+
+    f.setBackground(QBrush(QColor(Qt::lightGray)));
+    QTextBlock b = c.block().next();
+    b.blockFormat().merge(f);
+}
+
+void PadWriter::highLightPreviousBlock()
+{
+    WARN_FUNC;
+    QTextCursor c(d->ui->wysiwyg->document());
+    qWarning() << c.blockNumber();
+    QTextBlockFormat f;
+    f.setBackground(QBrush(QColor(Qt::white)));
+    c.blockFormat().merge(f);
+
+    f.setBackground(QBrush(QColor(Qt::lightGray)));
+    QTextBlock b = c.block().previous();
+    b.blockFormat().merge(f);
 }

@@ -118,6 +118,7 @@ TokenOutputDocument::~TokenOutputDocument()
 void TokenOutputDocument::setPadDocument(PadDocument *pad)
 {
     d->_pad = pad;
+    textEdit()->setDocument(d->_pad->outputDocument());
     connect(pad, SIGNAL(cleared()), this, SLOT(onPadCleared()));
 }
 
@@ -163,8 +164,8 @@ void TokenOutputDocument::editTokenUnderCursor()
         TokenEditor editor(this);
         PadFragment *f = item->fragment(PadItem::Core);
         editor.setTokenName(d->_pad->fragmentRawSource(f));
-        PadFragment *bef = item->fragment(PadItem::ConditionnalBeforeText);
-        PadFragment *aft = item->fragment(PadItem::ConditionnalAfterText);
+        PadFragment *bef = item->fragment(PadItem::DefinedCore_PrependText);
+        PadFragment *aft = item->fragment(PadItem::DefinedCore_AppendText);
         editor.setConditionnalHtml(d->_pad->fragmentHtmlOutput(bef), d->_pad->fragmentHtmlOutput(aft));
         if (editor.exec()==QDialog::Accepted) {
             // Remove rawSource PadItem
@@ -336,7 +337,6 @@ bool TokenOutputDocument::event(QEvent *event)
         } else {
             d->_lastHoveredItem = item;
         }
-
         if (d->_lastHoveredItem->getCore())
             Constants::setPadFragmentFormat("CoreH", d->_lastHoveredItem->getCore()->outputStart(), d->_lastHoveredItem->getCore()->outputEnd(), doc, d->_lastHoveredTokenCoreCharFormats, d->_hoveredTokenCoreCharFormat);
         Constants::setPadFragmentFormat("Hover", d->_lastHoveredItem->outputStart(), d->_lastHoveredItem->outputEnd(), doc, d->_lastHoveredItemCharFormats, d->_hoveredCharFormat);

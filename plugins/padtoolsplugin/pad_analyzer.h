@@ -33,69 +33,32 @@
 #include <coreplugin/ipadtools.h>
 
 #include "pad_fragment.h"
-#include "pad_core.h"
 #include "pad_string.h"
 #include "pad_document.h"
 #include "pad_item.h"
 
 namespace PadTools {
+namespace Internal {
+class PadAnalyzerPrivate;
+}
 
-class PadAnalyzer
+/** \todo make jobs asynchronous */
+
+class PadAnalyzer : public QObject
 {
+    Q_OBJECT
 public:
-	PadAnalyzer();
+    PadAnalyzer(QObject *parent = 0);
+    ~PadAnalyzer();
 
-    PadDocument *analyze(const QString &text);
-    PadDocument *analyze(QTextDocument *document, PadDocument *padDocument = 0);
+    PadDocument *analyze(const QString &source);
+    PadDocument *analyze(QTextDocument *source, PadDocument *padDocument = 0);
 
-	const QList<Core::PadAnalyzerError> lastErrors() const { return _lastErrors; }
+    const QList<Core::PadAnalyzerError> lastErrors() const;
 
 private:
-	enum LexemType {
-        Lexem_Null = 0,
-		Lexem_String,
-		Lexem_PadOpenDelimiter,
-		Lexem_PadCloseDelimiter,
-		Lexem_CoreDelimiter
-	};
-
-	struct Lexem {
-		LexemType type;		// type of the lexem
-		QString value;		// value (can be empty) of the lexem
-		QString rawValue;	// raw value of the lexem (never empty)
-		int start;			// start index in the analyzed text
-		int end;			// end index in the analyzed text
-	};
-
-    PadDocument *startAnalyze(PadDocument *padDocument = 0);
-
-    bool atEnd();
-	PadItem *nextPadItem();
-	PadCore *nextCore(); // tries to parse a core ("~...~")
-
-	int getLine(int curPos = -1) const;
-	int getPos(int curPos = -1) const;
-
-    bool isDelimiter(int pos, int *delimiterSize, LexemType *type);
-
-	Lexem nextLexem();
-
-    inline int nextId();
-    inline void resetId();
-
-private: // Data
-    Lexem _lexemNull;
-
-    const QString *_text;
-    QTextDocument *_document;
-    int _length;
-    int _curPos; // contains the current position in the analyzed text
-    uint _id;
-    QList<Core::PadAnalyzerError> _lastErrors;
-
+    Internal::PadAnalyzerPrivate *d;
 };
-int PadAnalyzer::nextId() {return ++_id;}
-void PadAnalyzer::resetId() {_id=0;}
 
 } // PadTools
 

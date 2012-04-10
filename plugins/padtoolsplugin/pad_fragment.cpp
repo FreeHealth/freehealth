@@ -34,7 +34,7 @@
 /** \fn virtual PadFragment *PadTools::PadFragment::parent() const
   Return the parent of the fragment */
 
-/** \fn virtual void PadTools::PadFragment::print(int indent = 0) const = 0;
+/** \fn virtual void PadTools::PadFragment::debug(int indent = 0) const = 0;
   Debug to console */
 
 /** \fn virtual int PadTools::PadFragment::id() const
@@ -128,10 +128,10 @@
 using namespace PadTools;
 
 PadFragment::PadFragment(PadFragment *parent) :
-    _start(-1),
-    _end(-1),
-    _outputStart(-1),
-    _outputEnd(-1),
+    _start(-1), _end(-1),
+    _outputStart(-1), _outputEnd(-1),
+    _beginDelimStart(-1), _beginDelimLength(-1),
+    _endDelimStart(-1), _endDelimLength(-1),
     _parent(parent),
     _id(-1)
 {

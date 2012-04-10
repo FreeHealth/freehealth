@@ -56,20 +56,18 @@ namespace Core {
 			Error_CoreDelimiterExpected
 		};
 
-		PadAnalyzerError(Type errorType, int line, int pos, const QMap<QString,QVariant> &errorTokens) :
+        PadAnalyzerError(Type errorType, int pos, const QMap<QString,QVariant> &errorTokens) :
 			_errorType(errorType),
-			_line(line),
 			_pos(pos),
 			_errorTokens(errorTokens) {}
 
 		int errorType() const { return _errorType; }
-		int line() const { return _line; }
 		int pos() const { return _pos; }
 		const QMap<QString,QVariant> &errorTokens() const { return _errorTokens; }
 
 	private:
 		Type _errorType;
-		int _line, _pos;
+        int _pos;
 		QMap<QString,QVariant> _errorTokens;
 	};
 

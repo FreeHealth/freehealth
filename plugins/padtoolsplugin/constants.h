@@ -46,9 +46,6 @@ const char * const C_PADWRITER_CONTEXT = "cPadWriter";
 const char * const TOKEN_AND_POSITION_TAG = "\n<!--%2-->%1<!--%2-->\n";
 const char * const ANCHOR_ITEM = "item";
 
-const char * const USERDATA_KEY_PADITEM = "PadItem";
-
-
 // Translations
 const char * const PADWRITER_TRANS_CONTEXT = "PadWriter";
 

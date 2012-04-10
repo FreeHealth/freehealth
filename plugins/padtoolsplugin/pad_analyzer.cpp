@@ -42,56 +42,129 @@
 enum { WarnLexemMatching = false, WarnIsDelimiterDebug = false };
 
 using namespace PadTools;
+using namespace Internal;
 
-static QChar getCharAt(int pos, QTextDocument *doc)
+namespace PadTools {
+namespace Internal {
+class PadAnalyzerPrivate
 {
-    QTextCursor cursor(doc);
-    cursor.setPosition(pos);
-    if (cursor.atEnd())
+public:
+    enum LexemType {
+        Lexem_Null = 0,
+        Lexem_String,
+        Lexem_PadOpenDelimiter,
+        Lexem_PadCloseDelimiter,
+        Lexem_CoreDelimiter
+    };
+
+    struct Lexem {
+        LexemType type;		// type of the lexem
+        QString value;		// value (can be empty) of the lexem
+        QString rawValue;	// raw value of the lexem (never empty)
+        int start;			// start index in the analyzed text
+        int end;			// end index in the analyzed text
+    };
+
+    PadAnalyzerPrivate(PadAnalyzer *parent):
+        _document(0),
+        _curPos(-1), // _curPos == -1 means no current analyze
+        q(parent)
+    {
+        _lexemNull.type = Lexem_Null;
+    }
+
+    QChar getCharAt(int pos, QTextDocument *doc)
+    {
+        QTextCursor cursor(doc);
+        cursor.setPosition(pos);
+        if (cursor.atEnd())
+            return QChar::Null;
+        cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
+        if (cursor.selectedText().size() > 0)
+            return cursor.selectedText().at(0);
         return QChar::Null;
-    cursor.movePosition(QTextCursor::NextCharacter, QTextCursor::KeepAnchor);
-    if (cursor.selectedText().size() > 0)
-        return cursor.selectedText().at(0);
-    return QChar::Null;
+    }
+
+    QString getStringAt(int pos, QTextDocument *doc, int size = 1)
+    {
+        QTextCursor cursor(doc);
+        cursor.setPosition(pos);
+        if (cursor.atEnd())
+            return QString::null;
+        cursor.setPosition(pos + size, QTextCursor::KeepAnchor);
+        return cursor.selectedText();
+    }
+
+    PadDocument *startAnalyze(PadDocument *padDocument = 0);
+
+    bool atEnd();
+    PadItem *nextPadItem();
+    PadCore *nextCore(); // tries to parse a core ("~...~")
+
+    bool isDelimiter(int pos, int *delimiterSize, LexemType *type);
+
+    Lexem nextLexem();
+
+    int nextId() {return ++_id;}
+    void resetId() {_id=0;}
+
+
+public:
+    Lexem _lexemNull;
+    QTextDocument *_document;
+    int _curPos; // contains the current position in the analyzed text
+    uint _id;
+    QList<Core::PadAnalyzerError> _lastErrors;
+
+private:
+    PadAnalyzer *q;
+};
+
+}
 }
 
-static QString getStringAt(int pos, QTextDocument *doc, int size = 1)
+PadAnalyzer::PadAnalyzer(QObject *parent) :
+    QObject(parent),
+    d(new Internal::PadAnalyzerPrivate(this))
 {
-    QTextCursor cursor(doc);
-    cursor.setPosition(pos);
-    if (cursor.atEnd())
-        return QString::null;
-    cursor.setPosition(pos + size, QTextCursor::KeepAnchor);
-    return cursor.selectedText();
 }
 
-PadAnalyzer::PadAnalyzer() :
-    _text(0),
-    _document(0),
-    _length(0),
-    _curPos(-1) // _curPos == -1 means no current analyze
+PadAnalyzer::~PadAnalyzer()
 {
-	_lexemNull.type = Lexem_Null;
+    if (d) {
+        delete d;
+        d = 0;
+    }
 }
 
-/** Analyzes a mask \e text and return a \e PadTools::Pad pointer. */
-PadDocument *PadAnalyzer::analyze(const QString &text)
+/** Analyzes a mask \e text and return a \e PadTools::PadDocument pointer. */
+PadDocument *PadAnalyzer::analyze(const QString &source)
 {
-    _document = 0;
-    _text = &text;
-    _length = text.count();
-    return startAnalyze();
+    if (d->_document && d->_document->parent()==this) {
+        delete d->_document;
+        d->_document = 0;
+    }
+    d->_document = new QTextDocument(this);
+    d->_document->setPlainText(source);
+    return d->startAnalyze();
 }
 
-PadDocument *PadAnalyzer::analyze(QTextDocument *document, PadDocument *padDocument)
+PadDocument *PadAnalyzer::analyze(QTextDocument *source, PadDocument *padDocument)
 {
-    _document = document;
-    _text = 0;
-    _length = -1;
-    return startAnalyze(padDocument);
+    if (d->_document && d->_document->parent()==this) {
+        delete d->_document;
+        d->_document = 0;
+    }
+    d->_document = source;
+    return d->startAnalyze(padDocument);
 }
 
-PadDocument *PadAnalyzer::startAnalyze(PadDocument *padDocument)
+const QList<Core::PadAnalyzerError> PadAnalyzer::lastErrors() const
+{
+    return d->_lastErrors;
+}
+
+PadDocument *PadAnalyzerPrivate::startAnalyze(PadDocument *padDocument)
 {
     QTime c;
     c.start();
@@ -99,7 +172,7 @@ PadDocument *PadAnalyzer::startAnalyze(PadDocument *padDocument)
     Lexem lex;
     PadDocument *pad;
     padDocument ? pad = padDocument : pad = new PadDocument();
-    _text ? pad->setSource(*_text) : pad->setSource(_document);
+    pad->setSource(_document);
 
 	PadFragment *fragment;
 	int pos;
@@ -114,13 +187,12 @@ PadDocument *PadAnalyzer::startAnalyze(PadDocument *padDocument)
 		fragment = 0;
 		switch (lex.type) {
 		case Lexem_String:
-            fragment = new PadString(lex.value);
-            fragment->setStart(lex.start);
-            fragment->setEnd(lex.end);
-            fragment->setId(nextId());
+//            fragment = new PadString(lex.value);
+//            fragment->setStart(lex.start);
+//            fragment->setEnd(lex.end);
+//            fragment->setId(nextId());
 			break;
 		case Lexem_PadOpenDelimiter:
-            pos = _curPos - QString(Constants::TOKEN_OPEN_DELIMITER).size();
 			fragment = nextPadItem();
 			if (!fragment) { // bad pad item => turn it into a string fragment
                 /** \todo manage error here */
@@ -134,9 +206,8 @@ PadDocument *PadAnalyzer::startAnalyze(PadDocument *padDocument)
 			// raise an error (unexpected close delimiter)
             errorTokens.insert("char", QString(Constants::TOKEN_CLOSE_DELIMITER));// padCloseDelimiter));
 			_lastErrors << Core::PadAnalyzerError(Core::PadAnalyzerError::Error_UnexpectedChar,
-												  getLine(_curPos - 1),
-												  getPos(_curPos - 1),
-												  errorTokens);
+                                                  _curPos - 1,
+                                                  errorTokens);
 
 			// turn it into a string fragment
             pos = _curPos - QString(Constants::TOKEN_CLOSE_DELIMITER).size();
@@ -150,8 +221,7 @@ PadDocument *PadAnalyzer::startAnalyze(PadDocument *padDocument)
 			// raise an error (unexpected core delimiter)
             errorTokens.insert("char", QString(Constants::TOKEN_CORE_DELIMITER));
 			_lastErrors << Core::PadAnalyzerError(Core::PadAnalyzerError::Error_UnexpectedChar,
-												  getLine(_curPos - 1),
-												  getPos(_curPos - 1),
+                                                  _curPos - 1,
 												  errorTokens);
 			// turn it into a string fragment
 			pos = _curPos - 1;
@@ -165,57 +235,90 @@ PadDocument *PadAnalyzer::startAnalyze(PadDocument *padDocument)
 			// TODO: raise an error (unknown lexem)
 			break;
 		}
-        pad->addChild(fragment);
+        if (fragment)
+            pad->addChild(fragment);
 	}
 
     Utils::Log::logTimeElapsed(c, "Analyzer", "analyze");
 
-//    pad->print();
+//    pad->debug();
 	return pad;
 }
 
-PadItem *PadAnalyzer::nextPadItem()
+/** Extract positions of a PadItem (full token) with children from source */
+PadItem *PadAnalyzerPrivate::nextPadItem()
 {
-	PadFragment *fragment;
+    PadConditionnalSubItem *fragment;
 	Lexem lex;
-	PadItem *padItem = new PadItem;
+    PadItem *padItem = new PadItem;
     padItem->setStart(_curPos - QString(Constants::TOKEN_OPEN_DELIMITER).size());
     padItem->setId(nextId());
-    int previousType = PadItem::ConditionnalBeforeText;
+    int previousType = PadItem::DefinedCore_PrependText;
 
 	// we expect strings, pad item, core (uniq) or close delimiter
 	while ((lex = nextLexem()).type != Lexem_Null) {
 		fragment = 0;
-		switch (lex.type) {
+        switch (lex.type) {
 		case Lexem_String:
-            fragment = new PadString(lex.value);
-            fragment->setStart(lex.start);
-            fragment->setEnd(lex.end);
+        {
+            switch (previousType) {
+            case PadItem::DefinedCore_PrependText :
+            {
+                fragment = new PadConditionnalSubItem(PadConditionnalSubItem::Defined, PadConditionnalSubItem::Prepend);
+                int s = QString(Constants::TOKEN_OPEN_DELIMITER).size();
+                fragment->addDelimiter(lex.start - s, s);
+                fragment->setStart(lex.start - s);
+                fragment->setEnd(lex.end);
+
+//                qWarning() << "PREPEND" << fragment->start() << fragment->end() << "Delim" << (lex.start - s) << s;
+
+                break;
+            }
+            case PadItem::DefinedCore_AppendText:
+            {
+                fragment = new PadConditionnalSubItem(PadConditionnalSubItem::Defined, PadConditionnalSubItem::Append);
+                int s = QString(Constants::TOKEN_CLOSE_DELIMITER).size();
+                fragment->setStart(lex.start);
+                fragment->setEnd(lex.end + s);
+                fragment->addDelimiter(lex.end, s);
+
+//                qWarning() << "APPEND" << fragment->start() << fragment->end() << "Delim" << lex.end << s;;
+
+                break;
+            }
+            case PadItem::UndefinedCore_AppendText : break;
+            case PadItem::UndefinedCore_PrependText: break;
+            default: LOG_ERROR_FOR(q->objectName(), "No type for PadItem subItem");
+            }
             fragment->setId(nextId());
-            fragment->setUserData(Constants::USERDATA_KEY_PADITEM, previousType);
             padItem->addChild(fragment);
             break;
+        }
 		case Lexem_PadOpenDelimiter:
-			fragment = nextPadItem();
-			if (!fragment) { // an error occured, stop all
+        {
+            PadItem *item = nextPadItem();
+            if (!item) { // an error occured, stop all
 				delete padItem;
 				return 0;
 			}
-            padItem->addChild(fragment);
+            padItem->addChild(item);
 			break;
+        }
 		case Lexem_PadCloseDelimiter:
             padItem->setEnd(_curPos);
-			return padItem;
+            return padItem;
 		case Lexem_CoreDelimiter:
-			// TODO: raise an error when a core has already been defined
-			fragment = nextCore();
-			if (!fragment) { // an error occured, stop all
+        {
+            /** \todo raise an error when a core has already been defined */
+            PadCore *core = nextCore();
+            if (!core) { // an error occured, stop all
 				delete padItem;
 				return 0;
 			}
-            padItem->addChild(fragment);
-            previousType = PadItem::ConditionnalAfterText;
+            padItem->addChild(core);
+            previousType = PadItem::DefinedCore_AppendText;
 			break;
+        }
 		default:
 			// TODO: raise an error (unknown lexem)
 			break;
@@ -226,14 +329,14 @@ PadItem *PadAnalyzer::nextPadItem()
 }
 
 /** Extracts the core of a token: '~CORE~'. This member is called when analyzer finds a starting core delimiter. */
-PadCore *PadAnalyzer::nextCore()
+PadCore *PadAnalyzerPrivate::nextCore()
 {
 	Lexem lex;
 	QMap<QString,QVariant> errorTokens;
     PadCore *core = new PadCore;
-	core->setStart(_curPos - 1);
+    int size = QString(Constants::TOKEN_CORE_DELIMITER).size();
+    core->setStart(_curPos - size);
     core->setId(nextId());
-    core->setUserData(Constants::USERDATA_KEY_PADITEM, PadItem::Core);
 
 	// first, we expect string (or not)
 	lex = nextLexem();
@@ -247,18 +350,20 @@ PadCore *PadAnalyzer::nextCore()
 		// raise an error (unexpected core delimiter)
         errorTokens.insert("char", QString(Constants::TOKEN_CORE_DELIMITER));
 		_lastErrors << Core::PadAnalyzerError(Core::PadAnalyzerError::Error_CoreDelimiterExpected,
-											  getLine(_curPos - 1),
-											  getPos(_curPos - 1),
-											  errorTokens);
+                                              _curPos - 1,
+                                              errorTokens);
 		delete core;
 		return 0;
 	}
     core->setEnd(_curPos);
-	return core;
+    core->setBeginDelimiter(core->start(), size);
+    core->setEndDelimiter(core->end() - size, size);
+    core->setName(getStringAt(core->start() + size, _document, core->rawLength() - (size*2)));
+    return core;
 }
 
 /** Returns true if the string is a delimiter. */
-bool PadAnalyzer::isDelimiter(int pos, int *delimiterSize, LexemType *type)
+bool PadAnalyzerPrivate::isDelimiter(int pos, int *delimiterSize, LexemType *type)
 {
     Q_ASSERT(delimiterSize);
     // Some init
@@ -269,13 +374,7 @@ bool PadAnalyzer::isDelimiter(int pos, int *delimiterSize, LexemType *type)
 
     // Get current char; stop if pos in out of the text
     QChar currentChar;
-    if (_text) {
-        if (pos >= _text->size())
-            return false;
-        currentChar = _text->at(pos);
-    } else if (_document) {
-        currentChar = getCharAt(pos, _document);
-    }
+    currentChar = getCharAt(pos, _document);
 
     if (WarnIsDelimiterDebug)
         qWarning() << "    isDelimiter(); curChar" << currentChar;
@@ -283,10 +382,7 @@ bool PadAnalyzer::isDelimiter(int pos, int *delimiterSize, LexemType *type)
     if (currentChar == Constants::TOKEN_OPEN_DELIMITER[0]) {
         QString tmp;
         int size = QString(Constants::TOKEN_OPEN_DELIMITER).size();
-        if (_text)
-            tmp = _text->mid(pos, size);
-        else if (_document)
-            tmp = getStringAt(pos, _document, size);
+        tmp = getStringAt(pos, _document, size);
 
         if (WarnIsDelimiterDebug)
             qWarning() << "  isDelimiter():: OpenDelim found" << tmp << "delimSize" << size;
@@ -300,10 +396,7 @@ bool PadAnalyzer::isDelimiter(int pos, int *delimiterSize, LexemType *type)
     if (currentChar == Constants::TOKEN_CLOSE_DELIMITER[0]) {
         QString tmp;
         int size = QString(Constants::TOKEN_OPEN_DELIMITER).size();
-        if (_text)
-            tmp = _text->mid(pos, size);
-        else if (_document)
-            tmp = getStringAt(pos, _document, size);
+        tmp = getStringAt(pos, _document, size);
 
         if (WarnIsDelimiterDebug)
             qWarning() << "  isDelimiter():: CloseDelim found" << tmp << "delimSize" << size;
@@ -317,10 +410,7 @@ bool PadAnalyzer::isDelimiter(int pos, int *delimiterSize, LexemType *type)
     if (currentChar == Constants::TOKEN_CORE_DELIMITER[0]) {
         QString tmp;
         int size = QString(Constants::TOKEN_CORE_DELIMITER).size();
-        if (_text)
-            tmp = _text->mid(pos, size);
-        else if (_document)
-            tmp = getStringAt(pos, _document, size);
+        tmp = getStringAt(pos, _document, size);
         if (tmp == Constants::TOKEN_CORE_DELIMITER) {
             *delimiterSize = size;
             *type = Lexem_CoreDelimiter;
@@ -331,7 +421,7 @@ bool PadAnalyzer::isDelimiter(int pos, int *delimiterSize, LexemType *type)
 }
 
 /** Returns the next lexem in the stream */
-PadAnalyzer::Lexem PadAnalyzer::nextLexem()
+PadAnalyzerPrivate::Lexem PadAnalyzerPrivate::nextLexem()
 {
     if (WarnLexemMatching)
         qWarning() << "Next Lexem; curpos" << _curPos <<  "atEnd" << atEnd();
@@ -373,57 +463,16 @@ PadAnalyzer::Lexem PadAnalyzer::nextLexem()
     }
     lexem.end = _curPos;
 
-    if (_text) {
-        lexem.value = _text->mid(lexem.start, lexem.end - lexem.start);
-    } else if (_document) {
-        lexem.value = getStringAt(lexem.start, _document, lexem.end - lexem.start);
-    }
-
     if (WarnLexemMatching)
         qWarning() << "  * value" << lexem.value << "_curPos" << _curPos << "lex.start" << lexem.start << "lex.end" << lexem.end;
 
     return lexem;
 }
 
-int PadAnalyzer::getLine(int curPos) const
-{
-	const QString &text = *_text;
-	int line = 0;
-
-	curPos = curPos == -1 ? _curPos : curPos;
-
-	for (int i = 0; i < _length; ++i) {
-		if (i == curPos)
-			return line;
-		if (text[i] == '\n')
-			line++;
-	}
-	return line;
-}
-
-int PadAnalyzer::getPos(int curPos) const
-{
-	const QString &text = *_text;
-
-	curPos = curPos == -1 ? _curPos : curPos;
-
-	int pos = curPos;
-	while (pos >= 0) {
-		pos--;
-		if (pos >= 0 && text[pos] == '\n')
-			break;
-	}
-	return curPos - pos - 1;
-}
-
 /** Returns true if current position reaches the end of the text. */
-bool PadAnalyzer::atEnd()
+bool PadAnalyzerPrivate::atEnd()
 {
-    if (_text) {
-        return _curPos >= _text->count();
-    } else {
-        QTextCursor cursor(_document);
-        cursor.setPosition(_curPos);
-        return cursor.atEnd();
-    }
+    QTextCursor cursor(_document);
+    cursor.setPosition(_curPos);
+    return cursor.atEnd();
 }

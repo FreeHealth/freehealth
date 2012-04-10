@@ -32,23 +32,8 @@
 #include "pad_fragment.h"
 
 namespace PadTools {
+class PadDocument;
 
-class PadCore : public PadFragment
-{
-public:
-    PadCore() : PadFragment() {}
-
-    const QString &name() const { return _name; }
-    void setName(const QString &name) { _name = name; }
-
-	void print(int indent = 0) const;
-
-	QString run(QMap<QString,QVariant> &tokens) const;
-    void run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *output) const;
-
-private:
-    QString _name;
-};
 
 }  // PadTools
 

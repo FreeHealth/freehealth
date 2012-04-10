@@ -39,22 +39,23 @@ using namespace PadTools;
 /** Analyse a string \e templ for \e tokens, manages a list of \e errors (output) and returns the parsed string.*/
 QString PadToolsImpl::parse(const QString &templ, QMap<QString,QVariant> &tokens, QList<Core::PadAnalyzerError> &errors)
 {
-	Q_UNUSED(tokens); //TMP
+    Q_UNUSED(tokens); //TMP
 
-	PadAnalyzer analyzer;
+    PadAnalyzer analyzer;
     QString t = templ;
     if (t.contains("&lt;")) {
         t = t.replace("&lt;","<").replace("&gt;",">");
     }
     PadDocument *pad = analyzer.analyze(t);
-	errors = analyzer.lastErrors();
+    errors = analyzer.lastErrors();
 
-	return pad->run(tokens);
+    pad->run(tokens);
+    return pad->outputDocument()->toHtml();
 }
 
 /** Creates a syntax highlighter for the \e textEdit usng the \e tokens.*/
 QSyntaxHighlighter *PadToolsImpl::createSyntaxHighlighter(QTextEdit *textEdit, QMap<QString,QVariant> &tokens)
 {
-	Q_UNUSED(tokens); //TMP
-	return new PadHighlighter(textEdit);
+    Q_UNUSED(tokens); //TMP
+    return new PadHighlighter(textEdit);
 }

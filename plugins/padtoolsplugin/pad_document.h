@@ -34,19 +34,33 @@
 #include <QTimer>
 
 #include "pad_fragment.h"
-#include "pad_core.h"
 #include "pad_item.h"
 
 namespace PadTools {
 class TokenModel;
 
+class PadPositionTranslator
+{
+public:
+    PadPositionTranslator();
+
+    void clear();
+    void addOutputTranslation(const int pos, const int length);
+    int deltaForSourcePosition(const int pos);
+    int rawToSource(const int rawPos);
+
+    void debug();
+
+private:
+    QMap<int, int> _translations;
+};
+
 class PadDocument : public QObject, public PadFragment
 {
     Q_OBJECT
 public:
-    PadDocument(const QString &rawSource);
-    PadDocument(QTextDocument *source);
-    PadDocument();
+    PadDocument(QTextDocument *source, QObject *parent = 0);
+    PadDocument(QObject *parent = 0);
     virtual ~PadDocument();
 
     // PadDocument must always have an Id == -1
@@ -55,16 +69,15 @@ public:
 
     // Manage data source
     void clear();
-    void setSource(const QString &rawSource);
     void setSource(QTextDocument *source);
     void setTokenModel(TokenModel *model);
-    QString rawSource() const {return _rawSource;}
     QTextDocument *rawSourceDocument() const {return _docSource;}
     QTextDocument *outputDocument() const {return _docOutput;}
 
     // Manage children fragments
     void addChild(PadFragment *fragment);
     void removeAndDeleteFragment(PadFragment *fragment);
+    void hideItemInOutput(PadItem *item);
 
     // Extract text from source && output
     QString fragmentRawSource(PadFragment *fragment) const;
@@ -79,16 +92,18 @@ public:
     PadFragment *padFragmentForSourcePosition(int p) const;
     PadFragment *padFragmentForOutputPosition(int p) const;
     QTextCursor rawSourceCursorForOutputPosition(int p) const;
+    PadPositionTranslator &positionTranslator() {return _posTrans;}
 
     // Start replacement of tokens
-    QString run(QMap<QString,QVariant> &tokens) const;
-    void run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out) const;
+    void run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out);
+    void run(QMap<QString,QVariant> &, PadDocument *) {/* Should never be used*/}
+    void run(QMap<QString,QVariant> &tokens);
 
     // do not return children padfragment
     virtual QList<PadFragment*> children() const {return QList<PadFragment*>();}
 
     // Debug
-    void print(int indent = 0) const;
+    void debug(int indent = 0) const;
 
 Q_SIGNALS:
     void cleared();
@@ -102,10 +117,10 @@ public Q_SLOTS:
 
 private:
     QList<PadItem*> _items;
-    QString _rawSource;
     mutable QTextDocument *_docSource, *_docOutput;
     TokenModel *_tokenModel;
     QTimer *_timer;
+    PadPositionTranslator _posTrans;
 };
 
 }  // PadTools
