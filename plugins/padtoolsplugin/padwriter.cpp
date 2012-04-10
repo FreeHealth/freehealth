@@ -187,7 +187,7 @@ PadWriter::PadWriter(QWidget *parent) :
 
     connect(d->ui->scenari, SIGNAL(triggered(QAction*)), this, SLOT(changeRawSourceScenario(QAction*)));
     d->ui->scenari->setDefaultAction(d->aTest1);
-    d->aTest1->trigger();
+    d->aTest2->trigger();
 
     // END TEST
 }
@@ -208,8 +208,10 @@ void PadWriter::changeRawSourceScenario(QAction *a)
                  " 10 chars ^$ _C_ ~C~ _C_$^<br />"
                  " 10 chars ^$ _D_ ~D~ _D_$^<br />";
     } else if (a == d->aTest2) {
-        source = "<p><b>^$ <span style=' text-decoration: underline; color:#ff00ff;'>before </span> 'a'  ~A~  after 'a'$^ qdsfsdqf qdf qsdf </b><br />"
-                 "^$ <span style=' text-decoration: underline; color:#0000ff;'>before</span> ^$ Before nested C ~C~ After nested C $^ 'b' ~B~ after 'b'$^<br />";
+        source = "<p>^$ _B_ ~B~ _B_ ^$‘‘nestedC’’~C~$^$^<br />"
+//                "^$ _^$‘‘nestedB’’~B~$^C_ ~C~ _C_$^<br />"
+//                " 10 chars ^$ _D_ ~D~ _D_$^<br />"
+                ;
     } else if (a == d->aTest3) {
         source = "<p><b>^$ <span style=' text-decoration: underline; color:#ff00ff;'>before </span> 'a'  ~A~  after 'a'$^ qdsfsdqf qdf qsdf </b><br />"
                  "^$ <span style=' text-decoration: underline; color:#0000ff;'>before</span> ^$ Before nested C ~C~ After ^$ Before D ~D~ After D $^nested C $^ 'b' ~B~ after 'b'$^<br />";

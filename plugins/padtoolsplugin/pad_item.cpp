@@ -68,7 +68,10 @@ void PadConditionnalSubItem::debug(int indent) const
     str += QString("[padSubItem:Source(%1;%2);Output(%3;%4)]")
             .arg(start()).arg(end())
             .arg(outputStart()).arg(outputEnd());
-    qWarning() << str;
+    qDebug("%s", qPrintable(str));
+    foreach (PadFragment *fragment, _fragments) {
+        fragment->debug(indent + 2);
+    }
 }
 
 void PadConditionnalSubItem::run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out)
@@ -145,7 +148,7 @@ void PadCore::debug(int indent) const
             .arg(start()).arg(end())
             .arg(outputStart()).arg(outputEnd())
             .arg(_name);
-    qWarning() << str;
+    qDebug("%s", qPrintable(str));
 }
 
 void PadCore::run(QMap<QString,QVariant> &tokens)
