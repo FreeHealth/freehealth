@@ -23,6 +23,7 @@ HEADERS += preventionplugin.h\
            treeviewdelegate.h \
            moreIHM.h \
            survey.h \
+           nextdateitemsdialog.h \
            connexion.h
 
 SOURCES += preventionplugin.cpp \
@@ -32,8 +33,10 @@ SOURCES += preventionplugin.cpp \
            treeviewdelegate.cpp \
            moreIHM.cpp \
            survey.cpp \
+           nextdateitemsdialog.cpp \
            connexion.cpp
 FORMS += prevent.ui \
+         NextDateItemsDialog.ui \
          moreIHM.ui
 
 OTHER_FILES += Core.pluginspec

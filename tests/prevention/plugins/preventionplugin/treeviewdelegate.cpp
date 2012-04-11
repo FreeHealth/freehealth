@@ -1,35 +1,29 @@
 #include "treeviewdelegate.h"
-#include "preventIO.h"
+#include "nextdateitemsdialog.h"
 
 static inline QString pixmaps() 
 { 
     return QString(qApp->applicationDirPath()+"/../../global_resources/pixmap");
 };
 
- ////////////////////////////////////////////
- //DATEEDIT DELEGATE FOR TREEVIEW
- ///////////////////////////////////////////
-
-DateEditTreeViewDelegate::DateEditTreeViewDelegate(QObject * parent)
+DateEditTreeViewFirstDelegate::DateEditTreeViewFirstDelegate(QObject * parent)
 {
-    Q_UNUSED(parent);
 }
 
-DateEditTreeViewDelegate::~DateEditTreeViewDelegate(){}
+DateEditTreeViewFirstDelegate::~DateEditTreeViewFirstDelegate(){}
 
-QSize DateEditTreeViewDelegate::sizeHint(const QStyleOptionViewItem &  option ,
+QSize DateEditTreeViewFirstDelegate::sizeHint(const QStyleOptionViewItem &  option ,
                               const QModelIndex & index) const
 {
     Q_UNUSED(option);
     Q_UNUSED(index);
     return QSize(40,25);
-
 }
 
-QWidget *DateEditTreeViewDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option,
+QWidget *DateEditTreeViewFirstDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option,
                            const QModelIndex &index) const
 {
-    if (  index.column() == VariantItemModel::DATE_DONE_H || index.column() == VariantItemModel::DATE_NEXT_H)
+    if (  index.column() == VariantItemModel::DATE_DONE_H)
     {
     	  QDateEdit * dateEdit = new QDateEdit(parent);
     	  dateEdit->setDisplayFormat("yyyy-MM-dd");
@@ -40,10 +34,104 @@ QWidget *DateEditTreeViewDelegate::createEditor(QWidget *parent, const QStyleOpt
      
 }
 
+ void DateEditTreeViewFirstDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
+ {
+     QDateEdit * dateEdit = static_cast<QDateEdit*>(editor);
+     QDate date;
+     date = index.model()->data(index,Qt::DisplayRole).toDate();
+     dateEdit->setDate(date);
+ }
+ 
+  void DateEditTreeViewFirstDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,
+                                      const QModelIndex &index) const
+ {
+     QDateEdit * dateEdit = static_cast<QDateEdit*>(editor);
+     QString value = dateEdit->date().toString("yyyy-MM-dd");
+
+     model->setData(index, value, Qt::EditRole);
+ }
+
+ ////////////////////////////////////////////
+ //DATEEDIT NEXT DELEGATE FOR TREEVIEW
+ ///////////////////////////////////////////
+
+DateEditTreeViewDelegate::DateEditTreeViewDelegate(QObject * parent)
+{
+    m_io = static_cast<PreventIO*>(parent);
+    m_itemsParametrizedList = m_io->getListOfNextDateItems();
+    qDebug() << __FILE__ << QString::number(__LINE__) << "m_itemsParametrizedList.size()  =" << QString::number(m_itemsParametrizedList.size()) ;
+    m_tableNextDateModel = m_io->getNextDateModel();
+    m_userUid = m_io->getUserUid();
+    qDebug() << __FILE__ << QString::number(__LINE__) << " m_tableNextDateModel->rowCount() =" 
+        <<  QString::number(m_tableNextDateModel->rowCount());
+    qDebug() << __FILE__ << QString::number(__LINE__) << " m_userUid =" << m_userUid ;
+}
+
+DateEditTreeViewDelegate::~DateEditTreeViewDelegate(){}
+
+QSize DateEditTreeViewDelegate::sizeHint(const QStyleOptionViewItem &  option ,
+                              const QModelIndex & index) const
+{
+    Q_UNUSED(option);
+    Q_UNUSED(index);
+    return QSize(40,25);
+}
+
+QWidget *DateEditTreeViewDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option,
+                           const QModelIndex &index) const
+{
+    if (index.column() == VariantItemModel::DATE_NEXT_H)
+    {
+    	  QDateEdit * dateEdit = new QDateEdit(parent);
+    	  dateEdit->setDisplayFormat("yyyy-MM-dd");
+    	  return dateEdit;
+        }
+          return QStyledItemDelegate::createEditor(parent, option, index);
+    
+}
+
  void DateEditTreeViewDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const
  {
      QDateEdit * dateEdit = static_cast<QDateEdit*>(editor);
-     QDate date = index.model()->data(index,Qt::EditRole).toDate();
+     QDate date;
+     int rowIndex = index.row();
+     QString item = index.model()->data(index.model()->index(rowIndex,ITEM_H,index.parent()),Qt::DisplayRole).toString();
+     qDebug() << __FILE__ << QString::number(__LINE__) << " item =" << item ;
+     QStringList listOfItems;
+     if (m_itemsParametrizedList.contains(item))
+     {
+     	  QString filter = QString("%1 LIKE '%2' AND %3 LIKE '%4'").arg("ITEM",item,"USER_UID",m_userUid);
+     	  m_tableNextDateModel->setFilter(filter);
+     	  m_tableNextDateModel->select();
+     	  QStringList listOfNextDateItems;
+     	  for (int row = 0; row < m_tableNextDateModel->rowCount(); ++row)
+     	  {
+     	      QString d = m_tableNextDateModel->data(m_tableNextDateModel->index(row,PreventIO::ND_ITEM),Qt::DisplayRole).toString();
+     	      qDebug() << __FILE__ << QString::number(__LINE__) << " d =" << d ;
+     	      listOfItems << d;
+     	      }
+     	   if (listOfItems.size() > 1)
+     	   {
+     	   	  NextDateDialog dialog(this,listOfItems,m_tableNextDateModel);
+     	   	  if (dialog.exec()== QDialog::Accepted)
+     	   	  {
+     	   	  	  listOfNextDateItems = dialog.getListForChosenItem();
+     	   	      }
+     	       }
+     	   else
+     	   {
+     	   	for (int col = 0; col < m_tableNextDateModel->columnCount() ; ++col)
+     	   	{
+     	            qDebug() << __FILE__ << QString::number(__LINE__) << " listOfNextDateItems =" << m_tableNextDateModel->data(m_tableNextDateModel->index(0,col),Qt::DisplayRole).toString(); ;
+     	            listOfNextDateItems << m_tableNextDateModel->data(m_tableNextDateModel->index(0,col),Qt::DisplayRole).toString();
+     	   	    }
+     	       }
+     	  date = m_io->getNextDate(listOfNextDateItems,index);
+         }
+     else
+     {
+         date = index.model()->data(index,Qt::DisplayRole).toDate();
+     	 }
      dateEdit->setDate(date);
  }
  
@@ -155,7 +243,7 @@ QSize ComboTreeViewItemDelegate::sizeHint(const QStyleOptionViewItem &  option ,
 {
     Q_UNUSED(option);
     Q_UNUSED(index);
-    return QSize(40,25);
+    return QSize(100,25);
 }
 
 QWidget *ComboTreeViewItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option,
@@ -190,7 +278,16 @@ QWidget *ComboTreeViewItemDelegate::createEditor(QWidget *parent, const QStyleOp
          }
      combo->setModel(m_rowAndItemModel);
      combo->setModelColumn(ITEM);
-     combo->setCurrentIndex(combo->findText(itemOfModel));
+     int newIndex = combo->findText(itemOfModel);
+     if (!itemOfModel.isEmpty())
+     {
+     	  combo->setCurrentIndex(newIndex);
+         }
+     else
+     {
+     	combo->setCurrentIndex(0);
+         }
+     
  }
  
  void ComboTreeViewItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model,

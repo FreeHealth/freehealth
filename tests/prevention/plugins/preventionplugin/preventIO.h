@@ -172,6 +172,10 @@ class VariantItemModel : public QAbstractItemModel
 
 class PreventIO : public QObject {
     Q_OBJECT
+    enum Uuid_List {
+      PATIENT = 0,
+      USER
+      };
     public:
         enum NextDateItems {
             ID_NEXTDATE = 0,
@@ -193,9 +197,13 @@ class PreventIO : public QObject {
         QSqlTableModel * getModel();
         VariantItemModel *getVariantItemModel();
         QSqlTableModel * getNextDateModel();
+        QStringList getListOfNextDateItems();
+        QString getUserUid();
+        QDate getNextDate(const QStringList & listOfDatas, QModelIndex index);
         QSqlDatabase m_db;
         VariantItemModel *m_variantModel;
         QSqlTableModel *m_NextDateModel;
+        QString m_userUid;
     private:
         QSqlTableModel * m_model;
     

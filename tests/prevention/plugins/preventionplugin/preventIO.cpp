@@ -974,6 +974,8 @@ PreventIO::PreventIO(QObject * parent){
     m_NextDateModel->setTable("nextdate");
     m_NextDateModel->setEditStrategy(QSqlTableModel::OnFieldChange);
     m_NextDateModel->select();
+    qDebug() << __FILE__ << QString::number(__LINE__) << "m_NextDateModel->rowCount()  =" <<  QString::number(m_NextDateModel->rowCount()) ;
+    m_userUid = patientAndUserUuid()[USER];
 }
 
 PreventIO::~PreventIO(){}
@@ -993,6 +995,10 @@ QSqlTableModel * PreventIO::getModel()
 
 QSqlTableModel * PreventIO::getNextDateModel()
 {
+    m_NextDateModel->setFilter("");
+    m_NextDateModel->select();
+    qDebug() << __FILE__ << QString::number(__LINE__) << "m_NextDateModel->rowCount()  =" <<  QString::number(m_NextDateModel->rowCount()) ;
+        
     return m_NextDateModel;
 }
 
@@ -1007,4 +1013,46 @@ VariantItemModel * PreventIO::getVariantItemModel()
     return m_variantModel;
 }
 
+QStringList PreventIO::getListOfNextDateItems()
+{
+    QStringList list;
+    QString userUid = patientAndUserUuid()[USER] ;
+    if (m_NextDateModel->rowCount()>0)
+    {
+    	  QString filter = QString("%1 LIKE '%2'").arg("USER_UID",userUid);
+          m_NextDateModel->setFilter(filter);
+        }
+    
+    m_NextDateModel->select();
+    for (int i = 0; i < m_NextDateModel->rowCount(); ++i)
+    {
+    	  list << m_NextDateModel->data(m_NextDateModel->index(i,ND_ITEM),Qt::DisplayRole).toString();
+        }
+    return list;
+}
+
+QString PreventIO::getUserUid()
+{
+    return m_userUid;
+}
+
+QDate PreventIO::getNextDate(const QStringList & listOfDatas, QModelIndex index)
+{
+    QDate date;
+    QDate newDate;
+    int years = 0;
+    years = listOfDatas[ND_YEAR].toInt();
+    int months = 0;
+    months = listOfDatas[ND_MONTH].toInt();
+    int days = 0;
+    days = listOfDatas[ND_DAY].toInt();
+    qDebug() << __FILE__ << QString::number(__LINE__) << " y m d =" << QString::number(years) << QString::number(months) << QString::number(days);
+    date = m_variantModel->data(m_variantModel->index(index.row(),VariantItemModel::DATE_DONE_H),Qt::DisplayRole).toDate();
+    qDebug() << __FILE__ << QString::number(__LINE__) << " date =" <<  date.toString("yyyy-MM-dd");
+    newDate = date.addYears(years);
+    newDate = newDate.addMonths(months);
+    newDate = newDate.addDays(days);
+    qDebug() << __FILE__ << QString::number(__LINE__) << " newDate =" << newDate.toString("yyyy-MM-dd");
+    return newDate;
+}
 
