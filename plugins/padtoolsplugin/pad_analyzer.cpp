@@ -249,7 +249,7 @@ PadItem *PadAnalyzerPrivate::nextPadItem()
     PadItem *padItem = new PadItem;
     int s = QString(Constants::TOKEN_OPEN_DELIMITER).size();
     padItem->addDelimiter(_curPos - s, s);
-    padItem->setStart(_curPos);
+    padItem->setStart(_curPos - s);
     padItem->setId(nextId());
     int previousType = PadItem::DefinedCore_PrependText;
 

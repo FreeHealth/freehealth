@@ -117,7 +117,7 @@ public:
     Ui::PadWriter *ui;
     TokenModel *_tokenModel;
     QAction *aFindCursor, *aAutoUpdate, *aSetDefaultValues;
-    QAction *aTest1, *aTest2, *aTest3, *aTest4; // actions used to test different rawsource scenari
+    QAction *aTest1, *aTest2, *aTest3, *aTest4, *aTest5; // actions used to test different rawsource scenari
     PadDocument *_pad;
     PadFragment *_followedItem; // should not be deleted
     QList<QTextCharFormat> m_LastHoveredItemCharFormats, _followedItemCharFormats;
@@ -166,29 +166,33 @@ PadWriter::PadWriter(QWidget *parent) :
     connect(d->ui->prevBlock, SIGNAL(clicked()), this, SLOT(highLightPreviousBlock()));
 
     a = d->aTest1 = new QAction(this);
-    a->setText("Test raw source 1");
-    a->setToolTip("Two tokens, some strings, no nested tokens");
+    a->setText("Tokens and strings");
     d->ui->scenari->addAction(a);
 
     a = d->aTest2 = new QAction(this);
-    a->setText("Test raw source 2");
-    a->setToolTip("Simple nested tokens with extra strings");
+    a->setText("Simple nested tokens & strings");
     d->ui->scenari->addAction(a);
 
     a = d->aTest3 = new QAction(this);
-    a->setText("Test raw source 3");
-    a->setToolTip("Multinested tokens with extra strings");
+    a->setText("Multinested tokens & strings");
     d->ui->scenari->addAction(a);
 
     a = d->aTest4 = new QAction(this);
-    a->setText("Test raw source 4");
-    a->setToolTip("Tokens in table");
+    a->setText("Tokens in table");
+    d->ui->scenari->addAction(a);
+
+    a = d->aTest5 = new QAction(this);
+    a->setText("Multinested tokens in table");
     d->ui->scenari->addAction(a);
 
     connect(d->ui->scenari, SIGNAL(triggered(QAction*)), this, SLOT(changeRawSourceScenario(QAction*)));
     d->ui->scenari->setDefaultAction(d->aTest1);
-    d->aTest2->trigger();
+    d->aTest1->trigger();
 
+    connect(d->ui->wysiwyg->textEdit(), SIGNAL(cursorPositionChanged()), this, SLOT(wysiwygCursorChanged()));
+    connect(d->ui->rawSource->textEdit(), SIGNAL(cursorPositionChanged()), this, SLOT(rawSourceCursorChanged()));
+    d->ui->wysiwyg->textEdit()->setCursorWidth(3);
+    d->ui->rawSource->textEdit()->setCursorWidth(3);
     // END TEST
 }
 
@@ -199,14 +203,49 @@ PadWriter::~PadWriter()
         d = 0;
     }
 }
+
+void PadWriter::wysiwygCursorChanged()
+{
+    QTextCursor c = d->ui->wysiwyg->textEdit()->textCursor();
+    d->ui->rawPos->setValue(d->_pad->positionTranslator().outputToRaw(c.position()));
+    d->ui->ouputPos->setValue(c.position());
+
+    QTextCursor raw(d->ui->rawSource->document());
+    raw.setPosition(d->_pad->positionTranslator().outputToRaw(c.position()));
+    raw.setPosition(raw.position() + 1, QTextCursor::KeepAnchor);
+    QTextCharFormat format;
+    format.setBackground(QBrush(QColor(Qt::lightGray)));
+    raw.mergeCharFormat(format);
+}
+
+void PadWriter::rawSourceCursorChanged()
+{
+    QTextCursor c = d->ui->rawSource->textEdit()->textCursor();
+    d->ui->rawPos->setValue(c.position());
+    d->ui->ouputPos->setValue(d->_pad->positionTranslator().rawToOutput(c.position()));
+
+    QTextCursor out(d->ui->wysiwyg->document());
+    out.setPosition(d->_pad->positionTranslator().rawToOutput(c.position()));
+    out.setPosition(out.position() + 1, QTextCursor::KeepAnchor);
+    QTextCharFormat format;
+    format.setBackground(QBrush(QColor(Qt::lightGray)));
+    out.mergeCharFormat(format);
+}
+
 void PadWriter::changeRawSourceScenario(QAction *a)
 {
     QString source;
     if (a == d->aTest1) {
-        source = "<p><b>^$_<span style=' text-decoration: underline; color:#ff00ff;'>A_</span> ~A~ _A_$^ 10 chars </b><br />"
-                 "^$ <span style=' text-decoration: underline; color:#0000ff;'>_B_</span> ~B~ _B_$^ 10 chars <br />"
-                 " 10 chars ^$ _C_ ~C~ _C_$^<br />"
-                 " 10 chars ^$ _D_ ~D~ _D_$^<br />";
+        source = "<p>"
+                "^$ _D_ ~D~ _D_ $^<br />"
+                "^$ _D_ ~D~ _D_ $^<br />"
+//                "^$ _D_ ~D~ _D_ $^<br />"
+//                "^$ _D_ ~D~ _D_ $^<br />"
+//                "<b>^$_<span style=' text-decoration: underline; color:#ff00ff;'>A_</span> ~A~ _A_$^ 10 chars </b><br />"
+//                 "^$ <span style=' text-decoration: underline; color:#0000ff;'>_B_</span> ~B~ _B_$^ 10 chars <br />"
+//                 " 10 chars ^$ _C_ ~C~ _C_$^<br />"
+//                 " 10 chars ^$ _D_ ~D~ _D_$^<br />";
+                ;
     } else if (a == d->aTest2) {
         source = "<p>^$ _B_ ~B~ _B_ ^$‘‘nestedC’’~C~$^$^<br />"
 //                "^$ _^$‘‘nestedB’’~B~$^C_ ~C~ _C_$^<br />"
@@ -223,6 +262,23 @@ void PadWriter::changeRawSourceScenario(QAction *a)
             "</tr>"
             "<tr>"
             "  <td> 10 chars ^$ _D_ ~D~ _D_$^</td>"
+            "</tr>"
+            "</table>"
+            "</p>";
+    } else if (a == d->aTest5) {
+    source = "<p><b>Testing nested tokens inside a table</b><br />"
+            "<table border=1>"
+            "<tr>"
+            "  <td>^$<span style=' text-decoration: underline; color:#ff00ff;'>_A_</span> ~A~ _A_$^ 10 chars </td>"
+            "</tr>"
+            "<tr>"
+            "  <td> 10 chars ^$ _D_ ~D~ _D_$^</td>"
+            "</tr>"
+            "<tr>"
+            "  <td>Two nested: ^$ _D_ ~D~ _^$Nested C ~C~... $^D_$^</td>"
+            "</tr>"
+            "<tr>"
+            "  <td>Multi-nested: ^$ _D_ ~D~ _^$Nested C ~C~..^$//~A~//$^.. $^D_$^</td>"
             "</tr>"
             "</table>"
             "</p>";

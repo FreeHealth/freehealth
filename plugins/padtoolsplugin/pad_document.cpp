@@ -62,30 +62,49 @@ void PadPositionTranslator::clear()
     _translations.clear();
 }
 
-void PadPositionTranslator::addOutputTranslation(const int pos, const int length)
+void PadPositionTranslator::addOutputTranslation(const int outputPos, const int length)
 {
-    _translations.insert(pos, length);
+    _translations.insert(outputPos, length);
 }
 
-//void PadPositionTranslator::addTranslation(const int rawPos, const int outputPos)
-//{
-//}
-
-int PadPositionTranslator::deltaForSourcePosition(const int pos)
+int PadPositionTranslator::deltaForSourcePosition(const int outputPos)
 {
     int delta = 0;
-    QMapIterator<int, int> i(_translations);
+    QMapIterator<int, int> i(_translations); // outputPos (start), length (of translation)
     while (i.hasNext()) {
         i.next();
-        if (i.key() < pos)
+        // if rawPos inside the delta
+        int begin = i.key();
+        int end = i.key() + i.value();
+        if ((outputPos >= begin) && (outputPos <= end)) {
+            delta += outputPos - begin;
+            continue;
+        }
+        if (i.key() <= outputPos)
             delta += i.value();
     }
     return delta;
 }
 
-int PadPositionTranslator::rawToSource(const int rawPos)
+int PadPositionTranslator::rawToOutput(const int rawPos)
 {
-    int pos = rawPos + deltaForSourcePosition(rawPos);
+    QMap<int,int> trans = _translations;
+    int pos = rawPos;
+    QMapIterator<int, int> i(_translations); // outputPos (start), length (of translation)
+    while (i.hasNext()) {
+        i.next();
+        if (pos > i.key()) {
+            pos += i.value();
+        } else {
+            break;
+        }
+    }
+    return pos>0 ? pos : 0;
+}
+
+int PadPositionTranslator::outputToRaw(const int outputPos)
+{
+    int pos = outputPos - deltaForSourcePosition(outputPos);
     return pos>0 ? pos : 0;
 }
 

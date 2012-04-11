@@ -107,7 +107,7 @@ void PadConditionnalSubItem::run(QMap<QString,QVariant> &tokens, PadDocument *do
         removeMe = (_coreCond == Undefined);
     }
 
-    setOutputStart(document->positionTranslator().rawToSource(start()));
+    setOutputStart(document->positionTranslator().rawToOutput(start()));
     if (removeMe) {
         // Remove everything
         QTextCursor cursor(document->outputDocument());
@@ -121,10 +121,10 @@ void PadConditionnalSubItem::run(QMap<QString,QVariant> &tokens, PadDocument *do
 //         Remove only delimiters
         foreach(const PadDelimiter &delim, _delimiters) {
 
-//            qWarning() << "DELIM raw" << delim.rawPos << "size" << delim.size << "output" << (document->positionTranslator().rawToSource(delim.rawPos));
+//            qWarning() << "SUBITEM DELIM raw" << delim.rawPos << "size" << delim.size << "output" << (document->positionTranslator().rawToOutput(delim.rawPos));
 
             QTextCursor cursor(document->outputDocument());
-            int pos = document->positionTranslator().rawToSource(delim.rawPos);
+            int pos = document->positionTranslator().rawToOutput(delim.rawPos);
             cursor.setPosition(pos);
             cursor.setPosition(pos + delim.size, QTextCursor::KeepAnchor);
             cursor.removeSelectedText();
@@ -136,7 +136,7 @@ void PadConditionnalSubItem::run(QMap<QString,QVariant> &tokens, PadDocument *do
         foreach(PadFragment *frag, _fragments)
             frag->run(tokens, document);
     }
-    setOutputEnd(document->positionTranslator().rawToSource(end()));
+    setOutputEnd(document->positionTranslator().rawToOutput(end()));
 }
 
 
@@ -190,7 +190,7 @@ void PadCore::run(QMap<QString,QVariant> &tokens, PadDocument *document)
         return;
     }
     // Compute output positions
-    setOutputStart(document->positionTranslator().rawToSource(start()));
+    setOutputStart(document->positionTranslator().rawToOutput(start()));
     setOutputEnd(outputStart() + value.size());
 
     // Replace core source
@@ -343,7 +343,7 @@ void PadItem::run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDo
 
 void PadItem::run(QMap<QString,QVariant> &tokens, PadDocument *document)
 {
-//    qWarning() << "run Item";
+//    qWarning() << "run Item: rawStart" << start() << "outputStart" << document->positionTranslator().rawToOutput(start()) << document->positionTranslator().deltaForSourcePosition(start());
     PadCore *core = getCore();
     QString coreValue;
 
@@ -354,36 +354,51 @@ void PadItem::run(QMap<QString,QVariant> &tokens, PadDocument *document)
         if (coreValue.isEmpty()) {
             // No value -> Remove the entire PadItem from the text output and add a translation
             QTextCursor cursor(document->outputDocument());
-            setOutputStart(document->positionTranslator().rawToSource(start()));
+            setOutputStart(document->positionTranslator().rawToOutput(start()));
             cursor.setPosition(outputStart());
             cursor.setPosition(outputStart() + rawLength(), QTextCursor::KeepAnchor);
             cursor.removeSelectedText();
             setOutputEnd(outputStart());
             document->positionTranslator().addOutputTranslation(outputStart(), rawLength());
         } else {
+            // Remove delimiters before the core
             foreach(const PadDelimiter &delim, _delimiters) {
+                if (delim.rawPos >= core->start())
+                    continue;
 
-    //            qWarning() << "ITEM DELIM raw" << delim.rawPos << "size" << delim.size << "output" << (document->positionTranslator().rawToSource(delim.rawPos));
+//                qWarning() << "ITEM DELIM raw" << delim.rawPos << "size" << delim.size << "output" << (document->positionTranslator().rawToOutput(delim.rawPos));
 
                 QTextCursor cursor(document->outputDocument());
-                int pos = document->positionTranslator().rawToSource(delim.rawPos);
+                int pos = document->positionTranslator().rawToOutput(delim.rawPos);
                 cursor.setPosition(pos);
                 cursor.setPosition(pos + delim.size, QTextCursor::KeepAnchor);
                 cursor.removeSelectedText();
-                setOutputEnd(outputEnd() - delim.size);
-                document->positionTranslator().addOutputTranslation(delim.rawPos, -delim.size);
+                document->positionTranslator().addOutputTranslation(pos, -delim.size);
             }
 
             // Value -> run fragments
             foreach(PadFragment *f, _fragments) {
                 f->run(tokens, document);
             }
-            // Recompute output positions
 
-//            qWarning() << "PadItem--> " << start() << document->positionTranslator().rawToSource(start());
+            // Remove delimiters after the core
+            foreach(const PadDelimiter &delim, _delimiters) {
+                if (delim.rawPos <= core->end())
+                    continue;
 
-            setOutputStart(document->positionTranslator().rawToSource(start()));
-            setOutputEnd(document->positionTranslator().rawToSource(end()));
+//                qWarning() << "ITEM DELIM raw" << delim.rawPos << "size" << delim.size << "output" << (document->positionTranslator().rawToOutput(delim.rawPos));
+
+                QTextCursor cursor(document->outputDocument());
+                int pos = document->positionTranslator().rawToOutput(delim.rawPos);
+                cursor.setPosition(pos);
+                cursor.setPosition(pos + delim.size, QTextCursor::KeepAnchor);
+                cursor.removeSelectedText();
+                document->positionTranslator().addOutputTranslation(pos, -delim.size);
+            }
+
+            setOutputStart(document->positionTranslator().rawToOutput(start()));
+            setOutputEnd(document->positionTranslator().rawToOutput(end()));
         }
     }
+//    qWarning();
 }

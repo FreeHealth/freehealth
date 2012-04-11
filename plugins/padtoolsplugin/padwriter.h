@@ -28,6 +28,9 @@
 #define PADTOOLS_PADWRITER_H
 
 #include <QWidget>
+QT_BEGIN_NAMESPACE
+class QTextCursor;
+QT_END_NAMESPACE
 
 namespace PadTools {
 class PadFragment;
@@ -57,6 +60,8 @@ private:
     void findCursorPositionInOutput();
 
 private Q_SLOTS:
+    void wysiwygCursorChanged();
+    void rawSourceCursorChanged();
     void changeRawSourceScenario(QAction*);
     void analyseRawSource();
     void viewErrors();

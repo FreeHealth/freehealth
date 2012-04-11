@@ -45,14 +45,15 @@ public:
     PadPositionTranslator();
 
     void clear();
-    void addOutputTranslation(const int pos, const int length);
-    int deltaForSourcePosition(const int pos);
-    int rawToSource(const int rawPos);
+    void addOutputTranslation(const int outputPos, const int length);
+    int deltaForSourcePosition(const int rawPos);
+    int rawToOutput(const int rawPos);
+    int outputToRaw(const int outputPos);
 
     void debug();
 
 private:
-    QMap<int, int> _translations;
+    QMap<int, int> _translations; // outputPos (start), length (of translation)
 };
 
 class PadDocument : public QObject, public PadFragment
