@@ -51,7 +51,7 @@ PadConditionnalSubItem::PadConditionnalSubItem(TokenCoreCondition cond, Place pl
 
 void PadConditionnalSubItem::addDelimiter(const int posInRaw, const int size)
 {
-    Delimiter delim;
+    PadDelimiter delim;
     delim.rawPos = posInRaw;
     delim.size = size;
     _delimiters << delim;
@@ -59,7 +59,6 @@ void PadConditionnalSubItem::addDelimiter(const int posInRaw, const int size)
 
 void PadConditionnalSubItem::run(QMap<QString,QVariant> &tokens)
 {
-//    return QString();
 }
 
 void PadConditionnalSubItem::debug(int indent) const
@@ -120,7 +119,7 @@ void PadConditionnalSubItem::run(QMap<QString,QVariant> &tokens, PadDocument *do
         return;
     } else {
 //         Remove only delimiters
-        foreach(const Delimiter &delim, _delimiters) {
+        foreach(const PadDelimiter &delim, _delimiters) {
 
 //            qWarning() << "DELIM raw" << delim.rawPos << "size" << delim.size << "output" << (document->positionTranslator().rawToSource(delim.rawPos));
 
@@ -255,6 +254,15 @@ PadFragment *PadItem::fragment(const int type) const
     return 0;
 }
 
+void PadItem::addDelimiter(const int posInRaw, const int size)
+{
+    PadDelimiter delim;
+    delim.rawPos = posInRaw;
+    delim.size = size;
+    _delimiters << delim;
+}
+
+
 /** Returns the PadTools::PadCore of the PadTools::PadItem. If no core is found, 0 is returned. */
 PadCore *PadItem::getCore() const
 {
@@ -343,7 +351,6 @@ void PadItem::run(QMap<QString,QVariant> &tokens, PadDocument *document)
     if (core) {
         coreValue = tokens.value(core->name()).toString();
 
-
         if (coreValue.isEmpty()) {
             // No value -> Remove the entire PadItem from the text output and add a translation
             QTextCursor cursor(document->outputDocument());
@@ -354,6 +361,19 @@ void PadItem::run(QMap<QString,QVariant> &tokens, PadDocument *document)
             setOutputEnd(outputStart());
             document->positionTranslator().addOutputTranslation(outputStart(), rawLength());
         } else {
+            foreach(const PadDelimiter &delim, _delimiters) {
+
+    //            qWarning() << "ITEM DELIM raw" << delim.rawPos << "size" << delim.size << "output" << (document->positionTranslator().rawToSource(delim.rawPos));
+
+                QTextCursor cursor(document->outputDocument());
+                int pos = document->positionTranslator().rawToSource(delim.rawPos);
+                cursor.setPosition(pos);
+                cursor.setPosition(pos + delim.size, QTextCursor::KeepAnchor);
+                cursor.removeSelectedText();
+                setOutputEnd(outputEnd() - delim.size);
+                document->positionTranslator().addOutputTranslation(delim.rawPos, -delim.size);
+            }
+
             // Value -> run fragments
             foreach(PadFragment *f, _fragments) {
                 f->run(tokens, document);

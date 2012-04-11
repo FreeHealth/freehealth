@@ -99,7 +99,7 @@ public:
 
     bool atEnd();
     PadItem *nextPadItem();
-    PadCore *nextCore(); // tries to parse a core ("~...~")
+    PadCore *nextCore();
 
     bool isDelimiter(int pos, int *delimiterSize, LexemType *type);
 
@@ -186,11 +186,7 @@ PadDocument *PadAnalyzerPrivate::startAnalyze(PadDocument *padDocument)
 	while ((lex = nextLexem()).type != Lexem_Null) {
 		fragment = 0;
 		switch (lex.type) {
-		case Lexem_String:
-//            fragment = new PadString(lex.value);
-//            fragment->setStart(lex.start);
-//            fragment->setEnd(lex.end);
-//            fragment->setId(nextId());
+        case Lexem_String: // ignore this kind of fragment
 			break;
 		case Lexem_PadOpenDelimiter:
 			fragment = nextPadItem();
@@ -251,7 +247,9 @@ PadItem *PadAnalyzerPrivate::nextPadItem()
     PadConditionnalSubItem *fragment;
 	Lexem lex;
     PadItem *padItem = new PadItem;
-    padItem->setStart(_curPos - QString(Constants::TOKEN_OPEN_DELIMITER).size());
+    int s = QString(Constants::TOKEN_OPEN_DELIMITER).size();
+    padItem->addDelimiter(_curPos - s, s);
+    padItem->setStart(_curPos);
     padItem->setId(nextId());
     int previousType = PadItem::DefinedCore_PrependText;
 
@@ -259,15 +257,14 @@ PadItem *PadAnalyzerPrivate::nextPadItem()
 	while ((lex = nextLexem()).type != Lexem_Null) {
 		fragment = 0;
         switch (lex.type) {
-		case Lexem_String:
+        case Lexem_String:
         {
             switch (previousType) {
             case PadItem::DefinedCore_PrependText :
             {
                 fragment = new PadConditionnalSubItem(PadConditionnalSubItem::Defined, PadConditionnalSubItem::Prepend);
                 int s = QString(Constants::TOKEN_OPEN_DELIMITER).size();
-                fragment->addDelimiter(lex.start - s, s);
-                fragment->setStart(lex.start - s);
+                fragment->setStart(lex.start);
                 fragment->setEnd(lex.end);
 
 //                qWarning() << "PREPEND" << fragment->start() << fragment->end() << "Delim" << (lex.start - s) << s;
@@ -277,10 +274,8 @@ PadItem *PadAnalyzerPrivate::nextPadItem()
             case PadItem::DefinedCore_AppendText:
             {
                 fragment = new PadConditionnalSubItem(PadConditionnalSubItem::Defined, PadConditionnalSubItem::Append);
-                int s = QString(Constants::TOKEN_CLOSE_DELIMITER).size();
                 fragment->setStart(lex.start);
-                fragment->setEnd(lex.end + s);
-                fragment->addDelimiter(lex.end, s);
+                fragment->setEnd(lex.end);
 
 //                qWarning() << "APPEND" << fragment->start() << fragment->end() << "Delim" << lex.end << s;;
 
@@ -294,17 +289,19 @@ PadItem *PadAnalyzerPrivate::nextPadItem()
             padItem->addChild(fragment);
             break;
         }
-		case Lexem_PadOpenDelimiter:
+        case Lexem_PadOpenDelimiter:
         {
             PadItem *item = nextPadItem();
             if (!item) { // an error occured, stop all
-				delete padItem;
-				return 0;
-			}
+                delete padItem;
+                return 0;
+            }
             padItem->addChild(item);
-			break;
+            break;
         }
-		case Lexem_PadCloseDelimiter:
+        case Lexem_PadCloseDelimiter:
+            s = QString(Constants::TOKEN_CLOSE_DELIMITER).size();
+            padItem->addDelimiter(_curPos - s, s);
             padItem->setEnd(_curPos);
             return padItem;
 		case Lexem_CoreDelimiter:

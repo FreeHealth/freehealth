@@ -36,6 +36,11 @@
 namespace PadTools {
 class PadDocument;
 
+struct PadDelimiter {
+    int rawPos, size;
+};
+
+
 class PadConditionnalSubItem : public PadFragment
 {
 public:
@@ -60,13 +65,9 @@ public:
     void debug(int indent = 0) const;
 
 private:
-    struct Delimiter {
-        int rawPos, size;
-    };
-
     TokenCoreCondition _coreCond;
     Place _place;
-    QList<Delimiter> _delimiters;
+    QList<PadDelimiter> _delimiters;
 };
 
 class PadCore : public PadFragment
@@ -105,6 +106,8 @@ public:
 
     PadFragment *fragment(const int type) const;
 
+    void addDelimiter(const int posInRaw, const int size);
+
     void debug(int indent = 0) const;
 
     void run(QMap<QString,QVariant> &tokens);
@@ -113,6 +116,9 @@ public:
 
     QList<PadFragment*> children() const;
 	PadCore *getCore() const;
+
+private:
+    QList<PadDelimiter> _delimiters;
 };
 
 }  // PadTools
