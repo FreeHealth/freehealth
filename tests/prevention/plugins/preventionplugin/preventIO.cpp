@@ -1046,13 +1046,10 @@ QDate PreventIO::getNextDate(const QStringList & listOfDatas, QModelIndex index)
     months = listOfDatas[ND_MONTH].toInt();
     int days = 0;
     days = listOfDatas[ND_DAY].toInt();
-    qDebug() << __FILE__ << QString::number(__LINE__) << " y m d =" << QString::number(years) << QString::number(months) << QString::number(days);
-    date = m_variantModel->data(m_variantModel->index(index.row(),VariantItemModel::DATE_DONE_H),Qt::DisplayRole).toDate();
-    qDebug() << __FILE__ << QString::number(__LINE__) << " date =" <<  date.toString("yyyy-MM-dd");
+    date = m_variantModel->data(m_variantModel->index(index.row(),VariantItemModel::DATE_DONE_H,index.parent()),Qt::DisplayRole).toDate();
     newDate = date.addYears(years);
     newDate = newDate.addMonths(months);
     newDate = newDate.addDays(days);
-    qDebug() << __FILE__ << QString::number(__LINE__) << " newDate =" << newDate.toString("yyyy-MM-dd");
     return newDate;
 }
 

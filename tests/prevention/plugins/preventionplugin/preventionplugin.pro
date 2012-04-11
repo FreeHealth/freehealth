@@ -36,7 +36,7 @@ SOURCES += preventionplugin.cpp \
            nextdateitemsdialog.cpp \
            connexion.cpp
 FORMS += prevent.ui \
-         NextDateItemsDialog.ui \
+         nextdateitemsdialog.ui \   
          moreIHM.ui
 
 OTHER_FILES += Core.pluginspec

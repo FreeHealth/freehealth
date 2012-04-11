@@ -59,12 +59,8 @@ DateEditTreeViewDelegate::DateEditTreeViewDelegate(QObject * parent)
 {
     m_io = static_cast<PreventIO*>(parent);
     m_itemsParametrizedList = m_io->getListOfNextDateItems();
-    qDebug() << __FILE__ << QString::number(__LINE__) << "m_itemsParametrizedList.size()  =" << QString::number(m_itemsParametrizedList.size()) ;
     m_tableNextDateModel = m_io->getNextDateModel();
     m_userUid = m_io->getUserUid();
-    qDebug() << __FILE__ << QString::number(__LINE__) << " m_tableNextDateModel->rowCount() =" 
-        <<  QString::number(m_tableNextDateModel->rowCount());
-    qDebug() << __FILE__ << QString::number(__LINE__) << " m_userUid =" << m_userUid ;
 }
 
 DateEditTreeViewDelegate::~DateEditTreeViewDelegate(){}
@@ -107,22 +103,20 @@ QWidget *DateEditTreeViewDelegate::createEditor(QWidget *parent, const QStyleOpt
      	  for (int row = 0; row < m_tableNextDateModel->rowCount(); ++row)
      	  {
      	      QString d = m_tableNextDateModel->data(m_tableNextDateModel->index(row,PreventIO::ND_ITEM),Qt::DisplayRole).toString();
-     	      qDebug() << __FILE__ << QString::number(__LINE__) << " d =" << d ;
      	      listOfItems << d;
      	      }
      	   if (listOfItems.size() > 1)
      	   {
-     	   	  NextDateDialog dialog(this,listOfItems,m_tableNextDateModel);
-     	   	  if (dialog.exec()== QDialog::Accepted)
+     	   	  NextDateDialog *dialog = new NextDateDialog(this,listOfItems,m_tableNextDateModel);
+     	   	  if (dialog->exec()== QDialog::Accepted)
      	   	  {
-     	   	  	  listOfNextDateItems = dialog.getListForChosenItem();
+     	   	  	  listOfNextDateItems = dialog->getListForChosenItem();
      	   	      }
      	       }
      	   else
      	   {
      	   	for (int col = 0; col < m_tableNextDateModel->columnCount() ; ++col)
      	   	{
-     	            qDebug() << __FILE__ << QString::number(__LINE__) << " listOfNextDateItems =" << m_tableNextDateModel->data(m_tableNextDateModel->index(0,col),Qt::DisplayRole).toString(); ;
      	            listOfNextDateItems << m_tableNextDateModel->data(m_tableNextDateModel->index(0,col),Qt::DisplayRole).toString();
      	   	    }
      	       }
