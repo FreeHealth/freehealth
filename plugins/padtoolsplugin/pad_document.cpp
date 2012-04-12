@@ -372,6 +372,7 @@ void PadDocument::softReset()
     QTime c;
     c.start();
 
+//    clear();
     qDeleteAll(_fragments);
     _fragments.clear();
     _docOutput->clear();
@@ -379,7 +380,7 @@ void PadDocument::softReset()
     PadAnalyzer a;
     a.analyze(_docSource, this);
     if (_tokenModel)
-        run(_tokenModel->tokens(), _docSource, _docOutput);
+        run(_tokenModel->tokens());//, _docSource, _docOutput);
 
     Utils::Log::logTimeElapsed(c, "PadDocument", "reset");
 }

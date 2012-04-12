@@ -238,7 +238,7 @@ void TokenOutputDocument::dropEvent(QDropEvent *event)
         int pos = cursor.position();
         int dropRawPosition = pos;
 
-//        qWarning() << "DROP AT OUTPUT:"<<this->cursorForPosition(event->pos()).position() << "RAW" << pos;
+//        qWarning() << "DROP AT OUTPUT:" << this->cursorForPosition(event->pos()).position() << "RAW" << pos;
 
         PadItem *item = d->_pad->padItemForSourcePosition(pos);
         if (item) {
@@ -296,6 +296,7 @@ void TokenOutputDocument::dropEvent(QDropEvent *event)
             cursor.setPosition(dropRawPosition);
             cursor.insertHtml(editor.toRawSourceHtml());
             d->_pad->softReset();
+            textEdit()->setDocument(d->_pad->outputDocument());
             event->acceptProposedAction();
             event->accept();
             return;
