@@ -115,7 +115,7 @@ void PadConditionnalSubItem::run(QMap<QString,QVariant> &tokens, PadDocument *do
         cursor.setPosition(outputStart() + rawLength(), QTextCursor::KeepAnchor);
         cursor.removeSelectedText();
         setOutputEnd(outputStart());
-        document->positionTranslator().addOutputTranslation(outputStart(), rawLength());
+        document->positionTranslator().addOutputTranslation(outputStart(), -rawLength());
         return;
     } else {
 //         Remove only delimiters
@@ -359,7 +359,7 @@ void PadItem::run(QMap<QString,QVariant> &tokens, PadDocument *document)
             cursor.setPosition(outputStart() + rawLength(), QTextCursor::KeepAnchor);
             cursor.removeSelectedText();
             setOutputEnd(outputStart());
-            document->positionTranslator().addOutputTranslation(outputStart(), rawLength());
+            document->positionTranslator().addOutputTranslation(outputStart(), -rawLength());
         } else {
             // Remove delimiters before the core
             foreach(const PadDelimiter &delim, _delimiters) {

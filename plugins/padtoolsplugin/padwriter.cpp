@@ -237,7 +237,7 @@ void PadWriter::changeRawSourceScenario(QAction *a)
     QString source;
     if (a == d->aTest1) {
         source = "<p>"
-                "^$ _D_ ~D~ _D_ $^<br />"
+                "^$ _D_ ~D~ _D_ $^ Null(^$All this text ~NULL~ should not appear in the output$^)<br />"
                 "^$ _D_ ~D~ _D_ $^<br />"
 //                "^$ _D_ ~D~ _D_ $^<br />"
 //                "^$ _D_ ~D~ _D_ $^<br />"
@@ -247,7 +247,7 @@ void PadWriter::changeRawSourceScenario(QAction *a)
 //                 " 10 chars ^$ _D_ ~D~ _D_$^<br />";
                 ;
     } else if (a == d->aTest2) {
-        source = "<p>^$ _B_ ~B~ _B_ ^$‘‘nestedC’’~C~$^$^<br />"
+        source = "<p>^$ _B_ ~B~ _B_ ^$‘‘nestedC’’~C~$^<b>$^</b><br />"
 //                "^$ _^$‘‘nestedB’’~B~$^C_ ~C~ _C_$^<br />"
 //                " 10 chars ^$ _D_ ~D~ _D_$^<br />"
                 ;
