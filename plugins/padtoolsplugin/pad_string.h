@@ -32,6 +32,7 @@
 #include <padtoolsplugin/pad_fragment.h>
 
 namespace PadTools {
+class PadDocument;
 
 class PadString : public PadFragment
 {
@@ -41,10 +42,11 @@ public:
 	const QString &string() const { return _string; }
 	void setValue(const QString &string) { _string = string; }
 
-	void print(int indent = 0) const;
+	void debug(int indent = 0) const;
 
-	QString run(QMap<QString,QVariant> &) const;
-    void run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out) const;
+    void run(QMap<QString,QVariant> &);
+    void run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out);
+    void run(QMap<QString,QVariant> &tokens, PadDocument *document);
 
 private:
 	QString _string;

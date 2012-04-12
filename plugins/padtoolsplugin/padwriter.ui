@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>638</width>
-    <height>307</height>
+    <height>428</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -25,7 +25,7 @@
         <widget class="QLineEdit" name="search"/>
        </item>
        <item>
-        <widget class="QTreeView" name="treeView">
+        <widget class="TokenTreeView" name="treeView">
          <property name="editTriggers">
           <set>QAbstractItemView::NoEditTriggers</set>
          </property>
@@ -123,10 +123,43 @@
            </property>
           </widget>
          </item>
+         <item row="3" column="6">
+          <widget class="QToolButton" name="nextBlock">
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="7">
+          <widget class="QToolButton" name="prevBlock">
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="2">
+          <widget class="QSpinBox" name="rawPos">
+           <property name="toolTip">
+            <string>RAW</string>
+           </property>
+           <property name="maximum">
+            <number>16777215</number>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="3">
+          <widget class="QSpinBox" name="ouputPos">
+           <property name="toolTip">
+            <string>OUTPUT</string>
+           </property>
+           <property name="maximum">
+            <number>16777215</number>
+           </property>
+          </widget>
+         </item>
         </layout>
        </widget>
        <widget class="PadTools::TokenOutputDocument" name="wysiwyg"/>
-       <widget class="Editor::TextEditor" name="textEdit"/>
       </widget>
       <widget class="QListWidget" name="listWidgetErrors">
        <property name="toolTip">
@@ -150,9 +183,9 @@
    <header location="global">padtoolsplugin/tokenoutputdocument.cpp</header>
   </customwidget>
   <customwidget>
-   <class>Editor::TextEditor</class>
-   <extends>QTextEdit</extends>
-   <header location="global">texteditorplugin/texteditor.h</header>
+   <class>TokenTreeView</class>
+   <extends>QTreeView</extends>
+   <header location="global">padtoolsplugin/tokentreeview.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

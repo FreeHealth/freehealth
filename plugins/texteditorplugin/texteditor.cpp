@@ -21,7 +21,7 @@
 /***************************************************************************
  *   This code is inspired of the Qt example : Text Edit                   *
  *   Adaptations to FreeMedForms and improvments by : Eric Maeker, MD      *
- *   eric.maeker@gmail.com                                                   *
+ *   eric.maeker@gmail.com                                                 *
  ***************************************************************************/
 
 /***************************************************************************
@@ -326,6 +326,7 @@ void TextEditor::setTypes(Types type)
     Core::ICore::instance()->contextManager()->updateContext();
 }
 
+/** Creates the context menu for the Editor::TextEditor according to its Editor::TextEditor::Type. The menu is not executed. */
 QMenu *TextEditor::getContextMenu()
 {
     QMenu *mc = new QMenu(this);
@@ -444,10 +445,6 @@ QMenu *TextEditor::getContextMenu()
 
 void TextEditor::contextMenu(const QPoint &pos)
 {
-    if (textEdit()->underMouse()) {
-        QTextCursor c = textEdit()->cursorForPosition(pos);
-        textEdit()->setTextCursor(c);
-    }
     QMenu *p = getContextMenu();
     p->exec(mapToGlobal(pos));
 }

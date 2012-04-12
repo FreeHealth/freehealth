@@ -27,27 +27,78 @@
 #ifndef PAD_ITEM_H
 #define PAD_ITEM_H
 
+#include <padtoolsplugin/pad_fragment.h>
+
 #include <QList>
 #include <QMap>
 #include <QVariant>
 
-#include "pad_fragment.h"
-#include "pad_core.h"
-
 namespace PadTools {
+class PadDocument;
 
-/**
- * Contains an entire pad item i.e. a list of fragments
- * @class
- */
+struct PadDelimiter {
+    int rawPos, size;
+};
+
+
+class PadConditionnalSubItem : public PadFragment
+{
+public:
+    enum TokenCoreCondition {
+        Defined = 0,
+        Undefined
+    };
+    enum Place {
+        Prepend = 0,
+        Append
+    };
+
+    PadConditionnalSubItem(TokenCoreCondition cond, Place place, PadFragment *parent = 0);
+    virtual ~PadConditionnalSubItem() {}
+
+    void addDelimiter(const int posInRaw, const int size);
+
+    void run(QMap<QString,QVariant> &tokens);
+    void run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out);
+    void run(QMap<QString,QVariant> &tokens, PadDocument *document);
+
+    void debug(int indent = 0) const;
+
+private:
+    TokenCoreCondition _coreCond;
+    Place _place;
+    QList<PadDelimiter> _delimiters;
+};
+
+class PadCore : public PadFragment
+{
+public:
+    PadCore() : PadFragment() {}
+
+    const QString &name() const { return _name; }
+    void setName(const QString &name) { _name = name; }
+
+    void debug(int indent = 0) const;
+
+    void run(QMap<QString,QVariant> &tokens);
+    void run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *output);
+    void run(QMap<QString,QVariant> &tokens, PadDocument *document);
+
+
+private:
+    QString _name;
+};
+
 class PadItem : public PadFragment
 {
 public:
     enum PadStringType {
         NoType = 0,
         Core,
-        ConditionnalBeforeText,
-        ConditionnalAfterText
+        DefinedCore_PrependText,
+        DefinedCore_AppendText,
+        UndefinedCore_PrependText,
+        UndefinedCore_AppendText
     };
 
     PadItem() : PadFragment() {}
@@ -55,15 +106,19 @@ public:
 
     PadFragment *fragment(const int type) const;
 
-    void print(int indent = 0) const;
+    void addDelimiter(const int posInRaw, const int size);
 
-	QString run(QMap<QString,QVariant> &tokens) const;
-    void run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out) const;
+    void debug(int indent = 0) const;
+
+    void run(QMap<QString,QVariant> &tokens);
+    void run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out);
+    void run(QMap<QString,QVariant> &tokens, PadDocument *document);
 
     QList<PadFragment*> children() const;
+	PadCore *getCore() const;
 
 private:
-	PadCore *getCore() const;
+    QList<PadDelimiter> _delimiters;
 };
 
 }  // PadTools

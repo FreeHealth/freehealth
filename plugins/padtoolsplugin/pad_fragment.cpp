@@ -24,6 +24,96 @@
  *  Contributors :                                                         *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
+/** \class PadTools::PadFragment
+  * Represents a fragment of the raw/output source
+*/
+
+/** \fn virtual void PadTools::PadFragment::setParent(PadFragment *parent)
+  Define the parent of the fragment */
+
+/** \fn virtual PadFragment *PadTools::PadFragment::parent() const
+  Return the parent of the fragment */
+
+/** \fn virtual void PadTools::PadFragment::debug(int indent = 0) const = 0;
+  Debug to console */
+
+/** \fn virtual int PadTools::PadFragment::id() const
+  Returns the start position in the raw source string/document */
+
+/** \fn virtual void PadTools::PadFragment::setId(int id)
+  Defines the start position in the raw source string/document */
+
+/** \fn int PadTools::PadFragment::start() const { return _start; }
+  Returns the start position in the raw source string/document */
+
+/** \fn void PadTools::PadFragment::setStart(int start) { _start = start; }
+  Defines the start position in the raw source string/document */
+
+/** \fn int PadTools::PadFragment::end() const { return _end; }
+ Returns the end position in the raw source string/document */
+
+/** \fn void PadTools::PadFragment::setEnd(int end) { _end = end; }
+  Defines the end position in the raw source string/document */
+
+/** \fn int PadTools::PadFragment::rawLength() const {return _end - _start;}
+  Return the length of the fragment in the raw source string/document */
+
+/** \fn int PadTools::PadFragment::outputLength() const {return _outputEnd - _outputStart;}
+  Return the length of the fragment in the output string/document */
+
+/** \fn void PadTools::PadFragment::move(int nbChars);
+  */
+
+/** \fn void PadTools::PadFragment::moveEnd(int nbOfChars);
+  */
+
+/** \fn void PadTools::PadFragment::setOutputStart(const int pos)
+  */
+
+/** \fn void PadTools::PadFragment::setOutputEnd(const int pos)
+  */
+
+/** \fn int PadTools::PadFragment::outputStart() const
+  Returns the start position in the output QTextDocument. This is defined only after the calling run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out) const. */
+
+/** \fn int PadTools::PadFragment::outputEnd() const
+  Returns the end position in the output QTextDocument. This is defined only after the calling run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out) const. */
+
+/** \fn void PadTools::PadFragment::resetOutputRange() {_outputStart=-1; _outputEnd=-1; foreach(PadFragment*f,_fragments) f->resetOutputRange();}
+  Removes (set to -1) all output limits to the object and its children. */
+
+/** \fn bool PadTools::PadFragment::containsRawPosition(const int pos) const {return (_start <= pos && _end >= pos);}
+  Contains raw source \e position */
+
+/** \fn bool PadTools::PadFragment::containsOutputPosition(const int pos) const {return (_outputStart <= pos && _outputEnd >= pos);}
+  Contains output \e position */
+
+/** \fn void PadTools::PadFragment::setToolTip(const QString &tooltip)
+  */
+
+/** \fn const QString &PadTools::PadFragment::toolTip() const
+  */
+
+/** \fn void PadTools::PadFragment::setUserData(const QString &key, const QVariant &value)
+  */
+
+/** \fn QVariant PadTools::PadFragment::userData(const QString &key) const
+  */
+
+/** \fn virtual QString PadTools::PadFragment::run(QMap<QString,QVariant> &tokens) const = 0;
+  Run this fragment over some tokens and returns the result text */
+
+/** \fn virtual void PadTools::PadFragment::run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out) const = 0;
+  Run this fragment over some tokens inside QTextDocuments */
+
+/** \fn virtual void PadTools::PadFragment::run(QMap<QString,QVariant> &tokens, PadDocument *document) = 0;
+  Run this fragment over some tokens inside the output QTextDocument (which is initially a clone of the source). */
+
+/** \fn virtual QList<PadFragment*> PadTools::PadFragment::children() const
+   Returns the list of PadTools::PadFragment children */
+
+
+
 #include "pad_fragment.h"
 
 #include <QTextDocument>
@@ -38,12 +128,12 @@
 using namespace PadTools;
 
 PadFragment::PadFragment(PadFragment *parent) :
+    _start(-1), _end(-1),
+    _outputStart(-1), _outputEnd(-1),
+    _beginDelimStart(-1), _beginDelimLength(-1),
+    _endDelimStart(-1), _endDelimLength(-1),
     _parent(parent),
-    _start(-1),
-    _end(-1),
-    _id(-1),
-    _outputStart(-1),
-    _outputEnd(-1)
+    _id(-1)
 {
 }
 
@@ -60,6 +150,16 @@ void PadFragment::addChild(PadFragment *fragment)
 {
     fragment->setParent(this);
     _fragments << fragment;
+}
+
+/** Removes a PadTools::PadFragment from the object children. Children are stored in an ordered list. */
+void PadFragment::removeAndDeleteFragment(PadFragment *fragment)
+{
+    if (_fragments.contains(fragment)) {
+        _fragments.removeAll(fragment);
+        delete fragment;
+        fragment = 0;
+    }
 }
 
 /** Return the smallest PadTools::PadFragment that include the position. All children are checked. Return 0 if the pos is not included in the fragment. */
@@ -96,7 +196,6 @@ PadFragment *PadFragment::padFragmentForOutputPosition(int pos) const
     return child;
 }
 
-
 /** Insert the content of the PadFragment rawSource to the output */
 void PadFragment::insertFragment(QTextDocument *source, QTextDocument *out) const
 {
@@ -116,6 +215,7 @@ void PadFragment::insertFragment(QTextDocument *source, QTextDocument *out) cons
     }
 }
 
+/** Insert html at the end of the output \e out QTextDocument and compute fragment output range */
 void PadFragment::insertText(QTextDocument *out, const QString &text) const
 {
     if (_start>=0) {

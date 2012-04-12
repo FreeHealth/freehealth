@@ -33,10 +33,8 @@
 #include <QTextDocument>
 
 namespace PadTools {
+class PadDocument;
 
-/**
- * Represent a string or a token
- */
 class PadFragment
 {
 public:
@@ -46,35 +44,37 @@ public:
     virtual void setParent(PadFragment *parent) {_parent = parent;}
     virtual PadFragment *parent() const {return _parent;}
 
-	virtual void print(int indent = 0) const = 0;
+    virtual void debug(int indent = 0) const = 0;
 
-    /** Returns the start position in the raw source string/document */
     virtual int id() const { return _id; }
-    /** Defines the start position in the raw source string/document */
     virtual void setId(int id) { _id = id; }
 
-    /** Returns the start position in the raw source string/document */
 	int start() const { return _start; }
-    /** Defines the start position in the raw source string/document */
     void setStart(int start) { _start = start; }
-
-    /** Returns the end position in the raw source string/document */
     int end() const { return _end; }
-    /** Defines the end position in the raw source string/document */
     void setEnd(int end) { _end = end; }
 
-    /** Return the length of the fragment in the raw source string/document */
+    void setBeginDelimiter(int startPos, int size) {_beginDelimStart = startPos; _beginDelimLength = size;}
+    int beginDelimiterStartPos() const {return _beginDelimStart;}
+    int beginDelimiterSize() const {return _beginDelimLength;}
+    void setEndDelimiter(int startPos, int size) {_endDelimStart = startPos; _endDelimLength = size;}
+    int endDelimiterStartPos() const {return _endDelimStart;}
+    int endDelimiterSize() const {return _endDelimLength;}
+
     int rawLength() const {return _end - _start;}
-    /** Return the length of the fragment in the output string/document */
     int outputLength() const {return _outputEnd - _outputStart;}
 
     void move(int nbChars);
     void moveEnd(int nbOfChars);
 
-    /** Returns the start position in the output QTextDocument. This is defined only after the calling run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out) const. */
+    void setOutputStart(const int pos) {_outputStart = pos;}
+    void setOutputEnd(const int pos) {_outputEnd = pos;}
     int outputStart() const {return _outputStart;}
-    /** Returns the end position in the output QTextDocument. This is defined only after the calling run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out) const. */
     int outputEnd() const {return _outputEnd;}
+    void resetOutputRange() {_outputStart=-1; _outputEnd=-1; foreach(PadFragment*f,_fragments) f->resetOutputRange();}
+
+    bool containsRawPosition(const int pos) const {return (_start <= pos && _end >= pos);}
+    bool containsOutputPosition(const int pos) const {return (_outputStart <= pos && _outputEnd >= pos);}
 
     void setToolTip(const QString &tooltip) {_toolTip = tooltip;}
     const QString &toolTip() const {return _toolTip;}
@@ -82,13 +82,12 @@ public:
     void setUserData(const QString &key, const QVariant &value) {_userData.insert(key, value);}
     QVariant userData(const QString &key) const {return _userData.value(key);}
 
-    /**  Run this fragment over some tokens and returns the result text */
-	virtual QString run(QMap<QString,QVariant> &tokens) const = 0;
-
-    /**  Run this fragment over some tokens inside QTextDocuments */
-    virtual void run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out) const = 0;
+    virtual void run(QMap<QString,QVariant> &tokens) = 0;
+    virtual void run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out) = 0;
+    virtual void run(QMap<QString,QVariant> &tokens, PadDocument *document) = 0;
 
     virtual void addChild(PadFragment *fragment);
+    virtual void removeAndDeleteFragment(PadFragment *fragment);
     virtual QList<PadFragment*> children() const {return _fragments;}
 
     virtual PadFragment *padFragmentForSourcePosition(int pos) const;
@@ -99,17 +98,16 @@ public:
 
 protected:
     QList<PadFragment *> _fragments;
+    int _start; // index of the first char in the text
+    int _end; // index of the last char in the text
+    mutable int _outputStart, _outputEnd;
+    int _beginDelimStart, _beginDelimLength, _endDelimStart, _endDelimLength;
 
 private:
     PadFragment *_parent;
-    int _start; // index of the first char in the text
-	int _end; // index of the last char in the text
     long long _id; // unique identifier
     QString _toolTip;
     QHash<QString, QVariant> _userData;
-
-protected:
-    mutable int _outputStart, _outputEnd;
 };
 
 }  // PadTools

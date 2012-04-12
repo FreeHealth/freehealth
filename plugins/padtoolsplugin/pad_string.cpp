@@ -26,12 +26,13 @@
  ***************************************************************************/
 #include "pad_string.h"
 #include "constants.h"
+#include "pad_document.h"
 
 #include <QDebug>
 
 using namespace PadTools;
 
-void PadString::print(int indent) const
+void PadString::debug(int indent) const
 {
     QString i(indent, ' ');
     QString str;
@@ -43,19 +44,27 @@ void PadString::print(int indent) const
 }
 
 /** Paste the content of a string fragment in the output. */
-QString PadString::run(QMap<QString,QVariant> &) const
+void PadString::run(QMap<QString,QVariant> &)
 {
-    /** \todo use this output only if HTML is requested */
-    if (start() > 0) {
-        return QString(Constants::TOKEN_AND_POSITION_TAG)
-                .arg(_string).arg(id());
-    }
-    return _string;
+//    /** \todo use this output only if HTML is requested */
+//    if (start() > 0) {
+//        return QString(Constants::TOKEN_AND_POSITION_TAG)
+//                .arg(_string).arg(id());
+//    }
+//    return _string;
 }
 
 /** Paste the content of a string fragment in the output. */
-void PadString::run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out) const
+void PadString::run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out)
 {
     Q_UNUSED(tokens);
     insertFragment(source, out);
+}
+
+void PadString::run(QMap<QString,QVariant> &tokens, PadDocument *document)
+{
+    Q_UNUSED(tokens);
+    // Compute output positions
+    setOutputStart(start() + document->positionTranslator().deltaForSourcePosition(start()));
+    setOutputEnd(outputStart() + rawLength());
 }

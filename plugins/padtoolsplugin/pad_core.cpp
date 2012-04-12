@@ -26,32 +26,13 @@
  ***************************************************************************/
 #include "pad_core.h"
 #include "constants.h"
+#include "pad_document.h"
+
+#include <utils/log.h>
+
+#include <QTextCursor>
 
 #include <QDebug>
 
 using namespace PadTools;
 
-void PadCore::print(int indent) const
-{
-	QString str(indent, ' ');
-    str += QString("[padCore]:%1%2%1").arg(Constants::TOKEN_CORE_DELIMITER).arg(_name);
-    qWarning() << str;
-}
-
-QString PadCore::run(QMap<QString,QVariant> &tokens) const
-{
-    /** \todo use this output only if HTML is requested */
-    const QString &value = tokens[_name].toString();
-    if (start() > 0 && !value.isEmpty()) {
-        return QString(Constants::TOKEN_AND_POSITION_TAG)
-                .arg(value).arg(id());
-    }
-    return value;
-}
-
-void PadCore::run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *output) const
-{
-    const QString &value = tokens[_name].toString();
-    if (!value.isEmpty())
-        insertText(output, value);
-}

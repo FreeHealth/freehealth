@@ -19,49 +19,33 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main Developers : Eric Maeker <eric.maeker@gmail.com>,                *
- *                    Guillaume Denry <guillaume.denry@gmail.com>          *
- *  Contributors :                                                         *
- *      NAME <MAIL@ADDRESS.COM>                                            *
+ *   Main Developers:                                                      *
+ *       Eric MAEKER, MD <eric.maeker@gmail.com>                           *
+ *   Contributors:                                                         *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef PADTOOLS_TOKENEDITOR_H
-#define PADTOOLS_TOKENEDITOR_H
+#ifndef PADTOOLS_TOKENTREEVIEW_H
+#define PADTOOLS_TOKENTREEVIEW_H
 
-#include <QDialog>
-#include <QModelIndex>
+#include <QTreeView>
 
 namespace PadTools {
-class TokenModel;
 
-namespace Ui {
-class TokenEditor;
-}
-
-class TokenEditor : public QDialog
+class TokenTreeView : public QTreeView
 {
     Q_OBJECT
-    
 public:
-    explicit TokenEditor(QWidget *parent = 0);
-    ~TokenEditor();
+    explicit TokenTreeView(QWidget *parent = 0);
     
-    void setTokenModel(TokenModel *model);
-    void setCurrentIndex(const QModelIndex &index);
-
-    void setTokenName(const QString &name);
-
-    void setConditionnalHtml(const QString &before, const QString &after);
-    void setConditionnalPlainText(const QString &before, const QString &after);
-
-    QString toRawSourceHtml() const;
-
 protected:
-    void done(int result);
+    void startDrag(Qt::DropActions supportedActions);
 
 private:
-    Ui::TokenEditor *ui;
+//    QItemViewPaintPairs  draggablePaintPairs(const QModelIndexList &indexes, QRect *r);
+    QPixmap renderToPixmap(const QModelIndexList &indexes, QRect *r);
+
 };
 
 } // namespace PadTools
 
-#endif // PADTOOLS_TOKENEDITOR_H
+#endif // PADTOOLS_TOKENTREEVIEW_H
