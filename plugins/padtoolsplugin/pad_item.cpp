@@ -191,7 +191,6 @@ void PadCore::run(QMap<QString,QVariant> &tokens, PadDocument *document)
     }
     // Compute output positions
     setOutputStart(document->positionTranslator().rawToOutput(start()));
-    setOutputEnd(outputStart() + value.size());
 
     // Replace core source
     QTextCursor cursor(document->outputDocument());
@@ -199,7 +198,16 @@ void PadCore::run(QMap<QString,QVariant> &tokens, PadDocument *document)
     cursor.setPosition(outputStart() + rawLength(), QTextCursor::KeepAnchor);
     QTextCharFormat format = cursor.charFormat();
     cursor.removeSelectedText();
-    cursor.insertText(value, format);
+    if (Qt::mightBeRichText(value)) {
+        cursor.insertHtml(value);
+        setOutputEnd(cursor.selectionEnd());
+        cursor.setPosition(outputStart());
+        cursor.setPosition(outputEnd(), QTextCursor::KeepAnchor);
+        cursor.mergeCharFormat(format);
+    } else {
+        cursor.insertText(value, format);
+        setOutputEnd(outputStart() + value.size());
+    }
 
     // Add translation to document
     int delta = outputLength() - rawLength();
@@ -321,17 +329,18 @@ void PadItem::run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDo
     _outputStart = start;
     _outputEnd = end;
 
-    // Add anchors to the output QTextDocument
-    QTextCursor cursor(out);
-    cursor.setPosition(_outputStart);
-    cursor.setPosition(_outputEnd, QTextCursor::KeepAnchor);
-    QTextCharFormat f;
-    f.setAnchor(true);
-    f.setAnchorNames(QStringList() << Constants::ANCHOR_ITEM << QString::number(id()));
-    cursor.mergeCharFormat(f);
+//    // Add anchors to the output QTextDocument
+//    QTextCursor cursor(out);
+//    cursor.setPosition(_outputStart);
+//    cursor.setPosition(_outputEnd, QTextCursor::KeepAnchor);
+//    QTextCharFormat f;
+//    f.setAnchor(true);
+//    f.setAnchorNames(QStringList() << Constants::ANCHOR_ITEM << QString::number(id()));
+//    cursor.mergeCharFormat(f);
 
-    // Add the format && tooltip
+    // Add token tooltip
     int count = _outputEnd - _outputStart;
+    QTextCursor cursor(out);
     for(int i=0; i < count; ++i) {
         cursor.setPosition(start + i);
         cursor.setPosition(start + i + 1, QTextCursor::KeepAnchor);
