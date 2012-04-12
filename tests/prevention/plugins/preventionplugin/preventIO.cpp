@@ -974,7 +974,6 @@ PreventIO::PreventIO(QObject * parent){
     m_NextDateModel->setTable("nextdate");
     m_NextDateModel->setEditStrategy(QSqlTableModel::OnFieldChange);
     m_NextDateModel->select();
-    qDebug() << __FILE__ << QString::number(__LINE__) << "m_NextDateModel->rowCount()  =" <<  QString::number(m_NextDateModel->rowCount()) ;
     m_userUid = patientAndUserUuid()[USER];
 }
 
@@ -997,8 +996,6 @@ QSqlTableModel * PreventIO::getNextDateModel()
 {
     m_NextDateModel->setFilter("");
     m_NextDateModel->select();
-    qDebug() << __FILE__ << QString::number(__LINE__) << "m_NextDateModel->rowCount()  =" <<  QString::number(m_NextDateModel->rowCount()) ;
-        
     return m_NextDateModel;
 }
 
@@ -1041,11 +1038,14 @@ QDate PreventIO::getNextDate(const QStringList & listOfDatas, QModelIndex index)
     QDate date;
     QDate newDate;
     int years = 0;
-    years = listOfDatas[ND_YEAR].toInt();
     int months = 0;
-    months = listOfDatas[ND_MONTH].toInt();
     int days = 0;
-    days = listOfDatas[ND_DAY].toInt();
+    if (listOfDatas.size()>0)
+    {
+    	  years = listOfDatas[ND_YEAR].toInt();
+    	  months = listOfDatas[ND_MONTH].toInt();
+    	  days = listOfDatas[ND_DAY].toInt();
+        }
     date = m_variantModel->data(m_variantModel->index(index.row(),VariantItemModel::DATE_DONE_H,index.parent()),Qt::DisplayRole).toDate();
     newDate = date.addYears(years);
     newDate = newDate.addMonths(months);

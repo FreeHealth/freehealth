@@ -57,6 +57,7 @@ private:
     QString m_userUuid;
     VariantItemModel *m_model;
     PreventIO *m_io;
+    QObject * m_parent;
 };
 
 class PreventIHM : public QWidget, public Ui::PreventWidget {

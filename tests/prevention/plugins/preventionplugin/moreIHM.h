@@ -13,13 +13,14 @@ class TreeViewOfPrevention;
 class MoreIHM : public QWidget , Ui::MoreWidget{
     Q_OBJECT
     public:
-        MoreIHM(TreeViewOfPrevention * parent , QModelIndex index = QModelIndex());
+        MoreIHM(QObject *parent, TreeViewOfPrevention * treeView , QModelIndex index = QModelIndex());
         ~MoreIHM();
     
+    private Q_SLOTS:
+        void showDocumentAccordingToComboChoice(int);
     private:
         void closeMoreWidget();
-        void showDocumentAccordingToComboChoice(int item);
-        void mouseReleaseEvent(QMouseEvent *event);
+        //void mouseReleaseEvent(QMouseEvent *event);
 };
 
 #endif

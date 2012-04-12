@@ -34,6 +34,7 @@ static inline Core::IPatient *patient() { return Core::ICore::instance()->patien
 ///////////////////////////////////////////////////////
 
 TreeViewOfPrevention::TreeViewOfPrevention(QObject * parent){
+    m_parent = parent;
     m_io = new PreventIO(parent);
     m_deleteValue = new QAction(trUtf8("Delete this value."),this);
     m_showMore = new QAction(trUtf8("More."),this);
@@ -117,7 +118,7 @@ bool TreeViewOfPrevention::deleteItemAccordingToIndex(QModelIndex & index){
 void TreeViewOfPrevention::showMore(bool b){
     Q_UNUSED(b);
     QModelIndex index = currentIndex();
-    MoreIHM * more = new MoreIHM(this,index);
+    MoreIHM * more = new MoreIHM(m_parent,this,index);
     more->show();
 }
 
