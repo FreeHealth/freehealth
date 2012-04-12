@@ -235,7 +235,7 @@ PadDocument *PadAnalyzerPrivate::startAnalyze(PadDocument *padDocument)
             pad->addChild(fragment);
 	}
 
-    Utils::Log::logTimeElapsed(c, "Analyzer", "analyze");
+    Utils::Log::logTimeElapsed(c, "PadTools::PadAnalyzer", "analyze");
 
 //    pad->debug();
 	return pad;

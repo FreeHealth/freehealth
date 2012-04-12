@@ -362,8 +362,8 @@ void PadDocument::run(QMap<QString,QVariant> &tokens)
     foreach (PadFragment *fragment, _fragments)
         fragment->run(tokens, this);
 
-    positionTranslator().debug();
-    debug();
+//    positionTranslator().debug();
+//    debug();
 }
 
 /** Clear the PadDocument without deleting sources. */
@@ -382,7 +382,7 @@ void PadDocument::softReset()
     if (_tokenModel)
         run(_tokenModel->tokens());//, _docSource, _docOutput);
 
-    Utils::Log::logTimeElapsed(c, "PadDocument", "reset");
+    Utils::Log::logTimeElapsed(c, "PadTools::PadDocument", "reset");
 }
 
 /** Renew the analyze of the source and update the output. Clears the object first \sa clear(), softReset() */
