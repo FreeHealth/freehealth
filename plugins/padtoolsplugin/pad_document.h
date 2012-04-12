@@ -27,14 +27,14 @@
 #ifndef PAD_DOCUMENT_H
 #define PAD_DOCUMENT_H
 
+#include <padtoolsplugin/pad_fragment.h>
+#include <padtoolsplugin/pad_item.h>
+
 #include <QList>
-#include <QMap>
+#include <QMultiMap>
 #include <QVariant>
 #include <QObject>
 #include <QTimer>
-
-#include "pad_fragment.h"
-#include "pad_item.h"
 
 namespace PadTools {
 class TokenModel;
@@ -53,7 +53,7 @@ public:
     void debug();
 
 private:
-    QMap<int, int> _translations; // outputPos (start), length (of translation)
+    QMultiMap<int, int> _translations; // outputPos (start), length (of translation)
 };
 
 class PadDocument : public QObject, public PadFragment
@@ -78,7 +78,6 @@ public:
     // Manage children fragments
     void addChild(PadFragment *fragment);
     void removeAndDeleteFragment(PadFragment *fragment);
-    void hideItemInOutput(PadItem *item);
 
     // Extract text from source && output
     QString fragmentRawSource(PadFragment *fragment) const;
@@ -90,9 +89,9 @@ public:
     // PadFragment/Cursor hunting
     PadItem *padItemForOutputPosition(int positionInOutputQTextDocument) const;
     PadItem *padItemForSourcePosition(int positionInSourceQTextDocument) const;
-    PadFragment *padFragmentForSourcePosition(int p) const;
-    PadFragment *padFragmentForOutputPosition(int p) const;
-    QTextCursor rawSourceCursorForOutputPosition(int p) const;
+    PadFragment *padFragmentForSourcePosition(int rawPos) const;
+    PadFragment *padFragmentForOutputPosition(int outputPos) const;
+    QTextCursor rawSourceCursorForOutputPosition(int outputPos);
     PadPositionTranslator &positionTranslator() {return _posTrans;}
 
     // Start replacement of tokens

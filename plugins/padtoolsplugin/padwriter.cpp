@@ -237,9 +237,12 @@ void PadWriter::changeRawSourceScenario(QAction *a)
     QString source;
     if (a == d->aTest1) {
         source = "<p>"
-                "^$ _D_ ~D~ _D_ $^ Null(^$All this text ~NULL~ should not appear in the output$^)<br />"
-                "^$ _D_ ~D~ _D_ $^<br />"
-//                "^$ _D_ ~D~ _D_ $^<br />"
+                "<b><center>Simple token test</center></b></p><p>"
+                "&nbsp;&nbsp;* Token D: ^$\"~D~\"$^<br />"
+                "&nbsp;&nbsp;* Null token: (^$All this text ~NULL~ should not appear in the output$^)<br />"
+                "&nbsp;&nbsp;* Token D without 'after conditionnal text':^$ ~D~$^<br />"
+                "&nbsp;&nbsp;* Token D without 'before conditionnal text': ^$~D~. $^<br />"
+                "&nbsp;&nbsp;* Long token A: ^$this text should appear in the output document, <u>including the core value</u> \"<b>~A~</b>\" (in bold) as defined in the <span style=' text-decoration: underline; color:#ff00ff;'>TokenModel</span>.$^<br />"
 //                "^$ _D_ ~D~ _D_ $^<br />"
 //                "<b>^$_<span style=' text-decoration: underline; color:#ff00ff;'>A_</span> ~A~ _A_$^ 10 chars </b><br />"
 //                 "^$ <span style=' text-decoration: underline; color:#0000ff;'>_B_</span> ~B~ _B_$^ 10 chars <br />"
@@ -247,7 +250,12 @@ void PadWriter::changeRawSourceScenario(QAction *a)
 //                 " 10 chars ^$ _D_ ~D~ _D_$^<br />";
                 ;
     } else if (a == d->aTest2) {
-        source = "<p>^$ _B_ ~B~ _B_ ^$‘‘nestedC’’~C~$^<b>$^</b><br />"
+        source = "<p>"
+                "<b><center>Nested tokens test</center></b></p><p>"
+                "&nbsp;&nbsp;* Testing tokens:<br />"
+                "&nbsp;&nbsp;&nbsp;&nbsp;* ^$\"Token B: (~B~) ^$[[Token ^$this text ~NULL~ should not appear in output$^C: ~C~]]$^.\"$^<br />"
+                "&nbsp;&nbsp;* Result should be:<br />"
+                "&nbsp;&nbsp;&nbsp;&nbsp;* \"Token B: (This is B) [[Token C: This is C]].\"<br />"
 //                "^$ _^$‘‘nestedB’’~B~$^C_ ~C~ _C_$^<br />"
 //                " 10 chars ^$ _D_ ~D~ _D_$^<br />"
                 ;

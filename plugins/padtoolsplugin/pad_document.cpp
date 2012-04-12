@@ -64,39 +64,42 @@ void PadPositionTranslator::clear()
 
 void PadPositionTranslator::addOutputTranslation(const int outputPos, const int length)
 {
-    _translations.insert(outputPos, length);
+    _translations.insertMulti(outputPos, length);
 }
 
 int PadPositionTranslator::deltaForSourcePosition(const int outputPos)
 {
     int delta = 0;
-    QMapIterator<int, int> i(_translations); // outputPos (start), length (of translation)
-    while (i.hasNext()) {
-        i.next();
-        // if rawPos inside the delta
-        int begin = i.key();
-        int end = i.key() + i.value();
-        if ((outputPos >= begin) && (outputPos <= end)) {
-            delta += outputPos - begin;
-            continue;
+    foreach(int begin, _translations.uniqueKeys()) {
+        // translation is after the required position
+        if (begin > outputPos)
+            break;
+
+        foreach(int size, _translations.values(begin)) {
+            // if rawPos inside the delta
+            int end = begin + size;
+            if ((outputPos >= begin) && (outputPos <= end)) {
+                delta += outputPos - begin;
+                continue;
+            }
+            if (begin <= outputPos)
+                delta += size;
         }
-        if (i.key() <= outputPos)
-            delta += i.value();
     }
     return delta;
 }
 
 int PadPositionTranslator::rawToOutput(const int rawPos)
 {
-    QMap<int,int> trans = _translations;
     int pos = rawPos;
-    QMapIterator<int, int> i(_translations); // outputPos (start), length (of translation)
-    while (i.hasNext()) {
-        i.next();
-        if (pos > i.key()) {
-            pos += i.value();
-        } else {
-            break;
+    foreach(int begin, _translations.uniqueKeys()) {
+        if (pos > begin) {
+            foreach(int size, _translations.values(begin)) {
+                if (pos + size < begin)
+                    pos = begin;
+                else
+                    pos += size;
+            }
         }
     }
     return pos>0 ? pos : 0;
@@ -273,59 +276,37 @@ PadItem *PadDocument::padItemForSourcePosition(int p) const
     return item;
 }
 
-/** Find fragment for the QTextCursor position in raw source document. */
-PadFragment *PadDocument::padFragmentForSourcePosition(int p) const
+/** Find fragment for the QTextCursor position in raw source document. Return 0 if no fragment matches. */
+PadFragment *PadDocument::padFragmentForSourcePosition(int rawPos) const
 {
     foreach(PadFragment *fragment, _fragments) {
-        if (fragment->start() <= p && fragment->end() >= p)
-            return fragment->padFragmentForSourcePosition(p);
+        if (fragment->start() <= rawPos && fragment->end() >= rawPos)
+            return fragment->padFragmentForSourcePosition(rawPos);
     }
     return 0;
 }
 
-/** Find fragment for the QTextCursor position in output document. */
-PadFragment *PadDocument::padFragmentForOutputPosition(int p) const
+/** Find fragment for the QTextCursor position in output document. Return 0 if no fragment matches. */
+PadFragment *PadDocument::padFragmentForOutputPosition(int outputPos) const
 {
     foreach(PadFragment *fragment, _fragments) {
-        if (fragment->outputStart() <= p && fragment->outputEnd() >= p)
-            return fragment->padFragmentForOutputPosition(p);
+        if (fragment->outputStart() <= outputPos && fragment->outputEnd() >= outputPos)
+            return fragment->padFragmentForOutputPosition(outputPos);
     }
     return 0;
 }
 
-/** Returns the QTextCursor in the rawSource corresponding to the position \e p in the output document. */
-QTextCursor PadDocument::rawSourceCursorForOutputPosition(int p) const
+/**
+ * Returns the QTextCursor in the rawSource corresponding to the position \e p in the output document.
+ * \sa PadTools::PadDocument::positionTranslator(), PadTools::PadPositionTranslator
+ */
+QTextCursor PadDocument::rawSourceCursorForOutputPosition(int outputPos)
 {
     Q_ASSERT(_docSource);
     Q_ASSERT(_docOutput);
 
-    PadFragment *outFragment = padFragmentForOutputPosition(p);
-    if (!outFragment) {
-        // return start or end
-        QTextCursor cursor(_docSource);
-        QTextCursor out(_docOutput);
-        out.setPosition(p);
-        out.atEnd() ? cursor.movePosition(QTextCursor::End) : cursor.movePosition(QTextCursor::Start);
-        return cursor;
-    }
-
-    int posInFragment = p - outFragment->outputStart();
-    PadFragment *sourceFragment = padFragmentForSourcePosition(outFragment->start());
-    int posInRaw = sourceFragment->start() + posInFragment;
-    if (!sourceFragment) {
-        // return start or end
-        QTextCursor cursor(_docSource);
-        QTextCursor out(_docOutput);
-        out.setPosition(p);
-        if (out.atEnd())
-            cursor.movePosition(QTextCursor::End);
-        else
-            cursor.movePosition(QTextCursor::Start);
-        return cursor;
-    }
-
     QTextCursor cursor(_docSource);
-    cursor.setPosition(posInRaw);
+    cursor.setPosition(positionTranslator().outputToRaw(outputPos));
     return cursor;
 }
 

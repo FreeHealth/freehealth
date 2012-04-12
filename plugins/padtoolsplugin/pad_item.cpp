@@ -363,6 +363,7 @@ void PadItem::run(QMap<QString,QVariant> &tokens, PadDocument *document)
         } else {
             // Remove delimiters before the core
             foreach(const PadDelimiter &delim, _delimiters) {
+//                qWarning() << delim.rawPos << core->start();
                 if (delim.rawPos >= core->start())
                     continue;
 
@@ -383,7 +384,7 @@ void PadItem::run(QMap<QString,QVariant> &tokens, PadDocument *document)
 
             // Remove delimiters after the core
             foreach(const PadDelimiter &delim, _delimiters) {
-                if (delim.rawPos <= core->end())
+                if (delim.rawPos < core->end())
                     continue;
 
 //                qWarning() << "ITEM DELIM raw" << delim.rawPos << "size" << delim.size << "output" << (document->positionTranslator().rawToOutput(delim.rawPos));
