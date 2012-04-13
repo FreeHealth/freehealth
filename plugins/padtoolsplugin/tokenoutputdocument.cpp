@@ -33,6 +33,7 @@
 #include "tokeneditor.h"
 #include "pad_document.h"
 
+#include <utils/log.h>
 #include <utils/global.h>
 #include <translationutils/constants.h>
 #include <translationutils/trans_current.h>
@@ -50,11 +51,36 @@ using namespace Trans::ConstantTranslations;
 
 namespace PadTools {
 namespace Internal {
+
+//TokenOutputDocumentControl::TokenOutputDocumentControl(QObject *parent)
+//{}
+
+//TokenOutputDocumentControl::~TokenOutputDocumentControl()
+//{}
+
+//bool TokenOutputDocumentControl::canInsertFromMimeData (const QMimeData *source) const
+//{
+//    WARN_FUNC;
+//}
+
+//QMimeData *TokenOutputDocumentControl::createMimeDataFromSelection() const
+//{
+//    WARN_FUNC;
+//    return new QMimeData();
+//}
+
+//void TokenOutputDocumentControl::insertFromMimeData(const QMimeData *source)
+//{
+//    WARN_FUNC;
+//}
+
+
 class TokenOutputDocumentPrivate
 {
 public:
     TokenOutputDocumentPrivate() :
-        _pad(0), _lastHoveredItem(0)
+        _pad(0),
+        _lastHoveredItem(0)
     {
 //        qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #e7effd, stop: 1 #cbdaf1);
 //        QLinearGradient grad(QPointF(0,0), QPointF(0,1));
@@ -65,6 +91,10 @@ public:
 
         _hoveredTokenCoreCharFormat.setUnderlineColor(Qt::darkBlue);
         _hoveredTokenCoreCharFormat.setUnderlineStyle(QTextCharFormat::WaveUnderline);
+
+        _coreFormat.setBackground(QBrush(QColor("#dedede")));
+        _tokenFormat.setBackground(QBrush(QColor("#efefef")));
+
     }
 
     bool deletePadCoreAt(int pos)
@@ -84,13 +114,53 @@ public:
         return yes;
     }
 
+    void itemToExtraSelection(PadItem *item)
+    {
+        QTextEdit::ExtraSelection sel;
+        // get token's core
+        PadCore *core = item->getCore();
+        if (core) {
+            QTextCursor c1(_pad->outputDocument());
+            c1.setPosition(item->outputStart());
+            c1.setPosition(core->outputStart(), QTextCursor::KeepAnchor);
+            sel.cursor = c1;
+            sel.format = _tokenFormat;
+            _tokenExtraSelection.insertMulti(item, sel);
+
+            QTextCursor c2(_pad->outputDocument());
+            c2.setPosition(core->outputStart());
+            c2.setPosition(core->outputEnd(), QTextCursor::KeepAnchor);
+            sel.cursor = c2;
+            sel.format = _coreFormat;
+            _tokenExtraSelection.insertMulti(item, sel);
+
+            QTextCursor c3(_pad->outputDocument());
+            c3.setPosition(core->outputEnd());
+            c3.setPosition(item->outputEnd(), QTextCursor::KeepAnchor);
+            sel.cursor = c3;
+            sel.format = _tokenFormat;
+            _tokenExtraSelection.insertMulti(item, sel);
+        } else {
+            QTextCursor c(_pad->outputDocument());
+            c.setPosition(item->outputStart());
+            c.setPosition(item->outputEnd(), QTextCursor::KeepAnchor);
+            sel.cursor = c;
+            sel.format = _tokenFormat;
+            _tokenExtraSelection.insertMulti(item, sel);
+        }
+    }
+
 public:
     PadDocument *_pad;
     PadItem *_lastHoveredItem; // should not be deleted
+//    TokenOutputDocumentControl *_textControl;
     QList<QTextCharFormat> _lastHoveredItemCharFormats, _lastHoveredTokenCoreCharFormats;
     QTextCharFormat _hoveredCharFormat;
     QTextCharFormat _hoveredTokenCoreCharFormat;
     QTextFrameFormat _hoveredFrameFormat;
+    QTextCharFormat _coreFormat;
+    QTextCharFormat _tokenFormat;
+    QMultiMap<PadItem *, QTextEdit::ExtraSelection> _tokenExtraSelection;
 };
 }
 }
@@ -99,11 +169,14 @@ TokenOutputDocument::TokenOutputDocument(QWidget *parent) :
     Editor::TextEditor(parent, TokenOutputDocument::Simple),
     d(new Internal::TokenOutputDocumentPrivate)
 {
+//    d->_textControl = new Internal::TokenOutputDocumentControl(this);
+//    this->setTextControl(d->_textControl);
     setAttribute(Qt::WA_Hover);
     setAcceptDrops(true);
     setContextMenuPolicy(Qt::CustomContextMenu);
     textEdit()->viewport()->installEventFilter(this);
     textEdit()->installEventFilter(this);
+    connect(textEdit(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
 }
 
 TokenOutputDocument::~TokenOutputDocument()
@@ -117,9 +190,16 @@ TokenOutputDocument::~TokenOutputDocument()
 /** Define the PadTools::PadDocument to use with this object */
 void TokenOutputDocument::setPadDocument(PadDocument *pad)
 {
+    if (d->_pad) {
+        disconnect(d->_pad, SIGNAL(cleared()), this, SLOT(onPadCleared()));
+        disconnect(d->_pad, SIGNAL(documentAnalyzeReset()), this, SLOT(onDocumentAnalyzeReset()));
+    }
     d->_pad = pad;
     textEdit()->setDocument(d->_pad->outputDocument());
-    connect(pad, SIGNAL(cleared()), this, SLOT(onPadCleared()));
+    connect(textEdit()->document(), SIGNAL(contentsChange(int,int,int)), this, SLOT(contentChanged(int,int,int)));
+    connect(d->_pad, SIGNAL(cleared()), this, SLOT(onPadCleared()));
+    connect(d->_pad, SIGNAL(documentAnalyzeReset()), this, SLOT(onDocumentAnalyzeReset()));
+    onDocumentAnalyzeReset();
 }
 
 /** Manage PadTools::PadDocument clear signal */
@@ -129,6 +209,15 @@ void TokenOutputDocument::onPadCleared()
         return;
     Constants::removePadFragmentFormat("Hover", document(), d->_lastHoveredItemCharFormats);
     d->_lastHoveredItem = 0;
+}
+
+void TokenOutputDocument::onDocumentAnalyzeReset()
+{
+    // Create extraSelections for the tokens
+    d->_tokenExtraSelection.clear();
+    foreach(PadItem *f, d->_pad->padItems()) {
+        d->itemToExtraSelection(f);
+    }
 }
 
 /** Overwrite the context menu (add token editor action is mouse under a PadTools::PadItem */
@@ -161,24 +250,39 @@ void TokenOutputDocument::editTokenUnderCursor()
     int position = textCursor().position();
     PadItem *item = d->_pad->padItemForOutputPosition(position);
     if (item) {
-        TokenEditor editor(this);
-        PadFragment *f = item->fragment(PadItem::Core);
-        editor.setTokenName(d->_pad->fragmentRawSource(f));
-        PadFragment *bef = item->fragment(PadItem::DefinedCore_PrependText);
-        PadFragment *aft = item->fragment(PadItem::DefinedCore_AppendText);
-        editor.setConditionnalHtml(d->_pad->fragmentHtmlOutput(bef), d->_pad->fragmentHtmlOutput(aft));
-        if (editor.exec()==QDialog::Accepted) {
-            // Remove rawSource PadItem
-            QTextCursor cursor(d->_pad->rawSourceDocument());
-            cursor.setPosition(item->start());
-            cursor.setPosition(item->end(), QTextCursor::KeepAnchor);
-            cursor.removeSelectedText();
-            // Insert new Item in rawSource
-            cursor.setPosition(item->start());
-            cursor.insertHtml(editor.toRawSourceHtml());
-            // Reset _pad
-//            d->_pad->softReset();
-        }
+        /** \todo recode here: no mode PadItem::fragment() */
+//        TokenEditor editor(this);
+//        PadFragment *f = item->getCore();
+//        editor.setTokenName(d->_pad->fragmentRawSource(f));
+//        PadFragment *bef = item->fragment(PadItem::DefinedCore_PrependText);
+//        PadFragment *aft = item->fragment(PadItem::DefinedCore_AppendText);
+//        editor.setConditionnalHtml(d->_pad->fragmentHtmlOutput(bef), d->_pad->fragmentHtmlOutput(aft));
+//        if (editor.exec()==QDialog::Accepted) {
+//            // Remove rawSource PadItem
+//            QTextCursor cursor(d->_pad->rawSourceDocument());
+//            cursor.setPosition(item->start());
+//            cursor.setPosition(item->end(), QTextCursor::KeepAnchor);
+//            cursor.removeSelectedText();
+//            // Insert new Item in rawSource
+//            cursor.setPosition(item->start());
+//            cursor.insertHtml(editor.toRawSourceHtml());
+//            // Reset _pad
+////            d->_pad->softReset();
+//        }
+    }
+}
+
+/** Manages the text selection according to the tokens. */
+void TokenOutputDocument::selectionChanged()
+{
+    // mirror the selection in rawSource document
+    QTextCursor output(document());
+    if (output.hasSelection()) {
+        int start = d->_pad->positionTranslator().outputToRaw(output.selectionStart());
+        int end = d->_pad->positionTranslator().outputToRaw(output.selectionEnd());
+        QTextCursor cursor(d->_pad->rawSourceDocument());
+        cursor.setPosition(start);
+        cursor.setPosition(end, QTextCursor::KeepAnchor);
     }
 }
 
@@ -310,6 +414,9 @@ bool TokenOutputDocument::event(QEvent *event)
     if (!d->_pad)
         return Editor::TextEditor::event(event);
 
+    QTime c;
+    c.start();
+
     if (event->type()==QEvent::HoverMove) {
         /** \todo improve PadCore highlighting */
         QHoverEvent *me = static_cast<QHoverEvent*>(event);
@@ -319,11 +426,9 @@ bool TokenOutputDocument::event(QEvent *event)
                 return true;
         }
         PadItem *item = d->_pad->padItemForOutputPosition(position);
-        QTextDocument *doc = document();
         if (!item) {
             if (d->_lastHoveredItem) {
-                Constants::removePadFragmentFormat("Hover", doc, d->_lastHoveredItemCharFormats);
-                Constants::removePadFragmentFormat("CoreH", doc, d->_lastHoveredTokenCoreCharFormats);
+                textEdit()->setExtraSelections(QList<QTextEdit::ExtraSelection>());
                 d->_lastHoveredItem = 0;
             }
             return Editor::TextEditor::event(event);
@@ -332,20 +437,18 @@ bool TokenOutputDocument::event(QEvent *event)
         if (d->_lastHoveredItem) {
             if (d->_lastHoveredItem == item)
                 return true;
-            Constants::removePadFragmentFormat("Hover", doc, d->_lastHoveredItemCharFormats);
-            Constants::removePadFragmentFormat("CoreH", doc, d->_lastHoveredTokenCoreCharFormats);
+            textEdit()->setExtraSelections(QList<QTextEdit::ExtraSelection>());
             d->_lastHoveredItem = item;
         } else {
             d->_lastHoveredItem = item;
         }
-        if (d->_lastHoveredItem->getCore())
-            Constants::setPadFragmentFormat("CoreH", d->_lastHoveredItem->getCore()->outputStart(), d->_lastHoveredItem->getCore()->outputEnd(), doc, d->_lastHoveredTokenCoreCharFormats, d->_hoveredTokenCoreCharFormat);
-        Constants::setPadFragmentFormat("Hover", d->_lastHoveredItem->outputStart(), d->_lastHoveredItem->outputEnd(), doc, d->_lastHoveredItemCharFormats, d->_hoveredCharFormat);
+        textEdit()->setExtraSelections(d->_tokenExtraSelection.values(item));
+
+        Utils::Log::logTimeElapsed(c, "TokenOutputDocument", "Hover");
         me->accept();
         return Editor::TextEditor::event(event);
     } else if (event->type()==QEvent::HoverLeave && d->_lastHoveredItem) {
-        Constants::removePadFragmentFormat("Hover", document(), d->_lastHoveredItemCharFormats);
-        Constants::removePadFragmentFormat("CoreH", document(), d->_lastHoveredTokenCoreCharFormats);
+        textEdit()->setExtraSelections(QList<QTextEdit::ExtraSelection>());
         d->_lastHoveredItem = 0;
         event->accept();
         return Editor::TextEditor::event(event);
@@ -376,6 +479,13 @@ bool TokenOutputDocument::eventFilter(QObject *o, QEvent *e)
             QKeyEvent *kevent = static_cast<QKeyEvent*>(e);
             if (!kevent)
                 return false;
+
+            // Matches Cut shortcut ?
+            if (kevent->matches(QKeySequence::Cut)) {
+                // Cut
+            } else if (kevent->matches(QKeySequence::Delete)) {
+                // Delete
+            }
 
             // Manage autoRepeat keys
             switch (kevent->key()) {
@@ -427,7 +537,15 @@ bool TokenOutputDocument::eventFilter(QObject *o, QEvent *e)
             QKeyEvent *kevent = static_cast<QKeyEvent*>(e);
             if (!kevent)
                 return false;
-                    switch (kevent->key()) {
+
+            // Matches Cut shortcut ?
+            if (kevent->matches(QKeySequence::Cut)) {
+                // Cut
+            } else if (kevent->matches(QKeySequence::Delete)) {
+                // Delete
+            }
+
+            switch (kevent->key()) {
             //        case Qt::Key_Left:
             ////            if (l->cursorPosition()==0) {
             ////                setCursorPosition(currentId, -1);
@@ -437,39 +555,45 @@ bool TokenOutputDocument::eventFilter(QObject *o, QEvent *e)
             //        case Qt::Key_Right:
             //            return true;
             //            break;
-                    case Qt::Key_Delete:
-                    {
-                        qWarning() << "DEL RELEASED" << textCursor().position() << kevent->isAutoRepeat();
-                        int newPosition = textCursor().position()+1;
-                        if (d->deletePadCoreAt(newPosition)) {
-                            if (d->userWantsToDeletePadItem(newPosition)) {
-                                PadItem *item = d->_pad->padItemForOutputPosition(newPosition);
-                                d->_pad->removeAndDeleteFragment(item);
-                                d->_pad->softReset();
-                            }
-                        } else {
-                            //////////////// HERE /////////////
-//                            d->_pad->removeOutputCharAt(newPosition);
-                        }
-                        return true;
+            case Qt::Key_Delete:
+            {
+                qWarning() << "DEL RELEASED" << textCursor().position() << kevent->isAutoRepeat();
+                int newPosition = textCursor().position()+1;
+                if (d->deletePadCoreAt(newPosition)) {
+                    if (d->userWantsToDeletePadItem(newPosition)) {
+                        PadItem *item = d->_pad->padItemForOutputPosition(newPosition);
+                        d->_pad->removeAndDeleteFragment(item);
+                        d->_pad->softReset();
                     }
-                    case Qt::Key_Backspace:
-                    {
-                        qWarning() << "BACKSPACE RELEASED" << textCursor().position() << kevent->isAutoRepeat();
-                        int newPosition = textCursor().position()-1;
-                        if (d->deletePadCoreAt(newPosition)) {
-                            if (d->userWantsToDeletePadItem(newPosition)) {
-                                PadItem *item = d->_pad->padItemForOutputPosition(newPosition);
-                                d->_pad->removeAndDeleteFragment(item);
-                                d->_pad->softReset();
-                            }
-                        }
-                        return true;
+                } else {
+                    //////////////// HERE /////////////
+                    //                            d->_pad->removeOutputCharAt(newPosition);
+                }
+                return true;
+            }
+            case Qt::Key_Backspace:
+            {
+                qWarning() << "BACKSPACE RELEASED" << textCursor().position() << kevent->isAutoRepeat();
+                int newPosition = textCursor().position()-1;
+                if (d->deletePadCoreAt(newPosition)) {
+                    if (d->userWantsToDeletePadItem(newPosition)) {
+                        PadItem *item = d->_pad->padItemForOutputPosition(newPosition);
+                        d->_pad->removeAndDeleteFragment(item);
+                        d->_pad->softReset();
                     }
-                    default: return false;
-                    }
+                }
+                return true;
+            }
+            default: return false;
+            }
         }
     }
 
     return QWidget::eventFilter(o, e);
+}
+
+/** Keep PadDocument sync to the output QTextDocument */
+void TokenOutputDocument::contentChanged(const int pos, const int ins, const int rm)
+{
+    qWarning() << "contentChanged pos" << pos << "ins" << ins << "rm" << rm;
 }

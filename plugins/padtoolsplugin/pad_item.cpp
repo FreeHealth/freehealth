@@ -252,15 +252,15 @@ QList<PadFragment*> PadItem::children() const
 	return fragments;
 }
 
-/** Find PadFragment according to its \e type. \sa PadItem::PadStringType */
-PadFragment *PadItem::fragment(const int type) const
-{
-    foreach (PadFragment *fragment, _fragments) {
-//        if (fragment->userData(Constants::USERDATA_KEY_PADITEM).toInt() == type)
-//            return fragment;
-    }
-    return 0;
-}
+///** Find PadFragment according to its \e type. \sa PadItem::PadStringType */
+//PadFragment *PadItem::fragment(const int type) const
+//{
+//    foreach (PadFragment *fragment, _fragments) {
+////        if (fragment->userData(Constants::USERDATA_KEY_PADITEM).toInt() == type)
+////            return fragment;
+//    }
+//    return 0;
+//}
 
 void PadItem::addDelimiter(const int posInRaw, const int size)
 {

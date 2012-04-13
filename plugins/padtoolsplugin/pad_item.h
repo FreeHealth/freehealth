@@ -104,7 +104,7 @@ public:
     PadItem() : PadFragment() {}
 	virtual ~PadItem();
 
-    PadFragment *fragment(const int type) const;
+//    PadFragment *fragment(const int type) const;
 
     void addDelimiter(const int posInRaw, const int size);
 
