@@ -54,9 +54,6 @@ const char * const FIND_CURSOR_IN_RESULT = QT_TRANSLATE_NOOP("PadWriter", "Find 
 const char * const AUTO_UPDATE_RESULT = QT_TRANSLATE_NOOP("PadWriter", "Automatic update of results");
 const char * const SET_TEST_VALUE_TO_TOKENS = QT_TRANSLATE_NOOP("PadWriter", "Set a test value to all available tokens");
 
-void setPadFragmentFormat(const QString &tag, int s, int e, QTextDocument *doc, QList<QTextCharFormat> &formats, QTextCharFormat mergeFormat);
-void removePadFragmentFormat(const QString &tag, QTextDocument *doc, QList<QTextCharFormat> &formats);
-
 }  // namespace Constants
 }  // namespace PadTools
 
