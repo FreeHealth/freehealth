@@ -103,17 +103,13 @@ bool receiptsEngine::insertIntoAccount(const QHash<int,QVariant> &hashValues, co
                                                                     << m_mpmodel->lastError().text() ;
                 }
         }
-        if (!m_mpmodel->submit())
+        if (!m_mpmodel->AccountModel::submit())
         {
         	  qWarning() << __FILE__ << QString::number(__LINE__) << " submit error = " 
         	                         << m_mpmodel->lastError().text() ;
+        	  ret = false;
             }
 
-
-    if (m_mpmodel->rowCount(QModelIndex()) == rowBefore) {
-        Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("Error = ") + m_mpmodel->lastError().text());
-        ret = false;
-    }
     return ret;
 }
 

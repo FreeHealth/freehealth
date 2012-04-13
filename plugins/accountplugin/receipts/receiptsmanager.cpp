@@ -530,7 +530,7 @@ bool ReceiptsManager::getpreferredValues(){
 
 QStringList ReceiptsManager::getChoiceFromCategories(QString & categoriesItem){
     QStringList listOfItems;
-    QSqlDatabase db = QSqlDatabase::database(freeaccount);
+    QSqlDatabase db = QSqlDatabase::database(Constants::DB_ACCOUNTANCY);
     QString item = categoriesItem;
     if (WarnDebugMessage)
     	      qDebug()  << __FILE__ << QString::number(__LINE__) << " categories item ="+item;

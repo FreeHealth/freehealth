@@ -24,7 +24,7 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main Developers : Pierre-Marie DESOMBRE <pm.desombre@medsyn.fr>,      *
+ *  Main Developers : Pierre-Marie DESOMBRE <pm.desombre@medsyn.fr>,       *
  *                     Eric MAEKER, <eric.maeker@gmail.com>                *
  *  Contributors :                                                         *
  *      NAME <MAIL@ADDRESS.COM>                                            *
@@ -47,7 +47,7 @@
 #include <QColor>
 #include <QMouseEvent>
 
-enum { WarnDebugMessage = true };
+enum { WarnDebugMessage = false };
 
 using namespace ChoiceActions;
 using namespace Trans::ConstantTranslations;
@@ -422,6 +422,7 @@ QList<double> choiceDialog::listOfPercentValues(){
 
 void choiceDialog::beforeAccepted(){
      receiptsEngine rIO;
+
      if (WarnDebugMessage)
          qDebug() << __FILE__ << QString::number(__LINE__) << " m_insuranceUid =" << QString::number(m_insuranceUid.toInt()) ;
      QString debtor = rIO.getStringFromInsuranceUid(m_insuranceUid);
@@ -481,7 +482,8 @@ QStandardItemModel * choiceDialog::getChoicePercentageDebtorSiteDistruleModel(){
 }
 
 QVariant choiceDialog::firstItemchosenAsPreferential(QString & item)
-{if (WarnDebugMessage)
+{
+    if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " item =" << item ;
     QVariant variantValue = QVariant("No item");
     ReceiptsManager manager;
