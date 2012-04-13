@@ -39,6 +39,9 @@ global_resources/datapacks/http_zip/drugs/*/*db.zip
 # Docs imported from the project wiki
 global_resources/doc/*/*/html/*
 
+# Api doc created with doxygen
+doc/doxygen/
+
 # Working places
 global_resources/datapacks/install/*
 global_resources/datapacks/tmp/*
