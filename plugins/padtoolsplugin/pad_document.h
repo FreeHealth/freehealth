@@ -100,7 +100,8 @@ public:
     void run(QMap<QString,QVariant> &tokens);
 
     // do not return children padfragment
-    virtual QList<PadFragment*> children() const {return QList<PadFragment*>();}
+    QList<PadFragment*> children() const {return QList<PadFragment*>();}
+    QList<PadItem*> padItems() const {return _items;}
 
     // Debug
     void debug(int indent = 0) const;
@@ -108,6 +109,7 @@ public:
 Q_SIGNALS:
     void cleared();
     void padFragmentChanged(PadFragment *fragment);
+    void documentAnalyzeReset();
 
 private:
 

@@ -153,6 +153,7 @@ void PadDocument::clear()
 {
     qDeleteAll(_fragments);
     _fragments.clear();
+    _items.clear();
 //    if (_rawSource.isEmpty()) {
 ////        disconnect(_docSource, SIGNAL(contentsChange(int,int,int)), this, SLOT(rawSourceContentsChanged(int,int,int)));
 //        _docSource = 0;
@@ -352,7 +353,12 @@ void PadDocument::run(QMap<QString,QVariant> &tokens)
 {
 //    if (_docOutput && _docOutput->parent() == this)
 //        delete _docOutput;
-    _docOutput = _docSource->clone(this);
+//    _docOutput = _docSource->clone(this);
+    if (!_docOutput) {
+        _docOutput = new QTextDocument(this);
+    }
+    _docOutput->clear();
+    _docOutput->setHtml(_docSource->toHtml());
 
     // sync raw && output ranges of all fragments
     foreach (PadFragment *fragment, _fragments)
@@ -362,8 +368,11 @@ void PadDocument::run(QMap<QString,QVariant> &tokens)
     foreach (PadFragment *fragment, _fragments)
         fragment->run(tokens, this);
 
-//    positionTranslator().debug();
+    //    positionTranslator().debug();
 //    debug();
+
+    // emit end signal
+    Q_EMIT documentAnalyzeReset();
 }
 
 /** Clear the PadDocument without deleting sources. */
@@ -375,6 +384,7 @@ void PadDocument::softReset()
 //    clear();
     qDeleteAll(_fragments);
     _fragments.clear();
+    _items.clear();
     _docOutput->clear();
 
     PadAnalyzer a;
