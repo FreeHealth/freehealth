@@ -130,8 +130,6 @@ using namespace PadTools;
 PadFragment::PadFragment(PadFragment *parent) :
     _start(-1), _end(-1),
     _outputStart(-1), _outputEnd(-1),
-    _beginDelimStart(-1), _beginDelimLength(-1),
-    _endDelimStart(-1), _endDelimLength(-1),
     _parent(parent),
     _id(-1)
 {

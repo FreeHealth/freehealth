@@ -353,8 +353,6 @@ PadCore *PadAnalyzerPrivate::nextCore()
 		return 0;
 	}
     core->setEnd(_curPos);
-    core->setBeginDelimiter(core->start(), size);
-    core->setEndDelimiter(core->end() - size, size);
     core->setName(getStringAt(core->start() + size, _document, core->rawLength() - (size*2)));
     return core;
 }

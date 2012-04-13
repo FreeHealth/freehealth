@@ -54,13 +54,6 @@ public:
     int end() const { return _end; }
     void setEnd(int end) { _end = end; }
 
-    void setBeginDelimiter(int startPos, int size) {_beginDelimStart = startPos; _beginDelimLength = size;}
-    int beginDelimiterStartPos() const {return _beginDelimStart;}
-    int beginDelimiterSize() const {return _beginDelimLength;}
-    void setEndDelimiter(int startPos, int size) {_endDelimStart = startPos; _endDelimLength = size;}
-    int endDelimiterStartPos() const {return _endDelimStart;}
-    int endDelimiterSize() const {return _endDelimLength;}
-
     int rawLength() const {return _end - _start;}
     int outputLength() const {return _outputEnd - _outputStart;}
 
@@ -78,9 +71,6 @@ public:
 
     void setToolTip(const QString &tooltip) {_toolTip = tooltip;}
     const QString &toolTip() const {return _toolTip;}
-
-    void setUserData(const QString &key, const QVariant &value) {_userData.insert(key, value);}
-    QVariant userData(const QString &key) const {return _userData.value(key);}
 
     virtual void run(QMap<QString,QVariant> &tokens) = 0;
     virtual void run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out) = 0;
@@ -101,13 +91,11 @@ protected:
     int _start; // index of the first char in the text
     int _end; // index of the last char in the text
     mutable int _outputStart, _outputEnd;
-    int _beginDelimStart, _beginDelimLength, _endDelimStart, _endDelimLength;
 
 private:
     PadFragment *_parent;
     long long _id; // unique identifier
     QString _toolTip;
-    QHash<QString, QVariant> _userData;
 };
 
 }  // PadTools
