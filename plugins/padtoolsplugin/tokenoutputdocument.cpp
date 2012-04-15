@@ -485,15 +485,14 @@ bool TokenOutputDocument::eventFilter(QObject *o, QEvent *e)
     // Catch KeyEvent in QTextEdit
     if (o==textEdit()) {
         if (e->type() == QEvent::KeyPress) {
-            QTextCursor cursor(textEdit()->document());
+            QTextCursor cursor = textEdit()->textCursor();
             if (!d->posIsEditable(cursor.position())) {
                 e->ignore();
                 return true;
             }
             textEdit()->setExtraSelections(QList<QTextEdit::ExtraSelection>());
         } else if (e->type() == QEvent::KeyRelease) {
-            QTextCursor cursor(textEdit()->document());
-            qWarning() << "posIsEditable" << d->posIsEditable(cursor.position());
+            QTextCursor cursor = textEdit()->textCursor();
             if (!d->posIsEditable(cursor.position())) {
                 e->ignore();
                 return true;
