@@ -44,8 +44,8 @@ public:
 
 	void debug(int indent = 0) const;
 
-    void run(QMap<QString,QVariant> &);
-    void run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out);
+//    void run(QMap<QString,QVariant> &);
+//    void run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out);
     void run(QMap<QString,QVariant> &tokens, PadDocument *document);
 
 private:

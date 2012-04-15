@@ -80,8 +80,8 @@ public:
 
     void debug(int indent = 0) const;
 
-    void run(QMap<QString,QVariant> &tokens);
-    void run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *output);
+//    void run(QMap<QString,QVariant> &tokens);
+//    void run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *output);
     void run(QMap<QString,QVariant> &tokens, PadDocument *document);
 
 
@@ -110,8 +110,8 @@ public:
 
     void debug(int indent = 0) const;
 
-    void run(QMap<QString,QVariant> &tokens);
-    void run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out);
+//    void run(QMap<QString,QVariant> &tokens);
+//    void run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out);
     void run(QMap<QString,QVariant> &tokens, PadDocument *document);
 
     QList<PadFragment*> children() const;

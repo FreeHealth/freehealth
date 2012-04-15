@@ -44,22 +44,22 @@ void PadString::debug(int indent) const
 }
 
 /** Paste the content of a string fragment in the output. */
-void PadString::run(QMap<QString,QVariant> &)
-{
-//    /** \todo use this output only if HTML is requested */
-//    if (start() > 0) {
-//        return QString(Constants::TOKEN_AND_POSITION_TAG)
-//                .arg(_string).arg(id());
-//    }
-//    return _string;
-}
+//void PadString::run(QMap<QString,QVariant> &)
+//{
+////    /** \todo use this output only if HTML is requested */
+////    if (start() > 0) {
+////        return QString(Constants::TOKEN_AND_POSITION_TAG)
+////                .arg(_string).arg(id());
+////    }
+////    return _string;
+//}
 
-/** Paste the content of a string fragment in the output. */
-void PadString::run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out)
-{
-    Q_UNUSED(tokens);
-    insertFragment(source, out);
-}
+///** Paste the content of a string fragment in the output. */
+//void PadString::run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out)
+//{
+//    Q_UNUSED(tokens);
+////    insertFragment(source, out);
+//}
 
 void PadString::run(QMap<QString,QVariant> &tokens, PadDocument *document)
 {

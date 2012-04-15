@@ -57,8 +57,8 @@ public:
     int rawLength() const {return _end - _start;}
     int outputLength() const {return _outputEnd - _outputStart;}
 
-    void move(int nbChars);
-    void moveEnd(int nbOfChars);
+    void translateOutput(int nbChars);
+    void moveOutputEnd(int nbOfChars);
 
     void setOutputStart(const int pos) {_outputStart = pos;}
     void setOutputEnd(const int pos) {_outputEnd = pos;}
@@ -72,8 +72,6 @@ public:
     void setToolTip(const QString &tooltip) {_toolTip = tooltip;}
     const QString &toolTip() const {return _toolTip;}
 
-    virtual void run(QMap<QString,QVariant> &tokens) = 0;
-    virtual void run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out) = 0;
     virtual void run(QMap<QString,QVariant> &tokens, PadDocument *document) = 0;
 
     virtual void addChild(PadFragment *fragment);
@@ -83,8 +81,10 @@ public:
     virtual PadFragment *padFragmentForSourcePosition(int pos) const;
     virtual PadFragment *padFragmentForOutputPosition(int pos) const;
 
-    void insertFragment(QTextDocument *source, QTextDocument *out) const;
-    void insertText(QTextDocument *out, const QString &text) const;
+    virtual void outputPosChanged(const int oldPos, const int newPos);
+
+//    void insertFragment(QTextDocument *source, QTextDocument *out) const;
+//    void insertText(QTextDocument *out, const QString &text) const;
 
 protected:
     QList<PadFragment *> _fragments;

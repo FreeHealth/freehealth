@@ -79,6 +79,10 @@ public:
     void addChild(PadFragment *fragment);
     void removeAndDeleteFragment(PadFragment *fragment);
 
+    // Inform on analyze
+    void beginRawSourceAnalyze();
+    void endRawSourceAnalyze();
+
     // Extract text from source && output
     QString fragmentRawSource(PadFragment *fragment) const;
     QString fragmentHtmlOutput(PadFragment *fragment) const;
@@ -93,9 +97,10 @@ public:
     PadFragment *padFragmentForOutputPosition(int outputPos) const;
     QTextCursor rawSourceCursorForOutputPosition(int outputPos);
     PadPositionTranslator &positionTranslator() {return _posTrans;}
+    void outputPosChanged(const int oldPos, const int newPos);
 
     // Start replacement of tokens
-    void run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out);
+//    void run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out);
     void run(QMap<QString,QVariant> &, PadDocument *) {/* Should never be used*/}
     void run(QMap<QString,QVariant> &tokens);
 
@@ -107,9 +112,14 @@ public:
     void debug(int indent = 0) const;
 
 Q_SIGNALS:
+    void aboutToClear();
     void cleared();
     void padFragmentChanged(PadFragment *fragment);
-    void documentAnalyzeReset();
+    void rawSourceAnalyzeStarted();
+    void rawSourceAnalyseFinished();
+    void beginTokenReplacement();
+    void endTokenReplacement();
+
 
 private:
 

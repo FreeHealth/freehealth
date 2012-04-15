@@ -63,6 +63,10 @@ private Q_SLOTS:
     void contextMenu(const QPoint &pos);
     void editTokenUnderCursor();
     void selectionChanged();
+    void connectPadDocument();
+    void disconnectPadDocument();
+    void connectOutputDocumentChanges();
+    void disconnectOutputDocumentChanges();
     void contentChanged(const int pos, const int rm, const int ins);
 
 protected:

@@ -84,20 +84,25 @@ public:
     {
 //        qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #e7effd, stop: 1 #cbdaf1);
 //        QLinearGradient grad(QPointF(0,0), QPointF(0,1));
-//        grad.setColorAt(0, QColor(Qt::lightGray).lighter(50));
+//        grad.setColorAt(0, QColor(Qt::lightGray));
+//        grad.setColorAt(0.8, Qt::white);
 //        grad.setColorAt(1, QColor(Qt::lightGray));
-        QBrush brush(QColor("#eeeeee"));
-        _hoveredCharFormat.setBackground(brush);
+//        QBrush brush(QColor("#eeeeee"));
+//        _hoveredCharFormat.setBackground(grad);
 
         _hoveredTokenCoreCharFormat.setUnderlineColor(Qt::darkBlue);
         _hoveredTokenCoreCharFormat.setUnderlineStyle(QTextCharFormat::WaveUnderline);
 
-        _coreFormat.setBackground(QBrush(QColor("#dedede")));
-        _tokenFormat.setBackground(QBrush(QColor("#efefef")));
-
+        _coreFormat.setBackground(QBrush(QColor("#FFF8C6"))); //("#dedeff")));
+        _tokenFormat.setBackground(QBrush(QColor("#FDEEF4"))); //"#efefef")));
     }
 
-    bool deletePadCoreAt(int pos)
+    bool posIsEditable(const int pos)
+    {
+        return !padCoreAt(pos);
+    }
+
+    bool padCoreAt(const int pos)
     {
         PadCore *core = dynamic_cast<PadCore*>(_pad->padFragmentForOutputPosition(pos));
         return (core!=0);
@@ -120,6 +125,8 @@ public:
         // get token's core
         PadCore *core = item->getCore();
         if (core) {
+            if (item->outputStart() == item->outputEnd())
+                return;
             QTextCursor c1(_pad->outputDocument());
             c1.setPosition(item->outputStart());
             c1.setPosition(core->outputStart(), QTextCursor::KeepAnchor);
@@ -191,30 +198,32 @@ TokenOutputDocument::~TokenOutputDocument()
 void TokenOutputDocument::setPadDocument(PadDocument *pad)
 {
     if (d->_pad) {
-        disconnect(d->_pad, SIGNAL(cleared()), this, SLOT(onPadCleared()));
-        disconnect(d->_pad, SIGNAL(documentAnalyzeReset()), this, SLOT(onDocumentAnalyzeReset()));
+        disconnectPadDocument();
     }
     d->_pad = pad;
     textEdit()->setDocument(d->_pad->outputDocument());
-    connect(textEdit()->document(), SIGNAL(contentsChange(int,int,int)), this, SLOT(contentChanged(int,int,int)));
-    connect(d->_pad, SIGNAL(cleared()), this, SLOT(onPadCleared()));
-    connect(d->_pad, SIGNAL(documentAnalyzeReset()), this, SLOT(onDocumentAnalyzeReset()));
+    connectPadDocument();
+    connectOutputDocumentChanges();
     onDocumentAnalyzeReset();
 }
 
 /** Manage PadTools::PadDocument clear signal */
 void TokenOutputDocument::onPadCleared()
 {
+    d->_tokenExtraSelection.clear();
     if (!d->_lastHoveredItem)
         return;
-    Constants::removePadFragmentFormat("Hover", document(), d->_lastHoveredItemCharFormats);
+//    Constants::removePadFragmentFormat("Hover", document(), d->_lastHoveredItemCharFormats);
     d->_lastHoveredItem = 0;
 }
 
+/** Reset view when Padtools::PadDocument reset its token analyze. \sa PadTools::PadDocument::documentAnalyzeReset() */
 void TokenOutputDocument::onDocumentAnalyzeReset()
 {
     // Create extraSelections for the tokens
+    textEdit()->setExtraSelections(QList<QTextEdit::ExtraSelection>());
     d->_tokenExtraSelection.clear();
+    d->_lastHoveredItem = 0;
     foreach(PadItem *f, d->_pad->padItems()) {
         d->itemToExtraSelection(f);
     }
@@ -336,7 +345,7 @@ void TokenOutputDocument::dropEvent(QDropEvent *event)
     if (!d->_pad)
         return;
 
-    if (underMouse()) {
+    if (textEdit()->underMouse()) {
         // Where did the user drop the token ?
         QTextCursor cursor = d->_pad->rawSourceCursorForOutputPosition(this->cursorForPosition(event->pos()).position());
         int pos = cursor.position();
@@ -475,125 +484,188 @@ bool TokenOutputDocument::eventFilter(QObject *o, QEvent *e)
 
     // Catch KeyEvent in QTextEdit
     if (o==textEdit()) {
-        if (e->type()==QEvent::KeyPress) {
-            QKeyEvent *kevent = static_cast<QKeyEvent*>(e);
-            if (!kevent)
-                return false;
-
-            // Matches Cut shortcut ?
-            if (kevent->matches(QKeySequence::Cut)) {
-                // Cut
-            } else if (kevent->matches(QKeySequence::Delete)) {
-                // Delete
-            }
-
-            // Manage autoRepeat keys
-            switch (kevent->key()) {
-            //        case Qt::Key_Left:
-            //            if (l->cursorPosition()==0)
-            //                setCursorPosition(currentId, -1);
-            //            break;
-            //        case Qt::Key_Right:  // Ok
-            //            if (l->cursorPosition()==m_NbChars.at(currentId)) {
-            //                nextTab = currentId+1;
-            //                if (nextTab >= m_Edits.count())
-            //                    return true;
-            //                setCursorPosition(nextTab, 0);
-            //                return true;
-            //            }
-            //            break;
-            case Qt::Key_Backspace:
-            {
-                qWarning() << "BACKSPACE PRESSED" << textCursor().position() << kevent->isAutoRepeat();
-                if (kevent->isAutoRepeat()) {
-                    // if the next deleted char == PadCore
-                    // ask user if he wants to totally removed the PadItem
-                    //                int pos = l->cursorPosition();
-                    //                removeChar(currentId, pos);
-                    //                --pos;
-                    //                if (pos==0) --pos;
-                    //                setCursorPosition(currentId, pos);
-                }
+        if (e->type() == QEvent::KeyPress) {
+            QTextCursor cursor(textEdit()->document());
+            if (!d->posIsEditable(cursor.position())) {
                 e->ignore();
                 return true;
-                break;
             }
-            case Qt::Key_Delete:
-                qWarning() << "DEL PRESSED" << textCursor().position() << kevent->isAutoRepeat();
-                if (kevent->isAutoRepeat()) {
-                    // if the next deleted char == PadCore
-                    // ask user if he wants to totally removed the PadItem
-                    //                int pos = l->cursorPosition();
-                    //                ++pos;
-                    //                removeChar(currentId, pos);
-                    //                setCursorPosition(currentId, pos-1);
-                }
+            textEdit()->setExtraSelections(QList<QTextEdit::ExtraSelection>());
+        } else if (e->type() == QEvent::KeyRelease) {
+            QTextCursor cursor(textEdit()->document());
+            qWarning() << "posIsEditable" << d->posIsEditable(cursor.position());
+            if (!d->posIsEditable(cursor.position())) {
                 e->ignore();
                 return true;
-            default: return false;
-            }
-
-        } else if (e->type()==QEvent::KeyRelease) {
-            QKeyEvent *kevent = static_cast<QKeyEvent*>(e);
-            if (!kevent)
-                return false;
-
-            // Matches Cut shortcut ?
-            if (kevent->matches(QKeySequence::Cut)) {
-                // Cut
-            } else if (kevent->matches(QKeySequence::Delete)) {
-                // Delete
-            }
-
-            switch (kevent->key()) {
-            //        case Qt::Key_Left:
-            ////            if (l->cursorPosition()==0) {
-            ////                setCursorPosition(currentId, -1);
-            //                return true;
-            ////            }
-            //            break;
-            //        case Qt::Key_Right:
-            //            return true;
-            //            break;
-            case Qt::Key_Delete:
-            {
-                qWarning() << "DEL RELEASED" << textCursor().position() << kevent->isAutoRepeat();
-                int newPosition = textCursor().position()+1;
-                if (d->deletePadCoreAt(newPosition)) {
-                    if (d->userWantsToDeletePadItem(newPosition)) {
-                        PadItem *item = d->_pad->padItemForOutputPosition(newPosition);
-                        d->_pad->removeAndDeleteFragment(item);
-                        d->_pad->softReset();
-                    }
-                } else {
-                    //////////////// HERE /////////////
-                    //                            d->_pad->removeOutputCharAt(newPosition);
-                }
-                return true;
-            }
-            case Qt::Key_Backspace:
-            {
-                qWarning() << "BACKSPACE RELEASED" << textCursor().position() << kevent->isAutoRepeat();
-                int newPosition = textCursor().position()-1;
-                if (d->deletePadCoreAt(newPosition)) {
-                    if (d->userWantsToDeletePadItem(newPosition)) {
-                        PadItem *item = d->_pad->padItemForOutputPosition(newPosition);
-                        d->_pad->removeAndDeleteFragment(item);
-                        d->_pad->softReset();
-                    }
-                }
-                return true;
-            }
-            default: return false;
             }
         }
     }
+//            QKeyEvent *kevent = static_cast<QKeyEvent*>(e);
+//            if (!kevent)
+//                return false;
+
+//            // Matches Cut shortcut ?
+//            if (kevent->matches(QKeySequence::Cut)) {
+//                // Cut
+//            } else if (kevent->matches(QKeySequence::Delete)) {
+//                // Delete
+//            }
+
+//            // Manage autoRepeat keys
+//            switch (kevent->key()) {
+//            //        case Qt::Key_Left:
+//            //            if (l->cursorPosition()==0)
+//            //                setCursorPosition(currentId, -1);
+//            //            break;
+//            //        case Qt::Key_Right:  // Ok
+//            //            if (l->cursorPosition()==m_NbChars.at(currentId)) {
+//            //                nextTab = currentId+1;
+//            //                if (nextTab >= m_Edits.count())
+//            //                    return true;
+//            //                setCursorPosition(nextTab, 0);
+//            //                return true;
+//            //            }
+//            //            break;
+//            case Qt::Key_Backspace:
+//            {
+//                qWarning() << "BACKSPACE PRESSED" << textCursor().position() << kevent->isAutoRepeat();
+//                if (kevent->isAutoRepeat()) {
+//                    // if the next deleted char == PadCore
+//                    // ask user if he wants to totally removed the PadItem
+//                    //                int pos = l->cursorPosition();
+//                    //                removeChar(currentId, pos);
+//                    //                --pos;
+//                    //                if (pos==0) --pos;
+//                    //                setCursorPosition(currentId, pos);
+//                }
+//                e->ignore();
+//                return true;
+//                break;
+//            }
+//            case Qt::Key_Delete:
+//                qWarning() << "DEL PRESSED" << textCursor().position() << kevent->isAutoRepeat();
+//                if (kevent->isAutoRepeat()) {
+//                    // if the next deleted char == PadCore
+//                    // ask user if he wants to totally removed the PadItem
+//                    //                int pos = l->cursorPosition();
+//                    //                ++pos;
+//                    //                removeChar(currentId, pos);
+//                    //                setCursorPosition(currentId, pos-1);
+//                }
+//                e->ignore();
+//                return true;
+//            default: return false;
+//            }
+
+//        } else if (e->type()==QEvent::KeyRelease) {
+//            QKeyEvent *kevent = static_cast<QKeyEvent*>(e);
+//            if (!kevent)
+//                return false;
+
+//            // Matches Cut shortcut ?
+//            if (kevent->matches(QKeySequence::Cut)) {
+//                // Cut
+//            } else if (kevent->matches(QKeySequence::Delete)) {
+//                // Delete
+//            }
+
+//            switch (kevent->key()) {
+//            //        case Qt::Key_Left:
+//            ////            if (l->cursorPosition()==0) {
+//            ////                setCursorPosition(currentId, -1);
+//            //                return true;
+//            ////            }
+//            //            break;
+//            //        case Qt::Key_Right:
+//            //            return true;
+//            //            break;
+//            case Qt::Key_Delete:
+//            {
+//                qWarning() << "DEL RELEASED" << textCursor().position() << kevent->isAutoRepeat();
+//                int newPosition = textCursor().position()+1;
+//                if (d->deletePadCoreAt(newPosition)) {
+//                    if (d->userWantsToDeletePadItem(newPosition)) {
+//                        PadItem *item = d->_pad->padItemForOutputPosition(newPosition);
+//                        d->_pad->removeAndDeleteFragment(item);
+//                        d->_pad->softReset();
+//                    }
+//                } else {
+//                    //////////////// HERE /////////////
+//                    //                            d->_pad->removeOutputCharAt(newPosition);
+//                }
+//                return true;
+//            }
+//            case Qt::Key_Backspace:
+//            {
+//                qWarning() << "BACKSPACE RELEASED" << textCursor().position() << kevent->isAutoRepeat();
+//                int newPosition = textCursor().position()-1;
+//                if (d->deletePadCoreAt(newPosition)) {
+//                    if (d->userWantsToDeletePadItem(newPosition)) {
+//                        PadItem *item = d->_pad->padItemForOutputPosition(newPosition);
+//                        d->_pad->removeAndDeleteFragment(item);
+//                        d->_pad->softReset();
+//                    }
+//                }
+//                return true;
+//            }
+//            default: return false;
+//            }
+//        }
+//    }
 
     return QWidget::eventFilter(o, e);
 }
 
-/** Keep PadDocument sync to the output QTextDocument */
-void TokenOutputDocument::contentChanged(const int pos, const int ins, const int rm)
+void TokenOutputDocument::connectPadDocument()
 {
-    qWarning() << "contentChanged pos" << pos << "ins" << ins << "rm" << rm;
+    connect(d->_pad, SIGNAL(cleared()), this, SLOT(onPadCleared()));
+
+    connect(d->_pad, SIGNAL(aboutToClear()), this, SLOT(disconnectOutputDocumentChanges()));
+    connect(d->_pad, SIGNAL(cleared()), this, SLOT(connectOutputDocumentChanges()));
+
+    connect(d->_pad, SIGNAL(rawSourceAnalyzeStarted()), this, SLOT(disconnectOutputDocumentChanges()));
+    connect(d->_pad, SIGNAL(rawSourceAnalyseFinished()), this, SLOT(connectOutputDocumentChanges()));
+
+    connect(d->_pad, SIGNAL(beginTokenReplacement()), this, SLOT(disconnectOutputDocumentChanges()));
+    connect(d->_pad, SIGNAL(endTokenReplacement()), this, SLOT(connectOutputDocumentChanges()));
+    connect(d->_pad, SIGNAL(endTokenReplacement()), this, SLOT(onDocumentAnalyzeReset()));
+}
+
+void TokenOutputDocument::disconnectPadDocument()
+{
+    disconnect(d->_pad, SIGNAL(cleared()), this, SLOT(onPadCleared()));
+
+    disconnect(d->_pad, SIGNAL(aboutToClear()), this, SLOT(disconnectOutputDocumentChanges()));
+    disconnect(d->_pad, SIGNAL(cleared()), this, SLOT(connectOutputDocumentChanges()));
+
+    disconnect(d->_pad, SIGNAL(rawSourceAnalyzeStarted()), this, SLOT(disconnectOutputDocumentChanges()));
+    disconnect(d->_pad, SIGNAL(rawSourceAnalyseFinished()), this, SLOT(connectOutputDocumentChanges()));
+
+    disconnect(d->_pad, SIGNAL(beginTokenReplacement()), this, SLOT(disconnectOutputDocumentChanges()));
+    disconnect(d->_pad, SIGNAL(endTokenReplacement()), this, SLOT(connectOutputDocumentChanges()));
+    disconnect(d->_pad, SIGNAL(endTokenReplacement()), this, SLOT(onDocumentAnalyzeReset()));
+}
+
+void TokenOutputDocument::connectOutputDocumentChanges()
+{
+    connect(textEdit()->document(), SIGNAL(contentsChange(int,int,int)), this, SLOT(contentChanged(int,int,int)));
+}
+
+void TokenOutputDocument::disconnectOutputDocumentChanges()
+{
+    disconnect(textEdit()->document(), SIGNAL(contentsChange(int,int,int)), this, SLOT(contentChanged(int,int,int)));
+}
+
+/** Keep PadDocument sync to the output QTextDocument */
+void TokenOutputDocument::contentChanged(const int pos, const int rm, const int ins)
+{
+//    qWarning() << "contentChanged pos" << pos << "ins" << ins << "rm" << rm;
+
+    if (rm)
+        d->_pad->outputPosChanged(pos, pos-rm);
+
+    if (ins)
+        d->_pad->outputPosChanged(pos, pos+ins);
+
+    onDocumentAnalyzeReset();
 }

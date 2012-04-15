@@ -194,54 +194,90 @@ PadFragment *PadFragment::padFragmentForOutputPosition(int pos) const
     return child;
 }
 
-/** Insert the content of the PadFragment rawSource to the output */
-void PadFragment::insertFragment(QTextDocument *source, QTextDocument *out) const
+void PadFragment::outputPosChanged(const int oldPos, const int newPos)
 {
-    if (_start>=0) {
-        QTextCursor cursor(source);
-        cursor.setPosition(_start, QTextCursor::MoveAnchor);
-        cursor.setPosition(_end, QTextCursor::KeepAnchor);
+    QString debug = QString("outputPosChanged : Fragment %1 (%2:%3)\n"
+                            "    old: %4  new: %5\n")
+                    .arg(_id)
+                    .arg(_outputStart).arg(_outputEnd)
+                    .arg(oldPos).arg(newPos);
+    int delta = newPos - oldPos;
 
-        QTextCursor toCursor(out);
-        toCursor.movePosition(QTextCursor::End);
-        _outputStart = toCursor.position();
-
-        toCursor.insertHtml(cursor.selection().toHtml());
-
-        toCursor.movePosition(QTextCursor::End);
-        _outputEnd = toCursor.position();
+    // oldPos inside the fragment
+    debug += QString("    delta: %1\n").arg(delta);
+    if (_outputStart <= oldPos  && oldPos < _outputEnd) {
+        debug += QString("    oldPos is inside token\n");
+        // Remove chars
+        if (delta < 0) {
+            // Start removed ?
+            if (_outputStart > newPos)
+                _outputStart = newPos;
+            // Remove chars in fragment
+            moveOutputEnd(delta);
+        } else {
+            // Add chars
+            moveOutputEnd(delta);
+        }
+        foreach(PadFragment *f, children()) {
+            if (f!=this)
+                f->outputPosChanged(oldPos, newPos);
+        }
+    } else {
+        debug += QString("    move: %1\n").arg((_outputStart > oldPos));
+        // oldPos outside fragment
+        if (_outputStart > oldPos)
+            translateOutput(delta);
     }
+    debug += QString("    new: (%1;%2)\n").arg(_outputStart).arg(_outputEnd);
+
+    qWarning() << debug;
 }
 
-/** Insert html at the end of the output \e out QTextDocument and compute fragment output range */
-void PadFragment::insertText(QTextDocument *out, const QString &text) const
-{
-    if (_start>=0) {
-        QTextCursor toCursor(out);
-        toCursor.movePosition(QTextCursor::End);
-        _outputStart = toCursor.position();
-        toCursor.insertHtml(text);
-        toCursor.movePosition(QTextCursor::End);
-        _outputEnd = toCursor.position();
-    }
-}
+///** Insert the content of the PadFragment rawSource to the output */
+//void PadFragment::insertFragment(QTextDocument *source, QTextDocument *out) const
+//{
+//    if (_start>=0) {
+//        QTextCursor cursor(source);
+//        cursor.setPosition(_start, QTextCursor::MoveAnchor);
+//        cursor.setPosition(_end, QTextCursor::KeepAnchor);
 
-/** Moves the PadTools::PadFragment from \e nbChars. \e nbChars can be a positive (moving forward) or a negative int (moving backward). Manages children too.*/
-void PadFragment::move(int nbChars)
+//        QTextCursor toCursor(out);
+//        toCursor.movePosition(QTextCursor::End);
+//        _outputStart = toCursor.position();
+
+//        toCursor.insertHtml(cursor.selection().toHtml());
+
+//        toCursor.movePosition(QTextCursor::End);
+//        _outputEnd = toCursor.position();
+//    }
+//}
+
+///** Insert html at the end of the output \e out QTextDocument and compute fragment output range */
+//void PadFragment::insertText(QTextDocument *out, const QString &text) const
+//{
+//    if (_start>=0) {
+//        QTextCursor toCursor(out);
+//        toCursor.movePosition(QTextCursor::End);
+//        _outputStart = toCursor.position();
+//        toCursor.insertHtml(text);
+//        toCursor.movePosition(QTextCursor::End);
+//        _outputEnd = toCursor.position();
+//    }
+//}
+
+/** Moves the PadTools::PadFragment from \e nbChars. \e nbChars can be a positive (moving forward) or a negative int (moving backward). Does not manage children fragments.*/
+void PadFragment::translateOutput(int nbChars)
 {
-    _start+=nbChars;
     _outputStart+=nbChars;
-    _end+=nbChars;
     _outputEnd+=nbChars;
-    foreach(PadFragment *f, _fragments)
-        f->move(nbChars);
 }
 
-/** Move the end tag of the fragment in rawsource and output. Manages parent end too. */
-void PadFragment::moveEnd(int nbOfChars)
+/** Move the end tag of the fragment in rawsource and output. Does not manage parent fragment. */
+void PadFragment::moveOutputEnd(int nbOfChars)
 {
-    _end += nbOfChars;
-    _outputEnd += nbOfChars;
-    if (_parent && _parent->id()>=0)
-        _parent->moveEnd(nbOfChars);
+    if (_outputEnd + nbOfChars < _outputStart) {
+        _outputEnd = _outputStart;
+    } else {
+        _outputEnd += nbOfChars;
+    }
 }
