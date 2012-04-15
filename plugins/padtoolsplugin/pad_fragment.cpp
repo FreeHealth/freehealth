@@ -196,17 +196,17 @@ PadFragment *PadFragment::padFragmentForOutputPosition(int pos) const
 
 void PadFragment::outputPosChanged(const int oldPos, const int newPos)
 {
-    QString debug = QString("outputPosChanged : Fragment %1 (%2:%3)\n"
-                            "    old: %4  new: %5\n")
-                    .arg(_id)
-                    .arg(_outputStart).arg(_outputEnd)
-                    .arg(oldPos).arg(newPos);
+//    QString debug = QString("outputPosChanged : Fragment %1 (%2:%3)\n"
+//                            "    old: %4  new: %5\n")
+//                    .arg(_id)
+//                    .arg(_outputStart).arg(_outputEnd)
+//                    .arg(oldPos).arg(newPos);
     int delta = newPos - oldPos;
 
     // oldPos inside the fragment
-    debug += QString("    delta: %1\n").arg(delta);
+//    debug += QString("    delta: %1\n").arg(delta);
     if (_outputStart <= oldPos  && oldPos < _outputEnd) {
-        debug += QString("    oldPos is inside token\n");
+//        debug += QString("    oldPos is inside token\n");
         // Remove chars
         if (delta < 0) {
             // Start removed ?
@@ -223,14 +223,14 @@ void PadFragment::outputPosChanged(const int oldPos, const int newPos)
                 f->outputPosChanged(oldPos, newPos);
         }
     } else {
-        debug += QString("    move: %1\n").arg((_outputStart > oldPos));
+//        debug += QString("    move: %1\n").arg((_outputStart > oldPos));
         // oldPos outside fragment
         if (_outputStart > oldPos)
             translateOutput(delta);
     }
-    debug += QString("    new: (%1;%2)\n").arg(_outputStart).arg(_outputEnd);
+//    debug += QString("    new: (%1;%2)\n").arg(_outputStart).arg(_outputEnd);
 
-    qWarning() << debug;
+//    qWarning() << debug;
 }
 
 ///** Insert the content of the PadFragment rawSource to the output */
