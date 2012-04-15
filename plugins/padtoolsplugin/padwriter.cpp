@@ -144,6 +144,8 @@ PadWriter::PadWriter(QWidget *parent) :
 
     // Create PadDocument object
     d->_pad = new PadDocument();
+    d->ui->wysiwyg->setPadDocument(d->_pad);
+    connect(d->_pad, SIGNAL(padFragmentChanged(PadFragment*)), this, SLOT(onPadFragmentChanged(PadFragment*)));
 
     // Create PadHighlighter
 //    PadHighlighter *highlight = new PadHighlighter(d->ui->rawSource->textEdit());
@@ -189,8 +191,8 @@ PadWriter::PadWriter(QWidget *parent) :
     d->ui->scenari->setDefaultAction(d->aTest1);
     d->aTest1->trigger();
 
-    connect(d->ui->wysiwyg->textEdit(), SIGNAL(cursorPositionChanged()), this, SLOT(wysiwygCursorChanged()));
-    connect(d->ui->rawSource->textEdit(), SIGNAL(cursorPositionChanged()), this, SLOT(rawSourceCursorChanged()));
+//    connect(d->ui->wysiwyg->textEdit(), SIGNAL(cursorPositionChanged()), this, SLOT(wysiwygCursorChanged()));
+//    connect(d->ui->rawSource->textEdit(), SIGNAL(cursorPositionChanged()), this, SLOT(rawSourceCursorChanged()));
     d->ui->wysiwyg->textEdit()->setCursorWidth(3);
     d->ui->rawSource->textEdit()->setCursorWidth(3);
     // END TEST
@@ -237,15 +239,15 @@ void PadWriter::changeRawSourceScenario(QAction *a)
     QString source;
     if (a == d->aTest1) {
         source = "<p>"
-                "<b><center>Simple token test</center></b></p><p>"
-                "&nbsp;&nbsp;* Token D: ^$\"~D~\"$^<br />"
-                "&nbsp;&nbsp;* Null token: (^$All this text ~NULL~ should not appear in the output$^)<br />"
-                "&nbsp;&nbsp;* Token D without 'after conditionnal text':^$ ~D~$^<br />"
-                "&nbsp;&nbsp;* Token D without 'before conditionnal text': ^$~D~. $^<br />"
-                "&nbsp;&nbsp;* Long token A: ^$this text should appear in the output document, <u>including the core value</u> \"<b>~A~</b>\" (in bold) as defined in the <span style=' text-decoration: underline; color:#ff00ff;'>TokenModel</span>.$^<br />"
-                "&nbsp;&nbsp;* HTML Token:<br />"
-                "&nbsp;&nbsp;&nbsp;&nbsp;* Result should be \" <u><b>htmlToken</b></u> \"<br />"
-                "&nbsp;&nbsp;&nbsp;&nbsp;* Result should be ^$\" <u>~HTMLTOKEN~</u> \"$^<br />"
+//                "<b><center>Simple token test</center></b></p><p>"
+                "&nbsp;&nbsp;* Token D: ^$\"...~D~...\"$^<br />"
+//                "&nbsp;&nbsp;* Null token: (^$All this text ~NULL~ should not appear in the output$^)<br />"
+//                "&nbsp;&nbsp;* Token D without 'after conditionnal text':^$ ~D~$^<br />"
+//                "&nbsp;&nbsp;* Token D without 'before conditionnal text': ^$~D~. $^<br />"
+//                "&nbsp;&nbsp;* Long token A: ^$this text should appear in the output document, <u>including the core value</u> \"<b>~A~</b>\" (in bold) as defined in the <span style=' text-decoration: underline; color:#ff00ff;'>TokenModel</span>.$^<br />"
+//                "&nbsp;&nbsp;* HTML Token:<br />"
+//                "&nbsp;&nbsp;&nbsp;&nbsp;* Result should be \" <u><b>htmlToken</b></u> \"<br />"
+//                "&nbsp;&nbsp;&nbsp;&nbsp;* Result should be ^$\" <u>~HTMLTOKEN~</u> \"$^<br />"
 //                "^$ _D_ ~D~ _D_ $^<br />"
 //                "<b>^$_<span style=' text-decoration: underline; color:#ff00ff;'>A_</span> ~A~ _A_$^ 10 chars </b><br />"
 //                 "^$ <span style=' text-decoration: underline; color:#0000ff;'>_B_</span> ~B~ _B_$^ 10 chars <br />"
@@ -317,18 +319,12 @@ void PadWriter::analyseRawSource()
 {
     // clear PadDocument && views
     QList<Core::PadAnalyzerError> errors;
-    d->ui->wysiwyg->document()->clear();
     d->_pad->clear();
 
     // Start analyze && token replacement
     PadAnalyzer().analyze(d->ui->rawSource->document(), d->_pad);
     d->_pad->setTokenModel(d->_tokenModel);
     d->_pad->run(d->_tokenModel->tokens());
-
-    connect(d->_pad, SIGNAL(padFragmentChanged(PadFragment*)), this, SLOT(onPadFragmentChanged(PadFragment*)));
-
-    // Setup ui
-    d->ui->wysiwyg->setPadDocument(d->_pad);
 
     d->ui->listWidgetErrors->clear();
     foreach (const Core::PadAnalyzerError &error, errors) {
@@ -385,28 +381,28 @@ void PadWriter::findCursorPositionInOutput()
     if (!d->_pad)
         return;
 
-    // Find corresponding fragment Id
-    const int cursorPos = d->ui->rawSource->textEdit()->textCursor().position();
-//    PadItem *item = d->_pad->padItemForSourcePosition(cursorPos);
-    PadFragment *item = d->_pad->padFragmentForSourcePosition(cursorPos);
-    QTextDocument *doc = d->ui->wysiwyg->document();
-    if (!item) {
-        if (d->_followedItem) {
-            Constants::removePadFragmentFormat("Follow", doc, d->_followedItemCharFormats);
-            d->_followedItem = 0;
-        }
-        return;
-    }
+//    // Find corresponding fragment Id
+//    const int cursorPos = d->ui->rawSource->textEdit()->textCursor().position();
+////    PadItem *item = d->_pad->padItemForSourcePosition(cursorPos);
+//    PadFragment *item = d->_pad->padFragmentForSourcePosition(cursorPos);
+//    QTextDocument *doc = d->ui->wysiwyg->document();
+//    if (!item) {
+//        if (d->_followedItem) {
+//            Constants::removePadFragmentFormat("Follow", doc, d->_followedItemCharFormats);
+//            d->_followedItem = 0;
+//        }
+//        return;
+//    }
 
-    if (d->_followedItem) {
-        if (d->_followedItem == item)
-            return;
-        Constants::removePadFragmentFormat("Follow", doc, d->_followedItemCharFormats);
-        d->_followedItem = item;
-    } else {
-        d->_followedItem = item;
-    }
-    Constants::setPadFragmentFormat("Follow", d->_followedItem->outputStart(), d->_followedItem->outputEnd(), doc, d->_followedItemCharFormats, d->_followedCharFormat);
+//    if (d->_followedItem) {
+//        if (d->_followedItem == item)
+//            return;
+//        Constants::removePadFragmentFormat("Follow", doc, d->_followedItemCharFormats);
+//        d->_followedItem = item;
+//    } else {
+//        d->_followedItem = item;
+//    }
+//    Constants::setPadFragmentFormat("Follow", d->_followedItem->outputStart(), d->_followedItem->outputEnd(), doc, d->_followedItemCharFormats, d->_followedCharFormat);
 }
 
 void PadWriter::setAutoUpdateOfResult(bool state)
@@ -430,10 +426,10 @@ void PadWriter::onPadFragmentChanged(PadFragment *fragment)
         return;
     if (d->_followedItem!=fragment)
         return;
-    // The followed fragment was modified
-    QTextDocument *doc = d->ui->wysiwyg->document();
-    Constants::removePadFragmentFormat("Follow", doc, d->_followedItemCharFormats);
-    Constants::setPadFragmentFormat("Follow", d->_followedItem->outputStart(), d->_followedItem->outputEnd(), doc, d->_followedItemCharFormats, d->_followedCharFormat);
+//    // The followed fragment was modified
+//    QTextDocument *doc = d->ui->wysiwyg->document();
+//    Constants::removePadFragmentFormat("Follow", doc, d->_followedItemCharFormats);
+//    Constants::setPadFragmentFormat("Follow", d->_followedItem->outputStart(), d->_followedItem->outputEnd(), doc, d->_followedItemCharFormats, d->_followedCharFormat);
 }
 
 void PadWriter::highLightNextBlock()

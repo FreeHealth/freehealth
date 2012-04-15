@@ -59,6 +59,7 @@ void PadConditionnalSubItem::addDelimiter(const int posInRaw, const int size)
 
 void PadConditionnalSubItem::run(QMap<QString,QVariant> &tokens)
 {
+    Q_UNUSED(tokens);
 }
 
 void PadConditionnalSubItem::debug(int indent) const
@@ -74,7 +75,11 @@ void PadConditionnalSubItem::debug(int indent) const
 }
 
 void PadConditionnalSubItem::run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out)
-{}
+{
+    Q_UNUSED(tokens);
+    Q_UNUSED(source);
+    Q_UNUSED(out);
+}
 
 void PadConditionnalSubItem::run(QMap<QString,QVariant> &tokens, PadDocument *document)
 {
@@ -150,34 +155,35 @@ void PadCore::debug(int indent) const
     qDebug("%s", qPrintable(str));
 }
 
-void PadCore::run(QMap<QString,QVariant> &tokens)
-{
-//    /** \todo use this output only if HTML is requested */
-//    const QString &value = tokens[_name].toString();
-//    if (start() > 0 && !value.isEmpty()) {
-//        return QString(Constants::TOKEN_AND_POSITION_TAG)
-//                .arg(value).arg(id());
-//    }
-//    return value;
-}
+//void PadCore::run(QMap<QString,QVariant> &tokens)
+//{
+//    Q_UNUSED(tokens);
+////    /** \todo use this output only if HTML is requested */
+////    const QString &value = tokens[_name].toString();
+////    if (start() > 0 && !value.isEmpty()) {
+////        return QString(Constants::TOKEN_AND_POSITION_TAG)
+////                .arg(value).arg(id());
+////    }
+////    return value;
+//}
 
-void PadCore::run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *output)
-{
-    const QString &value = tokens[_name].toString();
-    if (!value.isEmpty()) {
-        // insert core value
-        insertText(output, value);
-        // apply charFormat from the source
-        QTextCursor cursor(source);
-        cursor.setPosition(_start);
-        cursor.setPosition(_end, QTextCursor::KeepAnchor);
-        QTextCharFormat format = cursor.charFormat();
-        QTextCursor cout(output);
-        cout.setPosition(_outputStart);
-        cout.setPosition(_outputEnd, QTextCursor::KeepAnchor);
-        cout.setCharFormat(format);
-    }
-}
+//void PadCore::run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *output)
+//{
+//    const QString &value = tokens[_name].toString();
+//    if (!value.isEmpty()) {
+//        // insert core value
+//        insertText(output, value);
+//        // apply charFormat from the source
+//        QTextCursor cursor(source);
+//        cursor.setPosition(_start);
+//        cursor.setPosition(_end, QTextCursor::KeepAnchor);
+//        QTextCharFormat format = cursor.charFormat();
+//        QTextCursor cout(output);
+//        cout.setPosition(_outputStart);
+//        cout.setPosition(_outputEnd, QTextCursor::KeepAnchor);
+//        cout.setCharFormat(format);
+//    }
+//}
 
 void PadCore::run(QMap<QString,QVariant> &tokens, PadDocument *document)
 {
@@ -252,15 +258,15 @@ QList<PadFragment*> PadItem::children() const
 	return fragments;
 }
 
-/** Find PadFragment according to its \e type. \sa PadItem::PadStringType */
-PadFragment *PadItem::fragment(const int type) const
-{
-    foreach (PadFragment *fragment, _fragments) {
-//        if (fragment->userData(Constants::USERDATA_KEY_PADITEM).toInt() == type)
-//            return fragment;
-    }
-    return 0;
-}
+///** Find PadFragment according to its \e type. \sa PadItem::PadStringType */
+//PadFragment *PadItem::fragment(const int type) const
+//{
+//    foreach (PadFragment *fragment, _fragments) {
+////        if (fragment->userData(Constants::USERDATA_KEY_PADITEM).toInt() == type)
+////            return fragment;
+//    }
+//    return 0;
+//}
 
 void PadItem::addDelimiter(const int posInRaw, const int size)
 {
@@ -283,72 +289,73 @@ PadCore *PadItem::getCore() const
     return 0;
 }
 
-/** Run this pad over some tokens and returns the result text */
-void PadItem::run(QMap<QString,QVariant> &tokens)
-{
-//	QString value;
-//	PadCore *core = getCore();
-//	QString coreValue;
+///** Run this pad over some tokens and returns the result text */
+//void PadItem::run(QMap<QString,QVariant> &tokens)
+//{
+//    Q_UNUSED(tokens);
+////	QString value;
+////	PadCore *core = getCore();
+////	QString coreValue;
 
-//	// if a core exists, the entire pad expression is optional, depending on the core emptiness
+////	// if a core exists, the entire pad expression is optional, depending on the core emptiness
+////    if (core) {
+////        coreValue = tokens.value(core->name());
+////		if (coreValue.isEmpty()) // core empty? so the entire pad will be empty too
+////			return "";
+////	}
+
+////	foreach (PadFragment *fragment, _fragments)
+////		value += fragment->run(tokens);
+
+////	return value;
+//}
+
+//void PadItem::run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out)
+//{
+//    PadCore *core = getCore();
+//    QString coreValue;
+
+//    // if a core exists, the entire pad expression is optional, depending on the core emptiness
 //    if (core) {
-//        coreValue = tokens.value(core->name());
-//		if (coreValue.isEmpty()) // core empty? so the entire pad will be empty too
-//			return "";
-//	}
+//        coreValue = tokens.value(core->name()).toString();
+//        if (coreValue.isEmpty())
+//            return;
+//    }
 
-//	foreach (PadFragment *fragment, _fragments)
-//		value += fragment->run(tokens);
+//    int start = -1;
+//    int end = -1;
+//    foreach(PadFragment *fragment, _fragments) {
+//        fragment->run(tokens, source, out);
+//        if (fragment->outputStart() < start || start == -1)
+//            start = fragment->outputStart();
+//        if (fragment->outputEnd() > end)
+//            end = fragment->outputEnd();
+//    }
 
-//	return value;
-}
+//    // Trace position in output
+//    _outputStart = start;
+//    _outputEnd = end;
 
-void PadItem::run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out)
-{
-    PadCore *core = getCore();
-    QString coreValue;
+////    // Add anchors to the output QTextDocument
+////    QTextCursor cursor(out);
+////    cursor.setPosition(_outputStart);
+////    cursor.setPosition(_outputEnd, QTextCursor::KeepAnchor);
+////    QTextCharFormat f;
+////    f.setAnchor(true);
+////    f.setAnchorNames(QStringList() << Constants::ANCHOR_ITEM << QString::number(id()));
+////    cursor.mergeCharFormat(f);
 
-    // if a core exists, the entire pad expression is optional, depending on the core emptiness
-    if (core) {
-        coreValue = tokens.value(core->name()).toString();
-        if (coreValue.isEmpty())
-            return;
-    }
-
-    int start = -1;
-    int end = -1;
-    foreach(PadFragment *fragment, _fragments) {
-        fragment->run(tokens, source, out);
-        if (fragment->outputStart() < start || start == -1)
-            start = fragment->outputStart();
-        if (fragment->outputEnd() > end)
-            end = fragment->outputEnd();
-    }
-
-    // Trace position in output
-    _outputStart = start;
-    _outputEnd = end;
-
-//    // Add anchors to the output QTextDocument
+//    // Add token tooltip
+//    int count = _outputEnd - _outputStart;
 //    QTextCursor cursor(out);
-//    cursor.setPosition(_outputStart);
-//    cursor.setPosition(_outputEnd, QTextCursor::KeepAnchor);
-//    QTextCharFormat f;
-//    f.setAnchor(true);
-//    f.setAnchorNames(QStringList() << Constants::ANCHOR_ITEM << QString::number(id()));
-//    cursor.mergeCharFormat(f);
-
-    // Add token tooltip
-    int count = _outputEnd - _outputStart;
-    QTextCursor cursor(out);
-    for(int i=0; i < count; ++i) {
-        cursor.setPosition(start + i);
-        cursor.setPosition(start + i + 1, QTextCursor::KeepAnchor);
-        QTextCharFormat format;
-        format.setToolTip("Token: " + coreValue);
-        cursor.mergeCharFormat(format);
-    }
-}
+//    for(int i=0; i < count; ++i) {
+//        cursor.setPosition(start + i);
+//        cursor.setPosition(start + i + 1, QTextCursor::KeepAnchor);
+//        QTextCharFormat format;
+//        format.setToolTip("Token: " + coreValue);
+//        cursor.mergeCharFormat(format);
+//    }
+//}
 
 void PadItem::run(QMap<QString,QVariant> &tokens, PadDocument *document)
 {

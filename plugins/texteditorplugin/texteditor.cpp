@@ -30,8 +30,13 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 /**
+  \class Editor::ITextControl
+  Overloads the QTextEdit copy/paste mimeData engine.
+*/
+
+/**
   \class Editor::TextEditor
-  \todo Document code.
+  Complex text editor for the FreeMedForms project.
 */
 
 #include "texteditor.h"
@@ -55,7 +60,6 @@
 #include <coreplugin/constants_menus.h>
 #include <coreplugin/isettings.h>
 
-// include Qt headers
 #include <QLocale>
 #include <QAction>
 #include <QClipboard>
@@ -77,6 +81,7 @@
 #include <QVBoxLayout>
 #include <QStringList>
 #include <QFontDialog>
+#include <QPointer>
 
 using namespace Editor;
 using namespace Editor::Internal;
@@ -88,6 +93,47 @@ static inline Core::ISettings *settings() {return Core::ICore::instance()->setti
 
 namespace Editor {
 namespace Internal {
+
+/** \todo manage multiple controls */
+class TextEditorWithControl : public QTextEdit
+{
+public:
+    TextEditorWithControl(QWidget *parent = 0) : QTextEdit(parent), _control(0) {}
+    TextEditorWithControl(const QString &text, QWidget *parent = 0) : QTextEdit(text, parent), _control(0) {}
+    ~TextEditorWithControl() {}
+
+    void setTextControl(ITextControl *control)
+    {
+        _control = control;
+    }
+
+    bool canInsertFromMimeData(const QMimeData *source) const
+    {
+        if (_control)
+            return _control->canInsertFromMimeData(source);
+        return QTextEdit::canInsertFromMimeData(source);
+    }
+
+    void insertFromMimeData(const QMimeData *source)
+    {
+        if (_control)
+            _control->insertFromMimeData(source);
+        else
+            QTextEdit::insertFromMimeData(source);
+    }
+
+    QMimeData *createMimeDataFromSelection() const
+    {
+        if (_control)
+            return _control->createMimeDataFromSelection();
+        else
+            return QTextEdit::createMimeDataFromSelection();
+    }
+
+
+private:
+    QPointer<ITextControl> _control;
+};
 
 class TextEditorHtmlPaster : public QTextEdit
 {
@@ -112,10 +158,14 @@ public:
 class TextEditorPrivate
 {
 public:
-    TextEditorPrivate(QWidget *parent , TextEditor::Types type)
-            : m_Type(type), m_Context(0), textEdit(0), m_Parent(parent), m_ToolBarIsVisible(false)
+    TextEditorPrivate(QWidget *parent , TextEditor::Types type) :
+        m_Type(type),
+        m_Context(0),
+        textEdit(0),
+        m_Parent(parent),
+        m_ToolBarIsVisible(false)
     {
-        textEdit = new QTextEdit(m_Parent);
+        textEdit = new TextEditorWithControl(m_Parent);
         //textEdit = new TextEditorHtmlPaster(m_Parent);
         textEdit->setContextMenuPolicy(Qt::CustomContextMenu);
     }
@@ -236,7 +286,7 @@ public:
     TextEditor::Types m_Type;
     EditorContext *m_Context;
     QToolBar *m_ToolBar;
-    QTextEdit *textEdit;
+    TextEditorWithControl *textEdit;
     //TextEditorHtmlPaster *textEdit;
     QWidget *m_Parent;
     bool m_ToolBarIsVisible;
@@ -294,6 +344,11 @@ TextEditor::~TextEditor()
 QTextEdit *TextEditor::textEdit() const
 {
     return d->textEdit;
+}
+
+void TextEditor::setTextControl(ITextControl *control)
+{
+    d->textEdit->setTextControl(control);
 }
 
 void TextEditor::setTypes(Types type)

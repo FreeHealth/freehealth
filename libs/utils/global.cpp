@@ -671,6 +671,7 @@ QString isFileExists(const QString &absPath)
     return QString();
 }
 
+/** \brief Returns the MD5 checksum of a file. */
 QByteArray md5(const QString &fileName)
 {
     QFile file(fileName);
@@ -685,7 +686,13 @@ QByteArray md5(const QString &fileName)
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////   MESSAGEBOXES FUNCTIONS   //////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/** \brief Creates an informative messagebox. **/
+/** \brief Creates an informative messagebox.
+  \code
+#include <utils/global.h>
+[...]
+    Utils::informativeMessageBox(...);
+\endcode
+**/
 void informativeMessageBox(const QString &text, const QString &infoText, const QString &detail, const QString &title)
 {
     QWidget *parent = qApp->activeWindow();
@@ -713,7 +720,13 @@ void informativeMessageBox(const QString &text, const QString &infoText, const Q
     qApp->setActiveWindow(parent);
 }
 
-/** \brief Creates a warning messagebox. **/
+/** \brief Creates a warning messagebox.
+  \code
+#include <utils/global.h>
+[...]
+    Utils::warningMessageBox(...);
+\endcode
+**/
 void warningMessageBox(const QString &text, const QString &infoText, const QString &detail, const QString &title)
 {
     LOG_FOR("Warning Dialog", infoText);
@@ -742,7 +755,18 @@ void warningMessageBox(const QString &text, const QString &infoText, const QStri
     qApp->setActiveWindow(parent);
 }
 
-/** \brief Creates a messagebox with yes / no. Return true if user clicked yes. **/
+/** \brief Creates a messagebox with yes / no. Return true if user clicked yes.
+  \code
+#include <utils/global.h>
+[...]
+    bool yes = Utils::yesnoMessageBox(...);
+    if (yes) {
+        // yes clicked
+    } else {
+        // no clicked
+    }
+\endcode
+**/
 bool yesNoMessageBox(const QString &text, const QString&infoText, const QString&detail, const QString &title, const QPixmap &icon)
 {
     QWidget *parent = qApp->activeWindow();
@@ -778,8 +802,30 @@ bool yesNoMessageBox(const QString &text, const QString&infoText, const QString&
 }
 
 /**
-  \brief Creates a messagebox with many buttons.
+  \brief Creates a messagebox with multiple buttons.
   Return -1 if dialog was cancelled, or the index of the button into the stringlist.
+  \code
+#include <utils/global.h>
+[...]
+    QStringList buttonText;
+    buttonText << "1" << "2" << "3";
+    int r = Utils::withButtonMessageBox(..., buttonText, ...);
+    switch (r) {
+    case -1:
+        // Cancelled
+        break;
+    case 0:
+        // Button "1"
+        break;
+    case 1:
+        // Button "2"
+        break;
+    case 2:
+        // Button "3"
+        break;
+    }
+\endcode
+
 **/
 int withButtonsMessageBox(const QString &text, const QString&infoText, const QString&detail, const QStringList &buttonsText, const QString &title, bool withCancelButton)
 {
@@ -818,8 +864,24 @@ int withButtonsMessageBox(const QString &text, const QString&infoText, const QSt
 }
 
 /**
-  \brief Creates a messagebox with many standard buttons.
+  \brief Creates a messagebox with multiple standard buttons.
   Return the standard button selected.
+  \code
+#include <utils/global.h>
+[...]
+    QMessageBox::StandardButtons buts;
+    buts = QMessageBox::Ok | QMessageBox::Save | QMessageBox::Cancel;
+    int r = Utils::withButtonMessageBox(..., buts, ...);
+    switch (r) {
+    case QMessageBox::Ok:
+        break;
+    case QMessageBox::Save:
+        break;
+    case QMessageBox::Cancel:
+        break;
+    }
+\endcode
+
 **/
 int withButtonsMessageBox(const QString &text, const QString&infoText, const QString&detail, QMessageBox::StandardButtons buts, QMessageBox::StandardButton defaultButton, const QString &title)
 {

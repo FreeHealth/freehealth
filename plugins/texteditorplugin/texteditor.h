@@ -45,7 +45,7 @@ class QMenu;
  * \file texteditor.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.7.1
- * \date 23 Mar 2012
+ * \date 13 Apr 2012
 */
 
 namespace Editor {
@@ -55,16 +55,27 @@ class TextEditorPrivate;
 class EditorActionHandler;
 }
 
+class EDITOR_EXPORT ITextControl : public QObject
+{
+    Q_OBJECT
+public:
+    ITextControl(QObject *parent = 0) : QObject(parent) {}
+    virtual ~ITextControl() {}
+
+    virtual bool canInsertFromMimeData (const QMimeData *source) const = 0;
+    virtual QMimeData *createMimeDataFromSelection() const = 0;
+    virtual void insertFromMimeData(const QMimeData *source) = 0;
+};
+
 class EDITOR_EXPORT TextEditor : public TableEditor
 {
     friend class Internal::TextEditorPrivate;
     friend class Internal::EditorActionHandler;
     Q_OBJECT
-    Q_PROPERTY( QString html READ getHtml WRITE setHtml USER true)
+    Q_PROPERTY(QString html READ getHtml WRITE setHtml USER true)
 
 public:
-    enum Type
-    {
+    enum Type {
         CharFormat        = 0x0001,
         ParagraphFormat   = 0x0002,
         Clipboard         = 0x0004,
@@ -95,6 +106,8 @@ public:
     QString toHtml() const {return textEdit()->toHtml();}
     void setPlainText(const QString &s) {textEdit()->setPlainText(s);}
     QString toPlainText() const {return textEdit()->toPlainText();}
+
+    void setTextControl(ITextControl *control);
 
 public Q_SLOTS:
     void setReadOnly(bool ro) {textEdit()->setReadOnly(ro);}

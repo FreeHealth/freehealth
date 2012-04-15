@@ -123,7 +123,7 @@ void PadPositionTranslator::debug()
 PadDocument::PadDocument(QTextDocument *source, QObject *parent) :
     QObject(parent),
     _docSource(source),
-    _docOutput(0),
+    _docOutput(new QTextDocument(this)),
     _tokenModel(0),
     _timer(0)
 {
@@ -137,7 +137,7 @@ PadDocument::PadDocument(QTextDocument *source, QObject *parent) :
 PadDocument::PadDocument(QObject *parent) :
     QObject(parent),
     _docSource(0),
-    _docOutput(0),
+    _docOutput(new QTextDocument(this)),
     _tokenModel(0),
     _timer(0)
 {
@@ -151,8 +151,10 @@ PadDocument::~PadDocument()
 /** Clear the current PadTools::PadDocument. Removes all fragments && sources. */
 void PadDocument::clear()
 {
+    Q_EMIT aboutToClear();
     qDeleteAll(_fragments);
     _fragments.clear();
+    _items.clear();
 //    if (_rawSource.isEmpty()) {
 ////        disconnect(_docSource, SIGNAL(contentsChange(int,int,int)), this, SLOT(rawSourceContentsChanged(int,int,int)));
 //        _docSource = 0;
@@ -229,6 +231,16 @@ void PadDocument::removeAndDeleteFragment(PadFragment *fragment)
     PadFragment::removeAndDeleteFragment(fragment);
 }
 
+void PadDocument::beginRawSourceAnalyze()
+{
+    Q_EMIT rawSourceAnalyzeStarted();
+}
+
+void PadDocument::endRawSourceAnalyze()
+{
+    Q_EMIT rawSourceAnalyseFinished();
+}
+
 ///** Removes char at \e position in output and keep raw source sync */
 //void PadDocument::removeOutputCharAt(int position, int length)
 //{
@@ -279,9 +291,14 @@ PadItem *PadDocument::padItemForSourcePosition(int p) const
 /** Find fragment for the QTextCursor position in raw source document. Return 0 if no fragment matches. */
 PadFragment *PadDocument::padFragmentForSourcePosition(int rawPos) const
 {
-    foreach(PadFragment *fragment, _fragments) {
-        if (fragment->start() <= rawPos && fragment->end() >= rawPos)
-            return fragment->padFragmentForSourcePosition(rawPos);
+    if (_fragments.isEmpty()) {
+        if (_start <= rawPos && _end >= rawPos)
+            return (PadFragment *)this;
+    } else {
+        foreach(PadFragment *fragment, _fragments) {
+            if (fragment->start() <= rawPos && fragment->end() >= rawPos)
+                return fragment->padFragmentForSourcePosition(rawPos);
+        }
     }
     return 0;
 }
@@ -289,9 +306,14 @@ PadFragment *PadDocument::padFragmentForSourcePosition(int rawPos) const
 /** Find fragment for the QTextCursor position in output document. Return 0 if no fragment matches. */
 PadFragment *PadDocument::padFragmentForOutputPosition(int outputPos) const
 {
-    foreach(PadFragment *fragment, _fragments) {
-        if (fragment->outputStart() <= outputPos && fragment->outputEnd() >= outputPos)
-            return fragment->padFragmentForOutputPosition(outputPos);
+    if (_fragments.isEmpty()) {
+        if (_outputStart <= outputPos && _outputEnd >= outputPos)
+            return (PadFragment *)this;
+    } else {
+        foreach(PadFragment *fragment, _fragments) {
+            if (fragment->outputStart() <= outputPos && fragment->outputEnd() >= outputPos)
+                return fragment->padFragmentForOutputPosition(outputPos);
+        }
     }
     return 0;
 }
@@ -310,35 +332,21 @@ QTextCursor PadDocument::rawSourceCursorForOutputPosition(int outputPos)
     return cursor;
 }
 
-///** Run this pad over some tokens and returns the result text */
-//QString PadDocument::run(QMap<QString,QVariant> &tokens) const
-//{
-//    /** \todo use QtConcurrent to run this part into a specific thread */
-//    /** \todo transform _rawSource into a QTextDocument and run tokens on it */
-////    QTextDocument *source = 0;
-////    if (!_rawSource.isEmpty()) {
-////        // Run throught raw string source
-////        source = new QTextDocument(this);
-////        source->setPlainText(_rawSource);
-////    } else {
-////        source = _docSource;
-////    }
-
-//    QString value;
-//    foreach (PadFragment *fragment, _fragments)
-//		value += fragment->run(tokens);
-//	return value;
-//}
-
-/** Run this pad over some tokens and set the result to the \e out QTextDocument */
-void PadDocument::run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out)
+void PadDocument::outputPosChanged(const int oldPos, const int newPos)
 {
-    foreach (PadFragment *fragment, _fragments)
-        fragment->run(tokens, source, out);
-    _docOutput = out;
-
-    debug();
+    foreach(PadItem *item, _items)
+        item->outputPosChanged(oldPos, newPos);
 }
+
+///** Run this pad over some tokens and set the result to the \e out QTextDocument */
+//void PadDocument::run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out)
+//{
+//    foreach (PadFragment *fragment, _fragments)
+//        fragment->run(tokens, source, out);
+//    _docOutput = out;
+
+//    debug();
+//}
 
 static void syncRange(PadFragment *f)
 {
@@ -350,9 +358,13 @@ static void syncRange(PadFragment *f)
 
 void PadDocument::run(QMap<QString,QVariant> &tokens)
 {
-//    if (_docOutput && _docOutput->parent() == this)
-//        delete _docOutput;
-    _docOutput = _docSource->clone(this);
+    Q_EMIT beginTokenReplacement();
+
+    if (!_docOutput) {
+        _docOutput = new QTextDocument(this);
+    }
+    _docOutput->clear();
+    _docOutput->setHtml(_docSource->toHtml());
 
     // sync raw && output ranges of all fragments
     foreach (PadFragment *fragment, _fragments)
@@ -362,8 +374,11 @@ void PadDocument::run(QMap<QString,QVariant> &tokens)
     foreach (PadFragment *fragment, _fragments)
         fragment->run(tokens, this);
 
-//    positionTranslator().debug();
+    //    positionTranslator().debug();
 //    debug();
+
+    // emit end signal
+    Q_EMIT endTokenReplacement();
 }
 
 /** Clear the PadDocument without deleting sources. */
@@ -375,6 +390,7 @@ void PadDocument::softReset()
 //    clear();
     qDeleteAll(_fragments);
     _fragments.clear();
+    _items.clear();
     _docOutput->clear();
 
     PadAnalyzer a;

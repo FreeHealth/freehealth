@@ -34,7 +34,6 @@ SOURCES += \
     $${PWD}/tokenmodel.cpp \
     $${PWD}/padwriter.cpp \
     $${PWD}/dragdroptextedit.cpp \
-    $${PWD}/constants.cpp \
     $${PWD}/tokeneditorwidget.cpp \
     $${PWD}/tokeneditor.cpp \
     $${PWD}/tokenoutputdocument.cpp \
