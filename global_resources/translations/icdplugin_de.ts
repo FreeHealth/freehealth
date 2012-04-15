@@ -140,7 +140,7 @@
     </message>
     <message>
         <source>The ICD10 database can not be created. The application will not work properly.
-Please contact the development team.</source>
+</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

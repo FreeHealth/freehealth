@@ -45,27 +45,27 @@ Please verify your daily scheme prescriptions and relations to meal.</source>
 <context>
     <name>DrugsDB::DrugsBase</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="521"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="525"/>
         <source>Switching to the default drugs database source.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1101"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1105"/>
         <source>No drug database source selected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1103"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1107"/>
         <source>No drugs database loaded.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1121"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1125"/>
         <source>Asking for a drug without UID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1258"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1262"/>
         <source>Unable to find drug with DID %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -352,26 +352,19 @@ Do you want to add them to the file?</source>
 <context>
     <name>DrugsDB::ProtocolsBase</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/protocolsbase.cpp" line="345"/>
-        <location filename="../../plugins/drugsbaseplugin/protocolsbase.cpp" line="351"/>
-        <location filename="../../plugins/drugsbaseplugin/protocolsbase.cpp" line="356"/>
+        <location filename="../../plugins/drugsbaseplugin/protocolsbase.cpp" line="346"/>
+        <location filename="../../plugins/drugsbaseplugin/protocolsbase.cpp" line="352"/>
+        <location filename="../../plugins/drugsbaseplugin/protocolsbase.cpp" line="357"/>
         <source>Unable to create the Protocol database.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/protocolsbase.cpp" line="345"/>
-        <location filename="../../plugins/drugsbaseplugin/protocolsbase.cpp" line="351"/>
-        <location filename="../../plugins/drugsbaseplugin/protocolsbase.cpp" line="356"/>
-        <source>Please contact the development team.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsbaseplugin/protocolsbase.cpp" line="397"/>
+        <location filename="../../plugins/drugsbaseplugin/protocolsbase.cpp" line="398"/>
         <source>Standardized protocols database can not be updated successfully</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/protocolsbase.cpp" line="462"/>
+        <location filename="../../plugins/drugsbaseplugin/protocolsbase.cpp" line="463"/>
         <source>Unable to update the protocol&apos;s transmission date.</source>
         <translation type="unfinished"></translation>
     </message>

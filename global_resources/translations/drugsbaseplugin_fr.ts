@@ -50,27 +50,27 @@ Veuillez vérifier vos répartitions journalières et vos relations avec le repa
 <context>
     <name>DrugsDB::DrugsBase</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="521"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="525"/>
         <source>Switching to the default drugs database source.</source>
         <translation>Revenir à la base de données par défaut.</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1101"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1105"/>
         <source>No drug database source selected</source>
         <translation>Pas de source pour la base de données thérapeutique sélectionné</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1103"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1107"/>
         <source>No drugs database loaded.</source>
         <translation>Pas de base de données thérapeutique chargée.</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1121"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1125"/>
         <source>Asking for a drug without UID</source>
         <translation>Requête d&apos;un médicament sant UID</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1258"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1262"/>
         <source>Unable to find drug with DID %1</source>
         <translation>Impossible de trouver le médicament avec le DID %1</translation>
     </message>
@@ -360,26 +360,19 @@ Voulez-vous les sauvegarder aussi ?</translation>
 <context>
     <name>DrugsDB::ProtocolsBase</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/protocolsbase.cpp" line="345"/>
-        <location filename="../../plugins/drugsbaseplugin/protocolsbase.cpp" line="351"/>
-        <location filename="../../plugins/drugsbaseplugin/protocolsbase.cpp" line="356"/>
+        <location filename="../../plugins/drugsbaseplugin/protocolsbase.cpp" line="346"/>
+        <location filename="../../plugins/drugsbaseplugin/protocolsbase.cpp" line="352"/>
+        <location filename="../../plugins/drugsbaseplugin/protocolsbase.cpp" line="357"/>
         <source>Unable to create the Protocol database.</source>
         <translation>Impossible de créer la base de données Protocoles.</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/protocolsbase.cpp" line="345"/>
-        <location filename="../../plugins/drugsbaseplugin/protocolsbase.cpp" line="351"/>
-        <location filename="../../plugins/drugsbaseplugin/protocolsbase.cpp" line="356"/>
-        <source>Please contact the development team.</source>
-        <translation>Veuillez contacter l&apos;équipe de développement.</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/drugsbaseplugin/protocolsbase.cpp" line="397"/>
+        <location filename="../../plugins/drugsbaseplugin/protocolsbase.cpp" line="398"/>
         <source>Standardized protocols database can not be updated successfully</source>
         <translation>La base de données des protocoles standardisés ne peut pas être mise à jour correctement</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/protocolsbase.cpp" line="462"/>
+        <location filename="../../plugins/drugsbaseplugin/protocolsbase.cpp" line="463"/>
         <source>Unable to update the protocol&apos;s transmission date.</source>
         <translation>Impossible de mettre à jour la date de transmission des protocoles.</translation>
     </message>

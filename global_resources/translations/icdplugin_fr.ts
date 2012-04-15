@@ -140,8 +140,9 @@
     </message>
     <message>
         <source>The ICD10 database can not be created. The application will not work properly.
-Please contact the development team.</source>
-        <translation>La base de données CIM10 ne peut pas être créée. L&apos;application ne fonctionnera pas correctement. Veuillez contacter l&apos;équipe de développement.</translation>
+</source>
+        <translation>La base de données CIM10 ne peut pas être créée. L&apos;application ne fonctionnera pas comme prévu.
+</translation>
     </message>
 </context>
 <context>

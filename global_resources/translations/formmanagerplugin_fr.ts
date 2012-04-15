@@ -106,17 +106,6 @@ Answering &apos;No&apos; will cause definitve data lose.</source>
     </message>
 </context>
 <context>
-    <name>Form::Internal::EpisodeBase</name>
-    <message>
-        <location filename="../../plugins/formmanagerplugin/episodebase.cpp" line="267"/>
-        <location filename="../../plugins/formmanagerplugin/episodebase.cpp" line="275"/>
-        <location filename="../../plugins/formmanagerplugin/episodebase.cpp" line="281"/>
-        <location filename="../../plugins/formmanagerplugin/episodebase.cpp" line="291"/>
-        <source>Please contact the development team.</source>
-        <translation>Veuillez contacter l&apos;équipe de développement.</translation>
-    </message>
-</context>
-<context>
     <name>Form::Internal::FirstRunFormManagerWizardPage</name>
     <message>
         <location filename="../../plugins/formmanagerplugin/firstrunformmanager.cpp" line="51"/>

@@ -75,16 +75,6 @@
     </message>
 </context>
 <context>
-    <name>PMH::Internal::PmhBase</name>
-    <message>
-        <location filename="../../plugins/pmhplugin/pmhbase.cpp" line="225"/>
-        <location filename="../../plugins/pmhplugin/pmhbase.cpp" line="233"/>
-        <location filename="../../plugins/pmhplugin/pmhbase.cpp" line="239"/>
-        <source>Please contact the development team.</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>PMH::Internal::PmhModeWidget</name>
     <message>
         <location filename="../../plugins/pmhplugin/pmhmodewidget.ui" line="14"/>

@@ -182,6 +182,11 @@
         <source>You just have to wait until all packs are downloaded.</source>
         <translation>Sie brauchen nur mehr zu warten, bis alle Pakete heruntergeladen sind.</translation>
     </message>
+    <message>
+        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="447"/>
+        <source>Download failed</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>DataPack::Internal::PackEndPage</name>
@@ -194,42 +199,42 @@
 <context>
     <name>DataPack::Internal::PackInstallPage</name>
     <message>
-        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="476"/>
+        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="477"/>
         <source>Installing pack(s)</source>
         <translation>Installiere Paket(e)</translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="478"/>
-        <source>Wait until all installations are done.</source>
-        <translation>Bitte warten Sie, bis alle Pakete fertig installiert sind.</translation>
+        <source>Please wait until all packs are installed.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>DataPack::Internal::PackIntroPage</name>
     <message>
-        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="164"/>
+        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="165"/>
         <source>Pack processing</source>
         <translation>Paketverarbeitung</translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="166"/>
-        <source>The following packs will be processed. Please verify all information.</source>
-        <translation>Die folgenden Pakete werden verarbeitet. Bitte überprüfen Sie alle Informationen. </translation>
+        <source>The following packs will be processed. Please verify all informations.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="193"/>
-        <source>Pack(s) to install</source>
-        <translation>Paket(e) zu installieren</translation>
+        <source>%1 Pack(s) to install</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="195"/>
-        <source>Pack(s) to update</source>
-        <translation>Paket(e) zu aktualisieren</translation>
+        <source>%1 Pack(s) to update</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="197"/>
-        <source>Pack(s) to remove</source>
-        <translation>Paket(e) zu entfernen</translation>
+        <source>%1 Pack(s) to remove</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

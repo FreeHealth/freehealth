@@ -209,18 +209,18 @@
 <context>
     <name>Editor::TextEditor</name>
     <message>
-        <location filename="../../plugins/texteditorplugin/texteditor.cpp" line="528"/>
+        <location filename="../../plugins/texteditorplugin/texteditor.cpp" line="580"/>
         <source>Save in pure textual format?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/texteditorplugin/texteditor.cpp" line="529"/>
+        <location filename="../../plugins/texteditorplugin/texteditor.cpp" line="581"/>
         <source>The conversion of the document to a pure textual format will cause the lost of the paragraph and characters format. Do you really want to save in pure textual format?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/texteditorplugin/texteditor.cpp" line="551"/>
-        <location filename="../../plugins/texteditorplugin/texteditor.cpp" line="553"/>
+        <location filename="../../plugins/texteditorplugin/texteditor.cpp" line="603"/>
+        <location filename="../../plugins/texteditorplugin/texteditor.cpp" line="605"/>
         <source>Font format</source>
         <translation type="unfinished"></translation>
     </message>

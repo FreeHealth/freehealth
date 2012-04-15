@@ -25,7 +25,7 @@
     <message>
         <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="1013"/>
         <source>User %1 successfully updated.</source>
-        <translation type="unfinished"></translation>
+        <translation>Utilisateur %1 correctement mis à jour.</translation>
     </message>
 </context>
 <context>
@@ -117,13 +117,14 @@
     <message>
         <location filename="../../plugins/usermanagerplugin/widgets/defautuserviewerpages.cpp" line="120"/>
         <source>Password successfully modified and saved into database.</source>
-        <translation type="unfinished"></translation>
+        <translation>Mot de passe correctement modifié et sauvegardé dans la base de données.</translation>
     </message>
     <message>
         <location filename="../../plugins/usermanagerplugin/widgets/defautuserviewerpages.cpp" line="129"/>
         <source>User %1
 Last connection: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Utilisateur %1
+Dernière connexion : %2</translation>
     </message>
     <message>
         <location filename="../../plugins/usermanagerplugin/widgets/defautuserviewerpages.cpp" line="128"/>
@@ -371,7 +372,7 @@ Vous ne pouvez pas continuer avec un utilisateur anonyme.</translation>
     <message>
         <location filename="../../plugins/usermanagerplugin/widgets/useridentityandloginpage.cpp" line="202"/>
         <source>You must specify a valid login. An empty login is forbidden.</source>
-        <translation type="unfinished"></translation>
+        <translation>Vous devez spécifier un identifiant valide. Les identifiants vides sont interdits.</translation>
     </message>
     <message>
         <location filename="../../plugins/usermanagerplugin/widgets/useridentityandloginpage.cpp" line="203"/>
@@ -462,22 +463,22 @@ Vous devez en utiliser un différent.</translation>
     <message>
         <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="355"/>
         <source>You&apos;ve modified the users list.</source>
-        <translation type="unfinished"></translation>
+        <translation>Vous avez modifié la liste des utilisateurs.</translation>
     </message>
     <message>
         <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="355"/>
         <source>Do you want to save your changes?</source>
-        <translation type="unfinished"></translation>
+        <translation>Voulez-vous sauvegarder les modifications ?</translation>
     </message>
     <message>
         <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="363"/>
         <source>Changes have been saved successfully.</source>
-        <translation type="unfinished"></translation>
+        <translation>Les modifications ont été correctement sauvegardées.</translation>
     </message>
     <message>
         <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="366"/>
         <source>Changes can not be saved successfully.</source>
-        <translation type="unfinished"></translation>
+        <translation>Les modification n&apos;ont pas été sauvegardés.</translation>
     </message>
     <message>
         <location filename="../../plugins/usermanagerplugin/widgets/usermanager.cpp" line="487"/>
@@ -981,7 +982,8 @@ Vous devez en utiliser un différent.</translation>
         <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="124"/>
         <source>The user database is not reachable. Please check your configuration.
 Application will stop.</source>
-        <translation type="unfinished"></translation>
+        <translation>La base de données utilisateur n&apos;est pas joignable. Veuillez vérifier votre configuration.
+L&apos;application va s&apos;arrêter.</translation>
     </message>
     <message>
         <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="166"/>
@@ -1200,12 +1202,12 @@ Application will stop.</source>
         <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="274"/>
         <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="276"/>
         <source>User successfully saved into database.</source>
-        <translation type="unfinished"></translation>
+        <translation>Utilisateur correctement sauvegardé dans la base de données.</translation>
     </message>
     <message>
         <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="275"/>
         <source>The user was successfully created and saved into database.</source>
-        <translation type="unfinished"></translation>
+        <translation>L&apos;utilisateur a été correctement créé et sauvegardé dans la base de données.</translation>
     </message>
 </context>
 <context>

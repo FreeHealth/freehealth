@@ -2,17 +2,6 @@
 <!DOCTYPE TS>
 <TS version="2.0" language="es_ES">
 <context>
-    <name>Templates::Internal::TemplateBase</name>
-    <message>
-        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="314"/>
-        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="322"/>
-        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="328"/>
-        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="338"/>
-        <source>Please contact the development team.</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>Templates::Internal::TemplatesContentEditor</name>
     <message>
         <location filename="../../plugins/templatesplugin/templatescontenteditor.ui" line="14"/>

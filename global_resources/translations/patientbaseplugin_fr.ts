@@ -256,17 +256,6 @@
     </message>
 </context>
 <context>
-    <name>Patients::Internal::PatientBase</name>
-    <message>
-        <location filename="../../plugins/patientbaseplugin/patientbase.cpp" line="323"/>
-        <location filename="../../plugins/patientbaseplugin/patientbase.cpp" line="331"/>
-        <location filename="../../plugins/patientbaseplugin/patientbase.cpp" line="337"/>
-        <location filename="../../plugins/patientbaseplugin/patientbase.cpp" line="347"/>
-        <source>Please contact the development team.</source>
-        <translation>Veuillez contacter l&apos;équipe de développement.</translation>
-    </message>
-</context>
-<context>
     <name>Patients::Internal::PatientBasePreferencesPage</name>
     <message>
         <location filename="../../plugins/patientbaseplugin/patientbasepreferencespage.cpp" line="67"/>

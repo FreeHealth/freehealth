@@ -191,48 +191,48 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="810"/>
+        <location filename="../../libs/utils/global.cpp" line="856"/>
         <source>Cancel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="885"/>
+        <location filename="../../libs/utils/global.cpp" line="947"/>
         <source>This function is not available in this version.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="886"/>
+        <location filename="../../libs/utils/global.cpp" line="948"/>
         <source>You can send an email to developers and explain your difficulties: freemedforms@googlegroups.com.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="947"/>
+        <location filename="../../libs/utils/global.cpp" line="1009"/>
         <source>Do you agree these terms?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="927"/>
-        <location filename="../../libs/utils/global.cpp" line="928"/>
+        <location filename="../../libs/utils/global.cpp" line="989"/>
+        <location filename="../../libs/utils/global.cpp" line="990"/>
         <source>License agreement acceptation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="939"/>
+        <location filename="../../libs/utils/global.cpp" line="1001"/>
         <source>&lt;b&gt;Before you can use this software, you must agree its license terms&lt;/b&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1017"/>
+        <location filename="../../libs/utils/global.cpp" line="1079"/>
         <source>%1 is now in fullScreen Mode.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1022"/>
+        <location filename="../../libs/utils/global.cpp" line="1084"/>
         <source>%1 is now in non fullScreen Mode.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/global.cpp" line="1535"/>
+        <location filename="../../libs/utils/global.cpp" line="1597"/>
         <source>Token replacement error (%1). Wrong number of parentheses.</source>
         <translation type="unfinished"></translation>
     </message>

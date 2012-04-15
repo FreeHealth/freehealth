@@ -42,7 +42,7 @@ Erreur : %2</translation>
     <message>
         <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="549"/>
         <source>A form update has been detected. Do you want to update the forms?</source>
-        <translation type="unfinished"></translation>
+        <translation>Une mise à jour de formulaire a été détectée. Voulez-vous mettre à jour les formulaires ?</translation>
     </message>
 </context>
 <context>

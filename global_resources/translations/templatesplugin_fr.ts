@@ -2,17 +2,6 @@
 <!DOCTYPE TS>
 <TS version="2.0" language="fr_FR">
 <context>
-    <name>Templates::Internal::TemplateBase</name>
-    <message>
-        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="314"/>
-        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="322"/>
-        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="328"/>
-        <location filename="../../plugins/templatesplugin/templatebase.cpp" line="338"/>
-        <source>Please contact the development team.</source>
-        <translation>Veuillez contacter l&apos;équipe de développement.</translation>
-    </message>
-</context>
-<context>
     <name>Templates::Internal::TemplatesContentEditor</name>
     <message>
         <location filename="../../plugins/templatesplugin/templatescontenteditor.ui" line="14"/>
@@ -32,7 +21,8 @@
         <location filename="../../plugins/templatesplugin/templatesmodel.cpp" line="113"/>
         <source>Some data are not actually saved into database.Do you want to save them?
  Answering &apos;No&apos; will cause definitive data loss.</source>
-        <translation type="unfinished"></translation>
+        <translation>Des données ne sont pas sauvegardées. Voulez-vous les sauvegarder ?
+Répondre &quot;Non&quot; causera une perte de données irréversible.</translation>
     </message>
 </context>
 <context>
