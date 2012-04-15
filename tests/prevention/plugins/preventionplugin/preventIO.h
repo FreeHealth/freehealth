@@ -5,7 +5,7 @@
 #include <QtCore>
 #include <QAbstractItemModel>
 #include <QDebug>
-
+#include <QTextDocument>
 
  class TreeItem:public QObject
  {
@@ -161,6 +161,8 @@ class VariantItemModel : public QAbstractItemModel
      bool addAGroupItem(QModelIndex & index,QModelIndex & parent,QObject * parentObject);
      bool deleteItemAccordingToIndex(QModelIndex & index,QModelIndex & parent, QObject * parentObject);
      bool deleteGroupOfItems(QModelIndex & index);
+     //get childsAndItems
+     QHash<QString,QString> childsAndItems(QModelIndex & parent);
  private:
      int getSqlTableRow(int idOfItem);
      TreeItem * findTreeItemWithIdItem(QVariant & idItem);
@@ -200,6 +202,8 @@ class PreventIO : public QObject {
         QStringList getListOfNextDateItems();
         QString getUserUid();
         QDate getNextDate(const QStringList & listOfDatas, QModelIndex index);
+        bool recordDocument(const QTextDocument *document, const QString & id);
+        QString getDocumentRelativeToIdItem(const QString & id_item);
         QSqlDatabase m_db;
         VariantItemModel *m_variantModel;
         QSqlTableModel *m_NextDateModel;
