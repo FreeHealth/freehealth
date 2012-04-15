@@ -291,9 +291,14 @@ PadItem *PadDocument::padItemForSourcePosition(int p) const
 /** Find fragment for the QTextCursor position in raw source document. Return 0 if no fragment matches. */
 PadFragment *PadDocument::padFragmentForSourcePosition(int rawPos) const
 {
-    foreach(PadFragment *fragment, _fragments) {
-        if (fragment->start() <= rawPos && fragment->end() >= rawPos)
-            return fragment->padFragmentForSourcePosition(rawPos);
+    if (_fragments.isEmpty()) {
+        if (_start <= rawPos && _end >= rawPos)
+            return (PadFragment *)this;
+    } else {
+        foreach(PadFragment *fragment, _fragments) {
+            if (fragment->start() <= rawPos && fragment->end() >= rawPos)
+                return fragment->padFragmentForSourcePosition(rawPos);
+        }
     }
     return 0;
 }
@@ -301,9 +306,14 @@ PadFragment *PadDocument::padFragmentForSourcePosition(int rawPos) const
 /** Find fragment for the QTextCursor position in output document. Return 0 if no fragment matches. */
 PadFragment *PadDocument::padFragmentForOutputPosition(int outputPos) const
 {
-    foreach(PadFragment *fragment, _fragments) {
-        if (fragment->outputStart() <= outputPos && fragment->outputEnd() >= outputPos)
-            return fragment->padFragmentForOutputPosition(outputPos);
+    if (_fragments.isEmpty()) {
+        if (_outputStart <= outputPos && _outputEnd >= outputPos)
+            return (PadFragment *)this;
+    } else {
+        foreach(PadFragment *fragment, _fragments) {
+            if (fragment->outputStart() <= outputPos && fragment->outputEnd() >= outputPos)
+                return fragment->padFragmentForOutputPosition(outputPos);
+        }
     }
     return 0;
 }
