@@ -5,12 +5,12 @@ SUBDIRS = \
     core \
     listview \
     texteditor \
-    padtools \
     templates \
     formmanager \
     zipcodes \
     datapack \
-#    saverestore \
+#    padtools \       # unstable
+#    saverestore \    # unstable
     # Depend to more than one plugin
     printer \
     category \

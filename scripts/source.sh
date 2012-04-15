@@ -244,6 +244,11 @@ cd $PACKPATH/libs
 find . -type f -name '*.pro' -exec sed -i bkup 's/# VERSION=1.0.0/!win32:{VERSION='$NON_ALPHABETA_PROJECT_VERSION'}/' {} \;
 find . -type f -name '*.probkup' -exec rm {} \;
 
+echo "   * REMOVING TEST VERSION IN FORMS"
+cd $PACKPATH/forms
+find . -type f -name '*.xml' -exec sed -i bkup 's#<version>test</version>#<version>'$NON_ALPHABETA_PROJECT_VERSION'</version>#' {} \;
+find . -type f -name '*.xmlbkup' -exec rm {} \;
+
 # git version is computed in the buildspecs/githash.pri
 # but the source package needs a static reference
 # while source package does not include the git logs
