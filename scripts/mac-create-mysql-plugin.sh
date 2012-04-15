@@ -9,7 +9,7 @@
 # - installs the plugins
 # - clean the Qt sources
 
-QT_VERSION=4.8.0
+QT_VERSION=4.8.1
 ACTUAL_PATH=`pwd`
 
 # This script assumes that MySQL is installed with header files
