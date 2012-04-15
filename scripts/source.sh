@@ -245,7 +245,7 @@ find . -type f -name '*.pro' -exec sed -i bkup 's/# VERSION=1.0.0/!win32:{VERSIO
 find . -type f -name '*.probkup' -exec rm {} \;
 
 echo "   * REMOVING TEST VERSION IN FORMS"
-cd $PACKPATH/forms
+cd $PACKPATH/global_resources/forms
 find . -type f -name '*.xml' -exec sed -i bkup 's#<version>test</version>#<version>'$NON_ALPHABETA_PROJECT_VERSION'</version>#' {} \;
 find . -type f -name '*.xmlbkup' -exec rm {} \;
 
