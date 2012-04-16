@@ -64,6 +64,8 @@ private Q_SLOTS:
     void rawSourceCursorChanged();
     void changeRawSourceScenario(QAction*);
     void analyseRawSource();
+    void outputToRaw();
+
     void viewErrors();
     void setAutoUpdateOfResult(bool state);
     void setTestValues(bool state);

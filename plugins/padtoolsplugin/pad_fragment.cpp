@@ -225,8 +225,13 @@ void PadFragment::outputPosChanged(const int oldPos, const int newPos)
     } else {
 //        debug += QString("    move: %1\n").arg((_outputStart > oldPos));
         // oldPos outside fragment
-        if (_outputStart > oldPos)
+        if (_outputStart > oldPos) {
             translateOutput(delta);
+            foreach(PadFragment *f, children()) {
+                if (f!=this)
+                    f->outputPosChanged(oldPos, newPos);
+            }
+        }
     }
 //    debug += QString("    new: (%1;%2)\n").arg(_outputStart).arg(_outputEnd);
 

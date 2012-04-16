@@ -46,6 +46,7 @@ public:
 
     void clear();
     void addOutputTranslation(const int outputPos, const int length);
+    void addRawTranslation(const int rawPos, const int length);
     int deltaForSourcePosition(const int rawPos);
     int rawToOutput(const int rawPos);
     int outputToRaw(const int outputPos);
@@ -99,10 +100,13 @@ public:
     PadPositionTranslator &positionTranslator() {return _posTrans;}
     void outputPosChanged(const int oldPos, const int newPos);
 
-    // Start replacement of tokens
+    // Start replacement of tokens  (raw to output)
 //    void run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out);
     void run(QMap<QString,QVariant> &, PadDocument *) {/* Should never be used*/}
     void run(QMap<QString,QVariant> &tokens);
+
+    // Start token creation  (output to raw)
+    void toRaw(PadDocument *doc = 0);
 
     // do not return children padfragment
     QList<PadFragment*> children() const {return QList<PadFragment*>();}

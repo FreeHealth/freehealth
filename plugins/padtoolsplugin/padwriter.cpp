@@ -158,6 +158,7 @@ PadWriter::PadWriter(QWidget *parent) :
     connect(d->ui->viewResult, SIGNAL(clicked()), this, SLOT(analyseRawSource()));
     connect(d->ui->viewError, SIGNAL(clicked()), this, SLOT(viewErrors()));
     connect(d->ui->findCursor, SIGNAL(clicked()), this, SLOT(highlightCursor()));
+    connect(d->ui->outputToRaw, SIGNAL(clicked()), this, SLOT(outputToRaw()));
 
     // TEST
     QAction *a;
@@ -265,8 +266,9 @@ void PadWriter::changeRawSourceScenario(QAction *a)
 //                " 10 chars ^$ _D_ ~D~ _D_$^<br />"
                 ;
     } else if (a == d->aTest3) {
-        source = "<p><b>^$ <span style=' text-decoration: underline; color:#ff00ff;'>before </span> 'a'  ~A~  after 'a'$^ qdsfsdqf qdf qsdf </b><br />"
-                 "^$ <span style=' text-decoration: underline; color:#0000ff;'>before</span> ^$ Before nested C ~C~ After ^$ Before D ~D~ After D $^nested C $^ 'b' ~B~ after 'b'$^<br />";
+        source = "<p><b>^$(<span style='text-decoration: underline; color:#ff00ff;'>A:</span> ~A~)$^. Some strings.</b><br />"
+                "^$(<span style='text-decoration: underline; color:#0000ff;'>D:</span> ^$[C: ~C~]$^ ~D~)$^<br/>"
+                "^$(B: ~B~)$^<br />";
     } else if (a == d->aTest4) {
     source = "<p><b>Testing tokens inside a table</b><br />"
             "<table border=1>"
@@ -337,6 +339,32 @@ void PadWriter::analyseRawSource()
             break;
         }
     }
+}
+
+void PadWriter::outputToRaw()
+{
+    // clear PadDocument && views
+//    QList<Core::PadAnalyzerError> errors;
+//    d->_pad->clear();
+
+    // Start raw source composition
+    d->_pad->toRaw();
+
+//    PadAnalyzer().analyze(d->ui->rawSource->document(), d->_pad);
+//    d->_pad->setTokenModel(d->_tokenModel);
+//    d->_pad->run(d->_tokenModel->tokens());
+
+//    d->ui->listWidgetErrors->clear();
+//    foreach (const Core::PadAnalyzerError &error, errors) {
+//        switch (error.errorType()) {
+//        case Core::PadAnalyzerError::Error_UnexpectedChar:
+//            d->ui->listWidgetErrors->addItem(tr("Unexpected '%1' found at pos %2").arg(error.errorTokens()["char"].toString()).arg(error.pos()));
+//            break;
+//        case Core::PadAnalyzerError::Error_CoreDelimiterExpected:
+//            d->ui->listWidgetErrors->addItem(tr("Expected '%1' at pos %2").arg(error.errorTokens()["char"].toString()).arg(error.pos()));
+//            break;
+//        }
+//    }
 }
 
 void PadWriter::viewErrors()
