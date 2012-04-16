@@ -7,6 +7,8 @@
 #include "ui_moreIHM.h"
 #include <QWidget>
 #include <QMouseEvent>
+#include <QSqlDatabase>
+#include <QHash>
 
 class TreeViewOfPrevention;
 
@@ -18,9 +20,15 @@ class MoreIHM : public QWidget , Ui::MoreWidget{
     
     private Q_SLOTS:
         void showDocumentAccordingToComboChoice(int);
+        void closeAndQuit();
+        void saveTextBrowser();
     private:
         void closeMoreWidget();
         //void mouseReleaseEvent(QMouseEvent *event);
+        PreventIO *m_io;
+        QSqlDatabase m_db;
+        QHash<QString,QString> m_hashItemAndId;
+        QHash<int,QString> m_hashIndexAndId;
 };
 
 #endif

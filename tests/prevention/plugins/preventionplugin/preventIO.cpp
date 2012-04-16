@@ -4,6 +4,7 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/iuser.h>
 #include <coreplugin/ipatient.h>
+#include <utils/log.h>
 
 #include <QAbstractItemModel>
 #include <QMessageBox>
@@ -410,6 +411,22 @@ QHash<int,QVariant> VariantItemModel::childs(QModelIndex &parent){
           }
       return listHash;
   }
+  
+QHash<QString,QString> VariantItemModel::childsAndItems(QModelIndex & parent)
+{
+    QHash<QString,QString> hash;
+      TreeItem * parentItem = getItem(parent);
+      int childCount = parentItem->childCount();
+      for (int i = 0; i < childCount; i += 1)
+      {
+      	  TreeItem * child = parentItem->child(i);
+      	  QString data = child->data(ITEM_H).toString();
+      	  QString id = child->data(ID_ITEM_H).toString();
+      	  hash.insertMulti(data,id);
+          }    
+    return hash;
+    
+}
 
  bool VariantItemModel::insertColumns(int position, int columns, const QModelIndex &parent)
  {
@@ -1051,5 +1068,47 @@ QDate PreventIO::getNextDate(const QStringList & listOfDatas, QModelIndex index)
     newDate = newDate.addMonths(months);
     newDate = newDate.addDays(days);
     return newDate;
+}
+
+bool PreventIO::recordDocument(const QTextDocument *document,const QString & id)
+{
+    bool success = true;
+    const QString text = document->toPlainText();
+    QSqlQuery query(m_db);
+    const QString req = QString("UPDATE %1 SET %2 = '%3' WHERE %4 LIKE '%5'")
+                        .arg("prevention","RESULT",text,"ID_ITEM",id);
+    if (!query.exec(req))
+    {
+    	LOG_ERROR(query.lastError().text()+" "__FILE__+QString::number(__LINE__));
+    	qDebug() << __FILE__ << QString::number(__LINE__) << query.lastQuery() ;
+    	success = false;
+    }
+    return success;
+}
+
+QString PreventIO::getDocumentRelativeToIdItem(const QString & id_item)
+{
+    QString text;
+    QStringList listTest;
+    QSqlQuery query(m_db);
+    const QString req = QString("SELECT %1 FROM %2 WHERE %3 = '%4' ")
+                        .arg("RESULT","prevention","ID_ITEM",id_item);
+    if (!query.exec(req))
+    {
+    	LOG_ERROR(query.lastError().text()+" "__FILE__+QString::number(__LINE__));
+    }
+    while (query.next())
+    {
+    	text = query.value(0).toString();
+    	listTest << text;
+    }
+    if (listTest.size()>1)
+    {
+    	/*Utils::warningMessageBox( trUtf8("ERROR"),
+    	                          trUtf8("There is two results for the same ID"), 
+    	                          __FILE__+" "+QString::number(__LINE__), 
+    	                          trUtf8("Warning") );*/
+    }
+    return text;
 }
 
