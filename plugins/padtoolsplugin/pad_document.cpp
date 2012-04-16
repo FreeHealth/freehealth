@@ -298,7 +298,7 @@ PadItem *PadDocument::padItemForSourcePosition(int p) const
 PadFragment *PadDocument::padFragmentForSourcePosition(int rawPos) const
 {
     if (_fragments.isEmpty()) {
-        if (_start <= rawPos && _end >= rawPos)
+        if (_start <= rawPos && rawPos <= _end)
             return (PadFragment *)this;
     } else {
         foreach(PadFragment *fragment, _fragments) {
@@ -313,7 +313,7 @@ PadFragment *PadDocument::padFragmentForSourcePosition(int rawPos) const
 PadFragment *PadDocument::padFragmentForOutputPosition(int outputPos) const
 {
     if (_fragments.isEmpty()) {
-        if (_outputStart <= outputPos && _outputEnd >= outputPos)
+        if (_outputStart <= outputPos && outputPos <= _outputEnd)
             return (PadFragment *)this;
     } else {
         foreach(PadFragment *fragment, _fragments) {
