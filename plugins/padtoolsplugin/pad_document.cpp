@@ -67,6 +67,12 @@ void PadPositionTranslator::addOutputTranslation(const int outputPos, const int 
     _translations.insertMulti(outputPos, length);
 }
 
+void PadPositionTranslator::addRawTranslation(const int rawPos, const int length)
+{
+    int output = rawToOutput(rawPos);
+    addOutputTranslation(output, -length);
+}
+
 int PadPositionTranslator::deltaForSourcePosition(const int outputPos)
 {
     int delta = 0;
@@ -338,26 +344,20 @@ void PadDocument::outputPosChanged(const int oldPos, const int newPos)
         item->outputPosChanged(oldPos, newPos);
 }
 
-///** Run this pad over some tokens and set the result to the \e out QTextDocument */
-//void PadDocument::run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out)
-//{
-//    foreach (PadFragment *fragment, _fragments)
-//        fragment->run(tokens, source, out);
-//    _docOutput = out;
-
-//    debug();
-//}
-
-static void syncRange(PadFragment *f)
+static void syncOutputRange(PadFragment *f)
 {
     f->setOutputStart(f->start());
     f->setOutputEnd(f->end());
     foreach(PadFragment *frag, f->children())
-        syncRange(frag);
+        syncOutputRange(frag);
 }
 
+/** Starts the replacement of tokens. This function will recreate the output QTextDocument. This one will be cleared. */
 void PadDocument::run(QMap<QString,QVariant> &tokens)
 {
+    Q_ASSERT(_docSource);
+    if (!_docSource)
+        return;
     Q_EMIT beginTokenReplacement();
 
     if (!_docOutput) {
@@ -368,7 +368,7 @@ void PadDocument::run(QMap<QString,QVariant> &tokens)
 
     // sync raw && output ranges of all fragments
     foreach (PadFragment *fragment, _fragments)
-        syncRange(fragment);
+        syncOutputRange(fragment);
 
     // run tokens on fragments
     foreach (PadFragment *fragment, _fragments)
@@ -379,6 +379,40 @@ void PadDocument::run(QMap<QString,QVariant> &tokens)
 
     // emit end signal
     Q_EMIT endTokenReplacement();
+}
+
+static void syncRawRange(PadFragment *f)
+{
+    f->setStart(f->outputStart());
+    f->setEnd(f->outputEnd());
+    foreach(PadFragment *frag, f->children())
+        syncRawRange(frag);
+}
+
+void PadDocument::toRaw(PadDocument *doc)
+{
+    // Doc must be null cause we are using the current object
+    Q_ASSERT(!doc);
+    if (doc)
+        return;
+    Q_ASSERT(_docOutput);
+    if (!_docOutput)
+        return;
+    Q_ASSERT(_docSource);
+    if (!_docSource)
+        return;
+
+    _docSource->clear();
+    _posTrans.clear();
+    _docSource->setHtml(_docOutput->toHtml());
+
+    // sync raw && output ranges of all fragments
+    foreach (PadFragment *fragment, _fragments)
+        syncRawRange(fragment);
+
+    // run tokens on fragments
+    foreach (PadFragment *fragment, _fragments)
+        fragment->toRaw(this);
 }
 
 /** Clear the PadDocument without deleting sources. */

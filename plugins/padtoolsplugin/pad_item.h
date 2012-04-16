@@ -58,9 +58,10 @@ public:
 
     void addDelimiter(const int posInRaw, const int size);
 
-    void run(QMap<QString,QVariant> &tokens);
-    void run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out);
+//    void run(QMap<QString,QVariant> &tokens);
+//    void run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out);
     void run(QMap<QString,QVariant> &tokens, PadDocument *document);
+    void toRaw(PadDocument *doc);
 
     void debug(int indent = 0) const;
 
@@ -83,7 +84,7 @@ public:
 //    void run(QMap<QString,QVariant> &tokens);
 //    void run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *output);
     void run(QMap<QString,QVariant> &tokens, PadDocument *document);
-
+    void toRaw(PadDocument *doc);
 
 private:
     QString _name;
@@ -113,6 +114,7 @@ public:
 //    void run(QMap<QString,QVariant> &tokens);
 //    void run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out);
     void run(QMap<QString,QVariant> &tokens, PadDocument *document);
+    void toRaw(PadDocument *doc);
 
     QList<PadFragment*> children() const;
 	PadCore *getCore() const;

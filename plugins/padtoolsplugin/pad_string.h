@@ -47,6 +47,7 @@ public:
 //    void run(QMap<QString,QVariant> &);
 //    void run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out);
     void run(QMap<QString,QVariant> &tokens, PadDocument *document);
+    void toRaw(PadDocument *document);
 
 private:
 	QString _string;

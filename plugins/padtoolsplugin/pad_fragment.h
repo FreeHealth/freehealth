@@ -73,6 +73,7 @@ public:
     const QString &toolTip() const {return _toolTip;}
 
     virtual void run(QMap<QString,QVariant> &tokens, PadDocument *document) = 0;
+    virtual void toRaw(PadDocument *doc) = 0;
 
     virtual void addChild(PadFragment *fragment);
     virtual void removeAndDeleteFragment(PadFragment *fragment);

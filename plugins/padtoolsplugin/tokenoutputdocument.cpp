@@ -653,8 +653,9 @@ void TokenOutputDocument::disconnectOutputDocumentChanges()
 /** Keep PadDocument sync to the output QTextDocument */
 void TokenOutputDocument::contentChanged(const int pos, const int rm, const int ins)
 {
-//    qWarning() << "contentChanged pos" << pos << "ins" << ins << "rm" << rm;
+    qWarning() << "contentChanged pos" << pos << "ins" << ins << "rm" << rm;
 
+    /** \todo manage textformatting modifications -> do not re-compute positions */
     if (rm)
         d->_pad->outputPosChanged(pos, pos-rm);
 
