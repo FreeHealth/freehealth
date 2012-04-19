@@ -58,8 +58,10 @@ public:
 
     void addDelimiter(const int posInRaw, const int size);
 
-//    void run(QMap<QString,QVariant> &tokens);
-//    void run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out);
+    bool containsOutputPosition(const int pos) const;
+    bool isBeforeOutputPosition(const int pos) const;
+    bool isAfterOutputPosition(const int pos) const;
+
     void run(QMap<QString,QVariant> &tokens, PadDocument *document);
     void toRaw(PadDocument *doc);
 
@@ -78,6 +80,10 @@ public:
 
     const QString &name() const { return _name; }
     void setName(const QString &name) { _name = name; }
+
+    bool containsOutputPosition(const int pos) const;
+    bool isBeforeOutputPosition(const int pos) const;
+    bool isAfterOutputPosition(const int pos) const;
 
     void debug(int indent = 0) const;
 
