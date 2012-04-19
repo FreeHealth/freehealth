@@ -242,7 +242,7 @@ void AccountDatabaseDefautsWidget::on_createButton_clicked()
     QApplication::setOverrideCursor(QCursor(Qt::BusyCursor));
     bool success = true;
     if (medicalProcedure->isChecked()) {
-        if (!createDefaultsFor("medical_procedure_6957", AccountDB::Constants::Table_MedicalProcedure))
+        if (!createDefaultsFor("medical_procedure", AccountDB::Constants::Table_MedicalProcedure))
             {Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("Medical procedure defaults can not be included."));
              success = false;
              }

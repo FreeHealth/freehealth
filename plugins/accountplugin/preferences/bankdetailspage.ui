@@ -52,7 +52,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="deleteButton">
+         <widget class="QPushButton" name="removeButton">
           <property name="minimumSize">
            <size>
             <width>22</width>

@@ -227,7 +227,7 @@ void MedicalProcedureWidget::on_mpComboBox_currentIndexChanged(const QString & t
         qDebug() << __FILE__ << QString::number(__LINE__) << "index   =" << QString::number(m_index);
 }
 
-void MedicalProcedureWidget::on_addButton_clicked()//todo
+void MedicalProcedureWidget::on_addButton_clicked()
 {
     MedicalProcedureModel *modelMP = new MedicalProcedureModel(this);
     if (WarnDebugMessage)
@@ -382,7 +382,8 @@ void MedicalProcedureWidget::save(){
         LOG_QUERY_ERROR(q);
     while (q.next()) {
     	QString str = q.value(0).toString();
-        if (str.contains(nameStr)) {
+    	str : str.trimmed();
+        if (str==nameStr) {
     		  test = true;
         }
     }
