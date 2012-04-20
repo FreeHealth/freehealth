@@ -129,16 +129,12 @@ MainWindow::MainWindow(QWidget *parent) :
     testInternet();
 
     // get the global_resources directory from the command line argument
-    QDir resourcesDir(QCoreApplication::applicationDirPath());
-    QStringList list = QCoreApplication::arguments();
-    int index = list.indexOf(QRegExp("--config=*", Qt::CaseSensitive, QRegExp::Wildcard));
-    if (index >= 0) {
-        QString iniFileName = list[index];
-        iniFileName = iniFileName.mid(iniFileName.indexOf("=") + 1);
-
-        resourcesDir = QFileInfo(resourcesDir.filePath(iniFileName)).absolutePath();
-    } else // ugly shortcut only valid for eric when no --config parameter has been provided :)
-        resourcesDir = "/Users/eric/Desktop/Programmation/freemedforms/global_resources";
+    QDir resourcesDir;
+    if (Utils::isRunningOnLinux()) {
+        resourcesDir.setPath(QCoreApplication::applicationDirPath() + "/../../global_resources");
+    } else {
+        resourcesDir.setPath(QCoreApplication::applicationDirPath() + "/../../../../../global_resources");
+    }
 
     // Create and configure DataPack lib
     DataPack::DataPackCore &core = DataPack::DataPackCore::instance();
