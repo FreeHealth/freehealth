@@ -111,14 +111,14 @@ public:
     PadItem() : PadFragment() {}
 	virtual ~PadItem();
 
-//    PadFragment *fragment(const int type) const;
-
     void addDelimiter(const int posInRaw, const int size);
+
+    bool containsOutputPosition(const int pos) const;
+    bool isBeforeOutputPosition(const int pos) const;
+    bool isAfterOutputPosition(const int pos) const;
 
     void debug(int indent = 0) const;
 
-//    void run(QMap<QString,QVariant> &tokens);
-//    void run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out);
     void run(QMap<QString,QVariant> &tokens, PadDocument *document);
     void toRaw(PadDocument *doc);
 
