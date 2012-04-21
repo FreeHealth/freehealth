@@ -41,6 +41,8 @@ public:
     PadFragment(PadFragment *parent = 0);
     virtual ~PadFragment();
 
+    void clear();
+
     virtual void setParent(PadFragment *parent) {_parent = parent;}
     virtual PadFragment *parent() const {return _parent;}
 
@@ -66,8 +68,10 @@ public:
     int outputEnd() const {return _outputEnd;}
     void resetOutputRange() {_outputStart=-1; _outputEnd=-1; foreach(PadFragment*f,_fragments) f->resetOutputRange();}
 
-    bool containsRawPosition(const int pos) const {return (_start <= pos && _end >= pos);}
-    bool containsOutputPosition(const int pos) const {return (_outputStart <= pos && _outputEnd >= pos);}
+    virtual bool containsRawPosition(const int pos) const;
+    virtual bool containsOutputPosition(const int pos) const;
+    virtual bool isBeforeOutputPosition(const int pos) const;
+    virtual bool isAfterOutputPosition(const int pos) const;
 
     void setToolTip(const QString &tooltip) {_toolTip = tooltip;}
     const QString &toolTip() const {return _toolTip;}
