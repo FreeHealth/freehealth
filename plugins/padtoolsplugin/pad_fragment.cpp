@@ -145,6 +145,19 @@ PadFragment::~PadFragment()
     _parent = 0;
 }
 
+/** Clear the fragment including: children list, parent, ranges.*/
+void PadFragment::clear()
+{
+    qDeleteAll(_fragments);
+    _fragments.clear();
+    _parent = 0;
+    _start = -1;
+    _end = -1;
+    _outputStart = -1;
+    _outputEnd = -1;
+    _id = -1;
+}
+
 /** Add a PadTools::PadFragment as a direct child of this object. Children are stored in an ordered list. */
 void PadFragment::addChild(PadFragment *fragment)
 {

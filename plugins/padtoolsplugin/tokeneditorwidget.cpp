@@ -26,6 +26,7 @@
  ***************************************************************************/
 #include "tokeneditorwidget.h"
 #include "constants.h"
+#include "pad_item.h"
 
 #include <translationutils/constants.h>
 #include <translationutils/trans_current.h>
@@ -117,7 +118,7 @@ void TokenEditorWidget::setConditionnalAfterPlainText(const QString &txt)
     ui->after->setPlainText(txt);
 }
 
-QString TokenEditorWidget::toHtml() const
+QString TokenEditorWidget::toRawSourceHtml() const
 {
     QTextDocument doc;
     QTextCursor cursor(&doc);
@@ -146,3 +147,49 @@ QString TokenEditorWidget::toHtml() const
 
     return doc.toHtml();
 }
+
+void TokenEditorWidget::getOutput(QString &html, PadItem &item, int startingOutputPos) const
+{
+    QTextDocument doc;
+    QTextCursor cursor(&doc);
+    html.clear();
+    // Keep parent && id of item
+    item.clear();
+    item.setOutputStart(startingOutputPos);
+    int previousPosition = 0;
+
+    // Insert SubItemFragment before (id ?)
+    PadConditionnalSubItem *before = new PadConditionnalSubItem(PadConditionnalSubItem::Defined, PadConditionnalSubItem::Prepend, &item);
+    before->setOutputStart(startingOutputPos);
+    cursor.insertHtml(ui->before->toHtml());
+    cursor.movePosition(QTextCursor::End);
+    startingOutputPos += cursor.position() - previousPosition;
+    before->setOutputEnd(startingOutputPos);
+
+    // Insert PadCore (id ?)
+    previousPosition = cursor.position();
+    PadCore *core = new PadCore;
+    core->setName(_tokenName);
+    core->setOutputStart(startingOutputPos);
+    /** \todo insert charFormat for the token value */
+    cursor.insertText(_tokenName);
+    cursor.movePosition(QTextCursor::End);
+    startingOutputPos += cursor.position() - previousPosition;
+    core->setOutputEnd(startingOutputPos);
+
+    // Insert SubItemFragment after (id ?)
+    previousPosition = cursor.position();
+    PadConditionnalSubItem *after = new PadConditionnalSubItem(PadConditionnalSubItem::Defined, PadConditionnalSubItem::Append, &item);
+    after->setOutputStart(startingOutputPos);
+    cursor.insertHtml(ui->after->toHtml());
+    cursor.movePosition(QTextCursor::End);
+    startingOutputPos += cursor.position() - previousPosition;
+    after->setOutputEnd(startingOutputPos);
+
+    item.addChild(before);
+    item.addChild(core);
+    item.addChild(after);
+    item.setOutputEnd(startingOutputPos);
+    html = doc.toHtml();
+}
+

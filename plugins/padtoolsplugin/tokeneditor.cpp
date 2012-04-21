@@ -83,8 +83,12 @@ void TokenEditor::setConditionnalPlainText(const QString &before, const QString 
     ui->tokenEditor->setConditionnalAfterPlainText(after);
 }
 
-
 QString TokenEditor::toRawSourceHtml() const
 {
-    return ui->tokenEditor->toHtml();
+    return ui->tokenEditor->toRawSourceHtml();
+}
+
+void TokenEditor::getOutput(QString &html, PadItem &item, int startingOutputPos) const
+{
+    return ui->tokenEditor->getOutput(html, item, startingOutputPos);
 }

@@ -41,6 +41,8 @@ public:
     PadFragment(PadFragment *parent = 0);
     virtual ~PadFragment();
 
+    void clear();
+
     virtual void setParent(PadFragment *parent) {_parent = parent;}
     virtual PadFragment *parent() const {return _parent;}
 

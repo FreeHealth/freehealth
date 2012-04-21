@@ -194,8 +194,8 @@ PadWriter::PadWriter(QWidget *parent) :
 
 //    connect(d->ui->wysiwyg->textEdit(), SIGNAL(cursorPositionChanged()), this, SLOT(wysiwygCursorChanged()));
 //    connect(d->ui->rawSource->textEdit(), SIGNAL(cursorPositionChanged()), this, SLOT(rawSourceCursorChanged()));
-    d->ui->wysiwyg->textEdit()->setCursorWidth(3);
-    d->ui->rawSource->textEdit()->setCursorWidth(3);
+//    d->ui->wysiwyg->textEdit()->setCursorWidth(3);
+//    d->ui->rawSource->textEdit()->setCursorWidth(3);
     // END TEST
 }
 

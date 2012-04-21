@@ -32,6 +32,7 @@
 
 namespace PadTools {
 class TokenModel;
+class PadItem;
 
 namespace Ui {
 class TokenEditor;
@@ -54,6 +55,7 @@ public:
     void setConditionnalPlainText(const QString &before, const QString &after);
 
     QString toRawSourceHtml() const;
+    void getOutput(QString &html, PadItem &item, int startingOutputPos) const;
 
 protected:
     void done(int result);
