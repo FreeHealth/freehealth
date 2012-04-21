@@ -45,3 +45,4 @@ doc/doxygen/
 # Working places
 global_resources/datapacks/install/*
 global_resources/datapacks/tmp/*
+scripts/freemedforms-*
