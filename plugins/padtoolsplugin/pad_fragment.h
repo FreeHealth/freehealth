@@ -80,16 +80,17 @@ public:
     virtual void toRaw(PadDocument *doc) = 0;
 
     virtual void addChild(PadFragment *fragment);
+    virtual void removeChild(PadFragment *fragment);
     virtual void removeAndDeleteFragment(PadFragment *fragment);
     virtual QList<PadFragment*> children() const {return _fragments;}
+    virtual void sortChildren();
 
     virtual PadFragment *padFragmentForSourcePosition(int pos) const;
     virtual PadFragment *padFragmentForOutputPosition(int pos) const;
 
     virtual void outputPosChanged(const int oldPos, const int newPos);
 
-//    void insertFragment(QTextDocument *source, QTextDocument *out) const;
-//    void insertText(QTextDocument *out, const QString &text) const;
+    static bool lessThan(PadFragment *first, PadFragment *second);
 
 protected:
     QList<PadFragment *> _fragments;
