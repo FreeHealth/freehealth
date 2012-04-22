@@ -331,6 +331,20 @@ PadCore *PadItem::getCore() const
     return 0;
 }
 
+/** Returns the PadTools::PadConditionnalSubItem of the PadTools::PadItem or 0 if not found. */
+PadConditionnalSubItem *PadItem::subItem(const PadConditionnalSubItem::TokenCoreCondition cond, const PadConditionnalSubItem::Place place)
+{
+    PadConditionnalSubItem *sub;
+    foreach (PadFragment *fragment, _fragments) {
+        sub = dynamic_cast<PadConditionnalSubItem*>(fragment);
+        if (sub) {
+            if (sub->tokenCoreCondition() == cond && sub->place() == place)
+                return sub;
+        }
+    }
+    return 0;
+}
+
 void PadItem::run(QMap<QString,QVariant> &tokens, PadDocument *document)
 {
 //    qWarning() << "run Item: rawStart" << start() << "outputStart" << document->positionTranslator().rawToOutput(start()) << document->positionTranslator().deltaForSourcePosition(start());

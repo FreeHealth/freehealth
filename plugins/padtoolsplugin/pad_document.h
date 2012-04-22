@@ -78,7 +78,9 @@ public:
 
     // Manage children fragments
     void addChild(PadFragment *fragment);
+    void removeChild(PadFragment *fragment);
     void removeAndDeleteFragment(PadFragment *fragment);
+    void sortChildren();
 
     // Inform on analyze
     void beginRawSourceAnalyze();
