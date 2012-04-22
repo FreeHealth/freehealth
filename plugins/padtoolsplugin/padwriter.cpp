@@ -192,8 +192,8 @@ PadWriter::PadWriter(QWidget *parent) :
     d->ui->scenari->setDefaultAction(d->aTest1);
     d->aTest1->trigger();
 
-//    connect(d->ui->wysiwyg->textEdit(), SIGNAL(cursorPositionChanged()), this, SLOT(wysiwygCursorChanged()));
-//    connect(d->ui->rawSource->textEdit(), SIGNAL(cursorPositionChanged()), this, SLOT(rawSourceCursorChanged()));
+    connect(d->ui->wysiwyg->textEdit(), SIGNAL(cursorPositionChanged()), this, SLOT(wysiwygCursorChanged()));
+    connect(d->ui->rawSource->textEdit(), SIGNAL(cursorPositionChanged()), this, SLOT(rawSourceCursorChanged()));
 //    d->ui->wysiwyg->textEdit()->setCursorWidth(3);
 //    d->ui->rawSource->textEdit()->setCursorWidth(3);
     // END TEST
@@ -210,29 +210,13 @@ PadWriter::~PadWriter()
 void PadWriter::wysiwygCursorChanged()
 {
     QTextCursor c = d->ui->wysiwyg->textEdit()->textCursor();
-    d->ui->rawPos->setValue(d->_pad->positionTranslator().outputToRaw(c.position()));
     d->ui->ouputPos->setValue(c.position());
-
-    QTextCursor raw(d->ui->rawSource->document());
-    raw.setPosition(d->_pad->positionTranslator().outputToRaw(c.position()));
-    raw.setPosition(raw.position() + 1, QTextCursor::KeepAnchor);
-    QTextCharFormat format;
-    format.setBackground(QBrush(QColor(Qt::lightGray)));
-    raw.mergeCharFormat(format);
 }
 
 void PadWriter::rawSourceCursorChanged()
 {
     QTextCursor c = d->ui->rawSource->textEdit()->textCursor();
     d->ui->rawPos->setValue(c.position());
-    d->ui->ouputPos->setValue(d->_pad->positionTranslator().rawToOutput(c.position()));
-
-    QTextCursor out(d->ui->wysiwyg->document());
-    out.setPosition(d->_pad->positionTranslator().rawToOutput(c.position()));
-    out.setPosition(out.position() + 1, QTextCursor::KeepAnchor);
-    QTextCharFormat format;
-    format.setBackground(QBrush(QColor(Qt::lightGray)));
-    out.mergeCharFormat(format);
 }
 
 void PadWriter::changeRawSourceScenario(QAction *a)
@@ -240,15 +224,15 @@ void PadWriter::changeRawSourceScenario(QAction *a)
     QString source;
     if (a == d->aTest1) {
         source = "<p>"
-//                "<b><center>Simple token test</center></b></p><p>"
+                "<b><center>Simple token test</center></b></p><p>"
                 "&nbsp;&nbsp;* Token D: ^$\"...~D~...\"$^<br />"
 //                "&nbsp;&nbsp;* Null token: (^$All this text ~NULL~ should not appear in the output$^)<br />"
-//                "&nbsp;&nbsp;* Token D without 'after conditionnal text':^$ ~D~$^<br />"
-//                "&nbsp;&nbsp;* Token D without 'before conditionnal text': ^$~D~. $^<br />"
-//                "&nbsp;&nbsp;* Long token A: ^$this text should appear in the output document, <u>including the core value</u> \"<b>~A~</b>\" (in bold) as defined in the <span style=' text-decoration: underline; color:#ff00ff;'>TokenModel</span>.$^<br />"
-//                "&nbsp;&nbsp;* HTML Token:<br />"
-//                "&nbsp;&nbsp;&nbsp;&nbsp;* Result should be \" <u><b>htmlToken</b></u> \"<br />"
-//                "&nbsp;&nbsp;&nbsp;&nbsp;* Result should be ^$\" <u>~HTMLTOKEN~</u> \"$^<br />"
+                "&nbsp;&nbsp;* Token D without 'after conditionnal text':^$ ~D~$^<br />"
+                "&nbsp;&nbsp;* Token D without 'before conditionnal text': ^$~D~. $^<br />"
+                "&nbsp;&nbsp;* Long token A: ^$this text should appear in the output document, <u>including the core value</u> \"<b>~A~</b>\" (in bold) as defined in the <span style=' text-decoration: underline; color:#ff00ff;'>TokenModel</span>.$^<br />"
+                "&nbsp;&nbsp;* HTML Token:<br />"
+                "&nbsp;&nbsp;&nbsp;&nbsp;* Result should be \" <u><b>htmlToken</b></u> \"<br />"
+                "&nbsp;&nbsp;&nbsp;&nbsp;* Result should be ^$\" <u>~HTMLTOKEN~</u> \"$^<br />"
 //                "^$ _D_ ~D~ _D_ $^<br />"
 //                "<b>^$_<span style=' text-decoration: underline; color:#ff00ff;'>A_</span> ~A~ _A_$^ 10 chars </b><br />"
 //                 "^$ <span style=' text-decoration: underline; color:#0000ff;'>_B_</span> ~B~ _B_$^ 10 chars <br />"
