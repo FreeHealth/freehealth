@@ -166,6 +166,12 @@ void PadFragment::addChild(PadFragment *fragment)
 }
 
 /** Removes a PadTools::PadFragment from the object children. Children are stored in an ordered list. */
+void PadFragment::removeChild(PadFragment *fragment)
+{
+    _fragments.removeAll(fragment);
+}
+
+/** Removes a PadTools::PadFragment from the object children and delete it (delete the pointer). Children are stored in an ordered list. */
 void PadFragment::removeAndDeleteFragment(PadFragment *fragment)
 {
     if (_fragments.contains(fragment)) {
@@ -173,6 +179,13 @@ void PadFragment::removeAndDeleteFragment(PadFragment *fragment)
         delete fragment;
         fragment = 0;
     }
+}
+
+void PadFragment::sortChildren()
+{
+    qSort(_fragments.begin(), _fragments.end(), PadFragment::lessThan);
+    foreach(PadFragment *f, _fragments)
+        f->sortChildren();
 }
 
 /**
@@ -258,7 +271,7 @@ PadFragment *PadFragment::padFragmentForOutputPosition(int pos) const
     if (_fragments.isEmpty())
         return (PadFragment*)(this);
     // check all children
-    PadFragment *child = 0;
+    PadFragment *child = (PadFragment *)this;
     foreach(PadFragment *frag, _fragments) {
         PadFragment *test = frag->padFragmentForOutputPosition(pos);
         if (test)
@@ -279,7 +292,7 @@ void PadFragment::outputPosChanged(const int oldPos, const int newPos)
     // oldPos inside the fragment
 //    debug += QString("    delta: %1\n").arg(delta);
 
-    qWarning() << "outputPosChanged" << containsOutputPosition(oldPos);
+//    qWarning() << "outputPosChanged" << containsOutputPosition(oldPos);
 
     if (containsOutputPosition(oldPos)) {
 //    if (_outputStart <= oldPos  && oldPos < _outputEnd) {
@@ -315,38 +328,6 @@ void PadFragment::outputPosChanged(const int oldPos, const int newPos)
 //    qWarning() << debug;
 }
 
-///** Insert the content of the PadFragment rawSource to the output */
-//void PadFragment::insertFragment(QTextDocument *source, QTextDocument *out) const
-//{
-//    if (_start>=0) {
-//        QTextCursor cursor(source);
-//        cursor.setPosition(_start, QTextCursor::MoveAnchor);
-//        cursor.setPosition(_end, QTextCursor::KeepAnchor);
-
-//        QTextCursor toCursor(out);
-//        toCursor.movePosition(QTextCursor::End);
-//        _outputStart = toCursor.position();
-
-//        toCursor.insertHtml(cursor.selection().toHtml());
-
-//        toCursor.movePosition(QTextCursor::End);
-//        _outputEnd = toCursor.position();
-//    }
-//}
-
-///** Insert html at the end of the output \e out QTextDocument and compute fragment output range */
-//void PadFragment::insertText(QTextDocument *out, const QString &text) const
-//{
-//    if (_start>=0) {
-//        QTextCursor toCursor(out);
-//        toCursor.movePosition(QTextCursor::End);
-//        _outputStart = toCursor.position();
-//        toCursor.insertHtml(text);
-//        toCursor.movePosition(QTextCursor::End);
-//        _outputEnd = toCursor.position();
-//    }
-//}
-
 /** Moves the PadTools::PadFragment from \e nbChars. \e nbChars can be a positive (moving forward) or a negative int (moving backward). Does not manage children fragments.*/
 void PadFragment::translateOutput(int nbChars)
 {
@@ -362,4 +343,10 @@ void PadFragment::moveOutputEnd(int nbOfChars)
     } else {
         _outputEnd += nbOfChars;
     }
+}
+
+/** Returns true if this object starts before the \e other one in the output document. */
+bool PadFragment::lessThan(PadFragment *first, PadFragment *second)
+{
+    return first->_outputStart < second->_outputStart;
 }

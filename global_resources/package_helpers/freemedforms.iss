@@ -94,6 +94,7 @@ Source: "Resources/datapacks/appinstalled/drugs/*"; DestDir: "{app}/Resources/da
 Source: "Resources/forms/*"; DestDir: "{app}/Resources/forms/"; Components: program; Flags: recursesubdirs
 Source: "Resources/pixmap/*"; DestDir: "{app}/Resources/pixmap"; Components: program; Flags: recursesubdirs
 Source: "Resources/profiles/*"; DestDir: "{app}/Resources/profiles"; Components: program; Flags: recursesubdirs
+Source: "Resources/sql/*"; DestDir: "{app}/Resources/sql"; Components: program; Flags: recursesubdirs
 Source: "Resources/textfiles/*"; DestDir: "{app}/Resources/textfiles"; Components: program; Flags: recursesubdirs
 Source: "Resources/translations/*"; DestDir: "{app}/Resources/translations"; Components: program; Flags: recursesubdirs
 Source: "Resources/doc/freemedforms/en/*"; DestDir: "{app}/Resources/doc/freemedforms/en"; Components: helpEn; Flags: recursesubdirs

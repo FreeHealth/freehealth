@@ -56,6 +56,9 @@ public:
     PadConditionnalSubItem(TokenCoreCondition cond, Place place, PadFragment *parent = 0);
     virtual ~PadConditionnalSubItem() {}
 
+    TokenCoreCondition tokenCoreCondition() const {return _coreCond;}
+    Place place() const {return _place;}
+
     void addDelimiter(const int posInRaw, const int size);
 
     bool containsOutputPosition(const int pos) const;
@@ -124,6 +127,7 @@ public:
 
     QList<PadFragment*> children() const;
 	PadCore *getCore() const;
+    PadConditionnalSubItem *subItem(const PadConditionnalSubItem::TokenCoreCondition cond, const PadConditionnalSubItem::Place place);
 
 private:
     QList<PadDelimiter> _delimiters;
