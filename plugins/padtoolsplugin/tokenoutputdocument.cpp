@@ -327,25 +327,59 @@ void TokenOutputDocument::editTokenUnderCursor()
     int position = textCursor().position();
     PadItem *item = d->_pad->padItemForOutputPosition(position);
     if (item) {
-        /** \todo recode here: no mode PadItem::fragment() */
-//        TokenEditor editor(this);
-//        PadFragment *f = item->getCore();
-//        editor.setTokenName(d->_pad->fragmentRawSource(f));
-//        PadFragment *bef = item->fragment(PadItem::DefinedCore_PrependText);
-//        PadFragment *aft = item->fragment(PadItem::DefinedCore_AppendText);
-//        editor.setConditionnalHtml(d->_pad->fragmentHtmlOutput(bef), d->_pad->fragmentHtmlOutput(aft));
-//        if (editor.exec()==QDialog::Accepted) {
-//            // Remove rawSource PadItem
-//            QTextCursor cursor(d->_pad->rawSourceDocument());
-//            cursor.setPosition(item->start());
-//            cursor.setPosition(item->end(), QTextCursor::KeepAnchor);
-//            cursor.removeSelectedText();
-//            // Insert new Item in rawSource
-//            cursor.setPosition(item->start());
-//            cursor.insertHtml(editor.toRawSourceHtml());
-//            // Reset _pad
-////            d->_pad->softReset();
-//        }
+        /** manage nested tokens */
+        TokenEditor editor(this);
+        PadCore *core = item->getCore();
+        editor.setTokenName(core->name());
+        PadFragment *bef = item->subItem(PadConditionnalSubItem::Defined, PadConditionnalSubItem::Prepend);
+        PadFragment *aft = item->subItem(PadConditionnalSubItem::Defined, PadConditionnalSubItem::Append);
+        editor.setConditionnalHtml(d->_pad->fragmentHtmlOutput(bef), d->_pad->fragmentHtmlOutput(aft));
+        if (editor.exec()==QDialog::Accepted) {
+            // Remove old PadItem positions
+            textEdit()->document()->blockSignals(true);
+            QTextCursor cursor = textCursor();
+            cursor.setPosition(item->outputStart());
+            cursor.setPosition(item->outputEnd(), QTextCursor::KeepAnchor);
+            cursor.removeSelectedText();
+
+            // Save parent && id of the item
+            PadFragment *parent = item->parent();
+            if (parent)
+                parent->removeChild(item);
+            int id = item->id();
+//            d->_pad->debug();
+
+            // Modify output position for all subitemfragments
+            int oldLength = item->outputLength();
+            int oldStart = item->outputStart();
+
+            QString html;
+            editor.getOutput(html, *item, item->outputStart());
+            bef = item->subItem(PadConditionnalSubItem::Defined, PadConditionnalSubItem::Prepend);
+            aft = item->subItem(PadConditionnalSubItem::Defined, PadConditionnalSubItem::Append);
+
+            // insert token length to the PadDocument
+            int deltaLength = (item->outputLength() - oldLength);
+//            qWarning() << "posChanged" << oldStart << oldStart + deltaLength << deltaLength;
+            d->_pad->outputPosChanged(oldStart, oldStart + deltaLength);
+
+            // insert html
+            cursor.setPosition(item->outputStart());
+            cursor.insertHtml(html);
+            textEdit()->document()->blockSignals(false);
+
+            item->setParent(parent);
+            if (parent) {
+                parent->addChild(item);
+                parent->sortChildren();
+            }
+            item->setId(id);
+
+            onDocumentAnalyzeReset();
+
+//            d->_pad->debug();
+
+        }
     }
 }
 
@@ -450,9 +484,6 @@ void TokenOutputDocument::dropEvent(QDropEvent *event)
             PadItem *item = new PadItem;
             editor.getOutput(html, *item, pos);
 
-//            qWarning() << "    insert token" << item;
-//            item->debug(5);
-
             // insert token length to the PadDocument
             d->_pad->outputPosChanged(item->outputStart(), item->outputStart() + item->outputLength());
 
@@ -460,19 +491,16 @@ void TokenOutputDocument::dropEvent(QDropEvent *event)
             PadFragment *parent = d->_pad->padFragmentForOutputPosition(pos);
             if (parent) {
                 parent->addChild(item);
-//                qWarning() << "parent" << parent->id();
             } else {
                 d->_pad->addChild(item);
-//                qWarning() << "parent paddoc";
             }
-
-//            d->_pad->debug();
 
             // insert item text in the output document
             textEdit()->document()->blockSignals(true);
             cursor.setPosition(pos);
             cursor.insertHtml(html);
             // create the extraselection for the new item
+            d->_pad->sortChildren();
             onDocumentAnalyzeReset();
             textEdit()->document()->blockSignals(false);
 
