@@ -225,7 +225,7 @@ void PadWriter::changeRawSourceScenario(QAction *a)
     if (a == d->aTest1) {
         source = "<p>"
                 "<b><center>Simple token test</center></b></p><p>"
-                "&nbsp;&nbsp;* Token D: ^$\"...~D~...\"$^<br />"
+                "&nbsp;&nbsp;* To^$~A~) no before text$^ken D: ^$\"...~D~...\"$^<br />"
 //                "&nbsp;&nbsp;* Null token: (^$All this text ~NULL~ should not appear in the output$^)<br />"
                 "&nbsp;&nbsp;* Token D without 'after conditionnal text':^$ ~D~$^<br />"
                 "&nbsp;&nbsp;* Token D without 'before conditionnal text': ^$~D~. $^<br />"
@@ -233,11 +233,7 @@ void PadWriter::changeRawSourceScenario(QAction *a)
                 "&nbsp;&nbsp;* HTML Token:<br />"
                 "&nbsp;&nbsp;&nbsp;&nbsp;* Result should be \" <u><b>htmlToken</b></u> \"<br />"
                 "&nbsp;&nbsp;&nbsp;&nbsp;* Result should be ^$\" <u>~HTMLTOKEN~</u> \"$^<br />"
-//                "^$ _D_ ~D~ _D_ $^<br />"
-//                "<b>^$_<span style=' text-decoration: underline; color:#ff00ff;'>A_</span> ~A~ _A_$^ 10 chars </b><br />"
-//                 "^$ <span style=' text-decoration: underline; color:#0000ff;'>_B_</span> ~B~ _B_$^ 10 chars <br />"
-//                 " 10 chars ^$ _C_ ~C~ _C_$^<br />"
-//                 " 10 chars ^$ _D_ ~D~ _D_$^<br />";
+                "</p>"
                 ;
     } else if (a == d->aTest2) {
         source = "<p>"
