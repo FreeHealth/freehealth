@@ -240,16 +240,16 @@ public:
 }
 
 TokenOutputDocument::TokenOutputDocument(QWidget *parent) :
-    Editor::TextEditor(parent, TokenOutputDocument::Simple),
+    Editor::TextEditor(parent, TokenOutputDocument::Simple | TokenOutputDocument::WithTables),
     d(new Internal::TokenOutputDocumentPrivate)
 {
 //    d->_textControl = new Internal::TokenOutputDocumentControl(this);
 //    this->setTextControl(d->_textControl);
-    setAttribute(Qt::WA_Hover);
     setAcceptDrops(true);
     setContextMenuPolicy(Qt::CustomContextMenu);
     textEdit()->viewport()->installEventFilter(this);
     textEdit()->installEventFilter(this);
+    textEdit()->setAttribute(Qt::WA_Hover);
     connect(textEdit(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
     connect(textEdit(), SIGNAL(cursorPositionChanged()), this, SLOT(cursorPositionChanged()));
 }
@@ -521,43 +521,6 @@ bool TokenOutputDocument::event(QEvent *event)
     QTime c;
     c.start();
 
-    if (event->type()==QEvent::HoverMove) {
-        /** \todo improve PadCore highlighting */
-        QHoverEvent *me = static_cast<QHoverEvent*>(event);
-        int position = cursorForPosition(me->pos()).position();
-        if (d->_lastHoveredItem) {
-            if (d->_lastHoveredItem->containsOutputPosition(position))
-                return true;
-        }
-        PadItem *item = d->_pad->padItemForOutputPosition(position);
-        if (!item) {
-            if (d->_lastHoveredItem) {
-                textEdit()->setExtraSelections(QList<QTextEdit::ExtraSelection>());
-                d->_lastHoveredItem = 0;
-            }
-            return Editor::TextEditor::event(event);
-        }
-
-        if (d->_lastHoveredItem) {
-            if (d->_lastHoveredItem == item)
-                return true;
-            textEdit()->setExtraSelections(QList<QTextEdit::ExtraSelection>());
-            d->_lastHoveredItem = item;
-        } else {
-            d->_lastHoveredItem = item;
-        }
-        textEdit()->setExtraSelections(d->_tokenExtraSelection.values(item));
-
-        Utils::Log::logTimeElapsed(c, "TokenOutputDocument", "Hover");
-        me->accept();
-        return Editor::TextEditor::event(event);
-    } else if (event->type()==QEvent::HoverLeave && d->_lastHoveredItem) {
-        textEdit()->setExtraSelections(QList<QTextEdit::ExtraSelection>());
-        d->_lastHoveredItem = 0;
-        event->accept();
-        return Editor::TextEditor::event(event);
-    }
-
     return Editor::TextEditor::event(event);;
 }
 
@@ -579,6 +542,41 @@ bool TokenOutputDocument::eventFilter(QObject *o, QEvent *e)
 
     // Catch KeyEvent in QTextEdit
     if (o==textEdit()) {
+        if (e->type()==QEvent::HoverMove) {
+            /** \todo improve PadCore highlighting */
+            QHoverEvent *me = static_cast<QHoverEvent*>(e);
+            // compute pos
+            int position = cursorForPosition(me->pos()).position();
+            if (d->_lastHoveredItem) {
+                if (d->_lastHoveredItem->containsOutputPosition(position))
+                    return true;
+            }
+            PadItem *item = d->_pad->padItemForOutputPosition(position);
+            if (!item) {
+                if (d->_lastHoveredItem) {
+                    textEdit()->setExtraSelections(QList<QTextEdit::ExtraSelection>());
+                    d->_lastHoveredItem = 0;
+                }
+                return QWidget::eventFilter(o, e);
+            }
+
+            if (d->_lastHoveredItem) {
+                if (d->_lastHoveredItem == item)
+                    return true;
+                textEdit()->setExtraSelections(QList<QTextEdit::ExtraSelection>());
+                d->_lastHoveredItem = item;
+            } else {
+                d->_lastHoveredItem = item;
+            }
+            textEdit()->setExtraSelections(d->_tokenExtraSelection.values(item));
+            me->accept();
+            return true;
+        } else if (e->type()==QEvent::HoverLeave && d->_lastHoveredItem) {
+            textEdit()->setExtraSelections(QList<QTextEdit::ExtraSelection>());
+            d->_lastHoveredItem = 0;
+            e->accept();
+            return true;
+        }
         if (e->type() == QEvent::InputMethod) {
             // Avoid edition when cursor is inside a padCore
             QInputMethodEvent *input = static_cast<QInputMethodEvent*>(e);
