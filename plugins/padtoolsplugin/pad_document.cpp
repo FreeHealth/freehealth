@@ -243,6 +243,9 @@ void PadDocument::removeAndDeleteFragment(PadFragment *fragment)
         cursor.setPosition(fragment->outputEnd(), QTextCursor::KeepAnchor);
         cursor.removeSelectedText();
     }
+    PadItem *item = dynamic_cast<PadItem*>(fragment);
+    if (item)
+        _items.removeAll(item);
     PadFragment::removeAndDeleteFragment(fragment);
 }
 
