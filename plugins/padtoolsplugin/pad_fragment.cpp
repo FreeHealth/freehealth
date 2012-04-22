@@ -116,6 +116,8 @@
 
 #include "pad_fragment.h"
 
+#include <utils/global.h>
+
 #include <QTextDocument>
 #include <QTextCursor>
 #include <QTextDocumentFragment>
@@ -143,6 +145,19 @@ PadFragment::~PadFragment()
     _parent = 0;
 }
 
+/** Clear the fragment including: children list, parent, ranges.*/
+void PadFragment::clear()
+{
+    qDeleteAll(_fragments);
+    _fragments.clear();
+    _parent = 0;
+    _start = -1;
+    _end = -1;
+    _outputStart = -1;
+    _outputEnd = -1;
+    _id = -1;
+}
+
 /** Add a PadTools::PadFragment as a direct child of this object. Children are stored in an ordered list. */
 void PadFragment::addChild(PadFragment *fragment)
 {
@@ -151,6 +166,12 @@ void PadFragment::addChild(PadFragment *fragment)
 }
 
 /** Removes a PadTools::PadFragment from the object children. Children are stored in an ordered list. */
+void PadFragment::removeChild(PadFragment *fragment)
+{
+    _fragments.removeAll(fragment);
+}
+
+/** Removes a PadTools::PadFragment from the object children and delete it (delete the pointer). Children are stored in an ordered list. */
 void PadFragment::removeAndDeleteFragment(PadFragment *fragment)
 {
     if (_fragments.contains(fragment)) {
@@ -160,10 +181,70 @@ void PadFragment::removeAndDeleteFragment(PadFragment *fragment)
     }
 }
 
-/** Return the smallest PadTools::PadFragment that include the position. All children are checked. Return 0 if the pos is not included in the fragment. */
+void PadFragment::sortChildren()
+{
+    qSort(_fragments.begin(), _fragments.end(), PadFragment::lessThan);
+    foreach(PadFragment *f, _fragments)
+        f->sortChildren();
+}
+
+/**
+  * Test if a position is inside a fragment (using the raw source positionning).
+  * By default, the start and end position are considered as part of the fragment
+  * (meaning that containsRawPosition(start()) == true).
+  * This function is used by:
+  *    - PadTools::PadFragment::outputPosChanged().
+  *    - PadTools::PadFragment::padFragmentForSourcePosition().
+*/
+bool PadFragment::containsRawPosition(const int pos) const
+{
+    return IN_RANGE(pos, _start, _end);
+}
+
+/**
+  * Test if a position is inside a fragment (using the output positionning).
+  * By default, the start and end position are considered as part of the fragment
+  * (meaning that containsOutputPosition(outputStart()) == true).
+  * This function is used by:
+  *    - PadTools::PadFragment::outputPosChanged().
+  *    - PadTools::PadFragment::padFragmentForOutputPosition().
+*/
+bool PadFragment::containsOutputPosition(const int pos) const
+{
+    return IN_RANGE(pos, _outputStart, _outputEnd);
+}
+
+/**
+  * Test if a position is before a fragment (using the output positionning).
+  * By default, the start and end position are considered as part of the fragment
+  * (meaning that isBeforeOutputPosition(outputStart()) == false).
+  * This function is used by:
+  *    - PadTools::PadFragment::translateOutput().
+  *    - PadTools::PadFragment::outputPosChanged().
+*/
+bool PadFragment::isBeforeOutputPosition(const int pos) const
+{
+    return pos > _outputEnd;
+}
+
+/**
+  * Test if a position is after a fragment (using the output positionning).
+  * By default, the start and end position are considered as part of the fragment
+  * (meaning that isAfterOutputPosition(outputEnd()) == false).
+  * This function is used by:
+  *    - PadTools::PadFragment::translateOutput().
+  *    - PadTools::PadFragment::outputPosChanged().
+*/
+bool PadFragment::isAfterOutputPosition(const int pos) const
+{
+    return pos < _outputStart;
+}
+
+/** Return the smallest PadTools::PadFragment that includes the position. All children are checked. Return 0 if the pos is not included in the fragment. */
 PadFragment *PadFragment::padFragmentForSourcePosition(int pos) const
 {
-    if (_start > pos || _end < pos)
+    if (!containsRawPosition(pos))
+//    if (_start > pos || _end < pos)
         return 0;
     if (_fragments.isEmpty())
         return (PadFragment*)(this);
@@ -180,12 +261,17 @@ PadFragment *PadFragment::padFragmentForSourcePosition(int pos) const
 /** Return the smallest PadTools::PadFragment that include the position. All children are checked. Return 0 if the pos is not included in the fragment. */
 PadFragment *PadFragment::padFragmentForOutputPosition(int pos) const
 {
-    if (_outputStart > pos || _outputEnd < pos)
+
+//    qWarning() << pos << _outputStart << _outputEnd << (!IN_RANGE(pos, _outputStart, _outputEnd)) << (pos <= _outputStart || pos >= _outputEnd);
+//    qWarning() << "(" <<  pos  << "<=" <<_outputStart<< "||"  << pos <<">=" <<_outputEnd<<")";
+
+    if (!containsOutputPosition(pos))
+//    if (pos <= _outputStart || pos >= _outputEnd)
         return 0;
     if (_fragments.isEmpty())
         return (PadFragment*)(this);
     // check all children
-    PadFragment *child = 0;
+    PadFragment *child = (PadFragment *)this;
     foreach(PadFragment *frag, _fragments) {
         PadFragment *test = frag->padFragmentForOutputPosition(pos);
         if (test)
@@ -205,7 +291,11 @@ void PadFragment::outputPosChanged(const int oldPos, const int newPos)
 
     // oldPos inside the fragment
 //    debug += QString("    delta: %1\n").arg(delta);
-    if (_outputStart <= oldPos  && oldPos < _outputEnd) {
+
+//    qWarning() << "outputPosChanged" << containsOutputPosition(oldPos);
+
+    if (containsOutputPosition(oldPos)) {
+//    if (_outputStart <= oldPos  && oldPos < _outputEnd) {
 //        debug += QString("    oldPos is inside token\n");
         // Remove chars
         if (delta < 0) {
@@ -225,7 +315,7 @@ void PadFragment::outputPosChanged(const int oldPos, const int newPos)
     } else {
 //        debug += QString("    move: %1\n").arg((_outputStart > oldPos));
         // oldPos outside fragment
-        if (_outputStart > oldPos) {
+        if (isAfterOutputPosition(oldPos)) {
             translateOutput(delta);
             foreach(PadFragment *f, children()) {
                 if (f!=this)
@@ -237,38 +327,6 @@ void PadFragment::outputPosChanged(const int oldPos, const int newPos)
 
 //    qWarning() << debug;
 }
-
-///** Insert the content of the PadFragment rawSource to the output */
-//void PadFragment::insertFragment(QTextDocument *source, QTextDocument *out) const
-//{
-//    if (_start>=0) {
-//        QTextCursor cursor(source);
-//        cursor.setPosition(_start, QTextCursor::MoveAnchor);
-//        cursor.setPosition(_end, QTextCursor::KeepAnchor);
-
-//        QTextCursor toCursor(out);
-//        toCursor.movePosition(QTextCursor::End);
-//        _outputStart = toCursor.position();
-
-//        toCursor.insertHtml(cursor.selection().toHtml());
-
-//        toCursor.movePosition(QTextCursor::End);
-//        _outputEnd = toCursor.position();
-//    }
-//}
-
-///** Insert html at the end of the output \e out QTextDocument and compute fragment output range */
-//void PadFragment::insertText(QTextDocument *out, const QString &text) const
-//{
-//    if (_start>=0) {
-//        QTextCursor toCursor(out);
-//        toCursor.movePosition(QTextCursor::End);
-//        _outputStart = toCursor.position();
-//        toCursor.insertHtml(text);
-//        toCursor.movePosition(QTextCursor::End);
-//        _outputEnd = toCursor.position();
-//    }
-//}
 
 /** Moves the PadTools::PadFragment from \e nbChars. \e nbChars can be a positive (moving forward) or a negative int (moving backward). Does not manage children fragments.*/
 void PadFragment::translateOutput(int nbChars)
@@ -285,4 +343,10 @@ void PadFragment::moveOutputEnd(int nbOfChars)
     } else {
         _outputEnd += nbOfChars;
     }
+}
+
+/** Returns true if this object starts before the \e other one in the output document. */
+bool PadFragment::lessThan(PadFragment *first, PadFragment *second)
+{
+    return first->_outputStart < second->_outputStart;
 }

@@ -56,10 +56,15 @@ public:
     PadConditionnalSubItem(TokenCoreCondition cond, Place place, PadFragment *parent = 0);
     virtual ~PadConditionnalSubItem() {}
 
+    TokenCoreCondition tokenCoreCondition() const {return _coreCond;}
+    Place place() const {return _place;}
+
     void addDelimiter(const int posInRaw, const int size);
 
-//    void run(QMap<QString,QVariant> &tokens);
-//    void run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out);
+    bool containsOutputPosition(const int pos) const;
+    bool isBeforeOutputPosition(const int pos) const;
+    bool isAfterOutputPosition(const int pos) const;
+
     void run(QMap<QString,QVariant> &tokens, PadDocument *document);
     void toRaw(PadDocument *doc);
 
@@ -78,6 +83,10 @@ public:
 
     const QString &name() const { return _name; }
     void setName(const QString &name) { _name = name; }
+
+    bool containsOutputPosition(const int pos) const;
+    bool isBeforeOutputPosition(const int pos) const;
+    bool isAfterOutputPosition(const int pos) const;
 
     void debug(int indent = 0) const;
 
@@ -105,19 +114,20 @@ public:
     PadItem() : PadFragment() {}
 	virtual ~PadItem();
 
-//    PadFragment *fragment(const int type) const;
-
     void addDelimiter(const int posInRaw, const int size);
+
+    bool containsOutputPosition(const int pos) const;
+    bool isBeforeOutputPosition(const int pos) const;
+    bool isAfterOutputPosition(const int pos) const;
 
     void debug(int indent = 0) const;
 
-//    void run(QMap<QString,QVariant> &tokens);
-//    void run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out);
     void run(QMap<QString,QVariant> &tokens, PadDocument *document);
     void toRaw(PadDocument *doc);
 
     QList<PadFragment*> children() const;
 	PadCore *getCore() const;
+    PadConditionnalSubItem *subItem(const PadConditionnalSubItem::TokenCoreCondition cond, const PadConditionnalSubItem::Place place);
 
 private:
     QList<PadDelimiter> _delimiters;

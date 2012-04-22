@@ -42,6 +42,7 @@
 #include "tokenmodel.h"
 
 #include <utils/log.h>
+#include <utils/global.h>
 
 #include <QString>
 #include <QTextCursor>
@@ -133,7 +134,6 @@ PadDocument::PadDocument(QTextDocument *source, QObject *parent) :
     _tokenModel(0),
     _timer(0)
 {
-//    connect(_docSource, SIGNAL(contentsChange(int,int,int)), this, SLOT(rawSourceContentsChanged(int,int,int)));
 }
 
 /**
@@ -210,13 +210,22 @@ QString PadDocument::fragmentHtmlOutput(PadFragment *fragment) const
     return QString::null;
 }
 
-/** Add string fragment to the object. */
+/** Add fragments to the object. Manages the padItems() list too. */
 void PadDocument::addChild(PadFragment *fragment)
 {
     PadItem *item = dynamic_cast<PadItem *>(fragment);
     if (item)
         _items << item;
     PadFragment::addChild(fragment);
+}
+
+/** Removes fragments to the object. Manages the padItems() list too. */
+void PadDocument::removeChild(PadFragment *fragment)
+{
+    PadItem *item = dynamic_cast<PadItem *>(fragment);
+    if (item)
+        _items.removeAll(item);
+    PadFragment::removeChild(fragment);
 }
 
 /** Remove \e fragment content in raw source && in output and delete the fragment */
@@ -237,6 +246,12 @@ void PadDocument::removeAndDeleteFragment(PadFragment *fragment)
     PadFragment::removeAndDeleteFragment(fragment);
 }
 
+void PadDocument::sortChildren()
+{
+    PadFragment::sortChildren();
+    qSort(_items);
+}
+
 void PadDocument::beginRawSourceAnalyze()
 {
     Q_EMIT rawSourceAnalyzeStarted();
@@ -246,16 +261,6 @@ void PadDocument::endRawSourceAnalyze()
 {
     Q_EMIT rawSourceAnalyseFinished();
 }
-
-///** Removes char at \e position in output and keep raw source sync */
-//void PadDocument::removeOutputCharAt(int position, int length)
-//{
-//}
-
-///** Inserts char at \e position in output and keep raw source sync */
-//void PadDocument::insertOutputCharAt(const QChar &c,int position)
-//{
-//}
 
 /** Debug to console. */
 void PadDocument::debug(int indent) const
@@ -272,8 +277,8 @@ void PadDocument::debug(int indent) const
 PadItem *PadDocument::padItemForOutputPosition(int p) const
 {
     PadFragment *fragment = padFragmentForOutputPosition(p);
-    PadItem *item = dynamic_cast<PadItem*>(fragment);
     PadFragment *parent = fragment;
+    PadItem *item = dynamic_cast<PadItem*>(fragment);
     while (parent && !item) {
         parent = parent->parent();
         item = dynamic_cast<PadItem*>(parent);
@@ -298,11 +303,12 @@ PadItem *PadDocument::padItemForSourcePosition(int p) const
 PadFragment *PadDocument::padFragmentForSourcePosition(int rawPos) const
 {
     if (_fragments.isEmpty()) {
-        if (_start <= rawPos && _end >= rawPos)
+//        if (_start < rawPos && rawPos < _end)
+        if (IN_RANGE_STRICTLY(rawPos, _start, _end))
             return (PadFragment *)this;
     } else {
         foreach(PadFragment *fragment, _fragments) {
-            if (fragment->start() <= rawPos && fragment->end() >= rawPos)
+            if (fragment->start() < rawPos && rawPos < fragment->end())
                 return fragment->padFragmentForSourcePosition(rawPos);
         }
     }
@@ -313,11 +319,12 @@ PadFragment *PadDocument::padFragmentForSourcePosition(int rawPos) const
 PadFragment *PadDocument::padFragmentForOutputPosition(int outputPos) const
 {
     if (_fragments.isEmpty()) {
-        if (_outputStart <= outputPos && _outputEnd >= outputPos)
+        if (IN_RANGE_STRICTLY(outputPos, _outputStart, _outputEnd)) // _outputStart < outputPos && outputPos < _outputEnd)
             return (PadFragment *)this;
     } else {
         foreach(PadFragment *fragment, _fragments) {
-            if (fragment->outputStart() <= outputPos && fragment->outputEnd() >= outputPos)
+            //            if (fragment->outputStart() < outputPos && fragment->outputEnd() > outputPos)
+            if (IN_RANGE_STRICTLY(outputPos, fragment->outputStart(), fragment->outputEnd()))
                 return fragment->padFragmentForOutputPosition(outputPos);
         }
     }

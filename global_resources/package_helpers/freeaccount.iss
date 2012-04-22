@@ -108,6 +108,7 @@ Source: "freeaccount.exe"; DestDir: "{app}"; Components: program
 Source: "*.dll"; DestDir: "{app}"; Components: program
 Source: "plugins/*"; DestDir: "{app}/plugins"; Components: program; Flags: recursesubdirs
 Source: "Resources/pixmap/*"; DestDir: "{app}/Resources/pixmap"; Components: program; Flags: recursesubdirs
+Source: "Resources/sql/*"; DestDir: "{app}/Resources/sql"; Components: program; Flags: recursesubdirs
 Source: "Resources/textfiles/*"; DestDir: "{app}/Resources/textfiles"; Components: program; Flags: recursesubdirs
 Source: "Resources/translations/*"; DestDir: "{app}/Resources/translations"; Components: program; Flags: recursesubdirs
 ;Source: "Resources/doc/freeaccount/en/*"; DestDir: "{app}/Resources/doc/freeaccount/en"; Components: helpEn; Flags: recursesubdirs
