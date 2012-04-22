@@ -43,7 +43,7 @@
         <location filename="../../freediams/plugins/coreplugin/coreimpl.cpp" line="156"/>
         <location filename="../../freediams/plugins/coreplugin/coreimpl.cpp" line="158"/>
         <source>Core intialization finished...</source>
-        <translation>Intialisation du Core terminée...</translation>
+        <translation>Initialisation du Core terminée...</translation>
     </message>
     <message>
         <location filename="../../freediams/plugins/coreplugin/coreimpl.cpp" line="214"/>

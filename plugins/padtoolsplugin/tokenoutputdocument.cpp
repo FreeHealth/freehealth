@@ -119,6 +119,57 @@ public:
         return yes;
     }
 
+    // Correct the position of the DropEvent when it appends inside a PadCore
+    int correctDropPosition(int pos)
+    {
+        qWarning() << "correctDropPosition" << pos;
+        PadCore *core = dynamic_cast<PadCore*>(_pad->padFragmentForOutputPosition(pos));
+        Q_ASSERT(core);
+        if (!core) {
+            LOG_ERROR_FOR("TokenOutputDocument", "No core ???");
+            return -1;
+        }
+        PadItem *item = dynamic_cast<PadItem *>(core->parent());
+        Q_ASSERT(item);
+        if (!item) {
+            LOG_ERROR_FOR("TokenOutputDocument", "No item ???");
+            return -1;
+        }
+
+        QStringList buttons;
+        buttons << QApplication::translate(Constants::PADWRITER_TRANS_CONTEXT, Constants::INSIDE_CONDITIONNAL_BEFORE_TEXT);
+        buttons << QApplication::translate(Constants::PADWRITER_TRANS_CONTEXT, Constants::INSIDE_CONDITIONNAL_AFTER_TEXT);
+        buttons << QApplication::translate(Constants::PADWRITER_TRANS_CONTEXT, Constants::BEFORE_TOKEN);
+        buttons << QApplication::translate(Constants::PADWRITER_TRANS_CONTEXT, Constants::AFTER_TOKEN);
+        int s = Utils::withButtonsMessageBox(QApplication::translate(Constants::PADWRITER_TRANS_CONTEXT, Constants::NESTED_TOKEN),
+                                             QApplication::translate(Constants::PADWRITER_TRANS_CONTEXT,
+                                                                     "You have dropped a token inside the value of a token. \n"
+                                                                     "You must specify where the dropped token should be inserted:\n"
+                                                                     "- inside the conditionnal text before the token, \n"
+                                                                     "- inside the conditionnal text after the token \n"
+                                                                     "- or the before/after the token"),
+                                             "",
+                                             buttons, "",
+                                             // with cancel
+                                             true
+                                             );
+        switch (s) {
+        case 0: // inside before conditionnal
+            pos = core->start() - 1;
+            break;
+        case 1: // inside after conditionnal
+            pos = core->end() + 1;
+            break;
+        case 2: // before the token
+            pos = item->start() - 1;
+            break;
+        case 3: // after the token
+            pos = item->end() + 1;
+            break;
+        }
+        return pos;
+    }
+
     void itemToExtraSelection(PadItem *item)
     {
         QTextEdit::ExtraSelection sel;
@@ -155,6 +206,22 @@ public:
             sel.format = _tokenFormat;
             _tokenExtraSelection.insertMulti(item, sel);
         }
+    }
+
+    bool isNavigationKey(QKeyEvent *k)
+    {
+        switch (k->key()) {
+        case Qt::Key_Left:
+        case Qt::Key_Right:
+        case Qt::Key_Up:
+        case Qt::Key_Down:
+        case Qt::Key_PageDown:
+        case Qt::Key_PageUp:
+        case Qt::Key_Home:
+        case Qt::Key_End:
+            return true;
+        }
+        return false;
     }
 
 public:
@@ -300,6 +367,7 @@ void TokenOutputDocument::cursorPositionChanged()
 {
     qWarning() << "cursor moves" << textCursor().position() << d->isPadCoreAt(textCursor().position());
     if (d->isPadCoreAt(textCursor().position())) {
+        textEdit()->blockSignals(true);
         // Select the core
         PadCore *core = dynamic_cast<PadCore*>(d->_pad->padFragmentForOutputPosition(textCursor().position()));
         QTextCursor cursor(textEdit()->document());
@@ -307,6 +375,7 @@ void TokenOutputDocument::cursorPositionChanged()
         cursor.setPosition(core->outputStart());
         cursor.setPosition(core->outputEnd(), QTextCursor::KeepAnchor);
         textEdit()->setTextCursor(cursor);
+        textEdit()->blockSignals(false);
     }
 }
 
@@ -361,70 +430,53 @@ void TokenOutputDocument::dropEvent(QDropEvent *event)
         return;
 
     if (textEdit()->underMouse()) {
-        // Where did the user drop the token ?
-        QTextCursor cursor = d->_pad->rawSourceCursorForOutputPosition(this->cursorForPosition(event->pos()).position());
+        QTextCursor cursor = textEdit()->textCursor();
         int pos = cursor.position();
-        int dropRawPosition = pos;
+//        qWarning() << "DROP AT OUTPUT:" << pos;
 
-//        qWarning() << "DROP AT OUTPUT:" << this->cursorForPosition(event->pos()).position() << "RAW" << pos;
+        // drop inside a PadCore ?
+        if (d->isPadCoreAt(pos))
+            pos = d->correctDropPosition(pos);
 
-        PadItem *item = d->_pad->padItemForSourcePosition(pos);
-        if (item) {
-            // Inside a PadItem
-            PadFragment *core = item->getCore();
-            if (core) {
-                // Inside its PadCore -> manage error
-                if (core->containsRawPosition(pos)) {
-                    // drop inside a PadCore, ask user what to do
-                    QStringList buttons;
-                    buttons << tr("Inside conditionnal before text");
-                    buttons << tr("Inside conditionnal after text");
-                    buttons << tr("Before");
-                    buttons << tr("After");
-                    int s = Utils::withButtonsMessageBox(tr("Nested token"),
-                                                         tr("You have dropped a token inside the value of a token. \n"
-                                                            "You must specify where the dropped token should be inserted:\n"
-                                                            "- inside the conditionnal text before the token, \n"
-                                                            "- inside the conditionnal text after the token \n"
-                                                            "- or the before/after the token"),
-                                                         "",
-                                                         buttons, "",
-                                                         // with cancel
-                                                         true
-                                                         );
-                    switch (s) {
-                    case 0: // inside before conditionnal
-                        qWarning() << "inside before cond";
-                        dropRawPosition = core->start() - 1;
-                        break;
-                    case 1: // inside after conditionnal
-                        qWarning() << "inside after cond";
-                        dropRawPosition = core->end() + 1;
-                        break;
-                    case 2: // before the token
-                        qWarning() << "before token";
-                        dropRawPosition = item->start() - 1;
-                        break;
-                    case 3: // after the token
-                        qWarning() << "after token";
-                        dropRawPosition = item->end() + 1;
-                        break;
-                    }
-                    qWarning() << "CORE" << item->start() << item->end() << dropRawPosition;
-                }
-            }
-        }
-
+        // start token editor dialog
         TokenEditor editor(this);
         editor.setTokenName(event->mimeData()->data(Constants::TOKENNAME_MIME));
         int r = editor.exec();
         if (r == QDialog::Accepted) {
+
+            // get the content of the editor
             setFocus();
-//            qWarning() << "INSERT" << "rawPos" << dropRawPosition << "outputPos" << this->cursorForPosition(event->pos()).position();
-            cursor.setPosition(dropRawPosition);
-            cursor.insertHtml(editor.toRawSourceHtml());
-            d->_pad->softReset();
-            textEdit()->setDocument(d->_pad->outputDocument());
+            QString html;
+            PadItem *item = new PadItem;
+            editor.getOutput(html, *item, pos);
+
+//            qWarning() << "    insert token" << item;
+//            item->debug(5);
+
+            // insert token length to the PadDocument
+            d->_pad->outputPosChanged(item->outputStart(), item->outputStart() + item->outputLength());
+
+            // retrieve the item parent
+            PadFragment *parent = d->_pad->padFragmentForOutputPosition(pos);
+            if (parent) {
+                parent->addChild(item);
+//                qWarning() << "parent" << parent->id();
+            } else {
+                d->_pad->addChild(item);
+//                qWarning() << "parent paddoc";
+            }
+
+//            d->_pad->debug();
+
+            // insert item text in the output document
+            textEdit()->document()->blockSignals(true);
+            cursor.setPosition(pos);
+            cursor.insertHtml(html);
+            // create the extraselection for the new item
+            onDocumentAnalyzeReset();
+            textEdit()->document()->blockSignals(false);
+
+            // Manage event
             event->acceptProposedAction();
             event->accept();
             return;
@@ -499,15 +551,66 @@ bool TokenOutputDocument::eventFilter(QObject *o, QEvent *e)
 
     // Catch KeyEvent in QTextEdit
     if (o==textEdit()) {
+        if (e->type() == QEvent::InputMethod) {
+            // Avoid edition when cursor is inside a padCore
+            QInputMethodEvent *input = static_cast<QInputMethodEvent*>(e);
+            if (!input)
+                return false;
+            QTextCursor cursor = textEdit()->textCursor();
+            if (cursor.hasSelection()) {
+                if (d->isPadCoreAt(cursor.selectionStart())) {
+                    // reject event
+                    e->ignore();
+                    return true;
+                }
+            } else if (d->isPadCoreAt(cursor.position())) {
+                // reject event
+                e->ignore();
+                return true;
+            }
+        }
         if (e->type() == QEvent::KeyPress) {
             QTextCursor cursor = textEdit()->textCursor();
             QKeyEvent *kevent = static_cast<QKeyEvent*>(e);
+
             if (!kevent)
                 return false;
+            qWarning() << kevent->key() << kevent->modifiers() << kevent->text() << d->isNavigationKey(kevent);
 
             textEdit()->setExtraSelections(QList<QTextEdit::ExtraSelection>());
 
+            // cursor inside a token ?
+            if (cursor.hasSelection() && d->isPadCoreAt(cursor.selectionStart())) {
+                if (!d->isNavigationKey(kevent)) {
+                    e->ignore();
+                    return true;
+                }
+            }
             switch (kevent->key()) {
+            case Qt::Key_Left:  // Manage tokens
+            {
+                if (cursor.hasSelection() && d->isPadCoreAt(cursor.selectionStart())) {
+                    // move cursor before token start
+                    cursor.setPosition(cursor.selectionStart() - 1);
+                    textEdit()->setTextCursor(cursor);
+                    // reject
+                    e->ignore();
+                    return true;
+                }
+                break;
+            }
+            case Qt::Key_Right:  // Manage tokens
+            {
+                if (cursor.hasSelection() && d->isPadCoreAt(cursor.selectionStart())) {
+                    // move cursor before token start
+                    cursor.setPosition(cursor.selectionEnd());
+                    textEdit()->setTextCursor(cursor);
+                    // reject
+                    e->ignore();
+                    return true;
+                }
+                break;
+            }
             case Qt::Key_Backspace:
             {
                 qWarning() << "BACKSPACE PRESSED" << cursor.position() << "autorepeat" << kevent->isAutoRepeat();
@@ -557,8 +660,10 @@ bool TokenOutputDocument::eventFilter(QObject *o, QEvent *e)
         } else if (e->type() == QEvent::KeyRelease) {
             QTextCursor cursor = textEdit()->textCursor();
             QKeyEvent *kevent = static_cast<QKeyEvent*>(e);
+//            qWarning() << kevent;
             if (!kevent)
                 return false;
+//            qWarning() << kevent->key() << kevent->modifiers() << kevent->text();
 
             switch (kevent->key()) {
             case Qt::Key_Backspace:

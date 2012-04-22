@@ -36,6 +36,7 @@
 #include "pad_document.h"
 
 #include <utils/log.h>
+#include <utils/global.h>
 
 #include <QString>
 #include <QTextCursor>
@@ -132,9 +133,48 @@ void PadConditionnalSubItem::run(QMap<QString,QVariant> &tokens, PadDocument *do
     setOutputEnd(document->positionTranslator().rawToOutput(end()));
 }
 
+/** Overwrite the position tester, by default a PadTools::PadConditionnalSubItem does not include the outputStart() and outputEnd() position. */
+bool PadConditionnalSubItem::containsOutputPosition(const int pos) const
+{
+    return IN_RANGE_STRICTLY(pos, _outputStart, _outputEnd);
+}
+
+/** Overwrite the position tester, by default a PadTools::PadConditionnalSubItem does not include the outputStart() and outputEnd() position. */
+bool PadConditionnalSubItem::isBeforeOutputPosition(const int pos) const
+{
+    return pos >= _outputEnd;
+}
+
+/** Overwrite the position tester, by default a PadTools::PadConditionnalSubItem does not include the outputStart() and outputEnd() position. */
+bool PadConditionnalSubItem::isAfterOutputPosition(const int pos) const
+{
+    return pos <= _outputStart;
+}
+
+
 void PadConditionnalSubItem::toRaw(PadDocument *doc)
 {
+    /** \todo re-compute raw positionning */
 }
+
+/** Overwrite the position tester, by default a PadTools::PadCore does not include the outputStart() and outputEnd() position. */
+bool PadCore::containsOutputPosition(const int pos) const
+{
+    return IN_RANGE_STRICTLY(pos, _outputStart, _outputEnd);
+}
+
+/** Overwrite the position tester, by default a PadTools::PadCore does not include the outputStart() and outputEnd() position. */
+bool PadCore::isBeforeOutputPosition(const int pos) const
+{
+    return pos >= _outputEnd;
+}
+
+/** Overwrite the position tester, by default a PadTools::PadCore does not include the outputStart() and outputEnd() position. */
+bool PadCore::isAfterOutputPosition(const int pos) const
+{
+    return pos <= _outputStart;
+}
+
 
 void PadCore::debug(int indent) const
 {
@@ -259,6 +299,24 @@ void PadItem::addDelimiter(const int posInRaw, const int size)
     delim.rawPos = posInRaw;
     delim.size = size;
     _delimiters << delim;
+}
+
+/** Overwrite the position tester, by default a PadTools::PadItem does not include the outputStart() and outputEnd() position. */
+bool PadItem::containsOutputPosition(const int pos) const
+{
+    return IN_RANGE_STRICTLY(pos, _outputStart, _outputEnd);
+}
+
+/** Overwrite the position tester, by default a PadTools::PadItem does not include the outputStart() and outputEnd() position. */
+bool PadItem::isBeforeOutputPosition(const int pos) const
+{
+    return pos >= _outputEnd;
+}
+
+/** Overwrite the position tester, by default a PadTools::PadItem does not include the outputStart() and outputEnd() position. */
+bool PadItem::isAfterOutputPosition(const int pos) const
+{
+    return pos <= _outputStart;
 }
 
 /** Returns the PadTools::PadCore of the PadTools::PadItem. If no core is found, 0 is returned. */

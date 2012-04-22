@@ -4,6 +4,8 @@ FreeMedForms
 
 ===== Bug correction =====
 
+  * FreeAccount
+    * Windows installation corrected (missing default french medical procedure)
   * Many typos corrected
   * Many bug fixes
 
@@ -19,9 +21,10 @@ FreeMedForms
 *********************************************************************************************
 ===== Nouveautés =====
 
-
 ===== Corrections de bug =====
 
+  * FreeAccount
+    * Correction de l'installateur Windows (les procédure médicales française par défaut étaient manquantes)
   * Beaucoup de correction de bogues
   * Beaucoup de traductions corrigées
 
@@ -33,5 +36,4 @@ FreeMedForms
   * Documentation
     * Updating the FreeDiams documentation [French section only]
     * First version of the FreeMedForms documentation
-
 

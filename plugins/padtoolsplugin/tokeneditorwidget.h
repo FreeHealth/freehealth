@@ -35,6 +35,7 @@ QT_END_NAMESPACE
 
 namespace PadTools {
 class TokenModel;
+class PadItem;
 
 namespace Ui {
 class TokenEditorWidget;
@@ -62,7 +63,8 @@ public Q_SLOTS:
     void setConditionnalBeforePlainText(const QString &txt);
     void setConditionnalAfterPlainText(const QString &txt);
 
-    QString toHtml() const;
+    QString toRawSourceHtml() const;
+    void getOutput(QString &html, PadItem &item, int startingOutputPos) const;
 
 private:
     Ui::TokenEditorWidget *ui;
