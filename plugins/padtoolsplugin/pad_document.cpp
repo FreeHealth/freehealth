@@ -210,13 +210,22 @@ QString PadDocument::fragmentHtmlOutput(PadFragment *fragment) const
     return QString::null;
 }
 
-/** Add string fragment to the object. */
+/** Add fragments to the object. Manages the padItems() list too. */
 void PadDocument::addChild(PadFragment *fragment)
 {
     PadItem *item = dynamic_cast<PadItem *>(fragment);
     if (item)
         _items << item;
     PadFragment::addChild(fragment);
+}
+
+/** Removes fragments to the object. Manages the padItems() list too. */
+void PadDocument::removeChild(PadFragment *fragment)
+{
+    PadItem *item = dynamic_cast<PadItem *>(fragment);
+    if (item)
+        _items.removeAll(item);
+    PadFragment::removeChild(fragment);
 }
 
 /** Remove \e fragment content in raw source && in output and delete the fragment */
@@ -235,6 +244,12 @@ void PadDocument::removeAndDeleteFragment(PadFragment *fragment)
         cursor.removeSelectedText();
     }
     PadFragment::removeAndDeleteFragment(fragment);
+}
+
+void PadDocument::sortChildren()
+{
+    PadFragment::sortChildren();
+    qSort(_items);
 }
 
 void PadDocument::beginRawSourceAnalyze()
@@ -262,8 +277,8 @@ void PadDocument::debug(int indent) const
 PadItem *PadDocument::padItemForOutputPosition(int p) const
 {
     PadFragment *fragment = padFragmentForOutputPosition(p);
-    PadItem *item = dynamic_cast<PadItem*>(fragment);
     PadFragment *parent = fragment;
+    PadItem *item = dynamic_cast<PadItem*>(fragment);
     while (parent && !item) {
         parent = parent->parent();
         item = dynamic_cast<PadItem*>(parent);
