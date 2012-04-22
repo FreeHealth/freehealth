@@ -237,7 +237,7 @@ PadDocument *PadAnalyzerPrivate::startAnalyze(PadDocument *padDocument)
 	}
 
     Utils::Log::logTimeElapsed(c, "PadTools::PadAnalyzer", "analyze");
-
+    pad->sortChildren();
 //    pad->debug();
     pad->endRawSourceAnalyze();
     return pad;
