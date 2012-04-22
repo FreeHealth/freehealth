@@ -208,7 +208,7 @@ void findReceiptsValues::chooseValue()
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " data = " << data;
     if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " amount = " << amount;
-    if (m_modifier < 1.0)
+    if (m_modifier < 1.0 || m_modifier > 1.0)
     {
     	  data = data+"*"+QString::number(m_modifier);
     	  double amountDouble = amount.toDouble();

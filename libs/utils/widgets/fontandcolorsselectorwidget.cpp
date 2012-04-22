@@ -70,6 +70,7 @@ void FontAndColorsSelectorWidget::setCurrentFont(const QFont &font)
 
 void FontAndColorsSelectorWidget::setDefaultColor(const QColor &color)
 {
+    Q_UNUSED(color);
 }
 
 void FontAndColorsSelectorWidget::setCurrentColor(const QColor &color)
