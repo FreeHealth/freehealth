@@ -28,8 +28,9 @@ void Survey::resetIcons()
     m_hashIconIdItem.clear();
     QSqlDatabase db = m_io->getDatabase();
     const QString warning = pixmaps()+"/preventWarning";
+    const QString passed = pixmaps()+"/past";
     QSqlQuery q(db);
-    const QString req = QString("SELECT %1,%2 FROM %3 WHERE %4 < '%5' AND %6 NOT LIKE '%7' AND %8 NOT LIKE '%9'")
+    QString req = QString("SELECT %1,%2 FROM %3 WHERE %4 < '%5' AND %6 NOT LIKE '%7' AND %8 NOT LIKE '%9'")
                         .arg("ICON",
                              "ID_ITEM",
                              "prevention",
@@ -40,6 +41,7 @@ void Survey::resetIcons()
                              "ICON",
                              warning
                              );
+    req = req + QString(" AND %1 NOT LIKE '%2'").arg("ICON",passed);
     if (!q.exec(req))
     {
     	  qWarning() << __FILE__ << QString::number(__LINE__) << q.lastError().text() ;

@@ -1,9 +1,10 @@
 #include "moreIHM.h"
-#include "preventionconstants.h"
+//#include "preventionconstants.h"
+#include "IPrevention.h"
 
 #include <utils/global.h>
 
-
+static inline PreventionEngine::IPreventionEngine *preventionEngine() {return PreventionEngine::IPreventionEngine::preventionEnginePtr();}
 /*Message Boxes and default dialogs
 UTILS_EXPORT void informativeMessageBox( const QString &text, const QString&infoText, const QString&detail = QString::null, const QString &title = QString::null );
 UTILS_EXPORT void warningMessageBox( const QString &text, const QString&infoText, const QString&detail = QString::null, const QString &title = QString::null );
@@ -31,7 +32,7 @@ MoreIHM::MoreIHM(QObject * parent,TreeViewOfPrevention * treeView,QModelIndex in
     saveButton->setShortcut(QKeySequence("CTRL+s"));
     QModelIndex parentIndex = treeView->model()->parent(index);
     m_hashItemAndId = treeView->model()->childsAndItems(parentIndex);
-    int id = treeView->model()->data(treeView->model()->index(index.row(),PreventionConstants::ID_ITEM_H,parentIndex),Qt::DisplayRole).toInt();
+    int id = treeView->model()->data(treeView->model()->index(index.row(),PreventionEngine::IPreventionEngine::ID_ITEM_H,parentIndex),Qt::DisplayRole).toInt();
     qDebug() << __FILE__ << QString::number(__LINE__) << " id in More =" << QString::number(id)  ;
     int idx = 0;
     QStringList listForTheCombo;

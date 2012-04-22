@@ -9,6 +9,27 @@
 #include <QAbstractItemModel>
 #include <QMessageBox>
 
+
+///////////////////////////////////////////////////////////////////
+// Block pour l'utilisation des pixmaps du theme de FreeMedForms //
+///////////////////////////////////////////////////////////////////
+#include <coreplugin/icore.h>
+#include <coreplugin/itheme.h>
+#include <coreplugin/constants_icons.h>
+
+static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
+
+// Pour récupérer le chemin vers un pixmap
+//     theme()->iconFullPath(Core::Constants::ICONABOUT); // sous entendu Core::ITheme::SmallSize
+//     theme()->iconFullPath(Core::Constants::ICONABOUT, Core::ITheme::MediumSize);
+//     theme()->iconFullPath(Core::Constants::ICONABOUT, Core::ITheme::BigSize);
+
+// Pour récupérer l'icône
+//     theme()->icon(Core::Constants::ICONABOUT); // sous entendu Core::ITheme::SmallSize
+//     theme()->icon(Core::Constants::ICONABOUT, Core::ITheme::MediumSize);
+//     theme()->icon(Core::Constants::ICONABOUT, Core::ITheme::BigSize);
+
+
 static const QString PREVENT = QString("prevention");
 static inline QString pixmaps() 
 { 
@@ -273,7 +294,7 @@ VariantItemModel::VariantItemModel(QSqlTableModel * model, QObject *parent)
          }
      TreeItem *item = getItem(index);
      QVariant itemData = item->data(index.column());
-     if (index.column() == ICON_H)
+     if (index.column() == PreventionEngine::IPreventionEngine::ICON_H)
      {
      	 if(role == Qt::DecorationRole || role == Qt::DisplayRole)
      	     return itemData;
@@ -287,14 +308,14 @@ VariantItemModel::VariantItemModel(QSqlTableModel * model, QObject *parent)
  
  bool VariantItemModel::setData(const QModelIndex &index, const QVariant &value, int role)
  {
-     if (role != Qt::EditRole && (role == Qt::DecorationRole && index.column() != ICON_H ) )
+     if (role != Qt::EditRole && (role == Qt::DecorationRole && index.column() != PreventionEngine::IPreventionEngine::ICON_H ) )
          return false;
      bool result = true;
      TreeItem *item = getItem(index);
      //TreeItem *parent = item->parent();
      QModelIndex parentIndex = index.parent();
      int idOfItem = 0;
-     idOfItem = item->data(ID_ITEM_H).toInt();
+     idOfItem = item->data(PreventionEngine::IPreventionEngine::ID_ITEM_H).toInt();
      result = item->setData(index.column(), value);
      int rowOfSqlTable = getSqlTableRow(idOfItem);
      if (idOfItem == 0)
@@ -312,8 +333,8 @@ VariantItemModel::VariantItemModel(QSqlTableModel * model, QObject *parent)
  int VariantItemModel::getSqlTableRow(int idOfItem){
      int tableRow = 0;
      int row = 0; 
-     QString patientUuid = patientAndUserUuid()[PATIENT];
-     QString userUuid = patientAndUserUuid()[USER];
+     QString patientUuid = patientAndUserUuid()[PreventionEngine::IPreventionEngine::PATIENT];
+     QString userUuid = patientAndUserUuid()[PreventionEngine::IPreventionEngine::USER];
      QSqlDatabase db = QSqlDatabase::database("prevention");
      QSqlQuery q(db);
      QString req = QString("SELECT %1 FROM %2").arg("ID_ITEM","prevention");
@@ -405,7 +426,7 @@ QHash<int,QVariant> VariantItemModel::childs(QModelIndex &parent){
       for (int i = 0; i < childCount; i += 1)
       {
       	  TreeItem * child = parentItem->child(i);
-      	  QVariant data = child->data(ITEM_H);
+      	  QVariant data = child->data(PreventionEngine::IPreventionEngine::ITEM_H);
       	  
       	  listHash.insert(i,data);
           }
@@ -420,8 +441,8 @@ QHash<QString,QString> VariantItemModel::childsAndItems(QModelIndex & parent)
       for (int i = 0; i < childCount; i += 1)
       {
       	  TreeItem * child = parentItem->child(i);
-      	  QString data = child->data(ITEM_H).toString();
-      	  QString id = child->data(ID_ITEM_H).toString();
+      	  QString data = child->data(PreventionEngine::IPreventionEngine::ITEM_H).toString();
+      	  QString id = child->data(PreventionEngine::IPreventionEngine::ID_ITEM_H).toString();
       	  hash.insertMulti(data,id);
           }    
     return hash;
@@ -445,10 +466,10 @@ QHash<QString,QString> VariantItemModel::childsAndItems(QModelIndex & parent)
      TreeItem *parentItem = getItem(parent);
      int actualModelRowCount = m_modelSql->rowCount();
      beginInsertRows(parent, position, position + rows - 1);
-     success = parentItem->insertChildren(position, rows, Prevention_Items_MaxParam);
+     success = parentItem->insertChildren(position, rows, PreventionEngine::IPreventionEngine::Prevention_Items_MaxParam);
      for (int row = 0; row < rows; row += 1)
      {
-     	  for (int col = 0; col < Prevention_Items_MaxParam; col += 1)
+     	  for (int col = 0; col < PreventionEngine::IPreventionEngine::Prevention_Items_MaxParam; col += 1)
      	  {
      	  	  createIndex(position+row,col,parentItem);
      	      }
@@ -517,7 +538,7 @@ QHash<QString,QString> VariantItemModel::childsAndItems(QModelIndex & parent)
      beginRemoveRows(parent, position, position + rows - 1);
      for (int pos = position; pos < rows+position ; pos += 1)
      {
-     	  QString itemId = parentItem->child(position)->data(ID_ITEM_H).toString();
+     	  QString itemId = parentItem->child(position)->data(PreventionEngine::IPreventionEngine::ID_ITEM_H).toString();
           QSqlQuery q(m_db);
           QString req = QString("DELETE FROM %1 WHERE %2 LIKE '%3'")
           .arg("prevention","ID_ITEM",itemId);
@@ -557,8 +578,8 @@ QHash<QString,QString> VariantItemModel::childsAndItems(QModelIndex & parent)
  {
      //ID ITEM TYPE_OF_ITEM PARENT_ITEM PARENT_OR_CHILD ICON DATE_DONE DATE_NEXT ABSTRACT ID_ITEM PATIENT_UID USER_UID RESULT 
      //N  Y    N            Y           N               Y    Y         Y         Y        Y       N
-     QString patientUuid = patientAndUserUuid()[PATIENT];
-     QString userUuid = patientAndUserUuid()[USER];
+     QString patientUuid = patientAndUserUuid()[PreventionEngine::IPreventionEngine::PATIENT];
+     QString userUuid = patientAndUserUuid()[PreventionEngine::IPreventionEngine::USER];
      QString patientAndUserFilter = QString("%1 LIKE '%2' AND %3 LIKE '%4'")
                                    .arg("PATIENT_UID",patientUuid,"USER_UID",userUuid);
      model->setFilter(patientAndUserFilter);
@@ -576,16 +597,16 @@ QHash<QString,QString> VariantItemModel::childsAndItems(QModelIndex & parent)
      	 	  items << item;
      	     }
      	 int parentOrChild = 0;
-     	 parentOrChild = items.value(PARENT_OR_CHILD).toInt();
+     	 parentOrChild = items.value(PreventionEngine::IPreventionEngine::PARENT_OR_CHILD).toInt();
      	 TreeItem * itemParent;
      	 QString parentName;
      	 int childCount = 0;
      	 switch(parentOrChild){
-     	     case PARENT :
-     	         parentName = items[ITEM].toString();
+     	     case PreventionEngine::IPreventionEngine::PARENT :
+     	         parentName = items[PreventionEngine::IPreventionEngine::ITEM].toString();
      	         if(parent){
      	             childCount = parent->childCount();
-     	             parent->insertChildren(childCount, 1, Prevention_Items_MaxParam);
+     	             parent->insertChildren(childCount, 1, PreventionEngine::IPreventionEngine::Prevention_Items_MaxParam);
      	             parent->fillParentsHash(parentName,parent->child(parent->childCount()-1));
      	             for (int i = 1; i < parent->columnCount()+1; i += 1)
      	             {
@@ -603,15 +624,15 @@ QHash<QString,QString> VariantItemModel::childsAndItems(QModelIndex & parent)
      	                  }
      	               
      	         break;
-     	     case CHILD :
+     	     case PreventionEngine::IPreventionEngine::CHILD :
      	         
      	         if(parent)
-     	         itemParent = parent->child(items[PARENT_ITEM].toString());
+     	         itemParent = parent->child(items[PreventionEngine::IPreventionEngine::PARENT_ITEM].toString());
      	         
      	         if(itemParent)     	         
      	             {
      	              childCount = itemParent->childCount();
-     	              itemParent->insertChildren(childCount,1,Prevention_Items_MaxParam);
+     	              itemParent->insertChildren(childCount,1,PreventionEngine::IPreventionEngine::Prevention_Items_MaxParam);
      	              for (int i = 1; i < itemParent->columnCount()-1; i += 1)
      	              {
      	         	  itemParent->child(itemParent->childCount() -1)->setData(i-1,items[i]);
@@ -644,7 +665,7 @@ TreeItem * VariantItemModel::findTreeItemWithIdItem(QVariant & idItem)
     	  for (int rowChild = 0; rowChild < rowCount(parent); rowChild += 1)
     	  {
     	  	  TreeItem * item = parentItem->child(rowChild);
-    	  	  QVariant idOfThisItem = item->data(ID_ITEM_H);
+    	  	  QVariant idOfThisItem = item->data(PreventionEngine::IPreventionEngine::ID_ITEM_H);
     	  	  if (idOfThisItem == idItem)
     	  	  {
     	  	  	  itemWithIdItem = item;
@@ -661,7 +682,7 @@ QModelIndex VariantItemModel::indexOfIconOfItem(TreeItem * item)
     int rowParent = parentItem->childNumber();
     QModelIndex parentIndex = VariantItemModel::index(rowParent,0) ; 
     int rowChild = item->childNumber();
-    index = VariantItemModel::index(rowChild,int(VariantItemModel::ICON_H),parentIndex);
+    index = VariantItemModel::index(rowChild,int(PreventionEngine::IPreventionEngine::ICON_H),parentIndex);
     return index;
 }
 
@@ -671,14 +692,14 @@ void VariantItemModel::setIconWarning(QVariant & idItem)
     const QString filter = QString("%1='%2'").arg("ID_ITEM",idItem.toString());
     m_modelSql->setFilter(filter);
     m_modelSql->select();
-    m_modelSql->setData(m_modelSql->index(0,ICON),preventWarningIcon,Qt::EditRole);
+    m_modelSql->setData(m_modelSql->index(0,PreventionEngine::IPreventionEngine::ICON),preventWarningIcon,Qt::EditRole);
     m_modelSql->submitAll();
     m_modelSql->setFilter("");
     m_modelSql->select();
     
     emit layoutAboutToBeChanged();
     TreeItem * itemChanged = findTreeItemWithIdItem(idItem);
-    itemChanged->setData(ICON_H,preventWarningIcon);
+    itemChanged->setData(PreventionEngine::IPreventionEngine::ICON_H,preventWarningIcon);
     QModelIndex index = indexOfIconOfItem(itemChanged);
     emit dataChanged(index,index);
     emit layoutChanged();
@@ -689,8 +710,8 @@ bool VariantItemModel::addAnItemAccordingToIndex(QModelIndex & index,QModelIndex
     bool success = true;
     PreventIHM * parentOfIO = static_cast<PreventIHM*>(m_modelSql->QObject::parent());
     TreeViewOfPrevention *treeView = static_cast<TreeViewOfPrevention*>(parentObject);
-    QString patientUuid = patientAndUserUuid()[PATIENT];
-    QString userUuid = patientAndUserUuid()[USER];    
+    QString patientUuid = patientAndUserUuid()[PreventionEngine::IPreventionEngine::PATIENT];
+    QString userUuid = patientAndUserUuid()[PreventionEngine::IPreventionEngine::USER];    
     TreeItem * parentItem = getItem(parent);
     TreeItem * child = getItem(index);
     TreeItem * item;
@@ -716,62 +737,62 @@ bool VariantItemModel::addAnItemAccordingToIndex(QModelIndex & index,QModelIndex
     	 	  << "unable to insert rows in the treeview" ;
     	     }
     	 int newModelRow = m_modelSql->rowCount()-1;
-    	 if (!m_modelSql->setData(m_modelSql->index(newModelRow,VariantItemModel::ID_PREVENTION),
+    	 if (!m_modelSql->setData(m_modelSql->index(newModelRow,PreventionEngine::IPreventionEngine::ID_PREVENTION),
     	          nextIdPrimkey,Qt::EditRole))
     	 {
     	 	  qWarning() << __FILE__ << QString::number(__LINE__) << "UNABLE TO SET PRIMKEY" ;
     	     }
     	 itemNew = item->child(item->childCount() -1);
-    	 for (int col = 0; col < VariantItemModel::Headers_MaxParam; col += 1)
+    	 for (int col = 0; col < PreventionEngine::IPreventionEngine::Headers_MaxParam; col += 1)
     	 {
     	         int role = Qt::EditRole;
     	 	 QVariant value;
     	 	 switch(col){
-    	 	     case VariantItemModel::ITEM_H:
+    	 	     case PreventionEngine::IPreventionEngine::ITEM_H:
     	 	         role = Qt::EditRole;
     	 	         value = QVariant();
     	 	         break;
-    	 	     case VariantItemModel::TYPE_OF_ITEM_H :
+    	 	     case PreventionEngine::IPreventionEngine::TYPE_OF_ITEM_H :
     	 	         role = Qt::EditRole;
-    	 	         value = QVariant(VariantItemModel::PRIMARY_PREVENTION_ITEM);
+    	 	         value = QVariant(PreventionEngine::IPreventionEngine::PRIMARY_PREVENTION_ITEM);
     	 	         break;
-    	 	     case VariantItemModel::PARENT_ITEM_H :
+    	 	     case PreventionEngine::IPreventionEngine::PARENT_ITEM_H :
     	 	         role = Qt::EditRole;
-    	 	         value = item->data(VariantItemModel::ITEM_H);
+    	 	         value = item->data(PreventionEngine::IPreventionEngine::ITEM_H);
     	 	         break;
-    	 	     case VariantItemModel::PARENT_OR_CHILD_H :
+    	 	     case PreventionEngine::IPreventionEngine::PARENT_OR_CHILD_H :
     	 	         role = Qt::EditRole;
-    	 	         value = QVariant(VariantItemModel::CHILD);
+    	 	         value = QVariant(PreventionEngine::IPreventionEngine::CHILD);
     	 	         break;
-    	 	     case VariantItemModel::ICON_H :
+    	 	     case PreventionEngine::IPreventionEngine::ICON_H :
     	 	         role = Qt::EditRole;
     	 	         value = pixmaps()+"/preventOk.png";
     	 	         break;
-    	 	     case VariantItemModel::DATE_DONE_H :
+    	 	     case PreventionEngine::IPreventionEngine::DATE_DONE_H :
     	 	         role = Qt::EditRole;
     	 	         value = QVariant(QDate::currentDate().toString("yyyy-MM-dd"));
     	 	         break;
-    	 	     case VariantItemModel::DATE_NEXT_H :
+    	 	     case PreventionEngine::IPreventionEngine::DATE_NEXT_H :
     	 	         role = Qt::EditRole;
     	 	         value = QVariant(QDate::currentDate().toString("yyyy-MM-dd"));
     	 	         break;
-    	 	     case VariantItemModel::ABSTRACT_H :
+    	 	     case PreventionEngine::IPreventionEngine::ABSTRACT_H :
     	 	         role = Qt::EditRole;
     	 	         value = QVariant();
     	 	         break;
-    	 	     case VariantItemModel::ID_ITEM_H :
+    	 	     case PreventionEngine::IPreventionEngine::ID_ITEM_H :
     	 	         role = Qt::EditRole;
     	 	         value = QVariant(findNextId());
     	 	         break;
-    	 	     case VariantItemModel::PATIENT_UID_H :
+    	 	     case PreventionEngine::IPreventionEngine::PATIENT_UID_H :
     	 	         role = Qt::EditRole;
     	 	         value = QVariant(patientUuid);
     	 	         break;
-    	 	     case VariantItemModel::USER_UID_H :
+    	 	     case PreventionEngine::IPreventionEngine::USER_UID_H :
     	 	         role = Qt::EditRole;
     	 	         value = QVariant(userUuid);
     	 	         break;      	 	         
-    	 	     case VariantItemModel::RESULT_H :
+    	 	     case PreventionEngine::IPreventionEngine::RESULT_H :
     	 	         role = Qt::EditRole;
     	 	         value = QVariant();
     	 	         break;
@@ -838,8 +859,8 @@ bool VariantItemModel::deleteItemAccordingToIndex(QModelIndex & index,QModelInde
 bool VariantItemModel::addAGroupItem(QModelIndex & index,QModelIndex & parent,QObject * parentObject)
 {
     Q_UNUSED(index);
-    QString patientUuid = patientAndUserUuid()[PATIENT];
-    QString userUuid = patientAndUserUuid()[USER];
+    QString patientUuid = patientAndUserUuid()[PreventionEngine::IPreventionEngine::PATIENT];
+    QString userUuid = patientAndUserUuid()[PreventionEngine::IPreventionEngine::USER];
     //PreventIHM * parentOfIO = static_cast<PreventIHM*>(m_modelSql->QObject::parent());
     TreeViewOfPrevention *treeView = static_cast<TreeViewOfPrevention*>(parentObject);
     TreeItem * item = getRootItem();
@@ -865,62 +886,62 @@ bool VariantItemModel::addAGroupItem(QModelIndex & index,QModelIndex & parent,QO
     	 TreeItem * newItem = item->child(item->childCount() -1);
          item->fillParentsHash(parentName,newItem );
     	 int newModelRow = m_modelSql->rowCount()-1;
-    	 if (!m_modelSql->setData(m_modelSql->index(newModelRow,VariantItemModel::ID_PREVENTION),
+    	 if (!m_modelSql->setData(m_modelSql->index(newModelRow,PreventionEngine::IPreventionEngine::ID_PREVENTION),
     	          nextIdPrimkey,Qt::EditRole))
     	 {
     	 	  qWarning() << __FILE__ << QString::number(__LINE__) << "UNABLE TO SET PRIMKEY" ;
     	 	  success = false;
     	     }
-    	 for (int col = 0; col < VariantItemModel::Headers_MaxParam; col += 1)
+    	 for (int col = 0; col < PreventionEngine::IPreventionEngine::Headers_MaxParam; col += 1)
     	 {
     	         int role = Qt::EditRole;
     	 	 QVariant value;
     	 	 switch(col){
-    	 	     case VariantItemModel::ITEM_H:
+    	 	     case PreventionEngine::IPreventionEngine::ITEM_H:
     	 	         role = Qt::EditRole;
     	 	         value = QVariant("new group");
     	 	         break;
-    	 	     case VariantItemModel::TYPE_OF_ITEM_H :
+    	 	     case PreventionEngine::IPreventionEngine::TYPE_OF_ITEM_H :
     	 	         role = Qt::EditRole;
-    	 	         value = QVariant(VariantItemModel::PRIMARY_PREVENTION_ITEM);
+    	 	         value = QVariant(PreventionEngine::IPreventionEngine::PRIMARY_PREVENTION_ITEM);
     	 	         break;
-    	 	     case VariantItemModel::PARENT_ITEM_H :
+    	 	     case PreventionEngine::IPreventionEngine::PARENT_ITEM_H :
     	 	         role = Qt::EditRole;
     	 	         value = QVariant("ROOT");
     	 	         break;
-    	 	     case VariantItemModel::PARENT_OR_CHILD_H :
+    	 	     case PreventionEngine::IPreventionEngine::PARENT_OR_CHILD_H :
     	 	         role = Qt::EditRole;
-    	 	         value = QVariant(VariantItemModel::PARENT);
+    	 	         value = QVariant(PreventionEngine::IPreventionEngine::PARENT);
     	 	         break;
-    	 	     case VariantItemModel::ICON_H :
-    	 	         role = Qt::EditRole;
-    	 	         value = QVariant();
-    	 	         break;
-    	 	     case VariantItemModel::DATE_DONE_H :
-    	 	         role = Qt::EditRole;
-    	 	         value = QVariant(QDate::currentDate().toString("yyyy-MM-dd"));
-    	 	         break;
-    	 	     case VariantItemModel::DATE_NEXT_H :
-    	 	         role = Qt::EditRole;
-    	 	         value = QVariant(QDate::currentDate().toString("yyyy-MM-dd"));
-    	 	         break;
-    	 	     case VariantItemModel::ABSTRACT_H :
+    	 	     case PreventionEngine::IPreventionEngine::ICON_H :
     	 	         role = Qt::EditRole;
     	 	         value = QVariant();
     	 	         break;
-    	 	     case VariantItemModel::ID_ITEM_H :
+    	 	     case PreventionEngine::IPreventionEngine::DATE_DONE_H :
+    	 	         role = Qt::EditRole;
+    	 	         value = QVariant(QDate::currentDate().toString("yyyy-MM-dd"));
+    	 	         break;
+    	 	     case PreventionEngine::IPreventionEngine::DATE_NEXT_H :
+    	 	         role = Qt::EditRole;
+    	 	         value = QVariant(QDate::currentDate().toString("yyyy-MM-dd"));
+    	 	         break;
+    	 	     case PreventionEngine::IPreventionEngine::ABSTRACT_H :
+    	 	         role = Qt::EditRole;
+    	 	         value = QVariant();
+    	 	         break;
+    	 	     case PreventionEngine::IPreventionEngine::ID_ITEM_H :
     	 	         role = Qt::EditRole;
     	 	         value = QVariant(findNextId());
     	 	         break;
-    	 	     case VariantItemModel::PATIENT_UID_H :
+    	 	     case PreventionEngine::IPreventionEngine::PATIENT_UID_H :
     	 	         role = Qt::EditRole;
     	 	         value = QVariant(patientUuid);
     	 	         break;
-    	 	     case VariantItemModel::USER_UID_H :
+    	 	     case PreventionEngine::IPreventionEngine::USER_UID_H :
     	 	         role = Qt::EditRole;
     	 	         value = QVariant(userUuid);
     	 	         break;     	 	         
-    	 	     case VariantItemModel::RESULT_H :
+    	 	     case PreventionEngine::IPreventionEngine::RESULT_H :
     	 	         role = Qt::EditRole;
     	 	         value = QVariant();
     	 	         break;
@@ -991,7 +1012,7 @@ PreventIO::PreventIO(QObject * parent){
     m_NextDateModel->setTable("nextdate");
     m_NextDateModel->setEditStrategy(QSqlTableModel::OnFieldChange);
     m_NextDateModel->select();
-    m_userUid = patientAndUserUuid()[USER];
+    m_userUid = patientAndUserUuid()[PreventionEngine::IPreventionEngine::USER];
 }
 
 PreventIO::~PreventIO(){}
@@ -1030,7 +1051,7 @@ VariantItemModel * PreventIO::getVariantItemModel()
 QStringList PreventIO::getListOfNextDateItems()
 {
     QStringList list;
-    QString userUid = patientAndUserUuid()[USER] ;
+    QString userUid = patientAndUserUuid()[PreventionEngine::IPreventionEngine::USER] ;
     if (m_NextDateModel->rowCount()>0)
     {
     	  QString filter = QString("%1 LIKE '%2'").arg("USER_UID",userUid);
@@ -1040,7 +1061,7 @@ QStringList PreventIO::getListOfNextDateItems()
     m_NextDateModel->select();
     for (int i = 0; i < m_NextDateModel->rowCount(); ++i)
     {
-    	  list << m_NextDateModel->data(m_NextDateModel->index(i,ND_ITEM),Qt::DisplayRole).toString();
+    	  list << m_NextDateModel->data(m_NextDateModel->index(i,PreventionEngine::IPreventionEngine::ND_ITEM),Qt::DisplayRole).toString();
         }
     return list;
 }
@@ -1059,11 +1080,11 @@ QDate PreventIO::getNextDate(const QStringList & listOfDatas, QModelIndex index)
     int days = 0;
     if (listOfDatas.size()>0)
     {
-    	  years = listOfDatas[ND_YEAR].toInt();
-    	  months = listOfDatas[ND_MONTH].toInt();
-    	  days = listOfDatas[ND_DAY].toInt();
+    	  years = listOfDatas[PreventionEngine::IPreventionEngine::ND_YEAR].toInt();
+    	  months = listOfDatas[PreventionEngine::IPreventionEngine::ND_MONTH].toInt();
+    	  days = listOfDatas[PreventionEngine::IPreventionEngine::ND_DAY].toInt();
         }
-    date = m_variantModel->data(m_variantModel->index(index.row(),VariantItemModel::DATE_DONE_H,index.parent()),Qt::DisplayRole).toDate();
+    date = m_variantModel->data(m_variantModel->index(index.row(),PreventionEngine::IPreventionEngine::DATE_DONE_H,index.parent()),Qt::DisplayRole).toDate();
     newDate = date.addYears(years);
     newDate = newDate.addMonths(months);
     newDate = newDate.addDays(days);

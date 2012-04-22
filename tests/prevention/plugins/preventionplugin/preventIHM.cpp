@@ -1,4 +1,6 @@
 #include "preventIHM.h"
+#include "IPrevention.h"
+
 #include <preferences/dateOfNextAction.h>
 
 #include <coreplugin/icore.h>
@@ -194,17 +196,17 @@ PreventIHM::PreventIHM(QWidget * parent):QWidget(parent){
     m_modelOfItems = m_io->getVariantItemModel();
     m_TreeViewOfPrevention->setModel(m_modelOfItems);
     m_TreeViewOfPrevention->getModel(m_modelOfItems);
-    m_TreeViewOfPrevention->setItemDelegateForColumn(VariantItemModel::DATE_DONE_H,new DateEditTreeViewFirstDelegate(m_io));
-    m_TreeViewOfPrevention->setItemDelegateForColumn(VariantItemModel::DATE_NEXT_H,new DateEditTreeViewDelegate(m_io));
-    m_TreeViewOfPrevention->setItemDelegateForColumn(VariantItemModel::ICON_H,new ComboTreeViewDelegate);
-    m_TreeViewOfPrevention->setItemDelegateForColumn(VariantItemModel::ITEM_H,new ComboTreeViewItemDelegate(m_io));
-    m_TreeViewOfPrevention->header()->hideSection(VariantItemModel::TYPE_OF_ITEM_H);
-    m_TreeViewOfPrevention->header()->hideSection(VariantItemModel::PARENT_ITEM_H);
-    m_TreeViewOfPrevention->header()->hideSection(VariantItemModel::PARENT_OR_CHILD_H);
-    m_TreeViewOfPrevention->header()->hideSection(VariantItemModel::RESULT_H);
-    m_TreeViewOfPrevention->header()->hideSection(VariantItemModel::PATIENT_UID_H);
-    m_TreeViewOfPrevention->header()->hideSection(VariantItemModel::USER_UID_H);
-    m_TreeViewOfPrevention->header()->resizeSection(VariantItemModel::ITEM_H,200);
+    m_TreeViewOfPrevention->setItemDelegateForColumn(PreventionEngine::IPreventionEngine::DATE_DONE_H,new DateEditTreeViewFirstDelegate(m_io));
+    m_TreeViewOfPrevention->setItemDelegateForColumn(PreventionEngine::IPreventionEngine::DATE_NEXT_H,new DateEditTreeViewDelegate(m_io));
+    m_TreeViewOfPrevention->setItemDelegateForColumn(PreventionEngine::IPreventionEngine::ICON_H,new ComboTreeViewDelegate);
+    m_TreeViewOfPrevention->setItemDelegateForColumn(PreventionEngine::IPreventionEngine::ITEM_H,new ComboTreeViewItemDelegate(m_io));
+    m_TreeViewOfPrevention->header()->hideSection(PreventionEngine::IPreventionEngine::TYPE_OF_ITEM_H);
+    m_TreeViewOfPrevention->header()->hideSection(PreventionEngine::IPreventionEngine::PARENT_ITEM_H);
+    m_TreeViewOfPrevention->header()->hideSection(PreventionEngine::IPreventionEngine::PARENT_OR_CHILD_H);
+    m_TreeViewOfPrevention->header()->hideSection(PreventionEngine::IPreventionEngine::RESULT_H);
+    m_TreeViewOfPrevention->header()->hideSection(PreventionEngine::IPreventionEngine::PATIENT_UID_H);
+    m_TreeViewOfPrevention->header()->hideSection(PreventionEngine::IPreventionEngine::USER_UID_H);
+    m_TreeViewOfPrevention->header()->resizeSection(PreventionEngine::IPreventionEngine::ITEM_H,200);
     m_vbox->addWidget(m_TreeViewOfPrevention);
     setLayout(m_vbox);
     changeIconWidget();
@@ -224,7 +226,7 @@ void PreventIHM::changeIconWidget()
     	  
     	  for (int underRow = 0; underRow < modelOfItems->rowCount(parent); underRow += 1)
     	  {
-    	  	 QModelIndex indexChild = modelOfItems->index(underRow,VariantItemModel::ICON_H,parent);
+    	  	 QModelIndex indexChild = modelOfItems->index(underRow,PreventionEngine::IPreventionEngine::ICON_H,parent);
     	  	 QString data = modelOfItems->data(indexChild,Qt::DisplayRole).toString();
     	  	 m_TreeViewOfPrevention->closePersistentEditor(indexChild);
     	  	 m_TreeViewOfPrevention->openPersistentEditor (indexChild);

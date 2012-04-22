@@ -19,6 +19,7 @@
  ***************************************************************************/
 #include "connexion.h"
 #include "preventIO.h"
+#include "IPrevention.h"
 
 #include <QMessageBox>
 #include <QString>
@@ -384,70 +385,70 @@ bool Connexion::setFirstDefaultValues(){
 	{
 		  QVariant data;
 		  switch(it){
-		      case VariantItemModel::ID_PREVENTION :
+		      case PreventionEngine::IPreventionEngine::ID_PREVENTION :
 		          data = row;
 		          success = model.setData(model.index(row,it),data,Qt::EditRole);
 		          break;		          
-		      case VariantItemModel::ITEM :
+		      case PreventionEngine::IPreventionEngine::ITEM :
 		          data = listOfDatas[it];
 		          
 		          success = model.setData(model.index(row,it),data,Qt::EditRole);
 		          break;
-		      case VariantItemModel::TYPE_OF_ITEM :
+		      case PreventionEngine::IPreventionEngine::TYPE_OF_ITEM :
 		          data = listOfDatas[it];
 		          if (data == QVariant("PRIMARY_PREVENTION_ITEM"))
 		          {
-		          	  data = QVariant(VariantItemModel::PRIMARY_PREVENTION_ITEM);
+		          	  data = QVariant(PreventionEngine::IPreventionEngine::PRIMARY_PREVENTION_ITEM);
 		              }
 		          else{
-		                  data = QVariant(VariantItemModel::SECONDARY_PREVENTION_ITEM);
+		                  data = QVariant(PreventionEngine::IPreventionEngine::SECONDARY_PREVENTION_ITEM);
 		          }
 		          success = model.setData(model.index(row,it),data,Qt::EditRole);
 		          break;
-		      case VariantItemModel::PARENT_ITEM :
+		      case PreventionEngine::IPreventionEngine::PARENT_ITEM :
 		          data = listOfDatas[it];
 		          success = model.setData(model.index(row,it),data,Qt::EditRole);
 		          break;
-		      case VariantItemModel::PARENT_OR_CHILD :
+		      case PreventionEngine::IPreventionEngine::PARENT_OR_CHILD :
 		          data = listOfDatas[it];
 		          if (data == QVariant("PARENT"))
 		          {
-		          	  data = QVariant(VariantItemModel::PARENT);
+		          	  data = QVariant(PreventionEngine::IPreventionEngine::PARENT);
 		              }
 		          else
 		          {
-		          	data = QVariant(VariantItemModel::CHILD);
+		          	data = QVariant(PreventionEngine::IPreventionEngine::CHILD);
 		              }
 		          success = model.setData(model.index(row,it),data,Qt::EditRole);
 		          break;
-		      case VariantItemModel::ICON  :
+		      case PreventionEngine::IPreventionEngine::ICON  :
 		          data = QVariant();
 		          success = model.setData(model.index(row,it),data,Qt::EditRole);
 		          break;
-		      case VariantItemModel::DATE_DONE :
+		      case PreventionEngine::IPreventionEngine::DATE_DONE :
 		          data = QVariant("2000-01-01");
 		          success = model.setData(model.index(row,it),data,Qt::EditRole);
 		          break;
-		      case VariantItemModel::DATE_NEXT :
+		      case PreventionEngine::IPreventionEngine::DATE_NEXT :
 		          data = QVariant("2000-01-01");
 		          success = model.setData(model.index(row,it),data,Qt::EditRole);
 		          break;
-		      case VariantItemModel::ABSTRACT :
+		      case PreventionEngine::IPreventionEngine::ABSTRACT :
 		          data = QVariant("");
 		          success = model.setData(model.index(row,it),data,Qt::EditRole);
 		          break;
-		      case VariantItemModel::RESULT :
+		      case PreventionEngine::IPreventionEngine::RESULT :
 		          data = QVariant("");
 		          success = model.setData(model.index(row,it),data,Qt::EditRole);
 		          break;
-		      case VariantItemModel::ID_ITEM :
+		      case PreventionEngine::IPreventionEngine::ID_ITEM :
 		          data = listOfDatas[it];
 		          success = model.setData(model.index(row,it),data,Qt::EditRole);
 		          break;
-    	 	      case VariantItemModel::PATIENT_UID :
+    	 	      case PreventionEngine::IPreventionEngine::PATIENT_UID :
     	 	         success = model.setData(model.index(row,it),"111111111111111111111111111111",Qt::EditRole);
     	 	         break;
-    	 	      case VariantItemModel::USER_UID :
+    	 	      case PreventionEngine::IPreventionEngine::USER_UID :
     	 	         success = model.setData(model.index(row,it),QVariant(1),Qt::EditRole);
     	 	         break;		         
 		      default :
@@ -509,43 +510,43 @@ bool Connexion::fillWithValuesForTesting(){
 	{
 		  QVariant data;
 		  switch(it){
-		      case VariantItemModel::ID_PREVENTION :
+		      case PreventionEngine::IPreventionEngine::ID_PREVENTION :
 		          data = row;
 		          success = model.setData(model.index(row,it),data,Qt::EditRole);
 		          break;		          
-		      case VariantItemModel::ITEM :
+		      case PreventionEngine::IPreventionEngine::ITEM :
 		          data = listOfDatas[it];
 		          
 		          success = model.setData(model.index(row,it),data,Qt::EditRole);
 		          break;
-		      case VariantItemModel::TYPE_OF_ITEM :
+		      case PreventionEngine::IPreventionEngine::TYPE_OF_ITEM :
 		          data = listOfDatas[it];
 		          if (data == QVariant("PRIMARY_PREVENTION_ITEM"))
 		          {
-		          	  data = QVariant(VariantItemModel::PRIMARY_PREVENTION_ITEM);
+		          	  data = QVariant(PreventionEngine::IPreventionEngine::PRIMARY_PREVENTION_ITEM);
 		              }
 		          else{
-		                  data = QVariant(VariantItemModel::SECONDARY_PREVENTION_ITEM);
+		                  data = QVariant(PreventionEngine::IPreventionEngine::SECONDARY_PREVENTION_ITEM);
 		          }
 		          success = model.setData(model.index(row,it),data,Qt::EditRole);
 		          break;
-		      case VariantItemModel::PARENT_ITEM :
+		      case PreventionEngine::IPreventionEngine::PARENT_ITEM :
 		          data = listOfDatas[it];
 		          success = model.setData(model.index(row,it),data,Qt::EditRole);
 		          break;
-		      case VariantItemModel::PARENT_OR_CHILD :
+		      case PreventionEngine::IPreventionEngine::PARENT_OR_CHILD :
 		          data = listOfDatas[it];
 		          if (data == QVariant("PARENT"))
 		          {
-		          	  data = QVariant(VariantItemModel::PARENT);
+		          	  data = QVariant(PreventionEngine::IPreventionEngine::PARENT);
 		              }
 		          else
 		          {
-		          	data = QVariant(VariantItemModel::CHILD);
+		          	data = QVariant(PreventionEngine::IPreventionEngine::CHILD);
 		              }
 		          success = model.setData(model.index(row,it),data,Qt::EditRole);
 		          break;
-		      case VariantItemModel::ICON  :
+		      case PreventionEngine::IPreventionEngine::ICON  :
 		          data = listOfDatas[it];
 		          if (data.toString().contains("GREEN"))
 		          {
@@ -557,30 +558,30 @@ bool Connexion::fillWithValuesForTesting(){
 		              }
 		          success = model.setData(model.index(row,it),data,Qt::EditRole);
 		          break;
-		      case VariantItemModel::DATE_DONE :
+		      case PreventionEngine::IPreventionEngine::DATE_DONE :
 		          data = QVariant("2000-01-01");
 		          success = model.setData(model.index(row,it),data,Qt::EditRole);
 		          break;
-		      case VariantItemModel::DATE_NEXT :
+		      case PreventionEngine::IPreventionEngine::DATE_NEXT :
 		          data = QVariant("2000-01-01");
 		          success = model.setData(model.index(row,it),data,Qt::EditRole);
 		          break;
-		      case VariantItemModel::ABSTRACT :
+		      case PreventionEngine::IPreventionEngine::ABSTRACT :
 		          data = QVariant(listOfDatas[it]);
 		          success = model.setData(model.index(row,it),data,Qt::EditRole);
 		          break;
-		      case VariantItemModel::RESULT :
+		      case PreventionEngine::IPreventionEngine::RESULT :
 		          data = QVariant("");
 		          success = model.setData(model.index(row,it),data,Qt::EditRole);
 		          break;
-		      case VariantItemModel::ID_ITEM :
+		      case PreventionEngine::IPreventionEngine::ID_ITEM :
 		          data = listOfDatas[it];
 		          success = model.setData(model.index(row,it),data,Qt::EditRole);
 		          break;
-    	 	      case VariantItemModel::PATIENT_UID :
+    	 	      case PreventionEngine::IPreventionEngine::PATIENT_UID :
     	 	         success = model.setData(model.index(row,it),"111111111111111111111111111111",Qt::EditRole);
     	 	         break;
-    	 	      case VariantItemModel::USER_UID :
+    	 	      case PreventionEngine::IPreventionEngine::USER_UID :
     	 	         success = model.setData(model.index(row,it),QVariant(1),Qt::EditRole);
     	 	         break;	
 		      default :

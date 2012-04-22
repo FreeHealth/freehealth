@@ -23,7 +23,7 @@ QSize DateEditTreeViewFirstDelegate::sizeHint(const QStyleOptionViewItem &  opti
 QWidget *DateEditTreeViewFirstDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option,
                            const QModelIndex &index) const
 {
-    if (  index.column() == VariantItemModel::DATE_DONE_H)
+    if (  index.column() == PreventionEngine::IPreventionEngine::DATE_DONE_H)
     {
     	  QDateEdit * dateEdit = new QDateEdit(parent);
     	  dateEdit->setDisplayFormat("yyyy-MM-dd");
@@ -76,7 +76,7 @@ QSize DateEditTreeViewDelegate::sizeHint(const QStyleOptionViewItem &  option ,
 QWidget *DateEditTreeViewDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option,
                            const QModelIndex &index) const
 {
-    if (index.column() == VariantItemModel::DATE_NEXT_H)
+    if (index.column() == PreventionEngine::IPreventionEngine::DATE_NEXT_H)
     {
     	  QDateEdit * dateEdit = new QDateEdit(parent);
     	  dateEdit->setDisplayFormat("yyyy-MM-dd");
@@ -163,7 +163,7 @@ QSize ComboTreeViewDelegate::sizeHint(const QStyleOptionViewItem &  option ,
 QWidget *ComboTreeViewDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option,
                            const QModelIndex &index) const
 {
-   if (  index.column() == VariantItemModel::ICON_H )
+   if (  index.column() == PreventionEngine::IPreventionEngine::ICON_H )
     {
    	  QComboBox * combo = new QComboBox(parent);
     	  return combo;
@@ -243,7 +243,7 @@ QSize ComboTreeViewItemDelegate::sizeHint(const QStyleOptionViewItem &  option ,
 QWidget *ComboTreeViewItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option,
                            const QModelIndex &index) const
 {
-   if (  index.column() == VariantItemModel::ITEM_H )
+   if (  index.column() == PreventionEngine::IPreventionEngine::ITEM_H )
     {
    	  QComboBox * combo = new QComboBox(parent);
     	  return combo;

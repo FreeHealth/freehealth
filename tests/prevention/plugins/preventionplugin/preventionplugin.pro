@@ -24,7 +24,8 @@ HEADERS += preventionplugin.h\
            moreIHM.h \
            survey.h \
            nextdateitemsdialog.h \
-           preventionconstants.h \
+           #preventionconstants.h \
+           IPrevention.h \
            connexion.h
 
 SOURCES += preventionplugin.cpp \

@@ -2,6 +2,7 @@
 #define NEXTDATEITEMS_H
 
 #include "ui_nextdateitemsdialog.h"
+
 #include <QSqlTableModel>
 
 class NextDateDialog : public QDialog, public Ui::NextDateItemsDialog

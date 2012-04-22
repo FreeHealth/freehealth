@@ -1,35 +1,20 @@
 #ifndef PREVENTIO_H
 #define PREVENTIO_H
 
+#include "IPrevention.h"
+
 #include <QtSql>
 #include <QtCore>
 #include <QAbstractItemModel>
 #include <QDebug>
 #include <QTextDocument>
 
- class TreeItem:public QObject
+using namespace PreventionEngine;
+
+ class TreeItem : public IPreventionEngine
  {
  Q_OBJECT
-      enum Parenthood {
-          PARENT = 0,
-          CHILD,
-          Parenthood_MaxParam
-          };
-      enum Headers {
-          ITEM_H = 0,
-          TYPE_OF_ITEM_H,
-          PARENT_ITEM_H,
-          PARENT_OR_CHILD_H,
-          ICON_H,
-          DATE_DONE_H,
-          DATE_NEXT_H,
-          ABSTRACT_H,
-          ID_ITEM_H,
-          PATIENT_UID_H,
-          USER_UID_H,           
-          RESULT_H,
-          Headers_MaxParam
-          };
+
  public:
      TreeItem(const QVector<QVariant> &data = QVector<QVariant>(), TreeItem *parent = 0);
      ~TreeItem();
@@ -62,58 +47,9 @@
 class VariantItemModel : public QAbstractItemModel
  {
      Q_OBJECT
-  enum Uuid_List {
-      PATIENT = 0,
-      USER
-      };
+
   public:
-      enum Parenthood {
-          PARENT = 0,
-          CHILD,
-          Parenthood_MaxParam
-          };
-      enum Prevention_Items {
-          ID_PREVENTION = 0,
-          ITEM,
-          TYPE_OF_ITEM,
-          PARENT_ITEM,
-          PARENT_OR_CHILD,
-          ICON,
-          DATE_DONE,
-          DATE_NEXT,
-          ABSTRACT,
-          ID_ITEM,
-          PATIENT_UID,
-          USER_UID,          
-          RESULT,
-          Prevention_Items_MaxParam
-          };
-      enum Headers {
-          ITEM_H = 0,
-          TYPE_OF_ITEM_H,
-          PARENT_ITEM_H,
-          PARENT_OR_CHILD_H,
-          ICON_H,
-          DATE_DONE_H,
-          DATE_NEXT_H,
-          ABSTRACT_H,
-          ID_ITEM_H,
-          PATIENT_UID_H,
-          USER_UID_H,          
-          RESULT_H,
-          Headers_MaxParam
-          };
-      enum Types_Of_Items {
-          PRIMARY_PREVENTION_ITEM = 0,
-          SECONDARY_PREVENTION_ITEM,
-          Types_Of_Items_MaxParam
-          };
-      enum Icons {//see enum in treeviewdelegate
-          PREVENT_OK = 0,
-          PREVENT_WARNING,
-          PREVENT_PAST,
-          Icons_MaxParam
-          };
+
      VariantItemModel(QSqlTableModel *model = 0, QObject *parent = 0);
      ~VariantItemModel();
 

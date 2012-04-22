@@ -1,9 +1,13 @@
 #include "nextdateitemsdialog.h"
-#include "preventionconstants.h"
+//#include "preventionconstants.h"
+#include "IPrevention.h"
 
-using namespace PreventionConstants;
 
-NextDateDialog::NextDateDialog(const QObject * parent , QStringList & listOfItems, QSqlTableModel * nextDateModel)
+//using namespace PreventionConstants;
+
+NextDateDialog::NextDateDialog(const QObject * parent , 
+                               QStringList & listOfItems, 
+                               QSqlTableModel * nextDateModel)
 {
     Q_UNUSED(parent);
     Q_UNUSED(listOfItems);
@@ -12,8 +16,8 @@ NextDateDialog::NextDateDialog(const QObject * parent , QStringList & listOfItem
     m_model = nextDateModel;
     m_model->select();
     tableView->setModel(m_model);
-    tableView->setColumnHidden(ID_NEXTDATE,true);
-    tableView->setColumnHidden(ND_USER_UID,true);    
+    tableView->setColumnHidden(PreventionEngine::IPreventionEngine::ID_NEXTDATE,true);
+    tableView->setColumnHidden(PreventionEngine::IPreventionEngine::ND_USER_UID,true);    
     tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
 }
 

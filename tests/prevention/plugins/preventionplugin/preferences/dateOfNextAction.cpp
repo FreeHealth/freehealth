@@ -86,6 +86,5 @@ void NextAction::saveInModel()
 void NextAction::revertChangesAndClose()
 {
     m_model->revert();
-    close();
 }
 
