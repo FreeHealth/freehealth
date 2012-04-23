@@ -2,6 +2,8 @@
 #define IPREVENTION_H
 
 #include <QObject>
+#include <QVector>
+#include <QVariant>
 
 namespace PreventionEngine {
 
@@ -70,12 +72,24 @@ class IPreventionEngine : public QObject {
             ND_USER_UID,
             NextDateItems_MaxParam
             };
-        IPreventionEngine (QObject * parent = 0) {}
+        IPreventionEngine (const QVector<QVariant> &data = QVector<QVariant>(),QObject * parent = 0) {}
         virtual ~IPreventionEngine() {}
         
         static IPreventionEngine * preventionEnginePtr();
-      
         
+        virtual QObject *child(int number) =0;
+        virtual int childCount() const =0;
+        virtual int columnCount() const =0;
+        virtual QVariant data(int column) const =0;
+        virtual QVector<QVariant> datas(int columns) =0;
+        virtual bool insertChildren(int position, int count, int columns) =0;
+        virtual bool insertColumns(int position, int columns) =0;
+        virtual QObject * parent() =0;
+        virtual bool removeChildren(int position, int count) =0;
+        virtual bool removeColumns(int position, int columns) =0;
+        virtual int childNumber() const =0;
+        virtual bool setData(int column, const QVariant&) =0;
+       
 };
 
 };
