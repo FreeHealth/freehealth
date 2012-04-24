@@ -381,6 +381,8 @@ void ControlReceipts::changeEvent(QEvent *e) {
 
 QString ControlReceipts::getHtmlDocAccordingToTableView()
 {
+    QStringList listOfSums;
+    listOfSums = getListOfSums();
     QString htmlDocument = "<html><body><font size=3>";
     htmlDocument += "<TABLE BORDER=1>";
     htmlDocument += "<CAPTION><font color = red size = 6>"+trUtf8("Extract of receipts")+"</font></CAPTION>";
@@ -420,6 +422,7 @@ QString ControlReceipts::getHtmlDocAccordingToTableView()
                          << ACCOUNT_OTHERAMOUNT
                          << ACCOUNT_DUEAMOUNT
                          << ACCOUNT_DUEBY ;
+
     for (int row = 0; row < model->rowCount(); ++row )
     {
     	  htmlDocument += "<TR>";
@@ -435,7 +438,82 @@ QString ControlReceipts::getHtmlDocAccordingToTableView()
     	      }
     	  htmlDocument += "</TR>";
         }
+    htmlDocument += "<TR>";
+    for (int cell = 0; cell < HeadersForPrint_MaxParam; ++cell)
+    {
+    	  if (cell < CASH_HEADER || cell > DUE_HEADER)
+    	  {
+    	  	  if (cell == ACTS_HEADER)
+    	  	  {
+    	  	     htmlDocument += "<TD>";
+    	  	     htmlDocument+= trUtf8("TOTAL");
+    	  	     htmlDocument += "</TD>";
+    	  	      }
+    	  	  else
+    	  	  {
+    	  	      htmlDocument += "<TD>";
+    	  	      htmlDocument+= "";
+    	  	      htmlDocument += "</TD>";
+    	  	      }
+    	  	  
+    	      }
+    	  else
+    	  {
+    	  	  htmlDocument += "<TD>";
+    	  	  qDebug() << __FILE__ << QString::number(__LINE__) << " listOfSums =" << QString::number(cell-ACTS_HEADER) ;
+    	  	  htmlDocument+= listOfSums[cell-CASH_HEADER];
+    	  	  htmlDocument += "</TD>";    	  	
+    	      }
+    	  
+        }
+    htmlDocument += "</TR>";
     htmlDocument += "</TABLE></font></body></html>";
     return htmlDocument;
+}
+
+QStringList ControlReceipts::getListOfSums()
+{
+    QStringList listOfSums;
+    double cash = 0.00;
+    double chq = 0.00;
+    double visa = 0.00;
+    double banking = 0.00;
+    double other = 0.00;
+    double dues = 0.00;
+    double totalReceived = 0.00;
+    double totals = 0.00;
+    QAbstractItemModel *model = ui->tableView->model();
+   int modelRowCount = model->rowCount(QModelIndex());
+   for(int i = 0; i < modelRowCount ; i ++){
+       QString c  = model->data(model->index(i,ACCOUNT_CASHAMOUNT),Qt::DisplayRole).toString();
+       QString ch = model->data(model->index(i,ACCOUNT_CHEQUEAMOUNT),Qt::DisplayRole).toString();
+       QString v  = model->data(model->index(i,ACCOUNT_VISAAMOUNT),Qt::DisplayRole).toString();
+       QString b  = model->data(model->index(i,ACCOUNT_INSURANCEAMOUNT),Qt::DisplayRole).toString();
+       QString o  = model->data(model->index(i,ACCOUNT_OTHERAMOUNT),Qt::DisplayRole).toString();
+       QString d  = model->data(model->index(i,ACCOUNT_DUEAMOUNT),Qt::DisplayRole).toString();
+       QStringList list;
+       list << c << ch << v << b << o << d;
+       if (c.toDouble() == 0.0 || ch.toDouble() == 0.0 || v.toDouble() == 0.0 || b.toDouble() == 0.0
+           || o.toDouble() == 0.0 || d.toDouble() == 0.0)
+       {
+       	   foreach(QString s,list){
+       	       s.replace(",",QLocale::c().decimalPoint ());
+       	       s.replace(".",QLocale::c().decimalPoint ());
+       	       }
+           }
+       cash  += list[ReceiptsConstants::Cash].toDouble();
+       chq  += list[ReceiptsConstants::Check].toDouble();
+       visa += list[ReceiptsConstants::Visa].toDouble();
+       banking += list[ReceiptsConstants::Banking].toDouble();
+       other += list[ReceiptsConstants::Other].toDouble();
+       dues  += list[ReceiptsConstants::Due].toDouble();
+       }
+     listOfSums << QString::number(cash)
+                << QString::number(chq)
+                << QString::number(visa)
+                << QString::number(banking)
+                << QString::number(other)
+                << QString::number(dues) ;
+     return listOfSums;
 }
 

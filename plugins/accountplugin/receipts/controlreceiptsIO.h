@@ -47,6 +47,20 @@ using namespace AccountDB;
 class ACCOUNT_EXPORT ControlReceipts : public QWidget
 {
     Q_OBJECT
+    enum HeadersForPrint
+    {
+        PATIENT_NAME_HEADER = 0,
+        DATE_HEADER,
+        ACTS_HEADER,
+        CASH_HEADER,
+        CHQ_HEADER,
+        VISA_HEADER,
+        BANKING_HEADER,
+        OTHER_HEADER,
+        DUE_HEADER,
+        DUE_BY_HEADER,
+        HeadersForPrint_MaxParam
+        };
     public :
         ControlReceipts(QWidget * parent);
         ~ControlReceipts();
@@ -68,6 +82,7 @@ class ACCOUNT_EXPORT ControlReceipts : public QWidget
         void changeEvent(QEvent *e);
         void print(QString & html);
         QString getHtmlDocAccordingToTableView();
+        QStringList getListOfSums();
         Ui::ControlReceiptsWidget * ui;
         AccountModel * m_accountModel;
         QString m_userUuid;
