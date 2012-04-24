@@ -240,17 +240,17 @@ void PadCore::toRaw(PadDocument *doc)
     raw.insertText(_name);
     int newLength = _name.size();
     doc->positionTranslator().addRawTranslation(_start, newLength-oldLength);
+    doc->positionTranslator().addRawTranslation(_start, s);
 
     // add delimiters
     raw.setPosition(_start);
     raw.insertText(Constants::TOKEN_CORE_DELIMITER);
-    doc->positionTranslator().addRawTranslation(_start, s);
 
     setEnd(doc->positionTranslator().outputToRaw(_outputEnd));
+    doc->positionTranslator().addRawTranslation(_start, s);
     raw.setPosition(_end);
     raw.insertText(Constants::TOKEN_CORE_DELIMITER);
     setEnd(_end + s);
-    doc->positionTranslator().addRawTranslation(_end, s);
 //    qWarning() << "core end";
 //    debug(2);
 //    doc->positionTranslator().debug();
@@ -405,14 +405,10 @@ void PadItem::run(QMap<QString,QVariant> &tokens, PadDocument *document)
             setOutputEnd(document->positionTranslator().rawToOutput(end()));
         }
     }
-//    qWarning();
 }
 
 void PadItem::toRaw(PadDocument *doc)
 {
-//    qWarning() << "start";
-//    debug();
-
     // add delimiters at the beginning && the end
     QTextCursor raw(doc->rawSourceDocument());
     setStart(doc->positionTranslator().outputToRaw(_outputStart));
@@ -421,13 +417,15 @@ void PadItem::toRaw(PadDocument *doc)
     int s = QString(Constants::TOKEN_OPEN_DELIMITER).size();
     doc->positionTranslator().addRawTranslation(_start, s);
 
-//    doc->positionTranslator().debug();
+    doc->positionTranslator().debug();
 
     PadCore *core = getCore();
     Q_ASSERT(core);
     if (!core)
         return;
     core->toRaw(doc);
+
+    doc->positionTranslator().debug();
 
     setEnd(doc->positionTranslator().outputToRaw(_outputEnd));
     raw.setPosition(_end);
