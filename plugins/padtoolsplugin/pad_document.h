@@ -36,6 +36,13 @@
 #include <QObject>
 #include <QTimer>
 
+/**
+ * \file itoken.h
+ * \author Eric Maeker
+ * \version 0.8.0
+ * \date 25 Apr 2012
+*/
+
 namespace PadTools {
 class TokenModel;
 
