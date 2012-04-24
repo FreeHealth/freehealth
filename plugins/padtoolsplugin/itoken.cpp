@@ -19,54 +19,16 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main Developers : Eric Maeker <eric.maeker@gmail.com>,                *
- *                    Guillaume Denry <guillaume.denry@gmail.com>          *
+ *  Main Developers : Eric Maeker <eric.maeker@gmail.com>                  *
  *  Contributors :                                                         *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
-#ifndef PAD_ANALYZER_H
-#define PAD_ANALYZER_H
-
-#include <QString>
-#include <QStack>
-
-#include <coreplugin/ipadtools.h>
-
-#include "pad_fragment.h"
-#include "pad_string.h"
-#include "pad_document.h"
-#include "pad_item.h"
-
-/**
- * \file pad_analyzer.h
- * \author Eric Maeker, Guillaume Denry
- * \version 0.8.0
- * \date 25 Apr 2012
-*/
+#include "itoken.h"
 
 namespace PadTools {
-namespace Internal {
-class PadAnalyzerPrivate;
+
+IToken::IToken()
+{
 }
 
-/** \todo make jobs asynchronous */
-
-class PadAnalyzer : public QObject
-{
-    Q_OBJECT
-public:
-    PadAnalyzer(QObject *parent = 0);
-    ~PadAnalyzer();
-
-    PadDocument *analyze(const QString &source);
-    PadDocument *analyze(QTextDocument *source, PadDocument *padDocument = 0);
-
-    const QList<Core::PadAnalyzerError> lastErrors() const;
-
-private:
-    Internal::PadAnalyzerPrivate *d;
-};
-
-} // PadTools
-
-#endif
+} // namespace PadTools
