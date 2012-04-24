@@ -34,9 +34,15 @@
 #include "ui_controlreceipts.h"
 
 #include <utils/global.h>
+#include <utils/log.h>
 #include <translationutils/constants.h>
 #include <translationutils/trans_msgerror.h>
 #include <translationutils/trans_spashandupdate.h>
+//#include <extensionsystem/iplugin.h>
+#include <extensionsystem/pluginmanager.h>
+
+#include <coreplugin/idocumentprinter.h> //coreplugin/idocumentprinter.h
+#include <coreplugin/constants.h>
 
 #include <QDebug>
 
@@ -45,6 +51,11 @@ enum { WarnDebugMessage = false };
 using namespace AccountDB;
 using namespace Constants;
 using namespace Trans::ConstantTranslations;
+using namespace ExtensionSystem;
+using namespace Core;
+
+inline static Core::IDocumentPrinter *printer() {return ExtensionSystem::PluginManager::instance()->getObject<Core::IDocumentPrinter>();}
+
 
 ControlReceipts::ControlReceipts(QWidget * parent):QWidget(parent),ui(new Ui::ControlReceiptsWidget)
 {
@@ -211,9 +222,29 @@ void ControlReceipts::printDues(){
     Utils::informativeMessageBox(tkTr(Trans::Constants::INFORMATION), tkTr(Trans::Constants::FEATURE_NOT_IMPLEMENTED));
 }
 
-void ControlReceipts::print(){
-    Utils::informativeMessageBox(tkTr(Trans::Constants::INFORMATION), tkTr(Trans::Constants::FEATURE_NOT_IMPLEMENTED));
+void ControlReceipts::print()
+{
+    QString html = getHtmlDocAccordingToTableView();
+    print(html);
 }
+
+
+void ControlReceipts::print(QString & html)
+{
+      Core::IDocumentPrinter *p = printer();
+      if (!p) {
+          Utils::Log::addError(this, "No IDocumentPrinter found", __FILE__, __LINE__);
+          return;
+      }
+
+      p->clearTokens();
+      QHash<QString, QVariant> tokens;
+      tokens.insert(Core::Constants::TOKEN_DOCUMENTTITLE, this->windowTitle());
+      p->addTokens(Core::IDocumentPrinter::Tokens_Global, tokens);
+      p->print(html);   
+}
+
+
 
 void ControlReceipts::coloringDoubles(){
     int rowCount = m_accountModel->rowCount();
@@ -347,3 +378,64 @@ void ControlReceipts::changeEvent(QEvent *e) {
         search();
         }
 }
+
+QString ControlReceipts::getHtmlDocAccordingToTableView()
+{
+    QString htmlDocument = "<html><body><font size=3>";
+    htmlDocument += "<TABLE BORDER=1>";
+    htmlDocument += "<CAPTION><font color = red size = 6>"+trUtf8("Extract of receipts")+"</font></CAPTION>";
+    htmlDocument += "<TR>";
+    htmlDocument += "<TH><font color = blue><bold>"+trUtf8("Patient")+"</bold></font></TH>";
+    htmlDocument += "<TH><font color = blue><bold>"+trUtf8("Date")+"</bold></font></TH>";
+    htmlDocument += "<TH><font color = blue><bold>"+trUtf8("Acts")+"</bold></font></TH>";
+    htmlDocument += "<TH><font color = blue><bold>"+trUtf8("Cash")+"</bold></font></TH>";
+    htmlDocument += "<TH><font color = blue><bold>"+trUtf8("Checks")+"</bold></font></TH>";
+    htmlDocument += "<TH><font color = blue><bold>"+trUtf8("Credit Cards")+"</bold></font></TH>";
+    htmlDocument += "<TH><font color = blue><bold>"+trUtf8("Insurance")+"</bold></font></TH>";
+    htmlDocument += "<TH><font color = blue><bold>"+trUtf8("Others")+"</bold></font></TH>";
+    htmlDocument += "<TH><font color = blue><bold>"+trUtf8("Dues")+"</bold></font></TH>";
+    htmlDocument += "<TH><font color = blue><bold>"+trUtf8("Due by")+"</bold></font></TH>";
+    htmlDocument += "</TR>";
+    
+    QAbstractItemModel *model = ui->tableView->model();
+    QList<int> listOfColumnsExcluded;
+    listOfColumnsExcluded << ACCOUNT_ID 
+                          << ACCOUNT_SITE_ID
+                          << ACCOUNT_INSURANCE_ID
+                          << ACCOUNT_MEDICALPROCEDURE_XML
+                          << ACCOUNT_COMMENT
+                          << ACCOUNT_UID 
+                          << ACCOUNT_USER_UID 
+                          << ACCOUNT_PATIENT_UID 
+                          << ACCOUNT_ISVALID
+                          << ACCOUNT_TRACE ;
+    QList<int> listOfHeadersNumbers;
+    listOfHeadersNumbers << ACCOUNT_PATIENT_NAME
+                         << ACCOUNT_DATE
+                         << ACCOUNT_MEDICALPROCEDURE_TEXT
+                         << ACCOUNT_CASHAMOUNT
+                         << ACCOUNT_CHEQUEAMOUNT
+                         << ACCOUNT_VISAAMOUNT
+                         << ACCOUNT_INSURANCEAMOUNT
+                         << ACCOUNT_OTHERAMOUNT
+                         << ACCOUNT_DUEAMOUNT
+                         << ACCOUNT_DUEBY ;
+    for (int row = 0; row < model->rowCount(); ++row )
+    {
+    	  htmlDocument += "<TR>";
+    	  for (int col = 0; col < model->columnCount() ; ++col)
+    	  {
+    	  	  
+    	  	  if (!listOfColumnsExcluded.contains(col))
+    	  	  {
+    	  	  htmlDocument += "<TD>";
+     	  	  htmlDocument += model->data(model->index(row,col),Qt::DisplayRole).toString();
+    	  	  htmlDocument += "</TD>";
+                  }
+    	      }
+    	  htmlDocument += "</TR>";
+        }
+    htmlDocument += "</TABLE></font></body></html>";
+    return htmlDocument;
+}
+

@@ -19,8 +19,8 @@ using namespace PreventionEngine;
      TreeItem(const QVector<QVariant> &data = QVector<QVariant>(), TreeItem *parent = 0);
      ~TreeItem();
      
-     void appendChild(TreeItem *item);
-     void fillParentsHash(const QString & parentName, TreeItem * item);
+     void appendChild(TreeItem *item);//new
+     void fillParentsHash(const QString & parentName, TreeItem * item);//new
      TreeItem *child(int number);
      TreeItem *child(const QString & parentName);
      int childCount() const;
