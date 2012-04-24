@@ -250,8 +250,6 @@ TokenOutputDocument::TokenOutputDocument(QWidget *parent) :
     textEdit()->viewport()->installEventFilter(this);
     textEdit()->installEventFilter(this);
     textEdit()->setAttribute(Qt::WA_Hover);
-    connect(textEdit(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
-    connect(textEdit(), SIGNAL(cursorPositionChanged()), this, SLOT(cursorPositionChanged()));
 }
 
 TokenOutputDocument::~TokenOutputDocument()
@@ -268,6 +266,7 @@ void TokenOutputDocument::setPadDocument(PadDocument *pad)
     if (d->_pad) {
         disconnectPadDocument();
     }
+    disconnectOutputDocumentChanges();
     d->_pad = pad;
     textEdit()->setDocument(d->_pad->outputDocument());
     connectPadDocument();
@@ -709,11 +708,15 @@ void TokenOutputDocument::disconnectPadDocument()
 
 void TokenOutputDocument::connectOutputDocumentChanges()
 {
+    connect(textEdit(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
+    connect(textEdit(), SIGNAL(cursorPositionChanged()), this, SLOT(cursorPositionChanged()));
     connect(textEdit()->document(), SIGNAL(contentsChange(int,int,int)), this, SLOT(contentChanged(int,int,int)));
 }
 
 void TokenOutputDocument::disconnectOutputDocumentChanges()
 {
+    disconnect(textEdit(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
+    disconnect(textEdit(), SIGNAL(cursorPositionChanged()), this, SLOT(cursorPositionChanged()));
     disconnect(textEdit()->document(), SIGNAL(contentsChange(int,int,int)), this, SLOT(contentChanged(int,int,int)));
 }
 
