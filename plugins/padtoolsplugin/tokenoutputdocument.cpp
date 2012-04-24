@@ -80,7 +80,8 @@ class TokenOutputDocumentPrivate
 public:
     TokenOutputDocumentPrivate() :
         _pad(0),
-        _lastHoveredItem(0)
+        _lastHoveredItem(0),
+        _lastUnderCursorItem(0)
     {
 //        qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #e7effd, stop: 1 #cbdaf1);
 //        QLinearGradient grad(QPointF(0,0), QPointF(0,1));
@@ -106,6 +107,12 @@ public:
     {
         PadCore *core = dynamic_cast<PadCore*>(_pad->padFragmentForOutputPosition(pos));
         return (core!=0);
+    }
+
+    bool isPadItemAt(const int pos)
+    {
+        PadItem *item = dynamic_cast<PadItem*>(_pad->padItemForOutputPosition(pos));
+        return (item!=0);
     }
 
     bool userWantsToDeletePadItem(int pos)
@@ -226,7 +233,7 @@ public:
 
 public:
     PadDocument *_pad;
-    PadItem *_lastHoveredItem; // should not be deleted
+    PadItem *_lastHoveredItem, *_lastUnderCursorItem; // should not be deleted
 //    TokenOutputDocumentControl *_textControl;
     QList<QTextCharFormat> _lastHoveredItemCharFormats, _lastHoveredTokenCoreCharFormats;
     QTextCharFormat _hoveredCharFormat;
@@ -294,6 +301,9 @@ void TokenOutputDocument::onDocumentAnalyzeReset()
     foreach(PadItem *f, d->_pad->padItems()) {
         d->itemToExtraSelection(f);
     }
+    // highlight the item under cursor
+    d->_lastUnderCursorItem = 0;
+    cursorPositionChanged();
 }
 
 /** Overwrite the context menu (add token editor action is mouse under a PadTools::PadItem */
@@ -382,33 +392,27 @@ void TokenOutputDocument::editTokenUnderCursor()
     }
 }
 
-/** Manages the text selection according to the tokens. */
-void TokenOutputDocument::selectionChanged()
-{
-    // mirror the selection in rawSource document
-    QTextCursor output(document());
-    if (output.hasSelection()) {
-        int start = d->_pad->positionTranslator().outputToRaw(output.selectionStart());
-        int end = d->_pad->positionTranslator().outputToRaw(output.selectionEnd());
-        QTextCursor cursor(d->_pad->rawSourceDocument());
-        cursor.setPosition(start);
-        cursor.setPosition(end, QTextCursor::KeepAnchor);
-    }
-}
-
 void TokenOutputDocument::cursorPositionChanged()
 {
-    qWarning() << "cursor moves" << textCursor().position() << d->isPadCoreAt(textCursor().position());
-    if (d->isPadCoreAt(textCursor().position())) {
-        textEdit()->blockSignals(true);
-        // Select the core
-        PadCore *core = dynamic_cast<PadCore*>(d->_pad->padFragmentForOutputPosition(textCursor().position()));
-        QTextCursor cursor(textEdit()->document());
-        cursor.clearSelection();
-        cursor.setPosition(core->outputStart());
-        cursor.setPosition(core->outputEnd(), QTextCursor::KeepAnchor);
-        textEdit()->setTextCursor(cursor);
-        textEdit()->blockSignals(false);
+    qWarning() << "cursor moves" << textCursor().position() << "isPadItem" << d->isPadItemAt(textCursor().position());
+    if (d->isPadItemAt(textCursor().position())) {
+        PadItem *item = d->_pad->padItemForOutputPosition(textCursor().position());
+        if (!d->_lastUnderCursorItem) {
+            d->_lastUnderCursorItem = item;
+            if (d->_lastUnderCursorItem) {
+                textEdit()->setExtraSelections(d->_tokenExtraSelection.values(d->_lastUnderCursorItem));
+            } else {
+                textEdit()->setExtraSelections(QList<QTextEdit::ExtraSelection>());
+            }
+        } else {
+            if (d->_lastUnderCursorItem && d->_lastUnderCursorItem != item) {
+                d->_lastUnderCursorItem = item;
+                textEdit()->setExtraSelections(d->_tokenExtraSelection.values(d->_lastUnderCursorItem));
+            }
+        }
+    } else {
+        d->_lastUnderCursorItem = 0;
+        textEdit()->setExtraSelections(QList<QTextEdit::ExtraSelection>());
     }
 }
 
@@ -601,9 +605,9 @@ bool TokenOutputDocument::eventFilter(QObject *o, QEvent *e)
                 return false;
 //            qWarning() << kevent->key() << kevent->modifiers() << kevent->text() << d->isNavigationKey(kevent);
 
-            textEdit()->setExtraSelections(QList<QTextEdit::ExtraSelection>());
+//            textEdit()->setExtraSelections(QList<QTextEdit::ExtraSelection>());
             // cursor inside a token ?
-            if (cursor.hasSelection() && d->isPadCoreAt(cursor.selectionStart())) {
+            if (d->isPadCoreAt(cursor.position())) {
                 if (!d->isNavigationKey(kevent)) {
                     e->ignore();
                     return true;
@@ -612,9 +616,12 @@ bool TokenOutputDocument::eventFilter(QObject *o, QEvent *e)
             switch (kevent->key()) {
             case Qt::Key_Left:  // Manage tokens
             {
-                if (cursor.hasSelection() && d->isPadCoreAt(cursor.selectionStart())) {
-                    // move cursor before token start
-                    cursor.setPosition(cursor.selectionStart() - 1);
+                int pos = cursor.position() - 1;
+                if (d->isPadCoreAt(pos)) {
+                    // move cursor before PadCore start
+                    PadCore *core = dynamic_cast<PadCore*>(d->_pad->padFragmentForOutputPosition(pos));
+                    Q_ASSERT(core);
+                    cursor.setPosition(core->outputStart());
                     textEdit()->setTextCursor(cursor);
                     // reject
                     e->ignore();
@@ -624,9 +631,12 @@ bool TokenOutputDocument::eventFilter(QObject *o, QEvent *e)
             }
             case Qt::Key_Right:  // Manage tokens
             {
-                if (cursor.hasSelection() && d->isPadCoreAt(cursor.selectionStart())) {
+                int pos = cursor.position() + 1;
+                if (d->isPadCoreAt(pos)) {
                     // move cursor before token start
-                    cursor.setPosition(cursor.selectionEnd());
+                    PadCore *core = dynamic_cast<PadCore*>(d->_pad->padFragmentForOutputPosition(pos));
+                    Q_ASSERT(core);
+                    cursor.setPosition(core->outputEnd());
                     textEdit()->setTextCursor(cursor);
                     // reject
                     e->ignore();
@@ -708,14 +718,12 @@ void TokenOutputDocument::disconnectPadDocument()
 
 void TokenOutputDocument::connectOutputDocumentChanges()
 {
-    connect(textEdit(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
     connect(textEdit(), SIGNAL(cursorPositionChanged()), this, SLOT(cursorPositionChanged()));
     connect(textEdit()->document(), SIGNAL(contentsChange(int,int,int)), this, SLOT(contentChanged(int,int,int)));
 }
 
 void TokenOutputDocument::disconnectOutputDocumentChanges()
 {
-    disconnect(textEdit(), SIGNAL(selectionChanged()), this, SLOT(selectionChanged()));
     disconnect(textEdit(), SIGNAL(cursorPositionChanged()), this, SLOT(cursorPositionChanged()));
     disconnect(textEdit()->document(), SIGNAL(contentsChange(int,int,int)), this, SLOT(contentChanged(int,int,int)));
 }

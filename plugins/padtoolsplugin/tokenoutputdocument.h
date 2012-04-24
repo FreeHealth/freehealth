@@ -62,7 +62,6 @@ private Q_SLOTS:
     void onDocumentAnalyzeReset();
     void contextMenu(const QPoint &pos);
     void editTokenUnderCursor();
-    void selectionChanged();
     void cursorPositionChanged();
     void connectPadDocument();
     void disconnectPadDocument();
