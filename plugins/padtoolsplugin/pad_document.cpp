@@ -161,10 +161,6 @@ void PadDocument::clear()
     qDeleteAll(_fragments);
     _fragments.clear();
     _items.clear();
-//    if (_rawSource.isEmpty()) {
-////        disconnect(_docSource, SIGNAL(contentsChange(int,int,int)), this, SLOT(rawSourceContentsChanged(int,int,int)));
-//        _docSource = 0;
-//    }
     if (_docOutput)
         _docOutput->clear();
     _posTrans.clear();
@@ -176,7 +172,6 @@ void PadDocument::setSource(QTextDocument *source)
 {
     clear();
     _docSource = source;
-//    connect(_docSource, SIGNAL(contentsChange(int,int,int)), this, SLOT(rawSourceContentsChanged(int,int,int)));
 }
 
 /** Set the PadTools::TokenModel to use in this object. The model is mainly used by reset(). */
@@ -440,7 +435,7 @@ void PadDocument::softReset()
     QTime c;
     c.start();
 
-//    clear();
+//    clear();  // Don't clean cause it deletes some pointers that we need
     qDeleteAll(_fragments);
     _fragments.clear();
     _items.clear();

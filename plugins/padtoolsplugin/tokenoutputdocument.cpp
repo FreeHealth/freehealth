@@ -32,6 +32,8 @@
 #include "constants.h"
 #include "tokeneditor.h"
 #include "pad_document.h"
+#include "pad_item.h"
+#include "pad_fragment.h"
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -83,17 +85,6 @@ public:
         _lastHoveredItem(0),
         _lastUnderCursorItem(0)
     {
-//        qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #e7effd, stop: 1 #cbdaf1);
-//        QLinearGradient grad(QPointF(0,0), QPointF(0,1));
-//        grad.setColorAt(0, QColor(Qt::lightGray));
-//        grad.setColorAt(0.8, Qt::white);
-//        grad.setColorAt(1, QColor(Qt::lightGray));
-//        QBrush brush(QColor("#eeeeee"));
-//        _hoveredCharFormat.setBackground(grad);
-
-        _hoveredTokenCoreCharFormat.setUnderlineColor(Qt::darkBlue);
-        _hoveredTokenCoreCharFormat.setUnderlineStyle(QTextCharFormat::WaveUnderline);
-
         _coreFormat.setBackground(QBrush(QColor(Qt::yellow)));//"#FFF8C6"))); //("#dedeff")));
         _tokenFormat.setBackground(QBrush(QColor(Qt::lightGray)));//"#FDEEF4"))); //"#efefef")));
     }
@@ -129,7 +120,6 @@ public:
     // Correct the position of the DropEvent when it appends inside a PadCore
     int correctDropPosition(int pos)
     {
-//        qWarning() << "correctDropPosition" << pos;
         PadCore *core = dynamic_cast<PadCore*>(_pad->padFragmentForOutputPosition(pos));
         Q_ASSERT(core);
         if (!core) {
@@ -233,12 +223,7 @@ public:
 
 public:
     PadDocument *_pad;
-    PadItem *_lastHoveredItem, *_lastUnderCursorItem; // should not be deleted
-//    TokenOutputDocumentControl *_textControl;
-    QList<QTextCharFormat> _lastHoveredItemCharFormats, _lastHoveredTokenCoreCharFormats;
-    QTextCharFormat _hoveredCharFormat;
-    QTextCharFormat _hoveredTokenCoreCharFormat;
-    QTextFrameFormat _hoveredFrameFormat;
+    PadItem *_lastHoveredItem, *_lastUnderCursorItem; // must not be deleted
     QTextCharFormat _coreFormat;
     QTextCharFormat _tokenFormat;
     QMultiMap<PadItem *, QTextEdit::ExtraSelection> _tokenExtraSelection;
@@ -250,8 +235,6 @@ TokenOutputDocument::TokenOutputDocument(QWidget *parent) :
     Editor::TextEditor(parent, TokenOutputDocument::Simple | TokenOutputDocument::WithTables),
     d(new Internal::TokenOutputDocumentPrivate)
 {
-//    d->_textControl = new Internal::TokenOutputDocumentControl(this);
-//    this->setTextControl(d->_textControl);
     setAcceptDrops(true);
     setContextMenuPolicy(Qt::CustomContextMenu);
     textEdit()->viewport()->installEventFilter(this);
@@ -285,10 +268,8 @@ void TokenOutputDocument::setPadDocument(PadDocument *pad)
 void TokenOutputDocument::onPadCleared()
 {
     d->_tokenExtraSelection.clear();
-    if (!d->_lastHoveredItem)
-        return;
-//    Constants::removePadFragmentFormat("Hover", document(), d->_lastHoveredItemCharFormats);
     d->_lastHoveredItem = 0;
+    d->_lastUnderCursorItem = 0;
 }
 
 /** Reset view when Padtools::PadDocument reset its token analyze. \sa PadTools::PadDocument::documentAnalyzeReset() */
@@ -356,7 +337,6 @@ void TokenOutputDocument::editTokenUnderCursor()
             if (parent)
                 parent->removeChild(item);
             int id = item->id();
-//            d->_pad->debug();
 
             // Modify output position for all subitemfragments
             int oldLength = item->outputLength();
@@ -369,7 +349,6 @@ void TokenOutputDocument::editTokenUnderCursor()
 
             // insert token length to the PadDocument
             int deltaLength = (item->outputLength() - oldLength);
-//            qWarning() << "posChanged" << oldStart << oldStart + deltaLength << deltaLength;
             d->_pad->outputPosChanged(oldStart, oldStart + deltaLength);
 
             // insert html
@@ -385,16 +364,13 @@ void TokenOutputDocument::editTokenUnderCursor()
             item->setId(id);
 
             onDocumentAnalyzeReset();
-
-//            d->_pad->debug();
-
         }
     }
 }
 
 void TokenOutputDocument::cursorPositionChanged()
 {
-    qWarning() << "cursor moves" << textCursor().position() << "isPadItem" << d->isPadItemAt(textCursor().position());
+//    qWarning() << "cursor moves" << textCursor().position() << "isPadItem" << d->isPadItemAt(textCursor().position());
     if (d->isPadItemAt(textCursor().position())) {
         PadItem *item = d->_pad->padItemForOutputPosition(textCursor().position());
         if (!d->_lastUnderCursorItem) {
@@ -469,7 +445,6 @@ void TokenOutputDocument::dropEvent(QDropEvent *event)
     if (textEdit()->underMouse()) {
         QTextCursor cursor = textEdit()->textCursor();
         int pos = cursor.position();
-//        qWarning() << "DROP AT OUTPUT:" << pos;
 
         // drop inside a PadCore ?
         if (d->isPadCoreAt(pos))
@@ -579,8 +554,7 @@ bool TokenOutputDocument::eventFilter(QObject *o, QEvent *e)
             d->_lastHoveredItem = 0;
             e->accept();
             return true;
-        }
-        if (e->type() == QEvent::InputMethod) {
+        } else if (e->type() == QEvent::InputMethod) {
             // Avoid edition when cursor is inside a padCore
             QInputMethodEvent *input = static_cast<QInputMethodEvent*>(e);
             if (!input)
@@ -597,15 +571,11 @@ bool TokenOutputDocument::eventFilter(QObject *o, QEvent *e)
                 e->ignore();
                 return true;
             }
-        }
-        if (e->type() == QEvent::KeyPress) {
+        } else if (e->type() == QEvent::KeyPress) {
             QTextCursor cursor = textEdit()->textCursor();
             QKeyEvent *kevent = static_cast<QKeyEvent*>(e);
             if (!kevent)
                 return false;
-//            qWarning() << kevent->key() << kevent->modifiers() << kevent->text() << d->isNavigationKey(kevent);
-
-//            textEdit()->setExtraSelections(QList<QTextEdit::ExtraSelection>());
             // cursor inside a token ?
             if (d->isPadCoreAt(cursor.position())) {
                 if (!d->isNavigationKey(kevent)) {
@@ -646,12 +616,19 @@ bool TokenOutputDocument::eventFilter(QObject *o, QEvent *e)
             }
             case Qt::Key_Backspace:
             {
-//                qWarning() << "BACKSPACE PRESSED" << cursor.position() << "autorepeat" << kevent->isAutoRepeat();
                 int newPosition = cursor.position() - 1;
                 if (d->isPadCoreAt(newPosition)) {
                     if (d->userWantsToDeletePadItem(newPosition)) {
                         PadItem *item = d->_pad->padItemForOutputPosition(newPosition);
+                        Q_ASSERT(item);
+                        if (!item)
+                            return true;
+                        newPosition = item->outputStart();
                         d->_pad->removeAndDeleteFragment(item);
+                        d->_lastHoveredItem = 0;
+                        d->_lastUnderCursorItem = 0;
+                        cursor.setPosition(newPosition);
+                        textEdit()->setTextCursor(cursor);
                         e->accept();
                         return true;
                     } else {
@@ -663,12 +640,16 @@ bool TokenOutputDocument::eventFilter(QObject *o, QEvent *e)
             }
             case Qt::Key_Delete:
             {
-//                qWarning() << "DEL PRESSED" << cursor.position() << kevent->isAutoRepeat();
                 int newPosition = cursor.position() + 1;
                 if (d->isPadCoreAt(newPosition)) {
                     if (d->userWantsToDeletePadItem(newPosition)) {
                         PadItem *item = d->_pad->padItemForOutputPosition(newPosition);
+                        Q_ASSERT(item);
+                        if (!item)
+                            return true;
                         d->_pad->removeAndDeleteFragment(item);
+                        d->_lastHoveredItem = 0;
+                        d->_lastUnderCursorItem = 0;
                         e->accept();
                         return true;
                     } else {
@@ -731,7 +712,7 @@ void TokenOutputDocument::disconnectOutputDocumentChanges()
 /** Keep PadDocument sync to the output QTextDocument */
 void TokenOutputDocument::contentChanged(const int pos, const int rm, const int ins)
 {
-    qWarning() << "contentChanged pos" << pos << "ins" << ins << "rm" << rm;
+//    qWarning() << "contentChanged pos" << pos << "ins" << ins << "rm" << rm;
 
     /** \todo improve management of textformatting modifications -> do not re-compute positions */
     if (rm==ins)

@@ -54,7 +54,7 @@ public:
     void debug();
 
 private:
-    QMultiMap<int, int> _translations; // outputPos (start), length (of translation)
+    QMultiMap<int, int> _translations;       //! Key == outputPos (start), Value == length (of translation)
 };
 
 class PadDocument : public QObject, public PadFragment
@@ -90,9 +90,6 @@ public:
     QString fragmentRawSource(PadFragment *fragment) const;
     QString fragmentHtmlOutput(PadFragment *fragment) const;
 
-    // Reconstruction of rawsource from output
-//    QTextDocument constructSourceFromOutput() const;
-
     // PadFragment/Cursor hunting
     PadItem *padItemForOutputPosition(int positionInOutputQTextDocument) const;
     PadItem *padItemForSourcePosition(int positionInSourceQTextDocument) const;
@@ -103,8 +100,7 @@ public:
     void outputPosChanged(const int oldPos, const int newPos);
 
     // Start replacement of tokens  (raw to output)
-//    void run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out);
-    void run(QMap<QString,QVariant> &, PadDocument *) {/* Should never be used*/}
+    void run(QMap<QString,QVariant> &, PadDocument *) {Q_ASSERT(false);/* Should never be used*/}
     void run(QMap<QString,QVariant> &tokens);
 
     // Start token creation  (output to raw)
@@ -125,9 +121,6 @@ Q_SIGNALS:
     void rawSourceAnalyseFinished();
     void beginTokenReplacement();
     void endTokenReplacement();
-
-
-private:
 
 public Q_SLOTS:
     void softReset();
