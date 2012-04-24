@@ -122,7 +122,7 @@ public:
     // Correct the position of the DropEvent when it appends inside a PadCore
     int correctDropPosition(int pos)
     {
-        qWarning() << "correctDropPosition" << pos;
+//        qWarning() << "correctDropPosition" << pos;
         PadCore *core = dynamic_cast<PadCore*>(_pad->padFragmentForOutputPosition(pos));
         Q_ASSERT(core);
         if (!core) {
@@ -725,7 +725,10 @@ void TokenOutputDocument::contentChanged(const int pos, const int rm, const int 
 {
     qWarning() << "contentChanged pos" << pos << "ins" << ins << "rm" << rm;
 
-    /** \todo manage textformatting modifications -> do not re-compute positions */
+    /** \todo improve management of textformatting modifications -> do not re-compute positions */
+    if (rm==ins)
+        return;
+
     if (rm)
         d->_pad->outputPosChanged(pos+rm, pos);
 
