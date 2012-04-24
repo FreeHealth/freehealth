@@ -322,6 +322,13 @@ void PadFragment::outputPosChanged(const int oldPos, const int newPos)
                     f->outputPosChanged(oldPos, newPos);
             }
         }
+        // fragment is removed ?
+        if (delta<0) {
+            if (IN_RANGE(_outputStart, newPos, oldPos) && IN_RANGE(_outputEnd, newPos, oldPos)) {
+                qWarning() << "fragment removed" << _id << _outputStart << _outputEnd;
+            }
+
+        }
     }
 //    debug += QString("    new: (%1;%2)\n").arg(_outputStart).arg(_outputEnd);
 
