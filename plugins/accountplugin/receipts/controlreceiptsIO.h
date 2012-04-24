@@ -66,6 +66,8 @@ class ACCOUNT_EXPORT ControlReceipts : public QWidget
         void refreshFilter(const QString & filter);
         QString textOfSums(AccountModel * model);
         void changeEvent(QEvent *e);
+        void print(QString & html);
+        QString getHtmlDocAccordingToTableView();
         Ui::ControlReceiptsWidget * ui;
         AccountModel * m_accountModel;
         QString m_userUuid;
