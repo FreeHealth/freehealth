@@ -350,8 +350,17 @@ QTextCursor PadDocument::rawSourceCursorForOutputPosition(int outputPos)
 
 void PadDocument::outputPosChanged(const int oldPos, const int newPos)
 {
+    // manage positionning of fragment
     foreach(PadItem *item, _items)
         item->outputPosChanged(oldPos, newPos);
+
+    // manage deletion of fragments if needed
+    foreach(PadFragment *f, _fragmentsToDelete) {
+        if (f->parent())
+            f->parent()->removeChild(f);
+    }
+    qDeleteAll(_fragmentsToDelete);
+    _fragmentsToDelete.clear();
 }
 
 static void syncOutputRange(PadFragment *f)

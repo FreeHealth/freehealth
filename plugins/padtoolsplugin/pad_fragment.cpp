@@ -122,7 +122,7 @@
 #include <QDebug>
 
 using namespace PadTools;
-enum { WarnOutputPosChangedDebugging = true };
+enum { WarnOutputPosChangedDebugging = false };
 
 QList<PadFragment *> PadTools::PadFragment::_fragmentsToDelete;
 
@@ -281,25 +281,22 @@ PadFragment *PadFragment::padFragmentForOutputPosition(int pos) const
 /** Manages modification in the output document (insertion, removal of text). */
 void PadFragment::outputPosChanged(const int oldPos, const int newPos)
 {
+    if (_outputStart == -1 && _outputEnd == -1)
+        return;
     QString debug;
+    int delta = newPos - oldPos;
     if (WarnOutputPosChangedDebugging)
         debug = QString("outputPosChanged : Fragment %1 (%2:%3)\n"
-                        "    old: %4  new: %5\n")
+                        "    oldPos: %4; newPos: %5; delta: %6 \n")
                 .arg(_id)
                 .arg(_outputStart).arg(_outputEnd)
-                .arg(oldPos).arg(newPos);
-    int delta = newPos - oldPos;
+                .arg(oldPos).arg(newPos).arg(delta);
 
     // oldPos inside the fragment
-    if (WarnOutputPosChangedDebugging)
-        debug += QString("    delta: %1\n").arg(delta);
-
-//    qWarning() << "outputPosChanged" << containsOutputPosition(oldPos);
-
     if (containsOutputPosition(oldPos)) {
 //    if (_outputStart <= oldPos  && oldPos < _outputEnd) {
         if (WarnOutputPosChangedDebugging)
-            debug += QString("    oldPos is inside token\n");
+            debug += QString("    oldPos is inside token; moveEnd\n");
         // Remove chars
         if (delta < 0) {
             // Start removed ?
@@ -325,23 +322,25 @@ void PadFragment::outputPosChanged(const int oldPos, const int newPos)
                 if (f!=this)
                     f->outputPosChanged(oldPos, newPos);
             }
-        }
-        // fragment is removed ?
-        if (delta<0) {
-            if (IN_RANGE(_outputStart, newPos, oldPos) && IN_RANGE(_outputEnd, newPos, oldPos)) {
-                if (WarnOutputPosChangedDebugging)
-                    debug += QString("    fragment removed\n");
-                // mark this fragment for deletion
-                _fragmentsToDelete << this;
+        } else {
+            // fragment is removed ?
+            if (delta<0) {
+                if (IN_RANGE(_outputStart, newPos, oldPos) && IN_RANGE(_outputEnd, newPos, oldPos)) {
+                    if (WarnOutputPosChangedDebugging)
+                        debug += QString("    fragment removed\n");
+                    // mark this fragment for deletion
+                    resetOutputRange();
+                    _fragmentsToDelete << this;
+                }
             }
-
         }
     }
 
-    if (WarnOutputPosChangedDebugging)
-        debug += QString("    new: (%1;%2)\n").arg(_outputStart).arg(_outputEnd);
-
-//    qWarning() << debug;
+    if (WarnOutputPosChangedDebugging) {
+        int b = debug.indexOf("\n");
+        debug.insert(b, QString(" -> (%1;%2)").arg(_outputStart).arg(_outputEnd));
+        qWarning() << debug;
+    }
 }
 
 /** Moves the PadTools::PadFragment from \e nbChars. \e nbChars can be a positive (moving forward) or a negative int (moving backward). Does not manage children fragments.*/
