@@ -100,12 +100,6 @@
 /** \fn QVariant PadTools::PadFragment::userData(const QString &key) const
   */
 
-/** \fn virtual QString PadTools::PadFragment::run(QMap<QString,QVariant> &tokens) const = 0;
-  Run this fragment over some tokens and returns the result text */
-
-/** \fn virtual void PadTools::PadFragment::run(QMap<QString,QVariant> &tokens, QTextDocument *source, QTextDocument *out) const = 0;
-  Run this fragment over some tokens inside QTextDocuments */
-
 /** \fn virtual void PadTools::PadFragment::run(QMap<QString,QVariant> &tokens, PadDocument *document) = 0;
   Run this fragment over some tokens inside the output QTextDocument (which is initially a clone of the source). */
 
@@ -128,6 +122,9 @@
 #include <QDebug>
 
 using namespace PadTools;
+enum { WarnOutputPosChangedDebugging = true };
+
+QList<PadFragment *> PadTools::PadFragment::_fragmentsToDelete;
 
 PadFragment::PadFragment(PadFragment *parent) :
     _start(-1), _end(-1),
@@ -181,6 +178,7 @@ void PadFragment::removeAndDeleteFragment(PadFragment *fragment)
     }
 }
 
+/** Sort children according to their position in the output document. */
 void PadFragment::sortChildren()
 {
     qSort(_fragments.begin(), _fragments.end(), PadFragment::lessThan);
@@ -280,23 +278,28 @@ PadFragment *PadFragment::padFragmentForOutputPosition(int pos) const
     return child;
 }
 
+/** Manages modification in the output document (insertion, removal of text). */
 void PadFragment::outputPosChanged(const int oldPos, const int newPos)
 {
-//    QString debug = QString("outputPosChanged : Fragment %1 (%2:%3)\n"
-//                            "    old: %4  new: %5\n")
-//                    .arg(_id)
-//                    .arg(_outputStart).arg(_outputEnd)
-//                    .arg(oldPos).arg(newPos);
+    QString debug;
+    if (WarnOutputPosChangedDebugging)
+        debug = QString("outputPosChanged : Fragment %1 (%2:%3)\n"
+                        "    old: %4  new: %5\n")
+                .arg(_id)
+                .arg(_outputStart).arg(_outputEnd)
+                .arg(oldPos).arg(newPos);
     int delta = newPos - oldPos;
 
     // oldPos inside the fragment
-//    debug += QString("    delta: %1\n").arg(delta);
+    if (WarnOutputPosChangedDebugging)
+        debug += QString("    delta: %1\n").arg(delta);
 
 //    qWarning() << "outputPosChanged" << containsOutputPosition(oldPos);
 
     if (containsOutputPosition(oldPos)) {
 //    if (_outputStart <= oldPos  && oldPos < _outputEnd) {
-//        debug += QString("    oldPos is inside token\n");
+        if (WarnOutputPosChangedDebugging)
+            debug += QString("    oldPos is inside token\n");
         // Remove chars
         if (delta < 0) {
             // Start removed ?
@@ -313,7 +316,8 @@ void PadFragment::outputPosChanged(const int oldPos, const int newPos)
                 f->outputPosChanged(oldPos, newPos);
         }
     } else {
-//        debug += QString("    move: %1\n").arg((_outputStart > oldPos));
+        if (WarnOutputPosChangedDebugging)
+            debug += QString("    move: %1\n").arg((_outputStart > oldPos));
         // oldPos outside fragment
         if (isAfterOutputPosition(oldPos)) {
             translateOutput(delta);
@@ -325,12 +329,17 @@ void PadFragment::outputPosChanged(const int oldPos, const int newPos)
         // fragment is removed ?
         if (delta<0) {
             if (IN_RANGE(_outputStart, newPos, oldPos) && IN_RANGE(_outputEnd, newPos, oldPos)) {
-                qWarning() << "fragment removed" << _id << _outputStart << _outputEnd;
+                if (WarnOutputPosChangedDebugging)
+                    debug += QString("    fragment removed\n");
+                // mark this fragment for deletion
+                _fragmentsToDelete << this;
             }
 
         }
     }
-//    debug += QString("    new: (%1;%2)\n").arg(_outputStart).arg(_outputEnd);
+
+    if (WarnOutputPosChangedDebugging)
+        debug += QString("    new: (%1;%2)\n").arg(_outputStart).arg(_outputEnd);
 
 //    qWarning() << debug;
 }

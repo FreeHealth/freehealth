@@ -93,10 +93,13 @@ public:
     static bool lessThan(PadFragment *first, PadFragment *second);
 
 protected:
-    QList<PadFragment *> _fragments;
-    int _start; // index of the first char in the text
-    int _end; // index of the last char in the text
-    mutable int _outputStart, _outputEnd;
+    QList<PadFragment *> _fragments;                    //! List of children */
+    static QList<PadFragment *> _fragmentsToDelete;     //! List of fragment to delete after the PadTools::PadFragment::outputPosChanged() is called */
+
+    int _start;                 //! Index of the first char of the fragment in the source document */
+    int _end;                   //! Index of the last char of the fragment in the source document */
+    mutable int _outputStart;   //! Index of the first char of the fragment in the output document */
+    mutable int _outputEnd;     //! Index of the last char of the fragment in the output document */
 
 private:
     PadFragment *_parent;
