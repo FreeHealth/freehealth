@@ -13,7 +13,9 @@
 #include <QAction>
 #include <QMouseEvent>
 #include <QVBoxLayout>
+#include <QSplitter>
 #include <QSqlTableModel>
+#include <QTextEdit>
 
 class TreeViewOfPrevention: public QTreeView
 {
@@ -75,6 +77,8 @@ class PreventIHM : public QWidget, public Ui::PreventWidget {
     private :
         PreventIO *m_io;
         QVBoxLayout *m_vbox;
+        QSplitter *m_vboxSplitter;
+        QTextEdit *m_Editor;
         TreeViewOfPrevention *m_TreeViewOfPrevention; 
         Survey * m_survey;
 };

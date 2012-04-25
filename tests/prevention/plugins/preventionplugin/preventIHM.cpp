@@ -192,6 +192,8 @@ PreventIHM::PreventIHM(QWidget * parent):QWidget(parent){
     m_survey = new Survey(this);
     m_io = new PreventIO(this);
     m_vbox = new QVBoxLayout(this);
+    m_vboxSplitter = new QSplitter(this);
+    m_Editor = new QTextEdit(this);
     m_TreeViewOfPrevention = new TreeViewOfPrevention(this); 
     m_modelOfItems = m_io->getVariantItemModel();
     m_TreeViewOfPrevention->setModel(m_modelOfItems);
@@ -207,7 +209,9 @@ PreventIHM::PreventIHM(QWidget * parent):QWidget(parent){
     m_TreeViewOfPrevention->header()->hideSection(PreventionEngine::IPreventionEngine::PATIENT_UID_H);
     m_TreeViewOfPrevention->header()->hideSection(PreventionEngine::IPreventionEngine::USER_UID_H);
     m_TreeViewOfPrevention->header()->resizeSection(PreventionEngine::IPreventionEngine::ITEM_H,200);
-    m_vbox->addWidget(m_TreeViewOfPrevention);
+    m_vboxSplitter->addWidget(m_TreeViewOfPrevention);
+    m_vboxSplitter->addWidget(m_Editor);
+    m_vbox->addWidget(m_vboxSplitter);
     setLayout(m_vbox);
     changeIconWidget();
     connect(m_survey,SIGNAL(iconsReset(const QHash<int,QVariant>&)),this,
