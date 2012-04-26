@@ -217,6 +217,7 @@ PreventIHM::PreventIHM(QWidget * parent):QWidget(parent){
     connect(m_survey,SIGNAL(iconsReset(const QHash<int,QVariant>&)),this,
                      SLOT(iconsResetIfDateNextOvertaken(const QHash<int,QVariant>&)));
     connect(m_modelOfItems,SIGNAL(layoutChanged()),this,SLOT(changeIconWidget()));
+    connect(m_TreeViewOfPrevention,SIGNAL(clicked(const QModelIndex&)),this,SLOT(showDocument(const QModelIndex&)));
 }
 
 PreventIHM::~PreventIHM(){}
@@ -246,4 +247,14 @@ void PreventIHM::iconsResetIfDateNextOvertaken(const QHash<int,QVariant> & hashO
     	  QVariant idItem = listOfId[i];
     	  m_modelOfItems->setIconWarning(idItem);
         }
+}
+
+void PreventIHM::showDocument(const QModelIndex & index)
+{
+    QString idItem;
+    PreventIO io;
+    idItem = io.getIdItem(index);
+    QString document = io.getDocumentRelativeToIdItem(idItem);
+    QTextDocument *textDocument = new QTextDocument (document);
+    m_Editor->setDocument(textDocument);
 }

@@ -73,6 +73,7 @@ class PreventIHM : public QWidget, public Ui::PreventWidget {
         void changeIconWidget();
     private Q_SLOTS :
         void iconsResetIfDateNextOvertaken(const QHash<int,QVariant>&);   
+        void showDocument(const QModelIndex &);
         
     private :
         PreventIO *m_io;

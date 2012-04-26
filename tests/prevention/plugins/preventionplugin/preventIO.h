@@ -98,7 +98,7 @@ class VariantItemModel : public QAbstractItemModel
      bool deleteItemAccordingToIndex(QModelIndex & index,QModelIndex & parent, QObject * parentObject);
      bool deleteGroupOfItems(QModelIndex & index);
      //get childsAndItems
-     QHash<QString,QString> childsAndItems(QModelIndex & parent);
+     QMap<int,QVector<QVariant> > childsAndItems(QModelIndex & parent);
  private:
      int getSqlTableRow(int idOfItem);
      TreeItem * findTreeItemWithIdItem(QVariant & idItem);
@@ -140,6 +140,7 @@ class PreventIO : public QObject {
         QDate getNextDate(const QStringList & listOfDatas, QModelIndex index);
         bool recordDocument(const QTextDocument *document, const QString & id);
         QString getDocumentRelativeToIdItem(const QString & id_item);
+        QString getIdItem(const QModelIndex & indexInRow);
         QSqlDatabase m_db;
         VariantItemModel *m_variantModel;
         QSqlTableModel *m_NextDateModel;

@@ -14,6 +14,11 @@ class TreeViewOfPrevention;
 
 class MoreIHM : public QWidget , Ui::MoreWidget{
     Q_OBJECT
+    enum DataAndId
+    {
+        DATA = 0,
+        ID
+    };
     public:
         MoreIHM(QObject *parent, TreeViewOfPrevention * treeView , QModelIndex index = QModelIndex());
         ~MoreIHM();
@@ -27,7 +32,7 @@ class MoreIHM : public QWidget , Ui::MoreWidget{
         //void mouseReleaseEvent(QMouseEvent *event);
         PreventIO *m_io;
         QSqlDatabase m_db;
-        QHash<QString,QString> m_hashItemAndId;
+        QMap<int,QVector<QVariant> > m_hashItemAndId;
         QHash<int,QString> m_hashIndexAndId;
 };
 
