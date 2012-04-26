@@ -31,15 +31,17 @@
 #include <QtCore/QObject>
 #include <QString>
 
+QT_BEGIN_NAMESPACE
 class QSplashScreen;
 class QPixmap;
 class QWidget;
+QT_END_NAMESPACE
 
 /**
  * \file icore.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.4
- * \date 22 Dec 2011
+ * \version 0.8.0
+ * \date 26 Apr 2012
 */
 
 
@@ -100,7 +102,8 @@ public:
     virtual void setMainWindow(IMainWindow *) = 0;
     virtual IMainWindow *mainWindow() const = 0;
 
-    virtual IPadTools *padTools() const { return 0; } // pad tools are not mandatory for everyone, so not pure virtual
+    virtual void setPadTools(IPadTools *) = 0;
+    virtual IPadTools *padTools() const = 0;
 
     // Patient's datas wrapper
     virtual IPatient *patient() const = 0;

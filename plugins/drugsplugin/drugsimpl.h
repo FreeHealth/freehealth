@@ -37,7 +37,8 @@ public:
     ISettings *settings() const;
 
     QMainWindow *mainWindow() const;
-
+    void setPadTools(IPadTools *pad) {m_PadTools=pad;}
+    IPadTools *padTools() const {return m_PadTools;}
 
     // initialization
     bool initialize();
@@ -51,6 +52,7 @@ private:
     ThemePrivate *m_Theme;
     Translators *m_Translators;
     SettingsPrivate *m_Settings;
+    IPadTools *m_PadTools;
 };
 
 } // namespace Internal

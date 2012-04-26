@@ -74,6 +74,9 @@ public:
     IMainWindow *mainWindow() const;
     void setMainWindow(IMainWindow *);
 
+    void setPadTools(IPadTools *pad) {m_PadTools=pad;}
+    IPadTools *padTools() const {return m_PadTools;}
+
     FileManager *fileManager() const;
 
     // initialization
@@ -83,8 +86,6 @@ public:
     ICommandLine *commandLine() const;
 
     Utils::UpdateChecker *updateChecker() const;
-
-	IPadTools *padTools() const { return m_padTools; }
 
     // Patient's datas wrapper
     IPatient *patient() const {return 0;}
@@ -110,6 +111,7 @@ private:
 	IPadTools *m_padTools;
     Utils::UpdateChecker *m_UpdateChecker;
     Core::FileManager *m_FileManager;
+    IPadTools *m_PadTools;
 };
 
 } // namespace Internal

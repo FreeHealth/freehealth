@@ -86,6 +86,9 @@ public:
     IMainWindow *mainWindow() const;
     void setMainWindow(IMainWindow *window);
 
+    void setPadTools(IPadTools *pad) {m_PadTools=pad;}
+    IPadTools *padTools() const {return m_PadTools;}
+
 //    FormManager *formManager() const;
     virtual ModeManager *modeManager() const;
 
@@ -124,6 +127,7 @@ private:
     IPatient *m_Patient;
     IUser *m_User;
     IScriptManager *m_Script;
+    IPadTools *m_PadTools;
 };
 
 } // namespace Internal

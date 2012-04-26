@@ -39,6 +39,7 @@
 #include <coreplugin/ipatient.h>
 #include <coreplugin/iuser.h>
 #include <coreplugin/constants_icons.h>
+#include <coreplugin/ipadtools.h>
 
 #include <translationutils/constanttranslations.h>
 #include <utils/log.h>
@@ -76,7 +77,8 @@ CoreImpl::CoreImpl(QObject *parent) :
         m_MainWindow(0),
         m_ActionManager(0),
         m_ContextManager(0),
-        m_UID(new UniqueIDManager)
+        m_UID(new UniqueIDManager),
+        m_PadTools(0)
 {
     m_Settings = new SettingsPrivate(this);
     m_Settings->setPath(ISettings::UpdateUrl, Utils::Constants::FREEPAD_UPDATE_URL);
