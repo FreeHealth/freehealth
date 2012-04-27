@@ -20,6 +20,7 @@
  ***************************************************************************/
 #include "mainwindowplugin.h"
 #include "mainwindow.h"
+#include "patientmodelwrapper.h"
 //#include "preferences/userpreferences.h"
 
 #include <coreplugin/icore.h>
@@ -39,6 +40,11 @@ MainWinPlugin::MainWinPlugin() :
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating FREEPAD::MainWinPlugin";
+    m_MainWindow = new MainWindow();
+    Core::ICore::instance()->setMainWindow(m_MainWindow);
+    m_MainWindow->initialize(QStringList(),0);
+    Core::IPatient *p = new Internal::PatientModelWrapper(Core::ICore::instance());
+    Core::ICore::instance()->setPatient(p);
 }
 
 MainWinPlugin::~MainWinPlugin()
@@ -56,9 +62,6 @@ bool MainWinPlugin::initialize(const QStringList &arguments, QString *errorStrin
         qWarning() << "MainWinPlugin::initialize";
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
-    m_MainWindow = new MainWindow();
-    Core::ICore::instance()->setMainWindow(m_MainWindow);
-    m_MainWindow->initialize(QStringList(),0);
     return true;
 }
 

@@ -15,11 +15,13 @@ DEPENDPATH += ../
 HEADERS += mainwindowplugin.h \
     mainwindow_exporter.h \
     mainwindow.h \
+    patientmodelwrapper.h \
 #    preferences/userpreferences.h \
 
 
 SOURCES += mainwindowplugin.cpp \
     mainwindow.cpp \
+    patientmodelwrapper.cpp \
 #    preferences/userpreferences.cpp \
 
 

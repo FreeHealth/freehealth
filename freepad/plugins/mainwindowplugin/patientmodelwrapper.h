@@ -19,106 +19,72 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developper : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef FREEPAD_MAINWINDOW_H
-#define FREEPAD_MAINWINDOW_H
+#ifndef PATIENTMODELWRAPPER_H
+#define PATIENTMODELWRAPPER_H
 
-#include <mainwindowplugin/mainwindow_exporter.h>
-#include <coreplugin/imainwindow.h>
-#include <coreplugin/ipadtools.h>
-
-#include <utils/global.h>
-
-#include <QCloseEvent>
-#include <QComboBox>
+#include <coreplugin/ipatient.h>
+#include <patientbaseplugin/patientbar.h>
 
 QT_BEGIN_NAMESPACE
-class QAction;
-class QMenu;
-class QTreeWidgetItem;
+class QModelIndex;
 QT_END_NAMESPACE
 
+
 /**
- * \file mainwindow.h
+ * \file patientmodelwrapper.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.1.0
- * \date 03 Jan 2011
+ * \version 0.5.0
+ * \date 08 Feb 2011
 */
 
-namespace PadTools {
-class TokenModel;
-class PadWriter;
+namespace Patients {
+class PatientModel;
 }
 
 namespace MainWin {
 namespace Internal {
-class MainWinPrivate;
 
-namespace Ui {
-class MainWindow;
-}  // End Ui
-}  // End Internal
-
-class FREEPAD_MAINWIN_EXPORT MainWindow: public Core::IMainWindow
+/** \brief PatientModel wrapper can be accessed using Core::ICore::instance()->patient() */
+class PatientModelWrapper : public Core::IPatient
 {
     Q_OBJECT
-    enum { MaxRecentFiles = 10 };
-
 public:
-    MainWindow(QWidget *parent = 0);
-    ~MainWindow();
+    PatientModelWrapper(QObject *parent = 0);
+    ~PatientModelWrapper();
+    void init();
 
-    // IMainWindow Interface
-    bool initialize(const QStringList &arguments, QString *errorString);
-    void extensionsInitialized();
+    // IPatient interface
+    void clear() {}
+    bool has(const int ref) const {return (ref>=0 && ref<Core::IPatient::NumberOfColumns);}
+    QModelIndex currentPatientIndex() const;
 
-    void readSettings();
-    void writeSettings();
-    void createStatusBar();
-    void changeFontTo(const QFont &font);
+    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    virtual QVariant data(int column) const;
+
+    /** \todo remove this and use setData instead **/
+    virtual bool setValue(int ref, const QVariant &value);
+    virtual bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
 
 
-public Q_SLOTS:
-    void postCoreInitialization();
+    /** \todo Is this needed in freemedforms ? */
+    QString toXml() const {return QString();}
+    bool fromXml(const QString &) {return true;}
 
-    // Interface of MainWidowActionHandler
-    bool newFile();
-    bool openFile();
-    void readFile(const QString &file);
-    bool saveFile();
-    bool saveAsFile();
+    virtual void hidePatientBar();
+    virtual void showPatientBar();
+    virtual bool isPatientBarVisible() const;
 
-    bool applicationPreferences();
-
-    void updateCheckerEnd();
-
-    void aboutToShowRecentFiles();
-    void openRecentFile();
-
-private slots:
-	void padTextChanged();
-    void tokenChanged(const QString &token, const QString &value);
-	void tokenItemChanged(QTreeWidgetItem *item, int column);
-
-protected:
-    void closeEvent( QCloseEvent *event );
-    void changeEvent(QEvent *event);
-    bool eventFilter(QObject *obj, QEvent *event);
-
-//public:
-//    Internal::Ui::MainWindow *m_ui;
-
-private:
-//	Core::IPadTools *m_padTools;
-    PadTools::TokenModel *m_TokenModel;
-    PadTools::PadWriter *m_Writer;
-
-	void refreshTokens();
+private Q_SLOTS:
+    void onCurrentPatientChanged(const QString &);
+    void patientDataChanged(const QModelIndex &index);
 };
 
-} // End Core
+}  // End namespace Internal
+}  // End namespace MainWin
 
-#endif  // FREEPAD_MAINWINDOW_H
+#endif // PATIENTMODELWRAPPER_H
