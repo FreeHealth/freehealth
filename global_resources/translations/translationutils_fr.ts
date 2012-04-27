@@ -1608,7 +1608,7 @@ Lieu: %2</translation>
         <translation>Titre</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_patient.h" line="40"/>
+        <location filename="../../libs/translationutils/trans_patient.h" line="52"/>
         <source>Clear patient&apos;s information</source>
         <translation>Effacer les informations concernant le patient</translation>
     </message>
@@ -2196,31 +2196,76 @@ Lieu: %2</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_patient.h" line="35"/>
-        <source>Patient Name</source>
+        <source>Patient name</source>
         <translation>Nom du patient</translation>
     </message>
     <message>
+        <location filename="../../libs/translationutils/trans_patient.h" line="37"/>
+        <source>Patient firstname</source>
+        <translation>Prénom du patient</translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_patient.h" line="38"/>
+        <source>Patient full name</source>
+        <translation>Nom complet du patient</translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_patient.h" line="40"/>
+        <source>Birthname</source>
+        <translation>Nom de naissance</translation>
+    </message>
+    <message>
         <location filename="../../libs/translationutils/trans_patient.h" line="36"/>
+        <source>Patient secondname</source>
+        <translation>Nom marital du patient</translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_patient.h" line="41"/>
+        <source>Secondname</source>
+        <translation>Nom marital</translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_patient.h" line="42"/>
+        <source>Firstname</source>
+        <translation>Prénom</translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_patient.h" line="43"/>
+        <source>Full name</source>
+        <translation>Nom complet</translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_patient.h" line="45"/>
+        <source>Date of birth</source>
+        <translation>Date de naissance</translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_patient.h" line="46"/>
+        <source>Date of death</source>
+        <translation>Date de décès</translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_patient.h" line="48"/>
         <source>Patient</source>
         <translation>Patient</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_patient.h" line="37"/>
+        <location filename="../../libs/translationutils/trans_patient.h" line="49"/>
         <source>Patients</source>
         <translation>Patients</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_patient.h" line="38"/>
+        <location filename="../../libs/translationutils/trans_patient.h" line="50"/>
         <source>Patient information</source>
         <translation>Informations sur le patient</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_patient.h" line="39"/>
+        <location filename="../../libs/translationutils/trans_patient.h" line="51"/>
         <source>Patient database</source>
         <translation>Base de données patient</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_patient.h" line="41"/>
+        <location filename="../../libs/translationutils/trans_patient.h" line="53"/>
         <source>Toggle patient&apos;s information</source>
         <translation>Afficher/cacher les informations concernant le patient</translation>
     </message>

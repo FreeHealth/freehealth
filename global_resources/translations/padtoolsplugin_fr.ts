@@ -114,37 +114,6 @@
     </message>
 </context>
 <context>
-    <name>PadTools::TokenOutputDocument</name>
-    <message>
-        <source>Inside conditionnal before text</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Inside conditionnal after text</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Before</source>
-        <translation type="unfinished">Avant</translation>
-    </message>
-    <message>
-        <source>After</source>
-        <translation type="unfinished">Après</translation>
-    </message>
-    <message>
-        <source>Nested token</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>You have dropped a token inside the value of a token. 
-You must specify where the dropped token should be inserted:
-- inside the conditionnal text before the token, 
-- inside the conditionnal text after the token 
-- or the before/after the token</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>PadWriter</name>
     <message>
         <source>Follow cursor in result output</source>
@@ -161,6 +130,26 @@ You must specify where the dropped token should be inserted:
     <message>
         <source>Find cursor</source>
         <translation type="unfinished">Trouver le curseur</translation>
+    </message>
+    <message>
+        <source>Inside conditionnal before text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Inside conditionnal after text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Before the token</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>After the token</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Nested token</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>
