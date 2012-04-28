@@ -1,9 +1,9 @@
 TEMPLATE         = app
-TARGET           = freepad
-mac:TARGET       = $$quote(FreePad)
+TARGET           = freeport
+mac:TARGET       = $$quote(FreePort)
 
 # include general configuration
-FREEPAD = 1
+FREEPORT = 1
 
 include(../../buildspecs/config.pri)
 !CONFIG(debug, release|debug):include($${SOURCES_BUILDSPECS_PATH}/install.pri)
@@ -23,13 +23,13 @@ QT *= sql \
 DEFINES *= FREEPAD
 
 macx {
-  ICON=$${SOURCES_GLOBAL_RESOURCES}/pixmap/svg/freepad.icns
+  ICON=$${SOURCES_GLOBAL_RESOURCES}/pixmap/svg/freeport.icns
   QMAKE_INFO_PLIST=Info.plist
 }
-win32:RC_FILE=freepad_win32_icon.rc
+win32:RC_FILE=freeport_win32_icon.rc
 
 # sources
 SOURCES += \
     main.cpp
 
-OTHER_FILES += freepad_win32_icon.rc Info.plist
+OTHER_FILES += freeport_win32_icon.rc Info.plist

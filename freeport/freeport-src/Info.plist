@@ -15,7 +15,7 @@
         <key>CFBundleIdentifier</key>
         <string>com.freemedforms.freepad</string>
 	<key>NOTE</key>
-        <string>FreePad is a FreeMedForms mask assistant.</string>
+        <string>FreePort is a FreeMedForms data integrator assistant.</string>
         <key>CFBundleVersion</key>
         <string>0.1.0</string>
         <key>CFBundleShortVersionString</key>
