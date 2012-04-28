@@ -90,7 +90,7 @@ QVariant PatientModelWrapper::data(const QModelIndex &index, int role) const
 
     // get datas from the model
     QModelIndex idx = m_Model->index(index.row(), index.column());
-    QVariant result = idx.data();
+    QVariant result = m_Model->data(idx, role);
     if (!result.isNull())
         return result;
 

@@ -443,6 +443,7 @@ bool FrenchSocialNumber::eventFilter(QObject *o, QEvent *e)
 
 void FrenchSocialNumber::populateWithPatientData()
 {
+    qWarning() << "eeeeeeeeeeeeeeeeeee populate"<<m_FullNumber;
     if (!m_FullNumber.isEmpty())
         return;
 
@@ -456,7 +457,8 @@ void FrenchSocialNumber::populateWithPatientData()
     }
 
     // Birth date
-    QDate birth = patient()->data(Core::IPatient::DateOfBirth).toDate();
+    QModelIndex idx = patient()->index(patient()->currentPatientIndex().row(), Core::IPatient::DateOfBirth);
+    QDate birth = patient()->data(idx, Qt::EditRole).toDate();
     if (birth.isValid()) {
         // year
         m_FullNumber = m_FullNumber.left(1) + QString::number(birth.year()).right(2) + m_FullNumber.mid(3);
@@ -549,10 +551,6 @@ FrenchSocialNumberFormData::~FrenchSocialNumberFormData()
 void FrenchSocialNumberFormData::clear()
 {
     const QString &s = m_FormItem->valueReferences()->defaultValue().toString();
-
-    if (s.isEmpty())
-        return;
-
     m_Widget->setNumberWithControlKey(s);
 }
 
