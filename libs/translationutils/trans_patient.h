@@ -63,6 +63,9 @@ const char* const PATIENT_DATABASE            = QT_TRANSLATE_NOOP("tkConstants",
 const char* const CLEAR_PATIENT_INFOS         = QT_TRANSLATE_NOOP("tkConstants", "Clear patient's information");
 const char* const TOGGLE_PATIENT_INFORMATION  = QT_TRANSLATE_NOOP("tkConstants", "Toggle patient's information");
 
+const char* const SPECIALTIES     = QT_TRANSLATE_NOOP("tkConstants", "Specialties");
+
+
 } // end Constants
 } // end TranslationUtils
 
