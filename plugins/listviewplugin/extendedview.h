@@ -73,6 +73,15 @@ public:
 protected:
     void setItemView(QAbstractItemView *view);
 
+Q_SIGNALS:
+    // QAbstractItemView overload
+    void activated(const QModelIndex &index);
+    void clicked(const QModelIndex &index);
+    void doubleClicked(const QModelIndex &index);
+    void entered(const QModelIndex &index);
+    void pressed(const QModelIndex &index);
+    void viewportEntered();
+
 private:
     QList<QToolBar*> m_AddedToolBars;
 };
