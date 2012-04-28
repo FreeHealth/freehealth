@@ -6,7 +6,7 @@
   <formdescription>
     <!-- Non translatable values -->
     <authors>Eric Maeker, MD</authors>
-    <version>0.7.0</version>
+    <version>0.7.1</version>
     <fmfv>0.7.0</fmfv>
     <cdate>2011-11-10</cdate>
     <lmdate>2012-02-26</lmdate>
@@ -22,6 +22,12 @@
     <category lang="fr">Médecine générale</category>
     <specialties lang="fr">Médecine générale</specialties>
     <specialties lang="xx">General practice</specialties>
+    <updateinfo>
+      <updateversion from="0.7.0" to="0.7.1">
+        <text lang="fr">Faute de frappe dans les catégories des antécédents</text>
+        <text lang="en">Typo in PHMx categories</text>
+      </updateversion>
+    </updateinfo>
 
   </formdescription>
 

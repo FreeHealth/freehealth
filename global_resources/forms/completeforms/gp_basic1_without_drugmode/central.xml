@@ -6,10 +6,10 @@
   <formdescription>
     <!-- Non translatable values -->
     <authors>Eric Maeker, MD</authors>
-    <version>0.7.0</version>
+    <version>0.7.1</version>
     <fmfv>0.7.0</fmfv>
     <cdate>2011-03-15</cdate>
-    <lmdate>2012-02-26</lmdate>
+    <lmdate>2012-04-26</lmdate>
     <icon>generalpractitioner.png</icon>
     <weblink></weblink>
     <bibliography/>
@@ -23,6 +23,10 @@
     <specialties lang="fr">Médecine générale</specialties>
     <specialties lang="xx">General practice</specialties>
     <updateinfo>
+    <updateversion from="0.7.0" to="0.7.1">
+      <text lang="fr">Faute de frappe dans les catégories des antécédents</text>
+      <text lang="en">Typo in PHMx categories</text>
+    </updateversion>
     <updateversion from="0.6.04" to="0.7.0">
       <text lang="fr">Utilisation du sous-formulaire identité</text>
       <text lang="en">Using sub-form identity</text>
