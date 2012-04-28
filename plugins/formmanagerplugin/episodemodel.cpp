@@ -512,7 +512,7 @@ public:
         /** \todo code here : use a QDomDocument */
         FormMain *form = m_RootForm->formMainChild(formUid);
         if (!form)
-            return false;
+            return QString::null;
 //        bool formIsModified = false;
 
         QHash<QString, FormItem *> items;

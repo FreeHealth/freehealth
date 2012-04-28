@@ -507,7 +507,7 @@ bool PrinterPrivate::complexDraw()
                 pageNumber = complexDrawNewPage(painter, headerSize, footerSize, pageSize,
                                                  correctedY, drawnedSize, pageNumber);
 
-            QPointF TablePos = QPointF(tableRect.x(), drawnedSize.height());
+//            QPointF TablePos = QPointF(tableRect.x(), drawnedSize.height());
             // get position of the table into the painter
             // draw all frames/blocks of the table
             // modify drawnedRect / actualRect...
@@ -565,8 +565,8 @@ int PrinterPrivate::complexDrawNewPage(QPainter &p, QSizeF & headerSize, QSizeF 
                                           QSizeF & pageSize, int & correctedY, QSizeF & drawnedSize,
                                           int currentPageNumber)
 {
-    bool headerDrawned = false;
-    bool footerDrawned = false;
+//    bool headerDrawned = false;
+//    bool footerDrawned = false;
 
     // correctedY --> translate painter to  (0, correctedY)  in order to paint with paperRect coordonnates
 
@@ -609,7 +609,7 @@ int PrinterPrivate::complexDrawNewPage(QPainter &p, QSizeF & headerSize, QSizeF 
         p.restore();
         p.translate(0, doc->size().height());
         p.save();
-        headerDrawned = true;
+//        headerDrawned = true;
     }
     headerSize.setHeight(headerHeight);
 
@@ -624,7 +624,7 @@ int PrinterPrivate::complexDrawNewPage(QPainter &p, QSizeF & headerSize, QSizeF 
         QRectF footRect = QRectF(QPoint(0,0), QSizeF(doc->size().width(), footHeight));
         doc->drawContents(&p, footRect);
         p.restore();
-        footerDrawned = true;
+//        footerDrawned = true;
     }
     footerSize.setHeight(footHeight);
 
@@ -682,7 +682,7 @@ bool PrinterPrivate::simpleDrawPreparePages(QRect &contentRect)
     QSizeF footerSize(_pageWidth, 0);
     int pageNumber = 1;
     int drawnHeight = 0;
-    QRectF headRect = QRectF(QPoint(0,0), headerSize);
+//    QRectF headRect = QRectF(QPoint(0,0), headerSize);
     QRect currentRect = contentRect;
     int fromPage = m_Printer->fromPage();
     int toPage = m_Printer->toPage();
@@ -1252,7 +1252,7 @@ PrinterPreviewer *Printer::previewer(QWidget *parent)
 void Printer::previewToPixmap(QPixmap &drawTo, QPrinter *printer)
 {
     Q_ASSERT(printer);
-    QSize savePixSize = drawTo.size();
+//    QSize savePixSize = drawTo.size();
     if (!d->m_Content) {
         d->m_Content = new QTextDocument(this);
         d->m_Content->setHtml("<p>This is the previewing mode</p><p&nbsp;</p><p>This is the previewing mode</p><p&nbsp;</p><p>This is the previewing mode</p><p&nbsp;</p>");
@@ -1266,7 +1266,7 @@ void Printer::previewToPixmap(QPixmap &drawTo, QPrinter *printer)
     d->m_Content->setUseDesignMetrics(true);
 
     // prepare drawing areas
-    QRect contentRect = QRect(QPoint(0,0), d->m_Content->size().toSize());     // whole document drawing rectangle
+//    QRect contentRect = QRect(QPoint(0,0), d->m_Content->size().toSize());     // whole document drawing rectangle
 
     // prepare painter then draw
     drawTo = QPixmap(_pageWidth, printer->paperRect().height() + 30);
@@ -1284,7 +1284,7 @@ void Printer::previewHeaderFooter(QPixmap &drawTo,
                                      const QString &headerHtml,
                                      const QString &footerHtml)
 {
-    QSize savePixSize = drawTo.size();
+//    QSize savePixSize = drawTo.size();
     // prepare pseudo printer
     QPrinter *printer = new QPrinter;
     printer->setPaperSize(QPrinter::A4);
