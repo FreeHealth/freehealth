@@ -101,7 +101,7 @@ IdentityPage::IdentityPage(QWidget *parent) :
     m_Identity = new IdentityWidget(this, IdentityWidget::ReadWriteMode);
     m_Model = new PatientModel(this);
     m_Model->setFilter("", "", "__", PatientModel::FilterOnUuid);
-    m_Model->emitUserCreationOnSubmit(true);
+    m_Model->emitPatientCreationOnSubmit(true);
     m_Model->insertRow(0);
     m_uuid = m_Model->index(0, Core::IPatient::Uid).data().toString();
 
