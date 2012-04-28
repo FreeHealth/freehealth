@@ -665,7 +665,7 @@ bool PatientModel::setData(const QModelIndex &index, const QVariant &value, int 
 
         // Emit data changed signals
         for(int i = 0; i < colsToEmit.count(); ++i) {
-            QModelIndex idx = this->index(index.row(), i, index.parent());
+            QModelIndex idx = this->index(index.row(), colsToEmit.at(i), index.parent());
             Q_EMIT dataChanged(idx, idx);
         }
         return true;
