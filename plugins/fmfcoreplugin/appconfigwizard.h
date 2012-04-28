@@ -90,6 +90,7 @@ class ServerConfigPage: public QWizardPage
 public:
     ServerConfigPage(QWidget *parent = 0);
 
+    bool isComplete() const;
     bool validatePage();
     int nextId() const;
 
@@ -107,6 +108,7 @@ class ClientConfigPage: public QWizardPage
 public:
     ClientConfigPage(QWidget *parent = 0);
 
+    bool isComplete() const;
     bool validatePage();
     int nextId() const;
 
