@@ -443,7 +443,6 @@ bool FrenchSocialNumber::eventFilter(QObject *o, QEvent *e)
 
 void FrenchSocialNumber::populateWithPatientData()
 {
-    qWarning() << "eeeeeeeeeeeeeeeeeee populate"<<m_FullNumber;
     if (!m_FullNumber.isEmpty())
         return;
 
