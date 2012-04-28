@@ -75,11 +75,14 @@ UpdateCheckerPrivate::UpdateCheckerPrivate( QObject *parent )
 
 UpdateCheckerPrivate::~UpdateCheckerPrivate()
 {
+    disconnect(m_Http, SIGNAL(done(bool)), this, SLOT(httpDone(bool)));
+    disconnect(m_Http, SIGNAL(dataReadProgress(int, int)),
+            this, SLOT(updateDataReadProgress(int, int)));
 }
 
 bool UpdateCheckerPrivate::getFile( const QUrl &url )
 {
-    Log::addMessage( this, "getFile" );
+    LOG("getFile");
     if ((!url.isValid()) || (url.scheme() != "http") || (url.path().isEmpty())) {
         Q_EMIT static_cast<UpdateChecker*>(parent())->done(false);
         return false;
@@ -216,6 +219,7 @@ void UpdateChecker::check(const QUrl &url)
     d->getFile(url);
 }
 
+/** \brief Cancels all downloads */
 void UpdateChecker::cancel()
 {
     d->cancelDownload();
