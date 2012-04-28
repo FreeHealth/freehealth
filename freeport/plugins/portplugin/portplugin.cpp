@@ -18,7 +18,7 @@
  *  along with this program (COPYING.FREEMEDFORMS file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
-#include "texteditorplugin.h"
+#include "portplugin.h"
 
 #include <utils/log.h>
 
@@ -31,42 +31,39 @@
 
 #include <QDebug>
 
-using namespace Editor;
+using namespace Port;
 
-/**
-  \todo Find a way to add a spell checking (see ispell, aspell, macspecific...)
-*/
 
-TextEditorPlugin::TextEditorPlugin()
+PortPlugin::PortPlugin()
 {
     if (Utils::Log::warnPluginsCreation())
-        qWarning() << "creating TextEditorPlugin";
+        qWarning() << "creating PortPlugin";
 }
 
-TextEditorPlugin::~TextEditorPlugin()
+PortPlugin::~PortPlugin()
 {
 }
 
-bool TextEditorPlugin::initialize(const QStringList &arguments, QString *errorString)
+bool PortPlugin::initialize(const QStringList &arguments, QString *errorString)
 {
     if (Utils::Log::warnPluginsCreation())
-        qWarning() << "TextEditorPlugin::initialize";
+        qWarning() << "PortPlugin::initialize";
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
 
     // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("texteditorplugin");
+    Core::ICore::instance()->translators()->addNewTranslator("PortPlugin");
 
     return true;
 }
 
-void TextEditorPlugin::extensionsInitialized()
+void PortPlugin::extensionsInitialized()
 {
     if (Utils::Log::warnPluginsCreation())
-        qWarning() << "TextEditorPlugin::extensionsInitialized";
+        qWarning() << "PortPlugin::extensionsInitialized";
 
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 }
 
 
-Q_EXPORT_PLUGIN(TextEditorPlugin)
+Q_EXPORT_PLUGIN(PortPlugin)

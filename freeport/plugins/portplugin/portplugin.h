@@ -21,31 +21,30 @@
 /***************************************************************************
  *   Main Developper : Eric MAEKER, <eric.maeker@gmail.com>                *
  *   Contributors :                                                        *
- *       Guillaume DENRY <guillaume.denry@gmail.com>                       *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef TEXTEDITORTPLUGIN_H
-#define TEXTEDITORTPLUGIN_H
+#ifndef PORTPLUGIN_H
+#define PORTPLUGIN_H
 
 #include <extensionsystem/iplugin.h>
 
 #include <QtCore/QObject>
 
 /**
- * \file texteditorplugin.h
+ * \file portplugin.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.2.1
- * \date 25 Oct 2009
+ * \version 0.8.0
+ * \date 28 Apr 2012
 */
 
-namespace Editor {
+namespace Port {
 
-class TextEditorPlugin : public ExtensionSystem::IPlugin
+class PortPlugin : public ExtensionSystem::IPlugin
 {
     Q_OBJECT
 public:
-    TextEditorPlugin();
-    ~TextEditorPlugin();
+    PortPlugin();
+    ~PortPlugin();
 
     bool initialize(const QStringList &arguments, QString *errorString);
     void extensionsInitialized();
@@ -54,4 +53,4 @@ public:
 
 }  // End Editor
 
-#endif // End TEXTEDITORTPLUGIN_H
+#endif // End PORTPLUGIN_H
