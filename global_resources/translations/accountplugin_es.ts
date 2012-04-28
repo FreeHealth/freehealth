@@ -1553,21 +1553,21 @@ Otherwise result will be wrong !</source>
         <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="327"/>
         <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="331"/>
         <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="338"/>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="388"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="390"/>
         <source>Patient</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="305"/>
         <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="343"/>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="389"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="391"/>
         <source>Date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="306"/>
         <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="344"/>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="390"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="392"/>
         <source>Acts</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1582,7 +1582,7 @@ Otherwise result will be wrong !</source>
         <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="308"/>
         <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="318"/>
         <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="346"/>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="391"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="393"/>
         <source>Cash</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1608,20 +1608,20 @@ Otherwise result will be wrong !</source>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="206"/>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="395"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="397"/>
         <source>Others</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="207"/>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="396"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="398"/>
         <source>Dues</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="309"/>
         <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="347"/>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="392"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="394"/>
         <source>Checks</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1635,7 +1635,7 @@ Otherwise result will be wrong !</source>
     <message>
         <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="311"/>
         <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="349"/>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="394"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="396"/>
         <source>Insurance</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1666,13 +1666,18 @@ Otherwise result will be wrong !</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="386"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="388"/>
         <source>Extract of receipts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="393"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="395"/>
         <source>Credit Cards</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="449"/>
+        <source>TOTAL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1693,7 +1698,7 @@ Otherwise result will be wrong !</source>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="324"/>
-        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="397"/>
+        <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="399"/>
         <source>Due by</source>
         <translation type="unfinished"></translation>
     </message>
