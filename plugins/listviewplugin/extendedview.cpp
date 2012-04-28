@@ -360,6 +360,7 @@ void ExtendedView::on_edit_triggered()
 
 void ExtendedView::contextMenu(const QPoint &p)
 {
+    Q_UNUSED(p);
     /** \todo improve this */
 //    QMenu *pop = getContextMenu();
 //    pop->popup(view->mapToGlobal(p));

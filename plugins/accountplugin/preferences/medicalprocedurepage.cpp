@@ -382,7 +382,7 @@ void MedicalProcedureWidget::save(){
         LOG_QUERY_ERROR(q);
     while (q.next()) {
     	QString str = q.value(0).toString();
-    	str : str.trimmed();
+        str = str.trimmed();
         if (str==nameStr) {
     		  test = true;
         }
