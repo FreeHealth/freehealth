@@ -2,8 +2,11 @@ FreeMedForms
 0.7.2
 ===== News =====
 
+
 ===== Bug correction =====
 
+  * Installation procedure
+    * Improving error detection when configuring a network client or server
   * FreeAccount
     * Windows installation corrected (missing default french medical procedure)
   * Many typos corrected
@@ -23,6 +26,8 @@ FreeMedForms
 
 ===== Corrections de bug =====
 
+  * Procédure d'installation
+    * Amélioration des détections d'erreurs lors d'une configuration réseau : client ou serveur
   * FreeAccount
     * Correction de l'installateur Windows (les procédure médicales française par défaut étaient manquantes)
   * Beaucoup de correction de bogues
