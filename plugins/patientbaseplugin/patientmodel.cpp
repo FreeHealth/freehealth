@@ -384,12 +384,14 @@ QVariant PatientModel::data(const QModelIndex &index, int role) const
             }
         case IPatient::DateOfBirth:
         {
-            const QDate &dob = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_DOB)).toDate();
-            if (role==Qt::DisplayRole || role==Qt::ToolTipRole) {
-                return QDate::fromString(dob.toString(Trans::Constants::DATEFORMAT_FOR_EDITOR));
-            } else {
-                return dob;
+            QModelIndex idx = d->m_SqlPatient->index(index.row(), Constants::IDENTITY_DOB);
+            QDate dob = d->m_SqlPatient->data(idx).toDate();
+            if (role==Qt::DisplayRole) {
+                return dob.toString(Trans::Constants::DATEFORMAT_FOR_EDITOR);
+            } else if (role==Qt::ToolTipRole) {
+                return QString("%1; %2").arg(dob.toString(QLocale().dateFormat(QLocale::LongFormat))).arg(MedicalUtils::readableAge(dob));
             }
+            return dob;
             break;
         }
         case IPatient::MaritalStatus: col = Constants::IDENTITY_MARITAL_STATUS;    break;
@@ -455,11 +457,15 @@ QVariant PatientModel::data(const QModelIndex &index, int role) const
                 return QString("%1 %2 %3 %4").arg(street, city, zip, country).simplified();
             }
         case IPatient::Age:
-            {
-                const QDate &dob = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_DOB)).toDate();
-                return MedicalUtils::readableAge(dob);
-            }
-        case IPatient::YearsOld: return MedicalUtils::ageYears(d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_DOB)).toDate());
+        {
+            QModelIndex idx = d->m_SqlPatient->index(index.row(), Constants::IDENTITY_DOB);
+            return MedicalUtils::readableAge(d->m_SqlPatient->data(idx).toDate());
+        }
+        case IPatient::YearsOld:
+        {
+            QModelIndex idx = d->m_SqlPatient->index(index.row(), Constants::IDENTITY_DOB);
+            return MedicalUtils::ageYears(d->m_SqlPatient->data(idx).toDate());
+        }
         case IPatient::IconizedGender: return d->iconizedGender(index);
         case IPatient::GenderPixmap: return d->iconizedGender(index).pixmap(16,16);
         case IPatient::Photo_32x32 :
