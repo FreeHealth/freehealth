@@ -13,7 +13,9 @@
 #include <QAction>
 #include <QMouseEvent>
 #include <QVBoxLayout>
+#include <QSplitter>
 #include <QSqlTableModel>
+#include <QTextEdit>
 
 class TreeViewOfPrevention: public QTreeView
 {
@@ -71,10 +73,13 @@ class PreventIHM : public QWidget, public Ui::PreventWidget {
         void changeIconWidget();
     private Q_SLOTS :
         void iconsResetIfDateNextOvertaken(const QHash<int,QVariant>&);   
+        void showDocument(const QModelIndex &);
         
     private :
         PreventIO *m_io;
         QVBoxLayout *m_vbox;
+        QSplitter *m_vboxSplitter;
+        QTextEdit *m_Editor;
         TreeViewOfPrevention *m_TreeViewOfPrevention; 
         Survey * m_survey;
 };

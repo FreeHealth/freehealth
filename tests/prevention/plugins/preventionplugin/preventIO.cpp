@@ -433,9 +433,9 @@ QHash<int,QVariant> VariantItemModel::childs(QModelIndex &parent){
       return listHash;
   }
   
-QHash<QString,QString> VariantItemModel::childsAndItems(QModelIndex & parent)
+QMap<int,QVector<QVariant> > VariantItemModel::childsAndItems(QModelIndex & parent)
 {
-    QHash<QString,QString> hash;
+    QMap<int,QVector<QVariant> > hash;
       TreeItem * parentItem = getItem(parent);
       int childCount = parentItem->childCount();
       for (int i = 0; i < childCount; i += 1)
@@ -443,10 +443,11 @@ QHash<QString,QString> VariantItemModel::childsAndItems(QModelIndex & parent)
       	  TreeItem * child = parentItem->child(i);
       	  QString data = child->data(PreventionEngine::IPreventionEngine::ITEM_H).toString();
       	  QString id = child->data(PreventionEngine::IPreventionEngine::ID_ITEM_H).toString();
-      	  hash.insertMulti(data,id);
+      	  QVector<QVariant> data_id ;
+      	  data_id << data << id;
+      	  hash.insert(i,data_id);
           }    
-    return hash;
-    
+     return hash;
 }
 
  bool VariantItemModel::insertColumns(int position, int columns, const QModelIndex &parent)
@@ -1131,5 +1132,13 @@ QString PreventIO::getDocumentRelativeToIdItem(const QString & id_item)
     	                          trUtf8("Warning") );*/
     }
     return text;
+}
+
+QString PreventIO::getIdItem(const QModelIndex & indexInRow)
+{
+    QString idItem;
+    QModelIndex parent = indexInRow.parent();
+    idItem = m_variantModel->data(m_variantModel->index(indexInRow.row(),PreventionEngine::IPreventionEngine::ID_ITEM_H, parent),Qt::DisplayRole).toString();
+    return idItem;
 }
 

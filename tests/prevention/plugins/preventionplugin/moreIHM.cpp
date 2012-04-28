@@ -34,21 +34,23 @@ MoreIHM::MoreIHM(QObject * parent,TreeViewOfPrevention * treeView,QModelIndex in
     m_hashItemAndId = treeView->model()->childsAndItems(parentIndex);
     int id = treeView->model()->data(treeView->model()->index(index.row(),PreventionEngine::IPreventionEngine::ID_ITEM_H,parentIndex),Qt::DisplayRole).toInt();
     qDebug() << __FILE__ << QString::number(__LINE__) << " id in More =" << QString::number(id)  ;
-    int idx = 0;
+    int item = 0;
     QStringList listForTheCombo;
-    QHashIterator<QString,QString> it(m_hashItemAndId);
-    while (it.hasNext())
-    {
-    	it.next();
-    	listForTheCombo << it.key();
-    	m_hashIndexAndId.insert(idx,it.value());
-    	++idx;
-    }
+    for (int i = 0; i < m_hashItemAndId.size(); i += 1)
+    { 
+        QVector<QVariant> data_id = m_hashItemAndId.value(i);
+        listForTheCombo << data_id[DATA].toString();
+        int idItem = data_id[ID].toInt();
+        if (idItem == id)
+        {
+        	  item = i;
+            }
+        }
     m_io = new PreventIO(parent);
     m_db = m_io->getDatabase();
     textBrowser->setOpenExternalLinks(true);
     textBrowser->setReadOnly(false);
-    showDocumentAccordingToComboChoice(0);
+    showDocumentAccordingToComboChoice(item);
     comboItemsSameParent->addItems(listForTheCombo);
     connect(comboItemsSameParent,SIGNAL(activated(int)),this,SLOT(showDocumentAccordingToComboChoice(int)));
     connect(quitButton,SIGNAL(pressed()),this,SLOT(closeAndQuit()));
@@ -78,9 +80,11 @@ void MoreIHM::closeMoreWidget(){
 
 void MoreIHM::showDocumentAccordingToComboChoice(int item)
 {
+    PreventIO io;    
     qDebug() << __FILE__ << QString::number(__LINE__) << " id in show document =" << QString::number(item)  ;
-    PreventIO io(this);
-    const QString id_item = m_hashIndexAndId.value(item);
+    QVector<QVariant> data_id = m_hashItemAndId.value(item);
+    QString id_item = data_id[ID].toString();
+    qDebug() << __FILE__ << QString::number(__LINE__) << " id_item =" << id_item ;
     QString text = io.getDocumentRelativeToIdItem(id_item);
     textBrowser->setText(text);
 }
