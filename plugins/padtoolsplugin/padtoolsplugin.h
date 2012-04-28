@@ -33,21 +33,23 @@
 
 /**
  * \file padtoolsplugin.h
- * \author Guillaume DENRY <guillaume.denry@gmail.com>
- */
+ * \author Eric Maeker, Guillaume Denry
+ * \version 0.8.0
+ * \date 25 Apr 2012
+*/
 
 namespace PadTools {
 
-	class PadToolsPlugin : public ExtensionSystem::IPlugin
-	{
-		Q_OBJECT
-	public:
-		PadToolsPlugin();
-		~PadToolsPlugin();
+class PadToolsPlugin : public ExtensionSystem::IPlugin
+{
+    Q_OBJECT
+public:
+    PadToolsPlugin();
+    ~PadToolsPlugin();
 
-		bool initialize(const QStringList &arguments, QString *errorString);
-		void extensionsInitialized();
-	};
+    bool initialize(const QStringList &arguments, QString *errorString);
+    void extensionsInitialized();
+};
 
 }
 

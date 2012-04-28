@@ -167,7 +167,7 @@ void MainWindow::extensionsInitialized()
     // Connect post core initialization
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
 
-	m_padTools = ExtensionSystem::PluginManager::instance()->getObject<Core::IPadTools>();
+//    m_padTools = ExtensionSystem::PluginManager::instance()->getObject<Core::IPadTools>();
 //**    m_padTools->createSyntaxHighlighter(m_ui->padTextEdit->textEdit(), m_TokenModel->tokens());
 
 //	QHBoxLayout *layout = new QHBoxLayout(m_ui->tabCalendar);
@@ -193,7 +193,7 @@ void MainWindow::extensionsInitialized()
 //	m_tokens.insert("NOTE", "note");
 
 //    m_ui->tableViewTokens->clear();
-    m_TokenModel= new PadTools::TokenModel(this);
+//    m_TokenModel = new PadTools::TokenModel(this);
 //**    m_ui->tableViewTokens->setModel(m_TokenModel);
 
 //	foreach (const QString &key, m_tokens.keys()) {
@@ -203,7 +203,7 @@ void MainWindow::extensionsInitialized()
 //	}
 
 //**	connect(m_ui->padTextEdit, SIGNAL(textChanged()), this, SLOT(padTextChanged()));
-    connect(m_TokenModel, SIGNAL(tokenChanged(QString,QString)), this, SLOT(tokenChanged(QString, QString)));
+//    connect(m_TokenModel, SIGNAL(tokenChanged(QString,QString)), this, SLOT(tokenChanged(QString, QString)));
 }
 
 void MainWindow::padTextChanged()
@@ -230,11 +230,13 @@ void MainWindow::tokenChanged(const QString &token, const QString &value)
     refreshTokens();
 }
 
-void MainWindow::tokenItemChanged(QTreeWidgetItem *, int) {
+void MainWindow::tokenItemChanged(QTreeWidgetItem *, int)
+{
 	refreshTokens();
 }
 
-void MainWindow::refreshTokens() {
+void MainWindow::refreshTokens()
+{
 	padTextChanged();
 }
 

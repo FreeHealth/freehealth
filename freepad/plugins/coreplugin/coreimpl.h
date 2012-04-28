@@ -74,6 +74,9 @@ public:
     IMainWindow *mainWindow() const;
     void setMainWindow(IMainWindow *);
 
+    void setPadTools(IPadTools *pad) {m_PadTools=pad;}
+    IPadTools *padTools() const {return m_PadTools;}
+
     FileManager *fileManager() const;
 
     // initialization
@@ -84,11 +87,9 @@ public:
 
     Utils::UpdateChecker *updateChecker() const;
 
-	IPadTools *padTools() const { return m_padTools; }
-
     // Patient's datas wrapper
-    IPatient *patient() const {return 0;}
-    void setPatient(IPatient *) {}
+    IPatient *patient() const {return m_Patient;}
+    void setPatient(IPatient *patient) {m_Patient = patient;}
 
     IUser *user() const {return m_User;}
     void setUser(IUser *user) {m_User = user;}
@@ -105,11 +106,12 @@ private:
     Translators *m_Translators;
     SettingsPrivate *m_Settings;
 //    CommandLine *m_CommandLine;
-    Patient *m_Patient;
+    IPatient *m_Patient;
     IUser *m_User;
 	IPadTools *m_padTools;
     Utils::UpdateChecker *m_UpdateChecker;
     Core::FileManager *m_FileManager;
+    IPadTools *m_PadTools;
 };
 
 } // namespace Internal

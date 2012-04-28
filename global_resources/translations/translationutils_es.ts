@@ -1413,7 +1413,7 @@ Place: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_patient.h" line="38"/>
+        <location filename="../../libs/translationutils/trans_patient.h" line="50"/>
         <source>Patient information</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2149,31 +2149,76 @@ Place: %2</source>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_patient.h" line="35"/>
-        <source>Patient Name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/translationutils/trans_patient.h" line="36"/>
-        <source>Patient</source>
+        <source>Patient name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_patient.h" line="37"/>
-        <source>Patients</source>
+        <source>Patient firstname</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_patient.h" line="39"/>
-        <source>Patient database</source>
+        <location filename="../../libs/translationutils/trans_patient.h" line="38"/>
+        <source>Patient full name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_patient.h" line="40"/>
-        <source>Clear patient&apos;s information</source>
+        <source>Birthname</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_patient.h" line="36"/>
+        <source>Patient secondname</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_patient.h" line="41"/>
+        <source>Secondname</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_patient.h" line="42"/>
+        <source>Firstname</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_patient.h" line="43"/>
+        <source>Full name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_patient.h" line="45"/>
+        <source>Date of birth</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_patient.h" line="46"/>
+        <source>Date of death</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_patient.h" line="48"/>
+        <source>Patient</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_patient.h" line="49"/>
+        <source>Patients</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_patient.h" line="51"/>
+        <source>Patient database</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_patient.h" line="52"/>
+        <source>Clear patient&apos;s information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_patient.h" line="53"/>
         <source>Toggle patient&apos;s information</source>
         <translation type="unfinished"></translation>
     </message>

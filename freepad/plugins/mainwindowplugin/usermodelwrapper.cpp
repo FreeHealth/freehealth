@@ -19,54 +19,56 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main Developers : Eric Maeker <eric.maeker@gmail.com>,                *
- *                    Guillaume Denry <guillaume.denry@gmail.com>          *
- *  Contributors :                                                         *
- *      NAME <MAIL@ADDRESS.COM>                                            *
+ *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Contributors :                                                        *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef PAD_ANALYZER_H
-#define PAD_ANALYZER_H
-
-#include <QString>
-#include <QStack>
-
-#include <coreplugin/ipadtools.h>
-
-#include "pad_fragment.h"
-#include "pad_string.h"
-#include "pad_document.h"
-#include "pad_item.h"
-
 /**
- * \file pad_analyzer.h
- * \author Eric Maeker, Guillaume Denry
- * \version 0.8.0
- * \date 25 Apr 2012
+   \class MainWin::Internal::UserModelWrapper
+   Fake wrapper to the Patient::UserModel Just coded for test.
 */
 
-namespace PadTools {
-namespace Internal {
-class PadAnalyzerPrivate;
+#include "usermodelwrapper.h"
+
+#include <coreplugin/icore.h>
+#include <coreplugin/iuser.h>
+
+#include <formmanagerplugin/formmanager.h>
+#include <formmanagerplugin/iformitem.h>
+#include <formmanagerplugin/iformitemdata.h>
+
+#include <patientbaseplugin/patientmodel.h>
+
+static inline Form::FormManager *formManager() {return Form::FormManager::instance();}
+static inline Core::IUser *user()  { return Core::ICore::instance()->user(); }
+
+using namespace MainWin::Internal;
+
+UserModelWrapper::UserModelWrapper(QObject *parent) :
+        Core::IUser(parent)
+{
+//    connect(model, SIGNAL(patientChanged(QString)), this, SLOT(onCurrentPatientChanged(QString)));
+//    connect(model, SIGNAL(patientCreated(QString)), this, SIGNAL(patientCreated(QString)));
 }
 
-/** \todo make jobs asynchronous */
-
-class PadAnalyzer : public QObject
+UserModelWrapper::~UserModelWrapper()
 {
-    Q_OBJECT
-public:
-    PadAnalyzer(QObject *parent = 0);
-    ~PadAnalyzer();
+    // as this object was created in Mainwindowplugin class with Core::ICore::instance as parent
+    // nothing to do
+}
 
-    PadDocument *analyze(const QString &source);
-    PadDocument *analyze(QTextDocument *source, PadDocument *padDocument = 0);
+void UserModelWrapper::init()
+{
+}
 
-    const QList<Core::PadAnalyzerError> lastErrors() const;
+QVariant UserModelWrapper::value(int column) const
+{
+    return column;
+}
 
-private:
-    Internal::PadAnalyzerPrivate *d;
-};
+bool UserModelWrapper::setValue(int ref, const QVariant &value)
+{
+    return true;
+}
 
-} // PadTools
-
-#endif

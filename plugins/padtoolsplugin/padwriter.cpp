@@ -140,7 +140,7 @@ PadWriter::PadWriter(QWidget *parent) :
     // Create TokenModel
     d->_tokenModel = new TokenModel(this);
     d->ui->treeView->setModel(d->_tokenModel);
-    d->ui->treeView->header()->setResizeMode(0, QHeaderView::Stretch);
+    d->ui->treeView->hideColumn(1);
 
     // Create PadDocument object
     d->_pad = new PadDocument();

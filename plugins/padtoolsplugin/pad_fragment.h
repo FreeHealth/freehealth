@@ -32,6 +32,13 @@
 #include <QVariant>
 #include <QTextDocument>
 
+/**
+ * \file pad_fragment.h
+ * \author Eric Maeker, Guillaume Denry
+ * \version 0.8.0
+ * \date 25 Apr 2012
+*/
+
 namespace PadTools {
 class PadDocument;
 

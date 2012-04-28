@@ -39,6 +39,7 @@
 #include <coreplugin/ipatient.h>
 #include <coreplugin/iuser.h>
 #include <coreplugin/constants_icons.h>
+#include <coreplugin/ipadtools.h>
 
 #include <translationutils/constanttranslations.h>
 #include <utils/log.h>
@@ -76,8 +77,11 @@ CoreImpl::CoreImpl(QObject *parent) :
         m_MainWindow(0),
         m_ActionManager(0),
         m_ContextManager(0),
-        m_UID(new UniqueIDManager)
+        m_UID(new UniqueIDManager),
+        m_Patient(0),
+        m_PadTools(0)
 {
+    setObjectName("Core");
     m_Settings = new SettingsPrivate(this);
     m_Settings->setPath(ISettings::UpdateUrl, Utils::Constants::FREEPAD_UPDATE_URL);
 
@@ -115,7 +119,7 @@ CoreImpl::CoreImpl(QObject *parent) :
     m_FileManager = new FileManager(this);
     m_UpdateChecker = new Utils::UpdateChecker(this);
 
-    Utils::Log::addMessage( "Core" , tkTr(Trans::Constants::STARTING_APPLICATION_AT_1).arg( QDateTime::currentDateTime().toString() ) );
+    LOG(tkTr(Trans::Constants::STARTING_APPLICATION_AT_1).arg(QDateTime::currentDateTime().toString()));
 
     // initialize the settings
     m_Theme->messageSplashScreen(tkTr(Trans::Constants::LOADING_SETTINGS));
@@ -131,7 +135,7 @@ CoreImpl::CoreImpl(QObject *parent) :
 //#endif
 
     foreach(const QString &l, QCoreApplication::libraryPaths()) {
-        Utils::Log::addMessage("Core" , tkTr(Trans::Constants::USING_LIBRARY_1).arg(l));
+        LOG(tkTr(Trans::Constants::USING_LIBRARY_1).arg(l));
     }
 
 //    m_FormManager = new FormManager(this);
@@ -145,7 +149,7 @@ CoreImpl::CoreImpl(QObject *parent) :
     // ready
     m_Theme->messageSplashScreen(QCoreApplication::translate("Core", "Core intialization finished..."));
 
-    Utils::Log::addMessage("Core" , QCoreApplication::translate("Core", "Core intialization finished..."));
+    LOG(QCoreApplication::translate("Core", "Core intialization finished..."));
     if (logChrono)
         Utils::Log::logTimeElapsed(chrono, "Core", "end of core intialization");
 

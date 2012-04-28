@@ -19,54 +19,53 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main Developers : Eric Maeker <eric.maeker@gmail.com>,                *
- *                    Guillaume Denry <guillaume.denry@gmail.com>          *
- *  Contributors :                                                         *
- *      NAME <MAIL@ADDRESS.COM>                                            *
+ *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Contributors :                                                        *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef PAD_ANALYZER_H
-#define PAD_ANALYZER_H
+#ifndef USERMODELWRAPPER_H
+#define USERMODELWRAPPER_H
 
-#include <QString>
-#include <QStack>
-
-#include <coreplugin/ipadtools.h>
-
-#include "pad_fragment.h"
-#include "pad_string.h"
-#include "pad_document.h"
-#include "pad_item.h"
+#include <coreplugin/iuser.h>
 
 /**
- * \file pad_analyzer.h
- * \author Eric Maeker, Guillaume Denry
+ * \file usermodelwrapper.h
+ * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.8.0
- * \date 25 Apr 2012
+ * \date 27 Apr 2012
 */
 
-namespace PadTools {
+namespace MainWin {
 namespace Internal {
-class PadAnalyzerPrivate;
-}
 
-/** \todo make jobs asynchronous */
-
-class PadAnalyzer : public QObject
+class UserModelWrapper : public Core::IUser
 {
     Q_OBJECT
 public:
-    PadAnalyzer(QObject *parent = 0);
-    ~PadAnalyzer();
+    UserModelWrapper(QObject *parent = 0);
+    ~UserModelWrapper();
 
-    PadDocument *analyze(const QString &source);
-    PadDocument *analyze(QTextDocument *source, PadDocument *padDocument = 0);
+    void init();
 
-    const QList<Core::PadAnalyzerError> lastErrors() const;
+    // IUser interface
+    void clear() {}
+    bool has(const int ref) const {return (ref>=0 && ref<Core::IUser::NumberOfColumns);}
+    virtual bool hasCurrentUser() const {return true;}
 
-private:
-    Internal::PadAnalyzerPrivate *d;
+    virtual QVariant value(const int ref) const;
+    virtual bool setValue(const int ref, const QVariant &value);
+
+    virtual QString toXml() const {return QString();}
+    virtual bool fromXml(const QString &xml)  {Q_UNUSED(xml); return true;}
+
+    virtual bool saveChanges() {}
+
+    virtual QString fullNameOfUser(const QVariant &uid) {Q_UNUSED(uid);}
+
 };
 
-} // PadTools
+}  // End namespace Internal
+}  // End namespace MainWin
 
-#endif
+#endif // USERMODELWRAPPER_H

@@ -19,54 +19,57 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main Developers : Eric Maeker <eric.maeker@gmail.com>,                *
- *                    Guillaume Denry <guillaume.denry@gmail.com>          *
+ *  Main Developers : Eric Maeker <eric.maeker@gmail.com>                  *
  *  Contributors :                                                         *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
-#ifndef PAD_ANALYZER_H
-#define PAD_ANALYZER_H
+#ifndef PADTOOLS_ITOKEN_H
+#define PADTOOLS_ITOKEN_H
 
-#include <QString>
-#include <QStack>
-
+#include <padtoolsplugin/padtools_exporter.h>
 #include <coreplugin/ipadtools.h>
 
-#include "pad_fragment.h"
-#include "pad_string.h"
-#include "pad_document.h"
-#include "pad_item.h"
+#include <QString>
+#include <QVariant>
 
 /**
- * \file pad_analyzer.h
- * \author Eric Maeker, Guillaume Denry
+ * \file itoken.h
+ * \author Eric Maeker
  * \version 0.8.0
- * \date 25 Apr 2012
+ * \date 26 Apr 2012
 */
 
 namespace PadTools {
 namespace Internal {
-class PadAnalyzerPrivate;
+class TokenPoolPrivate;
 }
 
-/** \todo make jobs asynchronous */
-
-class PadAnalyzer : public QObject
+class PADTOOLS_EXPORT TokenPool : public Core::ITokenPool
 {
     Q_OBJECT
 public:
-    PadAnalyzer(QObject *parent = 0);
-    ~PadAnalyzer();
+    TokenPool(QObject *parent = 0);
+    ~TokenPool();
 
-    PadDocument *analyze(const QString &source);
-    PadDocument *analyze(QTextDocument *source, PadDocument *padDocument = 0);
+//    TokenNamespace &createNamespace(const QString &name);
+//    void registerNamespace(const TokenNamespace &ns);
+//    const TokenNamespace &getTokenNamespace(const QString &name) const;
 
-    const QList<Core::PadAnalyzerError> lastErrors() const;
+    void addToken(Core::IToken *token);
+    void addTokens(QVector<Core::IToken *> &tokens);
+    Core::IToken *token(const QString &name);
+    void removeToken(Core::IToken *token);
+
+    QVector<Core::IToken *> tokens() const;
+
+    QVariant tokenTestingValue(const QString &name);
+    QVariant tokenCurrentValue(const QString &name);
 
 private:
-    Internal::PadAnalyzerPrivate *d;
+    static TokenPool *_instance;
+    Internal::TokenPoolPrivate *d;
 };
 
-} // PadTools
+} // namespace PadTools
 
-#endif
+#endif // PADTOOLS_ITOKEN_H

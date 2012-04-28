@@ -31,6 +31,13 @@
 
 #include "pad_analyzer.h"
 
+/**
+ * \file pad_highlighter.h
+ * \author Eric Maeker, Guillaume Denry
+ * \version 0.8.0
+ * \date 25 Apr 2012
+*/
+
 namespace PadTools {
 
 struct BlockData : public QTextBlockUserData

@@ -71,6 +71,9 @@ public:
     IMainWindow *mainWindow() const;
     void setMainWindow(IMainWindow *);
 
+    void setPadTools(IPadTools *pad) {m_PadTools=pad;}
+    IPadTools *padTools() const {return m_PadTools;}
+
     FileManager *fileManager() const;
 
     // initialization
@@ -103,6 +106,7 @@ private:
     Core::FileManager *m_FileManager;
     Core::IUser *m_User;
     Core::IPatient *m_Patient;
+    IPadTools *m_PadTools;
 };
 
 } // namespace Internal

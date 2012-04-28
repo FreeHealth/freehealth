@@ -41,6 +41,7 @@
 #include <coreplugin/filemanager.h>
 #include <coreplugin/modemanager/modemanager.h>
 #include <coreplugin/constants_icons.h>
+#include <coreplugin/ipadtools.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -76,7 +77,9 @@ CoreImpl::CoreImpl(QObject *parent) :
     m_ModeManager(0),
     m_Patient(0),
     m_User(0),
-    m_Script(0)
+    m_Script(0),
+    m_PadTools(0)
+
 {
     setObjectName("Core");
     m_Settings = new SettingsPrivate(this);

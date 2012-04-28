@@ -40,28 +40,28 @@
 <context>
     <name>Core</name>
     <message>
-        <location filename="../../freediams/plugins/coreplugin/coreimpl.cpp" line="156"/>
-        <location filename="../../freediams/plugins/coreplugin/coreimpl.cpp" line="158"/>
+        <location filename="../../freediams/plugins/coreplugin/coreimpl.cpp" line="159"/>
+        <location filename="../../freediams/plugins/coreplugin/coreimpl.cpp" line="161"/>
         <source>Core intialization finished...</source>
         <translation>Kern Initialisierung beendet...</translation>
     </message>
     <message>
-        <location filename="../../freediams/plugins/coreplugin/coreimpl.cpp" line="214"/>
+        <location filename="../../freediams/plugins/coreplugin/coreimpl.cpp" line="217"/>
         <source>You are running FreeDiams for the first time. You need to approve the licence terms.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freediams/plugins/coreplugin/coreimpl.cpp" line="217"/>
+        <location filename="../../freediams/plugins/coreplugin/coreimpl.cpp" line="220"/>
         <source>You are running a new version of FreeDiams, you need to renew the licence agreement.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freediams/plugins/coreplugin/coreimpl.cpp" line="227"/>
+        <location filename="../../freediams/plugins/coreplugin/coreimpl.cpp" line="230"/>
         <source>You are updating FreeDiams, do you want to update your personnal preferences ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freediams/plugins/coreplugin/coreimpl.cpp" line="228"/>
+        <location filename="../../freediams/plugins/coreplugin/coreimpl.cpp" line="231"/>
         <source>With the new version some preferences should be outdated. Answering yes will allow FreeDiams to update your personnal preferences.</source>
         <translation type="unfinished"></translation>
     </message>

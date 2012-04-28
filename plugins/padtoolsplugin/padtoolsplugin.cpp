@@ -35,12 +35,13 @@
 
 #include "padtoolsplugin.h"
 #include "padtoolsimpl.h"
-//#include "padwriter.h"
 
 #include <utils/log.h>
 
 #include <coreplugin/dialogs/pluginaboutpage.h>
 #include <coreplugin/icore.h>
+#include <coreplugin/ipatient.h>
+#include <coreplugin/iuser.h>
 #include <coreplugin/imainwindow.h>
 #include <coreplugin/translators.h>
 
@@ -69,8 +70,11 @@ bool PadToolsPlugin::initialize(const QStringList &arguments, QString *errorStri
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
 
-	addAutoReleasedObject(new PadToolsImpl());
-
+    // Create the Core::IPadTools implementation and register it to the Core::ICore::instance()
+    PadToolsImpl *impl = new PadToolsImpl(this);
+    Core::ICore::instance()->setPadTools(impl);
+    Core::ICore::instance()->patient()->registerPatientTokens();
+    Core::ICore::instance()->user()->registerUserTokens();
     return true;
 }
 
@@ -82,7 +86,6 @@ void PadToolsPlugin::extensionsInitialized()
 
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 
-//    mainWindow()->setCentralWidget(new PadWriter);
 }
 
 

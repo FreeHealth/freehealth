@@ -45,55 +45,120 @@ class QTextEdit;
  */
 
 namespace Core {
-	/**
-	   \brief Store all date relative to an analyzer error. Can be useful to reconstruct localized error string because all tokens are transmitted
-	 */
-	class PadAnalyzerError {
-	public:
-		enum Type {
-			Error_NoError,
-			Error_UnexpectedChar,
-			Error_CoreDelimiterExpected
-		};
+class ICore;
 
-        PadAnalyzerError(Type errorType, int pos, const QMap<QString,QVariant> &errorTokens) :
-			_errorType(errorType),
-			_pos(pos),
-			_errorTokens(errorTokens) {}
+class CORE_EXPORT PadAnalyzerError {
+public:
+    enum Type {
+        Error_NoError,
+        Error_UnexpectedChar,
+        Error_CoreDelimiterExpected
+    };
 
-		int errorType() const { return _errorType; }
-		int pos() const { return _pos; }
-		const QMap<QString,QVariant> &errorTokens() const { return _errorTokens; }
+    PadAnalyzerError(Type errorType, int pos, const QMap<QString,QVariant> &errorTokens) :
+        _errorType(errorType),
+        _pos(pos),
+        _errorTokens(errorTokens) {}
 
-	private:
-		Type _errorType;
-        int _pos;
-		QMap<QString,QVariant> _errorTokens;
-	};
+    int errorType() const { return _errorType; }
+    int pos() const { return _pos; }
+    const QMap<QString,QVariant> &errorTokens() const { return _errorTokens; }
 
-	/**
-	   \brief Use this class to avoid any plugin dependencies (other than Core), when needing to access to the \e current \e pad datas.
-	*/
-	class CORE_EXPORT IPadTools : public QObject
-	{
-        Q_OBJECT
+private:
+    Type _errorType;
+    int _pos;
+    QMap<QString,QVariant> _errorTokens;
+};
 
-	public:
-		IPadTools(QObject * parent = 0) : QObject(parent) {}
-		virtual ~IPadTools() {}
 
-		// TODO manage errors
+class CORE_EXPORT TokenDescription
+{
+public:
+    TokenDescription(const QString &name);
+    virtual ~TokenDescription() {}
 
-		/**
-		 * \brief returns a parsing result of a template against some tokens
-		 */
-        virtual QString parse(const QString &templ, QMap<QString,QVariant> &tokens, QList<PadAnalyzerError> &errors) = 0;
+    virtual QString fullName() const {return _name;}
+    virtual QString humanReadableName() const;
+    virtual QString tooltip() const;
+    virtual QString helpText() const;
+    virtual QString shortHtmlDescription() const;
 
-		/**
-		 * \brief returns a syntax highlighter which can be used in text editors
-		 */
-        virtual QSyntaxHighlighter *createSyntaxHighlighter(QTextEdit *textEdit, QMap<QString,QVariant> &tokens) { Q_UNUSED(textEdit); Q_UNUSED(tokens); return NULL ; }
-	};
+    virtual void setTrContext(const QString &context) {_trContext=context;}
+    virtual void setUntranslatedTooltip(const QString &tooltip) {_tooltip=tooltip;}
+    virtual void setUntranslatedHelpText(const QString &help) {_help=help;}
+    virtual void setUntranslatedHumanReadableName(const QString &name) {_human=name;}
+    virtual void setUntranslatedHtmlDescription(const QString &descr) {_descr=descr;}
+
+    bool operator<(const TokenDescription &descr) const;
+
+private:
+    QString _name, _human, _tooltip, _descr, _help, _trContext;
+};
+
+class CORE_EXPORT TokenNamespace : public TokenDescription
+{
+public:
+    TokenNamespace(const QString &name = QString::null) : TokenDescription(name) {}
+    ~TokenNamespace() {}
+
+    bool isValid() const {return !fullName().isEmpty();}
+};
+
+
+class CORE_EXPORT IToken : public TokenDescription
+{
+public:
+    IToken(const QString &fullName) : TokenDescription(fullName) {}
+    virtual ~IToken() {}
+
+    virtual QVariant testValue() const = 0;
+    virtual QVariant value() const = 0;
+};
+
+
+class CORE_EXPORT ITokenPool : public QObject
+{
+    Q_OBJECT
+    friend class Core::ICore;
+
+protected:
+    ITokenPool(QObject *parent = 0) : QObject(parent) {}
+
+public:
+    virtual ~ITokenPool() {}
+
+//    virtual TokenNamespace &createNamespace(const QString &name) = 0;
+//    virtual void registerNamespace(const TokenNamespace &ns) = 0;
+//    virtual const TokenNamespace &getTokenNamespace(const QString &name) const = 0;
+
+    virtual void addToken(Core::IToken *token) = 0;
+    virtual void addTokens(QVector<Core::IToken *> &tokens) = 0;
+    virtual Core::IToken *token(const QString &name) = 0;
+    virtual void removeToken(Core::IToken *token) = 0;
+
+    virtual QVector<Core::IToken *> tokens() const = 0;
+
+    virtual QVariant tokenTestingValue(const QString &name) = 0;
+    virtual QVariant tokenCurrentValue(const QString &name) = 0;
+
+Q_SIGNALS:
+    void tokenAdded(Core::IToken *token);
+    void tokenRemoved(Core::IToken *token);
+};
+
+
+class CORE_EXPORT IPadTools : public QObject
+{
+    Q_OBJECT
+public:
+    IPadTools(QObject * parent = 0) : QObject(parent) {}
+    virtual ~IPadTools() {}
+
+    virtual Core::ITokenPool *tokenPool() const = 0;
+    virtual QString parse(const QString &templ, QMap<QString,QVariant> &tokens, QList<PadAnalyzerError> &errors) = 0;
+    virtual QSyntaxHighlighter *createSyntaxHighlighter(QTextEdit *textEdit, QMap<QString,QVariant> &tokens) { Q_UNUSED(textEdit); Q_UNUSED(tokens); return NULL ; }
+};
+
 }
 
 
