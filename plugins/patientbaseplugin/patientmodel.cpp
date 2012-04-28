@@ -757,7 +757,7 @@ QString PatientModel::filter() const
     return QString();
 }
 
-void PatientModel::emitUserCreationOnSubmit(bool state)
+void PatientModel::emitPatientCreationOnSubmit(bool state)
 {
     d->m_EmitCreationAtSubmit = state;
     if (!state) {
