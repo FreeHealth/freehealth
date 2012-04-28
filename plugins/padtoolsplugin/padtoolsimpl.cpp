@@ -30,11 +30,26 @@
  */
 
 #include "padtoolsimpl.h"
-
+#include "tokenpool.h"
 #include "pad_analyzer.h"
 #include "pad_highlighter.h"
 
 using namespace PadTools;
+
+PadToolsImpl::PadToolsImpl(QObject *parent) :
+    Core::IPadTools(parent)
+{
+    _pool = new TokenPool(this);
+}
+
+PadToolsImpl::~PadToolsImpl()
+{}
+
+Core::ITokenPool *PadToolsImpl::tokenPool() const
+{
+    return _pool;
+}
+
 
 /** Analyse a string \e templ for \e tokens, manages a list of \e errors (output) and returns the parsed string.*/
 QString PadToolsImpl::parse(const QString &templ, QMap<QString,QVariant> &tokens, QList<Core::PadAnalyzerError> &errors)

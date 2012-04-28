@@ -36,17 +36,28 @@
  * \date 25 Apr 2012
 */
 
+
+namespace Core {
+class ITokenPool;
+}
+
 namespace PadTools {
+class TokenPool;
 
 class PadToolsImpl : public Core::IPadTools
 {
     Q_OBJECT
 public:
-    PadToolsImpl(QObject *parent = 0) : Core::IPadTools(parent) {}
-    ~PadToolsImpl() {}
+    PadToolsImpl(QObject *parent = 0);
+    ~PadToolsImpl();
+
+    Core::ITokenPool *tokenPool() const;
 
     QString parse(const QString &templ, QMap<QString,QVariant> &tokens, QList<Core::PadAnalyzerError> &errors);
     QSyntaxHighlighter *createSyntaxHighlighter(QTextEdit *textEdit, QMap<QString,QVariant> &tokens);
+
+private:
+    PadTools::TokenPool *_pool;
 };
 
 }

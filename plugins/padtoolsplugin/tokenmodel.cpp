@@ -27,6 +27,9 @@
 #include "tokenmodel.h"
 #include "constants.h"
 
+#include <coreplugin/icore.h>
+#include <coreplugin/ipadtools.h>
+
 #include <QStandardItem>
 #include <QStringList>
 #include <QMimeData>
@@ -35,6 +38,8 @@
 
 using namespace PadTools;
 using namespace Internal;
+
+static inline Core::ITokenPool *tokenPool() {return Core::ICore::instance()->padTools()->tokenPool();}
 
 namespace PadTools {
 namespace Internal {
@@ -64,15 +69,17 @@ public:
     void createTree()
     {
         // Create namespaces
-        QMapIterator<QString, QVariant> i(m_Tokens);
-        while (i.hasNext()) {
-            i.next();
-            QStringList ns = tokenNamespaces(i.key());
+        _tokens = tokenPool()->tokens();
+        for(int i=0; i < _tokens.count(); ++i) {
+            Core::IToken *token = _tokens.at(i);
+            QStringList ns = tokenNamespaces(token->fullName());
+            QString name;
+            token->humanReadableName().isEmpty() ? name=token->fullName() : name=token->humanReadableName();
 
             // token without namespace
             if (ns.count()==1) {
-                QStandardItem *item = new QStandardItem(i.key());
-                m_TokensToItem.insert(i.key(), item);
+                QStandardItem *item = new QStandardItem(name);
+                _tokensToItem.insert(token, item);
                 q->invisibleRootItem()->appendRow(QList<QStandardItem*>() << item << new QStandardItem());
                 continue;
             }
@@ -85,21 +92,24 @@ public:
                 if (fullNs.isEmpty()) {
                     parent = q->invisibleRootItem();
                 } else {
-                    parent = m_TokensNamespaceToItem[fullNs];
+                    parent = _tokensNamespaceToItem[fullNs];
                     fullNs += ".";
                 }
                 // recreate ns
                 fullNs += n;
 
                 // create ns
-                item = m_TokensNamespaceToItem[fullNs];
+                item = _tokensNamespaceToItem[fullNs];
                 if (!item) {
-                    item = new QStandardItem(n);
-                    m_TokensToItem.insert(i.key(), item);
-                    //                    if (n==ns.last()) {
-                    //                        item->setToolTip(i.value().toString());
-                    //                    }
-                    m_TokensNamespaceToItem.insert(fullNs, item);
+                    if (n==ns.last()) {
+                        token->humanReadableName().isEmpty() ? name=n : name=token->humanReadableName();
+                        item = new QStandardItem(name);
+                        item->setToolTip(token->tooltip());
+                        _tokensToItem.insert(token, item);
+                    } else {
+                        item = new QStandardItem(n);
+                        _tokensNamespaceToItem.insert(fullNs, item);
+                    }
                     parent->appendRow(QList<QStandardItem*>() << item << new QStandardItem());
                 }
 
@@ -110,8 +120,9 @@ public:
 
 public:
     QMap<QString, QVariant> m_Tokens;
-    QHash<QString, QStandardItem *> m_TokensToItem;
-    QHash<QString, QStandardItem *> m_TokensNamespaceToItem;
+    QVector<Core::IToken *> _tokens;
+    QHash<Core::IToken *, QStandardItem *> _tokensToItem;
+    QHash<QString, QStandardItem *> _tokensNamespaceToItem;
 
 private:
     TokenModel *q;
@@ -124,25 +135,32 @@ TokenModel::TokenModel(QObject *parent) :
     QStandardItemModel(parent),
     d(new Internal::TokenModelPrivate(this))
 {
-    // tmp: fill with dummy tokens
-    d->m_Tokens.insert("Prescription.Drug.DRUG", "drug");
-    d->m_Tokens.insert("Prescription.Drug.Q_FROM", "q_from");
-    d->m_Tokens.insert("Prescription.Drug.Q_TO", "q_to");
-    d->m_Tokens.insert("Prescription.Drug.Q_SCHEME", "q_scheme");
-    d->m_Tokens.insert("Prescription.Drug.REPEATED_DAILY_SCHEME", "repeated daily scheme");
-    d->m_Tokens.insert("Prescription.Drug.MEAL", "meal");
-    d->m_Tokens.insert("PERIOD", "period");
-    d->m_Tokens.insert("PERIOD_SCHEME", "period scheme");
-    d->m_Tokens.insert("A", "This is A");
-    d->m_Tokens.insert("B", "This is B");
-    d->m_Tokens.insert("C", "This is C");
-    d->m_Tokens.insert("D", "This is D");
-    d->m_Tokens.insert("NULL", "");
-    d->m_Tokens.insert("HTMLTOKEN", "<b>htmlToken</b>");
+    Q_ASSERT(tokenPool());
 
+    // create tree
     d->createTree();
+
+//    // tmp: fill with dummy tokens
+//    d->m_Tokens.insert("Prescription.Drug.DRUG", "drug");
+//    d->m_Tokens.insert("Prescription.Drug.Q_FROM", "q_from");
+//    d->m_Tokens.insert("Prescription.Drug.Q_TO", "q_to");
+//    d->m_Tokens.insert("Prescription.Drug.Q_SCHEME", "q_scheme");
+//    d->m_Tokens.insert("Prescription.Drug.REPEATED_DAILY_SCHEME", "repeated daily scheme");
+//    d->m_Tokens.insert("Prescription.Drug.MEAL", "meal");
+//    d->m_Tokens.insert("PERIOD", "period");
+//    d->m_Tokens.insert("PERIOD_SCHEME", "period scheme");
+//    d->m_Tokens.insert("A", "This is A");
+//    d->m_Tokens.insert("B", "This is B");
+//    d->m_Tokens.insert("C", "This is C");
+//    d->m_Tokens.insert("D", "This is D");
+//    d->m_Tokens.insert("NULL", "");
+//    d->m_Tokens.insert("HTMLTOKEN", "<b>htmlToken</b>");
+
+//    d->createTree();
 }
 
+
+// OBSOLETE
 void TokenModel::setTokens(const QMap<QString, QVariant> &tokens)
 {
     d->m_Tokens.clear();
@@ -154,12 +172,19 @@ QMap<QString, QVariant> &TokenModel::tokens()
 {
     return d->m_Tokens;
 }
+// END OBSOLETE
 
-//int TokenModel::rowCount(const QModelIndex &parent) const
-//{
-//    Q_UNUSED(parent);
-//    return d->m_Tokens.count();
-//}
+
+void TokenModel::addToken(Core::IToken *token)
+{
+    d->_tokens.append(token);
+}
+
+void TokenModel::addTokens(const QVector<Core::IToken*> &tokens)
+{
+    for(int i=0; i<tokens.count();++i)
+        d->_tokens.append(tokens.at(i));
+}
 
 QVariant TokenModel::data(const QModelIndex &index, int role) const
 {
@@ -240,9 +265,9 @@ QMimeData *TokenModel::mimeData(const QModelIndexList &indexes) const
 //            dt += data(index, Qt::DisplayRole).toString();
 //        }
 //    }
-
-    QString name = d->m_TokensToItem.key(itemFromIndex(indexes.at(0))); // d->m_Tokens.keys().at(indexes.at(0).row());
-    const QVariant &value = d->m_Tokens.value(name);;
+    Core::IToken *token = d->_tokensToItem.key(itemFromIndex(indexes.at(0)));
+    QString name = token->fullName(); // d->m_Tokens.keys().at(indexes.at(0).row());
+    const QVariant &value = token->value();
     mimeData->setData(Constants::TOKENVALUE_MIME, value.toByteArray());
     mimeData->setData(Constants::TOKENNAME_MIME, name.toUtf8());
     name = QString("%1%2%3%2%4")

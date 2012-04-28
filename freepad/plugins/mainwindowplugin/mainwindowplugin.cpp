@@ -21,6 +21,7 @@
 #include "mainwindowplugin.h"
 #include "mainwindow.h"
 #include "patientmodelwrapper.h"
+#include "usermodelwrapper.h"
 //#include "preferences/userpreferences.h"
 
 #include <coreplugin/icore.h>
@@ -45,6 +46,8 @@ MainWinPlugin::MainWinPlugin() :
     m_MainWindow->initialize(QStringList(),0);
     Core::IPatient *p = new Internal::PatientModelWrapper(Core::ICore::instance());
     Core::ICore::instance()->setPatient(p);
+    Core::IUser *u = new Internal::UserModelWrapper(Core::ICore::instance());
+    Core::ICore::instance()->setUser(u);
 }
 
 MainWinPlugin::~MainWinPlugin()

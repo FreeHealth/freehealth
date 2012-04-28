@@ -16,12 +16,14 @@ HEADERS += mainwindowplugin.h \
     mainwindow_exporter.h \
     mainwindow.h \
     patientmodelwrapper.h \
+    usermodelwrapper.h \
 #    preferences/userpreferences.h \
 
 
 SOURCES += mainwindowplugin.cpp \
     mainwindow.cpp \
     patientmodelwrapper.cpp \
+    usermodelwrapper.cpp \
 #    preferences/userpreferences.cpp \
 
 

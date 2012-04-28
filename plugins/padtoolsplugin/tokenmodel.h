@@ -34,8 +34,12 @@
  * \file tokenmodel.h
  * \author Eric Maeker
  * \version 0.8.0
- * \date 25 Apr 2012
+ * \date 26 Apr 2012
 */
+
+namespace Core {
+class IToken;
+}
 
 namespace PadTools {
 namespace Internal {
@@ -54,8 +58,13 @@ public:
 
     explicit TokenModel(QObject *parent = 0);
 
+    // OBSOLETE
     void setTokens(const QMap<QString, QVariant> &tokens);
     QMap<QString, QVariant> &tokens();
+    // END
+
+    void addToken(Core::IToken *token);
+    void addTokens(const QVector<Core::IToken *> &token);
 
 //    int rowCount(const QModelIndex &parent = QModelIndex()) const;
     int columnCount(const QModelIndex &) const {return ColumnCount;}
