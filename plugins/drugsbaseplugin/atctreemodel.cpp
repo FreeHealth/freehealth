@@ -162,7 +162,7 @@ public:
         m_Root = new AtcItem;
         m_Root->setData(0, "ATC_ROOT_ITEM");
 
-        AtcItem *last = 0;
+//        AtcItem *last = 0;
         AtcItem *lastOne = 0;
         AtcItem *lastThree = 0;
         AtcItem *lastFour = 0;
@@ -184,7 +184,7 @@ public:
                 item->setParent(parent);
                 parent->addChildren(item);
             }
-            last = item;
+//            last = item;
             parent = 0;
         }
         q->reset();

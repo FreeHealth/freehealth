@@ -434,7 +434,7 @@ QString BaseForm::printableHtml(bool withValues) const
 //    qWarning() << html;
 
     int i = 0;
-    int c = 0;
+//    int c = 0;
     int r = 0;
     int previousrow = 0;
     QString header, content;
@@ -455,7 +455,7 @@ QString BaseForm::printableHtml(bool withValues) const
 
     // recreate the grid as an html table
     foreach(const QString &s, html) {
-        c = (i % numberColumns);
+//        c = (i % numberColumns);
         r = (i / numberColumns);
         if (r>previousrow) {
             previousrow = r;
@@ -676,11 +676,11 @@ QString BaseGroup::printableHtml(bool withValues) const
 
     // recreate the grid as an html table
     int i = 0;
-    int c = 0;
+//    int c = 0;
     int r = 0;
     int previousrow = 0;
     foreach(const QString &s, html) {
-        c = (i % numberColumns);
+//        c = (i % numberColumns);
         r = (i / numberColumns);
         if (r>previousrow) {
             previousrow = r;

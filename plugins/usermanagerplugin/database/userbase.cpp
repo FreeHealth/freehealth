@@ -461,7 +461,7 @@ bool UserBase::checkLogin(const QString &clearLogin, const QString &clearPasswor
 QString UserBase::getUuid(const QString &log64, const QString &cryptpass64)
 {
     if (!testConnexion())
-        return false;
+        return QString::null;
     if ((log64 == m_LastLogin) && (cryptpass64 == m_LastPass))
         return m_LastUuid;
     m_LastUuid.clear();
@@ -486,7 +486,7 @@ QString UserBase::getUuid(const QString &log64, const QString &cryptpass64)
 QString UserBase::createNewUuid()
 {
     if (!testConnexion())
-        return false;
+        return QString::null;
     QString tmp;
     while (tmp.isEmpty()) {
         tmp = Utils::Database::createUid();
@@ -512,7 +512,7 @@ QString UserBase::createNewUuid()
 QString UserBase::getLogin64(const QString &uuid)
 {
     if (!testConnexion())
-        return false;
+        return QString::null;
     if (uuid == m_LastUuid)
         return m_LastLogin;
     // create query
@@ -535,7 +535,7 @@ QString UserBase::getLogin64(const QString &uuid)
 QString UserBase::getUserDynamicData(const QString &userUid, const QString &dynDataUuid)
 {
     if (!testConnexion())
-        return false;
+        return QString::null;
     QSqlQuery query(database());
     QHash<int, QString> where;
     where.insert(DATAS_USER_UUID, QString("='%1'").arg(userUid));

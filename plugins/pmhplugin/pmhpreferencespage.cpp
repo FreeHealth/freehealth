@@ -150,7 +150,7 @@ void PmhPreferencesWidget::saveToSettings(Core::ISettings *sets)
     defaultvalues.insert(Constants::S_FOREGROUND_PMH, pmhForegroundButton->color().name());
 
     foreach(const QString &k, defaultvalues.keys()) {
-        settings()->setValue(k, defaultvalues.value(k));
+        s->setValue(k, defaultvalues.value(k));
     }
 }
 
