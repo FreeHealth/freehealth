@@ -174,7 +174,7 @@ void PatientBar::onCurrentPatientChanged()
 //    }
 //}
 
-void PatientBar::paintEvent(QPaintEvent *)
+void PatientBar::paintEvent(QPaintEvent *e)
 {
     QPainter p(this);
 
@@ -195,6 +195,8 @@ void PatientBar::paintEvent(QPaintEvent *)
     p.drawLine(rect.topLeft(), rect.topRight());
     p.setPen(QColor(150, 160, 200));
     p.drawLine(rect.bottomLeft(), rect.bottomRight());
+
+    QWidget::paintEvent(e);
 }
 
 void PatientBar::changeEvent(QEvent *event)
