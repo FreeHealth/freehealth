@@ -2,6 +2,8 @@ FreeMedForms
 0.7.2
 ===== News =====
 
+  * DataPack manager
+    * adding a category browser
 
 ===== Bug correction =====
 
@@ -25,6 +27,9 @@ FreeMedForms
 
 *********************************************************************************************
 ===== Nouveautés =====
+
+  * Gestionnaire de paquets de données
+    * ajout d'un navigateur de categorie
 
 ===== Corrections de bug =====
 
