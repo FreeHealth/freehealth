@@ -38,7 +38,9 @@ class DATAPACK_EXPORT Pack
 {
 public:
     enum DataType {
-        Forms = 0,
+        NoType = 0,
+        FormSubset,
+        SubForms,
         DrugsWithoutInteractions,
         DrugsWithInteractions,
         ICD,
@@ -95,6 +97,7 @@ private:
     bool m_Sha1Checked, m_Md5Checked;
     PackDescription m_descr;
     PackDependencies m_depends;
+    mutable int m_type;
 };
 
 

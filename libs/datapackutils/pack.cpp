@@ -50,7 +50,8 @@ const char *const TAG_PACKDEPENDENCIES = "PackDependencies";
 }
 
 Pack::Pack() :
-    m_Sha1Checked(false), m_Md5Checked(false)
+    m_Sha1Checked(false), m_Md5Checked(false),
+    m_type(-1)
 {
 }
 
@@ -188,20 +189,26 @@ QStringList Pack::installedFiles() const
 /** Return the DataPack::Pack::DataType of the package according to its description. */
 Pack::DataType Pack::dataType() const
 {
+    if (m_type!=-1)
+        return Pack::DataType(m_type);
     const QString &type = m_descr.data(PackDescription::DataType).toString();
-    if (type.compare("forms", Qt::CaseInsensitive)==0)
-        return Pack::Forms;
+    if (type.compare("FormsFullSet", Qt::CaseInsensitive)==0)
+        m_type = Pack::FormSubset;
+    else if (type.compare("SubForms", Qt::CaseInsensitive)==0)
+        m_type = Pack::SubForms;
     else if (type.compare("DrugsWithInteractions", Qt::CaseInsensitive)==0)
-        return Pack::DrugsWithInteractions;
+        m_type = Pack::DrugsWithInteractions;
     else if (type.compare("DrugsWithoutInteractions", Qt::CaseInsensitive)==0)
-        return Pack::DrugsWithoutInteractions;
+        m_type = Pack::DrugsWithoutInteractions;
     else if (type.compare("icd", Qt::CaseInsensitive)==0)
-        return Pack::ICD;
+        m_type = Pack::ICD;
     else if (type.compare("ZipCodes", Qt::CaseInsensitive)==0)
-        return Pack::ZipCodes;
+        m_type = Pack::ZipCodes;
     else if (type.compare("UserDocuments", Qt::CaseInsensitive)==0)
-        return Pack::UserDocuments;
-    return Pack::UnknownType;
+        m_type = Pack::UserDocuments;
+    else
+        m_type = Pack::UnknownType;
+    return Pack::DataType(m_type);
 }
 
 /** Return the DataPack::Pack::DataType name of the package according to its description. */
@@ -209,7 +216,8 @@ QString Pack::dataTypeName() const
 {
     Pack::DataType type = dataType();
     switch (type) {
-    case Pack::Forms: return tkTr(Trans::Constants::FORMS);
+    case Pack::FormSubset: return tkTr(Trans::Constants::FORMS);
+    case Pack::SubForms: return tkTr(Trans::Constants::SUBFORMS);
     case Pack::DrugsWithInteractions: return tkTr(Trans::Constants::DRUGS_WITH_INTERACTIONS);
     case Pack::DrugsWithoutInteractions: return tkTr(Trans::Constants::DRUGS_WITHOUT_INTERACTIONS);
     case Pack::ICD: return tkTr(Trans::Constants::ICD10);
