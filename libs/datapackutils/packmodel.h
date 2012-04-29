@@ -77,6 +77,7 @@ public:
 
 public Q_SLOTS:
     void updateModel();
+    void filter(const QString &vendor, const QList<Pack::DataType> &type);
 
 private Q_SLOTS:
     void onServerAdded(const int index);

@@ -163,7 +163,7 @@ public:
     // Get all packs available from a server (avoid duplicates) : populate m_AvailPacks list
     void scanServerPack(const int index)
     {
-        qWarning() << "PackModel::Scanning server" << serverManager()->getServerAt(index).uuid();
+//        qWarning() << "PackModel::Scanning server" << serverManager()->getServerAt(index).uuid();
         foreach(const Pack &p, serverManager()->getPackForServer(serverManager()->getServerAt(index))) {
 //            qWarning() << "   ?? " << p.uuid() << p.version();
             // Add to the package list if not already included
@@ -282,9 +282,12 @@ public:
 
 public:
     bool m_InstallChecking, m_PackCheckable;
-    QList<PackItem> m_Items;
+    QList<PackItem> m_Items;    // represent the non filtered model (all packages are shown)
     QList<Pack> m_AvailPacks;
     Pack m_InvalidPack;
+    QList<int> rowToItem;       // when filtering the model, the list is populated with the item to show. If empty == not filtered
+    QString _filterVendor;
+    QList<Pack::DataType> _filterDataType;
 };
 }
 }
@@ -342,6 +345,8 @@ bool PackModel::isDirty() const
 
 int PackModel::rowCount(const QModelIndex &) const
 {
+    if (!d->rowToItem.isEmpty())
+        return d->rowToItem.count();
     return d->m_Items.count();
 }
 
@@ -350,8 +355,10 @@ QVariant PackModel::data(const QModelIndex &index, int role) const
     if (!index.isValid())
         return QVariant();
 
+    // Manage filter
     int row = index.row();
-
+    if (!d->rowToItem.isEmpty())
+        row = d->rowToItem.at(row);
     if (row < 0 || row >= d->m_Items.count())
         return QVariant();
 
@@ -380,14 +387,20 @@ bool PackModel::setData(const QModelIndex &index, const QVariant &value, int rol
     if (!index.isValid())
         return false;
 
+    // Manage filter
+    int row = index.row();
+    if (!d->rowToItem.isEmpty())
+        row = d->rowToItem.at(row);
+    if (row < 0 || row >= d->m_Items.count())
+        return false;
+
     if (d->m_PackCheckable && role==Qt::CheckStateRole && index.column()==Label) {
-//        Qt::CheckState save = d->m_Items[index.row()].userCheckState;
         // Manage a tristate bug in model/view
         if (flags(index) & Qt::ItemIsTristate) {
-            int v = (d->m_Items[index.row()].userCheckState + 1) % 3;
-            d->m_Items[index.row()].userCheckState = Qt::CheckState(v);
+            int v = (d->m_Items[row].userCheckState + 1) % 3;
+            d->m_Items[row].userCheckState = Qt::CheckState(v);
         } else {
-            d->m_Items[index.row()].userCheckState = Qt::CheckState(value.toInt());
+            d->m_Items[row].userCheckState = Qt::CheckState(value.toInt());
         }
 
 //        Q_EMIT packStatusChanged(d->m_Items[index.row()].pack, save, d->m_Items[index.row()].userCheckState);
@@ -402,10 +415,15 @@ Qt::ItemFlags PackModel::flags(const QModelIndex &index) const
     Qt::ItemFlags f = QAbstractTableModel::flags(index);
     if (d->m_PackCheckable && index.column()==Label) {
         f |= Qt::ItemIsUserCheckable;
-        if (index.row()>=0 && index.row()<d->m_Items.count()) {
-            if (d->m_Items.at(index.row()).isAnUpdate)
-                f |= Qt::ItemIsTristate;
-        }
+
+        // Manage filter
+        int row = index.row();
+        if (!d->rowToItem.isEmpty())
+            row = d->rowToItem.at(row);
+        if (row < 0 || row >= d->m_Items.count())
+            return f;
+        if (d->m_Items.at(row).isAnUpdate)
+            f |= Qt::ItemIsTristate;
     }
     return f;
 }
@@ -413,9 +431,14 @@ Qt::ItemFlags PackModel::flags(const QModelIndex &index) const
 /** Return the package at row \e index */
 const Pack &PackModel::packageAt(const int index) const
 {
-    if (index>=0 && index<d->m_Items.count())
-        return d->m_Items.at(index).pack;
-    return d->m_InvalidPack;
+    // Manage filter
+    int row = index;
+    if (!d->rowToItem.isEmpty())
+        row = d->rowToItem.at(row);
+    if (row < 0 || row >= d->m_Items.count())
+        return d->m_InvalidPack;
+
+    return d->m_Items.at(row).pack;
 }
 
 /** Return the list of user selected packages for install. */
@@ -460,11 +483,32 @@ void PackModel::updateModel()
     reset();
 }
 
+/** Filter the model using the \e vendor name and the Pack::DataType \e types. An empty /e vendor name and a empty \e types removes the filter. */
+void PackModel::filter(const QString &vendor, const QList<Pack::DataType> &types)
+{
+    d->rowToItem.clear();
+    if (types.isEmpty() && vendor.isEmpty()) {
+        d->_filterVendor.clear();
+        d->_filterDataType = types;
+        reset();
+        return;
+    }
+
+    for(int i=0; i < d->m_Items.count(); ++i) {
+        const PackItem &item = d->m_Items.at(i);
+        if (item.pack.vendor() == vendor && (types.contains(item.pack.dataType())))
+            d->rowToItem << i;
+    }
+    d->_filterVendor = vendor;
+    d->_filterDataType = types;
+    reset();
+}
+
 /** Manage model when a server is added to the server manager */
 void PackModel::onServerAdded(const int index)
 {
     d->serverAdded(index);
-    reset();
+    filter(d->_filterVendor, d->_filterDataType);
 }
 
 /** Manage model when a server is about to be removed from the server manager */
@@ -472,6 +516,6 @@ void PackModel::onServerRemoved(const int index)
 {
     Q_UNUSED(index);
     d->serverRemoved(index);
-    reset();
+    filter(d->_filterVendor, d->_filterDataType);
 }
 
