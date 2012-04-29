@@ -39,8 +39,8 @@ QT_END_NAMESPACE
 /**
  * \file serverdescsription.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.2
- * \date 25 Nov 2011
+ * \version 0.7.2
+ * \date 27 Apr 2012
 */
 
 namespace DataPack {
@@ -51,7 +51,8 @@ class DATAPACK_EXPORT ServerDescription : public Utils::GenericDescription
 {
 public:
     enum ExtraNonTranslatedData {
-        RecommendedUpdateFrequency = Utils::GenericDescription::NonTranslatableExtraData + 1
+        RecommendedUpdateFrequency = Utils::GenericDescription::NonTranslatableExtraData + 1,
+        RequiereAuthentification
     };
 
     ServerDescription();

@@ -34,6 +34,8 @@ ServerDescription::ServerDescription() :
     Utils::GenericDescription("ServerDescription")
 {
     addNonTranslatableExtraData(RecommendedUpdateFrequency, "RecomUpFreq");
+    addNonTranslatableExtraData(RequiereAuthentification, "RequiereAuth");
+    setData(RequiereAuthentification, false);
 }
 
 ServerDescription::~ServerDescription()
