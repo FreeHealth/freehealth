@@ -334,36 +334,6 @@
         <source>Form</source>
         <translation></translation>
     </message>
-    <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.ui" line="152"/>
-        <source>Identification</source>
-        <translation>Identification</translation>
-    </message>
-    <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.ui" line="170"/>
-        <source>Authors</source>
-        <translation>Auteurs</translation>
-    </message>
-    <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.ui" line="199"/>
-        <source>Vendor</source>
-        <translation>Vendeur</translation>
-    </message>
-    <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.ui" line="228"/>
-        <source>Version</source>
-        <translation>Version</translation>
-    </message>
-    <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.ui" line="257"/>
-        <source>Creation date</source>
-        <translation>Date de création</translation>
-    </message>
-    <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.ui" line="302"/>
-        <source>Last updated</source>
-        <translation>Date de mise à jour</translation>
-    </message>
 </context>
 <context>
     <name>DataPack::ServerModel</name>
@@ -386,77 +356,62 @@
 <context>
     <name>DataPack::ServerPackEditor</name>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="165"/>
-        <source>Datapacks</source>
-        <translation>Gestionnaire de paquets de données</translation>
-    </message>
-    <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="167"/>
-        <source>Servers</source>
-        <translation>Serveurs</translation>
-    </message>
-    <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="358"/>
-        <source>Update information</source>
-        <translation>Information de mise à jour</translation>
-    </message>
-    <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="374"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="352"/>
         <source>Dependencies</source>
         <translation>Dépendances</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="389"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="367"/>
         <source>File specification</source>
         <translation>Spécification du fichier</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="390"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="368"/>
         <source>File name or URL:</source>
         <translation>Nom de fichier ou adresse :</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="229"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="224"/>
         <source>Updating server information</source>
         <translation>Mise à jour des informations du serveur</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="394"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="372"/>
         <source>Unzip pack to path</source>
         <translation>Décompression du paquet de données dans le répertoire</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="423"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="408"/>
         <source>Downloading server information</source>
         <translation>Téléchargement des informations du serveur</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="463"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="448"/>
         <source>Refresh datapack servers</source>
         <translation>Mise à jour des informations des serveurs</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="464"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="449"/>
         <source>Server editor</source>
         <translation>Editeur de serveur</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="465"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="450"/>
         <source>Add a server</source>
         <translation>Ajouter un serveur</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="466"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="451"/>
         <source>Remove a server</source>
         <translation>Supprimer un serveur</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="467"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="452"/>
         <source>Server and pack editor</source>
         <translation>Editeur de paquets et de serveurs</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="468"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="453"/>
         <source>Process changes</source>
         <translation>Traiter la demande</translation>
     </message>

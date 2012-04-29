@@ -44,6 +44,7 @@ const char* const HIGH                               = QT_TRANSLATE_NOOP("tkCons
 const char* const MODIFY                             = QT_TRANSLATE_NOOP("tkConstants", "modify");
 const char* const SELECTOR                           = QT_TRANSLATE_NOOP("tkConstants", "Selector");
 const char* const FORMS                              = QT_TRANSLATE_NOOP("tkConstants", "Forms");
+const char* const SUBFORMS                           = QT_TRANSLATE_NOOP("tkConstants", "Subforms");
 const char* const VIEWER                             = QT_TRANSLATE_NOOP("tkConstants", "Viewer");
 const char* const SERVER                             = QT_TRANSLATE_NOOP("tkConstants", "Server");
 const char* const PACKAGE                            = QT_TRANSLATE_NOOP("tkConstants", "Package");
@@ -88,8 +89,15 @@ const char* const DATAPACK                          = QT_TRANSLATE_NOOP("tkConst
 const char* const DATAPACK_MANAGER                  = QT_TRANSLATE_NOOP("tkConstants", "Data pack manager");
 const char* const LAST_MODIFICATION                 = QT_TRANSLATE_NOOP("tkConstants", "Last modification");
 const char* const DATA_TYPE                         = QT_TRANSLATE_NOOP("tkConstants", "Data type");
+
+// DataPack types
 const char* const ZIP_CODES                         = QT_TRANSLATE_NOOP("tkConstants", "Zip codes");
 const char* const USER_DOCUMENTS                    = QT_TRANSLATE_NOOP("tkConstants", "User documents");
+const char* const FORMS_FULL_SET                    = QT_TRANSLATE_NOOP("tkConstants", "Full set of forms");
+const char* const FORMS_SUBFORMS                    = QT_TRANSLATE_NOOP("tkConstants", "Subforms");
+const char* const DISEASES_ICD                      = QT_TRANSLATE_NOOP("tkConstants", "International classification of diseases");
+const char* const DISEASES_CLASSIFICATIONS          = QT_TRANSLATE_NOOP("tkConstants", "Diseases classifications");
+const char* const VARIOUS                           = QT_TRANSLATE_NOOP("tkConstants", "Various");
 
 } // end Constants
 } // end TranslationUtils
