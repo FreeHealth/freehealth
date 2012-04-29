@@ -38,8 +38,8 @@
 /**
  * \file server.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.2
- * \date 02 Dec 2011
+ * \version 0.7.2
+ * \date 27 Apr 2012
 */
 
 namespace DataPack {
@@ -97,6 +97,7 @@ public:
     // Connection state
     void setConnected(bool connected) {m_Connected=connected;}
     bool isConnected() const {return m_Connected;}
+    bool requiereAuthentification() const;
 
     // XML Management, Description and Content
     void fromXml(const QString &fullServerConfigXml);
