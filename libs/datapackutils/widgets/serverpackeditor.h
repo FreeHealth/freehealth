@@ -69,16 +69,16 @@ public Q_SLOTS:
 private:
     void createActions();
     void createToolbar();
-    void createServerDataWidgetMapper();
+//    void createServerDataWidgetMapper();
 //    void populateServerView(const int serverId);
     void populatePackView(const int packId);
 
 private Q_SLOTS:
+    void onPackCategoriesChanged(const QModelIndex &index, const QModelIndex &previous);
     void onPackIndexActivated(const QModelIndex &index, const QModelIndex &previous);
     void serverActionTriggered(QAction *a);
     void processPacks();
-    void on_listWidgetMenu_currentRowChanged(int row);
-    void serverCurrentChanged(const QModelIndex &c, const QModelIndex &p);
+//    void serverCurrentChanged(const QModelIndex &c, const QModelIndex &p);
 
 private:
     void retranslate();
