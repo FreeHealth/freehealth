@@ -27,6 +27,7 @@ HEADERS += datapack_exporter.h \
     iserverengine.h \
     serverengines/localserverengine.h \
     serverengines/httpserverengine.h \
+    packcategoriesmodel.h \
     packmodel.h \
     servermodel.h \
     categorylistwidget.h \
@@ -51,6 +52,7 @@ SOURCES += \
     iserverengine.cpp \
     serverengines/localserverengine.cpp \
     serverengines/httpserverengine.cpp \
+    packcategoriesmodel.cpp \
     packmodel.cpp \
     servermodel.cpp \
     categorylistwidget.cpp \
