@@ -5,6 +5,8 @@ FreeMedForms
 
 ===== Bug correction =====
 
+  * Segfaulting when looking for an update over the web corrected
+  * Some related bugs with the patient's date of birth corrected
   * Installation procedure
     * Improving error detection when configuring a network client or server
   * FreeAccount
@@ -26,6 +28,8 @@ FreeMedForms
 
 ===== Corrections de bug =====
 
+  * Crash quand recherche une mise à jour sur le net corrigé
+  * Bogues liés à la date de naissance du patient corrigés
   * Procédure d'installation
     * Amélioration des détections d'erreurs lors d'une configuration réseau : client ou serveur
   * FreeAccount
