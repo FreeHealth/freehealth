@@ -46,6 +46,7 @@ public:
         ICD,
         ZipCodes,
         UserDocuments,
+        Accountancy,
         UnknownType
     };
 
