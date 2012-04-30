@@ -30,6 +30,8 @@
 #include <QPushButton>
 #include <QFrame>
 
+#include <QDebug>
+
 using namespace Utils;
 
 namespace {
@@ -53,23 +55,30 @@ const char *const BUTTON_CSS =
         "border: 1px outset #777;"
         "background: qradialgradient(cx: 0.3, cy: -0.4,"
         "fx: 0.3, fy: -0.4,"
-        "radius: 1.35, stop: 0 #fff, stop: 1 #ccc);"
+        "radius: 1.35, stop: 0 #fff, stop: 1 #eee);"
         "color: #333;"
         "%1"
-        "padding: 5px;"
-        "min-width: 80px;"
+        "padding: 3px;"
         "}"
         "QPushButton:hover {"
         "background: qradialgradient(cx: 0.4, cy: -0.1,"
         "fx: 0.4, fy: -0.1,"
-        "radius: 1.35, stop: 0 #fff, stop: 1 #ddd);"
+        "radius: 1.35, stop: 0 #fff, stop: 1 #ededed);"
         "}"
         "QPushButton:pressed {"
         "border: 1px inset #666;"
         "background: qradialgradient(cx: 0.3, cy: -0.4,"
         "fx: 0.3, fy: -0.4,"
-        "radius: 1.35, stop: 0 #fff, stop: 1 #888);"
+        "radius: 1.35, stop: 0 #fff, stop: 1 #aaa);"
         "}"
+        "QPushButton:checked {"
+        "border: 1px inset #666;"
+        "background: qradialgradient(cx: 0.3, cy: -0.4,"
+        "fx: 0.3, fy: -0.4,"
+        "radius: 1.35, stop: 0 #fff, stop: 1 #bbb);"
+        "color: darkBlue;"
+        "}"
+
         ;
 
 }
@@ -81,7 +90,7 @@ SegmentedButton::SegmentedButton(QWidget *parent) :
 {
     QHBoxLayout *lay = _buttonLayout = new QHBoxLayout(this);
     lay->setMargin(0);
-    lay->setSpacing(0);
+    lay->setSpacing(11);
     setLayout(lay);
 }
 
@@ -102,4 +111,35 @@ void SegmentedButton::setLastButton(QPushButton *but)
     but->setStyleSheet(QString(::BUTTON_CSS).arg(::LAST_BUTTON));
     _buttonLayout->addWidget(but);
     _last = but;
+}
+
+void SegmentedButton::setAutoExclusive(bool state)
+{
+    if (_first)
+        _first->setAutoExclusive(state);
+    if (_last)
+        _last->setAutoExclusive(state);
+    for(int i=0; i < _buttons.count(); ++i)
+        _buttons.at(i)->setAutoExclusive(state);
+}
+
+void SegmentedButton::computeSizes()
+{
+    // get max width
+    int width = 0;
+    if (_first)
+        width = _first->width();
+    if (_last)
+        width = qMax(width, _last->width());
+    for(int i=0; i < _buttons.count(); ++i) {
+        width = qMax(width, _buttons.at(i)->width());
+    }
+
+    // apply to all buttons
+    if (_first)
+        _first->setMinimumWidth(width);
+    if (_last)
+        _last->setMinimumWidth(width);
+    for(int i=0; i < _buttons.count(); ++i)
+        _buttons.at(i)->setMinimumWidth(width);
 }

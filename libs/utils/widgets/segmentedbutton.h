@@ -47,9 +47,9 @@ public:
     void addMiddleButton(QPushButton *but);
     void setLastButton(QPushButton *but);
 
-signals:
-    
-public slots:
+    void setAutoExclusive(bool state);
+    void computeSizes();
+
 private:
     QHBoxLayout *_buttonLayout;
     QPushButton *_first, *_last;
