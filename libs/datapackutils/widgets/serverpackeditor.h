@@ -70,15 +70,18 @@ private:
     void createActions();
     void createToolbar();
 //    void createServerDataWidgetMapper();
-//    void populateServerView(const int serverId);
     void populatePackView(const int packId);
+    void populateServerView(const int serverId);
 
 private Q_SLOTS:
+    void swithToPackView();
+    void swithToServerView();
     void onPackCategoriesChanged(const QModelIndex &index, const QModelIndex &previous);
     void onPackIndexActivated(const QModelIndex &index, const QModelIndex &previous);
     void serverActionTriggered(QAction *a);
+    void refreshPacks();
     void processPacks();
-//    void serverCurrentChanged(const QModelIndex &c, const QModelIndex &p);
+    void serverCurrentChanged(const QModelIndex &c, const QModelIndex &p);
 
 private:
     void retranslate();
