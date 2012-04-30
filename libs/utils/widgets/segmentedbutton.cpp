@@ -1,69 +1,38 @@
+/***************************************************************************
+ *  The FreeMedForms project is a set of free, open source medical         *
+ *  applications.                                                          *
+ *  (C) 2008-2012 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
+ *  All rights reserved.                                                   *
+ *                                                                         *
+ *  This program is free software: you can redistribute it and/or modify   *
+ *  it under the terms of the GNU General Public License as published by   *
+ *  the Free Software Foundation, either version 3 of the License, or      *
+ *  (at your option) any later version.                                    *
+ *                                                                         *
+ *  This program is distributed in the hope that it will be useful,        *
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
+ *  GNU General Public License for more details.                           *
+ *                                                                         *
+ *  You should have received a copy of the GNU General Public License      *
+ *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  If not, see <http://www.gnu.org/licenses/>.                            *
+ ***************************************************************************/
+/***************************************************************************
+ *   Main Developers:                                                      *
+ *       Eric MAEKER, MD <eric.maeker@gmail.com>                           *
+ *   Contributors :                                                        *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
+ ***************************************************************************/
 #include "segmentedbutton.h"
 
 #include <QHBoxLayout>
 #include <QPushButton>
 #include <QFrame>
 
+using namespace Utils;
+
 namespace {
-const char *const FRAME_CSS =
-        "QFrame {"
-        "border-bottom: 1px solid #C2C7CB;"
-//        "border-bottom-color:  #C2C7CB; /* same as the pane color */"
-        "border-top-left-radius: 4px;"
-        "border-bottom-left-radius: 4px;"
-//        "min-width: 8ex;"
-//        "padding: 2px;"
-        "}"
-        ;
-
-//const char *const FIRST_BUTTON_CSS =
-//        "QPushButton:pressed {"
-//        "background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,"
-//        "                            stop: 0 #F1F1F1, stop: 0.4 #eeeeee,"
-//        "                            stop: 0.5 #e8e8e8, stop: 1.0 #e3e3e3);"
-//        "border: 1px solid black/*#C4C4C3*/;"
-//        "border-bottom: 1px solid navy;"
-////        "border-bottom-color:  #C2C7CB; /* same as the pane color */"
-//        "border-top-left-radius: 4px;"
-//        "border-bottom-left-radius: 4px;"
-//        "min-width: 8ex;"
-//        "padding: 2px;"
-//        "}"
-////        "QPushButton:pressed {"
-////        "background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,"
-////        "                            stop: 0 #c1c1c1, stop: 0.4 #dddddd,"
-////        "                            stop: 0.5 #d8d8d8, stop: 1.0 #d3d3d3);"
-////        "border: 1px solid black/*#C4C4C3*/;"
-////        "border-bottom: 1px solid navy;"
-////        "border-top-left-radius: 4px;"
-////        "border-bottom-left-radius: 4px;"
-////        "min-width: 8ex;"
-////        "padding: 2px;"
-////        "}"
-//        "QPushButton {"
-//        "background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,"
-//        "                            stop: 0 #F5F5F5, stop: 0.4 #f0f0f0,"
-//        "                            stop: 0.5 #dfdfdf, stop: 1.0 #dbdbdb);"
-//        "border: 1px solid black/*#C4C4C3*/;"
-//        "border-bottom: 1px solid navy;"
-//        "border-top-left-radius: 4px;"
-//        "border-bottom-left-radius: 4px;"
-//        "min-width: 8ex;"
-//        "padding: 2px;"
-//        "}"
-//        ;
-
-//        "QTabBar::tab:selected, QTabBar::tab:hover {"
-//        "background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,"
-//        "                            stop: 0 #fafafa, stop: 0.4 #f4f4f4,"
-//        "                            stop: 0.5 #e7e7e7, stop: 1.0 #fafafa);"
-//        "}"
-
-//        "QTabBar::tab:selected {"
-//        "border-color: #9B9B9B;"
-//        "border-bottom-color: #C2C7CB; /* same as pane color */"
-//        "}"
-//        ;
 
 const char *const FIRST_BUTTON =
         "border-top-left-radius: 8px;"
