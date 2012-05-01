@@ -89,16 +89,15 @@ bool Translators::setPathToTranslations(const QString & path)
     if (QDir(path).exists()) {
         m_PathToTranslations = QDir::cleanPath(path);
         if (WarnTranslatorsErrors) {
-            Utils::Log::addMessage("Translators", Trans::ConstantTranslations::tkTr(Trans::Constants::SETTING_1_PATH_TO_2)
-                                    .arg(Trans::ConstantTranslations::tkTr(Trans::Constants::TRANSLATORS_TEXT),
-                                          QDir::cleanPath(path)));
+            LOG_ERROR_FOR("Translators", Trans::ConstantTranslations::tkTr(Trans::Constants::SETTING_1_PATH_TO_2)
+                .arg(Trans::ConstantTranslations::tkTr(Trans::Constants::TRANSLATORS_TEXT),
+                     QDir::cleanPath(path)));
         }
         return true;
     } else {
         if (WarnTranslatorsErrors) {
-            Utils::Log::addError("Translators", Trans::ConstantTranslations::tkTr(Trans::Constants::PATH_1_DOESNOT_EXISTS)
-                                 .arg(QDir::cleanPath(path)),
-                                 __FILE__, __LINE__);
+            LOG_ERROR_FOR("Translators", Trans::ConstantTranslations::tkTr(Trans::Constants::PATH_1_DOESNOT_EXISTS)
+                      .arg(QDir::cleanPath(path)));
         }
         return false;
     }
@@ -118,7 +117,6 @@ void Translators::changeLanguage(const QString &lang)
 {
     QString l = lang.left(2);
     QLocale::setDefault(l);
-    WARN_FUNC << lang << QLocale().languageToString(QLocale().language());
 
     // load translations
 //    if (l.toLower()=="en") {
@@ -184,10 +182,8 @@ bool Translators::addNewTranslator(const QString & fileMask, bool fromDefaultPat
             return true;
         }
     }
-    else {
-        if (WarnTranslatorsErrors) {
-            LOG(tr("WARNING: %1 can not be loaded or is already loaded.").arg(file.absoluteFilePath() + "_" + lang));
-        }
+    else if (WarnTranslatorsErrors) {
+        LOG(tr("WARNING: %1 can not be loaded or is already loaded.").arg(file.absoluteFilePath() + "_" + lang));
     }
 
     // something gone wrong so clean and exit the member
@@ -232,9 +228,9 @@ QMap<QString, QString> Translators::availableLocalesAndLanguages()
         locale.remove(0, locale.indexOf('_') + 1);
         locale.truncate(locale.lastIndexOf('.'));
         QTranslator translator;
-	translator.load(s, m_PathToTranslations);
-	QString lang = translator.translate(Trans::Constants::CONSTANTS_TR_CONTEXT, Trans::Constants::ENGLISH);
-	toReturn.insert(locale, lang);
+        translator.load(s, m_PathToTranslations);
+        QString lang = translator.translate(Trans::Constants::CONSTANTS_TR_CONTEXT, Trans::Constants::ENGLISH);
+        toReturn.insert(locale, lang);
     }
     return toReturn;
 }
