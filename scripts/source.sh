@@ -65,6 +65,7 @@ scripts/Linux \
 "
 
 RESOURCES="\
+global_resources/datapacks/appinstalled/defaultservers.txt \
 global_resources/datapacks/appinstalled/drugs/master.db \
 global_resources/datapacks/appinstalled/drugs/readme.txt \
 global_resources/doc/freeaccount \
