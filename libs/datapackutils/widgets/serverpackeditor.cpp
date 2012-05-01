@@ -577,12 +577,16 @@ void ServerPackEditor::serverCurrentChanged(const QModelIndex &c, const QModelIn
 
 void ServerPackEditor::selectedFirstRow()
 {
+    d->ui->packCategoriesView->setCurrentIndex(d->m_PackCategoriesModel->index(0,0));
     d->ui->packCategoriesView->selectionModel()->select(d->m_PackCategoriesModel->index(0,0), QItemSelectionModel::SelectCurrent);
     onPackCategoriesChanged(d->m_PackCategoriesModel->index(0,0), QModelIndex());
+    d->ui->packView->setCurrentIndex(d->m_PackModel->index(0,0));
     d->ui->packView->selectionModel()->select(d->m_PackModel->index(0,0), QItemSelectionModel::SelectCurrent);
     onPackIndexActivated(d->m_PackModel->index(0,0), QModelIndex());
     for(int i=0; i<d->m_PackCategoriesModel->rowCount(); ++i)
         d->ui->packCategoriesView->expand(d->m_PackCategoriesModel->index(i,0));
+
+    d->ui->serverListView->setCurrentIndex(d->m_serverModel->index(0,0));
     d->ui->serverListView->selectionModel()->select(d->m_serverModel->index(0,0), QItemSelectionModel::SelectCurrent);
 }
 
