@@ -385,6 +385,16 @@ bool isRunningOnFreebsd()
     return false;
 #endif
 }
+bool isLinuxIntegratedCompilation()
+{
+    if (!isRunningOnLinux() || !isRunningOnFreebsd())
+        return false;
+#ifdef LINUX_INTEGRATED
+    return true;
+#else
+    return false;
+#endif
+}
 QString uname()
 {
     QString system;
