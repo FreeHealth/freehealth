@@ -48,7 +48,6 @@
 #include <datapackutils/packmodel.h>
 #include <datapackutils/servermodel.h>
 #include <datapackutils/widgets/packwizard.h>
-#include <datapackutils/widgets/servereditordialog.h>
 
 #include <QToolBar>
 #include <QProgressDialog>
@@ -472,13 +471,7 @@ void ServerPackEditor::serverActionTriggered(QAction *a)
         int row = d->ui->serverListView->selectionModel()->currentIndex().row();
         serverManager()->removeServerAt(row);
     } else if (a==d->aServerEdit) {
-        ServerEditorDialog dlg(this);
-        dlg.exec();
-//        d->ui->stackedWidget->setCurrentWidget(d->ui->pageServers);
-//        d->processToolBar(::SERVER_MODE);
-//    } else if (a==d->aServerPackEditor) {
-//        d->ui->stackedWidget->setCurrentWidget(d->ui->pagePacks);
-//        d->processToolBar(::PACK_MODE);
+        swithToServerView();
     }
 }
 
