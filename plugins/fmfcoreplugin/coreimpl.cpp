@@ -49,8 +49,10 @@
 #include <utils/versionnumber.h>
 #include <translationutils/constanttranslations.h>
 
-#include <QtCore/QDir>
-#include <QtCore/QCoreApplication>
+#include <QDir>
+#include <QCoreApplication>
+#include <QLibraryInfo>
+#include <QTranslator>
 
 namespace Core {
 namespace Internal {
@@ -103,7 +105,14 @@ CoreImpl::CoreImpl(QObject *parent) :
     m_Translators = new Translators(this);
     m_Translators->setPathToTranslations(m_Settings->path(ISettings::TranslationsPath));
     // Qt
-    m_Translators->addNewTranslator("qt");
+    if (Utils::isLinuxIntegratedCompilation()) {
+        QTranslator qtTranslator;
+        qtTranslator.load("qt_" + QLocale::system().name(),
+                          QLibraryInfo::location(QLibraryInfo::TranslationsPath));
+        qApp->installTranslator(&qtTranslator);
+    } else {
+        m_Translators->addNewTranslator("qt");
+    }
     // Core Needed Libs
     m_Translators->addNewTranslator(Trans::Constants::CONSTANTS_TRANSLATOR_NAME);
     m_Translators->addNewTranslator("utils");
