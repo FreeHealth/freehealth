@@ -226,7 +226,7 @@ ServerPackEditor::ServerPackEditor(QWidget *parent) :
     connect(d->ui->packView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(onPackIndexActivated(QModelIndex,QModelIndex)));
     connect(d->ui->serverListView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(serverCurrentChanged(QModelIndex,QModelIndex)));
 
-
+    connect(serverManager(), SIGNAL(allServerDescriptionAvailable()), this, SLOT(selectedFirstRow()));
     // file://Users/eric/Desktop/Programmation/freemedforms/global_resources/datapacks/default/
 }
 
@@ -434,6 +434,8 @@ void ServerPackEditor::swithToServerView()
 
 void ServerPackEditor::onPackCategoriesChanged(const QModelIndex &index, const QModelIndex &)
 {
+    if (!index.isValid())
+        return;
     const QString &vendor = d->m_PackCategoriesModel->vendor(index);
     const QList<Pack::DataType> &type = d->m_PackCategoriesModel->datatype(index);
     d->m_PackModel->filter(vendor, type);
@@ -442,7 +444,8 @@ void ServerPackEditor::onPackCategoriesChanged(const QModelIndex &index, const Q
 void ServerPackEditor::onPackIndexActivated(const QModelIndex &index, const QModelIndex &previous)
 {
     Q_UNUSED(previous);
-    populatePackView(index.row());
+    if (index.isValid())
+        populatePackView(index.row());
 }
 
 void ServerPackEditor::serverActionTriggered(QAction *a)
@@ -570,6 +573,17 @@ void ServerPackEditor::serverCurrentChanged(const QModelIndex &c, const QModelIn
 {
     Q_UNUSED(p);
     populateServerView(c.row());
+}
+
+void ServerPackEditor::selectedFirstRow()
+{
+    d->ui->packCategoriesView->selectionModel()->select(d->m_PackCategoriesModel->index(0,0), QItemSelectionModel::SelectCurrent);
+    onPackCategoriesChanged(d->m_PackCategoriesModel->index(0,0), QModelIndex());
+    d->ui->packView->selectionModel()->select(d->m_PackModel->index(0,0), QItemSelectionModel::SelectCurrent);
+    onPackIndexActivated(d->m_PackModel->index(0,0), QModelIndex());
+    for(int i=0; i<d->m_PackCategoriesModel->rowCount(); ++i)
+        d->ui->packCategoriesView->expand(d->m_PackCategoriesModel->index(i,0));
+    d->ui->serverListView->selectionModel()->select(d->m_serverModel->index(0,0), QItemSelectionModel::SelectCurrent);
 }
 
 void ServerPackEditor::retranslate()
