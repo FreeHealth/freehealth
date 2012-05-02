@@ -285,10 +285,43 @@ void PatientBase::createVirtualPatient(const QString &name, const QString &secon
     }
 }
 
-//    bool isPatientExists(const QString &birthname, const QString &secondname, const QString &firstname,
-//                         const QString &gender, const QDate &dob);
+/** Return a patient uuid in the database or a QString::null. */
+QString PatientBase::patientUuid(const QString &birthname,
+                                 const QString &secondname,
+                                 const QString &firstname,
+                                 const QString &gender,
+                                 const QDate &dob) const
+{
+    using namespace Patients::Constants;
+    QHash<int, QString> where;
+    where.insert(IDENTITY_BIRTHNAME, QString("='%1'").arg(birthname));
+    where.insert(IDENTITY_FIRSTNAME, QString("='%1'").arg(firstname));
+    where.insert(IDENTITY_SECONDNAME, QString("='%1'").arg(secondname));
+    where.insert(IDENTITY_GENDER, QString("='%1'").arg(gender));
+    where.insert(IDENTITY_DOB, QString("='%1'").arg(dob.toString(Qt::ISODate)));
+    QString req = select(Table_IDENT, IDENTITY_UID, where);
+    QSqlQuery query(database());
+    if (query.exec(req)) {
+        if (query.next()) {
+            return query.value(0).toString();
+        }
+    } else {
+        LOG_QUERY_ERROR_FOR("PatientBase", query);
+    }
+    return QString::null;
+}
 
+/** Test the existence of a patient in the database. */
+bool PatientBase::isPatientExists(const QString &birthname,
+                                  const QString &secondname,
+                                  const QString &firstname,
+                                  const QString &gender,
+                                  const QDate &dob) const
+{
+    return (!patientUuid(birthname, secondname, firstname, gender, dob).isNull());
+}
 
+/** Private part of the Patients::PatientBase that creates the database. \sa Utils::Database. */
 bool PatientBase::createDatabase(const QString &connectionName , const QString &dbName,
                     const QString &pathOrHostName,
                     TypeOfAccess access, AvailableDrivers driver,
@@ -380,6 +413,7 @@ bool PatientBase::createDatabase(const QString &connectionName , const QString &
     return true;
 }
 
+/** Reconnect the database when the database server changes. \sa Core::ICore::databaseServerChanged(), Core::ISettings::databaseConnector() */
 void PatientBase::onCoreDatabaseServerChanged()
 {
     m_initialized = false;
@@ -389,6 +423,7 @@ void PatientBase::onCoreDatabaseServerChanged()
     init();
 }
 
+/** For debugging purpose */
 void PatientBase::toTreeWidget(QTreeWidget *tree)
 {
     Database::toTreeWidget(tree);
