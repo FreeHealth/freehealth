@@ -205,8 +205,7 @@ bool PatientBase::init()
     return true;
 }
 
-static inline Patients::Internal::PatientBase *patientBase()  { return Patients::Internal::PatientBase::instance(); }
-
+/** Creates a virtual patient with the specified data. Virtual patient can be hidden from the ui using a preference setting. */
 void PatientBase::createVirtualPatient(const QString &name, const QString &secondname, const QString &firstname,
                           const QString &gender, const int title, const QDate &dob,
                           const QString &country, const QString &note,
@@ -226,8 +225,8 @@ void PatientBase::createVirtualPatient(const QString &name, const QString &secon
             return;
         }
     }
-    QSqlQuery query(patientBase()->database());
-    query.prepare(patientBase()->prepareInsertQuery(Table_IDENT));
+    QSqlQuery query(database());
+    query.prepare(prepareInsertQuery(Table_IDENT));
     query.bindValue(IDENTITY_ID, QVariant());
     query.bindValue(IDENTITY_UID, uuid);
     query.bindValue(IDENTITY_LK_TOPRACT_LKID, lkid);
@@ -275,7 +274,7 @@ void PatientBase::createVirtualPatient(const QString &name, const QString &secon
         QBuffer buffer(&ba);
         buffer.open(QIODevice::WriteOnly);
         pix.save(&buffer, "PNG"); // writes image into ba in PNG format {6a247e73-c241-4556-8dc8-c5d532b8457e}
-        query.prepare(patientBase()->prepareInsertQuery(Table_PATIENT_PHOTO));
+        query.prepare(prepareInsertQuery(Table_PATIENT_PHOTO));
         query.bindValue(PHOTO_ID, QVariant());
         query.bindValue(PHOTO_UID, Utils::Database::createUid());
         query.bindValue(PHOTO_PATIENT_UID, uuid);
@@ -285,6 +284,10 @@ void PatientBase::createVirtualPatient(const QString &name, const QString &secon
         }
     }
 }
+
+//    bool isPatientExists(const QString &birthname, const QString &secondname, const QString &firstname,
+//                         const QString &gender, const QDate &dob);
+
 
 bool PatientBase::createDatabase(const QString &connectionName , const QString &dbName,
                     const QString &pathOrHostName,
