@@ -301,14 +301,15 @@ QString PatientBase::patientUuid(const QString &birthname,
     where.insert(IDENTITY_DOB, QString("='%1'").arg(dob.toString(Qt::ISODate)));
     QString req = select(Table_IDENT, IDENTITY_UID, where);
     QSqlQuery query(database());
+    QString toReturn;
     if (query.exec(req)) {
         if (query.next()) {
-            return query.value(0).toString();
+            toReturn = query.value(0).toString();
         }
     } else {
         LOG_QUERY_ERROR_FOR("PatientBase", query);
     }
-    return QString::null;
+    return toReturn;
 }
 
 /** Test the existence of a patient in the database. */
