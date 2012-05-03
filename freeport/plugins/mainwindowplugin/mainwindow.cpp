@@ -141,14 +141,6 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
     connectConfigurationActions();
     connectHelpActions();
 
-    // Creating MainWindow interface
-//    m_ui = new Internal::Ui::MainWindow();
-//    m_ui->setupUi(this);
-//    m_ui->padTextEdit->toogleToolbar(true);
-//    resize(1024, 768);
-//    m_ui->splitterMain->setSizes(QList<int>() << 150);
-//    m_ui->splitterErrors->setSizes(QList<int>() << 0 << 100);
-
     return true;
 }
 
@@ -156,8 +148,7 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
 */
 void MainWindow::extensionsInitialized()
 {
-    m_Writer = new PadTools::PadWriter(this);
-    setCentralWidget(m_Writer);
+    setCentralWidget(new QLabel("WORK IN PROGRESS..."));
 
     finishSplash(this);
     readSettings();
@@ -166,84 +157,10 @@ void MainWindow::extensionsInitialized()
 
     // Connect post core initialization
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
-
-//    m_padTools = ExtensionSystem::PluginManager::instance()->getObject<Core::IPadTools>();
-//**    m_padTools->createSyntaxHighlighter(m_ui->padTextEdit->textEdit(), m_TokenModel->tokens());
-
-//	QHBoxLayout *layout = new QHBoxLayout(m_ui->tabCalendar);
-//        Calendar::CalendarWidget *calendarWidget = new Calendar::CalendarWidget(this);
-//        calendarWidget->setModel(new Calendar::BasicCalendarModel(this));
-//        layout->addWidget(calendarWidget);
-
-//	// tmp: fill with dummy tokens
-//	m_tokens.insert("DRUG", "drug");
-//	m_tokens.insert("Q_FROM", "q_from");
-//	m_tokens.insert("Q_TO", "q_to");
-//	m_tokens.insert("Q_SCHEME", "q_scheme");
-//	m_tokens.insert("REPEATED_DAILY_SCHEME", "repeated daily scheme");
-//	m_tokens.insert("MEAL", "meal");
-//	m_tokens.insert("PERIOD", "period");
-//	m_tokens.insert("PERIOD_SCHEME", "period scheme");
-//	m_tokens.insert("D_FROM", "d_from");
-//	m_tokens.insert("D_TO", "d_to");
-//	m_tokens.insert("D_SCHEME", "d_scheme");
-//	m_tokens.insert("ROUTE", "route");
-//	m_tokens.insert("DISTRIBUTED_DAILY_SCHEME", "distributed daily scheme");
-//	m_tokens.insert("MIN_INTERVAL", "min interval");
-//	m_tokens.insert("NOTE", "note");
-
-//    m_ui->tableViewTokens->clear();
-//    m_TokenModel = new PadTools::TokenModel(this);
-//**    m_ui->tableViewTokens->setModel(m_TokenModel);
-
-//	foreach (const QString &key, m_tokens.keys()) {
-//		QTreeWidgetItem *item = new QTreeWidgetItem(QStringList() << key << m_tokens[key].toString());
-//		item->setFlags(item->flags() | Qt::ItemIsEditable);
-//		m_ui->treeWidgetTokens->addTopLevelItem(item);
-//	}
-
-//**	connect(m_ui->padTextEdit, SIGNAL(textChanged()), this, SLOT(padTextChanged()));
-//    connect(m_TokenModel, SIGNAL(tokenChanged(QString,QString)), this, SLOT(tokenChanged(QString, QString)));
-}
-
-void MainWindow::padTextChanged()
-{
-	QList<Core::PadAnalyzerError> errors;
-	// TODO : use a timer based on key strokes instead of realtime analysis
-//**    m_ui->previewTextEdit->setPlainText(m_padTools->parse(m_ui->padTextEdit->textEdit()->toPlainText(), m_TokenModel->tokens(), errors));
-
-//**	m_ui->listWidgetErrors->clear();
-	foreach (const Core::PadAnalyzerError &error, errors) {
-		switch (error.errorType()) {
-		case Core::PadAnalyzerError::Error_UnexpectedChar:
-//**			m_ui->listWidgetErrors->addItem(tr("Unexpected '%1' found at line %2 and pos %3").arg(error.errorTokens()["char"].toString()).arg(error.line()).arg(error.pos()));
-			break;
-		case Core::PadAnalyzerError::Error_CoreDelimiterExpected:
-//**			m_ui->listWidgetErrors->addItem(tr("Expected '%1' at line %2 and pos %3").arg(error.errorTokens()["char"].toString()).arg(error.line()).arg(error.pos()));
-			break;
-		}
-	}
-}
-
-void MainWindow::tokenChanged(const QString &token, const QString &value)
-{
-    refreshTokens();
-}
-
-void MainWindow::tokenItemChanged(QTreeWidgetItem *, int)
-{
-	refreshTokens();
-}
-
-void MainWindow::refreshTokens()
-{
-	padTextChanged();
 }
 
 MainWindow::~MainWindow()
 {
-//**    delete m_ui->padTextEdit;
-//**    delete m_ui;
 }
 
 void MainWindow::postCoreInitialization()

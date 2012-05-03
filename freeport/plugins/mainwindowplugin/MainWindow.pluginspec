@@ -2,12 +2,9 @@
     <vendor>FreePAD</vendor>
     <copyright>(C) 2008-2012 by Eric MAEKER, MD</copyright>
     <license>Released under GPLv3.</license>
-    <description></description>
+    <description>FreePort main window.</description>
     <url>http://www.freemedforms.com</url>
     <dependencyList>
       <dependency name="Core" version="0.0.1"/>
-      <dependency name="Printer" version="0.0.1"/>
-      <dependency name="TextEditor" version="0.0.1"/>
-      <dependency name="PadTools" version="0.0.1"/>
     </dependencyList>
 </plugin>

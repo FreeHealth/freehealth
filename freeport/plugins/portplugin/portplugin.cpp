@@ -38,6 +38,8 @@ PortPlugin::PortPlugin()
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating PortPlugin";
+    // Add Translator to the Application
+    Core::ICore::instance()->translators()->addNewTranslator("PortPlugin");
 }
 
 PortPlugin::~PortPlugin()
@@ -50,10 +52,6 @@ bool PortPlugin::initialize(const QStringList &arguments, QString *errorString)
         qWarning() << "PortPlugin::initialize";
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
-
-    // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("PortPlugin");
-
     return true;
 }
 
@@ -64,6 +62,5 @@ void PortPlugin::extensionsInitialized()
 
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 }
-
 
 Q_EXPORT_PLUGIN(PortPlugin)

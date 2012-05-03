@@ -23,10 +23,10 @@
 
 #include <qglobal.h>
 
-#if defined(FREEPAD_MAINWIN_LIBRARY)
-#define FREEPAD_MAINWIN_EXPORT Q_DECL_EXPORT
+#if defined(PORT_LIBRARY)
+#define PORT_EXPORT Q_DECL_EXPORT
 #else
-#define FREEPAD_MAINWIN_EXPORT Q_DECL_IMPORT
+#define PORT_EXPORT Q_DECL_IMPORT
 #endif
 
 #endif

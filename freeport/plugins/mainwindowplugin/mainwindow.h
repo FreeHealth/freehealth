@@ -28,12 +28,10 @@
 
 #include <mainwindowplugin/mainwindow_exporter.h>
 #include <coreplugin/imainwindow.h>
-#include <coreplugin/ipadtools.h>
 
 #include <utils/global.h>
 
 #include <QCloseEvent>
-#include <QComboBox>
 
 QT_BEGIN_NAMESPACE
 class QAction;
@@ -45,7 +43,7 @@ QT_END_NAMESPACE
  * \file mainwindow.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.1.0
- * \date 03 Jan 2011
+ * \date 03 May 2012
 */
 
 namespace PadTools {
@@ -62,7 +60,7 @@ class MainWindow;
 }  // End Ui
 }  // End Internal
 
-class FREEPAD_MAINWIN_EXPORT MainWindow: public Core::IMainWindow
+class FREEPORT_MAINWIN_EXPORT MainWindow: public Core::IMainWindow
 {
     Q_OBJECT
     enum { MaxRecentFiles = 10 };
@@ -79,7 +77,6 @@ public:
     void writeSettings();
     void createStatusBar();
     void changeFontTo(const QFont &font);
-
 
 public Q_SLOTS:
     void postCoreInitialization();
@@ -98,25 +95,11 @@ public Q_SLOTS:
     void aboutToShowRecentFiles();
     void openRecentFile();
 
-private slots:
-	void padTextChanged();
-    void tokenChanged(const QString &token, const QString &value);
-	void tokenItemChanged(QTreeWidgetItem *item, int column);
-
 protected:
     void closeEvent( QCloseEvent *event );
     void changeEvent(QEvent *event);
     bool eventFilter(QObject *obj, QEvent *event);
 
-//public:
-//    Internal::Ui::MainWindow *m_ui;
-
-private:
-//	Core::IPadTools *m_padTools;
-    PadTools::TokenModel *m_TokenModel;
-    PadTools::PadWriter *m_Writer;
-
-	void refreshTokens();
 };
 
 } // End Core

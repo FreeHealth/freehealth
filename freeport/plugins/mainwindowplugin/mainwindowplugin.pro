@@ -1,10 +1,10 @@
 TEMPLATE = lib
 TARGET = MainWindow
 
-DEFINES += FREEPAD_MAINWIN_LIBRARY
-FREEPAD = 1
+DEFINES += FREEPORT_MAINWIN_LIBRARY
+FREEPORT = 1
 
-BUILD_PATH_POSTFIXE = FreePad
+BUILD_PATH_POSTFIXE = FreePort
 
 include( ../../../plugins/fmf_plugins.pri)
 include( mainwindowplugin_dependencies.pri )
@@ -31,9 +31,9 @@ FORMS += mainwindow.ui \
 #    preferences/useroptionspage.ui
 
 # Translators
-TRANSLATIONS += $${SOURCES_TRANSLATIONS_PATH}/freepad_mainwindow_fr.ts \
-                $${SOURCES_TRANSLATIONS_PATH}/freepad_mainwindow_de.ts \
-                $${SOURCES_TRANSLATIONS_PATH}/freepad_mainwindow_es.ts
+TRANSLATIONS += $${SOURCES_TRANSLATIONS_PATH}/freeport_mainwindow_fr.ts \
+                $${SOURCES_TRANSLATIONS_PATH}/freeport_mainwindow_de.ts \
+                $${SOURCES_TRANSLATIONS_PATH}/freeport_mainwindow_es.ts
 
 OTHER_FILES += MainWindow.pluginspec
 

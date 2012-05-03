@@ -10,9 +10,12 @@ BUILD_PATH_POSTFIXE = FreePort
 INCLUDEPATH += ../
 DEPENDPATH += ../
 
-#include(../../../plugins/portplugin/shared_sources.pri)
+include( ../../../plugins/fmf_plugins.pri)
+include( portplugin_dependencies.pri )
 
 HEADERS += portplugin.h \
+    port_exporter.h \
+    constants.h
 
 SOURCES += portplugin.cpp \
 

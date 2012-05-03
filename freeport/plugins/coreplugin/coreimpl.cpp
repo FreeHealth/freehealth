@@ -209,8 +209,8 @@ bool CoreImpl::initialize(const QStringList &arguments, QString *errorString)
 #endif
         // update some preferences ?
         bool yes = Utils::yesNoMessageBox(
-                QCoreApplication::translate("Core", "You are updating FreePad, do you want to update your personnal preferences ?"),
-                QCoreApplication::translate("Core", "With the new version some preferences should be outdated. Answering yes will allow FreePad to update your personnal preferences."));
+                QCoreApplication::translate("Core", "You are updating FreePort, do you want to update your personnal preferences ?"),
+                QCoreApplication::translate("Core", "With the new version some preferences should be outdated. Answering yes will allow FreePort to update your personnal preferences."));
         if (yes) {
             m_UpdatePreferences = true;
         }
