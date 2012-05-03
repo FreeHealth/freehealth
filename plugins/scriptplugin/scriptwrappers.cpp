@@ -182,8 +182,8 @@ QString FormItemScriptWrapper::type() const
 QVariant FormItemScriptWrapper::currentValue() const
 {
     if (m_Item) {
-        if (m_Item->itemDatas()) {
-            return m_Item->itemDatas()->data(0, Form::IFormItemData::CalculationsRole);
+        if (m_Item->itemData()) {
+            return m_Item->itemData()->data(0, Form::IFormItemData::CalculationsRole);
         }
     }
     return QVariant(QString());
@@ -192,8 +192,8 @@ QVariant FormItemScriptWrapper::currentValue() const
 QVariant FormItemScriptWrapper::currentText() const
 {
     if (m_Item) {
-        if (m_Item->itemDatas()) {
-            return m_Item->itemDatas()->data(0, Qt::DisplayRole);
+        if (m_Item->itemData()) {
+            return m_Item->itemData()->data(0, Qt::DisplayRole);
         }
     }
     return QVariant();
@@ -202,8 +202,8 @@ QVariant FormItemScriptWrapper::currentText() const
 void FormItemScriptWrapper::setCurrentText(const QVariant &text) const
 {
     if (m_Item) {
-        if (m_Item->itemDatas()) {
-            m_Item->itemDatas()->setData(0, text);
+        if (m_Item->itemData()) {
+            m_Item->itemData()->setData(0, text);
         }
     }
 }
@@ -211,8 +211,8 @@ void FormItemScriptWrapper::setCurrentText(const QVariant &text) const
 bool FormItemScriptWrapper::isChecked() const
 {
     if (m_Item) {
-        if (m_Item->itemDatas()) {
-            return (m_Item->itemDatas()->data(0, Qt::CheckStateRole).toInt()==Qt::Checked);
+        if (m_Item->itemData()) {
+            return (m_Item->itemData()->data(0, Qt::CheckStateRole).toInt()==Qt::Checked);
         }
     }
     return false;
@@ -221,11 +221,11 @@ bool FormItemScriptWrapper::isChecked() const
 void FormItemScriptWrapper::setChecked(const bool check)
 {
     if (m_Item) {
-        if (m_Item->itemDatas()) {
+        if (m_Item->itemData()) {
             if (check)
-                m_Item->itemDatas()->setData(0, 2, Qt::CheckStateRole);
+                m_Item->itemData()->setData(0, 2, Qt::CheckStateRole);
             else
-                m_Item->itemDatas()->setData(0, 0, Qt::CheckStateRole);
+                m_Item->itemData()->setData(0, 0, Qt::CheckStateRole);
         }
     }
 }
@@ -233,8 +233,8 @@ void FormItemScriptWrapper::setChecked(const bool check)
 QVariant FormItemScriptWrapper::currentUuid() const
 {
     if (m_Item) {
-        if (m_Item->itemDatas()) {
-            QVariant result = m_Item->itemDatas()->data(Form::IFormItemData::ID_CurrentUuid);
+        if (m_Item->itemData()) {
+            QVariant result = m_Item->itemData()->data(Form::IFormItemData::ID_CurrentUuid);
             return result;
         }
     }
@@ -244,8 +244,8 @@ QVariant FormItemScriptWrapper::currentUuid() const
 void FormItemScriptWrapper::setCurrentUuid(const QVariant &uuid)
 {
     if (m_Item) {
-        if (m_Item->itemDatas()) {
-            if (!m_Item->itemDatas()->setData(Form::IFormItemData::ID_CurrentUuid, uuid))
+        if (m_Item->itemData()) {
+            if (!m_Item->itemData()->setData(Form::IFormItemData::ID_CurrentUuid, uuid))
                 LOG_ERROR("Unable to setCurrentUuid, FormItem " + m_Item->uuid());
         }
     }

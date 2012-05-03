@@ -1189,7 +1189,7 @@ void BaseRadio::retranslate()
 
 void BaseRadio::buttonClicked(QAbstractButton *radio)
 {
-    formItem()->itemDatas()->setData(0, radio->property("id"), Form::IFormItemData::CalculationsRole);
+    formItem()->itemData()->setData(0, radio->property("id"), Form::IFormItemData::CalculationsRole);
 }
 
 ////////////////////////////////////////// ItemData /////////////////////////////////////////////

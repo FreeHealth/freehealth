@@ -469,9 +469,9 @@ FormItem::~FormItem()
         delete m_Scripts;
         m_Scripts = 0;
     }
-    if (m_ItemDatas) {
-        delete m_ItemDatas;
-        m_ItemDatas = 0;
+    if (m_ItemData) {
+        delete m_ItemData;
+        m_ItemData = 0;
     }
 }
 
@@ -596,8 +596,8 @@ void FormMain::languageChanged()
 void FormMain::clear()
 {
     foreach(FormItem *it, this->flattenFormItemChildren()) {
-        if (it->itemDatas())
-            it->itemDatas()->clear();
+        if (it->itemData())
+            it->itemData()->clear();
     }
 }
 
