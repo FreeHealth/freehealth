@@ -223,9 +223,9 @@ void DayRangeHeader::paintEvent(QPaintEvent *) {
 		}
 		r.adjust(0, 2, 0, 0);  // +2 is a vertical correction to not be stucked to the top line
 		if (m_rangeWidth == 1)
-			painter.drawText(r, Qt::AlignHCenter | Qt::AlignTop, date.toString("dddd d/M").toLower());
+            painter.drawText(r, Qt::AlignHCenter | Qt::AlignTop, QLocale().toString(date, "dddd d/M").toLower());
 		else
-			painter.drawText(r, Qt::AlignHCenter | Qt::AlignTop, date.toString("ddd d/M").toLower());
+            painter.drawText(r, Qt::AlignHCenter | Qt::AlignTop, QLocale().toString(date, "ddd d/M").toLower());
 		painter.setPen(oldPen);
 		date = date.addDays(1);
 	}

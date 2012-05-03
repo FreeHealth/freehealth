@@ -58,8 +58,8 @@ void MonthHeader::paintEvent(QPaintEvent *) {
 
 	int containWidth = rect().width();
 	for (int i = 0; i < 7; ++i) {
-		QRect r(QPoint((i * containWidth) / 7, 0), QPoint(((i + 1) * containWidth) / 7 - 1 + 2, rect().height())); // +2 is a vertical correction to not be stucked to the top line
-		painter.drawText(r, Qt::AlignHCenter | Qt::AlignTop, QDate::shortDayName(i + 1));
+        QRect r(QPoint((i * containWidth) / 7, 0), QPoint(((i + 1) * containWidth) / 7 - 1 + 2, rect().height())); // +2 is a vertical correction to not be stucked to the top line
+        painter.drawText(r, Qt::AlignHCenter | Qt::AlignTop, QLocale().toString(QDate(2012, 05, 07 + i), "ddd"));
 	}
 }
 
@@ -110,9 +110,9 @@ void MonthBody::paintBody(QPainter *painter, const QRect &visibleRect) {
 
 		QString text;
 		if (day.day() == 1)
-			text = day.toString(tr("d MMM"));
+            text = QLocale().toString(day, tr("d MMM"));
 		else
-			text = day.toString(tr("d"));
+            text = QLocale().toString(day, tr("d"));
 
 		if (day.month() != firstDate().month())
 			pen.setColor(QColor(180, 180, 180));

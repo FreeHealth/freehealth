@@ -218,7 +218,7 @@ QString IdentityFormWidget::printableHtml(bool withValues) const
                        "</tbody>"
                        "</table>")
                 .arg(n)
-                .arg(dob.toString(QLocale().dateFormat(QLocale::LongFormat)))
+                .arg(QLocale().toString(dob, QLocale().dateFormat(QLocale::LongFormat)))
                 .arg(age)
                 .arg(patient()->data(Core::IPatient::Gender).toString())
                 .arg(patient()->data(Core::IPatient::FullAddress).toString())
