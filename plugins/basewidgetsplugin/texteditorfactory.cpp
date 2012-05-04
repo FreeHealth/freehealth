@@ -145,6 +145,9 @@ TextEditorForm::TextEditorForm(Form::FormItem *formItem, QWidget *parent) :
         m_Text->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
         m_Text->setMinimumHeight(1000);
     }
+    if (!options.contains("TabKeepsFocus", Qt::CaseInsensitive)) {
+        m_Text->textEdit()->setTabChangesFocus(true);
+    }
 
     // create item data
     TextEditorData *data = new TextEditorData(formItem);
