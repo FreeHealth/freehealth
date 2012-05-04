@@ -121,7 +121,7 @@ void DocumentPrinter::prepareHeader(Print::Printer *p, const int papers) const
         // replace user's tokens
         user()->replaceTokens(header);
     }
-    Utils::replaceToken(header, Core::Constants::TOKEN_DATE, QDate::currentDate().toString(QLocale().dateFormat()));
+    Utils::replaceToken(header, Core::Constants::TOKEN_DATE, QLocale().toString(QDate::currentDate(), QLocale().dateFormat()));
     // replace patient's tokens
     if (patient()) {
         patient()->replaceTokens(header);

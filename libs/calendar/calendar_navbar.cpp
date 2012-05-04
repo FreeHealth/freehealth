@@ -185,8 +185,8 @@ QToolButton *CalendarNavbar::createCurrentDateViewButton() {
     // Add month menu
     mMonths = generalMenu->addMenu(tkTr(Trans::Constants::MONTHS));
     for(int i = 1 ; i < 13; ++i) {
-        QString t = QDate::longMonthName(i);
-        t = t.left(1).toUpper()+t.mid(1);
+        QString t = QLocale().toString(QDate(2012, i, 1), "MMMM");
+        t = Utils::firstLetterUpperCase(t);
         a = mMonths->addAction(t);
         a->setData(i);
     }
@@ -208,8 +208,8 @@ QToolButton *CalendarNavbar::createCurrentDateViewButton() {
         endWeek = date.addDays(6);
         a = menu->addAction(QString("%1: %2 - %3")
                              .arg(i)
-                             .arg(date.toString(dateFormat))
-                             .arg(endWeek.toString(dateFormat)));
+                             .arg(QLocale().toString(date, dateFormat))
+                             .arg(QLocale().toString(endWeek, dateFormat)));
         a->setData(date);
         date = date.addDays(7);
     }
@@ -257,7 +257,7 @@ void CalendarNavbar::refreshInfos() {
 	switch (m_viewType){
 	case View_Day:
 //		m_dateLabel->setText(m_firstDate.toString());
-                m_currentDateViewButton->setText(m_firstDate.toString());
+                m_currentDateViewButton->setText(QLocale().toString(m_firstDate));
 		break;
 	case View_Week:
 //		m_dateLabel->setText(getDateIntervalString());
@@ -265,7 +265,7 @@ void CalendarNavbar::refreshInfos() {
                 break;
 	case View_Month:
 //		m_dateLabel->setText(m_firstDate.toString("MMMM yyyy"));
-                m_currentDateViewButton->setText(m_firstDate.toString("MMMM yyyy"));
+                m_currentDateViewButton->setText(QLocale().toString(m_firstDate, "MMMM yyyy"));
                 break;
 	default:; // should never happends
 	}
@@ -379,15 +379,15 @@ QString CalendarNavbar::getDateIntervalString() {
 	QDate lastDate;
 	switch (m_viewType) {
 	case View_Day:
-		return m_firstDate.toString();
+        return QLocale().toString(m_firstDate);
 	case View_Week:
 		lastDate = m_firstDate.addDays(6);
 		if (m_firstDate.month() != lastDate.month() && m_firstDate.year() != lastDate.year())
-			return QString("%1 - %2").arg(m_firstDate.toString(tr("d MMM yyyy"))).arg(lastDate.toString(tr("d MMM yyyy")));
+            return QString("%1 - %2").arg(QLocale().toString(m_firstDate, tr("d MMM yyyy"))).arg(QLocale().toString(lastDate, tr("d MMM yyyy")));
 		else if (m_firstDate.month() != lastDate.month())
-			return QString("%1 - %2").arg(m_firstDate.toString(tr("d MMM"))).arg(lastDate.toString(tr("d MMM yyyy")));
+            return QString("%1 - %2").arg(QLocale().toString(m_firstDate, tr("d MMM"))).arg(QLocale().toString(lastDate, tr("d MMM yyyy")));
 		else
-			return QString("%1 - %2").arg(m_firstDate.toString(tr("d"))).arg(lastDate.toString(tr("d MMM yyyy")));
+            return QString("%1 - %2").arg(QLocale().toString(m_firstDate, tr("d"))).arg(QLocale().toString(lastDate, tr("d MMM yyyy")));
 	case View_Month:
 //			return randomDate.addDays(- randomDate.day() + 1);
 	default: // should never happend
@@ -411,8 +411,8 @@ void CalendarNavbar::changeEvent(QEvent *e)
         mMonths->clear();
         mMonths->setTitle(Utils::firstLetterUpperCase(tkTr(Trans::Constants::MONTHS)));
         for(int i = 1 ; i < 13; ++i) {
-            QString t = QDate::longMonthName(i);
-            t = t.left(1).toUpper()+t.mid(1);
+            QString t = QLocale().toString(QDate(2012, i, 1), "MMMM");
+            t = Utils::firstLetterUpperCase(t);
             QAction *a = mMonths->addAction(t);
             a->setData(i);
         }

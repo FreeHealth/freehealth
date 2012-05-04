@@ -8,6 +8,7 @@ FreeMedForms
 
 ===== Bug correction =====
 
+  * Date translations are now connected to the application language (not the system langugage)
   * Avoid duplicates during patient creation
   * Translations problem on Linux corrected
   * Segfaulting when looking for an update over the web corrected
@@ -37,6 +38,7 @@ FreeMedForms
 
 ===== Corrections de bug =====
 
+  * Les traductions des dates sont connectés au langage de l'application et non au langage du système uniquement)
   * Evite la création de doublons lors de la création de patients
   * Problème de traductions avec les binaires Linux corrigé
   * Crash quand recherche une mise à jour sur le net corrigé

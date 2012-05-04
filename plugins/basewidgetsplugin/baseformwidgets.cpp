@@ -542,11 +542,11 @@ bool BaseFormData::setData(const int ref, const QVariant &data, const int role)
         break;
     }
     m_Form->m_EpisodeDate->setToolTip(QString("<p align=\"right\">%1&nbsp;-&nbsp;%2<br /><span style=\"color:gray;font-size:9pt\">%3</span></p>")
-                                       .arg(m_Data.value(ID_EpisodeDate).toDate().toString(QLocale().dateFormat(QLocale::ShortFormat)))
+                                      .arg(QLocale().toString(m_Data.value(ID_EpisodeDate).toDate(),QLocale::LongFormat).replace(" ","&nbsp;"))
                                        .arg(m_Data.value(ID_EpisodeLabel).toString().replace(" ", "&nbsp;"))
                                        .arg(m_Data.value(ID_UserName).toString().replace(" ", "&nbsp;")));
     m_Form->m_EpisodeLabel->setToolTip(QString("<p align=\"right\">%1&nbsp;-&nbsp;%2<br /><span style=\"color:gray;font-size:9pt\">%3</span></p>")
-                                       .arg(m_Data.value(ID_EpisodeDate).toDate().toString(QLocale().dateFormat(QLocale::ShortFormat)))
+                                       .arg(QLocale().toString(m_Data.value(ID_EpisodeDate).toDate(),QLocale::LongFormat).replace(" ","&nbsp;"))
                                        .arg(m_Data.value(ID_EpisodeLabel).toString().replace(" ", "&nbsp;"))
                                        .arg(m_Data.value(ID_UserName).toString().replace(" ", "&nbsp;")));
     return true;
@@ -2071,7 +2071,7 @@ QString BaseDate::printableHtml(bool withValues) const
                        "</tr>"
                        "</tbody>"
                        "</table>")
-                .arg(m_FormItem->spec()->label()).arg(m_Date->date().toString(getDateFormat(m_FormItem)));
+                .arg(m_FormItem->spec()->label()).arg(QLocale().toString(m_Date->date(), getDateFormat(m_FormItem)).replace(" ","&nbsp;"));
     }
     return content;
 }

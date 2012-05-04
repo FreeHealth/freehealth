@@ -39,12 +39,14 @@
 
 #include <translationutils/constanttranslations.h>
 #include <utils/log.h>
+#include <utils/global.h>
 
 #include <QTranslator>
 #include <QFileInfo>
 #include <QDir>
 #include <QLocale>
 #include <QApplication>
+#include <QLibraryInfo>
 
 using namespace Core;
 
@@ -162,16 +164,22 @@ bool Translators::addNewTranslator(const QString & fileMask, bool fromDefaultPat
     QTranslator *t = new QTranslator(qApp);
     QString lang = QLocale().name().left(2).toLower();
     QString path;
+    if (fileMask.compare("qt", Qt::CaseInsensitive) == 0) {
+        if (Utils::isLinuxIntegratedCompilation() || Utils::isRunningOnLinux() || Utils::isRunningOnFreebsd())
+            path = QLibraryInfo::location(QLibraryInfo::TranslationsPath);
+    }
     QFileInfo file(fileMask);
 
     // manage path
-    if (fromDefaultPath)
-        path = m_PathToTranslations;
-    else
-        path = file.absolutePath();
+    if (path.isEmpty()) {
+        if (fromDefaultPath)
+            path = m_PathToTranslations;
+        else
+            path = file.absolutePath();
+    }
 
     // if translator loads
-    if (t->load(file.fileName() + "_" + lang, path )) {
+    if (t->load(file.fileName() + "_" + lang, path)) {
         // add it to the map and the application
         if (!m_Translators.contains(QDir::cleanPath(fileMask))) {
             m_Translators.insert(QDir::cleanPath(fileMask) , t);

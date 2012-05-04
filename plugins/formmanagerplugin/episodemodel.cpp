@@ -938,8 +938,8 @@ QVariant EpisodeModel::data(const QModelIndex &item, int role) const
             if (episode) {
                 QHash<QString, QString> tokens;
                 tokens.insert(Constants::T_LABEL, episode->data(EpisodeData::Label).toString());
-                tokens.insert(Constants::T_SMALLDATE, episode->data(EpisodeData::UserDate).toDate().toString(settings()->value(Constants::S_EPISODEMODEL_SHORTDATEFORMAT, "dd MM yyyy").toString()));
-                tokens.insert(Constants::T_FULLDATE, episode->data(EpisodeData::UserDate).toDateTime().toString(settings()->value(Constants::S_EPISODEMODEL_LONGDATEFORMAT, "dd MM yyyy").toString()));
+                tokens.insert(Constants::T_SMALLDATE, QLocale().toString(episode->data(EpisodeData::UserDate).toDate(), settings()->value(Constants::S_EPISODEMODEL_SHORTDATEFORMAT, tkTr(Trans::Constants::DATEFORMAT_FOR_MODEL)).toString()));
+                tokens.insert(Constants::T_FULLDATE, QLocale().toString(episode->data(EpisodeData::UserDate).toDate(), settings()->value(Constants::S_EPISODEMODEL_SHORTDATEFORMAT, tkTr(Trans::Constants::DATEFORMAT_FOR_MODEL)).toString()));
                 QString s = settings()->value(Constants::S_EPISODELABELCONTENT).toString();
                 Utils::replaceTokens(s, tokens);
                 return s;
@@ -983,10 +983,10 @@ QVariant EpisodeModel::data(const QModelIndex &item, int role) const
         case Label:
             if (episode)
                 return QString("<p align=\"right\">%1&nbsp;-&nbsp;%2<br /><span style=\"color:gray;font-size:9pt\">%3</span></p>")
-                        .arg(episode->data(EpisodeData::UserDate).toDate().toString(settings()->value(Constants::S_EPISODEMODEL_LONGDATEFORMAT, "dd MMM yyyy").toString()).replace(" ", "&nbsp;"))
+                        .arg(QLocale().toString(episode->data(EpisodeData::UserDate).toDate(), settings()->value(Constants::S_EPISODEMODEL_SHORTDATEFORMAT, tkTr(Trans::Constants::DATEFORMAT_FOR_MODEL)).toString()).replace(" ", "&nbsp;"))
                         .arg(episode->data(EpisodeData::Label).toString().replace(" ", "&nbsp;"))
                         .arg(user()->value(Core::IUser::FullName).toString() + "<br/>" +
-                             tr("Created: ") +  episode->data(EpisodeData::CreationDate).toDateTime().toString(settings()->value(Constants::S_EPISODEMODEL_LONGDATEFORMAT, "dd MMM yyyy").toString()));
+                             tr("Created: ") +  QLocale().toString(episode->data(EpisodeData::CreationDate).toDate(), settings()->value(Constants::S_EPISODEMODEL_LONGDATEFORMAT, tkTr(Trans::Constants::DATEFORMAT_FOR_MODEL)).toString()));
             if (form)
                 return form->spec()->label();
             break;

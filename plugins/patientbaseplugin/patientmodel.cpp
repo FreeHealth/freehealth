@@ -387,9 +387,9 @@ QVariant PatientModel::data(const QModelIndex &index, int role) const
             QModelIndex idx = d->m_SqlPatient->index(index.row(), Constants::IDENTITY_DOB);
             QDate dob = d->m_SqlPatient->data(idx).toDate();
             if (role==Qt::DisplayRole) {
-                return dob.toString(Trans::Constants::DATEFORMAT_FOR_EDITOR);
+                return QLocale().toString(dob, tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR));
             } else if (role==Qt::ToolTipRole) {
-                return QString("%1; %2").arg(dob.toString(QLocale().dateFormat(QLocale::LongFormat))).arg(MedicalUtils::readableAge(dob));
+                return QString("%1; %2").arg(QLocale().toString(dob, QLocale().dateFormat(QLocale::LongFormat))).arg(MedicalUtils::readableAge(dob));
             }
             return dob;
             break;
@@ -494,7 +494,7 @@ QVariant PatientModel::data(const QModelIndex &index, int role) const
         switch (index.column()) {
         case Core::IPatient::DateOfBirth:
         case Core::IPatient::DateOfDeath:
-            return r.toDate().toString(tkTr(Trans::Constants::DATEFORMAT_FOR_MODEL));
+            return QLocale().toString(r.toDate(), tkTr(Trans::Constants::DATEFORMAT_FOR_MODEL));
         default:
             return r;
         }
