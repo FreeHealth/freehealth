@@ -477,11 +477,11 @@ FormItem::~FormItem()
 
 void FormItem::addExtraData(const QString &id, const QString &data)
 {
-    if (m_ExtraDatas.keys().indexOf(id, Qt::CaseInsensitive) != -1) {
-        QString add = m_ExtraDatas.value(id) + ";" + data;
-        m_ExtraDatas.insert(id, add);
+    if (m_ExtraData.keys().indexOf(id, Qt::CaseInsensitive) != -1) {
+        QString add = m_ExtraData.value(id) + ";" + data;
+        m_ExtraData.insert(id, add);
     } else {
-        m_ExtraDatas.insert(id,data);
+        m_ExtraData.insert(id,data);
     }
 }
 
@@ -489,8 +489,8 @@ void FormItem::addExtraData(const QString &id, const QString &data)
 QStringList FormItem::getOptions() const
 {
     QStringList l;
-    l = m_ExtraDatas.value("options").split(";", QString::SkipEmptyParts);
-    l += m_ExtraDatas.value("option").split(";", QString::SkipEmptyParts);
+    l = m_ExtraData.value("options").split(";", QString::SkipEmptyParts);
+    l += m_ExtraData.value("option").split(";", QString::SkipEmptyParts);
     return l;
 }
 

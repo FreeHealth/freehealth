@@ -106,8 +106,8 @@ public:
 
     // FormIO extra datas
     virtual void addExtraData(const QString &id, const QString &data);
-    virtual QHash<QString,QString> extraDatas() const {return m_ExtraDatas;}
-    virtual void clearExtraDatas() {m_ExtraDatas.clear();}
+    virtual QHash<QString,QString> extraDatas() const {return m_ExtraData;}
+    virtual void clearExtraDatas() {m_ExtraData.clear();}
     virtual QStringList getOptions() const;
 
     // Data representation
@@ -123,7 +123,7 @@ private:
     Form::FormItemValues *m_Values;
     Form::IFormWidget *m_FormWidget;
     Form::IFormItemData *m_ItemData;
-    QHash<QString, QString> m_ExtraDatas;
+    QHash<QString, QString> m_ExtraData;
     int m_PatientData;
 };
 /** Returns the first level Form::FormItem children. */
