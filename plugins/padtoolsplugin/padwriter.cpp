@@ -141,6 +141,8 @@ PadWriter::PadWriter(QWidget *parent) :
     d->_tokenModel = new TokenModel(this);
     d->ui->treeView->setModel(d->_tokenModel);
     d->ui->treeView->hideColumn(1);
+    expandTokenTreeView();
+    connect(d->_tokenModel, SIGNAL(modelReset()), this, SLOT(expandTokenTreeView()));
 
     // Create PadDocument object
     d->_pad = new PadDocument();
@@ -295,6 +297,12 @@ QString PadWriter::htmlResult() const
 QString PadWriter::rawSource() const
 {
     return d->ui->rawSource->toPlainText();
+}
+
+void PadWriter::expandTokenTreeView()
+{
+    for(int i=0; i < d->_tokenModel->rowCount(); ++i)
+        d->ui->treeView->expand(d->_tokenModel->index(i,0));
 }
 
 void PadWriter::analyseRawSource()
