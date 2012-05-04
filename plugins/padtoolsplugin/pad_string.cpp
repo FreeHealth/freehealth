@@ -69,6 +69,14 @@ void PadString::run(QMap<QString,QVariant> &tokens, PadDocument *document)
     setOutputEnd(outputStart() + rawLength());
 }
 
+void PadString::toOutput(Core::ITokenPool *pool, PadDocument *document)
+{
+    Q_UNUSED(pool);
+    // Compute output positions
+    setOutputStart(start() + document->positionTranslator().deltaForSourcePosition(start()));
+    setOutputEnd(outputStart() + rawLength());
+}
+
 void PadString::toRaw(PadDocument *document)
 {
     Q_UNUSED(document);

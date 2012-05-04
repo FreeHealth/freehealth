@@ -39,7 +39,9 @@
 using namespace PadTools;
 using namespace Internal;
 
+namespace {
 static inline Core::ITokenPool *tokenPool() {return Core::ICore::instance()->padTools()->tokenPool();}
+}
 
 namespace PadTools {
 namespace Internal {
@@ -174,6 +176,10 @@ QMap<QString, QVariant> &TokenModel::tokens()
 }
 // END OBSOLETE
 
+Core::ITokenPool *TokenModel::tokenPool() const
+{
+    return ::tokenPool();
+}
 
 void TokenModel::addToken(Core::IToken *token)
 {

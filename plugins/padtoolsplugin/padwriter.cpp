@@ -314,7 +314,8 @@ void PadWriter::analyseRawSource()
     // Start analyze && token replacement
     PadAnalyzer().analyze(d->ui->rawSource->document(), d->_pad);
     d->_pad->setTokenModel(d->_tokenModel);
-    d->_pad->run(d->_tokenModel->tokens());
+//    d->_pad->run(d->_tokenModel->tokens());
+    d->_pad->toOutput(d->_tokenModel->tokenPool());
 
     d->ui->listWidgetErrors->clear();
     foreach (const Core::PadAnalyzerError &error, errors) {

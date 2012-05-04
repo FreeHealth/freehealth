@@ -39,9 +39,9 @@ class QTextEdit;
 
 /**
  * \file ipadtools.h
- * \author Guillaume DENRY <guillaume.denry@gmail.com>
- * \version 0.5.0
- * \date 13 Jan 2011
+ * \author Eric Maeker <eric.maeker@gmail.com>, Guillaume DENRY <guillaume.denry@gmail.com>
+ * \version 0.8.0
+ * \date 05 May 2012
  */
 
 namespace Core {

@@ -77,10 +77,13 @@ QVariant PatientModelWrapper::data(const QModelIndex &index, int role) const
     if (!index.isValid())
         return QVariant();
 
-    if (role != Qt::DisplayRole && role != Qt::EditRole)
-        return QVariant();
+    if (role == Qt::DisplayRole || role == Qt::EditRole) {
+        switch (index.column()) {
+        case Core::IPatient::FullName: return "Patient.FullName";
+        }
+    }
 
-    return index.row();
+    return index.column();
 }
 
 QVariant PatientModelWrapper::data(int column) const
