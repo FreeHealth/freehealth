@@ -147,6 +147,7 @@ const char * const  ICONTABLESPLITCELLS =   "table-split-cells.png";
 // menu Help
 const char * const  ICONSEARCH =       "search.png";
 const char * const  ICONPREFERENCES =  "configure.png";
+const char * const  ICONPLUGIN =       "plugin.png";
 const char * const  ICONHELP =         "help.png";
 const char * const  ICONABOUT =        "help.png";
 const char * const  ICONHELPTEXT =     "helptext.png";

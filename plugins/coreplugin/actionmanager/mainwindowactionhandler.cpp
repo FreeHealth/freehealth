@@ -370,7 +370,7 @@ void MainWindowActionHandler::createGeneralActions(const int actions)
     if (actions & Core::MainWindowActions::A_PluginsPreferences) {
         a = aGeneralPlugsPrefs = new QAction(this);
         a->setObjectName("aGeneralPlugsPrefs");
-        a->setIcon(theme()->icon(Constants::ICONPREFERENCES));
+        a->setIcon(theme()->icon(Constants::ICONPLUGIN));
         cmd = actionManager()->registerAction(a, Constants::A_PLUGINS_PREFERENCES, ctx);
         cmd->setDefaultKeySequence(QKeySequence::SelectAll);
         cmd->setTranslations(Trans::Constants::PLUGINS_CATEGORY);
@@ -398,7 +398,7 @@ void MainWindowActionHandler::createGeneralActions(const int actions)
     }
     if (actions & Core::MainWindowActions::A_PluginsAbout) {
         a = aGeneralPlugsAbout = new QAction(this);
-        a->setIcon(theme()->icon(Constants::ICONHELP));
+        a->setIcon(theme()->icon(Constants::ICONPLUGIN));
         cmd = actionManager()->registerAction(a, Constants::A_ABOUTPLUGINS, ctx);
         cmd->setTranslations(Trans::Constants::ABOUTPLUGINS_TEXT);
         menu->addAction(cmd, group);
@@ -986,7 +986,7 @@ void MainWindowActionHandler::createConfigurationActions(int actions)
     if (actions & Core::MainWindowActions::A_PluginsPreferences) {
         a = aPlugsPrefs = new QAction(this);
         a->setObjectName("aPlugsPrefs");
-        a->setIcon(theme()->icon(Constants::ICONPREFERENCES));
+        a->setIcon(theme()->icon(Constants::ICONPLUGIN));
         cmd = actionManager()->registerAction(a, Constants::A_PLUGINS_PREFERENCES, ctx);
         cmd->setDefaultKeySequence(QKeySequence::SelectAll);
         cmd->setTranslations(Trans::Constants::PLUGINS_CATEGORY);
