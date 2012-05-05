@@ -26,25 +26,40 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "alertcore.h"
+#include "alertbase.h"
+#include "alertmanager.h"
+
+#include <QUuid>
+#include <QString>
 
 using namespace Alert;
 
-AlertCore * AlertCore::m_singleton = NULL;
+AlertCore *AlertCore::m_singleton = 0;
 
-AlertCore::AlertCore(QObject * parent){}
+AlertCore *AlertCore::instance(QObject *parent)
+{
+    if (!m_singleton)
+        m_singleton = new AlertCore(parent);
+    return m_singleton;
+}
+
+AlertCore::AlertCore(QObject *parent) :
+    QObject(parent),
+    m_alertBase(0),
+    m_alertManager(0)
+{
+}
 
 AlertCore::~AlertCore()
 {
-    if (m_singleton)
-    {
-    	  m_singleton = NULL;
-        }
+    // QObject manages children deletion so no need to delete the singleton
 }
 
 void AlertCore::initialize()
 {
-    m_alertBase = AlertBase::singleton();
-    m_alertManager = AlertManager::singleton();
+    // Create all instance
+    m_alertBase = new AlertBase(this);
+    m_alertManager = new AlertManager(this);
 }
 
 QString AlertCore::setAlertUuid()

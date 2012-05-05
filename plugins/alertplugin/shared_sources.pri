@@ -7,6 +7,7 @@ include(../fmf_plugins.pri)
 include(alertplugin_dependencies.pri)
 
 HEADERS += \
+    $${PWD}/alertplugin.h \
     $${PWD}/alertbase.h \
     $${PWD}/alertcore.h \
     $${PWD}/alertmanager.h \
@@ -15,6 +16,7 @@ HEADERS += \
     $${PWD}/xmlalert.h
 
 SOURCES += \
+    $${PWD}/alertplugin.cpp \
     $${PWD}/alertbase.cpp \
     $${PWD}/alertcore.cpp \
     $${PWD}/alertmanager.cpp \

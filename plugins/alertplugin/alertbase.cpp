@@ -33,22 +33,16 @@
 
 using namespace Alert;
 
-AlertBase * AlertBase::m_singleton = NULL;
 
-AlertBase::AlertBase(QObject * parent)
+AlertBase::AlertBase(QObject *parent)
 {
-    if (!connectToAlertDatabase())
-    {
-    	  qWarning() << __FILE__ << QString::number(__LINE__) << "Unable to connect to alertbase !" ;
-        }
+    if (!connectToAlertDatabase()) {
+        qWarning() << __FILE__ << QString::number(__LINE__) << "Unable to connect to alertbase !" ;
+    }
 }
 
 AlertBase::~AlertBase()
 {
-    if (m_singleton)
-    {
-    	  m_singleton = NULL;
-        }
 }
 
 bool AlertBase::connectToAlertDatabase()

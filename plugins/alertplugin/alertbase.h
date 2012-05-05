@@ -34,33 +34,23 @@
 #include <QDebug>
 
 namespace Alert {
+class AlertCore;
 
 class AlertBase:public QObject
 {
-	Q_OBJECT
-	private:
-		AlertBase(QObject * parent = 0);
-		~AlertBase();
-        public:
-            static AlertBase * singleton()
-            {
-                if (m_singleton == NULL)
-                {
-                	  m_singleton = new AlertBase();
-                	  qWarning() << __FILE__ << QString::number(__LINE__) << "AlertBase is created" ;
-                    }
-                else
-                {
-                	qWarning() << __FILE__ << QString::number(__LINE__) << "AlertBase is already opened" ;
-                    }
-                return m_singleton;
-            }
-            QSqlDatabase m_db;
-            
-	private:
-	    static AlertBase * m_singleton;
-	    bool connectToAlertDatabase();
-	    bool setTables();
+    Q_OBJECT
+    friend class Alert::AlertCore;
+
+protected:
+    AlertBase(QObject * parent = 0);
+
+public:
+    ~AlertBase();
+
+private:
+    QSqlDatabase m_db;
+    bool connectToAlertDatabase();
+    bool setTables();
 };
 
 }  // Alert

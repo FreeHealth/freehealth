@@ -36,25 +36,25 @@ namespace Alert {
 class XmlAlert : public QObject
 {
     Q_OBJECT
-    public:
-        XmlAlert(QObject * parent = 0);
-        ~XmlAlert();
+public:
+    XmlAlert(QObject * parent = 0);
+    ~XmlAlert();
 };
 
 class XmlWriter : public QXmlStreamWriter
 {
     //Q_OBJECT
-    public:
-        XmlWriter();
-        ~XmlWriter();
+public:
+    XmlWriter();
+    ~XmlWriter();
 };
 
 class XmlReader : public QXmlStreamReader
 {
     //Q_OBJECT
-    public:
-        XmlReader();
-        ~XmlReader();
+public:
+    XmlReader();
+    ~XmlReader();
 };
 
 }  // Alert

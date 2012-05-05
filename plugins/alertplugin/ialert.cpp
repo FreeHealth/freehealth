@@ -30,9 +30,3 @@
 
 using namespace Alert;
 
-IAlert * IAlert::instance()
-{
-    IAlert * Ptr = AlertCore::singleton();
-    return Ptr;
-}
-

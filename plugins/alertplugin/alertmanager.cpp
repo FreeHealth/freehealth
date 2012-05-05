@@ -30,11 +30,9 @@
 
 #include <QTextDocument>
 
-AlertManager * AlertManager::m_singleton = NULL;
-
 using namespace Alert;
 
-AlertManager::AlertManager(QObject * parent)
+AlertManager::AlertManager(QObject *parent)
 {
     m_type = 0;
     //ALL
@@ -43,10 +41,6 @@ AlertManager::AlertManager(QObject * parent)
 
 AlertManager::~AlertManager()
 {
-    if (m_singleton)
-    {
-    	  m_singleton = NULL;
-        }
 }
 
 void AlertManager::showAlertsIHM()

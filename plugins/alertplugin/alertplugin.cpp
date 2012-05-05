@@ -24,6 +24,8 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "alertplugin.h"
+#include "alertcore.h"
+#include "ialert.h"
 
 #include <utils/log.h>
 
@@ -37,8 +39,9 @@
 #include <QtCore/QtPlugin>
 #include <QDebug>
 
-using namespace Empty;
+using namespace Alert;
 
+static inline Core::IUser *user()  { return Core::ICore::instance()->user(); }
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline void messageSplash(const QString &s) {theme()->messageSplashScreen(s); }
 
@@ -86,7 +89,7 @@ void AlertPlugin::extensionsInitialized()
 
     // If you want to stop the plugin initialization if there are no identified user
     // Just uncomment the following code
-//    // no user -> end
+    // no user -> end
 //    if (!user())
 //        return;
 //    if (user()->uuid().isEmpty())
@@ -95,6 +98,9 @@ void AlertPlugin::extensionsInitialized()
     messageSplash(tr("Initializing AlertPlugin..."));
 
     // At this point, user is connected
+    Alert::AlertCore *core = Alert::AlertCore::instance(this);
+    core->initialize();
+    core->showIHMaccordingToType(IAlert::PATIENT_PRIMARY_PREVENTION_ALERTS);//NOTES
 
     // Add here the DataPackPlugin::IDataPackListener objects to the pluginmanager object pool
 
