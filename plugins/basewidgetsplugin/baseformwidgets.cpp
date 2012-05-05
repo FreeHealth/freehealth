@@ -345,6 +345,7 @@ BaseForm::BaseForm(Form::FormItem *formItem, QWidget *parent) :
     m_Header->toolButton->addAction(aScreenshot);
     connect(m_Header->toolButton, SIGNAL(triggered(QAction*)), this, SLOT(triggered(QAction*)));
     m_Header->toolButton->setDefaultAction(aScreenshot);
+    m_Header->toolButton->setFocusPolicy(Qt::ClickFocus);
 
     // create main widget
     QWidget *mainWidget = 0;
