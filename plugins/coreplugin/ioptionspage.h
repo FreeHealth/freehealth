@@ -34,7 +34,7 @@
  * \version 0.6.0
  * \date 12 Jul 2011
  * \class Core::IOptionsPage
- * \brief Represents an application preferences page. Derive objects from this interface and set it inside the PluginManager oject pool to get the page in the Core::SettingsDialog.
+ * \brief Represents an application preferences page. Derive objects from this interface and set it inside the PluginManager object pool to get the page in the Core::SettingsDialog.
 */
 
 namespace Core {

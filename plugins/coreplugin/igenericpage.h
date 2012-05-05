@@ -34,7 +34,7 @@
  * \version 0.6.0
  * \date 12 Jul 2011
  * \class Core::IGenericPage
-* \brief Represents an application preferences page. Derive objects from this interface and set it inside the PluginManager oject pool to get a paged widget Core::PageWidget.
+* \brief Represents an application preferences page. Derive objects from this interface and set it inside the PluginManager object pool to get a paged widget Core::PageWidget.
 */
 
 namespace Core {

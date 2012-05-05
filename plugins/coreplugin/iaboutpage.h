@@ -39,7 +39,7 @@
  * \version 0.4.0
  * \date 13 June 2010
  * \class Core::IAboutPage
- * \brief Derive object from this interface and set it inside the PluginManager oject pool to get your page in the Core::AboutDialog.
+ * \brief Derive object from this interface and set it inside the PluginManager object pool to get your page in the Core::AboutDialog.
 */
 
 namespace Core {
