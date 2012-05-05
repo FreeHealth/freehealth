@@ -4,6 +4,7 @@
 #include <QXmlStreamReader>
 #include <QXmlStreamWriter>
 
+namespace Alert {
 
 class XmlAlert : public QObject
 {
@@ -28,6 +29,8 @@ class XmlReader : public QXmlStreamReader
         XmlReader();
         ~XmlReader();
 };
+
+}  // Alert
 
 #endif
 

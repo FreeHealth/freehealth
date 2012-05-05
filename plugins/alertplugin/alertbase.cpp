@@ -4,6 +4,8 @@
 #include <QStringList>
 #include <QSqlQuery>
 
+using namespace Alert;
+
 AlertBase * AlertBase::m_singleton = NULL;
 
 AlertBase::AlertBase(QObject * parent)

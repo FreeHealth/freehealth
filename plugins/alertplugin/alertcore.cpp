@@ -1,5 +1,7 @@
 #include "alertcore.h"
 
+using namespace Alert;
+
 AlertCore * AlertCore::m_singleton = NULL;
 
 AlertCore::AlertCore(QObject * parent){}

@@ -5,7 +5,7 @@
 #include <QUuid>
 #include <QString>
 
-namespace Alert{
+namespace Alert {
 
 class IAlert : public QObject
 {

@@ -6,6 +6,8 @@
 #include <QObject>
 #include <QDebug>
 
+namespace Alert {
+
 class AlertBase:public QObject
 {
 	Q_OBJECT
@@ -33,6 +35,8 @@ class AlertBase:public QObject
 	    bool connectToAlertDatabase();
 	    bool setTables();
 };
+
+}  // Alert
 
 #endif
 

@@ -4,6 +4,7 @@
 #include "ui_ShowAlertsWidget.h"
 #include <QWidget>
 
+namespace Alert {
 
 class ShowAlerts : public QWidget, public Ui::ShowAlertsWidget
 {
@@ -13,6 +14,7 @@ class ShowAlerts : public QWidget, public Ui::ShowAlertsWidget
         ~ShowAlerts();
 };
 
+}  // Alert
 
 #endif
 

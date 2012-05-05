@@ -17,6 +17,8 @@
 #include <QVariant>
 #include <QVector>
 
+namespace Alert {
+
 class AlertManager : public QObject
 {
 	Q_OBJECT
@@ -71,6 +73,8 @@ class AlertManager : public QObject
 	    //items
 	    void setRowOfItems(QVector<QVariant> datas);
 };
+
+}  // Alert
 
 #endif
 

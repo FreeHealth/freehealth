@@ -9,7 +9,7 @@
 #include <QObject>
 #include <QDebug>
 
-using namespace Alert;
+namespace Alert {
 
 class AlertCore : public IAlert
 {
@@ -40,6 +40,8 @@ class AlertCore : public IAlert
          AlertBase * m_alertBase;
          AlertManager * m_alertManager;
 };
+
+}  // Alert
 
 #endif
 

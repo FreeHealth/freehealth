@@ -1,5 +1,7 @@
 #include "xmlalert.h"
 
+using namespace Alert;
+
 XmlAlert::XmlAlert(QObject * parent)
 {}
 
