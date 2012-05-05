@@ -9,6 +9,7 @@ global_resources/*.ini
 *~
 *bak
 *bkup
+*.autosave
 
 # QtCreator files
 *.pro.user
