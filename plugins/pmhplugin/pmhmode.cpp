@@ -116,93 +116,13 @@ const char * const TREEVIEW_SHEET =
         ;
 }
 
-//namespace PMH {
-//namespace Internal {
-//PmhItemDelegate::PmhItemDelegate(QObject *parent) :
-//        QStyledItemDelegate(parent)
-//{
-//}
-
-//void PmhItemDelegate::drawHovered()
-//{
-//}
-
-////void PmhItemDelegate::setPmhCategoryModel(PmhCategoryModel *model)
-////{
-////    m_PmhModel = model;
-////}
-
-////void PmhItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
-////{
-////    if (option.state & QStyle::State_MouseOver) {
-////        if ((QApplication::mouseButtons() & Qt::LeftButton) == 0)
-////            pressedIndex = QModelIndex();
-////        QBrush brush = option.palette.alternateBase();
-////        if (index == pressedIndex)
-////            brush = option.palette.dark();
-////        painter->fillRect(option.rect, brush);
-////    }
-
-////    // If item is PMHx -> draw all children
-////    if (m_PmhModel->isPmhx(index)) {
-////        for(int i = 0; i < m_PmhModel->rowCount(); ++i) {
-////            paint()
-////        }
-////    }
-////    // If parent item is PMHx -> draw it
-
-////    QModelIndex pmhParent = index;
-////    while (m_PmhModel->isPmhx(pmhParent)) {
-////        pmhParent = pmhParent.parent();
-////    }
-
-////    QStyledItemDelegate::paint(painter, option, index);
-
-////    if (index.column()==EpisodeModel::EmptyColumn1 && option.state & QStyle::State_MouseOver) {
-////        QIcon icon;
-////        if (option.state & QStyle::State_Selected) {
-////            if (m_EpisodeModel->isEpisode(index)) {
-////                icon = theme()->icon(Core::Constants::ICONVALIDATELIGHT);
-////            } else {
-////                // test the form to be unique or multiple episode
-////                if (m_EpisodeModel->isUniqueEpisode(index) && m_EpisodeModel->rowCount(index) == 1)
-////                    return;
-////                if (m_EpisodeModel->isNoEpisode(index))
-////                    return;
-////                icon = theme()->icon(Core::Constants::ICONADDLIGHT);
-////            }
-////        } else {
-////            if (m_EpisodeModel->isEpisode(index)) {
-////                icon = theme()->icon(Core::Constants::ICONVALIDATEDARK);
-////            } else {
-////                // test the form to be unique or multiple episode
-////                if (m_EpisodeModel->isUniqueEpisode(index) && m_EpisodeModel->rowCount(index) == 1)
-////                    return;
-////                if (m_EpisodeModel->isNoEpisode(index))
-////                    return;
-////                icon = theme()->icon(Core::Constants::ICONADDDARK);
-////            }
-////        }
-
-////        QRect iconRect(option.rect.right() - option.rect.height(),
-////                       option.rect.top(),
-////                       option.rect.height(),
-////                       option.rect.height());
-
-////        icon.paint(painter, iconRect, Qt::AlignRight | Qt::AlignVCenter);
-////    }
-////}
-//}
-//}
-
-
 PmhModeWidget::PmhModeWidget(QWidget *parent) :
         PmhContextualWidget(parent), ui(new Ui::PmhModeWidget), m_EditButton(0)
 {
     ui->setupUi(this);
     ui->pmhViewer->setEditMode(PmhViewer::ReadOnlyMode);
     ui->treeViewLayout->setMargin(0);
-    this->layout()->setMargin(0);
+    layout()->setMargin(0);
 
     ui->treeView->setActions(0);
     ui->treeView->setCommands(QStringList()
@@ -213,7 +133,6 @@ PmhModeWidget::PmhModeWidget(QWidget *parent) :
     ui->treeView->setModel(catModel());
     ui->treeView->header()->hide();
     ui->treeView->setStyleSheet(::TREEVIEW_SHEET);
-//    ui->treeView->installEventFilter(this);
 
     // Actions connected in local widget context
     Core::Command *cmd = 0;
@@ -227,9 +146,9 @@ PmhModeWidget::PmhModeWidget(QWidget *parent) :
     ui->buttonBox->button(QDialogButtonBox::Save)->setEnabled(false);
     ui->buttonBox->button(QDialogButtonBox::Cancel)->setEnabled(false);
 
-    ui->treeView->hideColumn(PmhCategoryModel::Id);
-    ui->treeView->hideColumn(PmhCategoryModel::Type);
-    ui->treeView->hideColumn(PmhCategoryModel::EmptyColumn);
+    for(int i=0; i < catModel()->columnCount(); ++i)
+        ui->treeView->hideColumn(i);
+    ui->treeView->showColumn(PmhCategoryModel::Label);
     ui->treeView->header()->setStretchLastSection(false);
     ui->treeView->header()->setResizeMode(PmhCategoryModel::Label, QHeaderView::Stretch);
 
@@ -266,6 +185,7 @@ int PmhModeWidget::currentSelectedCategory() const
     return -1;
 }
 
+
 void PmhModeWidget::currentChanged(const QModelIndex &current, const QModelIndex &previous)
 {
     Q_UNUSED(previous);
@@ -273,13 +193,16 @@ void PmhModeWidget::currentChanged(const QModelIndex &current, const QModelIndex
         return;
 
     // No active patient ?
-    if (patient()->uuid().isEmpty()) {
+    if (patient()->uuid().isEmpty())
         return;
-    }
 
-    ui->stackedWidget->setCurrentIndex(0);
-
-    if (catModel()->isForm(current)) {
+    if (catModel()->isSynthesis(current)) {
+        ui->pmhSynthesisBrowser->setHtml(catModel()->synthesis());
+        ui->stackedWidget->setCurrentWidget(ui->pageSynthesis);
+    } else if (catModel()->isCategory(current)) {
+        ui->pmhSynthesisBrowser->setHtml(catModel()->synthesis(current));
+        ui->stackedWidget->setCurrentWidget(ui->pageSynthesis);
+    } else if (catModel()->isForm(current)) {
         // Show the form's widget
         const QString &formUid = catModel()->index(current.row(), PmhCategoryModel::Id, current.parent()).data().toString();
         if (m_FormUid_StackId.keys().contains(formUid)) {
@@ -297,8 +220,10 @@ void PmhModeWidget::currentChanged(const QModelIndex &current, const QModelIndex
         catModel()->activateFormEpisode(current);
 
     } else if (catModel()->isPmhx(current)) {
+        ui->stackedWidget->setCurrentWidget(ui->pageEditor);
         ui->pmhViewer->setPmhData(catModel()->pmhDataforIndex(current));
     }
+
     ui->scrollArea->horizontalScrollBar()->setValue(0);
     ui->scrollArea->verticalScrollBar()->setValue(0);
 }
@@ -375,9 +300,12 @@ void PmhModeWidget::removeItem()
 void PmhModeWidget::onPatientChanged()
 {
     ui->treeView->expandAll();
-    for(int i = 1; i < ui->stackedWidget->count(); ++i) {
+    for(int i = 0; i < ui->stackedWidget->count(); ++i) {
         // Remove all form's widgets
-        ui->stackedWidget->removeWidget(ui->stackedWidget->widget(i));
+        QWidget *w = ui->stackedWidget->widget(i);
+        if (w == ui->pageEditor || w == ui->pageSynthesis)
+            continue;
+        ui->stackedWidget->removeWidget(w);
     }
     m_FormUid_StackId.clear();
 }
@@ -415,33 +343,6 @@ void PmhModeWidget::changeEvent(QEvent *e)
         break;
     }
 }
-
-
-//static void drawItemHovered(const QModelIndex &index, QTreeView *view)
-//{
-//    QHoverEvent *e = new QHoverEvent(QEvent::HoverMove, view->visualRect(index).center(), QPoint(0, 0));
-//    qApp->sendEvent(view, e);
-//    qApp->processEvents();
-////    for(int i = 0;)
-//}
-
-//bool PmhModeWidget::eventFilter(QObject *o, QEvent *e)
-//{
-//    if (o==ui->treeView && e->type()==QEvent::HoverMove) {
-//        QHoverEvent* h = static_cast<QHoverEvent*>(e);
-//        QModelIndex parent = ui->treeView->indexAt(h->pos());
-//        if (catModel()->isPmhx(parent)) {
-//            // find the first parent
-//            while (catModel()->isPmhx(parent.parent())) {
-//                parent = parent.parent();
-//            }
-//            drawItemHovered(parent, ui->treeView);
-//            qWarning() << "hover" << parent.data().toString();
-//            return true;
-//        }
-//    }
-//    return false;
-//}
 
 
 PmhMode::PmhMode(QObject *parent) :

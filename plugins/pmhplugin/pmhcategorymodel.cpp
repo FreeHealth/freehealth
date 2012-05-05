@@ -231,8 +231,9 @@ class PmhCategoryModelPrivate
 {
 public:
     PmhCategoryModelPrivate(PmhCategoryModel *parent) :
-            m_Root(0),
-            q(parent)
+        m_Root(0),
+        _synthesis(0),
+        q(parent)
     {
         clearTree();
     }
@@ -416,7 +417,18 @@ public:
             // Get all categories from database
             m_Cats.clear();
             m_CategoryToItem.clear();
-            m_Cats = base()->getPmhCategory();
+            if (!_synthesis) {
+                _synthesis = new Category::CategoryItem;
+                _synthesis->setData(Category::CategoryItem::DbOnly_Id, -2);
+                _synthesis->setData(Category::CategoryItem::DbOnly_LabelId, -1);
+                _synthesis->setData(Category::CategoryItem::DbOnly_ParentId, -3);
+                _synthesis->setData(Category::CategoryItem::DbOnly_Mime, -1);
+                _synthesis->setData(Category::CategoryItem::ThemedIcon, Core::Constants::ICONPATIENTSYNTHESIS);
+                _synthesis->setData(Category::CategoryItem::SortId, -1);
+                _synthesis->setLabel("Synthesis", Trans::Constants::ALL_LANGUAGE);
+            }
+            m_Cats << _synthesis;
+            m_Cats << base()->getPmhCategory();
         }
         // Recreate the category tree
         foreach(Category::CategoryItem *cat, base()->createCategoryTree(m_Cats)) {
@@ -447,6 +459,9 @@ public:
     QHash<Category::CategoryItem *, TreeItem *> m_CategoryToItem;
     QHash<PmhData *, TreeItem *> m_PmhToItems;
     QMultiHash<Category::CategoryItem *, PmhData *> m_Cat_Pmhs;
+    Category::CategoryItem *_synthesis;
+    QString _htmlSynthesis;
+
 
 private:
     PmhCategoryModel *q;
@@ -482,6 +497,7 @@ void PmhCategoryModel::refreshFromDatabase()
     d->m_PmhToItems.clear();
     d->m_CategoryToItem.clear();
     d->m_Cats.clear();
+    d->_htmlSynthesis.clear();
     d->clearTree();
     d->getDataFromDatabase();
     reset();
@@ -524,12 +540,29 @@ QModelIndex PmhCategoryModel::parent(const QModelIndex &index) const
     return createIndex(parentItem->childNumber(), 0, parentItem);
 }
 
+int PmhCategoryModel::pmhCount(const QModelIndex &parent) const
+{
+    if (!parent.isValid())
+        return 0;
+    TreeItem *item = d->getItem(parent);
+    int n = 0;
+    if (item->isCategory()) {
+        for(int i=0; i < item->childCount(); ++i) {
+            n += pmhCount(index(i,0,parent));
+        }
+    } else if (item->isPmh() || item->isForm()) {
+        ++n;
+    }
+    return n;
+}
+
 int PmhCategoryModel::rowCount(const QModelIndex &parent) const
 {
     TreeItem *item = d->getItem(parent);
-    if (item) {
+    if (item->isForm())
+        return 0;
+    if (item)
         return item->childCount();
-    }
     return 0;
 }
 
@@ -565,8 +598,12 @@ QVariant PmhCategoryModel::data(const QModelIndex &index, int role) const
     case Qt::DisplayRole :
         {
             if (index.column()==Label) {
-                if (it->isCategory())
-                    return it->label();// + " " + QString::number(it->pmhCategory()->sortId());
+                if (it->isCategory()) {
+                    if (it->pmhCategory() == d->_synthesis)
+                        return tkTr(Trans::Constants::PATIENT_SYNTHESIS);
+                    else
+                        return it->label();// + " " + QString::number(it->pmhCategory()->sortId());
+                }
                 return it->label();
             } else if (index.column()==Id) {
                 if (it->isCategory()) {
@@ -650,6 +687,7 @@ QVariant PmhCategoryModel::data(const QModelIndex &index, int role) const
             }
             if (!it->icon().isNull())
                 return it->icon();
+            break;
         }
     }
 
@@ -671,9 +709,9 @@ bool PmhCategoryModel::setData(const QModelIndex &index, const QVariant &value, 
         return false;
 
     if (role==Qt::EditRole || role == Qt::DisplayRole) {
-//        it->pmhCategory()->clearLabels();
         it->pmhCategory()->setLabel(value.toString());
         it->setLabel(value.toString());
+        d->_htmlSynthesis.clear();
         Q_EMIT dataChanged(index, index);
     }
 
@@ -760,6 +798,7 @@ bool PmhCategoryModel::removeRows(int row, int count, const QModelIndex &parent)
     }
 //    qWarning() << "afterRemoveRows";
 //    d->m_Root->warn();
+    d->_htmlSynthesis.clear();
     return true;
 }
 
@@ -790,7 +829,7 @@ bool PmhCategoryModel::addPmhData(PmhData *pmh)
 
         QModelIndex pmhOldIndex = indexForPmhData(pmh);
 
-        qWarning() << oldItem->label() << pmhOldIndex;
+//        qWarning() << oldItem->label() << pmhOldIndex;
 
         beginInsertRows(newParentIndex, rowCount(newParentIndex), rowCount(newParentIndex));
         TreeItem *item = new TreeItem;
@@ -806,6 +845,7 @@ bool PmhCategoryModel::addPmhData(PmhData *pmh)
 
         // Send to database
         base()->savePmhData(pmh);
+        d->_htmlSynthesis.clear();
 
         return true;
     } else {
@@ -829,6 +869,7 @@ bool PmhCategoryModel::addPmhData(PmhData *pmh)
         TreeItem *item = new TreeItem;
         d->pmhToItem(pmh, item, rowCount(newParentIndex));
         endInsertRows();
+        d->_htmlSynthesis.clear();
     }
     return true;
 }
@@ -895,6 +936,17 @@ bool PmhCategoryModel::isForm(const QModelIndex &index) const
         return true; // root is a category
     TreeItem *it = d->getItem(index);
     return it->isForm();
+}
+
+/** Return true if the \e index represents synthesis item. */
+bool PmhCategoryModel::isSynthesis(const QModelIndex &item) const
+{
+    if (!item.isValid())
+        return false; // root is a category
+    TreeItem *it = d->getItem(item);
+    if (it->isCategory())
+        return (it->pmhCategory() == d->_synthesis);
+    return false;
 }
 
 /** Returns the related Category::CategoryItem pointer related to the QModelIndex \e item. Warning, the pointer should not be deleted. */
@@ -1024,6 +1076,7 @@ void PmhCategoryModel::addCategory(Category::CategoryItem *cat, int row, const Q
         Q_EMIT layoutChanged();
 //        reset();
     }
+    d->_htmlSynthesis.clear();
 }
 
 /** Update a Category::CategoryItem in the model and in the database. \sa PMH::PmhCore::saveCategory(), PMH::PmhBase::savePmhCategory()*/
@@ -1035,6 +1088,7 @@ void PmhCategoryModel::updateCategory(Category::CategoryItem *category)
         return;
     item->setLabel(category->label());
     base()->savePmhCategory(category);
+    d->_htmlSynthesis.clear();
     Q_EMIT dataChanged(cat, cat);
 }
 
@@ -1042,6 +1096,63 @@ void PmhCategoryModel::updateCategory(Category::CategoryItem *category)
 QString PmhCategoryModel::mime() const
 {
     return Constants::CATEGORY_MIME;
+}
+
+QString PmhCategoryModel::indexToHtml(const QModelIndex &index, int indent) const
+{
+    QString html;
+    if (isSynthesis(index))
+        return QString();
+
+    if (isCategory(index)) {
+        int _rowCount = rowCount(index);
+        int _pmhCount = pmhCount(index);
+        if (!_pmhCount)
+            return QString();
+        html = QString("<p style=\"margin:0px 0px 0px %1px\"><span style=\"font-weight:bold;\">%2 (%3)</span><br />")
+                .arg(indent*10)
+                .arg(index.data(Qt::DisplayRole).toString()).arg(_pmhCount);
+        for(int i=0; i < _rowCount; ++i) {
+            html += indexToHtml(this->index(i, 0, index), indent+2);
+        }
+        html += "</p>";
+    } else if (isPmhx(index)) {
+        QString id;
+        for(int i=0; i < indent; ++i)
+            id += "&nbsp;&nbsp;";
+        html += QString("•&nbsp;%1<br />").arg(index.data(Qt::ToolTipRole).toString().replace("<br />","; "));
+    } else if (isForm(index)) {
+        html = QString("<p style=\"margin:0px 0px 0px %1px\">%2<br />")
+                .arg(indent*10)
+                .arg(formForIndex(index)->printableHtml());
+    }
+    return html;
+}
+
+QString PmhCategoryModel::synthesis(const QModelIndex &parent) const
+{
+    if (parent==QModelIndex() || isSynthesis(parent)) {
+        if (d->_htmlSynthesis.isEmpty()) {
+            d->_htmlSynthesis ="<html><style>p{margin:0 0 0 0}</style><body>";
+            d->_htmlSynthesis += QString("<p align=center style=\"font-weight:bold;font-size:16pt\">%1<hr/></p>").arg(tr("Patient PMHx synthesis"));
+            for(int i=0; i < rowCount(parent); ++i) {
+                d->_htmlSynthesis += indexToHtml(index(i, 0, parent));
+            }
+            d->_htmlSynthesis += "</body></html>";
+        }
+        return d->_htmlSynthesis;
+    } else if (isCategory(parent)) {
+        QString html ="<html><style>p{margin:0 0 0 0}</style><body>";
+        html += QString("<p align=center style=\"font-weight:bold;font-size:16pt\">%1<br />%2<hr/></p>")
+                .arg(tr("Patient PMHx synthesis"))
+                .arg(data(parent).toString());
+        for(int i=0; i < rowCount(parent); ++i) {
+            html += indexToHtml(index(i, 0, parent));
+        }
+        html += "</body></html>";
+        return html;
+    }
+    return QString::null;
 }
 
 /** Update the model when the current patient changes. */
@@ -1052,6 +1163,7 @@ void PmhCategoryModel::patientChanged()
     d->m_Cat_Pmhs.clear();
     d->m_PmhToItems.clear();
     d->m_CategoryToItem.clear();
+    d->_htmlSynthesis.clear();
     for(int i=0; i < d->m_Cats.count(); ++i) {
         d->m_Cats.at(i)->clearContentItems();
     }
@@ -1073,6 +1185,7 @@ void PmhCategoryModel::updateCategoryLabel(const Category::CategoryItem *categor
     if (!item)
         return;
     item->setLabel(category->label());
+    d->_htmlSynthesis.clear();
     Q_EMIT dataChanged(cat, cat);
 }
 
@@ -1086,4 +1199,5 @@ void PmhCategoryModel::retranslate()
         QModelIndex idx = indexForCategory(i.key());
         Q_EMIT dataChanged(idx,idx);
     }
+    d->_htmlSynthesis.clear();
 }

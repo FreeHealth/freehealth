@@ -64,13 +64,18 @@ using namespace Trans::ConstantTranslations;
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 static inline PMH::PmhCore *pmhCore() { return PMH::PmhCore::instance(); }
 
-
 namespace PMH {
 namespace Internal {
 
 class PmhViewerPrivate {
 public:
-    PmhViewerPrivate(PmhViewer *parent) : ui(0), m_Pmh(0), m_ShowPatient(false), q(parent) {}
+    PmhViewerPrivate(PmhViewer *parent) :
+        ui(0),
+        m_Pmh(0),
+        m_ShowPatient(false),
+        q(parent)
+    {}
+
     ~PmhViewerPrivate()
     {
         delete ui; ui=0;

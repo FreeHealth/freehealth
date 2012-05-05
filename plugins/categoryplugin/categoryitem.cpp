@@ -224,13 +224,14 @@ bool CategoryItem::setLabel(const QString &label, const QString &lang)
 QString CategoryItem::label(const QString &lang) const
 {
     if (lang.isEmpty() || (!d->m_Labels.keys().contains(lang))) {
-        QString t = d->m_Labels.value(QLocale().name().left(2));
+        const QString &lang = QLocale().name().left(2);
+        QString t = d->m_Labels.value(lang, QString::null);
         if (t.isEmpty()) {
-            t = d->m_Labels.value(Trans::Constants::ALL_LANGUAGE);
+            t = d->m_Labels.value(Trans::Constants::ALL_LANGUAGE, QString::null);
         }
         return t;
     }
-    return d->m_Labels.value(lang);
+    return d->m_Labels.value(lang, QString::null);
 }
 
 /** \brief Return all available languages for the label of this CategoryItem. */
