@@ -231,8 +231,9 @@ class PmhCategoryModelPrivate
 {
 public:
     PmhCategoryModelPrivate(PmhCategoryModel *parent) :
-            m_Root(0),
-            q(parent)
+        m_Root(0),
+        _synthesis(0),
+        q(parent)
     {
         clearTree();
     }
@@ -416,7 +417,18 @@ public:
             // Get all categories from database
             m_Cats.clear();
             m_CategoryToItem.clear();
-            m_Cats = base()->getPmhCategory();
+            if (!_synthesis) {
+                _synthesis = new Category::CategoryItem;
+                _synthesis->setData(Category::CategoryItem::DbOnly_Id, -2);
+                _synthesis->setData(Category::CategoryItem::DbOnly_LabelId, -1);
+                _synthesis->setData(Category::CategoryItem::DbOnly_ParentId, -3);
+                _synthesis->setData(Category::CategoryItem::DbOnly_Mime, -1);
+                _synthesis->setData(Category::CategoryItem::ThemedIcon, Core::Constants::ICONPATIENTSYNTHESIS);
+                _synthesis->setData(Category::CategoryItem::SortId, -1);
+                _synthesis->setLabel("Synthesis", Trans::Constants::ALL_LANGUAGE);
+            }
+            m_Cats << _synthesis;
+            m_Cats << base()->getPmhCategory();
         }
         // Recreate the category tree
         foreach(Category::CategoryItem *cat, base()->createCategoryTree(m_Cats)) {
@@ -447,6 +459,7 @@ public:
     QHash<Category::CategoryItem *, TreeItem *> m_CategoryToItem;
     QHash<PmhData *, TreeItem *> m_PmhToItems;
     QMultiHash<Category::CategoryItem *, PmhData *> m_Cat_Pmhs;
+    Category::CategoryItem *_synthesis;
 
 private:
     PmhCategoryModel *q;
@@ -524,12 +537,29 @@ QModelIndex PmhCategoryModel::parent(const QModelIndex &index) const
     return createIndex(parentItem->childNumber(), 0, parentItem);
 }
 
+int PmhCategoryModel::pmhCount(const QModelIndex &parent) const
+{
+    if (!parent.isValid())
+        return 0;
+    TreeItem *item = d->getItem(parent);
+    int n = 0;
+    if (item->isCategory()) {
+        for(int i=0; i < item->childCount(); ++i) {
+            n += pmhCount(index(i,0,parent));
+        }
+    } else if (item->isPmh() || item->isForm()) {
+        ++n;
+    }
+    return n;
+}
+
 int PmhCategoryModel::rowCount(const QModelIndex &parent) const
 {
     TreeItem *item = d->getItem(parent);
-    if (item) {
+    if (item->isForm())
+        return 0;
+    if (item)
         return item->childCount();
-    }
     return 0;
 }
 
@@ -565,8 +595,12 @@ QVariant PmhCategoryModel::data(const QModelIndex &index, int role) const
     case Qt::DisplayRole :
         {
             if (index.column()==Label) {
-                if (it->isCategory())
-                    return it->label();// + " " + QString::number(it->pmhCategory()->sortId());
+                if (it->isCategory()) {
+                    if (it->pmhCategory() == d->_synthesis)
+                        return tkTr(Trans::Constants::PATIENT_SYNTHESIS);
+                    else
+                        return it->label();// + " " + QString::number(it->pmhCategory()->sortId());
+                }
                 return it->label();
             } else if (index.column()==Id) {
                 if (it->isCategory()) {
@@ -650,6 +684,7 @@ QVariant PmhCategoryModel::data(const QModelIndex &index, int role) const
             }
             if (!it->icon().isNull())
                 return it->icon();
+            break;
         }
     }
 
@@ -671,7 +706,6 @@ bool PmhCategoryModel::setData(const QModelIndex &index, const QVariant &value, 
         return false;
 
     if (role==Qt::EditRole || role == Qt::DisplayRole) {
-//        it->pmhCategory()->clearLabels();
         it->pmhCategory()->setLabel(value.toString());
         it->setLabel(value.toString());
         Q_EMIT dataChanged(index, index);
@@ -895,6 +929,17 @@ bool PmhCategoryModel::isForm(const QModelIndex &index) const
         return true; // root is a category
     TreeItem *it = d->getItem(index);
     return it->isForm();
+}
+
+/** Return true if the \e index represents synthesis item. */
+bool PmhCategoryModel::isSynthesis(const QModelIndex &item) const
+{
+    if (!item.isValid())
+        return false; // root is a category
+    TreeItem *it = d->getItem(item);
+    if (it->isCategory())
+        return (it->pmhCategory() == d->_synthesis);
+    return false;
 }
 
 /** Returns the related Category::CategoryItem pointer related to the QModelIndex \e item. Warning, the pointer should not be deleted. */

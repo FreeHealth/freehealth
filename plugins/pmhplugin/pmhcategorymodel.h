@@ -37,8 +37,8 @@
 /**
  * \file pmhcategorymodel.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.0
- * \date 10 Jun 2011
+ * \version 0.7.2
+ * \date 05 May 2012
 */
 
 namespace Form {
@@ -73,6 +73,7 @@ public:
     QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
     QModelIndex parent(const QModelIndex &index) const;
 
+    int pmhCount(const QModelIndex &parent = QModelIndex()) const;
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     int columnCount(const QModelIndex &parent = QModelIndex()) const;
 
@@ -96,10 +97,11 @@ public:
     // Helpers
     void updateFontAndColors(const QModelIndex &parent = QModelIndex());
 
-    // Category::ICategoryModelHelper and Form interface
+    // Category::ICategoryModelHelper and extra
     bool isPmhx(const QModelIndex &item) const;
     bool isCategory(const QModelIndex &item) const;
     bool isForm(const QModelIndex &item) const;
+    bool isSynthesis(const QModelIndex &item) const;
 
     Category::CategoryItem *categoryForIndex(const QModelIndex &item) const;
     QModelIndex indexForCategory(const Category::CategoryItem *category) const;

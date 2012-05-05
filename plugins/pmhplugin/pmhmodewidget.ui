@@ -52,7 +52,20 @@
         </property>
         <item row="0" column="0">
          <widget class="QStackedWidget" name="stackedWidget">
-          <widget class="QWidget" name="Page1">
+          <property name="currentIndex">
+           <number>0</number>
+          </property>
+          <widget class="QWidget" name="pageSynthesis">
+           <layout class="QGridLayout" name="gridLayout_3">
+            <property name="margin">
+             <number>0</number>
+            </property>
+            <item row="0" column="0">
+             <widget class="QTextBrowser" name="pmhSynthesisBrowser"/>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="pageEditor">
            <layout class="QVBoxLayout" name="verticalLayout">
             <property name="margin">
              <number>0</number>

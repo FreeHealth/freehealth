@@ -42,25 +42,15 @@ class QPushButton;
 class QToolBar;
 QT_END_NAMESPACE
 
+/**
+ * \file pmhmode.h
+ * \author Eric MAEKER <eric.maeker@gmail.com>
+ * \version 0.7.2
+ * \date 05 May 2012
+*/
+
 namespace PMH {
-//class PmhCategoryModel;
 namespace Internal {
-//class PmhItemDelegate : public QStyledItemDelegate
-//{
-//    Q_OBJECT
-//public:
-//    PmhItemDelegate(QObject *parent);
-
-//    void drawHovered();
-
-////    void setPmhCategoryModel(PmhCategoryModel *model);
-
-////    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-
-//private:
-////    PmhCategoryModel *m_PmhModel;
-//};
-
 namespace Ui {
 class PmhModeWidget;
 }
@@ -85,6 +75,7 @@ private Q_SLOTS:
     void pmhModelRowsInserted(const QModelIndex &parent, int start, int end);
 
 private:
+    QString indexToHtml(const QModelIndex &index, int indent = 0);
     void changeEvent(QEvent *e);
 //    bool eventFilter(QObject *o, QEvent *e);
 
@@ -93,6 +84,7 @@ private:
     QToolBar *m_ToolBar;
     QPushButton *m_EditButton;
     QHash<QString, int> m_FormUid_StackId;
+    QString _synthesis;
 };
 
 class PmhMode : public Core::BaseMode
