@@ -41,7 +41,7 @@ de.BeveledLabel=Deutsch
 [CustomMessages]
 en.FreeAccountSetup=Free medical accountancy manager.
 fr.FreeAccountSetup=Assistant de comptabilité médicale.
-de.FreeAccountSetup=Freie medizinische rechnungswesen manager.
+de.FreeAccountSetup=Freier medizinischer Rechnungswesen-Manager.
 
 en.FreeMedFormsProject=The FreeMedForms project
 fr.FreeMedFormsProject=Le projet FreeMedForms
@@ -57,14 +57,14 @@ fr.CustomInstall=Installation personnalisée
 
 en.UninstallProgram=Uninstall %1
 fr.UninstallProgram=Désinstaller %1
-de.UninstallProgram=Deinstallieren %1
+de.UninstallProgram=%1 deinstallieren
 
 ;en.OneDbInstall=One drugs database install
-;de.OneDbInstall=
+;de.OneDbInstall=Installation mit nur einer Medikamentendatenbank
 ;fr.OneDbInstall=Installation avec une seule base de données thérapeutique
 
 en.CompDbFr=Drugs database
-de.CompDbFr=Drugs database
+de.CompDbFr=Medikamentendatenbank
 fr.CompDbFr=Base de données thérapeutique
 
 ;en.TypeDbFr=custom
@@ -81,14 +81,14 @@ fr.CompDbFr=Base de données thérapeutique
 ;fr.TypeDbZa=custom
 
 en.CompHelpEn=English help
-de.CompHelpEn=Englisch Hilfe
+de.CompHelpEn=Englische Hilfe
 fr.CompHelpEn=Aide : traduction anglaise
 en.CompHelpFr=French help translations
-de.CompHelpFr=Franzˆsisch Hilfe
+de.CompHelpFr=Franzˆsische Hilfe
 fr.CompHelpFr=Aide française
 
 en.StartApplication=Launch FreeAccount
-de.StartApplication=Starten FreeAccount
+de.StartApplication=FreeAccount starten
 fr.StartApplication=Démarrer FreeAccount
 
 [Types]
