@@ -245,7 +245,8 @@ void AccountView::on_periodCombo_currentIndexChanged(int index)
     filterChanged();
 }
 
-void AccountView::calc(){
+void AccountView::calc()
+{
     if (WarnDebugMessage)
         qDebug() << __FILE__ << QString::number(__LINE__) << " in calc " ;
     QHash<int,QLineEdit*> hash;
@@ -274,11 +275,12 @@ void AccountView::calc(){
         }
 }
 
-void AccountView::changeEvent(QEvent *e){
+void AccountView::changeEvent(QEvent *e)
+{
     QWidget::changeEvent(e);
     if (e->type()== QEvent::LanguageChange)
     {
     	  m_ui->retranslateUi(this);
     	  setHeadersOfTable();
-        }
+    }
 }
