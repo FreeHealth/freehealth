@@ -1,0 +1,1 @@
+include(../coreplugin/coreplugin.pri)
