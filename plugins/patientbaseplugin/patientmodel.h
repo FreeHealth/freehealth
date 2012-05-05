@@ -71,7 +71,7 @@ public:
     QString filter() const;
     int numberOfFilteredPatients() const;
 
-    void emitUserCreationOnSubmit(bool state);
+    void emitPatientCreationOnSubmit(bool state);
     bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
     bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
 

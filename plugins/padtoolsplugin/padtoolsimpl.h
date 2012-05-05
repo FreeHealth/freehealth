@@ -29,23 +29,36 @@
 
 #include <coreplugin/ipadtools.h>
 
+/**
+ * \file padtoolsimpl.h
+ * \author Eric Maeker, Guillaume Denry
+ * \version 0.8.0
+ * \date 25 Apr 2012
+*/
+
+
+namespace Core {
+class ITokenPool;
+}
+
 namespace PadTools {
+class TokenPool;
 
-	class PadToolsImpl : public Core::IPadTools
-	{
-		Q_OBJECT
+class PadToolsImpl : public Core::IPadTools
+{
+    Q_OBJECT
+public:
+    PadToolsImpl(QObject *parent = 0);
+    ~PadToolsImpl();
 
-	public:
-		PadToolsImpl(QObject *parent = 0) : Core::IPadTools(parent) {}
-		~PadToolsImpl() {}
+    Core::ITokenPool *tokenPool() const;
 
-		QString parse(const QString &templ, QMap<QString,QVariant> &tokens, QList<Core::PadAnalyzerError> &errors);
+    QString parse(const QString &templ, QMap<QString,QVariant> &tokens, QList<Core::PadAnalyzerError> &errors);
+    QSyntaxHighlighter *createSyntaxHighlighter(QTextEdit *textEdit, QMap<QString,QVariant> &tokens);
 
-		QSyntaxHighlighter *createSyntaxHighlighter(QTextEdit *textEdit, QMap<QString,QVariant> &tokens);
-
-	private:
-
-	};
+private:
+    PadTools::TokenPool *_pool;
+};
 
 }
 

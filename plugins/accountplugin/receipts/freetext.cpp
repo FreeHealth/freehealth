@@ -1,6 +1,7 @@
 #include "freetext.h"
 
-FreeText::FreeText(QWidget *parent)
+FreeText::FreeText(QWidget *parent) :
+    QDialog(parent)
 {
     setupUi(this);
 }

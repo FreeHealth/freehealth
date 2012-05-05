@@ -39,12 +39,14 @@
 
 #include <translationutils/constanttranslations.h>
 #include <utils/log.h>
+#include <utils/global.h>
 
 #include <QTranslator>
 #include <QFileInfo>
 #include <QDir>
 #include <QLocale>
 #include <QApplication>
+#include <QLibraryInfo>
 
 using namespace Core;
 
@@ -89,16 +91,15 @@ bool Translators::setPathToTranslations(const QString & path)
     if (QDir(path).exists()) {
         m_PathToTranslations = QDir::cleanPath(path);
         if (WarnTranslatorsErrors) {
-            Utils::Log::addMessage("Translators", Trans::ConstantTranslations::tkTr(Trans::Constants::SETTING_1_PATH_TO_2)
-                                    .arg(Trans::ConstantTranslations::tkTr(Trans::Constants::TRANSLATORS_TEXT),
-                                          QDir::cleanPath(path)));
+            LOG_ERROR_FOR("Translators", Trans::ConstantTranslations::tkTr(Trans::Constants::SETTING_1_PATH_TO_2)
+                .arg(Trans::ConstantTranslations::tkTr(Trans::Constants::TRANSLATORS_TEXT),
+                     QDir::cleanPath(path)));
         }
         return true;
     } else {
         if (WarnTranslatorsErrors) {
-            Utils::Log::addError("Translators", Trans::ConstantTranslations::tkTr(Trans::Constants::PATH_1_DOESNOT_EXISTS)
-                                 .arg(QDir::cleanPath(path)),
-                                 __FILE__, __LINE__);
+            LOG_ERROR_FOR("Translators", Trans::ConstantTranslations::tkTr(Trans::Constants::PATH_1_DOESNOT_EXISTS)
+                      .arg(QDir::cleanPath(path)));
         }
         return false;
     }
@@ -118,7 +119,6 @@ void Translators::changeLanguage(const QString &lang)
 {
     QString l = lang.left(2);
     QLocale::setDefault(l);
-    WARN_FUNC << lang << QLocale().languageToString(QLocale().language());
 
     // load translations
 //    if (l.toLower()=="en") {
@@ -164,16 +164,22 @@ bool Translators::addNewTranslator(const QString & fileMask, bool fromDefaultPat
     QTranslator *t = new QTranslator(qApp);
     QString lang = QLocale().name().left(2).toLower();
     QString path;
+    if (fileMask.compare("qt", Qt::CaseInsensitive) == 0) {
+        if (Utils::isLinuxIntegratedCompilation() || Utils::isRunningOnLinux() || Utils::isRunningOnFreebsd())
+            path = QLibraryInfo::location(QLibraryInfo::TranslationsPath);
+    }
     QFileInfo file(fileMask);
 
     // manage path
-    if (fromDefaultPath)
-        path = m_PathToTranslations;
-    else
-        path = file.absolutePath();
+    if (path.isEmpty()) {
+        if (fromDefaultPath)
+            path = m_PathToTranslations;
+        else
+            path = file.absolutePath();
+    }
 
     // if translator loads
-    if (t->load(file.fileName() + "_" + lang, path )) {
+    if (t->load(file.fileName() + "_" + lang, path)) {
         // add it to the map and the application
         if (!m_Translators.contains(QDir::cleanPath(fileMask))) {
             m_Translators.insert(QDir::cleanPath(fileMask) , t);
@@ -184,10 +190,8 @@ bool Translators::addNewTranslator(const QString & fileMask, bool fromDefaultPat
             return true;
         }
     }
-    else {
-        if (WarnTranslatorsErrors) {
-            LOG(tr("WARNING: %1 can not be loaded or is already loaded.").arg(file.absoluteFilePath() + "_" + lang));
-        }
+    else if (WarnTranslatorsErrors) {
+        LOG(tr("WARNING: %1 can not be loaded or is already loaded.").arg(file.absoluteFilePath() + "_" + lang));
     }
 
     // something gone wrong so clean and exit the member
@@ -232,9 +236,9 @@ QMap<QString, QString> Translators::availableLocalesAndLanguages()
         locale.remove(0, locale.indexOf('_') + 1);
         locale.truncate(locale.lastIndexOf('.'));
         QTranslator translator;
-	translator.load(s, m_PathToTranslations);
-	QString lang = translator.translate(Trans::Constants::CONSTANTS_TR_CONTEXT, Trans::Constants::ENGLISH);
-	toReturn.insert(locale, lang);
+        translator.load(s, m_PathToTranslations);
+        QString lang = translator.translate(Trans::Constants::CONSTANTS_TR_CONTEXT, Trans::Constants::ENGLISH);
+        toReturn.insert(locale, lang);
     }
     return toReturn;
 }

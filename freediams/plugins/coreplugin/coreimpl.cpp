@@ -44,6 +44,7 @@
 #include <coreplugin/commandlineparser.h>
 #include <coreplugin/patient.h>
 #include <coreplugin/user.h>
+#include <coreplugin/ipadtools.h>
 
 #include <translationutils/constanttranslations.h>
 #include <utils/log.h>
@@ -58,6 +59,8 @@
 #include <QFont>
 #include <QWidget>
 #include <QSplashScreen>
+#include <QLibraryInfo>
+#include <QTranslator>
 
 namespace Core {
 namespace Internal {
@@ -85,7 +88,9 @@ CoreImpl::CoreImpl(QObject *parent) :
         m_UID(new UniqueIDManager),
         m_MedinTux(0),
         m_Patient(new Patient(this)),
-        m_User(new Internal::User(this))
+        m_User(new Internal::User(this)),
+        m_PadTools(0)
+
 {
     m_Settings = new SettingsPrivate(this);
     m_Settings->setPath(ISettings::UpdateUrl, Utils::Constants::FREEDIAMS_UPDATE_URL);

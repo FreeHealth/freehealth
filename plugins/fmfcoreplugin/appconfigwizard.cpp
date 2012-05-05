@@ -281,6 +281,9 @@ ClientConfigPage::ClientConfigPage(QWidget *parent) :
     setPixmap(QWizard::WatermarkPixmap, pix);
 
     settings()->setValue(Core::Constants::S_USE_EXTERNAL_DATABASE, true);
+
+    connect(serverWidget, SIGNAL(userConnectionChanged(bool)), this, SIGNAL(completeChanged()));
+    connect(serverWidget, SIGNAL(hostConnectionChanged(bool)), this, SIGNAL(completeChanged()));
 }
 
 void ClientConfigPage::retranslate()
@@ -291,12 +294,53 @@ void ClientConfigPage::retranslate()
                    "Use your <b>personnal login and password</b> to connect the database."));
 }
 
+bool ClientConfigPage::isComplete() const
+{
+    return serverWidget->connectionSucceeded();
+}
+
 bool ClientConfigPage::validatePage()
 {
     if (serverWidget->connectionSucceeded()) {
         // remove log and pass from settings
         settings()->setValue(Core::Constants::S_LASTLOGIN, QString());
         settings()->setValue(Core::Constants::S_LASTPASSWORD, QString());
+        // try to connect the MySQL server and test existence of a FreeMedForms configuration
+        QSqlDatabase mysql = QSqlDatabase::addDatabase("QMYSQL", "__CHECK__CONFIG__");
+        Utils::DatabaseConnector c = settings()->databaseConnector();
+        // test fmf_admin user
+        mysql.setHostName(c.host());
+        mysql.setPort(c.port());
+        mysql.setUserName(c.clearLog());
+        mysql.setPassword(c.clearPass());
+        if (!mysql.open()) {
+            Q_EMIT completeChanged();
+            return false;
+        }
+        // all freemedforms databases are prefixed with fmf_
+        // test the fmf_* databases existence
+        QSqlQuery query(mysql);
+        int n = 0;
+        if (!query.exec("show databases;")) {
+            LOG_QUERY_ERROR(query);
+            Q_EMIT completeChanged();
+            return false;
+        } else {
+            while (query.next())
+                if (query.value(0).toString().startsWith("fmf_"))
+                        ++n;
+        }
+        if (n<5) {
+            Utils::warningMessageBox(tr("No FreeMedForms server configuration detected"),
+                                     tr("You are trying to configure a network client of FreeMedForms. "
+                                        "It is manadatory to connect to a FreeMedForms network server.\n"
+                                        "While the host connection is valid, no FreeMedForms configuration was "
+                                        "found on this host.\n\n"
+                                        "Please check that this host contains a FreeMedForms server configuration."));
+            LOG_ERROR("No FreeMedForms configuration detected on the server");
+            Q_EMIT completeChanged();
+            return false;
+        }
         return true;
     }
     return false;
@@ -338,6 +382,9 @@ ServerConfigPage::ServerConfigPage(QWidget *parent) :
     setPixmap(QWizard::WatermarkPixmap, pix);
 
     settings()->setValue(Core::Constants::S_USE_EXTERNAL_DATABASE, true);
+
+    connect(serverWidget, SIGNAL(userConnectionChanged(bool)), this, SIGNAL(completeChanged()));
+    connect(serverWidget, SIGNAL(hostConnectionChanged(bool)), this, SIGNAL(completeChanged()));
 }
 
 void ServerConfigPage::retranslate()
@@ -347,6 +394,11 @@ void ServerConfigPage::retranslate()
                    "You must configure the server manually.<br />"
                    "Use the <b>server super-administrator login and password</b> to connect the database."));
     serverWidget->setUserLoginGroupTitle(tr("Server super-administrator login and password"));
+}
+
+bool ServerConfigPage::isComplete() const
+{
+    return serverWidget->connectionSucceeded();
 }
 
 bool ServerConfigPage::validatePage()
@@ -371,6 +423,7 @@ bool ServerConfigPage::validatePage()
                                  tr("You need to connect with another user that have rights to "
                                     "select, udpate, delete, insert, create, drop, alter and create user.\n"
                                     "Please contact your server administrator."));
+        Q_EMIT completeChanged();
         return false;
     }
 
@@ -385,6 +438,7 @@ bool ServerConfigPage::validatePage()
         if (!test.open()) {
             LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(test.connectionName()).arg(test.lastError().text()));
             QSqlDatabase::removeDatabase("__APP_CONNECTION_TESTER");
+            Q_EMIT completeChanged();
             return false;
         }
 

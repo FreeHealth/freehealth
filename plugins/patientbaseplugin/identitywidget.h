@@ -61,6 +61,12 @@ public:
 
     bool isModified() const;
 
+    QString currentBirthName() const;
+    QString currentSecondName() const;
+    QString currentFirstName() const;
+    QString currentGender() const;
+    QDate currentDateOfBirth() const;
+
 public Q_SLOTS:
     void setCurrentIndex(const QModelIndex &patientIndex);
     bool submit();

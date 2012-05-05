@@ -47,6 +47,9 @@
          <attribute name="headerVisible">
           <bool>false</bool>
          </attribute>
+         <attribute name="headerCascadingSectionResizes">
+          <bool>true</bool>
+         </attribute>
         </widget>
        </item>
       </layout>

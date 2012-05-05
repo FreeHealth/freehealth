@@ -112,7 +112,7 @@ protected:
 //    Internal::Ui::MainWindow *m_ui;
 
 private:
-	Core::IPadTools *m_padTools;
+//	Core::IPadTools *m_padTools;
     PadTools::TokenModel *m_TokenModel;
     PadTools::PadWriter *m_Writer;
 

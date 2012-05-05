@@ -2,8 +2,19 @@ FreeMedForms
 0.7.2
 ===== News =====
 
+  * DataPack manager
+    * adding a category browser
+    * redefining default servers
+
 ===== Bug correction =====
 
+  * Date translations are now connected to the application language (not the system langugage)
+  * Avoid duplicates during patient creation
+  * Translations problem on Linux corrected
+  * Segfaulting when looking for an update over the web corrected
+  * Some related bugs with the patient's date of birth corrected
+  * Installation procedure
+    * Improving error detection when configuring a network client or server
   * FreeAccount
     * Windows installation corrected (missing default french medical procedure)
   * Many typos corrected
@@ -21,8 +32,19 @@ FreeMedForms
 *********************************************************************************************
 ===== Nouveautés =====
 
+  * Gestionnaire de paquets de données
+    * ajout d'un navigateur de categorie
+    * redéfinition des serveurs par défaut
+
 ===== Corrections de bug =====
 
+  * Les traductions des dates sont connectés au langage de l'application et non au langage du système uniquement)
+  * Evite la création de doublons lors de la création de patients
+  * Problème de traductions avec les binaires Linux corrigé
+  * Crash quand recherche une mise à jour sur le net corrigé
+  * Bogues liés à la date de naissance du patient corrigés
+  * Procédure d'installation
+    * Amélioration des détections d'erreurs lors d'une configuration réseau : client ou serveur
   * FreeAccount
     * Correction de l'installateur Windows (les procédure médicales française par défaut étaient manquantes)
   * Beaucoup de correction de bogues

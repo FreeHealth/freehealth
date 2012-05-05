@@ -85,68 +85,98 @@ QVariant ServerModel::data(const QModelIndex &index, int role) const
     switch (role) {
     case Qt::EditRole:
     case Qt::DisplayRole:
+    {
+        switch (index.column()) {
+        case PlainTextLabel: return s.label();
+        case HtmlLabel:
         {
-            switch (index.column()) {
-            case PlainTextLabel: return s.label();
-            case HtmlLabel:
-            {
-                QString label = s.label();
-                if (s.label().isEmpty())
-                    label = tkTr(Trans::Constants::UNKNOWN_SERVER);
-                label = QString("<span style=\"color:black;font-weight:bold;\">%1</span>")
-                        .arg(label);
+            QString label = s.label();
+            if (s.label().isEmpty())
+                label = tkTr(Trans::Constants::UNKNOWN_SERVER);
+            label = QString("<span style=\"color:black;font-weight:bold;\">%1</span>")
+                    .arg(label);
 
-                if (s.isConnected()) {
-                    label += QString("<br /><span style=\"color:gray; font-size:small;\">%2 (%3: %4)</span>")
-                            .arg(tkTr(Trans::Constants::CONNECTED))
-                            .arg(tkTr(Trans::Constants::LAST_CHECK))
-                            .arg(s.lastChecked().toString(QLocale().dateFormat(QLocale::LongFormat)));
-                } else {
-                    label += QString("<br /><small>%2</small>")
-                            .arg(tkTr(Trans::Constants::NOT_CONNECTED));
-                }
-
-                label += QString("<br /><span style=\"color:gray; font-size:small;\">%1 %2</span>")
-                        .arg(serverManager()->getPackForServer(s).count())
-                        .arg(tkTr(Trans::Constants::PACKAGES));
-                return label;
+            if (s.isConnected()) {
+                label += QString("<br /><span style=\"color:gray; font-size:small;\">%2 (%3: %4)</span>")
+                        .arg(tkTr(Trans::Constants::CONNECTED))
+                        .arg(tkTr(Trans::Constants::LAST_CHECK))
+                        .arg(s.lastChecked().toString(QLocale().dateFormat(QLocale::LongFormat)));
+            } else {
+                label += QString("<br /><small>%2</small>")
+                        .arg(tkTr(Trans::Constants::NOT_CONNECTED));
             }
-            case Uuid : return s.uuid();
-            case Authors: return s.description().data(ServerDescription::Author);
-            case Version: return s.version();
-            case NativeUrl: return s.nativeUrl();
-            case CreationDate: return s.description().data(ServerDescription::CreationDate).toDate().toString(QLocale().dateFormat());
-            case Vendor:
-                if (s.description().data(ServerDescription::Vendor).toString().isEmpty())
-                    return tkTr(Trans::Constants::THE_FREEMEDFORMS_COMMUNITY);
-                else
-                    return s.description().data(ServerDescription::Vendor);
-            case RecommendedUpdateFrequencyIndex: return s.recommendedUpdateFrequency();
-            case HtmlDescription: return s.description().data(ServerDescription::HtmlDescription);
-            case LastUpdateDate: return s.description().data(ServerDescription::LastModificationDate).toDate().toString(QLocale().dateFormat());
-            }// End switch
+
+            label += QString("<br /><span style=\"color:gray; font-size:small;\">%1 %2</span>")
+                    .arg(serverManager()->getPackForServer(s).count())
+                    .arg(tkTr(Trans::Constants::PACKAGES));
+            return label;
         }
+        case Uuid : return s.uuid();
+        case Authors: return s.description().data(ServerDescription::Author);
+        case Version: return s.version();
+        case NativeUrl: return s.nativeUrl();
+        case CreationDate: return s.description().data(ServerDescription::CreationDate).toDate().toString(QLocale().dateFormat());
+        case Vendor:
+            if (s.description().data(ServerDescription::Vendor).toString().isEmpty())
+                return tkTr(Trans::Constants::THE_FREEMEDFORMS_COMMUNITY);
+            else
+                return s.description().data(ServerDescription::Vendor);
+        case RecommendedUpdateFrequencyIndex: return s.recommendedUpdateFrequency();
+        case HtmlDescription: return s.description().data(ServerDescription::HtmlDescription);
+        case LastUpdateDate: return s.description().data(ServerDescription::LastModificationDate).toDate().toString(QLocale().dateFormat());
+        }// End switch
+    }
     case Qt::ToolTipRole:
-        {
-            QString toolTip = QString("<b>%1</b>:&nbsp;%2<br/><b>%3</b>:&nbsp;%4<br/><b>%5</b>:&nbsp;%6")
+    {
+        QString toolTip = QString("<b>%1</b>:&nbsp;%2<br/>"
+                                  "<b>%3</b>:&nbsp;%4<br/>"
+                                  "<b>%5</b>:&nbsp;%6<br/>"
+                                  "<b>%7</b>:&nbsp;%8")
+                .arg(tkTr(Trans::Constants::LABEL).replace(" ", "&nbsp;"))
+                .arg(s.label())
                 .arg(tr("Native Url").replace(" ", "&nbsp;")) /** \todo maybe use URL instead of Url */
                 .arg(s.nativeUrl())
-                .arg(tr("Recommended update checking")) /** \todo maybe better: "Recommended update check frequency" */
+                .arg(tkTr(Trans::Constants::RECOMMENDED_UPDATE_FREQUENCY)) /** \todo maybe better: "Recommended update check frequency" */
                 .arg(Trans::ConstantTranslations::checkUpdateLabel(s.recommendedUpdateFrequency()))
                 .arg(tr("Url Style")) /** \todo maybe use URL instead of Url */
                 .arg(s.urlStyleName());
-            return toolTip.replace(" ", "&nbsp;");
-        }
+        return toolTip.replace(" ", "&nbsp;");
+    }
     case Qt::DecorationRole:
-        if (s.isLocalServer())
-            return icon(::ICON_SERVER_LOCAL);
-        if (s.isConnected())
-            return icon(::ICON_SERVER_CONNECTED);
-        return icon(::ICON_SERVER_NOT_CONNECTED);
+        if (index.column()==PlainTextLabel) {
+            if (s.isLocalServer())
+                return icon(::ICON_SERVER_LOCAL);
+            if (s.isConnected())
+                return icon(::ICON_SERVER_CONNECTED);
+            return icon(::ICON_SERVER_NOT_CONNECTED);
+        }
     default: return QVariant();
     }
 
     return QVariant();
+}
+
+QVariant ServerModel::headerData(int section, Qt::Orientation orientation, int role) const
+{
+    if (role!=Qt::DisplayRole)
+        return QAbstractTableModel::headerData(section, orientation, role);
+    if (orientation!=Qt::Horizontal)
+        return QAbstractTableModel::headerData(section, orientation, role);
+    switch (section) {
+    case PlainTextLabel:
+    case HtmlLabel:  return tkTr(Trans::Constants::LABEL);
+    case Uuid: return tkTr(Trans::Constants::UNIQUE_IDENTIFIER);
+    case Version: return tkTr(Trans::Constants::VERSION);
+    case Authors: return tkTr(Trans::Constants::AUTHOR);
+    case Vendor: return tkTr(Trans::Constants::VENDOR);
+    case NativeUrl: return tkTr(Trans::Constants::URL);
+    case CreationDate: return "Creation date";
+    case LastUpdateDate: return tkTr(Trans::Constants::LAST_UPDATE_CHECKING);
+    case RecommendedUpdateFrequencyIndex: return tkTr(Trans::Constants::RECOMMENDED_UPDATE_FREQUENCY);
+    case HtmlDescription: return tkTr(Trans::Constants::DESCRIPTION);
+    default: break;
+    }
+    return QAbstractTableModel::headerData(section, orientation, role);
 }
 
 void ServerModel::serverAdded(int row)

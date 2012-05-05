@@ -72,7 +72,7 @@
         </size>
        </property>
        <property name="title">
-        <string>Filtering datas</string>
+        <string>Filtering data</string>
        </property>
        <widget class="QWidget" name="layoutWidget">
         <property name="geometry">

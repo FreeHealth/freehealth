@@ -199,26 +199,28 @@ QString IdentityFormWidget::printableHtml(bool withValues) const
         } else {
             age = patient()->data(Core::IPatient::YearsOld).toString() + " " + tkTr(Trans::Constants::YEARS);
         }
+        QModelIndex idx = patient()->index(patient()->currentPatientIndex().row(), Core::IPatient::DateOfBirth);
+        QDate dob = patient()->data(idx, Qt::EditRole).toDate();
         return QString("<table width=100% border=1 cellpadding=0 cellspacing=0>"
                        "<thead>"
                        "<tr>"
                        "<td style=\"vertical-align: top; padding: 5px\">"
-                       "<span style=\"font-weight: 600\">%1</span> (%2) - %3 (%4)"
+                       "<span style=\"font-weight: 600\">%1</span> (%2; %3) - %4"
                        "</td>"
                        "</tr>"
                        "</thead>"
                        "<tbody>"
                        "<tr>"
                        "<td style=\"vertical-align: top; padding-left:2em; padding-top:5px; padding-bottom: 5px; padding-right:2em\">"
-                       "%5<br />"
+                       "%5"
                        "</td>"
                        "</tr>"
                        "</tbody>"
                        "</table>")
                 .arg(n)
-                .arg(patient()->data(Core::IPatient::DateOfBirth).toDate().toString(QLocale().dateFormat(QLocale::ShortFormat)))
-                .arg(patient()->data(Core::IPatient::Gender).toString())
+                .arg(QLocale().toString(dob, QLocale().dateFormat(QLocale::LongFormat)))
                 .arg(age)
+                .arg(patient()->data(Core::IPatient::Gender).toString())
                 .arg(patient()->data(Core::IPatient::FullAddress).toString())
                 ;
     } else {

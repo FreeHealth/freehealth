@@ -31,6 +31,14 @@
 
 #include <padtoolsplugin/pad_fragment.h>
 
+/**
+ * \file pad_string.h
+ * \author Eric Maeker, Guillaume Denry
+ * \version 0.8.0
+ * \date 05 May 2012
+*/
+
+
 namespace PadTools {
 class PadDocument;
 
@@ -45,6 +53,7 @@ public:
 	void debug(int indent = 0) const;
 
     void run(QMap<QString,QVariant> &tokens, PadDocument *document);
+    void toOutput(Core::ITokenPool *pool, PadDocument *document);
     void toRaw(PadDocument *document);
 
 private:

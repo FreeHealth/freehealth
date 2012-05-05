@@ -64,8 +64,6 @@ ServerPreferencesWidget::ServerPreferencesWidget(QWidget *parent) :
     if (settings()->value(Core::Constants::S_USE_EXTERNAL_DATABASE, false).toBool())
         on_testButton_clicked();
     connect(ui->testHostButton, SIGNAL(clicked()), this, SLOT(testHost()));
-//    connect(ui->host, SIGNAL(textChanged(QString)), this, SLOT(testHost(QString)));
-//    ui->userGroupBox->setEnabled(m_HostReachable);
     ui->testButton->setEnabled(m_HostReachable);
 }
 
@@ -107,9 +105,6 @@ void ServerPreferencesWidget::setDatasToUi()
 {
     // Get from settings()->databaseConnector()
     const Utils::DatabaseConnector &db = settings()->databaseConnector();
-//    ui->host->setText(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_HOST).toByteArray()));
-//    ui->log->setText(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_LOG).toByteArray()));
-//    ui->pass->setText(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_PASS).toByteArray()));
     ui->host->setText(db.host());
     ui->log->setText(db.clearLog());
     ui->pass->setText(db.clearPass());
@@ -123,15 +118,6 @@ void ServerPreferencesWidget::setDatasToUi()
 //        ui->host->setText("192.168.0.20");
 //        testHost("192.168.0.20");
     }
-
-//    ui->autoSave->setChecked(settings()->value(Core::Constants::S_ALWAYS_SAVE_WITHOUT_PROMPTING).toBool());
-//    ui->useExternalDB->setChecked(settings()->value(Core::Constants::S_USE_EXTERNAL_DATABASE).toBool());
-
-//    if (!settings()->value(Core::Constants::S_EXTERNAL_DATABASE_PORT).isNull()) {
-//        ui->port->setValue(QString(QByteArray::fromBase64(settings()->value(Core::Constants::S_EXTERNAL_DATABASE_PORT).toByteArray())).toInt());
-//    } else {
-//        ui->port->setValue(3306);
-//    }
 }
 
 void ServerPreferencesWidget::testHost()
@@ -141,26 +127,32 @@ void ServerPreferencesWidget::testHost()
 
 void ServerPreferencesWidget::testHost(const QString &hostName)
 {
+    QString error;
     if (hostName.length() < 3) {
         m_HostReachable = false;
-        return;
-    }
-    QHostInfo info = QHostInfo::fromName(hostName);
-    if (info.error()==QHostInfo::NoError) {
-        QPalette palette = ui->host->palette();
-        palette.setColor(QPalette::Active, QPalette::Text, Qt::darkBlue);
-        ui->host->setPalette(palette);
-        ui->labelHost->setPalette(palette);
-        m_HostReachable = true;
     } else {
-        QPalette palette = ui->host->palette();
-        palette.setColor(QPalette::Active, QPalette::Text, Qt::darkRed);
-        ui->host->setPalette(palette);
-        ui->labelHost->setPalette(palette);
-        m_HostReachable = false;
+        QHostInfo info = QHostInfo::fromName(hostName);
+        m_HostReachable = (info.error()==QHostInfo::NoError);
+        error = info.errorString();
     }
+    QPalette palette = ui->host->palette();
+    palette.setColor(QPalette::Active, QPalette::Text, m_HostReachable ? Qt::darkBlue : Qt::darkRed);
+    ui->host->setPalette(palette);
+    ui->labelHost->setPalette(palette);
+
     ui->userGroupBox->setEnabled(m_HostReachable);
     ui->testButton->setEnabled(m_HostReachable);
+
+    if (!m_HostReachable) {
+        LOG_ERROR(QString("Host (%1:%2) not reachable: %3").arg(ui->host->text()).arg(ui->port->text()).arg(error));
+        ui->testHostConnectionLabel->setText(tr("Host not reachable..."));
+        ui->testHostConnectionLabel->setToolTip(error);
+    } else {
+        LOG(QString("Host available: %1:%2").arg(ui->host->text()).arg(ui->port->text()));
+        ui->testHostConnectionLabel->setText(tr("Host available..."));
+    }
+
+    Q_EMIT hostConnectionChanged(m_HostReachable);
 }
 
 void ServerPreferencesWidget::saveToSettings(Core::ISettings *sets)
@@ -178,17 +170,11 @@ void ServerPreferencesWidget::saveToSettings(Core::ISettings *sets)
     LOG("saving host");
     Utils::DatabaseConnector db(ui->log->text(), ui->pass->text(), ui->host->text(), ui->port->value());
     db.setDriver(Utils::Database::MySQL);
-//    s->setValue(Core::Constants::S_USE_EXTERNAL_DATABASE, true);
-//    s->setValue(Core::Constants::S_EXTERNAL_DATABASE_HOST, QString(ui->host->text().toAscii().toBase64()));
-//    s->setValue(Core::Constants::S_EXTERNAL_DATABASE_PORT, QString::number(ui->port->value()).toAscii().toBase64());
     if (ui->useDefaultAdminLog->isChecked()) {
         db.setClearLog("fmf_admin");
         db.setClearPass("fmf_admin");
-//        s->setValue(Core::Constants::S_EXTERNAL_DATABASE_LOG, QString(QString("fmf_admin").toAscii().toBase64()));
-//        s->setValue(Core::Constants::S_EXTERNAL_DATABASE_PASS, QString(QString("fmf_admin").toAscii().toBase64()));
     }
     s->setDatabaseConnector(db);
-//    s->sync();
     Core::ICore::instance()->databaseServerLoginChanged();
 }
 
@@ -196,12 +182,6 @@ void ServerPreferencesWidget::writeDefaultSettings(Core::ISettings *s)
 {
     //    qWarning() << "---------> writedefaults";
     LOG_FOR("ServerPreferencesWidget", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("ServerPreferencesWidget"));
-//    s->setValue(Core::Constants::S_ALWAYS_SAVE_WITHOUT_PROMPTING, true);
-//    s->setValue(Core::Constants::S_USE_EXTERNAL_DATABASE, false);
-//    s->setValue(Core::Constants::S_EXTERNAL_DATABASE_HOST, QString());
-//    s->setValue(Core::Constants::S_EXTERNAL_DATABASE_PORT, QString());
-//    s->setValue(Core::Constants::S_EXTERNAL_DATABASE_LOG, QString());
-//    s->setValue(Core::Constants::S_EXTERNAL_DATABASE_PASS, QString());
     Utils::DatabaseConnector db;
     s->setDatabaseConnector(db);
     s->sync();
@@ -211,10 +191,12 @@ void ServerPreferencesWidget::on_testButton_clicked()
 {
     if (!m_HostReachable) {
         ui->testConnectionLabel->setText(tr("Host not reachable..."));
+        Q_EMIT userConnectionChanged(false);
         return;
     }
     if (ui->log->text().isEmpty() && !ui->useDefaultAdminLog->isChecked()) {
         ui->testConnectionLabel->setText(tr("No anonymous connection allowed"));
+        Q_EMIT userConnectionChanged(false);
         return;
     }
     ui->testConnectionLabel->setText(tr("Test in progress..."));
@@ -232,9 +214,10 @@ void ServerPreferencesWidget::on_testButton_clicked()
         if (!test.open()) {
             ui->testButton->setIcon(theme()->icon(Core::Constants::ICONERROR));
             ui->testConnectionLabel->setText(tr("Connection error: %1").arg(test.lastError().number()));
-            ui->testConnectionLabel->setToolTip(test.lastError().text());
+            ui->testConnectionLabel->setToolTip(test.lastError().driverText());
             m_ConnectionSucceeded = false;
             m_Grants = Utils::Database::Grant_NoGrant;
+            Q_EMIT userConnectionChanged(false);
         } else {
             ui->testButton->setIcon(theme()->icon(Core::Constants::ICONOK));
             ui->testConnectionLabel->setText(tr("Connected"));
@@ -242,6 +225,7 @@ void ServerPreferencesWidget::on_testButton_clicked()
             m_Grants = Utils::Database::getConnectionGrants("__APP_CONNECTION_TESTER");
 //            qWarning() << "GRANTS" << m_Grants;
             saveToSettings();
+            Q_EMIT userConnectionChanged(true);
         }
     }
     QSqlDatabase::removeDatabase("__APP_CONNECTION_TESTER");

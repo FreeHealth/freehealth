@@ -260,6 +260,42 @@ bool IdentityWidget::isModified() const
     return true;
 }
 
+/** Return the current editing value */
+QString IdentityWidget::currentBirthName() const
+{
+    return d->editUi->birthName->text();
+}
+
+/** Return the current editing value */
+QString IdentityWidget::currentSecondName() const
+{
+    return d->editUi->secondName->text();
+}
+
+/** Return the current editing value */
+QString IdentityWidget::currentFirstName() const
+{
+    return d->editUi->firstname->text();
+}
+
+/** Return the current editing value */
+QString IdentityWidget::currentGender() const
+{
+    switch (d->editUi->genderCombo->currentIndex())
+    {
+    case 0: return "M"; break;
+    case 1: return "F"; break;
+    case 2: return "H"; break;
+    }
+    return QString::null;
+}
+
+/** Return the current editing value */
+QDate IdentityWidget::currentDateOfBirth() const
+{
+    return d->editUi->dob->date();
+}
+
 /** \brief Submit the Identity to the model and the database. */
 bool IdentityWidget::submit()
 {

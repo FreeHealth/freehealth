@@ -27,6 +27,7 @@
 #include "patientcreatorwizard.h"
 #include "identitywidget.h"
 #include "patientmodel.h"
+#include "patientbase.h"
 #include "constants_settings.h"
 
 #include <coreplugin/icore.h>
@@ -35,8 +36,12 @@
 #include <coreplugin/ipatient.h>
 #include <coreplugin/isettings.h>
 
-#include <utils/global.h>
 #include <utils/log.h>
+#include <utils/global.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_current.h>
+#include <translationutils/trans_titles.h>
+#include <translationutils/trans_patient.h>
 
 #include <QLabel>
 #include <QLineEdit>
@@ -44,11 +49,12 @@
 #include <QGridLayout>
 
 using namespace Patients;
+using namespace Trans::ConstantTranslations;
 
 static inline Core::ITheme *theme() { return Core::ICore::instance()->theme(); }
 static inline Core::IPatient *patient() { return Core::ICore::instance()->patient(); }
 static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
-
+static inline Patients::Internal::PatientBase *patientBase() { return Patients::Internal::PatientBase::instance(); }
 
 PatientCreatorWizard::PatientCreatorWizard(QWidget *parent) :
         QWizard(parent)
@@ -101,7 +107,7 @@ IdentityPage::IdentityPage(QWidget *parent) :
     m_Identity = new IdentityWidget(this, IdentityWidget::ReadWriteMode);
     m_Model = new PatientModel(this);
     m_Model->setFilter("", "", "__", PatientModel::FilterOnUuid);
-    m_Model->emitUserCreationOnSubmit(true);
+    m_Model->emitPatientCreationOnSubmit(true);
     m_Model->insertRow(0);
     m_uuid = m_Model->index(0, Core::IPatient::Uid).data().toString();
 
@@ -119,6 +125,52 @@ bool IdentityPage::validatePage()
 {
     if (!m_Identity->isIdentityValid())
         return false;
+
+    // check duplicates
+    if (patientBase()->isPatientExists(m_Identity->currentBirthName(),
+                                       m_Identity->currentSecondName(),
+                                       m_Identity->currentFirstName(),
+                                       m_Identity->currentGender(),
+                                       m_Identity->currentDateOfBirth())) {
+        Utils::warningMessageBox(tr("Patient already exists"),
+                                 tr("A patient with the same names, gender and date of birth "
+                                    "already exists. You can not create duplicates."));
+        return false;
+    } else {
+        // nearly duplicates (same names only)
+        PatientModel *model = new PatientModel(this);
+        model->setFilter(m_Identity->currentBirthName(), m_Identity->currentFirstName(), "", PatientModel::FilterOnFullName);
+        if (model->rowCount() > 0) {
+            QStringList names;
+            int count = qMin(10, model->rowCount());
+            for(int i=0; i < count; ++i)
+                names << QString("%1 (%2; %3)")
+                         .arg(model->data(model->index(i, Core::IPatient::FullName)).toString())
+                         .arg(model->data(model->index(i, Core::IPatient::DateOfBirth)).toString())
+                         .arg(model->data(model->index(i, Core::IPatient::Age)).toString());
+            QString fullName = QString("%1 %2 %3<br />&nbsp;&nbsp;%4: %5<br />&nbsp;&nbsp;%6: %7")
+                    .arg(m_Identity->currentBirthName())
+                    .arg(m_Identity->currentSecondName())
+                    .arg(m_Identity->currentFirstName())
+                    .arg(tkTr(Trans::Constants::GENDER))
+                    .arg(m_Identity->currentGender())
+                    .arg(tkTr(Trans::Constants::DATE_OF_BIRTH))
+                    .arg(m_Identity->currentDateOfBirth().toString(QLocale().dateFormat(QLocale::LongFormat))).simplified();
+            QString msg = QString("%1.<br />"
+                                  "<br />%2<br /><ul><li>%3</li></ul><br />%4")
+                    .arg(tr("You are about to create the following  patient: %1")
+                         .arg("<br /><br />&nbsp;&nbsp;<b>"+fullName+"</b>"))
+                    .arg(tr("Patients with the same names exist in the database."))
+                    .arg(names.join("</li><li>"))
+                    .arg(tr("Do you really want to create this patient?"))
+                    ;
+            bool yes = Utils::yesNoMessageBox(tr("Patients of the same name exist"), msg);
+            if (!yes)
+                return false;
+        }
+        delete model;
+    }
+    // submit the new patient
     bool ok = true;
     connect(m_Model, SIGNAL(patientCreated(QString)), Patients::PatientModel::activeModel(), SIGNAL(patientCreated(QString)));
     if (m_Identity->submit()) {

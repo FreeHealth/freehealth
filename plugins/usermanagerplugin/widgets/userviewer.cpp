@@ -163,7 +163,7 @@ UserViewer::UserViewer(QWidget *parent) :
     connect(pluginManager(), SIGNAL(objectAdded(QObject*)), this, SLOT(pluginManagerObjectAdded(QObject*)));
     connect(pluginManager(), SIGNAL(aboutToRemoveObject(QObject*)), this, SLOT(pluginManagerObjectRemoved(QObject*)));
 //    connect(user(), SIGNAL(userChanged()), this, SLOT(userChanged()));
-    connect(Core::ICore::instance(), SIGNAL(coreAboutToClose()), this, SLOT(coreAboutToClose()));
+//    connect(Core::ICore::instance(), SIGNAL(coreAboutToClose()), this, SLOT(coreAboutToClose()));
 }
 
 UserViewer::~UserViewer()

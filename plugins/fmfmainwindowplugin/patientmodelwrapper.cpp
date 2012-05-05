@@ -90,7 +90,7 @@ QVariant PatientModelWrapper::data(const QModelIndex &index, int role) const
 
     // get datas from the model
     QModelIndex idx = m_Model->index(index.row(), index.column());
-    QVariant result = idx.data();
+    QVariant result = m_Model->data(idx, role);
     if (!result.isNull())
         return result;
 
@@ -98,9 +98,9 @@ QVariant PatientModelWrapper::data(const QModelIndex &index, int role) const
     foreach(Form::FormMain *modeForms, formManager()->forms()) {
         foreach(Form::FormMain *f, modeForms->flattenFormMainChildren()) {
             foreach(Form::FormItem *item, f->formItemChildren()) {
-                if (item->itemDatas()) {
+                if (item->itemData()) {
                     if (item->patientDataRepresentation() == index.column())
-                        return item->itemDatas()->data(item->patientDataRepresentation(), Form::IFormItemData::PatientModelRole);
+                        return item->itemData()->data(item->patientDataRepresentation(), Form::IFormItemData::PatientModelRole);
                 }
             }
         }

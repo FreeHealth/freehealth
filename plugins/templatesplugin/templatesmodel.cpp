@@ -1124,9 +1124,9 @@ bool TemplatesModel::dropMimeData(const QMimeData *data, Qt::DropAction action, 
     while (isTemplate(parentIndex)) {
         parentIndex = parentIndex.parent();
     }
-    int beginRow = 0;
-    if (row != -1)
-        beginRow = row;
+//    int beginRow = 0;
+//    if (row != -1)
+//        beginRow = row;
 
     QList<QPersistentModelIndex> list = getIndexesFromMimeData(data);
 //    QList<QPersistentModelIndex> temp, cat;

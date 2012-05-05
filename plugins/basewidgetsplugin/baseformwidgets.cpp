@@ -434,7 +434,7 @@ QString BaseForm::printableHtml(bool withValues) const
 //    qWarning() << html;
 
     int i = 0;
-    int c = 0;
+//    int c = 0;
     int r = 0;
     int previousrow = 0;
     QString header, content;
@@ -455,7 +455,7 @@ QString BaseForm::printableHtml(bool withValues) const
 
     // recreate the grid as an html table
     foreach(const QString &s, html) {
-        c = (i % numberColumns);
+//        c = (i % numberColumns);
         r = (i / numberColumns);
         if (r>previousrow) {
             previousrow = r;
@@ -496,6 +496,13 @@ void BaseForm::triggered(QAction *action)
                                                         settings()->path(Core::ISettings::UserDocumentsPath),
                                                         tr("Images (*.png)"));
         if (!fileName.isEmpty()) {
+
+            /** \badcode this is a dirty hack to workaround a Qt "bug" that
+              makes it impossible to add a default suffix with the
+              static function getSaveFileName() */
+            if (fileName.right(4) != ".png") {
+                fileName.append(".png");
+            }
             pix.save(fileName);
         }
     }
@@ -542,11 +549,11 @@ bool BaseFormData::setData(const int ref, const QVariant &data, const int role)
         break;
     }
     m_Form->m_EpisodeDate->setToolTip(QString("<p align=\"right\">%1&nbsp;-&nbsp;%2<br /><span style=\"color:gray;font-size:9pt\">%3</span></p>")
-                                       .arg(m_Data.value(ID_EpisodeDate).toDate().toString(QLocale().dateFormat(QLocale::ShortFormat)))
+                                      .arg(QLocale().toString(m_Data.value(ID_EpisodeDate).toDate(),QLocale::LongFormat).replace(" ","&nbsp;"))
                                        .arg(m_Data.value(ID_EpisodeLabel).toString().replace(" ", "&nbsp;"))
                                        .arg(m_Data.value(ID_UserName).toString().replace(" ", "&nbsp;")));
     m_Form->m_EpisodeLabel->setToolTip(QString("<p align=\"right\">%1&nbsp;-&nbsp;%2<br /><span style=\"color:gray;font-size:9pt\">%3</span></p>")
-                                       .arg(m_Data.value(ID_EpisodeDate).toDate().toString(QLocale().dateFormat(QLocale::ShortFormat)))
+                                       .arg(QLocale().toString(m_Data.value(ID_EpisodeDate).toDate(),QLocale::LongFormat).replace(" ","&nbsp;"))
                                        .arg(m_Data.value(ID_EpisodeLabel).toString().replace(" ", "&nbsp;"))
                                        .arg(m_Data.value(ID_UserName).toString().replace(" ", "&nbsp;")));
     return true;
@@ -676,11 +683,11 @@ QString BaseGroup::printableHtml(bool withValues) const
 
     // recreate the grid as an html table
     int i = 0;
-    int c = 0;
+//    int c = 0;
     int r = 0;
     int previousrow = 0;
     foreach(const QString &s, html) {
-        c = (i % numberColumns);
+//        c = (i % numberColumns);
         r = (i / numberColumns);
         if (r>previousrow) {
             previousrow = r;
@@ -1189,7 +1196,7 @@ void BaseRadio::retranslate()
 
 void BaseRadio::buttonClicked(QAbstractButton *radio)
 {
-    formItem()->itemDatas()->setData(0, radio->property("id"), Form::IFormItemData::CalculationsRole);
+    formItem()->itemData()->setData(0, radio->property("id"), Form::IFormItemData::CalculationsRole);
 }
 
 ////////////////////////////////////////// ItemData /////////////////////////////////////////////
@@ -2071,7 +2078,7 @@ QString BaseDate::printableHtml(bool withValues) const
                        "</tr>"
                        "</tbody>"
                        "</table>")
-                .arg(m_FormItem->spec()->label()).arg(m_Date->date().toString(getDateFormat(m_FormItem)));
+                .arg(m_FormItem->spec()->label()).arg(QLocale().toString(m_Date->date(), getDateFormat(m_FormItem)).replace(" ","&nbsp;"));
     }
     return content;
 }

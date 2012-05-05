@@ -163,7 +163,7 @@ static void addResultToEpisodeLabel(Form::FormMain *parent, QLabel *label, const
         return;
     if (!parent)
         return;
-    QString episodeLabel = parent->itemDatas()->data(0, Form::IFormItemData::ID_EpisodeLabel).toString();
+    QString episodeLabel = parent->itemData()->data(0, Form::IFormItemData::ID_EpisodeLabel).toString();
     QTextDocument doc;
     doc.setHtml(label->text());
     QString add = QString("[[%1 %2]]").arg(doc.toPlainText()).arg(result.toString());
@@ -174,9 +174,9 @@ static void addResultToEpisodeLabel(Form::FormMain *parent, QLabel *label, const
         episodeLabel.remove(begin, end-begin);
         // add the new value
         episodeLabel.insert(begin, add);
-        parent->itemDatas()->setData(Form::IFormItemData::ID_EpisodeLabel, episodeLabel);
+        parent->itemData()->setData(Form::IFormItemData::ID_EpisodeLabel, episodeLabel);
     } else {
-        parent->itemDatas()->setData(Form::IFormItemData::ID_EpisodeLabel, episodeLabel + "; " + add);
+        parent->itemData()->setData(Form::IFormItemData::ID_EpisodeLabel, episodeLabel + "; " + add);
     }
 }
 
@@ -294,9 +294,9 @@ void SumWidget::connectFormItems()
                 if (item==m_FormItem)
                     continue;
                 if (item->uuid().compare(uid, Qt::CaseInsensitive)==0) {
-                    if (item->itemDatas()) {
+                    if (item->itemData()) {
                         //                    qWarning() << "  connecting" << item->uuid();
-                        connect(item->itemDatas(), SIGNAL(dataChanged(int)), this, SLOT(recalculate(int)));
+                        connect(item->itemData(), SIGNAL(dataChanged(int)), this, SLOT(recalculate(int)));
                     }
                 }
             }
@@ -308,9 +308,9 @@ void SumWidget::connectFormItems()
             Form::FormItem *item = items.at(i);
             if (item==m_FormItem)
                 continue;
-            if (item->uuid().contains(reg) && item->itemDatas()) {
+            if (item->uuid().contains(reg) && item->itemData()) {
 //                qWarning() << "  connecting (regexp)" << item->uuid();
-                connect(item->itemDatas(), SIGNAL(dataChanged(int)), this, SLOT(recalculate(int)));
+                connect(item->itemData(), SIGNAL(dataChanged(int)), this, SLOT(recalculate(int)));
             }
         }
     }
@@ -334,7 +334,7 @@ void SumWidget::recalculate(const int modifiedRef)
             for(int i = 0; i < items.count(); ++i) {
                 Form::FormItem *item = items.at(i);
                 if (item->uuid().compare(uid, Qt::CaseInsensitive)==0) {
-                    QVariant val = item->itemDatas()->data(0, Form::IFormItemData::CalculationsRole);
+                    QVariant val = item->itemData()->data(0, Form::IFormItemData::CalculationsRole);
                     sum += val.toDouble();
                 }
             }
@@ -344,8 +344,8 @@ void SumWidget::recalculate(const int modifiedRef)
         QList<Form::FormItem *> items = p->flattenFormItemChildren();
         for(int i = 0; i < items.count(); ++i) {
             Form::FormItem *item = items.at(i);
-            if (item->uuid().contains(reg) && item->itemDatas()) {
-                QVariant val = item->itemDatas()->data(0, Form::IFormItemData::CalculationsRole);
+            if (item->uuid().contains(reg) && item->itemData()) {
+                QVariant val = item->itemData()->data(0, Form::IFormItemData::CalculationsRole);
                 sum += val.toDouble();
             }
         }
@@ -503,9 +503,9 @@ void ScriptWidget::connectFormItems()
                 continue;
             QString uuid = item->uuid();
             if (items.contains(uuid, Qt::CaseInsensitive)) {
-                if (item->itemDatas()) {
+                if (item->itemData()) {
 //                    qWarning() << "  connecting" << item->uuid();
-                    connect(item->itemDatas(), SIGNAL(dataChanged(int)), this, SLOT(recalculate(int)));
+                    connect(item->itemData(), SIGNAL(dataChanged(int)), this, SLOT(recalculate(int)));
                 }
             }
         }
@@ -517,9 +517,9 @@ void ScriptWidget::connectFormItems()
                 continue;
             QString uuid = item->uuid();
             if (uuid.contains(reg)) {
-                if (item->itemDatas()) {
+                if (item->itemData()) {
 //                    qWarning() << "  connecting (regexp)" << item->uuid();
-                    connect(item->itemDatas(), SIGNAL(dataChanged(int)), this, SLOT(recalculate(int)));
+                    connect(item->itemData(), SIGNAL(dataChanged(int)), this, SLOT(recalculate(int)));
                 }
             }
         }

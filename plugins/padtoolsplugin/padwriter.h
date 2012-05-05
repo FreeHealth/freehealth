@@ -32,6 +32,13 @@ QT_BEGIN_NAMESPACE
 class QTextCursor;
 QT_END_NAMESPACE
 
+/**
+ * \file padwriter.h
+ * \author Eric Maeker
+ * \version 0.8.0
+ * \date 25 Apr 2012
+*/
+
 namespace PadTools {
 class PadFragment;
 
@@ -63,6 +70,8 @@ private Q_SLOTS:
     void wysiwygCursorChanged();
     void rawSourceCursorChanged();
     void changeRawSourceScenario(QAction*);
+
+    void expandTokenTreeView();
     void analyseRawSource();
     void outputToRaw();
 

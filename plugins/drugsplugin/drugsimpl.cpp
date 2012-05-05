@@ -9,6 +9,7 @@
 #include "contextmanager/contextmanager.h"
 #include "contextmanager/contextmanager_p.h"
 #include "uniqueidmanager.h"
+#include <coreplugin/ipadtools.h>
 
 
 //#include ".h"
@@ -34,7 +35,9 @@ ICore* ICore::instance()
 }
 
 // instance is created by Core::CorePlugin()
-CoreImpl::CoreImpl(QObject *parent) : ICore(parent)
+CoreImpl::CoreImpl(QObject *parent) :
+    ICore(parent),
+    m_PadTools(0)
 {
     m_UID = new UniqueIDManager();
     m_Settings = new SettingsPrivate(this);

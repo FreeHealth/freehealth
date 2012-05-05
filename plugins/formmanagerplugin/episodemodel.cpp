@@ -512,13 +512,13 @@ public:
         /** \todo code here : use a QDomDocument */
         FormMain *form = m_RootForm->formMainChild(formUid);
         if (!form)
-            return false;
+            return QString::null;
 //        bool formIsModified = false;
 
         QHash<QString, FormItem *> items;
         foreach(FormItem *it, form->flattenFormItemChildren()) {
             /** \todo check nested items ??? */
-            if (it->itemDatas()) {
+            if (it->itemData()) {
 //                if (it->itemDatas()->isModified()) {
 //                    qWarning() << it->uuid() << "is modified";
 //                    formIsModified = true;
@@ -531,7 +531,7 @@ public:
             // create the XML episode file
             QHash<QString, QString> datas;
             foreach(FormItem *it, items) {
-                datas.insert(it->uuid(), it->itemDatas()->storableData().toString());
+                datas.insert(it->uuid(), it->itemData()->storableData().toString());
             }
             return Utils::createXml(Form::Constants::XML_FORM_GENERAL_TAG, datas, 2, false);
 //        }
@@ -560,8 +560,8 @@ public:
         if (episode && form) {
             episode->setData(EpisodeData::XmlContent, createXmlEpisode(formUid));
             episode->setData(EpisodeData::IsXmlContentPopulated, true);
-            episode->setData(EpisodeData::Label, form->itemDatas()->data(IFormItemData::ID_EpisodeLabel));
-            episode->setData(EpisodeData::UserDate, form->itemDatas()->data(IFormItemData::ID_EpisodeDate));
+            episode->setData(EpisodeData::Label, form->itemData()->data(IFormItemData::ID_EpisodeLabel));
+            episode->setData(EpisodeData::UserDate, form->itemData()->data(IFormItemData::ID_EpisodeDate));
             LOG_FOR("EpisodeModel", "Save episode: " + episode->data(EpisodeData::Label).toString());
             if (!settings()->value(Core::Constants::S_ALWAYS_SAVE_WITHOUT_PROMPTING, true).toBool()) {
                 bool yes = Utils::yesNoMessageBox(QCoreApplication::translate("EpisodeModel", "Save episode?"),
@@ -575,10 +575,10 @@ public:
 
             // inform the patient model
             foreach(FormItem *it, form->flattenFormItemChildren()) {
-                if (!it->itemDatas())
+                if (!it->itemData())
                     continue;
 //                qWarning() << "Feeding patientModel data with" << it->patientDataRepresentation() << it->itemDatas()->data(it->patientDataRepresentation(), IFormItemData::PatientModelRole);
-                patient()->setValue(it->patientDataRepresentation(), it->itemDatas()->data(it->patientDataRepresentation(), IFormItemData::PatientModelRole));
+                patient()->setValue(it->patientDataRepresentation(), it->itemData()->data(it->patientDataRepresentation(), IFormItemData::PatientModelRole));
             }
 
             // save episode to database
@@ -622,13 +622,13 @@ public:
 
 //        qWarning() << Q_FUNC_INFO << feedPatientModel << form->uuid();
         form->clear();
-        form->itemDatas()->setData(IFormItemData::ID_EpisodeDate, episode->data(EpisodeData::UserDate));
-        form->itemDatas()->setData(IFormItemData::ID_EpisodeLabel, episode->data(EpisodeData::Label));
+        form->itemData()->setData(IFormItemData::ID_EpisodeDate, episode->data(EpisodeData::UserDate));
+        form->itemData()->setData(IFormItemData::ID_EpisodeLabel, episode->data(EpisodeData::Label));
         const QString &username = user()->fullNameOfUser(episode->data(EpisodeData::UserCreatorUuid)); //value(Core::IUser::FullName).toString();
         if (username.isEmpty())
-            form->itemDatas()->setData(IFormItemData::ID_UserName, "No user");
+            form->itemData()->setData(IFormItemData::ID_UserName, "No user");
         else
-            form->itemDatas()->setData(IFormItemData::ID_UserName, username);
+            form->itemData()->setData(IFormItemData::ID_UserName, username);
 
         // feed the formitemdatas for this form and get the data for the patientmodel
         foreach(FormItem *it, items.values()) {
@@ -636,16 +636,16 @@ public:
                 qWarning() << "FormManager::activateForm :: ERROR: no item: " << items.key(it);
                 continue;
             }
-            if (!it->itemDatas())
+            if (!it->itemData())
                 continue;
 
-            it->itemDatas()->setStorableData(datas.value(it->uuid()));
+            it->itemData()->setStorableData(datas.value(it->uuid()));
             if (feedPatientModel) {
 //                qWarning() << "Feeding patientModel data with" << it->patientDataRepresentation() << it->itemDatas()->data(it->patientDataRepresentation(), IFormItemData::ID_ForPatientModel);
                 if (it->patientDataRepresentation() >= 0) {
                     if (WarnLogChronos)
                         Utils::Log::logTimeElapsed(chrono, q->objectName(), "feedFormWithEpisodeContent: feed patient model: " + it->uuid());
-                    patient()->setValue(it->patientDataRepresentation(), it->itemDatas()->data(it->patientDataRepresentation(), IFormItemData::PatientModelRole));
+                    patient()->setValue(it->patientDataRepresentation(), it->itemData()->data(it->patientDataRepresentation(), IFormItemData::PatientModelRole));
                 }
             }
         }
@@ -938,8 +938,8 @@ QVariant EpisodeModel::data(const QModelIndex &item, int role) const
             if (episode) {
                 QHash<QString, QString> tokens;
                 tokens.insert(Constants::T_LABEL, episode->data(EpisodeData::Label).toString());
-                tokens.insert(Constants::T_SMALLDATE, episode->data(EpisodeData::UserDate).toDate().toString(settings()->value(Constants::S_EPISODEMODEL_SHORTDATEFORMAT, "dd MM yyyy").toString()));
-                tokens.insert(Constants::T_FULLDATE, episode->data(EpisodeData::UserDate).toDateTime().toString(settings()->value(Constants::S_EPISODEMODEL_LONGDATEFORMAT, "dd MM yyyy").toString()));
+                tokens.insert(Constants::T_SMALLDATE, QLocale().toString(episode->data(EpisodeData::UserDate).toDate(), settings()->value(Constants::S_EPISODEMODEL_SHORTDATEFORMAT, tkTr(Trans::Constants::DATEFORMAT_FOR_MODEL)).toString()));
+                tokens.insert(Constants::T_FULLDATE, QLocale().toString(episode->data(EpisodeData::UserDate).toDate(), settings()->value(Constants::S_EPISODEMODEL_SHORTDATEFORMAT, tkTr(Trans::Constants::DATEFORMAT_FOR_MODEL)).toString()));
                 QString s = settings()->value(Constants::S_EPISODELABELCONTENT).toString();
                 Utils::replaceTokens(s, tokens);
                 return s;
@@ -983,10 +983,10 @@ QVariant EpisodeModel::data(const QModelIndex &item, int role) const
         case Label:
             if (episode)
                 return QString("<p align=\"right\">%1&nbsp;-&nbsp;%2<br /><span style=\"color:gray;font-size:9pt\">%3</span></p>")
-                        .arg(episode->data(EpisodeData::UserDate).toDate().toString(settings()->value(Constants::S_EPISODEMODEL_LONGDATEFORMAT, "dd MMM yyyy").toString()).replace(" ", "&nbsp;"))
+                        .arg(QLocale().toString(episode->data(EpisodeData::UserDate).toDate(), settings()->value(Constants::S_EPISODEMODEL_SHORTDATEFORMAT, tkTr(Trans::Constants::DATEFORMAT_FOR_MODEL)).toString()).replace(" ", "&nbsp;"))
                         .arg(episode->data(EpisodeData::Label).toString().replace(" ", "&nbsp;"))
                         .arg(user()->value(Core::IUser::FullName).toString() + "<br/>" +
-                             tr("Created: ") +  episode->data(EpisodeData::CreationDate).toDateTime().toString(settings()->value(Constants::S_EPISODEMODEL_LONGDATEFORMAT, "dd MMM yyyy").toString()));
+                             tr("Created: ") +  QLocale().toString(episode->data(EpisodeData::CreationDate).toDate(), settings()->value(Constants::S_EPISODEMODEL_LONGDATEFORMAT, tkTr(Trans::Constants::DATEFORMAT_FOR_MODEL)).toString()));
             if (form)
                 return form->spec()->label();
             break;
@@ -1306,17 +1306,19 @@ bool EpisodeModel::activateEpisode(const QModelIndex &index, const QString &form
     d->m_ActualEpisode = it;
     d->m_ActualEpisode_FormUid = formUid;
 
-    // clear actual form and fill episode datas
+    /** \todo this form code should not appear in a model's method according to strict MVC pattern.
+        Extract it to the form parts and maybe link with Signal/Slots? */
+    // clear actual form and fill episode data
     if (!form)
         return false;
     form->clear();
-    form->itemDatas()->setData(IFormItemData::ID_EpisodeDate, episode->data(EpisodeData::UserDate));
-    form->itemDatas()->setData(IFormItemData::ID_EpisodeLabel, episode->data(EpisodeData::Label));
+    form->itemData()->setData(IFormItemData::ID_EpisodeDate, episode->data(EpisodeData::UserDate));
+    form->itemData()->setData(IFormItemData::ID_EpisodeLabel, episode->data(EpisodeData::Label));
     const QString &username = user()->fullNameOfUser(episode->data(EpisodeData::UserCreatorUuid)); //value(Core::IUser::FullName).toString();
     if (username.isEmpty())
-        form->itemDatas()->setData(IFormItemData::ID_UserName, tr("No user"));
+        form->itemData()->setData(IFormItemData::ID_UserName, tr("No user"));
     else
-        form->itemDatas()->setData(IFormItemData::ID_UserName, username);
+        form->itemData()->setData(IFormItemData::ID_UserName, username);
 
     /** \todo move this part into a specific member of the private part */
     d->getEpisodeContent(episode);
@@ -1351,8 +1353,8 @@ bool EpisodeModel::activateEpisode(const QModelIndex &index, const QString &form
             qWarning() << "FormManager::activateForm :: ERROR: no item: " << s;
             continue;
         }
-        if (it->itemDatas())
-            it->itemDatas()->setStorableData(datas.value(s));
+        if (it->itemData())
+            it->itemData()->setStorableData(datas.value(s));
         else
             qWarning() << "FormManager::activateForm :: ERROR: no itemData: " << s;
     }

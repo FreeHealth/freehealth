@@ -218,6 +218,14 @@ INSTALLS += plugs_specs
     packageHelpers.files=$${SOURCES_GLOBAL_RESOURCES}/package_helpers/*
     INSTALLS+=packageHelpers
   }
+
+  # Default datapack servers list
+  !isEmpty(INSTALL_FREEDATAPACK_PATH):!isEmpty(SOURCES_FREEDATAPACK_PATH){
+    datapackDefServerList.path = $${INSTALL_FREEDATAPACK_PATH}/
+    datapackDefServerList.files = $${SOURCES_FREEDATAPACK_PATH}/defaultservers.txt
+    INSTALLS += datapackDefServerList
+  }
+
   # Install drugs databases
   contains(INSTALL_DRUGS,1):!isEmpty(INSTALL_FREEDATAPACK_PATH):!isEmpty(SOURCES_FREEDATAPACK_PATH){
     drugsdb.path = $${INSTALL_FREEDATAPACK_PATH}/drugs

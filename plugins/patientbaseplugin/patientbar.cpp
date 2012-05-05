@@ -44,6 +44,7 @@
 #include <coreplugin/isettings.h>
 
 #include <utils/log.h>
+#include <utils/global.h>
 
 #include <QDataWidgetMapper>
 #include <QIcon>
@@ -83,17 +84,16 @@ public:
         m_Mapper = new QDataWidgetMapper(q);
         m_Mapper->setModel(m_Model);
         m_Mapper->addMapping(ui->names, Core::IPatient::FullName, "text");
-        m_Mapper->addMapping(ui->age, Core::IPatient::Age, "text");
         m_Mapper->addMapping(ui->gender, Core::IPatient::GenderPixmap, "pixmap");
         m_Mapper->addMapping(ui->photo, Core::IPatient::Photo_64x64, "pixmap");
-//        QIcon icon = m_Model->index(m_Index->row(), Core::IPatient::IconizedGender).data().value<QIcon>();
-//        ui->names->setText(m_Model->index(m_Index->row(), Core::IPatient::FullName).data().toString());
-//        ui->age->setText(m_Model->index(m_Index->row(), Core::IPatient::Age).data().toString());
-//        ui->gender->setPixmap(icon.pixmap(QSize(16,16)));
-//        QPixmap photo = m_Model->index(m_Index->row(), Core::IPatient::Photo).data().value<QPixmap>();
-//        if (!photo.isNull())
-//            photo = photo.scaled(QSize(64,64), Qt::KeepAspectRatio);
-//        ui->photo->setPixmap(photo);
+    }
+
+    void clearUi()
+    {
+        ui->age->clear();
+        ui->gender->clear();
+        ui->names->clear();
+        ui->photo->clear();
     }
 
 public:
@@ -107,7 +107,6 @@ private:
 };
 }
 }
-
 
 PatientBar *PatientBar::m_Instance = 0;
 PatientBar *PatientBar::instance(QWidget *parent)
@@ -127,7 +126,6 @@ PatientBar::PatientBar(QWidget *parent) :
     }
     setPatientModel(PatientModel::activeModel());
     connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onCurrentPatientChanged()));
-//    connect(patient(), SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(patientDataChanged(QModelIndex, QModelIndex)));
 }
 
 PatientBar::~PatientBar()
@@ -136,7 +134,10 @@ PatientBar::~PatientBar()
 
 void PatientBar::setPatientModel(PatientModel *model)
 {
+    if (d->m_Model)
+        disconnect(model, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(patientDataChanged(QModelIndex, QModelIndex)));
     d->m_Model = model;
+    connect(model, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(patientDataChanged(QModelIndex, QModelIndex)));
     d->setUi();
     d->m_Mapper->setModel(model);
 }
@@ -146,6 +147,10 @@ void PatientBar::setCurrentIndex(const QModelIndex &index)
     if (d->m_Index)
         delete d->m_Index;
     d->m_Index = new QPersistentModelIndex(index);
+    d->clearUi();
+    QModelIndex top = d->m_Model->index(index.row(),0);
+    QModelIndex bottom = d->m_Model->index(index.row(), d->m_Model->columnCount() - 1);
+    patientDataChanged(top, bottom);
     d->m_Mapper->setCurrentModelIndex(QModelIndex());
     d->m_Mapper->setCurrentModelIndex(index);
 }
@@ -155,26 +160,17 @@ void PatientBar::onCurrentPatientChanged()
     setCurrentIndex(d->m_Model->currentPatient());
 }
 
-//static bool indexesIncludeColumn(const QModelIndex &left, const QModelIndex &right, int column)
-//{
-//    if (left.column()==column || right.column()==column) {
-//        return true;
-//    }
-//    if (left.column() < column)
-//        return false;
-//    if (right.column() > column)
-//        return false;
-//    return true;
-//}
+void PatientBar::patientDataChanged(const QModelIndex &top, const QModelIndex &bottom)
+{
+    if (IN_RANGE(Core::IPatient::DateOfBirth, top.column(), bottom.column())) {
+        QModelIndex dob = d->m_Model->index(d->m_Index->row(), Core::IPatient::DateOfBirth);
+        QModelIndex age = d->m_Model->index(d->m_Index->row(), Core::IPatient::Age);
+        d->ui->age->setText(d->m_Model->data(age, Qt::DisplayRole).toString());
+        d->ui->age->setToolTip(d->m_Model->data(dob, Qt::ToolTipRole).toString());
+    }
+}
 
-//void PatientBar::patientDataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight)
-//{
-//    if (indexesIncludeColumn(topLeft, bottomRight, Core::IPatient::DateOfBirth)) {
-
-//    }
-//}
-
-void PatientBar::paintEvent(QPaintEvent *)
+void PatientBar::paintEvent(QPaintEvent *e)
 {
     QPainter p(this);
 
@@ -195,6 +191,8 @@ void PatientBar::paintEvent(QPaintEvent *)
     p.drawLine(rect.topLeft(), rect.topRight());
     p.setPen(QColor(150, 160, 200));
     p.drawLine(rect.bottomLeft(), rect.bottomRight());
+
+    QWidget::paintEvent(e);
 }
 
 void PatientBar::changeEvent(QEvent *event)

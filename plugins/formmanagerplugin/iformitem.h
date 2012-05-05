@@ -77,7 +77,7 @@ public:
             m_Scripts(new FormItemScripts),
             m_Values(new FormItemValues(this)),
             m_FormWidget(0),
-            m_ItemDatas(0),
+            m_ItemData(0),
             m_PatientData(-1)
             {}
 
@@ -90,8 +90,8 @@ public:
     Form::FormItemValues *valueReferences() const {return m_Values;}
 
     // Access to database values. Pointer will not be deleted
-    void setItemDatas(Form::IFormItemData *data) {m_ItemDatas = data;}
-    Form::IFormItemData *itemDatas() {return m_ItemDatas;}
+    void setItemDatas(Form::IFormItemData *data) {m_ItemData = data;}
+    Form::IFormItemData *itemData() {return m_ItemData;}
 
     // Access to the user's widget
     virtual void setFormWidget(Form::IFormWidget *w) {m_FormWidget=w;}
@@ -106,8 +106,8 @@ public:
 
     // FormIO extra datas
     virtual void addExtraData(const QString &id, const QString &data);
-    virtual QHash<QString,QString> extraDatas() const {return m_ExtraDatas;}
-    virtual void clearExtraDatas() {m_ExtraDatas.clear();}
+    virtual QHash<QString,QString> extraDatas() const {return m_ExtraData;}
+    virtual void clearExtraDatas() {m_ExtraData.clear();}
     virtual QStringList getOptions() const;
 
     // Data representation
@@ -122,8 +122,8 @@ private:
     Form::FormItemScripts *m_Scripts;
     Form::FormItemValues *m_Values;
     Form::IFormWidget *m_FormWidget;
-    Form::IFormItemData *m_ItemDatas;
-    QHash<QString, QString> m_ExtraDatas;
+    Form::IFormItemData *m_ItemData;
+    QHash<QString, QString> m_ExtraData;
     int m_PatientData;
 };
 /** Returns the first level Form::FormItem children. */

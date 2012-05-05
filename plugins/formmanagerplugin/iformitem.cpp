@@ -469,19 +469,19 @@ FormItem::~FormItem()
         delete m_Scripts;
         m_Scripts = 0;
     }
-    if (m_ItemDatas) {
-        delete m_ItemDatas;
-        m_ItemDatas = 0;
+    if (m_ItemData) {
+        delete m_ItemData;
+        m_ItemData = 0;
     }
 }
 
 void FormItem::addExtraData(const QString &id, const QString &data)
 {
-    if (m_ExtraDatas.keys().indexOf(id, Qt::CaseInsensitive) != -1) {
-        QString add = m_ExtraDatas.value(id) + ";" + data;
-        m_ExtraDatas.insert(id, add);
+    if (m_ExtraData.keys().indexOf(id, Qt::CaseInsensitive) != -1) {
+        QString add = m_ExtraData.value(id) + ";" + data;
+        m_ExtraData.insert(id, add);
     } else {
-        m_ExtraDatas.insert(id,data);
+        m_ExtraData.insert(id,data);
     }
 }
 
@@ -489,8 +489,8 @@ void FormItem::addExtraData(const QString &id, const QString &data)
 QStringList FormItem::getOptions() const
 {
     QStringList l;
-    l = m_ExtraDatas.value("options").split(";", QString::SkipEmptyParts);
-    l += m_ExtraDatas.value("option").split(";", QString::SkipEmptyParts);
+    l = m_ExtraData.value("options").split(";", QString::SkipEmptyParts);
+    l += m_ExtraData.value("option").split(";", QString::SkipEmptyParts);
     return l;
 }
 
@@ -596,8 +596,8 @@ void FormMain::languageChanged()
 void FormMain::clear()
 {
     foreach(FormItem *it, this->flattenFormItemChildren()) {
-        if (it->itemDatas())
-            it->itemDatas()->clear();
+        if (it->itemData())
+            it->itemData()->clear();
     }
 }
 

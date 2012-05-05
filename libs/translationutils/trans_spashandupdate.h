@@ -73,7 +73,9 @@ const char* const CURRENT_VERSION                    = QT_TRANSLATE_NOOP("tkCons
 const char* const LATEST_VERSION                     = QT_TRANSLATE_NOOP("tkConstants", "Latest version:");
 const char* const UPDATE_AVAILABLE                   = QT_TRANSLATE_NOOP("tkConstants", "Update available");
 const char* const UPDATE                             = QT_TRANSLATE_NOOP("tkConstants", "Update");
+const char* const LAST_UPDATE_CHECKING               = QT_TRANSLATE_NOOP("tkConstants", "Last update checking");
 const char* const INSTALL                            = QT_TRANSLATE_NOOP("tkConstants", "Install");
+const char* const RECOMMENDED_UPDATE_FREQUENCY       = QT_TRANSLATE_NOOP("tkConstants", "Recommended update frequency");
 
 } // end Constants
 } // end TranslationUtils

@@ -7,9 +7,9 @@
     <!-- Non translatable values -->
     <authors>Eric Maeker, MD</authors>
     <version>0.7.0</version>
-    <fmfversion>0.7.0</fmfversion>
+    <fmfversion>0.7.1</fmfversion>
     <cdate>2011-09-02</cdate>
-    <lmdate>2012-02-26</lmdate>
+    <lmdate>2012-04-26</lmdate>
     <icon>generalpractitioner.png</icon>
     <weblink></weblink>
     <bibliography/>
@@ -23,6 +23,10 @@
     <specialties lang="fr">Médecine générale</specialties>
     <specialties lang="xx">General practice</specialties>
     <updateinfo>
+    <updateversion from="0.7.0" to="0.7.1">
+      <text lang="fr">Faute de frappe dans les catégories des antécédents</text>
+      <text lang="en">Typo in PHMx categories</text>
+    </updateversion>
       <updateversion from="0.6.0" to="0.7.0">
         <text lang="fr">Amélioration du processus d'impression.&lt;br />Ajoute un bouton pour importer dans la prescription courante les traitements chroniques.&lt;br />Ajout des éléments de contact des patients</text>
         <text lang="en">Improvements in the printing process.&lt;br />Add a button next to the current prescription to append the chronic therapeutics.&lt;br />Adding contact items to patient identity</text>

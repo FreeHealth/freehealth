@@ -24,8 +24,8 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef IUSER_H
-#define IUSER_H
+#ifndef CORE_IUSER_H
+#define CORE_IUSER_H
 
 #include <coreplugin/core_exporter.h>
 
@@ -40,10 +40,6 @@
 */
 
 namespace Core {
-
-/**
-  \brief Use this class to avoid any plugin dependencies (other than Core), when needing to access to patients datas.
-*/
 
 class CORE_EXPORT IUser : public QObject
 {
@@ -136,8 +132,10 @@ public:
     };
     Q_DECLARE_FLAGS(UserRights, UserRight)
 
-    IUser(QObject *parent) : QObject(parent) {}
-    virtual ~IUser() {}
+    IUser(QObject *parent);
+    virtual ~IUser();
+
+    void registerUserTokens() const;
 
     virtual void clear() = 0;
     virtual bool has(const int ref) const = 0;
@@ -164,7 +162,7 @@ Q_SIGNALS:
 };
 
 }  // End Core
+
 Q_DECLARE_OPERATORS_FOR_FLAGS(Core::IUser::UserRights)
 
-
-#endif // IUSER_H
+#endif // CORE_IUSER_H

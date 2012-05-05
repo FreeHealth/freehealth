@@ -480,8 +480,8 @@ QStringList ControlReceipts::getListOfSums()
     double banking = 0.00;
     double other = 0.00;
     double dues = 0.00;
-    double totalReceived = 0.00;
-    double totals = 0.00;
+//    double totalReceived = 0.00;
+//    double totals = 0.00;
     QAbstractItemModel *model = ui->tableView->model();
    int modelRowCount = model->rowCount(QModelIndex());
    for(int i = 0; i < modelRowCount ; i ++){

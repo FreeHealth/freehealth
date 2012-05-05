@@ -40,28 +40,28 @@
 <context>
     <name>Core</name>
     <message>
-        <location filename="../../freediams/plugins/coreplugin/coreimpl.cpp" line="156"/>
-        <location filename="../../freediams/plugins/coreplugin/coreimpl.cpp" line="158"/>
+        <location filename="../../freediams/plugins/coreplugin/coreimpl.cpp" line="159"/>
+        <location filename="../../freediams/plugins/coreplugin/coreimpl.cpp" line="161"/>
         <source>Core intialization finished...</source>
         <translation>Kern Initialisierung beendet...</translation>
     </message>
     <message>
-        <location filename="../../freediams/plugins/coreplugin/coreimpl.cpp" line="214"/>
+        <location filename="../../freediams/plugins/coreplugin/coreimpl.cpp" line="217"/>
         <source>You are running FreeDiams for the first time. You need to approve the licence terms.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freediams/plugins/coreplugin/coreimpl.cpp" line="217"/>
+        <location filename="../../freediams/plugins/coreplugin/coreimpl.cpp" line="220"/>
         <source>You are running a new version of FreeDiams, you need to renew the licence agreement.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freediams/plugins/coreplugin/coreimpl.cpp" line="227"/>
+        <location filename="../../freediams/plugins/coreplugin/coreimpl.cpp" line="230"/>
         <source>You are updating FreeDiams, do you want to update your personnal preferences ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freediams/plugins/coreplugin/coreimpl.cpp" line="228"/>
+        <location filename="../../freediams/plugins/coreplugin/coreimpl.cpp" line="231"/>
         <source>With the new version some preferences should be outdated. Answering yes will allow FreeDiams to update your personnal preferences.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -303,52 +303,52 @@ Using Url: %1
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.ui" line="43"/>
+        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.ui" line="49"/>
         <source>Database server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.ui" line="55"/>
+        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.ui" line="61"/>
         <source>Server type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.ui" line="66"/>
+        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.ui" line="72"/>
         <source>MySQL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.ui" line="80"/>
+        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.ui" line="86"/>
         <source>Host name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.ui" line="100"/>
+        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.ui" line="106"/>
         <source>Port</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.ui" line="120"/>
+        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.ui" line="126"/>
         <source>Test host connection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.ui" line="130"/>
+        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.ui" line="143"/>
         <source>User identification</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.ui" line="142"/>
+        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.ui" line="155"/>
         <source>Login</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.ui" line="162"/>
+        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.ui" line="175"/>
         <source>Password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.ui" line="176"/>
+        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.ui" line="189"/>
         <source>Use the default FreeMedForms administrator</source>
         <translation type="unfinished"></translation>
     </message>
@@ -815,32 +815,38 @@ Using Url: %1
 <context>
     <name>Core::ServerPreferencesWidget</name>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.cpp" line="175"/>
+        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.cpp" line="167"/>
         <source>Host name error (%1:%2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.cpp" line="213"/>
+        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.cpp" line="148"/>
+        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.cpp" line="193"/>
         <source>Host not reachable...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.cpp" line="217"/>
+        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.cpp" line="152"/>
+        <source>Host available...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.cpp" line="198"/>
         <source>No anonymous connection allowed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.cpp" line="220"/>
+        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.cpp" line="202"/>
         <source>Test in progress...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.cpp" line="234"/>
+        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.cpp" line="216"/>
         <source>Connection error: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.cpp" line="240"/>
+        <location filename="../../plugins/coreplugin/dialogs/serverpreferenceswidget.cpp" line="223"/>
         <source>Connected</source>
         <translation type="unfinished"></translation>
     </message>

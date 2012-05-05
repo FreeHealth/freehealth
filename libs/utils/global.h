@@ -99,6 +99,8 @@ UTILS_EXPORT bool isRunningOnWin();
 UTILS_EXPORT bool isRunningOnLinux();
 /** \brief Return true if the application is running on FreeBsd. */
 UTILS_EXPORT bool isRunningOnFreebsd();
+/** \brief Return true if the application was built was the LINUX_INTEGRATED tag. */
+UTILS_EXPORT bool isLinuxIntegratedCompilation();
 /** \brief Returns information of 'uname -a' command. Works on Linux, MacOs, FreeBSD */
 UTILS_EXPORT QString uname();
 UTILS_EXPORT QString osName();

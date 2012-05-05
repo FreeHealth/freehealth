@@ -59,9 +59,11 @@ static inline Core::ISettings *settings()  { return Core::ICore::instance()->set
 static inline Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
 static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
 static inline void messageSplash(const QString &s) {theme()->messageSplashScreen(s); }
+static inline QString defaultServerFile() {return settings()->path(Core::ISettings::DataPackApplicationPath) + "/defaultservers.txt";}
 
 DataPackPluginIPlugin::DataPackPluginIPlugin()
 {
+    setObjectName("DataPackPlugin");
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating DataPackPluginIPlugin";
 
@@ -152,13 +154,39 @@ void DataPackPluginIPlugin::extensionsInitialized()
     xmlConfig = QString(QByteArray::fromBase64(settings()->value("datapack/server/config").toByteArray()));
 #  endif
 #endif
-    if (!core.serverManager()->setGlobalConfiguration(xmlConfig))
-        LOG_ERROR("Unable to set the datapack server manager configuration");
 
-    // Always unsure that the freemedforms datapack server is available
-    DataPack::Server http("http://packs.freemedforms.com");
-    http.setUrlStyle(DataPack::Server::HttpPseudoSecuredAndZipped);
-    core.serverManager()->addServer(http);
+    if (xmlConfig.isEmpty()) {
+        // read default servers
+        QString content = Utils::readTextFile(defaultServerFile(), Utils::DontWarnUser);
+        if (!content.isEmpty()) {
+            LOG(tr("Trying to set the default datapack servers using file %1").arg(defaultServerFile()));
+            foreach(const QString &line, content.split("\n")) {
+                if (line.startsWith("--") || (line.startsWith("//")))
+                    continue;
+                QStringList values = line.split(";");
+                QString serverUrl;
+                DataPack::Server::UrlStyle urlStyle;
+                if (values.count()==2) {
+                    serverUrl = values.at(0);
+                    urlStyle = DataPack::Server::UrlStyle(values.at(1).toInt());
+                    DataPack::Server server(serverUrl);
+                    server.setUrlStyle(urlStyle);
+                    if (!core.serverManager()->addServer(server))
+                        LOG_ERROR(tr("Unable to add default server %1 (%2)").arg(serverUrl).arg(urlStyle));
+                    else
+                        LOG(tr("Adding default server %1 (%2)").arg(serverUrl).arg(urlStyle));
+                }
+            }
+        }
+    } else {
+        if (!core.serverManager()->setGlobalConfiguration(xmlConfig))
+            LOG_ERROR("Unable to set the datapack server manager configuration");
+        // Always unsure that the freemedforms datapack server is available
+        DataPack::Server http("http://packs.freemedforms.com");
+        http.setUrlStyle(DataPack::Server::HttpPseudoSecuredAndZipped);
+        core.serverManager()->addServer(http);
+    }
+
 
     /** \todo Check for package update -> thread this */
 

@@ -395,6 +395,35 @@ void PadDocument::run(QMap<QString,QVariant> &tokens)
     Q_EMIT endTokenReplacement();
 }
 
+/** Starts the replacement of tokens. This function will recreate the output QTextDocument. This one will be cleared. */
+void PadDocument::toOutput(Core::ITokenPool *pool)
+{
+    Q_ASSERT(_docSource);
+    if (!_docSource)
+        return;
+    Q_EMIT beginTokenReplacement();
+
+    if (!_docOutput) {
+        _docOutput = new QTextDocument(this);
+    }
+    _docOutput->clear();
+    _docOutput->setHtml(_docSource->toHtml());
+
+    // sync raw && output ranges of all fragments
+    foreach (PadFragment *fragment, _fragments)
+        syncOutputRange(fragment);
+
+    // run tokens on fragments
+    foreach (PadFragment *fragment, _fragments)
+        fragment->toOutput(pool, this);
+
+    //    positionTranslator().debug();
+//    debug();
+
+    // emit end signal
+    Q_EMIT endTokenReplacement();
+}
+
 static void syncRawRange(PadFragment *f)
 {
     f->setStart(f->outputStart());
@@ -443,6 +472,7 @@ void PadDocument::softReset()
 
     PadAnalyzer a;
     a.analyze(_docSource, this);
+    /** \todo use ITokenPool */
     if (_tokenModel)
         run(_tokenModel->tokens());//, _docSource, _docOutput);
 

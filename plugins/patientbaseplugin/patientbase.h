@@ -74,7 +74,16 @@ public:
                               QString uuid, const int lkid,
                               const QString &photoFile = QString(), const QDate &death = QDate());
 
-    //private:
+    QString patientUuid(const QString &birthname, const QString &secondname, const QString &firstname,
+                        const QString &gender, const QDate &dob) const;
+    bool isPatientExists(const QString &birthname, const QString &secondname, const QString &firstname,
+                         const QString &gender, const QDate &dob) const;
+
+//    bool mergePatients(const QString &uuid1, const QString &uuid2);
+
+    void toTreeWidget(QTreeWidget *tree);
+
+private:
     bool createDatabase(const QString &connectionName, const QString &dbName,
                           const QString &pathOrHostName,
                           TypeOfAccess access, AvailableDrivers driver,
@@ -83,16 +92,12 @@ public:
                           CreationOption createOption
                          );
 
-    void toTreeWidget(QTreeWidget *tree);
-
 private Q_SLOTS:
     void onCoreDatabaseServerChanged();
 
 private:
     static bool m_initialized;
     static PatientBase *m_Instance;
-//    QList<PatientData *> m_OrderedHistory;
-//    bool m_IsNewlyCreated;
 };
 
 }  // End namespace Internal

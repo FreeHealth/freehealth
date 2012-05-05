@@ -33,6 +33,14 @@
 #include <QMap>
 #include <QVariant>
 
+/**
+ * \file pad_item.h
+ * \author Eric Maeker, Guillaume Denry
+ * \version 0.8.0
+ * \date 05 May 2012
+*/
+
+
 namespace PadTools {
 class PadDocument;
 
@@ -66,6 +74,7 @@ public:
     bool isAfterOutputPosition(const int pos) const;
 
     void run(QMap<QString,QVariant> &tokens, PadDocument *document);
+    void toOutput(Core::ITokenPool *pool, PadDocument *document);
     void toRaw(PadDocument *doc);
 
     void debug(int indent = 0) const;
@@ -91,6 +100,7 @@ public:
     void debug(int indent = 0) const;
 
     void run(QMap<QString,QVariant> &tokens, PadDocument *document);
+    void toOutput(Core::ITokenPool *pool, PadDocument *document);
     void toRaw(PadDocument *doc);
 
 private:
@@ -121,6 +131,7 @@ public:
     void debug(int indent = 0) const;
 
     void run(QMap<QString,QVariant> &tokens, PadDocument *document);
+    void toOutput(Core::ITokenPool *pool, PadDocument *document);
     void toRaw(PadDocument *doc);
 
     QList<PadFragment*> children() const;

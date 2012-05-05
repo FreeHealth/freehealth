@@ -37,12 +37,19 @@
 #include "pad_document.h"
 #include "pad_item.h"
 
+/**
+ * \file pad_analyzer.h
+ * \author Eric Maeker, Guillaume Denry
+ * \version 0.8.0
+ * \date 25 Apr 2012
+*/
+
 namespace PadTools {
 namespace Internal {
 class PadAnalyzerPrivate;
 }
 
-/** \todo make jobs asynchronous */
+/** \todo make jobs asynchronous and threaded */
 
 class PadAnalyzer : public QObject
 {
@@ -52,7 +59,7 @@ public:
     ~PadAnalyzer();
 
     PadDocument *analyze(const QString &source);
-    PadDocument *analyze(QTextDocument *source, PadDocument *padDocument = 0);
+    PadDocument *analyze(QTextDocument *source, PadDocument *padDocument);
 
     const QList<Core::PadAnalyzerError> lastErrors() const;
 

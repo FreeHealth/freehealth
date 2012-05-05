@@ -19,7 +19,7 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developers :                                                    *
+ *   Main Developers :                                                     *
  *       Eric MAEKER, MD <eric.maeker@gmail.com>                           *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
@@ -30,37 +30,41 @@
 #include <QAbstractTableModel>
 
 namespace DataPack {
-    class ServerModel : public QAbstractTableModel {
-        Q_OBJECT
-    public:
-        enum DataRepresentation {
-            PlainTextLabel = 0,
-            HtmlLabel,
-            Uuid,
-            Version,
-            Authors,
-            Vendor,
-            NativeUrl,
-            CreationDate,
-            LastUpdateDate,
-            RecommendedUpdateFrequencyIndex,
-            HtmlDescription,
-            ColumnCount
-        };
 
-        ServerModel(QObject *parent = 0);
-
-        int rowCount(const QModelIndex &parent = QModelIndex()) const;
-        int columnCount(const QModelIndex &parent = QModelIndex()) const {Q_UNUSED(parent); return ColumnCount;}
-
-        QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-
-    private Q_SLOTS:
-        void serverAdded(int row);
-        void serverRemoved(int row);
-        void allServerDescriptionAvailable();
-
+class ServerModel : public QAbstractTableModel
+{
+    Q_OBJECT
+public:
+    enum DataRepresentation {
+        PlainTextLabel = 0,
+        HtmlLabel,
+        Uuid,
+        Version,
+        Authors,
+        Vendor,
+        NativeUrl,
+        CreationDate,
+        LastUpdateDate,
+        RecommendedUpdateFrequencyIndex,
+        HtmlDescription,
+        ColumnCount
     };
+
+    ServerModel(QObject *parent = 0);
+
+    int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    int columnCount(const QModelIndex &parent = QModelIndex()) const {Q_UNUSED(parent); return ColumnCount;}
+
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+
+    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
+
+private Q_SLOTS:
+    void serverAdded(int row);
+    void serverRemoved(int row);
+    void allServerDescriptionAvailable();
+
+};
 }
 
 #endif // DATAPACK_SERVERMODEL_H

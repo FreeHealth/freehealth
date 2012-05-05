@@ -36,6 +36,13 @@
 #include <QObject>
 #include <QTimer>
 
+/**
+ * \file itoken.h
+ * \author Eric Maeker
+ * \version 0.8.0
+ * \date 05 May 2012
+*/
+
 namespace PadTools {
 class TokenModel;
 
@@ -101,6 +108,8 @@ public:
 
     // Start replacement of tokens  (raw to output)
     void run(QMap<QString,QVariant> &, PadDocument *) {Q_ASSERT(false);/* Should never be used*/}
+    void toOutput(Core::ITokenPool *pool, PadDocument *document) {Q_UNUSED(pool); Q_UNUSED(document);Q_ASSERT(false);/* Should never be used*/}
+    void toOutput(Core::ITokenPool *pool);
     void run(QMap<QString,QVariant> &tokens);
 
     // Start token creation  (output to raw)

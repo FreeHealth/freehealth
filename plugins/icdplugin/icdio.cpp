@@ -142,8 +142,8 @@ public:
     QString modelRowToHtml(const IcdCollectionModel *model, int row, const QModelIndex &parent)
     {
         QString htmlRow, htmlChild;
-        bool hasChild = false;
-        bool hasParent = false;
+//        bool hasChild = false;
+//        bool hasParent = false;
         if (parent==QModelIndex()) {
             const QModelIndex &current = model->index(row, 0);
             if (model->hasChildren(current)) {
@@ -153,10 +153,10 @@ public:
                     ++i;
                 }
                 htmlChild = QString("<ol type=i>%1</ol>").arg(htmlChild);
-                hasChild = true;
+//                hasChild = true;
             }
-        } else {
-            hasParent = true;
+//        } else {
+//            hasParent = true;
         }
 
         const QString &code = model->index(row, IcdCollectionModel::CodeWithDaget, parent).data().toString();

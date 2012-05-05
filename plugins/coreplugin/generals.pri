@@ -39,4 +39,6 @@ SOURCES += $${PWD}/uniqueidmanager.cpp \
     $${PWD}/filemanager.cpp \
     $${PWD}/ipatient.cpp \
     $${PWD}/iuser.cpp \
-    $${PWD}/idocumentprinter.cpp
+    $${PWD}/idocumentprinter.cpp \
+    $${PWD}/ipadtools.cpp
+

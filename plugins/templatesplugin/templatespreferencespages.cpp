@@ -153,7 +153,7 @@ void TemplatesPreferencesWidget::saveToSettings(Core::ISettings *sets)
     defaultvalues.insert(Constants::S_PROMPTFORDELETION, deletionBox->isChecked());
 
     foreach(const QString &k, defaultvalues.keys()) {
-        settings()->setValue(k, defaultvalues.value(k));
+        s->setValue(k, defaultvalues.value(k));
     }
 }
 

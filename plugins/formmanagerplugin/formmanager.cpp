@@ -378,7 +378,8 @@ void FormManager::executeOnloadScript(Form::FormMain *emptyRootForm)
 
 void FormManager::packChanged(const DataPack::Pack &pack)
 {
-    if (pack.dataType() != DataPack::Pack::Forms)
+    if ((pack.dataType() != DataPack::Pack::FormSubset) ||
+            (pack.dataType() != DataPack::Pack::SubForms))
         return;
 
     // get all form readers (IFormIO)

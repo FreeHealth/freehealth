@@ -31,6 +31,7 @@
 #include <QPixmap>
 #include <QPainter>
 #include <QLinearGradient>
+#include <QHeaderView>
 
 #include <QDebug>
 
@@ -40,6 +41,7 @@ TokenTreeView::TokenTreeView(QWidget *parent) :
     QTreeView(parent)
 {
     setSelectionMode(QAbstractItemView::SingleSelection);
+    header()->setResizeMode(0, QHeaderView::Stretch);
 }
 
 QPixmap TokenTreeView::renderToPixmap(const QModelIndexList &indexes, QRect *r)

@@ -40,6 +40,7 @@
 #include <coreplugin/iuser.h>
 #include <coreplugin/constants_icons.h>
 #include <coreplugin/commandlineparser.h>
+#include <coreplugin/ipadtools.h>
 
 #include <translationutils/constanttranslations.h>
 #include <utils/log.h>
@@ -53,6 +54,8 @@
 #include <QFont>
 #include <QWidget>
 #include <QSplashScreen>
+#include <QLibraryInfo>
+#include <QTranslator>
 
 namespace Core {
 namespace Internal {
@@ -76,7 +79,8 @@ CoreImpl::CoreImpl(QObject *parent) :
         m_MainWindow(0),
         m_ActionManager(0),
         m_ContextManager(0),
-        m_UID(new UniqueIDManager)
+        m_UID(new UniqueIDManager),
+        m_PadTools(0)
 {
     m_Settings = new SettingsPrivate(this);
     m_Settings->setPath(ISettings::UpdateUrl, Utils::Constants::FREEICD_UPDATE_URL);

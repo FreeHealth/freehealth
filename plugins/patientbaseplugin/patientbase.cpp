@@ -205,8 +205,7 @@ bool PatientBase::init()
     return true;
 }
 
-static inline Patients::Internal::PatientBase *patientBase()  { return Patients::Internal::PatientBase::instance(); }
-
+/** Creates a virtual patient with the specified data. Virtual patient can be hidden from the ui using a preference setting. */
 void PatientBase::createVirtualPatient(const QString &name, const QString &secondname, const QString &firstname,
                           const QString &gender, const int title, const QDate &dob,
                           const QString &country, const QString &note,
@@ -226,8 +225,8 @@ void PatientBase::createVirtualPatient(const QString &name, const QString &secon
             return;
         }
     }
-    QSqlQuery query(patientBase()->database());
-    query.prepare(patientBase()->prepareInsertQuery(Table_IDENT));
+    QSqlQuery query(database());
+    query.prepare(prepareInsertQuery(Table_IDENT));
     query.bindValue(IDENTITY_ID, QVariant());
     query.bindValue(IDENTITY_UID, uuid);
     query.bindValue(IDENTITY_LK_TOPRACT_LKID, lkid);
@@ -275,7 +274,7 @@ void PatientBase::createVirtualPatient(const QString &name, const QString &secon
         QBuffer buffer(&ba);
         buffer.open(QIODevice::WriteOnly);
         pix.save(&buffer, "PNG"); // writes image into ba in PNG format {6a247e73-c241-4556-8dc8-c5d532b8457e}
-        query.prepare(patientBase()->prepareInsertQuery(Table_PATIENT_PHOTO));
+        query.prepare(prepareInsertQuery(Table_PATIENT_PHOTO));
         query.bindValue(PHOTO_ID, QVariant());
         query.bindValue(PHOTO_UID, Utils::Database::createUid());
         query.bindValue(PHOTO_PATIENT_UID, uuid);
@@ -286,6 +285,44 @@ void PatientBase::createVirtualPatient(const QString &name, const QString &secon
     }
 }
 
+/** Return a patient uuid in the database or a QString::null. */
+QString PatientBase::patientUuid(const QString &birthname,
+                                 const QString &secondname,
+                                 const QString &firstname,
+                                 const QString &gender,
+                                 const QDate &dob) const
+{
+    using namespace Patients::Constants;
+    QHash<int, QString> where;
+    where.insert(IDENTITY_BIRTHNAME, QString("='%1'").arg(birthname));
+    where.insert(IDENTITY_FIRSTNAME, QString("='%1'").arg(firstname));
+    where.insert(IDENTITY_SECONDNAME, QString("='%1'").arg(secondname));
+    where.insert(IDENTITY_GENDER, QString("='%1'").arg(gender));
+    where.insert(IDENTITY_DOB, QString("='%1'").arg(dob.toString(Qt::ISODate)));
+    QString req = select(Table_IDENT, IDENTITY_UID, where);
+    QSqlQuery query(database());
+    QString toReturn;
+    if (query.exec(req)) {
+        if (query.next()) {
+            toReturn = query.value(0).toString();
+        }
+    } else {
+        LOG_QUERY_ERROR_FOR("PatientBase", query);
+    }
+    return toReturn;
+}
+
+/** Test the existence of a patient in the database. */
+bool PatientBase::isPatientExists(const QString &birthname,
+                                  const QString &secondname,
+                                  const QString &firstname,
+                                  const QString &gender,
+                                  const QDate &dob) const
+{
+    return (!patientUuid(birthname, secondname, firstname, gender, dob).isNull());
+}
+
+/** Private part of the Patients::PatientBase that creates the database. \sa Utils::Database. */
 bool PatientBase::createDatabase(const QString &connectionName , const QString &dbName,
                     const QString &pathOrHostName,
                     TypeOfAccess access, AvailableDrivers driver,
@@ -377,6 +414,7 @@ bool PatientBase::createDatabase(const QString &connectionName , const QString &
     return true;
 }
 
+/** Reconnect the database when the database server changes. \sa Core::ICore::databaseServerChanged(), Core::ISettings::databaseConnector() */
 void PatientBase::onCoreDatabaseServerChanged()
 {
     m_initialized = false;
@@ -386,6 +424,7 @@ void PatientBase::onCoreDatabaseServerChanged()
     init();
 }
 
+/** For debugging purpose */
 void PatientBase::toTreeWidget(QTreeWidget *tree)
 {
     Database::toTreeWidget(tree);

@@ -83,6 +83,13 @@ void IView::addToolBar(QToolBar *bar)
 void IView::setItemView(QAbstractItemView *view)
 {
     layout()->addWidget(view);
+    // Connect signal overload
+    connect(view, SIGNAL(activated(QModelIndex)), this, SIGNAL(activated(QModelIndex)));
+    connect(view, SIGNAL(clicked(QModelIndex)), this, SIGNAL(clicked(QModelIndex)));
+    connect(view, SIGNAL(doubleClicked(QModelIndex)), this, SIGNAL(doubleClicked(QModelIndex)));
+    connect(view, SIGNAL(entered(QModelIndex)), this, SIGNAL(entered(QModelIndex)));
+    connect(view, SIGNAL(pressed(QModelIndex)), this, SIGNAL(pressed(QModelIndex)));
+    connect(view, SIGNAL(viewportEntered()), this, SIGNAL(viewportEntered()));
 }
 
 namespace Views {
@@ -360,6 +367,7 @@ void ExtendedView::on_edit_triggered()
 
 void ExtendedView::contextMenu(const QPoint &p)
 {
+    Q_UNUSED(p);
     /** \todo improve this */
 //    QMenu *pop = getContextMenu();
 //    pop->popup(view->mapToGlobal(p));

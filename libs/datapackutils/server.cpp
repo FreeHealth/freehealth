@@ -200,6 +200,12 @@ QString Server::urlStyleName() const
     return urlStyleName(m_UrlStyle);
 }
 
+/** Return true if the server needs a user authentification to proceed pack installation. */
+bool Server::requiereAuthentification() const
+{
+    return m_Desc.data(ServerDescription::RequiereAuthentification).toBool();
+}
+
 /**
  * Reads the XML configuration content of the server and
  * create the DataPack::ServerDescription and the DataPack::ServerContent

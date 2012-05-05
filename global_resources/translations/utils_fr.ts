@@ -564,12 +564,12 @@
 <context>
     <name>Utils::Internal::UpdateCheckerPrivate</name>
     <message>
-        <location filename="../../libs/utils/updatechecker.cpp" line="108"/>
+        <location filename="../../libs/utils/updatechecker.cpp" line="111"/>
         <source>Error %1 while retreiving update file %2</source>
         <translation>Erreur %1 lors du rapatriement du fichier de mise à jour %2</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/updatechecker.cpp" line="132"/>
+        <location filename="../../libs/utils/updatechecker.cpp" line="135"/>
         <source>* Updates of version: %1</source>
         <translation>* Mises à jour de la version : %1</translation>
     </message>
@@ -652,7 +652,7 @@
 <context>
     <name>Utils::UpdateChecker</name>
     <message>
-        <location filename="../../libs/utils/updatechecker.cpp" line="280"/>
+        <location filename="../../libs/utils/updatechecker.cpp" line="284"/>
         <source>An update is available. Please check the web site: &lt;a href=&quot;%1&quot;&gt;%1&lt;/a&gt;</source>
         <translation>Une mise à jour est disponible. Veuillez vérifier sur le site internet de l&apos;application : &lt;a href=&quot;%1&quot;&gt;%1&lt;/a&gt;</translation>
     </message>

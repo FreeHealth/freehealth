@@ -59,7 +59,8 @@ HEADERS += global_exporter.h \
     widgets/loginwidget.h \
     widgets/basiclogindialog.h \
     widgets/fontselectorbutton.h \
-    widgets/fontandcolorsselectorwidget.h
+    widgets/fontandcolorsselectorwidget.h \
+    widgets/segmentedbutton.h
 #    widgets/dialogbuttonbox.h
 
 SOURCES += global.cpp \
@@ -105,7 +106,8 @@ SOURCES += global.cpp \
     widgets/basiclogindialog.cpp \
     widgets/uppercasevalidator.cpp \
     widgets/fontselectorbutton.cpp \
-    widgets/fontandcolorsselectorwidget.cpp
+    widgets/fontandcolorsselectorwidget.cpp \
+    widgets/segmentedbutton.cpp
 #    widgets/dialogbuttonbox.cpp
 
 macx {

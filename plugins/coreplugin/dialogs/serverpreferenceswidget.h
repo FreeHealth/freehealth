@@ -62,6 +62,10 @@ public:
 
     static void writeDefaultSettings(Core::ISettings *s);
 
+Q_SIGNALS:
+    void hostConnectionChanged(bool coonected);
+    void userConnectionChanged(bool coonected);
+
 private:
     void setDatasToUi();
 

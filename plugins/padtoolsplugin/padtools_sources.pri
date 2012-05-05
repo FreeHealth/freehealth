@@ -20,7 +20,8 @@ HEADERS +=  \
     $${PWD}/tokeneditorwidget.h \
     $${PWD}/tokeneditor.h \
     $${PWD}/tokenoutputdocument.h \
-    $${PWD}/tokentreeview.h
+    $${PWD}/tokentreeview.h \
+    $${PWD}/tokenpool.h
 
 SOURCES += \
     $${PWD}/padtoolsplugin.cpp \
@@ -37,7 +38,8 @@ SOURCES += \
     $${PWD}/tokeneditorwidget.cpp \
     $${PWD}/tokeneditor.cpp \
     $${PWD}/tokenoutputdocument.cpp \
-    $${PWD}/tokentreeview.cpp
+    $${PWD}/tokentreeview.cpp \
+    $${PWD}/tokenpool.cpp
 
 FORMS += \
     $${PWD}/padwriter.ui \
