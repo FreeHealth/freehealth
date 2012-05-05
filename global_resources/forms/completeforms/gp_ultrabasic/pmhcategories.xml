@@ -11,29 +11,29 @@
       </extra>
     </Category>
     <Category icon="__theme__/stethoscope.png">
-      <label lang="xx">Personnal</label>
+      <label lang="xx">Personal</label>
       <label lang="fr">Personnel</label>
-      <label lang="de">Personal</label>
+      <label lang="de">Persönlich</label>
       <Category icon="__theme__/stethoscope.png">
         <label lang="xx">Medical</label>
         <label lang="fr">Médicaux</label>
-        <label lang="de">Medizinische</label>
+        <label lang="de">Medizinisch</label>
       </Category>
       <Category icon="__theme__/stethoscope.png">
         <label lang="xx">Surgical</label>
         <label lang="fr">Chirurgicaux</label>
-        <label lang="de">Chirurgische</label>
+        <label lang="de">Chirurgisch</label>
       </Category>
       <Category icon="__theme__/stethoscope.png">
         <label lang="xx">Obstetric</label>
         <label lang="fr">Obstétricaux</label>
-        <label lang="de">Geburtshilfe</label>
+        <label lang="de">Geburtshilflich</label>
       </Category>
     </Category>
     <Category icon="__theme__/stethoscope.png">
       <label lang="xx">Family</label>
       <label lang="fr">Familiaux</label>
-      <label lang="de">Familale</label>
+      <label lang="de">Familiär</label>
     </Category>
   </PMHx>
 </FreeMedForms>
