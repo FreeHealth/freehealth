@@ -185,36 +185,6 @@ int PmhModeWidget::currentSelectedCategory() const
     return -1;
 }
 
-QString PmhModeWidget::indexToHtml(const QModelIndex &index, int indent)
-{
-    QString html;
-    if (catModel()->isSynthesis(index))
-        return QString();
-
-    if (catModel()->isCategory(index)) {
-        int rowCount = catModel()->rowCount(index);
-        int pmhCount = catModel()->pmhCount(index);
-        if (!pmhCount)
-            return QString();
-        html = QString("<p style=\"margin:0px 0px 0px %1px\"><span style=\"font-weight:bold;\">%2 (%3)</span><br />")
-                .arg(indent*10)
-                .arg(index.data(Qt::DisplayRole).toString()).arg(pmhCount);
-        for(int i=0; i < rowCount; ++i) {
-            html += indexToHtml(catModel()->index(i, 0, index), indent+2);
-        }
-        html += "</p>";
-    } else if (catModel()->isPmhx(index)) {
-        QString id;
-        for(int i=0; i < indent; ++i)
-            id += "&nbsp;&nbsp;";
-        html += QString("•&nbsp;%1<br />").arg(index.data(Qt::ToolTipRole).toString().replace("<br />","; "));
-    } else if (catModel()->isForm(index)) {
-        html = QString("<p style=\"margin:0px 0px 0px %1px\">%2<br />")
-                .arg(indent*10)
-                .arg(catModel()->formForIndex(index)->printableHtml());
-    }
-    return html;
-}
 
 void PmhModeWidget::currentChanged(const QModelIndex &current, const QModelIndex &previous)
 {
@@ -227,24 +197,10 @@ void PmhModeWidget::currentChanged(const QModelIndex &current, const QModelIndex
         return;
 
     if (catModel()->isSynthesis(current)) {
-        if (_synthesis.isEmpty()) {
-            _synthesis ="<html><style>p{margin:0 0 0 0}</style><body>";
-            _synthesis += QString("<p align=center style=\"font-weight:bold;font-size:16pt\">%1<hr/></p>").arg(tr("Patient PMHx synthesis"));
-            for(int i=0; i < catModel()->rowCount(); ++i) {
-                _synthesis += indexToHtml(catModel()->index(i, 0));
-            }
-            _synthesis += "</body></html>";
-        }
-        ui->pmhSynthesisBrowser->setHtml(_synthesis);
+        ui->pmhSynthesisBrowser->setHtml(catModel()->synthesis());
         ui->stackedWidget->setCurrentWidget(ui->pageSynthesis);
     } else if (catModel()->isCategory(current)) {
-        QString html ="<html><style>p{margin:0 0 0 0}</style><body>";
-        html += QString("<p align=center style=\"font-weight:bold;font-size:16pt\">%1<hr/></p>").arg(tr("Patient PMHx synthesis"));
-        for(int i=0; i < catModel()->rowCount(current); ++i) {
-            html += indexToHtml(catModel()->index(i, 0, current));
-        }
-        html += "</body></html>";
-        ui->pmhSynthesisBrowser->setHtml(html);
+        ui->pmhSynthesisBrowser->setHtml(catModel()->synthesis(current));
         ui->stackedWidget->setCurrentWidget(ui->pageSynthesis);
     } else if (catModel()->isForm(current)) {
         // Show the form's widget
@@ -278,7 +234,6 @@ void PmhModeWidget::onButtonClicked(QAbstractButton *button)
         ui->pmhViewer->setEditMode(PmhViewer::ReadWriteMode);
         ui->buttonBox->button(QDialogButtonBox::Cancel)->setEnabled(true);
         ui->buttonBox->button(QDialogButtonBox::Save)->setEnabled(true);
-        _synthesis.clear();
         return;
     }
 
@@ -312,7 +267,6 @@ void PmhModeWidget::onButtonClicked(QAbstractButton *button)
 
 void PmhModeWidget::createCategory()
 {
-    _synthesis.clear();
     Category::CategoryDialog dlg(this);
     dlg.setModal(true);
     dlg.setCategoryModel(catModel(), PmhCategoryModel::Label);
@@ -323,7 +277,6 @@ void PmhModeWidget::removeItem()
 {
     if (!ui->treeView->selectionModel()->hasSelection())
         return;
-    _synthesis.clear();
     QModelIndex item = ui->treeView->selectionModel()->currentIndex();
 
     // Do not delete categories this way (use the CategoryManagerDialog)
@@ -346,7 +299,6 @@ void PmhModeWidget::removeItem()
 
 void PmhModeWidget::onPatientChanged()
 {
-    _synthesis.clear();
     ui->treeView->expandAll();
     for(int i = 0; i < ui->stackedWidget->count(); ++i) {
         // Remove all form's widgets
@@ -373,7 +325,6 @@ void PmhModeWidget::createPmh()
 
 void PmhModeWidget::pmhModelRowsInserted(const QModelIndex &parent, int start, int end)
 {
-    _synthesis.clear();
     ui->treeView->expand(parent);
     for(int i=start; i != end+1; ++i) {
         ui->treeView->expand(catModel()->index(i, PmhCategoryModel::Label, parent));

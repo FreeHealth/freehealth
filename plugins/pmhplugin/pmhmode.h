@@ -75,7 +75,6 @@ private Q_SLOTS:
     void pmhModelRowsInserted(const QModelIndex &parent, int start, int end);
 
 private:
-    QString indexToHtml(const QModelIndex &index, int indent = 0);
     void changeEvent(QEvent *e);
 //    bool eventFilter(QObject *o, QEvent *e);
 
@@ -84,7 +83,6 @@ private:
     QToolBar *m_ToolBar;
     QPushButton *m_EditButton;
     QHash<QString, int> m_FormUid_StackId;
-    QString _synthesis;
 };
 
 class PmhMode : public Core::BaseMode

@@ -114,6 +114,10 @@ public:
 
     virtual QString mime() const;
 
+    // Patient synthesis
+    QString indexToHtml(const QModelIndex &index, int indent = 0) const;
+    QString synthesis(const QModelIndex &parent = QModelIndex()) const;
+
 public Q_SLOTS:
     // Connections to Core::IPatient
     void patientChanged();
