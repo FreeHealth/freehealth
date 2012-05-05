@@ -1474,7 +1474,7 @@ Do you really want to change the editing mode?</source>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/constants.h" line="91"/>
-        <source>Add chronic therapeutics</source>
+        <source>Add long-term medications</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

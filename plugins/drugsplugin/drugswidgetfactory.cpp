@@ -178,7 +178,7 @@ DrugsPrescriptorWidget::DrugsPrescriptorWidget(const QString &name, Form::FormIt
 
     if (addChronicButton(formItem)) {
         labelBox->addSpacerItem(new QSpacerItem(20,1, QSizePolicy::Expanding, QSizePolicy::Minimum));
-        m_AddChronic = new QPushButton(QCoreApplication::translate(Constants::DRUGCONSTANTS_TR_CONTEXT, Constants::ADDCHRONICTHERAPEUTICS_TEXT), this);
+        m_AddChronic = new QPushButton(QCoreApplication::translate(Constants::DRUGCONSTANTS_TR_CONTEXT, Constants::ADDLONGTERMTHERAPEUTICS_TEXT), this);
         labelBox->addWidget(m_AddChronic);
         connect(m_AddChronic, SIGNAL(clicked()), this, SLOT(addChronicTherapeutics()));
     }
@@ -247,7 +247,7 @@ void DrugsPrescriptorWidget::retranslate()
 {
     m_Label->setText(m_FormItem->spec()->label());
     if (m_AddChronic)
-        m_AddChronic->setText(QCoreApplication::translate(Constants::DRUGCONSTANTS_TR_CONTEXT, Constants::ADDCHRONICTHERAPEUTICS_TEXT));
+        m_AddChronic->setText(QCoreApplication::translate(Constants::DRUGCONSTANTS_TR_CONTEXT, Constants::ADDLONGTERMTHERAPEUTICS_TEXT));
 }
 
 ////////////////////////////////////////// ItemData /////////////////////////////////////////////
