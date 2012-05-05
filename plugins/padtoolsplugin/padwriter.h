@@ -70,6 +70,8 @@ private Q_SLOTS:
     void wysiwygCursorChanged();
     void rawSourceCursorChanged();
     void changeRawSourceScenario(QAction*);
+
+    void expandTokenTreeView();
     void analyseRawSource();
     void outputToRaw();
 

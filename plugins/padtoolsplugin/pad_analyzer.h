@@ -49,7 +49,7 @@ namespace Internal {
 class PadAnalyzerPrivate;
 }
 
-/** \todo make jobs asynchronous */
+/** \todo make jobs asynchronous and threaded */
 
 class PadAnalyzer : public QObject
 {
@@ -59,7 +59,7 @@ public:
     ~PadAnalyzer();
 
     PadDocument *analyze(const QString &source);
-    PadDocument *analyze(QTextDocument *source, PadDocument *padDocument = 0);
+    PadDocument *analyze(QTextDocument *source, PadDocument *padDocument);
 
     const QList<Core::PadAnalyzerError> lastErrors() const;
 

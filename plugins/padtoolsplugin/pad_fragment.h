@@ -27,6 +27,8 @@
 #ifndef PAD_FRAGMENT_H
 #define PAD_FRAGMENT_H
 
+#include <coreplugin/ipadtools.h>
+
 #include <QString>
 #include <QHash>
 #include <QVariant>
@@ -36,7 +38,7 @@
  * \file pad_fragment.h
  * \author Eric Maeker, Guillaume Denry
  * \version 0.8.0
- * \date 25 Apr 2012
+ * \date 05 May 2012
 */
 
 namespace PadTools {
@@ -84,6 +86,7 @@ public:
     const QString &toolTip() const {return _toolTip;}
 
     virtual void run(QMap<QString,QVariant> &tokens, PadDocument *document) = 0;
+    virtual void toOutput(Core::ITokenPool *pool, PadDocument *document) = 0;
     virtual void toRaw(PadDocument *doc) = 0;
 
     virtual void addChild(PadFragment *fragment);

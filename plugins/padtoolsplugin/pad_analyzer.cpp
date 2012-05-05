@@ -171,7 +171,8 @@ PadDocument *PadAnalyzerPrivate::startAnalyze(PadDocument *padDocument)
 
     Lexem lex;
     PadDocument *pad;
-    padDocument ? pad = padDocument : pad = new PadDocument();
+    /** \todo where, when and who delete the PadDocument pointer ? */
+    padDocument ? pad = padDocument : pad = new PadDocument(q);
     pad->setSource(_sourceDocument);
     pad->beginRawSourceAnalyze();
 

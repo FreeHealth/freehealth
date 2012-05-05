@@ -141,6 +141,8 @@ PadWriter::PadWriter(QWidget *parent) :
     d->_tokenModel = new TokenModel(this);
     d->ui->treeView->setModel(d->_tokenModel);
     d->ui->treeView->hideColumn(1);
+    expandTokenTreeView();
+    connect(d->_tokenModel, SIGNAL(modelReset()), this, SLOT(expandTokenTreeView()));
 
     // Create PadDocument object
     d->_pad = new PadDocument();
@@ -297,6 +299,12 @@ QString PadWriter::rawSource() const
     return d->ui->rawSource->toPlainText();
 }
 
+void PadWriter::expandTokenTreeView()
+{
+    for(int i=0; i < d->_tokenModel->rowCount(); ++i)
+        d->ui->treeView->expand(d->_tokenModel->index(i,0));
+}
+
 void PadWriter::analyseRawSource()
 {
     // clear PadDocument && views
@@ -306,7 +314,8 @@ void PadWriter::analyseRawSource()
     // Start analyze && token replacement
     PadAnalyzer().analyze(d->ui->rawSource->document(), d->_pad);
     d->_pad->setTokenModel(d->_tokenModel);
-    d->_pad->run(d->_tokenModel->tokens());
+//    d->_pad->run(d->_tokenModel->tokens());
+    d->_pad->toOutput(d->_tokenModel->tokenPool());
 
     d->ui->listWidgetErrors->clear();
     foreach (const Core::PadAnalyzerError &error, errors) {

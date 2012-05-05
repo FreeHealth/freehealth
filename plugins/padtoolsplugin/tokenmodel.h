@@ -27,6 +27,8 @@
 #ifndef PADTOOLS_TOKENMODEL_H
 #define PADTOOLS_TOKENMODEL_H
 
+#include <coreplugin/ipadtools.h>
+
 #include <QStandardItemModel>
 #include <QMap>
 
@@ -34,7 +36,7 @@
  * \file tokenmodel.h
  * \author Eric Maeker
  * \version 0.8.0
- * \date 26 Apr 2012
+ * \date 05 May 2012
 */
 
 namespace Core {
@@ -62,6 +64,8 @@ public:
     void setTokens(const QMap<QString, QVariant> &tokens);
     QMap<QString, QVariant> &tokens();
     // END
+
+    Core::ITokenPool *tokenPool() const;
 
     void addToken(Core::IToken *token);
     void addTokens(const QVector<Core::IToken *> &token);
