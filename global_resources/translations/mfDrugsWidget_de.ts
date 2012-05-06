@@ -562,11 +562,6 @@ p, li { white-space: pre-wrap; }
         <translation>Gewicht / Alter / Geschlecht</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="797"/>
-        <source>Kg</source>
-        <translation></translation>
-    </message>
-    <message>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="814"/>
         <source>No Sex limitation</source>
         <translation></translation>

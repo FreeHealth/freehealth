@@ -82,12 +82,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhmode.cpp" line="369"/>
+        <location filename="../../plugins/pmhplugin/pmhmode.cpp" line="294"/>
         <source>Remove PMHx</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhmode.cpp" line="370"/>
+        <location filename="../../plugins/pmhplugin/pmhmode.cpp" line="295"/>
         <source>Do you really want to remove the PMHx called &lt;br /&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;b&gt;%1&lt;/b&gt;?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -173,84 +173,93 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="46"/>
+        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="222"/>
         <source>Patient</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="62"/>
-        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="205"/>
+        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="46"/>
+        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="189"/>
         <source>General information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="68"/>
+        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="52"/>
         <source>Personal label</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="78"/>
+        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="62"/>
         <source>Type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="88"/>
+        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="72"/>
         <source>Status</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="98"/>
+        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="82"/>
         <source>Confidence index</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="127"/>
+        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="111"/>
         <source>Privacy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="134"/>
+        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="118"/>
         <source>Make this PMHx private</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="186"/>
+        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="170"/>
         <source>Category</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="211"/>
+        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="195"/>
         <source>Date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="225"/>
+        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="209"/>
         <source>Manage ICD10 Codes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="148"/>
+        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="132"/>
         <source>Episodes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="173"/>
+        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="157"/>
         <source>Comment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="158"/>
+        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="142"/>
         <source>Management</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="163"/>
+        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="147"/>
         <source>Contacts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="168"/>
+        <location filename="../../plugins/pmhplugin/pmhviewer.ui" line="152"/>
         <source>Links</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>PMH::PmhCategoryModel</name>
+    <message>
+        <location filename="../../plugins/pmhplugin/pmhcategorymodel.cpp" line="1137"/>
+        <location filename="../../plugins/pmhplugin/pmhcategorymodel.cpp" line="1147"/>
+        <source>Patient PMHx synthesis</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -310,7 +319,7 @@
 <context>
     <name>PMH::PmhViewer</name>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhviewer.cpp" line="261"/>
+        <location filename="../../plugins/pmhplugin/pmhviewer.cpp" line="266"/>
         <source>Replacing pmh data</source>
         <translation type="unfinished"></translation>
     </message>

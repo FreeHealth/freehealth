@@ -1750,8 +1750,8 @@ Autrement le résultat sera faux!</translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/receipts/controlreceipts.ui" line="75"/>
-        <source>Filtering datas</source>
-        <translation>Filtrer les données</translation>
+        <source>Filtering data</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/receipts/controlreceipts.ui" line="98"/>
@@ -2513,6 +2513,11 @@ dans le thésaurus
 et choisir la valeur préférée.</translation>
     </message>
     <message>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="1233"/>
+        <source> has been saved in thesaurus!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="699"/>
         <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="824"/>
         <source>Act</source>
@@ -2522,11 +2527,6 @@ et choisir la valeur préférée.</translation>
         <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="968"/>
         <source>Kilometers</source>
         <translation>Kilomètres</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="1233"/>
-        <source> has been saved in thesaurus !</source>
-        <translation> a été sauvegardé dans le thésaurus !</translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="1004"/>

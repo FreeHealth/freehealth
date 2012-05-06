@@ -153,12 +153,12 @@
           <widget class="QComboBox" name="weightUnit">
            <item>
             <property name="text">
-             <string>Kg</string>
+             <string notr="true">kg</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>lbs</string>
+             <string notr="true">lbs</string>
             </property>
            </item>
           </widget>

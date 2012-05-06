@@ -237,8 +237,8 @@ Please check that this host contains a FreeMedForms server configuration.</sourc
 <context>
     <name>Core::Internal::CoreImpl</name>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/coreimpl.cpp" line="150"/>
         <location filename="../../plugins/fmfcoreplugin/coreimpl.cpp" line="152"/>
+        <location filename="../../plugins/fmfcoreplugin/coreimpl.cpp" line="154"/>
         <source>Core intialization finished...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -958,12 +958,12 @@ Please contact your server administrator.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/translators.cpp" line="182"/>
+        <location filename="../../plugins/coreplugin/translators.cpp" line="188"/>
         <source>Add Translator %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/translators.cpp" line="189"/>
+        <location filename="../../plugins/coreplugin/translators.cpp" line="194"/>
         <source>WARNING: %1 can not be loaded or is already loaded.</source>
         <translation type="unfinished"></translation>
     </message>

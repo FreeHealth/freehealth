@@ -558,11 +558,6 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="797"/>
-        <source>Kg</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="814"/>
         <source>No Sex limitation</source>
         <translation type="unfinished"></translation>

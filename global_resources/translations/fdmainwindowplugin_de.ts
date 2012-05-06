@@ -25,16 +25,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freediams/plugins/mainwindowplugin/mainwindow.ui" line="156"/>
-        <source>Kg</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../freediams/plugins/mainwindowplugin/mainwindow.ui" line="161"/>
-        <source>lbs</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../freediams/plugins/mainwindowplugin/mainwindow.ui" line="190"/>
         <source>cm</source>
         <translation type="unfinished"></translation>

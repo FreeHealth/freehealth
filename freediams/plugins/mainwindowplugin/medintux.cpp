@@ -60,7 +60,7 @@ namespace Internal {
               "--patientname=\"{{NOM PATIENT}}\","
               "--patientfirstname=\"{{PRENOM PATIENT}}\","
               "--gender={{SEXE PATIENT}},"
-              "--weight=\"{{POIDS PATIENT}} Kg\","
+              "--weight=\"{{POIDS PATIENT}} kg\","
               "--dateofbirth=\"{{DATE NAISSANCE PATIENT}}\")}}\\\n"
               "{{::import (../../tmp/DIexch.txt , insert)}}\\\n";
 
@@ -75,7 +75,7 @@ namespace Internal {
             "--patientname=\"{{NOM PATIENT}}\","
             "--patientfirstname=\"{{PRENOM PATIENT}}\","
             "--gender={{SEXE PATIENT}},"
-            "--weight=\"{{POIDS PATIENT}} Kg\","
+            "--weight=\"{{POIDS PATIENT}} kg\","
             "--dateofbirth=\"{{DATE NAISSANCE PATIENT}}\")}}"
             "{{::import (../../tmp/DIexch.txt , replace )}}"
             "{{::delete_file (../../tmp/DIexch.txt)}}"
