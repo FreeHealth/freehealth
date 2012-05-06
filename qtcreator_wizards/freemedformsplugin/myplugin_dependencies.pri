@@ -1,0 +1,1 @@
+include( ../fmfcoreplugin/fmfcoreplugin.pri )
