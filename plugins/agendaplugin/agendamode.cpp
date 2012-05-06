@@ -30,6 +30,7 @@
 #include "agendabase.h"
 #include "agendacore.h"
 #include "usercalendarmodel.h"
+#include "constants.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
@@ -38,6 +39,8 @@
 #include <coreplugin/iuser.h>
 #include <coreplugin/constants_menus.h>
 #include <coreplugin/constants_icons.h>
+#include <coreplugin/modemanager/modemanager.h>
+#include <coreplugin/actionmanager/actionmanager.h>
 
 using namespace Agenda;
 using namespace Internal;
@@ -48,6 +51,8 @@ static inline Core::IPatient *patient() { return Core::ICore::instance()->patien
 static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
 static inline Agenda::Internal::AgendaBase *base() {return Agenda::Internal::AgendaBase::instance();}
 static inline Agenda::AgendaCore *agendaCore() {return Agenda::AgendaCore::instance();}
+static inline Core::ModeManager *modeManager() { return Core::ICore::instance()->modeManager(); }
+static inline Core::ActionManager *actionManager() { return Core::ICore::instance()->actionManager(); }
 
 AgendaMode::AgendaMode(QObject *parent) :
     Core::BaseMode(parent),
@@ -58,13 +63,12 @@ AgendaMode::AgendaMode(QObject *parent) :
     setPriority(Core::Constants::P_MODE_AGENDA);
     setUniqueModeName(Core::Constants::MODE_AGENDA);
     setPatientBarVisibility(false);
-//    const QList<int> &context;
-//    setContext();
-//    m_Stack = new QStackedWidget;
-//    setWidget(m_Stack);
     m_Viewer = new UserCalendarViewer;
     setWidget(m_Viewer);
     userChanged();
+
+    Core::Command *cmd = actionManager()->command(Agenda::Constants::A_NEW_AGENDAEVENT);
+    modeManager()->addAction(cmd, Core::Constants::P_MODE_AGENDA);
 
 //    connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
     connect(user(), SIGNAL(userChanged()), this, SLOT(userChanged()));

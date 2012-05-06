@@ -203,8 +203,10 @@ AgendaActionHandler::AgendaActionHandler(QObject *parent) :
     // New agenda event
     Core::ActionContainer *fmenu = actionManager()->actionContainer(Core::Constants::M_GENERAL_NEW);
     a = aNewEvent = new QAction(this);
-    a->setIcon(th->icon(Constants::I_NEW_AGENDAEVENT));
-//    a->setShortcut(tkTr(Trans::Constants::K_PRINT_PRESCRIPTION));
+    QIcon icon;
+    icon.addFile(th->iconFullPath(Constants::I_NEW_AGENDAEVENT, Core::ITheme::SmallIcon), QSize(16, 16));
+    icon.addFile(th->iconFullPath(Constants::I_NEW_AGENDAEVENT, Core::ITheme::MediumIcon), QSize(32, 32));
+    a->setIcon(icon);
     cmd = actionManager()->registerAction(a, Constants::A_NEW_AGENDAEVENT, globalcontext);
     cmd->setTranslations(Trans::Constants::AGENDA_EVENT, Trans::Constants::AGENDA_EVENT);
 //    cmd->setKeySequence(QKeySequence::Print);

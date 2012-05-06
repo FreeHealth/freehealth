@@ -52,6 +52,7 @@
 #include <coreplugin/theme.h>
 #include <coreplugin/uniqueidmanager.h>
 #include <coreplugin/modemanager/modemanager.h>
+#include <coreplugin/actionmanager/actionmanager.h>
 #include <coreplugin/contextmanager/contextmanager.h>
 #include <coreplugin/constants_menus.h>
 #include <coreplugin/constants_icons.h>
@@ -63,6 +64,7 @@ using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
 static inline Core::ModeManager *modeManager() { return Core::ICore::instance()->modeManager(); }
+static inline Core::ActionManager *actionManager() { return Core::ICore::instance()->actionManager(); }
 static inline Core::ITheme *theme() { return Core::ICore::instance()->theme(); }
 
 PatientSearchMode::PatientSearchMode(QObject *parent) :
@@ -71,6 +73,8 @@ PatientSearchMode::PatientSearchMode(QObject *parent) :
     m_Selector = new PatientSelector;
     m_Selector->setFieldsToShow(PatientSelector::Gender | PatientSelector::BirthName | PatientSelector::SecondName | PatientSelector::FirstName | PatientSelector::DateOfBirth | PatientSelector::FullAdress);
     PatientWidgetManager::instance()->setCurrentView(m_Selector);
+    Core::Command *cmd = actionManager()->command(Core::Constants::A_PATIENT_NEW);
+    modeManager()->addAction(cmd, Core::Constants::P_MODE_PATIENT_SEARCH);
 }
 
 PatientSearchMode::~PatientSearchMode()
