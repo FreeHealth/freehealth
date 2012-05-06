@@ -92,6 +92,8 @@ void AgendaMode::userChanged()
     m_UserCalendarModel = agendaCore()->userCalendarModel();
     int nbCals = m_UserCalendarModel->rowCount();
     m_Viewer->setEnabled(nbCals>0);
+    Core::Command *cmd = actionManager()->command(Agenda::Constants::A_NEW_AGENDAEVENT);
+    cmd->action()->setEnabled(nbCals>0);
     connect(m_UserCalendarModel, SIGNAL(rowsInserted(QModelIndex,int,int)), this, SLOT(rowsChanged(QModelIndex,int,int)));
     connect(m_UserCalendarModel, SIGNAL(rowsRemoved(QModelIndex,int,int)), this, SLOT(rowsChanged(QModelIndex,int,int)));
 }
@@ -104,4 +106,6 @@ void AgendaMode::rowsChanged(const QModelIndex &parent, int start, int end)
     int nbCals = m_UserCalendarModel->rowCount();
     m_Viewer->setEnabled((nbCals>0));
     m_Viewer->recalculateComboAgendaIndex();
+    Core::Command *cmd = actionManager()->command(Agenda::Constants::A_NEW_AGENDAEVENT);
+    cmd->action()->setEnabled(nbCals>0);
 }
