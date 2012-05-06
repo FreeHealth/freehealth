@@ -321,7 +321,10 @@ void MainWindowActionHandler::createGeneralActions(const int actions)
     if (actions & Core::MainWindowActions::A_Patients_New) {
         a = aGeneralPatientNew = new QAction(this);
         a->setObjectName("aGeneralPatientNew");
-        a->setIcon(theme()->icon(Constants::ICONPATIENT));
+        QIcon icon;
+        icon.addFile(theme()->iconFullPath(Constants::ICONPATIENT, Core::ITheme::SmallIcon), QSize(16, 16));
+        icon.addFile(theme()->iconFullPath(Constants::ICONPATIENT, Core::ITheme::MediumIcon), QSize(32, 32));
+        a->setIcon(icon);
         cmd = actionManager()->registerAction(a, Constants::A_PATIENT_NEW, ctx);
         cmd->setDefaultKeySequence(Qt::CTRL + Qt::Key_N);
         cmd->setTranslations(Trans::Constants::PATIENTNEW_TEXT);
