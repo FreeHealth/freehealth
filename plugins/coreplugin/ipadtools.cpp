@@ -34,7 +34,7 @@
 /**
   \class Core::IPadTools
   Use this class to avoid any plugin dependencies (other than Core),
-  when needing to access to the \e current \e pad datas.
+  when needing to access the \e current \e pad data.
 */
 
 /**

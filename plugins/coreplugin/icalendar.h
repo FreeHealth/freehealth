@@ -44,7 +44,7 @@ class QTextEdit;
 
 namespace Core {
 	/**
-	   \brief Use this class to avoid any plugin dependencies (other than Core), when needing to access to the \e current \e pad datas.
+       \brief Use this class to avoid any plugin dependencies (other than Core), when needing to access the \e current \e pad data.
 	*/
 	class CORE_EXPORT ICalendar : public QObject
 	{
