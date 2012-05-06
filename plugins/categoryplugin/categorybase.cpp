@@ -277,6 +277,7 @@ QVector<CategoryItem *> CategoryBase::getCategories(const QString &mime) const
             cat->setData(CategoryItem::DbOnly_LabelId, query.value(Constants::CATEGORY_LABEL_ID));
             cat->setData(CategoryItem::DbOnly_ParentId, query.value(Constants::CATEGORY_PARENT));
             cat->setData(CategoryItem::DbOnly_Mime, query.value(Constants::CATEGORY_MIME));
+            cat->setData(CategoryItem::Uuid, query.value(Constants::CATEGORY_UUID));
             cat->setData(CategoryItem::ThemedIcon, query.value(Constants::CATEGORY_THEMEDICON));
             cat->setData(CategoryItem::Password, query.value(Constants::CATEGORY_PASSWORD));
             cat->setData(CategoryItem::SortId, query.value(Constants::CATEGORY_SORT_ID));
@@ -362,7 +363,7 @@ bool CategoryBase::saveCategory(CategoryItem *category)
     QSqlQuery query(database());
     query.prepare(prepareInsertQuery(Constants::Table_CATEGORIES));
     query.bindValue(Constants::CATEGORY_ID, QVariant());
-    query.bindValue(Constants::CATEGORY_UUID, QVariant());
+    query.bindValue(Constants::CATEGORY_UUID, category->data(CategoryItem::Uuid));
     query.bindValue(Constants::CATEGORY_PARENT, category->parentId());
     query.bindValue(Constants::CATEGORY_LABEL_ID, category->data(CategoryItem::DbOnly_LabelId));
     query.bindValue(Constants::CATEGORY_MIME, category->mime());
@@ -407,7 +408,8 @@ bool CategoryBase::updateCategory(CategoryItem *category)
                                      << Constants::CATEGORY_SORT_ID
                                      << Constants::CATEGORY_THEMEDICON
                                      << Constants::CATEGORY_LABEL_ID
-                                     << Constants::CATEGORY_EXTRAXML, where));
+                                     << Constants::CATEGORY_EXTRAXML
+                                     << Constants::CATEGORY_UUID, where));
     query.bindValue(0, category->mime());
     query.bindValue(1, category->cryptedPassword());
     query.bindValue(2, category->data(CategoryItem::DbOnly_IsValid).toInt());
@@ -416,6 +418,7 @@ bool CategoryBase::updateCategory(CategoryItem *category)
     query.bindValue(5, category->data(CategoryItem::ThemedIcon));
     query.bindValue(6, category->data(CategoryItem::DbOnly_LabelId));
     query.bindValue(7, category->data(CategoryItem::ExtraXml));
+    query.bindValue(8, category->data(CategoryItem::Uuid));
 
     if (!query.exec()) {
         LOG_QUERY_ERROR(query);

@@ -60,6 +60,7 @@ public:
         DbOnly_ParentId,
         DbOnly_IsValid,
         DbOnly_Mime,
+        Uuid,
         ThemedIcon,
         SortId,
         Password,
