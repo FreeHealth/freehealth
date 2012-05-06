@@ -17,7 +17,7 @@
       <item>
        <widget class="QLabel" name="surnamesLabel">
         <property name="text">
-         <string>Patient Name</string>
+         <string>Patient name</string>
         </property>
        </widget>
       </item>
@@ -187,17 +187,17 @@
           <widget class="QComboBox" name="sizeUnit">
            <item>
             <property name="text">
-             <string>cm</string>
+             <string notr="true">cm</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>m</string>
+             <string notr="true">m</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>inches</string>
+             <string notr="true">ins</string>
             </property>
            </item>
           </widget>
@@ -240,12 +240,12 @@
           <widget class="QComboBox" name="crClUnit">
            <item>
             <property name="text">
-             <string>mL/min</string>
+             <string notr="true">ml/min</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>mL/sec</string>
+             <string notr="true">ml/sec</string>
             </property>
            </item>
           </widget>
@@ -274,22 +274,22 @@
           <widget class="QComboBox" name="creatinineUnit">
            <item>
             <property name="text">
-             <string>mg/L</string>
+             <string notr="true">mg/l</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>mg/dL</string>
+             <string notr="true">mg/dl</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>mmol/L</string>
+             <string notr="true">mmol/l</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>µmol/L</string>
+             <string notr="true">µmol/l</string>
             </property>
            </item>
           </widget>

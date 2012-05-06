@@ -90,11 +90,11 @@ namespace Internal {
         bool error = false;
         bool ok = Utils::okCancelMessageBox(
                 QCoreApplication::translate("diMedinTux", "Automatic configuration for MedinTux usage"),
-                QCoreApplication::translate("diMedinTux", "This assistant will create a new entrie into the users' menu of DrTux.\n"
+                QCoreApplication::translate("diMedinTux", "This assistant will create a new entry into the users' menu of DrTux.\n"
                                             "You can create a new prescription by clicking this menu.\n"
                                             "Please take care that if DrTux' location changes, "
                                             "or if FreeDiams' location changes, you must "
-                                            "reconfigure DrTux with this assitant."),
+                                            "reconfigure DrTux with this assistant."),
                 QCoreApplication::translate("diMedinTux",
                                             "This assistant will try to find your MedinTux path. If it doesn't, you will be asked "
                                             "about this place. Then it will configure a new user's menu for DrTux and create "
@@ -241,11 +241,11 @@ namespace Internal {
 
         if (!error) {
             Utils::informativeMessageBox(QCoreApplication::translate("diMedinTux", "DrTux is now fully configured for %1.").arg(qApp->applicationName()),
-                                         QCoreApplication::translate("diMedinTux", "You can run %1 using DrTux User's Menu.").arg(qApp->applicationName()),
+                                         QCoreApplication::translate("diMedinTux", "You can run %1 using DrTux' user menu.").arg(qApp->applicationName()),
                                          QCoreApplication::translate("diMedinTux", "If you encounter difficulties with DrTux integration, please refer to documentation of both applications.\n%1").arg(finalMsg));
         } else {
             Utils::warningMessageBox(QCoreApplication::translate("diMedinTux", "DrTux is not correctly configured."),
-                                     QCoreApplication::translate("diMedinTux", "This assitant encountered errors during its process."),
+                                     QCoreApplication::translate("diMedinTux", "This assistant encountered errors during its process."),
                                      QCoreApplication::translate("diMedinTux", "This is the log of the processes \n%1").arg(finalMsg));
         }
     }

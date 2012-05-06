@@ -379,11 +379,11 @@ void MainWindow::extensionsInitialized()
     m_ui->sexCombo->addItems(genders());
 
     if (commandLine()->value(Core::CommandLine::CL_EMR_Name).isValid())
-        setWindowTitle(QString("%1 - %2 [%3 %4]")
+        setWindowTitle(QString("%1 - %2 [%3]")
                        .arg(qApp->applicationName())
                        .arg(qApp->applicationVersion())
-                       .arg(tr("Connected to"))
-                       .arg(commandLine()->value(Core::CommandLine::CL_EMR_Name).toString()));
+                       .arg(tr("Connected to %1")
+                            .arg(commandLine()->value(Core::CommandLine::CL_EMR_Name).toString())));
     else
         setWindowTitle(QString("%1 - %2")
                        .arg(qApp->applicationName())
@@ -746,8 +746,8 @@ bool MainWindow::newFile()
 {
     if (drugModel()->drugsList().count()) {
         bool yes = Utils::yesNoMessageBox(
-                tr("Save actual prescription ?"),
-                tr("The actual prescription is not empty. Do you want to save it before creating a new one ?"));
+                tr("Save actual prescription?"),
+                tr("The actual prescription is not empty. Do you want to save it before creating a new one?"));
         if (yes) {
             saveFile();
         }
@@ -851,8 +851,8 @@ void MainWindow::readFile(const QString &file)
     DrugsDB::DrugsIO io;
     if (drugModel()->rowCount() > 0) {
         int r = Utils::withButtonsMessageBox(
-                tr("Opening a prescription : merge or replace ?"),
-                tr("There is a prescription inside editor, do you to replace it or to add the opened prescription ?"),
+                tr("Opening a prescription : merge or replace?"),
+                tr("There is a prescription inside editor, do you to replace it or to add the opened prescription?"),
                 QString(), QStringList() << tr("Replace prescription") << tr("Add to prescription"),
                 tr("Open a prescription") + " - " + qApp->applicationName());
         if (r == 0) {
