@@ -18,6 +18,7 @@ OTHER_FILES = %PluginName%.pluginspec
 # FreeMedForms linking
 
 include(../fmf_plugins.pri)
+include(../coreplugin/coreplugin.pri)
 
 #FREEMEDFORMS_SOURCES=%FreeMedFormsSources%
 #IDE_BUILD_TREE=%FreeMedFormsBuild%

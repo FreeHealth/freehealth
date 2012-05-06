@@ -88,14 +88,14 @@ leave room for the Qt 4 target page.
                           defaulttext="http://www.mycompany.com" />
             <fielddescription>URL:</fielddescription>
         </field>
-
+<!--
         <field mandatory="true" name="FreeMedFormsSources">
             <fieldcontrol class="Utils::PathChooser"
                           defaulttext="%Path%" />
             <fielddescription>FreeMedForms sources:</fielddescription>
             <fielddescription xml:lang="de">Freemedforms-Quellcode:</fielddescription>
         </field>
-<!--
+
         <field mandatory="true" name="FreeMedFormsBuild">
             <fieldcontrol class="Utils::PathChooser"
                           defaulttext="" />
