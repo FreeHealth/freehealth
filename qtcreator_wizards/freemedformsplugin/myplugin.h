@@ -21,7 +21,7 @@
 /***************************************************************************
  *   Main Developer: Eric MAEKER, <eric.maeker@gmail.com>                  *
  *   Contributors:                                                         *
- *       %Author% <AuthorEmail>                                            *
+ *       %Author% <%AuthorEmail%>                                            *
  ***************************************************************************/
 #ifndef %PluginName:u%_%CppHeaderSuffix:u%
 #define %PluginName:u%_%CppHeaderSuffix:u%
@@ -43,9 +43,11 @@ public:
 
     bool initialize(const QStringList &arguments, QString *errorString);
     void extensionsInitialized();
-    ShutdownFlag aboutToShutdown();
+//    ShutdownFlag aboutToShutdown();
 
 private slots:
+    void postCoreInitialization();
+    void coreAboutToClose();
 //    void triggerAction();
 };
 

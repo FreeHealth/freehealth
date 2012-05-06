@@ -21,7 +21,7 @@
 /***************************************************************************
  *   Main Developer: Eric MAEKER, <eric.maeker@gmail.com>                  *
  *   Contributors:                                                         *
- *       %Author% <AuthorEmail>                                            *
+ *       %Author% <%AuthorEmail%>                                            *
  ***************************************************************************/
 #ifndef %PluginName:u%CONSTANTS_%CppHeaderSuffix:u%
 #define %PluginName:u%CONSTANTS_%CppHeaderSuffix:u%

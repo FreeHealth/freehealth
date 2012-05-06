@@ -21,14 +21,13 @@
 /***************************************************************************
  *   Main Developer: Eric MAEKER, <eric.maeker@gmail.com>                  *
  *   Contributors:                                                         *
- *       %Author% <AuthorEmail>                                            *
+ *       %Author% <%AuthorEmail%>                                            *
  ***************************************************************************/
 
 #include "%PluginName:l%plugin.%CppHeaderSuffix%"
 #include "%PluginName:l%constants.%CppHeaderSuffix%"
 
-// comment out if you need this:
-// #include <utils/log.h>
+#include <utils/log.h>
 
 #include <coreplugin/dialogs/pluginaboutpage.h>
 #include <coreplugin/icore.h>
@@ -36,6 +35,8 @@
 #include <coreplugin/itheme.h>
 #include <coreplugin/iuser.h>
 #include <coreplugin/translators.h>
+
+#include <extensionsystem/pluginmanager.h>
 
 //#include <coreplugin/contextmanager/icontext.h>
 #include <coreplugin/actionmanager/actionmanager.h>
@@ -55,7 +56,6 @@ using namespace %PluginName%::Internal;
 
 static inline Core::IUser *user()  { return Core::ICore::instance()->user(); }
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
-static inline Extensionsystem::PluginManager *pluginManager = Extensionsystem::PluginManager::instance();
 static inline void messageSplash(const QString &s) {theme()->messageSplashScreen(s); }
 
 %PluginName%Plugin::%PluginName%Plugin()
@@ -85,9 +85,10 @@ bool %PluginName%Plugin::initialize(const QStringList &arguments, QString *error
 {
     Q_UNUSED(arguments)
     Q_UNUSED(errorString)
-
+    
+    setObjectName("%PluginName%");
     if (Utils::Log::warnPluginsCreation()) {
-        qWarning() << "%PluginName%::initialize";
+        qWarning() << "creating %PluginName%";
     }
     
     // Register objects in the plugin manager's object pool
@@ -127,6 +128,9 @@ void %PluginName%Plugin::extensionsInitialized()
         qWarning() << "%PluginName%::extensionsInitialized";
     }
 
+    // Add Translator to the Application
+    //Core::ICore::instance()->translators()->addNewTranslator("mf_XXX_Widget");
+    
     // Retrieve other objects from the plugin manager's object pool
     // "In the extensionsInitialized method, a plugin can be sure that all
     //  plugins that depend on it are completely initialized."
@@ -155,13 +159,15 @@ void %PluginName%Plugin::postCoreInitialization()
     // DataPacks are checked
 }
 
-ExtensionSystem::IPlugin::ShutdownFlag %PluginName%Plugin::aboutToShutdown()
-{
-    // Save settings
-    // Disconnect from signals that are not needed during shutdown
-    // Hide UI (if you add UI that is not in the main window directly)
-    return SynchronousShutdown;
-}
+// aboutToShutdown does not exist in the old QtCreator code.
+// we have to wait until FMF is updatet to a newer QtCreator source
+// ExtensionSystem::IPlugin::ShutdownFlag %PluginName%Plugin::aboutToShutdown()
+// {
+//     // Save settings
+//     // Disconnect from signals that are not needed during shutdown
+//     // Hide UI (if you add UI that is not in the main window directly)
+//     return SynchronousShutdown;
+// }
 
 // void %PluginName%Plugin::triggerAction()
 // {
