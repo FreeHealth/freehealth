@@ -2,7 +2,7 @@
 <!DOCTYPE FreeMedForms>
 <FreeMedForms>
   <PMHx>
-    <Category icon="__theme__/stethoscope.png">
+    <Category icon="__theme__/stethoscope.png" uuid="GP::Basic::UltraBasic::PMHxCategory::RiskFactors"  sortId="0">
       <label lang="xx">Risk factors</label>
       <label lang="fr">Facteurs de risque</label>
       <label lang="de">Risikofaktoren</label>
@@ -10,27 +10,27 @@
         <file>__subForms__/cardiology/riskfactors/central.xml</file>
       </extra>
     </Category>
-    <Category icon="__theme__/stethoscope.png">
+    <Category icon="__theme__/stethoscope.png" uuid="GP::Basic::UltraBasic::PMHxCategory::Perso"  sortId="1">
       <label lang="xx">Personal</label>
       <label lang="fr">Personnel</label>
       <label lang="de">Persönlich</label>
-      <Category icon="__theme__/stethoscope.png">
+      <Category icon="__theme__/stethoscope.png" uuid="GP::Basic::UltraBasic::PMHxCategory::Med"  sortId="0">
         <label lang="xx">Medical</label>
         <label lang="fr">Médicaux</label>
         <label lang="de">Medizinisch</label>
       </Category>
-      <Category icon="__theme__/stethoscope.png">
+      <Category icon="__theme__/stethoscope.png" uuid="GP::Basic::UltraBasic::PMHxCategory::Surg"  sortId="1">
         <label lang="xx">Surgical</label>
         <label lang="fr">Chirurgicaux</label>
         <label lang="de">Chirurgisch</label>
       </Category>
-      <Category icon="__theme__/stethoscope.png">
+      <Category icon="__theme__/stethoscope.png" uuid="GP::Basic::UltraBasic::PMHxCategory::Obst"  sortId="2">
         <label lang="xx">Obstetric</label>
         <label lang="fr">Obstétricaux</label>
         <label lang="de">Geburtshilflich</label>
       </Category>
     </Category>
-    <Category icon="__theme__/stethoscope.png">
+    <Category icon="__theme__/stethoscope.png" uuid="GP::Basic::UltraBasic::PMHxCategory::Family" sortId="2">
       <label lang="xx">Family</label>
       <label lang="fr">Familiaux</label>
       <label lang="de">Familiär</label>

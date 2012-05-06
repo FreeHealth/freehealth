@@ -391,15 +391,38 @@ bool CategoryBase::updateCategory(CategoryItem *category)
 //    qWarning() << "UpdateCategory" << category->isDirty();
 //    category->warn();
 
+    int id = -1;
     if (category->data(CategoryItem::DbOnly_Id).isNull() || category->id()==-1) {
-        return saveCategory(category);
+        // try to find the category using the uuid
+        const QString &uuid = category->data(CategoryItem::Uuid).toString();
+        if (!uuid.isEmpty()) {
+            QSqlQuery query(database());
+            QHash<int, QString> where;
+            where.insert(Constants::CATEGORY_UUID, QString("=%1").arg(uuid));
+            if (query.exec(select(Constants::Table_CATEGORIES, Constants::CATEGORY_ID, where))) {
+                if (query.next()) {
+                    id = query.value(0).toInt();
+                }
+            } else {
+                LOG_QUERY_ERROR(query);
+            }
+            // not found --> save category
+            if (id == -1)
+                return saveCategory(category);
+        }
     }
+
     // update episode
     if (!category->isDirty())
         return true;
-    QSqlQuery query(database());
+
+    // do we update from the uuid or the id ?
+    if (id==-1)
+        id = category->id();
+
     QHash<int, QString> where;
     where.insert(Constants::CATEGORY_ID, QString("=%1").arg(category->id()));
+    QSqlQuery query(database());
     query.prepare(prepareUpdateQuery(Constants::Table_CATEGORIES, QList<int>()
                                      << Constants::CATEGORY_MIME
                                      << Constants::CATEGORY_PASSWORD

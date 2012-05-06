@@ -162,6 +162,7 @@ const char* const TAG_OPTIONS_NO_EPISODE        = "noepisode";
 
 const char* const ATTRIB_ID           = "id";
 const char* const ATTRIB_UUID         = "uuid";
+const char* const ATTRIB_SORT_ID      = "sortId";
 const char* const ATTRIB_NAME         = "name";
 const char* const ATTRIB_TYPE         = "type";
 const char* const ATTRIB_UIFILE       = "uifilename";

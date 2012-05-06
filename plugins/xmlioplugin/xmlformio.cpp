@@ -429,6 +429,8 @@ bool XmlFormIO::createCategory(const QDomElement &element, Category::CategoryIte
     Category::CategoryItem *item = new Category::CategoryItem;
     item->setData(Category::CategoryItem::DbOnly_Mime, "PMHx");
     item->setData(Category::CategoryItem::ThemedIcon, element.attribute(::Constants::ATTRIB_ICON));
+    item->setData(Category::CategoryItem::Uuid, element.attribute(::Constants::ATTRIB_UUID));
+    item->setData(Category::CategoryItem::SortId, element.attribute(::Constants::ATTRIB_SORT_ID));
 
     // read the labels
     QDomElement label = element.firstChildElement(::Constants::TAG_SPEC_LABEL);
