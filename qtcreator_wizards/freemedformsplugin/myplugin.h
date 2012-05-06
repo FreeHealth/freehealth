@@ -45,7 +45,7 @@ public:
     void extensionsInitialized();
 //    ShutdownFlag aboutToShutdown();
 
-private slots:
+private Q_SLOTS:
     void postCoreInitialization();
     void coreAboutToClose();
 //    void triggerAction();

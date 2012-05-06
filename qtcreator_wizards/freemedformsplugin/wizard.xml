@@ -65,17 +65,17 @@ leave room for the Qt 4 target page.
         </field>
         <field mandatory="true" name="VendorName">
             <fieldcontrol class="QLineEdit" validator="^[a-zA-Z0-9_]+$"
-                          defaulttext="MyCompany" />
+                          defaulttext="FreeMedForms" />
             <fielddescription>Vendor name:</fielddescription>
         </field>
         <field name="Copyright">
             <fieldcontrol class="QLineEdit"
-                          defaulttext="(C) MyCompany" />
+                          defaulttext="(C) 2008-2012 Eric Maeker <eric.maeker@gmail.com>" />
             <fielddescription>Copyright:</fielddescription>
         </field>
         <field name="License">
             <fieldcontrol class="QTextEdit"
-                          defaulttext="GPL" />
+                          defaulttext="GNU Public License" />
             <fielddescription>License:</fielddescription>
         </field>
         <field name="Description">
