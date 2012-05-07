@@ -86,6 +86,8 @@ public Q_SLOTS:
     void drugsModelChanged();
 
 private Q_SLOTS:
+    void savePrescription();
+    void saveAsPrescription();
     void toggleDrugSelector();
     void moveUp();
     void moveDown();
@@ -120,6 +122,7 @@ private:
     void updateActions();
 
 protected:
+    QAction *aSavePrescription, *aSaveAsPrescription;
     QAction *aToggleDrugSelector;
     QAction *aAddRow;
     QAction *aRemoveRow;

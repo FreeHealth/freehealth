@@ -52,6 +52,8 @@ namespace Constants {
     const char * const  C_DRUGS_PLUGINS         =  "DrugsPlugins.cDrugs";
     const char * const  C_DRUGS_SEARCH          =  "DrugsPlugins.cSearch";
 
+    const char* const   A_SAVE_PRESCRIPTION     = "a.Drugs.SavePrescription";
+    const char* const   A_SAVEAS_PRESCRIPTION   = "a.Drugs.SaveAsPrescription";
     const char* const   A_TOGGLE_DRUGSELECTOR   = "a.Drugs.ToggleDrugSelector";
     const char* const   A_VIEW_INTERACTIONS     = "a.Drugs.ViewInteractions";
     const char* const   A_CHANGE_DURATION       = "a.Drugs.ChangeDuration";

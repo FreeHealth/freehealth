@@ -35,7 +35,7 @@
 #include <drugsplugin/drugswidget/interactionsynthesisdialog.h>
 
 #include <drugsbaseplugin/drugsmodel.h>
-//#include <drugsbaseplugin/interactionmanager.h>
+#include <drugsbaseplugin/drugsio.h>
 
 #include <coreplugin/constants_menus.h>
 #include <coreplugin/icore.h>
@@ -114,16 +114,24 @@ void PrescriptionViewer::createActionsAndToolbar()
     m_ToolBar->setIconSize(QSize(16,16));
 #endif
     QStringList actionsToAdd;
-    actionsToAdd
+
 #ifdef FREEMEDFORMS
+    actionsToAdd
             << Constants::A_TOGGLE_DRUGSELECTOR
-#endif
+            << Core::Constants::A_FILE_OPEN
+            << Constants::A_SAVE_PRESCRIPTION
+            << Core::Constants::A_TEMPLATE_CREATE
+            << Core::Constants::A_FILE_PRINTPREVIEW
+            << DrugsWidget::Constants::A_PRINT_PRESCRIPTION;
+#else
+    actionsToAdd
             << Core::Constants::A_FILE_OPEN
             << Core::Constants::A_FILE_SAVE
             << Core::Constants::A_FILE_SAVEAS
             << Core::Constants::A_TEMPLATE_CREATE
             << Core::Constants::A_FILE_PRINTPREVIEW
             << DrugsWidget::Constants::A_PRINT_PRESCRIPTION;
+#endif
 
     foreach(const QString &s, actionsToAdd) {
         cmd = actionManager()->command(s);
@@ -188,6 +196,20 @@ void PrescriptionViewer::on_listView_customContextMenuRequested(const QPoint &)
     pop->exec(QCursor::pos());
     delete pop;
     pop = 0;
+}
+
+bool PrescriptionViewer::savePrescription()
+{
+    DrugsDB::DrugsIO io;
+    QHash<QString, QString> extra;
+    return io.savePrescription(drugModel(), extra);
+}
+
+bool PrescriptionViewer::saveAsPrescription()
+{
+    DrugsDB::DrugsIO io;
+    QHash<QString, QString> extra;
+    return io.savePrescription(drugModel(), extra);
 }
 
 /** \brief Clears the prescription */

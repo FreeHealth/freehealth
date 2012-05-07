@@ -127,6 +127,8 @@ DrugsCentralWidget *DrugsWidgetManager::currentView() const
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 DrugsActionHandler::DrugsActionHandler(QObject *parent) :
         QObject(parent),
+        aSavePrescription(0),
+        aSaveAsPrescription(0),
         aToggleDrugSelector(0),
         aAddRow(0),
         aRemoveRow(0),
@@ -187,6 +189,25 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
     Q_ASSERT(menu);
 
     // Create local actions
+
+#ifndef FREEDIAMS
+    a = aSavePrescription = new QAction(this);
+    a->setObjectName("aSavePrescription");
+    a->setIcon(th->icon(Core::Constants::ICONSAVE));
+    cmd = actionManager()->registerAction(a, Constants::A_SAVE_PRESCRIPTION, ctx);
+    cmd->setTranslations(Trans::Constants::FILESAVE_TEXT);
+    menu->addAction(cmd, DrugsWidget::Constants::G_PLUGINS_DRUGS);
+    connect(a, SIGNAL(triggered()), this, SLOT(savePrescription()));
+
+    a = aSaveAsPrescription = new QAction(this);
+    a->setObjectName("aSaveAsPrescription");
+    a->setIcon(th->icon(Core::Constants::ICONSAVEAS));
+    cmd = actionManager()->registerAction(a, Constants::A_SAVEAS_PRESCRIPTION, ctx);
+    cmd->setTranslations(Trans::Constants::FILESAVEAS_TEXT);
+    menu->addAction(cmd, DrugsWidget::Constants::G_PLUGINS_DRUGS);
+    connect(a, SIGNAL(triggered()), this, SLOT(saveAsPrescription()));
+#endif
+
     a = aToggleDrugSelector = new QAction(this);
     a->setObjectName("aToggleDrugSelector");
     a->setIcon(th->icon(Constants::I_TOGGLEDRUGSELECTOR));
@@ -501,6 +522,20 @@ void DrugsActionHandler::updateActions()
 {
     listViewItemChanged();
     drugsModelChanged();
+}
+
+void DrugsActionHandler::savePrescription()
+{
+    if (m_CurrentView) {
+        m_CurrentView->prescriptionView()->savePrescription();
+    }
+}
+
+void DrugsActionHandler::saveAsPrescription()
+{
+    if (m_CurrentView) {
+        m_CurrentView->prescriptionView()->saveAsPrescription();
+    }
 }
 
 void DrugsActionHandler::toggleDrugSelector()

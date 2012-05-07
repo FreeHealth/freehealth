@@ -50,9 +50,9 @@ class DrugsModel;
 namespace DrugsWidget {
 
 /**
- \brief This widget is the prescription viewer. It deals data with mfDrugsModel. The model MUST BE SET using setModel() and setModelColumn().
- Signals are emitted when user ask for : save (saveTriggered()) and print (printTriggered()) prescription.
-  */
+  \brief This widget is the prescription viewer.
+  It deals data with a DrugsDB::DrugsModel. The model MUST BE SET using setModel() and setModelColumn().
+*/
 class DRUGS_EXPORT PrescriptionViewer : public QWidget, private Internal::Ui::PrescriptionViewer
 {
     Q_OBJECT
@@ -65,10 +65,6 @@ public:
     void setModel(DrugsDB::DrugsModel *model);
     void setListViewPadding(const int pad);
 
-Q_SIGNALS:
-    void saveTriggered();
-    void printTriggered();
-
 protected:
     virtual void changeEvent(QEvent *e);
 
@@ -76,6 +72,9 @@ private:
     void createActionsAndToolbar();
 
 public Q_SLOTS:
+    bool savePrescription();
+    bool saveAsPrescription();
+
     void clearTriggered();
     void removeTriggered();
     void moveUp();

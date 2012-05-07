@@ -95,7 +95,7 @@ private:
     void focusInEvent(QFocusEvent *event);
 
 private:
-    DrugsDB::DrugsModel   *m_CurrentDrugModel;
+    DrugsDB::DrugsModel *m_CurrentDrugModel;
     Internal::Ui::DrugsCentralWidget *m_ui;
     Internal::DrugsContext *m_Context;
 };
