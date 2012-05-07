@@ -1,8 +1,8 @@
-<FreeDiams_In version="0.4.0">
-  <ConfigFile value="../../../global_resources/config.ini"/>
+<FreeDiams_In version="0.7.2">
+  <ConfigFile value="../../../../../global_resources/config.ini"/>
   <DrugsDatabase uid="FR-AFSSAPS"/>
   <EMR name="EMRName" uid="SessionUIDWillBeReturnedInOutputFile"/>
-  <ExchangeOut value="../../../../global_resources/testexchangeout.xml" format="xml"/>
+  <ExchangeOut value="../../../../../global_resources/textfiles/freediamstest/prescription-0.6.2-witherror.xml" format="xml"/>
   <Patient>
     <Identity lastnames="KIRK" firstnames="James Tiberius" uid="EMR Patient's UID" dob="1960/12/01" gender="M"/>
     <Creatinine value="12" unit="mg/l"/>
