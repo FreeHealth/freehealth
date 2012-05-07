@@ -153,11 +153,11 @@ void Translators::changeLanguage(QLocale::Language lang)
     changeLanguage(QLocale(lang).name().left(2));
 }
 
-/**
+/*!
  * \brief Add a translator to the known application translators. It can be for app or for plugins.
  * This member will automatically add the translator located at fileMask into QApplication translators.
- * @param fileMask : full path to qm file. Like this: "/path/to/qm/file" without "_en.qm" for example.
- * @return  true if all gone ok, false in the other case
+ * @param fileMask: full path to qm file. Like this: "/path/to/qm/file" without "_en.qm" for example.
+ * @return true if all gone ok, false in the other case
  */
 bool Translators::addNewTranslator(const QString & fileMask, bool fromDefaultPath)
 {
