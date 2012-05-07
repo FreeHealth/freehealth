@@ -22,7 +22,7 @@
  ***************************************************************************/
 
 Project wizard configuration file for FreeMedForms plugins.
-Note that by convention, the project file goes last.
+Note that by convention, the project file page goes last.
 The "class" and "firstpage" attributes specify that it is a Qt 4 wizard and 
 leave room for the Qt 4 target page.
 -->
@@ -32,10 +32,13 @@ leave room for the Qt 4 target page.
     <icon>freemedforms_24.png</icon>
     <description>Creates a basic FreeMedForms plugin.</description>
     <description xml:lang="fr">Créer un greffon pour la suite FreeMedForms.</description>
+    <description xml:lang="de">Erstellt ein einfaches FreeMedForms-Plugin.</description>
     <displayname>FreeMedForms plugin</displayname>;
     <displayname xml:lang="fr">Greffon FreeMedForms</displayname>;
+    <displayname xml:lang="de">FreeMedForms-Plugin</displayname>;
     <displaycategory>FreeMedForms</displaycategory>
     <displaycategory xml:lang="fr">FreeMedForms</displaycategory>
+    <displaycategory xml:lang="de">FreeMedForms</displaycategory>
     <files>
         <file source="myplugin.pro" target="%PluginName:l%.pro" openproject="true"/>
         <file source="myplugin_dependencies.pri" target="%PluginName:l%_dependencies.pri" openproject="true"/>
@@ -48,11 +51,13 @@ leave room for the Qt 4 target page.
     </files>
     <!-- Create a 2nd wizard page with parameters -->
     <fieldpagetitle>Plugin Information</fieldpagetitle>
+    <fieldpagetitle xml:lang="de">Plugin-Information</fieldpagetitle>
     <fields>
         <field mandatory="true" name="PluginName">
             <fieldcontrol class="QLineEdit" validator="^[a-zA-Z0-9_]+$"
                           defaulttext="%ProjectName:c%" />
-            <fielddescription>Plugin name:</fielddescription>
+            <fielddescription>Plugin name (without "plugin"):</fielddescription>
+            <fielddescription xml:lang="de">Name des Plugins (ohne "plugin"):</fielddescription>
         </field>
         <field mandatory="true" name="Author">
             <fieldcontrol class="QLineEdit"
@@ -72,11 +77,13 @@ leave room for the Qt 4 target page.
             <fieldcontrol class="QLineEdit" validator="^[a-zA-Z0-9_]+$"
                           defaulttext="FreeMedForms" />
             <fielddescription>Vendor name:</fielddescription>
+            <fielddescription xml:lang="de">Anbieter:</fielddescription>
         </field>
         <field name="License">
             <fieldcontrol class="QTextEdit"
                           defaulttext="GNU General Public License version 3" />
             <fielddescription>License:</fielddescription>
+            <fielddescription xml:lang="de">Lizenz</fielddescription>
         </field>
         <field name="Description">
             <fieldcontrol class="QTextEdit"
@@ -87,6 +94,8 @@ leave room for the Qt 4 target page.
             <fieldcontrol class="QLineEdit"
                           defaulttext="http://www.freemedforms.com" />
             <fielddescription>URL:</fielddescription>
+            <fielddescription xml:lang="fr">URL:</fielddescription>
+            <fielddescription xml:lang="de">URL:</fielddescription>
         </field>
 <!--
         <field mandatory="true" name="FreeMedFormsSources">
