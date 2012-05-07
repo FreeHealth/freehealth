@@ -73,11 +73,6 @@ leave room for the Qt 4 target page.
                           defaulttext="FreeMedForms" />
             <fielddescription>Vendor name:</fielddescription>
         </field>
-        <field name="Copyright">
-            <fieldcontrol class="QLineEdit"
-                          defaulttext="(C) 2008-2012 Eric Maeker <eric.maeker@gmail.com>" />
-            <fielddescription>Copyright:</fielddescription>
-        </field>
         <field name="License">
             <fieldcontrol class="QTextEdit"
                           defaulttext="GNU Public License" />
