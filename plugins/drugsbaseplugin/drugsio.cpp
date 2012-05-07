@@ -442,7 +442,7 @@ public:
         }
 
         // Get drug from database
-        // using oldUid only
+        // --> using oldUid only
         if ((uid1.isEmpty() || uid1 == "-1") &&
             (uid2.isEmpty() || uid2 == "-1") &&
             (uid3.isEmpty() || uid3 == "-1") &&
@@ -451,7 +451,7 @@ public:
             if (readingDrug)
                 return readingDrug;
         }
-        // using all uids
+        // --> using all uids
         readingDrug = drugsBase().getDrugByUID(uid1, uid2, uid3, olduid, db);
         if (readingDrug)
             return readingDrug;
@@ -479,6 +479,7 @@ public:
                 drug->setPrescriptionValue(column, at.nodeValue());
             }
         }
+        /** \todo code here = manage dose in note if IDrug is pure textual */
     }
 
 public:
@@ -622,28 +623,18 @@ bool DrugsIO::prescriptionFromXml(DrugsDB::DrugsModel *m, const QString &xmlCont
     if (loader==ReplacePrescription)
         m->clearDrugsList();
 
-//    Utils::Log::logTimeElapsed(time, "DrugsIO", "Checking XML prescription");
-
     // Read prescription itself
     QVector<IDrug *> drugs;
     QList<int> rowsToUpdate;
     QString errorMsg;
     QDomElement prescr = fullPrescription.firstChildElement(XML_PRESCRIPTION_MAINTAG);
 
-//    Utils::Log::logTimeElapsed(time, "DrugsIO", "xxxxx");
-
     while (!prescr.isNull()) {
         QDomElement item = prescr.firstChildElement(::XML_DRUG_ROOT);
         IDrug *readingDrug = d->readDrug(item);
-
-//        Utils::Log::logTimeElapsed(time, "DrugsIO", "Reading drug" + readingDrug->brandName());
-
-
         item = prescr.firstChildElement(::XML_PRESCRIPTION_DOSAGE);
         d->readDose(readingDrug, item);
         drugs << readingDrug;
-
-//        Utils::Log::logTimeElapsed(time, "DrugsIO", "Reading dose" + readingDrug->brandName());
 
         // check Model Updaters
 //        if (needUpdate) {
@@ -652,11 +643,9 @@ bool DrugsIO::prescriptionFromXml(DrugsDB::DrugsModel *m, const QString &xmlCont
 
         prescr = prescr.nextSiblingElement(XML_PRESCRIPTION_MAINTAG);
     }
-//    Utils::Log::logTimeElapsed(time, "DrugsIO", "Reading full prescription file");
 
     // Feed model with drugs
     m->addDrugs(drugs, false);
-//    Utils::Log::logTimeElapsed(time, "DrugsIO", "Adding drugs to model (no DDI checking)");
 
     if ((needUpdate) && (!version.isEmpty())){
         versionUpdater().updateXmlIOModel(version, m, rowsToUpdate);
@@ -670,9 +659,6 @@ bool DrugsIO::prescriptionFromXml(DrugsDB::DrugsModel *m, const QString &xmlCont
     // check interaction, emit final signal from model for views to update
     m->checkInteractions();
     Q_EMIT m->numberOfRowsChanged();
-//    Utils::Log::logTimeElapsed(time, "DrugsIO", "DDI checking");
-
-//    Utils::Log::logTimeElapsed(time, "DrugsIO", "Reading prescription");
 
     // small debug information
     LOG_FOR("DrugsIO", tr("Xml prescription successfully read."));
@@ -707,8 +693,7 @@ bool DrugsIO::loadPrescription(DrugsDB::DrugsModel *m, const QString &fileName, 
 {
     Q_ASSERT(m);
     if (fileName.isEmpty()) {
-        Utils::Log::addError("DrugsIO", tr("No file name passed to load prescription"),
-                             __FILE__, __LINE__);
+        LOG_ERROR_FOR("DrugsIO", tr("No file name passed to load prescription"));
         return false;
     }
     QFileInfo info(fileName);
@@ -716,13 +701,11 @@ bool DrugsIO::loadPrescription(DrugsDB::DrugsModel *m, const QString &fileName, 
         info.setFile(qApp->applicationDirPath() + QDir::separator() + fileName);
 
     if (!info.exists()) {
-        Utils::Log::addError("DrugsIO", tkTr(Trans::Constants::FILE_1_DOESNOT_EXISTS).arg(info.absoluteFilePath()),
-                             __FILE__, __LINE__);
+        LOG_ERROR_FOR("DrugsIO", tkTr(Trans::Constants::FILE_1_DOESNOT_EXISTS).arg(info.absoluteFilePath()));
         return false;
     }
     if (!info.isReadable()) {
-        Utils::Log::addError("DrugsIO", tkTr(Trans::Constants::FILE_1_ISNOT_READABLE).arg(info.absoluteFilePath()),
-                             __FILE__, __LINE__);
+        LOG_ERROR_FOR("DrugsIO", tkTr(Trans::Constants::FILE_1_ISNOT_READABLE).arg(info.absoluteFilePath()));
         return false;
     }
     xmlExtraDatas.clear();
