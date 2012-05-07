@@ -103,9 +103,10 @@ public:
 
 /** Constructor */
 Patient::Patient(QObject *parent) :
-        IPatient(parent), d(new PatientPrivate)
+    IPatient(parent), d(new PatientPrivate)
 {
     Q_ASSERT(d);
+    setObjectName("Core::Patient");
 }
 
 /** \brief Destructor */
@@ -126,7 +127,6 @@ bool Patient::has(const int ref) const
 {
     return d->m_Values.keys().contains(ref);
 }
-
 
 /** \brief Get the value of the patient according to the enumerator Patient::Reference. */
 QVariant Patient::data(const QModelIndex &index, int role) const
@@ -319,6 +319,5 @@ bool Patient::fromXml(const QString &xml)
             d->m_Values.insert(id, datas.value(k));
         }
     }
-//    qWarning() << d->m_Values;
     return true;
 }
