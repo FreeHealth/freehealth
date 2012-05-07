@@ -529,10 +529,6 @@ bool XmlFormIO::checkDatabaseFormFileForUpdates() const
             if (file.versionString()=="test" || file>db) {
                 // update database
                 XmlFormName &form = formName(descFile->data(Form::FormIODescription::UuidOrAbsPath).toString(), m_FormNames);
-//                XmlFormName form(descFile->data(Form::FormIODescription::UuidOrAbsPath).toString());
-
-//                qWarning() << "UpdateDB:" << form.uid << form.modeName << form.absFileName;
-
                 // Construct the detailled text of the user's question messagebox
                 msg << tr("Form: ") + descFile->data(Form::FormIODescription::ShortDescription).toString() + "<br />";
                 msg << tr("Database version: %1").arg(db.versionString()) + "<br />";
@@ -559,27 +555,6 @@ bool XmlFormIO::checkDatabaseFormFileForUpdates() const
                     LOG("Form updated: "  + form.uid + " " + form.absFileName);
                 }
             }
-
-//                foreach(const QFileInfo &file, formUidToUpdate.values(formUid)) {
-//                    //                    qWarning() << "UPDATING" << file.baseName();
-//                    QDomDocument *doc = reader()->fromCache(file.absoluteFilePath());
-//                    if (!doc) {
-//                        LOG_ERROR("Wrong cache");
-//                        continue;
-//                    }
-//                    //                        qWarning() << "CACHE OK" << file.absoluteFilePath();
-//                    XmlFormName form(formUid);
-//                    if (!base()->saveForm(form)) { //, doc->toString(2), XmlIOBase::FullContent, file.baseName(), QDateTime::currentDateTime())) {
-//                        LOG_ERROR("Unable to update form database. Form: " + formUid + " " + file.baseName());
-//                    } else {
-//                        LOG("Form updated: " + formUid + " " + file.baseName());
-//                    }
-//                    // save screenshots && scripts
-////                    base()->saveScreenShots(file.absoluteFilePath(), formUid);
-////                    base()->saveScriptFiles(file.absolutePath(), formUid);
-//                }
-//            }
-
         }
     }
 

@@ -318,7 +318,6 @@ bool FormManager::insertSubForm(const SubFormInsertionPoint &insertionPoint)
 bool FormManager::readPmhxCategories(const QString &formUuidOrAbsPath)
 {
     Q_UNUSED(formUuidOrAbsPath);
-//    qWarning() << Q_FUNC_INFO;
     /** \todo code here why don't we use the \e formUuidOrAbsPath param ??? */
     // get all form readers (IFormIO)
     QList<Form::IFormIO *> list = pluginManager()->getObjects<Form::IFormIO>();

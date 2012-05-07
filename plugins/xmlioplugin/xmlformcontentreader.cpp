@@ -338,7 +338,7 @@ Form::FormIODescription *XmlFormContentReader::readFileInformation(const QString
         } else {
             // Get from database
             QHash<QString, QPixmap> pix = base()->getScreenShots(form.uid, QLocale().name().left(2).toLower());
-            qWarning() << "xxxxxxxx FROMBASE" << formUidOrFullAbsPath << pix.keys();
+//            qWarning() << "xxxxxxxx FROMBASE" << formUidOrFullAbsPath << pix.keys();
             foreach(const QString &k, pix.keys()) {
                 toReturn->addScreenShot(k, pix.value(k));
             }
