@@ -168,7 +168,6 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
     QAction *a = 0;
     Core::Command *cmd = 0;
     QList<int> ctx = QList<int>() << uid->uniqueIdentifier(DrugsWidget::Constants::C_DRUGS_PLUGINS);
-    QList<int> globalcontext = QList<int>() << Core::Constants::C_GLOBAL_ID;
 
     Core::ActionContainer *menu = actionManager()->actionContainer(DrugsWidget::Constants::M_PLUGINS_DRUGS);
     if (!menu) {
@@ -240,6 +239,7 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
 
     a = aSearch = new QAction(this);
 #ifdef FREEDIAMS
+    QList<int> globalcontext = QList<int>() << Core::Constants::C_GLOBAL_ID;
     cmd = actionManager()->registerAction(a, Core::Constants::A_EDIT_SEARCH, globalcontext);
 #else
     cmd = actionManager()->registerAction(a, Core::Constants::A_EDIT_SEARCH, ctx);

@@ -1181,6 +1181,7 @@ IDrug *DrugsBase::getDrugByUID(const QVariant &uid1, const QVariant &uid2, const
         if (q.next()) {
 //            Utils::Log::logTimeElapsed(time, "DrugsBase", "Query.next()");
             toReturn = new IDrug();
+            toReturn->setDataFromDb(IDrug::UidName, d->m_ActualDBInfos->drugsUidName);
             toReturn->setDataFromDb(IDrug::SourceID, q.value(Constants::DRUGS_SID));
             toReturn->setDataFromDb(IDrug::SourceName, sourceUid);
             toReturn->setDataFromDb(IDrug::Uid1, q.value(Constants::DRUGS_MaxParam));

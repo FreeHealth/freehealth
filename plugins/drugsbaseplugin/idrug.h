@@ -213,7 +213,8 @@ public:
         Uid3,
         AllUids,
         OldUid,
-        SourceID,            // Source
+        UidName,
+        SourceID,                   // Source
         SourceName,
         AuthorizationID,            // Authorization
         Name,
@@ -251,6 +252,7 @@ public:
 
     QVariant drugId() const {return data(DrugID);}
     QStringList uids() const {return data(AllUids).toStringList();}
+    QString drugUidName() const {return data(UidName).toString();}
     QString brandName() const {return data(Name).toString();}
     QString atcLabel() const { return data(AtcLabel).toString(); }
     QString strength() const { return data(Strength).toString(); }

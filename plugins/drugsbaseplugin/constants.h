@@ -299,6 +299,7 @@ namespace Drug
         DrugId,
         Pack_UID,
         Denomination,
+        UidName,
         Form,
         Route,
         GlobalStrength,

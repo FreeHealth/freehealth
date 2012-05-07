@@ -90,6 +90,7 @@ namespace DrugsIOConstants {
     const char *const XML_DRUG_ATTR_OLDUID  = "old";
     const char *const XML_DRUG_ATTR_DB      = "db";
     const char *const XML_DRUG_DENOMINATION = "DrugName";
+    const char *const XML_DRUG_UUID_NAME    = "DrugUidName";
     const char *const XML_DRUG_FORM         = "DrugForm";
     const char *const XML_DRUG_ROUTE        = "DrugRoute";
     const char *const XML_DRUG_STRENGTH     = "DrugStrength";
@@ -197,6 +198,7 @@ public:
             m_PrescriptionXmlTags.insert(Prescription::IsALD, XML_PRESCRIPTION_ISALD);
             m_PrescriptionXmlTags.insert(Prescription::ToHtml, XML_PRESCRIPTION_TOHTML);
             m_PrescriptionXmlTags.insert(Drug::Denomination, XML_DRUG_DENOMINATION);
+            m_PrescriptionXmlTags.insert(Drug::UidName, XML_DRUG_UUID_NAME);
             m_PrescriptionXmlTags.insert(Drug::Inns, XML_DRUG_INNS);
             m_PrescriptionXmlTags.insert(Drug::InnsATCcodes, XML_DRUG_INNS_ATC);
             m_PrescriptionXmlTags.insert(Drug::ATC, XML_DRUG_ATC);
@@ -253,6 +255,11 @@ public:
         text = doc.createTextNode(drug->brandName());
         name.appendChild(text);
         drugRoot.appendChild(name);
+
+        QDomElement uidname = doc.createElement(::XML_DRUG_UUID_NAME);
+        text = doc.createTextNode(drug->drugUidName());
+        uidname.appendChild(text);
+        drugRoot.appendChild(uidname);
 
         foreach(IComponent *compo, drug->components()) {
             QDomElement c = doc.createElement(::XML_COMPOSITION);
