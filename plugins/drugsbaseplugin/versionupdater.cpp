@@ -839,8 +839,6 @@ public:
         int end = xml.indexOf("</FullPrescription>", begin, Qt::CaseInsensitive);
         newPrescription.prepend("<FullPrescription version=\"0.6.0\">\n");
         xml.replace(begin, end-begin, newPrescription);
-
-        qWarning() << xml;
         return true;
     }
 
@@ -856,6 +854,34 @@ private:
     mutable int m_LastExtractionEnd;
 };
 
+class IO_Update_From_060_To_072 : public DrugsDB::DrugsIOUpdateStep
+{
+public:
+    // Update XML code:
+    // - DrugUidName is included in the 0.7.2 output file (just for external EMR information)
+    IO_Update_From_060_To_072() : DrugsDB::DrugsIOUpdateStep() {}
+    ~IO_Update_From_060_To_072() {}
+
+    QString fromVersion() const {return "0.6.0";}
+    QString toVersion() const {return "0.7.2";}
+
+    bool updateFromXml() const {return true;}
+
+    bool executeXmlUpdate(QString &xml) const
+    {
+        // Replace version numbering
+        xml.replace("<FullPrescription version=\"0.6.0\">", "<FullPrescription version=\"0.7.2\">");
+        return true;
+    }
+
+    bool updateFromModel() const {return false;}
+    bool executeUpdate(DrugsDB::DrugsModel *model, QList<int> rows) const
+    {
+        Q_UNUSED(model);
+        Q_UNUSED(rows);
+        return true;
+    }
+};
 
 }  // End anonymous namespace
 
@@ -871,7 +897,7 @@ public:
     }
 
     static QStringList dosageDatabaseVersions() { return QStringList() << "0.0.8" << "0.2.0" << "0.4.0" << "0.5.0" << "0.5.4"; }
-    static QStringList xmlIoVersions() {return QStringList() << "0.0.8" << "0.2.0" << "0.4.0" << "0.5.0" << "0.6.0"; }
+    static QStringList xmlIoVersions() {return QStringList() << "0.0.8" << "0.2.0" << "0.4.0" << "0.5.0" << "0.6.0" << "0.7.2"; }
 
     QString xmlVersion(const QString &xml)
     {
@@ -934,6 +960,7 @@ VersionUpdater::VersionUpdater() :
     d->m_Updaters.append(new ::IO_Update_From_020_To_040);
     d->m_Updaters.append(new ::IO_Update_From_040_To_050);
     d->m_Updaters.append(new ::IO_Update_From_050_To_060);
+    d->m_Updaters.append(new ::IO_Update_From_060_To_072);
 }
 
 VersionUpdater::~VersionUpdater()
