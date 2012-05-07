@@ -1,40 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-/***************************************************************************
- *  The FreeMedForms project is a set of free, open source medical         *
- *  applications.                                                          *
- *  (C) 2008-2012 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
- *  All rights reserved.                                                   *
- *                                                                         *
- *  This program is free software: you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation, either version 3 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *  You should have received a copy of the GNU General Public License      *
- *  along with this program (COPYING.FREEMEDFORMS file).                   *
- *  If not, see <http://www.gnu.org/licenses/>.                            *
- ***************************************************************************/
 
-Project wizard configuration file for FreeMedForms plugins.
-Note that by convention, the project file goes last.
-The "class" and "firstpage" attributes specify that it is a Qt 4 wizard and 
-leave room for the Qt 4 target page.
--->
 <wizard version="1" kind="project"
         class="qt4project" firstpage="10"
         id="A.FMFPlugin" category="X.FMFProjects">
     <icon>freemedforms_24.png</icon>
     <description>Creates a basic FreeMedForms plugin.</description>
+    <description xml:lang="fr">Créer un greffon pour la suite FreeMedForms.</description>
     <displayname>FreeMedForms plugin</displayname>;
+    <displayname xml:lang="fr">Greffon FreeMedForms</displayname>;
     <displaycategory>FreeMedForms</displaycategory>
+    <displaycategory xml:lang="fr">FreeMedForms</displaycategory>
     <files>
         <file source="myplugin.pro" target="%PluginName:l%.pro" openproject="true"/>
+        <file source="myplugin_dependencies.pri" target="%PluginName:l%_dependencies.pri" openproject="true"/>
+        <file source="myplugin.pri" target="%PluginName:l%.pri" openproject="true"/>
         <file source="MyPlugin.pluginspec" target="%PluginName%.pluginspec" openeditor="true"/>
         <file source="myplugin_exporter.h" target="%PluginName:l%_exporter.%CppHeaderSuffix%" openeditor="true"/>
         <file source="mypluginconstants.h" target="%PluginName:l%constants.%CppHeaderSuffix%" openeditor="true"/>

@@ -1,7 +1,7 @@
 /***************************************************************************
  *  The FreeMedForms project is a set of free, open source medical         *
  *  applications.                                                          *
- *  (C) 2008-2012 by %Author%, <%AuthorEmail%>                             *
+ *  (C) 2008-2012 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
  *  All rights reserved.                                                   *
  *                                                                         *
  *  This program is free software: you can redistribute it and/or modify   *
@@ -19,9 +19,9 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developer: Eric MAEKER, <eric.maeker@gmail.com>                  *
+ *   Main Developer: %Author% <%AuthorEmail%>                  *
  *   Contributors:                                                         *
- *       %Author% <%AuthorEmail%>                                            *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #ifndef %PluginName:u%CONSTANTS_%CppHeaderSuffix:u%
 #define %PluginName:u%CONSTANTS_%CppHeaderSuffix:u%
