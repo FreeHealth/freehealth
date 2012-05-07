@@ -498,6 +498,8 @@ void HttpServerEngine::afterPackFileDownload(const ReplyData &data)
     ServerEngineStatus *status = getStatus(data);
     Q_ASSERT(status);
     status->engineMessages.append(tr("Pack successfully downloaded."));
+    status->isSuccessful = true;
+    status->hasError = false;
 
     // Save downladed content to persistently pack cache
     const Pack &pack = data.pack;
