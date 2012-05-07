@@ -461,6 +461,7 @@ public:
         td->setDenomination(drugElement.firstChildElement(::XML_DRUG_DENOMINATION).text());
         td->setDataFromDb(IDrug::Forms, drugElement.firstChildElement(::XML_DRUG_FORM).text());
         td->setDataFromDb(IDrug::Strength, drugElement.firstChildElement(::XML_DRUG_STRENGTH).text());
+        td->setDataFromDb(IDrug::Routes, drugElement.firstChildElement(::XML_DRUG_ROUTE).text());
         // add routes, composition, uids
         /** \todo code here = manage error msg */
         return td;
@@ -584,7 +585,6 @@ bool DrugsIO::prescriptionFromXml(DrugsDB::DrugsModel *m, const QString &xmlCont
         version = versionUpdater().xmlVersion(xmlContent);
         LOG_FOR("DrugsIO::prescriptionFromXml", "Reading old prescription file: version " + version);
         xml = versionUpdater().updateXmlIOContent(xmlContent);
-//        Utils::Log::logTimeElapsed(time, "DrugsIO", "Updating XML prescription");
     }
 
     // Read the XML file using QDomDocument
