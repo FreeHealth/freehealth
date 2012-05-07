@@ -1121,7 +1121,8 @@ IDrug *DrugsBase::getDrugByUID(const QVariant &uid1, const QVariant &uid2, const
     QString newUid1 = uid1.toString();
     QString newUid2 = uid2.toString();
     QString newUid3 = uid3.toString();
-    if ((newUid1 == "-1" || newUid1.isEmpty()) && oldUid.toString().isEmpty()) {
+    if ((newUid1 == "-1" || newUid1.isEmpty()) &&
+            (oldUid.toString().isEmpty() || oldUid.toString() == "-1")) {
         LOG(tr("Asking for a drug without UID"));
         QHash<int, QString> where;
         where.insert(Constants::MASTER_SID, QString("=%1").arg(d->m_DbUids.value(sourceUid)));
