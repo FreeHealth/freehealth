@@ -1,7 +1,7 @@
 /***************************************************************************
  *  The FreeMedForms project is a set of free, open source medical         *
  *  applications.                                                          *
- *  (C) 2008-2012 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
+ *  (C) 2008-2012 by %Author%, <%AuthorEmail%>                             *
  *  All rights reserved.                                                   *
  *                                                                         *
  *  This program is free software: you can redistribute it and/or modify   *
@@ -19,19 +19,19 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developper : Eric MAEKER, <eric.maeker@gmail.com>                *
- *   Contributors :                                                        *
- *       NAME <MAIL@ADDRESS.COM>                                           *
+ *   Main Developer: Eric MAEKER, <eric.maeker@gmail.com>                  *
+ *   Contributors:                                                         *
+ *       %Author% <%AuthorEmail%>                                            *
  ***************************************************************************/
-#ifndef COREEXPORTER_H
-#define COREEXPORTER_H
+#ifndef %PluginName:u%_EXPORTER_%CppHeaderSuffix:u%
+#define %PluginName:u%_EXPORTER_%CppHeaderSuffix:u%
 
-#include <qglobal.h>
+#include <QtCore/QtGlobal>
 
-#if defined(BASEFORMWIDGETS_LIBRARY)
-#define BASEWIDGETS_EXPORT Q_DECL_EXPORT
+#if defined(%PluginName:u%_LIBRARY)
+#  define %PluginName:u%SHARED_EXPORT Q_DECL_EXPORT
 #else
-#define BASEWIDGETS_EXPORT Q_DECL_IMPORT
+#  define %PluginName:u%SHARED_EXPORT Q_DECL_IMPORT
 #endif
 
-#endif
+#endif // %PluginName:u%_EXPORTER_H

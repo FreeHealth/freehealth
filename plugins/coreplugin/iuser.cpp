@@ -28,7 +28,7 @@
   \class Core::IUser
   Is a model data for the currently logged user.
   Use this class to avoid any plugin dependencies (other than Core),
-  when needing to access to user's datas.
+  when needing access to user's data.
   \a Core::ICore::user()
 */
 

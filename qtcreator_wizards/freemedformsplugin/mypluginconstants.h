@@ -1,7 +1,7 @@
 /***************************************************************************
  *  The FreeMedForms project is a set of free, open source medical         *
  *  applications.                                                          *
- *  (C) 2008-2012 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
+ *  (C) 2008-2012 by %Author%, <%AuthorEmail%>                             *
  *  All rights reserved.                                                   *
  *                                                                         *
  *  This program is free software: you can redistribute it and/or modify   *
@@ -19,19 +19,20 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developper : Eric MAEKER, <eric.maeker@gmail.com>                *
- *   Contributors :                                                        *
- *       NAME <MAIL@ADDRESS.COM>                                           *
+ *   Main Developer: Eric MAEKER, <eric.maeker@gmail.com>                  *
+ *   Contributors:                                                         *
+ *       %Author% <%AuthorEmail%>                                            *
  ***************************************************************************/
-#ifndef COREEXPORTER_H
-#define COREEXPORTER_H
+#ifndef %PluginName:u%CONSTANTS_%CppHeaderSuffix:u%
+#define %PluginName:u%CONSTANTS_%CppHeaderSuffix:u%
 
-#include <qglobal.h>
+namespace %PluginName% {
+namespace Constants {
 
-#if defined(BASEFORMWIDGETS_LIBRARY)
-#define BASEWIDGETS_EXPORT Q_DECL_EXPORT
-#else
-#define BASEWIDGETS_EXPORT Q_DECL_IMPORT
-#endif
+    const char * const ACTION_ID = "%PluginName%.Action";
+    const char * const MENU_ID = "%PluginName%.Menu";
 
-#endif
+} // namespace %PluginName%
+} // namespace Constants
+
+#endif // %PluginName:u%CONSTANTS_%CppHeaderSuffix:u%

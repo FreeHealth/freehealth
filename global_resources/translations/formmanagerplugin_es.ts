@@ -33,7 +33,7 @@ Answering &apos;No&apos; will cause definitve data lose.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="1317"/>
+        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="1319"/>
         <source>No user</source>
         <translation type="unfinished"></translation>
     </message>

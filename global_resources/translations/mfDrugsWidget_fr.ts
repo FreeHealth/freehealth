@@ -558,11 +558,6 @@ p, li { white-space: pre-wrap; }
         <translation>Limites de poids / âge / sexe </translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="797"/>
-        <source>Kg</source>
-        <translation>Kg</translation>
-    </message>
-    <message>
         <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.ui" line="814"/>
         <source>No Sex limitation</source>
         <translation>Pas de limite de genre</translation>

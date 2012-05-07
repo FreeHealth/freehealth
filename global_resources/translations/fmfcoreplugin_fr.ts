@@ -240,8 +240,8 @@ Veuillez vérfier que l&apos;hôte contient bien une configuration serveur de Fr
 <context>
     <name>Core::Internal::CoreImpl</name>
     <message>
-        <location filename="../../plugins/fmfcoreplugin/coreimpl.cpp" line="150"/>
         <location filename="../../plugins/fmfcoreplugin/coreimpl.cpp" line="152"/>
+        <location filename="../../plugins/fmfcoreplugin/coreimpl.cpp" line="154"/>
         <source>Core intialization finished...</source>
         <translation>Initialisation du Core terminée...</translation>
     </message>
@@ -966,12 +966,12 @@ Veuillez contacter votre administrateur réseau.</translation>
         <translation>Impossible de charger %1, chemin %2</translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/translators.cpp" line="182"/>
+        <location filename="../../plugins/coreplugin/translators.cpp" line="188"/>
         <source>Add Translator %1.</source>
         <translation>Ajout du dictionnaire de traductions %1.</translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/translators.cpp" line="189"/>
+        <location filename="../../plugins/coreplugin/translators.cpp" line="194"/>
         <source>WARNING: %1 can not be loaded or is already loaded.</source>
         <translation>Attention : impossible de charger %1 ou est déjà chargé.</translation>
     </message>

@@ -338,17 +338,12 @@
 <context>
     <name>DataPack::ServerModel</name>
     <message>
-        <location filename="../../libs/datapackutils/servermodel.cpp" line="132"/>
+        <location filename="../../libs/datapackutils/servermodel.cpp" line="137"/>
         <source>Native Url</source>
         <translation>Native URL</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/servermodel.cpp" line="134"/>
-        <source>Recommended update checking</source>
-        <translation>Empfohlene Aktualisierungshäufigkeit</translation>
-    </message>
-    <message>
-        <location filename="../../libs/datapackutils/servermodel.cpp" line="136"/>
+        <location filename="../../libs/datapackutils/servermodel.cpp" line="141"/>
         <source>Url Style</source>
         <translation>URL-Stil</translation>
     </message>
@@ -356,65 +351,74 @@
 <context>
     <name>DataPack::ServerPackEditor</name>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="352"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="393"/>
         <source>Dependencies</source>
         <translation>Abhängigkeiten</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="367"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="408"/>
         <source>File specification</source>
         <translation>Dateispezifikation</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="368"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="409"/>
         <source>File name or URL:</source>
         <translation>Dateiname oder URL</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="224"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="248"/>
         <source>Updating server information</source>
         <translation>Serverinformation wird aktualisiert</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="372"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="377"/>
+        <source>Update information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="413"/>
         <source>Unzip pack to path</source>
         <translation>Pfad zum Entpacken</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="408"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="464"/>
         <source>Downloading server information</source>
         <translation>Lade Serverinformation herunter</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="448"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="528"/>
+        <source>Native URL</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="595"/>
         <source>Refresh datapack servers</source>
         <translation>Aktualisiere Datenpaket-Server</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="449"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="596"/>
         <source>Server editor</source>
         <translation>Server-Editor</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="450"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="597"/>
         <source>Add a server</source>
         <translation>Server hinzufügen</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="451"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="598"/>
         <source>Remove a server</source>
         <translation>Server entfernen</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="452"/>
-        <source>Server and pack editor</source>
-        <translation>Server- und Paket-Editor</translation>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="599"/>
+        <source>Refresh packs</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="453"/>
-        <source>Process changes</source>
-        <translatorcomment>maybe bad translation</translatorcomment>
-        <translation>Prozessänderungen</translation>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="600"/>
+        <source>Apply changes</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

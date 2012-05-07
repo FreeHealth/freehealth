@@ -14,6 +14,11 @@
         <translation>Informations concernant le patient</translation>
     </message>
     <message>
+        <location filename="../../freediams/plugins/mainwindowplugin/mainwindow.ui" line="20"/>
+        <source>Patient name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../freediams/plugins/mainwindowplugin/mainwindow.ui" line="128"/>
         <source>yyyy/MM/dd</source>
         <comment>Format de date</comment>
@@ -25,31 +30,6 @@
         <translation>Poids</translation>
     </message>
     <message>
-        <location filename="../../freediams/plugins/mainwindowplugin/mainwindow.ui" line="156"/>
-        <source>Kg</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../freediams/plugins/mainwindowplugin/mainwindow.ui" line="161"/>
-        <source>lbs</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../freediams/plugins/mainwindowplugin/mainwindow.ui" line="190"/>
-        <source>cm</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../freediams/plugins/mainwindowplugin/mainwindow.ui" line="195"/>
-        <source>m</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../freediams/plugins/mainwindowplugin/mainwindow.ui" line="200"/>
-        <source>inches</source>
-        <translation></translation>
-    </message>
-    <message>
         <location filename="../../freediams/plugins/mainwindowplugin/mainwindow.ui" line="208"/>
         <source>Gender</source>
         <translation>Sexe</translation>
@@ -58,11 +38,6 @@
         <location filename="../../freediams/plugins/mainwindowplugin/mainwindow.ui" line="169"/>
         <source>Height</source>
         <translation>Taille</translation>
-    </message>
-    <message>
-        <location filename="../../freediams/plugins/mainwindowplugin/mainwindow.ui" line="20"/>
-        <source>Patient Name</source>
-        <translation>Nom</translation>
     </message>
     <message>
         <location filename="../../freediams/plugins/mainwindowplugin/mainwindow.ui" line="27"/>
@@ -85,39 +60,9 @@
         <translation>Clearance de la créatinine</translation>
     </message>
     <message>
-        <location filename="../../freediams/plugins/mainwindowplugin/mainwindow.ui" line="243"/>
-        <source>mL/min</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../freediams/plugins/mainwindowplugin/mainwindow.ui" line="248"/>
-        <source>mL/sec</source>
-        <translation></translation>
-    </message>
-    <message>
         <location filename="../../freediams/plugins/mainwindowplugin/mainwindow.ui" line="256"/>
         <source>Creatinine</source>
         <translation>Créatinine</translation>
-    </message>
-    <message>
-        <location filename="../../freediams/plugins/mainwindowplugin/mainwindow.ui" line="277"/>
-        <source>mg/L</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../freediams/plugins/mainwindowplugin/mainwindow.ui" line="282"/>
-        <source>mg/dL</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../freediams/plugins/mainwindowplugin/mainwindow.ui" line="287"/>
-        <source>mmol/L</source>
-        <translation></translation>
-    </message>
-    <message utf8="true">
-        <location filename="../../freediams/plugins/mainwindowplugin/mainwindow.ui" line="292"/>
-        <source>µmol/L</source>
-        <translation></translation>
     </message>
     <message>
         <location filename="../../freediams/plugins/mainwindowplugin/mainwindow.ui" line="304"/>
@@ -139,8 +84,8 @@
     </message>
     <message>
         <location filename="../../freediams/plugins/mainwindowplugin/mainwindow.cpp" line="385"/>
-        <source>Connected to</source>
-        <translation>Connecté à</translation>
+        <source>Connected to %1</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../freediams/plugins/mainwindowplugin/mainwindow.cpp" line="400"/>
@@ -159,23 +104,23 @@
     </message>
     <message>
         <location filename="../../freediams/plugins/mainwindowplugin/mainwindow.cpp" line="749"/>
-        <source>Save actual prescription ?</source>
-        <translation>Sauvegarder la prescription actuelle ?</translation>
+        <source>Save actual prescription?</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../freediams/plugins/mainwindowplugin/mainwindow.cpp" line="750"/>
-        <source>The actual prescription is not empty. Do you want to save it before creating a new one ?</source>
-        <translation>La prescription actuelle n&apos;est pas vide. Voulez-vous la sauvegarder avant d&apos;en créer une nouvelle ?</translation>
+        <source>The actual prescription is not empty. Do you want to save it before creating a new one?</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../freediams/plugins/mainwindowplugin/mainwindow.cpp" line="854"/>
-        <source>Opening a prescription : merge or replace ?</source>
-        <translation>Ouverture d&apos;une prescription : fusionner ou remplacer ?</translation>
+        <source>Opening a prescription : merge or replace?</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../freediams/plugins/mainwindowplugin/mainwindow.cpp" line="855"/>
-        <source>There is a prescription inside editor, do you to replace it or to add the opened prescription ?</source>
-        <translation>Il existe déjà une prescription dans l&apos;éditeur, voulez-vous la remplacer ou ajouter la nouvelle prescription ?</translation>
+        <source>There is a prescription inside editor, do you to replace it or to add the opened prescription?</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../freediams/plugins/mainwindowplugin/mainwindow.cpp" line="856"/>
@@ -207,15 +152,6 @@
         <location filename="../../freediams/plugins/mainwindowplugin/medintux.cpp" line="92"/>
         <source>Automatic configuration for MedinTux usage</source>
         <translation>Configuration automatique pour l&apos;utilisation avec MedinTux</translation>
-    </message>
-    <message>
-        <location filename="../../freediams/plugins/mainwindowplugin/medintux.cpp" line="93"/>
-        <source>This assistant will create a new entrie into the users&apos; menu of DrTux.
-You can create a new prescription by clicking this menu.
-Please take care that if DrTux&apos; location changes, or if FreeDiams&apos; location changes, you must reconfigure DrTux with this assitant.</source>
-        <translation>Cet assistant va créer une nouvelle entrée dans le menu utilsateur de DrTux.
-Vous pourrez créer de nouvelles prescriptions depuis ce menu.
-Attention, assurez-vous de reconfigurer MedinTux grâce à cet assistant à chaque fois que MedinTux ou FreeDiams changera de répertoire.</translation>
     </message>
     <message>
         <location filename="../../freediams/plugins/mainwindowplugin/medintux.cpp" line="98"/>
@@ -312,8 +248,13 @@ Vous devrez le faire vous-même.</translation>
     </message>
     <message>
         <location filename="../../freediams/plugins/mainwindowplugin/medintux.cpp" line="244"/>
-        <source>You can run %1 using DrTux User&apos;s Menu.</source>
-        <translation>Vous pouvez utiliser %1 grâce au menu utilisateur de DrTux.</translation>
+        <source>You can run %1 using DrTux&apos; user menu.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../freediams/plugins/mainwindowplugin/medintux.cpp" line="248"/>
+        <source>This assistant encountered errors during its process.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../freediams/plugins/mainwindowplugin/medintux.cpp" line="245"/>
@@ -323,14 +264,16 @@ Vous devrez le faire vous-même.</translation>
 %1</translation>
     </message>
     <message>
+        <location filename="../../freediams/plugins/mainwindowplugin/medintux.cpp" line="93"/>
+        <source>This assistant will create a new entry into the users&apos; menu of DrTux.
+You can create a new prescription by clicking this menu.
+Please take care that if DrTux&apos; location changes, or if FreeDiams&apos; location changes, you must reconfigure DrTux with this assistant.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../freediams/plugins/mainwindowplugin/medintux.cpp" line="247"/>
         <source>DrTux is not correctly configured.</source>
         <translation>DrTux n&apos;est pas correctement configuré.</translation>
-    </message>
-    <message>
-        <location filename="../../freediams/plugins/mainwindowplugin/medintux.cpp" line="248"/>
-        <source>This assitant encountered errors during its process.</source>
-        <translation>Cet assistant a rencontré des erreurs pendant la configuration.</translation>
     </message>
     <message>
         <location filename="../../freediams/plugins/mainwindowplugin/medintux.cpp" line="249"/>

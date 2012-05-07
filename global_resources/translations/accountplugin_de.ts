@@ -1717,7 +1717,7 @@ Otherwise result will be wrong !</source>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/receipts/controlreceipts.ui" line="75"/>
-        <source>Filtering datas</source>
+        <source>Filtering data</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2479,6 +2479,11 @@ You can create one in Preferences.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="1233"/>
+        <source> has been saved in thesaurus!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="913"/>
         <source>You have to insert your preferred value
 in thesaurus
@@ -2504,11 +2509,6 @@ and choose it as preferred.</source>
     <message>
         <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="1212"/>
         <source>Error inserting into AccountModel!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="1233"/>
-        <source> has been saved in thesaurus !</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

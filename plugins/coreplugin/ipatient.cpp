@@ -26,9 +26,9 @@
  ***************************************************************************/
 /**
   \class Core::IPatient
-  Abstract interface provided to access Patient's datas.\n
+  Abstract interface provided to access Patient's data.\n
   Use this class to avoid any plugin dependencies (other than Core),
-  when needing to access to the \b current \b editing \b patient datas.
+  when needing editing access to the \b current \b editing \b patient data.
   \sa Core::ICore::setPatient(), Core::ICore::patient()
 */
 
