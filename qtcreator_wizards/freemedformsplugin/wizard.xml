@@ -75,7 +75,7 @@ leave room for the Qt 4 target page.
         </field>
         <field name="License">
             <fieldcontrol class="QTextEdit"
-                          defaulttext="GNU Public License" />
+                          defaulttext="GNU General Public License version 3" />
             <fielddescription>License:</fielddescription>
         </field>
         <field name="Description">
@@ -85,7 +85,7 @@ leave room for the Qt 4 target page.
         </field>
         <field name="URL">
             <fieldcontrol class="QLineEdit"
-                          defaulttext="http://www.mycompany.com" />
+                          defaulttext="http://www.freemedforms.com" />
             <fielddescription>URL:</fielddescription>
         </field>
 <!--
