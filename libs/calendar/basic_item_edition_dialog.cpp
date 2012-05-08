@@ -42,7 +42,7 @@
   \code
   // User adding an object
   Calendar::BasicItemEditionDialog dlg(yourAbstractCalendarModelPointer);
-  dlg.addCalendarDataWidget(yourItemDataWidgetEditorPointer); // optionnal
+  dlg.addCalendarDataWidget(yourItemDataWidgetEditorPointer); // optional
   dlg.init(yourCalendarItem);
   if (dlg.exec()==QDialog::Accepted) {
       // retrieve updated item
