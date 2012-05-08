@@ -57,8 +57,9 @@ namespace UserPlugin {
 class USER_EXPORT IUserListener : public QObject
 {
     Q_OBJECT
-public:
+protected:
     IUserListener(QObject *parent = 0) : QObject(parent) {}
+public:
     virtual ~IUserListener() {}
 
     virtual bool userAboutToChange() { return true; }

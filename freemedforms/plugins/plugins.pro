@@ -11,6 +11,7 @@ SUBDIRS = \
     datapack \
 #    padtools \       # unstable
 #    saverestore \    # unstable
+\
     # Depend to more than one plugin
     printer \
     category \
@@ -30,6 +31,7 @@ SUBDIRS = \
     script \
     mainwin \
 #    alerts \
+    webcam
 
 
 # root plugin
@@ -158,6 +160,10 @@ script.depends += formmanager
 
 datapack.subdir = ../../plugins/datapackplugin
 datapack.depends += core
+
+webcam.subdir = ../../plugins/webcam
+webcam.depends += core
+webcam.depends += patientbase
 
 # manage non free content
 #include(../buildspecs/config.pri)

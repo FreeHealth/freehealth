@@ -23,7 +23,8 @@ HEADERS = patientbaseplugin.h \
     patientbasepreferencespage.h \
     patientbar.h \
     patientcreatorwizard.h \
-    patientlineeditcompletersearch.h
+    patientlineeditcompletersearch.h \
+    iphotoprovider.h
 SOURCES = patientbaseplugin.cpp \
     patientbase.cpp \
     patientdata.cpp \

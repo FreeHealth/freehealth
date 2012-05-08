@@ -43,6 +43,8 @@
 #include <coreplugin/constants_tokensandsettings.h>
 #include <coreplugin/ipatient.h>
 
+#include <extensionsystem/pluginmanager.h>
+#include <iphotoprovider.h>
 #include <zipcodesplugin/zipcodescompleters.h>
 
 #include <utils/global.h>
@@ -328,17 +330,36 @@ void IdentityWidget::photoButton_clicked()
     if (d->m_EditMode != ReadWriteMode)
         return;
 
-    // if a photo is already loaded --> ask user what to do
-    // show openfiledialog
-    QString file;
-    file = QFileDialog::getOpenFileName(this, tr("Choose a photo"),
-                                        QDir::homePath(),
-                                        "Image (*.png *.jpg *.gif *.tiff)");
-    if (file.isEmpty())
-        return;
+    // TODO: if a photo is already loaded --> ask user what to do
 
-    // load pixmap
-    d->m_Photo.load(file);
+    QString fileName;
+
+    // get a list of plugin implementations that provide a photo
+    QList<IPhotoProvider *> photoProviders = ExtensionSystem::PluginManager::instance()->getObjects<IPhotoProvider>();
+
+    if (!photoProviders.isEmpty()) { // call the plugin
+
+        // TODO: implement code to allow having more than one photoProvider plugins
+        // and configurations to select the default one.
+        // by now just get first plugin
+        qWarning() << "Info: IPhotoProvider interface was implemented.";
+        IPhotoProvider *photoProvider = photoProviders.first();
+        fileName = photoProvider->recievePhotoFile();
+        if (fileName.isEmpty()) {
+            return;
+        }
+
+    } else {
+        // if no plugins installed/active, fall back to default behaviour
+        fileName = QFileDialog::getOpenFileName(this, tr("Choose a photo"),
+                                            QDir::homePath(),
+                                            "Image (*.png *.jpg *.gif *.tiff)");
+        if (fileName.isEmpty())
+            return;
+    }
+
+    // everything ok, now load pixmap
+    d->m_Photo.load(fileName);
     if (d->m_Photo.isNull())
         return;
 
