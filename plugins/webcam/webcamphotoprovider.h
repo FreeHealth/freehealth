@@ -10,15 +10,10 @@ namespace Internal {
 class WebcamPhotoProvider : public Patients::IPhotoProvider
 {
     Q_OBJECT
-
 public:
     explicit WebcamPhotoProvider();
-    ~WebcamPhotoProvider();
+    ~WebcamPhotoProvider() {}
     QString recievePhotoFile();
-
-signals:
-    
-public slots:
     
 };
 
