@@ -24,7 +24,18 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
+/**
+  \class Utils::SegmentedButton
+  The segmented button is a multi-button control shown has a unique button (in Mas style).
+  You firstly need to add your buttons using the setFirstButton(), addMiddleButton(), setLastButton().\n
+  Then you need to prepare the buttons with computeSizes(). Each times the content of the QPushButton changes (text, tooltip)
+  you have to recall computeSizes().\n
+  You can set the button autoexclusives (after adding all your buttons) with the setAutoExclusive().
+*/
+
 #include "segmentedbutton.h"
+
+#include <utils/global.h>
 
 #include <QHBoxLayout>
 #include <QPushButton>
@@ -60,17 +71,20 @@ const char *const BUTTON_CSS =
         "%1"
         "padding: 3px;"
         "}"
+
         "QPushButton:hover {"
         "background: qradialgradient(cx: 0.4, cy: -0.1,"
         "fx: 0.4, fy: -0.1,"
         "radius: 1.35, stop: 0 #fff, stop: 1 #ededed);"
         "}"
+
         "QPushButton:pressed {"
         "border: 1px inset #666;"
         "background: qradialgradient(cx: 0.3, cy: -0.4,"
         "fx: 0.3, fy: -0.4,"
         "radius: 1.35, stop: 0 #fff, stop: 1 #aaa);"
         "}"
+
         "QPushButton:checked {"
         "border: 1px inset #666;"
         "background: qradialgradient(cx: 0.3, cy: -0.4,"
@@ -83,6 +97,7 @@ const char *const BUTTON_CSS =
 
 }
 
+/** Create an empty segmented button */
 SegmentedButton::SegmentedButton(QWidget *parent) :
     QWidget(parent),
     _first(0),
@@ -90,29 +105,41 @@ SegmentedButton::SegmentedButton(QWidget *parent) :
 {
     QHBoxLayout *lay = _buttonLayout = new QHBoxLayout(this);
     lay->setMargin(0);
-    lay->setSpacing(11);
+    if (Utils::isRunningOnMac())
+        lay->setSpacing(11);
+    else if (Utils::isRunningOnLinux() || Utils::isRunningOnFreebsd())
+        lay->setSpacing(0);
+    else
+        lay->setSpacing(0);
     setLayout(lay);
 }
 
+/** Define the first button of the segmented button. */
 void SegmentedButton::setFirstButton(QPushButton *but)
 {
+    but->setFocusPolicy(Qt::NoFocus);
     but->setStyleSheet(QString(::BUTTON_CSS).arg(::FIRST_BUTTON));
     _buttonLayout->addWidget(but);
     _first = but;
 }
+/** Add middle button in the segmented button. */
 void SegmentedButton::addMiddleButton(QPushButton *but)
 {
+    but->setFocusPolicy(Qt::NoFocus);
     but->setStyleSheet(QString(::BUTTON_CSS).arg(::MIDDLE_BUTTON));
     _buttonLayout->addWidget(but);
     _buttons << but;
 }
+/** Define the last button of the segmented button. */
 void SegmentedButton::setLastButton(QPushButton *but)
 {
+    but->setFocusPolicy(Qt::NoFocus);
     but->setStyleSheet(QString(::BUTTON_CSS).arg(::LAST_BUTTON));
     _buttonLayout->addWidget(but);
     _last = but;
 }
 
+/** Set the buttons autoExclusive according to the \e state. Call this function after all your buttons are registered. */
 void SegmentedButton::setAutoExclusive(bool state)
 {
     if (_first)
@@ -123,6 +150,7 @@ void SegmentedButton::setAutoExclusive(bool state)
         _buttons.at(i)->setAutoExclusive(state);
 }
 
+/** Recomputes the sizes and the presentation of each registered buttons. Call this function each time the content of the button changes (text or tooltip). */
 void SegmentedButton::computeSizes()
 {
     // get max width
