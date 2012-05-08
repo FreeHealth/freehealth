@@ -168,7 +168,7 @@ ItemEditorWidget::~ItemEditorWidget()
     delete d;
 }
 
-/** Clear the widget of its datas. All changes will be lost. You must redefine the Calendar::CalendarItem to edit. \sa setCalendarEvent() */
+/** Clear the widget of its data. All changes will be lost. You must redefine the Calendar::CalendarItem to edit. \sa setCalendarEvent() */
 void ItemEditorWidget::clear()
 {
     d->ui->typeCombo->setCurrentIndex(-1);
@@ -184,9 +184,10 @@ void ItemEditorWidget::clear()
     d->ui->eventLabel->clear();
     d->ui->fullInfo->clear();
     d->ui->iconLabel->clear();
+
     // clear addedWidgets
-    for(int i = 0; i < d->m_AddedWidgets.count(); ++i) {
-        d->m_AddedWidgets.at(i)->clear();
+    foreach(ICalendarItemDataWidget * widget, d->m_AddedWidgets) {
+        widget->clear();
     }
 }
 

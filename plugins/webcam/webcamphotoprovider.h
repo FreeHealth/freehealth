@@ -3,11 +3,12 @@
 
 #include <QObject>
 #include <patientbaseplugin/iphotoprovider.h>
+#include <webcam_exporter.h>
 
 namespace Webcam {
 namespace Internal {
 
-class WebcamPhotoProvider : public Patients::IPhotoProvider
+class WEBCAMSHARED_EXPORT WebcamPhotoProvider : public Patients::IPhotoProvider
 {
     Q_OBJECT
 
