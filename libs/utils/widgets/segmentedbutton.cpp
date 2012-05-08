@@ -24,6 +24,15 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
+/**
+  \class Utils::SegmentedButton
+  The segmented button is a multi-button control shown has a unique button (in Mas style).
+  You firstly need to add your buttons using the setFirstButton(), addMiddleButton(), setLastButton().\n
+  Then you need to prepare the buttons with computeSizes(). Each times the content of the QPushButton changes (text, tooltip)
+  you have to recall computeSizes().\n
+  You can set the button autoexclusives (after adding all your buttons) with the setAutoExclusive().
+*/
+
 #include "segmentedbutton.h"
 
 #include <utils/global.h>
@@ -88,6 +97,7 @@ const char *const BUTTON_CSS =
 
 }
 
+/** Create an empty segmented button */
 SegmentedButton::SegmentedButton(QWidget *parent) :
     QWidget(parent),
     _first(0),
@@ -104,6 +114,7 @@ SegmentedButton::SegmentedButton(QWidget *parent) :
     setLayout(lay);
 }
 
+/** Define the first button of the segmented button. */
 void SegmentedButton::setFirstButton(QPushButton *but)
 {
     but->setFocusPolicy(Qt::NoFocus);
@@ -111,6 +122,7 @@ void SegmentedButton::setFirstButton(QPushButton *but)
     _buttonLayout->addWidget(but);
     _first = but;
 }
+/** Add middle button in the segmented button. */
 void SegmentedButton::addMiddleButton(QPushButton *but)
 {
     but->setFocusPolicy(Qt::NoFocus);
@@ -118,6 +130,7 @@ void SegmentedButton::addMiddleButton(QPushButton *but)
     _buttonLayout->addWidget(but);
     _buttons << but;
 }
+/** Define the last button of the segmented button. */
 void SegmentedButton::setLastButton(QPushButton *but)
 {
     but->setFocusPolicy(Qt::NoFocus);
@@ -126,6 +139,7 @@ void SegmentedButton::setLastButton(QPushButton *but)
     _last = but;
 }
 
+/** Set the buttons autoExclusive according to the \e state. Call this function after all your buttons are registered. */
 void SegmentedButton::setAutoExclusive(bool state)
 {
     if (_first)
@@ -136,6 +150,7 @@ void SegmentedButton::setAutoExclusive(bool state)
         _buttons.at(i)->setAutoExclusive(state);
 }
 
+/** Recomputes the sizes and the presentation of each registered buttons. Call this function each time the content of the button changes (text or tooltip). */
 void SegmentedButton::computeSizes()
 {
     // get max width
