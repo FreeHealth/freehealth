@@ -208,8 +208,8 @@ void ItemEditorWidget::setCalendarItem(const CalendarItem &item)
     d->setEventToUi();
 
     // set to addedWidgets
-    for(int i = 0; i < d->m_AddedWidgets.count(); ++i) {
-        d->m_AddedWidgets.at(i)->setCalendarItem(item);
+    foreach(ICalendarItemDataWidget *widget, d->m_AddedWidgets) {
+        widget->setCalendarItem(item);
     }
 }
 
@@ -279,9 +279,9 @@ void ItemEditorWidget::addCalendarDataWidget(Calendar::ICalendarItemDataWidget *
 /** Submit UI changes to the internal Agenda::CalendarItem \sa calendarEvent(), setCalendarEvent() */
 void ItemEditorWidget::submit()
 {
-    // clear addedWidgets
-    for(int i = 0; i < d->m_AddedWidgets.count(); ++i) {
-        d->m_AddedWidgets.at(i)->submitChangesToCalendarItem(d->m_Item);
+    // add data in addedWidgets to the model
+    foreach(ICalendarItemDataWidget *widget, d->m_AddedWidgets) {
+        widget->submitChangesToCalendarItem(d->m_Item);
     }
     d->submit();
 }
