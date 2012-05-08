@@ -26,6 +26,8 @@
  ***************************************************************************/
 #include "segmentedbutton.h"
 
+#include <utils/global.h>
+
 #include <QHBoxLayout>
 #include <QPushButton>
 #include <QFrame>
@@ -60,17 +62,20 @@ const char *const BUTTON_CSS =
         "%1"
         "padding: 3px;"
         "}"
+
         "QPushButton:hover {"
         "background: qradialgradient(cx: 0.4, cy: -0.1,"
         "fx: 0.4, fy: -0.1,"
         "radius: 1.35, stop: 0 #fff, stop: 1 #ededed);"
         "}"
+
         "QPushButton:pressed {"
         "border: 1px inset #666;"
         "background: qradialgradient(cx: 0.3, cy: -0.4,"
         "fx: 0.3, fy: -0.4,"
         "radius: 1.35, stop: 0 #fff, stop: 1 #aaa);"
         "}"
+
         "QPushButton:checked {"
         "border: 1px inset #666;"
         "background: qradialgradient(cx: 0.3, cy: -0.4,"
@@ -90,24 +95,30 @@ SegmentedButton::SegmentedButton(QWidget *parent) :
 {
     QHBoxLayout *lay = _buttonLayout = new QHBoxLayout(this);
     lay->setMargin(0);
-    lay->setSpacing(11);
+    if (Utils::isRunningOnMac())
+        lay->setSpacing(11);
+    else if (Utils::isRunningOnLinux() || Utils::isRunningOnFreebsd())
+        lay->setSpacing(0);
     setLayout(lay);
 }
 
 void SegmentedButton::setFirstButton(QPushButton *but)
 {
+    but->setFocusPolicy(Qt::NoFocus);
     but->setStyleSheet(QString(::BUTTON_CSS).arg(::FIRST_BUTTON));
     _buttonLayout->addWidget(but);
     _first = but;
 }
 void SegmentedButton::addMiddleButton(QPushButton *but)
 {
+    but->setFocusPolicy(Qt::NoFocus);
     but->setStyleSheet(QString(::BUTTON_CSS).arg(::MIDDLE_BUTTON));
     _buttonLayout->addWidget(but);
     _buttons << but;
 }
 void SegmentedButton::setLastButton(QPushButton *but)
 {
+    but->setFocusPolicy(Qt::NoFocus);
     but->setStyleSheet(QString(::BUTTON_CSS).arg(::LAST_BUTTON));
     _buttonLayout->addWidget(but);
     _last = but;
