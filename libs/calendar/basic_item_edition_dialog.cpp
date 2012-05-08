@@ -30,7 +30,7 @@
   \class Calendar::BasicItemEditionDialog
   Basic editing dialog of Calendar::CalendarItem. This dialog can be extended with the
   usage of Calendar::ICalendarItemDataWidget objects. \n
-  There are two ways to add these king of objects to the dialog:
+  There are two ways to add these kind of objects to the dialog:
     - using the plugin manager object pool,
   \code
   // User adding an object to the plugin manager pool
