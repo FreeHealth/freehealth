@@ -70,13 +70,16 @@ WebcamPlugin::WebcamPlugin()
     
     // All preferences pages must be created in this part (before user connection)
     // And included in the QObject pool
-    
+
+    m_webcamProvider = new WebcamPhotoProvider();
+
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
     connect(Core::ICore::instance(), SIGNAL(coreAboutToClose()), this, SLOT(coreAboutToClose()));
 }
 
 WebcamPlugin::~WebcamPlugin()
 {
+    ExtensionSystem::PluginManager::instance()->removeObject(m_webcamProvider);
     // Unregister objects from the plugin manager's object pool
     // Delete members
 }
@@ -105,8 +108,8 @@ bool WebcamPlugin::initialize(const QStringList &arguments, QString *errorString
     
     // No user is logged in until here
     
-    WebcamPhotoProvider * webcamProvider = new  WebcamPhotoProvider();
-    ExtensionSystem::PluginManager::instance()->addObject(webcamProvider);
+
+    ExtensionSystem::PluginManager::instance()->addObject(m_webcamProvider);
 
     //    Core::ActionManager *am = Core::ICore::instance()->actionManager();
     //

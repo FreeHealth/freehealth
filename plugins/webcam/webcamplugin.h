@@ -27,7 +27,7 @@
 #define WEBCAM_H
 
 #include "webcam_exporter.h"
-
+#include <webcamphotoprovider.h>
 #include <extensionsystem/iplugin.h>
 
 namespace Webcam {
@@ -45,6 +45,9 @@ public:
     void extensionsInitialized();
     //    ShutdownFlag aboutToShutdown();
     
+private:
+    WebcamPhotoProvider *m_webcamProvider;
+
 private Q_SLOTS:
     void postCoreInitialization();
     void coreAboutToClose();

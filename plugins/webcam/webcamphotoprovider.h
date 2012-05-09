@@ -4,6 +4,9 @@
 #include <QObject>
 #include <patientbaseplugin/iphotoprovider.h>
 #include <webcam_exporter.h>
+#include <qopencvwidget.h>
+//#include <opencv/cv.h>
+#include <opencv/highgui.h>
 
 namespace Webcam {
 namespace Internal {
@@ -13,14 +16,17 @@ class WEBCAMSHARED_EXPORT WebcamPhotoProvider : public Patients::IPhotoProvider
     Q_OBJECT
 
 public:
-    explicit WebcamPhotoProvider();
+    WebcamPhotoProvider();
     ~WebcamPhotoProvider();
     QString recievePhotoFile();
 
-signals:
-    
-public slots:
-    
+private:
+    QOpenCVWidget *m_cvWidget;
+    CvCapture *m_camera;
+
+protected:
+    void timerEvent(QTimerEvent*);
+
 };
 
 } // end Internal

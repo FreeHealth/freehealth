@@ -342,7 +342,7 @@ void IdentityWidget::photoButton_clicked()
         // TODO: implement code to allow having more than one photoProvider plugins
         // and configurations to select the default one.
         // by now just get first plugin
-        qWarning() << "Info: IPhotoProvider interface was implemented.";
+
         IPhotoProvider *photoProvider = photoProviders.first();
         fileName = photoProvider->recievePhotoFile();
         if (fileName.isEmpty()) {

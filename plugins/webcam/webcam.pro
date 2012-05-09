@@ -1,5 +1,6 @@
 TARGET = Webcam
 TEMPLATE = lib
+LIBS += -lopencv_video -lopencv_highgui
 
 DEFINES += WEBCAM_LIBRARY
 BUILD_PATH_POSTFIXE = FreeMedForms
@@ -11,11 +12,13 @@ HEADERS += \
     webcamplugin.h\
     webcam_exporter.h\
     webcamconstants.h \
-    webcamphotoprovider.h
+    webcamphotoprovider.h \
+    qopencvwidget.h
         
 SOURCES += \
     webcamplugin.cpp \
-    webcamphotoprovider.cpp
+    webcamphotoprovider.cpp \
+    qopencvwidget.cpp
 
 OTHER_FILES = Webcam.pluginspec
 
