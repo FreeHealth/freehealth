@@ -13,6 +13,7 @@ global_resources/*.ini
 
 # QtCreator files
 *.pro.user
+*.pro.user.*
 
 # bin files
 build/*
