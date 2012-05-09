@@ -14,7 +14,6 @@ namespace Internal {
 class WEBCAMSHARED_EXPORT WebcamPhotoProvider : public Patients::IPhotoProvider
 {
     Q_OBJECT
-
 public:
     WebcamPhotoProvider();
     ~WebcamPhotoProvider();
@@ -26,7 +25,6 @@ private:
 
 protected:
     void timerEvent(QTimerEvent*);
-
 };
 
 } // end Internal

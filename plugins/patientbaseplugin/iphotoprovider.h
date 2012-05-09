@@ -21,9 +21,8 @@ namespace Patients {
 class PATIENT_EXPORT IPhotoProvider : public QObject
 {
     Q_OBJECT
-protected:
-    explicit IPhotoProvider(QObject *parent = 0) : QObject(parent) {}
 public:
+    explicit IPhotoProvider(QObject *parent = 0) : QObject(parent) {}
     virtual ~IPhotoProvider() {}
 
     virtual QString recievePhotoFile() = 0;
