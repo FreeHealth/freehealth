@@ -4,6 +4,10 @@
 //#include <QtGui/QVBoxLayout>
 #include <opencv/highgui.h>
 #include <opencv/cv.h>
+#include <coreplugin/itheme.h>
+#include <coreplugin/icore.h>
+#include <utils/global.h>
+#include <QtMultimediaKit/QCamera>
 
 namespace Webcam {
 namespace Internal {
@@ -12,28 +16,42 @@ WebcamPhotoProvider::WebcamPhotoProvider():
     m_camera(0),
     m_cvWidget(0)
 {
+
 }
+
 
 QString WebcamPhotoProvider::recievePhotoFile()
 {
     QDialog *webCamWindow = new QDialog();
     QVBoxLayout *layout = new QVBoxLayout;
+    webCamWindow->setLayout(layout);
+
     m_cvWidget = new QOpenCVWidget(webCamWindow);
     layout->addWidget(m_cvWidget);
-    webCamWindow->setLayout(layout);
-    webCamWindow->resize(500, 400);
+//    webCamWindow->resize(500, 400);
 
-    layout->addWidget(new QPushButton(tr("Take Photo")));
-    startTimer(100);  // 0.1-second timer
+    QPushButton *takePhotoButton = new QPushButton(tr("Take Photo"));
+    takePhotoButton->setIcon(Core::ICore::instance()->theme()->icon("takescreenshot.png"));
+    layout->addWidget(takePhotoButton);
 
+    startTimer(200);  // 0.2-second timer
+
+    // create a OpenCV camera capture on device 0
+    // TODO: add settings to change device
     m_camera = cvCreateCameraCapture(0);
-    assert(m_camera);
 
+    if(!m_camera) {
+        Utils::warningMessageBox("text","infotext", "detail", "title");
+        cvReleaseCapture(&m_camera);
+        return QString();
+    }
     webCamWindow->show();
+
     if (webCamWindow->exec() == QDialog::Accepted) {
         delete webCamWindow;
         return QString("");
     } else {
+        cvReleaseCapture(&m_camera);
         delete webCamWindow;
         return QString();
     }
@@ -43,7 +61,6 @@ QString WebcamPhotoProvider::recievePhotoFile()
 
 WebcamPhotoProvider::~WebcamPhotoProvider()
 {
-    cvReleaseCapture(&m_camera);
 }
 
 void WebcamPhotoProvider::timerEvent(QTimerEvent*) {
