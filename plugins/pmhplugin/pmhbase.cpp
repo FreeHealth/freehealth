@@ -120,12 +120,13 @@ PmhBase::PmhBase(QObject *parent) :
     using namespace PMH::Constants;
     addTable(Table_MASTER,        "PMH_MASTER");
     addTable(Table_EPISODE,       "PMH_EPISODE");
-
+    /** \todo add table version && version management of the database */
 //    addTable(Table_VERSION, "VERSION");
 
     addField(Table_MASTER, MASTER_ID,            "ID",             FieldIsUniquePrimaryKey);
     addField(Table_MASTER, MASTER_PATIENT_UID,   "PATIENT_UUID",   FieldIsUUID);
     addField(Table_MASTER, MASTER_USER_UID,      "USER_UUID",      FieldIsUUID);
+    /** \todo change the category ID to the category uuid ? should be better. */
     addField(Table_MASTER, MASTER_CATEGORY_ID,   "CATEGORY_ID",    FieldIsInteger);
     addField(Table_MASTER, MASTER_EPISODE_ID,    "MH_EPISODE_ID",  FieldIsInteger);
     addField(Table_MASTER, MASTER_CONTACTS_ID,   "MH_CONTACTS_ID", FieldIsInteger);
