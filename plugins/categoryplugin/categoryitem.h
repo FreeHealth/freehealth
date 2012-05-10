@@ -104,6 +104,7 @@ public:
     int id() const {return data(DbOnly_Id).toInt();}
     int parentId() const {return data(DbOnly_ParentId).toInt();}
     int sortId() const  {return data(SortId).toInt();}
+    QString uuid() const {return data(Uuid).toString();}
     QString cryptedPassword() const {return data(Password).toString();}
     QString mime() const {return data(DbOnly_Mime).toString();}
     QString iconName() const {return data(ThemedIcon).toString();}

@@ -80,7 +80,7 @@ private:
 }
 }
 
-/** \brief Creates a valid CategoryItem. */
+/** \brief Creates a valid empty CategoryItem (id==-1, parentId==-1, labelId==-1). */
 CategoryItem::CategoryItem() :
         d(new CategoryItemPrivate(this))
 {

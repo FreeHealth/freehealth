@@ -50,6 +50,7 @@ public:
     bool linkContentItemWithCategoryItem(const QVector<Category::CategoryItem *> &cats, const QVector<Category::ICategoryContentItem *> &contents) const;
 
     bool saveCategory(CategoryItem *category);
+    bool saveCategories(const QVector<CategoryItem *> &categories);
     bool removeAllExistingCategories(const QString &mime);
 
 private:

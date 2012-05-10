@@ -64,13 +64,19 @@ private:
 public:
     QVector<CategoryItem *> getCategories(const QString &mime) const;
     QList<CategoryItem *> createCategoryTree(const QVector<CategoryItem *> &cats) const;
+
     bool saveCategory(CategoryItem *category);
-    bool updateCategory(CategoryItem *category);
+    bool saveCategories(const QVector<CategoryItem *> &categories);
     bool saveCategoryLabels(CategoryItem *category);
+
     bool removeAllExistingCategories(const QString &mime);
 
 private Q_SLOTS:
     void onCoreDatabaseServerChanged();
+
+private:
+    bool categoryNeedsUpdate(CategoryItem *category);
+    bool updateCategory(CategoryItem *category);
 
 private:
     static bool m_initialized;

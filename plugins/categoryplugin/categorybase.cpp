@@ -349,76 +349,106 @@ QList<CategoryItem *> CategoryBase::createCategoryTree(const QVector<CategoryIte
 */
 bool CategoryBase::saveCategory(CategoryItem *category)
 {
-//    qWarning() << "SaveCategory" << category->isDirty();
-//    category->warn();
+    return saveCategories(QVector<CategoryItem *>() << category);
+}
 
-    // save or update ?
-    if (!(category->data(CategoryItem::DbOnly_Id).isNull() || category->id()==-1)) {
-        return updateCategory(category);
+/**
+  Save a QVector of CategoryItem pointers to database.
+  If CategoryItem already exists in database, CategoryItem is updated.
+  \sa updateCategory()
+*/
+bool CategoryBase::saveCategories(const QVector<CategoryItem *> &categories)
+{
+    bool ok = true;
+    for(int i=0; i < categories.count(); ++i) {
+        CategoryItem *category = categories.at(i);
+
+        // save or update ?
+        if (categoryNeedsUpdate(category)) {
+            if (!updateCategory(category)) {
+                ok = false;
+            }
+            continue;
+        }
+
+        // save labels
+        if (!saveCategoryLabels(category)) {
+            ok = false;
+            continue;
+        }
+        // save category itself
+        QSqlQuery query(database());
+        query.prepare(prepareInsertQuery(Constants::Table_CATEGORIES));
+        query.bindValue(Constants::CATEGORY_ID, QVariant());
+        query.bindValue(Constants::CATEGORY_UUID, category->data(CategoryItem::Uuid));
+        query.bindValue(Constants::CATEGORY_PARENT, category->parentId());
+        query.bindValue(Constants::CATEGORY_LABEL_ID, category->data(CategoryItem::DbOnly_LabelId));
+        query.bindValue(Constants::CATEGORY_MIME, category->mime());
+        query.bindValue(Constants::CATEGORY_PROTECTION_ID, QVariant());
+        query.bindValue(Constants::CATEGORY_SORT_ID, category->sortId());
+        query.bindValue(Constants::CATEGORY_PASSWORD, category->cryptedPassword());
+        query.bindValue(Constants::CATEGORY_ISVALID, category->data(CategoryItem::DbOnly_IsValid).toInt());
+        query.bindValue(Constants::CATEGORY_THEMEDICON, category->data(CategoryItem::ThemedIcon));
+        query.bindValue(Constants::CATEGORY_EXTRAXML, category->data(CategoryItem::ExtraXml));
+        if (query.exec()) {
+            category->setData(CategoryItem::DbOnly_Id, query.lastInsertId());
+        } else {
+            LOG_QUERY_ERROR(query);
+            ok = false;
+        }
+        category->setDirty(false);
+        for(int i=0; i < category->childCount(); ++i)
+            category->child(i)->setData(CategoryItem::DbOnly_ParentId, category->id());
+
+        saveCategories(category->children().toVector());
     }
-    // save labels
-    if (!saveCategoryLabels(category))
-        return false;
-    // save category itself
-    QSqlQuery query(database());
-    query.prepare(prepareInsertQuery(Constants::Table_CATEGORIES));
-    query.bindValue(Constants::CATEGORY_ID, QVariant());
-    query.bindValue(Constants::CATEGORY_UUID, category->data(CategoryItem::Uuid));
-    query.bindValue(Constants::CATEGORY_PARENT, category->parentId());
-    query.bindValue(Constants::CATEGORY_LABEL_ID, category->data(CategoryItem::DbOnly_LabelId));
-    query.bindValue(Constants::CATEGORY_MIME, category->mime());
-    query.bindValue(Constants::CATEGORY_PROTECTION_ID, QVariant());
-    query.bindValue(Constants::CATEGORY_SORT_ID, category->sortId());
-    query.bindValue(Constants::CATEGORY_PASSWORD, category->cryptedPassword());
-    query.bindValue(Constants::CATEGORY_ISVALID, category->data(CategoryItem::DbOnly_IsValid).toInt());
-    query.bindValue(Constants::CATEGORY_THEMEDICON, category->data(CategoryItem::ThemedIcon));
-    query.bindValue(Constants::CATEGORY_EXTRAXML, category->data(CategoryItem::ExtraXml));
-    if (query.exec()) {
-        category->setData(CategoryItem::DbOnly_Id, query.lastInsertId());
-    } else {
-        LOG_QUERY_ERROR(query);
+    return ok;
+}
+
+/** Check the database from already existing category. Return true if the category already exists in the database (in this case, the CategoryItem::DbOnly_Id will be populated with the id of the item). */
+bool CategoryBase::categoryNeedsUpdate(CategoryItem *category)
+{
+//    WARN_FUNC;
+    int id = -1;
+    if ((category->data(CategoryItem::DbOnly_Id).isNull() || category->id()==-1) &&
+            (!category->uuid().isEmpty())) {
+        // try to find the category using the uuid
+        const QString &uuid = category->data(CategoryItem::Uuid).toString();
+        QSqlQuery query(database());
+        QHash<int, QString> where;
+        where.insert(Constants::CATEGORY_UUID, QString("='%1'").arg(uuid));
+        if (query.exec(select(Constants::Table_CATEGORIES, Constants::CATEGORY_ID, where))) {
+            if (query.next()) {
+                id = query.value(0).toInt();
+                category->setData(CategoryItem::DbOnly_Id, id);
+            }
+        } else {
+            LOG_QUERY_ERROR(query);
+        }
+        // id found --> return true
+        return (id >= 0);
     }
-    category->setDirty(false);
     return false;
 }
 
 /**
-  \brief Update a CategoryItem pointer to database. If CategoryItem does not already exist in database, CategoryItem is saved.
+  Update a CategoryItem pointer to database.
+  This member should not be call directly.
+  The Category::CategoryBase::saveCategory() manages the whole save process (save/update).
   \sa saveCategory()
 */
 bool CategoryBase::updateCategory(CategoryItem *category)
 {
-//    qWarning() << "UpdateCategory" << category->isDirty();
+//    qWarning() << "UpdateCategory" << category->id();
 //    category->warn();
 
-    int id = -1;
-    if (category->data(CategoryItem::DbOnly_Id).isNull() || category->id()==-1) {
-        // try to find the category using the uuid
-        const QString &uuid = category->data(CategoryItem::Uuid).toString();
-        if (!uuid.isEmpty()) {
-            QSqlQuery query(database());
-            QHash<int, QString> where;
-            where.insert(Constants::CATEGORY_UUID, QString("=%1").arg(uuid));
-            if (query.exec(select(Constants::Table_CATEGORIES, Constants::CATEGORY_ID, where))) {
-                if (query.next()) {
-                    id = query.value(0).toInt();
-                }
-            } else {
-                LOG_QUERY_ERROR(query);
-            }
-            // not found --> save category
-            if (id == -1)
-                return saveCategory(category);
-        }
-    }
+    int id = category->id();
+    if (id < 0)
+        return false;
 
-    // update episode
+    // update needed ?
     if (!category->isDirty())
         return true;
-
-    // do we update from the uuid or the id ?
-    if (id==-1)
-        id = category->id();
 
     QHash<int, QString> where;
     where.insert(Constants::CATEGORY_ID, QString("=%1").arg(category->id()));
@@ -442,7 +472,6 @@ bool CategoryBase::updateCategory(CategoryItem *category)
     query.bindValue(6, category->data(CategoryItem::DbOnly_LabelId));
     query.bindValue(7, category->data(CategoryItem::ExtraXml));
     query.bindValue(8, category->data(CategoryItem::Uuid));
-
     if (!query.exec()) {
         LOG_QUERY_ERROR(query);
     }
