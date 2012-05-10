@@ -49,7 +49,7 @@ CategoryCore *CategoryCore::instance(QObject *parent)
 CategoryCore::CategoryCore(QObject *parent) :
         QObject(parent)
 {
-    // instanciate CategoryBase
+    setObjectName("CategoryCore");
     base();
 }
 
@@ -57,16 +57,19 @@ CategoryCore::~CategoryCore()
 {
 }
 
+/** Public core wrapper to the Category::CategoryBase::getCategories() */
 QVector<CategoryItem *> CategoryCore::getCategories(const QString &mime) const
 {
     return base()->getCategories(mime);
 }
 
+/** Public core wrapper to the Category::CategoryBase::createCategoryTree() */
 QList<CategoryItem *> CategoryCore::createCategoryTree(const QVector<CategoryItem *> &cats) const
 {
     return base()->createCategoryTree(cats);
 }
 
+/** Link Category::ICategoryContentItem to its Category::CategoryItem using the \e uuid of the category. */
 bool CategoryCore::linkContentItemWithCategoryItem(const QVector<Category::CategoryItem *> &cats, const QVector<Category::ICategoryContentItem *> &contents) const
 {
     for(int i = 0; i < contents.count(); ++i) {
@@ -74,7 +77,7 @@ bool CategoryCore::linkContentItemWithCategoryItem(const QVector<Category::Categ
         if (id < 0)
             continue;
 
-        // Add PMHx to the category
+        // Add content to the category
         for(int j = 0; j < cats.count(); ++j) {
             if (cats.at(j)->id() == id) {
                 cats.at(j)->addContentItem(contents.at(i));
@@ -86,16 +89,19 @@ bool CategoryCore::linkContentItemWithCategoryItem(const QVector<Category::Categ
     return true;
 }
 
+/** Public core wrapper to the Category::CategoryBase::saveCategory() */
 bool CategoryCore::saveCategory(CategoryItem *category)
 {
     return base()->saveCategory(category);
 }
 
+/** Public core wrapper to the Category::CategoryBase::saveCategories() */
 bool CategoryCore::saveCategories(const QVector<CategoryItem *> &categories)
 {
     return base()->saveCategories(categories);
 }
 
+/** Public core wrapper to the Category::CategoryBase::removeAllExistingCategories() */
 bool CategoryCore::removeAllExistingCategories(const QString &mime)
 {
     return base()->removeAllExistingCategories(mime);
