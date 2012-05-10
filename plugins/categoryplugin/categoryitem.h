@@ -41,6 +41,8 @@ public:
     virtual ~ICategoryContentItem() {}
 
     virtual int categoryId() const = 0;
+    /** \todo code the category uuid used by the linkCategoryContentToCategory() */
+//    virtual QString categoryUid() const = 0;
     virtual void setCategory(Category::CategoryItem *cat) = 0;
     virtual Category::CategoryItem *category() const = 0;
 
