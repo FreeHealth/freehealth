@@ -586,6 +586,9 @@ int PmhCategoryModel::pmhCount(const QModelIndex &parent) const
     if (!parent.isValid())
         return 0;
     TreeItem *item = d->getItem(parent);
+    Q_ASSERT(item);
+    if (!item)
+        return 0;
     int n = 0;
     if (item->isCategory()) {
         for(int i=0; i < item->childCount(); ++i) {
@@ -600,6 +603,9 @@ int PmhCategoryModel::pmhCount(const QModelIndex &parent) const
 int PmhCategoryModel::rowCount(const QModelIndex &parent) const
 {
     TreeItem *item = d->getItem(parent);
+    Q_ASSERT(item);
+    if (!item)
+        return 0;
     if (item->isForm())
         return 0;
     if (item)
@@ -632,6 +638,9 @@ QVariant PmhCategoryModel::data(const QModelIndex &index, int role) const
         return QVariant();
 
     const TreeItem *it = d->getItem(index);
+    Q_ASSERT(it);
+    if (!it)
+        return QVariant();
 
     switch (role)
     {
@@ -730,6 +739,16 @@ QVariant PmhCategoryModel::data(const QModelIndex &index, int role) const
                 return it->icon();
             break;
         }
+    case Qt::SizeHintRole:
+    {
+        if (it->isCategory()) {
+            QSize size;
+            QFont font = data(index, Qt::FontRole).value<QFont>();
+            QFontMetrics fm(font);
+            size.setHeight(fm.height() + 10);
+            return size;
+        }
+    }
     }
 
     return QVariant();
@@ -745,6 +764,9 @@ bool PmhCategoryModel::setData(const QModelIndex &index, const QVariant &value, 
         return false;
 
     TreeItem *it = d->getItem(index);
+    Q_ASSERT(it);
+    if (!it)
+        return false;
 
     if (!it->isCategory())
         return false;
@@ -862,8 +884,11 @@ bool PmhCategoryModel::addPmhData(PmhData *pmh)
 
         // Insert the row to the right category
         Category::CategoryItem *cat = d->findCategory(pmh->categoryId());
-        if (!cat)
+
+        if (!cat) {
+            qWarning() << "NO CATEGORY";
             return false;
+        }
 
         qWarning() << cat->label() << cat->id();
 
