@@ -340,7 +340,7 @@ QVariant PackCategoriesModel::data(const QModelIndex &index, int role) const
         return tr;
     } else if (role==Qt::SizeHintRole) {
         QSize size = QStandardItemModel::data(index, role).toSize();
-        QFont font = QStandardItemModel::data(index, role).value<QFont>();
+        QFont font = QStandardItemModel::data(index, Qt::FontRole).value<QFont>();
         QFontMetrics fm(font);
         size.setHeight(fm.height() + 10);
         return size;
