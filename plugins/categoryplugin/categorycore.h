@@ -54,6 +54,8 @@ public:
     bool saveCategories(const QVector<CategoryItem *> &categories);
     bool removeAllExistingCategories(const QString &mime);
 
+    Category::CategoryItem *findCategory(const int usingReference, const QVariant &searchValue, Category::CategoryItem *category);
+
 private:
     static CategoryCore *m_Instance;
 };

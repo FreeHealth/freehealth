@@ -106,3 +106,25 @@ bool CategoryCore::removeAllExistingCategories(const QString &mime)
 {
     return base()->removeAllExistingCategories(mime);
 }
+
+/**
+  Search in a category tree after a  Category::CategoryItem pointer whose value for the reference
+  \e usingReference is equal to \e searchValue.
+  The search includes all the children of the \e category. \n
+  For the reference please refer to the Category::CategoryItem::DataRepresentation enumerator. \n
+  Return 0 if there are no matching category found.
+*/
+Category::CategoryItem *CategoryCore::findCategory(const int usingReference, const QVariant &searchValue, Category::CategoryItem *category)
+{
+    if (!category)
+        return 0;
+    if (category->data(usingReference) == searchValue)
+        return category;
+    for(int i = 0; i < category->childCount(); ++i) {
+        Category::CategoryItem *child = category->child(i);
+        child = findCategory(usingReference, searchValue, child);
+        if (child)
+            return child;
+    }
+    return 0;
+}
