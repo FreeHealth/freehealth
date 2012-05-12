@@ -347,10 +347,13 @@ QVector<PmhData *> PmhBase::getPmh(const QString &patientUid) const
     return pmhs;
 }
 
-/** \brief Return flatten list of Category::CategoryItem extracted from database. \sa Category::CategoryCore */
-QVector<Category::CategoryItem *> PmhBase::getPmhCategory() const
+/**
+  Return list of Category::CategoryItem extracted from database linked with the root form \e uid.
+  \sa Category::CategoryCore
+*/
+QVector<Category::CategoryItem *> PmhBase::getPmhCategory(const QString &uid) const
 {
-    return categoryCore()->getCategories(Constants::CATEGORY_MIME);
+    return categoryCore()->getCategories(QString("%1@%2").arg(Constants::CATEGORY_MIME).arg(uid));
 }
 
 /** \brief Recreate the category tree and return a QList of root categories. \sa Category::CategoryCore */

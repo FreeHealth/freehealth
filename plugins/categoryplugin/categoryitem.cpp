@@ -102,7 +102,7 @@ CategoryItem::~CategoryItem()
 /**
   \brief When building a CategoryItem tree, define the \e parent of the item.
   Warning, the item is not automatically added to the children of the \e parent. \sa addChild().
-  Warning, the ParentId is not automatically defined. \sa setData().
+  Warning, the ParentId is automatically defined.
 */
 void CategoryItem::setParent(CategoryItem *parent)
 {
@@ -118,10 +118,27 @@ CategoryItem *CategoryItem::parent() const
     return d->m_Parent;
 }
 
-/** \brief When building a CategoryItem tree, add the item \e child to the list of children. Warning, adding an item to the children list will not redefine the parent of the \e child. \sa setParent()*/
+/**
+  Add the item \e child to the list of children.
+  Adding an item to the children list will redefine the parent of the \e child.
+  \sa setParent()
+*/
 void CategoryItem::addChild(CategoryItem *child)
 {
     d->m_Children.append(child);
+    child->setParent(this);
+}
+
+/**
+  Adds items as \e children.
+  Adding an item to the children list will redefine the parent of the \e child.
+  \sa setParent()
+*/
+void CategoryItem::addChildren(const QVector<CategoryItem *> &children)
+{
+    d->m_Children.append(children.toList());
+    for(int i=0; i<children.count(); ++i)
+        children.at(i)->setParent(this);
 }
 
 /** \brief Insert a CategoryItem tree \e child to the list of children at index \e row. Warning, adding an item to the children list will not redefine the parent of the \e child. \sa setParent()*/
@@ -136,6 +153,13 @@ void CategoryItem::updateChildrenSortId()
     for(int i=0; i < d->m_Children.count(); ++i) {
         d->m_Children[i]->setData(CategoryItem::SortId, i+1);
     }
+}
+
+/** Clear the children of the item. All pointers are deleted. */
+void CategoryItem::clearChildren()
+{
+    qDeleteAll(d->m_Children);
+    d->m_Children.clear();
 }
 
 /** \brief Returns the child number \e number. */

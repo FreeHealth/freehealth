@@ -251,10 +251,11 @@ bool CategoryBase::createDatabase(const QString &connectionName , const QString 
     return true;
 }
 
-/** \brief Return flatten list of CategoryItem extracted from database. */
-QVector<CategoryItem *> CategoryBase::getCategories(const QString &mime) const
+/** Return a list of CategoryItem tree extracted from database. */
+QVector<CategoryItem *> CategoryBase::getCategories(const QString &mime, const QStringList &uuids) const
 {
     QVector<CategoryItem *> cats;
+    QMultiHash<CategoryItem *, QString> childrenUuid;
     if (!database().isOpen()) {
         if (!database().open()) {
             LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
@@ -263,49 +264,107 @@ QVector<CategoryItem *> CategoryBase::getCategories(const QString &mime) const
         }
     }
     QString req;
+    database().transaction();
     QSqlQuery query(database());
+    QStringList correctedUids = uuids;
     QHash<int, QString> where;
-    where.insert(Constants::CATEGORY_ISVALID, "=1");
-    where.insert(Constants::CATEGORY_MIME, QString("='%1'").arg(mime));
-
-    // Get Category table
-    req = select(Constants::Table_CATEGORIES, where);
-    if (query.exec(req)) {
-        while (query.next()) {
-            CategoryItem *cat = new CategoryItem;
-            cat->setData(CategoryItem::DbOnly_Id, query.value(Constants::CATEGORY_ID));
-            cat->setData(CategoryItem::DbOnly_LabelId, query.value(Constants::CATEGORY_LABEL_ID));
-            cat->setData(CategoryItem::DbOnly_ParentId, query.value(Constants::CATEGORY_PARENT));
-            cat->setData(CategoryItem::DbOnly_Mime, query.value(Constants::CATEGORY_MIME));
-            cat->setData(CategoryItem::Uuid, query.value(Constants::CATEGORY_UUID));
-            cat->setData(CategoryItem::ThemedIcon, query.value(Constants::CATEGORY_THEMEDICON));
-            cat->setData(CategoryItem::Password, query.value(Constants::CATEGORY_PASSWORD));
-            cat->setData(CategoryItem::SortId, query.value(Constants::CATEGORY_SORT_ID));
-            cat->setData(CategoryItem::ExtraXml, query.value(Constants::CATEGORY_EXTRAXML));
-            cats << cat;
-        }
-    } else {
-        LOG_QUERY_ERROR(query);
-    }
-    query.finish();
-
-    // Get CategoryItem labels
-    for(int i = 0; i < cats.count(); ++i) {
-        where.clear();
-        CategoryItem *cat = cats.at(i);
-        where.insert(Constants::CATEGORYLABEL_LABEL_ID, QString("='%1'").arg(cat->data(CategoryItem::DbOnly_LabelId).toInt()));
-        req = select(Constants::Table_CATEGORY_LABEL, where);
+    if (uuids.isEmpty()) {
+        // get root uuids
+        QHash<int, QString> where;
+        where.insert(Constants::CATEGORY_ISVALID, "=1");
+        where.insert(Constants::CATEGORY_PARENT, "=-1");
+        where.insert(Constants::CATEGORY_MIME, QString("='%1'").arg(mime));
+        req = select(Constants::Table_CATEGORIES, Constants::CATEGORY_UUID, where);
         if (query.exec(req)) {
             while (query.next()) {
-                cat->setLabel(query.value(Constants::CATEGORYLABEL_VALUE).toString(),
-                              query.value(Constants::CATEGORYLABEL_LANG).toString());
+                correctedUids << query.value(0).toString();
             }
         } else {
             LOG_QUERY_ERROR(query);
         }
         query.finish();
     }
-//    qWarning() << "getting categories" << mime << cats.count();
+
+    foreach(const QString &uuid, correctedUids) {
+        where.clear();
+        where.insert(Constants::CATEGORY_ISVALID, "=1");
+        where.insert(Constants::CATEGORY_MIME, QString("='%1'").arg(mime));
+        if (uuid.contains("%"))
+            where.insert(Constants::CATEGORY_UUID, QString("like '%1'").arg(uuid));
+        else
+            where.insert(Constants::CATEGORY_UUID, QString("='%1'").arg(uuid));
+
+        // Get Category table
+        req = select(Constants::Table_CATEGORIES, where);
+        if (query.exec(req)) {
+            while (query.next()) {
+                CategoryItem *cat = new CategoryItem;
+                cat->setData(CategoryItem::DbOnly_Id, query.value(Constants::CATEGORY_ID));
+                cat->setData(CategoryItem::DbOnly_LabelId, query.value(Constants::CATEGORY_LABEL_ID));
+                cat->setData(CategoryItem::DbOnly_ParentId, query.value(Constants::CATEGORY_PARENT));
+                cat->setData(CategoryItem::DbOnly_Mime, query.value(Constants::CATEGORY_MIME));
+                cat->setData(CategoryItem::Uuid, query.value(Constants::CATEGORY_UUID));
+                cat->setData(CategoryItem::ThemedIcon, query.value(Constants::CATEGORY_THEMEDICON));
+                cat->setData(CategoryItem::Password, query.value(Constants::CATEGORY_PASSWORD));
+                cat->setData(CategoryItem::SortId, query.value(Constants::CATEGORY_SORT_ID));
+                cat->setData(CategoryItem::ExtraXml, query.value(Constants::CATEGORY_EXTRAXML));
+                cats << cat;
+            }
+        } else {
+            LOG_QUERY_ERROR(query);
+        }
+        query.finish();
+
+        // Get CategoryItem labels
+        for(int i = 0; i < cats.count(); ++i) {
+            where.clear();
+            CategoryItem *cat = cats.at(i);
+            where.insert(Constants::CATEGORYLABEL_LABEL_ID, QString("='%1'").arg(cat->data(CategoryItem::DbOnly_LabelId).toInt()));
+            req = select(Constants::Table_CATEGORY_LABEL, where);
+            if (query.exec(req)) {
+                while (query.next()) {
+                    cat->setLabel(query.value(Constants::CATEGORYLABEL_VALUE).toString(),
+                                  query.value(Constants::CATEGORYLABEL_LANG).toString());
+                }
+            } else {
+                LOG_QUERY_ERROR(query);
+            }
+            query.finish();
+
+        }
+        //    qWarning() << "getting categories" << mime << cats.count();
+
+    }
+
+    for(int i = 0; i < cats.count(); ++i) {
+        // Get Category children
+        CategoryItem *cat = cats.at(i);
+        where.clear();
+        where.insert(Constants::CATEGORY_ISVALID, "=1");
+        where.insert(Constants::CATEGORY_PARENT, QString("='%1'").arg(cat->id()));
+        req = select(Constants::Table_CATEGORIES, Constants::CATEGORY_UUID, where);
+        if (query.exec(req)) {
+            while (query.next()) {
+                childrenUuid.insertMulti(cat, query.value(0).toString());
+            }
+        } else {
+            LOG_QUERY_ERROR(query);
+        }
+        query.finish();
+    }
+    database().commit();
+
+    // Get the children of the category
+    foreach(CategoryItem *item, cats) {
+        const QStringList &uids = childrenUuid.values(item);
+        if (uids.isEmpty())
+            continue;
+        item->addChildren(getCategories(mime, uids));
+    }
+
+    // Sort items
+    qSort(cats.begin(), cats.end(), CategoryItem::lessThan);
+
     return cats;
 }
 
@@ -327,7 +386,7 @@ QList<CategoryItem *> CategoryBase::createCategoryTree(const QVector<CategoryIte
                     continue;
 //                qWarning() << "    reparent" << child->label() << "as child of" << parent->label();
                 parent->addChild(child);
-                child->setParent(parent);
+//                child->setParent(parent);
             }
         }
         // Find roots categories
@@ -548,6 +607,7 @@ bool CategoryBase::saveCategoryLabels(CategoryItem *category)
     return true;
 }
 
+/** Set the valid tag all categories from the \e mime to 'invalid'. */
 bool CategoryBase::removeAllExistingCategories(const QString &mime)
 {
     QSqlQuery query(database());
@@ -561,6 +621,7 @@ bool CategoryBase::removeAllExistingCategories(const QString &mime)
     return false;
 }
 
+/** Reacts to Core::ICore::databaseServerChanged(). */
 void CategoryBase::onCoreDatabaseServerChanged()
 {
     m_initialized = false;

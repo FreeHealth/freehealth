@@ -58,9 +58,9 @@ CategoryCore::~CategoryCore()
 }
 
 /** Public core wrapper to the Category::CategoryBase::getCategories() */
-QVector<CategoryItem *> CategoryCore::getCategories(const QString &mime) const
+QVector<CategoryItem *> CategoryCore::getCategories(const QString &mime, const QStringList &uuids) const
 {
-    return base()->getCategories(mime);
+    return base()->getCategories(mime, uuids);
 }
 
 /** Public core wrapper to the Category::CategoryBase::createCategoryTree() */

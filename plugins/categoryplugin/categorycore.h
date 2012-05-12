@@ -28,6 +28,7 @@
 
 #include <categoryplugin/category_exporter.h>
 #include <QObject>
+#include <QStringList>
 
 namespace Category {
 class CategoryItem;
@@ -45,7 +46,7 @@ public:
     static CategoryCore *instance(QObject *parent = 0);
     virtual ~CategoryCore();
 
-    QVector<CategoryItem *> getCategories(const QString &mime) const;
+    QVector<CategoryItem *> getCategories(const QString &mime, const QStringList &uuids = QStringList()) const;
     QList<CategoryItem *> createCategoryTree(const QVector<CategoryItem *> &cats) const;
     bool linkContentItemWithCategoryItem(const QVector<Category::CategoryItem *> &cats, const QVector<Category::ICategoryContentItem *> &contents) const;
 

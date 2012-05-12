@@ -428,10 +428,12 @@ public:
                 _synthesis->setLabel("Synthesis", Trans::Constants::ALL_LANGUAGE);
             }
             m_Cats << _synthesis;
-            m_Cats << base()->getPmhCategory();
+            m_Cats << base()->getPmhCategory(_rootUid);
         }
+
         // Recreate the category tree
-        foreach(Category::CategoryItem *cat, base()->createCategoryTree(m_Cats)) {
+        m_Root->pmhCategory()->clearChildren();
+        foreach(Category::CategoryItem *cat, m_Cats) { ///base()->createCategoryTree(m_Cats)) {
             m_Root->pmhCategory()->addChild(cat);
             categoryToItem(cat, new TreeItem(m_Root));
         }
@@ -461,7 +463,7 @@ public:
     QMultiHash<Category::CategoryItem *, PmhData *> m_Cat_Pmhs;
     Category::CategoryItem *_synthesis;
     QString _htmlSynthesis;
-
+    QString _rootUid;
 
 private:
     PmhCategoryModel *q;
@@ -484,6 +486,15 @@ PmhCategoryModel::~PmhCategoryModel()
     if (d)
         delete d;
     d = 0;
+}
+
+/**
+  Define the uid of the root form that contains the categories to use in the model.
+  \sa Forms::FormManager::loadPmhCategories(), XmlForms::XmlFormIO::loadPmhCategories()
+*/
+void PmhCategoryModel::setRootFormUid(const QString &uid)
+{
+    d->_rootUid = uid;
 }
 
 /** Clear and refresh the whole model */
