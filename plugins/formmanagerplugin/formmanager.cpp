@@ -178,9 +178,9 @@ QList<FormMain *> FormManager::subFormsEmptyRoot() const
 }
 
 /**
-  Return the empty root forms loaded from the \e formUid by the IFormIO objects. \n
+  Return the empty root forms loaded from the \e formUid by the Forms::IFormIO objects. \n
   All these forms are stored in the plugin manager object pool and can be accessed using
-  forms().
+  Forms::FormManager::forms().
  */
 QList<Form::FormMain *> FormManager::loadFormFile(const QString &formUid)
 {
@@ -225,6 +225,11 @@ bool FormManager::loadPatientFile()
 
     // load subforms
     loadSubForms();
+
+    // load pmhx
+    if (!d->m_RootForms.isEmpty()) {
+        d->m_RootForms.at(0)->reader()->loadPmhCategories(absDirPath);
+    }
 
     // emit signal
     Q_EMIT patientFormsLoaded();
