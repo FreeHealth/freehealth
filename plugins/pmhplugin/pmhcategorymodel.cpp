@@ -50,6 +50,8 @@
 #include <formmanagerplugin/formmanager.h>
 #include <formmanagerplugin/episodemodel.h>
 
+#include <categoryplugin/categorycore.h>
+
 #include <utils/log.h>
 #include <translationutils/constanttranslations.h>
 
@@ -65,7 +67,6 @@ using namespace PMH;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
-
 static inline PmhCore *pmhCore() {return PmhCore::instance();}
 static inline PmhBase *base() {return PmhBase::instance();}
 static inline Core::IPatient *patient()  { return Core::ICore::instance()->patient(); }
@@ -74,7 +75,7 @@ static inline Core::ISettings *settings() {return Core::ICore::instance()->setti
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 static inline Core::Translators *translators() {return Core::ICore::instance()->translators();}
 static inline Form::FormManager *formManager() { return Form::FormManager::instance(); }
-
+static inline Category::CategoryCore *categoryCore() {return Category::CategoryCore::instance();}
 
 namespace {
 
@@ -411,11 +412,36 @@ public:
         }
     }
 
+    Category::CategoryItem *findCategory(const int id, Category::CategoryItem *category = 0)
+    {
+        if (!category) {
+            for(int i = 0; i < m_Cats.count(); ++i) {
+                Category::CategoryItem *cat = m_Cats.at(i);
+                cat = categoryCore()->findCategory(Category::CategoryItem::DbOnly_Id, QVariant(id), cat);
+                if (cat)
+                    return cat;
+            }
+            return 0;
+        }
+        return categoryCore()->findCategory(Category::CategoryItem::DbOnly_Id, QVariant(id), category);
+    }
+
+    QVector<Category::CategoryItem *> flattenCategories(Category::CategoryItem *item)
+    {
+        QVector<Category::CategoryItem *> cats;
+        cats << item->children().toVector();
+        for(int i=0; i < item->childCount(); ++i) {
+            cats << flattenCategories(item->child(i));
+        }
+        return cats;
+    }
+
     void getCategories(bool getFromDatabase = false)
     {
+        QVector<Category::CategoryItem *> cats;
         if (getFromDatabase) {
-            // Get all categories from database
             m_Cats.clear();
+            // Get all categories from database
             m_CategoryToItem.clear();
             if (!_synthesis) {
                 _synthesis = new Category::CategoryItem;
@@ -457,7 +483,7 @@ public:
 public:
     TreeItem *m_Root;
     QVector<PmhData *> m_Pmhs;
-    QVector<Category::CategoryItem *> m_Cats;
+    QVector<Category::CategoryItem *> m_FlattenedCategories, m_Cats;
     QHash<Category::CategoryItem *, TreeItem *> m_CategoryToItem;
     QHash<PmhData *, TreeItem *> m_PmhToItems;
     QMultiHash<Category::CategoryItem *, PmhData *> m_Cat_Pmhs;
@@ -794,6 +820,8 @@ bool PmhCategoryModel::removeRows(int row, int count, const QModelIndex &parent)
             Category::CategoryItem *cat = item->pmhCategory();
             cat->setData(Category::CategoryItem::DbOnly_IsValid, false);
             d->m_CategoryToItem.remove(cat);
+
+            /** \todo recode this while d.m_Cats is not linear at all. */
             d->m_Cats.remove(d->m_Cats.indexOf(cat));
             d->m_Cat_Pmhs.remove(cat);
             base()->savePmhCategory(cat);
@@ -821,18 +849,38 @@ bool PmhCategoryModel::addPmhData(PmhData *pmh)
 {
     if (d->m_Pmhs.contains(pmh)) {
         // Update PMH
-        TreeItem *oldItem = d->m_PmhToItems.value(pmh);
+        TreeItem *oldItem = d->m_PmhToItems.value(pmh, 0);
+        Q_ASSERT(oldItem);
+        if (!oldItem)
+            return false;
         TreeItem *parentOldItem = oldItem->parent(); //parent should be a category
         QModelIndex newParentIndex;
+
         // Insert the row to the right category
-        for(int i=0; i < d->m_Cats.count(); ++i) {
-            Category::CategoryItem *cat = d->m_Cats.at(i);
-            if (cat->id() == pmh->categoryId()) {
-                newParentIndex = indexForCategory(cat);
-                pmh->setCategory(cat);
-                break;
-            }
-        }
+        Category::CategoryItem *cat = d->findCategory(pmh->categoryId());
+        if (!cat)
+            return false;
+
+        qWarning() << cat->label() << cat->id();
+
+        newParentIndex = indexForCategory(cat);
+        pmh->setCategory(cat);
+
+
+//        // ATTENTION CATS N'EST PLUS LINEAIRE MAIS EN TREE !!!!
+//        for(int i=0; i < d->m_Cats.count(); ++i) {
+//            Category::CategoryItem *cat = d->m_Cats.at(i);
+//            if (cat->id() == pmh->categoryId()) {
+//                newParentIndex = indexForCategory(cat);
+//                pmh->setCategory(cat);
+//                break;
+//            }
+//        }
+
+
+
+
+
         if (!newParentIndex.isValid()) {
             LOG_ERROR("Unable to update PmhCategoryModel");
             return false;
@@ -862,6 +910,14 @@ bool PmhCategoryModel::addPmhData(PmhData *pmh)
     } else {
         // Add PMH
         QModelIndex newParentIndex;
+
+
+
+
+
+
+
+        // ATTENTION CATS N'EST PLUS LINEAIRE MAIS EN TREE !!!!
         for(int i=0; i < d->m_Cats.count(); ++i) {
             Category::CategoryItem *cat = d->m_Cats.at(i);
             if (cat->id() == pmh->categoryId()) {
@@ -870,6 +926,11 @@ bool PmhCategoryModel::addPmhData(PmhData *pmh)
                 break;
             }
         }
+
+
+
+
+
 
         // Save PMH to database
         base()->savePmhData(pmh);
@@ -1053,6 +1114,16 @@ bool PmhCategoryModel::activateFormEpisode(const QModelIndex &formIndex)
 */
 void PmhCategoryModel::addCategory(Category::CategoryItem *cat, int row, const QModelIndex &parentCategory)
 {
+    Q_ASSERT(d->_rootUid.isEmpty());
+    if (d->_rootUid.isEmpty()) {
+        LOG_ERROR("N root uid defined");
+        return;
+    }
+
+    // ensure the category gets the correct mime type for PMHx
+    cat->setData(Category::CategoryItem::DbOnly_Mime, QString("%1@%2").arg(PMH::Constants::CATEGORY_MIME).arg(d->_rootUid));
+
+    /** \todo recode this, not more linear m_Cats */
     if (d->m_Cats.contains(cat)) {
         updateCategory(cat);
     } else {
@@ -1175,6 +1246,8 @@ void PmhCategoryModel::patientChanged()
     d->m_PmhToItems.clear();
     d->m_CategoryToItem.clear();
     d->_htmlSynthesis.clear();
+
+    /** \todo recode this no more linear */
     for(int i=0; i < d->m_Cats.count(); ++i) {
         d->m_Cats.at(i)->clearContentItems();
     }
