@@ -386,100 +386,33 @@ QList<Form::FormMain *> XmlFormIO::loadAllRootForms(const QString &uuidOrAbsPath
 
 bool XmlFormIO::loadPmhCategories(const QString &uuidOrAbsPath) const
 {
-    QString file = uuidOrAbsPath;
-    if (file.endsWith(".xml")) {
-        file = file.left(file.lastIndexOf("/"));
-    }
-    file += "/pmhcategories.xml";
+    XmlFormName &form = formName(uuidOrAbsPath, m_FormNames);
+    WARN_FUNC << uuidOrAbsPath << form;
 
-    // replace path TAGs
-    file.replace(Core::Constants::TAG_APPLICATION_COMPLETEFORMS_PATH, settings()->path(Core::ISettings::CompleteFormsPath));
-    file.replace(Core::Constants::TAG_APPLICATION_SUBFORMS_PATH, settings()->path(Core::ISettings::SubFormsPath));
-    file.replace(Core::Constants::TAG_APPLICATION_RESOURCES_PATH, settings()->path(Core::ISettings::BundleResourcesPath));
+//    // Get the pmhx file from xmlformbase
+//    QString content = base()->getFormContent(form.uid, XmlIOBase::PmhCategories);
+//    if (content.isEmpty())
+//        return false;
 
-    QDomDocument *doc = 0;
-    if (!reader()->isInCache(file)) {
-        if (!canReadForms(file)) {
-            LOG_ERROR("Unable to read Pmh Category file: " + file);
-            return false;
-        }
-    }
-    categoryCore()->removeAllExistingCategories("PMHx");
-    doc = reader()->fromCache(file);
-    Q_ASSERT(doc);
-    if (!doc) {
-        LOG_ERROR("No category document in XmlFormIO::loadPmhCategories("+file+")");
-        return false;
-    }
-    QDomElement root = doc->firstChildElement(Constants::TAG_MAINXMLTAG);
-    QDomElement element = root.firstChildElement(Constants::TAG_PMHX_CATEGORIES);
-    element = element.firstChildElement(::Constants::TAG_CATEGORY);
-    while (!element.isNull()) {
-        createCategory(element, 0, file);
-        element = element.nextSiblingElement(::Constants::TAG_CATEGORY);
-    }
+//    // Read the uuid of root categories
+//    QDomDocument doc;
+//    doc.setContent(content);
+
+//    // Pass the root uuids to the PMHxModel
+//    QDomElement root = doc.firstChildElement(Constants::TAG_MAINXMLTAG);
+//    QDomElement element = root.firstChildElement(Constants::TAG_PMHX_CATEGORIES);
+//    element = element.firstChildElement(::Constants::TAG_CATEGORY);
+//    QStringList rootUuids;
+//    while (!element.isNull()) {
+//        rootUuids << element.text();
+//        element = element.nextSiblingElement(::Constants::TAG_CATEGORY);
+//    }
+    pmhCore()->pmhCategoryModel()->setRootFormUid(form.uid);
     pmhCore()->pmhCategoryModel()->refreshFromDatabase();
-    LOG("Category created");
+    LOG("Category retreived");
     return true;
 }
 
-bool XmlFormIO::createCategory(const QDomElement &element, Category::CategoryItem *parent, const QString &readingAbsPathFile) const
-{
-    // create the category
-    Category::CategoryItem *item = new Category::CategoryItem;
-    item->setData(Category::CategoryItem::DbOnly_Mime, "PMHx");
-    item->setData(Category::CategoryItem::ThemedIcon, element.attribute(::Constants::ATTRIB_ICON));
-    item->setData(Category::CategoryItem::Uuid, element.attribute(::Constants::ATTRIB_UUID));
-    item->setData(Category::CategoryItem::SortId, element.attribute(::Constants::ATTRIB_SORT_ID));
-
-    // read the labels
-    QDomElement label = element.firstChildElement(::Constants::TAG_SPEC_LABEL);
-    while (!label.isNull()) {
-        item->setLabel(label.text(), label.attribute(::Constants::ATTRIB_LANGUAGE, Trans::Constants::ALL_LANGUAGE));
-        label = label.nextSiblingElement(::Constants::TAG_SPEC_LABEL);
-    }
-
-    // get ExtraTag content -> CategoryItem::ExtraXml
-    QDomElement extra = element.firstChildElement(::Constants::TAG_SPEC_EXTRA);
-    if (!extra.isNull()) {
-//        QDomElement addFile = extra.firstChildElement(Constants::TAG_ADDFILE);
-        // if extra contains a reference to a form -> add it to the database
-//        if (!addFile.isNull()) {
-//            QString fileName = addFile.text();
-//            if (fileName.startsWith(".")) {
-//                QFileInfo file(fileName);
-//                file.setFile(QFileInfo(readingAbsPathFile).absolutePath() + QDir::separator() + file.fileName());
-//                fileName = file.absoluteFilePath();
-//            }
-//            // add form to database
-//            const QString &u = reader()->saveFormToDatabase(fileName, XmlIOBase::FullContent);
-//            if (u.isEmpty())
-//                LOG_ERROR("Unable to save form to database");
-//            else
-//                addFile.toText().setData(u);
-//        }
-
-        QString content;
-        QTextStream s(&content);
-        extra.save(s, 2);
-        item->setData(Category::CategoryItem::ExtraXml, content);
-    }
-
-    // reparent item
-    if (parent) {
-        parent->addChild(item);
-        item->setParent(parent);
-    }
-    categoryCore()->saveCategory(item);
-
-    // has children ?
-    QDomElement child = element.firstChildElement(::Constants::TAG_CATEGORY);
-    while (!child.isNull()) {
-        createCategory(child, item, readingAbsPathFile);
-        child = child.nextSiblingElement(::Constants::TAG_CATEGORY);
-    }
-    return true;
-}
 
 QList<QPixmap> XmlFormIO::screenShots(const QString &uuidOrAbsPath) const
 {

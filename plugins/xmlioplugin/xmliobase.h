@@ -32,12 +32,15 @@
 
 #include <QObject>
 #include <QDateTime>
+QT_BEGIN_NAMESPACE
+class QDomElement;
+QT_END_NAMESPACE
 
 /**
  * \file xmliobase.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.2
- * \date 11 Jan 2012
+ * \version 0.7.2
+ * \date 09 May 2012
 */
 
 namespace Form {
@@ -45,6 +48,9 @@ class FormIODescription;
 class FormIOQuery;
 }
 
+namespace Category {
+class CategoryItem;
+}
 
 namespace XmlForms {
 namespace Internal {
@@ -66,7 +72,7 @@ public:
         UiFile,
         HtmlFile,
 //        Forms,
-//        PmhCategories,
+        PmhCategories,
         ExtraFiles
     };
 
@@ -90,10 +96,13 @@ public:
 
     // Setters
     bool saveForm(const XmlFormName &form);
+    void savePmhxCategories(const XmlFormName &form, const QString &content);
     void saveScreenShots(const XmlFormName &form);
     void saveFiles(const XmlFormName &form, const QString &subDir, const QString &fileExtension, XmlIOBase::TypeOfContent type);
 
 private:
+    Category::CategoryItem *createCategory(const XmlFormName &form, const QDomElement &element, Category::CategoryItem *parent) const;
+
     bool createDatabase(const QString &connectionName, const QString &dbName,
                         const QString &pathOrHostName,
                         TypeOfAccess access, AvailableDrivers driver,
