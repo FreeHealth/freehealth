@@ -69,6 +69,27 @@ QList<CategoryItem *> CategoryCore::createCategoryTree(const QVector<CategoryIte
     return base()->createCategoryTree(cats);
 }
 
+static QVector<Category::CategoryItem *> flattenCategories(Category::CategoryItem *item)
+{
+    QVector<Category::CategoryItem *> cats;
+    cats << item->children().toVector();
+    for(int i=0; i < item->childCount(); ++i) {
+        cats << flattenCategories(item->child(i));
+    }
+    return cats;
+}
+
+/** Transform a category tree \e categories into a flat QVector. Root items of the \e categories vector will be included. */
+QVector<Category::CategoryItem *> CategoryCore::flattenCategoryTree(const QVector<Category::CategoryItem *> &categories)
+{
+    QVector<Category::CategoryItem *> cats;
+    for(int i=0; i < categories.count(); ++i) {
+        CategoryItem *item = categories.at(i);
+        cats << item << flattenCategories(item);
+    }
+    return cats;
+}
+
 /** Link Category::ICategoryContentItem to its Category::CategoryItem using the \e uuid of the category. */
 bool CategoryCore::linkContentItemWithCategoryItem(const QVector<Category::CategoryItem *> &cats, const QVector<Category::ICategoryContentItem *> &contents) const
 {

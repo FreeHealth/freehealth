@@ -48,13 +48,15 @@ public:
 
     QVector<CategoryItem *> getCategories(const QString &mime, const QStringList &uuids = QStringList()) const;
     QList<CategoryItem *> createCategoryTree(const QVector<CategoryItem *> &cats) const;
+    QVector<Category::CategoryItem *> flattenCategoryTree(const QVector<Category::CategoryItem *> &category);
+
     bool linkContentItemWithCategoryItem(const QVector<Category::CategoryItem *> &cats, const QVector<Category::ICategoryContentItem *> &contents) const;
 
     bool saveCategory(CategoryItem *category);
     bool saveCategories(const QVector<CategoryItem *> &categories);
     bool removeAllExistingCategories(const QString &mime);
 
-    Category::CategoryItem *findCategory(const int usingReference, const QVariant &searchValue, Category::CategoryItem *category);
+    Category::CategoryItem *findCategory(const int usingReference, const QVariant &searchValue, Category::CategoryItem *categories);
 
 private:
     static CategoryCore *m_Instance;
