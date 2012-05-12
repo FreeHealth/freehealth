@@ -837,7 +837,7 @@ bool XmlFormContentReader::createWidgets(const Form::FormMain *rootForm)
 bool XmlFormContentReader::loadPmhCategories(const QString &uuidOrAbsPath)
 {
     Q_UNUSED(uuidOrAbsPath);
-//    QString file = QFileInfo(uuidOrAbsPath).absolutePath() + "/pmhcategories.xml";
+//    QString file = QFileInfo(uuidOrAbsPath).absolutePath() + QDir::separator() + Constants::PMHXCATOGORIES_FILENAME;
 //    // replace path TAGs
 //    file.replace(Core::Constants::TAG_APPLICATION_COMPLETEFORMS_PATH, settings()->path(Core::ISettings::CompleteFormsPath));
 //    file.replace(Core::Constants::TAG_APPLICATION_SUBFORMS_PATH, settings()->path(Core::ISettings::SubFormsPath));
