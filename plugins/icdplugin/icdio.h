@@ -60,6 +60,8 @@ public:
     IcdIO();
     ~IcdIO();
 
+    static bool isDatabaseInitialized();
+
     QString icdCollectionToXml(const IcdCollectionModel *model);
     bool icdCollectionFromXml(IcdCollectionModel *model, const QString &xml, const ModelManagement management = ReplaceModelContent);
 
