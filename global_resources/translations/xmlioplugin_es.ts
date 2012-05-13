@@ -23,30 +23,43 @@ Error: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="535"/>
+        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="468"/>
         <source>Form: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="536"/>
+        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="469"/>
+        <source>New version: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="470"/>
         <source>Database version: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="548"/>
+        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="484"/>
         <source>Form update detected.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="549"/>
+        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="485"/>
         <source>A form update has been detected. Do you want to update the forms?</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>XmlForms::Internal::XmlIOBase</name>
+    <message>
+        <location filename="../../plugins/xmlioplugin/xmliobase.cpp" line="649"/>
+        <source>Error while saving PMHxCateogries (%1)</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>XmlIOBase</name>
     <message>
-        <location filename="../../plugins/xmlioplugin/xmliobase.cpp" line="191"/>
+        <location filename="../../plugins/xmlioplugin/xmliobase.cpp" line="198"/>
         <source>Trying to create empty database.
        Location: %1
        FileName: %2

@@ -65,12 +65,12 @@ Veuillez vérifier vos répartitions journalières et vos relations avec le repa
         <translation>Pas de base de données thérapeutique chargée.</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1125"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1126"/>
         <source>Asking for a drug without UID</source>
         <translation>Requête d&apos;un médicament sant UID</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1262"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1264"/>
         <source>Unable to find drug with DID %1</source>
         <translation>Impossible de trouver le médicament avec le DID %1</translation>
     </message>
@@ -86,80 +86,80 @@ Veuillez vérifier vos répartitions journalières et vos relations avec le repa
 <context>
     <name>DrugsDB::DrugsIO</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="543"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="552"/>
         <source>Dosages transmitted.</source>
         <translation>Posologies transmises.</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="589"/>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="608"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="597"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="616"/>
         <source>You are trying to read a corrupted XML file.</source>
         <translation>Le fichier que vous tentez de lire est corrompu.</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="590"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="598"/>
         <source>Error: %1
 Line: %2, Column: %3</source>
         <translation>Erreur : %1
 Ligne : %2, colonne : %3</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="546"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="555"/>
         <source>Dosage not successfully transmitted</source>
         <translation>Protocole non correctement transmit</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="607"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="615"/>
         <source>Unable to load XML prescription: tag %1 is missing</source>
         <translation>Impossible de lire la prescription XML : tag %1 manquant</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="609"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="617"/>
         <source>Missing tag: %1</source>
         <translation>Tag XML manquant : %1</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="659"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="655"/>
         <source>Interaction checking will not take these drugs into account.
 </source>
         <translation>Le moteur d&apos;interaction ne prendra pas en compte ces médicaments.
 </translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="660"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="656"/>
         <source>FreeDiams encountered errors while reading the XML prescription.</source>
         <translation>FreeDiams a rencontré des erreurs lors de la lecture de la prescription.</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="671"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="664"/>
         <source>Xml prescription successfully read.</source>
         <translation>Prescription XML correctement lu.</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="879"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="869"/>
         <source>Save test only drugs too?</source>
         <translation>Sauvagegarder les médicaments tests aussi ?</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="880"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="870"/>
         <source>Drugs added for testing only are actually hidden in this prescription.
 Do you want to add them to the file?</source>
         <translation>Des médicaments ajoutés à des fins de test d&apos;interaction sont actuellement cachés.
 Voulez-vous les sauvegarder aussi ?</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="703"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="696"/>
         <source>No file name passed to load prescription</source>
         <translation>Aucun nom de fichier donné pour l&apos;ouverture d&apos;une prescription</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="882"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="872"/>
         <source>Answering &apos;no&apos; will cause definitive lost of test only drugs when reloading this file.</source>
         <translation>Répondre &apos;non&apos; peut causer une perte définitive d&apos;informations des médicaments tests lors de la prochaine ouverture.</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="1101"/>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="1115"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="1091"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="1105"/>
         <source>Drugs Prescription</source>
         <translation>Prescription Medicamenteuse</translation>
     </message>
@@ -167,7 +167,7 @@ Voulez-vous les sauvegarder aussi ?</translation>
 <context>
     <name>DrugsDB::DrugsModel</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsmodel.cpp" line="519"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsmodel.cpp" line="520"/>
         <source>KNOWN ALLERGY</source>
         <translation>ALLERGIE CONNUE</translation>
     </message>
@@ -408,12 +408,12 @@ Voulez-vous les sauvegarder aussi ?</translation>
 <context>
     <name>DrugsModel</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsmodel.cpp" line="247"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsmodel.cpp" line="248"/>
         <source>x %1 of %2</source>
         <translation>x %1 de %2</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsmodel.cpp" line="256"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsmodel.cpp" line="257"/>
         <source>Available Dosages</source>
         <translation>Dosages disponibles</translation>
     </message>
