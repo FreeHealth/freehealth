@@ -151,6 +151,8 @@ bool VersionNumber::operator==(const VersionNumber &b) const
             return true;
         } else if ((m_IsRC && b.isRC()) && (m_RC==b.rcNumber())) {
             return true;
+        } else {
+            return (m_IsAlpha==b.isAlpha() && m_IsBeta==b.isBeta() && m_IsRC==b.isRC());
         }
     }
     return false;
