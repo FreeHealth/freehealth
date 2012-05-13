@@ -463,11 +463,16 @@ bool XmlFormIO::checkDatabaseFormFileForUpdates() const
                 // update database
                 XmlFormName &form = formName(descFile->data(Form::FormIODescription::UuidOrAbsPath).toString(), m_FormNames);
                 // Construct the detailled text of the user's question messagebox
-                msg << tr("Form: ") + descFile->data(Form::FormIODescription::ShortDescription).toString() + "<br />";
-                msg << tr("Database version: %1").arg(db.versionString()) + "<br />";
+                QString html;
+                html = QString("<b>%1</b><br />&nbsp;&nbsp;•&nbsp;%2<br />&nbsp;&nbsp;•&nbsp;%3<br />")
+                        .arg(tr("Form: ") + descFile->data(Form::FormIODescription::ShortDescription).toString())
+                        .arg(tr("New version: %1").arg(file.versionString()))
+                        .arg(tr("Database version: %1").arg(db.versionString()))
+                        ;
                 foreach(const Utils::GenericUpdateInformation &u, descFile->updateInformationForVersion(db)) {
-                    msg << Utils::firstLetterUpperCase(tkTr(Trans::Constants::FROM_1_TO_2).arg(u.fromVersion()).arg(u.toVersion())) + "<br>" + u.text();
+                    html += "&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;" + Utils::firstLetterUpperCase(tkTr(Trans::Constants::FROM_1_TO_2).arg(u.fromVersion()).arg(u.toVersion())) + "&nbsp;: " + u.text() + "<br />";
                 }
+                msg << html;
                 if (!formsToUpdate.contains(form))
                     formsToUpdate << form;
             }
@@ -478,7 +483,7 @@ bool XmlFormIO::checkDatabaseFormFileForUpdates() const
         // Ask user for update
         bool yes = Utils::yesNoMessageBox(tr("Form update detected."),
                                           tr("A form update has been detected. Do you want to update the forms?"),
-                                          msg.join("<br><br>"));
+                                          msg.join("<br /><br />"));
         if (yes) {
             // Update all checked forms
             foreach(const XmlFormName &form, formsToUpdate) {
