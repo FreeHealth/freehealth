@@ -128,6 +128,7 @@ public:
             if (m_Root)
                 delete m_Root;
             m_Root = 0;
+            q->reset();
             return;
         }
 

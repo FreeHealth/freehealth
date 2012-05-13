@@ -86,6 +86,7 @@ public Q_SLOTS:
     void drugsModelChanged();
 
 private Q_SLOTS:
+    void onDrugsBaseChanged();
     void savePrescription();
     void saveAsPrescription();
     void toggleDrugSelector();

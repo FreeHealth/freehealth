@@ -161,8 +161,9 @@ void DrugSelector::initialize()
         break;
     }
     }
+
     if (a)
-        a->trigger();
+        a->setChecked(true);
 
     splitter->setStretchFactor(0, 1);
     splitter->setStretchFactor(1, 3);
