@@ -249,6 +249,7 @@ public:
         qDeleteAll(_pmh);
         _pmh.clear();
         qDeleteAll(_categoryTree);
+        _categoryTree.clear();
     }
 
     void clearTree()
@@ -261,6 +262,8 @@ public:
         _rootItem->setLabel("ROOT CATEGORY");
         Category::CategoryItem *cat = new Category::CategoryItem;
         _rootItem->setPmhCategory(cat);
+        _flattenCategoryList.clear();
+        _categoryTree.clear();
     }
 
     TreeItem *getItem(const QModelIndex &index) const
@@ -391,14 +394,15 @@ public:
 
         // Find related PmhCategory in TreeItems
         int id = pmh->categoryId();
-        for(int i = 0; i < _categoryTree.count(); ++i) {
-            if (_categoryTree.at(i)->id()==id) {
+        for(int i = 0; i < _flattenCategoryList.count(); ++i) {
+            Category::CategoryItem *cat = _flattenCategoryList.at(i);
+            if (cat->id()==id) {
                 // Reparent TreeItem
-                item->setParent(_categoryToItem.value(_categoryTree.at(i)));
+                item->setParent(_categoryToItem.value(cat));
                 if (childNumber==-1) {
-                    _categoryToItem.value(_categoryTree.at(i))->addChildren(item);
+                    _categoryToItem.value(cat)->addChildren(item);
                 } else {
-                    _categoryToItem.value(_categoryTree.at(i))->insertChild(childNumber,item);
+                    _categoryToItem.value(cat)->insertChild(childNumber,item);
                 }
                 return;
             }
@@ -412,34 +416,21 @@ public:
         }
     }
 
-    Category::CategoryItem *findCategory(const int id, Category::CategoryItem *category = 0)
+    Category::CategoryItem *findCategory(const int id)
     {
-        if (!category) {
-            for(int i = 0; i < _categoryTree.count(); ++i) {
-                Category::CategoryItem *cat = _categoryTree.at(i);
-                cat = categoryCore()->findCategory(Category::CategoryItem::DbOnly_Id, QVariant(id), cat);
-                if (cat)
-                    return cat;
-            }
-            return 0;
+        for(int i = 0; i < _flattenCategoryList.count(); ++i) {
+            Category::CategoryItem *cat = _flattenCategoryList.at(i);
+            if (cat->id() == id)
+                return cat;
         }
-        return categoryCore()->findCategory(Category::CategoryItem::DbOnly_Id, QVariant(id), category);
-    }
-
-    QVector<Category::CategoryItem *> flattenCategories(Category::CategoryItem *item)
-    {
-        QVector<Category::CategoryItem *> cats;
-        cats << item->children().toVector();
-        for(int i=0; i < item->childCount(); ++i) {
-            cats << flattenCategories(item->child(i));
-        }
-        return cats;
+        return 0;
     }
 
     void getCategories(bool getFromDatabase = false)
     {
         QVector<Category::CategoryItem *> cats;
         if (getFromDatabase) {
+            qDeleteAll(_categoryTree);
             _categoryTree.clear();
             // Get all categories from database
             _categoryToItem.clear();
@@ -462,18 +453,13 @@ public:
             _rootItem->pmhCategory()->addChild(cat);
             categoryToItem(cat, new TreeItem(_rootItem));
         }
-
-//        if (getFromDatabase)
-//            _categoryTree = categoryCore()->flattenCategoryTree(_categoryTree);
-
-//        qWarning() << categoryCore()->flattenCategoryTree(_categoryTree);
-
+        _flattenCategoryList << _categoryToItem.uniqueKeys().toVector();
     }
 
     void getPmh()
     {
         _pmh = base()->getPmh();
-        base()->linkPmhWithCategory(_categoryTree, _pmh);
+        base()->linkPmhWithCategory(_flattenCategoryList, _pmh);
         for(int i = 0; i < _pmh.count(); ++i) {
             pmhToItem(_pmh.at(i), new TreeItem);
         }
@@ -488,7 +474,7 @@ public:
 public:
     TreeItem *_rootItem;
     QVector<PmhData *> _pmh;
-    QVector<Category::CategoryItem *> _categoryTree;
+    QVector<Category::CategoryItem *> _categoryTree, _flattenCategoryList;
     QHash<Category::CategoryItem *, TreeItem *> _categoryToItem;
     QHash<PmhData *, TreeItem *> _pmhToItems;
     QMultiHash<Category::CategoryItem *, PmhData *> _categoryToMultiPmh;
@@ -538,6 +524,7 @@ void PmhCategoryModel::refreshFromDatabase()
     d->_pmhToItems.clear();
     d->_categoryToItem.clear();
     d->_categoryTree.clear();
+    d->_flattenCategoryList.clear();
     d->_htmlSynthesis.clear();
     d->clearTree();
     d->getDataFromDatabase();
@@ -745,7 +732,7 @@ QVariant PmhCategoryModel::data(const QModelIndex &index, int role) const
             QSize size;
             QFont font = data(index, Qt::FontRole).value<QFont>();
             QFontMetrics fm(font);
-            size.setHeight(fm.height() + 10);
+            size.setHeight(fm.height() + 5);
             return size;
         }
     }
@@ -845,9 +832,10 @@ bool PmhCategoryModel::removeRows(int row, int count, const QModelIndex &parent)
             beginRemoveRows(indexToDelete.parent(), indexToDelete.row(), indexToDelete.row()+1);
             Category::CategoryItem *cat = item->pmhCategory();
             cat->setData(Category::CategoryItem::DbOnly_IsValid, false);
-            d->_categoryToItem.remove(cat);
 
             /** \todo recode this while d._categoryTree is not linear at all. */
+            d->_flattenCategoryList.remove(d->_flattenCategoryList.indexOf(cat));
+            d->_categoryToItem.remove(cat);
             d->_categoryTree.remove(d->_categoryTree.indexOf(cat));
             d->_categoryToMultiPmh.remove(cat);
             base()->savePmhCategory(cat);
@@ -889,26 +877,8 @@ bool PmhCategoryModel::addPmhData(PmhData *pmh)
             qWarning() << "NO CATEGORY";
             return false;
         }
-
-        qWarning() << cat->label() << cat->id();
-
         newParentIndex = indexForCategory(cat);
         pmh->setCategory(cat);
-
-
-//        // ATTENTION CATS N'EST PLUS LINEAIRE MAIS EN TREE !!!!
-//        for(int i=0; i < d->_categoryTree.count(); ++i) {
-//            Category::CategoryItem *cat = d->_categoryTree.at(i);
-//            if (cat->id() == pmh->categoryId()) {
-//                newParentIndex = indexForCategory(cat);
-//                pmh->setCategory(cat);
-//                break;
-//            }
-//        }
-
-
-
-
 
         if (!newParentIndex.isValid()) {
             LOG_ERROR("Unable to update PmhCategoryModel");
@@ -917,7 +887,7 @@ bool PmhCategoryModel::addPmhData(PmhData *pmh)
 
         QModelIndex pmhOldIndex = indexForPmhData(pmh);
 
-//        qWarning() << oldItem->label() << pmhOldIndex;
+//        qWarning() << "ADD PMH DATA" << cat->label() << cat->id() << newParentIndex.data() << pmhOldIndex.data();
 
         beginInsertRows(newParentIndex, rowCount(newParentIndex), rowCount(newParentIndex));
         TreeItem *item = new TreeItem;
@@ -934,32 +904,23 @@ bool PmhCategoryModel::addPmhData(PmhData *pmh)
         // Send to database
         base()->savePmhData(pmh);
         d->_htmlSynthesis.clear();
-
         return true;
     } else {
         // Add PMH
         QModelIndex newParentIndex;
 
-
-
-
-
-
-
-        // ATTENTION CATS N'EST PLUS LINEAIRE MAIS EN TREE !!!!
-        for(int i=0; i < d->_categoryTree.count(); ++i) {
-            Category::CategoryItem *cat = d->_categoryTree.at(i);
-            if (cat->id() == pmh->categoryId()) {
-                newParentIndex = indexForCategory(cat);
-                pmh->setCategory(cat);
-                break;
-            }
+        // Insert the row to the right category
+        Category::CategoryItem *cat = d->findCategory(pmh->categoryId());
+        if (!cat) {
+            qWarning() << "NO CATEGORY";
+            return false;
         }
-
-
-
-
-
+        newParentIndex = indexForCategory(cat);
+        pmh->setCategory(cat);
+        if (!newParentIndex.isValid()) {
+            LOG_ERROR("Unable to update PmhCategoryModel");
+            return false;
+        }
 
         // Save PMH to database
         base()->savePmhData(pmh);
@@ -1206,7 +1167,7 @@ void PmhCategoryModel::updateCategory(Category::CategoryItem *category)
 /** Return the Mime of the model. */
 QString PmhCategoryModel::mime() const
 {
-    return Constants::CATEGORY_MIME;
+    return QString("%1@%2").arg(Constants::CATEGORY_MIME).arg(d->_rootUid);
 }
 
 QString PmhCategoryModel::indexToHtml(const QModelIndex &index, int indent) const
