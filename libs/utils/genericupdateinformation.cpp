@@ -99,9 +99,9 @@ QList<GenericUpdateInformation> GenericUpdateInformation::updateInformationForVe
 {
     QList<GenericUpdateInformation> toReturn;
     foreach(const GenericUpdateInformation &u, list) {
-        Utils::VersionNumber f(u.fromVersion());
-        Utils::VersionNumber t(u.toVersion());
-        if (version<=f || (version>f && version<=t))
+        Utils::VersionNumber from(u.fromVersion());
+        Utils::VersionNumber to(u.toVersion());
+        if (version<=from || (version>from && version<to))
             toReturn << u;
     }
     qSort(toReturn.begin(), toReturn.end(), Utils::GenericUpdateInformation::lessThan);
