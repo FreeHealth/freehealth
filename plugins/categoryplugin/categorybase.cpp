@@ -467,8 +467,8 @@ bool CategoryBase::saveCategories(const QVector<CategoryItem *> &categories)
 /** Check the database from already existing category. Return true if the category already exists in the database (in this case, the CategoryItem::DbOnly_Id will be populated with the id of the item). */
 bool CategoryBase::categoryNeedsUpdate(CategoryItem *category)
 {
-//    WARN_FUNC;
     int id = -1;
+    bool isDirty = category->isDirty();
     if ((category->data(CategoryItem::DbOnly_Id).isNull() || category->id()==-1) &&
             (!category->uuid().isEmpty())) {
         // try to find the category using the uuid
@@ -476,10 +476,14 @@ bool CategoryBase::categoryNeedsUpdate(CategoryItem *category)
         QSqlQuery query(database());
         QHash<int, QString> where;
         where.insert(Constants::CATEGORY_UUID, QString("='%1'").arg(uuid));
-        if (query.exec(select(Constants::Table_CATEGORIES, Constants::CATEGORY_ID, where))) {
+        if (query.exec(select(Constants::Table_CATEGORIES, QList<int>()
+                              << Constants::CATEGORY_ID
+                              << Constants::CATEGORY_LABEL_ID, where))) {
             if (query.next()) {
                 id = query.value(0).toInt();
                 category->setData(CategoryItem::DbOnly_Id, id);
+                category->setData(CategoryItem::DbOnly_LabelId, query.value(1).toInt());
+                category->setDirty(isDirty);
             }
         } else {
             LOG_QUERY_ERROR(query);
@@ -498,9 +502,6 @@ bool CategoryBase::categoryNeedsUpdate(CategoryItem *category)
 */
 bool CategoryBase::updateCategory(CategoryItem *category)
 {
-//    qWarning() << "UpdateCategory" << category->id();
-//    category->warn();
-
     int id = category->id();
     if (id < 0)
         return false;
@@ -519,18 +520,19 @@ bool CategoryBase::updateCategory(CategoryItem *category)
                                      << Constants::CATEGORY_PARENT
                                      << Constants::CATEGORY_SORT_ID
                                      << Constants::CATEGORY_THEMEDICON
-                                     << Constants::CATEGORY_LABEL_ID
                                      << Constants::CATEGORY_EXTRAXML
-                                     << Constants::CATEGORY_UUID, where));
+                                     << Constants::CATEGORY_UUID
+                                     // << Constants::CATEGORY_LABEL_ID
+                                     , where));
     query.bindValue(0, category->mime());
     query.bindValue(1, category->cryptedPassword());
     query.bindValue(2, category->data(CategoryItem::DbOnly_IsValid).toInt());
     query.bindValue(3, category->data(CategoryItem::DbOnly_ParentId));
     query.bindValue(4, category->data(CategoryItem::SortId));
     query.bindValue(5, category->data(CategoryItem::ThemedIcon));
-    query.bindValue(6, category->data(CategoryItem::DbOnly_LabelId));
-    query.bindValue(7, category->data(CategoryItem::ExtraXml));
-    query.bindValue(8, category->data(CategoryItem::Uuid));
+    query.bindValue(6, category->data(CategoryItem::ExtraXml));
+    query.bindValue(7, category->data(CategoryItem::Uuid));
+    //    query.bindValue(6, category->data(CategoryItem::DbOnly_LabelId));
     if (!query.exec()) {
         LOG_QUERY_ERROR(query);
     }
@@ -570,6 +572,7 @@ bool CategoryBase::saveCategoryLabels(CategoryItem *category)
     } else {
         labelId = category->data(CategoryItem::DbOnly_LabelId).toInt();
     }
+
     // delete all labels related to this LabelId
     QHash<int, QString> where;
     where.clear();
