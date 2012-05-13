@@ -11,7 +11,6 @@ FreeMedForms
 
 ===== Bug correction =====
 
-  * Corrections in the XML prescription output file
   * Correcting the categories database saving
   * Correctly save the prescription is user click on save in the prescription view (FreeMedForms only)
   * Avoid a segfault when editing empty PMHx
@@ -26,6 +25,8 @@ FreeMedForms
     * Windows installation corrected (missing default french medical procedure)
   * FreeDiams
     * add DrugUidName to the prescription file
+    * Corrections in the XML prescription output file
+    * Show/hide the search INN action in the search line according to the ATC status of the drugs database
   * Many typos corrected
   * Many bug fixes
 
@@ -50,7 +51,6 @@ FreeMedForms
 
 ===== Corrections de bug =====
 
-  * Corrections dans le fichier XML prescription
   * Correction de la sauvegarde des catégories
   * Sauvegarde la prescription quand on clique sur sauvegarder la prescription dans la vue prescription
   * Corrige un crash de l'application si édition d'un antécédent vide
@@ -64,7 +64,9 @@ FreeMedForms
   * FreeAccount
     * Correction de l'installateur Windows (les procédure médicales française par défaut étaient manquantes)
   * FreeDiams
-    * ajout du tag DrugUidName au format de fichier prescription (essentiellement pour les EMR externes)
+    * Corrections dans le fichier XML prescription
+    * Ajout du tag DrugUidName au format de fichier prescription (essentiellement pour les EMR externes)
+    * Montre/Cache l'action "Rechercher par INN" selon le status de la base de données
   * Beaucoup de correction de bogues
   * Beaucoup de traductions corrigées
 
