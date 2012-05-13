@@ -89,7 +89,7 @@
     <message>
         <location filename="../../plugins/pmhplugin/pmhmode.cpp" line="295"/>
         <source>Do you really want to remove the PMHx called &lt;br /&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;b&gt;%1&lt;/b&gt;?</source>
-        <translation>Voulez)vous réellement effacer l&apos;antécédent nommé &lt;br /&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;b&gt;%1&lt;/b&gt;?</translation>
+        <translation>Voulez-vous réellement effacer l&apos;antécédent nommé &lt;br /&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;b&gt;%1&lt;/b&gt;?</translation>
     </message>
 </context>
 <context>
