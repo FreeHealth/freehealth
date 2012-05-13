@@ -28,6 +28,7 @@
 
 #include <drugsbaseplugin/drugbasecore.h>
 #include <drugsbaseplugin/drugsbase.h>
+#include <drugsbaseplugin/drugsbaseinfo.h>
 #include <drugsbaseplugin/constants.h>
 
 #include <coreplugin/translators.h>
@@ -123,6 +124,13 @@ public:
 
     void getTree()
     {
+        if (!drugsBase().actualDatabaseInformation() || !drugsBase().actualDatabaseInformation()->atcCompatible) {
+            if (m_Root)
+                delete m_Root;
+            m_Root = 0;
+            return;
+        }
+
         if (m_Language==QLocale().name().left(2)) {
             qWarning() << "atc tree not rebuilded";
             return;
@@ -215,6 +223,7 @@ AtcTreeModel::AtcTreeModel(QObject *parent) :
         QAbstractItemModel(parent),
         d(new Internal::AtcTreeModelPrivate(this))
 {
+    connect(&drugsBase(), SIGNAL(drugsBaseHasChanged()), this, SLOT(onDrugsBaseChanged()));
     connect(translators(), SIGNAL(languageChanged()), this, SLOT(init()));
 }
 
@@ -344,4 +353,10 @@ QVariant AtcTreeModel::headerData(int section, Qt::Orientation orientation, int)
             return tr("Code");
     }
     return QVariant();
+}
+
+void AtcTreeModel::onDrugsBaseChanged()
+{
+    d->m_Language.clear();
+    d->getTree();
 }

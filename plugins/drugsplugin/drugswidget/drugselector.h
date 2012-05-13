@@ -83,6 +83,7 @@ Q_SIGNALS:
 private:
     void createDrugsHistoryActions();
     void createToolButtons();
+    void refreshSearchToolButton();
     void refreshAvailableDrugsDatabaseButtons();
     void createDrugModelView();
     void createINNModelView();
