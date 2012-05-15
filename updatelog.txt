@@ -8,6 +8,8 @@ FreeMedForms
     * warn user on download error
   * PMHx
     * Adding a synthetic view of the PMHx
+  * Command line usage
+    * Two new params to set the user identifiants to use for the connexion
 
 ===== Bug correction =====
 
@@ -48,6 +50,8 @@ FreeMedForms
     * informe lorsqu'un téléchargement échoue
   * Antécédents
     * Ajout d'une vue synthétique des antécédents
+  * Utilisation de la ligne de commande
+    * Deux nouveaux paramètres pour définir les identifiants de l'utilisateur à utiliser pour la connection
 
 ===== Corrections de bug =====
 
