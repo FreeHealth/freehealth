@@ -122,6 +122,7 @@ private Q_SLOTS:
     void addPatientName();
 
 private:
+    bool generalMenu;          /**< set to true if the application uses the Core::MainWindowActionHandler::createGeneralMenu() */
     QAction *aToggleToolBar;
 
     QAction *aOpen;
