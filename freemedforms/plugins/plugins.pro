@@ -11,7 +11,6 @@ SUBDIRS = \
     datapack \
 #    padtools \       # unstable
 #    saverestore \    # unstable
-\
     # Depend to more than one plugin
     printer \
     category \
@@ -30,8 +29,8 @@ SUBDIRS = \
     agenda \
     script \
     mainwin \
+#    webcam
 #    alerts \
-    webcam
 
 
 # root plugin
