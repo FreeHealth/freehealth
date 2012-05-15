@@ -117,9 +117,13 @@ public:
         params.insert(CommandLine::ClearUserDatabases,   "--clear-user-databases");
         params.insert(CommandLine::CreateVirtuals,       "--create-virtuals");
         params.insert(CommandLine::ResetUserPreferences, "--reset-user-preferences");
+        params.insert(CommandLine::UserClearLogin,       "--user-clear-log");
+        params.insert(CommandLine::UserClearPassword,    "--user-clear-password");
 
         // insert default values
         value.insert(Core::Constants::CL_ExchangeOutFileFormat, "html_xml");
+        value.insert(CommandLine::UserClearLogin, QVariant());
+        value.insert(CommandLine::UserClearPassword, QVariant());
     }
 
     void parseCommandLine()
@@ -157,6 +161,8 @@ public:
             case CommandLine::RunningUnderWine:   value.insert(CommandLine::RunningUnderWine, true); break;
             case CommandLine::ClearUserDatabases:   value.insert(CommandLine::ClearUserDatabases, true); break;
             case Core::Constants::CL_BlockPatientDatas:  value.insert(Core::Constants::CL_BlockPatientDatas, true); break;
+            case CommandLine::UserClearLogin:        value.insert(CommandLine::UserClearLogin, a.mid(a.indexOf("=")+1).remove("\"")); break;
+            case CommandLine::UserClearPassword:        value.insert(CommandLine::UserClearPassword, a.mid(a.indexOf("=")+1).remove("\"")); break;
             default : break;
         }
         }
@@ -177,7 +183,7 @@ public:
 
         if (!Utils::isDebugCompilation()) {
             value.insert(CommandLine::ClearUserDatabases, false);
-        }
+        }        
     }
 
     bool readInFileXml(const QString &file)

@@ -51,6 +51,8 @@ public:
         ClearUserDatabases,
         CreateVirtuals,
         ResetUserPreferences,
+        UserClearLogin,
+        UserClearPassword,
         MaxParam
     };
 

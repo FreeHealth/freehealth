@@ -40,6 +40,8 @@ CommandLine::CommandLine() : ICommandLine()
     ref.insert(ClearUserDatabases, "--clear-user-databases");
     ref.insert(CreateVirtuals, "--create-virtuals");
     ref.insert(ResetUserPreferences, "--reset-users-preferences");
+    ref.insert(UserClearLogin,       "--user-clear-log");
+    ref.insert(UserClearPassword,    "--user-clear-password");
 
     // set default values
     params.insert(Chrono, false);
@@ -48,6 +50,8 @@ CommandLine::CommandLine() : ICommandLine()
     params.insert(ClearUserDatabases, false);
     params.insert(CreateVirtuals, false);
     params.insert(ResetUserPreferences, false);
+    params.insert(UserClearLogin, QVariant());
+    params.insert(UserClearPassword, QVariant());
 
     // read command line params
     const QStringList &args = qApp->arguments();
@@ -66,6 +70,8 @@ CommandLine::CommandLine() : ICommandLine()
         case ClearUserDatabases : params.insert(ClearUserDatabases, true); break;
         case CreateVirtuals : params.insert(CreateVirtuals, true); break;
         case ResetUserPreferences : params.insert(ResetUserPreferences, true); break;
+        case UserClearLogin: params.insert(CommandLine::UserClearLogin, a.mid(a.indexOf("=")+1).remove("\"")); break;
+        case UserClearPassword: params.insert(CommandLine::UserClearPassword, a.mid(a.indexOf("=")+1).remove("\"")); break;
         default : break;
         }
     }
