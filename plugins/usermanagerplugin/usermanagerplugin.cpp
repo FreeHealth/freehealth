@@ -245,15 +245,22 @@ bool UserManagerPlugin::identifyUser()
     QString log;
     QString pass;
     bool sqliteVersion = (settings()->databaseConnector().driver()==Utils::Database::SQLite);
+    bool usingCommandLine = false;
     if (sqliteVersion) {
         log = settings()->databaseConnector().clearLog();
         pass = settings()->databaseConnector().clearPass();
+    }
+    if (commandLine()->value(Core::ICommandLine::UserClearLogin).isValid()) {
+        log = commandLine()->value(Core::ICommandLine::UserClearLogin).toString();
+        pass = commandLine()->value(Core::ICommandLine::UserClearPassword).toString();
+        usingCommandLine = true;
+        LOG(tr("Using command line user identifiants: %1 - %2").arg(log).arg(pass));
     }
     bool ask = true;
     while (true) {
         if (userModel()->isCorrectLogin(log, pass)) {
             userModel()->setCurrentUser(log, pass);
-            if (ask) {
+            if (!usingCommandLine && ask) {
                 int r = Utils::withButtonsMessageBox(tkTr(Trans::Constants::CONNECTED_AS_1)
                                                      .arg(userModel()->currentUserData(Core::IUser::FullName).toString()),
                                                      QApplication::translate("UserManagerPlugin", "You can proceed with this user or connect with another one."),
@@ -273,6 +280,7 @@ bool UserManagerPlugin::identifyUser()
         } else {
             log.clear();
             pass.clear();
+            usingCommandLine = false;
             Internal::UserIdentifier ident;
             if (ident.exec() == QDialog::Rejected)
                 return false;
