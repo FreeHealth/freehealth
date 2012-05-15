@@ -14,7 +14,7 @@ VersionInfoProductName=FreeToolBox
 OutputDir=FreeToolBox
 ;ShowLanguageDialog=no
 ;ShowUndisplayableLanguages=yes
-AppCopyright=Copyright (C) 2008-2010 Eric Maeker, MD, {cm:FreeMedFormsProject}
+AppCopyright=Copyright (C) 2008-2012 Eric Maeker, MD, {cm:FreeMedFormsProject}
 AppPublisher={cm:FreeMedFormsProject}
 AppPublisherURL=http://www.freemedforms.com/
 ChangesAssociations=yes
@@ -86,6 +86,7 @@ Name: "helpFr"; Description: {cm:CompHelpFr}; Types: full custom
 Source: "FreeToolBox.exe"; DestDir: "{app}"; Components: program
 Source: "*.dll"; DestDir: "{app}"; Components: program
 Source: "plugins/*"; DestDir: "{app}/plugins"; Components: program; Flags: recursesubdirs
+Source: "Resources/datapacks/appinstalled/defaultservers.txt"; DestDir: "{app}/Resources/datapacks/appinstalled"; Components: program
 Source: "Resources/pixmap/*"; DestDir: "{app}/Resources/pixmap"; Components: program; Flags: recursesubdirs
 Source: "Resources/textfiles/*"; DestDir: "{app}/Resources/textfiles"; Components: program; Flags: recursesubdirs
 Source: "Resources/translations/*"; DestDir: "{app}/Resources/translations"; Components: program; Flags: recursesubdirs

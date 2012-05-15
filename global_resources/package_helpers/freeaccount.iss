@@ -35,7 +35,7 @@ Name: de; MessagesFile: "compiler:Languages\German.isl"
 
 [Messages]
 en.BeveledLabel=English
-fr.BeveledLabel=FranÁais
+fr.BeveledLabel=Français
 de.BeveledLabel=Deutsch
 
 [CustomMessages]
@@ -59,27 +59,6 @@ en.UninstallProgram=Uninstall %1
 fr.UninstallProgram=Désinstaller %1
 de.UninstallProgram=%1 deinstallieren
 
-;en.OneDbInstall=One drugs database install
-;de.OneDbInstall=Installation mit nur einer Medikamentendatenbank
-;fr.OneDbInstall=Installation avec une seule base de données thérapeutique
-
-en.CompDbFr=Drugs database
-de.CompDbFr=Medikamentendatenbank
-fr.CompDbFr=Base de données thérapeutique
-
-;en.TypeDbFr=custom
-;de.TypeDbFr=custom
-;fr.TypeDbFr=custom onedb
-;en.TypeDbCa=custom onedb
-;de.TypeDbCa=custom
-;fr.TypeDbCa=custom
-;en.TypeDbUs=custom onedb
-;de.TypeDbUs=custom
-;fr.TypeDbUs=custom
-;en.TypeDbZa=custom
-;de.TypeDbZa=custom
-;fr.TypeDbZa=custom
-
 en.CompHelpEn=English help
 de.CompHelpEn=Englische Hilfe
 fr.CompHelpEn=Aide : traduction anglaise
@@ -93,12 +72,10 @@ fr.StartApplication=Démarrer FreeAccount
 
 [Types]
 Name: "full"; Description: {cm:FullInstall}
-;Name: "onedb"; Description: {cm:OneDbInstall}
 Name: "custom"; Description: {cm:CustomInstall}; Flags: iscustom
 
 [Components]
 Name: "program"; Description: "FreeAccount"; Types: full custom; Flags: fixed
-Name: "dbFr"; Description: {cm:CompDbFr}; Types: full
 Name: "helpEn"; Description: {cm:CompHelpEn}; Types: full custom
 Name: "helpFr"; Description: {cm:CompHelpFr}; Types: full custom
 
@@ -107,6 +84,7 @@ Name: "helpFr"; Description: {cm:CompHelpFr}; Types: full custom
 Source: "freeaccount.exe"; DestDir: "{app}"; Components: program
 Source: "*.dll"; DestDir: "{app}"; Components: program
 Source: "plugins/*"; DestDir: "{app}/plugins"; Components: program; Flags: recursesubdirs
+Source: "Resources/datapacks/appinstalled/defaultservers.txt"; DestDir: "{app}/Resources/datapacks/appinstalled"; Components: program
 Source: "Resources/pixmap/*"; DestDir: "{app}/Resources/pixmap"; Components: program; Flags: recursesubdirs
 Source: "Resources/sql/*"; DestDir: "{app}/Resources/sql"; Components: program; Flags: recursesubdirs
 Source: "Resources/textfiles/*"; DestDir: "{app}/Resources/textfiles"; Components: program; Flags: recursesubdirs

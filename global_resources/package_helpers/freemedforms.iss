@@ -14,7 +14,7 @@ VersionInfoProductName=FreeMedForms
 OutputDir=FreeMedForms
 ;ShowLanguageDialog=no
 ;ShowUndisplayableLanguages=yes
-AppCopyright=Copyright (C) 2008-2011 Eric Maeker, MD, {cm:FreeMedFormsProject}
+AppCopyright=Copyright (C) 2008-2012 Eric Maeker, MD, {cm:FreeMedFormsProject}
 AppPublisher={cm:FreeMedFormsProject}
 AppPublisherURL=http://www.freemedforms.com/
 ChangesAssociations=yes
@@ -91,6 +91,7 @@ Source: "freemedforms.exe"; DestDir: "{app}"; Components: program
 Source: "*.dll"; DestDir: "{app}"; Components: program
 Source: "plugins/*"; DestDir: "{app}/plugins"; Components: program; Flags: recursesubdirs
 Source: "Resources/datapacks/appinstalled/drugs/*"; DestDir: "{app}/Resources/datapacks/appinstalled/drugs"; Components: program
+Source: "Resources/datapacks/appinstalled/defaultservers.txt"; DestDir: "{app}/Resources/datapacks/appinstalled"; Components: program
 Source: "Resources/forms/*"; DestDir: "{app}/Resources/forms/"; Components: program; Flags: recursesubdirs
 Source: "Resources/pixmap/*"; DestDir: "{app}/Resources/pixmap"; Components: program; Flags: recursesubdirs
 Source: "Resources/profiles/*"; DestDir: "{app}/Resources/profiles"; Components: program; Flags: recursesubdirs
