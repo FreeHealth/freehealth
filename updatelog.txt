@@ -36,6 +36,7 @@ FreeMedForms
 
   * Sources
   * Packaging
+    * Correction of dependencies for the Debian/Ubuntu package
   * Compilation
   * Documentation
     * Updating the FreeDiams documentation [French section only]
@@ -78,6 +79,7 @@ FreeMedForms
 
   * Sources
   * Packaging
+    * Correction des dépendances pour les paquets Debian et Ubuntu
   * Compilation
   * Documentation
     * Updating the FreeDiams documentation [French section only]
