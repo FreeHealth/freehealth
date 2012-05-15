@@ -14,6 +14,7 @@ FreeMedForms
 ===== Bug correction =====
 
   * Correcting the categories database saving
+  * Improving text editor file actions in menus
   * Correctly save the prescription is user click on save in the prescription view (FreeMedForms only)
   * Avoid a segfault when editing empty PMHx
   * Date translations are now connected to the application language (not the system langugage)
@@ -56,6 +57,7 @@ FreeMedForms
 ===== Corrections de bug =====
 
   * Correction de la sauvegarde des catégories
+  * Amélioration des actions de menu de l'éditeur de texte
   * Sauvegarde la prescription quand on clique sur sauvegarder la prescription dans la vue prescription
   * Corrige un crash de l'application si édition d'un antécédent vide
   * Les traductions des dates sont connectés au langage de l'application et non au langage du système uniquement)
