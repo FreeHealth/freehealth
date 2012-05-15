@@ -122,10 +122,10 @@ svnBuildPackage()
 {
   cd $PACKDIR
   echo "    * Fecthing svn debian files"
-  #echo "      from Debian Med"
-  # svn checkout svn://svn.debian.org/svn/debian-med/trunk/packages/$APP_NAME/ ./
-  echo "       from FreeMedForms project"
-  svn checkout https://freemedforms.googlecode.com/svn/trunk/buildspecs/debian/freemedforms-project ./
+  echo "      from Debian Med"
+   svn checkout svn://svn.debian.org/svn/debian-med/trunk/packages/$APP_NAME/ ./
+  #echo "       from FreeMedForms project"
+  #svn checkout https://freemedforms.googlecode.com/svn/trunk/buildspecs/debian/freemedforms-project ./
   cp "./trunk/debian/changelog" $PACKDIR"/changelog.bkup"
   SOURCEDIR=$PACKDIR"/trunk"
   patchChangelog
