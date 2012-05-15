@@ -32,12 +32,12 @@ Please verify your daily scheme prescriptions and relations to meal.</source>
 <context>
     <name>DrugsDB::AtcTreeModel</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/atctreemodel.cpp" line="342"/>
+        <location filename="../../plugins/drugsbaseplugin/atctreemodel.cpp" line="352"/>
         <source>Label</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/atctreemodel.cpp" line="344"/>
+        <location filename="../../plugins/drugsbaseplugin/atctreemodel.cpp" line="354"/>
         <source>Code</source>
         <translation type="unfinished"></translation>
     </message>
@@ -45,27 +45,27 @@ Please verify your daily scheme prescriptions and relations to meal.</source>
 <context>
     <name>DrugsDB::DrugsBase</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="525"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="492"/>
         <source>Switching to the default drugs database source.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1105"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1082"/>
         <source>No drug database source selected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1107"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1084"/>
         <source>No drugs database loaded.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1126"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1103"/>
         <source>Asking for a drug without UID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1264"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1241"/>
         <source>Unable to find drug with DID %1</source>
         <translation type="unfinished"></translation>
     </message>

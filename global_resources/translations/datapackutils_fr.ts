@@ -424,13 +424,13 @@
 <context>
     <name>Datapack::PackModel</name>
     <message>
-        <location filename="../../libs/datapackutils/packmodel.cpp" line="85"/>
-        <location filename="../../libs/datapackutils/packmodel.cpp" line="96"/>
+        <location filename="../../libs/datapackutils/packmodel.cpp" line="90"/>
+        <location filename="../../libs/datapackutils/packmodel.cpp" line="101"/>
         <source>Deletion requested</source>
         <translation>Suppression requise</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/packmodel.cpp" line="92"/>
+        <location filename="../../libs/datapackutils/packmodel.cpp" line="97"/>
         <source>Installation requested</source>
         <translation>Installation requise</translation>
     </message>

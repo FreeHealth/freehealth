@@ -37,12 +37,12 @@ Veuillez vérifier vos répartitions journalières et vos relations avec le repa
 <context>
     <name>DrugsDB::AtcTreeModel</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/atctreemodel.cpp" line="342"/>
+        <location filename="../../plugins/drugsbaseplugin/atctreemodel.cpp" line="352"/>
         <source>Label</source>
         <translation>Nom</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/atctreemodel.cpp" line="344"/>
+        <location filename="../../plugins/drugsbaseplugin/atctreemodel.cpp" line="354"/>
         <source>Code</source>
         <translation></translation>
     </message>
@@ -50,27 +50,27 @@ Veuillez vérifier vos répartitions journalières et vos relations avec le repa
 <context>
     <name>DrugsDB::DrugsBase</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="525"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="492"/>
         <source>Switching to the default drugs database source.</source>
         <translation>Revenir à la base de données par défaut.</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1105"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1082"/>
         <source>No drug database source selected</source>
         <translation>Pas de source pour la base de données thérapeutique sélectionné</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1107"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1084"/>
         <source>No drugs database loaded.</source>
         <translation>Pas de base de données thérapeutique chargée.</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1126"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1103"/>
         <source>Asking for a drug without UID</source>
         <translation>Requête d&apos;un médicament sant UID</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1264"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1241"/>
         <source>Unable to find drug with DID %1</source>
         <translation>Impossible de trouver le médicament avec le DID %1</translation>
     </message>

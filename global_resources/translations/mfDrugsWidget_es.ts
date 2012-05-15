@@ -904,7 +904,7 @@ Do you want to send them?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/drugselector.cpp" line="196"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/drugselector.cpp" line="199"/>
         <source>Selected drugs historic.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -912,12 +912,12 @@ Do you want to send them?</source>
 <context>
     <name>DrugsWidget::Internal::DrugsActionHandler</name>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidgetmanager.cpp" line="689"/>
+        <location filename="../../plugins/drugsplugin/drugswidgetmanager.cpp" line="696"/>
         <source>Prescription is not empty. Clear it?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidgetmanager.cpp" line="690"/>
+        <location filename="../../plugins/drugsplugin/drugswidgetmanager.cpp" line="697"/>
         <source>You select another editing mode than the actual one. Changing of mode during edition may cause prescription lose.
 Do you really want to change the editing mode?</source>
         <translation type="unfinished"></translation>

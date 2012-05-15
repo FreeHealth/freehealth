@@ -913,7 +913,7 @@ Voulez-vous les envoyer ?</translation>
         <translation>Forme</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidget/drugselector.cpp" line="196"/>
+        <location filename="../../plugins/drugsplugin/drugswidget/drugselector.cpp" line="199"/>
         <source>Selected drugs historic.</source>
         <translation>Historique des médicaments sélectionnés.</translation>
     </message>
@@ -921,12 +921,12 @@ Voulez-vous les envoyer ?</translation>
 <context>
     <name>DrugsWidget::Internal::DrugsActionHandler</name>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidgetmanager.cpp" line="689"/>
+        <location filename="../../plugins/drugsplugin/drugswidgetmanager.cpp" line="696"/>
         <source>Prescription is not empty. Clear it?</source>
         <translation>La prescription n&apos;est pas vide. L&apos;effacer ?</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidgetmanager.cpp" line="690"/>
+        <location filename="../../plugins/drugsplugin/drugswidgetmanager.cpp" line="697"/>
         <source>You select another editing mode than the actual one. Changing of mode during edition may cause prescription lose.
 Do you really want to change the editing mode?</source>
         <translation>Vous avez sélectionné un autre mode d&apos;édition que celui en cours. Changer le mode d&apos;édition fera disparaître votre prescription actuelle.
