@@ -24,6 +24,7 @@ FreeMedForms
   * Some related bugs with the patient's date of birth corrected
   * Installation procedure
     * Improving error detection when configuring a network client or server
+    * Correction of MySQL installation (config script was not executed)
   * FreeAccount
     * Windows installation corrected (missing default french medical procedure)
   * FreeDiams
@@ -68,6 +69,7 @@ FreeMedForms
   * Bogues liés à la date de naissance du patient corrigés
   * Procédure d'installation
     * Amélioration des détections d'erreurs lors d'une configuration réseau : client ou serveur
+    * Correction de l'installation MySQL (le script de configuration n'était pas exécuté)
   * FreeAccount
     * Correction de l'installateur Windows (les procédure médicales française par défaut étaient manquantes)
   * FreeDiams
