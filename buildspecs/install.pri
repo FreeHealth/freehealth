@@ -249,6 +249,13 @@ INSTALLS += plugs_specs
     INSTALLS+=account_sqlfile
   }
 
+  # Default MySQL server configuration script
+  !isEmpty(INSTALL_FREEDATAPACK_PATH){
+    mysqlconf.path = $${INSTALL_RESOURCES_PATH}/sql/server_config
+    mysqlconf.files = $${INSTALL_RESOURCES_PATH}/sql/server_config/config.sql
+    INSTALLS += mysqlconf
+  }
+
   # Install Zipcodes db  TODO MOVE THIS IN DATAPACKS
   contains(INSTALL_ZIPCODES,1){
     zipcodes_db.path=$${INSTALL_DATABASES_PATH}/zipcodes
