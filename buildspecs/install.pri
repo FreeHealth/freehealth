@@ -250,7 +250,7 @@ INSTALLS += plugs_specs
   }
 
   # Default MySQL server configuration script
-  !isEmpty(INSTALL_FREEDATAPACK_PATH){
+  !isEmpty(INSTALL_RESOURCES_PATH){
     mysqlconf.path = $${INSTALL_RESOURCES_PATH}/sql/server_config
     mysqlconf.files = $${INSTALL_RESOURCES_PATH}/sql/server_config/config.sql
     INSTALLS += mysqlconf
