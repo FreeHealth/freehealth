@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataroot xmlns:od="urn:schemas-microsoft-com:officedata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"  xsi:noNamespaceSchemaLocation="OMNIS_FPatient.xsd" generated="2012-04-25T16:43:06">
+<OMNIS_FPatient>
+<NCEPatient>11111</NCEPatient>
+<PatientNom>ANNA</PatientNom>
+<PatientPrenom>Jeannot</PatientPrenom>
+<AssureAdresse1>1 Rte Impériale</AssureAdresse1>
+<AssureAdresse2></AssureAdresse2>
+<AssureCodePostal>34670</AssureCodePostal>
+<PatientDateNaissance>1930-10-22T00:00:00</PatientDateNaissance>
+<AssureVille>Trouville</AssureVille>
+<PatientTelephone1>0234220348</PatientTelephone1>
+<AntecedentTexte1>- Arthrose multiple
+- Insuffisance veineuse.
+- Colopathie diverticulaire
+- Hypercholestérolémie</AntecedentTexte1>
+<AntecedentTexte2></AntecedentTexte2>
+</OMNIS_FPatient>
+<OMNIS_FPatient>
+<NCEPatient>22222</NCEPatient>
+<PatientNom>BALLAA</PatientNom>
+<PatientPrenom>Pierre</PatientPrenom>
+<AssureAdresse1>10 Rte de la soie</AssureAdresse1>
+<AssureAdresse2></AssureAdresse2>
+<AssureCodePostal>98000</AssureCodePostal>
+<PatientDateNaissance>1945-12-25T00:00:00</PatientDateNaissance>
+<AssureVille>Balzabuc</AssureVille>
+<PatientTelephone1>0175220348</PatientTelephone1>
+<AntecedentTexte1>- amnesie anterograde
+- polyrhumatisme
+- Hyperthyroidie</AntecedentTexte1>
+<AntecedentTexte2></AntecedentTexte2>
+</OMNIS_FPatient>
+<OMNIS_FPatient>
+<NCEPatient>33333</NCEPatient>
+<PatientNom>CCHHAARLO</PatientNom>
+<PatientPrenom>Stephane</PatientPrenom>
+<AssureAdresse1>5, place de la paix</AssureAdresse1>
+<AssureAdresse2></AssureAdresse2>
+<AssureCodePostal>93450</AssureCodePostal>
+<PatientDateNaissance>1921-02-12T00:00:00</PatientDateNaissance>
+<AssureVille>Chartres</AssureVille>
+<PatientTelephone1>0275220348</PatientTelephone1>
+<AntecedentTexte1>- depression
+- anxiete.
+- operation du genou</AntecedentTexte1>
+<AntecedentTexte2></AntecedentTexte2>
+</OMNIS_FPatient>
+</dataroot>
