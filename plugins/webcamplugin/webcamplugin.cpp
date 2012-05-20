@@ -19,12 +19,13 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developer: Christian A. Reiter <christian.a.reiter@gmail.com>                  *
+ *   Main Developer: Christian A. Reiter <christian.a.reiter@gmail.com>    *
  *   Contributors:                                                         *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "webcamplugin.h"
 #include "webcamconstants.h"
+#include "webcamphotoprovider.h"
 
 #include <utils/log.h>
 
@@ -36,7 +37,6 @@
 #include <coreplugin/translators.h>
 
 #include <extensionsystem/pluginmanager.h>
-#include <webcamphotoprovider.h>
 
 //#include <coreplugin/contextmanager/icontext.h>
 #include <coreplugin/actionmanager/actionmanager.h>

@@ -19,7 +19,7 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developer: Christian A. Reiter <christian.a.reiter@gmail.com>                  *
+ *   Main Developer: Christian A. Reiter <christian.a.reiter@gmail.com>    *
  *   Contributors:                                                         *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
@@ -27,6 +27,11 @@
 #define WEBCAM_EXPORTER_H
 
 #include <QtCore/QtGlobal>
+
+/**
+  \namespace Webcam
+  Namespace for the webcam plugin.
+*/
 
 #if defined(WEBCAM_LIBRARY)
 #  define WEBCAMSHARED_EXPORT Q_DECL_EXPORT

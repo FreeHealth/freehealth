@@ -19,14 +19,12 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developer: Christian A. Reiter <christian.a.reiter@gmail.com>                  *
+ *   Main Developer: Christian A. Reiter <christian.a.reiter@gmail.com>    *
  *   Contributors:                                                         *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #ifndef WEBCAM_H
 #define WEBCAM_H
-
-#include "webcam_exporter.h"
 
 #include <extensionsystem/iplugin.h>
 
@@ -36,7 +34,6 @@ namespace Internal {
 class WebcamPlugin : public ExtensionSystem::IPlugin
 {
     Q_OBJECT
-    
 public:
     WebcamPlugin();
     ~WebcamPlugin();
