@@ -10,6 +10,7 @@ HEADERS += $${PWD}/core_exporter.h \
     $${PWD}/icore.h \
     $${PWD}/icorelistener.h \
     $${PWD}/itheme.h \
+    $${PWD}/iphotoprovider.h \
     $${PWD}/theme.h \
     $${PWD}/translators.h \
     $${PWD}/isettings.h \
