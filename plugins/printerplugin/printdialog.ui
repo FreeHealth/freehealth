@@ -353,14 +353,14 @@
      <item row="5" column="0" colspan="4">
       <widget class="QCheckBox" name="duplicatas">
        <property name="text">
-        <string>Print with duplicatas</string>
+        <string>Print with duplicates</string>
        </property>
       </widget>
      </item>
      <item row="6" column="0" colspan="4">
       <widget class="QCheckBox" name="nup">
        <property name="text">
-        <string>Two pages per paper</string>
+        <string>Two pages per sheet</string>
        </property>
       </widget>
      </item>
