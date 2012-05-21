@@ -38,7 +38,6 @@ using namespace Trans::ConstantTranslations;
 
 static inline PmhCore *pmhCore() {return PmhCore::instance();}
 
-
 namespace PMH {
 namespace Internal {
 

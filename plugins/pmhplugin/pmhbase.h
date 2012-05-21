@@ -59,7 +59,7 @@ public:
 
     // Database getters
     QVector<PmhData *> getPmh(const QString &patientUid = QString::null) const;
-    QVector<Category::CategoryItem *> getPmhCategory() const;
+    QVector<Category::CategoryItem *> getPmhCategory(const QString &uid) const;
     QList<Category::CategoryItem *> createCategoryTree(const QVector<Category::CategoryItem *> &cats) const;
     bool linkPmhWithCategory(const QVector<Category::CategoryItem *> &cats, const QVector<PmhData *> &pmhs) const;
 

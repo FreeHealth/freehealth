@@ -19,20 +19,52 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developer: Christian A. Reiter <christian.a.reiter@gmail.com>    *
- *   Contributors:                                                         *
+ *   Main Developper : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef WEBCAM_EXPORTER_H
-#define WEBCAM_EXPORTER_H
+#ifndef FREEICD_COREPLUGIN_H
+#define FREEICD_COREPLUGIN_H
 
-#include <QtCore/QtGlobal>
+#include <extensionsystem/iplugin.h>
 
-#if defined(WEBCAM_LIBRARY)
-#  define WEBCAMSHARED_EXPORT Q_DECL_EXPORT
-#else
-#  define WEBCAMSHARED_EXPORT Q_DECL_IMPORT
-#endif
+/**
+ * \file coreplugin.h
+ * \author Eric MAEKER <eric.maeker@gmail.com>
+ * \version 0.4.0
+ * \date 15 June 2010
+*/
 
-#endif // WEBCAM_EXPORTER_H
+namespace Core {
+    class ApplicationGeneralPreferencesPage;
+namespace Internal {
+    class CoreImpl;
+}
+}
 
+
+namespace Core {
+namespace Internal {
+
+class CorePlugin : public ExtensionSystem::IPlugin
+{
+    Q_OBJECT
+public:
+    CorePlugin();
+    ~CorePlugin();
+
+    bool initialize(const QStringList &arguments, QString *errorMessage = 0);
+    void extensionsInitialized();
+
+public Q_SLOTS:
+    void remoteArgument(const QString&);
+
+private:
+    CoreImpl *m_CoreImpl;
+    ApplicationGeneralPreferencesPage *prefPage;
+};
+
+} // namespace Internal
+} // namespace Core
+
+#endif // FREEICD_COREPLUGIN_H

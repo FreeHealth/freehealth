@@ -49,7 +49,7 @@ CategoryCore *CategoryCore::instance(QObject *parent)
 CategoryCore::CategoryCore(QObject *parent) :
         QObject(parent)
 {
-    // instanciate CategoryBase
+    setObjectName("CategoryCore");
     base();
 }
 
@@ -57,16 +57,40 @@ CategoryCore::~CategoryCore()
 {
 }
 
-QVector<CategoryItem *> CategoryCore::getCategories(const QString &mime) const
+/** Public core wrapper to the Category::CategoryBase::getCategories() */
+QVector<CategoryItem *> CategoryCore::getCategories(const QString &mime, const QStringList &uuids) const
 {
-    return base()->getCategories(mime);
+    return base()->getCategories(mime, uuids);
 }
 
+/** Public core wrapper to the Category::CategoryBase::createCategoryTree() */
 QList<CategoryItem *> CategoryCore::createCategoryTree(const QVector<CategoryItem *> &cats) const
 {
     return base()->createCategoryTree(cats);
 }
 
+static QVector<Category::CategoryItem *> flattenCategories(Category::CategoryItem *item)
+{
+    QVector<Category::CategoryItem *> cats;
+    cats << item->children().toVector();
+    for(int i=0; i < item->childCount(); ++i) {
+        cats << flattenCategories(item->child(i));
+    }
+    return cats;
+}
+
+/** Transform a category tree \e categories into a flat QVector. Root items of the \e categories vector will be included. */
+QVector<Category::CategoryItem *> CategoryCore::flattenCategoryTree(const QVector<Category::CategoryItem *> &categories)
+{
+    QVector<Category::CategoryItem *> cats;
+    for(int i=0; i < categories.count(); ++i) {
+        CategoryItem *item = categories.at(i);
+        cats << item << flattenCategories(item);
+    }
+    return cats;
+}
+
+/** Link Category::ICategoryContentItem to its Category::CategoryItem using the \e uuid of the category. */
 bool CategoryCore::linkContentItemWithCategoryItem(const QVector<Category::CategoryItem *> &cats, const QVector<Category::ICategoryContentItem *> &contents) const
 {
     for(int i = 0; i < contents.count(); ++i) {
@@ -74,7 +98,7 @@ bool CategoryCore::linkContentItemWithCategoryItem(const QVector<Category::Categ
         if (id < 0)
             continue;
 
-        // Add PMHx to the category
+        // Add content to the category
         for(int j = 0; j < cats.count(); ++j) {
             if (cats.at(j)->id() == id) {
                 cats.at(j)->addContentItem(contents.at(i));
@@ -86,12 +110,42 @@ bool CategoryCore::linkContentItemWithCategoryItem(const QVector<Category::Categ
     return true;
 }
 
+/** Public core wrapper to the Category::CategoryBase::saveCategory() */
 bool CategoryCore::saveCategory(CategoryItem *category)
 {
     return base()->saveCategory(category);
 }
 
+/** Public core wrapper to the Category::CategoryBase::saveCategories() */
+bool CategoryCore::saveCategories(const QVector<CategoryItem *> &categories)
+{
+    return base()->saveCategories(categories);
+}
+
+/** Public core wrapper to the Category::CategoryBase::removeAllExistingCategories() */
 bool CategoryCore::removeAllExistingCategories(const QString &mime)
 {
     return base()->removeAllExistingCategories(mime);
+}
+
+/**
+  Search in a category tree after a  Category::CategoryItem pointer whose value for the reference
+  \e usingReference is equal to \e searchValue.
+  The search includes all the children of the \e category. \n
+  For the reference please refer to the Category::CategoryItem::DataRepresentation enumerator. \n
+  Return 0 if there are no matching category found.
+*/
+Category::CategoryItem *CategoryCore::findCategory(const int usingReference, const QVariant &searchValue, Category::CategoryItem *category)
+{
+    if (!category)
+        return 0;
+    if (category->data(usingReference) == searchValue)
+        return category;
+    for(int i = 0; i < category->childCount(); ++i) {
+        Category::CategoryItem *child = category->child(i);
+        child = findCategory(usingReference, searchValue, child);
+        if (child)
+            return child;
+    }
+    return 0;
 }

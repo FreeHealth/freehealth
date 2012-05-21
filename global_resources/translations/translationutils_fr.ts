@@ -1144,7 +1144,7 @@ Lieu: %2</translation>
     <message>
         <location filename="../../libs/translationutils/trans_spashandupdate.h" line="76"/>
         <source>Last update checking</source>
-        <translation type="unfinished"></translation>
+        <translation>Dernier contrôle de mise à jour</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_spashandupdate.h" line="77"/>
@@ -1154,7 +1154,7 @@ Lieu: %2</translation>
     <message>
         <location filename="../../libs/translationutils/trans_spashandupdate.h" line="78"/>
         <source>Recommended update frequency</source>
-        <translation type="unfinished"></translation>
+        <translation>Fréquence recommandée de contrôle de mise à jour</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_current.h" line="35"/>
@@ -1285,17 +1285,17 @@ Lieu: %2</translation>
     <message>
         <location filename="../../libs/translationutils/trans_current.h" line="60"/>
         <source>Label</source>
-        <translation type="unfinished"></translation>
+        <translation>Libellé</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_current.h" line="61"/>
         <source>Unique identifier</source>
-        <translation type="unfinished"></translation>
+        <translation>Identifiant unique</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_current.h" line="62"/>
         <source>URL</source>
-        <translation type="unfinished"></translation>
+        <translation>URL</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_current.h" line="64"/>
@@ -2358,7 +2358,7 @@ Lieu: %2</translation>
     <message>
         <location filename="../../libs/translationutils/trans_patient.h" line="66"/>
         <source>Patient synthesis</source>
-        <translation type="unfinished"></translation>
+        <translation>Synthèse patient</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_patient.h" line="68"/>

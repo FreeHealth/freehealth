@@ -147,7 +147,7 @@
         <translation>Füge Serverbeschreibungsdatei zur Download-Warteschlange hinzu.</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="521"/>
+        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="523"/>
         <source>Pack file can not be created in the persistent cache.</source>
         <translation>Paketdatei konnte nicht im persisterenden Zwischenspeicher erstellt werden.</translation>
     </message>
@@ -424,13 +424,13 @@
 <context>
     <name>Datapack::PackModel</name>
     <message>
-        <location filename="../../libs/datapackutils/packmodel.cpp" line="85"/>
-        <location filename="../../libs/datapackutils/packmodel.cpp" line="96"/>
+        <location filename="../../libs/datapackutils/packmodel.cpp" line="90"/>
+        <location filename="../../libs/datapackutils/packmodel.cpp" line="101"/>
         <source>Deletion requested</source>
         <translation>Entfernung beantragt</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/packmodel.cpp" line="92"/>
+        <location filename="../../libs/datapackutils/packmodel.cpp" line="97"/>
         <source>Installation requested</source>
         <translation>Installation beantragt</translation>
     </message>

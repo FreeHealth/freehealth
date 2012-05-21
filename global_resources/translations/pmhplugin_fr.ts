@@ -89,7 +89,7 @@
     <message>
         <location filename="../../plugins/pmhplugin/pmhmode.cpp" line="295"/>
         <source>Do you really want to remove the PMHx called &lt;br /&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;b&gt;%1&lt;/b&gt;?</source>
-        <translation>Voulez)vous réellement effacer l&apos;antécédent nommé &lt;br /&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;b&gt;%1&lt;/b&gt;?</translation>
+        <translation>Voulez-vous réellement effacer l&apos;antécédent nommé &lt;br /&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;b&gt;%1&lt;/b&gt;?</translation>
     </message>
 </context>
 <context>
@@ -257,8 +257,8 @@
 <context>
     <name>PMH::PmhCategoryModel</name>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhcategorymodel.cpp" line="1137"/>
-        <location filename="../../plugins/pmhplugin/pmhcategorymodel.cpp" line="1147"/>
+        <location filename="../../plugins/pmhplugin/pmhcategorymodel.cpp" line="1209"/>
+        <location filename="../../plugins/pmhplugin/pmhcategorymodel.cpp" line="1219"/>
         <source>Patient PMHx synthesis</source>
         <translation type="unfinished"></translation>
     </message>
@@ -279,22 +279,22 @@
 <context>
     <name>PMH::PmhEpisodeModel</name>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhepisodemodel.cpp" line="265"/>
+        <location filename="../../plugins/pmhplugin/pmhepisodemodel.cpp" line="264"/>
         <source>Starting date</source>
         <translation>Date de début</translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhepisodemodel.cpp" line="266"/>
+        <location filename="../../plugins/pmhplugin/pmhepisodemodel.cpp" line="265"/>
         <source>Ending date</source>
         <translation>Date de fin</translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhepisodemodel.cpp" line="267"/>
+        <location filename="../../plugins/pmhplugin/pmhepisodemodel.cpp" line="266"/>
         <source>Label</source>
         <translation>Libellé</translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhepisodemodel.cpp" line="268"/>
+        <location filename="../../plugins/pmhplugin/pmhepisodemodel.cpp" line="267"/>
         <source>ICD10 coding</source>
         <translation>Codage CIM10</translation>
     </message>
@@ -319,7 +319,7 @@
 <context>
     <name>PMH::PmhViewer</name>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhviewer.cpp" line="266"/>
+        <location filename="../../plugins/pmhplugin/pmhviewer.cpp" line="267"/>
         <source>Replacing pmh data</source>
         <translation>Remplacement des données de l&apos;antécédent</translation>
     </message>

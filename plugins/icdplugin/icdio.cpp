@@ -186,11 +186,18 @@ IcdIO::~IcdIO()
     d = 0;
 }
 
+/** Return true if the ICD10 database is available and initialized */
+bool IcdIO::isDatabaseInitialized()
+{
+    return icdBase()->isInitialized();
+}
+
+/** Return the XML translation of a ICD::IcdCollectionModel \e model */
 QString IcdIO::icdCollectionToXml(const IcdCollectionModel *model)
 {
     Q_ASSERT(model);
     if (!model) {
-        Utils::Log::addError("IcdIO", "toXml: No model", __FILE__, __LINE__);
+        LOG_ERROR_FOR("IcdIO", "toXml: No model");
         return QString();
     }
     QString xml;
@@ -215,19 +222,19 @@ QString IcdIO::icdCollectionToXml(const IcdCollectionModel *model)
     return root.toString(2);
 }
 
+/** Populate a ICD::IcdCollectionModel \e model using the XML ICD10 collection \e xml according to the \e management method. */
 bool IcdIO::icdCollectionFromXml(IcdCollectionModel *model, const QString &xml, const ModelManagement management)
 {
     Q_ASSERT(model);
     if (!model) {
-        Utils::Log::addError("IcdIO", "fromXml: No model", __FILE__, __LINE__);
+        LOG_ERROR_FOR("IcdIO", "fromXml: No model");
         return false;
     }
-
     QDomDocument root;
     root.setContent(xml);
     QDomElement element = root.firstChildElement(Constants::XML_MAINTAG);
     if (element.isNull()) {
-        Utils::Log::addError("IcdIO", "No XML main tag", __FILE__, __LINE__);
+        LOG_ERROR_FOR("IcdIO", "No XML main tag");
         return false;
     }
 
@@ -237,8 +244,8 @@ bool IcdIO::icdCollectionFromXml(IcdCollectionModel *model, const QString &xml, 
     // Check XML db version with actual db version
     if (dbVersion!=icdBase()->getDatabaseVersion()) {
         /** \todo Update XML if needed */
-        Utils::Log::addMessage("IcdIO", QString("XML version (%1) different from db version (%2).")
-                               .arg(dbVersion).arg(icdBase()->getDatabaseVersion()));
+        LOG_FOR("IcdIO", QString("XML version (%1) different from db version (%2).")
+                .arg(dbVersion).arg(icdBase()->getDatabaseVersion()));
     }
 
     // Manage model insertion mode
@@ -264,7 +271,7 @@ bool IcdIO::icdCollectionFromXml(IcdCollectionModel *model, const QString &xml, 
                 }
             }
             if (mainSid==0) {
-                Utils::Log::addError("IcdIO", "Wrong association, no main code", __FILE__, __LINE__);
+                LOG_ERROR_FOR("IcdIO", "Wrong association, no main code");
                 continue;
             }
             for(int i=0; i<allSids.count();++i) {
@@ -276,11 +283,12 @@ bool IcdIO::icdCollectionFromXml(IcdCollectionModel *model, const QString &xml, 
     return true;
 }
 
+/** Return the HTML output of an ICD::IcdCollectionModel \e model */
 QString IcdIO::icdCollectionToHtml(const IcdCollectionModel *model)
 {
     Q_ASSERT(model);
     if (!model) {
-        Utils::Log::addError("IcdIO", "toHtml: No model", __FILE__, __LINE__);
+        LOG_ERROR_FOR("IcdIO", "toHtml: No model");
         return QString();
     }
     QString html;

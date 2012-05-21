@@ -41,6 +41,8 @@ public:
     virtual ~ICategoryContentItem() {}
 
     virtual int categoryId() const = 0;
+    /** \todo code the category uuid used by the linkCategoryContentToCategory() */
+//    virtual QString categoryUid() const = 0;
     virtual void setCategory(Category::CategoryItem *cat) = 0;
     virtual Category::CategoryItem *category() const = 0;
 
@@ -73,8 +75,10 @@ public:
     void setParent(CategoryItem *parent);
     CategoryItem *parent() const;
     void addChild(CategoryItem *child);
+    void addChildren(const QVector<CategoryItem *> &child);
     void insertChild(CategoryItem *child, int row);
     void updateChildrenSortId();
+    void clearChildren();
 
     CategoryItem *child(int number) const;
     QList<CategoryItem *> children() const;
@@ -104,6 +108,7 @@ public:
     int id() const {return data(DbOnly_Id).toInt();}
     int parentId() const {return data(DbOnly_ParentId).toInt();}
     int sortId() const  {return data(SortId).toInt();}
+    QString uuid() const {return data(Uuid).toString();}
     QString cryptedPassword() const {return data(Password).toString();}
     QString mime() const {return data(DbOnly_Mime).toString();}
     QString iconName() const {return data(ThemedIcon).toString();}

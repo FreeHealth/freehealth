@@ -46,6 +46,7 @@
 #include <coreplugin/ipatient.h>
 
 #include <icdplugin/icdcollectiondialog.h>
+#include <icdplugin/icdio.h>
 
 #include <categoryplugin/categoryonlyproxymodel.h>
 
@@ -173,7 +174,7 @@ PmhViewer::PmhViewer(QWidget *parent, EditMode editMode, ViewMode viewMode) :
     d->ui = new Internal::Ui::PmhViewer;
     d->ui->setupUi(this);
     d->ui->simple_date->setDisplayFormat(tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR));
-
+    d->ui->simple_icd10->setEnabled(ICD::IcdIO::isDatabaseInitialized());
     d->m_IcdLabelModel = new QStringListModel(this);
 
     // Populate combos

@@ -32,6 +32,9 @@
 #include <drugsplugin/drugswidget/drugselector.h>
 
 #include <drugsbaseplugin/idrugengine.h>
+#include <drugsbaseplugin/drugbasecore.h>
+#include <drugsbaseplugin/drugsbase.h>
+#include <drugsbaseplugin/drugsbaseinfo.h>
 
 #include <coreplugin/constants_icons.h>
 #include <coreplugin/constants_menus.h>
@@ -58,10 +61,11 @@ using namespace DrugsWidget;
 using namespace DrugsWidget::Internal;
 using namespace Trans::ConstantTranslations;
 
-inline static Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
+static inline Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
 static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
+static inline DrugsDB::DrugsBase &drugsBase() {return DrugsDB::DrugBaseCore::instance().drugsBase();}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////      MANAGER      ///////////////////////////////////////////////
@@ -80,7 +84,6 @@ DrugsWidgetManager::DrugsWidgetManager(QObject *parent) : DrugsActionHandler(par
     connect(Core::ICore::instance()->contextManager(), SIGNAL(contextChanged(Core::IContext*)),
             this, SLOT(updateContext(Core::IContext*)));
     setObjectName("DrugsWidgetManager");
-//    Utils::Log::addMessage(this, "Instance created");
 }
 
 void DrugsWidgetManager::updateContext(Core::IContext *object)
@@ -162,7 +165,6 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
         m_PrecautionDock(0)
 {
     setObjectName("DrugsActionHandler");
-//    Utils::Log::addMessage(this, "Instance created");
 
     Core::UniqueIDManager *uid = Core::ICore::instance()->uniqueIDManager();
     Core::ITheme *th = Core::ICore::instance()->theme();
@@ -454,10 +456,15 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
     menu->addAction(cmd, DrugsWidget::Constants::G_PLUGINS_VIEWS);
     connect(aCopyPrescriptionItem, SIGNAL(triggered()), this, SLOT(copyPrescriptionItem()));
 
-
-
+    connect(&drugsBase(), SIGNAL(drugsBaseHasChanged()), this, SLOT(onDrugsBaseChanged()));
+    onDrugsBaseChanged();
     contextManager()->updateContext();
     actionManager()->retranslateMenusAndActions();
+}
+
+void DrugsActionHandler::onDrugsBaseChanged()
+{
+    aSearchInn->setEnabled(drugsBase().actualDatabaseInformation() && drugsBase().actualDatabaseInformation()->atcCompatible);
 }
 
 void DrugsActionHandler::searchActionChanged(QAction *a)

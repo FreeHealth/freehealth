@@ -77,6 +77,7 @@ namespace Constants {
 
 const char* const DOCTYPE_NAME     = "freemedforms";
 const char* const DOCTYPE_EXTENSION= "xml";
+const char* const PMHXCATEGORIES_FILENAME = "pmhcategories.xml";
 
 const char* const TAG_MAINXMLTAG   = "FreeMedForms";
 const char* const TAG_NEW_FORM     = "MedForm";

@@ -400,39 +400,6 @@ bool DrugsBase::init()
         refreshDrugsBase();
     }
 
-//    // Connect and check Dosage Database
-//    // Check settings --> SQLite or MySQL ?
-//    // remove drugs database connection if exists
-//    if (d->m_RefreshDosageBase) {
-//        if (QSqlDatabase::connectionNames().contains(Dosages::Constants::DB_DOSAGES_NAME)) {
-//            QSqlDatabase::removeDatabase(Dosages::Constants::DB_DOSAGES_NAME);
-//        }
-//        d->m_RefreshDosageBase = false;
-//    }
-
-//    // create dosage database connection
-//    if (!QSqlDatabase::connectionNames().contains(Dosages::Constants::DB_DOSAGES_NAME)) {
-
-//        // connect
-//        createConnection(Dosages::Constants::DB_DOSAGES_NAME, Dosages::Constants::DB_DOSAGES_NAME,
-//                         settings()->databaseConnector(),
-//                         Utils::Database::CreateDatabase);
-
-//        QSqlDatabase dosageDb = QSqlDatabase::database(Dosages::Constants::DB_DOSAGES_NAME);
-//        if (!dosageDb.isOpen()) {
-//            if (!dosageDb.open()) {
-//                LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Dosages::Constants::DB_DOSAGES_NAME).arg(dosageDb.lastError().text()));
-//            } else {
-//                LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(dosageDb.connectionName()).arg(dosageDb.driverName()));
-//            }
-//        } else {
-//            LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(dosageDb.connectionName()).arg(dosageDb.driverName()));
-//        }
-
-//        checkDosageDatabaseVersion();
-
-//    }
-
     setConnectionName(Constants::DB_DRUGS_NAME);
     d->retreiveLinkTables();
     d->getSearchEngine();
@@ -606,31 +573,31 @@ DatabaseInfos *DrugsBase::getDrugSourceInformation(const QString &drugSourceUid)
     else
         where.insert(Constants::SOURCES_DBUID, QString("='%1'").arg(drugSourceUid));
     QString req = select(Constants::Table_SOURCES, where);
-    QSqlQuery q(req, QSqlDatabase::database(Constants::DB_DRUGS_NAME));
-    if (q.isActive()) {
-        if (q.next()) {
-            LOG("Drugs database information successfully read " + q.value(Constants::SOURCES_DBUID).toString());
+    QSqlQuery query(QSqlDatabase::database(Constants::DB_DRUGS_NAME));
+    if (query.exec(req)) {
+        if (query.next()) {
+            LOG("Drugs database information successfully read " + query.value(Constants::SOURCES_DBUID).toString());
             info = new DatabaseInfos;
-            info->version = q.value(Constants::SOURCES_VERSION).toString();
-            info->sid = q.value(Constants::SOURCES_SID).toInt();
-            info->names = d->getAllLabels(q.value(Constants::SOURCES_MASTERLID).toInt());
-            info->identifier = q.value(Constants::SOURCES_DBUID).toString();
-            info->compatVersion = q.value(Constants::SOURCES_FMFCOMPAT).toString();
-            info->provider = q.value(Constants::SOURCES_PROVIDER).toString();
-            info->weblink = q.value(Constants::SOURCES_WEBLINK).toString();
-            info->author = q.value(Constants::SOURCES_AUTHORS).toString();
-            info->copyright = q.value(Constants::SOURCES_COPYRIGHT).toString();
-            info->license = q.value(Constants::SOURCES_LICENSE).toString();
-            info->date = q.value(Constants::SOURCES_DATE).toDate();
-            info->drugsUidName = q.value(Constants::SOURCES_DRUGUID_NAME).toString();
-            info->packUidName = q.value(Constants::SOURCES_PACKUID_NAME).toString();
-            info->atcCompatible = q.value(Constants::SOURCES_ATC).toBool();
-            info->iamCompatible = q.value(Constants::SOURCES_INTERACTIONS).toBool();
-            info->authorComments = q.value(Constants::SOURCES_AUTHOR_COMMENTS).toString();
-            info->lang_country = q.value(Constants::SOURCES_LANG).toString();
-            info->setDrugsNameConstructor(q.value(Constants::SOURCES_DRUGNAMECONSTRUCTOR).toString());
-            info->complementaryWebsite = q.value(Constants::SOURCES_COMPL_WEBSITE).toString();
-            info->moleculeLinkCompletion = q.value(Constants::SOURCES_COMPLETION).toInt();
+            info->version = query.value(Constants::SOURCES_VERSION).toString();
+            info->sid = query.value(Constants::SOURCES_SID).toInt();
+            info->names = d->getAllLabels(query.value(Constants::SOURCES_MASTERLID).toInt());
+            info->identifier = query.value(Constants::SOURCES_DBUID).toString();
+            info->compatVersion = query.value(Constants::SOURCES_FMFCOMPAT).toString();
+            info->provider = query.value(Constants::SOURCES_PROVIDER).toString();
+            info->weblink = query.value(Constants::SOURCES_WEBLINK).toString();
+            info->author = query.value(Constants::SOURCES_AUTHORS).toString();
+            info->copyright = query.value(Constants::SOURCES_COPYRIGHT).toString();
+            info->license = query.value(Constants::SOURCES_LICENSE).toString();
+            info->date = query.value(Constants::SOURCES_DATE).toDate();
+            info->drugsUidName = query.value(Constants::SOURCES_DRUGUID_NAME).toString();
+            info->packUidName = query.value(Constants::SOURCES_PACKUID_NAME).toString();
+            info->atcCompatible = query.value(Constants::SOURCES_ATC).toBool();
+            info->iamCompatible = query.value(Constants::SOURCES_INTERACTIONS).toBool();
+            info->authorComments = query.value(Constants::SOURCES_AUTHOR_COMMENTS).toString();
+            info->lang_country = query.value(Constants::SOURCES_LANG).toString();
+            info->setDrugsNameConstructor(query.value(Constants::SOURCES_DRUGNAMECONSTRUCTOR).toString());
+            info->complementaryWebsite = query.value(Constants::SOURCES_COMPL_WEBSITE).toString();
+            info->moleculeLinkCompletion = query.value(Constants::SOURCES_COMPLETION).toInt();
             info->connectionName = drugSourceUid;
             if (QSqlDatabase::database(Constants::DB_DRUGS_NAME).driverName() == "QSQLITE") {
                 info->fileName = databaseFileName();
@@ -639,7 +606,17 @@ DatabaseInfos *DrugsBase::getDrugSourceInformation(const QString &drugSourceUid)
             LOG_ERROR(QString("No drug database source for %1").arg(drugSourceUid));
         }
     } else {
-        LOG_QUERY_ERROR(q);
+        LOG_QUERY_ERROR(query);
+    }
+    query.finish();
+
+    // Check existence of the ATC classification
+    if (info && info->atcCompatible) {
+        QHash<int, QString> where;
+        where.insert(Constants::ATC_ID, "=5300");
+        int c = count(Constants::Table_ATC, Constants::ATC_ID, getWhereClause(Constants::Table_ATC, where));
+        info->atcCompatible = (c==1);
+        info->iamCompatible = (c==1);
     }
     return info;
 }

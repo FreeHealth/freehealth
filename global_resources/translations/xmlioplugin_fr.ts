@@ -25,35 +25,48 @@ Erreur : %2</translation>
         <translation>Pas de nom de formulaire</translation>
     </message>
     <message>
-        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="535"/>
+        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="468"/>
         <source>Form: </source>
         <translation>Formulaire : </translation>
     </message>
     <message>
-        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="536"/>
+        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="469"/>
+        <source>New version: %1</source>
+        <translation>Nouvelle version : %1</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="470"/>
         <source>Database version: %1</source>
         <translation>Version en base de données : %1</translation>
     </message>
     <message>
-        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="548"/>
+        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="484"/>
         <source>Form update detected.</source>
         <translation>Mise à jour de formulaire détectée.</translation>
     </message>
     <message>
-        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="549"/>
+        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="485"/>
         <source>A form update has been detected. Do you want to update the forms?</source>
         <translation>Une mise à jour de formulaire a été détectée. Voulez-vous mettre à jour les formulaires ?</translation>
     </message>
 </context>
 <context>
+    <name>XmlForms::Internal::XmlIOBase</name>
+    <message>
+        <location filename="../../plugins/xmlioplugin/xmliobase.cpp" line="649"/>
+        <source>Error while saving PMHxCateogries (%1)</source>
+        <translation>Erreur lors de la sauvegarde des catégories ATCD (%1)</translation>
+    </message>
+</context>
+<context>
     <name>XmlIOBase</name>
     <message>
-        <location filename="../../plugins/xmlioplugin/xmliobase.cpp" line="191"/>
+        <location filename="../../plugins/xmlioplugin/xmliobase.cpp" line="198"/>
         <source>Trying to create empty database.
        Location: %1
        FileName: %2
        Driver: %3</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 </TS>

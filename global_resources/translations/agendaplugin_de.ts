@@ -58,8 +58,8 @@
 <context>
     <name>Agenda::Internal::AgendaMode</name>
     <message>
-        <location filename="../../plugins/agendaplugin/agendamode.cpp" line="56"/>
-        <location filename="../../plugins/agendaplugin/agendamode.cpp" line="75"/>
+        <location filename="../../plugins/agendaplugin/agendamode.cpp" line="61"/>
+        <location filename="../../plugins/agendaplugin/agendamode.cpp" line="79"/>
         <source>Agenda</source>
         <translation>Agenda</translation>
     </message>

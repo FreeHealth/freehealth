@@ -20,7 +20,7 @@
        Location: %1
        FileName: %2
        Driver: %3</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/usermanagerplugin/database/userbase.cpp" line="1013"/>
@@ -31,17 +31,17 @@
 <context>
     <name>UserManagerPlugin</name>
     <message>
-        <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="259"/>
+        <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="266"/>
         <source>You can proceed with this user or connect with another one.</source>
         <translation>Vous pouvez continuer avec votre utilisateur ou vous connecter avec un autre.</translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="261"/>
+        <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="268"/>
         <source>Stay connected</source>
         <translation>Rester connecté</translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="262"/>
+        <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="269"/>
         <source>Change the current user</source>
         <translation>Changer d&apos;utilisateur</translation>
     </message>
@@ -994,6 +994,11 @@ L&apos;application va s&apos;arrêter.</translation>
         <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="228"/>
         <source>Change current user</source>
         <translation>Changer l&apos;utilisateur courant</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="257"/>
+        <source>Using command line user identifiants: %1 - %2</source>
+        <translation>Utilise les identifiants de la ligne de commande : %1 - %2</translation>
     </message>
 </context>
 <context>

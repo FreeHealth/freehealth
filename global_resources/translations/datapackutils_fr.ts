@@ -147,7 +147,7 @@
         <translation>Ajout du fichier descriptif du paquet à la liste des téléchargements.</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="521"/>
+        <location filename="../../libs/datapackutils/serverengines/httpserverengine.cpp" line="523"/>
         <source>Pack file can not be created in the persistent cache.</source>
         <translation>Le paquet ne peut pas être créé dans le répertoire de cache persistant.</translation>
     </message>
@@ -373,7 +373,7 @@
     <message>
         <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="377"/>
         <source>Update information</source>
-        <translation type="unfinished"></translation>
+        <translation>Informations de mise à jour</translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="413"/>
@@ -388,7 +388,7 @@
     <message>
         <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="528"/>
         <source>Native URL</source>
-        <translation type="unfinished"></translation>
+        <translation>URL native</translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="595"/>
@@ -413,24 +413,24 @@
     <message>
         <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="599"/>
         <source>Refresh packs</source>
-        <translation type="unfinished"></translation>
+        <translation>Rafraîchir les paquets de données</translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="600"/>
         <source>Apply changes</source>
-        <translation type="unfinished"></translation>
+        <translation>Appliquer les modifications</translation>
     </message>
 </context>
 <context>
     <name>Datapack::PackModel</name>
     <message>
-        <location filename="../../libs/datapackutils/packmodel.cpp" line="85"/>
-        <location filename="../../libs/datapackutils/packmodel.cpp" line="96"/>
+        <location filename="../../libs/datapackutils/packmodel.cpp" line="90"/>
+        <location filename="../../libs/datapackutils/packmodel.cpp" line="101"/>
         <source>Deletion requested</source>
         <translation>Suppression requise</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/packmodel.cpp" line="92"/>
+        <location filename="../../libs/datapackutils/packmodel.cpp" line="97"/>
         <source>Installation requested</source>
         <translation>Installation requise</translation>
     </message>

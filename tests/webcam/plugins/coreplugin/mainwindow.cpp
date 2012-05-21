@@ -19,52 +19,41 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developer: Christian A. Reiter <christian.a.reiter@gmail.com>    *
- *   Contributors:                                                         *
+ *   Main Developpers :                                                    *
+ *       Eric MAEKER, MD <eric.maeker@gmail.com>                           *
+ *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#include "webcamphotoprovider.h"
-#include <QtGui/QDialog>
-#include <QtGui/QPushButton>
+#include "mainwindow.h"
+#include "ui_mainwindow.h"
 
-#include <coreplugin/itheme.h>
-#include <coreplugin/icore.h>
 #include <utils/global.h>
 
-#include <webcamdialog.h>
+#include <QDebug>
 
-using namespace cv;
-
-namespace Webcam {
-namespace Internal {
-
-WebcamPhotoProvider::WebcamPhotoProvider()
+MainWindow::MainWindow(QWidget *parent) :
+    Core::IMainWindow(parent),
+    ui(new Ui::MainWindow)
 {
+    ui->setupUi(this);
+
+    // Add your specific widgets here
+
+    resize(900,600);
 }
 
-/*!
-  \brief returns Photo that is captured by the selected webcam.
-
-  All of the code is in this function, there is no async calling, because
-  the dialog should be modal and no other functions should be possible.
-*/
-QString WebcamPhotoProvider::recievePhotoFile()
+MainWindow::~MainWindow()
 {
-    WebcamDialog dialog(0);
-
-    // Escape button pressed, etc.
-    if(dialog.exec() != QDialog::Accepted) {
-        return QString();
-    }
-    // ok, here we go:
-    return QString();
-    // return &dialog.photo();
+    delete ui;
 }
 
-
-WebcamPhotoProvider::~WebcamPhotoProvider()
+bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
 {
+    return true;
 }
 
-} // end Internal
-} // end Webcam
+void MainWindow::extensionsInitialized()
+{
+    raise();
+    show();
+}

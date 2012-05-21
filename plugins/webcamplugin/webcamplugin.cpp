@@ -25,6 +25,7 @@
  ***************************************************************************/
 #include "webcamplugin.h"
 #include "webcamconstants.h"
+#include "webcamphotoprovider.h"
 
 #include <utils/log.h>
 
@@ -36,13 +37,10 @@
 #include <coreplugin/translators.h>
 
 #include <extensionsystem/pluginmanager.h>
-#include <webcamphotoprovider.h>
 
-//#include <coreplugin/contextmanager/icontext.h>
 #include <coreplugin/actionmanager/actionmanager.h>
 #include <coreplugin/actionmanager/command.h>
 #include <coreplugin/actionmanager/actioncontainer.h>
-//#include <coreplugin/coreconstants.h>
 
 #include <QtGui/QAction>
 #include <QtGui/QMessageBox>
@@ -91,7 +89,7 @@ bool WebcamPlugin::initialize(const QStringList &arguments, QString *errorString
     
     setObjectName("Webcam");
     if (Utils::Log::warnPluginsCreation()) {
-        qWarning() << "creating Webcam";
+        qDebug() << "creating Webcam";
     }
     
     // Register objects in the plugin manager's object pool
@@ -130,7 +128,7 @@ bool WebcamPlugin::initialize(const QStringList &arguments, QString *errorString
 void WebcamPlugin::extensionsInitialized()
 {
     if (Utils::Log::warnPluginsCreation()) {
-        qWarning() << "Webcam::extensionsInitialized";
+        qDebug() << "Webcam::extensionsInitialized";
     }
     
     // Add Translator to the Application

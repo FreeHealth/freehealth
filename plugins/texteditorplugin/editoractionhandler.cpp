@@ -168,35 +168,17 @@ void EditorActionHandler::createMenus()
 
     // Menu structure -- rootMenu is menubar if exists otherwise it is a specific editor's menu Core::Constants::M_EDITOR
     Core::ActionContainer *rootMenu;
-
-//    if ((actionManager()->actionContainer(Core::Constants::MENUBAR)) && (!actionManager()->actionContainer(Core::Constants::M_EDITOR))) {
-////        qWarning() << "using contextual menu";
-//        rootMenu = m_ContextualMenu;//actionManager()->createMenu(Core::Constants::M_EDITOR);
-//        rootMenu->appendGroup(Core::Constants::G_EDIT);
-//        m_EditMenu = actionManager()->createMenu(Core::Constants::M_EDITOR_EDIT);
-//        m_EditMenu->setTranslations(Trans::Constants::M_EDIT_TEXT);
-//        rootMenu->addMenu(m_EditMenu, Core::Constants::G_EDIT);
-//        m_EditMenu->appendGroup(Core::Constants::G_EDIT_UNDOREDO);
-//        m_EditMenu->appendGroup(Core::Constants::G_EDIT_COPYPASTE);
-//        m_EditMenu->appendGroup(Core::Constants::G_EDIT_FIND);
-//        m_EditMenu->appendGroup(Core::Constants::G_EDIT_EDITOR);
-//        m_FileMenu = actionManager()->createMenu(Core::Constants::M_EDITOR_FILE);
-//        m_FileMenu->appendGroup(Core::Constants::G_FILE_OPEN);
-//        m_FileMenu->appendGroup(Core::Constants::G_FILE_SAVE);
-//        m_FileMenu->appendGroup(Core::Constants::G_FILE_PRINT);
-//        // create edition actions
-//    } else {
-//        qWarning() << "using menubar menus";
-        rootMenu = actionManager()->actionContainer(Core::Constants::MENUBAR);
-        m_EditMenu = actionManager()->actionContainer(Core::Constants::M_EDIT);
-        m_FileMenu = actionManager()->actionContainer(Core::Constants::M_FILE);
-        if (!m_FileMenu)
-            m_FileMenu = actionManager()->actionContainer(Core::Constants::M_GENERAL);
-        if (!m_EditMenu || !m_FileMenu || !rootMenu) {
-            LOG_ERROR("No menu for texteditor widgets");
-        }
-//        qWarning() << rootMenu << m_EditMenu << m_FileMenu;
-//    }
+    generalMenu = false;
+    rootMenu = actionManager()->actionContainer(Core::Constants::MENUBAR);
+    m_EditMenu = actionManager()->actionContainer(Core::Constants::M_EDIT);
+    m_FileMenu = actionManager()->actionContainer(Core::Constants::M_FILE);
+    if (!m_FileMenu) {
+        m_FileMenu = actionManager()->actionContainer(Core::Constants::M_GENERAL);
+        generalMenu = true;
+    }
+    if (!m_EditMenu || !m_FileMenu || !rootMenu) {
+        LOG_ERROR("No menu for texteditor widgets");
+    }
 
     // Menu Edit --> text formats
     m_FormatMenu = actionManager()->actionContainer(Core::Constants::M_FORMAT);
@@ -353,8 +335,15 @@ void EditorActionHandler::createActions()
 
     // File Actions
     /** \todo change the group for apps that do not use the GeneralMenu */
-    aOpen = createAction(this, "aOpen", Core::Constants::ICONOPEN, A_EDITOR_FILEOPEN, ioContext, EDITOR_FILEOPEN_TEXT, cmd, m_FileMenu, G_GENERAL_FILE);
-    aSave = createAction(this, "aSave", ICONSAVE, A_EDITOR_FILESAVE, ioContext, EDITOR_FILESAVE_TEXT, cmd, m_FileMenu, G_GENERAL_FILE);
+    if (generalMenu)
+        aOpen = createAction(this, "aOpen", Core::Constants::ICONOPEN, A_EDITOR_FILEOPEN, ioContext, EDITOR_FILEOPEN_TEXT, cmd, m_FileMenu, G_GENERAL_FILE);
+    else
+        aOpen = createAction(this, "aOpen", Core::Constants::ICONOPEN, A_EDITOR_FILEOPEN, ioContext, EDITOR_FILEOPEN_TEXT, cmd, m_FileMenu, G_FILE_OPEN);
+
+    if (generalMenu)
+        aSave = createAction(this, "aSave", ICONSAVE, A_EDITOR_FILESAVE, ioContext, EDITOR_FILESAVE_TEXT, cmd, m_FileMenu, G_GENERAL_FILE);
+    else
+        aSave = createAction(this, "aSave", ICONSAVE, A_EDITOR_FILESAVE, ioContext, EDITOR_FILESAVE_TEXT, cmd, m_FileMenu, G_FILE_SAVE);
     actionManager()->command(A_FORMAT_FONTCOLOR)->setAttribute(Core::Command::CA_UpdateText);
 
     // Text autocompletion

@@ -26,7 +26,7 @@
  ***************************************************************************/
 /**
   \class PMH::PmhMode
-  \brief Core::IMode to show in the MainWindow
+  \brief Core::IMode to show in the MainWindow for the PMHx plugin.
 */
 
 #include "pmhmode.h"

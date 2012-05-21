@@ -83,7 +83,7 @@
 
 #include <QDebug>
 
-enum { WarnSqlCommands = false , WarnLogMessages = false };
+enum { WarnSqlCommands = false, WarnCreateTableSqlCommand = false, WarnLogMessages = false };
 
 using namespace Utils;
 using namespace Utils::Internal;
@@ -2000,24 +2000,34 @@ bool Database::importCsvToDatabase(const QString &connectionName, const QString 
 QStringList DatabasePrivate::getSQLCreateTable(const int &tableref)
 {
     QString toReturn;
-    toReturn = QString("CREATE TABLE IF NOT EXISTS `%1` (\n").arg(m_Tables.value(tableref));
+    toReturn = QString("CREATE TABLE IF NOT EXISTS `%1` (\n  ").arg(m_Tables.value(tableref));
     QList<int> list = m_Tables_Fields.values(tableref);
     qSort(list);
+    QStringList fieldLine;
 
+    // Find the max field name length
+    int maxLength = 0;
+    for(int i=0; i < list.count(); ++i) {
+        const QString &f = m_Fields.value(list.at(i));
+        maxLength = qMax(maxLength, f.size());
+    }
+    maxLength += 3;
+
+    // Create SQL field lines
     foreach(int i, list) {
+        QString fieldName = QString("`%1`").arg(m_Fields.value(i)).leftJustified(maxLength, ' ');
         // Manage NULL value
         if (m_DefaultFieldValue.value(i) == "NULL") {
             if (Database::TypeOfField(m_TypeOfField.value(i)) != Database::FieldIsUniquePrimaryKey) {
-                toReturn.append(QString("%1 \t %2 DEFAULT NULL,\n")
-                                .arg(QString("`%1`").arg(m_Fields.value(i)))//.leftJustified(55, ' '))
+                fieldLine.append(QString("%1 %2 DEFAULT NULL")
+                                .arg(fieldName)
                                 .arg(getTypeOfField(i)));// .leftJustified(20, ' '))
             } else {
-                toReturn.append(QString("%1 \t %2,\n")
-                                .arg(QString("`%1`").arg(m_Fields.value(i)))//.leftJustified(55, ' '))
+                fieldLine.append(QString("%1 %2")
+                                .arg(fieldName)
                                 .arg(getTypeOfField(i)));// .leftJustified(20, ' '))
             }
         } else {
-
             // Manage DEFAULT value by type of field
             switch (Database::TypeOfField(m_TypeOfField.value(i)))
             {
@@ -2026,8 +2036,8 @@ QStringList DatabasePrivate::getSQLCreateTable(const int &tableref)
             case Database::FieldIsShortText :
             case Database::FieldIsLanguageText :
             case Database::FieldIsBlob :
-                toReturn.append(QString("%1 \t %2 DEFAULT '%3',\n")
-                                .arg(QString("`%1`").arg(m_Fields.value(i)))//.leftJustified(55, ' '))
+                fieldLine.append(QString("%1 %2 DEFAULT '%3'")
+                                .arg(fieldName)
                                 .arg(getTypeOfField(i))// .leftJustified(20, ' '))
                                 .arg(m_DefaultFieldValue.value(i)));
                 break;
@@ -2041,14 +2051,14 @@ QStringList DatabasePrivate::getSQLCreateTable(const int &tableref)
                         } else if (defVal.endsWith("()")) {
                             defVal = defVal.remove("()");
                         }
-                        toReturn.append(QString("%1 \t %2 DEFAULT %3,\n")
-                                        .arg(QString("`%1`").arg(m_Fields.value(i)))//.leftJustified(55, ' '))
-                                        .arg(getTypeOfField(i))// .leftJustified(20, ' '))
-                                        .arg(defVal));
+                        fieldLine.append(QString("%1 %2 DEFAULT %3")
+                                         .arg(fieldName)
+                                         .arg(getTypeOfField(i))// .leftJustified(20, ' '))
+                                         .arg(defVal));
                     }
                     else
-                        toReturn.append(QString("%1 \t %2 DEFAULT '%3',\n")
-                                        .arg(QString("`%1`").arg(m_Fields.value(i)))//.leftJustified(55, ' '))
+                        fieldLine.append(QString("%1 %2 DEFAULT '%3'")
+                                        .arg(fieldName)
                                         .arg(getTypeOfField(i))// .leftJustified(20, ' '))
                                         .arg(m_DefaultFieldValue.value(i)));
                     break;
@@ -2057,22 +2067,22 @@ QStringList DatabasePrivate::getSQLCreateTable(const int &tableref)
             case Database::FieldIsInteger :
             case Database::FieldIsLongInteger :
             case Database::FieldIsReal :
-                toReturn.append(QString("%1 \t %2 DEFAULT %3,\n")
-                                .arg(QString("`%1`").arg(m_Fields.value(i)))//.leftJustified(55, ' '))
+                fieldLine.append(QString("%1 %2 DEFAULT %3")
+                                .arg(fieldName)
                                 .arg(getTypeOfField(i))// .leftJustified(20, ' '))
                                 .arg(m_DefaultFieldValue.value(i)));
                 break;
             default :
-                    toReturn.append(QString("%1 \t %2 DEFAULT '%3',\n")
-                                    .arg(QString("`%1`").arg(m_Fields.value(i)))//.leftJustified(55, ' '))
-                                    .arg(getTypeOfField(i))// .leftJustified(20, ' '))
-                                    .arg(m_DefaultFieldValue.value(i)));
-            break;
+                fieldLine.append(QString("%1 %2 DEFAULT '%3'")
+                                .arg(fieldName)
+                                .arg(getTypeOfField(i))// .leftJustified(20, ' '))
+                                .arg(m_DefaultFieldValue.value(i)));
+                break;
 
         }
         }
     }
-    toReturn.chop(3);
+    toReturn.append(fieldLine.join(",\n  "));
 
     foreach(int field, m_PrimKeys.values(tableref)) {
         int ref = field + (tableref * 1000);
@@ -2080,7 +2090,6 @@ QStringList DatabasePrivate::getSQLCreateTable(const int &tableref)
             toReturn.append(QString(",\nPRIMARY KEY(%1)").arg(m_Fields.value(ref)));
         }
     }
-
     toReturn.append("\n);\n");
 
     QStringList indexes;
@@ -2094,8 +2103,8 @@ QStringList DatabasePrivate::getSQLCreateTable(const int &tableref)
         }
     }
 
-    if (WarnSqlCommands)
-        qWarning() << toReturn << indexes;
+    if (WarnCreateTableSqlCommand)
+        qWarning() << toReturn << "\nIndexes: \n" << indexes;
 
     return QStringList() << toReturn << indexes;
 }

@@ -257,8 +257,8 @@
 <context>
     <name>PMH::PmhCategoryModel</name>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhcategorymodel.cpp" line="1137"/>
-        <location filename="../../plugins/pmhplugin/pmhcategorymodel.cpp" line="1147"/>
+        <location filename="../../plugins/pmhplugin/pmhcategorymodel.cpp" line="1209"/>
+        <location filename="../../plugins/pmhplugin/pmhcategorymodel.cpp" line="1219"/>
         <source>Patient PMHx synthesis</source>
         <translation type="unfinished"></translation>
     </message>
@@ -279,22 +279,22 @@
 <context>
     <name>PMH::PmhEpisodeModel</name>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhepisodemodel.cpp" line="265"/>
+        <location filename="../../plugins/pmhplugin/pmhepisodemodel.cpp" line="264"/>
         <source>Starting date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhepisodemodel.cpp" line="266"/>
+        <location filename="../../plugins/pmhplugin/pmhepisodemodel.cpp" line="265"/>
         <source>Ending date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhepisodemodel.cpp" line="267"/>
+        <location filename="../../plugins/pmhplugin/pmhepisodemodel.cpp" line="266"/>
         <source>Label</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhepisodemodel.cpp" line="268"/>
+        <location filename="../../plugins/pmhplugin/pmhepisodemodel.cpp" line="267"/>
         <source>ICD10 coding</source>
         <translation type="unfinished"></translation>
     </message>
@@ -319,7 +319,7 @@
 <context>
     <name>PMH::PmhViewer</name>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhviewer.cpp" line="266"/>
+        <location filename="../../plugins/pmhplugin/pmhviewer.cpp" line="267"/>
         <source>Replacing pmh data</source>
         <translation type="unfinished"></translation>
     </message>

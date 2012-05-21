@@ -213,10 +213,14 @@ INSTALLS += plugs_specs
   }
 
   # Package Helpers
+  # Default MySQL server configuration script
   !isEmpty(INSTALL_RESOURCES_PATH){
     packageHelpers.path=$${INSTALL_RESOURCES_PATH}/package_helpers
     packageHelpers.files=$${SOURCES_GLOBAL_RESOURCES}/package_helpers/*
     INSTALLS+=packageHelpers
+    mysqlconf.path=$${INSTALL_RESOURCES_PATH}/sql/server_config
+    mysqlconf.files=$${SOURCES_GLOBAL_RESOURCES}/sql/server_config/config.sql
+    INSTALLS += mysqlconf
   }
 
   # Default datapack servers list
@@ -248,6 +252,7 @@ INSTALLS += plugs_specs
     account_sqlfile.files=$${SOURCES_GLOBAL_RESOURCES}/sql/account/*
     INSTALLS+=account_sqlfile
   }
+
 
   # Install Zipcodes db  TODO MOVE THIS IN DATAPACKS
   contains(INSTALL_ZIPCODES,1){

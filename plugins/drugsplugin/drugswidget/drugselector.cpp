@@ -142,17 +142,28 @@ void DrugSelector::initialize()
 
     // select last search method
     int m = settings()->value(Constants::S_SEARCHMETHOD).toInt();
+    if (m==Constants::SearchInn) {
+        if (!drugsBase().actualDatabaseInformation() || !drugsBase().actualDatabaseInformation()->atcCompatible)
+            m = Constants::SearchCommercial;
+    }
     setSearchMethod(m);
     QAction *a = 0;
     switch (m)
     {
-        case Constants::SearchCommercial : a = actionManager()->command(Constants::A_SEARCH_COMMERCIAL)->action(); break;
-        case Constants::SearchMolecules : a = actionManager()->command(Constants::A_SEARCH_MOLECULES)->action(); break;
-        case Constants::SearchInn : a = actionManager()->command(Constants::A_SEARCH_INN)->action(); break;
+    case Constants::SearchCommercial: a = actionManager()->command(Constants::A_SEARCH_COMMERCIAL)->action(); break;
+    case Constants::SearchMolecules: a = actionManager()->command(Constants::A_SEARCH_MOLECULES)->action(); break;
+    case Constants::SearchInn:
+    {
+        if (drugsBase().actualDatabaseInformation() && drugsBase().actualDatabaseInformation()->atcCompatible)
+            a = actionManager()->command(Constants::A_SEARCH_INN)->action();
+        else
+            a = actionManager()->command(Constants::A_SEARCH_COMMERCIAL)->action();
+        break;
     }
-    if (a) {
-        a->trigger();
     }
+
+    if (a)
+        a->setChecked(true);
 
     splitter->setStretchFactor(0, 1);
     splitter->setStretchFactor(1, 3);
@@ -182,14 +193,6 @@ void DrugSelector::createToolButtons()
     m_SearchToolButton = new QToolButton(searchLine);   // parent object will be redefined
     m_SearchToolButton->setPopupMode(QToolButton::InstantPopup);
     m_SearchToolButton->setIcon(theme()->icon(Core::Constants::ICONSEARCH));
-    Core::ActionManager *am = actionManager();
-    Core::Command *cmd = am->command(Constants::A_SEARCH_COMMERCIAL);
-    m_SearchToolButton->addAction(cmd->action());
-    cmd->action()->trigger();
-    cmd = am->command(Constants::A_SEARCH_MOLECULES);
-    m_SearchToolButton->addAction(cmd->action());
-    cmd = am->command(Constants::A_SEARCH_INN);
-    m_SearchToolButton->addAction(cmd->action());
 
     m_DrugsHistoricButton = new QToolButton(searchLine);
     m_DrugsHistoricButton->setPopupMode(QToolButton::InstantPopup);
@@ -200,9 +203,36 @@ void DrugSelector::createToolButtons()
     searchLine->setLeftButton(m_SearchToolButton);
     searchLine->setRightButton(m_DrugsHistoricButton);
 
+    refreshSearchToolButton();
     refreshAvailableDrugsDatabaseButtons();
     connect(drugsDatabaseSelectorButton, SIGNAL(triggered(QAction*)), drugsDatabaseSelectorButton, SLOT(setDefaultAction(QAction*)));
     connect(drugsDatabaseSelectorButton, SIGNAL(triggered(QAction*)), this, SLOT(changeDrugBaseUid(QAction*)));
+}
+
+void DrugSelector::refreshSearchToolButton()
+{
+    // clear button
+    foreach(QAction *a, m_SearchToolButton->actions())
+        m_SearchToolButton->removeAction(a);
+
+    bool includeInn = true;
+    if (drugsBase().actualDatabaseInformation()) {
+        if (!drugsBase().actualDatabaseInformation()->atcCompatible) {
+            includeInn = false;
+        }
+    } else {
+        includeInn = false;
+    }
+    Core::ActionManager *am = actionManager();
+    Core::Command *cmd = am->command(Constants::A_SEARCH_COMMERCIAL);
+    m_SearchToolButton->addAction(cmd->action());
+    cmd->action()->trigger();
+    cmd = am->command(Constants::A_SEARCH_MOLECULES);
+    m_SearchToolButton->addAction(cmd->action());
+    if (includeInn) {
+        cmd = am->command(Constants::A_SEARCH_INN);
+        m_SearchToolButton->addAction(cmd->action());
+    }
 }
 
 void DrugSelector::refreshAvailableDrugsDatabaseButtons()
@@ -233,6 +263,7 @@ void DrugSelector::refreshAvailableDrugsDatabaseButtons()
 void DrugSelector::onDrugsBaseChanged()
 {
     refreshAvailableDrugsDatabaseButtons();
+    refreshSearchToolButton();
 }
 
 void DrugSelector::changeDrugBaseUid(QAction *a)

@@ -24,6 +24,11 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
+/**
+  \class DataPack::PackModel
+  Table model of datapacks. The model can be used to select packs to install/deinstall/update.
+*/
+
 #include "packmodel.h"
 #include <datapackutils/datapackcore.h>
 #include <datapackutils/servermanager.h>

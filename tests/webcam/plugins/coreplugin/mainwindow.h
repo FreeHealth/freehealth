@@ -19,43 +19,33 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developer: Christian A. Reiter <christian.a.reiter@gmail.com>                  *
- *   Contributors:                                                         *
+ *   Main Developpers :                                                    *
+ *       Eric MAEKER, MD <eric.maeker@gmail.com>                           *
+ *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef WEBCAM_H
-#define WEBCAM_H
+#ifndef MAINWINDOW_H
+#define MAINWINDOW_H
 
-#include "webcam_exporter.h"
-#include <webcamphotoprovider.h>
-#include <extensionsystem/iplugin.h>
+#include <coreplugin/imainwindow.h>
+#include <QNetworkReply>
 
-namespace Webcam {
-namespace Internal {
+namespace Ui {
+    class MainWindow;
+}
 
-class WebcamPlugin : public ExtensionSystem::IPlugin
+class MainWindow : public Core::IMainWindow
 {
     Q_OBJECT
-    
 public:
-    WebcamPlugin();
-    ~WebcamPlugin();
-    
+    explicit MainWindow(QWidget *parent = 0);
+    ~MainWindow();
+
     bool initialize(const QStringList &arguments, QString *errorString);
     void extensionsInitialized();
-    //    ShutdownFlag aboutToShutdown();
-    
-private:
-    WebcamPhotoProvider *m_webcamProvider;
 
-private Q_SLOTS:
-    void postCoreInitialization();
-    void coreAboutToClose();
-    //    void triggerAction();
+private:
+    Ui::MainWindow *ui;
 };
 
-} // namespace Internal
-} // namespace Webcam
-
-#endif // WEBCAM_H
-
+#endif // MAINWINDOW_H

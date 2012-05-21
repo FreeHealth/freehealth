@@ -31,11 +31,17 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/constants_tokensandsettings.h>
-#include <printerplugin/textdocumentextra.h>
 #include <coreplugin/iuser.h>
 #include <coreplugin/icommandline.h>
 
 #include <formmanagerplugin/iformio.h>
+
+#include <categoryplugin/categoryitem.h>
+#include <categoryplugin/categorycore.h>
+
+#include <printerplugin/textdocumentextra.h>
+
+#include <pmhplugin/constants.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -58,6 +64,7 @@ using namespace Trans::ConstantTranslations;
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline XmlFormContentReader *reader() {return XmlFormContentReader::instance();}
 static inline Core::ICommandLine *commandLine()  { return Core::ICore::instance()->commandLine(); }
+static inline Category::CategoryCore *categoryCore() {return  Category::CategoryCore::instance();}
 
 static inline QString normalizedFormUid(const QString &formUid)
 {
@@ -514,15 +521,27 @@ bool XmlIOBase::saveForm(const XmlFormName &form)
 //    qWarning() << Q_FUNC_INFO << form;
     LOG("Saving forms to database: " + form.uid);
 
-    // save all XML files from the form
     QDir dir(form.absPath);
+
+    database().transaction();
+
+    // save all XML files && files included in the form using the <file> XML tag
     foreach(const QFileInfo &f, dir.entryInfoList(QStringList() << "*.xml", QDir::Files | QDir::Readable)) {
+        // save the content of the form file
         QString modeName = f.baseName();
         QString content = Utils::readTextFile(f.absoluteFilePath(), Utils::DontWarnUser);
-        if (!saveContent(form.uid, content, XmlIOBase::FullContent, modeName))
-            LOG_ERROR("Can not save form to database");
-        else
-            LOG("Saving attached *xml files to database " + f.absoluteFilePath());
+        if (f.fileName().compare(Constants::PMHXCATEGORIES_FILENAME, Qt::CaseInsensitive)==0) {
+            if (!saveContent(form.uid, content, XmlIOBase::PmhCategories, modeName))
+                LOG_ERROR("Can not save pmhx categories associated with the form to database");
+            else
+                LOG("Saving pmhx categories file to database " + f.absoluteFilePath());
+            savePmhxCategories(form, content);
+        } else {
+            if (!saveContent(form.uid, content, XmlIOBase::FullContent, modeName))
+                LOG_ERROR("Can not save form to database");
+            else
+                LOG("Saving attached *xml files to database " + f.absoluteFilePath());
+        }
 
         // Try to catch file addition
         // File addition is done using the tag ‘file’ or an attrib of the same name
@@ -555,7 +574,79 @@ bool XmlIOBase::saveForm(const XmlFormName &form)
     // Save screenshots
     saveScreenShots(form);
 
+    database().commit();
     return true;
+}
+
+Category::CategoryItem * XmlIOBase::createCategory(const XmlFormName &form, const QDomElement &element, Category::CategoryItem *parent) const
+{
+    // create the category
+    Category::CategoryItem *item = new Category::CategoryItem;
+    item->setData(Category::CategoryItem::DbOnly_Mime, QString("%1@%2").arg(PMH::Constants::CATEGORY_MIME).arg(form.uid));
+    item->setData(Category::CategoryItem::DbOnly_IsValid, 1);
+    item->setData(Category::CategoryItem::ThemedIcon, element.attribute(::Constants::ATTRIB_ICON));
+    item->setData(Category::CategoryItem::Uuid, element.attribute(::Constants::ATTRIB_UUID));
+    item->setData(Category::CategoryItem::SortId, element.attribute(::Constants::ATTRIB_SORT_ID));
+
+    // read the labels
+    QDomElement label = element.firstChildElement(::Constants::TAG_SPEC_LABEL);
+    while (!label.isNull()) {
+        item->setLabel(label.text(), label.attribute(::Constants::ATTRIB_LANGUAGE, Trans::Constants::ALL_LANGUAGE));
+        label = label.nextSiblingElement(::Constants::TAG_SPEC_LABEL);
+    }
+
+    // get ExtraTag content -> CategoryItem::ExtraXml
+    QDomElement extra = element.firstChildElement(::Constants::TAG_SPEC_EXTRA);
+    if (!extra.isNull()) {
+        QString content;
+        QTextStream s(&content);
+        extra.save(s, 2);
+        item->setData(Category::CategoryItem::ExtraXml, content);
+    }
+
+    // reparent item
+    if (parent) {
+        parent->addChild(item);
+        item->setParent(parent);
+    }
+    // has children ?
+    QDomElement child = element.firstChildElement(::Constants::TAG_CATEGORY);
+    while (!child.isNull()) {
+        createCategory(form, child, item);
+        child = child.nextSiblingElement(::Constants::TAG_CATEGORY);
+    }
+    return item;
+}
+
+/** Save PMHx categories to the categories database. The pmhx category file must be already in the database. */
+void XmlIOBase::savePmhxCategories(const XmlFormName &form, const QString &content)
+{
+    Q_UNUSED(form);
+    if (content.isEmpty()) {
+        LOG_ERROR("Empty content.");
+        return;
+    }
+    // analyze XML content
+    QDomDocument doc;
+    int line = -1;
+    int col = -1;
+    QString error;
+    if (!doc.setContent(content, &error, &line, &col)) {
+        LOG_ERROR(QString("Error while oading PMHxCategories XML files.\n  %1: %2;%3").arg(error).arg(line).arg(col));
+        return;
+    }
+    QDomElement root = doc.firstChildElement(Constants::TAG_MAINXMLTAG);
+    QDomElement element = root.firstChildElement(Constants::TAG_PMHX_CATEGORIES);
+    element = element.firstChildElement(::Constants::TAG_CATEGORY);
+    QVector<Category::CategoryItem *> rootCategories;
+    while (!element.isNull()) {
+        rootCategories << createCategory(form, element, 0);
+        element = element.nextSiblingElement(::Constants::TAG_CATEGORY);
+    }
+
+    // save categories in the categories plugin
+    if (!categoryCore()->saveCategories(rootCategories))
+        LOG_ERROR(tr("Error while saving PMHxCateogries (%1)").arg(form.uid));
 }
 
 /** Save screenshots files associated with the forms. */
@@ -738,20 +829,3 @@ bool XmlIOBase::saveContent(const QString &formUid, const QString &xmlContent, c
     return true;
 }
 
-
-
-//QSqlDatabase DB = database();
-//if (!DB.isOpen()) {
-//    if (!DB.open()) {
-//        LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_NAME).arg(DB.lastError().text()));
-//    }
-//}
-//QSqlQuery query(DB);
-//QString req = ;
-//if (query.exec(req)) {
-//    if (query.next()) {
-
-//    }
-//} else {
-//    LOG_QUERY_ERROR(query);
-//}
