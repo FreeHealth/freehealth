@@ -1,6 +1,6 @@
 TARGET = Webcam
 TEMPLATE = lib
-LIBS +=-lopencv_core -lopencv_highguir -lopencv_highgui -lopencv_core
+LIBS +=-lopencv_core -lopencv_highgui
 
 DEFINES += WEBCAM_LIBRARY
 BUILD_PATH_POSTFIXE = FreeMedForms
