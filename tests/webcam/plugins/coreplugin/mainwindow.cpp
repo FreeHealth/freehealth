@@ -19,40 +19,41 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developer: Christian A. Reiter <christian.a.reiter@gmail.com>                  *
- *   Contributors:                                                         *
+ *   Main Developpers :                                                    *
+ *       Eric MAEKER, MD <eric.maeker@gmail.com>                           *
+ *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef WEBCAM_H
-#define WEBCAM_H
+#include "mainwindow.h"
+#include "ui_mainwindow.h"
 
-#include "webcam_exporter.h"
+#include <utils/global.h>
 
-#include <extensionsystem/iplugin.h>
+#include <QDebug>
 
-namespace Webcam {
-namespace Internal {
-
-class WebcamPlugin : public ExtensionSystem::IPlugin
+MainWindow::MainWindow(QWidget *parent) :
+    Core::IMainWindow(parent),
+    ui(new Ui::MainWindow)
 {
-    Q_OBJECT
-    
-public:
-    WebcamPlugin();
-    ~WebcamPlugin();
-    
-    bool initialize(const QStringList &arguments, QString *errorString);
-    void extensionsInitialized();
-    //    ShutdownFlag aboutToShutdown();
-    
-private Q_SLOTS:
-    void postCoreInitialization();
-    void coreAboutToClose();
-    //    void triggerAction();
-};
+    ui->setupUi(this);
 
-} // namespace Internal
-} // namespace Webcam
+    // Add your specific widgets here
 
-#endif // WEBCAM_H
+    resize(900,600);
+}
 
+MainWindow::~MainWindow()
+{
+    delete ui;
+}
+
+bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
+{
+    return true;
+}
+
+void MainWindow::extensionsInitialized()
+{
+    raise();
+    show();
+}

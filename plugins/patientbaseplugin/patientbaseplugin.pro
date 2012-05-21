@@ -23,8 +23,8 @@ HEADERS = patientbaseplugin.h \
     patientbasepreferencespage.h \
     patientbar.h \
     patientcreatorwizard.h \
-    patientlineeditcompletersearch.h \
-    iphotoprovider.h
+    patientlineeditcompletersearch.h
+
 SOURCES = patientbaseplugin.cpp \
     patientbase.cpp \
     patientdata.cpp \
@@ -37,12 +37,15 @@ SOURCES = patientbaseplugin.cpp \
     patientbar.cpp \
     patientcreatorwizard.cpp \
     patientlineeditcompletersearch.cpp
+
 FORMS += identitywidget.ui \
     patientselector.ui \
     patientbasepreferencespage.ui \
     patientbar.ui \
     identityviewer.ui
+
 OTHER_FILES = PatientBase.pluginspec
+
 TRANSLATIONS += $${SOURCES_TRANSLATIONS_PATH}/patientbaseplugin_fr.ts \
     $${SOURCES_TRANSLATIONS_PATH}/patientbaseplugin_de.ts \
     $${SOURCES_TRANSLATIONS_PATH}/patientbaseplugin_es.ts

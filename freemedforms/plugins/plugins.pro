@@ -160,9 +160,8 @@ script.depends += formmanager
 datapack.subdir = ../../plugins/datapackplugin
 datapack.depends += core
 
-webcam.subdir = ../../plugins/webcam
+webcam.subdir = ../../plugins/webcamplugin
 webcam.depends += core
-webcam.depends += patientbase
 
 # manage non free content
 #include(../buildspecs/config.pri)

@@ -18,21 +18,35 @@
  *  along with this program (COPYING.FREEMEDFORMS file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
-/***************************************************************************
- *   Main Developer: Christian A. Reiter <christian.a.reiter@gmail.com>                  *
- *   Contributors:                                                         *
- *       NAME <MAIL@ADDRESS.COM>                                           *
- ***************************************************************************/
-#ifndef WEBCAM_EXPORTER_H
-#define WEBCAM_EXPORTER_H
+#ifndef CORE_IPHOTOPROVIDER_H
+#define CORE_IPHOTOPROVIDER_H
 
-#include <QtCore/QtGlobal>
+#include <coreplugin/core_exporter.h>
+#include <QObject>
 
-#if defined(WEBCAM_LIBRARY)
-#  define WEBCAMSHARED_EXPORT Q_DECL_EXPORT
-#else
-#  define WEBCAMSHARED_EXPORT Q_DECL_IMPORT
-#endif
+namespace Core {
+/*!
+  \class Patients::IPhotoProvider
+  \brief Provides a hook for plugins that return a photo path.
 
-#endif // WEBCAM_EXPORTER_H
+  Implement this interface if you want to provide another way of
+  fetching a foto for the user instead of the default (searching for it
+  in the files system).
+  Possibilities are webcams, scanners, other databases, LDAP, etc.
 
+  The recievePhotoFile() method should return a filename of an \e existing photo.
+ */
+
+class CORE_EXPORT IPhotoProvider : public QObject
+{
+    Q_OBJECT
+public:
+    explicit IPhotoProvider(QObject *parent = 0) : QObject(parent) {}
+    virtual ~IPhotoProvider() {}
+
+    virtual QString recievePhotoFile() = 0;
+};
+
+} // end namespace Core
+
+#endif // CORE_IPHOTOPROVIDER_H
