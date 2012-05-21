@@ -34,6 +34,7 @@ SUBDIRS = \
     webcam
 
 
+
 # root plugin
 core.subdir = ../../plugins/fmfcoreplugin
 
