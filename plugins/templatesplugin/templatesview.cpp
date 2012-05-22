@@ -444,7 +444,7 @@ public Q_SLOTS:
         }
     }
     void on_ModelAboutToReset() {
-        /** \todo Store the expanded indexes of the view and restore when view resets. */
+        // TODO: Store the expanded indexes of the view and restore when view resets. */
     }
     void model_rowInserted(const QModelIndex &parent, int start, int count)
     {
@@ -549,7 +549,7 @@ bool TemplatesView::isLocked() const
 
 void TemplatesView::addCategory()
 {
-    /** \todo Manage USER and MIMETYPE */
+    // TODO: Manage USER and MIMETYPE */
     QModelIndex idx = d->m_ui->categoryTreeView->currentIndex();
     if (!d->m_ui->categoryTreeView->selectionModel()->hasSelection())
         idx = QModelIndex();

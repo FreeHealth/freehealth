@@ -138,7 +138,7 @@ namespace Internal {
         }
 
         // delete old drugsinteractions path
-        /** \todo this part should be obsolete */
+        // TODO: this part should be obsolete */
         if (binDir.exists("DrugsInteractions")) {
             QString error;
             if (!Utils::removeDir(binDir.absolutePath() + "/DrugsInteractions", &error))

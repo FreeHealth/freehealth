@@ -79,7 +79,7 @@ bool ServerPreferencesWidget::connectionSucceeded() const
 
 void ServerPreferencesWidget::setUserLoginGroupTitle(const QString &text)
 {
-    /** \todo this does not work ???? */
+    // TODO: this does not work ???? */
     ui->userGroupBox->setTitle(text);
     repaint();
 }

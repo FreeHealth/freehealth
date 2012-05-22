@@ -213,7 +213,7 @@ void GirWidget::clearModel()
 QString GirWidget::printableHtml(bool withValues) const
 {
     Q_UNUSED(withValues);
-    /** \todo code here with values, print empty values */
+    // TODO: code here with values, print empty values */
     return m_ui->toHtml();
 }
 

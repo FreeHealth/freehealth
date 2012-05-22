@@ -231,7 +231,7 @@ QString DrugInteractor::toXml() const
     const QStringList &atc = data(ATCCodeStringList).toStringList();
     if (atc.count() > 0) {
         if (!atc.at(0).isEmpty()) {
-                /** \todo add to each linked ATC codes: comment, reviewState, reviewers */
+                // TODO: add to each linked ATC codes: comment, reviewState, reviewers */
 //                xml += QString("\n    <ATC a=\"%1\" c=\"%2\" rv=\"\" r=\"\">")
 //                        .arg(code).arg("");
             xml += QString("\n    <ATC a=\"%1\"/>")
@@ -516,7 +516,7 @@ public:
             msg << ddisText;
         }
 
-        /** \todo get pims */
+        // TODO: get pims */
 
         return msg.join("<br />");
     }
@@ -730,7 +730,7 @@ bool DrugInteractorModel::setData(const QModelIndex &index, const QVariant &valu
             QStringList list = value.toStringList();
             list.sort();
             di->setChildId(list);
-            /** \todo update DI parent */
+            // TODO: update DI parent */
             beginRemoveRows(index, 0, rowCount(index));
             item->clearChildren();
             endRemoveRows();
@@ -874,7 +874,7 @@ int DrugInteractorModel::numberOfUnlinked() const
     return result;
 }
 
-/** \todo take care to NEWLY CREATED INTERACTORS ??? WILL NOT BE SAVED !!! */
+// TODO: take care to NEWLY CREATED INTERACTORS ??? WILL NOT BE SAVED !!! */
 bool DrugInteractorModel::saveModel()
 {
     core()->saveCompleteList(d->m_interactors);

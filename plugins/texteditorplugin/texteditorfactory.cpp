@@ -75,12 +75,12 @@ TextEditorForm::~TextEditorForm()
 
 QVariant TextEditorForm::value() const
 {
-    /** \todo this */
+    // TODO: this */
     return "needs to implement script engine and ask it for the scripted value of the form";
 }
 
 void TextEditorForm::retranslate()
 {
-    /** \todo iformitem --> one spec per language ? */
+    // TODO: iformitem --> one spec per language ? */
     //     m_Label->setText( m_LinkedObject->spec()->label() );
 }

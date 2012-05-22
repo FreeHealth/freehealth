@@ -305,7 +305,7 @@ Form::IFormWidget *BaseWidgetsFactory::createWidget(const QString &name, Form::F
 
 
 
-/** \todo Verify usage of clear() in all itemData() --> originalValue ? */
+// TODO: Verify usage of clear() in all itemData() --> originalValue ? */
 
 
 //--------------------------------------------------------------------------------------------------------
@@ -528,7 +528,7 @@ void BaseFormData::clear()
 
 bool BaseFormData::isModified() const
 {
-    /** \todo here */
+    // TODO: here */
     return true;
 }
 
@@ -562,7 +562,7 @@ bool BaseFormData::setData(const int ref, const QVariant &data, const int role)
 
 QVariant BaseFormData::data(const int ref, const int role) const
 {
-    /** \todo code here : IFormItemData should have a submit method */
+    // TODO: code here : IFormItemData should have a submit method */
     if (role!=Qt::DisplayRole)
         return false;
     switch (ref) {
@@ -1301,7 +1301,7 @@ QVariant BaseRadioData::storableData() const
         if (but->isChecked())
             return but->property("id");
     }
-    /** \todo return the default value ? */
+    // TODO: return the default value ? */
     return QVariant();
 }
 

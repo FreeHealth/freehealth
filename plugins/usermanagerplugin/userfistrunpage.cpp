@@ -122,7 +122,7 @@ void UserCreationPage::initializePage()
 
 bool UserCreationPage::validatePage()
 {
-    /** \todo code here */
+    // TODO: code here */
     // Are there user created ? no -> can not validate
     // disconnected user database ?
     // disconnect currentUser from userModel

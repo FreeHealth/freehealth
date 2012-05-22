@@ -34,8 +34,8 @@
 #include <QtCore/QtPlugin>
 #include <QDebug>
 
-/** \todo Ca zipcodes: http://www.populardata.com/postalcode_database.html */
-/** \todo USA zipcodes: http://www.populardata.com/zipcode_database.html // http://federalgovernmentzipcodes.us/ //  http://www.free-zipcodes.com/download-zip-code-database.php */
+// TODO: Ca zipcodes: http://www.populardata.com/postalcode_database.html */
+// TODO: USA zipcodes: http://www.populardata.com/zipcode_database.html // http://federalgovernmentzipcodes.us/ //  http://www.free-zipcodes.com/download-zip-code-database.php */
 // UK: http://www.freemaptools.com/download-uk-postcode-lat-lng.htm
 // Australia http://auspost.com.au/apps/postcode.html
 // ALL !!!! : http://download.geonames.org/export/dump/ (no zip codes)

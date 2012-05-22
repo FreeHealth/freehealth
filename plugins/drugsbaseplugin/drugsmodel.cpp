@@ -255,7 +255,7 @@ public:
             {
                 QStringList list;
                 list << QApplication::translate("DrugsModel","Available Dosages");
-                /** \todo add Drugs available dosage */
+                // TODO: add Drugs available dosage */
                 return list.join("<br />");
                 break;
             }
@@ -1012,7 +1012,7 @@ QString DrugsModel::getFullPrescription(const IDrug *drug, bool toHtml, const QS
     tokens_value["MEAL"] = Trans::ConstantTranslations::mealTime(drug->prescriptionValue(Constants::Prescription::MealTimeSchemeIndex).toInt());
     QString tmp2 = drug->prescriptionValue(Constants::Prescription::Period).toString();
 
-    /** \todo provide a better management of 'EACH DAY__S__' here .. \sa Translation::periodPlurialForm()*/
+    // TODO: provide a better management of 'EACH DAY__S__' here .. \sa Translation::periodPlurialForm()*/
     // Period management of 'EACH DAY__S'
     if (tmp2 == "1") {
         tmp2.clear();

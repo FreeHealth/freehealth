@@ -151,7 +151,7 @@ using namespace DrugsDB;
 using namespace DrugsDB::Constants;
 using namespace Trans::ConstantTranslations;
 
-/** \todo memory leak potential when using static functions -> who is deleting the instance singleton ? */
+// TODO: memory leak potential when using static functions -> who is deleting the instance singleton ? */
 
 namespace DrugsDB {
 namespace Internal {
@@ -463,7 +463,7 @@ public:
         td->setDataFromDb(IDrug::Strength, drugElement.firstChildElement(::XML_DRUG_STRENGTH).text());
         td->setDataFromDb(IDrug::Routes, drugElement.firstChildElement(::XML_DRUG_ROUTE).text());
         // add routes, composition, uids
-        /** \todo code here = manage error msg */
+        // TODO: code here = manage error msg */
         return td;
     }
 
@@ -480,7 +480,7 @@ public:
                 drug->setPrescriptionValue(column, at.nodeValue());
             }
         }
-        /** \todo code here = manage dose in note if IDrug is pure textual */
+        // TODO: code here = manage dose in note if IDrug is pure textual */
     }
 
 public:
@@ -599,7 +599,7 @@ bool DrugsIO::prescriptionFromXml(DrugsDB::DrugsModel *m, const QString &xmlCont
         return false;
     }
 
-    /** \todo XML: check document type: <!DOCTYPE name> */
+    // TODO: XML: check document type: <!DOCTYPE name> */
     QDomElement root = doc.firstChildElement(XML_ROOT_TAG);
 
     // Check if the drugs database correspond to the actual one
@@ -863,7 +863,7 @@ QString DrugsIO::prescriptionToHtml(DrugsDB::DrugsModel *m, const QString &xmlEx
 QString DrugsIO::prescriptionToXml(DrugsDB::DrugsModel *m, const QString &xmlExtraData)
 {
     Q_UNUSED(xmlExtraData);
-    /** \todo manage xmlExtraData */
+    // TODO: manage xmlExtraData */
     Q_ASSERT(m);
     if (!m->testingDrugsAreVisible()) {
         bool yes = Utils::yesNoMessageBox(tr("Save test only drugs too?"),
@@ -949,7 +949,7 @@ QString DrugsIO::prescriptionToXml(DrugsDB::DrugsModel *m, const QString &xmlExt
 
 //    // Process each prescribed drugs
 //    for(i=0; i < m->rowCount() ; ++i) {
-//        /** \todo code here UIDs */
+//        // TODO: code here UIDs */
 //        forXml.insert(XML_PRESCRIPTION_UID, m->index(i, Drug::UIDs).data().toStringList().join(";").remove(";;"));
 //        if (m->index(i, Prescription::OnlyForTest).data().toBool()) {
 //            forXml.insert(instance()->d->xmlTagForPrescriptionRow(Prescription::OnlyForTest), "true");
@@ -1089,9 +1089,9 @@ bool DrugsIO::printPrescription(DrugsDB::DrugsModel *model)
     p->clearTokens();
     QHash<QString, QVariant> tokens;
     tokens.insert(Core::Constants::TOKEN_DOCUMENTTITLE, tr("Drugs Prescription"));
-    /** \todo add EPISODE_DATE token for FMF */
+    // TODO: add EPISODE_DATE token for FMF */
     p->addTokens(Core::IDocumentPrinter::Tokens_Global, tokens);
-    /** \todo add more options for the user : select papers, print duplicatas... */
+    // TODO: add more options for the user : select papers, print duplicatas... */
     return p->print(DrugsDB::DrugsIO::prescriptionToHtml(model, "", DrugsIO::MedinTuxVersion),
                     Core::IDocumentPrinter::Papers_Prescription_User,
                     settings()->value(Constants::S_PRINTDUPLICATAS).toBool());
@@ -1104,10 +1104,10 @@ void DrugsIO::prescriptionPreview(DrugsDB::DrugsModel *model)
     QHash<QString, QVariant> tokens;
     tokens.insert(Core::Constants::TOKEN_DOCUMENTTITLE, tr("Drugs Prescription"));
 
-    /** \todo add EPISODE_DATE token for FMF */
+    // TODO: add EPISODE_DATE token for FMF */
     p->addTokens(Core::IDocumentPrinter::Tokens_Global, tokens);
 
-    /** \todo add more options for the user : select papers, print duplicatas... */
+    // TODO: add more options for the user : select papers, print duplicatas... */
     p->printPreview(DrugsDB::DrugsIO::prescriptionToHtml(model, "", DrugsIO::MedinTuxVersion),
              Core::IDocumentPrinter::Papers_Prescription_User,
              settings()->value(Constants::S_PRINTDUPLICATAS).toBool());

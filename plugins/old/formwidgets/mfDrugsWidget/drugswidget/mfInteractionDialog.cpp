@@ -86,7 +86,7 @@ void mfInteractionDialog::on_helpButton_clicked()
 
 void mfInteractionDialog::on_printButton_clicked()
 {
-    /** \todo add functionnality to FMF */
+    // TODO: add functionnality to FMF */
 #ifdef DRUGS_INTERACTIONS_STANDALONE
     tkPrinter p(this);
     p.askForPrinter(this);

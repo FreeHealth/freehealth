@@ -61,7 +61,7 @@ static inline Core::ISettings *settings()  { return Core::ICore::instance()->set
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 static inline Core::ICommandLine *commandLine()  { return Core::ICore::instance()->commandLine(); }
 
-/** \todo move getLkId into UserModel/UserBase */
+// TODO: move getLkId into UserModel/UserBase */
 
 //namespace Patients {
 //namespace Internal {
@@ -430,7 +430,7 @@ void PatientBase::toTreeWidget(QTreeWidget *tree)
     Database::toTreeWidget(tree);
     QString uuid = user()->uuid();
     QHash<int, QString> where;
-    /** \todo here */
+    // TODO: here */
 //    where.clear();
 //    where.insert(Constants::LK_TOPRACT_PRACT_UUID, QString("='%1'").arg(uuid));
 //    QString req = select(Constants::Table_LK_TOPRACT, Constants::LK_TOPRACT_LKID, where);

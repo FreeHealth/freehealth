@@ -96,7 +96,7 @@ CurrentUserPreferencesWidget::CurrentUserPreferencesWidget(QWidget *parent) :
     m_Viewer = new UserViewer(this);
     userLayout->addWidget(m_Viewer);
     setDatasToUi();
-    /** \todo connect userchange */
+    // TODO: connect userchange */
 }
 
 void CurrentUserPreferencesWidget::setDatasToUi()

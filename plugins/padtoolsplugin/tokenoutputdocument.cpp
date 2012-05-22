@@ -521,7 +521,7 @@ bool TokenOutputDocument::eventFilter(QObject *o, QEvent *e)
     // Catch KeyEvent in QTextEdit
     if (o==textEdit()) {
         if (e->type()==QEvent::HoverMove) {
-            /** \todo improve PadCore highlighting */
+            // TODO: improve PadCore highlighting */
             QHoverEvent *me = static_cast<QHoverEvent*>(e);
             // compute pos
             int position = cursorForPosition(me->pos()).position();
@@ -714,7 +714,7 @@ void TokenOutputDocument::contentChanged(const int pos, const int rm, const int 
 {
 //    qWarning() << "contentChanged pos" << pos << "ins" << ins << "rm" << rm;
 
-    /** \todo improve management of textformatting modifications -> do not re-compute positions */
+    // TODO: improve management of textformatting modifications -> do not re-compute positions */
     if (rm==ins)
         return;
 

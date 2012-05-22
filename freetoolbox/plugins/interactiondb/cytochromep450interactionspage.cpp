@@ -124,7 +124,7 @@ CytochromeP450InteractionsWidget::~CytochromeP450InteractionsWidget()
 bool CytochromeP450InteractionsWidget::on_download_clicked()
 {
     ui->download->setEnabled(false);
-    /** \todo First : download A..Z files; then download drugs files */
+    // TODO: First : download A..Z files; then download drugs files */
     d->m_Progress = new QProgressDialog(this);
     d->m_Progress->setLabelText(tr("Downloading Cytochrome P450 interactions table"));
     d->m_Progress->setCancelButtonText(tkTr(Trans::Constants::CANCEL));

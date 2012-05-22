@@ -85,13 +85,13 @@ UserCalendar::~UserCalendar()
 
 bool UserCalendar::isValid() const
 {
-    /** \todo code here */
+    // TODO: code here */
     return true;
 }
 
 bool UserCalendar::isNull() const
 {
-    /** \todo code here */
+    // TODO: code here */
     return false;
 }
 

@@ -200,7 +200,7 @@ TemplateBase::TemplateBase(QObject *parent)
     addField(Table_Templates, TEMPLATE_THEMEDICON,       "THEMED_ICON_FILENAME", FieldIsShortText);
     addField(Table_Templates, TEMPLATE_TRANSMISSIONDATE, "TRANSMISSION_DATE",    FieldIsDate);
 
-    /** \todo code here : use the category plugin */
+    // TODO: code here : use the category plugin */
     addField(Table_Categories,  CATEGORIES_ID,               "CATEGORY_ID",          FieldIsUniquePrimaryKey);
     addField(Table_Categories,  CATEGORIES_UUID,             "CATEGORY_UUID",        FieldIsUUID);
     addField(Table_Categories,  CATEGORIES_USER_UID,         "USER_UUID",            FieldIsUUID);
@@ -214,7 +214,7 @@ TemplateBase::TemplateBase(QObject *parent)
     addField(Table_Categories,  CATEGORIES_THEMEDICON,       "THEMED_ICON_FILENAME", FieldIsShortText);
     addField(Table_Categories,  CATEGORIES_TRANSMISSIONDATE, "TRANSMISSION_DATE",    FieldIsDate);
 
-    /** \todo DB Schema :: Add USerGroupUid */
+    // TODO: DB Schema :: Add USerGroupUid */
 
     addField(Table_Version, VERSION_ACTUAL, "ACTUAL", FieldIsShortText);
 

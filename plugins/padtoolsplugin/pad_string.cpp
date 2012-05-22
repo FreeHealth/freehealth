@@ -46,7 +46,7 @@ void PadString::debug(int indent) const
 /** Paste the content of a string fragment in the output. */
 //void PadString::run(QMap<QString,QVariant> &)
 //{
-////    /** \todo use this output only if HTML is requested */
+////    // TODO: use this output only if HTML is requested */
 ////    if (start() > 0) {
 ////        return QString(Constants::TOKEN_AND_POSITION_TAG)
 ////                .arg(_string).arg(id());

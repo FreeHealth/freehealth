@@ -110,7 +110,7 @@ QString DataPackPreferencePage::helpPage()
 //    if (l=="fr")
 //        return Constants::H_PREFERENCES_DBSELECTOR_FR;
 //    return Constants::H_PREFERENCES_DBSELECTOR_EN;
-    /** \todo add a reference to documentation */
+    // TODO: add a reference to documentation */
     return QString();
 }
 

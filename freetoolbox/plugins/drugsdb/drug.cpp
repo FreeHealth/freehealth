@@ -124,7 +124,7 @@ bool Drug::setData(const int ref, const QVariant &value, const QString &lang)
         }
         break;
     }
-    case Forms: /** \todo manage drugs forms ? */  break;
+    case Forms: // TODO: manage drugs forms ? */  break;
     }
     d->m_Content[ref].insertMulti(lang, value);
     return true;
@@ -339,7 +339,7 @@ bool Drug::saveDrugsIntoDatabase(const QString &connection, QVector<Drug *> drug
 //    Core::Tools::executeSqlQuery(QString("DELETE FROM MOLS WHERE SID=%1;").arg(sid), connection);
 //    Core::Tools::executeSqlQuery(QString("DELETE FROM LK_MOL_ATC WHERE SID=%1;").arg(sid), connection);
 //    Core::Tools::executeSqlQuery(QString("DELETE FROM PACKAGING WHERE SID=%1;").arg(sid), connection);
-    /** \todo delete COMPOSITION, DRUG_ROUTES, LABELS_LINK, LABELS */
+    // TODO: delete COMPOSITION, DRUG_ROUTES, LABELS_LINK, LABELS */
 
     // get distinct component names
     QStringList molnames;

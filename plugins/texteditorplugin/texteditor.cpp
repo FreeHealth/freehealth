@@ -94,7 +94,7 @@ static inline Core::ISettings *settings() {return Core::ICore::instance()->setti
 namespace Editor {
 namespace Internal {
 
-/** \todo manage multiple controls */
+// TODO: manage multiple controls */
 class TextEditorWithControl : public QTextEdit
 {
 public:
@@ -333,7 +333,7 @@ TextEditor::TextEditor(QWidget *parent, Types type) :
 TextEditor::~TextEditor()
 {
     // unreg context
-    /** \todo manage a segfault with freepad when updating context. */
+    // TODO: manage a segfault with freepad when updating context. */
 //    Core::ICore::instance()->contextManager()->removeContextObject(d->m_Context);
     if (d) {
         delete d;

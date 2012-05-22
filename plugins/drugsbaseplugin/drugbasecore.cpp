@@ -118,7 +118,7 @@ bool DrugBaseCore::init()
     d->m_ProtocolsBase = new ProtocolsBase(this);
     d->m_ProtocolsBase->init();
     d->m_InteractionManager = new InteractionManager(this);
-    /** \todo code here */
+    // TODO: code here */
     return true;
 }
 

@@ -125,7 +125,7 @@ bool DrugsWidgetsFactory::extensionInitialized()
 
 QStringList DrugsWidgetsFactory::providedWidgets() const
 {
-     return QStringList() << "drugs" << "prescription" << "prescriptor" << "drugselector";  /** \todo add more type of plugs ? */
+     return QStringList() << "drugs" << "prescription" << "prescriptor" << "drugselector";  // TODO: add more type of plugs ? */
 }
 
 bool DrugsWidgetsFactory::isContainer(const int) const

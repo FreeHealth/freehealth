@@ -119,13 +119,13 @@ public:
 //                QString encoded = tmp.mid( begin, end - begin );
 //                DrugsDB::DrugsIO::instance()->prescriptionFromXml(drugModel(), QByteArray::fromBase64(encoded.toAscii()));
 //            } else if (tmp.contains("DrugsInteractionsEncodedPrescription:")) {
-//                /** \todo Manage wrong file encoding */
+//                // TODO: Manage wrong file encoding */
 //                int begin = tmp.indexOf("DrugsInteractionsEncodedPrescription:") + QString("DrugsInteractionsEncodedPrescription:").length();
 //                int end = tmp.indexOf("\"", begin);
 //                QString encoded = tmp.mid( begin, end - begin );
 //                DrugsDB::DrugsIO::instance()->prescriptionFromXml(drugModel(), QByteArray::fromBase64(encoded.toAscii()));
 //            } else if (tmp.startsWith("<?xml") && tmp.contains("<FreeDiams>", Qt::CaseInsensitive) && tmp.contains("</FreeDiams>", Qt::CaseInsensitive)) {
-//                /** \todo Read patients datas ? */
+//                // TODO: Read patients datas ? */
 //                DrugsDB::DrugsIO::instance()->prescriptionFromXml(drugModel(), tmp);
 //            } else {
 //                return false;
@@ -425,7 +425,7 @@ void MainWindow::changeFontTo( const QFont &font )
 
 bool MainWindow::saveAsFile()
 {
-    /** \todo save filename */
+    // TODO: save filename */
     return saveIcdCollection();
 }
 

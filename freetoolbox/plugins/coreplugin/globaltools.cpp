@@ -508,7 +508,7 @@ int addLabels(const QString &connection, const int masterLid, QMultiHash<QString
             QString t = value.toString();
 
             // Check is couple already exists
-            /** \todo code here: code buggy */
+            // TODO: code here: code buggy */
 //            req = QString("SELECT LID FROM LABELS WHERE (LANG='%1' AND LABEL=\"%2\")")
 //                  .arg(lang)
 //                  .arg(t);
@@ -816,7 +816,7 @@ bool addInteraction(const QString &connection, const QStringList &atc1, const QS
         return false;
 
     // Add IAK
-    /** \todo add bibliography */
+    // TODO: add bibliography */
 //    req = QString("INSERT INTO IAKNOWLEDGE (IAKID,TYPE,RISK_MASTER_LID,MAN_MASTER_LID) VALUES "
 //                  "(NULL, \"%1\", %2, %3)")
 //            .arg(type)
@@ -895,7 +895,7 @@ int addBibliography(const QString &connection, const QString &type, const QStrin
 //                    .arg(a.replace("'","''"))
 //                    .arg(e.replace("'","''"));
             query.finish();
-            /** \todo add bibliography XML here ? */
+            // TODO: add bibliography XML here ? */
             query.prepare(Core::Tools::drugBase()->prepareInsertQuery(DrugsDB::Constants::Table_BIB));
             query.bindValue(DrugsDB::Constants::BIB_BIBID, QVariant());
             query.bindValue(DrugsDB::Constants::BIB_TYPE, type);

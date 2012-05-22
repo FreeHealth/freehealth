@@ -235,7 +235,7 @@ bool CoreImpl::initialize(const QStringList &arguments, QString *errorString)
             return false;
         }
         m_Settings->noMoreFirstTimeRunning();
-        /** \todo code here: if alpha -> delete old configuration && databases */
+        // TODO: code here: if alpha -> delete old configuration && databases */
         m_Settings->setLicenseApprovedApplicationNumber(qApp->applicationVersion());
         // Clear identifiers
         Utils::DatabaseConnector connector = settings()->databaseConnector();

@@ -157,7 +157,7 @@ QScriptValue ScriptManager::evaluate(const QString &script)
         return QScriptValue();
 //    qWarning() << "xxxxxxxxxxxxxxxxxxxx \n\n" << script << "\n\n";
 //    qWarning() << "xxxxxxxxxxxxxxxxxxxx \n\n" << script << m_Engine->evaluate(script).toVariant() << "\n\n";
-    /** \todo improvement script debugging */
+    // TODO: improvement script debugging */
     QScriptSyntaxCheckResult check = m_Engine->checkSyntax(script);
     if (check.state()!=QScriptSyntaxCheckResult::Valid) {
         LOG_ERROR(QString("Script error (%1;%2): ").arg(check.errorLineNumber()).arg(check.errorColumnNumber()) + check.errorMessage());

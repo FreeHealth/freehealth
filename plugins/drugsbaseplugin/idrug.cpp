@@ -231,7 +231,7 @@ QVariant IComponent::data(const int ref, const QString &lang) const
         }
     case MainAtcId:
         {
-            /** \todo can have multiple ids */
+            // TODO: can have multiple ids */
             if (d_component->m_Link && !isActiveSubstance()) {
                 return d_component->m_Link->data(AtcId, language);
             }
@@ -239,7 +239,7 @@ QVariant IComponent::data(const int ref, const QString &lang) const
         }
     case MainAtcCode:
         {
-            /** \todo can have multiple codes */
+            // TODO: can have multiple codes */
             if (d_component->m_Link && !isActiveSubstance()) {
                 return d_component->m_Link->data(AtcCode, language);
             }
@@ -247,7 +247,7 @@ QVariant IComponent::data(const int ref, const QString &lang) const
         }
     case MainAtcName:
         {
-            /** \todo can have multiple names ?? */
+            // TODO: can have multiple names ?? */
             if (d_component->m_Link && !isActiveSubstance()) {
                 return d_component->m_Link->data(AtcLabel, language);
             }
@@ -264,7 +264,7 @@ QVariant IComponent::data(const int ref, const QString &lang) const
         }
     case AtcId:
         {
-            /** \todo A component can have multiple AtcIds. */
+            // TODO: A component can have multiple AtcIds. */
             if (!d_component->m_7CharAtcIds.isEmpty())
                 return d_component->m_7CharAtcIds.at(0);
             return -1;
@@ -325,7 +325,7 @@ QVector<int> IComponent::interactingClassAtcIds() const
 
 QString IComponent::toXml() const
 {
-    /** \todo code here */
+    // TODO: code here */
     return QString();
 }
 
@@ -498,7 +498,7 @@ void IPrescription::setPrescriptionValue(const int fieldref, const QVariant &val
 
 bool IPrescription::hasPrescription() const
 {
-    /** \todo this needs improvements ++ */
+    // TODO: this needs improvements ++ */
     int i = 0;
     foreach(const QVariant &q , d_pres->m_PrescriptionValues) {
         if (!q.isNull())
@@ -526,7 +526,7 @@ QVariant IPrescription::prescriptionValue(const int fieldref) const
         }
     case Prescription::Route :
         {
-            /** \todo code here */
+            // TODO: code here */
 //            QString lang = QLocale().name().left(2);
 //            typedef QPair<QString, QString> pair;
 //            foreach(const pair &p, d_pres->m_Routes.values(d->m_PrescriptionValues.value(Prescription::Route,-1).toInt())) {
@@ -606,7 +606,7 @@ QVariant IDrug::data(const int ref, const QString &lang) const
         }
     case AtcLabel :
         {
-            /** \todo code here */
+            // TODO: code here */
             break;
         }
     case Forms:
@@ -636,7 +636,7 @@ QVariant IDrug::data(const int ref, const QString &lang) const
     case AllInnsKnown:
         {
             foreach(const IComponent *compo, d_drug->m_Compo) {
-                /** \todo code here manage virtual components */
+                // TODO: code here manage virtual components */
                 if (compo->isActiveSubstance()) {
                     if (compo->innAtcIds().isEmpty())
                         return false;
@@ -787,7 +787,7 @@ namespace {
 QString IDrug::compositionToXml()
 {
     QString tmp;
-    /** \todo add ATC to drug composition and XML_COMPOSITION_STRENGTH */
+    // TODO: add ATC to drug composition and XML_COMPOSITION_STRENGTH */
     foreach(IComponent *compo, d_drug->m_Compo) {
         tmp += QString("<%1").arg(::XML_COMPOSITION);
         tmp += QString(" %1=\"%2\" ").arg(::XML_COMPOSITION_INN).arg(compo->innName());
@@ -820,7 +820,7 @@ QString IDrug::toHtml() const
     else
         textClass = iamClass.join("<br>");
 
-    /** \todo code here: UIDs not UID */
+    // TODO: code here: UIDs not UID */
     QString uidName = "UID";
     if (drugsBase().actualDatabaseInformation()) {
         if (!drugsBase().actualDatabaseInformation()->drugsUidName.isEmpty())
@@ -853,7 +853,7 @@ QString IDrug::toHtml() const
                     " </tr>\n")
             .arg(brandName())
             .arg(mark)
-            /** \todo code here */
+            // TODO: code here */
             .arg(QCoreApplication::translate("DrugsData", "Form(s): ")) //+ value(Table_DRUGS, DRUGS_FORM).toString())
             .arg(QCoreApplication::translate("DrugsData", "Route(s): ")) //+ value(Table_DRUGS, DRUGS_ROUTE).toString())
             .arg(QCoreApplication::translate("DrugsData", "Identifier(s): "), uidName)
@@ -867,7 +867,7 @@ QString IDrug::toHtml() const
         if (compo->innName().isEmpty()) {
             name = compo->moleculeName();
         } else if (compo->mainInnCode() < 200000) {
-            /** \todo check this innAtcIds ? instead of maininncode*/
+            // TODO: check this innAtcIds ? instead of maininncode*/
             name = compo->innName();
         }
         tmp += QString("<tr><td>%1</td><td>%2</td></tr>").arg(name).arg(compo->dosage());
@@ -889,7 +889,7 @@ QString IDrug::drugsListToHtml(const QList<IDrug*> &list)
     Q_UNUSED(list);
     QString msg;
 
-    /** \todo code here */
+    // TODO: code here */
 //    // check interactions of the drugs list
 //    InteractionsManager *im = new_im();
 //    im->setDrugsList(list);

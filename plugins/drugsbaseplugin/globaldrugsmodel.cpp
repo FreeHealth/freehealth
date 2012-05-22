@@ -279,7 +279,7 @@ void GlobalDrugsModel::updateAvailableDosages()  // static
     Internal::GlobalDrugsModelPrivate::updateCachedAvailableDosage();
 }
 
-/** \todo Add drug source management */
+// TODO: Add drug source management */
 GlobalDrugsModel::GlobalDrugsModel(const SearchMode searchMode, QObject *parent) :
         QSqlQueryModel(parent),
         d(0)
@@ -366,7 +366,7 @@ QVariant GlobalDrugsModel::data(const QModelIndex &item, int role) const
 
     if (role == Qt::BackgroundRole) {
         // test atc's patient allergies
-        /** \todo add drug's atc */
+        // TODO: add drug's atc */
 //        QSqlQueryModel::data(QSqlQueryModel::index(item.row(), GlobalDrugsModelPrivate::Priv_ATC_ID)).toString();
         if (d->m_AllergyEngine) {
             d->m_AllergyEngine->check(IDrugAllergyEngine::Allergy, uid);
@@ -414,7 +414,7 @@ QVariant GlobalDrugsModel::data(const QModelIndex &item, int role) const
         }
         // Marketed infos
         QString mark;
-        /** \todo code here */
+        // TODO: code here */
         //        mark = QSqlTableModel::data(index(item.row(), DrugsDB::Constants::DRUGS_AUTHORIZATION)).toString();
         //        if (!mark.isEmpty()) {
         //            mark.prepend("<br>");

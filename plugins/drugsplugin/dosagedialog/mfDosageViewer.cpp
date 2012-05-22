@@ -505,7 +505,7 @@ void DosageViewer::commitToModel()
 {
     d->m_Mapper->submit();
     // populate DailyShemeModel
-    /** \todo Create and Use DailySchemeViewer Properties */
+    // TODO: Create and Use DailySchemeViewer Properties */
     DrugsDB::DailySchemeModel *daily = dailyScheme->model();
     Q_ASSERT(daily);
     if (d->m_DosageModel) {

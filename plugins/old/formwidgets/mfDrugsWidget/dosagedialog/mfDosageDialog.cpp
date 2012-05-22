@@ -166,7 +166,7 @@ void mfDosageDialog::on_drugNameButton_clicked()
     dialog.exec();
 }
 
-/** \todo code this */
+// TODO: code this */
 void mfDosageDialog::on_innButton_clicked()
 {
     mfDrugsModel *m = DRUGMODEL;

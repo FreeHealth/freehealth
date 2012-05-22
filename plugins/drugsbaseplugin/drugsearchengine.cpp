@@ -135,7 +135,7 @@ void DrugSearchEngine::setDrug(const IDrug *drug)
     tokens.insert("ATC_CODES", codes.join("%20"));
     tokens.insert("ATC_LABELS", labels.join("%20"));
     tokens.insert("DRUG_NAME", d->m_Drug->brandName());
-    /** \todo improve this "DRUG_UID" */
+    // TODO: improve this "DRUG_UID" */
     tokens.insert("DRUG_UID", d->m_Drug->uids().join(";"));
     tokens.insert("DRUG_LINK_SPC", d->m_Drug->linkToSCP());
 //    tokens.insert("CONSTRUCTED_DRUG_NAME", d->m_Drug->);

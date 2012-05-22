@@ -288,7 +288,7 @@ void UserCalendarModel::updateUserCalendarChanged(const int row)
 {
     Q_UNUSED(row);
     reset();
-    /** \todo update availabities model */
+    // TODO: update availabities model */
 }
 
 /** Return the Agenda::DayAvailabilityModel corresponding to the calendar at the specified \e index . You have to delete the returned pointer. */
@@ -540,20 +540,20 @@ void DayAvailabilityModel::removeAvailability(const QModelIndex &index)
 
 bool DayAvailabilityModel::insertRows(int row, int count, const QModelIndex &parent)
 {
-    /** \todo code here */
+    // TODO: code here */
     qWarning() << Q_FUNC_INFO << row << count << parent;
     return true;
 }
 
 bool DayAvailabilityModel::removeRows(int row, int count, const QModelIndex &parent)
 {
-    /** \todo code here */
+    // TODO: code here */
     qWarning() << Q_FUNC_INFO << row << count << parent;
     return true;
 }
 
 bool DayAvailabilityModel::submit()
 {
-    /** \todo code here */
+    // TODO: code here */
     return true;
 }

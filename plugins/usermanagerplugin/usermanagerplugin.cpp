@@ -207,7 +207,7 @@ void UserManagerPlugin::extensionsInitialized()
     Core::Command *cmd = 0;
 
     // Create user
-    /** \todo manage user's right to enable/unable these actions */
+    // TODO: manage user's right to enable/unable these actions */
     a = aCreateUser = new QAction(this);
     a->setObjectName("aCreateUser");
     a->setIcon(QIcon(Core::Constants::ICONNEWUSER));

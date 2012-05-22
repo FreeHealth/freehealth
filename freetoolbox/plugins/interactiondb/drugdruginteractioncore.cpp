@@ -174,7 +174,7 @@ QList<DrugInteractor *> DrugDrugInteractionCore::getDrugInteractors() const
 void DrugDrugInteractionCore::updateXmlFileForDrugDrugInteraction(DrugDrugInteraction */*ddi*/)
 {
     // Populate the DomNode
-    /** \todo code here ??? */
+    // TODO: code here ??? */
 }
 
 /** Will overwrite the thesaurus file with a new one created on the basis of the \e ddis. All precedent datas will be lost. */

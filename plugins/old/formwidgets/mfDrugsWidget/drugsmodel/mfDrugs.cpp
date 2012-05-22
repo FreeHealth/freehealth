@@ -172,7 +172,7 @@ void mfDrugs::addComposition( mfDrugComposition *compo )
 
 void mfDrugs::addCIP( const int CIP, const QString & denomination, QDate date )
 {
-    /** \todo one drug can have multi presentations ==> list */
+    // TODO: one drug can have multi presentations ==> list */
     mfDrugsPrivate::structCIP st;
     st.CIP = CIP;
     st.denomination = denomination;
@@ -375,7 +375,7 @@ QString mfDrugs::mainInnDosage() const
 
 //QStringList mfDrugs::listOfInnWithPosology() const
 //{
-//    /** \todo add dosage of molecules */
+//    // TODO: add dosage of molecules */
 //    QStringList toReturn;
 //    QString tmp = "";
 //    const QVariantList &poso = d->m_COMPOValues.values( COMPO_DOSAGE );

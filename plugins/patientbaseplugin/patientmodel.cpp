@@ -131,7 +131,7 @@ public:
 
     void refreshFilter()
     {
-        /** \todo filter photo SQL as well */
+        // TODO: filter photo SQL as well */
 
         // WHERE (LK_ID IN (SELECT LK_ID FROM LK_TOPRACT WHERE LK_PRACT_UID='...')) OR
         //       (LK_ID IN (SELECT LK_ID FROM LK_TOPRACT WHERE LK_GROUP_UID='...'))
@@ -524,7 +524,7 @@ bool PatientModel::setData(const QModelIndex &index, const QVariant &value, int 
         return false;
 
     if (role == Qt::EditRole) {
-        /** \todo manage patient duplicates when modifying names/uuid */
+        // TODO: manage patient duplicates when modifying names/uuid */
         using namespace Core;
         int col = -1;
         QList<int> colsToEmit;
@@ -784,7 +784,7 @@ bool PatientModel::insertRows(int row, int count, const QModelIndex &parent)
         bool findUuid = false;
         QString uuid;
         while (!findUuid) {
-            /** \todo Take care to inifinite looping... */
+            // TODO: Take care to inifinite looping... */
             uuid = Utils::Database::createUid();
             QString f = QString("%1='%2'").arg(patientBase()->fieldName(Constants::Table_IDENT, Constants::IDENTITY_UID), uuid);
             findUuid = (patientBase()->count(Constants::Table_IDENT, Constants::IDENTITY_UID, f) == 0);

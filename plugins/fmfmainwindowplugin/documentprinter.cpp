@@ -106,7 +106,7 @@ void DocumentPrinter::print(const QTextDocument &text) const
 
     p.previewer(qApp->activeWindow());
     p.printWithDuplicata(settings()->value(Constants::S_PRINTDUPLICATAS).toBool());
-    /** \todo Use NormalVersion instead of MedinTuxversion */
+    // TODO: Use NormalVersion instead of MedinTuxversion */
     return p.print(text);
 }
 

@@ -110,7 +110,7 @@ void AccountData::setDatasFromDb(const int ref, const QVariant &value)
     case Constants::ACCOUNT_SITE_ID: d->m_DbDatas.insert(SiteId, value); break;
     case Constants::ACCOUNT_INSURANCE_ID: d->m_DbDatas.insert(InsuranceId, value); break;
     case Constants::ACCOUNT_DATE : d->m_DbDatas.insert(Date, value); break;
-//    case MedicalProcedureHtml : return "/** \todo here */";
+//    case MedicalProcedureHtml : return "// TODO: here */";
     case Constants::ACCOUNT_COMMENT : d->m_DbDatas.insert(Comment, value); break;
     case Constants::ACCOUNT_CASHAMOUNT: d->m_DbDatas.insert(Cash, value); break;
     case Constants::ACCOUNT_CHEQUEAMOUNT: d->m_DbDatas.insert(Cheque, value); break;

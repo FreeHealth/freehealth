@@ -417,7 +417,7 @@ bool mfDosageModel::isDirty(const int row) const
     return false;
 }
 
-/** \todo write this */
+// TODO: write this */
 QStringList mfDosageModel::isDosageValid( const int row )
 {
     Q_ASSERT_X( m_CIS != -1, "mfDosageModel::isDosageValid", "before using the dosagemodel, you must specify the CIS of the related drug");

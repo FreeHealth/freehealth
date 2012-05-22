@@ -53,13 +53,13 @@ IUserCalendar::~IUserCalendar()
 
 bool IUserCalendar::isValid() const
 {
-    /** \todo code here */
+    // TODO: code here */
     return true;
 }
 
 bool IUserCalendar::isNull() const
 {
-    /** \todo code here */
+    // TODO: code here */
     return false;
 }
 

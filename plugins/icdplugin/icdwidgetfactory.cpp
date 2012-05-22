@@ -175,7 +175,7 @@ bool IcdFormData::setData(const int ref, const QVariant &data, const int role)
     Q_UNUSED(ref);
     Q_UNUSED(role);
     Q_UNUSED(data);
-    /** \todo code here */
+    // TODO: code here */
 //    qWarning() << "BaseCheckData::setData" << data << role;
 //    if (role==Qt::EditRole || role==Qt::DisplayRole) {
 //        if (data.canConvert(QVariant::Int))  { // Tristate
@@ -189,7 +189,7 @@ QVariant IcdFormData::data(const int ref, const int role) const
 {
     Q_UNUSED(ref);
     Q_UNUSED(role);
-    /** \todo code here */
+    // TODO: code here */
     return QVariant();
 //    return m_Check->checkState();
 }

@@ -260,7 +260,7 @@ InteractionDatabaseChecker::~InteractionDatabaseChecker()
 
 void InteractionDatabaseChecker::on_check_clicked()
 {
-    /** \todo code here */
+    // TODO: code here */
 }
 
 

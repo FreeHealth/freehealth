@@ -168,7 +168,7 @@ void DatabaseInfos::toTreeWidget(QTreeWidget *tree) const
     new QTreeWidgetItem(authorItem, QStringList() << "Sources link" << weblink);
     new QTreeWidgetItem(authorItem, QStringList() << tkTr(Trans::Constants::AUTHOR) << author);
     new QTreeWidgetItem(authorItem, QStringList() << "License" << license);
-    /** \todo put a link instead of the content for licenseTerms */
+    // TODO: put a link instead of the content for licenseTerms */
     new QTreeWidgetItem(authorItem, QStringList() << "License terms" << licenseTerms);
 
     QTreeWidgetItem *validItem = new QTreeWidgetItem(tree,QStringList() << "Validity");
