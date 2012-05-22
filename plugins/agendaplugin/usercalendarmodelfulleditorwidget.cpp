@@ -43,6 +43,7 @@
 
 #include <usermanagerplugin/usermodel.h>
 
+#include <utils/log.h>
 #include <utils/global.h>
 #include <translationutils/constants.h>
 #include <translationutils/trans_agenda.h>
@@ -75,10 +76,8 @@ UserCalendarModelFullEditorWidget::UserCalendarModelFullEditorWidget(QWidget *pa
     ui->editor->setEnabled(false);
     ui->listView->setActions(Views::Constants::AddRemove);
 
-//    modeManager()->addAction(actionManager()->command(Core::Constants::A_PATIENT_NEW), 0);
-
     connect(ui->listView, SIGNAL(clicked(QModelIndex)), this, SLOT(setCurrentIndex(QModelIndex)));
-//    connect(ui->listView, SIGNAL(addRequested), ui->editor, SLOT(addUserCalendar()));
+    // INFO: User calendars are added/removed using the ListView actions' connected to the view model
 }
 
 UserCalendarModelFullEditorWidget::~UserCalendarModelFullEditorWidget()
