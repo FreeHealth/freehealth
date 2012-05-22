@@ -62,14 +62,14 @@ void CommandLine::feedPatientDatas(Core::IPatient *patient)
 
 QVariant CommandLine::value(int param, const QVariant &def) const
 {
-    /** \todo code heree */
+    //TODO: CommandLine::value() - code here
     return QVariant();
 //    return d->value.value(param,def);
 }
 
 QString CommandLine::paramName(int param) const
 {
-    /** \todo code heree */
+    //TODO: CommandLine::paramName() - code here
 //    if (d->params.keys().contains(param))
 //        return d->params.value(param);
 //    else
