@@ -44,7 +44,7 @@
 #include <coreplugin/ipatient.h>
 
 #include <extensionsystem/pluginmanager.h>
-#include <iphotoprovider.h>
+#include <coreplugin/iphotoprovider.h>
 #include <zipcodesplugin/zipcodescompleters.h>
 
 #include <utils/global.h>
@@ -335,7 +335,7 @@ void IdentityWidget::photoButton_clicked()
     QString fileName;
 
     // get a list of plugin implementations that provide a photo
-    QList<IPhotoProvider *> photoProviders = ExtensionSystem::PluginManager::instance()->getObjects<IPhotoProvider>();
+    QList<Core::IPhotoProvider *> photoProviders = ExtensionSystem::PluginManager::instance()->getObjects<Core::IPhotoProvider>();
 
     if (!photoProviders.isEmpty()) { // call the plugin
 
@@ -343,7 +343,7 @@ void IdentityWidget::photoButton_clicked()
         // and configurations to select the default one.
         // by now just get first plugin
 
-        IPhotoProvider *photoProvider = photoProviders.first();
+        Core::IPhotoProvider *photoProvider = photoProviders.first();
         fileName = photoProvider->recievePhotoFile();
         if (fileName.isEmpty()) {
             return;
