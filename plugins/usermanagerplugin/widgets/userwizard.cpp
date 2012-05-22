@@ -86,6 +86,7 @@
 #include <QGroupBox>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
+#include <QStringListModel>
 
 #include "ui_userwizardcontactwidget.h"
 

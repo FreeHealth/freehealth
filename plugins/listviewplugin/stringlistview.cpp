@@ -41,6 +41,7 @@
 
 #include <QAction>
 #include <QMenu>
+#include <QStringListModel>
 
 #include <QDebug>
 

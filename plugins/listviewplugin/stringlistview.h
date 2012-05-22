@@ -29,10 +29,7 @@
 #include <listviewplugin/listview_exporter.h>
 #include <listviewplugin/listview.h>
 
-//#include <QListView>
-#include <QEvent>
 #include <QObject>
-#include <QStringListModel>
 
 /**
  * \file stringlistview.h
@@ -43,7 +40,7 @@
 
 namespace Views {
 
-class LISTVIEW_EXPORT StringListView : public ListView //QListView
+class LISTVIEW_EXPORT StringListView : public ListView
 {
     Q_OBJECT
     Q_PROPERTY(QVariant stringList         READ getStringList         WRITE setStringList        USER true)
@@ -66,4 +63,5 @@ Q_SIGNALS:
 };
 
 }  // End Views
+
 #endif // STRINGLISTVIEW_H

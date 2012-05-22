@@ -40,6 +40,7 @@
 #include <translationutils/constanttranslations.h>
 
 #include <QDataWidgetMapper>
+#include <QStringListModel>
 
 #include "ui_userviewer_identity.h"
 #include "ui_userviewer_contact.h"
