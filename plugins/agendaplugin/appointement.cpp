@@ -37,24 +37,24 @@ Appointement::Appointement() :
     m_Modified(false),
     m_uid(-1)
 {
-    m_Datas.insert(Constants::Db_CalId, -1);
-    m_Datas.insert(Constants::Db_ComId, -1);
-    m_Datas.insert(Constants::Db_EvId, -1);
-    m_Datas.insert(Constants::Db_CyclingEvId, -1);
-    m_Datas.insert(Constants::Db_UserCalId, -1);
-    m_Datas.insert(Constants::Db_IsValid, false);
+    m_Data.insert(Constants::Db_CalId, -1);
+    m_Data.insert(Constants::Db_ComId, -1);
+    m_Data.insert(Constants::Db_EvId, -1);
+    m_Data.insert(Constants::Db_CyclingEvId, -1);
+    m_Data.insert(Constants::Db_UserCalId, -1);
+    m_Data.insert(Constants::Db_IsValid, false);
 }
 
 bool Appointement::isNull() const
 {
     if (m_Modified)
         return false;
-    if ((m_Datas.value(Constants::Db_CalId).toInt() == -1) &&
-            (m_Datas.value(Constants::Db_ComId).toInt() == -1) &&
-            (m_Datas.value(Constants::Db_EvId).toInt() == -1) &&
-            (m_Datas.value(Constants::Db_CyclingEvId).toInt() == -1) &&
-            (m_Datas.value(Constants::Db_UserCalId).toInt() == -1) &&
-            (m_Datas.value(Constants::Db_IsValid).toBool() == false)) {
+    if ((m_Data.value(Constants::Db_CalId).toInt() == -1) &&
+            (m_Data.value(Constants::Db_ComId).toInt() == -1) &&
+            (m_Data.value(Constants::Db_EvId).toInt() == -1) &&
+            (m_Data.value(Constants::Db_CyclingEvId).toInt() == -1) &&
+            (m_Data.value(Constants::Db_UserCalId).toInt() == -1) &&
+            (m_Data.value(Constants::Db_IsValid).toBool() == false)) {
         return true;
     }
     return false;
@@ -69,14 +69,14 @@ bool Appointement::isValid() const
 QVariant Appointement::data(const int ref) const
 {
     // TODO: retrieve data from the model
-    return m_Datas.value(ref, QVariant());
+    return m_Data.value(ref, QVariant());
 }
 
 bool Appointement::setData(const int ref, const QVariant &value)
 {
     // TODO: set datas to the model
     m_Modified = true;
-    m_Datas.insert(ref, value);
+    m_Data.insert(ref, value);
     return true;
 }
 
