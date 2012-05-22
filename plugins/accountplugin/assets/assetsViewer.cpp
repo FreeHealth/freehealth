@@ -93,7 +93,7 @@ void AssetsViewer::showAssets()
     AssetsIO  mov(this) ;
     AssetModel * model = mov.getModelAssets();
 
-    /** \todo move header naming into the model */
+    // TODO: move header naming into the model
     model->setHeaderData(ASSETS_ACCOUNT_ID,Qt::Horizontal,trUtf8("Account id"));
     model->setHeaderData(ASSETS_LABEL,Qt::Horizontal,trUtf8("Label"));
     model->setHeaderData(ASSETS_DATE,Qt::Horizontal,trUtf8("Date"));

@@ -134,11 +134,11 @@ QVariant ServerModel::data(const QModelIndex &index, int role) const
                                   "<b>%7</b>:&nbsp;%8")
                 .arg(tkTr(Trans::Constants::LABEL).replace(" ", "&nbsp;"))
                 .arg(s.label())
-                .arg(tr("Native Url").replace(" ", "&nbsp;")) /** \todo maybe use URL instead of Url */
+                .arg(tr("Native Url").replace(" ", "&nbsp;")) // TODO: maybe use URL instead of Url
                 .arg(s.nativeUrl())
-                .arg(tkTr(Trans::Constants::RECOMMENDED_UPDATE_FREQUENCY)) /** \todo maybe better: "Recommended update check frequency" */
+                .arg(tkTr(Trans::Constants::RECOMMENDED_UPDATE_FREQUENCY)) // TODO: maybe better: "Recommended update check frequency"
                 .arg(Trans::ConstantTranslations::checkUpdateLabel(s.recommendedUpdateFrequency()))
-                .arg(tr("Url Style")) /** \todo maybe use URL instead of Url */
+                .arg(tr("Url Style")) // TODO: maybe use "URL" instead of "Url"
                 .arg(s.urlStyleName());
         return toolTip.replace(" ", "&nbsp;");
     }

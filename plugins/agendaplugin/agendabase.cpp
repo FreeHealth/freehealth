@@ -310,9 +310,8 @@ AgendaBase::AgendaBase(QObject *parent) :
     addField(Table_CYCLINGEVENTS, CYCLING_CALENDAR_ID, "CAL_ID", FieldIsInteger);
     addField(Table_CYCLINGEVENTS, CYCLING_COMMON_ID, "COM_ID", FieldIsInteger);
 
-    /** \todo code here : field obsolete */
+    // TODO: field is obsolete
     addField(Table_CYCLINGEVENTS, CYCLING_PATIENT_UID, "PATIENT_UID", FieldIsUUID);
-    /** end */
 
     addField(Table_CYCLINGEVENTS, CYCLING_ISNOTRELATEDTOPATIENT, "ISRELTOPATIENT", FieldIsBoolean);
     addField(Table_CYCLINGEVENTS, CYCLING_ISVALID, "ISVALID", FieldIsBoolean);
@@ -321,7 +320,8 @@ AgendaBase::AgendaBase(QObject *parent) :
     addField(Table_CYCLINGEVENTS, CYCLING_REPEATINTERVAL, "INTERVAL", FieldIsInteger);
     addField(Table_CYCLINGEVENTS, CYCLING_REPEATSCHEMA, "SCHEME", FieldIsInteger);
     addField(Table_CYCLINGEVENTS, CYCLING_REPEATTIMES, "TIMES", FieldIsInteger); // (eg repeat only seven times)
-    /** \todo code here : add indexes */
+
+    // TODO: add indexes
 //    addIndex(Table_PEOPLE, PEOPLE_ID);
 //    addIndex(Table_PEOPLE, PEOPLE_ID);
 //    addIndex(Table_PEOPLE, PEOPLE_ID);
@@ -388,7 +388,7 @@ bool AgendaBase::isInitialized() const
 /** Return true if the AgendaBase is the last version (database is updated by this member if needed) */
 bool AgendaBase::checkDatabaseVersion()
 {
-    /** \todo Code : AgendaBase::checkDatabaseVersion() */
+    // TODO: Code : AgendaBase::checkDatabaseVersion()
     return true;
 }
 
@@ -429,7 +429,7 @@ bool AgendaBase::createDatabase(const QString &connectionName, const QString &db
             LOG(tkTr(Trans::Constants::DATABASE_1_CANNOT_BE_CREATED_ERROR_2).arg(dbName).arg(DB.lastError().text()));
         setDriver(Utils::Database::SQLite);
     } else if (driver == MySQL) {
-        /** \todo test grants here or before ? */
+        // TODO: test grants here or before?
         if (QSqlDatabase::connectionNames().contains(connectionName)) {
             DB = QSqlDatabase::database(connectionName);
         } else {
@@ -934,10 +934,10 @@ QList<Appointement *> AgendaBase::getCalendarEvents(const CalendarEventQuery &ca
             return toReturn;
         conds << Utils::Field(Constants::Table_EVENTS, Constants::EVENT_ID, QString("='%1'").arg(calQuery.appointementId().toString()));
     } else {
-        /** \todo add virtual appointement filtering */
+        // TODO: add virtual appointement filtering
         // Date conditions
         if (calQuery.hasDateRange()) {
-            /** \todo code here: better management of dates in filters */
+            // TODO: code here: better management of dates in filters
             conds << Utils::Field(Constants::Table_EVENTS, Constants::EVENT_DATESTART, QString(">='%1'").arg(calQuery.dateStart().toString(Qt::ISODate)));
             conds << Utils::Field(Constants::Table_EVENTS, Constants::EVENT_DATEEND, QString("<='%1'").arg(calQuery.dateEnd().toString(Qt::ISODate)));
         }
@@ -1421,7 +1421,7 @@ QList<QDateTime> AgendaBase::nextAvailableTime(const QDateTime &startSearch, con
     get << Utils::Field(Table_EVENTS, EVENT_DATEEND);
     Utils::JoinList joins;
     // no joins
-    /** \todo code here : condition with the type/status of appointements */
+    // TODO: code here : condition with the type/status of appointements
     Utils::FieldList conds;
     conds << Utils::Field(Table_EVENTS, EVENT_ISVALID, "=1");
     conds << Utils::Field(Table_EVENTS, EVENT_CAL_ID, QString("=%1").arg(calendar.data(Constants::Db_CalId).toString()));
@@ -1494,7 +1494,7 @@ QList<QDateTime> AgendaBase::nextAvailableTime(const QDateTime &startSearch, con
 
 //    int nbFound = 0;
 //    int durationInSeconds = durationInMinutes * 60;
-//    /** \todo manage algorythm error here */
+//    TODO: manage algorythm error here
 //    int limitComputation = 10000;//224640; // 10min, 6day a week, 12hours a day :: 1 full year == 12*6 *10 *6 *52 == 224640
 //    QList<QRect> avList = availabilitiesToRect(calendar.availabilities());
 

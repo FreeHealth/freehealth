@@ -1080,7 +1080,7 @@ void centerWidget(QWidget *win, QWidget *reference)
 /** \brief Switch widget to fullscreen/non fullscreen. **/
 void setFullScreen(QWidget* win, bool on)
 {
-    /** \todo code with Qt::WindowFullScreen is buggy under mac os 10.6.8 -> windows is not visible */
+    // TODO: code with Qt::WindowFullScreen is buggy under mac os 10.6.8 -> windows is not visible
     if (win->isFullScreen()==on)
         return;
 
@@ -1640,7 +1640,7 @@ int replaceTokens(QString &textToAnalyse, const QHash<QString, QString> &tokens_
  * Test the internet connection capability, and return the first available configuration identifier.
  * This code needs Qt 4.7+
  * \sa QNetworkConfigurationManager::configurationFromIdentifier(const QString &identifier) const
- * \todo this function is inhibited due to a Qt bug on MacOs X 10.6 & others
+ * \bug this function is inhibited due to a Qt bug on MacOs X 10.6 & others
 */
 QString testInternetConnexion()
 {

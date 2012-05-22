@@ -245,8 +245,8 @@ void QButtonLineEdit::keyPressEvent(QKeyEvent *event)
 
 /**
   \brief Define rounded border for the QLineEdit
-  \todo Buggy
 */
+// FIXME: Buggy
 void QButtonLineEdit::setRoundedCorners()
 {
     setStyleSheet(QString("QLineEdit#%1, QFrame#%1 {"

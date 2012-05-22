@@ -54,7 +54,7 @@ using namespace Trans::ConstantTranslations;
 enum { WarnDebugMessage = false };
 
 /*********************/
-/** \todo bank system et deposit */
+// TODO: bank system and deposit
 /********************/
 static inline Core::IUser *user() { return  Core::ICore::instance()->user(); }
 

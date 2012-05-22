@@ -222,7 +222,7 @@ bool PackManager::installDownloadedPack(const Pack &pack, QProgressBar *bar)
     if (!Utils::checkDir(pack.unzipPackToPath(), true, "PackManager::installDownloadedPack"))
         return false;
 
-    /** \todo manage updating packs */
+    // TODO: manage updating packs
 
     // Unzip pack to the install path
     bool error = false;
@@ -282,8 +282,8 @@ bool PackManager::removePack(const Pack &pack)
         }
     }
 
-    m_Msg << tr("Pack %1 successfully removed.").arg(pack.name()); /** \todo successfully -> successfully */
-    LOG(tr("Pack %1 successfully removed.").arg(pack.name())); /** \todo successfully -> successfully */
+    m_Msg << tr("Pack %1 successfully removed.").arg(pack.name()); // TODO: successfully -> successfully
+    LOG(tr("Pack %1 successfully removed.").arg(pack.name())); // TODO: successfully -> successfully
     Q_EMIT packRemoved(pack);
     return true;
 }

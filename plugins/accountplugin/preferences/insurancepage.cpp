@@ -147,7 +147,7 @@ InsuranceWidget::InsuranceWidget(QWidget *parent) :
 
     m_Model = new AccountDB::InsuranceModel(this);
 
-    /** \todo  m_Model->setUserUuid(); */
+    // TODO:  m_Model->setUserUuid();
     m_insuranceUidLabel = new QSpinBox(this);
     //m_insuranceUidLabel->setText("NULL");
     m_insuranceUidLabel->setValue(11111);

@@ -338,7 +338,7 @@ QList<Pack> ServerManager::getPackForServer(const Server &server)
 
 Server &ServerManager::getServerForPack(const Pack &pack)
 {
-    /** \todo priorize servers : local > http > ftp */
+    // TODO: priorize servers : local > http > ftp
     for(int i=0; i<m_Servers.count();++i) {
 //        createServerPackList(m_Servers.at(i));
         const QString &uuid = m_Servers.at(i).uuid();

@@ -63,7 +63,7 @@ const QMap<QString, QPicture> &buttonElementsMap(const QString &iconPath)
 {
     static QMap<QString, QPicture> result;
     if (result.isEmpty()) {
-        /** \todo code here : remove resources usage */
+        // TODO: code here : remove resources usage
         QSvgRenderer renderer(QString("%1/fancytoolbutton.svg").arg(iconPath));
         for (size_t i = 0; i < sizeof(elementsSvgIds)/sizeof(elementsSvgIds[0]); i++) {
             QString elementId(elementsSvgIds[i]);

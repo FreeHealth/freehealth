@@ -115,11 +115,10 @@ void Server::setUrl(const QString &url)
 }
 
 /**
- * Return the server Url according to the \e UrlStyle and the \e native \e url params for the requested \e file.
- * \todo code here and test
+ * Returns the server Url according to the \e UrlStyle and the \e native \e url params for the requested \e file.
  */
 QString Server::url(const FileRequested &file, const QString &fileName) const
-{
+{   // TODO: test and improve code
     switch (file) {
     case NoFile : return m_Url;
     case ServerConfigurationFile:

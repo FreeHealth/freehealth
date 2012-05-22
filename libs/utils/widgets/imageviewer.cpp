@@ -42,7 +42,7 @@
 using namespace Utils;
 using namespace Trans::ConstantTranslations;
 
-/** \todo add gesture for the resize mode and Alt(or Ctrl)+mousewheel to zoom in/out */
+// TODO: add gesture for the resize mode and Alt(or Ctrl)+mousewheel to zoom in/out
 
 ImageViewer::ImageViewer(QWidget *parent) :
     QDialog(parent), m_CurrentIndex(-1)
@@ -104,7 +104,7 @@ void ImageViewer::setPixmaps(const QList<QPixmap> &pixmaps)
 void ImageViewer::showPixmapFile(const QString &absFilePath)
 {
     Q_UNUSED(absFilePath);
-    /** \todo code here ImageViewer::showPixmapFile(const QString &absFilePath) */
+    // TODO: code here ImageViewer::showPixmapFile(const QString &absFilePath)
 }
 
 void ImageViewer::zoomIn()

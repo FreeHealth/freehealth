@@ -86,7 +86,7 @@ public:
     static bool dateLessThan(const Appointement *item1, const Appointement *item2);
 
 private:
-    QHash<int, QVariant> m_Datas;
+    QHash<int, QVariant> m_Data;
     bool m_Modified;
     int m_uid;
 };

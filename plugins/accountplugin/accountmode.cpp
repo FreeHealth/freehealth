@@ -87,8 +87,8 @@ AccountMode::AccountMode(QObject *parent) :
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
     connect(modeManager(), SIGNAL(currentModeChanged(Core::IMode*)), this, SLOT(modeActivated(Core::IMode*)));
 
-    /** \todo connect actions from the account menu */
-    /** \todo connect patient changed and refresh views ? */
+    // TODO: connect actions from the account menu
+    // TODO: connect patient changed and refresh views?
 }
 
 QString AccountMode::name() const

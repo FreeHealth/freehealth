@@ -269,7 +269,7 @@ public:
                 parent->setData(++nb, ::PackCountRole);
                 parent = parent->parent();
             }
-            /** \todo split packs in: installed, available, update available ? */
+            // TODO: split packs in: installed, available, update available?
         }
 
         // Remove non-populated categories
@@ -278,14 +278,14 @@ public:
 
     void serverAdded(const int index)
     {
-        /** \todo improve this */
+        // TODO: improve this
         Q_UNUSED(index);
         checkAvailablePack();
     }
 
     void serverRemoved(const int index)
     {
-        /** \todo improve this */
+        // TODO: improve this
         Q_UNUSED(index);
         checkAvailablePack();
     }
