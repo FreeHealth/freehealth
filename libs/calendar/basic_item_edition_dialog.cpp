@@ -88,7 +88,7 @@ BasicItemEditionDialog::BasicItemEditionDialog(AbstractCalendarModel *model, QWi
     // Ask plugin manager for extended widgets
     QList<ICalendarItemDataWidget*> extended = pluginManager()->getObjects<ICalendarItemDataWidget>();
 
-    //TODO: better use foreach here?
+    // TODO: better use foreach here?
     for(int i = 0; i < extended.count(); ++i)
         addCalendarDataWidget(extended.at(i));
 
