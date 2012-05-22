@@ -1307,7 +1307,7 @@ bool EpisodeModel::activateEpisode(const QModelIndex &index, const QString &form
     d->m_ActualEpisode_FormUid = formUid;
 
     // TODO: this form code should not appear in a model's method according to strict MVC pattern.
-        Extract it to the form parts and maybe link with Signal/Slots? */
+    //    Extract it to the form parts and maybe link with Signal/Slots?
     // clear actual form and fill episode data
     if (!form)
         return false;
