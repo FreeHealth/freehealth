@@ -82,8 +82,7 @@ QWizardPage *UserCalendarWizardCreatorPage::createWizardPage(QWidget *parent)
 void UserCalendarWizardCreatorPage::submit(const QString &userUid)
 {
     if (page) {
-        UserCalendar *u = page->getUserCalendar();
-        u->setData(UserCalendar::UserOwnerUid, userUid);
+        UserCalendar *u = page->getUserCalendar(userUid);
         base()->saveUserCalendar(u);
     }
 }
@@ -106,25 +105,14 @@ UserCalendarWizardPage::~UserCalendarWizardPage()
     delete ui;
 }
 
-UserCalendar *UserCalendarWizardPage::getUserCalendar()
+UserCalendar *UserCalendarWizardPage::getUserCalendar(const QString &userUid)
 {
-    UserCalendar *u = new UserCalendar;
-    u->setData(Constants::Db_IsValid, 1);
-    u->setData(UserCalendar::Uid, Utils::Database::createUid());
+    UserCalendar *u = base()->createEmptyCalendar(userUid);
     u->setData(UserCalendar::Label, ui->calendarLabel->text());
     u->setData(UserCalendar::DefaultDuration, ui->defaultDuration->value());
     u->setData(UserCalendar::Description, ui->description->toHtml());
     u->setData(UserCalendar::LocationUid, ui->defaultLocation->text());
     u->setData(UserCalendar::IsDefault, 1);
-    u->setData(Constants::Db_IsValid, 1);
-    u->setData(Constants::Db_UserCalId, -1);
-    // Create day availabilities
-    for(int j=1; j < 8; ++j) {
-        DayAvailability av;
-        av.addTimeRange(QTime(06,00,00), QTime(20,00,00));
-        av.setWeekDay(j);
-        u->addAvailabilities(av);
-    }
     return u;
 }
 

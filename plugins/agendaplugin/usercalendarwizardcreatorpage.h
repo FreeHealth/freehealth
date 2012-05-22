@@ -34,8 +34,8 @@
 /**
  * \file usercalendarwizardcreatorpage.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.0
- * \date 30 Jul 2011
+ * \version 0.7.2
+ * \date 22 May 2012
 */
 
 namespace Agenda {
@@ -55,7 +55,7 @@ public:
     explicit UserCalendarWizardPage(QWidget *parent = 0);
     ~UserCalendarWizardPage();
 
-    UserCalendar *getUserCalendar();
+    UserCalendar *getUserCalendar(const QString &userUid);
 
     bool validatePage();
 
