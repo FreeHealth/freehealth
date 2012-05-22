@@ -317,7 +317,7 @@ QList<QDateTime> NextAvailabiliyManager::nextAvailableTime(const QDateTime &star
 
     int nbFound = 0;
     int durationInSeconds = durationInMinutes * 60;
-    // TODO: manage algorythm error here */
+    // TODO: manage algorythm error here
     int limitComputation = 10000;//224640; // 10min, 6day a week, 12hours a day :: 1 full year == 12*6 *10 *6 *52 == 224640
 
     while (nbFound < numberOfDates) {

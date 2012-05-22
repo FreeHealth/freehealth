@@ -550,7 +550,7 @@ public:
                 // get the line related to the level of pim
                 //                    int typeId = pim->value(PimInteraction::PIM_Level).toInt();
 
-                // TODO: manage levelOfWarning */
+                // TODO: manage levelOfWarning
 
                 int riskId = pim->value(PimInteraction::PIM_RiskMasterLid).toInt();
                 int level =  pim->value(PimInteraction::PIM_Level).toInt();
@@ -788,7 +788,7 @@ QString PimEngine::shortName() const
 }
 
 QString PimEngine::tooltip() const
-{ // TODO: this is not a real good English sentence - not translatable neither... */
+{ // TODO: this is not a real good English sentence - not translatable neither...
     return tr("Detects interaction between drugs and patient in elderly");
 }
 

@@ -302,7 +302,7 @@ public:
 
     void allInstancesEmitDataChangedFrom(const QModelIndex &item)
     {
-        // TODO: improve this */
+        // TODO: improve this
 //        bool isTemplate = q->isTemplate(item);
         foreach(TemplatesModelPrivate *pr, m_Handles) {
             if (pr->q->isCategoryOnly() == q->isCategoryOnly()) {
@@ -315,7 +315,7 @@ public:
 
     void allInstancesBeginInsertRows(const QModelIndex &parent, int first, int last)
     {
-        // TODO: improve this */
+        // TODO: improve this
         foreach(TemplatesModelPrivate *pr, m_Handles) {
             if (pr->q->isCategoryOnly() == q->isCategoryOnly()) {
                 QModelIndex idx = pr->q->index(parent.row(), parent.column(), parent.parent());
@@ -326,7 +326,7 @@ public:
 
     void allInstancesEndInsertRows()
     {
-        // TODO: improve this */
+        // TODO: improve this
         foreach(TemplatesModelPrivate *pr, m_Handles) {
             if (pr->q->isCategoryOnly() == q->isCategoryOnly()) {
                 pr->q->endInsertRows();
@@ -336,7 +336,7 @@ public:
 
     void allInstancesBeginRemoveRows(const QModelIndex &parent, int first, int last)
     {
-        // TODO: improve this */
+        // TODO: improve this
         foreach(TemplatesModelPrivate *pr, m_Handles) {
             if (pr->q->isCategoryOnly() == q->isCategoryOnly()) {
                 pr->q->beginRemoveRows(parent,first,last);
@@ -346,7 +346,7 @@ public:
 
     void allInstancesEndRemoveRows()
     {
-        // TODO: improve this */
+        // TODO: improve this
         foreach(TemplatesModelPrivate *pr, m_Handles) {
             if (pr->q->isCategoryOnly() == q->isCategoryOnly()) {
                 pr->q->endRemoveRows();
@@ -384,7 +384,7 @@ public:
 
         // get categories
         m_IdToCategory.clear();
-        // TODO: Filter user's templates */
+        // TODO: Filter user's templates
         QSqlQuery query(templateBase()->select(Templates::Constants::Table_Categories), DB);
         if (query.isActive()) {
             QHash<int, QVariant> datas;
@@ -415,7 +415,7 @@ public:
         // get templates
         Utils::Log::addMessage(q, "Getting Templates");
         QList<TreeItem *> templates;
-        // TODO: filter user's uuid */
+        // TODO: filter user's uuid
         query.exec(templateBase()->select(Templates::Constants::Table_Templates));
         if (query.isActive()) {
             QHash<int, QVariant> datas;
@@ -764,7 +764,7 @@ TemplatesModel::TemplatesModel(QObject *parent) :
 
 TemplatesModel::~TemplatesModel()
 {
-    // TODO: improve this with coreListener */
+    // TODO: improve this with coreListener
     submit();
 
     if (d) {
@@ -782,14 +782,14 @@ void TemplatesModel::onCoreDatabaseServerChanged()
 
 bool TemplatesModel::isDirty() const
 {
-    // TODO: code here  */
+    // TODO: code here
     return false;
 }
 
 bool TemplatesModel::setCurrentUser(const QString &uuid)
 {
     Q_UNUSED(uuid);
-    // TODO: upadte template model filter */
+    // TODO: upadte template model filter
     return true;
 }
 
@@ -1003,9 +1003,9 @@ bool TemplatesModel::insertTemplate(const Templates::ITemplate *t)
     QModelIndex parentIndex = d->findIndex(parent->id());
     // setDatas of newly created row
 //    Internal::TreeItem *parentItem = d->getItem(item)->parent();
-//    // TODO: manage user */
+//    // TODO: manage user
 //    Internal::TreeItem *newItem = new Internal::TreeItem(t.datas(),parentItem);
-//    // TODO: reset all instances of the model */
+//    // TODO: reset all instances of the model
 //    d->resetAllInstances();
     return true;
 }
@@ -1141,7 +1141,7 @@ bool TemplatesModel::dropMimeData(const QMimeData *data, Qt::DropAction action, 
         foreach(const QPersistentModelIndex &idx, list) {
 //            int id = d->getItem(idx)->id();
 //            bool isTemplate = d->getItem(idx)->isTemplate();
-            // TODO: removes templates children from the temp list */
+            // TODO: removes templates children from the temp list
             if (!reparentIndex(idx, parentIndex))
                 return false;
         }

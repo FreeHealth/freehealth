@@ -305,7 +305,7 @@ QList<Form::FormIODescription *> XmlFormIO::getFormFileDescriptions(const Form::
         }
     }
 
-    // TODO: check all forms for params of Query, check forms versions, remove duplicates */
+    // TODO: check all forms for params of Query, check forms versions, remove duplicates
     for(int i = 0; i < toReturn.count(); ++i) {
         toReturn.at(i)->setIoFormReader((Form::IFormIO*)this);
     }

@@ -277,7 +277,7 @@ QString InteractionManager::synthesisToHtml(const QVector<IDrugInteraction *> &l
 
 //void InteractionManager::synthesisToTreeWidget(const QList<IDrugInteraction *> &list, QTreeWidget *tree) // static
 //{
-//    // TODO: code here */
+//    // TODO: code here
 //    Q_ASSERT(tree);
 ////    using namespace DrugsDB::Constants;
 ////    QString tmp, toReturn;

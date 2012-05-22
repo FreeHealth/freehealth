@@ -197,7 +197,7 @@ bool FullIcdCodeModel::isSelectionValid() const
 
 int FullIcdCodeModel::rowCount(const QModelIndex &) const
 {
-    // TODO: code here : check this */
+    // TODO: code here: check this
     return 1;
 }
 

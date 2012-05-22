@@ -36,7 +36,7 @@
 #include <coreplugin/constants_tokensandsettings.h>
 
 
-// TODO: create a virtual user creator */
+// TODO: create a virtual user creator
 
 using namespace MainWin::Internal;
 using namespace Trans::ConstantTranslations;

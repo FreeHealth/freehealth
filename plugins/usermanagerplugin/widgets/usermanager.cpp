@@ -436,7 +436,7 @@ void UserManagerWidget::onCreateUserRequested()
     }
     QModelIndex index = ui->userTableView->model()->index(createdRow, USER_NAME);
     UserWizard wiz(this);
-    // TODO: code here */
+    // TODO: code here
 //    wiz.setModelRow(createdRow);
     int r = wiz.exec();
     if (r == QDialog::Rejected) {

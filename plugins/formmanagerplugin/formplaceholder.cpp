@@ -225,7 +225,7 @@ public:
 
     void clearStackLayout()
     {
-        // TODO: check leaks */
+       // TODO: check leaks
         QWidget *w = m_Stack->parentWidget();
         delete m_Stack;
         m_Stack = new QStackedLayout(w);
@@ -335,7 +335,7 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
     setLayout(d->m_GeneralLayout);
 
     // create the tree view
-    // TODO: use the Views::FancyTreeView */
+    // TODO: use the Views::FancyTreeView
     QWidget *w = new QWidget;
 //    d->m_FileTree = new QTreeView(this);
     d->m_FileTree = new Views::TreeView(this,0);
@@ -400,7 +400,7 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
     vertic->setObjectName("FormPlaceHolder::MiniSplitter::Vertical");
     vertic->setOrientation(Qt::Vertical);
 
-    // TODO: add the episode table view */
+    // TODO: add the episode table view
 //    d->m_EpisodesTable = new QTableView(this);
 //    d->m_EpisodesTable->horizontalHeader()->hide();
 //    d->m_EpisodesTable->verticalHeader()->hide();
@@ -472,7 +472,7 @@ void FormPlaceHolder::setRootForm(Form::FormMain *rootForm)
         delete d->m_EpisodeModel;
         d->m_EpisodeModel = 0;
     }
-    // TODO: before deleting -> clear stackedLayout of FormPlaceHolder ? */
+    // TODO: before deleting -> clear stackedLayout of FormPlaceHolder ?
 //    if (d->m_RootForm) {
 //        delete d->m_RootForm;
 //        d->m_RootForm = 0;
@@ -529,7 +529,7 @@ void FormPlaceHolder::handleClicked(const QModelIndex &index)
         if (d->m_EpisodeModel->isForm(index)) {
             newEpisode();
         } else {
-            // TODO: validateEpisode */
+            // TODO: validateEpisode
 //            validateEpisode();
         }
 
@@ -597,7 +597,7 @@ void FormPlaceHolder::setCurrentEpisode(const QModelIndex &index)
         qobject_cast<QScrollArea*>(d->m_Stack->currentWidget())->widget()->setEnabled(true);
         d->m_EpisodeModel->activateEpisode(index, formUuid);
     } else {
-        // TODO: code here : show HtmlSynthesis in a label */
+        // TODO: code here : show HtmlSynthesis in a label
         d->m_EpisodeModel->activateEpisode(QModelIndex(), formUuid);
     }
     foreach(Form::FormMain *form, d->m_RootForm->flattenFormMainChildren()) {
@@ -658,14 +658,14 @@ void FormPlaceHolder::removeEpisode()
 {
     if (!d->m_FileTree->selectionModel())
         return;
-    // TODO: code here : removeEpisode */
+    // TODO: code here: removeEpisode
 }
 
 void FormPlaceHolder::validateEpisode()
 {
     if (!d->m_FileTree->selectionModel())
         return;
-    // TODO: code here : validateEpisode */
+    // TODO: code here: validateEpisode
 }
 
 void FormPlaceHolder::addForm()

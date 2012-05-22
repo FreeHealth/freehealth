@@ -193,7 +193,7 @@ DynamicAlert::DialogResult DynamicAlert::executeDynamicAlert(const DrugsDB::Drug
     if (dlg.exec()==QDialog::Accepted) {
         return DynamicAlertAccepted;
     }
-    // TODO: create an interface class like IDrugDynamicAlertListener and get object in the plugin manager pool. To allow plugins to implement alert overridden logging. */
+    // TODO: create an interface class like IDrugDynamicAlertListener and get object in the plugin manager pool. To allow plugins to implement alert overridden logging.
     return DynamicAlertOverridden;
 }
 

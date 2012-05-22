@@ -111,7 +111,7 @@ QStandardItemModel *DrugInteractionQuery::toStandardModel() const
         root->setFlags(Qt::ItemIsEnabled | Qt::ItemIsSelectable);
         root->setData(drug->drugId());
         m_StandardModel->appendRow(root);
-        // TODO: foreach component of the drug, append total daily dose */
+        // TODO: foreach component of the drug, append total daily dose
     }
     return m_StandardModel;
 }

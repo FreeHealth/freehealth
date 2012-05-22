@@ -136,7 +136,7 @@ void DocumentPrinter::prepareFooter(Print::Printer *p, const int papers) const
 {
     QString footer;
     if (user()) {
-        // TODO: wrong papers */
+        // TODO: wrong papers
 #ifdef FREEDIAMS
         footer = user()->value(Core::IUser::PrescriptionFooter).toString();
 #else

@@ -217,7 +217,7 @@ InteractionSynthesisDialog::~InteractionSynthesisDialog()
     d = 0;
 }
 
-// TODO: add class information */
+// TODO: add class information
 void InteractionSynthesisDialog::interactionActivated(const QModelIndex &current, const QModelIndex &previous)
 {
     Q_UNUSED(previous);
@@ -331,7 +331,7 @@ void InteractionSynthesisDialog::print(QAction *action)
 
 void InteractionSynthesisDialog::drugReportRequested()
 {
-    // TODO: code here */
+    // TODO: code here
 }
 
 void InteractionSynthesisDialog::changeEvent(QEvent *e)

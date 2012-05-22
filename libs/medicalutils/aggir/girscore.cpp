@@ -728,7 +728,7 @@ int NewGirScore::resultingGir() const
 QString NewGirScore::explanations(int girScore) const
 {
     Q_UNUSED(girScore);
-    // TODO: code here */
+    // TODO: code here
     return QString();
 }
 

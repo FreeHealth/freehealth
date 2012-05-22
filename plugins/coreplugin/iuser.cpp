@@ -182,6 +182,6 @@ void IUser::replaceTokens(QString &stringWillBeModified)
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_USERFULLADDRESS,   value(IUser::FullHtmlAddress).toString());
 
 //    Utils::replaceToken(stringWillBeModified, Constants::TOKEN_USERDATEOFBIRTH, value(IUser::DateOfBirth).toString() );
-    // TODO: improve manage of token mail, tels, faxes */
+    // TODO: improve manage of token mail, tels, faxes
 }
 

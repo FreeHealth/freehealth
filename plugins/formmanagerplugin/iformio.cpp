@@ -135,7 +135,7 @@ bool FormIODescription::setData(const int ref, const QVariant &value, const QStr
 
 void FormIODescription::toTreeWidget(QTreeWidget *tree) const
 {
-    // TODO: code here */
+    // TODO: code here
     tree->clear();
     tree->setColumnCount(2);
     QFont bold;

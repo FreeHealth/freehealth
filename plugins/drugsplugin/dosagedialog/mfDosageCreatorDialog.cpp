@@ -305,7 +305,7 @@ void DosageCreatorDialog::done(int r)
     }  else {
         DrugsDB::GlobalDrugsModel::updateAvailableDosages();
         dosageViewer->done(r);
-        // TODO: check validity of the dosage before submition */
+        // TODO: check validity of the dosage before submition
     }
     // if user deleted all protocols --> update cached data in global drugs model
 //    qWarning() << d->m_DosageModel->rowCount() << d->m_InitialNumberOfRow;

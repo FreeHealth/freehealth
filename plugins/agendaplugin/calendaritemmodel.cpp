@@ -291,7 +291,7 @@ QVariant CalendarItemModel::data(const Calendar::CalendarItem &item, int dataRef
         }
     } else if (role==Qt::BackgroundRole && dataRef==Status) {
         int status = pItem->data(Status).toInt();
-        // TODO: create preferences for color */
+        // TODO: create preferences for color
         switch (status) {
         case Waiting: return QColor(0,0,200); break;
         case Approved: return QColor(0,200,0); break;
@@ -525,7 +525,7 @@ int CalendarItemModel::createUid() const
 void CalendarItemModel::getItemFromDatabase(const QDate &from, const QDate &to, const int calendarId) const
 {
     Q_UNUSED(calendarId);
-    // TODO: code here: manage calendarId ? */
+    // TODO: code here: manage calendarId ?
     // appointements are already available ?
     QDate testDate = from;
     bool getFullRange = true;

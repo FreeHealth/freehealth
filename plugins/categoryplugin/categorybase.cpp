@@ -578,7 +578,7 @@ bool CategoryBase::saveCategoryLabels(CategoryItem *category)
     where.clear();
     where.insert(Constants::CATEGORYLABEL_LABEL_ID, QString("=%1").arg(labelId));
     QSqlQuery query(database());
-    // TODO: improve this, no need to delete before adding */
+    // TODO: improve this, no need to delete before adding
     if (!category->allLanguagesForLabel().isEmpty())
         query.exec(prepareDeleteQuery(Constants::Table_CATEGORY_LABEL, where));
     // save labels

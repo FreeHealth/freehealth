@@ -760,7 +760,7 @@ QString SettingsPrivate::getIniFile(const QString & appName, const QString & fil
 
     // if QApplication args contains "--config=iniFileName.ini" use it if possible
     // retreive command line arguments
-    // TODO: get the command line args through the Core::ICommandLine */
+    // TODO: get the command line args through the Core::ICommandLine
     QStringList list = QCoreApplication::arguments();
     int index = list.indexOf(QRegExp("--config=*", Qt::CaseSensitive, QRegExp::Wildcard));
 

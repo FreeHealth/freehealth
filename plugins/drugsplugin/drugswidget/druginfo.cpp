@@ -151,7 +151,7 @@ void DrugInfo::setDrug(const QVariant &drugUid)
     d->listWidgetInteractions->clear();
     QString display;
     if (drugModel()->drugData(d->m_DrugUid, Drug::Interacts).toBool()) { //mfDrugsBase::instance()->drugHaveInteraction(m_Drug)) {
-        // TODO: code here */
+        // TODO: code here
 //        d->m_InteractionsList = DrugsWidget::DrugsWidgetManager::instance()->currentInteractionManager()->getAllInteractionsFound();
         // populate the listwidget with found interactions
 //        foreach(DrugsDB::IDrugInteraction *di , d->m_InteractionsList) {

@@ -255,7 +255,7 @@ bool UserBase::isNewlyCreated() const
 /** Return true if the userbase is the last version (database is updated by this member if needed) */
 bool UserBase::checkDatabaseVersion()
 {
-    // TODO: Code : UserBase::checkDatabaseVersion() */
+    // TODO: Code : UserBase::checkDatabaseVersion()
     return true;
 }
 
@@ -326,7 +326,7 @@ UserData *UserBase::getUser(const QHash<int, QString> &conditions) const
         toReturn->addDynamicDatasFromDatabase(list);
 
     // get personal LINK_ID
-    // TODO: this must be updated: manage groups too */
+    // TODO: this must be updated: manage groups too
     where.clear();
     where.insert(Constants::LK_USER_UUID, QString("='%1'").arg(uuid));
     req = select(Constants::Table_USER_LK_ID, Constants::LK_LKID, where);
@@ -341,7 +341,7 @@ UserData *UserBase::getUser(const QHash<int, QString> &conditions) const
     query.finish();
 
     if (lkid == -1) {
-        // TODO: WARNING this causes segfault */
+        // TODO: WARNING this causes segfault
         LOG_ERROR(QString("No linker for user %1").arg(toReturn->uuid()));
         return 0;
     }
@@ -642,7 +642,7 @@ bool UserBase::createDatabase(const QString &connectionName , const QString &dbN
             LOG_ERROR(tkTr(Trans::Constants::DATABASE_1_CANNOT_BE_CREATED_ERROR_2).arg(dbName).arg(DB.lastError().text()));
         setDriver(Utils::Database::SQLite);
     } else if (driver == MySQL) {
-        // TODO: test grants here or before ? */
+        // TODO: test grants here or before ?
         if (QSqlDatabase::connectionNames().contains(connectionName)) {
             DB = QSqlDatabase::database(connectionName);
         } else {
@@ -723,7 +723,7 @@ bool UserBase::createDefaultUser()
     user->setExtraDocument(Print::TextDocumentExtra::fromXml(defaultFooter("admin")), Core::IUser::AdministrativeFooter);
     user->setExtraDocument(Print::TextDocumentExtra::fromXml(defaultWatermark("admin", "administrative")), Core::IUser::AdministrativeWatermark);
 
-    // TODO: add a transaction */
+    // TODO: add a transaction
     saveUser(user);
 
     // create the linker
@@ -808,7 +808,7 @@ bool UserBase::createVirtualUser(const QString &uid, const QString &name, const 
 
     // Create the user on the server
     if (driver()==MySQL) {
-        // TODO: this can be a serious security problem */
+        // TODO: this can be a serious security problem
         createMySQLUser(pass, pass, Grant_Select|Grant_Update|Grant_Insert|Grant_Delete|Grant_Create|Grant_Index);
     }
 
@@ -859,7 +859,7 @@ bool UserBase::createUser(UserData *user)
     if (!testConnexion())
         return false;
     // check current user grants
-    // TODO: code here */
+    // TODO: code here
 
     switch (driver()) {
     case Utils::Database::MySQL:
@@ -923,7 +923,7 @@ bool UserBase::saveUser(UserData *user)
     bool error = false;
     if (toUpdate) {
         // update Table_USERS
-        // TODO: update identifiers according to the driver. */
+        // TODO: update identifiers according to the driver.
         QSqlQuery q(database());
         q.prepare(prepareUpdateQuery(Table_USERS, where));
         q.bindValue(USER_ID, user->id());
@@ -1007,7 +1007,7 @@ bool UserBase::saveUser(UserData *user)
             }
         }
 
-        // TODO: code here : --> update UserLkId */
+        // TODO: code here : --> update UserLkId
 
         if (!error) {
             LOG(QCoreApplication::translate("UserBase", "User %1 successfully updated.").arg(user->uuid()));

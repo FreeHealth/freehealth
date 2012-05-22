@@ -180,7 +180,7 @@ void DailySchemeModel::setMaximumDay(double max)
     d->m_Max = max;
     d->dailySum();
     reset();
-    // TODO: recalculate daily scheme and manage errors ? */
+    // TODO: recalculate daily scheme and manage errors ?
 }
 
 double DailySchemeModel::sum() const

@@ -113,7 +113,7 @@ public:
     }
 
 public:
-    // TODO: create a EpisodeData class */
+    // TODO: create an EpisodeData class
     int m_ActualEpisode;
     QString m_ActualEpisode_FormUid;
     QList<Form::FormMain *> m_RootForms, m_SubFormsEmptyRoot;
@@ -217,7 +217,7 @@ bool FormManager::loadPatientFile()
     // get form general form absPath from episodeBase
     QString absDirPath = episodeBase()->getGenericFormFile();
     if (absDirPath.isEmpty()) {
-        // TODO: code here: manage no patient form file recorded in episodebase */
+        // TODO: code here: manage no patient form file recorded in episodebase
         return false;
     }
     // load central root forms
@@ -323,14 +323,14 @@ bool FormManager::insertSubForm(const SubFormInsertionPoint &insertionPoint)
 bool FormManager::readPmhxCategories(const QString &formUuidOrAbsPath)
 {
     Q_UNUSED(formUuidOrAbsPath);
-    // TODO: code here why don't we use the \e formUuidOrAbsPath param ??? */
+    // TODO: code here why don't we use the \e formUuidOrAbsPath param?
     // get all form readers (IFormIO)
     QList<Form::IFormIO *> list = pluginManager()->getObjects<Form::IFormIO>();
 
     // get form general form absPath from episodeBase
     QString absDirPath = episodeBase()->getGenericFormFile();
     if (absDirPath.isEmpty()) {
-        // TODO: code here: manage no patient form file recorded in episodebase */
+        // TODO: code here: manage no patient form file recorded in episodebase
         return false;
     }
     foreach(Form::IFormIO *io, list) {
@@ -497,6 +497,6 @@ void FormActionHandler::showPatientLastEpisode()
 void FormActionHandler::updateActions()
 {
     aShowPatientLastEpisode->setEnabled(true);
-    // TODO: remove when patient synthesis will be available */
+    // TODO: remove when patient synthesis will be available
     aShowPatientSynthesis->setEnabled(false);
 }

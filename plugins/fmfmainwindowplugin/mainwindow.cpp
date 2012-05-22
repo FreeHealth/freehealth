@@ -305,7 +305,7 @@ void MainWindow::postCoreInitialization()
     actionManager()->retranslateMenusAndActions();
 
     // Open Last Opened Forms is necessary
-//    openPatientFormsFile();  // TODO: code here: remove this and all sub-member */
+//    openPatientFormsFile();  // TODO: code here: remove this and all sub-member
     // Create the patient navigation menu (needed in Patient::PatientSelector)
     aboutToShowRecentPatients();
 
@@ -386,7 +386,7 @@ void MainWindow::updateCheckerEnd()
 /** \brief Load a patient XML file into the FormManager. */
 void MainWindow::openPatientFormsFile()
 {
-    // TODO: Save patient forms file to database */
+    // TODO: Save patient forms file to database
 //    loadFile(settings()->value(Core::Constants::S_PATIENTFORMS_FILENAME).toString());
 }
 
@@ -437,7 +437,7 @@ bool MainWindow::viewPatientIdentity()
 
 bool MainWindow::removePatient()
 {
-    // TODO: write MainWindow::removePatient() */
+    // TODO: write MainWindow::removePatient()
     return true;
 }
 
@@ -561,7 +561,7 @@ bool MainWindow::applicationPreferences()
 /** \brief Open the application global configurator dialog. \sa MainWindow::AppConfigWizard */
 bool MainWindow::applicationConfiguratorWizard()
 {
-    // TODO: code here ? */
+    // TODO: code here?
 //    AppConfigWizard wiz(this);
 //    int r = wiz.exec();
 //    return r==QDialog::Accepted;

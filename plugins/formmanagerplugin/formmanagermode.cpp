@@ -103,7 +103,7 @@ bool FormManagerMode::getPatientForm()
         pluginManager()->addObject(this);
         m_inPluginManager = true;
     }
-    // TODO: code here : add patient synthesis action in fancy action bar */
+    // TODO: code here : add patient synthesis action in fancy action bar
 //    if (!m_actionInBar) {
 //        Core::Command *cmd = actionManager()->command(Constants::A_SHOWPATIENTSYNTHESIS);
 //        modeManager()->addAction(cmd, 100);

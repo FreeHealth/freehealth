@@ -99,7 +99,7 @@ static inline QString getPluginPaths()
     return app;
 #  endif
 
-// TODO: Add FreeBSD pluginPath */
+// TODO: Add FreeBSD pluginPath
 
 #  ifdef Q_OS_WIN
     app = QDir::cleanPath(app + "/plugins/");

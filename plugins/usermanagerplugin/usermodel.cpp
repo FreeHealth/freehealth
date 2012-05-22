@@ -323,7 +323,7 @@ public:
             }
         case Core::IUser::GenericWatermarkAlignement :
             {
-                // TODO: return Watermark alignement */
+                // TODO: return Watermark alignement
                 return Qt::AlignCenter;
             }
 
@@ -339,7 +339,7 @@ public:
             }
         case Core::IUser::AdministrativeWatermarkAlignement :
             {
-                // TODO: return Watermark alignement */
+                // TODO: return Watermark alignement
                 return Qt::AlignCenter;
             }
 
@@ -369,7 +369,7 @@ public:
             }
         case Core::IUser::PrescriptionWatermarkAlignement :
             {
-                // TODO: return Watermark alignement */
+                // TODO: return Watermark alignement
                 return Qt::AlignCenter;
             }
 
@@ -552,7 +552,7 @@ bool UserModel::setCurrentUser(const QString &clearLog, const QString &clearPass
         u->setCurrent(false);
 
     // 5. If precedent currentUser was SERVER_ADMINISTRATOR_UUID --> remove it from the cache
-    // TODO: code here */
+    // TODO: code here
 
     Q_EMIT(userAboutToConnect(uuid));
 
@@ -569,7 +569,7 @@ bool UserModel::setCurrentUser(const QString &clearLog, const QString &clearPass
         user->setModified(false);
     }
 
-    // TODO: this is not the usermanger role if asked uuid == currentuser */
+    // TODO: this is not the usermanger role if asked uuid == currentuser
     d->m_CurrentUserRights = Core::IUser::UserRights(user->rightsValue(USER_ROLE_USERMANAGER).toInt());
 
     if (WarnAllProcesses || WarnUserConnection)
@@ -785,8 +785,8 @@ bool UserModel::removeRows(int row, int count, const QModelIndex &)
 
     bool noError = true;
     beginRemoveRows(QModelIndex(), row, row+count);
-    // TODO: alert when user to delete is modified ? */
-    // TODO: pb when userviewer is showing the index to delete */
+    // TODO: alert when user to delete is modified?
+    // TODO: pb when userviewer is showing the index to delete
     int i = 0;
     for (i=0; i < count ; i++) {
         QString uuid = d->m_Sql->index(row+i , USER_UUID).data().toString();
@@ -796,7 +796,7 @@ bool UserModel::removeRows(int row, int count, const QModelIndex &)
                                           tr("You can not delete your own user."),
                                           "",
                                           qApp->applicationName());
-            // TODO: add a button (change su password) */
+            // TODO: add a button (change su password)
             continue;
         }
 
@@ -859,7 +859,7 @@ bool UserModel::insertRows(int row, int count, const QModelIndex &parent)
         }
         // define a lkid for this user
         int maxLkId = userBase()->getMaxLinkId();
-        // TODO: user already have a lkid ? --> manage this */
+        // TODO: user already have a lkid ? --> manage this
         QSqlQuery query(userBase()->database());
         query.prepare(userBase()->prepareInsertQuery(Constants::Table_USER_LK_ID));
         query.bindValue(Constants::LK_ID, QVariant());
@@ -932,7 +932,7 @@ bool UserModel::setData(const QModelIndex &item, const QVariant &value, int role
         return false;
 
 
-    // TODO: if user if a delegate of current user */
+    // TODO: if user if a delegate of current user
 
     // set datas directly into database using QSqlTableModel if possible
     if (item.column() < USER_MaxParam) {
@@ -985,7 +985,7 @@ bool UserModel::setData(const QModelIndex &item, const QVariant &value, int role
     case Core::IUser::Preferences :  user->setPreferences(value); break;
     case Core::IUser::DataPackConfig: return userBase()->saveUserDynamicData(user->uuid(), Constants::USER_DATAS_DATAPACK_CONFIG, value);
 
-        // TODO: Add Xml extra document to model */
+        // TODO: Add Xml extra document to model
     case Core::IUser::GenericHeader : user->setExtraDocumentHtml(value, Core::IUser::GenericHeader); Q_EMIT(userDocumentsChanged()); break;
     case Core::IUser::GenericFooter :  user->setExtraDocumentHtml(value, Core::IUser::GenericFooter); Q_EMIT(userDocumentsChanged()); break;
     case Core::IUser::GenericWatermark :  user->setExtraDocumentHtml(value, Core::IUser::GenericWatermark); Q_EMIT(userDocumentsChanged()); break;
@@ -1086,7 +1086,7 @@ QVariant UserModel::data(const QModelIndex &item, int role) const
         if ((item.column() < Core::IUser::LocaleLanguage)) {
             // here we suppose that it is the currentUser the ask for datas
 //            qWarning() << (bool)(d->m_CurrentUserRights & Core::IUser::ReadAll) << (bool)(d->m_CurrentUserRights & Core::IUser::ReadOwn) << (d->m_CurrentUserUuid == uuid);
-            // TODO: code here : has delegates rights */
+            // TODO: code here : has delegates rights
             if (d->m_CurrentUserRights & Core::IUser::ReadAll)
                 return d->m_Sql->data(item, role);
             else if (d->m_CurrentUserUuid == uuid)
@@ -1108,7 +1108,7 @@ QVariant UserModel::data(const QModelIndex &item, int role) const
                 return QVariant();
         } else if (!d->m_CurrentUserRights & Core::IUser::ReadAll)
             return QVariant();
-        // TODO: if user is a delegate of current user */
+        // TODO: if user is a delegate of current user
 
         // get datas directly from database using QSqlTableModel if possible
         if (item.column() < USER_LANGUAGE)
@@ -1265,7 +1265,7 @@ bool UserModel::revertAll()
     if (WarnAllProcesses)
         qWarning() << Q_FUNC_INFO;
     d->checkNullUser();
-    // TODO: ASSERT failure in QSqlTableModelPrivate::revertCachedRow(): "Invalid entry in cache map", file models\qsqltablemodel.cpp, line 151 */
+    // FIXME: ASSERT failure in QSqlTableModelPrivate::revertCachedRow(): "Invalid entry in cache map", file models\qsqltablemodel.cpp, line 151
     int i = 0;
     for(i=0; i < rowCount() ; i++)
         revertRow(i);
@@ -1301,7 +1301,7 @@ void UserModel::revertRow(int row)
 void UserModel::setFilter(const QHash<int,QString> &conditions)
 {
     d->checkNullUser();
-    // TODO: filter by name AND Firstname at the same time */
+    // TODO: filter by name AND Firstname at the same time
     QString filter = "";
     const Internal::UserBase *b = userBase();
     foreach(const int r, conditions.keys()) {
@@ -1325,7 +1325,7 @@ void UserModel::setFilter(const QHash<int,QString> &conditions)
 /** Return the LinkId for the user with uuid \e uid */
 int UserModel::practionnerLkId(const QString &uid)
 {
-    // TODO: manage user's groups */
+    // TODO: manage user's groups
     if (d->m_Uuid_UserList.keys().contains(uid)) {
         Internal::UserData *user = d->m_Uuid_UserList.value(uid, 0);
 //        qWarning() << "xxxxxxxxxxxxx memory" << uid << user->linkIds();
@@ -1353,7 +1353,7 @@ int UserModel::practionnerLkId(const QString &uid)
 QList<int> UserModel::practionnerLkIds(const QString &uid)
 {
 //    qWarning() << "\n\n" << Q_FUNC_INFO << uid;
-    // TODO: manage user's groups */
+    // TODO: manage user's groups
     if (d->m_Uuid_UserList.keys().contains(uid)) {
         Internal::UserData *user = d->m_Uuid_UserList.value(uid, 0);
 //        qWarning() << "xxxxxxxxxxxxx memory" << uid << user->linkIds();

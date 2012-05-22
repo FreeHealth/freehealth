@@ -901,7 +901,7 @@ public:
 
     QString xmlVersion(const QString &xml)
     {
-        // TODO: read with QDomDoc */
+        // TODO: read with QDomDoc
         QString v;
         if (xml.startsWith("<?xml version=\"1.0\"") ||
             xml.startsWith("<?xml version='1.0'")) {

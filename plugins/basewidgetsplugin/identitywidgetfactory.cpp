@@ -224,7 +224,7 @@ QString IdentityFormWidget::printableHtml(bool withValues) const
                 .arg(patient()->data(Core::IPatient::FullAddress).toString())
                 ;
     } else {
-        // TODO: code here : empty identity HTML mask */
+        // TODO: code here: empty identity HTML mask
         return QString();
     }
     return QString();

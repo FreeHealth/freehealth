@@ -112,7 +112,7 @@ public:
         m_ui->viewButton->setEnabled(m_Model->isTemplate(*m_Index));
         QModelIndex idx = m_Index->parent();
         m_ui->parentTreeView->setCurrentIndex(idx);
-        // TODO: scrollTo is buggy... */
+        // FIXME: scrollTo is buggy...
         m_ui->parentTreeView->scrollTo(idx);
     }
 
@@ -211,7 +211,7 @@ void TemplatesEditDialog::editContent()
     Internal::TemplatesContentEditor dlg(this);
     dlg.setContent(d->m_Model->index(d->m_Index->row(), Constants::Data_Content, d->m_Index->parent()).data().toString());
     dlg.exec();
-    // TODO: Manage changes done to the content */
+    // TODO: Manage changes done to the content
 }
 
 void TemplatesEditDialog::changeEvent(QEvent *e)

@@ -139,7 +139,7 @@ AppConfigWizard::AppConfigWizard(QWidget *parent) :
 void AppConfigWizard::done(int r)
 {
     if (r == QDialog::Rejected) {
-        // TODO: code here */
+        // TODO: code here
         //        bool yes = Utils::yesNoMessageBox(tr("WARNING! You did not save this user."),
         //                               tr("If you continue without saving, changes will be lost."
         //                                  "Do you really want to close this dialog?"),
@@ -174,7 +174,7 @@ CoreConfigPage::CoreConfigPage(QWidget *parent) :
     combo->setDisplayMode(Utils::LanguageComboBox::AvailableTranslations);
     combo->setTranslationsPath(settings()->path(Core::ISettings::TranslationsPath));
     combo->setFlagsIconPath(settings()->path(Core::ISettings::SmallPixmapPath));
-    // TODO: connection here to retranslate (changeEvent())... */
+    // TODO: connection here to retranslate (changeEvent())...
     connect(combo, SIGNAL(currentLanguageChanged(QLocale::Language)), Core::Translators::instance(), SLOT(changeLanguage(QLocale::Language)));
     combo->setCurrentLanguage(QLocale().language());
 

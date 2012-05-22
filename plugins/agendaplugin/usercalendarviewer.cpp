@@ -271,7 +271,7 @@ void UserCalendarViewer::onStartDateChanged(const QDate &start)
 
 void UserCalendarViewer::recalculateAvailabilitiesWithDurationIndex(const int index)
 {
-    // TODO: Create a tree model for the nextAvailableDates */
+    // TODO: Create a tree model for the nextAvailableDates
 
 //    for(int i = d->ui->availButton->actions().count()-1; i > -1 ; --i)
 //        d->ui->availButton->removeAction(d->ui->availButton->actions().at(i));

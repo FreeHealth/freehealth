@@ -176,7 +176,7 @@ bool XmlIOBase::isInitialized() const
 /** Return true if the XmlIOBase is the last version (database is updated by this member if needed) */
 bool XmlIOBase::checkDatabaseVersion()
 {
-    // TODO: Code : XmlIOBase::checkDatabaseVersion() */
+    // TODO: Code : XmlIOBase::checkDatabaseVersion()
     return true;
 }
 
@@ -217,7 +217,7 @@ bool XmlIOBase::createDatabase(const QString &connectionName , const QString &db
             LOG(tkTr(Trans::Constants::DATABASE_1_CANNOT_BE_CREATED_ERROR_2).arg(dbName).arg(DB.lastError().text()));
         setDriver(Utils::Database::SQLite);
     } else if (driver == MySQL) {
-        // TODO: test grants here or before ? */
+        // TODO: test grants here or before ?
         if (QSqlDatabase::connectionNames().contains(connectionName)) {
             DB = QSqlDatabase::database(connectionName);
         } else {
@@ -432,7 +432,7 @@ QHash<QString, QString> XmlIOBase::getAllFormFullContent(const QString &formUid)
 QString XmlIOBase::getFormContent(const QString &formUid, const int type, const QString &modeName)
 {
 //    qWarning() << Q_FUNC_INFO;
-    // TODO: manage modes */
+    // TODO: manage modes
     QSqlDatabase DB = database();
     if (!DB.isOpen()) {
         if (!DB.open()) {

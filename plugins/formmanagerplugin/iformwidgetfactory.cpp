@@ -68,7 +68,7 @@ QBoxLayout *IFormWidget::getBoxLayout(const int labelOption, const QString &text
         createLabel(text, Qt::AlignTop | Qt::AlignLeft);
         hb->setSpacing(5);
     } else {
-        // TODO: Code specific label options */
+        // TODO: Code specific label options
         hb = new QHBoxLayout(parent);
         if (labelOption != Label_NoLabel) {
             createLabel(text, Qt::AlignTop | Qt::AlignLeft);
