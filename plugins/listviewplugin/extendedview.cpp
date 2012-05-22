@@ -143,8 +143,8 @@ public:
 ExtendedView::ExtendedView(IView *parent, Constants::AvailableActions actions) :
     d(0)
 {
-    static int handler = 0;
-    ++handler;
+//    static int handler = 0;
+//    ++handler;
 //    QObject::setObjectName("ExtendedView_"+QString::number(handler));
     d = new Internal::ExtendedViewPrivate(parent, actions);
 
@@ -233,6 +233,7 @@ QMenu *ExtendedView::getContextMenu()
 void ExtendedView::addItem(bool asChildOfCurrentIndex)
 {
     if (!d->m_DefaultSlots) {
+//        Q_EMIT addRequested();
         return;
     }
     QAbstractItemView *view = d->m_Parent->itemView();
@@ -265,7 +266,6 @@ void ExtendedView::addItem(bool asChildOfCurrentIndex)
     if (view->editTriggers() != QAbstractItemView::NoEditTriggers) {
         view->edit(index);
     }
-//    Q_EMIT addRequested();
 }
 
 void ExtendedView::removeItem()

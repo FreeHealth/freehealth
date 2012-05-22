@@ -79,8 +79,12 @@ public Q_SLOTS:
     virtual void moveUp();
 
 Q_SIGNALS:
+    void aboutToAddItem();
     void addRequested();
+    void itemAdded();
+    void aboutToRemove();
     void removeRequested();
+    void itemRemoved();
     void moveUpRequested();
     void moveDownRequested();
 

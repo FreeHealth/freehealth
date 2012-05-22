@@ -199,14 +199,20 @@ void ListView::useContextMenu(bool state)
 
 void ListView::addItem()
 {
+    Q_EMIT addRequested();
+    Q_EMIT aboutToAddItem();
     setFocus();
     d->m_ExtView->addItem();
+    Q_EMIT itemAdded();
 }
 
 void ListView::removeItem()
 {
+    Q_EMIT removeRequested();
+    Q_EMIT aboutToRemove();
     setFocus();
     d->m_ExtView->removeItem();
+    Q_EMIT itemRemoved();
 }
 
 void ListView::moveDown()
