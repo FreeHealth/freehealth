@@ -135,7 +135,7 @@ BankDetailsWidget::BankDetailsWidget(QWidget *parent) :
             LOG_ERROR("Unable to create cash box.");
         }
     }
-    /** \todo  m_Model->setUserUuid(); */
+    // TODO:  m_Model->setUserUuid();
     m_Mapper = new QDataWidgetMapper(this);
     m_Mapper->setSubmitPolicy(QDataWidgetMapper::AutoSubmit);
     m_Mapper->setModel(m_Model);

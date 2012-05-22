@@ -147,7 +147,7 @@ SitesWidget::SitesWidget(QWidget *parent) :
 
     // Create mapper
     m_Model = new AccountDB::WorkingPlacesModel(this);
-        /** \todo  m_Model->setUserUuid(); */
+    // TODO:  m_Model->setUserUuid();
     m_siteUidLabel = new QSpinBox(this);
     //m_siteUidLabel->setText("NULL");
     m_siteUidLabel->setValue(11111);

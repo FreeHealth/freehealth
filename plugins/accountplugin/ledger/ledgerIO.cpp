@@ -398,7 +398,7 @@ QStringList LedgerIO::getListOfSumsMonthlyReceiptsIO(QObject * parent,QString & 
 
 QStringList LedgerIO::getListOfSumsMonthlyMovementsIO(QObject * parent, const QString &dateBegin , const QString &dateEnd)
 {
-    /** \todo move this in AccountBase using the grouping sql functions ? */
+    // TODO: move this in AccountBase using the grouping sql functions?
     //NO
     Q_UNUSED(parent);
     QStringList list;

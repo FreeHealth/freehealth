@@ -79,7 +79,7 @@ QColor CalendarTheme::color(const ColorInUse colorRef) const
 
 void CalendarTheme::populateWithDefault()
 {
-    /** \todo Guillaume: code here */
+    // TODO: Guillaume: code here
     // populate colors
 }
 

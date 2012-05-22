@@ -80,13 +80,13 @@ void CalendarItem::setDaily(bool value) {
 
 bool CalendarItem::isValid() const
 {
-    /** \todo code here */
+    // TODO: code here
     return m_beginning.isValid() && (m_Model);
 }
 
 bool CalendarItem::isNull() const
 {
-    /** \todo code here */
+    // TODO: code here
     return false;
 }
 
@@ -201,7 +201,7 @@ void CalendarItem::setEnding(const QDateTime &value)
 /** Test Calendar::CalendarItem equality */
 bool CalendarItem::operator==(const CalendarItem &other) const
 {
-    /** \todo match on uid should be enough assuming each CalendarItem have a different uid. */
+    // TODO: match on uid should be enough assuming each CalendarItem have a different uid.
     return (other.uid()==uid() &&
             other.beginning()==m_beginning &&
             other.ending() == m_ending);

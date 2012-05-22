@@ -29,8 +29,8 @@
   Wizard used by the DataPack::ServerPackEditor for the pack processing:
   install, remove, update.
 
-  \todo Crash when cancelling dialog if a download was started --> add core.stopJobsAndClearQueues()
 */
+// FIXME: Crash when cancelling dialog if a download was started --> add core.stopJobsAndClearQueues()
 
 #include "packwizard.h"
 #include <datapackutils/datapackcore.h>
@@ -189,7 +189,7 @@ void PackIntroPage::initializePage()
     // Create the HTML output of processing packs
     QString html = "<p>";
     // install
-    /** \todo better would be tr(" %1 Pack(s) to install/update/remove").arg(packWizard()->installPacks()) to reflect other languages. */
+    // TODO: better would be tr(" %1 Pack(s) to install/update/remove").arg(packWizard()->installPacks()) to reflect other languages.
     html += toHtml(packWizard()->installPacks(), tr("%1 Pack(s) to install").arg(packWizard()->installPacks().count()));
     // update
     html += toHtml(packWizard()->updatePacks(), tr("%1 Pack(s) to update").arg(packWizard()->updatePacks().count()));
@@ -324,7 +324,7 @@ PackDownloadPage::PackDownloadPage(QWidget *parent) :
 {
     setObjectName("PackDownloadPage");
     setTitle(tr("Downloading packs"));
-    /** \todo better would be "Please wait until..." (HIG), more professional */
+    // TODO: better would be "Please wait until..." (HIG), more professional
     setSubTitle(tr("You just have to wait until all packs are downloaded."));
     m_Area = new QScrollArea(this);
     m_Grid = new QGridLayout(m_Area);
@@ -389,7 +389,7 @@ void PackDownloadPage::initializePage()
     QVBoxLayout *lay = qobject_cast<QVBoxLayout*>(layout());
     lay->addSpacerItem(sp);
 
-    /** \todo IMPROVE THIS */
+    // TODO: IMPROVE THIS
     // Start downloads (one pack at time)
     if (!m_DownloadPacks.isEmpty()) {
         // Manage wizard buttons
@@ -529,7 +529,7 @@ void PackInstallPage::initializePage()
     QVBoxLayout *lay = qobject_cast<QVBoxLayout*>(layout());
     lay->addSpacerItem(sp);
 
-    /** \todo IMPROVE THIS */
+    // TODO: IMPROVE THIS
     if (!m_InstallPacks.isEmpty()) {
         packWizard()->button(QWizard::NextButton)->setEnabled(false);
         QTimer::singleShot(2, this, SLOT(startInstalls()));
@@ -602,9 +602,9 @@ int PackInstallPage::nextId() const
 PackRemovePage::PackRemovePage(QWidget *parent) :
     PackPage(parent)
 {
-    /** \todo better would be tr(" %1 Pack(s) to install/update/remove").arg(packWizard()->installPacks()) to reflect other languages. */
+    // TODO: better would be tr(" %1 Pack(s) to install/update/remove").arg(packWizard()->installPacks()) to reflect other languages.
     setTitle(tr("Removing pack(s)"));
-    /** \todo better would be "Please wait until al packs are removed." - be nice to users ;-) */
+    // TODO: better would be "Please wait until al packs are removed." - be nice to users ;-)
     setSubTitle(tr("Wait until all removal are done."));
     m_Area = new QScrollArea(this);
     m_Grid = new QGridLayout(m_Area);
@@ -635,7 +635,7 @@ void PackRemovePage::initializePage()
     QVBoxLayout *lay = qobject_cast<QVBoxLayout*>(layout());
     lay->addSpacerItem(sp);
 
-    /** \todo IMPROVE THIS */
+    // TODO: IMPROVE THIS
     if (!packWizard()->removePacks().isEmpty()) {
         packWizard()->button(QWizard::NextButton)->setEnabled(false);
         QTimer::singleShot(2, this, SLOT(startRemoval()));

@@ -323,7 +323,8 @@ namespace Constants {
 
     const char* const   CASH                    = QT_TRANSLATE_NOOP("Account", "Cash");
     const char* const   CHEQUES                 = QT_TRANSLATE_NOOP("Account", "Cheques");
-    /** \todo VISA is just one of many credit cards. Shouldn't we consider a general aproach 'CreditCard'? */
+    // TODO: VISA is just one of many credit cards. Shouldn't we consider a general aproach 'CreditCard'?
+    // Visa, MasterCard, DinersClub
     const char* const   VISA                    = QT_TRANSLATE_NOOP("Account", "VISA");
     const char* const   MONEY                   = QT_TRANSLATE_NOOP("Account", "Money");
     const char* const   DUE                     = QT_TRANSLATE_NOOP("Account", "Due");

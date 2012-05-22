@@ -129,7 +129,7 @@ DistanceRulesWidget::DistanceRulesWidget(QWidget *parent) :
     preferredSpinBox->setRange(0,1);
     
     m_Model = new AccountDB::DistanceRulesModel(this);
-    /** \todo  m_Model->setUserUuid(); */
+    // TODO:  m_Model->setUserUuid();
     distanceRulesUidLabel->setText("");
     m_Mapper = new QDataWidgetMapper(this);
     m_Mapper->setSubmitPolicy(QDataWidgetMapper::AutoSubmit);

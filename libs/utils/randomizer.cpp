@@ -200,7 +200,7 @@ QString Randomizer::getRandomFirstname(bool male)
     db.transaction();
     QSqlQuery query(db);
     QString req = QString("SELECT count(ID) FROM FIRSTNAMES WHERE LANG='%1' AND FEMALE=%2;")
-            .arg("fr") /** \todo manage multiple languages */
+            .arg("fr") // TODO: manage multiple languages
             .arg(sex);
     if (query.exec(req)) {
         if (query.next()) {
@@ -212,7 +212,7 @@ QString Randomizer::getRandomFirstname(bool male)
     query.finish();
 
     req = QString("SELECT FIRSTNAME FROM FIRSTNAMES WHERE (LANG='%1' AND FEMALE=%2) LIMIT %3,1;")
-            .arg("fr") /** \todo manage multiple languages */
+            .arg("fr") // TODO: manage multiple languages
             .arg(sex)
             .arg(randomInt(0, max));
     if (query.exec(req)) {
@@ -285,7 +285,7 @@ QString Randomizer::randomWords(int nbOfWords)
     db.transaction();
     QSqlQuery query(db);
     QString req = QString("SELECT max(ID) FROM WORDS WHERE LANG='%1';")
-            .arg("fr"); /** \todo manage multiple languages */
+            .arg("fr"); // TODO: manage multiple languages
     if (query.exec(req)) {
         if (query.next()) {
             max = query.value(0).toInt();
@@ -299,7 +299,7 @@ QString Randomizer::randomWords(int nbOfWords)
     QStringList t;
     for(int i=0; i < nbOfWords; ++i) {
         QString req = QString("SELECT WORD FROM WORDS WHERE LANG='%1' AND ID='%2';")
-                .arg("fr") /** \todo manage multiple languages */
+                .arg("fr") // TODO: manage multiple languages
                 .arg(randomInt(0, max));
         if (query.exec(req)) {
             if (query.next()) {

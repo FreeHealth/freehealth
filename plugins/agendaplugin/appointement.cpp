@@ -62,19 +62,19 @@ bool Appointement::isNull() const
 
 bool Appointement::isValid() const
 {
-    /** \todo code here */
+    // TODO: code here
     return true;
 }
 
 QVariant Appointement::data(const int ref) const
 {
-    /** \todo retrieve datas from the model */
+    // TODO: retrieve data from the model
     return m_Datas.value(ref, QVariant());
 }
 
 bool Appointement::setData(const int ref, const QVariant &value)
 {
-    /** \todo set datas to the model */
+    // TODO: set datas to the model
     m_Modified = true;
     m_Datas.insert(ref, value);
     return true;

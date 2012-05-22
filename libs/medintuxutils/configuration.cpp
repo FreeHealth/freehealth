@@ -355,7 +355,7 @@ QVariant Configuration::drtuxIni( const QString &rubrik, const QString &key ) co
 
 QString Configuration::glossaryPath() const
 {
-    /** \todo manage settings absolute path */
+    // TODO: manage settings absolute path
     if (d->m_ManagerPath.isEmpty()) {
         findManagerBinaryPath();
         if (d->m_ManagerPath.isEmpty())
@@ -381,7 +381,7 @@ QString Configuration::glossaryPath(GlossaryFor rubrik) const
 
 QString Configuration::menuLibraryPath() const
 {
-    /** \todo manage settings absolute path */
+    // TODO: manage settings absolute path
     if (d->m_ManagerPath.isEmpty()) {
         findManagerBinaryPath();
         if (d->m_ManagerPath.isEmpty())

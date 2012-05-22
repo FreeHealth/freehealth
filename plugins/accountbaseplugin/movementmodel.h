@@ -46,7 +46,7 @@ class ACCOUNTBASE_EXPORT MovementModel : public QAbstractTableModel
 {
     Q_OBJECT
 public:
-    /** \todo define a DataRepresentation enum for MovementModel */
+    // TODO: define a DataRepresentation enum for MovementModel
 
     MovementModel(QObject *parent);
     ~MovementModel();

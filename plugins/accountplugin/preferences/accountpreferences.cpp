@@ -286,7 +286,7 @@ void AccountDatabaseDefautsWidget::on_createButton_clicked()
 
 void AccountDatabaseDefautsWidget::setDatasToUi()
 {
-    /** \todo For each defaults checkbox: check if defaults are: 1) available (if no -> unable checkbox) 2) not already inserted (unable checkbox) */
+    // TODO: For each defaults checkbox: check if defaults are: 1) available (if no -> unable checkbox) 2) not already inserted (unable checkbox)
 }
 
 void AccountDatabaseDefautsWidget::saveToSettings(Core::ISettings *)

@@ -259,7 +259,7 @@ bool Database::createMySQLUser(const QString &log, const QString &password,
     // Testing current connected user grants
     Grants userGrants = d->m_Grants.value(d->m_ConnectionName, Grant_NoGrant);
 
-    /** \todo bug with grant privileges of created user */
+    // TODO: bug with grant privileges of created user
 //    qWarning() << "xxxxxxxxxxxxxxxxxxxxxxx check";
 //    qWarning() << grants << (grants & Grant_All);
 
@@ -421,7 +421,7 @@ bool Database::changeMySQLUserPassword(const QString &login, const QString &newP
         }
     }
 
-    /** \todo manage user grants */
+    // TODO: manage user grants
 //    // Testing current connected user grants
 //    Grants userGrants = d->m_Grants.value(d->m_ConnectionName, Grant_NoGrant);
 
@@ -581,7 +581,7 @@ bool Database::createConnection(const QString &connectionName, const QString &no
         }
     case PostSQL:
         {
-            /** \todo Check PostSQL connection */
+            // TODO: Check PostSQL connection
             break;
         }
     }
@@ -628,7 +628,7 @@ bool Database::createConnection(const QString &connectionName, const QString &no
         }
     case PostSQL:
         {
-            /** \todo Test database existence */
+            // TODO: Test database existence
             break;
         }
     }
@@ -672,7 +672,7 @@ bool Database::createConnection(const QString &connectionName, const QString &no
         }
     case PostSQL:
         {
-            /** \todo Test database connection PostSQL */
+            // TODO: Test database connection PostSQL
             break;
         }
     }
@@ -692,12 +692,12 @@ bool Database::createConnection(const QString &connectionName, const QString &no
             }
         case MySQL:
             {
-                /** \todo test write access to MySQL database */
+                // TODO: test write access to MySQL database
                 break;
             }
         case PostSQL:
             {
-                /** \todo test write access to PostGreSQL database */
+                // TODO: test write access to PostGreSQL database
                 break;
             }
         }
@@ -717,7 +717,7 @@ bool Database::createConnection(const QString &connectionName, const QString &no
              break;
          }
         case PostSQL :
-             /** \todo : manage PostGre SQL */
+             // TODO: manage PostGre SQL
              return false;
              break;
     }
@@ -820,7 +820,7 @@ Database::Grants Database::getConnectionGrants(const QString &connectionName) //
         query.finish();
         return DatabasePrivate::getGrants(connectionName, grants);
     }
-    /** \todo code here : PostGreSQL and other drivers */
+    // TODO: code here : PostGreSQL and other drivers
     return Grant_NoGrant;
 }
 
@@ -1823,7 +1823,7 @@ bool Database::executeSQL(const QString &req, const QSqlDatabase & DB)
 {
     if (req.isEmpty())
         return false;
-    /** \todo manage ; inside "" or '' */
+    // TODO: manage ; inside "" or ''
     QStringList list = req.split(";\n", QString::SkipEmptyParts);
     return executeSQL(list, DB);
 }
@@ -1963,7 +1963,7 @@ bool Database::importCsvToDatabase(const QString &connectionName, const QString 
             if (val.isEmpty()) {
                 reqValues += "NULL, ";
             } else {
-                /** \todo this needs some improvements (string, numbers, " chars...) */
+                // TODO: this needs some improvements (string, numbers, " chars...)
                 if (val.startsWith("'") && val.endsWith("'")) {
                     reqValues += val + ", ";
                 } else if (val.startsWith("\"") && val.endsWith("\"")) {

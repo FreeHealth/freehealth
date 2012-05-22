@@ -250,7 +250,7 @@ public:
         foreach(int id, idInUse) {
             const Pack &p = m_AvailPacks.at(id);
             PackItem item(p);
-            /** \todo keep trace of the server ID/UUID ? */
+            // TODO: keep trace of the server ID/UUID?
             item.isInstalled = packManager()->isDataPackInstalled(p);
             if (!item.isInstalled) {
                 // Pack is installed with a lower version ?
@@ -269,7 +269,7 @@ public:
 
     void serverAdded(const int index)
     {
-        /** \todo improve this */
+        // TODO: improve this
         Q_UNUSED(index);
         m_Items.clear();
         m_AvailPacks.clear();
@@ -278,7 +278,7 @@ public:
 
     void serverRemoved(const int index)
     {
-        /** \todo improve this */
+        // TODO: improve this
         Q_UNUSED(index);
         m_Items.clear();
         m_AvailPacks.clear();

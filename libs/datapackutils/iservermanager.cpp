@@ -158,7 +158,7 @@
 
 /**
  * \fn QList<Pack> DataPack::IServerManager::packDependencies(const Pack &pack, const PackDependencyData::TypeOfDependence &dependence);
- * \todo doc
+ * \todo documentation
  */
 
 /**

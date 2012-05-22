@@ -56,7 +56,7 @@ static inline Core::IUser *user() { return  Core::ICore::instance()->user(); }
 namespace AccountDB {
 namespace Internal {
 
-/** \todo Manage user change */
+// TODO: Manage user change
 class ActsModelPrivate
 {
 public:
@@ -177,7 +177,7 @@ QVariant ActsModel::headerData(int section, Qt::Orientation orientation, int rol
     Q_UNUSED(role);
     if (orientation==Qt::Horizontal) {
         switch (section) {
-        /** \todo remove tr translations use tkTr*/
+        // TODO: remove tr translations use tkTr
         case Constants::ACTS_COMMENT : return tr("Comments");
         case Constants::ACTS_DATE : return tr("Date");
         case Constants::ACTS_ID : return "ID";

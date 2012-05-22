@@ -250,7 +250,7 @@ bool ServerPackEditor::refreshServerContent()
     dlg.setBar(bar);
     dlg.show();
     connect(&dlg, SIGNAL(canceled()), &core(), SLOT(stopJobsAndClearQueues()));
-    /** \todo Connect the cancel button */
+    // TODO: Connect the cancel button
     serverManager()->getAllDescriptionFile(bar);
 //    dlg.exec();
     return true;
@@ -459,7 +459,7 @@ void ServerPackEditor::serverActionTriggered(QAction *a)
         if (dlg.exec()==QDialog::Accepted) {
             dlg.submitTo(&server);
             serverManager()->addServer(server);
-            /** \todo manage progress dialog cancellation */
+            // TODO: manage progress dialog cancellation
             QProgressDialog dlg(this);
             dlg.setLabelText(tr("Downloading server information"));
             dlg.setModal(true);

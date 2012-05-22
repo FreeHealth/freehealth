@@ -62,7 +62,7 @@ public:
     virtual bool installDownloadedPack(const Pack &pack, QProgressBar *bar = 0) = 0;
     virtual bool removePack(const Pack &pack) = 0;
 
-    /** \todo add signal including the ServerEngineStatus */
+    // TODO: add signal including the ServerEngineStatus
 Q_SIGNALS:
     void packDownloaded(const DataPack::Pack &pack, const DataPack::ServerEngineStatus &status);
     void packInstalled(const DataPack::Pack &pack);

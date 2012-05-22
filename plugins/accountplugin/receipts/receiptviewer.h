@@ -54,7 +54,7 @@ namespace Ui {
     class ReceiptViewer;
 }
 
-/** \todo this is not correct. Two choices: create its own files or hide it in the cpp in an anonymous namespace. */
+// TODO: this is not correct. Two choices: create its own files or hide it in the cpp in an anonymous namespace.
 namespace InternalAmount {
 class AmountModel;
 }  // End namespace Internal
@@ -153,7 +153,7 @@ protected:
                    const QVariant & distrules,
                    const int row);
 
-    /** \todo remove this using the Core::ActionManager. */
+    // TODO: remove this using the Core::ActionManager.
     QVBoxLayout *m_vbox;
     QVBoxLayout *m_vboxForList;
 
@@ -177,7 +177,7 @@ private Q_SLOTS:
     //void createFirstTimeTxt();
 
 private:
-    /** \todo create a pimpl */
+    // TODO: create a pimpl
     Ui::ReceiptViewer *ui;
     QStringListModel *m_modelReturnedList;
     InternalAmount::AmountModel *m_model;

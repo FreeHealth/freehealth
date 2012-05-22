@@ -309,7 +309,7 @@ bool AssetsIO::deleteMovement(int idMovement,int idBank){
         Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("Unable to delete movement of this asset."));
         ret = false;
     }
-    /** \todo : add value deleted to bank and delete asset without delete movement ? */
+    // TODO: add value deleted to bank and delete asset without delete movement?
     return ret;
 }
 

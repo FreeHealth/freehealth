@@ -87,7 +87,7 @@ public:
 
 public:
     bool m_Initialized;
-    /** \todo use QPointers instead of pure pointers */
+    // TODO: use QPointers instead of pure pointers
     QHash<QString, UserCalendarModel *> m_UCalModels;
     QHash<QString, CalendarItemModel *> m_CalItemModel;
     Internal::UserCalendarPageForUserViewer *m_UserViewerPage;

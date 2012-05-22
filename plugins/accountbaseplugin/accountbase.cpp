@@ -184,7 +184,7 @@ AccountBase::AccountBase(QObject *parent)
 //            "PRIMARY KEY(id_acte_dispo));";
 
     addField(Table_BankDetails,  BANKDETAILS_ID,             "BD_ID",             FieldIsUniquePrimaryKey);
-    /** \todo this field must be not null */
+    // TODO: this field must be not null
     addField(Table_BankDetails,  BANKDETAILS_USER_UID,       "BD_USER_UID",       FieldIsUUID);
     addField(Table_BankDetails,  BANKDETAILS_LABEL,          "BD_LABEL",          FieldIsShortText);
     addField(Table_BankDetails,  BANKDETAILS_OWNER,          "BD_OWNER",          FieldIsShortText);
@@ -612,7 +612,7 @@ bool AccountBase::createDatabase(const QString &connectionName , const QString &
                     CreationOption
                    )
 {
-    /** \todo manage createOption */
+    // TODO: manage createOption
     if (connectionName != Constants::DB_ACCOUNTANCY)
         return false;
 

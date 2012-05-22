@@ -272,7 +272,7 @@ void HttpServerEngine::authenticationRequired(QNetworkReply *reply, QAuthenticat
         authenticator->setUser(dlg.login());
         authenticator->setPassword(dlg.password());
     }
-    /** \todo manage ServerEngineStatus here */
+    // TODO: manage ServerEngineStatus here
 }
 
 void HttpServerEngine::proxyAuthenticationRequired(const QNetworkProxy &proxy, QAuthenticator *authenticator)
@@ -298,7 +298,7 @@ void HttpServerEngine::proxyAuthenticationRequired(const QNetworkProxy &proxy, Q
             authenticator->setPassword(dlg.password());
         }
     }
-    /** \todo manage ServerEngineStatus here */
+    // TODO: manage ServerEngineStatus here
 }
 
 /** Server configuration file read enable. */
@@ -523,7 +523,7 @@ void HttpServerEngine::afterPackFileDownload(const ReplyData &data)
         status->engineMessages.append(tr("Pack file can not be created in the persistent cache."));
         status->hasError = true;
         status->isSuccessful = false;
-        /** \todo a better management of error is required */
+        // TODO: a better management of error is required
         return;
     }
     LOG("Writing pack content to " + toPersistentCache.absoluteFilePath());

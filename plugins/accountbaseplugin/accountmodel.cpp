@@ -56,7 +56,7 @@ static inline Core::IUser *user() { return  Core::ICore::instance()->user(); }
 namespace AccountDB {
 namespace Internal {
 
-/** \todo Manage user change */
+// TODO: Manage user change
 class AccountModelPrivate
 {
 public:
