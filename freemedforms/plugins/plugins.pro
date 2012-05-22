@@ -29,7 +29,7 @@ SUBDIRS = \
     agenda \
     script \
     mainwin \
-    webcam
+#    webcam
 #    alerts \
 
 
