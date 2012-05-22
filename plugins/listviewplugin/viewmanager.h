@@ -80,7 +80,7 @@ public:
     ViewActionHandler(QObject *parent = 0);
     virtual ~ViewActionHandler() {}
 
-    void setCurrentView(QAbstractItemView *view);
+    void setCurrentView(IView *view);
 
 
 private Q_SLOTS:
@@ -102,7 +102,7 @@ protected:
     QAction *aUp;
     QAction *aEdit;
 
-    QPointer<QAbstractItemView> m_CurrentView;
+    QPointer<IView> m_CurrentView;
 };
 
 

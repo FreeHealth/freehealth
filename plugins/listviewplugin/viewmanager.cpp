@@ -84,8 +84,8 @@ ViewManager::ViewManager(QObject *parent) : ViewActionHandler(parent)
 void ViewManager::updateContext(Core::IContext *object)
 {
 //    if (object)
-//        qWarning() << "context" << object;
-    QAbstractItemView *view = 0;
+//        qWarning() << "context" << object << object->context() << m_CurrentView;
+    IView *view = 0;
     do {
         if (!object) {
             if (!m_CurrentView)
@@ -94,7 +94,7 @@ void ViewManager::updateContext(Core::IContext *object)
             m_CurrentView = 0;
             break;
         }
-        view = qobject_cast<QAbstractItemView *>(object->widget());
+        view = qobject_cast<IView *>(object->widget());
         if (view) {
             if (view->property(Constants::HIDDEN_ID).isNull()) {
                 view = 0;
@@ -189,7 +189,7 @@ ViewActionHandler::ViewActionHandler(QObject *parent) :
 
 }
 
-void ViewActionHandler::setCurrentView(QAbstractItemView *view)
+void ViewActionHandler::setCurrentView(IView *view)
 {
 //    if (view)
 //        qWarning() << "current view " << view << m_CurrentView;
