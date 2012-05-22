@@ -224,19 +224,8 @@ bool UserCalendarModel::insertRows(int row, int count, const QModelIndex &parent
     beginInsertRows(parent, row, row+count);
     bool newIsDefault = (rowCount() == 0); // check if there already is an Agenda
     for(int i = 0 ; i < count; ++i) {
-        UserCalendar *u = new UserCalendar();
-        u->setData(UserCalendar::Label, tr("New calendar"));
-        u->setData(UserCalendar::Uid, Utils::Database::createUid());
-        u->setData(UserCalendar::UserOwnerUid, d->m_UserUid);
-        u->setData(Constants::Db_IsValid, 1);
-        u->setData(Constants::Db_UserCalId, -1);
+        UserCalendar *u = base()->createEmptyCalendar(d->m_UserUid);
         u->setData(UserCalendar::IsDefault, newIsDefault);
-        for(int j=1; j < 8; ++j) {
-            DayAvailability av;
-            av.addTimeRange(QTime(06,00,00), QTime(20,00,00));
-            av.setWeekDay(j);
-            u->addAvailabilities(av);
-        }
         base()->saveUserCalendar(u);
         d->m_UserCalendars.insert(row+i, u);
     }
