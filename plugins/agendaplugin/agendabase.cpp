@@ -64,6 +64,7 @@
 #include <utils/global.h>
 #include <utils/databaseconnector.h>
 #include <translationutils/constants.h>
+#include <translationutils/trans_agenda.h>
 #include <translationutils/trans_database.h>
 #include <translationutils/trans_msgerror.h>
 
@@ -484,6 +485,27 @@ void AgendaBase::onCoreDatabaseServerChanged()
         QSqlDatabase::removeDatabase(Constants::DB_NAME);
     }
     initialize();
+}
+
+/** Creates an return an empty Agenda::UserCalendar pointer. Agenda::DayAvailability are added all days. The calendar is not defines as the default one. */
+Agenda::UserCalendar *AgendaBase::createEmptyCalendar(const QString &userUid)
+{
+    Agenda::UserCalendar *u = new Agenda::UserCalendar;
+    u->setData(Constants::Db_UserCalId, -1);
+    u->setData(Constants::Db_IsValid, 1);
+    u->setData(UserCalendar::IsDefault, 0);
+    u->setData(UserCalendar::UserOwnerUid, userUid);
+    u->setData(UserCalendar::Uid, Utils::Database::createUid());
+    u->setData(UserCalendar::Label, tkTr(Trans::Constants::AGENDA));
+    u->setData(UserCalendar::DefaultDuration, 5);
+    // Create day availabilities
+    for(int j=1; j < 8; ++j) {
+        DayAvailability av;
+        av.addTimeRange(QTime(06,00,00), QTime(20,00,00));
+        av.setWeekDay(j);
+        u->addAvailabilities(av);
+    }
+    return u;
 }
 
 /** Return true if the user \e userUid has recorded calendar(s) in the database. */

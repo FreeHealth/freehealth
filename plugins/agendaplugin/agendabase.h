@@ -137,6 +137,7 @@ private Q_SLOTS:
     void onCoreDatabaseServerChanged();
 
 public:
+    static Agenda::UserCalendar *createEmptyCalendar(const QString &userUid);
     bool hasCalendar(const QString &userUuid = QString::null);
     QList<Agenda::UserCalendar *> getUserCalendars(const QString &userUuid = QString::null);
     bool saveUserCalendar(Agenda::UserCalendar *calendar);
