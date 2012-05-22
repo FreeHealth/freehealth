@@ -56,7 +56,7 @@ templates.depends += core
 
 formmanager.subdir   = ../../plugins/formmanagerplugin
 formmanager.depends += core
-#formmanager.depends += usermanager
+formmanager.depends += listview
 
 printer.subdir   = ../../plugins/printerplugin
 printer.depends += core
