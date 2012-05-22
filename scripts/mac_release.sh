@@ -12,6 +12,7 @@
 # Binary to use for the qmake step
 QMAKE_BIN="qmake"
 QMAKE_SPEC=""
+MAKE_JOBS=1
 
 # Scripts names and paths
 SCRIPT_NAME=""
@@ -22,7 +23,7 @@ PACKAGES_PATH=""
 
 # Qt Prject file to build (contains absolute file path)
 PROJECT_FILE=""
-BUNDLE_NAME="FreeMedForms FreeDiams"
+BUNDLE_NAME="FreeMedForms FreeDiams FreeAccount"
 PROJECT="" # lowered case of BundleName
 
 # Get scripts names and paths
@@ -45,6 +46,7 @@ showHelp()
   echo "Usage : $SCRIPT_NAME -b CaseSensitiveBundle <options>"
   echo "Options :"
   echo " -b  Bundle name (optionnal)"
+  echo " -j  jobs for the make process (see also make -j jobs)"
   echo " -s  Build from source package (you need to create the source package)"
   echo " -h  show this help"
   echo "Win32 port can be build under Linux using crosscompilation"
@@ -101,7 +103,8 @@ buildApp()
   # build app
   echo "*** Building "$BUNDLE_NAME" "$VERSION
   cd $SOURCES_PATH/$PROJECT
-  QMAKE_SPEC="-r -spec macx-g++ CONFIG+=release CONFIG-=debug_and_release LOWERED_APPNAME=$PROJECT"
+   QMAKE_SPEC="-r -spec macx-g++ CONFIG+=release CONFIG-=debug_and_release LOWERED_APPNAME=$PROJECT"
+   echo "   --> $QMAKE_BIN $PROJECT_FILE $QMAKE_SPEC"
 
    MAKE_STEP=`$QMAKE_BIN $PROJECT_FILE $QMAKE_SPEC`
    MAKE_STEP=$?
@@ -112,7 +115,8 @@ buildApp()
      echo "   *** QMake done"
    fi
 
-   MAKE_STEP=`make -j 4`
+   echo "   --> make -j $MAKE_JOBS"
+   MAKE_STEP=`make -j $MAKE_JOBS`
    MAKE_STEP=$?
    if [ ! $MAKE_STEP = 0 ]; then
      echo "   *** Error: make step wrong ***"
@@ -121,6 +125,7 @@ buildApp()
      echo "   *** Make done"
    fi
 
+   echo "   --> make install"
    MAKE_STEP=`make install`
    MAKE_STEP=$?
    if [ ! $MAKE_STEP = 0 ]; then
@@ -196,10 +201,12 @@ createDmg()
    mv $BUNDLE_NAME.dmg $PACKAGES_PATH/$BUNDLE_NAME-$VERSION.dmg
  }
 
-while getopts "b:sh" option
+while getopts "j:b:sh" option
 do
 #echo "(-- option:$option  $OPTIND - '$OPTARG' --)"
         case $option in
+                j) MAKE_JOBS=$OPTARG;
+                ;;
                 b) BUNDLE_NAME=$OPTARG;
                 ;;
                 h) showHelp
