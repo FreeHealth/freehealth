@@ -25,7 +25,7 @@
      <widget class="QWidget" name="verticalLayoutWidget">
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
-        <widget class="Views::StringListView" name="listView">
+        <widget class="Views::ListView" name="listView">
          <property name="editTriggers">
           <set>QAbstractItemView::NoEditTriggers</set>
          </property>
@@ -43,19 +43,19 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>Agenda::UserCalendarEditorWidget</class>
-   <extends>QWidget</extends>
-   <header location="global">agendaplugin/usercalendareditor.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>Utils::MiniSplitter</class>
    <extends>QSplitter</extends>
    <header location="global">utils/widgets/minisplitter.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>Views::StringListView</class>
+   <class>Agenda::UserCalendarEditorWidget</class>
+   <extends>QWidget</extends>
+   <header location="global">agendaplugin/usercalendareditor.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>Views::ListView</class>
    <extends>QListView</extends>
    <header location="global">listviewplugin/stringlistview.h</header>
   </customwidget>
