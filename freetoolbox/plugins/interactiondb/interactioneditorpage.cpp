@@ -217,7 +217,7 @@ InteractionEditorWidget::InteractionEditorWidget(QWidget *parent) :
     d->biblioModel = new QStringListModel(this);
     ui->bilbioTableView->setModel(d->biblioModel);
     ui->bilbioTableView->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
-    ui->bilbioTableView->alternatingRowColors();
+    ui->bilbioTableView->setAlternatingRowColors(true);
     ui->bilbioTableView->horizontalHeader()->hide();
     ui->bilbioTableView->verticalHeader()->hide();
 

@@ -244,7 +244,7 @@ InteractorEditorWidget::InteractorEditorWidget(QWidget *parent) :
     d->m_AtcCodes = new QStringListModel(this);
     d->ui->atcTableView->setModel(d->m_AtcCodes);
     d->ui->atcTableView->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
-    d->ui->atcTableView->alternatingRowColors();
+    d->ui->atcTableView->setAlternatingRowColors(true);
     d->ui->atcTableView->horizontalHeader()->hide();
     d->ui->atcTableView->verticalHeader()->hide();
     d->ui->atcTableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -252,7 +252,7 @@ InteractorEditorWidget::InteractorEditorWidget(QWidget *parent) :
     d->m_ChildrenInteractors = new QStringListModel(this);
     d->ui->classChildrenTableView->setModel(d->m_ChildrenInteractors);
     d->ui->classChildrenTableView->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
-    d->ui->classChildrenTableView->alternatingRowColors();
+    d->ui->classChildrenTableView->setAlternatingRowColors(true);
     d->ui->classChildrenTableView->horizontalHeader()->hide();
     d->ui->classChildrenTableView->verticalHeader()->hide();
 //    d->ui->classChildrenTableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -260,7 +260,7 @@ InteractorEditorWidget::InteractorEditorWidget(QWidget *parent) :
     d->m_Pmids = new QStringListModel(this);
     d->ui->pmidListView->setModel(d->m_Pmids);
 //    d->ui->pmidListView->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
-    d->ui->pmidListView->alternatingRowColors();
+    d->ui->pmidListView->setAlternatingRowColors(true);
 //    d->ui->pmidListView->horizontalHeader()->hide();
 //    d->ui->pmidListView->verticalHeader()->hide();
 
