@@ -124,7 +124,8 @@ bool Drug::setData(const int ref, const QVariant &value, const QString &lang)
         }
         break;
     }
-    case Forms: // TODO: manage drugs forms ? */  break;
+    case Forms: // TODO: manage drugs forms ?
+        break;
     }
     d->m_Content[ref].insertMulti(lang, value);
     return true;
