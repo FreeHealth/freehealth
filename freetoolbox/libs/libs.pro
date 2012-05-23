@@ -1,10 +1,13 @@
 TEMPLATE = subdirs
 CONFIG *= ordered
+
+LIB_PATH=../../libs
+
 SUBDIRS += \
-           ../../libs/aggregation \
-           ../../libs/extensionsystem \
-           ../../libs/translationutils \
-           ../../libs/utils \
-           ../../libs/medicalutils \
            ../../contrib/quazip \
-           ../../libs/datapackutils \
+           $${LIB_PATH}/translationutils \
+           $${LIB_PATH}/aggregation \
+           $${LIB_PATH}/extensionsystem \
+           $${LIB_PATH}/utils \
+           $${LIB_PATH}/medicalutils \
+           $${LIB_PATH}/datapackutils \
