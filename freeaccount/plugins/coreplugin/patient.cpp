@@ -172,7 +172,7 @@ QVariant Patient::data(const QModelIndex &index, int role) const
                 if (has(ref) && (!d->m_Values.value(ref).isNull()))
                     return d->m_Values.value(ref);
                 // If we can not retreive it from command line --> calculate it
-                /** \todo code here */
+                // TODO: code here */
 //                if (IPatient::data(YearsOld).toInt()>0) {
 //                    if (has(Creatinine) && has(Gender) && has(Weight)) {
 //                        bool isMale = d->m_Values.value(Gender).toString().startsWith("M");

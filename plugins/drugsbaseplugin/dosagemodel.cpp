@@ -64,7 +64,7 @@
 #include <coreplugin/isettings.h>
 #include <coreplugin/iuser.h>
 
-/** \todo reimplement user management */
+// TODO: reimplement user management
 
 #include <QSqlRecord>
 #include <QSqlError>
@@ -576,7 +576,7 @@ QString DosageModel::toXml(const int row)
 bool DosageModel::addFromXml(const QString &xml)
 {
     Q_UNUSED(xml);
-    /** \todo here */
+    // TODO: here
     //    QHash<QString, QString> datas;
     //    int n = xml.count("<"+XML_DOSAGE_MAINTAG+">");
     //    if (n<=0)

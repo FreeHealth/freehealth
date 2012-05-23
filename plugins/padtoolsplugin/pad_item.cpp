@@ -218,7 +218,7 @@ bool PadConditionnalSubItem::isAfterOutputPosition(const int pos) const
 
 void PadConditionnalSubItem::toRaw(PadDocument *doc)
 {
-    /** \todo re-compute raw positionning */
+    // TODO: re-compute raw positionning */
     Q_UNUSED(doc);
 }
 

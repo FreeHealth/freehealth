@@ -61,7 +61,7 @@ public:
 }  // End namespace Internal
 }  // End namespace PMH
 
-/** \todo add Contacts */
+// TODO: add Contacts
 PmhEpisodeViewer::PmhEpisodeViewer(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::PmhEpisodeViewer),

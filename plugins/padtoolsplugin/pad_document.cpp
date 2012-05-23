@@ -53,7 +53,7 @@
 
 using namespace PadTools;
 
-/** \todo documentation */
+// TODO: documentation */
 PadPositionTranslator::PadPositionTranslator()
 {
 }
@@ -472,7 +472,7 @@ void PadDocument::softReset()
 
     PadAnalyzer a;
     a.analyze(_docSource, this);
-    /** \todo use ITokenPool */
+    // TODO: use ITokenPool */
     if (_tokenModel)
         run(_tokenModel->tokens());//, _docSource, _docOutput);
 

@@ -111,7 +111,7 @@ void ThemePrivate::setThemeRelativeRootPath(const QString &relPathFromAppBinary)
 
 void ThemePrivate::refreshCache()
 {
-    /** \todo */
+    // TODO: code here
 }
 
 /** \brief Defines the max number of icons in the cache */

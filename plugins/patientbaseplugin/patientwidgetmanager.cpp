@@ -171,7 +171,7 @@ PatientActionHandler::PatientActionHandler(QObject *parent) :
     }
     Q_ASSERT(searchmenu);
 
-    /** \todo create search icons */
+    // TODO: create search icons
     gSearchMethod = new QActionGroup(this);
     a = aSearchName = new QAction(this);
     a->setObjectName("aSearchName");

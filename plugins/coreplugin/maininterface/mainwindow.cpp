@@ -244,7 +244,7 @@ bool MainWindow::aboutQt()
 //
 //bool MainWindow::openFile()
 //{
-//    /** \todo here */
+//    // TODO: here */
 //    if ( maybeSave() ) {
 //        QString fileName = QFileDialog::getOpenFileName( this , "", mfCore::settings()->formPath() );
 //        if ( !fileName.isEmpty() )

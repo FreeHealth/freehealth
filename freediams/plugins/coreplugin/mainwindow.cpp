@@ -210,7 +210,7 @@ void MainWindow::refreshPatient() const
 void MainWindow::closeEvent( QCloseEvent *event )
 {
     writeSettings();
-    /** \todo here */
+    // TODO: here */
     // if is a medintux plugins --> save prescription to exchange file
 //    if (!diMedinTux::medintuxExchangeFileName().isEmpty()) {
 //        QString tmp = DrugsIO::instance()->prescriptionToHtml();
@@ -264,7 +264,7 @@ bool MainWindow::aboutPlugins()
 */
 bool MainWindow::applicationPreferences()
 {
-    /** \todo here */
+    // TODO: here */
 //    QTime t;
 //    t.start();
 //    Core::ISettings *s = Core::ICore::instance()->settings();
@@ -329,7 +329,7 @@ bool MainWindow::savePrescription( const QString &fileName )
 {
     QString xmlExtra = Core::Internal::CoreImpl::instance()->patient()->toXml();
 //    return Drugs::DrugsIO::savePrescription(xmlExtra, fileName);
-    /** \todo here */
+    // TODO: here */
     return true;
 }
 

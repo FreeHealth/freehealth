@@ -117,7 +117,7 @@ Printer::Presence TextDocumentExtra::presence() const
 
 bool TextDocumentExtra::lessThan( const TextDocumentExtra *h1, const TextDocumentExtra *h2 )
 {
-    /** \todo  ? */
+    // TODO:  ?
     Q_UNUSED(h1);
     Q_UNUSED(h2);
     return true;

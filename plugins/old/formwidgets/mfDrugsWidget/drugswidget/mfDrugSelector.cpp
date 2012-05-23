@@ -93,7 +93,7 @@ void mfDrugSelector::initialize()
         case mfDrugsConstants::SearchInn : a = am->command(mfDrugsConstants::A_SEARCH_INN)->action(); break;
     }
     if (a) {
-        /** \todo Check the action in the menu/toolbutton... */
+        // TODO: Check the action in the menu/toolbutton... */
         a->trigger();
     }
 

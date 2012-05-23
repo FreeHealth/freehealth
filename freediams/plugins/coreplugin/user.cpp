@@ -133,7 +133,7 @@ QVariant User::value(const int ref) const
 
 bool User::setValue(const int ref, const QVariant &value)
 {
-    /** \todo code this ??? FREEDIAMS::User::setValue(const int ref, const QVariant &value)*/
+    // TODO: code this ??? FREEDIAMS::User::setValue(const int ref, const QVariant &value)*/
     Q_UNUSED(ref);
     Q_UNUSED(value);
     return true;

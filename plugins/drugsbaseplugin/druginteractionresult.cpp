@@ -110,7 +110,7 @@ QVector<IDrugInteraction *> DrugInteractionResult::getInteractions(const IDrug *
 QIcon DrugInteractionResult::icon(const IDrug *drug, const DrugInteractionInformationQuery &query) const
 {
     for(int i=0; i < m_Alerts.count(); ++i) {
-        /** \todo manage processtime of alerts */
+        // TODO: manage processtime of alerts
         QIcon icon = m_Alerts.at(i)->icon(drug, query);
         if (!icon.isNull())
             return icon;
@@ -133,7 +133,7 @@ QString DrugInteractionResult::alertMessagesToHtml(const IDrug *drug, const Drug
     }
     if (query.engineUid.isEmpty()) {
         QString msg;
-        /** \todo add drugengine header */
+        // TODO: add drugengine header
         foreach(const QString &uids, msgs) {
             msg += msgs.value(uids);
         }
@@ -191,7 +191,7 @@ QStandardItemModel *DrugInteractionResult::toStandardModel() const
             if (di->engine()!=engine)
                 continue;
 
-            /** \todo code here : no double */
+            // TODO: code here : no double
 
             // Get the interaction level item
             QStandardItem *level = levels.value(di->type(), 0);

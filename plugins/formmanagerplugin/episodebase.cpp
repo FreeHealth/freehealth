@@ -108,7 +108,7 @@ EpisodeBase *EpisodeBase::instance()
     return m_Instance;
 }
 
-/** \todo EPISODES_DATEOFCREATION -> use EPISODE_MODIFICATION table instead ?? */
+// TODO: EPISODES_DATEOFCREATION -> use EPISODE_MODIFICATION table instead ??
 EpisodeBase::EpisodeBase(QObject *parent) :
         QObject(parent), Utils::Database()
 //        d_prt(new EpisodeBasePrivate(this))
@@ -170,7 +170,7 @@ EpisodeBase::EpisodeBase(QObject *parent) :
     addField(Table_FORM, FORM_INSERTIONPOINT, "IP", FieldIsShortText);
     addField(Table_FORM, FORM_INSERTASCHILD, "CHILD", FieldIsBoolean, "true");
     addField(Table_FORM, FORM_APPEND, "APPEND", FieldIsBoolean, "false");
-    /** \todo code here : manage user access restriction Table_FORM, FORM_USER_RESTRICTION_ID*/
+    // TODO: code here : manage user access restriction Table_FORM, FORM_USER_RESTRICTION_ID
     addField(Table_FORM, FORM_USER_RESTRICTION_ID, "USER_REST_ID", FieldIsInteger, "NULL");
     addIndex(Table_FORM, FORM_ID);
     addIndex(Table_FORM, FORM_PATIENTUID);
@@ -901,7 +901,7 @@ void EpisodeBase::toTreeWidget(QTreeWidget *tree)
     QString uuid = user()->uuid();
     QHash<int, QString> where;
     where.clear();
-    /** \todo here */
+    // TODO: here
 //    where.insert(LK_TOPRACT_PRACT_UUID, QString("='%1'").arg(uuid));
 //    QString req = select(Table_LK_TOPRACT, LK_TOPRACT_LKID, where);
 //    where.clear();

@@ -111,7 +111,7 @@ public:
         ui->simple_date->clear();
         m_IcdLabelModel->setStringList(QStringList());
         if (pmh->episodeModel()->rowCount()) {
-            /** \todo improve this */
+            // TODO: improve this
             // use only the first row
             ui->simple_date->setDate(pmh->episodeModel()->index(0, PmhEpisodeModel::DateStart).data().toDate());
             m_IcdLabelModel->setStringList(pmh->episodeModel()->index(0, PmhEpisodeModel::IcdLabelStringList).data().toStringList());
@@ -132,7 +132,7 @@ public:
         QModelIndex cat = pmhCore()->pmhCategoryModel()->categoryOnlyModel()->mapToSource(ui->categoryTreeView->currentIndex());
         cat = pmhCore()->pmhCategoryModel()->index(cat.row(), PmhCategoryModel::Id, cat.parent());
         m_Pmh->setData(PmhData::CategoryId, cat.data().toInt());
-        /** \todo improve this : pmhx only manages one episode */
+        // TODO: improve this : pmhx only manages one episode
         if (m_Pmh->episodeModel()->rowCount() == 0) {
             m_Pmh->episodeModel()->insertRow(0);
         }

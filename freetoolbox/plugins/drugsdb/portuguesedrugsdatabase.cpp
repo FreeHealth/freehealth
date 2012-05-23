@@ -188,7 +188,7 @@ bool PtDrugDatatabaseStep::cleanFiles()
 bool PtDrugDatatabaseStep::downloadFiles(QProgressBar *bar)
 {
     Q_UNUSED(bar);
-    /** \todo add progress download */
+    // TODO: add progress download */
     Utils::HttpDownloader *dld = new Utils::HttpDownloader(this);
     //    dld->setMainWindow(mainwindow());
     dld->setOutputPath(workingPath());

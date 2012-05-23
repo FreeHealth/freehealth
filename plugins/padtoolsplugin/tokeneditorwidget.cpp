@@ -132,7 +132,7 @@ QString TokenEditorWidget::toRawSourceHtml() const
     cursor.insertText(Constants::TOKEN_CORE_DELIMITER);
     cursor.movePosition(QTextCursor::End);
 
-    /** \todo insert charFormat for the token value */
+    // TODO: insert charFormat for the token value */
     cursor.insertText(_tokenName);
     cursor.movePosition(QTextCursor::End);
 
@@ -171,7 +171,7 @@ void TokenEditorWidget::getOutput(QString &html, PadItem &item, int startingOutp
     PadCore *core = new PadCore;
     core->setName(_tokenName);
     core->setOutputStart(startingOutputPos);
-    /** \todo insert charFormat for the token value */
+    // TODO: insert charFormat for the token value */
     cursor.insertText(_tokenName);
     cursor.movePosition(QTextCursor::End);
     startingOutputPos += cursor.position() - previousPosition;

@@ -131,7 +131,7 @@ void FormItemIdentifier::setUuid(const QString &uuid)
     id = uuidManager()->uniqueIdentifier(uuid);
     m_Uuid = uuid;
 
-    /** \todo Define the objectName according to the parent to simplify the scripting */
+    // TODO: Define the objectName according to the parent to simplify the scripting
 //    QString objName = uuid;
 //    if (parent()) {
 //        qWarning() << "xxxxxx" << parent()->objectName() << uuid;
@@ -537,7 +537,7 @@ FormMain::FormMain(QObject *parent) :
 
 FormMain::~FormMain()
 {
-    /** \todo this is buggy */
+    // TODO: this is buggy
 //    if (m_DebugPage)
 //        ExtensionSystem::PluginManager::instance()->removeObject(m_DebugPage);
 }
@@ -604,7 +604,7 @@ void FormMain::clear()
 /** Returns the printable html for the form using all its items. */
 QString FormMain::printableHtml(bool withValues) const
 {
-    /** \todo code here : print a form with/wo item content */
+    // TODO: code here: print a form with/wo item content
     FormMain *f = (FormMain*)this;
     if (f->formWidget())
         return f->formWidget()->printableHtml(withValues);

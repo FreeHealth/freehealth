@@ -343,7 +343,7 @@ UserProfilePage::UserProfilePage(QWidget *parent) :
     setTitle(tr("Select a profile"));
     setSubTitle(tr("FreeMedForms allows you to create users using predefined profiles. Select your profile and options."));
 
-    /** \todo code here = add new profiles */
+    // TODO: code here = add new profiles
     Views::StringListModel *model = new Views::StringListModel(this);
     model->setStringList(QStringList()
                          << tkTr(Trans::Constants::DOCTOR)
@@ -498,7 +498,7 @@ UserLastPage::UserLastPage(QWidget *parent) : QWizardPage(parent)
     setSubTitle(tr("The user will be created."));
     tree = new QTreeWidget(this);
     tree->header()->hide();
-    /** \todo hide password!! */
+    // TODO: hide password!!
     QVBoxLayout *lay = new QVBoxLayout(this);
     this->setLayout(lay);
     lay->addWidget(tree);

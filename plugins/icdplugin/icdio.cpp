@@ -243,7 +243,7 @@ bool IcdIO::icdCollectionFromXml(IcdCollectionModel *model, const QString &xml, 
 
     // Check XML db version with actual db version
     if (dbVersion!=icdBase()->getDatabaseVersion()) {
-        /** \todo Update XML if needed */
+        // TODO: Update XML if needed
         LOG_FOR("IcdIO", QString("XML version (%1) different from db version (%2).")
                 .arg(dbVersion).arg(icdBase()->getDatabaseVersion()));
     }

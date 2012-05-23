@@ -1274,7 +1274,7 @@ void Printer::previewToPixmap(QPixmap &drawTo, QPrinter *printer)
     QPainter painter;
     painter.begin(&drawTo);
 
-    /** \todo HERE */
+    // TODO: code here
 //    d->simpleDrawToPainter(painter, contentRect);
     drawTo = drawTo.scaled(250, 250, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 }

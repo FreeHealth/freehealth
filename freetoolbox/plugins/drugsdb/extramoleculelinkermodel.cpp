@@ -808,7 +808,7 @@ QMultiHash<int, int> ExtraMoleculeLinkerModel::moleculeLinker
     // Try to find new associations via the COMPOSITION.LK_NATURE field
     int natureLinkerNb = 0;
     if (drugsDbUid == "FR_AFSSAPS") {
-        /** \todo code here */
+        // TODO: code here */
         QMap<int, QMultiHash<int, int> > cis_codeMol_lk;
         QMap<int, QVector<MolLink> > cis_compo;
         {

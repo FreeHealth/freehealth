@@ -265,7 +265,7 @@ QMimeData *TokenModel::mimeData(const QModelIndexList &indexes) const
     if (indexes.isEmpty())
         return mimeData;
 
-    /** \todo code multiple line selection ? */
+    // TODO: code multiple line selection ? */
 //    foreach (const QModelIndex &index, indexes) {
 //        if (index.isValid()) {
 //            dt += data(index, Qt::DisplayRole).toString();

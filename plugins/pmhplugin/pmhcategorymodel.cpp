@@ -301,7 +301,7 @@ public:
         // Category has forms ?
         const QString &xml = cat->data(Category::CategoryItem::ExtraXml).toString();
         if (!xml.isEmpty()) {
-            /** \todo improve this +++ this should be part of the XmlFormIO plugin */
+            // TODO: improve this +++ this should be part of the XmlFormIO plugin
             // Check the addfile tag
             QDomDocument doc;
             doc.setContent(xml);
@@ -833,7 +833,7 @@ bool PmhCategoryModel::removeRows(int row, int count, const QModelIndex &parent)
             Category::CategoryItem *cat = item->pmhCategory();
             cat->setData(Category::CategoryItem::DbOnly_IsValid, false);
 
-            /** \todo recode this while d._categoryTree is not linear at all. */
+            // TODO: recode this while d._categoryTree is not linear at all.
             d->_flattenCategoryList.remove(d->_flattenCategoryList.indexOf(cat));
             d->_categoryToItem.remove(cat);
             d->_categoryTree.remove(d->_categoryTree.indexOf(cat));
@@ -1113,7 +1113,7 @@ void PmhCategoryModel::addCategory(Category::CategoryItem *cat, int row, const Q
     // ensure the category gets the correct mime type for PMHx
     cat->setData(Category::CategoryItem::DbOnly_Mime, QString("%1@%2").arg(PMH::Constants::CATEGORY_MIME).arg(d->_rootUid));
 
-    /** \todo recode this, not more linear _categoryTree */
+    // TODO: recode this, not more linear _categoryTree
     if (d->_categoryTree.contains(cat)) {
         updateCategory(cat);
     } else {
@@ -1237,7 +1237,7 @@ void PmhCategoryModel::patientChanged()
     d->_categoryToItem.clear();
     d->_htmlSynthesis.clear();
 
-    /** \todo recode this no more linear */
+    // TODO: recode this no more linear
     for(int i=0; i < d->_categoryTree.count(); ++i) {
         d->_categoryTree.at(i)->clearContentItems();
     }

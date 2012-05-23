@@ -104,7 +104,7 @@ static inline ExtensionSystem::PluginManager *pluginManager() { return Extension
 
 namespace {
 
-    /** \todo create an Utils::GenericTreeItem \sa Templates::TemplateModel, PMH::PmhCategoryModel */
+    // TODO: create an Utils::GenericTreeItem \sa Templates::TemplateModel, PMH::PmhCategoryModel
     class EpisodeModelTreeItem
     {
     public:
@@ -448,7 +448,7 @@ public:
         m_EpisodeItems.clear();
 
         // get Episodes
-        /** \todo code here : add limit to episode retreiving. */
+        // TODO: code here : add limit to episode retreiving.
         EpisodeBaseQuery query;
         query.setPatientUid(patient()->uuid());
         query.setValidEpisodes(true);
@@ -497,7 +497,7 @@ public:
         return m_RootItem;
     }
 
-    /** \todo code here : limit memory usage by getting/saving XmlContent separately from base()->getEpisodes() */
+    // TODO: code here : limit memory usage by getting/saving XmlContent separately from base()->getEpisodes()
     void getEpisodeContent(EpisodeData *episode)
     {
         if (episode->data(EpisodeData::Id).toInt()<0)
@@ -509,7 +509,7 @@ public:
 
     QString createXmlEpisode(const QString &formUid)
     {
-        /** \todo code here : use a QDomDocument */
+        // TODO: code here : use a QDomDocument
         FormMain *form = m_RootForm->formMainChild(formUid);
         if (!form)
             return QString::null;
@@ -517,7 +517,7 @@ public:
 
         QHash<QString, FormItem *> items;
         foreach(FormItem *it, form->flattenFormItemChildren()) {
-            /** \todo check nested items ??? */
+            // TODO: check nested items?
             if (it->itemData()) {
 //                if (it->itemDatas()->isModified()) {
 //                    qWarning() << it->uuid() << "is modified";
@@ -720,7 +720,7 @@ public:
     QMap<Form::Internal::EpisodeData *, EpisodeModelTreeItem *> m_EpisodeItems;
     QList<Form::Internal::EpisodeData *> m_Episodes;
 
-    /** \todo code here : remove m_ActualEpisode, m_ActualEpisode_FormUid */
+    // TODO: code here : remove m_ActualEpisode, m_ActualEpisode_FormUid
     EpisodeModelTreeItem *m_ActualEpisode;
     QString m_ActualEpisode_FormUid;
 
@@ -817,7 +817,7 @@ void EpisodeModel::onCoreDatabaseServerChanged()
 void EpisodeModel::onUserChanged()
 {
     d->m_UserUuid = user()->uuid();
-    /** \todo code here */
+    // TODO: code here
 //    QList<int> ids = episodeBase()->retreivePractionnerLkIds(uuid);
 //    d->m_LkIds.clear();
 //    foreach(int i, ids)
@@ -1110,7 +1110,7 @@ bool EpisodeModel::insertRows(int row, int count, const QModelIndex &parent)
         episode->setData(Internal::EpisodeData::CreationDate, QDateTime::currentDateTime());
         episode->setData(Internal::EpisodeData::UserDate, QDateTime::currentDateTime());
         episode->setData(Internal::EpisodeData::IsValid, true);
-        /** \todo code here : create an episode modification to store the user creator ??? */
+        // TODO: code here : create an episode modification to store the user creator?
 
         // create the tree item
         EpisodeModelTreeItem *it = new EpisodeModelTreeItem(parentItem);
@@ -1306,8 +1306,8 @@ bool EpisodeModel::activateEpisode(const QModelIndex &index, const QString &form
     d->m_ActualEpisode = it;
     d->m_ActualEpisode_FormUid = formUid;
 
-    /** \todo this form code should not appear in a model's method according to strict MVC pattern.
-        Extract it to the form parts and maybe link with Signal/Slots? */
+    // TODO: this form code should not appear in a model's method according to strict MVC pattern.
+    //    Extract it to the form parts and maybe link with Signal/Slots?
     // clear actual form and fill episode data
     if (!form)
         return false;
@@ -1320,7 +1320,7 @@ bool EpisodeModel::activateEpisode(const QModelIndex &index, const QString &form
     else
         form->itemData()->setData(IFormItemData::ID_UserName, username);
 
-    /** \todo move this part into a specific member of the private part */
+    // TODO: move this part into a specific member of the private part
     d->getEpisodeContent(episode);
     const QString &xml = episode->data(EpisodeData::XmlContent).toString();
     if (xml.isEmpty())

@@ -890,7 +890,7 @@ void MainWindowActionHandler::createEditActions()
     a->setEnabled(false);
 }
 
-/** \todo actually does nothing useful */
+// TODO: actually does nothing useful
 void MainWindowActionHandler::connectEditActions()
 {
 //    if (aUndo) {}
@@ -905,7 +905,7 @@ void MainWindowActionHandler::connectEditActions()
 /** \brief Actions are created in the global context \sa Constants::C_GLOBAL_ID */
 void MainWindowActionHandler::createPatientsActions(int actions)
 {
-    /** \todo Patients actions should be exploded into different menus or in a single menu ? */
+    // TODO: Patients actions should be exploded into different menus or in a single menu ?
     if (!actions)
         return;
 
@@ -1293,7 +1293,7 @@ bool MainWindowActionHandler::updateFound()
 void MainWindowActionHandler::updateCheckerEnd(bool error)
 {
     Q_UNUSED(error);
-    /** \todo improve this for FreeMedForms (delete only label and progressbar) */
+    // TODO: improve this for FreeMedForms (delete only label and progressbar)
     delete statusBar();
 }
 

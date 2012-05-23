@@ -429,9 +429,8 @@ void PrinterPreviewerPrivate::on_duplicataCheck_stateChanged(int state)
 
 void PrinterPreviewerPrivate::on_pageNumberSpinBox_valueChanged(int value)
 {
-    /** \todo needs modification of Printer::previewToPixmap(QPixmap &drawTo, QPrinter *printer) to
-              Printer::previewToPixmap(QPixmap &drawTo, QPrinter *printer, int pageNumber)
-    */
+    // TODO: needs modification of Printer::previewToPixmap(QPixmap &drawTo, QPrinter *printer) to
+    //          Printer::previewToPixmap(QPixmap &drawTo, QPrinter *printer, int pageNumber)
     Q_UNUSED(value);
 }
 

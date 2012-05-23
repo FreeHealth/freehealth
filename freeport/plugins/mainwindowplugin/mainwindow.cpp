@@ -300,7 +300,7 @@ void MainWindow::changeFontTo( const QFont &font )
 
 bool MainWindow::saveAsFile()
 {
-    /** \todo save filename */
+    // TODO: save filename */
 //    return saveIcdCollection();
 	return false;
 }

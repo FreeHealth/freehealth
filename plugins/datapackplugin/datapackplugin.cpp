@@ -188,7 +188,7 @@ void DataPackPluginIPlugin::extensionsInitialized()
     }
 
 
-    /** \todo Check for package update -> thread this */
+    // TODO: Check for package update -> thread this
 
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
@@ -215,7 +215,7 @@ void DataPackPluginIPlugin::postCoreInitialization()
         connect(a, SIGNAL(triggered()), this, SLOT(togglePackManager()));
     }
 
-    /** \todo code here ??? DataPacks are checked. */
+    // TODO: code here? DataPacks are checked.
     // DataPacks are checked
 
 }

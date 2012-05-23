@@ -276,7 +276,7 @@ IcdActionHandler::IcdActionHandler(QObject *parent) :
 //    menu->addAction(cmd, DrugsWidget::Constants::G_PLUGINS_DRUGS);
     connect(a, SIGNAL(triggered()), this, SLOT(removeItem()));
 
-    /** \todo code here */
+    // TODO: code here
 //#ifdef FREEMEDFORMS
 //    const char * const filemenuId = Core::Constants::M_GENERAL;
 //    const char * const printGroupId = Core::Constants::G_GENERAL_PRINT;

@@ -120,7 +120,7 @@ bool FrenchZipCodesStep::cleanFiles()
 bool FrenchZipCodesStep::downloadFiles(QProgressBar *bar)
 {
     Q_UNUSED(bar);
-    /** \todo manage progress download */
+    // TODO: manage progress download */
     Utils::HttpDownloader *dld = new Utils::HttpDownloader(this);
     dld->setOutputPath(workingPath());
     dld->setUrl(QUrl(FRENCH_URL));

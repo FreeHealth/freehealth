@@ -334,7 +334,7 @@ void EditorActionHandler::createActions()
 ////    connect(aNew, SIGNAL(triggered()), this, SLOT(newFile()));
 
     // File Actions
-    /** \todo change the group for apps that do not use the GeneralMenu */
+    // TODO: change the group for apps that do not use the GeneralMenu
     if (generalMenu)
         aOpen = createAction(this, "aOpen", Core::Constants::ICONOPEN, A_EDITOR_FILEOPEN, ioContext, EDITOR_FILEOPEN_TEXT, cmd, m_FileMenu, G_GENERAL_FILE);
     else
@@ -546,7 +546,7 @@ void EditorActionHandler::print()
         QHash<QString, QVariant> tokens;
         tokens.insert(Core::Constants::TOKEN_DOCUMENTTITLE, "");
         p->addTokens(Core::IDocumentPrinter::Tokens_Global, tokens);
-        /** \todo add more options for the user : select papers, print duplicatas... */
+        // TODO: add more options for the user : select papers, print duplicatas...
         p->print(m_CurrentEditor->textEdit()->document(), Core::IDocumentPrinter::Papers_Generic_User, false);
     }
 }
@@ -652,7 +652,7 @@ void EditorActionHandler::textColor()
 {
     if (m_CurrentEditor) {
         m_CurrentEditor->textColor();
-        /** \todo update color in action */        
+        // TODO: update color in action
     }
     m_CurrentEditor->textEdit()->setFocus();
 }

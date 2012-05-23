@@ -200,7 +200,7 @@ void MainWindow::extensionsInitialized()
 //                QString encoded = tmp.mid( begin, end - begin );
 //                DrugsDB::DrugsIO::instance()->prescriptionFromXml(drugModel(), QByteArray::fromBase64(encoded.toAscii()));
 //            } else if (tmp.contains("DrugsInteractionsEncodedPrescription:")) {
-//                /** \todo Manage wrong file encoding */
+//                // TODO: Manage wrong file encoding */
 //                int begin = tmp.indexOf("DrugsInteractionsEncodedPrescription:") + QString("DrugsInteractionsEncodedPrescription:").length();
 //                int end = tmp.indexOf("\"", begin);
 //                QString encoded = tmp.mid( begin, end - begin );
@@ -455,7 +455,7 @@ bool MainWindow::saveFile()
 bool MainWindow::savePrescription(const QString &fileName)
 {
     Q_UNUSED(fileName);
-    /** \todo code here */
+    // TODO: code here */
 //    QString xmlExtra = patient()->toXml();
 //    if (commandLine()->value(Core::Internal::CommandLine::CL_EMR_Name).isValid()) {
 //        xmlExtra.append(QString("<EMR name=\"%1\"").arg(commandLine()->value(Core::Internal::CommandLine::CL_EMR_Name).toString()));
@@ -492,7 +492,7 @@ bool MainWindow::openFile()
 void MainWindow::readFile(const QString &file)
 {
     Q_UNUSED(file);
-    /** \todo code here */
+    // TODO: code here */
 //    QString datas;
 //    if (drugModel()->rowCount() > 0) {
 //        int r = Utils::withButtonsMessageBox(
@@ -575,7 +575,7 @@ void MainWindow::createDockWindows()
 ///** \brief Always keep uptodate patient's datas */
 //void MainWindow::on_listOfAllergies_textChanged(const QString &text)
 //{
-//    /** \todo manage allergies */
+//    // TODO: manage allergies */
 //    patient()->setValue(Core::Patient::DrugsAtcAllergies, text);
 //    refreshPatient();
 //}

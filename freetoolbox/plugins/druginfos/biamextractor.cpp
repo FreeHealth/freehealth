@@ -171,7 +171,7 @@ public:
         manager = 0;
     }
 
-    /** \todo move this in Utils::Global */
+    // TODO: move this in Utils::Global */
     QString extractString(const QString &fromContent, const QString &startDelim, const QString &endDelim, int *startIndex = 0)
     {
         int begin = 0;
@@ -449,7 +449,7 @@ BiamExtractor::~BiamExtractor()
 bool BiamExtractor::on_download_clicked()
 {
     d->ui->download->setEnabled(false);
-    /** \todo First : download A..Z files; then download drugs files */
+    // TODO: First : download A..Z files; then download drugs files */
     d->m_Progress = new QProgressDialog(this);
     d->m_Progress->setLabelText(tr("Downloading BIAM substance index"));
     d->m_Progress->setCancelButtonText(tkTr(Trans::Constants::CANCEL));

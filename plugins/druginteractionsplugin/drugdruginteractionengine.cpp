@@ -524,7 +524,7 @@ public:
 
     QString message(const IDrug *drug, const DrugInteractionInformationQuery &query) const
     {
-        /** \todo manage in the query level usage : static or dynamic ??? */
+        // TODO: manage in the query level usage : static or dynamic?
         QString toReturn;
         if (!m_Result->testedDrugs().contains((IDrug*)drug))
             return toReturn;
@@ -1106,7 +1106,7 @@ QVector<IDrugInteraction *> DrugDrugInteractionEngine::getInteractionsFromDataba
     }
     query.finish();
 
-    /** \todo get interaction bibliography */
+    // TODO: get interaction bibliography
 
     return toReturn;
 }

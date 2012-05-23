@@ -339,7 +339,7 @@ public:
     QMultiHash<int, int> m_ClassToAtcs;   /*!< Link ClassIam_Id to Iam_Id */
     QCache<int, AtcLabel> m_AtcLabelCache;
     QHash<QString, int> m_DbUids;
-    /** \todo improve memory usage here */
+    // TODO: improve memory usage here
     QCache<int, QString> m_AtcCodeCacheIdKeyed;
     QHash<QString, int> m_AtcCodeCacheCodeKeyed;
 };
@@ -623,7 +623,7 @@ DatabaseInfos *DrugsBase::getDrugSourceInformation(const QString &drugSourceUid)
 
 //QString DrugsBase::dosageCreateTableSqlQuery()
 //{
-//    /** \todo add UserUuid field or lkid */
+//    // TODO: add UserUuid field or lkid
 //    return "CREATE TABLE IF NOT EXISTS `DOSAGE` ("
 //           "`POSO_ID`               INTEGER        PRIMARY KEY AUTOINCREMENT,"
 //           "`POSO_UUID`             varchar(40)    NULL,"    // put NOT NULL
@@ -691,7 +691,7 @@ DatabaseInfos *DrugsBase::getDrugSourceInformation(const QString &drugSourceUid)
 //                               CreationOption /*createOption*/
 //                              )
 //{
-//    /** \todo  ask user if he wants : 1. an empty dosage base ; 2. to retreive dosages from internet FMF website */
+//    // TODO:  ask user if he wants : 1. an empty dosage base ; 2. to retreive dosages from internet FMF website
 //    if (connectionName != Dosages::Constants::DB_DOSAGES_NAME)
 //        return false;
 
@@ -713,7 +713,7 @@ DatabaseInfos *DrugsBase::getDrugSourceInformation(const QString &drugSourceUid)
 //        if (!DB.open()) {
 //            QSqlDatabase d = QSqlDatabase::addDatabase("QMYSQL", "CREATOR");
 //            d.setHostName(pathOrHostName);
-//            /** \todo retreive log/pass */
+//            // TODO: retreive log/pass
 //            d.setUserName(login);
 //            d.setPassword(pass);
 //            d.setPort(port);
@@ -745,7 +745,7 @@ DatabaseInfos *DrugsBase::getDrugSourceInformation(const QString &drugSourceUid)
 //    setConnectionName(connectionName);
 
 //    // The SQL scheme MUST BE synchronized with the Dosages::Constants Model Enumerator !!!
-//    /** \todo code here */
+//    // TODO: code here
 //    if (executeSQL(QStringList()
 //        << dosageCreateTableSqlQuery().remove("AUTOINCREMENT")
 //        << "CREATE TABLE IF NOT EXISTS `VERSION` ("
@@ -864,7 +864,7 @@ void DrugsBase::onCoreDatabaseServerChanged()
 //QList<QVariant> DrugsBase::getAllUIDThatHaveRecordedDosages() const
 //{
 //    QList<QVariant> toReturn;
-//    /** \todo recode this */
+//    // TODO: recode this
 
 //    if (!actualDatabaseInformation())
 //        return toReturn;
@@ -1207,7 +1207,7 @@ IDrug *DrugsBase::getDrugByUID(const QVariant &uid1, const QVariant &uid2, const
 
     toReturn->constructAtcIdsVectorsUsingComponents();
 
-    /** \todo add drug ATC code and related ids */
+    // TODO: add drug ATC code and related ids
 
     // get ROUTES
     d->getRoutes(toReturn);
@@ -1602,7 +1602,7 @@ QString DrugsBase::getInnDenominationFromSubstanceCode(const int molId) const
 //*/
 //QVector<int> DrugsBase::getAllInnAndIamClassesIndex(const int molId)
 //{
-//    /** \todo obsolete ? */
+//    // TODO: obsolete?
 //    QVector<int> toReturn;
 
 ////    if (di->m_AtcToMol.keys(molecule_code).count()>1)

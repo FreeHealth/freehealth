@@ -499,7 +499,7 @@ void mfDrugsBasePrivate::retreiveLinkTables()
           }
      }
 
-     /** \todo release these resources files to limit memory usage */
+     // TODO: release these resources files to limit memory usage */
 
      QSqlDatabase DB = QSqlDatabase::database( DRUGS_DATABASE_NAME );
      if ( !DB.isOpen() )

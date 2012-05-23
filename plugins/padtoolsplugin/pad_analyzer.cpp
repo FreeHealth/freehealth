@@ -171,7 +171,7 @@ PadDocument *PadAnalyzerPrivate::startAnalyze(PadDocument *padDocument)
 
     Lexem lex;
     PadDocument *pad;
-    /** \todo where, when and who delete the PadDocument pointer ? */
+    // TODO: where, when and who delete the PadDocument pointer ? */
     padDocument ? pad = padDocument : pad = new PadDocument(q);
     pad->setSource(_sourceDocument);
     pad->beginRawSourceAnalyze();
@@ -193,7 +193,7 @@ PadDocument *PadAnalyzerPrivate::startAnalyze(PadDocument *padDocument)
 		case Lexem_PadOpenDelimiter:
 			fragment = nextPadItem();
 			if (!fragment) { // bad pad item => turn it into a string fragment
-                /** \todo manage error here */
+                // TODO: manage error here */
                 fragment = new PadString();//text.mid(pos, _curPos - pos));
 				fragment->setStart(pos);
 				fragment->setEnd(_curPos - 1);
@@ -209,7 +209,7 @@ PadDocument *PadAnalyzerPrivate::startAnalyze(PadDocument *padDocument)
 
 			// turn it into a string fragment
             pos = _curPos - QString(Constants::TOKEN_CLOSE_DELIMITER).size();
-            /** \todo manage error here */
+            // TODO: manage error here */
             fragment = new PadString();//text.mid(pos, _curPos - pos));
 			fragment->setStart(pos);
 			fragment->setEnd(_curPos - 1);
@@ -223,7 +223,7 @@ PadDocument *PadAnalyzerPrivate::startAnalyze(PadDocument *padDocument)
 												  errorTokens);
 			// turn it into a string fragment
 			pos = _curPos - 1;
-            /** \todo manage error here */
+            // TODO: manage error here */
             fragment = new PadString();//text.mid(pos, _curPos - pos));
             fragment->setStart(pos);
 			fragment->setEnd(_curPos - 1);
@@ -307,7 +307,7 @@ PadItem *PadAnalyzerPrivate::nextPadItem()
             return padItem;
 		case Lexem_CoreDelimiter:
         {
-            /** \todo raise an error when a core has already been defined */
+            // TODO: raise an error when a core has already been defined */
             PadCore *core = nextCore();
             if (!core) { // an error occured, stop all
 				delete padItem;

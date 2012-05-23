@@ -352,13 +352,13 @@ QList<Form::FormIODescription *> XmlFormContentReader::getFormFileDescriptions(c
     Q_UNUSED(query);
     QList<Form::FormIODescription *> toReturn;
 
-    /** \todo code here */
+    // TODO: code here
 
 //    QString startPath;
 //    if (query.typeOfForms() & Form::FormIOQuery::UserForms) {
-//        /** \todo manage user forms path and default path */
+//        // TODO: manage user forms path and default path
 //    } else {
-//        /** \todo manage user forms path and default path */
+//        // TODO: manage user forms path and default path
 //    }
 //    if (query.typeOfForms() & Form::FormIOQuery::CompleteForms) {
 //        startPath = settings()->path(Core::ISettings::CompleteFormsPath);
@@ -374,7 +374,7 @@ QList<Form::FormIODescription *> XmlFormContentReader::getFormFileDescriptions(c
 //            toReturn.at(i)->setData(Form::FormIODescription::IsSubForm, true);
 //        }
 //    }
-//    /** \todo Add IFormIO to descr && check all forms for params of Query */
+//    // TODO: Add IFormIO to descr && check all forms for params of Query
 //    for(int i = 0; i < toReturn.count(); ++i) {
 //        toReturn.at(i)->setIoFormReader(this);
 //    }
@@ -625,7 +625,7 @@ bool XmlFormContentReader::createElement(Form::FormItem *item, QDomElement &elem
     if (element.tagName().compare(Constants::TAG_NEW_PAGE, Qt::CaseInsensitive)==0) {
         // create a new page
         item = item->createPage(element.firstChildElement(Constants::TAG_NAME).text());
-        /** \todo add page to a form */
+        // TODO: add page to a form
         if (item) {
             QString uidNS = getNamespace(item);
             // read attributes (type, uid/name, patient representation...)
@@ -662,7 +662,7 @@ bool XmlFormContentReader::populateValues(Form::FormItem *item, const QDomElemen
         int type = m_ValuesTypes.value(element.tagName(), -1);
         if (type==Form::FormItemValues::Value_Printing) {
             // read file
-            /** \todo ... */
+            // TODO: ...
 //            if (!element.attribute(Constants::ATTRIB_FILE).isEmpty()) {
 //                QString content = readExtraFile(form, element.attribute(Constants::ATTRIB_FILE));
 //                item->valueReferences()->setValue(type, id, content, lang);
@@ -686,7 +686,7 @@ bool XmlFormContentReader::populateScripts(Form::FormItem *item, const QDomEleme
     while (!element.isNull()) {
         QString script = element.text();
         QString file = root.attribute(Constants::ATTRIB_FILE);
-        /** \todo HERE */
+        // TODO: HERE
         int type = m_ScriptsTypes.value(element.tagName().toLower(), Form::FormItemScripts::Script_OnDemand);
         item->scripts()->setScript(type, script, lang);
         element = element.nextSiblingElement();
@@ -764,7 +764,7 @@ bool XmlFormContentReader::addFile(const QDomElement &element, const XmlFormName
             LOG_ERROR_FOR("XmlReader", "Unable to add form file " + element.text());
             return false;
         } else {
-            /** \todo ... */
+            // TODO: code here
 //            saveFormToDatabase(fileName, XmlIOBase::FullContent, content);
             return true;
 

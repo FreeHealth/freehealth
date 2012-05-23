@@ -57,7 +57,7 @@ SettingsDialog::SettingsDialog(QWidget *parent, const QString &categoryId, const
 {
     Q_UNUSED(categoryId);
     Q_UNUSED(pageId);
-    /** \todo allow users to open SettingsDialog with a specific page */
+    // TODO: allow users to open SettingsDialog with a specific page
     m_ui = new Ui::SettingsDialog();
     setWindowFlags(Qt::Window | Qt::CustomizeWindowHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint);
     m_ui->setupUi(this);

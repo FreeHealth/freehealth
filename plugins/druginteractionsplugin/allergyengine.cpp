@@ -352,7 +352,7 @@ public:
 //                // get the line related to the level of pim
 //                //                    int typeId = pim->value(PimInteraction::PIM_Level).toInt();
 
-//                /** \todo manage levelOfWarning */
+//                // TODO: manage levelOfWarning
 
 //                int riskId = pim->value(PimInteraction::PIM_RiskMasterLid).toInt();
 //                int level =  pim->value(PimInteraction::PIM_Level).toInt();

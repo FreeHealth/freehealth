@@ -321,7 +321,7 @@ void ExtendedView::moveDown()
             moved=true;
         }
     }
-    /** \todo else swap the two rows.*/
+    // TODO: else swap the two rows.
 
     if (moved)
         view->setCurrentIndex(view->model()->index(idx.row()+1,0));
@@ -352,7 +352,7 @@ void ExtendedView::moveUp()
         }
     }
 
-    /** \todo else swap the two rows. */
+    // TODO: else swap the two rows.
 
     if (moved)
         view->setCurrentIndex(view->model()->index(idx.row()-1,0));
@@ -368,7 +368,7 @@ void ExtendedView::on_edit_triggered()
 void ExtendedView::contextMenu(const QPoint &p)
 {
     Q_UNUSED(p);
-    /** \todo improve this */
+    // TODO: improve this
 //    QMenu *pop = getContextMenu();
 //    pop->popup(view->mapToGlobal(p));
 //    pop->exec();

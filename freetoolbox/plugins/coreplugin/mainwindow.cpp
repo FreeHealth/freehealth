@@ -359,7 +359,7 @@ void MainWindow::createFullRelease()
         connect(s, SIGNAL(progressRangeChanged(int,int)), m_FullReleaseProgress, SLOT(setRange(int,int)));
     }
 
-    /** \todo add a if (userWantsToDld)... */
+    // TODO: add a if (userWantsToDld)... */
     startNextDownload();
 //    startNextProcess();
 //    startNextPostProcessDownload();

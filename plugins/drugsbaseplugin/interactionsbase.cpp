@@ -121,7 +121,7 @@ public:
          if ((!m_AtcToMol.isEmpty()) && (!m_ClassToAtcs.isEmpty()))
              return;
 
-         /** \todo WARNING FULL SQL COMMAND */
+         // TODO: WARNING FULL SQL COMMAND */
          {
              QSqlDatabase drugs = QSqlDatabase::database(Constants::DB_DRUGS_NAME);
              if (!drugs.open())

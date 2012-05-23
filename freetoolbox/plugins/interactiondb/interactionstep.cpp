@@ -912,7 +912,7 @@ bool InteractionStep::saveDrugDrugInteractions(const QList<DrugInteractor *> &in
 bool InteractionStep::saveBibliographicReferences()
 {
     qWarning() << "SAVE BIBLIO";
-    /** \todo Ensure all PMIDs are available */
+    // TODO: Ensure all PMIDs are available */
     QSqlDatabase db = QSqlDatabase::database(Core::Constants::MASTER_DATABASE_NAME);
     // Clear database first
     QString req = Core::Tools::drugBase()->prepareDeleteQuery(DrugsDB::Constants::Table_BIB);
