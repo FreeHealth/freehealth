@@ -9,7 +9,9 @@ SUBDIRS = \
     icd \
     zip \
     listview \
-    biblio
+    biblio \
+    datapack \
+    account
 
 
 core.subdir = coreplugin
@@ -43,3 +45,9 @@ listview.depends += core
 
 biblio.subdir = biblio
 biblio.depends += core
+
+datapack.subdir = datapackplugin
+datapack.depends += core
+
+account.subdir = accountplugin
+account.depends += core
