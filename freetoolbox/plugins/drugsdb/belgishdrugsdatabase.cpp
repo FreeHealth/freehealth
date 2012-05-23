@@ -40,6 +40,8 @@
 #include <utils/database.h>
 #include <quazip/global.h>
 #include <extensionsystem/pluginmanager.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_drugs.h>
 
 #include <QDir>
 #include <QFile>
@@ -52,7 +54,7 @@
 // Download at : http://www.fagg-afmps.be/fr/items-HOME/Bases_de_donnees/index.jsp
 
 using namespace DrugsDbCreator;
-
+using namespace Trans::ConstantTranslations;
 
 const char* const  BE_DRUGS_DATABASE_NAME     = "FAGG_AFMPS_BE";
 
@@ -69,6 +71,10 @@ static inline QString dumpFileAbsPath()     {return QDir::cleanPath(settings()->
 
 static inline QString databaseFinalizationScript() {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + "/global_resources/sql/drugdb/be/be_db_finalize.sql");}
 
+QString BeDrugsDatabasePage::category() const
+{
+    return tkTr(Trans::Constants::DRUGS) + "|" + Core::Constants::CATEGORY_DRUGSDATABASE;
+}
 
 QWidget *BeDrugsDatabasePage::createPage(QWidget *parent)
 {

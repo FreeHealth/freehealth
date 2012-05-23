@@ -17,7 +17,7 @@ public:
 
     virtual QString id() const {return "PimsTreePage";}
     virtual QString name() const {return "PimsTreePage";}
-    virtual QString category() const {return tr("PIM database");}
+    virtual QString category() const;
     virtual QIcon icon() const {return QIcon();}
 
     // widget will be deleted after the show

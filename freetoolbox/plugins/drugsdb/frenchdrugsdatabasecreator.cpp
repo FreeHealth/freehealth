@@ -42,6 +42,8 @@
 #include <utils/httpdownloader.h>
 #include <extensionsystem/pluginmanager.h>
 #include <quazip/global.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_drugs.h>
 
 #include <QFile>
 #include <QMap>
@@ -62,10 +64,10 @@
 #include "ui_frenchdrugsdatabasewidget.h"
 
 using namespace DrugsDbCreator;
+using namespace Trans::ConstantTranslations;
 
 const char* const  FRENCH_URL                  = "http://afssaps-prd.afssaps.fr/php/ecodex/telecharger/fic_cis_cip.zip";
 const char* const  FR_DRUGS_DATABASE_NAME      = "FR_AFSSAPS";
-
 
 static inline Core::IMainWindow *mainwindow() {return Core::ICore::instance()->mainWindow();}
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
@@ -82,6 +84,11 @@ FrenchDrugsDatabasePage::FrenchDrugsDatabasePage(QObject *parent) :
         IToolPage(parent)
 {
     setObjectName("FrenchDrugsDatabasePage");
+}
+
+QString FrenchDrugsDatabasePage::category() const
+{
+    return tkTr(Trans::Constants::DRUGS) + "|" + Core::Constants::CATEGORY_DRUGSDATABASE;
 }
 
 QWidget *FrenchDrugsDatabasePage::createPage(QWidget *parent)

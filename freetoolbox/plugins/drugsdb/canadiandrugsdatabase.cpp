@@ -40,6 +40,8 @@
 #include <utils/httpdownloader.h>
 #include <extensionsystem/pluginmanager.h>
 #include <quazip/global.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_drugs.h>
 
 #include <QDir>
 #include <QProgressDialog>
@@ -47,12 +49,12 @@
 
 #include "ui_canadiandrugsdatabasewidget.h"
 
+using namespace DrugsDbCreator;
+using namespace Trans::ConstantTranslations;
 
 const char* const  CANADIAN_URL               = "http://www.hc-sc.gc.ca/dhp-mps/alt_formats/zip/prodpharma/databasdon/allfiles.zip";
 //const char* const  CANADIAN_URL               = "http://www.hc-sc.gc.ca/dhp-mps/prodpharma/databasdon/txt/allfiles.zip";
 const char* const  CA_DRUGS_DATABASE_NAME     = "CA_HCDPD";
-
-using namespace DrugsDbCreator;
 
 static inline Core::IMainWindow *mainwindow() {return Core::ICore::instance()->mainWindow();}
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
@@ -68,6 +70,11 @@ CanadianDrugsDatabasePage::CanadianDrugsDatabasePage(QObject *parent) :
         Core::IToolPage(parent)
 {
     setObjectName("CanadianDrugsDatabasePage");
+}
+
+QString CanadianDrugsDatabasePage::category() const
+{
+    return tkTr(Trans::Constants::DRUGS) + "|" + Core::Constants::CATEGORY_DRUGSDATABASE;
 }
 
 QWidget *CanadianDrugsDatabasePage::createPage(QWidget *parent)

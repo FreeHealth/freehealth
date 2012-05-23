@@ -40,6 +40,8 @@
 #include <utils/httpdownloader.h>
 #include <extensionsystem/pluginmanager.h>
 #include <quazip/global.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_drugs.h>
 
 #include <QFile>
 #include <QMap>
@@ -64,6 +66,7 @@
 #include "ui_fdadrugsdatabasewidget.h"
 
 using namespace DrugsDbCreator;
+using namespace Trans::ConstantTranslations;
 
 const char* const  FDA_URL                     = "http://www.fda.gov/downloads/Drugs/InformationOnDrugs/ucm054599.zip";
 const char* const  FDA_DRUGS_DATABASE_NAME     = "FDA_US";
@@ -84,6 +87,11 @@ FdaDrugsDatabasePage::FdaDrugsDatabasePage(QObject *parent) :
         IToolPage(parent)
 {
     setObjectName("FdaDrugsDatabaseCreator_IToolPage");
+}
+
+QString FdaDrugsDatabasePage::category() const
+{
+    return tkTr(Trans::Constants::DRUGS) + "|" + Core::Constants::CATEGORY_DRUGSDATABASE;
 }
 
 QWidget *FdaDrugsDatabasePage::createPage(QWidget *parent)

@@ -38,7 +38,10 @@
 #include <utils/log.h>
 #include <utils/global.h>
 #include <utils/httpdownloader.h>
-#include <translationutils/constanttranslations.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_drugs.h>
+#include <translationutils/trans_menu.h>
+#include <translationutils/trans_msgerror.h>
 #include <translationutils/googletranslator.h>
 
 #include <QDataWidgetMapper>
@@ -112,6 +115,11 @@ public:
 };
 
 } // namespace IAMDb
+
+QString InteractionEditorPage::category() const
+{
+    return tkTr(Trans::Constants::DRUGS) + "|" + tr("Interaction database");
+}
 
 QWidget *InteractionEditorPage::createPage(QWidget *parent)
 {

@@ -116,6 +116,10 @@ static inline QString atcCsvFile()          {return QDir::cleanPath(settings()->
 //    return QIcon();
 //}
 
+QString InteractionsDatabaseCreatorPage::category() const
+{
+    return tkTr(Trans::Constants::DRUGS) + "|" + tr("Interaction database");
+}
 
 QWidget *InteractionsDatabaseCreatorPage::createPage(QWidget *parent)
 {

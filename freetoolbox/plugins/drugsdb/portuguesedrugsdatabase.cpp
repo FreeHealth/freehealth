@@ -41,6 +41,8 @@
 #include <utils/httpdownloader.h>
 
 #include <extensionsystem/pluginmanager.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_drugs.h>
 
 #include <QDir>
 #include <QFile>
@@ -50,9 +52,8 @@
 
 #include "ui_portuguesedrugsdatabase.h"
 
-
 using namespace DrugsDbCreator;
-
+using namespace Trans::ConstantTranslations;
 
 const char* const  PT_DRUGS_DATABASE_NAME     = "INFARMED_PT";
 const char* const  PT_URL = "http://www.infarmed.pt/infomed/lista_excel_public.php?nome_comer=%";
@@ -72,6 +73,11 @@ static inline QString uidFile() {return QDir::cleanPath(settings()->value(Core::
 QWidget *PtDrugsDatabasePage::createPage(QWidget *parent)
 {
     return new PortugueseDrugsDatabase(parent);
+}
+
+QString PtDrugsDatabasePage::category() const
+{
+    return tkTr(Trans::Constants::DRUGS) + "|" + Core::Constants::CATEGORY_DRUGSDATABASE;
 }
 
 PortugueseDrugsDatabase::PortugueseDrugsDatabase(QWidget *parent) :

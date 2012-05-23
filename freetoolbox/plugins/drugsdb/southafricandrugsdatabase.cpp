@@ -37,7 +37,8 @@
 #include <utils/global.h>
 #include <utils/log.h>
 #include <extensionsystem/pluginmanager.h>
-
+#include <translationutils/constants.h>
+#include <translationutils/trans_drugs.h>
 
 #include <QApplication>
 #include <QFile>
@@ -60,6 +61,7 @@
 #include "ui_southafricandrugsdatabase.h"
 
 using namespace DrugsDbCreator;
+using namespace Trans::ConstantTranslations;
 
 // get drugs name
 // pages http://home.intekom.com/pharm/index/index_T_*.shtml
@@ -84,6 +86,10 @@ static inline QString databaseAbsPath()  {return Core::Tools::drugsDatabaseAbsFi
 static inline QString databaseFinalizationScript() {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + "/global_resources/sql/drugdb/za/za_db_finalize.sql");}
 static inline QString uidFile() {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + "/global_resources/sql/drugdb/za/za_uids.csv");}
 
+QString SouthAfricanDrugsDatabasePage::category() const
+{
+    return tkTr(Trans::Constants::DRUGS) + "|" + Core::Constants::CATEGORY_DRUGSDATABASE;
+}
 
 QWidget *SouthAfricanDrugsDatabasePage::createPage(QWidget *parent)
 {

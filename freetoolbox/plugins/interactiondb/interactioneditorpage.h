@@ -46,7 +46,7 @@ public:
 
     virtual QString id() const {return "InteractionEditorPage";}
     virtual QString name() const {return "Interactions editor";}
-    virtual QString category() const {return tr("Interaction database");}
+    virtual QString category() const;
     virtual QIcon icon() const {return QIcon();}
 
     // widget will be deleted after the show

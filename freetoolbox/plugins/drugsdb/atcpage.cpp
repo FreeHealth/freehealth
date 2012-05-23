@@ -27,13 +27,22 @@
 #include "atcpage.h"
 #include "atcmodel.h"
 
+#include <translationutils/constants.h>
+#include <translationutils/trans_drugs.h>
+
 #include "ui_atcpage.h"
 
+using namespace Trans::ConstantTranslations;
 using namespace DrugsDbCreator;
 
 AtcPage::AtcPage(QObject *parent) :
         IToolPage(parent)
 {}
+
+QString AtcPage::category() const
+{
+    return tkTr(Trans::Constants::DRUGS) + "|" + Core::Constants::CATEGORY_ATC_HELPERS;
+}
 
 QWidget *AtcPage::createPage(QWidget *parent)
 {

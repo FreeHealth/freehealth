@@ -42,7 +42,7 @@ public:
 
     virtual QString id() const {return "InteractionsDatabaseCreatorPage";}
     virtual QString name() const {return "Create the interactions database";}
-    virtual QString category() const {return tr("Interaction database");}
+    virtual QString category() const;
     virtual QIcon icon() const {return QIcon();}
 
     // widget will be deleted after the show

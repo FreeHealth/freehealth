@@ -46,7 +46,7 @@ public:
 
     virtual QString id() const {return "CanadianDrugsDatabase";}
     virtual QString name() const {return "Canadian Drugs Database Creator";}
-    virtual QString category() const {return Core::Constants::CATEGORY_DRUGSDATABASE;}
+    virtual QString category() const;
     virtual QIcon icon() const {return QIcon();}
 
     // widget will be deleted after the show

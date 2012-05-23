@@ -52,7 +52,7 @@ public:
 
     virtual QString id() const {return "BiamExtractorPage";}
     virtual QString name() const {return "BIAM extractor";}
-    virtual QString category() const {return Core::Constants::CATEGORY_DRUGINFOSDATABASE;}
+    virtual QString category() const;
     virtual QIcon icon() const {return QIcon();}
 
     // widget will be deleted after the show

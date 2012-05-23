@@ -27,6 +27,7 @@
 #include <QDomDocument>
 
 using namespace DrugInfos;
+using namespace Trans::ConstantTranslations;
 
 static inline Core::IMainWindow *mainwindow() {return Core::ICore::instance()->mainWindow();}
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
@@ -410,4 +411,9 @@ void PimDatabaseCreator::changeEvent(QEvent *e)
     default:
         break;
     }
+}
+
+QString PimDatabasePage::category() const
+{
+    return tkTr(Trans::Constants::DRUGS) + "|" + tr("PIM database");
 }

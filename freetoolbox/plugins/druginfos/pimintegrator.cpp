@@ -65,6 +65,10 @@ private:
 }  // End namespace Internal
 }  // End namespace DrugInfos
 
+QString PimsTreePage::category() const
+{
+    return tkTr(Trans::Constants::DRUGS) + "|" + tr("PIM database");
+}
 
 PimTreeModel::PimTreeModel(QObject *parent) :
         QAbstractXmlTreeModel(treeXmlFile(), "FreeMedForms_PIMs", parent)

@@ -43,7 +43,7 @@ public:
 
     virtual QString id() const {return "AtcPage";}
     virtual QString name() const {return "ATC";}
-    virtual QString category() const {return Core::Constants::CATEGORY_ATC_HELPERS;}
+    virtual QString category() const;
     virtual QIcon icon() const {return QIcon();}
 
     // widget will be deleted after the show

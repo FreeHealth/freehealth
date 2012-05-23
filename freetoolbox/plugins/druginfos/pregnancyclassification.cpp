@@ -35,8 +35,8 @@
 #include <utils/log.h>
 #include <utils/httpdownloader.h>
 #include <extensionsystem/pluginmanager.h>
-#include <translationutils/constanttranslations.h>
-
+#include <translationutils/constants.h>
+#include <translationutils/trans_drugs.h>
 #include <QScriptEngine>
 #include <QDir>
 #include <QUrl>
@@ -44,6 +44,8 @@
 #include "ui_pregnancyclassification.h"
 
 using namespace DrugInfos;
+using namespace Trans::ConstantTranslations;
+
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 
@@ -54,8 +56,11 @@ static inline QString databaseDescriptionFile() {return QDir::cleanPath(settings
 
 QString PregnancyClassificationPage::id() const {return "PregnancyClassificationPage";}
 QString PregnancyClassificationPage::name() const {return "Pregnancy & drugs";}
-QString PregnancyClassificationPage::category() const {return Core::Constants::CATEGORY_DRUGINFOSDATABASE;}
 QIcon PregnancyClassificationPage::icon() const {return QIcon();}
+QString PregnancyClassificationPage::category() const
+{
+    return tkTr(Trans::Constants::DRUGS) + "|" + Core::Constants::CATEGORY_DRUGINFOSDATABASE;
+}
 
 namespace {
 
@@ -129,14 +134,13 @@ bool load(const QString &fileName, QList<PregnancyRecord> &records, QString *err
     return true;
 }
 
-}
+} // End namespace Anonymous
 
 // widget will be deleted after the show
 QWidget *PregnancyClassificationPage::createPage(QWidget *parent)
 {
     return new PregnancyClassificationWidget(parent);
 }
-
 
 PregnancyDatatabaseStep::PregnancyDatatabaseStep(QObject *parent) :
     Core::IFullReleaseStep(parent),

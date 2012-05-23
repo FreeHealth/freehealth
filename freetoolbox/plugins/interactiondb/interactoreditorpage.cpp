@@ -43,7 +43,9 @@
 
 #include <utils/log.h>
 #include <utils/global.h>
-#include <translationutils/constanttranslations.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_drugs.h>
+#include <translationutils/trans_menu.h>
 
 #include "ui_interactoreditorwidget.h"
 
@@ -72,6 +74,10 @@ static inline QString oldMolLinkFile() {return QDir::cleanPath(settings()->value
 static inline QString oldTreeXmlFile() {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + Core::Constants::AFSSAPS_CLASSTREE_FILENAME);}
 static inline QString newInteractorsFile() {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + Core::Constants::NEW_INTERACTORS_FILENAME);}
 
+QString InteractorEditorPage::category() const
+{
+    return tkTr(Trans::Constants::DRUGS) + "|" + tr("Interaction database");
+}
 
 QWidget *InteractorEditorPage::createPage(QWidget *parent)
 {

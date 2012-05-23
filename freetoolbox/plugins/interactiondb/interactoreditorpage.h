@@ -28,6 +28,7 @@
 #define INTERACTOREDITORPAGE_H
 
 #include <coreplugin/itoolpage.h>
+
 class QModelIndex;
 
 namespace IAMDb {
@@ -39,7 +40,7 @@ public:
 
     virtual QString id() const {return "InteractorEditorPage";}
     virtual QString name() const {return "Interactors Editor";}
-    virtual QString category() const {return tr("Interaction database");}
+    virtual QString category() const;
     virtual QIcon icon() const {return QIcon();}
 
     // widget will be deleted after the show

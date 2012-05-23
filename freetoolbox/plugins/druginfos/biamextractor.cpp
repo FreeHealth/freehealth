@@ -404,14 +404,15 @@ public:
 }  // End namespace Internal
 }  // End namespace DrugInfos
 
-
+QString BiamExtractorPage::category() const
+{
+    return tkTr(Trans::Constants::DRUGS) + "|" + Core::Constants::CATEGORY_DRUGINFOSDATABASE;
+}
 
 QWidget *BiamExtractorPage::createPage(QWidget *parent)
 {
     return new BiamExtractor(parent);
 }
-
-
 
 BiamExtractor::BiamExtractor(QWidget *parent) :
     QWidget(parent),
