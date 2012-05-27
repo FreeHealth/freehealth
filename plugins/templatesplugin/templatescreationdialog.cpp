@@ -75,7 +75,7 @@ void TemplatesCreationDialog::done(int r)
         model->setData(model->index(row, Constants::Data_IsTemplate, parent), true);
         QString tmp = ui->nameLineEdit->text();
         if (tmp.isEmpty())
-            tmp = tkTr(Trans::Constants::FILENEW_TEXT);
+            tmp = tkTr(Trans::Constants::FILENEW_TEXT).remove("&");
         model->setData(model->index(row, Constants::Data_Label, parent), tmp);
         model->setData(model->index(row, Constants::Data_Summary, parent), ui->summaryTextEdit->toHtml());
         model->setData(model->index(row, Constants::Data_Content, parent), m_Content);

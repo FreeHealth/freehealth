@@ -193,7 +193,7 @@ bool CategoryOnlyProxyModel::insertRows(int row, int count, const QModelIndex &p
         Category::CategoryItem *cat = new Category::CategoryItem;
         cat->setParent(d->m_Model->categoryForIndex(mapToSource(parent)));
         cat->setData(CategoryItem::DbOnly_Mime, d->m_Model->mime());
-        cat->setLabel(tkTr(Trans::Constants::FILENEW_TEXT), QLocale().name().left(2));
+        cat->setLabel(tkTr(Trans::Constants::FILENEW_TEXT).remove("&"), QLocale().name().left(2));
         d->m_Model->addCategory(cat, row+i, parent);
     }
     return true;

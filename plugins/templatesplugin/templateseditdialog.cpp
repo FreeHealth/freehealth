@@ -168,7 +168,7 @@ void TemplatesEditDialog::done(int r)
     } else if (r==QDialog::Accepted) {
         if (d->m_ui->nameLineEdit->text().isEmpty()) {
             d->m_ui->nameLineEdit->setFocus();
-            d->m_ui->nameLineEdit->setText(tkTr(Trans::Constants::FILENEW_TEXT));
+            d->m_ui->nameLineEdit->setText(tkTr(Trans::Constants::FILENEW_TEXT).remove("&"));
         }
         // modify focus in order to the mapper to get the changes done
         d->m_ui->buttonBox->setFocus();

@@ -201,17 +201,17 @@ bool CategoryLabelsModel::insertRows(int row, int count, const QModelIndex &pare
 
     for(int i=0; i < count; ++i) {
         if (!languages.contains(actual)) {
-            d->m_Labels.insert(row+i, Language(actual, tkTr(Trans::Constants::FILENEW_TEXT)));
+            d->m_Labels.insert(row+i, Language(actual, tkTr(Trans::Constants::FILENEW_TEXT).remove("&")));
             languages.append(actual);
         } else if (!languages.contains(Trans::Constants::ALL_LANGUAGE)) {
-            d->m_Labels.insert(row+i, Language(Trans::Constants::ALL_LANGUAGE, tkTr(Trans::Constants::FILENEW_TEXT)));
+            d->m_Labels.insert(row+i, Language(Trans::Constants::ALL_LANGUAGE, tkTr(Trans::Constants::FILENEW_TEXT).remove("&")));
             languages.append(Trans::Constants::ALL_LANGUAGE);
         } else {
             for(int j = 2; j < QLocale::LastLanguage; ++j) {
                 QLocale::Language lang = static_cast<QLocale::Language>(j);
                 QString l = QLocale(lang).name().left(2);
                 if (!languages.contains(l)) {
-                    d->m_Labels.insert(row+i, Language(l, tkTr(Trans::Constants::FILENEW_TEXT)));
+                    d->m_Labels.insert(row+i, Language(l, tkTr(Trans::Constants::FILENEW_TEXT).remove("&")));
                     languages.append(l);
                     break;
                 }
