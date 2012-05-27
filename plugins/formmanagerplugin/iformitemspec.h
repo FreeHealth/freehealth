@@ -49,8 +49,8 @@ QT_END_NAMESPACE
 /**
  * \file iformitem.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.4.0
- * \date 04 Apr 2011
+ * \version 0.7.3
+ * \date 27 May 2012
 */
 
 namespace Form {
@@ -58,6 +58,7 @@ class IFormWidget;
 
 class FORM_EXPORT FormItemIdentifier : public QObject
 {
+    Q_OBJECT
 public:
     FormItemIdentifier(QObject *parent =0) : QObject(parent) {}
     ~FormItemIdentifier() {}

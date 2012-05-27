@@ -318,8 +318,8 @@ public:
 }  // End Internal
 }  // End Form
 
-FormItemValues::FormItemValues(QObject *parent) :
-        QObject(parent), d(new Form::Internal::FormItemValuesPrivate)
+FormItemValues::FormItemValues() :
+    d(new Form::Internal::FormItemValuesPrivate)
 {
 }
 
@@ -459,15 +459,29 @@ void FormItemValues::toTreeWidget(QTreeWidgetItem *tree) const
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////  FormItem  ///////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+FormItem::FormItem(QObject *parent) :
+    FormItemIdentifier(parent),
+    m_Spec(new FormItemSpec),
+    m_Scripts(new FormItemScripts),
+    m_Values(new FormItemValues),
+    m_FormWidget(0),
+    m_ItemData(0),
+    m_PatientData(-1)
+{}
+
 FormItem::~FormItem()
 {
+    if (m_Scripts) {
+        delete m_Scripts;
+        m_Scripts = 0;
+    }
     if (m_Spec) {
         delete m_Spec;
         m_Spec = 0;
     }
-    if (m_Scripts) {
-        delete m_Scripts;
-        m_Scripts = 0;
+    if (m_Values) {
+        delete m_Values;
+        m_Values = 0;
     }
     if (m_ItemData) {
         delete m_ItemData;

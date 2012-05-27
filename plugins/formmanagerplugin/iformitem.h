@@ -52,8 +52,8 @@ QT_END_NAMESPACE
 /**
  * \file iformitem.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.2
- * \date 06 Jan 2012
+ * \version 0.7.3
+ * \date 27 May 2012
 */
 
 namespace Form {
@@ -71,17 +71,9 @@ class FORM_EXPORT FormItem : public Form::FormItemIdentifier
 //    Q_PROPERTY(QVariant value READ value WRITE setValue USER true)
 
 public:
-    FormItem(QObject *parent=0) :
-            FormItemIdentifier(parent),
-            m_Spec(new FormItemSpec),
-            m_Scripts(new FormItemScripts),
-            m_Values(new FormItemValues(this)),
-            m_FormWidget(0),
-            m_ItemData(0),
-            m_PatientData(-1)
-            {}
-
+    FormItem(QObject *parent=0);
     virtual ~FormItem();
+
     Form::FormItem *parentFormItem() const;
     Form::FormMain *parentFormMain() const;
 

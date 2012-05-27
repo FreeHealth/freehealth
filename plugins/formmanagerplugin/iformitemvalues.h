@@ -62,9 +62,9 @@ namespace Internal {
 class FormItemValuesPrivate;
 }
 
-class FORM_EXPORT FormItemValues : public QObject
+class FORM_EXPORT FormItemValues //: public QObject
 {
-    Q_OBJECT
+//    Q_OBJECT
 public:
     enum {
         Value_Uuid = 0,
@@ -75,7 +75,8 @@ public:
         Value_Printing,
         Value_Dependency
     };
-    FormItemValues(QObject *parent);
+//    FormItemValues(QObject *parent);
+    FormItemValues();
     ~FormItemValues();
 
     void setValue(int type, const int id, const QVariant &val, const QString &language = QString::null);
