@@ -316,6 +316,9 @@ void PatientSelector::refreshFilter(const QString &)
 /** \brief Slot activated when the user select a patient from the selector. \sa setSelectedPatient()*/
 void PatientSelector::onPatientSelected(const QModelIndex &index)
 {
+    if (index==d->m_Model->currentPatient())
+        return;
+
     mainWindow()->startProcessingSpinner();
     // Inform Core::IPatient model wrapper
     if (!d->m_Model)
