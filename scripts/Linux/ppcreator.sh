@@ -4,7 +4,7 @@
 # License : GPLv3
 # Create the Launchpad PPA package for one specific application
 
-SCRIPT_VERSION=0.6.0
+SCRIPT_VERSION=0.7.3
 
 PACKDIR="~/ppa_"
 APP_VERSION=""
@@ -18,7 +18,7 @@ PGP_KEY="0x3FA0BBEF"      # Eric's key by default, you have to know the phrase
 WGET_NOPROXY=""
 DEBUILD_SOURCE="-sa"
 PPA_VERSION="1"
-SERIES="oneiric maverick natty"
+SERIES="maverick natty oneiric precise"
 
 showHelp()
 {
