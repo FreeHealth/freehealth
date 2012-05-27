@@ -77,7 +77,8 @@ FormManagerScriptWrapper::FormManagerScriptWrapper(QObject *parent) :
 
 void FormManagerScriptWrapper::recreateItemWrappers()
 {
-//    qDeleteAll(m_Items);
+    qDeleteAll(m_Wrappers);
+    m_Wrappers.clear();
     m_Items.clear();
     foreach(Form::FormItem *main, formManager()->forms()) {
         const QList<Form::FormItem*> items = main->flattenFormItemChildren();
@@ -86,6 +87,7 @@ void FormManagerScriptWrapper::recreateItemWrappers()
             FormItemScriptWrapper *w = new FormItemScriptWrapper(this);
             w->setFormItem(items.at(i));
             m_Items.insert(items.at(i)->uuid(), scriptManager()->addScriptObject(w));
+            m_Wrappers << w;
         }
     }
 }
@@ -106,6 +108,7 @@ void FormManagerScriptWrapper::updateSubFormItemWrappers(const QString &uuid)
             }
             // Create && insert item
             FormItemScriptWrapper *w = new FormItemScriptWrapper(this);
+            m_Wrappers << w;
             w->setFormItem(item);
             m_Items.insert(item->uuid(), scriptManager()->addScriptObject(w));
         }
@@ -163,6 +166,16 @@ FormItemScriptWrapper::~FormItemScriptWrapper()
 void FormItemScriptWrapper::setFormItem(Form::FormItem *item)
 {
     m_Item = item;
+}
+
+Form::FormItem *FormItemScriptWrapper::item() const
+{
+    return m_Item;
+}
+
+bool FormItemScriptWrapper::isValid() const
+{
+    return (m_Item!=0);
 }
 
 QString FormItemScriptWrapper::uuid() const

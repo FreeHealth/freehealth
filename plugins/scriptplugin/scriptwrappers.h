@@ -33,14 +33,23 @@
 #include <QVector>
 #include <QtScript/QScriptable>
 #include <QtScript/QScriptValue>
-
+#include <QPointer>
 #include <QListWidgetItem>
 #include <QListWidget>
 #include <QComboBox>
 
+QT_BEGIN_NAMESPACE
 class QScriptValue;
 class QScriptEngine;
 class QScriptContext;
+QT_END_NAMESPACE
+
+/**
+ * \file scriptwrappers.h
+ * \author Eric MAEKER <eric.maeker@gmail.com>
+ * \version 0.7.3
+ * \date 27 May 2012
+*/
 
 namespace Form {
 class FormItem;
@@ -68,10 +77,10 @@ public:
     ~FormItemScriptWrapper();
 
     void setFormItem(Form::FormItem *item);
-    Form::FormItem *item() const {return m_Item;}
+    Form::FormItem *item() const;
 
 public Q_SLOTS:
-    bool isValid() const {return (m_Item!=0);}
+    bool isValid() const;
     QString uuid() const;
     QString type() const;
 
@@ -94,7 +103,7 @@ public Q_SLOTS:
     QStringList childrenUuid() const;
 
 private:
-    Form::FormItem *m_Item;
+    QPointer<Form::FormItem> m_Item;
 };
 
 class FormMainScriptWrapper: public QObject
@@ -143,6 +152,7 @@ private:
     QHash<QString, QScriptValue> m_Items;
     FormItemScriptWrapper m_Null;
     bool m_LogItemSearch;
+    QVector<FormItemScriptWrapper*> m_Wrappers;
 };
 
 } // namespace Script
