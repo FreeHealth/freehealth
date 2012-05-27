@@ -513,6 +513,12 @@ void PmhCategoryModel::setRootFormUid(const QString &uid)
     d->_rootUid = uid;
 }
 
+/** Define the uid of the root form that contains the categories to use in the model. */
+QString PmhCategoryModel::rootFormUid() const
+{
+    return d->_rootUid;
+}
+
 /** Clear and refresh the whole model */
 void PmhCategoryModel::refreshFromDatabase()
 {
@@ -1104,9 +1110,9 @@ bool PmhCategoryModel::activateFormEpisode(const QModelIndex &formIndex)
 */
 void PmhCategoryModel::addCategory(Category::CategoryItem *cat, int row, const QModelIndex &parentCategory)
 {
-    Q_ASSERT(d->_rootUid.isEmpty());
+    Q_ASSERT(!d->_rootUid.isEmpty());
     if (d->_rootUid.isEmpty()) {
-        LOG_ERROR("N root uid defined");
+        LOG_ERROR("No root uid defined - can not create PMHx category");
         return;
     }
 
@@ -1154,6 +1160,15 @@ void PmhCategoryModel::addCategory(Category::CategoryItem *cat, int row, const Q
 /** Update a Category::CategoryItem in the model and in the database. \sa PMH::PmhCore::saveCategory(), PMH::PmhBase::savePmhCategory()*/
 void PmhCategoryModel::updateCategory(Category::CategoryItem *category)
 {
+    Q_ASSERT(!d->_rootUid.isEmpty());
+    if (d->_rootUid.isEmpty()) {
+        LOG_ERROR("No root uid defined - can not create PMHx category");
+        return;
+    }
+
+    // ensure the category gets the correct mime type for PMHx
+    category->setData(Category::CategoryItem::DbOnly_Mime, QString("%1@%2").arg(PMH::Constants::CATEGORY_MIME).arg(d->_rootUid));
+
     QModelIndex cat = indexForCategory(category);
     TreeItem *item = d->getItem(cat);
     if (!item)

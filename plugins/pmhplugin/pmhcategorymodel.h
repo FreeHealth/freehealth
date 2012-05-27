@@ -69,6 +69,7 @@ public:
     ~PmhCategoryModel();
 
     void setRootFormUid(const QString &uid);
+    QString rootFormUid() const;
     void refreshFromDatabase();
 
     QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;

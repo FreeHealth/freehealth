@@ -69,7 +69,7 @@ public:
     {
         CategoryItem *cat = 0;
         if (!m_CatLabelsModel) {
-            LOG_ERROR_FOR("CategoryDialog", "No valid model");
+//            LOG_ERROR_FOR("CategoryDialog", "No valid model");
             return;
         }
         m_CatLabelsModel->submit();
@@ -83,7 +83,7 @@ public:
     {
         CategoryItem *cat = 0;
         if (!m_CatLabelsModel) {
-            LOG_ERROR_FOR("CategoryDialog", "No valid model");
+//            LOG_ERROR_FOR("CategoryDialog", "No valid model");
             return;
         }
         cat = m_CatLabelsModel->categoryItem();
@@ -101,8 +101,6 @@ public:
 
 }
 }
-
-
 
 CategoryDialog::CategoryDialog(QWidget *parent) :
         QDialog(parent), d(new Internal::CategoryDialogPrivate)
