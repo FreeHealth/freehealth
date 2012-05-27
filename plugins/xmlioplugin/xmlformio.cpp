@@ -387,26 +387,7 @@ QList<Form::FormMain *> XmlFormIO::loadAllRootForms(const QString &uuidOrAbsPath
 bool XmlFormIO::loadPmhCategories(const QString &uuidOrAbsPath) const
 {
     XmlFormName &form = formName(uuidOrAbsPath, m_FormNames);
-    WARN_FUNC << uuidOrAbsPath << form;
-
-//    // Get the pmhx file from xmlformbase
-//    QString content = base()->getFormContent(form.uid, XmlIOBase::PmhCategories);
-//    if (content.isEmpty())
-//        return false;
-
-//    // Read the uuid of root categories
-//    QDomDocument doc;
-//    doc.setContent(content);
-
-//    // Pass the root uuids to the PMHxModel
-//    QDomElement root = doc.firstChildElement(Constants::TAG_MAINXMLTAG);
-//    QDomElement element = root.firstChildElement(Constants::TAG_PMHX_CATEGORIES);
-//    element = element.firstChildElement(::Constants::TAG_CATEGORY);
-//    QStringList rootUuids;
-//    while (!element.isNull()) {
-//        rootUuids << element.text();
-//        element = element.nextSiblingElement(::Constants::TAG_CATEGORY);
-//    }
+//    WARN_FUNC << uuidOrAbsPath << form;
     pmhCore()->pmhCategoryModel()->setRootFormUid(form.uid);
     pmhCore()->pmhCategoryModel()->refreshFromDatabase();
     LOG("Category retreived");
