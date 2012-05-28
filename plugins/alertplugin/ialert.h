@@ -28,9 +28,9 @@
 #ifndef IALERT
 #define IALERT
 
-#include <QObject>
-#include <QUuid>
+#include <alertplugin/alertplugin_exporter.h>
 #include <QString>
+#include <QDateTime>
 
 /**
  * \file ialert.h
@@ -41,44 +41,120 @@
 
 namespace Alert {
 
-class IAlert : public QObject
+class ALERT_EXPORT AlertTiming
 {
-    Q_OBJECT
 public:
-    enum TypeOfAlert
-    {
-        ALL_ALERTS = 0,
-        PATIENT_PRIMARY_PREVENTION_ALERTS,
-        PATIENT_SECONDARY_PREVENTION_ALERTS,
-        PATIENT_PRESCRIPTION_ALERTS,
-        PATIENT_NOTES,
-        TypeOfAlert_MaxParams
+    AlertTiming() : _id(-1), _delay(-1) {}
+    virtual ~AlertTiming() {}
+
+    virtual int id() const {return _id;}
+    virtual void setId(int id) {_id = id;}
+
+    virtual QDateTime start() const {return _start;}
+    virtual QDateTime end() const {return _end;}
+    virtual void setStart(const QDateTime &dt) {_start = dt;}
+    virtual void setEnd(const QDateTime &dt) {_end = dt;}
+
+    virtual bool isCycling() const {return _isCycle;}
+    virtual void setCycling(bool cycle) {_isCycle=cycle;}
+    virtual QDateTime nextDate() const {return _next;}
+    virtual void setNextDate(const QDateTime &dt) {_next = dt;}
+    virtual int cyclingDelayInDays() const {return _delay;}
+    virtual void setCyclingDelayInDays(const int delay) {_delay=delay;}
+
+private:
+    int _id, _delay;
+    QDateTime _start, _end, _next;
+    bool _isCycle;
+};
+
+class ALERT_EXPORT AlertScript
+{
+public:
+    enum ScriptType {
+        BeforeAlert = 0,
+        DuringAlert,
+        AfterAlert
     };
 
-    enum ItemsDefinition
-    {
-        TYPE_OF_ITEM = 0,
-        PARENT_ITEM,
-        PARENT_OR_CHILD,
-        ICON,
-        DATE_DONE,
-        DATE_NEXT,
-        ABSTRACT,
-        ID_ITEM,
-        PATIENT_UID,
-        USER_UID,
-        ItemsDefinition_MaxParam
+    AlertScript() : _id(-1), _valid(true) {}
+    virtual ~AlertScript() {}
+
+    virtual int id() const {return _id;}
+    virtual void setId(int id) {_id = id;}
+
+    virtual bool isValid() const {return _valid;}
+    virtual void setValid(bool state) {_valid=state;}
+
+    virtual QString script() const {return _script;}
+    virtual void setScript(const QString &script) {_script=script;}
+
+private:
+    int _id;
+    bool _valid;
+    ScriptType _type;
+    QString _script;
+};
+
+namespace Internal {
+class AlertItemPrivate;
+}
+
+class ALERT_EXPORT AlertItem
+{
+public:
+    enum ViewType {
+        DynamicAlert = 0,
+        StaticPatientBar,
+        StaticStatusBar
+    };
+    enum ContentType {
+        ApplicationNotification = 0,
+        PatientCondition,
+        UserNotification
+    };
+    enum Priority {
+        High = 0,
+        Medium,
+        Low
     };
 
-public:
-    IAlert (){}
-    virtual ~IAlert (){}
+    AlertItem();
+    virtual ~AlertItem();
+    virtual bool isValid() const;
 
-    //methods
-    virtual void initialize() = 0;
-    virtual QString setAlertUuid() = 0 ;
-    virtual void showIHMaccordingToType(int) = 0 ;
+    virtual QString label(const QString &lang = QString::null) const;
+    virtual QString category(const QString &lang = QString::null) const;
+    virtual QString description(const QString &lang = QString::null) const;
+    virtual QString comment(const QString &lang = QString::null) const;
 
+    virtual void setLabel(const QString &txt, const QString &lang = QString::null);
+    virtual void setCategory(const QString &txt, const QString &lang = QString::null);
+    virtual void setDescription(const QString &txt, const QString &lang = QString::null);
+    virtual void setComment(const QString &txt, const QString &lang = QString::null);
+
+    virtual ViewType viewType() const;
+    virtual ContentType contentType() const;
+    virtual Priority priority() const;
+    // TODO : virtual xxx condition() const = 0;
+
+    virtual void setViewType(ViewType type);
+    virtual void setContentType(ContentType content);
+    virtual void setPriority(Priority priority);
+    // TODO : virtual void setCondition(...);
+
+    virtual AlertTiming &timing(int id) const;
+    virtual QVector<AlertTiming> &timings() const;
+    virtual AlertTiming &timingAt(int id) const;
+    virtual void addTiming(const AlertTiming &timing);
+
+    virtual AlertScript &script(int id) const;
+    virtual QVector<AlertScript> &scripts() const;
+    virtual AlertScript &scriptAt(int id) const;
+    virtual void addScript(const AlertScript &script);
+
+private:
+    Internal::AlertItemPrivate *d;
 };
 
 }  // Alert
