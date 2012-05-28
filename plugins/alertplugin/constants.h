@@ -25,50 +25,101 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#include "alertcore.h"
-#include "alertbase.h"
-#include "alertmanager.h"
+#ifndef CONSTANTS_H
+#define CONSTANTS_H
 
-#include <QUuid>
-#include <QString>
+/**
+ * \file constants.h
+ * \author Eric MAEKER <eric.maeker@gmail.com>
+ * \version 0.8.0
+ * \date 28 May 2012
+*/
 
-using namespace Alert;
+namespace Alert {
+namespace Constants {
 
-AlertCore *AlertCore::_instance = 0;
+const char * const  DB_NAME            = "alerts";
+const char * const  DB_FILENAME        = "alerts.db";
+const char * const  DB_ACTUALVERSION   = "0.1";
 
-AlertCore *AlertCore::instance(QObject *parent)
-{
-    if (!_instance)
-        _instance = new AlertCore(parent);
-    return _instance;
-}
+// Tables
+enum Tables {
+    Table_ALERT = 0,
+    Table_ALERT_LABELS,
+    Table_ALERT_SCRIPTS,
+    Table_ALERT_TIMING,
+    Table_ALERT_VERSION
+};
 
-AlertCore::AlertCore(QObject *parent) :
-    QObject(parent),
-    m_alertBase(0),
-    m_alertManager(0)
-{
-}
+// Fields
+enum AlertFields {
+    ALERT_ID = 0,
 
-AlertCore::~AlertCore()
-{
-    // QObject manages children deletion so no need to delete the singleton
-}
+    // Uids
+    ALERT_UID,
+    ALERT_USER_UID,
+    ALERT_GROUP_UID,  // for future use (user groups)
+    ALERT_PATIENT_UID,
+    ALERT_FAMILY_UID, // for future use (patient family)
+    ALERT_APP_NAME,
+    ALERT_CATEGORY_UID,
+    ALERT_SCRIPTS_ID,
+    ALERT_ISVALID,
+    // TODO : Add a trace for alert modification
 
-void AlertCore::initialize()
-{
-    // Create all instance
-    m_alertBase = new Internal::AlertBase(this);
-    m_alertBase->init();
-    m_alertManager = new AlertManager(this);
-}
+    // Types
+    ALERT_VIEW_TYPE,
+    ALERT_CONTENT_TYPE,
+    ALERT_TIMING_ID,
+    ALERT_CONDITION_TYPE,
 
-QString AlertCore::setAlertUuid()
-{
-  return QUuid::createUuid().toString();
-}
+    // Translatable description items
+    ALERT_LABEL_LABELID,
+    ALERT_DESCRIPTION_LABELID,
+    ALERT_COMMENT_LABELID,
 
-void AlertCore::showIHMaccordingToType(int type)
-{
-    m_alertManager->initializeWithType(type);
-}
+    // Non translable items
+    ALERT_CREATION_DATE,
+    ALERT_LAST_UPDATE_DATE,
+    ALERT_THEMED_ICON,
+    ALERT_THEME_CSS,
+    ALERT_CRYPTED_PASSWORD,
+
+    // Other
+    ALERT_EXTRA_XML
+};
+
+enum AlertLabelFields {
+    ALERT_LABELS_ID = 0,
+    ALERT_LABELS_LABELID,
+    ALERT_LABELS_LANG,
+    ALERT_LABELS_VALUE,
+    ALERT_LABELS_ISVALID
+};
+
+enum AlertScriptsFields {
+    ALERT_SCRIPTS_SID = 0,
+    ALERT_SCRIPT_UID,
+    ALERT_SCRIPT_ISVALID,
+    ALERT_SCRIPT_TYPE,
+    ALERT_SCRIPT_CONTENT
+};
+
+enum AlertTimingFields {
+    ALERT_TIMING_TIMINGID = 0,
+    ALERT_TIMING_ISVALID,
+    ALERT_TIMING_STARTDATETIME,
+    ALERT_TIMING_ENDDATETIME,
+    ALERT_TIMING_CYCLES,        // number of cycle or infinite cycling
+    ALERT_TIMING_CYCLINGDELAY,  // cycle every X days
+    ALERT_TIMING_NEXTCYCLE
+};
+
+enum VersionFields {
+    VERSION_TEXT = 0
+};
+
+}  // namespace Constants
+}  // namespace Alert
+
+#endif // CONSTANTS_H

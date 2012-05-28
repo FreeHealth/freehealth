@@ -28,32 +28,54 @@
 #ifndef ALERTBASE_H
 #define ALERTBASE_H
 
-//#include <utils/log.h>
-#include <QSqlDatabase>
+#include <utils/database.h>
 #include <QObject>
-#include <QDebug>
+
+/**
+ * \file alertbase.h
+ * \author Eric MAEKER <eric.maeker@gmail.com>, Pierre-Marie Desombre <pm.desombre@gmail.com>
+ * \version 0.8.0
+ * \date 28 May 2012
+*/
 
 namespace Alert {
 class AlertCore;
+namespace Internal {
 
-class AlertBase:public QObject
+class AlertBase : public QObject, public Utils::Database
 {
     Q_OBJECT
     friend class Alert::AlertCore;
 
 protected:
     AlertBase(QObject * parent = 0);
+    bool init();
 
 public:
     ~AlertBase();
+    bool isInitialized() const {return m_initialized;}
+
+    // For debugging purpose
+    void toTreeWidget(QTreeWidget *tree);
 
 private:
-    QSqlDatabase m_db;
-    bool connectToAlertDatabase();
-    bool setTables();
+    bool createDatabase(const QString &connectionName, const QString &dbName,
+                          const QString &pathOrHostName,
+                          TypeOfAccess access, AvailableDrivers driver,
+                          const QString &login, const QString &pass,
+                          const int port,
+                          CreationOption createOption
+                         );
+
+private Q_SLOTS:
+    void onCoreDatabaseServerChanged();
+
+private:
+    bool m_initialized;
 };
 
-}  // Alert
+}  // namespace Internal
+}  // namespace Alert
 
-#endif
+#endif  // ALERTBASE_H
 

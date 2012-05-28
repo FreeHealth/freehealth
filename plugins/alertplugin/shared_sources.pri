@@ -7,6 +7,7 @@ include(../fmf_plugins.pri)
 include(alertplugin_dependencies.pri)
 
 HEADERS += \
+    $${PWD}/constants.h \
     $${PWD}/alertplugin.h \
     $${PWD}/alertbase.h \
     $${PWD}/alertcore.h \

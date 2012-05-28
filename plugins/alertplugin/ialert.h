@@ -32,6 +32,13 @@
 #include <QUuid>
 #include <QString>
 
+/**
+ * \file ialert.h
+ * \author Eric MAEKER <eric.maeker@gmail.com>, Pierre-Marie Desombre <pm.desombre@gmail.com>
+ * \version 0.8.0
+ * \date 28 May 2012
+*/
+
 namespace Alert {
 
 class IAlert : public QObject
