@@ -139,10 +139,6 @@ PatientBase::PatientBase(QObject *parent) :
     addField(Table_IDENT, IDENTITY_TELS, "TELS", FieldIsLongText);  // Context:Value;Context;Value...
     addField(Table_IDENT, IDENTITY_FAXES, "FAXES", FieldIsLongText);  // Context:Value;Context;Value...
 
-    // Automate Indexes creation ? or hard coding of indexes
-    // Needed : documents, prescriptions...
-    // Insurances ?
-
     // Photo
     addTable(Table_PATIENT_PHOTO, "PATIENT_PHOTO");
     addField(Table_PATIENT_PHOTO, PHOTO_ID, "PHOTO_ID", FieldIsUniquePrimaryKey);
@@ -161,10 +157,6 @@ PatientBase::PatientBase(QObject *parent) :
 
 PatientBase::~PatientBase()
 {
-//    if (d) {
-//        delete d;
-//        d = 0;
-//    }
 }
 
 bool PatientBase::init()
