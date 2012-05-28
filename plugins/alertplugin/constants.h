@@ -72,6 +72,7 @@ enum AlertFields {
     ALERT_CONTENT_TYPE,
     ALERT_TIMING_ID,
     ALERT_CONDITION_TYPE,
+    ALERT_PRIORITY,
 
     // Translatable description items
     ALERT_LABEL_LABELID,

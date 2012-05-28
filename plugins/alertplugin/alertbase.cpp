@@ -89,6 +89,7 @@ AlertBase::AlertBase(QObject *parent) :
     addField(Table_ALERT, ALERT_CONTENT_TYPE, "CONTENT_ID", FieldIsInteger);
     addField(Table_ALERT, ALERT_TIMING_ID, "TIM_ID", FieldIsInteger);
     addField(Table_ALERT, ALERT_CONDITION_TYPE, "COND_ID", FieldIsInteger);
+    addField(Table_ALERT, ALERT_PRIORITY, "PRIOR", FieldIsInteger);
 
     addField(Table_ALERT, ALERT_LABEL_LABELID, "LBL_LID", FieldIsInteger);
     addField(Table_ALERT, ALERT_DESCRIPTION_LABELID, "DES_LID", FieldIsInteger);
