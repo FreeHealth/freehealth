@@ -498,7 +498,7 @@ UserLastPage::UserLastPage(QWidget *parent) : QWizardPage(parent)
     setSubTitle(tr("The user will be created."));
     tree = new QTreeWidget(this);
     tree->header()->hide();
-    // TODO: hide password!!
+    // DONE: hide password!
     QVBoxLayout *lay = new QVBoxLayout(this);
     this->setLayout(lay);
     lay->addWidget(tree);
