@@ -61,7 +61,7 @@ public:
     virtual bool isCycling() const {return _isCycle;}
     virtual void setCycling(bool cycle) {_isCycle=cycle;}
     virtual int numberOfCycles() const {return _ncycle;}
-    virtual void setNumberOfCycles(int n) {_ncycle=n;}
+    virtual void setNumberOfCycles(int n) {_ncycle=n; if (n>0)_ncycle=true;}
     virtual QDateTime nextDate() const {return _next;}
     virtual void setNextDate(const QDateTime &dt) {_next = dt;}
     virtual int cyclingDelayInDays() const {return _delay;}
