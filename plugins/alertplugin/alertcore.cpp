@@ -43,32 +43,50 @@ AlertCore *AlertCore::instance(QObject *parent)
     return _instance;
 }
 
+namespace Alert {
+namespace Internal {
+class AlertCorePrivate
+{
+public:
+    AlertCorePrivate() :
+        m_alertBase(0),
+        m_alertManager(0)
+    {}
+
+    ~AlertCorePrivate() {}
+
+public:
+    AlertBase *m_alertBase;
+    AlertManager *m_alertManager;
+};
+}
+}
+
 AlertCore::AlertCore(QObject *parent) :
     QObject(parent),
-    m_alertBase(0),
-    m_alertManager(0)
+    d(new Internal::AlertCorePrivate)
 {
 }
 
 AlertCore::~AlertCore()
 {
-    // QObject manages children deletion so no need to delete the singleton
+    if (d) {
+        delete d;
+        d = 0;
+    }
 }
 
-void AlertCore::initialize()
+bool AlertCore::initialize()
 {
     // Create all instance
-    m_alertBase = new Internal::AlertBase(this);
-    m_alertBase->init();
-    m_alertManager = new AlertManager(this);
-}
-
-QString AlertCore::setAlertUuid()
-{
-  return QUuid::createUuid().toString();
+    d->m_alertBase = new Internal::AlertBase(this);
+    d->m_alertManager = new AlertManager(this);
+    if (!d->m_alertBase->init())
+        return false;
+    return true;
 }
 
 void AlertCore::showIHMaccordingToType(int type)
 {
-    m_alertManager->initializeWithType(type);
+    d->m_alertManager->initializeWithType(type);
 }
