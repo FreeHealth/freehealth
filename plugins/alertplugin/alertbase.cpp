@@ -511,12 +511,12 @@ bool AlertBase::saveAlertItem(AlertItem &item)
         } else {
             LOG_QUERY_ERROR(query);
         }
-        if (!item.db(ItemId).isValid())
+        if (item.db(ItemId).isValid())
             return updateAlertItem(item);
     }
 
     database().transaction();
-
+    qWarning() << "SAVING ITEM" << item.uuid();
     if (!saveItemRelations(item)) {
         database().rollback();
         return false;
@@ -579,7 +579,7 @@ bool AlertBase::saveAlertItem(AlertItem &item)
 
 bool AlertBase::updateAlertItem(AlertItem &item)
 {
-    if (!item.db(ItemId).isValid())
+    if (item.db(ItemId).isValid())
         return false;
 
     database().transaction();
@@ -932,6 +932,9 @@ AlertItem AlertBase::getAlertItemFromUuid(const QString &uuid)
     QHash<int, QString> where;
     where.insert(Constants::ALERT_UID, QString("='%1'").arg(uuid));
     QSqlQuery query(database());
+
+    qWarning() << select(Constants::Table_ALERT, where);
+
     if (query.exec(select(Constants::Table_ALERT, where))) {
         if (query.next()) {
             item.setDb(ItemId, query.value(Constants::ALERT_ID).toInt());
