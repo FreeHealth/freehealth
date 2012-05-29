@@ -70,10 +70,9 @@ template <typename T>
 class MultiLingualClass
 {
 public:
-    MultiLingualClass() { }
+    MultiLingualClass() {}
     virtual ~MultiLingualClass()
     {
-        qDeleteAll(m_Hash_T_Lang);
         m_Hash_T_Lang.clear();
     }
 
@@ -93,41 +92,39 @@ public:
     }
 
     /**
-        Return a pointer to the datas class for one unique \e language, or if it does not exist for
-        the default common language.
-        If \e language doesnot exists return 0.
+        Return a pointer to the datas class for one unique \e language,
+        or if it does not exist for the default common language.
+        If \e language does not exists return 0.
      */
     T *getLanguage(const QString &language)
     {
         QString tmp = language.left(2);
-        T *s = 0;
         if (m_Hash_T_Lang.contains(tmp)) {
-            s = m_Hash_T_Lang.value(tmp);
+            return &m_Hash_T_Lang[tmp];
         } else {
             if (m_Hash_T_Lang.contains(Constants::ALL_LANGUAGE))
-                s = m_Hash_T_Lang.value(Constants::ALL_LANGUAGE);
+                return &m_Hash_T_Lang[Constants::ALL_LANGUAGE];
         }
-        return s;
+        return 0;
     }
 
     /** Return a pointer to the datas class for one unique \e language. If \e language doesnot exists it is created. */
     T *createLanguage(const QString &lang)
     {
         QString tmp = lang.left(2);
-        T *s = 0;
         if (m_Hash_T_Lang.contains(tmp)) {
-            s = m_Hash_T_Lang.value(tmp);
+            return &m_Hash_T_Lang[tmp];
         } else {
-            s = new T;
-            m_Hash_T_Lang.insert(tmp,s);
+            T s;
+            m_Hash_T_Lang.insert(tmp, s);
+            return &m_Hash_T_Lang[tmp];
         }
-        return s;
+        return 0;
     }
 
     /** Clear all recorded data and languages. */
     void clear()
     {
-        qDeleteAll(m_Hash_T_Lang);
         m_Hash_T_Lang.clear();
     }
 
@@ -142,13 +139,12 @@ public:
         foreach(const QString &lang, m_Hash_T_Lang.keys()) {
             l = new QTreeWidgetItem(v, QStringList() << "Language" << lang );
             l->setFont(0,bold);
-            T *s = m_Hash_T_Lang.value(lang);
-            s->toTreeWidgetItem(l);
+            m_Hash_T_Lang.value(lang).toTreeWidgetItem(l);
         }
     }
 
 private:
-    QHash<QString, T *> m_Hash_T_Lang;
+    QHash<QString, T> m_Hash_T_Lang;
 };
 
 } // end Trans
