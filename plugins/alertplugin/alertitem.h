@@ -141,10 +141,14 @@ public:
 
     AlertItem();
     virtual ~AlertItem();
-    virtual bool setValidity(bool isValid);
     virtual bool isValid() const;
+    virtual bool setValidity(bool isValid);
 
     virtual QString uuid() const;
+    virtual void setUuid(const QString &uid) const;
+
+    virtual bool isModified() const;
+    virtual bool setModified(bool modified);
 
     virtual QString label(const QString &lang = QString::null) const;
     virtual QString category(const QString &lang = QString::null) const;

@@ -53,7 +53,7 @@ class AlertItemPrivate : public Trans::MultiLingualClass<AlertValueBook>
 public:
     AlertItemPrivate() :
         _id(-1),
-        _valid(true),
+        _valid(true), _modified(false),
         _viewType(AlertItem::StaticPatientBar),
         _contentType(AlertItem::ApplicationNotification),
         _priority(AlertItem::Medium)
@@ -66,7 +66,7 @@ public:
 public:
     QString _uid;
     int _id;
-    bool _valid;
+    bool _valid, _modified;
     AlertItem::ViewType _viewType;
     AlertItem::ContentType _contentType;
     AlertItem::Priority _priority;
@@ -105,9 +105,24 @@ bool AlertItem::isValid() const
     return d->_valid;
 }
 
+bool AlertItem::isModified() const
+{
+    return _modified;
+}
+
+bool AlertItem::setModified(bool modified)
+{
+    _modified = modified;
+}
+
 QString AlertItem::uuid() const
 {
     return d->_uid;
+}
+
+void AlertItem::setUuid(const QString &uid) const
+{
+    d->_uid = uid;
 }
 
 QString AlertItem::label(const QString &lang) const
