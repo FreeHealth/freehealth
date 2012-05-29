@@ -32,6 +32,8 @@
 
 #include <QTreeWidgetItem>
 
+#include <QDebug>
+
 using namespace Alert;
 
 namespace Alert {
@@ -438,4 +440,74 @@ AlertValidation &AlertItem::validationAt(int id) const
 void AlertItem::addValidation(const AlertValidation &val)
 {
     d->_validations << val;
+}
+
+QDebug operator<<(QDebug dbg, const Alert::AlertItem &a)
+{
+    QStringList s;
+    s << "AlertItem(" + a.uuid();
+    if (a.isValid()) {
+        if (a.isModified())
+            s << "valid*";
+        else
+            s << "valid";
+    } else {
+        if (a.isModified())
+            s << "notValid*";
+        else
+            s << "notValid";
+    }
+    switch (a.priority()) {
+    case AlertItem::High:
+        s << "high";
+        break;
+    case AlertItem::Medium:
+        s << "medium";
+        break;
+    case AlertItem::Low:
+        s << "low";
+        break;
+    }
+    if (!a.cryptedPassword().isEmpty())
+        s << "pass:" + a.cryptedPassword();
+    s << "lbl:" + a.label();
+    s << "cat:" + a.category();
+    s << "availableLang:" + a.availableLanguages().join(";");
+    switch (a.viewType()) {
+    case AlertItem::DynamicAlert:
+        s << "view:dynamic";
+        break;
+    case AlertItem::StaticPatientBar:
+        s << "view:patientBar";
+        break;
+    case AlertItem::StaticStatusBar:
+        s << "view:statusBar";
+        break;
+    default:
+        s << "view:" + QString::number(a.viewType());
+        break;
+    }
+    switch (a.contentType()) {
+    case AlertItem::ApplicationNotification:
+        s << "content:appNotification";
+        break;
+    case AlertItem::PatientCondition:
+        s << "content:patientCondition";
+        break;
+    case AlertItem::UserNotification:
+        s << "content:userNotification";
+        break;
+    default:
+        s << "content:" + QString::number(a.contentType());
+        break;
+    }
+    s << "create:" + a.creationDate().toString(Qt::ISODate);
+    dbg.nospace() << s.join(",\n           ")
+                  << ")";
+    return dbg.space();
+}
+
+QDebug operator<<(QDebug dbg, const Alert::AlertItem *c)
+{
+    return operator<<(dbg, *c);
 }

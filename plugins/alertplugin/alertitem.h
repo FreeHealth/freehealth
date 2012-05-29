@@ -265,5 +265,8 @@ private:
 
 }  // namespace Alert
 
+ALERT_EXPORT QDebug operator<<(QDebug dbg, const Alert::AlertItem &c);
+ALERT_EXPORT QDebug operator<<(QDebug dbg, const Alert::AlertItem *c);
+
 #endif  // ALERT_ALERTITEM
 
