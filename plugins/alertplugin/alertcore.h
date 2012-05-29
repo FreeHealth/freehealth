@@ -30,28 +30,35 @@
 
 #include <QObject>
 
+/**
+ * \file alertcore.h
+ * \author Eric MAEKER <eric.maeker@gmail.com>, Pierre-Marie Desombre <pm.desombre@gmail.com>
+ * \version 0.8.0
+ * \date 28 May 2012
+*/
+
 namespace Alert {
-class AlertBase;
+namespace Internal {
+class AlertCorePrivate;
+}
 class AlertManager;
 
 class AlertCore : public QObject
 {
     Q_OBJECT
-
 private:
     AlertCore(QObject *parent = 0);
+
 public:
     static AlertCore *instance(QObject *parent = 0);
     ~AlertCore();
+    bool initialize();
 
-    void initialize();
-    QString setAlertUuid();
     void showIHMaccordingToType(int type = 0);
 
 private:
-    static AlertCore * m_singleton;
-    AlertBase * m_alertBase;
-    AlertManager * m_alertManager;
+    static AlertCore *_instance;
+    Internal::AlertCorePrivate *d;
 };
 
 }  // Alert

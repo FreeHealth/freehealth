@@ -7,23 +7,25 @@ include(../fmf_plugins.pri)
 include(alertplugin_dependencies.pri)
 
 HEADERS += \
+    $${PWD}/constants.h \
     $${PWD}/alertplugin.h \
     $${PWD}/alertbase.h \
     $${PWD}/alertcore.h \
     $${PWD}/alertmanager.h \
-    $${PWD}/ialert.h \
+    $${PWD}/alertitem.h \
     $${PWD}/showalertsIHM.h \
-    $${PWD}/xmlalert.h
+    $${PWD}/xmlalert.h \
+    $${PWD}/alertmodel.h
 
 SOURCES += \
     $${PWD}/alertplugin.cpp \
     $${PWD}/alertbase.cpp \
     $${PWD}/alertcore.cpp \
     $${PWD}/alertmanager.cpp \
-    $${PWD}/ialert.cpp \
-#    $${PWD}/main.cpp \
+    $${PWD}/alertitem.cpp \
     $${PWD}/showalertsIHM.cpp \
-    $${PWD}/xmlalert.cpp
+    $${PWD}/xmlalert.cpp \
+    $${PWD}/alertmodel.cpp
 
 FORMS += $${PWD}/ShowAlertsWidget.ui
 

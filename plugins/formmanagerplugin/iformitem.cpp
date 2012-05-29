@@ -172,7 +172,7 @@ QStringList FormItemIdentifier::equivalentUuid() const
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class ScriptsBook {
 public:
-    void toTreeWidgetItem(QTreeWidgetItem *l)
+    void toTreeWidgetItem(QTreeWidgetItem *l) const
     {
         new QTreeWidgetItem(l, QStringList() << "OnLoad" << m_Scripts.value(0) );
         new QTreeWidgetItem(l, QStringList() << "PostLoad" << m_Scripts.value(1) );
@@ -277,7 +277,7 @@ namespace Internal {
 
 class ValuesBook {
 public:
-    void toTreeWidgetItem(QTreeWidgetItem *l)
+    void toTreeWidgetItem(QTreeWidgetItem *l) const
     {
         QTreeWidgetItem *i = 0;
         i = new QTreeWidgetItem(l, QStringList() << "Possibles");
@@ -673,7 +673,7 @@ void FormMain::emitFormLoaded()
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class SpecsBook {
 public:
-    void toTreeWidgetItem(QTreeWidgetItem *i)
+    void toTreeWidgetItem(QTreeWidgetItem *i) const
     {
         new QTreeWidgetItem(i, QStringList() << "Authors" << m_Specs.value(Form::FormItemSpec::Spec_Author).toString() );
         new QTreeWidgetItem(i, QStringList() << "License" << m_Specs.value(Form::FormItemSpec::Spec_License).toString() );

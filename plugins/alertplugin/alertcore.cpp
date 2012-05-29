@@ -28,46 +28,75 @@
 #include "alertcore.h"
 #include "alertbase.h"
 #include "alertmanager.h"
-
-#include <QUuid>
-#include <QString>
+#include "alertitem.h"
 
 using namespace Alert;
 
-AlertCore *AlertCore::m_singleton = 0;
+AlertCore *AlertCore::_instance = 0;
 
 AlertCore *AlertCore::instance(QObject *parent)
 {
-    if (!m_singleton)
-        m_singleton = new AlertCore(parent);
-    return m_singleton;
+    if (!_instance)
+        _instance = new AlertCore(parent);
+    return _instance;
+}
+
+namespace Alert {
+namespace Internal {
+class AlertCorePrivate
+{
+public:
+    AlertCorePrivate() :
+        m_alertBase(0),
+        m_alertManager(0)
+    {}
+
+    ~AlertCorePrivate() {}
+
+public:
+    AlertBase *m_alertBase;
+    AlertManager *m_alertManager;
+};
+}
 }
 
 AlertCore::AlertCore(QObject *parent) :
     QObject(parent),
-    m_alertBase(0),
-    m_alertManager(0)
+    d(new Internal::AlertCorePrivate)
 {
 }
 
 AlertCore::~AlertCore()
 {
-    // QObject manages children deletion so no need to delete the singleton
+    if (d) {
+        delete d;
+        d = 0;
+    }
 }
 
-void AlertCore::initialize()
+bool AlertCore::initialize()
 {
     // Create all instance
-    m_alertBase = new AlertBase(this);
-    m_alertManager = new AlertManager(this);
-}
+    d->m_alertBase = new Internal::AlertBase(this);
+    d->m_alertManager = new AlertManager(this);
+    if (!d->m_alertBase->init())
+        return false;
 
-QString AlertCore::setAlertUuid()
-{
-  return QUuid::createUuid().toString();
+    // TESTS
+    AlertItem item = d->m_alertBase->createVirtualItem();
+    AlertItem item2 = item;
+    qWarning() << item << item2;
+    d->m_alertBase->saveAlertItem(item);
+    Internal::AlertBaseQuery query;
+    query.getAlertItemFromUuid(item.uuid());
+    QVector<AlertItem> test = d->m_alertBase->getAlertItems(query);
+    qWarning() << test;
+    // END TESTS
+
+    return true;
 }
 
 void AlertCore::showIHMaccordingToType(int type)
 {
-    m_alertManager->initializeWithType(type);
+    d->m_alertManager->initializeWithType(type);
 }

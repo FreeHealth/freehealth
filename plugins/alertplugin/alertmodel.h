@@ -25,8 +25,28 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#include "ialert.h"
-#include "alertcore.h"
+#ifndef ALERT_ALERTMODEL_H
+#define ALERT_ALERTMODEL_H
 
-using namespace Alert;
+#include <alertplugin/alertplugin_exporter.h>
+#include <QObject>
 
+namespace Alert {
+
+class ALERT_EXPORT AlertModel : public QObject
+{
+    Q_OBJECT
+public:
+    explicit AlertModel(QObject *parent = 0);
+    
+public Q_SLOTS:
+
+private Q_SLOTS:
+
+Q_SIGNALS:
+
+};
+
+}  // namespace Alert
+
+#endif // ALERTMODEL_H

@@ -82,31 +82,31 @@ void AlertManager::initializeWithType(int type)
 void AlertManager::setupIHM(int type)
 {
     
-    switch(m_type){
-        case IAlert::ALL_ALERTS :
-            setupAllAlerts();
-            break;
-        case IAlert::PATIENT_PRIMARY_PREVENTION_ALERTS :
-            setupPrimaryPreventionAlerts();
-            break;
-        case IAlert::PATIENT_SECONDARY_PREVENTION_ALERTS :
-            setupSecondaryPreventionAlerts();
-            break;            
-        case IAlert::PATIENT_PRESCRIPTION_ALERTS :
-            setupPrescriptionAlerts();
-            break;
-        case IAlert::PATIENT_NOTES :
-            setupPatientNotes();
-            break;                        
-        default :
-            break;    
-        }
+//    switch(m_type){
+//        case IAlert::ALL_ALERTS :
+//            setupAllAlerts();
+//            break;
+//        case IAlert::PATIENT_PRIMARY_PREVENTION_ALERTS :
+//            setupPrimaryPreventionAlerts();
+//            break;
+//        case IAlert::PATIENT_SECONDARY_PREVENTION_ALERTS :
+//            setupSecondaryPreventionAlerts();
+//            break;
+//        case IAlert::PATIENT_PRESCRIPTION_ALERTS :
+//            setupPrescriptionAlerts();
+//            break;
+//        case IAlert::PATIENT_NOTES :
+//            setupPatientNotes();
+//            break;
+//        default :
+//            break;
+//        }
 }
 
 void AlertManager::setupAllAlerts()
 {
     m_tableWidget = new QTableWidget(m_w);
-    m_tableWidget->setColumnCount(IAlert::ItemsDefinition_MaxParam);
+//    m_tableWidget->setColumnCount(IAlert::ItemsDefinition_MaxParam);
     m_gridLayout->addWidget(m_tableWidget,0,0);
     m_gridLayout->addWidget(m_ButtonsFrame,1,0);
     m_w->setLayout(m_gridLayout);
@@ -115,7 +115,7 @@ void AlertManager::setupAllAlerts()
 void AlertManager::setupPrimaryPreventionAlerts()
 {
     m_tableWidget = new QTableWidget(m_w);
-    m_tableWidget->setColumnCount(IAlert::ItemsDefinition_MaxParam);
+//    m_tableWidget->setColumnCount(IAlert::ItemsDefinition_MaxParam);
     m_gridLayout->addWidget(m_tableWidget,0,0);
     m_gridLayout->addWidget(m_ButtonsFrame,1,0);
     m_w->setLayout(m_gridLayout);    
@@ -124,7 +124,7 @@ void AlertManager::setupPrimaryPreventionAlerts()
 void AlertManager::setupSecondaryPreventionAlerts()
 {
     m_tableWidget = new QTableWidget(m_w);
-    m_tableWidget->setColumnCount(IAlert::ItemsDefinition_MaxParam);
+//    m_tableWidget->setColumnCount(IAlert::ItemsDefinition_MaxParam);
     m_gridLayout->addWidget(m_tableWidget,0,0);
     m_gridLayout->addWidget(m_ButtonsFrame,1,0);
     m_w->setLayout(m_gridLayout);    
@@ -162,12 +162,12 @@ void AlertManager::setRowOfItems(QVector<QVariant> datas)
     int rows = m_tableWidget->rowCount();
     m_tableWidget->setRowCount(rows+1);
     
-    for (int col = IAlert::TYPE_OF_ITEM; col < IAlert::ItemsDefinition_MaxParam; ++col)
-    {
-    	  QTableWidgetItem * item = new QTableWidgetItem();
-    	  item->setData(Qt::DisplayRole,datas[col]);
-    	  m_tableWidget->setItem(rows+1,col,item);
-        }
+//    for (int col = IAlert::TYPE_OF_ITEM; col < IAlert::ItemsDefinition_MaxParam; ++col)
+//    {
+//    	  QTableWidgetItem * item = new QTableWidgetItem();
+//    	  item->setData(Qt::DisplayRole,datas[col]);
+//    	  m_tableWidget->setItem(rows+1,col,item);
+//        }
 }
 
 

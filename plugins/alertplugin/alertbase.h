@@ -28,32 +28,118 @@
 #ifndef ALERTBASE_H
 #define ALERTBASE_H
 
-//#include <utils/log.h>
-#include <QSqlDatabase>
+#include <utils/database.h>
 #include <QObject>
-#include <QDebug>
+#include <QDate>
+#include <QString>
+#include <QStringList>
+#include <QVector>
+
+/**
+ * \file alertbase.h
+ * \author Eric MAEKER <eric.maeker@gmail.com>, Pierre-Marie Desombre <pm.desombre@gmail.com>
+ * \version 0.8.0
+ * \date 28 May 2012
+*/
 
 namespace Alert {
 class AlertCore;
+class AlertItem;
+namespace Internal {
 
-class AlertBase:public QObject
+class AlertBaseQuery
+{
+public:
+    enum AlertValidity {
+        ValidAlerts = 0,
+        InvalidAlerts,
+        ValidAndInvalidAlerts
+    };
+
+    AlertBaseQuery();
+    ~AlertBaseQuery();
+
+    void getAlertItemFromUuid(const QString &uuid);
+    QString alertItemFromUuid() const;
+
+    void setAlertValidity(AlertValidity validity);
+    AlertValidity alertValidity() const;
+
+    void addCurrentUserAlerts();
+    void addUserAlerts(const QString &uuid);
+
+    void addCurrentPatientAlerts();
+    void addPatientAlerts(const QString &uuid);
+
+    QStringList userUids() const;
+    QStringList patientUids() const;
+
+    void setDateRange(const QDate &start, const QDate &end);
+    bool dateRangeDefined() const;
+    QDate dateRangeStart() const;
+    QDate dateRangeEnd() const;
+
+private:
+    QString _itemUid;
+    QStringList _userUids, _patientUids;
+    QDate _start, _end;
+    AlertValidity _validity;
+};
+
+class AlertBase : public QObject, public Utils::Database
 {
     Q_OBJECT
     friend class Alert::AlertCore;
 
 protected:
     AlertBase(QObject * parent = 0);
+    bool init();
+
+    AlertItem createVirtualItem() const;
 
 public:
     ~AlertBase();
+    bool isInitialized() const {return m_initialized;}
+
+    bool saveAlertItem(AlertItem &item);
+    QVector<AlertItem> getAlertItems(const AlertBaseQuery &query);
+
+    // For debugging purpose
+    void toTreeWidget(QTreeWidget *tree);
 
 private:
-    QSqlDatabase m_db;
-    bool connectToAlertDatabase();
-    bool setTables();
+    bool createDatabase(const QString &connectionName, const QString &dbName,
+                          const QString &pathOrHostName,
+                          TypeOfAccess access, AvailableDrivers driver,
+                          const QString &login, const QString &pass,
+                          const int port,
+                          CreationOption createOption
+                         );
+
+    bool updateAlertItem(AlertItem &item);
+
+    bool saveItemRelations(AlertItem &item);
+    bool saveItemScripts(AlertItem &item);
+    bool saveItemTimings(AlertItem &item);
+    bool saveItemValidations(AlertItem &item);
+    bool saveItemLabels(AlertItem &item);
+
+    AlertItem getAlertItemFromUuid(const QString &uuid);
+    bool getItemRelations(AlertItem &item);
+    bool getItemScripts(AlertItem &item);
+    bool getItemTimings(AlertItem &item);
+    bool getItemValidations(AlertItem &item);
+    bool getItemLabels(AlertItem &item);
+
+private Q_SLOTS:
+    void onCoreDatabaseServerChanged();
+
+private:
+    bool m_initialized;
 };
 
-}  // Alert
+}  // namespace Internal
+}  // namespace Alert
 
-#endif
+#endif  // ALERTBASE_H
 

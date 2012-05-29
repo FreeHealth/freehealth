@@ -25,7 +25,7 @@
  ***************************************************************************/
 #include "alertplugin.h"
 #include "alertcore.h"
-#include "ialert.h"
+#include "alertitem.h"
 
 #include <utils/log.h>
 
@@ -98,9 +98,9 @@ void AlertPlugin::extensionsInitialized()
     messageSplash(tr("Initializing AlertPlugin..."));
 
     // At this point, user is connected
-    Alert::AlertCore *core = Alert::AlertCore::instance(this);
+    AlertCore *core = AlertCore::instance(this);
     core->initialize();
-    core->showIHMaccordingToType(IAlert::PATIENT_PRIMARY_PREVENTION_ALERTS);//NOTES
+//    core->showIHMaccordingToType(IAlert::PATIENT_PRIMARY_PREVENTION_ALERTS);//NOTES
 
     // Add here the DataPackPlugin::IDataPackListener objects to the pluginmanager object pool
 
