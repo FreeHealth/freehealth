@@ -228,9 +228,9 @@ AlertBase::AlertBase(QObject *parent) :
 
     // Alert relations to user/patient/family/groups and other...
     addField(Table_ALERT_RELATED, ALERT_RELATED_ID, "ID", FieldIsUniquePrimaryKey);
-    addField(Table_ALERT_RELATED, ALERT_RELATED_REL_ID, "RID", FieldIsUniquePrimaryKey);
-    addField(Table_ALERT_RELATED, ALERT_RELATED_RELATED_TO, "TO", FieldIsUniquePrimaryKey);
-    addField(Table_ALERT_RELATED, ALERT_RELATED_RELATED_UID, "UID", FieldIsUniquePrimaryKey);
+    addField(Table_ALERT_RELATED, ALERT_RELATED_REL_ID, "RID", FieldIsInteger);
+    addField(Table_ALERT_RELATED, ALERT_RELATED_RELATED_TO, "TO", FieldIsInteger);
+    addField(Table_ALERT_RELATED, ALERT_RELATED_RELATED_UID, "UID", FieldIsUUID);
     addIndex(Table_ALERT_RELATED, ALERT_RELATED_ID);
     addIndex(Table_ALERT_RELATED, ALERT_RELATED_REL_ID);
 
@@ -239,14 +239,14 @@ AlertBase::AlertBase(QObject *parent) :
     addField(Table_ALERT_LABELS, ALERT_LABELS_LABELID, "LID", FieldIsInteger);
     addField(Table_ALERT_LABELS, ALERT_LABELS_LANG, "LNG", FieldIsLanguageText);
     addField(Table_ALERT_LABELS, ALERT_LABELS_VALUE, "VAL", FieldIsShortText);
-    addField(Table_ALERT_LABELS, ALERT_LABELS_ISVALID, "ISV", FieldIsBoolean);
+    addField(Table_ALERT_LABELS, ALERT_LABELS_ISVALID, "ISV", FieldIsBoolean, "1");
     addIndex(Table_ALERT_LABELS, ALERT_LABELS_ID);
     addIndex(Table_ALERT_LABELS, ALERT_LABELS_LABELID);
     addIndex(Table_ALERT_LABELS, ALERT_LABELS_LANG);
 
     // Timing
     addField(Table_ALERT_TIMING, ALERT_TIMING_TIMINGID, "ID", FieldIsUniquePrimaryKey);
-    addField(Table_ALERT_TIMING, ALERT_TIMING_TIMING_TIM_ID, "TIM_ID", FieldIsUniquePrimaryKey);
+    addField(Table_ALERT_TIMING, ALERT_TIMING_TIMING_TIM_ID, "TIM_ID", FieldIsInteger);
     addField(Table_ALERT_TIMING, ALERT_TIMING_ISVALID, "ISV", FieldIsBoolean, "1");
     addField(Table_ALERT_TIMING, ALERT_TIMING_STARTDATETIME, "STR", FieldIsDateTime);
     addField(Table_ALERT_TIMING, ALERT_TIMING_ENDDATETIME, "END", FieldIsDateTime);
@@ -441,12 +441,12 @@ AlertItem AlertBase::createVirtualItem() const
     }
 
     item.setViewType(AlertItem::ViewType(r.randomInt(0, AlertItem::StaticStatusBar)));
-    item.setContentType(AlertItem::ContentType(r.randomInt(0, UserNotification)));
+    item.setContentType(AlertItem::ContentType(r.randomInt(0, AlertItem::UserNotification)));
     item.setPriority(AlertItem::Priority(r.randomInt(0, AlertItem::Low)));
     item.setCreationDate(r.randomDateTime(QDateTime::currentDateTime()));
     if (r.randomBool())
         item.setLastUpdate(r.randomDateTime(item.creationDate()));
-    item.setThemedIcon(r.randomFile(pix, QStringList() << "*.png"));
+    item.setThemedIcon(r.randomFile(pix, QStringList() << "*.png").fileName());
     if (r.randomBool())
         item.setStyleSheet(r.randomWords(10));
     if (r.randomBool())
@@ -470,7 +470,7 @@ AlertItem AlertBase::createVirtualItem() const
     item.addTiming(time);
 
     // TODO : Add random script
-    item.addScript();
+//    item.addScript();
 
     // TODO : Add random validation
 //    item.addValidation();
