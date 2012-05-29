@@ -28,9 +28,7 @@
 #include "alertcore.h"
 #include "alertbase.h"
 #include "alertmanager.h"
-
-#include <QUuid>
-#include <QString>
+#include "alertitem.h"
 
 using namespace Alert;
 
@@ -83,6 +81,12 @@ bool AlertCore::initialize()
     d->m_alertManager = new AlertManager(this);
     if (!d->m_alertBase->init())
         return false;
+
+    // TESTS
+    AlertItem item = d->m_alertBase->createVirtualItem();
+    qWarning() << item;
+    // END TESTS
+
     return true;
 }
 
