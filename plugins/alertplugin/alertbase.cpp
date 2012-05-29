@@ -103,6 +103,18 @@ AlertBaseQuery::AlertBaseQuery() :
 AlertBaseQuery::~AlertBaseQuery()
 {}
 
+/** Define the query to the unique alert item with the \e uuid. All other params are ignored. */
+void AlertBaseQuery::getAlertItemFromUuid(const QString &uuid)
+{
+    _itemUid = uuid;
+}
+
+/** Return the queried alert item uuid. If an uuid is provided, all other params are ignored. */
+QString AlertBaseQuery::alertItemFromUuid() const
+{
+    return _itemUid;
+}
+
 /** Define the validity of queried alerts \sa Alert::Internal::AlertBaseQuery::AlertValidity */
 void AlertBaseQuery::setAlertValidity(AlertBaseQuery::AlertValidity validity)
 {
@@ -186,13 +198,15 @@ QDate AlertBaseQuery::dateRangeEnd() const
 
 AlertBase::AlertBase(QObject *parent) :
     QObject(parent),
-    Utils::Database()
+    Utils::Database(),
+    m_initialized(false)
 {
     setObjectName("AlertBase");
 
     using namespace Alert::Constants;
     addTable(Table_ALERT, "ALR");
     addTable(Table_ALERT_LABELS, "LBL");
+    addTable(Table_ALERT_RELATED, "REL");
     addTable(Table_ALERT_SCRIPTS, "SCR");
     addTable(Table_ALERT_TIMING, "TIM");
     addTable(Table_ALERT_VERSION, "VER");
@@ -898,7 +912,135 @@ bool AlertBase::saveItemLabels(AlertItem &item)
 QVector<AlertItem> AlertBase::getAlertItems(const AlertBaseQuery &query)
 {
     QVector<AlertItem> alerts;
+    if (!connectDatabase(Constants::DB_NAME, __LINE__))
+        return alerts;
+    if (!query.alertItemFromUuid().isEmpty()) {
+        AlertItem item = getAlertItemFromUuid(query.alertItemFromUuid());
+        alerts.append(item);
+        return alerts;
+    }
     return alerts;
+}
+
+AlertItem AlertBase::getAlertItemFromUuid(const QString &uuid)
+{
+    AlertItem item;
+    item.setUuid(uuid);
+    if (!connectDatabase(Constants::DB_NAME, __LINE__))
+        return item;
+    database().transaction();
+    QHash<int, QString> where;
+    where.insert(Constants::ALERT_UID, QString("='%1'").arg(uuid));
+    QSqlQuery query(database());
+    if (query.exec(select(Constants::Table_ALERT, where))) {
+        if (query.next()) {
+            item.setDb(ItemId, query.value(Constants::ALERT_ID).toInt());
+            item.setDb(RelatedId, query.value(Constants::ALERT_REL_ID).toInt());
+            item.setDb(CategoryUid, query.value(Constants::ALERT_CATEGORY_UID).toInt());
+            item.setDb(ScriptId, query.value(Constants::ALERT_SID).toInt());
+            item.setDb(ValidationId, query.value(Constants::ALERT_VAL_ID).toInt());
+            item.setDb(TimingId, query.value(Constants::ALERT_TIM_ID).toInt());
+            item.setDb(LabelLID, query.value(Constants::ALERT_LABEL_LABELID).toInt());
+            item.setDb(DescrLID, query.value(Constants::ALERT_DESCRIPTION_LABELID).toInt());
+            item.setDb(CommentLID, query.value(Constants::ALERT_COMMENT_LABELID).toInt());
+            item.setValidity(query.value(Constants::ALERT_ISVALID).toBool());
+            item.setCryptedPassword(query.value(Constants::ALERT_CRYPTED_PASSWORD).toString());
+            item.setViewType(AlertItem::ViewType(query.value(Constants::ALERT_VIEW_TYPE).toInt()));
+            item.setContentType(AlertItem::ContentType(query.value(Constants::ALERT_CONTENT_TYPE).toInt()));
+            item.setPriority(AlertItem::Priority(query.value(Constants::ALERT_PRIORITY).toInt()));
+            item.setCreationDate(query.value(Constants::ALERT_CREATION_DATE).toDateTime());
+            item.setLastUpdate(query.value(Constants::ALERT_LAST_UPDATE_DATE).toDateTime());
+            item.setThemedIcon(query.value(Constants::ALERT_THEMED_ICON).toString());
+            item.setStyleSheet(query.value(Constants::ALERT_THEME_CSS).toString());
+            item.setExtraXml(query.value(Constants::ALERT_EXTRA_XML).toString());
+        }
+    } else {
+        LOG_QUERY_ERROR(query);
+        database().rollback();
+        return item;
+    }
+
+    if (!getItemRelations(item)) {
+        database().rollback();
+        return item;
+    }
+    if (!getItemScripts(item)) {
+        database().rollback();
+        return item;
+    }
+    if (!getItemTimings(item)) {
+        database().rollback();
+        return item;
+    }
+    if (!getItemValidations(item)) {
+        database().rollback();
+        return item;
+    }
+    if (!getItemLabels(item)) {
+        database().rollback();
+        return item;
+    }
+    database().commit();
+    return item;
+}
+
+bool AlertBase::getItemRelations(AlertItem &item)
+{
+    // we are inside a transaction opened by saveAlertItem
+    if (!connectDatabase(Constants::DB_NAME, __LINE__))
+        return false;
+    using namespace Alert::Constants;
+    QSqlQuery query(database());
+    Utils::Field cond(Table_ALERT, ALERT_ID, QString("=%1").arg(item.db(ItemId).toString()));
+    Utils::Join join(Table_ALERT_RELATED, ALERT_RELATED_REL_ID, Table_ALERT, ALERT_REL_ID);
+
+    qWarning() << select(Table_ALERT_RELATED, join, cond);
+
+    if (query.exec(select(Table_ALERT_RELATED, join, cond))) {
+        while (query.next()) {
+            qWarning() << "wwwwwwwwwwww getting relations" << item.uuid();
+            AlertRelation rel;
+            rel.setId(query.value(ALERT_RELATED_ID).toInt());
+            rel.setRelatedTo(AlertRelation::RelatedTo(query.value(ALERT_RELATED_RELATED_TO).toInt()));
+            rel.setRelatedToUid(query.value(ALERT_RELATED_RELATED_UID).toString());
+            item.addRelation(rel);
+        }
+    }
+    return true;
+}
+
+bool AlertBase::getItemScripts(AlertItem &item)
+{
+    // we are inside a transaction opened by saveAlertItem
+    if (!connectDatabase(Constants::DB_NAME, __LINE__))
+        return false;
+    QSqlQuery query(database());
+    return true;
+}
+
+bool AlertBase::getItemTimings(AlertItem &item)
+{
+    // we are inside a transaction opened by saveAlertItem
+    if (!connectDatabase(Constants::DB_NAME, __LINE__))
+        return false;
+    QSqlQuery query(database());
+    return true;
+}
+bool AlertBase::getItemValidations(AlertItem &item)
+{
+    // we are inside a transaction opened by saveAlertItem
+    if (!connectDatabase(Constants::DB_NAME, __LINE__))
+        return false;
+    QSqlQuery query(database());
+    return true;
+}
+bool AlertBase::getItemLabels(AlertItem &item)
+{
+    // we are inside a transaction opened by saveAlertItem
+    if (!connectDatabase(Constants::DB_NAME, __LINE__))
+        return false;
+    QSqlQuery query(database());
+    return true;
 }
 
 /** Reconnect the database when the database server changes. \sa Core::ICore::databaseServerChanged(), Core::ISettings::databaseConnector() */

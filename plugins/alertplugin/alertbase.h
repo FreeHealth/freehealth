@@ -59,6 +59,9 @@ public:
     AlertBaseQuery();
     ~AlertBaseQuery();
 
+    void getAlertItemFromUuid(const QString &uuid);
+    QString alertItemFromUuid() const;
+
     void setAlertValidity(AlertValidity validity);
     AlertValidity alertValidity() const;
 
@@ -77,6 +80,7 @@ public:
     QDate dateRangeEnd() const;
 
 private:
+    QString _itemUid;
     QStringList _userUids, _patientUids;
     QDate _start, _end;
     AlertValidity _validity;
@@ -119,6 +123,13 @@ private:
     bool saveItemTimings(AlertItem &item);
     bool saveItemValidations(AlertItem &item);
     bool saveItemLabels(AlertItem &item);
+
+    AlertItem getAlertItemFromUuid(const QString &uuid);
+    bool getItemRelations(AlertItem &item);
+    bool getItemScripts(AlertItem &item);
+    bool getItemTimings(AlertItem &item);
+    bool getItemValidations(AlertItem &item);
+    bool getItemLabels(AlertItem &item);
 
 private Q_SLOTS:
     void onCoreDatabaseServerChanged();
