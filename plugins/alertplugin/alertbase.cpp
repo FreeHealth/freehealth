@@ -209,6 +209,7 @@ AlertBase::AlertBase(QObject *parent) :
     addTable(Table_ALERT_RELATED, "REL");
     addTable(Table_ALERT_SCRIPTS, "SCR");
     addTable(Table_ALERT_TIMING, "TIM");
+    addTable(Table_ALERT_VALIDATION, "VAL");
     addTable(Table_ALERT_VERSION, "VER");
 
     addField(Table_ALERT, ALERT_ID, "A_ID", FieldIsUniquePrimaryKey);
@@ -225,7 +226,7 @@ AlertBase::AlertBase(QObject *parent) :
     addField(Table_ALERT, ALERT_CONDITION_TYPE, "COND_ID", FieldIsInteger);
     addField(Table_ALERT, ALERT_PRIORITY, "PRIOR", FieldIsInteger);
 
-    addField(Table_ALERT, ALERT_LABEL_LABELID, "LBL_LID", FieldIsInteger);
+    addField(Table_ALERT, ALERT_LABELID, "LBL_LID", FieldIsInteger);
     addField(Table_ALERT, ALERT_DESCRIPTION_LABELID, "DES_LID", FieldIsInteger);
     addField(Table_ALERT, ALERT_COMMENT_LABELID, "COM_LID", FieldIsInteger);
     addField(Table_ALERT, ALERT_CREATION_DATE, "C_DATE", FieldIsDate);
@@ -260,7 +261,7 @@ AlertBase::AlertBase(QObject *parent) :
 
     // Timing
     addField(Table_ALERT_TIMING, ALERT_TIMING_TIMINGID, "ID", FieldIsUniquePrimaryKey);
-    addField(Table_ALERT_TIMING, ALERT_TIMING_TIMING_TIM_ID, "TIM_ID", FieldIsInteger);
+    addField(Table_ALERT_TIMING, ALERT_TIMING_TIM_ID, "TIM_ID", FieldIsInteger);
     addField(Table_ALERT_TIMING, ALERT_TIMING_ISVALID, "ISV", FieldIsBoolean, "1");
     addField(Table_ALERT_TIMING, ALERT_TIMING_STARTDATETIME, "STR", FieldIsDateTime);
     addField(Table_ALERT_TIMING, ALERT_TIMING_ENDDATETIME, "END", FieldIsDateTime);
@@ -268,7 +269,7 @@ AlertBase::AlertBase(QObject *parent) :
     addField(Table_ALERT_TIMING, ALERT_TIMING_CYCLINGDELAY, "CDY", FieldIsInteger);
     addField(Table_ALERT_TIMING, ALERT_TIMING_NEXTCYCLE, "NCY", FieldIsDateTime);
     addIndex(Table_ALERT_TIMING, ALERT_TIMING_TIMINGID);
-    addIndex(Table_ALERT_TIMING, ALERT_TIMING_TIMING_TIM_ID);
+    addIndex(Table_ALERT_TIMING, ALERT_TIMING_TIM_ID);
     addIndex(Table_ALERT_TIMING, ALERT_TIMING_STARTDATETIME);
     addIndex(Table_ALERT_TIMING, ALERT_TIMING_ENDDATETIME);
 
@@ -285,7 +286,7 @@ AlertBase::AlertBase(QObject *parent) :
 
     // Validations
     addField(Table_ALERT_VALIDATION, ALERT_VALIDATION_VID, "ID", FieldIsUniquePrimaryKey);
-    addField(Table_ALERT_VALIDATION, ALERT_VALIDATION_VAL_ID, "VAL_UID", FieldIsUUID);
+    addField(Table_ALERT_VALIDATION, ALERT_VALIDATION_VAL_ID, "VID", FieldIsInteger);
     addField(Table_ALERT_VALIDATION, ALERT_VALIDATION_DATEOFVALIDATION, "DT", FieldIsDateTime);
     addField(Table_ALERT_VALIDATION, ALERT_VALIDATION_USER_UUID, "U_U", FieldIsUUID);
     addField(Table_ALERT_VALIDATION, ALERT_VALIDATION_USER_COMMENT, "U_C", FieldIsLongText);
@@ -550,12 +551,12 @@ bool AlertBase::saveAlertItem(AlertItem &item)
     query.bindValue(Constants::ALERT_SID, item.db(ScriptId));
     query.bindValue(Constants::ALERT_VAL_ID, item.db(ValidationId));
     query.bindValue(Constants::ALERT_TIM_ID, item.db(TimingId));
-    query.bindValue(Constants::ALERT_ISVALID, item.isValid());
+    query.bindValue(Constants::ALERT_ISVALID, int(item.isValid()));
     query.bindValue(Constants::ALERT_VIEW_TYPE, item.viewType());
     query.bindValue(Constants::ALERT_CONTENT_TYPE, item.contentType());
     query.bindValue(Constants::ALERT_CONDITION_TYPE, QVariant());
     query.bindValue(Constants::ALERT_PRIORITY, item.priority());
-    query.bindValue(Constants::ALERT_LABEL_LABELID, item.db(LabelLID));
+    query.bindValue(Constants::ALERT_LABELID, item.db(LabelLID));
     query.bindValue(Constants::ALERT_DESCRIPTION_LABELID, item.db(DescrLID));
     query.bindValue(Constants::ALERT_COMMENT_LABELID, item.db(CommentLID));
     query.bindValue(Constants::ALERT_CREATION_DATE, item.creationDate());
@@ -617,12 +618,12 @@ bool AlertBase::updateAlertItem(AlertItem &item)
     query.bindValue(Constants::ALERT_SID, item.db(ScriptId));
     query.bindValue(Constants::ALERT_VAL_ID, item.db(ValidationId));
     query.bindValue(Constants::ALERT_TIM_ID, item.db(TimingId));
-    query.bindValue(Constants::ALERT_ISVALID, item.isValid());
+    query.bindValue(Constants::ALERT_ISVALID, int(item.isValid()));
     query.bindValue(Constants::ALERT_VIEW_TYPE, item.viewType());
     query.bindValue(Constants::ALERT_CONTENT_TYPE, item.contentType());
     query.bindValue(Constants::ALERT_CONDITION_TYPE, QVariant());
     query.bindValue(Constants::ALERT_PRIORITY, item.priority());
-    query.bindValue(Constants::ALERT_LABEL_LABELID, item.db(LabelLID));
+    query.bindValue(Constants::ALERT_LABELID, item.db(LabelLID));
     query.bindValue(Constants::ALERT_DESCRIPTION_LABELID, item.db(DescrLID));
     query.bindValue(Constants::ALERT_COMMENT_LABELID, item.db(CommentLID));
     query.bindValue(Constants::ALERT_CREATION_DATE, item.creationDate());
@@ -719,7 +720,7 @@ bool AlertBase::saveItemScripts(AlertItem &item)
         query.bindValue(Constants::ALERT_SCRIPTS_ID, QVariant());
         query.bindValue(Constants::ALERT_SCRIPTS_SID, id);
         query.bindValue(Constants::ALERT_SCRIPT_UID, script.uuid());
-        query.bindValue(Constants::ALERT_SCRIPT_ISVALID, script.isValid());
+        query.bindValue(Constants::ALERT_SCRIPT_ISVALID, int(script.isValid()));
         query.bindValue(Constants::ALERT_SCRIPT_TYPE, script.type());
         query.bindValue(Constants::ALERT_SCRIPT_CONTENT, script.script());
         if (query.exec()) {
@@ -744,7 +745,7 @@ bool AlertBase::saveItemTimings(AlertItem &item)
         id = item.db(TimingId).toInt();
         // delete all old relations
         QHash<int, QString> where;
-        where.insert(Constants::ALERT_TIMING_TIMING_TIM_ID, QString("=%1").arg(id));
+        where.insert(Constants::ALERT_TIMING_TIM_ID, QString("=%1").arg(id));
         QString req = prepareDeleteQuery(Constants::Table_ALERT_TIMING, where);
         QSqlQuery query(database());
         if (!query.exec(req)) {
@@ -753,7 +754,7 @@ bool AlertBase::saveItemTimings(AlertItem &item)
         }
         query.finish();
     } else {
-        id = max(Constants::Table_ALERT_TIMING, Constants::ALERT_TIMING_TIMING_TIM_ID).toInt() + 1;
+        id = max(Constants::Table_ALERT_TIMING, Constants::ALERT_TIMING_TIM_ID).toInt() + 1;
         item.setDb(TimingId, id);
     }
     // save all timings
@@ -763,8 +764,8 @@ bool AlertBase::saveItemTimings(AlertItem &item)
         QString req = prepareInsertQuery(Constants::Table_ALERT_TIMING);
         query.prepare(req);
         query.bindValue(Constants::ALERT_TIMING_TIMINGID, QVariant());
-        query.bindValue(Constants::ALERT_TIMING_TIMING_TIM_ID, id);
-        query.bindValue(Constants::ALERT_TIMING_ISVALID, timing.isValid());
+        query.bindValue(Constants::ALERT_TIMING_TIM_ID, id);
+        query.bindValue(Constants::ALERT_TIMING_ISVALID, int(timing.isValid()));
         query.bindValue(Constants::ALERT_TIMING_STARTDATETIME, timing.start());
         query.bindValue(Constants::ALERT_TIMING_ENDDATETIME, timing.end());
         query.bindValue(Constants::ALERT_TIMING_CYCLES, timing.numberOfCycles());
@@ -845,14 +846,14 @@ bool AlertBase::saveItemLabels(AlertItem &item)
             lids[i] = item.db(LabelLID).toInt();
             // delete all old relations
             QHash<int, QString> where;
-            where.insert(Constants::ALERT_LABEL_LABELID, QString("=%1").arg(lids[i]));
+            where.insert(Constants::ALERT_LABELS_LABELID, QString("=%1").arg(lids[i]));
             QString req = prepareDeleteQuery(Constants::Table_ALERT_LABELS, where);
             if (!query.exec(req)) {
                 LOG_QUERY_ERROR(query);
                 return false;
             }
         } else {
-            lids[i] = max(Constants::Table_ALERT_LABELS, Constants::ALERT_LABEL_LABELID).toInt() + 1;
+            lids[i] = max(Constants::Table_ALERT_LABELS, Constants::ALERT_LABELS_LABELID).toInt() + 1;
             item.setDb(vals.at(i), lids.at(i));
         }
         query.finish();
@@ -943,7 +944,7 @@ AlertItem AlertBase::getAlertItemFromUuid(const QString &uuid)
             item.setDb(ScriptId, query.value(Constants::ALERT_SID).toInt());
             item.setDb(ValidationId, query.value(Constants::ALERT_VAL_ID).toInt());
             item.setDb(TimingId, query.value(Constants::ALERT_TIM_ID).toInt());
-            item.setDb(LabelLID, query.value(Constants::ALERT_LABEL_LABELID).toInt());
+            item.setDb(LabelLID, query.value(Constants::ALERT_LABELID).toInt());
             item.setDb(DescrLID, query.value(Constants::ALERT_DESCRIPTION_LABELID).toInt());
             item.setDb(CommentLID, query.value(Constants::ALERT_COMMENT_LABELID).toInt());
             item.setValidity(query.value(Constants::ALERT_ISVALID).toBool());
@@ -989,60 +990,143 @@ AlertItem AlertBase::getAlertItemFromUuid(const QString &uuid)
 
 bool AlertBase::getItemRelations(AlertItem &item)
 {
-    // we are inside a transaction opened by saveAlertItem
+    // we are inside a transaction opened by getAlertItem
     if (!connectDatabase(Constants::DB_NAME, __LINE__))
         return false;
     using namespace Alert::Constants;
     QSqlQuery query(database());
     Utils::Field cond(Table_ALERT, ALERT_ID, QString("=%1").arg(item.db(ItemId).toString()));
     Utils::Join join(Table_ALERT_RELATED, ALERT_RELATED_REL_ID, Table_ALERT, ALERT_REL_ID);
-
-    qWarning() << select(Table_ALERT_RELATED, join, cond);
-
     if (query.exec(select(Table_ALERT_RELATED, join, cond))) {
         while (query.next()) {
-            qWarning() << "wwwwwwwwwwww getting relations" << item.uuid();
             AlertRelation rel;
             rel.setId(query.value(ALERT_RELATED_ID).toInt());
             rel.setRelatedTo(AlertRelation::RelatedTo(query.value(ALERT_RELATED_RELATED_TO).toInt()));
             rel.setRelatedToUid(query.value(ALERT_RELATED_RELATED_UID).toString());
             item.addRelation(rel);
         }
+    } else {
+        LOG_QUERY_ERROR(query);
+        return false;
     }
     return true;
 }
 
 bool AlertBase::getItemScripts(AlertItem &item)
 {
-    // we are inside a transaction opened by saveAlertItem
+    // we are inside a transaction opened by getAlertItem
     if (!connectDatabase(Constants::DB_NAME, __LINE__))
         return false;
+    using namespace Alert::Constants;
     QSqlQuery query(database());
+    Utils::Field cond(Table_ALERT, ALERT_ID, QString("=%1").arg(item.db(ItemId).toString()));
+    Utils::Join join(Table_ALERT_SCRIPTS, ALERT_SCRIPTS_SID, Table_ALERT, ALERT_SID);
+    if (query.exec(select(Table_ALERT_SCRIPTS, join, cond))) {
+        while (query.next()) {
+            AlertScript scr;
+            scr.setId(query.value(ALERT_RELATED_ID).toInt());
+            scr.setValid(query.value(ALERT_SCRIPT_ISVALID).toBool());
+            scr.setUuid(query.value(ALERT_SCRIPT_UID).toString());
+            scr.setType(AlertScript::ScriptType(query.value(ALERT_SCRIPT_TYPE).toInt()));
+            scr.setScript(query.value(ALERT_SCRIPT_CONTENT).toString());
+            item.addScript(scr);
+        }
+    } else {
+        LOG_QUERY_ERROR(query);
+        return false;
+    }
     return true;
 }
 
 bool AlertBase::getItemTimings(AlertItem &item)
 {
-    // we are inside a transaction opened by saveAlertItem
+    // we are inside a transaction opened by getAlertItem
     if (!connectDatabase(Constants::DB_NAME, __LINE__))
         return false;
+    using namespace Alert::Constants;
     QSqlQuery query(database());
+    Utils::Field cond(Table_ALERT, ALERT_ID, QString("=%1").arg(item.db(ItemId).toString()));
+    Utils::Join join(Table_ALERT_TIMING, ALERT_TIMING_TIM_ID, Table_ALERT, ALERT_TIM_ID);
+    if (query.exec(select(Table_ALERT_TIMING, join, cond))) {
+        while (query.next()) {
+            AlertTiming time;
+            time.setId(query.value(ALERT_TIMING_TIMINGID).toInt());
+            time.setValid(query.value(ALERT_TIMING_ISVALID).toBool());
+            time.setStart(query.value(ALERT_TIMING_STARTDATETIME).toDateTime());
+            time.setEnd(query.value(ALERT_TIMING_ENDDATETIME).toDateTime());
+            time.setNumberOfCycles(query.value(ALERT_TIMING_CYCLES).toInt());
+            time.setCyclingDelayInDays(query.value(ALERT_TIMING_CYCLINGDELAY).toInt());
+            time.setNextDate(query.value(ALERT_TIMING_NEXTCYCLE).toDateTime());
+            item.addTiming(time);
+        }
+    } else {
+        LOG_QUERY_ERROR(query);
+        return false;
+    }
     return true;
 }
 bool AlertBase::getItemValidations(AlertItem &item)
 {
-    // we are inside a transaction opened by saveAlertItem
+    // we are inside a transaction opened by getAlertItem
     if (!connectDatabase(Constants::DB_NAME, __LINE__))
         return false;
+    using namespace Alert::Constants;
     QSqlQuery query(database());
+    Utils::Field cond(Table_ALERT, ALERT_ID, QString("=%1").arg(item.db(ItemId).toString()));
+    Utils::Join join(Table_ALERT_VALIDATION, ALERT_VALIDATION_VAL_ID, Table_ALERT, ALERT_VAL_ID);
+    if (query.exec(select(Table_ALERT_VALIDATION, join, cond))) {
+        while (query.next()) {
+            AlertValidation val;
+            val.setId(query.value(ALERT_VALIDATION_VID).toInt());
+            val.setUserUuid(query.value(ALERT_VALIDATION_USER_UUID).toString());
+            val.setUserComment(query.value(ALERT_VALIDATION_USER_UUID).toString());
+            val.setDateOfValidation(query.value(ALERT_VALIDATION_USER_COMMENT).toDateTime());
+            item.addValidation(val);
+        }
+    } else {
+        LOG_QUERY_ERROR(query);
+        return false;
+    }
     return true;
 }
 bool AlertBase::getItemLabels(AlertItem &item)
 {
-    // we are inside a transaction opened by saveAlertItem
+    // we are inside a transaction opened by getAlertItem
     if (!connectDatabase(Constants::DB_NAME, __LINE__))
         return false;
+    using namespace Alert::Constants;
     QSqlQuery query(database());
+    Utils::Field cond(Table_ALERT, ALERT_ID, QString("=%1").arg(item.db(ItemId).toString()));
+    Utils::Join join(Table_ALERT_LABELS, ALERT_LABELS_LABELID, Table_ALERT, ALERT_LABELID);
+    if (query.exec(select(Table_ALERT_LABELS, join, cond))) {
+        while (query.next()) {
+            item.setLabel(query.value(ALERT_LABELS_VALUE).toString(), query.value(ALERT_LABELS_LANG).toString());
+        }
+    } else {
+        LOG_QUERY_ERROR(query);
+        return false;
+    }
+    query.finish();
+    join = Utils::Join(Table_ALERT_LABELS, ALERT_LABELS_LABELID, Table_ALERT, ALERT_DESCRIPTION_LABELID);
+    if (query.exec(select(Table_ALERT_LABELS, join, cond))) {
+        while (query.next()) {
+            item.setDescription(query.value(ALERT_LABELS_VALUE).toString(), query.value(ALERT_LABELS_LANG).toString());
+        }
+    } else {
+        LOG_QUERY_ERROR(query);
+        return false;
+    }
+    query.finish();
+    join = Utils::Join(Table_ALERT_LABELS, ALERT_LABELS_LABELID, Table_ALERT, ALERT_COMMENT_LABELID);
+    if (query.exec(select(Table_ALERT_LABELS, join, cond))) {
+        while (query.next()) {
+            item.setComment(query.value(ALERT_LABELS_VALUE).toString(), query.value(ALERT_LABELS_LANG).toString());
+        }
+    } else {
+        LOG_QUERY_ERROR(query);
+        return false;
+    }
+    query.finish();
     return true;
 }
 
