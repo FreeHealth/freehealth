@@ -189,6 +189,8 @@ public:
     };
 
     AlertItem();
+    AlertItem(const AlertItem &cp);
+
     virtual ~AlertItem();
     virtual bool isValid() const;
     virtual void setValidity(bool isValid);
@@ -258,6 +260,8 @@ public:
     virtual AlertValidation &validationAt(int id) const;
     virtual void addValidation(const AlertValidation &val);
     // END
+
+    bool operator==(const AlertItem &other) const;
 
 private:
     Internal::AlertItemPrivate *d;

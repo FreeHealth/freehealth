@@ -41,7 +41,7 @@ namespace Internal {
 
 class AlertValueBook {
 public:
-    void toTreeWidgetItem(QTreeWidgetItem *l)
+    void toTreeWidgetItem(QTreeWidgetItem *l) const
     {
         Q_UNUSED(l);
     }
@@ -94,6 +94,14 @@ AlertItem::AlertItem() :
     d(new Internal::AlertItemPrivate)
 {}
 
+// The copy constructor is required for the QVector/QList and others.
+// We have to copy the content of the private part.
+// The multilingual class does not store pointers so the copy process is automatic.
+AlertItem::AlertItem(const AlertItem &cp) :
+  d(new Internal::AlertItemPrivate(*cp.d))
+{
+}
+
 AlertItem::~AlertItem()
 {
     if (d)
@@ -101,41 +109,49 @@ AlertItem::~AlertItem()
     d = 0;
 }
 
+/** Store database identifiants. This part is protected and should only be used by Alert::Internal::AlertBase */
 void AlertItem::setDb(int ref, const QVariant &value)
 {
     d->_db.insert(ref, value);
 }
 
+/** Returns database identifiants. This part is protected and should only be used by Alert::Internal::AlertBase */
 QVariant AlertItem::db(int ref) const
 {
     return d->_db.value(ref, QVariant());
 }
 
+/** Define the validity of the item */
 void AlertItem::setValidity(bool isValid)
 {
     d->_valid = isValid;
 }
 
+/** Return the validity of the item */
 bool AlertItem::isValid() const
 {
     return d->_valid;
 }
 
+/** Return the modification state of the item */
 bool AlertItem::isModified() const
 {
     return d->_modified;
 }
 
+/** Define the modification state of the item */
 void AlertItem::setModified(bool modified)
 {
     d->_modified = modified;
 }
 
+/** Return the uuid of the item */
 QString AlertItem::uuid() const
 {
     return d->_uid;
 }
 
+/** Define the uuid of the item. By default, a uuid is defined in the constructor. */
 void AlertItem::setUuid(const QString &uid) const
 {
     d->_uid = uid;
@@ -440,6 +456,38 @@ AlertValidation &AlertItem::validationAt(int id) const
 void AlertItem::addValidation(const AlertValidation &val)
 {
     d->_validations << val;
+}
+
+bool AlertItem::operator==(const AlertItem &other) const
+{
+    // first test
+    if (other.uuid() != uuid())
+        return false;
+//    if (other.d->_db != d->_db)
+//        return false;
+    // second test
+    if (other.cryptedPassword() != cryptedPassword() ||
+            other.creationDate() != creationDate() ||
+            other.lastUpdate() != lastUpdate() ||
+            other.availableLanguages() != availableLanguages() ||
+            other.viewType() != viewType() ||
+            other.contentType() != contentType() ||
+            other.priority() != priority() ||
+            other.themedIcon() != themedIcon() ||
+            other.styleSheet() != styleSheet() ||
+            other.extraXml() != extraXml()
+            )
+        return false;
+    // third test (same number of sub-classes)
+    if (other.relations().count() != relations().count() ||
+            other.scripts().count() != scripts().count() ||
+            other.validations().count() != validations().count() ||
+            other.timings().count() != timings().count()
+            )
+        return false;
+    // fourth test: test each relations, validations, scripts and timings equality
+    // TODO: test each relations, validations, scripts and timings equality
+    return true;
 }
 
 QDebug operator<<(QDebug dbg, const Alert::AlertItem &a)
