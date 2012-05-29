@@ -45,6 +45,7 @@ const char * const  DB_ACTUALVERSION   = "0.1";
 // Tables
 enum Tables {
     Table_ALERT = 0,
+    Table_ALERT_RELATED,
     Table_ALERT_LABELS,
     Table_ALERT_SCRIPTS,
     Table_ALERT_TIMING,
@@ -58,21 +59,17 @@ enum AlertFields {
 
     // Uids
     ALERT_UID,
-    ALERT_USER_UID,
-    ALERT_GROUP_UID,  // for future use (user groups)
-    ALERT_PATIENT_UID,
-    ALERT_FAMILY_UID, // for future use (patient family)
-    ALERT_APP_NAME,
     ALERT_CATEGORY_UID,
-    ALERT_SCRIPTS_ID,
-    ALERT_ISVALID,
+    ALERT_REL_ID,
+    ALERT_SID,
     ALERT_VAL_ID,
+    ALERT_TIM_ID,
+    ALERT_ISVALID,
     // TODO : Add a trace for alert modification
 
     // Types
     ALERT_VIEW_TYPE,
     ALERT_CONTENT_TYPE,
-    ALERT_TIMING_ID,
     ALERT_CONDITION_TYPE,
     ALERT_PRIORITY,
 
@@ -92,6 +89,13 @@ enum AlertFields {
     ALERT_EXTRA_XML
 };
 
+enum AlertRelatedFields {
+    ALERT_RELATED_ID = 0,
+    ALERT_RELATED_REL_ID,
+    ALERT_RELATED_RELATED_TO,
+    ALERT_RELATED_RELATED_UID
+};
+
 enum AlertLabelFields {
     ALERT_LABELS_ID = 0,
     ALERT_LABELS_LABELID,
@@ -101,7 +105,8 @@ enum AlertLabelFields {
 };
 
 enum AlertScriptsFields {
-    ALERT_SCRIPTS_SID = 0,
+    ALERT_SCRIPTS_ID = 0,
+    ALERT_SCRIPTS_SID,
     ALERT_SCRIPT_UID,
     ALERT_SCRIPT_ISVALID,
     ALERT_SCRIPT_TYPE,
@@ -110,6 +115,7 @@ enum AlertScriptsFields {
 
 enum AlertTimingFields {
     ALERT_TIMING_TIMINGID = 0,
+    ALERT_TIMING_TIMING_TIM_ID,
     ALERT_TIMING_ISVALID,
     ALERT_TIMING_STARTDATETIME,
     ALERT_TIMING_ENDDATETIME,

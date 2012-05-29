@@ -91,11 +91,13 @@ protected:
     AlertBase(QObject * parent = 0);
     bool init();
 
+    AlertItem createVirtualItem() const;
+
 public:
     ~AlertBase();
     bool isInitialized() const {return m_initialized;}
 
-    bool saveAlertItem(const AlertItem &item);
+    bool saveAlertItem(AlertItem &item);
     QVector<AlertItem> getAlertItems(const AlertBaseQuery &query);
 
     // For debugging purpose
@@ -109,6 +111,14 @@ private:
                           const int port,
                           CreationOption createOption
                          );
+
+    bool updateAlertItem(AlertItem &item);
+
+    bool saveItemRelations(AlertItem &item);
+    bool saveItemScripts(AlertItem &item);
+    bool saveItemTimings(AlertItem &item);
+    bool saveItemValidations(AlertItem &item);
+    bool saveItemLabels(AlertItem &item);
 
 private Q_SLOTS:
     void onCoreDatabaseServerChanged();

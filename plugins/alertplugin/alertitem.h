@@ -30,6 +30,7 @@
 
 #include <alertplugin/alertplugin_exporter.h>
 #include <QString>
+#include <QVariant>
 #include <QDateTime>
 
 /**
@@ -44,11 +45,13 @@ namespace Alert {
 class ALERT_EXPORT AlertTiming
 {
 public:
-    AlertTiming() : _id(-1), _delay(-1) {}
+    AlertTiming() : _id(-1), _delay(-1), _ncycle(0), _valid(true), _isCycle(false) {}
     virtual ~AlertTiming() {}
 
     virtual int id() const {return _id;}
     virtual void setId(int id) {_id = id;}
+    virtual bool isValid() const {return _valid;}
+    virtual void setValid(bool state) {_valid=state;}
 
     virtual QDateTime start() const {return _start;}
     virtual QDateTime end() const {return _end;}
@@ -57,15 +60,17 @@ public:
 
     virtual bool isCycling() const {return _isCycle;}
     virtual void setCycling(bool cycle) {_isCycle=cycle;}
+    virtual int numberOfCycles() const {return _ncycle;}
+    virtual void setNumberOfCycles(int n) {_ncycle=n;}
     virtual QDateTime nextDate() const {return _next;}
     virtual void setNextDate(const QDateTime &dt) {_next = dt;}
     virtual int cyclingDelayInDays() const {return _delay;}
     virtual void setCyclingDelayInDays(const int delay) {_delay=delay;}
 
 private:
-    int _id, _delay;
+    int _id, _delay, _ncycle;
     QDateTime _start, _end, _next;
-    bool _isCycle;
+    bool _valid, _isCycle;
 };
 
 class ALERT_EXPORT AlertScript
@@ -83,8 +88,14 @@ public:
     virtual int id() const {return _id;}
     virtual void setId(int id) {_id = id;}
 
+    virtual QString uuid() const {return _uid;}
+    virtual void setUuid(const QString &uid) {_uid=uid;}
+
     virtual bool isValid() const {return _valid;}
     virtual void setValid(bool state) {_valid=state;}
+
+    virtual ScriptType type() {return _type;}
+    virtual void setType(ScriptType type) {_type=type;}
 
     virtual QString script() const {return _script;}
     virtual void setScript(const QString &script) {_script=script;}
@@ -93,7 +104,7 @@ private:
     int _id;
     bool _valid;
     ScriptType _type;
-    QString _script;
+    QString _uid, _script;
 };
 
 class ALERT_EXPORT AlertValidation
@@ -107,21 +118,59 @@ public:
 
     virtual QString userUid() const {return _userUid;}
     virtual void setUserUuid(const QString &uid) {_userUid=uid;}
+    virtual QString userComment() const {return _userComment;}
+    virtual void setUserComment(const QString &comment) {_userComment=comment;}
 
     virtual QDateTime dateOfValidation() const {return _date;}
     virtual void setDateOfValidation(const QDateTime &dt) {_date=dt;}
 
 private:
     int _id;
-    QString _userUid;
+    QString _userUid, _userComment;
     QDateTime _date;
+};
+
+class ALERT_EXPORT AlertRelation
+{
+public:
+    enum RelatedTo {
+        RelatedToPatient = 0,
+        RelatedToFamily,
+        RelatedToAllPatients,
+        RelatedToUser,
+        RelatedToUserGroup,
+        RelatedToApplication
+    };
+    AlertRelation() : _id(-1) {}
+    virtual ~AlertRelation() {}
+
+    virtual int id() const {return _id;}
+    virtual void setId(int id) {_id = id;}
+
+    virtual RelatedTo relatedTo() const {return _related;}
+    virtual void setRelatedTo(RelatedTo related) {_related = related;}
+
+    virtual QString relatedToUid() const {return _relatedUid;}
+    virtual void setRelatedToUid(const QString &uid) {_relatedUid=uid;}
+
+private:
+    int _id;
+    RelatedTo _related;
+    QString _relatedUid;
 };
 
 namespace Internal {
 class AlertItemPrivate;
+class AlertBase;
 }
 class ALERT_EXPORT AlertItem
 {
+    friend class Alert::Internal::AlertBase;
+
+protected:
+    void setDb(int ref, const QVariant &value);
+    QVariant db(int ref) const;
+
 public:
     enum ViewType {
         DynamicAlert = 0,
@@ -142,13 +191,16 @@ public:
     AlertItem();
     virtual ~AlertItem();
     virtual bool isValid() const;
-    virtual bool setValidity(bool isValid);
+    virtual void setValidity(bool isValid);
 
     virtual QString uuid() const;
     virtual void setUuid(const QString &uid) const;
 
+    virtual QString cryptedPassword() const;
+    virtual void setCryptedPassword(const QString &pass);
+
     virtual bool isModified() const;
-    virtual bool setModified(bool modified);
+    virtual void setModified(bool modified);
 
     virtual QString label(const QString &lang = QString::null) const;
     virtual QString category(const QString &lang = QString::null) const;
@@ -160,6 +212,8 @@ public:
     virtual void setDescription(const QString &txt, const QString &lang = QString::null);
     virtual void setComment(const QString &txt, const QString &lang = QString::null);
 
+    virtual QStringList availableLanguages() const;
+
     virtual ViewType viewType() const;
     virtual ContentType contentType() const;
     virtual Priority priority() const;
@@ -170,8 +224,25 @@ public:
     virtual void setPriority(Priority priority);
     // TODO : virtual void setCondition(...);
 
+    virtual QDateTime creationDate() const;
+    virtual void setCreationDate(const QDateTime &dt);
+    virtual QDateTime lastUpdate() const;
+    virtual void setLastUpdate(const QDateTime &dt);
+
+    virtual QString themedIcon() const;
+    virtual void setThemedIcon(const QString &icon);
+    virtual QString styleSheet() const;
+    virtual void setStyleSheet(const QString &css);
+
+    virtual QString extraXml() const;
+    virtual void setExtraXml(const QString &xml);
 
     // TODO : move this in AlertModel ?
+    virtual AlertRelation &relation(int id) const;
+    virtual QVector<AlertRelation> &relations() const;
+    virtual AlertRelation &relationAt(int id) const;
+    virtual void addRelation(const AlertRelation &relation);
+
     virtual AlertTiming &timing(int id) const;
     virtual QVector<AlertTiming> &timings() const;
     virtual AlertTiming &timingAt(int id) const;

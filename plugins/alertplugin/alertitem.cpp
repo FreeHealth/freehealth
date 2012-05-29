@@ -64,17 +64,21 @@ public:
     QString categoryForTreeWiget() const {return QString::null;}
 
 public:
-    QString _uid;
+    QString _uid, _pass, _themedIcon, _css, _extraXml;
     int _id;
     bool _valid, _modified;
     AlertItem::ViewType _viewType;
     AlertItem::ContentType _contentType;
     AlertItem::Priority _priority;
+    QHash<int, QVariant> _db;
+    QDateTime _creationDate, _update;
 
     // TODO : move this in an AlertModel
+    QVector<AlertRelation> _relations;
     QVector<AlertScript> _scripts;
     QVector<AlertTiming> _timings;
     QVector<AlertValidation> _validations;
+    AlertRelation _nullRelation;
     AlertScript _nullScript;
     AlertTiming _nullTiming;
     AlertValidation _nullValidation;
@@ -95,7 +99,17 @@ AlertItem::~AlertItem()
     d = 0;
 }
 
-bool AlertItem::setValidity(bool isValid)
+void AlertItem::setDb(int ref, const QVariant &value)
+{
+    d->_db.insert(ref, value);
+}
+
+QVariant AlertItem::db(int ref) const
+{
+    return d->_db.value(ref, QVariant());
+}
+
+void AlertItem::setValidity(bool isValid)
 {
     d->_valid = isValid;
 }
@@ -107,12 +121,12 @@ bool AlertItem::isValid() const
 
 bool AlertItem::isModified() const
 {
-    return _modified;
+    return d->_modified;
 }
 
-bool AlertItem::setModified(bool modified)
+void AlertItem::setModified(bool modified)
 {
-    _modified = modified;
+    d->_modified = modified;
 }
 
 QString AlertItem::uuid() const
@@ -123,6 +137,16 @@ QString AlertItem::uuid() const
 void AlertItem::setUuid(const QString &uid) const
 {
     d->_uid = uid;
+}
+
+QString AlertItem::cryptedPassword() const
+{
+    return d->_pass;
+}
+
+void AlertItem::setCryptedPassword(const QString &pass)
+{
+    d->_pass = pass;
 }
 
 QString AlertItem::label(const QString &lang) const
@@ -222,6 +246,10 @@ void AlertItem::setComment(const QString &txt, const QString &lang)
     v->_comment = txt;
 }
 
+QStringList AlertItem::availableLanguages() const
+{
+    return d->languages();
+}
 
 AlertItem::ViewType AlertItem::viewType() const
 {
@@ -255,7 +283,84 @@ void AlertItem::setPriority(AlertItem::Priority priority)
     d->_priority = priority;
 }
 
+QDateTime AlertItem::creationDate() const
+{
+    return d->_creationDate;
+}
+
+void AlertItem::setCreationDate(const QDateTime &dt)
+{
+    d->_creationDate = dt;
+}
+
+QDateTime AlertItem::lastUpdate() const
+{
+    return d->_update;
+}
+
+void AlertItem::setLastUpdate(const QDateTime &dt)
+{
+    d->_update = dt;
+}
+
+QString AlertItem::themedIcon() const
+{
+    return d->_themedIcon;
+}
+
+void AlertItem::setThemedIcon(const QString &icon)
+{
+    d->_themedIcon = icon;
+}
+
+QString AlertItem::styleSheet() const
+{
+    return d->_css;
+}
+
+void AlertItem::setStyleSheet(const QString &css)
+{
+    d->_css = css;
+}
+
+QString AlertItem::extraXml() const
+{
+    return d->_extraXml;
+}
+
+void AlertItem::setExtraXml(const QString &xml)
+{
+    d->_extraXml = xml;
+}
+
 // TODO : void setCondition(...);
+
+AlertRelation &AlertItem::relation(int id) const
+{
+    for(int i=0; i<d->_relations.count();++i) {
+        if (d->_relations.at(i).id()==id)
+            return d->_relations[i];
+    }
+    return d->_nullRelation;
+}
+
+QVector<AlertRelation> &AlertItem::relations() const
+{
+    return d->_relations;
+}
+
+AlertRelation &AlertItem::relationAt(int id) const
+{
+    if (id>0 && id<d->_relations.count())
+        return d->_relations[id];
+    return d->_nullRelation;
+}
+
+void AlertItem::addRelation(const AlertRelation &relation)
+{
+    d->_relations << relation;
+}
+
 
 AlertTiming &AlertItem::timing(int id) const
 {
