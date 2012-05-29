@@ -25,15 +25,15 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef IALERT
-#define IALERT
+#ifndef ALERT_ALERTITEM
+#define ALERT_ALERTITEM
 
 #include <alertplugin/alertplugin_exporter.h>
 #include <QString>
 #include <QDateTime>
 
 /**
- * \file ialert.h
+ * \file alertitem.h
  * \author Eric MAEKER <eric.maeker@gmail.com>, Pierre-Marie Desombre <pm.desombre@gmail.com>
  * \version 0.8.0
  * \date 28 May 2012
@@ -96,10 +96,30 @@ private:
     QString _script;
 };
 
+class ALERT_EXPORT AlertValidation
+{
+public:
+    AlertValidation() : _id(-1) {}
+    virtual ~AlertValidation() {}
+
+    virtual int id() const {return _id;}
+    virtual void setId(int id) {_id = id;}
+
+    virtual QString userUid() const {return _userUid;}
+    virtual void setUserUuid(const QString &uid) {_userUid=uid;}
+
+    virtual QDateTime dateOfValidation() const {return _date;}
+    virtual void setDateOfValidation(const QDateTime &dt) {_date=dt;}
+
+private:
+    int _id;
+    QString _userUid;
+    QDateTime _date;
+};
+
 namespace Internal {
 class AlertItemPrivate;
 }
-
 class ALERT_EXPORT AlertItem
 {
 public:
@@ -121,7 +141,10 @@ public:
 
     AlertItem();
     virtual ~AlertItem();
+    virtual bool setValidity(bool isValid);
     virtual bool isValid() const;
+
+    virtual QString uuid() const;
 
     virtual QString label(const QString &lang = QString::null) const;
     virtual QString category(const QString &lang = QString::null) const;
@@ -143,6 +166,8 @@ public:
     virtual void setPriority(Priority priority);
     // TODO : virtual void setCondition(...);
 
+
+    // TODO : move this in AlertModel ?
     virtual AlertTiming &timing(int id) const;
     virtual QVector<AlertTiming> &timings() const;
     virtual AlertTiming &timingAt(int id) const;
@@ -153,11 +178,17 @@ public:
     virtual AlertScript &scriptAt(int id) const;
     virtual void addScript(const AlertScript &script);
 
+    virtual AlertValidation &validation(int id) const;
+    virtual QVector<AlertValidation> &validations() const;
+    virtual AlertValidation &validationAt(int id) const;
+    virtual void addValidation(const AlertValidation &val);
+    // END
+
 private:
     Internal::AlertItemPrivate *d;
 };
 
-}  // Alert
+}  // namespace Alert
 
-#endif
+#endif  // ALERT_ALERTITEM
 

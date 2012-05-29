@@ -25,7 +25,7 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#include "ialert.h"
+#include "alertitem.h"
 #include "alertcore.h"
 
 #include <translationutils/multilingualclasstemplate.h>
@@ -70,8 +70,15 @@ public:
     AlertItem::ViewType _viewType;
     AlertItem::ContentType _contentType;
     AlertItem::Priority _priority;
+
+    // TODO : move this in an AlertModel
     QVector<AlertScript> _scripts;
     QVector<AlertTiming> _timings;
+    QVector<AlertValidation> _validations;
+    AlertScript _nullScript;
+    AlertTiming _nullTiming;
+    AlertValidation _nullValidation;
+    // END
 };
 
 }
@@ -88,9 +95,20 @@ AlertItem::~AlertItem()
     d = 0;
 }
 
-bool AlertItem::isValid() const
-{}
+bool AlertItem::setValidity(bool isValid)
+{
+    d->_valid = isValid;
+}
 
+bool AlertItem::isValid() const
+{
+    return d->_valid;
+}
+
+QString AlertItem::uuid() const
+{
+    return d->_uid;
+}
 
 QString AlertItem::label(const QString &lang) const
 {
@@ -225,26 +243,79 @@ void AlertItem::setPriority(AlertItem::Priority priority)
 // TODO : void setCondition(...);
 
 AlertTiming &AlertItem::timing(int id) const
-{}
+{
+    for(int i=0; i<d->_timings.count();++i) {
+        if (d->_timings.at(i).id()==id)
+            return d->_timings[i];
+    }
+    return d->_nullTiming;
+}
 
 QVector<AlertTiming> &AlertItem::timings() const
-{}
+{
+    return d->_timings;
+}
 
 AlertTiming &AlertItem::timingAt(int id) const
-{}
+{
+    if (id>0 && id<d->_timings.count())
+        return d->_timings[id];
+    return d->_nullTiming;
+}
 
 void AlertItem::addTiming(const AlertTiming &timing)
-{}
+{
+    d->_timings << timing;
+}
 
 AlertScript &AlertItem::script(int id) const
-{}
+{
+    for(int i=0; i<d->_scripts.count();++i) {
+        if (d->_scripts.at(i).id()==id)
+            return d->_scripts[i];
+    }
+    return d->_nullScript;
+}
 
 QVector<AlertScript> &AlertItem::scripts() const
-{}
+{
+    return d->_scripts;
+}
 
 AlertScript &AlertItem::scriptAt(int id) const
-{}
+{
+    if (id>0 && id<d->_scripts.count())
+        return d->_scripts[id];
+    return d->_nullScript;
+}
 
 void AlertItem::addScript(const AlertScript &script)
-{}
+{
+    d->_scripts << script;
+}
 
+AlertValidation &AlertItem::validation(int id) const
+{
+    for(int i=0; i<d->_validations.count();++i) {
+        if (d->_validations.at(i).id()==id)
+            return d->_validations[i];
+    }
+    return d->_nullValidation;
+}
+
+QVector<AlertValidation> &AlertItem::validations() const
+{
+    return d->_validations;
+}
+
+AlertValidation &AlertItem::validationAt(int id) const
+{
+    if (id>0 && id<d->_validations.count())
+        return d->_validations[id];
+    return d->_nullValidation;
+}
+
+void AlertItem::addValidation(const AlertValidation &val)
+{
+    d->_validations << val;
+}
