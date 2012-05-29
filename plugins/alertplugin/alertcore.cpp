@@ -84,7 +84,13 @@ bool AlertCore::initialize()
 
     // TESTS
     AlertItem item = d->m_alertBase->createVirtualItem();
-    qWarning() << item;
+    AlertItem item2 = item;
+    qWarning() << item << item2;
+    d->m_alertBase->saveAlertItem(item);
+    Internal::AlertBaseQuery query;
+    query.getAlertItemFromUuid(item.uuid());
+    QVector<AlertItem> test = d->m_alertBase->getAlertItems(query);
+    qWarning() << test;
     // END TESTS
 
     return true;
