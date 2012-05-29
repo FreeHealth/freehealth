@@ -48,6 +48,7 @@ enum Tables {
     Table_ALERT_LABELS,
     Table_ALERT_SCRIPTS,
     Table_ALERT_TIMING,
+    Table_ALERT_VALIDATION,
     Table_ALERT_VERSION
 };
 
@@ -65,6 +66,7 @@ enum AlertFields {
     ALERT_CATEGORY_UID,
     ALERT_SCRIPTS_ID,
     ALERT_ISVALID,
+    ALERT_VAL_ID,
     // TODO : Add a trace for alert modification
 
     // Types
@@ -114,6 +116,14 @@ enum AlertTimingFields {
     ALERT_TIMING_CYCLES,        // number of cycle or infinite cycling
     ALERT_TIMING_CYCLINGDELAY,  // cycle every X days
     ALERT_TIMING_NEXTCYCLE
+};
+
+enum AlertValidationFields {
+    ALERT_VALIDATION_VID = 0,
+    ALERT_VALIDATION_VAL_ID = 0,
+    ALERT_VALIDATION_DATEOFVALIDATION,
+    ALERT_VALIDATION_USER_UUID,
+    ALERT_VALIDATION_USER_COMMENT
 };
 
 enum VersionFields {

@@ -31,6 +31,11 @@
   \sa Alert::AlertCore
 */
 
+/**
+  \class Alert::Internal::AlertBaseQuery
+  Construct queries for the Alert::Internal::AlertBase.
+*/
+
 #include "alertbase.h"
 #include "constants.h"
 
@@ -61,6 +66,95 @@ static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 static inline Core::ICommandLine *commandLine()  { return Core::ICore::instance()->commandLine(); }
 
+/** Create an empty query. */
+AlertBaseQuery::AlertBaseQuery() :
+    _validity(AlertBaseQuery::ValidAlerts)
+{}
+
+AlertBaseQuery::~AlertBaseQuery()
+{}
+
+/** Define the validity of queried alerts \sa Alert::Internal::AlertBaseQuery::AlertValidity */
+void AlertBaseQuery::setAlertValidity(AlertBaseQuery::AlertValidity validity)
+{
+    _validity = validity;
+}
+
+/** Return the queried validity \sa Alert::Internal::AlertBaseQuery::AlertValidity */
+AlertBaseQuery::AlertValidity AlertBaseQuery::alertValidity() const
+{
+    return _validity;
+}
+
+/** Query alerts for the current logged user. */
+void AlertBaseQuery::addCurrentUserAlerts()
+{
+    const QString &u = user()->uuid();
+    if (!_userUids.contains(u))
+        _userUids << u;
+}
+
+/** Query alerts for the user according to its \e uuid. */
+void AlertBaseQuery::addUserAlerts(const QString &uuid)
+{
+    if (!_userUids.contains(uuid))
+        _userUids << uuid;
+}
+
+/** Query alerts for the current editing patient. */
+void AlertBaseQuery::addCurrentPatientAlerts()
+{
+    const QString &u = patient()->uuid();
+    if (!_patientUids.contains(u))
+        _patientUids << u;
+}
+
+/** Query alerts for the patient according to its \e uuid. */
+void AlertBaseQuery::addPatientAlerts(const QString &uuid)
+{
+    if (!_patientUids.contains(uuid))
+        _patientUids << uuid;
+}
+
+/** Returns all queried user uuids. */
+QStringList AlertBaseQuery::userUids() const
+{
+    return _userUids;
+}
+
+/** Returns all queried patient uuids. */
+QStringList AlertBaseQuery::patientUids() const
+{
+    return _patientUids;
+}
+
+/** Query alerts for a specific date range (\e start, \e end). */
+void AlertBaseQuery::setDateRange(const QDate &start, const QDate &end)
+{
+    _start = start;
+    _end = end;
+}
+
+/** Return true if a date is defined. */
+bool AlertBaseQuery::dateRangeDefined() const
+{
+    return (_start.isValid() && _end.isValid());
+}
+
+/** Returns the date range. */
+QDate AlertBaseQuery::dateRangeStart() const
+{
+    return _start;
+}
+
+/** Returns the date range. */
+QDate AlertBaseQuery::dateRangeEnd() const
+{
+    return _end;
+}
+
+
+
 AlertBase::AlertBase(QObject *parent) :
     QObject(parent),
     Utils::Database()
@@ -84,6 +178,7 @@ AlertBase::AlertBase(QObject *parent) :
     addField(Table_ALERT, ALERT_CATEGORY_UID, "C_UID", FieldIsUUID);
     addField(Table_ALERT, ALERT_SCRIPTS_ID, "SCR_ID", FieldIsInteger);
     addField(Table_ALERT, ALERT_ISVALID, "ISV", FieldIsInteger);
+    addField(Table_ALERT, ALERT_VAL_ID, "VAL", FieldIsInteger);
 
     addField(Table_ALERT, ALERT_VIEW_TYPE, "VIEW_ID", FieldIsInteger);
     addField(Table_ALERT, ALERT_CONTENT_TYPE, "CONTENT_ID", FieldIsInteger);
@@ -138,6 +233,18 @@ AlertBase::AlertBase(QObject *parent) :
     addField(Table_ALERT_SCRIPTS, ALERT_SCRIPT_ISVALID, "ISV", FieldIsBoolean, "1");
     addField(Table_ALERT_SCRIPTS, ALERT_SCRIPT_TYPE, "S_TP", FieldIsShortText);
     addField(Table_ALERT_SCRIPTS, ALERT_SCRIPT_CONTENT, "S_CT", FieldIsLongText);
+    addIndex(Table_ALERT_SCRIPTS, ALERT_SCRIPTS_SID);
+    addIndex(Table_ALERT_SCRIPTS, ALERT_SCRIPT_UID);
+
+    // Validations
+    addField(Table_ALERT_VALIDATION, ALERT_VALIDATION_VID, "ID", FieldIsUniquePrimaryKey);
+    addField(Table_ALERT_VALIDATION, ALERT_VALIDATION_VAL_ID, "VAL_UID", FieldIsUUID);
+    addField(Table_ALERT_VALIDATION, ALERT_VALIDATION_DATEOFVALIDATION, "DT", FieldIsDateTime);
+    addField(Table_ALERT_VALIDATION, ALERT_VALIDATION_USER_UUID, "U_U", FieldIsUUID);
+    addField(Table_ALERT_VALIDATION, ALERT_VALIDATION_USER_COMMENT, "U_C", FieldIsLongText);
+    addIndex(Table_ALERT_VALIDATION, ALERT_VALIDATION_VID);
+    addIndex(Table_ALERT_VALIDATION, ALERT_VALIDATION_VAL_ID);
+    addIndex(Table_ALERT_VALIDATION, ALERT_VALIDATION_USER_UUID);
 
     addField(Table_ALERT_VERSION, VERSION_TEXT, "TXT", FieldIsShortText);
 }

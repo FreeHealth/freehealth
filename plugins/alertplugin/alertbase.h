@@ -30,6 +30,9 @@
 
 #include <utils/database.h>
 #include <QObject>
+#include <QDate>
+#include <QString>
+#include <QStringList>
 
 /**
  * \file alertbase.h
@@ -41,6 +44,41 @@
 namespace Alert {
 class AlertCore;
 namespace Internal {
+
+class AlertBaseQuery
+{
+public:
+    enum AlertValidity {
+        ValidAlerts = 0,
+        InvalidAlerts,
+        ValidAndInvalidAlerts
+    };
+
+    AlertBaseQuery();
+    ~AlertBaseQuery();
+
+    void setAlertValidity(AlertValidity validity);
+    AlertValidity alertValidity() const;
+
+    void addCurrentUserAlerts();
+    void addUserAlerts(const QString &uuid);
+
+    void addCurrentPatientAlerts();
+    void addPatientAlerts(const QString &uuid);
+
+    QStringList userUids() const;
+    QStringList patientUids() const;
+
+    void setDateRange(const QDate &start, const QDate &end);
+    bool dateRangeDefined() const;
+    QDate dateRangeStart() const;
+    QDate dateRangeEnd() const;
+
+private:
+    QStringList _userUids, _patientUids;
+    QDate _start, _end;
+    AlertValidity _validity;
+};
 
 class AlertBase : public QObject, public Utils::Database
 {
