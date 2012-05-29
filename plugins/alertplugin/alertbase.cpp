@@ -384,6 +384,19 @@ bool AlertBase::createDatabase(const QString &connectionName , const QString &db
     return true;
 }
 
+/** Save or update the Alert::AlertItem in the alert database. Return true in case of success. */
+bool AlertBase::saveAlertItem(const AlertItem &item)
+{
+    return true;
+}
+
+/** Return the Alert::AlertItem corresponding to the Alert::Internal::AlertBaseQuery \e query */
+QVector<AlertItem> AlertBase::getAlertItems(const AlertBaseQuery &query)
+{
+    QVector<AlertItem> alerts;
+    return alerts;
+}
+
 /** Reconnect the database when the database server changes. \sa Core::ICore::databaseServerChanged(), Core::ISettings::databaseConnector() */
 void AlertBase::onCoreDatabaseServerChanged()
 {

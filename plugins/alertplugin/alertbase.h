@@ -33,6 +33,7 @@
 #include <QDate>
 #include <QString>
 #include <QStringList>
+#include <QVector>
 
 /**
  * \file alertbase.h
@@ -43,6 +44,7 @@
 
 namespace Alert {
 class AlertCore;
+class AlertItem;
 namespace Internal {
 
 class AlertBaseQuery
@@ -92,6 +94,9 @@ protected:
 public:
     ~AlertBase();
     bool isInitialized() const {return m_initialized;}
+
+    bool saveAlertItem(const AlertItem &item);
+    QVector<AlertItem> getAlertItems(const AlertBaseQuery &query);
 
     // For debugging purpose
     void toTreeWidget(QTreeWidget *tree);
