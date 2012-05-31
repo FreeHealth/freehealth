@@ -72,6 +72,18 @@ const char* const DURING                        = QT_TRANSLATE_NOOP("tkConstants
 const char* const EACH                          = QT_TRANSLATE_NOOP("tkConstants", "each");
 const char* const AND                           = QT_TRANSLATE_NOOP("tkConstants", "and");
 
+// The "related to"
+const char* const RELATED_TO                    = QT_TRANSLATE_NOOP("tkConstants", "related to");
+const char* const RELATED_TO_PATIENT_1          = QT_TRANSLATE_NOOP("tkConstants", "related to patient %1");
+const char* const RELATED_TO_CURRENT_PATIENT    = QT_TRANSLATE_NOOP("tkConstants", "related to current patient");
+const char* const RELATED_TO_ALL_PATIENTS       = QT_TRANSLATE_NOOP("tkConstants", "related to all patients");
+const char* const RELATED_TO_USER_1             = QT_TRANSLATE_NOOP("tkConstants", "related to user %1");
+const char* const RELATED_TO_CURRENT_USER       = QT_TRANSLATE_NOOP("tkConstants", "related to current user");
+const char* const RELATED_TO_ALL_USERS          = QT_TRANSLATE_NOOP("tkConstants", "related to all users");
+const char* const RELATED_TO_APPLICATION        = QT_TRANSLATE_NOOP("tkConstants", "related to application");
+const char* const RELATED_TO_PATIENT_FAMILY_1   = QT_TRANSLATE_NOOP("tkConstants", "related to the family %1");
+const char* const RELATED_TO_USER_GROUP_1       = QT_TRANSLATE_NOOP("tkConstants", "related to user group %1");
+
 // Settings related messages
 const char* const SETTINGS_RECOVERED                = QT_TRANSLATE_NOOP("tkConstants", "Settings recovered" );
 const char* const LOADING_SETTINGS                  = QT_TRANSLATE_NOOP("tkConstants", "Reading settings file");

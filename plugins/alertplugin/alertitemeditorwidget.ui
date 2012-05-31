@@ -174,6 +174,9 @@
        <string>Extra</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_3">
+       <item row="1" column="0">
+        <widget class="QPlainTextEdit" name="plainTextEdit"/>
+       </item>
        <item row="0" column="0">
         <widget class="QLabel" name="label_7">
          <property name="text">
@@ -181,17 +184,7 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="0">
-        <widget class="QPlainTextEdit" name="plainTextEdit"/>
-       </item>
       </layout>
-      <zorder>label_4</zorder>
-      <zorder>priority</zorder>
-      <zorder>contentType</zorder>
-      <zorder>label_6</zorder>
-      <zorder>viewType</zorder>
-      <zorder>checkBox</zorder>
-      <zorder>label_5</zorder>
       <zorder>plainTextEdit</zorder>
       <zorder>label_7</zorder>
      </widget>
