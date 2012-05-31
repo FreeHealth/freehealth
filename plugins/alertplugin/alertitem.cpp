@@ -535,11 +535,8 @@ QDebug operator<<(QDebug dbg, const Alert::AlertItem &a)
     case AlertItem::DynamicAlert:
         s << "view:dynamic";
         break;
-    case AlertItem::StaticPatientBar:
-        s << "view:patientBar";
-        break;
-    case AlertItem::StaticStatusBar:
-        s << "view:statusBar";
+    case AlertItem::StaticAlert:
+        s << "view:staticAlert";
         break;
     default:
         s << "view:" + QString::number(a.viewType());

@@ -174,8 +174,7 @@ protected:
 public:
     enum ViewType {
         DynamicAlert = 0,
-        StaticPatientBar,
-        StaticStatusBar
+        StaticAlert
     };
     enum ContentType {
         ApplicationNotification = 0,
