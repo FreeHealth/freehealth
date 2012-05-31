@@ -28,6 +28,7 @@
 #include "alertitem.h"
 #include "alertcore.h"
 
+#include <utils/global.h>
 #include <translationutils/multilingualclasstemplate.h>
 
 #include <QTreeWidgetItem>
@@ -379,7 +380,7 @@ QVector<AlertRelation> &AlertItem::relations() const
 
 AlertRelation &AlertItem::relationAt(int id) const
 {
-    if (id>0 && id<d->_relations.count())
+    if (IN_RANGE(id, 0, d->_relations.count()))
         return d->_relations[id];
     return d->_nullRelation;
 }
@@ -406,14 +407,14 @@ QVector<AlertTiming> &AlertItem::timings() const
 
 AlertTiming &AlertItem::timingAt(int id) const
 {
-    if (id>0 && id<d->_timings.count())
+    if (IN_RANGE(id, 0, d->_timings.count()))
         return d->_timings[id];
     return d->_nullTiming;
 }
 
 void AlertItem::addTiming(const AlertTiming &timing)
 {
-    d->_timings << timing;
+    d->_timings.append(timing);
 }
 
 AlertScript &AlertItem::script(int id) const
@@ -432,7 +433,7 @@ QVector<AlertScript> &AlertItem::scripts() const
 
 AlertScript &AlertItem::scriptAt(int id) const
 {
-    if (id>0 && id<d->_scripts.count())
+    if (IN_RANGE(id, 0, d->_scripts.count()))
         return d->_scripts[id];
     return d->_nullScript;
 }
@@ -458,7 +459,7 @@ QVector<AlertValidation> &AlertItem::validations() const
 
 AlertValidation &AlertItem::validationAt(int id) const
 {
-    if (id>0 && id<d->_validations.count())
+    if (IN_RANGE(id, 0, d->_validations.count()))
         return d->_validations[id];
     return d->_nullValidation;
 }
