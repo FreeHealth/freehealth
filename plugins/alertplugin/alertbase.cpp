@@ -846,11 +846,12 @@ bool AlertBase::saveItemLabels(AlertItem &item)
     const int DESCR = 1;
     const int COMMENT = 2;
     // get the labels lid for label, descr && comment
-    lids << -1 << -1 << -1;
-    vals << LabelLID << DescrLID << CommentLID;
+    lids << -1 << -1 << -1 << -1;
+    vals << LabelLID << CategoryLID << DescrLID << CommentLID;
+    int lastLid = -1;
     for(int i=0; i < vals.count(); ++i) {
-        if (item.db(vals.at(i)).isValid()) {
-            lids[i] = item.db(LabelLID).toInt();
+        if (item.db(vals.at(i)).isValid() && item.db(vals.at(i)).toInt()>-1) {
+            lids[i] = item.db(vals.at(i)).toInt();
             // delete all old relations
             QHash<int, QString> where;
             where.insert(Constants::ALERT_LABELS_LABELID, QString("=%1").arg(lids[i]));
@@ -860,9 +861,10 @@ bool AlertBase::saveItemLabels(AlertItem &item)
                 return false;
             }
         } else {
-            lids[i] = max(Constants::Table_ALERT_LABELS, Constants::ALERT_LABELS_LABELID).toInt() + 1;
+            lids[i] = qMax(lastLid, max(Constants::Table_ALERT_LABELS, Constants::ALERT_LABELS_LABELID).toInt()) + 1;
             item.setDb(vals.at(i), lids.at(i));
         }
+        lastLid = lids[i];
         query.finish();
     }
     // save all labels
