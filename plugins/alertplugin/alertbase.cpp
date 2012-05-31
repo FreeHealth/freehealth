@@ -225,6 +225,7 @@ AlertBase::AlertBase(QObject *parent) :
     addField(Table_ALERT, ALERT_TIM_ID, "TIM_ID", FieldIsInteger);
     addField(Table_ALERT, ALERT_CONDITION_TYPE, "COND_ID", FieldIsInteger);
     addField(Table_ALERT, ALERT_PRIORITY, "PRIOR", FieldIsInteger);
+    addField(Table_ALERT, ALERT_OVERRIDEREQUIREUSERCOMMENT, "VRUC", FieldIsInteger);
 
     addField(Table_ALERT, ALERT_LABELID, "LBL_LID", FieldIsInteger);
     addField(Table_ALERT, ALERT_DESCRIPTION_LABELID, "DES_LID", FieldIsInteger);
@@ -556,6 +557,7 @@ bool AlertBase::saveAlertItem(AlertItem &item)
     query.bindValue(Constants::ALERT_CONTENT_TYPE, item.contentType());
     query.bindValue(Constants::ALERT_CONDITION_TYPE, QVariant());
     query.bindValue(Constants::ALERT_PRIORITY, item.priority());
+    query.bindValue(Constants::ALERT_OVERRIDEREQUIREUSERCOMMENT, int(item.isOverrideRequiresUserComment()));
     query.bindValue(Constants::ALERT_LABELID, item.db(LabelLID));
     query.bindValue(Constants::ALERT_DESCRIPTION_LABELID, item.db(DescrLID));
     query.bindValue(Constants::ALERT_COMMENT_LABELID, item.db(CommentLID));
@@ -623,6 +625,7 @@ bool AlertBase::updateAlertItem(AlertItem &item)
     query.bindValue(Constants::ALERT_CONTENT_TYPE, item.contentType());
     query.bindValue(Constants::ALERT_CONDITION_TYPE, QVariant());
     query.bindValue(Constants::ALERT_PRIORITY, item.priority());
+    query.bindValue(Constants::ALERT_OVERRIDEREQUIREUSERCOMMENT, int(item.isOverrideRequiresUserComment()));
     query.bindValue(Constants::ALERT_LABELID, item.db(LabelLID));
     query.bindValue(Constants::ALERT_DESCRIPTION_LABELID, item.db(DescrLID));
     query.bindValue(Constants::ALERT_COMMENT_LABELID, item.db(CommentLID));
@@ -952,6 +955,7 @@ AlertItem AlertBase::getAlertItemFromUuid(const QString &uuid)
             item.setViewType(AlertItem::ViewType(query.value(Constants::ALERT_VIEW_TYPE).toInt()));
             item.setContentType(AlertItem::ContentType(query.value(Constants::ALERT_CONTENT_TYPE).toInt()));
             item.setPriority(AlertItem::Priority(query.value(Constants::ALERT_PRIORITY).toInt()));
+            item.setOverrideRequiresUserComment(query.value(Constants::ALERT_OVERRIDEREQUIREUSERCOMMENT).toBool());
             item.setCreationDate(query.value(Constants::ALERT_CREATION_DATE).toDateTime());
             item.setLastUpdate(query.value(Constants::ALERT_LAST_UPDATE_DATE).toDateTime());
             item.setThemedIcon(query.value(Constants::ALERT_THEMED_ICON).toString());

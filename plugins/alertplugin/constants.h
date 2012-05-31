@@ -72,6 +72,7 @@ enum AlertFields {
     ALERT_CONTENT_TYPE,
     ALERT_CONDITION_TYPE,
     ALERT_PRIORITY,
+    ALERT_OVERRIDEREQUIREUSERCOMMENT,
 
     // Translatable description items
     ALERT_LABELID,

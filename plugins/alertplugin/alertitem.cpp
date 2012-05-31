@@ -55,7 +55,7 @@ class AlertItemPrivate : public Trans::MultiLingualClass<AlertValueBook>
 public:
     AlertItemPrivate() :
         _id(-1),
-        _valid(true), _modified(false),
+        _valid(true), _modified(false), _overrideRequiresUserComment(false),
         _viewType(AlertItem::StaticPatientBar),
         _contentType(AlertItem::ApplicationNotification),
         _priority(AlertItem::Medium)
@@ -68,7 +68,7 @@ public:
 public:
     QString _uid, _pass, _themedIcon, _css, _extraXml;
     int _id;
-    bool _valid, _modified;
+    bool _valid, _modified, _overrideRequiresUserComment;
     AlertItem::ViewType _viewType;
     AlertItem::ContentType _contentType;
     AlertItem::Priority _priority;
@@ -284,6 +284,11 @@ AlertItem::Priority AlertItem::priority() const
     return d->_priority;
 }
 
+bool AlertItem::isOverrideRequiresUserComment() const
+{
+    return d->_overrideRequiresUserComment;
+}
+
 // TODO : xxx condition() const = 0;
 
 void AlertItem::setViewType(AlertItem::ViewType type)
@@ -299,6 +304,11 @@ void AlertItem::setContentType(AlertItem::ContentType content)
 void AlertItem::setPriority(AlertItem::Priority priority)
 {
     d->_priority = priority;
+}
+
+void AlertItem::setOverrideRequiresUserComment(bool required)
+{
+    d->_overrideRequiresUserComment = required;
 }
 
 QDateTime AlertItem::creationDate() const
