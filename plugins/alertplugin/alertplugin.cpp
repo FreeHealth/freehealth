@@ -40,6 +40,7 @@
 #include <QDebug>
 
 using namespace Alert;
+using namespace Internal;
 
 static inline Core::IUser *user()  { return Core::ICore::instance()->user(); }
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }

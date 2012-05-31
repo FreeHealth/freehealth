@@ -38,6 +38,7 @@
 */
 
 namespace Alert {
+namespace Internal {
 
 class AlertPlugin : public ExtensionSystem::IPlugin
 {
@@ -54,7 +55,7 @@ private Q_SLOTS:
     void coreAboutToClose();
 };
 
-
+}  // End namespace Internal
 }  // End namespace Alert
 
 #endif  // End ALERT_PLUGIN_H
