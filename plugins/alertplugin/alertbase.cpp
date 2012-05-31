@@ -91,6 +91,7 @@ enum DbValues {
     ValidationId,
     TimingId,
     LabelLID,
+    CategoryLID,
     DescrLID,
     CommentLID
 };
@@ -228,6 +229,7 @@ AlertBase::AlertBase(QObject *parent) :
     addField(Table_ALERT, ALERT_OVERRIDEREQUIREUSERCOMMENT, "VRUC", FieldIsInteger);
 
     addField(Table_ALERT, ALERT_LABELID, "LBL_LID", FieldIsInteger);
+    addField(Table_ALERT, ALERT_CATEGORYLID, "CAT_LID", FieldIsInteger);
     addField(Table_ALERT, ALERT_DESCRIPTION_LABELID, "DES_LID", FieldIsInteger);
     addField(Table_ALERT, ALERT_COMMENT_LABELID, "COM_LID", FieldIsInteger);
     addField(Table_ALERT, ALERT_CREATION_DATE, "C_DATE", FieldIsDate);
@@ -559,6 +561,7 @@ bool AlertBase::saveAlertItem(AlertItem &item)
     query.bindValue(Constants::ALERT_PRIORITY, item.priority());
     query.bindValue(Constants::ALERT_OVERRIDEREQUIREUSERCOMMENT, int(item.isOverrideRequiresUserComment()));
     query.bindValue(Constants::ALERT_LABELID, item.db(LabelLID));
+    query.bindValue(Constants::ALERT_CATEGORYLID, item.db(CategoryLID));
     query.bindValue(Constants::ALERT_DESCRIPTION_LABELID, item.db(DescrLID));
     query.bindValue(Constants::ALERT_COMMENT_LABELID, item.db(CommentLID));
     query.bindValue(Constants::ALERT_CREATION_DATE, item.creationDate());
@@ -627,6 +630,7 @@ bool AlertBase::updateAlertItem(AlertItem &item)
     query.bindValue(Constants::ALERT_PRIORITY, item.priority());
     query.bindValue(Constants::ALERT_OVERRIDEREQUIREUSERCOMMENT, int(item.isOverrideRequiresUserComment()));
     query.bindValue(Constants::ALERT_LABELID, item.db(LabelLID));
+    query.bindValue(Constants::ALERT_CATEGORYLID, item.db(CategoryLID));
     query.bindValue(Constants::ALERT_DESCRIPTION_LABELID, item.db(DescrLID));
     query.bindValue(Constants::ALERT_COMMENT_LABELID, item.db(CommentLID));
     query.bindValue(Constants::ALERT_CREATION_DATE, item.creationDate());
@@ -948,6 +952,7 @@ AlertItem AlertBase::getAlertItemFromUuid(const QString &uuid)
             item.setDb(ValidationId, query.value(Constants::ALERT_VAL_ID).toInt());
             item.setDb(TimingId, query.value(Constants::ALERT_TIM_ID).toInt());
             item.setDb(LabelLID, query.value(Constants::ALERT_LABELID).toInt());
+            item.setDb(CategoryLID, query.value(Constants::ALERT_CATEGORYLID).toInt());
             item.setDb(DescrLID, query.value(Constants::ALERT_DESCRIPTION_LABELID).toInt());
             item.setDb(CommentLID, query.value(Constants::ALERT_COMMENT_LABELID).toInt());
             item.setValidity(query.value(Constants::ALERT_ISVALID).toBool());
@@ -1101,6 +1106,8 @@ bool AlertBase::getItemLabels(AlertItem &item)
     using namespace Alert::Constants;
     QSqlQuery query(database());
     Utils::Field cond(Table_ALERT, ALERT_ID, QString("=%1").arg(item.db(ItemId).toString()));
+
+    // get label
     Utils::Join join(Table_ALERT_LABELS, ALERT_LABELS_LABELID, Table_ALERT, ALERT_LABELID);
     if (query.exec(select(Table_ALERT_LABELS, join, cond))) {
         while (query.next()) {
@@ -1111,6 +1118,20 @@ bool AlertBase::getItemLabels(AlertItem &item)
         return false;
     }
     query.finish();
+
+    // get category
+    join = Utils::Join(Table_ALERT_LABELS, ALERT_LABELS_LABELID, Table_ALERT, ALERT_CATEGORYLID);
+    if (query.exec(select(Table_ALERT_LABELS, join, cond))) {
+        while (query.next()) {
+            item.setCategory(query.value(ALERT_LABELS_VALUE).toString(), query.value(ALERT_LABELS_LANG).toString());
+        }
+    } else {
+        LOG_QUERY_ERROR(query);
+        return false;
+    }
+    query.finish();
+
+    // get description
     join = Utils::Join(Table_ALERT_LABELS, ALERT_LABELS_LABELID, Table_ALERT, ALERT_DESCRIPTION_LABELID);
     if (query.exec(select(Table_ALERT_LABELS, join, cond))) {
         while (query.next()) {
@@ -1121,6 +1142,8 @@ bool AlertBase::getItemLabels(AlertItem &item)
         return false;
     }
     query.finish();
+
+    // get comment
     join = Utils::Join(Table_ALERT_LABELS, ALERT_LABELS_LABELID, Table_ALERT, ALERT_COMMENT_LABELID);
     if (query.exec(select(Table_ALERT_LABELS, join, cond))) {
         while (query.next()) {

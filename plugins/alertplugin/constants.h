@@ -59,7 +59,7 @@ enum AlertFields {
 
     // Uids
     ALERT_UID,
-    ALERT_CATEGORY_UID,
+    ALERT_CATEGORY_UID,  // for later use with category plugin
     ALERT_REL_ID,
     ALERT_SID,
     ALERT_VAL_ID,
@@ -76,6 +76,7 @@ enum AlertFields {
 
     // Translatable description items
     ALERT_LABELID,
+    ALERT_CATEGORYLID,  // while waiting integration of category plugin
     ALERT_DESCRIPTION_LABELID,
     ALERT_COMMENT_LABELID,
 
