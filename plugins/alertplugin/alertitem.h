@@ -45,7 +45,7 @@ namespace Alert {
 class ALERT_EXPORT AlertTiming
 {
 public:
-    AlertTiming() : _id(-1), _delay(-1), _ncycle(0), _valid(true), _isCycle(false) {}
+    AlertTiming() : _id(-1), _ncycle(0), _delay(0), _valid(true), _isCycle(false) {}
     virtual ~AlertTiming() {}
 
     virtual int id() const {return _id;}
@@ -64,11 +64,12 @@ public:
     virtual void setNumberOfCycles(int n) {_ncycle=n; if (n>0)_ncycle=true;}
     virtual QDateTime nextDate() const {return _next;}
     virtual void setNextDate(const QDateTime &dt) {_next = dt;}
-    virtual int cyclingDelayInDays() const {return _delay;}
-    virtual void setCyclingDelayInDays(const int delay) {_delay=delay;}
+    virtual qulonglong cyclingDelayInMinutes() const {return _delay;}
+    virtual void setCyclingDelayInMinutes(const qulonglong delay) {_delay=delay;}
 
 private:
-    int _id, _delay, _ncycle;
+    int _id, _ncycle;
+    qulonglong _delay;
     QDateTime _start, _end, _next;
     bool _valid, _isCycle;
 };

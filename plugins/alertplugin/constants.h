@@ -122,7 +122,7 @@ enum AlertTimingFields {
     ALERT_TIMING_STARTDATETIME,
     ALERT_TIMING_ENDDATETIME,
     ALERT_TIMING_CYCLES,        // number of cycle or infinite cycling
-    ALERT_TIMING_CYCLINGDELAY,  // cycle every X days
+    ALERT_TIMING_CYCLINGDELAY,  // cycle every X **minutes**
     ALERT_TIMING_NEXTCYCLE
 };
 

@@ -269,7 +269,7 @@ AlertBase::AlertBase(QObject *parent) :
     addField(Table_ALERT_TIMING, ALERT_TIMING_STARTDATETIME, "STR", FieldIsDateTime);
     addField(Table_ALERT_TIMING, ALERT_TIMING_ENDDATETIME, "END", FieldIsDateTime);
     addField(Table_ALERT_TIMING, ALERT_TIMING_CYCLES, "CYC", FieldIsInteger);
-    addField(Table_ALERT_TIMING, ALERT_TIMING_CYCLINGDELAY, "CDY", FieldIsInteger);
+    addField(Table_ALERT_TIMING, ALERT_TIMING_CYCLINGDELAY, "CDY", FieldIsUnsignedLongInteger);
     addField(Table_ALERT_TIMING, ALERT_TIMING_NEXTCYCLE, "NCY", FieldIsDateTime);
     addIndex(Table_ALERT_TIMING, ALERT_TIMING_TIMINGID);
     addIndex(Table_ALERT_TIMING, ALERT_TIMING_TIM_ID);
@@ -482,7 +482,7 @@ AlertItem AlertBase::createVirtualItem() const
     time.setEnd(time.start().addDays(r.randomInt(10, 5000)));
     if (r.randomBool()) {
         time.setCycling(true);
-        time.setCyclingDelayInDays(r.randomInt(10, 100));
+        time.setCyclingDelayInMinutes(r.randomInt(10*24*60, 1000*24*60));
         time.setNumberOfCycles(r.randomInt(1, 100));
     }
     item.addTiming(time);
@@ -774,7 +774,7 @@ bool AlertBase::saveItemTimings(AlertItem &item)
         query.bindValue(Constants::ALERT_TIMING_STARTDATETIME, timing.start());
         query.bindValue(Constants::ALERT_TIMING_ENDDATETIME, timing.end());
         query.bindValue(Constants::ALERT_TIMING_CYCLES, timing.numberOfCycles());
-        query.bindValue(Constants::ALERT_TIMING_CYCLINGDELAY, timing.cyclingDelayInDays());
+        query.bindValue(Constants::ALERT_TIMING_CYCLINGDELAY, timing.cyclingDelayInMinutes());
         query.bindValue(Constants::ALERT_TIMING_NEXTCYCLE, timing.nextDate());
         if (query.exec()) {
             timing.setId(query.lastInsertId().toInt());
@@ -1061,9 +1061,12 @@ bool AlertBase::getItemTimings(AlertItem &item)
             time.setStart(query.value(ALERT_TIMING_STARTDATETIME).toDateTime());
             time.setEnd(query.value(ALERT_TIMING_ENDDATETIME).toDateTime());
             time.setNumberOfCycles(query.value(ALERT_TIMING_CYCLES).toInt());
-            time.setCyclingDelayInDays(query.value(ALERT_TIMING_CYCLINGDELAY).toInt());
+            time.setCyclingDelayInMinutes(query.value(ALERT_TIMING_CYCLINGDELAY).toULongLong());
             time.setNextDate(query.value(ALERT_TIMING_NEXTCYCLE).toDateTime());
             item.addTiming(time);
+
+            qWarning() << query.value(ALERT_TIMING_CYCLINGDELAY) << query.value(ALERT_TIMING_CYCLINGDELAY).toULongLong();
+
         }
     } else {
         LOG_QUERY_ERROR(query);
