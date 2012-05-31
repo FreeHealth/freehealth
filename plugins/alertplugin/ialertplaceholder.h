@@ -39,9 +39,17 @@ class ALERT_EXPORT IAlertPlaceHolder : public QWidget
     Q_OBJECT
 public:
     explicit IAlertPlaceHolder(QWidget *parent = 0);
+    virtual ~IAlertPlaceHolder() {}
 
+    // identification
     virtual QString uuid() const = 0;
 
+    // for UI presentation of the place holder
+    virtual QString name(const QString &lang = QString::null) const = 0;
+    virtual QString category(const QString &lang = QString::null) const = 0;
+    virtual QString description(const QString &lang = QString::null) const = 0;
+
+    // AlertItem management
     virtual bool addAlert(const AlertItem &alert) = 0;
     virtual bool removeAlert(const AlertItem &alert) = 0;
     virtual bool highlightAlert(const AlertItem &alert) = 0;
