@@ -151,6 +151,8 @@ public:
         FieldUndefined = 0,
         FieldIsInteger,
         FieldIsLongInteger,
+        FieldIsUnsignedInteger,
+        FieldIsUnsignedLongInteger,
         FieldIsLongText,
         FieldIsShortText,
         FieldIsOneChar,
