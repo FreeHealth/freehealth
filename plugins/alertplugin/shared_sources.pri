@@ -16,7 +16,8 @@ HEADERS += \
     $${PWD}/showalertsIHM.h \
     $${PWD}/xmlalert.h \
     $${PWD}/alertmodel.h \
-    ../../../../plugins/alertplugin/ialertplaceholder.h
+    $${PWD}/ialertplaceholder.h \
+    $${PWD}/alertitemeditorwidget.h
 
 SOURCES += \
     $${PWD}/alertplugin.cpp \
@@ -27,9 +28,11 @@ SOURCES += \
     $${PWD}/showalertsIHM.cpp \
     $${PWD}/xmlalert.cpp \
     $${PWD}/alertmodel.cpp \
-    ../../../../plugins/alertplugin/ialertplaceholder.cpp
+    $${PWD}/ialertplaceholder.cpp \
+    $${PWD}/alertitemeditorwidget.cpp
 
-FORMS += $${PWD}/ShowAlertsWidget.ui
+FORMS += $${PWD}/ShowAlertsWidget.ui \
+    $${PWD}/alertitemeditorwidget.ui
 
 OTHER_FILES += $${PWD}/Alert.pluginspec
 
