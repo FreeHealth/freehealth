@@ -63,6 +63,7 @@ public:
 
     int randomInt(int max);
     int randomInt(int min, int max);
+//    qlonglong randomLongLongInt(qlonglong min, qlonglong max);
     bool randomBool();
 
     QString randomWords(int nbOfWords);
