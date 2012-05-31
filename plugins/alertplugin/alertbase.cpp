@@ -456,7 +456,7 @@ AlertItem AlertBase::createVirtualItem() const
         item.setComment(r.randomWords(r.randomInt(2, 10)), l);
     }
 
-    item.setViewType(AlertItem::ViewType(r.randomInt(0, AlertItem::StaticSAlert)));
+    item.setViewType(AlertItem::ViewType(r.randomInt(0, AlertItem::StaticAlert)));
     item.setContentType(AlertItem::ContentType(r.randomInt(0, AlertItem::UserNotification)));
     item.setPriority(AlertItem::Priority(r.randomInt(0, AlertItem::Low)));
     item.setCreationDate(r.randomDateTime(QDateTime::currentDateTime()));

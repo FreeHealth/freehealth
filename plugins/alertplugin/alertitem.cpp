@@ -56,7 +56,7 @@ public:
     AlertItemPrivate() :
         _id(-1),
         _valid(true), _modified(false), _overrideRequiresUserComment(false),
-        _viewType(AlertItem::StaticPatientBar),
+        _viewType(AlertItem::StaticAlert),
         _contentType(AlertItem::ApplicationNotification),
         _priority(AlertItem::Medium)
     {}
