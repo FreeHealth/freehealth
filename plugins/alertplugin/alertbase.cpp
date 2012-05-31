@@ -520,7 +520,6 @@ bool AlertBase::saveAlertItem(AlertItem &item)
     }
 
     database().transaction();
-    qWarning() << "SAVING ITEM" << item.uuid();
     if (!saveItemRelations(item)) {
         database().rollback();
         return false;
@@ -541,7 +540,6 @@ bool AlertBase::saveAlertItem(AlertItem &item)
         database().rollback();
         return false;
     }
-
     if (item.uuid().isEmpty())
         item.setUuid(Database::createUid());
     QSqlQuery query(database());
@@ -719,7 +717,7 @@ bool AlertBase::saveItemScripts(AlertItem &item)
         item.setDb(ScriptId, id);
     }
     // save all scripts
-    for(int i=0; i<item.relations().count(); ++i) {
+    for(int i=0; i<item.scripts().count(); ++i) {
         AlertScript &script = item.scriptAt(i);
         QSqlQuery query(database());
         QString req = prepareInsertQuery(Constants::Table_ALERT_SCRIPTS);
@@ -810,7 +808,7 @@ bool AlertBase::saveItemValidations(AlertItem &item)
         query.finish();
     } else {
         id = max(Constants::Table_ALERT_VALIDATION, Constants::ALERT_VALIDATION_VAL_ID).toInt() + 1;
-        item.setDb(TimingId, id);
+        item.setDb(ValidationId, id);
     }
     // save all validations
     for(int i=0; i<item.validations().count(); ++i) {
@@ -942,9 +940,6 @@ AlertItem AlertBase::getAlertItemFromUuid(const QString &uuid)
     QHash<int, QString> where;
     where.insert(Constants::ALERT_UID, QString("='%1'").arg(uuid));
     QSqlQuery query(database());
-
-    qWarning() << select(Constants::Table_ALERT, where);
-
     if (query.exec(select(Constants::Table_ALERT, where))) {
         if (query.next()) {
             item.setDb(ItemId, query.value(Constants::ALERT_ID).toInt());
