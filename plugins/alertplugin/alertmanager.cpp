@@ -26,7 +26,7 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "alertmanager.h"
-#include "ialert.h"
+#include "alertitem.h"
 
 #include <QTextDocument>
 
