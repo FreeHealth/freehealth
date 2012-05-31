@@ -2164,7 +2164,7 @@ QString DatabasePrivate::getTypeOfField(const int &fieldref) const
             toReturn = "integer unsigned";
             break;
         case Database::FieldIsUnsignedLongInteger:
-            toReturn = "bigint unsigned";
+            toReturn = "unsigned bigint";
             break;
         case Database::FieldIsReal :
             toReturn = "double";

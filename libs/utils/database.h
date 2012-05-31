@@ -152,7 +152,7 @@ public:
         FieldIsInteger,
         FieldIsLongInteger,
         FieldIsUnsignedInteger,
-        FieldIsUnsignedLongInteger,
+        FieldIsUnsignedLongInteger,  // does not correctly works on SQLite, needs testing with MySQL
         FieldIsLongText,
         FieldIsShortText,
         FieldIsOneChar,
