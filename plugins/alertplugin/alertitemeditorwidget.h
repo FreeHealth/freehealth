@@ -31,8 +31,13 @@
 #include <QWidget>
 
 namespace Alert {
+class AlertItem;
+
+namespace Internal {
 namespace Ui {
 class AlertItemEditorWidget;
+}
+class AlertItemEditorWidgetPrivate;
 }
 
 class AlertItemEditorWidget : public QWidget
@@ -43,8 +48,18 @@ public:
     explicit AlertItemEditorWidget(QWidget *parent = 0);
     ~AlertItemEditorWidget();
     
+public Q_SLOTS:
+    void setAlertItem(const AlertItem &item);
+    AlertItem &submit();
+
 private:
-    Ui::AlertItemEditorWidget *ui;
+    void clearUi();
+
+private Q_SLOTS:
+    void cycleComboChanged(int index);
+
+private:
+    Internal::AlertItemEditorWidgetPrivate *d;
 };
 
 }

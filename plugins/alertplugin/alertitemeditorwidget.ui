@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Alert::AlertItemEditorWidget</class>
- <widget class="QWidget" name="Alert::AlertItemEditorWidget">
+ <class>Alert::Internal::AlertItemEditorWidget</class>
+ <widget class="QWidget" name="Alert::Internal::AlertItemEditorWidget">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -56,7 +56,7 @@
    <item row="1" column="0">
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
@@ -94,7 +94,7 @@
         <widget class="QComboBox" name="contentType"/>
        </item>
        <item row="3" column="1">
-        <widget class="QCheckBox" name="checkBox">
+        <widget class="QCheckBox" name="overrideRequiresUserComment">
          <property name="layoutDirection">
           <enum>Qt::LeftToRight</enum>
          </property>
@@ -124,7 +124,7 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="1">
+       <item row="0" column="1" colspan="2">
         <widget class="QComboBox" name="relatedTo"/>
        </item>
        <item row="1" column="0">
@@ -135,7 +135,17 @@
         </widget>
        </item>
        <item row="1" column="1">
-        <widget class="QDateTimeEdit" name="startDT"/>
+        <widget class="QDateEdit" name="startDate"/>
+       </item>
+       <item row="1" column="2">
+        <widget class="QTimeEdit" name="startTime">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
        </item>
        <item row="2" column="0">
         <widget class="QLabel" name="label_11">
@@ -145,21 +155,38 @@
         </widget>
        </item>
        <item row="2" column="1">
-        <widget class="QDateTimeEdit" name="endDT"/>
+        <widget class="QDateEdit" name="endDate"/>
+       </item>
+       <item row="2" column="2">
+        <widget class="QTimeEdit" name="endTime">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
        </item>
        <item row="3" column="0">
         <widget class="QComboBox" name="cycleCombo"/>
        </item>
-       <item row="3" column="1">
+       <item row="3" column="1" colspan="2">
         <layout class="QHBoxLayout" name="horizontalLayout">
+         <item>
+          <widget class="QSpinBox" name="cycleDelayNumber"/>
+         </item>
          <item>
           <widget class="QComboBox" name="cyclingEvery"/>
          </item>
          <item>
-          <widget class="QSpinBox" name="cycles"/>
+          <widget class="QSpinBox" name="cycles">
+           <property name="maximum">
+            <number>16777215</number>
+           </property>
+          </widget>
          </item>
          <item>
-          <widget class="QLabel" name="label_14">
+          <widget class="QLabel" name="cycleLabel">
            <property name="text">
             <string>times</string>
            </property>
@@ -175,7 +202,7 @@
       </attribute>
       <layout class="QGridLayout" name="gridLayout_3">
        <item row="1" column="0">
-        <widget class="QPlainTextEdit" name="plainTextEdit"/>
+        <widget class="QPlainTextEdit" name="css"/>
        </item>
        <item row="0" column="0">
         <widget class="QLabel" name="label_7">
@@ -185,7 +212,7 @@
         </widget>
        </item>
       </layout>
-      <zorder>plainTextEdit</zorder>
+      <zorder>css</zorder>
       <zorder>label_7</zorder>
      </widget>
      <widget class="QWidget" name="tab_4">
@@ -194,7 +221,7 @@
       </attribute>
       <layout class="QGridLayout" name="gridLayout_6">
        <item row="0" column="0">
-        <widget class="QPlainTextEdit" name="plainTextEdit_2"/>
+        <widget class="QPlainTextEdit" name="xml"/>
        </item>
       </layout>
      </widget>

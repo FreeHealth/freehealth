@@ -26,35 +26,73 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "alertitemeditorwidget.h"
-#include "ui_alertitemeditorwidget.h"
+#include "alertitem.h"
 
+#include <utils/global.h>
 #include <translationutils/constants.h>
 #include <translationutils/trans_current.h>
+
+#include <QTextDocument>
+
+#include "ui_alertitemeditorwidget.h"
 
 using namespace Alert;
 using namespace Trans::ConstantTranslations;
 
+// TODO: manage multiple relations
+// TODO: manage multiple timings
+
+namespace Alert {
+namespace Internal {
+class AlertItemEditorWidgetPrivate
+{
+public:
+    AlertItemEditorWidgetPrivate() :
+        ui(new Ui::AlertItemEditorWidget)
+    {}
+
+    ~AlertItemEditorWidgetPrivate()
+    {
+        delete ui;
+    }
+
+    // return the number of days in a cycle according to the ui settings
+    int daysInCycle()
+    {
+    }
+
+public:
+    Ui::AlertItemEditorWidget *ui;
+    AlertItem _item;
+};
+}  // namespace Internal
+}  // namespace Alert
+
 AlertItemEditorWidget::AlertItemEditorWidget(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::AlertItemEditorWidget)
+    d(new Internal::AlertItemEditorWidgetPrivate)
 {
-    ui->setupUi(this);
+    d->ui->setupUi(this);
+    // set up dateedits
+    d->ui->startDate->setDisplayFormat(tkTr(Trans::Constants::DATETIMEFORMAT_FOR_EDITOR));
+    d->ui->endDate->setDisplayFormat(tkTr(Trans::Constants::DATETIMEFORMAT_FOR_EDITOR));
+
     // set up combo
-    ui->priority->addItem(tkTr(Trans::Constants::HIGH));
-    ui->priority->addItem(tkTr(Trans::Constants::MEDIUM));
-    ui->priority->addItem(tkTr(Trans::Constants::LOW));
+    d->ui->priority->addItem(Utils::firstLetterUpperCase(tkTr(Trans::Constants::HIGH)));
+    d->ui->priority->addItem(Utils::firstLetterUpperCase(tkTr(Trans::Constants::MEDIUM)));
+    d->ui->priority->addItem(Utils::firstLetterUpperCase(tkTr(Trans::Constants::LOW)));
 
     // DynamicAlert = 0,
     // StaticAlert,
-    ui->viewType->addItem(tr("Dynamic alert"));
-    ui->viewType->addItem(tr("Static alert"));
+    d->ui->viewType->addItem(tr("Dynamic alert"));
+    d->ui->viewType->addItem(tr("Static alert"));
 
     // ApplicationNotification = 0,
     // PatientCondition,
     // UserNotification
-    ui->contentType->addItem(tr("Application notification"));
-    ui->contentType->addItem(tr("Patient bar notification"));
-    ui->contentType->addItem(tr("Status bar notification"));
+    d->ui->contentType->addItem(tr("Application notification"));
+    d->ui->contentType->addItem(tr("Patient bar notification"));
+    d->ui->contentType->addItem(tr("Status bar notification"));
 
     // RelatedToPatient = 0,
     // RelatedToFamily,
@@ -62,19 +100,112 @@ AlertItemEditorWidget::AlertItemEditorWidget(QWidget *parent) :
     // RelatedToUser,
     // RelatedToUserGroup,
     // RelatedToApplication
-    ui->relatedTo->addItem(tkTr(Trans::Constants::RELATED_TO_CURRENT_PATIENT));
-//    ui->relatedTo->addItem(tkTr(Trans::Constants::RELATED_TO_PATIENT_FAMILY_1).arg(""));
-    ui->relatedTo->addItem(tkTr(Trans::Constants::RELATED_TO_ALL_PATIENTS));
-    ui->relatedTo->addItem(tkTr(Trans::Constants::RELATED_TO_CURRENT_USER));
-//    ui->relatedTo->addItem(tkTr(Trans::Constants::RELATED_TO_USER_GROUP_1));
-    ui->relatedTo->addItem(tkTr(Trans::Constants::RELATED_TO_APPLICATION));
+    d->ui->relatedTo->addItem(Utils::firstLetterUpperCase(tkTr(Trans::Constants::RELATED_TO_CURRENT_PATIENT)));
+//    d->ui->relatedTo->addItem(tkTr(Trans::Constants::RELATED_TO_PATIENT_FAMILY_1).arg(""));
+    d->ui->relatedTo->addItem(Utils::firstLetterUpperCase(tkTr(Trans::Constants::RELATED_TO_ALL_PATIENTS)));
+    d->ui->relatedTo->addItem(Utils::firstLetterUpperCase(tkTr(Trans::Constants::RELATED_TO_CURRENT_USER)));
+//    d->ui->relatedTo->addItem(tkTr(Trans::Constants::RELATED_TO_USER_GROUP_1));
+    d->ui->relatedTo->addItem(Utils::firstLetterUpperCase(tkTr(Trans::Constants::RELATED_TO_APPLICATION)));
 
-    ui->cycleCombo->addItem(tr("Not cycling"));
-    ui->cycleCombo->addItem(tr("Cycle"));
-//    ui->cyclingEvery;
+    d->ui->cycleCombo->addItem(tr("Not cycling"));
+    d->ui->cycleCombo->addItem(tr("Cycle every"));
+    d->ui->cyclingEvery->addItems(Trans::ConstantTranslations::periods());
+
+    connect(d->ui->cycleCombo, SIGNAL(currentIndexChanged(int)), this, SLOT(cycleComboChanged(int)));
+    clearUi();
 }
 
 AlertItemEditorWidget::~AlertItemEditorWidget()
 {
-    delete ui;
+    if (d)
+        delete d;
+    d = 0;
+}
+
+void AlertItemEditorWidget::clearUi()
+{
+    d->ui->alertLabel->clear();
+    d->ui->alertCategory->clear();
+    d->ui->alertDecsr->clear();
+    d->ui->contentType->setCurrentIndex(-1);
+    d->ui->viewType->setCurrentIndex(-1);
+    d->ui->priority->setCurrentIndex(-1);
+    d->ui->overrideRequiresUserComment->setChecked(false);
+    d->ui->relatedTo->setCurrentIndex(-1);
+    d->ui->cycleCombo->setCurrentIndex(-1);
+    d->ui->cyclingEvery->setCurrentIndex(-1);
+    d->ui->cycleDelayNumber->setValue(0);
+    d->ui->cycles->setValue(0);
+    d->ui->startDate->clear();
+    d->ui->endDate->clear();
+    d->ui->css->clear();
+    d->ui->xml->clear();
+    d->ui->tabWidget->setCurrentIndex(0);
+}
+
+void AlertItemEditorWidget::setAlertItem(const AlertItem &item)
+{
+    d->_item = item;
+    clearUi();
+
+    // Description
+    d->ui->alertLabel->setText(d->_item.label());
+    d->ui->alertCategory->setText(d->_item.category());
+    if (Qt::mightBeRichText(d->_item.description()))
+        d->ui->alertDecsr->setHtml(d->_item.description());
+    else
+        d->ui->alertDecsr->setPlainText(d->_item.description());
+
+    // Types
+    if (d->_item.viewType()==AlertItem::DynamicAlert)
+        d->ui->viewType->setCurrentIndex(0);
+    else
+        d->ui->viewType->setCurrentIndex(1);
+    d->ui->contentType->setCurrentIndex(d->_item.contentType());
+    d->ui->priority->setCurrentIndex(d->_item.priority());
+    d->ui->overrideRequiresUserComment->setChecked(d->_item.isOverrideRequiresUserComment());
+
+    // Related to
+    if (d->_item.relations().count() > 0) {
+        const AlertRelation &rel = d->_item.relationAt(0);
+        switch (rel.relatedTo()) {
+        case AlertRelation::RelatedToPatient: d->ui->relatedTo->setCurrentIndex(0);
+        case AlertRelation::RelatedToAllPatients: d->ui->relatedTo->setCurrentIndex(1);
+        case AlertRelation::RelatedToUser: d->ui->relatedTo->setCurrentIndex(2);
+        case AlertRelation::RelatedToApplication: d->ui->relatedTo->setCurrentIndex(3);
+        }
+    }
+
+    // Timings
+    if (d->_item.timings().count() > 0) {
+        const AlertTiming &time = d->_item.timingAt(0);
+        d->ui->startDate->setDateTime(time.start());
+        d->ui->endDate->setDateTime(time.end());
+        if (time.isCycling())
+            d->ui->cycleCombo->setCurrentIndex(1);
+        else
+            d->ui->cycleCombo->setCurrentIndex(0);
+//        d->ui->cyclingEvery;
+        d->ui->cycles->setValue(time.cyclingDelayInMinutes());
+    }
+}
+
+AlertItem &AlertItemEditorWidget::submit()
+{
+    return d->_item;
+}
+
+void AlertItemEditorWidget::cycleComboChanged(int index)
+{
+    if (index==1) {
+        d->ui->cyclingEvery->show();
+        d->ui->cycles->show();
+        d->ui->cycleLabel->show();
+        d->ui->cycleDelayNumber->show();
+    } else {
+        d->ui->cyclingEvery->hide();
+        d->ui->cycles->hide();
+        d->ui->cycleLabel->hide();
+        d->ui->cycleDelayNumber->hide();
+    }
 }
