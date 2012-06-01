@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
+
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
@@ -13,13 +14,13 @@
    height="48px"
    id="svg1306"
    sodipodi:version="0.32"
-   inkscape:version="0.46"
-   sodipodi:docbase="/home/hbons/Desktop"
+   inkscape:version="0.48.0 r9654"
    sodipodi:docname="freeaccount.svg"
    inkscape:export-filename="/home/hbons/Desktop/gnucash.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90"
-   inkscape:output_extension="org.inkscape.output.svg.inkscape">
+   inkscape:output_extension="org.inkscape.output.svg.inkscape"
+   version="1.1">
   <defs
      id="defs1308">
     <linearGradient
@@ -628,7 +629,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="2.1435468"
-     inkscape:cx="105.67408"
+     inkscape:cx="-46.177048"
      inkscape:cy="43.420015"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -637,12 +638,13 @@
      stroke="#888a85"
      fill="#edd400"
      inkscape:window-width="1268"
-     inkscape:window-height="778"
+     inkscape:window-height="756"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:showpageshadow="false"
      showguides="true"
-     inkscape:guide-bbox="true" />
+     inkscape:guide-bbox="true"
+     inkscape:window-maximized="0" />
   <metadata
      id="metadata1311">
     <rdf:RDF>
@@ -651,36 +653,30 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title>Removable drive</dc:title>
+        <dc:title></dc:title>
         <dc:creator>
           <cc:Agent>
-            <dc:title>Andreas Nilsson</dc:title>
+            <dc:title></dc:title>
           </cc:Agent>
         </dc:creator>
         <dc:description />
         <cc:license
-           rdf:resource="http://creativecommons.org/licenses/GPL/2.0/" />
-        <dc:source>http://www.gnome.org</dc:source>
+           rdf:resource="http://creativecommons.org/licenses/publicdomain/" />
+        <dc:source></dc:source>
         <dc:contributor>
           <cc:Agent>
-            <dc:title>Jakub Steiner</dc:title>
+            <dc:title></dc:title>
           </cc:Agent>
         </dc:contributor>
       </cc:Work>
       <cc:License
-         rdf:about="http://creativecommons.org/licenses/GPL/2.0/">
+         rdf:about="http://creativecommons.org/licenses/publicdomain/">
         <cc:permits
-           rdf:resource="http://web.resource.org/cc/Reproduction" />
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
         <cc:permits
-           rdf:resource="http://web.resource.org/cc/Distribution" />
-        <cc:requires
-           rdf:resource="http://web.resource.org/cc/Notice" />
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
         <cc:permits
-           rdf:resource="http://web.resource.org/cc/DerivativeWorks" />
-        <cc:requires
-           rdf:resource="http://web.resource.org/cc/ShareAlike" />
-        <cc:requires
-           rdf:resource="http://web.resource.org/cc/SourceCode" />
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
       </cc:License>
     </rdf:RDF>
   </metadata>

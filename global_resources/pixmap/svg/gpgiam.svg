@@ -15,7 +15,7 @@
    height="48"
    id="svg2"
    version="1.1"
-   inkscape:version="0.48.0 r9654"
+   inkscape:version="0.48.2 r9819"
    inkscape:export-filename="/Users/eric/Desktop/Programmation/freemedforms/global_resources/pixmap/svg/gpgiam-64.png"
    inkscape:export-xdpi="120"
    inkscape:export-ydpi="120"
@@ -156,7 +156,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="5.6"
-     inkscape:cx="11.92087"
+     inkscape:cx="-46.20413"
      inkscape:cy="36.885106"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
@@ -175,7 +175,18 @@
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
         <dc:title></dc:title>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/publicdomain/" />
       </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/publicdomain/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
     </rdf:RDF>
   </metadata>
   <g

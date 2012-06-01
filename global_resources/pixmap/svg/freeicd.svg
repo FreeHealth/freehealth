@@ -13,8 +13,8 @@
    height="48"
    id="svg2"
    version="1.1"
-   inkscape:version="0.48.0 r9654"
-   sodipodi:docname="icd.svg"
+   inkscape:version="0.48.2 r9819"
+   sodipodi:docname="freeicd.svg"
    inkscape:export-filename="/Users/eric/Desktop/Programmation/freemedforms/global_resources/pixmap/svg/icd-16.png"
    inkscape:export-xdpi="30"
    inkscape:export-ydpi="30">
@@ -248,7 +248,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="3"
-     inkscape:cx="92.827917"
+     inkscape:cx="-15.672083"
      inkscape:cy="-15.52219"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
@@ -267,7 +267,18 @@
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
         <dc:title></dc:title>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/publicdomain/" />
       </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/publicdomain/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
     </rdf:RDF>
   </metadata>
   <g

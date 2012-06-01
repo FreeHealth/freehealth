@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
+
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
-   xmlns:cc="http://web.resource.org/cc/"
+   xmlns:cc="http://creativecommons.org/ns#"
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
@@ -14,9 +15,8 @@
    height="128"
    id="svg14662"
    sodipodi:version="0.32"
-   inkscape:version="0.44.1"
-   sodipodi:docname="User.svg"
-   sodipodi:docbase="K:\Inkscape">
+   inkscape:version="0.48.0 r9654"
+   sodipodi:docname="patients.svg">
   <metadata
      id="metadata87">
     <rdf:RDF>
@@ -26,7 +26,7 @@
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
         <cc:license
-           rdf:resource="http://creativecommons.org/licenses/GPL/2.0/" />
+           rdf:resource="http://creativecommons.org/licenses/publicdomain/" />
         <dc:title>User icon</dc:title>
         <dc:creator>
           <cc:Agent>
@@ -41,7 +41,7 @@
             <rdf:li>namespace</rdf:li>
           </rdf:Bag>
         </dc:subject>
-        <dc:date></dc:date>
+        <dc:date />
         <dc:rights>
           <cc:Agent>
             <dc:title>GFDL</dc:title>
@@ -49,25 +49,19 @@
         </dc:rights>
       </cc:Work>
       <cc:License
-         rdf:about="http://creativecommons.org/licenses/GPL/2.0/">
+         rdf:about="http://creativecommons.org/licenses/publicdomain/">
         <cc:permits
-           rdf:resource="http://web.resource.org/cc/Reproduction" />
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
         <cc:permits
-           rdf:resource="http://web.resource.org/cc/Distribution" />
-        <cc:requires
-           rdf:resource="http://web.resource.org/cc/Notice" />
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
         <cc:permits
-           rdf:resource="http://web.resource.org/cc/DerivativeWorks" />
-        <cc:requires
-           rdf:resource="http://web.resource.org/cc/ShareAlike" />
-        <cc:requires
-           rdf:resource="http://web.resource.org/cc/SourceCode" />
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
       </cc:License>
     </rdf:RDF>
   </metadata>
   <sodipodi:namedview
      inkscape:window-height="542"
-     inkscape:window-width="939"
+     inkscape:window-width="1018"
      inkscape:pageshadow="2"
      inkscape:pageopacity="0.0"
      borderopacity="1.0"
@@ -77,9 +71,11 @@
      inkscape:zoom="2.9375"
      inkscape:cx="64"
      inkscape:cy="64"
-     inkscape:window-x="50"
-     inkscape:window-y="292"
-     inkscape:current-layer="svg14662" />
+     inkscape:window-x="21"
+     inkscape:window-y="0"
+     inkscape:current-layer="svg14662"
+     showgrid="false"
+     inkscape:window-maximized="0" />
   <defs
      id="defs14664">
     <linearGradient
