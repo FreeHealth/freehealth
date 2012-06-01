@@ -1061,12 +1061,9 @@ bool AlertBase::getItemTimings(AlertItem &item)
             time.setStart(query.value(ALERT_TIMING_STARTDATETIME).toDateTime());
             time.setEnd(query.value(ALERT_TIMING_ENDDATETIME).toDateTime());
             time.setNumberOfCycles(query.value(ALERT_TIMING_CYCLES).toInt());
-            time.setCyclingDelayInMinutes(query.value(ALERT_TIMING_CYCLINGDELAY).toULongLong());
+            time.setCyclingDelayInMinutes(query.value(ALERT_TIMING_CYCLINGDELAY).toLongLong());
             time.setNextDate(query.value(ALERT_TIMING_NEXTCYCLE).toDateTime());
             item.addTiming(time);
-
-            qWarning() << query.value(ALERT_TIMING_CYCLINGDELAY) << query.value(ALERT_TIMING_CYCLINGDELAY).toULongLong();
-
         }
     } else {
         LOG_QUERY_ERROR(query);

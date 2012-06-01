@@ -558,6 +558,11 @@ QDebug operator<<(QDebug dbg, const Alert::AlertItem &a)
         break;
     }
     s << "create:" + a.creationDate().toString(Qt::ISODate);
+
+    s << QString::number(a.timingAt(0).cyclingDelayInMinutes());
+
+    qWarning() << a.timingAt(0).cyclingDelayInMinutes();
+
     dbg.nospace() << s.join(",\n           ")
                   << ")";
     return dbg.space();

@@ -64,12 +64,12 @@ public:
     virtual void setNumberOfCycles(int n) {_ncycle=n; if (n>0)_ncycle=true;}
     virtual QDateTime nextDate() const {return _next;}
     virtual void setNextDate(const QDateTime &dt) {_next = dt;}
-    virtual qulonglong cyclingDelayInMinutes() const {return _delay;}
-    virtual void setCyclingDelayInMinutes(const qulonglong delay) {_delay=delay;}
+    virtual qlonglong cyclingDelayInMinutes() const {return _delay;}
+    virtual void setCyclingDelayInMinutes(const qlonglong delay) {_delay=delay;}
 
 private:
     int _id, _ncycle;
-    qulonglong _delay;
+    qlonglong _delay;
     QDateTime _start, _end, _next;
     bool _valid, _isCycle;
 };
