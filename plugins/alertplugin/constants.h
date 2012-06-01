@@ -59,7 +59,7 @@ enum AlertFields {
 
     // Uids
     ALERT_UID,
-    ALERT_CATEGORY_UID,
+    ALERT_CATEGORY_UID,  // for later use with category plugin
     ALERT_REL_ID,
     ALERT_SID,
     ALERT_VAL_ID,
@@ -72,9 +72,11 @@ enum AlertFields {
     ALERT_CONTENT_TYPE,
     ALERT_CONDITION_TYPE,
     ALERT_PRIORITY,
+    ALERT_OVERRIDEREQUIREUSERCOMMENT,
 
     // Translatable description items
     ALERT_LABELID,
+    ALERT_CATEGORYLID,  // while waiting integration of category plugin
     ALERT_DESCRIPTION_LABELID,
     ALERT_COMMENT_LABELID,
 
@@ -120,7 +122,7 @@ enum AlertTimingFields {
     ALERT_TIMING_STARTDATETIME,
     ALERT_TIMING_ENDDATETIME,
     ALERT_TIMING_CYCLES,        // number of cycle or infinite cycling
-    ALERT_TIMING_CYCLINGDELAY,  // cycle every X days
+    ALERT_TIMING_CYCLINGDELAY,  // cycle every X **minutes**
     ALERT_TIMING_NEXTCYCLE
 };
 

@@ -151,6 +151,8 @@ public:
         FieldUndefined = 0,
         FieldIsInteger,
         FieldIsLongInteger,
+        FieldIsUnsignedInteger,
+        FieldIsUnsignedLongInteger,  // does not correctly works on SQLite, needs testing with MySQL
         FieldIsLongText,
         FieldIsShortText,
         FieldIsOneChar,

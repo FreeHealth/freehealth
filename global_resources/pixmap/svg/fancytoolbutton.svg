@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
+
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
@@ -13,11 +14,10 @@
    height="64"
    id="svg2"
    sodipodi:version="0.32"
-   inkscape:version="0.46"
+   inkscape:version="0.48.0 r9654"
    version="1.0"
    sodipodi:docname="fancytoolbutton.svg"
    inkscape:output_extension="org.inkscape.output.svg.inkscape"
-   sodipodi:docbase="C:\depot\ide\research\modes\src\plugins\coreplugin\images"
    style="display:inline">
   <defs
      id="defs4">
@@ -217,13 +217,13 @@
      inkscape:pageopacity="1"
      inkscape:pageshadow="2"
      inkscape:zoom="5.6568542"
-     inkscape:cx="-11.541044"
+     inkscape:cx="-69.081859"
      inkscape:cy="27.695432"
      inkscape:document-units="px"
      inkscape:current-layer="LayerPressed"
      showgrid="true"
-     inkscape:window-width="1551"
-     inkscape:window-height="972"
+     inkscape:window-width="1280"
+     inkscape:window-height="756"
      inkscape:window-x="103"
      inkscape:window-y="25"
      showguides="true"
@@ -231,7 +231,8 @@
      inkscape:grid-points="true"
      inkscape:snap-nodes="true"
      inkscape:snap-global="false"
-     inkscape:snap-intersection-grid-guide="false">
+     inkscape:snap-intersection-grid-guide="false"
+     inkscape:window-maximized="0">
     <inkscape:grid
        type="xygrid"
        id="grid2388"
@@ -284,7 +285,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
         <dc:date />
         <dc:creator>
           <cc:Agent>
@@ -316,7 +317,7 @@
           </cc:Agent>
         </dc:contributor>
         <cc:license
-           rdf:resource="" />
+           rdf:resource="http://creativecommons.org/licenses/publicdomain/" />
       </cc:Work>
       <cc:Work
          rdf:about="">
@@ -324,6 +325,15 @@
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
       </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/publicdomain/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
     </rdf:RDF>
   </metadata>
   <g
@@ -336,7 +346,7 @@
        id="ButtonBase"
        transform="matrix(0.6792453,0,0,0.6792453,10.26415,10.26415)">
       <path
-         d="M 61.444443,32 A 29.444443,29.444443 0 1 1 60.441148,24.379217"
+         d="M 61.444443,32 C 61.444443,48.261717 48.261717,61.444443 32,61.444443 15.738283,61.444443 2.5555573,48.261717 2.5555573,32 2.5555573,15.738283 15.738283,2.5555573 32,2.5555573 c 13.326722,0 24.991938,8.9510347 28.441148,21.8236597"
          sodipodi:ry="29.444443"
          sodipodi:rx="29.444443"
          sodipodi:cy="32"
@@ -349,7 +359,7 @@
          sodipodi:open="true" />
       <path
          transform="matrix(0.9498207,0,0,0.9498207,1.6057361,1.6057361)"
-         d="M 63,32 A 31,31 0 1 1 1,32 A 31,31 0 1 1 63,32 z"
+         d="M 63,32 C 63,49.120827 49.120827,63 32,63 14.879173,63 1,49.120827 1,32 1,14.879173 14.879173,1 32,1 49.120827,1 63,14.879173 63,32 z"
          sodipodi:ry="31"
          sodipodi:rx="31"
          sodipodi:cy="32"
@@ -359,7 +369,7 @@
          sodipodi:type="arc" />
       <path
          transform="matrix(0.9,0,0,0.9,3.1999999,3.1999999)"
-         d="M 62,32 A 30,30 0 1 1 2,32 A 30,30 0 1 1 62,32 z"
+         d="M 62,32 C 62,48.568542 48.568542,62 32,62 15.431458,62 2,48.568542 2,32 2,15.431458 15.431458,2 32,2 48.568542,2 62,15.431458 62,32 z"
          sodipodi:ry="30"
          sodipodi:rx="30"
          sodipodi:cy="32"
@@ -386,7 +396,7 @@
          y="0" />
       <path
          transform="matrix(0.9310345,0,0,0.9310345,2.2068967,2.2068968)"
-         d="M 61,32 A 29,29 0 1 1 3,32 A 29,29 0 1 1 61,32 z"
+         d="M 61,32 C 61,48.016258 48.016258,61 32,61 15.983742,61 3,48.016258 3,32 3,15.983742 15.983742,3 32,3 48.016258,3 61,15.983742 61,32 z"
          sodipodi:ry="29"
          sodipodi:rx="29"
          sodipodi:cy="32"
@@ -396,7 +406,7 @@
          sodipodi:type="arc" />
       <path
          transform="matrix(1.4166666,0,0,1.4027778,-1.9999995,3.1944446)"
-         d="M 42,20 A 18,18 0 1 1 6,20 A 18,18 0 1 1 42,20 z"
+         d="M 42,20 C 42,29.941125 33.941125,38 24,38 14.058875,38 6,29.941125 6,20 6,10.058875 14.058875,2 24,2 c 9.941125,0 18,8.058875 18,18 z"
          sodipodi:ry="18"
          sodipodi:rx="18"
          sodipodi:cy="20"
@@ -424,7 +434,7 @@
          sodipodi:cy="20"
          sodipodi:rx="18"
          sodipodi:ry="18"
-         d="M 42,20 A 18,18 0 1 1 6,20 A 18,18 0 1 1 42,20 z"
+         d="M 42,20 C 42,29.941125 33.941125,38 24,38 14.058875,38 6,29.941125 6,20 6,10.058875 14.058875,2 24,2 c 9.941125,0 18,8.058875 18,18 z"
          transform="matrix(1.1666668,0,0,1,3.9999975,4.9999993)" />
     </g>
   </g>
@@ -447,7 +457,7 @@
          ry="0" />
       <path
          transform="matrix(1.4722222,0,0,1.4444445,-3.3333336,2.1111101)"
-         d="M 42,20 A 18,18 0 1 1 6,20 A 18,18 0 1 1 42,20 z"
+         d="M 42,20 C 42,29.941125 33.941125,38 24,38 14.058875,38 6,29.941125 6,20 6,10.058875 14.058875,2 24,2 c 9.941125,0 18,8.058875 18,18 z"
          sodipodi:ry="18"
          sodipodi:rx="18"
          sodipodi:cy="20"
@@ -476,7 +486,7 @@
          sodipodi:cy="20"
          sodipodi:rx="18"
          sodipodi:ry="18"
-         d="M 42,20 A 18,18 0 1 1 6,20 A 18,18 0 1 1 42,20 z"
+         d="M 42,20 C 42,29.941125 33.941125,38 24,38 14.058875,38 6,29.941125 6,20 6,10.058875 14.058875,2 24,2 c 9.941125,0 18,8.058875 18,18 z"
          transform="matrix(1.1666667,0,0,1.0000001,3.9999997,3.9999987)" />
     </g>
   </g>
@@ -504,7 +514,7 @@
          sodipodi:cy="32"
          sodipodi:rx="30"
          sodipodi:ry="30"
-         d="M 62,32 A 30,30 0 1 1 2,32 A 30,30 0 1 1 62,32 z"
+         d="M 62,32 C 62,48.568542 48.568542,62 32,62 15.431458,62 2,48.568542 2,32 2,15.431458 15.431458,2 32,2 48.568542,2 62,15.431458 62,32 z"
          transform="matrix(0.9,0,0,0.9,3.2,3.2)" />
     </g>
   </g>
@@ -526,7 +536,7 @@
          style="opacity:1;fill:none;fill-opacity:1;stroke:none;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
       <path
          transform="matrix(0.9,0,0,0.9,3.2,3.2)"
-         d="M 62,32 A 30,30 0 1 1 2,32 A 30,30 0 1 1 62,32 z"
+         d="M 62,32 C 62,48.568542 48.568542,62 32,62 15.431458,62 2,48.568542 2,32 2,15.431458 15.431458,2 32,2 48.568542,2 62,15.431458 62,32 z"
          sodipodi:ry="30"
          sodipodi:rx="30"
          sodipodi:cy="32"

@@ -2066,6 +2066,8 @@ QStringList DatabasePrivate::getSQLCreateTable(const int &tableref)
             case Database::FieldIsBoolean :
             case Database::FieldIsInteger :
             case Database::FieldIsLongInteger :
+            case Database::FieldIsUnsignedInteger:
+            case Database::FieldIsUnsignedLongInteger:
             case Database::FieldIsReal :
                 fieldLine.append(QString("%1 %2 DEFAULT %3")
                                 .arg(fieldName)
@@ -2157,6 +2159,12 @@ QString DatabasePrivate::getTypeOfField(const int &fieldref) const
             break;
         case Database::FieldIsLongInteger :
             toReturn = "int(11)";
+            break;
+        case Database::FieldIsUnsignedInteger:
+            toReturn = "integer unsigned";
+            break;
+        case Database::FieldIsUnsignedLongInteger:
+            toReturn = "unsigned bigint";
             break;
         case Database::FieldIsReal :
             toReturn = "double";

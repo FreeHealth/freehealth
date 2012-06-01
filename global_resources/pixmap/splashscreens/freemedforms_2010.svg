@@ -14,8 +14,8 @@
    height="110"
    id="svg1306"
    sodipodi:version="0.32"
-   inkscape:version="0.48.0 r9654"
-   sodipodi:docname="freediams_2010.svg"
+   inkscape:version="0.48.2 r9819"
+   sodipodi:docname="freemedforms_2010.svg"
    inkscape:export-filename="/Users/eric/Desktop/Programmation/freemedforms/global_resources/pixmap/splashscreens/freediams.png"
    inkscape:export-xdpi="90"
    inkscape:export-ydpi="90"
@@ -1194,7 +1194,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.0717734"
-     inkscape:cx="267.02938"
+     inkscape:cx="-36.672876"
      inkscape:cy="-54.318952"
      inkscape:current-layer="layer1"
      showgrid="true"
@@ -1203,7 +1203,7 @@
      stroke="#888a85"
      fill="#edd400"
      inkscape:window-width="1268"
-     inkscape:window-height="778"
+     inkscape:window-height="756"
      inkscape:window-x="3"
      inkscape:window-y="0"
      inkscape:showpageshadow="false"
@@ -1221,33 +1221,27 @@
         <dc:title></dc:title>
         <dc:creator>
           <cc:Agent>
-            <dc:title>Andreas Nilsson</dc:title>
+            <dc:title></dc:title>
           </cc:Agent>
         </dc:creator>
         <dc:description />
         <cc:license
-           rdf:resource="http://creativecommons.org/licenses/GPL/2.0/" />
-        <dc:source>http://www.gnome.org</dc:source>
+           rdf:resource="http://creativecommons.org/licenses/publicdomain/" />
+        <dc:source></dc:source>
         <dc:contributor>
           <cc:Agent>
-            <dc:title>Jakub Steiner</dc:title>
+            <dc:title></dc:title>
           </cc:Agent>
         </dc:contributor>
       </cc:Work>
       <cc:License
-         rdf:about="http://creativecommons.org/licenses/GPL/2.0/">
+         rdf:about="http://creativecommons.org/licenses/publicdomain/">
         <cc:permits
-           rdf:resource="http://web.resource.org/cc/Reproduction" />
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
         <cc:permits
-           rdf:resource="http://web.resource.org/cc/Distribution" />
-        <cc:requires
-           rdf:resource="http://web.resource.org/cc/Notice" />
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
         <cc:permits
-           rdf:resource="http://web.resource.org/cc/DerivativeWorks" />
-        <cc:requires
-           rdf:resource="http://web.resource.org/cc/ShareAlike" />
-        <cc:requires
-           rdf:resource="http://web.resource.org/cc/SourceCode" />
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
       </cc:License>
     </rdf:RDF>
   </metadata>
@@ -1315,7 +1309,7 @@
            height="24.725376"
            x="196.40346"
            y="86.207657" /></flowRegion><flowPara
-         id="flowPara3989"></flowPara></flowRoot>    <g
+         id="flowPara3989" /></flowRoot>    <g
        id="layer1-3"
        inkscape:label="Calque 1"
        transform="matrix(2.1435888,0,0,2.1435888,-0.2645767,-57.922336)">

@@ -19,66 +19,49 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Main Developpers:                                                     *
+ *       Eric MAEKER, <eric.maeker@gmail.com>,                             *
+ *       Pierre-Marie Desombre <pm.desombre@gmail.com>                     *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef RANDOMIZER_H
-#define RANDOMIZER_H
+#ifndef ALERTITEMEDITORWIDGET_H
+#define ALERTITEMEDITORWIDGET_H
 
-#include <utils/global_exporter.h>
+#include <QWidget>
 
-#include <QString>
-#include <QStringList>
-#include <QFileInfo>
-#include <QPair>
-#include <QDate>
+namespace Alert {
+class AlertItem;
 
-/**
- * \file randomizer.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.0
- * \date 19 Jun 2011
-*/
-
-namespace Utils {
 namespace Internal {
-class RandomizerPrivate;
+namespace Ui {
+class AlertItemEditorWidget;
+}
+class AlertItemEditorWidgetPrivate;
 }
 
-class UTILS_EXPORT Randomizer
+class AlertItemEditorWidget : public QWidget
 {
+    Q_OBJECT
+    
 public:
-    Randomizer();
-    ~Randomizer();
-
-    void setPathToFiles(const QString &path);
-
-    QString getRandomString(int length);
-
-    QString getRandomName();
-    QString getRandomFirstname(bool male);
-
-    QPair<int, QString> getRandomFrenchCity();
-
-    int randomInt(int max);
-    int randomInt(int min, int max);
-//    qlonglong randomLongLongInt(qlonglong min, qlonglong max);
-    bool randomBool();
-
-    QString randomWords(int nbOfWords);
-
-    QDate randomDate(const int minYear, const int minMonth = 1, const int minDay = 1);
-    QDateTime randomDateTime(const QDateTime &mindate);
-    QTime randomTime(const int minHour, const int maxHour);
-
-    QFileInfo randomFile(const QDir &inDir, const QStringList &filters);
+    explicit AlertItemEditorWidget(QWidget *parent = 0);
+    ~AlertItemEditorWidget();
+    
+public Q_SLOTS:
+    void setAlertItem(const AlertItem &item);
+    AlertItem &submit();
 
 private:
-    Internal::RandomizerPrivate *d;
+    void clearUi();
+
+private Q_SLOTS:
+    void cycleComboChanged(int index);
+
+private:
+    Internal::AlertItemEditorWidgetPrivate *d;
 };
 
+}
 
-} // End namespace Utils
-
-#endif // RANDOMIZER_H
+#endif // ALERTITEMEDITORWIDGET_H

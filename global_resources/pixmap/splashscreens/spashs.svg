@@ -14,7 +14,7 @@
    height="80"
    id="svg2"
    version="1.1"
-   inkscape:version="0.48.0 r9654"
+   inkscape:version="0.48.2 r9819"
    sodipodi:docname="spashs.svg"
    inkscape:export-filename="/Users/eric/Desktop/Programmation/freemedforms/global_resources/pixmap/splashscreens/freediams_beta.png"
    inkscape:export-xdpi="90"
@@ -5096,10 +5096,10 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.979899"
-     inkscape:cx="130.29292"
+     inkscape:cx="-34.109406"
      inkscape:cy="-3.1857802"
      inkscape:document-units="px"
-     inkscape:current-layer="layer6"
+     inkscape:current-layer="g7099"
      showgrid="true"
      inkscape:window-width="1280"
      inkscape:window-height="712"
@@ -5142,7 +5142,18 @@
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
         <dc:title></dc:title>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/publicdomain/" />
       </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/publicdomain/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
     </rdf:RDF>
   </metadata>
   <g
@@ -5255,7 +5266,7 @@
          y="180.12437">STABLE</tspan></text>
   </g>
   <g
-     style="display:none"
+     style="display:inline"
      transform="translate(0,-972.36218)"
      id="g7099"
      inkscape:groupmode="layer"
@@ -5316,7 +5327,7 @@
          y="1043.6041"
          x="130.85315"
          id="tspan7167"
-         sodipodi:role="line">(c) FreeMedForms project, Eric Maeker ,MD</tspan></text>
+         sodipodi:role="line">(c) FreeMedForms project, Eric Maeker, MD</tspan></text>
     <text
        sodipodi:linespacing="125%"
        id="text7185"
@@ -5623,7 +5634,7 @@
      inkscape:groupmode="layer"
      id="g7497"
      transform="translate(0,-972.36218)"
-     style="display:inline"
+     style="display:none"
      sodipodi:insensitive="true">
     <text
        xml:space="preserve"

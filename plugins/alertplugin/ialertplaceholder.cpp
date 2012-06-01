@@ -19,66 +19,17 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Main Developpers:                                                     *
+ *       Eric MAEKER, <eric.maeker@gmail.com>,                             *
+ *       Pierre-Marie Desombre <pm.desombre@gmail.com>                     *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef RANDOMIZER_H
-#define RANDOMIZER_H
+#include "ialertplaceholder.h"
 
-#include <utils/global_exporter.h>
+using namespace Alert;
 
-#include <QString>
-#include <QStringList>
-#include <QFileInfo>
-#include <QPair>
-#include <QDate>
-
-/**
- * \file randomizer.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.0
- * \date 19 Jun 2011
-*/
-
-namespace Utils {
-namespace Internal {
-class RandomizerPrivate;
-}
-
-class UTILS_EXPORT Randomizer
+IAlertPlaceHolder::IAlertPlaceHolder(QWidget *parent) :
+    QWidget(parent)
 {
-public:
-    Randomizer();
-    ~Randomizer();
-
-    void setPathToFiles(const QString &path);
-
-    QString getRandomString(int length);
-
-    QString getRandomName();
-    QString getRandomFirstname(bool male);
-
-    QPair<int, QString> getRandomFrenchCity();
-
-    int randomInt(int max);
-    int randomInt(int min, int max);
-//    qlonglong randomLongLongInt(qlonglong min, qlonglong max);
-    bool randomBool();
-
-    QString randomWords(int nbOfWords);
-
-    QDate randomDate(const int minYear, const int minMonth = 1, const int minDay = 1);
-    QDateTime randomDateTime(const QDateTime &mindate);
-    QTime randomTime(const int minHour, const int maxHour);
-
-    QFileInfo randomFile(const QDir &inDir, const QStringList &filters);
-
-private:
-    Internal::RandomizerPrivate *d;
-};
-
-
-} // End namespace Utils
-
-#endif // RANDOMIZER_H
+}

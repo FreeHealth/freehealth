@@ -28,6 +28,7 @@
 #include "alertitem.h"
 #include "alertcore.h"
 
+#include <utils/global.h>
 #include <translationutils/multilingualclasstemplate.h>
 
 #include <QTreeWidgetItem>
@@ -55,8 +56,8 @@ class AlertItemPrivate : public Trans::MultiLingualClass<AlertValueBook>
 public:
     AlertItemPrivate() :
         _id(-1),
-        _valid(true), _modified(false),
-        _viewType(AlertItem::StaticPatientBar),
+        _valid(true), _modified(false), _overrideRequiresUserComment(false),
+        _viewType(AlertItem::StaticAlert),
         _contentType(AlertItem::ApplicationNotification),
         _priority(AlertItem::Medium)
     {}
@@ -68,7 +69,7 @@ public:
 public:
     QString _uid, _pass, _themedIcon, _css, _extraXml;
     int _id;
-    bool _valid, _modified;
+    bool _valid, _modified, _overrideRequiresUserComment;
     AlertItem::ViewType _viewType;
     AlertItem::ContentType _contentType;
     AlertItem::Priority _priority;
@@ -284,6 +285,11 @@ AlertItem::Priority AlertItem::priority() const
     return d->_priority;
 }
 
+bool AlertItem::isOverrideRequiresUserComment() const
+{
+    return d->_overrideRequiresUserComment;
+}
+
 // TODO : xxx condition() const = 0;
 
 void AlertItem::setViewType(AlertItem::ViewType type)
@@ -299,6 +305,11 @@ void AlertItem::setContentType(AlertItem::ContentType content)
 void AlertItem::setPriority(AlertItem::Priority priority)
 {
     d->_priority = priority;
+}
+
+void AlertItem::setOverrideRequiresUserComment(bool required)
+{
+    d->_overrideRequiresUserComment = required;
 }
 
 QDateTime AlertItem::creationDate() const
@@ -369,7 +380,7 @@ QVector<AlertRelation> &AlertItem::relations() const
 
 AlertRelation &AlertItem::relationAt(int id) const
 {
-    if (id>0 && id<d->_relations.count())
+    if (IN_RANGE(id, 0, d->_relations.count()))
         return d->_relations[id];
     return d->_nullRelation;
 }
@@ -396,14 +407,14 @@ QVector<AlertTiming> &AlertItem::timings() const
 
 AlertTiming &AlertItem::timingAt(int id) const
 {
-    if (id>0 && id<d->_timings.count())
+    if (IN_RANGE(id, 0, d->_timings.count()))
         return d->_timings[id];
     return d->_nullTiming;
 }
 
 void AlertItem::addTiming(const AlertTiming &timing)
 {
-    d->_timings << timing;
+    d->_timings.append(timing);
 }
 
 AlertScript &AlertItem::script(int id) const
@@ -422,7 +433,7 @@ QVector<AlertScript> &AlertItem::scripts() const
 
 AlertScript &AlertItem::scriptAt(int id) const
 {
-    if (id>0 && id<d->_scripts.count())
+    if (IN_RANGE(id, 0, d->_scripts.count()))
         return d->_scripts[id];
     return d->_nullScript;
 }
@@ -448,7 +459,7 @@ QVector<AlertValidation> &AlertItem::validations() const
 
 AlertValidation &AlertItem::validationAt(int id) const
 {
-    if (id>0 && id<d->_validations.count())
+    if (IN_RANGE(id, 0, d->_validations.count()))
         return d->_validations[id];
     return d->_nullValidation;
 }
@@ -525,11 +536,8 @@ QDebug operator<<(QDebug dbg, const Alert::AlertItem &a)
     case AlertItem::DynamicAlert:
         s << "view:dynamic";
         break;
-    case AlertItem::StaticPatientBar:
-        s << "view:patientBar";
-        break;
-    case AlertItem::StaticStatusBar:
-        s << "view:statusBar";
+    case AlertItem::StaticAlert:
+        s << "view:staticAlert";
         break;
     default:
         s << "view:" + QString::number(a.viewType());
@@ -550,6 +558,11 @@ QDebug operator<<(QDebug dbg, const Alert::AlertItem &a)
         break;
     }
     s << "create:" + a.creationDate().toString(Qt::ISODate);
+
+    s << QString::number(a.timingAt(0).cyclingDelayInMinutes());
+
+    qWarning() << a.timingAt(0).cyclingDelayInMinutes();
+
     dbg.nospace() << s.join(",\n           ")
                   << ")";
     return dbg.space();

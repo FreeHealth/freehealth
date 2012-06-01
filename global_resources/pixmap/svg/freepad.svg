@@ -599,22 +599,6 @@
        fx="88.669159"
        fy="78.891891"
        r="27.934568" />
-    <filter
-       inkscape:collect="always"
-       id="filter4028">
-      <feGaussianBlur
-         inkscape:collect="always"
-         stdDeviation="0.38921875"
-         id="feGaussianBlur4030" />
-    </filter>
-    <filter
-       inkscape:collect="always"
-       id="filter4044">
-      <feGaussianBlur
-         inkscape:collect="always"
-         stdDeviation="0.29191406"
-         id="feGaussianBlur4046" />
-    </filter>
     <linearGradient
        inkscape:collect="always"
        xlink:href="#linearGradient4668"
@@ -857,7 +841,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="11.2"
-     inkscape:cx="32.745535"
+     inkscape:cx="3.683035"
      inkscape:cy="26.915509"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
@@ -866,7 +850,7 @@
      inkscape:window-height="752"
      inkscape:window-x="0"
      inkscape:window-y="0"
-     inkscape:window-maximized="1" />
+     inkscape:window-maximized="0" />
   <metadata
      id="metadata2463">
     <rdf:RDF>
@@ -876,7 +860,18 @@
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
         <dc:title></dc:title>
+        <cc:license
+           rdf:resource="http://creativecommons.org/licenses/publicdomain/" />
       </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/publicdomain/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
     </rdf:RDF>
   </metadata>
   <g

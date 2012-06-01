@@ -19,66 +19,46 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Main Developpers:                                                     *
+ *       Eric MAEKER, <eric.maeker@gmail.com>,                             *
+ *       Pierre-Marie Desombre <pm.desombre@gmail.com>                     *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef RANDOMIZER_H
-#define RANDOMIZER_H
+#ifndef IALERTPLACEHOLDER_H
+#define IALERTPLACEHOLDER_H
 
-#include <utils/global_exporter.h>
+#include <alertplugin/alertplugin_exporter.h>
+#include <QWidget>
 
-#include <QString>
-#include <QStringList>
-#include <QFileInfo>
-#include <QPair>
-#include <QDate>
+namespace Alert {
+class AlertItem;
 
-/**
- * \file randomizer.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.0
- * \date 19 Jun 2011
-*/
-
-namespace Utils {
-namespace Internal {
-class RandomizerPrivate;
-}
-
-class UTILS_EXPORT Randomizer
+class ALERT_EXPORT IAlertPlaceHolder : public QWidget
 {
+    Q_OBJECT
 public:
-    Randomizer();
-    ~Randomizer();
+    explicit IAlertPlaceHolder(QWidget *parent = 0);
+    virtual ~IAlertPlaceHolder() {}
 
-    void setPathToFiles(const QString &path);
+    // identification
+    virtual QString uuid() const = 0;
 
-    QString getRandomString(int length);
+    // for UI presentation of the place holder
+    virtual QString name(const QString &lang = QString::null) const = 0;
+    virtual QString category(const QString &lang = QString::null) const = 0;
+    virtual QString description(const QString &lang = QString::null) const = 0;
 
-    QString getRandomName();
-    QString getRandomFirstname(bool male);
+    // AlertItem management
+    virtual bool addAlert(const AlertItem &alert) = 0;
+    virtual bool removeAlert(const AlertItem &alert) = 0;
+    virtual bool highlightAlert(const AlertItem &alert) = 0;
 
-    QPair<int, QString> getRandomFrenchCity();
+Q_SIGNALS:
+    void alertItemValidated(const AlertItem &alert);
 
-    int randomInt(int max);
-    int randomInt(int min, int max);
-//    qlonglong randomLongLongInt(qlonglong min, qlonglong max);
-    bool randomBool();
-
-    QString randomWords(int nbOfWords);
-
-    QDate randomDate(const int minYear, const int minMonth = 1, const int minDay = 1);
-    QDateTime randomDateTime(const QDateTime &mindate);
-    QTime randomTime(const int minHour, const int maxHour);
-
-    QFileInfo randomFile(const QDir &inDir, const QStringList &filters);
-
-private:
-    Internal::RandomizerPrivate *d;
 };
 
+} // namespace Alert
 
-} // End namespace Utils
-
-#endif // RANDOMIZER_H
+#endif // IALERTPLACEHOLDER_H

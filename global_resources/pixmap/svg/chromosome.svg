@@ -28,13 +28,13 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="3.959798"
-     inkscape:cx="6.8508412"
+     inkscape:cx="-36.33318"
      inkscape:cy="32.158654"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="1082"
-     inkscape:window-height="460"
+     inkscape:window-width="1276"
+     inkscape:window-height="710"
      inkscape:window-x="0"
      inkscape:window-y="0"
      inkscape:window-maximized="0" />
@@ -47,7 +47,18 @@
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
         <dc:title></dc:title>
+        <cc:license
+           rdf:resource="" />
       </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/licenses/publicdomain/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
     </rdf:RDF>
   </metadata>
   <g
@@ -63,7 +74,7 @@
        sodipodi:cy="17.785521"
        sodipodi:rx="3.9143412"
        sodipodi:ry="13.889598"
-       d="m 18.94036,17.785521 a 3.9143412,13.889598 0 1 1 -3.62e-4,-0.18892"
+       d="m 18.94036,17.785521 c 0,7.671013 -1.75251,13.889597 -3.914341,13.889597 -2.161831,0 -3.914341,-6.218584 -3.914341,-13.889597 0,-7.671014 1.75251,-13.8895983 3.914341,-13.8895983 2.141068,0 3.884858,6.1040447 3.913979,13.7006783"
        transform="matrix(1.3481818,-0.4205076,0.56571059,0.90953194,-7.1973419,994.77452)"
        sodipodi:start="0"
        sodipodi:end="6.2695834"
@@ -73,7 +84,7 @@
        sodipodi:end="6.2695834"
        sodipodi:start="0"
        transform="matrix(1.3774408,0.338933,-0.4962318,0.94081051,29.899219,982.55431)"
-       d="m 18.94036,17.785521 a 3.9143412,13.889598 0 1 1 -3.62e-4,-0.18892"
+       d="m 18.94036,17.785521 c 0,7.671013 -1.75251,13.889597 -3.914341,13.889597 -2.161831,0 -3.914341,-6.218584 -3.914341,-13.889597 0,-7.671014 1.75251,-13.8895983 3.914341,-13.8895983 2.141068,0 3.884858,6.1040447 3.913979,13.7006783"
        sodipodi:ry="13.889598"
        sodipodi:rx="3.9143412"
        sodipodi:cy="17.785521"
@@ -89,7 +100,7 @@
        sodipodi:cy="17.785521"
        sodipodi:rx="3.9143412"
        sodipodi:ry="13.889598"
-       d="m 18.94036,17.785521 a 3.9143412,13.889598 0 1 1 -3.62e-4,-0.18892"
+       d="m 18.94036,17.785521 c 0,7.671013 -1.75251,13.889597 -3.914341,13.889597 -2.161831,0 -3.914341,-6.218584 -3.914341,-13.889597 0,-7.671014 1.75251,-13.8895983 3.914341,-13.8895983 2.141068,0 3.884858,6.1040447 3.913979,13.7006783"
        transform="matrix(1.3130922,0.5401274,-0.65247519,1.1236849,14.335951,1004.6334)"
        sodipodi:start="0"
        sodipodi:end="6.2695834"
@@ -99,7 +110,7 @@
        sodipodi:end="6.2695834"
        sodipodi:start="0"
        transform="matrix(1.2727006,-0.60608795,0.73127032,1.1054353,12.07057,1022.1024)"
-       d="m 18.94036,17.785521 a 3.9143412,13.889598 0 1 1 -3.62e-4,-0.18892"
+       d="m 18.94036,17.785521 c 0,7.671013 -1.75251,13.889597 -3.914341,13.889597 -2.161831,0 -3.914341,-6.218584 -3.914341,-13.889597 0,-7.671014 1.75251,-13.8895983 3.914341,-13.8895983 2.141068,0 3.884858,6.1040447 3.913979,13.7006783"
        sodipodi:ry="13.889598"
        sodipodi:rx="3.9143412"
        sodipodi:cy="17.785521"
@@ -115,7 +126,7 @@
        sodipodi:cy="28.518393"
        sodipodi:rx="4.0406103"
        sodipodi:ry="4.1668792"
-       d="m 37.123107,28.518393 a 4.0406103,4.1668792 0 1 1 -3.74e-4,-0.05668"
+       d="m 37.123107,28.518393 c 0,2.301303 -1.809043,4.166879 -4.04061,4.166879 -2.231568,0 -4.040611,-1.865576 -4.040611,-4.166879 0,-2.301304 1.809043,-4.16688 4.040611,-4.16688 2.210134,0 4.010175,1.831214 4.040236,4.110204"
        transform="matrix(1.21,0,0,1,-7.0939584,988.36218)"
        sodipodi:start="0"
        sodipodi:end="6.2695834"

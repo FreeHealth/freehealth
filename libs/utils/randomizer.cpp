@@ -342,6 +342,22 @@ int Randomizer::randomInt(int min, int max)
     return i;
 }
 
+// TODO: code qlonglong Randomizer::randomLongLongInt(qlonglong min, qlonglong max)
+//qlonglong Randomizer::randomLongLongInt(qlonglong min, qlonglong max)
+//{
+//    Q_ASSERT(min < max);
+//    qlonglong i = min - 10;
+//    qlonglong z = 0;
+//    while (i < min) {
+//        i = makeRand(max);
+//        if (++z == 20) {
+//            i = max;
+//            break;
+//        }
+//    }
+//    return i;
+//}
+
 QDate Randomizer::randomDate(const int minYear, const int minMonth, const int minDay)
 {
     int r = -1;

@@ -91,6 +91,7 @@ enum DbValues {
     ValidationId,
     TimingId,
     LabelLID,
+    CategoryLID,
     DescrLID,
     CommentLID
 };
@@ -225,8 +226,10 @@ AlertBase::AlertBase(QObject *parent) :
     addField(Table_ALERT, ALERT_TIM_ID, "TIM_ID", FieldIsInteger);
     addField(Table_ALERT, ALERT_CONDITION_TYPE, "COND_ID", FieldIsInteger);
     addField(Table_ALERT, ALERT_PRIORITY, "PRIOR", FieldIsInteger);
+    addField(Table_ALERT, ALERT_OVERRIDEREQUIREUSERCOMMENT, "VRUC", FieldIsInteger);
 
     addField(Table_ALERT, ALERT_LABELID, "LBL_LID", FieldIsInteger);
+    addField(Table_ALERT, ALERT_CATEGORYLID, "CAT_LID", FieldIsInteger);
     addField(Table_ALERT, ALERT_DESCRIPTION_LABELID, "DES_LID", FieldIsInteger);
     addField(Table_ALERT, ALERT_COMMENT_LABELID, "COM_LID", FieldIsInteger);
     addField(Table_ALERT, ALERT_CREATION_DATE, "C_DATE", FieldIsDate);
@@ -266,7 +269,7 @@ AlertBase::AlertBase(QObject *parent) :
     addField(Table_ALERT_TIMING, ALERT_TIMING_STARTDATETIME, "STR", FieldIsDateTime);
     addField(Table_ALERT_TIMING, ALERT_TIMING_ENDDATETIME, "END", FieldIsDateTime);
     addField(Table_ALERT_TIMING, ALERT_TIMING_CYCLES, "CYC", FieldIsInteger);
-    addField(Table_ALERT_TIMING, ALERT_TIMING_CYCLINGDELAY, "CDY", FieldIsInteger);
+    addField(Table_ALERT_TIMING, ALERT_TIMING_CYCLINGDELAY, "CDY", FieldIsUnsignedLongInteger);
     addField(Table_ALERT_TIMING, ALERT_TIMING_NEXTCYCLE, "NCY", FieldIsDateTime);
     addIndex(Table_ALERT_TIMING, ALERT_TIMING_TIMINGID);
     addIndex(Table_ALERT_TIMING, ALERT_TIMING_TIM_ID);
@@ -455,7 +458,7 @@ AlertItem AlertBase::createVirtualItem() const
         item.setComment(r.randomWords(r.randomInt(2, 10)), l);
     }
 
-    item.setViewType(AlertItem::ViewType(r.randomInt(0, AlertItem::StaticStatusBar)));
+    item.setViewType(AlertItem::ViewType(r.randomInt(0, AlertItem::StaticAlert)));
     item.setContentType(AlertItem::ContentType(r.randomInt(0, AlertItem::UserNotification)));
     item.setPriority(AlertItem::Priority(r.randomInt(0, AlertItem::Low)));
     item.setCreationDate(r.randomDateTime(QDateTime::currentDateTime()));
@@ -479,7 +482,7 @@ AlertItem AlertBase::createVirtualItem() const
     time.setEnd(time.start().addDays(r.randomInt(10, 5000)));
     if (r.randomBool()) {
         time.setCycling(true);
-        time.setCyclingDelayInDays(r.randomInt(10, 100));
+        time.setCyclingDelayInMinutes(r.randomInt(10*24*60, 1000*24*60));
         time.setNumberOfCycles(r.randomInt(1, 100));
     }
     item.addTiming(time);
@@ -517,7 +520,6 @@ bool AlertBase::saveAlertItem(AlertItem &item)
     }
 
     database().transaction();
-    qWarning() << "SAVING ITEM" << item.uuid();
     if (!saveItemRelations(item)) {
         database().rollback();
         return false;
@@ -538,7 +540,6 @@ bool AlertBase::saveAlertItem(AlertItem &item)
         database().rollback();
         return false;
     }
-
     if (item.uuid().isEmpty())
         item.setUuid(Database::createUid());
     QSqlQuery query(database());
@@ -556,7 +557,9 @@ bool AlertBase::saveAlertItem(AlertItem &item)
     query.bindValue(Constants::ALERT_CONTENT_TYPE, item.contentType());
     query.bindValue(Constants::ALERT_CONDITION_TYPE, QVariant());
     query.bindValue(Constants::ALERT_PRIORITY, item.priority());
+    query.bindValue(Constants::ALERT_OVERRIDEREQUIREUSERCOMMENT, int(item.isOverrideRequiresUserComment()));
     query.bindValue(Constants::ALERT_LABELID, item.db(LabelLID));
+    query.bindValue(Constants::ALERT_CATEGORYLID, item.db(CategoryLID));
     query.bindValue(Constants::ALERT_DESCRIPTION_LABELID, item.db(DescrLID));
     query.bindValue(Constants::ALERT_COMMENT_LABELID, item.db(CommentLID));
     query.bindValue(Constants::ALERT_CREATION_DATE, item.creationDate());
@@ -623,7 +626,9 @@ bool AlertBase::updateAlertItem(AlertItem &item)
     query.bindValue(Constants::ALERT_CONTENT_TYPE, item.contentType());
     query.bindValue(Constants::ALERT_CONDITION_TYPE, QVariant());
     query.bindValue(Constants::ALERT_PRIORITY, item.priority());
+    query.bindValue(Constants::ALERT_OVERRIDEREQUIREUSERCOMMENT, int(item.isOverrideRequiresUserComment()));
     query.bindValue(Constants::ALERT_LABELID, item.db(LabelLID));
+    query.bindValue(Constants::ALERT_CATEGORYLID, item.db(CategoryLID));
     query.bindValue(Constants::ALERT_DESCRIPTION_LABELID, item.db(DescrLID));
     query.bindValue(Constants::ALERT_COMMENT_LABELID, item.db(CommentLID));
     query.bindValue(Constants::ALERT_CREATION_DATE, item.creationDate());
@@ -712,7 +717,7 @@ bool AlertBase::saveItemScripts(AlertItem &item)
         item.setDb(ScriptId, id);
     }
     // save all scripts
-    for(int i=0; i<item.relations().count(); ++i) {
+    for(int i=0; i<item.scripts().count(); ++i) {
         AlertScript &script = item.scriptAt(i);
         QSqlQuery query(database());
         QString req = prepareInsertQuery(Constants::Table_ALERT_SCRIPTS);
@@ -769,7 +774,7 @@ bool AlertBase::saveItemTimings(AlertItem &item)
         query.bindValue(Constants::ALERT_TIMING_STARTDATETIME, timing.start());
         query.bindValue(Constants::ALERT_TIMING_ENDDATETIME, timing.end());
         query.bindValue(Constants::ALERT_TIMING_CYCLES, timing.numberOfCycles());
-        query.bindValue(Constants::ALERT_TIMING_CYCLINGDELAY, timing.cyclingDelayInDays());
+        query.bindValue(Constants::ALERT_TIMING_CYCLINGDELAY, timing.cyclingDelayInMinutes());
         query.bindValue(Constants::ALERT_TIMING_NEXTCYCLE, timing.nextDate());
         if (query.exec()) {
             timing.setId(query.lastInsertId().toInt());
@@ -803,7 +808,7 @@ bool AlertBase::saveItemValidations(AlertItem &item)
         query.finish();
     } else {
         id = max(Constants::Table_ALERT_VALIDATION, Constants::ALERT_VALIDATION_VAL_ID).toInt() + 1;
-        item.setDb(TimingId, id);
+        item.setDb(ValidationId, id);
     }
     // save all validations
     for(int i=0; i<item.validations().count(); ++i) {
@@ -839,11 +844,12 @@ bool AlertBase::saveItemLabels(AlertItem &item)
     const int DESCR = 1;
     const int COMMENT = 2;
     // get the labels lid for label, descr && comment
-    lids << -1 << -1 << -1;
-    vals << LabelLID << DescrLID << CommentLID;
+    lids << -1 << -1 << -1 << -1;
+    vals << LabelLID << CategoryLID << DescrLID << CommentLID;
+    int lastLid = -1;
     for(int i=0; i < vals.count(); ++i) {
-        if (item.db(vals.at(i)).isValid()) {
-            lids[i] = item.db(LabelLID).toInt();
+        if (item.db(vals.at(i)).isValid() && item.db(vals.at(i)).toInt()>-1) {
+            lids[i] = item.db(vals.at(i)).toInt();
             // delete all old relations
             QHash<int, QString> where;
             where.insert(Constants::ALERT_LABELS_LABELID, QString("=%1").arg(lids[i]));
@@ -853,9 +859,10 @@ bool AlertBase::saveItemLabels(AlertItem &item)
                 return false;
             }
         } else {
-            lids[i] = max(Constants::Table_ALERT_LABELS, Constants::ALERT_LABELS_LABELID).toInt() + 1;
+            lids[i] = qMax(lastLid, max(Constants::Table_ALERT_LABELS, Constants::ALERT_LABELS_LABELID).toInt()) + 1;
             item.setDb(vals.at(i), lids.at(i));
         }
+        lastLid = lids[i];
         query.finish();
     }
     // save all labels
@@ -933,9 +940,6 @@ AlertItem AlertBase::getAlertItemFromUuid(const QString &uuid)
     QHash<int, QString> where;
     where.insert(Constants::ALERT_UID, QString("='%1'").arg(uuid));
     QSqlQuery query(database());
-
-    qWarning() << select(Constants::Table_ALERT, where);
-
     if (query.exec(select(Constants::Table_ALERT, where))) {
         if (query.next()) {
             item.setDb(ItemId, query.value(Constants::ALERT_ID).toInt());
@@ -945,6 +949,7 @@ AlertItem AlertBase::getAlertItemFromUuid(const QString &uuid)
             item.setDb(ValidationId, query.value(Constants::ALERT_VAL_ID).toInt());
             item.setDb(TimingId, query.value(Constants::ALERT_TIM_ID).toInt());
             item.setDb(LabelLID, query.value(Constants::ALERT_LABELID).toInt());
+            item.setDb(CategoryLID, query.value(Constants::ALERT_CATEGORYLID).toInt());
             item.setDb(DescrLID, query.value(Constants::ALERT_DESCRIPTION_LABELID).toInt());
             item.setDb(CommentLID, query.value(Constants::ALERT_COMMENT_LABELID).toInt());
             item.setValidity(query.value(Constants::ALERT_ISVALID).toBool());
@@ -952,6 +957,7 @@ AlertItem AlertBase::getAlertItemFromUuid(const QString &uuid)
             item.setViewType(AlertItem::ViewType(query.value(Constants::ALERT_VIEW_TYPE).toInt()));
             item.setContentType(AlertItem::ContentType(query.value(Constants::ALERT_CONTENT_TYPE).toInt()));
             item.setPriority(AlertItem::Priority(query.value(Constants::ALERT_PRIORITY).toInt()));
+            item.setOverrideRequiresUserComment(query.value(Constants::ALERT_OVERRIDEREQUIREUSERCOMMENT).toBool());
             item.setCreationDate(query.value(Constants::ALERT_CREATION_DATE).toDateTime());
             item.setLastUpdate(query.value(Constants::ALERT_LAST_UPDATE_DATE).toDateTime());
             item.setThemedIcon(query.value(Constants::ALERT_THEMED_ICON).toString());
@@ -1055,7 +1061,7 @@ bool AlertBase::getItemTimings(AlertItem &item)
             time.setStart(query.value(ALERT_TIMING_STARTDATETIME).toDateTime());
             time.setEnd(query.value(ALERT_TIMING_ENDDATETIME).toDateTime());
             time.setNumberOfCycles(query.value(ALERT_TIMING_CYCLES).toInt());
-            time.setCyclingDelayInDays(query.value(ALERT_TIMING_CYCLINGDELAY).toInt());
+            time.setCyclingDelayInMinutes(query.value(ALERT_TIMING_CYCLINGDELAY).toLongLong());
             time.setNextDate(query.value(ALERT_TIMING_NEXTCYCLE).toDateTime());
             item.addTiming(time);
         }
@@ -1097,6 +1103,8 @@ bool AlertBase::getItemLabels(AlertItem &item)
     using namespace Alert::Constants;
     QSqlQuery query(database());
     Utils::Field cond(Table_ALERT, ALERT_ID, QString("=%1").arg(item.db(ItemId).toString()));
+
+    // get label
     Utils::Join join(Table_ALERT_LABELS, ALERT_LABELS_LABELID, Table_ALERT, ALERT_LABELID);
     if (query.exec(select(Table_ALERT_LABELS, join, cond))) {
         while (query.next()) {
@@ -1107,6 +1115,20 @@ bool AlertBase::getItemLabels(AlertItem &item)
         return false;
     }
     query.finish();
+
+    // get category
+    join = Utils::Join(Table_ALERT_LABELS, ALERT_LABELS_LABELID, Table_ALERT, ALERT_CATEGORYLID);
+    if (query.exec(select(Table_ALERT_LABELS, join, cond))) {
+        while (query.next()) {
+            item.setCategory(query.value(ALERT_LABELS_VALUE).toString(), query.value(ALERT_LABELS_LANG).toString());
+        }
+    } else {
+        LOG_QUERY_ERROR(query);
+        return false;
+    }
+    query.finish();
+
+    // get description
     join = Utils::Join(Table_ALERT_LABELS, ALERT_LABELS_LABELID, Table_ALERT, ALERT_DESCRIPTION_LABELID);
     if (query.exec(select(Table_ALERT_LABELS, join, cond))) {
         while (query.next()) {
@@ -1117,6 +1139,8 @@ bool AlertBase::getItemLabels(AlertItem &item)
         return false;
     }
     query.finish();
+
+    // get comment
     join = Utils::Join(Table_ALERT_LABELS, ALERT_LABELS_LABELID, Table_ALERT, ALERT_COMMENT_LABELID);
     if (query.exec(select(Table_ALERT_LABELS, join, cond))) {
         while (query.next()) {
