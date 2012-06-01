@@ -34,27 +34,52 @@
  * \file alertcore.h
  * \author Eric MAEKER <eric.maeker@gmail.com>, Pierre-Marie Desombre <pm.desombre@gmail.com>
  * \version 0.8.0
- * \date 28 May 2012
+ * \date 31 May 2012
 */
 
 namespace Alert {
 namespace Internal {
 class AlertCorePrivate;
+class AlertPlugin;
 }
 class AlertManager;
 
 class AlertCore : public QObject
 {
     Q_OBJECT
-private:
+    friend class Alert::Internal::AlertPlugin;
+
+protected:
     AlertCore(QObject *parent = 0);
+    bool initialize();
 
 public:
     static AlertCore *instance(QObject *parent = 0);
     ~AlertCore();
-    bool initialize();
+
+    // Getters/Setters
+    //    QVector<AlertItem> getAlertItemForCurrentUser() const;
+    //    QVector<AlertItem> getAlertItemForCurrentPatient() const;
+    //    QVector<AlertItem> getAlertItemForCurrentApplication() const;
+    //    bool saveAlertItem(const AlertItem &item);
+
+    // Executers
+    //    bool executeAlert(const AlertItem &alert);  // add a delay ?
+
+    // Editors
+    //    AlertItem &editAlert(AlertItem &alert);
+    //    AlertItem &createAlert();
+    //  OR
+    //    bool editAlert(AlertItem &alert);
+    //    bool createAlert(AlertItem &alert);
+
 
     void showIHMaccordingToType(int type = 0);
+
+Q_SIGNALS:
+//    void alertItemUpdated(const AlertItem &alert);
+//    void alertItemRemoved(const AlertItem &alert);
+//    void alertItemValidated(const AlertItem &alert);
 
 private:
     static AlertCore *_instance;

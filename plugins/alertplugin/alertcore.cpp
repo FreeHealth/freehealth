@@ -30,6 +30,12 @@
 #include "alertmanager.h"
 #include "alertitem.h"
 
+// TEST
+#include "alertitemeditorwidget.h"
+#include <QDialog>
+#include <QGridLayout>
+// END TEST
+
 using namespace Alert;
 
 AlertCore *AlertCore::_instance = 0;
@@ -85,12 +91,19 @@ bool AlertCore::initialize()
     // TESTS
     AlertItem item = d->m_alertBase->createVirtualItem();
     AlertItem item2 = item;
-    qWarning() << item << item2;
     d->m_alertBase->saveAlertItem(item);
     Internal::AlertBaseQuery query;
     query.getAlertItemFromUuid(item.uuid());
     QVector<AlertItem> test = d->m_alertBase->getAlertItems(query);
     qWarning() << test;
+
+    qWarning() << "llllllllllllllllllllllllllllllllllllllllll";
+    QDialog dlg;
+    AlertItemEditorWidget *w = new AlertItemEditorWidget(&dlg);
+    dlg.setLayout(new QGridLayout(&dlg));
+    w->setAlertItem(test.at(0));
+    dlg.layout()->addWidget(w);
+    dlg.exec();
     // END TESTS
 
     return true;
