@@ -168,7 +168,7 @@ AccountBase::AccountBase(QObject *parent)
     addField(Table_MedicalProcedure, MP_ABSTRACT,       "ABSTRACT",       FieldIsLongText);
     addField(Table_MedicalProcedure, MP_TYPE,           "TYPE",           FieldIsShortText);
     addField(Table_MedicalProcedure, MP_AMOUNT,         "AMOUNT",         FieldIsReal);
-    addField(Table_MedicalProcedure, MP_REIMBOURSEMENT, "REIMBOURSEMENT", FieldIsReal);
+    addField(Table_MedicalProcedure, MP_OTHERS,         "OTHERS",         FieldIsBlob);
     addField(Table_MedicalProcedure, MP_DATE,           "DATE",           FieldIsDate);
     /** Add a link to INSURANCE table ? One MP is reimburse by a specific insurance... */
     //ok but have to enter insurance uid in .csv
