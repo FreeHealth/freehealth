@@ -2,7 +2,7 @@ TEMPLATE  = lib
 TARGET    = quazip
 
 # QuaZip version = 0.4.4
-!win32{VERSION=0.4.4}
+#!win32{VERSION=0.4.4}
 
 include(../../../libs/libsworkbench.pri)
 include(../quazip_dependencies.pri)
@@ -19,21 +19,16 @@ INCLUDEPATH += .
 DEFINES += QUAZIP_BUILD
 CONFIG(staticlib): DEFINES += QUAZIP_STATIC
 
+CONFIG(dontbuildquazip) {
+  message(Using libquazip0 package)
+  LIBS+=-lquazip
+} else {
+  message(Building libquazip)
+  include(quazip.pri)
+}
+
 # Input
 HEADERS += \
-    crypt.h\
-    ioapi.h\
-    JlCompress.h\
-    quaadler32.h\
-    quachecksum32.h\
-    quacrc32.h\
-    quazip.h\
-    quazipfile.h\
-    quazipfileinfo.h\
-    quazipnewinfo.h\
-    quazip_global.h\
-    unzip.h\
-    zip.h\
     global.h
 
-SOURCES += *.c *.cpp
+SOURCES += global.cpp
