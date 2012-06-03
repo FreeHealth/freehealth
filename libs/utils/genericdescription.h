@@ -102,6 +102,7 @@ public:
 
     virtual QVariant data(const int ref, const QString &lang = QString::null) const;
     virtual bool setData(const int ref, const QVariant &value, const QString &lang = QString::null);
+    virtual QStringList availableLanguages() const;
 
     virtual bool fromXmlContent(const QString &xmlContent);
     virtual bool fromXmlFile(const QString &absFileName);

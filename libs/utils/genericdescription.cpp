@@ -151,6 +151,12 @@ bool GenericDescription::setData(const int ref, const QVariant &value, const QSt
     return true;
 }
 
+/** Return all languages with a translable value. */
+QStringList GenericDescription::availableLanguages() const
+{
+    return m_Data.uniqueKeys();
+}
+
 /** Populate the description using a xml content \e xmlContent. */
 bool GenericDescription::fromXmlContent(const QString &xmlContent)
 {
