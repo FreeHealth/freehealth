@@ -96,6 +96,7 @@ bool AlertCore::initialize()
     query.getAlertItemFromUuid(item.uuid());
     QVector<AlertItem> test = d->m_alertBase->getAlertItems(query);
     qWarning() << test;
+    qWarning() << item.toXml();
 
     qWarning() << "llllllllllllllllllllllllllllllllllllllllll";
     QDialog dlg;

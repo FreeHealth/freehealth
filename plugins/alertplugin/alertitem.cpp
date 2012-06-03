@@ -29,16 +29,64 @@
 #include "alertcore.h"
 
 #include <utils/global.h>
+#include <utils/genericdescription.h>
 #include <translationutils/multilingualclasstemplate.h>
 
 #include <QTreeWidgetItem>
+#include <QDomDocument>
 
 #include <QDebug>
 
 using namespace Alert;
 
+namespace {
+const char * const XML_ROOT_TAG = "Alert";
+const char * const XML_DESCRIPTION_ROOTTAG = "Descr";
+const char * const XML_TIMING_ROOTTAG = "Timings";
+const char * const XML_RELATED_ROOTTAG = "Rels";
+const char * const XML_VALIDATION_ROOTTAG = "Vals";
+const char * const XML_SCRIPT_ROOTTAG = "Scripts";
+const char * const XML_EXTRAXML_ROOTTAG = "Xtra";
+
+const char * const XML_TIMING_ELEMENTTAG = "Timing";
+const char * const XML_RELATED_ELEMENTTAG = "Rel";
+const char * const XML_VALIDATION_ELEMENTTAG = "Val";
+const char * const XML_SCRIPT_ELEMENTTAG = "Script";
+
+const char * const XML_DATABASE_VALUES_TAG = "Alert";
+}
+
 namespace Alert {
 namespace Internal {
+
+class AlertXmlDescription  : public Utils::GenericDescription
+{
+public:
+    enum NonTr {
+        CryptedPass = Utils::GenericDescription::NonTranslatableExtraData + 1,
+        ViewType,
+        ContentType,
+        Priority,
+        OverrideRequiresUserComment,
+        StyleSheet
+    };
+    enum Tr {
+        Comment = Utils::GenericDescription::TranslatableExtraData + 1
+    };
+
+    AlertXmlDescription() : Utils::GenericDescription(::XML_DESCRIPTION_ROOTTAG)
+    {
+        addNonTranslatableExtraData(CryptedPass, "cryptedPassword");
+        addNonTranslatableExtraData(ViewType, "viewType");
+        addNonTranslatableExtraData(ContentType, "contentType");
+        addNonTranslatableExtraData(Priority, "prior");
+        addNonTranslatableExtraData(OverrideRequiresUserComment, "overrideComment");
+        addNonTranslatableExtraData(StyleSheet, "styleSheet");
+        addTranslatableExtraData(Comment, "comment");
+    }
+
+    ~AlertXmlDescription() {}
+};
 
 class AlertValueBook {
 public:
@@ -48,7 +96,7 @@ public:
     }
 
 public:
-    QString _label, _category, _descr, _comment;
+    QString _label, _toolTip, _category, _descr, _comment;
 };
 
 class AlertItemPrivate : public Trans::MultiLingualClass<AlertValueBook>
@@ -64,6 +112,66 @@ public:
 
     ~AlertItemPrivate() {}
 
+    QString viewTypeToXml()
+    {
+        switch (_viewType) {
+        case AlertItem::DynamicAlert: return "dynamic";
+        case AlertItem::StaticAlert: return "static";
+        }
+        return QString::null;
+    }
+
+    QString contentTypeToXml()
+    {
+        switch (_contentType) {
+        case AlertItem::ApplicationNotification: return "applicationNotification";
+        case AlertItem::PatientCondition: return "patientCondition";
+        case AlertItem::UserNotification: return "userNotification";
+        }
+        return QString::null;
+    }
+
+    QString priorityToXml()
+    {
+        switch (_priority) {
+        case AlertItem::High: return "high";
+        case AlertItem::Medium: return "medium";
+        case AlertItem::Low: return "low";
+        }
+        return QString::null;
+    }
+
+    void viewTypeFromXml(const QString &xml)
+    {
+        // default is dynamic alert
+        _viewType = AlertItem::DynamicAlert;
+        if (xml.compare("static", Qt::CaseInsensitive)==0) {
+            _viewType = AlertItem::StaticAlert;
+        }
+    }
+
+    void contentTypeFromXml(const QString &xml)
+    {
+        // default is patientCondition
+        _contentType = AlertItem::PatientCondition;
+        if (xml.compare("applicationNotification", Qt::CaseInsensitive)==0) {
+            _contentType = AlertItem::ApplicationNotification;
+        } else if (xml.compare("userNotification", Qt::CaseInsensitive)==0) {
+            _contentType = AlertItem::UserNotification;
+        }
+    }
+
+    void priorityTypeFromXml(const QString &xml)
+    {
+        // default is low
+        _priority = AlertItem::Low;
+        if (xml.compare("high", Qt::CaseInsensitive)==0) {
+            _priority = AlertItem::High;
+        } else if (xml.compare("medium", Qt::CaseInsensitive)==0) {
+            _priority = AlertItem::Medium;
+        }
+    }
+
     QString categoryForTreeWiget() const {return QString::null;}
 
 public:
@@ -75,6 +183,7 @@ public:
     AlertItem::Priority _priority;
     QHash<int, QVariant> _db;
     QDateTime _creationDate, _update;
+    AlertXmlDescription descr;
 
     // TODO : move this in an AlertModel
     QVector<AlertRelation> _relations;
@@ -182,6 +291,20 @@ QString AlertItem::label(const QString &lang) const
     return v->_label;
 }
 
+QString AlertItem::toolTip(const QString &lang) const
+{
+    Internal::AlertValueBook *v = d->getLanguage(lang);
+    if (!v) {
+        v = d->getLanguage(Trans::Constants::ALL_LANGUAGE);
+        if (!v) {
+            v = d->getLanguage("en");
+            if (!v)
+                return QString::null;
+        }
+    }
+    return v->_toolTip;
+}
+
 QString AlertItem::category(const QString &lang) const
 {
     Internal::AlertValueBook *v = d->getLanguage(lang);
@@ -233,6 +356,16 @@ void AlertItem::setLabel(const QString &txt, const QString &lang)
     else
         v = d->createLanguage(lang);
     v->_label = txt;
+}
+
+void AlertItem::setToolTip(const QString &txt, const QString &lang)
+{
+    Internal::AlertValueBook *v = 0;
+    if (d->hasLanguage(lang))
+        v = d->getLanguage(lang);
+    else
+        v = d->createLanguage(lang);
+    v->_toolTip= txt;
 }
 
 void AlertItem::setCategory(const QString &txt, const QString &lang)
@@ -558,15 +691,175 @@ QDebug operator<<(QDebug dbg, const Alert::AlertItem &a)
         break;
     }
     s << "create:" + a.creationDate().toString(Qt::ISODate);
-
     s << QString::number(a.timingAt(0).cyclingDelayInMinutes());
-
-    qWarning() << a.timingAt(0).cyclingDelayInMinutes();
-
     dbg.nospace() << s.join(",\n           ")
                   << ")";
     return dbg.space();
 }
+
+QString AlertItem::toXml() const
+{
+    // Feed description
+    d->descr.setData(Internal::AlertXmlDescription::Uuid, d->_uid);
+//    d->descr.setData(Internal::AlertXmlDescription::Version, );
+//    d->descr.setData(Internal::AlertXmlDescription::Author, );
+//    d->descr.setData(Internal::AlertXmlDescription::Country, );
+//    d->descr.setData(Internal::AlertXmlDescription::URL, );
+//    d->descr.setData(Internal::AlertXmlDescription::AbsFileName, );
+//    d->descr.setData(Internal::AlertXmlDescription::Vendor, );
+    d->descr.setData(Internal::AlertXmlDescription::Validity, d->_valid);
+//    d->descr.setData(Internal::AlertXmlDescription::FreeMedFormsCompatVersion, );
+//    d->descr.setData(Internal::AlertXmlDescription::FreeDiamsCompatVersion, );
+//    d->descr.setData(Internal::AlertXmlDescription::FreeAccountCompatVersion, );
+    d->descr.setData(Internal::AlertXmlDescription::CreationDate, d->_creationDate);
+    d->descr.setData(Internal::AlertXmlDescription::LastModificationDate, d->_update);
+    d->descr.setData(Internal::AlertXmlDescription::CryptedPass, d->_pass);
+    d->descr.setData(Internal::AlertXmlDescription::ViewType, d->viewTypeToXml());
+    d->descr.setData(Internal::AlertXmlDescription::ContentType, d->contentTypeToXml());
+    d->descr.setData(Internal::AlertXmlDescription::Priority, d->priorityToXml());
+    d->descr.setData(Internal::AlertXmlDescription::OverrideRequiresUserComment, d->_overrideRequiresUserComment);
+    d->descr.setData(Internal::AlertXmlDescription::StyleSheet, d->_css);
+    d->descr.setData(Internal::AlertXmlDescription::GeneralIcon, d->_themedIcon);
+
+    foreach(const QString &l, availableLanguages()) {
+        d->descr.setData(Internal::AlertXmlDescription::Label, label(l) , l);
+        d->descr.setData(Internal::AlertXmlDescription::Category, category(l), l);
+        d->descr.setData(Internal::AlertXmlDescription::ToolTip, toolTip(l), l);
+//        d->descr.setData(Internal::AlertXmlDescription::Specialties, , l);
+//        d->descr.setData(Internal::AlertXmlDescription::TypeName, , l);
+        d->descr.setData(Internal::AlertXmlDescription::ShortDescription, description(l), l);
+//        d->descr.setData(Internal::AlertXmlDescription::HtmlDescription, , l);
+//        d->descr.setData(Internal::AlertXmlDescription::LicenseName, , l);
+//        d->descr.setData(Internal::AlertXmlDescription::LicenseTerms, , l);
+//        d->descr.setData(Internal::AlertXmlDescription::WebLink, , l);
+        d->descr.setData(Internal::AlertXmlDescription::Comment, comment(l), l);
+    }
+
+    // Prepare xml code
+    QString xml = "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n";
+    xml += "<!DOCTYPE FreeMedForms>\n";
+    xml += QString("<%1>\n").arg(::XML_ROOT_TAG);
+    xml += d->descr.toXml();
+    // Include timings
+    int n = d->_timings.count();
+    if (n) {
+        xml += QString("<%1>\n").arg(::XML_TIMING_ROOTTAG);
+        for(int i=0; i < n; ++i) {
+            xml += d->_timings.at(i).toXml();
+        }
+        xml += QString("</%1>\n").arg(::XML_TIMING_ROOTTAG);
+    }
+    // Include related
+    n = d->_relations.count();
+    if (n) {
+        xml += QString("<%1>\n").arg(::XML_RELATED_ROOTTAG);
+        for(int i=0; i < n; ++i) {
+            xml += d->_relations.at(i).toXml();
+        }
+        xml += QString("</%1>\n").arg(::XML_RELATED_ROOTTAG);
+    }
+    // Include scripts
+    n = d->_scripts.count();
+    if (n) {
+        xml += QString("<%1>\n").arg(::XML_SCRIPT_ROOTTAG);
+        for(int i=0; i < n; ++i) {
+            xml += d->_scripts.at(i).toXml();
+        }
+        xml += QString("</%1>\n").arg(::XML_SCRIPT_ROOTTAG);
+    }
+    // Include validations
+    n = d->_validations.count();
+    if (n) {
+        xml += QString("<%1>\n").arg(::XML_VALIDATION_ROOTTAG);
+        for(int i=0; i < n; ++i) {
+            xml += d->_validations.at(i).toXml();
+        }
+        xml += QString("</%1>\n").arg(::XML_VALIDATION_ROOTTAG);
+    }
+    // Include extra-xml
+    if (!d->_extraXml.isEmpty())
+        xml += QString("<%1>%2</%1>").arg(::XML_EXTRAXML_ROOTTAG).arg(d->_extraXml);
+    // TODO: Include database values ?
+    xml += QString("</%1>\n").arg(::XML_ROOT_TAG);
+    QDomDocument doc;
+    QString err;
+    int l, c;
+    if (!doc.setContent(xml, &err, &l, &c))
+        LOG_ERROR_FOR("AlertItem", QString("XML Error (%1,%2): %3\n%4").arg(l).arg(c).arg(err).arg(xml));
+    return doc.toString(2);
+}
+
+AlertItem AlertItem::fromXml(const QString &xml)
+{
+//    ::XML_DESCRIPTION_ROOTTAG;
+}
+
+QString AlertTiming::toXml() const
+{
+    if (_isCycle)
+        return QString("<%1 id='%2' valid='%3' start='%4' end='%5' "
+                       "isCycle='%6' ncycle='%7' delayInMin='%8' next='%9'/>\n")
+                .arg(::XML_TIMING_ELEMENTTAG)
+                .arg(_id)
+                .arg(_valid)
+                .arg(_start.toString(Qt::ISODate))
+                .arg(_end.toString(Qt::ISODate))
+                .arg(_isCycle)
+                .arg(_ncycle)
+                .arg(_delay)
+                .arg(_next.toString(Qt::ISODate))
+                ;
+    return QString("<%1 id='%2' valid='%3' start='%4' end='%5'/>\n")
+            .arg(::XML_TIMING_ELEMENTTAG)
+            .arg(_id)
+            .arg(_valid)
+            .arg(_start.toString(Qt::ISODate))
+            .arg(_end.toString(Qt::ISODate))
+            ;
+}
+
+QString AlertScript::toXml() const
+{
+    // TODO: manage "<" in script
+    return QString("<%1 id='%2' valid='%3' type='%4' uid='%5'>\n%6\n</%1>\n")
+            .arg(::XML_SCRIPT_ELEMENTTAG)
+            .arg(_id)
+            .arg(_valid)
+            .arg(_type)
+            .arg(_uid)
+            .arg(_script)
+            ;
+}
+
+QString AlertValidation::toXml() const
+{
+    QString comment = _userComment;
+    comment = comment.replace("<", "&lt;");
+    return QString("<%1 id='%2' user='%3' comment='%4' dt='%5'/>\n")
+            .arg(::XML_VALIDATION_ELEMENTTAG)
+            .arg(_id)
+            .arg(_userUid)
+            .arg(comment)
+            .arg(_date.toString(Qt::ISODate))
+            ;
+}
+
+QString AlertRelation::toXml() const
+{
+    if (_relatedUid.isEmpty())
+        return QString("<%1 id='%2' to='%3'/>\n")
+                .arg(::XML_RELATED_ELEMENTTAG)
+                .arg(_id)
+                .arg(_related)
+                ;
+    return QString("<%1 id='%2' to='%3' uid='%4'/>\n")
+            .arg(::XML_RELATED_ELEMENTTAG)
+            .arg(_id)
+            .arg(_related)
+            .arg(_relatedUid)
+            ;
+}
+
 
 QDebug operator<<(QDebug dbg, const Alert::AlertItem *c)
 {

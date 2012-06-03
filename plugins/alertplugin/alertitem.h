@@ -67,6 +67,8 @@ public:
     virtual qlonglong cyclingDelayInMinutes() const {return _delay;}
     virtual void setCyclingDelayInMinutes(const qlonglong delay) {_delay=delay;}
 
+    virtual QString toXml() const;
+
 private:
     int _id, _ncycle;
     qlonglong _delay;
@@ -101,6 +103,8 @@ public:
     virtual QString script() const {return _script;}
     virtual void setScript(const QString &script) {_script=script;}
 
+    virtual QString toXml() const;
+
 private:
     int _id;
     bool _valid;
@@ -124,6 +128,8 @@ public:
 
     virtual QDateTime dateOfValidation() const {return _date;}
     virtual void setDateOfValidation(const QDateTime &dt) {_date=dt;}
+
+    virtual QString toXml() const;
 
 private:
     int _id;
@@ -153,6 +159,8 @@ public:
 
     virtual QString relatedToUid() const {return _relatedUid;}
     virtual void setRelatedToUid(const QString &uid) {_relatedUid=uid;}
+
+    virtual QString toXml() const;
 
 private:
     int _id;
@@ -205,11 +213,13 @@ public:
     virtual void setModified(bool modified);
 
     virtual QString label(const QString &lang = QString::null) const;
+    virtual QString toolTip(const QString &lang = QString::null) const;
     virtual QString category(const QString &lang = QString::null) const;
     virtual QString description(const QString &lang = QString::null) const;
     virtual QString comment(const QString &lang = QString::null) const;
 
     virtual void setLabel(const QString &txt, const QString &lang = QString::null);
+    virtual void setToolTip(const QString &txt, const QString &lang = QString::null);
     virtual void setCategory(const QString &txt, const QString &lang = QString::null);
     virtual void setDescription(const QString &txt, const QString &lang = QString::null);
     virtual void setComment(const QString &txt, const QString &lang = QString::null);
@@ -264,6 +274,9 @@ public:
     // END
 
     bool operator==(const AlertItem &other) const;
+
+    QString toXml() const;
+    static AlertItem fromXml(const QString &xml);
 
 private:
     Internal::AlertItemPrivate *d;
