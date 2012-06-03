@@ -45,87 +45,87 @@ const char * const  TOKEN_DOCUMENTTITLE     = "DOCUMENTTITLE";
 
 // For Patients
 // OLD TOKENS (before v0.8.0)
-//const char * const  TOKEN_PATIENTAGE        = "PATIENTAGE";
-//const char * const  TOKEN_PATIENTYEARSOLD   = "PATIENTYEARSOLD";
-//const char * const  TOKEN_PATIENTFULLNAME   = "PATIENTFULLNAME";
-//const char * const  TOKEN_PATIENTNAME       = "PATIENTNAME";
-//const char * const  TOKEN_PATIENTSECONDNAME = "PATIENTSECONDNAME";
-//const char * const  TOKEN_PATIENTFIRSTNAME  = "PATIENTFIRSTNAME";
-//const char * const  TOKEN_PATIENTTITLE      = "PATIENTTITLE";
-//const char * const  TOKEN_PATIENTDATEOFBIRTH= "PATIENTDATEOFBIRTH";
-//const char * const  TOKEN_WEIGHT            = "WEIGHT";
-//const char * const  TOKEN_WEIGHT_UNIT       = "WEIGHT_UNIT";
-//const char * const  TOKEN_HEIGHT            = "HEIGHT";
-//const char * const  TOKEN_HEIGHT_UNIT       = "HEIGHT_UNIT";
-//const char * const  TOKEN_CLCR              = "CLCR";
-//const char * const  TOKEN_CLCR_UNIT         = "CLCR_UNIT";
+const char * const  TOKEN_PATIENTAGE        = "PATIENTAGE";
+const char * const  TOKEN_PATIENTYEARSOLD   = "PATIENTYEARSOLD";
+const char * const  TOKEN_PATIENTFULLNAME   = "PATIENTFULLNAME";
+const char * const  TOKEN_PATIENTNAME       = "PATIENTNAME";
+const char * const  TOKEN_PATIENTSECONDNAME = "PATIENTSECONDNAME";
+const char * const  TOKEN_PATIENTFIRSTNAME  = "PATIENTFIRSTNAME";
+const char * const  TOKEN_PATIENTTITLE      = "PATIENTTITLE";
+const char * const  TOKEN_PATIENTDATEOFBIRTH= "PATIENTDATEOFBIRTH";
+const char * const  TOKEN_WEIGHT            = "WEIGHT";
+const char * const  TOKEN_WEIGHT_UNIT       = "WEIGHT_UNIT";
+const char * const  TOKEN_HEIGHT            = "HEIGHT";
+const char * const  TOKEN_HEIGHT_UNIT       = "HEIGHT_UNIT";
+const char * const  TOKEN_CLCR              = "CLCR";
+const char * const  TOKEN_CLCR_UNIT         = "CLCR_UNIT";
+const char * const  TOKEN_DATE              = "DATE";
+const char * const  TOKEN_NUMBEROFDRUGS     = "NBDRUGS";
+// END
+
+// NEW TOKENS (>= v0.8.0)
+//const char * const  TOKEN_PATIENTAGE        = "Patient.Age.FullAge";
+//const char * const  TOKEN_PATIENTYEARSOLD   = "Patient.Age.YearsOld";
+//const char * const  TOKEN_PATIENTDATEOFBIRTH= "Patient.Age.DateOfBirth";
+//const char * const  TOKEN_PATIENTDATEOFDEATH= "Patient.Age.DateOfDeath";
+//const char * const  TOKEN_PATIENTFULLNAME   = "Patient.Name.Full";
+//const char * const  TOKEN_PATIENTNAME       = "Patient.Name.BirthName";
+//const char * const  TOKEN_PATIENTSECONDNAME = "Patient.Name.SecondName";
+//const char * const  TOKEN_PATIENTFIRSTNAME  = "Patient.Name.FirstName";
+//const char * const  TOKEN_PATIENTTITLE      = "Patient.Name.Title";
+//const char * const  TOKEN_PATIENTFULLADDRESS= "Patient.Address.Full";
+
+//const char * const  TOKEN_WEIGHT            = "Patient.Metrics.Weight";
+//const char * const  TOKEN_WEIGHT_UNIT       = "Patient.Metrics.WeightUnit";
+//const char * const  TOKEN_HEIGHT            = "Patient.Metrics.Height";
+//const char * const  TOKEN_HEIGHT_UNIT       = "Patient.Metrics.HeightUnit";
+//const char * const  TOKEN_CLCR              = "Patient.Biology.CreatininClearance";
+//const char * const  TOKEN_CLCR_UNIT         = "Patient.Biology.CreatininClearanceUnit";
+
 //const char * const  TOKEN_DATE              = "DATE";
 //const char * const  TOKEN_NUMBEROFDRUGS     = "NBDRUGS";
 // END
 
-// NEW TOKENS (>= v0.8.0)
-const char * const  TOKEN_PATIENTAGE        = "Patient.Age.FullAge";
-const char * const  TOKEN_PATIENTYEARSOLD   = "Patient.Age.YearsOld";
-const char * const  TOKEN_PATIENTDATEOFBIRTH= "Patient.Age.DateOfBirth";
-const char * const  TOKEN_PATIENTDATEOFDEATH= "Patient.Age.DateOfDeath";
-const char * const  TOKEN_PATIENTFULLNAME   = "Patient.Name.Full";
-const char * const  TOKEN_PATIENTNAME       = "Patient.Name.BirthName";
-const char * const  TOKEN_PATIENTSECONDNAME = "Patient.Name.SecondName";
-const char * const  TOKEN_PATIENTFIRSTNAME  = "Patient.Name.FirstName";
-const char * const  TOKEN_PATIENTTITLE      = "Patient.Name.Title";
-const char * const  TOKEN_PATIENTFULLADDRESS= "Patient.Address.Full";
-
-const char * const  TOKEN_WEIGHT            = "Patient.Metrics.Weight";
-const char * const  TOKEN_WEIGHT_UNIT       = "Patient.Metrics.WeightUnit";
-const char * const  TOKEN_HEIGHT            = "Patient.Metrics.Height";
-const char * const  TOKEN_HEIGHT_UNIT       = "Patient.Metrics.HeightUnit";
-const char * const  TOKEN_CLCR              = "Patient.Biology.CreatininClearance";
-const char * const  TOKEN_CLCR_UNIT         = "Patient.Biology.CreatininClearanceUnit";
-// END
-
-const char * const  TOKEN_DATE              = "DATE";
-const char * const  TOKEN_NUMBEROFDRUGS     = "NBDRUGS";
-
 // For Users
 // OLD TOKENS (before v0.8.0)
-//const char * const  TOKEN_USERAGE            = "USERAGE";
-//const char * const  TOKEN_USERYEARSOLD       = "USERYEARSOLD";
-//const char * const  TOKEN_USERFULLNAME       = "USERFULLNAME";
-//const char * const  TOKEN_USERTITLE          = "USERTITLE";
-//const char * const  TOKEN_USERNAME           = "USERNAME";
-//const char * const  TOKEN_USERSECONDNAME     = "USERSECONDNAME";
-//const char * const  TOKEN_USERFIRSTNAME      = "USERFIRSTNAME";
-//const char * const  TOKEN_USERSPECIALITIES   = "USERSPECIALITIES";
-//const char * const  TOKEN_USERIDENTIFIER     = "USERIDENTIFIANTS";
-//const char * const  TOKEN_USERQUALIFICATIONS = "USERQUALIFICATIONS";
-//const char * const  TOKEN_USERADDRESS        = "USERADDRESS";
-//const char * const  TOKEN_USERMAIL           = "USERMAIL";
-//const char * const  TOKEN_USERTEL1           = "USERTEL1";
-//const char * const  TOKEN_USERTEL2           = "USERTEL2";
-//const char * const  TOKEN_USERTEL3           = "USERTEL3";
-//const char * const  TOKEN_USERFAX            = "USERFAX";
-//const char * const  TOKEN_USERFULLADDRESS    = "USERFULLADDRESS";
-//const char * const  TOKEN_USERFULLCONTACT    = "USERFULLCONTACT";
+const char * const  TOKEN_USERAGE            = "USERAGE";
+const char * const  TOKEN_USERYEARSOLD       = "USERYEARSOLD";
+const char * const  TOKEN_USERFULLNAME       = "USERFULLNAME";
+const char * const  TOKEN_USERTITLE          = "USERTITLE";
+const char * const  TOKEN_USERBIRTHNAME      = "USERNAME";
+const char * const  TOKEN_USERSECONDNAME     = "USERSECONDNAME";
+const char * const  TOKEN_USERFIRSTNAME      = "USERFIRSTNAME";
+const char * const  TOKEN_USERSPECIALITIES   = "USERSPECIALITIES";
+const char * const  TOKEN_USERIDENTIFIER     = "USERIDENTIFIANTS";
+const char * const  TOKEN_USERQUALIFICATIONS = "USERQUALIFICATIONS";
+const char * const  TOKEN_USERADDRESS        = "USERADDRESS";
+const char * const  TOKEN_USERMAIL           = "USERMAIL";
+const char * const  TOKEN_USERTEL1           = "USERTEL1";
+const char * const  TOKEN_USERTEL2           = "USERTEL2";
+const char * const  TOKEN_USERTEL3           = "USERTEL3";
+const char * const  TOKEN_USERFAX            = "USERFAX";
+const char * const  TOKEN_USERFULLADDRESS    = "USERFULLADDRESS";
+const char * const  TOKEN_USERFULLCONTACT    = "USERFULLCONTACT";
 // END
 
-const char * const  TOKEN_USERAGE            = "User.Age.FullAge";
-const char * const  TOKEN_USERYEARSOLD       = "User.Age.YearsOld";
-const char * const  TOKEN_USERFULLNAME       = "User.Name.FullName";
-const char * const  TOKEN_USERTITLE          = "User.Name.Title";
-const char * const  TOKEN_USERBIRTHNAME      = "User.Name.BirthName";
-const char * const  TOKEN_USERSECONDNAME     = "User.Name.SecondName";
-const char * const  TOKEN_USERFIRSTNAME      = "User.Name.FirstName";
-const char * const  TOKEN_USERSPECIALITIES   = "User.Professional.Specialties";
-const char * const  TOKEN_USERIDENTIFIER     = "User.Professional.Identifiants";
-const char * const  TOKEN_USERQUALIFICATIONS = "User.Professional.Qualifications";
-const char * const  TOKEN_USERADDRESS        = "User.Contact.Address";
-const char * const  TOKEN_USERMAIL           = "User.Contact.Mail";
-const char * const  TOKEN_USERTEL1           = "User.Contact.Tel1";
-const char * const  TOKEN_USERTEL2           = "User.Contact.Tel2";
-const char * const  TOKEN_USERTEL3           = "User.Contact.Tel3";
-const char * const  TOKEN_USERFAX            = "User.Contact.Fax";
-const char * const  TOKEN_USERFULLADDRESS    = "User.Contact.FullAddress";
-const char * const  TOKEN_USERFULLCONTACT    = "User.Contact.FullContact";
+//const char * const  TOKEN_USERAGE            = "User.Age.FullAge";
+//const char * const  TOKEN_USERYEARSOLD       = "User.Age.YearsOld";
+//const char * const  TOKEN_USERFULLNAME       = "User.Name.FullName";
+//const char * const  TOKEN_USERTITLE          = "User.Name.Title";
+//const char * const  TOKEN_USERBIRTHNAME      = "User.Name.BirthName";
+//const char * const  TOKEN_USERSECONDNAME     = "User.Name.SecondName";
+//const char * const  TOKEN_USERFIRSTNAME      = "User.Name.FirstName";
+//const char * const  TOKEN_USERSPECIALITIES   = "User.Professional.Specialties";
+//const char * const  TOKEN_USERIDENTIFIER     = "User.Professional.Identifiants";
+//const char * const  TOKEN_USERQUALIFICATIONS = "User.Professional.Qualifications";
+//const char * const  TOKEN_USERADDRESS        = "User.Contact.Address";
+//const char * const  TOKEN_USERMAIL           = "User.Contact.Mail";
+//const char * const  TOKEN_USERTEL1           = "User.Contact.Tel1";
+//const char * const  TOKEN_USERTEL2           = "User.Contact.Tel2";
+//const char * const  TOKEN_USERTEL3           = "User.Contact.Tel3";
+//const char * const  TOKEN_USERFAX            = "User.Contact.Fax";
+//const char * const  TOKEN_USERFULLADDRESS    = "User.Contact.FullAddress";
+//const char * const  TOKEN_USERFULLCONTACT    = "User.Contact.FullContact";
 
 
 // Some path tags
