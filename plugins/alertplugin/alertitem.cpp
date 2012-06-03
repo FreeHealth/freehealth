@@ -28,6 +28,7 @@
 #include "alertitem.h"
 #include "alertcore.h"
 
+#include <utils/log.h>
 #include <utils/global.h>
 #include <utils/genericdescription.h>
 #include <translationutils/multilingualclasstemplate.h>
@@ -102,12 +103,13 @@ public:
 class AlertItemPrivate : public Trans::MultiLingualClass<AlertValueBook>
 {
 public:
-    AlertItemPrivate() :
+    AlertItemPrivate(AlertItem *parent) :
         _id(-1),
         _valid(true), _modified(false), _overrideRequiresUserComment(false),
         _viewType(AlertItem::StaticAlert),
         _contentType(AlertItem::ApplicationNotification),
-        _priority(AlertItem::Medium)
+        _priority(AlertItem::Medium),
+        q(parent)
     {}
 
     ~AlertItemPrivate() {}
@@ -161,7 +163,7 @@ public:
         }
     }
 
-    void priorityTypeFromXml(const QString &xml)
+    void priorityFromXml(const QString &xml)
     {
         // default is low
         _priority = AlertItem::Low;
@@ -169,6 +171,30 @@ public:
             _priority = AlertItem::High;
         } else if (xml.compare("medium", Qt::CaseInsensitive)==0) {
             _priority = AlertItem::Medium;
+        }
+    }
+
+    void feedItemWithXmlDescription()
+    {
+        _id = -1;
+        _uid = descr.data(AlertXmlDescription::Uuid).toString();
+        _pass = descr.data(AlertXmlDescription::CryptedPass).toString();
+        _themedIcon = descr.data(AlertXmlDescription::GeneralIcon).toString();
+        _css = descr.data(AlertXmlDescription::StyleSheet).toString();
+        _valid = descr.data(AlertXmlDescription::Validity).toInt();
+        _overrideRequiresUserComment = descr.data(AlertXmlDescription::OverrideRequiresUserComment).toInt();
+        viewTypeFromXml(descr.data(AlertXmlDescription::ViewType).toString());
+        contentTypeFromXml(descr.data(AlertXmlDescription::ContentType).toString());
+        priorityFromXml(descr.data(AlertXmlDescription::Priority).toString());
+        _creationDate = QDateTime::fromString(descr.data(AlertXmlDescription::CreationDate).toString(), Qt::ISODate);
+        _update = QDateTime::fromString(descr.data(AlertXmlDescription::LastModificationDate).toString(), Qt::ISODate);
+
+        foreach(const QString &l, descr.availableLanguages()) {
+            q->setLabel(descr.data(Internal::AlertXmlDescription::Label, l).toString(), l);
+            q->setToolTip(descr.data(Internal::AlertXmlDescription::ToolTip, l).toString(), l);
+            q->setCategory(descr.data(Internal::AlertXmlDescription::Category, l).toString(), l);
+            q->setDescription(descr.data(Internal::AlertXmlDescription::ShortDescription, l).toString(), l);
+            q->setComment(descr.data(Internal::AlertXmlDescription::Comment, l).toString(), l);
         }
     }
 
@@ -195,13 +221,16 @@ public:
     AlertTiming _nullTiming;
     AlertValidation _nullValidation;
     // END
+
+private:
+    AlertItem *q;
 };
 
 }
 }
 
 AlertItem::AlertItem() :
-    d(new Internal::AlertItemPrivate)
+    d(new Internal::AlertItemPrivate(this))
 {}
 
 // The copy constructor is required for the QVector/QList and others.
@@ -707,7 +736,7 @@ QString AlertItem::toXml() const
 //    d->descr.setData(Internal::AlertXmlDescription::URL, );
 //    d->descr.setData(Internal::AlertXmlDescription::AbsFileName, );
 //    d->descr.setData(Internal::AlertXmlDescription::Vendor, );
-    d->descr.setData(Internal::AlertXmlDescription::Validity, d->_valid);
+    d->descr.setData(Internal::AlertXmlDescription::Validity, int(d->_valid));
 //    d->descr.setData(Internal::AlertXmlDescription::FreeMedFormsCompatVersion, );
 //    d->descr.setData(Internal::AlertXmlDescription::FreeDiamsCompatVersion, );
 //    d->descr.setData(Internal::AlertXmlDescription::FreeAccountCompatVersion, );
@@ -792,6 +821,76 @@ QString AlertItem::toXml() const
 AlertItem AlertItem::fromXml(const QString &xml)
 {
 //    ::XML_DESCRIPTION_ROOTTAG;
+    QDomDocument doc;
+    QString err;
+    int l, c;
+    if (!doc.setContent(xml, &err, &l, &c)) {
+        LOG_ERROR_FOR("AlertItem", QString("XML Error (%1,%2): %3\n%4").arg(l).arg(c).arg(err).arg(xml));
+        return AlertItem();
+    }
+    AlertItem item;
+    QDomElement root = doc.firstChildElement(::XML_ROOT_TAG);
+
+    // Description
+    item.d->descr.fromDomElement(root.firstChildElement(::XML_DESCRIPTION_ROOTTAG));
+    item.d->feedItemWithXmlDescription();
+
+    // Timings
+    QDomElement main = root.firstChildElement(::XML_TIMING_ROOTTAG);
+    if (!main.isNull()) {
+        QDomElement element = main.firstChildElement(::XML_TIMING_ELEMENTTAG);
+        while (!element.isNull()) {
+            AlertTiming timing = AlertTiming::fromDomElement(element);
+            item.addTiming(timing);
+            element = element.nextSiblingElement(::XML_TIMING_ELEMENTTAG);
+        }
+    }
+
+    // Relations
+    main = root.firstChildElement(::XML_RELATED_ROOTTAG);
+    if (!main.isNull()) {
+        QDomElement element = main.firstChildElement(::XML_RELATED_ELEMENTTAG);
+        while (!element.isNull()) {
+            AlertRelation rel = AlertRelation::fromDomElement(element);
+            item.addRelation(rel);
+            element = element.nextSiblingElement(::XML_RELATED_ELEMENTTAG);
+        }
+    }
+
+    // Validations
+    main = root.firstChildElement(::XML_VALIDATION_ROOTTAG);
+    if (!main.isNull()) {
+        QDomElement element = main.firstChildElement(::XML_VALIDATION_ELEMENTTAG);
+        while (!element.isNull()) {
+            AlertValidation val = AlertValidation::fromDomElement(element);
+            item.addValidation(val);
+            element = element.nextSiblingElement(::XML_VALIDATION_ELEMENTTAG);
+        }
+    }
+
+    // Scripts
+    main = root.firstChildElement(::XML_SCRIPT_ROOTTAG);
+    if (!main.isNull()) {
+        QDomElement element = main.firstChildElement(::XML_SCRIPT_ELEMENTTAG);
+        while (!element.isNull()) {
+            AlertScript scr = AlertScript::fromDomElement(element);
+            item.addScript(scr);
+            element = element.nextSiblingElement(::XML_SCRIPT_ELEMENTTAG);
+        }
+    }
+
+    // Extra-xml
+    int begin = xml.indexOf(QString("<%1>").arg(::XML_EXTRAXML_ROOTTAG), Qt::CaseInsensitive);
+    if (begin > 0) {
+        begin += QString("<%1>").arg(::XML_EXTRAXML_ROOTTAG).length();
+        int end = xml.indexOf(::XML_EXTRAXML_ROOTTAG, begin);
+        if (end > begin) {
+            --end;
+            --end;
+            item.d->_extraXml = xml.mid(begin, end-begin);
+        }
+    }
+    return item;
 }
 
 QString AlertTiming::toXml() const
@@ -806,7 +905,7 @@ QString AlertTiming::toXml() const
                 .arg(_end.toString(Qt::ISODate))
                 .arg(_isCycle)
                 .arg(_ncycle)
-                .arg(_delay)
+                .arg(QString::number(_delay))
                 .arg(_next.toString(Qt::ISODate))
                 ;
     return QString("<%1 id='%2' valid='%3' start='%4' end='%5'/>\n")
@@ -816,6 +915,22 @@ QString AlertTiming::toXml() const
             .arg(_start.toString(Qt::ISODate))
             .arg(_end.toString(Qt::ISODate))
             ;
+}
+
+AlertTiming AlertTiming::fromDomElement(const QDomElement &element)
+{
+    if (element.tagName().compare(::XML_TIMING_ELEMENTTAG, Qt::CaseInsensitive)!=0)
+        return AlertTiming();
+    AlertTiming timing;
+    timing.setId(element.attribute("id").toInt());
+    timing.setValid(element.attribute("valid").toInt());
+    timing.setStart(QDateTime::fromString(element.attribute("start"), Qt::ISODate));
+    timing.setEnd(QDateTime::fromString(element.attribute("end"), Qt::ISODate));
+    timing.setCycling(element.attribute("isCycle").toInt());
+    timing.setNumberOfCycles(element.attribute("ncycle").toInt());
+    timing.setCyclingDelayInMinutes(element.attribute("delayInMin").toLongLong());
+    timing.setNextDate(QDateTime::fromString(element.attribute("next"), Qt::ISODate));
+    return timing;
 }
 
 QString AlertScript::toXml() const
@@ -831,6 +946,19 @@ QString AlertScript::toXml() const
             ;
 }
 
+AlertScript AlertScript::fromDomElement(const QDomElement &element)
+{
+    if (element.tagName().compare(::XML_SCRIPT_ELEMENTTAG, Qt::CaseInsensitive)!=0)
+        return AlertScript();
+    AlertScript script;
+    script.setId(element.attribute("id").toInt());
+    script.setUuid(element.attribute("uid"));
+    script.setValid(element.attribute("valid").toInt());
+    script.setType(AlertScript::ScriptType(element.attribute("type").toInt()));
+    script.setScript(element.text());
+    return script;
+}
+
 QString AlertValidation::toXml() const
 {
     QString comment = _userComment;
@@ -842,6 +970,18 @@ QString AlertValidation::toXml() const
             .arg(comment)
             .arg(_date.toString(Qt::ISODate))
             ;
+}
+
+AlertValidation AlertValidation::fromDomElement(const QDomElement &element)
+{
+    if (element.tagName().compare(::XML_VALIDATION_ELEMENTTAG, Qt::CaseInsensitive)!=0)
+        return AlertValidation();
+    AlertValidation val;
+    val.setId(element.attribute("id").toInt());
+    val.setUserUuid(element.attribute("user"));
+    val.setUserComment(element.attribute("comment"));
+    val.setDateOfValidation(QDateTime::fromString(element.attribute("dt"), Qt::ISODate));
+    return val;
 }
 
 QString AlertRelation::toXml() const
@@ -860,6 +1000,16 @@ QString AlertRelation::toXml() const
             ;
 }
 
+AlertRelation AlertRelation::fromDomElement(const QDomElement &element)
+{
+    if (element.tagName().compare(::XML_RELATED_ELEMENTTAG, Qt::CaseInsensitive)!=0)
+        return AlertRelation();
+    AlertRelation rel;
+    rel.setId(element.attribute("id").toInt());
+    rel.setRelatedTo(AlertRelation::RelatedTo(element.attribute("to").toInt()));
+    rel.setRelatedToUid(element.attribute("uid"));
+    return rel;
+}
 
 QDebug operator<<(QDebug dbg, const Alert::AlertItem *c)
 {

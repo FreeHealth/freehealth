@@ -33,6 +33,10 @@
 #include <QVariant>
 #include <QDateTime>
 
+QT_BEGIN_NAMESPACE
+class QDomElement;
+QT_END_NAMESPACE
+
 /**
  * \file alertitem.h
  * \author Eric MAEKER <eric.maeker@gmail.com>, Pierre-Marie Desombre <pm.desombre@gmail.com>
@@ -68,6 +72,7 @@ public:
     virtual void setCyclingDelayInMinutes(const qlonglong delay) {_delay=delay;}
 
     virtual QString toXml() const;
+    static AlertTiming fromDomElement(const QDomElement &element);
 
 private:
     int _id, _ncycle;
@@ -104,6 +109,7 @@ public:
     virtual void setScript(const QString &script) {_script=script;}
 
     virtual QString toXml() const;
+    static AlertScript fromDomElement(const QDomElement &element);
 
 private:
     int _id;
@@ -130,6 +136,7 @@ public:
     virtual void setDateOfValidation(const QDateTime &dt) {_date=dt;}
 
     virtual QString toXml() const;
+    static AlertValidation fromDomElement(const QDomElement &element);
 
 private:
     int _id;
@@ -161,6 +168,7 @@ public:
     virtual void setRelatedToUid(const QString &uid) {_relatedUid=uid;}
 
     virtual QString toXml() const;
+    static AlertRelation fromDomElement(const QDomElement &element);
 
 private:
     int _id;
