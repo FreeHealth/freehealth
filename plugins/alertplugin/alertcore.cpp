@@ -98,6 +98,11 @@ bool AlertCore::initialize()
     qWarning() << test;
     qWarning() << item.toXml();
 
+    AlertItem t = AlertItem::fromXml(item.toXml());
+    qWarning() << t.toXml();
+
+    qWarning() << (t.toXml() == item.toXml());
+
     qWarning() << "llllllllllllllllllllllllllllllllllllllllll";
     QDialog dlg;
     AlertItemEditorWidget *w = new AlertItemEditorWidget(&dlg);
