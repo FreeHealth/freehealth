@@ -46,6 +46,7 @@ const char * const XML_TIMING_ROOTTAG = "Timings";
 const char * const XML_RELATED_ROOTTAG = "Rels";
 const char * const XML_VALIDATION_ROOTTAG = "Vals";
 const char * const XML_SCRIPT_ROOTTAG = "Scripts";
+const char * const XML_EXTRAXML_ROOTTAG = "Xtra";
 
 const char * const XML_TIMING_ELEMENTTAG = "Timing";
 const char * const XML_RELATED_ELEMENTTAG = "Rel";
@@ -690,11 +691,7 @@ QDebug operator<<(QDebug dbg, const Alert::AlertItem &a)
         break;
     }
     s << "create:" + a.creationDate().toString(Qt::ISODate);
-
     s << QString::number(a.timingAt(0).cyclingDelayInMinutes());
-
-    qWarning() << a.timingAt(0).cyclingDelayInMinutes();
-
     dbg.nospace() << s.join(",\n           ")
                   << ")";
     return dbg.space();
@@ -779,6 +776,9 @@ QString AlertItem::toXml() const
         }
         xml += QString("</%1>\n").arg(::XML_VALIDATION_ROOTTAG);
     }
+    // Include extra-xml
+    if (!d->_extraXml.isEmpty())
+        xml += QString("<%1>%2</%1>").arg(::XML_EXTRAXML_ROOTTAG).arg(d->_extraXml);
     // TODO: Include database values ?
     xml += QString("</%1>\n").arg(::XML_ROOT_TAG);
     QDomDocument doc;
