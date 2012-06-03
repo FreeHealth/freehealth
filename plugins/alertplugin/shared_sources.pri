@@ -16,7 +16,6 @@ HEADERS += \
     $${PWD}/alertmanager.h \
     $${PWD}/alertitem.h \
     $${PWD}/showalertsIHM.h \
-    $${PWD}/xmlalert.h \
     $${PWD}/alertmodel.h \
     $${PWD}/ialertplaceholder.h \
     $${PWD}/alertitemeditorwidget.h
@@ -28,7 +27,6 @@ SOURCES += \
     $${PWD}/alertmanager.cpp \
     $${PWD}/alertitem.cpp \
     $${PWD}/showalertsIHM.cpp \
-    $${PWD}/xmlalert.cpp \
     $${PWD}/alertmodel.cpp \
     $${PWD}/ialertplaceholder.cpp \
     $${PWD}/alertitemeditorwidget.cpp
