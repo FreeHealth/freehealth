@@ -125,7 +125,7 @@ changeToDebHelper8()
   cp $PACKDIR"/control.bkup" $SOURCEDIR"/debian/control"
   if [ "$UBUNTU_RELEASE_NAME" = "precise" ]; then
     echo "9" > $SOURCEDIR"/debian/compat"
-    exit 0;
+    return 0;
   fi
   echo "    * Patching debhelper dependency to 8.0, ubuntu "$UBUNTU_RELEASE_NAME
   sed -i "s/debhelper (>= 9)/debhelper (>= 8)/" $SOURCEDIR"/debian/control"
