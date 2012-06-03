@@ -75,6 +75,7 @@ downloadDebianMedFiles()
     echo "    * Downloading Debian Med files"
     svn checkout svn://svn.debian.org/svn/debian-med/trunk/packages/$APP_NAME/trunk/debian $SOURCEDIR"/debian"
     cp $SOURCEDIR"/debian/changelog" $PACKDIR"/changelog.bkup"
+    echo 'cp $SOURCEDIR"/debian/control" $PACKDIR"/control.bkup"'
   fi
 }
 
@@ -117,6 +118,21 @@ patchChangelog()
 
 }
 
+# For all distribs, change the debhelper dependency to 8.0 instead of the latest one
+changeToDebHelper8()
+{
+  rm $SOURCEDIR"/debian/control"
+  cp $PACKDIR"/control.bkup" $SOURCEDIR"/debian/control"
+  if [ "$UBUNTU_RELEASE_NAME" = "precise" ]; then
+    echo "9" > $SOURCEDIR"/debian/compat"
+    exit 0;
+  fi
+  echo "    * Patching debhelper dependency to 8.0, ubuntu "$UBUNTU_RELEASE_NAME
+  sed -i "s/debhelper (>= 9)/debhelper (>= 8)/" $SOURCEDIR"/debian/control"
+  rm $SOURCEDIR"/debian/compat"
+  echo "8" > $SOURCEDIR"/debian/compat"
+}
+
 # prepare source package using svn-buildpackage
 svnBuildPackage()
 {
@@ -127,7 +143,9 @@ svnBuildPackage()
   #echo "       from FreeMedForms project"
   #svn checkout https://freemedforms.googlecode.com/svn/trunk/buildspecs/debian/freemedforms-project ./
   cp "./trunk/debian/changelog" $PACKDIR"/changelog.bkup"
+  cp "./trunk/debian/control" $PACKDIR"/control.bkup"
   SOURCEDIR=$PACKDIR"/trunk"
+  changeToDebHelper8
   patchChangelog
   cd $PACKDIR"/trunk"
   echo "    * Building DSC file: svn-buildpackage --svn-download-orig -k$PGP_KEY -S $DEBUILD_SOURCE --svn-ignore"
