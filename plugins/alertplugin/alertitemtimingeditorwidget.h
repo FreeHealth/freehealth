@@ -25,40 +25,39 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef ALERTITEMEDITORWIDGET_H
-#define ALERTITEMEDITORWIDGET_H
+#ifndef ALERT_ALERTITEMTIMINGEDITORWIDGET_H
+#define ALERT_ALERTITEMTIMINGEDITORWIDGET_H
 
+#include <alertplugin/alertplugin_exporter.h>
 #include <QWidget>
 
 namespace Alert {
 class AlertItem;
-
 namespace Internal {
 namespace Ui {
-class AlertItemEditorWidget;
+class AlertItemTimingEditorWidget;
 }
-class AlertItemEditorWidgetPrivate;
 }
 
-class AlertItemEditorWidget : public QWidget
+class ALERT_EXPORT AlertItemTimingEditorWidget : public QWidget
 {
     Q_OBJECT
-    
 public:
-    explicit AlertItemEditorWidget(QWidget *parent = 0);
-    ~AlertItemEditorWidget();
+    explicit AlertItemTimingEditorWidget(QWidget *parent = 0);
+    ~AlertItemTimingEditorWidget();
     
 public Q_SLOTS:
+    void clear();
     void setAlertItem(const AlertItem &item);
     bool submit(AlertItem &item);
 
-private:
-    void clearUi();
+private Q_SLOTS:
+    void cycleComboChanged(int index);
 
 private:
-    Internal::AlertItemEditorWidgetPrivate *d;
+    Internal::Ui::AlertItemTimingEditorWidget *ui;
 };
 
-}
+} // namespace Alert
 
-#endif // ALERTITEMEDITORWIDGET_H
+#endif // ALERT_ALERTITEMTIMINGEDITORWIDGET_H
