@@ -206,6 +206,7 @@ public:
 
     AlertItem();
     AlertItem(const AlertItem &cp);
+    void operator=(const AlertItem &cp);
 
     virtual ~AlertItem();
     virtual bool isValid() const;
