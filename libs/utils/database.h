@@ -266,6 +266,7 @@ public:
     virtual Field field(const int &tableref, const int &fieldref) const;
 
     virtual QStringList fieldNames(const int &tableref) const;
+    virtual QStringList fieldNamesSql(const int &tableref) const;
     virtual FieldList fields(const int tableref) const;
 
     virtual QString table(const int &tableref) const;
@@ -322,6 +323,8 @@ public:
 
     virtual bool createTable(const int &tableref) const;
     virtual bool createTables() const;
+    
+    virtual bool alterTableForNewField(const int tableRef, const int newFieldRef,const QString & type, const QString & nullOption,const int lastLastFieldRef);
 
     static bool executeSQL(const QStringList &list, const QSqlDatabase &DB);
     static bool executeSQL(const QString &req, const QSqlDatabase &DB);

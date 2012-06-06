@@ -989,6 +989,38 @@ QStringList Database::fieldNames(const int &tableref) const
     return toReturn;
 }
 
+QStringList Database::fieldNamesSql(const int &tableref) const
+{
+    if (!d->m_Tables.contains(tableref))
+        return QStringList();
+    if (!d->m_Tables_Fields.keys().contains(tableref))
+        return QStringList();
+    QStringList fieldNamesList;
+    QString tableString = table(tableref);
+    QSqlQuery q(database());
+    QString req;
+    if (database().driverName().contains("MYSQL"))
+    {
+        req = QString("SHOW COLUMNS FROM %1").arg(tableString);
+        }
+    if (database().driverName().contains("SQLITE"))
+    {
+        req = QString("PRAGMA table_info(medical_procedure);")
+             .arg(tableString);
+        }
+    if (!q.exec(req))
+    {
+    	  LOG_QUERY_ERROR_FOR("Database", q);
+    	  Utils::warningMessageBox("Warning",QString("Unable to get the fields of %1").arg(tableString));
+    	  return QStringList();
+        }    
+     while (q.next())
+     {
+     	fieldNamesList << q.value(0).toString();
+         }
+     return fieldNamesList;      
+}
+
 QString Database::table(const int & tableref) const
 {
     return d->m_Tables.value(tableref, QString());
@@ -2283,4 +2315,32 @@ void Database::toTreeWidget(QTreeWidget *tree)
     tree->expandAll();
     tree->resizeColumnToContents(0);
     tree->resizeColumnToContents(1);
+}
+
+bool Database::alterTableForNewField(const int tableRef, const int newFieldRef,const QString & type, const QString & nullOption,const int lastLastFieldRef)
+{
+    bool b = true;
+    QString tableString = table(tableRef);
+    QString newField = fieldName(tableRef,newFieldRef);
+    QString lastField = fieldName(tableRef,lastLastFieldRef);
+    QSqlQuery q(database());
+    QString req;
+    if (database().driverName().contains("MYSQL"))
+    {
+    	  req = QString("ALTER TABLE %1 ADD %2 %3 %4 AFTER %5;")
+    	       .arg(tableString,newField,type,nullOption,lastField);
+        }
+    if (database().driverName().contains("SQLITE"))
+    {
+    	  req = QString("ALTER TABLE %1 ADD %2 %3 %4;")
+    	       .arg(tableString,newField,type,nullOption);
+        }
+    if (!q.exec(req))
+    {
+    	  LOG_QUERY_ERROR_FOR("Database", q);
+    	  Utils::warningMessageBox("Warning",QString("Unable to add the fields %1").arg(newField));
+    	  b = false;
+        }
+    
+    return b;
 }

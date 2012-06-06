@@ -75,7 +75,7 @@ static inline bool connectDatabase(QSqlDatabase &DB, const QString &file, const 
 {
     if (!DB.isOpen()) {
         if (!DB.open()) {
-            Utils::Log::addError("DrugsBase", tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+            Utils::Log::addError("AccountBase", tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
                                  .arg(DB.connectionName()).arg(DB.lastError().text()),
                                  file, line);
             return false;
@@ -88,7 +88,7 @@ static inline bool connectDatabase(QSqlDatabase &DB, const QString &file, const 
 namespace AccountDB {
 namespace Internal {
 /**
-  \brief Private part of DrugsBase
+  \brief Private part of AccountBase
   \internal
 */
 class AccountBasePrivate
@@ -116,7 +116,7 @@ bool AccountBase::m_initialized = false;
 //--------------------------------------------------------------------------------------------------------
 //-------------------------------------- Initializing Database -------------------------------------------
 //--------------------------------------------------------------------------------------------------------
-/** \brief Returns the unique instance of DrugsBase. If it does not exist, it is created */
+/** \brief Returns the unique instance of AccountBase. If it does not exist, it is created */
 AccountBase *AccountBase::instance()
 {
     if (!m_Instance) {
@@ -170,7 +170,7 @@ AccountBase::AccountBase(QObject *parent)
     addField(Table_MedicalProcedure, MP_AMOUNT,         "AMOUNT",         FieldIsReal);
     addField(Table_MedicalProcedure, MP_REIMBOURSEMENT, "REIMBOURSEMENT", FieldIsReal);
     addField(Table_MedicalProcedure, MP_DATE,           "DATE",           FieldIsDate);
-    //addField(Table_MedicalProcedure, MP_OTHERS,         "OTHERS",         FieldIsBlob);
+    addField(Table_MedicalProcedure, MP_OTHERS,         "OTHERS",         FieldIsBlob);
 
 //    "CREATE TABLE 	actes_disponibles ("  --> medical_procedure
 //            "id_acte_dispo  int(10)  	UNSIGNED  	       		NOT NULL  	 auto_increment ,"
@@ -592,9 +592,30 @@ bool AccountBase::init()
     }
 
     if (!checkDatabaseScheme()) {
-        LOG_ERROR(tkTr(Trans::Constants::DATABASE_1_SCHEMA_ERROR).arg(Constants::DB_ACCOUNTANCY));
+        foreach(QString field,fieldNamesSql(AccountDB::Constants::Table_MedicalProcedure)){
+            qDebug() << __FILE__ << QString::number(__LINE__) << " field =" << field ;
+            }
+        if (fieldNamesSql(AccountDB::Constants::Table_MedicalProcedure).size()< AccountDB::Constants::MP_MaxParam)
+        {
+        	  qDebug() << __FILE__ << QString::number(__LINE__) << " fieldNames =" << QString::number(fieldNamesSql(AccountDB::Constants::Table_MedicalProcedure).size()) ;
+        	  if (!alterTableForNewField(AccountDB::Constants::Table_MedicalProcedure, AccountDB::Constants::MP_OTHERS,QString("blob"), QString("NULL"),AccountDB::Constants::MP_DATE))
+        	  {
+        	  	  LOG_ERROR("Unable to add new field in table MP");
+        	  	  return false;
+        	      }
+        	  else
+        	  {
+        	  	return true;
+        	      }
+            }
+        else
+        {
+        	LOG_ERROR(tkTr(Trans::Constants::DATABASE_1_SCHEMA_ERROR).arg(Constants::DB_ACCOUNTANCY));
+            }
+        
         return false;
     }
+    
 
     m_initialized = true;
     return true;
