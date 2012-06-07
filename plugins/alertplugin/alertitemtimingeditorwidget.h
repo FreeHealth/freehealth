@@ -33,6 +33,7 @@
 
 namespace Alert {
 class AlertItem;
+class AlertTiming;
 namespace Internal {
 namespace Ui {
 class AlertItemTimingEditorWidget;
@@ -55,7 +56,12 @@ private Q_SLOTS:
     void cycleComboChanged(int index);
 
 private:
+    void cyclingToUi(const Alert::AlertTiming &timing);
+    void cyclingFromUi(Alert::AlertTiming &timing);
+
+private:
     Internal::Ui::AlertItemTimingEditorWidget *ui;
+    bool _periodicalCycling;
 };
 
 } // namespace Alert

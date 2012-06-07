@@ -30,13 +30,17 @@
 #include "ui_alertitemtimingeditorwidget.h"
 
 #include <translationutils/constants.h>
+#include <translationutils/trans_datetime.h>
+
+#include <QDebug>
 
 using namespace Alert;
 using namespace Trans::ConstantTranslations;
 
 AlertItemTimingEditorWidget::AlertItemTimingEditorWidget(QWidget *parent) :
     QWidget(parent),
-    ui(new Internal::Ui::AlertItemTimingEditorWidget)
+    ui(new Internal::Ui::AlertItemTimingEditorWidget),
+    _periodicalCycling(false)
 {
     ui->setupUi(this);
     layout()->setMargin(0);
@@ -77,8 +81,8 @@ void AlertItemTimingEditorWidget::setAlertItem(const AlertItem &item)
             ui->cycleCombo->setCurrentIndex(1);
         else
             ui->cycleCombo->setCurrentIndex(0);
-//        ui->cyclingEvery;
         ui->cycles->setValue(time.cyclingDelayInMinutes());
+        cyclingToUi(time);
     }
 }
 
@@ -99,5 +103,95 @@ void AlertItemTimingEditorWidget::cycleComboChanged(int index)
         ui->cycles->hide();
         ui->cycleLabel->hide();
         ui->cycleDelayNumber->hide();
+    }
+}
+
+void AlertItemTimingEditorWidget::cyclingToUi(const AlertTiming &timing)
+{
+    _periodicalCycling = false;
+
+    // TODO: move this computation into AlertTiming
+    QList<int> ops;
+    //     hours days     weeks      months      years                decade
+    ops << 60 << 60*24 << 60*24*7 << 60*24*30 << int(60*24*365.25) << int(60*24*365.25*10);
+
+    // find the natural corresponding multiple of a period
+    qlonglong tmp = timing.cyclingDelayInMinutes();
+    int period = -1;
+    for(int i = 0; i < ops.count(); ++i) {
+        if ((tmp % ops.at(i)) == 0) {
+            period = i;
+        } else {
+            break;
+        }
+    }
+    // END TODO
+
+    switch (period) {
+    case 0: // hours
+        ui->cyclingEvery->setCurrentIndex(Trans::Constants::Time::Hours);
+        break;
+    case 1: // days
+        ui->cyclingEvery->setCurrentIndex(Trans::Constants::Time::Days);
+        break;
+    case 2: // weeks
+        ui->cyclingEvery->setCurrentIndex(Trans::Constants::Time::Weeks);
+        break;
+    case 3: // months
+        ui->cyclingEvery->setCurrentIndex(Trans::Constants::Time::Months);
+        break;
+    case 4: // years
+        ui->cyclingEvery->setCurrentIndex(Trans::Constants::Time::Year);
+        break;
+    case 5: // decades
+        ui->cyclingEvery->setCurrentIndex(Trans::Constants::Time::Decade);
+        break;
+    case -1: // minutes
+        // TODO: improve this -> 1442543521341 minutes is not really user friendly
+        ui->cyclingEvery->setCurrentIndex(Trans::Constants::Time::Minutes);
+        break;
+    }
+    ui->cycleDelayNumber->setValue((tmp / ops.at(period)));
+}
+
+void AlertItemTimingEditorWidget::cyclingFromUi(Alert::AlertTiming &timing)
+{
+    switch (ui->cyclingEvery->currentIndex()) {
+    case Trans::Constants::Time::Seconds:
+        timing.setCycling(true);
+        timing.setCyclingDelayInMinutes(ui->cycleDelayNumber->value() / 60);
+        break;
+    case Trans::Constants::Time::Minutes:
+        timing.setCycling(true);
+        timing.setCyclingDelayInMinutes(ui->cycleDelayNumber->value());
+        break;
+    case Trans::Constants::Time::Hours:
+        timing.setCycling(true);
+        timing.setCyclingDelayInHours(ui->cycleDelayNumber->value());
+        break;
+    case Trans::Constants::Time::Days:
+        timing.setCycling(true);
+        timing.setCyclingDelayInDays(ui->cycleDelayNumber->value());
+        break;
+    case Trans::Constants::Time::Weeks:
+        timing.setCycling(true);
+        timing.setCyclingDelayInWeeks(ui->cycleDelayNumber->value());
+        break;
+    case Trans::Constants::Time::Months:
+        timing.setCycling(true);
+        timing.setCyclingDelayInMonth(ui->cycleDelayNumber->value());
+        break;
+    case Trans::Constants::Time::Quarter:
+        timing.setCycling(true);
+        timing.setCyclingDelayInMonth(ui->cycleDelayNumber->value() * 3);
+        break;
+    case Trans::Constants::Time::Year:
+        timing.setCycling(true);
+        timing.setCyclingDelayInYears(ui->cycleDelayNumber->value());
+        break;
+    case Trans::Constants::Time::Decade:
+        timing.setCycling(true);
+        timing.setCyclingDelayInDecades(ui->cycleDelayNumber->value());
+        break;
     }
 }
