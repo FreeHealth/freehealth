@@ -590,14 +590,10 @@ bool AccountBase::init()
     } else {
         LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(database().connectionName()).arg(database().driverName()));
     }
-
     if (!checkDatabaseScheme()) {
-        foreach(QString field,fieldNamesSql(AccountDB::Constants::Table_MedicalProcedure)){
-            qDebug() << __FILE__ << QString::number(__LINE__) << " field =" << field ;
-            }
+                    
         if (fieldNamesSql(AccountDB::Constants::Table_MedicalProcedure).size()< AccountDB::Constants::MP_MaxParam)
         {
-        	  qDebug() << __FILE__ << QString::number(__LINE__) << " fieldNames =" << QString::number(fieldNamesSql(AccountDB::Constants::Table_MedicalProcedure).size()) ;
         	  if (!alterTableForNewField(AccountDB::Constants::Table_MedicalProcedure, AccountDB::Constants::MP_OTHERS,QString("blob"), QString("NULL"),AccountDB::Constants::MP_DATE))
         	  {
         	  	  LOG_ERROR("Unable to add new field in table MP");
@@ -605,6 +601,9 @@ bool AccountBase::init()
         	      }
         	  else
         	  {
+        	      foreach(QString field,fieldNamesSql(AccountDB::Constants::Table_MedicalProcedure)){
+        	          qWarning() << __FILE__ << QString::number(__LINE__) << " field =" << field ;
+                          }
         	  	return true;
         	      }
             }

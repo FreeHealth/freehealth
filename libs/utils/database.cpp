@@ -989,6 +989,11 @@ QStringList Database::fieldNames(const int &tableref) const
     return toReturn;
 }
 
+/**  Return all fields names of a table by a sql query and not according to tableref.
+This permits to test the real number of fields of the sql table regarding to code table references.
+@author Pierre-Marie Desombre
+*/
+
 QStringList Database::fieldNamesSql(const int &tableref) const
 {
     if (!d->m_Tables.contains(tableref))
@@ -1005,7 +1010,7 @@ QStringList Database::fieldNamesSql(const int &tableref) const
         }
     if (database().driverName().contains("SQLITE"))
     {
-        req = QString("PRAGMA table_info(medical_procedure);")
+        req = QString("PRAGMA table_info('%1');")
              .arg(tableString);
         }
     if (!q.exec(req))
@@ -1016,7 +1021,7 @@ QStringList Database::fieldNamesSql(const int &tableref) const
         }    
      while (q.next())
      {
-     	fieldNamesList << q.value(0).toString();
+     	fieldNamesList << q.value(1).toString();
          }
      return fieldNamesList;      
 }
@@ -2316,7 +2321,15 @@ void Database::toTreeWidget(QTreeWidget *tree)
     tree->resizeColumnToContents(0);
     tree->resizeColumnToContents(1);
 }
-
+/**
+Add a fied to table referenced by 
+    code tableRef, 
+    new constant newFieldRef that is int referencing the new field, 
+    the type of field (ie varchar, blob, ...),
+    the sql option ("NULL" or "NOT NULL"),
+    and after the last field referenced by is code field reference.
+@author Pierre-Marie Desombre
+*/
 bool Database::alterTableForNewField(const int tableRef, const int newFieldRef,const QString & type, const QString & nullOption,const int lastLastFieldRef)
 {
     bool b = true;
