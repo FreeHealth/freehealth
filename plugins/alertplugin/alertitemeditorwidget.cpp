@@ -135,9 +135,7 @@ void AlertItemEditorWidget::clearUi()
 
 void AlertItemEditorWidget::setAlertItem(const AlertItem &item)
 {
-    qWarning() << "xxxxxxxxxxxxxxxxxxxxxxx";
     d->_item = item;
-    qWarning() << "xxxxxxxxxxxxxxxxxxxxxxx";
     clearUi();
 
     // Description
@@ -156,6 +154,9 @@ void AlertItemEditorWidget::setAlertItem(const AlertItem &item)
     d->ui->contentType->setCurrentIndex(d->_item.contentType());
     d->ui->priority->setCurrentIndex(d->_item.priority());
     d->ui->overrideRequiresUserComment->setChecked(d->_item.isOverrideRequiresUserComment());
+
+    // Timing
+    d->ui->timingEditor->setAlertItem(item);
 
     // Related to
     if (d->_item.relations().count() > 0) {
