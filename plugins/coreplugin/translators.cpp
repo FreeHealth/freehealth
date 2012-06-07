@@ -90,6 +90,7 @@ bool Translators::setPathToTranslations(const QString & path)
 {
     if (QDir(path).exists()) {
         m_PathToTranslations = QDir::cleanPath(path);
+        LOG_FOR("Translators", "Settings translation path to: " + path);
         if (WarnTranslatorsErrors) {
             LOG_ERROR_FOR("Translators", Trans::ConstantTranslations::tkTr(Trans::Constants::SETTING_1_PATH_TO_2)
                 .arg(Trans::ConstantTranslations::tkTr(Trans::Constants::TRANSLATORS_TEXT),
