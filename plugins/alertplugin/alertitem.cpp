@@ -911,6 +911,30 @@ AlertItem AlertItem::fromXml(const QString &xml)
     return item;
 }
 
+void AlertTiming::cyclingDelay(qlonglong *mins, qlonglong *hours, qlonglong *days, qlonglong *weeks, qlonglong *months, qlonglong *years, qlonglong *decades) const
+{
+    qlonglong tmp = _delay;
+    *decades = cyclingDelayInDecades();
+    tmp -= (*decades)*60*24*365.25*10;
+
+    *years = tmp/60/24/365.25;
+    tmp -= (*years)*60*24*365.25;
+
+    *months = tmp/60/24/30;
+    tmp -= (*months)*60*24*30;
+
+    *weeks = tmp/60/24/7;
+    tmp -= (*weeks)*60*24*7;
+
+    *days = tmp/60/24;
+    tmp -= (*days)*60/24;
+
+    *hours = tmp/60;
+    tmp -= (*hours)*60;
+
+    *mins = tmp;
+}
+
 QString AlertTiming::toXml() const
 {
     if (_isCycle)

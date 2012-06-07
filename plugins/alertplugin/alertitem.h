@@ -68,8 +68,30 @@ public:
     virtual void setNumberOfCycles(int n) {_ncycle=n; if (n>0)_ncycle=true;}
     virtual QDateTime nextDate() const {return _next;}
     virtual void setNextDate(const QDateTime &dt) {_next = dt;}
+
     virtual qlonglong cyclingDelayInMinutes() const {return _delay;}
     virtual void setCyclingDelayInMinutes(const qlonglong delay) {_delay=delay;}
+
+    virtual qlonglong cyclingDelayInHours() const {return qlonglong(_delay/60);}
+    virtual void setCyclingDelayInHours(const qlonglong delay) {_delay=delay*60;}
+
+    virtual qlonglong cyclingDelayInDays() const {return qlonglong(_delay/60/24);}
+    virtual void setCyclingDelayInDays(const qlonglong delay) {_delay=delay*60*24;}
+
+    virtual qlonglong cyclingDelayInWeeks() const {return qlonglong(_delay/60/24/7);}
+    virtual void setCyclingDelayInWeeks(const qlonglong delay) {_delay=delay*60*24*7;}
+
+    virtual qlonglong cyclingDelayInMonth() const {return qlonglong(_delay/60/24/30);}
+    virtual void setCyclingDelayInMonth(const qlonglong delay) {_delay=delay*60*24*30;}
+
+    virtual qlonglong cyclingDelayInYears() const {return qlonglong(_delay/60/24/365.25);}
+    virtual void setCyclingDelayInYears(const qlonglong delay) {_delay=qlonglong(delay*60*24*365.25);}
+
+    virtual qlonglong cyclingDelayInDecades() const {return qlonglong(_delay/60/24/365.25/10);}
+    virtual void setCyclingDelayInDecades(const qlonglong delay) {_delay=qlonglong(delay*60*24*365.25*10);}
+
+    virtual void cyclingDelay(qlonglong *min, qlonglong *hours, qlonglong *days, qlonglong *weeks,
+                              qlonglong *months, qlonglong *years, qlonglong *decades) const;
 
     virtual QString toXml() const;
     static AlertTiming fromDomElement(const QDomElement &element);
