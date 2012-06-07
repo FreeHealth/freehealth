@@ -103,14 +103,18 @@ bool AlertCore::initialize()
 
     qWarning() << (t.toXml() == item.toXml());
 
-    qWarning() << "llllllllllllllllllllllllllllllllllllllllll";
     QDialog dlg;
     AlertItemEditorWidget *w = new AlertItemEditorWidget(&dlg);
     dlg.setLayout(new QGridLayout(&dlg));
-    w->setAlertItem(test.at(0));
+
+    AlertTiming &time = item.timingAt(0);
+    time.setCycling(true);
+    time.setCyclingDelayInWeeks(10);
+    w->setAlertItem(item);
     dlg.layout()->addWidget(w);
     dlg.exec();
     // END TESTS
+
 
     return true;
 }
