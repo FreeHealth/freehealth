@@ -46,12 +46,17 @@ AlertItemTimingEditorWidget::AlertItemTimingEditorWidget(QWidget *parent) :
     layout()->setMargin(0);
 
     // set up dateedits
-    ui->startDate->setDisplayFormat(tkTr(Trans::Constants::DATETIMEFORMAT_FOR_EDITOR));
-    ui->endDate->setDisplayFormat(tkTr(Trans::Constants::DATETIMEFORMAT_FOR_EDITOR));
+    ui->startDate->setDisplayFormat(tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR));
+    ui->endDate->setDisplayFormat(tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR));
+    ui->startTime->setDisplayFormat(tkTr(Trans::Constants::TIMEFORMAT_FOR_EDITOR));
+    ui->endTime->setDisplayFormat(tkTr(Trans::Constants::TIMEFORMAT_FOR_EDITOR));
     ui->cycleCombo->addItem(tr("Not cycling"));
     ui->cycleCombo->addItem(tr("Cycle every"));
     ui->cyclingEvery->addItems(Trans::ConstantTranslations::periods());
 
+    // manage date mofication (start < end)
+    connect(ui->startDate, SIGNAL(editingFinished()), this, SLOT(checkDates()));
+    connect(ui->endDate, SIGNAL(editingFinished()), this, SLOT(checkDates()));
 //    connect(ui->cycleCombo, SIGNAL(currentIndexChanged(int)), this, SLOT(cycleComboChanged(int)));
 }
 
@@ -81,7 +86,7 @@ void AlertItemTimingEditorWidget::setAlertItem(const AlertItem &item)
             ui->cycleCombo->setCurrentIndex(1);
         else
             ui->cycleCombo->setCurrentIndex(0);
-        ui->cycles->setValue(time.cyclingDelayInMinutes());
+        ui->cycles->setValue(time.numberOfCycles());
         cyclingToUi(time);
     }
 }
@@ -106,27 +111,28 @@ void AlertItemTimingEditorWidget::cycleComboChanged(int index)
     }
 }
 
+void AlertItemTimingEditorWidget::checkDates()
+{
+    // startDate < endDate
+    // TODO: add a small visual effect to alert user of the automated modification
+    QDateEdit *de = qobject_cast<QDateEdit*>(sender());
+    if (de==ui->startDate) {
+        if (ui->startDate->date() > ui->endDate->date()) {
+            ui->endDate->setDate(ui->startDate->date().addMonths(1));
+        }
+    } else {
+        if (ui->startDate->date() > ui->endDate->date()) {
+            ui->startDate->setDate(ui->endDate->date().addMonths(-1));
+        }
+    }
+}
+
 void AlertItemTimingEditorWidget::cyclingToUi(const AlertTiming &timing)
 {
     _periodicalCycling = false;
 
-    // TODO: move this computation into AlertTiming
-    QList<int> ops;
-    //     hours days     weeks      months      years                decade
-    ops << 60 << 60*24 << 60*24*7 << 60*24*30 << int(60*24*365.25) << int(60*24*365.25*10);
-
-    // find the natural corresponding multiple of a period
-    qlonglong tmp = timing.cyclingDelayInMinutes();
-    int period = -1;
-    for(int i = 0; i < ops.count(); ++i) {
-        if ((tmp % ops.at(i)) == 0) {
-            period = i;
-        } else {
-            break;
-        }
-    }
-    // END TODO
-
+    int period, mod;
+    timing.cyclingDelayPeriodModulo(&period, &mod);
     switch (period) {
     case 0: // hours
         ui->cyclingEvery->setCurrentIndex(Trans::Constants::Time::Hours);
@@ -151,7 +157,7 @@ void AlertItemTimingEditorWidget::cyclingToUi(const AlertTiming &timing)
         ui->cyclingEvery->setCurrentIndex(Trans::Constants::Time::Minutes);
         break;
     }
-    ui->cycleDelayNumber->setValue((tmp / ops.at(period)));
+    ui->cycleDelayNumber->setValue(mod);
 }
 
 void AlertItemTimingEditorWidget::cyclingFromUi(Alert::AlertTiming &timing)
@@ -195,3 +201,4 @@ void AlertItemTimingEditorWidget::cyclingFromUi(Alert::AlertTiming &timing)
         break;
     }
 }
+

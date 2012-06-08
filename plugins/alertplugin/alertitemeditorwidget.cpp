@@ -58,11 +58,6 @@ public:
         delete ui;
     }
 
-    // return the number of days in a cycle according to the ui settings
-    int daysInCycle()
-    {
-    }
-
 public:
     Ui::AlertItemEditorWidget *ui;
     AlertItem _item;
