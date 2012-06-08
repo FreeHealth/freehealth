@@ -93,6 +93,8 @@ public:
     virtual void cyclingDelay(qlonglong *min, qlonglong *hours, qlonglong *days, qlonglong *weeks,
                               qlonglong *months, qlonglong *years, qlonglong *decades) const;
 
+    virtual void cyclingDelayPeriodModulo(int *period, int *mod) const;
+
     virtual QString toXml() const;
     static AlertTiming fromDomElement(const QDomElement &element);
 

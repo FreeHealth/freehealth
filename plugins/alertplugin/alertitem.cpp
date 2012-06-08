@@ -32,6 +32,7 @@
 #include <utils/global.h>
 #include <utils/genericdescription.h>
 #include <translationutils/multilingualclasstemplate.h>
+#include <translationutils/trans_datetime.h>
 
 #include <QTreeWidgetItem>
 #include <QDomDocument>
@@ -933,6 +934,77 @@ void AlertTiming::cyclingDelay(qlonglong *mins, qlonglong *hours, qlonglong *day
     tmp -= (*hours)*60;
 
     *mins = tmp;
+}
+
+/**
+  Computes the cycling delay in on unique period modulo. \n
+  \e period correspond to the Trans::Constants::Time enumerator \n
+  \e mod the number of times the period is repeated \n
+  Example:
+  \code
+    AlertTiming time;
+    time.setCycling(true);
+    time.setCyclingDelayInWeeks(11);
+    int period, mod;
+
+    time.cyclingDelayPeriodModulo(&period, &mod);
+    // period = Trans::Constants::Time::Weeks
+    // mod = 11
+
+    time.setCyclingDelayInMinutes(110880); // == 11 weeks
+    time.cyclingDelayPeriodModulo(&period, &mod);
+    // period = Trans::Constants::Time::Weeks
+    // mod = 11
+
+    time.setCyclingDelayInMinutes(110881); // == 11 weeks + 1Minutes
+    time.cyclingDelayPeriodModulo(&period, &mod);
+    // period = Trans::Constants::Time::Minutes
+    // mod = 0
+  \endcode
+*/
+void AlertTiming::cyclingDelayPeriodModulo(int *period, int *mod) const
+{
+    Q_ASSERT(period);
+    Q_ASSERT(mod);
+    if (!period || !mod)
+        return;
+    QList<int> ops;
+    //     hours days     weeks      months      years                decade
+    ops << 60 << 60*24 << 60*24*7 << 60*24*30 << int(60*24*365.25) << int(60*24*365.25*10);
+
+    // find the natural corresponding multiple of a period
+    *period = -1;
+    *mod = 0;
+    for(int i = 0; i < ops.count(); ++i) {
+        if ((_delay % ops.at(i)) == 0) {
+            *period = i;
+        }
+    }
+    if (*period != -1)
+        *mod = _delay / ops.at(*period);
+    switch (*period) {
+    case -1:
+        *period = Trans::Constants::Time::Minutes;
+        break;
+    case 0:
+        *period = Trans::Constants::Time::Hours;
+        break;
+    case 1:
+        *period = Trans::Constants::Time::Days;
+        break;
+    case 2:
+        *period = Trans::Constants::Time::Weeks;
+        break;
+    case 3:
+        *period = Trans::Constants::Time::Months;
+        break;
+    case 4:
+        *period = Trans::Constants::Time::Year;
+        break;
+    case 5:
+        *period = Trans::Constants::Time::Decade;
+        break;
+    }
 }
 
 QString AlertTiming::toXml() const
