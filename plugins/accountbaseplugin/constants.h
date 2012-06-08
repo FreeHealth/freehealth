@@ -49,7 +49,7 @@ namespace Constants {
 
     const char * const DB_ACCOUNTANCY           = "account";
     const char * const DEFAULT_ACCOUNTANCY_USER = "AccountancyDefaultUser";
-    const char * const DB_VERSION_NUMBER        = "0.1";
+    const char * const DB_VERSION_NUMBER        = "0.2"; //"0.1";
 
     // Database abstraction
     

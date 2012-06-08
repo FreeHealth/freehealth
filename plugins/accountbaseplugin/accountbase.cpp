@@ -591,10 +591,10 @@ bool AccountBase::init()
         LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(database().connectionName()).arg(database().driverName()));
     }
     if (!checkDatabaseScheme()) {
-                    
+       if(checkIfIsFirstVersion()){             
         if (fieldNamesSql(AccountDB::Constants::Table_MedicalProcedure).size()< AccountDB::Constants::MP_MaxParam)
         {
-        	  if (!alterTableForNewField(AccountDB::Constants::Table_MedicalProcedure, AccountDB::Constants::MP_OTHERS,QString("blob"), QString("NULL"),AccountDB::Constants::MP_DATE))
+        	  if (!alterTableForNewField(AccountDB::Constants::Table_MedicalProcedure, AccountDB::Constants::MP_OTHERS,QString("blob"), QString("NULL")))
         	  {
         	  	  LOG_ERROR("Unable to add new field in table MP");
         	  	  return false;
@@ -604,17 +604,23 @@ bool AccountBase::init()
         	      foreach(QString field,fieldNamesSql(AccountDB::Constants::Table_MedicalProcedure)){
         	          qWarning() << __FILE__ << QString::number(__LINE__) << " field =" << field ;
                           }
+                        LOG("New Version = "+checkAndReplaceVersionNumber());
         	  	return true;
         	      }
+                }           	
+                
             }
         else
         {
         	LOG_ERROR(tkTr(Trans::Constants::DATABASE_1_SCHEMA_ERROR).arg(Constants::DB_ACCOUNTANCY));
+        	return false;
             }
         
-        return false;
-    }
-    
+    }//checkDatabaseScheme
+    if(versionHasChanged())
+    {
+        LOG("New Version = "+checkAndReplaceVersionNumber());
+        }
 
     m_initialized = true;
     return true;
@@ -748,4 +754,62 @@ void AccountBase::onCoreDatabaseServerChanged()
         QSqlDatabase::removeDatabase(Constants::DB_ACCOUNTANCY);
     }
     init();
+}
+
+bool AccountBase::checkIfIsFirstVersion()
+{
+    QVariant version;
+    QSqlQuery q(database());
+    QString req = QString("SELECT %1 FROM %2").arg("ACTUAL","VERSION");
+    if (!q.exec(req))
+    {
+    	  LOG_QUERY_ERROR(q);
+        }
+    while (q.next())
+    {
+    	version = q.value(0);
+        }
+    if (version == QVariant("0.1"))
+    {
+    	  LOG(QString("VERSION == 0.1"));
+    	  return true;
+        }
+    return false;
+}
+
+QString AccountBase::checkAndReplaceVersionNumber()
+{
+    if (versionHasChanged())
+    {
+    	  QSqlQuery q(database());
+    	  QString req = QString("INSERT INTO %1 (%2) VALUES ('%3')")
+    	               .arg("VERSION","ACTUAL",QString(Constants::VERSION_ACTUAL));
+    	  if (!q.exec(req))
+    	  {
+    	  	  LOG_QUERY_ERROR(q);
+    	  	  return QString();
+    	      }
+    	  return QString(Constants::VERSION_ACTUAL);
+        }
+     return QString();
+}
+
+bool AccountBase::versionHasChanged()
+{
+    QString version;
+    QSqlQuery q(database());
+    QString req = QString("SELECT %1 FROM %2").arg("ACTUAL","VERSION");
+    if (!q.exec(req))
+    {
+    	  LOG_QUERY_ERROR(q);
+        }
+    while (q.next())
+    {
+    	version = q.value(0).toString();
+        }
+    if (!version.contains(QString(Constants::VERSION_ACTUAL)))
+    {
+    	  return true;
+        }
+    return false;
 }

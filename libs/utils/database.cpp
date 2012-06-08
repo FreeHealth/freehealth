@@ -1021,7 +1021,7 @@ QStringList Database::fieldNamesSql(const int &tableref) const
         }    
      while (q.next())
      {
-     	fieldNamesList << q.value(1).toString();
+     	fieldNamesList << q.value(Name_PragmaValue).toString();
          }
      return fieldNamesList;      
 }
@@ -2330,30 +2330,20 @@ Add a fied to table referenced by
     and after the last field referenced by is code field reference.
 @author Pierre-Marie Desombre
 */
-bool Database::alterTableForNewField(const int tableRef, const int newFieldRef,const QString & type, const QString & nullOption,const int lastLastFieldRef)
+bool Database::alterTableForNewField(const int tableRef, const int newFieldRef,const QString & TypeOfField, const QString & nullOption)
 {
     bool b = true;
     QString tableString = table(tableRef);
     QString newField = fieldName(tableRef,newFieldRef);
-    QString lastField = fieldName(tableRef,lastLastFieldRef);
     QSqlQuery q(database());
-    QString req;
-    if (database().driverName().contains("MYSQL"))
-    {
-    	  req = QString("ALTER TABLE %1 ADD %2 %3 %4 AFTER %5;")
-    	       .arg(tableString,newField,type,nullOption,lastField);
-        }
-    if (database().driverName().contains("SQLITE"))
-    {
-    	  req = QString("ALTER TABLE %1 ADD %2 %3 %4;")
-    	       .arg(tableString,newField,type,nullOption);
-        }
+    QString req = QString("ALTER TABLE %1 ADD %2 %3 %4;")
+    	       .arg(tableString,newField,TypeOfField,nullOption);
+
     if (!q.exec(req))
     {
     	  LOG_QUERY_ERROR_FOR("Database", q);
-    	  Utils::warningMessageBox("Warning",QString("Unable to add the fields %1").arg(newField));
+    	  LOG_FOR("Database",QString("Unable to add the fields %1").arg(newField));
     	  b = false;
-        }
-    
+        }    
     return b;
 }
