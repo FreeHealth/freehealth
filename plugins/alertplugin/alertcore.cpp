@@ -109,7 +109,14 @@ bool AlertCore::initialize()
 
     AlertTiming &time = item.timingAt(0);
     time.setCycling(true);
-    time.setCyclingDelayInWeeks(10);
+    time.setCyclingDelayInDays(10);
+    qWarning() << time.cyclingDelayInMinutes();
+    int period, mod;
+    time.cyclingDelayPeriodModulo(&period, &mod);
+    // period = Trans::Constants::Time::Weeks
+    // mod = 11
+    qWarning() << period << mod;
+
     w->setAlertItem(item);
     dlg.layout()->addWidget(w);
     dlg.exec();
