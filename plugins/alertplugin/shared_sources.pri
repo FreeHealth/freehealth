@@ -19,7 +19,8 @@ HEADERS += \
     $${PWD}/alertmodel.h \
     $${PWD}/ialertplaceholder.h \
     $${PWD}/alertitemeditorwidget.h \
-    $${PWD}/alertitemtimingeditorwidget.h
+    $${PWD}/alertitemtimingeditorwidget.h \
+    $${PWD}/alertitemeditordialog.h
 
 SOURCES += \
     $${PWD}/alertplugin.cpp \
@@ -31,7 +32,8 @@ SOURCES += \
     $${PWD}/alertmodel.cpp \
     $${PWD}/ialertplaceholder.cpp \
     $${PWD}/alertitemeditorwidget.cpp \
-    $${PWD}/alertitemtimingeditorwidget.cpp
+    $${PWD}/alertitemtimingeditorwidget.cpp \
+    $${PWD}/alertitemeditordialog.cpp
 
 FORMS += $${PWD}/ShowAlertsWidget.ui \
     $${PWD}/alertitemeditorwidget.ui \
