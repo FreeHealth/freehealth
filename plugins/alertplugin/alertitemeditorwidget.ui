@@ -50,13 +50,23 @@
       <item row="2" column="1">
        <widget class="QTextEdit" name="alertDecsr"/>
       </item>
+      <item row="4" column="1">
+       <widget class="QComboBox" name="relatedTo"/>
+      </item>
+      <item row="4" column="0">
+       <widget class="QLabel" name="label_9">
+        <property name="text">
+         <string>Related to</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>
    <item row="1" column="0">
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab">
       <attribute name="title">
@@ -114,19 +124,9 @@
      </widget>
      <widget class="QWidget" name="tab_2">
       <attribute name="title">
-       <string>Information</string>
+       <string>Timing</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_4">
-       <item row="0" column="0">
-        <widget class="QLabel" name="label_9">
-         <property name="text">
-          <string>Related to</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="1" colspan="2">
-        <widget class="QComboBox" name="relatedTo"/>
-       </item>
        <item row="1" column="0" colspan="3">
         <widget class="Alert::AlertItemTimingEditorWidget" name="timingEditor" native="true"/>
        </item>
