@@ -48,23 +48,6 @@ createWorkingDir()
   fi
 }
 
-# Download source
-# Uses $SOURCEPACK_FULLPATH, $PACKDIR, $APP_NAME, $APP_VERSION, $PACKDIR, $DOWNLOAD_URL, $DOWNLOAD_FILENAME
-downloadAndUnpackSource()
-{
-  if [ ! -e $SOURCEPACK_FULLPATH ]; then
-    echo "    * Downloading source package: "$DOWNLOAD_URL
-    echo "    * To: "$SOURCEPACK_FULLPATH
-    cd $PACKDIR
-    wget $WGET_NOPROXY $DOWNLOAD_URL
-    mv $DOWNLOAD_FILENAME $SOURCEPACK_FULLPATH
-  fi
-  if [ ! -e $SOURCEDIR ]; then
-    echo "    * Unpackaging source package to: "$PACKDIR
-    tar xzvf $SOURCEPACK_FULLPATH -C $PACKDIR
-  fi
-}
-
 # Assuming the Debian Med files are totally updated to the correct version
 # Uses $SOURCEDIR, $APP_NAME
 downloadDebianMedFiles()
@@ -96,7 +79,11 @@ uploadToPPA()
   echo "    * Uploading to PPA: "$UBUNTU_RELEASE_NAME
   cd $PACKDIR"/build-area"
   echo `pwd`
-  dput ppa:freemedforms/ppa $APP_NAME"_"$APP_VERSION"-"$UBUNTU_RELEASE_NAME$PPA_VERSION"_source.changes"
+  if [ "$APP_NAME" = "libquazip" ]; then
+    dput ppa:freemedforms/libquazip $APP_NAME"_"$APP_VERSION"-"$UBUNTU_RELEASE_NAME$PPA_VERSION"_source.changes"
+  else
+    dput ppa:freemedforms/ppa $APP_NAME"_"$APP_VERSION"-"$UBUNTU_RELEASE_NAME$PPA_VERSION"_source.changes"
+  fi
 }
 
 # patch changelog
@@ -115,7 +102,6 @@ patchChangelog()
   echo "\n  * New upstream" >> $SOURCEDIR"/debian/changelog"
   echo "\n -- Eric Maeker <eric.maeker@gmail.com>  "`date -R`"\n" >> $SOURCEDIR"/debian/changelog"
   cat $PACKDIR"/changelog.bkup" >> $SOURCEDIR"/debian/changelog"
-
 }
 
 # For all distribs, change the debhelper dependency to 8.0 instead of the latest one
@@ -197,25 +183,16 @@ fi
 PACKDIR=`pwd`"/ppa_"$APP_NAME"_"$APP_VERSION
 SOURCEDIR=$PACKDIR"/"$APP_NAME"-"$APP_VERSION
 SOURCEPACK_FULLPATH=$PACKDIR"/"$APP_NAME"_"$APP_VERSION".orig.tar.gz"
-DOWNLOAD_URL="http://freemedforms.googlecode.com/files/freemedformsfullsources-"$APP_VERSION".tgz"
-DOWNLOAD_FILENAME=$APP_NAME"fullsources-"$APP_VERSION".tgz"
 
 echo "*** Processing "$APP_NAME" "$APP_VERSION
 echo "    * Source package: "$SOURCEPACK_FULLPATH
 echo "    * Source path: "$SOURCEDIR
 
-# build debhelper v8+ package
-# "maverick natty oneiric" #precise
-
 createWorkingDir
-#downloadAndUnpackSource
-#downloadDebianMedFiles
 for u in $SERIES
 do
   UBUNTU_RELEASE_NAME=$u
   svnBuildPackage
-  #patchChangelog
-  #buildSourcePackage
   uploadToPPA
 done
 
