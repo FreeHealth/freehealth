@@ -251,8 +251,12 @@ AlertItem::AlertItem(const AlertItem &cp) :
 // The operator()=: we have to copy the content of the private part.
 void AlertItem::operator=(const AlertItem &cp)
 {
-    if (d)
+    if (d) {
+        // Avoid copying the same
+        if (cp.d == d)
+           return;
         delete d;
+    }
     d = new Internal::AlertItemPrivate(*cp.d);
     if (WarnAlertItemConstructionDestruction)
         qWarning() << "AlertItem =()" << d->_uid << d;
@@ -545,6 +549,11 @@ void AlertItem::setExtraXml(const QString &xml)
 
 // TODO : void setCondition(...);
 
+void AlertItem::clearRelations()
+{
+    d->_relations.clear();
+}
+
 AlertRelation &AlertItem::relation(int id) const
 {
     for(int i=0; i<d->_relations.count();++i) {
@@ -571,6 +580,10 @@ void AlertItem::addRelation(const AlertRelation &relation)
     d->_relations << relation;
 }
 
+void AlertItem::clearTimings()
+{
+    d->_timings.clear();
+}
 
 AlertTiming &AlertItem::timing(int id) const
 {
@@ -598,6 +611,11 @@ void AlertItem::addTiming(const AlertTiming &timing)
     d->_timings.append(timing);
 }
 
+void AlertItem::clearScripts()
+{
+    d->_scripts.clear();
+}
+
 AlertScript &AlertItem::script(int id) const
 {
     for(int i=0; i<d->_scripts.count();++i) {
@@ -622,6 +640,11 @@ AlertScript &AlertItem::scriptAt(int id) const
 void AlertItem::addScript(const AlertScript &script)
 {
     d->_scripts << script;
+}
+
+void AlertItem::clearValidations()
+{
+    d->_validations.clear();
 }
 
 AlertValidation &AlertItem::validation(int id) const
@@ -680,6 +703,11 @@ bool AlertItem::operator==(const AlertItem &other) const
     // fourth test: test each relations, validations, scripts and timings equality
     // TODO: test each relations, validations, scripts and timings equality
     return true;
+}
+
+bool AlertItem::operator!=(const AlertItem &other) const
+{
+    return !(operator==(other));
 }
 
 QDebug operator<<(QDebug dbg, const Alert::AlertItem &a)

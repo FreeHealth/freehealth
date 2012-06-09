@@ -287,21 +287,25 @@ public:
     virtual void setExtraXml(const QString &xml);
 
     // TODO : move this in AlertModel ?
+    virtual void clearRelations();
     virtual AlertRelation &relation(int id) const;
     virtual QVector<AlertRelation> &relations() const;
     virtual AlertRelation &relationAt(int id) const;
     virtual void addRelation(const AlertRelation &relation);
 
+    virtual void clearTimings();
     virtual AlertTiming &timing(int id) const;
     virtual QVector<AlertTiming> &timings() const;
     virtual AlertTiming &timingAt(int id) const;
     virtual void addTiming(const AlertTiming &timing);
 
+    virtual void clearScripts();
     virtual AlertScript &script(int id) const;
     virtual QVector<AlertScript> &scripts() const;
     virtual AlertScript &scriptAt(int id) const;
     virtual void addScript(const AlertScript &script);
 
+    virtual void clearValidations();
     virtual AlertValidation &validation(int id) const;
     virtual QVector<AlertValidation> &validations() const;
     virtual AlertValidation &validationAt(int id) const;
@@ -309,6 +313,7 @@ public:
     // END
 
     bool operator==(const AlertItem &other) const;
+    bool operator!=(const AlertItem &other) const;
 
     QString toXml() const;
     static AlertItem fromXml(const QString &xml);
