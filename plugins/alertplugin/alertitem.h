@@ -59,8 +59,10 @@ public:
 
     virtual QDateTime start() const {return _start;}
     virtual QDateTime end() const {return _end;}
+    virtual QDateTime expiration() const {return _end;}
     virtual void setStart(const QDateTime &dt) {_start = dt;}
     virtual void setEnd(const QDateTime &dt) {_end = dt;}
+    virtual void setExpiration(const QDateTime &dt) {_end = dt;}
 
     virtual bool isCycling() const {return _isCycle;}
     virtual void setCycling(bool cycle) {_isCycle=cycle;}
