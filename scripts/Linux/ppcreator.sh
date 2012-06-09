@@ -80,8 +80,10 @@ uploadToPPA()
   cd $PACKDIR"/build-area"
   echo `pwd`
   if [ "$APP_NAME" = "libquazip" ]; then
+    echo "      ppa:freemedforms/libquazip"
     dput ppa:freemedforms/libquazip $APP_NAME"_"$APP_VERSION"-"$UBUNTU_RELEASE_NAME$PPA_VERSION"_source.changes"
   else
+    echo "      ppa:freemedforms/ppa"
     dput ppa:freemedforms/ppa $APP_NAME"_"$APP_VERSION"-"$UBUNTU_RELEASE_NAME$PPA_VERSION"_source.changes"
   fi
 }
