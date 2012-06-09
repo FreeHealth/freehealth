@@ -98,7 +98,7 @@ bool AlertItemTimingEditorWidget::submit(AlertItem &item)
         AlertTiming time;
         item.addTiming(time);
     }
-    const AlertTiming &time = item.timingAt(0);
+    AlertTiming &time = item.timingAt(0);
     time.setStart(QDateTime(ui->startDate->date(), ui->startTime->time()));
     time.setEnd(QDateTime(ui->endDate->date(), ui->endTime->time()));
     if (ui->cycleCombo->currentIndex()==1) {
@@ -175,7 +175,7 @@ void AlertItemTimingEditorWidget::cyclingToUi(const AlertTiming &timing)
 
 void AlertItemTimingEditorWidget::cyclingFromUi(Alert::AlertTiming &timing)
 {
-    time.numberOfCycles(ui->cycles->value());
+    timing.setNumberOfCycles(ui->cycles->value());
     switch (ui->cyclingEvery->currentIndex()) {
     case Trans::Constants::Time::Seconds:
         timing.setCycling(true);
