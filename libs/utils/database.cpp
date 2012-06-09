@@ -2325,19 +2325,20 @@ void Database::toTreeWidget(QTreeWidget *tree)
 Add a fied to table referenced by 
     code tableRef, 
     new constant newFieldRef that is int referencing the new field, 
-    the type of field (ie varchar, blob, ...),
+    the type of field (ie varchar, blob, ...) by the enum TypeOfField ,
     the sql option ("NULL" or "NOT NULL"),
     and after the last field referenced by is code field reference.
 @author Pierre-Marie Desombre
 */
-bool Database::alterTableForNewField(const int tableRef, const int newFieldRef,const QString & TypeOfField, const QString & nullOption)
+bool Database::alterTableForNewField(const int tableRef, const int newFieldRef,const int TypeOfField, const QString & nullOption)
 {
     bool b = true;
     QString tableString = table(tableRef);
     QString newField = fieldName(tableRef,newFieldRef);
+    QString type = d->getTypeOfField(TypeOfField);
     QSqlQuery q(database());
     QString req = QString("ALTER TABLE %1 ADD %2 %3 %4;")
-    	       .arg(tableString,newField,TypeOfField,nullOption);
+    	       .arg(tableString,newField,type,nullOption);
 
     if (!q.exec(req))
     {

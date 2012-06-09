@@ -594,7 +594,7 @@ bool AccountBase::init()
        if(checkIfIsFirstVersion()){             
         if (fieldNamesSql(AccountDB::Constants::Table_MedicalProcedure).size()< AccountDB::Constants::MP_MaxParam)
         {
-        	  if (!alterTableForNewField(AccountDB::Constants::Table_MedicalProcedure, AccountDB::Constants::MP_OTHERS,QString("blob"), QString("NULL")))
+        	  if (!alterTableForNewField(AccountDB::Constants::Table_MedicalProcedure, AccountDB::Constants::MP_OTHERS,FieldIsBlob, QString("NULL")))
         	  {
         	  	  LOG_ERROR("Unable to add new field in table MP");
         	  	  return false;

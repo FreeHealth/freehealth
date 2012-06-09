@@ -336,7 +336,7 @@ public:
     virtual bool createTable(const int &tableref) const;
     virtual bool createTables() const;
     
-    virtual bool alterTableForNewField(const int tableRef, const int newFieldRef,const QString & TypeOfField, const QString & nullOption);
+    virtual bool alterTableForNewField(const int tableRef, const int newFieldRef,const int TypeOfField, const QString & nullOption);
 
     static bool executeSQL(const QStringList &list, const QSqlDatabase &DB);
     static bool executeSQL(const QString &req, const QSqlDatabase &DB);
