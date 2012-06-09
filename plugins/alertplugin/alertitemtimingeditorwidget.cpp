@@ -91,8 +91,21 @@ void AlertItemTimingEditorWidget::setAlertItem(const AlertItem &item)
     }
 }
 
+/** Submit the timing to the first Alert::AlertTiming of the \e item. */
 bool AlertItemTimingEditorWidget::submit(AlertItem &item)
 {
+    if (item.timings().count() == 0) {
+        AlertTiming time;
+        item.addTiming(time);
+    }
+    const AlertTiming &time = item.timingAt(0);
+    time.setStart(QDateTime(ui->startDate->date(), ui->startTime->time()));
+    time.setEnd(QDateTime(ui->endDate->date(), ui->endTime->time()));
+    if (ui->cycleCombo->currentIndex()==1) {
+        cyclingFromUi(time);
+    } else {
+        time.setCycling(false);
+    }
     return true;
 }
 
@@ -162,6 +175,7 @@ void AlertItemTimingEditorWidget::cyclingToUi(const AlertTiming &timing)
 
 void AlertItemTimingEditorWidget::cyclingFromUi(Alert::AlertTiming &timing)
 {
+    time.numberOfCycles(ui->cycles->value());
     switch (ui->cyclingEvery->currentIndex()) {
     case Trans::Constants::Time::Seconds:
         timing.setCycling(true);
