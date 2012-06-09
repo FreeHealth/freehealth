@@ -46,10 +46,10 @@ AlertItemTimingEditorWidget::AlertItemTimingEditorWidget(QWidget *parent) :
     layout()->setMargin(0);
 
     // set up dateedits
-    ui->startDate->setDisplayFormat(tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR));
-    ui->endDate->setDisplayFormat(tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR));
-    ui->startTime->setDisplayFormat(tkTr(Trans::Constants::TIMEFORMAT_FOR_EDITOR));
-    ui->endTime->setDisplayFormat(tkTr(Trans::Constants::TIMEFORMAT_FOR_EDITOR));
+    ui->startDate->setDisplayFormat(QLocale().dateFormat());
+    ui->endDate->setDisplayFormat(QLocale().dateFormat());
+//    ui->startTime->setDisplayFormat(tkTr(Trans::Constants::TIMEFORMAT_FOR_EDITOR));
+//    ui->endTime->setDisplayFormat(tkTr(Trans::Constants::TIMEFORMAT_FOR_EDITOR));
     ui->cycleCombo->addItem(tr("Not cycling"));
     ui->cycleCombo->addItem(tr("Cycle every"));
     ui->cyclingEvery->addItems(Trans::ConstantTranslations::periods());
@@ -57,7 +57,7 @@ AlertItemTimingEditorWidget::AlertItemTimingEditorWidget(QWidget *parent) :
     // manage date mofication (start < end)
     connect(ui->startDate, SIGNAL(editingFinished()), this, SLOT(checkDates()));
     connect(ui->endDate, SIGNAL(editingFinished()), this, SLOT(checkDates()));
-//    connect(ui->cycleCombo, SIGNAL(currentIndexChanged(int)), this, SLOT(cycleComboChanged(int)));
+    connect(ui->cycleCombo, SIGNAL(currentIndexChanged(int)), this, SLOT(cycleComboChanged(int)));
 }
 
 AlertItemTimingEditorWidget::~AlertItemTimingEditorWidget()
@@ -81,7 +81,7 @@ void AlertItemTimingEditorWidget::setAlertItem(const AlertItem &item)
     if (item.timings().count() > 0) {
         const AlertTiming &time = item.timingAt(0);
         ui->startDate->setDateTime(time.start());
-        ui->endDate->setDateTime(time.end());
+        ui->endDate->setDateTime(time.expiration());
         if (time.isCycling())
             ui->cycleCombo->setCurrentIndex(1);
         else
@@ -99,8 +99,8 @@ bool AlertItemTimingEditorWidget::submit(AlertItem &item)
         item.addTiming(time);
     }
     AlertTiming &time = item.timingAt(0);
-    time.setStart(QDateTime(ui->startDate->date(), ui->startTime->time()));
-    time.setEnd(QDateTime(ui->endDate->date(), ui->endTime->time()));
+    time.setStart(QDateTime(ui->startDate->date(), QTime(23,59,59)));
+    time.setExpiration(QDateTime(ui->endDate->date(), QTime(23,59,59)));
     if (ui->cycleCombo->currentIndex()==1) {
         cyclingFromUi(time);
     } else {
