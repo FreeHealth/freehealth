@@ -134,6 +134,7 @@ public Q_SLOTS:
 
 private Q_SLOTS:
     void on_createButton_clicked();
+    void on_datapackButton_clicked();
 
 private:
     bool createDefaultsFor(const QString &filePrototype, const int tableRef);

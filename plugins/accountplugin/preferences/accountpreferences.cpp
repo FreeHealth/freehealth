@@ -324,3 +324,9 @@ bool AccountDatabaseDefautsWidget::createDefaultsFor(const QString &filePrototyp
                                          ";", true);
     return yes;
 }
+
+void AccountDatabaseDefautsWidget::on_datapackButton_clicked()
+{
+        QSqlDatabase DB = QSqlDatabase::database(Constants::DB_ACCOUNTANCY);
+        if (!connectDatabase(DB, __FILE__, __LINE__))
+}

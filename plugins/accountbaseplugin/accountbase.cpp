@@ -84,7 +84,6 @@ static inline bool connectDatabase(QSqlDatabase &DB, const QString &file, const 
     return true;
 }
 
-
 namespace AccountDB {
 namespace Internal {
 /**
@@ -591,7 +590,8 @@ bool AccountBase::init()
         LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(database().connectionName()).arg(database().driverName()));
     }
     if (!checkDatabaseScheme()) {
-       if(checkIfIsFirstVersion()){             
+       if(checkIfIsFirstVersion()){
+        qDebug() << __FILE__ << QString::number(__LINE__) << "ISFIRSTVERSION";             
         if (fieldNamesSql(AccountDB::Constants::Table_MedicalProcedure).size()< AccountDB::Constants::MP_MaxParam)
         {
         	  if (!alterTableForNewField(AccountDB::Constants::Table_MedicalProcedure, AccountDB::Constants::MP_OTHERS,FieldIsBlob, QString("NULL")))
@@ -619,7 +619,7 @@ bool AccountBase::init()
     }//checkDatabaseScheme
     if(versionHasChanged())
     {
-        LOG("New Version = "+checkAndReplaceVersionNumber());
+        LOG("Version has changed , new version = "+checkAndReplaceVersionNumber());
         }
 
     m_initialized = true;
@@ -759,15 +759,16 @@ void AccountBase::onCoreDatabaseServerChanged()
 bool AccountBase::checkIfIsFirstVersion()
 {
     QVariant version;
-    QSqlQuery q(database());
-    QString req = QString("SELECT %1 FROM %2").arg("ACTUAL","VERSION");
-    if (!q.exec(req))
+    QSqlQuery qy(database());
+    QString req = select(Constants::Table_VERSION, Constants::VERSION_ACTUAL);//QString("SELECT %1 FROM %2").arg("ACTUAL","VERSION");
+    if (!qy.exec(req))
     {
-    	  LOG_QUERY_ERROR(q);
+    	  LOG_QUERY_ERROR(qy);
+    	  return false;
         }
-    while (q.next())
+    while (qy.next())
     {
-    	version = q.value(0);
+    	version = qy.value(0);
         }
     if (version == QVariant("0.1"))
     {
@@ -779,35 +780,39 @@ bool AccountBase::checkIfIsFirstVersion()
 
 QString AccountBase::checkAndReplaceVersionNumber()
 {
-    if (versionHasChanged())
-    {
-    	  QSqlQuery q(database());
-    	  QString req = QString("INSERT INTO %1 (%2) VALUES ('%3')")
-    	               .arg("VERSION","ACTUAL",QString(Constants::VERSION_ACTUAL));
-    	  if (!q.exec(req))
+   // if (versionHasChanged())
+   // {
+    	  QSqlQuery qy(database());
+    	  /*QString req = QString("INSERT INTO %1 (%2) VALUES ('%3')")
+    	               .arg("VERSION","ACTUAL",QString(Constants::VERSION_ACTUAL));*/
+    	  qy.prepare(prepareInsertQuery(Constants::Table_VERSION));
+          qy.bindValue(Constants::VERSION_ACTUAL, Constants::DB_VERSION_NUMBER);
+	  
+    	  if (!qy.exec())
     	  {
-    	  	  LOG_QUERY_ERROR(q);
-    	  	  return QString();
+    	  	  LOG_QUERY_ERROR(qy);
+    	  	  return QString(qy.lastError().text());
     	      }
-    	  return QString(Constants::VERSION_ACTUAL);
-        }
-     return QString();
+    	  return QString(Constants::DB_VERSION_NUMBER);
+     //   }
+     
 }
 
 bool AccountBase::versionHasChanged()
 {
     QString version;
-    QSqlQuery q(database());
-    QString req = QString("SELECT %1 FROM %2").arg("ACTUAL","VERSION");
-    if (!q.exec(req))
+    QSqlQuery qy(database());
+    QString req = select(Constants::Table_VERSION, Constants::VERSION_ACTUAL);//QString("SELECT %1 FROM %2").arg("ACTUAL","VERSION");
+    if (!qy.exec(req))
     {
-    	  LOG_QUERY_ERROR(q);
+    	  LOG_QUERY_ERROR(qy);
+    	  return false;
         }
-    while (q.next())
+    while (qy.next())
     {
-    	version = q.value(0).toString();
+    	version = qy.value(0).toString();
         }
-    if (!version.contains(QString(Constants::VERSION_ACTUAL)))
+    if (!version.contains(QString(Constants::DB_VERSION_NUMBER)))
     {
     	  return true;
         }

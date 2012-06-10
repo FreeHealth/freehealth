@@ -85,7 +85,7 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="0">
+   <item row="3" column="0">
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -97,6 +97,13 @@
       </size>
      </property>
     </spacer>
+   </item>
+   <item row="2" column="1">
+    <widget class="QPushButton" name="datapackButton">
+     <property name="text">
+      <string>Load datapack</string>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>
