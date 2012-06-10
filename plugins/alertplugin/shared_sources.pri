@@ -37,7 +37,8 @@ SOURCES += \
 
 FORMS += $${PWD}/ShowAlertsWidget.ui \
     $${PWD}/alertitemeditorwidget.ui \
-    $${PWD}/alertitemtimingeditorwidget.ui
+    $${PWD}/alertitemtimingeditorwidget.ui \
+    $${PWD}/alertitemeditordialog.ui
 
 OTHER_FILES += $${PWD}/Alert.pluginspec
 
