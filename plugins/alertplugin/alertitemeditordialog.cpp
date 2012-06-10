@@ -27,45 +27,61 @@
  ***************************************************************************/
 #include "alertitemeditordialog.h"
 #include "alertitemeditorwidget.h"
+#include "ui_alertitemeditordialog.h"
 
 #include <QVBoxLayout>
 #include <QDialogButtonBox>
 #include <QPushButton>
+#include <QLabel>
 
 using namespace Alert;
 
 AlertItemEditorDialog::AlertItemEditorDialog(QWidget *parent) :
     QDialog(parent),
-    _editor(0)
+    ui(new Ui::AlertItemEditorDialog)
 {
-    QVBoxLayout *lay = new QVBoxLayout(this);
-    setLayout(lay);
-    _editor = new AlertItemEditorWidget(this);
-    lay->addWidget(_editor);
-    QDialogButtonBox *box = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Reset | QDialogButtonBox::Cancel, Qt::Horizontal, this);
-    lay->addWidget(box);
-    connect(box, SIGNAL(accepted()), this, SLOT(accept()));
-    connect(box, SIGNAL(rejected()), this, SLOT(reject()));
-    QPushButton *but = box->button(QDialogButtonBox::Reset);
+    ui->setupUi(this);
+    setWindowTitle(ui->title->text());
+    connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(ui->buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    QPushButton *but = ui->buttonBox->button(QDialogButtonBox::Reset);
     connect(but, SIGNAL(clicked()), this, SLOT(reset()));
+}
+
+AlertItemEditorDialog::~AlertItemEditorDialog()
+{
+    delete ui;
 }
 
 void AlertItemEditorDialog::setEditableParams(EditableParams params)
 {
-
+    ui->editor->setLabelVisible(params & Label);
+    ui->editor->setCategoryVisible(params & Category);
+    ui->editor->setDescriptionVisible(params & Description);
+    ui->editor->setRelationVisible(params & Relation);
+    ui->editor->setViewTypeVisible(params & ViewType);
+    ui->editor->setContentTypeVisible(params & ContentType);
+    ui->editor->setPriorityVisible(params & Priority);
+    ui->editor->setOverridingCommentVisible(params & OverrideNeedsComment);
+    if (!(params & Timing))
+        ui->editor->hideTimingTab();
+    if (!(params & CSS))
+        ui->editor->hideStyleSheetTab();
+    if (!(params & ExtraXml))
+        ui->editor->hideExtraXmlTab();
 }
 
 void AlertItemEditorDialog::setAlertItem(const AlertItem &item)
 {
-    _editor->setAlertItem(item);
+    ui->editor->setAlertItem(item);
 }
 
 void AlertItemEditorDialog::reset()
 {
-    _editor->reset();
+    ui->editor->reset();
 }
 
 bool AlertItemEditorDialog::submit(AlertItem &item)
 {
-    _editor->submit(item);
+    return ui->editor->submit(item);
 }

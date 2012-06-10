@@ -55,6 +55,8 @@ public Q_SLOTS:
 private Q_SLOTS:
     void cycleComboChanged(int index);
     void checkDates();
+    void startPeriodSelected(int period, int value);
+    void endPeriodSelected(int period, int value);
 
 private:
     void cyclingToUi(const Alert::AlertTiming &timing);

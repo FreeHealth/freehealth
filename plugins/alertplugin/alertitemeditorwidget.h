@@ -47,9 +47,24 @@ class AlertItemEditorWidget : public QWidget
 public:
     explicit AlertItemEditorWidget(QWidget *parent = 0);
     ~AlertItemEditorWidget();
-    
+
+    void setLabelVisible(bool visible);
+    void setCategoryVisible(bool visible);
+    void setDescriptionVisible(bool visible);
+    void setRelationVisible(bool visible);
+    void setViewTypeVisible(bool visible);
+    void setContentTypeVisible(bool visible);
+    void setPriorityVisible(bool visible);
+    void setOverridingCommentVisible(bool visible);
+
+    void hideTypeTab();
+    void hideTimingTab();
+    void hideStyleSheetTab();
+    void hideExtraXmlTab();
+
 public Q_SLOTS:
     void setAlertItem(const AlertItem &item);
+    void reset();
     bool submit(AlertItem &item);
 
 private:

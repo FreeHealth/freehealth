@@ -33,7 +33,10 @@
 
 namespace Alert {
 class AlertItem;
-class AlertItemEditorWidget;
+
+namespace Ui {
+class AlertItemEditorDialog;
+}
 
 class ALERT_EXPORT AlertItemEditorDialog : public QDialog
 {
@@ -48,8 +51,8 @@ public:
         ViewType             = 0x00000010,
         ContentType          = 0x00000020,
         Priority             = 0x00000040,
-        StartDate            = 0x00000080,
-        ExpirationDate       = 0x00000100,
+        Timing               = 0x00000080,
+//        ExpirationDate       = 0x00000100,
         OverrideNeedsComment = 0x00000200,
         CSS                  = 0x00000400,
         ExtraXml             = 0x00000800,
@@ -59,6 +62,8 @@ public:
     Q_DECLARE_FLAGS(EditableParams, EditableParam)
 
     explicit AlertItemEditorDialog(QWidget *parent = 0);
+    ~AlertItemEditorDialog();
+
     void setEditableParams(EditableParams params);
 
     void setAlertItem(const AlertItem &item);
@@ -68,7 +73,7 @@ public Q_SLOTS:
     void reset();
 
 private:
-    AlertItemEditorWidget *_editor;
+    Ui::AlertItemEditorDialog *ui;
 };
 
 }  // namespace Alert
