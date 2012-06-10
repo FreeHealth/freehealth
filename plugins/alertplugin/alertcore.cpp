@@ -102,7 +102,9 @@ bool AlertCore::initialize()
 //    qWarning() << (t.toXml() == item.toXml());
 
     AlertItemEditorDialog dlg;
+    dlg.setEditableParams(AlertItemEditorDialog::FullDescription | AlertItemEditorDialog::Timing);
 //    dlg.setEditableParams(AlertItemEditorDialog::Label | AlertItemEditorDialog::Timing);
+//    dlg.setEditableParams(AlertItemEditorDialog::Label | AlertItemEditorDialog::Timing | AlertItemEditorDialog::Types);
 
     AlertTiming &time = item.timingAt(0);
     time.setCycling(true);
