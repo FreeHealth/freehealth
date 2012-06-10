@@ -455,6 +455,12 @@ QStringList AlertItem::availableLanguages() const
     return d->languages();
 }
 
+/** Clear and remove all translatable values (label, description, category...) */
+void AlertItem::removeAllLanguages()
+{
+    d->clear();
+}
+
 AlertItem::ViewType AlertItem::viewType() const
 {
     return d->_viewType;

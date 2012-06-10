@@ -260,6 +260,7 @@ public:
     virtual void setComment(const QString &txt, const QString &lang = QString::null);
 
     virtual QStringList availableLanguages() const;
+    virtual void removeAllLanguages();
 
     virtual ViewType viewType() const;
     virtual ContentType contentType() const;
