@@ -31,9 +31,7 @@
 #include "alertitem.h"
 
 // TEST
-#include "alertitemeditorwidget.h"
-#include <QDialog>
-#include <QGridLayout>
+#include "alertitemeditordialog.h"
 // END TEST
 
 using namespace Alert;
@@ -95,31 +93,25 @@ bool AlertCore::initialize()
     Internal::AlertBaseQuery query;
     query.getAlertItemFromUuid(item.uuid());
     QVector<AlertItem> test = d->m_alertBase->getAlertItems(query);
-    qWarning() << test;
-    qWarning() << item.toXml();
+//    qWarning() << test;
+//    qWarning() << item.toXml();
 
-    AlertItem t = AlertItem::fromXml(item.toXml());
-    qWarning() << t.toXml();
+//    AlertItem t = AlertItem::fromXml(item.toXml());
+//    qWarning() << t.toXml();
 
-    qWarning() << (t.toXml() == item.toXml());
+//    qWarning() << (t.toXml() == item.toXml());
 
-    QDialog dlg;
-    AlertItemEditorWidget *w = new AlertItemEditorWidget(&dlg);
-    dlg.setLayout(new QGridLayout(&dlg));
+    AlertItemEditorDialog dlg;
+//    dlg.setEditableParams(AlertItemEditorDialog::Label | AlertItemEditorDialog::Timing);
 
     AlertTiming &time = item.timingAt(0);
     time.setCycling(true);
     time.setCyclingDelayInDays(10);
-    qWarning() << time.cyclingDelayInMinutes();
-    int period, mod;
-    time.cyclingDelayPeriodModulo(&period, &mod);
-    // period = Trans::Constants::Time::Weeks
-    // mod = 11
-    qWarning() << period << mod;
-
-    w->setAlertItem(item);
-    dlg.layout()->addWidget(w);
-    dlg.exec();
+    dlg.setAlertItem(item);
+    if (dlg.exec()==QDialog::Accepted) {
+        dlg.submit(item);
+    }
+    qWarning() << item.toXml();
     // END TESTS
 
 
