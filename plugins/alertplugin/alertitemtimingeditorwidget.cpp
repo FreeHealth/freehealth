@@ -54,6 +54,10 @@ AlertItemTimingEditorWidget::AlertItemTimingEditorWidget(QWidget *parent) :
     // set up icons
     ui->startPeriodSelector->setIconSize(QSize(16,16));
     ui->startPeriodSelector->setIcon(theme()->icon(Core::Constants::ICONAGENDA_NEW));
+    ui->endPeriodSelector->setIconSize(QSize(16,16));
+    ui->endPeriodSelector->setIcon(theme()->icon(Core::Constants::ICONAGENDA_NEW));
+    ui->startPeriodSelector->setStartPeriodsAt(Trans::Constants::Time::Days);
+    ui->endPeriodSelector->setStartPeriodsAt(Trans::Constants::Time::Days);
 
     // set up dateedits
     ui->startDate->setDisplayFormat(QLocale().dateFormat());
@@ -187,8 +191,8 @@ void AlertItemTimingEditorWidget::startPeriodSelected(int period, int value)
 
 void AlertItemTimingEditorWidget::endPeriodSelected(int period, int value)
 {
-    QDateTime start = getDateTimeFromPeriod(ui->startDate->date(), value, period);
-    ui->startDate->setDate(start.date());
+    QDateTime start = getDateTimeFromPeriod(ui->endDate->date(), value, period);
+    ui->endDate->setDate(start.date());
 }
 
 void AlertItemTimingEditorWidget::cyclingToUi(const AlertTiming &timing)
