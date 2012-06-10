@@ -43,6 +43,7 @@ using namespace Trans::ConstantTranslations;
 
 // TODO: manage multiple relations
 // TODO: manage multiple timings
+// TODO: manage scripts
 
 namespace Alert {
 namespace Internal {
@@ -56,6 +57,18 @@ public:
     ~AlertItemEditorWidgetPrivate()
     {
         delete ui;
+    }
+
+    bool hideTypeTabRequested()
+    {
+        return (ui->priority->isHidden() && ui->viewType->isHidden() &&
+                ui->contentType->isHidden() && ui->overrideRequiresUserComment->isHidden());
+    }
+
+    void manageTabWidgeVisibility()
+    {
+        if (ui->tabWidget->count() == 0)
+            ui->tabWidget->hide();
     }
 
 public:
@@ -154,20 +167,143 @@ void AlertItemEditorWidget::setAlertItem(const AlertItem &item)
     d->ui->timingEditor->setAlertItem(item);
 
     // Related to
+    // TODO: manage more than one relation
     if (d->_item.relations().count() > 0) {
         const AlertRelation &rel = d->_item.relationAt(0);
         switch (rel.relatedTo()) {
-        case AlertRelation::RelatedToPatient: d->ui->relatedTo->setCurrentIndex(0);
-        case AlertRelation::RelatedToAllPatients: d->ui->relatedTo->setCurrentIndex(1);
-        case AlertRelation::RelatedToUser: d->ui->relatedTo->setCurrentIndex(2);
-        case AlertRelation::RelatedToApplication: d->ui->relatedTo->setCurrentIndex(3);
+        case AlertRelation::RelatedToPatient: d->ui->relatedTo->setCurrentIndex(0); break;
+        case AlertRelation::RelatedToAllPatients: d->ui->relatedTo->setCurrentIndex(1); break;
+        case AlertRelation::RelatedToUser: d->ui->relatedTo->setCurrentIndex(2); break;
+        case AlertRelation::RelatedToApplication: d->ui->relatedTo->setCurrentIndex(3); break;
         }
     }
 }
 
+void AlertItemEditorWidget::reset()
+{
+    setAlertItem(d->_item);
+}
+
+void AlertItemEditorWidget::setLabelVisible(bool visible)
+{
+    d->ui->alertLabel->setVisible(visible);
+    d->ui->alertLabel_Label->setVisible(visible);
+}
+
+void AlertItemEditorWidget::setCategoryVisible(bool visible)
+{
+    d->ui->alertCategory->setVisible(visible);
+    d->ui->alertCategory_Label->setVisible(visible);
+}
+
+void AlertItemEditorWidget::setDescriptionVisible(bool visible)
+{
+    d->ui->alertDecsr->setVisible(visible);
+    d->ui->alertDescription_Label->setVisible(visible);
+}
+
+void AlertItemEditorWidget::setRelationVisible(bool visible)
+{
+    d->ui->relatedTo->setVisible(visible);
+    d->ui->alertRelated_Label->setVisible(visible);
+}
+
+void AlertItemEditorWidget::setViewTypeVisible(bool visible)
+{
+    d->ui->viewType->setVisible(visible);
+    d->ui->viewType_Label->setVisible(visible);
+    if (d->hideTypeTabRequested())
+        hideTypeTab();
+}
+
+void AlertItemEditorWidget::setContentTypeVisible(bool visible)
+{
+    d->ui->contentType->setVisible(visible);
+    d->ui->contentType_Label->setVisible(visible);
+    if (d->hideTypeTabRequested())
+        hideTypeTab();
+}
+
+void AlertItemEditorWidget::setPriorityVisible(bool visible)
+{
+    d->ui->priority->setVisible(visible);
+    d->ui->priority_Label->setVisible(visible);
+    if (d->hideTypeTabRequested())
+        hideTypeTab();
+}
+
+void AlertItemEditorWidget::setOverridingCommentVisible(bool visible)
+{
+    d->ui->overrideRequiresUserComment->setVisible(visible);
+    d->ui->override_Label->setVisible(visible);
+    if (d->hideTypeTabRequested())
+        hideTypeTab();
+}
+
+void AlertItemEditorWidget::hideTypeTab()
+{
+    int id = d->ui->tabWidget->indexOf(d->ui->tab_type);
+    d->ui->tabWidget->removeTab(id);
+    d->manageTabWidgeVisibility();
+}
+
+void AlertItemEditorWidget::hideTimingTab()
+{
+    int id = d->ui->tabWidget->indexOf(d->ui->tab_timing);
+    d->ui->tabWidget->removeTab(id);
+    d->manageTabWidgeVisibility();
+}
+
+void AlertItemEditorWidget::hideStyleSheetTab()
+{
+    int id = d->ui->tabWidget->indexOf(d->ui->tab_css);
+    d->ui->tabWidget->removeTab(id);
+    d->manageTabWidgeVisibility();
+}
+
+void AlertItemEditorWidget::hideExtraXmlTab()
+{
+    int id = d->ui->tabWidget->indexOf(d->ui->tab_xml);
+    d->ui->tabWidget->removeTab(id);
+    d->manageTabWidgeVisibility();
+}
+
 bool AlertItemEditorWidget::submit(AlertItem &item)
 {
-//    return d->_item;
+    // Description
+    // remove all multi-lingual values
+    item.removeAllLanguages();
+    item.setLabel(d->ui->alertLabel->text());
+    item.setCategory(d->ui->alertCategory->text());
+    item.setDescription(d->ui->alertDecsr->toHtml());
+
+    // Types
+    if (d->ui->viewType->currentIndex() == 0)
+        item.setViewType(AlertItem::DynamicAlert);
+    else
+        item.setViewType(AlertItem::StaticAlert);
+    item.setContentType(AlertItem::ContentType(d->ui->contentType->currentIndex()));
+    item.setPriority(AlertItem::Priority(d->ui->priority->currentIndex()));
+    item.setOverrideRequiresUserComment(d->ui->overrideRequiresUserComment->isChecked());
+
+    // Timing
+    item.clearTimings();
+    d->ui->timingEditor->submit(item);
+
+    // Related to
+    // TODO: manage more than one relation
+    item.clearRelations();
+    AlertRelation rel;
+    switch (d->ui->relatedTo->currentIndex()) {
+    case 0: rel.setRelatedTo(AlertRelation::RelatedToPatient); break;
+    case 1: rel.setRelatedTo(AlertRelation::RelatedToAllPatients); break;
+    case 2: rel.setRelatedTo(AlertRelation::RelatedToUser); break;
+    case 3: rel.setRelatedTo(AlertRelation::RelatedToApplication); break;
+    }
+
+    // Scripts
+//    item.clearScripts();
+
     return true;
 }
 

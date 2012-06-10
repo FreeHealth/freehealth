@@ -21,52 +21,42 @@
 /***************************************************************************
  *   Main Developpers:                                                     *
  *       Eric MAEKER, <eric.maeker@gmail.com>,                             *
- *       Pierre-Marie Desombre <pm.desombre@gmail.com>                     *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef ALERT_ALERTITEMTIMINGEDITORWIDGET_H
-#define ALERT_ALERTITEMTIMINGEDITORWIDGET_H
+#ifndef PERIODSELECTORTOOLBUTTON_H
+#define PERIODSELECTORTOOLBUTTON_H
 
-#include <alertplugin/alertplugin_exporter.h>
-#include <QWidget>
+#include <QToolButton>
 
-namespace Alert {
-class AlertItem;
-class AlertTiming;
+namespace Utils {
 namespace Internal {
-namespace Ui {
-class AlertItemTimingEditorWidget;
-}
-}
+class PeriodSelectorToolButtonPrivate;
+}  // namespace Internal
 
-class ALERT_EXPORT AlertItemTimingEditorWidget : public QWidget
+class PeriodSelectorToolButton : public QToolButton
 {
     Q_OBJECT
 public:
-    explicit AlertItemTimingEditorWidget(QWidget *parent = 0);
-    ~AlertItemTimingEditorWidget();
-    
-public Q_SLOTS:
-    void clear();
-    void setAlertItem(const AlertItem &item);
-    bool submit(AlertItem &item);
+    explicit PeriodSelectorToolButton(QWidget *parent = 0);
+    ~PeriodSelectorToolButton();
+
+    void setMainMenuTitle(const QString &translatableTitle, const QString &translationContext);
+    void setStartPeriodsAt(const int transConstantsTimeEnumValue);
+
+Q_SIGNALS:
+    void periodSelected(int period, int value);
 
 private Q_SLOTS:
-    void cycleComboChanged(int index);
-    void checkDates();
-    void startPeriodSelected(int period, int value);
-    void endPeriodSelected(int period, int value);
+    void _actionTriggered(QAction *a);
 
 private:
-    void cyclingToUi(const Alert::AlertTiming &timing);
-    void cyclingFromUi(Alert::AlertTiming &timing);
+    void changeEvent(QEvent *e);
 
 private:
-    Internal::Ui::AlertItemTimingEditorWidget *ui;
-    bool _periodicalCycling;
+    Internal::PeriodSelectorToolButtonPrivate *d;
 };
 
-} // namespace Alert
+}  // namespace Utils
 
-#endif // ALERT_ALERTITEMTIMINGEDITORWIDGET_H
+#endif // PERIODSELECTORTOOLBUTTON_H

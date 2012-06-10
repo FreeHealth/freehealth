@@ -25,48 +25,61 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef ALERT_ALERTITEMTIMINGEDITORWIDGET_H
-#define ALERT_ALERTITEMTIMINGEDITORWIDGET_H
+#ifndef ALERTITEMEDITORDIALOG_H
+#define ALERTITEMEDITORDIALOG_H
 
 #include <alertplugin/alertplugin_exporter.h>
-#include <QWidget>
+#include <QDialog>
 
 namespace Alert {
 class AlertItem;
-class AlertTiming;
-namespace Internal {
+
 namespace Ui {
-class AlertItemTimingEditorWidget;
-}
+class AlertItemEditorDialog;
 }
 
-class ALERT_EXPORT AlertItemTimingEditorWidget : public QWidget
+class ALERT_EXPORT AlertItemEditorDialog : public QDialog
 {
     Q_OBJECT
 public:
-    explicit AlertItemTimingEditorWidget(QWidget *parent = 0);
-    ~AlertItemTimingEditorWidget();
-    
-public Q_SLOTS:
-    void clear();
+    enum EditableParam {
+        NoEditableParams     = 0x00000000,
+        Label                = 0x00000001,
+        Category             = 0x00000002,
+        Description          = 0x00000004,
+        Relation             = 0x00000008,
+        ViewType             = 0x00000010,
+        ContentType          = 0x00000020,
+        Priority             = 0x00000040,
+        Timing               = 0x00000080,
+//        ExpirationDate       = 0x00000100,
+        OverrideNeedsComment = 0x00000200,
+        CSS                  = 0x00000400,
+        ExtraXml             = 0x00000800,
+        Script               = 0x00001000,
+        Types                = Relation | ViewType | ContentType | Priority | OverrideNeedsComment,
+        FullDescription      = Label | Category | Description,
+        AllParams            = 0xFFFFFFFF
+    };
+    Q_DECLARE_FLAGS(EditableParams, EditableParam)
+
+    explicit AlertItemEditorDialog(QWidget *parent = 0);
+    ~AlertItemEditorDialog();
+
+    void setEditableParams(EditableParams params);
+
     void setAlertItem(const AlertItem &item);
+
+public Q_SLOTS:
     bool submit(AlertItem &item);
-
-private Q_SLOTS:
-    void cycleComboChanged(int index);
-    void checkDates();
-    void startPeriodSelected(int period, int value);
-    void endPeriodSelected(int period, int value);
+    void reset();
 
 private:
-    void cyclingToUi(const Alert::AlertTiming &timing);
-    void cyclingFromUi(Alert::AlertTiming &timing);
-
-private:
-    Internal::Ui::AlertItemTimingEditorWidget *ui;
-    bool _periodicalCycling;
+    Ui::AlertItemEditorDialog *ui;
 };
 
-} // namespace Alert
+}  // namespace Alert
 
-#endif // ALERT_ALERTITEMTIMINGEDITORWIDGET_H
+Q_DECLARE_OPERATORS_FOR_FLAGS(Alert::AlertItemEditorDialog::EditableParams)
+
+#endif // ALERTITEMEDITORDIALOG_H

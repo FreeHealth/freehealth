@@ -29,6 +29,10 @@
 #include "alertitem.h"
 #include "ui_alertitemtimingeditorwidget.h"
 
+#include <coreplugin/icore.h>
+#include <coreplugin/itheme.h>
+#include <coreplugin/constants_icons.h>
+
 #include <translationutils/constants.h>
 #include <translationutils/trans_datetime.h>
 
@@ -36,6 +40,8 @@
 
 using namespace Alert;
 using namespace Trans::ConstantTranslations;
+
+static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 
 AlertItemTimingEditorWidget::AlertItemTimingEditorWidget(QWidget *parent) :
     QWidget(parent),
@@ -45,11 +51,19 @@ AlertItemTimingEditorWidget::AlertItemTimingEditorWidget(QWidget *parent) :
     ui->setupUi(this);
     layout()->setMargin(0);
 
+    // set up icons
+    ui->startPeriodSelector->setIconSize(QSize(16,16));
+    ui->startPeriodSelector->setIcon(theme()->icon(Core::Constants::ICONAGENDA_NEW));
+    ui->endPeriodSelector->setIconSize(QSize(16,16));
+    ui->endPeriodSelector->setIcon(theme()->icon(Core::Constants::ICONAGENDA_NEW));
+    ui->startPeriodSelector->setStartPeriodsAt(Trans::Constants::Time::Days);
+    ui->endPeriodSelector->setStartPeriodsAt(Trans::Constants::Time::Days);
+
     // set up dateedits
     ui->startDate->setDisplayFormat(QLocale().dateFormat());
     ui->endDate->setDisplayFormat(QLocale().dateFormat());
-//    ui->startTime->setDisplayFormat(tkTr(Trans::Constants::TIMEFORMAT_FOR_EDITOR));
-//    ui->endTime->setDisplayFormat(tkTr(Trans::Constants::TIMEFORMAT_FOR_EDITOR));
+
+    // populate combos
     ui->cycleCombo->addItem(tr("Not cycling"));
     ui->cycleCombo->addItem(tr("Cycle every"));
     ui->cyclingEvery->addItems(Trans::ConstantTranslations::periods());
@@ -58,6 +72,9 @@ AlertItemTimingEditorWidget::AlertItemTimingEditorWidget(QWidget *parent) :
     connect(ui->startDate, SIGNAL(editingFinished()), this, SLOT(checkDates()));
     connect(ui->endDate, SIGNAL(editingFinished()), this, SLOT(checkDates()));
     connect(ui->cycleCombo, SIGNAL(currentIndexChanged(int)), this, SLOT(cycleComboChanged(int)));
+    // periods
+    connect(ui->startPeriodSelector, SIGNAL(periodSelected(int,int)), this, SLOT(startPeriodSelected(int,int)));
+    connect(ui->endPeriodSelector, SIGNAL(periodSelected(int,int)), this, SLOT(endPeriodSelected(int,int)));
 }
 
 AlertItemTimingEditorWidget::~AlertItemTimingEditorWidget()
@@ -81,7 +98,13 @@ void AlertItemTimingEditorWidget::setAlertItem(const AlertItem &item)
     if (item.timings().count() > 0) {
         const AlertTiming &time = item.timingAt(0);
         ui->startDate->setDateTime(time.start());
-        ui->endDate->setDateTime(time.expiration());
+        // TODO: add tooltip "alert in x years x months x days x hours x mins"
+        if (time.expiration().isValid()) {
+            ui->endDate->setDateTime(time.expiration());
+        } else {
+            ui->neverExpires->setChecked(false);
+        }
+        // TODO: add tooltip "alert in x years x months x days x hours x mins"
         if (time.isCycling())
             ui->cycleCombo->setCurrentIndex(1);
         else
@@ -89,6 +112,23 @@ void AlertItemTimingEditorWidget::setAlertItem(const AlertItem &item)
         ui->cycles->setValue(time.numberOfCycles());
         cyclingToUi(time);
     }
+}
+
+static QDateTime getDateTimeFromPeriod(QDate from, const int amount, const int period)
+{
+    QDateTime start = QDateTime(from, QTime::currentTime());
+    switch (period) {
+    case Trans::Constants::Time::Seconds: start = start.addSecs(amount); break;
+    case Trans::Constants::Time::Minutes: start = start.addSecs(amount*60); break;
+    case Trans::Constants::Time::Hours: start = start.addSecs(amount*60*24); break;
+    case Trans::Constants::Time::Days: start = start.addDays(amount);break;
+    case Trans::Constants::Time::Weeks: start = start.addDays(amount*7);break;
+    case Trans::Constants::Time::Months: start = start.addMonths(amount);break;
+    case Trans::Constants::Time::Quarter: start = start.addMonths(amount*3);break;
+    case Trans::Constants::Time::Year: start = start.addYears(amount);break;
+    case Trans::Constants::Time::Decade: start = start.addYears(amount*10);break;
+    }
+    return start;
 }
 
 /** Submit the timing to the first Alert::AlertTiming of the \e item. */
@@ -100,7 +140,10 @@ bool AlertItemTimingEditorWidget::submit(AlertItem &item)
     }
     AlertTiming &time = item.timingAt(0);
     time.setStart(QDateTime(ui->startDate->date(), QTime(23,59,59)));
-    time.setExpiration(QDateTime(ui->endDate->date(), QTime(23,59,59)));
+    if (ui->neverExpires->isChecked())
+        time.setExpiration(QDateTime());
+    else
+        time.setExpiration(QDateTime(ui->endDate->date(), QTime(23,59,59)));
     if (ui->cycleCombo->currentIndex()==1) {
         cyclingFromUi(time);
     } else {
@@ -138,6 +181,18 @@ void AlertItemTimingEditorWidget::checkDates()
             ui->startDate->setDate(ui->endDate->date().addMonths(-1));
         }
     }
+}
+
+void AlertItemTimingEditorWidget::startPeriodSelected(int period, int value)
+{
+    QDateTime start = getDateTimeFromPeriod(ui->startDate->date(), value, period);
+    ui->startDate->setDate(start.date());
+}
+
+void AlertItemTimingEditorWidget::endPeriodSelected(int period, int value)
+{
+    QDateTime start = getDateTimeFromPeriod(ui->endDate->date(), value, period);
+    ui->endDate->setDate(start.date());
 }
 
 void AlertItemTimingEditorWidget::cyclingToUi(const AlertTiming &timing)

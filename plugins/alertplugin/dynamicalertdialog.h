@@ -19,54 +19,47 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developpers:                                                     *
- *       Eric MAEKER, <eric.maeker@gmail.com>,                             *
- *       Pierre-Marie Desombre <pm.desombre@gmail.com>                     *
+ *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef ALERT_ALERTITEMTIMINGEDITORWIDGET_H
-#define ALERT_ALERTITEMTIMINGEDITORWIDGET_H
+#ifndef ALERT_DYNAMICALERTDIALOG_H
+#define ALERT_DYNAMICALERTDIALOG_H
 
 #include <alertplugin/alertplugin_exporter.h>
-#include <QWidget>
+#include <QDialog>
 
 namespace Alert {
 class AlertItem;
-class AlertTiming;
-namespace Internal {
 namespace Ui {
-class AlertItemTimingEditorWidget;
-}
+class DynamicAlertDialog;
 }
 
-class ALERT_EXPORT AlertItemTimingEditorWidget : public QWidget
+class ALERT_EXPORT DynamicAlertDialog : public QDialog
 {
     Q_OBJECT
+
+    explicit DynamicAlertDialog(const AlertItem &item, QWidget *parent = 0);
+    explicit DynamicAlertDialog(const QList<AlertItem> &item, QWidget *parent = 0);
+
 public:
-    explicit AlertItemTimingEditorWidget(QWidget *parent = 0);
-    ~AlertItemTimingEditorWidget();
-    
-public Q_SLOTS:
-    void clear();
-    void setAlertItem(const AlertItem &item);
-    bool submit(AlertItem &item);
+    enum DialogResult {
+        NoDynamicAlert = 0,
+        DynamicAlertOverridden,
+        DynamicAlertAccepted
+    };
+    ~DynamicAlertDialog();
 
-private Q_SLOTS:
-    void cycleComboChanged(int index);
-    void checkDates();
-    void startPeriodSelected(int period, int value);
-    void endPeriodSelected(int period, int value);
+    static DialogResult executeDynamicAlert(const AlertItem &item, QWidget *parent = 0);
+    static DialogResult executeDynamicAlert(const QList<AlertItem> &item, QWidget *parent = 0);
 
-private:
-    void cyclingToUi(const Alert::AlertTiming &timing);
-    void cyclingFromUi(Alert::AlertTiming &timing);
+protected:
+    void changeEvent(QEvent *e);
 
 private:
-    Internal::Ui::AlertItemTimingEditorWidget *ui;
-    bool _periodicalCycling;
+    Ui::DynamicAlertDialog *ui;
 };
 
 } // namespace Alert
-
-#endif // ALERT_ALERTITEMTIMINGEDITORWIDGET_H
+#endif // ALERT_DYNAMICALERTDIALOG_H

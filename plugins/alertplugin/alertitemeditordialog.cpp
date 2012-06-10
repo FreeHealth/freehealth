@@ -25,48 +25,63 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef ALERT_ALERTITEMTIMINGEDITORWIDGET_H
-#define ALERT_ALERTITEMTIMINGEDITORWIDGET_H
+#include "alertitemeditordialog.h"
+#include "alertitemeditorwidget.h"
+#include "ui_alertitemeditordialog.h"
 
-#include <alertplugin/alertplugin_exporter.h>
-#include <QWidget>
+#include <QVBoxLayout>
+#include <QDialogButtonBox>
+#include <QPushButton>
+#include <QLabel>
 
-namespace Alert {
-class AlertItem;
-class AlertTiming;
-namespace Internal {
-namespace Ui {
-class AlertItemTimingEditorWidget;
-}
-}
+using namespace Alert;
 
-class ALERT_EXPORT AlertItemTimingEditorWidget : public QWidget
+AlertItemEditorDialog::AlertItemEditorDialog(QWidget *parent) :
+    QDialog(parent),
+    ui(new Ui::AlertItemEditorDialog)
 {
-    Q_OBJECT
-public:
-    explicit AlertItemTimingEditorWidget(QWidget *parent = 0);
-    ~AlertItemTimingEditorWidget();
-    
-public Q_SLOTS:
-    void clear();
-    void setAlertItem(const AlertItem &item);
-    bool submit(AlertItem &item);
+    ui->setupUi(this);
+    setWindowTitle(ui->title->text());
+    connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(ui->buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+    QPushButton *but = ui->buttonBox->button(QDialogButtonBox::Reset);
+    connect(but, SIGNAL(clicked()), this, SLOT(reset()));
+}
 
-private Q_SLOTS:
-    void cycleComboChanged(int index);
-    void checkDates();
-    void startPeriodSelected(int period, int value);
-    void endPeriodSelected(int period, int value);
+AlertItemEditorDialog::~AlertItemEditorDialog()
+{
+    delete ui;
+}
 
-private:
-    void cyclingToUi(const Alert::AlertTiming &timing);
-    void cyclingFromUi(Alert::AlertTiming &timing);
+void AlertItemEditorDialog::setEditableParams(EditableParams params)
+{
+    ui->editor->setLabelVisible(params & Label);
+    ui->editor->setCategoryVisible(params & Category);
+    ui->editor->setDescriptionVisible(params & Description);
+    ui->editor->setRelationVisible(params & Relation);
+    ui->editor->setViewTypeVisible(params & ViewType);
+    ui->editor->setContentTypeVisible(params & ContentType);
+    ui->editor->setPriorityVisible(params & Priority);
+    ui->editor->setOverridingCommentVisible(params & OverrideNeedsComment);
+    if (!(params & Timing))
+        ui->editor->hideTimingTab();
+    if (!(params & CSS))
+        ui->editor->hideStyleSheetTab();
+    if (!(params & ExtraXml))
+        ui->editor->hideExtraXmlTab();
+}
 
-private:
-    Internal::Ui::AlertItemTimingEditorWidget *ui;
-    bool _periodicalCycling;
-};
+void AlertItemEditorDialog::setAlertItem(const AlertItem &item)
+{
+    ui->editor->setAlertItem(item);
+}
 
-} // namespace Alert
+void AlertItemEditorDialog::reset()
+{
+    ui->editor->reset();
+}
 
-#endif // ALERT_ALERTITEMTIMINGEDITORWIDGET_H
+bool AlertItemEditorDialog::submit(AlertItem &item)
+{
+    return ui->editor->submit(item);
+}
