@@ -370,7 +370,7 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
 
     connect(tree, SIGNAL(clicked(QModelIndex)), this, SLOT(handleClicked(QModelIndex)));
     connect(tree, SIGNAL(pressed(QModelIndex)), this, SLOT(handlePressed(QModelIndex)));
-    connect(tree, SIGNAL(activated(QModelIndex)), this, SLOT(setCurrentEpisode(QModelIndex)));
+//    connect(tree, SIGNAL(activated(QModelIndex)), this, SLOT(setCurrentEpisode(QModelIndex)));
 //    connect(d->m_FileTree, SIGNAL(addRequested()), this, SLOT(newEpisode()));
 //    connect(d->m_FileTree, SIGNAL(removeRequested()), this, SLOT(removeEpisode()));
 
@@ -539,6 +539,8 @@ void FormPlaceHolder::handleClicked(const QModelIndex &index)
         QWidget *vp = tree->viewport();
         QMouseEvent e(QEvent::MouseMove, vp->mapFromGlobal(cursorPos), cursorPos, Qt::NoButton, 0, 0);
         QCoreApplication::sendEvent(vp, &e);
+    } else if(index.column() == EpisodeModel::Label) {
+        setCurrentEpisode(index);
     }
 }
 
