@@ -772,7 +772,10 @@ bool AlertBase::saveItemTimings(AlertItem &item)
         query.bindValue(Constants::ALERT_TIMING_TIM_ID, id);
         query.bindValue(Constants::ALERT_TIMING_ISVALID, int(timing.isValid()));
         query.bindValue(Constants::ALERT_TIMING_STARTDATETIME, timing.start());
-        query.bindValue(Constants::ALERT_TIMING_ENDDATETIME, timing.end());
+        if (timing.end().isValid())
+            query.bindValue(Constants::ALERT_TIMING_ENDDATETIME, timing.end());
+        else
+            query.bindValue(Constants::ALERT_TIMING_ENDDATETIME, QString());
         query.bindValue(Constants::ALERT_TIMING_CYCLES, timing.numberOfCycles());
         query.bindValue(Constants::ALERT_TIMING_CYCLINGDELAY, timing.cyclingDelayInMinutes());
         query.bindValue(Constants::ALERT_TIMING_NEXTCYCLE, timing.nextDate());
@@ -1059,7 +1062,8 @@ bool AlertBase::getItemTimings(AlertItem &item)
             time.setId(query.value(ALERT_TIMING_TIMINGID).toInt());
             time.setValid(query.value(ALERT_TIMING_ISVALID).toBool());
             time.setStart(query.value(ALERT_TIMING_STARTDATETIME).toDateTime());
-            time.setEnd(query.value(ALERT_TIMING_ENDDATETIME).toDateTime());
+            if (query.value(ALERT_TIMING_ENDDATETIME).toString().length() > 8)
+                time.setEnd(query.value(ALERT_TIMING_ENDDATETIME).toDateTime());
             time.setNumberOfCycles(query.value(ALERT_TIMING_CYCLES).toInt());
             time.setCyclingDelayInMinutes(query.value(ALERT_TIMING_CYCLINGDELAY).toLongLong());
             time.setNextDate(query.value(ALERT_TIMING_NEXTCYCLE).toDateTime());
