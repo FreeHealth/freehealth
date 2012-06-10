@@ -34,6 +34,8 @@
 #include <QApplication>
 #include <QStringList>
 
+#include <QDebug>
+
 using namespace Utils;
 using namespace Trans::ConstantTranslations;
 
@@ -69,11 +71,12 @@ public:
             _periodMenu->setTitle(_trTitle);
         else
             _periodMenu->setTitle(QApplication::translate(_trContext.toAscii(), _trTitle.toAscii()));
-        for(int i=_startPeriod; i < periods().count(); ++i) {
+        for(int i = _startPeriod; i < periods().count(); ++i) {
             QAction *a = _periodMenu->addMenu(valueMenu(_periodMenu, i));
             a->setText(Utils::firstLetterUpperCase(periods().at(i)));
             a->setData(i); // store the period id
         }
+        q->setMenu(_periodMenu);
     }
 
 public:
@@ -93,7 +96,6 @@ PeriodSelectorToolButton::PeriodSelectorToolButton(QWidget *parent) :
     d(new Internal::PeriodSelectorToolButtonPrivate(this))
 {
     d->populatePeriodMenu();
-    setMenu(d->_periodMenu);
     connect(this, SIGNAL(triggered(QAction*)), this, SLOT(_actionTriggered(QAction*)));
 }
 
