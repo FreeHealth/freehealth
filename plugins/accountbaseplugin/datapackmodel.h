@@ -2,11 +2,22 @@
 #define DATAPACKMODEL_H
 
 #include <accountbaseplugin/accountbase_exporter.h>
-
+#include <utils/database.h>
 #include <QAbstractTableModel>
 #include <QSqlError>
 
 namespace AccountDB {
+
+class DatapackBase:public QObject,public Utils::Database
+{
+    Q_OBJECT
+    public :
+        DatapackBase(QObject * parent);
+        ~DatapackBase();
+        static DatapackBase *instance();
+    private:
+        static DatapackBase *m_Instance;
+};
 namespace Internal {
 class DatapackMPModelPrivate;
 }
@@ -46,6 +57,7 @@ public Q_SLOTS:
 
 private:
     Internal::DatapackMPModelPrivate *d;
+    
 };
 
 }  // End namespace AccountDB

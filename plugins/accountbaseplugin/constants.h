@@ -53,7 +53,6 @@ namespace Constants {
     
     //DatapackMPModel
     const char * const DATAPACK_ACCOUNTANCY    = "MPDatapack";
-"
 
     // Database abstraction
     
@@ -79,6 +78,11 @@ namespace Constants {
         Table_NameIndex,
         Table_VERSION
     };
+    
+    enum Tables_datapack
+    {
+        Table_DatapackMP = 0
+        };
 
     enum TableMedicalProcedure_Fields {
         MP_ID = 0,

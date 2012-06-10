@@ -3,10 +3,15 @@
 #include "constants.h"
 
 #include <utils/log.h>
+#include <utils/databaseconnector.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_current.h>
+#include <translationutils/trans_database.h>
+#include <translationutils/trans_msgerror.h>
 
 #include <QSqlTableModel>
 
-static inline bool connectDatabase(QSqlDatabase &DB, const QString &file, const int line)
+/*static inline bool connectDatabase(QSqlDatabase &DB, const QString &file, const int line)
 {
     if (!DB.isOpen()) {
         if (!DB.open()) {
@@ -17,9 +22,52 @@ static inline bool connectDatabase(QSqlDatabase &DB, const QString &file, const 
         }
     }
     return true;
-}
+}*/
+
 
 using namespace AccountDB;
+using namespace Constants;
+using namespace Trans::ConstantTranslations;
+
+DatapackBase::DatapackBase(QObject *parent): QObject(parent), Utils::Database()
+{
+    addTable(Table_MedicalProcedure,  "medical_procedure");
+    
+    addField(Table_MedicalProcedure, MP_ID,             "MP_ID",          FieldIsUniquePrimaryKey);
+    addField(Table_MedicalProcedure, MP_UID,            "MP_UUID",        FieldIsUUID);
+    addField(Table_MedicalProcedure, MP_USER_UID,       "MP_USER_UID",    FieldIsUUID);
+    addField(Table_MedicalProcedure, MP_INSURANCE_UID,  "MP_INSURANCE_UID",FieldIsUUID);
+    addField(Table_MedicalProcedure, MP_NAME,           "NAME",           FieldIsShortText);
+    addField(Table_MedicalProcedure, MP_ABSTRACT,       "ABSTRACT",       FieldIsLongText);
+    addField(Table_MedicalProcedure, MP_TYPE,           "TYPE",           FieldIsShortText);
+    addField(Table_MedicalProcedure, MP_AMOUNT,         "AMOUNT",         FieldIsReal);
+    addField(Table_MedicalProcedure, MP_REIMBOURSEMENT, "REIMBOURSEMENT", FieldIsReal);
+    addField(Table_MedicalProcedure, MP_DATE,           "DATE",           FieldIsDate);
+    addField(Table_MedicalProcedure, MP_OTHERS,         "OTHERS",         FieldIsBlob);   
+    
+    //createConnection(Constants::DATAPACK_ACCOUNTANCY, Constants::DATAPACK_ACCOUNTANCY, connector);
+    if (!database().isOpen()) {
+        if (!database().open()) {
+            LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_ACCOUNTANCY).arg(database().lastError().text()));
+        } else {
+            LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(database().connectionName()).arg(database().driverName()));
+        }
+    } else {
+        LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(database().connectionName()).arg(database().driverName()));
+    }
+}
+
+DatapackBase::~DatapackBase(){}
+
+DatapackBase *DatapackBase::m_Instance = 0;
+
+DatapackBase *DatapackBase::instance()
+{
+    if (!m_Instance) {
+        m_Instance = new DatapackBase(qApp);
+    }
+    return m_Instance;
+}
 
 namespace AccountDB {
 namespace Internal {
@@ -30,7 +78,7 @@ public:
     DatapackMPModelPrivate(DatapackMPModel *parent) : m_SqlTable(0), m_IsDirty(false), q(parent)
     {
         m_SqlTable = new QSqlTableModel(q, QSqlDatabase::database(Constants::DATAPACK_ACCOUNTANCY));
-        m_SqlTable->setTable(AccountDB::AccountBase::instance()->table(Constants::Table_DatapackMP));
+        m_SqlTable->setTable(AccountDB::DatapackBase::instance()->table(Constants::Table_DatapackMP));
 //        m_SqlTable->setFilter(USER_UID);
     }
     ~DatapackMPModelPrivate () {}
@@ -49,21 +97,7 @@ private:
 DatapackMPModel::DatapackMPModel(QObject *parent) :
         QAbstractTableModel(parent), d(new Internal::DatapackMPModelPrivate(this))
 {
-    addTable(Table_MedicalProcedure,  "medical_procedure");
-    
-    addField(Table_MedicalProcedure, MP_ID,             "MP_ID",          FieldIsUniquePrimaryKey);
-    addField(Table_MedicalProcedure, MP_UID,            "MP_UUID",        FieldIsUUID);
-    addField(Table_MedicalProcedure, MP_USER_UID,       "MP_USER_UID",    FieldIsUUID);
-    addField(Table_MedicalProcedure, MP_INSURANCE_UID,  "MP_INSURANCE_UID",FieldIsUUID);
-    addField(Table_MedicalProcedure, MP_NAME,           "NAME",           FieldIsShortText);
-    addField(Table_MedicalProcedure, MP_ABSTRACT,       "ABSTRACT",       FieldIsLongText);
-    addField(Table_MedicalProcedure, MP_TYPE,           "TYPE",           FieldIsShortText);
-    addField(Table_MedicalProcedure, MP_AMOUNT,         "AMOUNT",         FieldIsReal);
-    addField(Table_MedicalProcedure, MP_REIMBOURSEMENT, "REIMBOURSEMENT", FieldIsReal);
-    addField(Table_MedicalProcedure, MP_DATE,           "DATE",           FieldIsDate);
-    addField(Table_MedicalProcedure, MP_OTHERS,         "OTHERS",         FieldIsBlob);   
-    
-    createConnection(Constants::DATAPACK_ACCOUNTANCY, Constants::DATAPACK_ACCOUNTANCY, databasePath(), ReadWrite, SQLite) 
+ 
 //    d->m_SqlTable->setEditStrategy(QSqlTableModel::OnManualSubmit);
     d->m_SqlTable->setEditStrategy(QSqlTableModel::OnFieldChange);
     d->m_SqlTable->select();
@@ -91,8 +125,8 @@ int DatapackMPModel::columnCount(const QModelIndex &parent) const
 void DatapackMPModel::setUserUuid(const QString &uuid)
 {
     QHash<int, QString> where;
-    where.insert(Constants::BANKDETAILS_USER_UID, QString("='%1'").arg(uuid));
-    d->m_SqlTable->setFilter(AccountBase::instance()->getWhereClause(Constants::Table_DatapackMP, where));
+    where.insert(Constants::MP_USER_UID, QString("='%1'").arg(uuid));
+    d->m_SqlTable->setFilter(DatapackBase::instance()->getWhereClause(Constants::Table_DatapackMP, where));
 }
 
 QVariant DatapackMPModel::data(const QModelIndex &index, int role) const
