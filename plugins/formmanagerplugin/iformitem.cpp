@@ -58,7 +58,7 @@
 /**
   \class Form::FormMain
   A Form::FormMain represents a root item of a form. Usually, the Form::FormMain are created by the
-  Form::IFormIO engines. The first item returned by the Form::IFormIO when loading files are empty and represents
+  Form::IFormIO engines. The first item returned by the Form::IFormIO when loading files is empty and represents
   the root of the form.\n
   When you need to create a FormMain as child to one another use the createChildForm() member. Get all its children
   (including sub-trees) using the flattenFormMainChildren() member or the formMainChild() if you want a specific child.\n
