@@ -1,36 +1,10 @@
 FreeMedForms
-0.7.2
+0.8.0
 ===== News =====
 
-  * DataPack manager
-    * adding a category browser
-    * redefining default servers
-    * warn user on download error
-  * PMHx
-    * Adding a synthetic view of the PMHx
-  * Command line usage
-    * Two new params to set the user identifiants to use for the connexion
 
 ===== Bug correction =====
 
-  * Correcting the categories database saving
-  * Improving text editor file actions in menus
-  * Correctly save the prescription is user click on save in the prescription view (FreeMedForms only)
-  * Avoid a segfault when editing empty PMHx
-  * Date translations are now connected to the application language (not the system langugage)
-  * Avoid duplicates during patient creation
-  * Translations problem on Linux corrected
-  * Segfaulting when looking for an update over the web corrected
-  * Some related bugs with the patient's date of birth corrected
-  * Installation procedure
-    * Improving error detection when configuring a network client or server
-    * Correction of MySQL installation (config script was not executed)
-  * FreeAccount
-    * Windows installation corrected (missing default french medical procedure)
-  * FreeDiams
-    * add DrugUidName to the prescription file
-    * Corrections in the XML prescription output file
-    * Show/hide the search INN action in the search line according to the ATC status of the drugs database
   * Many typos corrected
   * Many bug fixes
 
@@ -47,35 +21,9 @@ FreeMedForms
 *********************************************************************************************
 ===== Nouveautés =====
 
-  * Gestionnaire de paquets de données
-    * ajout d'un navigateur de categorie
-    * redéfinition des serveurs par défaut
-    * informe lorsqu'un téléchargement échoue
-  * Antécédents
-    * Ajout d'une vue synthétique des antécédents
-  * Utilisation de la ligne de commande
-    * Deux nouveaux paramètres pour définir les identifiants de l'utilisateur à utiliser pour la connection
 
 ===== Corrections de bug =====
 
-  * Correction de la sauvegarde des catégories
-  * Amélioration des actions de menu de l'éditeur de texte
-  * Sauvegarde la prescription quand on clique sur sauvegarder la prescription dans la vue prescription
-  * Corrige un crash de l'application si édition d'un antécédent vide
-  * Les traductions des dates sont connectés au langage de l'application et non au langage du système uniquement)
-  * Evite la création de doublons lors de la création de patients
-  * Problème de traductions avec les binaires Linux corrigé
-  * Crash quand recherche une mise à jour sur le net corrigé
-  * Bogues liés à la date de naissance du patient corrigés
-  * Procédure d'installation
-    * Amélioration des détections d'erreurs lors d'une configuration réseau : client ou serveur
-    * Correction de l'installation MySQL (le script de configuration n'était pas exécuté)
-  * FreeAccount
-    * Correction de l'installateur Windows (les procédure médicales française par défaut étaient manquantes)
-  * FreeDiams
-    * Corrections dans le fichier XML prescription
-    * Ajout du tag DrugUidName au format de fichier prescription (essentiellement pour les EMR externes)
-    * Montre/Cache l'action "Rechercher par INN" selon le status de la base de données
   * Beaucoup de correction de bogues
   * Beaucoup de traductions corrigées
 
