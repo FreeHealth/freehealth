@@ -57,6 +57,8 @@ public:
         CSS                  = 0x00000400,
         ExtraXml             = 0x00000800,
         Script               = 0x00001000,
+        Types                = Relation | ViewType | ContentType | Priority | OverrideNeedsComment,
+        FullDescription      = Label | Category | Description,
         AllParams            = 0xFFFFFFFF
     };
     Q_DECLARE_FLAGS(EditableParams, EditableParam)
