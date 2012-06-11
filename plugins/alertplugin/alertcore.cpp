@@ -124,7 +124,9 @@ bool AlertCore::initialize()
     qWarning() << item.label() << item2.label();
 
     item.setViewType(AlertItem::DynamicAlert);
+    item.setOverrideRequiresUserComment(true);
     DynamicAlertDialog::executeDynamicAlert(QList<AlertItem>() <<  item << item2 << item3 << item4 << item5<<item6);
+//    DynamicAlertDialog::executeDynamicAlert(item4);
 
 //    AlertItemEditorDialog dlg;
 //    dlg.setEditableParams(AlertItemEditorDialog::FullDescription | AlertItemEditorDialog::Timing);
