@@ -94,9 +94,11 @@ const char * const  ICONDESELECT =     "";
 const char * const  ICONFIND =         "find.png";
 const char * const  ICONOK =           "ok.png";
 const char * const  ICONERROR =        "warning.png";
-const char * const  ICONWARNING =      "warning.png";
 const char * const  ICONFORBIDDEN =    "deconseille.png";
 const char * const  ICONTRANSLATE =    "translate.png";
+const char * const  ICONCRITICAL =     "critical.png";
+const char * const  ICONWARNING =      "warning.png";
+const char * const  ICONINFORMATION =  "information.png";
 
 // menu Navigation
 const char * const  ICONNEXT =         "next.png";
@@ -159,7 +161,6 @@ const char * const  ICONSOFTWAREUPDATEAVAILABLE = "updateavailable.png";
 const char * const  ICONMEDINTUX    =  "medintux.png";
 const char * const  ICONPENCIL    =  "pencil.png";
 const char * const  ICONFORMS    =  "forms.png";
-const char * const  ICONCRITICAL    =  "critical.png";
 const char * const  ICONPATIENTSYNTHESIS  =  "patientsynthesis.png";
 const char * const  ICONTAKESCREENSHOT  =  "takescreenshot.png";
 

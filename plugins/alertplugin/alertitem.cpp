@@ -403,50 +403,65 @@ QString AlertItem::comment(const QString &lang) const
 void AlertItem::setLabel(const QString &txt, const QString &lang)
 {
     Internal::AlertValueBook *v = 0;
-    if (d->hasLanguage(lang))
-        v = d->getLanguage(lang);
+    QString l = lang;
+    if (l.isEmpty())
+        l = Trans::Constants::ALL_LANGUAGE;
+    if (d->hasLanguage(l))
+        v = d->getLanguage(l);
     else
-        v = d->createLanguage(lang);
+        v = d->createLanguage(l);
     v->_label = txt;
 }
 
 void AlertItem::setToolTip(const QString &txt, const QString &lang)
 {
     Internal::AlertValueBook *v = 0;
-    if (d->hasLanguage(lang))
-        v = d->getLanguage(lang);
+    QString l = lang;
+    if (l.isEmpty())
+        l = Trans::Constants::ALL_LANGUAGE;
+    if (d->hasLanguage(l))
+        v = d->getLanguage(l);
     else
-        v = d->createLanguage(lang);
+        v = d->createLanguage(l);
     v->_toolTip= txt;
 }
 
 void AlertItem::setCategory(const QString &txt, const QString &lang)
 {
     Internal::AlertValueBook *v = 0;
-    if (d->hasLanguage(lang))
-        v = d->getLanguage(lang);
+    QString l = lang;
+    if (l.isEmpty())
+        l = Trans::Constants::ALL_LANGUAGE;
+    if (d->hasLanguage(l))
+        v = d->getLanguage(l);
     else
-        v = d->createLanguage(lang);
+        v = d->createLanguage(l);
     v->_category = txt;
 }
 
 void AlertItem::setDescription(const QString &txt, const QString &lang)
 {
     Internal::AlertValueBook *v = 0;
-    if (d->hasLanguage(lang))
-        v = d->getLanguage(lang);
+    QString l = lang;
+    if (l.isEmpty())
+        l = Trans::Constants::ALL_LANGUAGE;
+    if (d->hasLanguage(l))
+        v = d->getLanguage(l);
     else
-        v = d->createLanguage(lang);
+        v = d->createLanguage(l);
     v->_descr = txt;
 }
 
 void AlertItem::setComment(const QString &txt, const QString &lang)
 {
     Internal::AlertValueBook *v = 0;
-    if (d->hasLanguage(lang))
-        v = d->getLanguage(lang);
+    QString l = lang;
+    if (l.isEmpty())
+        l = Trans::Constants::ALL_LANGUAGE;
+    if (d->hasLanguage(l))
+        v = d->getLanguage(l);
     else
-        v = d->createLanguage(lang);
+        v = d->createLanguage(l);
     v->_comment = txt;
 }
 

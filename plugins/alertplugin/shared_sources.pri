@@ -41,7 +41,8 @@ FORMS += $${PWD}/ShowAlertsWidget.ui \
     $${PWD}/alertitemeditorwidget.ui \
     $${PWD}/alertitemtimingeditorwidget.ui \
     $${PWD}/alertitemeditordialog.ui \
-    $${PWD}/dynamicalertdialog.ui
+    $${PWD}/dynamicalertdialog.ui \
+    $${PWD}/dynamicalertdialogoverridingcomment.ui
 
 OTHER_FILES += $${PWD}/Alert.pluginspec
 

@@ -42,7 +42,6 @@
 
 #include <utils/log.h>
 #include <utils/global.h>
-#include <utils/randomizer.h>
 #include <utils/databaseconnector.h>
 #include <translationutils/constants.h>
 #include <translationutils/trans_current.h>
@@ -298,6 +297,8 @@ AlertBase::AlertBase(QObject *parent) :
     addIndex(Table_ALERT_VALIDATION, ALERT_VALIDATION_USER_UUID);
 
     addField(Table_ALERT_VERSION, VERSION_TEXT, "TXT", FieldIsShortText);
+
+    r.setPathToFiles(settings()->path(Core::ISettings::BundleResourcesPath) + "/textfiles/");
 }
 
 AlertBase::~AlertBase()
@@ -436,10 +437,8 @@ bool AlertBase::createDatabase(const QString &connectionName , const QString &db
 }
 
 /** Create a virtual item. For debugging purpose. */
-AlertItem AlertBase::createVirtualItem() const
+AlertItem AlertBase::createVirtualItem()
 {
-    Utils::Randomizer r;
-    r.setPathToFiles(settings()->path(Core::ISettings::BundleResourcesPath) + "/textfiles/");
     QDir pix(settings()->path(Core::ISettings::SmallPixmapPath));
 
     AlertItem item;

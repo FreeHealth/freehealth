@@ -71,6 +71,8 @@ const char* const FROM_1_TO_2                   = QT_TRANSLATE_NOOP("tkConstants
 const char* const DURING                        = QT_TRANSLATE_NOOP("tkConstants", "during");
 const char* const EACH                          = QT_TRANSLATE_NOOP("tkConstants", "each");
 const char* const AND                           = QT_TRANSLATE_NOOP("tkConstants", "and");
+const char* const ALERT                         = QT_TRANSLATE_NOOP("tkConstants", "Alert");
+const char* const DYNAMIC_ALERT                 = QT_TRANSLATE_NOOP("tkConstants", "Dynamic alert");
 
 // The "related to"
 const char* const RELATED_TO                    = QT_TRANSLATE_NOOP("tkConstants", "related to");

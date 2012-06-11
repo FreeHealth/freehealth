@@ -29,6 +29,8 @@
 #define ALERTBASE_H
 
 #include <utils/database.h>
+#include <utils/randomizer.h>
+
 #include <QObject>
 #include <QDate>
 #include <QString>
@@ -95,7 +97,7 @@ protected:
     AlertBase(QObject * parent = 0);
     bool init();
 
-    AlertItem createVirtualItem() const;
+    AlertItem createVirtualItem();
 
 public:
     ~AlertBase();
@@ -136,6 +138,7 @@ private Q_SLOTS:
 
 private:
     bool m_initialized;
+    Utils::Randomizer r;
 };
 
 }  // namespace Internal
