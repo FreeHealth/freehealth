@@ -34,80 +34,167 @@
 #include <coreplugin/imainwindow.h>
 
 #include <utils/global.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_current.h>
+
+#include <QDialogButtonBox>
+#include <QToolButton>
+#include <QScrollArea>
 
 #include <QDebug>
 
 using namespace Alert;
+using namespace Trans::ConstantTranslations;
 
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 
-DynamicAlertDialog::DynamicAlertDialog(const AlertItem &item, QWidget *parent) :
+DynamicAlertDialog::DynamicAlertDialog(const QList<AlertItem> &items,
+                                       const QString &themedIcon,
+                                       const QList<QAbstractButton *> &buttons,
+                                       QWidget *parent) :
     QDialog(parent),
     ui(new Ui::DynamicAlertDialog)
 {
     ui->setupUi(this);
-    setWindowTitle(tr("Drug interaction alert"));
-    setWindowIcon(theme()->icon(item.themedIcon()));
+    layout()->setSpacing(5);
+    setWindowTitle(tkTr(Trans::Constants::DYNAMIC_ALERT));
     setWindowModality(Qt::WindowModal);
-//    ui->generalIconLabel->setPixmap(theme()->icon(DrugsDB::Constants::I_DRUGENGINE, Core::ITheme::BigIcon).pixmap(64,64));
+    // Manage the general icon of the dialog
+    if (!themedIcon.isEmpty() && QFile(theme()->iconFullPath(themedIcon, Core::ITheme::BigIcon)).exists()) {
+        ui->generalIconLabel->setPixmap(theme()->icon(themedIcon, Core::ITheme::BigIcon).pixmap(64,64));
+        setWindowIcon(theme()->icon(themedIcon));
+    } else {
+        int maxPriority = AlertItem::Low;
+        for(int i=0; i<items.count();++i) {
+            maxPriority = qMax(maxPriority, int(items.at(i).priority()));
+        }
+        QString icon;
+        switch (maxPriority) {
+        case AlertItem::High: icon = Core::Constants::ICONCRITICAL; break;
+        case AlertItem::Medium: icon = Core::Constants::ICONWARNING; break;
+        case AlertItem::Low: icon = Core::Constants::ICONINFORMATION; break;
+        }
+        ui->generalIconLabel->setPixmap(theme()->icon(icon, Core::ITheme::BigIcon).pixmap(64,64));
+        setWindowIcon(theme()->icon(icon));
+    }
 
-//    if (alertsToUse.count()==1) {
-//        // No tabwidget
-//        DrugsDB::IDrugInteractionAlert *alert = alerts.at(alertsToUse.at(0));
+    if (items.count()==1) {
+        // No tabwidget
+        const AlertItem &alert = items.at(0);
 
-//        QLabel *label = new QLabel(this);
-//        label->setTextFormat(Qt::RichText);
-//        label->setWordWrap(true);
-////        label->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-//        DrugsDB::DrugInteractionInformationQuery myQuery(query);
-//        myQuery.messageType = DrugsDB::DrugInteractionInformationQuery::InformationAlert;
-//        myQuery.iconSize = DrugsDB::DrugInteractionInformationQuery::BigSize;
-//        myQuery.levelOfWarningStaticAlert = myQuery.levelOfWarningDynamicAlert;
-//        label->setText(alert->message(myQuery.relatedDrug, myQuery));
+        if (!alert.category().isEmpty()) {
+            QFont bold;
+            bold.setBold(true);
+            QLabel *label = new QLabel(this);
+            label->setFont(bold);
+            label->setTextFormat(Qt::RichText);
+            label->setAlignment(Qt::AlignHCenter);
+            label->setWordWrap(true);
+            //        label->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+            label->setText(alert.category());
+            ui->centralLayout->addWidget(label);
+        }
 
-//        ui->centralLayout->addWidget(engineTitle(this, alert->engine()), 0, 0);
-//        ui->centralLayout->addWidget(label, 1, 0);
-//    } else {
-//        // With tabwidget
-//        QTabWidget *tab = new QTabWidget(this);
-//        for(int i=0; i < alertsToUse.count(); ++i) {
-//            DrugsDB::IDrugInteractionAlert *alert = alerts.at(alertsToUse.at(i));
-//            QLabel *label = new QLabel(this);
-//            label->setWordWrap(true);
-//            label->setTextFormat(Qt::RichText);
-//            DrugsDB::DrugInteractionInformationQuery myQuery(query);
-//            myQuery.messageType = DrugsDB::DrugInteractionInformationQuery::InformationAlert;
-//            label->setText(alert->message(myQuery.relatedDrug, myQuery));
+        QLabel *label = new QLabel(this);
+        label->setTextFormat(Qt::RichText);
+        label->setAlignment(Qt::AlignHCenter);
+        label->setWordWrap(true);
+        //        label->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+        label->setText(alert.label());
+        ui->centralLayout->addWidget(label);
 
-//            QWidget *w = new QWidget(this);
-//            QVBoxLayout *lay = new QVBoxLayout(w);
-//            lay->setMargin(0);
-//            lay->setSpacing(5);
-//            w->setLayout(lay);
-//            lay->addWidget(engineTitle(this, alert->engine()));
-//            lay->addWidget(label);
+        if (!alert.description().isEmpty()) {
+            QLabel *label = new QLabel(this);
+            label->setTextFormat(Qt::RichText);
+            label->setAlignment(Qt::AlignLeft);
+            label->setWordWrap(true);
+            //        label->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+            label->setText(alert.description());
+            ui->centralLayout->addWidget(label);
+        }
 
-//            tab->addTab(w, alert->engine()->icon(Core::ITheme::SmallIcon), alert->engine()->shortName());
-//        }
+    } else {
+        // With tabwidget
+        QHash<QString, QVBoxLayout *> categories;
 
-//        ui->centralLayout->addWidget(tab, 0, 0);
-//    }
+        for(int i=0; i < items.count(); ++i) {
+            const AlertItem &alert = items.at(i);
+            QString cat = alert.category();
+            if (cat.isEmpty()) {
+                cat = tkTr(Trans::Constants::ALERT);
+            }
+
+            // Get the category layout
+            QVBoxLayout *lay = categories.value(cat, 0);
+            if (!lay) {
+                lay = new QVBoxLayout;
+                categories.insert(cat, lay);
+            } else {
+                QFrame *line = new QFrame(this);
+                line->setFrameShape(QFrame::HLine);
+                line->setFrameShadow(QFrame::Sunken);
+                lay->addWidget(line);
+            }
+
+            // Add the label / description to the layout
+            QLabel *label = new QLabel(this);
+            label->setWordWrap(true);
+            label->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+            label->setTextFormat(Qt::RichText);
+            label->setText(alert.label());
+            lay->addWidget(label);
+
+            if (!alert.description().isEmpty()) {
+                QLabel *label = new QLabel(this);
+                label->setTextFormat(Qt::RichText);
+                label->setAlignment(Qt::AlignLeft);
+                label->setWordWrap(true);
+                label->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+                label->setText(alert.description());
+                lay->addWidget(label);
+            }
+        }
+
+        QTabWidget *tab = new QTabWidget(this);
+        // Create a tab for each category
+        foreach(const QString &cat, categories.keys()) {
+            QWidget *container = new QWidget(this);
+            QVBoxLayout *containerLayout = new QVBoxLayout(container);
+            containerLayout->setMargin(0);
+            container->setLayout(containerLayout);
+
+            QScrollArea *s = new QScrollArea(this);
+            s->setBackgroundRole(QPalette::Background);
+            s->setWidgetResizable(true);
+            s->setFrameStyle(QFrame::NoFrame);
+            s->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+
+            QWidget *tabContainer = new QWidget(this);
+            QVBoxLayout *central = categories.value(cat);
+            tabContainer->setLayout(central);
+            s->setWidget(tabContainer);
+            containerLayout->addWidget(s);
+
+            tab->addTab(container, cat);
+        }
+        ui->centralLayout->addWidget(tab);
+    }
 
 //    // Add buttons
-//    QDialogButtonBox *box = new QDialogButtonBox(this);
-//    QToolButton *accept = new QToolButton(this);
-//    accept->setText(tr("Accept alert and cancel last action"));
-//    accept->setIcon(theme()->icon(DrugsDB::Constants::I_DRUGALERT_ACCEPT, Core::ITheme::MediumIcon));
-//    accept->setIconSize(QSize(32,32));
-//    accept->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
-//    box->addButton(accept, QDialogButtonBox::AcceptRole);
+    QDialogButtonBox *box = new QDialogButtonBox(Qt::Horizontal, this);
+    QToolButton *accept = new QToolButton(this);
+    accept->setText(tr("Accept alert"));
+    accept->setIcon(theme()->icon(Core::Constants::ICONOK, Core::ITheme::SmallIcon));
+    accept->setIconSize(QSize(32,32));
+    accept->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    box->addButton(accept, QDialogButtonBox::AcceptRole);
 
-//    QToolButton *override = new QToolButton(this);
-//    override->setText(tr("Override alert and go on"));
-//    override->setIcon(theme()->icon(DrugsDB::Constants::I_DRUGALERT_OVERRIDE, Core::ITheme::MediumIcon));
-//    override->setIconSize(QSize(32,32));
-//    override->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
-//    box->addButton(override, QDialogButtonBox::RejectRole);
+    QToolButton *override = new QToolButton(this);
+    override->setText(tr("Override alert"));
+    override->setIcon(theme()->icon(Core::Constants::ICONNEXT, Core::ITheme::SmallIcon));
+    override->setIconSize(QSize(32,32));
+    override->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    box->addButton(override, QDialogButtonBox::RejectRole);
 
 //    QToolButton *showSynthesis = new QToolButton(this);
 //    showSynthesis->setText(tr("Show full interactions information"));
@@ -116,12 +203,12 @@ DynamicAlertDialog::DynamicAlertDialog(const AlertItem &item, QWidget *parent) :
 //    showSynthesis->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
 //    box->addButton(showSynthesis, QDialogButtonBox::HelpRole);
 
-//    connect(box, SIGNAL(accepted()), this, SLOT(accept()));
-//    connect(box, SIGNAL(rejected()), this, SLOT(reject()));
+    connect(box, SIGNAL(accepted()), this, SLOT(accept()));
+    connect(box, SIGNAL(rejected()), this, SLOT(reject()));
 //    connect(showSynthesis, SIGNAL(clicked()), this, SLOT(showInteractionSynthesisDialog()));
-//    ui->buttonLayout->addWidget(box);
+    ui->buttonLayout->addWidget(box);
 
-//    adjustSize();
+    adjustSize();
 }
 
 DynamicAlertDialog::~DynamicAlertDialog()
@@ -132,4 +219,21 @@ DynamicAlertDialog::~DynamicAlertDialog()
 void DynamicAlertDialog::changeEvent(QEvent *e)
 {
     QDialog::changeEvent(e);
+}
+
+DynamicAlertResult DynamicAlertDialog::executeDynamicAlert(const AlertItem &item, const QString &themedIcon, QWidget *parent)
+{
+    return executeDynamicAlert(QList<AlertItem>() << item, themedIcon, parent);
+}
+
+DynamicAlertResult DynamicAlertDialog::executeDynamicAlert(const QList<AlertItem> &item, const QString &themedIcon, QWidget *parent)
+{
+    DynamicAlertResult result;
+    DynamicAlertDialog dlg(item, themedIcon, QList<QAbstractButton*>(), parent);
+    if (dlg.exec()==QDialog::Accepted) {
+
+    } else {
+
+    }
+    return result;
 }

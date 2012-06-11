@@ -30,18 +30,32 @@
 #include <alertplugin/alertplugin_exporter.h>
 #include <QDialog>
 
+QT_BEGIN_NAMESPACE
+class QAbstractButton;
+QT_END_NAMESPACE
+
 namespace Alert {
 class AlertItem;
 namespace Ui {
 class DynamicAlertDialog;
 }
 
+class ALERT_EXPORT DynamicAlertResult
+{
+public:
+    DynamicAlertResult() {}
+    ~DynamicAlertResult() {}
+
+};
+
 class ALERT_EXPORT DynamicAlertDialog : public QDialog
 {
     Q_OBJECT
 
-    explicit DynamicAlertDialog(const AlertItem &item, QWidget *parent = 0);
-    explicit DynamicAlertDialog(const QList<AlertItem> &item, QWidget *parent = 0);
+    explicit DynamicAlertDialog(const QList<AlertItem> &item,
+                                const QString &themedIcon,
+                                const QList<QAbstractButton *> &buttons = QList<QAbstractButton *>(),
+                                QWidget *parent = 0);
 
 public:
     enum DialogResult {
@@ -51,8 +65,8 @@ public:
     };
     ~DynamicAlertDialog();
 
-    static DialogResult executeDynamicAlert(const AlertItem &item, QWidget *parent = 0);
-    static DialogResult executeDynamicAlert(const QList<AlertItem> &item, QWidget *parent = 0);
+    static DynamicAlertResult executeDynamicAlert(const AlertItem &item, const QString &themedIcon = QString::null, QWidget *parent = 0);
+    static DynamicAlertResult executeDynamicAlert(const QList<AlertItem> &item, const QString &themedIcon = QString::null, QWidget *parent = 0);
 
 protected:
     void changeEvent(QEvent *e);
