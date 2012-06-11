@@ -32,6 +32,7 @@
 
 // TEST
 #include "alertitemeditordialog.h"
+#include "dynamicalertdialog.h"
 // END TEST
 
 using namespace Alert;
@@ -88,11 +89,29 @@ bool AlertCore::initialize()
 
     // TESTS
     AlertItem item = d->m_alertBase->createVirtualItem();
-    AlertItem item2 = item;
-    d->m_alertBase->saveAlertItem(item);
-    Internal::AlertBaseQuery query;
-    query.getAlertItemFromUuid(item.uuid());
-    QVector<AlertItem> test = d->m_alertBase->getAlertItems(query);
+    AlertItem item2 = d->m_alertBase->createVirtualItem();
+    AlertItem item3 = item2;
+    item3.setUuid("LKLKLK");
+    item3.setLabel("Double label");
+    item3.setDescription("Double Description Double Description Double Description v Double Description v v vvvDouble Description Double Description Double DescriptionDouble Description Double Description Double Description");
+    AlertItem item4 = item2;
+    item3.setUuid("qsdkygvuihe");
+    item3.setLabel("Double label Double label");
+    item3.setDescription("Double Description Double Description Double Description v Double Description v v vvvDouble Description Double Description Double DescriptionDouble Description Double Description Double Description");
+    AlertItem item5 = item2;
+    item3.setUuid("fokoe,rf");
+    item3.setLabel("Double label Double label Double label");
+    item3.setDescription("Double Description Double Description Double Description v Double Description v v vvvDouble Description Double Description Double DescriptionDouble Description Double Description Double Description");
+    AlertItem item6 = item2;
+    item3.setUuid("dfqdf qsf");
+    item3.setLabel("Double labelDouble label Double label Double label Double label");
+    item3.setDescription("Double Description Double Description Double Description v Double Description v v vvvDouble Description Double Description Double DescriptionDouble Description Double Description Double Description");
+
+
+//    d->m_alertBase->saveAlertItem(item);
+//    Internal::AlertBaseQuery query;
+//    query.getAlertItemFromUuid(item.uuid());
+//    QVector<AlertItem> test = d->m_alertBase->getAlertItems(query);
 //    qWarning() << test;
 //    qWarning() << item.toXml();
 
@@ -101,19 +120,25 @@ bool AlertCore::initialize()
 
 //    qWarning() << (t.toXml() == item.toXml());
 
-    AlertItemEditorDialog dlg;
-    dlg.setEditableParams(AlertItemEditorDialog::FullDescription | AlertItemEditorDialog::Timing);
+    qWarning() << item.category() << item2.category();
+    qWarning() << item.label() << item2.label();
+
+    item.setViewType(AlertItem::DynamicAlert);
+    DynamicAlertDialog::executeDynamicAlert(QList<AlertItem>() <<  item << item2 << item3 << item4 << item5<<item6);
+
+//    AlertItemEditorDialog dlg;
+//    dlg.setEditableParams(AlertItemEditorDialog::FullDescription | AlertItemEditorDialog::Timing);
 //    dlg.setEditableParams(AlertItemEditorDialog::Label | AlertItemEditorDialog::Timing);
 //    dlg.setEditableParams(AlertItemEditorDialog::Label | AlertItemEditorDialog::Timing | AlertItemEditorDialog::Types);
 
-    AlertTiming &time = item.timingAt(0);
-    time.setCycling(true);
-    time.setCyclingDelayInDays(10);
-    dlg.setAlertItem(item);
-    if (dlg.exec()==QDialog::Accepted) {
-        dlg.submit(item);
-    }
-    qWarning() << item.toXml();
+//    AlertTiming &time = item.timingAt(0);
+//    time.setCycling(true);
+//    time.setCyclingDelayInDays(10);
+//    dlg.setAlertItem(item);
+//    if (dlg.exec()==QDialog::Accepted) {
+//        dlg.submit(item);
+//    }
+//    qWarning() << item.toXml();
     // END TESTS
 
 
