@@ -1,7 +1,7 @@
 FreeMedForms
 0.8.0
 ===== News =====
-
+  * Activation of forms now per single instead of double click
 
 ===== Bug correction =====
 
