@@ -39,6 +39,7 @@ namespace Alert {
 class AlertItem;
 namespace Ui {
 class DynamicAlertDialog;
+class DynamicAlertDialogOverridingComment;
 }
 
 class ALERT_EXPORT DynamicAlertResult
@@ -80,6 +81,7 @@ protected:
 
 private:
     Ui::DynamicAlertDialog *ui;
+    Ui::DynamicAlertDialogOverridingComment *cui;
     QToolButton *_overrideButton;
     bool _overrideCommentRequired;
 };

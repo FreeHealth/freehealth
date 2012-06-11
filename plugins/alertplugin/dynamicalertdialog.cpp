@@ -27,6 +27,7 @@
 #include "dynamicalertdialog.h"
 #include "alertitem.h"
 #include "ui_dynamicalertdialog.h"
+#include "ui_dynamicalertdialogoverridingcomment.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
@@ -54,6 +55,7 @@ DynamicAlertDialog::DynamicAlertDialog(const QList<AlertItem> &items,
                                        QWidget *parent) :
     QDialog(parent),
     ui(new Ui::DynamicAlertDialog),
+    cui(0),
     _overrideButton(0),
     _overrideCommentRequired(false)
 {
@@ -94,6 +96,7 @@ DynamicAlertDialog::DynamicAlertDialog(const QList<AlertItem> &items,
     if (items.count()==1) {
         // No tabwidget
         const AlertItem &alert = items.at(0);
+        QVBoxLayout *central = new QVBoxLayout(this);
 
         if (!alert.category().isEmpty()) {
             QFont bold;
@@ -105,7 +108,7 @@ DynamicAlertDialog::DynamicAlertDialog(const QList<AlertItem> &items,
             label->setWordWrap(true);
             //        label->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
             label->setText(alert.category());
-            ui->centralLayout->addWidget(label);
+            central->addWidget(label);
         }
 
         QLabel *label = new QLabel(this);
@@ -114,7 +117,7 @@ DynamicAlertDialog::DynamicAlertDialog(const QList<AlertItem> &items,
         label->setWordWrap(true);
         //        label->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
         label->setText(alert.label());
-        ui->centralLayout->addWidget(label);
+        central->addWidget(label);
 
         if (!alert.description().isEmpty()) {
             QLabel *label = new QLabel(this);
@@ -123,8 +126,26 @@ DynamicAlertDialog::DynamicAlertDialog(const QList<AlertItem> &items,
             label->setWordWrap(true);
             //        label->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
             label->setText(alert.description());
-            ui->centralLayout->addWidget(label);
+            central->addWidget(label);
         }
+
+        QWidget *container = new QWidget(this);
+        QVBoxLayout *containerLayout = new QVBoxLayout(container);
+        containerLayout->setMargin(0);
+        container->setLayout(containerLayout);
+
+        QScrollArea *s = new QScrollArea(this);
+        s->setBackgroundRole(QPalette::Background);
+        s->setWidgetResizable(true);
+        s->setFrameStyle(QFrame::NoFrame);
+        s->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+
+        QWidget *alertContainer = new QWidget(this);
+        alertContainer->setLayout(central);
+        s->setWidget(alertContainer);
+        containerLayout->addWidget(s);
+
+        ui->centralLayout->addWidget(container);
 
     } else {
         // With tabwidget
@@ -182,10 +203,10 @@ DynamicAlertDialog::DynamicAlertDialog(const QList<AlertItem> &items,
             s->setFrameStyle(QFrame::NoFrame);
             s->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 
-            QWidget *tabContainer = new QWidget(this);
+            QWidget *alertContainer = new QWidget(this);
             QVBoxLayout *central = categories.value(cat);
-            tabContainer->setLayout(central);
-            s->setWidget(tabContainer);
+            alertContainer->setLayout(central);
+            s->setWidget(alertContainer);
             containerLayout->addWidget(s);
 
             tab->addTab(container, cat);
@@ -195,29 +216,31 @@ DynamicAlertDialog::DynamicAlertDialog(const QList<AlertItem> &items,
 
     // Add buttons
     QDialogButtonBox *box = new QDialogButtonBox(Qt::Horizontal, this);
+    QFont bold;
+    bold.setBold(true);
     QToolButton *accept = new QToolButton(this);
+    accept->setMinimumHeight(22);
     accept->setText(tr("Accept alert"));
     accept->setIcon(theme()->icon(Core::Constants::ICONOK, Core::ITheme::SmallIcon));
-    accept->setIconSize(QSize(32,32));
+    accept->setIconSize(QSize(16,16));
     accept->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    accept->setFont(bold);
     box->addButton(accept, QDialogButtonBox::AcceptRole);
 
     _overrideButton = new QToolButton(this);
+    _overrideButton->setMinimumHeight(22);
     _overrideButton->setText(tr("Override alert"));
     _overrideButton->setIcon(theme()->icon(Core::Constants::ICONNEXT, Core::ITheme::SmallIcon));
-    _overrideButton->setIconSize(QSize(32,32));
+    _overrideButton->setIconSize(QSize(16,16));
     _overrideButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    _overrideButton->setFont(bold);
     box->addButton(_overrideButton, QDialogButtonBox::RejectRole);
 
     connect(box, SIGNAL(accepted()), this, SLOT(accept()));
     connect(box, SIGNAL(rejected()), this, SLOT(override()));
-    connect(ui->validateComment, SIGNAL(clicked()), this, SLOT(validateUserOverridingComment()));
+    ui->buttonLayout->setMargin(0);
+    ui->buttonLayout->setSpacing(0);
     ui->buttonLayout->addWidget(box);
-
-    // Hide unused
-    ui->overrideCommentLabel->hide();
-    ui->overridingComment->hide();
-    ui->validateComment->hide();
 
     adjustSize();
 }
@@ -225,6 +248,7 @@ DynamicAlertDialog::DynamicAlertDialog(const QList<AlertItem> &items,
 DynamicAlertDialog::~DynamicAlertDialog()
 {
     delete ui;
+    if (cui) delete cui; cui=0;
 }
 
 void DynamicAlertDialog::override()
@@ -234,17 +258,19 @@ void DynamicAlertDialog::override()
         return;
     }
 
-    if (!ui->overrideCommentLabel->isVisible()) {
-        ui->overrideCommentLabel->show();
-        ui->overridingComment->show();
-        ui->validateComment->show();
-        _overrideButton->hide();
-    }
+    // Append the comment
+    cui = new Ui::DynamicAlertDialogOverridingComment;
+    QWidget *w = new QWidget(this);
+    cui->setupUi(w);
+    ui->centralLayout->addWidget(w);
+    connect(cui->validateComment, SIGNAL(clicked()), this, SLOT(validateUserOverridingComment()));
+
+    _overrideButton->hide();
 }
 
 void DynamicAlertDialog::validateUserOverridingComment()
 {
-    if (!ui->overridingComment->toPlainText().isEmpty())
+    if (!cui->overridingComment->toPlainText().isEmpty())
         reject();
 }
 
