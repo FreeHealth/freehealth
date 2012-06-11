@@ -32,6 +32,7 @@
 
 QT_BEGIN_NAMESPACE
 class QAbstractButton;
+class QToolButton;
 QT_END_NAMESPACE
 
 namespace Alert {
@@ -65,14 +66,22 @@ public:
     };
     ~DynamicAlertDialog();
 
+    bool isOverridingUserCommentRequired() const {return _overrideCommentRequired;}
+
     static DynamicAlertResult executeDynamicAlert(const AlertItem &item, const QString &themedIcon = QString::null, QWidget *parent = 0);
     static DynamicAlertResult executeDynamicAlert(const QList<AlertItem> &item, const QString &themedIcon = QString::null, QWidget *parent = 0);
+
+private Q_SLOTS:
+    void override();
+    void validateUserOverridingComment();
 
 protected:
     void changeEvent(QEvent *e);
 
 private:
     Ui::DynamicAlertDialog *ui;
+    QToolButton *_overrideButton;
+    bool _overrideCommentRequired;
 };
 
 } // namespace Alert

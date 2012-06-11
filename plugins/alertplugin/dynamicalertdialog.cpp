@@ -53,12 +53,24 @@ DynamicAlertDialog::DynamicAlertDialog(const QList<AlertItem> &items,
                                        const QList<QAbstractButton *> &buttons,
                                        QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::DynamicAlertDialog)
+    ui(new Ui::DynamicAlertDialog),
+    _overrideButton(0),
+    _overrideCommentRequired(false)
 {
+    // Do we need to ask for an overriding comment
+    foreach(const AlertItem &item, items) {
+        if (item.isOverrideRequiresUserComment()) {
+            _overrideCommentRequired = true;
+            break;
+        }
+    }
+
+    // Prepare the ui
     ui->setupUi(this);
     layout()->setSpacing(5);
     setWindowTitle(tkTr(Trans::Constants::DYNAMIC_ALERT));
     setWindowModality(Qt::WindowModal);
+
     // Manage the general icon of the dialog
     if (!themedIcon.isEmpty() && QFile(theme()->iconFullPath(themedIcon, Core::ITheme::BigIcon)).exists()) {
         ui->generalIconLabel->setPixmap(theme()->icon(themedIcon, Core::ITheme::BigIcon).pixmap(64,64));
@@ -78,6 +90,7 @@ DynamicAlertDialog::DynamicAlertDialog(const QList<AlertItem> &items,
         setWindowIcon(theme()->icon(icon));
     }
 
+    // Include alerts
     if (items.count()==1) {
         // No tabwidget
         const AlertItem &alert = items.at(0);
@@ -180,7 +193,7 @@ DynamicAlertDialog::DynamicAlertDialog(const QList<AlertItem> &items,
         ui->centralLayout->addWidget(tab);
     }
 
-//    // Add buttons
+    // Add buttons
     QDialogButtonBox *box = new QDialogButtonBox(Qt::Horizontal, this);
     QToolButton *accept = new QToolButton(this);
     accept->setText(tr("Accept alert"));
@@ -189,24 +202,22 @@ DynamicAlertDialog::DynamicAlertDialog(const QList<AlertItem> &items,
     accept->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     box->addButton(accept, QDialogButtonBox::AcceptRole);
 
-    QToolButton *override = new QToolButton(this);
-    override->setText(tr("Override alert"));
-    override->setIcon(theme()->icon(Core::Constants::ICONNEXT, Core::ITheme::SmallIcon));
-    override->setIconSize(QSize(32,32));
-    override->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    box->addButton(override, QDialogButtonBox::RejectRole);
-
-//    QToolButton *showSynthesis = new QToolButton(this);
-//    showSynthesis->setText(tr("Show full interactions information"));
-//    showSynthesis->setIcon(theme()->icon(DrugsDB::Constants::I_DRUGENGINE, Core::ITheme::MediumIcon));
-//    showSynthesis->setIconSize(QSize(32,32));
-//    showSynthesis->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
-//    box->addButton(showSynthesis, QDialogButtonBox::HelpRole);
+    _overrideButton = new QToolButton(this);
+    _overrideButton->setText(tr("Override alert"));
+    _overrideButton->setIcon(theme()->icon(Core::Constants::ICONNEXT, Core::ITheme::SmallIcon));
+    _overrideButton->setIconSize(QSize(32,32));
+    _overrideButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    box->addButton(_overrideButton, QDialogButtonBox::RejectRole);
 
     connect(box, SIGNAL(accepted()), this, SLOT(accept()));
-    connect(box, SIGNAL(rejected()), this, SLOT(reject()));
-//    connect(showSynthesis, SIGNAL(clicked()), this, SLOT(showInteractionSynthesisDialog()));
+    connect(box, SIGNAL(rejected()), this, SLOT(override()));
+    connect(ui->validateComment, SIGNAL(clicked()), this, SLOT(validateUserOverridingComment()));
     ui->buttonLayout->addWidget(box);
+
+    // Hide unused
+    ui->overrideCommentLabel->hide();
+    ui->overridingComment->hide();
+    ui->validateComment->hide();
 
     adjustSize();
 }
@@ -214,6 +225,27 @@ DynamicAlertDialog::DynamicAlertDialog(const QList<AlertItem> &items,
 DynamicAlertDialog::~DynamicAlertDialog()
 {
     delete ui;
+}
+
+void DynamicAlertDialog::override()
+{
+    if (!_overrideCommentRequired) {
+        reject();
+        return;
+    }
+
+    if (!ui->overrideCommentLabel->isVisible()) {
+        ui->overrideCommentLabel->show();
+        ui->overridingComment->show();
+        ui->validateComment->show();
+        _overrideButton->hide();
+    }
+}
+
+void DynamicAlertDialog::validateUserOverridingComment()
+{
+    if (!ui->overridingComment->toPlainText().isEmpty())
+        reject();
 }
 
 void DynamicAlertDialog::changeEvent(QEvent *e)
@@ -226,10 +258,10 @@ DynamicAlertResult DynamicAlertDialog::executeDynamicAlert(const AlertItem &item
     return executeDynamicAlert(QList<AlertItem>() << item, themedIcon, parent);
 }
 
-DynamicAlertResult DynamicAlertDialog::executeDynamicAlert(const QList<AlertItem> &item, const QString &themedIcon, QWidget *parent)
+DynamicAlertResult DynamicAlertDialog::executeDynamicAlert(const QList<AlertItem> &items, const QString &themedIcon, QWidget *parent)
 {
     DynamicAlertResult result;
-    DynamicAlertDialog dlg(item, themedIcon, QList<QAbstractButton*>(), parent);
+    DynamicAlertDialog dlg(items, themedIcon, QList<QAbstractButton*>(), parent);
     if (dlg.exec()==QDialog::Accepted) {
 
     } else {
