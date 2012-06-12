@@ -15,9 +15,15 @@ class DatapackBase:public QObject,public Utils::Database
         DatapackBase(QObject * parent);
         ~DatapackBase();
         static DatapackBase *instance();
+        
+        bool initialize();
+        
     private:
         static DatapackBase *m_Instance;
+        bool _init;
 };
+
+
 namespace Internal {
 class DatapackMPModelPrivate;
 }
@@ -41,10 +47,6 @@ public:
     bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
     bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
 
-    bool insertRow(int arow, const QModelIndex &aparent = QModelIndex())        { return insertRows(arow, 1, aparent); }
-    bool insertColumn(int acolumn, const QModelIndex &aparent = QModelIndex())  { return insertColumns(acolumn, 1, aparent); }
-    bool removeRow(int arow, const QModelIndex &aparent = QModelIndex())        { return removeRows(arow, 1, aparent); }
-    bool removeColumn(int acolumn, const QModelIndex &aparent = QModelIndex())  { return removeColumns(acolumn, 1, aparent); }
     void setFilter(const QString & filter);
     QString filter();
     void setUserUuid(const QString &uuid);
