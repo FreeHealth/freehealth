@@ -11,23 +11,46 @@
 
 #include <QSqlTableModel>
 
-/*static inline bool connectDatabase(QSqlDatabase &DB, const QString &file, const int line)
+using namespace AccountDB;
+using namespace Constants;
+using namespace Trans::ConstantTranslations;
+
+
+// This is just a code easier (for user's reading)
+static inline bool connectDatabase(QSqlDatabase &DB, const int line)
 {
     if (!DB.isOpen()) {
         if (!DB.open()) {
-            Utils::Log::addError("MPDatapack", tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+            LOG_ERROR_FOR("MPDatapack", tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
                                  .arg(DB.connectionName()).arg(DB.lastError().text()),
-                                 file, line);
+                                 __FILE__, line);
             return false;
         }
     }
     return true;
-}*/
+}
+
+// Find the database to use. In priority order:
+// - User datapack
+// - Application installed datapack
+static QString databasePath()
+{
+    QString dbRelPath = QString("/%1/%2").arg(Constants::DATAPACK_ACCOUNTANCY).arg(Constants::DATAPACK_ACCOUNTANCY_FILENAME);
+    QString tmp;
+    tmp = settings()->dataPackInstallPath() + dbRelPath;
+    if (QFileInfo(tmp).exists())
+        return settings()->dataPackInstallPath();
+    tmp = settings()->dataPackApplicationInstalledPath() + dbRelPath;
+    return settings()->dataPackApplicationInstalledPath();
+}
+
+static QString databaseFileName()
+{
+    return databasePath() + QDir::separator() + Constants::DATAPACK_ACCOUNTANCY;
+}
 
 
-using namespace AccountDB;
-using namespace Constants;
-using namespace Trans::ConstantTranslations;
+
 
 DatapackBase::DatapackBase(QObject *parent): QObject(parent), Utils::Database()
 {
@@ -49,8 +72,41 @@ DatapackBase::DatapackBase(QObject *parent): QObject(parent), Utils::Database()
     // Je pense que des indexes seraient les bienvenus
     // Ici comme on se trouve dans datapack -> MP_USER_UID est il vraiment nécessaire et utile
     // on initialise jamais dans le constructeur pour éviter effet de Bord
+}
 
-    //createConnection(Constants::DATAPACK_ACCOUNTANCY, Constants::DATAPACK_ACCOUNTANCY, connector);
+bool DatapackBase::initialize() 
+{
+    if (_init)
+        return true;
+    setConnectionName(Constants::DATAPACK_ACCOUNTANCY);
+    setDriver(Utils::Database::SQLite);
+
+    // test driver
+    // use only SQLite with datapacks
+    if (!QSqlDatabase::isDriverAvailable("QSQLITE")) {
+        LOG_ERROR_FOR("DatapackBase", tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE).arg("SQLite"));
+        Utils::warningMessageBox(tkTr(Trans::Constants::APPLICATION_FAILURE),
+                                 tkTr(Trans::Constants::DATABASE_DRIVER_1_NOT_AVAILABLE_DETAIL).arg("SQLite"),
+                                 "", qApp->applicationName());
+        return false;
+    }
+
+    // Connect Database
+    Utils::DatabaseConnector connector;
+    QString path = databasePath();
+    if (!QFileInfo(pathToDb).isDir())
+        path = QFileInfo(pathToDb).absolutePath();
+    connector.setAbsPathToReadOnlySqliteDatabase(path);
+    connector.setHost(QFileInfo(databaseFileName()).fileName());
+    connector.setAccessMode(Utils::DatabaseConnector::ReadOnly);
+    connector.setDriver(Utils::Database::SQLite);
+
+    LOG_FOR("DatapackBase", tkTr(Trans::Constants::SEARCHING_DATABASE_1_IN_PATH_2).arg(Constants::DB_ACCOUNTANCY).arg(pathToDb));
+
+    createConnection(Constants::DB_ACCOUNTANCY, Constants::DB_ACCOUNTANCY_FILENAME,
+                     connector,
+                     Utils::Database::WarnOnly);
+
     if (!database().isOpen()) {
         if (!database().open()) {
             LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_ACCOUNTANCY).arg(database().lastError().text()));
@@ -60,6 +116,24 @@ DatapackBase::DatapackBase(QObject *parent): QObject(parent), Utils::Database()
     } else {
         LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(database().connectionName()).arg(database().driverName()));
     }
+
+    // Code optionnel de vérification de la base
+    if (!checkDatabaseScheme()) {
+        LOG_ERROR_FOR("DatapackBase", tkTr(Trans::Constants::DATABASE_1_SCHEMA_ERROR).arg(Constants::DATAPACK_ACCOUNTANCY));
+        return false;
+    }
+
+    //if (!checkDatabaseVersion()) {
+    //    LOG_ERROR_FOR("DatapackBase", QString("Wrong database version. Db: %1; Current: %2").arg(version()).arg(::CURRENTVERSION));
+    //    return false;
+    //} else {
+    //    LOG_FOR("DatapackBase", QString("Using DatapackBase database version " + version()));
+    //}
+
+    setConnectionName(Constants::DATAPACK_ACCOUNTANCY);
+
+    _init = true;
+    return true;
 }
 
 DatapackBase::~DatapackBase(){}
@@ -82,8 +156,11 @@ class DatapackMPModelPrivate
 public:
     DatapackMPModelPrivate(DatapackMPModel *parent) : m_SqlTable(0), m_IsDirty(false), q(parent)
     {
-        m_SqlTable = new QSqlTableModel(q, QSqlDatabase::database(Constants::DATAPACK_ACCOUNTANCY));
-        m_SqlTable->setTable(AccountDB::DatapackBase::instance()->table(Constants::Table_DatapackMP));
+        // Ensure that the DatapackBase is created and initialized
+        AccountDB::DatapackBase *db = AccountDB::DatapackBase::instance();
+        db->initialize();
+        m_SqlTable = new QSqlTableModel(q, db->database());
+        m_SqlTable->setTable(db->table(Constants::Table_DatapackMP));
 //        m_SqlTable->setFilter(USER_UID);
     }
     ~DatapackMPModelPrivate () {}
