@@ -45,6 +45,11 @@ DatapackBase::DatapackBase(QObject *parent): QObject(parent), Utils::Database()
     addField(Table_MedicalProcedure, MP_DATE,           "DATE",           FieldIsDate);
     addField(Table_MedicalProcedure, MP_OTHERS,         "OTHERS",         FieldIsBlob);   
     
+    // COMMENT: Eric
+    // Je pense que des indexes seraient les bienvenus
+    // Ici comme on se trouve dans datapack -> MP_USER_UID est il vraiment nécessaire et utile
+    // on initialise jamais dans le constructeur pour éviter effet de Bord
+
     //createConnection(Constants::DATAPACK_ACCOUNTANCY, Constants::DATAPACK_ACCOUNTANCY, connector);
     if (!database().isOpen()) {
         if (!database().open()) {
