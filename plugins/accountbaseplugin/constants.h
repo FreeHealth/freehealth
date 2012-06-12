@@ -49,7 +49,11 @@ namespace Constants {
 
     const char * const DB_ACCOUNTANCY           = "account";
     const char * const DEFAULT_ACCOUNTANCY_USER = "AccountancyDefaultUser";
-    const char * const DB_VERSION_NUMBER        = "0.1";
+    const char * const DB_VERSION_NUMBER        = "0.2"; //"0.1";
+    
+    //DatapackMPModel
+    const char * const DATAPACK_ACCOUNTANCY    = "MPDatapack";
+    const char * const DATAPACK_ACCOUNTANCY_FILENAME    = "MPDatapack.db";
 
     // Database abstraction
     
@@ -75,6 +79,11 @@ namespace Constants {
         Table_NameIndex,
         Table_VERSION
     };
+    
+    enum Tables_datapack
+    {
+        Table_DatapackMP = 0
+        };
 
     enum TableMedicalProcedure_Fields {
         MP_ID = 0,
@@ -87,6 +96,7 @@ namespace Constants {
         MP_AMOUNT,
         MP_REIMBOURSEMENT,
         MP_DATE,
+        MP_OTHERS,
         MP_MaxParam
     };
     enum TableBankDetails_Fields {

@@ -989,6 +989,43 @@ QStringList Database::fieldNames(const int &tableref) const
     return toReturn;
 }
 
+/**  Return all fields names of a table by a sql query and not according to tableref.
+This permits to test the real number of fields of the sql table regarding to code table references.
+@author Pierre-Marie Desombre
+*/
+
+QStringList Database::fieldNamesSql(const int &tableref) const
+{
+    if (!d->m_Tables.contains(tableref))
+        return QStringList();
+    if (!d->m_Tables_Fields.keys().contains(tableref))
+        return QStringList();
+    QStringList fieldNamesList;
+    QString tableString = table(tableref);
+    QSqlQuery q(database());
+    QString req;
+    if (database().driverName().contains("MYSQL"))
+    {
+        req = QString("SHOW COLUMNS FROM %1").arg(tableString);
+        }
+    if (database().driverName().contains("SQLITE"))
+    {
+        req = QString("PRAGMA table_info('%1');")
+             .arg(tableString);
+        }
+    if (!q.exec(req))
+    {
+    	  LOG_QUERY_ERROR_FOR("Database", q);
+    	  Utils::warningMessageBox("Warning",QString("Unable to get the fields of %1").arg(tableString));
+    	  return QStringList();
+        }    
+     while (q.next())
+     {
+     	fieldNamesList << q.value(Name_PragmaValue).toString();
+         }
+     return fieldNamesList;      
+}
+
 QString Database::table(const int & tableref) const
 {
     return d->m_Tables.value(tableref, QString());
@@ -2283,4 +2320,31 @@ void Database::toTreeWidget(QTreeWidget *tree)
     tree->expandAll();
     tree->resizeColumnToContents(0);
     tree->resizeColumnToContents(1);
+}
+/**
+Add a fied to table referenced by 
+    code tableRef, 
+    new constant newFieldRef that is int referencing the new field, 
+    the type of field (ie varchar, blob, ...) by the enum Utils::Database::TypeOfField ,
+    the sql option ("NULL" or "NOT NULL"),
+    and after the last field referenced by is code field reference.
+@author Pierre-Marie Desombre
+*/
+bool Database::alterTableForNewField(const int tableRef, const int newFieldRef,const int TypeOfField, const QString & nullOption)
+{
+    bool b = true;
+    QString tableString = table(tableRef);
+    QString newField = fieldName(tableRef,newFieldRef);
+    QString type = d->getTypeOfField(TypeOfField);
+    QSqlQuery q(database());
+    QString req = QString("ALTER TABLE `%1` ADD `%2` %3 %4;")
+    	       .arg(tableString,newField,type,nullOption);
+
+    if (!q.exec(req))
+    {
+    	  LOG_QUERY_ERROR_FOR("Database", q);
+    	  LOG_FOR("Database",QString("Unable to add the fields %1").arg(newField));
+    	  b = false;
+        }    
+    return b;
 }

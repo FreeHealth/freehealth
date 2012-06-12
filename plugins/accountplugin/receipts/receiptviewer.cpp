@@ -1139,6 +1139,12 @@ void ReceiptViewer::save()
     ReceiptsManager manager;
     QString userUuid = user()->uuid();
     QString textOfListOfActs = m_listOfValues.join("+");
+    if (m_model->rowCount(QModelIndex()) < 1)
+    {
+    	  Utils::warningMessageBox(tr("No value available !"), 
+    	  tr("Please choose a value first"));
+    	  return;
+        }
     for (int row = 0; row < m_model->rowCount(QModelIndex()); row += 1)
     {
         double cash = m_model->data(m_model->index(row,InternalAmount::AmountModel::Col_Cash)).toDouble();
@@ -1210,7 +1216,7 @@ void ReceiptViewer::save()
     receiptsEngine r;
     if (!r.insertIntoAccount(hash,userUuid)) {
         Utils::warningMessageBox(tr("Error inserting into AccountModel!"), tkTr(Trans::Constants::CONTACT_DEV_TEAM));
-    }
+      }
     }
     clearAll(true);
 }

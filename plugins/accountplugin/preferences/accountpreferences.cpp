@@ -36,6 +36,9 @@
 #include <accountbaseplugin/constants.h>
 #include <accountbaseplugin/accountbase.h>
 
+#include <accountbaseplugin/datapackmodel.h>
+#include <accountbaseplugin/medicalproceduremodel.h>
+
 #include <utils/log.h>
 #include <utils/global.h>
 #include <utils/database.h>
@@ -323,4 +326,16 @@ bool AccountDatabaseDefautsWidget::createDefaultsFor(const QString &filePrototyp
                                          base()->table(tableRef),
                                          ";", true);
     return yes;
+}
+
+void AccountDatabaseDefautsWidget::on_datapackButton_clicked()
+{
+        QSqlDatabase db = QSqlDatabase::database(AccountDB::Constants::DATAPACK_ACCOUNTANCY);
+        AccountDB::DatapackMPModel dtpk(this);
+        AccountDB::MedicalProcedureModel MP(this);
+        /*
+        1) vérifier que la mise à jour n'est pas déjà faite.
+        2) updater les valeurs communes 
+        3) rajouter les nouvelles valeurs.
+        */
 }

@@ -74,9 +74,11 @@ private:
                         const int port,
                         CreationOption /*createOption*/
                        );
-
-
     AccountData *getAccountByUid(const QString &uid);
+    
+    bool checkIfIsFirstVersion();
+    bool versionHasChanged();
+    QString checkAndReplaceVersionNumber();
 
 private Q_SLOTS:
     void onCoreDatabaseServerChanged();
