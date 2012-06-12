@@ -71,13 +71,13 @@ using namespace Trans::ConstantTranslations;
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline Core::ICommandLine *commandLine()  { return Core::ICore::instance()->commandLine(); }
 
-static inline bool connectDatabase(QSqlDatabase &DB, const QString &file, const int line)
+static inline bool connectDatabase(QSqlDatabase &DB, const int line)
 {
     if (!DB.isOpen()) {
         if (!DB.open()) {
-            Utils::Log::addError("AccountBase", tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+            LOG_ERROR_FOR("AccountBase", tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
                                  .arg(DB.connectionName()).arg(DB.lastError().text()),
-                                 file, line);
+                                 __FILE__, line);
             return false;
         }
     }
@@ -718,7 +718,7 @@ bool AccountBase::createDatabase(const QString &connectionName , const QString &
 AccountData *AccountBase::getAccountByUid(const QString &uid)
 {
     QSqlDatabase DB = QSqlDatabase::database(Constants::DB_ACCOUNTANCY);
-    if (!connectDatabase(DB, __FILE__, __LINE__))
+    if (!connectDatabase(DB, __LINE__))
         return 0;
     if (uid.isEmpty())
         return 0;
@@ -758,6 +758,9 @@ void AccountBase::onCoreDatabaseServerChanged()
 
 bool AccountBase::checkIfIsFirstVersion()
 {
+    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_ACCOUNTANCY);
+    if (!connectDatabase(DB, __LINE__))
+        return 0;
     QVariant version;
     QSqlQuery qy(database());
     QString req = select(Constants::Table_VERSION, Constants::VERSION_ACTUAL);//QString("SELECT %1 FROM %2").arg("ACTUAL","VERSION");
@@ -780,6 +783,9 @@ bool AccountBase::checkIfIsFirstVersion()
 
 QString AccountBase::checkAndReplaceVersionNumber()
 {
+    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_ACCOUNTANCY);
+    if (!connectDatabase(DB, __LINE__))
+        return 0;
    // if (versionHasChanged())
    // {
     	  QSqlQuery qy(database());
@@ -800,6 +806,9 @@ QString AccountBase::checkAndReplaceVersionNumber()
 
 bool AccountBase::versionHasChanged()
 {
+    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_ACCOUNTANCY);
+    if (!connectDatabase(DB, __LINE__))
+        return 0;
     QString version;
     QSqlQuery qy(database());
     QString req = select(Constants::Table_VERSION, Constants::VERSION_ACTUAL);//QString("SELECT %1 FROM %2").arg("ACTUAL","VERSION");
