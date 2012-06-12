@@ -45,10 +45,10 @@ DatapackBase::DatapackBase(QObject *parent): QObject(parent), Utils::Database()
     addField(Table_MedicalProcedure, MP_DATE,           "DATE",           FieldIsDate);
     addField(Table_MedicalProcedure, MP_OTHERS,         "OTHERS",         FieldIsBlob);   
     
-    //createConnection(Constants::DATAPACK_ACCOUNTANCY, Constants::DATAPACK_ACCOUNTANCY, connector);
+    //createConnection(Constants::DATAPACK_ACCOUNTANCY, Constants::DATAPACK_ACCOUNTANCY, connector);TODO
     if (!database().isOpen()) {
         if (!database().open()) {
-            LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_ACCOUNTANCY).arg(database().lastError().text()));
+            LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DATAPACK_ACCOUNTANCY).arg(database().lastError().text()));
         } else {
             LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(database().connectionName()).arg(database().driverName()));
         }
