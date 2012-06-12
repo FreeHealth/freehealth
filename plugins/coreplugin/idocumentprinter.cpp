@@ -81,7 +81,7 @@
   Register tokens \e tokensAndValues for a specific document, or a global usage with \e tokenWhere.
   Use the Core::IDocumentPrinter::TokensWhere enumerator to define the \e tokenWhere value.
   The tokens are represented in a hash of QString (key), QVariant (value).
-  For more informations about the token management and usage please refer to the web site:
+  For more information about the token management and usage please refer to the web site:
   - French: http://www.freemedforms.com/fr/manuals/freemedforms/tokenmanager
   - English: http://www.freemedforms.com/en/manuals/freemedforms/tokenmanager
  */

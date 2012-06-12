@@ -12,7 +12,7 @@
 # Binary to use for the qmake step
 QMAKE_BIN="qmake"
 QMAKE_SPEC=""
-MAKE_JOBS=1
+MAKE_JOBS=4
 
 # Scripts names and paths
 SCRIPT_NAME=""

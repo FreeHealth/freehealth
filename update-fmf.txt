@@ -1,5 +1,5 @@
-version=0.7.1
+version=0.7.4
 {
-    * April 15, 2012
+    * June, 2012
     * Debug version
 }

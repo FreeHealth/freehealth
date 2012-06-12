@@ -3,6 +3,8 @@ TARGET = Alert
 
 DEFINES += ALERT_LIBRARY
 
+QT += sql
+
 include(../fmf_plugins.pri)
 include(alertplugin_dependencies.pri)
 
@@ -14,10 +16,10 @@ HEADERS += \
     $${PWD}/alertmanager.h \
     $${PWD}/alertitem.h \
     $${PWD}/showalertsIHM.h \
-    $${PWD}/xmlalert.h \
     $${PWD}/alertmodel.h \
     $${PWD}/ialertplaceholder.h \
-    $${PWD}/alertitemeditorwidget.h
+    $${PWD}/alertitemeditorwidget.h \
+    $${PWD}/alertitemtimingeditorwidget.h
 
 SOURCES += \
     $${PWD}/alertplugin.cpp \
@@ -26,13 +28,14 @@ SOURCES += \
     $${PWD}/alertmanager.cpp \
     $${PWD}/alertitem.cpp \
     $${PWD}/showalertsIHM.cpp \
-    $${PWD}/xmlalert.cpp \
     $${PWD}/alertmodel.cpp \
     $${PWD}/ialertplaceholder.cpp \
-    $${PWD}/alertitemeditorwidget.cpp
+    $${PWD}/alertitemeditorwidget.cpp \
+    $${PWD}/alertitemtimingeditorwidget.cpp
 
 FORMS += $${PWD}/ShowAlertsWidget.ui \
-    $${PWD}/alertitemeditorwidget.ui
+    $${PWD}/alertitemeditorwidget.ui \
+    $${PWD}/alertitemtimingeditorwidget.ui
 
 OTHER_FILES += $${PWD}/Alert.pluginspec
 

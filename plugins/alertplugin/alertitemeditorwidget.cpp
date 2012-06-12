@@ -36,6 +36,8 @@
 
 #include "ui_alertitemeditorwidget.h"
 
+#include <QDebug>
+
 using namespace Alert;
 using namespace Trans::ConstantTranslations;
 
@@ -56,11 +58,6 @@ public:
         delete ui;
     }
 
-    // return the number of days in a cycle according to the ui settings
-    int daysInCycle()
-    {
-    }
-
 public:
     Ui::AlertItemEditorWidget *ui;
     AlertItem _item;
@@ -73,9 +70,6 @@ AlertItemEditorWidget::AlertItemEditorWidget(QWidget *parent) :
     d(new Internal::AlertItemEditorWidgetPrivate)
 {
     d->ui->setupUi(this);
-    // set up dateedits
-    d->ui->startDate->setDisplayFormat(tkTr(Trans::Constants::DATETIMEFORMAT_FOR_EDITOR));
-    d->ui->endDate->setDisplayFormat(tkTr(Trans::Constants::DATETIMEFORMAT_FOR_EDITOR));
 
     // set up combo
     d->ui->priority->addItem(Utils::firstLetterUpperCase(tkTr(Trans::Constants::HIGH)));
@@ -107,16 +101,12 @@ AlertItemEditorWidget::AlertItemEditorWidget(QWidget *parent) :
 //    d->ui->relatedTo->addItem(tkTr(Trans::Constants::RELATED_TO_USER_GROUP_1));
     d->ui->relatedTo->addItem(Utils::firstLetterUpperCase(tkTr(Trans::Constants::RELATED_TO_APPLICATION)));
 
-    d->ui->cycleCombo->addItem(tr("Not cycling"));
-    d->ui->cycleCombo->addItem(tr("Cycle every"));
-    d->ui->cyclingEvery->addItems(Trans::ConstantTranslations::periods());
-
-    connect(d->ui->cycleCombo, SIGNAL(currentIndexChanged(int)), this, SLOT(cycleComboChanged(int)));
     clearUi();
 }
 
 AlertItemEditorWidget::~AlertItemEditorWidget()
 {
+    qWarning() << "~AlertItemEditorWidget()";
     if (d)
         delete d;
     d = 0;
@@ -132,15 +122,10 @@ void AlertItemEditorWidget::clearUi()
     d->ui->priority->setCurrentIndex(-1);
     d->ui->overrideRequiresUserComment->setChecked(false);
     d->ui->relatedTo->setCurrentIndex(-1);
-    d->ui->cycleCombo->setCurrentIndex(-1);
-    d->ui->cyclingEvery->setCurrentIndex(-1);
-    d->ui->cycleDelayNumber->setValue(0);
-    d->ui->cycles->setValue(0);
-    d->ui->startDate->clear();
-    d->ui->endDate->clear();
     d->ui->css->clear();
     d->ui->xml->clear();
     d->ui->tabWidget->setCurrentIndex(0);
+    d->ui->timingEditor->clear();
 }
 
 void AlertItemEditorWidget::setAlertItem(const AlertItem &item)
@@ -165,6 +150,9 @@ void AlertItemEditorWidget::setAlertItem(const AlertItem &item)
     d->ui->priority->setCurrentIndex(d->_item.priority());
     d->ui->overrideRequiresUserComment->setChecked(d->_item.isOverrideRequiresUserComment());
 
+    // Timing
+    d->ui->timingEditor->setAlertItem(item);
+
     // Related to
     if (d->_item.relations().count() > 0) {
         const AlertRelation &rel = d->_item.relationAt(0);
@@ -175,37 +163,11 @@ void AlertItemEditorWidget::setAlertItem(const AlertItem &item)
         case AlertRelation::RelatedToApplication: d->ui->relatedTo->setCurrentIndex(3);
         }
     }
-
-    // Timings
-    if (d->_item.timings().count() > 0) {
-        const AlertTiming &time = d->_item.timingAt(0);
-        d->ui->startDate->setDateTime(time.start());
-        d->ui->endDate->setDateTime(time.end());
-        if (time.isCycling())
-            d->ui->cycleCombo->setCurrentIndex(1);
-        else
-            d->ui->cycleCombo->setCurrentIndex(0);
-//        d->ui->cyclingEvery;
-        d->ui->cycles->setValue(time.cyclingDelayInMinutes());
-    }
 }
 
-AlertItem &AlertItemEditorWidget::submit()
+bool AlertItemEditorWidget::submit(AlertItem &item)
 {
-    return d->_item;
+//    return d->_item;
+    return true;
 }
 
-void AlertItemEditorWidget::cycleComboChanged(int index)
-{
-    if (index==1) {
-        d->ui->cyclingEvery->show();
-        d->ui->cycles->show();
-        d->ui->cycleLabel->show();
-        d->ui->cycleDelayNumber->show();
-    } else {
-        d->ui->cyclingEvery->hide();
-        d->ui->cycles->hide();
-        d->ui->cycleLabel->hide();
-        d->ui->cycleDelayNumber->hide();
-    }
-}

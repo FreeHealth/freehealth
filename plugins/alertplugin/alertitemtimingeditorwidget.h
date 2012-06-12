@@ -25,46 +25,46 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef XMLALERT_H
-#define XMLALERT_H
+#ifndef ALERT_ALERTITEMTIMINGEDITORWIDGET_H
+#define ALERT_ALERTITEMTIMINGEDITORWIDGET_H
 
-#include <QXmlStreamReader>
-#include <QXmlStreamWriter>
-
-/**
- * \file xmlalert.h
- * \author Eric MAEKER <eric.maeker@gmail.com>, Pierre-Marie Desombre <pm.desombre@gmail.com>
- * \version 0.8.0
- * \date 28 May 2012
-*/
+#include <alertplugin/alertplugin_exporter.h>
+#include <QWidget>
 
 namespace Alert {
+class AlertItem;
+class AlertTiming;
+namespace Internal {
+namespace Ui {
+class AlertItemTimingEditorWidget;
+}
+}
 
-class XmlAlert : public QObject
+class ALERT_EXPORT AlertItemTimingEditorWidget : public QWidget
 {
     Q_OBJECT
 public:
-    XmlAlert(QObject * parent = 0);
-    ~XmlAlert();
+    explicit AlertItemTimingEditorWidget(QWidget *parent = 0);
+    ~AlertItemTimingEditorWidget();
+    
+public Q_SLOTS:
+    void clear();
+    void setAlertItem(const AlertItem &item);
+    bool submit(AlertItem &item);
+
+private Q_SLOTS:
+    void cycleComboChanged(int index);
+    void checkDates();
+
+private:
+    void cyclingToUi(const Alert::AlertTiming &timing);
+    void cyclingFromUi(Alert::AlertTiming &timing);
+
+private:
+    Internal::Ui::AlertItemTimingEditorWidget *ui;
+    bool _periodicalCycling;
 };
 
-class XmlWriter : public QXmlStreamWriter
-{
-    //Q_OBJECT
-public:
-    XmlWriter();
-    ~XmlWriter();
-};
+} // namespace Alert
 
-class XmlReader : public QXmlStreamReader
-{
-    //Q_OBJECT
-public:
-    XmlReader();
-    ~XmlReader();
-};
-
-}  // Alert
-
-#endif
-
+#endif // ALERT_ALERTITEMTIMINGEDITORWIDGET_H

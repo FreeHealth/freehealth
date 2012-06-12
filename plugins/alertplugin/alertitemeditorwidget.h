@@ -50,13 +50,10 @@ public:
     
 public Q_SLOTS:
     void setAlertItem(const AlertItem &item);
-    AlertItem &submit();
+    bool submit(AlertItem &item);
 
 private:
     void clearUi();
-
-private Q_SLOTS:
-    void cycleComboChanged(int index);
 
 private:
     Internal::AlertItemEditorWidgetPrivate *d;

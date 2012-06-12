@@ -48,23 +48,6 @@ createWorkingDir()
   fi
 }
 
-# Download source
-# Uses $SOURCEPACK_FULLPATH, $PACKDIR, $APP_NAME, $APP_VERSION, $PACKDIR, $DOWNLOAD_URL, $DOWNLOAD_FILENAME
-downloadAndUnpackSource()
-{
-  if [ ! -e $SOURCEPACK_FULLPATH ]; then
-    echo "    * Downloading source package: "$DOWNLOAD_URL
-    echo "    * To: "$SOURCEPACK_FULLPATH
-    cd $PACKDIR
-    wget $WGET_NOPROXY $DOWNLOAD_URL
-    mv $DOWNLOAD_FILENAME $SOURCEPACK_FULLPATH
-  fi
-  if [ ! -e $SOURCEDIR ]; then
-    echo "    * Unpackaging source package to: "$PACKDIR
-    tar xzvf $SOURCEPACK_FULLPATH -C $PACKDIR
-  fi
-}
-
 # Assuming the Debian Med files are totally updated to the correct version
 # Uses $SOURCEDIR, $APP_NAME
 downloadDebianMedFiles()
@@ -75,6 +58,7 @@ downloadDebianMedFiles()
     echo "    * Downloading Debian Med files"
     svn checkout svn://svn.debian.org/svn/debian-med/trunk/packages/$APP_NAME/trunk/debian $SOURCEDIR"/debian"
     cp $SOURCEDIR"/debian/changelog" $PACKDIR"/changelog.bkup"
+    echo 'cp $SOURCEDIR"/debian/control" $PACKDIR"/control.bkup"'
   fi
 }
 
@@ -95,7 +79,13 @@ uploadToPPA()
   echo "    * Uploading to PPA: "$UBUNTU_RELEASE_NAME
   cd $PACKDIR"/build-area"
   echo `pwd`
-  dput ppa:freemedforms/ppa $APP_NAME"_"$APP_VERSION"-"$UBUNTU_RELEASE_NAME$PPA_VERSION"_source.changes"
+  if [ "$APP_NAME" = "libquazip" ]; then
+    echo "      ppa:freemedforms/libquazip"
+    dput ppa:freemedforms/libquazip $APP_NAME"_"$APP_VERSION"-"$UBUNTU_RELEASE_NAME$PPA_VERSION"_source.changes"
+  else
+    echo "      ppa:freemedforms/ppa"
+    dput ppa:freemedforms/ppa $APP_NAME"_"$APP_VERSION"-"$UBUNTU_RELEASE_NAME$PPA_VERSION"_source.changes"
+  fi
 }
 
 # patch changelog
@@ -114,7 +104,21 @@ patchChangelog()
   echo "\n  * New upstream" >> $SOURCEDIR"/debian/changelog"
   echo "\n -- Eric Maeker <eric.maeker@gmail.com>  "`date -R`"\n" >> $SOURCEDIR"/debian/changelog"
   cat $PACKDIR"/changelog.bkup" >> $SOURCEDIR"/debian/changelog"
+}
 
+# For all distribs, change the debhelper dependency to 8.0 instead of the latest one
+changeToDebHelper8()
+{
+  rm $SOURCEDIR"/debian/control"
+  cp $PACKDIR"/control.bkup" $SOURCEDIR"/debian/control"
+  if [ "$UBUNTU_RELEASE_NAME" = "precise" ]; then
+    echo "9" > $SOURCEDIR"/debian/compat"
+    return 0;
+  fi
+  echo "    * Patching debhelper dependency to 8.0, ubuntu "$UBUNTU_RELEASE_NAME
+  sed -i "s/debhelper (>= 9)/debhelper (>= 8)/" $SOURCEDIR"/debian/control"
+  rm $SOURCEDIR"/debian/compat"
+  echo "8" > $SOURCEDIR"/debian/compat"
 }
 
 # prepare source package using svn-buildpackage
@@ -127,7 +131,9 @@ svnBuildPackage()
   #echo "       from FreeMedForms project"
   #svn checkout https://freemedforms.googlecode.com/svn/trunk/buildspecs/debian/freemedforms-project ./
   cp "./trunk/debian/changelog" $PACKDIR"/changelog.bkup"
+  cp "./trunk/debian/control" $PACKDIR"/control.bkup"
   SOURCEDIR=$PACKDIR"/trunk"
+  changeToDebHelper8
   patchChangelog
   cd $PACKDIR"/trunk"
   echo "    * Building DSC file: svn-buildpackage --svn-download-orig -k$PGP_KEY -S $DEBUILD_SOURCE --svn-ignore"
@@ -179,25 +185,16 @@ fi
 PACKDIR=`pwd`"/ppa_"$APP_NAME"_"$APP_VERSION
 SOURCEDIR=$PACKDIR"/"$APP_NAME"-"$APP_VERSION
 SOURCEPACK_FULLPATH=$PACKDIR"/"$APP_NAME"_"$APP_VERSION".orig.tar.gz"
-DOWNLOAD_URL="http://freemedforms.googlecode.com/files/freemedformsfullsources-"$APP_VERSION".tgz"
-DOWNLOAD_FILENAME=$APP_NAME"fullsources-"$APP_VERSION".tgz"
 
 echo "*** Processing "$APP_NAME" "$APP_VERSION
 echo "    * Source package: "$SOURCEPACK_FULLPATH
 echo "    * Source path: "$SOURCEDIR
 
-# build debhelper v8+ package
-# "maverick natty oneiric" #precise
-
 createWorkingDir
-#downloadAndUnpackSource
-#downloadDebianMedFiles
 for u in $SERIES
 do
   UBUNTU_RELEASE_NAME=$u
   svnBuildPackage
-  #patchChangelog
-  #buildSourcePackage
   uploadToPPA
 done
 

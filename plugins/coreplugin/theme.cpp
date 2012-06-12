@@ -239,16 +239,19 @@ QPixmap ThemePrivate::splashScreenPixmap(const QString &fileName, const IconSize
     }
 
     // return themed splashscreen
-    if (QFile(m_AbsolutePath + "/pixmap/splashscreens/" + file).exists())
+    if (QFile(m_AbsolutePath + "/pixmap/splashscreens/" + file).exists()) {
+        LOG("Using splashscreen: " + file);
         return QPixmap(m_AbsolutePath + "/pixmap/splashscreens/" + file);
-    else
-        LOG_ERROR_FOR("ThemePrivate", QString("SplashScreen file does not exist %1").arg(m_AbsolutePath + "/pixmap/splashscreens/" + fileName));
+    } else {
+        LOG_ERROR(QString("SplashScreen file does not exist %1").arg(m_AbsolutePath + "/pixmap/splashscreens/" + fileName));
+    }
     return QPixmap();
 }
 
 void ThemePrivate::createSplashScreen(const QString &fileName)
 {
     if (!m_Splash) {
+        LOG_FOR("Theme", "Creating splashscreen");
         if (qApp->desktop()->screenGeometry().width() > 1024) {
             m_Splash = new QSplashScreen(splashScreenPixmap(fileName, BigIcon));
         } else {

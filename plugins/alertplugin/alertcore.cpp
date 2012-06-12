@@ -96,15 +96,32 @@ bool AlertCore::initialize()
     query.getAlertItemFromUuid(item.uuid());
     QVector<AlertItem> test = d->m_alertBase->getAlertItems(query);
     qWarning() << test;
+    qWarning() << item.toXml();
 
-    qWarning() << "llllllllllllllllllllllllllllllllllllllllll";
+    AlertItem t = AlertItem::fromXml(item.toXml());
+    qWarning() << t.toXml();
+
+    qWarning() << (t.toXml() == item.toXml());
+
     QDialog dlg;
     AlertItemEditorWidget *w = new AlertItemEditorWidget(&dlg);
     dlg.setLayout(new QGridLayout(&dlg));
-    w->setAlertItem(test.at(0));
+
+    AlertTiming &time = item.timingAt(0);
+    time.setCycling(true);
+    time.setCyclingDelayInDays(10);
+    qWarning() << time.cyclingDelayInMinutes();
+    int period, mod;
+    time.cyclingDelayPeriodModulo(&period, &mod);
+    // period = Trans::Constants::Time::Weeks
+    // mod = 11
+    qWarning() << period << mod;
+
+    w->setAlertItem(item);
     dlg.layout()->addWidget(w);
     dlg.exec();
     // END TESTS
+
 
     return true;
 }
