@@ -15,9 +15,15 @@ class DatapackBase:public QObject,public Utils::Database
         DatapackBase(QObject * parent);
         ~DatapackBase();
         static DatapackBase *instance();
+        
+        bool initialize();
+        
     private:
         static DatapackBase *m_Instance;
+        bool _init;
 };
+
+
 namespace Internal {
 class DatapackMPModelPrivate;
 }
