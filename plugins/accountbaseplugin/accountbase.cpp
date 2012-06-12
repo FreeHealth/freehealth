@@ -120,6 +120,8 @@ AccountBase *AccountBase::instance()
 {
     if (!m_Instance) {
         m_Instance = new AccountBase(qApp);
+        
+        // TODO: this should be avoid, create the object **only**
         m_Instance->init();
     }
     return m_Instance;
@@ -550,6 +552,7 @@ AccountBase::AccountBase(QObject *parent)
 //          "surname          varchar(50)               NULL,"
 //          "guid             varchar(6)                NOT NULL);";
 
+    // TODO: this should be avoid don't init in constructor
     init();
 
     connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
