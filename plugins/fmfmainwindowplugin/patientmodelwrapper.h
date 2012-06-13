@@ -71,7 +71,7 @@ public:
     virtual bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
 
 
-    /** \todo Is this needed in freemedforms ? */
+    //TODO: Is this needed in freemedforms?
     QString toXml() const {return QString();}
     bool fromXml(const QString &) {return true;}
 
