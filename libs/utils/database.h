@@ -206,6 +206,18 @@ public:
                                  Grant_Process|Grant_Trigger|Grant_ShowDatabases
 
     };
+    /** \brief Enumerate the values of fields got by Sqlite PRAGMA command */
+    enum PragmaValues 
+    {
+        Cid_PragmaValue = 0,
+        Name_PragmaValue ,
+        Type_PragmaValue ,
+        OptionNull_PragmaValue ,
+        DefaultValue_PragmaValue ,
+        Pk_PragmaValue ,
+        PragmaValues_MaxParam
+        };
+    
     Q_DECLARE_FLAGS(Grants, Grant)
 
     Database();
@@ -266,6 +278,7 @@ public:
     virtual Field field(const int &tableref, const int &fieldref) const;
 
     virtual QStringList fieldNames(const int &tableref) const;
+    virtual QStringList fieldNamesSql(const int &tableref) const;
     virtual FieldList fields(const int tableref) const;
 
     virtual QString table(const int &tableref) const;
@@ -322,6 +335,8 @@ public:
 
     virtual bool createTable(const int &tableref) const;
     virtual bool createTables() const;
+    
+    virtual bool alterTableForNewField(const int tableRef, const int newFieldRef,const int TypeOfField, const QString & nullOption);
 
     static bool executeSQL(const QStringList &list, const QSqlDatabase &DB);
     static bool executeSQL(const QString &req, const QSqlDatabase &DB);

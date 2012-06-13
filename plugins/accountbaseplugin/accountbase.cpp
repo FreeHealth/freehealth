@@ -71,24 +71,22 @@ using namespace Trans::ConstantTranslations;
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline Core::ICommandLine *commandLine()  { return Core::ICore::instance()->commandLine(); }
 
-static inline bool connectDatabase(QSqlDatabase &DB, const QString &file, const int line)
+static inline bool connectDatabase(QSqlDatabase &DB, const int line)
 {
     if (!DB.isOpen()) {
         if (!DB.open()) {
-            Utils::Log::addError("DrugsBase", tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
-                                 .arg(DB.connectionName()).arg(DB.lastError().text()),
-                                 file, line);
+            Utils::Log::addError("AccountBase", tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+                                 .arg(DB.connectionName()).arg(DB.lastError().text()), __FILE__, line);
             return false;
         }
     }
     return true;
 }
 
-
 namespace AccountDB {
 namespace Internal {
 /**
-  \brief Private part of DrugsBase
+  \brief Private part of AccountBase
   \internal
 */
 class AccountBasePrivate
@@ -116,11 +114,13 @@ bool AccountBase::m_initialized = false;
 //--------------------------------------------------------------------------------------------------------
 //-------------------------------------- Initializing Database -------------------------------------------
 //--------------------------------------------------------------------------------------------------------
-/** \brief Returns the unique instance of DrugsBase. If it does not exist, it is created */
+/** \brief Returns the unique instance of AccountBase. If it does not exist, it is created */
 AccountBase *AccountBase::instance()
 {
     if (!m_Instance) {
         m_Instance = new AccountBase(qApp);
+        
+        // TODO: this should be avoid, create the object **only**
         m_Instance->init();
     }
     return m_Instance;
@@ -170,7 +170,7 @@ AccountBase::AccountBase(QObject *parent)
     addField(Table_MedicalProcedure, MP_AMOUNT,         "AMOUNT",         FieldIsReal);
     addField(Table_MedicalProcedure, MP_REIMBOURSEMENT, "REIMBOURSEMENT", FieldIsReal);
     addField(Table_MedicalProcedure, MP_DATE,           "DATE",           FieldIsDate);
-    //addField(Table_MedicalProcedure, MP_OTHERS,         "OTHERS",         FieldIsBlob);
+    addField(Table_MedicalProcedure, MP_OTHERS,         "OTHERS",         FieldIsBlob);
 
 //    "CREATE TABLE 	actes_disponibles ("  --> medical_procedure
 //            "id_acte_dispo  int(10)  	UNSIGNED  	       		NOT NULL  	 auto_increment ,"
@@ -551,6 +551,7 @@ AccountBase::AccountBase(QObject *parent)
 //          "surname          varchar(50)               NULL,"
 //          "guid             varchar(6)                NOT NULL);";
 
+    // TODO: this should be avoid don't init in constructor
     init();
 
     connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
@@ -590,11 +591,38 @@ bool AccountBase::init()
     } else {
         LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(database().connectionName()).arg(database().driverName()));
     }
-
     if (!checkDatabaseScheme()) {
-        LOG_ERROR(tkTr(Trans::Constants::DATABASE_1_SCHEMA_ERROR).arg(Constants::DB_ACCOUNTANCY));
-        return false;
-    }
+       if(checkIfIsFirstVersion()){
+        qDebug() << __FILE__ << QString::number(__LINE__) << "ISFIRSTVERSION";             
+        if (fieldNamesSql(AccountDB::Constants::Table_MedicalProcedure).size()< AccountDB::Constants::MP_MaxParam)
+        {
+        	  if (!alterTableForNewField(AccountDB::Constants::Table_MedicalProcedure, AccountDB::Constants::MP_OTHERS,FieldIsBlob, QString("NULL")))
+        	  {
+        	  	  LOG_ERROR("Unable to add new field in table MP");
+        	  	  return false;
+        	      }
+        	  else
+        	  {
+        	      foreach(QString field,fieldNamesSql(AccountDB::Constants::Table_MedicalProcedure)){
+        	          qWarning() << __FILE__ << QString::number(__LINE__) << " field =" << field ;
+                          }
+                        LOG("New Version = "+checkAndReplaceVersionNumber());
+        	  	return true;
+        	      }
+                }           	
+                
+            }
+        else
+        {
+        	LOG_ERROR(tkTr(Trans::Constants::DATABASE_1_SCHEMA_ERROR).arg(Constants::DB_ACCOUNTANCY));
+        	return false;
+            }
+        
+    }//checkDatabaseScheme
+    if(versionHasChanged())
+    {
+        LOG("Version has changed , new version = "+checkAndReplaceVersionNumber());
+        }
 
     m_initialized = true;
     return true;
@@ -692,7 +720,7 @@ bool AccountBase::createDatabase(const QString &connectionName , const QString &
 AccountData *AccountBase::getAccountByUid(const QString &uid)
 {
     QSqlDatabase DB = QSqlDatabase::database(Constants::DB_ACCOUNTANCY);
-    if (!connectDatabase(DB, __FILE__, __LINE__))
+    if (!connectDatabase(DB, __LINE__))
         return 0;
     if (uid.isEmpty())
         return 0;
@@ -728,4 +756,76 @@ void AccountBase::onCoreDatabaseServerChanged()
         QSqlDatabase::removeDatabase(Constants::DB_ACCOUNTANCY);
     }
     init();
+}
+
+bool AccountBase::checkIfIsFirstVersion()
+{
+    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_ACCOUNTANCY);
+    if (!connectDatabase(DB, __LINE__))
+        return 0;
+    QVariant version;
+    QSqlQuery qy(database());
+    QString req = select(Constants::Table_VERSION, Constants::VERSION_ACTUAL);//QString("SELECT %1 FROM %2").arg("ACTUAL","VERSION");
+    if (!qy.exec(req))
+    {
+    	  LOG_QUERY_ERROR(qy);
+    	  return false;
+        }
+    while (qy.next())
+    {
+    	version = qy.value(0);
+        }
+    if (version == QVariant("0.1"))
+    {
+    	  LOG(QString("VERSION == 0.1"));
+    	  return true;
+        }
+    return false;
+}
+
+QString AccountBase::checkAndReplaceVersionNumber()
+{
+    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_ACCOUNTANCY);
+    if (!connectDatabase(DB, __LINE__))
+        return 0;
+   // if (versionHasChanged())
+   // {
+    	  QSqlQuery qy(database());
+    	  /*QString req = QString("INSERT INTO %1 (%2) VALUES ('%3')")
+    	               .arg("VERSION","ACTUAL",QString(Constants::VERSION_ACTUAL));*/
+    	  qy.prepare(prepareInsertQuery(Constants::Table_VERSION));
+          qy.bindValue(Constants::VERSION_ACTUAL, Constants::DB_VERSION_NUMBER);
+	  
+    	  if (!qy.exec())
+    	  {
+    	  	  LOG_QUERY_ERROR(qy);
+    	  	  return QString(qy.lastError().text());
+    	      }
+    	  return QString(Constants::DB_VERSION_NUMBER);
+     //   }
+     
+}
+
+bool AccountBase::versionHasChanged()
+{
+    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_ACCOUNTANCY);
+    if (!connectDatabase(DB, __LINE__))
+        return 0;
+    QString version;
+    QSqlQuery qy(database());
+    QString req = select(Constants::Table_VERSION, Constants::VERSION_ACTUAL);//QString("SELECT %1 FROM %2").arg("ACTUAL","VERSION");
+    if (!qy.exec(req))
+    {
+    	  LOG_QUERY_ERROR(qy);
+    	  return false;
+        }
+    while (qy.next())
+    {
+    	version = qy.value(0).toString();
+        }
+    if (!version.contains(QString(Constants::DB_VERSION_NUMBER)))
+    {
+    	  return true;
+        }
+    return false;
 }
