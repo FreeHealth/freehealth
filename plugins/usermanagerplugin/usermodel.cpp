@@ -1425,16 +1425,16 @@ bool UserModel::createVirtualUsers(const int count)
 
         int genderIndex = r.randomInt(1);
         QString name = r.getRandomName();
-        QString surname = r.getRandomFirstname(genderIndex==1);
+        QString firstName = r.getRandomFirstname(genderIndex==1);
 
         u->setName(name);
-        u->setFirstname(surname);
+        u->setFirstname(firstName);
         u->setTitleIndex(r.randomInt(0, 4));
         u->setGenderIndex(genderIndex);
         u->setValidity(true);
 
         // Create log and pass
-        QString pass = name + "." + surname;
+        QString pass = name + "." + firstName;
         pass = pass.toLower();
         pass = Utils::removeAccents(pass);
         u->setLogin64(Utils::loginForSQL(pass));
