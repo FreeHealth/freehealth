@@ -34,7 +34,7 @@ int csplit(const char *chaine, char *nomFichier1, char *nomFichier2, char *prefi
   while (fgets(ligne1, 300, fichier1) != NULL)
   {
     //rechercher chaine dans ligne
-    if (strstr(ligne1, chaine)) // si chaine trouvée
+    if (strstr(ligne1, chaine)  && chaine != "****FINFICHIER****") // si chaine trouvée
     { 
       numero++;
       sprintf(nomFichier2, "%s%03d.txt", prefixe, numero); // Ecrit dans la chaine nomFichier le nom formaté du fichier suivant
