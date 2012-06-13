@@ -69,6 +69,7 @@ class IdentityPage: public QWizardPage
 public:
     IdentityPage(QWidget *parent = 0);
     bool validatePage();
+    bool isModified();
 
     QString lastInsertedUuid() const {return m_uuid;}
 

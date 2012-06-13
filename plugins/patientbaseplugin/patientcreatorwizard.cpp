@@ -57,7 +57,7 @@ static inline Core::ISettings *settings() { return Core::ICore::instance()->sett
 static inline Patients::Internal::PatientBase *patientBase() { return Patients::Internal::PatientBase::instance(); }
 
 PatientCreatorWizard::PatientCreatorWizard(QWidget *parent) :
-        QWizard(parent)
+    QWizard(parent)
 {
     m_Page = new IdentityPage(this);
     addPage(m_Page);
@@ -75,16 +75,19 @@ void PatientCreatorWizard::done(int r)
 {
     if (r == QDialog::Rejected) {
         m_Saved = false;
-        bool yes = Utils::yesNoMessageBox(tr("WARNING! You did not save this patient. "
-                                             "If you continue without saving, all changes will be lost."),
-                               tr("Do you really want to close this dialog?"),
-                               "", tr("Patient not saved"));
-        if (yes) {
+        // has been anything entered already into the fields (data model is "dirty")?
+        // -->then ask for confirmation
+        bool reallyClose = !m_Page->isModified() ? true :
+                                      Utils::yesNoMessageBox(tr("WARNING! You did not save this patient. "
+                                                                "If you continue without saving, all changes will be lost."),
+                                                             tr("Do you really want to close this dialog?"),
+                                                             "", tr("Patient not saved"));
+        if (reallyClose) {
             QDialog::done(r);
             if (Patients::PatientModel::activeModel())
                 Patients::PatientModel::activeModel()->refreshModel();
         }
-    } else if (r==QDialog::Accepted) {
+    } else if (r == QDialog::Accepted) {
         if (!validateCurrentPage())
             return;
         if (settings()->value(Constants::S_PATIENTCHANGEONCREATION).toBool()) {
@@ -99,6 +102,9 @@ void PatientCreatorWizard::done(int r)
     }
 }
 
+/** \class IdentityPage
+  * \brief Wizard page that asks for basic identity data like name, title, date of birth, gender, etc.
+  */
 IdentityPage::IdentityPage(QWidget *parent) :
     QWizardPage(parent)
 {
@@ -181,4 +187,10 @@ bool IdentityPage::validatePage()
         ok = false;
     }
     return ok;
+}
+
+bool IdentityPage::isModified()
+{
+    //TODO: add photo + zip check
+    return m_Identity->isModified();
 }

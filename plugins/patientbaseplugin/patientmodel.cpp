@@ -555,35 +555,35 @@ bool PatientModel::setData(const QModelIndex &index, const QVariant &value, int 
             break;
         }
         case IPatient::GenderIndex:
+        {
+            col = Constants::IDENTITY_GENDER;
+            QString g;
+            switch (value.toInt())
             {
-                col = Constants::IDENTITY_GENDER;
-                QString g;
-                switch (value.toInt())
-                {
-                case 0: g = "M"; break;
-                case 1: g = "F"; break;
-                case 2: g = "H"; break;
-                }
-                d->m_SqlPatient->setData(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_GENDER), g, role);
-                col=-1;
-                colsToEmit << Core::IPatient::Gender << Core::IPatient::GenderPixmap;
-                break;
+            case 0: g = "M"; break;
+            case 1: g = "F"; break;
+            case 2: g = "H"; break;
             }
+            d->m_SqlPatient->setData(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_GENDER), g, role);
+            col=-1;
+            colsToEmit << Core::IPatient::Gender << Core::IPatient::GenderPixmap;
+            break;
+        }
         case IPatient::Gender:
-            {
-                const QString &g = value.toString();
-                QString toSave;
-                switch (genders().indexOf(g)) {
-                case 0 : toSave = "M"; break;
-                case 1 : toSave = "F"; break;
-                case 2:  toSave = "H"; break;
-                default: LOG_ERROR("Unknown gender " + g);
-                }
-                d->m_SqlPatient->setData(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_GENDER), toSave, role);
-                col = -1;
-                colsToEmit << Core::IPatient::GenderIndex << Core::IPatient::GenderPixmap;
-                break;
+        {
+            const QString &g = value.toString();
+            QString toSave;
+            switch (genders().indexOf(g)) {
+            case 0 : toSave = "M"; break;
+            case 1 : toSave = "F"; break;
+            case 2:  toSave = "H"; break;
+            default: LOG_ERROR("Unknown gender " + g);
             }
+            d->m_SqlPatient->setData(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_GENDER), toSave, role);
+            col = -1;
+            colsToEmit << Core::IPatient::GenderIndex << Core::IPatient::GenderPixmap;
+            break;
+        }
         case IPatient::DateOfBirth:
         {
             col = Constants::IDENTITY_DOB;
