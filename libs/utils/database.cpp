@@ -1069,6 +1069,12 @@ QString Database::getWhereClause(const FieldList &fields) const
     return where;
 }
 
+/** Create a where clause on the \e fields. */
+QString Database::getWhereClause(const Field &field) const
+{
+    return getWhereClause(Utils::FieldList() << field);
+}
+
 /**
    Create a join statement on \e join.field1.tableName using fields equality.
   \code

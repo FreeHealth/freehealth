@@ -273,6 +273,7 @@ public:
 
     virtual QString getWhereClause(const int &tableref, const QHash<int, QString> &conditions) const;
     virtual QString getWhereClause(const FieldList &fields) const;
+    virtual QString getWhereClause(const Field &field) const;
 
     virtual QString joinToSql(const Join &join) const;
 
