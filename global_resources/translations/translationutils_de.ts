@@ -611,13 +611,13 @@
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_drugs.h" line="47"/>
-        <source>%1 allergy</source>
-        <translation>%1-Allergie</translation>
+        <source>Allergy to %1</source>
+        <translation>Allergie auf %1</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_drugs.h" line="48"/>
-        <source>%1 intolerance</source>
-        <translation>%1-Unverträglichkeit</translation>
+        <source>Intolerance to %1</source>
+        <translation>Unverträglichkeit von %1</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_drugs.h" line="49"/>

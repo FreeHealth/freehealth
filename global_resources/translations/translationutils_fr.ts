@@ -631,12 +631,12 @@
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_drugs.h" line="47"/>
-        <source>%1 allergy</source>
+        <source>Allergy to %1</source>
         <translation>Allergie à %1</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_drugs.h" line="48"/>
-        <source>%1 intolerance</source>
+        <source>Intolerance to %1</source>
         <translation>Intolérance à %1</translation>
     </message>
     <message>
