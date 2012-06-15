@@ -90,6 +90,7 @@ void BirthDayEdit::setDate(const QDate& date)
     m_date = date;
     emit dateChanged(m_date);
 }
+
 /** \brief sets the internal date of the widget to the string
  *
  * tries to parse the string. If it is an invalid date string, the date field
@@ -124,6 +125,7 @@ void BirthDayEdit::setDateString(const QString& dateString)
     }
 }
 
+/** \brief updates the displayText with the internal date using the FMF date format */
 void BirthDayEdit::updateDisplayText()
 {
     // was there valid date saved?
@@ -137,7 +139,7 @@ void BirthDayEdit::updateDisplayText()
 }
 
 
-/** \brief init function called from constructor to init all internal values */
+/** \brief init function called from constructors to init all internal values */
 void BirthDayEdit::init(const QDate& date, const QDate& maximumDate, const QDate& minimumDate)
 {
     m_date = date;

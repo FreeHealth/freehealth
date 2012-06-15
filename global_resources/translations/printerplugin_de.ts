@@ -257,7 +257,7 @@ Dies kann eine starke CPU Belastung sein.</translation>
     <message>
         <location filename="../../plugins/printerplugin/printerpreviewer_p.ui" line="118"/>
         <source>Update preview</source>
-        <translation>Updating der Vorschau</translation>
+        <translation>Vorschau aktualisieren</translation>
     </message>
 </context>
 <context>
