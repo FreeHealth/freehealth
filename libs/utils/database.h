@@ -89,6 +89,8 @@ struct Field {
 typedef QList<Field> FieldList;
 
 struct Join {
+    Join() : type(-1) {}
+
     Join(const Field &field1, const Field &field2, const int type = 0) :
             field1(field1), field2(field2), type(type) {}
 
@@ -100,6 +102,8 @@ struct Join {
         field2.field = f2;
         type = joinType;
     }
+
+    bool isNull() const {return (field1.field < 0) && (field2.field < 0); }
 
     Field field1;
     Field field2;
