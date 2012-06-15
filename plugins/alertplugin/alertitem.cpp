@@ -298,13 +298,44 @@ bool AlertItem::isValid() const
 /** Return the modification state of the item */
 bool AlertItem::isModified() const
 {
-    return d->_modified;
+    if (d->_modified)
+        return true;
+    // test all subclasses
+    for(int i=0; i < d->_timings.count(); ++i) {
+        if (d->_timings.at(i).isModified())
+            return true;
+    }
+    for(int i=0; i < d->_relations.count(); ++i) {
+        if (d->_relations.at(i).isModified())
+            return true;
+    }
+    for(int i=0; i < d->_scripts.count(); ++i) {
+        if (d->_scripts.at(i).isModified())
+            return true;
+    }
+    for(int i=0; i < d->_validations.count(); ++i) {
+        if (d->_relations.at(i).isModified())
+            return true;
+    }
+    return false;
 }
 
-/** Define the modification state of the item */
+/** Define the modification state of the item and all its subitems (timings, relations, validations, scripts). */
 void AlertItem::setModified(bool modified)
 {
     d->_modified = modified;
+    for(int i=0; i < d->_timings.count(); ++i) {
+        d->_timings[i].setModified(modified);
+    }
+    for(int i=0; i < d->_relations.count(); ++i) {
+        d->_relations[i].setModified(modified);
+    }
+    for(int i=0; i < d->_scripts.count(); ++i) {
+        d->_scripts[i].setModified(modified);
+    }
+    for(int i=0; i < d->_validations.count(); ++i) {
+        d->_validations[i].setModified(modified);
+    }
 }
 
 /** Return the uuid of the item */
@@ -572,6 +603,7 @@ void AlertItem::setExtraXml(const QString &xml)
 
 void AlertItem::clearRelations()
 {
+    d->_modified = true;
     d->_relations.clear();
 }
 
@@ -598,11 +630,13 @@ AlertRelation &AlertItem::relationAt(int id) const
 
 void AlertItem::addRelation(const AlertRelation &relation)
 {
+    d->_modified = true;
     d->_relations << relation;
 }
 
 void AlertItem::clearTimings()
 {
+    d->_modified = true;
     d->_timings.clear();
 }
 
@@ -629,11 +663,13 @@ AlertTiming &AlertItem::timingAt(int id) const
 
 void AlertItem::addTiming(const AlertTiming &timing)
 {
+    d->_modified = true;
     d->_timings.append(timing);
 }
 
 void AlertItem::clearScripts()
 {
+    d->_modified = true;
     d->_scripts.clear();
 }
 
@@ -660,11 +696,13 @@ AlertScript &AlertItem::scriptAt(int id) const
 
 void AlertItem::addScript(const AlertScript &script)
 {
+    d->_modified = true;
     d->_scripts << script;
 }
 
 void AlertItem::clearValidations()
 {
+    d->_modified = true;
     d->_validations.clear();
 }
 
@@ -691,6 +729,7 @@ AlertValidation &AlertItem::validationAt(int id) const
 
 void AlertItem::addValidation(const AlertValidation &val)
 {
+    d->_modified = true;
     d->_validations << val;
 }
 
