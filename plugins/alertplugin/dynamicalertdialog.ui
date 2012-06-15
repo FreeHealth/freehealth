@@ -70,7 +70,6 @@
     <layout class="QHBoxLayout" name="buttonLayout"/>
    </item>
   </layout>
-  <zorder>overrideCommentLabel</zorder>
  </widget>
  <resources/>
  <connections/>
