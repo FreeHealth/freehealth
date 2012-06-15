@@ -90,11 +90,9 @@ void BirthDayEdit::updateDisplayText()
     // was there valid date saved?
     if (m_date.isValid()) {
         setText(m_date.toString(Trans::Constants::DATEFORMAT_FOR_EDITOR));
-        setStyleSheet("background: white");
     } else {
         // no valid date saved, maybe NULL
         setText("");
-        setStyleSheet("background: red");
         clear();
     }
 }
