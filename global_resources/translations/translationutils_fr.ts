@@ -631,12 +631,12 @@
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_drugs.h" line="47"/>
-        <source>Allergy to %1</source>
+        <source>%1 allergy</source>
         <translation>Allergie à %1</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_drugs.h" line="48"/>
-        <source>Intolerance to %1</source>
+        <source>%1 intolerance</source>
         <translation>Intolérance à %1</translation>
     </message>
     <message>
@@ -1093,27 +1093,27 @@ Lieu: %2</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_spashandupdate.h" line="60"/>
-        <source>Each days</source>
+        <source>daily</source>
         <translation>Tous les jours</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_spashandupdate.h" line="61"/>
-        <source>Each week</source>
-        <translation>Toutes les semaines</translation>
+        <source>weekly</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_spashandupdate.h" line="62"/>
-        <source>Each month</source>
+        <source>monthly</source>
         <translation>Tous les mois</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_spashandupdate.h" line="63"/>
-        <source>Each quarter</source>
+        <source>quarterly</source>
         <translation>Tous les trimestres</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_spashandupdate.h" line="64"/>
-        <source>Never automatically</source>
+        <source>never automatically</source>
         <translation>Jamais automatiquement</translation>
     </message>
     <message>
@@ -2557,6 +2557,12 @@ Text Align Justify shortcut key : Mac specific</extracomment>
         <location filename="../../libs/translationutils/constants.h" line="44"/>
         <source>All other languages</source>
         <translation>Tous les autres langages</translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/constants.h" line="49"/>
+        <source>MM dd yyyy</source>
+        <extracomment>This date format will be used in every QDateEdit only</extracomment>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/constants.h" line="50"/>

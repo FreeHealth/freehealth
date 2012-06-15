@@ -45,6 +45,12 @@
 <context>
     <name>Calendar::DayRangeHeader</name>
     <message>
+        <location filename="../../libs/calendar/day_range_view.cpp" line="226"/>
+        <source>dddd d/M</source>
+        <comment>short date format in agenda&apos;s calendar header</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../libs/calendar/day_range_view.cpp" line="228"/>
         <source>ddd d/M</source>
         <comment>short date format in agenda&apos;s calendar header</comment>

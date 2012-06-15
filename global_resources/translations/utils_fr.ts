@@ -253,7 +253,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/widgets/birthdayedit.cpp" line="105"/>
+        <location filename="../../libs/utils/widgets/birthdayedit.cpp" line="112"/>
         <source>ddMMyy,ddMMyyyy</source>
         <translation type="unfinished"></translation>
     </message>
