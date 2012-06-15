@@ -30,6 +30,7 @@
 
 #include <utils/database.h>
 #include <utils/randomizer.h>
+#include <alertplugin/alertitem.h>
 
 #include <QObject>
 #include <QDate>
@@ -41,7 +42,7 @@
  * \file alertbase.h
  * \author Eric MAEKER <eric.maeker@gmail.com>, Pierre-Marie Desombre <pm.desombre@gmail.com>
  * \version 0.8.0
- * \date 28 May 2012
+ * \date 15 June 2012
 */
 
 namespace Alert {
@@ -84,11 +85,19 @@ public:
     QDate dateRangeStart() const;
     QDate dateRangeEnd() const;
 
+    void setAlertViewType(AlertItem::ViewType viewType);
+    AlertItem::ViewType alertViewType() const;
+
+//    void addCategory(const QString &category, const QString &lang = QString::null);
+//    QMultiHash<QString, QString> categories() const;
+
 private:
     QString _itemUid;
     QStringList _userUids, _patientUids, _appNames;
     QDate _start, _end;
     AlertValidity _validity;
+    int _viewType;
+    QMultiHash<QString, QString> _categories;
 };
 
 class AlertBase : public QObject, public Utils::Database

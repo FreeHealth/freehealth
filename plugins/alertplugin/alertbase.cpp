@@ -111,7 +111,8 @@ enum DbValues {
 
 /**  Create an empty query on valid alerts. */
 AlertBaseQuery::AlertBaseQuery() :
-    _validity(AlertBaseQuery::ValidAlerts)
+    _validity(AlertBaseQuery::ValidAlerts),
+    _viewType(-1)
 {
     _start = QDate::currentDate();
     _end = _start.addYears(1);
@@ -147,7 +148,13 @@ AlertBaseQuery::AlertValidity AlertBaseQuery::alertValidity() const
 /** Query alerts for the current logged user. */
 void AlertBaseQuery::addCurrentUserAlerts()
 {
-    const QString &u = user()->uuid();
+    QString u;
+    if (user()) {
+        u = user()->uuid();
+    } else {
+        if (Utils::isDebugCompilation())
+            u = "user1";
+    }
     if (!_userUids.contains(u))
         _userUids << u;
 }
@@ -162,7 +169,13 @@ void AlertBaseQuery::addUserAlerts(const QString &uuid)
 /** Query alerts for the current editing patient. */
 void AlertBaseQuery::addCurrentPatientAlerts()
 {
-    const QString &u = patient()->uuid();
+    QString u;
+    if (patient()) {
+        u = patient()->uuid();
+    } else {
+        if (Utils::isDebugCompilation())
+            u = "patient1";
+    }
     if (!_patientUids.contains(u))
         _patientUids << u;
 }
@@ -223,6 +236,25 @@ QDate AlertBaseQuery::dateRangeEnd() const
     return _end;
 }
 
+void AlertBaseQuery::setAlertViewType(AlertItem::ViewType viewType)
+{
+    _viewType = viewType;
+}
+
+/** Return -1 if nothing was defined */
+AlertItem::ViewType AlertBaseQuery::alertViewType() const
+{
+    return AlertItem::ViewType(_viewType);
+}
+
+//void AlertBaseQuery::addCategory(const QString &category, const QString &lang = QString::null)
+//{
+//    if (lang.isEmpty())
+//        _categories.insertMulti(lang, category);
+//}
+
+//QMultiHash<QString, QString> AlertBaseQuery::categories() const
+//{}
 
 
 AlertBase::AlertBase(QObject *parent) :
