@@ -87,7 +87,7 @@ public:
         Q_ASSERT(orientation() == Qt::Horizontal);
         Q_ASSERT(rootIndex() == QModelIndex());
 
-        qDebug() << "FMWidgetmapper.isDirty() called:";
+//        qDebug() << "FMWidgetmapper.isDirty() called:";
 
         // cycle through all widgets the mapper supports
         for(int i = 0; i < model()->columnCount(); i++) {
@@ -98,8 +98,23 @@ public:
 
                 qDebug() << mapWidget->objectName() << "DB:" << idx.data(Qt::EditRole) << "- Widget value:" << mapWidget->property(p);
 
+                QVariant data = idx.data(Qt::EditRole);
+//                qDebug(mapWidget->metaObject()->className());
+
+                // special case: QDateEdit can not display NULL value. so compare here manually
+                if (mapWidget->metaObject()->className() == QString("QDateEdit")) {
+                    QDateEdit* dateEdit = qobject_cast<QDateEdit*>(mapWidget);
+                    if (dateEdit) {
+//                        qDebug() << data.toDate();
+//                        qDebug() << dateEdit->date();
+//                        qDebug() << dateEdit->minimumDate();
+                        if (data.toDate() == QDate() && dateEdit->date() != dateEdit->minimumDate()) {
+                            return true;
+                        }
+                    }
+                }
                 // if data in model != widget's value, data was modified, page is "dirty"
-                if (idx.data(Qt::EditRole) != mapWidget->property(p))
+                if (data != mapWidget->property(p))
                     return true;
             }
         }
@@ -121,7 +136,7 @@ public:
         } else {
             editUi = new Ui::IdentityWidget;
             editUi->setupUi(q);
-            editUi->dob->setDisplayFormat(tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR));
+            //editUi->dob->setDisplayFormat(tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR));
             editUi->genderCombo->addItems(genders());
             editUi->titleCombo->addItems(titles());
             Utils::UpperCaseValidator *val = new Utils::UpperCaseValidator(q);
@@ -167,11 +182,6 @@ public:
             m_Mapper->addMapping(editUi->firstname, Core::IPatient::Firstname, "text");
             m_Mapper->addMapping(editUi->genderCombo, Core::IPatient::GenderIndex, "currentIndex");
             m_Mapper->addMapping(editUi->titleCombo, Core::IPatient::TitleIndex, "currentIndex");
-
-            //FIXME: buggy: dob widget can not display NULL value as nothing
-            // therefor the widget holds 1/1/2000 as value while the model holds a NULL
-            // this prevents m_Mapper.isDirty from working correctly!
-            // maybe use NullDateEdit: http://www.qtcentre.org/threads/17295-How-to-put-empty-value-in-QDateEdit ?
             m_Mapper->addMapping(editUi->dob, Core::IPatient::DateOfBirth, "date");
 
             m_Mapper->addMapping(editUi->street, Core::IPatient::Street, "plainText");
@@ -180,7 +190,7 @@ public:
 
             //FIXME: buggy: country widget has FR(,DE,AT,...) as value while model holds a NULL
             // this prevents m_Mapper.isDirty from working correctly!
-            m_Mapper->addMapping(editUi->country, Core::IPatient::Country, "currentIsoCountry");
+//            m_Mapper->addMapping(editUi->country, Core::IPatient::Country, "currentIsoCountry");
             m_Mapper->toFirst();
         }
     }
