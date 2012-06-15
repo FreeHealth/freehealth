@@ -73,8 +73,11 @@ public:
     void addCurrentPatientAlerts();
     void addPatientAlerts(const QString &uuid);
 
+    void addApplicationAlerts(const QString &appName);
+
     QStringList userUids() const;
     QStringList patientUids() const;
+    QStringList applicationNames() const;
 
     void setDateRange(const QDate &start, const QDate &end);
     bool dateRangeDefined() const;
@@ -83,7 +86,7 @@ public:
 
 private:
     QString _itemUid;
-    QStringList _userUids, _patientUids;
+    QStringList _userUids, _patientUids, _appNames;
     QDate _start, _end;
     AlertValidity _validity;
 };
