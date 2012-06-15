@@ -34,10 +34,12 @@
  * \file alertcore.h
  * \author Eric MAEKER <eric.maeker@gmail.com>, Pierre-Marie Desombre <pm.desombre@gmail.com>
  * \version 0.8.0
- * \date 31 May 2012
+ * \date 13 June 2012
 */
 
 namespace Alert {
+class AlertItem;
+
 namespace Internal {
 class AlertCorePrivate;
 class AlertPlugin;
@@ -58,10 +60,10 @@ public:
     ~AlertCore();
 
     // Getters/Setters
-    //    QVector<AlertItem> getAlertItemForCurrentUser() const;
-    //    QVector<AlertItem> getAlertItemForCurrentPatient() const;
-    //    QVector<AlertItem> getAlertItemForCurrentApplication() const;
-    //    bool saveAlertItem(const AlertItem &item);
+    QVector<AlertItem> getAlertItemForCurrentUser() const;
+    QVector<AlertItem> getAlertItemForCurrentPatient() const;
+    QVector<AlertItem> getAlertItemForCurrentApplication() const;
+    bool saveAlertItem(AlertItem &item);
 
     // Executers
     //    bool executeAlert(const AlertItem &alert);  // add a delay ?
@@ -80,6 +82,9 @@ Q_SIGNALS:
 //    void alertItemUpdated(const AlertItem &alert);
 //    void alertItemRemoved(const AlertItem &alert);
 //    void alertItemValidated(const AlertItem &alert);
+
+private Q_SLOTS:
+    void postCoreInitialization();
 
 private:
     static AlertCore *_instance;

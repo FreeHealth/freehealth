@@ -30,9 +30,12 @@
 #include "alertmanager.h"
 #include "alertitem.h"
 
+#include <coreplugin/icore.h>
+
 // TEST
 #include "alertitemeditordialog.h"
 #include "dynamicalertdialog.h"
+#include <QToolButton>
 // END TEST
 
 using namespace Alert;
@@ -65,10 +68,12 @@ public:
 }
 }
 
+/** Construct the core of the Alert plugin. */
 AlertCore::AlertCore(QObject *parent) :
     QObject(parent),
     d(new Internal::AlertCorePrivate)
 {
+    connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
 }
 
 AlertCore::~AlertCore()
@@ -79,6 +84,7 @@ AlertCore::~AlertCore()
     }
 }
 
+/** Initialize the core. */
 bool AlertCore::initialize()
 {
     // Create all instance
@@ -86,7 +92,44 @@ bool AlertCore::initialize()
     d->m_alertManager = new AlertManager(this);
     if (!d->m_alertBase->init())
         return false;
+    return true;
+}
 
+/** Return all the Alert::AlertItem recorded in the database related to the current user. */
+QVector<AlertItem> AlertCore::getAlertItemForCurrentUser() const
+{
+    Internal::AlertBaseQuery query;
+    query.addCurrentUserAlerts();
+    query.setAlertValidity(Internal::AlertBaseQuery::ValidAlerts);
+    return d->m_alertBase->getAlertItems(query);
+}
+
+/** Return all the Alert::AlertItem recorded in the database related to the current patient. */
+QVector<AlertItem> AlertCore::getAlertItemForCurrentPatient() const
+{
+    Internal::AlertBaseQuery query;
+    query.addCurrentPatientAlerts();
+    query.setAlertValidity(Internal::AlertBaseQuery::ValidAlerts);
+    return d->m_alertBase->getAlertItems(query);
+}
+
+/** Return all the Alert::AlertItem recorded in the database related to the current application. */
+QVector<AlertItem> AlertCore::getAlertItemForCurrentApplication() const
+{
+    Internal::AlertBaseQuery query;
+    query.addApplicationAlerts(qApp->applicationName().toLower());
+    query.setAlertValidity(Internal::AlertBaseQuery::ValidAlerts);
+    return d->m_alertBase->getAlertItems(query);
+}
+
+/** Save the Alert::AlertItem \e item into the database and update some of its values. The \e item will be modified. */
+bool AlertCore::saveAlertItem(AlertItem &item)
+{
+    return d->m_alertBase->saveAlertItem(item);
+}
+
+void AlertCore::postCoreInitialization()
+{
     // TESTS
     AlertItem item = d->m_alertBase->createVirtualItem();
     AlertItem item2 = d->m_alertBase->createVirtualItem();
@@ -107,44 +150,72 @@ bool AlertCore::initialize()
     item3.setLabel("Double labelDouble label Double label Double label Double label");
     item3.setDescription("Double Description Double Description Double Description v Double Description v v vvvDouble Description Double Description Double DescriptionDouble Description Double Description Double Description");
 
+    // Db save/get
+    if (true) {
+        item3 = d->m_alertBase->createVirtualItem();
 
-//    d->m_alertBase->saveAlertItem(item);
-//    Internal::AlertBaseQuery query;
-//    query.getAlertItemFromUuid(item.uuid());
-//    QVector<AlertItem> test = d->m_alertBase->getAlertItems(query);
-//    qWarning() << test;
-//    qWarning() << item.toXml();
+        AlertRelation rel;
+        rel.setRelatedTo(AlertRelation::RelatedToPatient);
+        rel.setRelatedToUid("patient1");
+        item.addRelation(rel);
+        rel.setRelatedToUid("patient2");
+        item2.addRelation(rel);
+        rel.setRelatedToUid("patient3");
+        item3.addRelation(rel);
 
-//    AlertItem t = AlertItem::fromXml(item.toXml());
-//    qWarning() << t.toXml();
-
-//    qWarning() << (t.toXml() == item.toXml());
+        d->m_alertBase->saveAlertItem(item);
+        d->m_alertBase->saveAlertItem(item2);
+        d->m_alertBase->saveAlertItem(item3);
+        Internal::AlertBaseQuery query;
+        query.setAlertValidity(Internal::AlertBaseQuery::ValidAlerts);
+//        query.setAlertValidity(Internal::AlertBaseQuery::InvalidAlerts);
+        query.addUserAlerts("user1");
+        query.addUserAlerts("user2");
+        query.addPatientAlerts("patient1");
+        query.addPatientAlerts("patient2");
+        query.addPatientAlerts("patient3");
+//        query.addUserAlerts();
+        QVector<AlertItem> test = d->m_alertBase->getAlertItems(query);
+        qWarning() << test;
+        //    AlertItem t = AlertItem::fromXml(item.toXml());
+        //    qWarning() << (t.toXml() == item.toXml());
+    }
 
     qWarning() << item.category() << item2.category();
     qWarning() << item.label() << item2.label();
 
-    item.setViewType(AlertItem::DynamicAlert);
-    item.setOverrideRequiresUserComment(true);
-    DynamicAlertDialog::executeDynamicAlert(QList<AlertItem>() <<  item << item2 << item3 << item4 << item5<<item6);
-//    DynamicAlertDialog::executeDynamicAlert(item4);
+    // Dynamic alerts
+    if (false) {
+        item.setViewType(AlertItem::DynamicAlert);
+        item.setOverrideRequiresUserComment(true);
+        QToolButton *test = new QToolButton;
+        test->setText("Houlala");
+        test->setToolTip("kokokokokok");
+        QList<QAbstractButton*> buttons;
+        buttons << test;
 
-//    AlertItemEditorDialog dlg;
-//    dlg.setEditableParams(AlertItemEditorDialog::FullDescription | AlertItemEditorDialog::Timing);
-//    dlg.setEditableParams(AlertItemEditorDialog::Label | AlertItemEditorDialog::Timing);
-//    dlg.setEditableParams(AlertItemEditorDialog::Label | AlertItemEditorDialog::Timing | AlertItemEditorDialog::Types);
+        DynamicAlertDialog::executeDynamicAlert(QList<AlertItem>() <<  item << item2 << item3 << item4 << item5<<item6, buttons);
+        //    DynamicAlertDialog::executeDynamicAlert(item4);
+    }
 
-//    AlertTiming &time = item.timingAt(0);
-//    time.setCycling(true);
-//    time.setCyclingDelayInDays(10);
-//    dlg.setAlertItem(item);
-//    if (dlg.exec()==QDialog::Accepted) {
-//        dlg.submit(item);
-//    }
-//    qWarning() << item.toXml();
+    // Alert editor
+    if (false) {
+        AlertItemEditorDialog dlg;
+        dlg.setEditableParams(AlertItemEditorDialog::FullDescription | AlertItemEditorDialog::Timing);
+        dlg.setEditableParams(AlertItemEditorDialog::Label | AlertItemEditorDialog::Timing);
+        dlg.setEditableParams(AlertItemEditorDialog::Label | AlertItemEditorDialog::Timing | AlertItemEditorDialog::Types);
+
+        AlertTiming &time = item.timingAt(0);
+        time.setCycling(true);
+        time.setCyclingDelayInDays(10);
+        dlg.setAlertItem(item);
+        if (dlg.exec()==QDialog::Accepted) {
+            dlg.submit(item);
+        }
+        qWarning() << item.toXml();
+    }
+
     // END TESTS
-
-
-    return true;
 }
 
 void AlertCore::showIHMaccordingToType(int type)
