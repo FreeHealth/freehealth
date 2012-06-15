@@ -134,38 +134,62 @@ void AlertCore::postCoreInitialization()
     AlertItem item = d->m_alertBase->createVirtualItem();
     AlertItem item2 = d->m_alertBase->createVirtualItem();
     AlertItem item3 = item2;
-    item3.setUuid("LKLKLK");
+//    item3.setUuid("LKLKLK");
     item3.setLabel("Double label");
     item3.setDescription("Double Description Double Description Double Description v Double Description v v vvvDouble Description Double Description Double DescriptionDouble Description Double Description Double Description");
     AlertItem item4 = item2;
-    item3.setUuid("qsdkygvuihe");
-    item3.setLabel("Double label Double label");
-    item3.setDescription("Double Description Double Description Double Description v Double Description v v vvvDouble Description Double Description Double DescriptionDouble Description Double Description Double Description");
+//    item4.setUuid("qsdkygvuihe");
+    item4.setLabel("Double label Double label");
+    item4.setDescription("Double Description Double Description Double Description v Double Description v v vvvDouble Description Double Description Double DescriptionDouble Description Double Description Double Description");
     AlertItem item5 = item2;
-    item3.setUuid("fokoe,rf");
-    item3.setLabel("Double label Double label Double label");
-    item3.setDescription("Double Description Double Description Double Description v Double Description v v vvvDouble Description Double Description Double DescriptionDouble Description Double Description Double Description");
+    item5.setUuid("fokoe,rf");
+    item5.setLabel("Double label Double label Double label");
+    item5.setDescription("Double Description Double Description Double Description v Double Description v v vvvDouble Description Double Description Double DescriptionDouble Description Double Description Double Description");
     AlertItem item6 = item2;
-    item3.setUuid("dfqdf qsf");
-    item3.setLabel("Double labelDouble label Double label Double label Double label");
-    item3.setDescription("Double Description Double Description Double Description v Double Description v v vvvDouble Description Double Description Double DescriptionDouble Description Double Description Double Description");
+    item6.setUuid("dfqdf qsf");
+    item6.setLabel("Double labelDouble label Double label Double label Double label");
+    item6.setDescription("Double Description Double Description Double Description v Double Description v v vvvDouble Description Double Description Double DescriptionDouble Description Double Description Double Description");
 
     // Db save/get
     if (true) {
         item3 = d->m_alertBase->createVirtualItem();
+//        item4 = d->m_alertBase->createVirtualItem();
 
         AlertRelation rel;
+        // patients
         rel.setRelatedTo(AlertRelation::RelatedToPatient);
         rel.setRelatedToUid("patient1");
         item.addRelation(rel);
-        rel.setRelatedToUid("patient2");
+        rel.setRelatedToUid("patient2.1");
         item2.addRelation(rel);
         rel.setRelatedToUid("patient3");
         item3.addRelation(rel);
+        // users
+        rel.setRelatedTo(AlertRelation::RelatedToUser);
+        rel.setRelatedToUid("user1");
+        item4.addRelation(rel);
+        // timings
+        AlertTiming timing;
+        timing.setStart(QDateTime::currentDateTime().addSecs(-60*60*24));
+        timing.setEnd(QDateTime::currentDateTime().addSecs(60*60*24));
+        item.clearTimings();
+        item.addTiming(timing);
+        item2.clearTimings();
+        item2.addTiming(timing);
+        item3.clearTimings();
+        item3.addTiming(timing);
+        item4.clearTimings();
+        item4.addTiming(timing);
 
-        d->m_alertBase->saveAlertItem(item);
-        d->m_alertBase->saveAlertItem(item2);
-        d->m_alertBase->saveAlertItem(item3);
+        if (!d->m_alertBase->saveAlertItem(item))
+            qWarning() << "ITEM WRONG";
+        if (!d->m_alertBase->saveAlertItem(item2))
+            qWarning() << "ITEM2 WRONG";
+        if (!d->m_alertBase->saveAlertItem(item3))
+            qWarning() << "ITEM3 WRONG";
+        if (!d->m_alertBase->saveAlertItem(item4))
+            qWarning() << "ITEM4 WRONG";
+
         Internal::AlertBaseQuery query;
         query.setAlertValidity(Internal::AlertBaseQuery::ValidAlerts);
 //        query.setAlertValidity(Internal::AlertBaseQuery::InvalidAlerts);
@@ -176,7 +200,11 @@ void AlertCore::postCoreInitialization()
         query.addPatientAlerts("patient3");
 //        query.addUserAlerts();
         QVector<AlertItem> test = d->m_alertBase->getAlertItems(query);
-        qWarning() << test;
+        qWarning() << test.count();
+        for(int i=0; i < test.count(); ++i) {
+            qWarning() << "\n\n" << test.at(i).timingAt(0).start() << test.at(i).timingAt(0).end() << test.at(i).relationAt(1).relatedToUid();
+        }
+        qWarning() << "\n\n";
         //    AlertItem t = AlertItem::fromXml(item.toXml());
         //    qWarning() << (t.toXml() == item.toXml());
     }
