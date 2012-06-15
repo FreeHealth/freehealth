@@ -81,6 +81,8 @@ CoreImpl::CoreImpl(QObject *parent) :
         m_ActionManager(0),
         m_ContextManager(0),
         m_UID(new UniqueIDManager),
+        m_Patient(0),
+        m_User(0),
         m_PadTools(0)
 {
     setObjectName("Core");
