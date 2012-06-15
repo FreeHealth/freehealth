@@ -44,7 +44,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="1794"/>
+        <location filename="../../libs/utils/database.cpp" line="1831"/>
         <source>Can not create table %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -242,6 +242,19 @@
     <message>
         <location filename="../../libs/utils/widgets/basiclogindialog.ui" line="14"/>
         <source>Dialog</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Utils::BirthDayEdit</name>
+    <message>
+        <location filename="../../libs/utils/widgets/birthdayedit.cpp" line="19"/>
+        <source>xxxxxxxxxx</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/birthdayedit.cpp" line="105"/>
+        <source>ddMMyy,ddMMyyyy</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

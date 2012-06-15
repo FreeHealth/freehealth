@@ -4,7 +4,7 @@
 <context>
     <name>Category::CategoryDialog</name>
     <message>
-        <location filename="../../plugins/categoryplugin/categorydialog.cpp" line="112"/>
+        <location filename="../../plugins/categoryplugin/categorydialog.cpp" line="110"/>
         <source>Category manager</source>
         <translation>Kategorien-Verwaltung</translation>
     </message>

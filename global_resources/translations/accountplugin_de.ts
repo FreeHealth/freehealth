@@ -183,32 +183,37 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/accountpreferences.cpp" line="246"/>
+        <location filename="../../plugins/accountplugin/preferences/accountdatabasedefaultswidget.ui" line="104"/>
+        <source>Load datapack</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/preferences/accountpreferences.cpp" line="249"/>
         <source>Medical procedure defaults can not be included.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/accountpreferences.cpp" line="252"/>
+        <location filename="../../plugins/accountplugin/preferences/accountpreferences.cpp" line="255"/>
         <source>Assets Rates defaults can not be included.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/accountpreferences.cpp" line="258"/>
+        <location filename="../../plugins/accountplugin/preferences/accountpreferences.cpp" line="261"/>
         <source>Movements defaults can not be included.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/accountpreferences.cpp" line="264"/>
+        <location filename="../../plugins/accountplugin/preferences/accountpreferences.cpp" line="267"/>
         <source>Distance rules defaults can not be included.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/accountpreferences.cpp" line="270"/>
+        <location filename="../../plugins/accountplugin/preferences/accountpreferences.cpp" line="273"/>
         <source>Insurance defaults can not be included.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/preferences/accountpreferences.cpp" line="283"/>
+        <location filename="../../plugins/accountplugin/preferences/accountpreferences.cpp" line="286"/>
         <source>Defaults have been created.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2479,7 +2484,17 @@ You can create one in Preferences.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="1233"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="1144"/>
+        <source>No value available !</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="1145"/>
+        <source>Please choose a value first</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="1239"/>
         <source> has been saved in thesaurus!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2507,7 +2522,7 @@ and choose it as preferred.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="1212"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="1218"/>
         <source>Error inserting into AccountModel!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2590,47 +2605,47 @@ You should create defaults in Configuration &gt; Preference &gt; Accountancy.</s
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/findValuesGUI.ui" line="65"/>
+        <location filename="../../plugins/accountplugin/receipts/findValuesGUI.ui" line="62"/>
         <source>List of values chosen</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/findValuesGUI.ui" line="82"/>
+        <location filename="../../plugins/accountplugin/receipts/findValuesGUI.ui" line="79"/>
         <source>+</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/findValuesGUI.ui" line="99"/>
+        <location filename="../../plugins/accountplugin/receipts/findValuesGUI.ui" line="96"/>
         <source>-</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/findValuesGUI.ui" line="162"/>
+        <location filename="../../plugins/accountplugin/receipts/findValuesGUI.ui" line="159"/>
         <source>Categories</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/findValuesGUI.ui" line="172"/>
+        <location filename="../../plugins/accountplugin/receipts/findValuesGUI.ui" line="169"/>
         <source>Filter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/findValuesGUI.ui" line="52"/>
+        <location filename="../../plugins/accountplugin/receipts/findValuesGUI.ui" line="49"/>
         <source>Choose your values</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/findValuesGUI.ui" line="39"/>
+        <location filename="../../plugins/accountplugin/receipts/findValuesGUI.ui" line="36"/>
         <source>with abstract</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/findValuesGUI.ui" line="32"/>
+        <location filename="../../plugins/accountplugin/receipts/findValuesGUI.ui" line="29"/>
         <source>with name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/findValuesGUI.ui" line="134"/>
+        <location filename="../../plugins/accountplugin/receipts/findValuesGUI.ui" line="131"/>
         <source>Next</source>
         <translation type="unfinished"></translation>
     </message>

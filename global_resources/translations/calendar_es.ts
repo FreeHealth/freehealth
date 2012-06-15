@@ -5,24 +5,25 @@
     <name>Calendar::CalendarNavbar</name>
     <message>
         <location filename="../../libs/calendar/calendar_navbar.cpp" line="157"/>
-        <location filename="../../libs/calendar/calendar_navbar.cpp" line="421"/>
+        <location filename="../../libs/calendar/calendar_navbar.cpp" line="427"/>
         <source>View range</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/calendar/calendar_navbar.cpp" line="386"/>
+        <location filename="../../libs/calendar/calendar_navbar.cpp" line="387"/>
         <location filename="../../libs/calendar/calendar_navbar.cpp" line="388"/>
-        <location filename="../../libs/calendar/calendar_navbar.cpp" line="390"/>
+        <location filename="../../libs/calendar/calendar_navbar.cpp" line="392"/>
+        <location filename="../../libs/calendar/calendar_navbar.cpp" line="396"/>
         <source>d MMM yyyy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/calendar/calendar_navbar.cpp" line="388"/>
+        <location filename="../../libs/calendar/calendar_navbar.cpp" line="391"/>
         <source>d MMM</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/calendar/calendar_navbar.cpp" line="390"/>
+        <location filename="../../libs/calendar/calendar_navbar.cpp" line="395"/>
         <source>d</source>
         <translation type="unfinished"></translation>
     </message>
@@ -30,12 +31,12 @@
 <context>
     <name>Calendar::DayRangeBody</name>
     <message>
-        <location filename="../../libs/calendar/day_range_view.cpp" line="749"/>
+        <location filename="../../libs/calendar/day_range_view.cpp" line="750"/>
         <source>modify</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/calendar/day_range_view.cpp" line="751"/>
+        <location filename="../../libs/calendar/day_range_view.cpp" line="752"/>
         <source>remove</source>
         <translation type="unfinished"></translation>
     </message>
@@ -43,12 +44,17 @@
 <context>
     <name>Calendar::DayRangeHeader</name>
     <message>
-        <location filename="../../libs/calendar/day_range_view.cpp" line="323"/>
+        <location filename="../../libs/calendar/day_range_view.cpp" line="229"/>
+        <source>ddd d/M</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/calendar/day_range_view.cpp" line="324"/>
         <source>modify</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/calendar/day_range_view.cpp" line="325"/>
+        <location filename="../../libs/calendar/day_range_view.cpp" line="326"/>
         <source>remove</source>
         <translation type="unfinished"></translation>
     </message>
