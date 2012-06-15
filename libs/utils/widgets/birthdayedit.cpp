@@ -1,3 +1,29 @@
+/***************************************************************************
+ *  The FreeMedForms project is a set of free, open source medical         *
+ *  applications.                                                          *
+ *  (C) 2008-2012 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
+ *  All rights reserved.                                                   *
+ *                                                                         *
+ *  This program is free software: you can redistribute it and/or modify   *
+ *  it under the terms of the GNU General Public License as published by   *
+ *  the Free Software Foundation, either version 3 of the License, or      *
+ *  (at your option) any later version.                                    *
+ *                                                                         *
+ *  This program is distributed in the hope that it will be useful,        *
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
+ *  GNU General Public License for more details.                           *
+ *                                                                         *
+ *  You should have received a copy of the GNU General Public License      *
+ *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  If not, see <http://www.gnu.org/licenses/>.                            *
+ ***************************************************************************/
+/***************************************************************************
+ *   Main developers : Christian A. Reiter, <christian.a.reiter@gmail.com> *
+ *   Contributors :                                                        *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
+ ***************************************************************************/
 #include "birthdayedit.h"
 #include <QDebug>
 
@@ -23,11 +49,18 @@ BirthDayEdit::~BirthDayEdit()
 {
 }
 
+
 QDate BirthDayEdit::date() const
 {
     return QDate(m_date);
 }
 
+/**
+ * \brief BirthDayEdit::setDateFormats
+ * \param formats QString that should provide a comma separated list of
+ * input formats like "ddMMyy,ddMMyyyy". This string is expanded into a QStringList
+ * and used to determine a date out of the user-endered text of the widget.
+ */
 void BirthDayEdit::setDateFormats(QString formats)
 {
     //TODO: check string for errors
@@ -44,18 +77,24 @@ void BirthDayEdit::setDateFormats(QString formats)
     m_dateFormatList.append(Trans::Constants::DATEFORMAT_FOR_EDITOR);
 }
 
+/// \brief sets the internal dateof the widget to NULL
 void BirthDayEdit::clear()
 {
     m_date = QDate();
     emit dateChanged(m_date);
 }
 
+/** \brief sets the internal date of the widget to date */
 void BirthDayEdit::setDate(const QDate& date)
 {
     m_date = date;
     emit dateChanged(m_date);
 }
-
+/** \brief sets the internal date of the widget to the string
+ *
+ * tries to parse the string. If it is an invalid date string, the date field
+ * is set to NULL.
+ */
 void BirthDayEdit::setDateString(const QString& dateString)
 {
     QDate tmpDate;
@@ -98,7 +137,7 @@ void BirthDayEdit::updateDisplayText()
 }
 
 
-/// \brief init function called from contructor to init all internal values
+/** \brief init function called from constructor to init all internal values */
 void BirthDayEdit::init(const QDate& date, const QDate& maximumDate, const QDate& minimumDate)
 {
     m_date = date;
@@ -114,6 +153,3 @@ void BirthDayEdit::init(const QDate& date, const QDate& maximumDate, const QDate
     connect(this,SIGNAL(textChanged(QString)), this, SLOT(setDateString(QString)));
     connect(this, SIGNAL(editingFinished()), this, SLOT(updateDisplayText()));
 }
-
-
-
