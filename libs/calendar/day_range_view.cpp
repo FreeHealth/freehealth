@@ -223,9 +223,9 @@ void DayRangeHeader::paintEvent(QPaintEvent *) {
 		}
 		r.adjust(0, 2, 0, 0);  // +2 is a vertical correction to not be stucked to the top line
 		if (m_rangeWidth == 1)
-            painter.drawText(r, Qt::AlignHCenter | Qt::AlignTop, QLocale().toString(date, "dddd d/M").toLower());
+            painter.drawText(r, Qt::AlignHCenter | Qt::AlignTop, QLocale().toString(date, tr("dddd d/M", "short date format in agenda's calendar header")).toLower());
 		else
-            painter.drawText(r, Qt::AlignHCenter | Qt::AlignTop, QLocale().toString(date, "ddd d/M").toLower());
+            painter.drawText(r, Qt::AlignHCenter | Qt::AlignTop, QLocale().toString(date, tr("ddd d/M", "short date format in agenda's calendar header")).toLower());
 		painter.setPen(oldPen);
 		date = date.addDays(1);
 	}

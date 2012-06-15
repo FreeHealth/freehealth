@@ -31,13 +31,13 @@
 <context>
     <name>Calendar::DayRangeBody</name>
     <message>
-        <location filename="../../libs/calendar/day_range_view.cpp" line="750"/>
+        <location filename="../../libs/calendar/day_range_view.cpp" line="749"/>
         <source>modify</source>
         <translatorcomment>shouldn&apos;t be this &quot;edit&quot;?</translatorcomment>
         <translation>verändern</translation>
     </message>
     <message>
-        <location filename="../../libs/calendar/day_range_view.cpp" line="752"/>
+        <location filename="../../libs/calendar/day_range_view.cpp" line="751"/>
         <source>remove</source>
         <translation>entfernen</translation>
     </message>
@@ -45,17 +45,18 @@
 <context>
     <name>Calendar::DayRangeHeader</name>
     <message>
-        <location filename="../../libs/calendar/day_range_view.cpp" line="229"/>
+        <location filename="../../libs/calendar/day_range_view.cpp" line="228"/>
         <source>ddd d/M</source>
-        <translation type="unfinished"></translation>
+        <comment>short date format in agenda&apos;s calendar header</comment>
+        <translation>ddd d.M</translation>
     </message>
     <message>
-        <location filename="../../libs/calendar/day_range_view.cpp" line="324"/>
+        <location filename="../../libs/calendar/day_range_view.cpp" line="323"/>
         <source>modify</source>
         <translation>verändern</translation>
     </message>
     <message>
-        <location filename="../../libs/calendar/day_range_view.cpp" line="326"/>
+        <location filename="../../libs/calendar/day_range_view.cpp" line="325"/>
         <source>remove</source>
         <translation>entfernen</translation>
     </message>
