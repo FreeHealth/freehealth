@@ -59,9 +59,9 @@ const char * const  M_UPDATE_TEXT            = QT_TRANSLATE_NOOP("tkConstants", 
 
 // Actions translations
 const char * const  FILENEW_TEXT          = QT_TRANSLATE_NOOP("tkConstants", "&New");
-const char * const  FILEOPEN_TEXT         = QT_TRANSLATE_NOOP("tkConstants", "&Open");
+const char * const  FILEOPEN_TEXT         = QT_TRANSLATE_NOOP("tkConstants", "&Open...");
 const char * const  FILESAVE_TEXT         = QT_TRANSLATE_NOOP("tkConstants", "&Save");
-const char * const  FILESAVEAS_TEXT       = QT_TRANSLATE_NOOP("tkConstants", "Save &as");
+const char * const  FILESAVEAS_TEXT       = QT_TRANSLATE_NOOP("tkConstants", "Save &as...");
 const char * const  FILEPRINT_TEXT        = QT_TRANSLATE_NOOP("tkConstants", "&Print...");
 const char * const  PRINTPREVIEW_TEXT     = QT_TRANSLATE_NOOP("tkConstants", "Print pre&view");
 const char * const  FILEEXIT_TEXT         = QT_TRANSLATE_NOOP("tkConstants", "&Exit");
