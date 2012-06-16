@@ -334,6 +334,20 @@ void AccountDatabaseDefautsWidget::on_datapackButton_clicked()
         AccountDB::MedicalProcedureModel MPmodel(this);
         int MPmodelRowCount = MPmodel.rowCount();
         int dtpkRowCount = dtpkmodel.rowCount();
+        //test of date
+        QList<QDate> listOfDates;
+        for (int r = 0; r < MPmodelRowCount; ++r)
+        {
+        	  QDate date = MPmodel.data(MPmodel.index(r,AccountDB::Constants::MP_DATE),Qt::DisplayRole).toDate();
+        	  listOfDates << date;
+            }
+        QDate dateDapapack = dtpkmodel.data(dtpkmodel.index(1,AccountDB::Constants::MP_DATE),Qt::DisplayRole).toDate();
+        if (listOfDates.contains(dateDapapack))
+        {
+        	  LOG_ERROR("Datapack has already been loaded.");
+        	  Utils::warningMessageBox( trUtf8("Warning"), trUtf8("Datapack has already been loaded."));
+        	  return;
+            }
         if (!MPmodel.insertRows(MPmodelRowCount,dtpkRowCount,QModelIndex()))
         {
         	  LOG_ERROR(MPmodel.lastError().text());
@@ -350,8 +364,8 @@ void AccountDatabaseDefautsWidget::on_datapackButton_clicked()
         	     }
             }
         /*
-        1) vérifier que la mise à jour n'est pas déjà faite.
-        2) updater les valeurs communes 
+        1) vérifier que la mise à jour n'est pas déjà faite. Controle de date.
+         
         3) rajouter les nouvelles valeurs.
         */
         
