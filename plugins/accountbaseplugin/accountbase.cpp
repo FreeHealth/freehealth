@@ -171,6 +171,7 @@ AccountBase::AccountBase(QObject *parent)
     addField(Table_MedicalProcedure, MP_REIMBOURSEMENT, "REIMBOURSEMENT", FieldIsReal);
     addField(Table_MedicalProcedure, MP_DATE,           "DATE",           FieldIsDate);
     addField(Table_MedicalProcedure, MP_OTHERS,         "OTHERS",         FieldIsBlob);
+    addField(Table_MedicalProcedure, MP_COUNTRY,        "COUNTRY",         FieldIsBlob);
 
 //    "CREATE TABLE 	actes_disponibles ("  --> medical_procedure
 //            "id_acte_dispo  int(10)  	UNSIGNED  	       		NOT NULL  	 auto_increment ,"
@@ -596,7 +597,8 @@ bool AccountBase::init()
         qDebug() << __FILE__ << QString::number(__LINE__) << "ISFIRSTVERSION";             
         if (fieldNamesSql(AccountDB::Constants::Table_MedicalProcedure).size()< AccountDB::Constants::MP_MaxParam)
         {
-        	  if (!alterTableForNewField(AccountDB::Constants::Table_MedicalProcedure, AccountDB::Constants::MP_OTHERS,FieldIsBlob, QString("NULL")))
+        	  if (   !alterTableForNewField(AccountDB::Constants::Table_MedicalProcedure, AccountDB::Constants::MP_OTHERS,FieldIsBlob, QString("NULL"))
+        	      && !alterTableForNewField(AccountDB::Constants::Table_MedicalProcedure, AccountDB::Constants::MP_COUNTRY,FieldIsBlob, QString("NULL")))
         	  {
         	  	  LOG_ERROR("Unable to add new field in table MP");
         	  	  return false;

@@ -330,12 +330,34 @@ bool AccountDatabaseDefautsWidget::createDefaultsFor(const QString &filePrototyp
 
 void AccountDatabaseDefautsWidget::on_datapackButton_clicked()
 {
-        QSqlDatabase db = QSqlDatabase::database(AccountDB::Constants::DATAPACK_ACCOUNTANCY);
-        AccountDB::DatapackMPModel dtpk(this);
-        AccountDB::MedicalProcedureModel MP(this);
+        AccountDB::DatapackMPModel dtpkmodel(this);
+        AccountDB::MedicalProcedureModel MPmodel(this);
+        int MPmodelRowCount = MPmodel.rowCount();
+        int dtpkRowCount = dtpkmodel.rowCount();
+        if (!MPmodel.insertRows(MPmodelRowCount,dtpkRowCount,QModelIndex()))
+        {
+        	  LOG_ERROR(MPmodel.lastError().text());
+            }
+        for (int row = 0; row < dtpkRowCount ; ++row)
+        {        	 
+        	 for (int col = 0; col < dtpkmodel.columnCount(); ++col)
+        	 {
+        	 	  QVariant data = dtpkmodel.data(dtpkmodel.index(row,col),Qt::DisplayRole);
+        	 	  if (!MPmodel.setData(MPmodel.index(MPmodelRowCount+row,col),data,Qt::EditRole))
+        	 	  {
+        	 	  	  LOG_ERROR(MPmodel.lastError().text());
+        	 	      }
+        	     }
+            }
         /*
         1) vérifier que la mise à jour n'est pas déjà faite.
         2) updater les valeurs communes 
         3) rajouter les nouvelles valeurs.
         */
+        
+        
+        
+        
+        
+        
 }

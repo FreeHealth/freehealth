@@ -272,11 +272,12 @@ void ParseCcam::writeMedicalProcedureCsv()
     	QString text = listOfLine[NGAP_TEXT];
     	QString price = listOfLine[NGAP_AMOUNT];
     	QString blob = listOfLine[NGAP_OTHERS];
+    	const QString country = "FR";
     	if (price == "Non pris en charge")
     	{
     		  price = "0.00";
     	    }
-    	QString line = "\""+QString::number(id)+"\";"+"\""+mpUuid+"\";"+"\""+mpUserUuid+"\";"+"\""+mpInsuranceUuid+"\";"+"\""+code+"\";"+"\""+text+"\";"+"\""+mpType+"\";"+"\""+price+"\";"+"\""+blob+"\";"+"\""+mpDate+"\"";
+    	QString line = "\""+QString::number(id)+"\";"+"\""+mpUuid+"\";"+"\""+mpUserUuid+"\";"+"\""+mpInsuranceUuid+"\";"+"\""+code+"\";"+"\""+text+"\";"+"\""+mpType+"\";"+"\""+price+"\";"+"\""+mpDate+"\";"+"\""+blob+"\";"+"\""+country+"";
     	listOfMedicalProcedureSineCcam << line;    	
         ++id;
         }
@@ -321,11 +322,12 @@ void ParseCcam::writeMedicalProcedureCsv()
     	QString text = m_model->data(m_model->index(i,MODEL_TEXT),Qt::DisplayRole).toString();
     	QString price = m_model->data(m_model->index(i,MODEL_PRICE),Qt::DisplayRole).toString();
     	QString blob = m_model->data(m_model->index(i,MODEL_BLOB),Qt::DisplayRole).toString();
+    	const QString country = "FR";
     	if (price == "Non pris en charge")
     	{
     		  price = "0.00";
     	    }
-    	QString line = "\""+QString::number(MPId)+"\";"+"\""+mpUuid+"\";"+"\""+mpUserUuid+"\";"+"\""+mpInsuranceUuid+"\";"+"\""+code+"\";"+"\""+text+"\";"+"\""+mpType+"\";"+"\""+price+"\";"+"\""+blob+"\";"+"\""+mpDate+"\"\n";
+    	QString line = "\""+QString::number(MPId)+"\";"+"\""+mpUuid+"\";"+"\""+mpUserUuid+"\";"+"\""+mpInsuranceUuid+"\";"+"\""+code+"\";"+"\""+text+"\";"+"\""+mpType+"\";"+"\""+price+"\";"+"\""+mpDate+"\";"+"\""+blob+"\";"+"\""+country+"\"\n";
     	streamNew << line;
     	++id;
         }
@@ -389,8 +391,9 @@ void ParseCcam::createMPDatapackDatabase()
     	                      "ABSTRACT varchar(2000) NULL,"
     	                      "TYPE varchar(200) NULL,"
     	                      "AMOUNT double NULL,"    	                      
-    	                      "OTHERS blob NULL,"
-    	                      "DATE date NULL);";
+    	                      "DATE date NULL,"
+    	                      "COUNTRY blob NULL,"
+    	                      "OTHERS blob NULL);";
     	  if (!q.exec(req))
     	  {
     	  	  qWarning() << __FILE__ << QString::number(__LINE__) << q.lastError().text() ;

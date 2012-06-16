@@ -1,43 +1,43 @@
-NAME;ABSTRACT;TYPE;AMOUNT;OTHERS
-C;consultation;NGAP;23.0;
-CS;consultation spécialisée;NGAP;23.0;
-V;visite;NGAP;23.0;
-VS;visite spécialiste;NGAP;23.0;
-CNPSY;consultation psychiatre;NGAP;34.3;
-CSC;consultation cardiologue;NGAP;45.73;
-FPE;Forfait pédiatre et  généralistes enfants 0 à 2 ans;Forfaits;5.0;
-MN;Majoration pédiatre enfants 0 à 2 ans;Forfaits;3.0;
-MPJ;Majoration pédiatre enfants plus de 2 ans;Forfaits;5.0;
-MPJ-PSY;Majoration psychiatre enfants plus de 2 ans;Forfaits;6.7;
-MTA;Majoration pour le spécialiste en médecine physique et réadaptation;Forfaits;20.0;
-MCE;majoration pour le spécialiste en endocrinologie et en médecine interne avec compétence en diabétologie moins de 16 ans;Forfaits;10.0;
-MBB;majoration pour l'examen médical obligatoire du nourrisson dans les 8 jours suivant la naissance pour le pédiatre.;Forfaits;5.0;
-MAS;majoration de consultation annuelle de synthèse pour un enfant atteint d'une ALD pour le pédiatre;Forfaits;10.0;
-MPF;majoration pour la première consultation familiale pour le psychiatre et pédopsychiatre pour un enfant présentant une pathologie psychiatrique grave relevant d'une ALD;Forfaits;10.0;
-MAF;majoration pour la consultation annuelle de synthèse familiale pour le psychiatre et pédopsychiatre pour un enfant présentant une pathologie psychiatrique grave relevant d'une ALD;Forfaits;10.0;
-MCG;majoration de coordination;Forfaits;3.0;
-RMT;rémunération spécifique annuelle pour un patient en ALD;Forfaits;40.0;
-MD;majoration de déplacement pour visite à domicile justifiée;Forfaits;10.0;
-MDN;majoration de déplacement pour visite à domicile justifiée de nuit de 20h00 à 00h00 et de 6h00 à 8h00;Forfaits;38.5;
-MDI;majoration de déplacement pour visite à domicile justifiée de nuit de 00h00 à 6h00;Forfaits;43.5;
-MDD;majoration de déplacement pour visite à domicile justifiée de dimanche et jour férié;Forfaits;22.6;
-N;indemnité forfaitaire de déplacement pour des actes effectués à domicile autre que la visite;Forfaits;3.5;
-N;majoration de nuit pour visite à domicile non justifiée de 20h00 à 00h00 et de 6h00 à 8h00;Forfaits;35.0;
-MM;majoration de nuit pour visite à domicile non justifiée de 00h00 à 6h00;Forfaits;40.0;
-F;majoration de dimanche et jour férié pour visite à domicile non justifiée;Forfaits;19.06;
-MNO;majoration pour les enfants de 0 à 2 ans;Forfaits;5.0;
-MGE;majoration pour les enfants de 2 à 6 ans;Forfaits;3.0;
-MU;majoration d'urgence;Forfaits;22.6;
-STH;forfait de surveillance thermal;Forfaits;64.03;
-CST;majoration du forfait de cure thermal;Forfaits;10.0;
-CA;consultation annuelle de bilan ALD;NGAP;26.00;
-VL;Visite longue maladies neuro-dégénératives;NGAP;46.00;
-P;Nuit de 20h-24h et 6h-8h (si appel après 19h,CCAM);Forfaits;35.0;
-S;Milieu de Nuit de 0h-6h (CCAM);Forfaits;40.0;
-F;Dimanche et J fériés + Samedi AM en garde si acte non régulé (CCAM);Forfaits;19.06;
-CRD;Consultation de Dimanche et férié;Forfaits;26.50;
-CRN;Consultation de 20h-24h et 6h-8h (appel après 19h);Forfaits;42.50;
-CRM;Consultation de 0h à 6h;Forfaits;52.50;
-VRD;Visite de Dimanche et férié;Forfaits;30.00;
-VRN;Visite de 20h-24h et 6h-8h (appel après 19h);Forfaits;46.00;
-VRM;Visite de 0h à 6h;Forfaits;59.50;
+NAME;ABSTRACT;TYPE;AMOUNT;OTHERS;COUNTRY
+C;consultation;NGAP;23.0;;FR
+CS;consultation spécialisée;NGAP;23.0;;FR
+V;visite;NGAP;23.0;;FR
+VS;visite spécialiste;NGAP;23.0;;FR
+CNPSY;consultation psychiatre;NGAP;34.3;;FR
+CSC;consultation cardiologue;NGAP;45.73;;FR
+FPE;Forfait pédiatre et  généralistes enfants 0 à 2 ans;Forfaits;5.0;;FR
+MN;Majoration pédiatre enfants 0 à 2 ans;Forfaits;3.0;;FR
+MPJ;Majoration pédiatre enfants plus de 2 ans;Forfaits;5.0;;FR
+MPJ-PSY;Majoration psychiatre enfants plus de 2 ans;Forfaits;6.7;;FR
+MTA;Majoration pour le spécialiste en médecine physique et réadaptation;Forfaits;20.0;;FR
+MCE;majoration pour le spécialiste en endocrinologie et en médecine interne avec compétence en diabétologie moins de 16 ans;Forfaits;10.0;;FR
+MBB;majoration pour l'examen médical obligatoire du nourrisson dans les 8 jours suivant la naissance pour le pédiatre.;Forfaits;5.0;;FR
+MAS;majoration de consultation annuelle de synthèse pour un enfant atteint d'une ALD pour le pédiatre;Forfaits;10.0;;FR
+MPF;majoration pour la première consultation familiale pour le psychiatre et pédopsychiatre pour un enfant présentant une pathologie psychiatrique grave relevant d'une ALD;Forfaits;10.0;;FR
+MAF;majoration pour la consultation annuelle de synthèse familiale pour le psychiatre et pédopsychiatre pour un enfant présentant une pathologie psychiatrique grave relevant d'une ALD;Forfaits;10.0;;FR
+MCG;majoration de coordination;Forfaits;3.0;;FR
+RMT;rémunération spécifique annuelle pour un patient en ALD;Forfaits;40.0;;FR
+MD;majoration de déplacement pour visite à domicile justifiée;Forfaits;10.0;;FR
+MDN;majoration de déplacement pour visite à domicile justifiée de nuit de 20h00 à 00h00 et de 6h00 à 8h00;Forfaits;38.5;;FR
+MDI;majoration de déplacement pour visite à domicile justifiée de nuit de 00h00 à 6h00;Forfaits;43.5;;FR
+MDD;majoration de déplacement pour visite à domicile justifiée de dimanche et jour férié;Forfaits;22.6;;FR
+N;indemnité forfaitaire de déplacement pour des actes effectués à domicile autre que la visite;Forfaits;3.5;;FR
+N;majoration de nuit pour visite à domicile non justifiée de 20h00 à 00h00 et de 6h00 à 8h00;Forfaits;35.0;;FR
+MM;majoration de nuit pour visite à domicile non justifiée de 00h00 à 6h00;Forfaits;40.0;;FR
+F;majoration de dimanche et jour férié pour visite à domicile non justifiée;Forfaits;19.06;;FR
+MNO;majoration pour les enfants de 0 à 2 ans;Forfaits;5.0;;FR
+MGE;majoration pour les enfants de 2 à 6 ans;Forfaits;3.0;;FR
+MU;majoration d'urgence;Forfaits;22.6;;FR
+STH;forfait de surveillance thermal;Forfaits;64.03;;FR
+CST;majoration du forfait de cure thermal;Forfaits;10.0;;FR
+CA;consultation annuelle de bilan ALD;NGAP;26.00;;FR
+VL;Visite longue maladies neuro-dégénératives;NGAP;46.00;;FR
+P;Nuit de 20h-24h et 6h-8h (si appel après 19h,CCAM);Forfaits;35.0;;FR
+S;Milieu de Nuit de 0h-6h (CCAM);Forfaits;40.0;;FR
+F;Dimanche et J fériés + Samedi AM en garde si acte non régulé (CCAM);Forfaits;19.06;;FR
+CRD;Consultation de Dimanche et férié;Forfaits;26.50;;FR
+CRN;Consultation de 20h-24h et 6h-8h (appel après 19h);Forfaits;42.50;;FR
+CRM;Consultation de 0h à 6h;Forfaits;52.50;;FR
+VRD;Visite de Dimanche et férié;Forfaits;30.00;;FR
+VRN;Visite de 20h-24h et 6h-8h (appel après 19h);Forfaits;46.00;;FR
+VRM;Visite de 0h à 6h;Forfaits;59.50;;FR
