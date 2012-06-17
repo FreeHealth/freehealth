@@ -363,15 +363,5 @@ void AccountDatabaseDefautsWidget::on_datapackButton_clicked()
         	 	      }
         	     }
             }
-        /*
-        1) vérifier que la mise à jour n'est pas déjà faite. Controle de date.
-         
-        3) rajouter les nouvelles valeurs.
-        */
-        
-        
-        
-        
-        
         
 }

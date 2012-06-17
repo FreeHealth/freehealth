@@ -68,6 +68,7 @@ private:
     void fillComboCategories();
     bool tableViewIsFull(QAbstractItemModel * model);
     void enableShowNextTable();
+    QString getDateWhereClause();
     
 private slots:
     void fillListViewValues(const QString & comboItem);

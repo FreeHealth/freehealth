@@ -288,8 +288,7 @@ QHash<int,QVariant> receiptsEngine::getListOfpreferredValues(QString & userUuid,
             break;
         default :
             break;    
-        }
-    
+        }    
          
     QVariant comment = QVariant(trUtf8("preferred act"));
     hash.insert(ACCOUNT_UID,"UID");
@@ -315,13 +314,14 @@ QHash<int,QVariant> receiptsEngine::getListOfpreferredValues(QString & userUuid,
 }
 
 QHash<QString,double> receiptsEngine::getFilteredValueFromMedicalProcedure(const QString & act, 
-                                                                              const QString & field){
+                                                                           const QString & field){
     QHash<QString,double> hash;
     const QString baseName = "medical_procedure";
     const QString name = act;
     const QString amount = "AMOUNT";
     const QString type = field;
     QString filter = QString("WHERE %1 = '%2'").arg(type,act);
+    filter += getDateWhereClause();
     QString req = QString("SELECT %1 FROM %2 ").arg(amount,baseName )+filter;
     QSqlQuery q(m_db);
     if (!q.exec(req))
@@ -441,4 +441,28 @@ QString receiptsEngine::getStringOfpreferredActAndHisValue(const QString & prefe
         }
     QString text = data+" = "+QString::number(totalValue);
     return text;
+}
+
+QString receiptsEngine::getJustDayBeforeLastRelease()
+{
+    QString lastDateBefore;
+    AccountDB::MedicalProcedureModel MPmodel(this);
+    QStringList listOfDates;
+        for (int r = 0; r < MPmodel.rowCount(); ++r)
+        {
+            QString date = MPmodel.data(MPmodel.index(r,AccountDB::Constants::MP_DATE),Qt::DisplayRole).toString();
+            listOfDates << date;
+            }
+    listOfDates.removeDuplicates();
+    listOfDates.sort();
+    QDate lastDate = QDate::fromString("1903-01-01","yyyy-MM-dd");
+    foreach(QString dateStr,listOfDates){
+        QDate date = QDate::fromString(dateStr,"yyyy-MM-dd");
+        if (date > lastDate)
+        {
+        	  lastDate = date;
+            }
+        }    
+    lastDateBefore = lastDate.addDays(-1).toString("yyyy-MM-dd");  
+    return lastDateBefore;
 }

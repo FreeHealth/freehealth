@@ -31,6 +31,7 @@
  ***************************************************************************/
 #include "findReceiptsValues.h"
 #include "constants.h"
+#include "receiptsIO.h"
 
 #include <utils/global.h>
 #include <translationutils/constants.h>
@@ -127,7 +128,10 @@ void findReceiptsValues::fillListViewValues(const QString & comboItem){
     const QString amount = "AMOUNT";
     const QString explanation = "ABSTRACT";
     const QString type = "TYPE";
+    
     QString filter = QString("WHERE %1 = '%2'").arg(type,strItem);
+    //add date release test
+    filter += getDateWhereClause();
     QString req = QString("SELECT %1,%2,%3 FROM %4 ").arg(name,amount,explanation,baseName )+filter;
     QStandardItemModel *model = new QStandardItemModel(0,2,this);
     int row = 0;
@@ -468,4 +472,13 @@ void findReceiptsValues::showNext(){
     ui->tableViewOfValues-> setSelectionMode(QAbstractItemView::SingleSelection);
     ui->tableViewOfValues->horizontalHeader()->setStretchLastSection ( true );
     ui->tableViewOfValues->setGridStyle(Qt::NoPen);
+}
+
+QString findReceiptsValues::getDateWhereClause()
+{
+    QString whereClause;
+    receiptsEngine io;
+    QString dateOfLastReleaseLessOneDay = io.getJustDayBeforeLastRelease();
+    whereClause = QString(" AND WHERE %1 > '%2'").arg(dateOfLastReleaseLessOneDay,"DATE");
+    return whereClause;
 }

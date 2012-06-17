@@ -66,6 +66,7 @@ public:
     QVariant getSiteUidFromSite(const QString & site);
     QVariant getInsuranceUidFromInsurance(const QString & insurance);
     QString getStringOfpreferredActAndHisValue(const QString & preferredAct);
+    QString getJustDayBeforeLastRelease();
 
 private:
     enum typeOfChoice {
@@ -76,6 +77,7 @@ private:
             OTHER,
             DUE
         };
+   QString getDateWhereClause();
    AccountModel *m_mpmodel;
    QSqlDatabase  m_db;
 };
