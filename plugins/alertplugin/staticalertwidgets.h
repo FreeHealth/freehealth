@@ -29,6 +29,8 @@
 #define ALERT_STATICALERTWIDGETS_H
 
 #include <alertplugin/alertplugin_exporter.h>
+#include <alertplugin/alertitem.h>
+
 #include <QToolButton>
 #include <QLabel>
 
@@ -37,10 +39,24 @@ class AlertItem;
 
 class ALERT_EXPORT StaticAlertToolButton : public QToolButton
 {
+    Q_OBJECT
 public:
     StaticAlertToolButton(QWidget *parent = 0);
+    ~StaticAlertToolButton();
 
     void setAlertItem(const AlertItem &item);
+
+private Q_SLOTS:
+    void validateAlert();
+    void editAlert();
+
+private:
+    void retranslateUi();
+    void changeEvent(QEvent *event);
+
+private:
+    QAction *aCategory, *aLabel, *aValidate, *aEdit;
+    AlertItem _item;
 };
 
 class ALERT_EXPORT StaticAlertLabel : public QLabel

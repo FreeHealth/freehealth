@@ -141,12 +141,13 @@ QVector<AlertItem> AlertCore::getAlertItemForCurrentApplication() const
 }
 
 /** Save the Alert::AlertItem \e item into the database and update some of its values. The \e item will be modified. */
-bool AlertCore::saveAlertItem(AlertItem &item)
+bool AlertCore::saveAlert(AlertItem &item)
 {
     return d->m_alertBase->saveAlertItem(item);
 }
 
-void AlertCore::checkAlerts(AlertsToCheck check)
+/** Check all database recorded alerts for the current patient, the current user and the current application. */
+bool AlertCore::checkAlerts(AlertsToCheck check)
 {
     // Prepare the query
     Internal::AlertBaseQuery query;
@@ -161,6 +162,49 @@ void AlertCore::checkAlerts(AlertsToCheck check)
     // Get the alerts
     QVector<AlertItem> alerts = d->m_alertBase->getAlertItems(query);
 
+    processAlerts(alerts);
+
+    return true;
+}
+
+/**
+  Register a new Alert::AlertItem to the core without saving it to the database.
+  \sa Alert::AlertCore::saveAlert()
+*/
+bool AlertCore::registerAlert(const AlertItem &item)
+{
+    processAlerts(QVector<AlertItem>() << item);
+    return true;
+}
+
+/**
+  Update an already registered Alert::AlertItem. \n
+  If the alert view type is a static alert, inform all IAlertPlaceHolder of the update otherwise
+  execute the dynamic alert. \n
+  The modification are not saved into the database.
+  \sa Alert::AlertCore::saveAlert(), Alert::AlertCore::registerAlert()
+*/
+bool AlertCore::updateAlert(const AlertItem &item)
+{
+    if (item.viewType() == AlertItem::DynamicAlert && !item.isUserValidated() && item.isValid()) {
+        DynamicAlertDialog::executeDynamicAlert(item);
+    } else {
+        // Get static place holders
+        QList<Alert::IAlertPlaceHolder*> placeHolders = pluginManager()->getObjects<Alert::IAlertPlaceHolder>();
+        foreach(Alert::IAlertPlaceHolder *ph, placeHolders) {
+            ph->updateAlert(item);
+        }
+    }
+    return true;
+}
+
+/**
+ Process alerts:\n
+   - Execute dynamic alerts if needed
+   - Feed Alert::IAlertPlaceHolder
+*/
+void AlertCore::processAlerts(const QVector<AlertItem> &alerts)
+{
     // Get static place holders
     QList<Alert::IAlertPlaceHolder*> placeHolders = pluginManager()->getObjects<Alert::IAlertPlaceHolder>();
 
@@ -168,6 +212,9 @@ void AlertCore::checkAlerts(AlertsToCheck check)
     QList<AlertItem> dynamics;
     for(int i = 0; i < alerts.count(); ++i) {
         const AlertItem &item = alerts.at(i);
+        if (!item.isValid() || item.isUserValidated())
+            continue;
+
         if (item.viewType() == AlertItem::DynamicAlert) {
             dynamics << item;
         } else {

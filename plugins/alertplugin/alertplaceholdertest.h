@@ -55,10 +55,15 @@ public:
     // AlertItem management
     void clear();
     bool addAlert(const AlertItem &alert);
+    bool updateAlert(const AlertItem &alert);
     bool removeAlert(const AlertItem &alert);
     bool highlightAlert(const AlertItem &alert);
 
     QWidget *createWidget(QWidget *parent = 0);
+
+    bool containsAlert(const AlertItem &item);
+    bool containsAlertUuid(const QString &alertUid);
+    bool removeAlertUuid(const QString &alertUid);
 
 private:
     QPointer<QToolBar> _widget;
