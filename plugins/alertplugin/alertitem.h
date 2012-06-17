@@ -303,7 +303,6 @@ public:
     virtual QString extraXml() const;
     virtual void setExtraXml(const QString &xml);
 
-    // TODO : move this in AlertModel ?
     virtual void clearRelations();
     virtual AlertRelation &relation(int id) const;
     virtual QVector<AlertRelation> &relations() const;
@@ -322,12 +321,13 @@ public:
     virtual AlertScript &scriptAt(int id) const;
     virtual void addScript(const AlertScript &script);
 
+    bool validateAlertWithCurrentUser();
+    bool isUserValidated() const;
     virtual void clearValidations();
     virtual AlertValidation &validation(int id) const;
     virtual QVector<AlertValidation> &validations() const;
     virtual AlertValidation &validationAt(int id) const;
     virtual void addValidation(const AlertValidation &val);
-    // END
 
     bool operator==(const AlertItem &other) const;
     bool operator!=(const AlertItem &other) const;
