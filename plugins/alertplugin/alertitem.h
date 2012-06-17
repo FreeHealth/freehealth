@@ -164,20 +164,23 @@ public:
     virtual void setModified(bool state) {_modified = state;}
     virtual bool isModified() const {return _modified;}
 
-    virtual QString userUid() const {return _userUid;}
-    virtual void setUserUuid(const QString &uid) {_modified=true; _userUid=uid;}
+    virtual QString validatorUid() const {return _userUid;}
+    virtual void setValidatorUuid(const QString &uid) {_modified=true; _userUid=uid;}
     virtual QString userComment() const {return _userComment;}
     virtual void setUserComment(const QString &comment) {_modified=true; _userComment=comment;}
 
     virtual QDateTime dateOfValidation() const {return _date;}
     virtual void setDateOfValidation(const QDateTime &dt) {_modified=true; _date=dt;}
 
+    virtual QString validatedUid() const {return _validated;}
+    virtual void setValidatedUuid(const QString &uid) {_validated=uid;}
+
     virtual QString toXml() const;
     static AlertValidation fromDomElement(const QDomElement &element);
 
 private:
     int _id;
-    QString _userUid, _userComment;
+    QString _userUid, _userComment, _validated;
     QDateTime _date;
     bool _modified;
 };

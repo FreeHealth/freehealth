@@ -351,11 +351,13 @@ AlertBase::AlertBase(QObject *parent) :
     addField(Table_ALERT_VALIDATION, ALERT_VALIDATION_VID, "ID", FieldIsUniquePrimaryKey);
     addField(Table_ALERT_VALIDATION, ALERT_VALIDATION_VAL_ID, "VID", FieldIsInteger);
     addField(Table_ALERT_VALIDATION, ALERT_VALIDATION_DATEOFVALIDATION, "DT", FieldIsDateTime);
-    addField(Table_ALERT_VALIDATION, ALERT_VALIDATION_USER_UUID, "U_U", FieldIsUUID);
+    addField(Table_ALERT_VALIDATION, ALERT_VALIDATION_VALIDATOR_UUID, "U_U", FieldIsUUID);
     addField(Table_ALERT_VALIDATION, ALERT_VALIDATION_USER_COMMENT, "U_C", FieldIsLongText);
+    addField(Table_ALERT_VALIDATION, ALERT_VALIDATION_VALIDATED_UUID, "U_P", FieldIsUUID);
     addIndex(Table_ALERT_VALIDATION, ALERT_VALIDATION_VID);
     addIndex(Table_ALERT_VALIDATION, ALERT_VALIDATION_VAL_ID);
-    addIndex(Table_ALERT_VALIDATION, ALERT_VALIDATION_USER_UUID);
+    addIndex(Table_ALERT_VALIDATION, ALERT_VALIDATION_VALIDATOR_UUID);
+    addIndex(Table_ALERT_VALIDATION, ALERT_VALIDATION_VALIDATED_UUID);
 
     addField(Table_ALERT_VERSION, VERSION_TEXT, "TXT", FieldIsShortText);
 
@@ -896,9 +898,10 @@ bool AlertBase::saveItemValidations(AlertItem &item)
         return true;
     // get the validations val_id
     int id = -1;
+    // TODO: do not delete validations (try to find the id && update them if needed)
     if (item.db(ValidationId).isValid()) {
         id = item.db(ValidationId).toInt();
-        // delete all old relations
+        // delete all old validations
         QHash<int, QString> where;
         where.insert(Constants::ALERT_VALIDATION_VAL_ID, QString("=%1").arg(id));
         QString req = prepareDeleteQuery(Constants::Table_ALERT_VALIDATION, where);
@@ -921,8 +924,9 @@ bool AlertBase::saveItemValidations(AlertItem &item)
         query.bindValue(Constants::ALERT_VALIDATION_VID, QVariant());
         query.bindValue(Constants::ALERT_VALIDATION_VAL_ID, id);
         query.bindValue(Constants::ALERT_VALIDATION_DATEOFVALIDATION, validation.dateOfValidation());
-        query.bindValue(Constants::ALERT_VALIDATION_USER_UUID, validation.userUid());
+        query.bindValue(Constants::ALERT_VALIDATION_VALIDATOR_UUID, validation.validatorUid());
         query.bindValue(Constants::ALERT_VALIDATION_USER_COMMENT, validation.userComment());
+        query.bindValue(Constants::ALERT_VALIDATION_VALIDATED_UUID, validation.validatedUid());
         if (query.exec()) {
             validation.setId(query.lastInsertId().toInt());
         } else {
@@ -1377,9 +1381,10 @@ bool AlertBase::getItemValidations(AlertItem &item)
         while (query.next()) {
             AlertValidation val;
             val.setId(query.value(ALERT_VALIDATION_VID).toInt());
-            val.setUserUuid(query.value(ALERT_VALIDATION_USER_UUID).toString());
-            val.setUserComment(query.value(ALERT_VALIDATION_USER_UUID).toString());
+            val.setValidatorUuid(query.value(ALERT_VALIDATION_VALIDATOR_UUID).toString());
+            val.setUserComment(query.value(ALERT_VALIDATION_USER_COMMENT).toString());
             val.setDateOfValidation(query.value(ALERT_VALIDATION_USER_COMMENT).toDateTime());
+            val.setValidatedUuid(query.value(ALERT_VALIDATION_VALIDATED_UUID).toString());
             item.addValidation(val);
         }
     } else {

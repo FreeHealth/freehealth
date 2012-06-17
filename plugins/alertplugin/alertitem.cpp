@@ -725,9 +725,10 @@ bool AlertItem::validateAlertWithCurrentUser()
         AlertValidation val;
         val.setDateOfValidation(QDateTime::currentDateTime());
         if (user())
-            val.setUserUuid(user()->uuid());
+            val.setValidatorUuid(user()->uuid());
         else
-            val.setUserUuid("UnknownUser");
+            val.setValidatorUuid("UnknownUser");
+        // TODO: add setValidatedUuid
         addValidation(val);
         // inform the core
         AlertCore::instance()->updateAlert(*this);
@@ -1213,12 +1214,13 @@ QString AlertValidation::toXml() const
 {
     QString comment = _userComment;
     comment = comment.replace("<", "&lt;");
-    return QString("<%1 id='%2' user='%3' comment='%4' dt='%5'/>\n")
+    return QString("<%1 id='%2' user='%3' comment='%4' dt='%5' validated='%6'/>\n")
             .arg(::XML_VALIDATION_ELEMENTTAG)
             .arg(_id)
             .arg(_userUid)
             .arg(comment)
             .arg(_date.toString(Qt::ISODate))
+            .arg(_validated)
             ;
 }
 
@@ -1228,8 +1230,9 @@ AlertValidation AlertValidation::fromDomElement(const QDomElement &element)
         return AlertValidation();
     AlertValidation val;
     val.setId(element.attribute("id").toInt());
-    val.setUserUuid(element.attribute("user"));
+    val.setValidatorUuid(element.attribute("user"));
     val.setUserComment(element.attribute("comment"));
+    val.setValidatedUuid(element.attribute("validated"));
     val.setDateOfValidation(QDateTime::fromString(element.attribute("dt"), Qt::ISODate));
     return val;
 }
