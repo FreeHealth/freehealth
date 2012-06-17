@@ -29,16 +29,24 @@
 #include "alertbase.h"
 #include "alertmanager.h"
 #include "alertitem.h"
+#include "ialertplaceholder.h"
 
 #include <coreplugin/icore.h>
+
+#include <extensionsystem/pluginmanager.h>
 
 // TEST
 #include "alertitemeditordialog.h"
 #include "dynamicalertdialog.h"
+#include "alertplaceholdertest.h"
 #include <QToolButton>
+#include <QVBoxLayout>
+#include <QPointer>
 // END TEST
 
 using namespace Alert;
+
+static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 
 AlertCore *AlertCore::_instance = 0;
 
@@ -56,14 +64,19 @@ class AlertCorePrivate
 public:
     AlertCorePrivate() :
         m_alertBase(0),
-        m_alertManager(0)
+        m_alertManager(0),
+        _placeholdertest(0)
+
     {}
 
-    ~AlertCorePrivate() {}
+    ~AlertCorePrivate()
+    {
+    }
 
 public:
     AlertBase *m_alertBase;
     AlertManager *m_alertManager;
+    QPointer<AlertPlaceHolderTest> _placeholdertest;
 };
 }
 }
@@ -78,6 +91,11 @@ AlertCore::AlertCore(QObject *parent) :
 
 AlertCore::~AlertCore()
 {
+    if (d->_placeholdertest) {
+        pluginManager()->removeObject(d->_placeholdertest);
+        delete d->_placeholdertest;
+        d->_placeholdertest = 0;
+    }
     if (d) {
         delete d;
         d = 0;
@@ -128,11 +146,48 @@ bool AlertCore::saveAlertItem(AlertItem &item)
     return d->m_alertBase->saveAlertItem(item);
 }
 
+void AlertCore::checkAlerts(AlertsToCheck check)
+{
+    // Prepare the query
+    Internal::AlertBaseQuery query;
+    if (check & CurrentUserAlerts)
+        query.addCurrentUserAlerts();
+    if (check & CurrentPatientAlerts)
+        query.addCurrentPatientAlerts();
+    if (check & CurrentApplicationAlerts)
+        query.addApplicationAlerts(qApp->applicationName().toLower());
+    query.setAlertValidity(Internal::AlertBaseQuery::ValidAlerts);
+
+    // Get the alerts
+    QVector<AlertItem> alerts = d->m_alertBase->getAlertItems(query);
+
+    // Get static place holders
+    QList<Alert::IAlertPlaceHolder*> placeHolders = pluginManager()->getObjects<Alert::IAlertPlaceHolder>();
+
+    // Process alerts
+    QList<AlertItem> dynamics;
+    for(int i = 0; i < alerts.count(); ++i) {
+        const AlertItem &item = alerts.at(i);
+        if (item.viewType() == AlertItem::DynamicAlert) {
+            dynamics << item;
+        } else {
+            foreach(Alert::IAlertPlaceHolder *ph, placeHolders) {
+                ph->addAlert(item);
+            }
+        }
+    }
+
+    if (!dynamics.isEmpty()) {
+        DynamicAlertDialog::executeDynamicAlert(dynamics);
+    }
+}
+
 void AlertCore::postCoreInitialization()
 {
     // TESTS
     AlertItem item = d->m_alertBase->createVirtualItem();
     AlertItem item2 = d->m_alertBase->createVirtualItem();
+
     AlertItem item3 = item2;
 //    item3.setUuid("LKLKLK");
     item3.setLabel("Double label");
@@ -181,6 +236,9 @@ void AlertCore::postCoreInitialization()
         item4.clearTimings();
         item4.addTiming(timing);
 
+        item.setViewType(AlertItem::StaticAlert);
+        item2.setViewType(AlertItem::StaticAlert);
+
         if (!d->m_alertBase->saveAlertItem(item))
             qWarning() << "ITEM WRONG";
         if (!d->m_alertBase->saveAlertItem(item2))
@@ -208,9 +266,6 @@ void AlertCore::postCoreInitialization()
         //    AlertItem t = AlertItem::fromXml(item.toXml());
         //    qWarning() << (t.toXml() == item.toXml());
     }
-
-    qWarning() << item.category() << item2.category();
-    qWarning() << item.label() << item2.label();
 
     // Dynamic alerts
     if (false) {
@@ -243,6 +298,24 @@ void AlertCore::postCoreInitialization()
         qWarning() << item.toXml();
     }
 
+    // PlaceHolders
+    if (true) {
+        // Put placeholder in the plugin manager object pool
+        d->_placeholdertest = new AlertPlaceHolderTest; // object should not be deleted
+        pluginManager()->addObject(d->_placeholdertest);
+
+        // Create the dialog && the placeholder
+        QDialog dlg;
+        QVBoxLayout lay(&dlg);
+        dlg.setLayout(&lay);
+        lay.addWidget(d->_placeholdertest->createWidget(&dlg));
+
+        // Check alerts
+        checkAlerts(CurrentPatientAlerts | CurrentUserAlerts | CurrentApplicationAlerts);
+
+        // Exec the dialog
+        dlg.exec();
+    }
     // END TESTS
 }
 

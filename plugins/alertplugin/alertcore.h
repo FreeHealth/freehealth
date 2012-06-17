@@ -56,6 +56,14 @@ protected:
     bool initialize();
 
 public:
+    enum AlertToCheck {
+        CurrentPatientAlerts =      0x00000001,
+        CurrentUserAlerts =         0x00000002,
+        CurrentApplicationAlerts =  0x00000004
+    };
+    Q_DECLARE_FLAGS(AlertsToCheck, AlertToCheck)
+
+
     static AlertCore *instance(QObject *parent = 0);
     ~AlertCore();
 
@@ -66,6 +74,7 @@ public:
     bool saveAlertItem(AlertItem &item);
 
     // Executers
+    void checkAlerts(AlertsToCheck check);
     //    bool executeAlert(const AlertItem &alert);  // add a delay ?
 
     // Editors
@@ -92,6 +101,8 @@ private:
 };
 
 }  // Alert
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(Alert::AlertCore::AlertsToCheck)
 
 #endif
 
