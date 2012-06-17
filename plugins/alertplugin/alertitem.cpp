@@ -628,7 +628,7 @@ QVector<AlertRelation> &AlertItem::relations() const
 
 AlertRelation &AlertItem::relationAt(int id) const
 {
-    if (IN_RANGE(id, 0, d->_relations.count()))
+    if (IN_RANGE_STRICTLY(id, 0, d->_relations.count()))
         return d->_relations[id];
     return d->_nullRelation;
 }
@@ -661,7 +661,7 @@ QVector<AlertTiming> &AlertItem::timings() const
 
 AlertTiming &AlertItem::timingAt(int id) const
 {
-    if (IN_RANGE(id, 0, d->_timings.count()))
+    if (IN_RANGE_STRICTLY(id, 0, d->_timings.count()))
         return d->_timings[id];
     return d->_nullTiming;
 }
@@ -694,7 +694,7 @@ QVector<AlertScript> &AlertItem::scripts() const
 
 AlertScript &AlertItem::scriptAt(int id) const
 {
-    if (IN_RANGE(id, 0, d->_scripts.count()))
+    if (IN_RANGE_STRICTLY(id, 0, d->_scripts.count()))
         return d->_scripts[id];
     return d->_nullScript;
 }
@@ -769,7 +769,7 @@ QVector<AlertValidation> &AlertItem::validations() const
 /** Return all the recorded validation at index \e id. */
 AlertValidation &AlertItem::validationAt(int id) const
 {
-    if (IN_RANGE(id, 0, d->_validations.count()))
+    if (IN_RANGE_STRICTLY(id, 0, d->_validations.count()))
         return d->_validations[id];
     return d->_nullValidation;
 }
