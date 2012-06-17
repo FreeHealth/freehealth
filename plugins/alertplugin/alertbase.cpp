@@ -1156,7 +1156,7 @@ QVector<AlertItem> AlertBase::getAlertItems(const AlertBaseQuery &query)
         req = QString("%1 WHERE\n %2\n AND (%3)").arg(select(Constants::Table_ALERT, joins, conds)).arg(where).arg(uidWhere);
     }
 
-    qWarning() << req;
+//    qWarning() << req;
 
     database().transaction();
     QSqlQuery query(database());
