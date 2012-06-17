@@ -89,6 +89,8 @@ struct Field {
 typedef QList<Field> FieldList;
 
 struct Join {
+    Join() : type(-1) {}
+
     Join(const Field &field1, const Field &field2, const int type = 0) :
             field1(field1), field2(field2), type(type) {}
 
@@ -100,6 +102,8 @@ struct Join {
         field2.field = f2;
         type = joinType;
     }
+
+    bool isNull() const {return (field1.field < 0) && (field2.field < 0); }
 
     Field field1;
     Field field2;
@@ -286,6 +290,7 @@ public:
 
     virtual QString getWhereClause(const int &tableref, const QHash<int, QString> &conditions) const;
     virtual QString getWhereClause(const FieldList &fields) const;
+    virtual QString getWhereClause(const Field &field) const;
 
     virtual QString joinToSql(const Join &join) const;
 

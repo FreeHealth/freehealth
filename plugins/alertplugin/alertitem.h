@@ -49,48 +49,51 @@ namespace Alert {
 class ALERT_EXPORT AlertTiming
 {
 public:
-    AlertTiming() : _id(-1), _ncycle(0), _delay(0), _valid(true), _isCycle(false) {}
+    AlertTiming() : _id(-1), _ncycle(0), _delay(0), _valid(true), _isCycle(false), _modified(false) {}
     virtual ~AlertTiming() {}
 
     virtual int id() const {return _id;}
-    virtual void setId(int id) {_id = id;}
+    virtual void setId(int id) {_modified=true; _id = id;}
     virtual bool isValid() const {return _valid;}
-    virtual void setValid(bool state) {_valid=state;}
+    virtual void setValid(bool state) {_modified=true; _valid=state;}
+
+    virtual void setModified(bool state) {_modified = state;}
+    virtual bool isModified() const {return _modified;}
 
     virtual QDateTime start() const {return _start;}
     virtual QDateTime end() const {return _end;}
     virtual QDateTime expiration() const {return _end;}
-    virtual void setStart(const QDateTime &dt) {_start = dt;}
-    virtual void setEnd(const QDateTime &dt) {_end = dt;}
-    virtual void setExpiration(const QDateTime &dt) {_end = dt;}
+    virtual void setStart(const QDateTime &dt) {_modified=true; _start = dt;}
+    virtual void setEnd(const QDateTime &dt) {_modified=true; _end = dt;}
+    virtual void setExpiration(const QDateTime &dt) {_modified=true; _end = dt;}
 
     virtual bool isCycling() const {return _isCycle;}
-    virtual void setCycling(bool cycle) {_isCycle=cycle;}
+    virtual void setCycling(bool cycle) {_modified=true; _isCycle=cycle;}
     virtual int numberOfCycles() const {return _ncycle;}
-    virtual void setNumberOfCycles(int n) {_ncycle=n; if (n>0)_ncycle=true;}
+    virtual void setNumberOfCycles(int n) {_modified=true; _ncycle=n; if (n>0)_ncycle=true;}
     virtual QDateTime nextDate() const {return _next;}
-    virtual void setNextDate(const QDateTime &dt) {_next = dt;}
+    virtual void setNextDate(const QDateTime &dt) {_modified=true; _next = dt;}
 
     virtual qlonglong cyclingDelayInMinutes() const {return _delay;}
-    virtual void setCyclingDelayInMinutes(const qlonglong delay) {_delay=delay;}
+    virtual void setCyclingDelayInMinutes(const qlonglong delay) {_modified=true; _delay=delay;}
 
     virtual qlonglong cyclingDelayInHours() const {return qlonglong(_delay/60);}
-    virtual void setCyclingDelayInHours(const qlonglong delay) {_delay=delay*60;}
+    virtual void setCyclingDelayInHours(const qlonglong delay) {_modified=true; _delay=delay*60;}
 
     virtual qlonglong cyclingDelayInDays() const {return qlonglong(_delay/60/24);}
-    virtual void setCyclingDelayInDays(const qlonglong delay) {_delay=delay*60*24;}
+    virtual void setCyclingDelayInDays(const qlonglong delay) {_modified=true; _delay=delay*60*24;}
 
     virtual qlonglong cyclingDelayInWeeks() const {return qlonglong(_delay/60/24/7);}
-    virtual void setCyclingDelayInWeeks(const qlonglong delay) {_delay=delay*60*24*7;}
+    virtual void setCyclingDelayInWeeks(const qlonglong delay) {_modified=true; _delay=delay*60*24*7;}
 
     virtual qlonglong cyclingDelayInMonth() const {return qlonglong(_delay/60/24/30);}
-    virtual void setCyclingDelayInMonth(const qlonglong delay) {_delay=delay*60*24*30;}
+    virtual void setCyclingDelayInMonth(const qlonglong delay) {_modified=true; _delay=delay*60*24*30;}
 
     virtual qlonglong cyclingDelayInYears() const {return qlonglong(_delay/60/24/365.25);}
-    virtual void setCyclingDelayInYears(const qlonglong delay) {_delay=qlonglong(delay*60*24*365.25);}
+    virtual void setCyclingDelayInYears(const qlonglong delay) {_modified=true; _delay=qlonglong(delay*60*24*365.25);}
 
     virtual qlonglong cyclingDelayInDecades() const {return qlonglong(_delay/60/24/365.25/10);}
-    virtual void setCyclingDelayInDecades(const qlonglong delay) {_delay=qlonglong(delay*60*24*365.25*10);}
+    virtual void setCyclingDelayInDecades(const qlonglong delay) {_modified=true; _delay=qlonglong(delay*60*24*365.25*10);}
 
     virtual void cyclingDelay(qlonglong *min, qlonglong *hours, qlonglong *days, qlonglong *weeks,
                               qlonglong *months, qlonglong *years, qlonglong *decades) const;
@@ -105,6 +108,7 @@ private:
     qlonglong _delay;
     QDateTime _start, _end, _next;
     bool _valid, _isCycle;
+    bool _modified;
 };
 
 class ALERT_EXPORT AlertScript
@@ -116,23 +120,26 @@ public:
         AfterAlert
     };
 
-    AlertScript() : _id(-1), _valid(true) {}
+    AlertScript() : _id(-1), _valid(true), _modified(false) {}
     virtual ~AlertScript() {}
 
     virtual int id() const {return _id;}
-    virtual void setId(int id) {_id = id;}
+    virtual void setId(int id) {_modified=true; _id = id;}
 
     virtual QString uuid() const {return _uid;}
-    virtual void setUuid(const QString &uid) {_uid=uid;}
+    virtual void setUuid(const QString &uid) {_modified=true; _uid=uid;}
 
     virtual bool isValid() const {return _valid;}
-    virtual void setValid(bool state) {_valid=state;}
+    virtual void setValid(bool state) {_modified=true; _valid=state;}
+
+    virtual void setModified(bool state) {_modified = state;}
+    virtual bool isModified() const {return _modified;}
 
     virtual ScriptType type() {return _type;}
-    virtual void setType(ScriptType type) {_type=type;}
+    virtual void setType(ScriptType type) {_modified=true; _type=type;}
 
     virtual QString script() const {return _script;}
-    virtual void setScript(const QString &script) {_script=script;}
+    virtual void setScript(const QString &script) {_modified=true; _script=script;}
 
     virtual QString toXml() const;
     static AlertScript fromDomElement(const QDomElement &element);
@@ -142,24 +149,28 @@ private:
     bool _valid;
     ScriptType _type;
     QString _uid, _script;
+    bool _modified;
 };
 
 class ALERT_EXPORT AlertValidation
 {
 public:
-    AlertValidation() : _id(-1) {}
+    AlertValidation() : _id(-1), _modified(false) {}
     virtual ~AlertValidation() {}
 
     virtual int id() const {return _id;}
-    virtual void setId(int id) {_id = id;}
+    virtual void setId(int id) {_modified=true; _id = id;}
+
+    virtual void setModified(bool state) {_modified = state;}
+    virtual bool isModified() const {return _modified;}
 
     virtual QString userUid() const {return _userUid;}
-    virtual void setUserUuid(const QString &uid) {_userUid=uid;}
+    virtual void setUserUuid(const QString &uid) {_modified=true; _userUid=uid;}
     virtual QString userComment() const {return _userComment;}
-    virtual void setUserComment(const QString &comment) {_userComment=comment;}
+    virtual void setUserComment(const QString &comment) {_modified=true; _userComment=comment;}
 
     virtual QDateTime dateOfValidation() const {return _date;}
-    virtual void setDateOfValidation(const QDateTime &dt) {_date=dt;}
+    virtual void setDateOfValidation(const QDateTime &dt) {_modified=true; _date=dt;}
 
     virtual QString toXml() const;
     static AlertValidation fromDomElement(const QDomElement &element);
@@ -168,6 +179,7 @@ private:
     int _id;
     QString _userUid, _userComment;
     QDateTime _date;
+    bool _modified;
 };
 
 class ALERT_EXPORT AlertRelation
@@ -181,17 +193,20 @@ public:
         RelatedToUserGroup,
         RelatedToApplication
     };
-    AlertRelation() : _id(-1) {}
+    AlertRelation() : _id(-1), _modified(false) {}
     virtual ~AlertRelation() {}
 
     virtual int id() const {return _id;}
-    virtual void setId(int id) {_id = id;}
+    virtual void setId(int id) {_modified=true; _id = id;}
+
+    virtual void setModified(bool state) {_modified = state;}
+    virtual bool isModified() const {return _modified;}
 
     virtual RelatedTo relatedTo() const {return _related;}
-    virtual void setRelatedTo(RelatedTo related) {_related = related;}
+    virtual void setRelatedTo(RelatedTo related) {_modified=true; _related = related;}
 
     virtual QString relatedToUid() const {return _relatedUid;}
-    virtual void setRelatedToUid(const QString &uid) {_relatedUid=uid;}
+    virtual void setRelatedToUid(const QString &uid) {_modified=true; _relatedUid=uid;}
 
     virtual QString toXml() const;
     static AlertRelation fromDomElement(const QDomElement &element);
@@ -200,6 +215,7 @@ private:
     int _id;
     RelatedTo _related;
     QString _relatedUid;
+    bool _modified;
 };
 
 namespace Internal {

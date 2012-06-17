@@ -30,15 +30,16 @@
 
 #include <alertplugin/alertplugin_exporter.h>
 #include <QWidget>
+#include <QObject>
 
 namespace Alert {
 class AlertItem;
 
-class ALERT_EXPORT IAlertPlaceHolder : public QWidget
+class ALERT_EXPORT IAlertPlaceHolder : public QObject
 {
     Q_OBJECT
 public:
-    explicit IAlertPlaceHolder(QWidget *parent = 0);
+    explicit IAlertPlaceHolder(QObject *parent = 0);
     virtual ~IAlertPlaceHolder() {}
 
     // identification
@@ -50,9 +51,12 @@ public:
     virtual QString description(const QString &lang = QString::null) const = 0;
 
     // AlertItem management
+    virtual void clear() = 0;
     virtual bool addAlert(const AlertItem &alert) = 0;
     virtual bool removeAlert(const AlertItem &alert) = 0;
     virtual bool highlightAlert(const AlertItem &alert) = 0;
+
+    virtual QWidget *createWidget(QWidget *parent = 0) = 0;
 
 Q_SIGNALS:
     void alertItemValidated(const AlertItem &alert);

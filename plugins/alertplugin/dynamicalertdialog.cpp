@@ -41,6 +41,7 @@
 #include <QDialogButtonBox>
 #include <QToolButton>
 #include <QScrollArea>
+#include <QDesktopWidget>
 
 #include <QDebug>
 
@@ -236,13 +237,19 @@ DynamicAlertDialog::DynamicAlertDialog(const QList<AlertItem> &items,
     _overrideButton->setFont(bold);
     box->addButton(_overrideButton, QDialogButtonBox::RejectRole);
 
+    for(int i=0; i < buttons.count(); ++i) {
+        buttons.at(i)->setIconSize(QSize(16,16));
+        buttons.at(i)->setFont(bold);
+        box->addButton(buttons.at(i), QDialogButtonBox::ActionRole);
+    }
+
     connect(box, SIGNAL(accepted()), this, SLOT(accept()));
     connect(box, SIGNAL(rejected()), this, SLOT(override()));
     ui->buttonLayout->setMargin(0);
     ui->buttonLayout->setSpacing(0);
     ui->buttonLayout->addWidget(box);
 
-    adjustSize();
+    Utils::resizeAndCenter(this, QApplication::activeWindow());
 }
 
 DynamicAlertDialog::~DynamicAlertDialog()
@@ -281,13 +288,20 @@ void DynamicAlertDialog::changeEvent(QEvent *e)
 
 DynamicAlertResult DynamicAlertDialog::executeDynamicAlert(const AlertItem &item, const QString &themedIcon, QWidget *parent)
 {
-    return executeDynamicAlert(QList<AlertItem>() << item, themedIcon, parent);
+    QList<QAbstractButton*> noButtons;
+    return executeDynamicAlert(QList<AlertItem>() << item, noButtons, themedIcon, parent);
 }
 
 DynamicAlertResult DynamicAlertDialog::executeDynamicAlert(const QList<AlertItem> &items, const QString &themedIcon, QWidget *parent)
 {
+    QList<QAbstractButton*> noButtons;
+    return executeDynamicAlert(items, noButtons, themedIcon, parent);
+}
+
+DynamicAlertResult DynamicAlertDialog::executeDynamicAlert(const QList<AlertItem> &items, const QList<QAbstractButton*> &buttons, const QString &themedIcon, QWidget *parent)
+{
     DynamicAlertResult result;
-    DynamicAlertDialog dlg(items, themedIcon, QList<QAbstractButton*>(), parent);
+    DynamicAlertDialog dlg(items, themedIcon, buttons, parent);  // theme()->icon(themedIcon, Core::ITheme::BigIcon)
     if (dlg.exec()==QDialog::Accepted) {
 
     } else {

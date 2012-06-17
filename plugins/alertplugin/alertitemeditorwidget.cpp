@@ -175,6 +175,7 @@ void AlertItemEditorWidget::setAlertItem(const AlertItem &item)
         case AlertRelation::RelatedToAllPatients: d->ui->relatedTo->setCurrentIndex(1); break;
         case AlertRelation::RelatedToUser: d->ui->relatedTo->setCurrentIndex(2); break;
         case AlertRelation::RelatedToApplication: d->ui->relatedTo->setCurrentIndex(3); break;
+        default: break;
         }
     }
 }

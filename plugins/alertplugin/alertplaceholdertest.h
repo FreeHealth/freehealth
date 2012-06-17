@@ -25,84 +25,47 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef ALERTCORE_H
-#define ALERTCORE_H
+#ifndef ALERTPLACEHOLDERTEST_H
+#define ALERTPLACEHOLDERTEST_H
 
-#include <QObject>
-
-/**
- * \file alertcore.h
- * \author Eric MAEKER <eric.maeker@gmail.com>, Pierre-Marie Desombre <pm.desombre@gmail.com>
- * \version 0.8.0
- * \date 13 June 2012
-*/
+#include <alertplugin/ialertplaceholder.h>
+#include <alertplugin/alertitem.h>
+#include <QToolBar>
+#include <QPointer>
 
 namespace Alert {
-class AlertItem;
+class StaticAlertToolButton;
 
-namespace Internal {
-class AlertCorePrivate;
-class AlertPlugin;
-}
-class AlertManager;
-
-class AlertCore : public QObject
+class AlertPlaceHolderTest : public IAlertPlaceHolder
 {
     Q_OBJECT
-    friend class Alert::Internal::AlertPlugin;
-
-protected:
-    AlertCore(QObject *parent = 0);
-    bool initialize();
-
+    
 public:
-    enum AlertToCheck {
-        CurrentPatientAlerts =      0x00000001,
-        CurrentUserAlerts =         0x00000002,
-        CurrentApplicationAlerts =  0x00000004
-    };
-    Q_DECLARE_FLAGS(AlertsToCheck, AlertToCheck)
+    explicit AlertPlaceHolderTest(QObject *parent = 0);
+    ~AlertPlaceHolderTest();
+    
+    // identification
+    QString uuid() const;
 
+    // for UI presentation of the place holder
+    QString name(const QString &lang = QString::null) const;
+    QString category(const QString &lang = QString::null) const;
+    QString description(const QString &lang = QString::null) const;
 
-    static AlertCore *instance(QObject *parent = 0);
-    ~AlertCore();
+    // AlertItem management
+    void clear();
+    bool addAlert(const AlertItem &alert);
+    bool removeAlert(const AlertItem &alert);
+    bool highlightAlert(const AlertItem &alert);
 
-    // Getters/Setters
-    QVector<AlertItem> getAlertItemForCurrentUser() const;
-    QVector<AlertItem> getAlertItemForCurrentPatient() const;
-    QVector<AlertItem> getAlertItemForCurrentApplication() const;
-    bool saveAlertItem(AlertItem &item);
-
-    // Executers
-    void checkAlerts(AlertsToCheck check);
-    //    bool executeAlert(const AlertItem &alert);  // add a delay ?
-
-    // Editors
-    //    AlertItem &editAlert(AlertItem &alert);
-    //    AlertItem &createAlert();
-    //  OR
-    //    bool editAlert(AlertItem &alert);
-    //    bool createAlert(AlertItem &alert);
-
-
-    void showIHMaccordingToType(int type = 0);
-
-Q_SIGNALS:
-//    void alertItemUpdated(const AlertItem &alert);
-//    void alertItemRemoved(const AlertItem &alert);
-//    void alertItemValidated(const AlertItem &alert);
-
-private Q_SLOTS:
-    void postCoreInitialization();
+    QWidget *createWidget(QWidget *parent = 0);
 
 private:
-    static AlertCore *_instance;
-    Internal::AlertCorePrivate *d;
+    QPointer<QToolBar> _widget;
+    QList<AlertItem> alerts;
+    QHash<QString, StaticAlertToolButton *> _buttons;
 };
 
-}  // Alert
+}  // namespace Alert
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(Alert::AlertCore::AlertsToCheck)
-
-#endif
-
+#endif // ALERTPLACEHOLDERTEST_H
