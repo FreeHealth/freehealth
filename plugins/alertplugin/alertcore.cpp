@@ -235,22 +235,26 @@ void AlertCore::postCoreInitialization()
     AlertItem item = d->m_alertBase->createVirtualItem();
     AlertItem item2 = d->m_alertBase->createVirtualItem();
 
-    AlertItem item3 = item2;
-//    item3.setUuid("LKLKLK");
-    item3.setLabel("Double label");
-    item3.setDescription("Double Description Double Description Double Description v Double Description v v vvvDouble Description Double Description Double DescriptionDouble Description Double Description Double Description");
-    AlertItem item4 = item2;
-//    item4.setUuid("qsdkygvuihe");
-    item4.setLabel("Double label Double label");
-    item4.setDescription("Double Description Double Description Double Description v Double Description v v vvvDouble Description Double Description Double DescriptionDouble Description Double Description Double Description");
-    AlertItem item5 = item2;
-    item5.setUuid("fokoe,rf");
-    item5.setLabel("Double label Double label Double label");
-    item5.setDescription("Double Description Double Description Double Description v Double Description v v vvvDouble Description Double Description Double DescriptionDouble Description Double Description Double Description");
-    AlertItem item6 = item2;
-    item6.setUuid("dfqdf qsf");
-    item6.setLabel("Double labelDouble label Double label Double label Double label");
-    item6.setDescription("Double Description Double Description Double Description v Double Description v v vvvDouble Description Double Description Double DescriptionDouble Description Double Description Double Description");
+    AlertItem item3;
+    item3.setUuid(Utils::Database::createUid());
+    item3.setLabel("Just a simple alert");
+    item3.setCategory("Test");
+    item3.setDescription("Simple basic static alert");
+    item3.setViewType(AlertItem::StaticAlert);
+
+    AlertItem item4;
+    item4.setUuid(Utils::Database::createUid());
+    item4.setLabel("Related to all patient");
+    item4.setCategory("Test");
+    item4.setDescription("Related to all patients and validated for uid='patient2'. Static alert");
+    item4.setViewType(AlertItem::StaticAlert);
+
+    AlertItem item5;
+    item5.setUuid(Utils::Database::createUid());
+    item5.setLabel("Simple basic dynamic alert test");
+    item5.setCategory("Test");
+    item5.setDescription("Aoutch this is a dynamic alert !");
+    item5.setViewType(AlertItem::DynamicAlert);
 
     // Db save/get
     if (true) {
@@ -262,14 +266,21 @@ void AlertCore::postCoreInitialization()
         rel.setRelatedTo(AlertRelation::RelatedToPatient);
         rel.setRelatedToUid("patient1");
         item.addRelation(rel);
+
         rel.setRelatedToUid("patient2.1");
         item2.addRelation(rel);
+
         rel.setRelatedToUid("patient3");
         item3.addRelation(rel);
+
         // users
         rel.setRelatedTo(AlertRelation::RelatedToUser);
         rel.setRelatedToUid("user1");
         item4.addRelation(rel);
+
+        rel.setRelatedToUid("user3");
+        item5.addRelation(rel);
+
         // timings
         AlertTiming timing;
         timing.setStart(QDateTime::currentDateTime().addSecs(-60*60*24));
@@ -282,6 +293,8 @@ void AlertCore::postCoreInitialization()
         item3.addTiming(timing);
         item4.clearTimings();
         item4.addTiming(timing);
+        item5.clearTimings();
+        item5.addTiming(timing);
 
         item.setViewType(AlertItem::StaticAlert);
         item2.setViewType(AlertItem::StaticAlert);
@@ -294,6 +307,8 @@ void AlertCore::postCoreInitialization()
             qWarning() << "ITEM3 WRONG";
         if (!d->m_alertBase->saveAlertItem(item4))
             qWarning() << "ITEM4 WRONG";
+        if (!d->m_alertBase->saveAlertItem(item5))
+            qWarning() << "ITEM5 WRONG";
 
         Internal::AlertBaseQuery query;
         query.setAlertValidity(Internal::AlertBaseQuery::ValidAlerts);
@@ -324,7 +339,7 @@ void AlertCore::postCoreInitialization()
         QList<QAbstractButton*> buttons;
         buttons << test;
 
-        DynamicAlertDialog::executeDynamicAlert(QList<AlertItem>() <<  item << item2 << item3 << item4 << item5<<item6, buttons);
+        DynamicAlertDialog::executeDynamicAlert(QList<AlertItem>() <<  item << item2 << item3 << item4 << item5, buttons);
         //    DynamicAlertDialog::executeDynamicAlert(item4);
     }
 
@@ -363,6 +378,7 @@ void AlertCore::postCoreInitialization()
         // Exec the dialog
         dlg.exec();
     }
+
     // END TESTS
 }
 
