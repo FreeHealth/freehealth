@@ -26,15 +26,25 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "staticalertwidgets.h"
+#include "alertcore.h"
 #include "alertitem.h"
+#include "alertitemeditordialog.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/constants_icons.h>
 
+#include <utils/global.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_current.h>
+
 #include <QFileInfo>
+#include <QEvent>
+#include <QAction>
+#include <QMenu>
 
 using namespace Alert;
+using namespace Trans::ConstantTranslations;
 
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 
@@ -71,12 +81,43 @@ static QString getToolTip(const AlertItem &item)
 
 /**
   \class Alert::StaticAlertLabel
-  Create a QToolButton for any static view type Alert::AlertItem.
+  Create a QToolButton for any static view type Alert::AlertItem. The alert can be:
+    - validated
+    - edited
+  using the menu of this button.
 */
 StaticAlertToolButton::StaticAlertToolButton(QWidget *parent) :
     QToolButton(parent)
 {
     setMinimumSize(QSize(16,16));
+    setToolButtonStyle(Qt::ToolButtonIconOnly);
+    setPopupMode(QToolButton::InstantPopup);
+
+    // create actions and menu
+    aLabel = new QAction(this);
+    aCategory = new QAction(this);
+    aValidate = new QAction(this);
+    aEdit = new QAction(this);
+    QAction *sep = new QAction(this);
+    sep->setSeparator(true);
+
+    aValidate->setIcon(theme()->icon(Core::Constants::ICONOK));
+    aEdit->setIcon(theme()->icon(Core::Constants::ICONEDIT));
+
+    addAction(aCategory);
+    addAction(sep);
+    addAction(aLabel);
+    addAction(sep);
+    addAction(aValidate);
+    addAction(aEdit);
+
+    connect(aValidate, SIGNAL(triggered()), this, SLOT(validateAlert()));
+    connect(aEdit, SIGNAL(triggered()), this, SLOT(editAlert()));
+    retranslateUi();
+}
+
+StaticAlertToolButton::~StaticAlertToolButton()
+{
 }
 
 /** Define the Alert::AlertItem to use for this button. */
@@ -84,8 +125,51 @@ void StaticAlertToolButton::setAlertItem(const AlertItem &item)
 {
     setIcon(getIcon(item));
     setToolTip(getToolTip(item));
+    if (aLabel)
+        aLabel->setText(item.label());
+    if (aCategory) {
+        if (item.category().isEmpty())
+            aCategory->setText(tr("No category"));
+        else
+            aCategory->setText(item.category());
+    }
+    _item = item;
 }
 
+void StaticAlertToolButton::validateAlert()
+{
+    _item.validateAlertWithCurrentUser();
+}
+
+void StaticAlertToolButton::editAlert()
+{
+    AlertItemEditorDialog dlg(this);
+    dlg.setAlertItem(_item);
+    if (dlg.exec() == QDialog::Accepted) {
+        dlg.submit(_item);
+        AlertCore::instance()->updateAlert(_item);
+        AlertCore::instance()->saveAlert(_item);
+    }
+}
+
+void StaticAlertToolButton::retranslateUi()
+{
+    aValidate->setText(tkTr(Trans::Constants::VALIDATE));
+    aEdit->setText(tkTr(Trans::Constants::EDIT_ALERT));
+    aLabel->setText(_item.label());
+    if (_item.category().isEmpty())
+        aCategory->setText(tr("No category"));
+    else
+        aCategory->setText(_item.category());
+}
+
+void StaticAlertToolButton::changeEvent(QEvent *event)
+{
+    if (event->type()==QEvent::LanguageChange) {
+        retranslateUi();
+    }
+    QToolButton::changeEvent(event);
+}
 
 /**
   \class Alert::StaticAlertLabel
