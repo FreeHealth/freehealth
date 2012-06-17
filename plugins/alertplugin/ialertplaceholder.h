@@ -53,6 +53,7 @@ public:
     // AlertItem management
     virtual void clear() = 0;
     virtual bool addAlert(const AlertItem &alert) = 0;
+    virtual bool updateAlert(const AlertItem &alert) = 0;
     virtual bool removeAlert(const AlertItem &alert) = 0;
     virtual bool highlightAlert(const AlertItem &alert) = 0;
 
