@@ -29,19 +29,19 @@
 #define ALERTPLACEHOLDERTEST_H
 
 #include <alertplugin/ialertplaceholder.h>
-#include <QWidget>
+#include <alertplugin/alertitem.h>
+#include <QToolBar>
+#include <QPointer>
 
 namespace Alert {
-namespace Ui {
-class AlertPlaceHolderTest;
-}
+class StaticAlertToolButton;
 
 class AlertPlaceHolderTest : public IAlertPlaceHolder
 {
     Q_OBJECT
     
 public:
-    explicit AlertPlaceHolderTest(QWidget *parent = 0);
+    explicit AlertPlaceHolderTest(QObject *parent = 0);
     ~AlertPlaceHolderTest();
     
     // identification
@@ -58,8 +58,12 @@ public:
     bool removeAlert(const AlertItem &alert);
     bool highlightAlert(const AlertItem &alert);
 
+    QWidget *createWidget(QWidget *parent = 0);
+
 private:
-    Ui::AlertPlaceHolderTest *ui;
+    QPointer<QToolBar> _widget;
+    QList<AlertItem> alerts;
+    QHash<QString, StaticAlertToolButton *> _buttons;
 };
 
 }  // namespace Alert

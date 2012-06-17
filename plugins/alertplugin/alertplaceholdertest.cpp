@@ -27,23 +27,21 @@
  ***************************************************************************/
 #include "alertplaceholdertest.h"
 #include "alertitem.h"
-
-#include "ui_alertplaceholdertest.h"
+#include "staticalertwidgets.h"
 
 #include <QDebug>
 
 using namespace Alert;
 
-AlertPlaceHolderTest::AlertPlaceHolderTest(QWidget *parent) :
+AlertPlaceHolderTest::AlertPlaceHolderTest(QObject *parent) :
     IAlertPlaceHolder(parent),
-    ui(new Ui::AlertPlaceHolderTest)
+    _widget(0)
 {
-    ui->setupUi(this);
 }
 
 AlertPlaceHolderTest::~AlertPlaceHolderTest()
 {
-    delete ui;
+    qWarning() << "AlertPlaceHolderTest::~AlertPlaceHolderTest()";
 }
 
 QString AlertPlaceHolderTest::uuid() const
@@ -69,18 +67,35 @@ QString AlertPlaceHolderTest::description(const QString &lang) const
 
 void AlertPlaceHolderTest::clear()
 {
-    qWarning() << "clear";
+    if (_widget)
+        _widget->clear();
 }
 
 bool AlertPlaceHolderTest::addAlert(const AlertItem &alert)
 {
-    qWarning() << "addAlert" << alert.label();
+    if (!alerts.contains(alert)) {
+        alerts << alert;
+        if (_widget) {
+            StaticAlertToolButton *but = new StaticAlertToolButton(_widget);
+            but->setAlertItem(alert);
+            _widget->addWidget(but);
+            _buttons.insert(alert.uuid(), but);
+        }
+    }
     return true;
 }
 
 bool AlertPlaceHolderTest::removeAlert(const AlertItem &alert)
 {
-    qWarning() << "removeAlert" << alert.label();
+    if (alerts.contains(alert)) {
+        alerts.removeAll(alert);
+        if (_widget) {
+            _buttons.remove(alert.uuid());
+            _widget->clear();
+            foreach(StaticAlertToolButton *but, _buttons.values())
+                _widget->addWidget(but);
+        }
+    }
     return true;
 }
 
@@ -88,4 +103,19 @@ bool AlertPlaceHolderTest::highlightAlert(const AlertItem &alert)
 {
     qWarning() << "highlighAlert" << alert.label();
     return true;
+}
+
+QWidget *AlertPlaceHolderTest::createWidget(QWidget *parent)
+{
+    if (!_widget) {
+        _widget = new QToolBar(parent);
+        _widget->setIconSize(QSize(16,16));
+    }
+    for(int i = 0; i < alerts.count(); ++i) {
+        StaticAlertToolButton *but = new StaticAlertToolButton(_widget);
+        but->setAlertItem(alerts.at(i));
+        _widget->addWidget(but);
+        // connect button signals
+    }
+    return _widget;
 }

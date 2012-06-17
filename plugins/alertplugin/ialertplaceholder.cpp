@@ -29,7 +29,7 @@
 
 using namespace Alert;
 
-IAlertPlaceHolder::IAlertPlaceHolder(QWidget *parent) :
-    QWidget(parent)
+IAlertPlaceHolder::IAlertPlaceHolder(QObject *parent) :
+    QObject(parent)
 {
 }
