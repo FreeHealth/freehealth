@@ -120,12 +120,17 @@ class ALERT_EXPORT AlertScript
 {
 public:
     enum ScriptType {
-        BeforeAlert = 0,
+        CheckValidityOfAlert = 0,
+        BeforeAlert,
         DuringAlert,
-        AfterAlert
+        AfterAlert,
+        OnOverride
     };
 
     AlertScript() : _id(-1), _valid(true), _modified(false) {}
+    AlertScript(const QString &uuid, ScriptType type, const QString &script) :
+        _id(-1), _valid(true),
+        _type(type), _uid(uuid), _script(script), _modified(true) {}
     virtual ~AlertScript() {}
 
     virtual int id() const {return _id;}
@@ -140,12 +145,14 @@ public:
     virtual void setModified(bool state) {_modified = state;}
     virtual bool isModified() const {return _modified;}
 
-    virtual ScriptType type() {return _type;}
+    virtual ScriptType type() const {return _type;}
     virtual void setType(ScriptType type) {_modified=true; _type=type;}
 
     virtual QString script() const {return _script;}
     virtual void setScript(const QString &script) {_modified=true; _script=script;}
 
+    static QString typeToXml(ScriptType type);
+    static ScriptType typeFromXml(const QString &xml);
     virtual QString toXml() const;
     static AlertScript fromDomElement(const QDomElement &element);
 
