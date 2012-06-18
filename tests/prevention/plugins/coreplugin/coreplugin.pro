@@ -16,13 +16,15 @@ HEADERS += coreimpl.h \
     appaboutpage.h \
     coreplugin.h \
     commandlineparser.h \
-    mainwindow.h
+    mainwindow.h \
+    fakescriptmanager.h
 
 SOURCES += coreimpl.cpp \
     appaboutpage.cpp \
     coreplugin.cpp \
     commandlineparser.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    fakescriptmanager.cpp
 
 FORMS += mainwindow.ui
 
