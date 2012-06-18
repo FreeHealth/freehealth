@@ -794,7 +794,7 @@
         <source>Trying to create %1 
 Place: %2</source>
         <translation>Essaie de créer %1
-Lieu: %2</translation>
+Emplacement : %2</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_database.h" line="44"/>
@@ -1099,7 +1099,7 @@ Lieu: %2</translation>
     <message>
         <location filename="../../libs/translationutils/trans_spashandupdate.h" line="61"/>
         <source>weekly</source>
-        <translation type="unfinished"></translation>
+        <translation>hebdomadaire</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_spashandupdate.h" line="62"/>
@@ -1315,62 +1315,62 @@ Lieu: %2</translation>
     <message>
         <location filename="../../libs/translationutils/trans_current.h" line="74"/>
         <source>Alert</source>
-        <translation type="unfinished"></translation>
+        <translation>Alerte</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_current.h" line="75"/>
         <source>Dynamic alert</source>
-        <translation type="unfinished"></translation>
+        <translation>Alerte dynamique</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_current.h" line="78"/>
         <source>related to</source>
-        <translation type="unfinished"></translation>
+        <translation>lié à</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_current.h" line="79"/>
         <source>related to patient %1</source>
-        <translation type="unfinished"></translation>
+        <translation>lié au patient %1</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_current.h" line="80"/>
         <source>related to current patient</source>
-        <translation type="unfinished"></translation>
+        <translation>lié au patient courant</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_current.h" line="81"/>
         <source>related to all patients</source>
-        <translation type="unfinished"></translation>
+        <translation>lié à tous les patients</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_current.h" line="82"/>
         <source>related to user %1</source>
-        <translation type="unfinished"></translation>
+        <translation>lié à l&apos;utilisateur %1</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_current.h" line="83"/>
         <source>related to current user</source>
-        <translation type="unfinished"></translation>
+        <translation>lié à l&apos;utilisateur courant</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_current.h" line="84"/>
         <source>related to all users</source>
-        <translation type="unfinished"></translation>
+        <translation>lié à tous les utilisateurs</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_current.h" line="85"/>
         <source>related to application</source>
-        <translation type="unfinished"></translation>
+        <translation>lié à l&apos;application</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_current.h" line="86"/>
         <source>related to the family %1</source>
-        <translation type="unfinished"></translation>
+        <translation>lié à la famille %1</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_current.h" line="87"/>
         <source>related to user group %1</source>
-        <translation type="unfinished"></translation>
+        <translation>lié au groupe d&apos;utilisateurs %1</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_current.h" line="90"/>
@@ -2562,7 +2562,7 @@ Text Align Justify shortcut key : Mac specific</extracomment>
         <location filename="../../libs/translationutils/constants.h" line="49"/>
         <source>MM dd yyyy</source>
         <extracomment>This date format will be used in every QDateEdit only</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>dd MM yyyy</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/constants.h" line="50"/>
