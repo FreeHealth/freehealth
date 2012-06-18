@@ -310,6 +310,8 @@ void AlertCore::postCoreInitialization()
     item6.setViewType(AlertItem::DynamicAlert);
     item6.addRelation(AlertRelation(AlertRelation::RelatedToUser, "user1"));
     item6.addTiming(AlertTiming(start, expiration));
+    item6.addScript(AlertScript("check_item6", AlertScript::CheckValidityOfAlert, "(1+1)==2;"));
+    item6.addScript(AlertScript("onoverride_item6", AlertScript::OnOverride, "(1+1)==2;"));
 
     AlertItem item7;
     item7.setUuid(Utils::Database::createUid());
@@ -329,7 +331,7 @@ void AlertCore::postCoreInitialization()
     item8.setViewType(AlertItem::StaticAlert);
     item8.addRelation(AlertRelation(AlertRelation::RelatedToAllPatients));
     item8.addTiming(AlertTiming(start, expiration));
-    item8.addScript(AlertScript("check", AlertScript::CheckValidityOfAlert, "(1+1)==2;"));
+    item8.addScript(AlertScript("check_item8", AlertScript::CheckValidityOfAlert, "(1+1)==2;"));
 
     AlertItem item9;
     item9.setUuid(Utils::Database::createUid());
@@ -339,7 +341,7 @@ void AlertCore::postCoreInitialization()
     item9.setViewType(AlertItem::StaticAlert);
     item9.addRelation(AlertRelation(AlertRelation::RelatedToAllPatients));
     item9.addTiming(AlertTiming(start, expiration));
-    item9.addScript(AlertScript("check", AlertScript::CheckValidityOfAlert, "(1+1)==3;"));
+    item9.addScript(AlertScript("check_item9", AlertScript::CheckValidityOfAlert, "(1+1)==3;"));
 
     // Db save/get
     if (true) {
