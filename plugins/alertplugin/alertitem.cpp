@@ -30,12 +30,15 @@
 
 #include <coreplugin/icore.h>
 #include <coreplugin/iuser.h>
+#include <coreplugin/ipatient.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
 #include <utils/genericdescription.h>
-#include <translationutils/multilingualclasstemplate.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_current.h>
 #include <translationutils/trans_datetime.h>
+#include <translationutils/multilingualclasstemplate.h>
 
 #include <QTreeWidgetItem>
 #include <QDomDocument>
@@ -45,8 +48,10 @@
 enum { WarnAlertItemConstructionDestruction = false };
 
 using namespace Alert;
+using namespace Trans::ConstantTranslations;
 
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
+static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 
 namespace {
 const char * const XML_ROOT_TAG = "Alert";
@@ -207,6 +212,16 @@ public:
     }
 
     QString categoryForTreeWiget() const {return QString::null;}
+
+    bool validationsContainsValidatedUuid(const QString &uuid)
+    {
+        for(int i=0; i< _validations.count(); ++i) {
+            const AlertValidation &val = _validations.at(i);
+            if (val.validatedUid().compare(uuid, Qt::CaseInsensitive)==0)
+                return true;
+        }
+        return false;
+    }
 
 public:
     QString _uid, _pass, _themedIcon, _css, _extraXml;
@@ -628,7 +643,7 @@ QVector<AlertRelation> &AlertItem::relations() const
 
 AlertRelation &AlertItem::relationAt(int id) const
 {
-    if (IN_RANGE(id, 0, d->_relations.count()))
+    if (IN_RANGE_STRICT_MAX(id, 0, d->_relations.count()))
         return d->_relations[id];
     return d->_nullRelation;
 }
@@ -661,7 +676,7 @@ QVector<AlertTiming> &AlertItem::timings() const
 
 AlertTiming &AlertItem::timingAt(int id) const
 {
-    if (IN_RANGE(id, 0, d->_timings.count()))
+    if (IN_RANGE_STRICT_MAX(id, 0, d->_timings.count()))
         return d->_timings[id];
     return d->_nullTiming;
 }
@@ -694,7 +709,7 @@ QVector<AlertScript> &AlertItem::scripts() const
 
 AlertScript &AlertItem::scriptAt(int id) const
 {
-    if (IN_RANGE(id, 0, d->_scripts.count()))
+    if (IN_RANGE_STRICT_MAX(id, 0, d->_scripts.count()))
         return d->_scripts[id];
     return d->_nullScript;
 }
@@ -721,13 +736,48 @@ bool AlertItem::validateAlertWithCurrentUser()
                 .arg(label()), "",
                 QApplication::translate("Alert::AlertItem", "Alert validation."));
     if (yes) {
-        // create the validation
+        // Create the validation
         AlertValidation val;
         val.setDateOfValidation(QDateTime::currentDateTime());
         if (user())
-            val.setUserUuid(user()->uuid());
+            val.setValidatorUuid(user()->uuid());
         else
-            val.setUserUuid("UnknownUser");
+            val.setValidatorUuid("UnknownUser");
+
+        // Get validated
+        if (d->_relations.count()  > 0) {
+            const AlertRelation &rel = d->_relations.at(0);
+            switch (rel.relatedTo())
+            {
+            case AlertRelation::RelatedToPatient:
+            case AlertRelation::RelatedToAllPatients:
+            {
+                if (patient())
+                    val.setValidatedUuid(patient()->uuid());
+                else if (Utils::isDebugCompilation())
+                    val.setValidatedUuid("patient1");
+                break;
+            }
+            case AlertRelation::RelatedToFamily: // TODO: manage family
+                break;
+            case AlertRelation::RelatedToUser:
+            case AlertRelation::RelatedToAllUsers:
+            {
+                if (user())
+                    val.setValidatedUuid(user()->uuid());
+                else if (Utils::isDebugCompilation())
+                    val.setValidatedUuid("user1");
+                break;
+            }
+            case AlertRelation::RelatedToUserGroup: // TODO: manage user groups
+                break;
+            case AlertRelation::RelatedToApplication:
+            {
+                val.setValidatedUuid(qApp->applicationName().toLower());
+                break;
+            }
+            }
+        }
         addValidation(val);
         // inform the core
         AlertCore::instance()->updateAlert(*this);
@@ -739,7 +789,43 @@ bool AlertItem::validateAlertWithCurrentUser()
 /** Return true if the alert was validated by any user. */
 bool AlertItem::isUserValidated() const
 {
-    return (d->_validations.count() > 0);
+    if (d->_validations.count()==0)
+        return false;
+
+    if (d->_relations.count() > 0) {
+        const AlertRelation &rel = d->_relations.at(0);
+        switch (rel.relatedTo())
+        {
+        case AlertRelation::RelatedToPatient:
+        case AlertRelation::RelatedToAllPatients:
+        {
+            if (patient())
+                return d->validationsContainsValidatedUuid(patient()->uuid());
+            else if (Utils::isDebugCompilation())
+                return d->validationsContainsValidatedUuid("patient1");
+            break;
+        }
+        case AlertRelation::RelatedToFamily: // TODO: manage family
+            break;
+        case AlertRelation::RelatedToUser:
+        case AlertRelation::RelatedToAllUsers:
+        {
+            if (user())
+                return d->validationsContainsValidatedUuid(user()->uuid());
+            else if (Utils::isDebugCompilation())
+                return d->validationsContainsValidatedUuid("user1");
+            break;
+        }
+        case AlertRelation::RelatedToUserGroup: // TODO: manage user groups
+            break;
+        case AlertRelation::RelatedToApplication:
+        {
+            return d->validationsContainsValidatedUuid(qApp->applicationName().toLower());
+        }
+        }
+    }
+    LOG_ERROR_FOR("AlertItem", "No relation to link validation");
+    return false;
 }
 
 /** Remove all recorded validations. */
@@ -768,7 +854,7 @@ QVector<AlertValidation> &AlertItem::validations() const
 /** Return all the recorded validation at index \e id. */
 AlertValidation &AlertItem::validationAt(int id) const
 {
-    if (IN_RANGE(id, 0, d->_validations.count()))
+    if (IN_RANGE_STRICT_MAX(id, 0, d->_validations.count()))
         return d->_validations[id];
     return d->_nullValidation;
 }
@@ -1213,12 +1299,13 @@ QString AlertValidation::toXml() const
 {
     QString comment = _userComment;
     comment = comment.replace("<", "&lt;");
-    return QString("<%1 id='%2' user='%3' comment='%4' dt='%5'/>\n")
+    return QString("<%1 id='%2' validator='%3' comment='%4' dt='%5' validated='%6'/>\n")
             .arg(::XML_VALIDATION_ELEMENTTAG)
             .arg(_id)
-            .arg(_userUid)
+            .arg(_validator)
             .arg(comment)
             .arg(_date.toString(Qt::ISODate))
+            .arg(_validated)
             ;
 }
 
@@ -1228,10 +1315,26 @@ AlertValidation AlertValidation::fromDomElement(const QDomElement &element)
         return AlertValidation();
     AlertValidation val;
     val.setId(element.attribute("id").toInt());
-    val.setUserUuid(element.attribute("user"));
+    val.setValidatorUuid(element.attribute("validator"));
     val.setUserComment(element.attribute("comment"));
+    val.setValidatedUuid(element.attribute("validated"));
     val.setDateOfValidation(QDateTime::fromString(element.attribute("dt"), Qt::ISODate));
     return val;
+}
+
+QString AlertRelation::relationTypeToString() const
+{
+    // TODO: improve the translations
+    switch (_related) {
+    case RelatedToPatient: return Utils::firstLetterUpperCase(tkTr(Trans::Constants::RELATED_TO_CURRENT_PATIENT));
+    case RelatedToFamily: return tkTr(Trans::Constants::RELATED_TO_PATIENT_FAMILY_1).arg("");
+    case RelatedToAllPatients: return Utils::firstLetterUpperCase(tkTr(Trans::Constants::RELATED_TO_ALL_PATIENTS));
+    case RelatedToUser: return Utils::firstLetterUpperCase(tkTr(Trans::Constants::RELATED_TO_CURRENT_USER));
+    case RelatedToAllUsers: return Utils::firstLetterUpperCase(tkTr(Trans::Constants::RELATED_TO_ALL_USERS));
+    case RelatedToUserGroup: return Utils::firstLetterUpperCase(tkTr(Trans::Constants::RELATED_TO_USER_GROUP_1).arg(""));
+    case RelatedToApplication: return Utils::firstLetterUpperCase(tkTr(Trans::Constants::RELATED_TO_APPLICATION));
+    }
+    return QString::null;
 }
 
 QString AlertRelation::toXml() const

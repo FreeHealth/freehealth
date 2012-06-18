@@ -47,12 +47,13 @@ QT_END_NAMESPACE
 /**
  * \file global.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.7.1
- * \date 19 Apr 2012
+ * \version 0.7.4
+ * \date 19 June 2012
 */
 
-#define IN_RANGE(v, min, max)           (min <= v && v <= max)
-#define IN_RANGE_STRICTLY(v, min, max)  (min < v && v < max)
+#define IN_RANGE(v, min, max)            (min <= v && v <= max)
+#define IN_RANGE_STRICTLY(v, min, max)   (min < v && v < max)
+#define IN_RANGE_STRICT_MAX(v, min, max) (min <= v && v < max)
 
 namespace Utils {
 

@@ -232,60 +232,72 @@ void AlertCore::processAlerts(const QVector<AlertItem> &alerts)
 void AlertCore::postCoreInitialization()
 {
     // TESTS
-    AlertItem item = d->m_alertBase->createVirtualItem();
-    AlertItem item2 = d->m_alertBase->createVirtualItem();
+    QDateTime start = QDateTime::currentDateTime().addSecs(-60*60*24);
+    QDateTime expiration = QDateTime::currentDateTime().addSecs(60*60*24);
 
-    AlertItem item3 = item2;
-//    item3.setUuid("LKLKLK");
-    item3.setLabel("Double label");
-    item3.setDescription("Double Description Double Description Double Description v Double Description v v vvvDouble Description Double Description Double DescriptionDouble Description Double Description Double Description");
-    AlertItem item4 = item2;
-//    item4.setUuid("qsdkygvuihe");
-    item4.setLabel("Double label Double label");
-    item4.setDescription("Double Description Double Description Double Description v Double Description v v vvvDouble Description Double Description Double DescriptionDouble Description Double Description Double Description");
-    AlertItem item5 = item2;
-    item5.setUuid("fokoe,rf");
-    item5.setLabel("Double label Double label Double label");
-    item5.setDescription("Double Description Double Description Double Description v Double Description v v vvvDouble Description Double Description Double DescriptionDouble Description Double Description Double Description");
-    AlertItem item6 = item2;
-    item6.setUuid("dfqdf qsf");
-    item6.setLabel("Double labelDouble label Double label Double label Double label");
-    item6.setDescription("Double Description Double Description Double Description v Double Description v v vvvDouble Description Double Description Double DescriptionDouble Description Double Description Double Description");
+    AlertItem item = d->m_alertBase->createVirtualItem();
+    item.setViewType(AlertItem::StaticAlert);
+    item.clearRelations();
+    item.clearTimings();
+    item.addRelation(AlertRelation(AlertRelation::RelatedToPatient, "patient1"));
+    item.addTiming(AlertTiming(start, expiration));
+
+    AlertItem item2 = d->m_alertBase->createVirtualItem();
+    item2.setViewType(AlertItem::StaticAlert);
+    item2.clearRelations();
+    item2.clearTimings();
+    item2.addRelation(AlertRelation(AlertRelation::RelatedToPatient, "patient2"));
+    item2.addTiming(AlertTiming(start, expiration));
+
+    AlertItem item3;
+    item3.setUuid(Utils::Database::createUid());
+    item3.setLabel("Just a simple alert (item3)");
+    item3.setCategory("Test");
+    item3.setDescription("Simple basic static alert");
+    item3.setViewType(AlertItem::StaticAlert);
+    item3.addRelation(AlertRelation(AlertRelation::RelatedToPatient, "patient1"));
+    item3.addTiming(AlertTiming(start, expiration));
+
+    AlertItem item4;
+    item4.setUuid(Utils::Database::createUid());
+    item4.setLabel("Related to all patient (item4)");
+    item4.setCategory("Test");
+    item4.setDescription("Related to all patients and was validated for patient2 by user1.<br /> Static alert");
+    item4.setViewType(AlertItem::StaticAlert);
+    item4.addRelation(AlertRelation(AlertRelation::RelatedToAllPatients));
+    item4.addValidation(AlertValidation(QDateTime::currentDateTime(), "user1", "patient2"));
+    item4.addTiming(AlertTiming(start, expiration));
+
+    AlertItem item5;
+    item5.setUuid(Utils::Database::createUid());
+    item5.setLabel("Simple basic dynamic alert test (item5)");
+    item5.setCategory("Test");
+    item5.setDescription("Aoutch this is a dynamic alert !");
+    item5.setViewType(AlertItem::DynamicAlert);
+    item5.addRelation(AlertRelation(AlertRelation::RelatedToPatient, "patient1"));
+    item5.addTiming(AlertTiming(start, expiration));
+
+    AlertItem item6;
+    item6.setUuid(Utils::Database::createUid());
+    item6.setLabel("Simple basic dynamic user alert (item6)");
+    item6.setCategory("Test user alert");
+    item6.setDescription("Aoutch this is a dynamic alert !<br />For you, <b>user1</b>!");
+    item6.setViewType(AlertItem::DynamicAlert);
+    item6.addRelation(AlertRelation(AlertRelation::RelatedToUser, "user1"));
+    item6.addTiming(AlertTiming(start, expiration));
+
+    AlertItem item7;
+    item7.setUuid(Utils::Database::createUid());
+    item7.setLabel("Simple basic alert (item7)");
+    item7.setCategory("Test validated alert");
+    item7.setDescription("Aoutch this is an error you should not see this !<br /><br />Validated for patient1.");
+    item7.setViewType(AlertItem::StaticAlert);
+    item7.addRelation(AlertRelation(AlertRelation::RelatedToAllPatients));
+    item7.addValidation(AlertValidation(QDateTime::currentDateTime(), "user1", "patient1"));
+    item7.addTiming(AlertTiming(start, expiration));
 
     // Db save/get
     if (true) {
-        item3 = d->m_alertBase->createVirtualItem();
-//        item4 = d->m_alertBase->createVirtualItem();
-
-        AlertRelation rel;
-        // patients
-        rel.setRelatedTo(AlertRelation::RelatedToPatient);
-        rel.setRelatedToUid("patient1");
-        item.addRelation(rel);
-        rel.setRelatedToUid("patient2.1");
-        item2.addRelation(rel);
-        rel.setRelatedToUid("patient3");
-        item3.addRelation(rel);
-        // users
-        rel.setRelatedTo(AlertRelation::RelatedToUser);
-        rel.setRelatedToUid("user1");
-        item4.addRelation(rel);
-        // timings
-        AlertTiming timing;
-        timing.setStart(QDateTime::currentDateTime().addSecs(-60*60*24));
-        timing.setEnd(QDateTime::currentDateTime().addSecs(60*60*24));
-        item.clearTimings();
-        item.addTiming(timing);
-        item2.clearTimings();
-        item2.addTiming(timing);
-        item3.clearTimings();
-        item3.addTiming(timing);
-        item4.clearTimings();
-        item4.addTiming(timing);
-
-        item.setViewType(AlertItem::StaticAlert);
-        item2.setViewType(AlertItem::StaticAlert);
-
         if (!d->m_alertBase->saveAlertItem(item))
             qWarning() << "ITEM WRONG";
         if (!d->m_alertBase->saveAlertItem(item2))
@@ -294,6 +306,12 @@ void AlertCore::postCoreInitialization()
             qWarning() << "ITEM3 WRONG";
         if (!d->m_alertBase->saveAlertItem(item4))
             qWarning() << "ITEM4 WRONG";
+        if (!d->m_alertBase->saveAlertItem(item5))
+            qWarning() << "ITEM5 WRONG";
+        if (!d->m_alertBase->saveAlertItem(item6))
+            qWarning() << "ITEM6 WRONG";
+        if (!d->m_alertBase->saveAlertItem(item7))
+            qWarning() << "ITEM7 WRONG";
 
         Internal::AlertBaseQuery query;
         query.setAlertValidity(Internal::AlertBaseQuery::ValidAlerts);
@@ -324,7 +342,7 @@ void AlertCore::postCoreInitialization()
         QList<QAbstractButton*> buttons;
         buttons << test;
 
-        DynamicAlertDialog::executeDynamicAlert(QList<AlertItem>() <<  item << item2 << item3 << item4 << item5<<item6, buttons);
+        DynamicAlertDialog::executeDynamicAlert(QList<AlertItem>() <<  item << item2 << item3 << item4 << item5, buttons);
         //    DynamicAlertDialog::executeDynamicAlert(item4);
     }
 
@@ -363,6 +381,7 @@ void AlertCore::postCoreInitialization()
         // Exec the dialog
         dlg.exec();
     }
+
     // END TESTS
 }
 

@@ -351,11 +351,14 @@ AlertBase::AlertBase(QObject *parent) :
     addField(Table_ALERT_VALIDATION, ALERT_VALIDATION_VID, "ID", FieldIsUniquePrimaryKey);
     addField(Table_ALERT_VALIDATION, ALERT_VALIDATION_VAL_ID, "VID", FieldIsInteger);
     addField(Table_ALERT_VALIDATION, ALERT_VALIDATION_DATEOFVALIDATION, "DT", FieldIsDateTime);
-    addField(Table_ALERT_VALIDATION, ALERT_VALIDATION_USER_UUID, "U_U", FieldIsUUID);
+    addField(Table_ALERT_VALIDATION, ALERT_VALIDATION_VALIDATOR_UUID, "U_U", FieldIsUUID);
+    addField(Table_ALERT_VALIDATION, ALERT_VALIDATION_OVERRIDDEN, "OVR", FieldIsBoolean);
     addField(Table_ALERT_VALIDATION, ALERT_VALIDATION_USER_COMMENT, "U_C", FieldIsLongText);
+    addField(Table_ALERT_VALIDATION, ALERT_VALIDATION_VALIDATED_UUID, "U_P", FieldIsUUID);
     addIndex(Table_ALERT_VALIDATION, ALERT_VALIDATION_VID);
     addIndex(Table_ALERT_VALIDATION, ALERT_VALIDATION_VAL_ID);
-    addIndex(Table_ALERT_VALIDATION, ALERT_VALIDATION_USER_UUID);
+    addIndex(Table_ALERT_VALIDATION, ALERT_VALIDATION_VALIDATOR_UUID);
+    addIndex(Table_ALERT_VALIDATION, ALERT_VALIDATION_VALIDATED_UUID);
 
     addField(Table_ALERT_VERSION, VERSION_TEXT, "TXT", FieldIsShortText);
 
@@ -751,37 +754,50 @@ bool AlertBase::saveItemRelations(AlertItem &item)
     int id = -1;
     if (item.db(RelatedId).isValid()) {
         id = item.db(RelatedId).toInt();
-        // delete all old relations
-        QHash<int, QString> where;
-        where.insert(Constants::ALERT_RELATED_REL_ID, QString("=%1").arg(id));
-        QString req = prepareDeleteQuery(Constants::Table_ALERT_RELATED, where);
-        QSqlQuery query(database());
-        if (!query.exec(req)) {
-            LOG_QUERY_ERROR(query);
-            return false;
-        }
-        query.finish();
     } else {
         id = max(Constants::Table_ALERT_RELATED, Constants::ALERT_RELATED_REL_ID).toInt() + 1;
         item.setDb(RelatedId, id);
     }
     // save all relations
+    QSqlQuery query(database());
     for(int i=0; i<item.relations().count(); ++i) {
         AlertRelation &rel = item.relationAt(i);
-        QSqlQuery query(database());
-        QString req = prepareInsertQuery(Constants::Table_ALERT_RELATED);
-        query.prepare(req);
-        query.bindValue(Constants::ALERT_RELATED_ID, QVariant());
-        query.bindValue(Constants::ALERT_RELATED_REL_ID, id);
-        query.bindValue(Constants::ALERT_RELATED_RELATED_TO, rel.relatedTo());
-        query.bindValue(Constants::ALERT_RELATED_RELATED_UID, rel.relatedToUid());
-        if (query.exec()) {
-            rel.setId(query.lastInsertId().toInt());
+        if (rel.id()==-1) {
+            // save
+            QString req = prepareInsertQuery(Constants::Table_ALERT_RELATED);
+            query.prepare(req);
+            query.bindValue(Constants::ALERT_RELATED_ID, QVariant());
+            query.bindValue(Constants::ALERT_RELATED_REL_ID, id);
+            query.bindValue(Constants::ALERT_RELATED_RELATED_TO, rel.relatedTo());
+            query.bindValue(Constants::ALERT_RELATED_RELATED_UID, rel.relatedToUid());
+            if (query.exec()) {
+                rel.setId(query.lastInsertId().toInt());
+            } else {
+                LOG_QUERY_ERROR(query);
+                return false;
+            }
+            query.finish();
         } else {
-            LOG_QUERY_ERROR(query);
-            return false;
+            // update
+            if (rel.isModified()) {
+                QHash<int, QString> where;
+                where.insert(Constants::ALERT_RELATED_ID, QString("=%1").arg(rel.id()));
+                QString req = prepareUpdateQuery(Constants::Table_ALERT_RELATED, QList<int>()
+                                                 << Constants::ALERT_RELATED_RELATED_TO
+                                                 << Constants::ALERT_RELATED_RELATED_UID,
+                                                 where);
+                query.prepare(req);
+                int i = 0;
+                query.bindValue(i, rel.relatedTo());
+                query.bindValue(++i, rel.relatedToUid());
+                if (query.exec()) {
+                    rel.setModified(false);
+                } else {
+                    LOG_QUERY_ERROR(query);
+                    return false;
+                }
+            }
         }
-        query.finish();
     }
     return true;
 }
@@ -797,37 +813,53 @@ bool AlertBase::saveItemScripts(AlertItem &item)
     int id = -1;
     if (item.db(ScriptId).isValid()) {
         id = item.db(ScriptId).toInt();
-        // delete all old relations
-        QHash<int, QString> where;
-        where.insert(Constants::ALERT_SCRIPTS_SID, QString("=%1").arg(id));
-        QString req = prepareDeleteQuery(Constants::Table_ALERT_SCRIPTS, where);
-        QSqlQuery query(database());
-        if (!query.exec(req)) {
-            LOG_QUERY_ERROR(query);
-            return false;
-        }
-        query.finish();
     } else {
         id = max(Constants::Table_ALERT_SCRIPTS, Constants::ALERT_SCRIPTS_SID).toInt() + 1;
         item.setDb(ScriptId, id);
     }
-    // save all scripts
+    QSqlQuery query(database());
     for(int i=0; i<item.scripts().count(); ++i) {
         AlertScript &script = item.scriptAt(i);
-        QSqlQuery query(database());
-        QString req = prepareInsertQuery(Constants::Table_ALERT_SCRIPTS);
-        query.prepare(req);
-        query.bindValue(Constants::ALERT_SCRIPTS_ID, QVariant());
-        query.bindValue(Constants::ALERT_SCRIPTS_SID, id);
-        query.bindValue(Constants::ALERT_SCRIPT_UID, script.uuid());
-        query.bindValue(Constants::ALERT_SCRIPT_ISVALID, int(script.isValid()));
-        query.bindValue(Constants::ALERT_SCRIPT_TYPE, script.type());
-        query.bindValue(Constants::ALERT_SCRIPT_CONTENT, script.script());
-        if (query.exec()) {
-            script.setId(query.lastInsertId().toInt());
+        if (script.id()==-1) {
+            // save
+            QString req = prepareInsertQuery(Constants::Table_ALERT_SCRIPTS);
+            query.prepare(req);
+            query.bindValue(Constants::ALERT_SCRIPTS_ID, QVariant());
+            query.bindValue(Constants::ALERT_SCRIPTS_SID, id);
+            query.bindValue(Constants::ALERT_SCRIPT_UID, script.uuid());
+            query.bindValue(Constants::ALERT_SCRIPT_ISVALID, int(script.isValid()));
+            query.bindValue(Constants::ALERT_SCRIPT_TYPE, script.type());
+            query.bindValue(Constants::ALERT_SCRIPT_CONTENT, script.script());
+            if (query.exec()) {
+                script.setId(query.lastInsertId().toInt());
+            } else {
+                LOG_QUERY_ERROR(query);
+                return false;
+            }
         } else {
-            LOG_QUERY_ERROR(query);
-            return false;
+            // update
+            if (script.isModified()) {
+                QHash<int, QString> where;
+                where.insert(Constants::ALERT_SCRIPTS_ID, QString("=%1").arg(script.id()));
+                QString req = prepareUpdateQuery(Constants::Table_ALERT_SCRIPTS, QList<int>()
+                                                 << Constants::ALERT_SCRIPT_UID
+                                                 << Constants::ALERT_SCRIPT_ISVALID
+                                                 << Constants::ALERT_SCRIPT_TYPE
+                                                 << Constants::ALERT_SCRIPT_CONTENT,
+                                                 where);
+                query.prepare(req);
+                int i = 0;
+                query.bindValue(i, script.uuid());
+                query.bindValue(++i, int(script.isValid()));
+                query.bindValue(++i, script.type());
+                query.bindValue(++i, script.script());
+                if (query.exec()) {
+                    script.setModified(false);
+                } else {
+                    LOG_QUERY_ERROR(query);
+                    return false;
+                }
+            }
         }
         query.finish();
     }
@@ -845,42 +877,67 @@ bool AlertBase::saveItemTimings(AlertItem &item)
     int id = -1;
     if (item.db(TimingId).isValid()) {
         id = item.db(TimingId).toInt();
-        // delete all old relations
-        QHash<int, QString> where;
-        where.insert(Constants::ALERT_TIMING_TIM_ID, QString("=%1").arg(id));
-        QString req = prepareDeleteQuery(Constants::Table_ALERT_TIMING, where);
-        QSqlQuery query(database());
-        if (!query.exec(req)) {
-            LOG_QUERY_ERROR(query);
-            return false;
-        }
-        query.finish();
     } else {
         id = max(Constants::Table_ALERT_TIMING, Constants::ALERT_TIMING_TIM_ID).toInt() + 1;
         item.setDb(TimingId, id);
     }
     // save all timings
+    QSqlQuery query(database());
     for(int i=0; i<item.timings().count(); ++i) {
         AlertTiming &timing = item.timingAt(i);
-        QSqlQuery query(database());
-        QString req = prepareInsertQuery(Constants::Table_ALERT_TIMING);
-        query.prepare(req);
-        query.bindValue(Constants::ALERT_TIMING_TIMINGID, QVariant());
-        query.bindValue(Constants::ALERT_TIMING_TIM_ID, id);
-        query.bindValue(Constants::ALERT_TIMING_ISVALID, int(timing.isValid()));
-        query.bindValue(Constants::ALERT_TIMING_STARTDATETIME, timing.start());
-        if (timing.end().isValid())
-            query.bindValue(Constants::ALERT_TIMING_ENDDATETIME, timing.end());
-        else
-            query.bindValue(Constants::ALERT_TIMING_ENDDATETIME, QString());
-        query.bindValue(Constants::ALERT_TIMING_CYCLES, timing.numberOfCycles());
-        query.bindValue(Constants::ALERT_TIMING_CYCLINGDELAY, timing.cyclingDelayInMinutes());
-        query.bindValue(Constants::ALERT_TIMING_NEXTCYCLE, timing.nextDate());
-        if (query.exec()) {
-            timing.setId(query.lastInsertId().toInt());
+        if (timing.id() == -1) {
+            // save timing
+            QString req = prepareInsertQuery(Constants::Table_ALERT_TIMING);
+            query.prepare(req);
+            query.bindValue(Constants::ALERT_TIMING_TIMINGID, QVariant());
+            query.bindValue(Constants::ALERT_TIMING_TIM_ID, id);
+            query.bindValue(Constants::ALERT_TIMING_ISVALID, int(timing.isValid()));
+            query.bindValue(Constants::ALERT_TIMING_STARTDATETIME, timing.start());
+            if (timing.end().isValid())
+                query.bindValue(Constants::ALERT_TIMING_ENDDATETIME, timing.end());
+            else
+                query.bindValue(Constants::ALERT_TIMING_ENDDATETIME, QString());
+            query.bindValue(Constants::ALERT_TIMING_CYCLES, timing.numberOfCycles());
+            query.bindValue(Constants::ALERT_TIMING_CYCLINGDELAY, timing.cyclingDelayInMinutes());
+            query.bindValue(Constants::ALERT_TIMING_NEXTCYCLE, timing.nextDate());
+            if (query.exec()) {
+                timing.setId(query.lastInsertId().toInt());
+                timing.setModified(false);
+            } else {
+                LOG_QUERY_ERROR(query);
+                return false;
+            }
         } else {
-            LOG_QUERY_ERROR(query);
-            return false;
+            // update timing
+            if (timing.isModified()) {
+                QHash<int, QString> where;
+                where.insert(Constants::ALERT_TIMING_TIMINGID, QString("=%1").arg(timing.id()));
+                QString req = prepareUpdateQuery(Constants::Table_ALERT_TIMING, QList<int>()
+                                                 << Constants::ALERT_TIMING_ISVALID
+                                                 << Constants::ALERT_TIMING_STARTDATETIME
+                                                 << Constants::ALERT_TIMING_ENDDATETIME
+                                                 << Constants::ALERT_TIMING_CYCLES
+                                                 << Constants::ALERT_TIMING_CYCLINGDELAY
+                                                 << Constants::ALERT_TIMING_NEXTCYCLE,
+                                                 where);
+                query.prepare(req);
+                int i = 0;
+                query.bindValue(i, int(timing.isValid()));
+                query.bindValue(++i, timing.start());
+                if (timing.end().isValid())
+                    query.bindValue(++i, timing.end());
+                else
+                    query.bindValue(++i, QString());
+                query.bindValue(++i, timing.numberOfCycles());
+                query.bindValue(++i, timing.cyclingDelayInMinutes());
+                query.bindValue(++i, timing.nextDate());
+                if (query.exec()) {
+                    timing.setModified(false);
+                } else {
+                    LOG_QUERY_ERROR(query);
+                    return false;
+                }
+            }
         }
         query.finish();
     }
@@ -896,38 +953,59 @@ bool AlertBase::saveItemValidations(AlertItem &item)
         return true;
     // get the validations val_id
     int id = -1;
-    if (item.db(ValidationId).isValid()) {
-        id = item.db(ValidationId).toInt();
-        // delete all old relations
-        QHash<int, QString> where;
-        where.insert(Constants::ALERT_VALIDATION_VAL_ID, QString("=%1").arg(id));
-        QString req = prepareDeleteQuery(Constants::Table_ALERT_VALIDATION, where);
-        QSqlQuery query(database());
-        if (!query.exec(req)) {
-            LOG_QUERY_ERROR(query);
-            return false;
-        }
-        query.finish();
-    } else {
+    if (!item.db(ValidationId).isValid()) {
         id = max(Constants::Table_ALERT_VALIDATION, Constants::ALERT_VALIDATION_VAL_ID).toInt() + 1;
         item.setDb(ValidationId, id);
+    } else {
+        id = item.db(ValidationId).toInt();
     }
-    // save all validations
+    QSqlQuery query(database());
     for(int i=0; i<item.validations().count(); ++i) {
         AlertValidation &validation = item.validationAt(i);
-        QSqlQuery query(database());
-        QString req = prepareInsertQuery(Constants::Table_ALERT_VALIDATION);
-        query.prepare(req);
-        query.bindValue(Constants::ALERT_VALIDATION_VID, QVariant());
-        query.bindValue(Constants::ALERT_VALIDATION_VAL_ID, id);
-        query.bindValue(Constants::ALERT_VALIDATION_DATEOFVALIDATION, validation.dateOfValidation());
-        query.bindValue(Constants::ALERT_VALIDATION_USER_UUID, validation.userUid());
-        query.bindValue(Constants::ALERT_VALIDATION_USER_COMMENT, validation.userComment());
-        if (query.exec()) {
-            validation.setId(query.lastInsertId().toInt());
+        if (validation.id() == -1) {
+            // save validation
+            QString req = prepareInsertQuery(Constants::Table_ALERT_VALIDATION);
+            query.prepare(req);
+            query.bindValue(Constants::ALERT_VALIDATION_VID, QVariant());
+            query.bindValue(Constants::ALERT_VALIDATION_VAL_ID, id);
+            query.bindValue(Constants::ALERT_VALIDATION_DATEOFVALIDATION, validation.dateOfValidation());
+            query.bindValue(Constants::ALERT_VALIDATION_VALIDATOR_UUID, validation.validatorUid());
+            query.bindValue(Constants::ALERT_VALIDATION_OVERRIDDEN, int(validation.isOverriden()));
+            query.bindValue(Constants::ALERT_VALIDATION_USER_COMMENT, validation.userComment());
+            query.bindValue(Constants::ALERT_VALIDATION_VALIDATED_UUID, validation.validatedUid());
+            if (query.exec()) {
+                validation.setId(query.lastInsertId().toInt());
+                validation.setModified(false);
+            } else {
+                LOG_QUERY_ERROR(query);
+                return false;
+            }
         } else {
-            LOG_QUERY_ERROR(query);
-            return false;
+            // update validation
+            if (validation.isModified()) {
+                QHash<int, QString> where;
+                where.insert(Constants::ALERT_VALIDATION_VID, QString("=%1").arg(validation.id()));
+                QString req = prepareUpdateQuery(Constants::Table_ALERT_VALIDATION, QList<int>()
+                                                 << Constants::ALERT_VALIDATION_DATEOFVALIDATION
+                                                 << Constants::ALERT_VALIDATION_VALIDATOR_UUID
+                                                 << Constants::ALERT_VALIDATION_OVERRIDDEN
+                                                 << Constants::ALERT_VALIDATION_USER_COMMENT
+                                                 << Constants::ALERT_VALIDATION_VALIDATED_UUID,
+                                                 where);
+                query.prepare(req);
+                int i = 0;
+                query.bindValue(i, validation.dateOfValidation());
+                query.bindValue(++i, validation.validatorUid());
+                query.bindValue(++i, int(validation.isOverriden()));
+                query.bindValue(++i, validation.userComment());
+                query.bindValue(++i, validation.validatedUid());
+                if (query.exec()) {
+                    validation.setModified(false);
+                } else {
+                    LOG_QUERY_ERROR(query);
+                    return false;
+                }
+            }
         }
         query.finish();
     }
@@ -943,8 +1021,9 @@ bool AlertBase::saveItemLabels(AlertItem &item)
     QList<int> lids;
     QList<int> vals;
     const int LABEL = 0;
-    const int DESCR = 1;
-    const int COMMENT = 2;
+    const int CATEGORY = 1;
+    const int DESCR = 2;
+    const int COMMENT = 3;
     // get the labels lid for label, descr && comment
     lids << -1 << -1 << -1 << -1;
     vals << LabelLID << CategoryLID << DescrLID << CommentLID;
@@ -977,6 +1056,21 @@ bool AlertBase::saveItemLabels(AlertItem &item)
             query.bindValue(Constants::ALERT_LABELS_LABELID, lids[LABEL]);
             query.bindValue(Constants::ALERT_LABELS_LANG, l);
             query.bindValue(Constants::ALERT_LABELS_VALUE, label);
+            query.bindValue(Constants::ALERT_LABELS_ISVALID, 1);
+            if (!query.exec()) {
+                LOG_QUERY_ERROR(query);
+                return false;
+            }
+            query.finish();
+        }
+        const QString &cat = item.category(l);
+        if (!cat.isEmpty()) {
+            QString req = prepareInsertQuery(Constants::Table_ALERT_LABELS);
+            query.prepare(req);
+            query.bindValue(Constants::ALERT_LABELS_ID, QVariant());
+            query.bindValue(Constants::ALERT_LABELS_LABELID, lids[CATEGORY]);
+            query.bindValue(Constants::ALERT_LABELS_LANG, l);
+            query.bindValue(Constants::ALERT_LABELS_VALUE, cat);
             query.bindValue(Constants::ALERT_LABELS_ISVALID, 1);
             if (!query.exec()) {
                 LOG_QUERY_ERROR(query);
@@ -1035,23 +1129,31 @@ QVector<AlertItem> AlertBase::getAlertItems(const AlertBaseQuery &query)
     // create the where clause according to the query
     Utils::FieldList conds;
     Utils::JoinList joins;
-    Utils::Join relatedJoin, timingJoin;
-    QString where;
+    Utils::Join relatedJoin, timingJoin, validationJoin;
+
+    // All where clauses
+    QString wValid;         // ALERT.ISVALID = 1
+    QString wTimeValidity;  // basical time validity of alerts
+    QString wCycleValidity; // cycling time validity of alerts
+    QString wNullValidity;  // alerts without validations
+    QString wUidValidity;   // related to all patient/user but not including the current uid
+    QString wUids;          // queried uids (user, patient, application)
 
     // validity
     Utils::Field valid(Constants::Table_ALERT, Constants::ALERT_ISVALID, QString("=1"));
-    where = getWhereClause(valid);
+    wValid = getWhereClause(valid);
 
     switch (query.alertValidity()) {
     case AlertBaseQuery::ValidAlerts:
     {
-        // add join
+        // 1. Manage timings
+        //    add join
         timingJoin = Utils::Join(Constants::Table_ALERT_TIMING, Constants::ALERT_TIMING_TIM_ID, Constants::Table_ALERT, Constants::ALERT_TIM_ID);
 
-        // add conditions
-        // ------------s--------------e---------------  SQL
-        // ------------vvvvvvvXXvvvvvv----------------  (SQL start date <= alert start date &&  SQL end date > alert start date)
-        // start date > dateRangeStart
+        //    add conditions
+        //     ------------s--------------e---------------  SQL
+        //     ------------vvvvvvvXXvvvvvv----------------  (SQL start date <= alert start date &&  SQL end date > alert start date)
+        //    start date > dateRangeStart
         QDateTime start;
         if (!query.dateRangeStart().isValid() || query.dateRangeStart().isNull())
             start = QDateTime(QDate::currentDate(), QTime(0,0,0));
@@ -1060,61 +1162,74 @@ QVector<AlertItem> AlertBase::getAlertItems(const AlertBaseQuery &query)
         conds << Utils::Field(Constants::Table_ALERT_TIMING, Constants::ALERT_TIMING_STARTDATETIME, QString("<= '%1'").arg(start.toString(Qt::ISODate)));
         conds << Utils::Field(Constants::Table_ALERT_TIMING, Constants::ALERT_TIMING_ENDDATETIME, QString("> '%1'").arg(start.toString(Qt::ISODate)));
 
-        // start date <= dateRangeEnd
+        //     start date <= dateRangeEnd
         if (query.dateRangeEnd().isValid() && !query.dateRangeEnd().isNull()) {
             QDateTime dt = QDateTime(query.dateRangeEnd(), QTime(23,59,59));
             conds << Utils::Field(Constants::Table_ALERT_TIMING, Constants::ALERT_TIMING_STARTDATETIME, QString("<= '%1'").arg(dt.toString(Qt::ISODate)));
         }
+        wTimeValidity += QString("\n AND %1 ").arg(getWhereClause(conds).replace("AND", "\n       AND"));
+        conds.clear();
 
-        // not already validated by user
+        // 2. User validations
+        //     not already validated by user:
+        //     ((VAL_ID is null OR
+        //        ((RELATED_TO = allpatient AND VALIDATED != currentpatient) OR
+        //         (RELATED_TO = alluser AND VALIDATED != currentuser)))
         conds << Utils::Field(Constants::Table_ALERT, Constants::ALERT_VAL_ID, "IS NULL");
+        wNullValidity += QString("\n AND %1 ").arg(getWhereClause(conds));
+        conds.clear();
 
-        where += QString("\n AND %1 ").arg(getWhereClause(conds));
+        relatedJoin = Utils::Join(Constants::Table_ALERT_RELATED, Constants::ALERT_RELATED_REL_ID, Constants::Table_ALERT, Constants::ALERT_REL_ID);
+        validationJoin = Utils::Join(Constants::Table_ALERT_VALIDATION, Constants::ALERT_VALIDATION_VAL_ID, Constants::Table_ALERT, Constants::ALERT_VAL_ID);
+        Utils::FieldList relCond1;
+//        if (patient()) {
+        relCond1 << Utils::Field(Constants::Table_ALERT_VALIDATION, Constants::ALERT_VALIDATION_VALIDATED_UUID, QString("<> '%1'").arg("patient1"));//patient()->uuid()));
+            relCond1 << Utils::Field(Constants::Table_ALERT_RELATED, Constants::ALERT_RELATED_RELATED_TO, QString("=%1").arg(AlertRelation::RelatedToAllPatients));
+//        }
+        Utils::FieldList relCond2;
+//        if (user()) {
+        relCond2 << Utils::Field(Constants::Table_ALERT_VALIDATION, Constants::ALERT_VALIDATION_VALIDATED_UUID, QString("<> '%1'").arg("user1"));//user()->uuid()));
+            relCond2 << Utils::Field(Constants::Table_ALERT_RELATED, Constants::ALERT_RELATED_RELATED_TO, QString("=%1").arg(AlertRelation::RelatedToAllUsers));
+//        }
+        if (relCond1.isEmpty() && !relCond2.isEmpty()) {
+            wUidValidity += QString("\n     ( %1\n"
+                                    "       )").arg(getWhereClause(relCond2));
+        } else if (relCond2.isEmpty() && !relCond1.isEmpty()) {
+            wUidValidity += QString("\n     ( %1\n"
+                                    "       )\n").arg(getWhereClause(relCond1));
+        } else if (!relCond2.isEmpty() && !relCond1.isEmpty()) {
+            wUidValidity += QString("\n     ( %1\n"
+                                    "         OR %2\n"
+                                    "       )"
+                                    )
+                    .arg(getWhereClause(relCond1))
+                    .arg(getWhereClause(relCond2));
+        }
+        conds.clear();
         break;
     }
     case AlertBaseQuery::InvalidAlerts:
     {
         // add join
-        timingJoin = Utils::Join(Constants::Table_ALERT_TIMING, Constants::ALERT_TIMING_TIM_ID, Constants::Table_ALERT, Constants::ALERT_TIM_ID);
-
         // add conditions
-        // ------------s--------------e---------------  SQL
-        // ------------vvvvvvvvvvvvvvv----------------  (SQL start date >= alert start date &&  SQL end date > alert start date)
-        // start date > dateRangeStart
-        QDateTime start;
-        if (!query.dateRangeStart().isValid() || query.dateRangeStart().isNull())
-            start = QDateTime(QDate::currentDate(), QTime(0,0,0));
-        else
-            start = QDateTime(query.dateRangeStart(), QTime(0,0,0));
-        where += QString("\n AND (%1 ").arg(getWhereClause(Utils::Field(Constants::Table_ALERT_TIMING, Constants::ALERT_TIMING_STARTDATETIME, QString(">= '%1'").arg(start.toString(Qt::ISODate)))));
-        where += QString("\n AND %1 ").arg(getWhereClause(Utils::Field(Constants::Table_ALERT_TIMING, Constants::ALERT_TIMING_ENDDATETIME, QString("> '%1'").arg(start.toString(Qt::ISODate)))));
-
-        // start date <= dateRangeEnd
-        if (query.dateRangeEnd().isValid() && !query.dateRangeEnd().isNull()) {
-            QDateTime dt = QDateTime(query.dateRangeEnd(), QTime(23,59,59));
-            conds << Utils::Field(Constants::Table_ALERT_TIMING, Constants::ALERT_TIMING_STARTDATETIME, QString("<= '%1'").arg(dt.toString(Qt::ISODate)));
-        }
-
-        // not already validated by user
-        where += QString("\n AND %1 ").arg(getWhereClause(Utils::Field(Constants::Table_ALERT, Constants::ALERT_VAL_ID, "IS NOT NULL")));
         break;
     }
     case AlertBaseQuery::ValidAndInvalidAlerts:
     {
+        // add join
         // add conditions
         break;
     }
     }
 
     // users
-    QString uidWhere;
     if (!query.userUids().isEmpty()) {
         conds.clear();
         relatedJoin = Utils::Join(Constants::Table_ALERT_RELATED, Constants::ALERT_RELATED_REL_ID, Constants::Table_ALERT, Constants::ALERT_REL_ID);
         QString w = QString("IN ('%1')").arg(query.userUids().join("','"));
         conds << Utils::Field(Constants::Table_ALERT_RELATED, Constants::ALERT_RELATED_RELATED_TO, QString("=%1").arg(AlertRelation::RelatedToUser));
         conds << Utils::Field(Constants::Table_ALERT_RELATED, Constants::ALERT_RELATED_RELATED_UID, w);
-        uidWhere = getWhereClause(conds);
+        wUids = getWhereClause(conds);
     }
     // patients
     if (!query.patientUids().isEmpty()) {
@@ -1123,22 +1238,22 @@ QVector<AlertItem> AlertBase::getAlertItems(const AlertBaseQuery &query)
         QString w = QString("IN ('%1')").arg(query.patientUids().join("','"));
         conds << Utils::Field(Constants::Table_ALERT_RELATED, Constants::ALERT_RELATED_RELATED_TO, QString("=%1").arg(AlertRelation::RelatedToPatient));
         conds << Utils::Field(Constants::Table_ALERT_RELATED, Constants::ALERT_RELATED_RELATED_UID, w);
-        if (uidWhere.isEmpty())
-            uidWhere = getWhereClause(conds);
+        if (wUids.isEmpty())
+            wUids = getWhereClause(conds);
         else
-            uidWhere = QString("%1\n OR %2").arg(uidWhere).arg(getWhereClause(conds));
+            wUids = QString("%1\n        OR %2").arg(wUids).arg(getWhereClause(conds));
     }
     // application
     if (!query.applicationNames().isEmpty()) {
         conds.clear();
         relatedJoin = Utils::Join(Constants::Table_ALERT_RELATED, Constants::ALERT_RELATED_REL_ID, Constants::Table_ALERT, Constants::ALERT_REL_ID);
         QString w = QString("IN ('%1')").arg(query.applicationNames().join("','"));
-        conds << Utils::Field(Constants::Table_ALERT_RELATED, Constants::ALERT_RELATED_RELATED_TO, QString("=%1").arg(AlertRelation::RelatedToPatient));
+        conds << Utils::Field(Constants::Table_ALERT_RELATED, Constants::ALERT_RELATED_RELATED_TO, QString("=%1").arg(AlertRelation::RelatedToApplication));
         conds << Utils::Field(Constants::Table_ALERT_RELATED, Constants::ALERT_RELATED_RELATED_UID, w);
-        if (uidWhere.isEmpty())
-            uidWhere = getWhereClause(conds);
+        if (wUids.isEmpty())
+            wUids = getWhereClause(conds);
         else
-            uidWhere = QString("%1\n OR %2").arg(uidWhere).arg(getWhereClause(conds));
+            wUids = QString("%1\n        OR %2").arg(wUids).arg(getWhereClause(conds));
     }
     conds.clear();
 
@@ -1149,14 +1264,65 @@ QVector<AlertItem> AlertBase::getAlertItems(const AlertBaseQuery &query)
         joins << relatedJoin;
     }
 
+    // First select (not including VALIDATION table)
     QString req;
-    if (uidWhere.isEmpty()) {
-        req = QString("%1 WHERE\n %2").arg(select(Constants::Table_ALERT, joins, conds)).arg(where);
+    QString where = QString("%1 %2 %3 %4").arg(wValid).arg(wTimeValidity).arg(wCycleValidity).arg(wNullValidity);
+    if (wUids.isEmpty()) {
+        req = QString("%1"
+                      "WHERE %2").arg(select(Constants::Table_ALERT, joins, conds)).arg(where);
     } else {
-        req = QString("%1 WHERE\n %2\n AND (%3)").arg(select(Constants::Table_ALERT, joins, conds)).arg(where).arg(uidWhere);
+        req = QString("%1"
+                      "WHERE %2\n"
+                      " AND ( %3\n"
+                      "     )").arg(select(Constants::Table_ALERT, joins, conds)).arg(where).arg(wUids);
     }
 
-//    qWarning() << req;
+    if (!validationJoin.isNull()) {
+        joins << validationJoin;
+        where = QString("%1 %2 %3").arg(wValid).arg(wTimeValidity).arg(wCycleValidity);
+        if (wUids.isEmpty()) {
+            req += QString("\nUNION\n"
+                           "%1"
+                           "WHERE %2 %3").arg(select(Constants::Table_ALERT, joins, conds)).arg(where).arg(wUidValidity);
+        } else {
+            req += QString("\nUNION\n"
+                           "%1"
+                           "WHERE %2\n"
+                           " AND ( %3\n"
+                           "       OR %4\n"
+                           "     )").arg(select(Constants::Table_ALERT, joins, conds)).arg(where).arg(wUidValidity).arg(wUids);
+        }
+    }
+
+
+//    SELECT `ALR`.`A_ID`, `ALR`.`A_UID` FROM `ALR`
+//    JOIN `TIM` ON `TIM`.`TIM_ID`=`ALR`.`TIM_ID`
+//    JOIN `REL` ON `REL`.`RID`=`ALR`.`R_ID`
+//     WHERE
+//       (`ALR`.`VAL_ID` IS NULL)
+//     AND (`ALR`.`ISV` =1)
+//     AND ( (`TIM`.`STR` <= '2012-06-17T00:00:00') AND  (`TIM`.`END` > '2012-06-17T00:00:00') AND  (`TIM`.`STR` <= '2013-06-17T23:59:59'))
+//     AND (( (`REL`.`TO` =3) AND  (`REL`.`UID` IN ('user1')))
+//     OR ( (`REL`.`TO` =0) AND  (`REL`.`UID` IN ('patient1')))
+//     OR ( (`REL`.`TO` =6) AND  (`REL`.`UID` IN ('prevention_debug'))))
+//    UNION
+//    SELECT `ALR`.`A_ID`, `ALR`.`A_UID` FROM `ALR`
+//    JOIN `TIM` ON `TIM`.`TIM_ID`=`ALR`.`TIM_ID`
+//    JOIN `REL` ON `REL`.`RID`=`ALR`.`R_ID`
+//    JOIN `VAL` ON `VAL`.`VID`=`ALR`.`VAL_ID`
+//     WHERE
+//      (`ALR`.`ISV` =1)
+//     AND ( (`TIM`.`STR` <= '2012-06-17T00:00:00') AND  (`TIM`.`END` > '2012-06-17T00:00:00') AND  (`TIM`.`STR` <= '2013-06-17T23:59:59'))
+//     AND
+//       (
+//             ( ( (`VAL`.`U_P` <> 'patient1') AND  (`REL`.`TO` =2) ) OR
+//                ( (`VAL`.`U_P` <> 'user1') AND  (`REL`.`TO` =4) )
+//              )
+//       )
+//    ;
+
+
+    qWarning() << req;
 
     database().transaction();
     QSqlQuery query(database());
@@ -1370,16 +1536,31 @@ bool AlertBase::getItemValidations(AlertItem &item)
     if (!connectDatabase(Constants::DB_NAME, __LINE__))
         return false;
     using namespace Alert::Constants;
+    if (item.relations().count() <= 0) {
+        LOG_ERROR("No relations to link validations");
+        return false;
+    }
     QSqlQuery query(database());
-    Utils::Field cond(Table_ALERT, ALERT_ID, QString("=%1").arg(item.db(ItemId).toString()));
+    QStringList uids;
+    if (user())
+        uids << user()->uuid();
+    if (patient())
+        uids << patient()->uuid();
+    uids << qApp->applicationName().toLower();
+    Utils::FieldList conds;
+    // Get only validations related to the current user, patient && application
+    conds << Utils::Field(Table_ALERT, ALERT_ID, QString("=%1").arg(item.db(ItemId).toString()));
+    conds << Utils::Field(Table_ALERT, ALERT_VALIDATION_VALIDATED_UUID, QString("IN ('%1')").arg(uids.join("','")));
     Utils::Join join(Table_ALERT_VALIDATION, ALERT_VALIDATION_VAL_ID, Table_ALERT, ALERT_VAL_ID);
-    if (query.exec(select(Table_ALERT_VALIDATION, join, cond))) {
+    if (query.exec(select(Table_ALERT_VALIDATION, join, conds))) {
         while (query.next()) {
             AlertValidation val;
             val.setId(query.value(ALERT_VALIDATION_VID).toInt());
-            val.setUserUuid(query.value(ALERT_VALIDATION_USER_UUID).toString());
-            val.setUserComment(query.value(ALERT_VALIDATION_USER_UUID).toString());
+            val.setValidatorUuid(query.value(ALERT_VALIDATION_VALIDATOR_UUID).toString());
+            val.setOverriden(query.value(ALERT_VALIDATION_OVERRIDDEN).toBool());
+            val.setUserComment(query.value(ALERT_VALIDATION_USER_COMMENT).toString());
             val.setDateOfValidation(query.value(ALERT_VALIDATION_USER_COMMENT).toDateTime());
+            val.setValidatedUuid(query.value(ALERT_VALIDATION_VALIDATED_UUID).toString());
             item.addValidation(val);
         }
     } else {
