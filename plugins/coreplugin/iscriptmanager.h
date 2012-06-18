@@ -16,6 +16,7 @@ public:
     virtual QScriptValue evaluate(const QString &script) = 0;
     virtual QScriptValue addScriptObject(const QObject *object) = 0;
 
+    // TODO: add exceptions catchers
 };
 }
 
