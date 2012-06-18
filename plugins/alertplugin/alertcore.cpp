@@ -32,8 +32,10 @@
 #include "ialertplaceholder.h"
 
 #include <coreplugin/icore.h>
+#include <coreplugin/iscriptmanager.h>
 
 #include <extensionsystem/pluginmanager.h>
+#include <utils/log.h>
 
 // TEST
 #include "alertitemeditordialog.h"
@@ -47,6 +49,7 @@
 using namespace Alert;
 
 static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
+static inline Core::IScriptManager *scriptManager() {return Core::ICore::instance()->scriptManager();}
 
 AlertCore *AlertCore::_instance = 0;
 
@@ -86,6 +89,7 @@ AlertCore::AlertCore(QObject *parent) :
     QObject(parent),
     d(new Internal::AlertCorePrivate)
 {
+    setObjectName("AlertCore");
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
 }
 
@@ -146,7 +150,12 @@ bool AlertCore::saveAlert(AlertItem &item)
     return d->m_alertBase->saveAlertItem(item);
 }
 
-/** Check all database recorded alerts for the current patient, the current user and the current application. */
+/**
+  Check all database recorded alerts for the current patient,
+  the current user and the current application.\n
+  If a script defines the validity of the alert it is executed and the valid state of alert is modified.
+  \sa Alert::AlertScript::CheckValidityOfAlert, Alert::AlertItem::isValid()
+*/
 bool AlertCore::checkAlerts(AlertsToCheck check)
 {
     // Prepare the query
@@ -200,6 +209,7 @@ bool AlertCore::updateAlert(const AlertItem &item)
 
 /**
  Process alerts:\n
+   - Execute check scripts
    - Execute dynamic alerts if needed
    - Feed Alert::IAlertPlaceHolder
 */
@@ -212,6 +222,21 @@ void AlertCore::processAlerts(const QVector<AlertItem> &alerts)
     QList<AlertItem> dynamics;
     for(int i = 0; i < alerts.count(); ++i) {
         const AlertItem &item = alerts.at(i);
+        // Check script ?
+        bool checked = true;
+        for(int i = 0; i < item.scripts().count(); ++i) {
+            const AlertScript &s = item.scripts().at(i);
+            if (s.type()==AlertScript::CheckValidityOfAlert) {
+                QScriptValue v = scriptManager()->evaluate(s.script());
+                LOG(tr("Checking alert validity using the 'CheckScript': %1; validity: %2").arg(item.uuid()).arg(v.toBool()));
+                if (!v.toBool()) {
+                    checked = false;
+                    break;
+                }
+            }
+        }
+        if (!checked)
+            continue;
         if (!item.isValid() || item.isUserValidated())
             continue;
 
@@ -296,6 +321,26 @@ void AlertCore::postCoreInitialization()
     item7.addValidation(AlertValidation(QDateTime::currentDateTime(), "user1", "patient1"));
     item7.addTiming(AlertTiming(start, expiration));
 
+    AlertItem item8;
+    item8.setUuid(Utils::Database::createUid());
+    item8.setLabel("Scripted alert (item8)");
+    item8.setCategory("Test scripted alert");
+    item8.setDescription("A valid alert with multiple scripts.");
+    item8.setViewType(AlertItem::StaticAlert);
+    item8.addRelation(AlertRelation(AlertRelation::RelatedToAllPatients));
+    item8.addTiming(AlertTiming(start, expiration));
+    item8.addScript(AlertScript("check", AlertScript::CheckValidityOfAlert, "(1+1)==2;"));
+
+    AlertItem item9;
+    item9.setUuid(Utils::Database::createUid());
+    item9.setLabel("INVALID Scripted alert (item8)");
+    item9.setCategory("Test scripted alert");
+    item9.setDescription("A invalid alert with multiple scripts. YOU SHOULD NOT SEE IT !!!!");
+    item9.setViewType(AlertItem::StaticAlert);
+    item9.addRelation(AlertRelation(AlertRelation::RelatedToAllPatients));
+    item9.addTiming(AlertTiming(start, expiration));
+    item9.addScript(AlertScript("check", AlertScript::CheckValidityOfAlert, "(1+1)==3;"));
+
     // Db save/get
     if (true) {
         if (!d->m_alertBase->saveAlertItem(item))
@@ -312,6 +357,10 @@ void AlertCore::postCoreInitialization()
             qWarning() << "ITEM6 WRONG";
         if (!d->m_alertBase->saveAlertItem(item7))
             qWarning() << "ITEM7 WRONG";
+        if (!d->m_alertBase->saveAlertItem(item8))
+            qWarning() << "ITEM8 WRONG";
+        if (!d->m_alertBase->saveAlertItem(item9))
+            qWarning() << "ITEM9 WRONG";
 
         Internal::AlertBaseQuery query;
         query.setAlertValidity(Internal::AlertBaseQuery::ValidAlerts);
