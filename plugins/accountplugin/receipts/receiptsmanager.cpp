@@ -113,20 +113,27 @@ QHash<int,QString> ReceiptsManager::getPercentages()
     while (listOfPercents.size() < count +1)
     {
        QString minValue ;
-    	for (int i = 0; i < values.size(); ++i)
+       for (int i = 0; i < values.size(); ++i)
        {
            for (int j = 0; j < values.size(); j += 1)
            {
-           	if (values[i].toDouble() <= values[j].toDouble())
+           	if (values[i].toDouble() < values[j].toDouble())
            	{
            		minValue = values[i];
            	    }
-           }
+               }
+            }
+        if (values.size()<2)
+        {
+              minValue = values[0];
+            }
+        qDebug() << __FILE__ << QString::number(__LINE__) << " minValue =" << minValue ;
+        if (!listOfPercents.contains(minValue))
+        {
+        	  listOfPercents.append(minValue);
+        	  values.removeOne(minValue)  ; 
+            }    	        
         }
-    	listOfPercents.append(minValue);
-    	values.removeOne(minValue)  ; 
-        
-    }
     listOfPercents << "100.00";
     for (int i = 0; i < listOfPercents.size() ; ++i)
     {
