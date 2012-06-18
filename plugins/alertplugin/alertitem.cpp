@@ -1269,14 +1269,43 @@ AlertTiming AlertTiming::fromDomElement(const QDomElement &element)
     return timing;
 }
 
+QString AlertScript::typeToXml(ScriptType type)
+{
+    switch (type) {
+    case CheckValidityOfAlert: return "check";
+    case BeforeAlert: return "before";
+    case DuringAlert: return "during";
+    case AfterAlert: return "after";
+    case OnOverride: return "onoverride";
+    }
+    return QString::null;
+}
+
+AlertScript::ScriptType AlertScript::typeFromXml(const QString &xml)
+{
+    if (xml.compare("check", Qt::CaseInsensitive)==0)
+        return CheckValidityOfAlert;
+    else if (xml.compare("before", Qt::CaseInsensitive)==0)
+        return BeforeAlert;
+    else if (xml.compare("after", Qt::CaseInsensitive)==0)
+        return AfterAlert;
+    else if (xml.compare("during", Qt::CaseInsensitive)==0)
+        return DuringAlert;
+    else if (xml.compare("onoverride", Qt::CaseInsensitive)==0)
+        return OnOverride;
+    return CheckValidityOfAlert;
+}
+
 QString AlertScript::toXml() const
 {
     // TODO: manage "<" in script
-    return QString("<%1 id='%2' valid='%3' type='%4' uid='%5'>\n%6\n</%1>\n")
+    return QString("<%1 id='%2' valid='%3' type='%4' uid='%5'>\n"
+                   "%6\n"
+                   "</%1>\n")
             .arg(::XML_SCRIPT_ELEMENTTAG)
             .arg(_id)
             .arg(_valid)
-            .arg(_type)
+            .arg(typeToXml(_type))
             .arg(_uid)
             .arg(_script)
             ;
@@ -1290,7 +1319,7 @@ AlertScript AlertScript::fromDomElement(const QDomElement &element)
     script.setId(element.attribute("id").toInt());
     script.setUuid(element.attribute("uid"));
     script.setValid(element.attribute("valid").toInt());
-    script.setType(AlertScript::ScriptType(element.attribute("type").toInt()));
+    script.setType(typeFromXml(element.attribute("type")));
     script.setScript(element.text());
     return script;
 }

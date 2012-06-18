@@ -42,6 +42,7 @@
 #include <coreplugin/constants_icons.h>
 #include <coreplugin/commandlineparser.h>
 #include <coreplugin/ipadtools.h>
+#include <coreplugin/fakescriptmanager.h>
 
 #include <translationutils/constanttranslations.h>
 #include <utils/log.h>
@@ -83,7 +84,8 @@ CoreImpl::CoreImpl(QObject *parent) :
         m_UID(new UniqueIDManager),
         m_Patient(0),
         m_User(0),
-        m_PadTools(0)
+        m_PadTools(0),
+        m_Script(0)
 {
     setObjectName("Core");
     m_Settings = new SettingsPrivate(this);
@@ -94,6 +96,8 @@ CoreImpl::CoreImpl(QObject *parent) :
 
     m_CommandLine = new CommandLine;
 //    m_CommandLine->feedPatientDatas(m_Patient);
+
+    m_Script = new FakeScriptManager(this);
 
     setMainWindow(new MainWindow);
 

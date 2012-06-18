@@ -60,6 +60,8 @@
 #include <QHash>
 #include <QSqlQuery>
 
+enum { WarnGetAlertQuerySQLCommand = false };
+
 using namespace Alert;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
@@ -1136,6 +1138,7 @@ QVector<AlertItem> AlertBase::getAlertItems(const AlertBaseQuery &query)
     QString wTimeValidity;  // basical time validity of alerts
     QString wCycleValidity; // cycling time validity of alerts
     QString wNullValidity;  // alerts without validations
+    QString wNullValRelated;
     QString wUidValidity;   // related to all patient/user but not including the current uid
     QString wUids;          // queried uids (user, patient, application)
 
@@ -1179,16 +1182,21 @@ QVector<AlertItem> AlertBase::getAlertItems(const AlertBaseQuery &query)
         wNullValidity += QString("\n AND %1 ").arg(getWhereClause(conds));
         conds.clear();
 
+        conds << Utils::Field(Constants::Table_ALERT_RELATED, Constants::ALERT_RELATED_RELATED_TO, QString("=%1").arg(AlertRelation::RelatedToAllPatients));
+        conds << Utils::Field(Constants::Table_ALERT_RELATED, Constants::ALERT_RELATED_RELATED_TO, QString("=%1").arg(AlertRelation::RelatedToAllUsers));
+//        conds << Utils::Field(Constants::Table_ALERT_RELATED, Constants::ALERT_RELATED_RELATED_TO, QString("=%1").arg(AlertRelation::RelatedToApplication));
+        wNullValRelated = getWhereClause(conds, Utils::Database::OR);
+
         relatedJoin = Utils::Join(Constants::Table_ALERT_RELATED, Constants::ALERT_RELATED_REL_ID, Constants::Table_ALERT, Constants::ALERT_REL_ID);
         validationJoin = Utils::Join(Constants::Table_ALERT_VALIDATION, Constants::ALERT_VALIDATION_VAL_ID, Constants::Table_ALERT, Constants::ALERT_VAL_ID);
         Utils::FieldList relCond1;
 //        if (patient()) {
-        relCond1 << Utils::Field(Constants::Table_ALERT_VALIDATION, Constants::ALERT_VALIDATION_VALIDATED_UUID, QString("<> '%1'").arg("patient1"));//patient()->uuid()));
+            relCond1 << Utils::Field(Constants::Table_ALERT_VALIDATION, Constants::ALERT_VALIDATION_VALIDATED_UUID, QString("<> '%1'").arg("patient1"));//patient()->uuid()));
             relCond1 << Utils::Field(Constants::Table_ALERT_RELATED, Constants::ALERT_RELATED_RELATED_TO, QString("=%1").arg(AlertRelation::RelatedToAllPatients));
 //        }
         Utils::FieldList relCond2;
 //        if (user()) {
-        relCond2 << Utils::Field(Constants::Table_ALERT_VALIDATION, Constants::ALERT_VALIDATION_VALIDATED_UUID, QString("<> '%1'").arg("user1"));//user()->uuid()));
+            relCond2 << Utils::Field(Constants::Table_ALERT_VALIDATION, Constants::ALERT_VALIDATION_VALIDATED_UUID, QString("<> '%1'").arg("user1"));//user()->uuid()));
             relCond2 << Utils::Field(Constants::Table_ALERT_RELATED, Constants::ALERT_RELATED_RELATED_TO, QString("=%1").arg(AlertRelation::RelatedToAllUsers));
 //        }
         if (relCond1.isEmpty() && !relCond2.isEmpty()) {
@@ -1269,12 +1277,14 @@ QVector<AlertItem> AlertBase::getAlertItems(const AlertBaseQuery &query)
     QString where = QString("%1 %2 %3 %4").arg(wValid).arg(wTimeValidity).arg(wCycleValidity).arg(wNullValidity);
     if (wUids.isEmpty()) {
         req = QString("%1"
-                      "WHERE %2").arg(select(Constants::Table_ALERT, joins, conds)).arg(where);
+                      "WHERE %2\n"
+                      " AND %3").arg(select(Constants::Table_ALERT, joins, conds)).arg(where).arg(wNullValRelated);
     } else {
         req = QString("%1"
                       "WHERE %2\n"
                       " AND ( %3\n"
-                      "     )").arg(select(Constants::Table_ALERT, joins, conds)).arg(where).arg(wUids);
+                      "       OR ( %4 )\n"
+                      "     )").arg(select(Constants::Table_ALERT, joins, conds)).arg(where).arg(wUids).arg(wNullValRelated);
     }
 
     if (!validationJoin.isNull()) {
@@ -1322,7 +1332,8 @@ QVector<AlertItem> AlertBase::getAlertItems(const AlertBaseQuery &query)
 //    ;
 
 
-    qWarning() << req;
+    if (WarnGetAlertQuerySQLCommand)
+        qWarning() << req;
 
     database().transaction();
     QSqlQuery query(database());

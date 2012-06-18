@@ -224,6 +224,11 @@ public:
     
     Q_DECLARE_FLAGS(Grants, Grant)
 
+    enum WhereClauseType {
+        AND = 0,
+        OR
+    };
+
     Database();
     virtual ~Database();
 
@@ -289,7 +294,7 @@ public:
     virtual QStringList tables() const;
 
     virtual QString getWhereClause(const int &tableref, const QHash<int, QString> &conditions) const;
-    virtual QString getWhereClause(const FieldList &fields) const;
+    virtual QString getWhereClause(const FieldList &fields, WhereClauseType type = AND) const;
     virtual QString getWhereClause(const Field &field) const;
 
     virtual QString joinToSql(const Join &join) const;
