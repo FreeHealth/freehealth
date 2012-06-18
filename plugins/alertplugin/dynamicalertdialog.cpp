@@ -94,14 +94,14 @@ DynamicAlertDialog::DynamicAlertDialog(const QList<AlertItem> &items,
     }
 
     // Include alerts
+    QFont bold;
+    bold.setBold(true);
     if (items.count()==1) {
         // No tabwidget
         const AlertItem &alert = items.at(0);
         QVBoxLayout *central = new QVBoxLayout(this);
 
         if (!alert.category().isEmpty()) {
-            QFont bold;
-            bold.setBold(true);
             QLabel *label = new QLabel(this);
             label->setFont(bold);
             label->setTextFormat(Qt::RichText);
@@ -113,6 +113,7 @@ DynamicAlertDialog::DynamicAlertDialog(const QList<AlertItem> &items,
         }
 
         QLabel *label = new QLabel(this);
+        label->setFont(bold);
         label->setTextFormat(Qt::RichText);
         label->setAlignment(Qt::AlignHCenter);
         label->setWordWrap(true);
@@ -122,6 +123,7 @@ DynamicAlertDialog::DynamicAlertDialog(const QList<AlertItem> &items,
 
         if (!alert.description().isEmpty()) {
             QLabel *label = new QLabel(this);
+            label->setStyleSheet("padding-left:20px");
             label->setTextFormat(Qt::RichText);
             label->setAlignment(Qt::AlignLeft);
             label->setWordWrap(true);
@@ -173,6 +175,7 @@ DynamicAlertDialog::DynamicAlertDialog(const QList<AlertItem> &items,
 
             // Add the label / description to the layout
             QLabel *label = new QLabel(this);
+            label->setFont(bold);
             label->setWordWrap(true);
             label->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
             label->setTextFormat(Qt::RichText);
@@ -181,6 +184,7 @@ DynamicAlertDialog::DynamicAlertDialog(const QList<AlertItem> &items,
 
             if (!alert.description().isEmpty()) {
                 QLabel *label = new QLabel(this);
+                label->setStyleSheet("padding-left:20px");
                 label->setTextFormat(Qt::RichText);
                 label->setAlignment(Qt::AlignLeft);
                 label->setWordWrap(true);
@@ -217,8 +221,6 @@ DynamicAlertDialog::DynamicAlertDialog(const QList<AlertItem> &items,
 
     // Add buttons
     QDialogButtonBox *box = new QDialogButtonBox(Qt::Horizontal, this);
-    QFont bold;
-    bold.setBold(true);
     QToolButton *accept = new QToolButton(this);
     accept->setMinimumHeight(22);
     accept->setText(tr("Accept alert"));
