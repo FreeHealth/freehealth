@@ -49,13 +49,14 @@ public:
 private Q_SLOTS:
     void validateAlert();
     void editAlert();
+    void overrideAlert();
 
 private:
     void retranslateUi();
     void changeEvent(QEvent *event);
 
 private:
-    QAction *aCategory, *aLabel, *aValidate, *aEdit;
+    QAction *aCategory, *aLabel, *aValidate, *aEdit, *aOverride;
     AlertItem _item;
 };
 

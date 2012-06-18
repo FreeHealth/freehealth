@@ -114,11 +114,13 @@ StaticAlertToolButton::StaticAlertToolButton(QWidget *parent) :
     aCategory = new QAction(this);
     aValidate = new QAction(this);
     aEdit = new QAction(this);
+    aOverride = new QAction(this);
     QAction *sep = new QAction(this);
     sep->setSeparator(true);
 
     aValidate->setIcon(theme()->icon(Core::Constants::ICONOK));
     aEdit->setIcon(theme()->icon(Core::Constants::ICONEDIT));
+    aEdit->setIcon(theme()->icon(Core::Constants::ICONNEXT));
 
     addAction(aCategory);
     addAction(sep);
@@ -126,9 +128,11 @@ StaticAlertToolButton::StaticAlertToolButton(QWidget *parent) :
     addAction(sep);
     addAction(aValidate);
     addAction(aEdit);
+    addAction(aOverride);
 
     connect(aValidate, SIGNAL(triggered()), this, SLOT(validateAlert()));
     connect(aEdit, SIGNAL(triggered()), this, SLOT(editAlert()));
+    connect(aOverride, SIGNAL(triggered()), this, SLOT(overrideAlert()));
     retranslateUi();
 }
 
@@ -168,10 +172,16 @@ void StaticAlertToolButton::editAlert()
     }
 }
 
+void StaticAlertToolButton::overrideAlert()
+{
+    // TODO: code this
+}
+
 void StaticAlertToolButton::retranslateUi()
 {
     aValidate->setText(tkTr(Trans::Constants::VALIDATE));
     aEdit->setText(tkTr(Trans::Constants::EDIT_ALERT));
+    aOverride->setText(tkTr(Trans::Constants::OVERRIDE));
     aLabel->setText(_item.label());
     if (_item.category().isEmpty())
         aCategory->setText(tr("No category"));
