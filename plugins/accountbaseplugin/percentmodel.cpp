@@ -42,7 +42,7 @@
 
 using namespace AccountDB;
 
-enum {WarnFilter=true};
+enum {WarnFilter=false};
 
 static inline AccountDB::AccountBase *accountBase() {return AccountDB::AccountBase::instance();}
 static inline Core::IUser *user() { return  Core::ICore::instance()->user(); }
@@ -57,7 +57,9 @@ public:
                                                 m_UserUid(user()->uuid()),
                                                 m_IsDirty(false),
                                                 q(parent)
-    {   qDebug() << __FILE__ << QString::number(__LINE__) << " m_UserUid =  " << m_UserUid;
+    {   
+        if(WarnFilter)
+        qDebug() << __FILE__ << QString::number(__LINE__) << " m_UserUid =  " << m_UserUid;
         m_SqlTable = new QSqlTableModel(q, QSqlDatabase::database(Constants::DB_ACCOUNTANCY));
         m_SqlTable->setTable(AccountDB::AccountBase::instance()->table(Constants::Table_Percent));
         refreshFilter();

@@ -66,6 +66,7 @@ public:
     QVariant getSiteUidFromSite(const QString & site);
     QVariant getInsuranceUidFromInsurance(const QString & insurance);
     QString getStringOfpreferredActAndHisValue(const QString & preferredAct);
+    QHash<QString,QString> getPercentagesAccordingToUser();
 
 private:
     enum typeOfChoice {
