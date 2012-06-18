@@ -163,6 +163,7 @@ public:
     AlertValidation() : _id(-1), _modified(false) {}
     AlertValidation(const QDateTime &dateTimeOfValidation, const QString &validatorUid, const QString &validatedUid) :
         _id(-1), _modified(true),
+        _overridden(false),
         _validator(validatorUid), _validated(validatedUid),
         _date(dateTimeOfValidation)
     {}
@@ -176,8 +177,14 @@ public:
 
     virtual QString validatorUid() const {return _validator;}
     virtual void setValidatorUuid(const QString &uid) {_modified=true; _validator=uid;}
+
     virtual QString userComment() const {return _userComment;}
     virtual void setUserComment(const QString &comment) {_modified=true; _userComment=comment;}
+
+    virtual void setOverriden(bool overriden) {_overridden=overriden;}
+    virtual bool isOverriden() const {return _overridden;}
+    virtual void setAccepted(bool accepted) {_overridden=!accepted;}
+    virtual bool isAccepted() const {return !_overridden;}
 
     virtual QDateTime dateOfValidation() const {return _date;}
     virtual void setDateOfValidation(const QDateTime &dt) {_modified=true; _date=dt;}
@@ -190,7 +197,7 @@ public:
 
 private:
     int _id;
-    bool _modified;
+    bool _modified, _overridden;
     QString _validator, _userComment, _validated;
     QDateTime _date;
 };
@@ -200,8 +207,8 @@ class ALERT_EXPORT AlertRelation
 public:
     enum RelatedTo {
         RelatedToPatient = 0,
-        RelatedToFamily,
         RelatedToAllPatients,
+        RelatedToFamily,
         RelatedToUser,
         RelatedToAllUsers,
         RelatedToUserGroup,
