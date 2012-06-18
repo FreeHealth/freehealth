@@ -34,8 +34,10 @@
 #include <utils/log.h>
 #include <utils/global.h>
 #include <utils/genericdescription.h>
-#include <translationutils/multilingualclasstemplate.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_current.h>
 #include <translationutils/trans_datetime.h>
+#include <translationutils/multilingualclasstemplate.h>
 
 #include <QTreeWidgetItem>
 #include <QDomDocument>
@@ -45,6 +47,7 @@
 enum { WarnAlertItemConstructionDestruction = false };
 
 using namespace Alert;
+using namespace Trans::ConstantTranslations;
 
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 
@@ -1214,10 +1217,10 @@ QString AlertValidation::toXml() const
 {
     QString comment = _userComment;
     comment = comment.replace("<", "&lt;");
-    return QString("<%1 id='%2' user='%3' comment='%4' dt='%5' validated='%6'/>\n")
+    return QString("<%1 id='%2' validator='%3' comment='%4' dt='%5' validated='%6'/>\n")
             .arg(::XML_VALIDATION_ELEMENTTAG)
             .arg(_id)
-            .arg(_userUid)
+            .arg(_validator)
             .arg(comment)
             .arg(_date.toString(Qt::ISODate))
             .arg(_validated)
@@ -1230,11 +1233,26 @@ AlertValidation AlertValidation::fromDomElement(const QDomElement &element)
         return AlertValidation();
     AlertValidation val;
     val.setId(element.attribute("id").toInt());
-    val.setValidatorUuid(element.attribute("user"));
+    val.setValidatorUuid(element.attribute("validator"));
     val.setUserComment(element.attribute("comment"));
     val.setValidatedUuid(element.attribute("validated"));
     val.setDateOfValidation(QDateTime::fromString(element.attribute("dt"), Qt::ISODate));
     return val;
+}
+
+QString AlertRelation::relationTypeToString() const
+{
+    // TODO: improve the translations
+    switch (_related) {
+    case RelatedToPatient: return Utils::firstLetterUpperCase(tkTr(Trans::Constants::RELATED_TO_CURRENT_PATIENT));
+    case RelatedToFamily: return tkTr(Trans::Constants::RELATED_TO_PATIENT_FAMILY_1).arg("");
+    case RelatedToAllPatients: return Utils::firstLetterUpperCase(tkTr(Trans::Constants::RELATED_TO_ALL_PATIENTS));
+    case RelatedToUser: return Utils::firstLetterUpperCase(tkTr(Trans::Constants::RELATED_TO_CURRENT_USER));
+    case RelatedToAllUsers: return Utils::firstLetterUpperCase(tkTr(Trans::Constants::RELATED_TO_ALL_USERS));
+    case RelatedToUserGroup: return Utils::firstLetterUpperCase(tkTr(Trans::Constants::RELATED_TO_USER_GROUP_1).arg(""));
+    case RelatedToApplication: return Utils::firstLetterUpperCase(tkTr(Trans::Constants::RELATED_TO_APPLICATION));
+    }
+    return QString::null;
 }
 
 QString AlertRelation::toXml() const

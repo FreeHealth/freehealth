@@ -50,6 +50,11 @@ class ALERT_EXPORT AlertTiming
 {
 public:
     AlertTiming() : _id(-1), _ncycle(0), _delay(0), _valid(true), _isCycle(false), _modified(false) {}
+    AlertTiming(const QDateTime &start, const QDateTime &expirationDate) :
+        _id(-1), _ncycle(0),
+        _start(start), _end(expirationDate),
+        _delay(0), _valid(true), _isCycle(false), _modified(true)
+    {}
     virtual ~AlertTiming() {}
 
     virtual int id() const {return _id;}
@@ -105,8 +110,8 @@ public:
 
 private:
     int _id, _ncycle;
-    qlonglong _delay;
     QDateTime _start, _end, _next;
+    qlonglong _delay;
     bool _valid, _isCycle;
     bool _modified;
 };
@@ -156,6 +161,11 @@ class ALERT_EXPORT AlertValidation
 {
 public:
     AlertValidation() : _id(-1), _modified(false) {}
+    AlertValidation(const QDateTime &dateTimeOfValidation, const QString &validatorUid, const QString &validatedUid) :
+        _id(-1), _modified(true),
+        _validator(validatorUid), _validated(validatedUid),
+        _date(dateTimeOfValidation)
+    {}
     virtual ~AlertValidation() {}
 
     virtual int id() const {return _id;}
@@ -164,8 +174,8 @@ public:
     virtual void setModified(bool state) {_modified = state;}
     virtual bool isModified() const {return _modified;}
 
-    virtual QString validatorUid() const {return _userUid;}
-    virtual void setValidatorUuid(const QString &uid) {_modified=true; _userUid=uid;}
+    virtual QString validatorUid() const {return _validator;}
+    virtual void setValidatorUuid(const QString &uid) {_modified=true; _validator=uid;}
     virtual QString userComment() const {return _userComment;}
     virtual void setUserComment(const QString &comment) {_modified=true; _userComment=comment;}
 
@@ -180,9 +190,9 @@ public:
 
 private:
     int _id;
-    QString _userUid, _userComment, _validated;
-    QDateTime _date;
     bool _modified;
+    QString _validator, _userComment, _validated;
+    QDateTime _date;
 };
 
 class ALERT_EXPORT AlertRelation
@@ -193,10 +203,16 @@ public:
         RelatedToFamily,
         RelatedToAllPatients,
         RelatedToUser,
+        RelatedToAllUsers,
         RelatedToUserGroup,
         RelatedToApplication
     };
     AlertRelation() : _id(-1), _modified(false) {}
+    AlertRelation(RelatedTo related, const QString &uuid = QString::null) :
+        _id(-1), _modified(true),
+        _related(related),
+        _relatedUid(uuid)
+    {}
     virtual ~AlertRelation() {}
 
     virtual int id() const {return _id;}
@@ -207,6 +223,7 @@ public:
 
     virtual RelatedTo relatedTo() const {return _related;}
     virtual void setRelatedTo(RelatedTo related) {_modified=true; _related = related;}
+    virtual QString relationTypeToString() const;
 
     virtual QString relatedToUid() const {return _relatedUid;}
     virtual void setRelatedToUid(const QString &uid) {_modified=true; _relatedUid=uid;}
@@ -216,9 +233,9 @@ public:
 
 private:
     int _id;
+    bool _modified;
     RelatedTo _related;
     QString _relatedUid;
-    bool _modified;
 };
 
 namespace Internal {
