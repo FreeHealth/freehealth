@@ -60,6 +60,8 @@
 #include <QHash>
 #include <QSqlQuery>
 
+enum { WarnGetAlertQuerySQLCommand = false };
+
 using namespace Alert;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
@@ -1330,7 +1332,8 @@ QVector<AlertItem> AlertBase::getAlertItems(const AlertBaseQuery &query)
 //    ;
 
 
-    qWarning() << req;
+    if (WarnGetAlertQuerySQLCommand)
+        qWarning() << req;
 
     database().transaction();
     QSqlQuery query(database());
