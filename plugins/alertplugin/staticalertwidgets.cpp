@@ -71,8 +71,24 @@ static QString getToolTip(const AlertItem &item)
         toolTip = QString("<p>%1</p>").arg(item.label());
     else
         toolTip = QString("<p><b>%1</b>: %2</p>").arg(item.category()).arg(item.label());
+
+    QStringList related;
+    for(int i = 0; i < item.relations().count(); ++i) {
+        const AlertRelation &rel = item.relationAt(i);
+        related += QString("%1").arg(rel.relationTypeToString());
+    }
+
+    QString content;
+    if (!related.isEmpty())
+        content += QString("<span style=\"color:#303030\">%1</span><br />").arg(related.join("<br />"));
+
     if (!item.description().isEmpty())
-        toolTip += QString("<p style=\"color:gray;margin-left:10px;margin-top=0;margin-bottom:0px\">%1</p>").arg(item.description());
+        content += QString("<span style=\"color:#606060\">%1</span>").arg(item.description());
+
+    if (!content.isEmpty()) {
+        content = QString("<p style=\"margin-left:15px\">%1</p>").arg(content);
+        toolTip += content;
+    }
     return toolTip;
 }
 
