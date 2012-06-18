@@ -45,6 +45,7 @@ const char* const ALL_OTHER_LANGUAGES_TEXT = QT_TRANSLATE_NOOP("tkConstants", "A
 
 // App dateFormat for editors
 
+//TODO: Why is this hardcoded as "MM dd yyyy" which is Canadian, and not taken from the system settings?
 //: This date format will be used in every QDateEdit only
 const char* const DATEFORMAT_FOR_EDITOR = QT_TRANSLATE_NOOP("tkConstants", "MM dd yyyy");
 const char* const DATEFORMAT_FOR_MODEL = QT_TRANSLATE_NOOP("tkConstants", "MM-dd-yyyy");

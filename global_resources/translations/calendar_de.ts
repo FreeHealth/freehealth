@@ -5,24 +5,25 @@
     <name>Calendar::CalendarNavbar</name>
     <message>
         <location filename="../../libs/calendar/calendar_navbar.cpp" line="157"/>
-        <location filename="../../libs/calendar/calendar_navbar.cpp" line="421"/>
+        <location filename="../../libs/calendar/calendar_navbar.cpp" line="427"/>
         <source>View range</source>
         <translation>Zeitspanne ansehen</translation>
     </message>
     <message>
-        <location filename="../../libs/calendar/calendar_navbar.cpp" line="386"/>
+        <location filename="../../libs/calendar/calendar_navbar.cpp" line="387"/>
         <location filename="../../libs/calendar/calendar_navbar.cpp" line="388"/>
-        <location filename="../../libs/calendar/calendar_navbar.cpp" line="390"/>
+        <location filename="../../libs/calendar/calendar_navbar.cpp" line="392"/>
+        <location filename="../../libs/calendar/calendar_navbar.cpp" line="396"/>
         <source>d MMM yyyy</source>
         <translation>1.MMM.yyyy</translation>
     </message>
     <message>
-        <location filename="../../libs/calendar/calendar_navbar.cpp" line="388"/>
+        <location filename="../../libs/calendar/calendar_navbar.cpp" line="391"/>
         <source>d MMM</source>
         <translation>d.MMM</translation>
     </message>
     <message>
-        <location filename="../../libs/calendar/calendar_navbar.cpp" line="390"/>
+        <location filename="../../libs/calendar/calendar_navbar.cpp" line="395"/>
         <source>d</source>
         <translation>d</translation>
     </message>
@@ -43,6 +44,18 @@
 </context>
 <context>
     <name>Calendar::DayRangeHeader</name>
+    <message>
+        <location filename="../../libs/calendar/day_range_view.cpp" line="226"/>
+        <source>dddd d/M</source>
+        <comment>short date format in agenda&apos;s calendar header</comment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/calendar/day_range_view.cpp" line="228"/>
+        <source>ddd d/M</source>
+        <comment>short date format in agenda&apos;s calendar header</comment>
+        <translation>ddd d.M</translation>
+    </message>
     <message>
         <location filename="../../libs/calendar/day_range_view.cpp" line="323"/>
         <source>modify</source>

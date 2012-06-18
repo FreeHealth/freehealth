@@ -25,45 +25,52 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef IALERTPLACEHOLDER_H
-#define IALERTPLACEHOLDER_H
+#ifndef ALERTPLACEHOLDERTEST_H
+#define ALERTPLACEHOLDERTEST_H
 
-#include <alertplugin/alertplugin_exporter.h>
-#include <QWidget>
-#include <QObject>
+#include <alertplugin/ialertplaceholder.h>
+#include <alertplugin/alertitem.h>
+#include <QToolBar>
+#include <QPointer>
 
 namespace Alert {
-class AlertItem;
+class StaticAlertToolButton;
 
-class ALERT_EXPORT IAlertPlaceHolder : public QObject
+class AlertPlaceHolderTest : public IAlertPlaceHolder
 {
     Q_OBJECT
+    
 public:
-    explicit IAlertPlaceHolder(QObject *parent = 0);
-    virtual ~IAlertPlaceHolder() {}
-
+    explicit AlertPlaceHolderTest(QObject *parent = 0);
+    ~AlertPlaceHolderTest();
+    
     // identification
-    virtual QString uuid() const = 0;
+    QString uuid() const;
 
     // for UI presentation of the place holder
-    virtual QString name(const QString &lang = QString::null) const = 0;
-    virtual QString category(const QString &lang = QString::null) const = 0;
-    virtual QString description(const QString &lang = QString::null) const = 0;
+    QString name(const QString &lang = QString::null) const;
+    QString category(const QString &lang = QString::null) const;
+    QString description(const QString &lang = QString::null) const;
 
     // AlertItem management
-    virtual void clear() = 0;
-    virtual bool addAlert(const AlertItem &alert) = 0;
-    virtual bool updateAlert(const AlertItem &alert) = 0;
-    virtual bool removeAlert(const AlertItem &alert) = 0;
-    virtual bool highlightAlert(const AlertItem &alert) = 0;
+    void clear();
+    bool addAlert(const AlertItem &alert);
+    bool updateAlert(const AlertItem &alert);
+    bool removeAlert(const AlertItem &alert);
+    bool highlightAlert(const AlertItem &alert);
 
-    virtual QWidget *createWidget(QWidget *parent = 0) = 0;
+    QWidget *createWidget(QWidget *parent = 0);
 
-Q_SIGNALS:
-    void alertItemValidated(const AlertItem &alert);
+    bool containsAlert(const AlertItem &item);
+    bool containsAlertUuid(const QString &alertUid);
+    bool removeAlertUuid(const QString &alertUid);
 
+private:
+    QPointer<QToolBar> _widget;
+    QList<AlertItem> alerts;
+    QHash<QString, StaticAlertToolButton *> _buttons;
 };
 
-} // namespace Alert
+}  // namespace Alert
 
-#endif // IALERTPLACEHOLDER_H
+#endif // ALERTPLACEHOLDERTEST_H

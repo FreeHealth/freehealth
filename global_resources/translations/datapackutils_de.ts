@@ -218,7 +218,7 @@
     </message>
     <message>
         <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="166"/>
-        <source>The following packs will be processed. Please verify all informations.</source>
+        <source>The following packs will be processed. Please verify all information.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -438,32 +438,32 @@
 <context>
     <name>Server</name>
     <message>
-        <location filename="../../libs/datapackutils/server.cpp" line="188"/>
+        <location filename="../../libs/datapackutils/server.cpp" line="187"/>
         <source>Local file</source>
         <translation>Lokale Datei</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/server.cpp" line="189"/>
+        <location filename="../../libs/datapackutils/server.cpp" line="188"/>
         <source>Protected HTTP with zipped content</source>
         <translation>gesichertes HTTP mit komprimiertem Inhalt</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/server.cpp" line="190"/>
+        <location filename="../../libs/datapackutils/server.cpp" line="189"/>
         <source>Protected HTTP non-zipped</source>
         <translation>gesichertes HTTP, nicht komprimiert</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/server.cpp" line="191"/>
+        <location filename="../../libs/datapackutils/server.cpp" line="190"/>
         <source>HTTP (standard mode)</source>
         <translation>HTTP (Standardmodus)</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/server.cpp" line="192"/>
+        <location filename="../../libs/datapackutils/server.cpp" line="191"/>
         <source>FTP with zipped content</source>
         <translation>FTP mit komprimiertem Inhalt</translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/server.cpp" line="193"/>
+        <location filename="../../libs/datapackutils/server.cpp" line="192"/>
         <source>FTP (standard mode)</source>
         <translation>FTP (Standardmodus)</translation>
     </message>

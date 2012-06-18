@@ -73,37 +73,37 @@
 <context>
     <name>Patients::IdentityPage</name>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="106"/>
+        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="112"/>
         <source>Please enter the patient&apos;s identity.</source>
         <translation>Veuillez saisir l&apos;identité du patient.</translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="135"/>
+        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="141"/>
         <source>Patient already exists</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="136"/>
+        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="142"/>
         <source>A patient with the same names, gender and date of birth already exists. You can not create duplicates.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="161"/>
+        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="167"/>
         <source>You are about to create the following  patient: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="163"/>
+        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="169"/>
         <source>Patients with the same names exist in the database.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="165"/>
+        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="171"/>
         <source>Do you really want to create this patient?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="167"/>
+        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="173"/>
         <source>Patients of the same name exist</source>
         <translation type="unfinished"></translation>
     </message>
@@ -111,72 +111,72 @@
 <context>
     <name>Patients::IdentityWidget</name>
     <message>
-        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="206"/>
+        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="267"/>
         <source>born on</source>
         <translation>né(e) le</translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="220"/>
+        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="281"/>
         <source>You must specify a birthname.</source>
         <translation>Vous devez spécifier un nom de naissance.</translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="221"/>
+        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="282"/>
         <source>You can not create a patient without a birthname</source>
         <translation>Vous ne pouvez pas créer un patient sans nom de naissance</translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="222"/>
+        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="283"/>
         <source>No birthname</source>
         <translation>Pas de nom de naissance</translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="226"/>
+        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="287"/>
         <source>You must specify a first name.</source>
         <translation>Vous devez spécifier un prénom.</translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="227"/>
+        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="288"/>
         <source>You can not create a patient without a first name</source>
         <translation>Vous ne pouvez pas créer un patient sans prénom</translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="228"/>
+        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="289"/>
         <source>No firstname</source>
         <translation>Pas de prénom</translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="232"/>
+        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="293"/>
         <source>You must specify a date of birth.</source>
         <translation>Vous devez spécifier une date de naissance.</translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="233"/>
+        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="294"/>
         <source>You can not create a patient without a date of birth</source>
         <translation>Vous ne pouvez pas créer un patient sans date de naissance</translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="234"/>
+        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="295"/>
         <source>No date of birth</source>
         <translation>Pas de date de naissance</translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="238"/>
+        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="299"/>
         <source>You must specify a gender.</source>
         <translation>Vous devez spécifier un sexe.</translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="239"/>
+        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="300"/>
         <source>You can not create a patient without a gender</source>
         <translation>Vous ne pouvez pas créer un patient sans sexe</translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="240"/>
+        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="301"/>
         <source>No gender</source>
         <translation>Pas de sexe</translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="354"/>
+        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="416"/>
         <source>Choose a photo</source>
         <translation>Choisissez une photographie</translation>
     </message>
@@ -217,57 +217,57 @@
         <translation>Titre</translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/identitywidget.ui" line="57"/>
+        <location filename="../../plugins/patientbaseplugin/identitywidget.ui" line="60"/>
         <source>Click to add/change the photo</source>
         <translation>Cliquez pour ajouter/modifier la photographie</translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/identitywidget.ui" line="76"/>
+        <location filename="../../plugins/patientbaseplugin/identitywidget.ui" line="79"/>
         <source>Birth name</source>
         <translation>Nom de naissance</translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/identitywidget.ui" line="96"/>
+        <location filename="../../plugins/patientbaseplugin/identitywidget.ui" line="105"/>
         <source>First name</source>
         <translation>Prénom</translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/identitywidget.ui" line="139"/>
+        <location filename="../../plugins/patientbaseplugin/identitywidget.ui" line="147"/>
         <source>Address</source>
         <translation>Adresse</translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/identitywidget.ui" line="86"/>
+        <location filename="../../plugins/patientbaseplugin/identitywidget.ui" line="92"/>
         <source>Second name</source>
         <translation>Nom marital</translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/identitywidget.ui" line="106"/>
+        <location filename="../../plugins/patientbaseplugin/identitywidget.ui" line="118"/>
         <source>Gender</source>
         <translation>Sexe</translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/identitywidget.ui" line="116"/>
+        <location filename="../../plugins/patientbaseplugin/identitywidget.ui" line="131"/>
         <source>Date of birth</source>
         <translation>Date de naissance</translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/identitywidget.ui" line="145"/>
+        <location filename="../../plugins/patientbaseplugin/identitywidget.ui" line="153"/>
         <source>Street</source>
         <translation>Rue</translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/identitywidget.ui" line="152"/>
+        <location filename="../../plugins/patientbaseplugin/identitywidget.ui" line="163"/>
         <source>City</source>
         <translation>Ville</translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/identitywidget.ui" line="162"/>
+        <location filename="../../plugins/patientbaseplugin/identitywidget.ui" line="176"/>
         <source>Zipcode</source>
         <translation>Code postal</translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/identitywidget.ui" line="172"/>
+        <location filename="../../plugins/patientbaseplugin/identitywidget.ui" line="189"/>
         <source>Country</source>
         <translation>Pays</translation>
     </message>
@@ -343,17 +343,17 @@
         <translation>Nouveau patient</translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="78"/>
+        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="81"/>
         <source>WARNING! You did not save this patient. If you continue without saving, all changes will be lost.</source>
         <translation>ATTENTION ! Vous n&apos;avez pas sauvegardé le patient. Si vous continuez sans sauvegarder, tous les changements seront perdus.</translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="80"/>
+        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="83"/>
         <source>Do you really want to close this dialog?</source>
         <translation>Voulez-vous réellement fermer ce dialogue ?</translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="81"/>
+        <location filename="../../plugins/patientbaseplugin/patientcreatorwizard.cpp" line="84"/>
         <source>Patient not saved</source>
         <translation>Patient non sauvegardé</translation>
     </message>

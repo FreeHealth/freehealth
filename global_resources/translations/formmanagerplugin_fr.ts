@@ -92,7 +92,7 @@ Answering &apos;No&apos; will cause definitve data lose.</source>
 <context>
     <name>Form::FormMain</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/iformitem.cpp" line="639"/>
+        <location filename="../../plugins/formmanagerplugin/iformitem.cpp" line="653"/>
         <source>Form: </source>
         <translation>Formulaire : </translation>
     </message>
@@ -100,7 +100,7 @@ Answering &apos;No&apos; will cause definitve data lose.</source>
 <context>
     <name>Form::FormMainDebugPage</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/iformitem.cpp" line="765"/>
+        <location filename="../../plugins/formmanagerplugin/iformitem.cpp" line="779"/>
         <source>Forms: </source>
         <translation>Formuaires : </translation>
     </message>

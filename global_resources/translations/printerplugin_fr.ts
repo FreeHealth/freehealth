@@ -88,13 +88,13 @@
     </message>
     <message>
         <location filename="../../plugins/printerplugin/printdialog.ui" line="356"/>
-        <source>Print with duplicatas</source>
-        <translation>Imprimer les duplicatas</translation>
+        <source>Print with duplicates</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/printerplugin/printdialog.ui" line="363"/>
-        <source>Two pages per paper</source>
-        <translation>Deux pages par feuille</translation>
+        <source>Two pages per sheet</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/printerplugin/printdialog.ui" line="370"/>

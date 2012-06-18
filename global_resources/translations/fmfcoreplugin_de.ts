@@ -953,17 +953,17 @@ Please contact your server administrator.</source>
 <context>
     <name>Core::Translators</name>
     <message>
-        <location filename="../../plugins/coreplugin/translators.cpp" line="139"/>
+        <location filename="../../plugins/coreplugin/translators.cpp" line="140"/>
         <source>Can not load %1, path: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/translators.cpp" line="188"/>
+        <location filename="../../plugins/coreplugin/translators.cpp" line="189"/>
         <source>Add Translator %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/translators.cpp" line="194"/>
+        <location filename="../../plugins/coreplugin/translators.cpp" line="195"/>
         <source>WARNING: %1 can not be loaded or is already loaded.</source>
         <translation type="unfinished"></translation>
     </message>

@@ -55,7 +55,6 @@
 #include <QDir>
 #include <QFileDialog>
 
-
 #include <QDebug>
 
 using namespace Patients;
@@ -64,13 +63,66 @@ using namespace Trans::ConstantTranslations;
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 static inline Patients::Internal::PatientBase *patientBase() {return Patients::Internal::PatientBase::instance();}
 
-/**
-  \todo Users can add pages in the identity widget using the XMLForm --> create a <Form> named \e Identity
-  \todo Create a viewUi for the readonly mode (more compact)
-*/
+//TODO: Users can add pages in the identity widget using the XMLForm --> create a <Form> named \e Identity
+//TODO: Create a viewUi for the readonly mode (more compact)
+
 
 namespace Patients {
 namespace Internal {
+
+//TODO: extract this class into Utils?
+/** \brief wrapper function for QDataWidgetMapper with isDirty() method
+ *
+ * Thanks to Davor Josipovic for the code, http://davor.no-ip.com/blog/2010/05/11/isdirty-class-member-for-qdatawidgetmapper/
+ */
+class FMFWidgetMapper: public QDataWidgetMapper
+{
+public:
+    FMFWidgetMapper(QObject *parent = 0) :
+        QDataWidgetMapper(parent)
+    {}
+
+    bool isDirty() const {
+        //TODO: support both orientations
+        Q_ASSERT(orientation() == Qt::Horizontal);
+        Q_ASSERT(rootIndex() == QModelIndex());
+
+//        qDebug() << "FMWidgetmapper.isDirty() called:";
+
+        // cycle through all widgets the mapper supports
+        for(int i = 0; i < model()->columnCount(); i++) {
+            QWidget *mapWidget = mappedWidgetAt(i);
+            if (mapWidget){
+                QByteArray p = mappedPropertyName(mapWidget);
+                QModelIndex idx = model()->index(currentIndex(), i);
+
+                qDebug() << mapWidget->objectName() << "DB:" << idx.data(Qt::EditRole) << "- Widget value:" << mapWidget->property(p);
+
+                QVariant data = idx.data(Qt::EditRole);
+//                qDebug(mapWidget->metaObject()->className());
+
+                // special case: QDateEdit can not display NULL value. so compare here manually
+                if (mapWidget->metaObject()->className() == QString("QDateEdit")) {
+                    QDateEdit* dateEdit = qobject_cast<QDateEdit*>(mapWidget);
+                    if (dateEdit) {
+//                        qDebug() << data.toDate();
+//                        qDebug() << dateEdit->date();
+//                        qDebug() << dateEdit->minimumDate();
+                        if (data.toDate() == QDate() && dateEdit->date() != dateEdit->minimumDate()) {
+                            return true;
+                        }
+                    }
+                }
+                // if data in model != widget's value, data was modified, page is "dirty"
+                if (data != mapWidget->property(p))
+                    return true;
+            }
+        }
+        return false;
+    }
+};
+
+
 class IdentityWidgetPrivate
 {
 public:
@@ -84,7 +136,7 @@ public:
         } else {
             editUi = new Ui::IdentityWidget;
             editUi->setupUi(q);
-            editUi->dob->setDisplayFormat(tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR));
+            //editUi->dob->setDisplayFormat(tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR));
             editUi->genderCombo->addItems(genders());
             editUi->titleCombo->addItems(titles());
             Utils::UpperCaseValidator *val = new Utils::UpperCaseValidator(q);
@@ -122,8 +174,8 @@ public:
                 delete m_Mapper;
                 m_Mapper = 0;
             }
-            m_Mapper = new QDataWidgetMapper(q);
-            m_Mapper->setSubmitPolicy(QDataWidgetMapper::ManualSubmit);
+            m_Mapper = new FMFWidgetMapper(q);
+            m_Mapper->setSubmitPolicy(FMFWidgetMapper::ManualSubmit);
             m_Mapper->setModel(m_PatientModel);
             m_Mapper->addMapping(editUi->birthName, Core::IPatient::BirthName, "text");
             m_Mapper->addMapping(editUi->secondName, Core::IPatient::SecondName, "text");
@@ -131,17 +183,21 @@ public:
             m_Mapper->addMapping(editUi->genderCombo, Core::IPatient::GenderIndex, "currentIndex");
             m_Mapper->addMapping(editUi->titleCombo, Core::IPatient::TitleIndex, "currentIndex");
             m_Mapper->addMapping(editUi->dob, Core::IPatient::DateOfBirth, "date");
+
             m_Mapper->addMapping(editUi->street, Core::IPatient::Street, "plainText");
             m_Mapper->addMapping(editUi->city, Core::IPatient::City, "text");
             m_Mapper->addMapping(editUi->zipcode, Core::IPatient::ZipCode, "text");
-            m_Mapper->addMapping(editUi->country, Core::IPatient::Country, "currentIsoCountry");
+
+            //FIXME: buggy: country widget has FR(,DE,AT,...) as value while model holds a NULL
+            // this prevents m_Mapper.isDirty from working correctly!
+//            m_Mapper->addMapping(editUi->country, Core::IPatient::Country, "currentIsoCountry");
             m_Mapper->toFirst();
         }
     }
 public:
     Ui::IdentityWidget *editUi;
     Ui::IdentityViewer *viewUi;
-    QDataWidgetMapper *m_Mapper;
+    FMFWidgetMapper *m_Mapper;
     Patients::PatientModel *m_PatientModel;
     IdentityWidget::EditMode m_EditMode;
     ZipCodes::ZipCountryCompleters *zipCompleter;
@@ -259,7 +315,8 @@ bool IdentityWidget::isModified() const
 {
     if (d->m_EditMode==ReadOnlyMode)
         return false;
-    return true;
+    //TODO: return right value
+    return d->m_Mapper->isDirty();
 }
 
 /** Return the current editing value */

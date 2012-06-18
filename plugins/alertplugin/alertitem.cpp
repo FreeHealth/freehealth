@@ -28,6 +28,9 @@
 #include "alertitem.h"
 #include "alertcore.h"
 
+#include <coreplugin/icore.h>
+#include <coreplugin/iuser.h>
+
 #include <utils/log.h>
 #include <utils/global.h>
 #include <utils/genericdescription.h>
@@ -42,6 +45,8 @@
 enum { WarnAlertItemConstructionDestruction = false };
 
 using namespace Alert;
+
+static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 
 namespace {
 const char * const XML_ROOT_TAG = "Alert";
@@ -298,13 +303,44 @@ bool AlertItem::isValid() const
 /** Return the modification state of the item */
 bool AlertItem::isModified() const
 {
-    return d->_modified;
+    if (d->_modified)
+        return true;
+    // test all subclasses
+    for(int i=0; i < d->_timings.count(); ++i) {
+        if (d->_timings.at(i).isModified())
+            return true;
+    }
+    for(int i=0; i < d->_relations.count(); ++i) {
+        if (d->_relations.at(i).isModified())
+            return true;
+    }
+    for(int i=0; i < d->_scripts.count(); ++i) {
+        if (d->_scripts.at(i).isModified())
+            return true;
+    }
+    for(int i=0; i < d->_validations.count(); ++i) {
+        if (d->_relations.at(i).isModified())
+            return true;
+    }
+    return false;
 }
 
-/** Define the modification state of the item */
+/** Define the modification state of the item and all its subitems (timings, relations, validations, scripts). */
 void AlertItem::setModified(bool modified)
 {
     d->_modified = modified;
+    for(int i=0; i < d->_timings.count(); ++i) {
+        d->_timings[i].setModified(modified);
+    }
+    for(int i=0; i < d->_relations.count(); ++i) {
+        d->_relations[i].setModified(modified);
+    }
+    for(int i=0; i < d->_scripts.count(); ++i) {
+        d->_scripts[i].setModified(modified);
+    }
+    for(int i=0; i < d->_validations.count(); ++i) {
+        d->_validations[i].setModified(modified);
+    }
 }
 
 /** Return the uuid of the item */
@@ -572,6 +608,7 @@ void AlertItem::setExtraXml(const QString &xml)
 
 void AlertItem::clearRelations()
 {
+    d->_modified = true;
     d->_relations.clear();
 }
 
@@ -598,11 +635,13 @@ AlertRelation &AlertItem::relationAt(int id) const
 
 void AlertItem::addRelation(const AlertRelation &relation)
 {
+    d->_modified = true;
     d->_relations << relation;
 }
 
 void AlertItem::clearTimings()
 {
+    d->_modified = true;
     d->_timings.clear();
 }
 
@@ -629,11 +668,13 @@ AlertTiming &AlertItem::timingAt(int id) const
 
 void AlertItem::addTiming(const AlertTiming &timing)
 {
+    d->_modified = true;
     d->_timings.append(timing);
 }
 
 void AlertItem::clearScripts()
 {
+    d->_modified = true;
     d->_scripts.clear();
 }
 
@@ -660,14 +701,55 @@ AlertScript &AlertItem::scriptAt(int id) const
 
 void AlertItem::addScript(const AlertScript &script)
 {
+    d->_modified = true;
     d->_scripts << script;
 }
 
+/**
+  Validate an Alert::AlertItem with the current user. Return true if the alert was validated.\n
+  The new state of the alert is not automatically saved into database, but
+  the core is informed of this modification. \sa Alert::AlertCore::updateAlert()
+*/
+bool AlertItem::validateAlertWithCurrentUser()
+{
+    bool yes = Utils::yesNoMessageBox(
+                QApplication::translate("Alert::AlertItem", "Alert validation."),
+                QApplication::translate("Alert::AlertItem",
+                                        "You are about to validate this alert:<br />"
+                                        "<b>%1</b><br /><br />"
+                                        "Do you really want to validate this alert ?")
+                .arg(label()), "",
+                QApplication::translate("Alert::AlertItem", "Alert validation."));
+    if (yes) {
+        // create the validation
+        AlertValidation val;
+        val.setDateOfValidation(QDateTime::currentDateTime());
+        if (user())
+            val.setUserUuid(user()->uuid());
+        else
+            val.setUserUuid("UnknownUser");
+        addValidation(val);
+        // inform the core
+        AlertCore::instance()->updateAlert(*this);
+        return true;
+    }
+    return false;
+}
+
+/** Return true if the alert was validated by any user. */
+bool AlertItem::isUserValidated() const
+{
+    return (d->_validations.count() > 0);
+}
+
+/** Remove all recorded validations. */
 void AlertItem::clearValidations()
 {
+    d->_modified = true;
     d->_validations.clear();
 }
 
+/** Return the validation according to its identifiant \sa AlertValidation::id(). */
 AlertValidation &AlertItem::validation(int id) const
 {
     for(int i=0; i<d->_validations.count();++i) {
@@ -677,11 +759,13 @@ AlertValidation &AlertItem::validation(int id) const
     return d->_nullValidation;
 }
 
+/** Return all the recorded validations. */
 QVector<AlertValidation> &AlertItem::validations() const
 {
     return d->_validations;
 }
 
+/** Return all the recorded validation at index \e id. */
 AlertValidation &AlertItem::validationAt(int id) const
 {
     if (IN_RANGE(id, 0, d->_validations.count()))
@@ -689,11 +773,14 @@ AlertValidation &AlertItem::validationAt(int id) const
     return d->_nullValidation;
 }
 
+/** Add a validation to the alert. */
 void AlertItem::addValidation(const AlertValidation &val)
 {
+    d->_modified = true;
     d->_validations << val;
 }
 
+/** Check equality between two Alert::AlertItem */
 bool AlertItem::operator==(const AlertItem &other) const
 {
     // first test

@@ -64,6 +64,8 @@ const char* const URL                                = QT_TRANSLATE_NOOP("tkCons
 const char* const TOKEN                              = QT_TRANSLATE_NOOP("tkConstants", "Token");
 const char* const TOKEN_1                            = QT_TRANSLATE_NOOP("tkConstants", "Token: %1");
 const char* const EDIT_TOKEN                         = QT_TRANSLATE_NOOP("tkConstants", "Edit token");
+const char* const VALIDATE                           = QT_TRANSLATE_NOOP("tkConstants", "Validate");
+const char* const EDIT_ALERT                         = QT_TRANSLATE_NOOP("tkConstants", "Edit alert");
 
 const char* const FROM                          = QT_TRANSLATE_NOOP("tkConstants", "from");
 const char* const TO                            = QT_TRANSLATE_NOOP("tkConstants", "to");

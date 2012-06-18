@@ -88,12 +88,12 @@
     </message>
     <message>
         <location filename="../../plugins/printerplugin/printdialog.ui" line="356"/>
-        <source>Print with duplicatas</source>
+        <source>Print with duplicates</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/printerplugin/printdialog.ui" line="363"/>
-        <source>Two pages per paper</source>
+        <source>Two pages per sheet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -257,7 +257,7 @@ Dies kann eine starke CPU Belastung sein.</translation>
     <message>
         <location filename="../../plugins/printerplugin/printerpreviewer_p.ui" line="118"/>
         <source>Update preview</source>
-        <translation>Updating der Vorschau</translation>
+        <translation>Vorschau aktualisieren</translation>
     </message>
 </context>
 <context>

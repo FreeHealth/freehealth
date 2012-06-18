@@ -1106,6 +1106,12 @@ QString Database::getWhereClause(const FieldList &fields) const
     return where;
 }
 
+/** Create a where clause on the \e fields. */
+QString Database::getWhereClause(const Field &field) const
+{
+    return getWhereClause(Utils::FieldList() << field);
+}
+
 /**
    Create a join statement on \e join.field1.tableName using fields equality.
   \code
@@ -1384,11 +1390,14 @@ QString Database::select(const FieldList &select, const JoinList &joins, const F
     fields.chop(2);
 
     // Calculate conditions
-    QString w = getWhereClause(cond);
-    for(int i=0; i < cond.count(); ++i) {
-        tables << cond.at(i).tableName;
+    QString w;
+    if (cond.count() > 0) {
+        w = "\nWHERE " + getWhereClause(cond);
+        for(int i=0; i < cond.count(); ++i) {
+            tables << cond.at(i).tableName;
+        }
+        tables.removeDuplicates();
     }
-    tables.removeDuplicates();
 
     // Calculate joins
     QString j;
@@ -1404,7 +1413,7 @@ QString Database::select(const FieldList &select, const JoinList &joins, const F
     }
     from.chop(2);
 
-    return QString("SELECT %1 FROM %2 \n %3 WHERE %4").arg(fields, from, j, w);
+    return QString("SELECT %1 FROM %2\n%3%4").arg(fields, from, j, w);
 }
 
 QString Database::select(const FieldList &select, const JoinList &joins, const Field &condition) const

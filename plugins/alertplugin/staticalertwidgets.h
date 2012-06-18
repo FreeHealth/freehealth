@@ -19,73 +19,55 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Main Developpers:                                                     *
+ *       Eric MAEKER, <eric.maeker@gmail.com>,                             *
+ *       Pierre-Marie Desombre <pm.desombre@gmail.com>                     *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
- *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef ALERT_DYNAMICALERTDIALOG_H
-#define ALERT_DYNAMICALERTDIALOG_H
+#ifndef ALERT_STATICALERTWIDGETS_H
+#define ALERT_STATICALERTWIDGETS_H
 
 #include <alertplugin/alertplugin_exporter.h>
-#include <QDialog>
+#include <alertplugin/alertitem.h>
 
-QT_BEGIN_NAMESPACE
-class QAbstractButton;
-class QToolButton;
-QT_END_NAMESPACE
+#include <QToolButton>
+#include <QLabel>
 
 namespace Alert {
 class AlertItem;
-namespace Ui {
-class DynamicAlertDialog;
-class DynamicAlertDialogOverridingComment;
-}
 
-class ALERT_EXPORT DynamicAlertResult
-{
-public:
-    DynamicAlertResult() {}
-    ~DynamicAlertResult() {}
-
-};
-
-class ALERT_EXPORT DynamicAlertDialog : public QDialog
+class ALERT_EXPORT StaticAlertToolButton : public QToolButton
 {
     Q_OBJECT
-
-    explicit DynamicAlertDialog(const QList<AlertItem> &item,
-                                const QString &themedIcon,
-                                const QList<QAbstractButton *> &buttons = QList<QAbstractButton *>(),
-                                QWidget *parent = 0);
-
 public:
-    enum DialogResult {
-        NoDynamicAlert = 0,
-        DynamicAlertOverridden,
-        DynamicAlertAccepted
-    };
-    ~DynamicAlertDialog();
+    StaticAlertToolButton(QWidget *parent = 0);
+    ~StaticAlertToolButton();
 
-    bool isOverridingUserCommentRequired() const {return _overrideCommentRequired;}
-
-    static DynamicAlertResult executeDynamicAlert(const AlertItem &item, const QString &themedIcon = QString::null, QWidget *parent = 0);
-    static DynamicAlertResult executeDynamicAlert(const QList<AlertItem> &item, const QString &themedIcon = QString::null, QWidget *parent = 0);
-    static DynamicAlertResult executeDynamicAlert(const QList<AlertItem> &item, const QList<QAbstractButton*> &buttons, const QString &themedIcon = QString::null, QWidget *parent = 0);
+    void setAlertItem(const AlertItem &item);
 
 private Q_SLOTS:
-    void override();
-    void validateUserOverridingComment();
-
-protected:
-    void changeEvent(QEvent *e);
+    void validateAlert();
+    void editAlert();
 
 private:
-    Ui::DynamicAlertDialog *ui;
-    Ui::DynamicAlertDialogOverridingComment *cui;
-    QToolButton *_overrideButton;
-    bool _overrideCommentRequired;
+    void retranslateUi();
+    void changeEvent(QEvent *event);
+
+private:
+    QAction *aCategory, *aLabel, *aValidate, *aEdit;
+    AlertItem _item;
 };
 
+class ALERT_EXPORT StaticAlertLabel : public QLabel
+{
+public:
+    StaticAlertLabel(QWidget *parent = 0);
+
+    void setAlertItem(const AlertItem &item);
+};
+
+
 } // namespace Alert
-#endif // ALERT_DYNAMICALERTDIALOG_H
+
+#endif // ALERT_STATICALERTWIDGETS_H

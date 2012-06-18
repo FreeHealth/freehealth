@@ -259,29 +259,29 @@ default agenda duration time (in minutes)</extracomment>
 <context>
     <name>Agenda::Internal::UserCalendarWizardPage</name>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.cpp" line="136"/>
+        <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.cpp" line="124"/>
         <source>Please specify a label for this agenda.</source>
         <translation>Bitte geben Sie eine Bezeichnung für diese Agenda an.</translation>
     </message>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.cpp" line="139"/>
+        <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.cpp" line="127"/>
         <source>The default duration can not be null.</source>
         <translatorcomment>???&quot;null&quot; maybe should be in &lt;i&gt; or &quot;</translatorcomment>
         <translation>Die Standarddauer kann nicht &lt;i&gt;Null&lt;/i&gt; sein.</translation>
     </message>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.cpp" line="142"/>
+        <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.cpp" line="130"/>
         <source>Error detected</source>
         <translation>Fehler gefunden</translation>
     </message>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.cpp" line="152"/>
+        <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.cpp" line="140"/>
         <source>Manage an agenda.</source>
         <translatorcomment>??? why a &quot;.&quot; at the end? Maybe without &quot;an&quot;</translatorcomment>
         <translation>Eine Agenda verwalten.</translation>
     </message>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.cpp" line="153"/>
+        <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.cpp" line="141"/>
         <source>You can quickly define an agenda for this user. This agenda will be the default one.</source>
         <translation>Sie können schnell eine Agenda für diesen Benutzer definieren. Diese Agenda wird dann die Standard-Agenda.</translation>
     </message>
@@ -410,14 +410,6 @@ default agenda duration time (in minutes)</extracomment>
     </message>
 </context>
 <context>
-    <name>Agenda::UserCalendarModel</name>
-    <message>
-        <location filename="../../plugins/agendaplugin/usercalendarmodel.cpp" line="228"/>
-        <source>New calendar</source>
-        <translation>Neuer Kalender</translation>
-    </message>
-</context>
-<context>
     <name>Agenda::UserCalendarModelFullEditorWidget</name>
     <message>
         <location filename="../../plugins/agendaplugin/usercalendarmodelfulleditorwidget.ui" line="14"/>
@@ -426,8 +418,8 @@ default agenda duration time (in minutes)</extracomment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendarmodelfulleditorwidget.cpp" line="71"/>
-        <location filename="../../plugins/agendaplugin/usercalendarmodelfulleditorwidget.cpp" line="128"/>
+        <location filename="../../plugins/agendaplugin/usercalendarmodelfulleditorwidget.cpp" line="72"/>
+        <location filename="../../plugins/agendaplugin/usercalendarmodelfulleditorwidget.cpp" line="127"/>
         <source>Create a new calendar</source>
         <translation>Neuen Kalender erstellen</translation>
     </message>
@@ -435,7 +427,7 @@ default agenda duration time (in minutes)</extracomment>
 <context>
     <name>AgendaBase</name>
     <message>
-        <location filename="../../plugins/agendaplugin/agendabase.cpp" line="409"/>
+        <location filename="../../plugins/agendaplugin/agendabase.cpp" line="410"/>
         <source>Trying to create empty database.
        Location: %1
        FileName: %2

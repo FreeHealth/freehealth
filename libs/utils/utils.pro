@@ -61,7 +61,8 @@ HEADERS += global_exporter.h \
     widgets/fontselectorbutton.h \
     widgets/fontandcolorsselectorwidget.h \
     widgets/segmentedbutton.h \
-    widgets/periodselectortoolbutton.h
+    widgets/periodselectortoolbutton.h \
+    widgets/birthdayedit.h
 #    widgets/dialogbuttonbox.h
 
 SOURCES += global.cpp \
@@ -109,7 +110,8 @@ SOURCES += global.cpp \
     widgets/fontselectorbutton.cpp \
     widgets/fontandcolorsselectorwidget.cpp \
     widgets/segmentedbutton.cpp \
-    widgets/periodselectortoolbutton.cpp
+    widgets/periodselectortoolbutton.cpp \
+    widgets/birthdayedit.cpp
 #    widgets/dialogbuttonbox.cpp
 
 macx {

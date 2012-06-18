@@ -44,7 +44,7 @@
         <translation>Schema de base erroné : champs numéro %1 différe : %2 au lieu de %3 dans la table %4</translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="1794"/>
+        <location filename="../../libs/utils/database.cpp" line="1831"/>
         <source>Can not create table %1</source>
         <translation>Impossible de créer la table %1</translation>
     </message>
@@ -243,6 +243,19 @@
         <location filename="../../libs/utils/widgets/basiclogindialog.ui" line="14"/>
         <source>Dialog</source>
         <translation></translation>
+    </message>
+</context>
+<context>
+    <name>Utils::BirthDayEdit</name>
+    <message>
+        <location filename="../../libs/utils/widgets/birthdayedit.cpp" line="19"/>
+        <source>xxxxxxxxxx</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/widgets/birthdayedit.cpp" line="112"/>
+        <source>ddMMyy,ddMMyyyy</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

@@ -23,27 +23,27 @@ Error: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="468"/>
+        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="449"/>
         <source>Form: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="469"/>
+        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="450"/>
         <source>New version: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="470"/>
+        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="451"/>
         <source>Database version: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="484"/>
+        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="465"/>
         <source>Form update detected.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="485"/>
+        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="466"/>
         <source>A form update has been detected. Do you want to update the forms?</source>
         <translation type="unfinished"></translation>
     </message>

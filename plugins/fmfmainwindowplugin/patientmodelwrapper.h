@@ -66,12 +66,12 @@ public:
     virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
     virtual QVariant data(int column) const;
 
-    /** \todo remove this and use setData instead **/
-    virtual bool setValue(int ref, const QVariant &value);
+    /** \deprecated **/
+    virtual bool setValue(int ref, const QVariant &value); // TODO: remove this and use setData instead
     virtual bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
 
 
-    /** \todo Is this needed in freemedforms ? */
+    //TODO: Is this needed in freemedforms?
     QString toXml() const {return QString();}
     bool fromXml(const QString &) {return true;}
 

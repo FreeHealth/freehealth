@@ -383,11 +383,17 @@ QString CalendarNavbar::getDateIntervalString() {
 	case View_Week:
 		lastDate = m_firstDate.addDays(6);
 		if (m_firstDate.month() != lastDate.month() && m_firstDate.year() != lastDate.year())
-            return QString("%1 - %2").arg(QLocale().toString(m_firstDate, tr("d MMM yyyy"))).arg(QLocale().toString(lastDate, tr("d MMM yyyy")));
+            return QString("%1 - %2").arg(
+                        QLocale().toString(m_firstDate, tr("d MMM yyyy")),
+                        QLocale().toString(lastDate, tr("d MMM yyyy")));
 		else if (m_firstDate.month() != lastDate.month())
-            return QString("%1 - %2").arg(QLocale().toString(m_firstDate, tr("d MMM"))).arg(QLocale().toString(lastDate, tr("d MMM yyyy")));
+            return QString("%1 - %2").arg(
+                        QLocale().toString(m_firstDate, tr("d MMM")),
+                        QLocale().toString(lastDate, tr("d MMM yyyy")));
 		else
-            return QString("%1 - %2").arg(QLocale().toString(m_firstDate, tr("d"))).arg(QLocale().toString(lastDate, tr("d MMM yyyy")));
+            return QString("%1 - %2").arg(
+                        QLocale().toString(m_firstDate, tr("d")),
+                        QLocale().toString(lastDate, tr("d MMM yyyy")));
 	case View_Month:
 //			return randomDate.addDays(- randomDate.day() + 1);
 	default: // should never happend

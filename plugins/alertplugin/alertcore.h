@@ -34,10 +34,12 @@
  * \file alertcore.h
  * \author Eric MAEKER <eric.maeker@gmail.com>, Pierre-Marie Desombre <pm.desombre@gmail.com>
  * \version 0.8.0
- * \date 31 May 2012
+ * \date 13 June 2012
 */
 
 namespace Alert {
+class AlertItem;
+
 namespace Internal {
 class AlertCorePrivate;
 class AlertPlugin;
@@ -54,16 +56,28 @@ protected:
     bool initialize();
 
 public:
+    enum AlertToCheck {
+        CurrentPatientAlerts =      0x00000001,
+        CurrentUserAlerts =         0x00000002,
+        CurrentApplicationAlerts =  0x00000004
+    };
+    Q_DECLARE_FLAGS(AlertsToCheck, AlertToCheck)
+
+
     static AlertCore *instance(QObject *parent = 0);
     ~AlertCore();
 
     // Getters/Setters
-    //    QVector<AlertItem> getAlertItemForCurrentUser() const;
-    //    QVector<AlertItem> getAlertItemForCurrentPatient() const;
-    //    QVector<AlertItem> getAlertItemForCurrentApplication() const;
-    //    bool saveAlertItem(const AlertItem &item);
+    QVector<AlertItem> getAlertItemForCurrentUser() const;
+    QVector<AlertItem> getAlertItemForCurrentPatient() const;
+    QVector<AlertItem> getAlertItemForCurrentApplication() const;
+    bool saveAlert(AlertItem &item);
 
     // Executers
+    bool checkAlerts(AlertsToCheck check);
+    bool registerAlert(const AlertItem &item);
+    bool updateAlert(const AlertItem &item);
+
     //    bool executeAlert(const AlertItem &alert);  // add a delay ?
 
     // Editors
@@ -82,11 +96,19 @@ Q_SIGNALS:
 //    void alertItemValidated(const AlertItem &alert);
 
 private:
+    void processAlerts(const QVector<AlertItem> &alerts);
+
+private Q_SLOTS:
+    void postCoreInitialization();
+
+private:
     static AlertCore *_instance;
     Internal::AlertCorePrivate *d;
 };
 
 }  // Alert
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(Alert::AlertCore::AlertsToCheck)
 
 #endif
 

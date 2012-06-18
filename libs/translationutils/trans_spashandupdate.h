@@ -57,16 +57,16 @@ const char* const INITIALIZATING_DATABASES          = QT_TRANSLATE_NOOP("tkConst
 const char* const CHECKUPDATE                       = QT_TRANSLATE_NOOP("tkConstants", "Check for update");
 const char* const CHECKING_UPDATES                  = QT_TRANSLATE_NOOP("tkConstants", "Checking for updates...");
 const char* const AT_STARTUP                        = QT_TRANSLATE_NOOP("tkConstants", "At startup");
-const char* const EACH_DAY                          = QT_TRANSLATE_NOOP("tkConstants", "Each days");
-const char* const EACH_WEEK                         = QT_TRANSLATE_NOOP("tkConstants", "Each week");
-const char* const EACH_MONTH                        = QT_TRANSLATE_NOOP("tkConstants", "Each month");
-const char* const EACH_QUARTER                      = QT_TRANSLATE_NOOP("tkConstants", "Each quarter");
-const char* const NEVER_AUTOMATICALLY               = QT_TRANSLATE_NOOP("tkConstants", "Never automatically");
+const char* const EACH_DAY                          = QT_TRANSLATE_NOOP("tkConstants", "daily");
+const char* const EACH_WEEK                         = QT_TRANSLATE_NOOP("tkConstants", "weekly");
+const char* const EACH_MONTH                        = QT_TRANSLATE_NOOP("tkConstants", "monthly");
+const char* const EACH_QUARTER                      = QT_TRANSLATE_NOOP("tkConstants", "quarterly");
+const char* const NEVER_AUTOMATICALLY               = QT_TRANSLATE_NOOP("tkConstants", "never automatically");
 
 // Sender and Updater
 const char* const START_MESSAGE_SENDING              = QT_TRANSLATE_NOOP("tkConstants", "Starting to send message.");
-const char* const MESSAGE_SENT_OK                  = QT_TRANSLATE_NOOP("tkConstants", "Message sent without error.");
-const char* const MESSAGE_NOT_SENT                 = QT_TRANSLATE_NOOP("tkConstants", "An error occured, message was not sent.");
+const char* const MESSAGE_SENT_OK                    = QT_TRANSLATE_NOOP("tkConstants", "Message sent without error.");
+const char* const MESSAGE_NOT_SENT                   = QT_TRANSLATE_NOOP("tkConstants", "An error occured, message was not sent.");
 const char* const CHECKING_UPDATE_FROM_1             = QT_TRANSLATE_NOOP("tkConstants", "Checking for updates from %1");
 const char* const VERSION_UPTODATE                   = QT_TRANSLATE_NOOP("tkConstants", "Version up to date");
 const char* const CURRENT_VERSION                    = QT_TRANSLATE_NOOP("tkConstants", "Current version:");

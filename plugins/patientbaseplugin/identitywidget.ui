@@ -25,6 +25,9 @@
         <property name="text">
          <string>Title</string>
         </property>
+        <property name="buddy">
+         <cstring>titleCombo</cstring>
+        </property>
        </widget>
       </item>
       <item row="0" column="1">
@@ -75,6 +78,9 @@
         <property name="text">
          <string>Birth name</string>
         </property>
+        <property name="buddy">
+         <cstring>birthName</cstring>
+        </property>
        </widget>
       </item>
       <item row="1" column="1">
@@ -84,6 +90,9 @@
        <widget class="QLabel" name="label_2">
         <property name="text">
          <string>Second name</string>
+        </property>
+        <property name="buddy">
+         <cstring>secondName</cstring>
         </property>
        </widget>
       </item>
@@ -95,6 +104,9 @@
         <property name="text">
          <string>First name</string>
         </property>
+        <property name="buddy">
+         <cstring>firstname</cstring>
+        </property>
        </widget>
       </item>
       <item row="3" column="1">
@@ -104,6 +116,9 @@
        <widget class="QLabel" name="label_5">
         <property name="text">
          <string>Gender</string>
+        </property>
+        <property name="buddy">
+         <cstring>genderCombo</cstring>
         </property>
        </widget>
       </item>
@@ -115,20 +130,13 @@
         <property name="text">
          <string>Date of birth</string>
         </property>
+        <property name="buddy">
+         <cstring>dob</cstring>
+        </property>
        </widget>
       </item>
       <item row="5" column="1">
-       <widget class="QDateEdit" name="dob">
-        <property name="buttonSymbols">
-         <enum>QAbstractSpinBox::NoButtons</enum>
-        </property>
-        <property name="displayFormat">
-         <string notr="true">dd/MM/yy</string>
-        </property>
-        <property name="calendarPopup">
-         <bool>false</bool>
-        </property>
-       </widget>
+       <widget class="Utils::BirthDayEdit" name="dob"/>
       </item>
      </layout>
     </widget>
@@ -144,12 +152,18 @@
         <property name="text">
          <string>Street</string>
         </property>
+        <property name="buddy">
+         <cstring>street</cstring>
+        </property>
        </widget>
       </item>
       <item row="1" column="0">
        <widget class="QLabel" name="label_8">
         <property name="text">
          <string>City</string>
+        </property>
+        <property name="buddy">
+         <cstring>city</cstring>
         </property>
        </widget>
       </item>
@@ -161,6 +175,9 @@
         <property name="text">
          <string>Zipcode</string>
         </property>
+        <property name="buddy">
+         <cstring>zipcode</cstring>
+        </property>
        </widget>
       </item>
       <item row="2" column="1">
@@ -170,6 +187,9 @@
        <widget class="QLabel" name="label_10">
         <property name="text">
          <string>Country</string>
+        </property>
+        <property name="buddy">
+         <cstring>country</cstring>
         </property>
        </widget>
       </item>
@@ -199,6 +219,11 @@
    <extends>QLineEdit</extends>
    <header>utils/widgets/qbuttonlineedit.h</header>
   </customwidget>
+  <customwidget>
+   <class>Utils::BirthDayEdit</class>
+   <extends>QLineEdit</extends>
+   <header location="global">utils/widgets/birthdayedit.h</header>
+  </customwidget>
  </customwidgets>
  <tabstops>
   <tabstop>titleCombo</tabstop>
@@ -207,10 +232,11 @@
   <tabstop>firstname</tabstop>
   <tabstop>genderCombo</tabstop>
   <tabstop>dob</tabstop>
-  <tabstop>photoButton</tabstop>
   <tabstop>street</tabstop>
   <tabstop>city</tabstop>
   <tabstop>zipcode</tabstop>
+  <tabstop>country</tabstop>
+  <tabstop>photoButton</tabstop>
  </tabstops>
  <resources/>
  <connections/>

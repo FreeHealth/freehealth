@@ -19,73 +19,70 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Main developers : Christian A. Reiter, <christian.a.reiter@gmail.com> *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef ALERT_DYNAMICALERTDIALOG_H
-#define ALERT_DYNAMICALERTDIALOG_H
+#ifndef BIRTHDAYEDIT_H
+#define BIRTHDAYEDIT_H
 
-#include <alertplugin/alertplugin_exporter.h>
-#include <QDialog>
+#include <QLineEdit>
+#include <utils/global_exporter.h>
 
-QT_BEGIN_NAMESPACE
-class QAbstractButton;
-class QToolButton;
-QT_END_NAMESPACE
+#include <QDate>
+#include <QDateTimeEdit>
+#include <QKeyEvent>
 
-namespace Alert {
-class AlertItem;
-namespace Ui {
-class DynamicAlertDialog;
-class DynamicAlertDialogOverridingComment;
-}
 
-class ALERT_EXPORT DynamicAlertResult
-{
-public:
-    DynamicAlertResult() {}
-    ~DynamicAlertResult() {}
+namespace Utils {
 
-};
 
-class ALERT_EXPORT DynamicAlertDialog : public QDialog
+/**
+ * \class Utils::BirthDayEdit
+ * \brief Replacement class for QDateEdit to better handle birthday entering
+ *
+ * Inherits QLineEdit and accepts an input format that can be freely defined for
+ * each translation. It parses the input and tries to make a date out of it, using
+ * the available masks (user provided, system QLocale()->dateFormat(QLocale::ShortFormat),
+ * FMF provided). When the focus is lost, it displays the date in the standard way.
+ */
+class UTILS_EXPORT BirthDayEdit : public QLineEdit
 {
     Q_OBJECT
-
-    explicit DynamicAlertDialog(const QList<AlertItem> &item,
-                                const QString &themedIcon,
-                                const QList<QAbstractButton *> &buttons = QList<QAbstractButton *>(),
-                                QWidget *parent = 0);
+    Q_PROPERTY(QDate date READ date WRITE setDate NOTIFY dateChanged USER true)
+//    Q_PROPERTY(bool calendarPopup READ calendarPopup WRITE setCalendarPopup)
 
 public:
-    enum DialogResult {
-        NoDynamicAlert = 0,
-        DynamicAlertOverridden,
-        DynamicAlertAccepted
-    };
-    ~DynamicAlertDialog();
+    explicit BirthDayEdit(QWidget *parent);
+    explicit BirthDayEdit(const QDate & date, QWidget *parent = 0);
+    ~BirthDayEdit();
 
-    bool isOverridingUserCommentRequired() const {return _overrideCommentRequired;}
+    QDate date() const;
 
-    static DynamicAlertResult executeDynamicAlert(const AlertItem &item, const QString &themedIcon = QString::null, QWidget *parent = 0);
-    static DynamicAlertResult executeDynamicAlert(const QList<AlertItem> &item, const QString &themedIcon = QString::null, QWidget *parent = 0);
-    static DynamicAlertResult executeDynamicAlert(const QList<AlertItem> &item, const QList<QAbstractButton*> &buttons, const QString &themedIcon = QString::null, QWidget *parent = 0);
-
-private Q_SLOTS:
-    void override();
-    void validateUserOverridingComment();
-
-protected:
-    void changeEvent(QEvent *e);
+    void setDateFormats(QString formats);
 
 private:
-    Ui::DynamicAlertDialog *ui;
-    Ui::DynamicAlertDialogOverridingComment *cui;
-    QToolButton *_overrideButton;
-    bool _overrideCommentRequired;
+    void init(const QDate& date = QDate(), const QDate& maximumDate = QDate(), const QDate& minimumDate = QDate());
+
+signals:
+    void dateChanged (const QDate& date);
+
+public slots:
+    virtual void clear();
+    void setDate(const QDate& date);
+    void setDateString(const QString& dateString);
+
+protected slots:
+    void updateDisplayText();
+
+private:
+    QDate m_date;
+    QDate m_maximumDate;
+    QDate m_minimumDate;
+    QStringList m_dateFormatList;
 };
 
-} // namespace Alert
-#endif // ALERT_DYNAMICALERTDIALOG_H
+} // end Utils
+
+#endif // BIRTHDAYEDIT_H
