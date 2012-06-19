@@ -1486,6 +1486,13 @@ QString Database::select(const Field &select, const Join &join, const FieldList 
     return this->select(get, joins, conditions);
 }
 
+QString Database::select(const Field &select, const JoinList &joins, const FieldList &conditions) const
+{
+    FieldList get;
+    get << select;
+    return this->select(get, joins, conditions);
+}
+
 QString Database::select(const Field &select, const Join &join, const Field &condition) const
 {
     JoinList joins;
