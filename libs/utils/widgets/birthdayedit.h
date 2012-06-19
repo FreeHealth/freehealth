@@ -37,7 +37,6 @@
 
 namespace Utils {
 
-
 /**
  * \class Utils::BirthDayEdit
  * \brief Replacement class for QDateEdit to better handle birthday entering
@@ -59,8 +58,7 @@ public:
     ~BirthDayEdit();
 
     QDate date() const;
-
-    void setDateFormats(QString formats);
+//    void setDateFormats(QString formats);
 
 private:
     void init(const QDate& date = QDate(), const QDate& maximumDate = QDate(), const QDate& minimumDate = QDate());
@@ -70,8 +68,9 @@ signals:
 
 public slots:
     virtual void clear();
-    void setDate(const QDate& date);
+    void setDisplayedDateString();
     void setDateString(const QString& dateString);
+    void setDate(const QDate &date);
 
 protected slots:
     void updateDisplayText();
@@ -80,7 +79,6 @@ private:
     QDate m_date;
     QDate m_maximumDate;
     QDate m_minimumDate;
-    QStringList m_dateFormatList;
 };
 
 } // end Utils
