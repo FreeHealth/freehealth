@@ -31,9 +31,11 @@
 #include "alertitemeditordialog.h"
 
 #include <coreplugin/icore.h>
+#include <coreplugin/iuser.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/constants_icons.h>
 
+#include <utils/log.h>
 #include <utils/global.h>
 #include <translationutils/constants.h>
 #include <translationutils/trans_current.h>
@@ -42,11 +44,13 @@
 #include <QEvent>
 #include <QAction>
 #include <QMenu>
+#include <QInputDialog>
 
 using namespace Alert;
 using namespace Trans::ConstantTranslations;
 
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
+static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 
 namespace {
 static QIcon getIcon(const AlertItem &item)
@@ -158,7 +162,7 @@ void StaticAlertToolButton::setAlertItem(const AlertItem &item)
 
 void StaticAlertToolButton::validateAlert()
 {
-    _item.validateAlertWithCurrentUser();
+    _item.validateAlertWithCurrentUserAndConfirmationDialog();
 }
 
 void StaticAlertToolButton::editAlert()
@@ -174,7 +178,31 @@ void StaticAlertToolButton::editAlert()
 
 void StaticAlertToolButton::overrideAlert()
 {
-    // TODO: code this
+    // TODO: improve the dialog by creating a specific AlertOverridingConfirmationDialog
+    bool yes = Utils::yesNoMessageBox(tr("Override alert"),
+                                      tr("Do you really want to override this alert ?"),
+                                      tr("By overriding an alert, you report your disagreement "
+                                         "with the alert. The alert will no longer be presented.\n"
+                                         "It is sometimes necessary to clarify your arguments."));
+    if (yes) {
+        QString comment;
+        if (_item.isOverrideRequiresUserComment()) {
+            bool ok;
+            comment = QInputDialog::getText(this, tr("Explain why you override this alert"),
+                                                 tr("Override comment"), QLineEdit::Normal,
+                                                 "", &ok);
+            if (!ok || comment.isEmpty())
+                return;
+        }
+
+        QString validator;
+        user() ? validator = user()->uuid() : validator = "UnknownUser";
+        if (!_item.validateAlert(validator, true, comment, QDateTime::currentDateTime())) {
+            LOG_ERROR("Unable to validate the static alert");
+        } else {
+            AlertCore::instance()->saveAlert(_item);
+        }
+    }
 }
 
 void StaticAlertToolButton::retranslateUi()
