@@ -90,19 +90,16 @@ bool Translators::setPathToTranslations(const QString & path)
 {
     if (QDir(path).exists()) {
         m_PathToTranslations = QDir::cleanPath(path);
-        if (WarnTranslatorsErrors) {
-            LOG_ERROR_FOR("Translators", Trans::ConstantTranslations::tkTr(Trans::Constants::SETTING_1_PATH_TO_2)
+        LOG_FOR("Translators", Trans::ConstantTranslations::tkTr(Trans::Constants::SETTING_1_PATH_TO_2)
                 .arg(Trans::ConstantTranslations::tkTr(Trans::Constants::TRANSLATORS_TEXT),
                      QDir::cleanPath(path)));
-        }
         return true;
-    } else {
-        if (WarnTranslatorsErrors) {
-            LOG_ERROR_FOR("Translators", Trans::ConstantTranslations::tkTr(Trans::Constants::PATH_1_DOESNOT_EXISTS)
-                      .arg(QDir::cleanPath(path)));
-        }
-        return false;
     }
+    if (WarnTranslatorsErrors) {
+        LOG_ERROR_FOR("Translators", Trans::ConstantTranslations::tkTr(Trans::Constants::PATH_1_DOESNOT_EXISTS)
+                      .arg(QDir::cleanPath(path)));
+    }
+    return false;
 }
 
 /** \brief Returns the path the actual translations */

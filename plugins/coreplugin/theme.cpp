@@ -75,7 +75,6 @@ ThemePrivate::ThemePrivate(QObject *parent, const int cacheSize)
     if (!parent)
         setParent(qApp);
     setObjectName("ThemePrivate");
-//    Log::instance()->addObjectWatcher(this);
     m_IconCache.setMaxCost(cacheSize);
 }
 
@@ -239,6 +238,7 @@ QPixmap ThemePrivate::splashScreenPixmap(const QString &fileName, const IconSize
     }
 
     // return themed splashscreen
+    LOG(tr("Using splash: %1").arg(m_AbsolutePath + "/pixmap/splashscreens/" + file));
     if (QFile(m_AbsolutePath + "/pixmap/splashscreens/" + file).exists())
         return QPixmap(m_AbsolutePath + "/pixmap/splashscreens/" + file);
     else
