@@ -133,6 +133,7 @@ public:
 
     void parseCommandLine()
     {
+        LOG_FOR("CommandLineParser", "Parsing command line");
         const QStringList &args = qApp->arguments();
         foreach(const QString &a, args) {
             QString k = a;
@@ -186,6 +187,7 @@ public:
         if (!value.value(CommandLine::CL_ExchangeInFile).isNull()) {
             QString file = value.value(CommandLine::CL_ExchangeInFile).toString();
             LOG_FOR("Core", QCoreApplication::translate("CommandLine", "Passing exchange in file : %1").arg(file));
+            file = QDir::cleanPath(file);
             if (QDir::isRelativePath(file)) {
                 file.prepend(qApp->applicationDirPath() + QDir::separator());
                 file = QDir::cleanPath(file);
@@ -196,6 +198,7 @@ public:
                 LOG_ERROR_FOR("Core", QCoreApplication::translate("CommandLine", "Passing %1 as exchange in file, but file does not exists.").arg(file));
             }
         }
+        LOG_FOR("CommandLineParser", "Command line parsed");
     }
 
     bool readInFileXml(const QString &file)
@@ -324,6 +327,9 @@ public:
 
     void feedPatientDatas(Core::Patient *patient)
     {
+        Q_ASSERT(patient);
+        if (!patient)
+            return;
         patient->setData(patient->index(0, IPatient::Uid),            value.value(CommandLine::CL_PatientUid));
         patient->setData(patient->index(0, IPatient::DateOfBirth),    value.value(CommandLine::CL_DateOfBirth));
         patient->setData(patient->index(0, IPatient::Height),         value.value(CommandLine::CL_Height));
