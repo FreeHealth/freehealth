@@ -297,7 +297,8 @@ AlertItem::~AlertItem()
 /** Store database identifiants. This part is protected and should only be used by Alert::Internal::AlertBase */
 void AlertItem::setDb(int ref, const QVariant &value)
 {
-    d->_db.insert(ref, value);
+    if (!value.toString().isEmpty())
+        d->_db.insert(ref, value);
 }
 
 /** Returns database identifiants. This part is protected and should only be used by Alert::Internal::AlertBase */
