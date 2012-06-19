@@ -142,6 +142,7 @@ public:
             if (QFileInfo(exfile).isRelative())
                 exfile.prepend(qApp->applicationDirPath() + QDir::separator());
             QString tmp;
+            exfile = QDir::cleanPath(exfile);
             if (QFile(exfile).exists())
                 tmp = Utils::readTextFile(exfile, Utils::DontWarnUser);
             //            LOG("Content of the exchange file : " + tmp);

@@ -80,7 +80,7 @@ public:
     };
 
     CommandLine();
-    ~ CommandLine();
+    ~CommandLine();
 
     QVariant value(int param, const QVariant &def = QVariant()) const;
     QString paramName(int param) const;
