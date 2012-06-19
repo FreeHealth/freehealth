@@ -289,6 +289,7 @@ AlertBase::AlertBase(QObject *parent) :
     addField(Table_ALERT, ALERT_CONDITION_TYPE, "COND_ID", FieldIsInteger);
     addField(Table_ALERT, ALERT_PRIORITY, "PRIOR", FieldIsInteger);
     addField(Table_ALERT, ALERT_OVERRIDEREQUIREUSERCOMMENT, "VRUC", FieldIsInteger);
+    addField(Table_ALERT, ALERT_MUSTBEREAD, "MBR", FieldIsInteger);
 
     addField(Table_ALERT, ALERT_LABELID, "LBL_LID", FieldIsInteger);
     addField(Table_ALERT, ALERT_CATEGORYLID, "CAT_LID", FieldIsInteger);
@@ -623,6 +624,7 @@ bool AlertBase::saveAlertItem(AlertItem &item)
     query.bindValue(Constants::ALERT_CONDITION_TYPE, QVariant());
     query.bindValue(Constants::ALERT_PRIORITY, item.priority());
     query.bindValue(Constants::ALERT_OVERRIDEREQUIREUSERCOMMENT, int(item.isOverrideRequiresUserComment()));
+    query.bindValue(Constants::ALERT_MUSTBEREAD, int(item.mustBeRead()));
     query.bindValue(Constants::ALERT_LABELID, item.db(LabelLID));
     query.bindValue(Constants::ALERT_CATEGORYLID, item.db(CategoryLID));
     query.bindValue(Constants::ALERT_DESCRIPTION_LABELID, item.db(DescrLID));
@@ -694,6 +696,7 @@ bool AlertBase::updateAlertItem(AlertItem &item)
             << Constants::ALERT_CONDITION_TYPE
             << Constants::ALERT_PRIORITY
             << Constants::ALERT_OVERRIDEREQUIREUSERCOMMENT
+            << Constants::ALERT_MUSTBEREAD
             << Constants::ALERT_LABELID
             << Constants::ALERT_CATEGORYLID
             << Constants::ALERT_DESCRIPTION_LABELID
@@ -723,6 +726,7 @@ bool AlertBase::updateAlertItem(AlertItem &item)
     query.bindValue(++i, QVariant());
     query.bindValue(++i, item.priority());
     query.bindValue(++i, int(item.isOverrideRequiresUserComment()));
+    query.bindValue(++i, int(item.mustBeRead()));
     query.bindValue(++i, item.db(LabelLID));
     query.bindValue(++i, item.db(CategoryLID));
     query.bindValue(++i, item.db(DescrLID));
@@ -1357,6 +1361,7 @@ QVector<AlertItem> AlertBase::getAlertItems(const AlertBaseQuery &query)
             item.setContentType(AlertItem::ContentType(query.value(Constants::ALERT_CONTENT_TYPE).toInt()));
             item.setPriority(AlertItem::Priority(query.value(Constants::ALERT_PRIORITY).toInt()));
             item.setOverrideRequiresUserComment(query.value(Constants::ALERT_OVERRIDEREQUIREUSERCOMMENT).toBool());
+            item.setMustBeRead(query.value(Constants::ALERT_MUSTBEREAD).toBool());
             item.setCreationDate(query.value(Constants::ALERT_CREATION_DATE).toDateTime());
             item.setLastUpdate(query.value(Constants::ALERT_LAST_UPDATE_DATE).toDateTime());
             item.setThemedIcon(query.value(Constants::ALERT_THEMED_ICON).toString());
@@ -1427,6 +1432,7 @@ AlertItem AlertBase::getAlertItemFromUuid(const QString &uuid)
             item.setContentType(AlertItem::ContentType(query.value(Constants::ALERT_CONTENT_TYPE).toInt()));
             item.setPriority(AlertItem::Priority(query.value(Constants::ALERT_PRIORITY).toInt()));
             item.setOverrideRequiresUserComment(query.value(Constants::ALERT_OVERRIDEREQUIREUSERCOMMENT).toBool());
+            item.setMustBeRead(query.value(Constants::ALERT_MUSTBEREAD).toBool());
             item.setCreationDate(query.value(Constants::ALERT_CREATION_DATE).toDateTime());
             item.setLastUpdate(query.value(Constants::ALERT_LAST_UPDATE_DATE).toDateTime());
             item.setThemedIcon(query.value(Constants::ALERT_THEMED_ICON).toString());

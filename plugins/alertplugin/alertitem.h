@@ -316,12 +316,14 @@ public:
     virtual ContentType contentType() const;
     virtual Priority priority() const;
     virtual bool isOverrideRequiresUserComment() const;
+    virtual bool mustBeRead() const;
     // TODO : virtual xxx condition() const = 0;
 
     virtual void setViewType(ViewType type);
     virtual void setContentType(ContentType content);
     virtual void setPriority(Priority priority);
     virtual void setOverrideRequiresUserComment(bool required);
+    virtual void setMustBeRead(bool mustberead);
     // TODO : virtual void setCondition(...);
 
     virtual QDateTime creationDate() const;

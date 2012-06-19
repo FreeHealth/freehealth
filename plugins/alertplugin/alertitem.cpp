@@ -82,6 +82,7 @@ public:
         ContentType,
         Priority,
         OverrideRequiresUserComment,
+        MustBeRead,
         StyleSheet
     };
     enum Tr {
@@ -95,6 +96,7 @@ public:
         addNonTranslatableExtraData(ContentType, "contentType");
         addNonTranslatableExtraData(Priority, "prior");
         addNonTranslatableExtraData(OverrideRequiresUserComment, "overrideComment");
+        addNonTranslatableExtraData(MustBeRead, "mustBeRead");
         addNonTranslatableExtraData(StyleSheet, "styleSheet");
         addTranslatableExtraData(Comment, "comment");
     }
@@ -118,7 +120,7 @@ class AlertItemPrivate : public Trans::MultiLingualClass<AlertValueBook>
 public:
     AlertItemPrivate(AlertItem *parent) :
         _id(-1),
-        _valid(true), _modified(false), _overrideRequiresUserComment(false),
+        _valid(true), _modified(false), _overrideRequiresUserComment(false), _mustBeRead(false),
         _viewType(AlertItem::StaticAlert),
         _contentType(AlertItem::ApplicationNotification),
         _priority(AlertItem::Medium),
@@ -196,6 +198,7 @@ public:
         _css = descr.data(AlertXmlDescription::StyleSheet).toString();
         _valid = descr.data(AlertXmlDescription::Validity).toInt();
         _overrideRequiresUserComment = descr.data(AlertXmlDescription::OverrideRequiresUserComment).toInt();
+        _mustBeRead = descr.data(AlertXmlDescription::MustBeRead).toInt();
         viewTypeFromXml(descr.data(AlertXmlDescription::ViewType).toString());
         contentTypeFromXml(descr.data(AlertXmlDescription::ContentType).toString());
         priorityFromXml(descr.data(AlertXmlDescription::Priority).toString());
@@ -226,7 +229,7 @@ public:
 public:
     QString _uid, _pass, _themedIcon, _css, _extraXml;
     int _id;
-    bool _valid, _modified, _overrideRequiresUserComment;
+    bool _valid, _modified, _overrideRequiresUserComment, _mustBeRead;
     AlertItem::ViewType _viewType;
     AlertItem::ContentType _contentType;
     AlertItem::Priority _priority;
@@ -547,6 +550,12 @@ bool AlertItem::isOverrideRequiresUserComment() const
     return d->_overrideRequiresUserComment;
 }
 
+/** When alert is included in a dynamic alert dialog with other alerts, setting the mustBeRead state ensure that user read the alert. */
+bool AlertItem::mustBeRead() const
+{
+    return d->_mustBeRead;
+}
+
 // TODO : xxx condition() const = 0;
 
 void AlertItem::setViewType(AlertItem::ViewType type)
@@ -567,6 +576,12 @@ void AlertItem::setPriority(AlertItem::Priority priority)
 void AlertItem::setOverrideRequiresUserComment(bool required)
 {
     d->_overrideRequiresUserComment = required;
+}
+
+/** When alert is included in a dynamic alert dialog with other alerts, setting the mustBeRead state ensure that user read the alert. */
+void AlertItem::setMustBeRead(bool mustberead)
+{
+    d->_mustBeRead = mustberead;
 }
 
 QDateTime AlertItem::creationDate() const
@@ -988,6 +1003,7 @@ QString AlertItem::toXml() const
     d->descr.setData(Internal::AlertXmlDescription::ContentType, d->contentTypeToXml());
     d->descr.setData(Internal::AlertXmlDescription::Priority, d->priorityToXml());
     d->descr.setData(Internal::AlertXmlDescription::OverrideRequiresUserComment, d->_overrideRequiresUserComment);
+    d->descr.setData(Internal::AlertXmlDescription::MustBeRead, d->_mustBeRead);
     d->descr.setData(Internal::AlertXmlDescription::StyleSheet, d->_css);
     d->descr.setData(Internal::AlertXmlDescription::GeneralIcon, d->_themedIcon);
 
