@@ -24,13 +24,81 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
+/**
+  \class Alert::DynamicAlertResult
+  Contains the result of a dynamic dialog:
+    - user accepted,
+    - override & user override comment,
+    - read alerts (all view alerts are logged)
+    - an AlertValidation to ease the validation process
+*/
+
+/**
+  \fn Alert::DynamicAlertResult::DynamicAlertResult()
+  Construct an empty invalid result (not accepted, not overridden);
+*/
+
+/**
+  \fn void Alert::DynamicAlertResult::setOverriden(bool override)
+  Define the user override status.
+*/
+
+/**
+  \fn bool Alert::DynamicAlertResult::isOverridenByUser() const
+  Return the user override status.
+*/
+
+/**
+  \fn void Alert::DynamicAlertResult::setOverrideUserComment(const QString &comment)
+  Define the user override comment.
+*/
+
+/**
+  \fn QString Alert::DynamicAlertResult::overrideUserComment() const
+  Return the user override comment.
+*/
+
+/**
+  \fn void Alert::DynamicAlertResult::setAccepted(bool accepted)
+  Define the status of the DynamicAlertDialog to accepted.
+*/
+
+/**
+  \fn bool Alert::DynamicAlertResult::isAccepted() const
+  Return true if the dialogue was accepted.
+*/
+
+/**
+  \fn void Alert::DynamicAlertResult::setReadAlertUid(const QStringList &uids)
+  Log all read alerts.
+*/
+
+/**
+  \fn QStringList Alert::DynamicAlertResult::readAlertsUid() const
+  Return all read alerts. If a dynamic dialog is started with more than one alert, all alerts
+  visualized by the user are loggued.
+*/
+
+/**
+  \fn void Alert::DynamicAlertResult::setAlertValidation(const AlertValidation &validation)
+  Set the Alert::AlertValidation according to the dynamic dialog result.
+*/
+
+/**
+  \fn AlertValidation Alert::DynamicAlertResult::alertValidation() const
+  Return the Alert::AlertValidation suitable to the user actions.
+*/
+
 #include "dynamicalertdialog.h"
 #include "alertitem.h"
+#include "alertcore.h"
 #include "ui_dynamicalertdialog.h"
 #include "ui_dynamicalertdialogoverridingcomment.h"
 
 #include <coreplugin/icore.h>
+#include <coreplugin/iuser.h>
 #include <coreplugin/itheme.h>
+#include <coreplugin/ipatient.h>
 #include <coreplugin/constants_icons.h>
 #include <coreplugin/imainwindow.h>
 
@@ -49,6 +117,8 @@ using namespace Alert;
 using namespace Trans::ConstantTranslations;
 
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
+static inline Core::IUser *user() {return Core::ICore::instance()->user();}
+static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 
 DynamicAlertDialog::DynamicAlertDialog(const QList<AlertItem> &items,
                                        const QString &themedIcon,
@@ -99,7 +169,7 @@ DynamicAlertDialog::DynamicAlertDialog(const QList<AlertItem> &items,
     if (items.count()==1) {
         // No tabwidget
         const AlertItem &alert = items.at(0);
-        QVBoxLayout *central = new QVBoxLayout(this);
+        QVBoxLayout *central = new QVBoxLayout;
 
         if (!alert.category().isEmpty()) {
             QLabel *label = new QLabel(this);
@@ -260,6 +330,8 @@ DynamicAlertDialog::~DynamicAlertDialog()
     if (cui) delete cui; cui=0;
 }
 
+// TODO: create a done(int r) and check if alert tagged with mustBeRead() was visualized by the user.
+
 void DynamicAlertDialog::override()
 {
     if (!_overrideCommentRequired) {
@@ -283,31 +355,108 @@ void DynamicAlertDialog::validateUserOverridingComment()
         reject();
 }
 
+QString DynamicAlertDialog::overridingComment() const
+{
+    if (cui)
+        return cui->overridingComment->toPlainText();
+    return QString::null;
+}
+
 void DynamicAlertDialog::changeEvent(QEvent *e)
 {
     QDialog::changeEvent(e);
 }
 
+/** Execute a dynamic alert dialog with the alerts \e item, using a general icon \e themedIcon.  Whatever is the result of the dialog, alerts are not modified. */
 DynamicAlertResult DynamicAlertDialog::executeDynamicAlert(const AlertItem &item, const QString &themedIcon, QWidget *parent)
 {
     QList<QAbstractButton*> noButtons;
     return executeDynamicAlert(QList<AlertItem>() << item, noButtons, themedIcon, parent);
 }
 
+/** Execute a dynamic alert dialog with a list of alerts \e items, using a general icon \e themedIcon.  Whatever is the result of the dialog, alerts are not modified. */
 DynamicAlertResult DynamicAlertDialog::executeDynamicAlert(const QList<AlertItem> &items, const QString &themedIcon, QWidget *parent)
 {
     QList<QAbstractButton*> noButtons;
     return executeDynamicAlert(items, noButtons, themedIcon, parent);
 }
 
+/** Execute a dynamic alert dialog with a list of alerts \e items, including extra-buttons \e buttons, using a general icon \e themedIcon. Whatever is the result of the dialog, alerts are not modified. */
 DynamicAlertResult DynamicAlertDialog::executeDynamicAlert(const QList<AlertItem> &items, const QList<QAbstractButton*> &buttons, const QString &themedIcon, QWidget *parent)
 {
     DynamicAlertResult result;
     DynamicAlertDialog dlg(items, themedIcon, buttons, parent);  // theme()->icon(themedIcon, Core::ITheme::BigIcon)
     if (dlg.exec()==QDialog::Accepted) {
-
+        result.setAccepted(true);
     } else {
-
+        result.setAccepted(false);
+        result.setOverriden(true);
+        result.setOverrideUserComment(dlg.overridingComment());
     }
     return result;
+}
+
+/**
+  Apply the dynamic alert dialog result to alerts \e items. \n
+  Alerts are modified in the list and Alert::AlertCore is informed of the modification.
+  \sa Alert::AlertCore::updateAlert()
+*/
+bool DynamicAlertDialog::applyResultToAlerts(AlertItem &item, const DynamicAlertResult &result)
+{
+    AlertValidation val;
+    val.setAccepted(result.isAccepted());
+    val.setOverriden(result.isOverridenByUser());
+    val.setUserComment(result.overrideUserComment());
+    val.setDateOfValidation(QDateTime::currentDateTime());
+    if (user())
+        val.setValidatorUuid(user()->uuid());
+    else if (Utils::isDebugCompilation())
+        val.setValidatorUuid("user1");
+
+    // Check alert's relations to find the validatedUid
+    if (item.relations().count() > 0) {
+        const AlertRelation &rel = item.relationAt(0);
+        switch (rel.relatedTo()) {
+        case AlertRelation::RelatedToPatient:
+        case AlertRelation::RelatedToAllPatients:
+            if (patient())
+                val.setValidatedUuid(patient()->uuid());
+            else if (Utils::isDebugCompilation())
+                val.setValidatedUuid("patient1");
+            break;
+        case AlertRelation::RelatedToFamily: break;
+        case AlertRelation::RelatedToUser:
+        case AlertRelation::RelatedToAllUsers:
+            if (user())
+                val.setValidatedUuid(user()->uuid());
+            else if (Utils::isDebugCompilation())
+                val.setValidatedUuid("user1");
+            break;
+        case AlertRelation::RelatedToUserGroup: break;
+        case AlertRelation::RelatedToApplication:
+            val.setValidatedUuid(qApp->applicationName());
+            break;
+        }
+        item.addValidation(val);
+    }
+
+    // inform the core
+    AlertCore::instance()->updateAlert(item);
+    return true;
+}
+
+/**
+  Apply the dynamic alert dialog result to alerts \e items. \n
+  Alerts are modified in the list and Alert::AlertCore is informed of the modification.
+  \sa Alert::AlertCore::updateAlert()
+*/
+bool DynamicAlertDialog::applyResultToAlerts(QList<AlertItem> &items, const DynamicAlertResult &result)
+{
+    bool ok = true;
+    for(int i=0; i < items.count(); ++i) {
+        AlertItem &item = items[i];
+        if (!applyResultToAlerts(item, result))
+            ok = false;
+    }
+    return ok;
 }
