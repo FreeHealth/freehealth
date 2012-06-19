@@ -26,6 +26,7 @@
  ***************************************************************************/
 #include "birthdayedit.h"
 #include <QDebug>
+#include <QToolButton>
 
 #include <translationutils/constants.h>
 #include <utils/datevalidator.h>
@@ -33,13 +34,13 @@
 using namespace Utils;
 
 BirthDayEdit::BirthDayEdit(QWidget *parent) :
-    QLineEdit(parent)
+    QButtonLineEdit(parent)
 {
     init();
 }
 
 BirthDayEdit::BirthDayEdit(const QDate &date, QWidget *parent) :
-    QLineEdit(parent)
+    QButtonLineEdit(parent)
 {
     init(date);
 }
@@ -81,7 +82,8 @@ void BirthDayEdit::setDisplayedDateString()
 /** \brief sets the internal date of the widget to the given string
  *
  * Tries to parse the string using QDate::fromString. If it is an invalid date string,
- * the date field is set to NULL.
+ * the date field is set to NULL. This method is called when a valid date string was
+ * entered and the user presses Enter or the widget looses focus.
  */
 void BirthDayEdit::setDateString(const QString& dateString)
 {
@@ -102,6 +104,7 @@ void BirthDayEdit::setDateString(const QString& dateString)
         if (m_date != oldDate)
             emit dateChanged(m_date);
         updateDisplayText();
+        setRightButton(new QToolButton());
         break;
     }
         /* FIXME: due to QLineEdit not firing editingFinished() when the QValidator returns
@@ -129,7 +132,6 @@ void BirthDayEdit::updateDisplayText()
         qDebug() << "DATEFORMAT_FOR_EDITOR:" << Trans::Constants::DATEFORMAT_FOR_EDITOR;
     } else {
         // no valid date saved, maybe NULL
-        setText("");
         clear();
     }
 }
@@ -145,4 +147,5 @@ void BirthDayEdit::init(const QDate& date, const QDate& maximumDate, const QDate
     setValidator(new DateValidator(this));
 
     connect(this, SIGNAL(editingFinished()), this, SLOT(setDisplayedDateString()));
+//    connect(this, SIGNAL(editingFinished()), this, SLOT(updateDisplayText()));
 }

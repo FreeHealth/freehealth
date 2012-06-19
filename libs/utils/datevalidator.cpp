@@ -12,13 +12,12 @@ DateValidator::DateValidator(QObject *parent) :
 
     // split localized dateFormat string and put the parts a separated QStringList
     //: this is a comma separated list of formatStrings used by QDate::fromString();
-    //:
-    m_dateFormatList = tr("ddMMyy,ddMMyyyy").trimmed().split(",", QString::SkipEmptyParts);
+    m_dateFormatList = tr("ddMMyy,ddMMyyyy").simplified().split(",", QString::SkipEmptyParts);
     m_lastValidFormat = QString();
 
-    // always use the default formats
-    m_dateFormatList.append(QLocale().dateFormat(QLocale::ShortFormat));
-    m_dateFormatList.append(QLocale().dateFormat(QLocale::NarrowFormat));
+    // always also use the default formats
+    m_dateFormatList.append(locale().dateFormat(QLocale::ShortFormat));
+    m_dateFormatList.append(locale().dateFormat(QLocale::NarrowFormat));
 
     // and then the FMF editor default format
     m_dateFormatList.append(Trans::Constants::DATEFORMAT_FOR_EDITOR);
@@ -28,7 +27,7 @@ DateValidator::DateValidator(QObject *parent) :
  *
  * The function checks if the input string matches a string
  * in the format list. This list that is set up with FMF
- * defaults, locale defaults, system locales and user defined settings.
+ * defaults, system locale defaults and user defined settings.
  */
 QValidator::State DateValidator::validate(QString &input, int &pos) const
 {
@@ -56,7 +55,9 @@ QValidator::State DateValidator::validate(QString &input, int &pos) const
     return QValidator::Invalid;
 }
 
-/** \brief returns formatString used in the last successful validation */
+/**
+ * \brief returns formatString that was used when the input string can
+ * be converted in a QDate */
 QString DateValidator::matchedFormat(QString & input) const
 {
     foreach(QString format, m_dateFormatList) {
@@ -69,5 +70,6 @@ QString DateValidator::matchedFormat(QString & input) const
 
 void DateValidator::fixup(QString &input) const
 {
-    input = input.trimmed();
+//    input = input.simplified();
+    input.clear();
 }

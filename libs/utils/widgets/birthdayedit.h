@@ -27,7 +27,7 @@
 #ifndef BIRTHDAYEDIT_H
 #define BIRTHDAYEDIT_H
 
-#include <QLineEdit>
+#include "qbuttonlineedit.h"
 #include <utils/global_exporter.h>
 
 #include <QDate>
@@ -46,7 +46,7 @@ namespace Utils {
  * the available masks (user provided, system QLocale()->dateFormat(QLocale::ShortFormat),
  * FMF provided). When the focus is lost, it displays the date in the standard way.
  */
-class UTILS_EXPORT BirthDayEdit : public QLineEdit
+class UTILS_EXPORT BirthDayEdit : public QButtonLineEdit
 {
     Q_OBJECT
     Q_PROPERTY(QDate date READ date WRITE setDate NOTIFY dateChanged USER true)
