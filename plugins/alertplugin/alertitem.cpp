@@ -741,7 +741,7 @@ void AlertItem::addScript(const AlertScript &script)
   The new state of the alert is not automatically saved into database, but
   the core is informed of this modification. \sa Alert::AlertCore::updateAlert()
 */
-bool AlertItem::validateAlertWithCurrentUser()
+bool AlertItem::validateAlertWithCurrentUserAndConfirmationDialog()
 {
     bool yes = Utils::yesNoMessageBox(
                 QApplication::translate("Alert::AlertItem", "Alert validation."),
@@ -752,54 +752,69 @@ bool AlertItem::validateAlertWithCurrentUser()
                 .arg(label()), "",
                 QApplication::translate("Alert::AlertItem", "Alert validation."));
     if (yes) {
-        // Create the validation
-        AlertValidation val;
-        val.setDateOfValidation(QDateTime::currentDateTime());
-        if (user())
-            val.setValidatorUuid(user()->uuid());
-        else
-            val.setValidatorUuid("UnknownUser");
-
-        // Get validated
-        if (d->_relations.count()  > 0) {
-            const AlertRelation &rel = d->_relations.at(0);
-            switch (rel.relatedTo())
-            {
-            case AlertRelation::RelatedToPatient:
-            case AlertRelation::RelatedToAllPatients:
-            {
-                if (patient())
-                    val.setValidatedUuid(patient()->uuid());
-                else if (Utils::isDebugCompilation())
-                    val.setValidatedUuid("patient1");
-                break;
-            }
-            case AlertRelation::RelatedToFamily: // TODO: manage family
-                break;
-            case AlertRelation::RelatedToUser:
-            case AlertRelation::RelatedToAllUsers:
-            {
-                if (user())
-                    val.setValidatedUuid(user()->uuid());
-                else if (Utils::isDebugCompilation())
-                    val.setValidatedUuid("user1");
-                break;
-            }
-            case AlertRelation::RelatedToUserGroup: // TODO: manage user groups
-                break;
-            case AlertRelation::RelatedToApplication:
-            {
-                val.setValidatedUuid(qApp->applicationName().toLower());
-                break;
-            }
-            }
-        }
-        addValidation(val);
-        // inform the core
-        AlertCore::instance()->updateAlert(*this);
-        return true;
+        QString validator;
+        user() ? validator = user()->uuid() : validator = "UnknownUser";
+        return validateAlert(validator, false, "", QDateTime::currentDateTime());
     }
     return false;
+}
+
+/**
+  Validate an Alert::AlertItem with the \e validatorUid, define override state with \e override,
+  define the \e overrideComment, at the \e dateOfValidation.
+  Return true if the alert was validated.\n
+  The new state of the alert is not automatically saved into database, but
+  the core is informed of this modification. \sa Alert::AlertCore::updateAlert()
+*/
+bool AlertItem::validateAlert(const QString &validatorUid, bool override, const QString overrideComment, const QDateTime &dateOfValidation)
+{
+    // Create the validation
+    AlertValidation val;
+    val.setDateOfValidation(QDateTime::currentDateTime());
+    val.setValidatorUuid(validatorUid);
+    val.setAccepted(!override);
+    val.setOverriden(override);
+    val.setUserComment(overrideComment);
+    val.setDateOfValidation(dateOfValidation);
+
+    // Get validated
+    if (d->_relations.count()  > 0) {
+        const AlertRelation &rel = d->_relations.at(0);
+        switch (rel.relatedTo())
+        {
+        case AlertRelation::RelatedToPatient:
+        case AlertRelation::RelatedToAllPatients:
+        {
+            if (patient())
+                val.setValidatedUuid(patient()->uuid());
+            else if (Utils::isDebugCompilation())
+                val.setValidatedUuid("patient1");
+            break;
+        }
+        case AlertRelation::RelatedToFamily: // TODO: manage family
+            break;
+        case AlertRelation::RelatedToUser:
+        case AlertRelation::RelatedToAllUsers:
+        {
+            if (user())
+                val.setValidatedUuid(user()->uuid());
+            else if (Utils::isDebugCompilation())
+                val.setValidatedUuid("user1");
+            break;
+        }
+        case AlertRelation::RelatedToUserGroup: // TODO: manage user groups
+            break;
+        case AlertRelation::RelatedToApplication:
+        {
+            val.setValidatedUuid(qApp->applicationName().toLower());
+            break;
+        }
+        }
+    }
+    addValidation(val);
+    // inform the core
+    AlertCore::instance()->updateAlert(*this);
+    return true;
 }
 
 /** Return true if the alert was validated by any user. */

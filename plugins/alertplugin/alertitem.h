@@ -357,7 +357,8 @@ public:
     virtual AlertScript &scriptAt(int id) const;
     virtual void addScript(const AlertScript &script);
 
-    bool validateAlertWithCurrentUser();
+    bool validateAlertWithCurrentUserAndConfirmationDialog();
+    bool validateAlert(const QString &validatorUid, bool override, const QString overrideComment, const QDateTime &dateOfValidation);
     bool isUserValidated() const;
     virtual void clearValidations();
     virtual AlertValidation &validation(int id) const;
