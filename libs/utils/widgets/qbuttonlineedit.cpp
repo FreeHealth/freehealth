@@ -96,6 +96,8 @@ void QButtonLineEdit::setDelayedSignals(bool state)
  */
 void QButtonLineEdit::setLeftButton(QToolButton *button)
 {
+    if(!button)
+        return;
     button->setParent(this);
     m_leftButton = button;
     m_leftButton->setStyleSheet("QToolButton { border: none; padding: 0 0 0 2px; }");
@@ -122,6 +124,8 @@ void QButtonLineEdit::setLeftButton(QToolButton *button)
 */
 void QButtonLineEdit::setRightButton(QToolButton * button)
 {
+    if(!button)
+        return;
     button->setParent(this);
     m_rightButton = button;
     m_rightButton->setStyleSheet("QToolButton { border: none; padding: 0px; }");
