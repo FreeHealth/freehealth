@@ -581,9 +581,9 @@ bool AlertBase::saveAlertItem(AlertItem &item)
         } else {
             LOG_QUERY_ERROR(query);
         }
-        if (item.db(ItemId).isValid())
-            return updateAlertItem(item);
     }
+    if (item.db(ItemId).isValid())
+        return updateAlertItem(item);
 
     database().transaction();
     if (!saveItemRelations(item)) {
@@ -652,7 +652,6 @@ bool AlertBase::updateAlertItem(AlertItem &item)
 {
     if (!connectDatabase(Constants::DB_NAME, __LINE__))
         return false;
-
     if (!item.db(ItemId).isValid())
         return false;
 
@@ -966,7 +965,7 @@ bool AlertBase::saveItemValidations(AlertItem &item)
         id = item.db(ValidationId).toInt();
     }
     QSqlQuery query(database());
-    for(int i=0; i<item.validations().count(); ++i) {
+    for(int i=0; i < item.validations().count(); ++i) {
         AlertValidation &validation = item.validationAt(i);
         if (validation.id() == -1) {
             // save validation
@@ -1344,16 +1343,16 @@ QVector<AlertItem> AlertBase::getAlertItems(const AlertBaseQuery &query)
     if (query.exec(req)) {
         while (query.next()) {
             AlertItem item;
-            item.setDb(ItemId, query.value(Constants::ALERT_ID).toInt());
-            item.setDb(RelatedId, query.value(Constants::ALERT_REL_ID).toInt());
-            item.setDb(CategoryUid, query.value(Constants::ALERT_CATEGORY_UID).toInt());
-            item.setDb(ScriptId, query.value(Constants::ALERT_SID).toInt());
-            item.setDb(ValidationId, query.value(Constants::ALERT_VAL_ID).toInt());
-            item.setDb(TimingId, query.value(Constants::ALERT_TIM_ID).toInt());
-            item.setDb(LabelLID, query.value(Constants::ALERT_LABELID).toInt());
-            item.setDb(CategoryLID, query.value(Constants::ALERT_CATEGORYLID).toInt());
-            item.setDb(DescrLID, query.value(Constants::ALERT_DESCRIPTION_LABELID).toInt());
-            item.setDb(CommentLID, query.value(Constants::ALERT_COMMENT_LABELID).toInt());
+            item.setDb(ItemId, query.value(Constants::ALERT_ID));
+            item.setDb(RelatedId, query.value(Constants::ALERT_REL_ID));
+            item.setDb(CategoryUid, query.value(Constants::ALERT_CATEGORY_UID));
+            item.setDb(ScriptId, query.value(Constants::ALERT_SID));
+            item.setDb(ValidationId, query.value(Constants::ALERT_VAL_ID));
+            item.setDb(TimingId, query.value(Constants::ALERT_TIM_ID));
+            item.setDb(LabelLID, query.value(Constants::ALERT_LABELID));
+            item.setDb(CategoryLID, query.value(Constants::ALERT_CATEGORYLID));
+            item.setDb(DescrLID, query.value(Constants::ALERT_DESCRIPTION_LABELID));
+            item.setDb(CommentLID, query.value(Constants::ALERT_COMMENT_LABELID));
             item.setUuid(query.value(Constants::ALERT_UID).toString());
             item.setValidity(query.value(Constants::ALERT_ISVALID).toBool());
             item.setCryptedPassword(query.value(Constants::ALERT_CRYPTED_PASSWORD).toString());
@@ -1416,16 +1415,16 @@ AlertItem AlertBase::getAlertItemFromUuid(const QString &uuid)
     QSqlQuery query(database());
     if (query.exec(select(Constants::Table_ALERT, where))) {
         if (query.next()) {
-            item.setDb(ItemId, query.value(Constants::ALERT_ID).toInt());
-            item.setDb(RelatedId, query.value(Constants::ALERT_REL_ID).toInt());
-            item.setDb(CategoryUid, query.value(Constants::ALERT_CATEGORY_UID).toInt());
-            item.setDb(ScriptId, query.value(Constants::ALERT_SID).toInt());
-            item.setDb(ValidationId, query.value(Constants::ALERT_VAL_ID).toInt());
-            item.setDb(TimingId, query.value(Constants::ALERT_TIM_ID).toInt());
-            item.setDb(LabelLID, query.value(Constants::ALERT_LABELID).toInt());
-            item.setDb(CategoryLID, query.value(Constants::ALERT_CATEGORYLID).toInt());
-            item.setDb(DescrLID, query.value(Constants::ALERT_DESCRIPTION_LABELID).toInt());
-            item.setDb(CommentLID, query.value(Constants::ALERT_COMMENT_LABELID).toInt());
+            item.setDb(ItemId, query.value(Constants::ALERT_ID));
+            item.setDb(RelatedId, query.value(Constants::ALERT_REL_ID));
+            item.setDb(CategoryUid, query.value(Constants::ALERT_CATEGORY_UID));
+            item.setDb(ScriptId, query.value(Constants::ALERT_SID));
+            item.setDb(ValidationId, query.value(Constants::ALERT_VAL_ID));
+            item.setDb(TimingId, query.value(Constants::ALERT_TIM_ID));
+            item.setDb(LabelLID, query.value(Constants::ALERT_LABELID));
+            item.setDb(CategoryLID, query.value(Constants::ALERT_CATEGORYLID));
+            item.setDb(DescrLID, query.value(Constants::ALERT_DESCRIPTION_LABELID));
+            item.setDb(CommentLID, query.value(Constants::ALERT_COMMENT_LABELID));
             item.setValidity(query.value(Constants::ALERT_ISVALID).toBool());
             item.setCryptedPassword(query.value(Constants::ALERT_CRYPTED_PASSWORD).toString());
             item.setViewType(AlertItem::ViewType(query.value(Constants::ALERT_VIEW_TYPE).toInt()));
