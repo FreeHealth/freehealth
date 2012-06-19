@@ -61,6 +61,16 @@
         <translation>Identité</translation>
     </message>
     <message>
+        <location filename="../../libs/translationutils/trans_menu.h" line="62"/>
+        <source>&amp;Open...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_menu.h" line="64"/>
+        <source>Save &amp;as...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../libs/translationutils/trans_menu.h" line="75"/>
         <source>Open a prescription</source>
         <translation>Ouvrir une prescription</translation>
@@ -414,19 +424,9 @@
         <translation>&amp;Nouveau</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="62"/>
-        <source>&amp;Open</source>
-        <translation>&amp;Ouvrir</translation>
-    </message>
-    <message>
         <location filename="../../libs/translationutils/trans_menu.h" line="63"/>
         <source>&amp;Save</source>
         <translation>&amp;Sauvegarder</translation>
-    </message>
-    <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="64"/>
-        <source>Save &amp;as</source>
-        <translation>Sauvegarder &amp;sous</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_menu.h" line="65"/>
@@ -2559,24 +2559,24 @@ Text Align Justify shortcut key : Mac specific</extracomment>
         <translation>Tous les autres langages</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constants.h" line="49"/>
+        <location filename="../../libs/translationutils/constants.h" line="50"/>
         <source>MM dd yyyy</source>
         <extracomment>This date format will be used in every QDateEdit only</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constants.h" line="50"/>
+        <location filename="../../libs/translationutils/constants.h" line="51"/>
         <source>MM-dd-yyyy</source>
         <translation>dd-MM-yyyy</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constants.h" line="53"/>
+        <location filename="../../libs/translationutils/constants.h" line="54"/>
         <source>MM dd yyyy hh:mm</source>
         <extracomment>This date time format will be used in every QDateTimeEdit only</extracomment>
         <translation>dd MM yyyy hh:mm</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constants.h" line="56"/>
+        <location filename="../../libs/translationutils/constants.h" line="57"/>
         <source>hh:mm</source>
         <extracomment>This time format will be used in every QTimeEdit only</extracomment>
         <translation></translation>
