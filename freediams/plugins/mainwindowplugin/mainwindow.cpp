@@ -153,13 +153,13 @@ public:
                 QString encoded = tmp.mid( begin, end - begin );
                 io.prescriptionFromXml(drugModel(), QByteArray::fromBase64(encoded.toAscii()));
             } else if (tmp.contains("DrugsInteractionsEncodedPrescription:")) {
-                // TODO: Manage wrong file encoding */
+                // TODO: Manage wrong file encoding
                 int begin = tmp.indexOf("DrugsInteractionsEncodedPrescription:") + QString("DrugsInteractionsEncodedPrescription:").length();
                 int end = tmp.indexOf("\"", begin);
                 QString encoded = tmp.mid( begin, end - begin );
                 io.prescriptionFromXml(drugModel(), QByteArray::fromBase64(encoded.toAscii()));
             } else if (tmp.startsWith("<?xml") && tmp.contains("<FreeDiams>", Qt::CaseInsensitive) && tmp.contains("</FreeDiams>", Qt::CaseInsensitive)) {
-                // TODO: Read patients datas ? */
+                // TODO: Read patients datas ?
                 io.prescriptionFromXml(drugModel(), tmp);
             } else {
                 return false;
@@ -240,7 +240,7 @@ static bool transmitDosage()
 {
     if (!Utils::isDebugCompilation()) {
         LOG_FOR("Core", QCoreApplication::translate("MainWindow", "Preparing dosage transmission"));
-        // TODO: code here */
+        // TODO: code here
 //        DrugsDB::DrugsIO::instance()->startsDosageTransmission();
     }
     return true;
@@ -365,7 +365,7 @@ void MainWindow::extensionsInitialized()
     }
 
     // Disable some actions when starting as medintux plugin
-    // TODO: this must disappear */
+    // TODO: this must disappear
     if (commandLine()->value(Core::CommandLine::CL_MedinTux).toBool()) {
         this->aNew->setEnabled(false);
         this->aSave->setEnabled(false);
@@ -505,7 +505,7 @@ void MainWindow::refreshPatient()
 void MainWindow::updateIconBadgeOnMacOs()
 {
 #ifdef Q_OS_MAC
-    // TODO: code here : move this in the interactionmanager; result or alert  ? */
+    // TODO: code here : move this in the interactionmanager; result or alert  ?
 //    int n = drugModel()->interactionsManager()->getAllInteractionsFound().count();
 //    if (n > 0) {
 //        Utils::MacOs::setIconBadgeLabel(QString::number(n));
