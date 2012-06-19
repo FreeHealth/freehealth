@@ -184,14 +184,13 @@ bool Translators::addNewTranslator(const QString & fileMask, bool fromDefaultPat
             if (WarnTranslatorsErrors) {
                 LOG(tr("Add Translator %1.").arg(file.fileName() + "_" + lang));
             }
-            return true;
         }
-    }
-    else if (WarnTranslatorsErrors) {
-        LOG(tr("WARNING: %1 can not be loaded or is already loaded.").arg(file.absoluteFilePath() + "_" + lang));
+        return true;
     }
 
-    // something gone wrong so clean and exit the member
+    if (WarnTranslatorsErrors) {
+        LOG_ERROR(tr("WARNING: %1 can not be loaded or is already loaded.").arg(file.absoluteFilePath() + "_" + lang));
+    }
     delete t;
     return false;
 }
