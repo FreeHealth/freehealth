@@ -72,6 +72,7 @@ public:
     QVector<AlertItem> getAlertItemForCurrentPatient() const;
     QVector<AlertItem> getAlertItemForCurrentApplication() const;
     bool saveAlert(AlertItem &item);
+    bool saveAlerts(QList<AlertItem> &items);
 
     // Executers
     bool checkAlerts(AlertsToCheck check);

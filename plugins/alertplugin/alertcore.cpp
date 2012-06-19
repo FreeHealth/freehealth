@@ -150,6 +150,18 @@ bool AlertCore::saveAlert(AlertItem &item)
     return d->m_alertBase->saveAlertItem(item);
 }
 
+/** Save the Alert::AlertItem list \e items into the database and update some of its values. All the items will be modified in the list. */
+bool AlertCore::saveAlerts(QList<AlertItem> &items)
+{
+    bool ok = true;
+    for(int i=0; i < items.count(); ++i) {
+        AlertItem &item = items[i];
+        if (!d->m_alertBase->saveAlertItem(item))
+            ok = false;
+    }
+    return ok;
+}
+
 /**
   Check all database recorded alerts for the current patient,
   the current user and the current application.\n
@@ -195,9 +207,11 @@ bool AlertCore::registerAlert(const AlertItem &item)
 */
 bool AlertCore::updateAlert(const AlertItem &item)
 {
-    if (item.viewType() == AlertItem::DynamicAlert && !item.isUserValidated() && item.isValid()) {
+    if (item.viewType() == AlertItem::DynamicAlert) {
+        if (item.isUserValidated() || !item.isValid())
+            return true;
         DynamicAlertDialog::executeDynamicAlert(item);
-    } else {
+    } else if (item.viewType() == AlertItem::StaticAlert) {
         // Get static place holders
         QList<Alert::IAlertPlaceHolder*> placeHolders = pluginManager()->getObjects<Alert::IAlertPlaceHolder>();
         foreach(Alert::IAlertPlaceHolder *ph, placeHolders) {
@@ -237,10 +251,10 @@ void AlertCore::processAlerts(const QVector<AlertItem> &alerts)
         }
         if (!checked)
             continue;
-        if (!item.isValid() || item.isUserValidated())
-            continue;
 
         if (item.viewType() == AlertItem::DynamicAlert) {
+            if (!item.isValid() || item.isUserValidated())
+                continue;
             dynamics << item;
         } else {
             foreach(Alert::IAlertPlaceHolder *ph, placeHolders) {
@@ -250,7 +264,10 @@ void AlertCore::processAlerts(const QVector<AlertItem> &alerts)
     }
 
     if (!dynamics.isEmpty()) {
-        DynamicAlertDialog::executeDynamicAlert(dynamics);
+        DynamicAlertResult result = DynamicAlertDialog::executeDynamicAlert(dynamics);
+        DynamicAlertDialog::applyResultToAlerts(dynamics, result);
+        if (!saveAlerts(dynamics))
+            LOG_ERROR("Unable to save validated dynamic alerts");
     }
 }
 
@@ -261,6 +278,7 @@ void AlertCore::postCoreInitialization()
     QDateTime expiration = QDateTime::currentDateTime().addSecs(60*60*24);
 
     AlertItem item = d->m_alertBase->createVirtualItem();
+    item.setThemedIcon("identity.png");
     item.setViewType(AlertItem::StaticAlert);
     item.clearRelations();
     item.clearTimings();
@@ -268,6 +286,7 @@ void AlertCore::postCoreInitialization()
     item.addTiming(AlertTiming(start, expiration));
 
     AlertItem item2 = d->m_alertBase->createVirtualItem();
+    item2.setThemedIcon("next.png");
     item2.setViewType(AlertItem::StaticAlert);
     item2.clearRelations();
     item2.clearTimings();
@@ -276,15 +295,18 @@ void AlertCore::postCoreInitialization()
 
     AlertItem item3;
     item3.setUuid(Utils::Database::createUid());
+    item3.setThemedIcon("ok.png");
     item3.setLabel("Just a simple alert (item3)");
     item3.setCategory("Test");
-    item3.setDescription("Simple basic static alert");
+    item3.setDescription("Simple basic static alert that needs a user comment on overriding");
     item3.setViewType(AlertItem::StaticAlert);
+    item3.setOverrideRequiresUserComment(true);
     item3.addRelation(AlertRelation(AlertRelation::RelatedToPatient, "patient1"));
     item3.addTiming(AlertTiming(start, expiration));
 
     AlertItem item4;
     item4.setUuid(Utils::Database::createUid());
+    item4.setThemedIcon("elderly.png");
     item4.setLabel("Related to all patient (item4)");
     item4.setCategory("Test");
     item4.setDescription("Related to all patients and was validated for patient2 by user1.<br /> Static alert");
