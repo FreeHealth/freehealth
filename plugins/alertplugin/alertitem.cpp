@@ -28,11 +28,17 @@
 #include "alertitem.h"
 #include "alertcore.h"
 
+#include <coreplugin/icore.h>
+#include <coreplugin/iuser.h>
+#include <coreplugin/ipatient.h>
+
 #include <utils/log.h>
 #include <utils/global.h>
 #include <utils/genericdescription.h>
-#include <translationutils/multilingualclasstemplate.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_current.h>
 #include <translationutils/trans_datetime.h>
+#include <translationutils/multilingualclasstemplate.h>
 
 #include <QTreeWidgetItem>
 #include <QDomDocument>
@@ -42,6 +48,10 @@
 enum { WarnAlertItemConstructionDestruction = false };
 
 using namespace Alert;
+using namespace Trans::ConstantTranslations;
+
+static inline Core::IUser *user() {return Core::ICore::instance()->user();}
+static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 
 namespace {
 const char * const XML_ROOT_TAG = "Alert";
@@ -72,6 +82,7 @@ public:
         ContentType,
         Priority,
         OverrideRequiresUserComment,
+        MustBeRead,
         StyleSheet
     };
     enum Tr {
@@ -85,6 +96,7 @@ public:
         addNonTranslatableExtraData(ContentType, "contentType");
         addNonTranslatableExtraData(Priority, "prior");
         addNonTranslatableExtraData(OverrideRequiresUserComment, "overrideComment");
+        addNonTranslatableExtraData(MustBeRead, "mustBeRead");
         addNonTranslatableExtraData(StyleSheet, "styleSheet");
         addTranslatableExtraData(Comment, "comment");
     }
@@ -108,7 +120,7 @@ class AlertItemPrivate : public Trans::MultiLingualClass<AlertValueBook>
 public:
     AlertItemPrivate(AlertItem *parent) :
         _id(-1),
-        _valid(true), _modified(false), _overrideRequiresUserComment(false),
+        _valid(true), _modified(false), _overrideRequiresUserComment(false), _mustBeRead(false),
         _viewType(AlertItem::StaticAlert),
         _contentType(AlertItem::ApplicationNotification),
         _priority(AlertItem::Medium),
@@ -186,6 +198,7 @@ public:
         _css = descr.data(AlertXmlDescription::StyleSheet).toString();
         _valid = descr.data(AlertXmlDescription::Validity).toInt();
         _overrideRequiresUserComment = descr.data(AlertXmlDescription::OverrideRequiresUserComment).toInt();
+        _mustBeRead = descr.data(AlertXmlDescription::MustBeRead).toInt();
         viewTypeFromXml(descr.data(AlertXmlDescription::ViewType).toString());
         contentTypeFromXml(descr.data(AlertXmlDescription::ContentType).toString());
         priorityFromXml(descr.data(AlertXmlDescription::Priority).toString());
@@ -203,10 +216,20 @@ public:
 
     QString categoryForTreeWiget() const {return QString::null;}
 
+    bool validationsContainsValidatedUuid(const QString &uuid)
+    {
+        for(int i=0; i< _validations.count(); ++i) {
+            const AlertValidation &val = _validations.at(i);
+            if (val.validatedUid().compare(uuid, Qt::CaseInsensitive)==0)
+                return true;
+        }
+        return false;
+    }
+
 public:
     QString _uid, _pass, _themedIcon, _css, _extraXml;
     int _id;
-    bool _valid, _modified, _overrideRequiresUserComment;
+    bool _valid, _modified, _overrideRequiresUserComment, _mustBeRead;
     AlertItem::ViewType _viewType;
     AlertItem::ContentType _contentType;
     AlertItem::Priority _priority;
@@ -274,7 +297,8 @@ AlertItem::~AlertItem()
 /** Store database identifiants. This part is protected and should only be used by Alert::Internal::AlertBase */
 void AlertItem::setDb(int ref, const QVariant &value)
 {
-    d->_db.insert(ref, value);
+    if (!value.toString().isEmpty())
+        d->_db.insert(ref, value);
 }
 
 /** Returns database identifiants. This part is protected and should only be used by Alert::Internal::AlertBase */
@@ -527,6 +551,12 @@ bool AlertItem::isOverrideRequiresUserComment() const
     return d->_overrideRequiresUserComment;
 }
 
+/** When alert is included in a dynamic alert dialog with other alerts, setting the mustBeRead state ensure that user read the alert. */
+bool AlertItem::mustBeRead() const
+{
+    return d->_mustBeRead;
+}
+
 // TODO : xxx condition() const = 0;
 
 void AlertItem::setViewType(AlertItem::ViewType type)
@@ -547,6 +577,12 @@ void AlertItem::setPriority(AlertItem::Priority priority)
 void AlertItem::setOverrideRequiresUserComment(bool required)
 {
     d->_overrideRequiresUserComment = required;
+}
+
+/** When alert is included in a dynamic alert dialog with other alerts, setting the mustBeRead state ensure that user read the alert. */
+void AlertItem::setMustBeRead(bool mustberead)
+{
+    d->_mustBeRead = mustberead;
 }
 
 QDateTime AlertItem::creationDate() const
@@ -623,7 +659,7 @@ QVector<AlertRelation> &AlertItem::relations() const
 
 AlertRelation &AlertItem::relationAt(int id) const
 {
-    if (IN_RANGE(id, 0, d->_relations.count()))
+    if (IN_RANGE_STRICT_MAX(id, 0, d->_relations.count()))
         return d->_relations[id];
     return d->_nullRelation;
 }
@@ -656,7 +692,7 @@ QVector<AlertTiming> &AlertItem::timings() const
 
 AlertTiming &AlertItem::timingAt(int id) const
 {
-    if (IN_RANGE(id, 0, d->_timings.count()))
+    if (IN_RANGE_STRICT_MAX(id, 0, d->_timings.count()))
         return d->_timings[id];
     return d->_nullTiming;
 }
@@ -689,7 +725,7 @@ QVector<AlertScript> &AlertItem::scripts() const
 
 AlertScript &AlertItem::scriptAt(int id) const
 {
-    if (IN_RANGE(id, 0, d->_scripts.count()))
+    if (IN_RANGE_STRICT_MAX(id, 0, d->_scripts.count()))
         return d->_scripts[id];
     return d->_nullScript;
 }
@@ -700,12 +736,137 @@ void AlertItem::addScript(const AlertScript &script)
     d->_scripts << script;
 }
 
+/**
+  Validate an Alert::AlertItem with the current user. Return true if the alert was validated.\n
+  The new state of the alert is not automatically saved into database, but
+  the core is informed of this modification. \sa Alert::AlertCore::updateAlert()
+*/
+bool AlertItem::validateAlertWithCurrentUserAndConfirmationDialog()
+{
+    bool yes = Utils::yesNoMessageBox(
+                QApplication::translate("Alert::AlertItem", "Alert validation."),
+                QApplication::translate("Alert::AlertItem",
+                                        "You are about to validate this alert:<br />"
+                                        "<b>%1</b><br /><br />"
+                                        "Do you really want to validate this alert ?")
+                .arg(label()), "",
+                QApplication::translate("Alert::AlertItem", "Alert validation."));
+    if (yes) {
+        QString validator;
+        user() ? validator = user()->uuid() : validator = "UnknownUser";
+        return validateAlert(validator, false, "", QDateTime::currentDateTime());
+    }
+    return false;
+}
+
+/**
+  Validate an Alert::AlertItem with the \e validatorUid, define override state with \e override,
+  define the \e overrideComment, at the \e dateOfValidation.
+  Return true if the alert was validated.\n
+  The new state of the alert is not automatically saved into database, but
+  the core is informed of this modification. \sa Alert::AlertCore::updateAlert()
+*/
+bool AlertItem::validateAlert(const QString &validatorUid, bool override, const QString overrideComment, const QDateTime &dateOfValidation)
+{
+    // Create the validation
+    AlertValidation val;
+    val.setDateOfValidation(QDateTime::currentDateTime());
+    val.setValidatorUuid(validatorUid);
+    val.setAccepted(!override);
+    val.setOverriden(override);
+    val.setUserComment(overrideComment);
+    val.setDateOfValidation(dateOfValidation);
+
+    // Get validated
+    if (d->_relations.count()  > 0) {
+        const AlertRelation &rel = d->_relations.at(0);
+        switch (rel.relatedTo())
+        {
+        case AlertRelation::RelatedToPatient:
+        case AlertRelation::RelatedToAllPatients:
+        {
+            if (patient())
+                val.setValidatedUuid(patient()->uuid());
+            else if (Utils::isDebugCompilation())
+                val.setValidatedUuid("patient1");
+            break;
+        }
+        case AlertRelation::RelatedToFamily: // TODO: manage family
+            break;
+        case AlertRelation::RelatedToUser:
+        case AlertRelation::RelatedToAllUsers:
+        {
+            if (user())
+                val.setValidatedUuid(user()->uuid());
+            else if (Utils::isDebugCompilation())
+                val.setValidatedUuid("user1");
+            break;
+        }
+        case AlertRelation::RelatedToUserGroup: // TODO: manage user groups
+            break;
+        case AlertRelation::RelatedToApplication:
+        {
+            val.setValidatedUuid(qApp->applicationName().toLower());
+            break;
+        }
+        }
+    }
+    addValidation(val);
+    // inform the core
+    AlertCore::instance()->updateAlert(*this);
+    return true;
+}
+
+/** Return true if the alert was validated by any user. */
+bool AlertItem::isUserValidated() const
+{
+    if (d->_validations.count()==0)
+        return false;
+
+    if (d->_relations.count() > 0) {
+        const AlertRelation &rel = d->_relations.at(0);
+        switch (rel.relatedTo())
+        {
+        case AlertRelation::RelatedToPatient:
+        case AlertRelation::RelatedToAllPatients:
+        {
+            if (patient())
+                return d->validationsContainsValidatedUuid(patient()->uuid());
+            else if (Utils::isDebugCompilation())
+                return d->validationsContainsValidatedUuid("patient1");
+            break;
+        }
+        case AlertRelation::RelatedToFamily: // TODO: manage family
+            break;
+        case AlertRelation::RelatedToUser:
+        case AlertRelation::RelatedToAllUsers:
+        {
+            if (user())
+                return d->validationsContainsValidatedUuid(user()->uuid());
+            else if (Utils::isDebugCompilation())
+                return d->validationsContainsValidatedUuid("user1");
+            break;
+        }
+        case AlertRelation::RelatedToUserGroup: // TODO: manage user groups
+            break;
+        case AlertRelation::RelatedToApplication:
+        {
+            return d->validationsContainsValidatedUuid(qApp->applicationName().toLower());
+        }
+        }
+    }
+    LOG_ERROR_FOR("AlertItem", "No relation to link validation");
+    return false;
+}
+
+/** Remove all recorded validations. */
 void AlertItem::clearValidations()
 {
     d->_modified = true;
     d->_validations.clear();
 }
 
+/** Return the validation according to its identifiant \sa AlertValidation::id(). */
 AlertValidation &AlertItem::validation(int id) const
 {
     for(int i=0; i<d->_validations.count();++i) {
@@ -715,24 +876,28 @@ AlertValidation &AlertItem::validation(int id) const
     return d->_nullValidation;
 }
 
+/** Return all the recorded validations. */
 QVector<AlertValidation> &AlertItem::validations() const
 {
     return d->_validations;
 }
 
+/** Return all the recorded validation at index \e id. */
 AlertValidation &AlertItem::validationAt(int id) const
 {
-    if (IN_RANGE(id, 0, d->_validations.count()))
+    if (IN_RANGE_STRICT_MAX(id, 0, d->_validations.count()))
         return d->_validations[id];
     return d->_nullValidation;
 }
 
+/** Add a validation to the alert. */
 void AlertItem::addValidation(const AlertValidation &val)
 {
     d->_modified = true;
     d->_validations << val;
 }
 
+/** Check equality between two Alert::AlertItem */
 bool AlertItem::operator==(const AlertItem &other) const
 {
     // first test
@@ -854,6 +1019,7 @@ QString AlertItem::toXml() const
     d->descr.setData(Internal::AlertXmlDescription::ContentType, d->contentTypeToXml());
     d->descr.setData(Internal::AlertXmlDescription::Priority, d->priorityToXml());
     d->descr.setData(Internal::AlertXmlDescription::OverrideRequiresUserComment, d->_overrideRequiresUserComment);
+    d->descr.setData(Internal::AlertXmlDescription::MustBeRead, d->_mustBeRead);
     d->descr.setData(Internal::AlertXmlDescription::StyleSheet, d->_css);
     d->descr.setData(Internal::AlertXmlDescription::GeneralIcon, d->_themedIcon);
 
@@ -1135,14 +1301,43 @@ AlertTiming AlertTiming::fromDomElement(const QDomElement &element)
     return timing;
 }
 
+QString AlertScript::typeToXml(ScriptType type)
+{
+    switch (type) {
+    case CheckValidityOfAlert: return "check";
+    case BeforeAlert: return "before";
+    case DuringAlert: return "during";
+    case AfterAlert: return "after";
+    case OnOverride: return "onoverride";
+    }
+    return QString::null;
+}
+
+AlertScript::ScriptType AlertScript::typeFromXml(const QString &xml)
+{
+    if (xml.compare("check", Qt::CaseInsensitive)==0)
+        return CheckValidityOfAlert;
+    else if (xml.compare("before", Qt::CaseInsensitive)==0)
+        return BeforeAlert;
+    else if (xml.compare("after", Qt::CaseInsensitive)==0)
+        return AfterAlert;
+    else if (xml.compare("during", Qt::CaseInsensitive)==0)
+        return DuringAlert;
+    else if (xml.compare("onoverride", Qt::CaseInsensitive)==0)
+        return OnOverride;
+    return CheckValidityOfAlert;
+}
+
 QString AlertScript::toXml() const
 {
     // TODO: manage "<" in script
-    return QString("<%1 id='%2' valid='%3' type='%4' uid='%5'>\n%6\n</%1>\n")
+    return QString("<%1 id='%2' valid='%3' type='%4' uid='%5'>\n"
+                   "%6\n"
+                   "</%1>\n")
             .arg(::XML_SCRIPT_ELEMENTTAG)
             .arg(_id)
             .arg(_valid)
-            .arg(_type)
+            .arg(typeToXml(_type))
             .arg(_uid)
             .arg(_script)
             ;
@@ -1156,7 +1351,7 @@ AlertScript AlertScript::fromDomElement(const QDomElement &element)
     script.setId(element.attribute("id").toInt());
     script.setUuid(element.attribute("uid"));
     script.setValid(element.attribute("valid").toInt());
-    script.setType(AlertScript::ScriptType(element.attribute("type").toInt()));
+    script.setType(typeFromXml(element.attribute("type")));
     script.setScript(element.text());
     return script;
 }
@@ -1165,12 +1360,13 @@ QString AlertValidation::toXml() const
 {
     QString comment = _userComment;
     comment = comment.replace("<", "&lt;");
-    return QString("<%1 id='%2' user='%3' comment='%4' dt='%5'/>\n")
+    return QString("<%1 id='%2' validator='%3' comment='%4' dt='%5' validated='%6'/>\n")
             .arg(::XML_VALIDATION_ELEMENTTAG)
             .arg(_id)
-            .arg(_userUid)
+            .arg(_validator)
             .arg(comment)
             .arg(_date.toString(Qt::ISODate))
+            .arg(_validated)
             ;
 }
 
@@ -1180,10 +1376,26 @@ AlertValidation AlertValidation::fromDomElement(const QDomElement &element)
         return AlertValidation();
     AlertValidation val;
     val.setId(element.attribute("id").toInt());
-    val.setUserUuid(element.attribute("user"));
+    val.setValidatorUuid(element.attribute("validator"));
     val.setUserComment(element.attribute("comment"));
+    val.setValidatedUuid(element.attribute("validated"));
     val.setDateOfValidation(QDateTime::fromString(element.attribute("dt"), Qt::ISODate));
     return val;
+}
+
+QString AlertRelation::relationTypeToString() const
+{
+    // TODO: improve the translations
+    switch (_related) {
+    case RelatedToPatient: return Utils::firstLetterUpperCase(tkTr(Trans::Constants::RELATED_TO_CURRENT_PATIENT));
+    case RelatedToFamily: return tkTr(Trans::Constants::RELATED_TO_PATIENT_FAMILY_1).arg("");
+    case RelatedToAllPatients: return Utils::firstLetterUpperCase(tkTr(Trans::Constants::RELATED_TO_ALL_PATIENTS));
+    case RelatedToUser: return Utils::firstLetterUpperCase(tkTr(Trans::Constants::RELATED_TO_CURRENT_USER));
+    case RelatedToAllUsers: return Utils::firstLetterUpperCase(tkTr(Trans::Constants::RELATED_TO_ALL_USERS));
+    case RelatedToUserGroup: return Utils::firstLetterUpperCase(tkTr(Trans::Constants::RELATED_TO_USER_GROUP_1).arg(""));
+    case RelatedToApplication: return Utils::firstLetterUpperCase(tkTr(Trans::Constants::RELATED_TO_APPLICATION));
+    }
+    return QString::null;
 }
 
 QString AlertRelation::toXml() const

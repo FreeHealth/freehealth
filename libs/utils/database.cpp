@@ -1076,9 +1076,15 @@ QString Database::getWhereClause(const int &tableref, const QHash<int, QString> 
     // Will return: "WHERE (TABLE1.FIELD2='StringToMatch')"
   \endcode
 */
-QString Database::getWhereClause(const FieldList &fields) const
+QString Database::getWhereClause(const FieldList &fields, WhereClauseType type) const
 {
     QString where = "";
+    QString clause;
+    if (type==AND)
+        clause = "AND";
+    else if (type==OR)
+        clause = "OR ";
+
     for(int i = 0; i < fields.count(); ++i) {
         QString tab, f;
         if (fields.at(i).tableName.isEmpty()) {
@@ -1093,10 +1099,11 @@ QString Database::getWhereClause(const FieldList &fields) const
             where.chop(4);
             where += "OR ";
         }
-        where += QString(" (`%1`.`%2` %3) AND ")
-                 .arg(tab)
-                 .arg(f)
-                 .arg(fields.at(i).whereCondition);
+        where += QString("(`%1`.`%2` %3) %4 ")
+                .arg(tab)
+                .arg(f)
+                .arg(fields.at(i).whereCondition)
+                .arg(clause);
     }
     where.chop(5);
     if (fields.count() > 1)
@@ -1474,6 +1481,13 @@ QString Database::select(const Field &select, const Join &join, const FieldList 
 {
     JoinList joins;
     joins << join;
+    FieldList get;
+    get << select;
+    return this->select(get, joins, conditions);
+}
+
+QString Database::select(const Field &select, const JoinList &joins, const FieldList &conditions) const
+{
     FieldList get;
     get << select;
     return this->select(get, joins, conditions);

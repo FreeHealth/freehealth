@@ -92,6 +92,7 @@ CoreImpl::CoreImpl(QObject *parent) :
         m_PadTools(0)
 
 {
+    QTime chrono;
     m_Settings = new SettingsPrivate(this);
     m_Settings->setPath(ISettings::UpdateUrl, Utils::Constants::FREEDIAMS_UPDATE_URL);
 
@@ -101,11 +102,12 @@ CoreImpl::CoreImpl(QObject *parent) :
     m_CommandLine = new CommandLine();
     m_CommandLine->feedPatientDatas(m_Patient);
 
-    QTime chrono;
-    chrono.start();
     bool logChrono = m_CommandLine->value(CommandLine::CL_Chrono).toBool();
     if (logChrono)
-        Utils::Log::logTimeElapsed(chrono, "Core", "command line parsing");
+        chrono.start();
+
+    if (logChrono)
+        Utils::Log::logTimeElapsed(chrono, "Core", "Command line parsing");
 
     m_Theme->createSplashScreen(Constants::FREEDIAMS_SPLASHSCREEN);
 

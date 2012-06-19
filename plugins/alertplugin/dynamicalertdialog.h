@@ -28,6 +28,7 @@
 #define ALERT_DYNAMICALERTDIALOG_H
 
 #include <alertplugin/alertplugin_exporter.h>
+#include <alertplugin/alertitem.h>
 #include <QDialog>
 
 QT_BEGIN_NAMESPACE
@@ -36,7 +37,7 @@ class QToolButton;
 QT_END_NAMESPACE
 
 namespace Alert {
-class AlertItem;
+
 namespace Ui {
 class DynamicAlertDialog;
 class DynamicAlertDialogOverridingComment;
@@ -45,9 +46,29 @@ class DynamicAlertDialogOverridingComment;
 class ALERT_EXPORT DynamicAlertResult
 {
 public:
-    DynamicAlertResult() {}
+    DynamicAlertResult() : _override(false), _accepted(false) {}
     ~DynamicAlertResult() {}
 
+    void setOverriden(bool override) {_override = override;}
+    bool isOverridenByUser() const {return _override;}
+
+    void setOverrideUserComment(const QString &comment) {_overrideComment=comment;}
+    QString overrideUserComment() const {return _overrideComment;}
+
+    void setAccepted(bool accepted) {_accepted = accepted;}
+    bool isAccepted() const {return _accepted;}
+
+    void setReadAlertUid(const QStringList &uids) {_readUids=uids;}
+    QStringList readAlertsUid() const {return _readUids;}
+
+    void setAlertValidation(const AlertValidation &validation) {_validation=validation;}
+    AlertValidation alertValidation() const {return _validation;}
+
+private:
+    bool _override, _accepted;
+    QString _overrideComment;
+    QStringList _readUids;
+    AlertValidation _validation;
 };
 
 class ALERT_EXPORT DynamicAlertDialog : public QDialog
@@ -68,10 +89,14 @@ public:
     ~DynamicAlertDialog();
 
     bool isOverridingUserCommentRequired() const {return _overrideCommentRequired;}
+    QString overridingComment() const;
 
     static DynamicAlertResult executeDynamicAlert(const AlertItem &item, const QString &themedIcon = QString::null, QWidget *parent = 0);
     static DynamicAlertResult executeDynamicAlert(const QList<AlertItem> &item, const QString &themedIcon = QString::null, QWidget *parent = 0);
     static DynamicAlertResult executeDynamicAlert(const QList<AlertItem> &item, const QList<QAbstractButton*> &buttons, const QString &themedIcon = QString::null, QWidget *parent = 0);
+
+    static bool applyResultToAlerts(AlertItem &item, const DynamicAlertResult &result);
+    static bool applyResultToAlerts(QList<AlertItem> &items, const DynamicAlertResult &result);
 
 private Q_SLOTS:
     void override();

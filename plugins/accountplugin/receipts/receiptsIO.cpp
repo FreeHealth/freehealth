@@ -32,6 +32,7 @@
 #include "receiptsIO.h"
 
 #include <accountbaseplugin/constants.h>
+#include <accountbaseplugin/percentmodel.h>
 
 #include <utils/database.h>
 #include <utils/global.h>
@@ -441,4 +442,17 @@ QString receiptsEngine::getStringOfpreferredActAndHisValue(const QString & prefe
         }
     QString text = data+" = "+QString::number(totalValue);
     return text;
+}
+
+QHash<QString,QString> receiptsEngine::getPercentagesAccordingToUser()
+{
+    QHash<QString,QString> hash;
+    PercentModel model(this);
+    for (int i = 0; i < model.rowCount(); i += 1)
+    {
+    	QString type = model.data(model.index(i,AccountDB::Constants::PERCENT_TYPE),Qt::DisplayRole).toString();
+    	QString value = model.data(model.index(i,AccountDB::Constants::PERCENT_VALUES),Qt::DisplayRole).toString();
+    	hash.insert(type,value);
+    }
+    return hash;
 }

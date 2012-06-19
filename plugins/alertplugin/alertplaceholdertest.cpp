@@ -29,6 +29,9 @@
 #include "alertitem.h"
 #include "staticalertwidgets.h"
 
+#include <QAction>
+#include <QWidget>
+
 #include <QDebug>
 
 using namespace Alert;
@@ -69,11 +72,13 @@ void AlertPlaceHolderTest::clear()
 {
     if (_widget)
         _widget->clear();
+    alerts.clear();
+    _buttons.clear();
 }
 
 bool AlertPlaceHolderTest::addAlert(const AlertItem &alert)
 {
-    if (!alerts.contains(alert)) {
+    if (!containsAlertUuid(alert.uuid())) {
         alerts << alert;
         if (_widget) {
             StaticAlertToolButton *but = new StaticAlertToolButton(_widget);
@@ -85,15 +90,34 @@ bool AlertPlaceHolderTest::addAlert(const AlertItem &alert)
     return true;
 }
 
+bool AlertPlaceHolderTest::updateAlert(const AlertItem &alert)
+{
+//    qWarning() << "update Alert" << alert.label();
+    if (containsAlertUuid(alert.uuid())) {
+        // If alert is validated -> remove it
+        // or update the content of the toolbutton
+        if (alert.isUserValidated())
+            return removeAlert(alert);
+        _buttons.value(alert.uuid())->setAlertItem(alert);
+    } else {
+        // add the alert
+        return addAlert(alert);
+    }
+    return true;
+}
+
 bool AlertPlaceHolderTest::removeAlert(const AlertItem &alert)
 {
-    if (alerts.contains(alert)) {
-        alerts.removeAll(alert);
+//    qWarning() << "remove Alert" << alert.uuid();
+    if (containsAlertUuid(alert.uuid())) {
+        removeAlertUuid(alert.uuid());
         if (_widget) {
+            QWidget *w = _buttons.value(alert.uuid());
             _buttons.remove(alert.uuid());
-            _widget->clear();
-            foreach(StaticAlertToolButton *but, _buttons.values())
-                _widget->addWidget(but);
+            for(int i=0; i < _widget->actions().count(); ++i) {
+                if (_widget->widgetForAction(_widget->actions().at(i)) == w)
+                    _widget->actions().at(i)->setVisible(false);
+            }
         }
     }
     return true;
@@ -118,4 +142,27 @@ QWidget *AlertPlaceHolderTest::createWidget(QWidget *parent)
         // connect button signals
     }
     return _widget;
+}
+
+bool AlertPlaceHolderTest::containsAlert(const AlertItem &item)
+{
+    return alerts.contains(item);
+}
+
+bool AlertPlaceHolderTest::containsAlertUuid(const QString &alertUid)
+{
+    for(int i = 0; i < alerts.count(); ++i) {
+        if (alerts.at(i).uuid() == alertUid)
+            return true;
+    }
+    return false;
+}
+
+bool AlertPlaceHolderTest::removeAlertUuid(const QString &alertUid)
+{
+    for(int i = alerts.count()-1; i > -1 ; --i) {
+        if (alerts.at(i).uuid() == alertUid)
+            alerts.removeAt(i);
+    }
+    return false;
 }

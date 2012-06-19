@@ -94,8 +94,8 @@ public:
     IUser *user() const {return m_User;}
     void setUser(IUser *user) {m_User = user;}
 
-    virtual void setScriptManager(IScriptManager *) {}
-    virtual IScriptManager *scriptManager() const {return 0;}
+    virtual void setScriptManager(IScriptManager *script) {m_Script=script;}
+    virtual IScriptManager *scriptManager() const {return m_Script;}
 
 private:
     IMainWindow *m_MainWindow;
@@ -111,6 +111,7 @@ private:
     Utils::UpdateChecker *m_UpdateChecker;
     Core::FileManager *m_FileManager;
     IPadTools *m_PadTools;
+    IScriptManager *m_Script;
 };
 
 } // namespace Internal

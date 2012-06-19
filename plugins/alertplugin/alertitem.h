@@ -50,6 +50,11 @@ class ALERT_EXPORT AlertTiming
 {
 public:
     AlertTiming() : _id(-1), _ncycle(0), _delay(0), _valid(true), _isCycle(false), _modified(false) {}
+    AlertTiming(const QDateTime &start, const QDateTime &expirationDate) :
+        _id(-1), _ncycle(0),
+        _start(start), _end(expirationDate),
+        _delay(0), _valid(true), _isCycle(false), _modified(true)
+    {}
     virtual ~AlertTiming() {}
 
     virtual int id() const {return _id;}
@@ -105,8 +110,8 @@ public:
 
 private:
     int _id, _ncycle;
-    qlonglong _delay;
     QDateTime _start, _end, _next;
+    qlonglong _delay;
     bool _valid, _isCycle;
     bool _modified;
 };
@@ -115,12 +120,17 @@ class ALERT_EXPORT AlertScript
 {
 public:
     enum ScriptType {
-        BeforeAlert = 0,
+        CheckValidityOfAlert = 0,
+        BeforeAlert,
         DuringAlert,
-        AfterAlert
+        AfterAlert,
+        OnOverride
     };
 
     AlertScript() : _id(-1), _valid(true), _modified(false) {}
+    AlertScript(const QString &uuid, ScriptType type, const QString &script) :
+        _id(-1), _valid(true),
+        _type(type), _uid(uuid), _script(script), _modified(true) {}
     virtual ~AlertScript() {}
 
     virtual int id() const {return _id;}
@@ -135,12 +145,14 @@ public:
     virtual void setModified(bool state) {_modified = state;}
     virtual bool isModified() const {return _modified;}
 
-    virtual ScriptType type() {return _type;}
+    virtual ScriptType type() const {return _type;}
     virtual void setType(ScriptType type) {_modified=true; _type=type;}
 
     virtual QString script() const {return _script;}
     virtual void setScript(const QString &script) {_modified=true; _script=script;}
 
+    static QString typeToXml(ScriptType type);
+    static ScriptType typeFromXml(const QString &xml);
     virtual QString toXml() const;
     static AlertScript fromDomElement(const QDomElement &element);
 
@@ -156,6 +168,12 @@ class ALERT_EXPORT AlertValidation
 {
 public:
     AlertValidation() : _id(-1), _modified(false) {}
+    AlertValidation(const QDateTime &dateTimeOfValidation, const QString &validatorUid, const QString &validatedUid) :
+        _id(-1), _modified(true),
+        _overridden(false),
+        _validator(validatorUid), _validated(validatedUid),
+        _date(dateTimeOfValidation)
+    {}
     virtual ~AlertValidation() {}
 
     virtual int id() const {return _id;}
@@ -164,22 +182,31 @@ public:
     virtual void setModified(bool state) {_modified = state;}
     virtual bool isModified() const {return _modified;}
 
-    virtual QString userUid() const {return _userUid;}
-    virtual void setUserUuid(const QString &uid) {_modified=true; _userUid=uid;}
+    virtual QString validatorUid() const {return _validator;}
+    virtual void setValidatorUuid(const QString &uid) {_modified=true; _validator=uid;}
+
     virtual QString userComment() const {return _userComment;}
     virtual void setUserComment(const QString &comment) {_modified=true; _userComment=comment;}
 
+    virtual void setOverriden(bool overriden) {_overridden=overriden;}
+    virtual bool isOverriden() const {return _overridden;}
+    virtual void setAccepted(bool accepted) {_overridden=!accepted;}
+    virtual bool isAccepted() const {return !_overridden;}
+
     virtual QDateTime dateOfValidation() const {return _date;}
     virtual void setDateOfValidation(const QDateTime &dt) {_modified=true; _date=dt;}
+
+    virtual QString validatedUid() const {return _validated;}
+    virtual void setValidatedUuid(const QString &uid) {_validated=uid;}
 
     virtual QString toXml() const;
     static AlertValidation fromDomElement(const QDomElement &element);
 
 private:
     int _id;
-    QString _userUid, _userComment;
+    bool _modified, _overridden;
+    QString _validator, _userComment, _validated;
     QDateTime _date;
-    bool _modified;
 };
 
 class ALERT_EXPORT AlertRelation
@@ -187,13 +214,19 @@ class ALERT_EXPORT AlertRelation
 public:
     enum RelatedTo {
         RelatedToPatient = 0,
-        RelatedToFamily,
         RelatedToAllPatients,
+        RelatedToFamily,
         RelatedToUser,
+        RelatedToAllUsers,
         RelatedToUserGroup,
         RelatedToApplication
     };
     AlertRelation() : _id(-1), _modified(false) {}
+    AlertRelation(RelatedTo related, const QString &uuid = QString::null) :
+        _id(-1), _modified(true),
+        _related(related),
+        _relatedUid(uuid)
+    {}
     virtual ~AlertRelation() {}
 
     virtual int id() const {return _id;}
@@ -204,6 +237,7 @@ public:
 
     virtual RelatedTo relatedTo() const {return _related;}
     virtual void setRelatedTo(RelatedTo related) {_modified=true; _related = related;}
+    virtual QString relationTypeToString() const;
 
     virtual QString relatedToUid() const {return _relatedUid;}
     virtual void setRelatedToUid(const QString &uid) {_modified=true; _relatedUid=uid;}
@@ -213,9 +247,9 @@ public:
 
 private:
     int _id;
+    bool _modified;
     RelatedTo _related;
     QString _relatedUid;
-    bool _modified;
 };
 
 namespace Internal {
@@ -282,12 +316,14 @@ public:
     virtual ContentType contentType() const;
     virtual Priority priority() const;
     virtual bool isOverrideRequiresUserComment() const;
+    virtual bool mustBeRead() const;
     // TODO : virtual xxx condition() const = 0;
 
     virtual void setViewType(ViewType type);
     virtual void setContentType(ContentType content);
     virtual void setPriority(Priority priority);
     virtual void setOverrideRequiresUserComment(bool required);
+    virtual void setMustBeRead(bool mustberead);
     // TODO : virtual void setCondition(...);
 
     virtual QDateTime creationDate() const;
@@ -303,7 +339,6 @@ public:
     virtual QString extraXml() const;
     virtual void setExtraXml(const QString &xml);
 
-    // TODO : move this in AlertModel ?
     virtual void clearRelations();
     virtual AlertRelation &relation(int id) const;
     virtual QVector<AlertRelation> &relations() const;
@@ -322,12 +357,14 @@ public:
     virtual AlertScript &scriptAt(int id) const;
     virtual void addScript(const AlertScript &script);
 
+    bool validateAlertWithCurrentUserAndConfirmationDialog();
+    bool validateAlert(const QString &validatorUid, bool override, const QString overrideComment, const QDateTime &dateOfValidation);
+    bool isUserValidated() const;
     virtual void clearValidations();
     virtual AlertValidation &validation(int id) const;
     virtual QVector<AlertValidation> &validations() const;
     virtual AlertValidation &validationAt(int id) const;
     virtual void addValidation(const AlertValidation &val);
-    // END
 
     bool operator==(const AlertItem &other) const;
     bool operator!=(const AlertItem &other) const;

@@ -71,10 +71,14 @@ public:
     QVector<AlertItem> getAlertItemForCurrentUser() const;
     QVector<AlertItem> getAlertItemForCurrentPatient() const;
     QVector<AlertItem> getAlertItemForCurrentApplication() const;
-    bool saveAlertItem(AlertItem &item);
+    bool saveAlert(AlertItem &item);
+    bool saveAlerts(QList<AlertItem> &items);
 
     // Executers
-    void checkAlerts(AlertsToCheck check);
+    bool checkAlerts(AlertsToCheck check);
+    bool registerAlert(const AlertItem &item);
+    bool updateAlert(const AlertItem &item);
+
     //    bool executeAlert(const AlertItem &alert);  // add a delay ?
 
     // Editors
@@ -91,6 +95,9 @@ Q_SIGNALS:
 //    void alertItemUpdated(const AlertItem &alert);
 //    void alertItemRemoved(const AlertItem &alert);
 //    void alertItemValidated(const AlertItem &alert);
+
+private:
+    void processAlerts(const QVector<AlertItem> &alerts);
 
 private Q_SLOTS:
     void postCoreInitialization();

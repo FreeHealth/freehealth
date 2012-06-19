@@ -92,13 +92,55 @@ ReceiptsManager::~ReceiptsManager()
 QHash<int,QString> ReceiptsManager::getPercentages()
 {
   QHash<int,QString> hash;
-  hash.insert(1,"0.00");
-  hash.insert(2,"10.00");
-  hash.insert(3,"20.00");
-  hash.insert(4,"30.00");
-  hash.insert(5,"33.33");
-  hash.insert(6,"70.00");
-  hash.insert(7,"100.00");
+  receiptsEngine io;
+  QHash<QString,QString> hashFromModel;
+  hashFromModel = io.getPercentagesAccordingToUser();
+  QStringList values = hashFromModel.values(); 
+  if (hashFromModel.size()==0)
+  {
+  	hash.insert(1,"0.00");
+        hash.insert(2,"10.00");
+        hash.insert(3,"20.00");
+        hash.insert(4,"30.00");
+        hash.insert(5,"33.33");
+        hash.insert(6,"70.00");
+        hash.insert(7,"100.00");
+      }
+  else{
+    int count = values.count();
+    QStringList listOfPercents;
+    listOfPercents << "0.00";
+    while (listOfPercents.size() < count +1)
+    {
+       QString minValue ;
+       for (int i = 0; i < values.size(); ++i)
+       {
+           for (int j = 0; j < values.size(); j += 1)
+           {
+           	if (values[i].toDouble() < values[j].toDouble())
+           	{
+           		minValue = values[i];
+           	    }
+               }
+            }
+        if (values.size()<2)
+        {
+              minValue = values[0];
+            }
+        qDebug() << __FILE__ << QString::number(__LINE__) << " minValue =" << minValue ;
+        if (!listOfPercents.contains(minValue))
+        {
+        	  listOfPercents.append(minValue);
+        	  values.removeOne(minValue)  ; 
+            }    	        
+        }
+    listOfPercents << "100.00";
+    for (int i = 0; i < listOfPercents.size() ; ++i)
+    {
+    	hash.insert(i+1,listOfPercents[i]);
+        }
+    }
+  
   return hash;
 }
 

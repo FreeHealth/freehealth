@@ -73,7 +73,7 @@ Translators::Translators(QObject * parent)
 {
     setObjectName("Translators");
     m_Translators.clear();
-    setPathToTranslations(qApp->applicationDirPath());
+//    setPathToTranslations(qApp->applicationDirPath());
     m_Instance = this;
 }
 
@@ -90,20 +90,16 @@ bool Translators::setPathToTranslations(const QString & path)
 {
     if (QDir(path).exists()) {
         m_PathToTranslations = QDir::cleanPath(path);
-        LOG_FOR("Translators", "Settings translation path to: " + path);
-        if (WarnTranslatorsErrors) {
-            LOG_ERROR_FOR("Translators", Trans::ConstantTranslations::tkTr(Trans::Constants::SETTING_1_PATH_TO_2)
+        LOG_FOR("Translators", Trans::ConstantTranslations::tkTr(Trans::Constants::SETTING_1_PATH_TO_2)
                 .arg(Trans::ConstantTranslations::tkTr(Trans::Constants::TRANSLATORS_TEXT),
                      QDir::cleanPath(path)));
-        }
         return true;
-    } else {
-        if (WarnTranslatorsErrors) {
-            LOG_ERROR_FOR("Translators", Trans::ConstantTranslations::tkTr(Trans::Constants::PATH_1_DOESNOT_EXISTS)
-                      .arg(QDir::cleanPath(path)));
-        }
-        return false;
     }
+    if (WarnTranslatorsErrors) {
+        LOG_ERROR_FOR("Translators", Trans::ConstantTranslations::tkTr(Trans::Constants::PATH_1_DOESNOT_EXISTS)
+                      .arg(QDir::cleanPath(path)));
+    }
+    return false;
 }
 
 /** \brief Returns the path the actual translations */
@@ -188,14 +184,13 @@ bool Translators::addNewTranslator(const QString & fileMask, bool fromDefaultPat
             if (WarnTranslatorsErrors) {
                 LOG(tr("Add Translator %1.").arg(file.fileName() + "_" + lang));
             }
-            return true;
         }
-    }
-    else if (WarnTranslatorsErrors) {
-        LOG(tr("WARNING: %1 can not be loaded or is already loaded.").arg(file.absoluteFilePath() + "_" + lang));
+        return true;
     }
 
-    // something gone wrong so clean and exit the member
+    if (WarnTranslatorsErrors) {
+        LOG_ERROR(tr("WARNING: %1 can not be loaded or is already loaded.").arg(file.absoluteFilePath() + "_" + lang));
+    }
     delete t;
     return false;
 }
