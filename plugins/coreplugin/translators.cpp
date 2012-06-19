@@ -73,7 +73,7 @@ Translators::Translators(QObject * parent)
 {
     setObjectName("Translators");
     m_Translators.clear();
-    setPathToTranslations(qApp->applicationDirPath());
+//    setPathToTranslations(qApp->applicationDirPath());
     m_Instance = this;
 }
 
