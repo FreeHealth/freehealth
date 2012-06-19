@@ -403,46 +403,9 @@ DynamicAlertResult DynamicAlertDialog::executeDynamicAlert(const QList<AlertItem
 */
 bool DynamicAlertDialog::applyResultToAlerts(AlertItem &item, const DynamicAlertResult &result)
 {
-    AlertValidation val;
-    val.setAccepted(result.isAccepted());
-    val.setOverriden(result.isOverridenByUser());
-    val.setUserComment(result.overrideUserComment());
-    val.setDateOfValidation(QDateTime::currentDateTime());
-    if (user())
-        val.setValidatorUuid(user()->uuid());
-    else if (Utils::isDebugCompilation())
-        val.setValidatorUuid("user1");
-
-    // Check alert's relations to find the validatedUid
-    if (item.relations().count() > 0) {
-        const AlertRelation &rel = item.relationAt(0);
-        switch (rel.relatedTo()) {
-        case AlertRelation::RelatedToPatient:
-        case AlertRelation::RelatedToAllPatients:
-            if (patient())
-                val.setValidatedUuid(patient()->uuid());
-            else if (Utils::isDebugCompilation())
-                val.setValidatedUuid("patient1");
-            break;
-        case AlertRelation::RelatedToFamily: break;
-        case AlertRelation::RelatedToUser:
-        case AlertRelation::RelatedToAllUsers:
-            if (user())
-                val.setValidatedUuid(user()->uuid());
-            else if (Utils::isDebugCompilation())
-                val.setValidatedUuid("user1");
-            break;
-        case AlertRelation::RelatedToUserGroup: break;
-        case AlertRelation::RelatedToApplication:
-            val.setValidatedUuid(qApp->applicationName());
-            break;
-        }
-        item.addValidation(val);
-    }
-
-    // inform the core
-    AlertCore::instance()->updateAlert(item);
-    return true;
+    QString validator;
+    user() ? validator = user()->uuid() : validator = "UnknownUser";
+    return item.validateAlert(validator, result.isOverridenByUser(), result.overrideUserComment(), QDateTime::currentDateTime());
 }
 
 /**
