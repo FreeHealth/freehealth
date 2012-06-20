@@ -325,6 +325,7 @@ public:
     virtual ViewType viewType() const;
     virtual ContentType contentType() const;
     virtual Priority priority() const;
+    virtual QString priorityToString() const;
     virtual bool isOverrideRequiresUserComment() const;
     virtual bool mustBeRead() const;
     // TODO : virtual xxx condition() const = 0;

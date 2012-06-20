@@ -546,6 +546,16 @@ AlertItem::Priority AlertItem::priority() const
     return d->_priority;
 }
 
+QString AlertItem::priorityToString() const
+{
+    switch (d->_priority) {
+    case High: return tkTr(Trans::Constants::HIGH);
+    case Medium: return tkTr(Trans::Constants::MEDIUM);
+    case Low: return tkTr(Trans::Constants::LOW);
+    }
+    return QString::null;
+}
+
 bool AlertItem::isOverrideRequiresUserComment() const
 {
     return d->_overrideRequiresUserComment;
