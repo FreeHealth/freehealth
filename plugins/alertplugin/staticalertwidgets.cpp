@@ -120,7 +120,7 @@ static QString getToolTip(const AlertItem &item)
             timings << QString(QApplication::translate("Alert::StaticAlertWidget", "Started on: %1<br />Cycling every: %2<br />Expires on: %3"))
                        .arg(timing.cycleStartDate().toString(QLocale().dateFormat()))
                        .arg(timing.cyclingDelayInDays())
-                       .arg(timing.cycleStartDate().toString(QLocale().dateFormat()));
+                       .arg(timing.cycleExpirationDate().toString(QLocale().dateFormat()));
         } else {
             timings << QString(QApplication::translate("Alert::StaticAlertWidget", "Started on: %1<br />Expires on: %2"))
                        .arg(timing.start().toString(QLocale().dateFormat()))
