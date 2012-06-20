@@ -242,7 +242,7 @@ void AlertCore::processAlerts(const QVector<AlertItem> &alerts)
             const AlertScript &s = item.scripts().at(i);
             if (s.type()==AlertScript::CheckValidityOfAlert) {
                 QScriptValue v = scriptManager()->evaluate(s.script());
-                LOG(tr("Checking alert validity using the 'CheckScript': %1; validity: %2").arg(item.uuid()).arg(v.toBool()));
+                LOG(tr("Checking alert validity using the 'CheckScript': %1; validity: %2").arg(item.label()).arg(v.toBool()));
                 if (!v.toBool()) {
                     checked = false;
                     break;
@@ -357,13 +357,27 @@ void AlertCore::postCoreInitialization()
 
     AlertItem item9;
     item9.setUuid(Utils::Database::createUid());
-    item9.setLabel("INVALID Scripted alert (item8)");
+    item9.setLabel("INVALID Scripted alert (item9)");
     item9.setCategory("Test scripted alert");
     item9.setDescription("A invalid alert with multiple scripts. YOU SHOULD NOT SEE IT !!!!");
     item9.setViewType(AlertItem::StaticAlert);
     item9.addRelation(AlertRelation(AlertRelation::RelatedToAllPatients));
     item9.addTiming(AlertTiming(start, expiration));
     item9.addScript(AlertScript("check_item9", AlertScript::CheckValidityOfAlert, "(1+1)==3;"));
+
+    AlertItem item10;
+    item10.setUuid(Utils::Database::createUid());
+    item10.setLabel("Cycling alert for all patients (item10)");
+    item10.setCategory("Test cycling alert");
+    item10.setDescription("Testing a cycling alert with:<br />- scripts<br />- relation to all patients.<br />Static alert.");
+    item10.setViewType(AlertItem::StaticAlert);
+    item10.addRelation(AlertRelation(AlertRelation::RelatedToAllPatients));
+    AlertTiming cycling(start, expiration);
+    cycling.setCyclingDelayInYears(5);
+    cycling.setNumberOfCycles(32565);
+    item10.addTiming(cycling);
+    item10.addScript(AlertScript("check_item10", AlertScript::CheckValidityOfAlert, "(1+1)==2;"));
+    item10.addScript(AlertScript("startdate_item10", AlertScript::CyclingStartDate, "var currentDate = new Date(); currentDate.setDate(currentDate.getDate()-2); currentDate;"));
 
     // Db save/get
     if (true) {
@@ -385,6 +399,8 @@ void AlertCore::postCoreInitialization()
             qWarning() << "ITEM8 WRONG";
         if (!d->m_alertBase->saveAlertItem(item9))
             qWarning() << "ITEM9 WRONG";
+        if (!d->m_alertBase->saveAlertItem(item10))
+            qWarning() << "ITEM10 WRONG";
 
         Internal::AlertBaseQuery query;
         query.setAlertValidity(Internal::AlertBaseQuery::ValidAlerts);
