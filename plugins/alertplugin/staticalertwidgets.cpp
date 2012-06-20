@@ -86,6 +86,10 @@ static QString getToolTip(const AlertItem &item)
     if (!related.isEmpty())
         content += QString("<span style=\"color:#303030\">%1</span><br />").arg(related.join("<br />"));
 
+    // TODO: add start date of the alert
+//    if (item.timings().count() > 0) {
+//    }
+
     if (!item.description().isEmpty())
         content += QString("<span style=\"color:#606060\">%1</span>").arg(item.description());
 
