@@ -330,10 +330,13 @@ bool AccountDatabaseDefautsWidget::createDefaultsFor(const QString &filePrototyp
 
 void AccountDatabaseDefautsWidget::on_datapackButton_clicked()
 {
+        LOG("datapackButton clicked");
         AccountDB::DatapackMPModel dtpkmodel(this);
         AccountDB::MedicalProcedureModel MPmodel(this);
         int MPmodelRowCount = MPmodel.rowCount();
         int dtpkRowCount = dtpkmodel.rowCount();
+        qDebug() << __FILE__ << QString::number(__LINE__) << " rows =" << QString::number(MPmodelRowCount)
+                 << QString::number(dtpkRowCount) ;
         //test of date
         QList<QDate> listOfDates;
         for (int r = 0; r < MPmodelRowCount; ++r)

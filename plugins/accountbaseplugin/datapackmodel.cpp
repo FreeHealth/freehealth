@@ -44,6 +44,7 @@ static QString databasePath()
     QString dbRelPath = QString("/%1/%2").arg(Constants::DATAPACK_ACCOUNTANCY).arg(Constants::DATAPACK_ACCOUNTANCY_FILENAME);
     QString tmp;
     tmp = settings()->dataPackInstallPath() + dbRelPath;
+    qDebug() << __FILE__ << QString::number(__LINE__) << " tmp =" << tmp ;
     if (QFileInfo(tmp).exists())
         return settings()->dataPackInstallPath();
     tmp = settings()->dataPackApplicationInstalledPath() + dbRelPath;
@@ -60,8 +61,8 @@ static QString databaseFileName()
 
 DatapackBase::DatapackBase(QObject *parent): QObject(parent), Utils::Database()
 {
-    addTable(Table_MedicalProcedure,  "medical_procedure");
-    
+    _init = false;
+    addTable(Table_MedicalProcedure,  "medical_procedure");    
     addField(Table_MedicalProcedure, MP_ID,             "MP_ID",          FieldIsUniquePrimaryKey);
     addField(Table_MedicalProcedure, MP_UID,            "MP_UUID",        FieldIsUUID);
     addField(Table_MedicalProcedure, MP_USER_UID,       "MP_USER_UID",    FieldIsUUID);
@@ -84,12 +85,12 @@ DatapackBase::DatapackBase(QObject *parent): QObject(parent), Utils::Database()
 }
 
 bool DatapackBase::initialize() 
-{
+{qDebug() << __FILE__ << QString::number(__LINE__) << " initialize =" << "INITIALIZE" ;
     if (_init)
         return true;
     setConnectionName(Constants::DATAPACK_ACCOUNTANCY);
     setDriver(Utils::Database::SQLite);
-
+qDebug() << __FILE__ << QString::number(__LINE__) << " initialize =" << "INITIALIZE again" ;
     // test driver
     // use only SQLite with datapacks
     if (!QSqlDatabase::isDriverAvailable("QSQLITE")) {
@@ -103,6 +104,7 @@ bool DatapackBase::initialize()
     // Connect Database
     Utils::DatabaseConnector connector;
     QString pathToDb = databasePath();
+    qDebug() << __FILE__ << QString::number(__LINE__) << "pathToDb  =" <<pathToDb  ;
     if (!QFileInfo(pathToDb).isDir())
         pathToDb = QFileInfo(pathToDb).absolutePath();
     connector.setAbsPathToReadOnlySqliteDatabase(pathToDb);
@@ -112,11 +114,10 @@ bool DatapackBase::initialize()
 
     LOG_FOR("DatapackBase", tkTr(Trans::Constants::SEARCHING_DATABASE_1_IN_PATH_2).arg(Constants::DATAPACK_ACCOUNTANCY).arg(pathToDb));
 
-    createConnection(Constants::DB_ACCOUNTANCY, Constants::DATAPACK_ACCOUNTANCY_FILENAME,
+    createConnection(Constants::DATAPACK_ACCOUNTANCY, Constants::DATAPACK_ACCOUNTANCY_FILENAME,
                      connector,
                      Utils::Database::WarnOnly);
 
-//>>>>>>> 0b78fa17ef45e3b190c4be75e5d31544f311eb23
     if (!database().isOpen()) {
         if (!database().open()) {
             LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DATAPACK_ACCOUNTANCY).arg(database().lastError().text()));
