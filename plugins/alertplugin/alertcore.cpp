@@ -262,6 +262,7 @@ void AlertCore::processAlerts(QVector<AlertItem> &alerts)
                     LOG(tr("Cycling alert script: 'CyclingStartDate': %1; date: %2").arg(item.label()).arg(v.toDateTime().toString(Qt::ISODate)));
                     if (v.isDate()) {
                         timing.setCycleStartDate(v.toDateTime());
+                        timing.setCycleExpirationDate(timing.start().addSecs(timing.cyclingDelayInMinutes()*60));
                     }
                 }
             }
