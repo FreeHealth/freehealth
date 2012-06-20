@@ -1305,6 +1305,7 @@ QString AlertScript::typeToXml(ScriptType type)
 {
     switch (type) {
     case CheckValidityOfAlert: return "check";
+    case CyclingStartDate: return "cyclingStartDate";
     case BeforeAlert: return "before";
     case DuringAlert: return "during";
     case AfterAlert: return "after";
@@ -1317,6 +1318,8 @@ AlertScript::ScriptType AlertScript::typeFromXml(const QString &xml)
 {
     if (xml.compare("check", Qt::CaseInsensitive)==0)
         return CheckValidityOfAlert;
+    else if (xml.compare("cyclingStartDate", Qt::CaseInsensitive)==0)
+        return CyclingStartDate;
     else if (xml.compare("before", Qt::CaseInsensitive)==0)
         return BeforeAlert;
     else if (xml.compare("after", Qt::CaseInsensitive)==0)

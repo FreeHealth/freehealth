@@ -75,7 +75,7 @@ public:
     virtual bool isCycling() const {return _isCycle;}
     virtual void setCycling(bool cycle) {_modified=true; _isCycle=cycle;}
     virtual int numberOfCycles() const {return _ncycle;}
-    virtual void setNumberOfCycles(int n) {_modified=true; _ncycle=n; if (n>0)_ncycle=true;}
+    virtual void setNumberOfCycles(int n) {_modified=true; _ncycle=n; if (n>0)_isCycle=true;}
     virtual QDateTime nextDate() const {return _next;}
     virtual void setNextDate(const QDateTime &dt) {_modified=true; _next = dt;}
 
@@ -121,6 +121,7 @@ class ALERT_EXPORT AlertScript
 public:
     enum ScriptType {
         CheckValidityOfAlert = 0,
+        CyclingStartDate,
         BeforeAlert,
         DuringAlert,
         AfterAlert,
