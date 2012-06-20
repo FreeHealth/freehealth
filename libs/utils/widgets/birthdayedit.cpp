@@ -26,10 +26,15 @@
  ***************************************************************************/
 #include "birthdayedit.h"
 #include <QDebug>
-#include <QToolButton>
 
 #include <translationutils/constants.h>
 #include <utils/datevalidator.h>
+//#include "coreplugin/icore.h"
+//#include "coreplugin/itheme.h"
+//#include "coreplugin/constants_icons.h"
+
+
+//static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 
 using namespace Utils;
 
@@ -104,7 +109,8 @@ void BirthDayEdit::setDateString(const QString& dateString)
         if (m_date != oldDate)
             emit dateChanged(m_date);
         updateDisplayText();
-        setRightButton(new QToolButton());
+        //FIXME: buggy toolbutton
+        m_toolButton->show();
         break;
     }
         /* FIXME: due to QLineEdit not firing editingFinished() when the QValidator returns
@@ -145,6 +151,12 @@ void BirthDayEdit::init(const QDate& date, const QDate& maximumDate, const QDate
     m_maximumDate = maximumDate;
 
     setValidator(new DateValidator(this));
+
+    m_toolButton = new QToolButton(this);
+    m_toolButton->setFocusPolicy(Qt::ClickFocus);
+    setRightButton(m_toolButton);
+    m_toolButton->hide();
+//    m_button->setIcon(Core::ICore::instance()->theme()->icon(Core::Constants::ICONOK));
 
     connect(this, SIGNAL(editingFinished()), this, SLOT(setDisplayedDateString()));
 //    connect(this, SIGNAL(editingFinished()), this, SLOT(updateDisplayText()));

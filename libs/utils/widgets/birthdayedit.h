@@ -33,7 +33,7 @@
 #include <QDate>
 #include <QDateTimeEdit>
 #include <QKeyEvent>
-
+#include <QToolButton>
 
 namespace Utils {
 
@@ -79,6 +79,7 @@ private:
     QDate m_date;
     QDate m_maximumDate;
     QDate m_minimumDate;
+    QToolButton * m_toolButton;
 };
 
 } // end Utils
