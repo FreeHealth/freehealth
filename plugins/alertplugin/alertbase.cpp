@@ -1176,7 +1176,7 @@ QVector<AlertItem> AlertBase::getAlertItems(const AlertBaseQuery &query)
 
         // Cycle validity -> get all cycling alerts (date validity is checked by script in the Core)
         conds.clear();
-        conds << Utils::Field(Constants::Table_ALERT_TIMING, Constants::ALERT_TIMING_CYCLES, QString("IS NOT NULL"));
+        conds << Utils::Field(Constants::Table_ALERT_TIMING, Constants::ALERT_TIMING_CYCLES, QString(">0"));
         wTimeValidity += QString("\n       OR %1").arg(getWhereClause(conds));
         wTimeValidity = QString("\n AND (%1\n"
                                  "      )").arg(wTimeValidity);
