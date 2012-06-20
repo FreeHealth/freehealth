@@ -75,7 +75,7 @@ public:
     virtual bool isCycling() const {return _isCycle;}
     virtual void setCycling(bool cycle) {_modified=true; _isCycle=cycle;}
     virtual int numberOfCycles() const {return _ncycle;}
-    virtual void setNumberOfCycles(int n) {_modified=true; _ncycle=n; if (n>0)_isCycle=true;}
+    virtual void setNumberOfCycles(int n) {_modified=true; _ncycle=n; _isCycle=(n>0);}
     virtual QDateTime nextDate() const {return _next;}
     virtual void setNextDate(const QDateTime &dt) {_modified=true; _next = dt;}
 
@@ -105,6 +105,12 @@ public:
 
     virtual void cyclingDelayPeriodModulo(int *period, int *mod) const;
 
+    // Values not saved in the database, class is not considered as modified when settings these params
+    virtual QDateTime cycleStartDate() const {return _cycleStartDate;}
+    virtual QDateTime cycleExpirationDate() const {return _cycleExpirationDate;}
+    virtual void setCycleStartDate(const QDateTime &dt) const {_cycleStartDate=dt;}
+    virtual void setCycleExpirationDate(const QDateTime &dt) const {_cycleExpirationDate=dt;}
+
     virtual QString toXml() const;
     static AlertTiming fromDomElement(const QDomElement &element);
 
@@ -114,6 +120,7 @@ private:
     qlonglong _delay;
     bool _valid, _isCycle;
     bool _modified;
+    QDateTime _cycleStartDate, _cycleExpirationDate;
 };
 
 class ALERT_EXPORT AlertScript
