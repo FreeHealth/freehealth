@@ -108,8 +108,8 @@ public:
     // Values not saved in the database, class is not considered as modified when settings these params
     virtual QDateTime cycleStartDate() const {return _cycleStartDate;}
     virtual QDateTime cycleExpirationDate() const {return _cycleExpirationDate;}
-    virtual void setCycleStartDate(const QDateTime &dt) const {_cycleStartDate=dt;}
-    virtual void setCycleExpirationDate(const QDateTime &dt) const {_cycleExpirationDate=dt;}
+    virtual void setCycleStartDate(const QDateTime &dt) {_cycleStartDate=dt;}
+    virtual void setCycleExpirationDate(const QDateTime &dt) {_cycleExpirationDate=dt;}
 
     virtual QString toXml() const;
     static AlertTiming fromDomElement(const QDomElement &element);
@@ -146,6 +146,8 @@ public:
 
     virtual QString uuid() const {return _uid;}
     virtual void setUuid(const QString &uid) {_modified=true; _uid=uid;}
+
+    virtual bool isNull() const {return _script.isEmpty();}
 
     virtual bool isValid() const {return _valid;}
     virtual void setValid(bool state) {_modified=true; _valid=state;}
@@ -361,6 +363,7 @@ public:
 
     virtual void clearScripts();
     virtual AlertScript &script(int id) const;
+    virtual AlertScript &scriptType(AlertScript::ScriptType type) const;
     virtual QVector<AlertScript> &scripts() const;
     virtual AlertScript &scriptAt(int id) const;
     virtual void addScript(const AlertScript &script);

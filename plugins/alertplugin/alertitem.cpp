@@ -718,6 +718,16 @@ AlertScript &AlertItem::script(int id) const
     return d->_nullScript;
 }
 
+AlertScript &AlertItem::scriptType(AlertScript::ScriptType type) const
+{
+    for(int i=0; i < d->_scripts.count(); ++i) {
+        AlertScript &script = d->_scripts[i];
+        if (script.type()==type)
+            return script;
+    }
+    return d->_nullScript;
+}
+
 QVector<AlertScript> &AlertItem::scripts() const
 {
     return d->_scripts;
