@@ -194,7 +194,9 @@ bool AlertCore::checkAlerts(AlertsToCheck check)
 */
 bool AlertCore::registerAlert(const AlertItem &item)
 {
-    processAlerts(QVector<AlertItem>() << item);
+    QVector<AlertItem> items;
+    items << item;
+    processAlerts(items);
     return true;
 }
 
@@ -227,7 +229,7 @@ bool AlertCore::updateAlert(const AlertItem &item)
    - Execute dynamic alerts if needed
    - Feed Alert::IAlertPlaceHolder
 */
-void AlertCore::processAlerts(const QVector<AlertItem> &alerts)
+void AlertCore::processAlerts(QVector<AlertItem> &alerts)
 {
     // Get static place holders
     QList<Alert::IAlertPlaceHolder*> placeHolders = pluginManager()->getObjects<Alert::IAlertPlaceHolder>();
@@ -235,22 +237,35 @@ void AlertCore::processAlerts(const QVector<AlertItem> &alerts)
     // Process alerts
     QList<AlertItem> dynamics;
     for(int i = 0; i < alerts.count(); ++i) {
-        const AlertItem &item = alerts.at(i);
+        AlertItem &item = alerts[i];
+
         // Check script ?
         bool checked = true;
-        for(int i = 0; i < item.scripts().count(); ++i) {
-            const AlertScript &s = item.scripts().at(i);
-            if (s.type()==AlertScript::CheckValidityOfAlert) {
-                QScriptValue v = scriptManager()->evaluate(s.script());
-                LOG(tr("Checking alert validity using the 'CheckScript': %1; validity: %2").arg(item.label()).arg(v.toBool()));
-                if (!v.toBool()) {
-                    checked = false;
-                    break;
-                }
+        const AlertScript &checkScript = item.scriptType(AlertScript::CheckValidityOfAlert);
+        if (!checkScript.isNull()) {
+            QScriptValue v = scriptManager()->evaluate(checkScript.script());
+            LOG(tr("Checking alert validity using the 'CheckScript': %1; validity: %2").arg(item.label()).arg(v.toBool()));
+            if (!v.toBool()) {
+                checked = false;
             }
         }
         if (!checked)
             continue;
+
+        // Cycling scripts
+        for(int i =0; i < item.timings().count(); ++i) {
+            AlertTiming &timing = item.timingAt(i);
+            if (timing.isCycling()) {
+                const AlertScript &cyclingDateScript = item.scriptType(AlertScript::CyclingStartDate);
+                if (!cyclingDateScript.isNull()) {
+                    QScriptValue v = scriptManager()->evaluate(cyclingDateScript.script());
+                    LOG(tr("Cycling alert script: 'CyclingStartDate': %1; date: %2").arg(item.label()).arg(v.toDateTime().toString(Qt::ISODate)));
+                    if (v.isDate()) {
+                        timing.setCycleStartDate(v.toDateTime());
+                    }
+                }
+            }
+        }
 
         if (item.viewType() == AlertItem::DynamicAlert) {
             if (!item.isValid() || item.isUserValidated())
@@ -280,6 +295,7 @@ void AlertCore::postCoreInitialization()
     AlertItem item = d->m_alertBase->createVirtualItem();
     item.setThemedIcon("identity.png");
     item.setViewType(AlertItem::StaticAlert);
+    item.setPriority(AlertItem::High);
     item.clearRelations();
     item.clearTimings();
     item.addRelation(AlertRelation(AlertRelation::RelatedToPatient, "patient1"));
@@ -300,6 +316,7 @@ void AlertCore::postCoreInitialization()
     item3.setCategory("Test");
     item3.setDescription("Simple basic static alert that needs a user comment on overriding");
     item3.setViewType(AlertItem::StaticAlert);
+    item3.setPriority(AlertItem::Low);
     item3.setOverrideRequiresUserComment(true);
     item3.addRelation(AlertRelation(AlertRelation::RelatedToPatient, "patient1"));
     item3.addTiming(AlertTiming(start, expiration));
@@ -311,6 +328,7 @@ void AlertCore::postCoreInitialization()
     item4.setCategory("Test");
     item4.setDescription("Related to all patients and was validated for patient2 by user1.<br /> Static alert");
     item4.setViewType(AlertItem::StaticAlert);
+    item4.setPriority(AlertItem::Medium);
     item4.addRelation(AlertRelation(AlertRelation::RelatedToAllPatients));
     item4.addValidation(AlertValidation(QDateTime::currentDateTime(), "user1", "patient2"));
     item4.addTiming(AlertTiming(start, expiration));
