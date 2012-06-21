@@ -44,7 +44,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="1831"/>
+        <location filename="../../libs/utils/database.cpp" line="1854"/>
         <source>Can not create table %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -246,15 +246,11 @@
     </message>
 </context>
 <context>
-    <name>Utils::BirthDayEdit</name>
+    <name>Utils::DateValidator</name>
     <message>
-        <location filename="../../libs/utils/widgets/birthdayedit.cpp" line="45"/>
-        <source>xxxxxxxxxx</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/utils/widgets/birthdayedit.cpp" line="152"/>
+        <location filename="../../libs/utils/datevalidator.cpp" line="19"/>
         <source>ddMMyy,ddMMyyyy</source>
+        <extracomment>this is a comma separated list of formatStrings used by QDate::fromString();</extracomment>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -656,8 +652,8 @@
 <context>
     <name>Utils::QButtonLineEdit</name>
     <message>
-        <location filename="../../libs/utils/widgets/qbuttonlineedit.cpp" line="184"/>
-        <location filename="../../libs/utils/widgets/qbuttonlineedit.cpp" line="185"/>
+        <location filename="../../libs/utils/widgets/qbuttonlineedit.cpp" line="188"/>
+        <location filename="../../libs/utils/widgets/qbuttonlineedit.cpp" line="189"/>
         <source>(press Alt up/down cursor to cycle)</source>
         <translation type="unfinished"></translation>
     </message>

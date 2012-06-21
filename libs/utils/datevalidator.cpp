@@ -1,9 +1,13 @@
 #include <translationutils/constants.h>
+#include "translationutils/constanttranslations.h"
+
 #include "datevalidator.h"
+
 #include <QDate>
 #include <QDebug>
 
 using namespace Utils;
+using namespace Trans::ConstantTranslations;
 
 DateValidator::DateValidator(QObject *parent) :
     QValidator(parent)
@@ -15,12 +19,12 @@ DateValidator::DateValidator(QObject *parent) :
     m_dateFormatList = tr("ddMMyy,ddMMyyyy").simplified().split(",", QString::SkipEmptyParts);
     m_lastValidFormat = QString();
 
-    // always also use the default formats
+    // always also use the validator locale's default formats
     m_dateFormatList.append(locale().dateFormat(QLocale::ShortFormat));
     m_dateFormatList.append(locale().dateFormat(QLocale::NarrowFormat));
 
     // and then the FMF editor default format
-    m_dateFormatList.append(Trans::Constants::DATEFORMAT_FOR_EDITOR);
+    m_dateFormatList.append(tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR));
 }
 
 /** \brief validates the input string with custom date formats
@@ -56,8 +60,9 @@ QValidator::State DateValidator::validate(QString &input, int &pos) const
 }
 
 /**
- * \brief returns formatString that was used when the input string can
- * be converted in a QDate */
+ * \brief returns formatString that is used when the given input string can
+ * be converted in a QDate. If input leads to an invalid date, the function
+ * returns a QString(). */
 QString DateValidator::matchedFormat(QString & input) const
 {
     foreach(QString format, m_dateFormatList) {

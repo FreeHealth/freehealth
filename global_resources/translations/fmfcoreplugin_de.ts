@@ -821,6 +821,14 @@ Using Url: %1
     </message>
 </context>
 <context>
+    <name>Core::Internal::ThemePrivate</name>
+    <message>
+        <location filename="../../plugins/coreplugin/theme.cpp" line="242"/>
+        <source>Using splash: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Core::ModeManager</name>
     <message>
         <location filename="../../plugins/coreplugin/modemanager/modemanager.cpp" line="168"/>
@@ -953,17 +961,17 @@ Please contact your server administrator.</source>
 <context>
     <name>Core::Translators</name>
     <message>
-        <location filename="../../plugins/coreplugin/translators.cpp" line="140"/>
+        <location filename="../../plugins/coreplugin/translators.cpp" line="136"/>
         <source>Can not load %1, path: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/translators.cpp" line="189"/>
+        <location filename="../../plugins/coreplugin/translators.cpp" line="185"/>
         <source>Add Translator %1.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/translators.cpp" line="195"/>
+        <location filename="../../plugins/coreplugin/translators.cpp" line="192"/>
         <source>WARNING: %1 can not be loaded or is already loaded.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -971,7 +979,7 @@ Please contact your server administrator.</source>
 <context>
     <name>ThemePrivate</name>
     <message>
-        <location filename="../../plugins/coreplugin/theme.cpp" line="172"/>
+        <location filename="../../plugins/coreplugin/theme.cpp" line="171"/>
         <source>ERROR - Theme: Unable to load icon file %1</source>
         <translation type="unfinished"></translation>
     </message>

@@ -828,6 +828,14 @@ Url : %1
     </message>
 </context>
 <context>
+    <name>Core::Internal::ThemePrivate</name>
+    <message>
+        <location filename="../../plugins/coreplugin/theme.cpp" line="242"/>
+        <source>Using splash: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Core::ModeManager</name>
     <message>
         <location filename="../../plugins/coreplugin/modemanager/modemanager.cpp" line="168"/>
@@ -961,17 +969,17 @@ Veuillez contacter votre administrateur réseau.</translation>
 <context>
     <name>Core::Translators</name>
     <message>
-        <location filename="../../plugins/coreplugin/translators.cpp" line="140"/>
+        <location filename="../../plugins/coreplugin/translators.cpp" line="136"/>
         <source>Can not load %1, path: %2</source>
         <translation>Impossible de charger %1, chemin %2</translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/translators.cpp" line="189"/>
+        <location filename="../../plugins/coreplugin/translators.cpp" line="185"/>
         <source>Add Translator %1.</source>
         <translation>Ajout du dictionnaire de traductions %1.</translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/translators.cpp" line="195"/>
+        <location filename="../../plugins/coreplugin/translators.cpp" line="192"/>
         <source>WARNING: %1 can not be loaded or is already loaded.</source>
         <translation>Attention : impossible de charger %1 ou est déjà chargé.</translation>
     </message>
@@ -979,7 +987,7 @@ Veuillez contacter votre administrateur réseau.</translation>
 <context>
     <name>ThemePrivate</name>
     <message>
-        <location filename="../../plugins/coreplugin/theme.cpp" line="172"/>
+        <location filename="../../plugins/coreplugin/theme.cpp" line="171"/>
         <source>ERROR - Theme: Unable to load icon file %1</source>
         <translation>Erreur - Thème: impossible de charger l&apos;icône %1</translation>
     </message>

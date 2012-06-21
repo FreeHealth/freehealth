@@ -136,6 +136,7 @@ void BirthDayEdit::updateDisplayText()
     if (m_date.isValid()) {
         setText(m_date.toString(Trans::Constants::DATEFORMAT_FOR_EDITOR));
         qDebug() << "DATEFORMAT_FOR_EDITOR:" << Trans::Constants::DATEFORMAT_FOR_EDITOR;
+        qDebug() << "tr(DATEFORMAT_FOR_EDITOR):" << tr(Trans::Constants::DATEFORMAT_FOR_EDITOR);
     } else {
         // no valid date saved, maybe NULL
         clear();
@@ -159,5 +160,4 @@ void BirthDayEdit::init(const QDate& date, const QDate& maximumDate, const QDate
 //    m_button->setIcon(Core::ICore::instance()->theme()->icon(Core::Constants::ICONOK));
 
     connect(this, SIGNAL(editingFinished()), this, SLOT(setDisplayedDateString()));
-//    connect(this, SIGNAL(editingFinished()), this, SLOT(updateDisplayText()));
 }

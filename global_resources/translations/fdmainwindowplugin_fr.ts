@@ -73,67 +73,67 @@
 <context>
     <name>MainWin::MainWindow</name>
     <message>
-        <location filename="../../freediams/plugins/mainwindowplugin/mainwindow.cpp" line="263"/>
+        <location filename="../../freediams/plugins/mainwindowplugin/mainwindow.cpp" line="264"/>
         <source>Creating Main Window</source>
         <translation>Création de la fenêtre principale</translation>
     </message>
     <message>
-        <location filename="../../freediams/plugins/mainwindowplugin/mainwindow.cpp" line="359"/>
+        <location filename="../../freediams/plugins/mainwindowplugin/mainwindow.cpp" line="360"/>
         <source>Transmitting posologies...</source>
         <translation>Transmition des posologies...</translation>
     </message>
     <message>
-        <location filename="../../freediams/plugins/mainwindowplugin/mainwindow.cpp" line="385"/>
+        <location filename="../../freediams/plugins/mainwindowplugin/mainwindow.cpp" line="386"/>
         <source>Connected to %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freediams/plugins/mainwindowplugin/mainwindow.cpp" line="400"/>
+        <location filename="../../freediams/plugins/mainwindowplugin/mainwindow.cpp" line="401"/>
         <source>Initializing drugs database</source>
         <translation>Initialisation de la base de données thérapeutique</translation>
     </message>
     <message>
-        <location filename="../../freediams/plugins/mainwindowplugin/mainwindow.cpp" line="406"/>
+        <location filename="../../freediams/plugins/mainwindowplugin/mainwindow.cpp" line="407"/>
         <source>Entering selection mode</source>
         <translation>Entrée dans le mode de sélection seulement</translation>
     </message>
     <message>
-        <location filename="../../freediams/plugins/mainwindowplugin/mainwindow.cpp" line="415"/>
+        <location filename="../../freediams/plugins/mainwindowplugin/mainwindow.cpp" line="416"/>
         <source>Reading exchange file...</source>
         <translation>Ouverture du fichier d&apos;échange...</translation>
     </message>
     <message>
-        <location filename="../../freediams/plugins/mainwindowplugin/mainwindow.cpp" line="749"/>
+        <location filename="../../freediams/plugins/mainwindowplugin/mainwindow.cpp" line="750"/>
         <source>Save actual prescription?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freediams/plugins/mainwindowplugin/mainwindow.cpp" line="750"/>
+        <location filename="../../freediams/plugins/mainwindowplugin/mainwindow.cpp" line="751"/>
         <source>The actual prescription is not empty. Do you want to save it before creating a new one?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freediams/plugins/mainwindowplugin/mainwindow.cpp" line="854"/>
+        <location filename="../../freediams/plugins/mainwindowplugin/mainwindow.cpp" line="855"/>
         <source>Opening a prescription : merge or replace?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freediams/plugins/mainwindowplugin/mainwindow.cpp" line="855"/>
+        <location filename="../../freediams/plugins/mainwindowplugin/mainwindow.cpp" line="856"/>
         <source>There is a prescription inside editor, do you to replace it or to add the opened prescription?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freediams/plugins/mainwindowplugin/mainwindow.cpp" line="856"/>
+        <location filename="../../freediams/plugins/mainwindowplugin/mainwindow.cpp" line="857"/>
         <source>Replace prescription</source>
         <translation>Remplacer la prescription</translation>
     </message>
     <message>
-        <location filename="../../freediams/plugins/mainwindowplugin/mainwindow.cpp" line="856"/>
+        <location filename="../../freediams/plugins/mainwindowplugin/mainwindow.cpp" line="857"/>
         <source>Add to prescription</source>
         <translation>Ajouter à la prescription</translation>
     </message>
     <message>
-        <location filename="../../freediams/plugins/mainwindowplugin/mainwindow.cpp" line="857"/>
+        <location filename="../../freediams/plugins/mainwindowplugin/mainwindow.cpp" line="858"/>
         <source>Open a prescription</source>
         <translation>Ouvrerture d&apos;une prescription</translation>
     </message>
@@ -141,7 +141,7 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../../freediams/plugins/mainwindowplugin/mainwindow.cpp" line="241"/>
+        <location filename="../../freediams/plugins/mainwindowplugin/mainwindow.cpp" line="242"/>
         <source>Preparing dosage transmission</source>
         <translation>Préparation de la transmission des posologies</translation>
     </message>

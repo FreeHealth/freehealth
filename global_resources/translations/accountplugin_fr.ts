@@ -2569,12 +2569,12 @@ Vous pouvez en créer dans les préférences.</translation>
 <context>
     <name>ReceiptsManager</name>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptsmanager.cpp" line="329"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptsmanager.cpp" line="371"/>
         <source>You have to create a preferred value in Thesaurus.</source>
         <translation>Vous devez créer une valeur préférée par le Thésaurus.</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptsmanager.cpp" line="546"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptsmanager.cpp" line="588"/>
         <source>Error</source>
         <translation>Erreur</translation>
     </message>
@@ -2693,7 +2693,7 @@ Vous devriez créer les valeurs par défaut dans Configuration &gt; Preference &
 <context>
     <name>receiptsEngine</name>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptsIO.cpp" line="264"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptsIO.cpp" line="265"/>
         <source>You have to insert your preferred value
 in thesaurus
 and choose it as preferred.</source>
@@ -2702,12 +2702,12 @@ dans le thésaurus
 et la choisir comme préférée.</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptsIO.cpp" line="294"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptsIO.cpp" line="295"/>
         <source>preferred act</source>
         <translation>Acte préféré</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptsIO.cpp" line="355"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptsIO.cpp" line="356"/>
         <source>More than one value</source>
         <translation>Plus d&apos;une valeur</translation>
     </message>

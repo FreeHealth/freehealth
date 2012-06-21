@@ -2530,12 +2530,12 @@ and choose it as preferred.</source>
 <context>
     <name>ReceiptsManager</name>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptsmanager.cpp" line="329"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptsmanager.cpp" line="371"/>
         <source>You have to create a preferred value in Thesaurus.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptsmanager.cpp" line="546"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptsmanager.cpp" line="588"/>
         <source>Error</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2653,19 +2653,19 @@ You should create defaults in Configuration &gt; Preference &gt; Accountancy.</s
 <context>
     <name>receiptsEngine</name>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptsIO.cpp" line="264"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptsIO.cpp" line="265"/>
         <source>You have to insert your preferred value
 in thesaurus
 and choose it as preferred.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptsIO.cpp" line="294"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptsIO.cpp" line="295"/>
         <source>preferred act</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/receipts/receiptsIO.cpp" line="355"/>
+        <location filename="../../plugins/accountplugin/receipts/receiptsIO.cpp" line="356"/>
         <source>More than one value</source>
         <translation type="unfinished"></translation>
     </message>

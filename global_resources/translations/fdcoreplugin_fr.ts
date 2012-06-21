@@ -12,27 +12,27 @@
 <context>
     <name>CommandLine</name>
     <message>
-        <location filename="../../freediams/plugins/coreplugin/commandlineparser.cpp" line="188"/>
+        <location filename="../../freediams/plugins/coreplugin/commandlineparser.cpp" line="189"/>
         <source>Passing exchange in file : %1</source>
         <translation>Fichier d&apos;échange entrant spécifié : %1</translation>
     </message>
     <message>
-        <location filename="../../freediams/plugins/coreplugin/commandlineparser.cpp" line="196"/>
+        <location filename="../../freediams/plugins/coreplugin/commandlineparser.cpp" line="198"/>
         <source>Passing %1 as exchange in file, but file does not exists.</source>
         <translation>Fichier d&apos;échange spécifié %1 n&apos;existe pas.</translation>
     </message>
     <message>
-        <location filename="../../freediams/plugins/coreplugin/commandlineparser.cpp" line="203"/>
+        <location filename="../../freediams/plugins/coreplugin/commandlineparser.cpp" line="206"/>
         <source>Reading exchange in file : %1</source>
         <translation>Lecture du fichier d&apos;échange entrant : %1</translation>
     </message>
     <message>
-        <location filename="../../freediams/plugins/coreplugin/commandlineparser.cpp" line="208"/>
+        <location filename="../../freediams/plugins/coreplugin/commandlineparser.cpp" line="211"/>
         <source>In File %1 is empty.</source>
         <translation>Le fichier d&apos;entrée %1 est vide.</translation>
     </message>
     <message>
-        <location filename="../../freediams/plugins/coreplugin/commandlineparser.cpp" line="223"/>
+        <location filename="../../freediams/plugins/coreplugin/commandlineparser.cpp" line="226"/>
         <source>Wrong root tag %1 %2.</source>
         <translation>Mauvais marqueur principal %1 %2.</translation>
     </message>
@@ -40,28 +40,28 @@
 <context>
     <name>Core</name>
     <message>
-        <location filename="../../freediams/plugins/coreplugin/coreimpl.cpp" line="161"/>
         <location filename="../../freediams/plugins/coreplugin/coreimpl.cpp" line="163"/>
+        <location filename="../../freediams/plugins/coreplugin/coreimpl.cpp" line="165"/>
         <source>Core intialization finished...</source>
         <translation>Initialisation du Core terminée...</translation>
     </message>
     <message>
-        <location filename="../../freediams/plugins/coreplugin/coreimpl.cpp" line="219"/>
+        <location filename="../../freediams/plugins/coreplugin/coreimpl.cpp" line="221"/>
         <source>You are running FreeDiams for the first time. You need to approve the licence terms.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freediams/plugins/coreplugin/coreimpl.cpp" line="222"/>
+        <location filename="../../freediams/plugins/coreplugin/coreimpl.cpp" line="224"/>
         <source>You are running a new version of FreeDiams, you need to renew the licence agreement.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freediams/plugins/coreplugin/coreimpl.cpp" line="232"/>
+        <location filename="../../freediams/plugins/coreplugin/coreimpl.cpp" line="234"/>
         <source>You are updating FreeDiams, do you want to update your personnal preferences ?</source>
         <translation>Mise à jour de FreeDiams détectée, voulez-vous mettre à jour vos paramètres personnels ?</translation>
     </message>
     <message>
-        <location filename="../../freediams/plugins/coreplugin/coreimpl.cpp" line="233"/>
+        <location filename="../../freediams/plugins/coreplugin/coreimpl.cpp" line="235"/>
         <source>With the new version some preferences should be outdated. Answering yes will allow FreeDiams to update your personnal preferences.</source>
         <translation>Avec cette nouvelle version, quelques préférences devraient être mises à jour. En répondant par oui vous autorisez FreeDiams à mettre à jour vos préférences d&apos;application.</translation>
     </message>
@@ -743,6 +743,14 @@ Using Url: %1
     </message>
 </context>
 <context>
+    <name>Core::Internal::ThemePrivate</name>
+    <message>
+        <location filename="../../plugins/coreplugin/theme.cpp" line="242"/>
+        <source>Using splash: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Core::ModeManager</name>
     <message>
         <location filename="../../plugins/coreplugin/modemanager/modemanager.cpp" line="168"/>
@@ -867,17 +875,17 @@ Using Url: %1
 <context>
     <name>Core::Translators</name>
     <message>
-        <location filename="../../plugins/coreplugin/translators.cpp" line="140"/>
+        <location filename="../../plugins/coreplugin/translators.cpp" line="136"/>
         <source>Can not load %1, path: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/translators.cpp" line="189"/>
+        <location filename="../../plugins/coreplugin/translators.cpp" line="185"/>
         <source>Add Translator %1.</source>
         <translation>Ajout du dictionnaire de traductions %1.</translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/translators.cpp" line="195"/>
+        <location filename="../../plugins/coreplugin/translators.cpp" line="192"/>
         <source>WARNING: %1 can not be loaded or is already loaded.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -885,7 +893,7 @@ Using Url: %1
 <context>
     <name>ThemePrivate</name>
     <message>
-        <location filename="../../plugins/coreplugin/theme.cpp" line="172"/>
+        <location filename="../../plugins/coreplugin/theme.cpp" line="171"/>
         <source>ERROR - Theme: Unable to load icon file %1</source>
         <translation type="unfinished"></translation>
     </message>
