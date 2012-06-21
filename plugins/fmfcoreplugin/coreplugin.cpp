@@ -53,7 +53,6 @@ CorePlugin::CorePlugin() :
     m_CoreImpl(0),
     prefPage(0),
     proxyPage(0)
-
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating CorePlugin";
@@ -106,8 +105,6 @@ void CorePlugin::extensionsInitialized()
 
     messageSplash(tr("Initializing core plugin..."));
 
-    m_CoreImpl->extensionsInitialized();
-
     // add about pages
     this->addAutoReleasedObject(new AppAboutPage(this));
     this->addAutoReleasedObject(new TeamAboutPage(this));
@@ -126,6 +123,8 @@ void CorePlugin::extensionsInitialized()
     prefPage->checkSettingsValidity();
     proxyPage->checkSettingsValidity();
     m_CoreImpl->settings()->sync();
+
+    m_CoreImpl->extensionsInitialized();
 }
 
 void CorePlugin::remoteArgument(const QString& arg)
