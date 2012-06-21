@@ -37,6 +37,7 @@
 //static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 
 using namespace Utils;
+using namespace Trans::ConstantTranslations;
 
 BirthDayEdit::BirthDayEdit(QWidget *parent) :
     QButtonLineEdit(parent)
@@ -134,9 +135,7 @@ void BirthDayEdit::updateDisplayText()
 {
     // was there valid date saved?
     if (m_date.isValid()) {
-        setText(m_date.toString(Trans::Constants::DATEFORMAT_FOR_EDITOR));
-        qDebug() << "DATEFORMAT_FOR_EDITOR:" << Trans::Constants::DATEFORMAT_FOR_EDITOR;
-        qDebug() << "tr(DATEFORMAT_FOR_EDITOR):" << tr(Trans::Constants::DATEFORMAT_FOR_EDITOR);
+        setText(m_date.toString(tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR)));
     } else {
         // no valid date saved, maybe NULL
         clear();
