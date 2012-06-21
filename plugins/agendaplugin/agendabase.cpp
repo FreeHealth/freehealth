@@ -695,42 +695,53 @@ bool AgendaBase::saveCalendarAvailabilities(Agenda::UserCalendar *calendar)
         }
     } else {
         LOG_QUERY_ERROR(query);
+        database().rollback();
+        return false;
     }
     query.finish();
 
-    // get all tr_id for deleted availIds
-    QStringList trIds;
-    where.clear();
-    where.insert(Constants::AVTOTR_AVID, QString("IN (%1)").arg(availIds.join(",")));
-    if (query.exec(this->select(Constants::Table_AVAIL_TO_TIMERANGE, Constants::AVTOTR_TRID, where))) {
-        while (query.next()) {
-            trIds << query.value(0).toString();
+    if (!availIds.isEmpty()) {
+        // get all tr_id for deleted availIds
+        QStringList trIds;
+        where.clear();
+        where.insert(Constants::AVTOTR_AVID, QString("IN (%1)").arg(availIds.join(",")));
+        if (query.exec(this->select(Constants::Table_AVAIL_TO_TIMERANGE, Constants::AVTOTR_TRID, where))) {
+            while (query.next()) {
+                trIds << query.value(0).toString();
+            }
+        } else {
+            LOG_QUERY_ERROR(query);
+            database().rollback();
+            return false;
         }
-    } else {
-        LOG_QUERY_ERROR(query);
-    }
-    query.finish();
+        query.finish();
 
-    // delete availabilities records
-    where.clear();
-    where.insert(Constants::AVAIL_ID, QString("IN (%1)").arg(availIds.join(",")));
-    if (!query.exec(this->prepareDeleteQuery(Constants::Table_AVAILABILITIES, where))) {
-        LOG_QUERY_ERROR(query);
+        // delete availabilities records
+        where.clear();
+        where.insert(Constants::AVAIL_ID, QString("IN (%1)").arg(availIds.join(",")));
+        if (!query.exec(this->prepareDeleteQuery(Constants::Table_AVAILABILITIES, where))) {
+            LOG_QUERY_ERROR(query);
+            database().rollback();
+            return false;
+        }
+        query.finish();
+        where.clear();
+        where.insert(Constants::AVTOTR_AVID, QString("IN (%1)").arg(availIds.join(",")));
+        if (!query.exec(this->prepareDeleteQuery(Constants::Table_AVAIL_TO_TIMERANGE, where))) {
+            LOG_QUERY_ERROR(query);
+            database().rollback();
+            return false;
+        }
+        query.finish();
+        where.clear();
+        where.insert(Constants::TIMERANGE_ID, QString("IN (%1)").arg(trIds.join(",")));
+        if (!query.exec(this->prepareDeleteQuery(Constants::Table_TIMERANGE, where))) {
+            LOG_QUERY_ERROR(query);
+            database().rollback();
+            return false;
+        }
+        query.finish();
     }
-    query.finish();
-    where.clear();
-    where.insert(Constants::AVTOTR_AVID, QString("IN (%1)").arg(availIds.join(",")));
-    if (!query.exec(this->prepareDeleteQuery(Constants::Table_AVAIL_TO_TIMERANGE, where))) {
-        LOG_QUERY_ERROR(query);
-    }
-    query.finish();
-    where.clear();
-    where.insert(Constants::TIMERANGE_ID, QString("IN (%1)").arg(trIds.join(",")));
-    if (!query.exec(this->prepareDeleteQuery(Constants::Table_TIMERANGE, where))) {
-        LOG_QUERY_ERROR(query);
-    }
-    query.finish();
-    database().commit();
 
     // No availabilities -> finished
     if (!calendar->hasAvailability()) {
@@ -761,7 +772,8 @@ bool AgendaBase::saveCalendarAvailabilities(Agenda::UserCalendar *calendar)
         query.bindValue(Constants::AVAIL_WEEKDAY, it.key());
         if (!query.exec()) {
             LOG_QUERY_ERROR(query);
-            continue;
+            database().rollback();
+            return false;
         }
         int avId = query.lastInsertId().toInt();
         query.finish();
@@ -776,7 +788,8 @@ bool AgendaBase::saveCalendarAvailabilities(Agenda::UserCalendar *calendar)
             query.bindValue(Constants::TIMERANGE_TO, range.to.toString());
             if (!query.exec()) {
                 LOG_QUERY_ERROR(query);
-                continue;
+                database().rollback();
+                return false;
             }
             int trId = query.lastInsertId().toInt();
             range.id = trId;
@@ -788,7 +801,8 @@ bool AgendaBase::saveCalendarAvailabilities(Agenda::UserCalendar *calendar)
             query.bindValue(Constants::AVTOTR_TRID, trId);
             if (!query.exec()) {
                 LOG_QUERY_ERROR(query);
-                continue;
+                database().rollback();
+                return false;
             }
             query.finish();
         }
@@ -796,6 +810,8 @@ bool AgendaBase::saveCalendarAvailabilities(Agenda::UserCalendar *calendar)
         hashAv[it.key()].setId(avId);
     }
     calendar->setAvailabilities(hashAv.values());
+    database().commit();
+    LOG("User agenda correctly saved");
     return true;
 }
 
