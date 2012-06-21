@@ -61,6 +61,16 @@
         <translation>Identität</translation>
     </message>
     <message>
+        <location filename="../../libs/translationutils/trans_menu.h" line="62"/>
+        <source>&amp;Open...</source>
+        <translation>Ö&amp;ffnen...</translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_menu.h" line="64"/>
+        <source>Save &amp;as...</source>
+        <translation>Speichern &amp;unter...</translation>
+    </message>
+    <message>
         <location filename="../../libs/translationutils/trans_menu.h" line="75"/>
         <source>Open a prescription</source>
         <translation>Öffnen eines Rezeptes</translation>
@@ -179,17 +189,17 @@
     <message>
         <location filename="../../libs/translationutils/trans_menu.h" line="104"/>
         <source>Lock</source>
-        <translation type="unfinished"></translation>
+        <translation>Sperren</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_menu.h" line="105"/>
         <source>Unlock</source>
-        <translation type="unfinished"></translation>
+        <translation>Entsperren</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_menu.h" line="106"/>
         <source>Locked</source>
-        <translation type="unfinished"></translation>
+        <translation>Gesperrt</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_menu.h" line="107"/>
@@ -199,7 +209,7 @@
     <message>
         <location filename="../../libs/translationutils/trans_menu.h" line="110"/>
         <source>PMHx</source>
-        <translation>KG</translation>
+        <translation type="unfinished">PMHx (Past Medical History)</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_menu.h" line="111"/>
@@ -330,7 +340,7 @@
     <message>
         <location filename="../../libs/translationutils/trans_menu.h" line="143"/>
         <source>Debugging tools</source>
-        <translation>Debugging Werkzeuge</translation>
+        <translation type="unfinished">Debugging-Werkzeuge</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_menu.h" line="38"/>
@@ -409,19 +419,9 @@
         <translation>&amp;Neu</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="62"/>
-        <source>&amp;Open</source>
-        <translation>Ö&amp;ffnen</translation>
-    </message>
-    <message>
         <location filename="../../libs/translationutils/trans_menu.h" line="63"/>
         <source>&amp;Save</source>
         <translation>&amp;Speichern</translation>
-    </message>
-    <message>
-        <location filename="../../libs/translationutils/trans_menu.h" line="64"/>
-        <source>Save &amp;as</source>
-        <translation>Speichern &amp;unter...</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_menu.h" line="65"/>
@@ -2372,47 +2372,47 @@ Ort: %2</translation>
     <message>
         <location filename="../../libs/translationutils/trans_patient.h" line="50"/>
         <source>Age</source>
-        <translation type="unfinished"></translation>
+        <translation>Alter</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_patient.h" line="51"/>
         <source>Age in years</source>
-        <translation type="unfinished"></translation>
+        <translation>Alter in Jahren</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_patient.h" line="53"/>
         <source>Weight</source>
-        <translation type="unfinished"></translation>
+        <translation>Gewicht</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_patient.h" line="54"/>
         <source>Height</source>
-        <translation type="unfinished"></translation>
+        <translation>Größe</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_patient.h" line="55"/>
         <source>Creatinin clerance</source>
-        <translation type="unfinished"></translation>
+        <translation>Kreatinin-Clearance</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_patient.h" line="57"/>
         <source>Units</source>
-        <translation type="unfinished"></translation>
+        <translation>Units</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_patient.h" line="59"/>
         <source>Patient</source>
-        <translation type="unfinished"></translation>
+        <translation>Patient</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_patient.h" line="60"/>
         <source>Patients</source>
-        <translation type="unfinished"></translation>
+        <translation>Patienten</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_patient.h" line="62"/>
         <source>Patient database</source>
-        <translation type="unfinished"></translation>
+        <translation>Patientendatenbank</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_patient.h" line="64"/>
@@ -2432,47 +2432,47 @@ Ort: %2</translation>
     <message>
         <location filename="../../libs/translationutils/trans_titles.h" line="46"/>
         <source>Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Adresse</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_titles.h" line="47"/>
         <source>Male</source>
-        <translation type="unfinished"></translation>
+        <translation>Männlich</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_titles.h" line="48"/>
         <source>Female</source>
-        <translation type="unfinished"></translation>
+        <translation>Weiblich</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_titles.h" line="49"/>
         <source>Hermaphrodism</source>
-        <translation type="unfinished"></translation>
+        <translation>Hermaphrodismus</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_titles.h" line="52"/>
         <source>Mister</source>
-        <translation type="unfinished"></translation>
+        <translation>Herr</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_titles.h" line="53"/>
         <source>Miss</source>
-        <translation type="unfinished"></translation>
+        <translation>Frau</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_titles.h" line="54"/>
         <source>Madam</source>
-        <translation type="unfinished"></translation>
+        <translation>Fräulein</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_titles.h" line="55"/>
         <source>Doctor</source>
-        <translation type="unfinished"></translation>
+        <translation>Doktor</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_titles.h" line="56"/>
         <source>Professor</source>
-        <translation type="unfinished"></translation>
+        <translation>Professor</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_titles.h" line="57"/>
@@ -2491,7 +2491,7 @@ Ort: %2</translation>
         <extracomment>Text Align Left shortcut key
 ----------
 Text Align Left shortcut key : Mac specific</extracomment>
-        <translation></translation>
+        <translation>Strg+L</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_editor.h" line="39"/>
@@ -2500,7 +2500,7 @@ Text Align Left shortcut key : Mac specific</extracomment>
         <extracomment>Text Align Right shortcut key
 ----------
 Text Align Right shortcut key : Mac specific</extracomment>
-        <translation></translation>
+        <translation>Strg+R</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_editor.h" line="42"/>
@@ -2509,7 +2509,7 @@ Text Align Right shortcut key : Mac specific</extracomment>
         <extracomment>Text Align Center shortcut key
 ----------
 Text Align Center shortcut key : Mac specific</extracomment>
-        <translation></translation>
+        <translation>Strg+E</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_editor.h" line="45"/>
@@ -2518,18 +2518,18 @@ Text Align Center shortcut key : Mac specific</extracomment>
         <extracomment>Text Align Justify shortcut key
 ----------
 Text Align Justify shortcut key : Mac specific</extracomment>
-        <translation></translation>
+        <translation>Strg+J</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_editor.h" line="60"/>
         <source>Ctrl+Shift+T</source>
         <extracomment>Add table Editor shortcut key</extracomment>
-        <translation></translation>
+        <translation>Strg+Umschalt+T</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_editor.h" line="65"/>
         <source>Toggle toolbar</source>
-        <translation type="unfinished"></translation>
+        <translation>Werkzeugleiste aus-/einblenden</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_editor.h" line="66"/>
@@ -2555,32 +2555,32 @@ Text Align Justify shortcut key : Mac specific</extracomment>
     <message>
         <location filename="../../libs/translationutils/constants.h" line="43"/>
         <source>All languages</source>
-        <translation type="unfinished"></translation>
+        <translation>Alle Sprachen</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/constants.h" line="44"/>
         <source>All other languages</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../libs/translationutils/constants.h" line="49"/>
-        <source>MM dd yyyy</source>
-        <extracomment>This date format will be used in every QDateEdit only</extracomment>
-        <translation type="unfinished"></translation>
+        <translation>Alle anderen Sprachen</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/constants.h" line="50"/>
+        <source>MM dd yyyy</source>
+        <extracomment>This date format will be used in every QDateEdit only</extracomment>
+        <translation>dd.MM.yyyy</translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/constants.h" line="51"/>
         <source>MM-dd-yyyy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constants.h" line="53"/>
+        <location filename="../../libs/translationutils/constants.h" line="54"/>
         <source>MM dd yyyy hh:mm</source>
         <extracomment>This date time format will be used in every QDateTimeEdit only</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/constants.h" line="56"/>
+        <location filename="../../libs/translationutils/constants.h" line="57"/>
         <source>hh:mm</source>
         <extracomment>This time format will be used in every QTimeEdit only</extracomment>
         <translation type="unfinished"></translation>

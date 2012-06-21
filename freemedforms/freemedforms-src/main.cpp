@@ -177,11 +177,6 @@ int main(int argc, char *argv[])
          std::cout << qPrintable(HELP_MESSAGE);
          return 0;
      }
-     qDebug() << "QLocale::system().name()" << QLocale::system().name();
-     qDebug() << "QLocale().name()" << QLocale().name();
-     qDebug() << "QLocale::system().dateFormat(QLocale::ShortFormat)" << QLocale::system().dateFormat(QLocale::ShortFormat);
-     qDebug() << "QLocale().dateFormat(QLocale::ShortFormat)" << QLocale().dateFormat(QLocale::ShortFormat);
-     app.quit();
 
     ExtensionSystem::PluginManager pluginManager;
     pluginManager.setFileExtension(QString("pluginspec"));

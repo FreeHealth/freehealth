@@ -248,12 +248,12 @@
 <context>
     <name>Utils::BirthDayEdit</name>
     <message>
-        <location filename="../../libs/utils/widgets/birthdayedit.cpp" line="19"/>
+        <location filename="../../libs/utils/widgets/birthdayedit.cpp" line="45"/>
         <source>xxxxxxxxxx</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/widgets/birthdayedit.cpp" line="112"/>
+        <location filename="../../libs/utils/widgets/birthdayedit.cpp" line="152"/>
         <source>ddMMyy,ddMMyyyy</source>
         <translation type="unfinished"></translation>
     </message>

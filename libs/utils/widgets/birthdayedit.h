@@ -27,16 +27,15 @@
 #ifndef BIRTHDAYEDIT_H
 #define BIRTHDAYEDIT_H
 
-#include <QLineEdit>
+#include "qbuttonlineedit.h"
 #include <utils/global_exporter.h>
 
 #include <QDate>
 #include <QDateTimeEdit>
 #include <QKeyEvent>
-
+#include <QToolButton>
 
 namespace Utils {
-
 
 /**
  * \class Utils::BirthDayEdit
@@ -47,7 +46,7 @@ namespace Utils {
  * the available masks (user provided, system QLocale()->dateFormat(QLocale::ShortFormat),
  * FMF provided). When the focus is lost, it displays the date in the standard way.
  */
-class UTILS_EXPORT BirthDayEdit : public QLineEdit
+class UTILS_EXPORT BirthDayEdit : public QButtonLineEdit
 {
     Q_OBJECT
     Q_PROPERTY(QDate date READ date WRITE setDate NOTIFY dateChanged USER true)
@@ -59,8 +58,7 @@ public:
     ~BirthDayEdit();
 
     QDate date() const;
-
-    void setDateFormats(QString formats);
+//    void setDateFormats(QString formats);
 
 private:
     void init(const QDate& date = QDate(), const QDate& maximumDate = QDate(), const QDate& minimumDate = QDate());
@@ -70,8 +68,9 @@ signals:
 
 public slots:
     virtual void clear();
-    void setDate(const QDate& date);
+    void setDisplayedDateString();
     void setDateString(const QString& dateString);
+    void setDate(const QDate &date);
 
 protected slots:
     void updateDisplayText();
@@ -80,7 +79,7 @@ private:
     QDate m_date;
     QDate m_maximumDate;
     QDate m_minimumDate;
-    QStringList m_dateFormatList;
+    QToolButton * m_toolButton;
 };
 
 } // end Utils
