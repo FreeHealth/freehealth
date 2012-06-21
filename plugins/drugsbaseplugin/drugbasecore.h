@@ -71,6 +71,7 @@ public:
     VersionUpdater &versionUpdater() const;
 
 private Q_SLOTS:
+    void postCoreInitialization();
     void onCoreDatabaseServerChanged();
     void packChanged(const DataPack::Pack &pack);
 

@@ -89,7 +89,7 @@ void DrugsBasePlugin::extensionsInitialized()
     messageSplash(tr("Initializing drugs database plugin..."));
 
     // initialize DrugBaseCore
-    DrugBaseCore::instance().init();
+//    DrugBaseCore::instance().init();
 
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
     addAutoReleasedObject(new DrugsDB::Internal::DrugsTemplatePrinter(this));
