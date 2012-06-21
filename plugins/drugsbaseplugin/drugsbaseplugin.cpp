@@ -44,7 +44,7 @@
 
 #include <QtCore/QtPlugin>
 
-using namespace DrugsDB;
+using namespace DrugsDB::Internal;
 
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline void messageSplash(const QString &s) {theme()->messageSplashScreen(s); }
@@ -62,6 +62,9 @@ DrugsBasePlugin::DrugsBasePlugin() :
 
     // Add Translator to the Application
     Core::ICore::instance()->translators()->addNewTranslator("drugsbaseplugin");
+
+    // Create the drugs core instance
+    DrugsDB::DrugBaseCore::instance(this);
 }
 
 DrugsBasePlugin::~DrugsBasePlugin()
@@ -86,7 +89,7 @@ void DrugsBasePlugin::extensionsInitialized()
     messageSplash(tr("Initializing drugs database plugin..."));
 
     // initialize DrugBaseCore
-    DrugBaseCore::instance(this);
+    DrugBaseCore::instance().init();
 
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
     addAutoReleasedObject(new DrugsDB::Internal::DrugsTemplatePrinter(this));
