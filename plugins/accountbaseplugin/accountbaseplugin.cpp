@@ -53,7 +53,6 @@ AccountBasePlugin::AccountBasePlugin()
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating AccountBasePlugin";
-    qWarning() << __FILE__ << QString::number(__LINE__) << "ACCOUNT BASE PLUGIN" ;
     // Add Translator to the Application
     Core::ICore::instance()->translators()->addNewTranslator("accountbaseplugin");
 }
