@@ -261,6 +261,7 @@ void AlertCore::processAlerts(QVector<AlertItem> &alerts)
                     QScriptValue v = scriptManager()->evaluate(cyclingDateScript.script());
                     LOG(tr("Cycling alert script: 'CyclingStartDate': %1; date: %2").arg(item.label()).arg(v.toDateTime().toString(Qt::ISODate)));
                     if (v.isDate()) {
+                        // TODO: correctly the nearest starting date
                         timing.setCycleStartDate(v.toDateTime());
                         timing.setCycleExpirationDate(timing.start().addSecs(timing.cyclingDelayInMinutes()*60));
                     }
