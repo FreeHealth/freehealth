@@ -517,7 +517,7 @@ void UserLastPage::initializePage()
     new QTreeWidgetItem(general, QStringList() << tkTr(Trans::Constants::TITLE) << titles().at(field("Title").toInt()));
     new QTreeWidgetItem(general, QStringList() << tkTr(Trans::Constants::NAME) << field("Name").toString() + " " + field("SecondName").toString() + " " + field("Firstname").toString());
     new QTreeWidgetItem(general, QStringList() << tkTr(Trans::Constants::GENDER) << genders().at(field("Gender").toInt()));
-    new QTreeWidgetItem(general, QStringList() << tkTr(Trans::Constants::M_LANGUAGES_TEXT) << QLocale::languageToString(QLocale::Language(field("Language").toInt())) );
+    new QTreeWidgetItem(general, QStringList() << tkTr(Trans::Constants::M_LANGUAGES_TEXT).remove("&") << QLocale::languageToString(QLocale::Language(field("Language").toInt())) );
 
     QTreeWidgetItem *contact = new QTreeWidgetItem(tree, QStringList() << tr("Contact"));
     contact->setFont(0, bold);
