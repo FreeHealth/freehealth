@@ -328,7 +328,7 @@ bool AccountDatabaseDefautsWidget::createDefaultsFor(const QString &filePrototyp
     return yes;
 }
 
-void AccountDatabaseDefautsWidget::on_datapackButton_clicked()
+/*void AccountDatabaseDefautsWidget::on_datapackButton_clicked()
 {
         LOG("datapackButton clicked");
         AccountDB::DatapackMPModel dtpkmodel(this);
@@ -367,4 +367,4 @@ void AccountDatabaseDefautsWidget::on_datapackButton_clicked()
         	     }
             }
         
-}
+}*/

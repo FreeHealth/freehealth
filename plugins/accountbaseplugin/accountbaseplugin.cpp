@@ -31,7 +31,7 @@
  ***************************************************************************/
 #include "accountbaseplugin.h"
 #include "accountbase.h"
-
+#include "datapackmodel.h"
 #include <utils/log.h>
 
 #include <coreplugin/dialogs/pluginaboutpage.h>
@@ -87,7 +87,8 @@ void AccountBasePlugin::extensionsInitialized()
 
     // Initialize Account Database
     AccountBase::instance();
-
+    DatapackBase::instance()->initialize();
+    
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 }
 

@@ -34,9 +34,10 @@
 #include "ui_findValuesGUI.h"
 
 #include <accountplugin/account_exporter.h>
-#include <accountplugin/receipts/xmlcategoriesparser.h>
+//#include <accountplugin/receipts/xmlcategoriesparser.h>
 
 #include <accountbaseplugin/medicalproceduremodel.h>
+#include <accountbaseplugin/datapackmodel.h>
 #include <accountbaseplugin/thesaurusmodel.h>
 #include <accountbaseplugin/constants.h>
 
@@ -59,7 +60,6 @@ public:
     void clear();
 private:
     Ui::findValueDialog * ui;
-    xmlCategoriesParser * m_xmlParser;
     QSqlDatabase m_db;
     double m_modifier;
     QHash<int,QString> m_hashExplanations;
@@ -68,7 +68,8 @@ private:
     void fillComboCategories();
     bool tableViewIsFull(QAbstractItemModel * model);
     void enableShowNextTable();
-    QString getDateWhereClause();
+    //QString getDateWhereClause();
+    bool datapackIsAvalaible();
     
 private slots:
     void fillListViewValues(const QString & comboItem);
@@ -81,6 +82,8 @@ private slots:
     void showNext();
     void setModifSpinBox(QWidget*,QWidget*);
     void setModifier(double);
+    void chooseUserModel(bool);
+    void chooseDatapackModel(bool);
 };
 
 

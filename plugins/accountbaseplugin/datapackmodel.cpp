@@ -22,6 +22,8 @@ using namespace AccountDB;
 using namespace Constants;
 using namespace Trans::ConstantTranslations;
 
+enum Warn{WarnDebug = true};
+
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 // This is just a code easier (for user's reading)
 static inline bool connectDatabase(QSqlDatabase &DB, const int line)
@@ -85,12 +87,15 @@ DatapackBase::DatapackBase(QObject *parent): QObject(parent), Utils::Database()
 }
 
 bool DatapackBase::initialize() 
-{qDebug() << __FILE__ << QString::number(__LINE__) << " initialize =" << "INITIALIZE" ;
+{
+    if(WarnDebug)
+    qDebug() << __FILE__ << QString::number(__LINE__) << " initialize =" << "INITIALIZE" ;
     if (_init)
         return true;
     setConnectionName(Constants::DATAPACK_ACCOUNTANCY);
     setDriver(Utils::Database::SQLite);
-qDebug() << __FILE__ << QString::number(__LINE__) << " initialize =" << "INITIALIZE again" ;
+    if(WarnDebug)
+    qDebug() << __FILE__ << QString::number(__LINE__) << " initialize =" << "INITIALIZE again" ;
     // test driver
     // use only SQLite with datapacks
     if (!QSqlDatabase::isDriverAvailable("QSQLITE")) {

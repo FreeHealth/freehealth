@@ -34,17 +34,37 @@
 #include "receiptsIO.h"
 
 #include <utils/global.h>
+#include <coreplugin/isettings.h>
+#include <coreplugin/icore.h>
 #include <translationutils/constants.h>
 #include <translationutils/trans_msgerror.h>
 
 #include <QSqlQuery>
 #include <QSqlTableModel>
 
-enum { WarnDebugMessage = false };
+enum { WarnDebugMessage = true };
 
 using namespace AccountDB;
 using namespace Constants;
 using namespace Trans::ConstantTranslations;
+static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
+static QString databasePath()
+{
+    QString dbRelPath = QString("/%1/%2").arg(Constants::DATAPACK_ACCOUNTANCY).arg(Constants::DATAPACK_ACCOUNTANCY_FILENAME);
+    QString tmp;
+    tmp = settings()->dataPackInstallPath() + dbRelPath;
+    qDebug() << __FILE__ << QString::number(__LINE__) << " tmp =" << tmp ;
+    if (QFileInfo(tmp).exists())
+        return settings()->dataPackInstallPath();
+    tmp = settings()->dataPackApplicationInstalledPath() + dbRelPath;
+    return settings()->dataPackApplicationInstalledPath();
+}
+
+static QString databaseFileName()
+{
+    return databasePath() + QDir::separator() + Constants::DATAPACK_ACCOUNTANCY;
+}
+
 
 findReceiptsValues::findReceiptsValues(QWidget * parent):QDialog(parent){
   ui = new Ui::findValueDialog;
@@ -52,23 +72,29 @@ findReceiptsValues::findReceiptsValues(QWidget * parent):QDialog(parent){
   ui->nextButton->hide();
   ui->nameRadioButton->setChecked(true);
   ui->modifSpinBox->setValue(1.0);
+  ui->abstractLabel->setText("");//TODO
+  ui->abstractLabel->setWordWrap(true);
+  //m_db = QSqlDatabase::database(Constants::DB_ACCOUNTANCY);
+  //test of choice of user base or datapack
+  if (datapackIsAvalaible())//verify
+  {
+  	  ui->datapackRadioButton->setChecked(true);
+  	  chooseDatapackModel(true);
+  	  qWarning() << __FILE__ << QString::number(__LINE__) << "DATAPACK FREEACCOUNT AVALAIBLE" ;
+      }
+  else
+  {
+  	ui->userRadioButton->setChecked(true);
+      }
   m_modifier = 1.0;
-  MedicalProcedureModel model(parent);
-  m_db = QSqlDatabase::database(Constants::DB_ACCOUNTANCY);
-  if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__)   ;
-  fillComboCategories();
-  if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__)   ;
+  //fillComboCategories();
   initialize();
-  if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__)   ;
   QString comboValue = ui->comboBoxCategories->currentText().trimmed();
   ui->plusButton->setIcon(QIcon(qApp->applicationDirPath()+"/../../global_resources/pixmap/16x16/next.png"));
   ui->lessButton->setIcon(QIcon(qApp->applicationDirPath()+"/../../global_resources/pixmap/16x16/previous.png"));
   ui->plusButton->setShortcut(QKeySequence("CTRL+p"));
   ui->lessButton->setShortcut(QKeySequence("CTRL+l"));
-  fillListViewValues(comboValue);
+  //fillListViewValues(comboValue);
 
   connect(ui->comboBoxCategories,SIGNAL(activated(const QString&)),this,SLOT(fillListViewValues(const QString&)));
   connect(ui->tableViewOfValues,SIGNAL(pressed(const QModelIndex&)),this,SLOT(showToolTip(const QModelIndex&)));
@@ -78,17 +104,17 @@ findReceiptsValues::findReceiptsValues(QWidget * parent):QDialog(parent){
   connect(ui->nextButton,SIGNAL(pressed()),this,SLOT(showNext()));
   connect(qApp,SIGNAL(focusChanged(QWidget*,QWidget*)),this,SLOT(setModifSpinBox(QWidget*,QWidget*)));
   connect(ui->modifSpinBox,SIGNAL(valueChanged(double)),this,SLOT(setModifier(double)));
+  connect(ui->userRadioButton,SIGNAL(clicked(bool)),this,SLOT(chooseUserModel(bool)));
+  connect(ui->datapackRadioButton,SIGNAL(clicked(bool)),this,SLOT(chooseDatapackModel(bool)));
+   
 }
 
 findReceiptsValues::~findReceiptsValues()
 {
-  delete m_xmlParser;
   ui->listchosenWidget->clear();
 }
 
 void findReceiptsValues::initialize(){
-    m_xmlParser = new xmlCategoriesParser;
-;
     if(m_hashValueschosen.size()>0){
         m_hashValueschosen.clear();
         }
@@ -113,6 +139,7 @@ void findReceiptsValues::fillComboCategories(){
     	choiceList << type;
         }
     choiceList.removeDuplicates();
+    ui->comboBoxCategories->clear();
     ui->comboBoxCategories->setEditable(true);
     ui->comboBoxCategories->setInsertPolicy(QComboBox::NoInsert);
     ui->comboBoxCategories->addItems(choiceList);
@@ -131,7 +158,7 @@ void findReceiptsValues::fillListViewValues(const QString & comboItem){
     
     QString filter = QString("WHERE %1 = '%2'").arg(type,strItem);
     //add date release test
-    filter += getDateWhereClause();
+    //filter += getDateWhereClause();
     QString req = QString("SELECT %1,%2,%3 FROM %4 ").arg(name,amount,explanation,baseName )+filter;
     QStandardItemModel *model = new QStandardItemModel(0,2,this);
     int row = 0;
@@ -474,11 +501,45 @@ void findReceiptsValues::showNext(){
     ui->tableViewOfValues->setGridStyle(Qt::NoPen);
 }
 
-QString findReceiptsValues::getDateWhereClause()
+/*QString findReceiptsValues::getDateWhereClause()
 {
     QString whereClause;
     receiptsEngine io;
     QString dateOfLastReleaseLessOneDay = io.getJustDayBeforeLastRelease();
     whereClause = QString(" AND WHERE %1 > '%2'").arg(dateOfLastReleaseLessOneDay,"DATE");
     return whereClause;
+}*/
+
+bool findReceiptsValues::datapackIsAvalaible()
+{
+    bool b = true;
+    QString datapack = databaseFileName();
+    QFile file(datapack);
+    if (!file.exists())
+    {
+    	  b = false;
+        }
+    return b;
+}
+
+void findReceiptsValues::chooseUserModel(bool b)
+{
+    if (b)
+    {
+    	  m_db = QSqlDatabase::database(DB_ACCOUNTANCY);
+    	  fillComboCategories();
+    	  const QString comboText = ui->comboBoxCategories->currentText();
+    	  fillListViewValues(comboText);
+        }
+}
+
+void findReceiptsValues::chooseDatapackModel(bool b)
+{
+    if (b)
+    {
+    	  m_db = QSqlDatabase::database(DATAPACK_ACCOUNTANCY);
+    	  fillComboCategories();
+    	  const QString comboText = ui->comboBoxCategories->currentText();
+    	  fillListViewValues(comboText);
+        }
 }
