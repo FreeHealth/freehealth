@@ -444,10 +444,12 @@ bool ServerConfigPage::validatePage()
 
         // execute script : server configurator
         LOG("Executing server configuration SQL script");
-        if (!Utils::Database::executeSqlFile("__APP_CONNECTION_TESTER", serverConfigurationSqlScript()))
+        if (!Utils::Database::executeSqlFile("__APP_CONNECTION_TESTER", serverConfigurationSqlScript())) {
             LOG_ERROR("Server configuration script not processed");
-        else
+        } else {
             LOG("Server successfully configurated");
+            Utils::informativeMessageBox(tr("Server configurated"), tr("The server was successfully configurated."));
+        }
 
 //        // recreate server connector
 //        Utils::DatabaseConnector connector;
