@@ -119,6 +119,13 @@ void AgendaPlugin::extensionsInitialized()
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 
     // Initialize database
+    QProgressDialog dlg(tr("Creating agenda base..."), tr("Please wait"), 0, 0);
+    dlg.setWindowModality(Qt::WindowModal);
+    dlg.setMinimumDuration(1000);
+    dlg.show();
+    dlg.setFocus();
+    dlg.setValue(0);
+
     Internal::AgendaBase::instance();
 
     // Initialize ActionHandler and WidgetManager
@@ -140,13 +147,6 @@ void AgendaPlugin::extensionsInitialized()
     th->setIconFileName(Calendar::CalendarTheme::NavigationPrevious, Core::Constants::ICONPREVIOUS);
 
     if (commandLine()->value(Core::ICommandLine::CreateVirtuals).toBool()) {
-        QProgressDialog dlg(tr("Creating virtual users"), tr("Please wait"), 0, 0);
-        dlg.setWindowModality(Qt::WindowModal);
-        dlg.setMinimumDuration(100);
-        dlg.show();
-        dlg.setFocus();
-        dlg.setValue(0);
-
         QList<Calendar::People> peoples;
         UserCalendar *u = 0;
         // McCoy calendar (Uhura as delegate)
