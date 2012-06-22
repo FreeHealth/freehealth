@@ -66,6 +66,7 @@
 
 #include <QtCore/QtPlugin>
 #include <QApplication>
+#include <QProgressDialog>
 #include <QDebug>
 
 using namespace UserPlugin;
@@ -128,6 +129,13 @@ bool UserManagerPlugin::initialize(const QStringList &arguments, QString *errorS
 
     // manage virtual user creation
     if (commandLine()->value(Core::ICommandLine::CreateVirtuals).toBool()) {
+        QProgressDialog dlg(tr("Creating virtual users"), tr("Please wait"), 0, 0);
+        dlg.setWindowModality(Qt::WindowModal);
+        dlg.setMinimumDuration(100);
+        dlg.show();
+        dlg.setFocus();
+        dlg.setValue(0);
+
         bool created = true;
         // Doctors
         created = userBase()->createVirtualUser("d1f29ad4a4ea4dabbe40ec888d153228", "McCoy", "Leonard", Trans::Constants::Doctor, genders().indexOf(tkTr(Trans::Constants::MALE)),
