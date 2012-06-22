@@ -482,7 +482,7 @@ QString XmlIOBase::getFormContent(const QString &formUid, const int type, const 
         }
     } else {
         LOG_QUERY_ERROR(query);
-        DB.roolback();
+        DB.rollback();
     }
     return QString();
 }
