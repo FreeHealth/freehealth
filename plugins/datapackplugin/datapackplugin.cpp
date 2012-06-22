@@ -95,7 +95,8 @@ DataPackPluginIPlugin::~DataPackPluginIPlugin()
     // Core::user() is still available
     DataPack::DataPackCore &core = DataPack::DataPackCore::instance(this);
 #ifdef FREEMEDFORMS
-    user()->setValue(Core::IUser::DataPackConfig, core.serverManager()->xmlConfiguration());
+    if (user())
+        user()->setValue(Core::IUser::DataPackConfig, core.serverManager()->xmlConfiguration());
 #else
 #  ifdef FREEDIAMS
     QByteArray s = QByteArray(core.serverManager()->xmlConfiguration().toUtf8()).toBase64();
@@ -228,7 +229,8 @@ void DataPackPluginIPlugin::coreAboutToClose()
     // Core::user() is still available
     DataPack::DataPackCore &core = DataPack::DataPackCore::instance(this);
 #ifdef FREEMEDFORMS
-    user()->setValue(Core::IUser::DataPackConfig, core.serverManager()->xmlConfiguration());
+    if (user())
+        user()->setValue(Core::IUser::DataPackConfig, core.serverManager()->xmlConfiguration());
 #else
 #  ifdef FREEDIAMS
     QByteArray s = QByteArray(core.serverManager()->xmlConfiguration().toUtf8()).toBase64();
