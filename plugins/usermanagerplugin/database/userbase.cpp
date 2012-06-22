@@ -75,6 +75,7 @@
 #include <QDir>
 #include <QLocale>
 #include <QDateTime>
+#include <QProgressDialog>
 
 enum { WarnUserPreferences = false };
 
@@ -626,6 +627,10 @@ bool UserBase::createDatabase(const QString &connectionName , const QString &dbN
                                     "       FileName: %2\n"
                                     "       Driver: %3")
         .arg(pathOrHostName, dbName).arg(driver));
+
+    // TODO: create a QProgressDialog dialog for the creation duration
+//    dialog.setModal(true);
+//    dialog.setRange();
 
     setConnectionName(connectionName);
     setDriver(driver);
