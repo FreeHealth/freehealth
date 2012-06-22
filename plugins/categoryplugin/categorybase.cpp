@@ -80,7 +80,7 @@ CategoryBase::CategoryBase(QObject *parent) :
     addTable(Table_VERSION, "VERSION");
 
     addField(Table_CATEGORIES, CATEGORY_ID,              "CID",        FieldIsUniquePrimaryKey);
-    addField(Table_CATEGORIES, CATEGORY_UUID,            "UUID",       FieldIsUUID);
+    addField(Table_CATEGORIES, CATEGORY_UUID,            "UUID",       FieldIsShortText);
     addField(Table_CATEGORIES, CATEGORY_PARENT,          "PARENT_ID",  FieldIsInteger);
     addField(Table_CATEGORIES, CATEGORY_LABEL_ID,        "LID",        FieldIsInteger);
     addField(Table_CATEGORIES, CATEGORY_MIME,            "MIME",       FieldIsShortText);
