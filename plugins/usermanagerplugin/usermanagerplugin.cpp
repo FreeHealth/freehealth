@@ -131,7 +131,7 @@ bool UserManagerPlugin::initialize(const QStringList &arguments, QString *errorS
     if (commandLine()->value(Core::ICommandLine::CreateVirtuals).toBool()) {
         QProgressDialog dlg(tr("Creating virtual users"), tr("Please wait"), 0, 0);
         dlg.setWindowModality(Qt::WindowModal);
-        dlg.setMinimumDuration(100);
+        dlg.setMinimumDuration(1000);
         dlg.show();
         dlg.setFocus();
         dlg.setValue(0);

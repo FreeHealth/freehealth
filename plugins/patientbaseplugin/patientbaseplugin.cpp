@@ -121,7 +121,7 @@ bool PatientBasePlugin::initialize(const QStringList &arguments, QString *errorS
     // Initialize patient base
     QProgressDialog dlg(tr("Initializing patient database..."), tr("Please wait"), 0, 0);
     dlg.setWindowModality(Qt::WindowModal);
-    dlg.setMinimumDuration(100);
+    dlg.setMinimumDuration(1000);
     dlg.show();
     dlg.setFocus();
     dlg.setValue(0);
