@@ -55,6 +55,7 @@
 
 #include <QtCore/QtPlugin>
 #include <QDir>
+#include <QProgressDialog>
 
 #include <QDebug>
 
@@ -75,6 +76,9 @@ PatientBasePlugin::PatientBasePlugin() :
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating PatientBasePlugin";
+
+    // Add Translators
+    Core::ICore::instance()->translators()->addNewTranslator("patientbaseplugin");
 
     // add preference page
     prefpage = new PatientBasePreferencesPage(this);
@@ -105,13 +109,27 @@ bool PatientBasePlugin::initialize(const QStringList &arguments, QString *errorS
 
     messageSplash(tr("Initializing patients database plugin..."));
 
-    // Add Translators
-    Core::ICore::instance()->translators()->addNewTranslator("patientbaseplugin");
+    return true;
+}
+
+void PatientBasePlugin::extensionsInitialized()
+{
+    if (Utils::Log::warnPluginsCreation())
+        qWarning() << "PatientBasePlugin::extensionsInitialized";
+
+    messageSplash(tr("Initializing patients database plugin..."));
 
     // Initialize patient base
+    QProgressDialog dlg(tr("Initializing patient database..."), tr("Please wait"), 0, 0);
+    dlg.setWindowModality(Qt::WindowModal);
+    dlg.setMinimumDuration(100);
+    dlg.show();
+    dlg.setFocus();
+    dlg.setValue(0);
+
     patientBase();
     if (!patientBase()->isInitialized())
-        return false;
+        return;
 
     if (commandLine()->value(Core::ICommandLine::CreateVirtuals).toBool()) {
         // Populate with some virtual patients
@@ -141,16 +159,6 @@ bool PatientBasePlugin::initialize(const QStringList &arguments, QString *errorS
     // add mode patient search
     m_Mode = new PatientSearchMode(this);
     addObject(m_Mode);
-
-    return true;
-}
-
-void PatientBasePlugin::extensionsInitialized()
-{
-    if (Utils::Log::warnPluginsCreation())
-        qWarning() << "PatientBasePlugin::extensionsInitialized";
-
-    messageSplash(tr("Initializing patients database plugin..."));
 
     prefpage->checkSettingsValidity();
     settings()->sync();
