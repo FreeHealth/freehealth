@@ -429,26 +429,34 @@ bool ServerConfigPage::validatePage()
 
     // execute the server configuration SQL script
     {
-        QSqlDatabase test = QSqlDatabase::addDatabase("QMYSQL", "__APP_CONNECTION_TESTER");
-        test.setHostName(serverWidget->hostName());
-        test.setPort(serverWidget->port());
-        test.setUserName(serverWidget->login());
-        test.setPassword(serverWidget->password());
-        test.setDatabaseName("mysql");
-        if (!test.open()) {
-            LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(test.connectionName()).arg(test.lastError().text()));
+        QSqlDatabase mysql = QSqlDatabase::addDatabase("QMYSQL", "__APP_CONNECTION_TESTER");
+        mysql.setHostName(serverWidget->hostName());
+        mysql.setPort(serverWidget->port());
+        mysql.setUserName(serverWidget->login());
+        mysql.setPassword(serverWidget->password());
+        mysql.setDatabaseName("mysql");
+        if (!mysql.open()) {
+            LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(mysql.connectionName()).arg(mysql.lastError().text()));
             QSqlDatabase::removeDatabase("__APP_CONNECTION_TESTER");
             Q_EMIT completeChanged();
             return false;
         }
 
         // execute script : server configurator
-        LOG("Executing server configuration SQL script");
-        if (!Utils::Database::executeSqlFile("__APP_CONNECTION_TESTER", serverConfigurationSqlScript())) {
-            LOG_ERROR("Server configuration script not processed");
-        } else {
-            LOG("Server successfully configurated");
-            Utils::informativeMessageBox(tr("Server configurated"), tr("The server was successfully configurated."));
+        QSqlQuery query(mysql);
+        if (query.exec("SELECT * FROM `user` where User='fmf_admin';")) {
+            if (query.next()) {
+                LOG("Server already configurated");
+                Utils::informativeMessageBox(tr("Server already configurated"), tr("The server is already configurated for FreeMedForms."));
+            } else {
+                LOG("Executing server configuration SQL script");
+                if (!Utils::Database::executeSqlFile("__APP_CONNECTION_TESTER", serverConfigurationSqlScript())) {
+                    LOG_ERROR("Server configuration script not processed");
+                } else {
+                    LOG("Server successfully configurated");
+                    Utils::informativeMessageBox(tr("Server configurated"), tr("The server was successfully configurated."));
+                }
+            }
         }
 
 //        // recreate server connector
