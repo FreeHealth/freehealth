@@ -114,7 +114,7 @@ XmlIOBase::XmlIOBase(QObject *parent) :
     addTable(Table_VERSION,       "VERSION");
 
     addField(Table_FORMS, FORM_ID,           "FORM_ID",        FieldIsUniquePrimaryKey);
-    addField(Table_FORMS, FORM_UUID,         "FORM_UUID",      FieldIsUUID);
+    addField(Table_FORMS, FORM_UUID,         "FORM_UUID",      FieldIsShortText);
     addField(Table_FORMS, FORM_ORIGINALUID,  "FORM_ORG_UUID",  FieldIsShortText);
     addField(Table_FORMS, FORM_ORIGINALDATE, "FORM_ORG_DATE",  FieldIsDate);
     addIndex(Table_FORMS, FORM_UUID);
