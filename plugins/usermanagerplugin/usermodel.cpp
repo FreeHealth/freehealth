@@ -477,7 +477,7 @@ void UserModel::onCoreDatabaseServerChanged()
   Defines the current user using its login and password. There can be only one current user.
   The date and time of loggin are trace into database.
 */
-bool UserModel::setCurrentUser(const QString &clearLog, const QString &clearPassword, bool refreshCache)
+bool UserModel::setCurrentUser(const QString &clearLog, const QString &clearPassword, bool refreshCache, bool checkPrefValidity)
 {
     if (WarnAllProcesses || WarnUserConnection)
         qWarning() << Q_FUNC_INFO << clearLog << clearPassword;
@@ -591,19 +591,8 @@ bool UserModel::setCurrentUser(const QString &clearLog, const QString &clearPass
     }
 
     // Refresh the newly connected user's preferences
-    disconnect(settings(), SIGNAL(userSettingsSynchronized()), this, SLOT(updateUserPreferences()));
-    QList<Core::IOptionsPage *> prefs = pluginManager()->getObjects<Core::IOptionsPage>();
-    if (commandLine()->value(Core::ICommandLine::ResetUserPreferences).toBool()) {
-        for(int i=0; i < prefs.count(); ++i) {
-            prefs.at(i)->resetToDefaults();
-        }
-    } else {
-        for(int i=0; i < prefs.count(); ++i) {
-            prefs.at(i)->checkSettingsValidity();
-        }
-    }
-    updateUserPreferences();
-    connect(settings(), SIGNAL(userSettingsSynchronized()), this, SLOT(updateUserPreferences()));
+    if (checkPrefValidity)
+        checkUserPreferencesValidity();
 
     // Inform the listeners
     foreach(IUserListener *l, listeners) {
@@ -1489,3 +1478,19 @@ void UserModel::updateUserPreferences()
     }
 }
 
+void UserModel::checkUserPreferencesValidity()
+{
+    disconnect(settings(), SIGNAL(userSettingsSynchronized()), this, SLOT(updateUserPreferences()));
+    QList<Core::IOptionsPage *> prefs = pluginManager()->getObjects<Core::IOptionsPage>();
+    if (commandLine()->value(Core::ICommandLine::ResetUserPreferences).toBool()) {
+        for(int i=0; i < prefs.count(); ++i) {
+            prefs.at(i)->resetToDefaults();
+        }
+    } else {
+        for(int i=0; i < prefs.count(); ++i) {
+            prefs.at(i)->checkSettingsValidity();
+        }
+    }
+    updateUserPreferences();
+    connect(settings(), SIGNAL(userSettingsSynchronized()), this, SLOT(updateUserPreferences()));
+}

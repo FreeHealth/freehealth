@@ -163,7 +163,8 @@ bool UserManagerPlugin::initialize(const QStringList &arguments, QString *errorS
             UserModel::instance()->refresh();
             // reconnect user
             Utils::DatabaseConnector c = settings()->databaseConnector();
-            UserModel::instance()->setCurrentUser(c.clearLog(), c.clearPass(), true);
+            // clear cache, don't check preferences validity
+            UserModel::instance()->setCurrentUser(c.clearLog(), c.clearPass(), true, false);
         }
     }
 
@@ -267,7 +268,7 @@ bool UserManagerPlugin::identifyUser()
     bool ask = true;
     while (true) {
         if (userModel()->isCorrectLogin(log, pass)) {
-            userModel()->setCurrentUser(log, pass);
+            userModel()->setCurrentUser(log, pass, true, false);
             if (!usingCommandLine && ask) {
                 int r = Utils::withButtonsMessageBox(tkTr(Trans::Constants::CONNECTED_AS_1)
                                                      .arg(userModel()->currentUserData(Core::IUser::FullName).toString()),
@@ -313,6 +314,7 @@ void UserManagerPlugin::postCoreInitialization()
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << Q_FUNC_INFO;
+    userModel()->checkUserPreferencesValidity();
     // be sure everyone is informed of the currently connected user
     userModel()->emitUserConnected();
     // and be sure that ui is translated in the correct language
