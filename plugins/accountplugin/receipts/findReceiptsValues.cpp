@@ -72,8 +72,8 @@ findReceiptsValues::findReceiptsValues(QWidget * parent):QDialog(parent){
   ui->nextButton->hide();
   ui->nameRadioButton->setChecked(true);
   ui->modifSpinBox->setValue(1.0);
-  ui->abstractLabel->setText("");//TODO
-  ui->abstractLabel->setWordWrap(true);
+  ui->abstractTextEdit->setText("");
+  ui->othersTextEdit->setText("");
   //m_db = QSqlDatabase::database(Constants::DB_ACCOUNTANCY);
   //test of choice of user base or datapack
   if (datapackIsAvalaible())//verify
@@ -85,6 +85,8 @@ findReceiptsValues::findReceiptsValues(QWidget * parent):QDialog(parent){
   else
   {
   	ui->userRadioButton->setChecked(true);
+  	chooseUserModel(true);
+  	qWarning() << __FILE__ << QString::number(__LINE__) << "USER MODEL IS CHOOSEN" ;
       }
   m_modifier = 1.0;
   //fillComboCategories();
@@ -97,7 +99,7 @@ findReceiptsValues::findReceiptsValues(QWidget * parent):QDialog(parent){
   //fillListViewValues(comboValue);
 
   connect(ui->comboBoxCategories,SIGNAL(activated(const QString&)),this,SLOT(fillListViewValues(const QString&)));
-  connect(ui->tableViewOfValues,SIGNAL(pressed(const QModelIndex&)),this,SLOT(showToolTip(const QModelIndex&)));
+  connect(ui->tableViewOfValues,SIGNAL(pressed(const QModelIndex&)),this,SLOT(showInformations(const QModelIndex&)));
   connect(ui->plusButton,SIGNAL(pressed()),this,SLOT(chooseValue()));
   connect(ui->lessButton,SIGNAL(pressed()),this,SLOT(deleteValue()));
   //connect(ui->listchosenWidget,SIGNAL(itemClicked(QListWidgetItem *)),this,SLOT(supprItemchosen(QListWidgetItem *)));
@@ -105,8 +107,7 @@ findReceiptsValues::findReceiptsValues(QWidget * parent):QDialog(parent){
   connect(qApp,SIGNAL(focusChanged(QWidget*,QWidget*)),this,SLOT(setModifSpinBox(QWidget*,QWidget*)));
   connect(ui->modifSpinBox,SIGNAL(valueChanged(double)),this,SLOT(setModifier(double)));
   connect(ui->userRadioButton,SIGNAL(clicked(bool)),this,SLOT(chooseUserModel(bool)));
-  connect(ui->datapackRadioButton,SIGNAL(clicked(bool)),this,SLOT(chooseDatapackModel(bool)));
-   
+  connect(ui->datapackRadioButton,SIGNAL(clicked(bool)),this,SLOT(chooseDatapackModel(bool)));   
 }
 
 findReceiptsValues::~findReceiptsValues()
@@ -146,6 +147,8 @@ void findReceiptsValues::fillComboCategories(){
 }
 
 void findReceiptsValues::fillListViewValues(const QString & comboItem){
+    ui->abstractTextEdit->setText("");
+    ui->othersTextEdit->setText("");
     QList<int> counterList;
     const QString baseName = "medical_procedure";
     const QString strItem = comboItem.trimmed();
@@ -154,12 +157,14 @@ void findReceiptsValues::fillListViewValues(const QString & comboItem){
     const QString name = "NAME";
     const QString amount = "AMOUNT";
     const QString explanation = "ABSTRACT";
+    const QString others = "OTHERS";
     const QString type = "TYPE";
     
     QString filter = QString("WHERE %1 = '%2'").arg(type,strItem);
     //add date release test
     //filter += getDateWhereClause();
-    QString req = QString("SELECT %1,%2,%3 FROM %4 ").arg(name,amount,explanation,baseName )+filter;
+    QString req = QString("SELECT %1,%2,%3,%4 FROM %5 ")
+                 .arg(name,amount,explanation,others,baseName )+filter;
     QStandardItemModel *model = new QStandardItemModel(0,2,this);
     int row = 0;
     QSqlQuery q(m_db);
@@ -170,14 +175,16 @@ void findReceiptsValues::fillListViewValues(const QString & comboItem){
         }
     while (q.next())
     {
-    	QString n = q.value(0).toString();
-    	QString a = q.value(1).toString();
-    	QString expl = q.value(2).toString();
+    	QString n = q.value(NAME).toString();
+    	QString a = q.value(AMOUNT).toString();
+    	QString expl = q.value(EXPLANATION).toString();
+    	QString otherInformation = q.value(OTHERS).toString();
     	model->insertRows(row,1,QModelIndex());
     	model->setData(model->index(row,0),n,Qt::EditRole);
         model->setData(model->index(row,1),a,Qt::EditRole);
         model->submit();
         m_hashExplanations.insert(row,expl);
+        m_otherInformations.insert(row,otherInformation);
         ++row;
         counterList << row;
         }
@@ -194,14 +201,32 @@ void findReceiptsValues::fillListViewValues(const QString & comboItem){
 
 }
 
-void findReceiptsValues::showToolTip(const QModelIndex & index)
+void findReceiptsValues::showInformations(const QModelIndex & index)
 {
     int row = index.row();
+    ui->abstractTextEdit->clear();
+    ui->othersTextEdit->clear();
     QString explanation = m_hashExplanations.value(row);
-    const QAbstractItemModel *abstractModel = index.model();
+    explanation = "<html><body><font color=blue size=3>"+explanation+"</font></body></html>";
+    QString othersText;
+    othersText = "<html><body><font color=blue size=3>";
+    QHash<QString,QString> hash = getHashFatherSonFromOthers(index);
+    for (int i = 0; i < hash.count(); ++i)
+    {
+    	  QString father = hash.keys()[i];
+    	  QString son = hash.values()[i];
+    	  if (!father.isEmpty())
+    	  {
+    	  	  othersText += father+":"+son+"<br/>";
+    	      }
+        }
+    othersText += "</font></body></html>";
+    ui->abstractTextEdit->insertHtml(explanation);
+    ui->othersTextEdit->insertHtml(othersText);
+    /*const QAbstractItemModel *abstractModel = index.model();
     const QStandardItemModel * model = static_cast<const QStandardItemModel*>(abstractModel) ;
     QStandardItem *item = model->itemFromIndex(index);
-    item->setToolTip(explanation);
+    item->setToolTip(explanation);*/
 }
 
 /*void findReceiptsValues::chooseValue(const QModelIndex& index){
@@ -543,3 +568,39 @@ void findReceiptsValues::chooseDatapackModel(bool b)
     	  fillListViewValues(comboText);
         }
 }
+
+QHash<QString,QString> findReceiptsValues::getHashFatherSonFromOthers(const QModelIndex & index)
+{
+    QHash<QString,QString> hash;
+    int row = index.row();
+    QString othersString = m_otherInformations.value(row);
+    othersString.remove("<?xml version=1.0 encoding=ISO-8859-1?>");
+    qDebug() << __FILE__ << QString::number(__LINE__) << " othersString =" << othersString ;
+    othersString.replace("</",";");
+    QRegExp exp(";[a-z]*>");
+    othersString.replace(exp,";");
+    qDebug() << __FILE__ << QString::number(__LINE__) << " othersString =" << othersString ;
+    QStringList list;
+    list = othersString.split(";");
+    foreach(QString part,list){
+        part.replace("<","");
+        part.replace(">",";");
+        QStringList partList;
+        partList = part.split(";");
+        if (partList.size()==2)
+        {
+        	  hash.insert(partList[FATHER],partList[SON]);
+            }
+        if(partList.size()==1)
+        {
+        	hash.insert(partList[FATHER],"NULL");
+            }
+        }
+        for (int i = 0; i < hash.count(); i += 1)
+        {
+        	  qDebug() << __FILE__ << QString::number(__LINE__) << " father =" << hash.keys()[i] ;
+        	  qDebug() << __FILE__ << QString::number(__LINE__) << " son =" << hash.values()[i] ;
+            }
+    return hash;
+}
+

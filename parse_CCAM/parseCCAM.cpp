@@ -379,6 +379,7 @@ QString ParseCcam::getXmlForBlobItem(QString& activity,
 void ParseCcam::createMPDatapackDatabase()
 {
     databaseButton->setEnabled(false);
+    QApplication::setOverrideCursor(Qt::WaitCursor);
     bool ret = true;
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE","MPDatabase");
     db.setDatabaseName("MPDatapack.db");
@@ -401,8 +402,8 @@ void ParseCcam::createMPDatapackDatabase()
     	                      "TYPE varchar(200) NULL,"
     	                      "AMOUNT double NULL,"    	                      
     	                      "DATE date NULL,"
-    	                      "COUNTRY blob NULL,"
-    	                      "OTHERS blob NULL);";
+    	                      "OTHERS blob NULL,"
+    	                      "COUNTRY blob NULL);";
     	  if (!q.exec(req))
     	  {
     	  	  qWarning() << __FILE__ << QString::number(__LINE__) << q.lastError().text() ;
@@ -436,7 +437,7 @@ void ParseCcam::createMPDatapackDatabase()
      	++row;
      	line = line.remove("\"");
      	QStringList listOfLineDatas = line.split(";");
-     	qDebug() << __FILE__ << QString::number(__LINE__) << " line =" << line ;
+     	//qDebug() << __FILE__ << QString::number(__LINE__) << " line =" << line ;
      	QStringList listOfStrings;
      	foreach(QString str,listOfLineDatas){
      	    if (str.contains("'"))
@@ -449,7 +450,7 @@ void ParseCcam::createMPDatapackDatabase()
      	QString lineOfDatas = listOfStrings.join(",");
         QString req = QString("INSERT INTO %1 (%2) VALUES(%3)")
                      .arg("medical_procedure",
-                          "MP_ID,MP_UUID,MP_USER_UID,MP_INSURANCE_UID,NAME,ABSTRACT,TYPE,AMOUNT,DATE,COUNTRY,OTHERS",
+                          "MP_ID,MP_UUID,MP_USER_UID,MP_INSURANCE_UID,NAME,ABSTRACT,TYPE,AMOUNT,DATE,OTHERS,COUNTRY",
                           lineOfDatas);
         if (!qy.exec(req))
         {
@@ -466,6 +467,7 @@ void ParseCcam::createMPDatapackDatabase()
          	      }
          	  else{*/
          	      qWarning() << __FILE__ << QString::number(__LINE__) << "MPDatapack FINISHED !" ;
+         	      QApplication::restoreOverrideCursor();
          	      log.close();
          	  //}
              }        

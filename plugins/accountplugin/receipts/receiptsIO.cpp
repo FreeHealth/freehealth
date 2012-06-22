@@ -321,7 +321,6 @@ QHash<QString,double> receiptsEngine::getFilteredValueFromMedicalProcedure(const
     const QString amount = "AMOUNT";
     const QString type = field;
     QString filter = QString("WHERE %1 = '%2'").arg(type,act);
-    filter += getDateWhereClause();
     QString req = QString("SELECT %1 FROM %2 ").arg(amount,baseName )+filter;
     QSqlQuery q(m_db);
     if (!q.exec(req))

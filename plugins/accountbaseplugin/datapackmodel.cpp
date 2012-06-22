@@ -58,9 +58,6 @@ static QString databaseFileName()
     return databasePath() + QDir::separator() + Constants::DATAPACK_ACCOUNTANCY;
 }
 
-
-
-
 DatapackBase::DatapackBase(QObject *parent): QObject(parent), Utils::Database()
 {
     _init = false;
@@ -75,8 +72,8 @@ DatapackBase::DatapackBase(QObject *parent): QObject(parent), Utils::Database()
     addField(Table_MedicalProcedure, MP_AMOUNT,         "AMOUNT",         FieldIsReal);
     addField(Table_MedicalProcedure, MP_REIMBOURSEMENT, "REIMBOURSEMENT", FieldIsReal);
     addField(Table_MedicalProcedure, MP_DATE,           "DATE",           FieldIsDate);
-    addField(Table_MedicalProcedure, MP_OTHERS,         "OTHERS",         FieldIsBlob);   
-    
+    addField(Table_MedicalProcedure, MP_OTHERS,         "OTHERS",         FieldIsBlob);
+    addField(Table_MedicalProcedure, MP_COUNTRY,        "COUNTRY",        FieldIsBlob);    
 
     //createConnection(Constants::DATAPACK_ACCOUNTANCY, Constants::DATAPACK_ACCOUNTANCY, connector);TODO
 

@@ -87,6 +87,7 @@ void AccountBasePlugin::extensionsInitialized()
 
     // Initialize Account Database
     AccountBase::instance();
+    //TODO test datapack if is available
     DatapackBase::instance()->initialize();
     
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));

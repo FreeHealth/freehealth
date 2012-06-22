@@ -52,6 +52,19 @@ namespace Ui{
 class ACCOUNT_EXPORT findReceiptsValues:public QDialog
 {
   Q_OBJECT
+  enum LabelsDatas
+  {
+      NAME = 0,
+      AMOUNT,
+      EXPLANATION,
+      OTHERS,
+      LabelsDatas_MaxParam
+      };
+  enum FatherSon
+  {
+      FATHER = 0,
+      SON
+    };
 public:
     QHash<QString,QString> returnValuesHash();
     findReceiptsValues(QWidget * parent = 0);
@@ -63,6 +76,7 @@ private:
     QSqlDatabase m_db;
     double m_modifier;
     QHash<int,QString> m_hashExplanations;
+    QHash<int,QString> m_otherInformations;
     QHash<QString,QString> m_hashValueschosen;
     void initialize();
     void fillComboCategories();
@@ -70,6 +84,7 @@ private:
     void enableShowNextTable();
     //QString getDateWhereClause();
     bool datapackIsAvalaible();
+    QHash<QString,QString> getHashFatherSonFromOthers(const QModelIndex & index);
     
 private slots:
     void fillListViewValues(const QString & comboItem);
@@ -77,7 +92,7 @@ private slots:
     void chooseValue();
     void deleteValue();
 //    void supprItemchosen(QListWidgetItem * item);
-    void showToolTip(const QModelIndex & index);
+    void showInformations(const QModelIndex & index);
     void on_lineEditFilter_textChanged(const QString & text);
     void showNext();
     void setModifSpinBox(QWidget*,QWidget*);
