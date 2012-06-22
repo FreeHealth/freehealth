@@ -35,6 +35,7 @@
 
 #include <QEvent>
 #include <QGridLayout>
+#include <QProgressDialog>
 
 using namespace Form;
 using namespace Internal;
@@ -57,6 +58,13 @@ void FirstRunFormManagerWizardPage::retranslate()
 void FirstRunFormManagerWizardPage::initializePage()
 {
     if (!selector) {
+        QProgressDialog dlg(tr("Reading available forms"), tr("Please wait"), 0, 0, parentWidget());
+        dlg.setWindowModality(Qt::WindowModal);
+        dlg.setMinimumDuration(100);
+        dlg.show();
+        dlg.setFocus();
+        dlg.setValue(0);
+
         QGridLayout *layout = new QGridLayout(this);
         setLayout(layout);
         selector = new Form::FormFilesSelectorWidget(this, Form::FormFilesSelectorWidget::CompleteForms);
@@ -64,6 +72,8 @@ void FirstRunFormManagerWizardPage::initializePage()
         layout->addWidget(selector, 0, 0);
         adjustSize();
         selector->updateGeometry();
+
+        dlg.close();
     }
 }
 
