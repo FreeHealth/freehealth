@@ -317,6 +317,7 @@ bool Database::createMySQLUser(const QString &log, const QString &password,
 
     QSqlQuery query(database());
     QString req;
+
     req = QString("CREATE USER '%1'@'%2' IDENTIFIED BY '%3';").arg(log).arg(uh).arg(password);
     if (!query.exec(req)) {
         LOG_QUERY_ERROR_FOR("Database", query);
@@ -324,8 +325,26 @@ bool Database::createMySQLUser(const QString &log, const QString &password,
         return false;
     }
     query.finish();
+
+    if (uh.compare("localhost", Qt::CaseInsensitive)!=0) {
+        // MySQL Doc: user created on 'localhost' && '%'
+        // It is necessary to have both accounts for monty to be able to connect from
+        // anywhere as monty. Without the localhost account, the anonymous-user account
+        // for localhost that is created by mysql_install_db would take precedence when
+        // monty connects from the local host. As a result, monty would be treated as an
+        // anonymous user. The reason for this is that the anonymous-user account has a
+        // more specific Host column value than the 'monty'@'%' account and thus comes
+        // earlier in the user table sort order.
+        req = QString("CREATE USER '%1'@'localhost' IDENTIFIED BY '%3';").arg(log).arg(password);
+        if (!query.exec(req)) {
+            LOG_QUERY_ERROR_FOR("Database", query);
+            LOG_DATABASE_FOR("Database", database());
+            return false;
+        }
+        query.finish();
+    }
+
     // If grants fail -> remove user and return false
-//    req = QString("GRANT %1 ON `%2`.* TO '%3'@'%' IDENTIFIED BY '%4';").arg(g).arg(udb).arg(log).arg(password);
     req = QString("GRANT %1, GRANT OPTION ON `%2`.* TO '%3'@'%';").arg(g).arg(udb).arg(log);
     if (!query.exec(req)) {
         LOG_QUERY_ERROR_FOR("Database", query);
