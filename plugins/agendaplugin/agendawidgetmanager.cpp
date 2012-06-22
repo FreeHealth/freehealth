@@ -150,12 +150,12 @@ AgendaActionHandler::AgendaActionHandler(QObject *parent) :
     actionManager()->actionContainer(Core::Constants::M_PLUGINS)->addMenu(menu, Core::Constants::G_PLUGINS_CALENDAR);
 
     // Create local actions
-    a = aClear = new QAction(this);
-    a->setIcon(th->icon(Core::Constants::ICONCLEAR));
-    cmd = actionManager()->registerAction(a, Core::Constants::A_LIST_CLEAR, ctx);
-    cmd->setTranslations(Trans::Constants::LISTCLEAR_TEXT);
-    menu->addAction(cmd, Constants::G_AGENDA_EDIT);
-    connect(a, SIGNAL(triggered()), this, SLOT(clear()));
+//    a = aClear = new QAction(this);
+//    a->setIcon(th->icon(Core::Constants::ICONCLEAR));
+//    cmd = actionManager()->registerAction(a, Core::Constants::A_LIST_CLEAR, ctx);
+//    cmd->setTranslations(Trans::Constants::LISTCLEAR_TEXT);
+//    menu->addAction(cmd, Constants::G_AGENDA_EDIT);
+//    connect(a, SIGNAL(triggered()), this, SLOT(clear()));
 
     // Search method menu
 //    Core::ActionContainer *searchmenu = actionManager()->actionContainer(DrugsWidget::Constants::M_PLUGINS_SEARCH);
