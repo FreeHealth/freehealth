@@ -434,15 +434,11 @@ QHash<QString, QString> XmlIOBase::getAllFormFullContent(const QString &formUid)
 /** Return the XML content of the form according to the XmlIOBase::TypeOfForm \e type and the \e formUid */
 QString XmlIOBase::getFormContent(const QString &formUid, const int type, const QString &modeName)
 {
-//    qWarning() << Q_FUNC_INFO;
+//    qWarning() << Q_FUNC_INFO << formUid << type << modeName;
     // TODO: manage modes
     QSqlDatabase DB = database();
-    if (!DB.isOpen()) {
-        if (!DB.open()) {
-            LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_NAME).arg(DB.lastError().text()));
-            return QString();
-        }
-    }
+    if (!connectedDatabase(DB, __LINE__))
+        return false;
     QSqlQuery query(DB);
     Utils::FieldList gets;
     gets << Utils::Field(Constants::Table_FORM_CONTENT, Constants::FORMCONTENT_CONTENT);
