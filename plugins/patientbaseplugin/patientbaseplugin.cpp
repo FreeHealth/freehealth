@@ -45,6 +45,7 @@
 #include "patientmodel.h"
 
 #include <coreplugin/icore.h>
+#include <coreplugin/iuser.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/translators.h>
@@ -63,6 +64,7 @@
 using namespace Patients;
 using namespace Internal;
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
+static inline Core::IUser *user()  { return Core::ICore::instance()->user(); }
 static inline void messageSplash(const QString &s) {theme()->messageSplashScreen(s); }
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline Core::ICommandLine *commandLine() {return Core::ICore::instance()->commandLine();}
@@ -107,17 +109,14 @@ bool PatientBasePlugin::initialize(const QStringList &arguments, QString *errorS
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
 
-    messageSplash(tr("Initializing patients database plugin..."));
-
-    return true;
-}
-
-void PatientBasePlugin::extensionsInitialized()
-{
-    if (Utils::Log::warnPluginsCreation())
-        qWarning() << "PatientBasePlugin::extensionsInitialized";
+    // This part of the code is executed AFTER the UserManagerPlugin::initialize()
 
     messageSplash(tr("Initializing patients database plugin..."));
+
+    if (!user())
+        return false;
+    if (user()->uuid().isEmpty())
+        return false;
 
     // Initialize patient base
     QProgressDialog dlg(tr("Initializing patient database..."), tr("Please wait"), 0, 0);
@@ -129,7 +128,7 @@ void PatientBasePlugin::extensionsInitialized()
 
     patientBase();
     if (!patientBase()->isInitialized())
-        return;
+        return false;
 
     if (commandLine()->value(Core::ICommandLine::CreateVirtuals).toBool()) {
         // Populate with some virtual patients
@@ -159,6 +158,16 @@ void PatientBasePlugin::extensionsInitialized()
     // add mode patient search
     m_Mode = new PatientSearchMode(this);
     addObject(m_Mode);
+
+    return true;
+}
+
+void PatientBasePlugin::extensionsInitialized()
+{
+    if (Utils::Log::warnPluginsCreation())
+        qWarning() << "PatientBasePlugin::extensionsInitialized";
+
+    messageSplash(tr("Initializing patients database plugin..."));
 
     prefpage->checkSettingsValidity();
     settings()->sync();
