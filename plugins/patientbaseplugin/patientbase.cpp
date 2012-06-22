@@ -61,24 +61,18 @@ static inline Core::ISettings *settings()  { return Core::ICore::instance()->set
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 static inline Core::ICommandLine *commandLine()  { return Core::ICore::instance()->commandLine(); }
 
-// TODO: move getLkId into UserModel/UserBase
-
-//namespace Patients {
-//namespace Internal {
-//class PatientBasePrivate
-//{
-//public:
-//    PatientBasePrivate(PatientBase *parent = 0) : q(parent) {}
-//    ~PatientBasePrivate () {}
-//
-//    void checkDatabaseVersion()
-//    {}
-//
-//private:
-//    PatientBase *q;
-//};
-//}
-//}
+static inline bool connectDatabase(QSqlDatabase &DB, const int line)
+{
+    if (!DB.isOpen()) {
+        if (!DB.open()) {
+            Utils::Log::addError("EpisodeBase", tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+                                 .arg(DB.connectionName()).arg(DB.lastError().text()),
+                                 __FILE__, line);
+            return false;
+        }
+    }
+    return true;
+}
 
 PatientBase *PatientBase::m_Instance = 0;
 bool PatientBase::m_initialized = false;
@@ -198,13 +192,17 @@ bool PatientBase::init()
 }
 
 /** Creates a virtual patient with the specified data. Virtual patient can be hidden from the ui using a preference setting. */
-void PatientBase::createVirtualPatient(const QString &name, const QString &secondname, const QString &firstname,
+bool PatientBase::createVirtualPatient(const QString &name, const QString &secondname, const QString &firstname,
                           const QString &gender, const int title, const QDate &dob,
                           const QString &country, const QString &note,
                           const QString &street, const QString &zip, const QString &city,
                           QString uuid, const int lkid,
                           const QString &photoFile, const QDate &death)
 {
+    QSqlDatabase DB = QSqlDatabase::database(DB_NAME);
+    if (!connectDatabase(DB, __LINE__)) {
+        return false;
+    }
     using namespace Patients::Constants;
     if (uuid.isEmpty()) {
         uuid = Utils::Database::createUid();
@@ -217,7 +215,8 @@ void PatientBase::createVirtualPatient(const QString &name, const QString &secon
             return;
         }
     }
-    QSqlQuery query(database());
+    DB.transaction();
+    QSqlQuery query(DB);
     query.prepare(prepareInsertQuery(Table_IDENT));
     query.bindValue(IDENTITY_ID, QVariant());
     query.bindValue(IDENTITY_UID, uuid);
@@ -255,6 +254,8 @@ void PatientBase::createVirtualPatient(const QString &name, const QString &secon
 
     if (!query.exec()) {
         LOG_QUERY_ERROR_FOR("PatientBase", query);
+        DB.rollback();
+        return false;
     }
     query.finish();
 
@@ -273,8 +274,12 @@ void PatientBase::createVirtualPatient(const QString &name, const QString &secon
         query.bindValue(PHOTO_BLOB, ba);
         if (!query.exec()) {
             LOG_QUERY_ERROR_FOR("PatientBase", query);
+            DB.rollback();
+            return false;
         }
     }
+    DB.commit();
+    return true;
 }
 
 /** Return a patient uuid in the database or a QString::null. */
@@ -284,6 +289,10 @@ QString PatientBase::patientUuid(const QString &birthname,
                                  const QString &gender,
                                  const QDate &dob) const
 {
+    QSqlDatabase DB = QSqlDatabase::database(DB_NAME);
+    if (!connectDatabase(DB, __LINE__)) {
+        return false;
+    }
     using namespace Patients::Constants;
     QHash<int, QString> where;
     where.insert(IDENTITY_BIRTHNAME, QString("='%1'").arg(birthname));
@@ -292,7 +301,8 @@ QString PatientBase::patientUuid(const QString &birthname,
     where.insert(IDENTITY_GENDER, QString("='%1'").arg(gender));
     where.insert(IDENTITY_DOB, QString("='%1'").arg(dob.toString(Qt::ISODate)));
     QString req = select(Table_IDENT, IDENTITY_UID, where);
-    QSqlQuery query(database());
+    DB.transaction();
+    QSqlQuery query(DB);
     QString toReturn;
     if (query.exec(req)) {
         if (query.next()) {
@@ -301,6 +311,7 @@ QString PatientBase::patientUuid(const QString &birthname,
     } else {
         LOG_QUERY_ERROR_FOR("PatientBase", query);
     }
+    DB.commit();
     return toReturn;
 }
 
