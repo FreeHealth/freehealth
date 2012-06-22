@@ -985,7 +985,7 @@ QVariant EpisodeModel::data(const QModelIndex &item, int role) const
                 return QString("<p align=\"right\">%1&nbsp;-&nbsp;%2<br /><span style=\"color:gray;font-size:9pt\">%3</span></p>")
                         .arg(QLocale().toString(episode->data(EpisodeData::UserDate).toDate(), settings()->value(Constants::S_EPISODEMODEL_SHORTDATEFORMAT, tkTr(Trans::Constants::DATEFORMAT_FOR_MODEL)).toString()).replace(" ", "&nbsp;"))
                         .arg(episode->data(EpisodeData::Label).toString().replace(" ", "&nbsp;"))
-                        .arg(user()->value(Core::IUser::FullName).toString() + "<br/>" +
+                        .arg(user()->fullNameOfUser(episode->data(EpisodeData::UserCreatorUuid).toString()) + "<br/>" +
                              tr("Created: ") +  QLocale().toString(episode->data(EpisodeData::CreationDate).toDate(), settings()->value(Constants::S_EPISODEMODEL_LONGDATEFORMAT, tkTr(Trans::Constants::DATEFORMAT_FOR_MODEL)).toString()));
             if (form)
                 return form->spec()->label();
