@@ -65,7 +65,7 @@ protected:
 public:
     ~InteractionManager();
 
-    DrugInteractionResult *checkInteractions(const DrugInteractionQuery &query);
+    DrugInteractionResult *checkInteractions(const DrugInteractionQuery &query, QObject *parent);
 
 //    static QIcon interactionIcon(const int level, const int levelOfWarning = 0, bool medium = false);
 //    QIcon iamIcon(const IDrug *drug, const int &levelOfWarning = 0, bool medium = false) const;

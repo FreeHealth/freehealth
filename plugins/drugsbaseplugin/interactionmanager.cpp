@@ -134,15 +134,15 @@ InteractionManager::~InteractionManager()
     d=0;
 }
 
-DrugInteractionResult *InteractionManager::checkInteractions(const DrugInteractionQuery &query)
+DrugInteractionResult *InteractionManager::checkInteractions(const DrugInteractionQuery &query, QObject *parent)
 {
     if (query.drugsList().isEmpty())
-        return new DrugInteractionResult(this);
+        return new DrugInteractionResult(parent);
 
     QTime t;
     t.start();
     int nbInteractions = 0;
-    DrugInteractionResult *result = new DrugInteractionResult(this);
+    DrugInteractionResult *result = new DrugInteractionResult(parent);
     result->setTestedDrugs(query.drugsList());
 
     for(int i = 0; i < d->m_Engines.count(); ++i) {

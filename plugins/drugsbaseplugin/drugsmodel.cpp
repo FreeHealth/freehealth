@@ -377,7 +377,7 @@ using namespace DrugsDB;
 /** Constructor */
 DrugsModel::DrugsModel(QObject * parent) :
     QAbstractTableModel(parent),
-    d(new Internal::DrugsModelPrivate())
+    d(new Internal::DrugsModelPrivate)
 {
     static int handler = 0;
     ++handler;
@@ -393,7 +393,7 @@ DrugsModel::DrugsModel(QObject * parent) :
     d->m_InteractionQuery->setTestDrugDrugInteractions(true);
     d->m_InteractionQuery->setTestPatientDrugInteractions(true);
 
-    d->m_InteractionResult = interactionManager().checkInteractions(d->m_InteractionQuery);
+    d->m_InteractionResult = interactionManager().checkInteractions(d->m_InteractionQuery, this);
     connect(&protocolsBase(), SIGNAL(protocolsBaseHasChanged()), this, SLOT(dosageDatabaseChanged()));
     if (d->m_AllergyEngine) {
         connect(d->m_AllergyEngine, SIGNAL(allergiesUpdated()), this, SLOT(resetModel()));
@@ -404,7 +404,9 @@ DrugsModel::DrugsModel(QObject * parent) :
 /** Destructor */
 DrugsModel::~DrugsModel()
 {
-    if (d) delete d;
+    WARN_FUNC;
+    if (d)
+        delete d;
     d=0;
 }
 
@@ -908,7 +910,7 @@ void DrugsModel::checkInteractions()
     }
     if (d->m_InteractionResult)
         delete d->m_InteractionResult;
-    d->m_InteractionResult = interactionManager().checkInteractions(*d->m_InteractionQuery);
+    d->m_InteractionResult = interactionManager().checkInteractions(*d->m_InteractionQuery, this);
     reset();
 }
 
