@@ -28,12 +28,13 @@
 #define XMLFORMNAME_H
 
 #include <QString>
+#include <QMultiHash>
 
 /**
  * \file xmlformcontentreader.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.4
- * \date 15 Feb 2012
+ * \version 0.7.5
+ * \date 22 Jun 2012
 */
 
 
@@ -46,8 +47,11 @@ struct XmlFormName {
 
     bool operator==(const XmlFormName &other) const;
 
-    bool isValid;
+    bool isValid, isAvailableFromDatabase;
     QString uid, absFileName, absPath, modeName;
+    QString fileVersion, databaseVersion;
+    QMultiHash<int, QString> databaseAvailableContents;
+    int dbId;
 };
 
 QDebug operator<<(QDebug dbg, const XmlFormName &c);
