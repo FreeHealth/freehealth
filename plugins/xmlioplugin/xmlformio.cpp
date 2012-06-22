@@ -107,9 +107,8 @@ bool XmlFormIO::canReadForms(const QString &uuidOrAbsPath) const
 
 bool XmlFormIO::canReadForms(const Form::FormIOQuery &query) const
 {
-//    XmlFormName form(query.formUuid());
     XmlFormName &form = formName(query.formUuid(), m_FormNames);
-    qWarning() << "CanRead" << query.formUuid() << form.uid << form.absFileName;
+//    qWarning() << "CanRead" << query.formUuid() << form.uid << form.absFileName;
 
     if (m_ReadableForms.keys().contains(form.absFileName)) {
         return m_ReadableForms.value(form.absFileName);
