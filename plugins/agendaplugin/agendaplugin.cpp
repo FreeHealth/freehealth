@@ -60,6 +60,8 @@
 #include <QtCore/QtPlugin>
 #include <QDialog>
 #include <QGridLayout>
+#include <QProgressDialog>
+
 #include <QDebug>
 
 using namespace Agenda;
@@ -138,6 +140,13 @@ void AgendaPlugin::extensionsInitialized()
     th->setIconFileName(Calendar::CalendarTheme::NavigationPrevious, Core::Constants::ICONPREVIOUS);
 
     if (commandLine()->value(Core::ICommandLine::CreateVirtuals).toBool()) {
+        QProgressDialog dlg(tr("Creating virtual users"), tr("Please wait"), 0, 0);
+        dlg.setWindowModality(Qt::WindowModal);
+        dlg.setMinimumDuration(100);
+        dlg.show();
+        dlg.setFocus();
+        dlg.setValue(0);
+
         QList<Calendar::People> peoples;
         UserCalendar *u = 0;
         // McCoy calendar (Uhura as delegate)
