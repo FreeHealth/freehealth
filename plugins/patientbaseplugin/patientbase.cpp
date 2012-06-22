@@ -199,7 +199,7 @@ bool PatientBase::createVirtualPatient(const QString &name, const QString &secon
                           QString uuid, const int lkid,
                           const QString &photoFile, const QDate &death)
 {
-    QSqlDatabase DB = QSqlDatabase::database(DB_NAME);
+    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
     if (!connectDatabase(DB, __LINE__)) {
         return false;
     }
@@ -211,8 +211,8 @@ bool PatientBase::createVirtualPatient(const QString &name, const QString &secon
         where.insert(IDENTITY_UID, QString("='%1'").arg(uuid));
         int alreadyInBase = count(Table_IDENT, IDENTITY_UID, getWhereClause(Table_IDENT, where));
         if (alreadyInBase!=0) {
-            LOG_ERROR("Patient is alreday in base, virtual patient not created");
-            return;
+            LOG_ERROR("Patient is already in base, virtual patient not created");
+            return false;
         }
     }
     DB.transaction();
@@ -262,7 +262,7 @@ bool PatientBase::createVirtualPatient(const QString &name, const QString &secon
     if (!photoFile.isEmpty()) {
         QPixmap pix(photoFile);
         if (pix.isNull())
-            return;
+            return false;
         QByteArray ba;
         QBuffer buffer(&ba);
         buffer.open(QIODevice::WriteOnly);
@@ -289,7 +289,7 @@ QString PatientBase::patientUuid(const QString &birthname,
                                  const QString &gender,
                                  const QDate &dob) const
 {
-    QSqlDatabase DB = QSqlDatabase::database(DB_NAME);
+    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
     if (!connectDatabase(DB, __LINE__)) {
         return false;
     }

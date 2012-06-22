@@ -283,7 +283,7 @@ bool PmhBase::createDatabase(const QString &connectionName , const QString &dbNa
 QVector<PmhData *> PmhBase::getPmh(const QString &patientUid) const
 {
     QVector<PmhData *> pmhs;
-    QSqlDatabase DB = QSqlDatabase::database(DB_NAME);
+    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
     if (!connectDatabase(DB, __LINE__)) {
         return pmhs;
     }
@@ -392,7 +392,7 @@ bool PmhBase::linkPmhWithCategory(const QVector<Category::CategoryItem *> &cats,
 */
 bool PmhBase::savePmhData(PmhData *pmh)
 {
-    QSqlDatabase DB = QSqlDatabase::database(DB_NAME);
+    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
     if (!connectDatabase(DB, __LINE__)) {
         return false;
     }
@@ -438,7 +438,7 @@ bool PmhBase::savePmhData(PmhData *pmh)
 */
 bool PmhBase::updatePmhData(PmhData *pmh)
 {
-    QSqlDatabase DB = QSqlDatabase::database(DB_NAME);
+    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
     if (!connectDatabase(DB, __LINE__)) {
         return false;
     }
