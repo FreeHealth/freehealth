@@ -174,7 +174,15 @@ void DrugsPlugin::extensionsInitialized()
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "DrugsPlugin::extensionsInitialized";
 
-    messageSplash(tr("Initializing drugs plugin..."));
+//    messageSplash(tr("Initializing drugs plugin..."));
+
+    connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreOpened()));
+}
+
+void DrugsPlugin::postCoreOpened()
+{
+    if (Utils::Log::warnPluginsCreation())
+        qWarning() << Q_FUNC_INFO;
 
     // check settings
     if (!settings()->value(Constants::S_CONFIGURED, false).toBool()) {
@@ -203,13 +211,6 @@ void DrugsPlugin::extensionsInitialized()
         enginePage->checkSettingsValidity();
     }
 
-    connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreOpened()));
-}
-
-void DrugsPlugin::postCoreOpened()
-{
-    if (Utils::Log::warnPluginsCreation())
-        qWarning() << Q_FUNC_INFO;
 #ifdef FREEMEDFORMS
     // Add drug mode. DrugsMode manages its inclusion in pluginManager itself.
     DrugsMode *mode = new DrugsMode(this);

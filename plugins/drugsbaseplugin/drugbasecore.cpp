@@ -99,7 +99,7 @@ DrugBaseCore::DrugBaseCore(QObject *parent) :
     d->m_DrugsBase = new DrugsBase(this);
     d->m_ProtocolsBase = new ProtocolsBase(this);
 
-    connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
+//    connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
     connect(packManager(), SIGNAL(packInstalled(DataPack::Pack)), this, SLOT(packChanged(DataPack::Pack)));
     connect(packManager(), SIGNAL(packRemoved(DataPack::Pack)), this, SLOT(packChanged(DataPack::Pack)));
 //    connect(packManager(), SIGNAL(packUpdated(DataPack::Pack)), this, SLOT(packChanged(DataPack::Pack)));
@@ -119,7 +119,7 @@ bool DrugBaseCore::init()
     d->m_DrugsBase->init();
     d->m_ProtocolsBase->init();
     d->m_InteractionManager = new InteractionManager(this);
-    // TODO: code here
+    connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
     return true;
 }
 

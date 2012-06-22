@@ -78,6 +78,10 @@ bool DrugsBasePlugin::initialize(const QStringList &arguments, QString *errorStr
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
 
+    // This code is executed AFTER the UserManagerPlugin::intialize()
+    messageSplash(tr("Initializing drugs database plugin..."));
+    DrugsDB::DrugBaseCore::instance().init();
+
     return true;
 }
 
