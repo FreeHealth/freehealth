@@ -290,35 +290,50 @@ void XmlIOBase::onCoreDatabaseServerChanged()
 }
 
 /**
-  Return true if the form \e formUid, XmlIOBase::TypeOfForm \e type and \e modeName exists in the database.
-  Empty \e modeName are interpreted as the central form.
+  Return true if the form \e form, XmlIOBase::TypeOfForm \e type and \e modeName exists in the database.\n
+  Empty \e modeName are interpreted as the central form.\n
+  The \e form is modified and populate with the database content.
 */
-bool XmlIOBase::isFormExists(const QString &formUid, const int type, const QString &modeName)
+bool XmlIOBase::isFormExists(XmlFormName &form, const int type, const QString &modeName)
 {
+    // Form info already available
+    if (form.isAvailableFromDatabase && form.databaseAvailableContents.contains(type)) {
+        if (form.databaseAvailableContents.values(type).contains(modeName))
+            return true;
+    }
+    // Get form info from database
     QSqlDatabase DB = database();
     if (!connectedDatabase(DB, __LINE__))
         return false;
+    DB.transaction();
     Utils::FieldList gets;
     gets << Utils::Field(Constants::Table_FORMS, Constants::FORM_ID);
+    gets << Utils::Field(Constants::Table_FORM_CONTENT, Constants::FORMCONTENT_TYPE);
+    gets << Utils::Field(Constants::Table_FORM_CONTENT, Constants::FORMCONTENT_MODENAME);
     Utils::JoinList joins;
     joins << Utils::Join(Constants::Table_FORMS, Constants::FORM_ID, Constants::Table_FORM_CONTENT, Constants::FORMCONTENT_FORM_ID);
     Utils::FieldList conds;
-    conds << Utils::Field(Constants::Table_FORMS, Constants::FORM_UUID, QString("='%1'").arg(normalizedFormUid(formUid)));
-    conds << Utils::Field(Constants::Table_FORM_CONTENT, Constants::FORMCONTENT_TYPE, QString("=%1").arg(type));
+    conds << Utils::Field(Constants::Table_FORMS, Constants::FORM_UUID, QString("='%1'").arg(normalizedFormUid(form.uid)));
     conds << Utils::Field(Constants::Table_FORM_CONTENT, Constants::FORMCONTENT_ISVALID, QString("=1"));
-    if (modeName.isEmpty()) {
-        conds << Utils::Field(Constants::Table_FORM_CONTENT, Constants::FORMCONTENT_MODENAME, QString("='central'"));
-    } else {
-        conds << Utils::Field(Constants::Table_FORM_CONTENT, Constants::FORMCONTENT_MODENAME, QString("='%1'").arg(modeName));
-    }
     QString req = select(gets, joins, conds);
     QSqlQuery query(DB);
     if (query.exec(req)) {
-        if (query.next()) {
-            return true;
+        while (query.next()) {
+            form.databaseAvailableContents.insertMulti(query.value(1).toInt(), query.value(2).toString());
+            form.isAvailableFromDatabase = true;
+            form.dbId = query.value(0).toInt();
         }
     } else {
         LOG_QUERY_ERROR(query);
+        DB.rollback();
+        return false;
+    }
+    DB.commit();
+
+    if (form.isAvailableFromDatabase && form.databaseAvailableContents.contains(type)) {
+        if (form.databaseAvailableContents.values(type).contains(modeName)) {
+            return true;
+        }
     }
     return false;
 }
@@ -332,8 +347,8 @@ QList<Form::FormIODescription *> XmlIOBase::getFormDescription(const Form::FormI
         return toReturn;
 
     // Just manage type of forms
+    DB.transaction();
     QSqlQuery query(DB);
-
     Utils::FieldList gets;
     gets << Utils::Field(Constants::Table_FORMS, Constants::FORM_UUID);
     gets << Utils::Field(Constants::Table_FORM_CONTENT, Constants::FORMCONTENT_CONTENT);
@@ -374,9 +389,10 @@ QList<Form::FormIODescription *> XmlIOBase::getFormDescription(const Form::FormI
         }
     } else {
         LOG_QUERY_ERROR(query);
+        DB.rollback();
     }
     query.finish();
-
+    DB.commit();
     return toReturn;
 }
 
@@ -389,17 +405,18 @@ QHash<QString, QString> XmlIOBase::getAllFormFullContent(const QString &formUid)
         return toReturn;
     // Get all formIds from Forms table
     QVector<int> ids;
+    DB.transaction();
     QSqlQuery query(DB);
     QHash<int, QString> where;
     where.insert(Constants::FORM_UUID, QString("='%1'").arg(normalizedFormUid(formUid)));
     QString req = select(Table_FORMS, FORM_ID, where);
-
     if (query.exec(req)) {
         while (query.next()) {
             ids.append(query.value(0).toInt());
         }
     } else {
         LOG_QUERY_ERROR(query);
+        DB.rollback();
         return toReturn;
     }
     query.finish();
@@ -425,6 +442,7 @@ QHash<QString, QString> XmlIOBase::getAllFormFullContent(const QString &formUid)
             }
         } else {
             LOG_QUERY_ERROR(query);
+            DB.rollback();
         }
         query.finish();
     }
@@ -439,6 +457,7 @@ QString XmlIOBase::getFormContent(const QString &formUid, const int type, const 
     QSqlDatabase DB = database();
     if (!connectedDatabase(DB, __LINE__))
         return false;
+    DB.transaction();
     QSqlQuery query(DB);
     Utils::FieldList gets;
     gets << Utils::Field(Constants::Table_FORM_CONTENT, Constants::FORMCONTENT_CONTENT);
@@ -457,10 +476,13 @@ QString XmlIOBase::getFormContent(const QString &formUid, const int type, const 
 
     if (query.exec(req)) {
         if (query.next()) {
-            return query.value(0).toString();
+            QString var = query.value(0).toString();
+            DB.commit();
+            return var;
         }
     } else {
         LOG_QUERY_ERROR(query);
+        DB.roolback();
     }
     return QString();
 }
@@ -485,6 +507,7 @@ QHash<QString, QPixmap> XmlIOBase::getScreenShots(const QString &formUid, const 
     QSqlDatabase DB = database();
     if (!connectedDatabase(DB, __LINE__))
         return pixmaps;
+    DB.transaction();
     QSqlQuery query(DB);
     Utils::FieldList gets;
     gets << Utils::Field(Constants::Table_FORM_CONTENT, Constants::FORMCONTENT_MODENAME);
@@ -506,14 +529,27 @@ QHash<QString, QPixmap> XmlIOBase::getScreenShots(const QString &formUid, const 
         }
     } else {
         LOG_QUERY_ERROR(query);
+        DB.rollback();
+        return pixmaps;
     }
+    DB.commit();
     return pixmaps;
 }
 
-/** Save the \e content of the form \e form to the database and return the used formUid. If the \e content is empty the form file is accessed */
-bool XmlIOBase::saveForm(const XmlFormName &form)
+/**
+ Save the \e content of the form \e form to the database and return the used formUid.\n
+ If the \e content is empty the form file is accessed.\n
+ The \e form is modified and populated with the database content.
+*/
+bool XmlIOBase::saveForm(XmlFormName &form)
 {
-//    qWarning() << Q_FUNC_INFO << form;
+    QSqlDatabase DB = database();
+    if (!connectedDatabase(DB, __LINE__))
+        return false;
+
+    if (isFormExists(form))
+        return true;
+
     LOG("Saving forms to database: " + form.uid);
 
     QDir dir(form.absPath);
@@ -526,16 +562,26 @@ bool XmlIOBase::saveForm(const XmlFormName &form)
         QString modeName = f.baseName();
         QString content = Utils::readTextFile(f.absoluteFilePath(), Utils::DontWarnUser);
         if (f.fileName().compare(Constants::PMHXCATEGORIES_FILENAME, Qt::CaseInsensitive)==0) {
-            if (!saveContent(form.uid, content, XmlIOBase::PmhCategories, modeName))
+            if (!saveContent(form.uid, content, XmlIOBase::PmhCategories, modeName)) {
                 LOG_ERROR("Can not save pmhx categories associated with the form to database");
-            else
+                database().rollback();
+                return false;
+            } else {
                 LOG("Saving pmhx categories file to database " + f.absoluteFilePath());
-            savePmhxCategories(form, content);
+            }
+            if (!savePmhxCategories(form, content)) {
+                LOG_ERROR("Can not save pmhx categories associated with the form to database");
+                database().rollback();
+                return false;
+            }
         } else {
-            if (!saveContent(form.uid, content, XmlIOBase::FullContent, modeName))
+            if (!saveContent(form.uid, content, XmlIOBase::FullContent, modeName)) {
                 LOG_ERROR("Can not save form to database");
-            else
+                database().rollback();
+                return false;
+            } else {
                 LOG("Saving attached *xml files to database " + f.absoluteFilePath());
+            }
         }
 
         // Try to catch file addition
@@ -543,7 +589,8 @@ bool XmlIOBase::saveForm(const XmlFormName &form)
         QDomDocument doc;
         if (!doc.setContent(content)) {
             LOG_ERROR("XML Error");
-            continue;
+            database().rollback();
+            return false;
         }
         QDomNodeList list = doc.elementsByTagName("file");
 
@@ -552,24 +599,49 @@ bool XmlIOBase::saveForm(const XmlFormName &form)
             const QString &include = node.toElement().text();
             if (include.endsWith(".xml", Qt::CaseInsensitive)) {
                 XmlFormName includeForm(include);
-                if (!saveForm(includeForm))
+                if (!saveForm(includeForm)) {
                     LOG_ERROR("unable to save included form: " + includeForm.uid);
+                    database().rollback();
+                    return false;
+                }
             }
         }
     }
 
     // Save scripts
-    saveFiles(form, "scripts", "js", XmlIOBase::ScriptFile);
+    if (!saveFiles(form, "scripts", "js", XmlIOBase::ScriptFile)) {
+        LOG_ERROR("Unable to save script files");
+        database().rollback();
+        return false;
+    }
+
     // Save uis
-    saveFiles(form, "ui", "ui", XmlIOBase::UiFile);
+    if (!saveFiles(form, "ui", "ui", XmlIOBase::UiFile)) {
+        LOG_ERROR("Unable to save UI files");
+        database().rollback();
+        return false;
+    }
     // Save qml
 //    saveFiles(form, "qml", "qml", XmlIOBase::QmlFile);
+
     // Save html
-    saveFiles(form, "html", "html", XmlIOBase::HtmlFile);
+    if (!saveFiles(form, "html", "html", XmlIOBase::HtmlFile)) {
+        LOG_ERROR("Unable to save HTML files");
+        database().rollback();
+        return false;
+    }
     // Save screenshots
-    saveScreenShots(form);
+    if (!saveScreenShots(form)) {
+        LOG_ERROR("Unable to save screenshot files");
+        database().rollback();
+        return false;
+    }
 
     database().commit();
+
+    if (isFormExists(form))
+        return true;
+
     return true;
 }
 
@@ -614,12 +686,12 @@ Category::CategoryItem * XmlIOBase::createCategory(const XmlFormName &form, cons
 }
 
 /** Save PMHx categories to the categories database. The pmhx category file must be already in the database. */
-void XmlIOBase::savePmhxCategories(const XmlFormName &form, const QString &content)
+bool XmlIOBase::savePmhxCategories(const XmlFormName &form, const QString &content)
 {
     Q_UNUSED(form);
     if (content.isEmpty()) {
         LOG_ERROR("Empty content.");
-        return;
+        return false;
     }
     // analyze XML content
     QDomDocument doc;
@@ -628,7 +700,7 @@ void XmlIOBase::savePmhxCategories(const XmlFormName &form, const QString &conte
     QString error;
     if (!doc.setContent(content, &error, &line, &col)) {
         LOG_ERROR(QString("Error while oading PMHxCategories XML files.\n  %1: %2;%3").arg(error).arg(line).arg(col));
-        return;
+        return false;
     }
     QDomElement root = doc.firstChildElement(Constants::TAG_MAINXMLTAG);
     QDomElement element = root.firstChildElement(Constants::TAG_PMHX_CATEGORIES);
@@ -640,12 +712,15 @@ void XmlIOBase::savePmhxCategories(const XmlFormName &form, const QString &conte
     }
 
     // save categories in the categories plugin
-    if (!categoryCore()->saveCategories(rootCategories))
+    if (!categoryCore()->saveCategories(rootCategories)) {
         LOG_ERROR(tr("Error while saving PMHxCateogries (%1)").arg(form.uid));
+        return false;
+    }
+    return true;
 }
 
 /** Save screenshots files associated with the forms. */
-void XmlIOBase::saveScreenShots(const XmlFormName &form)
+bool XmlIOBase::saveScreenShots(const XmlFormName &form)
 {
     QDir shotPath(form.absPath + QDir::separator() + "shots");
     if (shotPath.exists()) {
@@ -660,14 +735,16 @@ void XmlIOBase::saveScreenShots(const XmlFormName &form)
             QString mode = fp.mid(begin, end-begin) + "/" + f.fileName();
             if (file.open(QFile::ReadOnly)) {
                 QByteArray ba = file.readAll();
-                saveContent(form.uid, ba.toBase64(), XmlIOBase::ScreenShot, mode);
+                if (!saveContent(form.uid, ba.toBase64(), XmlIOBase::ScreenShot, mode))
+                    return false;
             }
         }
     }
+    return true;
 }
 
 /** Save files associated with the forms. */
-void XmlIOBase::saveFiles(const XmlFormName &form, const QString &subDir, const QString &fileExtension, XmlIOBase::TypeOfContent type)
+bool XmlIOBase::saveFiles(const XmlFormName &form, const QString &subDir, const QString &fileExtension, XmlIOBase::TypeOfContent type)
 {
 //    WARN_FUNC << absPathDir << form.uid;
     QDir path(form.absPath + QDir::separator() + subDir);
@@ -680,9 +757,11 @@ void XmlIOBase::saveFiles(const XmlFormName &form, const QString &subDir, const 
             QString fp = f.absoluteFilePath();
             QString mode = fp;
             mode = "." + mode.remove(form.absPath);
-            saveContent(form.uid, Utils::readTextFile(fp, Utils::DontWarnUser), type, mode);
+            if (!saveContent(form.uid, Utils::readTextFile(fp, Utils::DontWarnUser), type, mode))
+                return false;
         }
     }
+    return true;
 }
 
 /** Save the content of an XML form content \e xmlContent into the database using the Form Uuid \e formUid, XmlIOBase::TypeOfForm \e type, Mode name \e modeName and \e date */
@@ -692,6 +771,7 @@ bool XmlIOBase::saveContent(const QString &formUid, const QString &xmlContent, c
     if (!connectedDatabase(DB, __LINE__))
         return false;
 
+    DB.transaction();
     QSqlQuery query(DB);
     int formId = -1;
     QString req;
@@ -717,6 +797,7 @@ bool XmlIOBase::saveContent(const QString &formUid, const QString &xmlContent, c
             formId = query.lastInsertId().toInt();
         } else {
             LOG_QUERY_ERROR(query);
+            DB.rollback();
             return false;
         }
         query.finish();
@@ -729,6 +810,7 @@ bool XmlIOBase::saveContent(const QString &formUid, const QString &xmlContent, c
             }
         } else {
             LOG_QUERY_ERROR(query);
+            DB.rollback();
             return false;
         }
         query.finish();
@@ -754,6 +836,7 @@ bool XmlIOBase::saveContent(const QString &formUid, const QString &xmlContent, c
         query.bindValue(FORMCONTENT_CONTENT, xmlContent);
         if (!query.exec()) {
             LOG_QUERY_ERROR(query);
+            DB.rollback();
             return false;
         }
         query.finish();
@@ -764,6 +847,7 @@ bool XmlIOBase::saveContent(const QString &formUid, const QString &xmlContent, c
             int end = xmlContent.indexOf(QString("</%1>").arg(Constants::TAG_FORM_DESCRIPTION), beg);
             if (beg==-1 || end==-1) {
                 LOG_ERROR("no description found");
+                DB.rollback();
                 return false;
             }
             end += QString("</%1>").arg(Constants::TAG_FORM_DESCRIPTION).length();
@@ -779,6 +863,7 @@ bool XmlIOBase::saveContent(const QString &formUid, const QString &xmlContent, c
             query.bindValue(FORMCONTENT_CONTENT, descr);
             if (!query.exec()) {
                 LOG_QUERY_ERROR(query);
+                DB.rollback();
                 return false;
             }
             query.finish();
@@ -791,6 +876,7 @@ bool XmlIOBase::saveContent(const QString &formUid, const QString &xmlContent, c
         query.bindValue(0, xmlContent);
         if (!query.exec()) {
             LOG_QUERY_ERROR(query);
+            DB.rollback();
             return false;
         }
         query.finish();
@@ -801,6 +887,7 @@ bool XmlIOBase::saveContent(const QString &formUid, const QString &xmlContent, c
             int end = xmlContent.indexOf(QString("</%1>").arg(Constants::TAG_FORM_DESCRIPTION), beg);
             if (beg==-1 || end==-1) {
                 LOG_ERROR("no description found");
+                DB.rollback();
                 return false;
             }
             end += QString("</%1>").arg(Constants::TAG_FORM_DESCRIPTION).length();
@@ -812,12 +899,13 @@ bool XmlIOBase::saveContent(const QString &formUid, const QString &xmlContent, c
             query.bindValue(0, descr);
             if (!query.exec()) {
                 LOG_QUERY_ERROR(query);
+                DB.rollback();
                 return false;
             }
             query.finish();
         }
-
     }
+    DB.commit();
     return true;
 }
 

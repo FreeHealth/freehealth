@@ -85,7 +85,8 @@ public:
     bool isInitialized() const;
 
     // Getters
-    bool isFormExists(const QString &formUid, const int type = FullContent, const QString &modeName = QString::null);
+//    bool isFormExists(const QString &formUid, const int type = FullContent, const QString &modeName = QString::null);
+    bool isFormExists(XmlFormName &formUid, const int type = FullContent, const QString &modeName = QString::null);
 
     QList<Form::FormIODescription *> getFormDescription(const Form::FormIOQuery &query);
     QHash<QString, QString> getAllFormFullContent(const QString &formUid);
@@ -95,10 +96,10 @@ public:
     QHash<QString, QPixmap> getScreenShots(const QString &formUid, const QString &lang);
 
     // Setters
-    bool saveForm(const XmlFormName &form);
-    void savePmhxCategories(const XmlFormName &form, const QString &content);
-    void saveScreenShots(const XmlFormName &form);
-    void saveFiles(const XmlFormName &form, const QString &subDir, const QString &fileExtension, XmlIOBase::TypeOfContent type);
+    bool saveForm(XmlFormName &form);
+    bool savePmhxCategories(const XmlFormName &form, const QString &content);
+    bool saveScreenShots(const XmlFormName &form);
+    bool saveFiles(const XmlFormName &form, const QString &subDir, const QString &fileExtension, XmlIOBase::TypeOfContent type);
 
 private:
     Category::CategoryItem *createCategory(const XmlFormName &form, const QDomElement &element, Category::CategoryItem *parent) const;
