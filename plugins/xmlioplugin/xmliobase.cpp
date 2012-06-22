@@ -66,6 +66,17 @@ static inline XmlFormContentReader *reader() {return XmlFormContentReader::insta
 static inline Core::ICommandLine *commandLine()  { return Core::ICore::instance()->commandLine(); }
 static inline Category::CategoryCore *categoryCore() {return  Category::CategoryCore::instance();}
 
+static inline bool connectedDatabase(QSqlDatabase &db, int line)
+{
+    if (!db.isOpen()) {
+        if (!db.open()) {
+            Utils::Log::addError("XmlIOBase", tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_NAME).arg(db.lastError().text()), __FILE__, line);
+            return false;
+        }
+    }
+    return true;
+}
+
 static inline QString normalizedFormUid(const QString &formUid)
 {
     QString newUid = formUid;
@@ -133,6 +144,9 @@ bool XmlIOBase::initialize()
 {
     if (m_initialized)
         return true;
+
+    // check database dependency
+    categoryCore();
 
     // connect
     if (commandLine()->value(Core::ICommandLine::ClearUserDatabases).toBool()) {
@@ -282,12 +296,8 @@ void XmlIOBase::onCoreDatabaseServerChanged()
 bool XmlIOBase::isFormExists(const QString &formUid, const int type, const QString &modeName)
 {
     QSqlDatabase DB = database();
-    if (!DB.isOpen()) {
-        if (!DB.open()) {
-            LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_NAME).arg(DB.lastError().text()));
-            return false;
-        }
-    }
+    if (!connectedDatabase(DB, __LINE__))
+        return false;
     Utils::FieldList gets;
     gets << Utils::Field(Constants::Table_FORMS, Constants::FORM_ID);
     Utils::JoinList joins;
@@ -318,12 +328,9 @@ QList<Form::FormIODescription *> XmlIOBase::getFormDescription(const Form::FormI
 {
     QList<Form::FormIODescription *> toReturn;
     QSqlDatabase DB = database();
-    if (!DB.isOpen()) {
-        if (!DB.open()) {
-            LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_NAME).arg(DB.lastError().text()));
-            return toReturn;
-        }
-    }
+    if (!connectedDatabase(DB, __LINE__))
+        return toReturn;
+
     // Just manage type of forms
     QSqlQuery query(DB);
 
@@ -378,12 +385,8 @@ QHash<QString, QString> XmlIOBase::getAllFormFullContent(const QString &formUid)
 {
     QHash<QString, QString> toReturn;
     QSqlDatabase DB = database();
-    if (!DB.isOpen()) {
-        if (!DB.open()) {
-            LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_NAME).arg(DB.lastError().text()));
-            return toReturn;
-        }
-    }
+    if (!connectedDatabase(DB, __LINE__))
+        return toReturn;
     // Get all formIds from Forms table
     QVector<int> ids;
     QSqlQuery query(DB);
@@ -484,12 +487,8 @@ QHash<QString, QPixmap> XmlIOBase::getScreenShots(const QString &formUid, const 
 {
     QHash<QString, QPixmap> pixmaps;
     QSqlDatabase DB = database();
-    if (!DB.isOpen()) {
-        if (!DB.open()) {
-            LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_NAME).arg(DB.lastError().text()));
-            return pixmaps;
-        }
-    }
+    if (!connectedDatabase(DB, __LINE__))
+        return pixmaps;
     QSqlQuery query(DB);
     Utils::FieldList gets;
     gets << Utils::Field(Constants::Table_FORM_CONTENT, Constants::FORMCONTENT_MODENAME);
@@ -694,11 +693,8 @@ void XmlIOBase::saveFiles(const XmlFormName &form, const QString &subDir, const 
 bool XmlIOBase::saveContent(const QString &formUid, const QString &xmlContent, const int type, const QString &modeName, const QDateTime &date)
 {
     QSqlDatabase DB = database();
-    if (!DB.isOpen()) {
-        if (!DB.open()) {
-            LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_NAME).arg(DB.lastError().text()));
-        }
-    }
+    if (!connectedDatabase(DB, __LINE__))
+        return false;
 
     QSqlQuery query(DB);
     int formId = -1;
