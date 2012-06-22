@@ -425,6 +425,10 @@ DrugsViewWidget::DrugsViewWidget(QWidget *parent) :
     setupUi(this);
     setDatasToUi();
     testerBox->hide();
+#ifdef FREEMEDFORMS
+    patientNameOrder->hide();
+    patientNameOrderLabel->hide();
+#endif
 }
 
 void DrugsViewWidget::setDatasToUi()
