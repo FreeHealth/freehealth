@@ -86,7 +86,7 @@ public:
 
     // Getters
 //    bool isFormExists(const QString &formUid, const int type = FullContent, const QString &modeName = QString::null);
-    bool isFormExists(XmlFormName &formUid, const int type = FullContent, const QString &modeName = QString::null);
+    bool isFormExists(XmlFormName &formUid, const int type = FullContent, QString modeName = QString::null);
 
     QList<Form::FormIODescription *> getFormDescription(const Form::FormIOQuery &query);
     QHash<QString, QString> getAllFormFullContent(const QString &formUid);

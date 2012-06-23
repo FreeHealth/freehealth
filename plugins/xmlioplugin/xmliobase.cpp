@@ -294,13 +294,19 @@ void XmlIOBase::onCoreDatabaseServerChanged()
   Empty \e modeName are interpreted as the central form.\n
   The \e form is modified and populate with the database content.
 */
-bool XmlIOBase::isFormExists(XmlFormName &form, const int type, const QString &modeName)
+bool XmlIOBase::isFormExists(XmlFormName &form, const int type, QString modeName)
 {
     // Form info already available
+    bool exists = false;
+    if (modeName.isEmpty())
+        modeName = "central";
     if (form.isAvailableFromDatabase && form.databaseAvailableContents.contains(type)) {
         if (form.databaseAvailableContents.values(type).contains(modeName))
-            return true;
+            exists = true;
     }
+    if (exists)
+        return exists;
+
     // Get form info from database
     QSqlDatabase DB = database();
     if (!connectedDatabase(DB, __LINE__))
@@ -630,6 +636,7 @@ bool XmlIOBase::saveForm(XmlFormName &form)
         database().rollback();
         return false;
     }
+
     // Save screenshots
     if (!saveScreenShots(form)) {
         LOG_ERROR("Unable to save screenshot files");
