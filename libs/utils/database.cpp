@@ -2152,7 +2152,11 @@ QString DatabasePrivate::getTypeOfField(const int &fieldref) const
             toReturn = "varchar(2)";
             break;
         case Database::FieldIsBlob :
-            toReturn = "blob";
+        if (m_Driver==Database::SQLite) {
+            toReturn = "blob"; // 1,000,000,000 max size
+        } else if (m_Driver==Database::MySQL) {
+            toReturn = "longblob"; // 4Go max size
+        }
             break;
         case Database::FieldIsDate :
             toReturn = "date";
