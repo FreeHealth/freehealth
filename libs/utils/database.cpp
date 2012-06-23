@@ -1804,26 +1804,39 @@ bool Database::createTable(const int &tableref) const
 /** Create all the tables in the database. */
 bool Database::createTables() const
 {
-    bool toReturn = true;
-    QList<int> list = d->m_Tables.keys();
-    qSort(list);
-    foreach(const int & i, list) {
-        if(!createTable(i)) {
-            toReturn = false;
-            LOG_ERROR_FOR("Database", QCoreApplication::translate("Database", "Can not create table %1").arg(table(i)));
+    QSqlDatabase DB = database();
+    if (!DB.isOpen()) {
+        if (!DB.open()) {
+            LOG_ERROR_FOR("Database", tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+                          .arg(DB.connectionName()).arg(DB.lastError().text()));
+            return false;
         }
     }
-    return toReturn;
+    QList<int> list = d->m_Tables.keys();
+    qSort(list);
+    DB.transaction();
+    foreach(const int & i, list) {
+        if(!createTable(i)) {
+            LOG_ERROR_FOR("Database", QCoreApplication::translate("Database", "Can not create table %1").arg(table(i)));
+            DB.rollback();
+            return false;
+        }
+    }
+    DB.commit();
+    return true;
 }
 
 /** Execute simple SQL commands on the QSqlDatabase \e DB. */
-bool Database::executeSQL(const QStringList &list, const QSqlDatabase &DB)
+bool Database::executeSQL(const QStringList &list, QSqlDatabase &DB)
 {
-    if (!DB.isOpen())
-        return false;
-
-    foreach(const QString &r, list)
-    {
+    if (!DB.isOpen()) {
+        if (!DB.open()) {
+            LOG_ERROR_FOR("Database", tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+                          .arg(DB.connectionName()).arg(DB.lastError().text()));
+            return false;
+        }
+    }
+    foreach(const QString &r, list) {
         if (r.isEmpty())
             continue;
 
@@ -1838,10 +1851,17 @@ bool Database::executeSQL(const QStringList &list, const QSqlDatabase &DB)
 }
 
 /** Execute simple SQL commands on the QSqlDatabase \e DB. */
-bool Database::executeSQL(const QString &req, const QSqlDatabase & DB)
+bool Database::executeSQL(const QString &req, QSqlDatabase & DB)
 {
     if (req.isEmpty())
         return false;
+    if (!DB.isOpen()) {
+        if (!DB.open()) {
+            LOG_ERROR_FOR("Database", tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+                          .arg(DB.connectionName()).arg(DB.lastError().text()));
+            return false;
+        }
+    }
     // TODO: manage ; inside "" or ''
     QStringList list = req.split(";\n", QString::SkipEmptyParts);
     return executeSQL(list, DB);

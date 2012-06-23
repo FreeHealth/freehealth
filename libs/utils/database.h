@@ -323,8 +323,8 @@ public:
     virtual bool createTable(const int &tableref) const;
     virtual bool createTables() const;
 
-    static bool executeSQL(const QStringList &list, const QSqlDatabase &DB);
-    static bool executeSQL(const QString &req, const QSqlDatabase &DB);
+    static bool executeSQL(const QStringList &list, QSqlDatabase &DB);
+    static bool executeSQL(const QString &req, QSqlDatabase &DB);
     static bool executeSqlFile(const QString &connectionName, const QString &fileName, QProgressDialog *dlg = 0);
     static bool importCsvToDatabase(const QString &connectionName, const QString &fileName, const QString &table, const QString &separator = QString(";"), bool ignoreFirstLine = false);
 
