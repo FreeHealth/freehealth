@@ -64,9 +64,8 @@ public:
     // Initializer / Checkers
     static bool isInitialized() { return m_initialized; }
     void logChronos(bool state);
-
-private:
     bool init();
+private:    
     bool createDatabase(const QString &connectionName , const QString &dbName,
                         const QString &pathOrHostName,
                         TypeOfAccess access, AvailableDrivers driver,

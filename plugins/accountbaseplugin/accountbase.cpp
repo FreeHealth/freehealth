@@ -553,7 +553,7 @@ AccountBase::AccountBase(QObject *parent)
 //          "guid             varchar(6)                NOT NULL);";
 
     // TODO: this should be avoid don't init in constructor
-    init();
+    //init();
 
     connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
 }
@@ -633,13 +633,16 @@ bool AccountBase::init()
 void AccountBase::logChronos(bool )
 {}
 
-bool AccountBase::createDatabase(const QString &connectionName , const QString &dbName,
-                    const QString &pathOrHostName,
-                    TypeOfAccess , AvailableDrivers driver,
-                    const QString & login, const QString & pass,
-                    const int port,
-                    CreationOption
-                   )
+bool AccountBase::createDatabase(const QString &connectionName , 
+                                 const QString &dbName,
+                                 const QString &pathOrHostName,
+                                 TypeOfAccess , 
+                                 AvailableDrivers driver,
+                                 const QString & login, 
+                                 const QString & pass,
+                                 const int port,
+                                 CreationOption
+                                 )
 {
     // TODO: manage createOption
     if (connectionName != Constants::DB_ACCOUNTANCY)

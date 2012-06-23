@@ -113,7 +113,7 @@ bool receiptsEngine::insertIntoAccount(const QHash<int,QVariant> &hashValues, co
     return ret;
 }
 
-QHash<QString,QVariant> receiptsEngine::getNamesAndValuesFromMP(){//obsolete
+/*QHash<QString,QVariant> receiptsEngine::getNamesAndValuesFromMP(){//obsolete
     QHash<QString,QVariant> hash;
     MedicalProcedureModel model(this);
     int rows = model.rowCount(QModelIndex());
@@ -126,7 +126,7 @@ QHash<QString,QVariant> receiptsEngine::getNamesAndValuesFromMP(){//obsolete
     	hash.insert(name,value);
     }
     return hash;
-}
+}*/
 
 bool receiptsEngine::insertInThesaurus(const QString &listOfValuesStr, const QString &userUuid){
     bool ret = true;
@@ -213,9 +213,9 @@ double receiptsEngine::getMinDistanceValue(const QString & data){
 }
 
 QHash<int,QVariant> receiptsEngine::getListOfpreferredValues(QString & userUuid,
-                                                           QString & patientUid,
-                                                           QString & patientName,
-                                                           int choice){
+                                                             QString & patientUid,
+                                                             QString & patientName,
+                                                             int choice){
     QHash<int,QVariant> hash;
     double cash = 0.00;
     double check = 0.00;
@@ -236,7 +236,6 @@ QHash<int,QVariant> receiptsEngine::getListOfpreferredValues(QString & userUuid,
     model.setFilter(filter);
     model.select();
     QString data = model.data(model.index(0,THESAURUS_VALUES)).toString();
-    MedicalProcedureModel MPmodel(this);
     double value = 0.00;
     QString MPfilter ;
     QStringList list;

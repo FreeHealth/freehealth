@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>626</width>
-    <height>473</height>
+    <height>485</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -19,6 +19,59 @@
   <layout class="QGridLayout" name="gridLayout_3">
    <item row="0" column="0">
     <layout class="QGridLayout" name="gridLayout_2">
+     <item row="4" column="3">
+      <widget class="QLineEdit" name="lineEditFilter"/>
+     </item>
+     <item row="7" column="0">
+      <widget class="QLabel" name="labelValues">
+       <property name="maximumSize">
+        <size>
+         <width>16777215</width>
+         <height>35</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Choose your values</string>
+       </property>
+      </widget>
+     </item>
+     <item row="7" column="2" colspan="2">
+      <widget class="QLabel" name="labelChoice">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>32</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>List of values chosen</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0" colspan="2">
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QRadioButton" name="userRadioButton">
+         <property name="text">
+          <string>User database</string>
+         </property>
+         <attribute name="buttonGroup">
+          <string notr="true">buttonGroup</string>
+         </attribute>
+        </widget>
+       </item>
+       <item>
+        <widget class="QRadioButton" name="datapackRadioButton">
+         <property name="text">
+          <string>Datapack database</string>
+         </property>
+         <attribute name="buttonGroup">
+          <string notr="true">buttonGroup</string>
+         </attribute>
+        </widget>
+       </item>
+      </layout>
+     </item>
      <item row="1" column="3">
       <widget class="QLabel" name="labelFilter">
        <property name="text">
@@ -32,7 +85,7 @@
      <item row="4" column="0" colspan="2">
       <widget class="QComboBox" name="comboBoxCategories"/>
      </item>
-     <item row="8" column="0" colspan="4">
+     <item row="9" column="0" colspan="4">
       <layout class="QGridLayout" name="gridLayout">
        <item row="2" column="2">
         <widget class="QDialogButtonBox" name="buttonBox">
@@ -79,59 +132,6 @@
        </item>
       </layout>
      </item>
-     <item row="4" column="3">
-      <widget class="QLineEdit" name="lineEditFilter"/>
-     </item>
-     <item row="6" column="0">
-      <widget class="QLabel" name="labelValues">
-       <property name="maximumSize">
-        <size>
-         <width>16777215</width>
-         <height>35</height>
-        </size>
-       </property>
-       <property name="text">
-        <string>Choose your values</string>
-       </property>
-      </widget>
-     </item>
-     <item row="6" column="2" colspan="2">
-      <widget class="QLabel" name="labelChoice">
-       <property name="minimumSize">
-        <size>
-         <width>0</width>
-         <height>32</height>
-        </size>
-       </property>
-       <property name="text">
-        <string>List of values chosen</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="0" colspan="2">
-      <layout class="QHBoxLayout" name="horizontalLayout">
-       <item>
-        <widget class="QRadioButton" name="userRadioButton">
-         <property name="text">
-          <string>User database</string>
-         </property>
-         <attribute name="buttonGroup">
-          <string notr="true">buttonGroup</string>
-         </attribute>
-        </widget>
-       </item>
-       <item>
-        <widget class="QRadioButton" name="datapackRadioButton">
-         <property name="text">
-          <string>Datapack database</string>
-         </property>
-         <attribute name="buttonGroup">
-          <string notr="true">buttonGroup</string>
-         </attribute>
-        </widget>
-       </item>
-      </layout>
-     </item>
      <item row="0" column="3">
       <layout class="QHBoxLayout" name="horizontalLayout_2">
        <item>
@@ -172,7 +172,7 @@
        </property>
       </widget>
      </item>
-     <item row="7" column="0">
+     <item row="8" column="0">
       <widget class="QTableView" name="tableViewOfValues">
        <property name="minimumSize">
         <size>
@@ -182,7 +182,7 @@
        </property>
       </widget>
      </item>
-     <item row="7" column="1" colspan="2">
+     <item row="8" column="1" colspan="2">
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
         <widget class="QPushButton" name="plusButton">
@@ -229,7 +229,7 @@
        </item>
       </layout>
      </item>
-     <item row="7" column="3">
+     <item row="8" column="3">
       <widget class="QListWidget" name="listchosenWidget">
        <property name="minimumSize">
         <size>
@@ -239,11 +239,31 @@
        </property>
       </widget>
      </item>
-     <item row="5" column="0">
+     <item row="6" column="0">
       <widget class="QTextEdit" name="abstractTextEdit"/>
      </item>
-     <item row="5" column="3">
+     <item row="6" column="3">
       <widget class="QTextEdit" name="othersTextEdit"/>
+     </item>
+     <item row="5" column="0">
+      <widget class="QLabel" name="abstractLabel">
+       <property name="text">
+        <string>Abstract</string>
+       </property>
+       <property name="wordWrap">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="5" column="3">
+      <widget class="QLabel" name="othersLabel">
+       <property name="text">
+        <string>Other informations</string>
+       </property>
+       <property name="wordWrap">
+        <bool>true</bool>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>

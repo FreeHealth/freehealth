@@ -86,7 +86,7 @@ void AccountBasePlugin::extensionsInitialized()
     messageSplash(tr("Initializing accountancy plugin..."));
 
     // Initialize Account Database
-    AccountBase::instance();
+    AccountBase::instance()->init();
     //TODO test datapack if is available
     DatapackBase::instance()->initialize();
     

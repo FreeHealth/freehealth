@@ -500,7 +500,7 @@ void findReceiptsValues::enableShowNextTable(){
     ui->tableViewOfValues->setGridStyle(Qt::NoPen);
 }*/
 
-void findReceiptsValues::showNext(){
+void findReceiptsValues::showNext(){//the button is hiden
     QAbstractItemModel * abModel = ui->tableViewOfValues->model();
     int rows = abModel->rowCount();
     if (WarnDebugMessage)
