@@ -125,7 +125,7 @@ static inline QString getPluginPaths()
 
 
 #  ifdef Q_OS_MAC
-    app = QDir::cleanPath(app+"/../"+"/plugins/");
+    app = QDir::cleanPath(app+"/../plugins/");
     return app;
 #  endif
 
