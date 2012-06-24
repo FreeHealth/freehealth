@@ -53,7 +53,7 @@ class UTILS_EXPORT BirthDayEdit : public QButtonLineEdit
 //    Q_PROPERTY(bool calendarPopup READ calendarPopup WRITE setCalendarPopup)
 
 public:
-    explicit BirthDayEdit(QWidget *parent);
+    explicit BirthDayEdit(QWidget *parent = 0);
     explicit BirthDayEdit(const QDate & date, QWidget *parent = 0);
     ~BirthDayEdit();
 
