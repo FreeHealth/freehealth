@@ -57,6 +57,8 @@ public:
     explicit BirthDayEdit(const QDate & date, QWidget *parent = 0);
     ~BirthDayEdit();
 
+    void focusOutEvent(QFocusEvent *event);
+
     QDate date() const;
 //    void setDateFormats(QString formats);
 

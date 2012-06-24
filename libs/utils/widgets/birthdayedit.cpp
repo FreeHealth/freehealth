@@ -62,8 +62,11 @@ BirthDayEdit::~BirthDayEdit()
 /** \brief sets the internal date of the widget to date */
 void BirthDayEdit::setDate(const QDate& date)
 {
+    QDate oldDate = m_date;
     m_date = date;
-    emit dateChanged(m_date);
+    if (oldDate != date)
+        Q_EMIT dateChanged(m_date);
+    updateDisplayText();
 }
 
 /** \brief getter function for the internal date
@@ -73,18 +76,38 @@ QDate BirthDayEdit::date() const
     return QDate(m_date);
 }
 
-/** \brief sets the internal date of the widget to NULL */
+/** \brief sets the internal date of the widget to NULL
+ *
+ *  If internal date is not already NULL, the widget emits the dateChanged(QDate &) signal. */
 void BirthDayEdit::clear()
 {
-    bool emitSignal = true;
-    if(m_date.isNull()) // if internal date is already NULL, don't emit dateChanged()
-        emitSignal = false;
-    m_date = QDate();
-    if (emitSignal)
-        emit dateChanged(m_date);
+    if(!m_date.isNull()) {
+        m_date = QDate();
+        Q_EMIT dateChanged(m_date);
+    }
+    setText("");
 }
 
-/** \brief Convenience function that sets the internal date to the interpreted
+/** \brief overrides the default focusOutEvent and sets a custom css.
+ *
+ *  When widget focus is lost with a date string that can't be interpreted by the
+ *  validator as a valid date, the css is changed, e.g. red background */
+void BirthDayEdit::focusOutEvent(QFocusEvent *event) {
+    int pos = 0;
+    QString tmpText = text();
+
+    if (validator()->validate(tmpText, pos) == QValidator::Acceptable) {
+        setStyleSheet("");
+
+    } else { // QValidator::Intermediate, QValidator::Invalid
+
+        //TODO: let color be a global constant, maybe in theme?
+        setStyleSheet(QString("background: %1;").arg("#f66"));
+    }
+    QButtonLineEdit::focusOutEvent(event);
+}
+
+/** \brief Convenience slot that sets the internal date to the interpreted
  *  value taken from the displayed string in the widget.
  *
  *  It just calls \sa setDateString(). */
@@ -110,39 +133,23 @@ void BirthDayEdit::setDateString(const QString& dateString)
     const DateValidator * pValidator = qobject_cast<const DateValidator*>(validator());
     Q_ASSERT(pValidator);
 
-    switch (pValidator->validate(tmpDateString, pos)) {
-    case QValidator::Acceptable: {
+    if (pValidator->validate(tmpDateString, pos) == QValidator::Acceptable) {
 
         // try to convert the QString into a QDate using the built-in formats
         tmpDate = QDate::fromString(tmpDateString, pValidator->matchedFormat(tmpDateString));
         m_date = tmpDate;
         if (m_date != oldDate)
-            emit dateChanged(m_date);
+            Q_EMIT dateChanged(m_date);
         updateDisplayText();
         //FIXME: buggy toolbutton
         m_toolButton->show();
-        break;
     }
-        /* FIXME: due to QLineEdit not firing editingFinished() when the QValidator returns
-         * Intermediate/Invalid the following code will never be called... */
-    case QValidator::Intermediate:
-    case QValidator::Invalid: {
-        // no valid date found
-        // -> set the internal date to NULL
-        m_date = QDate();
-        emit dateChanged(m_date);
-        updateDisplayText();
-        break;
-    }
-    default: break;
-    }
-
 }
 
 /** \brief updates the displayText with the internal date using the default FMF date format */
 void BirthDayEdit::updateDisplayText()
 {
-    // was there valid date saved?
+    // was there a valid date saved?
     if (m_date.isValid()) {
         setText(m_date.toString(tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR)));
     } else {
