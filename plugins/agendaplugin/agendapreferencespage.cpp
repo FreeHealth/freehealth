@@ -122,10 +122,10 @@ AgendaPreferencesWidget::AgendaPreferencesWidget(QWidget *parent) :
         QWidget(parent)
 {
     setupUi(this);
-    setDatasToUi();
+    setDataToUi();
 }
 
-void AgendaPreferencesWidget::setDatasToUi()
+void AgendaPreferencesWidget::setDataToUi()
 {
 //    showVirtualPatients->setChecked(settings()->value(Constants::S_SELECTOR_SHOWVIRTUALPATIENTS).toBool());
 //    genderColor->setChecked(settings()->value(Constants::S_SELECTOR_USEGENDERCOLORS).toBool());
