@@ -175,6 +175,7 @@ void QButtonLineEdit::emitTextChangedSignal()
     blockSignals(true);
 }
 
+/** \brief slot for triggered left button */
 void QButtonLineEdit::leftTrig(QAction *action)
 {
     m_leftButton->setDefaultAction(action);
@@ -182,6 +183,8 @@ void QButtonLineEdit::leftTrig(QAction *action)
     clearFocus();
 }
 
+/** \brief updates placeHolderText of the LineEdit to the text of the current QAction
+ *  that was last called. */
 void QButtonLineEdit::updatePlaceholderText()
 {
     if (m_leftButton && m_leftButton->defaultAction()) {
@@ -247,11 +250,9 @@ void QButtonLineEdit::keyPressEvent(QKeyEvent *event)
     QLineEdit::keyPressEvent(event);
 }
 
-/**
-  \brief Define rounded border for the QLineEdit
-*/
-// FIXME: Buggy
+/** \brief Define rounded border for the QLineEdit */
 void QButtonLineEdit::setRoundedCorners()
+// FIXME: Buggy
 {
     setStyleSheet(QString("QLineEdit#%1, QFrame#%1 {"
                           "border-style: groove;"
