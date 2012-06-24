@@ -39,12 +39,14 @@
 using namespace Utils;
 using namespace Trans::ConstantTranslations;
 
+/** \brief Default constructor */
 BirthDayEdit::BirthDayEdit(QWidget *parent) :
     QButtonLineEdit(parent)
 {
     init();
 }
 
+/** \brief Additional constructor that initializes the widget with given date */
 BirthDayEdit::BirthDayEdit(const QDate &date, QWidget *parent) :
     QButtonLineEdit(parent)
 {
@@ -64,12 +66,14 @@ void BirthDayEdit::setDate(const QDate& date)
     emit dateChanged(m_date);
 }
 
+/** \brief getter function for the internal date
+ *  \return a QDate() */
 QDate BirthDayEdit::date() const
 {
     return QDate(m_date);
 }
 
-/// \brief sets the internal date of the widget to NULL
+/** \brief sets the internal date of the widget to NULL */
 void BirthDayEdit::clear()
 {
     bool emitSignal = true;
@@ -80,6 +84,10 @@ void BirthDayEdit::clear()
         emit dateChanged(m_date);
 }
 
+/** \brief Convenience function that sets the internal date to the interpreted
+ *  value taken from the displayed string in the widget.
+ *
+ *  It just calls \sa setDateString(). */
 void BirthDayEdit::setDisplayedDateString()
 {
     setDateString(text());
@@ -98,7 +106,7 @@ void BirthDayEdit::setDateString(const QString& dateString)
     QString tmpDateString = dateString;
 
     int pos = 0;
-    //pointer to the DateValidator
+    // pointer to the DateValidator
     const DateValidator * pValidator = qobject_cast<const DateValidator*>(validator());
     Q_ASSERT(pValidator);
 
