@@ -1003,7 +1003,7 @@ void MainWindowActionHandler::createConfigurationActions(int actions)
         cmd->setTranslations(Trans::Constants::CONFIGMEDINTUX_TEXT);
         menu->addAction(cmd, Constants::G_PREFERENCES);
     }
-    if (actions & Core::MainWindowActions::A_LangageChange) {
+    if (actions & Core::MainWindowActions::A_LanguageChange) {
         aLanguageGroup = new QActionGroup(this);
         // create language menu
         ActionContainer *menuconf = actionManager()->actionContainer(Constants::M_CONFIGURATION);

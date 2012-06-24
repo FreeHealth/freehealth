@@ -195,7 +195,7 @@ void MainWindow::init()
             Core::MainWindowActions::A_AppPreferences |
 //            Core::MainWindowActions::A_AppConfigurator |
             Core::MainWindowActions::A_PluginsPreferences |
-            Core::MainWindowActions::A_LangageChange
+            Core::MainWindowActions::A_LanguageChange
             );
 
     actions.setHelpActions(
