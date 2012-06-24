@@ -551,7 +551,7 @@ AccountBase::AccountBase(QObject *parent)
 //          "surname          varchar(50)               NULL,"
 //          "guid             varchar(6)                NOT NULL);";
 
-    // TODO: this should be avoid don't init in constructor
+    // TODO: this should be avoided don't init in constructor
     init();
 
     connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
