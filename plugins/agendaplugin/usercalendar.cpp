@@ -97,12 +97,12 @@ bool UserCalendar::isNull() const
 
 QVariant UserCalendar::data(const int ref) const
 {
-    return m_Datas.value(ref);
+    return m_Data.value(ref);
 }
 
 bool UserCalendar::setData(const int ref, const QVariant &value)
 {
-    m_Datas.insert(ref, value);
+    m_Data.insert(ref, value);
     m_Modified = true;
     return true;
 }
