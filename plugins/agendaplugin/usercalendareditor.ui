@@ -196,7 +196,7 @@
          </property>
         </widget>
        </item>
-       <item row="5" column="0" colspan="2">
+       <item row="7" column="0">
         <widget class="QCheckBox" name="isPrivateCheck">
          <property name="text">
           <string>Agenda is private</string>
