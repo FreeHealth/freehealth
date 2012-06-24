@@ -20,48 +20,6 @@
       <string>Description</string>
      </property>
      <layout class="QGridLayout" name="gridLayout">
-      <item row="0" column="0">
-       <widget class="QLabel" name="label_2">
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>20</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>Label</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="1" colspan="2">
-       <widget class="QLineEdit" name="calendarLabel">
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>20</height>
-         </size>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="label_3">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>20</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>Description</string>
-        </property>
-       </widget>
-      </item>
       <item row="1" column="1" colspan="2">
        <widget class="QTextEdit" name="description">
         <property name="minimumSize">
@@ -91,6 +49,25 @@
         </property>
        </widget>
       </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_3">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>20</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Description</string>
+        </property>
+       </widget>
+      </item>
       <item row="2" column="1">
        <widget class="QLabel" name="iconLabel">
         <property name="minimumSize">
@@ -114,19 +91,49 @@
         </property>
        </widget>
       </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_2">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>20</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Label</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1" colspan="2">
+       <widget class="QLineEdit" name="calendarLabel">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>20</height>
+         </size>
+        </property>
+       </widget>
+      </item>
      </layout>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Reset|QDialogButtonBox::Save</set>
+     </property>
     </widget>
    </item>
    <item row="1" column="0">
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tabGeneral">
       <attribute name="title">
        <string>General</string>
       </attribute>
-      <layout class="QGridLayout" name="gridLayout_2">
+      <layout class="QFormLayout" name="formLayout">
        <property name="leftMargin">
         <number>12</number>
        </property>
@@ -145,6 +152,9 @@
        </item>
        <item row="0" column="1">
         <widget class="QSpinBox" name="defaultDuration">
+         <property name="suffix">
+          <string> minutes</string>
+         </property>
          <property name="minimum">
           <number>5</number>
          </property>
@@ -156,61 +166,40 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="2">
-        <widget class="QLabel" name="label_8">
-         <property name="text">
-          <string>minutes</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="0">
+       <item row="2" column="0">
         <widget class="QLabel" name="label_9">
          <property name="text">
           <string>Default location</string>
          </property>
         </widget>
        </item>
-       <item row="3" column="1" colspan="2">
+       <item row="2" column="1">
         <widget class="QLineEdit" name="defaultLocation"/>
        </item>
-       <item row="6" column="1" colspan="2">
-        <widget class="QLineEdit" name="password"/>
-       </item>
-       <item row="1" column="1">
-        <widget class="QCheckBox" name="isDefaultCheck">
-         <property name="text">
-          <string>is the default agenda</string>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QLabel" name="label">
-         <property name="text">
-          <string>Default agenda</string>
-         </property>
-        </widget>
-       </item>
-       <item row="4" column="1">
-        <widget class="QCheckBox" name="isPrivateCheck">
-         <property name="text">
-          <string>is private</string>
-         </property>
-        </widget>
-       </item>
        <item row="4" column="0">
-        <widget class="QLabel" name="label_6">
-         <property name="text">
-          <string>Privacy</string>
-         </property>
-        </widget>
-       </item>
-       <item row="6" column="0">
         <widget class="QLabel" name="label_4">
          <property name="text">
           <string>Password</string>
          </property>
          <property name="indent">
           <number>4</number>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="1">
+        <widget class="QLineEdit" name="password"/>
+       </item>
+       <item row="6" column="0" colspan="2">
+        <widget class="QCheckBox" name="isDefaultCheck">
+         <property name="text">
+          <string>Agenda is the default agenda</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0" colspan="2">
+        <widget class="QCheckBox" name="isPrivateCheck">
+         <property name="text">
+          <string>Agenda is private</string>
          </property>
         </widget>
        </item>
@@ -292,13 +281,6 @@
        </item>
       </layout>
      </widget>
-    </widget>
-   </item>
-   <item row="2" column="0">
-    <widget class="QDialogButtonBox" name="buttonBox">
-     <property name="standardButtons">
-      <set>QDialogButtonBox::Reset|QDialogButtonBox::Save</set>
-     </property>
     </widget>
    </item>
   </layout>
