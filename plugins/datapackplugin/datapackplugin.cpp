@@ -197,7 +197,7 @@ void DataPackPluginIPlugin::extensionsInitialized()
 void DataPackPluginIPlugin::postCoreInitialization()
 {
     // Core is fully intialized as well as all plugins
-    // Add a pack manager action
+    // Add pack manager action to "Preferences" menu
     QAction *a = 0;
     Core::Command *cmd = 0;
 
