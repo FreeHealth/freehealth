@@ -154,9 +154,9 @@ protected:
     void setModel(AbstractCalendarModel *model) {m_model=model;}
 
 private:
-    QHash<int, QVariant> m_Data;
-    bool m_Modified;
-    QList<DayAvailability> m_Availabilities;
+    QHash<int, QVariant> m_data;
+    bool m_modified;
+    QList<DayAvailability> m_availabilities;
     AbstractCalendarModel *m_model;
 };
 
