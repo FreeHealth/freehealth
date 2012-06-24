@@ -74,7 +74,7 @@ void BirthDayEdit::clear()
 {
     bool emitSignal = true;
     if(m_date.isNull())
-        emitSignal = true;
+        emitSignal = false;
     m_date = QDate();
     if (emitSignal)
         emit dateChanged(m_date);
@@ -100,8 +100,9 @@ void BirthDayEdit::setDateString(const QString& dateString)
     int pos = 0;
     //pointer to the DateValidator
     const DateValidator * pValidator = qobject_cast<const DateValidator*>(validator());
+    Q_ASSERT(pValidator);
 
-    switch (validator()->validate(tmpDateString, pos)) {
+    switch (pValidator->validate(tmpDateString, pos)) {
     case QValidator::Acceptable: {
 
         // try to convert the QString into a QDate using the built-in formats
@@ -130,7 +131,7 @@ void BirthDayEdit::setDateString(const QString& dateString)
 
 }
 
-/** \brief updates the displayText with the internal date using the FMF date format */
+/** \brief updates the displayText with the internal date using the default FMF date format */
 void BirthDayEdit::updateDisplayText()
 {
     // was there valid date saved?
