@@ -73,7 +73,7 @@ QDate BirthDayEdit::date() const
 void BirthDayEdit::clear()
 {
     bool emitSignal = true;
-    if(m_date.isNull())
+    if(m_date.isNull()) // if internal date is already NULL, don't emit dateChanged()
         emitSignal = false;
     m_date = QDate();
     if (emitSignal)
