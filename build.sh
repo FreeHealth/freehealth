@@ -17,6 +17,7 @@ fi
 TEST=""
 CLEAR=""
 SPEC=""
+QMAKE_CONFIG="CONFIG+=debug CONFIG-=release CONFIG+=debug_without_install"
 
 # get version number of FreeDiams from the project file
 PROJECT_VERSION=`cat $SCRIPT_PATH/buildspecs/projectversion.pri | grep "PACKAGE_VERSION" -m 1 | cut -d = -s -f2 | tr -d ' '`
@@ -36,7 +37,7 @@ fi
 
 showHelp()
 {
-echo $SCRIPT_NAME" builds the *debug* Linux versions of the FreeMedForms applications project."
+echo $SCRIPT_NAME" builds the *debug_without_install* Linux versions of the FreeMedForms applications project."
 echo "Project version: "$PROJECT_VERSION
 echo "Usage : $SCRIPT_NAME -txch -s <qt.spec> -b <AppToBuild>"
 echo
@@ -72,10 +73,10 @@ doCompilation()
   if [ ! -e $SPEC ]; then
     BUILD_SPEC="-spec "$SPEC
   fi
-  echo "    ** qmake $1/$1.pro -r \"CONFIG+=debug\" \"CONFIG-=release\" $BUILD_SPEC LOWERED_APPNAME=$1"
+  echo "    ** qmake $1/$1.pro -r $QMAKE_CONFIG $BUILD_SPEC LOWERED_APPNAME=$1"
 
-  qmake $1/$1.pro -r "CONFIG+=debug" "CONFIG-=release" $BUILD_SPEC LOWERED_APPNAME=$1
   cd $1
+  qmake $1.pro -r $QMAKE_CONFIG $BUILD_SPEC LOWERED_APPNAME=$1
   make
   cd ..
   echo "On LINUX: Start application with: ./bin/"$1"/"$1"_debug --config=../global_resources/"$1"_config.ini"
