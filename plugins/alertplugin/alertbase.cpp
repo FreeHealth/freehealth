@@ -1172,7 +1172,14 @@ QVector<AlertItem> AlertBase::getAlertItems(const AlertBaseQuery &query)
             QDateTime dt = QDateTime(query.dateRangeEnd(), QTime(23,59,59));
             conds << Utils::Field(Constants::Table_ALERT_TIMING, Constants::ALERT_TIMING_STARTDATETIME, QString("<= '%1'").arg(dt.toString(Qt::ISODate)));
         }
-        wTimeValidity += QString("\n AND %1 ").arg(getWhereClause(conds).replace("AND", "\n       AND"));
+        wTimeValidity += QString("\n       %1").arg(getWhereClause(conds).replace("AND", "\n       AND"));
+
+        // Cycle validity -> get all cycling alerts (date validity is checked by script in the Core)
+        conds.clear();
+        conds << Utils::Field(Constants::Table_ALERT_TIMING, Constants::ALERT_TIMING_CYCLES, QString(">0"));
+        wTimeValidity += QString("\n       OR %1").arg(getWhereClause(conds));
+        wTimeValidity = QString("\n AND (%1\n"
+                                 "      )").arg(wTimeValidity);
         conds.clear();
 
         // 2. User validations

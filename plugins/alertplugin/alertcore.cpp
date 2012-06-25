@@ -194,7 +194,9 @@ bool AlertCore::checkAlerts(AlertsToCheck check)
 */
 bool AlertCore::registerAlert(const AlertItem &item)
 {
-    processAlerts(QVector<AlertItem>() << item);
+    QVector<AlertItem> items;
+    items << item;
+    processAlerts(items);
     return true;
 }
 
@@ -227,7 +229,7 @@ bool AlertCore::updateAlert(const AlertItem &item)
    - Execute dynamic alerts if needed
    - Feed Alert::IAlertPlaceHolder
 */
-void AlertCore::processAlerts(const QVector<AlertItem> &alerts)
+void AlertCore::processAlerts(QVector<AlertItem> &alerts)
 {
     // Get static place holders
     QList<Alert::IAlertPlaceHolder*> placeHolders = pluginManager()->getObjects<Alert::IAlertPlaceHolder>();
@@ -235,22 +237,37 @@ void AlertCore::processAlerts(const QVector<AlertItem> &alerts)
     // Process alerts
     QList<AlertItem> dynamics;
     for(int i = 0; i < alerts.count(); ++i) {
-        const AlertItem &item = alerts.at(i);
+        AlertItem &item = alerts[i];
+
         // Check script ?
         bool checked = true;
-        for(int i = 0; i < item.scripts().count(); ++i) {
-            const AlertScript &s = item.scripts().at(i);
-            if (s.type()==AlertScript::CheckValidityOfAlert) {
-                QScriptValue v = scriptManager()->evaluate(s.script());
-                LOG(tr("Checking alert validity using the 'CheckScript': %1; validity: %2").arg(item.uuid()).arg(v.toBool()));
-                if (!v.toBool()) {
-                    checked = false;
-                    break;
-                }
+        const AlertScript &checkScript = item.scriptType(AlertScript::CheckValidityOfAlert);
+        if (!checkScript.isNull()) {
+            QScriptValue v = scriptManager()->evaluate(checkScript.script());
+            LOG(tr("Checking alert validity using the 'CheckScript': %1; validity: %2").arg(item.label()).arg(v.toBool()));
+            if (!v.toBool()) {
+                checked = false;
             }
         }
         if (!checked)
             continue;
+
+        // Cycling scripts
+        for(int i =0; i < item.timings().count(); ++i) {
+            AlertTiming &timing = item.timingAt(i);
+            if (timing.isCycling()) {
+                const AlertScript &cyclingDateScript = item.scriptType(AlertScript::CyclingStartDate);
+                if (!cyclingDateScript.isNull()) {
+                    QScriptValue v = scriptManager()->evaluate(cyclingDateScript.script());
+                    LOG(tr("Cycling alert script: 'CyclingStartDate': %1; date: %2").arg(item.label()).arg(v.toDateTime().toString(Qt::ISODate)));
+                    if (v.isDate()) {
+                        // TODO: correctly the nearest starting date
+                        timing.setCycleStartDate(v.toDateTime());
+                        timing.setCycleExpirationDate(timing.start().addSecs(timing.cyclingDelayInMinutes()*60));
+                    }
+                }
+            }
+        }
 
         if (item.viewType() == AlertItem::DynamicAlert) {
             if (!item.isValid() || item.isUserValidated())
@@ -280,6 +297,7 @@ void AlertCore::postCoreInitialization()
     AlertItem item = d->m_alertBase->createVirtualItem();
     item.setThemedIcon("identity.png");
     item.setViewType(AlertItem::StaticAlert);
+    item.setPriority(AlertItem::High);
     item.clearRelations();
     item.clearTimings();
     item.addRelation(AlertRelation(AlertRelation::RelatedToPatient, "patient1"));
@@ -300,6 +318,7 @@ void AlertCore::postCoreInitialization()
     item3.setCategory("Test");
     item3.setDescription("Simple basic static alert that needs a user comment on overriding");
     item3.setViewType(AlertItem::StaticAlert);
+    item3.setPriority(AlertItem::Low);
     item3.setOverrideRequiresUserComment(true);
     item3.addRelation(AlertRelation(AlertRelation::RelatedToPatient, "patient1"));
     item3.addTiming(AlertTiming(start, expiration));
@@ -311,6 +330,7 @@ void AlertCore::postCoreInitialization()
     item4.setCategory("Test");
     item4.setDescription("Related to all patients and was validated for patient2 by user1.<br /> Static alert");
     item4.setViewType(AlertItem::StaticAlert);
+    item4.setPriority(AlertItem::Medium);
     item4.addRelation(AlertRelation(AlertRelation::RelatedToAllPatients));
     item4.addValidation(AlertValidation(QDateTime::currentDateTime(), "user1", "patient2"));
     item4.addTiming(AlertTiming(start, expiration));
@@ -357,13 +377,27 @@ void AlertCore::postCoreInitialization()
 
     AlertItem item9;
     item9.setUuid(Utils::Database::createUid());
-    item9.setLabel("INVALID Scripted alert (item8)");
+    item9.setLabel("INVALID Scripted alert (item9)");
     item9.setCategory("Test scripted alert");
     item9.setDescription("A invalid alert with multiple scripts. YOU SHOULD NOT SEE IT !!!!");
     item9.setViewType(AlertItem::StaticAlert);
     item9.addRelation(AlertRelation(AlertRelation::RelatedToAllPatients));
     item9.addTiming(AlertTiming(start, expiration));
     item9.addScript(AlertScript("check_item9", AlertScript::CheckValidityOfAlert, "(1+1)==3;"));
+
+    AlertItem item10;
+    item10.setUuid(Utils::Database::createUid());
+    item10.setLabel("Cycling alert for all patients (item10)");
+    item10.setCategory("Test cycling alert");
+    item10.setDescription("Testing a cycling alert with:<br />- scripts<br />- relation to all patients.<br />Static alert.");
+    item10.setViewType(AlertItem::StaticAlert);
+    item10.addRelation(AlertRelation(AlertRelation::RelatedToAllPatients));
+    AlertTiming cycling(start, expiration);
+    cycling.setCyclingDelayInYears(5);
+    cycling.setNumberOfCycles(32565);
+    item10.addTiming(cycling);
+    item10.addScript(AlertScript("check_item10", AlertScript::CheckValidityOfAlert, "(1+1)==2;"));
+    item10.addScript(AlertScript("startdate_item10", AlertScript::CyclingStartDate, "var currentDate = new Date(); currentDate.setDate(currentDate.getDate()-2); currentDate;"));
 
     // Db save/get
     if (true) {
@@ -385,6 +419,8 @@ void AlertCore::postCoreInitialization()
             qWarning() << "ITEM8 WRONG";
         if (!d->m_alertBase->saveAlertItem(item9))
             qWarning() << "ITEM9 WRONG";
+        if (!d->m_alertBase->saveAlertItem(item10))
+            qWarning() << "ITEM10 WRONG";
 
         Internal::AlertBaseQuery query;
         query.setAlertValidity(Internal::AlertBaseQuery::ValidAlerts);

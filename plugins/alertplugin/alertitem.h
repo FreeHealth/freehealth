@@ -75,7 +75,7 @@ public:
     virtual bool isCycling() const {return _isCycle;}
     virtual void setCycling(bool cycle) {_modified=true; _isCycle=cycle;}
     virtual int numberOfCycles() const {return _ncycle;}
-    virtual void setNumberOfCycles(int n) {_modified=true; _ncycle=n; if (n>0)_ncycle=true;}
+    virtual void setNumberOfCycles(int n) {_modified=true; _ncycle=n; _isCycle=(n>0);}
     virtual QDateTime nextDate() const {return _next;}
     virtual void setNextDate(const QDateTime &dt) {_modified=true; _next = dt;}
 
@@ -105,6 +105,12 @@ public:
 
     virtual void cyclingDelayPeriodModulo(int *period, int *mod) const;
 
+    // Values not saved in the database, class is not considered as modified when settings these params
+    virtual QDateTime cycleStartDate() const {return _cycleStartDate;}
+    virtual QDateTime cycleExpirationDate() const {return _cycleExpirationDate;}
+    virtual void setCycleStartDate(const QDateTime &dt) {_cycleStartDate=dt;}
+    virtual void setCycleExpirationDate(const QDateTime &dt) {_cycleExpirationDate=dt;}
+
     virtual QString toXml() const;
     static AlertTiming fromDomElement(const QDomElement &element);
 
@@ -114,6 +120,7 @@ private:
     qlonglong _delay;
     bool _valid, _isCycle;
     bool _modified;
+    QDateTime _cycleStartDate, _cycleExpirationDate;
 };
 
 class ALERT_EXPORT AlertScript
@@ -121,6 +128,7 @@ class ALERT_EXPORT AlertScript
 public:
     enum ScriptType {
         CheckValidityOfAlert = 0,
+        CyclingStartDate,
         BeforeAlert,
         DuringAlert,
         AfterAlert,
@@ -138,6 +146,8 @@ public:
 
     virtual QString uuid() const {return _uid;}
     virtual void setUuid(const QString &uid) {_modified=true; _uid=uid;}
+
+    virtual bool isNull() const {return _script.isEmpty();}
 
     virtual bool isValid() const {return _valid;}
     virtual void setValid(bool state) {_modified=true; _valid=state;}
@@ -315,6 +325,7 @@ public:
     virtual ViewType viewType() const;
     virtual ContentType contentType() const;
     virtual Priority priority() const;
+    virtual QString priorityToString() const;
     virtual bool isOverrideRequiresUserComment() const;
     virtual bool mustBeRead() const;
     // TODO : virtual xxx condition() const = 0;
@@ -353,6 +364,7 @@ public:
 
     virtual void clearScripts();
     virtual AlertScript &script(int id) const;
+    virtual AlertScript &scriptType(AlertScript::ScriptType type) const;
     virtual QVector<AlertScript> &scripts() const;
     virtual AlertScript &scriptAt(int id) const;
     virtual void addScript(const AlertScript &script);

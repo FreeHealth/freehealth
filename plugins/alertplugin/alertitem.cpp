@@ -546,6 +546,16 @@ AlertItem::Priority AlertItem::priority() const
     return d->_priority;
 }
 
+QString AlertItem::priorityToString() const
+{
+    switch (d->_priority) {
+    case High: return tkTr(Trans::Constants::HIGH);
+    case Medium: return tkTr(Trans::Constants::MEDIUM);
+    case Low: return tkTr(Trans::Constants::LOW);
+    }
+    return QString::null;
+}
+
 bool AlertItem::isOverrideRequiresUserComment() const
 {
     return d->_overrideRequiresUserComment;
@@ -714,6 +724,16 @@ AlertScript &AlertItem::script(int id) const
     for(int i=0; i<d->_scripts.count();++i) {
         if (d->_scripts.at(i).id()==id)
             return d->_scripts[i];
+    }
+    return d->_nullScript;
+}
+
+AlertScript &AlertItem::scriptType(AlertScript::ScriptType type) const
+{
+    for(int i=0; i < d->_scripts.count(); ++i) {
+        AlertScript &script = d->_scripts[i];
+        if (script.type()==type)
+            return script;
     }
     return d->_nullScript;
 }
@@ -1305,6 +1325,7 @@ QString AlertScript::typeToXml(ScriptType type)
 {
     switch (type) {
     case CheckValidityOfAlert: return "check";
+    case CyclingStartDate: return "cyclingStartDate";
     case BeforeAlert: return "before";
     case DuringAlert: return "during";
     case AfterAlert: return "after";
@@ -1317,6 +1338,8 @@ AlertScript::ScriptType AlertScript::typeFromXml(const QString &xml)
 {
     if (xml.compare("check", Qt::CaseInsensitive)==0)
         return CheckValidityOfAlert;
+    else if (xml.compare("cyclingStartDate", Qt::CaseInsensitive)==0)
+        return CyclingStartDate;
     else if (xml.compare("before", Qt::CaseInsensitive)==0)
         return BeforeAlert;
     else if (xml.compare("after", Qt::CaseInsensitive)==0)

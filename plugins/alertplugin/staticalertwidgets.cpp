@@ -71,10 +71,36 @@ static QIcon getIcon(const AlertItem &item)
 static QString getToolTip(const AlertItem &item)
 {
     QString toolTip;
-    if (item.category().isEmpty())
-        toolTip = QString("<p>%1</p>").arg(item.label());
-    else
-        toolTip = QString("<p><b>%1</b>: %2</p>").arg(item.category()).arg(item.label());
+
+    QString background;
+    switch (item.priority()) {
+    case AlertItem::Low: background = "#FFC8C8"; break;
+    case AlertItem::Medium: background = "#FF6464"; break;
+    case AlertItem::High: background = "#FF3232"; break;
+    }
+
+    // category, label, priority
+    QString header;
+    header = QString("<table border=0 margin=0 width=100%>"
+                      "<tr>"
+                      "<td valign=middle width=70% style=\"font-weight:bold\">%1</td>"
+                      "<td valign=middle align=center style=\"font-weight:bold;background-color:%3;text-transform:uppercase\">%4</td>"
+                      "</tr>"
+                      "<tr>"
+                      "<td colspan=2 style=\"font-weight:bold;color:#101010;padding-left:10px\">%2</td>"
+                      "</tr>"
+                      "</table>")
+            .arg(item.category())
+            .arg(item.label())
+            .arg(background)
+            .arg(item.priorityToString())
+            ;
+
+    QString descr;
+    if (!item.description().isEmpty()) {
+        descr += QString("<span style=\"color:black\">%1</span>"
+                         "<hr align=center width=50% color=lightgray size=1>").arg(item.description());
+    }
 
     QStringList related;
     for(int i = 0; i < item.relations().count(); ++i) {
@@ -86,13 +112,33 @@ static QString getToolTip(const AlertItem &item)
     if (!related.isEmpty())
         content += QString("<span style=\"color:#303030\">%1</span><br />").arg(related.join("<br />"));
 
-    if (!item.description().isEmpty())
-        content += QString("<span style=\"color:#606060\">%1</span>").arg(item.description());
-
-    if (!content.isEmpty()) {
-        content = QString("<p style=\"margin-left:15px\">%1</p>").arg(content);
-        toolTip += content;
+    QStringList timings;
+    for(int i =0; i < item.timings().count(); ++i) {
+        AlertTiming &timing = item.timingAt(i);
+        if (timing.isCycling()) {
+            // TODO: create a AlertTiming::cycleDelayToString() and use it here
+            timings << QString(QApplication::translate("Alert::StaticAlertWidget", "Started on: %1<br />Cycling every: %2<br />Expires on: %3"))
+                       .arg(timing.cycleStartDate().toString(QLocale().dateFormat()))
+                       .arg(timing.cyclingDelayInDays())
+                       .arg(timing.cycleExpirationDate().toString(QLocale().dateFormat()));
+        } else {
+            timings << QString(QApplication::translate("Alert::StaticAlertWidget", "Started on: %1<br />Expires on: %2"))
+                       .arg(timing.start().toString(QLocale().dateFormat()))
+                       .arg(timing.expiration().toString(QLocale().dateFormat()));
+        }
     }
+    if (!timings.isEmpty())
+        content += QString("<span style=\"color:#303030\">%1</span>").arg(timings.join("<br />"));
+
+    toolTip = QString("%1"
+                      "<table border=0 cellpadding=0 cellspacing=0 width=100%>"
+                      "<tr><td style=\"padding-left:10px;\">%2</td></tr>"
+                      "<tr><td align=center>%3</td></tr>"
+                      "</table>")
+            .arg(header)
+            .arg(descr)
+            .arg(content)
+            ;
     return toolTip;
 }
 
@@ -149,6 +195,7 @@ void StaticAlertToolButton::setAlertItem(const AlertItem &item)
 {
     setIcon(getIcon(item));
     setToolTip(getToolTip(item));
+
     if (aLabel)
         aLabel->setText(item.label());
     if (aCategory) {

@@ -97,7 +97,7 @@ Q_SIGNALS:
 //    void alertItemValidated(const AlertItem &alert);
 
 private:
-    void processAlerts(const QVector<AlertItem> &alerts);
+    void processAlerts(QVector<AlertItem> &alerts);
 
 private Q_SLOTS:
     void postCoreInitialization();
