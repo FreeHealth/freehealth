@@ -37,15 +37,6 @@
 
 namespace Utils {
 
-/**
- * \class Utils::BirthDayEdit
- * \brief Replacement class for QDateEdit to better handle birthday entering
- *
- * Inherits QLineEdit and accepts an input format that can be freely defined for
- * each translation. It parses the input and tries to make a date out of it, using
- * the available masks (user provided, system QLocale()->dateFormat(QLocale::ShortFormat),
- * FMF provided). When the focus is lost, it displays the date in the standard way.
- */
 class UTILS_EXPORT BirthDayEdit : public QButtonLineEdit
 {
     Q_OBJECT
@@ -57,31 +48,31 @@ public:
     explicit BirthDayEdit(const QDate & date, QWidget *parent = 0);
     ~BirthDayEdit();
 
-    void focusOutEvent(QFocusEvent *event);
 
     QDate date() const;
 //    void setDateFormats(QString formats);
 
 private:
     void init(const QDate& date = QDate(), const QDate& maximumDate = QDate(), const QDate& minimumDate = QDate());
+    void focusOutEvent(QFocusEvent *event);
 
 signals:
-    void dateChanged (const QDate& date);
+    void dateChanged(const QDate &date);
 
-public slots:
+public Q_SLOTS:
     virtual void clear();
     void setDisplayedDateString();
     void setDateString(const QString& dateString);
     void setDate(const QDate &date);
 
-protected slots:
+protected Q_SLOTS:
     void updateDisplayText();
 
 private:
     QDate m_date;
     QDate m_maximumDate;
     QDate m_minimumDate;
-    QToolButton * m_toolButton;
+    QToolButton *m_toolButton;
 };
 
 } // end Utils

@@ -24,6 +24,17 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
+
+/**
+ * \class Utils::BirthDayEdit
+ * \brief Replacement class for QDateEdit to better handle birthday entering
+ *
+ * Inherits QLineEdit and accepts an input format that can be freely defined for
+ * each translation. It parses the input and tries to make a date out of it, using
+ * the available masks (user provided, system QLocale()->dateFormat(QLocale::ShortFormat),
+ * FMF provided). When the focus is lost, it displays the date in the standard way.
+ */
+
 #include "birthdayedit.h"
 #include <QDebug>
 
@@ -86,6 +97,8 @@ void BirthDayEdit::clear()
         Q_EMIT dateChanged(m_date);
     }
     setText("");
+    // TODO: add date format string
+    setPlaceholderText(tr("Enter a date (format: %1)").arg("ADD FORMAT"));
 }
 
 /** \brief overrides the default focusOutEvent and sets a custom css.
