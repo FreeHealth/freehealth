@@ -142,6 +142,8 @@ public:
             Utils::UpperCaseValidator *val = new Utils::UpperCaseValidator(q);
             editUi->birthName->setValidator(val);
             editUi->secondName->setValidator(val);
+            editUi->photoButton->setDefault(false);
+            editUi->photoButton->setAutoDefault(false);
 
             zipCompleter = new ZipCodes::ZipCountryCompleters(q);
             zipCompleter->setCityLineEdit(editUi->city);
