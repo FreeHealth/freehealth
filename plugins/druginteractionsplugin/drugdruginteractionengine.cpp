@@ -49,6 +49,12 @@
 #include <QVector>
 #include <QCoreApplication>
 
+enum {
+    WarnDDIComputation = false,
+    WarnDatabaseExtraction = false,
+    WarnFindInteractingDrugInsideDDI = false
+};
+
 static inline DrugsDB::DrugsBase &drugsBase() {return DrugsDB::DrugBaseCore::instance().drugsBase();}
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
@@ -248,13 +254,40 @@ public:
 
     const IDrug *getInteractingDrug(const IDrug *drug)
     {
+        if (WarnFindInteractingDrugInsideDDI) {
+            qWarning() << "getInteractingDrug from" << drug->brandName();
+            qWarning() << "    drug ATC ids" << drug->allAtcIds();
+            qWarning() << "    ATC1" << m_Infos.value(DI_ATC1) << "ATC2" << m_Infos.value(DI_ATC2);
+        }
+
         int testAtcId = m_Infos.value(DI_ATC1).toInt();
-        if (drug->allAtcIds().contains(testAtcId))
+        const QVector<int> &ids = drug->allAtcIds();
+        if (ids.contains(m_Infos.value(DI_ATC1).toInt()) && ids.contains(m_Infos.value(DI_ATC2).toInt())) {
+            if (m_InteractingDrugs.count()==2) {
+                for(int i=0; i < m_InteractingDrugs.count(); ++i) {
+                    const IDrug *dr = m_InteractingDrugs.at(i);
+                    if (dr==drug)
+                        continue;
+                    return dr;
+                }
+            }
+        }
+        if (ids.contains(testAtcId))
             testAtcId = m_Infos.value(DI_ATC2).toInt();
+
+        if (WarnFindInteractingDrugInsideDDI)
+            qWarning() << "    searching" << testAtcId;
+
         for(int i=0; i < m_InteractingDrugs.count(); ++i) {
             const IDrug *dr = m_InteractingDrugs.at(i);
             if (dr==drug)
                 continue;
+
+            if (WarnFindInteractingDrugInsideDDI) {
+                qWarning() << "        test" << dr->brandName();
+                qWarning() << "            " << dr->allAtcIds();
+            }
+
             if (typeId()==DrugDrugInteractionEngine::DrugDuplication)
                 return dr;
             if (dr->allAtcIds().contains(testAtcId)) {
@@ -829,7 +862,9 @@ bool DrugDrugInteractionEngine::init()
     QList<int> fields;
     fields << Constants::INTERACTIONS_ATC_ID1 << Constants::INTERACTIONS_ATC_ID2;
     QString req = drugsBase().select(Constants::Table_INTERACTIONS, fields);
-    QSqlQuery query(req , QSqlDatabase::database(Constants::DB_DRUGS_NAME));
+    QSqlDatabase db = QSqlDatabase::database(Constants::DB_DRUGS_NAME);
+    db.transaction();
+    QSqlQuery query(req , db);
     if (query.isActive()) {
         while (query.next()) {
             d->m_InteractionsIDs.insertMulti(query.value(0).toInt(), query.value(1).toInt());
@@ -842,8 +877,14 @@ bool DrugDrugInteractionEngine::init()
 
     d->m_DoNotWarnAtcDuplicates.clear();
     QHash<int,QString> where;
+    // Old drugs base are buggy, boolean field is recorded as a string 'true'/'false'
+    req = drugsBase().select(Constants::Table_ATC, Constants::ATC_ID);
+    req += " WHERE ";
     where.insert(Constants::ATC_WARNDUPLICATES, "=0");
-    req = drugsBase().select(Constants::Table_ATC, Constants::ATC_ID, where);
+    req += drugsBase().getWhereClause(Constants::Table_ATC, where);
+    where.clear();
+    where.insert(Constants::ATC_WARNDUPLICATES, "='false'");
+    req += " OR " + drugsBase().getWhereClause(Constants::Table_ATC, where);
     if (query.exec(req)) {
         while (query.next()) {
             d->m_DoNotWarnAtcDuplicates.append(query.value(0).toInt());
@@ -851,7 +892,7 @@ bool DrugDrugInteractionEngine::init()
     } else {
         LOG_QUERY_ERROR(query);
     }
-
+    db.commit();
     return true;
 }
 
@@ -884,10 +925,18 @@ bool DrugDrugInteractionEngine::checkDrugInteraction(IDrug *drug, const QVector<
     QTime t;
     t.start();
 
-    if (drug->numberOfInn() == 0)
+    if (WarnDDIComputation)
+        qWarning() << "\nDrugDrugInteractionEngine::checkDrugInteraction for drug" << drug->brandName().left(25);
+
+    if (drug->numberOfInn() == 0) {
+        if (WarnDDIComputation)
+            qWarning() << "  * Drug does not have INN" << drug->brandName().left(25);
         return false;
+    }
 
     if (DrugRoute::maximumSystemicEffect(drug) == DrugRoute::NoSystemicEffect) {
+        if (WarnDDIComputation)
+            qWarning() << "  * Drug route is not systemic" << drug->brandName().left(25);
         return false;
     }
 
@@ -906,10 +955,14 @@ bool DrugDrugInteractionEngine::checkDrugInteraction(IDrug *drug, const QVector<
             ddi->addInteractingDrug(drug);
             ddi->addInteractingDrug(drug2);
             d->m_FirstPassInteractions.append(ddi);
+            if (WarnDDIComputation)
+                qWarning() << "  * Drug duplication" << drug->brandName() << drug2->brandName().left(25);
             continue;
         }
 
         if (DrugRoute::maximumSystemicEffect(drug2) == DrugRoute::NoSystemicEffect) {
+            if (WarnDDIComputation)
+                qWarning() << "  * Drug does not have INN" << drug2->brandName().left(25);
             continue;
         }
 
@@ -936,6 +989,10 @@ bool DrugDrugInteractionEngine::checkDrugInteraction(IDrug *drug, const QVector<
                         ddi->addInteractingDrug(drug);
                         ddi->addInteractingDrug(drug2);
                         d->m_FirstPassInteractions.append(ddi);
+                        if (WarnDDIComputation) {
+                            qWarning() << "  * Found DDI" << drug->brandName().left(25) << drug2->brandName().left(25);
+                            qWarning() << "             " << drugsBase().getAtcLabel(s) << drugsBase().getAtcLabel(s2);
+                        }
                     }
                 }
 
@@ -954,6 +1011,10 @@ bool DrugDrugInteractionEngine::checkDrugInteraction(IDrug *drug, const QVector<
                         ddi->addInteractingDrug(drug);
                         ddi->addInteractingDrug(drug2);
                         d->m_FirstPassInteractions.append(ddi);
+                        if (WarnDDIComputation) {
+                            qWarning() << "  * Found Duplication" << drug->brandName().left(25) << drug2->brandName().left(25);
+                            qWarning() << "                     " << drugsBase().getAtcLabel(s);
+                        }
                     }
                 }
             }
@@ -964,7 +1025,9 @@ bool DrugDrugInteractionEngine::checkDrugInteraction(IDrug *drug, const QVector<
         Utils::Log::logTimeElapsed(t, "DrugDrugInteractionEngine", QString("checkDrugInteraction: %1 ; %2")
                                    .arg(drug->brandName()).arg(drugsList.count()));
 
-    //      qWarning() << "checkDrugInteraction" << m_DDIFound;
+    if (WarnDDIComputation)
+        qWarning() << "  * Total DDI" << d->m_DDIFound.count() << "\n\n";
+
     if (d->m_DDIFound.count() != 0)
         return true;
 
@@ -981,20 +1044,22 @@ int DrugDrugInteractionEngine::calculateInteractions(const QVector<IDrug *> &dru
     qDeleteAll(d->m_FirstPassInteractions);
     d->m_FirstPassInteractions.clear();
     d->m_TestedDrugs = drugs;
+    if (WarnDDIComputation)
+        qWarning() << "------------------------------------";
     foreach(IDrug *drug, drugs) {
         checkDrugInteraction(drug, drugs);
     }
     if (d->m_LogChrono)
         Utils::Log::logTimeElapsed(t, "DrugDrugInteractionEngine", QString("interactions(): %1 drugs").arg(drugs.count()));
-
-//    qWarning() << "DDIEngine::foundATCtoATC DDI" << d->m_DDIFound;
-//    qWarning() << "DDIEngine::found" << d->m_FirstPassInteractions.count();
-
+    if (WarnDDIComputation)
+        qWarning() << "------------------------------------";
     return d->m_DDIFound.count();
 }
 
 QVector<IDrugInteraction *> DrugDrugInteractionEngine::getInteractionsFromDatabase(IDrugInteraction *fromFirstPassInteraction)
 {
+    if (WarnDatabaseExtraction)
+        qWarning() << "DrugDrugInteractionEngine::getInteractionsFromDatabase";
     QVector<IDrugInteraction *> toReturn;
     DrugsInteraction *fromddi = static_cast<DrugsInteraction *>(fromFirstPassInteraction);
     Q_ASSERT(fromddi);
@@ -1012,6 +1077,9 @@ QVector<IDrugInteraction *> DrugDrugInteractionEngine::getInteractionsFromDataba
 
     // first test : is a duplication interaction ?
     if (id2 == -1) {
+        if (WarnDatabaseExtraction)
+            qWarning() << "  * Duplication" << drugsBase().getAtcLabel(_id1);
+
         // Drug duplication ?
         if (_id1==-1) {
             DrugsInteraction *ddi = 0;
@@ -1026,6 +1094,8 @@ QVector<IDrugInteraction *> DrugDrugInteractionEngine::getInteractionsFromDataba
                 ddi->addInteractingDrug(drug);
             }
             toReturn << ddi;
+            if (WarnDatabaseExtraction)
+                qWarning() << "    * Drug Duplication";
             return toReturn;
         } else if (!d->m_DoNotWarnAtcDuplicates.contains(_id1)) {
             DrugsInteraction *ddi = 0;
@@ -1049,6 +1119,8 @@ QVector<IDrugInteraction *> DrugDrugInteractionEngine::getInteractionsFromDataba
             }
             id2 = _id1;
             toReturn << ddi;
+            if (WarnDatabaseExtraction)
+                qWarning() << "    * ATC Duplication" << ddi->value(DrugsInteraction::DI_RiskFr).toString();
             return toReturn;
         } else {
             return toReturn;
@@ -1094,6 +1166,10 @@ QVector<IDrugInteraction *> DrugDrugInteractionEngine::getInteractionsFromDataba
                 ddi->addInteractingDrug(drug);
             }
             toReturn << ddi;
+            if (WarnDatabaseExtraction) {
+                qWarning() << "  * DDI: id" << ddi->value(DrugsInteraction::DI_Id).toString() << "ATC1" << ddi->value(DrugsInteraction::DI_ATC1).toString() << "ATC2" << ddi->value(DrugsInteraction::DI_ATC2).toString();
+                qWarning() << "        " << "ATC1" << drugsBase().getAtcLabel(ddi->value(DrugsInteraction::DI_ATC1).toInt()) << "ATC2" << drugsBase().getAtcLabel(ddi->value(DrugsInteraction::DI_ATC2).toInt());
+            }
         }
     } else {
         LOG_QUERY_ERROR(query);
