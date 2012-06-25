@@ -56,9 +56,21 @@ using namespace Trans::ConstantTranslations;
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline Core::ICommandLine *commandLine()  { return Core::ICore::instance()->commandLine(); }
 
-
 CategoryBase *CategoryBase::m_Instance = 0;
 bool CategoryBase::m_initialized = false;
+
+static inline bool connectDatabase(QSqlDatabase &DB, const int line)
+{
+    if (!DB.isOpen()) {
+        if (!DB.open()) {
+            Utils::Log::addError("CategoryBase", tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+                                 .arg(DB.connectionName()).arg(DB.lastError().text()),
+                                 __FILE__, line);
+            return false;
+        }
+    }
+    return true;
+}
 
 CategoryBase *CategoryBase::instance()
 {
@@ -80,7 +92,7 @@ CategoryBase::CategoryBase(QObject *parent) :
     addTable(Table_VERSION, "VERSION");
 
     addField(Table_CATEGORIES, CATEGORY_ID,              "CID",        FieldIsUniquePrimaryKey);
-    addField(Table_CATEGORIES, CATEGORY_UUID,            "UUID",       FieldIsUUID);
+    addField(Table_CATEGORIES, CATEGORY_UUID,            "UUID",       FieldIsShortText);
     addField(Table_CATEGORIES, CATEGORY_PARENT,          "PARENT_ID",  FieldIsInteger);
     addField(Table_CATEGORIES, CATEGORY_LABEL_ID,        "LID",        FieldIsInteger);
     addField(Table_CATEGORIES, CATEGORY_MIME,            "MIME",       FieldIsShortText);
@@ -256,16 +268,14 @@ QVector<CategoryItem *> CategoryBase::getCategories(const QString &mime, const Q
 {
     QVector<CategoryItem *> cats;
     QMultiHash<CategoryItem *, QString> childrenUuid;
-    if (!database().isOpen()) {
-        if (!database().open()) {
-            LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
-                      .arg(database().connectionName()).arg(database().lastError().text()));
-            return cats;
-        }
+    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
+    if (!connectDatabase(DB, __LINE__)) {
+        return cats;
     }
+
     QString req;
-    database().transaction();
-    QSqlQuery query(database());
+    DB.transaction();
+    QSqlQuery query(DB);
     QStringList correctedUids = uuids;
     QHash<int, QString> where;
     if (uuids.isEmpty()) {
@@ -352,7 +362,7 @@ QVector<CategoryItem *> CategoryBase::getCategories(const QString &mime, const Q
         }
         query.finish();
     }
-    database().commit();
+    DB.commit();
 
     // Get the children of the category
     foreach(CategoryItem *item, cats) {
@@ -416,27 +426,35 @@ bool CategoryBase::saveCategory(CategoryItem *category)
   If CategoryItem already exists in database, CategoryItem is updated.
   \sa updateCategory()
 */
-bool CategoryBase::saveCategories(const QVector<CategoryItem *> &categories)
+bool CategoryBase::saveCategories(const QVector<CategoryItem *> &categories, bool createTransaction)
 {
-    bool ok = true;
+    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
+    if (!connectDatabase(DB, __LINE__)) {
+        return false;
+    }
+    if (createTransaction)
+        DB.transaction();
     for(int i=0; i < categories.count(); ++i) {
         CategoryItem *category = categories.at(i);
 
         // save or update ?
         if (categoryNeedsUpdate(category)) {
             if (!updateCategory(category)) {
-                ok = false;
+                if (createTransaction)
+                    DB.rollback();
+                return false;
             }
             continue;
         }
 
         // save labels
         if (!saveCategoryLabels(category)) {
-            ok = false;
-            continue;
+            if (createTransaction)
+                DB.rollback();
+            return false;
         }
         // save category itself
-        QSqlQuery query(database());
+        QSqlQuery query(DB);
         query.prepare(prepareInsertQuery(Constants::Table_CATEGORIES));
         query.bindValue(Constants::CATEGORY_ID, QVariant());
         query.bindValue(Constants::CATEGORY_UUID, category->data(CategoryItem::Uuid));
@@ -453,20 +471,28 @@ bool CategoryBase::saveCategories(const QVector<CategoryItem *> &categories)
             category->setData(CategoryItem::DbOnly_Id, query.lastInsertId());
         } else {
             LOG_QUERY_ERROR(query);
-            ok = false;
+            if (createTransaction)
+                DB.rollback();
+            return false;
         }
         category->setDirty(false);
         for(int i=0; i < category->childCount(); ++i)
             category->child(i)->setData(CategoryItem::DbOnly_ParentId, category->id());
 
-        saveCategories(category->children().toVector());
+        if (!saveCategories(category->children().toVector(), false)) {
+            if (createTransaction)
+                DB.rollback();
+            return false;
+        }
     }
-    return ok;
+    DB.commit();
+    return true;
 }
 
 /** Check the database from already existing category. Return true if the category already exists in the database (in this case, the CategoryItem::DbOnly_Id will be populated with the id of the item). */
 bool CategoryBase::categoryNeedsUpdate(CategoryItem *category)
 {
+    // we are inside a transaction
     int id = -1;
     bool isDirty = category->isDirty();
     if ((category->data(CategoryItem::DbOnly_Id).isNull() || category->id()==-1) &&
@@ -502,6 +528,7 @@ bool CategoryBase::categoryNeedsUpdate(CategoryItem *category)
 */
 bool CategoryBase::updateCategory(CategoryItem *category)
 {
+    // we are inside a transaction
     int id = category->id();
     if (id < 0)
         return false;
@@ -535,18 +562,21 @@ bool CategoryBase::updateCategory(CategoryItem *category)
     //    query.bindValue(6, category->data(CategoryItem::DbOnly_LabelId));
     if (!query.exec()) {
         LOG_QUERY_ERROR(query);
+        return false;
     }
     query.finish();
 
     // update labels
-    saveCategoryLabels(category);
+    if (!saveCategoryLabels(category))
+        return false;
     category->setDirty(false);
-    return false;
+    return true;
 }
 
 /** \brief Save or update categories labels. */
 bool CategoryBase::saveCategoryLabels(CategoryItem *category)
 {
+    // we are inside a transaction
     if (!category->isDirty())
         return true;
     // get label_id
@@ -620,8 +650,9 @@ bool CategoryBase::removeAllExistingCategories(const QString &mime)
     query.bindValue(0, 0);
     if (!query.exec()) {
         LOG_QUERY_ERROR(query);
+        return false;
     }
-    return false;
+    return true;
 }
 
 /** Reacts to Core::ICore::databaseServerChanged(). */

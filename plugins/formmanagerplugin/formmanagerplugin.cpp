@@ -80,6 +80,8 @@ FormManagerPlugin::FormManagerPlugin() :
     m_PrefPage = new Internal::FormPreferencesPage(this);
     addAutoReleasedObject(m_PrefPage);
     addAutoReleasedObject(m_PrefPageSelector);
+
+    connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
 }
 
 FormManagerPlugin::~FormManagerPlugin()
@@ -122,6 +124,17 @@ void FormManagerPlugin::extensionsInitialized()
     episodeBase();
     FormManager::instance();
 
+    addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
+
+//    m_PrefPage->checkSettingsValidity();
+
+    // Add mode
+    mode = new FormManagerMode(this);
+}
+
+void FormManagerPlugin::postCoreInitialization()
+{
+    qWarning() << Q_FUNC_INFO;
     // Check FirstRun Default Form
     const QString &uid = settings()->defaultForm();
     if (!uid.isEmpty()) {
@@ -130,13 +143,6 @@ void FormManagerPlugin::extensionsInitialized()
         settings()->setDefaultForm("");
     }
 
-    addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
-
-    m_PrefPage->checkSettingsValidity();
-
-    // Add mode
-    mode = new FormManagerMode(this);
 }
-
 
 Q_EXPORT_PLUGIN(FormManagerPlugin)

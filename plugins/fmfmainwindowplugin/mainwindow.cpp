@@ -310,6 +310,9 @@ void MainWindow::postCoreInitialization()
     aboutToShowRecentPatients();
 
     theme()->finishSplashScreen(this);
+
+    modeManager()->activateMode(Core::Constants::MODE_PATIENT_SEARCH);
+
     raise();
     show();
 

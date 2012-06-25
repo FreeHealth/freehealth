@@ -100,7 +100,8 @@ public:
                     << "ALTER TABLE `CATEGORIES` RENAME TO `OLD_CATEGORIES`;"
                     << "ALTER TABLE `TEMPLATES` RENAME TO `OLD_TEMPLATES`;";
 
-            if (!q->executeSQL(reqs, q->database()))
+            QSqlDatabase DB = q->database();
+            if (!q->executeSQL(reqs, DB))
                 LOG_ERROR_FOR(q, "Unable to recreate template database during update (0.3.0 to 0.4.0)");
 
             // 2. Recreate the db schema
@@ -138,7 +139,7 @@ public:
 
 
             // Reinsert datas to new tables
-            if (!q->executeSQL(reqs, q->database()))
+            if (!q->executeSQL(reqs, DB))
                 LOG_ERROR_FOR(q, "Unable to recreate template database during update (0.3.0 to 0.4.0)");
 
             // Refresh db version

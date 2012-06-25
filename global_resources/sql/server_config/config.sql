@@ -26,8 +26,8 @@
 -- /**
 --  * \file global_resources/sql/server_config/config.sql
 --  * \author Eric MAEKER, MD <eric.maeker@free.fr>
---  * \version 0.6.0
---  * \date 15 May 2011
+--  * \version 0.7.5
+--  * \date 21 Jun 2012
 --  */
 
 -- /**
@@ -40,8 +40,10 @@
 --  */
 
 -- Create the main FreeMedForms adminstrator on MySQL user
-DROP USER 'fmf_admin';
+-- An error will occur if the user does not exist and the script will fail
+-- DROP USER 'fmf_admin';
 
+-- An error will occur if the user already exists and the script will fail
 CREATE USER 'fmf_admin' IDENTIFIED BY 'fmf_admin';
 
 GRANT CREATE USER, GRANT OPTION, RELOAD, SHOW DATABASES ON *.* TO 'fmf_admin'@'%' IDENTIFIED BY 'fmf_admin';

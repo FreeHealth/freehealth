@@ -317,6 +317,7 @@ bool Database::createMySQLUser(const QString &log, const QString &password,
 
     QSqlQuery query(database());
     QString req;
+
     req = QString("CREATE USER '%1'@'%2' IDENTIFIED BY '%3';").arg(log).arg(uh).arg(password);
     if (!query.exec(req)) {
         LOG_QUERY_ERROR_FOR("Database", query);
@@ -324,8 +325,26 @@ bool Database::createMySQLUser(const QString &log, const QString &password,
         return false;
     }
     query.finish();
+
+    if (uh.compare("localhost", Qt::CaseInsensitive)!=0) {
+        // MySQL Doc: user created on 'localhost' && '%'
+        // It is necessary to have both accounts for monty to be able to connect from
+        // anywhere as monty. Without the localhost account, the anonymous-user account
+        // for localhost that is created by mysql_install_db would take precedence when
+        // monty connects from the local host. As a result, monty would be treated as an
+        // anonymous user. The reason for this is that the anonymous-user account has a
+        // more specific Host column value than the 'monty'@'%' account and thus comes
+        // earlier in the user table sort order.
+        req = QString("CREATE USER '%1'@'localhost' IDENTIFIED BY '%3';").arg(log).arg(password);
+        if (!query.exec(req)) {
+            LOG_QUERY_ERROR_FOR("Database", query);
+            LOG_DATABASE_FOR("Database", database());
+            return false;
+        }
+        query.finish();
+    }
+
     // If grants fail -> remove user and return false
-//    req = QString("GRANT %1 ON `%2`.* TO '%3'@'%' IDENTIFIED BY '%4';").arg(g).arg(udb).arg(log).arg(password);
     req = QString("GRANT %1, GRANT OPTION ON `%2`.* TO '%3'@'%';").arg(g).arg(udb).arg(log);
     if (!query.exec(req)) {
         LOG_QUERY_ERROR_FOR("Database", query);
@@ -1845,26 +1864,39 @@ bool Database::createTable(const int &tableref) const
 /** Create all the tables in the database. */
 bool Database::createTables() const
 {
-    bool toReturn = true;
-    QList<int> list = d->m_Tables.keys();
-    qSort(list);
-    foreach(const int & i, list) {
-        if(!createTable(i)) {
-            toReturn = false;
-            LOG_ERROR_FOR("Database", QCoreApplication::translate("Database", "Can not create table %1").arg(table(i)));
+    QSqlDatabase DB = database();
+    if (!DB.isOpen()) {
+        if (!DB.open()) {
+            LOG_ERROR_FOR("Database", tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+                          .arg(DB.connectionName()).arg(DB.lastError().text()));
+            return false;
         }
     }
-    return toReturn;
+    QList<int> list = d->m_Tables.keys();
+    qSort(list);
+    DB.transaction();
+    foreach(const int & i, list) {
+        if(!createTable(i)) {
+            LOG_ERROR_FOR("Database", QCoreApplication::translate("Database", "Can not create table %1").arg(table(i)));
+            DB.rollback();
+            return false;
+        }
+    }
+    DB.commit();
+    return true;
 }
 
 /** Execute simple SQL commands on the QSqlDatabase \e DB. */
-bool Database::executeSQL(const QStringList &list, const QSqlDatabase &DB)
+bool Database::executeSQL(const QStringList &list, QSqlDatabase &DB)
 {
-    if (!DB.isOpen())
-        return false;
-
-    foreach(const QString &r, list)
-    {
+    if (!DB.isOpen()) {
+        if (!DB.open()) {
+            LOG_ERROR_FOR("Database", tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+                          .arg(DB.connectionName()).arg(DB.lastError().text()));
+            return false;
+        }
+    }
+    foreach(const QString &r, list) {
         if (r.isEmpty())
             continue;
 
@@ -1879,10 +1911,17 @@ bool Database::executeSQL(const QStringList &list, const QSqlDatabase &DB)
 }
 
 /** Execute simple SQL commands on the QSqlDatabase \e DB. */
-bool Database::executeSQL(const QString &req, const QSqlDatabase & DB)
+bool Database::executeSQL(const QString &req, QSqlDatabase & DB)
 {
     if (req.isEmpty())
         return false;
+    if (!DB.isOpen()) {
+        if (!DB.open()) {
+            LOG_ERROR_FOR("Database", tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+                          .arg(DB.connectionName()).arg(DB.lastError().text()));
+            return false;
+        }
+    }
     // TODO: manage ; inside "" or ''
     QStringList list = req.split(";\n", QString::SkipEmptyParts);
     return executeSQL(list, DB);
@@ -2193,7 +2232,11 @@ QString DatabasePrivate::getTypeOfField(const int &fieldref) const
             toReturn = "varchar(2)";
             break;
         case Database::FieldIsBlob :
-            toReturn = "blob";
+        if (m_Driver==Database::SQLite) {
+            toReturn = "blob"; // 1,000,000,000 max size
+        } else if (m_Driver==Database::MySQL) {
+            toReturn = "longblob"; // 4Go max size
+        }
             break;
         case Database::FieldIsDate :
             toReturn = "date";

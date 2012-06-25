@@ -67,7 +67,7 @@ public:
 //    bool initialize(Core::ISettings *settings);
     bool isInitialized() const {return m_initialized;}
 
-    void createVirtualPatient(const QString &name, const QString &secondname, const QString &firstname,
+    bool createVirtualPatient(const QString &name, const QString &secondname, const QString &firstname,
                               const QString &gender, const int title, const QDate &dob,
                               const QString &country, const QString &note,
                               const QString &street, const QString &zip, const QString &city,

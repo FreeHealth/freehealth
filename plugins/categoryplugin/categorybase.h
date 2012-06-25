@@ -66,7 +66,7 @@ public:
     QList<CategoryItem *> createCategoryTree(const QVector<CategoryItem *> &cats) const;
 
     bool saveCategory(CategoryItem *category);
-    bool saveCategories(const QVector<CategoryItem *> &categories);
+    bool saveCategories(const QVector<CategoryItem *> &categories, bool createTransaction = true);
     bool saveCategoryLabels(CategoryItem *category);
 
     bool removeAllExistingCategories(const QString &mime);

@@ -45,6 +45,7 @@
 #include "patientmodel.h"
 
 #include <coreplugin/icore.h>
+#include <coreplugin/iuser.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/translators.h>
@@ -55,6 +56,7 @@
 
 #include <QtCore/QtPlugin>
 #include <QDir>
+#include <QProgressDialog>
 
 #include <QDebug>
 
@@ -62,6 +64,7 @@
 using namespace Patients;
 using namespace Internal;
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
+static inline Core::IUser *user()  { return Core::ICore::instance()->user(); }
 static inline void messageSplash(const QString &s) {theme()->messageSplashScreen(s); }
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline Core::ICommandLine *commandLine() {return Core::ICore::instance()->commandLine();}
@@ -75,6 +78,9 @@ PatientBasePlugin::PatientBasePlugin() :
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating PatientBasePlugin";
+
+    // Add Translators
+    Core::ICore::instance()->translators()->addNewTranslator("patientbaseplugin");
 
     // add preference page
     prefpage = new PatientBasePreferencesPage(this);
@@ -103,12 +109,23 @@ bool PatientBasePlugin::initialize(const QStringList &arguments, QString *errorS
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
 
+    // This part of the code is executed AFTER the UserManagerPlugin::initialize()
+
     messageSplash(tr("Initializing patients database plugin..."));
 
-    // Add Translators
-    Core::ICore::instance()->translators()->addNewTranslator("patientbaseplugin");
+    if (!user())
+        return false;
+    if (user()->uuid().isEmpty())
+        return false;
 
     // Initialize patient base
+    QProgressDialog dlg(tr("Initializing patient database..."), tr("Please wait"), 0, 0);
+    dlg.setWindowModality(Qt::WindowModal);
+    dlg.setMinimumDuration(1000);
+    dlg.show();
+    dlg.setFocus();
+    dlg.setValue(0);
+
     patientBase();
     if (!patientBase()->isInitialized())
         return false;

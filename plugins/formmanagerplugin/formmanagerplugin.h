@@ -54,6 +54,10 @@ public:
 
     bool initialize(const QStringList &arguments, QString *errorString);
     void extensionsInitialized();
+
+private Q_SLOTS:
+    void postCoreInitialization();
+
 private:
     FormManagerMode *mode;
     Internal::FirstRunFormManagerConfigPage *m_FirstRun;

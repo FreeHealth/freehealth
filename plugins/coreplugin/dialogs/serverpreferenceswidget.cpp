@@ -109,15 +109,11 @@ void ServerPreferencesWidget::setDatasToUi()
     ui->log->setText(db.clearLog());
     ui->pass->setText(db.clearPass());
     ui->port->setValue(db.port());
-    if (Utils::isDebugCompilation()) {
-        if (db.host().isEmpty()) {
-            ui->host->setText("localhost");
-            testHost("localhost");
-        }
-        ui->port->setValue(3306);
-//        ui->host->setText("192.168.0.20");
-//        testHost("192.168.0.20");
+    if (db.host().isEmpty()) {
+        ui->host->setText("localhost");
+        testHost("localhost");
     }
+    ui->port->setValue(3306);
 }
 
 void ServerPreferencesWidget::testHost()

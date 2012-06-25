@@ -66,6 +66,8 @@ class DRUGS_EXPORT DrugsCentralWidget : public QWidget
 
 public:
     DrugsCentralWidget(QWidget *parent = 0);
+    ~DrugsCentralWidget();
+
     bool initialize(bool hideSelector = false);
 
     void changeFontTo(const QFont &font);

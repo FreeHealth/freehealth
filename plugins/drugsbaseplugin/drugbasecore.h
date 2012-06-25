@@ -33,8 +33,8 @@
 /**
  * \file drugsbasecore.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.4
- * \date 13 Feb 2012
+ * \version 0.7.5
+ * \date 21 Jun 2012
 */
 
 namespace DataPack {
@@ -48,12 +48,16 @@ class InteractionManager;
 class VersionUpdater;
 
 namespace Internal {
+class DrugsBasePlugin;
 class DrugBaseCorePrivate;
 }
 
 class DRUGSBASE_EXPORT DrugBaseCore : public QObject
 {
     Q_OBJECT
+    friend class DrugsDB::Internal::DrugsBasePlugin;
+
+protected:
     DrugBaseCore(QObject *parent = 0);
     bool init();
 
@@ -67,6 +71,7 @@ public:
     VersionUpdater &versionUpdater() const;
 
 private Q_SLOTS:
+    void postCoreInitialization();
     void onCoreDatabaseServerChanged();
     void packChanged(const DataPack::Pack &pack);
 

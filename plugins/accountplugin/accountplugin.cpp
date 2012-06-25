@@ -81,6 +81,9 @@ AccountPlugin::AccountPlugin() :
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating AccountPlugin";
 
+    // Add Translator to the Application
+    Core::ICore::instance()->translators()->addNewTranslator("accountplugin");
+
     // Add pages to plugins manager object pool
     addObject(m_BankPage);
     addObject(m_AvMovPage);
@@ -143,8 +146,6 @@ void AccountPlugin::extensionsInitialized()
     if (user()->uuid().isEmpty())
         return;
 
-    // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("accountplugin");
     messageSplash(tr("Initializing accountancy plugin..."));
 
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));

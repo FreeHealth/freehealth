@@ -128,7 +128,7 @@ EpisodeBase::EpisodeBase(QObject *parent) :
     addField(Table_EPISODES, EPISODES_PATIENT_UID, "PATIENT_UID", FieldIsUUID);
     addField(Table_EPISODES, EPISODES_LK_TOPRACT_LKID, "LK_TOPRACT_LKID", FieldIsInteger);
     addField(Table_EPISODES, EPISODES_ISVALID, "ISVALID", FieldIsBoolean);
-    addField(Table_EPISODES, EPISODES_FORM_PAGE_UID, "FORM_PAGE_UID", FieldIsUUID);
+    addField(Table_EPISODES, EPISODES_FORM_PAGE_UID, "FORM_PAGE_UID", FieldIsShortText);
     addField(Table_EPISODES, EPISODES_LABEL, "LABEL", FieldIsShortText);
     addField(Table_EPISODES, EPISODES_USERDATE, "USERDATE", FieldIsDate);
     addField(Table_EPISODES, EPISODES_DATEOFCREATION, "DATECREATION", FieldIsDate);
@@ -349,6 +349,7 @@ bool EpisodeBase::setGenericPatientFormFile(const QString &absPathOrUid)
     if (!connectDatabase(DB, __LINE__)) {
         return false;
     }
+    DB.transaction();
     QHash<int, QString> where;
     where.insert(FORM_GENERIC, QString("IS NOT NULL"));
     if (count(Table_FORM, FORM_GENERIC, getWhereClause(Table_FORM, where))) {
@@ -359,6 +360,7 @@ bool EpisodeBase::setGenericPatientFormFile(const QString &absPathOrUid)
         query.bindValue(0, absPathOrUid);
         if (!query.exec()) {
             LOG_QUERY_ERROR(query);
+            DB.rollback();
             return false;
         }
     } else {
@@ -377,9 +379,11 @@ bool EpisodeBase::setGenericPatientFormFile(const QString &absPathOrUid)
         query.bindValue(FORM_USER_RESTRICTION_ID, QVariant());
         if (!query.exec()) {
             LOG_QUERY_ERROR(query);
+            DB.rollback();
             return false;
         }
     }
+    DB.commit();
     return true;
 }
 
@@ -393,6 +397,7 @@ QString EpisodeBase::getGenericFormFile()
     if (!connectDatabase(DB, __LINE__)) {
         return QString();
     }
+    DB.transaction();
     QHash<int, QString> where;
     where.insert(FORM_GENERIC, QString("IS NOT NULL"));
     where.insert(FORM_VALID, QString("=1"));
@@ -405,8 +410,10 @@ QString EpisodeBase::getGenericFormFile()
         }
     } else {
         LOG_QUERY_ERROR(query);
+        DB.rollback();
         return QString();
     }
+    DB.commit();
     return path;
 }
 
@@ -421,6 +428,7 @@ QVector<Form::SubFormInsertionPoint> EpisodeBase::getSubFormFiles()
     if (!connectDatabase(DB, __LINE__)) {
         return toReturn;
     }
+    DB.transaction();
     QHash<int, QString> where;
     where.insert(FORM_GENERIC, QString("IS NULL"));
     where.insert(FORM_VALID, QString("=1"));
@@ -443,7 +451,10 @@ QVector<Form::SubFormInsertionPoint> EpisodeBase::getSubFormFiles()
         }
     } else {
         LOG_QUERY_ERROR(query);
+        DB.rollback();
+        return toReturn;
     }
+    DB.commit();
     return toReturn;
 }
 
@@ -457,8 +468,8 @@ bool EpisodeBase::addSubForms(const QVector<SubFormInsertionPoint> &insertions)
     if (!connectDatabase(DB, __LINE__)) {
         return false;
     }
+    DB.transaction();
     // save
-    bool success = true;
     QSqlQuery query(DB);
     for(int i = 0; i < insertions.count(); ++i) {
         query.prepare(prepareInsertQuery(Table_FORM));
@@ -473,11 +484,13 @@ bool EpisodeBase::addSubForms(const QVector<SubFormInsertionPoint> &insertions)
         query.bindValue(FORM_USER_RESTRICTION_ID, QVariant());
         if (!query.exec()) {
             LOG_QUERY_ERROR(query);
-            success = false;
+            DB.rollback();
+            return false;
         }
         query.finish();
     }
-    return success;
+    DB.commit();
+    return true;
 }
 
 /** Save or update episode modifications records for the \e episode. */
@@ -490,10 +503,9 @@ bool EpisodeBase::saveEpisodeValidations(Internal::EpisodeData *episode)
         return false;
     }
 
-    bool ok = true;
+    // we are inside a transaction
     QSqlQuery query(DB);
     QHash<int, QString> where;
-
     for(int i = 0; i < episode->validations().count(); ++i) {
         EpisodeValidationData &val = episode->validations()[i];
         if (!val.isModified())
@@ -513,7 +525,7 @@ bool EpisodeBase::saveEpisodeValidations(Internal::EpisodeData *episode)
             query.bindValue(2, val.data(EpisodeValidationData::IsValid));
             if (!query.exec()) {
                 LOG_QUERY_ERROR(query);
-                ok = false;
+                return false;
             } else {
                 val.setModified(false);
             }
@@ -527,7 +539,7 @@ bool EpisodeBase::saveEpisodeValidations(Internal::EpisodeData *episode)
             query.bindValue(VALIDATION_ISVALID, val.data(EpisodeValidationData::IsValid).toInt());
             if (!query.exec()) {
                 LOG_QUERY_ERROR(query);
-                ok = false;
+                return false;
             } else {
                 val.setData(EpisodeValidationData::ValidationId, query.lastInsertId());
                 val.setModified(false);
@@ -535,8 +547,7 @@ bool EpisodeBase::saveEpisodeValidations(Internal::EpisodeData *episode)
             query.finish();
         }
     }
-
-    return ok;
+    return true;
 }
 
 /** Save or update episode modifications records for the \e episode. */
@@ -549,7 +560,7 @@ bool EpisodeBase::saveEpisodeModifications(Internal::EpisodeData *episode)
         return false;
     }
 
-    bool ok = true;
+    // we are inside a transaction
     QSqlQuery query(DB);
     QHash<int, QString> where;
 
@@ -572,7 +583,7 @@ bool EpisodeBase::saveEpisodeModifications(Internal::EpisodeData *episode)
             query.bindValue(2, m.data(EpisodeModificationData::Trace));
             if (!query.exec()) {
                 LOG_QUERY_ERROR(query);
-                ok = false;
+                return false;
             } else {
                 m.setModified(false);
             }
@@ -586,15 +597,14 @@ bool EpisodeBase::saveEpisodeModifications(Internal::EpisodeData *episode)
             query.bindValue(EP_MODIF_TRACE, m.data(EpisodeModificationData::Trace));
             if (!query.exec()) {
                 LOG_QUERY_ERROR(query);
-                ok = false;
+                return false;
             } else {
                 m.setData(EpisodeModificationData::ModificationId, query.lastInsertId());
                 m.setModified(false);
             }
         }
     }
-
-    return ok;
+    return true;
 }
 
 /** Save or update a Form::Internal::EpisodeData \e episode to the database. Return true if all goes fine. */
@@ -614,18 +624,13 @@ bool EpisodeBase::saveEpisode(const QList<EpisodeData *> &episodes)
     if (!connectDatabase(DB, __LINE__)) {
         return false;
     }
-    bool ok = true;
-
+    DB.transaction();
     for(int i = 0; i < episodes.count(); ++i) {
         EpisodeData *episode = episodes.at(i);
         if (!episode)
             continue;
-
-//        qWarning() << "episodeId" << episode->episodeId() << "isModified" << episode->isModified();
-
         if (!episode->isModified())
             continue;
-
         if (episode->episodeId()==-1) {
             // save
             QSqlQuery query(DB);
@@ -640,8 +645,9 @@ bool EpisodeBase::saveEpisode(const QList<EpisodeData *> &episodes)
             query.bindValue(EPISODES_DATEOFCREATION, episode->data(EpisodeData::CreationDate));
             query.bindValue(EPISODES_USERCREATOR, episode->data(EpisodeData::UserCreatorUuid));
             if (!query.exec()) {
-                ok = false;
                 LOG_QUERY_ERROR(query);
+                DB.rollback();
+                return false;
             } else {
                 episode->setData(EpisodeData::Id, query.lastInsertId());
             }
@@ -655,7 +661,8 @@ bool EpisodeBase::saveEpisode(const QList<EpisodeData *> &episodes)
                 query.bindValue(EPISODE_CONTENT_XML, episode->data(EpisodeData::XmlContent));
                 if (!query.exec()) {
                     LOG_QUERY_ERROR(query);
-                    ok = false;
+                    DB.rollback();
+                    return false;
                 } else {
                     episode->setData(EpisodeData::ContentId, query.lastInsertId());
                 }
@@ -663,18 +670,18 @@ bool EpisodeBase::saveEpisode(const QList<EpisodeData *> &episodes)
             }
 
             // save validation
-            if (!saveEpisodeValidations(episode))
-                ok = false;
+            if (!saveEpisodeValidations(episode)) {
+                DB.rollback();
+                return false;
+            }
 
             // save modifications (there should be no modifications at this point)
-            if (!saveEpisodeModifications(episode))
-                ok = false;
-
-//            qWarning() << "ok" << ok;
-
-            if (ok) {
-                episode->setModified(false);
+            if (!saveEpisodeModifications(episode)) {
+                DB.rollback();
+                return false;
             }
+
+            episode->setModified(true);
         } else {
             // update
             QSqlQuery query(DB);
@@ -699,15 +706,13 @@ bool EpisodeBase::saveEpisode(const QList<EpisodeData *> &episodes)
             query.bindValue(6, episode->data(EpisodeData::UserCreatorUuid));
             if (!query.exec()) {
                 LOG_QUERY_ERROR(query);
-                ok = false;
+                DB.rollback();
+                return false;
             }
             query.finish();
 
             where.clear();
             if (episode->data(EpisodeData::IsXmlContentPopulated).toBool()) {
-
-//                qWarning() << "updating" << episode->data(EpisodeData::XmlContent);
-
                 where.insert(EPISODE_CONTENT_EPISODE_ID, QString("=%1").arg(episode->episodeId()));
                 query.prepare(prepareUpdateQuery(Table_EPISODE_CONTENT,
                                                  QList<int>()
@@ -716,28 +721,29 @@ bool EpisodeBase::saveEpisode(const QList<EpisodeData *> &episodes)
                 query.bindValue(0, episode->data(EpisodeData::XmlContent));
                 if (!query.exec()) {
                     LOG_QUERY_ERROR(query);
-                    ok = false;
+                    DB.rollback();
+                    return false;
                 }
                 query.finish();
             }
 
             // save validation
-            if (!saveEpisodeValidations(episode))
-                ok = false;
+            if (!saveEpisodeValidations(episode)) {
+                DB.rollback();
+                return false;
+            }
 
             // save modifications
-            if (!saveEpisodeModifications(episode))
-                ok = false;
-
-//            qWarning() << "ok" << ok;
-
-            if (ok) {
-                episode->setModified(false);
+            if (!saveEpisodeModifications(episode)) {
+                DB.rollback();
+                return false;
             }
+
+            episode->setModified(true);
         }
     }
-
-    return ok;
+    DB.commit();
+    return true;
 }
 
 /** Return all recorded episodes form the database according to the Form::Internal::EpisodeBaseQuery \e baseQuery. Episodes are sorted by UserDate. */
@@ -879,6 +885,7 @@ bool EpisodeBase::getEpisodeContent(EpisodeData *episode)
     QHash<int, QString> where;
     where.insert(Constants::EPISODE_CONTENT_EPISODE_ID, QString("=%1").arg(episode->data(EpisodeData::Id).toString()));
     QString req = select(Constants::Table_EPISODE_CONTENT, Constants::EPISODE_CONTENT_XML, where);
+    DB.transaction();
     QSqlQuery query(DB);
     if (query.exec(req)) {
         if (query.next()) {
@@ -886,13 +893,15 @@ bool EpisodeBase::getEpisodeContent(EpisodeData *episode)
             episode->setData(EpisodeData::IsXmlContentPopulated, true);
             if (!episodeWasModified)
                 episode->setModified(false);
-            return true;
         }
     } else {
         LOG_QUERY_ERROR(query);
+        DB.rollback();
+        return false;
     }
     query.finish();
-    return false;
+    DB.commit();
+    return true;
 }
 
 void EpisodeBase::toTreeWidget(QTreeWidget *tree)

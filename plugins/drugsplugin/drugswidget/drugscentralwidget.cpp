@@ -82,6 +82,13 @@ DrugsCentralWidget::DrugsCentralWidget(QWidget *parent) :
     DrugsWidgetManager::instance();
 }
 
+DrugsCentralWidget::~DrugsCentralWidget()
+{
+    if (m_ui)
+        delete m_ui;
+    m_ui = 0;
+}
+
 /** \brief Initialize the widget after the ui was set. */
 bool DrugsCentralWidget::initialize(bool hideSelector)
 {

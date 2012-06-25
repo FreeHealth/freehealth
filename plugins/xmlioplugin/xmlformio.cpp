@@ -107,9 +107,8 @@ bool XmlFormIO::canReadForms(const QString &uuidOrAbsPath) const
 
 bool XmlFormIO::canReadForms(const Form::FormIOQuery &query) const
 {
-    //    qWarning() << "CanRead" << query.formUuid() << form.uid << form.absFileName;
-//    XmlFormName form(query.formUuid());
     XmlFormName &form = formName(query.formUuid(), m_FormNames);
+//    qWarning() << "CanRead" << query.formUuid() << form.uid << form.absFileName;
 
     if (m_ReadableForms.keys().contains(form.absFileName)) {
         return m_ReadableForms.value(form.absFileName);
@@ -121,7 +120,7 @@ bool XmlFormIO::canReadForms(const Form::FormIOQuery &query) const
     QString content;
     if (!query.forceFileReading()) {
         // Get it from database (save it first if needed)
-        if (!base()->isFormExists(form.uid, XmlIOBase::FullContent, form.modeName)) {
+        if (!base()->isFormExists(form, XmlIOBase::FullContent, form.modeName)) {
             base()->saveForm(form);
         }
         content = base()->getFormContent(form.uid, XmlIOBase::FullContent, form.modeName);
@@ -138,6 +137,7 @@ bool XmlFormIO::canReadForms(const Form::FormIOQuery &query) const
 
     // check form content
     if (!reader()->checkFileContent(formFile.absoluteFilePath(), content)) {
+        LOG_ERROR(tr("Invalid form file detected: %1").arg(formFile.absoluteFilePath()));
         Utils::warningMessageBox(tr("Invalid file detected."),
                                  tr("An invalid file was found. Please contact your software administrator.\n"
                                     "Wrong file: %1\n"
@@ -163,7 +163,7 @@ bool XmlFormIO::canReadForms(const Form::FormIOQuery &query) const
                 queryInclude.setFormUuid(include);
                 queryInclude.setForceFileReading(query.forceFileReading());
                 if (!canReadForms(queryInclude))
-                    LOG_ERROR("unable to read included form: " + include);
+                    LOG_ERROR("Unable to read included form: " + include);
             }
         }
     }
@@ -190,7 +190,7 @@ bool XmlFormIO::canReadScripts(const Form::FormIOQuery &query) const
     QString content;
     if (!query.forceFileReading()) {
         // Get it from database
-        if (!base()->isFormExists(form.uid, XmlIOBase::ScriptFile, form.modeName)) {
+        if (!base()->isFormExists(form, XmlIOBase::ScriptFile, form.modeName)) {
             base()->saveForm(form);
         }
         content = base()->getFormContent(form.uid, XmlIOBase::ScriptFile, form.modeName);
@@ -206,6 +206,7 @@ bool XmlFormIO::canReadScripts(const Form::FormIOQuery &query) const
 
     // check form content
     if (!reader()->checkFileContent(scriptFile.absoluteFilePath(), content)) {
+        LOG_ERROR(tr("Invalid script file detected: %1").arg(scriptFile.absoluteFilePath()));
         Utils::warningMessageBox(tr("Invalid file detected."),
                                  tr("An invalid file was found. Please contact your software administrator.\n"
                                     "Wrong file: %1\n"
@@ -342,7 +343,7 @@ QList<Form::FormMain *> XmlFormIO::loadAllRootForms(const QString &uuidOrAbsPath
         dir.setPath(formFile.absolutePath());
 
     // Populate DB with all the files of this form if needed
-    if (!base()->isFormExists(form.uid)) {
+    if (!base()->isFormExists(form)) {
         base()->saveForm(form);
     }
 
@@ -467,7 +468,8 @@ bool XmlFormIO::checkDatabaseFormFileForUpdates() const
                                           msg.join("<br /><br />"));
         if (yes) {
             // Update all checked forms
-            foreach(const XmlFormName &form, formsToUpdate) {
+            for(int i = 0; i < formsToUpdate.count(); ++i) {
+                XmlFormName &form = formsToUpdate[i];
                 if (!base()->saveForm(form)) { //, doc->toString(2), XmlIOBase::FullContent, file.baseName(), QDateTime::currentDateTime())) {
                     LOG_ERROR("Unable to update form database. Form: " + form.uid + " " + form.absFileName);
                 } else {

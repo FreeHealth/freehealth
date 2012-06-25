@@ -943,18 +943,7 @@ bool Printer::previewDialog(QWidget *parent, bool test)
 {
     if (!d->m_Printer)
         d->m_Printer = new QPrinter(QPrinter::ScreenResolution);
-
-    if (Utils::isDebugCompilation()) {
-        // For test
-        if (test) {
-            QStringList list;
-            list << d->content()->toHtml() << d->header(EachPages)->toHtml() <<  d->footer(EachPages)->toHtml();
-            Utils::quickDebugDialog(list);
-        }
-    } else {
-        Q_UNUSED(test);
-    }
-
+    Q_UNUSED(test);
     preparePages();
     QPrintPreviewDialog dialog(d->m_Printer, parent, Qt::Window | Qt::CustomizeWindowHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint | Qt::WindowMinMaxButtonsHint);
     connect(&dialog, SIGNAL(paintRequested(QPrinter *)), this, SLOT(print(QPrinter *)));

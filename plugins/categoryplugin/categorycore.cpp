@@ -35,7 +35,6 @@ using namespace Internal;
 
 static inline CategoryBase *base() {return CategoryBase::instance();}
 
-
 CategoryCore *CategoryCore::m_Instance = 0;
 
 CategoryCore *CategoryCore::instance(QObject *parent)
@@ -50,6 +49,7 @@ CategoryCore::CategoryCore(QObject *parent) :
         QObject(parent)
 {
     setObjectName("CategoryCore");
+    // Create the base
     base();
 }
 

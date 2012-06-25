@@ -73,6 +73,19 @@ static inline Core::ICommandLine *commandLine()  { return Core::ICore::instance(
 PmhBase *PmhBase::m_Instance = 0;
 bool PmhBase::m_initialized = false;
 
+static inline bool connectDatabase(QSqlDatabase &DB, const int line)
+{
+    if (!DB.isOpen()) {
+        if (!DB.open()) {
+            Utils::Log::addError("EpisodeBase", tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+                                 .arg(DB.connectionName()).arg(DB.lastError().text()),
+                                 __FILE__, line);
+            return false;
+        }
+    }
+    return true;
+}
+
 /** \brief Returns the singleton. There should be only one instance of the PmhBase class. */
 PmhBase *PmhBase::instance()
 {
@@ -270,17 +283,14 @@ bool PmhBase::createDatabase(const QString &connectionName , const QString &dbNa
 QVector<PmhData *> PmhBase::getPmh(const QString &patientUid) const
 {
     QVector<PmhData *> pmhs;
-    if (!database().isOpen()) {
-        if (!database().open()) {
-            LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
-                      .arg(database().connectionName()).arg(database().lastError().text()));
-            return pmhs;
-        }
+    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
+    if (!connectDatabase(DB, __LINE__)) {
+        return pmhs;
     }
     QString req;
-    QSqlQuery query(database());
+    DB.transaction();
+    QSqlQuery query(DB);
     QHash<int, QString> where;
-
     // Get Master table
     // TODO: Manage User's Private PMHx
     if (patientUid.isEmpty())
@@ -313,6 +323,8 @@ QVector<PmhData *> PmhBase::getPmh(const QString &patientUid) const
         }
     } else {
         LOG_QUERY_ERROR(query);
+        DB.rollback();
+        return pmhs;
     }
     query.finish();
 
@@ -338,12 +350,14 @@ QVector<PmhData *> PmhBase::getPmh(const QString &patientUid) const
             }
         } else {
             LOG_QUERY_ERROR(query);
+            DB.rollback();
+            return pmhs;
         }
     }
 
     // Get Contacts
     where.clear();
-
+    DB.commit();
     return pmhs;
 }
 
@@ -378,12 +392,17 @@ bool PmhBase::linkPmhWithCategory(const QVector<Category::CategoryItem *> &cats,
 */
 bool PmhBase::savePmhData(PmhData *pmh)
 {
+    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
+    if (!connectDatabase(DB, __LINE__)) {
+        return false;
+    }
     // save or update ?
     if (!pmh->data(PmhData::Uid).isNull()) {
         return updatePmhData(pmh);
     }
     // save pmh
-    QSqlQuery query(database());
+    DB.transaction();
+    QSqlQuery query(DB);
     query.prepare(prepareInsertQuery(Constants::Table_MASTER));
     query.bindValue(Constants::MASTER_ID, QVariant());
     query.bindValue(Constants::MASTER_LABEL, pmh->data(PmhData::Label));
@@ -402,13 +421,15 @@ bool PmhBase::savePmhData(PmhData *pmh)
         pmh->setData(PmhData::Uid, query.lastInsertId());
     } else {
         LOG_QUERY_ERROR(query);
+        DB.rollback();
     }
 
     foreach(PmhEpisodeData *ep, pmh->episodes()) {
         savePmhEpisodeData(ep);
     }
 
-    return false;
+    DB.commit();
+    return true;
 }
 
 /**
@@ -417,12 +438,17 @@ bool PmhBase::savePmhData(PmhData *pmh)
 */
 bool PmhBase::updatePmhData(PmhData *pmh)
 {
+    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
+    if (!connectDatabase(DB, __LINE__)) {
+        return false;
+    }
     // save or update ?
     if (pmh->data(PmhData::Uid).isNull()) {
         return savePmhData(pmh);
     }
     // update pmh
-    QSqlQuery query(database());
+    DB.transaction();
+    QSqlQuery query(DB);
     QHash<int, QString> where;
     where.insert(Constants::MASTER_ID, QString("=%1").arg(pmh->data(PmhData::Uid).toString()));
     query.prepare(prepareUpdateQuery(Constants::Table_MASTER, QList<int>()
@@ -448,13 +474,15 @@ bool PmhBase::updatePmhData(PmhData *pmh)
     query.bindValue(9, pmh->data(PmhData::IsPrivate).toInt());
     if (!query.exec()) {
         LOG_QUERY_ERROR(query);
+        DB.rollback();
+        return false;
     }
 
     foreach(PmhEpisodeData *ep, pmh->episodes()) {
         updatePmhEpsisodeData(ep);
     }
 
-    return false;
+    return true;
 }
 
 /**
@@ -463,6 +491,7 @@ bool PmhBase::updatePmhData(PmhData *pmh)
 */
 bool PmhBase::savePmhEpisodeData(PmhEpisodeData *episode)
 {
+    // we are inside a transaction
     // save or update ?
     if (!episode->data(PmhEpisodeData::DbOnly_Id).isNull()) {
         return updatePmhEpsisodeData(episode);
@@ -496,6 +525,7 @@ bool PmhBase::savePmhEpisodeData(PmhEpisodeData *episode)
 */
 bool PmhBase::updatePmhEpsisodeData(PmhEpisodeData *episode)
 {
+    // we are inside a transaction
     if (episode->data(PmhEpisodeData::DbOnly_Id).isNull()) {
         return savePmhEpisodeData(episode);
     }

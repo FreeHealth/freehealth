@@ -33,13 +33,12 @@
 /**
  * \file drugsbaseplugin.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.0
- * \date 25 Sept 2011
+ * \version 0.7.5
+ * \date 21 Jun 2012
 */
 
 namespace DrugsDB {
 namespace Internal {
-}
 
 class DrugsBasePlugin : public ExtensionSystem::IPlugin
 {
@@ -53,6 +52,7 @@ public:
 };
 
 
-} // End DRUGSBASE_PLUGIN_H
+}  // namespace Internal
+}  // namespace DrugsDB
 
-#endif
+#endif  // End DRUGSBASE_PLUGIN_H

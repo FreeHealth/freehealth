@@ -41,12 +41,12 @@ using namespace Internal;
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 
 XmlFormName::XmlFormName() :
-    isValid(false)
+    isValid(false), isAvailableFromDatabase(false), dbId(-1)
 {
 }
 
 XmlFormName::XmlFormName(const QString &_uid) :
-    isValid(false), uid(_uid), absFileName(_uid)
+    isValid(false), uid(_uid), absFileName(_uid), isAvailableFromDatabase(false), dbId(-1)
 {
     if (uid.endsWith(".xml", Qt::CaseInsensitive)) {
         int begin = uid.lastIndexOf("/");

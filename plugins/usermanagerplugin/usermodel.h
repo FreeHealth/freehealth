@@ -104,7 +104,7 @@ public:
 
     bool isCorrectLogin(const QString &clearLog, const QString &clearPassword);
 
-    bool setCurrentUser(const QString &clearLog, const QString &clearPassword, bool refreshCache = false);
+    bool setCurrentUser(const QString &clearLog, const QString &clearPassword, bool refreshCache = false, bool checkPrefValidity = true);
     bool setCurrentUserIsServerManager();
 
     bool hasCurrentUser() const;
@@ -164,6 +164,7 @@ Q_SIGNALS:
 
 protected:
     void emitUserConnected() const;
+    void checkUserPreferencesValidity();
 
 private Q_SLOTS:
     void onCoreDatabaseServerChanged();

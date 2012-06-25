@@ -60,6 +60,8 @@
 #include <QtCore/QtPlugin>
 #include <QDialog>
 #include <QGridLayout>
+#include <QProgressDialog>
+
 #include <QDebug>
 
 using namespace Agenda;
@@ -117,6 +119,13 @@ void AgendaPlugin::extensionsInitialized()
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 
     // Initialize database
+    QProgressDialog dlg(tr("Creating agenda base..."), tr("Please wait"), 0, 0);
+    dlg.setWindowModality(Qt::WindowModal);
+    dlg.setMinimumDuration(1000);
+    dlg.show();
+    dlg.setFocus();
+    dlg.setValue(0);
+
     Internal::AgendaBase::instance();
 
     // Initialize ActionHandler and WidgetManager

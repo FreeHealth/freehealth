@@ -66,6 +66,7 @@
 
 #include <QtCore/QtPlugin>
 #include <QApplication>
+#include <QProgressDialog>
 #include <QDebug>
 
 using namespace UserPlugin;
@@ -128,6 +129,13 @@ bool UserManagerPlugin::initialize(const QStringList &arguments, QString *errorS
 
     // manage virtual user creation
     if (commandLine()->value(Core::ICommandLine::CreateVirtuals).toBool()) {
+        QProgressDialog dlg(tr("Creating virtual users"), tr("Please wait"), 0, 0);
+        dlg.setWindowModality(Qt::WindowModal);
+        dlg.setMinimumDuration(1000);
+        dlg.show();
+        dlg.setFocus();
+        dlg.setValue(0);
+
         bool created = true;
         // Doctors
         created = userBase()->createVirtualUser("d1f29ad4a4ea4dabbe40ec888d153228", "McCoy", "Leonard", Trans::Constants::Doctor, genders().indexOf(tkTr(Trans::Constants::MALE)),
@@ -155,7 +163,8 @@ bool UserManagerPlugin::initialize(const QStringList &arguments, QString *errorS
             UserModel::instance()->refresh();
             // reconnect user
             Utils::DatabaseConnector c = settings()->databaseConnector();
-            UserModel::instance()->setCurrentUser(c.clearLog(), c.clearPass(), true);
+            // clear cache, don't check preferences validity
+            UserModel::instance()->setCurrentUser(c.clearLog(), c.clearPass(), true, false);
         }
     }
 
@@ -259,7 +268,7 @@ bool UserManagerPlugin::identifyUser()
     bool ask = true;
     while (true) {
         if (userModel()->isCorrectLogin(log, pass)) {
-            userModel()->setCurrentUser(log, pass);
+            userModel()->setCurrentUser(log, pass, true, false);
             if (!usingCommandLine && ask) {
                 int r = Utils::withButtonsMessageBox(tkTr(Trans::Constants::CONNECTED_AS_1)
                                                      .arg(userModel()->currentUserData(Core::IUser::FullName).toString()),
@@ -305,6 +314,7 @@ void UserManagerPlugin::postCoreInitialization()
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << Q_FUNC_INFO;
+    userModel()->checkUserPreferencesValidity();
     // be sure everyone is informed of the currently connected user
     userModel()->emitUserConnected();
     // and be sure that ui is translated in the correct language

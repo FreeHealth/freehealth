@@ -1035,9 +1035,6 @@ QVector<int> IDrug::molsIds() const
 /** \brief For debugging purpose only. Warn all values of the drug. */
 QString IDrug::warnText() const
 {
-    if (!Utils::isDebugCompilation())
-        return QString();
-
     QString tmp;
     tmp += QString("IDrug: %1\n     (ID:%2; Uids: %3)\n     (AtcLabel: %4;\n      Strength: %5;\n      Forms: %6;\n      Routes: %7)\n")
            .arg(brandName()).arg(drugId().toString()).arg(uids().join(";"))
