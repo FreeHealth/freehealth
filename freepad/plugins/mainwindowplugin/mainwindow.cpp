@@ -124,7 +124,7 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
             );
     actions.setConfigurationActions(
             Core::MainWindowActions::A_AppPreferences |
-            Core::MainWindowActions::A_LangageChange
+            Core::MainWindowActions::A_LanguageChange
             );
     actions.setHelpActions(
             Core::MainWindowActions::A_AppAbout |

@@ -143,7 +143,7 @@ bool MainWindow::initialize(const QStringList &, QString *)
             );
     actions.setConfigurationActions(
             Core::MainWindowActions::A_AppPreferences |
-            Core::MainWindowActions::A_LangageChange
+            Core::MainWindowActions::A_LanguageChange
             );
     actions.setHelpActions(
             Core::MainWindowActions::A_AppAbout |

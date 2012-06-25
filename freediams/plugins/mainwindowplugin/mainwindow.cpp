@@ -238,7 +238,7 @@ private:
 
 static bool transmitDosage()
 {
-    if (!Utils::isDebugCompilation()) {
+    if (Utils::isReleaseCompilation()) {
         LOG_FOR("Core", QCoreApplication::translate("MainWindow", "Preparing dosage transmission"));
         // TODO: code here
 //        DrugsDB::DrugsIO::instance()->startsDosageTransmission();
@@ -307,7 +307,7 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
             Core::MainWindowActions::A_FileQuit);
     actions.setConfigurationActions(
             Core::MainWindowActions::A_AppPreferences |
-            Core::MainWindowActions::A_LangageChange |
+            Core::MainWindowActions::A_LanguageChange |
             Core::MainWindowActions::A_ConfigureMedinTux);
     actions.setHelpActions(
             Core::MainWindowActions::A_AppAbout |

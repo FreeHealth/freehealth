@@ -126,7 +126,8 @@ static inline QString getPluginPaths()
 #endif
 
 #ifdef LINUX_INTEGRATED
-    return QString("/usr/%1/%2").arg(LIBRARY_BASENAME).arg(QString(BINARY_NAME).toLower());
+    app = QString(BINARY_NAME).remove("_debug").toLower();
+    return QString("/usr/%1/%2").arg(LIBRARY_BASENAME).arg(app);
 #endif
 
 #  ifdef Q_OS_MAC
@@ -144,7 +145,7 @@ static inline QString getPluginPaths()
     return QDir::cleanPath(app + "/plugins/");
 }
 
-inline static void defineLibraryPaths()
+static inline void defineLibraryPaths()
 {
 #ifdef LINUX_INTEGRATED
     qApp->addLibraryPath(getPluginPaths());

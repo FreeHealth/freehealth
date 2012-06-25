@@ -82,7 +82,7 @@ static inline QString getPluginPaths()
 {
     QString app = qApp->applicationDirPath();
 
-#ifdef DEBUG
+#ifdef DEBUG_WITHOUT_INSTALL
 #    ifdef Q_OS_MAC
         app = QDir::cleanPath(app+"/../../../");
 #    endif
@@ -90,39 +90,36 @@ static inline QString getPluginPaths()
     return app;
 #endif
 
-#ifdef RELEASE
 #ifdef LINUX_INTEGRATED
-    return QString("/usr/%1/%2").arg(LIBRARY_BASENAME).arg(QString(BINARY_NAME).toLower());
+    app = QString(BINARY_NAME).remove("_debug").toLower();
+    return QString("/usr/%1/%2").arg(LIBRARY_BASENAME).arg(app);
 #endif
 
-
 #  ifdef Q_OS_MAC
-    app = QDir::cleanPath(app+"/../"+"/plugins/");
+    app = QDir::cleanPath(app+"/../plugins/");
     return app;
 #  endif
 
-// TODO: Add FreeBSD pluginPath */
+// TODO: Add FreeBSD pluginPath
 
 #  ifdef Q_OS_WIN
     app = QDir::cleanPath(app + "/plugins/");
     return app;
 #  endif
 
-#endif
     return QDir::cleanPath(app + "/plugins/");
 }
 
-inline static void defineLibraryPaths()
+static inline void defineLibraryPaths()
 {
 #ifdef LINUX_INTEGRATED
     qApp->addLibraryPath(getPluginPaths());
 #else
-#  ifndef DEBUG
+#  ifndef DEBUG_WITHOUT_INSTALL
     qApp->setLibraryPaths(QStringList() << getPluginPaths() << QDir::cleanPath(getPluginPaths() + "/qt"));
 #  endif
 #endif
 }
-
 
 int main( int argc, char *argv[] )
 {

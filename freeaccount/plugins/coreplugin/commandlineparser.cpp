@@ -181,7 +181,7 @@ public:
             }
         }
 
-        if (!Utils::isDebugCompilation()) {
+        if (Utils::isReleaseCompilation()) {
             value.insert(CommandLine::ClearUserDatabases, false);
         }        
     }

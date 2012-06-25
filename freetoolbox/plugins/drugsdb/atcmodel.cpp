@@ -325,7 +325,7 @@ QVariant AtcModel::data(const QModelIndex & item, int role) const
 //            } else {
 //                c = QColor(settings()->value(Core::Constants::S_BACKGROUND_CATEGORIES, "white").toString());
 //            }
-//            if (Utils::isDebugCompilation()) {
+//            if (!Utils::isReleaseCompilation()) {
 //                if (it->isNewlyCreated()) {
 //                    c = QColor(Qt::blue);
 //                } else
