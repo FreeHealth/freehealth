@@ -599,10 +599,6 @@ bool DosageModel::addFromXml(const QString &xml)
 /** \brief For debugging purpose only */
 void DosageModel::warn(const int row)
 {
-    if (!Utils::isDebugCompilation())
-        return;
-    //    qWarning() << "database connection" << database().connectionName();
-
     // row == -1 -> warn all rows
     int i;
     int j;

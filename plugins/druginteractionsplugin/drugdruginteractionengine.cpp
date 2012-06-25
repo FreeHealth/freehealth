@@ -806,13 +806,7 @@ DrugDrugInteractionEngine::DrugDrugInteractionEngine(QObject *parent) :
 {
     setObjectName("DrugDrugInteractionEngine");
     m_IsActive = settings()->value(Constants::S_ACTIVATED_INTERACTION_ENGINES).toStringList().contains(Constants::DDI_ENGINE_UID);
-
-//    if (Utils::isDebugCompilation()) {
-//        d->m_LogChrono = true;
-//    } else {
-        d->m_LogChrono = false;
-//    }
-
+    d->m_LogChrono = false;
     connect(&drugsBase(), SIGNAL(drugsBaseHasChanged()), this, SLOT(drugsBaseChanged()));
 }
 

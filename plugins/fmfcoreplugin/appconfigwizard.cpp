@@ -505,7 +505,7 @@ EndConfigPage::EndConfigPage(QWidget *parent) :
     QGridLayout *l = new QGridLayout(this);
     setLayout(l);
 
-    // Ask for virtuals
+    // Ask for database renewal
     if (Utils::isDebugCompilation()) {
         // Database renew management
         lblDb = new QLabel(this);

@@ -1444,8 +1444,6 @@ int UserModel::numberOfUsersInMemory()
 /** For debugging purpose only */
 void UserModel::warn()
 {
-    if (!Utils::isDebugCompilation())
-        return;
     qWarning() << "UserModel Warning";
     qWarning() << "  * Current user uuid" << d->m_CurrentUserUuid;
     qWarning() << "  * Current users list" << d->m_Uuid_UserList;

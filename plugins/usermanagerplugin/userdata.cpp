@@ -1051,17 +1051,12 @@ QString UserData::fullName() const
 /** \brief For debugging purpose only */
 void UserData::warn() const
 {
-    if (!Utils::isDebugCompilation())
-        return;
     foreach(const QString &s, warnText())
 	Utils::Log::addMessage("UserData", s);
 }
 
 QStringList UserData::warnText() const
 {
-    if (!Utils::isDebugCompilation())
-        return QStringList();
-
     QStringList list;
     int i;
     UserBase *tkb = UserBase::instance();

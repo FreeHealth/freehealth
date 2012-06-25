@@ -149,12 +149,6 @@ void UserManager::closeEvent(QCloseEvent *event)
 /** Destructor */
 UserManager::~UserManager()
 {
-    if (Utils::isDebugCompilation())
-        qWarning() << "~UserManager";
-//    if (m_Widget) {
-//        delete m_Widget;
-//        m_Widget = 0;
-//    }
 }
 
 
@@ -205,12 +199,6 @@ void UserManagerDialog::showEvent(QShowEvent *event)
 /** Destructor */
 UserManagerDialog::~UserManagerDialog()
 {
-    if (Utils::isDebugCompilation())
-        qWarning() << "~UserManagerDialog";
-//    if (m_Widget) {
-//        delete m_Widget;
-//        m_Widget = 0;
-//    }
 }
 
 
