@@ -33,8 +33,8 @@
 /**
  * \file idruginteraction.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.0
- * \date 09 Mar 2011
+ * \version 0.7.5
+ * \date 25 Jun 2012
 */
 
 namespace DrugsDB {
@@ -82,6 +82,9 @@ public:
 };
 
 }  // End DrugsDB
+
+DRUGSBASE_EXPORT QDebug operator<<(QDebug dbg, const DrugsDB::IDrugInteraction &c);
+DRUGSBASE_EXPORT QDebug operator<<(QDebug dbg, const DrugsDB::IDrugInteraction *c);
 
 #endif  // DRUGSDB_IDRUGINTERACTION_H
 

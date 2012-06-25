@@ -55,6 +55,7 @@ SOURCES += $${PWD}/drugsbaseplugin.cpp \
     $${PWD}/druginteractionquery.cpp \
     $${PWD}/druginteractionresult.cpp \
     $${PWD}/druginteractioninformationquery.cpp \
+    $${PWD}/idruginteraction.cpp
 
 
 # Translators
