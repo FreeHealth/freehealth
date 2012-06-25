@@ -94,7 +94,7 @@
            <item row="0" column="0" colspan="4">
             <widget class="QGroupBox" name="groupBox_3">
              <property name="title">
-              <string>Search params</string>
+              <string>Search parameters</string>
              </property>
              <layout class="QGridLayout" name="gridLayout_5">
               <item row="3" column="0" colspan="4">
