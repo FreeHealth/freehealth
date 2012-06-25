@@ -1,7 +1,4 @@
-CONFIG( debug, debug|release ) {
-message( No installation available in Debug mode )
-}
-else {
+!CONFIG(debug_without_install) {
  !linux*:error(install_linux.pri should only be used when building linux configuration)
  !CONFIG(LINUX_INTEGRATED):message(Preparing installation for Unix)
  else:message(Preparing installation for integrated Linux)
@@ -16,7 +13,7 @@ else {
    INSTALL_LIBS_PATH      = $${INSTALL_ROOT_PATH}/$${LIBRARY_BASENAME}/freemedforms-common
    INSTALL_PLUGINS_PATH   = $${INSTALL_ROOT_PATH}/$${LIBRARY_BASENAME}/$${LOWERED_APPNAME}
    INSTALL_RESOURCES_PATH = $${INSTALL_ROOT_PATH}/share/$${LOWERED_APPNAME}
-   INSTALL_DOCS_PATH      = $${INSTALL_ROOT_PATH}/share/doc/freemedforms-project/$${BINARY_TARGET}
+   INSTALL_DOCS_PATH      = $${INSTALL_ROOT_PATH}/share/doc/freemedforms-project/$${TARGET}
 
    isEmpty(INSTALL_DESKTOP_FILES_PATH):INSTALL_DESKTOP_FILES_PATH = $${INSTALL_ROOT_PATH}/share/applications/
    isEmpty(INSTALL_DESKTOP_ICON_PATH):INSTALL_DESKTOP_ICON_PATH = $${INSTALL_ROOT_PATH}/share/pixmaps

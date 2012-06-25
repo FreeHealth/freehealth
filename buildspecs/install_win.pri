@@ -1,6 +1,4 @@
-CONFIG(debug, debug|release) {
-  message( No installation available in Debug mode )
-} else {
+!CONFIG(debug_without_install) {
  !win32:error(install_win.pri should only be used when building win32 configuration)
  LIB_EXTENSION = dll
 

@@ -5,7 +5,7 @@ macx{
    QMAKE_MACOSX_DEPLOYMENT_TARGET=10.5
 
    # define rpath
-   CONFIG(debug, debug|release) {
+   CONFIG(debug_without_install) {
      RPATH_LIBS_BIN   = ../../../plugins/
    } else {
      RPATH_LIBS_BIN   = ../plugins/

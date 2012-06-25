@@ -1,3 +1,9 @@
+CONFIG(debug_without_install) {
+  message(Building debug mode without installation)
+
+}else{
+
+
 # define some default paths for installation process
 mac:INSTALL_BASENAME_PATH          = mac
 else:linux*:INSTALL_BASENAME_PATH  = linux
@@ -53,7 +59,7 @@ INSTALL_MEDIUMPIX_PATH    = $${INSTALL_RESOURCES_PATH}/pixmap/32x32
 INSTALL_BIGPIX_PATH       = $${INSTALL_RESOURCES_PATH}/pixmap/64x64
 INSTALL_SVGPIX_PATH       = $${INSTALL_RESOURCES_PATH}/pixmap/svg
 INSTALL_SPLASHPIX_PATH    = $${INSTALL_RESOURCES_PATH}/pixmap/splashscreens
-isEmpty(INSTALL_DOCS_PATH):INSTALL_DOCS_PATH         = $${INSTALL_RESOURCES_PATH}/doc/$${BINARY_TARGET}
+isEmpty(INSTALL_DOCS_PATH):INSTALL_DOCS_PATH         = $${INSTALL_RESOURCES_PATH}/doc/$${TARGET}
 
 # message the configuration
 message( ******************************************************************************** )
@@ -74,45 +80,50 @@ CONFIG(LINUX_INTEGRATED):message( Building Linux Integrated version )
 message( Binary : )
 message(    * From : $${BUILD_BINARY_PATH} )
 message(    * To : $${INSTALL_BINARY_PATH} )
+
 !CONFIG(dontinstalllibs) {
-message( Application libraries : )
-message(    * From : $${BUILD_LIB_PATH})
-message(    * To : $${INSTALL_LIBS_PATH})
-message(    * Extension : $${LIB_EXTENSION})
-message(    * RPath : $${RPATH_LIBS_BIN} )
+    message( Application libraries : )
+    message(    * From : $${BUILD_LIB_PATH})
+    message(    * To : $${INSTALL_LIBS_PATH})
+    message(    * Extension : $${LIB_EXTENSION})
+    message(    * RPath : $${RPATH_LIBS_BIN} )
 }
+
 message( Plugins : )
 message(    * From : $${BUILD_PLUGIN_PATH})
 message(    * To : $${INSTALL_PLUGINS_PATH} )
 message(    * Extension : $${LIB_EXTENSION})
 !isEmpty(INSTALL_QT_LIBS_PATH):message( Qt Libs : $${INSTALL_QT_LIBS_PATH} )
 !isEmpty(INSTALL_QT_PLUGINS_PATH):message( Qt Plugins : $${INSTALL_QT_PLUGINS_PATH} )
-message( ******************************************************************************** )
-message( *************************    FreeMedForms Resources   ************************** )
-message( ******************************************************************************** )
+
 !CONFIG(dontinstallresources) {
-message( Resources : $${INSTALL_RESOURCES_PATH} )
-message( Translations : $${INSTALL_TRANSLATIONS_PATH} )
-!isEmpty(INSTALL_FREEDATAPACK_PATH):message( Free datapack path : $${INSTALL_FREEDATAPACK_PATH} )
-!isEmpty(INSTALL_FORMS_PATH):message( Forms : $${INSTALL_FORMS_PATH} )
-message( Pixmaps - small : $${INSTALL_SMALLPIX_PATH} )
-message( Pixmaps - medium : $${INSTALL_MEDIUMPIX_PATH} )
-message( Pixmaps - big : $${INSTALL_BIGPIX_PATH} )
-message( Pixmaps - svg : $${INSTALL_SVGPIX_PATH} )
-message( Pixmaps - splashscreens : $${INSTALL_SPLASHPIX_PATH} )
+    message( ******************************************************************************** )
+    message( *************************    FreeMedForms Resources   ************************** )
+    message( ******************************************************************************** )
+    message( Resources : $${INSTALL_RESOURCES_PATH} )
+    message( Translations : $${INSTALL_TRANSLATIONS_PATH} )
+    !isEmpty(INSTALL_FREEDATAPACK_PATH):message( Free datapack path : $${INSTALL_FREEDATAPACK_PATH} )
+    !isEmpty(INSTALL_FORMS_PATH):message( Forms : $${INSTALL_FORMS_PATH} )
+    message( Pixmaps - small : $${INSTALL_SMALLPIX_PATH} )
+    message( Pixmaps - medium : $${INSTALL_MEDIUMPIX_PATH} )
+    message( Pixmaps - big : $${INSTALL_BIGPIX_PATH} )
+    message( Pixmaps - svg : $${INSTALL_SVGPIX_PATH} )
+    message( Pixmaps - splashscreens : $${INSTALL_SPLASHPIX_PATH} )
 }
+
 !isEmpty(INSTALL_DOCS_PATH):message( Documentation : $${INSTALL_DOCS_PATH} )
 !isEmpty(INSTALL_DESKTOP_FILES_PATH):message( DesktopFile : $${INSTALL_DESKTOP_FILES_PATH} )
 !isEmpty(INSTALL_DESKTOP_ICON_PATH):message( DesktopIcon : $${INSTALL_DESKTOP_ICON_PATH} )
+
 !CONFIG(dontinstallresources) {
-message( ******************************************************************************** )
-message( *************************    FreeMedForms Databases   ************************** )
-message( ******************************************************************************** )
-contains(INSTALL_DRUGS,1):message( Installing drugs database )
-contains(INSTALL_PROFILES_FILES,1):message( Installing user default Profiles files)
-contains(INSTALL_ICD_DATABASE,1):message( Installing ICD10 database )
-contains(INSTALL_ACCOUNT_FILES,1):message( Installing Account files )
-contains(INSTALL_ZIPCODES,1):message( Installing ZipCodes database )
+    message( ******************************************************************************** )
+    message( *************************    FreeMedForms Databases   ************************** )
+    message( ******************************************************************************** )
+    contains(INSTALL_DRUGS,1):message( Installing drugs database )
+    contains(INSTALL_PROFILES_FILES,1):message( Installing user default Profiles files)
+    contains(INSTALL_ICD_DATABASE,1):message( Installing ICD10 database )
+    contains(INSTALL_ACCOUNT_FILES,1):message( Installing Account files )
+    contains(INSTALL_ZIPCODES,1):message( Installing ZipCodes database )
 }
 
 # Install target
@@ -141,16 +152,16 @@ INSTALLS += bw
 # Install libs (on Win32 copy from BUILD_LIB_PATH/../ (remove plugins path) )
 !CONFIG(dontinstalllibs):!isEmpty(INSTALL_LIBS_PATH):!isEmpty(BUILD_LIB_PATH){
 applibs.path = $${INSTALL_LIBS_PATH}
-mac:applibs.files = $${BUILD_LIB_PATH}/*.1.$${LIB_EXTENSION}
-else:unix:applibs.files = $${BUILD_LIB_PATH}/*$${LIB_EXTENSION}*
-else:win32:applibs.files = $${BUILD_LIB_PATH}/../*$${LIB_EXTENSION}
+mac:applibs.files = $${BUILD_LIB_PATH}/*$${BINARY_POSTFIXE}.*$${LIB_EXTENSION}
+else:unix:applibs.files = $${BUILD_LIB_PATH}/*$${BINARY_POSTFIXE}.$${LIB_EXTENSION}*
+else:win32:applibs.files = $${BUILD_LIB_PATH}/../*$${BINARY_POSTFIXE}.$${LIB_EXTENSION}
 applibs.CONFIG += no_check_exist
 INSTALLS += applibs
 }
 # Install plugins
 !isEmpty(INSTALL_PLUGINS_PATH):!isEmpty(BUILD_PLUGIN_PATH){
 plugs.path = $${INSTALL_PLUGINS_PATH}
-plugs.files = $${BUILD_PLUGIN_PATH}/*.$${LIB_EXTENSION}
+plugs.files = $${BUILD_PLUGIN_PATH}/*$${BINARY_POSTFIXE}.$${LIB_EXTENSION}
 plugs.CONFIG += no_check_exist
 INSTALLS += plugs
 }
@@ -332,3 +343,4 @@ INSTALLS+=docs
    message(Bundle : Qt Plugins will be installed from $${QTPLUGINS_PATH} to $${INSTALL_QT_PLUGINS_PATH} )
  }
 
+}

@@ -72,7 +72,7 @@ static const QString VERSION_MESSAGE =
         .arg(qVersion());
 
 static const QString HELP_MESSAGE =
-        QString("FreeMedForms %1 (%2 compilation)\n"
+        QString("FreeMedForms %1 (%2%3 compilation)\n"
                 "Usage: freemedforms [--clear-user-databases] [--create-virtuals] [--config=...]\n"
                 "                    [--version,-version,-v] [--help,-help,-h]\n\n"
                 "FreeMedForms is free and open source an Electronic Medical Record manager.\n\n"
@@ -104,13 +104,20 @@ static const QString HELP_MESSAGE =
 #  else
         .arg("Release")
 #  endif
+#endif  // LINUX_INTEGRATED
+
+#ifdef DEBUG_WITHOUT_INSTALL
+        .arg("-debug_without_install")
+#else
+        .arg("")
 #endif
+
     ;
 static inline QString getPluginPaths()
 {
     QString app = qApp->applicationDirPath();
 
-#ifdef DEBUG
+#ifdef DEBUG_WITHOUT_INSTALL
 #    ifdef Q_OS_MAC
         app = QDir::cleanPath(app+"/../../../");
 #    endif
@@ -118,11 +125,9 @@ static inline QString getPluginPaths()
     return app;
 #endif
 
-#ifdef RELEASE
 #ifdef LINUX_INTEGRATED
     return QString("/usr/%1/%2").arg(LIBRARY_BASENAME).arg(QString(BINARY_NAME).toLower());
 #endif
-
 
 #  ifdef Q_OS_MAC
     app = QDir::cleanPath(app+"/../plugins/");
@@ -136,7 +141,6 @@ static inline QString getPluginPaths()
     return app;
 #  endif
 
-#endif
     return QDir::cleanPath(app + "/plugins/");
 }
 
@@ -145,7 +149,7 @@ inline static void defineLibraryPaths()
 #ifdef LINUX_INTEGRATED
     qApp->addLibraryPath(getPluginPaths());
 #else
-#  ifndef DEBUG
+#  ifndef DEBUG_WITHOUT_INSTALL
     qApp->setLibraryPaths(QStringList() << getPluginPaths() << QDir::cleanPath(getPluginPaths() + "/qt"));
 #  endif
 #endif

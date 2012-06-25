@@ -318,7 +318,7 @@ namespace Utils {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 bool isDebugWithoutInstallCompilation()
 {
-#ifdef DEBUG
+#ifdef DEBUG_WITHOUT_INSTALL
     return true;
 #else
     return false;

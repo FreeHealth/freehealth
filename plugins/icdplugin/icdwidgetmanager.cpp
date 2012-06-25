@@ -150,14 +150,14 @@ IcdActionHandler::IcdActionHandler(QObject *parent) :
 
     // Create ICD10 database
     Core::ActionContainer *hmenu = actionManager()->actionContainer(Core::Constants::M_HELP_DATABASES);
-#ifdef DEBUG
-    a = aRecreateDatabase = new QAction(this);
-    a->setObjectName("aRecreateDatabase");
-    cmd = actionManager()->registerAction(a, Constants::A_RECREATE_ICD_DB, QList<int>() << Core::Constants::C_GLOBAL_ID);
-    cmd->setTranslations(Constants::RECREATE_DATABASE_TEXT, Constants::RECREATE_DATABASE_TEXT, Constants::ICDCONSTANTS_TR_CONTEXT);
-    hmenu->addAction(cmd, Core::Constants::G_HELP_DATABASES);
-    connect(a, SIGNAL(triggered()), this, SLOT(recreateDatabase()));
-#endif
+    if (!Utils::isReleaseCompilation()) {
+        a = aRecreateDatabase = new QAction(this);
+        a->setObjectName("aRecreateDatabase");
+        cmd = actionManager()->registerAction(a, Constants::A_RECREATE_ICD_DB, QList<int>() << Core::Constants::C_GLOBAL_ID);
+        cmd->setTranslations(Constants::RECREATE_DATABASE_TEXT, Constants::RECREATE_DATABASE_TEXT, Constants::ICDCONSTANTS_TR_CONTEXT);
+        hmenu->addAction(cmd, Core::Constants::G_HELP_DATABASES);
+        connect(a, SIGNAL(triggered()), this, SLOT(recreateDatabase()));
+    }
 
     // Show Databases information
     a = aShowDatabaseInformation = new QAction(this);

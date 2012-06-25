@@ -5,7 +5,7 @@
         #do the rpath by hand since it's not possible to use ORIGIN in QMAKE_RPATHDIR
         # this expands to $ORIGIN (after qmake and make), it does NOT read a qmake var
 
-        !CONFIG(debug, debug|release):CONFIG(LINUX_INTEGRATED){
+        !CONFIG(debug_without_install):CONFIG(LINUX_INTEGRATED){
             # rpath for interdependant libs and plugs (everyone in the same dir)
             #QMAKE_RPATHDIR += \$\$ORIGIN
             # rpath application to the libs path. Here the path must be an absolute path (eg:/usr/lib/appname/).
