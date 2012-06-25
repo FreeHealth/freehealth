@@ -67,11 +67,11 @@ CONFIG(LINUX_INTEGRATED) {
 }
 
 RELEASE_BINARY_PATH       = $${SOURCES_ROOT_PATH}/packages
+
 # redefine binary target in debug mode add _d or _debug
 BINARY_TARGET             = $$quote($${TARGET})
-
 BINARY_POSTFIXE=
-CONFIG(debug, debug|release) {
+!CONFIG(dont_postfixe_binaries):CONFIG(debug, debug|release) {
     unix:BINARY_POSTFIXE= _debug
     else:BINARY_POSTFIXE= _d
     BINARY_TARGET   = $$quote($$join(BINARY_TARGET,,,$${BINARY_POSTFIXE}))
