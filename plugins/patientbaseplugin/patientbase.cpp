@@ -291,7 +291,7 @@ QString PatientBase::patientUuid(const QString &birthname,
 {
     QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
     if (!connectDatabase(DB, __LINE__)) {
-        return false;
+        return QString::null;
     }
     using namespace Patients::Constants;
     QHash<int, QString> where;
