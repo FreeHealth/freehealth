@@ -462,7 +462,7 @@ QString XmlIOBase::getFormContent(const QString &formUid, const int type, const 
     // TODO: manage modes
     QSqlDatabase DB = database();
     if (!connectedDatabase(DB, __LINE__))
-        return false;
+        return QString::null;
     DB.transaction();
     QSqlQuery query(DB);
     Utils::FieldList gets;
