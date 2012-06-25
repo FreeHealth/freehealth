@@ -376,7 +376,7 @@ SettingsPrivate::SettingsPrivate(QObject *parent, const QString &appName, const 
 //    if (Utils::isRunningOnLinux())
 //        setPath(FMFPluginsPath, LIBRARY_BASENAME);
 
-    if (Utils::isDebugCompilation()) {
+    if (Utils::isDebugWithoutInstallCompilation()) {
         // DEBUG BUILD
         QString res;
         if (Utils::isRunningOnMac())
@@ -568,7 +568,7 @@ void SettingsPrivate::setPath(const int type, const QString & absPath)
             if (qApp->applicationName().contains(" ")) {
                 appname = appname.left(appname.indexOf(" "));
             }
-            if (Utils::isDebugCompilation()) {
+            if (!Utils::isReleaseCompilation()) {
                 if (appname.contains("_d"))
                     appname = appname.left(appname.indexOf("_d"));
             }
@@ -973,7 +973,7 @@ QTreeWidget* SettingsPrivate::getTreeWidget(QWidget *parent) const
     new QTreeWidgetItem(compilItem, QStringList() << tr("Compile Qt version") << QString("%1").arg(QT_VERSION_STR));
     new QTreeWidgetItem(compilItem, QStringList() << tr("Actual Qt version") << QString("%1").arg(qVersion()));
     new QTreeWidgetItem(compilItem, QStringList() << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_VERSION_1).arg("") << qApp->applicationVersion());
-    if (Utils::isDebugCompilation())
+    if (!Utils::isReleaseCompilation())
         new QTreeWidgetItem(compilItem, QStringList() << tr("Compile mode") << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_DEBUG));
     else
         new QTreeWidgetItem(compilItem, QStringList() << tr("Compile mode") << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_RELEASE));
@@ -1092,7 +1092,7 @@ QString SettingsPrivate::toString() const
     tmp += "\n| " + tr("Qt Build version: %1").arg(QT_VERSION_STR).replace(":", "|") + " |";
     tmp += "\n| " + tr("Qt running version: %1").arg(qVersion()).replace(":", "|") + " |";
     tmp += "\n| " + tr("Application Version: %1").arg(qApp->applicationVersion()).replace(":", "|") + " |";
-    if (Utils::isDebugCompilation())
+    if (!Utils::isReleaseCompilation())
         tmp += "\n| " + tr("Actual build: Debug").replace(":", "|") + " |";
     else
         tmp += "\n| " + tr("Actual build: Release").replace(":", "|") + " |";

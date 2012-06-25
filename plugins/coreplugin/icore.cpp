@@ -59,7 +59,7 @@ Core::ICore::~ICore()
 
 bool Core::ICore::alphaDialog() const
 {
-    if (Utils::isAlpha() && !Utils::isDebugCompilation()) {
+    if (Utils::isAlpha() && !Utils::isDebugWithoutInstallCompilation()) {
         Utils::warningMessageBox("<p style=\"text-transform:uppercase;font-weight:bold;color:red;font-size:large\">" +
                                  tr("You are running an alpha version of %1. This version "
                                     "can be heavily buggy and is only provided for "

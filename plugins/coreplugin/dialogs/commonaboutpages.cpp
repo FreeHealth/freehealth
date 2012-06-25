@@ -73,8 +73,8 @@ QWidget *BuildAboutPage::createPage(QWidget *parent)
     QTreeWidgetItem *compilItem = new QTreeWidgetItem( tree, QStringList() << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_INFORMATION) );
     compilItem->setFont(0,f);
     new QTreeWidgetItem( compilItem, QStringList() << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_DATE_TIME_1_2).arg(__DATE__, __TIME__));
-    if (Utils::isDebugCompilation()) {
-        new QTreeWidgetItem( compilItem, QStringList() << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_DEBUG) );
+    if (Utils::isDebugWithoutInstallCompilation()) {
+        new QTreeWidgetItem( compilItem, QStringList() << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_DEBUG) + " - no install");
     } else {
         new QTreeWidgetItem( compilItem, QStringList() << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_RELEASE) );
     }
