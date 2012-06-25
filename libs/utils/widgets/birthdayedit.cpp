@@ -97,8 +97,7 @@ void BirthDayEdit::clear()
         Q_EMIT dateChanged(m_date);
     }
     setText("");
-    // TODO: add date format string
-    setPlaceholderText(tr("Enter a date (format: %1)").arg("ADD FORMAT"));
+    updatePlaceHolder();
 }
 
 /** \brief overrides the default focusOutEvent and sets a custom css.
@@ -188,4 +187,11 @@ void BirthDayEdit::init(const QDate& date, const QDate& maximumDate, const QDate
 //    m_button->setIcon(Core::ICore::instance()->theme()->icon(Core::Constants::ICONOK));
 
     connect(this, SIGNAL(editingFinished()), this, SLOT(setDisplayedDateString()));
+}
+
+void BirthDayEdit::updatePlaceHolder()
+{
+    // TODO: add date format string
+    setPlaceholderText(tr("Enter a date (format: %1)").arg("ADD FORMAT"));
+    setToolTip(tr("Enter a date (format: %1)").arg("ADD FORMAT"));
 }

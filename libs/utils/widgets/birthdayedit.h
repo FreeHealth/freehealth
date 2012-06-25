@@ -54,6 +54,7 @@ public:
 
 private:
     void init(const QDate& date = QDate(), const QDate& maximumDate = QDate(), const QDate& minimumDate = QDate());
+    void updatePlaceHolder();
     void focusOutEvent(QFocusEvent *event);
 
 signals:
