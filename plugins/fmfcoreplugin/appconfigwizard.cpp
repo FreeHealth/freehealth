@@ -506,7 +506,7 @@ EndConfigPage::EndConfigPage(QWidget *parent) :
     setLayout(l);
 
     // Ask for database renewal
-    if (Utils::isDebugCompilation()) {
+    if (Utils::isDebugWithoutInstallCompilation()) {
         // Database renew management
         lblDb = new QLabel(this);
         lblDb->setWordWrap(true);

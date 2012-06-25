@@ -6,7 +6,7 @@ mac:TARGET       = $$quote(FreePad)
 FREEPAD = 1
 
 include(../../buildspecs/config.pri)
-!CONFIG(debug, release|debug):include($${SOURCES_BUILDSPECS_PATH}/install.pri)
+include($${SOURCES_BUILDSPECS_PATH}/install.pri)
 
 message($${TARGET}  $${DESTDIR})
 

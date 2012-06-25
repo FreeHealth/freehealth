@@ -139,7 +139,7 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
             Core::MainWindowActions::A_FileQuit);
     actions.setConfigurationActions(
             Core::MainWindowActions::A_AppPreferences |
-            Core::MainWindowActions::A_LangageChange //|
+            Core::MainWindowActions::A_LanguageChange //|
 //            Core::MainWindowActions::A_ConfigureMedinTux
             );
     actions.setHelpActions(

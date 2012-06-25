@@ -1,6 +1,6 @@
 freebsd* {
 
-  !CONFIG(debug, debug|release):CONFIG(LINUX_INTEGRATED){
+  !CONFIG(debug_without_install):CONFIG(LINUX_INTEGRATED){
      message( *********** Building FreeBSD Integrated Spec ********** )
      DEFINES *= LINUX_INTEGRATED
      DEFINES *= "LINUX_QT_PATH=\"\\\"$$[QT_INSTALL_LIBS]\\\"\"" \
@@ -23,9 +23,4 @@ freebsd* {
   }
 
   RPATH_LIBS_BIN     = plugins/
-
-  CONFIG( debug, debug|release ) {
-    CONFIG      += console
-  }
-
 }

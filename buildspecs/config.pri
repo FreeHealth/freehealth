@@ -34,9 +34,11 @@ LIBS *= -L$${BUILD_PLUGIN_PATH} -L$${BUILD_LIB_PATH}
 
 # build mode
 CONFIG *= qt warn_on thread x11 windows
-CONFIG( debug, debug|release ) {
+CONFIG(debug, debug|release) {
 #  message( Building $${BINARY_TARGET} in DEBUG )
   DEFINES  *= DEBUG
+  CONFIG += console
+  CONFIG(debug_without_install):DEFINES *= DEBUG_WITHOUT_INSTALL
 } else {
 #  message( Building $${BINARY_TARGET} in RELEASE )
   DEFINES  *= RELEASE

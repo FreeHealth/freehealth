@@ -278,7 +278,7 @@ namespace {
     const char* const WEBSITE              = "http://www.freemedforms.org/";
 
     // BUNDLE RESOURCES  --> located inside the bundle. Location calculated from BundleRootPath
-#ifdef DEBUG
+#ifdef DEBUG_WITHOUT_INSTALL
     const char* const BUNDLERESOURCE_PATH   = "";                    // resources are located into global_resources paths
 #else
     const char* const BUNDLERESOURCE_PATH  = "/Resources";          // resources are located inside the bundle
@@ -301,7 +301,7 @@ namespace {
     const char* const USER_COMPLETEFORMSPATH  = "/forms/completeforms";
 
     // APPLICATIONS RESOURCES --> located next to the application binary
-#ifdef DEBUG
+#ifdef DEBUG_WITHOUT_INSTALL
     const char* const MAC_PLUGINSPATH      = "/../../../plugins";
 #else
     const char* const MAC_PLUGINSPATH      = "/../plugins";
@@ -376,8 +376,8 @@ SettingsPrivate::SettingsPrivate(QObject *parent, const QString &appName, const 
 //    if (Utils::isRunningOnLinux())
 //        setPath(FMFPluginsPath, LIBRARY_BASENAME);
 
-    if (Utils::isDebugCompilation()) {
-        // DEBUG BUILD
+    if (Utils::isDebugWithoutInstallCompilation()) {
+        // DEBUG WITHOUT INSTALL BUILD
         QString res;
         if (Utils::isRunningOnMac())
             res = qApp->applicationDirPath() + "/../../../../../global_resources";
@@ -394,7 +394,7 @@ SettingsPrivate::SettingsPrivate(QObject *parent, const QString &appName, const 
             setPath(BundleResourcesPath, resourcesPath);
         }
     } else {
-        // RELEASE BUILD
+        // RELEASE OR DEBUG INSTALLED BUILD
 #ifdef LINUX_INTEGRATED
         setPath(BundleResourcesPath, QString("/usr/share/freemedforms"));
 #else
@@ -568,7 +568,7 @@ void SettingsPrivate::setPath(const int type, const QString & absPath)
             if (qApp->applicationName().contains(" ")) {
                 appname = appname.left(appname.indexOf(" "));
             }
-            if (Utils::isDebugCompilation()) {
+            if (!Utils::isReleaseCompilation()) {
                 if (appname.contains("_d"))
                     appname = appname.left(appname.indexOf("_d"));
             }
@@ -973,10 +973,15 @@ QTreeWidget* SettingsPrivate::getTreeWidget(QWidget *parent) const
     new QTreeWidgetItem(compilItem, QStringList() << tr("Compile Qt version") << QString("%1").arg(QT_VERSION_STR));
     new QTreeWidgetItem(compilItem, QStringList() << tr("Actual Qt version") << QString("%1").arg(qVersion()));
     new QTreeWidgetItem(compilItem, QStringList() << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_VERSION_1).arg("") << qApp->applicationVersion());
-    if (Utils::isDebugCompilation())
-        new QTreeWidgetItem(compilItem, QStringList() << tr("Compile mode") << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_DEBUG));
-    else
+    if (Utils::isReleaseCompilation()) {
         new QTreeWidgetItem(compilItem, QStringList() << tr("Compile mode") << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_RELEASE));
+    } else {
+        if (Utils::isDebugWithoutInstallCompilation()) {
+            new QTreeWidgetItem(compilItem, QStringList() << tr("Compile mode") << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_DEBUG) + " (no install)");
+        } else {
+            new QTreeWidgetItem(compilItem, QStringList() << tr("Compile mode") << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_DEBUG));
+        }
+    }
     new QTreeWidgetItem(compilItem, QStringList() << tr("GIT revision") << QString(GIT_REVISION_HASH));
 
 
@@ -1092,7 +1097,7 @@ QString SettingsPrivate::toString() const
     tmp += "\n| " + tr("Qt Build version: %1").arg(QT_VERSION_STR).replace(":", "|") + " |";
     tmp += "\n| " + tr("Qt running version: %1").arg(qVersion()).replace(":", "|") + " |";
     tmp += "\n| " + tr("Application Version: %1").arg(qApp->applicationVersion()).replace(":", "|") + " |";
-    if (Utils::isDebugCompilation())
+    if (!Utils::isReleaseCompilation())
         tmp += "\n| " + tr("Actual build: Debug").replace(":", "|") + " |";
     else
         tmp += "\n| " + tr("Actual build: Release").replace(":", "|") + " |";

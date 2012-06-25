@@ -11,7 +11,7 @@ INSTALL_PROFILES_FILES = 1
 INSTALL_ZIPCODES = 1
 
 include(../../buildspecs/config.pri)
-!CONFIG(debug, release|debug):include($${SOURCES_BUILDSPECS_PATH}/install.pri)
+include($${SOURCES_BUILDSPECS_PATH}/install.pri)
 
 # include SDKs
 include( $${SOURCES_LIBS_PATH}/extensionsystem.pri )

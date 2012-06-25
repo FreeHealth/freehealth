@@ -1,7 +1,4 @@
-CONFIG( debug, debug|release ) {
-message( No installation available in Debug mode )
-}
-else {
+!CONFIG(debug_without_install) {
  !freebsd*:error(install_freebsd.pri should only be used when building FreeBSD configuration)
  !CONFIG(LINUX_INTEGRATED):message(Preparing installation for FreeBSD)
  else:message(Preparing installation for integrated FreeBSD)

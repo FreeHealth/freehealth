@@ -80,10 +80,6 @@ DebugDialog::~DebugDialog()
 
 void DebugDialog::on_butSend_clicked()
 {
-    if (!Utils::isDebugCompilation()) {
-        if (!Utils::Log::hasError())  // this should never be in this member
-            return;
-    }
     LOG(tkTr(Trans::Constants::START_MESSAGE_SENDING));
 
     QString msg;

@@ -1,7 +1,4 @@
-CONFIG( debug, debug|release ) {
-message( No installation available in Debug mode )
-}
-else {
+!CONFIG(debug_without_install) {
  !macx:error(install_mac.pri should only be used when building Mac version)
 
  QMAKE_INSTALL_FILE=cp -R
@@ -28,6 +25,6 @@ else {
  INSTALLS += descrfiles
  }
 
-}  #end if release mode
+}
 
 

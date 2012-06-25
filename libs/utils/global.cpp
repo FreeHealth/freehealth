@@ -316,15 +316,22 @@ namespace Utils {
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////   LIB AND OS FUNCTIONS   ///////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
-bool isDebugCompilation()
+bool isDebugWithoutInstallCompilation()
 {
-#ifdef DEBUG
+#ifdef DEBUG_WITHOUT_INSTALL
     return true;
 #else
     return false;
 #endif
 }
-bool isReleaseCompilation() {return !isDebugCompilation();}
+bool isReleaseCompilation()
+{
+#ifdef RELEASE
+    return true;
+#else
+    return false;
+#endif
+}
 bool isGitBuild()
 {
 #ifdef FULLAPPLICATION_BUILD

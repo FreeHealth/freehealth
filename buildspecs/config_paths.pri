@@ -67,12 +67,14 @@ CONFIG(LINUX_INTEGRATED) {
 }
 
 RELEASE_BINARY_PATH       = $${SOURCES_ROOT_PATH}/packages
+
 # redefine binary target in debug mode add _d or _debug
 BINARY_TARGET             = $$quote($${TARGET})
-
-CONFIG(debug, debug|release) {
- unix:BINARY_TARGET   = $$quote($$join(BINARY_TARGET,,,_debug))
- else:BINARY_TARGET  = $$quote($$join(BINARY_TARGET,,,_d))
+BINARY_POSTFIXE=
+!CONFIG(dont_postfixe_binaries):CONFIG(debug, debug|release) {
+    unix:BINARY_POSTFIXE= _debug
+    else:BINARY_POSTFIXE= _d
+    BINARY_TARGET   = $$quote($$join(BINARY_TARGET,,,$${BINARY_POSTFIXE}))
 }
 include(../buildspecs/projectversion.pri)
 DEFINES	*= "BINARY_NAME=\"\\\"$${BINARY_TARGET}\\\"\"" \
@@ -83,7 +85,6 @@ DEFINES	*= "BINARY_NAME=\"\\\"$${BINARY_TARGET}\\\"\"" \
 unix:OBJECTS_DIR   = $${SOURCES_BUILD_PATH}/$${BINARY_TARGET}/.obj/unix
 win32:OBJECTS_DIR  = $${SOURCES_BUILD_PATH}/$${BINARY_TARGET}/.obj/win32
 mac:OBJECTS_DIR    = $${SOURCES_BUILD_PATH}/$${BINARY_TARGET}/.obj/mac
-CONFIG(crosscompil):OBJECTS_DIR = $${SOURCES_BUILD_PATH}/$${BINARY_TARGET}/.obj/win-x
 UI_DIR	           = $${SOURCES_BUILD_PATH}/.ui
 MOC_DIR	           = $${SOURCES_BUILD_PATH}/$${BINARY_TARGET}/.moc
 RCC_DIR	           = $${SOURCES_BUILD_PATH}/$${BINARY_TARGET}/.rcc

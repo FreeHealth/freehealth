@@ -79,7 +79,7 @@ enum DirSearchType {
 
 // Libs and OS information
 /** \brief Return true if the application was built in debug mode. */
-UTILS_EXPORT bool isDebugCompilation();
+UTILS_EXPORT bool isDebugWithoutInstallCompilation();
 /** \brief Return true if the application was built in release mode. */
 UTILS_EXPORT bool isReleaseCompilation();
 /** \brief Return true if the application was built using a GIT checkout. */

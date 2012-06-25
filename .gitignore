@@ -18,6 +18,7 @@ global_resources/*.ini
 # bin files
 build/*
 bin/*
+packages/*
 Makefile
 *.o
 moc_*

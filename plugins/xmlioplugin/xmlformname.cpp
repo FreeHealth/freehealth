@@ -46,7 +46,7 @@ XmlFormName::XmlFormName() :
 }
 
 XmlFormName::XmlFormName(const QString &_uid) :
-    isValid(false), uid(_uid), absFileName(_uid), isAvailableFromDatabase(false), dbId(-1)
+    isValid(false), isAvailableFromDatabase(false), uid(_uid), absFileName(_uid), dbId(-1)
 {
     if (uid.endsWith(".xml", Qt::CaseInsensitive)) {
         int begin = uid.lastIndexOf("/");

@@ -29,8 +29,8 @@ SUBDIRS = \
     agenda \
     script \
     mainwin \
-#    webcam
-#    alerts \
+#    alerts \      # unstable
+#    webcam        # experimental
 
 
 

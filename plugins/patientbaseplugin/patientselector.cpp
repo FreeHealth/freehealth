@@ -278,9 +278,6 @@ void PatientSelector::setFieldsToShow(const FieldsToShow fields)
     if (fields & PatientSelector::FullAdress) {
         d->ui->tableView->showColumn(Core::IPatient::FullAddress);
     }
-
-    if (Utils::isDebugCompilation())
-        d->ui->tableView->showColumn(Core::IPatient::PractitionnerLkID);
 }
 
 /** \brief Define the selected patient (use this if patient was selected from outside the selector). */

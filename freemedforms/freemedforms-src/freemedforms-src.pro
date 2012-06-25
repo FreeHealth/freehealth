@@ -13,7 +13,7 @@ INSTALL_PROFILES_FILES = 1
 
 # include general configuration
 include(../../buildspecs/config.pri)
-!CONFIG(debug, release|debug):include($${SOURCES_BUILDSPECS_PATH}/install.pri)
+include($${SOURCES_BUILDSPECS_PATH}/install.pri)
 
 # include libs
 include( $${SOURCES_LIBS_PATH}/extensionsystem.pri )
