@@ -2398,10 +2398,11 @@ Add a fied to table referenced by
 */
 bool Database::alterTableForNewField(const int tableRef, const int newFieldRef,const int TypeOfField, const QString & nullOption)
 {
+    Q_UNUSED(TypeOfField);
     bool b = true;
     QString tableString = table(tableRef);
     QString newField = fieldName(tableRef,newFieldRef);
-    QString type = d->getTypeOfField(TypeOfField);
+    QString type = d->getTypeOfField(newFieldRef + (tableRef * 1000));
     QSqlQuery q(database());
     QString req = QString("ALTER TABLE `%1` ADD `%2` %3 %4;")
     	       .arg(tableString,newField,type,nullOption);
