@@ -43,29 +43,28 @@ class QTimer;
 QT_END_NAMESPACE
 
 namespace Utils {
+namespace Internal {
+class QButtonLineEditPrivate;
+}
 
 class UTILS_EXPORT QButtonLineEdit : public QLineEdit
 {
     Q_OBJECT
 public:
-    QButtonLineEdit( QWidget * parent = 0 );
+    QButtonLineEdit(QWidget *parent = 0);
     ~QButtonLineEdit();
 
     void setDelayedSignals(bool state);
-
     void setLeftButton(QToolButton *button);
     void setRightButton(QToolButton *button);
-
     void setRoundedCorners();
+    void setTranslatableExtraToolTip(const QString &trContext, const QString &translatable);
+    void setExtraStyleSheet(const QString &extraCss);
+    void clearExtraStyleSheet();
 
 protected:
     void keyPressEvent(QKeyEvent *event);
     void resizeEvent(QResizeEvent *);
-
-private:
-    void updatePlaceholderText();
-    void setSpecificStyleSheet(const QString &css = QString::null);
-    void prepareConnections();
     void changeEvent(QEvent *e);
 
 private Q_SLOTS:
@@ -73,12 +72,7 @@ private Q_SLOTS:
     void leftTrig(QAction *action);
 
 private:
-    QToolButton *m_leftButton;
-    QToolButton *m_rightButton;
-    QString m_CSS;
-    QString m_emptyString;
-    QTimer *m_Timer;
-    bool m_Delayed;
+    Internal::QButtonLineEditPrivate *d;
 };
 
 }  // End namespace Utils

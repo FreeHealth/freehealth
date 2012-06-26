@@ -36,6 +36,8 @@
 
 #include "qbuttonlineedit.h"
 
+#include <utils/log.h>
+
 #include <QApplication>
 #include <QTextDocument>
 #include <QAction>
@@ -60,31 +62,109 @@ static inline QString cleanString(const QString &s)
     return ret;
 }
 
+namespace Utils {
+namespace Internal {
+class QButtonLineEditPrivate
+{
+public:
+    QButtonLineEditPrivate(QButtonLineEdit *parent) :
+        _leftButton(0), _rightButton(0), _delayed(false),
+        _rightPadding(0), _leftPadding(0),
+        q(parent)
+    {}
+
+    QString constructStyleSheet(const QString &extraStyleSheet)
+    {
+        QStringList css;
+
+        // Create padding for buttons
+        if (_rightPadding>0)
+            css << QString("padding-right:%1px").arg(_rightPadding);
+        if (_leftPadding>0)
+            css << QString("padding-left:%1px").arg(_leftPadding);
+
+        // Analyse extraStyleSheet (remove all paddings)
+        if (!extraStyleSheet.isEmpty()) {
+
+            foreach(const QString &c, extraStyleSheet.split(";", QString::SkipEmptyParts)) {
+                if (!c.startsWith("paddin",Qt::CaseInsensitive))
+                    css << c;
+            }
+        }
+        return QString("QLineEdit#%1{%2;}").arg(q->objectName(), css.join(";"));
+    }
+
+    void setSpecificStyleSheet()
+    {
+        q->setStyleSheet(constructStyleSheet(_extraCss));
+    }
+
+    // Connects leftbutton
+    void prepareConnections()
+    {
+        if (_leftButton)
+            q->connect(_leftButton, SIGNAL(triggered(QAction*)), q, SLOT(leftTrig(QAction*)));
+    }
+
+    // Updates placeHolderText of the LineEdit to the text of the current QAction that was last called.
+    void updatePlaceholderText()
+    {
+        if (_leftButton && _leftButton->defaultAction()) {
+            QString t = QString("%1 %2")
+                    .arg(cleanString(_leftButton->defaultAction()->text()))
+                    .arg(QApplication::translate("Utils::QButtonLineEdit", "(press Alt up/down cursor to cycle)"));
+            q->setPlaceholderText(t);
+            if (!_extraToolTipContext.isEmpty() && !_extraToolTip.isEmpty()) {
+                t.prepend(QString("%1<br />").arg(QApplication::translate(_extraToolTipContext.toUtf8(), _extraToolTip.toUtf8())));
+            }
+            q->setToolTip(t);
+        }
+    }
+
+public:
+    QToolButton *_leftButton;
+    QToolButton *_rightButton;
+    QString _extraToolTipContext, _extraToolTip, _extraCss;
+    QTimer *_timer;
+    bool _delayed;
+    int _rightPadding, _leftPadding;
+
+private:
+    QButtonLineEdit *q;
+};
+} // Internal
+} // Utils
+
 QButtonLineEdit::QButtonLineEdit(QWidget *parent) :
-        QLineEdit(parent), m_leftButton(0), m_rightButton(0), m_Delayed(false)
+    QLineEdit(parent),
+    d(new Internal::QButtonLineEditPrivate(this))
 {
     static int handle = 0;
     handle++;
     if (objectName().isNull())
         setObjectName("QButtonLineEdit_" + QString::number(handle));
-    m_Timer = new QTimer(this);
-    m_Timer->setSingleShot(true);
+    d->_timer = new QTimer(this);
+    d->_timer->setSingleShot(true);
 }
 
 QButtonLineEdit::~QButtonLineEdit()
 {
+    if (d)
+        delete d;
+    d = 0;
 }
 
+/** Delay textChanged signal emition */
 void QButtonLineEdit::setDelayedSignals(bool state)
 {
-    m_Delayed = state;
-    m_Timer->stop();
+    d->_delayed = state;
+    d->_timer->stop();
     if (state) {
         blockSignals(true);
-        connect(m_Timer, SIGNAL(timeout()), this, SLOT(emitTextChangedSignal()));
+        connect(d->_timer, SIGNAL(timeout()), this, SLOT(emitTextChangedSignal()));
     } else {
         blockSignals(false);
-        disconnect(m_Timer, SIGNAL(timeout()), this, SLOT(emitTextChangedSignal()));
+        disconnect(d->_timer, SIGNAL(timeout()), this, SLOT(emitTextChangedSignal()));
     }
 }
 
@@ -96,25 +176,25 @@ void QButtonLineEdit::setDelayedSignals(bool state)
  */
 void QButtonLineEdit::setLeftButton(QToolButton *button)
 {
-    if(!button)
+    if (!button)
         return;
     button->setParent(this);
-    m_leftButton = button;
-    m_leftButton->setStyleSheet("QToolButton { border: none; padding: 0 0 0 2px; }");
-    m_leftButton->setCursor(Qt::ArrowCursor);
+    d->_leftButton = button;
+    d->_leftButton->setStyleSheet("QToolButton{border:none;padding: 0 0 0 2px;}");
+    d->_leftButton->setCursor(Qt::ArrowCursor);
 
     int frameWidth = style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
-    m_CSS.append(QString("padding-left: %1px;").arg(button->sizeHint().width() + frameWidth));
+    d->_leftPadding = button->sizeHint().width() + frameWidth + 1;
 
     QSize msz = minimumSizeHint();
     setMinimumSize(qMax(msz.width(), button->sizeHint().height() + frameWidth * 2 + 2),
                    qMax(msz.height(), button->sizeHint().height() + frameWidth * 2 + 2));
 
     // set text to button toolTip
-    updatePlaceholderText();
-    prepareConnections();
+    d->updatePlaceholderText();
+    d->prepareConnections();
     clearFocus();
-    setSpecificStyleSheet();
+    d->setSpecificStyleSheet();
 }
 
 /**
@@ -124,43 +204,35 @@ void QButtonLineEdit::setLeftButton(QToolButton *button)
 */
 void QButtonLineEdit::setRightButton(QToolButton * button)
 {
-    if(!button)
+    if (!button)
         return;
     button->setParent(this);
-    m_rightButton = button;
-    m_rightButton->setStyleSheet("QToolButton { border: none; padding: 0px; }");
-    m_rightButton->setCursor(Qt::ArrowCursor);
+    d->_rightButton = button;
+    d->_rightButton->setStyleSheet("QToolButton{border:none;padding: 0 0 0 0px;}");
+    d->_rightButton->setCursor(Qt::ArrowCursor);
 
     int frameWidth = style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
-    m_CSS.append(QString("padding-right: %1px;").arg(button->sizeHint().width() + frameWidth + 1));
+    d->_leftPadding = button->sizeHint().width() + frameWidth + 1;
     QSize msz = minimumSizeHint();
     setMinimumSize(qMax(msz.width(), button->sizeHint().height() + frameWidth * 2 + 2),
                    qMax(msz.height(), button->sizeHint().height() + frameWidth * 2 + 2));
-    prepareConnections();
+    d->prepareConnections();
     clearFocus();
-    setSpecificStyleSheet();
+    d->setSpecificStyleSheet();
 }
 
 void QButtonLineEdit::resizeEvent(QResizeEvent *)
 {
-    if (m_leftButton) {
-        QSize sz = m_leftButton->sizeHint();
+    if (d->_leftButton) {
+        QSize sz = d->_leftButton->sizeHint();
         int frameWidth = style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
-        m_leftButton->move(rect().left() + frameWidth ,
-                          (rect().bottom() + 1 - sz.height()) / 2);
+        d->_leftButton->move(rect().left() + frameWidth, (rect().bottom() + 1 - sz.height()) / 2);
     }
-    if (m_rightButton) {
-        QSize sz = m_rightButton->sizeHint();
+    if (d->_rightButton) {
+        QSize sz = d->_rightButton->sizeHint();
         int frameWidth = style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
-        m_rightButton->move(rect().right() - frameWidth - sz.width(),
-                           (rect().bottom() +2 - sz.height()) / 2);
+        d->_rightButton->move(rect().right() - frameWidth - sz.width(), (rect().bottom() + 2 - sz.height()) / 2);
     }
-}
-
-void QButtonLineEdit::prepareConnections()
-{
-    if (m_leftButton)
-        connect(m_leftButton, SIGNAL(triggered(QAction*)), this, SLOT(leftTrig(QAction*)));
 }
 
 void QButtonLineEdit::emitTextChangedSignal()
@@ -178,33 +250,23 @@ void QButtonLineEdit::emitTextChangedSignal()
 /** \brief slot for triggered left button */
 void QButtonLineEdit::leftTrig(QAction *action)
 {
-    m_leftButton->setDefaultAction(action);
-    updatePlaceholderText();
+    d->_leftButton->setDefaultAction(action);
+    d->updatePlaceholderText();
     clearFocus();
-}
-
-/** \brief updates placeHolderText of the LineEdit to the text of the current QAction
- *  that was last called. */
-void QButtonLineEdit::updatePlaceholderText()
-{
-    if (m_leftButton && m_leftButton->defaultAction()) {
-        setPlaceholderText(cleanString(m_leftButton->defaultAction()->text()) + " " + tr("(press Alt up/down cursor to cycle)"));
-        setToolTip(cleanString(m_leftButton->defaultAction()->text()) + " " + tr("(press Alt up/down cursor to cycle)"));
-    }
 }
 
 void QButtonLineEdit::keyPressEvent(QKeyEvent *event)
 {
-    if (m_Delayed)
-        m_Timer->stop();
+    if (d->_delayed)
+        d->_timer->stop();
 
     if (event->modifiers() & Qt::AltModifier) {
-        if (!m_leftButton)
+        if (!d->_leftButton)
             return;
-        const QList<QAction *> &list = m_leftButton->actions();
+        const QList<QAction *> &list = d->_leftButton->actions();
 
         if (list.count()) {
-            int actual = list.indexOf(m_leftButton->defaultAction());
+            int actual = list.indexOf(d->_leftButton->defaultAction());
             QAction *a = 0;
 
             if (event->key()==Qt::Key_Down) {
@@ -227,7 +289,7 @@ void QButtonLineEdit::keyPressEvent(QKeyEvent *event)
                 return;
             }
         }
-    } else if (m_Delayed) {
+    } else if (d->_delayed) {
         if (event->key()==Qt::Key_Enter) {
             blockSignals(false);
             Q_EMIT returnPressed();
@@ -243,7 +305,7 @@ void QButtonLineEdit::keyPressEvent(QKeyEvent *event)
                 int delay = 300 - t.length()*t.length()*10;
                 if (delay < 0)
                     delay = 0;
-                m_Timer->start(delay);
+                d->_timer->start(delay);
             }
         }
     }
@@ -252,8 +314,8 @@ void QButtonLineEdit::keyPressEvent(QKeyEvent *event)
 
 /** \brief Define rounded border for the QLineEdit */
 void QButtonLineEdit::setRoundedCorners()
-// FIXME: Buggy
 {
+    // FIXME: Buggy
     setStyleSheet(QString("QLineEdit#%1, QFrame#%1 {"
                           "border-style: groove;"
                           "border-width: 1px;"
@@ -261,12 +323,32 @@ void QButtonLineEdit::setRoundedCorners()
                           "}").arg(objectName()));
 }
 
-void QButtonLineEdit::setSpecificStyleSheet(const QString &css)
+void QButtonLineEdit::setTranslatableExtraToolTip(const QString &trContext, const QString &translatable)
 {
-    if (!css.isEmpty())
-        setStyleSheet(QString("QLineEdit#%1{%2;%3}").arg(objectName(), m_CSS, css));
-    else
-        setStyleSheet(QString("QLineEdit#%1{%2;}").arg(objectName(), m_CSS));
+    d->_extraToolTipContext = trContext;
+    d->_extraToolTip = translatable;
+}
+
+void QButtonLineEdit::setExtraStyleSheet(const QString &extraCss)
+{
+    d->_extraCss = extraCss;
+    if (d->_extraCss.contains("{")) {
+        int b = d->_extraCss.indexOf("{") + 1;
+        int e = d->_extraCss.indexOf("}", b);
+        if (e>0) {
+            d->_extraCss = d->_extraCss.mid(b, e-b);
+        } else {
+            LOG_ERROR("Wrong styleSheet -> {} " + extraCss);
+            d->_extraCss.clear();
+        }
+    }
+    d->setSpecificStyleSheet();
+}
+
+void QButtonLineEdit::clearExtraStyleSheet()
+{
+    d->_extraCss.clear();
+    d->setSpecificStyleSheet();
 }
 
 void QButtonLineEdit::changeEvent(QEvent *e)
@@ -274,7 +356,7 @@ void QButtonLineEdit::changeEvent(QEvent *e)
     QWidget::changeEvent(e);
     switch (e->type()) {
     case QEvent::LanguageChange:
-        updatePlaceholderText();
+        d->updatePlaceholderText();
         break;
     default:
         break;
