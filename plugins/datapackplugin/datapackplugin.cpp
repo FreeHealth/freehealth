@@ -97,12 +97,19 @@ DataPackPluginIPlugin::~DataPackPluginIPlugin()
 #ifdef FREEMEDFORMS
     if (user())
         user()->setValue(Core::IUser::DataPackConfig, core.serverManager()->xmlConfiguration());
-#else
-#  ifdef FREEDIAMS
+#endif
+
+#ifdef FREEACCOUNT
+    if (user())
+        user()->setValue(Core::IUser::DataPackConfig, core.serverManager()->xmlConfiguration());
+#endif
+
+#ifdef FREEDIAMS
     QByteArray s = QByteArray(core.serverManager()->xmlConfiguration().toUtf8()).toBase64();
     settings()->setValue("datapack/server/config", s);
-#  endif
 #endif
+
+
 }
 
 bool DataPackPluginIPlugin::initialize(const QStringList &arguments, QString *errorString)
@@ -149,11 +156,17 @@ void DataPackPluginIPlugin::extensionsInitialized()
     // Send the server manager configuration from the settings of the user/application
     QString xmlConfig;
 #ifdef FREEMEDFORMS
-    xmlConfig = user()->value(Core::IUser::DataPackConfig).toString();
-#else
-#  ifdef FREEDIAMS
+    if (user())
+        xmlConfig = user()->value(Core::IUser::DataPackConfig).toString();
+#endif
+
+#ifdef FREEACCOUNT
+    if (user())
+        xmlConfig = user()->value(Core::IUser::DataPackConfig).toString();
+#endif
+
+#ifdef FREEDIAMS
     xmlConfig = QString(QByteArray::fromBase64(settings()->value("datapack/server/config").toByteArray()));
-#  endif
 #endif
 
     if (xmlConfig.isEmpty()) {
@@ -231,11 +244,16 @@ void DataPackPluginIPlugin::coreAboutToClose()
 #ifdef FREEMEDFORMS
     if (user())
         user()->setValue(Core::IUser::DataPackConfig, core.serverManager()->xmlConfiguration());
-#else
-#  ifdef FREEDIAMS
+#endif
+
+#ifdef FREEACCOUNT
+    if (user())
+        user()->setValue(Core::IUser::DataPackConfig, core.serverManager()->xmlConfiguration());
+#endif
+
+#ifdef FREEDIAMS
     QByteArray s = QByteArray(core.serverManager()->xmlConfiguration().toUtf8()).toBase64();
     settings()->setValue("datapack/server/config", s);
-#  endif
 #endif
 }
 
