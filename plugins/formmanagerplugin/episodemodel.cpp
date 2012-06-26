@@ -1217,7 +1217,7 @@ bool EpisodeModel::isLastEpisodeIndex(const QModelIndex &index) const
 Form::FormMain *EpisodeModel::formForIndex(const QModelIndex &index) const
 {
     if (!index.isValid())
-        return false;
+        return 0;
     QModelIndex idx = index;
     while (idx.isValid()) {
         EpisodeModelTreeItem *it = d->getItem(idx);

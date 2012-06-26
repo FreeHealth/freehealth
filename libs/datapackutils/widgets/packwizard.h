@@ -46,12 +46,12 @@ QT_END_NAMESPACE
 /**
  * \file packwizard.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.2
- * \date 11 Feb 2012
+ * \version 0.7.5
+ * \date 25 Jun 2012
 */
 
 namespace DataPack {
-class ServerEngineStatus;
+struct ServerEngineStatus;
 
 namespace Internal {
 class PackWizardPrivate;
