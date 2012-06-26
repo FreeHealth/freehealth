@@ -91,7 +91,7 @@ public:
                     css << c;
             }
         }
-        return QString("QButtonLineEdit#%1{%2;}").arg(q->objectName(), css.join(";"));
+        return QString("%2;").arg(css.join(";"));
     }
 
     void setSpecificStyleSheet()
