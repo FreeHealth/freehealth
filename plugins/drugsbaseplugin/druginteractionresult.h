@@ -48,7 +48,7 @@ class IDrug;
 class IDrugInteraction;
 class IDrugInteractionAlert;
 class InteractionManager;
-class DrugInteractionInformationQuery;
+struct DrugInteractionInformationQuery;
 
 class DRUGSBASE_EXPORT DrugInteractionResult : public QObject
 {

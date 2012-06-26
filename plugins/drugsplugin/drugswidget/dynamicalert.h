@@ -39,7 +39,7 @@
  */
 
 namespace DrugsDB {
-class DrugInteractionInformationQuery;
+struct DrugInteractionInformationQuery;
 }
 
 namespace DrugsWidget {
