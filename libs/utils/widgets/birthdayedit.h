@@ -46,6 +46,7 @@ QT_END_NAMESPACE
 */
 
 namespace Utils {
+class DateValidator;
 
 class UTILS_EXPORT BirthDayEdit : public QButtonLineEdit
 {
@@ -90,6 +91,7 @@ private:
     QDate m_minimumDate;
     QToolButton *_rightButton, *_leftButton;
     QAction *aShortDisplay, *aLongDisplay, *aNumericDisplay;
+    DateValidator *_validator;
 };
 
 } // end Utils

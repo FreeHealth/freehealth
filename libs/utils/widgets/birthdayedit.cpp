@@ -61,7 +61,8 @@ BirthDayEdit::BirthDayEdit(QWidget *parent) :
 BirthDayEdit::BirthDayEdit(const QDate &date, QWidget *parent) :
     QButtonLineEdit(parent),
     _rightButton(0), _leftButton(0),
-    aShortDisplay(0), aLongDisplay(0), aNumericDisplay(0)
+    aShortDisplay(0), aLongDisplay(0), aNumericDisplay(0),
+    _validator(0)
 {
     init(date);
 }
@@ -77,7 +78,8 @@ void BirthDayEdit::init(const QDate& date, const QDate& maximumDate, const QDate
     m_minimumDate = minimumDate;
     m_maximumDate = maximumDate;
 
-    setValidator(new DateValidator(this));
+    _validator = new DateValidator(this);
+    setValidator(_validator);
 
     connect(this, SIGNAL(editingFinished()), this, SLOT(setDisplayedDateString()));
 }
@@ -157,11 +159,9 @@ void BirthDayEdit::focusOutEvent(QFocusEvent *event) {
     int pos = 0;
     QString tmpText = text();
 
-    if (validator()->validate(tmpText, pos) == QValidator::Acceptable) {
+    if (_validator->date().isValid()) {
         setExtraStyleSheet("");
-
-    } else { // QValidator::Intermediate, QValidator::Invalid
-
+    } else {
         //TODO: let color be a global constant, maybe in theme?
         setExtraStyleSheet(QString("background: %1").arg("#f66"));
     }
@@ -190,20 +190,13 @@ void BirthDayEdit::setDateString(const QString& dateString)
     QString tmpDateString = dateString;
 
     int pos = 0;
-    // pointer to the DateValidator
-    const DateValidator * pValidator = qobject_cast<const DateValidator*>(validator());
-    Q_ASSERT(pValidator);
 
-    if (pValidator->validate(tmpDateString, pos) == QValidator::Acceptable) {
-
+    if (_validator->date().isValid()) {
         // try to convert the QString into a QDate using the built-in formats
-        tmpDate = QDate::fromString(tmpDateString, pValidator->matchedFormat(tmpDateString));
-        m_date = tmpDate;
+        m_date = _validator->date();
         if (m_date != oldDate)
             Q_EMIT dateChanged(m_date);
         updateDisplayText();
-        //FIXME: buggy toolbutton
-//        m_toolButton->show();
     }
 }
 
@@ -231,25 +224,28 @@ void BirthDayEdit::formatActionTriggered(QAction *a)
 /** Clear the place holder. */
 void BirthDayEdit::updatePlaceHolder()
 {
-    // TODO: add date format string
-    setPlaceholderText(tr("Enter a date (format: %1)").arg("ADD FORMAT"));
-    setToolTip(tr("Enter a date (format: %1)").arg("ADD FORMAT"));
+    setPlaceholderText(tkTr(Trans::Constants::ENTER_DATE_FORMAT_1).arg(_validator->acceptedDateFormat().join(";")));
+    setExtraToolTip(tkTr(Trans::Constants::ENTER_DATE_FORMAT_1).arg(_validator->acceptedDateFormat().join(";")));
 }
 
 /** Retranslate UI. */
 void BirthDayEdit::retranslate()
 {
+    updatePlaceHolder();
     if (aLongDisplay) {
         aLongDisplay->setText(tkTr(Trans::Constants::SHOW_LONG_FORMAT));
         aLongDisplay->setToolTip(aLongDisplay->text());
+        aLongDisplay->setData(QLocale().dateFormat(QLocale::LongFormat));
     }
     if (aShortDisplay) {
         aShortDisplay->setText(tkTr(Trans::Constants::SHOW_SHORT_FORMAT));
         aShortDisplay->setToolTip(aLongDisplay->text());
+        aShortDisplay->setData(QLocale().dateFormat(QLocale::ShortFormat));
     }
     if (aNumericDisplay) {
         aNumericDisplay->setText(tkTr(Trans::Constants::SHOW_NUMERIC_FORMAT));
         aNumericDisplay->setToolTip(aLongDisplay->text());
+        aNumericDisplay->setData(tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR));
     }
 }
 
