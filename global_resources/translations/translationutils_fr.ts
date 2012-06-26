@@ -63,12 +63,12 @@
     <message>
         <location filename="../../libs/translationutils/trans_menu.h" line="62"/>
         <source>&amp;Open...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Ouvrir...</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_menu.h" line="64"/>
         <source>Save &amp;as...</source>
-        <translation type="unfinished"></translation>
+        <translation>S&amp;auvegarder sous...</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_menu.h" line="75"/>
@@ -1032,6 +1032,31 @@ Emplacement : %2</translation>
         <translation>prendre avec ou sans aliments</translation>
     </message>
     <message>
+        <location filename="../../libs/translationutils/trans_datetime.h" line="138"/>
+        <source>Show long date format</source>
+        <translation>Montrer en format dates longues</translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_datetime.h" line="139"/>
+        <source>Show short date format</source>
+        <translation>Montrer en format dates courtes</translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_datetime.h" line="140"/>
+        <source>Show numeric date format</source>
+        <translation>Montrer en format dates numériques</translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_datetime.h" line="141"/>
+        <source>Enter a date</source>
+        <translation>Saississez une date</translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_datetime.h" line="142"/>
+        <source>Enter a date (format: %1)</source>
+        <translation>Saississez une date (format : %1)</translation>
+    </message>
+    <message>
         <location filename="../../libs/translationutils/trans_spashandupdate.h" line="44"/>
         <source>Starting application at %1</source>
         <translation>Démarre l&apos;application %1</translation>
@@ -1315,17 +1340,17 @@ Emplacement : %2</translation>
     <message>
         <location filename="../../libs/translationutils/trans_current.h" line="67"/>
         <source>Validate</source>
-        <translation type="unfinished"></translation>
+        <translation>Valider</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_current.h" line="68"/>
         <source>Override</source>
-        <translation type="unfinished"></translation>
+        <translation>Outrepasser</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_current.h" line="69"/>
         <source>Edit alert</source>
-        <translation type="unfinished"></translation>
+        <translation>Éditer l&apos;alerte</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_current.h" line="77"/>

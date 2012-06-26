@@ -37,12 +37,12 @@ Veuillez vérifier vos répartitions journalières et vos relations avec le repa
 <context>
     <name>DrugsDB::AtcTreeModel</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/atctreemodel.cpp" line="352"/>
+        <location filename="../../plugins/drugsbaseplugin/atctreemodel.cpp" line="330"/>
         <source>Label</source>
         <translation>Nom</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/atctreemodel.cpp" line="354"/>
+        <location filename="../../plugins/drugsbaseplugin/atctreemodel.cpp" line="332"/>
         <source>Code</source>
         <translation></translation>
     </message>
@@ -73,14 +73,6 @@ Veuillez vérifier vos répartitions journalières et vos relations avec le repa
         <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1241"/>
         <source>Unable to find drug with DID %1</source>
         <translation>Impossible de trouver le médicament avec le DID %1</translation>
-    </message>
-</context>
-<context>
-    <name>DrugsDB::DrugsBasePlugin</name>
-    <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbaseplugin.cpp" line="86"/>
-        <source>Initializing drugs database plugin...</source>
-        <translation>Initialisation du plugin des bases de données thérapeutique...</translation>
     </message>
 </context>
 <context>
@@ -167,7 +159,7 @@ Voulez-vous les sauvegarder aussi ?</translation>
 <context>
     <name>DrugsDB::DrugsModel</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsmodel.cpp" line="520"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsmodel.cpp" line="522"/>
         <source>KNOWN ALLERGY</source>
         <translation>ALLERGIE CONNUE</translation>
     </message>
@@ -306,6 +298,15 @@ Voulez-vous les sauvegarder aussi ?</translation>
         <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="514"/>
         <source>The duration&apos;s scheme must be defined.</source>
         <translation>Le schema de durée doit être défini.</translation>
+    </message>
+</context>
+<context>
+    <name>DrugsDB::Internal::DrugsBasePlugin</name>
+    <message>
+        <location filename="../../plugins/drugsbaseplugin/drugsbaseplugin.cpp" line="82"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbaseplugin.cpp" line="93"/>
+        <source>Initializing drugs database plugin...</source>
+        <translation>Initialisation du plugin des bases de données thérapeutique...</translation>
     </message>
 </context>
 <context>

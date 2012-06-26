@@ -12,7 +12,7 @@
 <context>
     <name>DrugInteractions::Internal::DrugDrugInteractionEngine</name>
     <message>
-        <location filename="../../plugins/druginteractionsplugin/drugdruginteractionengine.cpp" line="873"/>
+        <location filename="../../plugins/druginteractionsplugin/drugdruginteractionengine.cpp" line="908"/>
         <source>Detects interaction between drugs</source>
         <translation type="unfinished"></translation>
     </message>
@@ -41,8 +41,8 @@
 <context>
     <name>DrugsBase</name>
     <message>
-        <location filename="../../plugins/druginteractionsplugin/drugdruginteractionengine.cpp" line="1030"/>
-        <location filename="../../plugins/druginteractionsplugin/drugdruginteractionengine.cpp" line="1052"/>
+        <location filename="../../plugins/druginteractionsplugin/drugdruginteractionengine.cpp" line="1092"/>
+        <location filename="../../plugins/druginteractionsplugin/drugdruginteractionengine.cpp" line="1116"/>
         <source>FreeDiams Interactions Engine</source>
         <translation type="unfinished"></translation>
     </message>

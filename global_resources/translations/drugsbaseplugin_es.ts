@@ -32,12 +32,12 @@ Please verify your daily scheme prescriptions and relations to meal.</source>
 <context>
     <name>DrugsDB::AtcTreeModel</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/atctreemodel.cpp" line="352"/>
+        <location filename="../../plugins/drugsbaseplugin/atctreemodel.cpp" line="330"/>
         <source>Label</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/atctreemodel.cpp" line="354"/>
+        <location filename="../../plugins/drugsbaseplugin/atctreemodel.cpp" line="332"/>
         <source>Code</source>
         <translation type="unfinished"></translation>
     </message>
@@ -67,14 +67,6 @@ Please verify your daily scheme prescriptions and relations to meal.</source>
     <message>
         <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1241"/>
         <source>Unable to find drug with DID %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>DrugsDB::DrugsBasePlugin</name>
-    <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbaseplugin.cpp" line="86"/>
-        <source>Initializing drugs database plugin...</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -159,7 +151,7 @@ Do you want to add them to the file?</source>
 <context>
     <name>DrugsDB::DrugsModel</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsmodel.cpp" line="520"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsmodel.cpp" line="522"/>
         <source>KNOWN ALLERGY</source>
         <translation type="unfinished"></translation>
     </message>
@@ -297,6 +289,15 @@ Do you want to add them to the file?</source>
     <message>
         <location filename="../../plugins/drugsbaseplugin/dosagemodel.cpp" line="514"/>
         <source>The duration&apos;s scheme must be defined.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>DrugsDB::Internal::DrugsBasePlugin</name>
+    <message>
+        <location filename="../../plugins/drugsbaseplugin/drugsbaseplugin.cpp" line="82"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbaseplugin.cpp" line="93"/>
+        <source>Initializing drugs database plugin...</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

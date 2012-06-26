@@ -58,7 +58,7 @@
 <context>
     <name>AccountDB::AccountBasePlugin</name>
     <message>
-        <location filename="../../plugins/accountbaseplugin/accountbaseplugin.cpp" line="86"/>
+        <location filename="../../plugins/accountbaseplugin/accountbaseplugin.cpp" line="85"/>
         <source>Initializing accountancy plugin...</source>
         <translation>Buchhaltungs-Plugin wird initialisiert...</translation>
     </message>

@@ -994,7 +994,6 @@ Voulez-vous réellement changer de mode d&apos;édition ?</translation>
     <name>DrugsWidget::Internal::DrugsPlugin</name>
     <message>
         <location filename="../../plugins/drugsplugin/drugsplugin.cpp" line="158"/>
-        <location filename="../../plugins/drugsplugin/drugsplugin.cpp" line="177"/>
         <source>Initializing drugs plugin...</source>
         <translation>Initialisation du plugin médicament...</translation>
     </message>
@@ -1065,7 +1064,7 @@ Voulez-vous réellement changer de mode d&apos;édition ?</translation>
         <translation>Imprimer les duplicatas</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="642"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="646"/>
         <source>This a note to take into account&lt;br /&gt;written in two lines...</source>
         <translation>Ceci est une note à prendre en compte&lt;br /&gt;écrite sur deux lignes...</translation>
     </message>

@@ -57,7 +57,7 @@
 <context>
     <name>Account::AccountPlugin</name>
     <message>
-        <location filename="../../plugins/accountplugin/accountplugin.cpp" line="148"/>
+        <location filename="../../plugins/accountplugin/accountplugin.cpp" line="149"/>
         <source>Initializing accountancy plugin...</source>
         <translation>Initialisation du plugin de comptabilité...</translation>
     </message>
@@ -185,7 +185,7 @@
     <message>
         <location filename="../../plugins/accountplugin/preferences/accountdatabasedefaultswidget.ui" line="104"/>
         <source>Load datapack</source>
-        <translation type="unfinished"></translation>
+        <translation>Chargement du paquet de données</translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/preferences/accountpreferences.cpp" line="249"/>
@@ -1706,17 +1706,17 @@ Autrement le résultat sera faux!</translation>
     <message>
         <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="388"/>
         <source>Extract of receipts</source>
-        <translation type="unfinished"></translation>
+        <translation>Extractions des recettes</translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="395"/>
         <source>Credit Cards</source>
-        <translation type="unfinished"></translation>
+        <translation>Cartes de crédit</translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="449"/>
         <source>TOTAL</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/receipts/controlreceiptsIO.cpp" line="73"/>
@@ -1756,7 +1756,7 @@ Autrement le résultat sera faux!</translation>
     <message>
         <location filename="../../plugins/accountplugin/receipts/controlreceipts.ui" line="75"/>
         <source>Filtering data</source>
-        <translation type="unfinished"></translation>
+        <translation>Filtrer les données</translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/receipts/controlreceipts.ui" line="98"/>
@@ -2520,17 +2520,17 @@ et choisir la valeur préférée.</translation>
     <message>
         <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="1144"/>
         <source>No value available !</source>
-        <translation type="unfinished"></translation>
+        <translation>Pas de valeur disponible !</translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="1145"/>
         <source>Please choose a value first</source>
-        <translation type="unfinished"></translation>
+        <translation>Veuillez sélectionner une valeur</translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="1239"/>
         <source> has been saved in thesaurus!</source>
-        <translation type="unfinished"></translation>
+        <translation> a été sauvegardé dans le thésaurus !</translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="699"/>

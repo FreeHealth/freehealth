@@ -178,7 +178,7 @@
 <context>
     <name>Templates::TemplatesModel</name>
     <message>
-        <location filename="../../plugins/templatesplugin/templatesmodel.cpp" line="1028"/>
+        <location filename="../../plugins/templatesplugin/templatesmodel.cpp" line="1020"/>
         <source>New</source>
         <translation type="unfinished"></translation>
     </message>

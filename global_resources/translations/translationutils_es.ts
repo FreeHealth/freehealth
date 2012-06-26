@@ -1102,6 +1102,31 @@ Place: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../libs/translationutils/trans_datetime.h" line="138"/>
+        <source>Show long date format</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_datetime.h" line="139"/>
+        <source>Show short date format</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_datetime.h" line="140"/>
+        <source>Show numeric date format</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_datetime.h" line="141"/>
+        <source>Enter a date</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_datetime.h" line="142"/>
+        <source>Enter a date (format: %1)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../libs/translationutils/trans_spashandupdate.h" line="44"/>
         <source>Starting application at %1</source>
         <translation type="unfinished"></translation>

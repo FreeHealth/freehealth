@@ -83,7 +83,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfmainwindowplugin/mainwindow.cpp" line="398"/>
+        <location filename="../../plugins/fmfmainwindowplugin/mainwindow.cpp" line="401"/>
         <source>Choose a patient file directory</source>
         <translation type="unfinished"></translation>
     </message>

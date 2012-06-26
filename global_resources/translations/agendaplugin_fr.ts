@@ -12,9 +12,19 @@
 <context>
     <name>Agenda::AgendaPlugin</name>
     <message>
-        <location filename="../../plugins/agendaplugin/agendaplugin.cpp" line="113"/>
+        <location filename="../../plugins/agendaplugin/agendaplugin.cpp" line="115"/>
         <source>Initializing agenda plugin...</source>
         <translation>Initialisation du plugin agenda...</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/agendaplugin/agendaplugin.cpp" line="122"/>
+        <source>Creating agenda base...</source>
+        <translation>Création de la base de données agenda...</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/agendaplugin/agendaplugin.cpp" line="122"/>
+        <source>Please wait</source>
+        <translation>Veuillez patienter</translation>
     </message>
 </context>
 <context>
@@ -165,7 +175,7 @@
     </message>
     <message>
         <location filename="../../plugins/agendaplugin/usercalendarviewer.ui" line="97"/>
-        <source>Search params</source>
+        <source>Search parameters</source>
         <translation>Paramètres de recherche</translation>
     </message>
     <message>
@@ -283,92 +293,82 @@ default agenda duration time (in minutes)</extracomment>
     </message>
     <message>
         <location filename="../../plugins/agendaplugin/usercalendareditor.ui" line="20"/>
-        <location filename="../../plugins/agendaplugin/usercalendareditor.ui" line="61"/>
+        <location filename="../../plugins/agendaplugin/usercalendareditor.ui" line="67"/>
         <source>Description</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendareditor.ui" line="32"/>
+        <location filename="../../plugins/agendaplugin/usercalendareditor.ui" line="103"/>
         <source>Label</source>
         <translation>Libellé</translation>
     </message>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendareditor.ui" line="90"/>
+        <location filename="../../plugins/agendaplugin/usercalendareditor.ui" line="48"/>
         <source>Icon</source>
         <translation>Icône</translation>
     </message>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendareditor.ui" line="113"/>
+        <location filename="../../plugins/agendaplugin/usercalendareditor.ui" line="90"/>
         <source>Select</source>
         <translation>Sélectionner</translation>
     </message>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendareditor.ui" line="127"/>
+        <location filename="../../plugins/agendaplugin/usercalendareditor.ui" line="134"/>
         <source>General</source>
         <translation>Général</translation>
     </message>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendareditor.ui" line="142"/>
+        <location filename="../../plugins/agendaplugin/usercalendareditor.ui" line="149"/>
         <source>Default event duration</source>
         <translation>Durée par défaut des rendez-vous</translation>
     </message>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendareditor.ui" line="162"/>
-        <source>minutes</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/agendaplugin/usercalendareditor.ui" line="169"/>
+        <location filename="../../plugins/agendaplugin/usercalendareditor.ui" line="172"/>
         <source>Default location</source>
         <translation>Localisation par défaut</translation>
     </message>
     <message>
+        <location filename="../../plugins/agendaplugin/usercalendareditor.ui" line="156"/>
+        <source> minutes</source>
+        <translation>minutes</translation>
+    </message>
+    <message>
         <location filename="../../plugins/agendaplugin/usercalendareditor.ui" line="182"/>
-        <source>is the default agenda</source>
-        <translation>est l&apos;agenda par défaut</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/agendaplugin/usercalendareditor.ui" line="189"/>
-        <source>Default agenda</source>
-        <translation>Agenda par défaut</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/agendaplugin/usercalendareditor.ui" line="196"/>
-        <source>is private</source>
-        <translation>est privé</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/agendaplugin/usercalendareditor.ui" line="203"/>
-        <source>Privacy</source>
-        <translation>Vie privée</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/agendaplugin/usercalendareditor.ui" line="210"/>
         <source>Password</source>
         <translation>Mot de passe</translation>
     </message>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendareditor.ui" line="221"/>
+        <location filename="../../plugins/agendaplugin/usercalendareditor.ui" line="195"/>
+        <source>Agenda is the default agenda</source>
+        <translation>est l&apos;agenda par défault</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/agendaplugin/usercalendareditor.ui" line="202"/>
+        <source>Agenda is private</source>
+        <translation>L&apos;agenda est privé</translation>
+    </message>
+    <message>
+        <location filename="../../plugins/agendaplugin/usercalendareditor.ui" line="210"/>
         <source>Shared</source>
         <translation>Partagé</translation>
     </message>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendareditor.ui" line="247"/>
+        <location filename="../../plugins/agendaplugin/usercalendareditor.ui" line="236"/>
         <source>Availabilities</source>
         <translation>Disponibilités</translation>
     </message>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendareditor.ui" line="272"/>
+        <location filename="../../plugins/agendaplugin/usercalendareditor.ui" line="261"/>
         <source>Add</source>
         <translation>Ajouter</translation>
     </message>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendareditor.ui" line="282"/>
+        <location filename="../../plugins/agendaplugin/usercalendareditor.ui" line="271"/>
         <source>Clear</source>
         <translation>Effacer</translation>
     </message>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendareditor.ui" line="289"/>
+        <location filename="../../plugins/agendaplugin/usercalendareditor.ui" line="278"/>
         <source>Remove</source>
         <translation>Enlever</translation>
     </message>

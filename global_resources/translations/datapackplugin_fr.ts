@@ -12,24 +12,24 @@
 <context>
     <name>DataPackPlugin::Internal::DataPackPluginIPlugin</name>
     <message>
-        <location filename="../../plugins/datapackplugin/datapackplugin.cpp" line="134"/>
+        <location filename="../../plugins/datapackplugin/datapackplugin.cpp" line="135"/>
         <source>Initializing DataPackPlugin...</source>
         <translation>Initialisation du gestionnaire des paquets de données...</translation>
     </message>
     <message>
-        <location filename="../../plugins/datapackplugin/datapackplugin.cpp" line="162"/>
+        <location filename="../../plugins/datapackplugin/datapackplugin.cpp" line="163"/>
         <source>Trying to set the default datapack servers using file %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Essaie de définir les serveurs par défaut avec le fichier %1</translation>
     </message>
     <message>
-        <location filename="../../plugins/datapackplugin/datapackplugin.cpp" line="175"/>
+        <location filename="../../plugins/datapackplugin/datapackplugin.cpp" line="176"/>
         <source>Unable to add default server %1 (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible d&apos;ajouter le serveur par défaut %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../plugins/datapackplugin/datapackplugin.cpp" line="177"/>
+        <location filename="../../plugins/datapackplugin/datapackplugin.cpp" line="178"/>
         <source>Adding default server %1 (%2)</source>
-        <translation type="unfinished"></translation>
+        <translation>Ajout du serveur par défaut %1 (%2)</translation>
     </message>
 </context>
 <context>

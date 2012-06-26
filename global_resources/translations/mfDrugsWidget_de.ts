@@ -988,7 +988,6 @@ Do you really want to change the editing mode?</source>
     <name>DrugsWidget::Internal::DrugsPlugin</name>
     <message>
         <location filename="../../plugins/drugsplugin/drugsplugin.cpp" line="158"/>
-        <location filename="../../plugins/drugsplugin/drugsplugin.cpp" line="177"/>
         <source>Initializing drugs plugin...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1059,7 +1058,7 @@ Do you really want to change the editing mode?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="642"/>
+        <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="646"/>
         <source>This a note to take into account&lt;br /&gt;written in two lines...</source>
         <translation type="unfinished"></translation>
     </message>

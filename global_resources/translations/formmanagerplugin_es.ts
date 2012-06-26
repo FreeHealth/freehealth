@@ -108,22 +108,32 @@ Answering &apos;No&apos; will cause definitve data lose.</source>
 <context>
     <name>Form::Internal::FirstRunFormManagerWizardPage</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/firstrunformmanager.cpp" line="51"/>
+        <location filename="../../plugins/formmanagerplugin/firstrunformmanager.cpp" line="52"/>
         <source>General patient form selection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/firstrunformmanager.cpp" line="52"/>
+        <location filename="../../plugins/formmanagerplugin/firstrunformmanager.cpp" line="53"/>
         <source>You can define your own patient form file, or use the default one. Select it from here. All patients will have the same forms, but you can add subforms anywhere in the form.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/firstrunformmanager.cpp" line="74"/>
+        <location filename="../../plugins/formmanagerplugin/firstrunformmanager.cpp" line="61"/>
+        <source>Reading available forms</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formmanagerplugin/firstrunformmanager.cpp" line="61"/>
+        <source>Please wait</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formmanagerplugin/firstrunformmanager.cpp" line="84"/>
         <source>Please one (and only one) form for your default patient file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/firstrunformmanager.cpp" line="75"/>
+        <location filename="../../plugins/formmanagerplugin/firstrunformmanager.cpp" line="85"/>
         <source>You must select one file to be used by default.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -140,8 +150,8 @@ Answering &apos;No&apos; will cause definitve data lose.</source>
 <context>
     <name>Form::Internal::FormManagerPlugin</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formmanagerplugin.cpp" line="103"/>
-        <location filename="../../plugins/formmanagerplugin/formmanagerplugin.cpp" line="119"/>
+        <location filename="../../plugins/formmanagerplugin/formmanagerplugin.cpp" line="105"/>
+        <location filename="../../plugins/formmanagerplugin/formmanagerplugin.cpp" line="121"/>
         <source>Initializing form manager plugin...</source>
         <translation type="unfinished"></translation>
     </message>

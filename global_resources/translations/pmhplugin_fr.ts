@@ -260,7 +260,7 @@
         <location filename="../../plugins/pmhplugin/pmhcategorymodel.cpp" line="1224"/>
         <location filename="../../plugins/pmhplugin/pmhcategorymodel.cpp" line="1234"/>
         <source>Patient PMHx synthesis</source>
-        <translation type="unfinished"></translation>
+        <translation>Synthèse des ATCD du patient</translation>
     </message>
 </context>
 <context>
