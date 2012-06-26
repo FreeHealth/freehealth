@@ -42,6 +42,8 @@
 #include <coreplugin/isettings.h>
 #include <coreplugin/constants_tokensandsettings.h>
 #include <coreplugin/ipatient.h>
+#include <coreplugin/itheme.h>
+#include <coreplugin/constants_icons.h>
 
 #include <extensionsystem/pluginmanager.h>
 #include <coreplugin/iphotoprovider.h>
@@ -54,6 +56,7 @@
 #include <QDataWidgetMapper>
 #include <QDir>
 #include <QFileDialog>
+#include <QDateEdit>
 
 #include <QDebug>
 
@@ -61,6 +64,7 @@ using namespace Patients;
 using namespace Trans::ConstantTranslations;
 
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
+static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 static inline Patients::Internal::PatientBase *patientBase() {return Patients::Internal::PatientBase::instance();}
 
 //TODO: Users can add pages in the identity widget using the XMLForm --> create a <Form> named \e Identity
@@ -136,7 +140,11 @@ public:
         } else {
             editUi = new Ui::IdentityWidget;
             editUi->setupUi(q);
+
             //editUi->dob->setDisplayFormat(tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR));
+            editUi->dob->setDateIcon(theme()->iconFullPath(Core::Constants::ICONDATE));
+            editUi->dob->setClearIcon(theme()->iconFullPath(Core::Constants::ICONCLEAR));
+
             editUi->genderCombo->addItems(genders());
             editUi->titleCombo->addItems(titles());
             Utils::UpperCaseValidator *val = new Utils::UpperCaseValidator(q);
