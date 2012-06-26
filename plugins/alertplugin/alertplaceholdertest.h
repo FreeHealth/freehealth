@@ -68,6 +68,7 @@ public:
 private:
     QPointer<QToolBar> _widget;
     QList<AlertItem> alerts;
+    QList<int> _priorities;
     QHash<QString, StaticAlertToolButton *> _buttons;
 };
 
