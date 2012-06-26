@@ -9,7 +9,8 @@ SUBDIRS = \
     texteditor \
     listview \
     usermanager \
-    zipcodes
+    zipcodes \
+    datapack
 
 core.subdir = coreplugin
 
@@ -48,3 +49,6 @@ usermanager.depends += zipcodes
 
 zipcodes.subdir = zipcodesplugin
 zipcodes.depends += core
+
+datapack.subdir = datapackplugin
+datapack.depends += core
