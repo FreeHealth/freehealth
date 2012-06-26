@@ -36,30 +36,32 @@
  */
 
 #include "birthdayedit.h"
-#include <QDebug>
 
-#include <translationutils/constants.h>
 #include <utils/datevalidator.h>
-//#include "coreplugin/icore.h"
-//#include "coreplugin/itheme.h"
-//#include "coreplugin/constants_icons.h"
+#include <translationutils/constants.h>
+#include <translationutils/trans_datetime.h>
 
-
-//static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
+#include <QAction>
+#include <QToolButton>
+#include <QDebug>
 
 using namespace Utils;
 using namespace Trans::ConstantTranslations;
 
 /** \brief Default constructor */
 BirthDayEdit::BirthDayEdit(QWidget *parent) :
-    QButtonLineEdit(parent)
+    QButtonLineEdit(parent),
+    _rightButton(0), _leftButton(0),
+    aShortDisplay(0), aLongDisplay(0), aNumericDisplay(0)
 {
     init();
 }
 
 /** \brief Additional constructor that initializes the widget with given date */
 BirthDayEdit::BirthDayEdit(const QDate &date, QWidget *parent) :
-    QButtonLineEdit(parent)
+    QButtonLineEdit(parent),
+    _rightButton(0), _leftButton(0),
+    aShortDisplay(0), aLongDisplay(0), aNumericDisplay(0)
 {
     init(date);
 }
@@ -77,13 +79,44 @@ void BirthDayEdit::init(const QDate& date, const QDate& maximumDate, const QDate
 
     setValidator(new DateValidator(this));
 
-    m_toolButton = new QToolButton(this);
-    m_toolButton->setFocusPolicy(Qt::ClickFocus);
-    setRightButton(m_toolButton);
-    m_toolButton->hide();
-//    m_button->setIcon(Core::ICore::instance()->theme()->icon(Core::Constants::ICONOK));
-
     connect(this, SIGNAL(editingFinished()), this, SLOT(setDisplayedDateString()));
+}
+
+void BirthDayEdit::setClearIcon(const QString &fullAbsPath)
+{
+    if (!_rightButton) {
+        _rightButton = new QToolButton(this);
+        _rightButton->setFocusPolicy(Qt::ClickFocus);
+        setRightButton(_rightButton);
+        connect(_rightButton, SIGNAL(clicked()), this, SLOT(clear()));
+    }
+    _rightButton->setIcon(QIcon(fullAbsPath));
+}
+
+void BirthDayEdit::setDateIcon(const QString &fullAbsPath)
+{
+    if (!_leftButton) {
+        _leftButton = new QToolButton(this);
+        _leftButton->setFocusPolicy(Qt::ClickFocus);
+        _leftButton->setPopupMode(QToolButton::InstantPopup);
+        // Create the menu
+        aShortDisplay = new QAction(this);
+        aLongDisplay = new QAction(this);
+        aNumericDisplay = new QAction(this);
+        _leftButton->addAction(aLongDisplay);
+        _leftButton->addAction(aShortDisplay);
+        _leftButton->addAction(aNumericDisplay);
+        _leftButton->setDefaultAction(aLongDisplay);
+        _leftButton->setToolButtonStyle(Qt::ToolButtonIconOnly);
+        retranslate();
+        _leftButton->resize(20,20);
+        setLeftButton(_leftButton);
+        connect(_leftButton, SIGNAL(triggered(QAction*)), this, SLOT(formatActionTriggered(QAction*)));
+    }
+    _leftButton->setIcon(QIcon(fullAbsPath));
+    aShortDisplay->setIcon(QIcon(fullAbsPath));
+    aLongDisplay->setIcon(QIcon(fullAbsPath));
+    aNumericDisplay->setIcon(QIcon(fullAbsPath));
 }
 
 /** \brief sets the internal date of the widget to date */
@@ -125,12 +158,12 @@ void BirthDayEdit::focusOutEvent(QFocusEvent *event) {
     QString tmpText = text();
 
     if (validator()->validate(tmpText, pos) == QValidator::Acceptable) {
-        setStyleSheet("");
+        setExtraStyleSheet("");
 
     } else { // QValidator::Intermediate, QValidator::Invalid
 
         //TODO: let color be a global constant, maybe in theme?
-        setStyleSheet(QString("background: %1;").arg("#f66"));
+        setExtraStyleSheet(QString("background: %1").arg("#f66"));
     }
     QButtonLineEdit::focusOutEvent(event);
 }
@@ -170,7 +203,7 @@ void BirthDayEdit::setDateString(const QString& dateString)
             Q_EMIT dateChanged(m_date);
         updateDisplayText();
         //FIXME: buggy toolbutton
-        m_toolButton->show();
+//        m_toolButton->show();
     }
 }
 
@@ -186,10 +219,44 @@ void BirthDayEdit::updateDisplayText()
     }
 }
 
+/** Private slot */
+void BirthDayEdit::formatActionTriggered(QAction *a)
+{
+    if (a==aLongDisplay) {
+    } else if (a==aShortDisplay) {
+    } else if (a==aNumericDisplay) {
+    }
+}
 
+/** Clear the place holder. */
 void BirthDayEdit::updatePlaceHolder()
 {
     // TODO: add date format string
     setPlaceholderText(tr("Enter a date (format: %1)").arg("ADD FORMAT"));
     setToolTip(tr("Enter a date (format: %1)").arg("ADD FORMAT"));
+}
+
+/** Retranslate UI. */
+void BirthDayEdit::retranslate()
+{
+    if (aLongDisplay) {
+        aLongDisplay->setText(tkTr(Trans::Constants::SHOW_LONG_FORMAT));
+        aLongDisplay->setToolTip(aLongDisplay->text());
+    }
+    if (aShortDisplay) {
+        aShortDisplay->setText(tkTr(Trans::Constants::SHOW_SHORT_FORMAT));
+        aShortDisplay->setToolTip(aLongDisplay->text());
+    }
+    if (aNumericDisplay) {
+        aNumericDisplay->setText(tkTr(Trans::Constants::SHOW_NUMERIC_FORMAT));
+        aNumericDisplay->setToolTip(aLongDisplay->text());
+    }
+}
+
+void BirthDayEdit::changeEvent(QEvent *e)
+{
+    if (e->type()==QEvent::LanguageChange) {
+        retranslate();
+    }
+    QButtonLineEdit::changeEvent(e);
 }

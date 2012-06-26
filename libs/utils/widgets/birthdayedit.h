@@ -21,19 +21,29 @@
 /***************************************************************************
  *   Main developers : Christian A. Reiter, <christian.a.reiter@gmail.com> *
  *   Contributors :                                                        *
- *       NAME <MAIL@ADDRESS.COM>                                           *
+ *       Eric MAEKER <eric.maeker@gmail.com>                               *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #ifndef BIRTHDAYEDIT_H
 #define BIRTHDAYEDIT_H
 
-#include "qbuttonlineedit.h"
+#include <utils/widgets/qbuttonlineedit.h>
 #include <utils/global_exporter.h>
 
 #include <QDate>
-#include <QDateTimeEdit>
-#include <QKeyEvent>
-#include <QToolButton>
+
+QT_BEGIN_NAMESPACE
+class QAction;
+class QToolButton;
+class QString;
+QT_END_NAMESPACE
+
+/**
+ * \file birthdayedit.h
+ * \author Christian A. Reiter, <christian.a.reiter@gmail.com>, Eric MAEKER <eric.maeker@gmail.com>
+ * \version 0.7.5
+ * \date 26 Jun 2012
+*/
 
 namespace Utils {
 
@@ -48,32 +58,38 @@ public:
     explicit BirthDayEdit(const QDate & date, QWidget *parent = 0);
     ~BirthDayEdit();
 
+    // View options
+    void setClearIcon(const QString &fullAbsPath);
+    void setDateIcon(const QString &fullAbsPath);
 
     QDate date() const;
-//    void setDateFormats(QString formats);
+
+public Q_SLOTS:
+    void clear();
+    void setDisplayedDateString();
+    void setDateString(const QString& dateString);
+    void setDate(const QDate &date);
+
+Q_SIGNALS:
+    void dateChanged(const QDate &date);
+
+protected Q_SLOTS:
+    void updateDisplayText();
+    void formatActionTriggered(QAction*);
 
 private:
     void init(const QDate& date = QDate(), const QDate& maximumDate = QDate(), const QDate& minimumDate = QDate());
     void updatePlaceHolder();
     void focusOutEvent(QFocusEvent *event);
-
-signals:
-    void dateChanged(const QDate &date);
-
-public Q_SLOTS:
-    virtual void clear();
-    void setDisplayedDateString();
-    void setDateString(const QString& dateString);
-    void setDate(const QDate &date);
-
-protected Q_SLOTS:
-    void updateDisplayText();
+    void retranslate();
+    void changeEvent(QEvent *e);
 
 private:
     QDate m_date;
     QDate m_maximumDate;
     QDate m_minimumDate;
-    QToolButton *m_toolButton;
+    QToolButton *_rightButton, *_leftButton;
+    QAction *aShortDisplay, *aLongDisplay, *aNumericDisplay;
 };
 
 } // end Utils
