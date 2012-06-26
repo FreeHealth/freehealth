@@ -54,7 +54,6 @@ UserIdentityAndLoginPage::UserIdentityAndLoginPage(QWidget *parent) :
     ui(new Ui::UserIdentityAndLoginPage)
 {
     ui->setupUi(this);
-    qWarning() << "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
 
     ui->cbLanguage->setDisplayMode(Views::LanguageComboBox::AvailableTranslations);
     ui->cbLanguage->setCurrentLanguage(QLocale().language());
@@ -62,6 +61,8 @@ UserIdentityAndLoginPage::UserIdentityAndLoginPage(QWidget *parent) :
     Utils::UpperCaseValidator *val = new Utils::UpperCaseValidator(this);
     ui->leName->setValidator(val);
     ui->leSecondName->setValidator(val);
+    Utils::FirstLetterUpperCaseValidator *firstval = new Utils::FirstLetterUpperCaseValidator(this);
+    ui->leFirstName->setValidator(firstval);
 
     connect(ui->cbLanguage, SIGNAL(currentLanguageChanged(QLocale::Language)), Core::Translators::instance(), SLOT(changeLanguage(QLocale::Language)));
 
