@@ -59,6 +59,7 @@ public:
     void setRightButton(QToolButton *button);
     void setRoundedCorners();
     void setTranslatableExtraToolTip(const QString &trContext, const QString &translatable);
+    void setExtraToolTip(const QString &nonTranslatable);
     void setExtraStyleSheet(const QString &extraCss);
     void clearExtraStyleSheet();
 

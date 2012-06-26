@@ -114,9 +114,21 @@ public:
                     .arg(cleanString(_leftButton->defaultAction()->text()))
                     .arg(QApplication::translate("Utils::QButtonLineEdit", "(press Alt up/down cursor to cycle)"));
             q->setPlaceholderText(t);
-            if (!_extraToolTipContext.isEmpty() && !_extraToolTip.isEmpty()) {
-                t.prepend(QString("%1<br />").arg(QApplication::translate(_extraToolTipContext.toUtf8(), _extraToolTip.toUtf8())));
+
+            QString e;
+            if (!_extraToolTipContext.isEmpty() && !_extraToolTipTr.isEmpty()) {
+                e = QString("%1<br />").arg(QApplication::translate(_extraToolTipContext.toUtf8(), _extraToolTipTr.toUtf8()));
             }
+
+            if (!_extraToolTipNonTr.isEmpty())
+                e += QString("%1<br />").arg(_extraToolTipNonTr);
+
+            t = t.replace(" ", "&nbsp;");
+            if (!e.contains("<br />"))
+                t = QString("<p>%1%2</p>").arg(e, t.replace(" ", "&nbsp;"));
+            else
+                t.prepend(e);
+
             q->setToolTip(t);
         }
     }
@@ -124,7 +136,7 @@ public:
 public:
     QToolButton *_leftButton;
     QToolButton *_rightButton;
-    QString _extraToolTipContext, _extraToolTip, _extraCss;
+    QString _extraToolTipContext, _extraToolTipTr, _extraToolTipNonTr, _extraCss;
     QTimer *_timer;
     bool _delayed;
     int _rightPadding, _leftPadding;
@@ -326,7 +338,12 @@ void QButtonLineEdit::setRoundedCorners()
 void QButtonLineEdit::setTranslatableExtraToolTip(const QString &trContext, const QString &translatable)
 {
     d->_extraToolTipContext = trContext;
-    d->_extraToolTip = translatable;
+    d->_extraToolTipTr = translatable;
+}
+
+void QButtonLineEdit::setExtraToolTip(const QString &nonTranslatable)
+{
+    d->_extraToolTipNonTr = nonTranslatable;
 }
 
 void QButtonLineEdit::setExtraStyleSheet(const QString &extraCss)
