@@ -150,7 +150,7 @@ public:
             editUi->secondName->setValidator(val);
             editUi->photoButton->setDefault(false);
             editUi->photoButton->setAutoDefault(false);
-            Utils::FirstLetterUpperCaseValidator *firstletterval = new Utils::FirstLetterUpperCaseValidator(q);
+            Utils::CapitalizationValidator *firstletterval = new Utils::CapitalizationValidator(q);
             editUi->firstname->setValidator(firstletterval);
 
             zipCompleter = new ZipCodes::ZipCountryCompleters(q);
