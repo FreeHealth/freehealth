@@ -381,6 +381,9 @@ public:
     bool operator==(const AlertItem &other) const;
     bool operator!=(const AlertItem &other) const;
 
+    static bool priorityLowerThan(const AlertItem &item1, const AlertItem &item2);
+    static bool categoryLowerThan(const AlertItem &item1, const AlertItem &item2);
+
     QString toXml() const;
     static AlertItem fromXml(const QString &xml);
 
