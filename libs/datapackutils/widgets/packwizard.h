@@ -102,6 +102,7 @@ namespace Internal {
 
 class PackPage : public QWizardPage
 {
+    Q_OBJECT
 public:
     PackPage(QWidget *parent = 0): QWizardPage(parent) {}
 
@@ -110,6 +111,7 @@ public:
 
 class PackIntroPage : public PackPage
 {
+    Q_OBJECT
 public:
     PackIntroPage(QWidget *parent = 0);
 
@@ -220,6 +222,7 @@ private:
 
 class PackEndPage : public PackPage
 {
+    Q_OBJECT
 public:
     PackEndPage(QWidget *parent = 0);
 };
