@@ -47,12 +47,9 @@ DateValidator::DateValidator(QObject *parent) :
     m_dateFormatList = tr("ddMMyy,ddMMyyyy").simplified().split(",", QString::SkipEmptyParts);
     m_lastValidFormat = QString();
 
-//    // always also use the validator locale's default formats
-//    m_dateFormatList.append(locale().dateFormat(QLocale::ShortFormat));
-//    m_dateFormatList.append(locale().dateFormat(QLocale::NarrowFormat));
-
     // and then the FMF editor default format
-    addDateFormat(tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR));
+    QRegExp withSep = QRegExp(QString("[%1]*").arg(::SEPARATORS));
+    addDateFormat(tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR).remove(withSep));
 }
 
 /** \brief validates the input string with custom date formats
@@ -67,7 +64,7 @@ QValidator::State DateValidator::validate(QString &input, int &pos) const
 
     // input contains only valid chars
     if (!QRegExp(QString("[%10-9]*").arg(::SEPARATORS)).exactMatch(input)) {
-        qDebug() << "NON VALID CHAR" << input;
+//        qDebug() << "NON VALID CHAR" << input;
         return QValidator::Invalid;
     }
 
@@ -76,7 +73,7 @@ QValidator::State DateValidator::validate(QString &input, int &pos) const
     foreach(const QString &format, m_dateFormatList) {
         _currentDate = QDate::fromString(input, format);
         if (_currentDate.isValid()) {
-            qDebug() << "Date conversion succeded:" << input;
+//            qDebug() << "Date conversion succeded:" << input;
             return QValidator::Acceptable;
         }
     }
@@ -85,17 +82,21 @@ QValidator::State DateValidator::validate(QString &input, int &pos) const
     // check if the user enters digits or .-/
     // everything else is discouraged
     if(QRegExp("[-./,;: 0-9]*").exactMatch(input)) {
-        qDebug() << "probable date format with separators:" << input;
+//        qDebug() << "probable date format with separators:" << input;
         return QValidator::Intermediate;
     }
 
     // if nothing of the above was possible, the input string is mess.
-    qDebug() << "invalid date format:" << input;
+//    qDebug() << "invalid date format:" << input;
     return QValidator::Invalid;
 }
 
-/**
- * \brief Returns the current editing string converted in a QDate. If input is not valid, the returned QDate will be invalid too. */
+void DateValidator::setDate(const QDate &date)
+{
+    _currentDate = date;
+}
+
+/** Returns the current editing string converted in a QDate. If input is not valid, the returned QDate will be invalid too. */
 QDate DateValidator::date() const
 {
     return _currentDate;

@@ -42,6 +42,7 @@ public:
     State validate(QString &input, int &pos) const;
     void fixup(QString &input) const;
 
+    void setDate(const QDate &date);
     QDate date() const;
 
     void addDateFormat(const QString &format);
@@ -51,7 +52,6 @@ private:
     QStringList m_dateFormatList;
     QString m_lastValidFormat;
     mutable QDate _currentDate;
-
 };
 } // end Utils
 #endif // DATEVALIDATOR_H
