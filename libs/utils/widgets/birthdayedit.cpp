@@ -81,7 +81,7 @@ void BirthDayEdit::init(const QDate& date, const QDate& maximumDate, const QDate
     _validator = new DateValidator(this);
     setValidator(_validator);
 
-    connect(this, SIGNAL(editingFinished()), this, SLOT(setDisplayedDateString()));
+    _defaultEditingFormat = tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR);
 }
 
 void BirthDayEdit::setClearIcon(const QString &fullAbsPath)
@@ -122,10 +122,11 @@ void BirthDayEdit::setDateIcon(const QString &fullAbsPath)
 }
 
 /** \brief sets the internal date of the widget to date */
-void BirthDayEdit::setDate(const QDate& date)
+void BirthDayEdit::setDate(const QDate &date)
 {
     QDate oldDate = m_date;
     m_date = date;
+    _validator->setDate(date);
     if (oldDate != date)
         Q_EMIT dateChanged(m_date);
     updateDisplayText();
@@ -135,7 +136,7 @@ void BirthDayEdit::setDate(const QDate& date)
  *  \return a QDate() */
 QDate BirthDayEdit::date() const
 {
-    return QDate(m_date);
+    return m_date;
 }
 
 /** \brief sets the internal date of the widget to NULL
@@ -147,6 +148,7 @@ void BirthDayEdit::clear()
         m_date = QDate();
         Q_EMIT dateChanged(m_date);
     }
+    _validator->setDate(m_date);
     setText("");
     updatePlaceHolder();
 }
@@ -155,26 +157,32 @@ void BirthDayEdit::clear()
  *
  *  When widget focus is lost with a date string that can't be interpreted by the
  *  validator as a valid date, the css is changed, e.g. red background */
-void BirthDayEdit::focusOutEvent(QFocusEvent *event) {
-    int pos = 0;
-    QString tmpText = text();
-
-    if (_validator->date().isValid()) {
-        setExtraStyleSheet("");
+void BirthDayEdit::focusOutEvent(QFocusEvent *event)
+{
+    // switching to displayMode
+    setValidator(0);
+    m_date = _validator->date();
+    if (m_date.isValid()) {
+        clearExtraStyleSheet();
     } else {
         //TODO: let color be a global constant, maybe in theme?
         setExtraStyleSheet(QString("background: %1").arg("#f66"));
     }
+    updateDisplayText();
     QButtonLineEdit::focusOutEvent(event);
 }
 
-/** \brief Convenience slot that sets the internal date to the interpreted
- *  value taken from the displayed string in the widget.
- *
- *  It just calls \sa setDateString(). */
-void BirthDayEdit::setDisplayedDateString()
+void BirthDayEdit::focusInEvent(QFocusEvent *event)
 {
-    setDateString(text());
+    // switching to editMode
+    if (m_date.isValid()) {
+        setText(m_date.toString(_defaultEditingFormat));
+    } else {
+        setText("");
+    }
+    setValidator(_validator);
+    _validator->setDate(m_date);
+    QButtonLineEdit::focusInEvent(event);
 }
 
 /** \brief sets the internal date of the widget to the given string
@@ -183,29 +191,36 @@ void BirthDayEdit::setDisplayedDateString()
  * the date field is set to NULL. This method is called when a valid date string was
  * entered and the user presses Enter or the widget looses focus.
  */
-void BirthDayEdit::setDateString(const QString& dateString)
+void BirthDayEdit::setDateString(QString dateString)
 {
-    QDate tmpDate;
-    QDate oldDate = m_date;
-    QString tmpDateString = dateString;
-
+    // inform validator
     int pos = 0;
-
-    if (_validator->date().isValid()) {
-        // try to convert the QString into a QDate using the built-in formats
-        m_date = _validator->date();
-        if (m_date != oldDate)
+    _validator->validate(dateString, pos);
+    QDate previousDate = m_date;
+    m_date = _validator->date();
+    if (m_date.isValid()) {
+        if (m_date != previousDate)
             Q_EMIT dateChanged(m_date);
-        updateDisplayText();
     }
+    updateDisplayText();
 }
 
 /** \brief updates the displayText with the internal date using the default FMF date format */
 void BirthDayEdit::updateDisplayText()
 {
-    // was there a valid date saved?
+    qWarning() << "updateDisplayText()" << hasFocus() << m_date.isValid();
+    // Edit mode -> do nothing
+    if (hasFocus()) {
+        return;
+    }
+
+    // Display mode
     if (m_date.isValid()) {
-        setText(m_date.toString(tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR)));
+        if (_leftButton) {
+            setText(m_date.toString(_leftButton->defaultAction()->data().toString()));
+        } else {
+            setText(m_date.toString(tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR)));
+        }
     } else {
         // no valid date saved, maybe NULL
         clear();
@@ -215,17 +230,15 @@ void BirthDayEdit::updateDisplayText()
 /** Private slot */
 void BirthDayEdit::formatActionTriggered(QAction *a)
 {
-    if (a==aLongDisplay) {
-    } else if (a==aShortDisplay) {
-    } else if (a==aNumericDisplay) {
-    }
+    Q_UNUSED(a);
+    updateDisplayText();
 }
 
 /** Clear the place holder. */
 void BirthDayEdit::updatePlaceHolder()
 {
-    setPlaceholderText(tkTr(Trans::Constants::ENTER_DATE_FORMAT_1).arg(_validator->acceptedDateFormat().join(";")));
-    setExtraToolTip(tkTr(Trans::Constants::ENTER_DATE_FORMAT_1).arg(_validator->acceptedDateFormat().join(";")));
+    setPlaceholderText(tkTr(Trans::Constants::ENTER_DATE_FORMAT_1).arg(_validator->acceptedDateFormat().join("; ")));
+    setExtraToolTip(tkTr(Trans::Constants::ENTER_DATE_FORMAT_1).arg(_validator->acceptedDateFormat().join("; ")));
 }
 
 /** Retranslate UI. */

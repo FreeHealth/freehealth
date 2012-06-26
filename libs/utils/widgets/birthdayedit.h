@@ -63,12 +63,13 @@ public:
     void setClearIcon(const QString &fullAbsPath);
     void setDateIcon(const QString &fullAbsPath);
 
+    void setDefaultEditingDateFormat(const QString &format);
+
     QDate date() const;
 
 public Q_SLOTS:
     void clear();
-    void setDisplayedDateString();
-    void setDateString(const QString& dateString);
+    void setDateString(QString dateString);
     void setDate(const QDate &date);
 
 Q_SIGNALS:
@@ -82,6 +83,7 @@ private:
     void init(const QDate& date = QDate(), const QDate& maximumDate = QDate(), const QDate& minimumDate = QDate());
     void updatePlaceHolder();
     void focusOutEvent(QFocusEvent *event);
+    void focusInEvent(QFocusEvent *event);
     void retranslate();
     void changeEvent(QEvent *e);
 
@@ -92,6 +94,7 @@ private:
     QToolButton *_rightButton, *_leftButton;
     QAction *aShortDisplay, *aLongDisplay, *aNumericDisplay;
     DateValidator *_validator;
+    QString _defaultEditingFormat;
 };
 
 } // end Utils
