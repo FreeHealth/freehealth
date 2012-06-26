@@ -111,6 +111,8 @@ public:
         params.insert(Core::Constants::CL_PatientGender,     "--gender");
         params.insert(Core::Constants::CL_DateOfBirth,       "--dateofbirth");
         params.insert(Core::Constants::CL_BlockPatientDatas, "--blockpatientdatas");
+        params.insert(Core::Constants::CL_DbHost, "--dbhost");
+        params.insert(Core::Constants::CL_DbPort, "--dbport");
         params.insert(CommandLine::Chrono,               "--chrono");
         params.insert(CommandLine::ConfigFile,           "--config");
         params.insert(CommandLine::RunningUnderWine,     "--wine");
@@ -156,6 +158,8 @@ public:
             case Core::Constants::CL_PatientFirstname :  value.insert(Core::Constants::CL_PatientFirstname, a.mid(a.indexOf("=")+1).remove("\"")); break;
             case Core::Constants::CL_PatientGender :     value.insert(Core::Constants::CL_PatientGender, a.mid(a.indexOf("=")+1).remove("\"")); break;
             case Core::Constants::CL_DateOfBirth :       value.insert(Core::Constants::CL_DateOfBirth, a.mid(a.indexOf("=")+1).remove("\"")); break;
+            case Core::Constants::CL_DbHost :       value.insert(Core::Constants::CL_DbHost, a.mid(a.indexOf("=")+1).remove("\"")); break;
+            case Core::Constants::CL_DbPort :       value.insert(Core::Constants::CL_DbPort, a.mid(a.indexOf("=")+1).remove("\"")); break;
             case CommandLine::Chrono :            value.insert(CommandLine::Chrono, true); break;
             case CommandLine::ConfigFile :        value.insert(CommandLine::ConfigFile, a.mid(a.indexOf("=")+1).remove("\"")); break;
             case CommandLine::RunningUnderWine:   value.insert(CommandLine::RunningUnderWine, true); break;

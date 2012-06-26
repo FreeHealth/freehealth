@@ -35,8 +35,8 @@
 /**
  * \file accountwidgetmanager.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.7.1
- * \date 23 Mar 2012
+ * \version 0.7.5
+ * \date 25 Jun 2012
  * \internal
 */
 
@@ -62,6 +62,8 @@ enum FreeAccountCommandLine {
     CL_PatientGender,
     CL_DateOfBirth,
     CL_BlockPatientDatas,
+    CL_DbHost,
+    CL_DbPort,
     CL_MaxParam
 };
 

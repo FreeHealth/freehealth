@@ -24,6 +24,7 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "coreimpl.h"
+#include "freeaccount_constants.h"
 
 #include <coreplugin/settings_p.h>
 #include <coreplugin/isettings.h>
@@ -82,6 +83,7 @@ CoreImpl::CoreImpl(QObject *parent) :
         m_User(0),
         m_PadTools(0)
 {
+    setObjectName("FreeAccount::Core");
     m_Settings = new SettingsPrivate(this);
     m_Settings->setPath(ISettings::UpdateUrl, Utils::Constants::FREEACCOUNT_UPDATE_URL);
     m_Settings->setPath(ISettings::Splashscreen, Constants::FREEACCOUNT_SPLASHSCREEN);
@@ -93,6 +95,16 @@ CoreImpl::CoreImpl(QObject *parent) :
 
     m_CommandLine = new CommandLine();
     m_CommandLine->feedPatientDatas(m_Patient);
+
+    // Create db connector if command line is populated with db data
+    if (m_CommandLine->value(Core::Constants::CL_DbHost).isValid() && m_CommandLine->value(Core::Constants::CL_DbPort).isValid()) {
+        Utils::DatabaseConnector connector(m_CommandLine->value(CommandLine::UserClearLogin).toString(),
+                                           m_CommandLine->value(CommandLine::UserClearPassword).toString(),
+                                           m_CommandLine->value(Core::Constants::CL_DbHost).toString(),
+                                           m_CommandLine->value(Core::Constants::CL_DbPort).toInt());
+        connector.setDriver(Utils::Database::MySQL);
+        m_Settings->setDatabaseConnector(connector);
+    }
 
     QTime chrono;
     chrono.start();
