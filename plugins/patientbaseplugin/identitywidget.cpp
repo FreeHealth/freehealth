@@ -140,10 +140,8 @@ public:
         } else {
             editUi = new Ui::IdentityWidget;
             editUi->setupUi(q);
-
-            //editUi->dob->setDisplayFormat(tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR));
             editUi->dob->setDateIcon(theme()->iconFullPath(Core::Constants::ICONDATE));
-            editUi->dob->setClearIcon(theme()->iconFullPath(Core::Constants::ICONCLEAR));
+            editUi->dob->setClearIcon(theme()->iconFullPath(Core::Constants::ICONCLEARLINEEDIT));
 
             editUi->genderCombo->addItems(genders());
             editUi->titleCombo->addItems(titles());
