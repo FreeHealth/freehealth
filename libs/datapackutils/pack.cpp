@@ -208,6 +208,8 @@ Pack::DataType Pack::dataType() const
         m_type = Pack::UserDocuments;
     else if (type.compare("Accountancy", Qt::CaseInsensitive)==0)
         m_type = Pack::Accountancy;
+    else if (type.compare("Account", Qt::CaseInsensitive)==0)
+        m_type = Pack::Accountancy;
     else
         m_type = Pack::UnknownType;
     return Pack::DataType(m_type);
