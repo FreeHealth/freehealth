@@ -103,7 +103,7 @@ buildApp()
   # build app
   echo "*** Building "$BUNDLE_NAME" "$VERSION
   cd $SOURCES_PATH/$PROJECT
-   QMAKE_SPEC="-r -spec macx-g++ CONFIG+=release CONFIG-=debug_and_release LOWERED_APPNAME=$PROJECT"
+   QMAKE_SPEC="-r -spec macx-g++ CONFIG+=release CONFIG-=debug_and_release CONFIG-=debug LOWERED_APPNAME=$PROJECT"
    echo "   --> $QMAKE_BIN $PROJECT_FILE $QMAKE_SPEC"
 
    MAKE_STEP=`$QMAKE_BIN $PROJECT_FILE $QMAKE_SPEC`
