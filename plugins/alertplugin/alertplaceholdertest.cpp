@@ -79,11 +79,41 @@ void AlertPlaceHolderTest::clear()
 bool AlertPlaceHolderTest::addAlert(const AlertItem &alert)
 {
     if (!containsAlertUuid(alert.uuid())) {
-        alerts << alert;
         if (_widget) {
             StaticAlertToolButton *but = new StaticAlertToolButton(_widget);
             but->setAlertItem(alert);
-            _widget->addWidget(but);
+
+            // keep alert sorted by priority
+            _priorities << alert.priority()*10000000 + alerts.count();
+            alerts << alert;
+            qSort(_priorities);
+
+            int id = -1;
+            bool br = false;
+            for(int i = 0; i < _priorities.count(); ++i) {
+                int prior = _priorities.at(i) / 10000000;
+
+                if (alert.priority() < prior) {
+                    id = _priorities.at(i);
+                    br = true;
+                } else if (alert.priority() == prior) {
+                    id = _priorities.at(i);
+                }
+                if (br)
+                    break;
+            }
+
+            if (id==-1) {
+                _widget->addWidget(but);
+            } else {
+                QWidget *w = _buttons.value(alerts.at(id%10000000).uuid());
+                QAction *before = 0;
+                for(int i=0; i < _widget->actions().count(); ++i) {
+                    if (_widget->widgetForAction(_widget->actions().at(i)) == w)
+                        before = _widget->actions().at(i);
+                }
+                _widget->insertWidget(before, but);
+            }
             _buttons.insert(alert.uuid(), but);
         }
     }
@@ -119,6 +149,11 @@ bool AlertPlaceHolderTest::removeAlert(const AlertItem &alert)
                     _widget->actions().at(i)->setVisible(false);
             }
         }
+        _priorities.clear();
+        for(int i = 0; i < alerts.count(); ++i) {
+            _priorities << alerts.at(i).priority()*10000000 + i;
+        }
+        qSort(_priorities);
     }
     return true;
 }
