@@ -27,17 +27,45 @@
 #include <utils/widgets/uppercasevalidator.h>
 
 #include <QString>
+#include <QDebug>
 
 using namespace Utils;
 
-UpperCaseValidator::UpperCaseValidator(QObject *parent) : QValidator(parent) {}  // nothing to do in constructor
+UpperCaseValidator::UpperCaseValidator(QObject *parent) :
+    QValidator(parent)
+{}  // nothing to do in constructor
 
-UpperCaseValidator::~UpperCaseValidator() {}
+UpperCaseValidator::~UpperCaseValidator()
+{}
 
 QValidator::State UpperCaseValidator::validate(QString &text, int &pos) const  // PS: no UpperCase for the first letter of variables, only for class names
 {
     Q_UNUSED(pos); // pos is not needed
     text = text.toUpper();  // Uppercase the text
+    return QValidator::Acceptable;  // return "ok text is like we want it to be"
+}
+
+FirstLetterUpperCaseValidator::FirstLetterUpperCaseValidator(QObject *parent) :
+    QValidator(parent)
+{}  // nothing to do in constructor
+
+FirstLetterUpperCaseValidator::~FirstLetterUpperCaseValidator()
+{}
+
+QValidator::State FirstLetterUpperCaseValidator::validate(QString &text, int &pos) const  // PS: no UpperCase for the first letter of variables, only for class names
+{
+    int previous = pos-2;
+    if (text.isEmpty())
+        return QValidator::Acceptable;
+
+    if (previous < 0) {
+        text = text.replace(0, 1, text.at(pos-1).toUpper());
+    } else {
+        QChar prev = text.at(previous);
+        if (prev==' ' || prev=='-' || prev==',' || prev=='.' || prev==';') {
+            text = text.replace(previous+1, 1, text.at(pos-1).toUpper());
+        }
+    }
     return QValidator::Acceptable;  // return "ok text is like we want it to be"
 }
 

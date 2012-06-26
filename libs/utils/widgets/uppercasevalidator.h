@@ -57,6 +57,16 @@ public:
 
 };
 
+class UTILS_EXPORT FirstLetterUpperCaseValidator : public QValidator
+{
+public:
+    FirstLetterUpperCaseValidator(QObject *parent);
+    ~FirstLetterUpperCaseValidator();
+
+    QValidator::State validate(QString &text, int &pos) const;
+
+};
+
 }
 
 #endif // UPPERCASEVALIDATOR_H
