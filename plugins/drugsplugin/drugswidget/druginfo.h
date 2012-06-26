@@ -33,8 +33,8 @@
 /**
  * \file druginfo.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.5.0
- * \date 12 Oct 2010
+ * \version 0.7.5
+ * \date 25 Jun 2012
 */
 namespace DrugsWidget {
 namespace Internal {
@@ -52,7 +52,7 @@ public:
 protected Q_SLOTS:
     void accept();
     void reject();
-    void done(int) { QDialog::done( QDialog::result() ); }
+    void done(int r) {QDialog::done(r);}
 
 private:
     Internal::DrugInfoPrivate *d;
