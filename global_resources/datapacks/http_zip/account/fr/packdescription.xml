@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FreeMedForms>
+
+<DataPack_Pack>
+
+  <PackDescription>
+    <!-- Non translatable values -->
+    <uuid>freemedforms.certified.account.france</uuid>
+    <authors>Eric Maeker, MD & Pierre-Marie Desombre, MD</authors>
+    <vendor>asso.freemedforms.com</vendor>
+    <version>0.7.0</version>
+    <fmfv>0.7.0</fmfv>
+    <fdv>0.7.0</fdv>
+    <cdate>2012-06-25</cdate>
+    <lmdate>2012-06-25</lmdate>
+    <icon>__theme__/freeaccount.png</icon>
+    <weblink></weblink>
+    <bibliography/>
+    <file>0.7.0/account/fr/account.db.zip</file>
+    <unziptopath>account</unziptopath>
+    <size></size>
+    <md5></md5>
+    <sha1></sha1>
+    <datatype>Accountancy</datatype>
+
+    <!-- Translatable values -->
+    <license>GPLv3</license>
+    <label lang="fr">Données CCAM</label>
+    <label lang="xx">French data for accountancy</label>
+    <description lang="fr">Base de données des codes CCAM</description>
+    <description lang="xx">French accountancy medical procedures database</description>
+
+    <htmldescription lang="fr">&lt;p>
+      Disponibles pour :&lt;br />
+      &nbsp;* France&lt;br />
+      &lt;br />
+      &lt;/p>
+    </htmldescription>
+
+
+    <htmldescription lang="xx">&lt;p>
+      Available for:&lt;br />
+      &nbsp;* France&lt;br />
+      &lt;br />
+      &lt;/p>
+    </htmldescription>
+
+    <updateinfo>
+      <updateversion from="0.7.0">
+        <text lang="fr">Première mise à disposition.</text>
+        <text lang="en">First release.</text>
+      </updateversion>
+    </updateinfo>
+
+  </PackDescription>
+
+</DataPack_Pack>
