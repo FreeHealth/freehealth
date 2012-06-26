@@ -68,7 +68,23 @@ BirthDayEdit::~BirthDayEdit()
 {
 }
 
-// "date" property:
+/** \brief init function called from constructors to init all internal values */
+void BirthDayEdit::init(const QDate& date, const QDate& maximumDate, const QDate& minimumDate)
+{
+    m_date = date;
+    m_minimumDate = minimumDate;
+    m_maximumDate = maximumDate;
+
+    setValidator(new DateValidator(this));
+
+    m_toolButton = new QToolButton(this);
+    m_toolButton->setFocusPolicy(Qt::ClickFocus);
+    setRightButton(m_toolButton);
+    m_toolButton->hide();
+//    m_button->setIcon(Core::ICore::instance()->theme()->icon(Core::Constants::ICONOK));
+
+    connect(this, SIGNAL(editingFinished()), this, SLOT(setDisplayedDateString()));
+}
 
 /** \brief sets the internal date of the widget to date */
 void BirthDayEdit::setDate(const QDate& date)
@@ -170,24 +186,6 @@ void BirthDayEdit::updateDisplayText()
     }
 }
 
-
-/** \brief init function called from constructors to init all internal values */
-void BirthDayEdit::init(const QDate& date, const QDate& maximumDate, const QDate& minimumDate)
-{
-    m_date = date;
-    m_minimumDate = minimumDate;
-    m_maximumDate = maximumDate;
-
-    setValidator(new DateValidator(this));
-
-    m_toolButton = new QToolButton(this);
-    m_toolButton->setFocusPolicy(Qt::ClickFocus);
-    setRightButton(m_toolButton);
-    m_toolButton->hide();
-//    m_button->setIcon(Core::ICore::instance()->theme()->icon(Core::Constants::ICONOK));
-
-    connect(this, SIGNAL(editingFinished()), this, SLOT(setDisplayedDateString()));
-}
 
 void BirthDayEdit::updatePlaceHolder()
 {
