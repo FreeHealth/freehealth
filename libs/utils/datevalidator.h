@@ -30,6 +30,7 @@
 #include "utils/global_exporter.h"
 #include <QValidator>
 #include <QStringList>
+#include <QDate>
 
 namespace Utils {
 
@@ -40,18 +41,17 @@ public:
     explicit DateValidator(QObject *parent = 0);
     State validate(QString &input, int &pos) const;
     void fixup(QString &input) const;
-//    void setDateFormats(QString& formats = "");
 
-    QString matchedFormat(QString &input) const;
+    QDate date() const;
+
+    void addDateFormat(const QString &format);
+    QStringList acceptedDateFormat() const {return m_dateFormatList;}
 
 private:
     QStringList m_dateFormatList;
     QString m_lastValidFormat;
+    mutable QDate _currentDate;
 
-signals:
-    
-public slots:
-    
 };
 } // end Utils
 #endif // DATEVALIDATOR_H

@@ -35,22 +35,24 @@
 using namespace Utils;
 using namespace Trans::ConstantTranslations;
 
+namespace {
+const char * const SEPARATORS = "-./,;: ";
+}
+
 DateValidator::DateValidator(QObject *parent) :
     QValidator(parent)
 {
-    m_dateFormatList.clear();
-
     // split localized dateFormat string and put the parts a separated QStringList
     //: this is a comma separated list of formatStrings used by QDate::fromString();
     m_dateFormatList = tr("ddMMyy,ddMMyyyy").simplified().split(",", QString::SkipEmptyParts);
     m_lastValidFormat = QString();
 
-    // always also use the validator locale's default formats
-    m_dateFormatList.append(locale().dateFormat(QLocale::ShortFormat));
-    m_dateFormatList.append(locale().dateFormat(QLocale::NarrowFormat));
+//    // always also use the validator locale's default formats
+//    m_dateFormatList.append(locale().dateFormat(QLocale::ShortFormat));
+//    m_dateFormatList.append(locale().dateFormat(QLocale::NarrowFormat));
 
     // and then the FMF editor default format
-    m_dateFormatList.append(tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR));
+    addDateFormat(tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR));
 }
 
 /** \brief validates the input string with custom date formats
@@ -63,10 +65,17 @@ QValidator::State DateValidator::validate(QString &input, int &pos) const
 {
     Q_UNUSED(pos);
 
+    // input contains only valid chars
+    if (!QRegExp(QString("[%10-9]*").arg(::SEPARATORS)).exactMatch(input)) {
+        qDebug() << "NON VALID CHAR" << input;
+        return QValidator::Invalid;
+    }
+
     // check if input string can be converted into a date
     // using a dateFormat of the list
-    foreach(QString format, m_dateFormatList) {
-        if (QDate::fromString(input, format).isValid()) {
+    foreach(const QString &format, m_dateFormatList) {
+        _currentDate = QDate::fromString(input, format);
+        if (_currentDate.isValid()) {
             qDebug() << "Date conversion succeded:" << input;
             return QValidator::Acceptable;
         }
@@ -75,8 +84,8 @@ QValidator::State DateValidator::validate(QString &input, int &pos) const
     // no match by now
     // check if the user enters digits or .-/
     // everything else is discouraged
-    if(QRegExp("[-./ 0-9]*").exactMatch(input)) {
-        qDebug() << "intermediate valid date format:" << input;
+    if(QRegExp("[-./,;: 0-9]*").exactMatch(input)) {
+        qDebug() << "probable date format with separators:" << input;
         return QValidator::Intermediate;
     }
 
@@ -86,21 +95,28 @@ QValidator::State DateValidator::validate(QString &input, int &pos) const
 }
 
 /**
- * \brief returns formatString that is used when the given input string can
- * be converted in a QDate. If input leads to an invalid date, the function
- * returns a QString(). */
-QString DateValidator::matchedFormat(QString & input) const
+ * \brief Returns the current editing string converted in a QDate. If input is not valid, the returned QDate will be invalid too. */
+QDate DateValidator::date() const
 {
-    foreach(QString format, m_dateFormatList) {
-        if (QDate::fromString(input, format).isValid()) {
-            return format;
-        }
-    }
-    return QString();
+    return _currentDate;
+}
+
+void DateValidator::addDateFormat(const QString &format)
+{
+    if (!m_dateFormatList.contains(format, Qt::CaseSensitive))
+        m_dateFormatList.append(format);
 }
 
 void DateValidator::fixup(QString &input) const
 {
-//    input = input.simplified();
-    input.clear();
+    QRegExp withSep = QRegExp(QString("[%1]*").arg(::SEPARATORS));
+    if (input.contains(withSep)) {
+        input = input.remove(withSep);
+        foreach(const QString &format, m_dateFormatList) {
+            _currentDate = QDate::fromString(input, format);
+            if (_currentDate.isValid()) {
+                break;
+            }
+        }
+    }
 }
