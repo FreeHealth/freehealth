@@ -52,7 +52,7 @@ public:
 protected Q_SLOTS:
     void accept();
     void reject();
-    void done() { QDialog::done( QDialog::result() ); }
+    void done(int) { QDialog::done( QDialog::result() ); }
 
 private:
     Internal::DrugInfoPrivate *d;
