@@ -135,9 +135,11 @@ const char* const SEPARATEDFROMFOOD   = QT_TRANSLATE_NOOP("tkConstants", "separa
 const char* const SUGGESTEDWITHFOOD   = QT_TRANSLATE_NOOP("tkConstants", "suggested with food");
 const char* const WITHORWITHOUTFOOD   = QT_TRANSLATE_NOOP("tkConstants", "with or without food");
 
-const char* const SHOW_LONG_FORMAT   = QT_TRANSLATE_NOOP("tkConstants", "Show long date format");
-const char* const SHOW_SHORT_FORMAT   = QT_TRANSLATE_NOOP("tkConstants", "Show short date format");
+const char* const SHOW_LONG_FORMAT      = QT_TRANSLATE_NOOP("tkConstants", "Show long date format");
+const char* const SHOW_SHORT_FORMAT     = QT_TRANSLATE_NOOP("tkConstants", "Show short date format");
 const char* const SHOW_NUMERIC_FORMAT   = QT_TRANSLATE_NOOP("tkConstants", "Show numeric date format");
+const char* const ENTER_DATE            = QT_TRANSLATE_NOOP("tkConstants", "Enter a date");
+const char* const ENTER_DATE_FORMAT_1   = QT_TRANSLATE_NOOP("tkConstants", "Enter a date (format: %1)");
 
 } // end Constants
 } // end TranslationUtils
