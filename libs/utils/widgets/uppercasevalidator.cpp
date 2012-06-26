@@ -45,14 +45,14 @@ QValidator::State UpperCaseValidator::validate(QString &text, int &pos) const  /
     return QValidator::Acceptable;  // return "ok text is like we want it to be"
 }
 
-FirstLetterUpperCaseValidator::FirstLetterUpperCaseValidator(QObject *parent) :
+CapitalizationValidator::CapitalizationValidator(QObject *parent) :
     QValidator(parent)
 {}  // nothing to do in constructor
 
-FirstLetterUpperCaseValidator::~FirstLetterUpperCaseValidator()
+CapitalizationValidator::~CapitalizationValidator()
 {}
 
-QValidator::State FirstLetterUpperCaseValidator::validate(QString &text, int &pos) const  // PS: no UpperCase for the first letter of variables, only for class names
+QValidator::State CapitalizationValidator::validate(QString &text, int &pos) const  // PS: no UpperCase for the first letter of variables, only for class names
 {
     int previous = pos-2;
     if (text.isEmpty())

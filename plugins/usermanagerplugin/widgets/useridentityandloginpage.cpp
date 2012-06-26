@@ -61,7 +61,7 @@ UserIdentityAndLoginPage::UserIdentityAndLoginPage(QWidget *parent) :
     Utils::UpperCaseValidator *val = new Utils::UpperCaseValidator(this);
     ui->leName->setValidator(val);
     ui->leSecondName->setValidator(val);
-    Utils::FirstLetterUpperCaseValidator *firstval = new Utils::FirstLetterUpperCaseValidator(this);
+    Utils::CapitalizationValidator *firstval = new Utils::CapitalizationValidator(this);
     ui->leFirstName->setValidator(firstval);
 
     connect(ui->cbLanguage, SIGNAL(currentLanguageChanged(QLocale::Language)), Core::Translators::instance(), SLOT(changeLanguage(QLocale::Language)));
