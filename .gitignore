@@ -10,6 +10,7 @@ global_resources/*.ini
 *bak
 *bkup
 *.autosave
+global_resources/textfiles/freediamstest/prescription-0.6.2-witherror.xml
 
 # QtCreator files
 *.pro.user
