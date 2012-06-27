@@ -133,9 +133,10 @@ public:
 
     void parseCommandLine()
     {
-        LOG_FOR("CommandLineParser", "Parsing command line");
-        const QStringList &args = qApp->arguments();
+        LOG_FOR("CommandLine", "Parsing command line");
+        QStringList args = qApp->arguments();
         foreach(const QString &a, args) {
+            LOG_FOR("CommandLine", a);
             QString k = a;
             if (k.contains(" "))
                 k = k.left(k.indexOf(" "));
@@ -378,17 +379,14 @@ public:
 
 public:
     QHash<int, QVariant> value;
-    static QHash<int, QString> params;
+    QHash<int, QString> params;
 };
 }
 }
 
-QHash<int, QString> Internal::CommandLinePrivate::params;
-
-
-
 CommandLine::CommandLine() :
-        ICommandLine(), d(new Internal::CommandLinePrivate)
+    ICommandLine(),
+    d(new Internal::CommandLinePrivate)
 {
     d->parseCommandLine();
 }

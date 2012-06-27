@@ -169,16 +169,17 @@ int main(int argc, char *argv[])
      app.setOrganizationName(BINARY_NAME);
      app.setApplicationVersion(PACKAGE_VERSION);
 
-     if (qApp->arguments().contains("--version") ||
-         qApp->arguments().contains("-version") ||
-         qApp->arguments().contains("-v")) {
+     QStringList args = qApp->arguments();
+     if (args.contains("--version") ||
+         args.contains("-version") ||
+         args.contains("-v")) {
          std::cout << qPrintable(VERSION_MESSAGE);
          return 0;
      }
 
-     if (qApp->arguments().contains("--help") ||
-         qApp->arguments().contains("-help") ||
-         qApp->arguments().contains("-h")) {
+     if (arg.contains("--help") ||
+         args.contains("-help") ||
+         args.contains("-h")) {
          std::cout << qPrintable(HELP_MESSAGE);
          return 0;
      }
@@ -190,7 +191,6 @@ int main(int argc, char *argv[])
     pluginManager.setPluginPaths(QStringList() << pluginPaths);
 
     // Add some debugging information
-    LOG_FOR("Main","Command line: " + qApp->arguments().join(" "));
 #ifdef DEBUG
     LOG_FOR("Main", "Running debug version");
 #else

@@ -44,10 +44,17 @@
 
 #include <QHash>
 #include <QString>
-#include <QApplication>
-#include <QDebug>
+#include <QVariant>
+
+/**
+ * \file commandlineparser.h
+ * \author Eric MAEKER <eric.maeker@gmail.com>
+ * \version 0.7.6
+ * \date 27 Jun 2012
+*/
 
 namespace Core {
+
 class CommandLine  : public Core::ICommandLine
 {
     Q_OBJECT
@@ -66,6 +73,6 @@ private:
     QHash<int, QString> ref;
 };
 
-}
+}  // namespace Core
 
 #endif // FREEMEDFORMS_COMMANDLINEPARSER_H

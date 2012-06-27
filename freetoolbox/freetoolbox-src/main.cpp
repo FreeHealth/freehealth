@@ -129,14 +129,13 @@ int main( int argc, char *argv[] )
     app.setOrganizationName(BINARY_NAME);
     app.setApplicationVersion(PACKAGE_VERSION);
 
-    if (qApp->arguments().contains("--version") ||
-        qApp->arguments().contains("-version") ||
-        qApp->arguments().contains("-v")) {
+    QStringList args = qApp->arguments();
+    if (args.contains("--version") ||
+        args.contains("-version") ||
+        args.contains("-v")) {
         std::cout << qPrintable(VERSION_MESSAGE);
         return 0;
     }
-
-    LOG_FOR("Main", qApp->arguments().join(";"));
 
     ExtensionSystem::PluginManager pluginManager;
     pluginManager.setFileExtension(QString("pluginspec"));
@@ -145,7 +144,6 @@ int main( int argc, char *argv[] )
     pluginManager.setPluginPaths(QStringList() << pluginPaths);
 
     // Add some debugging informations
-    LOG_FOR("Main","Command line : " + qApp->arguments().join(" "));
     Utils::Database::logAvailableDrivers();
 
 #ifdef DEBUG

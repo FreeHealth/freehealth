@@ -28,6 +28,9 @@
 
 #include <utils/global.h>
 
+#include <QApplication>
+#include <QDebug>
+
 using namespace Core;
 
 CommandLine::CommandLine() : ICommandLine()
@@ -54,8 +57,9 @@ CommandLine::CommandLine() : ICommandLine()
     params.insert(UserClearPassword, QVariant());
 
     // read command line params
-    const QStringList &args = qApp->arguments();
+    QStringList args = qApp->arguments();
     foreach(const QString &a, args) {
+        LOG_FOR("CommandLine", a);
         QString k = a;
         if (k.contains(" "))
             k = k.left(k.indexOf(" "));
