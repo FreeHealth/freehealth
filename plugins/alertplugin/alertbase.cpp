@@ -154,7 +154,7 @@ void AlertBaseQuery::addCurrentUserAlerts()
     if (user()) {
         u = user()->uuid();
     } else {
-        if (Utils::isDebugCompilation())
+        if (!Utils::isReleaseCompilation())
             u = "user1";
     }
     if (!_userUids.contains(u))
@@ -175,7 +175,7 @@ void AlertBaseQuery::addCurrentPatientAlerts()
     if (patient()) {
         u = patient()->uuid();
     } else {
-        if (Utils::isDebugCompilation())
+        if (!Utils::isReleaseCompilation())
             u = "patient1";
     }
     if (!_patientUids.contains(u))
