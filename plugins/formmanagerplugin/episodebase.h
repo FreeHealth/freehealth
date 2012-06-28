@@ -38,8 +38,8 @@
 /**
  * \file episodebase.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.0
- * \date 07 Aug 2011
+ * \version 0.7.6
+ * \date 28 Jun 2012
 */
 
 namespace Form {
@@ -47,6 +47,7 @@ class FormIODescription;
 class SubFormInsertionPoint;
 
 namespace Internal {
+class FormManagerPlugin;
 class EpisodeBasePrivate;
 class EpisodeData;
 
@@ -116,9 +117,11 @@ private:
 class FORM_EXPORT EpisodeBase : public QObject, public Utils::Database
 {
     Q_OBJECT
+    friend class Form::Internal::FormManagerPlugin;
+
 protected:
     EpisodeBase(QObject *parent = 0);
-    bool init();
+    bool initialize();
 
 public:
     // Constructor
@@ -161,7 +164,7 @@ private Q_SLOTS:
     void onCoreDatabaseServerChanged();
 
 private:
-    static bool m_initialized;
+    bool m_initialized;
     static EpisodeBase *m_Instance;
 };
 

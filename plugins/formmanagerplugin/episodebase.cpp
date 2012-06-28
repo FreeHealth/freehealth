@@ -97,22 +97,19 @@ static inline bool connectDatabase(QSqlDatabase &DB, const int line)
 //}
 
 EpisodeBase *EpisodeBase::m_Instance = 0;
-bool EpisodeBase::m_initialized = false;
 
 EpisodeBase *EpisodeBase::instance()
 {
-    if (!m_Instance) {
-        m_Instance = new EpisodeBase(qApp);
-        m_Instance->init();
-    }
+    Q_ASSERT(m_Instance);
     return m_Instance;
 }
 
 // TODO: EPISODES_DATEOFCREATION -> use EPISODE_MODIFICATION table instead ??
 EpisodeBase::EpisodeBase(QObject *parent) :
-        QObject(parent), Utils::Database()
-//        d_prt(new EpisodeBasePrivate(this))
+    QObject(parent), Utils::Database(),
+    m_initialized(false)
 {
+    m_Instance = this;
     setObjectName("EpisodeBase");
 
     using namespace Form::Constants;
@@ -179,8 +176,6 @@ EpisodeBase::EpisodeBase(QObject *parent) :
 
     // Version
     addField(Table_VERSION, VERSION_TEXT, "VERSION", FieldIsShortText);
-
-    connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
 }
 
 EpisodeBase::~EpisodeBase()
@@ -191,7 +186,7 @@ EpisodeBase::~EpisodeBase()
 //    }
 }
 
-bool EpisodeBase::init()
+bool EpisodeBase::initialize()
 {
     // only one base can be initialized
     if (m_initialized)
@@ -224,6 +219,8 @@ bool EpisodeBase::init()
         LOG_ERROR(tkTr(Trans::Constants::DATABASE_1_SCHEMA_ERROR).arg(DB_NAME));
         return false;
     }
+
+    connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
 
     m_initialized = true;
     return true;
@@ -336,7 +333,7 @@ void EpisodeBase::onCoreDatabaseServerChanged()
     if (QSqlDatabase::connectionNames().contains(DB_NAME)) {
         QSqlDatabase::removeDatabase(DB_NAME);
     }
-    init();
+    initialize();
 }
 
 /**

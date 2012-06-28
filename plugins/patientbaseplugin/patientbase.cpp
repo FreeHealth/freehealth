@@ -75,21 +75,18 @@ static inline bool connectDatabase(QSqlDatabase &DB, const int line)
 }
 
 PatientBase *PatientBase::m_Instance = 0;
-bool PatientBase::m_initialized = false;
 
 PatientBase *PatientBase::instance()
 {
-    if (!m_Instance) {
-        m_Instance = new PatientBase(qApp);
-        m_Instance->init();
-    }
+    Q_ASSERT(m_Instance);
     return m_Instance;
 }
 
 PatientBase::PatientBase(QObject *parent) :
-        QObject(parent), Utils::Database()
-//        d_prt(new PatientBasePrivate(this))
+    QObject(parent), Utils::Database(),
+    m_initialized(false)
 {
+    m_Instance = this;
     setObjectName("PatientBase");
 
     using namespace Patients::Constants;
@@ -145,15 +142,13 @@ PatientBase::PatientBase(QObject *parent) :
     // Version
     addTable(Table_VERSION, "VERSION");
     addField(Table_VERSION, VERSION_TEXT, "VERSION", FieldIsShortText);
-
-    connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
 }
 
 PatientBase::~PatientBase()
 {
 }
 
-bool PatientBase::init()
+bool PatientBase::initialize()
 {
     // only one base can be initialized
     if (m_initialized)
@@ -186,6 +181,8 @@ bool PatientBase::init()
         LOG_ERROR(tkTr(Trans::Constants::DATABASE_1_SCHEMA_ERROR).arg(Constants::DB_NAME));
         return false;
     }
+
+    connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
 
     m_initialized = true;
     return true;
@@ -424,7 +421,7 @@ void PatientBase::onCoreDatabaseServerChanged()
     if (QSqlDatabase::connectionNames().contains(Constants::DB_NAME)) {
         QSqlDatabase::removeDatabase(Constants::DB_NAME);
     }
-    init();
+    initialize();
 }
 
 /** For debugging purpose */

@@ -176,8 +176,9 @@ private:
    \brief Constructor.
    \private
 */
-TemplateBase::TemplateBase(QObject *parent)
-    : QObject(parent), Utils::Database(), d(0)
+TemplateBase::TemplateBase(QObject *parent) :
+    QObject(parent), Utils::Database(),
+    d(0)
 {
     d = new Internal::TemplateBasePrivate(this);
     setObjectName("TemplateBase");
@@ -218,8 +219,6 @@ TemplateBase::TemplateBase(QObject *parent)
     // TODO: DB Schema :: Add USerGroupUid
 
     addField(Table_Version, VERSION_ACTUAL, "ACTUAL", FieldIsShortText);
-
-    connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
 }
 
 /** \brief Destructor. */
@@ -262,6 +261,8 @@ bool TemplateBase::init()
     }
 
     d->checkDatabaseVersion();
+
+    connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
 
     d->m_initialized = true;
     return true;

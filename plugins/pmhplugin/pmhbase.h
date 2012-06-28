@@ -29,15 +29,20 @@
 
 #include <utils/database.h>
 
+/**
+ * \file pmhbase.h
+ * \author Eric MAEKER <eric.maeker@gmail.com>
+ * \version 0.7.6
+ * \date 28 June 2012
+*/
 
 namespace Category {
 class CategoryItem;
 }
 
-
 namespace PMH {
 namespace Internal {
-class PmhBasePrivate;
+class PmhPlugin;
 class PmhData;
 class PmhCategory;
 class PmhEpisodeData;
@@ -45,6 +50,7 @@ class PmhEpisodeData;
 class PmhBase : public QObject, public Utils::Database
 {
     Q_OBJECT
+    friend class PMH::Internal::PmhPlugin;
 
 protected:
     PmhBase(QObject *parent = 0);
@@ -55,7 +61,7 @@ public:
     virtual ~PmhBase();
 
     // initialize
-    bool init();
+    bool initialize();
 
     // Database getters
     QVector<PmhData *> getPmh(const QString &patientUid = QString::null) const;
@@ -83,9 +89,8 @@ private Q_SLOTS:
     void onCoreDatabaseServerChanged();
 
 private:
-    static bool m_initialized;
+    bool m_initialized;
     static PmhBase *m_Instance;
-    Internal::PmhBasePrivate *d;
 };
 
 }  // End namespace Internal

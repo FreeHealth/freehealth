@@ -71,7 +71,6 @@ static inline Category::CategoryCore *categoryCore() {return Category::CategoryC
 static inline Core::ICommandLine *commandLine()  { return Core::ICore::instance()->commandLine(); }
 
 PmhBase *PmhBase::m_Instance = 0;
-bool PmhBase::m_initialized = false;
 
 static inline bool connectDatabase(QSqlDatabase &DB, const int line)
 {
@@ -89,45 +88,41 @@ static inline bool connectDatabase(QSqlDatabase &DB, const int line)
 /** \brief Returns the singleton. There should be only one instance of the PmhBase class. */
 PmhBase *PmhBase::instance()
 {
-    if (!m_Instance) {
-        m_Instance = new PmhBase(qApp);
-        m_Instance->init();
-    }
+    Q_ASSERT(m_Instance);
     return m_Instance;
 }
 
+//namespace PMH {
+//namespace Internal {
+//class PmhBasePrivate
+//{
+//public:
+//    PmhBasePrivate() {}
+//    ~PmhBasePrivate() {}
 
+////    void checkPmhDataContent(PmhData *pmh)
+////    {
+////        // MASTER_ID defined ?
+////        if (pmh->data(PmhData::Uid).isNull()) {
+////            LOG_ERROR_FOR("PmhBase", "MasterId not defined for PMHx " + pmh->data(PmhData::Label).toString());
+////        }
 
-namespace PMH {
-namespace Internal {
-class PmhBasePrivate
-{
-public:
-    PmhBasePrivate() {}
-    ~PmhBasePrivate() {}
+////        // PmhEpisodeData MasterId defined ?
+////        foreach(PmhEpisodeData *ep, pmh->episodes()) {
 
-//    void checkPmhDataContent(PmhData *pmh)
-//    {
-//        // MASTER_ID defined ?
-//        if (pmh->data(PmhData::Uid).isNull()) {
-//            LOG_ERROR_FOR("PmhBase", "MasterId not defined for PMHx " + pmh->data(PmhData::Label).toString());
-//        }
+////        }
+////    }
 
-//        // PmhEpisodeData MasterId defined ?
-//        foreach(PmhEpisodeData *ep, pmh->episodes()) {
+//public:
 
-//        }
-//    }
-
-public:
-
-};
-}
-}
+//};
+//}
+//}
 
 PmhBase::PmhBase(QObject *parent) :
-        QObject(parent), Utils::Database(), d(new Internal::PmhBasePrivate)
-
+    QObject(parent), Utils::Database(),
+    m_initialized(false)
+//    d(new Internal::PmhBasePrivate)
 {
     setObjectName("PmhBase");
     using namespace PMH::Constants;
@@ -167,18 +162,13 @@ PmhBase::PmhBase(QObject *parent) :
     addIndex(Table_EPISODE, EPISODE_ID);
     addIndex(Table_EPISODE, EPISODE_MASTER_ID);
     addIndex(Table_EPISODE, EPISODE_TRACE_ID);
-
-    connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
 }
 
 PmhBase::~PmhBase()
 {
-    if (d)
-        delete d;
-    d = 0;
 }
 
-bool PmhBase::init()
+bool PmhBase::initialize()
 {
     // only one base can be initialized
     if (m_initialized)
@@ -199,6 +189,8 @@ bool PmhBase::init()
         LOG_ERROR(tkTr(Trans::Constants::DATABASE_1_SCHEMA_ERROR).arg(Constants::DB_NAME));
         return false;
     }
+
+    connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
 
     m_initialized = true;
     return true;
@@ -570,6 +562,6 @@ void PmhBase::onCoreDatabaseServerChanged()
     if (QSqlDatabase::connectionNames().contains(Constants::DB_NAME)) {
         QSqlDatabase::removeDatabase(Constants::DB_NAME);
     }
-    init();
+    initialize();
 }
 

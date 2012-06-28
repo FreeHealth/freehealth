@@ -48,15 +48,18 @@
 
 namespace Patients {
 namespace Internal {
+class PatientBasePlugin;
 class PatientBasePrivate;
 class PatientData;
 
 class PATIENT_EXPORT PatientBase : public QObject, public Utils::Database
 {
     Q_OBJECT
+    friend class Patients::Internal::PatientBasePlugin;
+
 protected:
     PatientBase(QObject *parent = 0);
-    bool init();
+    bool initialize();
 
 public:
     // Constructor
@@ -96,7 +99,7 @@ private Q_SLOTS:
     void onCoreDatabaseServerChanged();
 
 private:
-    static bool m_initialized;
+    bool m_initialized;
     static PatientBase *m_Instance;
 };
 

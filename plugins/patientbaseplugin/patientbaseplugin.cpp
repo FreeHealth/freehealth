@@ -85,6 +85,9 @@ PatientBasePlugin::PatientBasePlugin() :
     // add preference page
     prefpage = new PatientBasePreferencesPage(this);
     addObject(prefpage);
+
+    // create the base
+    new Internal::PatientBase(this);
 }
 
 PatientBasePlugin::~PatientBasePlugin()
@@ -126,8 +129,7 @@ bool PatientBasePlugin::initialize(const QStringList &arguments, QString *errorS
     dlg.setFocus();
     dlg.setValue(0);
 
-    patientBase();
-    if (!patientBase()->isInitialized())
+    if (!patientBase()->initialize())
         return false;
 
     if (commandLine()->value(Core::ICommandLine::CreateVirtuals).toBool()) {
