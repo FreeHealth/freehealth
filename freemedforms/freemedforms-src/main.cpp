@@ -177,7 +177,7 @@ int main(int argc, char *argv[])
          return 0;
      }
 
-     if (arg.contains("--help") ||
+     if (args.contains("--help") ||
          args.contains("-help") ||
          args.contains("-h")) {
          std::cout << qPrintable(HELP_MESSAGE);
