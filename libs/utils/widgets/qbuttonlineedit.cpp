@@ -78,9 +78,9 @@ public:
         QStringList css;
 
         // Create padding for buttons
-        if (_rightPadding>0)
+//        if (_rightPadding>0)
             css << QString("padding-right:%1px").arg(_rightPadding);
-        if (_leftPadding>0)
+//        if (_leftPadding>0)
             css << QString("padding-left:%1px").arg(_leftPadding);
 
         // Analyse extraStyleSheet (remove all paddings)
@@ -91,7 +91,7 @@ public:
                     css << c;
             }
         }
-        return QString("QButtonLineEdit#%1{%2;}").arg(q->objectName(), css.join(";"));
+        return QString("%2;").arg(css.join(";"));
     }
 
     void setSpecificStyleSheet()
@@ -224,7 +224,7 @@ void QButtonLineEdit::setRightButton(QToolButton * button)
     d->_rightButton->setCursor(Qt::ArrowCursor);
 
     int frameWidth = style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
-    d->_leftPadding = button->sizeHint().width() + frameWidth + 1;
+    d->_rightPadding = button->sizeHint().width() + frameWidth + 1;
     QSize msz = minimumSizeHint();
     setMinimumSize(qMax(msz.width(), button->sizeHint().height() + frameWidth * 2 + 2),
                    qMax(msz.height(), button->sizeHint().height() + frameWidth * 2 + 2));

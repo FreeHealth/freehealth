@@ -807,7 +807,7 @@ bool AlertItem::validateAlert(const QString &validatorUid, bool override, const 
         {
             if (patient())
                 val.setValidatedUuid(patient()->uuid());
-            else if (Utils::isDebugCompilation())
+            else if (!Utils::isReleaseCompilation())
                 val.setValidatedUuid("patient1");
             break;
         }
@@ -818,7 +818,7 @@ bool AlertItem::validateAlert(const QString &validatorUid, bool override, const 
         {
             if (user())
                 val.setValidatedUuid(user()->uuid());
-            else if (Utils::isDebugCompilation())
+            else if (!Utils::isReleaseCompilation())
                 val.setValidatedUuid("user1");
             break;
         }
@@ -852,7 +852,7 @@ bool AlertItem::isUserValidated() const
         {
             if (patient())
                 return d->validationsContainsValidatedUuid(patient()->uuid());
-            else if (Utils::isDebugCompilation())
+            else if (!Utils::isReleaseCompilation())
                 return d->validationsContainsValidatedUuid("patient1");
             break;
         }
@@ -863,7 +863,7 @@ bool AlertItem::isUserValidated() const
         {
             if (user())
                 return d->validationsContainsValidatedUuid(user()->uuid());
-            else if (Utils::isDebugCompilation())
+            else if (!Utils::isReleaseCompilation())
                 return d->validationsContainsValidatedUuid("user1");
             break;
         }
@@ -1018,6 +1018,19 @@ QDebug operator<<(QDebug dbg, const Alert::AlertItem &a)
     return dbg.space();
 }
 
+/** sort helpers */
+bool AlertItem::priorityLowerThan(const AlertItem &item1, const AlertItem &item2)
+{
+    return item1.priority() < item2.priority();
+}
+
+/** sort helpers */
+bool AlertItem::categoryLowerThan(const AlertItem &item1, const AlertItem &item2)
+{
+    return item1.category() < item2.category();
+}
+
+/** Transform to XML */
 QString AlertItem::toXml() const
 {
     // Feed description
@@ -1111,6 +1124,7 @@ QString AlertItem::toXml() const
     return doc.toString(2);
 }
 
+/** Create from XML */
 AlertItem AlertItem::fromXml(const QString &xml)
 {
 //    ::XML_DESCRIPTION_ROOTTAG;

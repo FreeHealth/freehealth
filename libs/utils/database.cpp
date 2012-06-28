@@ -105,6 +105,22 @@ public:
     QStringList getSQLCreateTable(const int & tableref);
     QString getTypeOfField(const int & fieldref) const;
 
+    // Return the index for: m_Fields, m_TypeOfField, m_DefaultFieldValue
+    int index(const int tableRef, const int fieldRef)
+    {
+        return fieldRef + (tableRef * 1000);
+    }
+
+    int fieldFromIndex(const int index)
+    {
+        return index % 1000;
+    }
+
+    int tableFromIndex(const int index)
+    {
+        return index / 1000;
+    }
+
     static Database::Grants getGrants(const QString &connection, const QStringList &grants)
     {
         Q_UNUSED(connection);
@@ -160,7 +176,7 @@ public:
     QString                    m_ConnectionName;
     QHash<QString, Database::Grants> m_Grants;
     Database::AvailableDrivers m_Driver;
-    QMultiHash<int,int> m_PrimKeys;
+    QMultiHash<int,int> m_PrimKeys; // K=table, V=field
     QVector<DbIndex> m_DbIndexes;
 };
 }
@@ -870,12 +886,12 @@ int Database::addTable(const int & ref, const QString & name)
 int Database::addField(const int & tableref, const int & fieldref, const QString & name, TypeOfField type, const QString & defaultValue)
 {
     Q_ASSERT_X(name.length() < 50, "Database", "Name of field can not exceed 50 chars");
-    int ref = fieldref + (tableref * 1000);
+    int ref = d->index(tableref, fieldref);
     d->m_Tables_Fields.insertMulti(tableref, ref);
     d->m_Fields.insert(ref , name);
     d->m_TypeOfField.insert(ref , type);
     d->m_DefaultFieldValue.insert(ref, defaultValue);
-    return d->m_Fields.key(name) - (tableref * 1000);
+    return d->fieldFromIndex(ref);
 }
 
 /**  Add a primary key reference to \e tableref \e fieldref.
@@ -965,7 +981,7 @@ QString Database::fieldName(const int &tableref, const int &fieldref) const
     if (!d->m_Fields.keys().contains(fieldref + (tableref * 1000)))
         return QString::null;
 
-    return d->m_Fields.value(fieldref + (tableref * 1000));
+    return d->m_Fields.value(d->index(tableref, fieldref));
 }
 
 /**
@@ -1072,11 +1088,13 @@ QString Database::getWhereClause(const int &tableref, const QHash<int, QString> 
     QHashIterator<int, QString> i(conditions);
     while (i.hasNext()) {
         i.next();
-        if (!d->m_Fields.keys().contains(i.key() + (tableref * 1000)))
+        int index = d->index(tableref, i.key());
+        if (!d->m_Fields.keys().contains(index))
             continue;
         where.append(QString(" (`%1`.`%2` %3) AND ")
-                      .arg(d->m_Tables[tableref])
-                      .arg(d->m_Fields.value(i.key() + (tableref * 1000)), i.value()));
+                     .arg(d->m_Tables[tableref])
+                     .arg(d->m_Fields.value(index))
+                     .arg(i.value()));
     }
     where.chop(5);
     if (conditions.count() > 1)
@@ -1544,7 +1562,7 @@ QString Database::fieldEquality(const int tableRef1, const int fieldRef1, const 
 */
 int Database::count(const int & tableref, const int & fieldref, const QString &filter) const
 {
-    QString req = QString("SELECT count(`%1`) FROM `%2`").arg(d->m_Fields.value(1000 * tableref + fieldref)).arg(d->m_Tables[tableref]);
+    QString req = QString("SELECT count(`%1`) FROM `%2`").arg(d->m_Fields.value(d->index(tableref, fieldref))).arg(d->m_Tables[tableref]);
     if (!filter.isEmpty())
         req += " WHERE " + filter;
     if (WarnSqlCommands)
@@ -1569,7 +1587,7 @@ int Database::count(const int & tableref, const int & fieldref, const QString &f
 QVariant Database::max(const int &tableref, const int &fieldref, const QString &filter) const
 {
     QString req = QString("SELECT max(%1) FROM %2")
-                  .arg(d->m_Fields.value(1000 * tableref + fieldref))
+                  .arg(d->m_Fields.value(d->index(tableref, fieldref)))
                   .arg(d->m_Tables[tableref]);
     if (!filter.isEmpty())
         req += " WHERE " + filter;
@@ -1595,9 +1613,9 @@ QVariant Database::max(const int &tableref, const int &fieldref, const QString &
 QVariant Database::max(const int &tableref, const int &fieldref, const int &groupBy, const QString &filter) const
 {
     QString req = QString("SELECT max(%1) FROM %2 GROUP BY %3")
-                  .arg(d->m_Fields.value(1000 * tableref + fieldref))
+                  .arg(d->m_Fields.value(d->index(tableref, fieldref)))
                   .arg(d->m_Tables[tableref])
-                  .arg(d->m_Fields.value(1000 * tableref + groupBy));
+                  .arg(d->m_Fields.value(d->index(tableref, groupBy)));
     if (!filter.isEmpty())
         req += " WHERE " + filter;
     if (WarnSqlCommands)
@@ -1622,7 +1640,7 @@ QVariant Database::max(const int &tableref, const int &fieldref, const int &grou
 QVariant Database::min(const int &tableref, const int &fieldref, const QString &filter) const
 {
     QString req = QString("SELECT MIN(%1) FROM %2")
-                  .arg(d->m_Fields.value(1000 * tableref + fieldref))
+                  .arg(d->m_Fields.value(d->index(tableref, fieldref)))
                   .arg(d->m_Tables[tableref]);
     if (!filter.isEmpty())
         req += " WHERE " + filter;
@@ -1650,24 +1668,24 @@ QString Database::totalSqlCommand(const int tableRef, const int fieldRef, const 
     QString toReturn;
     if (where.count()) {
         toReturn = QString("SELECT SUM(`%1`) FROM `%2` WHERE %3")
-                   .arg(d->m_Fields.value(fieldRef + tableRef * 1000))
+                   .arg(d->m_Fields.value(d->index(tableRef, fieldRef)))
                    .arg(d->m_Tables.value(tableRef))
                    .arg(getWhereClause(tableRef, where));
     } else  {
         toReturn = QString("SELECT SUM(`%1`) FROM `%2`")
-                   .arg(d->m_Fields.value(fieldRef + tableRef * 1000))
+                   .arg(d->m_Fields.value(d->index(tableRef, fieldRef)))
                    .arg(d->m_Tables.value(tableRef));
     }
     return toReturn;
 }
 
 /** Return a TOTAL SQL command on the table \e tableref, field \e fieldref. */
-QString Database::totalSqlCommand(const int tableRef, const int fieldRef) const
+QString Database::totalSqlCommand(const int tableref, const int fieldref) const
 {
     QString toReturn;
     toReturn = QString("SELECT SUM(`%1`) FROM `%2`")
-               .arg(d->m_Fields.value(fieldRef + tableRef * 1000))
-               .arg(d->m_Tables.value(tableRef));
+               .arg(d->m_Fields.value(d->index(tableref, fieldref)))
+               .arg(d->m_Tables.value(tableref));
     return toReturn;
 }
 
@@ -2186,7 +2204,7 @@ QStringList DatabasePrivate::getSQLCreateTable(const int &tableref)
     toReturn.append(fieldLine.join(",\n  "));
 
     foreach(int field, m_PrimKeys.values(tableref)) {
-        int ref = field + (tableref * 1000);
+        int ref = index(tableref, field);
         if (m_TypeOfField.value(ref) != Database::FieldIsUniquePrimaryKey) {
             toReturn.append(QString(",\nPRIMARY KEY(%1)").arg(m_Fields.value(ref)));
         }
@@ -2387,6 +2405,7 @@ void Database::toTreeWidget(QTreeWidget *tree)
     tree->resizeColumnToContents(0);
     tree->resizeColumnToContents(1);
 }
+
 /**
 Add a fied to table referenced by 
     code tableRef, 
@@ -2402,7 +2421,7 @@ bool Database::alterTableForNewField(const int tableRef, const int newFieldRef,c
     bool b = true;
     QString tableString = table(tableRef);
     QString newField = fieldName(tableRef,newFieldRef);
-    QString type = d->getTypeOfField(newFieldRef + (tableRef * 1000));
+    QString type = d->getTypeOfField(d->index(tableRef, newFieldRef));
     QSqlQuery q(database());
     QString req = QString("ALTER TABLE `%1` ADD `%2` %3 %4;")
     	       .arg(tableString,newField,type,nullOption);
