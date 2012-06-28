@@ -132,6 +132,9 @@ XmlIOBase::XmlIOBase(QObject *parent) :
     // information
     addTable(Table_VERSION, "VERSION");
     addField(Table_VERSION, VERSION_ACTUAL,  "ACTUAL", FieldIsShortText);
+
+    // Connect first run database creation requested
+    connect(Core::ICore::instance(), SIGNAL(firstRunDatabaseCreation()), this, SLOT(onCoreFirstRunCreationRequested()));
 }
 
 /** \brief Initialize the database. */
@@ -282,6 +285,14 @@ void XmlIOBase::onCoreDatabaseServerChanged()
     if (QSqlDatabase::connectionNames().contains(Constants::DB_NAME)) {
         QSqlDatabase::removeDatabase(Constants::DB_NAME);
     }
+    disconnect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
+    disconnect(Core::ICore::instance(), SIGNAL(firstRunDatabaseCreation()), this, SLOT(onCoreFirstRunCreationRequested()));
+    initialize();
+}
+
+void XmlIOBase::onCoreFirstRunCreationRequested()
+{
+    disconnect(Core::ICore::instance(), SIGNAL(firstRunDatabaseCreation()), this, SLOT(onCoreFirstRunCreationRequested()));
     initialize();
 }
 

@@ -87,10 +87,7 @@ static inline Core::ICommandLine *commandLine()  { return Core::ICore::instance(
 static inline QString bundlePath()  { return settings()->path(Core::ISettings::BundleResourcesPath); }
 
 // Initializing static datas
-QString  UserBase::m_LastUuid = "";
-QString  UserBase::m_LastLogin = "";
-QString  UserBase::m_LastPass = "";
-UserBase* UserBase::m_Instance = 0;
+UserBase *UserBase::m_Instance = 0;
 
 /**
   Returns the unique instance of UserBase. If the instance does not exist it is created.
@@ -186,6 +183,9 @@ UserBase::UserBase(QObject *parent) :
     addTable(Table_INFORMATION, "INFORMATIONS");
     addField(Table_INFORMATION, INFO_VERSION,  "VERSION", FieldIsShortText);
     addField(Table_INFORMATION, INFO_MAX_LKID, "MAX_LK_ID", FieldIsInteger);
+
+    // Connect first run database creation requested
+    connect(Core::ICore::instance(), SIGNAL(firstRunDatabaseCreation()), this, SLOT(onCoreFirstRunCreationRequested()));
 }
 
 /**
@@ -231,7 +231,6 @@ bool UserBase::initialize(Core::ISettings *s)
         return false;
 
 //    connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
-
     m_initialized = true;
     return true;
 }
@@ -255,6 +254,11 @@ bool UserBase::checkDatabaseVersion()
     return true;
 }
 
+void UserBase::onCoreFirstRunCreationRequested()
+{
+    disconnect(Core::ICore::instance(), SIGNAL(firstRunDatabaseCreation()), this, SLOT(onCoreFirstRunCreationRequested()));
+    initialize();
+}
 
 //--------------------------------------------------------------------------------------------------------
 //------------------------------------------- Datas retreivers -------------------------------------------

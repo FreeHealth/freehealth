@@ -219,6 +219,9 @@ TemplateBase::TemplateBase(QObject *parent) :
     // TODO: DB Schema :: Add USerGroupUid
 
     addField(Table_Version, VERSION_ACTUAL, "ACTUAL", FieldIsShortText);
+
+    // Connect first run database creation requested
+    connect(Core::ICore::instance(), SIGNAL(firstRunDatabaseCreation()), this, SLOT(onCoreFirstRunCreationRequested()));
 }
 
 /** \brief Destructor. */
@@ -263,7 +266,6 @@ bool TemplateBase::initialize()
     d->checkDatabaseVersion();
 
     connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
-
     d->m_initialized = true;
     return true;
 }
@@ -387,5 +389,13 @@ void TemplateBase::onCoreDatabaseServerChanged()
     if (QSqlDatabase::connectionNames().contains(Templates::Constants::DB_TEMPLATES_NAME)) {
         QSqlDatabase::removeDatabase(Templates::Constants::DB_TEMPLATES_NAME);
     }
+    disconnect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
+    disconnect(Core::ICore::instance(), SIGNAL(firstRunDatabaseCreation()), this, SLOT(onCoreFirstRunCreationRequested()));
+    initialize();
+}
+
+void TemplateBase::onCoreFirstRunCreationRequested()
+{
+    disconnect(Core::ICore::instance(), SIGNAL(firstRunDatabaseCreation()), this, SLOT(onCoreFirstRunCreationRequested()));
     initialize();
 }

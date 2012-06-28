@@ -134,6 +134,7 @@ public:
 
 private Q_SLOTS:
     void onCoreDatabaseServerChanged();
+    void onCoreFirstRunCreationRequested();
 
 public:
     static Agenda::UserCalendar *createEmptyCalendar(const QString &userUid);

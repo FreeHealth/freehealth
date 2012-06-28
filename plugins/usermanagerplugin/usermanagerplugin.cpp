@@ -95,6 +95,8 @@ UserManagerPlugin::UserManagerPlugin() :
     // Add Translator to the Application
     Core::ICore::instance()->translators()->addNewTranslator("usermanagerplugin");
 
+    new UserBase(this);
+
     addObject(m_FirstCreation);
 }
 
@@ -118,7 +120,7 @@ bool UserManagerPlugin::initialize(const QStringList &arguments, QString *errorS
     messageSplash(tr("Initializing user manager plugin..."));
 
     // is UserBase reachable ?
-    Internal::UserBase *base = new Internal::UserBase(this);
+    Internal::UserBase *base = UserBase::instance();
     base->initialize();
 
     if (!base->isInitialized()) {

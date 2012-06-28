@@ -70,6 +70,7 @@ private:
 
 private Q_SLOTS:
     void onCoreDatabaseServerChanged();
+    void onCoreFirstRunCreationRequested();
 
 private:
     TemplateBasePrivate *d;

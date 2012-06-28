@@ -55,6 +55,8 @@
 #include <QDesktopWidget>
 #include <QCheckBox>
 #include <QGroupBox>
+#include <QProgressBar>
+#include <QTimer>
 
 using namespace Core;
 using namespace Trans::ConstantTranslations;
@@ -74,6 +76,14 @@ namespace {
         CoreFirstRunPage(QObject *parent) : IFirstConfigurationPage(parent) {}
         int id() const {return IFirstConfigurationPage::FirstPage;}
         QWizardPage *createPage(QWidget *parent) {return new CoreConfigPage(parent);}
+    };
+
+    class CoreFirstRunDatabaseCreationPage : public Core::IFirstConfigurationPage
+    {
+    public:
+        CoreFirstRunDatabaseCreationPage(QObject *parent) : IFirstConfigurationPage(parent) {}
+        int id() const {return IFirstConfigurationPage::DatabaseCreationPage;}
+        QWizardPage *createPage(QWidget *parent) {return new CoreDatabaseCreationPage(parent);}
     };
 
     class CoreServerConfigPage : public Core::IFirstConfigurationPage
@@ -109,6 +119,7 @@ AppConfigWizard::AppConfigWizard(QWidget *parent) :
     pages << new ::CoreFirstRunPage(this);
     pages << new ::CoreServerConfigPage(this);
     pages << new ::CoreClientConfigPage(this);
+    pages << new ::CoreFirstRunDatabaseCreationPage(this);
     pages << new ::CoreLastRunPage(this);
 
     // add pages to wizard
@@ -458,17 +469,6 @@ bool ServerConfigPage::validatePage()
                 }
             }
         }
-
-//        // recreate server connector
-//        Utils::DatabaseConnector connector;
-//        connector.setClearLog();
-//        connector.setClearPass();
-//        connector.setHost(serverWidget->hostName());
-//        connector.setPort(serverWidget->port());
-//        connector.setDriver(Utils::Database::MySQL);
-//        connector.setAccessMode(Utils::DatabaseConnector::ReadWrite);
-//        settings()->setDatabaseConnector(connector);
-//        Core::ICore::instance()->databaseServerLoginChanged();
     }
     QSqlDatabase::removeDatabase("__APP_CONNECTION_TESTER");
     return true;
@@ -476,7 +476,7 @@ bool ServerConfigPage::validatePage()
 
 int ServerConfigPage::nextId() const
 {
-    return Core::IFirstConfigurationPage::UserCreation;
+    return Core::IFirstConfigurationPage::DatabaseCreationPage;
 }
 
 void ServerConfigPage::changeEvent(QEvent *e)
@@ -491,6 +491,71 @@ void ServerConfigPage::changeEvent(QEvent *e)
     }
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////  CoreDatabaseCreationPage  //////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////
+CoreDatabaseCreationPage::CoreDatabaseCreationPage(QWidget *parent) :
+    QWizardPage(parent),
+    _progressBar(0),
+    _completed(false)
+{
+    QGridLayout *l = new QGridLayout(this);
+    setLayout(l);
+
+    _progressBar = new QProgressBar(this);
+    l->addWidget(_progressBar);
+
+    retranslate();
+}
+
+void CoreDatabaseCreationPage::initializePage()
+{
+    _progressBar->setRange(0, 0);
+    _progressBar->setValue(0);
+    // request creation after the page is shown
+    QTimer::singleShot(100, this, SLOT(startDbCreation()));
+}
+
+void CoreDatabaseCreationPage::startDbCreation()
+{
+    Core::ICore::instance()->requestFirstRunDatabaseCreation();
+    _completed = true;
+    Q_EMIT completeChanged();
+    wizard()->next();
+}
+
+bool CoreDatabaseCreationPage::isComplete() const
+{
+    return _completed;
+}
+
+bool CoreDatabaseCreationPage::validatePage()
+{
+    return _completed;
+}
+
+int CoreDatabaseCreationPage::nextId() const
+{
+    return Core::IFirstConfigurationPage::UserCreation;
+}
+
+void CoreDatabaseCreationPage::retranslate()
+{
+    setTitle(tr("Preparing databases"));
+    setSubTitle(tr("Preparing databases. Please wait..."));
+}
+
+void CoreDatabaseCreationPage::changeEvent(QEvent *e)
+{
+    QWidget::changeEvent(e);
+    switch (e->type()) {
+    case QEvent::LanguageChange:
+        retranslate();
+        break;
+    default:
+        break;
+    }
+}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////  EndConfigPage  ///////////////////////////////////////////

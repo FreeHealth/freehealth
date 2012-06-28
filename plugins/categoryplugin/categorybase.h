@@ -75,6 +75,7 @@ public:
 
 private Q_SLOTS:
     void onCoreDatabaseServerChanged();
+    void onCoreFirstRunCreationRequested();
 
 private:
     bool categoryNeedsUpdate(CategoryItem *category);

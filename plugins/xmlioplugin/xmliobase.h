@@ -119,6 +119,7 @@ private:
 
 private Q_SLOTS:
     void onCoreDatabaseServerChanged();
+    void onCoreFirstRunCreationRequested();
 
 private:
     bool m_initialized;

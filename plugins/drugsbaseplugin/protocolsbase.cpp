@@ -200,6 +200,10 @@ ProtocolsBase::ProtocolsBase(QObject *parent) :
 
 //    "`EXTRAS`                blob           NULL,"
 //    "`ORDER`                 int(10)        NULL"
+
+
+    // Connect first run database creation requested
+    connect(Core::ICore::instance(), SIGNAL(firstRunDatabaseCreation()), this, SLOT(onCoreFirstRunCreationRequested()));
 }
 
 ProtocolsBase::~ProtocolsBase()
@@ -207,6 +211,12 @@ ProtocolsBase::~ProtocolsBase()
     if (d)
         delete d;
     d = 0;
+}
+
+void ProtocolsBase::onCoreFirstRunCreationRequested()
+{
+    disconnect(Core::ICore::instance(), SIGNAL(firstRunDatabaseCreation()), this, SLOT(onCoreFirstRunCreationRequested()));
+    init();
 }
 
 QString ProtocolsBase::dosageCreateTableSqlQuery()
@@ -268,6 +278,11 @@ QString ProtocolsBase::dosageCreateTableSqlQuery()
            "`TRANSMITTED`           date           NULL,"
            "`ORDER`                 int(10)        NULL"
            ");";
+}
+
+void ProtocolsBase::forceReinitialization()
+{
+    d->m_initialized = false;
 }
 
 /** \brief Initializer for the database. Return the error state. */
@@ -610,3 +625,4 @@ bool ProtocolsBase::onCoreDatabaseServerChanged()
         Q_EMIT protocolsBaseHasChanged();
     return r;
 }
+

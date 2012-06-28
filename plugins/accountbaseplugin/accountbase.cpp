@@ -547,6 +547,10 @@ AccountBase::AccountBase(QObject *parent)
 //          "name             varchar(50)                NULL,"
 //          "surname          varchar(50)               NULL,"
 //          "guid             varchar(6)                NOT NULL);";
+
+
+    // Connect first run database creation requested
+    connect(Core::ICore::instance(), SIGNAL(firstRunDatabaseCreation()), this, SLOT(onCoreFirstRunCreationRequested()));
 }
 
 /** \brief Destructor. */
@@ -749,6 +753,13 @@ void AccountBase::onCoreDatabaseServerChanged()
     if (QSqlDatabase::connectionNames().contains(Constants::DB_ACCOUNTANCY)) {
         QSqlDatabase::removeDatabase(Constants::DB_ACCOUNTANCY);
     }
+    disconnect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
+    initialize();
+}
+
+void AccountBase::onCoreFirstRunCreationRequested()
+{
+    disconnect(Core::ICore::instance(), SIGNAL(firstRunDatabaseCreation()), this, SLOT(onCoreFirstRunCreationRequested()));
     initialize();
 }
 

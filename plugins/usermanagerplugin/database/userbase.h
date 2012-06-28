@@ -61,6 +61,9 @@ protected:
     UserBase(QObject *parent = 0);
     void onCoreDatabaseServerChanged();
 
+protected Q_SLOTS:
+    void onCoreFirstRunCreationRequested();
+
 public:
     // Constructor
     static UserBase *instance();
@@ -120,8 +123,8 @@ private:
 
 private:
     bool m_initialized;
-    static QString  m_LastUuid, m_LastLogin, m_LastPass;
-    static UserBase * m_Instance;
+    mutable QString  m_LastUuid, m_LastLogin, m_LastPass;
+    static UserBase *m_Instance;
     bool m_IsNewlyCreated;
 };
 

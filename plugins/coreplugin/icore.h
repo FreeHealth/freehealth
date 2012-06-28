@@ -134,6 +134,7 @@ public:
     void coreIsAboutToClose() { Q_EMIT coreAboutToClose(); }
     void requestSaveSettings() { Q_EMIT saveSettingsRequested(); }
     void databaseServerLoginChanged() { Q_EMIT databaseServerChanged(); }
+    void requestFirstRunDatabaseCreation() { Q_EMIT firstRunDatabaseCreation(); }
 
 Q_SIGNALS:
     void coreAboutToOpen();
@@ -142,6 +143,8 @@ Q_SIGNALS:
     void optionsDialogRequested();
     void coreAboutToClose();
 
+    // Databases management
+    void firstRunDatabaseCreation();
     void databaseServerChanged();
 
 protected:

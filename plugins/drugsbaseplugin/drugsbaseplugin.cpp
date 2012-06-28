@@ -63,7 +63,7 @@ DrugsBasePlugin::DrugsBasePlugin() :
     // Add Translator to the Application
     Core::ICore::instance()->translators()->addNewTranslator("drugsbaseplugin");
 
-    // Create the drugs core instance
+    // Create the drugs core instance. Core auto-init itself after the coreOpened()
     new DrugsDB::DrugBaseCore(this);
 }
 

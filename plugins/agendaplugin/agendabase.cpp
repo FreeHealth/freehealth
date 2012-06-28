@@ -314,6 +314,9 @@ AgendaBase::AgendaBase(QObject *parent) :
 
     // information
     addField(Table_VERSION, VERSION_ACTUAL,  "ACTUAL", FieldIsShortText);
+
+    // Connect first run database creation requested
+    connect(Core::ICore::instance(), SIGNAL(firstRunDatabaseCreation()), this, SLOT(onCoreFirstRunCreationRequested()));
 }
 
 AgendaBase::~AgendaBase()
@@ -358,7 +361,6 @@ bool AgendaBase::initialize()
         return false;
 
     connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
-
     m_initialized = true;
     return true;
 }
@@ -468,8 +470,17 @@ void AgendaBase::onCoreDatabaseServerChanged()
     if (QSqlDatabase::connectionNames().contains(Constants::DB_NAME)) {
         QSqlDatabase::removeDatabase(Constants::DB_NAME);
     }
+    disconnect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
+    disconnect(Core::ICore::instance(), SIGNAL(firstRunDatabaseCreation()), this, SLOT(onCoreFirstRunCreationRequested()));
     initialize();
 }
+
+void AgendaBase::onCoreFirstRunCreationRequested()
+{
+    disconnect(Core::ICore::instance(), SIGNAL(firstRunDatabaseCreation()), this, SLOT(onCoreFirstRunCreationRequested()));
+    initialize();
+}
+
 
 /** Creates an return an empty Agenda::UserCalendar pointer. Agenda::DayAvailability are added all days. The calendar is not defines as the default one. */
 Agenda::UserCalendar *AgendaBase::createEmptyCalendar(const QString &userUid)

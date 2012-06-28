@@ -122,8 +122,8 @@ PmhBase *PmhBase::instance()
 PmhBase::PmhBase(QObject *parent) :
     QObject(parent), Utils::Database(),
     m_initialized(false)
-//    d(new Internal::PmhBasePrivate)
 {
+    m_Instance = this;
     setObjectName("PmhBase");
     using namespace PMH::Constants;
     addTable(Table_MASTER,        "PMH_MASTER");
@@ -162,6 +162,9 @@ PmhBase::PmhBase(QObject *parent) :
     addIndex(Table_EPISODE, EPISODE_ID);
     addIndex(Table_EPISODE, EPISODE_MASTER_ID);
     addIndex(Table_EPISODE, EPISODE_TRACE_ID);
+
+    // Connect first run database creation requested
+    connect(Core::ICore::instance(), SIGNAL(firstRunDatabaseCreation()), this, SLOT(onCoreFirstRunCreationRequested()));
 }
 
 PmhBase::~PmhBase()
@@ -191,7 +194,7 @@ bool PmhBase::initialize()
     }
 
     connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
-
+    connect(Core::ICore::instance(), SIGNAL(firstRunDatabaseCreation()), this, SLOT(onCoreFirstRunCreationRequested()));
     m_initialized = true;
     return true;
 }
@@ -562,6 +565,13 @@ void PmhBase::onCoreDatabaseServerChanged()
     if (QSqlDatabase::connectionNames().contains(Constants::DB_NAME)) {
         QSqlDatabase::removeDatabase(Constants::DB_NAME);
     }
+    disconnect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
+    disconnect(Core::ICore::instance(), SIGNAL(firstRunDatabaseCreation()), this, SLOT(onCoreFirstRunCreationRequested()));
     initialize();
 }
 
+void PmhBase::onCoreFirstRunCreationRequested()
+{
+    disconnect(Core::ICore::instance(), SIGNAL(firstRunDatabaseCreation()), this, SLOT(onCoreFirstRunCreationRequested()));
+    initialize();
+}
