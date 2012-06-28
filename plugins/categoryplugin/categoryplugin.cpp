@@ -53,8 +53,12 @@ CategoryPlugin::CategoryPlugin()
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating CategoryPlugin";
+
     // Add Translator to the Application
     Core::ICore::instance()->translators()->addNewTranslator("categoryplugin");
+
+    // Create the core instance
+    CategoryCore::instance(this);
 }
 
 CategoryPlugin::~CategoryPlugin()
@@ -77,8 +81,8 @@ void CategoryPlugin::extensionsInitialized()
         qWarning() << "CategoryPlugin::extensionsInitialized";
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 
-    // Create the core instance
-    CategoryCore::instance(this);
+    if (!CategoryCore::instance()->initialize())
+        LOG_ERROR("Category core not initialized");
 }
 
 

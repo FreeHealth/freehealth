@@ -33,7 +33,18 @@
 using namespace Category;
 using namespace Internal;
 
-static inline CategoryBase *base() {return CategoryBase::instance();}
+namespace Category {
+namespace Internal {
+class CategoryCorePrivate
+{
+public:
+    CategoryCorePrivate() : _categoryBase(0) {}
+
+public:
+    Internal::CategoryBase *_categoryBase;
+};
+}  // Internal
+}  // Category
 
 CategoryCore *CategoryCore::m_Instance = 0;
 
@@ -46,27 +57,33 @@ CategoryCore *CategoryCore::instance(QObject *parent)
 }
 
 CategoryCore::CategoryCore(QObject *parent) :
-        QObject(parent)
+    QObject(parent), d(new Internal::CategoryCorePrivate)
 {
     setObjectName("CategoryCore");
+
     // Create the base
-    base();
+    d->_categoryBase = new Internal::CategoryBase(this);
 }
 
 CategoryCore::~CategoryCore()
 {
 }
 
+bool CategoryCore::initialize()
+{
+    return d->_categoryBase->initialize();
+}
+
 /** Public core wrapper to the Category::CategoryBase::getCategories() */
 QVector<CategoryItem *> CategoryCore::getCategories(const QString &mime, const QStringList &uuids) const
 {
-    return base()->getCategories(mime, uuids);
+    return d->_categoryBase->getCategories(mime, uuids);
 }
 
 /** Public core wrapper to the Category::CategoryBase::createCategoryTree() */
 QList<CategoryItem *> CategoryCore::createCategoryTree(const QVector<CategoryItem *> &cats) const
 {
-    return base()->createCategoryTree(cats);
+    return d->_categoryBase->createCategoryTree(cats);
 }
 
 static QVector<Category::CategoryItem *> flattenCategories(Category::CategoryItem *item)
@@ -113,19 +130,19 @@ bool CategoryCore::linkContentItemWithCategoryItem(const QVector<Category::Categ
 /** Public core wrapper to the Category::CategoryBase::saveCategory() */
 bool CategoryCore::saveCategory(CategoryItem *category)
 {
-    return base()->saveCategory(category);
+    return d->_categoryBase->saveCategory(category);
 }
 
 /** Public core wrapper to the Category::CategoryBase::saveCategories() */
 bool CategoryCore::saveCategories(const QVector<CategoryItem *> &categories)
 {
-    return base()->saveCategories(categories);
+    return d->_categoryBase->saveCategories(categories);
 }
 
 /** Public core wrapper to the Category::CategoryBase::removeAllExistingCategories() */
 bool CategoryCore::removeAllExistingCategories(const QString &mime)
 {
-    return base()->removeAllExistingCategories(mime);
+    return d->_categoryBase->removeAllExistingCategories(mime);
 }
 
 /**
