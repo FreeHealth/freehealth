@@ -27,6 +27,7 @@
 #include "commandlineparser.h"
 
 #include <utils/global.h>
+#include <utils/log.h>
 
 #include <QApplication>
 #include <QDebug>
