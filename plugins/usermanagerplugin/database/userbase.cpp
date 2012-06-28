@@ -87,7 +87,6 @@ static inline Core::ICommandLine *commandLine()  { return Core::ICore::instance(
 static inline QString bundlePath()  { return settings()->path(Core::ISettings::BundleResourcesPath); }
 
 // Initializing static datas
-bool UserBase::m_initialized = false;
 QString  UserBase::m_LastUuid = "";
 QString  UserBase::m_LastLogin = "";
 QString  UserBase::m_LastPass = "";
@@ -99,8 +98,7 @@ UserBase* UserBase::m_Instance = 0;
 */
 UserBase *UserBase::instance()
 {
-    if (!m_Instance)
-        m_Instance = new UserBase(qApp);
+    Q_ASSERT(m_Instance);
     return m_Instance;
 }
 
@@ -116,12 +114,12 @@ bool UserBase::testConnexion() const
 }
 
 /** Constructor, inform Utils::Database of the database scheme. */
-UserBase::UserBase(QObject *parent)
-        : QObject(parent), Utils::Database()
+UserBase::UserBase(QObject *parent) :
+    QObject(parent), Utils::Database(),
+    m_initialized(false), m_IsNewlyCreated(false)
 {
+    m_Instance = this;
     setObjectName("UserBase");
-    m_initialized = false;
-    m_IsNewlyCreated = false;
 
     // populate tables and fields of database
     addTable(Table_USERS,  "USERS");
@@ -188,8 +186,6 @@ UserBase::UserBase(QObject *parent)
     addTable(Table_INFORMATION, "INFORMATIONS");
     addField(Table_INFORMATION, INFO_VERSION,  "VERSION", FieldIsShortText);
     addField(Table_INFORMATION, INFO_MAX_LKID, "MAX_LK_ID", FieldIsInteger);
-
-    initialize(Core::ICore::instance()->settings());
 }
 
 /**

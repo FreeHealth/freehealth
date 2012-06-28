@@ -228,7 +228,7 @@ TemplateBase::~TemplateBase()
     d=0;
 }
 
-bool TemplateBase::init()
+bool TemplateBase::initialize()
 {
     // only one base can be initialized
     if (d->m_initialized)
@@ -387,5 +387,5 @@ void TemplateBase::onCoreDatabaseServerChanged()
     if (QSqlDatabase::connectionNames().contains(Templates::Constants::DB_TEMPLATES_NAME)) {
         QSqlDatabase::removeDatabase(Templates::Constants::DB_TEMPLATES_NAME);
     }
-    init();
+    initialize();
 }

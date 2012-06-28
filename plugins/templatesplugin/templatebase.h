@@ -50,7 +50,7 @@ class TemplateBase : public QObject, public Utils::Database
 
 protected:
     TemplateBase(QObject *parent = 0);
-    bool init();
+    bool initialize();
 
 public:
     ~TemplateBase();

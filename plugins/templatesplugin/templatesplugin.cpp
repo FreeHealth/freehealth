@@ -54,6 +54,9 @@ TemplatesPlugin::TemplatesPlugin()
     // Add Translator to the Application
     Core::ICore::instance()->translators()->addNewTranslator("templatesplugin");
 
+    // Create the instance of Core
+    new Templates::TemplatesCore(this);
+
     prefPage = new Internal::TemplatesPreferencesPage(this);
     addObject(prefPage);
 }
@@ -83,8 +86,7 @@ void TemplatesPlugin::extensionsInitialized()
         qWarning() << "TemplatesPlugin::extensionsInitialized";
 
     // Initialize templateCore
-    Templates::TemplatesCore *core = new Templates::TemplatesCore(this);
-    core->init();
+    Templates::TemplatesCore::instance().init();
 
     // add plugin info page
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));

@@ -52,10 +52,10 @@ class TextDocumentExtra;
 
 
 namespace UserPlugin {
-class UserManagerPlugin;
 class UserModel;
 
 namespace Internal {
+class UserManagerPlugin;
 class UserModelPrivate;
 
 class UserModelWrapper : public Core::IUser
@@ -94,7 +94,7 @@ private:
 class USER_EXPORT UserModel : public QAbstractTableModel
 {
     Q_OBJECT
-    friend class UserPlugin::UserManagerPlugin;
+    friend class UserPlugin::Internal::UserManagerPlugin;
 
     UserModel(QObject *parent);
 

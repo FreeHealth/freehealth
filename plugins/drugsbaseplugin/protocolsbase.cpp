@@ -108,7 +108,8 @@ struct minimalCompo {
     int inn;
     QString dosage;
 };
-}
+}  // namespace anonymous
+
 namespace DrugsDB {
 namespace Internal {
 class ProtocolsBasePrivate
@@ -119,8 +120,8 @@ public:
 public:
     bool m_initialized;
 };
-}
-}
+}  // namespace DrugsDB
+}  // namespace Internal
 
 ProtocolsBase::ProtocolsBase(QObject *parent) :
     QObject(parent), Utils::Database(),
@@ -301,6 +302,7 @@ bool ProtocolsBase::init()
 
     checkDosageDatabaseVersion();
 
+    // Core signals are connected into the drugbasecore
     // Initialize
     d->m_initialized = true;
     return true;

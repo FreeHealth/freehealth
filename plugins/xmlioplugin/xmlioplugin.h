@@ -34,15 +34,14 @@
 /**
  * \file xmlioplugin.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.0.4
- * \date 11 Aug 2009
+ * \version 0.7.6
+ * \date 28 Jun 2012
 */
 
 namespace XmlForms {
 namespace Internal {
 class XmlFormIO;
 class XmlFormContentReader;
-}
 
 class XmlFormIOPlugin : public ExtensionSystem::IPlugin
 {
@@ -59,7 +58,7 @@ private:
     Internal::XmlFormIO *m_FormIo;
 };
 
-
-} // end XmlForms
+}  // namespace Internal
+}  // namespace XmlForms
 
 #endif  // End XMLIOTPLUGIN_H
