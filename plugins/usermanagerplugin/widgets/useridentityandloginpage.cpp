@@ -26,6 +26,7 @@
  ***************************************************************************/
 #include "useridentityandloginpage.h"
 #include <usermanagerplugin/usermodel.h>
+#include <usermanagerplugin/database/userbase.h>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
@@ -41,7 +42,6 @@
 
 #include "ui_useridentityandloginpage.h"
 
-
 using namespace UserPlugin;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
@@ -51,9 +51,11 @@ static inline UserPlugin::UserModel *userModel() { return UserModel::instance();
 
 UserIdentityAndLoginPage::UserIdentityAndLoginPage(QWidget *parent) :
     QWizardPage(parent),
-    ui(new Ui::UserIdentityAndLoginPage)
+    ui(new Ui::UserIdentityAndLoginPage),
+    _showErrorLabels(false)
 {
     ui->setupUi(this);
+    toggleErrorLabels();
 
     ui->cbLanguage->setDisplayMode(Views::LanguageComboBox::AvailableTranslations);
     ui->cbLanguage->setCurrentLanguage(QLocale().language());
@@ -93,7 +95,8 @@ UserIdentityAndLoginPage::UserIdentityAndLoginPage(QWidget *parent) :
 
     retranslate();
 
-    connect(ui->leLogin, SIGNAL(editingFinished()), this, SLOT(checkLogin()));
+    connect(ui->leLogin, SIGNAL(textChanged(QString)), this, SLOT(checkLogin()));
+//    connect(ui->leLogin, SIGNAL(editingFinished()), this, SLOT(checkLoginAfterEdition()));
     connect(ui->lePasswordConfirm, SIGNAL(textChanged(QString)), this, SLOT(checkControlPassword(QString)));
     connect(ui->lePassword, SIGNAL(textChanged(QString)), this, SLOT(checkControlPassword(QString)));
 
@@ -111,10 +114,29 @@ UserIdentityAndLoginPage::~UserIdentityAndLoginPage()
 
 void UserIdentityAndLoginPage::checkLogin()
 {
-    // TODO: code here
-
     // user login must be unique in the FreeMedForms database
     // user login must be unique on the server
+    if (ui->leLogin->text().length() < 6) {
+        ui->lblLogin->setStyleSheet("color:red;");
+        ui->lblLogin->setToolTip(tr("You must specify a valid login. Login must be more than 6 characters."));
+        ui->lblLoginError->setText(tr("You must specify a valid login. Login must be more than 6 characters."));
+    } else if (UserBase::instance()->isLoginAlreadyExists(ui->leLogin->text())) {
+        ui->lblLogin->setStyleSheet("color:red;");
+        ui->lblLogin->setStyleSheet(tr("Login in use. Please select another login"));
+        ui->lblLoginError->setText(tr("Login in use. Please select another login"));
+    } else {
+        ui->lblLogin->setStyleSheet(QString::null);
+        ui->lblLogin->setStyleSheet(QString::null);
+        ui->lblLoginError->clear();
+    }
+//    toggleErrorLabels();
+}
+
+void UserIdentityAndLoginPage::checkLoginAfterEdition()
+{
+    checkLogin();
+    _showErrorLabels = true;
+    toggleErrorLabels();
 }
 
 void UserIdentityAndLoginPage::checkControlPassword(const QString &text)
@@ -160,11 +182,6 @@ void UserIdentityAndLoginPage::retranslate()
     setTitle(tr("Create a new user"));
     setSubTitle(tr("Please enter your identity."));
 
-    /* TODO: the following lines are not really needed
-      as in the autocreated ui_ file the retranslate() method
-      is already implemented, but that method just doesn't use the
-      Trans::Constants::XXXX strings we should use here */
-
     if (ui->langLbl) {
         ui->langLbl->setText(tr("Language"));
         ui->lblTitle->setText(tkTr(Trans::Constants::TITLE));
@@ -182,6 +199,17 @@ void UserIdentityAndLoginPage::retranslate()
     }
 }
 
+void UserIdentityAndLoginPage::toggleErrorLabels()
+{
+    WARN_FUNC << ui->lblLoginError->text();
+    if (_showErrorLabels) {
+        ui->lblLoginError->setVisible(!ui->lblLoginError->text().isEmpty());
+        ui->lblPasswordError->setVisible(!ui->lblPasswordError->text().isEmpty());
+    } else {
+        ui->lblLoginError->setVisible(false);
+        ui->lblPasswordError->setVisible(false);
+    }
+}
 
 bool UserIdentityAndLoginPage::validatePage()
 {
@@ -210,6 +238,7 @@ bool UserIdentityAndLoginPage::validatePage()
                                  "", tr("Wrong login"));
         return false;
     }
+
     // log/pass already used ?
     if (userModel()->isCorrectLogin(field("Login").toString(),
                                     field("Password").toString())) {

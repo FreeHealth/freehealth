@@ -67,6 +67,7 @@ public:
 
 private Q_SLOTS:
     void checkLogin();
+    void checkLoginAfterEdition();
     void checkControlPassword(const QString &text);
     void on_leName_textChanged(const QString &text);
     void on_leFirstName_textChanged(const QString &text);
@@ -75,9 +76,11 @@ private Q_SLOTS:
 private:
     void changeEvent(QEvent *e);
     void retranslate();
+    void toggleErrorLabels();
 
 private:
     Internal::Ui::UserIdentityAndLoginPage *ui;
+    bool _showErrorLabels;
 };
 
 } // namespace Internal
