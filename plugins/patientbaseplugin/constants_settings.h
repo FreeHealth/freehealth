@@ -35,7 +35,6 @@ namespace Constants {
     const char * const  S_SELECTOR_USEGENDERCOLORS  = "Patients/Selector/UseGenderColors";
     const char * const  S_SEARCHMETHOD = "Patients/Selector/SearchMethod";
     const char * const  S_PATIENTBARCOLOR = "Patients/Bar/Color";
-    const char * const  S_PATIENTCHANGEONCREATION = "Patients/SelectOnCreation";
 
 }  // End namespace Patients::Constants
 }  // End namespace Patients

@@ -29,8 +29,8 @@
 /**
  * \file constants_tokensandsettings.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.4.0
- * \date 13 June 2010
+ * \version 0.7.6
+ * \date 28 Jun 2012
 */
 
 
@@ -163,6 +163,8 @@ const char * const  S_ALWAYS_SAVE_WITHOUT_PROMPTING = "Core/SaveInDatabaseWithou
 const char * const  S_ALLOW_VIRTUAL_DATA = "Core/AllowAndUseVirtuals";
 
 const char * const  S_PROXY = "Core/Proxy";
+
+const char * const  S_PATIENTCHANGEONCREATION = "Patients/SelectOnCreation";
 
 }  // end Constants
 } // end Core

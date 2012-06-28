@@ -34,6 +34,7 @@
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
+#include <coreplugin/constants_tokensandsettings.h>
 
 #include "ui_patientbasepreferencespage.h"
 
@@ -87,7 +88,7 @@ void PatientBasePreferencesPage::checkSettingsValidity()
     defaultvalues.insert(Constants::S_SELECTOR_FIELDSTOSHOW, PatientSelector::Default);
     defaultvalues.insert(Constants::S_SELECTOR_USEGENDERCOLORS, true);
     defaultvalues.insert(Constants::S_PATIENTBARCOLOR, Qt::white);
-    defaultvalues.insert(Constants::S_PATIENTCHANGEONCREATION, true);
+    defaultvalues.insert(Core::Constants::S_PATIENTCHANGEONCREATION, true);
 
     foreach(const QString &k, defaultvalues.keys()) {
         if (settings()->value(k) == QVariant())
@@ -121,7 +122,7 @@ PatientBasePreferencesWidget::~PatientBasePreferencesWidget()
 
 void PatientBasePreferencesWidget::setDatasToUi()
 {
-    ui->selectNewlyCreatedBox->setChecked(settings()->value(Constants::S_PATIENTCHANGEONCREATION).toBool());
+    ui->selectNewlyCreatedBox->setChecked(settings()->value(Core::Constants::S_PATIENTCHANGEONCREATION).toBool());
     ui->genderColor->setChecked(settings()->value(Constants::S_SELECTOR_USEGENDERCOLORS).toBool());
     ui->patientBarColor->setColor(QColor(settings()->value(Constants::S_PATIENTBARCOLOR).toString()));
 }
@@ -134,7 +135,7 @@ void PatientBasePreferencesWidget::saveToSettings(Core::ISettings *sets)
     else
         s = sets;
 
-    s->setValue(Constants::S_PATIENTCHANGEONCREATION, ui->selectNewlyCreatedBox->isChecked());
+    s->setValue(Core::Constants::S_PATIENTCHANGEONCREATION, ui->selectNewlyCreatedBox->isChecked());
     s->setValue(Constants::S_SELECTOR_USEGENDERCOLORS, ui->genderColor->isChecked());
     s->setValue(Constants::S_PATIENTBARCOLOR, ui->patientBarColor->color());
 }
@@ -145,7 +146,7 @@ void PatientBasePreferencesWidget::writeDefaultSettings(Core::ISettings *s)
     LOG_FOR("PatientBasePreferencesWidget", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("Patient preferences"));
     s->setValue(Constants::S_SELECTOR_USEGENDERCOLORS, true);
     s->setValue(Constants::S_PATIENTBARCOLOR, Qt::white);
-    s->setValue(Constants::S_PATIENTCHANGEONCREATION, true);
+    s->setValue(Core::Constants::S_PATIENTCHANGEONCREATION, true);
     s->sync();
 }
 

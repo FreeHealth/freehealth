@@ -34,6 +34,7 @@
 #include <coreplugin/isettings.h>
 #include <coreplugin/constants_icons.h>
 #include <coreplugin/constants_menus.h>
+#include <coreplugin/constants_tokensandsettings.h>
 #include <coreplugin/actionmanager/actionmanager.h>
 
 #include <calendar/calendar_item.h>
@@ -160,8 +161,8 @@ CalendarItemEditorPatientMapperWidget::CalendarItemEditorPatientMapperWidget(QWi
     Core::Command *cmd = actionManager()->command(Core::Constants::A_PATIENT_NEW);
     if (cmd) {
         // change the Patient settings for autoselection of newly created patients
-        m_StoredSettingsValue = settings()->value(Patients::Constants::S_PATIENTCHANGEONCREATION).toBool();
-        settings()->setValue(Patients::Constants::S_PATIENTCHANGEONCREATION, false);
+        m_StoredSettingsValue = settings()->value(Core::Constants::S_PATIENTCHANGEONCREATION).toBool();
+        settings()->setValue(Core::Constants::S_PATIENTCHANGEONCREATION, false);
         ui->createPatientToolButton->addAction(cmd->action());
         ui->createPatientToolButton->setDefaultAction(cmd->action());
         connect(patient(), SIGNAL(patientCreated(QString)), this, SLOT(onPatientCreated(QString)));
@@ -179,7 +180,7 @@ CalendarItemEditorPatientMapperWidget::CalendarItemEditorPatientMapperWidget(QWi
 
 CalendarItemEditorPatientMapperWidget::~CalendarItemEditorPatientMapperWidget()
 {
-    settings()->setValue(Patients::Constants::S_PATIENTCHANGEONCREATION, m_StoredSettingsValue);
+    settings()->setValue(Core::Constants::S_PATIENTCHANGEONCREATION, m_StoredSettingsValue);
     delete ui;
 }
 

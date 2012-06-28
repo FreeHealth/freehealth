@@ -35,6 +35,7 @@
 #include <coreplugin/constants_icons.h>
 #include <coreplugin/ipatient.h>
 #include <coreplugin/isettings.h>
+#include <coreplugin/constants_tokensandsettings.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -90,7 +91,7 @@ void PatientCreatorWizard::done(int r)
     } else if (r == QDialog::Accepted) {
         if (!validateCurrentPage())
             return;
-        if (settings()->value(Constants::S_PATIENTCHANGEONCREATION).toBool()) {
+        if (settings()->value(Core::Constants::S_PATIENTCHANGEONCREATION).toBool()) {
             Patients::PatientModel *m = Patients::PatientModel::activeModel();
             if (m) {
                 QString uid = m_Page->lastInsertedUuid();
