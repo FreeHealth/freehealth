@@ -389,7 +389,7 @@ UserData *UserBase::getUserByLoginPassword(const QVariant &login, const QVariant
     return getUser(where);
 }
 
-/** Check the couple login/password passed as params. */
+/** Check the couple login/password passed as params. Return true if a user can connect with these identifiants (to the server + to freemedforms). */
 bool UserBase::checkLogin(const QString &clearLogin, const QString &clearPassword) const
 {
     qWarning() << Q_FUNC_INFO << clearLogin << clearPassword;
@@ -411,12 +411,11 @@ bool UserBase::checkLogin(const QString &clearLogin, const QString &clearPasswor
             connectionTest.setUserName(clearLogin);
             connectionTest.setPassword(clearPassword);
             if (!connectionTest.open()) {
-                qWarning() << connectionTest << clearLogin << clearPassword << database().lastError().text();
-                LOG_ERROR(QString("Unable to connect to the MySQL server, with user %1: %2").arg(clearLogin).arg(clearPassword));
+                LOG_ERROR(QString("Unable to connect to the MySQL server, with user %1: %2").arg(clearLogin).arg(clearPassword.length()));
                 LOG_ERROR(database().lastError().text());
                 return false;
             }
-            LOG("Database server identifiers are correct");
+            LOG(QString("Database server identifiers are correct for login %1: %2").arg(clearLogin).arg(clearPassword.length()));
             // Reconnect with these identifiers all databases
             break;
         }
@@ -455,6 +454,19 @@ bool UserBase::checkLogin(const QString &clearLogin, const QString &clearPasswor
     }
 
     return (!m_LastUuid.isEmpty());
+}
+
+/** Return true if the \e login is already used on the server or in freemedforms configuration. */
+bool UserBase::isLoginAlreadyExists(const QString &clearLogin) const
+{
+    if (!testConnexion())
+        return false;
+    // TODO: test is the login is alreday used in mysql / postgre
+
+    // Check is user login is used
+    QHash<int, QString> where;
+    where.insert(USER_LOGIN, QString("='%1'").arg(Utils::loginForSQL(clearLogin)));
+    return count(Table_USERS, USER_LOGIN, getWhereClause(Table_USERS, where));
 }
 
 /** Return the Uuid of the user identified with couple login/password. Returns a null QString if an error occurs. */
@@ -858,8 +870,7 @@ bool UserBase::createUser(UserData *user)
 {
     if (!testConnexion())
         return false;
-    // check current user grants
-    // TODO: code here
+    // TODO: check current user freemedforms' rights
 
     switch (driver()) {
     case Utils::Database::MySQL:
@@ -908,6 +919,7 @@ bool UserBase::saveUser(UserData *user)
     // if user already exists ==> update   else ==> insert
     bool toUpdate = false;
     QHash<int, QString> where;
+    // Try to find existing user uuid
     if (user->id() != -1) {
         where.insert(USER_UUID, QString("='%1'").arg(user->uuid()));
         QString querychecker = select(Table_USERS, USER_UUID, where);
