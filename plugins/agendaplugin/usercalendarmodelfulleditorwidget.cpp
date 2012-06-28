@@ -32,6 +32,7 @@
 
 #include "usercalendarmodelfulleditorwidget.h"
 #include "agendabase.h"
+#include "agendacore.h"
 #include "usercalendarmodel.h"
 
 #include <coreplugin/icore.h>

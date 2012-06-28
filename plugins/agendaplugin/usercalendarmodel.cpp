@@ -33,6 +33,7 @@
 #include "usercalendarmodel.h"
 #include "usercalendar.h"
 #include "agendabase.h"
+#include "agendacore.h"
 #include "constants.h"
 
 #include <coreplugin/icore.h>

@@ -33,6 +33,7 @@
 #include "usercalendar.h"
 #include "constants.h"
 #include "agendabase.h"
+#include "agendacore.h"
 
 #include <utils/global.h>
 

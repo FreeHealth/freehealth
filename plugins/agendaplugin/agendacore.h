@@ -60,6 +60,7 @@ public:
     CalendarItemModel *calendarItemModel(const QVariant &calendarUid);
 
     bool initializeDatabase();
+    Internal::AgendaBase &agendaBase() const;
 
 protected Q_SLOTS:
     void postCoreInitialization();
@@ -67,7 +68,6 @@ protected Q_SLOTS:
 protected:
     explicit AgendaCore(QObject *parent = 0);
     void extensionsInitialized();
-    Internal::AgendaBase &agendaBase() const;
 
 private:
     static AgendaCore *m_Instance;

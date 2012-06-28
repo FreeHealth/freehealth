@@ -145,9 +145,11 @@ void AgendaCore::extensionsInitialized()
     connect(user(), SIGNAL(userChanged()), this, SLOT(postCoreInitialization()));
 }
 
+/** Direct access to agenda base. Please DONT use this function outside the agenda plugin. */
 Internal::AgendaBase &AgendaCore::agendaBase() const
 {
-    return d->m_AgendaBase;
+    Q_ASSERT(d->m_AgendaBase);
+    return *d->m_AgendaBase;
 }
 
 /** Create or get the Agenda::UserCalendarModel for the user \e userUid. The return pointer \b MUST \b NOT be deleted. */

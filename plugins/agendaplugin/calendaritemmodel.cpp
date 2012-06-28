@@ -25,9 +25,10 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "calendaritemmodel.h"
-#include "agendabase.h"
+#include "agendacore.h"
 #include "constants.h"
 #include "appointement.h"
+#include "agendabase.h"
 #include <agendaplugin/usercalendar.h>
 
 #include <coreplugin/icore.h>
