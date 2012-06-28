@@ -184,25 +184,11 @@ bool CalendarEventQuery::hasDateRange() const
     return (m_DateStart != QDateTime::currentDateTime() && m_DateEnd != QDateTime::currentDateTime());
 }
 
-// Initializing static datas
-bool AgendaBase::m_initialized = false;
-AgendaBase *AgendaBase::m_Instance = 0;
-
-/**
-  \brief Returns the unique instance of AgendaBase. If the instance does not exist it is created.
-  You should never construct a instance of this object using the constructor.
-*/
-AgendaBase *AgendaBase::instance()
-{
-    if (!m_Instance)
-        m_Instance = new AgendaBase(qApp);
-    return m_Instance;
-}
-
 AgendaBase::AgendaBase(QObject *parent) :
     QObject(parent), Utils::Database(),
     m_Next(new NextAvailabiliyManager)
 {
+    // The default instance is own by AgendaCore
     setObjectName("AgendaBase");
 
     // populate tables and fields of database
@@ -328,10 +314,6 @@ AgendaBase::AgendaBase(QObject *parent) :
 
     // information
     addField(Table_VERSION, VERSION_ACTUAL,  "ACTUAL", FieldIsShortText);
-
-    initialize();
-
-    connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
 }
 
 AgendaBase::~AgendaBase()
@@ -374,6 +356,8 @@ bool AgendaBase::initialize()
 
     if (!checkDatabaseVersion())
         return false;
+
+    connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
 
     m_initialized = true;
     return true;

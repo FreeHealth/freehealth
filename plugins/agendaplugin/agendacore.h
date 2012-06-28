@@ -43,6 +43,7 @@ class CalendarItemModel;
 
 namespace Internal {
 class AgendaCorePrivate;
+class AgendaBase;
 }  // End namespace Internal
 
 
@@ -52,11 +53,13 @@ class AgendaCore : public QObject
     friend class AgendaPlugin;
 
 public:
-    static AgendaCore *instance();
+    static AgendaCore &instance();
     ~AgendaCore();
 
     UserCalendarModel *userCalendarModel(const QString &userUid = QString::null);
     CalendarItemModel *calendarItemModel(const QVariant &calendarUid);
+
+    bool initializeDatabase();
 
 protected Q_SLOTS:
     void postCoreInitialization();
@@ -64,6 +67,7 @@ protected Q_SLOTS:
 protected:
     explicit AgendaCore(QObject *parent = 0);
     void extensionsInitialized();
+    Internal::AgendaBase &agendaBase() const;
 
 private:
     static AgendaCore *m_Instance;

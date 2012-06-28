@@ -29,6 +29,7 @@
   Core manager of the Agenda plugin.
 */
 #include "agendacore.h"
+#include "agendabase.h"
 #include "usercalendarmodel.h"
 #include "usercalendarpageforuserviewer.h"
 #include "usercalendarwizardcreatorpage.h"
@@ -62,7 +63,8 @@ public:
         m_UserViewerPage(0),
         m_UserCreatorPage(0),
         m_CalItemMapper(0),
-        m_AgendaMode(0)
+        m_AgendaMode(0),
+        m_AgendaBase(0)
     {}
 
     ~AgendaCorePrivate()
@@ -94,16 +96,17 @@ public:
     Internal::UserCalendarWizardCreatorPage *m_UserCreatorPage;
     Internal::CalendarItemEditorPatientMapper *m_CalItemMapper;
     Internal::AgendaMode *m_AgendaMode;
+    Internal::AgendaBase *m_AgendaBase;
 };
 }  // End namespace Internal
 }  // End namespace Agenda
 
 AgendaCore *AgendaCore::m_Instance = 0;
 
-AgendaCore *AgendaCore::instance()
+AgendaCore &AgendaCore::instance()
 {
     Q_ASSERT(m_Instance);
-    return m_Instance;
+    return *m_Instance;
 }
 
 AgendaCore::AgendaCore(QObject *parent) :
@@ -117,6 +120,9 @@ AgendaCore::AgendaCore(QObject *parent) :
 
     // Add the UserCreator wizard page
     pluginManager()->addObject(d->m_UserCreatorPage = new Internal::UserCalendarWizardCreatorPage(this));
+
+    // Create the base pointer (does not initialize the database)
+    d->m_AgendaBase = new Internal::AgendaBase(this);
 }
 
 AgendaCore::~AgendaCore()
@@ -129,9 +135,19 @@ AgendaCore::~AgendaCore()
     delete d;
 }
 
+bool AgendaCore::initializeDatabase()
+{
+    return d->m_AgendaBase->initialize();
+}
+
 void AgendaCore::extensionsInitialized()
 {
     connect(user(), SIGNAL(userChanged()), this, SLOT(postCoreInitialization()));
+}
+
+Internal::AgendaBase &AgendaCore::agendaBase() const
+{
+    return d->m_AgendaBase;
 }
 
 /** Create or get the Agenda::UserCalendarModel for the user \e userUid. The return pointer \b MUST \b NOT be deleted. */
@@ -178,6 +194,8 @@ void AgendaCore::postCoreInitialization()
         return;
     if (user()->uuid().isEmpty())
         return;
+
+    initializeDatabase();
 
     // Add Agenda's Calendar::CalendarItem extended editing widgets
     pluginManager()->addObject(d->m_CalItemMapper = new Internal::CalendarItemEditorPatientMapper(this));

@@ -126,7 +126,7 @@ void AgendaPlugin::extensionsInitialized()
     dlg.setFocus();
     dlg.setValue(0);
 
-    Internal::AgendaBase::instance();
+    m_Core->initializeDatabase();
 
     // Initialize ActionHandler and WidgetManager
     AgendaWidgetManager::instance();

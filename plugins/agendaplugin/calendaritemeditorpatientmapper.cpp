@@ -36,9 +36,6 @@
 #include <coreplugin/constants_menus.h>
 #include <coreplugin/actionmanager/actionmanager.h>
 
-#include <patientbaseplugin/patientmodel.h>
-#include <patientbaseplugin/constants_settings.h>
-
 #include <calendar/calendar_item.h>
 #include <calendar/calendar_people.h>
 #include <calendar/abstract_calendar_model.h>
@@ -233,7 +230,7 @@ bool CalendarItemEditorPatientMapperWidget::submitToItem(const Calendar::Calenda
 void CalendarItemEditorPatientMapperWidget::onPatientSelected(const QString &name, const QString &uid)
 {
     if (name.isEmpty()) {
-        QHash<QString, QString> name = Patients::PatientModel::patientName(QStringList() << uid);
+        QHash<QString, QString> name = patient()->fullPatientName(QStringList() << uid);
         addPatientRow(name.value(uid), uid);
         m_Selected.append(Calendar::People(Calendar::People::PeopleAttendee, name.value(uid), uid));
     } else {
@@ -245,7 +242,7 @@ void CalendarItemEditorPatientMapperWidget::onPatientSelected(const QString &nam
 
 void CalendarItemEditorPatientMapperWidget::onPatientCreated(const QString &uid)
 {
-    QHash<QString, QString> name = Patients::PatientModel::patientName(QStringList() << uid);
+    QHash<QString, QString> name = patient()->fullPatientName(QStringList() << uid);
     addPatientRow(name.value(uid), uid);
     m_Selected.append(Calendar::People(Calendar::People::PeopleAttendee, name.value(uid), uid));
     ui->searchPatient->clear();

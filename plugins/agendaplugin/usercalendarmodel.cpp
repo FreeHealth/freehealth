@@ -51,7 +51,7 @@ using namespace Trans::ConstantTranslations;
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 //static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
-static inline Agenda::Internal::AgendaBase *base() {return Agenda::Internal::AgendaBase::instance();}
+static inline Agenda::Internal::AgendaBase &base() {return Agenda::AgendaCore::instance().agendaBase();}
 
 namespace Agenda {
 namespace Internal {
@@ -62,7 +62,7 @@ public:
     {
         qDeleteAll(m_UserCalendars);
         m_UserCalendars.clear();
-        m_UserCalendars = base()->getUserCalendars(m_UserUid);
+        m_UserCalendars = base().getUserCalendars(m_UserUid);
     }
 
 public:
@@ -224,9 +224,9 @@ bool UserCalendarModel::insertRows(int row, int count, const QModelIndex &parent
     beginInsertRows(parent, row, row+count);
     bool newIsDefault = (rowCount() == 0); // check if there already is an Agenda
     for(int i = 0 ; i < count; ++i) {
-        UserCalendar *u = base()->createEmptyCalendar(d->m_UserUid);
+        UserCalendar *u = base().createEmptyCalendar(d->m_UserUid);
         u->setData(UserCalendar::IsDefault, newIsDefault);
-        base()->saveUserCalendar(u);
+        base().saveUserCalendar(u);
         d->m_UserCalendars.insert(row+i, u);
     }
     endInsertRows();
@@ -344,11 +344,11 @@ bool UserCalendarModel::submit()
 {
     bool ok = true;
     for(int i = 0; i < d->m_UserCalendars.count(); ++i) {
-        if (!base()->saveUserCalendar(d->m_UserCalendars.at(i)))
+        if (!base().saveUserCalendar(d->m_UserCalendars.at(i)))
                 ok = false;
     }
     for(int i = 0; i < d->m_RemovedCalendars.count(); ++i) {
-        if (!base()->saveUserCalendar(d->m_RemovedCalendars.at(i)))
+        if (!base().saveUserCalendar(d->m_RemovedCalendars.at(i)))
                 ok = false;
     }
     return ok;

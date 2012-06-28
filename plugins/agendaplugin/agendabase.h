@@ -39,12 +39,12 @@
 /**
  * \file agendabase.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.2
- * \date 22 Nov 2011
+ * \version 0.7.6
+ * \date 28 Jun 2012
 */
 
 namespace Agenda {
-
+class AgendaCore;
 namespace Internal {
 class Appointement;
 class NextAvailabiliyManager;
@@ -107,6 +107,7 @@ private:
 class AgendaBase :  public QObject, public Utils::Database
 {
     Q_OBJECT
+    friend class Agenda::AgendaCore;
 
 protected:
     AgendaBase(QObject *parent = 0);
@@ -117,8 +118,6 @@ public:
         RelatedToAppointement
     };
 
-    // Constructor
-    static AgendaBase *instance();
     virtual ~AgendaBase();
 
     // initialize
@@ -166,8 +165,7 @@ private:
     bool getRelatedPeoples(RelatedEventFor relatedTo, const int eventOrCalendarId, Calendar::CalendarPeople *event);
 
 private:
-    static bool m_initialized;
-    static AgendaBase *m_Instance;
+    bool m_initialized;
     NextAvailabiliyManager *m_Next;
 
 };
