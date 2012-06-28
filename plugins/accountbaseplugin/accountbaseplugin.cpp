@@ -86,6 +86,7 @@ void AccountBasePlugin::extensionsInitialized()
 
     // Initialize Account Database
     AccountBase::instance();
+    AccountBase::instance()->initialize();
 
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 }

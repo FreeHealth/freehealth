@@ -62,11 +62,11 @@ public:
     ~AccountBase();
 
     // Initializer / Checkers
+    bool initialize();
     static bool isInitialized() { return m_initialized; }
     void logChronos(bool state);
 
 private:
-    bool init();
     bool createDatabase(const QString &connectionName , const QString &dbName,
                         const QString &pathOrHostName,
                         TypeOfAccess access, AvailableDrivers driver,

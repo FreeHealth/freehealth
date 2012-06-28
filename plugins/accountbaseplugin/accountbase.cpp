@@ -119,9 +119,6 @@ AccountBase *AccountBase::instance()
 {
     if (!m_Instance) {
         m_Instance = new AccountBase(qApp);
-        
-        // TODO: this should be avoid, create the object **only**
-        m_Instance->init();
     }
     return m_Instance;
 }
@@ -550,11 +547,6 @@ AccountBase::AccountBase(QObject *parent)
 //          "name             varchar(50)                NULL,"
 //          "surname          varchar(50)               NULL,"
 //          "guid             varchar(6)                NOT NULL);";
-
-    // TODO: this should be avoided don't init in constructor
-    init();
-
-    connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
 }
 
 /** \brief Destructor. */
@@ -565,7 +557,7 @@ AccountBase::~AccountBase()
     d=0;
 }
 
-bool AccountBase::init()
+bool AccountBase::initialize()
 {
     // only one base can be initialized
     if (m_initialized)
@@ -618,12 +610,14 @@ bool AccountBase::init()
         	return false;
             }
         
-    }//checkDatabaseScheme
-    if(versionHasChanged())
-    {
-        LOG("Version has changed , new version = "+checkAndReplaceVersionNumber());
-        }
+    }
 
+    //checkDatabaseScheme
+    if (versionHasChanged()) {
+        LOG("Version has changed , new version = "+checkAndReplaceVersionNumber());
+    }
+
+    connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
     m_initialized = true;
     return true;
 }
@@ -755,7 +749,7 @@ void AccountBase::onCoreDatabaseServerChanged()
     if (QSqlDatabase::connectionNames().contains(Constants::DB_ACCOUNTANCY)) {
         QSqlDatabase::removeDatabase(Constants::DB_ACCOUNTANCY);
     }
-    init();
+    initialize();
 }
 
 bool AccountBase::checkIfIsFirstVersion()
