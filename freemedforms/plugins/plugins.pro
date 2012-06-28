@@ -108,6 +108,7 @@ usermanager.depends += printer
 usermanager.depends += texteditor
 usermanager.depends += listview
 usermanager.depends += zipcodes
+#usermanager.depends += agenda
 
 patientbase.subdir   = ../../plugins/patientbaseplugin
 patientbase.depends += core
