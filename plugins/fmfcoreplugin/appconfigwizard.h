@@ -109,6 +109,7 @@ class ClientConfigPage: public QWizardPage
 public:
     ClientConfigPage(QWidget *parent = 0);
 
+    void initializePage();
     bool isComplete() const;
     bool validatePage();
     int nextId() const;

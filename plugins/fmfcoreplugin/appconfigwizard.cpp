@@ -70,6 +70,12 @@ static inline QString serverConfigurationSqlScript() {return settings()->path(Co
 
 namespace {
 
+//static void noBackButton(QWizard *wizard)
+//{
+//    wizard->setButtonLayout(QList<QWizard::WizardButton>() << QWizard::HelpButton << QWizard::Stretch << QWizard::CancelButton << QWizard::NextButton);
+//    wizard->button(QWizard::BackButton)->setEnabled(false);
+//}
+
     class CoreFirstRunPage : public Core::IFirstConfigurationPage
     {
     public:
@@ -295,6 +301,11 @@ ClientConfigPage::ClientConfigPage(QWidget *parent) :
 
     connect(serverWidget, SIGNAL(userConnectionChanged(bool)), this, SIGNAL(completeChanged()));
     connect(serverWidget, SIGNAL(hostConnectionChanged(bool)), this, SIGNAL(completeChanged()));
+}
+
+void ClientConfigPage::initializePage()
+{
+//    noBackButton(wizard());
 }
 
 void ClientConfigPage::retranslate()
