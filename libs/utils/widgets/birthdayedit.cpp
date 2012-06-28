@@ -89,6 +89,7 @@ void BirthDayEdit::setClearIcon(const QString &fullAbsPath)
     if (!_rightButton) {
         _rightButton = new QToolButton(this);
         _rightButton->setFocusPolicy(Qt::ClickFocus);
+        _rightButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
         setRightButton(_rightButton);
         connect(_rightButton, SIGNAL(clicked()), this, SLOT(clear()));
     }
@@ -101,6 +102,7 @@ void BirthDayEdit::setDateIcon(const QString &fullAbsPath)
         _leftButton = new QToolButton(this);
         _leftButton->setFocusPolicy(Qt::ClickFocus);
         _leftButton->setPopupMode(QToolButton::InstantPopup);
+        _leftButton->setToolButtonStyle(Qt::ToolButtonIconOnly);
         // Create the menu
         aShortDisplay = new QAction(this);
         aLongDisplay = new QAction(this);
@@ -109,10 +111,8 @@ void BirthDayEdit::setDateIcon(const QString &fullAbsPath)
         _leftButton->addAction(aShortDisplay);
         _leftButton->addAction(aNumericDisplay);
         _leftButton->setDefaultAction(aLongDisplay);
-        _leftButton->setToolButtonStyle(Qt::ToolButtonIconOnly);
-        retranslate();
-        _leftButton->resize(20,20);
         setLeftButton(_leftButton);
+        retranslate();
         connect(_leftButton, SIGNAL(triggered(QAction*)), this, SLOT(formatActionTriggered(QAction*)));
     }
     _leftButton->setIcon(QIcon(fullAbsPath));
