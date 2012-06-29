@@ -258,7 +258,7 @@ int CoreConfigPage::nextId() const
     switch (installCombo->currentIndex())
     {
     case 0: // No server
-        return Core::IFirstConfigurationPage::UserCreation;
+        return Core::IFirstConfigurationPage::DatabaseCreationPage;
     case 1: // Network as client
         return Core::IFirstConfigurationPage::ServerClientConfig;
     case 2: // Network as server
