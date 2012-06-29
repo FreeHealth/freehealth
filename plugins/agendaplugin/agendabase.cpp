@@ -186,7 +186,7 @@ bool CalendarEventQuery::hasDateRange() const
 
 AgendaBase::AgendaBase(QObject *parent) :
     QObject(parent), Utils::Database(),
-    m_Next(new NextAvailabiliyManager)
+    m_initialized(false), m_Next(new NextAvailabiliyManager)
 {
     // The default instance is own by AgendaCore
     setObjectName("AgendaBase");
