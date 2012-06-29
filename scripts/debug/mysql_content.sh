@@ -101,13 +101,13 @@ extractData()
   echo `$MYSQL_ADMIN ping` >> $OUTPUT_FILE
   echo " " >> $OUTPUT_FILE
 
-  echo `$MYSQL_ADMIN status` >> $OUTPUT_FILE
+  echo "`$MYSQL_ADMIN status`" >> $OUTPUT_FILE
   echo " " >> $OUTPUT_FILE
 
-  echo `$MYSQL_ADMIN extended-status` >> $OUTPUT_FILE
+  echo "`$MYSQL_ADMIN extended-status`" >> $OUTPUT_FILE
   echo " " >> $OUTPUT_FILE
 
-  echo `$MYSQL_ADMIN variables` >> $OUTPUT_FILE
+  echo "`$MYSQL_ADMIN variables`" >> $OUTPUT_FILE
   echo " " >> $OUTPUT_FILE
 
   echo "## DATA EXTRACTION\n" >> $OUTPUT_FILE
