@@ -17,7 +17,7 @@ echo "WHERE mysql.db.Db='fmf\_%';" >> ./select.sql
 
 $MYSQL -uroot -p < ./select.sql | sed '1d' | tr -d "\t" | sed "s/^/DROP USER '/" | sed "s/$/';/" > ./drop.sql
 
-echo "*** Drop FreeMedForms users ***
+echo "*** Drop FreeMedForms users ***"
 more drop.sql
 $MYSQL -uroot < drop.sql
 
@@ -27,7 +27,7 @@ rm ./drop.sql
 echo "show databases LIKE 'fmf_%';" > ./select.sql
 $MYSQL -uroot -p < ./select.sql | sed '1d' | tr -d "\t"  | sed "s/^/DROP DATABASE /" | sed "s/$/;/" > ./drop.sql
 
-echo "*** Drop FreeMedForms databases ***
+echo "*** Drop FreeMedForms databases ***"
 more drop.sql
 $MYSQL -uroot < drop.sql
 
