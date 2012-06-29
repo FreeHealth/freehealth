@@ -45,8 +45,8 @@ checkMySQLServer()
   echo "## TESTING MYSQL SERVER" >> $OUTPUT_FILE
   echo "*** Testing MySQL server status"
   if [[ "$sys" == "Linux" ]] ; then
-    echo `mysqladmin ping` >> $OUTPUT_FILE
-    echo "    "`mysqladmin ping`
+    echo `$MYSQL_ADMIN ping` >> $OUTPUT_FILE
+    echo "    "`$MYSQL_ADMIN ping -uroot $MYSQL_ROOT_PASS`
   elif [[ "$sys" == "Darwin" ]] ; then
     echo "*** System Root password?"
     echo `sudo $MYSQL_PATH/../support-files/mysql.server status` >> $OUTPUT_FILE
@@ -97,16 +97,19 @@ clearSqlCommandFile()
 extractData()
 {
   echo "*** Starting data extraction"
-  echo "## MySQL CONFIGURATION \n" >> $OUTPUT_FILE
-  echo `$MYSQL_ADMIN ping` >> $OUTPUT_FILE
+  echo "## mysqladmin ping" >> $OUTPUT_FILE
+  echo "`$MYSQL_ADMIN ping`" >> $OUTPUT_FILE
   echo " " >> $OUTPUT_FILE
 
-  echo "`$MYSQL_ADMIN status`" >> $OUTPUT_FILE
+  echo "## mysqladmin status" >> $OUTPUT_FILE
+  echo "`$MYSQL_ADMIN  status`" >> $OUTPUT_FILE
   echo " " >> $OUTPUT_FILE
 
+  echo "## mysqladmin extended-status" >> $OUTPUT_FILE
   echo "`$MYSQL_ADMIN extended-status`" >> $OUTPUT_FILE
   echo " " >> $OUTPUT_FILE
 
+  echo "## mysqladmin variables" >> $OUTPUT_FILE
   echo "`$MYSQL_ADMIN variables`" >> $OUTPUT_FILE
   echo " " >> $OUTPUT_FILE
 
@@ -129,7 +132,14 @@ do
 done
 
 MYSQL=$MYSQL_PATH"mysql -uroot "$MYSQL_ROOT_PASS
-MYSQL_ADMIN=$MYSQL_PATH"mysqladmin"
+MYSQL_ADMIN=$MYSQL_PATH"mysqladmin -uroot $MYSQL_ROOT_PASS"
+
+if [[  "$MYSQL_ROOT_PASS" == "" ]]; then
+    echo "*** No password"
+else
+    echo "*** Using password: "$MYSQL_ROOT_PASS
+fi
+echo "    Default MySQL command: "$MYSQL
 
 echo "*** Starting MySQL debugging script at: "`date`" on "`hostname` > $OUTPUT_FILE
 
@@ -138,7 +148,7 @@ if [[  "$MYSQL_ROOT_PASS" == "" ]]; then
 else
     echo "*** Using password: "$MYSQL_ROOT_PASS
 fi
-echo "    Default MySQL command: "$MYSQL -uroot $MYSQL_ROOT_PASS
+echo "    Default MySQL command: "$MYSQL
 
 echo
 checkMySQLServer
@@ -152,5 +162,5 @@ if [[ $REPLY = [yY] ]]; then
    echo
    more $OUTPUT_FILE
 fi
-
+echo
 exit 0

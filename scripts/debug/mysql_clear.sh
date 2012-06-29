@@ -41,12 +41,14 @@ do
         esac
 done
 
+MYSQL="$MYSQL -uroot $MYSQL_ROOT_PASS"
+
 if [[  "$MYSQL_ROOT_PASS" == "" ]]; then
     echo "*** No password"
 else
     echo "*** Using password: "$MYSQL_ROOT_PASS
 fi
-echo "    Default MySQL command: "$MYSQL -uroot $MYSQL_ROOT_PASS
+echo "    Default MySQL command: "$MYSQL
 
 echo
 echo "*** Using MySQL from $MYSQL ***"
@@ -57,14 +59,14 @@ echo "WHERE mysql.db.Db='fmf\_%';" >> ./select.sql
 
 echo
 echo "*** Drop FreeMedForms users ***"
-$MYSQL -uroot $MYSQL_ROOT_PASS < ./select.sql | sed '1d' | tr -d "\t" | sed "s/^/DROP USER '/" | sed "s/$/';/" > ./drop.sql
+$MYSQL < ./select.sql | sed '1d' | tr -d "\t" | sed "s/^/DROP USER '/" | sed "s/$/';/" > ./drop.sql
 
 more drop.sql
 read -n1 -p "Execute these commands? [y/n]"
-if [[ $REPLY = [yY] ]]; then 
+if [[ $REPLY = [yY] ]]; then
    echo
    echo "*** Executing commands ***"
-   $MYSQL -uroot $MYSQL_ROOT_PASS < drop.sql
+   $MYSQL < drop.sql
 else
    echo
    echo "*** Commands ignored ***";
@@ -76,14 +78,14 @@ rm ./drop.sql
 echo
 echo "*** Drop FreeMedForms databases ***"
 echo "show databases LIKE 'fmf_%';" > ./select.sql
-$MYSQL -uroot $MYSQL_ROOT_PASS < ./select.sql | sed '1d' | tr -d "\t"  | sed "s/^/DROP DATABASE /" | sed "s/$/;/" > ./drop.sql
+$MYSQL < ./select.sql | sed '1d' | tr -d "\t"  | sed "s/^/DROP DATABASE /" | sed "s/$/;/" > ./drop.sql
 
 more drop.sql
 read -n1 -p "Execute these commands? [y/n]"
-if [[ $REPLY = [yY] ]]; then 
+if [[ $REPLY = [yY] ]]; then
    echo
    echo "*** Executing commands ***"
-   $MYSQL -uroot $MYSQL_ROOT_PASS < drop.sql
+   $MYSQL < drop.sql
 else
    echo
    echo "*** Commands ignored";
