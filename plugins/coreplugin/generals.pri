@@ -29,7 +29,8 @@ HEADERS += $${PWD}/core_exporter.h \
     $${PWD}/ifirstconfigurationpage.h \
     $${PWD}/ipatientlistener.h \
     $${PWD}/igenericpage.h \
-    $${PWD}/iscriptmanager.h
+    $${PWD}/iscriptmanager.h \
+    $${PWD}/constants_colors.h
 
 SOURCES += $${PWD}/uniqueidmanager.cpp \
     $${PWD}/icore.cpp \
