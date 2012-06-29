@@ -34,6 +34,7 @@
 #include <coreplugin/iuser.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/constants_icons.h>
+#include <coreplugin/constants_colors.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -71,14 +72,6 @@ static QIcon getIcon(const AlertItem &item)
 static QString getToolTip(const AlertItem &item)
 {
     QString toolTip;
-
-    QString background;
-    switch (item.priority()) {
-    case AlertItem::Low: background = "#FFC8C8"; break;
-    case AlertItem::Medium: background = "#FF6464"; break;
-    case AlertItem::High: background = "#FF3232"; break;
-    }
-
     // category, label, priority
     QString header;
     header = QString("<table border=0 margin=0 width=100%>"
@@ -92,7 +85,7 @@ static QString getToolTip(const AlertItem &item)
                       "</table>")
             .arg(item.category())
             .arg(item.label())
-            .arg(background)
+            .arg(item.priorityBackgroundColor())
             .arg(item.priorityToString())
             ;
 
@@ -196,6 +189,11 @@ void StaticAlertToolButton::setAlertItem(const AlertItem &item)
     setIcon(getIcon(item));
     setToolTip(getToolTip(item));
     setText(QString("%1: %2").arg(item.category()).arg(item.label()));
+//    QPalette palette = this->palette();
+//    palette.setColor(QPalette::Button, QColor(item.priorityBackgroundColor()));
+//    palette.setColor(QPalette::Background, QColor(item.priorityBackgroundColor()));
+//    this->setPalette(palette);
+//    setStyleSheet(QString("background:%1").arg(item.priorityBackgroundColor()));
 
     if (aLabel)
         aLabel->setText(item.label());

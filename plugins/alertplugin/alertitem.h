@@ -346,6 +346,7 @@ public:
     virtual void setThemedIcon(const QString &icon);
     virtual QString styleSheet() const;
     virtual void setStyleSheet(const QString &css);
+    virtual QString priorityBackgroundColor() const;
 
     virtual QString extraXml() const;
     virtual void setExtraXml(const QString &xml);

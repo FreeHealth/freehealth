@@ -31,6 +31,7 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/iuser.h>
 #include <coreplugin/ipatient.h>
+#include <coreplugin/constants_colors.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -633,6 +634,18 @@ QString AlertItem::styleSheet() const
 void AlertItem::setStyleSheet(const QString &css)
 {
     d->_css = css;
+}
+
+/** Returns the background color related to the Alert::AlertItem::priority(). */
+QString AlertItem::priorityBackgroundColor() const
+{
+    QString background;
+    switch (d->_priority) {
+    case AlertItem::Low: background = Core::Constants::COLOR_BACKGROUND_ALERT_HIGH; break;
+    case AlertItem::Medium: background = Core::Constants::COLOR_BACKGROUND_ALERT_MEDIUM; break;
+    case AlertItem::High: background = Core::Constants::COLOR_BACKGROUND_ALERT_LOW; break;
+    }
+    return background;
 }
 
 QString AlertItem::extraXml() const
