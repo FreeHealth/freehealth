@@ -57,6 +57,7 @@
 #include <QGroupBox>
 #include <QProgressBar>
 #include <QTimer>
+#include <QProgressDialog>
 
 using namespace Core;
 using namespace Trans::ConstantTranslations;
@@ -323,49 +324,62 @@ bool ClientConfigPage::isComplete() const
 
 bool ClientConfigPage::validatePage()
 {
-    if (serverWidget->connectionSucceeded()) {
-        // remove log and pass from settings
-        settings()->setValue(Core::Constants::S_LASTLOGIN, QString());
-        settings()->setValue(Core::Constants::S_LASTPASSWORD, QString());
-        // try to connect the MySQL server and test existence of a FreeMedForms configuration
-        QSqlDatabase mysql = QSqlDatabase::addDatabase("QMYSQL", "__CHECK__CONFIG__");
-        Utils::DatabaseConnector c = settings()->databaseConnector();
-        // test fmf_admin user
-        mysql.setHostName(c.host());
-        mysql.setPort(c.port());
-        mysql.setUserName(c.clearLog());
-        mysql.setPassword(c.clearPass());
-        if (!mysql.open()) {
-            Q_EMIT completeChanged();
-            return false;
-        }
-        // all freemedforms databases are prefixed with fmf_
-        // test the fmf_* databases existence
-        QSqlQuery query(mysql);
-        int n = 0;
-        if (!query.exec("show databases;")) {
-            LOG_QUERY_ERROR(query);
-            Q_EMIT completeChanged();
-            return false;
-        } else {
-            while (query.next())
-                if (query.value(0).toString().startsWith("fmf_"))
-                        ++n;
-        }
-        if (n<5) {
-            Utils::warningMessageBox(tr("No FreeMedForms server configuration detected"),
-                                     tr("You are trying to configure a network client of FreeMedForms. "
-                                        "It is manadatory to connect to a FreeMedForms network server.\n"
-                                        "While the host connection is valid, no FreeMedForms configuration was "
-                                        "found on this host.\n\n"
-                                        "Please check that this host contains a FreeMedForms server configuration."));
-            LOG_ERROR("No FreeMedForms configuration detected on the server");
-            Q_EMIT completeChanged();
-            return false;
-        }
-        return true;
+    if (!serverWidget->connectionSucceeded())
+        return false;
+
+    // Test server identifiants
+    settings()->setValue(Core::Constants::S_LASTLOGIN, QString());
+    settings()->setValue(Core::Constants::S_LASTPASSWORD, QString());
+    // try to connect the MySQL server and test existence of a FreeMedForms configuration
+    QSqlDatabase mysql = QSqlDatabase::addDatabase("QMYSQL", "__CHECK__CONFIG__");
+    Utils::DatabaseConnector c = settings()->databaseConnector();
+    // test fmf_admin user
+    mysql.setHostName(c.host());
+    mysql.setPort(c.port());
+    mysql.setUserName(c.clearLog());
+    mysql.setPassword(c.clearPass());
+    if (!mysql.open()) {
+        Q_EMIT completeChanged();
+        return false;
     }
-    return false;
+
+    // Test server configuration
+    // all freemedforms databases are prefixed with fmf_
+    // test the fmf_* databases existence
+    QSqlQuery query(mysql);
+    int n = 0;
+    if (!query.exec("show databases;")) {
+        LOG_QUERY_ERROR(query);
+        Q_EMIT completeChanged();
+        return false;
+    } else {
+        while (query.next())
+            if (query.value(0).toString().startsWith("fmf_"))
+                ++n;
+    }
+    if (n<5) {
+        Utils::warningMessageBox(tr("No FreeMedForms server configuration detected"),
+                                 tr("You are trying to configure a network client of FreeMedForms. "
+                                    "It is manadatory to connect to a FreeMedForms network server.\n"
+                                    "While the host connection is valid, no FreeMedForms configuration was "
+                                    "found on this host.\n\n"
+                                    "Please check that this host contains a FreeMedForms server configuration."));
+        LOG_ERROR("No FreeMedForms configuration detected on the server");
+        Q_EMIT completeChanged();
+        return false;
+    }
+
+    // Connect databases
+    QProgressDialog dlg(tr("Connecting databases"), tr("Please wait"), 0, 0);
+    dlg.setWindowModality(Qt::WindowModal);
+    dlg.setMinimumDuration(1000);
+    dlg.show();
+    dlg.setFocus();
+    dlg.setValue(0);
+
+    Core::ICore::instance()->requestFirstRunDatabaseCreation();
+
+    return true;
 }
 
 int ClientConfigPage::nextId() const
