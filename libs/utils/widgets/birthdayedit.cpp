@@ -156,7 +156,8 @@ void BirthDayEdit::clear()
 /** \brief overrides the default focusOutEvent and sets a custom css.
  *
  *  When widget focus is lost with a date string that can't be interpreted by the
- *  validator as a valid date, the css is changed, e.g. red background */
+ *  validator as a valid date, the css is changed, e.g. red background, to indicate
+ *  that there is something wrong. */
 void BirthDayEdit::focusOutEvent(QFocusEvent *event)
 {
     // switching to displayMode
@@ -172,13 +173,14 @@ void BirthDayEdit::focusOutEvent(QFocusEvent *event)
     QButtonLineEdit::focusOutEvent(event);
 }
 
+/** \brief overrides the default focusInEvent and sets \sa DateValidator. */
 void BirthDayEdit::focusInEvent(QFocusEvent *event)
 {
     // switching to editMode
     if (m_date.isValid()) {
         setText(m_date.toString(_defaultEditingFormat));
     } else {
-        setText("");
+//        setText("");
     }
     setValidator(_validator);
     _validator->setDate(m_date);
@@ -208,7 +210,7 @@ void BirthDayEdit::setDateString(QString dateString)
 /** \brief updates the displayText with the internal date using the default FMF date format */
 void BirthDayEdit::updateDisplayText()
 {
-    qWarning() << "updateDisplayText()" << hasFocus() << m_date.isValid();
+    qWarning() << "updateDisplayText(), focus:" << hasFocus() << "valid date:" << m_date.isValid();
     // Edit mode -> do nothing
     if (hasFocus()) {
         return;
@@ -223,7 +225,7 @@ void BirthDayEdit::updateDisplayText()
         }
     } else {
         // no valid date saved, maybe NULL
-        clear();
+//        clear();
     }
 }
 
