@@ -287,7 +287,7 @@ QString DatabaseConnector::toString() const
         dr += "(**Invalid**)";
     }
     QString t = QString("DatabaseConnector(Log:%1; Pass:%2; Host:%3; Port:%4; Driver:%5")
-                .arg(clearLog()).arg(clearPass()).arg(host()).arg(port()).arg(dr);
+                .arg(clearLog()).arg(clearPass().length()).arg(host()).arg(port()).arg(dr);
     if (accessMode()==Utils::DatabaseConnector::ReadWrite) {
         t += "; RW";
     } else {
