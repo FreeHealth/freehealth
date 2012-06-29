@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Copyright 2008-2012 Eric MAEKER
 
 MYSQL_PATH=""
@@ -7,7 +7,7 @@ MYSQL_ROOT_PASS=""
 MYSQL=""
 
 SCRIPT_NAME=`basename $0`
-if [ "`echo $0 | cut -c1`" = "/" ]; then
+if [[ "`echo $0 | cut -c1`" = "/" ]]; then
   SCRIPT_PATH=`dirname $0`
 else
   SCRIPT_PATH=`pwd`/`echo $0 | sed -e s/$SCRIPT_NAME//`
@@ -15,9 +15,9 @@ fi
 
 # Get OS name
 sys=`uname -s`
-if [ "$sys" == "Linux" ] ; then
+if [[ "$sys" == "Linux" ]] ; then
     echo "Running under Linux"
-elif [ "$sys" == "Darwin" ] ; then
+elif [[ "$sys" == "Darwin" ]] ; then
     echo "Running under MacOs"
     MYSQL_PATH="/usr/local/mysql/bin"
     echo "Setting MySQL path to: "$MYSQL_PATH
@@ -42,9 +42,9 @@ checkMySQLServer()
   # MySQL running ?
   echo "## TESTING MYSQL SERVER\n" >> $OUTPUT_FILE
 
-  if [ "$sys" == "Linux" ] ; then
+  if [[ "$sys" == "Linux" ]] ; then
     echo `/etc/init.d/mysqld status` >> $OUTPUT_FILE
-  elif [ "$sys" == "Darwin" ] ; then
+  elif [[ "$sys" == "Darwin" ]] ; then
     echo `sudo $MYSQL_PATH/../support-files/mysql.server status` >> $OUTPUT_FILE
   fi
 }
@@ -67,11 +67,16 @@ createSqlCommandFile()
 
    echo "SELECT '### FMF_USERS';\n" >> $COMMANDS_FILE
    echo "SELECT fmf_users.users.NAME, fmf_users.users.SURNAME, fmf_users.users.USER_UUID, fmf_users.users.ISVIRTUAL FROM fmf_users.users WHERE fmf_users.users.VALIDITY=1;\n" >> $COMMANDS_FILE
+
+   echo "SELECT '### MYSQL USERS FOR FMF';\n" >> $COMMANDS_FILE
+   echo "SELECT DISTINCT mysql.user.User, \"'@'\", mysql.user.Host FROM mysql.db" >> $COMMANDS_FILE
+   echo "JOIN mysql.user on mysql.user.User=mysql.db.User" >> $COMMANDS_FILE
+   echo "WHERE mysql.db.Db='fmf\_%';" >> $COMMANDS_FILE
 }
 
 clearSqlCommandFile()
 {
-   if [ test $COMMAND_FILE ]; then
+   if [[ test $COMMAND_FILE ]]; then
       rm -r $COMMANDS_FILE
    fi
 }
