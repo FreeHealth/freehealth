@@ -33,7 +33,7 @@ showHelp()
 while getopts "p:h" option
 do
         case $option in
-                p) MYSQL_ROOT_PASS=echo "-p$OPTARG" | tr -d " ";
+                p) MYSQL_ROOT_PASS=`echo "-p$OPTARG" | tr -d " "`;
                 ;;
                 h) showHelp
                     exit 0
@@ -47,7 +47,7 @@ else
   echo "*** Using password: "$MYSQL_ROOT_PASS
 fi
 echo "    Default command: "$MYSQL -uroot $MYSQL_ROOT_PASS
-
+exit 0;
 echo
 echo "*** Using MySQL from $MYSQL ***"
 # DROP FMF USERS
