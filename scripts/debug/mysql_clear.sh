@@ -33,7 +33,7 @@ showHelp()
 while getopts "p:h" option
 do
         case $option in
-                p) MYSQL_ROOT_PASS="-p"$OPTARG" ";
+                p) MYSQL_ROOT_PASS=echo "-p$OPTARG" | tr -d " ";
                 ;;
                 h) showHelp
                     exit 0
@@ -41,7 +41,11 @@ do
         esac
 done
 
-echo "*** Using password: "$MYSQL_ROOT_PASS
+if [[ -e $MYSQL_ROOT_PASS ]]; then
+  echo "*** No password"
+else
+  echo "*** Using password: "$MYSQL_ROOT_PASS
+fi
 echo "    Default command: "$MYSQL -uroot $MYSQL_ROOT_PASS
 
 echo
