@@ -120,6 +120,55 @@ static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 
+static void addAlertToLayout(const AlertItem &alert, bool showCategory, QLayout *lay)
+{
+    QFont bold;
+    bold.setBold(true);
+
+    // Add category
+    if (!alert.category().isEmpty() && showCategory) {
+        QLabel *label = new QLabel(lay->parentWidget());
+        label->setFont(bold);
+        label->setTextFormat(Qt::RichText);
+        label->setAlignment(Qt::AlignHCenter);
+        label->setWordWrap(true);
+        label->setText(alert.category());
+        lay->addWidget(label);
+    }
+
+    // Add label
+    QLabel *label = new QLabel(lay->parentWidget());
+    label->setFont(bold);
+    label->setWordWrap(true);
+    label->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+    label->setTextFormat(Qt::RichText);
+    QString header;
+    header = QString("<table border=0 margin=0 width=100%>"
+                      "<tr>"
+                      "<td valign=middle width=70% style=\"font-weight:bold\">%1</td>"
+                      "<td valign=middle align=center style=\"font-weight:bold;background-color:%2;text-transform:uppercase\">%3</td>"
+                      "</tr>"
+                      "</table>")
+            .arg(alert.label())
+            .arg(alert.priorityBackgroundColor())
+            .arg(alert.priorityToString())
+            ;
+    label->setText(header);
+    lay->addWidget(label);
+
+    // Add description
+    if (!alert.description().isEmpty()) {
+        QLabel *label = new QLabel(lay->parentWidget());
+        label->setStyleSheet("padding-left:20px");
+        label->setTextFormat(Qt::RichText);
+        label->setAlignment(Qt::AlignLeft);
+        label->setWordWrap(true);
+        label->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+        label->setText(alert.description());
+        lay->addWidget(label);
+    }
+}
+
 DynamicAlertDialog::DynamicAlertDialog(const QList<AlertItem> &items,
                                        const QString &themedIcon,
                                        const QList<QAbstractButton *> &buttons,
@@ -153,14 +202,8 @@ DynamicAlertDialog::DynamicAlertDialog(const QList<AlertItem> &items,
         for(int i=0; i<items.count();++i) {
             maxPriority = qMax(maxPriority, int(items.at(i).priority()));
         }
-        QString icon;
-        switch (maxPriority) {
-        case AlertItem::High: icon = Core::Constants::ICONCRITICAL; break;
-        case AlertItem::Medium: icon = Core::Constants::ICONWARNING; break;
-        case AlertItem::Low: icon = Core::Constants::ICONINFORMATION; break;
-        }
-        ui->generalIconLabel->setPixmap(theme()->icon(icon, Core::ITheme::BigIcon).pixmap(64,64));
-        setWindowIcon(theme()->icon(icon));
+        ui->generalIconLabel->setPixmap(AlertItem::priorityBigIcon(AlertItem::Priority(maxPriority)).pixmap(64,64));
+        setWindowIcon(AlertItem::priorityBigIcon(AlertItem::Priority(maxPriority)));
     }
 
     // Include alerts
@@ -169,56 +212,26 @@ DynamicAlertDialog::DynamicAlertDialog(const QList<AlertItem> &items,
     if (items.count()==1) {
         // No tabwidget
         const AlertItem &alert = items.at(0);
-        QVBoxLayout *central = new QVBoxLayout;
-
-        if (!alert.category().isEmpty()) {
-            QLabel *label = new QLabel(this);
-            label->setFont(bold);
-            label->setTextFormat(Qt::RichText);
-            label->setAlignment(Qt::AlignHCenter);
-            label->setWordWrap(true);
-            //        label->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-            label->setText(alert.category());
-            central->addWidget(label);
-        }
-
-        QLabel *label = new QLabel(this);
-        label->setFont(bold);
-        label->setTextFormat(Qt::RichText);
-        label->setAlignment(Qt::AlignHCenter);
-        label->setWordWrap(true);
-        //        label->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-        label->setText(alert.label());
-        central->addWidget(label);
-
-        if (!alert.description().isEmpty()) {
-            QLabel *label = new QLabel(this);
-            label->setStyleSheet("padding-left:20px");
-            label->setTextFormat(Qt::RichText);
-            label->setAlignment(Qt::AlignLeft);
-            label->setWordWrap(true);
-            //        label->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-            label->setText(alert.description());
-            central->addWidget(label);
-        }
-
-        QWidget *container = new QWidget(this);
-        QVBoxLayout *containerLayout = new QVBoxLayout(container);
-        containerLayout->setMargin(0);
-        container->setLayout(containerLayout);
-
-        QScrollArea *s = new QScrollArea(this);
-        s->setBackgroundRole(QPalette::Background);
-        s->setWidgetResizable(true);
-        s->setFrameStyle(QFrame::NoFrame);
-        s->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 
         QWidget *alertContainer = new QWidget(this);
-        alertContainer->setLayout(central);
-        s->setWidget(alertContainer);
-        containerLayout->addWidget(s);
+        QVBoxLayout *central = new QVBoxLayout(alertContainer);
+        addAlertToLayout(alert, true, central);
 
-        ui->centralLayout->addWidget(container);
+        QWidget *scrollContainer = new QWidget(this);
+        QVBoxLayout *containerLayout = new QVBoxLayout(scrollContainer);
+        containerLayout->setMargin(0);
+        scrollContainer->setLayout(containerLayout);
+
+        QScrollArea *scroll = new QScrollArea(this);
+        scroll->setBackgroundRole(QPalette::Background);
+        scroll->setWidgetResizable(true);
+        scroll->setFrameStyle(QFrame::NoFrame);
+        scroll->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+
+        scroll->setWidget(alertContainer);
+        containerLayout->addWidget(scroll);
+
+        ui->centralLayout->addWidget(scrollContainer);
 
     } else {
         // With tabwidget
@@ -242,49 +255,31 @@ DynamicAlertDialog::DynamicAlertDialog(const QList<AlertItem> &items,
                 line->setFrameShadow(QFrame::Sunken);
                 lay->addWidget(line);
             }
-
-            // Add the label / description to the layout
-            QLabel *label = new QLabel(this);
-            label->setFont(bold);
-            label->setWordWrap(true);
-            label->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-            label->setTextFormat(Qt::RichText);
-            label->setText(alert.label());
-            lay->addWidget(label);
-
-            if (!alert.description().isEmpty()) {
-                QLabel *label = new QLabel(this);
-                label->setStyleSheet("padding-left:20px");
-                label->setTextFormat(Qt::RichText);
-                label->setAlignment(Qt::AlignLeft);
-                label->setWordWrap(true);
-                label->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-                label->setText(alert.description());
-                lay->addWidget(label);
-            }
+            addAlertToLayout(alert, false, lay);
         }
 
         QTabWidget *tab = new QTabWidget(this);
         // Create a tab for each category
         foreach(const QString &cat, categories.keys()) {
-            QWidget *container = new QWidget(this);
-            QVBoxLayout *containerLayout = new QVBoxLayout(container);
-            containerLayout->setMargin(0);
-            container->setLayout(containerLayout);
-
-            QScrollArea *s = new QScrollArea(this);
-            s->setBackgroundRole(QPalette::Background);
-            s->setWidgetResizable(true);
-            s->setFrameStyle(QFrame::NoFrame);
-            s->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-
             QWidget *alertContainer = new QWidget(this);
             QVBoxLayout *central = categories.value(cat);
             alertContainer->setLayout(central);
-            s->setWidget(alertContainer);
-            containerLayout->addWidget(s);
 
-            tab->addTab(container, cat);
+            QWidget *scrollContainer = new QWidget(this);
+            QVBoxLayout *containerLayout = new QVBoxLayout(scrollContainer);
+            containerLayout->setMargin(0);
+//            container->setLayout(containerLayout);
+
+            QScrollArea *scroll = new QScrollArea(this);
+            scroll->setBackgroundRole(QPalette::Background);
+            scroll->setWidgetResizable(true);
+            scroll->setFrameStyle(QFrame::NoFrame);
+            scroll->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+
+            scroll->setWidget(alertContainer);
+            containerLayout->addWidget(scroll);
+
+            tab->addTab(scrollContainer, cat);
         }
         ui->centralLayout->addWidget(tab);
     }
