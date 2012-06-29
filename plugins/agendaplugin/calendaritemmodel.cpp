@@ -25,9 +25,10 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "calendaritemmodel.h"
-#include "agendabase.h"
+#include "agendacore.h"
 #include "constants.h"
 #include "appointement.h"
+#include "agendabase.h"
 #include <agendaplugin/usercalendar.h>
 
 #include <coreplugin/icore.h>
@@ -55,7 +56,7 @@ using namespace Trans::ConstantTranslations;
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 //static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
-static inline Agenda::Internal::AgendaBase *base() {return Agenda::Internal::AgendaBase::instance();}
+static inline Agenda::Internal::AgendaBase &base() {return Agenda::AgendaCore::instance().agendaBase();}
 
 CalendarItemModel::CalendarItemModel(const QVariant &calendarUid, QObject *parent) :
     Calendar::AbstractCalendarModel(parent),
@@ -240,7 +241,7 @@ void CalendarItemModel::removeItem(const QString &uid)
             return;
     // remove from database
     oldItem->setData(Constants::Db_IsValid, 0);
-    base()->saveCalendarEvent(oldItem);
+    base().saveCalendarEvent(oldItem);
 
     // remove from model
     beginRemoveItem();
@@ -266,7 +267,7 @@ bool CalendarItemModel::moveItem(const Calendar::CalendarItem &from, Calendar::C
     Q_EMIT itemRemoved(from);
     item->setData(DateStart, to.beginning());
     item->setData(DateEnd, to.ending());
-    base()->saveCalendarEvent(item);
+    base().saveCalendarEvent(item);
     Q_EMIT itemInserted(toCalendarItem(item));
     return true;
 }
@@ -413,7 +414,7 @@ void CalendarItemModel::clearAll()
 
 bool CalendarItemModel::submitAll()
 {
-    return base()->saveCalendarEvents(m_sortedByBeginList);
+    return base().saveCalendarEvents(m_sortedByBeginList);
 }
 
 bool CalendarItemModel::submit(const Calendar::CalendarItem &item)
@@ -426,7 +427,7 @@ bool CalendarItemModel::submit(const Calendar::CalendarItem &item)
     if (!pItem)
         return false;
 
-    return base()->saveCalendarEvent(pItem);
+    return base().saveCalendarEvent(pItem);
 }
 
 bool CalendarItemModel::revert(const Calendar::CalendarItem &item)
@@ -441,7 +442,7 @@ bool CalendarItemModel::revert(const Calendar::CalendarItem &item)
 
     CalendarEventQuery query;
     query.setAppointementId(pItem->data(Constants::Db_EvId));
-    QList<Appointement *> a = base()->getCalendarEvents(query);
+    QList<Appointement *> a = base().getCalendarEvents(query);
 
     if (a.count()==1) {
         beginModifyItem();
@@ -561,12 +562,12 @@ void CalendarItemModel::getItemFromDatabase(const QDate &from, const QDate &to, 
 
     if (getFullRange) {
         query.setDateRange(from, to);
-        items = base()->getCalendarEvents(query);
+        items = base().getCalendarEvents(query);
         m_RetrievedDates << getDates;
     } else {
         for(int i=0; i < getDates.count(); ++i) {
             query.setDateRangeForDay(getDates.at(i));
-            items << base()->getCalendarEvents(query);
+            items << base().getCalendarEvents(query);
         }
     }
 

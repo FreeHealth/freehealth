@@ -32,6 +32,7 @@
 
 
 namespace Category {
+class CategoryCore;
 class CategoryItem;
 namespace Internal {
 class CategoryBasePrivate;
@@ -39,6 +40,7 @@ class CategoryBasePrivate;
 class CategoryBase : public QObject, public Utils::Database
 {
     Q_OBJECT
+    friend class Category::CategoryCore;
 
 protected:
     CategoryBase(QObject *parent = 0);
@@ -49,8 +51,8 @@ public:
     virtual ~CategoryBase();
 
     // initialize
-    bool init();
-
+    bool initialize();
+    bool isInitialized() const {return m_initialized;}
 
 private:
     bool createDatabase(const QString &connectionName, const QString &dbName,
@@ -73,13 +75,14 @@ public:
 
 private Q_SLOTS:
     void onCoreDatabaseServerChanged();
+    void onCoreFirstRunCreationRequested();
 
 private:
     bool categoryNeedsUpdate(CategoryItem *category);
     bool updateCategory(CategoryItem *category);
 
 private:
-    static bool m_initialized;
+    bool m_initialized;
     static CategoryBase *m_Instance;
 };
 

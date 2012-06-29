@@ -184,25 +184,11 @@ bool CalendarEventQuery::hasDateRange() const
     return (m_DateStart != QDateTime::currentDateTime() && m_DateEnd != QDateTime::currentDateTime());
 }
 
-// Initializing static datas
-bool AgendaBase::m_initialized = false;
-AgendaBase *AgendaBase::m_Instance = 0;
-
-/**
-  \brief Returns the unique instance of AgendaBase. If the instance does not exist it is created.
-  You should never construct a instance of this object using the constructor.
-*/
-AgendaBase *AgendaBase::instance()
-{
-    if (!m_Instance)
-        m_Instance = new AgendaBase(qApp);
-    return m_Instance;
-}
-
 AgendaBase::AgendaBase(QObject *parent) :
     QObject(parent), Utils::Database(),
-    m_Next(new NextAvailabiliyManager)
+    m_initialized(false), m_Next(new NextAvailabiliyManager)
 {
+    // The default instance is own by AgendaCore
     setObjectName("AgendaBase");
 
     // populate tables and fields of database
@@ -329,9 +315,8 @@ AgendaBase::AgendaBase(QObject *parent) :
     // information
     addField(Table_VERSION, VERSION_ACTUAL,  "ACTUAL", FieldIsShortText);
 
-    initialize();
-
-    connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
+    // Connect first run database creation requested
+    connect(Core::ICore::instance(), SIGNAL(firstRunDatabaseCreation()), this, SLOT(onCoreFirstRunCreationRequested()));
 }
 
 AgendaBase::~AgendaBase()
@@ -375,6 +360,7 @@ bool AgendaBase::initialize()
     if (!checkDatabaseVersion())
         return false;
 
+    connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
     m_initialized = true;
     return true;
 }
@@ -484,8 +470,17 @@ void AgendaBase::onCoreDatabaseServerChanged()
     if (QSqlDatabase::connectionNames().contains(Constants::DB_NAME)) {
         QSqlDatabase::removeDatabase(Constants::DB_NAME);
     }
+    disconnect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
+    disconnect(Core::ICore::instance(), SIGNAL(firstRunDatabaseCreation()), this, SLOT(onCoreFirstRunCreationRequested()));
     initialize();
 }
+
+void AgendaBase::onCoreFirstRunCreationRequested()
+{
+    disconnect(Core::ICore::instance(), SIGNAL(firstRunDatabaseCreation()), this, SLOT(onCoreFirstRunCreationRequested()));
+    initialize();
+}
+
 
 /** Creates an return an empty Agenda::UserCalendar pointer. Agenda::DayAvailability are added all days. The calendar is not defines as the default one. */
 Agenda::UserCalendar *AgendaBase::createEmptyCalendar(const QString &userUid)

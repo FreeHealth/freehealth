@@ -32,6 +32,7 @@
 
 #include "usercalendarmodelfulleditorwidget.h"
 #include "agendabase.h"
+#include "agendacore.h"
 #include "usercalendarmodel.h"
 
 #include <coreplugin/icore.h>
@@ -40,8 +41,6 @@
 #include <coreplugin/modemanager/modemanager.h>
 #include <coreplugin/actionmanager/actionmanager.h>
 #include <coreplugin/constants_menus.h>
-
-#include <usermanagerplugin/usermodel.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -60,7 +59,7 @@ static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 static inline Core::ModeManager *modeManager() {return Core::ICore::instance()->modeManager();}
 static inline Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
-static inline Agenda::Internal::AgendaBase *base() {return Agenda::Internal::AgendaBase::instance();}
+static inline Agenda::Internal::AgendaBase &base() {return Agenda::AgendaCore::instance().agendaBase();}
 
 UserCalendarModelFullEditorWidget::UserCalendarModelFullEditorWidget(QWidget *parent) :
     QWidget(parent),

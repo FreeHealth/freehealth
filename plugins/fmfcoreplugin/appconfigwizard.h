@@ -35,13 +35,14 @@
 QT_BEGIN_NAMESPACE
 class QLabel;
 class QComboBox;
+class QProgressBar;
 QT_END_NAMESPACE
 
 /**
  * \file appconfigwizard.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.0
- * \date 11 May 2011
+ * \version 0.7.6
+ * \date 28 Jun 2012
 */
 
 namespace Utils {
@@ -108,6 +109,7 @@ class ClientConfigPage: public QWizardPage
 public:
     ClientConfigPage(QWidget *parent = 0);
 
+    void initializePage();
     bool isComplete() const;
     bool validatePage();
     int nextId() const;
@@ -118,6 +120,30 @@ private:
 
 private:
     Core::ServerPreferencesWidget *serverWidget;
+};
+
+class CoreDatabaseCreationPage: public QWizardPage
+{
+    Q_OBJECT
+public:
+    CoreDatabaseCreationPage(QWidget *parent = 0);
+
+public:
+    void initializePage();
+    bool isComplete() const;
+    bool validatePage();
+    int nextId() const;
+
+private Q_SLOTS:
+    void startDbCreation();
+
+private:
+    void retranslate();
+    void changeEvent(QEvent *e);
+
+private:
+    QProgressBar *_progressBar;
+    bool _completed;
 };
 
 class EndConfigPage: public QWizardPage

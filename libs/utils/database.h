@@ -364,7 +364,7 @@ protected:
     virtual AvailableDrivers driver() const;
 
 private:
-    Internal::DatabasePrivate *d;
+    Internal::DatabasePrivate *d_database;
 };
 
 }

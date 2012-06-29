@@ -44,6 +44,7 @@
 #include <QDebug>
 
 using namespace AccountDB;
+using namespace Internal;
 
 static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
@@ -53,8 +54,12 @@ AccountBasePlugin::AccountBasePlugin()
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating AccountBasePlugin";
+
     // Add Translator to the Application
     Core::ICore::instance()->translators()->addNewTranslator("accountbaseplugin");
+
+    // Create the database instance
+    new AccountBase(this);
 }
 
 AccountBasePlugin::~AccountBasePlugin()
@@ -85,7 +90,7 @@ void AccountBasePlugin::extensionsInitialized()
     messageSplash(tr("Initializing accountancy plugin..."));
 
     // Initialize Account Database
-    AccountBase::instance();
+    AccountBase::instance()->initialize();
 
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 }

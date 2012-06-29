@@ -23,23 +23,21 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef COMMANDLINEPARSER_H
-#define COMMANDLINEPARSER_H
+#ifndef FREEDIAMS_COMMANDLINEPARSER_H
+#define FREEDIAMS_COMMANDLINEPARSER_H
 
 #include <coreplugin/icommandline.h>
 
 #include <QString>
 #include <QVariant>
 
-
-
 namespace Core {
+class Patient;
 namespace Internal {
 class CommandLinePrivate;
 }
-class Patient;
 
-class CommandLine  : public Core::ICommandLine
+class CommandLine : public Core::ICommandLine
 {
 public:
     enum Param {

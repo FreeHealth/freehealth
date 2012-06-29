@@ -33,6 +33,9 @@
 namespace Category {
 class CategoryItem;
 class ICategoryContentItem;
+namespace Internal {
+class CategoryCorePrivate;
+}
 
 class CATEGORY_EXPORT CategoryCore : public QObject
 {
@@ -45,6 +48,8 @@ public:
     // Constructor
     static CategoryCore *instance(QObject *parent = 0);
     virtual ~CategoryCore();
+
+    bool initialize();
 
     QVector<CategoryItem *> getCategories(const QString &mime, const QStringList &uuids = QStringList()) const;
     QList<CategoryItem *> createCategoryTree(const QVector<CategoryItem *> &cats) const;
@@ -60,6 +65,7 @@ public:
 
 private:
     static CategoryCore *m_Instance;
+    Internal::CategoryCorePrivate *d;
 };
 
 }  // End namespace Category

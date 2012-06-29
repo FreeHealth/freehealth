@@ -54,10 +54,12 @@ class CategoryItem;
 
 namespace XmlForms {
 namespace Internal {
+class XmlFormIOPlugin;
 
-class XmlIOBase :  public QObject, public Utils::Database
+class XmlIOBase : public QObject, public Utils::Database
 {
     Q_OBJECT
+    friend class XmlForms::Internal::XmlFormIOPlugin;
 
 protected:
     XmlIOBase(QObject *parent = 0);
@@ -117,9 +119,10 @@ private:
 
 private Q_SLOTS:
     void onCoreDatabaseServerChanged();
+    void onCoreFirstRunCreationRequested();
 
 private:
-    static bool m_initialized;
+    bool m_initialized;
     static XmlIOBase *m_Instance;
 };
 

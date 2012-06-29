@@ -34,16 +34,14 @@
 /**
  * \file patientbaseplugin.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.0.4
- * \date 11 Aug 2009
+ * \version 0.7.6
+ * \date 27 Jun 2012
 */
 
 namespace Patients {
 namespace Internal {
 class PatientBasePreferencesPage;
 class PatientSearchMode;
-}  // End namespace Internal
-
 
 class PatientBasePlugin : public ExtensionSystem::IPlugin
 {
@@ -63,7 +61,7 @@ private:
     Internal::PatientBasePreferencesPage *prefpage;
 };
 
+}  // namespace Internal
+}  // namespace Patients
 
-} // End PATIENTPLUGIN_H
-
-#endif
+#endif  // End PATIENTPLUGIN_H

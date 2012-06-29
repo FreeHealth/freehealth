@@ -154,6 +154,16 @@ bool PatientModelWrapper::isPatientBarVisible() const
     return Patients::PatientBar::instance()->isVisible();
 }
 
+QHash<QString, QString> PatientModelWrapper::fullPatientName(const QString &uuid) const
+{
+    return m_Model->patientName(QStringList() << uuid);
+}
+
+QHash<QString, QString> PatientModelWrapper::fullPatientName(const QStringList &uuids) const
+{
+    return m_Model->patientName(uuids);
+}
+
 /** \brief Private connection to the Patient::PatientModel source. */
 void PatientModelWrapper::patientDataChanged(const QModelIndex &index)
 {

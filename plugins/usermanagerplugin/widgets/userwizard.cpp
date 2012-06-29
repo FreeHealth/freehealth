@@ -173,10 +173,7 @@ UserWizard::UserWizard(QWidget *parent) :
     setPage(LastPage, new UserLastPage(this));
 
     setWindowTitle(tr("User Creator Wizard"));
-    QList<QWizard::WizardButton> layout;
-    layout << QWizard::CancelButton << QWizard::Stretch << QWizard::BackButton
-            << QWizard::NextButton << QWizard::FinishButton;
-    setButtonLayout(layout);
+    setOptions(options() | QWizard::HaveHelpButton);
 }
 
 UserWizard::~UserWizard()
@@ -279,11 +276,6 @@ void UserWizard::done(int r)
                 QDialog::done(r);
             }
         }
-
-#ifdef DEBUG
-        // warn user
-//        m_User->warn();
-#endif
     }
 }
 

@@ -46,6 +46,7 @@
 #include <QDebug>
 
 using namespace XmlForms;
+using namespace Internal;
 
 static inline Core::IUser *user()  { return Core::ICore::instance()->user(); }
 
@@ -60,9 +61,11 @@ XmlFormIOPlugin::XmlFormIOPlugin() :
     // Add Translator to the Application
     Core::ICore::instance()->translators()->addNewTranslator("xmlioplugin");
 
-    // create XML reader singleton
-    m_XmlReader = Internal::XmlFormContentReader::instance();
-    addObject(m_FormIo = new Internal::XmlFormIO(this));
+    // create instance
+    m_XmlReader = XmlFormContentReader::instance();
+    new XmlIOBase(this);
+
+    addObject(m_FormIo = new XmlFormIO(this));
 }
 
 XmlFormIOPlugin::~XmlFormIOPlugin()
@@ -99,7 +102,7 @@ void XmlFormIOPlugin::extensionsInitialized()
         return;
 
     // initialize database
-    Internal::XmlIOBase::instance();
+    Internal::XmlIOBase::instance()->initialize();
     m_FormIo->checkDatabaseFormFileForUpdates();
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 }

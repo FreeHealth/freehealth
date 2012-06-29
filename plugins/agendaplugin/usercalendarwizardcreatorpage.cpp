@@ -33,6 +33,7 @@
 #include "usercalendar.h"
 #include "constants.h"
 #include "agendabase.h"
+#include "agendacore.h"
 
 #include <utils/global.h>
 
@@ -41,7 +42,7 @@
 using namespace Agenda;
 using namespace Internal;
 
-static inline Agenda::Internal::AgendaBase *base() {return Agenda::Internal::AgendaBase::instance();}
+static inline Agenda::Internal::AgendaBase &base() {return Agenda::AgendaCore::instance().agendaBase();}
 
 
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -83,7 +84,7 @@ void UserCalendarWizardCreatorPage::submit(const QString &userUid)
 {
     if (page) {
         UserCalendar *u = page->getUserCalendar(userUid);
-        base()->saveUserCalendar(u);
+        base().saveUserCalendar(u);
     }
 }
 
@@ -107,7 +108,7 @@ UserCalendarWizardPage::~UserCalendarWizardPage()
 
 UserCalendar *UserCalendarWizardPage::getUserCalendar(const QString &userUid)
 {
-    UserCalendar *u = base()->createEmptyCalendar(userUid);
+    UserCalendar *u = base().createEmptyCalendar(userUid);
     u->setData(UserCalendar::Label, ui->calendarLabel->text());
     u->setData(UserCalendar::DefaultDuration, ui->defaultDuration->value());
     u->setData(UserCalendar::Description, ui->description->toHtml());

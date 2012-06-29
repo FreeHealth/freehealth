@@ -176,8 +176,9 @@ private:
    \brief Constructor.
    \private
 */
-TemplateBase::TemplateBase(QObject *parent)
-    : QObject(parent), Utils::Database(), d(0)
+TemplateBase::TemplateBase(QObject *parent) :
+    QObject(parent), Utils::Database(),
+    d(0)
 {
     d = new Internal::TemplateBasePrivate(this);
     setObjectName("TemplateBase");
@@ -219,7 +220,8 @@ TemplateBase::TemplateBase(QObject *parent)
 
     addField(Table_Version, VERSION_ACTUAL, "ACTUAL", FieldIsShortText);
 
-    connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
+    // Connect first run database creation requested
+    connect(Core::ICore::instance(), SIGNAL(firstRunDatabaseCreation()), this, SLOT(onCoreFirstRunCreationRequested()));
 }
 
 /** \brief Destructor. */
@@ -229,7 +231,7 @@ TemplateBase::~TemplateBase()
     d=0;
 }
 
-bool TemplateBase::init()
+bool TemplateBase::initialize()
 {
     // only one base can be initialized
     if (d->m_initialized)
@@ -263,6 +265,7 @@ bool TemplateBase::init()
 
     d->checkDatabaseVersion();
 
+    connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
     d->m_initialized = true;
     return true;
 }
@@ -386,5 +389,13 @@ void TemplateBase::onCoreDatabaseServerChanged()
     if (QSqlDatabase::connectionNames().contains(Templates::Constants::DB_TEMPLATES_NAME)) {
         QSqlDatabase::removeDatabase(Templates::Constants::DB_TEMPLATES_NAME);
     }
-    init();
+    disconnect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
+    disconnect(Core::ICore::instance(), SIGNAL(firstRunDatabaseCreation()), this, SLOT(onCoreFirstRunCreationRequested()));
+    initialize();
+}
+
+void TemplateBase::onCoreFirstRunCreationRequested()
+{
+    disconnect(Core::ICore::instance(), SIGNAL(firstRunDatabaseCreation()), this, SLOT(onCoreFirstRunCreationRequested()));
+    initialize();
 }

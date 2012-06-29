@@ -63,8 +63,8 @@ DrugsBasePlugin::DrugsBasePlugin() :
     // Add Translator to the Application
     Core::ICore::instance()->translators()->addNewTranslator("drugsbaseplugin");
 
-    // Create the drugs core instance
-    DrugsDB::DrugBaseCore::instance(this);
+    // Create the drugs core instance. Core auto-init itself after the coreOpened()
+    new DrugsDB::DrugBaseCore(this);
 }
 
 DrugsBasePlugin::~DrugsBasePlugin()
@@ -78,7 +78,7 @@ bool DrugsBasePlugin::initialize(const QStringList &arguments, QString *errorStr
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
 
-    // This code is executed AFTER the UserManagerPlugin::intialize()
+    // This code is executed AFTER the UserManagerPlugin::initialize()
     messageSplash(tr("Initializing drugs database plugin..."));
     DrugsDB::DrugBaseCore::instance().init();
 

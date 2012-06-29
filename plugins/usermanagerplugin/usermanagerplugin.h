@@ -36,8 +36,8 @@ class QAction;
 /**
  * \file usermanagerplugin.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.0
- * \date 14 Aug 2011
+ * \version 0.7.6
+ * \date 28 Jun 2012
 */
 
 namespace UserPlugin {
@@ -46,7 +46,6 @@ class FirstRun_UserConnection;
 class FirstRun_UserCreation;
 namespace Internal {
 class UserManagerMode;
-}
 
 class UserManagerPlugin : public ExtensionSystem::IPlugin
 {
@@ -76,7 +75,7 @@ private:
     Internal::UserManagerMode *m_Mode;
 };
 
-
+} // namespace Internal
 }  // End UserPlugin
 
 #endif  // End USERMANAGERPLUGIN_H

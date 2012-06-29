@@ -50,7 +50,7 @@ class TemplateBase : public QObject, public Utils::Database
 
 protected:
     TemplateBase(QObject *parent = 0);
-    bool init();
+    bool initialize();
 
 public:
     ~TemplateBase();
@@ -70,6 +70,7 @@ private:
 
 private Q_SLOTS:
     void onCoreDatabaseServerChanged();
+    void onCoreFirstRunCreationRequested();
 
 private:
     TemplateBasePrivate *d;

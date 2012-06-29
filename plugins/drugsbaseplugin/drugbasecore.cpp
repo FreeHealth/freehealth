@@ -85,10 +85,7 @@ DrugBaseCore *DrugBaseCore::m_Instance = 0;
 /** \brief Returns the unique instance of DrugsDB::DrugBaseCore. If it does not exist, it is created */
 DrugBaseCore &DrugBaseCore::instance(QObject *parent)
 {
-    if (!m_Instance) {
-        m_Instance = new DrugBaseCore(parent);
-//        m_Instance->init();
-    }
+    Q_ASSERT(m_Instance);
     return *m_Instance;
 }
 
@@ -96,10 +93,11 @@ DrugBaseCore::DrugBaseCore(QObject *parent) :
     QObject(parent),
     d(new Internal::DrugBaseCorePrivate(this))
 {
+    m_Instance = this;
     d->m_DrugsBase = new DrugsBase(this);
     d->m_ProtocolsBase = new ProtocolsBase(this);
+    d->m_VersionUpdater = new VersionUpdater;
 
-//    connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
     connect(packManager(), SIGNAL(packInstalled(DataPack::Pack)), this, SLOT(packChanged(DataPack::Pack)));
     connect(packManager(), SIGNAL(packRemoved(DataPack::Pack)), this, SLOT(packChanged(DataPack::Pack)));
 //    connect(packManager(), SIGNAL(packUpdated(DataPack::Pack)), this, SLOT(packChanged(DataPack::Pack)));
@@ -115,7 +113,6 @@ DrugBaseCore::~DrugBaseCore()
 
 bool DrugBaseCore::init()
 {
-    d->m_VersionUpdater = new VersionUpdater;
     d->m_DrugsBase->init();
     d->m_ProtocolsBase->init();
     d->m_InteractionManager = new InteractionManager(this);
@@ -125,7 +122,6 @@ bool DrugBaseCore::init()
 
 void DrugBaseCore::postCoreInitialization()
 {
-    connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
     init();
 }
 

@@ -34,15 +34,14 @@
 /**
  * \file pmhplugin.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.5.0
- * \date 25 Dec 2010
+ * \version 0.7.6
+ * \date 28 June 2012
 */
 
 namespace PMH {
 namespace Internal {
 class PmhMode;
 class PmhPreferencesPage;
-}  // End namespace Internal
 
 class PmhPlugin : public ExtensionSystem::IPlugin
 {
@@ -62,7 +61,7 @@ private:
     Internal::PmhPreferencesPage *m_PrefPage;
 };
 
-
+}  // End namespace Internal
 }  // End namespace PMH
 
 #endif  // End PASTMEDICALHISTORY_PLUGIN_H

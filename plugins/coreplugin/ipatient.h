@@ -30,14 +30,16 @@
 #include <coreplugin/core_exporter.h>
 
 #include <QAbstractListModel>
+#include <QHash>
+#include <QString>
 
 #include <QDebug>
 
 /**
  * \file ipatient.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.8.0
- * \date 26 Apr 2012
+ * \version 0.7.6
+ * \date 28 Jun 2012
 */
 
 namespace Core {
@@ -147,6 +149,9 @@ public:
     virtual void hidePatientBar() = 0;
     virtual void showPatientBar() = 0;
     virtual bool isPatientBarVisible() const = 0;
+
+    virtual QHash<QString, QString> fullPatientName(const QString &uuid) const {Q_UNUSED(uuid); return QHash<QString, QString>();}
+    virtual QHash<QString, QString> fullPatientName(const QStringList &uuids) const {Q_UNUSED(uuids); return QHash<QString, QString>();}
 
 Q_SIGNALS:
     void currentPatientChanged();

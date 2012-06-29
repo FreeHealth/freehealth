@@ -92,7 +92,7 @@ namespace Internal {
 class AccountBasePrivate
 {
 public:
-    AccountBasePrivate(AccountBase *base) : q(base) {}
+    AccountBasePrivate(AccountBase *base) : q(base), m_LogChrono(false), m_initialized(false) {}
     ~AccountBasePrivate()
     {
     }
@@ -100,6 +100,7 @@ public:
 public:
     AccountBase *q;
     bool m_LogChrono;
+    bool m_initialized;
 };
 }  // End Internal
 }  // End AccountDB
@@ -109,7 +110,6 @@ public:
 //--------------------------------- Initialization of static members -------------------------------------
 //--------------------------------------------------------------------------------------------------------
 AccountBase *AccountBase::m_Instance = 0;
-bool AccountBase::m_initialized = false;
 
 //--------------------------------------------------------------------------------------------------------
 //-------------------------------------- Initializing Database -------------------------------------------
@@ -119,9 +119,6 @@ AccountBase *AccountBase::instance()
 {
     if (!m_Instance) {
         m_Instance = new AccountBase(qApp);
-        
-        // TODO: this should be avoid, create the object **only**
-        m_Instance->init();
     }
     return m_Instance;
 }
@@ -130,8 +127,9 @@ AccountBase *AccountBase::instance()
    \brief Constructor.
    \private
 */
-AccountBase::AccountBase(QObject *parent)
-    : QObject(parent), Utils::Database(), d(0)
+AccountBase::AccountBase(QObject *parent) :
+    QObject(parent), Utils::Database(),
+    d(0)
 {
     d = new AccountBasePrivate(this);
     setObjectName("AccountBase");
@@ -551,10 +549,9 @@ AccountBase::AccountBase(QObject *parent)
 //          "surname          varchar(50)               NULL,"
 //          "guid             varchar(6)                NOT NULL);";
 
-    // TODO: this should be avoided don't init in constructor
-    init();
 
-    connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
+    // Connect first run database creation requested
+    connect(Core::ICore::instance(), SIGNAL(firstRunDatabaseCreation()), this, SLOT(onCoreFirstRunCreationRequested()));
 }
 
 /** \brief Destructor. */
@@ -565,10 +562,10 @@ AccountBase::~AccountBase()
     d=0;
 }
 
-bool AccountBase::init()
+bool AccountBase::initialize()
 {
     // only one base can be initialized
-    if (m_initialized)
+    if (d->m_initialized)
         return true;
 
     // connect
@@ -618,18 +615,26 @@ bool AccountBase::init()
         	return false;
             }
         
-    }//checkDatabaseScheme
-    if(versionHasChanged())
-    {
-        LOG("Version has changed , new version = "+checkAndReplaceVersionNumber());
-        }
+    }
 
-    m_initialized = true;
+    //checkDatabaseScheme
+    if (versionHasChanged()) {
+        LOG("Version has changed , new version = "+checkAndReplaceVersionNumber());
+    }
+
+    connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
+    d->m_initialized = true;
     return true;
 }
 
-void AccountBase::logChronos(bool )
-{}
+bool AccountBase::isInitialized() const
+{
+    return d->m_initialized;
+}
+void AccountBase::logChronos(bool log)
+{
+    d->m_LogChrono = log;
+}
 
 bool AccountBase::createDatabase(const QString &connectionName , const QString &dbName,
                     const QString &pathOrHostName,
@@ -751,11 +756,18 @@ AccountData *AccountBase::getAccountByUid(const QString &uid)
 
 void AccountBase::onCoreDatabaseServerChanged()
 {
-    m_initialized = false;
+    d->m_initialized = false;
     if (QSqlDatabase::connectionNames().contains(Constants::DB_ACCOUNTANCY)) {
         QSqlDatabase::removeDatabase(Constants::DB_ACCOUNTANCY);
     }
-    init();
+    disconnect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
+    initialize();
+}
+
+void AccountBase::onCoreFirstRunCreationRequested()
+{
+    disconnect(Core::ICore::instance(), SIGNAL(firstRunDatabaseCreation()), this, SLOT(onCoreFirstRunCreationRequested()));
+    initialize();
 }
 
 bool AccountBase::checkIfIsFirstVersion()

@@ -65,8 +65,8 @@ using namespace Trans::ConstantTranslations;
 
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
-static inline Agenda::Internal::AgendaBase *base() {return Agenda::Internal::AgendaBase::instance();}
-static inline Agenda::AgendaCore *agendaCore() {return Agenda::AgendaCore::instance();}
+static inline Agenda::Internal::AgendaBase &base() {return Agenda::AgendaCore::instance().agendaBase();}
+static inline Agenda::AgendaCore &agendaCore() {return Agenda::AgendaCore::instance();}
 inline static Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
 inline static Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 
@@ -82,7 +82,7 @@ public:
     UserCalendarViewerPrivate(UserCalendarViewer *parent) :
         ui(new Ui::UserCalendarViewer),
         m_CalendarItemModel(0),
-        m_UserCalendarModel(agendaCore()->userCalendarModel(user()->uuid())),
+        m_UserCalendarModel(agendaCore().userCalendarModel(user()->uuid())),
         m_AvailModel(0),
         q(parent)
     {
@@ -290,7 +290,7 @@ void UserCalendarViewer::recalculateAvailabilitiesWithDurationIndex(const int in
     // Get the next available dates
     QList<QDateTime> dates;
     if (cal) {
-        dates = base()->nextAvailableTime(QDateTime(d->ui->startDate->date(), QTime(0,0)), (index+1)*5, *cal, S_NUMBEROFAVAILABILITIESTOSHOW);
+        dates = base().nextAvailableTime(QDateTime(d->ui->startDate->date(), QTime(0,0)), (index+1)*5, *cal, S_NUMBEROFAVAILABILITIESTOSHOW);
     }
 
     // Create a simple QStandardItemModel
@@ -351,7 +351,7 @@ void UserCalendarViewer::on_availableAgendasCombo_activated(const int index)
             return;
         if (!calUid.isValid())
             return;
-        d->m_CalendarItemModel = agendaCore()->calendarItemModel(calUid);
+        d->m_CalendarItemModel = agendaCore().calendarItemModel(calUid);
         d->ui->calendarViewer->setModel(d->m_CalendarItemModel);
 
         // Add availabilities
@@ -378,7 +378,7 @@ void UserCalendarViewer::userChanged()
         disconnect(d->m_UserCalendarModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(updateCalendarData(QModelIndex,QModelIndex)));
     }
     // model is automatically updated and resetted but the userCalendar combo model
-    d->m_UserCalendarModel = agendaCore()->userCalendarModel();
+    d->m_UserCalendarModel = agendaCore().userCalendarModel();
     connect(d->m_UserCalendarModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(updateCalendarData(QModelIndex,QModelIndex)));
     d->ui->availableAgendasCombo->setModel(d->m_UserCalendarModel);
     d->ui->availableAgendasCombo->setModelColumn(UserCalendarModel::ExtraLabel);
@@ -394,7 +394,7 @@ void UserCalendarViewer::userChanged()
 
     Agenda::UserCalendar *cal = d->m_UserCalendarModel->defaultUserCalendar();
     if (cal) {
-        d->m_CalendarItemModel = agendaCore()->calendarItemModel(cal->uid());
+        d->m_CalendarItemModel = agendaCore().calendarItemModel(cal->uid());
     } else {
         d->m_CalendarItemModel = 0;
     }

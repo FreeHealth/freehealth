@@ -78,14 +78,11 @@ public:
         QStringList css;
 
         // Create padding for buttons
-//        if (_rightPadding>0)
-            css << QString("padding-right:%1px").arg(_rightPadding);
-//        if (_leftPadding>0)
-            css << QString("padding-left:%1px").arg(_leftPadding);
+        css << QString("padding-left:%1px").arg(_leftPadding);
+        css << QString("padding-right:%1px").arg(_rightPadding);
 
         // Analyse extraStyleSheet (remove all paddings)
         if (!extraStyleSheet.isEmpty()) {
-
             foreach(const QString &c, extraStyleSheet.split(";", QString::SkipEmptyParts)) {
                 if (!c.startsWith("paddin",Qt::CaseInsensitive))
                     css << c;
@@ -192,7 +189,7 @@ void QButtonLineEdit::setLeftButton(QToolButton *button)
         return;
     button->setParent(this);
     d->_leftButton = button;
-    d->_leftButton->setStyleSheet("QToolButton{border:none;padding: 0 0 0 2px;}");
+    d->_leftButton->setStyleSheet("border:none;padding: 0 0 0 2px;");
     d->_leftButton->setCursor(Qt::ArrowCursor);
 
     int frameWidth = style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
@@ -220,11 +217,12 @@ void QButtonLineEdit::setRightButton(QToolButton * button)
         return;
     button->setParent(this);
     d->_rightButton = button;
-    d->_rightButton->setStyleSheet("QToolButton{border:none;padding: 0 0 0 0px;}");
+    d->_rightButton->setStyleSheet("border:none;padding: 0 0 0 0px;");
     d->_rightButton->setCursor(Qt::ArrowCursor);
 
     int frameWidth = style()->pixelMetric(QStyle::PM_DefaultFrameWidth);
     d->_rightPadding = button->sizeHint().width() + frameWidth + 1;
+
     QSize msz = minimumSizeHint();
     setMinimumSize(qMax(msz.width(), button->sizeHint().height() + frameWidth * 2 + 2),
                    qMax(msz.height(), button->sizeHint().height() + frameWidth * 2 + 2));

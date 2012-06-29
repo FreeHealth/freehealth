@@ -56,8 +56,8 @@ using namespace Trans::ConstantTranslations;
 
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
-static inline Agenda::Internal::AgendaBase *base() {return Agenda::Internal::AgendaBase::instance();}
-static inline Agenda::AgendaCore *agendaCore() {return Agenda::AgendaCore::instance();}
+static inline Agenda::Internal::AgendaBase &base() {return Agenda::AgendaCore::instance().agendaBase();}
+static inline Agenda::AgendaCore &agendaCore() {return Agenda::AgendaCore::instance();}
 
 UserCalendarPageForUserViewerWidget::UserCalendarPageForUserViewerWidget(QWidget *parent) :
     UserPlugin::IUserViewerWidget(parent),
@@ -84,7 +84,7 @@ void UserCalendarPageForUserViewerWidget::setUserIndex(const int index)
 {
     Q_ASSERT(m_UserModel);
     if (m_UserModel) {
-        UserCalendarModel *model = agendaCore()->userCalendarModel(m_UserModel->index(index, Core::IUser::Uuid).data().toString());
+        UserCalendarModel *model = agendaCore().userCalendarModel(m_UserModel->index(index, Core::IUser::Uuid).data().toString());
         m_Widget->setUserCalendarModel(model);
     }
 }
@@ -106,7 +106,7 @@ void UserCalendarPageForUserViewerWidget::userChanged()
 {
     if (m_Widget) {
         m_Widget->clear();
-        m_Widget->setUserCalendarModel(agendaCore()->userCalendarModel());
+        m_Widget->setUserCalendarModel(agendaCore().userCalendarModel());
     }
 }
 

@@ -1,5 +1,5 @@
 include(../coreplugin/coreplugin.pri)
-include(../patientbaseplugin/patientbaseplugin.pri)
 include(../usermanagerplugin/usermanagerplugin.pri)
+include(../patientbaseplugin/patientbaseplugin.pri)
 include(../listviewplugin/listviewplugin.pri)
 include($${SOURCES_LIBS_PATH}/calendar.pri)

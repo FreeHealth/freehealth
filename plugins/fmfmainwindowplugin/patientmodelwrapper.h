@@ -70,7 +70,6 @@ public:
     virtual bool setValue(int ref, const QVariant &value); // TODO: remove this and use setData instead
     virtual bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
 
-
     //TODO: Is this needed in freemedforms?
     QString toXml() const {return QString();}
     bool fromXml(const QString &) {return true;}
@@ -78,6 +77,9 @@ public:
     virtual void hidePatientBar();
     virtual void showPatientBar();
     virtual bool isPatientBarVisible() const;
+
+    virtual QHash<QString, QString> fullPatientName(const QString &uuid) const;
+    virtual QHash<QString, QString> fullPatientName(const QStringList &uuids) const;
 
 private Q_SLOTS:
     void onCurrentPatientChanged(const QString &);

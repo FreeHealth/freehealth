@@ -25,6 +25,7 @@
  ***************************************************************************/
 #include "agendaplugin.h"
 #include "agendabase.h"
+#include "agendacore.h"
 #include "constants.h"
 #include "agendawidgetmanager.h"
 #include "agendacore.h"
@@ -73,7 +74,7 @@ static inline Patients::Internal::PatientBase *patientBase() {return Patients::I
 
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 static inline Core::ICommandLine *commandLine() {return Core::ICore::instance()->commandLine();}
-static inline Agenda::Internal::AgendaBase *base() {return Agenda::Internal::AgendaBase::instance();}
+static inline Agenda::Internal::AgendaBase &base() {return Agenda::AgendaCore::instance().agendaBase();}
 
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline void messageSplash(const QString &s) {theme()->messageSplashScreen(s); }
@@ -126,7 +127,7 @@ void AgendaPlugin::extensionsInitialized()
     dlg.setFocus();
     dlg.setValue(0);
 
-    Internal::AgendaBase::instance();
+    m_Core->initializeDatabase();
 
     // Initialize ActionHandler and WidgetManager
     AgendaWidgetManager::instance();
@@ -151,7 +152,7 @@ void AgendaPlugin::extensionsInitialized()
         UserCalendar *u = 0;
         // McCoy calendar (Uhura as delegate)
         peoples.append(Calendar::People(Calendar::People::PeopleUserDelegate, "", "0f148ea3de6e47b8bbf9c2cedea47511"));
-        u = base()->createVirtualUserCalendar("d1f29ad4a4ea4dabbe40ec888d153228", "McCoy @Enterprise",
+        u = base().createVirtualUserCalendar("d1f29ad4a4ea4dabbe40ec888d153228", "McCoy @Enterprise",
                                           "Virtual calendar for the virtual user McCoy",
                                           15, 0, 0, 0, true, false, "", "mccoy.png", peoples);
         if (!u)
@@ -160,7 +161,7 @@ void AgendaPlugin::extensionsInitialized()
 
         // Phlox calendar (no delegates)
         peoples.clear();
-        u = base()->createVirtualUserCalendar("b5caead635a246a2a87ce676e9d2ef4d", "Phlox @Enterprise",
+        u = base().createVirtualUserCalendar("b5caead635a246a2a87ce676e9d2ef4d", "Phlox @Enterprise",
                                           "Virtual calendar for the virtual user Phlox",
                                           10, 0, 0, 0, true, false, "", "phlox.png", peoples);
         if (u)
@@ -191,8 +192,8 @@ static QString patientUid(const int row)
 
 //static QString patientName(const int row)
 //{
-//    QSqlQuery query(patientBase()->database());
-//    QString req= patientBase()->select(Patients::Constants::Table_IDENT, Patients::Constants::IDENTITY_NAME);
+//    QSqlQuery query(patientbase().database());
+//    QString req= patientbase().select(Patients::Constants::Table_IDENT, Patients::Constants::IDENTITY_NAME);
 //    req += QString(" LIMIT %1,%1").arg(row);
 //    if (query.exec(req)) {
 //        if (query.next()) {
@@ -263,7 +264,7 @@ void AgendaPlugin::createVirtualAppointements(UserCalendar *calendar)
         }
         list << ev;
     }
-    if (!base()->saveCalendarEvents(list))
+    if (!base().saveCalendarEvents(list))
         ok = false;
 
     if (ok)
@@ -273,10 +274,8 @@ void AgendaPlugin::createVirtualAppointements(UserCalendar *calendar)
 void AgendaPlugin::testDatabase()
 {
     qWarning() << "\n\n\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx AGENDA BASE TEST";
-    Internal::AgendaBase *base = Internal::AgendaBase::instance();
-
     // Try to get calendar(s) for the current user
-    QList<Agenda::UserCalendar *> cals = base->getUserCalendars();
+    QList<Agenda::UserCalendar *> cals = base().getUserCalendars();
     qWarning() << "Number of user calendars" << cals.count();
 
     Utils::Randomizer r;
@@ -305,14 +304,14 @@ void AgendaPlugin::testDatabase()
                 av.addTimeRange(from, to);
                 ucal->addAvailabilities(av);
             }
-            if (base->saveUserCalendar(ucal))
+            if (base().saveUserCalendar(ucal))
                 qWarning() << "user calendar successfully saved to database";
             cals << ucal;
         }
         // one must be the default
         ucal = cals.at(2);
         ucal->setData(Agenda::UserCalendar::IsDefault, 1);
-        base->saveUserCalendar(ucal);
+        base().saveUserCalendar(ucal);
     }
     ucal = cals.at(0);
 
@@ -334,7 +333,7 @@ void AgendaPlugin::testDatabase()
     CalendarEventQuery q;
     q.setDateRangeForCurrentWeek();
     q.setCalendarId(ucal->data(Constants::Db_CalId).toInt());
-    QList<Appointement *> list = base->getCalendarEvents(q);
+    QList<Appointement *> list = base().getCalendarEvents(q);
     qWarning() << "Retreived" << list.count() << "events from the database for user" << ucal->data(Agenda::UserCalendar::UserOwnerUid).toString() << "dateRange" << q.dateStart().toString(Qt::ISODate)<< q.dateEnd().toString(Qt::ISODate) << "in" << chrono.elapsed() << "ms";
 
     qWarning() << "PatientBase count" << numberOfPatients();
@@ -398,7 +397,7 @@ void AgendaPlugin::testDatabase()
                 ev->addPeople(Calendar::People(Calendar::People::PeopleAttendee, "", patientUid(zz)));
             }
 
-            if (!base->saveCalendarEvent(ev))
+            if (!base().saveCalendarEvent(ev))
                 ok = false;
             list << ev;
         }
@@ -418,7 +417,7 @@ void AgendaPlugin::testDatabase()
 //    dlg.exec();
 
     // Test nextAvailableDate
-    qWarning() << "Next available dates (15min)" << base->nextAvailableTime(QDateTime::currentDateTime(), 15, *ucal, 5);
+    qWarning() << "Next available dates (15min)" << base().nextAvailableTime(QDateTime::currentDateTime(), 15, *ucal, 5);
 
     qDeleteAll(list);
     list.clear();

@@ -65,13 +65,13 @@ TemplatesCore::TemplatesCore(QObject *parent) :
     d(new TemplatesCorePrivate(this))
 {
     setObjectName("TemplatesCore");
+    d->m_Base = new TemplateBase(this);
     m_Instance = this;
 }
 
 void TemplatesCore::init()
 {
-    d->m_Base = new TemplateBase(this);
-    d->m_Base->init();
+    d->m_Base->initialize();
     d->m_Manager = new TemplatesViewManager(this);
 }
 

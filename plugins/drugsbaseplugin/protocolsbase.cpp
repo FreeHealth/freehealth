@@ -108,7 +108,8 @@ struct minimalCompo {
     int inn;
     QString dosage;
 };
-}
+}  // namespace anonymous
+
 namespace DrugsDB {
 namespace Internal {
 class ProtocolsBasePrivate
@@ -119,8 +120,8 @@ public:
 public:
     bool m_initialized;
 };
-}
-}
+}  // namespace DrugsDB
+}  // namespace Internal
 
 ProtocolsBase::ProtocolsBase(QObject *parent) :
     QObject(parent), Utils::Database(),
@@ -199,6 +200,10 @@ ProtocolsBase::ProtocolsBase(QObject *parent) :
 
 //    "`EXTRAS`                blob           NULL,"
 //    "`ORDER`                 int(10)        NULL"
+
+
+    // Connect first run database creation requested
+    connect(Core::ICore::instance(), SIGNAL(firstRunDatabaseCreation()), this, SLOT(onCoreFirstRunCreationRequested()));
 }
 
 ProtocolsBase::~ProtocolsBase()
@@ -206,6 +211,12 @@ ProtocolsBase::~ProtocolsBase()
     if (d)
         delete d;
     d = 0;
+}
+
+void ProtocolsBase::onCoreFirstRunCreationRequested()
+{
+    disconnect(Core::ICore::instance(), SIGNAL(firstRunDatabaseCreation()), this, SLOT(onCoreFirstRunCreationRequested()));
+    init();
 }
 
 QString ProtocolsBase::dosageCreateTableSqlQuery()
@@ -269,6 +280,11 @@ QString ProtocolsBase::dosageCreateTableSqlQuery()
            ");";
 }
 
+void ProtocolsBase::forceReinitialization()
+{
+    d->m_initialized = false;
+}
+
 /** \brief Initializer for the database. Return the error state. */
 bool ProtocolsBase::init()
 {
@@ -301,6 +317,7 @@ bool ProtocolsBase::init()
 
     checkDosageDatabaseVersion();
 
+    // Core signals are connected into the drugbasecore
     // Initialize
     d->m_initialized = true;
     return true;
@@ -608,3 +625,4 @@ bool ProtocolsBase::onCoreDatabaseServerChanged()
         Q_EMIT protocolsBaseHasChanged();
     return r;
 }
+

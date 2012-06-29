@@ -38,8 +38,8 @@
 /**
  * \file userbase.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.0
- * \date 14 Aug 2011
+ * \version 0.7.6
+ * \date 28 Jun 2012
 */
 
 namespace UserPlugin {
@@ -47,17 +47,22 @@ class UserModel;
 
 namespace Internal {
 class UserData;
+class UserManagerPlugin;
 
 class USER_EXPORT UserBase :  public QObject, public Utils::Database
 {
     Q_OBJECT
     friend class UserPlugin::UserModel;
+    friend class UserPlugin::Internal::UserManagerPlugin;
 
     bool testConnexion() const;
 
 protected:
     UserBase(QObject *parent = 0);
     void onCoreDatabaseServerChanged();
+
+protected Q_SLOTS:
+    void onCoreFirstRunCreationRequested();
 
 public:
     // Constructor
@@ -105,6 +110,7 @@ public:
 
     // datas checkers
     bool checkLogin(const QString &clearLogin, const QString &clearPassword) const;
+    bool isLoginAlreadyExists(const QString &clearLogin) const;
     QDateTime recordLastLogin(const QString &log, const QString &pass);
 
     // Linkers
@@ -117,9 +123,9 @@ private:
 
 
 private:
-    static bool m_initialized;
-    static QString  m_LastUuid, m_LastLogin, m_LastPass;
-    static UserBase * m_Instance;
+    bool m_initialized;
+    mutable QString  m_LastUuid, m_LastLogin, m_LastPass;
+    static UserBase *m_Instance;
     bool m_IsNewlyCreated;
 };
 

@@ -56,7 +56,10 @@ class DRUGSBASE_EXPORT ProtocolsBase : public QObject, public Utils::Database
 
 protected:
     explicit ProtocolsBase(QObject *parent = 0);
+    void forceReinitialization();
     bool init();
+private Q_SLOTS:
+    void onCoreFirstRunCreationRequested();
 
 public:
     ~ProtocolsBase();

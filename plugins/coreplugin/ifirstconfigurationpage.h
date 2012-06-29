@@ -53,6 +53,7 @@ public:
         ServerClientConfig,
         ServerConfig,
         UserDbConnection,
+        DatabaseCreationPage,
         UserCreation,
         PatientForm,
         VirtualPatients,

@@ -81,6 +81,9 @@ FormManagerPlugin::FormManagerPlugin() :
     addAutoReleasedObject(m_PrefPage);
     addAutoReleasedObject(m_PrefPageSelector);
 
+    // Create the base instance
+    new Internal::EpisodeBase(this);
+
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
 }
 
@@ -122,6 +125,7 @@ void FormManagerPlugin::extensionsInitialized()
 
     // Initialize patient base and manager
     episodeBase();
+    episodeBase()->initialize();
     FormManager::instance();
 
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));

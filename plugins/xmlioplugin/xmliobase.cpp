@@ -88,7 +88,6 @@ static inline QString normalizedFormUid(const QString &formUid)
 }
 
 // Initializing static datas
-bool XmlIOBase::m_initialized = false;
 XmlIOBase *XmlIOBase::m_Instance = 0;
 
 /**
@@ -97,16 +96,16 @@ XmlIOBase *XmlIOBase::m_Instance = 0;
 */
 XmlIOBase *XmlIOBase::instance()
 {
-    if (!m_Instance)
-        m_Instance = new XmlIOBase(qApp);
+    Q_ASSERT(m_Instance);
     return m_Instance;
 }
 
 XmlIOBase::XmlIOBase(QObject *parent) :
-        QObject(parent), Utils::Database()
+    QObject(parent), Utils::Database(),
+    m_initialized(false)
 {
+    m_Instance = this;
     setObjectName("XmlIOBase");
-    m_initialized = false;
 
     // populate tables and fields of database
     addTable(Table_FORMS,         "FORMS");
@@ -134,9 +133,8 @@ XmlIOBase::XmlIOBase(QObject *parent) :
     addTable(Table_VERSION, "VERSION");
     addField(Table_VERSION, VERSION_ACTUAL,  "ACTUAL", FieldIsShortText);
 
-    initialize();
-
-    connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
+    // Connect first run database creation requested
+    connect(Core::ICore::instance(), SIGNAL(firstRunDatabaseCreation()), this, SLOT(onCoreFirstRunCreationRequested()));
 }
 
 /** \brief Initialize the database. */
@@ -177,6 +175,7 @@ bool XmlIOBase::initialize()
     if (!checkDatabaseVersion())
         return false;
 
+    connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
     m_initialized = true;
     return true;
 }
@@ -286,6 +285,14 @@ void XmlIOBase::onCoreDatabaseServerChanged()
     if (QSqlDatabase::connectionNames().contains(Constants::DB_NAME)) {
         QSqlDatabase::removeDatabase(Constants::DB_NAME);
     }
+    disconnect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
+    disconnect(Core::ICore::instance(), SIGNAL(firstRunDatabaseCreation()), this, SLOT(onCoreFirstRunCreationRequested()));
+    initialize();
+}
+
+void XmlIOBase::onCoreFirstRunCreationRequested()
+{
+    disconnect(Core::ICore::instance(), SIGNAL(firstRunDatabaseCreation()), this, SLOT(onCoreFirstRunCreationRequested()));
     initialize();
 }
 

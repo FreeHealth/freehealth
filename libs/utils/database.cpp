@@ -195,15 +195,17 @@ void Database::logAvailableDrivers()
 }
 
 
-Database::Database()
-        : d(0)
+Database::Database() :
+    d_database(0)
 {
-    d = new DatabasePrivate();
+    d_database = new DatabasePrivate();
 }
 
 Database::~Database()
 {
-    if (d) delete d; d=0;
+    if (d_database)
+        delete d_database;
+    d_database=0;
 }
 
 DatabasePrivate::DatabasePrivate() :
@@ -239,7 +241,7 @@ bool Database::createMySQLDatabase(const QString &dbName)
         return false;
     }
     // Testing current connected user grants
-    Grants userGrants = d->m_Grants.value(d->m_ConnectionName, Grant_NoGrant);
+    Grants userGrants = d_database->m_Grants.value(d_database->m_ConnectionName, Grant_NoGrant);
     if (userGrants & Grant_Create) {
         LOG_ERROR_FOR("Database", "Trying to create database, no suffisant rights.");
         return false;
@@ -273,7 +275,7 @@ bool Database::createMySQLUser(const QString &log, const QString &password,
     }
 
     // Testing current connected user grants
-    Grants userGrants = d->m_Grants.value(d->m_ConnectionName, Grant_NoGrant);
+    Grants userGrants = d_database->m_Grants.value(d_database->m_ConnectionName, Grant_NoGrant);
 
     // TODO: bug with grant privileges of created user
 //    qWarning() << "xxxxxxxxxxxxxxxxxxxxxxx check";
@@ -411,7 +413,7 @@ bool Database::dropMySQLUser(const QString &log, const QString &userHost)
     }
 
     // Testing current connected user grants
-    Grants userGrants = d->m_Grants.value(d->m_ConnectionName, Grant_NoGrant);
+    Grants userGrants = d_database->m_Grants.value(d_database->m_ConnectionName, Grant_NoGrant);
 
 //    qWarning() << "xxxxxxxxxxxxxxxxxxxxxxx check";
 //    qWarning() << grants << (grants & Grant_All);
@@ -458,7 +460,7 @@ bool Database::changeMySQLUserPassword(const QString &login, const QString &newP
 
     // TODO: manage user grants
 //    // Testing current connected user grants
-//    Grants userGrants = d->m_Grants.value(d->m_ConnectionName, Grant_NoGrant);
+//    Grants userGrants = d_database->m_Grants.value(d_database->m_ConnectionName, Grant_NoGrant);
 
 //    if (!(userGrants & Grant_CreateUser)) {
 //        LOG_ERROR_FOR("Database", "Trying to create user, no suffisant rights.");
@@ -491,7 +493,7 @@ bool Database::changeMySQLUserPassword(const QString &login, const QString &newP
 
 /** Return the pointer to the QSqlDatabase in use. */
 QSqlDatabase Database::database() const
-{ return QSqlDatabase::database(d->m_ConnectionName); }
+{ return QSqlDatabase::database(d_database->m_ConnectionName); }
 
 
 /**
@@ -513,9 +515,9 @@ bool Database::createConnection(const QString &connectionName, const QString &no
                                 )
 {
     bool toReturn = true;
-    d->m_ConnectionName.clear();
-    d->m_Driver = connector.driver();
-    QString dbName = prefixedDatabaseName(d->m_Driver, nonPrefixedDbName);
+    d_database->m_ConnectionName.clear();
+    d_database->m_Driver = connector.driver();
+    QString dbName = prefixedDatabaseName(d_database->m_Driver, nonPrefixedDbName);
 
     if (WarnLogMessages) {
         LOG_FOR("Database", connectionName + "  //  " + dbName);
@@ -534,7 +536,7 @@ bool Database::createConnection(const QString &connectionName, const QString &no
             LOG_FOR("Database", QCoreApplication::translate("Database",
                                                             "WARNING: %1 database already in use")
                     .arg(connectionName));
-        d->m_ConnectionName = connectionName;
+        d_database->m_ConnectionName = connectionName;
         return true;
     }
 
@@ -701,7 +703,7 @@ bool Database::createConnection(const QString &connectionName, const QString &no
                 while (query.next()) {
                     grants << query.value(0).toString();
                 }
-                d->m_Grants.insert(connectionName, d->getGrants(connectionName, grants));
+                d_database->m_Grants.insert(connectionName, d_database->getGrants(connectionName, grants));
             }
             break;
         }
@@ -773,7 +775,7 @@ bool Database::createConnection(const QString &connectionName, const QString &no
 
     // return boolean
     if (toReturn)
-        d->m_ConnectionName = connectionName;
+        d_database->m_ConnectionName = connectionName;
 
     return toReturn;
 }
@@ -808,7 +810,7 @@ bool Database::createDatabase(const QString &connectionName , const QString &pre
 /**  Returns the connectionName in use */
 QString Database::connectionName() const
 {
-    return d->m_ConnectionName;
+    return d_database->m_ConnectionName;
 }
 
 /** Create an UUID compatible with the Utils::Database manager. This code uses QUuid::createUuid().toString() with some string contraction. */
@@ -820,7 +822,7 @@ QString Database::createUid()
 /**  returns the grants according to the database \e connectionName. When using a SQLite driver Grants always == 0. */
 Database::Grants Database::grants(const QString &connectionName) const
 {
-    return d->m_Grants.value(connectionName, 0);
+    return d_database->m_Grants.value(connectionName, 0);
 }
 
 /**
@@ -862,20 +864,20 @@ Database::Grants Database::getConnectionGrants(const QString &connectionName) //
 
 /**  Set connectionName to \e c */
 void Database::setConnectionName(const QString & c)
-{ d->m_ConnectionName = c; }
+{ d_database->m_ConnectionName = c; }
 
 /**  Define the driver to use */
 void Database::setDriver(const Database::AvailableDrivers drv)
-{ d->m_Driver = drv; }
+{ d_database->m_Driver = drv; }
 
 Database::AvailableDrivers Database::driver() const
-{ return d->m_Driver; }
+{ return d_database->m_Driver; }
 
 /**  Add a table \e name to the database scheme with the index \e ref */
 int Database::addTable(const int & ref, const QString & name)
 {
-    d->m_Tables.insert(ref, name);
-    return d->m_Tables.key(name);
+    d_database->m_Tables.insert(ref, name);
+    return d_database->m_Tables.key(name);
 }
 
 /**  Add a field \e name to the database scheme with the index \e fieldref into table indexed \e tableref.\n
@@ -886,12 +888,12 @@ int Database::addTable(const int & ref, const QString & name)
 int Database::addField(const int & tableref, const int & fieldref, const QString & name, TypeOfField type, const QString & defaultValue)
 {
     Q_ASSERT_X(name.length() < 50, "Database", "Name of field can not exceed 50 chars");
-    int ref = d->index(tableref, fieldref);
-    d->m_Tables_Fields.insertMulti(tableref, ref);
-    d->m_Fields.insert(ref , name);
-    d->m_TypeOfField.insert(ref , type);
-    d->m_DefaultFieldValue.insert(ref, defaultValue);
-    return d->fieldFromIndex(ref);
+    int ref = d_database->index(tableref, fieldref);
+    d_database->m_Tables_Fields.insertMulti(tableref, ref);
+    d_database->m_Fields.insert(ref , name);
+    d_database->m_TypeOfField.insert(ref , type);
+    d_database->m_DefaultFieldValue.insert(ref, defaultValue);
+    return d_database->fieldFromIndex(ref);
 }
 
 /**  Add a primary key reference to \e tableref \e fieldref.
@@ -899,7 +901,7 @@ int Database::addField(const int & tableref, const int & fieldref, const QString
 */
 void Database::addPrimaryKey(const int &tableref, const int &fieldref)
 {
-    d->m_PrimKeys.insertMulti(tableref, fieldref);
+    d_database->m_PrimKeys.insertMulti(tableref, fieldref);
 }
 
 /** Create an index on the specified \e tableRef, \e fieldRef, named \e name. If \e name is not specified a unique name is created. */
@@ -922,44 +924,44 @@ void Database::addIndex(const Utils::Field &field, const QString &name)
         index.name = name;
     }
     // Store index
-    d->m_DbIndexes.append(index);
+    d_database->m_DbIndexes.append(index);
 }
 
 /**  Verify that the dynamically scheme passed is corresponding to the real database scheme. */
 bool Database::checkDatabaseScheme()
 {
-    if (d->m_ConnectionName.isEmpty())
+    if (d_database->m_ConnectionName.isEmpty())
         return false;
-    if (d->m_Tables.keys().count() == 0)
+    if (d_database->m_Tables.keys().count() == 0)
         return false;
-    if (d->m_Tables_Fields.keys().count() == 0)
+    if (d_database->m_Tables_Fields.keys().count() == 0)
         return false;
 
-    QSqlDatabase DB = QSqlDatabase::database(d->m_ConnectionName);
+    QSqlDatabase DB = QSqlDatabase::database(d_database->m_ConnectionName);
     if (!DB.isOpen()) {
         if (!DB.open()) {
             LOG_ERROR_FOR("Database", tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
-                          .arg(d->m_ConnectionName).arg(DB.lastError().text()));
+                          .arg(d_database->m_ConnectionName).arg(DB.lastError().text()));
             return false;
         }
     }
 
-    QList<int> list = d->m_Tables.keys();
+    QList<int> list = d_database->m_Tables.keys();
     qSort(list);
     foreach(int i, list) {
-        QSqlRecord rec = DB.record(d->m_Tables.value(i));
-        if (rec.count() != d->m_Tables_Fields.values(i).count()) {
+        QSqlRecord rec = DB.record(d_database->m_Tables.value(i));
+        if (rec.count() != d_database->m_Tables_Fields.values(i).count()) {
             LOG_ERROR_FOR("Database", QCoreApplication::translate("Database", "Database Scheme Error: wrong number of fields for table %1")
-                                   .arg(d->m_Tables.value(i)));
+                                   .arg(d_database->m_Tables.value(i)));
             return false;
         }
-        QList<int> fields = d->m_Tables_Fields.values(i);
+        QList<int> fields = d_database->m_Tables_Fields.values(i);
         qSort(fields);
         int id = 0;
         foreach(int f, fields) {
-            if (d->m_Fields.value(f)!= rec.field(id).name()) {
+            if (d_database->m_Fields.value(f)!= rec.field(id).name()) {
                 LOG_ERROR_FOR("Database", QCoreApplication::translate("Database", "Database Scheme Error: field number %1 differs: %2 instead of %3 in table %4")
-                                   .arg(id).arg(d->m_Fields.value(f), rec.field(id).name(), d->m_Tables.value(i)));
+                                   .arg(id).arg(d_database->m_Fields.value(f), rec.field(id).name(), d_database->m_Tables.value(i)));
                 return false;
             }
             id++;
@@ -974,14 +976,14 @@ bool Database::checkDatabaseScheme()
 */
 QString Database::fieldName(const int &tableref, const int &fieldref) const
 {
-    if (!d->m_Tables.contains(tableref))
+    if (!d_database->m_Tables.contains(tableref))
         return QString::null;
-    if (!d->m_Tables_Fields.keys().contains(tableref))
+    if (!d_database->m_Tables_Fields.keys().contains(tableref))
         return QString::null;
-    if (!d->m_Fields.keys().contains(fieldref + (tableref * 1000)))
+    if (!d_database->m_Fields.keys().contains(fieldref + (tableref * 1000)))
         return QString::null;
 
-    return d->m_Fields.value(d->index(tableref, fieldref));
+    return d_database->m_Fields.value(d_database->index(tableref, fieldref));
 }
 
 /**
@@ -1002,7 +1004,7 @@ Field Database::field(const int &tableref, const int &fieldref) const
 FieldList Database::fields(const int tableref) const
 {
     FieldList fields;
-    for(int i = 0; i < (d->m_Tables_Fields.values(tableref).count()); ++i) {
+    for(int i = 0; i < (d_database->m_Tables_Fields.values(tableref).count()); ++i) {
         fields << field(tableref, i);
     }
     return fields;
@@ -1011,16 +1013,16 @@ FieldList Database::fields(const int tableref) const
 /**  Return all fields name of a table */
 QStringList Database::fieldNames(const int &tableref) const
 {
-    if (!d->m_Tables.contains(tableref))
+    if (!d_database->m_Tables.contains(tableref))
         return QStringList();
-    if (!d->m_Tables_Fields.keys().contains(tableref))
+    if (!d_database->m_Tables_Fields.keys().contains(tableref))
         return QStringList();
 
-    QList<int> list = d->m_Tables_Fields.values(tableref);
+    QList<int> list = d_database->m_Tables_Fields.values(tableref);
     qSort(list);
     QStringList toReturn;
     foreach(int i, list)
-       toReturn << d->m_Fields.value(i);
+       toReturn << d_database->m_Fields.value(i);
     return toReturn;
 }
 
@@ -1031,9 +1033,9 @@ This permits to test the real number of fields of the sql table regarding to cod
 
 QStringList Database::fieldNamesSql(const int &tableref) const
 {
-    if (!d->m_Tables.contains(tableref))
+    if (!d_database->m_Tables.contains(tableref))
         return QStringList();
-    if (!d->m_Tables_Fields.keys().contains(tableref))
+    if (!d_database->m_Tables_Fields.keys().contains(tableref))
         return QStringList();
     QStringList fieldNamesList;
     QString tableString = table(tableref);
@@ -1063,12 +1065,12 @@ QStringList Database::fieldNamesSql(const int &tableref) const
 
 QString Database::table(const int & tableref) const
 {
-    return d->m_Tables.value(tableref, QString());
+    return d_database->m_Tables.value(tableref, QString());
 }
 
 QStringList Database::tables() const
 {
-    return d->m_Tables.values();
+    return d_database->m_Tables.values();
 }
 
 /**
@@ -1088,12 +1090,12 @@ QString Database::getWhereClause(const int &tableref, const QHash<int, QString> 
     QHashIterator<int, QString> i(conditions);
     while (i.hasNext()) {
         i.next();
-        int index = d->index(tableref, i.key());
-        if (!d->m_Fields.keys().contains(index))
+        int index = d_database->index(tableref, i.key());
+        if (!d_database->m_Fields.keys().contains(index))
             continue;
         where.append(QString(" (`%1`.`%2` %3) AND ")
-                     .arg(d->m_Tables[tableref])
-                     .arg(d->m_Fields.value(index))
+                     .arg(d_database->m_Tables[tableref])
+                     .arg(d_database->m_Fields.value(index))
                      .arg(i.value()));
     }
     where.chop(5);
@@ -1275,11 +1277,11 @@ QString Database::select(const int &tableref, const QHash<int, QString> &conditi
 {
     QString toReturn;
     QString tmp;
-    QList<int> list = d->m_Tables_Fields.values(tableref);
+    QList<int> list = d_database->m_Tables_Fields.values(tableref);
     qSort(list);
     foreach(const int &i, list)
-        tmp += "`" + table(tableref) + "`.`" + d->m_Fields.value(i) + "`, ";
-//        tmp += "`" + d->m_Fields.value(i)+ "`, ";
+        tmp += "`" + table(tableref) + "`.`" + d_database->m_Fields.value(i) + "`, ";
+//        tmp += "`" + d_database->m_Fields.value(i)+ "`, ";
     if (tmp.isEmpty())
         return QString::null;
     tmp.chop(2);
@@ -1301,10 +1303,10 @@ QString Database::select(const int &tableref) const
 {
     QString toReturn;
     QString tmp;
-    QList<int> list = d->m_Tables_Fields.values(tableref);
+    QList<int> list = d_database->m_Tables_Fields.values(tableref);
     qSort(list);
     foreach(const int & i, list)
-        tmp += "`" + table(tableref) + "`.`" + d->m_Fields.value(i) + "`, ";
+        tmp += "`" + table(tableref) + "`.`" + d_database->m_Fields.value(i) + "`, ";
     if (tmp.isEmpty())
         return QString::null;
     tmp.chop(2);
@@ -1474,7 +1476,7 @@ QString Database::select(const FieldList &select, const JoinList &joins, const F
 QString Database::select(const int tableref, const JoinList &joins, const FieldList &conditions) const
 {
     FieldList fields;
-    for(int i = 0; i < (d->m_Tables_Fields.values(tableref).count()); ++i) {
+    for(int i = 0; i < (d_database->m_Tables_Fields.values(tableref).count()); ++i) {
         fields << Field(tableref, i);
     }
     return this->select(fields, joins, conditions);
@@ -1562,7 +1564,7 @@ QString Database::fieldEquality(const int tableRef1, const int fieldRef1, const 
 */
 int Database::count(const int & tableref, const int & fieldref, const QString &filter) const
 {
-    QString req = QString("SELECT count(`%1`) FROM `%2`").arg(d->m_Fields.value(d->index(tableref, fieldref))).arg(d->m_Tables[tableref]);
+    QString req = QString("SELECT count(`%1`) FROM `%2`").arg(d_database->m_Fields.value(d_database->index(tableref, fieldref))).arg(d_database->m_Tables[tableref]);
     if (!filter.isEmpty())
         req += " WHERE " + filter;
     if (WarnSqlCommands)
@@ -1587,8 +1589,8 @@ int Database::count(const int & tableref, const int & fieldref, const QString &f
 QVariant Database::max(const int &tableref, const int &fieldref, const QString &filter) const
 {
     QString req = QString("SELECT max(%1) FROM %2")
-                  .arg(d->m_Fields.value(d->index(tableref, fieldref)))
-                  .arg(d->m_Tables[tableref]);
+                  .arg(d_database->m_Fields.value(d_database->index(tableref, fieldref)))
+                  .arg(d_database->m_Tables[tableref]);
     if (!filter.isEmpty())
         req += " WHERE " + filter;
     if (WarnSqlCommands)
@@ -1613,9 +1615,9 @@ QVariant Database::max(const int &tableref, const int &fieldref, const QString &
 QVariant Database::max(const int &tableref, const int &fieldref, const int &groupBy, const QString &filter) const
 {
     QString req = QString("SELECT max(%1) FROM %2 GROUP BY %3")
-                  .arg(d->m_Fields.value(d->index(tableref, fieldref)))
-                  .arg(d->m_Tables[tableref])
-                  .arg(d->m_Fields.value(d->index(tableref, groupBy)));
+                  .arg(d_database->m_Fields.value(d_database->index(tableref, fieldref)))
+                  .arg(d_database->m_Tables[tableref])
+                  .arg(d_database->m_Fields.value(d_database->index(tableref, groupBy)));
     if (!filter.isEmpty())
         req += " WHERE " + filter;
     if (WarnSqlCommands)
@@ -1640,8 +1642,8 @@ QVariant Database::max(const int &tableref, const int &fieldref, const int &grou
 QVariant Database::min(const int &tableref, const int &fieldref, const QString &filter) const
 {
     QString req = QString("SELECT MIN(%1) FROM %2")
-                  .arg(d->m_Fields.value(d->index(tableref, fieldref)))
-                  .arg(d->m_Tables[tableref]);
+                  .arg(d_database->m_Fields.value(d_database->index(tableref, fieldref)))
+                  .arg(d_database->m_Tables[tableref]);
     if (!filter.isEmpty())
         req += " WHERE " + filter;
     if (WarnSqlCommands)
@@ -1668,13 +1670,13 @@ QString Database::totalSqlCommand(const int tableRef, const int fieldRef, const 
     QString toReturn;
     if (where.count()) {
         toReturn = QString("SELECT SUM(`%1`) FROM `%2` WHERE %3")
-                   .arg(d->m_Fields.value(d->index(tableRef, fieldRef)))
-                   .arg(d->m_Tables.value(tableRef))
+                   .arg(d_database->m_Fields.value(d_database->index(tableRef, fieldRef)))
+                   .arg(d_database->m_Tables.value(tableRef))
                    .arg(getWhereClause(tableRef, where));
     } else  {
         toReturn = QString("SELECT SUM(`%1`) FROM `%2`")
-                   .arg(d->m_Fields.value(d->index(tableRef, fieldRef)))
-                   .arg(d->m_Tables.value(tableRef));
+                   .arg(d_database->m_Fields.value(d_database->index(tableRef, fieldRef)))
+                   .arg(d_database->m_Tables.value(tableRef));
     }
     return toReturn;
 }
@@ -1684,8 +1686,8 @@ QString Database::totalSqlCommand(const int tableref, const int fieldref) const
 {
     QString toReturn;
     toReturn = QString("SELECT SUM(`%1`) FROM `%2`")
-               .arg(d->m_Fields.value(d->index(tableref, fieldref)))
-               .arg(d->m_Tables.value(tableref));
+               .arg(d_database->m_Fields.value(d_database->index(tableref, fieldref)))
+               .arg(d_database->m_Tables.value(tableref));
     return toReturn;
 }
 
@@ -1725,11 +1727,11 @@ QString Database::prepareInsertQuery(const int tableref) const
     QString toReturn;
     QString fields;
     QString numbers;
-    QList<int> list = d->m_Tables_Fields.values(tableref);
+    QList<int> list = d_database->m_Tables_Fields.values(tableref);
     qSort(list);
     foreach(const int & i, list)
     {
-        fields.append("`"+ d->m_Fields.value(i) + "`, ");
+        fields.append("`"+ d_database->m_Fields.value(i) + "`, ");
         numbers.append("? , ");
     }
     fields.chop(2);
@@ -1860,21 +1862,21 @@ QString Database::prepareDeleteQuery(const int tableref, const QHash<int,QString
 /** Create table \e tableref in the database. */
 bool Database::createTable(const int &tableref) const
 {
-    if (!d->m_Tables.contains(tableref))
+    if (!d_database->m_Tables.contains(tableref))
         return false;
-    if (! d->m_Tables_Fields.keys().contains(tableref))
+    if (! d_database->m_Tables_Fields.keys().contains(tableref))
         return false;
-    if (d->m_ConnectionName.isEmpty())
+    if (d_database->m_ConnectionName.isEmpty())
         return false;
 
     // get database and open
-    QSqlDatabase DB = QSqlDatabase::database(d->m_ConnectionName);
+    QSqlDatabase DB = QSqlDatabase::database(d_database->m_ConnectionName);
     if (!DB.isOpen())
         return false;
 
     // create query
     QStringList req;
-    req = d->getSQLCreateTable(tableref);
+    req = d_database->getSQLCreateTable(tableref);
 
     return executeSQL(req, DB);
 }
@@ -1890,7 +1892,7 @@ bool Database::createTables() const
             return false;
         }
     }
-    QList<int> list = d->m_Tables.keys();
+    QList<int> list = d_database->m_Tables.keys();
     qSort(list);
     DB.transaction();
     foreach(const int & i, list) {
@@ -2298,24 +2300,24 @@ QString DatabasePrivate::getTypeOfField(const int &fieldref) const
 /**  Used for the debugging. */
 void Database::warn() const
 {
-    QSqlDatabase DB = QSqlDatabase::database(d->m_ConnectionName);
+    QSqlDatabase DB = QSqlDatabase::database(d_database->m_ConnectionName);
     if (WarnLogMessages)
         Log::addMessage("Database", QString("Connection name: %1, Database Name: %2, Driver: %3, Opened: %4, Can open: %5 ")
-                       .arg(d->m_ConnectionName, DB.databaseName(), DB.driverName())
+                       .arg(d_database->m_ConnectionName, DB.databaseName(), DB.driverName())
                        .arg(DB.isOpen())
                        .arg(DB.open()));
 
-    foreach(int i, d->m_Tables.keys())
+    foreach(int i, d_database->m_Tables.keys())
     {
         if (WarnLogMessages)
-            Log::addMessage("Database", QString("Tables = %1: %2").arg(i).arg(d->m_Tables[i]));
-        QList<int> list = d->m_Tables_Fields.values(i);
+            Log::addMessage("Database", QString("Tables = %1: %2").arg(i).arg(d_database->m_Tables[i]));
+        QList<int> list = d_database->m_Tables_Fields.values(i);
         qSort(list);
         foreach(int f, list)
             if (WarnLogMessages)
                 Log::addMessage("Database", QString("    Fields = %1: %2 %3 %4")
                                .arg(f)
-                               .arg(d->m_Fields[f], d->getTypeOfField(f), d->m_DefaultFieldValue[i]));
+                               .arg(d_database->m_Fields[f], d_database->getTypeOfField(f), d_database->m_DefaultFieldValue[i]));
 
     }
 }
@@ -2327,12 +2329,12 @@ void Database::toTreeWidget(QTreeWidget *tree)
     bold.setBold(true);
     tree->clear();
 
-    QSqlDatabase DB = QSqlDatabase::database(d->m_ConnectionName);
+    QSqlDatabase DB = QSqlDatabase::database(d_database->m_ConnectionName);
 
     // General information
     QTreeWidgetItem *db = new QTreeWidgetItem(tree, QStringList() << "General information");
     db->setFont(0, bold);
-    new QTreeWidgetItem(db, QStringList() << "Connection Name" << d->m_ConnectionName);
+    new QTreeWidgetItem(db, QStringList() << "Connection Name" << d_database->m_ConnectionName);
     new QTreeWidgetItem(db, QStringList() << "Database Name" << DB.databaseName());
     if (DB.isOpenError()) {
         QTreeWidgetItem *e = new QTreeWidgetItem(db, QStringList() << "Error" << DB.lastError().text());
@@ -2370,7 +2372,7 @@ void Database::toTreeWidget(QTreeWidget *tree)
     // Grants
     QTreeWidgetItem *grants = new QTreeWidgetItem(tree, QStringList() << "Grants");
     grants->setFont(0, bold);
-    Database::Grants g = d->m_Grants.value(d->m_ConnectionName);
+    Database::Grants g = d_database->m_Grants.value(d_database->m_ConnectionName);
     if (g & Database::Grant_All) {
         new QTreeWidgetItem(grants, QStringList() << "ALL PRIVILEGES");
     } else {
@@ -2421,7 +2423,7 @@ bool Database::alterTableForNewField(const int tableRef, const int newFieldRef,c
     bool b = true;
     QString tableString = table(tableRef);
     QString newField = fieldName(tableRef,newFieldRef);
-    QString type = d->getTypeOfField(d->index(tableRef, newFieldRef));
+    QString type = d_database->getTypeOfField(d_database->index(tableRef, newFieldRef));
     QSqlQuery q(database());
     QString req = QString("ALTER TABLE `%1` ADD `%2` %3 %4;")
     	       .arg(tableString,newField,type,nullOption);

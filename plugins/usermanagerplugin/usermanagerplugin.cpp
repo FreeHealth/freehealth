@@ -69,13 +69,12 @@
 #include <QProgressDialog>
 #include <QDebug>
 
-using namespace UserPlugin;
+using namespace UserPlugin::Internal;
 using namespace Trans::ConstantTranslations;
 
 static inline Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 static inline UserPlugin::UserModel *userModel() {return UserPlugin::UserModel::instance();}
-static inline UserPlugin::Internal::UserBase *userBase() {return UserPlugin::Internal::UserBase::instance();}
 static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
 static inline Core::ModeManager *modeManager() { return Core::ICore::instance()->modeManager(); }
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
@@ -95,6 +94,8 @@ UserManagerPlugin::UserManagerPlugin() :
 
     // Add Translator to the Application
     Core::ICore::instance()->translators()->addNewTranslator("usermanagerplugin");
+
+    new UserBase(this);
 
     addObject(m_FirstCreation);
 }
@@ -119,11 +120,14 @@ bool UserManagerPlugin::initialize(const QStringList &arguments, QString *errorS
     messageSplash(tr("Initializing user manager plugin..."));
 
     // is UserBase reachable ?
-    userBase();
-    if (!userBase()->isInitialized()) {
+    Internal::UserBase *base = UserBase::instance();
+    base->initialize();
+
+    if (!base->isInitialized()) {
         Utils::warningMessageBox(tr("Unable to connect to the user database."),
                                  tr("The user database is not reachable. Please check your configuration.\n"
                                     "Application will stop."));
+        LOG_ERROR(settings()->databaseConnector().toString());
         return false;
     }
 
@@ -138,22 +142,22 @@ bool UserManagerPlugin::initialize(const QStringList &arguments, QString *errorS
 
         bool created = true;
         // Doctors
-        created = userBase()->createVirtualUser("d1f29ad4a4ea4dabbe40ec888d153228", "McCoy", "Leonard", Trans::Constants::Doctor, genders().indexOf(tkTr(Trans::Constants::MALE)),
+        created = base->createVirtualUser("d1f29ad4a4ea4dabbe40ec888d153228", "McCoy", "Leonard", Trans::Constants::Doctor, genders().indexOf(tkTr(Trans::Constants::MALE)),
                                       QStringList() << "Medical Doctor",
                                       QStringList() << "Chief medical officer USS Enterprise",
                                       Core::IUser::AllRights, Core::IUser::AllRights, 0, Core::IUser::AllRights, Core::IUser::AllRights);
         if (created) {
-            userBase()->createVirtualUser("b5caead635a246a2a87ce676e9d2ef4d", "Phlox", "", Trans::Constants::Doctor, genders().indexOf(tkTr(Trans::Constants::MALE)),
+            base->createVirtualUser("b5caead635a246a2a87ce676e9d2ef4d", "Phlox", "", Trans::Constants::Doctor, genders().indexOf(tkTr(Trans::Constants::MALE)),
                                           QStringList() << "Intergalactic medicine",
                                           QStringList() << "Chief medical officer Enterprise NX-01",
                                           Core::IUser::AllRights, Core::IUser::AllRights, 0, Core::IUser::AllRights, Core::IUser::AllRights);
             // Secretaries or so :  Uhura  U.S.S. Enterprise
-            userBase()->createVirtualUser("0f148ea3de6e47b8bbf9c2cedea47511", "Uhura", "", Trans::Constants::Madam, genders().indexOf(tkTr(Trans::Constants::FEMALE)),
+            base->createVirtualUser("0f148ea3de6e47b8bbf9c2cedea47511", "Uhura", "", Trans::Constants::Madam, genders().indexOf(tkTr(Trans::Constants::FEMALE)),
                                           QStringList() << "Communications officer",
                                           QStringList() << "Enterprise NX-01",
                                           0, 0, 0, Core::IUser::AllRights, 0);
             // Nurses : Christine Chapel U.S.S. Enterprise
-            userBase()->createVirtualUser("b94ad4ee401a4fada0bf29fc8f8f3597", "Chapel", "Christine", Trans::Constants::Madam, genders().indexOf(tkTr(Trans::Constants::FEMALE)),
+            base->createVirtualUser("b94ad4ee401a4fada0bf29fc8f8f3597", "Chapel", "Christine", Trans::Constants::Madam, genders().indexOf(tkTr(Trans::Constants::FEMALE)),
                                           QStringList() << "Space nurse",
                                           QStringList() << "Nurse, Enterprise NX-01",
                                           0, 0, 0, Core::IUser::AllRights, Core::IUser::AllRights);

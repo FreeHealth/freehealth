@@ -87,11 +87,7 @@ static inline Core::ICommandLine *commandLine()  { return Core::ICore::instance(
 static inline QString bundlePath()  { return settings()->path(Core::ISettings::BundleResourcesPath); }
 
 // Initializing static datas
-bool UserBase::m_initialized = false;
-QString  UserBase::m_LastUuid = "";
-QString  UserBase::m_LastLogin = "";
-QString  UserBase::m_LastPass = "";
-UserBase* UserBase::m_Instance = 0;
+UserBase *UserBase::m_Instance = 0;
 
 /**
   Returns the unique instance of UserBase. If the instance does not exist it is created.
@@ -99,8 +95,7 @@ UserBase* UserBase::m_Instance = 0;
 */
 UserBase *UserBase::instance()
 {
-    if (!m_Instance)
-        m_Instance = new UserBase(qApp);
+    Q_ASSERT(m_Instance);
     return m_Instance;
 }
 
@@ -116,12 +111,12 @@ bool UserBase::testConnexion() const
 }
 
 /** Constructor, inform Utils::Database of the database scheme. */
-UserBase::UserBase(QObject *parent)
-        : QObject(parent), Utils::Database()
+UserBase::UserBase(QObject *parent) :
+    QObject(parent), Utils::Database(),
+    m_initialized(false), m_IsNewlyCreated(false)
 {
+    m_Instance = this;
     setObjectName("UserBase");
-    m_initialized = false;
-    m_IsNewlyCreated = false;
 
     // populate tables and fields of database
     addTable(Table_USERS,  "USERS");
@@ -189,7 +184,8 @@ UserBase::UserBase(QObject *parent)
     addField(Table_INFORMATION, INFO_VERSION,  "VERSION", FieldIsShortText);
     addField(Table_INFORMATION, INFO_MAX_LKID, "MAX_LK_ID", FieldIsInteger);
 
-    initialize(Core::ICore::instance()->settings());
+    // Connect first run database creation requested
+    connect(Core::ICore::instance(), SIGNAL(firstRunDatabaseCreation()), this, SLOT(onCoreFirstRunCreationRequested()));
 }
 
 /**
@@ -235,7 +231,6 @@ bool UserBase::initialize(Core::ISettings *s)
         return false;
 
 //    connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
-
     m_initialized = true;
     return true;
 }
@@ -259,6 +254,11 @@ bool UserBase::checkDatabaseVersion()
     return true;
 }
 
+void UserBase::onCoreFirstRunCreationRequested()
+{
+    disconnect(Core::ICore::instance(), SIGNAL(firstRunDatabaseCreation()), this, SLOT(onCoreFirstRunCreationRequested()));
+    initialize();
+}
 
 //--------------------------------------------------------------------------------------------------------
 //------------------------------------------- Datas retreivers -------------------------------------------
@@ -389,7 +389,7 @@ UserData *UserBase::getUserByLoginPassword(const QVariant &login, const QVariant
     return getUser(where);
 }
 
-/** Check the couple login/password passed as params. */
+/** Check the couple login/password passed as params. Return true if a user can connect with these identifiants (to the server + to freemedforms). */
 bool UserBase::checkLogin(const QString &clearLogin, const QString &clearPassword) const
 {
     qWarning() << Q_FUNC_INFO << clearLogin << clearPassword;
@@ -411,12 +411,11 @@ bool UserBase::checkLogin(const QString &clearLogin, const QString &clearPasswor
             connectionTest.setUserName(clearLogin);
             connectionTest.setPassword(clearPassword);
             if (!connectionTest.open()) {
-                qWarning() << connectionTest << clearLogin << clearPassword << database().lastError().text();
-                LOG_ERROR(QString("Unable to connect to the MySQL server, with user %1: %2").arg(clearLogin).arg(clearPassword));
+                LOG_ERROR(QString("Unable to connect to the MySQL server, with user %1: %2").arg(clearLogin).arg(clearPassword.length()));
                 LOG_ERROR(database().lastError().text());
                 return false;
             }
-            LOG("Database server identifiers are correct");
+            LOG(QString("Database server identifiers are correct for login %1: %2").arg(clearLogin).arg(clearPassword.length()));
             // Reconnect with these identifiers all databases
             break;
         }
@@ -455,6 +454,19 @@ bool UserBase::checkLogin(const QString &clearLogin, const QString &clearPasswor
     }
 
     return (!m_LastUuid.isEmpty());
+}
+
+/** Return true if the \e login is already used on the server or in freemedforms configuration. */
+bool UserBase::isLoginAlreadyExists(const QString &clearLogin) const
+{
+    if (!testConnexion())
+        return false;
+    // TODO: test is the login is alreday used in mysql / postgre
+
+    // Check is user login is used
+    QHash<int, QString> where;
+    where.insert(USER_LOGIN, QString("='%1'").arg(Utils::loginForSQL(clearLogin)));
+    return count(Table_USERS, USER_LOGIN, getWhereClause(Table_USERS, where));
 }
 
 /** Return the Uuid of the user identified with couple login/password. Returns a null QString if an error occurs. */
@@ -858,8 +870,7 @@ bool UserBase::createUser(UserData *user)
 {
     if (!testConnexion())
         return false;
-    // check current user grants
-    // TODO: code here
+    // TODO: check current user freemedforms' rights
 
     switch (driver()) {
     case Utils::Database::MySQL:
@@ -908,6 +919,7 @@ bool UserBase::saveUser(UserData *user)
     // if user already exists ==> update   else ==> insert
     bool toUpdate = false;
     QHash<int, QString> where;
+    // Try to find existing user uuid
     if (user->id() != -1) {
         where.insert(USER_UUID, QString("='%1'").arg(user->uuid()));
         QString querychecker = select(Table_USERS, USER_UUID, where);

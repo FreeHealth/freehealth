@@ -195,6 +195,7 @@ void StaticAlertToolButton::setAlertItem(const AlertItem &item)
 {
     setIcon(getIcon(item));
     setToolTip(getToolTip(item));
+    setText(QString("%1: %2").arg(item.category()).arg(item.label()));
 
     if (aLabel)
         aLabel->setText(item.label());

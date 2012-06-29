@@ -131,13 +131,7 @@ int main( int argc, char *argv[] )
     // Add some debugging information
     defineLibraryPaths();
     LOG_FOR("Main","looking for libraries in path : " + qApp->libraryPaths().join(";"));
-    LOG_FOR("Main","Command line : " + qApp->arguments().join(" "));
     Utils::Database::logAvailableDrivers();
-
-//    QLibrary mysql("/Developer/Applications/Qt/plugins/sqldrivers/libqsqlmysql.dylib");
-//    mysql.load();
-//    qWarning() << mysql.errorString() << mysql.isLoaded();
-
 
     QTextCodec::setCodecForTr( QTextCodec::codecForName( "UTF-8" ) );
     QTextCodec::setCodecForCStrings( QTextCodec::codecForName( "UTF-8" ) );
@@ -146,14 +140,13 @@ int main( int argc, char *argv[] )
     app.setOrganizationName(BINARY_NAME);
     app.setApplicationVersion(PACKAGE_VERSION);
 
-    if (qApp->arguments().contains("--version") ||
-        qApp->arguments().contains("-version") ||
-        qApp->arguments().contains("-v")) {
+    QStringList args = qApp->arguments();
+    if (args.contains("--version") ||
+        args.contains("-version") ||
+        args.contains("-v")) {
         std::cout << qPrintable(VERSION_MESSAGE);
         return 0;
     }
-
-    LOG_FOR("Main", qApp->arguments().join(";"));
 
     ExtensionSystem::PluginManager pluginManager;
     pluginManager.setFileExtension(QString("pluginspec"));

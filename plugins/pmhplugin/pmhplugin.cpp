@@ -50,7 +50,7 @@
 #include <QtCore/QtPlugin>
 #include <QDebug>
 
-using namespace PMH;
+using namespace PMH::Internal;
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline Core::IUser *user()  { return Core::ICore::instance()->user(); }
 static inline void messageSplash(const QString &s) {theme()->messageSplashScreen(s); }
@@ -66,6 +66,9 @@ PmhPlugin::PmhPlugin() :
 
     m_PrefPage = new Internal::PmhPreferencesPage(this);
     addAutoReleasedObject(m_PrefPage);
+
+    // Create database
+    new PmhBase(this);
 }
 
 PmhPlugin::~PmhPlugin()
@@ -99,7 +102,8 @@ void PmhPlugin::extensionsInitialized()
 
     messageSplash(tr("Initializing PMHx database plugin..."));
     // Initialize Base
-    Internal::PmhBase::instance();
+    PmhBase::instance()->initialize();
+
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
 }

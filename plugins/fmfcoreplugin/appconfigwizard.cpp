@@ -55,6 +55,9 @@
 #include <QDesktopWidget>
 #include <QCheckBox>
 #include <QGroupBox>
+#include <QProgressBar>
+#include <QTimer>
+#include <QProgressDialog>
 
 using namespace Core;
 using namespace Trans::ConstantTranslations;
@@ -68,12 +71,26 @@ static inline QString serverConfigurationSqlScript() {return settings()->path(Co
 
 namespace {
 
+//static void noBackButton(QWizard *wizard)
+//{
+//    wizard->setButtonLayout(QList<QWizard::WizardButton>() << QWizard::HelpButton << QWizard::Stretch << QWizard::CancelButton << QWizard::NextButton);
+//    wizard->button(QWizard::BackButton)->setEnabled(false);
+//}
+
     class CoreFirstRunPage : public Core::IFirstConfigurationPage
     {
     public:
         CoreFirstRunPage(QObject *parent) : IFirstConfigurationPage(parent) {}
         int id() const {return IFirstConfigurationPage::FirstPage;}
         QWizardPage *createPage(QWidget *parent) {return new CoreConfigPage(parent);}
+    };
+
+    class CoreFirstRunDatabaseCreationPage : public Core::IFirstConfigurationPage
+    {
+    public:
+        CoreFirstRunDatabaseCreationPage(QObject *parent) : IFirstConfigurationPage(parent) {}
+        int id() const {return IFirstConfigurationPage::DatabaseCreationPage;}
+        QWizardPage *createPage(QWidget *parent) {return new CoreDatabaseCreationPage(parent);}
     };
 
     class CoreServerConfigPage : public Core::IFirstConfigurationPage
@@ -109,6 +126,7 @@ AppConfigWizard::AppConfigWizard(QWidget *parent) :
     pages << new ::CoreFirstRunPage(this);
     pages << new ::CoreServerConfigPage(this);
     pages << new ::CoreClientConfigPage(this);
+    pages << new ::CoreFirstRunDatabaseCreationPage(this);
     pages << new ::CoreLastRunPage(this);
 
     // add pages to wizard
@@ -241,7 +259,7 @@ int CoreConfigPage::nextId() const
     switch (installCombo->currentIndex())
     {
     case 0: // No server
-        return Core::IFirstConfigurationPage::UserCreation;
+        return Core::IFirstConfigurationPage::DatabaseCreationPage;
     case 1: // Network as client
         return Core::IFirstConfigurationPage::ServerClientConfig;
     case 2: // Network as server
@@ -286,6 +304,11 @@ ClientConfigPage::ClientConfigPage(QWidget *parent) :
     connect(serverWidget, SIGNAL(hostConnectionChanged(bool)), this, SIGNAL(completeChanged()));
 }
 
+void ClientConfigPage::initializePage()
+{
+//    noBackButton(wizard());
+}
+
 void ClientConfigPage::retranslate()
 {
     setTitle(tr("Network client configuration"));
@@ -301,49 +324,62 @@ bool ClientConfigPage::isComplete() const
 
 bool ClientConfigPage::validatePage()
 {
-    if (serverWidget->connectionSucceeded()) {
-        // remove log and pass from settings
-        settings()->setValue(Core::Constants::S_LASTLOGIN, QString());
-        settings()->setValue(Core::Constants::S_LASTPASSWORD, QString());
-        // try to connect the MySQL server and test existence of a FreeMedForms configuration
-        QSqlDatabase mysql = QSqlDatabase::addDatabase("QMYSQL", "__CHECK__CONFIG__");
-        Utils::DatabaseConnector c = settings()->databaseConnector();
-        // test fmf_admin user
-        mysql.setHostName(c.host());
-        mysql.setPort(c.port());
-        mysql.setUserName(c.clearLog());
-        mysql.setPassword(c.clearPass());
-        if (!mysql.open()) {
-            Q_EMIT completeChanged();
-            return false;
-        }
-        // all freemedforms databases are prefixed with fmf_
-        // test the fmf_* databases existence
-        QSqlQuery query(mysql);
-        int n = 0;
-        if (!query.exec("show databases;")) {
-            LOG_QUERY_ERROR(query);
-            Q_EMIT completeChanged();
-            return false;
-        } else {
-            while (query.next())
-                if (query.value(0).toString().startsWith("fmf_"))
-                        ++n;
-        }
-        if (n<5) {
-            Utils::warningMessageBox(tr("No FreeMedForms server configuration detected"),
-                                     tr("You are trying to configure a network client of FreeMedForms. "
-                                        "It is manadatory to connect to a FreeMedForms network server.\n"
-                                        "While the host connection is valid, no FreeMedForms configuration was "
-                                        "found on this host.\n\n"
-                                        "Please check that this host contains a FreeMedForms server configuration."));
-            LOG_ERROR("No FreeMedForms configuration detected on the server");
-            Q_EMIT completeChanged();
-            return false;
-        }
-        return true;
+    if (!serverWidget->connectionSucceeded())
+        return false;
+
+    // Test server identifiants
+    settings()->setValue(Core::Constants::S_LASTLOGIN, QString());
+    settings()->setValue(Core::Constants::S_LASTPASSWORD, QString());
+    // try to connect the MySQL server and test existence of a FreeMedForms configuration
+    QSqlDatabase mysql = QSqlDatabase::addDatabase("QMYSQL", "__CHECK__CONFIG__");
+    Utils::DatabaseConnector c = settings()->databaseConnector();
+    // test fmf_admin user
+    mysql.setHostName(c.host());
+    mysql.setPort(c.port());
+    mysql.setUserName(c.clearLog());
+    mysql.setPassword(c.clearPass());
+    if (!mysql.open()) {
+        Q_EMIT completeChanged();
+        return false;
     }
-    return false;
+
+    // Test server configuration
+    // all freemedforms databases are prefixed with fmf_
+    // test the fmf_* databases existence
+    QSqlQuery query(mysql);
+    int n = 0;
+    if (!query.exec("show databases;")) {
+        LOG_QUERY_ERROR(query);
+        Q_EMIT completeChanged();
+        return false;
+    } else {
+        while (query.next())
+            if (query.value(0).toString().startsWith("fmf_"))
+                ++n;
+    }
+    if (n<5) {
+        Utils::warningMessageBox(tr("No FreeMedForms server configuration detected"),
+                                 tr("You are trying to configure a network client of FreeMedForms. "
+                                    "It is manadatory to connect to a FreeMedForms network server.\n"
+                                    "While the host connection is valid, no FreeMedForms configuration was "
+                                    "found on this host.\n\n"
+                                    "Please check that this host contains a FreeMedForms server configuration."));
+        LOG_ERROR("No FreeMedForms configuration detected on the server");
+        Q_EMIT completeChanged();
+        return false;
+    }
+
+    // Connect databases
+    QProgressDialog dlg(tr("Connecting databases"), tr("Please wait"), 0, 0);
+    dlg.setWindowModality(Qt::WindowModal);
+    dlg.setMinimumDuration(1000);
+    dlg.show();
+    dlg.setFocus();
+    dlg.setValue(0);
+
+    Core::ICore::instance()->requestFirstRunDatabaseCreation();
+
+    return true;
 }
 
 int ClientConfigPage::nextId() const
@@ -458,17 +494,6 @@ bool ServerConfigPage::validatePage()
                 }
             }
         }
-
-//        // recreate server connector
-//        Utils::DatabaseConnector connector;
-//        connector.setClearLog();
-//        connector.setClearPass();
-//        connector.setHost(serverWidget->hostName());
-//        connector.setPort(serverWidget->port());
-//        connector.setDriver(Utils::Database::MySQL);
-//        connector.setAccessMode(Utils::DatabaseConnector::ReadWrite);
-//        settings()->setDatabaseConnector(connector);
-//        Core::ICore::instance()->databaseServerLoginChanged();
     }
     QSqlDatabase::removeDatabase("__APP_CONNECTION_TESTER");
     return true;
@@ -476,7 +501,7 @@ bool ServerConfigPage::validatePage()
 
 int ServerConfigPage::nextId() const
 {
-    return Core::IFirstConfigurationPage::UserCreation;
+    return Core::IFirstConfigurationPage::DatabaseCreationPage;
 }
 
 void ServerConfigPage::changeEvent(QEvent *e)
@@ -491,6 +516,71 @@ void ServerConfigPage::changeEvent(QEvent *e)
     }
 }
 
+///////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////  CoreDatabaseCreationPage  //////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////
+CoreDatabaseCreationPage::CoreDatabaseCreationPage(QWidget *parent) :
+    QWizardPage(parent),
+    _progressBar(0),
+    _completed(false)
+{
+    QGridLayout *l = new QGridLayout(this);
+    setLayout(l);
+
+    _progressBar = new QProgressBar(this);
+    l->addWidget(_progressBar);
+
+    retranslate();
+}
+
+void CoreDatabaseCreationPage::initializePage()
+{
+    _progressBar->setRange(0, 0);
+    _progressBar->setValue(0);
+    // request creation after the page is shown
+    QTimer::singleShot(100, this, SLOT(startDbCreation()));
+}
+
+void CoreDatabaseCreationPage::startDbCreation()
+{
+    Core::ICore::instance()->requestFirstRunDatabaseCreation();
+    _completed = true;
+    Q_EMIT completeChanged();
+    wizard()->next();
+}
+
+bool CoreDatabaseCreationPage::isComplete() const
+{
+    return _completed;
+}
+
+bool CoreDatabaseCreationPage::validatePage()
+{
+    return _completed;
+}
+
+int CoreDatabaseCreationPage::nextId() const
+{
+    return Core::IFirstConfigurationPage::UserCreation;
+}
+
+void CoreDatabaseCreationPage::retranslate()
+{
+    setTitle(tr("Preparing databases"));
+    setSubTitle(tr("Preparing databases. Please wait..."));
+}
+
+void CoreDatabaseCreationPage::changeEvent(QEvent *e)
+{
+    QWidget::changeEvent(e);
+    switch (e->type()) {
+    case QEvent::LanguageChange:
+        retranslate();
+        break;
+    default:
+        break;
+    }
+}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////  EndConfigPage  ///////////////////////////////////////////
