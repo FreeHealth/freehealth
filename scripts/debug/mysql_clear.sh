@@ -41,6 +41,9 @@ do
         esac
 done
 
+echo "*** Using password: "$MYSQL_ROOT_PASS
+echo "    Default command: "$MYSQL -uroot $MYSQL_ROOT_PASS
+
 echo
 echo "*** Using MySQL from $MYSQL ***"
 # DROP FMF USERS
