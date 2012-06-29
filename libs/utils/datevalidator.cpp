@@ -85,7 +85,7 @@ QValidator::State DateValidator::validate(QString &input, int &pos) const
     }
 
     // no match by now
-    // check if the user enters digits or .-/
+    // check if the user enters digits or a SEPARATOR
     // everything else is discouraged
     if(QRegExp("[-./,;: 0-9]*").exactMatch(input)) {
 //        qDebug() << "probable date format with separators:" << input;
