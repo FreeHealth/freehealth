@@ -20,7 +20,7 @@ if [[ "$sys" == "Linux" ]] ; then
     echo "Running under Linux"
 elif [[ "$sys" == "Darwin" ]] ; then
     echo "Running under MacOs"
-    MYSQL_PATH="/usr/local/mysql/bin"
+    MYSQL_PATH="/usr/local/mysql/bin/"
     echo "Setting MySQL path to: "$MYSQL_PATH
 fi
 
@@ -45,8 +45,8 @@ checkMySQLServer()
   echo "## TESTING MYSQL SERVER" >> $OUTPUT_FILE
   echo "*** Testing MySQL server status"
   if [[ "$sys" == "Linux" ]] ; then
-    echo `/etc/init.d/mysqld status` >> $OUTPUT_FILE
-    echo "    "`/etc/init.d/mysqld status`
+    echo `mysqladmin ping` >> $OUTPUT_FILE
+    echo "    "`mysqladmin ping`
   elif [[ "$sys" == "Darwin" ]] ; then
     echo "*** System Root password?"
     echo `sudo $MYSQL_PATH/../support-files/mysql.server status` >> $OUTPUT_FILE
@@ -128,8 +128,8 @@ do
         esac
 done
 
-MYSQL=$MYSQL_PATH"/mysql -uroot "$MYSQL_ROOT_PASS
-MYSQL_ADMIN=$MYSQL_PATH"/mysqladmin"
+MYSQL=$MYSQL_PATH"mysql -uroot "$MYSQL_ROOT_PASS
+MYSQL_ADMIN=$MYSQL_PATH"mysqladmin"
 
 echo "*** Starting MySQL debugging script at: "`date`" on "`hostname` > $OUTPUT_FILE
 
