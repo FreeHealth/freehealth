@@ -42,14 +42,20 @@ const char * const SEPARATORS = "-./,;: ";
 DateValidator::DateValidator(QObject *parent) :
     QValidator(parent)
 {
-    // split localized dateFormat string and put the parts a separated QStringList
+    // split localized dateFormat string and put the parts in a separated QStringList
     //: this is a comma separated list of formatStrings used by QDate::fromString();
     m_dateFormatList = tr("ddMMyy,ddMMyyyy").simplified().split(",", QString::SkipEmptyParts);
     m_lastValidFormat = QString();
 
-    // and then the FMF editor default format
+    // add the systems default date ShortFormat
+    addDateFormat(QLocale().dateFormat(QLocale::ShortFormat));
+
+    // and then the FMF editor default format without separators
     QRegExp withSep = QRegExp(QString("[%1]*").arg(::SEPARATORS));
     addDateFormat(tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR).remove(withSep));
+
+    // let the user also enter the date exactly like the dateformat is
+    addDateFormat(tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR));
 }
 
 /** \brief validates the input string with custom date formats
