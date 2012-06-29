@@ -31,6 +31,8 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/iuser.h>
 #include <coreplugin/ipatient.h>
+#include <coreplugin/itheme.h>
+#include <coreplugin/constants_icons.h>
 #include <coreplugin/constants_colors.h>
 
 #include <utils/log.h>
@@ -53,6 +55,7 @@ using namespace Trans::ConstantTranslations;
 
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
+static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 
 namespace {
 const char * const XML_ROOT_TAG = "Alert";
@@ -646,6 +649,24 @@ QString AlertItem::priorityBackgroundColor() const
     case AlertItem::High: background = Core::Constants::COLOR_BACKGROUND_ALERT_LOW; break;
     }
     return background;
+}
+
+/** Return the icon corresponding to the \e priority. */
+QIcon AlertItem::priorityBigIcon(Priority priority)
+{
+    QString icon;
+    switch (priority) {
+    case AlertItem::High: icon = Core::Constants::ICONCRITICAL; break;
+    case AlertItem::Medium: icon = Core::Constants::ICONWARNING; break;
+    case AlertItem::Low: icon = Core::Constants::ICONINFORMATION; break;
+    }
+    return theme()->icon(icon, Core::ITheme::BigIcon).pixmap(64,64);
+}
+
+/** Return the priority's icon corresponding of the alert. */
+QIcon AlertItem::priorityBigIcon() const
+{
+    return priorityBigIcon(d->_priority);
 }
 
 QString AlertItem::extraXml() const
