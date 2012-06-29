@@ -84,6 +84,8 @@ public:
     DatabaseConnector &operator=(const DatabaseConnector &in);
     bool operator==(const DatabaseConnector &other) const;
 
+    QString toString() const;
+
 private:
     Internal::DatabaseConnectorPrivate *d;
 };
