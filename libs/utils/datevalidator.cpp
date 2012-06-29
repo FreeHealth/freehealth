@@ -80,6 +80,11 @@ QValidator::State DateValidator::validate(QString &input, int &pos) const
         _currentDate = QDate::fromString(input, format);
         if (_currentDate.isValid()) {
 //            qDebug() << "Date conversion succeded:" << input;
+
+            // interpret entered 2digit year before normal lifespan to be in current century
+            if (_currentDate.year() < (QDate::currentDate().year() - 80) && !format.contains("yyyy")) {
+                _currentDate = _currentDate.addYears(100);
+            }
             return QValidator::Acceptable;
         }
     }
