@@ -130,13 +130,15 @@ public:
 
     void parseCommandLine()
     {
+        LOG_FOR("CommandLine", "Parsing command line");
         // Add default values
         value.insert(Core::Constants::CL_Test, false);
         value.insert(Core::Constants::CL_ReceiptsCreator, false);
         value.insert(Core::Constants::CL_MedinTux, false);
 
-        const QStringList &args = qApp->arguments();
+        QStringList args = qApp->arguments();
         foreach(const QString &a, args) {
+            LOG_FOR("CommandLine", a);
             QString k = a;
             if (k.contains(" "))
                 k = k.left(k.indexOf(" "));
