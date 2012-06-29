@@ -43,8 +43,8 @@
 #include <agendaplugin/usercalendar.h>
 #include <calendar/common.h>
 //#include <calendar/usercalendar_editor_widget.h>
-//#include <patientbaseplugin/patientbase.h>
-//#include <patientbaseplugin/constants_db.h>
+#include <patientbaseplugin/patientbase.h>
+#include <patientbaseplugin/constants_db.h>
 // END TEST
 
 #include <utils/log.h>
@@ -69,7 +69,7 @@ using namespace Agenda;
 using namespace Internal;
 
 // TEST
-//static inline Patients::Internal::PatientBase *patientBase() {return Patients::Internal::PatientBase::instance();}
+static inline Patients::Internal::PatientBase *patientBase() {return Patients::Internal::PatientBase::instance();}
 // END TEST
 
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
@@ -147,39 +147,53 @@ void AgendaPlugin::extensionsInitialized()
     th->setIconFileName(Calendar::CalendarTheme::NavigationNext, Core::Constants::ICONNEXT);
     th->setIconFileName(Calendar::CalendarTheme::NavigationPrevious, Core::Constants::ICONPREVIOUS);
 
+    if (commandLine()->value(Core::ICommandLine::CreateVirtuals).toBool()) {
+        QList<Calendar::People> peoples;
+        UserCalendar *u = 0;
+        // McCoy calendar (Uhura as delegate)
+        peoples.append(Calendar::People(Calendar::People::PeopleUserDelegate, "", "0f148ea3de6e47b8bbf9c2cedea47511"));
+        u = base().createVirtualUserCalendar("d1f29ad4a4ea4dabbe40ec888d153228", "McCoy @Enterprise",
+                                          "Virtual calendar for the virtual user McCoy",
+                                          15, 0, 0, 0, true, false, "", "mccoy.png", peoples);
+        if (!u)
+            return;
+        createVirtualAppointements(u);
+
+        // Phlox calendar (no delegates)
+        peoples.clear();
+        u = base().createVirtualUserCalendar("b5caead635a246a2a87ce676e9d2ef4d", "Phlox @Enterprise",
+                                          "Virtual calendar for the virtual user Phlox",
+                                          10, 0, 0, 0, true, false, "", "phlox.png", peoples);
+        if (u)
+            createVirtualAppointements(u);
+    }
 }
 
-//    if (commandLine()->value(Core::ICommandLine::CreateVirtuals).toBool()) {
-//        QList<Calendar::People> peoples;
-//        UserCalendar *u = 0;
-//        // McCoy calendar (Uhura as delegate)
-//        peoples.append(Calendar::People(Calendar::People::PeopleUserDelegate, "", "0f148ea3de6e47b8bbf9c2cedea47511"));
-//        u = base().createVirtualUserCalendar("d1f29ad4a4ea4dabbe40ec888d153228", "McCoy @Enterprise",
-//                                          "Virtual calendar for the virtual user McCoy",
-//                                          15, 0, 0, 0, true, false, "", "mccoy.png", peoples);
-//        if (!u)
-//            return;
-//        createVirtualAppointements(u);
+static int numberOfPatients()
+{
+    return patientBase()->count(Patients::Constants::Table_IDENT, Patients::Constants::IDENTITY_ID);
+}
 
-//        // Phlox calendar (no delegates)
-//        peoples.clear();
-//        u = base().createVirtualUserCalendar("b5caead635a246a2a87ce676e9d2ef4d", "Phlox @Enterprise",
-//                                          "Virtual calendar for the virtual user Phlox",
-//                                          10, 0, 0, 0, true, false, "", "phlox.png", peoples);
-//        if (u)
-//            createVirtualAppointements(u);
-//    }
-//}
+static QString patientUid(const int row)
+{
+    QSqlQuery query(patientBase()->database());
+    QString req= patientBase()->select(Patients::Constants::Table_IDENT, Patients::Constants::IDENTITY_UID);
+    req += QString(" LIMIT %1,%1").arg(row);
+    if (query.exec(req)) {
+        if (query.next()) {
+            return query.value(0).toString();
+        }
+    } else {
+        LOG_QUERY_ERROR_FOR("AgendaPlugin", query);
+        return QString();
+    }
+    return QString();
+}
 
-//static int numberOfPatients()
-//{
-//    return patientbase().count(Patients::Constants::Table_IDENT, Patients::Constants::IDENTITY_ID);
-//}
-
-//static QString patientUid(const int row)
+//static QString patientName(const int row)
 //{
 //    QSqlQuery query(patientbase().database());
-//    QString req= patientbase().select(Patients::Constants::Table_IDENT, Patients::Constants::IDENTITY_UID);
+//    QString req= patientbase().select(Patients::Constants::Table_IDENT, Patients::Constants::IDENTITY_NAME);
 //    req += QString(" LIMIT %1,%1").arg(row);
 //    if (query.exec(req)) {
 //        if (query.next()) {
@@ -192,239 +206,223 @@ void AgendaPlugin::extensionsInitialized()
 //    return QString();
 //}
 
-////static QString patientName(const int row)
-////{
-////    QSqlQuery query(patientbase().database());
-////    QString req= patientbase().select(Patients::Constants::Table_IDENT, Patients::Constants::IDENTITY_NAME);
-////    req += QString(" LIMIT %1,%1").arg(row);
-////    if (query.exec(req)) {
-////        if (query.next()) {
-////            return query.value(0).toString();
-////        }
-////    } else {
-////        LOG_QUERY_ERROR_FOR("AgendaPlugin", query);
-////        return QString();
-////    }
-////    return QString();
-////}
+void AgendaPlugin::createVirtualAppointements(UserCalendar *calendar)
+{
+    QList<Appointement *> list;
+    Utils::Randomizer r;
+    r.setPathToFiles(settings()->path(Core::ISettings::BundleResourcesPath) + "/textfiles/");
+    QDir pix(settings()->path(Core::ISettings::SmallPixmapPath));
+    int maxStatus = Calendar::availableStatus().count() - 1;
+    bool ok = true;
+    int nbEvents = r.randomInt(50, 100);
+    QDateTime start = QDateTime::currentDateTime();
+    int maxDb = numberOfPatients();
+    int defaultDuration = calendar->data(UserCalendar::DefaultDuration).toInt();
+    int calendarId = calendar->data(Constants::Db_CalId).toInt();
 
-//void AgendaPlugin::createVirtualAppointements(UserCalendar *calendar)
-//{
-//    QList<Appointement *> list;
-//    Utils::Randomizer r;
-//    r.setPathToFiles(settings()->path(Core::ISettings::BundleResourcesPath) + "/textfiles/");
-//    QDir pix(settings()->path(Core::ISettings::SmallPixmapPath));
-//    int maxStatus = Calendar::availableStatus().count() - 1;
-//    bool ok = true;
-//    int nbEvents = r.randomInt(50, 100);
-//    QDateTime start = QDateTime::currentDateTime();
-//    int maxDb = numberOfPatients();
-//    int defaultDuration = calendar->data(UserCalendar::DefaultDuration).toInt();
-//    int calendarId = calendar->data(Constants::Db_CalId).toInt();
+    for(int i = 0; i < nbEvents; ++i) {
+        Appointement *ev = 0;
 
-//    for(int i = 0; i < nbEvents; ++i) {
-//        Appointement *ev = 0;
+        // add a duration to last start date
+        start.setTime(start.addSecs(60*defaultDuration*r.randomInt(0, 5)).time());
+        if (start.time().hour() >= 18) {
+            start.setDate(start.addDays(1).date());
+            start.setTime(QTime(8,0,0));
+        } else {
+        }
+        QDateTime end = start.addSecs(60*defaultDuration);
 
-//        // add a duration to last start date
-//        start.setTime(start.addSecs(60*defaultDuration*r.randomInt(0, 5)).time());
-//        if (start.time().hour() >= 18) {
-//            start.setDate(start.addDays(1).date());
-//            start.setTime(QTime(8,0,0));
-//        } else {
-//        }
-//        QDateTime end = start.addSecs(60*defaultDuration);
+        ev = new Appointement;
+        ev->setData(Constants::Db_CalId, calendarId);
+        ev->setData(Constants::Db_IsValid, 1);
+        ev->setData(Constants::Db_IsVirtual, 1);
+        ev->setData(Constants::Db_EvId, -1);
+        ev->setData(Constants::Db_IsVirtual, 1);
+        ev->setData(Constants::Db_XmlViewOptions, "XmlViewOptions");
+        ev->setData(Constants::Db_XmlOptions, "XmlOptions");
+        //    ev->setData(Constants::DbOnly_ComId, );
+        ev->setData(Constants::Db_CatId, -1);
+        //            ev->setData(Calendar::CalendarItem::PatientUid, r.getRandomString(45));
+        ev->setData(CalendarItemModel::DateStart, start);
+        ev->setData(CalendarItemModel::DateEnd, end);
+        ev->setData(CalendarItemModel::Type, 1);
+        ev->setData(CalendarItemModel::Status, r.randomInt(0, maxStatus));
+        ev->setData(CalendarItemModel::LocationUid, "siteId");
+        ev->setData(CalendarItemModel::IsPrivate, r.randomInt(0,1));
+        ev->setData(CalendarItemModel::Password, "nopass");
+        ev->setData(CalendarItemModel::IsBusy, r.randomInt(0,1));
+        ev->setData(CalendarItemModel::IsAGroupEvent, r.randomInt(0,1));
+        ev->setData(CalendarItemModel::Label, r.randomWords(r.randomInt(2, 15)));
+        ev->setData(CalendarItemModel::Description, r.randomWords(r.randomInt(10, 500)));
+        ev->setData(CalendarItemModel::Location, r.getRandomString(r.randomInt(1,145)));
+        ev->setData(CalendarItemModel::IconPath, r.randomFile(pix, QStringList() << "*.png").fileName());
 
-//        ev = new Appointement;
-//        ev->setData(Constants::Db_CalId, calendarId);
-//        ev->setData(Constants::Db_IsValid, 1);
-//        ev->setData(Constants::Db_IsVirtual, 1);
-//        ev->setData(Constants::Db_EvId, -1);
-//        ev->setData(Constants::Db_IsVirtual, 1);
-//        ev->setData(Constants::Db_XmlViewOptions, "XmlViewOptions");
-//        ev->setData(Constants::Db_XmlOptions, "XmlOptions");
-//        //    ev->setData(Constants::DbOnly_ComId, );
-//        ev->setData(Constants::Db_CatId, -1);
-//        //            ev->setData(Calendar::CalendarItem::PatientUid, r.getRandomString(45));
-//        ev->setData(CalendarItemModel::DateStart, start);
-//        ev->setData(CalendarItemModel::DateEnd, end);
-//        ev->setData(CalendarItemModel::Type, 1);
-//        ev->setData(CalendarItemModel::Status, r.randomInt(0, maxStatus));
-//        ev->setData(CalendarItemModel::LocationUid, "siteId");
-//        ev->setData(CalendarItemModel::IsPrivate, r.randomInt(0,1));
-//        ev->setData(CalendarItemModel::Password, "nopass");
-//        ev->setData(CalendarItemModel::IsBusy, r.randomInt(0,1));
-//        ev->setData(CalendarItemModel::IsAGroupEvent, r.randomInt(0,1));
-//        ev->setData(CalendarItemModel::Label, r.randomWords(r.randomInt(2, 15)));
-//        ev->setData(CalendarItemModel::Description, r.randomWords(r.randomInt(10, 500)));
-//        ev->setData(CalendarItemModel::Location, r.getRandomString(r.randomInt(1,145)));
-//        ev->setData(CalendarItemModel::IconPath, r.randomFile(pix, QStringList() << "*.png").fileName());
+        // Add 1 to 3 patients
+        for(int y = 0; y < r.randomInt(1, 3); ++y) {
+            int zz = r.randomInt(0, maxDb);
+            ev->addPeople(Calendar::People(Calendar::People::PeopleAttendee, "", patientUid(zz)));
+        }
+        list << ev;
+    }
+    if (!base().saveCalendarEvents(list))
+        ok = false;
 
-//        // Add 1 to 3 patients
-//        for(int y = 0; y < r.randomInt(1, 3); ++y) {
-//            int zz = r.randomInt(0, maxDb);
-//            ev->addPeople(Calendar::People(Calendar::People::PeopleAttendee, "", patientUid(zz)));
-//        }
-//        list << ev;
-//    }
-//    if (!base().saveCalendarEvents(list))
-//        ok = false;
+    if (ok)
+        qWarning() << nbEvents << "events successfully created and saved";
+}
 
-//    if (ok)
-//        qWarning() << nbEvents << "events successfully created and saved";
-//}
+void AgendaPlugin::testDatabase()
+{
+    qWarning() << "\n\n\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx AGENDA BASE TEST";
+    // Try to get calendar(s) for the current user
+    QList<Agenda::UserCalendar *> cals = base().getUserCalendars();
+    qWarning() << "Number of user calendars" << cals.count();
 
-//void AgendaPlugin::testDatabase()
-//{
-//    qWarning() << "\n\n\nxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx AGENDA BASE TEST";
-//    // Try to get calendar(s) for the current user
-//    QList<Agenda::UserCalendar *> cals = base().getUserCalendars();
-//    qWarning() << "Number of user calendars" << cals.count();
+    Utils::Randomizer r;
+    r.setPathToFiles(settings()->path(Core::ISettings::BundleResourcesPath) + "/textfiles/");
+    QDir pix(settings()->path(Core::ISettings::SmallPixmapPath));
 
-//    Utils::Randomizer r;
-//    r.setPathToFiles(settings()->path(Core::ISettings::BundleResourcesPath) + "/textfiles/");
-//    QDir pix(settings()->path(Core::ISettings::SmallPixmapPath));
+    Agenda::UserCalendar *ucal = 0;
+    if (cals.count() == 0) {
+        for(int i=0; i < 5; ++i) {
+            ucal = new Agenda::UserCalendar();
+            // Create a calendar for the current user
+            ucal->setData(Constants::Db_IsValid, 1);
+            ucal->setData(Agenda::UserCalendar::Password, r.getRandomString(r.randomInt(0,10)));
+            ucal->setData(Agenda::UserCalendar::Label, r.randomWords(r.randomInt(2,5)));
+            ucal->setData(Agenda::UserCalendar::IsPrivate, r.randomInt(0,1));
+            ucal->setData(Agenda::UserCalendar::IsDefault, 0);
+            ucal->setData(Agenda::UserCalendar::DefaultDuration, r.randomInt(10,120));
+            ucal->setData(Agenda::UserCalendar::Description, r.randomWords(r.randomInt(5,50)));
+            ucal->setData(Agenda::UserCalendar::AbsPathIcon, r.randomFile(pix, QStringList() << "*.png").fileName());
+            // Create availabilities
+            for(int i = 1; i < 6; ++i) {
+                QTime from = r.randomTime(6, 12);
+                QTime to = r.randomTime(17, 20);
+                Agenda::DayAvailability av;
+                av.setWeekDay(i);
+                av.addTimeRange(from, to);
+                ucal->addAvailabilities(av);
+            }
+            if (base().saveUserCalendar(ucal))
+                qWarning() << "user calendar successfully saved to database";
+            cals << ucal;
+        }
+        // one must be the default
+        ucal = cals.at(2);
+        ucal->setData(Agenda::UserCalendar::IsDefault, 1);
+        base().saveUserCalendar(ucal);
+    }
+    ucal = cals.at(0);
 
-//    Agenda::UserCalendar *ucal = 0;
-//    if (cals.count() == 0) {
-//        for(int i=0; i < 5; ++i) {
-//            ucal = new Agenda::UserCalendar();
-//            // Create a calendar for the current user
-//            ucal->setData(Constants::Db_IsValid, 1);
-//            ucal->setData(Agenda::UserCalendar::Password, r.getRandomString(r.randomInt(0,10)));
-//            ucal->setData(Agenda::UserCalendar::Label, r.randomWords(r.randomInt(2,5)));
-//            ucal->setData(Agenda::UserCalendar::IsPrivate, r.randomInt(0,1));
-//            ucal->setData(Agenda::UserCalendar::IsDefault, 0);
-//            ucal->setData(Agenda::UserCalendar::DefaultDuration, r.randomInt(10,120));
-//            ucal->setData(Agenda::UserCalendar::Description, r.randomWords(r.randomInt(5,50)));
-//            ucal->setData(Agenda::UserCalendar::AbsPathIcon, r.randomFile(pix, QStringList() << "*.png").fileName());
-//            // Create availabilities
-//            for(int i = 1; i < 6; ++i) {
-//                QTime from = r.randomTime(6, 12);
-//                QTime to = r.randomTime(17, 20);
-//                Agenda::DayAvailability av;
-//                av.setWeekDay(i);
-//                av.addTimeRange(from, to);
-//                ucal->addAvailabilities(av);
-//            }
-//            if (base().saveUserCalendar(ucal))
-//                qWarning() << "user calendar successfully saved to database";
-//            cals << ucal;
-//        }
-//        // one must be the default
-//        ucal = cals.at(2);
-//        ucal->setData(Agenda::UserCalendar::IsDefault, 1);
-//        base().saveUserCalendar(ucal);
-//    }
-//    ucal = cals.at(0);
+//    qWarning() << ucal->data(Constants::Db_CalId) << ucal->availabilities().count();
 
-////    qWarning() << ucal->data(Constants::Db_CalId) << ucal->availabilities().count();
+    // Test UserCalendar Widget Editor
+//    QDialog dlg;
+//    QGridLayout lay(&dlg);
+//    Agenda::UserCalendarEditorWidget w(&dlg);
+//    w.setUserCalendar(*ucal);
+//    lay.addWidget(&w);
+//    dlg.setLayout(&lay);
+//    dlg.exec();
 
-//    // Test UserCalendar Widget Editor
-////    QDialog dlg;
-////    QGridLayout lay(&dlg);
-////    Agenda::UserCalendarEditorWidget w(&dlg);
-////    w.setUserCalendar(*ucal);
-////    lay.addWidget(&w);
-////    dlg.setLayout(&lay);
-////    dlg.exec();
+    // Create events in the calendar
+    // Try to get events now
+    QTime chrono;
+    chrono.start();
+    CalendarEventQuery q;
+    q.setDateRangeForCurrentWeek();
+    q.setCalendarId(ucal->data(Constants::Db_CalId).toInt());
+    QList<Appointement *> list = base().getCalendarEvents(q);
+    qWarning() << "Retreived" << list.count() << "events from the database for user" << ucal->data(Agenda::UserCalendar::UserOwnerUid).toString() << "dateRange" << q.dateStart().toString(Qt::ISODate)<< q.dateEnd().toString(Qt::ISODate) << "in" << chrono.elapsed() << "ms";
 
-//    // Create events in the calendar
-//    // Try to get events now
-//    QTime chrono;
-//    chrono.start();
-//    CalendarEventQuery q;
-//    q.setDateRangeForCurrentWeek();
-//    q.setCalendarId(ucal->data(Constants::Db_CalId).toInt());
-//    QList<Appointement *> list = base().getCalendarEvents(q);
-//    qWarning() << "Retreived" << list.count() << "events from the database for user" << ucal->data(Agenda::UserCalendar::UserOwnerUid).toString() << "dateRange" << q.dateStart().toString(Qt::ISODate)<< q.dateEnd().toString(Qt::ISODate) << "in" << chrono.elapsed() << "ms";
+    qWarning() << "PatientBase count" << numberOfPatients();
 
-//    qWarning() << "PatientBase count" << numberOfPatients();
+    Appointement *ev = 0;
+    int maxStatus = Calendar::availableStatus().count() - 1;
+    if (list.count()==0) {
+        chrono.restart();
+        bool ok = true;
+        int nbEvents = r.randomInt(1000, 2000);
+        QDateTime start = QDateTime::currentDateTime();
 
-//    Appointement *ev = 0;
-//    int maxStatus = Calendar::availableStatus().count() - 1;
-//    if (list.count()==0) {
-//        chrono.restart();
-//        bool ok = true;
-//        int nbEvents = r.randomInt(1000, 2000);
-//        QDateTime start = QDateTime::currentDateTime();
+        QProgressDialog prog;
+        prog.setLabelText(QString("Creating %1 events (1 month ~= 800 events").arg(nbEvents));
+        prog.setRange(0, nbEvents);
+        prog.show();
+        int maxDb = numberOfPatients();
 
-//        QProgressDialog prog;
-//        prog.setLabelText(QString("Creating %1 events (1 month ~= 800 events").arg(nbEvents));
-//        prog.setRange(0, nbEvents);
-//        prog.show();
-//        int maxDb = numberOfPatients();
+        for(int i = 0; i < nbEvents; ++i) {
+            if ((i % 100)==0) {
+                prog.setValue(i);
+                qApp->processEvents();
+            }
 
-//        for(int i = 0; i < nbEvents; ++i) {
-//            if ((i % 100)==0) {
-//                prog.setValue(i);
-//                qApp->processEvents();
-//            }
+            if (start.time().hour() >= 18) {
+                start.setDate(start.addDays(1).date());
+                start.setTime(QTime(8,0,0));
+            } else {
+                start.setTime(start.addSecs(60*15).time());
+            }
+            QDateTime end = start.addSecs(60*15);
+            ucal = cals.at(r.randomInt(0, cals.count()-1));
 
-//            if (start.time().hour() >= 18) {
-//                start.setDate(start.addDays(1).date());
-//                start.setTime(QTime(8,0,0));
-//            } else {
-//                start.setTime(start.addSecs(60*15).time());
-//            }
-//            QDateTime end = start.addSecs(60*15);
-//            ucal = cals.at(r.randomInt(0, cals.count()-1));
+            ev = new Appointement;
+            ev->setData(Constants::Db_CalId, ucal->data(Constants::Db_CalId));
+            ev->setData(Constants::Db_IsValid, 1);
+            ev->setData(Constants::Db_EvId, -1);
+            ev->setData(Constants::Db_IsVirtual, 1);
+            ev->setData(Constants::Db_XmlViewOptions, "XmlViewOptions");
+            ev->setData(Constants::Db_XmlOptions, "XmlOptions");
+            //    ev->setData(Constants::DbOnly_ComId, );
+            ev->setData(Constants::Db_CatId, -1);
+//            ev->setData(Calendar::CalendarItem::PatientUid, r.getRandomString(45));
+            ev->setData(CalendarItemModel::DateStart, start);
+            ev->setData(CalendarItemModel::DateEnd, end);
+            ev->setData(CalendarItemModel::Type, 1);
+            ev->setData(CalendarItemModel::Status, r.randomInt(0, maxStatus));
+            ev->setData(CalendarItemModel::LocationUid, "siteId");
+            ev->setData(CalendarItemModel::IsPrivate, r.randomInt(0,1));
+            ev->setData(CalendarItemModel::Password, "nopass");
+            ev->setData(CalendarItemModel::IsBusy, r.randomInt(0,1));
+            ev->setData(CalendarItemModel::IsAGroupEvent, r.randomInt(0,1));
+            ev->setData(CalendarItemModel::Label, r.randomWords(r.randomInt(2, 15)));
+            ev->setData(CalendarItemModel::Description, r.randomWords(r.randomInt(10, 500)));
+            ev->setData(CalendarItemModel::Location, r.getRandomString(r.randomInt(1,145)));
+            ev->setData(CalendarItemModel::IconPath, r.randomFile(pix, QStringList() << "*.png").fileName());
 
-//            ev = new Appointement;
-//            ev->setData(Constants::Db_CalId, ucal->data(Constants::Db_CalId));
-//            ev->setData(Constants::Db_IsValid, 1);
-//            ev->setData(Constants::Db_EvId, -1);
-//            ev->setData(Constants::Db_IsVirtual, 1);
-//            ev->setData(Constants::Db_XmlViewOptions, "XmlViewOptions");
-//            ev->setData(Constants::Db_XmlOptions, "XmlOptions");
-//            //    ev->setData(Constants::DbOnly_ComId, );
-//            ev->setData(Constants::Db_CatId, -1);
-////            ev->setData(Calendar::CalendarItem::PatientUid, r.getRandomString(45));
-//            ev->setData(CalendarItemModel::DateStart, start);
-//            ev->setData(CalendarItemModel::DateEnd, end);
-//            ev->setData(CalendarItemModel::Type, 1);
-//            ev->setData(CalendarItemModel::Status, r.randomInt(0, maxStatus));
-//            ev->setData(CalendarItemModel::LocationUid, "siteId");
-//            ev->setData(CalendarItemModel::IsPrivate, r.randomInt(0,1));
-//            ev->setData(CalendarItemModel::Password, "nopass");
-//            ev->setData(CalendarItemModel::IsBusy, r.randomInt(0,1));
-//            ev->setData(CalendarItemModel::IsAGroupEvent, r.randomInt(0,1));
-//            ev->setData(CalendarItemModel::Label, r.randomWords(r.randomInt(2, 15)));
-//            ev->setData(CalendarItemModel::Description, r.randomWords(r.randomInt(10, 500)));
-//            ev->setData(CalendarItemModel::Location, r.getRandomString(r.randomInt(1,145)));
-//            ev->setData(CalendarItemModel::IconPath, r.randomFile(pix, QStringList() << "*.png").fileName());
+            // Add 1 to 3 patients
+            for(int y = 0; y < r.randomInt(1, 3); ++y) {
+                int zz = r.randomInt(0, maxDb);
+                ev->addPeople(Calendar::People(Calendar::People::PeopleAttendee, "", patientUid(zz)));
+            }
 
-//            // Add 1 to 3 patients
-//            for(int y = 0; y < r.randomInt(1, 3); ++y) {
-//                int zz = r.randomInt(0, maxDb);
-//                ev->addPeople(Calendar::People(Calendar::People::PeopleAttendee, "", patientUid(zz)));
-//            }
+            if (!base().saveCalendarEvent(ev))
+                ok = false;
+            list << ev;
+        }
+        if (ok)
+            qWarning() << nbEvents << "events successfully created and saved in" << chrono.elapsed() << "ms";
+    }
+    ev = list.at(0);
 
-//            if (!base().saveCalendarEvent(ev))
-//                ok = false;
-//            list << ev;
-//        }
-//        if (ok)
-//            qWarning() << nbEvents << "events successfully created and saved in" << chrono.elapsed() << "ms";
-//    }
-//    ev = list.at(0);
+    // Test event dialog
+//    QDialog dlg;
+//    QGridLayout lay(&dlg);
+//    EventEditorWidget w(&dlg);
+//    w.setCalendarEvent(ev);
+//    w.setAvailableUserCalendar(cals);
+//    lay.addWidget(&w);
+//    dlg.setLayout(&lay);
+//    dlg.exec();
 
-//    // Test event dialog
-////    QDialog dlg;
-////    QGridLayout lay(&dlg);
-////    EventEditorWidget w(&dlg);
-////    w.setCalendarEvent(ev);
-////    w.setAvailableUserCalendar(cals);
-////    lay.addWidget(&w);
-////    dlg.setLayout(&lay);
-////    dlg.exec();
+    // Test nextAvailableDate
+    qWarning() << "Next available dates (15min)" << base().nextAvailableTime(QDateTime::currentDateTime(), 15, *ucal, 5);
 
-//    // Test nextAvailableDate
-//    qWarning() << "Next available dates (15min)" << base().nextAvailableTime(QDateTime::currentDateTime(), 15, *ucal, 5);
+    qDeleteAll(list);
+    list.clear();
 
-//    qDeleteAll(list);
-//    list.clear();
-
-//    qWarning() << "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx AGENDA BASE TEST END\n\n\n";
-//}
+    qWarning() << "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx AGENDA BASE TEST END\n\n\n";
+}
 
 Q_EXPORT_PLUGIN(AgendaPlugin)
