@@ -41,13 +41,13 @@ do
         esac
 done
 
-if [[ -e $MYSQL_ROOT_PASS ]]; then
-  echo "*** No password"
+if [[  "$MYSQL_ROOT_PASS" == "" ]]; then
+    echo "*** No password"
 else
-  echo "*** Using password: "$MYSQL_ROOT_PASS
+    echo "*** Using password: "$MYSQL_ROOT_PASS
 fi
-echo "    Default command: "$MYSQL -uroot $MYSQL_ROOT_PASS
-exit 0;
+echo "    Default MySQL command: "$MYSQL -uroot $MYSQL_ROOT_PASS
+
 echo
 echo "*** Using MySQL from $MYSQL ***"
 # DROP FMF USERS

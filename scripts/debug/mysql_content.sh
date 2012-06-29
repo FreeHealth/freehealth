@@ -120,7 +120,7 @@ extractData()
 while getopts "p:h" option
 do
         case $option in
-                p) MYSQL_ROOT_PASS="-p"$OPTARG" ";
+                p) MYSQL_ROOT_PASS=`echo "-p$OPTARG" | tr -d " "`;
                 ;;
                 h) showHelp
                     exit 0
@@ -132,6 +132,13 @@ MYSQL=$MYSQL_PATH"mysql -uroot "$MYSQL_ROOT_PASS
 MYSQL_ADMIN=$MYSQL_PATH"mysqladmin"
 
 echo "*** Starting MySQL debugging script at: "`date`" on "`hostname` > $OUTPUT_FILE
+
+if [[  "$MYSQL_ROOT_PASS" == "" ]]; then
+    echo "*** No password"
+else
+    echo "*** Using password: "$MYSQL_ROOT_PASS
+fi
+echo "    Default MySQL command: "$MYSQL -uroot $MYSQL_ROOT_PASS
 
 echo
 checkMySQLServer
