@@ -39,22 +39,26 @@
 /**
  * \file accountbase.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.0
- * \date 29 May 2011
+ * \version 0.7.6
+ * \date 29 Jun 2012
 */
 
 
 namespace AccountDB {
-    class AccountData;
+class AccountData;
 
 namespace Internal {
+class AccountBasePlugin;
 class AccountBasePrivate;
 } // End namespace Internal
 
+// TODO: AccountBase should be in Internal and not exported
 class ACCOUNTBASE_EXPORT AccountBase : public QObject, public Utils::Database
 {
     Q_OBJECT
+    friend class AccountDB::Internal::AccountBasePlugin;
 
+protected:
     AccountBase(QObject *parent = 0);
 
 public:
@@ -63,8 +67,8 @@ public:
 
     // Initializer / Checkers
     bool initialize();
-    static bool isInitialized() { return m_initialized; }
-    void logChronos(bool state);
+    bool isInitialized() const;
+    void logChronos(bool log);
 
 private:
     bool createDatabase(const QString &connectionName , const QString &dbName,
@@ -87,7 +91,6 @@ private Q_SLOTS:
 private:
     // intialization state
     static AccountBase *m_Instance;
-    static bool m_initialized;
     Internal::AccountBasePrivate *d;
 };
 

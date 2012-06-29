@@ -92,7 +92,7 @@ namespace Internal {
 class AccountBasePrivate
 {
 public:
-    AccountBasePrivate(AccountBase *base) : q(base) {}
+    AccountBasePrivate(AccountBase *base) : q(base), m_LogChrono(false), m_initialized(false) {}
     ~AccountBasePrivate()
     {
     }
@@ -100,6 +100,7 @@ public:
 public:
     AccountBase *q;
     bool m_LogChrono;
+    bool m_initialized;
 };
 }  // End Internal
 }  // End AccountDB
@@ -109,7 +110,6 @@ public:
 //--------------------------------- Initialization of static members -------------------------------------
 //--------------------------------------------------------------------------------------------------------
 AccountBase *AccountBase::m_Instance = 0;
-bool AccountBase::m_initialized = false;
 
 //--------------------------------------------------------------------------------------------------------
 //-------------------------------------- Initializing Database -------------------------------------------
@@ -127,8 +127,9 @@ AccountBase *AccountBase::instance()
    \brief Constructor.
    \private
 */
-AccountBase::AccountBase(QObject *parent)
-    : QObject(parent), Utils::Database(), d(0)
+AccountBase::AccountBase(QObject *parent) :
+    QObject(parent), Utils::Database(),
+    d(0)
 {
     d = new AccountBasePrivate(this);
     setObjectName("AccountBase");
@@ -564,7 +565,7 @@ AccountBase::~AccountBase()
 bool AccountBase::initialize()
 {
     // only one base can be initialized
-    if (m_initialized)
+    if (d->m_initialized)
         return true;
 
     // connect
@@ -622,12 +623,18 @@ bool AccountBase::initialize()
     }
 
     connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
-    m_initialized = true;
+    d->m_initialized = true;
     return true;
 }
 
-void AccountBase::logChronos(bool )
-{}
+bool AccountBase::isInitialized() const
+{
+    return d->m_initialized;
+}
+void AccountBase::logChronos(bool log)
+{
+    d->m_LogChrono = log;
+}
 
 bool AccountBase::createDatabase(const QString &connectionName , const QString &dbName,
                     const QString &pathOrHostName,
@@ -749,7 +756,7 @@ AccountData *AccountBase::getAccountByUid(const QString &uid)
 
 void AccountBase::onCoreDatabaseServerChanged()
 {
-    m_initialized = false;
+    d->m_initialized = false;
     if (QSqlDatabase::connectionNames().contains(Constants::DB_ACCOUNTANCY)) {
         QSqlDatabase::removeDatabase(Constants::DB_ACCOUNTANCY);
     }
