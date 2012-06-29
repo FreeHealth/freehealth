@@ -39,11 +39,12 @@
 /**
  * \file accountbaseplugin.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.0.4
- * \date 27 Mar 2010
+ * \version 0.7.6
+ * \date 28 Jun 2012
 */
 
 namespace AccountDB {
+namespace Internal {
 
 class AccountBasePlugin : public ExtensionSystem::IPlugin
 {
@@ -56,7 +57,7 @@ public:
     void extensionsInitialized();
 };
 
-
-}
+}  // namespace Internal
+}  // namespace AcountDB
 
 #endif  // End ACCOUNTBASETPLUGIN_H
