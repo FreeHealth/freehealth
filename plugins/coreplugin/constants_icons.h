@@ -29,8 +29,8 @@
 /**
  * \file constants_icons.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.4.0
- * \date 13 June 2010
+ * \version 0.7.6
+ * \date 28 Jun 2012
 */
 
 namespace Core {
