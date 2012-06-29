@@ -210,7 +210,7 @@ void BirthDayEdit::setDateString(QString dateString)
 /** \brief updates the displayText with the internal date using the default FMF date format */
 void BirthDayEdit::updateDisplayText()
 {
-    qWarning() << "updateDisplayText()" << hasFocus() << m_date.isValid();
+    qWarning() << "updateDisplayText(), focus:" << hasFocus() << "valid date:" << m_date.isValid();
     // Edit mode -> do nothing
     if (hasFocus()) {
         return;
@@ -225,7 +225,7 @@ void BirthDayEdit::updateDisplayText()
         }
     } else {
         // no valid date saved, maybe NULL
-        clear();
+//        clear();
     }
 }
 
