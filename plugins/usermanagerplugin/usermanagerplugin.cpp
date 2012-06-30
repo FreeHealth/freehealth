@@ -95,7 +95,7 @@ UserManagerPlugin::UserManagerPlugin() :
     // Add Translator to the Application
     Core::ICore::instance()->translators()->addNewTranslator("usermanagerplugin");
 
-    new UserBase(this);
+    new UserBase;
 
     addObject(m_FirstCreation);
 }
