@@ -171,6 +171,8 @@ public:
     virtual QString toXml() const;
     static AlertScript fromDomElement(const QDomElement &element);
 
+    bool operator<(const AlertScript &script) const;
+
 private:
     int _id;
     bool _valid;

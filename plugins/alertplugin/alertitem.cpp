@@ -1551,6 +1551,12 @@ AlertScript AlertScript::fromDomElement(const QDomElement &element)
     return script;
 }
 
+/** Sort scripts by type */
+bool AlertScript::operator<(const AlertScript &script) const
+{
+    return this->type() < script.type();
+}
+
 /** Transform the validation to XML */
 QString AlertValidation::toXml() const
 {
