@@ -45,6 +45,7 @@ AlertItemScriptEditor::AlertItemScriptEditor(QWidget *parent) :
     ui(new Ui::AlertItemScriptEditor)
 {
     ui->setupUi(this);
+    layout()->setMargin(0);
     ui->add->setIcon(theme()->icon(Core::Constants::ICONADD));
     ui->remove->setIcon(theme()->icon(Core::Constants::ICONREMOVE));
     _menu = new QMenu(this);
