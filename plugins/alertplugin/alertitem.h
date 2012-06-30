@@ -349,6 +349,7 @@ public:
     virtual QString priorityBackgroundColor() const;
     static QIcon priorityBigIcon(Priority priority);
     virtual QIcon priorityBigIcon() const;
+    virtual QString htmlToolTip(bool showCategory = true) const;
 
     virtual QString extraXml() const;
     virtual void setExtraXml(const QString &xml);

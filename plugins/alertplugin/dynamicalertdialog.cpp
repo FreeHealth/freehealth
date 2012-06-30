@@ -122,51 +122,13 @@ static inline Core::IPatient *patient() {return Core::ICore::instance()->patient
 
 static void addAlertToLayout(const AlertItem &alert, bool showCategory, QLayout *lay)
 {
-    QFont bold;
-    bold.setBold(true);
-
-    // Add category
-    if (!alert.category().isEmpty() && showCategory) {
-        QLabel *label = new QLabel(lay->parentWidget());
-        label->setFont(bold);
-        label->setTextFormat(Qt::RichText);
-        label->setAlignment(Qt::AlignHCenter);
-        label->setWordWrap(true);
-        label->setText(alert.category());
-        lay->addWidget(label);
-    }
-
-    // Add label
     QLabel *label = new QLabel(lay->parentWidget());
-    label->setFont(bold);
+    label->setTextFormat(Qt::RichText);
+    label->setAlignment(Qt::AlignLeft);
     label->setWordWrap(true);
     label->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-    label->setTextFormat(Qt::RichText);
-    QString header;
-    header = QString("<table border=0 margin=0 width=100%>"
-                      "<tr>"
-                      "<td valign=middle width=70% style=\"font-weight:bold\">%1</td>"
-                      "<td valign=middle align=center style=\"font-weight:bold;background-color:%2;text-transform:uppercase\">%3</td>"
-                      "</tr>"
-                      "</table>")
-            .arg(alert.label())
-            .arg(alert.priorityBackgroundColor())
-            .arg(alert.priorityToString())
-            ;
-    label->setText(header);
+    label->setText(alert.htmlToolTip(showCategory));
     lay->addWidget(label);
-
-    // Add description
-    if (!alert.description().isEmpty()) {
-        QLabel *label = new QLabel(lay->parentWidget());
-        label->setStyleSheet("padding-left:20px");
-        label->setTextFormat(Qt::RichText);
-        label->setAlignment(Qt::AlignLeft);
-        label->setWordWrap(true);
-        label->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-        label->setText(alert.description());
-        lay->addWidget(label);
-    }
 }
 
 DynamicAlertDialog::DynamicAlertDialog(const QList<AlertItem> &items,
