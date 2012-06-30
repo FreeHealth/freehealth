@@ -366,6 +366,9 @@ AlertBase::AlertBase(QObject *parent) :
     addField(Table_ALERT_VERSION, VERSION_TEXT, "TXT", FieldIsShortText);
 
     r.setPathToFiles(settings()->path(Core::ISettings::BundleResourcesPath) + "/textfiles/");
+
+    // Connect first run database creation requested
+    connect(Core::ICore::instance(), SIGNAL(firstRunDatabaseCreation()), this, SLOT(onCoreFirstRunCreationRequested()));
 }
 
 AlertBase::~AlertBase()
@@ -373,7 +376,7 @@ AlertBase::~AlertBase()
 }
 
 /** Connect to the alert database. Return the connection state. */
-bool AlertBase::init()
+bool AlertBase::initialize()
 {
     // only one base can be initialized
     if (m_initialized)
@@ -1606,7 +1609,13 @@ void AlertBase::onCoreDatabaseServerChanged()
     if (QSqlDatabase::connectionNames().contains(Constants::DB_NAME)) {
         QSqlDatabase::removeDatabase(Constants::DB_NAME);
     }
-    init();
+    initialize();
+}
+
+void AlertBase::onCoreFirstRunCreationRequested()
+{
+    disconnect(Core::ICore::instance(), SIGNAL(firstRunDatabaseCreation()), this, SLOT(onCoreFirstRunCreationRequested()));
+    initialize();
 }
 
 /** For debugging purpose */

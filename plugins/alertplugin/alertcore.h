@@ -63,8 +63,7 @@ public:
     };
     Q_DECLARE_FLAGS(AlertsToCheck, AlertToCheck)
 
-
-    static AlertCore *instance(QObject *parent = 0);
+    static AlertCore *instance();
     ~AlertCore();
 
     // Getters/Setters
@@ -88,8 +87,6 @@ public:
     //    bool editAlert(AlertItem &alert);
     //    bool createAlert(AlertItem &alert);
 
-
-    void showIHMaccordingToType(int type = 0);
 
 Q_SIGNALS:
 //    void alertItemUpdated(const AlertItem &alert);

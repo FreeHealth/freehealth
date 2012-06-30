@@ -53,10 +53,11 @@ static inline Core::IScriptManager *scriptManager() {return Core::ICore::instanc
 
 AlertCore *AlertCore::_instance = 0;
 
-AlertCore *AlertCore::instance(QObject *parent)
+AlertCore *AlertCore::instance()
 {
+    Q_ASSERT(_instance);
     if (!_instance)
-        _instance = new AlertCore(parent);
+        _instance = new AlertCore(qApp);
     return _instance;
 }
 
@@ -66,8 +67,7 @@ class AlertCorePrivate
 {
 public:
     AlertCorePrivate() :
-        m_alertBase(0),
-        m_alertManager(0),
+        _alertBase(0),
         _placeholdertest(0)
 
     {}
@@ -77,8 +77,7 @@ public:
     }
 
 public:
-    AlertBase *m_alertBase;
-    AlertManager *m_alertManager;
+    AlertBase *_alertBase;
     QPointer<AlertPlaceHolderTest> _placeholdertest;
 };
 }
@@ -89,7 +88,12 @@ AlertCore::AlertCore(QObject *parent) :
     QObject(parent),
     d(new Internal::AlertCorePrivate)
 {
+    _instance = this;
     setObjectName("AlertCore");
+
+    // Create all instance
+    d->_alertBase = new Internal::AlertBase(this);
+
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
 }
 
@@ -109,10 +113,7 @@ AlertCore::~AlertCore()
 /** Initialize the core. */
 bool AlertCore::initialize()
 {
-    // Create all instance
-    d->m_alertBase = new Internal::AlertBase(this);
-    d->m_alertManager = new AlertManager(this);
-    if (!d->m_alertBase->init())
+    if (!d->_alertBase->init())
         return false;
     return true;
 }
@@ -123,7 +124,7 @@ QVector<AlertItem> AlertCore::getAlertItemForCurrentUser() const
     Internal::AlertBaseQuery query;
     query.addCurrentUserAlerts();
     query.setAlertValidity(Internal::AlertBaseQuery::ValidAlerts);
-    return d->m_alertBase->getAlertItems(query);
+    return d->_alertBase->getAlertItems(query);
 }
 
 /** Return all the Alert::AlertItem recorded in the database related to the current patient. */
@@ -132,7 +133,7 @@ QVector<AlertItem> AlertCore::getAlertItemForCurrentPatient() const
     Internal::AlertBaseQuery query;
     query.addCurrentPatientAlerts();
     query.setAlertValidity(Internal::AlertBaseQuery::ValidAlerts);
-    return d->m_alertBase->getAlertItems(query);
+    return d->_alertBase->getAlertItems(query);
 }
 
 /** Return all the Alert::AlertItem recorded in the database related to the current application. */
@@ -141,13 +142,13 @@ QVector<AlertItem> AlertCore::getAlertItemForCurrentApplication() const
     Internal::AlertBaseQuery query;
     query.addApplicationAlerts(qApp->applicationName().toLower());
     query.setAlertValidity(Internal::AlertBaseQuery::ValidAlerts);
-    return d->m_alertBase->getAlertItems(query);
+    return d->_alertBase->getAlertItems(query);
 }
 
 /** Save the Alert::AlertItem \e item into the database and update some of its values. The \e item will be modified. */
 bool AlertCore::saveAlert(AlertItem &item)
 {
-    return d->m_alertBase->saveAlertItem(item);
+    return d->_alertBase->saveAlertItem(item);
 }
 
 /** Save the Alert::AlertItem list \e items into the database and update some of its values. All the items will be modified in the list. */
@@ -156,7 +157,7 @@ bool AlertCore::saveAlerts(QList<AlertItem> &items)
     bool ok = true;
     for(int i=0; i < items.count(); ++i) {
         AlertItem &item = items[i];
-        if (!d->m_alertBase->saveAlertItem(item))
+        if (!d->_alertBase->saveAlertItem(item))
             ok = false;
     }
     return ok;
@@ -181,7 +182,7 @@ bool AlertCore::checkAlerts(AlertsToCheck check)
     query.setAlertValidity(Internal::AlertBaseQuery::ValidAlerts);
 
     // Get the alerts
-    QVector<AlertItem> alerts = d->m_alertBase->getAlertItems(query);
+    QVector<AlertItem> alerts = d->_alertBase->getAlertItems(query);
 
     processAlerts(alerts);
 
@@ -294,7 +295,7 @@ void AlertCore::postCoreInitialization()
     QDateTime start = QDateTime::currentDateTime().addSecs(-60*60*24);
     QDateTime expiration = QDateTime::currentDateTime().addSecs(60*60*24);
 
-    AlertItem item = d->m_alertBase->createVirtualItem();
+    AlertItem item = d->_alertBase->createVirtualItem();
     item.setThemedIcon("identity.png");
     item.setViewType(AlertItem::StaticAlert);
     item.setPriority(AlertItem::High);
@@ -303,7 +304,7 @@ void AlertCore::postCoreInitialization()
     item.addRelation(AlertRelation(AlertRelation::RelatedToPatient, "patient1"));
     item.addTiming(AlertTiming(start, expiration));
 
-    AlertItem item2 = d->m_alertBase->createVirtualItem();
+    AlertItem item2 = d->_alertBase->createVirtualItem();
     item2.setThemedIcon("next.png");
     item2.setViewType(AlertItem::StaticAlert);
     item2.clearRelations();
@@ -401,25 +402,25 @@ void AlertCore::postCoreInitialization()
 
     // Db save/get
     if (true) {
-        if (!d->m_alertBase->saveAlertItem(item))
+        if (!d->_alertBase->saveAlertItem(item))
             qWarning() << "ITEM WRONG";
-        if (!d->m_alertBase->saveAlertItem(item2))
+        if (!d->_alertBase->saveAlertItem(item2))
             qWarning() << "ITEM2 WRONG";
-        if (!d->m_alertBase->saveAlertItem(item3))
+        if (!d->_alertBase->saveAlertItem(item3))
             qWarning() << "ITEM3 WRONG";
-        if (!d->m_alertBase->saveAlertItem(item4))
+        if (!d->_alertBase->saveAlertItem(item4))
             qWarning() << "ITEM4 WRONG";
-        if (!d->m_alertBase->saveAlertItem(item5))
+        if (!d->_alertBase->saveAlertItem(item5))
             qWarning() << "ITEM5 WRONG";
-        if (!d->m_alertBase->saveAlertItem(item6))
+        if (!d->_alertBase->saveAlertItem(item6))
             qWarning() << "ITEM6 WRONG";
-        if (!d->m_alertBase->saveAlertItem(item7))
+        if (!d->_alertBase->saveAlertItem(item7))
             qWarning() << "ITEM7 WRONG";
-        if (!d->m_alertBase->saveAlertItem(item8))
+        if (!d->_alertBase->saveAlertItem(item8))
             qWarning() << "ITEM8 WRONG";
-        if (!d->m_alertBase->saveAlertItem(item9))
+        if (!d->_alertBase->saveAlertItem(item9))
             qWarning() << "ITEM9 WRONG";
-        if (!d->m_alertBase->saveAlertItem(item10))
+        if (!d->_alertBase->saveAlertItem(item10))
             qWarning() << "ITEM10 WRONG";
 
         Internal::AlertBaseQuery query;
@@ -431,7 +432,7 @@ void AlertCore::postCoreInitialization()
         query.addPatientAlerts("patient2");
         query.addPatientAlerts("patient3");
 //        query.addUserAlerts();
-        QVector<AlertItem> test = d->m_alertBase->getAlertItems(query);
+        QVector<AlertItem> test = d->_alertBase->getAlertItems(query);
         qWarning() << test.count();
         for(int i=0; i < test.count(); ++i) {
             qWarning() << "\n\n" << test.at(i).timingAt(0).start() << test.at(i).timingAt(0).end() << test.at(i).relationAt(1).relatedToUid();
@@ -494,7 +495,3 @@ void AlertCore::postCoreInitialization()
     // END TESTS
 }
 
-void AlertCore::showIHMaccordingToType(int type)
-{
-    d->m_alertManager->initializeWithType(type);
-}
