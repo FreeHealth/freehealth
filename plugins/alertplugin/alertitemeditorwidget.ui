@@ -59,7 +59,7 @@
    <item row="1" column="0">
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>1</number>
+      <number>3</number>
      </property>
      <widget class="QWidget" name="tab_type">
       <attribute name="title">
@@ -135,9 +135,24 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab_css">
+     <widget class="QWidget" name="tab_extra">
       <attribute name="title">
        <string>Extra</string>
+      </attribute>
+     </widget>
+     <widget class="QWidget" name="tab_scripts">
+      <attribute name="title">
+       <string>Script</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_7">
+       <item row="0" column="0">
+        <widget class="Alert::Internal::AlertItemScriptEditor" name="scriptEditor" native="true"/>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_css">
+      <attribute name="title">
+       <string>CSS</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_3">
        <item row="1" column="0">
@@ -171,6 +186,12 @@
    <class>Alert::AlertItemTimingEditorWidget</class>
    <extends>QWidget</extends>
    <header location="global">alertplugin/alertitemtimingeditorwidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>Alert::Internal::AlertItemScriptEditor</class>
+   <extends>QWidget</extends>
+   <header location="global">alertplugin/alertitemscripteditor.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
