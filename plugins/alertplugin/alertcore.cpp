@@ -355,6 +355,10 @@ void AlertCore::postCoreInitialization()
     item6.addScript(AlertScript("check_item6", AlertScript::CheckValidityOfAlert, "(1+1)==2;"));
     item6.addScript(AlertScript("onoverride_item6", AlertScript::OnOverride, "(1+1)==2;"));
 
+    AlertItemEditorDialog dlg;
+    dlg.setAlertItem(item6);
+    dlg.exec();
+
     AlertItem item7;
     item7.setUuid(Utils::Database::createUid());
     item7.setLabel("Simple basic alert (item7)");
