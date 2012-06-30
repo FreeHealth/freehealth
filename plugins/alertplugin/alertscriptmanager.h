@@ -46,6 +46,10 @@ class AlertScriptManager
 protected:
     AlertScriptManager();
 
+    // type is a AlertScript::ScriptType
+//    QVariant execute(const int type);
+
+
 public:
 
 };
