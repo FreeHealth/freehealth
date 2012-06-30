@@ -21,7 +21,8 @@ HEADERS += \
     $${PWD}/alertitemeditordialog.h \
     $${PWD}/dynamicalertdialog.h \
     $${PWD}/alertplaceholdertest.h \
-    $${PWD}/staticalertwidgets.h
+    $${PWD}/staticalertwidgets.h \
+    $${PWD}/alertscriptmanager.h
 
 SOURCES += \
     $${PWD}/alertplugin.cpp \
@@ -35,7 +36,8 @@ SOURCES += \
     $${PWD}/alertitemeditordialog.cpp \
     $${PWD}/dynamicalertdialog.cpp \
     $${PWD}/alertplaceholdertest.cpp \
-    $${PWD}/staticalertwidgets.cpp
+    $${PWD}/staticalertwidgets.cpp \
+    $${PWD}/alertscriptmanager.cpp
 
 FORMS += \
     $${PWD}/alertitemeditorwidget.ui \
