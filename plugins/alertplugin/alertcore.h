@@ -44,7 +44,6 @@ namespace Internal {
 class AlertCorePrivate;
 class AlertPlugin;
 }
-class AlertManager;
 
 class AlertCore : public QObject
 {

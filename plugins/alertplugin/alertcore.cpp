@@ -27,7 +27,6 @@
  ***************************************************************************/
 #include "alertcore.h"
 #include "alertbase.h"
-#include "alertmanager.h"
 #include "alertitem.h"
 #include "ialertplaceholder.h"
 
@@ -113,7 +112,7 @@ AlertCore::~AlertCore()
 /** Initialize the core. */
 bool AlertCore::initialize()
 {
-    if (!d->_alertBase->init())
+    if (!d->_alertBase->initialize())
         return false;
     return true;
 }
