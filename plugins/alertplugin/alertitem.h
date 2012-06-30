@@ -328,6 +328,7 @@ public:
     virtual QString priorityToString() const;
     virtual bool isOverrideRequiresUserComment() const;
     virtual bool mustBeRead() const;
+    virtual bool isRemindLaterAllowed() const;
     // TODO : virtual xxx condition() const = 0;
 
     virtual void setViewType(ViewType type);
