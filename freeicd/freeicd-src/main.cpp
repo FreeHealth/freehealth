@@ -151,10 +151,15 @@ int main( int argc, char *argv[] )
     Utils::Database::logAvailableDrivers();
 
 #ifdef DEBUG
-    Utils::Log::addMessage("Main", "Running debug version");
+#   ifdef DEBUG_WITHOUT_INSTALL
+        LOG_FOR("Main", "Running debug non-installed version (debug_without_install)");
+#   else
+        LOG_FOR("Main", "Running debug installed version");
+#   endif
 #else
-    Utils::Log::addMessage("Main", "Running release version");
+    LOG_FOR("Main", "Running release version");
 #endif
+
 #ifdef LINUX_INTEGRATED
     Utils::Log::addMessage("Main", "Linux Integrated");
 #endif
