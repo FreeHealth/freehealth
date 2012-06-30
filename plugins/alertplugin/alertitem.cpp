@@ -1459,6 +1459,24 @@ AlertTiming AlertTiming::fromDomElement(const QDomElement &element)
     return timing;
 }
 
+/** Return a human readable \e type property */
+QString AlertScript::typeToString(ScriptType type)
+{
+    switch (type) {
+    case CheckValidityOfAlert: return QApplication::translate("Alert::AlertScript", "Check alert validity");
+    case CyclingStartDate: return QApplication::translate("Alert::AlertScript", "Compute cycling starting date");
+    case BeforeAlert: return QApplication::translate("Alert::AlertScript", "Before showing the alert");
+    case DuringAlert: return QApplication::translate("Alert::AlertScript", "During the alert presentation");
+    case AfterAlert: return QApplication::translate("Alert::AlertScript", "After showing the alert");
+    case OnOverride: return QApplication::translate("Alert::AlertScript", "On alert override");
+    case OnPatientAboutToChange: return QApplication::translate("Alert::AlertScript", "On patient about to change");
+    case OnUserAboutToChange: return QApplication::translate("Alert::AlertScript", "On user about to change");
+    case OnEpisodeAboutToSave: return QApplication::translate("Alert::AlertScript", "On episode about to save");
+    case OnEpisodeLoaded: return QApplication::translate("Alert::AlertScript", "On episode loaded");
+    }
+    return QString::null;
+}
+
 /** Return the XML content corresponding to the AlertScript::ScriptType \e type */
 QString AlertScript::typeToXml(ScriptType type)
 {
@@ -1469,6 +1487,10 @@ QString AlertScript::typeToXml(ScriptType type)
     case DuringAlert: return "during";
     case AfterAlert: return "after";
     case OnOverride: return "onoverride";
+    case OnPatientAboutToChange: return "onpatientabouttochange";
+    case OnUserAboutToChange: return "onuserabouttochange";
+    case OnEpisodeAboutToSave: return "onepisodeabouttosave";
+    case OnEpisodeLoaded: return "onepisodeloaded";
     }
     return QString::null;
 }
@@ -1488,6 +1510,14 @@ AlertScript::ScriptType AlertScript::typeFromXml(const QString &xml)
         return DuringAlert;
     else if (xml.compare("onoverride", Qt::CaseInsensitive)==0)
         return OnOverride;
+    else if (xml.compare("onpatientabouttochange", Qt::CaseInsensitive)==0)
+        return OnPatientAboutToChange;
+    else if (xml.compare("onuserabouttochange", Qt::CaseInsensitive)==0)
+        return OnUserAboutToChange;
+    else if (xml.compare("onepisodeabouttosave", Qt::CaseInsensitive)==0)
+        return OnEpisodeAboutToSave;
+    else if (xml.compare("onepisodeloaded", Qt::CaseInsensitive)==0)
+        return OnEpisodeLoaded;
     return CheckValidityOfAlert;
 }
 

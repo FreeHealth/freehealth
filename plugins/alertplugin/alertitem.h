@@ -132,7 +132,11 @@ public:
         BeforeAlert,
         DuringAlert,
         AfterAlert,
-        OnOverride
+        OnOverride,
+        OnPatientAboutToChange,
+        OnUserAboutToChange,
+        OnEpisodeAboutToSave,
+        OnEpisodeLoaded
     };
 
     AlertScript() : _id(-1), _valid(true), _modified(false) {}
@@ -161,6 +165,7 @@ public:
     virtual QString script() const {return _script;}
     virtual void setScript(const QString &script) {_modified=true; _script=script;}
 
+    static QString typeToString(ScriptType type);
     static QString typeToXml(ScriptType type);
     static ScriptType typeFromXml(const QString &xml);
     virtual QString toXml() const;
