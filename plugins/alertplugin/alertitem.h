@@ -336,6 +336,7 @@ public:
     virtual void setPriority(Priority priority);
     virtual void setOverrideRequiresUserComment(bool required);
     virtual void setMustBeRead(bool mustberead);
+    virtual void setRemindLaterAllowed(bool allowed);
     // TODO : virtual void setCondition(...);
 
     virtual QDateTime creationDate() const;
