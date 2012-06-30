@@ -1447,6 +1447,7 @@ AlertTiming AlertTiming::fromDomElement(const QDomElement &element)
     return timing;
 }
 
+/** Return the XML content corresponding to the AlertScript::ScriptType \e type */
 QString AlertScript::typeToXml(ScriptType type)
 {
     switch (type) {
@@ -1460,6 +1461,7 @@ QString AlertScript::typeToXml(ScriptType type)
     return QString::null;
 }
 
+/** Return the AlertScript::ScriptType from XML content */
 AlertScript::ScriptType AlertScript::typeFromXml(const QString &xml)
 {
     if (xml.compare("check", Qt::CaseInsensitive)==0)
@@ -1477,6 +1479,7 @@ AlertScript::ScriptType AlertScript::typeFromXml(const QString &xml)
     return CheckValidityOfAlert;
 }
 
+/** Transform the script to XML */
 QString AlertScript::toXml() const
 {
     // TODO: manage "<" in script
@@ -1492,6 +1495,7 @@ QString AlertScript::toXml() const
             ;
 }
 
+/** Create a script from XML */
 AlertScript AlertScript::fromDomElement(const QDomElement &element)
 {
     if (element.tagName().compare(::XML_SCRIPT_ELEMENTTAG, Qt::CaseInsensitive)!=0)
@@ -1505,6 +1509,7 @@ AlertScript AlertScript::fromDomElement(const QDomElement &element)
     return script;
 }
 
+/** Transform the validation to XML */
 QString AlertValidation::toXml() const
 {
     QString comment = _userComment;
@@ -1519,6 +1524,7 @@ QString AlertValidation::toXml() const
             ;
 }
 
+/** Create a validation from XML */
 AlertValidation AlertValidation::fromDomElement(const QDomElement &element)
 {
     if (element.tagName().compare(::XML_VALIDATION_ELEMENTTAG, Qt::CaseInsensitive)!=0)
@@ -1532,14 +1538,36 @@ AlertValidation AlertValidation::fromDomElement(const QDomElement &element)
     return val;
 }
 
+/** Return a human readable string of the current relation. */
 QString AlertRelation::relationTypeToString() const
 {
-    // TODO: improve the translations
     switch (_related) {
-    case RelatedToPatient: return Utils::firstLetterUpperCase(tkTr(Trans::Constants::RELATED_TO_CURRENT_PATIENT));
+    case RelatedToPatient:
+    {
+        if (patient()) {
+            if (patient()->uuid().compare(_relatedUid, Qt::CaseInsensitive)==0) {
+                return Utils::firstLetterUpperCase(tkTr(Trans::Constants::RELATED_TO_CURRENT_PATIENT));
+            } else {
+                return Utils::firstLetterUpperCase(tkTr(Trans::Constants::RELATED_TO_PATIENT_1)
+                                                   .arg(patient()->fullPatientName(_relatedUid).value(_relatedUid)));
+            }
+        }
+        return Utils::firstLetterUpperCase(tkTr(Trans::Constants::RELATED_TO_CURRENT_PATIENT));
+    }
     case RelatedToFamily: return tkTr(Trans::Constants::RELATED_TO_PATIENT_FAMILY_1).arg("");
     case RelatedToAllPatients: return Utils::firstLetterUpperCase(tkTr(Trans::Constants::RELATED_TO_ALL_PATIENTS));
-    case RelatedToUser: return Utils::firstLetterUpperCase(tkTr(Trans::Constants::RELATED_TO_CURRENT_USER));
+    case RelatedToUser:
+    {
+        if (user()) {
+            if (user()->uuid().compare(_relatedUid, Qt::CaseInsensitive)==0) {
+                return Utils::firstLetterUpperCase(tkTr(Trans::Constants::RELATED_TO_CURRENT_USER));
+            } else {
+                return Utils::firstLetterUpperCase(tkTr(Trans::Constants::RELATED_TO_USER_1)
+                                                   .arg(user()->fullNameOfUser(_relatedUid)));
+            }
+        }
+        return Utils::firstLetterUpperCase(tkTr(Trans::Constants::RELATED_TO_CURRENT_USER));
+    }
     case RelatedToAllUsers: return Utils::firstLetterUpperCase(tkTr(Trans::Constants::RELATED_TO_ALL_USERS));
     case RelatedToUserGroup: return Utils::firstLetterUpperCase(tkTr(Trans::Constants::RELATED_TO_USER_GROUP_1).arg(""));
     case RelatedToApplication: return Utils::firstLetterUpperCase(tkTr(Trans::Constants::RELATED_TO_APPLICATION));
@@ -1547,6 +1575,7 @@ QString AlertRelation::relationTypeToString() const
     return QString::null;
 }
 
+/** Transform the relation to XML */
 QString AlertRelation::toXml() const
 {
     if (_relatedUid.isEmpty())
@@ -1563,6 +1592,7 @@ QString AlertRelation::toXml() const
             ;
 }
 
+/** Create a relation from XML */
 AlertRelation AlertRelation::fromDomElement(const QDomElement &element)
 {
     if (element.tagName().compare(::XML_RELATED_ELEMENTTAG, Qt::CaseInsensitive)!=0)
