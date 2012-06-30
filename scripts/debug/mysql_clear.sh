@@ -2,6 +2,8 @@
 
 MYSQL=/usr/local/mysql/bin/mysql
 MYSQL_ROOT_PASS=""
+MYSQL_HOST=""
+MYSQL_PORT=""
 
 if [[ -e /usr/bin/mysql ]]; then
   MYSQL=/usr/bin/mysql
@@ -25,15 +27,21 @@ showHelp()
   echo "Usage : $SCRIPT_NAME -p rootpassword"
   echo "Options :"
   echo " -p  define the mysql root password"
+  echo " -s  define the mysql hostname"
+  echo " -t  define the mysql port"
   echo " -h  show this help"
   echo
 }
 
 # Parse options
-while getopts "p:h" option
+while getopts "p:s:t:h" option
 do
         case $option in
                 p) MYSQL_ROOT_PASS=`echo "-p$OPTARG" | tr -d " "`;
+                ;;
+                s) MYSQL_HOST="--host=\"$OPTARG\"";
+                ;;
+                t) MYSQL_PORT="--port=\"$OPTARG\"";
                 ;;
                 h) showHelp
                     exit 0
@@ -41,7 +49,7 @@ do
         esac
 done
 
-MYSQL="$MYSQL -uroot $MYSQL_ROOT_PASS"
+MYSQL="$MYSQL -uroot $MYSQL_ROOT_PASS $MYSQL_HOST $MYSQL_PORT"
 
 if [[  "$MYSQL_ROOT_PASS" == "" ]]; then
     echo "*** No password"

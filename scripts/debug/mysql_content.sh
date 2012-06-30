@@ -6,6 +6,8 @@ OUTPUT_FILE=""
 MYSQL_ROOT_PASS=""
 MYSQL=""
 MYSQL_ADMIN=""
+MYSQL_HOST=""
+MYSQL_PORT=""
 
 SCRIPT_NAME=`basename $0`
 if [[ "`echo $0 | cut -c1`" = "/" ]]; then
@@ -35,6 +37,8 @@ showHelp()
   echo "Usage : $SCRIPT_NAME -p rootpassword"
   echo "Options :"
   echo " -p  define the mysql root password"
+  echo " -s  define the mysql hostname"
+  echo " -t  define the mysql port"
   echo " -h  show this help"
   echo
 }
@@ -120,10 +124,14 @@ extractData()
 }
 
 # Parse options
-while getopts "p:h" option
+while getopts "p:s:t:h" option
 do
         case $option in
                 p) MYSQL_ROOT_PASS=`echo "-p$OPTARG" | tr -d " "`;
+                ;;
+                s) MYSQL_HOST="--host=\"$OPTARG\"";
+                ;;
+                t) MYSQL_PORT="--port=\"$OPTARG\"";
                 ;;
                 h) showHelp
                     exit 0
@@ -131,8 +139,8 @@ do
         esac
 done
 
-MYSQL=$MYSQL_PATH"mysql -uroot "$MYSQL_ROOT_PASS
-MYSQL_ADMIN=$MYSQL_PATH"mysqladmin -uroot $MYSQL_ROOT_PASS"
+MYSQL="$MYSQL_PATHmysql -uroot $MYSQL_ROOT_PASS $MYSQL_HOST $MYSQL_PORT"
+MYSQL_ADMIN="$MYSQL_PATHmysqladmin -uroot $MYSQL_ROOT_PASS $MYSQL_HOST $MYSQL_PORT"
 
 if [[  "$MYSQL_ROOT_PASS" == "" ]]; then
     echo "*** No password"
