@@ -295,9 +295,11 @@ void AlertCore::postCoreInitialization()
     QDateTime expiration = QDateTime::currentDateTime().addSecs(60*60*24);
 
     AlertItem item = d->_alertBase->createVirtualItem();
+    item.setLabel(item.label() + " (item)");
     item.setThemedIcon("identity.png");
     item.setViewType(AlertItem::StaticAlert);
     item.setPriority(AlertItem::High);
+    item.setRemindLaterAllowed(true);
     item.clearRelations();
     item.clearTimings();
     item.addRelation(AlertRelation(AlertRelation::RelatedToPatient, "patient1"));
@@ -354,15 +356,6 @@ void AlertCore::postCoreInitialization()
     item6.addTiming(AlertTiming(start, expiration));
     item6.addScript(AlertScript("check_item6", AlertScript::CheckValidityOfAlert, "(1+1)==2;"));
     item6.addScript(AlertScript("onoverride_item6", AlertScript::OnOverride, "(1+1)==2;"));
-
-    AlertItemEditorDialog dlg;
-    dlg.setAlertItem(item6);
-    dlg.exec();
-    dlg.submit(item6);
-    for(int i=0; i<item6.scripts().count(); ++i) {
-        qWarning() << AlertScript::typeToString(item6.scriptAt(i).type()) << item6.scriptAt(i).script();
-    }
-    return;
 
     AlertItem item7;
     item7.setUuid(Utils::Database::createUid());
