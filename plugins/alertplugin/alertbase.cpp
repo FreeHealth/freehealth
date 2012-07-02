@@ -411,6 +411,7 @@ bool AlertBase::initialize()
         return false;
     }
 
+    connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
     m_initialized = true;
     return true;
 }
