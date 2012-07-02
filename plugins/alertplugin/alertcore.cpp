@@ -358,6 +358,11 @@ void AlertCore::postCoreInitialization()
     AlertItemEditorDialog dlg;
     dlg.setAlertItem(item6);
     dlg.exec();
+    dlg.submit(item6);
+    for(int i=0; i<item6.scripts().count(); ++i) {
+        qWarning() << AlertScript::typeToString(item6.scriptAt(i).type()) << item6.scriptAt(i).script();
+    }
+    return;
 
     AlertItem item7;
     item7.setUuid(Utils::Database::createUid());
