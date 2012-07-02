@@ -154,7 +154,8 @@ bool AlertPlaceHolderTest::removeAlert(const AlertItem &alert)
             _priorities << alerts.at(i).priority()*10000000 + i;
         }
         qSort(_priorities);
-        _widget->adjustSize();
+        if (_widget->sizePolicy().horizontalPolicy() != QSizePolicy::Expanding)
+            _widget->adjustSize();
     }
     return true;
 }
