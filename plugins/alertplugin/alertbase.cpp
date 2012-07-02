@@ -280,8 +280,9 @@ AlertBase::AlertBase(QObject *parent) :
     addField(Table_ALERT, ALERT_REL_ID, "R_ID", FieldIsUUID);
     addField(Table_ALERT, ALERT_CATEGORY_UID, "C_UID", FieldIsUUID);
     addField(Table_ALERT, ALERT_SID, "SCR_ID", FieldIsInteger);
-    addField(Table_ALERT, ALERT_ISVALID, "ISV", FieldIsInteger);
     addField(Table_ALERT, ALERT_VAL_ID, "VAL_ID", FieldIsInteger);
+    addField(Table_ALERT, ALERT_ISVALID, "ISV", FieldIsBoolean);
+    addField(Table_ALERT, ALERT_ISREMINDABLE, "REMIND", FieldIsBoolean);
 
     addField(Table_ALERT, ALERT_VIEW_TYPE, "VIEW_ID", FieldIsInteger);
     addField(Table_ALERT, ALERT_CONTENT_TYPE, "CONTENT_ID", FieldIsInteger);
@@ -622,6 +623,7 @@ bool AlertBase::saveAlertItem(AlertItem &item)
     query.bindValue(Constants::ALERT_VAL_ID, item.db(ValidationId));
     query.bindValue(Constants::ALERT_TIM_ID, item.db(TimingId));
     query.bindValue(Constants::ALERT_ISVALID, int(item.isValid()));
+    query.bindValue(Constants::ALERT_ISREMINDABLE, int(item.isRemindLaterAllowed()));
     query.bindValue(Constants::ALERT_VIEW_TYPE, item.viewType());
     query.bindValue(Constants::ALERT_CONTENT_TYPE, item.contentType());
     query.bindValue(Constants::ALERT_CONDITION_TYPE, QVariant());
@@ -693,6 +695,7 @@ bool AlertBase::updateAlertItem(AlertItem &item)
             << Constants::ALERT_VAL_ID
             << Constants::ALERT_TIM_ID
             << Constants::ALERT_ISVALID
+            << Constants::ALERT_ISREMINDABLE
             << Constants::ALERT_VIEW_TYPE
             << Constants::ALERT_CONTENT_TYPE
             << Constants::ALERT_CONDITION_TYPE
@@ -723,6 +726,7 @@ bool AlertBase::updateAlertItem(AlertItem &item)
     query.bindValue(++i, item.db(ValidationId));
     query.bindValue(++i, item.db(TimingId));
     query.bindValue(++i, int(item.isValid()));
+    query.bindValue(++i, int(item.isRemindLaterAllowed()));
     query.bindValue(++i, item.viewType());
     query.bindValue(++i, item.contentType());
     query.bindValue(++i, QVariant());
@@ -1313,6 +1317,7 @@ QVector<AlertItem> AlertBase::getAlertItems(const AlertBaseQuery &query)
             item.setDb(CommentLID, query.value(Constants::ALERT_COMMENT_LABELID));
             item.setUuid(query.value(Constants::ALERT_UID).toString());
             item.setValidity(query.value(Constants::ALERT_ISVALID).toBool());
+            item.setRemindLaterAllowed(query.value(Constants::ALERT_ISREMINDABLE).toBool());
             item.setCryptedPassword(query.value(Constants::ALERT_CRYPTED_PASSWORD).toString());
             item.setViewType(AlertItem::ViewType(query.value(Constants::ALERT_VIEW_TYPE).toInt()));
             item.setContentType(AlertItem::ContentType(query.value(Constants::ALERT_CONTENT_TYPE).toInt()));
@@ -1384,6 +1389,7 @@ AlertItem AlertBase::getAlertItemFromUuid(const QString &uuid)
             item.setDb(DescrLID, query.value(Constants::ALERT_DESCRIPTION_LABELID));
             item.setDb(CommentLID, query.value(Constants::ALERT_COMMENT_LABELID));
             item.setValidity(query.value(Constants::ALERT_ISVALID).toBool());
+            item.setRemindLaterAllowed(query.value(Constants::ALERT_ISREMINDABLE).toBool());
             item.setCryptedPassword(query.value(Constants::ALERT_CRYPTED_PASSWORD).toString());
             item.setViewType(AlertItem::ViewType(query.value(Constants::ALERT_VIEW_TYPE).toInt()));
             item.setContentType(AlertItem::ContentType(query.value(Constants::ALERT_CONTENT_TYPE).toInt()));
