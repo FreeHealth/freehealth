@@ -273,8 +273,16 @@ void AlertItemEditorWidget::hideExtraXmlTab()
     d->manageTabWidgeVisibility();
 }
 
+void AlertItemEditorWidget::hideScriptsTab()
+{
+    int id = d->ui->tabWidget->indexOf(d->ui->tab_scripts);
+    d->ui->tabWidget->removeTab(id);
+    d->manageTabWidgeVisibility();
+}
+
 bool AlertItemEditorWidget::submit(AlertItem &item)
 {
+    qWarning()<<"AlertItemEditorWidget::submit";
     // Description
     // remove all multi-lingual values
     item.removeAllLanguages();
@@ -307,7 +315,10 @@ bool AlertItemEditorWidget::submit(AlertItem &item)
     }
 
     // Scripts
-//    item.clearScripts();
+    qWarning() << "SUBMIT SCRIPTS";
+    d->ui->scriptEditor->submit();
+    item.clearScripts();
+    item.setScripts(d->ui->scriptEditor->scripts());
 
     return true;
 }
