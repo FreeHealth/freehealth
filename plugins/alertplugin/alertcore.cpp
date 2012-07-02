@@ -364,6 +364,7 @@ void AlertCore::postCoreInitialization()
     item5.setDescription("Aoutch this is a dynamic alert !");
     item5.setViewType(AlertItem::DynamicAlert);
     item5.setRemindLaterAllowed(true);
+    item5.setOverrideRequiresUserComment(true);
     item5.addRelation(AlertRelation(AlertRelation::RelatedToPatient, "patient1"));
     item5.addTiming(AlertTiming(start, expiration));
 
