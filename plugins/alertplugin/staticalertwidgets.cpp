@@ -45,6 +45,7 @@
 #include <QEvent>
 #include <QAction>
 #include <QMenu>
+#include <QHideEvent>
 #include <QInputDialog>
 
 using namespace Alert;
@@ -87,28 +88,34 @@ StaticAlertToolButton::StaticAlertToolButton(QWidget *parent) :
     setPopupMode(QToolButton::InstantPopup);
 
     // create actions and menu
+    _menu = new QMenu(this);
     aLabel = new QAction(this);
     aCategory = new QAction(this);
     aValidate = new QAction(this);
     aEdit = new QAction(this);
     aOverride = new QAction(this);
-    QAction *sep = new QAction(this);
-    sep->setSeparator(true);
+    aRemindLater = new QAction(this);
 
     aValidate->setIcon(theme()->icon(Core::Constants::ICONOK));
     aEdit->setIcon(theme()->icon(Core::Constants::ICONEDIT));
     aEdit->setIcon(theme()->icon(Core::Constants::ICONNEXT));
+    aRemindLater->setIcon(theme()->icon(Core::Constants::ICONREMINDER));
 
-    addAction(aCategory);
-    addAction(sep);
-    addAction(aLabel);
-    addAction(sep);
-    addAction(aValidate);
-    addAction(aEdit);
-    addAction(aOverride);
+    _menu->addAction(aCategory);
+    _menu->addSeparator();
+    _menu->addAction(aLabel);
+    _menu->addSeparator();
+    _menu->addAction(aEdit);
+    _menu->addSeparator();
+    _menu->addAction(aValidate);
+    _menu->addAction(aRemindLater);
+    _menu->addSeparator();
+    _menu->addAction(aOverride);
+    setMenu(_menu);
 
     connect(aValidate, SIGNAL(triggered()), this, SLOT(validateAlert()));
     connect(aEdit, SIGNAL(triggered()), this, SLOT(editAlert()));
+    connect(aRemindLater, SIGNAL(triggered()), this, SLOT(remindAlert()));
     connect(aOverride, SIGNAL(triggered()), this, SLOT(overrideAlert()));
     retranslateUi();
 }
@@ -137,6 +144,20 @@ void StaticAlertToolButton::setAlertItem(const AlertItem &item)
         else
             aCategory->setText(item.category());
     }
+
+    if (!item.isRemindLaterAllowed())
+        _menu->removeAction(aRemindLater);
+
+    if (!item.isEditable())
+        _menu->removeAction(aEdit);
+
+    // remove duplicate separators
+    QAction *p = 0;
+    foreach(QAction *a, _menu->actions()) {
+        if (p && p->isSeparator() && a->isSeparator())
+            _menu->removeAction(p);
+    }
+
     _item = item;
 }
 
@@ -147,6 +168,8 @@ void StaticAlertToolButton::validateAlert()
 
 void StaticAlertToolButton::editAlert()
 {
+    if (!_item.isEditable())
+        return;
     AlertItemEditorDialog dlg(this);
     dlg.setAlertItem(_item);
     if (dlg.exec() == QDialog::Accepted) {
@@ -154,6 +177,14 @@ void StaticAlertToolButton::editAlert()
         AlertCore::instance()->updateAlert(_item);
         AlertCore::instance()->saveAlert(_item);
     }
+}
+
+void StaticAlertToolButton::remindAlert()
+{
+    qWarning() << "REMIND" << _item.isRemindLaterAllowed();
+    if (!_item.isRemindLaterAllowed())
+        return;
+    _item.remindLater();
 }
 
 void StaticAlertToolButton::overrideAlert()
@@ -190,6 +221,7 @@ void StaticAlertToolButton::retranslateUi()
     aValidate->setText(tkTr(Trans::Constants::VALIDATE));
     aEdit->setText(tkTr(Trans::Constants::EDIT_ALERT));
     aOverride->setText(tkTr(Trans::Constants::OVERRIDE));
+    aRemindLater->setText(tkTr(Trans::Constants::REMIND_LATER));
     aLabel->setText(_item.label());
     if (_item.category().isEmpty())
         aCategory->setText(tr("No category"));
@@ -203,6 +235,14 @@ void StaticAlertToolButton::changeEvent(QEvent *event)
         retranslateUi();
     }
     QToolButton::changeEvent(event);
+}
+
+void StaticAlertToolButton::hideEvent(QHideEvent *event)
+{
+    // INFO: wrapper to Qt bug, when qtoolbutton is hidden the menu stays opened if it was opened
+    if (_menu->isVisible())
+        _menu->close();
+    QToolButton::hideEvent(event);
 }
 
 /**
