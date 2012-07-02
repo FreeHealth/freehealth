@@ -181,10 +181,10 @@ void StaticAlertToolButton::editAlert()
 
 void StaticAlertToolButton::remindAlert()
 {
-    qWarning() << "REMIND" << _item.isRemindLaterAllowed();
     if (!_item.isRemindLaterAllowed())
         return;
     _item.remindLater();
+    AlertCore::instance()->saveAlert(_item);
 }
 
 void StaticAlertToolButton::overrideAlert()
