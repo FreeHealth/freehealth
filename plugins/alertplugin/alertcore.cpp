@@ -224,6 +224,26 @@ bool AlertCore::updateAlert(const AlertItem &item)
 }
 
 /**
+  Remove a registered static alert (do nothing with dynamic alerts).\n
+  Inform all IAlertPlaceHolder of the removal of the alert.\n
+  The modification are not saved into the database.
+  \sa Alert::AlertCore::saveAlert(), Alert::AlertCore::registerAlert()
+*/
+bool AlertCore::removeAlert(const AlertItem &item)
+{
+    bool ok =true;
+    if (item.viewType() == AlertItem::StaticAlert) {
+        // Get static place holders
+        QList<Alert::IAlertPlaceHolder*> placeHolders = pluginManager()->getObjects<Alert::IAlertPlaceHolder>();
+        foreach(Alert::IAlertPlaceHolder *ph, placeHolders) {
+            if (!ph->removeAlert(item))
+                ok = false;
+        }
+    }
+    return ok;
+}
+
+/**
  Process alerts:\n
    - Execute check scripts
    - Execute dynamic alerts if needed

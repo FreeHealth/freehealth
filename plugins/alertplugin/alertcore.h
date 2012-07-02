@@ -76,6 +76,7 @@ public:
     bool checkAlerts(AlertsToCheck check);
     bool registerAlert(const AlertItem &item);
     bool updateAlert(const AlertItem &item);
+    bool removeAlert(const AlertItem &item);
 
     //    bool executeAlert(const AlertItem &alert);  // add a delay ?
 
