@@ -53,22 +53,27 @@ class AlertItemScriptEditor : public QWidget
     Q_OBJECT
 public:
     explicit AlertItemScriptEditor(QWidget *parent = 0);
+    ~AlertItemScriptEditor();
 
     void clear();
     void setAlertItem(const AlertItem &alert);
 
     QVector<AlertScript> scripts() const;
 
+public Q_SLOTS:
+    void submit();
+
 private:
     void refreshScriptCombo();
 
 private Q_SLOTS:
-    void on_types_currentIndexChanged(int index);
+    void onTypesSelected(int index);
     void addAction(QAction *a);
 
 private:
+    int _previousIndex;
     Ui::AlertItemScriptEditor *ui;
-    QList<AlertScript> _scripts;
+    QList<AlertScript> _scriptsCache, _scripts;
     QMenu *_menu;
 };
 

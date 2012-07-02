@@ -61,6 +61,7 @@ public:
     void hideTimingTab();
     void hideStyleSheetTab();
     void hideExtraXmlTab();
+    void hideScriptsTab();
 
 public Q_SLOTS:
     void setAlertItem(const AlertItem &item);

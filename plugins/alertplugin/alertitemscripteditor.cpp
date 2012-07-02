@@ -25,6 +25,13 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
+/**
+  \class Alert::Internal::AlertItemScriptEditor
+  Allow user to edit the Alert::AlertItem scripts. Modifications are not
+  automatically submitted, you must call submit() before retrieving scripts
+  with scripts().
+*/
+
 #include "alertitemscripteditor.h"
 
 #include <coreplugin/icore.h>
@@ -34,6 +41,7 @@
 #include "ui_alertitemscripteditor.h"
 
 #include <QMenu>
+#include <QDebug>
 
 using namespace Alert;
 using namespace Internal;
@@ -42,6 +50,7 @@ static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 
 AlertItemScriptEditor::AlertItemScriptEditor(QWidget *parent) :
     QWidget(parent),
+    _previousIndex(-1),
     ui(new Ui::AlertItemScriptEditor)
 {
     ui->setupUi(this);
@@ -62,35 +71,74 @@ AlertItemScriptEditor::AlertItemScriptEditor(QWidget *parent) :
     connect(_menu, SIGNAL(triggered(QAction*)), this, SLOT(addAction(QAction*)));
 }
 
+AlertItemScriptEditor::~AlertItemScriptEditor()
+{
+    delete ui;
+}
+
+/** Clear the editor */
 void AlertItemScriptEditor::clear()
 {
     ui->types->clear();
     ui->plainTextEdit->clear();
 }
 
+/** Define the Alert::AlertItem to edit */
 void AlertItemScriptEditor::setAlertItem(const AlertItem &alert)
 {
-    _scripts = alert.scripts().toList();
+    _scriptsCache = alert.scripts().toList();
+    _scripts = _scriptsCache;
     refreshScriptCombo();
 }
 
 void AlertItemScriptEditor::refreshScriptCombo()
 {
+    ui->types->disconnect(this);
     ui->types->clear();
     qSort(_scripts);
 
     for(int i=0; i<_scripts.count(); ++i) {
         ui->types->addItem(AlertScript::typeToString(_scripts.at(i).type()));
     }
+
+    foreach(QAction *a, _menu->actions()) {
+        a->setEnabled(true);
+        for(int i=0; i<_scripts.count(); ++i) {
+            if (a->data().toInt() == _scripts.at(i).type()) {
+                a->setEnabled(false);
+                break;
+            }
+        }
+    }
+
+    connect(ui->types, SIGNAL(currentIndexChanged(int)), this, SLOT(onTypesSelected(int)));
+    onTypesSelected(0);
 }
 
+/** Return the scripts. If you want to get the user's changes, call submit() before. */
 QVector<AlertScript> AlertItemScriptEditor::scripts() const
 {
-    return _scripts.toVector();
+    return _scriptsCache.toVector();
 }
 
-void AlertItemScriptEditor::on_types_currentIndexChanged(int index)
+/** Submit all user changes to the scripts */
+void AlertItemScriptEditor::submit()
 {
+    // Submit current editing
+    if (_scripts.count()) {
+        _scripts[ui->types->currentIndex()].setScript(ui->plainTextEdit->toPlainText());
+    }
+    _scriptsCache.clear();
+    _scriptsCache = _scripts;
+}
+
+void AlertItemScriptEditor::onTypesSelected(int index)
+{
+    if (_previousIndex != -1) {
+        // keep changes to the _scripts var
+        _scripts[_previousIndex].setScript(ui->plainTextEdit->toPlainText());
+    }
+    _previousIndex = index;
     // Populate the texteditor
     ui->plainTextEdit->setPlainText(_scripts.at(index).script());
 }
@@ -113,4 +161,8 @@ void AlertItemScriptEditor::addAction(QAction *a)
     refreshScriptCombo();
 
     // Select the newly created
+    for(int i=0; i < _scripts.count(); ++i) {
+        if (_scripts.at(i).type()==type)
+            ui->types->setCurrentIndex(i);
+    }
 }
