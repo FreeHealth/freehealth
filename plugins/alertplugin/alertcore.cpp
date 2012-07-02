@@ -363,6 +363,7 @@ void AlertCore::postCoreInitialization()
     item5.setCategory("Test");
     item5.setDescription("Aoutch this is a dynamic alert !");
     item5.setViewType(AlertItem::DynamicAlert);
+    item5.setRemindLaterAllowed(true);
     item5.addRelation(AlertRelation(AlertRelation::RelatedToPatient, "patient1"));
     item5.addTiming(AlertTiming(start, expiration));
 
@@ -372,6 +373,7 @@ void AlertCore::postCoreInitialization()
     item6.setCategory("Test user alert");
     item6.setDescription("Aoutch this is a dynamic alert !<br />For you, <b>user1</b>!");
     item6.setViewType(AlertItem::DynamicAlert);
+    item6.setRemindLaterAllowed(true);
     item6.addRelation(AlertRelation(AlertRelation::RelatedToUser, "user1"));
     item6.addTiming(AlertTiming(start, expiration));
     item6.addScript(AlertScript("check_item6", AlertScript::CheckValidityOfAlert, "(1+1)==2;"));
