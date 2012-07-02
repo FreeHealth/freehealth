@@ -6,6 +6,8 @@ OUTPUT_FILE=""
 MYSQL_ROOT_PASS=""
 MYSQL=""
 MYSQL_ADMIN=""
+MYSQL_HOST=""
+MYSQL_PORT=""
 
 SCRIPT_NAME=`basename $0`
 if [[ "`echo $0 | cut -c1`" = "/" ]]; then
@@ -35,6 +37,8 @@ showHelp()
   echo "Usage : $SCRIPT_NAME -p rootpassword"
   echo "Options :"
   echo " -p  define the mysql root password"
+  echo " -s  define the mysql hostname"
+  echo " -t  define the mysql port"
   echo " -h  show this help"
   echo
 }
@@ -45,8 +49,8 @@ checkMySQLServer()
   echo "## TESTING MYSQL SERVER" >> $OUTPUT_FILE
   echo "*** Testing MySQL server status"
   if [[ "$sys" == "Linux" ]] ; then
-    echo `mysqladmin ping` >> $OUTPUT_FILE
-    echo "    "`mysqladmin ping`
+    echo `$MYSQL_ADMIN ping` >> $OUTPUT_FILE
+    echo "    "`$MYSQL_ADMIN ping -uroot $MYSQL_ROOT_PASS`
   elif [[ "$sys" == "Darwin" ]] ; then
     echo "*** System Root password?"
     echo `sudo $MYSQL_PATH/../support-files/mysql.server status` >> $OUTPUT_FILE
@@ -97,16 +101,19 @@ clearSqlCommandFile()
 extractData()
 {
   echo "*** Starting data extraction"
-  echo "## MySQL CONFIGURATION \n" >> $OUTPUT_FILE
-  echo `$MYSQL_ADMIN ping` >> $OUTPUT_FILE
+  echo "## mysqladmin ping" >> $OUTPUT_FILE
+  echo "`$MYSQL_ADMIN ping`" >> $OUTPUT_FILE
   echo " " >> $OUTPUT_FILE
 
-  echo "`$MYSQL_ADMIN status`" >> $OUTPUT_FILE
+  echo "## mysqladmin status" >> $OUTPUT_FILE
+  echo "`$MYSQL_ADMIN  status`" >> $OUTPUT_FILE
   echo " " >> $OUTPUT_FILE
 
+  echo "## mysqladmin extended-status" >> $OUTPUT_FILE
   echo "`$MYSQL_ADMIN extended-status`" >> $OUTPUT_FILE
   echo " " >> $OUTPUT_FILE
 
+  echo "## mysqladmin variables" >> $OUTPUT_FILE
   echo "`$MYSQL_ADMIN variables`" >> $OUTPUT_FILE
   echo " " >> $OUTPUT_FILE
 
@@ -117,10 +124,14 @@ extractData()
 }
 
 # Parse options
-while getopts "p:h" option
+while getopts "p:s:t:h" option
 do
         case $option in
                 p) MYSQL_ROOT_PASS=`echo "-p$OPTARG" | tr -d " "`;
+                ;;
+                s) MYSQL_HOST="--host=\"$OPTARG\"";
+                ;;
+                t) MYSQL_PORT="--port=\"$OPTARG\"";
                 ;;
                 h) showHelp
                     exit 0
@@ -128,8 +139,15 @@ do
         esac
 done
 
-MYSQL=$MYSQL_PATH"mysql -uroot "$MYSQL_ROOT_PASS
-MYSQL_ADMIN=$MYSQL_PATH"mysqladmin"
+MYSQL="$MYSQL_PATHmysql -uroot $MYSQL_ROOT_PASS $MYSQL_HOST $MYSQL_PORT"
+MYSQL_ADMIN="$MYSQL_PATHmysqladmin -uroot $MYSQL_ROOT_PASS $MYSQL_HOST $MYSQL_PORT"
+
+if [[  "$MYSQL_ROOT_PASS" == "" ]]; then
+    echo "*** No password"
+else
+    echo "*** Using password: "$MYSQL_ROOT_PASS
+fi
+echo "    Default MySQL command: "$MYSQL
 
 echo "*** Starting MySQL debugging script at: "`date`" on "`hostname` > $OUTPUT_FILE
 
@@ -138,7 +156,7 @@ if [[  "$MYSQL_ROOT_PASS" == "" ]]; then
 else
     echo "*** Using password: "$MYSQL_ROOT_PASS
 fi
-echo "    Default MySQL command: "$MYSQL -uroot $MYSQL_ROOT_PASS
+echo "    Default MySQL command: "$MYSQL
 
 echo
 checkMySQLServer
@@ -152,5 +170,5 @@ if [[ $REPLY = [yY] ]]; then
    echo
    more $OUTPUT_FILE
 fi
-
+echo
 exit 0
