@@ -166,6 +166,7 @@ const char * const  ICONTAKESCREENSHOT  =  "takescreenshot.png";
 
 // date and time Icons
 const char * const  ICONDATE        =  "date.png";
+const char * const  ICONREMINDER    =  "reminder.png";
 
 // categories icons
 const char * const  ICONCATEGORY_MANAGER  =  "category_manager.png";
