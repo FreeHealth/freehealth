@@ -381,6 +381,7 @@ public:
     virtual QVector<AlertScript> &scripts() const;
     virtual AlertScript &scriptAt(int id) const;
     virtual void addScript(const AlertScript &script);
+    virtual void setScripts(const QVector<AlertScript> &scripts);
 
     bool validateAlertWithCurrentUserAndConfirmationDialog();
     bool validateAlert(const QString &validatorUid, bool override, const QString overrideComment, const QDateTime &dateOfValidation);

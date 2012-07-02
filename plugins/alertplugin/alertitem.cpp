@@ -879,6 +879,13 @@ void AlertItem::addScript(const AlertScript &script)
     d->_scripts << script;
 }
 
+void AlertItem::setScripts(const QVector<AlertScript> &scripts)
+{
+    d->_modified = true;
+    d->_scripts.clear();
+    d->_scripts = scripts;
+}
+
 /**
   Validate an Alert::AlertItem with the current user. Return true if the alert was validated.\n
   The new state of the alert is not automatically saved into database, but
