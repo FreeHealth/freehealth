@@ -88,6 +88,7 @@ public:
         OverrideRequiresUserComment,
         MustBeRead,
         RemindLater,
+        Editable,
         StyleSheet
     };
     enum Tr {
@@ -103,6 +104,7 @@ public:
         addNonTranslatableExtraData(OverrideRequiresUserComment, "overrideComment");
         addNonTranslatableExtraData(MustBeRead, "mustBeRead");
         addNonTranslatableExtraData(RemindLater, "remindLater");
+        addNonTranslatableExtraData(Editable, "editable");
         addNonTranslatableExtraData(StyleSheet, "styleSheet");
         addTranslatableExtraData(Comment, "comment");
     }
@@ -126,7 +128,9 @@ class AlertItemPrivate : public Trans::MultiLingualClass<AlertValueBook>
 public:
     AlertItemPrivate(AlertItem *parent) :
         _id(-1),
-        _valid(true), _modified(false), _overrideRequiresUserComment(false), _mustBeRead(false), _remindAllowed(false),
+        _valid(true), _modified(false),
+        _editable(true), _overrideRequiresUserComment(false),
+        _mustBeRead(false), _remindAllowed(false),
         _viewType(AlertItem::StaticAlert),
         _contentType(AlertItem::ApplicationNotification),
         _priority(AlertItem::Medium),
@@ -206,6 +210,7 @@ public:
         _overrideRequiresUserComment = descr.data(AlertXmlDescription::OverrideRequiresUserComment).toInt();
         _mustBeRead = descr.data(AlertXmlDescription::MustBeRead).toInt();
         _remindAllowed = descr.data(AlertXmlDescription::RemindLater).toInt();
+        _editable = descr.data(AlertXmlDescription::Editable).toInt();
         viewTypeFromXml(descr.data(AlertXmlDescription::ViewType).toString());
         contentTypeFromXml(descr.data(AlertXmlDescription::ContentType).toString());
         priorityFromXml(descr.data(AlertXmlDescription::Priority).toString());
@@ -236,7 +241,7 @@ public:
 public:
     QString _uid, _pass, _themedIcon, _css, _extraXml;
     int _id;
-    bool _valid, _modified, _overrideRequiresUserComment, _mustBeRead, _remindAllowed;
+    bool _valid, _modified, _editable, _overrideRequiresUserComment, _mustBeRead, _remindAllowed;
     AlertItem::ViewType _viewType;
     AlertItem::ContentType _contentType;
     AlertItem::Priority _priority;
@@ -579,6 +584,11 @@ bool AlertItem::isRemindLaterAllowed() const
     return d->_remindAllowed;
 }
 
+bool AlertItem::isEditable() const
+{
+    return d->_editable;
+}
+
 void AlertItem::setViewType(AlertItem::ViewType type)
 {
     d->_viewType = type;
@@ -608,6 +618,11 @@ void AlertItem::setMustBeRead(bool mustberead)
 void AlertItem::setRemindLaterAllowed(bool allowed)
 {
     d->_remindAllowed = allowed;
+}
+
+void AlertItem::setEditable(bool editable)
+{
+    d->_editable = editable;
 }
 
 QDateTime AlertItem::creationDate() const
@@ -1184,6 +1199,7 @@ QString AlertItem::toXml() const
     d->descr.setData(Internal::AlertXmlDescription::OverrideRequiresUserComment, d->_overrideRequiresUserComment);
     d->descr.setData(Internal::AlertXmlDescription::MustBeRead, d->_mustBeRead);
     d->descr.setData(Internal::AlertXmlDescription::RemindLater, d->_remindAllowed);
+    d->descr.setData(Internal::AlertXmlDescription::Editable, d->_editable);
     d->descr.setData(Internal::AlertXmlDescription::StyleSheet, d->_css);
     d->descr.setData(Internal::AlertXmlDescription::GeneralIcon, d->_themedIcon);
 

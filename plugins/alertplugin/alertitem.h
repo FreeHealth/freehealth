@@ -336,7 +336,7 @@ public:
     virtual bool isOverrideRequiresUserComment() const;
     virtual bool mustBeRead() const;
     virtual bool isRemindLaterAllowed() const;
-    // TODO : virtual xxx condition() const = 0;
+    virtual bool isEditable() const;
 
     virtual void setViewType(ViewType type);
     virtual void setContentType(ContentType content);
@@ -344,7 +344,7 @@ public:
     virtual void setOverrideRequiresUserComment(bool required);
     virtual void setMustBeRead(bool mustberead);
     virtual void setRemindLaterAllowed(bool allowed);
-    // TODO : virtual void setCondition(...);
+    virtual void setEditable(bool editable);
 
     virtual QDateTime creationDate() const;
     virtual void setCreationDate(const QDateTime &dt);
