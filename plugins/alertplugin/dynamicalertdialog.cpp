@@ -198,10 +198,11 @@ DynamicAlertDialog::DynamicAlertDialog(const QList<AlertItem> &items,
         containerLayout->addWidget(scroll);
 
         ui->centralLayout->addWidget(scrollContainer);
-
+        ui->nbLabel->hide();
     } else {
         // With tabwidget
         QHash<QString, QVBoxLayout *> categories;
+        QHash<QString, int> nbInCategories;
 
         for(int i=0; i < items.count(); ++i) {
             const AlertItem &alert = items.at(i);
@@ -214,6 +215,7 @@ DynamicAlertDialog::DynamicAlertDialog(const QList<AlertItem> &items,
             }
 
             // Get the category layout
+            nbInCategories.insert(cat, nbInCategories.value(cat, 0) + 1);
             QVBoxLayout *lay = categories.value(cat, 0);
             if (!lay) {
                 lay = new QVBoxLayout;
@@ -248,9 +250,10 @@ DynamicAlertDialog::DynamicAlertDialog(const QList<AlertItem> &items,
             scroll->setWidget(alertContainer);
             containerLayout->addWidget(scroll);
 
-            tab->addTab(scrollContainer, cat);
+            tab->addTab(scrollContainer, QString("%1 (%2)").arg(cat).arg(nbInCategories.value(cat)));
         }
         ui->centralLayout->addWidget(tab);
+        ui->nbLabel->setText(tkTr(Trans::Constants::_1_ALERTS).arg(items.count()));
     }
 
     // Add buttons
@@ -277,7 +280,7 @@ DynamicAlertDialog::DynamicAlertDialog(const QList<AlertItem> &items,
     _overrideButton = new QToolButton(this);
     _overrideButton->setMinimumHeight(22);
     _overrideButton->setText(tkTr(Trans::Constants::OVERRIDE));
-    _overrideButton->setIcon(theme()->icon(Core::Constants::ICONNEXT, Core::ITheme::SmallIcon));
+    _overrideButton->setIcon(theme()->icon(Core::Constants::ICONOVERRIDE, Core::ITheme::SmallIcon));
     _overrideButton->setIconSize(QSize(16,16));
     _overrideButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     _overrideButton->setFont(bold);
