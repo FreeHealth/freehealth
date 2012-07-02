@@ -13,9 +13,7 @@ HEADERS += \
     $${PWD}/alertplugin.h \
     $${PWD}/alertbase.h \
     $${PWD}/alertcore.h \
-    $${PWD}/alertmanager.h \
     $${PWD}/alertitem.h \
-    $${PWD}/showalertsIHM.h \
     $${PWD}/alertmodel.h \
     $${PWD}/ialertplaceholder.h \
     $${PWD}/alertitemeditorwidget.h \
@@ -23,15 +21,15 @@ HEADERS += \
     $${PWD}/alertitemeditordialog.h \
     $${PWD}/dynamicalertdialog.h \
     $${PWD}/alertplaceholdertest.h \
-    $${PWD}/staticalertwidgets.h
+    $${PWD}/staticalertwidgets.h \
+    $${PWD}/alertscriptmanager.h \
+    $${PWD}/alertitemscripteditor.h
 
 SOURCES += \
     $${PWD}/alertplugin.cpp \
     $${PWD}/alertbase.cpp \
     $${PWD}/alertcore.cpp \
-    $${PWD}/alertmanager.cpp \
     $${PWD}/alertitem.cpp \
-    $${PWD}/showalertsIHM.cpp \
     $${PWD}/alertmodel.cpp \
     $${PWD}/ialertplaceholder.cpp \
     $${PWD}/alertitemeditorwidget.cpp \
@@ -39,14 +37,17 @@ SOURCES += \
     $${PWD}/alertitemeditordialog.cpp \
     $${PWD}/dynamicalertdialog.cpp \
     $${PWD}/alertplaceholdertest.cpp \
-    $${PWD}/staticalertwidgets.cpp
+    $${PWD}/staticalertwidgets.cpp \
+    $${PWD}/alertscriptmanager.cpp \
+    $${PWD}/alertitemscripteditor.cpp
 
-FORMS += $${PWD}/ShowAlertsWidget.ui \
+FORMS += \
     $${PWD}/alertitemeditorwidget.ui \
     $${PWD}/alertitemtimingeditorwidget.ui \
     $${PWD}/alertitemeditordialog.ui \
     $${PWD}/dynamicalertdialog.ui \
-    $${PWD}/dynamicalertdialogoverridingcomment.ui
+    $${PWD}/dynamicalertdialogoverridingcomment.ui \
+    $${PWD}/alertitemscripteditor.ui
 
 OTHER_FILES += $${PWD}/Alert.pluginspec
 

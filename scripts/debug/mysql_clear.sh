@@ -1,4 +1,10 @@
 #!/bin/bash
+#  The FreeMedForms project is a set of free, open source medical
+#  applications.
+#  (C) 2008-2012 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>
+#  License: BSD 3 clauses
+
+VERSION="0.1"
 
 MYSQL=/usr/local/mysql/bin/mysql
 MYSQL_ROOT_PASS=""
@@ -24,6 +30,7 @@ showHelp()
 {
   echo $SCRIPT_NAME" clear your MySQL server from all freemedforms data."
   echo "This script is part of the FreeMedForms project."
+  echo "Version: $VERSION"
   echo "Usage : $SCRIPT_NAME -p rootpassword"
   echo "Options :"
   echo " -p  define the mysql root password"
@@ -69,17 +76,21 @@ echo
 echo "*** Drop FreeMedForms users ***"
 $MYSQL < ./select.sql | sed '1d' | tr -d "\t" | sed "s/^/DROP USER '/" | sed "s/$/';/" > ./drop.sql
 
-more drop.sql
-read -n1 -p "Execute these commands? [y/n]"
-if [[ $REPLY = [yY] ]]; then
-   echo
-   echo "*** Executing commands ***"
-   $MYSQL < drop.sql
+if [[ -z ./drop.sql ]]; then
+    echo
+    echo "*** No recorded users ***"
 else
-   echo
-   echo "*** Commands ignored ***";
+    more drop.sql
+    read -n1 -p "Execute these commands? [y/n]"
+    if [[ $REPLY = [yY] ]]; then
+        echo
+        echo "*** Executing commands ***"
+        $MYSQL < drop.sql
+    else
+        echo
+        echo "*** Commands ignored ***";
+    fi
 fi
-
 rm ./select.sql
 rm ./drop.sql
 
@@ -88,15 +99,20 @@ echo "*** Drop FreeMedForms databases ***"
 echo "show databases LIKE 'fmf_%';" > ./select.sql
 $MYSQL < ./select.sql | sed '1d' | tr -d "\t"  | sed "s/^/DROP DATABASE /" | sed "s/$/;/" > ./drop.sql
 
-more drop.sql
-read -n1 -p "Execute these commands? [y/n]"
-if [[ $REPLY = [yY] ]]; then
-   echo
-   echo "*** Executing commands ***"
-   $MYSQL < drop.sql
+if [[ -z ./drop.sql ]]; then
+    echo
+    echo "*** No freemedforms database ***"
 else
-   echo
-   echo "*** Commands ignored";
+    more drop.sql
+    read -n1 -p "Execute these commands? [y/n]"
+    if [[ $REPLY = [yY] ]]; then
+        echo
+        echo "*** Executing commands ***"
+        $MYSQL < drop.sql
+    else
+        echo
+        echo "*** Commands ignored";
+    fi
 fi
 
 rm ./select.sql

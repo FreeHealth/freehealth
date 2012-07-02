@@ -139,6 +139,7 @@ void AlertItemEditorWidget::clearUi()
     d->ui->xml->clear();
     d->ui->tabWidget->setCurrentIndex(0);
     d->ui->timingEditor->clear();
+    d->ui->scriptEditor->clear();
 }
 
 void AlertItemEditorWidget::setAlertItem(const AlertItem &item)
@@ -178,6 +179,9 @@ void AlertItemEditorWidget::setAlertItem(const AlertItem &item)
         default: break;
         }
     }
+
+    // Scripts
+    d->ui->scriptEditor->setAlertItem(d->_item);
 }
 
 void AlertItemEditorWidget::reset()

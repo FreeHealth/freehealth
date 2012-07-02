@@ -25,13 +25,54 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#include "showalertsIHM.h"
+#ifndef ALERT_INTERNAL_ALERTITEMSCRIPTEDITOR_H
+#define ALERT_INTERNAL_ALERTITEMSCRIPTEDITOR_H
 
-using namespace Alert;
+#include <alertplugin/alertitem.h>
+#include <QWidget>
+#include <QVector>
+QT_BEGIN_NAMESPACE
+class QMenu;
+QT_END_NAMESPACE
 
-ShowAlerts::ShowAlerts(QObject * parent)
-{
-    setupUi(this);
+/**
+ * \file alertitemscripteditor.h
+ * \author Eric MAEKER <eric.maeker@gmail.com>
+ * \version 0.8.0
+ * \date 30 June 2012
+*/
+
+namespace Alert {
+namespace Internal {
+namespace Ui {
+class AlertItemScriptEditor;
 }
 
-ShowAlerts::~ShowAlerts(){}
+class AlertItemScriptEditor : public QWidget
+{
+    Q_OBJECT
+public:
+    explicit AlertItemScriptEditor(QWidget *parent = 0);
+
+    void clear();
+    void setAlertItem(const AlertItem &alert);
+
+    QVector<AlertScript> scripts() const;
+
+private:
+    void refreshScriptCombo();
+
+private Q_SLOTS:
+    void on_types_currentIndexChanged(int index);
+    void addAction(QAction *a);
+
+private:
+    Ui::AlertItemScriptEditor *ui;
+    QList<AlertScript> _scripts;
+    QMenu *_menu;
+};
+
+} // namespace Internal
+} // namespace Alert
+
+#endif // ALERT_INTERNAL_ALERTITEMSCRIPTEDITOR_H

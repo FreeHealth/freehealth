@@ -59,6 +59,9 @@ AlertPlugin::AlertPlugin()
     // All preferences pages must be created in this part (before user connection)
     // And included in the QObject pool
 
+    // Create the core instance
+    new AlertCore(this);
+
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
     connect(Core::ICore::instance(), SIGNAL(coreAboutToClose()), this, SLOT(coreAboutToClose()));
 }
@@ -99,9 +102,7 @@ void AlertPlugin::extensionsInitialized()
     messageSplash(tr("Initializing AlertPlugin..."));
 
     // At this point, user is connected
-    AlertCore *core = AlertCore::instance(this);
-    core->initialize();
-//    core->showIHMaccordingToType(IAlert::PATIENT_PRIMARY_PREVENTION_ALERTS);//NOTES
+    AlertCore::instance()->initialize();
 
     // Add here the DataPackPlugin::IDataPackListener objects to the pluginmanager object pool
 

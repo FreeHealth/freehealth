@@ -25,30 +25,36 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef SHOWALERTSIHM_H
-#define SHOWALERTSIHM_H
-
-#include "ui_ShowAlertsWidget.h"
-#include <QWidget>
+#ifndef ALERT_INTERNAL_ALERTSCRIPTMANAGER_H
+#define ALERT_INTERNAL_ALERTSCRIPTMANAGER_H
 
 /**
- * \file showalertsIHM.h
+ * \file alertscriptmanager.h
  * \author Eric MAEKER <eric.maeker@gmail.com>, Pierre-Marie Desombre <pm.desombre@gmail.com>
  * \version 0.8.0
- * \date 28 May 2012
+ * \date 30 June 2012
 */
 
 namespace Alert {
+class AlertCore;
+namespace Internal {
 
-class ShowAlerts : public QWidget, public Ui::ShowAlertsWidget
+class AlertScriptManager
 {
-    Q_OBJECT
+    friend class Alert::AlertCore;
+
+protected:
+    AlertScriptManager();
+
+    // type is a AlertScript::ScriptType
+//    QVariant execute(const int type);
+
+
 public:
-    ShowAlerts(QObject * parent = 0);
-    ~ShowAlerts();
+
 };
 
-}  // Alert
+} // namespace Internal
+} // namespace Alert
 
-#endif
-
+#endif // ALERT_INTERNAL_ALERTSCRIPTMANAGER_H

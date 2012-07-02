@@ -1,5 +1,10 @@
 #!/bin/bash
-# Copyright 2008-2012 Eric MAEKER
+#  The FreeMedForms project is a set of free, open source medical
+#  applications.
+#  (C) 2008-2012 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>
+#  License: BSD 3 clauses
+
+VERSION="0.1"
 
 MYSQL_PATH=""
 OUTPUT_FILE=""
@@ -34,6 +39,7 @@ showHelp()
 {
   echo $SCRIPT_NAME" helps devs to debug MySQL configuration problems."
   echo "This script is part of the FreeMedForms project."
+  echo "Version: $VERSION"
   echo "Usage : $SCRIPT_NAME -p rootpassword"
   echo "Options :"
   echo " -p  define the mysql root password"

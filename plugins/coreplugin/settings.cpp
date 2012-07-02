@@ -377,6 +377,7 @@ SettingsPrivate::SettingsPrivate(QObject *parent, const QString &appName, const 
 //        setPath(FMFPluginsPath, LIBRARY_BASENAME);
 
     if (Utils::isDebugWithoutInstallCompilation()) {
+        LOG("Compiled with the debug_and_release configuration");
         // DEBUG WITHOUT INSTALL BUILD
         QString res;
         if (Utils::isRunningOnMac())
