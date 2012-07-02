@@ -383,6 +383,7 @@ public:
     virtual void addScript(const AlertScript &script);
     virtual void setScripts(const QVector<AlertScript> &scripts);
 
+    bool remindLater();
     bool validateAlertWithCurrentUserAndConfirmationDialog();
     bool validateAlert(const QString &validatorUid, bool override, const QString overrideComment, const QDateTime &dateOfValidation);
     bool isUserValidated() const;

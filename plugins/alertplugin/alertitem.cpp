@@ -902,9 +902,34 @@ void AlertItem::setScripts(const QVector<AlertScript> &scripts)
 }
 
 /**
+  Removes the alert from the core\n
+  Also add one day to the current start and expiration dates.\n
+  Modification are not saved in the database.
+  \sa  Alert::AlertCore::removeAlert()
+*/
+bool AlertItem::remindLater()
+{
+    // move start date +1 day
+    QDate today = QDate::currentDate();
+    for(int i=0; i < d->_timings.count(); ++i) {
+        AlertTiming &timing = d->_timings[i];
+        if (timing.start().date() <= today) {
+            QDateTime from = timing.start();
+            QDateTime to = QDateTime(today.addDays(1), QTime(0,0,0));
+            timing.setStart(to);
+            timing.setExpiration(timing.expiration().addDays(from.daysTo(to)));
+        }
+    }
+    // inform the core
+    AlertCore::instance()->removeAlert(*this);
+    return true;
+}
+
+/**
   Validate an Alert::AlertItem with the current user. Return true if the alert was validated.\n
   The new state of the alert is not automatically saved into database, but
-  the core is informed of this modification. \sa Alert::AlertCore::updateAlert()
+  the core is informed of this modification.
+  \sa Alert::AlertCore::updateAlert()
 */
 bool AlertItem::validateAlertWithCurrentUserAndConfirmationDialog()
 {
