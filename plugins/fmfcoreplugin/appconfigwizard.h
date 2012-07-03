@@ -91,6 +91,7 @@ class ServerConfigPage: public QWizardPage
 public:
     ServerConfigPage(QWidget *parent = 0);
 
+    void initializePage();
     bool isComplete() const;
     bool validatePage();
     int nextId() const;

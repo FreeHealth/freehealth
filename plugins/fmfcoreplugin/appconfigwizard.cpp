@@ -423,6 +423,17 @@ ServerConfigPage::ServerConfigPage(QWidget *parent) :
     connect(serverWidget, SIGNAL(hostConnectionChanged(bool)), this, SIGNAL(completeChanged()));
 }
 
+void ServerConfigPage::initializePage()
+{
+    if (!QFileInfo(serverConfigurationSqlScript).exists()) {
+        Utils::warningMessageBox(tr("Missing files."),
+                                 tr("The configuration script is missing. You can not "
+                                    "configure the server without this script.\n\n"
+                                    "<b>Please contact the developement team.</b>"));
+    }
+}
+
+
 void ServerConfigPage::retranslate()
 {
     setTitle(tr("Network server configuration"));
