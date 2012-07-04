@@ -425,7 +425,7 @@ ServerConfigPage::ServerConfigPage(QWidget *parent) :
 
 void ServerConfigPage::initializePage()
 {
-    if (!QFileInfo(serverConfigurationSqlScript).exists()) {
+    if (!QFileInfo(serverConfigurationSqlScript()).exists()) {
         Utils::warningMessageBox(tr("Missing files."),
                                  tr("The configuration script is missing. You can not "
                                     "configure the server without this script.\n\n"
