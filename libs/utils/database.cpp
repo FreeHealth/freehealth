@@ -647,7 +647,6 @@ bool Database::createConnection(const QString &connectionName, const QString &no
             // can get connection to server ?
             DB.setDatabaseName(dbName);
             if (!DB.open()) {
-                LOG_ERROR_FOR("Database", tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(dbName).arg(DB.lastError().text()));
                 if (createOption == CreateDatabase) {
                     if (!createDatabase(connectionName, dbName, connector, createOption)) {
                         LOG_ERROR_FOR("Database", tkTr(Trans::Constants::DATABASE_1_CANNOT_BE_CREATED_ERROR_2).arg(dbName + "@" + connector.host()).arg(""));
