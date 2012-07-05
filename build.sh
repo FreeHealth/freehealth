@@ -335,11 +335,11 @@ launchApplication()
         # Launch the debug application with the good config file
         if [[ "$BUILD" == "debug" ]]; then
             if [[ $OSTYPE == linux-gnu ]]; then
-                $SCRIPT_PATH/bin/$BUNDLE_NAME/$BUNDLE_NAME_debug --config=../global_resources/$BUNDLE_NAME_config.ini
+                $SCRIPT_PATH/bin/$BUNDLE_NAME/$BUNDLE_NAME_debug --config=../../global_resources/$BUNDLE_NAME_config.ini
             elif [[ $OSTYPE == darwin* ]]; then
                 $SCRIPT_PATH/bin/$BUNDLE_NAME/$BUNDLE_NAME_debug.app/Contents/MacOs/$BUNDLE_NAME_debug --config=../../../../../global_resources/$BUNDLE_NAME_config.ini
             elif [[ $OSTYPE == freebsd ]]; then
-                $SCRIPT_PATH/bin/$BUNDLE_NAME/$BUNDLE_NAME_debug --config=../global_resources/$BUNDLE_NAME_config.ini
+                $SCRIPT_PATH/bin/$BUNDLE_NAME/$BUNDLE_NAME_debug --config=../../global_resources/$BUNDLE_NAME_config.ini
             fi
         elif [[ "$BUILD" == "linuxintegrated" ]]; then
             if [[ $OSTYPE == linux-gnu ]]; then
