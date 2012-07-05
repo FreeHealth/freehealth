@@ -95,7 +95,6 @@ void AccountBasePlugin::extensionsInitialized()
 
 =======*/
     AccountBase::instance()->initialize();
-    //TODO test datapack if is available
     DatapackBase::instance()->initialize();
     
 //>>>>>>> pmd
