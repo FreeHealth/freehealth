@@ -217,7 +217,7 @@ finalMessage()
         echo "./bin/"$BUNDLE_NAME"/"$BUNDLE_NAME"_debug.app/Contents/MacOs/"$BUNDLE_NAME"_debug --config=../../../../../global_resources/"$BUNDLE_NAME"_config.ini"
     elif [[ $OSTYPE == freebsd ]]; then
         echo "*** Start application with:"
-        echo "./bin/"$BUNDLE_NAME"/"$BUNDLE_NAME"_debug --config=../global_resources/"$BUNDLE_NAME"_config.ini"
+        echo "./bin/"$BUNDLE_NAME"/"$BUNDLE_NAME"_debug --config=../../global_resources/"$BUNDLE_NAME"_config.ini"
     fi
     return 0
 }
