@@ -97,6 +97,7 @@ namespace Constants {
         MP_REIMBOURSEMENT,
         MP_DATE,
         MP_OTHERS,
+        MP_COUNTRY,
         MP_MaxParam
     };
     enum TableBankDetails_Fields {

@@ -31,7 +31,7 @@
  ***************************************************************************/
 #include "accountbaseplugin.h"
 #include "accountbase.h"
-
+#include "datapackmodel.h"
 #include <utils/log.h>
 
 #include <coreplugin/dialogs/pluginaboutpage.h>
@@ -90,8 +90,15 @@ void AccountBasePlugin::extensionsInitialized()
     messageSplash(tr("Initializing accountancy plugin..."));
 
     // Initialize Account Database
+/*<<<<<<< HEAD
     AccountBase::instance()->initialize();
 
+=======*/
+    AccountBase::instance()->initialize();
+    //TODO test datapack if is available
+    DatapackBase::instance()->initialize();
+    
+//>>>>>>> pmd
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 }
 

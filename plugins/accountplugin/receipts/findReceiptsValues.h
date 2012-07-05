@@ -34,9 +34,10 @@
 #include "ui_findValuesGUI.h"
 
 #include <accountplugin/account_exporter.h>
-#include <accountplugin/receipts/xmlcategoriesparser.h>
+//#include <accountplugin/receipts/xmlcategoriesparser.h>
 
 #include <accountbaseplugin/medicalproceduremodel.h>
+#include <accountbaseplugin/datapackmodel.h>
 #include <accountbaseplugin/thesaurusmodel.h>
 #include <accountbaseplugin/constants.h>
 
@@ -51,6 +52,19 @@ namespace Ui{
 class ACCOUNT_EXPORT findReceiptsValues:public QDialog
 {
   Q_OBJECT
+  enum LabelsDatas
+  {
+      NAME = 0,
+      AMOUNT,
+      EXPLANATION,
+      OTHERS,
+      LabelsDatas_MaxParam
+      };
+  enum FatherSon
+  {
+      FATHER = 0,
+      SON
+    };
 public:
     QHash<QString,QString> returnValuesHash();
     findReceiptsValues(QWidget * parent = 0);
@@ -59,15 +73,18 @@ public:
     void clear();
 private:
     Ui::findValueDialog * ui;
-    xmlCategoriesParser * m_xmlParser;
     QSqlDatabase m_db;
     double m_modifier;
     QHash<int,QString> m_hashExplanations;
+    QHash<int,QString> m_otherInformations;
     QHash<QString,QString> m_hashValueschosen;
     void initialize();
     void fillComboCategories();
     bool tableViewIsFull(QAbstractItemModel * model);
     void enableShowNextTable();
+    //QString getDateWhereClause();
+    bool datapackIsAvalaible();
+    QHash<QString,QString> getHashFatherSonFromOthers(const QModelIndex & index);
     
 private slots:
     void fillListViewValues(const QString & comboItem);
@@ -75,11 +92,13 @@ private slots:
     void chooseValue();
     void deleteValue();
 //    void supprItemchosen(QListWidgetItem * item);
-    void showToolTip(const QModelIndex & index);
+    void showInformations(const QModelIndex & index);
     void on_lineEditFilter_textChanged(const QString & text);
     void showNext();
     void setModifSpinBox(QWidget*,QWidget*);
     void setModifier(double);
+    void chooseUserModel(bool);
+    void chooseDatapackModel(bool);
 };
 
 

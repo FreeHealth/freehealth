@@ -52,7 +52,7 @@ public:
     receiptsEngine();
     ~receiptsEngine();
     bool insertIntoAccount(const QHash<int,QVariant> &hashValues, const QString &userUuid);
-    QHash<QString,QVariant> getNamesAndValuesFromMP();
+    //QHash<QString,QVariant> getNamesAndValuesFromMP();
     bool insertInThesaurus(const QString &listOfValuesStr, const QString &userUuid);
     bool deleteFromThesaurus(const QString & data , const QString & userUid );
     bool addBoolTrue(QString & data);
@@ -66,7 +66,11 @@ public:
     QVariant getSiteUidFromSite(const QString & site);
     QVariant getInsuranceUidFromInsurance(const QString & insurance);
     QString getStringOfpreferredActAndHisValue(const QString & preferredAct);
+//<<<<<<< HEAD
     QHash<QString,QString> getPercentagesAccordingToUser();
+//=======
+    QString getJustDayBeforeLastRelease();
+//>>>>>>> pmd
 
 private:
     enum typeOfChoice {
@@ -77,6 +81,7 @@ private:
             OTHER,
             DUE
         };
+   QString getDateWhereClause();
    AccountModel *m_mpmodel;
    QSqlDatabase  m_db;
 };

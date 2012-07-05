@@ -64,11 +64,6 @@ static inline Core::ICommandLine *commandLine() {return Core::ICore::instance()-
 
 enum { WarnDebugMessage = false };
 
-/***********************************************************************/
-// TODO: this conflicts with the AccountDb::Constants::DB_ACCOUNTANCY
-static  QString freeaccount = "freeaccount";
-/***********************************************************************/
-
 using namespace AccountDB;
 using namespace Constants;
 using namespace Trans::ConstantTranslations;

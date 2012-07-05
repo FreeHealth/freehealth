@@ -217,6 +217,14 @@ bool ParseCcam::parseAndGetCsv()
 void ParseCcam::writeCsv()
 {
     QString pathToCcamCsv = qApp->applicationDirPath()+"/../texts/ccam.csv";
+    if (QFile::exists(pathToCcamCsv))
+    {
+    	  if (!QFile::remove(pathToCcamCsv))
+    	  {
+    	      qWarning() << __FILE__ << QString::number(__LINE__) << "UNABLE TO REMOVE ccam.csv" ;
+    	      return;
+    	      }
+    	  }
     QFile newCsvFile(pathToCcamCsv);
     pathLabel->setText(pathToCcamCsv);
     if (!newCsvFile.open(QIODevice::ReadWrite|QIODevice::Text))
@@ -272,11 +280,12 @@ void ParseCcam::writeMedicalProcedureCsv()
     	QString text = listOfLine[NGAP_TEXT];
     	QString price = listOfLine[NGAP_AMOUNT];
     	QString blob = listOfLine[NGAP_OTHERS];
+    	const QString country = "FR";
     	if (price == "Non pris en charge")
     	{
     		  price = "0.00";
     	    }
-    	QString line = "\""+QString::number(id)+"\";"+"\""+mpUuid+"\";"+"\""+mpUserUuid+"\";"+"\""+mpInsuranceUuid+"\";"+"\""+code+"\";"+"\""+text+"\";"+"\""+mpType+"\";"+"\""+price+"\";"+"\""+blob+"\";"+"\""+mpDate+"\"";
+    	QString line = "\""+QString::number(id)+"\";"+"\""+mpUuid+"\";"+"\""+mpUserUuid+"\";"+"\""+mpInsuranceUuid+"\";"+"\""+code+"\";"+"\""+text+"\";"+"\""+mpType+"\";"+"\""+price+"\";"+"\""+mpDate+"\";"+"\""+blob+"\";"+"\""+country+"";
     	listOfMedicalProcedureSineCcam << line;    	
         ++id;
         }
@@ -289,6 +298,7 @@ void ParseCcam::writeMedicalProcedureCsv()
     	  {
     	  	  qWarning() << __FILE__ << QString::number(__LINE__) << "UNABLE TO REMOVE OLD medical_procedure_fr_FR.csv " ;
     	  	  QMessageBox::warning(0,trUtf8("Warning"),trUtf8("UNABLE TO REMOVE OLD medical_procedure_fr_FR.csv "),QMessageBox::Ok);
+    	  	  return;
     	      }
         }
     QFile newCsvFile(qApp->applicationDirPath()+"/../texts/medical_procedure_fr_FR.csv");
@@ -321,11 +331,12 @@ void ParseCcam::writeMedicalProcedureCsv()
     	QString text = m_model->data(m_model->index(i,MODEL_TEXT),Qt::DisplayRole).toString();
     	QString price = m_model->data(m_model->index(i,MODEL_PRICE),Qt::DisplayRole).toString();
     	QString blob = m_model->data(m_model->index(i,MODEL_BLOB),Qt::DisplayRole).toString();
+    	const QString country = "FR";
     	if (price == "Non pris en charge")
     	{
     		  price = "0.00";
     	    }
-    	QString line = "\""+QString::number(MPId)+"\";"+"\""+mpUuid+"\";"+"\""+mpUserUuid+"\";"+"\""+mpInsuranceUuid+"\";"+"\""+code+"\";"+"\""+text+"\";"+"\""+mpType+"\";"+"\""+price+"\";"+"\""+blob+"\";"+"\""+mpDate+"\"\n";
+    	QString line = "\""+QString::number(MPId)+"\";"+"\""+mpUuid+"\";"+"\""+mpUserUuid+"\";"+"\""+mpInsuranceUuid+"\";"+"\""+code+"\";"+"\""+text+"\";"+"\""+mpType+"\";"+"\""+price+"\";"+"\""+mpDate+"\";"+"\""+blob+"\";"+"\""+country+"\"\n";
     	streamNew << line;
     	++id;
         }
@@ -368,6 +379,7 @@ QString ParseCcam::getXmlForBlobItem(QString& activity,
 void ParseCcam::createMPDatapackDatabase()
 {
     databaseButton->setEnabled(false);
+    QApplication::setOverrideCursor(Qt::WaitCursor);
     bool ret = true;
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE","MPDatabase");
     db.setDatabaseName("MPDatapack.db");
@@ -382,23 +394,24 @@ void ParseCcam::createMPDatapackDatabase()
     	  QSqlQuery q(db);
     	  const QString req = "CREATE table if not exists medical_procedure ("
     	                      "MP_ID integer PRIMARY KEY,"
-    	                      "MP_UID varchar(32) NULL,"
+    	                      "MP_UUID varchar(32) NULL,"
     	                      "MP_USER_UID varchar(32) NULL,"
     	                      "MP_INSURANCE_UID varchar(32) NULL,"
     	                      "NAME varchar(200) NULL,"
     	                      "ABSTRACT varchar(2000) NULL,"
     	                      "TYPE varchar(200) NULL,"
     	                      "AMOUNT double NULL,"    	                      
+    	                      "DATE date NULL,"
     	                      "OTHERS blob NULL,"
-    	                      "DATE date NULL);";
+    	                      "COUNTRY blob NULL);";
     	  if (!q.exec(req))
     	  {
     	  	  qWarning() << __FILE__ << QString::number(__LINE__) << q.lastError().text() ;
     	  	  QMessageBox::critical(0,trUtf8("Critical"),trUtf8("Unable to create table MP")+q.lastError().text(),QMessageBox::Ok);
+    	  	  ret = false;
     	      }
         }
-     model.setTable("medical_procedure");
-     model.select();
+
      QFile file(qApp->applicationDirPath()+"/../texts/medical_procedure_fr_FR.csv");
      if (!file.open(QIODevice::ReadOnly))
      {
@@ -407,41 +420,56 @@ void ParseCcam::createMPDatapackDatabase()
          }
      QTextStream stream(&file);
      int row = 0;
-     
-     while (!stream.atEnd())
+     //error
+     QFile log("logError.txt");
+     if (!log.open(QIODevice::WriteOnly))
      {
-     	++row;
+     	  qWarning() << __FILE__ << QString::number(__LINE__) << "unable to open logError" ;
+         }
+     QTextStream streamLogError(&log);
+     while (!stream.atEnd())
+     {     	
      	QString line = stream.readLine();
+     	if (line.contains("NAME"))
+     	{
+     		  continue;
+     	    }
+     	++row;
      	line = line.remove("\"");
      	QStringList listOfLineDatas = line.split(";");
-     	qDebug() << __FILE__ << QString::number(__LINE__) << " line =" << line ;
-     	if (!model.insertRows(row-1,1,QModelIndex()))
-        {
-     	    qWarning() << __FILE__ << QString::number(__LINE__) << model.query().lastError().text() ;
-     	    ret = false;
+     	//qDebug() << __FILE__ << QString::number(__LINE__) << " line =" << line ;
+     	QStringList listOfStrings;
+     	foreach(QString str,listOfLineDatas){
+     	    if (str.contains("'"))
+     	    {
+     	    	  str.replace("'","''");
+     	        }
+     	    listOfStrings << "'"+str+"'";
      	    }
-     	for (int col = 0; col < MP_MaxParam; ++col)
-     	{
-     	     if (!model.setData(model.index(row-1,col),listOfLineDatas[col],Qt::EditRole))
-             {
-     		  qWarning() << __FILE__ << QString::number(__LINE__) << model.query().lastError().text() ;
-     		  ret = false;     		  	  
-     		  }
-     	     if (!model.submit())
-     	     {
-                 qWarning() << __FILE__ << QString::number(__LINE__) << model.query().lastError().text() ;
-     		 ret = false;  	  
-     		 }
-     	     }//for
-         }//while
+        QSqlQuery qy(db);
+     	QString lineOfDatas = listOfStrings.join(",");
+        QString req = QString("INSERT INTO %1 (%2) VALUES(%3)")
+                     .arg("medical_procedure",
+                          "MP_ID,MP_UUID,MP_USER_UID,MP_INSURANCE_UID,NAME,ABSTRACT,TYPE,AMOUNT,DATE,OTHERS,COUNTRY",
+                          lineOfDatas);
+        if (!qy.exec(req))
+        {
+        	  qWarning() << __FILE__ << QString::number(__LINE__) << qy.lastError().text() ;
+        	  qWarning() << __FILE__ << QString::number(__LINE__) << lineOfDatas ;
+        	  return;        	  
+            }
+         }
          if (ret == true)
          {
-         	  if (!model.submitAll())
+         	 /* if (!model.submitAll())
          	  {
          	  	  QMessageBox::critical(0,trUtf8("Critical"),model.query().lastError().text(),QMessageBox::Ok);
          	      }
-         	  else{
+         	  else{*/
          	      qWarning() << __FILE__ << QString::number(__LINE__) << "MPDatapack FINISHED !" ;
-         	  }
-             }             
+         	      QApplication::restoreOverrideCursor();
+         	      log.close();
+         	  //}
+             }        
+             
 }

@@ -169,6 +169,7 @@ AccountBase::AccountBase(QObject *parent) :
     addField(Table_MedicalProcedure, MP_REIMBOURSEMENT, "REIMBOURSEMENT", FieldIsReal);
     addField(Table_MedicalProcedure, MP_DATE,           "DATE",           FieldIsDate);
     addField(Table_MedicalProcedure, MP_OTHERS,         "OTHERS",         FieldIsBlob);
+    addField(Table_MedicalProcedure, MP_COUNTRY,        "COUNTRY",         FieldIsBlob);
 
 //    "CREATE TABLE 	actes_disponibles ("  --> medical_procedure
 //            "id_acte_dispo  int(10)  	UNSIGNED  	       		NOT NULL  	 auto_increment ,"
@@ -549,7 +550,6 @@ AccountBase::AccountBase(QObject *parent) :
 //          "surname          varchar(50)               NULL,"
 //          "guid             varchar(6)                NOT NULL);";
 
-
     // Connect first run database creation requested
     connect(Core::ICore::instance(), SIGNAL(firstRunDatabaseCreation()), this, SLOT(onCoreFirstRunCreationRequested()));
 }
@@ -593,7 +593,8 @@ bool AccountBase::initialize()
         qDebug() << __FILE__ << QString::number(__LINE__) << "ISFIRSTVERSION";             
         if (fieldNamesSql(AccountDB::Constants::Table_MedicalProcedure).size()< AccountDB::Constants::MP_MaxParam)
         {
-        	  if (!alterTableForNewField(AccountDB::Constants::Table_MedicalProcedure, AccountDB::Constants::MP_OTHERS,FieldIsBlob, QString("NULL")))
+        	  if (   !alterTableForNewField(AccountDB::Constants::Table_MedicalProcedure, AccountDB::Constants::MP_OTHERS,FieldIsBlob, QString("NULL"))
+        	      && !alterTableForNewField(AccountDB::Constants::Table_MedicalProcedure, AccountDB::Constants::MP_COUNTRY,FieldIsBlob, QString("NULL")))
         	  {
         	  	  LOG_ERROR("Unable to add new field in table MP");
         	  	  return false;
@@ -636,13 +637,16 @@ void AccountBase::logChronos(bool log)
     d->m_LogChrono = log;
 }
 
-bool AccountBase::createDatabase(const QString &connectionName , const QString &dbName,
-                    const QString &pathOrHostName,
-                    TypeOfAccess , AvailableDrivers driver,
-                    const QString & login, const QString & pass,
-                    const int port,
-                    CreationOption
-                   )
+bool AccountBase::createDatabase(const QString &connectionName , 
+                                 const QString &dbName,
+                                 const QString &pathOrHostName,
+                                 TypeOfAccess , 
+                                 AvailableDrivers driver,
+                                 const QString & login, 
+                                 const QString & pass,
+                                 const int port,
+                                 CreationOption
+                                 )
 {
     // TODO: manage createOption
     if (connectionName != Constants::DB_ACCOUNTANCY)
