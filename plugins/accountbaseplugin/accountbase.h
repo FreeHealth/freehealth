@@ -66,19 +66,10 @@ public:
     ~AccountBase();
 
     // Initializer / Checkers
-/*<<<<<<< HEAD
-    
-    bool isInitialized() const;
-    void logChronos(bool log);
-
-private:
-=======*/
     bool initialize();
     bool isInitialized() const ;
     void logChronos(bool state);
-    //bool init();
 private:    
-//>>>>>>> pmd
     bool createDatabase(const QString &connectionName , const QString &dbName,
                         const QString &pathOrHostName,
                         TypeOfAccess access, AvailableDrivers driver,
