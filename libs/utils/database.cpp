@@ -1951,16 +1951,23 @@ bool Database::executeSQL(const QString &req, QSqlDatabase & DB)
   Line starting with '-- ' are ignored.\n
   All SQL commands must end with a ;
 */
-bool Database::executeSqlFile(const QString &connectionName, const QString &fileName, QProgressDialog *dlg)
+bool Database::executeSqlFile(const QString &connectionName, const QString &fileName, QProgressDialog *dlg, QString *error)
 {
+    if (error)
+        error->clear();
+
     if (!QFile::exists(fileName)) {
         LOG_ERROR_FOR("Database", tkTr(Trans::Constants::FILE_1_DOESNOT_EXISTS).arg(fileName));
+        if (error)
+            error->append(tkTr(Trans::Constants::FILE_1_DOESNOT_EXISTS).arg(fileName));
         return false;
     }
 
     QFile file(fileName);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         LOG_ERROR_FOR("Database", tkTr(Trans::Constants::FILE_1_ISNOT_READABLE).arg(fileName));
+        if (error)
+            error->append(tkTr(Trans::Constants::FILE_1_ISNOT_READABLE).arg(fileName));
         return false;
     }
 
@@ -1976,6 +1983,11 @@ bool Database::executeSqlFile(const QString &connectionName, const QString &file
     QSqlDatabase DB = QSqlDatabase::database(connectionName);
     if (!DB.isOpen()) {
         if (!DB.open()) {
+            LOG_ERROR_FOR("Database", tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+                          .arg(DB.connectionName()).arg(DB.lastError().text()));
+            if (error)
+                error->append(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+                              .arg(DB.connectionName()).arg(DB.lastError().text()));
             return false;
         }
     }
@@ -2020,6 +2032,8 @@ bool Database::executeSqlFile(const QString &connectionName, const QString &file
         QSqlQuery query(sql, DB);
         if (!query.isActive()) {
             LOG_QUERY_ERROR_FOR("Database", query);
+            if (error)
+                error->append("Query error: " + DB.lastError().text());
             qWarning() << DB.database() << DB.hostName() << DB.userName() << DB.isOpenError();
 //            DB.rollback();
             return false;
