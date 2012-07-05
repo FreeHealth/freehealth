@@ -5,7 +5,7 @@
 # This script helps on the compilation on unices machines
 #
 
-SCRIPT_VERSION=1.0
+SCRIPT_VERSION=1.0-1341512607  # see date "+%s"
 
 DEBUG_BUILD_COMMANDS=0  # set to 1 to only debug commands (no commands are executed)
 
