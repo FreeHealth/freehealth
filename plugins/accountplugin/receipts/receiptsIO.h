@@ -67,7 +67,7 @@ public:
     QVariant getInsuranceUidFromInsurance(const QString & insurance);
     QString getStringOfpreferredActAndHisValue(const QString & preferredAct);
     QHash<QString,QString> getPercentagesAccordingToUser();
-    String getJustDayBeforeLastRelease();
+    QString getJustDayBeforeLastRelease();
 
 private:
     enum typeOfChoice {
