@@ -31,6 +31,9 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/iuser.h>
 #include <coreplugin/ipatient.h>
+#include <coreplugin/itheme.h>
+#include <coreplugin/constants_icons.h>
+#include <coreplugin/constants_colors.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -52,6 +55,7 @@ using namespace Trans::ConstantTranslations;
 
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
+static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 
 namespace {
 const char * const XML_ROOT_TAG = "Alert";
@@ -83,6 +87,8 @@ public:
         Priority,
         OverrideRequiresUserComment,
         MustBeRead,
+        RemindLater,
+        Editable,
         StyleSheet
     };
     enum Tr {
@@ -97,6 +103,8 @@ public:
         addNonTranslatableExtraData(Priority, "prior");
         addNonTranslatableExtraData(OverrideRequiresUserComment, "overrideComment");
         addNonTranslatableExtraData(MustBeRead, "mustBeRead");
+        addNonTranslatableExtraData(RemindLater, "remindLater");
+        addNonTranslatableExtraData(Editable, "editable");
         addNonTranslatableExtraData(StyleSheet, "styleSheet");
         addTranslatableExtraData(Comment, "comment");
     }
@@ -120,7 +128,9 @@ class AlertItemPrivate : public Trans::MultiLingualClass<AlertValueBook>
 public:
     AlertItemPrivate(AlertItem *parent) :
         _id(-1),
-        _valid(true), _modified(false), _overrideRequiresUserComment(false), _mustBeRead(false),
+        _valid(true), _modified(false),
+        _editable(true), _overrideRequiresUserComment(false),
+        _mustBeRead(false), _remindAllowed(false),
         _viewType(AlertItem::StaticAlert),
         _contentType(AlertItem::ApplicationNotification),
         _priority(AlertItem::Medium),
@@ -199,6 +209,8 @@ public:
         _valid = descr.data(AlertXmlDescription::Validity).toInt();
         _overrideRequiresUserComment = descr.data(AlertXmlDescription::OverrideRequiresUserComment).toInt();
         _mustBeRead = descr.data(AlertXmlDescription::MustBeRead).toInt();
+        _remindAllowed = descr.data(AlertXmlDescription::RemindLater).toInt();
+        _editable = descr.data(AlertXmlDescription::Editable).toInt();
         viewTypeFromXml(descr.data(AlertXmlDescription::ViewType).toString());
         contentTypeFromXml(descr.data(AlertXmlDescription::ContentType).toString());
         priorityFromXml(descr.data(AlertXmlDescription::Priority).toString());
@@ -229,7 +241,7 @@ public:
 public:
     QString _uid, _pass, _themedIcon, _css, _extraXml;
     int _id;
-    bool _valid, _modified, _overrideRequiresUserComment, _mustBeRead;
+    bool _valid, _modified, _editable, _overrideRequiresUserComment, _mustBeRead, _remindAllowed;
     AlertItem::ViewType _viewType;
     AlertItem::ContentType _contentType;
     AlertItem::Priority _priority;
@@ -567,7 +579,15 @@ bool AlertItem::mustBeRead() const
     return d->_mustBeRead;
 }
 
-// TODO : xxx condition() const = 0;
+bool AlertItem::isRemindLaterAllowed() const
+{
+    return d->_remindAllowed;
+}
+
+bool AlertItem::isEditable() const
+{
+    return d->_editable;
+}
 
 void AlertItem::setViewType(AlertItem::ViewType type)
 {
@@ -593,6 +613,16 @@ void AlertItem::setOverrideRequiresUserComment(bool required)
 void AlertItem::setMustBeRead(bool mustberead)
 {
     d->_mustBeRead = mustberead;
+}
+
+void AlertItem::setRemindLaterAllowed(bool allowed)
+{
+    d->_remindAllowed = allowed;
+}
+
+void AlertItem::setEditable(bool editable)
+{
+    d->_editable = editable;
 }
 
 QDateTime AlertItem::creationDate() const
@@ -633,6 +663,114 @@ QString AlertItem::styleSheet() const
 void AlertItem::setStyleSheet(const QString &css)
 {
     d->_css = css;
+}
+
+/** Returns the background color related to the Alert::AlertItem::priority(). */
+QString AlertItem::priorityBackgroundColor() const
+{
+    QString background;
+    switch (d->_priority) {
+    case AlertItem::Low: background = Core::Constants::COLOR_BACKGROUND_ALERT_HIGH; break;
+    case AlertItem::Medium: background = Core::Constants::COLOR_BACKGROUND_ALERT_MEDIUM; break;
+    case AlertItem::High: background = Core::Constants::COLOR_BACKGROUND_ALERT_LOW; break;
+    }
+    return background;
+}
+
+/** Return the icon corresponding to the \e priority. */
+QIcon AlertItem::priorityBigIcon(Priority priority)
+{
+    QString icon;
+    switch (priority) {
+    case AlertItem::High: icon = Core::Constants::ICONCRITICAL; break;
+    case AlertItem::Medium: icon = Core::Constants::ICONWARNING; break;
+    case AlertItem::Low: icon = Core::Constants::ICONINFORMATION; break;
+    }
+    return theme()->icon(icon, Core::ITheme::BigIcon).pixmap(64,64);
+}
+
+/** Return the priority's icon corresponding of the alert. */
+QIcon AlertItem::priorityBigIcon() const
+{
+    return priorityBigIcon(d->_priority);
+}
+
+QString AlertItem::htmlToolTip(bool showCategory) const
+{
+    QString toolTip;
+    // category, label, priority
+    QString header;
+    if (showCategory)
+        header = QString("<table border=0 margin=0 width=100%>"
+                         "<tr>"
+                         "<td valign=middle width=70% style=\"font-weight:bold\">%1</td>"
+                         "<td valign=middle align=center style=\"font-weight:bold;background-color:%3;text-transform:uppercase\">%4</td>"
+                         "</tr>"
+                         "<tr>"
+                         "<td colspan=2 style=\"font-weight:bold;color:#101010;padding-left:10px\">%2</td>"
+                         "</tr>"
+                         "</table>")
+                .arg(category())
+                .arg(label())
+                .arg(priorityBackgroundColor())
+                .arg(priorityToString())
+                ;
+    else
+        header = QString("<table border=0 margin=0 width=100%>"
+                         "<tr>"
+                         "<td valign=middle width=70% style=\"font-weight:bold\">%1</td>"
+                         "<td valign=middle align=center style=\"font-weight:bold;background-color:%2;text-transform:uppercase\">%3</td>"
+                         "</tr>"
+                         "</table>")
+                .arg(label())
+                .arg(priorityBackgroundColor())
+                .arg(priorityToString())
+                ;
+
+    QString descr;
+    if (!description().isEmpty()) {
+        descr += QString("<span style=\"color:black\">%1</span>"
+                         "<hr align=center width=50% color=lightgray size=1>").arg(description());
+    }
+
+    QStringList related;
+    for(int i = 0; i < relations().count(); ++i) {
+        const AlertRelation &rel = relationAt(i);
+        related += QString("%1").arg(rel.relationTypeToString());
+    }
+
+    QString content;
+    if (!related.isEmpty())
+        content += QString("<span style=\"font-size:small;color:#303030\">%1</span><br />").arg(related.join("<br />"));
+
+    QStringList tim;
+    for(int i =0; i < timings().count(); ++i) {
+        AlertTiming &timing = timingAt(i);
+        if (timing.isCycling()) {
+            // TODO: create a AlertTiming::cycleDelayToString() and use it here
+            tim << QString(QApplication::translate("Alert::AlertItem", "Started on: %1<br />Cycling every: %2<br />Expires on: %3"))
+                       .arg(timing.cycleStartDate().toString(QLocale().dateFormat()))
+                       .arg(timing.cyclingDelayInDays())
+                       .arg(timing.cycleExpirationDate().toString(QLocale().dateFormat()));
+        } else {
+            tim << QString(QApplication::translate("Alert::AlertItem", "Started on: %1<br />Expires on: %2"))
+                       .arg(timing.start().toString(QLocale().dateFormat()))
+                       .arg(timing.expiration().toString(QLocale().dateFormat()));
+        }
+    }
+    if (!tim.isEmpty())
+        content += QString("<span style=\"font-size:small;color:#303030\">%1</span>").arg(tim.join("<br />"));
+
+    toolTip = QString("%1"
+                      "<table border=0 cellpadding=0 cellspacing=0 width=100%>"
+                      "<tr><td style=\"padding-left:10px;\">%2</td></tr>"
+                      "<tr><td align=center>%3</td></tr>"
+                      "</table>")
+            .arg(header)
+            .arg(descr)
+            .arg(content)
+            ;
+    return toolTip;
 }
 
 QString AlertItem::extraXml() const
@@ -756,10 +894,42 @@ void AlertItem::addScript(const AlertScript &script)
     d->_scripts << script;
 }
 
+void AlertItem::setScripts(const QVector<AlertScript> &scripts)
+{
+    d->_modified = true;
+    d->_scripts.clear();
+    d->_scripts = scripts;
+}
+
+/**
+  Removes the alert from the core\n
+  Also add one day to the current start and expiration dates.\n
+  Modification are not saved in the database.
+  \sa  Alert::AlertCore::removeAlert()
+*/
+bool AlertItem::remindLater()
+{
+    // move start date +1 day
+    QDate today = QDate::currentDate();
+    for(int i=0; i < d->_timings.count(); ++i) {
+        AlertTiming &timing = d->_timings[i];
+        if (timing.start().date() <= today) {
+            QDateTime from = timing.start();
+            QDateTime to = QDateTime(today.addDays(1), QTime(0,0,0));
+            timing.setStart(to);
+            timing.setExpiration(timing.expiration().addDays(from.daysTo(to)));
+        }
+    }
+    // inform the core
+    AlertCore::instance()->removeAlert(*this);
+    return true;
+}
+
 /**
   Validate an Alert::AlertItem with the current user. Return true if the alert was validated.\n
   The new state of the alert is not automatically saved into database, but
-  the core is informed of this modification. \sa Alert::AlertCore::updateAlert()
+  the core is informed of this modification.
+  \sa Alert::AlertCore::updateAlert()
 */
 bool AlertItem::validateAlertWithCurrentUserAndConfirmationDialog()
 {
@@ -1053,6 +1223,8 @@ QString AlertItem::toXml() const
     d->descr.setData(Internal::AlertXmlDescription::Priority, d->priorityToXml());
     d->descr.setData(Internal::AlertXmlDescription::OverrideRequiresUserComment, d->_overrideRequiresUserComment);
     d->descr.setData(Internal::AlertXmlDescription::MustBeRead, d->_mustBeRead);
+    d->descr.setData(Internal::AlertXmlDescription::RemindLater, d->_remindAllowed);
+    d->descr.setData(Internal::AlertXmlDescription::Editable, d->_editable);
     d->descr.setData(Internal::AlertXmlDescription::StyleSheet, d->_css);
     d->descr.setData(Internal::AlertXmlDescription::GeneralIcon, d->_themedIcon);
 
@@ -1335,6 +1507,25 @@ AlertTiming AlertTiming::fromDomElement(const QDomElement &element)
     return timing;
 }
 
+/** Return a human readable \e type property */
+QString AlertScript::typeToString(ScriptType type)
+{
+    switch (type) {
+    case CheckValidityOfAlert: return QApplication::translate("Alert::AlertScript", "Check alert validity");
+    case CyclingStartDate: return QApplication::translate("Alert::AlertScript", "Compute cycling starting date");
+    case BeforeAlert: return QApplication::translate("Alert::AlertScript", "Before showing the alert");
+    case DuringAlert: return QApplication::translate("Alert::AlertScript", "During the alert presentation");
+    case AfterAlert: return QApplication::translate("Alert::AlertScript", "After showing the alert");
+    case OnOverride: return QApplication::translate("Alert::AlertScript", "On alert override");
+    case OnPatientAboutToChange: return QApplication::translate("Alert::AlertScript", "On patient about to change");
+    case OnUserAboutToChange: return QApplication::translate("Alert::AlertScript", "On user about to change");
+    case OnEpisodeAboutToSave: return QApplication::translate("Alert::AlertScript", "On episode about to save");
+    case OnEpisodeLoaded: return QApplication::translate("Alert::AlertScript", "On episode loaded");
+    }
+    return QString::null;
+}
+
+/** Return the XML content corresponding to the AlertScript::ScriptType \e type */
 QString AlertScript::typeToXml(ScriptType type)
 {
     switch (type) {
@@ -1344,10 +1535,15 @@ QString AlertScript::typeToXml(ScriptType type)
     case DuringAlert: return "during";
     case AfterAlert: return "after";
     case OnOverride: return "onoverride";
+    case OnPatientAboutToChange: return "onpatientabouttochange";
+    case OnUserAboutToChange: return "onuserabouttochange";
+    case OnEpisodeAboutToSave: return "onepisodeabouttosave";
+    case OnEpisodeLoaded: return "onepisodeloaded";
     }
     return QString::null;
 }
 
+/** Return the AlertScript::ScriptType from XML content */
 AlertScript::ScriptType AlertScript::typeFromXml(const QString &xml)
 {
     if (xml.compare("check", Qt::CaseInsensitive)==0)
@@ -1362,9 +1558,18 @@ AlertScript::ScriptType AlertScript::typeFromXml(const QString &xml)
         return DuringAlert;
     else if (xml.compare("onoverride", Qt::CaseInsensitive)==0)
         return OnOverride;
+    else if (xml.compare("onpatientabouttochange", Qt::CaseInsensitive)==0)
+        return OnPatientAboutToChange;
+    else if (xml.compare("onuserabouttochange", Qt::CaseInsensitive)==0)
+        return OnUserAboutToChange;
+    else if (xml.compare("onepisodeabouttosave", Qt::CaseInsensitive)==0)
+        return OnEpisodeAboutToSave;
+    else if (xml.compare("onepisodeloaded", Qt::CaseInsensitive)==0)
+        return OnEpisodeLoaded;
     return CheckValidityOfAlert;
 }
 
+/** Transform the script to XML */
 QString AlertScript::toXml() const
 {
     // TODO: manage "<" in script
@@ -1380,6 +1585,7 @@ QString AlertScript::toXml() const
             ;
 }
 
+/** Create a script from XML */
 AlertScript AlertScript::fromDomElement(const QDomElement &element)
 {
     if (element.tagName().compare(::XML_SCRIPT_ELEMENTTAG, Qt::CaseInsensitive)!=0)
@@ -1393,6 +1599,13 @@ AlertScript AlertScript::fromDomElement(const QDomElement &element)
     return script;
 }
 
+/** Sort scripts by type */
+bool AlertScript::operator<(const AlertScript &script) const
+{
+    return this->type() < script.type();
+}
+
+/** Transform the validation to XML */
 QString AlertValidation::toXml() const
 {
     QString comment = _userComment;
@@ -1407,6 +1620,7 @@ QString AlertValidation::toXml() const
             ;
 }
 
+/** Create a validation from XML */
 AlertValidation AlertValidation::fromDomElement(const QDomElement &element)
 {
     if (element.tagName().compare(::XML_VALIDATION_ELEMENTTAG, Qt::CaseInsensitive)!=0)
@@ -1420,14 +1634,36 @@ AlertValidation AlertValidation::fromDomElement(const QDomElement &element)
     return val;
 }
 
+/** Return a human readable string of the current relation. */
 QString AlertRelation::relationTypeToString() const
 {
-    // TODO: improve the translations
     switch (_related) {
-    case RelatedToPatient: return Utils::firstLetterUpperCase(tkTr(Trans::Constants::RELATED_TO_CURRENT_PATIENT));
+    case RelatedToPatient:
+    {
+        if (patient()) {
+            if (patient()->uuid().compare(_relatedUid, Qt::CaseInsensitive)==0) {
+                return Utils::firstLetterUpperCase(tkTr(Trans::Constants::RELATED_TO_CURRENT_PATIENT));
+            } else {
+                return Utils::firstLetterUpperCase(tkTr(Trans::Constants::RELATED_TO_PATIENT_1)
+                                                   .arg(patient()->fullPatientName(_relatedUid).value(_relatedUid)));
+            }
+        }
+        return Utils::firstLetterUpperCase(tkTr(Trans::Constants::RELATED_TO_CURRENT_PATIENT));
+    }
     case RelatedToFamily: return tkTr(Trans::Constants::RELATED_TO_PATIENT_FAMILY_1).arg("");
     case RelatedToAllPatients: return Utils::firstLetterUpperCase(tkTr(Trans::Constants::RELATED_TO_ALL_PATIENTS));
-    case RelatedToUser: return Utils::firstLetterUpperCase(tkTr(Trans::Constants::RELATED_TO_CURRENT_USER));
+    case RelatedToUser:
+    {
+        if (user()) {
+            if (user()->uuid().compare(_relatedUid, Qt::CaseInsensitive)==0) {
+                return Utils::firstLetterUpperCase(tkTr(Trans::Constants::RELATED_TO_CURRENT_USER));
+            } else {
+                return Utils::firstLetterUpperCase(tkTr(Trans::Constants::RELATED_TO_USER_1)
+                                                   .arg(user()->fullNameOfUser(_relatedUid)));
+            }
+        }
+        return Utils::firstLetterUpperCase(tkTr(Trans::Constants::RELATED_TO_CURRENT_USER));
+    }
     case RelatedToAllUsers: return Utils::firstLetterUpperCase(tkTr(Trans::Constants::RELATED_TO_ALL_USERS));
     case RelatedToUserGroup: return Utils::firstLetterUpperCase(tkTr(Trans::Constants::RELATED_TO_USER_GROUP_1).arg(""));
     case RelatedToApplication: return Utils::firstLetterUpperCase(tkTr(Trans::Constants::RELATED_TO_APPLICATION));
@@ -1435,6 +1671,7 @@ QString AlertRelation::relationTypeToString() const
     return QString::null;
 }
 
+/** Transform the relation to XML */
 QString AlertRelation::toXml() const
 {
     if (_relatedUid.isEmpty())
@@ -1451,6 +1688,7 @@ QString AlertRelation::toXml() const
             ;
 }
 
+/** Create a relation from XML */
 AlertRelation AlertRelation::fromDomElement(const QDomElement &element)
 {
     if (element.tagName().compare(::XML_RELATED_ELEMENTTAG, Qt::CaseInsensitive)!=0)

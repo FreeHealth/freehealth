@@ -44,7 +44,6 @@ namespace Internal {
 class AlertCorePrivate;
 class AlertPlugin;
 }
-class AlertManager;
 
 class AlertCore : public QObject
 {
@@ -63,8 +62,7 @@ public:
     };
     Q_DECLARE_FLAGS(AlertsToCheck, AlertToCheck)
 
-
-    static AlertCore *instance(QObject *parent = 0);
+    static AlertCore *instance();
     ~AlertCore();
 
     // Getters/Setters
@@ -78,6 +76,7 @@ public:
     bool checkAlerts(AlertsToCheck check);
     bool registerAlert(const AlertItem &item);
     bool updateAlert(const AlertItem &item);
+    bool removeAlert(const AlertItem &item);
 
     //    bool executeAlert(const AlertItem &alert);  // add a delay ?
 
@@ -88,8 +87,6 @@ public:
     //    bool editAlert(AlertItem &alert);
     //    bool createAlert(AlertItem &alert);
 
-
-    void showIHMaccordingToType(int type = 0);
 
 Q_SIGNALS:
 //    void alertItemUpdated(const AlertItem &alert);

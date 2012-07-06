@@ -49,8 +49,9 @@ class ParseCcam : public QWidget, Ui::ParseWidget {
         MP_ABSTRACT,
         MP_TYPE,
         MP_AMOUNT,
-        MP_OTHERS,
         MP_DATE,
+        MP_OTHERS,
+        MP_COUNTRY,
         MP_MaxParam
         };
     enum XmlItems

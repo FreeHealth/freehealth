@@ -114,7 +114,7 @@ bool receiptsEngine::insertIntoAccount(const QHash<int,QVariant> &hashValues, co
     return ret;
 }
 
-QHash<QString,QVariant> receiptsEngine::getNamesAndValuesFromMP(){//obsolete
+/*QHash<QString,QVariant> receiptsEngine::getNamesAndValuesFromMP(){//obsolete
     QHash<QString,QVariant> hash;
     MedicalProcedureModel model(this);
     int rows = model.rowCount(QModelIndex());
@@ -127,7 +127,7 @@ QHash<QString,QVariant> receiptsEngine::getNamesAndValuesFromMP(){//obsolete
     	hash.insert(name,value);
     }
     return hash;
-}
+}*/
 
 bool receiptsEngine::insertInThesaurus(const QString &listOfValuesStr, const QString &userUuid){
     bool ret = true;
@@ -214,9 +214,9 @@ double receiptsEngine::getMinDistanceValue(const QString & data){
 }
 
 QHash<int,QVariant> receiptsEngine::getListOfpreferredValues(QString & userUuid,
-                                                           QString & patientUid,
-                                                           QString & patientName,
-                                                           int choice){
+                                                             QString & patientUid,
+                                                             QString & patientName,
+                                                             int choice){
     QHash<int,QVariant> hash;
     double cash = 0.00;
     double check = 0.00;
@@ -237,7 +237,6 @@ QHash<int,QVariant> receiptsEngine::getListOfpreferredValues(QString & userUuid,
     model.setFilter(filter);
     model.select();
     QString data = model.data(model.index(0,THESAURUS_VALUES)).toString();
-    MedicalProcedureModel MPmodel(this);
     double value = 0.00;
     QString MPfilter ;
     QStringList list;
@@ -289,8 +288,7 @@ QHash<int,QVariant> receiptsEngine::getListOfpreferredValues(QString & userUuid,
             break;
         default :
             break;    
-        }
-    
+        }    
          
     QVariant comment = QVariant(trUtf8("preferred act"));
     hash.insert(ACCOUNT_UID,"UID");
@@ -316,7 +314,7 @@ QHash<int,QVariant> receiptsEngine::getListOfpreferredValues(QString & userUuid,
 }
 
 QHash<QString,double> receiptsEngine::getFilteredValueFromMedicalProcedure(const QString & act, 
-                                                                              const QString & field){
+                                                                           const QString & field){
     QHash<QString,double> hash;
     const QString baseName = "medical_procedure";
     const QString name = act;
@@ -455,4 +453,29 @@ QHash<QString,QString> receiptsEngine::getPercentagesAccordingToUser()
     	hash.insert(type,value);
     }
     return hash;
+}
+
+QString receiptsEngine::getJustDayBeforeLastRelease()
+{
+    QString lastDateBefore;
+    AccountDB::MedicalProcedureModel MPmodel(this);
+    QStringList listOfDates;
+        for (int r = 0; r < MPmodel.rowCount(); ++r)
+        {
+            QString date = MPmodel.data(MPmodel.index(r,AccountDB::Constants::MP_DATE),Qt::DisplayRole).toString();
+            listOfDates << date;
+            }
+    listOfDates.removeDuplicates();
+    listOfDates.sort();
+    QDate lastDate = QDate::fromString("1903-01-01","yyyy-MM-dd");
+    foreach(QString dateStr,listOfDates){
+        QDate date = QDate::fromString(dateStr,"yyyy-MM-dd");
+        if (date > lastDate)
+        {
+        	  lastDate = date;
+            }
+        }    
+    lastDateBefore = lastDate.addDays(-1).toString("yyyy-MM-dd");  
+    return lastDateBefore;
+//>>>>>>> pmd
 }

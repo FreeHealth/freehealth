@@ -132,7 +132,11 @@ public:
         BeforeAlert,
         DuringAlert,
         AfterAlert,
-        OnOverride
+        OnOverride,
+        OnPatientAboutToChange,
+        OnUserAboutToChange,
+        OnEpisodeAboutToSave,
+        OnEpisodeLoaded
     };
 
     AlertScript() : _id(-1), _valid(true), _modified(false) {}
@@ -161,10 +165,13 @@ public:
     virtual QString script() const {return _script;}
     virtual void setScript(const QString &script) {_modified=true; _script=script;}
 
+    static QString typeToString(ScriptType type);
     static QString typeToXml(ScriptType type);
     static ScriptType typeFromXml(const QString &xml);
     virtual QString toXml() const;
     static AlertScript fromDomElement(const QDomElement &element);
+
+    bool operator<(const AlertScript &script) const;
 
 private:
     int _id;
@@ -328,14 +335,16 @@ public:
     virtual QString priorityToString() const;
     virtual bool isOverrideRequiresUserComment() const;
     virtual bool mustBeRead() const;
-    // TODO : virtual xxx condition() const = 0;
+    virtual bool isRemindLaterAllowed() const;
+    virtual bool isEditable() const;
 
     virtual void setViewType(ViewType type);
     virtual void setContentType(ContentType content);
     virtual void setPriority(Priority priority);
     virtual void setOverrideRequiresUserComment(bool required);
     virtual void setMustBeRead(bool mustberead);
-    // TODO : virtual void setCondition(...);
+    virtual void setRemindLaterAllowed(bool allowed);
+    virtual void setEditable(bool editable);
 
     virtual QDateTime creationDate() const;
     virtual void setCreationDate(const QDateTime &dt);
@@ -346,6 +355,10 @@ public:
     virtual void setThemedIcon(const QString &icon);
     virtual QString styleSheet() const;
     virtual void setStyleSheet(const QString &css);
+    virtual QString priorityBackgroundColor() const;
+    static QIcon priorityBigIcon(Priority priority);
+    virtual QIcon priorityBigIcon() const;
+    virtual QString htmlToolTip(bool showCategory = true) const;
 
     virtual QString extraXml() const;
     virtual void setExtraXml(const QString &xml);
@@ -368,7 +381,9 @@ public:
     virtual QVector<AlertScript> &scripts() const;
     virtual AlertScript &scriptAt(int id) const;
     virtual void addScript(const AlertScript &script);
+    virtual void setScripts(const QVector<AlertScript> &scripts);
 
+    bool remindLater();
     bool validateAlertWithCurrentUserAndConfirmationDialog();
     bool validateAlert(const QString &validatorUid, bool override, const QString overrideComment, const QDateTime &dateOfValidation);
     bool isUserValidated() const;

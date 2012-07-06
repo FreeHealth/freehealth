@@ -33,6 +33,7 @@
 
 #include <QToolButton>
 #include <QLabel>
+#include <QMenu>
 
 namespace Alert {
 class AlertItem;
@@ -49,14 +50,17 @@ public:
 private Q_SLOTS:
     void validateAlert();
     void editAlert();
+    void remindAlert();
     void overrideAlert();
 
 private:
     void retranslateUi();
     void changeEvent(QEvent *event);
+    void hideEvent(QHideEvent *event);
 
 private:
-    QAction *aCategory, *aLabel, *aValidate, *aEdit, *aOverride;
+    QAction *aCategory, *aLabel, *aValidate, *aEdit, *aOverride, *aRemindLater;
+    QMenu *_menu;
     AlertItem _item;
 };
 

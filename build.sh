@@ -5,7 +5,7 @@
 # This script helps on the compilation on unices machines
 #
 
-SCRIPT_VERSION=1.0
+SCRIPT_VERSION=1.0-1341512607  # see date "+%s"
 
 DEBUG_BUILD_COMMANDS=0  # set to 1 to only debug commands (no commands are executed)
 
@@ -217,7 +217,7 @@ finalMessage()
         echo "./bin/"$BUNDLE_NAME"/"$BUNDLE_NAME"_debug.app/Contents/MacOs/"$BUNDLE_NAME"_debug --config=../../../../../global_resources/"$BUNDLE_NAME"_config.ini"
     elif [[ $OSTYPE == freebsd ]]; then
         echo "*** Start application with:"
-        echo "./bin/"$BUNDLE_NAME"/"$BUNDLE_NAME"_debug --config=../global_resources/"$BUNDLE_NAME"_config.ini"
+        echo "./bin/"$BUNDLE_NAME"/"$BUNDLE_NAME"_debug --config=../../global_resources/"$BUNDLE_NAME"_config.ini"
     fi
     return 0
 }
@@ -335,11 +335,11 @@ launchApplication()
         # Launch the debug application with the good config file
         if [[ "$BUILD" == "debug" ]]; then
             if [[ $OSTYPE == linux-gnu ]]; then
-                $SCRIPT_PATH/bin/$BUNDLE_NAME/$BUNDLE_NAME_debug --config=../global_resources/$BUNDLE_NAME_config.ini
+                $SCRIPT_PATH/bin/$BUNDLE_NAME/$BUNDLE_NAME_debug --config=../../global_resources/$BUNDLE_NAME_config.ini
             elif [[ $OSTYPE == darwin* ]]; then
                 $SCRIPT_PATH/bin/$BUNDLE_NAME/$BUNDLE_NAME_debug.app/Contents/MacOs/$BUNDLE_NAME_debug --config=../../../../../global_resources/$BUNDLE_NAME_config.ini
             elif [[ $OSTYPE == freebsd ]]; then
-                $SCRIPT_PATH/bin/$BUNDLE_NAME/$BUNDLE_NAME_debug --config=../global_resources/$BUNDLE_NAME_config.ini
+                $SCRIPT_PATH/bin/$BUNDLE_NAME/$BUNDLE_NAME_debug --config=../../global_resources/$BUNDLE_NAME_config.ini
             fi
         elif [[ "$BUILD" == "linuxintegrated" ]]; then
             if [[ $OSTYPE == linux-gnu ]]; then

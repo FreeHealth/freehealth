@@ -56,7 +56,7 @@ public:
         OverrideNeedsComment = 0x00000200,
         CSS                  = 0x00000400,
         ExtraXml             = 0x00000800,
-        Script               = 0x00001000,
+        Scripts              = 0x00001000,
         Types                = Relation | ViewType | ContentType | Priority | OverrideNeedsComment,
         FullDescription      = Label | Category | Description,
         AllParams            = 0xFFFFFFFF

@@ -34,6 +34,7 @@
 #include <coreplugin/iuser.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/constants_icons.h>
+#include <coreplugin/constants_colors.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -44,6 +45,7 @@
 #include <QEvent>
 #include <QAction>
 #include <QMenu>
+#include <QHideEvent>
 #include <QInputDialog>
 
 using namespace Alert;
@@ -68,80 +70,6 @@ static QIcon getIcon(const AlertItem &item)
     return theme()->icon(item.themedIcon(), Core::ITheme::SmallIcon);
 }
 
-static QString getToolTip(const AlertItem &item)
-{
-    QString toolTip;
-
-    QString background;
-    switch (item.priority()) {
-    case AlertItem::Low: background = "#FFC8C8"; break;
-    case AlertItem::Medium: background = "#FF6464"; break;
-    case AlertItem::High: background = "#FF3232"; break;
-    }
-
-    // category, label, priority
-    QString header;
-    header = QString("<table border=0 margin=0 width=100%>"
-                      "<tr>"
-                      "<td valign=middle width=70% style=\"font-weight:bold\">%1</td>"
-                      "<td valign=middle align=center style=\"font-weight:bold;background-color:%3;text-transform:uppercase\">%4</td>"
-                      "</tr>"
-                      "<tr>"
-                      "<td colspan=2 style=\"font-weight:bold;color:#101010;padding-left:10px\">%2</td>"
-                      "</tr>"
-                      "</table>")
-            .arg(item.category())
-            .arg(item.label())
-            .arg(background)
-            .arg(item.priorityToString())
-            ;
-
-    QString descr;
-    if (!item.description().isEmpty()) {
-        descr += QString("<span style=\"color:black\">%1</span>"
-                         "<hr align=center width=50% color=lightgray size=1>").arg(item.description());
-    }
-
-    QStringList related;
-    for(int i = 0; i < item.relations().count(); ++i) {
-        const AlertRelation &rel = item.relationAt(i);
-        related += QString("%1").arg(rel.relationTypeToString());
-    }
-
-    QString content;
-    if (!related.isEmpty())
-        content += QString("<span style=\"color:#303030\">%1</span><br />").arg(related.join("<br />"));
-
-    QStringList timings;
-    for(int i =0; i < item.timings().count(); ++i) {
-        AlertTiming &timing = item.timingAt(i);
-        if (timing.isCycling()) {
-            // TODO: create a AlertTiming::cycleDelayToString() and use it here
-            timings << QString(QApplication::translate("Alert::StaticAlertWidget", "Started on: %1<br />Cycling every: %2<br />Expires on: %3"))
-                       .arg(timing.cycleStartDate().toString(QLocale().dateFormat()))
-                       .arg(timing.cyclingDelayInDays())
-                       .arg(timing.cycleExpirationDate().toString(QLocale().dateFormat()));
-        } else {
-            timings << QString(QApplication::translate("Alert::StaticAlertWidget", "Started on: %1<br />Expires on: %2"))
-                       .arg(timing.start().toString(QLocale().dateFormat()))
-                       .arg(timing.expiration().toString(QLocale().dateFormat()));
-        }
-    }
-    if (!timings.isEmpty())
-        content += QString("<span style=\"color:#303030\">%1</span>").arg(timings.join("<br />"));
-
-    toolTip = QString("%1"
-                      "<table border=0 cellpadding=0 cellspacing=0 width=100%>"
-                      "<tr><td style=\"padding-left:10px;\">%2</td></tr>"
-                      "<tr><td align=center>%3</td></tr>"
-                      "</table>")
-            .arg(header)
-            .arg(descr)
-            .arg(content)
-            ;
-    return toolTip;
-}
-
 }  // namespace anonymous
 
 
@@ -160,28 +88,34 @@ StaticAlertToolButton::StaticAlertToolButton(QWidget *parent) :
     setPopupMode(QToolButton::InstantPopup);
 
     // create actions and menu
+    _menu = new QMenu(this);
     aLabel = new QAction(this);
     aCategory = new QAction(this);
     aValidate = new QAction(this);
     aEdit = new QAction(this);
     aOverride = new QAction(this);
-    QAction *sep = new QAction(this);
-    sep->setSeparator(true);
+    aRemindLater = new QAction(this);
 
     aValidate->setIcon(theme()->icon(Core::Constants::ICONOK));
     aEdit->setIcon(theme()->icon(Core::Constants::ICONEDIT));
     aEdit->setIcon(theme()->icon(Core::Constants::ICONNEXT));
+    aRemindLater->setIcon(theme()->icon(Core::Constants::ICONREMINDER));
 
-    addAction(aCategory);
-    addAction(sep);
-    addAction(aLabel);
-    addAction(sep);
-    addAction(aValidate);
-    addAction(aEdit);
-    addAction(aOverride);
+    _menu->addAction(aCategory);
+    _menu->addSeparator();
+    _menu->addAction(aLabel);
+    _menu->addSeparator();
+    _menu->addAction(aEdit);
+    _menu->addSeparator();
+    _menu->addAction(aValidate);
+    _menu->addAction(aRemindLater);
+    _menu->addSeparator();
+    _menu->addAction(aOverride);
+    setMenu(_menu);
 
     connect(aValidate, SIGNAL(triggered()), this, SLOT(validateAlert()));
     connect(aEdit, SIGNAL(triggered()), this, SLOT(editAlert()));
+    connect(aRemindLater, SIGNAL(triggered()), this, SLOT(remindAlert()));
     connect(aOverride, SIGNAL(triggered()), this, SLOT(overrideAlert()));
     retranslateUi();
 }
@@ -194,8 +128,13 @@ StaticAlertToolButton::~StaticAlertToolButton()
 void StaticAlertToolButton::setAlertItem(const AlertItem &item)
 {
     setIcon(getIcon(item));
-    setToolTip(getToolTip(item));
+    setToolTip(item.htmlToolTip());
     setText(QString("%1: %2").arg(item.category()).arg(item.label()));
+//    QPalette palette = this->palette();
+//    palette.setColor(QPalette::Button, QColor(item.priorityBackgroundColor()));
+//    palette.setColor(QPalette::Background, QColor(item.priorityBackgroundColor()));
+//    this->setPalette(palette);
+//    setStyleSheet(QString("background:%1").arg(item.priorityBackgroundColor()));
 
     if (aLabel)
         aLabel->setText(item.label());
@@ -205,6 +144,20 @@ void StaticAlertToolButton::setAlertItem(const AlertItem &item)
         else
             aCategory->setText(item.category());
     }
+
+    if (!item.isRemindLaterAllowed())
+        _menu->removeAction(aRemindLater);
+
+    if (!item.isEditable())
+        _menu->removeAction(aEdit);
+
+    // remove duplicate separators
+    QAction *p = 0;
+    foreach(QAction *a, _menu->actions()) {
+        if (p && p->isSeparator() && a->isSeparator())
+            _menu->removeAction(p);
+    }
+
     _item = item;
 }
 
@@ -215,6 +168,8 @@ void StaticAlertToolButton::validateAlert()
 
 void StaticAlertToolButton::editAlert()
 {
+    if (!_item.isEditable())
+        return;
     AlertItemEditorDialog dlg(this);
     dlg.setAlertItem(_item);
     if (dlg.exec() == QDialog::Accepted) {
@@ -222,6 +177,14 @@ void StaticAlertToolButton::editAlert()
         AlertCore::instance()->updateAlert(_item);
         AlertCore::instance()->saveAlert(_item);
     }
+}
+
+void StaticAlertToolButton::remindAlert()
+{
+    if (!_item.isRemindLaterAllowed())
+        return;
+    _item.remindLater();
+    AlertCore::instance()->saveAlert(_item);
 }
 
 void StaticAlertToolButton::overrideAlert()
@@ -258,6 +221,7 @@ void StaticAlertToolButton::retranslateUi()
     aValidate->setText(tkTr(Trans::Constants::VALIDATE));
     aEdit->setText(tkTr(Trans::Constants::EDIT_ALERT));
     aOverride->setText(tkTr(Trans::Constants::OVERRIDE));
+    aRemindLater->setText(tkTr(Trans::Constants::REMIND_LATER));
     aLabel->setText(_item.label());
     if (_item.category().isEmpty())
         aCategory->setText(tr("No category"));
@@ -271,6 +235,14 @@ void StaticAlertToolButton::changeEvent(QEvent *event)
         retranslateUi();
     }
     QToolButton::changeEvent(event);
+}
+
+void StaticAlertToolButton::hideEvent(QHideEvent *event)
+{
+    // INFO: wrapper to Qt bug, when qtoolbutton is hidden the menu stays opened if it was opened
+    if (_menu->isVisible())
+        _menu->close();
+    QToolButton::hideEvent(event);
 }
 
 /**
@@ -288,5 +260,5 @@ StaticAlertLabel::StaticAlertLabel(QWidget *parent) :
 void StaticAlertLabel::setAlertItem(const AlertItem &item)
 {
     setPixmap(getIcon(item).pixmap(16,16));
-    setToolTip(getToolTip(item));
+    setToolTip(item.htmlToolTip(true));
 }

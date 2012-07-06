@@ -107,7 +107,7 @@ class AlertBase : public QObject, public Utils::Database
 
 protected:
     AlertBase(QObject * parent = 0);
-    bool init();
+    bool initialize();
 
     AlertItem createVirtualItem();
 
@@ -147,6 +147,7 @@ private:
 
 private Q_SLOTS:
     void onCoreDatabaseServerChanged();
+    void onCoreFirstRunCreationRequested();
 
 private:
     bool m_initialized;

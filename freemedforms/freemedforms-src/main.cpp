@@ -192,14 +192,17 @@ int main(int argc, char *argv[])
 
     // Add some debugging information
 #ifdef DEBUG
-    LOG_FOR("Main", "Running debug version");
+#   ifdef DEBUG_WITHOUT_INSTALL
+        LOG_FOR("Main", "Running debug non-installed version (debug_without_install)");
+#   else
+        LOG_FOR("Main", "Running debug installed version");
+#   endif
 #else
     LOG_FOR("Main", "Running release version");
 #endif
 #ifdef LINUX_INTEGRATED
     LOG_FOR("Main", "Linux Integrated");
 #endif
-
     defineLibraryPaths();
     LOG_FOR("Main","looking for libraries in path: " + qApp->libraryPaths().join(";"));
 

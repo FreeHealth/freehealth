@@ -29,8 +29,8 @@
 /**
  * \file constants_icons.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.4.0
- * \date 13 June 2010
+ * \version 0.7.6
+ * \date 28 Jun 2012
 */
 
 namespace Core {
@@ -112,6 +112,7 @@ const char * const  ICONONERIGHTARROW = "1rightarrow.png";
 const char * const  ICONTWORIGHTARROW = "2rightarrow.png";
 const char * const  ICONBOOKMARK      = "bookmark_add.png";
 const char * const  ICONINTERNET      = "www.png";
+const char * const  ICONOVERRIDE      = "override.png";
 
 // menu View
 const char * const  ICONEYES =         "eyes.png";
@@ -166,6 +167,7 @@ const char * const  ICONTAKESCREENSHOT  =  "takescreenshot.png";
 
 // date and time Icons
 const char * const  ICONDATE        =  "date.png";
+const char * const  ICONREMINDER    =  "reminder.png";
 
 // categories icons
 const char * const  ICONCATEGORY_MANAGER  =  "category_manager.png";

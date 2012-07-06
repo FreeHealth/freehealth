@@ -32,6 +32,7 @@
 #include <QDialog>
 
 QT_BEGIN_NAMESPACE
+class QDialogButtonBox;
 class QAbstractButton;
 class QToolButton;
 QT_END_NAMESPACE
@@ -46,7 +47,7 @@ class DynamicAlertDialogOverridingComment;
 class ALERT_EXPORT DynamicAlertResult
 {
 public:
-    DynamicAlertResult() : _override(false), _accepted(false) {}
+    DynamicAlertResult() : _override(false), _accepted(false), _remind(false) {}
     ~DynamicAlertResult() {}
 
     void setOverriden(bool override) {_override = override;}
@@ -58,6 +59,9 @@ public:
     void setAccepted(bool accepted) {_accepted = accepted;}
     bool isAccepted() const {return _accepted;}
 
+    void setRemindLaterRequested(bool remind) {_remind = remind;}
+    bool isRemindLaterRequested() const {return _remind;}
+
     void setReadAlertUid(const QStringList &uids) {_readUids=uids;}
     QStringList readAlertsUid() const {return _readUids;}
 
@@ -65,7 +69,7 @@ public:
     AlertValidation alertValidation() const {return _validation;}
 
 private:
-    bool _override, _accepted;
+    bool _override, _accepted, _remind;
     QString _overrideComment;
     QStringList _readUids;
     AlertValidation _validation;
@@ -89,6 +93,7 @@ public:
     ~DynamicAlertDialog();
 
     bool isOverridingUserCommentRequired() const {return _overrideCommentRequired;}
+    bool isRemindLaterRequested() const {return _remind;}
     QString overridingComment() const;
 
     static DynamicAlertResult executeDynamicAlert(const AlertItem &item, const QString &themedIcon = QString::null, QWidget *parent = 0);
@@ -99,6 +104,7 @@ public:
     static bool applyResultToAlerts(QList<AlertItem> &items, const DynamicAlertResult &result);
 
 private Q_SLOTS:
+    void remindLater();
     void override();
     void validateUserOverridingComment();
 
@@ -108,8 +114,9 @@ protected:
 private:
     Ui::DynamicAlertDialog *ui;
     Ui::DynamicAlertDialogOverridingComment *cui;
-    QToolButton *_overrideButton;
-    bool _overrideCommentRequired;
+    QDialogButtonBox *_box;
+    QToolButton *_overrideButton, *_remindLaterButton;
+    bool _overrideCommentRequired, _remind;
 };
 
 } // namespace Alert

@@ -126,7 +126,7 @@ bool AlertPlaceHolderTest::updateAlert(const AlertItem &alert)
     if (containsAlertUuid(alert.uuid())) {
         // If alert is validated -> remove it
         // or update the content of the toolbutton
-        if (alert.isUserValidated())
+        if (alert.isUserValidated() || !alert.isValid())
             return removeAlert(alert);
         _buttons.value(alert.uuid())->setAlertItem(alert);
     } else {
@@ -154,6 +154,8 @@ bool AlertPlaceHolderTest::removeAlert(const AlertItem &alert)
             _priorities << alerts.at(i).priority()*10000000 + i;
         }
         qSort(_priorities);
+        if (_widget->sizePolicy().horizontalPolicy() != QSizePolicy::Expanding)
+            _widget->adjustSize();
     }
     return true;
 }

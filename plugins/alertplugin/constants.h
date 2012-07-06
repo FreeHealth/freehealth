@@ -65,6 +65,7 @@ enum AlertFields {
     ALERT_VAL_ID,
     ALERT_TIM_ID,
     ALERT_ISVALID,
+    ALERT_ISREMINDABLE,
     // TODO : Add a trace for alert modification
 
     // Types

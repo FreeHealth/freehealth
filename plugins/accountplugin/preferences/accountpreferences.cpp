@@ -328,14 +328,44 @@ bool AccountDatabaseDefautsWidget::createDefaultsFor(const QString &filePrototyp
     return yes;
 }
 
-void AccountDatabaseDefautsWidget::on_datapackButton_clicked()
+
+/*void AccountDatabaseDefautsWidget::on_datapackButton_clicked()
 {
-        QSqlDatabase db = QSqlDatabase::database(AccountDB::Constants::DATAPACK_ACCOUNTANCY);
-        AccountDB::DatapackMPModel dtpk(this);
-        AccountDB::MedicalProcedureModel MP(this);
-        /*
-        1) vérifier que la mise à jour n'est pas déjà faite.
-        2) updater les valeurs communes 
-        3) rajouter les nouvelles valeurs.
-        */
-}
+        LOG("datapackButton clicked");
+        AccountDB::DatapackMPModel dtpkmodel(this);
+        AccountDB::MedicalProcedureModel MPmodel(this);
+        int MPmodelRowCount = MPmodel.rowCount();
+        int dtpkRowCount = dtpkmodel.rowCount();
+        qDebug() << __FILE__ << QString::number(__LINE__) << " rows =" << QString::number(MPmodelRowCount)
+                 << QString::number(dtpkRowCount) ;
+        //test of date
+        QList<QDate> listOfDates;
+        for (int r = 0; r < MPmodelRowCount; ++r)
+        {
+        	  QDate date = MPmodel.data(MPmodel.index(r,AccountDB::Constants::MP_DATE),Qt::DisplayRole).toDate();
+        	  listOfDates << date;
+            }
+        QDate dateDapapack = dtpkmodel.data(dtpkmodel.index(1,AccountDB::Constants::MP_DATE),Qt::DisplayRole).toDate();
+        if (listOfDates.contains(dateDapapack))
+        {
+        	  LOG_ERROR("Datapack has already been loaded.");
+        	  Utils::warningMessageBox( trUtf8("Warning"), trUtf8("Datapack has already been loaded."));
+        	  return;
+            }
+        if (!MPmodel.insertRows(MPmodelRowCount,dtpkRowCount,QModelIndex()))
+        {
+        	  LOG_ERROR(MPmodel.lastError().text());
+            }
+        for (int row = 0; row < dtpkRowCount ; ++row)
+        {        	 
+        	 for (int col = 0; col < dtpkmodel.columnCount(); ++col)
+        	 {
+        	 	  QVariant data = dtpkmodel.data(dtpkmodel.index(row,col),Qt::DisplayRole);
+        	 	  if (!MPmodel.setData(MPmodel.index(MPmodelRowCount+row,col),data,Qt::EditRole))
+        	 	  {
+        	 	  	  LOG_ERROR(MPmodel.lastError().text());
+        	 	      }
+        	     }
+            }
+        
+}*/

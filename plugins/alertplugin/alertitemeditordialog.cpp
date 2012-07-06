@@ -25,6 +25,23 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
+/**
+  \class Alert::AlertItemEditorDialog
+  Editor for any Alert::AlertItem. You can define what values are editable
+  in the dialog using the Alert::AlertItemEditorDialog::EditableParam and
+  setEditableParams().\n
+  When the dialog is accepted/rejected, nothing is submitted in the editing
+  item. You must call the submit() procedure.\n
+  \code
+    // Example of code
+    AlertItemEditorDialog dlg(this);
+    dlg.setAlertItem(item);
+    if (dlg.exec() == QDialog::Accepted)
+        dlg.submit(item); // edited values are commited in the item
+  \endcode
+
+*/
+
 #include "alertitemeditordialog.h"
 #include "alertitemeditorwidget.h"
 #include "ui_alertitemeditordialog.h"
@@ -69,6 +86,8 @@ void AlertItemEditorDialog::setEditableParams(EditableParams params)
         ui->editor->hideStyleSheetTab();
     if (!(params & ExtraXml))
         ui->editor->hideExtraXmlTab();
+    if (!(params & Scripts))
+        ui->editor->hideScriptsTab();
 }
 
 void AlertItemEditorDialog::setAlertItem(const AlertItem &item)

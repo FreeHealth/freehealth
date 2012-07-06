@@ -120,6 +120,17 @@ static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 
+static void addAlertToLayout(const AlertItem &alert, bool showCategory, QLayout *lay)
+{
+    QLabel *label = new QLabel(lay->parentWidget());
+    label->setTextFormat(Qt::RichText);
+    label->setAlignment(Qt::AlignLeft);
+    label->setWordWrap(true);
+    label->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+    label->setText(alert.htmlToolTip(showCategory));
+    lay->addWidget(label);
+}
+
 DynamicAlertDialog::DynamicAlertDialog(const QList<AlertItem> &items,
                                        const QString &themedIcon,
                                        const QList<QAbstractButton *> &buttons,
@@ -128,7 +139,8 @@ DynamicAlertDialog::DynamicAlertDialog(const QList<AlertItem> &items,
     ui(new Ui::DynamicAlertDialog),
     cui(0),
     _overrideButton(0),
-    _overrideCommentRequired(false)
+    _overrideCommentRequired(false),
+    _remind(false)
 {
     // Do we need to ask for an overriding comment
     foreach(const AlertItem &item, items) {
@@ -153,85 +165,57 @@ DynamicAlertDialog::DynamicAlertDialog(const QList<AlertItem> &items,
         for(int i=0; i<items.count();++i) {
             maxPriority = qMax(maxPriority, int(items.at(i).priority()));
         }
-        QString icon;
-        switch (maxPriority) {
-        case AlertItem::High: icon = Core::Constants::ICONCRITICAL; break;
-        case AlertItem::Medium: icon = Core::Constants::ICONWARNING; break;
-        case AlertItem::Low: icon = Core::Constants::ICONINFORMATION; break;
-        }
-        ui->generalIconLabel->setPixmap(theme()->icon(icon, Core::ITheme::BigIcon).pixmap(64,64));
-        setWindowIcon(theme()->icon(icon));
+        ui->generalIconLabel->setPixmap(AlertItem::priorityBigIcon(AlertItem::Priority(maxPriority)).pixmap(64,64));
+        setWindowIcon(AlertItem::priorityBigIcon(AlertItem::Priority(maxPriority)));
     }
 
     // Include alerts
+    bool canRemind = true;
     QFont bold;
     bold.setBold(true);
     if (items.count()==1) {
         // No tabwidget
         const AlertItem &alert = items.at(0);
-        QVBoxLayout *central = new QVBoxLayout;
-
-        if (!alert.category().isEmpty()) {
-            QLabel *label = new QLabel(this);
-            label->setFont(bold);
-            label->setTextFormat(Qt::RichText);
-            label->setAlignment(Qt::AlignHCenter);
-            label->setWordWrap(true);
-            //        label->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-            label->setText(alert.category());
-            central->addWidget(label);
-        }
-
-        QLabel *label = new QLabel(this);
-        label->setFont(bold);
-        label->setTextFormat(Qt::RichText);
-        label->setAlignment(Qt::AlignHCenter);
-        label->setWordWrap(true);
-        //        label->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-        label->setText(alert.label());
-        central->addWidget(label);
-
-        if (!alert.description().isEmpty()) {
-            QLabel *label = new QLabel(this);
-            label->setStyleSheet("padding-left:20px");
-            label->setTextFormat(Qt::RichText);
-            label->setAlignment(Qt::AlignLeft);
-            label->setWordWrap(true);
-            //        label->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-            label->setText(alert.description());
-            central->addWidget(label);
-        }
-
-        QWidget *container = new QWidget(this);
-        QVBoxLayout *containerLayout = new QVBoxLayout(container);
-        containerLayout->setMargin(0);
-        container->setLayout(containerLayout);
-
-        QScrollArea *s = new QScrollArea(this);
-        s->setBackgroundRole(QPalette::Background);
-        s->setWidgetResizable(true);
-        s->setFrameStyle(QFrame::NoFrame);
-        s->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+        if (!alert.isRemindLaterAllowed())
+            canRemind = false;
 
         QWidget *alertContainer = new QWidget(this);
-        alertContainer->setLayout(central);
-        s->setWidget(alertContainer);
-        containerLayout->addWidget(s);
+        QVBoxLayout *central = new QVBoxLayout(alertContainer);
+        addAlertToLayout(alert, true, central);
 
-        ui->centralLayout->addWidget(container);
+        QWidget *scrollContainer = new QWidget(this);
+        QVBoxLayout *containerLayout = new QVBoxLayout(scrollContainer);
+        containerLayout->setMargin(0);
+        scrollContainer->setLayout(containerLayout);
 
+        QScrollArea *scroll = new QScrollArea(this);
+        scroll->setBackgroundRole(QPalette::Background);
+        scroll->setWidgetResizable(true);
+        scroll->setFrameStyle(QFrame::NoFrame);
+        scroll->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+
+        scroll->setWidget(alertContainer);
+        containerLayout->addWidget(scroll);
+
+        ui->centralLayout->addWidget(scrollContainer);
+        ui->nbLabel->hide();
     } else {
         // With tabwidget
         QHash<QString, QVBoxLayout *> categories;
+        QHash<QString, int> nbInCategories;
 
         for(int i=0; i < items.count(); ++i) {
             const AlertItem &alert = items.at(i);
+            if (!alert.isRemindLaterAllowed())
+                canRemind = false;
+
             QString cat = alert.category();
             if (cat.isEmpty()) {
                 cat = tkTr(Trans::Constants::ALERT);
             }
 
             // Get the category layout
+            nbInCategories.insert(cat, nbInCategories.value(cat, 0) + 1);
             QVBoxLayout *lay = categories.value(cat, 0);
             if (!lay) {
                 lay = new QVBoxLayout;
@@ -242,84 +226,78 @@ DynamicAlertDialog::DynamicAlertDialog(const QList<AlertItem> &items,
                 line->setFrameShadow(QFrame::Sunken);
                 lay->addWidget(line);
             }
-
-            // Add the label / description to the layout
-            QLabel *label = new QLabel(this);
-            label->setFont(bold);
-            label->setWordWrap(true);
-            label->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-            label->setTextFormat(Qt::RichText);
-            label->setText(alert.label());
-            lay->addWidget(label);
-
-            if (!alert.description().isEmpty()) {
-                QLabel *label = new QLabel(this);
-                label->setStyleSheet("padding-left:20px");
-                label->setTextFormat(Qt::RichText);
-                label->setAlignment(Qt::AlignLeft);
-                label->setWordWrap(true);
-                label->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
-                label->setText(alert.description());
-                lay->addWidget(label);
-            }
+            addAlertToLayout(alert, false, lay);
         }
 
         QTabWidget *tab = new QTabWidget(this);
         // Create a tab for each category
         foreach(const QString &cat, categories.keys()) {
-            QWidget *container = new QWidget(this);
-            QVBoxLayout *containerLayout = new QVBoxLayout(container);
-            containerLayout->setMargin(0);
-            container->setLayout(containerLayout);
-
-            QScrollArea *s = new QScrollArea(this);
-            s->setBackgroundRole(QPalette::Background);
-            s->setWidgetResizable(true);
-            s->setFrameStyle(QFrame::NoFrame);
-            s->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-
             QWidget *alertContainer = new QWidget(this);
             QVBoxLayout *central = categories.value(cat);
             alertContainer->setLayout(central);
-            s->setWidget(alertContainer);
-            containerLayout->addWidget(s);
 
-            tab->addTab(container, cat);
+            QWidget *scrollContainer = new QWidget(this);
+            QVBoxLayout *containerLayout = new QVBoxLayout(scrollContainer);
+            containerLayout->setMargin(0);
+//            container->setLayout(containerLayout);
+
+            QScrollArea *scroll = new QScrollArea(this);
+            scroll->setBackgroundRole(QPalette::Background);
+            scroll->setWidgetResizable(true);
+            scroll->setFrameStyle(QFrame::NoFrame);
+            scroll->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+
+            scroll->setWidget(alertContainer);
+            containerLayout->addWidget(scroll);
+
+            tab->addTab(scrollContainer, QString("%1 (%2)").arg(cat).arg(nbInCategories.value(cat)));
         }
         ui->centralLayout->addWidget(tab);
+        ui->nbLabel->setText(tkTr(Trans::Constants::_1_ALERTS).arg(items.count()));
     }
 
     // Add buttons
-    QDialogButtonBox *box = new QDialogButtonBox(Qt::Horizontal, this);
+    _box = new QDialogButtonBox(Qt::Horizontal, this);
     QToolButton *accept = new QToolButton(this);
     accept->setMinimumHeight(22);
-    accept->setText(tr("Accept alert"));
+    accept->setText(tkTr(Trans::Constants::VALIDATE));
     accept->setIcon(theme()->icon(Core::Constants::ICONOK, Core::ITheme::SmallIcon));
     accept->setIconSize(QSize(16,16));
     accept->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     accept->setFont(bold);
-    box->addButton(accept, QDialogButtonBox::AcceptRole);
+    _box->addButton(accept, QDialogButtonBox::AcceptRole);
+
+    _remindLaterButton = new QToolButton(this);
+    _remindLaterButton->setMinimumHeight(22);
+    _remindLaterButton->setText(tkTr(Trans::Constants::REMIND_LATER));
+    _remindLaterButton->setIcon(theme()->icon(Core::Constants::ICONREMINDER, Core::ITheme::SmallIcon));
+    _remindLaterButton->setIconSize(QSize(16,16));
+    _remindLaterButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    _remindLaterButton->setFont(bold);
+    if (canRemind)
+        _box->addButton(_remindLaterButton, QDialogButtonBox::AcceptRole);
 
     _overrideButton = new QToolButton(this);
     _overrideButton->setMinimumHeight(22);
-    _overrideButton->setText(tr("Override alert"));
-    _overrideButton->setIcon(theme()->icon(Core::Constants::ICONNEXT, Core::ITheme::SmallIcon));
+    _overrideButton->setText(tkTr(Trans::Constants::OVERRIDE));
+    _overrideButton->setIcon(theme()->icon(Core::Constants::ICONOVERRIDE, Core::ITheme::SmallIcon));
     _overrideButton->setIconSize(QSize(16,16));
     _overrideButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     _overrideButton->setFont(bold);
-    box->addButton(_overrideButton, QDialogButtonBox::RejectRole);
+    _box->addButton(_overrideButton, QDialogButtonBox::ResetRole);
 
     for(int i=0; i < buttons.count(); ++i) {
         buttons.at(i)->setIconSize(QSize(16,16));
         buttons.at(i)->setFont(bold);
-        box->addButton(buttons.at(i), QDialogButtonBox::ActionRole);
+        _box->addButton(buttons.at(i), QDialogButtonBox::ActionRole);
     }
 
-    connect(box, SIGNAL(accepted()), this, SLOT(accept()));
-    connect(box, SIGNAL(rejected()), this, SLOT(override()));
+    connect(accept, SIGNAL(clicked()), this, SLOT(accept()));
+    connect(_remindLaterButton, SIGNAL(clicked()), this, SLOT(remindLater()));
+    connect(_overrideButton, SIGNAL(clicked()), this, SLOT(override()));
     ui->buttonLayout->setMargin(0);
     ui->buttonLayout->setSpacing(0);
-    ui->buttonLayout->addWidget(box);
+    ui->buttonLayout->addWidget(_box);
 
     Utils::resizeAndCenter(this, QApplication::activeWindow());
 }
@@ -331,6 +309,13 @@ DynamicAlertDialog::~DynamicAlertDialog()
 }
 
 // TODO: create a done(int r) and check if alert tagged with mustBeRead() was visualized by the user.
+
+void DynamicAlertDialog::remindLater()
+{
+    qWarning() << "DynamicAlertDialog::remindLater()";
+    _remind = true;
+    accept();
+}
 
 void DynamicAlertDialog::override()
 {
@@ -388,8 +373,10 @@ DynamicAlertResult DynamicAlertDialog::executeDynamicAlert(const QList<AlertItem
     DynamicAlertDialog dlg(items, themedIcon, buttons, parent);  // theme()->icon(themedIcon, Core::ITheme::BigIcon)
     if (dlg.exec()==QDialog::Accepted) {
         result.setAccepted(true);
+        result.setRemindLaterRequested(dlg.isRemindLaterRequested());
     } else {
         result.setAccepted(false);
+        result.setRemindLaterRequested(false);
         result.setOverriden(true);
         result.setOverrideUserComment(dlg.overridingComment());
     }
@@ -403,6 +390,10 @@ DynamicAlertResult DynamicAlertDialog::executeDynamicAlert(const QList<AlertItem
 */
 bool DynamicAlertDialog::applyResultToAlerts(AlertItem &item, const DynamicAlertResult &result)
 {
+    if (result.isRemindLaterRequested()) {
+        return item.remindLater();
+    }
+
     QString validator;
     user() ? validator = user()->uuid() : validator = "UnknownUser";
     return item.validateAlert(validator, result.isOverridenByUser(), result.overrideUserComment(), QDateTime::currentDateTime());
@@ -415,6 +406,14 @@ bool DynamicAlertDialog::applyResultToAlerts(AlertItem &item, const DynamicAlert
 */
 bool DynamicAlertDialog::applyResultToAlerts(QList<AlertItem> &items, const DynamicAlertResult &result)
 {
+    if (result.isRemindLaterRequested()) {
+        for(int i=0; i < items.count(); ++i) {
+            AlertItem &item = items[i];
+            item.remindLater();
+        }
+        return true;
+    }
+
     bool ok = true;
     for(int i=0; i < items.count(); ++i) {
         AlertItem &item = items[i];
