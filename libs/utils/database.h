@@ -351,7 +351,7 @@ public:
 
     static bool executeSQL(const QStringList &list, QSqlDatabase &DB);
     static bool executeSQL(const QString &req, QSqlDatabase &DB);
-    static bool executeSqlFile(const QString &connectionName, const QString &fileName, QProgressDialog *dlg = 0);
+    static bool executeSqlFile(const QString &connectionName, const QString &fileName, QProgressDialog *dlg = 0, QString *error = 0);
     static bool importCsvToDatabase(const QString &connectionName, const QString &fileName, const QString &table, const QString &separator = QString(";"), bool ignoreFirstLine = false);
 
     virtual void warn() const;

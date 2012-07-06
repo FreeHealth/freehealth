@@ -90,15 +90,10 @@ void AccountBasePlugin::extensionsInitialized()
     messageSplash(tr("Initializing accountancy plugin..."));
 
     // Initialize Account Database
-/*<<<<<<< HEAD
-    AccountBase::instance()->initialize();
-
-=======*/
     AccountBase::instance()->initialize();
     DatapackBase::instance()->initialize();
-    
-//>>>>>>> pmd
-    addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
+
+addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 }
 
 

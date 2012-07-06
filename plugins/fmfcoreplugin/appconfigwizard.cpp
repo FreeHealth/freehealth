@@ -497,8 +497,13 @@ bool ServerConfigPage::validatePage()
                 Utils::informativeMessageBox(tr("Server already configurated"), tr("The server is already configurated for FreeMedForms."));
             } else {
                 LOG("Executing server configuration SQL script");
-                if (!Utils::Database::executeSqlFile("__APP_CONNECTION_TESTER", serverConfigurationSqlScript())) {
+                QString error;
+                if (!Utils::Database::executeSqlFile("__APP_CONNECTION_TESTER", serverConfigurationSqlScript(), 0, &error)) {
                     LOG_ERROR("Server configuration script not processed");
+                    Utils::warningMessageBox(tr("An error occured..."),
+                                             tr("An error occured when trying to execute the script configuration script.\n"
+                                                "Please check out the log files and contact your administrator."),
+                                             error);
                 } else {
                     LOG("Server successfully configurated");
                     Utils::informativeMessageBox(tr("Server configurated"), tr("The server was successfully configurated."));
