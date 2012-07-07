@@ -14,7 +14,6 @@ HEADERS += \
     $${PWD}/alertbase.h \
     $${PWD}/alertcore.h \
     $${PWD}/alertitem.h \
-    $${PWD}/alertmodel.h \
     $${PWD}/ialertplaceholder.h \
     $${PWD}/alertitemeditorwidget.h \
     $${PWD}/alertitemtimingeditorwidget.h \
@@ -30,7 +29,6 @@ SOURCES += \
     $${PWD}/alertbase.cpp \
     $${PWD}/alertcore.cpp \
     $${PWD}/alertitem.cpp \
-    $${PWD}/alertmodel.cpp \
     $${PWD}/ialertplaceholder.cpp \
     $${PWD}/alertitemeditorwidget.cpp \
     $${PWD}/alertitemtimingeditorwidget.cpp \
