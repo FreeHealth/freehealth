@@ -130,11 +130,9 @@ void StaticAlertToolButton::setAlertItem(const AlertItem &item)
     setIcon(getIcon(item));
     setToolTip(item.htmlToolTip());
     setText(QString("%1: %2").arg(item.category()).arg(item.label()));
-//    QPalette palette = this->palette();
-//    palette.setColor(QPalette::Button, QColor(item.priorityBackgroundColor()));
-//    palette.setColor(QPalette::Background, QColor(item.priorityBackgroundColor()));
-//    this->setPalette(palette);
-//    setStyleSheet(QString("background:%1").arg(item.priorityBackgroundColor()));
+    setStyleSheet(QString("QToolButton {background-color: %1; border: 2px solid %1;}")
+                  .arg(item.priorityBackgroundColor())
+                  );
 
     if (aLabel)
         aLabel->setText(item.label());
