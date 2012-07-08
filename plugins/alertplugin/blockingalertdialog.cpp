@@ -25,8 +25,8 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 /**
-  \class Alert::DynamicAlertResult
-  Contains the result of a dynamic dialog:
+  \class Alert::BlockingAlertResult
+  Contains the result of a blocking dialog:
     - user accepted,
     - override & user override comment,
     - read alerts (all view alerts are logged)
@@ -34,66 +34,66 @@
 */
 
 /**
-  \fn Alert::DynamicAlertResult::DynamicAlertResult()
+  \fn Alert::BlockingAlertResult::BlockingAlertResult()
   Construct an empty invalid result (not accepted, not overridden);
 */
 
 /**
-  \fn void Alert::DynamicAlertResult::setOverriden(bool override)
+  \fn void Alert::BlockingAlertResult::setOverriden(bool override)
   Define the user override status.
 */
 
 /**
-  \fn bool Alert::DynamicAlertResult::isOverridenByUser() const
+  \fn bool Alert::BlockingAlertResult::isOverridenByUser() const
   Return the user override status.
 */
 
 /**
-  \fn void Alert::DynamicAlertResult::setOverrideUserComment(const QString &comment)
+  \fn void Alert::BlockingAlertResult::setOverrideUserComment(const QString &comment)
   Define the user override comment.
 */
 
 /**
-  \fn QString Alert::DynamicAlertResult::overrideUserComment() const
+  \fn QString Alert::BlockingAlertResult::overrideUserComment() const
   Return the user override comment.
 */
 
 /**
-  \fn void Alert::DynamicAlertResult::setAccepted(bool accepted)
-  Define the status of the DynamicAlertDialog to accepted.
+  \fn void Alert::BlockingAlertResult::setAccepted(bool accepted)
+  Define the status of the BlockingAlertDialog to accepted.
 */
 
 /**
-  \fn bool Alert::DynamicAlertResult::isAccepted() const
+  \fn bool Alert::BlockingAlertResult::isAccepted() const
   Return true if the dialogue was accepted.
 */
 
 /**
-  \fn void Alert::DynamicAlertResult::setReadAlertUid(const QStringList &uids)
+  \fn void Alert::BlockingAlertResult::setReadAlertUid(const QStringList &uids)
   Log all read alerts.
 */
 
 /**
-  \fn QStringList Alert::DynamicAlertResult::readAlertsUid() const
-  Return all read alerts. If a dynamic dialog is started with more than one alert, all alerts
+  \fn QStringList Alert::BlockingAlertResult::readAlertsUid() const
+  Return all read alerts. If a blocking dialog is started with more than one alert, all alerts
   visualized by the user are loggued.
 */
 
 /**
-  \fn void Alert::DynamicAlertResult::setAlertValidation(const AlertValidation &validation)
-  Set the Alert::AlertValidation according to the dynamic dialog result.
+  \fn void Alert::BlockingAlertResult::setAlertValidation(const AlertValidation &validation)
+  Set the Alert::AlertValidation according to the blocking dialog result.
 */
 
 /**
-  \fn AlertValidation Alert::DynamicAlertResult::alertValidation() const
+  \fn AlertValidation Alert::BlockingAlertResult::alertValidation() const
   Return the Alert::AlertValidation suitable to the user actions.
 */
 
-#include "dynamicalertdialog.h"
+#include "BlockingAlertdialog.h"
 #include "alertitem.h"
 #include "alertcore.h"
-#include "ui_dynamicalertdialog.h"
-#include "ui_dynamicalertdialogoverridingcomment.h"
+#include "ui_BlockingAlertdialog.h"
+#include "ui_BlockingAlertdialogoverridingcomment.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/iuser.h>
@@ -131,12 +131,12 @@ static void addAlertToLayout(const AlertItem &alert, bool showCategory, QLayout 
     lay->addWidget(label);
 }
 
-DynamicAlertDialog::DynamicAlertDialog(const QList<AlertItem> &items,
+BlockingAlertDialog::BlockingAlertDialog(const QList<AlertItem> &items,
                                        const QString &themedIcon,
                                        const QList<QAbstractButton *> &buttons,
                                        QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::DynamicAlertDialog),
+    ui(new Ui::BlockingAlertDialog),
     cui(0),
     _overrideButton(0),
     _remindLaterButton(0),
@@ -154,7 +154,7 @@ DynamicAlertDialog::DynamicAlertDialog(const QList<AlertItem> &items,
     // Prepare the ui
     ui->setupUi(this);
     layout()->setSpacing(5);
-    setWindowTitle(tkTr(Trans::Constants::DYNAMIC_ALERT));
+    setWindowTitle(tkTr(Trans::Constants::BLOCKING_ALERT));
     setWindowModality(Qt::WindowModal);
 
     // Manage the general icon of the dialog
@@ -305,7 +305,7 @@ DynamicAlertDialog::DynamicAlertDialog(const QList<AlertItem> &items,
     Utils::resizeAndCenter(this, QApplication::activeWindow());
 }
 
-DynamicAlertDialog::~DynamicAlertDialog()
+BlockingAlertDialog::~BlockingAlertDialog()
 {
     delete ui;
     if (cui) delete cui; cui=0;
@@ -313,14 +313,14 @@ DynamicAlertDialog::~DynamicAlertDialog()
 
 // TODO: create a done(int r) and check if alert tagged with mustBeRead() was visualized by the user.
 
-void DynamicAlertDialog::remindLater()
+void BlockingAlertDialog::remindLater()
 {
-//    qWarning() << "DynamicAlertDialog::remindLater()";
+//    qWarning() << "BlockingAlertDialog::remindLater()";
     _remind = true;
     accept();
 }
 
-void DynamicAlertDialog::override()
+void BlockingAlertDialog::override()
 {
     if (!_overrideCommentRequired) {
         reject();
@@ -328,7 +328,7 @@ void DynamicAlertDialog::override()
     }
 
     // Append the comment
-    cui = new Ui::DynamicAlertDialogOverridingComment;
+    cui = new Ui::BlockingAlertDialogOverridingComment;
     QWidget *w = new QWidget(this);
     cui->setupUi(w);
     ui->centralLayout->addWidget(w);
@@ -337,43 +337,43 @@ void DynamicAlertDialog::override()
     _overrideButton->hide();
 }
 
-void DynamicAlertDialog::validateUserOverridingComment()
+void BlockingAlertDialog::validateUserOverridingComment()
 {
     if (!cui->overridingComment->toPlainText().isEmpty())
         reject();
 }
 
-QString DynamicAlertDialog::overridingComment() const
+QString BlockingAlertDialog::overridingComment() const
 {
     if (cui)
         return cui->overridingComment->toPlainText();
     return QString::null;
 }
 
-void DynamicAlertDialog::changeEvent(QEvent *e)
+void BlockingAlertDialog::changeEvent(QEvent *e)
 {
     QDialog::changeEvent(e);
 }
 
-/** Execute a dynamic alert dialog with the alerts \e item, using a general icon \e themedIcon.  Whatever is the result of the dialog, alerts are not modified. */
-DynamicAlertResult DynamicAlertDialog::executeDynamicAlert(const AlertItem &item, const QString &themedIcon, QWidget *parent)
+/** Execute a blocking alert dialog with the alerts \e item, using a general icon \e themedIcon.  Whatever is the result of the dialog, alerts are not modified. */
+BlockingAlertResult BlockingAlertDialog::executeBlockingAlert(const AlertItem &item, const QString &themedIcon, QWidget *parent)
 {
     QList<QAbstractButton*> noButtons;
-    return executeDynamicAlert(QList<AlertItem>() << item, noButtons, themedIcon, parent);
+    return executeBlockingAlert(QList<AlertItem>() << item, noButtons, themedIcon, parent);
 }
 
-/** Execute a dynamic alert dialog with a list of alerts \e items, using a general icon \e themedIcon.  Whatever is the result of the dialog, alerts are not modified. */
-DynamicAlertResult DynamicAlertDialog::executeDynamicAlert(const QList<AlertItem> &items, const QString &themedIcon, QWidget *parent)
+/** Execute a blocking alert dialog with a list of alerts \e items, using a general icon \e themedIcon.  Whatever is the result of the dialog, alerts are not modified. */
+BlockingAlertResult BlockingAlertDialog::executeBlockingAlert(const QList<AlertItem> &items, const QString &themedIcon, QWidget *parent)
 {
     QList<QAbstractButton*> noButtons;
-    return executeDynamicAlert(items, noButtons, themedIcon, parent);
+    return executeBlockingAlert(items, noButtons, themedIcon, parent);
 }
 
-/** Execute a dynamic alert dialog with a list of alerts \e items, including extra-buttons \e buttons, using a general icon \e themedIcon. Whatever is the result of the dialog, alerts are not modified. */
-DynamicAlertResult DynamicAlertDialog::executeDynamicAlert(const QList<AlertItem> &items, const QList<QAbstractButton*> &buttons, const QString &themedIcon, QWidget *parent)
+/** Execute a blocking alert dialog with a list of alerts \e items, including extra-buttons \e buttons, using a general icon \e themedIcon. Whatever is the result of the dialog, alerts are not modified. */
+BlockingAlertResult BlockingAlertDialog::executeBlockingAlert(const QList<AlertItem> &items, const QList<QAbstractButton*> &buttons, const QString &themedIcon, QWidget *parent)
 {
-    DynamicAlertResult result;
-    DynamicAlertDialog dlg(items, themedIcon, buttons, parent);  // theme()->icon(themedIcon, Core::ITheme::BigIcon)
+    BlockingAlertResult result;
+    BlockingAlertDialog dlg(items, themedIcon, buttons, parent);  // theme()->icon(themedIcon, Core::ITheme::BigIcon)
     if (dlg.exec()==QDialog::Accepted) {
         result.setAccepted(true);
         result.setRemindLaterRequested(dlg.isRemindLaterRequested());
@@ -387,11 +387,11 @@ DynamicAlertResult DynamicAlertDialog::executeDynamicAlert(const QList<AlertItem
 }
 
 /**
-  Apply the dynamic alert dialog result to alerts \e items. \n
+  Apply the blocking alert dialog result to alerts \e items. \n
   Alerts are modified in the list and Alert::AlertCore is informed of the modification.
   \sa Alert::AlertCore::updateAlert()
 */
-bool DynamicAlertDialog::applyResultToAlerts(AlertItem &item, const DynamicAlertResult &result)
+bool BlockingAlertDialog::applyResultToAlerts(AlertItem &item, const BlockingAlertResult &result)
 {
     if (result.isRemindLaterRequested()) {
         return item.remindLater();
@@ -403,11 +403,11 @@ bool DynamicAlertDialog::applyResultToAlerts(AlertItem &item, const DynamicAlert
 }
 
 /**
-  Apply the dynamic alert dialog result to alerts \e items. \n
+  Apply the blocking alert dialog result to alerts \e items. \n
   Alerts are modified in the list and Alert::AlertCore is informed of the modification.
   \sa Alert::AlertCore::updateAlert()
 */
-bool DynamicAlertDialog::applyResultToAlerts(QList<AlertItem> &items, const DynamicAlertResult &result)
+bool BlockingAlertDialog::applyResultToAlerts(QList<AlertItem> &items, const BlockingAlertResult &result)
 {
     if (result.isRemindLaterRequested()) {
         for(int i=0; i < items.count(); ++i) {

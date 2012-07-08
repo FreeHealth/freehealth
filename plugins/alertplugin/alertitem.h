@@ -283,7 +283,7 @@ protected:
 
 public:
     enum ViewType {
-        DynamicAlert = 0,
+        BlockingAlert = 0,
         StaticAlert
     };
     enum ContentType {

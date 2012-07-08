@@ -79,6 +79,8 @@ const char* const EACH                          = QT_TRANSLATE_NOOP("tkConstants
 const char* const AND                           = QT_TRANSLATE_NOOP("tkConstants", "and");
 const char* const ALERT                         = QT_TRANSLATE_NOOP("tkConstants", "Alert");
 const char* const DYNAMIC_ALERT                 = QT_TRANSLATE_NOOP("tkConstants", "Dynamic alert");
+const char* const BLOCKING_ALERT                = QT_TRANSLATE_NOOP("tkConstants", "Blocking alert");
+const char* const NON_BLOCKING_ALERT                = QT_TRANSLATE_NOOP("tkConstants", "Non-blocking alert");
 
 // The "related to"
 const char* const RELATED_TO                    = QT_TRANSLATE_NOOP("tkConstants", "related to");

@@ -142,8 +142,8 @@ public:
     QString viewTypeToXml()
     {
         switch (_viewType) {
-        case AlertItem::DynamicAlert: return "dynamic";
-        case AlertItem::StaticAlert: return "static";
+        case AlertItem::BlockingAlert: return "blocking";
+        case AlertItem::StaticAlert: return "nonblocking";
         }
         return QString::null;
     }
@@ -170,8 +170,8 @@ public:
 
     void viewTypeFromXml(const QString &xml)
     {
-        // default is dynamic alert
-        _viewType = AlertItem::DynamicAlert;
+        // default is blocking alert
+        _viewType = AlertItem::BlockingAlert;
         if (xml.compare("static", Qt::CaseInsensitive)==0) {
             _viewType = AlertItem::StaticAlert;
         }
@@ -573,7 +573,7 @@ bool AlertItem::isOverrideRequiresUserComment() const
     return d->_overrideRequiresUserComment;
 }
 
-/** When alert is included in a dynamic alert dialog with other alerts, setting the mustBeRead state ensure that user read the alert. */
+/** When alert is included in a blocking alert dialog with other alerts, setting the mustBeRead state ensure that user read the alert. */
 bool AlertItem::mustBeRead() const
 {
     return d->_mustBeRead;
@@ -609,7 +609,7 @@ void AlertItem::setOverrideRequiresUserComment(bool required)
     d->_overrideRequiresUserComment = required;
 }
 
-/** When alert is included in a dynamic alert dialog with other alerts, setting the mustBeRead state ensure that user read the alert. */
+/** When alert is included in a blocking alert dialog with other alerts, setting the mustBeRead state ensure that user read the alert. */
 void AlertItem::setMustBeRead(bool mustberead)
 {
     d->_mustBeRead = mustberead;
@@ -1158,11 +1158,11 @@ QDebug operator<<(QDebug dbg, const Alert::AlertItem &a)
     s << "cat:" + a.category();
     s << "availableLang:" + a.availableLanguages().join(";");
     switch (a.viewType()) {
-    case AlertItem::DynamicAlert:
-        s << "view:dynamic";
+    case AlertItem::BlockingAlert:
+        s << "view:blocking";
         break;
     case AlertItem::StaticAlert:
-        s << "view:staticAlert";
+        s << "view:nonblocking";
         break;
     default:
         s << "view:" + QString::number(a.viewType());
@@ -1212,7 +1212,7 @@ QString AlertItem::toXml() const
 //    d->descr.setData(Internal::AlertXmlDescription::URL, );
 //    d->descr.setData(Internal::AlertXmlDescription::AbsFileName, );
 //    d->descr.setData(Internal::AlertXmlDescription::Vendor, );
-    d->descr.setData(Internal::AlertXmlDescription::Validity, int(d->_valid));
+    d->descr.setData(Internal::AlertXmlDescription::Validity, d->_valid);
 //    d->descr.setData(Internal::AlertXmlDescription::FreeMedFormsCompatVersion, );
 //    d->descr.setData(Internal::AlertXmlDescription::FreeDiamsCompatVersion, );
 //    d->descr.setData(Internal::AlertXmlDescription::FreeAccountCompatVersion, );

@@ -24,8 +24,8 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef ALERT_DYNAMICALERTDIALOG_H
-#define ALERT_DYNAMICALERTDIALOG_H
+#ifndef ALERT_BLOCKINGALERTDIALOG_H
+#define ALERT_BLOCKINGALERTDIALOG_H
 
 #include <alertplugin/alertplugin_exporter.h>
 #include <alertplugin/alertitem.h>
@@ -40,15 +40,15 @@ QT_END_NAMESPACE
 namespace Alert {
 
 namespace Ui {
-class DynamicAlertDialog;
-class DynamicAlertDialogOverridingComment;
+class BlockingAlertDialog;
+class BlockingAlertDialogOverridingComment;
 }
 
-class ALERT_EXPORT DynamicAlertResult
+class ALERT_EXPORT BlockingAlertResult
 {
 public:
-    DynamicAlertResult() : _override(false), _accepted(false), _remind(false) {}
-    ~DynamicAlertResult() {}
+    BlockingAlertResult() : _override(false), _accepted(false), _remind(false) {}
+    ~BlockingAlertResult() {}
 
     void setOverriden(bool override) {_override = override;}
     bool isOverridenByUser() const {return _override;}
@@ -75,33 +75,33 @@ private:
     AlertValidation _validation;
 };
 
-class ALERT_EXPORT DynamicAlertDialog : public QDialog
+class ALERT_EXPORT BlockingAlertDialog : public QDialog
 {
     Q_OBJECT
 
-    explicit DynamicAlertDialog(const QList<AlertItem> &item,
+    explicit BlockingAlertDialog(const QList<AlertItem> &item,
                                 const QString &themedIcon,
                                 const QList<QAbstractButton *> &buttons = QList<QAbstractButton *>(),
                                 QWidget *parent = 0);
 
 public:
     enum DialogResult {
-        NoDynamicAlert = 0,
-        DynamicAlertOverridden,
-        DynamicAlertAccepted
+        NoBlockingAlert = 0,
+        BlockingAlertOverridden,
+        BlockingAlertAccepted
     };
-    ~DynamicAlertDialog();
+    ~BlockingAlertDialog();
 
     bool isOverridingUserCommentRequired() const {return _overrideCommentRequired;}
     bool isRemindLaterRequested() const {return _remind;}
     QString overridingComment() const;
 
-    static DynamicAlertResult executeDynamicAlert(const AlertItem &item, const QString &themedIcon = QString::null, QWidget *parent = 0);
-    static DynamicAlertResult executeDynamicAlert(const QList<AlertItem> &item, const QString &themedIcon = QString::null, QWidget *parent = 0);
-    static DynamicAlertResult executeDynamicAlert(const QList<AlertItem> &item, const QList<QAbstractButton*> &buttons, const QString &themedIcon = QString::null, QWidget *parent = 0);
+    static BlockingAlertResult executeBlockingAlert(const AlertItem &item, const QString &themedIcon = QString::null, QWidget *parent = 0);
+    static BlockingAlertResult executeBlockingAlert(const QList<AlertItem> &item, const QString &themedIcon = QString::null, QWidget *parent = 0);
+    static BlockingAlertResult executeBlockingAlert(const QList<AlertItem> &item, const QList<QAbstractButton*> &buttons, const QString &themedIcon = QString::null, QWidget *parent = 0);
 
-    static bool applyResultToAlerts(AlertItem &item, const DynamicAlertResult &result);
-    static bool applyResultToAlerts(QList<AlertItem> &items, const DynamicAlertResult &result);
+    static bool applyResultToAlerts(AlertItem &item, const BlockingAlertResult &result);
+    static bool applyResultToAlerts(QList<AlertItem> &items, const BlockingAlertResult &result);
 
 private Q_SLOTS:
     void remindLater();
@@ -112,12 +112,13 @@ protected:
     void changeEvent(QEvent *e);
 
 private:
-    Ui::DynamicAlertDialog *ui;
-    Ui::DynamicAlertDialogOverridingComment *cui;
+    Ui::BlockingAlertDialog *ui;
+    Ui::BlockingAlertDialogOverridingComment *cui;
     QDialogButtonBox *_box;
     QToolButton *_overrideButton, *_remindLaterButton;
     bool _overrideCommentRequired, _remind;
 };
 
 } // namespace Alert
-#endif // ALERT_DYNAMICALERTDIALOG_H
+
+#endif // ALERT_BLOCKINGALERTDIALOG_H

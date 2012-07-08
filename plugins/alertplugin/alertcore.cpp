@@ -39,7 +39,7 @@
 
 // TEST
 #include "alertitemeditordialog.h"
-#include "dynamicalertdialog.h"
+#include "blockingalertdialog.h"
 #include "alertplaceholdertest.h"
 #include <QToolButton>
 #include <QVBoxLayout>
@@ -207,16 +207,16 @@ bool AlertCore::registerAlert(const AlertItem &item)
 /**
   Update an already registered Alert::AlertItem. \n
   If the alert view type is a static alert, inform all IAlertPlaceHolder of the update otherwise
-  execute the dynamic alert. \n
+  execute the blocking alert. \n
   The modification are not saved into the database.
   \sa Alert::AlertCore::saveAlert(), Alert::AlertCore::registerAlert()
 */
 bool AlertCore::updateAlert(const AlertItem &item)
 {
-    if (item.viewType() == AlertItem::DynamicAlert) {
+    if (item.viewType() == AlertItem::BlockingAlert) {
         if (item.isUserValidated() || !item.isValid())
             return true;
-        DynamicAlertDialog::executeDynamicAlert(item);
+        BlockingAlertDialog::executeBlockingAlert(item);
     } else if (item.viewType() == AlertItem::StaticAlert) {
         // Get static place holders
         QList<Alert::IAlertPlaceHolder*> placeHolders = pluginManager()->getObjects<Alert::IAlertPlaceHolder>();
@@ -228,7 +228,7 @@ bool AlertCore::updateAlert(const AlertItem &item)
 }
 
 /**
-  Remove a registered static alert (do nothing with dynamic alerts).\n
+  Remove a registered static alert (do nothing with blocking alerts).\n
   Inform all IAlertPlaceHolder of the removal of the alert.\n
   The modification are not saved into the database.
   \sa Alert::AlertCore::saveAlert(), Alert::AlertCore::registerAlert()
@@ -250,7 +250,7 @@ bool AlertCore::removeAlert(const AlertItem &item)
 /**
  Process alerts:\n
    - Execute check scripts
-   - Execute dynamic alerts if needed
+   - Execute blocking alerts if needed
    - Feed Alert::IAlertPlaceHolder
 */
 void AlertCore::processAlerts(QVector<AlertItem> &alerts)
@@ -259,7 +259,7 @@ void AlertCore::processAlerts(QVector<AlertItem> &alerts)
     QList<Alert::IAlertPlaceHolder*> placeHolders = pluginManager()->getObjects<Alert::IAlertPlaceHolder>();
 
     // Process alerts
-    QList<AlertItem> dynamics;
+    QList<AlertItem> blockings;
     for(int i = 0; i < alerts.count(); ++i) {
         AlertItem &item = alerts[i];
 
@@ -281,10 +281,10 @@ void AlertCore::processAlerts(QVector<AlertItem> &alerts)
             }
         }
 
-        if (item.viewType() == AlertItem::DynamicAlert) {
+        if (item.viewType() == AlertItem::BlockingAlert) {
             if (!item.isValid() || item.isUserValidated())
                 continue;
-            dynamics << item;
+            blockings << item;
         } else {
             foreach(Alert::IAlertPlaceHolder *ph, placeHolders) {
                 ph->addAlert(item);
@@ -292,11 +292,11 @@ void AlertCore::processAlerts(QVector<AlertItem> &alerts)
         }
     }
 
-    if (!dynamics.isEmpty()) {
-        DynamicAlertResult result = DynamicAlertDialog::executeDynamicAlert(dynamics);
-        DynamicAlertDialog::applyResultToAlerts(dynamics, result);
-        if (!saveAlerts(dynamics))
-            LOG_ERROR("Unable to save validated dynamic alerts");
+    if (!blockings.isEmpty()) {
+        BlockingAlertResult result = BlockingAlertDialog::executeBlockingAlert(blockings);
+        BlockingAlertDialog::applyResultToAlerts(blockings, result);
+        if (!saveAlerts(blockings))
+            LOG_ERROR("Unable to save validated blockings alerts");
     }
 }
 
@@ -351,10 +351,10 @@ void AlertCore::postCoreInitialization()
 
     AlertItem item5;
     item5.setUuid(Utils::Database::createUid());
-    item5.setLabel("Simple basic dynamic alert test (item5)");
+    item5.setLabel("Simple basic Blocking alert test (item5)");
     item5.setCategory("Test");
-    item5.setDescription("Aoutch this is a dynamic alert !");
-    item5.setViewType(AlertItem::DynamicAlert);
+    item5.setDescription("Aoutch this is a Blocking alert !");
+    item5.setViewType(AlertItem::BlockingAlert);
     item5.setRemindLaterAllowed(true);
     item5.setOverrideRequiresUserComment(true);
     item5.addRelation(AlertRelation(AlertRelation::RelatedToPatient, "patient1"));
@@ -362,10 +362,10 @@ void AlertCore::postCoreInitialization()
 
     AlertItem item6;
     item6.setUuid(Utils::Database::createUid());
-    item6.setLabel("Simple basic dynamic user alert (item6)");
+    item6.setLabel("Simple basic Blocking user alert (item6)");
     item6.setCategory("Test user alert");
-    item6.setDescription("Aoutch this is a dynamic alert !<br />For you, <b>user1</b>!");
-    item6.setViewType(AlertItem::DynamicAlert);
+    item6.setDescription("Aoutch this is a Blocking alert !<br />For you, <b>user1</b>!");
+    item6.setViewType(AlertItem::BlockingAlert);
     item6.setRemindLaterAllowed(true);
     item6.addRelation(AlertRelation(AlertRelation::RelatedToUser, "user1"));
     item6.addTiming(AlertTiming(start, expiration));
@@ -421,7 +421,7 @@ void AlertCore::postCoreInitialization()
     item11.setLabel("Test script interactions (item11)");
     item11.setCategory("Test script");
     item11.setDescription("Test script interaction with alertitem:<br />- redefine priority to HIGH<br />- change the label adding \"WAAAAAAHHHHHHOOUUUUHHH\"<br/>- add a comment");
-    item11.setViewType(AlertItem::DynamicAlert);
+    item11.setViewType(AlertItem::BlockingAlert);
     item11.addRelation(AlertRelation(AlertRelation::RelatedToAllPatients));
     item11.addTiming(AlertTiming(start, expiration));
     item11.addScript(AlertScript("check_item11", AlertScript::CheckValidityOfAlert,
@@ -476,9 +476,15 @@ void AlertCore::postCoreInitialization()
         //    qWarning() << (t.toXml() == item.toXml());
     }
 
-    // Dynamic alerts
+    // To XML
+    if (true) {
+        qWarning() << item.toXml();
+        qWarning() << item11.toXml();
+    }
+
+    // Blocking alerts
     if (false) {
-        item.setViewType(AlertItem::DynamicAlert);
+        item.setViewType(AlertItem::BlockingAlert);
         item.setOverrideRequiresUserComment(true);
         QToolButton *test = new QToolButton;
         test->setText("Houlala");
@@ -486,8 +492,8 @@ void AlertCore::postCoreInitialization()
         QList<QAbstractButton*> buttons;
         buttons << test;
 
-        DynamicAlertDialog::executeDynamicAlert(QList<AlertItem>() <<  item << item2 << item3 << item4 << item5, buttons);
-        //    DynamicAlertDialog::executeDynamicAlert(item4);
+        BlockingAlertDialog::executeBlockingAlert(QList<AlertItem>() <<  item << item2 << item3 << item4 << item5, buttons);
+        //    BlockingAlertDialog::executeBlockingAlert(item4);
     }
 
     // Alert editor

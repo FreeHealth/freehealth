@@ -89,10 +89,10 @@ AlertItemEditorWidget::AlertItemEditorWidget(QWidget *parent) :
     d->ui->priority->addItem(Utils::firstLetterUpperCase(tkTr(Trans::Constants::MEDIUM)));
     d->ui->priority->addItem(Utils::firstLetterUpperCase(tkTr(Trans::Constants::LOW)));
 
-    // DynamicAlert = 0,
+    // BlockingAlert = 0,
     // StaticAlert,
-    d->ui->viewType->addItem(tr("Dynamic alert"));
-    d->ui->viewType->addItem(tr("Static alert"));
+    d->ui->viewType->addItem(tkTr(Trans::Constants::BLOCKING_ALERT));
+    d->ui->viewType->addItem(tkTr(Trans::Constants::NON_BLOCKING_ALERT));
 
     // ApplicationNotification = 0,
     // PatientCondition,
@@ -157,7 +157,7 @@ void AlertItemEditorWidget::setAlertItem(const AlertItem &item)
         d->ui->alertDecsr->setPlainText(d->_item.description());
 
     // Types
-    if (d->_item.viewType()==AlertItem::DynamicAlert)
+    if (d->_item.viewType()==AlertItem::BlockingAlert)
         d->ui->viewType->setCurrentIndex(0);
     else if (d->_item.viewType()==AlertItem::StaticAlert)
         d->ui->viewType->setCurrentIndex(1);
@@ -307,7 +307,7 @@ bool AlertItemEditorWidget::submit(AlertItem &item)
 
     // Types
     if (d->ui->viewType->currentIndex() == 0)
-        item.setViewType(AlertItem::DynamicAlert);
+        item.setViewType(AlertItem::BlockingAlert);
     else
         item.setViewType(AlertItem::StaticAlert);
     item.setContentType(AlertItem::ContentType(d->ui->contentType->currentIndex()));
