@@ -32,6 +32,7 @@
 #include <alertplugin/alertitem.h>
 #include <QToolBar>
 #include <QPointer>
+#include <QToolButton>
 
 namespace Alert {
 class StaticAlertToolButton;
@@ -65,11 +66,19 @@ public:
     bool containsAlertUuid(const QString &alertUid);
     bool removeAlertUuid(const QString &alertUid);
 
+private Q_SLOTS:
+    void createAlert();
+
+private:
+    void addNewAlertButton();
+    bool eventFilter(QObject *obj, QEvent *event);
+
 private:
     QPointer<QToolBar> _widget;
     QList<AlertItem> alerts;
     QList<int> _priorities;
     QHash<QString, StaticAlertToolButton *> _buttons;
+    QToolButton *_newButton;
 };
 
 }  // namespace Alert
