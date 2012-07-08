@@ -66,6 +66,7 @@ const char* const TOKEN_1                            = QT_TRANSLATE_NOOP("tkCons
 const char* const EDIT_TOKEN                         = QT_TRANSLATE_NOOP("tkConstants", "Edit token");
 const char* const VALIDATE                           = QT_TRANSLATE_NOOP("tkConstants", "Validate");
 const char* const OVERRIDE                           = QT_TRANSLATE_NOOP("tkConstants", "Override");
+const char* const ADD_ALERT                          = QT_TRANSLATE_NOOP("tkConstants", "Add alert");
 const char* const EDIT_ALERT                         = QT_TRANSLATE_NOOP("tkConstants", "Edit alert");
 const char* const REMIND_LATER                       = QT_TRANSLATE_NOOP("tkConstants", "Remind later");
 const char* const _1_ALERTS                           = QT_TRANSLATE_NOOP("tkConstants", "%1 alerts");
