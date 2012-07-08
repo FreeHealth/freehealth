@@ -674,7 +674,6 @@ QString AlertItem::priorityBackgroundColor() const
     case AlertItem::Medium: background = Core::Constants::COLOR_BACKGROUND_ALERT_MEDIUM; break;
     case AlertItem::High: background = Core::Constants::COLOR_BACKGROUND_ALERT_HIGH; break;
     }
-    qWarning()<< d->_priority << background;
     return background;
 }
 
