@@ -353,7 +353,7 @@ public:
     static bool executeSQL(const QString &req, QSqlDatabase &DB);
     static bool executeSqlFile(const QString &connectionName, const QString &fileName, QProgressDialog *dlg = 0, QString *error = 0);
     static bool importCsvToDatabase(const QString &connectionName, const QString &fileName, const QString &table, const QString &separator = QString(";"), bool ignoreFirstLine = false);
-
+    static bool createMinimalDefaultsFor(const QString &connectionName,const QString & tableString , const QStringList & valuesList);
     virtual void warn() const;
     virtual void toTreeWidget(QTreeWidget *tree);
 

@@ -2113,6 +2113,7 @@ bool Database::importCsvToDatabase(const QString &connectionName, const QString 
         QSqlQuery query(req + reqValues, db);
         if (!query.isActive()) {
             LOG_QUERY_ERROR_FOR("Database", query);
+            return false;
         }
 //        else{
 //            if (counter < 5)
@@ -2448,4 +2449,43 @@ bool Database::alterTableForNewField(const int tableRef, const int newFieldRef,c
     	  b = false;
         }    
     return b;
+}
+
+/**
+create minimal necessary defaults values for table referenced by tableRef
+@author Pierre-Marie Desombre
+*/
+
+bool Database::createMinimalDefaultsFor(const QString &connectionName,const QString & tableString, const QStringList & valuesList)
+{
+    bool success = true;
+    QSqlDatabase db = QSqlDatabase::database(connectionName);
+    if (!db.isOpen()) {
+        if (!db.open()) {
+            LOG_ERROR_FOR("Database", tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+                          .arg(db.connectionName(), db.lastError().text()));
+            return false;
+            }
+        }
+    QSqlRecord record = db.record(tableString);
+    QString req = "INSERT INTO " + tableString + " (\n";
+    for(int i = 0; i < record.count(); ++i) {
+        req += "`" + record.fieldName(i) + "`, ";
+    }
+    req.chop(2);
+    req += ")\n VALUES (";
+    foreach(QString values,valuesList){
+        values.replace(";",",");
+        QString lineReq = req;
+        lineReq += values;
+        lineReq += ");";
+        qDebug() << __FILE__ << QString::number(__LINE__) << " lineReq =" << lineReq ;
+        QSqlQuery query(db);
+        if (!query.exec(lineReq))
+        {
+        	  LOG_QUERY_ERROR_FOR("Database", query);
+        	  success = false;
+            }
+        }    
+    return success;
 }

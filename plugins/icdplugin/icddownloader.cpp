@@ -105,7 +105,7 @@ bool IcdDownloader::createDatabase()
         return false;
     }
 
-    // Create SQL Schema
+    // Create SQL schema
     if (Utils::Database::executeSqlFile(Constants::DB_ICD10, QFileInfo(sqlFile).absoluteFilePath())) {
         LOG(tkTr(Trans::Constants::DATABASE_1_CORRECTLY_CREATED).arg(Constants::DB_ICD10));
     } else {

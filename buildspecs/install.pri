@@ -26,7 +26,7 @@ INSTALL_QT_INSIDE_BUNDLE = true
 
 # These inclusions modify the default path for the installation process
 macx:include(install_mac.pri)
-else:linux*|hurd*:include(install_linux.pri)
+else:linux*|hurd*|glibc*:include(install_linux.pri)
 else:win32:include(install_win.pri)
 else:freebsd*:include(install_freebsd.pri)
 
