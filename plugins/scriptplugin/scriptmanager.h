@@ -44,7 +44,7 @@ public:
     ScriptManager(QObject *parent);
 
     QScriptValue evaluate(const QString &script);
-    QScriptValue addScriptObject(const QObject *object);
+    QScriptValue addScriptObject(QObject *object);
 
     QScriptEngine *engine() {return m_Engine;}
 

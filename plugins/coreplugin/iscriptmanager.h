@@ -14,7 +14,7 @@ public:
     explicit IScriptManager(QObject *parent = 0) : QObject(parent) {}
 
     virtual QScriptValue evaluate(const QString &script) = 0;
-    virtual QScriptValue addScriptObject(const QObject *object) = 0;
+    virtual QScriptValue addScriptObject(QObject *object) = 0;
 
     // TODO: add exceptions catchers
 };
