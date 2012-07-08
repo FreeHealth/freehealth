@@ -424,6 +424,22 @@ void AlertCore::postCoreInitialization()
     item10.addScript(AlertScript("check_item10", AlertScript::CheckValidityOfAlert, "(1+1)==2;"));
     item10.addScript(AlertScript("startdate_item10", AlertScript::CyclingStartDate, "var currentDate = new Date(); currentDate.setDate(currentDate.getDate()-2); currentDate;"));
 
+    AlertItem item11;
+    item11.setUuid(Utils::Database::createUid());
+    item11.setLabel("Test script interactions (item11)");
+    item11.setCategory("Test script");
+    item11.setDescription("Test script interaction with alertitem:<br />- redefine priority to HIGH<br />- change the label adding \"WAAAAAAHHHHHHOOUUUUHHH\"<br/>- add a comment");
+    item11.setViewType(AlertItem::DynamicAlert);
+    item11.addRelation(AlertRelation(AlertRelation::RelatedToAllPatients));
+    item11.addTiming(AlertTiming(start, expiration));
+    item11.addScript(AlertScript("check_item11", AlertScript::CheckValidityOfAlert,
+                                 "print(\"CURRENT ALERT PROPERTY:\"+alert.priority());"
+                                 "alert.setPriority(0);"
+                                 "print(\"CURRENT ALERT LABEL:\"+alert.label());"
+                                 "alert.setLabel(alert.label()+\"<br />WAAAAAAHHHHHHOOUUUUHHH\");"
+                                 "alert.setComment(\"Niah niah niah comment added by the script...\");"
+                                 "true;"));
+
     // Db save/get
     if (true) {
         if (!d->_alertBase->saveAlertItem(item))
@@ -446,6 +462,8 @@ void AlertCore::postCoreInitialization()
             qWarning() << "ITEM9 WRONG";
         if (!d->_alertBase->saveAlertItem(item10))
             qWarning() << "ITEM10 WRONG";
+        if (!d->_alertBase->saveAlertItem(item11))
+            qWarning() << "ITEM11 WRONG";
 
         Internal::AlertBaseQuery query;
         query.setAlertValidity(Internal::AlertBaseQuery::ValidAlerts);
@@ -458,10 +476,10 @@ void AlertCore::postCoreInitialization()
 //        query.addUserAlerts();
         QVector<AlertItem> test = d->_alertBase->getAlertItems(query);
         qWarning() << test.count();
-        for(int i=0; i < test.count(); ++i) {
-            qWarning() << "\n\n" << test.at(i).timingAt(0).start() << test.at(i).timingAt(0).end() << test.at(i).relationAt(1).relatedToUid();
-        }
-        qWarning() << "\n\n";
+//        for(int i=0; i < test.count(); ++i) {
+//            qWarning() << "\n\n" << test.at(i).timingAt(0).start() << test.at(i).timingAt(0).end() << test.at(i).relationAt(1).relatedToUid();
+//        }
+//        qWarning() << "\n\n";
         //    AlertItem t = AlertItem::fromXml(item.toXml());
         //    qWarning() << (t.toXml() == item.toXml());
     }
