@@ -139,6 +139,7 @@ DynamicAlertDialog::DynamicAlertDialog(const QList<AlertItem> &items,
     ui(new Ui::DynamicAlertDialog),
     cui(0),
     _overrideButton(0),
+    _remindLaterButton(0),
     _overrideCommentRequired(false),
     _remind(false)
 {
@@ -267,15 +268,16 @@ DynamicAlertDialog::DynamicAlertDialog(const QList<AlertItem> &items,
     accept->setFont(bold);
     _box->addButton(accept, QDialogButtonBox::AcceptRole);
 
-    _remindLaterButton = new QToolButton(this);
-    _remindLaterButton->setMinimumHeight(22);
-    _remindLaterButton->setText(tkTr(Trans::Constants::REMIND_LATER));
-    _remindLaterButton->setIcon(theme()->icon(Core::Constants::ICONREMINDER, Core::ITheme::SmallIcon));
-    _remindLaterButton->setIconSize(QSize(16,16));
-    _remindLaterButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    _remindLaterButton->setFont(bold);
-    if (canRemind)
+    if (canRemind) {
+        _remindLaterButton = new QToolButton(this);
+        _remindLaterButton->setMinimumHeight(22);
+        _remindLaterButton->setText(tkTr(Trans::Constants::REMIND_LATER));
+        _remindLaterButton->setIcon(theme()->icon(Core::Constants::ICONREMINDER, Core::ITheme::SmallIcon));
+        _remindLaterButton->setIconSize(QSize(16,16));
+        _remindLaterButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+        _remindLaterButton->setFont(bold);
         _box->addButton(_remindLaterButton, QDialogButtonBox::AcceptRole);
+    }
 
     _overrideButton = new QToolButton(this);
     _overrideButton->setMinimumHeight(22);
@@ -293,7 +295,8 @@ DynamicAlertDialog::DynamicAlertDialog(const QList<AlertItem> &items,
     }
 
     connect(accept, SIGNAL(clicked()), this, SLOT(accept()));
-    connect(_remindLaterButton, SIGNAL(clicked()), this, SLOT(remindLater()));
+    if (_remindLaterButton)
+        connect(_remindLaterButton, SIGNAL(clicked()), this, SLOT(remindLater()));
     connect(_overrideButton, SIGNAL(clicked()), this, SLOT(override()));
     ui->buttonLayout->setMargin(0);
     ui->buttonLayout->setSpacing(0);
