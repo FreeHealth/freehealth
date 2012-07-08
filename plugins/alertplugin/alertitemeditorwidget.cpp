@@ -90,7 +90,7 @@ AlertItemEditorWidget::AlertItemEditorWidget(QWidget *parent) :
     d->ui->priority->addItem(Utils::firstLetterUpperCase(tkTr(Trans::Constants::LOW)));
 
     // BlockingAlert = 0,
-    // StaticAlert,
+    // NonBlockingAlert,
     d->ui->viewType->addItem(tkTr(Trans::Constants::BLOCKING_ALERT));
     d->ui->viewType->addItem(tkTr(Trans::Constants::NON_BLOCKING_ALERT));
 
@@ -159,7 +159,7 @@ void AlertItemEditorWidget::setAlertItem(const AlertItem &item)
     // Types
     if (d->_item.viewType()==AlertItem::BlockingAlert)
         d->ui->viewType->setCurrentIndex(0);
-    else if (d->_item.viewType()==AlertItem::StaticAlert)
+    else if (d->_item.viewType()==AlertItem::NonBlockingAlert)
         d->ui->viewType->setCurrentIndex(1);
     else
         d->ui->viewType->setCurrentIndex(-1);
@@ -309,7 +309,7 @@ bool AlertItemEditorWidget::submit(AlertItem &item)
     if (d->ui->viewType->currentIndex() == 0)
         item.setViewType(AlertItem::BlockingAlert);
     else
-        item.setViewType(AlertItem::StaticAlert);
+        item.setViewType(AlertItem::NonBlockingAlert);
     item.setContentType(AlertItem::ContentType(d->ui->contentType->currentIndex()));
     item.setPriority(AlertItem::Priority(d->ui->priority->currentIndex()));
     item.setOverrideRequiresUserComment(d->ui->overrideRequiresUserComment->isChecked());

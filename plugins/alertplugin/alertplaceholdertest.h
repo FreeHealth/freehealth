@@ -35,7 +35,7 @@
 #include <QToolButton>
 
 namespace Alert {
-class StaticAlertToolButton;
+class NonBlockingAlertToolButton;
 
 class AlertPlaceHolderTest : public IAlertPlaceHolder
 {
@@ -77,7 +77,7 @@ private:
     QPointer<QToolBar> _widget;
     QList<AlertItem> alerts;
     QList<int> _priorities;
-    QHash<QString, StaticAlertToolButton *> _buttons;
+    QHash<QString, NonBlockingAlertToolButton *> _buttons;
     QToolButton *_newButton;
 };
 

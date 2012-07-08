@@ -131,7 +131,7 @@ public:
         _valid(true), _modified(false),
         _editable(true), _overrideRequiresUserComment(false),
         _mustBeRead(false), _remindAllowed(false),
-        _viewType(AlertItem::StaticAlert),
+        _viewType(AlertItem::NonBlockingAlert),
         _contentType(AlertItem::ApplicationNotification),
         _priority(AlertItem::Medium),
         q(parent)
@@ -143,7 +143,7 @@ public:
     {
         switch (_viewType) {
         case AlertItem::BlockingAlert: return "blocking";
-        case AlertItem::StaticAlert: return "nonblocking";
+        case AlertItem::NonBlockingAlert: return "nonblocking";
         }
         return QString::null;
     }
@@ -173,7 +173,7 @@ public:
         // default is blocking alert
         _viewType = AlertItem::BlockingAlert;
         if (xml.compare("static", Qt::CaseInsensitive)==0) {
-            _viewType = AlertItem::StaticAlert;
+            _viewType = AlertItem::NonBlockingAlert;
         }
     }
 
@@ -1161,7 +1161,7 @@ QDebug operator<<(QDebug dbg, const Alert::AlertItem &a)
     case AlertItem::BlockingAlert:
         s << "view:blocking";
         break;
-    case AlertItem::StaticAlert:
+    case AlertItem::NonBlockingAlert:
         s << "view:nonblocking";
         break;
     default:

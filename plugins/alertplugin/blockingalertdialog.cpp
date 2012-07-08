@@ -89,7 +89,7 @@
   Return the Alert::AlertValidation suitable to the user actions.
 */
 
-#include "BlockingAlertdialog.h"
+#include "blockingalertdialog.h"
 #include "alertitem.h"
 #include "alertcore.h"
 #include "ui_BlockingAlertdialog.h"

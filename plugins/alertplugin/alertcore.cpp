@@ -217,7 +217,7 @@ bool AlertCore::updateAlert(const AlertItem &item)
         if (item.isUserValidated() || !item.isValid())
             return true;
         BlockingAlertDialog::executeBlockingAlert(item);
-    } else if (item.viewType() == AlertItem::StaticAlert) {
+    } else if (item.viewType() == AlertItem::NonBlockingAlert) {
         // Get static place holders
         QList<Alert::IAlertPlaceHolder*> placeHolders = pluginManager()->getObjects<Alert::IAlertPlaceHolder>();
         foreach(Alert::IAlertPlaceHolder *ph, placeHolders) {
@@ -236,7 +236,7 @@ bool AlertCore::updateAlert(const AlertItem &item)
 bool AlertCore::removeAlert(const AlertItem &item)
 {
     bool ok =true;
-    if (item.viewType() == AlertItem::StaticAlert) {
+    if (item.viewType() == AlertItem::NonBlockingAlert) {
         // Get static place holders
         QList<Alert::IAlertPlaceHolder*> placeHolders = pluginManager()->getObjects<Alert::IAlertPlaceHolder>();
         foreach(Alert::IAlertPlaceHolder *ph, placeHolders) {
@@ -309,7 +309,7 @@ void AlertCore::postCoreInitialization()
     AlertItem item = d->_alertBase->createVirtualItem();
     item.setLabel(item.label() + " (item)");
     item.setThemedIcon("identity.png");
-    item.setViewType(AlertItem::StaticAlert);
+    item.setViewType(AlertItem::NonBlockingAlert);
     item.setPriority(AlertItem::High);
     item.setRemindLaterAllowed(true);
     item.clearRelations();
@@ -319,7 +319,7 @@ void AlertCore::postCoreInitialization()
 
     AlertItem item2 = d->_alertBase->createVirtualItem();
     item2.setThemedIcon("next.png");
-    item2.setViewType(AlertItem::StaticAlert);
+    item2.setViewType(AlertItem::NonBlockingAlert);
     item2.clearRelations();
     item2.clearTimings();
     item2.addRelation(AlertRelation(AlertRelation::RelatedToPatient, "patient2"));
@@ -331,7 +331,7 @@ void AlertCore::postCoreInitialization()
     item3.setLabel("Just a simple alert (item3)");
     item3.setCategory("Test");
     item3.setDescription("Simple basic static alert that needs a user comment on overriding");
-    item3.setViewType(AlertItem::StaticAlert);
+    item3.setViewType(AlertItem::NonBlockingAlert);
     item3.setPriority(AlertItem::Low);
     item3.setOverrideRequiresUserComment(true);
     item3.addRelation(AlertRelation(AlertRelation::RelatedToPatient, "patient1"));
@@ -343,7 +343,7 @@ void AlertCore::postCoreInitialization()
     item4.setLabel("Related to all patient (item4)");
     item4.setCategory("Test");
     item4.setDescription("Related to all patients and was validated for patient2 by user1.<br /> Static alert");
-    item4.setViewType(AlertItem::StaticAlert);
+    item4.setViewType(AlertItem::NonBlockingAlert);
     item4.setPriority(AlertItem::Medium);
     item4.addRelation(AlertRelation(AlertRelation::RelatedToAllPatients));
     item4.addValidation(AlertValidation(QDateTime::currentDateTime(), "user1", "patient2"));
@@ -377,7 +377,7 @@ void AlertCore::postCoreInitialization()
     item7.setLabel("Simple basic alert (item7)");
     item7.setCategory("Test validated alert");
     item7.setDescription("Aoutch this is an error you should not see this !<br /><br />Validated for patient1.");
-    item7.setViewType(AlertItem::StaticAlert);
+    item7.setViewType(AlertItem::NonBlockingAlert);
     item7.addRelation(AlertRelation(AlertRelation::RelatedToAllPatients));
     item7.addValidation(AlertValidation(QDateTime::currentDateTime(), "user1", "patient1"));
     item7.addTiming(AlertTiming(start, expiration));
@@ -387,7 +387,7 @@ void AlertCore::postCoreInitialization()
     item8.setLabel("Scripted alert (item8)");
     item8.setCategory("Test scripted alert");
     item8.setDescription("A valid alert with multiple scripts.");
-    item8.setViewType(AlertItem::StaticAlert);
+    item8.setViewType(AlertItem::NonBlockingAlert);
     item8.addRelation(AlertRelation(AlertRelation::RelatedToAllPatients));
     item8.addTiming(AlertTiming(start, expiration));
     item8.addScript(AlertScript("check_item8", AlertScript::CheckValidityOfAlert, "(1+1)==2;"));
@@ -397,7 +397,7 @@ void AlertCore::postCoreInitialization()
     item9.setLabel("INVALID Scripted alert (item9)");
     item9.setCategory("Test scripted alert");
     item9.setDescription("A invalid alert with multiple scripts. YOU SHOULD NOT SEE IT !!!!");
-    item9.setViewType(AlertItem::StaticAlert);
+    item9.setViewType(AlertItem::NonBlockingAlert);
     item9.addRelation(AlertRelation(AlertRelation::RelatedToAllPatients));
     item9.addTiming(AlertTiming(start, expiration));
     item9.addScript(AlertScript("check_item9", AlertScript::CheckValidityOfAlert, "(1+1)==3;"));
@@ -407,7 +407,7 @@ void AlertCore::postCoreInitialization()
     item10.setLabel("Cycling alert for all patients (item10)");
     item10.setCategory("Test cycling alert");
     item10.setDescription("Testing a cycling alert with:<br />- scripts<br />- relation to all patients.<br />Static alert.");
-    item10.setViewType(AlertItem::StaticAlert);
+    item10.setViewType(AlertItem::NonBlockingAlert);
     item10.addRelation(AlertRelation(AlertRelation::RelatedToAllPatients));
     AlertTiming cycling(start, expiration);
     cycling.setCyclingDelayInYears(5);

@@ -28,7 +28,7 @@
 #include "alertplaceholdertest.h"
 #include "alertitem.h"
 #include "alertcore.h"
-#include "staticalertwidgets.h"
+#include "nonblockingalertwidgets.h"
 #include "alertitemeditordialog.h"
 
 #include <coreplugin/icore.h>
@@ -98,7 +98,7 @@ bool AlertPlaceHolderTest::addAlert(const AlertItem &alert)
 {
     if (!containsAlertUuid(alert.uuid())) {
         if (_widget) {
-            StaticAlertToolButton *but = new StaticAlertToolButton(_widget);
+            NonBlockingAlertToolButton *but = new NonBlockingAlertToolButton(_widget);
             but->setAlertItem(alert);
 
             // keep alert sorted by priority

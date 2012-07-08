@@ -25,7 +25,7 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#include "staticalertwidgets.h"
+#include "nonblockingalertwidgets.h"
 #include "alertcore.h"
 #include "alertitem.h"
 #include "alertitemeditordialog.h"
@@ -74,13 +74,13 @@ static QIcon getIcon(const AlertItem &item)
 
 
 /**
-  \class Alert::StaticAlertLabel
+  \class Alert::NonBlockingAlertLabel
   Create a QToolButton for any static view type Alert::AlertItem. The alert can be:
     - validated
     - edited
   using the menu of this button.
 */
-StaticAlertToolButton::StaticAlertToolButton(QWidget *parent) :
+NonBlockingAlertToolButton::NonBlockingAlertToolButton(QWidget *parent) :
     QToolButton(parent)
 {
     setMinimumSize(QSize(16,16));
@@ -120,12 +120,12 @@ StaticAlertToolButton::StaticAlertToolButton(QWidget *parent) :
     retranslateUi();
 }
 
-StaticAlertToolButton::~StaticAlertToolButton()
+NonBlockingAlertToolButton::~NonBlockingAlertToolButton()
 {
 }
 
 /** Define the Alert::AlertItem to use for this button. */
-void StaticAlertToolButton::setAlertItem(const AlertItem &item)
+void NonBlockingAlertToolButton::setAlertItem(const AlertItem &item)
 {
     setIcon(getIcon(item));
     setToolTip(item.htmlToolTip());
@@ -159,12 +159,12 @@ void StaticAlertToolButton::setAlertItem(const AlertItem &item)
     _item = item;
 }
 
-void StaticAlertToolButton::validateAlert()
+void NonBlockingAlertToolButton::validateAlert()
 {
     _item.validateAlertWithCurrentUserAndConfirmationDialog();
 }
 
-void StaticAlertToolButton::editAlert()
+void NonBlockingAlertToolButton::editAlert()
 {
     if (!_item.isEditable())
         return;
@@ -177,7 +177,7 @@ void StaticAlertToolButton::editAlert()
     }
 }
 
-void StaticAlertToolButton::remindAlert()
+void NonBlockingAlertToolButton::remindAlert()
 {
     if (!_item.isRemindLaterAllowed())
         return;
@@ -185,7 +185,7 @@ void StaticAlertToolButton::remindAlert()
     AlertCore::instance()->saveAlert(_item);
 }
 
-void StaticAlertToolButton::overrideAlert()
+void NonBlockingAlertToolButton::overrideAlert()
 {
     // TODO: improve the dialog by creating a specific AlertOverridingConfirmationDialog
     bool yes = Utils::yesNoMessageBox(tr("Override alert"),
@@ -214,7 +214,7 @@ void StaticAlertToolButton::overrideAlert()
     }
 }
 
-void StaticAlertToolButton::retranslateUi()
+void NonBlockingAlertToolButton::retranslateUi()
 {
     aValidate->setText(tkTr(Trans::Constants::VALIDATE));
     aEdit->setText(tkTr(Trans::Constants::EDIT_ALERT));
@@ -227,7 +227,7 @@ void StaticAlertToolButton::retranslateUi()
         aCategory->setText(_item.category());
 }
 
-void StaticAlertToolButton::changeEvent(QEvent *event)
+void NonBlockingAlertToolButton::changeEvent(QEvent *event)
 {
     if (event->type()==QEvent::LanguageChange) {
         retranslateUi();
@@ -235,7 +235,7 @@ void StaticAlertToolButton::changeEvent(QEvent *event)
     QToolButton::changeEvent(event);
 }
 
-void StaticAlertToolButton::hideEvent(QHideEvent *event)
+void NonBlockingAlertToolButton::hideEvent(QHideEvent *event)
 {
     // INFO: wrapper to Qt bug, when qtoolbutton is hidden the menu stays opened if it was opened
     if (_menu->isVisible())
@@ -244,18 +244,18 @@ void StaticAlertToolButton::hideEvent(QHideEvent *event)
 }
 
 /**
-  \class Alert::StaticAlertLabel
+  \class Alert::NonBlockingAlertLabel
   Create a QLabel for any static view type Alert::AlertItem. The QLabel will only present the icon
   of the alert and its label/category as tooltip. It is a 16x16 sized QLabel.
 */
-StaticAlertLabel::StaticAlertLabel(QWidget *parent) :
+NonBlockingAlertLabel::NonBlockingAlertLabel(QWidget *parent) :
     QLabel(parent)
 {
     setMinimumSize(QSize(16,16));
 }
 
 /** Define the Alert::AlertItem to use for this button. */
-void StaticAlertLabel::setAlertItem(const AlertItem &item)
+void NonBlockingAlertLabel::setAlertItem(const AlertItem &item)
 {
     setPixmap(getIcon(item).pixmap(16,16));
     setToolTip(item.htmlToolTip(true));

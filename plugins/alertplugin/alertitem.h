@@ -284,7 +284,7 @@ protected:
 public:
     enum ViewType {
         BlockingAlert = 0,
-        StaticAlert
+        NonBlockingAlert
     };
     enum ContentType {
         ApplicationNotification = 0,

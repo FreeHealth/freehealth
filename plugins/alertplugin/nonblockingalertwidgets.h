@@ -25,8 +25,8 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef ALERT_STATICALERTWIDGETS_H
-#define ALERT_STATICALERTWIDGETS_H
+#ifndef ALERT_NONBLOCKINGALERTWIDGETS_H
+#define ALERT_NONBLOCKINGALERTWIDGETS_H
 
 #include <alertplugin/alertplugin_exporter.h>
 #include <alertplugin/alertitem.h>
@@ -38,12 +38,12 @@
 namespace Alert {
 class AlertItem;
 
-class ALERT_EXPORT StaticAlertToolButton : public QToolButton
+class ALERT_EXPORT NonBlockingAlertToolButton : public QToolButton
 {
     Q_OBJECT
 public:
-    StaticAlertToolButton(QWidget *parent = 0);
-    ~StaticAlertToolButton();
+    NonBlockingAlertToolButton(QWidget *parent = 0);
+    ~NonBlockingAlertToolButton();
 
     void setAlertItem(const AlertItem &item);
 
@@ -64,10 +64,10 @@ private:
     AlertItem _item;
 };
 
-class ALERT_EXPORT StaticAlertLabel : public QLabel
+class ALERT_EXPORT NonBlockingAlertLabel : public QLabel
 {
 public:
-    StaticAlertLabel(QWidget *parent = 0);
+    NonBlockingAlertLabel(QWidget *parent = 0);
 
     void setAlertItem(const AlertItem &item);
 };
@@ -75,4 +75,4 @@ public:
 
 } // namespace Alert
 
-#endif // ALERT_STATICALERTWIDGETS_H
+#endif // ALERT_NONBLOCKINGALERTWIDGETS_H
