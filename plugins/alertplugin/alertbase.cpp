@@ -60,7 +60,7 @@
 #include <QHash>
 #include <QSqlQuery>
 
-enum { WarnGetAlertQuerySQLCommand = true };
+enum { WarnGetAlertQuerySQLCommand = false };
 
 using namespace Alert;
 using namespace Internal;
