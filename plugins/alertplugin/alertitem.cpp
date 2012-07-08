@@ -670,10 +670,11 @@ QString AlertItem::priorityBackgroundColor() const
 {
     QString background;
     switch (d->_priority) {
-    case AlertItem::Low: background = Core::Constants::COLOR_BACKGROUND_ALERT_HIGH; break;
+    case AlertItem::Low: background = Core::Constants::COLOR_BACKGROUND_ALERT_LOW; break;
     case AlertItem::Medium: background = Core::Constants::COLOR_BACKGROUND_ALERT_MEDIUM; break;
-    case AlertItem::High: background = Core::Constants::COLOR_BACKGROUND_ALERT_LOW; break;
+    case AlertItem::High: background = Core::Constants::COLOR_BACKGROUND_ALERT_HIGH; break;
     }
+    qWarning()<< d->_priority << background;
     return background;
 }
 
@@ -956,7 +957,7 @@ bool AlertItem::validateAlertWithCurrentUserAndConfirmationDialog()
   The new state of the alert is not automatically saved into database, but
   the core is informed of this modification. \sa Alert::AlertCore::updateAlert()
 */
-bool AlertItem::validateAlert(const QString &validatorUid, bool override, const QString overrideComment, const QDateTime &dateOfValidation)
+bool AlertItem::validateAlert(const QString &validatorUid, bool override, const QString &overrideComment, const QDateTime &dateOfValidation)
 {
     // Create the validation
     AlertValidation val;
@@ -1052,6 +1053,7 @@ bool AlertItem::isUserValidated() const
 /** Remove all recorded validations. */
 void AlertItem::clearValidations()
 {
+    // TODO: check: clearValidations -> look at db (are all validations are removed ?)
     d->_modified = true;
     d->_validations.clear();
 }

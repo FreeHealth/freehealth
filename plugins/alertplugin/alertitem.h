@@ -385,7 +385,7 @@ public:
 
     bool remindLater();
     bool validateAlertWithCurrentUserAndConfirmationDialog();
-    bool validateAlert(const QString &validatorUid, bool override, const QString overrideComment, const QDateTime &dateOfValidation);
+    bool validateAlert(const QString &validatorUid, bool override, const QString &overrideComment, const QDateTime &dateOfValidation);
     bool isUserValidated() const;
     virtual void clearValidations();
     virtual AlertValidation &validation(int id) const;
