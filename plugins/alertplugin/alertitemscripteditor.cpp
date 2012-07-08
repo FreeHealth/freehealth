@@ -134,6 +134,9 @@ void AlertItemScriptEditor::submit()
 
 void AlertItemScriptEditor::onTypesSelected(int index)
 {
+    if (_scripts.count() <= index)
+        return;
+
     if (_previousIndex != -1) {
         // keep changes to the _scripts var
         _scripts[_previousIndex].setScript(ui->plainTextEdit->toPlainText());
