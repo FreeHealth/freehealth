@@ -312,7 +312,7 @@ DynamicAlertDialog::~DynamicAlertDialog()
 
 void DynamicAlertDialog::remindLater()
 {
-    qWarning() << "DynamicAlertDialog::remindLater()";
+//    qWarning() << "DynamicAlertDialog::remindLater()";
     _remind = true;
     accept();
 }
