@@ -344,7 +344,12 @@ bool AccountDatabaseDefautsWidget::createDefaultsFor(const QString &filePrototyp
 bool AccountDatabaseDefautsWidget::createMinimalsDefaults(const int tableRef)
 {
     bool success = true;
-    success = Utils::Database::createMinimalDefaultsFor(AccountDB::Constants::DB_ACCOUNTANCY,base()->table(tableRef));
+    QStringList valuesList;
+    valuesList << "'1','{07262c6f-9d08-4208-ae74-ba9b7d74daea}','{00000000-0000-0000-0000-000000000000}','2','C','consultation','NGAP','1','70','2012-06-22','NULL','FR'"
+               << "'2','{78521164-5ea9-4dcf-926f-b0518fcbf580}','{00000000-0000-0000-0000-000000000000}','2','MNO','majoration pour les enfants de 0 à 2 ans','Forfaits','5','70','2012-06-22','NULL','FR'"
+               << "'3','{f8593736-b517-4098-847e-f7c6cc15e051}','{00000000-0000-0000-0000-000000000000}','2','DEQP003','Électrocardiographie sur au moins 12 dérivations','CCAM','13','70','2012-06-22','<?xml version=1.0 encoding=ISO-8859-1?><activity>1</activity><phase>0</phase><reimbursment></reimbursment><agreement></agreement><exemption>2</exemption><regroupment>ATM</regroupment>','FR'";
+    
+    success = Utils::Database::createMinimalDefaultsFor(AccountDB::Constants::DB_ACCOUNTANCY,base()->table(tableRef),valuesList);
     return success;
 }
 

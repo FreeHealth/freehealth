@@ -2456,7 +2456,7 @@ create minimal necessary defaults values for table referenced by tableRef
 @author Pierre-Marie Desombre
 */
 
-bool Database::createMinimalDefaultsFor(const QString &connectionName,const QString & tableString)
+bool Database::createMinimalDefaultsFor(const QString &connectionName,const QString & tableString, const QStringList & valuesList)
 {
     bool success = true;
     QSqlDatabase db = QSqlDatabase::database(connectionName);
@@ -2467,10 +2467,6 @@ bool Database::createMinimalDefaultsFor(const QString &connectionName,const QStr
             return false;
             }
         }
-    QStringList valuesList;
-    valuesList << "'1','{07262c6f-9d08-4208-ae74-ba9b7d74daea}','{00000000-0000-0000-0000-000000000000}','2','C','consultation','NGAP','1','70','2012-06-22','NULL','FR'"
-               << "'2','{78521164-5ea9-4dcf-926f-b0518fcbf580}','{00000000-0000-0000-0000-000000000000}','2','MNO','majoration pour les enfants de 0 à 2 ans','Forfaits','5','70','2012-06-22','NULL','FR'"
-               << "'3','{f8593736-b517-4098-847e-f7c6cc15e051}','{00000000-0000-0000-0000-000000000000}','2','DEQP003','Électrocardiographie sur au moins 12 dérivations','CCAM','13','70','2012-06-22','<?xml version=1.0 encoding=ISO-8859-1?><activity>1</activity><phase>0</phase><reimbursment></reimbursment><agreement></agreement><exemption>2</exemption><regroupment>ATM</regroupment>','FR'";
     QSqlRecord record = db.record(tableString);
     QString req = "INSERT INTO " + tableString + " (\n";
     for(int i = 0; i < record.count(); ++i) {
