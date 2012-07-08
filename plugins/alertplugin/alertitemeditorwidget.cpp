@@ -130,6 +130,7 @@ void AlertItemEditorWidget::clearUi()
     d->ui->alertLabel->clear();
     d->ui->alertCategory->clear();
     d->ui->alertDecsr->clear();
+    d->ui->iconLineEdit->clear();
     d->ui->contentType->setCurrentIndex(-1);
     d->ui->viewType->setCurrentIndex(-1);
     d->ui->priority->setCurrentIndex(-1);
@@ -158,11 +159,15 @@ void AlertItemEditorWidget::setAlertItem(const AlertItem &item)
     // Types
     if (d->_item.viewType()==AlertItem::DynamicAlert)
         d->ui->viewType->setCurrentIndex(0);
-    else
+    else if (d->_item.viewType()==AlertItem::StaticAlert)
         d->ui->viewType->setCurrentIndex(1);
+    else
+        d->ui->viewType->setCurrentIndex(-1);
+
     d->ui->contentType->setCurrentIndex(d->_item.contentType());
     d->ui->priority->setCurrentIndex(d->_item.priority());
     d->ui->overrideRequiresUserComment->setChecked(d->_item.isOverrideRequiresUserComment());
+    d->ui->iconLineEdit->setText(d->_item.themedIcon());
 
     // Timing
     d->ui->timingEditor->setAlertItem(item);
@@ -182,6 +187,9 @@ void AlertItemEditorWidget::setAlertItem(const AlertItem &item)
 
     // Scripts
     d->ui->scriptEditor->setAlertItem(d->_item);
+
+    // Set focus
+    d->ui->alertLabel->setFocus();
 }
 
 void AlertItemEditorWidget::reset()
@@ -205,6 +213,12 @@ void AlertItemEditorWidget::setDescriptionVisible(bool visible)
 {
     d->ui->alertDecsr->setVisible(visible);
     d->ui->alertDescription_Label->setVisible(visible);
+}
+
+void AlertItemEditorWidget::setIconVisible(bool visible)
+{
+    d->ui->iconLineEdit->setVisible(visible);
+    d->ui->iconLabel->setVisible(visible);
 }
 
 void AlertItemEditorWidget::setRelationVisible(bool visible)
@@ -289,6 +303,7 @@ bool AlertItemEditorWidget::submit(AlertItem &item)
     item.setLabel(d->ui->alertLabel->text());
     item.setCategory(d->ui->alertCategory->text());
     item.setDescription(d->ui->alertDecsr->toHtml());
+    item.setThemedIcon(d->ui->iconLineEdit->text());
 
     // Types
     if (d->ui->viewType->currentIndex() == 0)

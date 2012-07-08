@@ -51,6 +51,7 @@ public:
     void setLabelVisible(bool visible);
     void setCategoryVisible(bool visible);
     void setDescriptionVisible(bool visible);
+    void setIconVisible(bool visible);
     void setRelationVisible(bool visible);
     void setViewTypeVisible(bool visible);
     void setContentTypeVisible(bool visible);

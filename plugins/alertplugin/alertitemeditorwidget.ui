@@ -23,15 +23,15 @@
       <string>General information</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
-      <item row="0" column="0">
-       <widget class="QLabel" name="alertLabel_Label">
+      <item row="2" column="1">
+       <widget class="QTextEdit" name="alertDecsr"/>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="alertDescription_Label">
         <property name="text">
-         <string>Label</string>
+         <string>Description</string>
         </property>
        </widget>
-      </item>
-      <item row="0" column="1">
-       <widget class="QLineEdit" name="alertLabel"/>
       </item>
       <item row="1" column="0">
        <widget class="QLabel" name="alertCategory_Label">
@@ -43,15 +43,25 @@
       <item row="1" column="1">
        <widget class="QLineEdit" name="alertCategory"/>
       </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="alertDescription_Label">
+      <item row="0" column="1">
+       <widget class="QLineEdit" name="alertLabel"/>
+      </item>
+      <item row="0" column="0">
+       <widget class="QLabel" name="alertLabel_Label">
         <property name="text">
-         <string>Description</string>
+         <string>Label</string>
         </property>
        </widget>
       </item>
-      <item row="2" column="1">
-       <widget class="QTextEdit" name="alertDecsr"/>
+      <item row="3" column="0">
+       <widget class="QLabel" name="iconLabel">
+        <property name="text">
+         <string>Icon</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QLineEdit" name="iconLineEdit"/>
       </item>
      </layout>
     </widget>
@@ -59,7 +69,7 @@
    <item row="1" column="0">
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>3</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tab_type">
       <attribute name="title">
@@ -134,11 +144,6 @@
         <widget class="Alert::AlertItemTimingEditorWidget" name="timingEditor" native="true"/>
        </item>
       </layout>
-     </widget>
-     <widget class="QWidget" name="tab_extra">
-      <attribute name="title">
-       <string>Extra</string>
-      </attribute>
      </widget>
      <widget class="QWidget" name="tab_scripts">
       <attribute name="title">
