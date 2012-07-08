@@ -250,8 +250,17 @@ void AccountDatabaseDefautsWidget::on_createButton_clicked()
     bool success = true;
     if (medicalProcedure->isChecked()) {
         if (!createDefaultsFor("medical_procedure", AccountDB::Constants::Table_MedicalProcedure))
-            {Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("Medical procedure defaults can not be included."));
-             success = false;
+            {
+                Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("Medical procedure defaults can not be included."));
+                success = false;
+             if (!createMinimalsDefaults(AccountDB::Constants::Table_MedicalProcedure))
+             {
+             	Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("Medical procedure minimal defaults can not be included."));  
+                success = false;
+                 }
+             else{
+                 Utils::informativeMessageBox(tkTr(Trans::Constants::INFORMATION), tr("Only few medical procedures are included.\nYou have to complete them yourself."), QString(), tr("Minimal defaults.") );
+                 }
              }
     }
     if (assetsRates->isChecked()) {
@@ -330,6 +339,13 @@ bool AccountDatabaseDefautsWidget::createDefaultsFor(const QString &filePrototyp
                                          base()->table(tableRef),
                                          ";", true);
     return yes;
+}
+
+bool AccountDatabaseDefautsWidget::createMinimalsDefaults(const int tableRef)
+{
+    bool success = true;
+    success = Utils::Database::createMinimalDefaultsFor(AccountDB::Constants::DB_ACCOUNTANCY,base()->table(tableRef));
+    return success;
 }
 
 
