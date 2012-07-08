@@ -183,12 +183,15 @@ void AccountUserWidget::changeEvent(QEvent *e)
 ///////////////////////////////  AccountDatabaseDefautsPage  ////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 AccountDatabaseDefautsPage::AccountDatabaseDefautsPage(QObject *parent) :
-        IOptionsPage(parent), m_Widget(0) { setObjectName("AccountDatabaseDefautsPage"); }
+        IOptionsPage(parent), m_Widget(0) 
+{ 
+    setObjectName("AccountDatabaseDefautsPage");
+}
 
 AccountDatabaseDefautsPage::~AccountDatabaseDefautsPage()
 {
     if (m_Widget) delete m_Widget;
-    m_Widget = 0;
+        m_Widget = 0;    
 }
 
 QString AccountDatabaseDefautsPage::id() const { return objectName(); }
@@ -237,6 +240,7 @@ AccountDatabaseDefautsWidget::AccountDatabaseDefautsWidget(QWidget *parent) :
     setObjectName("AccountDatabaseDefautsWidget");
     setupUi(this);
     others->hide();
+    datapackButton->hide();
 //    setDatasToUi();
 }
 
