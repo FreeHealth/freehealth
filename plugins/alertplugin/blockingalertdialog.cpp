@@ -92,8 +92,8 @@
 #include "blockingalertdialog.h"
 #include "alertitem.h"
 #include "alertcore.h"
-#include "ui_BlockingAlertdialog.h"
-#include "ui_BlockingAlertdialogoverridingcomment.h"
+#include "ui_blockingalertdialog.h"
+#include "ui_blockingalertdialogoverridingcomment.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/iuser.h>
