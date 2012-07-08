@@ -27,9 +27,74 @@
  ***************************************************************************/
 #include "alertscriptmanager.h"
 
+#include <coreplugin/icore.h>
+#include <coreplugin/iscriptmanager.h>
+
+#include <QScriptEngine>
+
+#include <QDebug>
+
 using namespace Alert;
 using namespace Internal;
 
-AlertScriptManager::AlertScriptManager()
+static inline Core::IScriptManager *scriptManager() {return Core::ICore::instance()->scriptManager();}
+
+AlertScriptManager::AlertScriptManager(QObject *parent) :
+    QObject(parent),
+    _wrapper(0),
+    _test(0)
 {
+    setObjectName("AlertScriptManager");
+    if (!scriptManager()) {
+        // for test purpose only
+        _test = new QScriptEngine(this);
+    }
 }
+
+/**
+ * Executes the script \e scriptType from the AlertItem \e item and return the value of the script.
+ * The script can modify the AlertItem.
+ * \sa AlertScript::ScriptType
+ */
+QVariant AlertScriptManager::execute(AlertItem &item, const int scriptType)
+{
+    // Remove all alert wrapper from the script engine
+    if (_wrapper) {
+        delete _wrapper;
+        _wrapper = 0;
+    }
+
+    const QString &script = item.scriptType(AlertScript::ScriptType(scriptType)).script();
+
+    if (script.isEmpty())
+        return QVariant();
+
+    // Create the AlertItem wrapper
+    if (scriptManager()) {
+        _wrapper = new AlertItemScriptWrapper(item);
+        QScriptValue wrapperValue = scriptManager()->addScriptObject(_wrapper);
+        scriptManager()->evaluate("namespace.com.freemedforms").setProperty("alert", wrapperValue);
+    } else {
+        _wrapper = new AlertItemScriptWrapper(item);
+        QScriptValue wrapperValue = _test->newQObject(_wrapper, QScriptEngine::QtOwnership);
+        _test->globalObject().setProperty("alert", wrapperValue);
+    }
+
+    // Evaluate
+    QScriptValue toReturn;
+    if (scriptManager())
+        toReturn = scriptManager()->evaluate(script);
+    else
+        toReturn = _test->evaluate(script);
+
+    // Remove the alert wrapper from the script engine
+    if (_wrapper) {
+        delete _wrapper;
+        _wrapper = 0;
+    }
+
+    qWarning() << "EXECUTE" << scriptType << script << toReturn.toVariant();
+
+    return toReturn.toVariant();
+}
+

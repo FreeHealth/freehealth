@@ -29,9 +29,10 @@
 #include "alertbase.h"
 #include "alertitem.h"
 #include "ialertplaceholder.h"
+#include "alertscriptmanager.h"
 
 #include <coreplugin/icore.h>
-#include <coreplugin/iscriptmanager.h>
+//#include <coreplugin/iscriptmanager.h>
 
 #include <extensionsystem/pluginmanager.h>
 #include <utils/log.h>
@@ -48,7 +49,7 @@
 using namespace Alert;
 
 static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
-static inline Core::IScriptManager *scriptManager() {return Core::ICore::instance()->scriptManager();}
+//static inline Core::IScriptManager *scriptManager() {return Core::ICore::instance()->scriptManager();}
 
 AlertCore *AlertCore::_instance = 0;
 
@@ -67,7 +68,8 @@ class AlertCorePrivate
 public:
     AlertCorePrivate() :
         _alertBase(0),
-        _placeholdertest(0)
+        _placeholdertest(0),
+        _alertScriptManager(0)
 
     {}
 
@@ -78,6 +80,7 @@ public:
 public:
     AlertBase *_alertBase;
     QPointer<AlertPlaceHolderTest> _placeholdertest;
+    AlertScriptManager *_alertScriptManager;
 };
 }
 }
@@ -92,6 +95,7 @@ AlertCore::AlertCore(QObject *parent) :
 
     // Create all instance
     d->_alertBase = new Internal::AlertBase(this);
+    d->_alertScriptManager = new Internal::AlertScriptManager(this);
 
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
 }
@@ -260,31 +264,19 @@ void AlertCore::processAlerts(QVector<AlertItem> &alerts)
         AlertItem &item = alerts[i];
 
         // Check script ?
-        bool checked = true;
-        const AlertScript &checkScript = item.scriptType(AlertScript::CheckValidityOfAlert);
-        if (!checkScript.isNull()) {
-            QScriptValue v = scriptManager()->evaluate(checkScript.script());
-            LOG(tr("Checking alert validity using the 'CheckScript': %1; validity: %2").arg(item.label()).arg(v.toBool()));
-            if (!v.toBool()) {
-                checked = false;
-            }
-        }
-        if (!checked)
+        QVariant checkValid = d->_alertScriptManager->execute(item, AlertScript::CheckValidityOfAlert);
+        if (checkValid.isValid() && checkValid.canConvert(QVariant::Bool) && !checkValid.toBool())
             continue;
 
         // Cycling scripts
         for(int i =0; i < item.timings().count(); ++i) {
             AlertTiming &timing = item.timingAt(i);
             if (timing.isCycling()) {
-                const AlertScript &cyclingDateScript = item.scriptType(AlertScript::CyclingStartDate);
-                if (!cyclingDateScript.isNull()) {
-                    QScriptValue v = scriptManager()->evaluate(cyclingDateScript.script());
-                    LOG(tr("Cycling alert script: 'CyclingStartDate': %1; date: %2").arg(item.label()).arg(v.toDateTime().toString(Qt::ISODate)));
-                    if (v.isDate()) {
-                        // TODO: correctly the nearest starting date
-                        timing.setCycleStartDate(v.toDateTime());
-                        timing.setCycleExpirationDate(timing.start().addSecs(timing.cyclingDelayInMinutes()*60));
-                    }
+                QVariant startDate = d->_alertScriptManager->execute(item, AlertScript::CyclingStartDate);
+                if (startDate.isValid() && startDate.canConvert(QVariant::DateTime)) {
+                    // TODO: correctly the nearest starting date
+                    timing.setCycleStartDate(startDate.toDateTime());
+                    timing.setCycleExpirationDate(timing.start().addSecs(timing.cyclingDelayInMinutes()*60));
                 }
             }
         }
