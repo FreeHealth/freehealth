@@ -54,6 +54,7 @@
 #include <printerplugin/textdocumentextra.h>
 
 #include <QPixmap>
+#include <QSqlRecord>
 
 using namespace Account;
 using namespace Account::Internal;
@@ -345,12 +346,54 @@ bool AccountDatabaseDefautsWidget::createMinimalsDefaults(const int tableRef)
 {
     bool success = true;
     QStringList valuesList;
-    valuesList << "'1','{07262c6f-9d08-4208-ae74-ba9b7d74daea}','{00000000-0000-0000-0000-000000000000}','2','C','consultation','NGAP','1','70','2012-06-22','NULL','FR'"
-               << "'2','{78521164-5ea9-4dcf-926f-b0518fcbf580}','{00000000-0000-0000-0000-000000000000}','2','MNO','majoration pour les enfants de 0 à 2 ans','Forfaits','5','70','2012-06-22','NULL','FR'"
-               << "'3','{f8593736-b517-4098-847e-f7c6cc15e051}','{00000000-0000-0000-0000-000000000000}','2','DEQP003','Électrocardiographie sur au moins 12 dérivations','CCAM','13','70','2012-06-22','<?xml version=1.0 encoding=ISO-8859-1?><activity>1</activity><phase>0</phase><reimbursment></reimbursment><agreement></agreement><exemption>2</exemption><regroupment>ATM</regroupment>','FR'";
+    valuesList <<  "'1';'{07262c6f-9d08-4208-ae74-ba9b7d74daea}';'{00000000-0000-0000-0000-000000000000}';'2';'C';'consultation';'NGAP';'1';'70';'2012-06-22';'NULL';'FR'"
+               <<  "'2';'{78521164-5ea9-4dcf-926f-b0518fcbf580}';'{00000000-0000-0000-0000-000000000000}';'2';'MNO';'majoration pour les enfants de 0 à 2 ans';'Forfaits';'5';'70';'2012-06-22';'NULL';'FR'"
+               <<  "'3';'{f8593736-b517-4098-847e-f7c6cc15e051}';'{00000000-0000-0000-0000-000000000000}';'2';'DEQP003';'Électrocardiographie sur au moins 12 dérivations';'CCAM';'13';'70';'2012-06-22';'<?xml version=1.0 encoding=ISO-8859-1?><activity>1</activity><phase>0</phase><reimbursment></reimbursment><agreement></agreement><exemption>2</exemption><regroupment>ATM</regroupment>';'FR'";
     
-    success = Utils::Database::createMinimalDefaultsFor(AccountDB::Constants::DB_ACCOUNTANCY,base()->table(tableRef),valuesList);
+    success = createMinimalDefaultsFor(AccountDB::Constants::DB_ACCOUNTANCY,tableRef,valuesList);
     return success;
+}
+
+bool AccountDatabaseDefautsWidget::createMinimalDefaultsFor(const QString &connectionName,const int tableRef, const QStringList & valuesList)
+{
+    QSqlDatabase db = QSqlDatabase::database(connectionName);
+    if (!db.isOpen()) {
+        if (!db.open()) {
+            LOG_ERROR_FOR("Database", tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+                          .arg(db.connectionName(), db.lastError().text()));
+            return false;
+            }
+        }
+    if (!db.transaction())
+    {
+    	  LOG_FOR("Account","Database cannot support transaction");
+    	  return false;
+        }  
+    foreach(QString line , valuesList){
+        QStringList values = line.split(";",QString::KeepEmptyParts);
+        QString req = base()->prepareInsertQuery(tableRef);
+        QSqlQuery query(db);
+        for (int col = 0; col < values.size(); ++col)
+        {
+            query.bindValue(col,values[col]);
+            }
+        if (!query.exec(req))
+        {
+        	  LOG_QUERY_ERROR(query);
+        	  if (!db.rollback())
+        	  {
+        	  	  LOG_FOR("Account","Unable to roll back the transaction.");
+        	  	  return false;
+        	      }
+        	  return false;
+            }
+        }
+    if (!db.commit())
+    {
+    	  LOG_FOR("Account",db.lastError().text());
+    	  return false;
+        }
+    return true;
 }
 
 
