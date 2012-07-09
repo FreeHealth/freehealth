@@ -32,7 +32,8 @@
  * Inherits QLineEdit and accepts an input format that can be freely defined for
  * each translation. It parses the input and tries to make a date out of it, using
  * the available masks (user provided, system QLocale()->dateFormat(QLocale::ShortFormat),
- * FMF provided). When the focus is lost, it displays the date in the standard way.
+ * FMF provided). When the focus is lost, it displays the date in the standard way
+ * if possible.
  */
 
 #include "birthdayedit.h"
