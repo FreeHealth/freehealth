@@ -54,6 +54,7 @@
 #include <printerplugin/textdocumentextra.h>
 
 #include <QPixmap>
+#include <QSqlRecord>
 
 using namespace Account;
 using namespace Account::Internal;
@@ -349,7 +350,40 @@ bool AccountDatabaseDefautsWidget::createMinimalsDefaults(const int tableRef)
                << "'2','{78521164-5ea9-4dcf-926f-b0518fcbf580}','{00000000-0000-0000-0000-000000000000}','2','MNO','majoration pour les enfants de 0 à 2 ans','Forfaits','5','70','2012-06-22','NULL','FR'"
                << "'3','{f8593736-b517-4098-847e-f7c6cc15e051}','{00000000-0000-0000-0000-000000000000}','2','DEQP003','Électrocardiographie sur au moins 12 dérivations','CCAM','13','70','2012-06-22','<?xml version=1.0 encoding=ISO-8859-1?><activity>1</activity><phase>0</phase><reimbursment></reimbursment><agreement></agreement><exemption>2</exemption><regroupment>ATM</regroupment>','FR'";
     
-    success = Utils::Database::createMinimalDefaultsFor(AccountDB::Constants::DB_ACCOUNTANCY,base()->table(tableRef),valuesList);
+    success = createMinimalDefaultsFor(AccountDB::Constants::DB_ACCOUNTANCY,base()->table(tableRef),valuesList);
+    return success;
+}
+
+bool AccountDatabaseDefautsWidget::createMinimalDefaultsFor(const QString &connectionName,const QString & tableString, const QStringList & valuesList)
+{
+    bool success = true;
+    QSqlDatabase db = QSqlDatabase::database(connectionName);
+    if (!db.isOpen()) {
+        if (!db.open()) {
+            LOG_ERROR_FOR("Database", tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+                          .arg(db.connectionName(), db.lastError().text()));
+            return false;
+            }
+        }
+    QSqlRecord record = db.record(tableString);
+    QString req = "INSERT INTO " + tableString + " (\n";
+    for(int i = 0; i < record.count(); ++i) {
+        req += "`" + record.fieldName(i) + "`, ";
+    }
+    req.chop(2);
+    req += ")\n VALUES (";
+    foreach(QString values,valuesList){
+        values.replace(";",",");
+        QString lineReq = req;
+        lineReq += values;
+        lineReq += ");";
+        QSqlQuery query(db);
+        if (!query.exec(lineReq))
+        {
+        	  LOG_QUERY_ERROR_FOR("Database", query);
+        	  success = false;
+            }
+        }    
     return success;
 }
 
