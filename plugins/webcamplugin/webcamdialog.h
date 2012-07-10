@@ -37,7 +37,7 @@ class QDockWidget;
 
 namespace Webcam {
 
-namespace ui {
+namespace Ui {
 class WebcamDialog;
 }
 
