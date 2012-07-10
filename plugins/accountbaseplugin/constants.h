@@ -52,8 +52,8 @@ namespace Constants {
     const char * const DB_VERSION_NUMBER        = "0.2"; //"0.1";
     
     //DatapackMPModel
-    const char * const DATAPACK_ACCOUNTANCY    = "MPDatapack";
-    const char * const DATAPACK_ACCOUNTANCY_FILENAME    = "MPDatapack.db";
+    const char * const DATAPACK_ACCOUNTANCY    = "account";
+    const char * const DATAPACK_ACCOUNTANCY_FILENAME    = "mp_datapack.db";
 
     // Database abstraction
     
