@@ -266,7 +266,12 @@ INSTALLS += plugs_specs
     account_sqlfile.files=$${SOURCES_GLOBAL_RESOURCES}/sql/account/*
     INSTALLS+=account_sqlfile
   }
-
+  # Install accountancy databases
+  contains(INSTALL_ACCOUNT_FILES,1):!isEmpty(INSTALL_FREEDATAPACK_PATH):!isEmpty(SOURCES_FREEDATAPACK_PATH){
+    accountdb.path = $${INSTALL_FREEDATAPACK_PATH}/account
+    accountdb.files = $${SOURCES_FREEDATAPACK_PATH}/account/*
+    INSTALLS += accountdb
+  }
 
   # Install Zipcodes db  TODO MOVE THIS IN DATAPACKS
   contains(INSTALL_ZIPCODES,1){
