@@ -29,6 +29,8 @@
 #include <QWidget>
 #include "filter.h"
 
+namespace Webcam {
+
 class HeadState;
 
 /*!
@@ -56,5 +58,7 @@ private:
     int time;
     int frames;
 };
+
+}
 
 #endif

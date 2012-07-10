@@ -29,9 +29,13 @@
 #include <QPoint>
 #include "opencv/cxcore.h"
 
+namespace Webcam {
+
 class HeadState {
 public:
     QPoint headCenter;
     IplImage* frame;
 };
+
+}
 #endif

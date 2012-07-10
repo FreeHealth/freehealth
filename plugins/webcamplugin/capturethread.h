@@ -32,6 +32,8 @@
 #include <QQueue>
 #include "opencv/highgui.h"
 
+namespace Webcam {
+
 class ImageBuffer;
 
 class CaptureThread : public QThread {
@@ -54,4 +56,5 @@ private:
     QQueue<int> frameTimes;
 };
 
+}
 #endif

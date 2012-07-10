@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Webcam::Internal::WebcamDialog</class>
- <widget class="QDialog" name="Webcam::Internal::WebcamDialog">
+ <class>Webcam::WebcamDialog</class>
+ <widget class="QDialog" name="Webcam::WebcamDialog">
   <property name="geometry">
    <rect>
     <x>0</x>

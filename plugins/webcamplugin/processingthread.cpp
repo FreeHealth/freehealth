@@ -29,6 +29,8 @@
 #include "imagebuffer.h"
 #include <QDebug>
 
+using namespace Webcam;
+
 ProcessingThread::ProcessingThread(ImageBuffer* buffer) : QThread(), imageBuffer(buffer), rootFilter(0), flipVertical(false) {
     currState = new HeadState();
 }

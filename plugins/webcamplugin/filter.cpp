@@ -25,6 +25,8 @@
  ***************************************************************************/
 #include "filter.h"
 
+using namespace Webcam;
+
 Filter::Filter() : listener(0) {}
 
 /**

@@ -50,7 +50,7 @@
 #include <QtCore/QtPlugin>
 #include <QDebug>
 
-using namespace Webcam::Internal;
+using namespace Webcam;
 
 static inline Core::IUser *user()  { return Core::ICore::instance()->user(); }
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }

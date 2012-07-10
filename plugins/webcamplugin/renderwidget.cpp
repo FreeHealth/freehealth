@@ -28,6 +28,8 @@
 #include <QDebug>
 #include <QTime>
 
+using namespace Webcam;
+
 RenderWidget::RenderWidget(QWidget* parent) :
     QWidget(parent),
     Filter(),

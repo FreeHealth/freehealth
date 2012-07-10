@@ -30,7 +30,6 @@
 #include <coreplugin/iphotoprovider.h>
 
 namespace Webcam {
-namespace Internal {
 
 class WebcamPhotoProvider : public Core::IPhotoProvider
 {
@@ -43,7 +42,6 @@ public:
     
 };
 
-} // end Internal
 } // end Webcam
 
 #endif // WEBCAMPHOTOPROVIDER_H

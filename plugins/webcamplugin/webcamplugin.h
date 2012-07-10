@@ -31,7 +31,6 @@
 #include <extensionsystem/iplugin.h>
 
 namespace Webcam {
-namespace Internal {
 
 class WebcamPlugin : public ExtensionSystem::IPlugin
 {
@@ -53,7 +52,6 @@ private Q_SLOTS:
     //    void triggerAction();
 };
 
-} // namespace Internal
 } // namespace Webcam
 
 #endif // WEBCAM_H

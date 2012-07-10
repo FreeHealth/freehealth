@@ -30,18 +30,19 @@
 #include "capturethread.h"
 #include <QDialog>
 
-class TrackController;
-class RenderWidget;
 class QToolBar;
 class QDockWidget;
-class SettingsWidget;
+//class SettingsWidget;
+
+
+namespace Webcam {
 
 namespace ui {
 class WebcamDialog;
 }
 
-namespace Webcam {
-namespace Internal {
+class TrackController;
+class RenderWidget;
 
 class WebcamDialog : public QDialog {
     Q_OBJECT
@@ -67,6 +68,5 @@ private:
     QPixmap m_snapshot;
 };
 
-} // end Internal
 } // end Webcam
 #endif

@@ -29,32 +29,42 @@
 
 #include <QDebug>
 
-TrackController::TrackController() : frameRate(15), frameSize(CaptureThread::Size320) {
+using namespace Webcam;
+
+TrackController::TrackController() :
+    frameRate(15),
+    frameSize(CaptureThread::Size320)
+{
     imageBuffer = new ImageBuffer(20);
     captureThread = new CaptureThread(imageBuffer);
     processingThread = new ProcessingThread(imageBuffer);
     processingThread->start();
 }
 
-void TrackController::startTracking() {
+void TrackController::startTracking()
+{
     captureThread->startCapture(frameRate, frameSize);
     qDebug() << "About to start the capture thread";
     captureThread->start(QThread::IdlePriority);
     qDebug() << "Started the capture thread";
 }
 
-bool TrackController::isTracking() {
+bool TrackController::isTracking()
+{
     return captureThread->isCapturing();
 }
 
-void TrackController::stopTracking() {
+void TrackController::stopTracking()
+{
     captureThread->stopCapture();
 }
 
-void TrackController::setRootFilter(Filter* filter) {
+void TrackController::setRootFilter(Filter* filter)
+{
     processingThread->setRootFilter(filter);
 }
 
-double TrackController::getFPS() {
+double TrackController::getFPS()
+{
     return captureThread->getFPS();
 }

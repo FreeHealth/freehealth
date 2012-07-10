@@ -27,7 +27,6 @@
 #include "webcamdialog.h"
 
 using namespace Webcam;
-using namespace Internal;
 
 WebcamPhotoProvider::WebcamPhotoProvider()
 {

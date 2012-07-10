@@ -28,6 +28,9 @@
 
 #include <QThread>
 
+
+namespace Webcam {
+
 class ImageBuffer;
 class Filter;
 class HeadState;
@@ -44,5 +47,7 @@ private:
     HeadState* currState;
     bool flipVertical;
 };
+
+}
 
 #endif

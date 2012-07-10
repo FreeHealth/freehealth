@@ -28,6 +28,8 @@
 #include <QDebug>
 #include <QTime>
 
+using namespace Webcam;
+
 CaptureThread::CaptureThread(ImageBuffer* buffer) :
     QThread(),
     imageBuffer(buffer),

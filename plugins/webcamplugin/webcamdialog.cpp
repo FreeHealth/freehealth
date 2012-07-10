@@ -36,8 +36,7 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
 
-namespace Webcam {
-namespace Internal {
+using namespace Webcam;
 
 WebcamDialog::WebcamDialog(QWidget *parent) :
     QDialog(parent),
@@ -110,6 +109,3 @@ void WebcamDialog::stopTracking() {
 void WebcamDialog::updateStats() {
     //	statusBar()->showMessage(QString("FPS: ")+QString::number(trackController->getFPS(), 'f', 1));
 }
-
-} // end Internal
-} // end Webcam

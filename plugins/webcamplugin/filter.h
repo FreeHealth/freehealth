@@ -28,6 +28,8 @@
 
 #include "headstate.h"
 
+namespace Webcam {
+
 /**
  * Base class for filters
  */
@@ -40,5 +42,7 @@ protected:
     Filter* listener;
     void notifyListener(HeadState* state);
 };
+
+} // end Webcam
 
 #endif

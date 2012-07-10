@@ -28,12 +28,15 @@
 
 #include "capturethread.h"
 
+namespace Webcam {
+
 class Filter;
 class ProcessingThread;
 class ImageBuffer;
 
 class TrackController : public QObject {
-    Q_OBJECT;
+    Q_OBJECT
+
 public:
     TrackController();
     bool isTracking();
@@ -44,9 +47,11 @@ public:
     void setRootFilter(Filter* filter);
     ProcessingThread* getProcessingThread() { return processingThread; }
     double getFPS();
+
 public slots:
     void startTracking();
     void stopTracking();
+
 private:
     int frameRate;
     CaptureThread::FrameSize frameSize;
@@ -55,4 +60,5 @@ private:
     ImageBuffer* imageBuffer;
 };
 
+} // end Webcam
 #endif
