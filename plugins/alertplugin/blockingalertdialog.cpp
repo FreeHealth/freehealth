@@ -120,7 +120,7 @@ static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 
-static void addAlertToLayout(const AlertItem &alert, bool showCategory, QLayout *lay)
+static QWidget *addAlertToLayout(const AlertItem &alert, bool showCategory, QLayout *lay)
 {
     QLabel *label = new QLabel(lay->parentWidget());
     label->setTextFormat(Qt::RichText);
@@ -129,44 +129,82 @@ static void addAlertToLayout(const AlertItem &alert, bool showCategory, QLayout 
     label->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
     label->setText(alert.htmlToolTip(showCategory));
     lay->addWidget(label);
+    return label;
 }
+
+namespace Alert {
+namespace Internal {
+class BlockingAlertDialogPrivate
+{
+public:
+    BlockingAlertDialogPrivate(BlockingAlertDialog *parent):
+        ui(new Ui::BlockingAlertDialog),
+        cui(0),
+        _overrideButton(0),
+        _remindLaterButton(0),
+        _overrideCommentRequired(false),
+        _remind(false),
+        _lastVisibleWidget(0),
+        q(parent)
+    {}
+
+    ~BlockingAlertDialogPrivate()
+    {
+        delete ui;
+        if (cui)
+            delete cui;
+    }
+
+public:
+    Ui::BlockingAlertDialog *ui;
+    Ui::BlockingAlertDialogOverridingComment *cui;
+    QDialogButtonBox *_box;
+    QToolButton *_overrideButton, *_remindLaterButton;
+    bool _overrideCommentRequired, _remind;
+    QHash<QString, QWidget *> _alertWidget;
+    QHash<QWidget *, int> _alertViewedTime;
+    QWidget *_lastVisibleWidget;
+    QHash<QWidget *, QTime *> _alertTimer;
+    QHash<QString, bool> _alertShown;
+
+private:
+    BlockingAlertDialog *q;
+};
+}  // Internal
+}  // Alert
+
 
 BlockingAlertDialog::BlockingAlertDialog(const QList<AlertItem> &items,
                                        const QString &themedIcon,
                                        const QList<QAbstractButton *> &buttons,
                                        QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::BlockingAlertDialog),
-    cui(0),
-    _overrideButton(0),
-    _remindLaterButton(0),
-    _overrideCommentRequired(false),
-    _remind(false)
+    d(new Internal::BlockingAlertDialogPrivate(this))
 {
     // Do we need to ask for an overriding comment
     foreach(const AlertItem &item, items) {
         if (item.isOverrideRequiresUserComment()) {
-            _overrideCommentRequired = true;
+            d->_overrideCommentRequired = true;
             break;
         }
     }
 
     // Prepare the ui
-    ui->setupUi(this);
+    d->ui->setupUi(this);
     layout()->setSpacing(5);
     setWindowTitle(tkTr(Trans::Constants::BLOCKING_ALERT));
     setWindowModality(Qt::WindowModal);
 
     // Manage the general icon of the dialog
     if (!themedIcon.isEmpty() && QFile(theme()->iconFullPath(themedIcon, Core::ITheme::BigIcon)).exists()) {
-        ui->generalIconLabel->setPixmap(theme()->icon(themedIcon, Core::ITheme::BigIcon).pixmap(64,64));
+        d->ui->generalIconLabel->setPixmap(theme()->icon(themedIcon, Core::ITheme::BigIcon).pixmap(64,64));
         setWindowIcon(theme()->icon(themedIcon));
     } else {
         int maxPriority = AlertItem::Low;
         for(int i=0; i<items.count();++i) {
             maxPriority = qMax(maxPriority, int(items.at(i).priority()));
         }
-        ui->generalIconLabel->setPixmap(AlertItem::priorityBigIcon(AlertItem::Priority(maxPriority)).pixmap(64,64));
+        d->ui->generalIconLabel->setPixmap(AlertItem::priorityBigIcon(AlertItem::Priority(maxPriority)).pixmap(64,64));
         setWindowIcon(AlertItem::priorityBigIcon(AlertItem::Priority(maxPriority)));
     }
 
@@ -182,7 +220,8 @@ BlockingAlertDialog::BlockingAlertDialog(const QList<AlertItem> &items,
 
         QWidget *alertContainer = new QWidget(this);
         QVBoxLayout *central = new QVBoxLayout(alertContainer);
-        addAlertToLayout(alert, true, central);
+        QWidget *w = addAlertToLayout(alert, true, central);
+        d->_alertWidget.insert(alert.uuid(), w);
 
         QWidget *scrollContainer = new QWidget(this);
         QVBoxLayout *containerLayout = new QVBoxLayout(scrollContainer);
@@ -198,8 +237,8 @@ BlockingAlertDialog::BlockingAlertDialog(const QList<AlertItem> &items,
         scroll->setWidget(alertContainer);
         containerLayout->addWidget(scroll);
 
-        ui->centralLayout->addWidget(scrollContainer);
-        ui->nbLabel->hide();
+        d->ui->centralLayout->addWidget(scrollContainer);
+        d->ui->nbLabel->hide();
     } else {
         // With tabwidget
         QHash<QString, QVBoxLayout *> categories;
@@ -227,7 +266,8 @@ BlockingAlertDialog::BlockingAlertDialog(const QList<AlertItem> &items,
                 line->setFrameShadow(QFrame::Sunken);
                 lay->addWidget(line);
             }
-            addAlertToLayout(alert, false, lay);
+            QWidget *w = addAlertToLayout(alert, false, lay);
+            d->_alertWidget.insert(alert.uuid(), w);
         }
 
         QTabWidget *tab = new QTabWidget(this);
@@ -253,12 +293,12 @@ BlockingAlertDialog::BlockingAlertDialog(const QList<AlertItem> &items,
 
             tab->addTab(scrollContainer, QString("%1 (%2)").arg(cat).arg(nbInCategories.value(cat)));
         }
-        ui->centralLayout->addWidget(tab);
-        ui->nbLabel->setText(tkTr(Trans::Constants::_1_ALERTS).arg(items.count()));
+        d->ui->centralLayout->addWidget(tab);
+        d->ui->nbLabel->setText(tkTr(Trans::Constants::_1_ALERTS).arg(items.count()));
     }
 
     // Add buttons
-    _box = new QDialogButtonBox(Qt::Horizontal, this);
+    d->_box = new QDialogButtonBox(Qt::Horizontal, this);
     QToolButton *accept = new QToolButton(this);
     accept->setMinimumHeight(22);
     accept->setText(tkTr(Trans::Constants::VALIDATE));
@@ -266,49 +306,69 @@ BlockingAlertDialog::BlockingAlertDialog(const QList<AlertItem> &items,
     accept->setIconSize(QSize(16,16));
     accept->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     accept->setFont(bold);
-    _box->addButton(accept, QDialogButtonBox::AcceptRole);
+    d->_box->addButton(accept, QDialogButtonBox::AcceptRole);
 
     if (canRemind) {
-        _remindLaterButton = new QToolButton(this);
-        _remindLaterButton->setMinimumHeight(22);
-        _remindLaterButton->setText(tkTr(Trans::Constants::REMIND_LATER));
-        _remindLaterButton->setIcon(theme()->icon(Core::Constants::ICONREMINDER, Core::ITheme::SmallIcon));
-        _remindLaterButton->setIconSize(QSize(16,16));
-        _remindLaterButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-        _remindLaterButton->setFont(bold);
-        _box->addButton(_remindLaterButton, QDialogButtonBox::AcceptRole);
+        d->_remindLaterButton = new QToolButton(this);
+        d->_remindLaterButton->setMinimumHeight(22);
+        d->_remindLaterButton->setText(tkTr(Trans::Constants::REMIND_LATER));
+        d->_remindLaterButton->setIcon(theme()->icon(Core::Constants::ICONREMINDER, Core::ITheme::SmallIcon));
+        d->_remindLaterButton->setIconSize(QSize(16,16));
+        d->_remindLaterButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+        d->_remindLaterButton->setFont(bold);
+        d->_box->addButton(d->_remindLaterButton, QDialogButtonBox::AcceptRole);
     }
 
-    _overrideButton = new QToolButton(this);
-    _overrideButton->setMinimumHeight(22);
-    _overrideButton->setText(tkTr(Trans::Constants::OVERRIDE));
-    _overrideButton->setIcon(theme()->icon(Core::Constants::ICONOVERRIDE, Core::ITheme::SmallIcon));
-    _overrideButton->setIconSize(QSize(16,16));
-    _overrideButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    _overrideButton->setFont(bold);
-    _box->addButton(_overrideButton, QDialogButtonBox::ResetRole);
+    d->_overrideButton = new QToolButton(this);
+    d->_overrideButton->setMinimumHeight(22);
+    d->_overrideButton->setText(tkTr(Trans::Constants::OVERRIDE));
+    d->_overrideButton->setIcon(theme()->icon(Core::Constants::ICONOVERRIDE, Core::ITheme::SmallIcon));
+    d->_overrideButton->setIconSize(QSize(16,16));
+    d->_overrideButton->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    d->_overrideButton->setFont(bold);
+    d->_box->addButton(d->_overrideButton, QDialogButtonBox::ResetRole);
 
     for(int i=0; i < buttons.count(); ++i) {
         buttons.at(i)->setIconSize(QSize(16,16));
         buttons.at(i)->setFont(bold);
-        _box->addButton(buttons.at(i), QDialogButtonBox::ActionRole);
+        d->_box->addButton(buttons.at(i), QDialogButtonBox::ActionRole);
     }
 
     connect(accept, SIGNAL(clicked()), this, SLOT(accept()));
-    if (_remindLaterButton)
-        connect(_remindLaterButton, SIGNAL(clicked()), this, SLOT(remindLater()));
-    connect(_overrideButton, SIGNAL(clicked()), this, SLOT(override()));
-    ui->buttonLayout->setMargin(0);
-    ui->buttonLayout->setSpacing(0);
-    ui->buttonLayout->addWidget(_box);
+    if (d->_remindLaterButton)
+        connect(d->_remindLaterButton, SIGNAL(clicked()), this, SLOT(remindLater()));
+    connect(d->_overrideButton, SIGNAL(clicked()), this, SLOT(override()));
+    d->ui->buttonLayout->setMargin(0);
+    d->ui->buttonLayout->setSpacing(0);
+    d->ui->buttonLayout->addWidget(d->_box);
+
+    // EventFilter alert widgets -> catch mustBeRead
+    foreach(QWidget *w, d->_alertWidget.values()) {
+        w->installEventFilter(this);
+        QTime *time = new QTime;
+        d->_alertTimer.insert(w, time);
+    }
 
     Utils::resizeAndCenter(this, QApplication::activeWindow());
 }
 
 BlockingAlertDialog::~BlockingAlertDialog()
 {
-    delete ui;
-    if (cui) delete cui; cui=0;
+    foreach(QWidget *w, d->_alertViewedTime.keys())
+        qWarning() << "WIDGET" << w << "TIME (ms)" << d->_alertViewedTime.value(w);
+    if (d)
+        delete d;
+    d=0;
+}
+
+bool BlockingAlertDialog::isOverridingUserCommentRequired() const
+{
+    return d->_overrideCommentRequired;
+}
+
+bool BlockingAlertDialog::isRemindLaterRequested() const
+{
+    return d->_remind;
 }
 
 // TODO: create a done(int r) and check if alert tagged with mustBeRead() was visualized by the user.
@@ -316,43 +376,64 @@ BlockingAlertDialog::~BlockingAlertDialog()
 void BlockingAlertDialog::remindLater()
 {
 //    qWarning() << "BlockingAlertDialog::remindLater()";
-    _remind = true;
+    d->_remind = true;
     accept();
 }
 
 void BlockingAlertDialog::override()
 {
-    if (!_overrideCommentRequired) {
+    if (!d->_overrideCommentRequired) {
         reject();
         return;
     }
 
     // Append the comment
-    cui = new Ui::BlockingAlertDialogOverridingComment;
+    d->cui = new Ui::BlockingAlertDialogOverridingComment;
     QWidget *w = new QWidget(this);
-    cui->setupUi(w);
-    ui->centralLayout->addWidget(w);
-    connect(cui->validateComment, SIGNAL(clicked()), this, SLOT(validateUserOverridingComment()));
+    d->cui->setupUi(w);
+    d->ui->centralLayout->addWidget(w);
+    connect(d->cui->validateComment, SIGNAL(clicked()), this, SLOT(validateUserOverridingComment()));
 
-    _overrideButton->hide();
+    d->_overrideButton->hide();
 }
 
 void BlockingAlertDialog::validateUserOverridingComment()
 {
-    if (!cui->overridingComment->toPlainText().isEmpty())
+    if (!d->cui->overridingComment->toPlainText().isEmpty())
         reject();
 }
 
 QString BlockingAlertDialog::overridingComment() const
 {
-    if (cui)
-        return cui->overridingComment->toPlainText();
+    if (d->cui)
+        return d->cui->overridingComment->toPlainText();
     return QString::null;
 }
 
 void BlockingAlertDialog::changeEvent(QEvent *e)
 {
     QDialog::changeEvent(e);
+}
+
+bool BlockingAlertDialog::eventFilter(QObject *o, QEvent *e)
+{
+    QWidget *w = qobject_cast<QWidget*>(o);
+    if (w && d->_alertWidget.values().contains(w)) {
+        if (e->type()==QEvent::Paint || e->type()==QEvent::Show || e->type()==QEvent::Hide) {
+            if (d->_lastVisibleWidget == w) {
+                // nothing to do
+                return false;
+            } else {
+                if (d->_lastVisibleWidget) {
+                    d->_alertViewedTime[d->_lastVisibleWidget] += d->_alertTimer.value(d->_lastVisibleWidget)->elapsed();
+                }
+                qWarning() << "STARTING CHRONO" << w << "last" << d->_lastVisibleWidget << d->_alertViewedTime[d->_lastVisibleWidget];
+                d->_alertTimer.value(w)->start();
+                d->_lastVisibleWidget = w;
+            }
+        }
+    }
+    return false;
 }
 
 /** Execute a blocking alert dialog with the alerts \e item, using a general icon \e themedIcon.  Whatever is the result of the dialog, alerts are not modified. */

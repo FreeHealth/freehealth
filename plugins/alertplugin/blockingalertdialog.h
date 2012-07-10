@@ -38,6 +38,9 @@ class QToolButton;
 QT_END_NAMESPACE
 
 namespace Alert {
+namespace Internal {
+class BlockingAlertDialogPrivate;
+}
 
 namespace Ui {
 class BlockingAlertDialog;
@@ -92,8 +95,8 @@ public:
     };
     ~BlockingAlertDialog();
 
-    bool isOverridingUserCommentRequired() const {return _overrideCommentRequired;}
-    bool isRemindLaterRequested() const {return _remind;}
+    bool isOverridingUserCommentRequired() const;
+    bool isRemindLaterRequested() const;
     QString overridingComment() const;
 
     static BlockingAlertResult executeBlockingAlert(const AlertItem &item, const QString &themedIcon = QString::null, QWidget *parent = 0);
@@ -110,13 +113,10 @@ private Q_SLOTS:
 
 protected:
     void changeEvent(QEvent *e);
+    bool eventFilter(QObject *o, QEvent *e);
 
 private:
-    Ui::BlockingAlertDialog *ui;
-    Ui::BlockingAlertDialogOverridingComment *cui;
-    QDialogButtonBox *_box;
-    QToolButton *_overrideButton, *_remindLaterButton;
-    bool _overrideCommentRequired, _remind;
+    Internal::BlockingAlertDialogPrivate *d;
 };
 
 } // namespace Alert
