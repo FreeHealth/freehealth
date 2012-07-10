@@ -85,6 +85,7 @@ DrugBaseCore *DrugBaseCore::m_Instance = 0;
 /** \brief Returns the unique instance of DrugsDB::DrugBaseCore. If it does not exist, it is created */
 DrugBaseCore &DrugBaseCore::instance(QObject *parent)
 {
+    Q_UNUSED(parent);
     Q_ASSERT(m_Instance);
     return *m_Instance;
 }
