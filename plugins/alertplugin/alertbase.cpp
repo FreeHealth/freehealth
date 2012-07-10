@@ -273,10 +273,12 @@ AlertBase::AlertBase(QObject *parent) :
     addTable(Table_ALERT_SCRIPTS, "SCR");
     addTable(Table_ALERT_TIMING, "TIM");
     addTable(Table_ALERT_VALIDATION, "VAL");
+    addTable(Table_ALERT_PACKS, "PACKS");
     addTable(Table_ALERT_VERSION, "VER");
 
     addField(Table_ALERT, ALERT_ID, "A_ID", FieldIsUniquePrimaryKey);
     addField(Table_ALERT, ALERT_UID, "A_UID", FieldIsUUID);
+    addField(Table_ALERT, ALERT_PACKUID, "A_PUID", FieldIsUUID);
     addField(Table_ALERT, ALERT_REL_ID, "R_ID", FieldIsUUID);
     addField(Table_ALERT, ALERT_CATEGORY_UID, "C_UID", FieldIsUUID);
     addField(Table_ALERT, ALERT_SID, "SCR_ID", FieldIsInteger);
@@ -292,19 +294,20 @@ AlertBase::AlertBase(QObject *parent) :
     addField(Table_ALERT, ALERT_OVERRIDEREQUIREUSERCOMMENT, "VRUC", FieldIsInteger);
     addField(Table_ALERT, ALERT_MUSTBEREAD, "MBR", FieldIsInteger);
 
-    addField(Table_ALERT, ALERT_LABELID, "LBL_LID", FieldIsInteger);
-    addField(Table_ALERT, ALERT_CATEGORYLID, "CAT_LID", FieldIsInteger);
-    addField(Table_ALERT, ALERT_DESCRIPTION_LABELID, "DES_LID", FieldIsInteger);
-    addField(Table_ALERT, ALERT_COMMENT_LABELID, "COM_LID", FieldIsInteger);
+    addField(Table_ALERT, ALERT_LABEL_LID, "LBL_LID", FieldIsInteger);
+    addField(Table_ALERT, ALERT_CATEGORY_LID, "CAT_LID", FieldIsInteger);
+    addField(Table_ALERT, ALERT_DESCRIPTION_LID, "DES_LID", FieldIsInteger);
+    addField(Table_ALERT, ALERT_COMMENT_LID, "COM_LID", FieldIsInteger);
     addField(Table_ALERT, ALERT_CREATION_DATE, "C_DATE", FieldIsDate);
     addField(Table_ALERT, ALERT_LAST_UPDATE_DATE, "U_DATE", FieldIsDate);
     addField(Table_ALERT, ALERT_THEMED_ICON, "THM_ICON", FieldIsDate);
     addField(Table_ALERT, ALERT_THEME_CSS, "CSS", FieldIsLongText);
     addField(Table_ALERT, ALERT_CRYPTED_PASSWORD, "PASS", FieldIsShortText);
-    addField(Table_ALERT, ALERT_EXTRA_XML, "EXTRA", FieldIsLongText);
+    addField(Table_ALERT, ALERT_EXTRA_XML, "EXTRA", FieldIsBlob);
 
     addIndex(Table_ALERT, ALERT_ID);
     addIndex(Table_ALERT, ALERT_UID);
+    addIndex(Table_ALERT, ALERT_PACKUID);
     addIndex(Table_ALERT, ALERT_REL_ID);
     addIndex(Table_ALERT, ALERT_CATEGORY_UID);
 
@@ -363,6 +366,26 @@ AlertBase::AlertBase(QObject *parent) :
     addIndex(Table_ALERT_VALIDATION, ALERT_VALIDATION_VAL_ID);
     addIndex(Table_ALERT_VALIDATION, ALERT_VALIDATION_VALIDATOR_UUID);
     addIndex(Table_ALERT_VALIDATION, ALERT_VALIDATION_VALIDATED_UUID);
+
+    // Packs
+    addField(Table_ALERT_PACKS, ALERT_PACKS_ID, "ID", FieldIsUniquePrimaryKey);
+    addField(Table_ALERT_PACKS, ALERT_PACKS_UID, "UID", FieldIsUUID);
+    addField(Table_ALERT_PACKS, ALERT_PACKS_ISVALID, "ISV", FieldIsBoolean);
+    addField(Table_ALERT_PACKS, ALERT_PACKS_IN_USE, "INU", FieldIsBoolean);
+    addField(Table_ALERT_PACKS, ALERT_PACKS_LABEL_LID, "LBL_LID", FieldIsInteger);
+    addField(Table_ALERT_PACKS, ALERT_PACKS_CATEGORY_LID, "CAT_LID", FieldIsInteger);
+    addField(Table_ALERT_PACKS, ALERT_PACKS_DESCRIPTION_LID, "DESC_LID", FieldIsInteger);
+    addField(Table_ALERT_PACKS, ALERT_PACKS_AUTHORS, "ATH", FieldIsShortText);
+    addField(Table_ALERT_PACKS, ALERT_PACKS_VENDOR, "VEN", FieldIsShortText);
+    addField(Table_ALERT_PACKS, ALERT_PACKS_URL, "URL", FieldIsShortText);
+    addField(Table_ALERT_PACKS, ALERT_PACKS_THEMEDICON, "ICO", FieldIsShortText);
+    addField(Table_ALERT_PACKS, ALERT_PACKS_VERSION, "VER", FieldIsShortText);
+    addField(Table_ALERT_PACKS, ALERT_PACKS_FMFVERSION, "FMFV", FieldIsShortText);
+    addField(Table_ALERT_PACKS, ALERT_PACKS_CREATEDATE, "CDT", FieldIsDateTime);
+    addField(Table_ALERT_PACKS, ALERT_PACKS_LASTUPDATE, "UDT", FieldIsDateTime);
+    addField(Table_ALERT_PACKS, ALERT_PACKS_XTRAXML, "XTR", FieldIsBlob);
+
+    addIndex(Table_ALERT_PACKS, ALERT_PACKS_UID);
 
     addField(Table_ALERT_VERSION, VERSION_TEXT, "TXT", FieldIsShortText);
 
@@ -618,6 +641,7 @@ bool AlertBase::saveAlertItem(AlertItem &item)
     query.prepare(req);
     query.bindValue(Constants::ALERT_ID, QVariant());
     query.bindValue(Constants::ALERT_UID, item.uuid());
+    query.bindValue(Constants::ALERT_PACKUID, item.packUid());
     query.bindValue(Constants::ALERT_CATEGORY_UID, item.db(CategoryUid));
     query.bindValue(Constants::ALERT_REL_ID, item.db(RelatedId));
     query.bindValue(Constants::ALERT_SID, item.db(ScriptId));
@@ -631,10 +655,10 @@ bool AlertBase::saveAlertItem(AlertItem &item)
     query.bindValue(Constants::ALERT_PRIORITY, item.priority());
     query.bindValue(Constants::ALERT_OVERRIDEREQUIREUSERCOMMENT, int(item.isOverrideRequiresUserComment()));
     query.bindValue(Constants::ALERT_MUSTBEREAD, int(item.mustBeRead()));
-    query.bindValue(Constants::ALERT_LABELID, item.db(LabelLID));
-    query.bindValue(Constants::ALERT_CATEGORYLID, item.db(CategoryLID));
-    query.bindValue(Constants::ALERT_DESCRIPTION_LABELID, item.db(DescrLID));
-    query.bindValue(Constants::ALERT_COMMENT_LABELID, item.db(CommentLID));
+    query.bindValue(Constants::ALERT_LABEL_LID, item.db(LabelLID));
+    query.bindValue(Constants::ALERT_CATEGORY_LID, item.db(CategoryLID));
+    query.bindValue(Constants::ALERT_DESCRIPTION_LID, item.db(DescrLID));
+    query.bindValue(Constants::ALERT_COMMENT_LID, item.db(CommentLID));
     query.bindValue(Constants::ALERT_CREATION_DATE, item.creationDate());
     query.bindValue(Constants::ALERT_LAST_UPDATE_DATE, item.lastUpdate());
     query.bindValue(Constants::ALERT_THEMED_ICON, item.themedIcon());
@@ -690,6 +714,7 @@ bool AlertBase::updateAlertItem(AlertItem &item)
     QList<int> fields;
     fields
             << Constants::ALERT_UID
+            << Constants::ALERT_PACKUID
             << Constants::ALERT_CATEGORY_UID
             << Constants::ALERT_REL_ID
             << Constants::ALERT_SID
@@ -703,10 +728,10 @@ bool AlertBase::updateAlertItem(AlertItem &item)
             << Constants::ALERT_PRIORITY
             << Constants::ALERT_OVERRIDEREQUIREUSERCOMMENT
             << Constants::ALERT_MUSTBEREAD
-            << Constants::ALERT_LABELID
-            << Constants::ALERT_CATEGORYLID
-            << Constants::ALERT_DESCRIPTION_LABELID
-            << Constants::ALERT_COMMENT_LABELID
+            << Constants::ALERT_LABEL_LID
+            << Constants::ALERT_CATEGORY_LID
+            << Constants::ALERT_DESCRIPTION_LID
+            << Constants::ALERT_COMMENT_LID
             << Constants::ALERT_CREATION_DATE
             << Constants::ALERT_LAST_UPDATE_DATE
             << Constants::ALERT_THEMED_ICON
@@ -721,6 +746,7 @@ bool AlertBase::updateAlertItem(AlertItem &item)
     query.prepare(req);
     int i = 0;
     query.bindValue(i, item.uuid());
+    query.bindValue(++i, item.packUid());
     query.bindValue(++i, item.db(CategoryUid));
     query.bindValue(++i, item.db(RelatedId));
     query.bindValue(++i, item.db(ScriptId));
@@ -1312,11 +1338,12 @@ QVector<AlertItem> AlertBase::getAlertItems(const AlertBaseQuery &query)
             item.setDb(ScriptId, query.value(Constants::ALERT_SID));
             item.setDb(ValidationId, query.value(Constants::ALERT_VAL_ID));
             item.setDb(TimingId, query.value(Constants::ALERT_TIM_ID));
-            item.setDb(LabelLID, query.value(Constants::ALERT_LABELID));
-            item.setDb(CategoryLID, query.value(Constants::ALERT_CATEGORYLID));
-            item.setDb(DescrLID, query.value(Constants::ALERT_DESCRIPTION_LABELID));
-            item.setDb(CommentLID, query.value(Constants::ALERT_COMMENT_LABELID));
+            item.setDb(LabelLID, query.value(Constants::ALERT_LABEL_LID));
+            item.setDb(CategoryLID, query.value(Constants::ALERT_CATEGORY_LID));
+            item.setDb(DescrLID, query.value(Constants::ALERT_DESCRIPTION_LID));
+            item.setDb(CommentLID, query.value(Constants::ALERT_COMMENT_LID));
             item.setUuid(query.value(Constants::ALERT_UID).toString());
+            item.setPackUid(query.value(Constants::ALERT_PACKUID).toString());
             item.setValidity(query.value(Constants::ALERT_ISVALID).toBool());
             item.setRemindLaterAllowed(query.value(Constants::ALERT_ISREMINDABLE).toBool());
             item.setCryptedPassword(query.value(Constants::ALERT_CRYPTED_PASSWORD).toString());
@@ -1385,10 +1412,10 @@ AlertItem AlertBase::getAlertItemFromUuid(const QString &uuid)
             item.setDb(ScriptId, query.value(Constants::ALERT_SID));
             item.setDb(ValidationId, query.value(Constants::ALERT_VAL_ID));
             item.setDb(TimingId, query.value(Constants::ALERT_TIM_ID));
-            item.setDb(LabelLID, query.value(Constants::ALERT_LABELID));
-            item.setDb(CategoryLID, query.value(Constants::ALERT_CATEGORYLID));
-            item.setDb(DescrLID, query.value(Constants::ALERT_DESCRIPTION_LABELID));
-            item.setDb(CommentLID, query.value(Constants::ALERT_COMMENT_LABELID));
+            item.setDb(LabelLID, query.value(Constants::ALERT_LABEL_LID));
+            item.setDb(CategoryLID, query.value(Constants::ALERT_CATEGORY_LID));
+            item.setDb(DescrLID, query.value(Constants::ALERT_DESCRIPTION_LID));
+            item.setDb(CommentLID, query.value(Constants::ALERT_COMMENT_LID));
             item.setValidity(query.value(Constants::ALERT_ISVALID).toBool());
             item.setRemindLaterAllowed(query.value(Constants::ALERT_ISREMINDABLE).toBool());
             item.setCryptedPassword(query.value(Constants::ALERT_CRYPTED_PASSWORD).toString());
@@ -1560,7 +1587,7 @@ bool AlertBase::getItemLabels(AlertItem &item)
     Utils::Field cond(Table_ALERT, ALERT_ID, QString("=%1").arg(item.db(ItemId).toString()));
 
     // get label
-    Utils::Join join(Table_ALERT_LABELS, ALERT_LABELS_LABELID, Table_ALERT, ALERT_LABELID);
+    Utils::Join join(Table_ALERT_LABELS, ALERT_LABELS_LABELID, Table_ALERT, ALERT_LABEL_LID);
     if (query.exec(select(Table_ALERT_LABELS, join, cond))) {
         while (query.next()) {
             item.setLabel(query.value(ALERT_LABELS_VALUE).toString(), query.value(ALERT_LABELS_LANG).toString());
@@ -1572,7 +1599,7 @@ bool AlertBase::getItemLabels(AlertItem &item)
     query.finish();
 
     // get category
-    join = Utils::Join(Table_ALERT_LABELS, ALERT_LABELS_LABELID, Table_ALERT, ALERT_CATEGORYLID);
+    join = Utils::Join(Table_ALERT_LABELS, ALERT_LABELS_LABELID, Table_ALERT, ALERT_CATEGORY_LID);
     if (query.exec(select(Table_ALERT_LABELS, join, cond))) {
         while (query.next()) {
             item.setCategory(query.value(ALERT_LABELS_VALUE).toString(), query.value(ALERT_LABELS_LANG).toString());
@@ -1584,7 +1611,7 @@ bool AlertBase::getItemLabels(AlertItem &item)
     query.finish();
 
     // get description
-    join = Utils::Join(Table_ALERT_LABELS, ALERT_LABELS_LABELID, Table_ALERT, ALERT_DESCRIPTION_LABELID);
+    join = Utils::Join(Table_ALERT_LABELS, ALERT_LABELS_LABELID, Table_ALERT, ALERT_DESCRIPTION_LID);
     if (query.exec(select(Table_ALERT_LABELS, join, cond))) {
         while (query.next()) {
             item.setDescription(query.value(ALERT_LABELS_VALUE).toString(), query.value(ALERT_LABELS_LANG).toString());
@@ -1596,7 +1623,7 @@ bool AlertBase::getItemLabels(AlertItem &item)
     query.finish();
 
     // get comment
-    join = Utils::Join(Table_ALERT_LABELS, ALERT_LABELS_LABELID, Table_ALERT, ALERT_COMMENT_LABELID);
+    join = Utils::Join(Table_ALERT_LABELS, ALERT_LABELS_LABELID, Table_ALERT, ALERT_COMMENT_LID);
     if (query.exec(select(Table_ALERT_LABELS, join, cond))) {
         while (query.next()) {
             item.setComment(query.value(ALERT_LABELS_VALUE).toString(), query.value(ALERT_LABELS_LANG).toString());

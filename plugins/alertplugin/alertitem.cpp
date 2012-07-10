@@ -239,7 +239,7 @@ public:
     }
 
 public:
-    QString _uid, _pass, _themedIcon, _css, _extraXml;
+    QString _uid, _packUid, _pass, _themedIcon, _css, _extraXml;
     int _id;
     bool _valid, _modified, _editable, _overrideRequiresUserComment, _mustBeRead, _remindAllowed;
     AlertItem::ViewType _viewType;
@@ -384,6 +384,18 @@ QString AlertItem::uuid() const
 void AlertItem::setUuid(const QString &uid) const
 {
     d->_uid = uid;
+}
+
+/** Return the pacl uid of the item */
+QString AlertItem::packUid() const
+{
+    return d->_packUid;
+}
+
+/** Define the pack uid of the item. */
+void AlertItem::setPackUid(const QString &uid) const
+{
+    d->_packUid = uid;
 }
 
 QString AlertItem::cryptedPassword() const

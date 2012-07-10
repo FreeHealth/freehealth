@@ -308,6 +308,9 @@ public:
     virtual QString uuid() const;
     virtual void setUuid(const QString &uid) const;
 
+    virtual QString packUid() const;
+    virtual void setPackUid(const QString &uid) const;
+
     virtual QString cryptedPassword() const;
     virtual void setCryptedPassword(const QString &pass);
 
