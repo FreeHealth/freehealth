@@ -46,7 +46,7 @@ public:
     QDate date() const;
 
     void addDateFormat(const QString &format);
-    QStringList acceptedDateFormat() const {return m_dateFormatList;}
+    QStringList acceptedDateFormats() const {return m_dateFormatList;}
 
 private:
     QStringList m_dateFormatList;

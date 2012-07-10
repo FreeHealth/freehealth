@@ -139,7 +139,7 @@ const char* const SHOW_LONG_FORMAT      = QT_TRANSLATE_NOOP("tkConstants", "Show
 const char* const SHOW_SHORT_FORMAT     = QT_TRANSLATE_NOOP("tkConstants", "Show short date format");
 const char* const SHOW_NUMERIC_FORMAT   = QT_TRANSLATE_NOOP("tkConstants", "Show numeric date format");
 const char* const ENTER_DATE            = QT_TRANSLATE_NOOP("tkConstants", "Enter a date");
-const char* const ENTER_DATE_FORMAT_1   = QT_TRANSLATE_NOOP("tkConstants", "Enter a date (format: %1)");
+const char* const ENTER_DATE_FORMAT_1   = QT_TRANSLATE_NOOP("tkConstants", "Enter a date using the formats:<br/>%1");
 
 } // end Constants
 } // end TranslationUtils

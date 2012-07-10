@@ -138,6 +138,10 @@ private Q_SLOTS:
 
 private:
     bool createDefaultsFor(const QString &filePrototype, const int tableRef);
+    bool createMinimalsDefaults(const int tableRef);
+    bool createMinimalDefaultsFor(const QString &connectionName,
+                                  const int tableRef, 
+                                  const QStringList & valuesList);
 
 protected:
     virtual void changeEvent(QEvent *e);

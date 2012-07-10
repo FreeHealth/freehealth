@@ -32,7 +32,8 @@
  * Inherits QLineEdit and accepts an input format that can be freely defined for
  * each translation. It parses the input and tries to make a date out of it, using
  * the available masks (user provided, system QLocale()->dateFormat(QLocale::ShortFormat),
- * FMF provided). When the focus is lost, it displays the date in the standard way.
+ * FMF provided). When the focus is lost, it displays the date in the standard way
+ * if possible.
  */
 
 #include "birthdayedit.h"
@@ -166,8 +167,12 @@ void BirthDayEdit::focusOutEvent(QFocusEvent *event)
     if (m_date.isValid()) {
         clearExtraStyleSheet();
     } else {
-        //TODO: let color be a global constant, maybe in theme?
-        setExtraStyleSheet(QString("background: %1").arg("#f66"));
+        if (text().isEmpty()) {
+            clearExtraStyleSheet();
+        } else {
+            //TODO: let color be a global constant, maybe in theme?
+            setExtraStyleSheet(QString("background: %1").arg("#f66"));
+        }
     }
     updateDisplayText();
     QButtonLineEdit::focusOutEvent(event);
@@ -239,8 +244,8 @@ void BirthDayEdit::formatActionTriggered(QAction *a)
 /** Clear the place holder. */
 void BirthDayEdit::updatePlaceHolder()
 {
-    setPlaceholderText(tkTr(Trans::Constants::ENTER_DATE_FORMAT_1).arg(_validator->acceptedDateFormat().join("; ")));
-    setExtraToolTip(tkTr(Trans::Constants::ENTER_DATE_FORMAT_1).arg(_validator->acceptedDateFormat().join("; ")));
+//    setPlaceholderText(tkTr(Trans::Constants::ENTER_DATE));
+//    setExtraToolTip(tkTr(Trans::Constants::ENTER_DATE_FORMAT_1).arg(_validator->acceptedDateFormats().join("<br/>")));
 }
 
 /** Retranslate UI. */

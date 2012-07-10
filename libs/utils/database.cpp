@@ -2113,6 +2113,7 @@ bool Database::importCsvToDatabase(const QString &connectionName, const QString 
         QSqlQuery query(req + reqValues, db);
         if (!query.isActive()) {
             LOG_QUERY_ERROR_FOR("Database", query);
+            return false;
         }
 //        else{
 //            if (counter < 5)
@@ -2449,3 +2450,5 @@ bool Database::alterTableForNewField(const int tableRef, const int newFieldRef,c
         }    
     return b;
 }
+
+
