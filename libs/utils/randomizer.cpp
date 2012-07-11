@@ -172,7 +172,7 @@ Randomizer::~Randomizer()
 
 void Randomizer::setPathToFiles(const QString &p)
 {
-    d->m_Path = p;
+    d->m_Path = QDir::cleanPath(p);
 }
 
 QString Randomizer::getRandomFirstname(bool male)
@@ -181,7 +181,7 @@ QString Randomizer::getRandomFirstname(bool male)
     QSqlDatabase db;
     if (!QSqlDatabase::connectionNames().contains("__RANDOM__FIRSTNAMES__")) {
         db = QSqlDatabase::addDatabase("QSQLITE", "__RANDOM__FIRSTNAMES__");
-        db.setDatabaseName(d->m_Path + "firstnames.db");
+        db.setDatabaseName(d->m_Path + "/firstnames.db");
     } else {
         db = QSqlDatabase::database("__RANDOM__FIRSTNAMES__");
     }
@@ -270,7 +270,7 @@ QString Randomizer::randomWords(int nbOfWords)
     QSqlDatabase db;
     if (!QSqlDatabase::connectionNames().contains("__RANDOM__WORDS__")) {
         db = QSqlDatabase::addDatabase("QSQLITE", "__RANDOM__WORDS__");
-        db.setDatabaseName(d->m_Path + "words.db");
+        db.setDatabaseName(d->m_Path + "/words.db");
     } else {
         db = QSqlDatabase::database("__RANDOM__WORDS__");
     }
