@@ -22,7 +22,8 @@ static inline Core::ISettings *settings() { return Core::ICore::instance()->sett
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
 
-NextAction::NextAction(QWidget * parent)
+NextAction::NextAction(QWidget * parent) :
+    QWidget(parent)
 {
     setObjectName("NextDateWidget");
     setupUi(this);
