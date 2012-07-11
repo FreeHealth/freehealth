@@ -31,11 +31,22 @@
 
 using namespace Webcam;
 
-ProcessingThread::ProcessingThread(ImageBuffer* buffer) : QThread(), imageBuffer(buffer), rootFilter(0), flipVertical(false) {
+ProcessingThread::ProcessingThread(ImageBuffer* buffer) :
+    QThread(),
+    imageBuffer(buffer),
+    rootFilter(0),
+    flipVertical(false)
+{
     currState = new HeadState();
 }
 
-void ProcessingThread::run() {
+ProcessingThread::~ProcessingThread()
+{
+    delete currState;
+}
+
+void ProcessingThread::run()
+{
     while(true) {
         IplImage* currentFrame = imageBuffer->getFrame();
         //qDebug() << "Processing thread has received a frame";

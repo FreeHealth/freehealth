@@ -38,6 +38,8 @@ class HeadState;
 class ProcessingThread : public QThread {
 public: 
     ProcessingThread(ImageBuffer* buffer);
+    ~ProcessingThread();
+
     void setRootFilter(Filter* filter) { rootFilter = filter; }
     void setFlipVertical(bool fv) { flipVertical = fv; }
     void run();

@@ -23,17 +23,46 @@
   </layout>
   <action name="actionFreeze">
    <property name="text">
-    <string>freeze</string>
+    <string>Freeze Picture</string>
+   </property>
+   <property name="toolTip">
+    <string>Make a snapshot of the current moment</string>
+   </property>
+   <property name="shortcut">
+    <string>Space</string>
    </property>
   </action>
   <action name="actionRetry">
    <property name="text">
     <string>Retry</string>
    </property>
+   <property name="toolTip">
+    <string>Proceed capturing, the current picture is not good enough</string>
+   </property>
+   <property name="shortcut">
+    <string>Space</string>
+   </property>
   </action>
   <action name="actionUse">
    <property name="text">
-    <string>Use</string>
+    <string>Use picture</string>
+   </property>
+   <property name="toolTip">
+    <string>Use this picture</string>
+   </property>
+   <property name="shortcut">
+    <string>Return</string>
+   </property>
+  </action>
+  <action name="actionCancel">
+   <property name="text">
+    <string>Cancel</string>
+   </property>
+   <property name="toolTip">
+    <string>Abort this dialog</string>
+   </property>
+   <property name="shortcut">
+    <string>Esc</string>
    </property>
   </action>
  </widget>

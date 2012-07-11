@@ -39,6 +39,12 @@ CaptureThread::CaptureThread(ImageBuffer* buffer) :
     capture = cvCaptureFromCAM(-1);
 }
 
+CaptureThread::~CaptureThread()
+{
+    qDebug() << "~CaptureThread: Releasing cvCapture...";
+    cvReleaseCapture(&capture);
+}
+
 /*!
  * \brief Overloaded function that starts the thread.
  */
@@ -67,6 +73,7 @@ void CaptureThread::run() {
 //        qDebug() << "FPS:" << fps;
     }
 }
+
 
 void CaptureThread::updateFPS(int time) {
     frameTimes.enqueue(time);

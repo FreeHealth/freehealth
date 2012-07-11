@@ -41,6 +41,16 @@ TrackController::TrackController() :
     m_processingThread->start();
 }
 
+TrackController::~TrackController()
+{
+    if (isTracking())
+        stopTracking();
+
+    m_processingThread->deleteLater();
+    m_captureThread->deleteLater();
+    delete imageBuffer;
+}
+
 /*!
  * \brief Start capturing the webcam.
  */
@@ -67,6 +77,7 @@ bool TrackController::isTracking()
 void TrackController::stopTracking()
 {
     m_captureThread->stopCapture();
+    qDebug() << "Stopped the capture thread";
 }
 
 void TrackController::setRootFilter(Filter* filter)

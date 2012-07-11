@@ -29,8 +29,15 @@
 namespace Webcam {
 namespace Constants {
 
+// Actions
 const char * const ACTION_ID = "Webcam.Action";
 const char * const MENU_ID = "Webcam.Menu";
+
+// ICONS
+
+const char * const ICON_WEBCAM_FREEZE = "record.png";
+const char * const ICON_WEBCAM_RETRY = "retry.png";
+
 
 } // namespace Webcam
 } // namespace Constants

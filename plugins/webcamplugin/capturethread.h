@@ -41,6 +41,7 @@ public:
     enum FrameSize { Size640, Size320 };
 
     CaptureThread(ImageBuffer* buffer);
+    ~CaptureThread();
     void run();
 
     bool startCapture(int framerate, FrameSize size);

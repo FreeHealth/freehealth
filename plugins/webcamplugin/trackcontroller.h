@@ -39,6 +39,7 @@ class TrackController : public QObject {
 
 public:
     TrackController();
+    ~TrackController();
     bool isTracking();
     void setFrameSize(CaptureThread::FrameSize size) { m_frameSize = size; }
     CaptureThread::FrameSize getFrameSize() const { return m_frameSize; }

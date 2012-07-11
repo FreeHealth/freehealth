@@ -25,22 +25,27 @@
  ***************************************************************************/
 #include "webcamdialog.h"
 #include "ui_webcamdialog.h"
-
+#include "webcamconstants.h"
 #include "webcamdialog.h"
-#include <trackcontroller.h>
-#include <renderwidget.h>
-#include <processingthread.h>
+#include "trackcontroller.h"
+#include "renderwidget.h"
+#include "processingthread.h"
+
+#include <translationutils/constanttranslations.h>
+#include <coreplugin/constants.h>
+#include <coreplugin/icore.h>
+#include <coreplugin/itheme.h>
+
 #include <QtCore/QTimer>
 #include <QtGui/QPixmap>
 #include <QtGui/QToolBar>
-
-#include <coreplugin/icore.h>
-#include <coreplugin/itheme.h>
 #include <QToolButton>
-
 #include <QDebug>
 
 using namespace Webcam;
+using namespace Trans::ConstantTranslations;
+
+static inline Core::ITheme *theme() { return Core::ICore::instance()->theme(); }
 
 WebcamDialog::WebcamDialog(QWidget *parent) :
     QDialog(parent),
@@ -58,20 +63,24 @@ WebcamDialog::WebcamDialog(QWidget *parent) :
     ui->verticalLayout->addWidget(toolbar);
 
     toolbar->addAction(ui->actionFreeze);
-    ui->actionFreeze->setIcon(Core::ICore::instance()->theme()->icon("takescreenshot.png", Core::ITheme::MediumIcon));
+    ui->actionFreeze->setIcon(Core::ICore::instance()->theme()->icon(Constants::ICON_WEBCAM_FREEZE, Core::ITheme::MediumIcon));
     ui->actionFreeze->setVisible(true);
     connect(ui->actionFreeze, SIGNAL(triggered()), this, SLOT(freeze()));
 
-    toolbar->addAction(ui->actionRetry);
-    ui->actionRetry->setIcon(Core::ICore::instance()->theme()->icon("retry.png", Core::ITheme::MediumIcon));
-    ui->actionRetry->setVisible(false);
-    connect(ui->actionRetry, SIGNAL(triggered()), this, SLOT(unFreeze()));
-
     toolbar->addAction(ui->actionUse);
-    ui->actionUse->setIcon(Core::ICore::instance()->theme()->icon("ok.png", Core::ITheme::MediumIcon));
+    ui->actionUse->setIcon(Core::ICore::instance()->theme()->icon(Core::Constants::ICONOK, Core::ITheme::MediumIcon));
     ui->actionUse->setVisible(false);
     connect(ui->actionUse, SIGNAL(triggered()), this, SLOT(usePhoto()));
 
+    toolbar->addAction(ui->actionRetry);
+    ui->actionRetry->setIcon(Core::ICore::instance()->theme()->icon(Constants::ICON_WEBCAM_RETRY, Core::ITheme::MediumIcon));
+    ui->actionRetry->setVisible(false);
+    connect(ui->actionRetry, SIGNAL(triggered()), this, SLOT(unFreeze()));
+
+
+//    toolbar->addAction(ui->actionCancel);
+//    ui->actionCancel->setIcon(theme()->icon("cancel.png"));
+//    connect(ui->actionCancel, SIGNAL(triggered()), this, SLOT(close()));
 
     updateTimer = new QTimer(this);
     connect(updateTimer, SIGNAL(timeout()), this, SLOT(updateStats()));
@@ -86,6 +95,7 @@ QPixmap WebcamDialog::photo() const
 
 WebcamDialog::~WebcamDialog()
 {
+    stopTracking();
     delete trackController;
     delete ui;
 }
@@ -143,6 +153,5 @@ void WebcamDialog::updateStats() {
 void WebcamDialog::usePhoto()
 {
 //    qDebug() << "m_snapshot size:" << m_snapshot.size();
-    stopTracking();
     QDialog::accept();
 }

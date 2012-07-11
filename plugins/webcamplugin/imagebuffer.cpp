@@ -29,7 +29,8 @@
 
 using namespace Webcam;
 
-ImageBuffer::ImageBuffer(int size) : bufferSize(size)
+ImageBuffer::ImageBuffer(int size) :
+    bufferSize(size)
 {
 }
 
@@ -41,7 +42,8 @@ ImageBuffer::ImageBuffer(int size) : bufferSize(size)
  * If the buffer is full, the function blocks until it there is space
  * @param image The image to add
  */
-void ImageBuffer::addFrame(const IplImage* image) {
+void ImageBuffer::addFrame(const IplImage* image)
+{
 	//QTime time;
 	//time.start();
 	if(!image) {
@@ -69,7 +71,8 @@ void ImageBuffer::addFrame(const IplImage* image) {
  * This is a blocking operation, so if there are no available images, this function will block until one is available or image acquisition is stopped.
  * @returns IplImage pointer to the next available frame. Ownership of the data is passed to the callee, so the image must be released there.
  */
-IplImage* ImageBuffer::getFrame() {
+IplImage* ImageBuffer::getFrame()
+{
 	mutex.lock();
 	if(imageQueue.isEmpty()) {
 	//	qDebug() << "Get frame waiting on frame";
@@ -90,7 +93,8 @@ IplImage* ImageBuffer::getFrame() {
 }
 
 /*! \brief Clear the buffer and release clients */
-void ImageBuffer::clear() {
+void ImageBuffer::clear()
+{
 	imageQueue.clear();
 	bufferNotEmpty.wakeAll();
 }
