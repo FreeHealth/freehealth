@@ -119,7 +119,7 @@ AlertItemEditorWidget::AlertItemEditorWidget(QWidget *parent) :
 
 AlertItemEditorWidget::~AlertItemEditorWidget()
 {
-    qWarning() << "~AlertItemEditorWidget()";
+//    qWarning() << "~AlertItemEditorWidget()";
     if (d)
         delete d;
     d = 0;
@@ -296,7 +296,6 @@ void AlertItemEditorWidget::hideScriptsTab()
 
 bool AlertItemEditorWidget::submit(AlertItem &item)
 {
-    qWarning()<<"AlertItemEditorWidget::submit";
     // Description
     // remove all multi-lingual values
     item.removeAllLanguages();
@@ -330,7 +329,6 @@ bool AlertItemEditorWidget::submit(AlertItem &item)
     }
 
     // Scripts
-    qWarning() << "SUBMIT SCRIPTS";
     d->ui->scriptEditor->submit();
     item.clearScripts();
     item.setScripts(d->ui->scriptEditor->scripts());
