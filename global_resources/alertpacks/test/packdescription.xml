@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FreeMedForms>
+
+<AlertPack>
+
+  <AlertPackDescription>
+    <!-- Non translatable values -->
+    <uuid>AlertPacks::Test::Alpha</uuid>
+    <authors>Eric Maeker, MD</authors>
+    <version>0.0.1</version>
+    <fmfv>0.8.0</fmfv>
+    <fdv>0.8.0</fdv>
+    <cdate>2012-07-11</cdate>
+    <lmdate></lmdate>
+    <icon>__theme__/warning.png</icon>
+    <weblink></weblink>
+    <bibliography/>
+
+    <!-- Translatable values -->
+    <license>GPLv3</license>
+    <label lang="fr">Jeux d'alertes de test</label>
+    <label lang="xx">Testing alert pack</label>
+    <description lang="fr">fr descr</description>
+    <description lang="xx">xx descr</description>
+
+    <htmldescription lang="fr">&lt;p>
+      &lt;br />
+      &lt;/p>
+    </htmldescription>
+
+    <htmldescription lang="xx">&lt;p>
+      &lt;/p>
+    </htmldescription>
+
+    <updateinfo>
+      <updateversion from="0.0.1">
+        <text lang="fr">Première mise à disposition.</text>
+        <text lang="en">First release.</text>
+      </updateversion>
+    </updateinfo>
+
+  </AlertPackDescription>
+
+</AlertPack>

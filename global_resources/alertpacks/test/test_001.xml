@@ -1,0 +1,55 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE FreeMedForms>
+<Alert>
+  <Descr>
+    <!--Non translatable values-->
+    <packUid>AlertPacks::Test::Alpha</packUid>
+    <version>0.8.0</version>
+    <authors>Eric Maeker, MD</authors>
+    <file/>
+    <vendor>The FreeMedForms community</vendor>
+    <validity>true</validity>
+    <fmfv>0.8.0</fmfv>
+    <fdv/>
+    <fav/>
+    <cdate>2012-07-12T09:57:09</cdate>
+    <lmdate></lmdate>
+    <icon>identity.png</icon>
+    <cryptedPassword></cryptedPassword>
+    <viewType>nonblocking</viewType>
+    <contentType>patientCondition</contentType>
+    <prior>high</prior>
+    <overrideComment>false</overrideComment>
+    <mustBeRead>false</mustBeRead>
+    <remindLater>true</remindLater>
+    <editable>true</editable>
+    <styleSheet></styleSheet>
+
+    <!--Translatable values-->
+    <comment lang="xx">All language comment</comment>
+    <comment lang="de">Deutsch comment</comment>
+    <comment lang="en">En comment</comment>
+    <comment lang="fr">Commentaire</comment>
+    <description lang="xx">All language descr</description>
+    <description lang="de">De descr</description>
+    <description lang="en">En descr</description>
+    <description lang="fr">Fr Description</description>
+    <label lang="xx">All language label</label>
+    <label lang="de">De label</label>
+    <label lang="en">En label</label>
+    <label lang="fr">Libellé</label>
+    <category lang="xx">All language Cat</category>
+    <category lang="de">De Cat</category>
+    <category lang="en">En Cat</category>
+    <category lang="fr">Fr Cat</category>
+  </Descr>
+  <Timings>
+    <Timing valid="1" end="2012-07-12T10:50:41" id="-1" start="2014-07-10T10:50:41"/>
+  </Timings>
+  <Rels>
+    <Rel id="-1" to="allPatients" uid="" />
+  </Rels>
+  <Xtra>
+    <Bla>Extra XML</Bla>
+  </Xtra>
+</Alert>
