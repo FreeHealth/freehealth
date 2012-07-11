@@ -126,7 +126,7 @@ public Q_SLOTS:
 //    bool aboutQt();
 //    bool aboutPlugins();
 
-    void updateCheckerEnd();
+    void updateCheckerEnd(bool error);
 
     void openPatientFormsFile();
     void aboutToShowRecentFiles();

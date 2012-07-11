@@ -63,7 +63,7 @@ public:
     
     QSqlError lastError();
     
-    bool setHeaderData(int section,Qt::Orientation orientation,QVariant & value,int role = Qt::EditRole );
+    bool setHeaderData(int section, Qt::Orientation orientation, const QVariant &value, int role = Qt::EditRole);
 
     bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
     bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());

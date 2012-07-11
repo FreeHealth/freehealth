@@ -23,7 +23,9 @@
  *   Contributors:                                                         *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#include "filter.h"
+#include <filter.h>
+
+using namespace Webcam;
 
 Filter::Filter() : listener(0) {}
 

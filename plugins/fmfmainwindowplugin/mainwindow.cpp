@@ -381,8 +381,9 @@ QStatusBar *MainWindow::statusBar()
     return QMainWindow::statusBar();
 }
 
-void MainWindow::updateCheckerEnd()
+void MainWindow::updateCheckerEnd(bool error)
 {
+    Q_UNUSED(error)
     delete statusBar();
 }
 

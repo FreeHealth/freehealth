@@ -27,7 +27,6 @@
 #include "webcamdialog.h"
 
 using namespace Webcam;
-using namespace Internal;
 
 WebcamPhotoProvider::WebcamPhotoProvider()
 {
@@ -40,21 +39,19 @@ WebcamPhotoProvider::~WebcamPhotoProvider()
  * \brief returns Photo that is captured by the selected webcam.
  *
  * All of the code is in this function, there is no async calling, because
- * the dialog should be modal and no other functions should be possible.
-*/
-QString WebcamPhotoProvider::recievePhotoFile()
+ * the dialog should be modal and no other functions should be possible
+ * meanwhile.
+ */
+QPixmap WebcamPhotoProvider::recievePhoto()
 {
-    //debug:
-    return QString("/tmp/photo.png");
 
     WebcamDialog dialog(0);
 
     // Escape button pressed, etc.
     if(dialog.exec() != QDialog::Accepted) {
-        return QString();
+        return QPixmap();
     }
     // ok, here we go:
-    return QString();
-    // return &dialog.photo();
+    return dialog.photo();
 }
 

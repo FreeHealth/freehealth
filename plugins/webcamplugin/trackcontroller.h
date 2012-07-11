@@ -26,33 +26,39 @@
 #ifndef TRACK_CONTROLLER_H
 #define TRACK_CONTROLLER_H
 
-#include "capturethread.h"
+#include <capturethread.h>
+#include <imagebuffer.h>
+
+namespace Webcam {
 
 class Filter;
 class ProcessingThread;
-class ImageBuffer;
 
 class TrackController : public QObject {
-    Q_OBJECT;
+    Q_OBJECT
+
 public:
     TrackController();
     bool isTracking();
-    void setFrameSize(CaptureThread::FrameSize size) { frameSize = size; }
-    CaptureThread::FrameSize getFrameSize() { return frameSize; }
-    void setFrameRate(int rate) { frameRate = rate; }
-    int getFrameRate() { return frameSize; }
+    void setFrameSize(CaptureThread::FrameSize size) { m_frameSize = size; }
+    CaptureThread::FrameSize getFrameSize() const { return m_frameSize; }
+    void setFrameRate(int rate) { m_frameRate = rate; }
+    int getFrameRate() const { return m_frameSize; }
     void setRootFilter(Filter* filter);
-    ProcessingThread* getProcessingThread() { return processingThread; }
+    ProcessingThread* getProcessingThread() { return m_processingThread; }
     double getFPS();
+
 public slots:
     void startTracking();
     void stopTracking();
+
 private:
-    int frameRate;
-    CaptureThread::FrameSize frameSize;
-    CaptureThread* captureThread;
-    ProcessingThread* processingThread;
+    int m_frameRate;
+    CaptureThread::FrameSize m_frameSize;
+    CaptureThread* m_captureThread;
+    ProcessingThread* m_processingThread;
     ImageBuffer* imageBuffer;
 };
 
+} // end Webcam
 #endif

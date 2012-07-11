@@ -23,11 +23,13 @@
  *   Contributors:                                                         *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#include "processingthread.h"
-#include "headstate.h"
-#include "filter.h"
-#include "imagebuffer.h"
+#include <processingthread.h>
+#include <headstate.h>
+#include <filter.h>
+#include <imagebuffer.h>
 #include <QDebug>
+
+using namespace Webcam;
 
 ProcessingThread::ProcessingThread(ImageBuffer* buffer) : QThread(), imageBuffer(buffer), rootFilter(0), flipVertical(false) {
     currState = new HeadState();

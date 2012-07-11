@@ -151,8 +151,8 @@ QVariant PercentModel::headerData(int section, Qt::Orientation orientation, int 
     return QVariant();
 }
 
-bool PercentModel::setHeaderData(int section,Qt::Orientation orientation,
-                                          QVariant & value,int role ){
+bool PercentModel::setHeaderData(int section, Qt::Orientation orientation,
+                                          const QVariant &value, int role ){
     return d->m_SqlTable->setHeaderData(section, orientation,value,role )  ;                                   
 }
 

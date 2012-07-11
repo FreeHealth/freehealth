@@ -34,6 +34,7 @@ SUBDIRS = \
 
 
 
+
 # root plugin
 core.subdir = ../../plugins/fmfcoreplugin
 

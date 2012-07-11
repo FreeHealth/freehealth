@@ -26,7 +26,9 @@
 #ifndef FILTER_H
 #define FILTER_H
 
-#include "headstate.h"
+#include <headstate.h>
+
+namespace Webcam {
 
 /**
  * Base class for filters
@@ -40,5 +42,7 @@ protected:
     Filter* listener;
     void notifyListener(HeadState* state);
 };
+
+} // end Webcam
 
 #endif

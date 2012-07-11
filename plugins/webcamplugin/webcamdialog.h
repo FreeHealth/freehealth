@@ -28,38 +28,42 @@
 
 #include "ui_webcamdialog.h"
 #include "capturethread.h"
-#include <QDialog>
+#include <QtGui/QDialog>
 
-class TrackController;
-class RenderWidget;
-class QToolBar;
-class QDockWidget;
-class SettingsWidget;
+//class SettingsWidget;
 
-namespace ui {
+namespace Webcam {
+
+namespace Ui {
 class WebcamDialog;
 }
 
-namespace Webcam {
-namespace Internal {
+class TrackController;
+class RenderWidget;
 
 class WebcamDialog : public QDialog {
     Q_OBJECT
 public:
-    WebcamDialog(QWidget *parent);
+    WebcamDialog(QWidget *parent = 0);
     ~WebcamDialog();
 
     QPixmap photo() const;
 
 
-public slots:
+public Q_SLOTS:
     void onFlipVerticalChanged(bool flip);
     void startTracking();
     void stopTracking();
-    void takePhoto();
+    void freeze();
+    void unFreeze();
     void updateStats();
+
+private Q_SLOTS:
+    void usePhoto();
+
 protected:
     void closeEvent(QCloseEvent*);
+
 private:
     Ui::WebcamDialog *ui;
     TrackController* trackController;
@@ -67,6 +71,5 @@ private:
     QPixmap m_snapshot;
 };
 
-} // end Internal
 } // end Webcam
 #endif

@@ -28,11 +28,6 @@
 
 #include <QtCore/QtGlobal>
 
-/**
-  \namespace Webcam
-  Namespace for the webcam plugin.
-*/
-
 #if defined(WEBCAM_LIBRARY)
 #  define WEBCAMSHARED_EXPORT Q_DECL_EXPORT
 #else

@@ -27,17 +27,20 @@
 #include "ui_webcamdialog.h"
 
 #include "webcamdialog.h"
-#include "trackcontroller.h"
-#include "renderwidget.h"
-#include "processingthread.h"
+#include <trackcontroller.h>
+#include <renderwidget.h>
+#include <processingthread.h>
 #include <QtCore/QTimer>
 #include <QtGui/QPixmap>
+#include <QtGui/QToolBar>
 
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
+#include <QToolButton>
 
-namespace Webcam {
-namespace Internal {
+#include <QDebug>
+
+using namespace Webcam;
 
 WebcamDialog::WebcamDialog(QWidget *parent) :
     QDialog(parent),
@@ -48,13 +51,28 @@ WebcamDialog::WebcamDialog(QWidget *parent) :
     trackController = new TrackController();
     trackController->setRootFilter(ui->renderWidget);
 
-    ui->takePhotoButton->setDefaultAction(ui->actionTakePhoto);
-    ui->takePhotoButton->setIcon(Core::ICore::instance()->theme()->icon("takescreenshot.png"));
+    QToolBar *toolbar = new QToolBar(this);
+    toolbar->setFloatable(false);
+    toolbar->setOrientation(Qt::Vertical);
 
-    ui->actionTakePhoto->setEnabled(false);
-    connect(ui->actionTakePhoto, SIGNAL(triggered()), this, SLOT(takePhoto()));
+    ui->verticalLayout->addWidget(toolbar);
 
-    //start a timer to update some statistics
+    toolbar->addAction(ui->actionFreeze);
+    ui->actionFreeze->setIcon(Core::ICore::instance()->theme()->icon("takescreenshot.png", Core::ITheme::MediumIcon));
+    ui->actionFreeze->setVisible(true);
+    connect(ui->actionFreeze, SIGNAL(triggered()), this, SLOT(freeze()));
+
+    toolbar->addAction(ui->actionRetry);
+    ui->actionRetry->setIcon(Core::ICore::instance()->theme()->icon("retry.png", Core::ITheme::MediumIcon));
+    ui->actionRetry->setVisible(false);
+    connect(ui->actionRetry, SIGNAL(triggered()), this, SLOT(unFreeze()));
+
+    toolbar->addAction(ui->actionUse);
+    ui->actionUse->setIcon(Core::ICore::instance()->theme()->icon("ok.png", Core::ITheme::MediumIcon));
+    ui->actionUse->setVisible(false);
+    connect(ui->actionUse, SIGNAL(triggered()), this, SLOT(usePhoto()));
+
+
     updateTimer = new QTimer(this);
     connect(updateTimer, SIGNAL(timeout()), this, SLOT(updateStats()));
     updateTimer->start(1000);
@@ -68,8 +86,10 @@ QPixmap WebcamDialog::photo() const
 
 WebcamDialog::~WebcamDialog()
 {
+    delete trackController;
     delete ui;
 }
+
 
 void WebcamDialog::closeEvent(QCloseEvent*) {
     if(trackController->isTracking()) {
@@ -83,27 +103,36 @@ void WebcamDialog::onFlipVerticalChanged(bool flip) {
 }
 
 
-void WebcamDialog::takePhoto() {
+void WebcamDialog::freeze() {
     if (trackController->isTracking()) {
         stopTracking();
+        ui->actionFreeze->setVisible(false);
+        ui->actionRetry->setVisible(true);
+        ui->actionUse->setVisible(true);
 
-    } else {
-        startTracking();
+        m_snapshot = ui->renderWidget->currentPixmap();
     }
 }
+
+void WebcamDialog::unFreeze()
+{
+    if (!trackController->isTracking()) {
+        ui->actionFreeze->setVisible(true);
+        ui->actionRetry->setVisible(false);
+        ui->actionUse->setVisible(false);
+        startTracking();
+    }
+
+}
+
 
 void WebcamDialog::startTracking() {
     trackController->setFrameSize(CaptureThread::Size640);
     trackController->startTracking();
-    ui->actionTakePhoto->setEnabled(true);
-    //	ui->actionStart->setEnabled(false);
-    //	ui->actionStop->setEnabled(true);
 }
 
 void WebcamDialog::stopTracking() {
     trackController->stopTracking();
-    //	ui->actionStart->setEnabled(true);
-    //	ui->actionStop->setEnabled(false);
 }
 
 
@@ -111,5 +140,9 @@ void WebcamDialog::updateStats() {
     //	statusBar()->showMessage(QString("FPS: ")+QString::number(trackController->getFPS(), 'f', 1));
 }
 
-} // end Internal
-} // end Webcam
+void WebcamDialog::usePhoto()
+{
+//    qDebug() << "m_snapshot size:" << m_snapshot.size();
+    stopTracking();
+    QDialog::accept();
+}

@@ -304,7 +304,7 @@ DayAvailabilityModel *UserCalendarModel::availabilityModel(const QModelIndex &in
 DayAvailabilityModel *UserCalendarModel::availabilityModel(const int index, QObject *parent) const
 {
     if (index < 0 || index >= d->m_UserCalendars.count())
-        return false;
+        return 0;
 
     UserCalendar *u = d->m_UserCalendars.at(index);
 

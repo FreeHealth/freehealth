@@ -399,8 +399,6 @@ void IdentityWidget::photoButton_clicked()
 
     // TODO: if a photo is already loaded --> ask user what to do
 
-    QString fileName;
-
     // get a list of plugin implementations that provide a photo
     QList<Core::IPhotoProvider *> photoProviders = ExtensionSystem::PluginManager::instance()->getObjects<Core::IPhotoProvider>();
 
@@ -411,22 +409,21 @@ void IdentityWidget::photoButton_clicked()
         // by now just get first plugin
 
         Core::IPhotoProvider *photoProvider = photoProviders.first();
-        fileName = photoProvider->recievePhotoFile();
-        if (fileName.isEmpty()) {
+        d->m_Photo = photoProvider->recievePhoto();
+        if (d->m_Photo.isNull()) {
             return;
         }
 
-    } else {
-        // if no plugins installed/active, fall back to default behaviour
-        fileName = QFileDialog::getOpenFileName(this, tr("Choose a photo"),
+    } else {   // if no plugins installed/active, fall back to default behaviour
+
+        QString fileName = QFileDialog::getOpenFileName(this, tr("Choose a photo"),
                                             QDir::homePath(),
                                             "Image (*.png *.jpg *.gif *.tiff)");
         if (fileName.isEmpty())
             return;
+        d->m_Photo.load(fileName);
     }
 
-    // everything ok, now load pixmap
-    d->m_Photo.load(fileName);
     if (d->m_Photo.isNull())
         return;
 
