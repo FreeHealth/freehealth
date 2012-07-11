@@ -278,7 +278,7 @@ AlertBase::AlertBase(QObject *parent) :
 
     addField(Table_ALERT, ALERT_ID, "A_ID", FieldIsUniquePrimaryKey);
     addField(Table_ALERT, ALERT_UID, "A_UID", FieldIsUUID);
-    addField(Table_ALERT, ALERT_PACKUID, "A_PUID", FieldIsUUID);
+    addField(Table_ALERT, ALERT_PACKUID, "A_PUID", FieldIsLongText);
     addField(Table_ALERT, ALERT_REL_ID, "R_ID", FieldIsUUID);
     addField(Table_ALERT, ALERT_CATEGORY_UID, "C_UID", FieldIsUUID);
     addField(Table_ALERT, ALERT_SID, "SCR_ID", FieldIsInteger);
@@ -369,7 +369,7 @@ AlertBase::AlertBase(QObject *parent) :
 
     // Packs
     addField(Table_ALERT_PACKS, ALERT_PACKS_ID, "ID", FieldIsUniquePrimaryKey);
-    addField(Table_ALERT_PACKS, ALERT_PACKS_UID, "UID", FieldIsUUID);
+    addField(Table_ALERT_PACKS, ALERT_PACKS_UID, "UID", FieldIsLongText);
     addField(Table_ALERT_PACKS, ALERT_PACKS_ISVALID, "ISV", FieldIsBoolean);
     addField(Table_ALERT_PACKS, ALERT_PACKS_IN_USE, "INU", FieldIsBoolean);
     addField(Table_ALERT_PACKS, ALERT_PACKS_LABEL_LID, "LBL_LID", FieldIsInteger);
