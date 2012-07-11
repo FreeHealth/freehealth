@@ -48,6 +48,7 @@
 namespace Alert {
 class AlertCore;
 class AlertItem;
+class AlertPackDescription;
 namespace Internal {
 
 class AlertBaseQuery
@@ -115,8 +116,12 @@ public:
     ~AlertBase();
     bool isInitialized() const {return m_initialized;}
 
+    // AlertItem
     bool saveAlertItem(AlertItem &item);
     QVector<AlertItem> getAlertItems(const AlertBaseQuery &query);
+
+    // AlertPacks
+    bool saveAlertPackDescription(AlertPackDescription &descr);
 
     // For debugging purpose
     void toTreeWidget(QTreeWidget *tree);
@@ -130,8 +135,8 @@ private:
                           CreationOption createOption
                          );
 
+    // Alerts
     bool updateAlertItem(AlertItem &item);
-
     bool saveItemRelations(AlertItem &item);
     bool saveItemScripts(AlertItem &item);
     bool saveItemTimings(AlertItem &item);
@@ -144,6 +149,10 @@ private:
     bool getItemTimings(AlertItem &item);
     bool getItemValidations(AlertItem &item);
     bool getItemLabels(AlertItem &item);
+
+    // AlertPacks
+    bool updateAlertPackDescription(AlertPackDescription &descr, const int id);
+    bool saveAlertPackLabels(AlertPackDescription &descr);
 
 private Q_SLOTS:
     void onCoreDatabaseServerChanged();

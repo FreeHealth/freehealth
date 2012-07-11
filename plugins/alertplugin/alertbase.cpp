@@ -39,6 +39,7 @@
 #include "alertbase.h"
 #include "alertitem.h"
 #include "constants.h"
+#include "alertpackdescription.h"
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -1577,6 +1578,7 @@ bool AlertBase::getItemValidations(AlertItem &item)
     }
     return true;
 }
+
 bool AlertBase::getItemLabels(AlertItem &item)
 {
     // we are inside a transaction opened by getAlertItem
@@ -1633,6 +1635,208 @@ bool AlertBase::getItemLabels(AlertItem &item)
         return false;
     }
     query.finish();
+    return true;
+}
+
+bool AlertBase::updateAlertPackDescription(AlertPackDescription &descr, const int id)
+{
+    // We are inside a transaction created by saveAlertPackDescription()
+    QList<int> fields;
+    fields
+            << Constants::ALERT_PACKS_UID
+            << Constants::ALERT_PACKS_ISVALID
+            << Constants::ALERT_PACKS_IN_USE
+            << Constants::ALERT_PACKS_LABEL_LID
+            << Constants::ALERT_PACKS_CATEGORY_LID
+            << Constants::ALERT_PACKS_DESCRIPTION_LID
+            << Constants::ALERT_PACKS_AUTHORS
+            << Constants::ALERT_PACKS_VENDOR
+            << Constants::ALERT_PACKS_URL
+            << Constants::ALERT_PACKS_THEMEDICON
+            << Constants::ALERT_PACKS_VERSION
+            << Constants::ALERT_PACKS_FMFVERSION
+            << Constants::ALERT_PACKS_CREATEDATE
+            << Constants::ALERT_PACKS_LASTUPDATE
+            << Constants::ALERT_PACKS_XTRAXML
+               ;
+    QHash<int, QString> where;
+    where.insert(Constants::ALERT_PACKS_ID, QString("=%1").arg(id));
+    QString req = prepareUpdateQuery(Constants::Table_ALERT_PACKS, fields, where);
+    QSqlQuery query(database());
+    query.prepare(req);
+    int i = 0;
+    query.bindValue(i, descr.uid());
+    query.bindValue(++i, 1); // TODO: descr.isValid());
+    query.bindValue(++i, (int)descr.inUse());
+    query.bindValue(++i, descr.dbData(LabelLID).toInt());
+    query.bindValue(++i, descr.dbData(CategoryLID).toInt());
+    query.bindValue(++i, descr.dbData(DescrLID).toInt());
+    query.bindValue(++i, descr.data(AlertPackDescription::Author));
+    query.bindValue(++i, descr.data(AlertPackDescription::Vendor));
+    query.bindValue(++i, descr.data(AlertPackDescription::URL));
+    query.bindValue(++i, descr.data(AlertPackDescription::GeneralIcon));
+    query.bindValue(++i, descr.data(AlertPackDescription::Version));
+    query.bindValue(++i, descr.data(AlertPackDescription::FreeMedFormsCompatVersion));
+    query.bindValue(++i, descr.data(AlertPackDescription::CreationDate));
+    query.bindValue(++i, descr.data(AlertPackDescription::LastModificationDate));
+    query.bindValue(++i, QString()); //TODO:: descr.extraXml());
+    if (query.exec()) {
+//        descr.setModified(false);
+    } else {
+        LOG_QUERY_ERROR(query);
+        database().rollback();
+        return false;
+    }
+    query.finish();
+    database().commit();
+    return true;
+}
+
+bool AlertBase::saveAlertPackDescription(AlertPackDescription &descr)
+{
+    if (!connectDatabase(Constants::DB_NAME, __LINE__))
+        return false;
+    if (descr.uid().isEmpty()) {
+        LOG_ERROR("AlertPackDescription uuid can not be null");
+        return false;
+    }
+    database().transaction();
+    // update or save ?
+    // try to catch the id using the uuid
+    QHash<int, QString> where;
+    where.insert(Constants::ALERT_PACKS_UID, QString("='%1'").arg(descr.uid()));
+    QString req = select(Constants::Table_ALERT_PACKS, Constants::ALERT_PACKS_ID, where);
+    QSqlQuery query(database());
+    int id = -1;
+    if (query.exec(req)) {
+        if (query.next())
+            id = query.value(0).toInt();
+    } else {
+        LOG_QUERY_ERROR(query);
+    }
+    query.finish();
+
+    if (!saveAlertPackLabels(descr)) {
+        database().rollback();
+        return false;
+    }
+
+    if (id >= 0)
+        return updateAlertPackDescription(descr, id);
+
+    req = prepareInsertQuery(Constants::Table_ALERT_PACKS);
+    query.prepare(req);
+    query.bindValue(Constants::ALERT_PACKS_ID, QVariant());
+    query.bindValue(Constants::ALERT_PACKS_UID, descr.uid());
+    query.bindValue(Constants::ALERT_PACKS_ISVALID, 1); // TODO: descr.isValid());
+    query.bindValue(Constants::ALERT_PACKS_IN_USE, (int)descr.inUse());
+    query.bindValue(Constants::ALERT_PACKS_LABEL_LID, descr.dbData(LabelLID).toInt());
+    query.bindValue(Constants::ALERT_PACKS_CATEGORY_LID, descr.dbData(CategoryLID).toInt());
+    query.bindValue(Constants::ALERT_PACKS_DESCRIPTION_LID, descr.dbData(DescrLID).toInt());
+    query.bindValue(Constants::ALERT_PACKS_AUTHORS, descr.data(AlertPackDescription::Author));
+    query.bindValue(Constants::ALERT_PACKS_VENDOR, descr.data(AlertPackDescription::Vendor));
+    query.bindValue(Constants::ALERT_PACKS_URL, descr.data(AlertPackDescription::URL));
+    query.bindValue(Constants::ALERT_PACKS_THEMEDICON, descr.data(AlertPackDescription::GeneralIcon));
+    query.bindValue(Constants::ALERT_PACKS_VERSION, descr.data(AlertPackDescription::Version));
+    query.bindValue(Constants::ALERT_PACKS_FMFVERSION, descr.data(AlertPackDescription::FreeMedFormsCompatVersion));
+    query.bindValue(Constants::ALERT_PACKS_CREATEDATE, descr.data(AlertPackDescription::CreationDate));
+    query.bindValue(Constants::ALERT_PACKS_LASTUPDATE, descr.data(AlertPackDescription::LastModificationDate));
+    query.bindValue(Constants::ALERT_PACKS_XTRAXML, QString()); // TODO: descr.extraXml());
+    if (query.exec()) {
+        id = query.lastInsertId().toInt();
+    } else {
+        LOG_QUERY_ERROR(query);
+        database().rollback();
+        return false;
+    }
+    query.finish();
+    database().commit();
+    return true;
+}
+
+bool AlertBase::saveAlertPackLabels(AlertPackDescription &descr)
+{
+    // we are inside a transaction opened by saveAlertItem
+    if (!connectDatabase(Constants::DB_NAME, __LINE__))
+        return false;
+    QSqlQuery query(database());
+    QList<int> lids;
+    QList<int> vals;
+    const int LABEL = 0;
+    const int CATEGORY = 1;
+    const int DESCR = 2;
+
+    // get the labels lid for label, descr && comment
+    lids << -1 << -1 << -1;
+    vals << LabelLID << CategoryLID << DescrLID;
+    int lastLid = -1;
+    for(int i=0; i < vals.count(); ++i) {
+        if (descr.dbData(vals.at(i)).isValid() && descr.dbData(vals.at(i)).toInt()>-1) {
+            lids[i] = descr.dbData(vals.at(i)).toInt();
+            // delete all old relations
+            QHash<int, QString> where;
+            where.insert(Constants::ALERT_LABELS_LABELID, QString("=%1").arg(lids[i]));
+            QString req = prepareDeleteQuery(Constants::Table_ALERT_LABELS, where);
+            if (!query.exec(req)) {
+                LOG_QUERY_ERROR(query);
+                return false;
+            }
+        } else {
+            lids[i] = qMax(lastLid, max(Constants::Table_ALERT_LABELS, Constants::ALERT_LABELS_LABELID).toInt()) + 1;
+            descr.setDbData(vals.at(i), lids.at(i));
+        }
+        lastLid = lids[i];
+        query.finish();
+    }
+
+    // save all labels
+    foreach(const QString &l, descr.availableLanguages()) {
+        const QString &label = descr.label(l);
+        if (!label.isEmpty()) {
+            QString req = prepareInsertQuery(Constants::Table_ALERT_LABELS);
+            query.prepare(req);
+            query.bindValue(Constants::ALERT_LABELS_ID, QVariant());
+            query.bindValue(Constants::ALERT_LABELS_LABELID, lids[LABEL]);
+            query.bindValue(Constants::ALERT_LABELS_LANG, l);
+            query.bindValue(Constants::ALERT_LABELS_VALUE, label);
+            query.bindValue(Constants::ALERT_LABELS_ISVALID, 1);
+            if (!query.exec()) {
+                LOG_QUERY_ERROR(query);
+                return false;
+            }
+            query.finish();
+        }
+        const QString &cat = descr.category(l);
+        if (!cat.isEmpty()) {
+            QString req = prepareInsertQuery(Constants::Table_ALERT_LABELS);
+            query.prepare(req);
+            query.bindValue(Constants::ALERT_LABELS_ID, QVariant());
+            query.bindValue(Constants::ALERT_LABELS_LABELID, lids[CATEGORY]);
+            query.bindValue(Constants::ALERT_LABELS_LANG, l);
+            query.bindValue(Constants::ALERT_LABELS_VALUE, cat);
+            query.bindValue(Constants::ALERT_LABELS_ISVALID, 1);
+            if (!query.exec()) {
+                LOG_QUERY_ERROR(query);
+                return false;
+            }
+            query.finish();
+        }
+        const QString &description = descr.description(l);
+        if (!description.isEmpty()) {
+            QString req = prepareInsertQuery(Constants::Table_ALERT_LABELS);
+            query.prepare(req);
+            query.bindValue(Constants::ALERT_LABELS_ID, QVariant());
+            query.bindValue(Constants::ALERT_LABELS_LABELID, lids[DESCR]);
+            query.bindValue(Constants::ALERT_LABELS_LANG, l);
+            query.bindValue(Constants::ALERT_LABELS_VALUE, description);
+            query.bindValue(Constants::ALERT_LABELS_ISVALID, 1);
+            if (!query.exec()) {
+                LOG_QUERY_ERROR(query);
+                return false;
+            }
+            query.finish();
+        }
+    }
     return true;
 }
 
