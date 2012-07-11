@@ -30,12 +30,17 @@
 #include "alertitem.h"
 #include "ialertplaceholder.h"
 #include "alertscriptmanager.h"
+#include "alertpackdescription.h"
+#include "constants.h"
 
 #include <coreplugin/icore.h>
-//#include <coreplugin/iscriptmanager.h>
+#include <coreplugin/isettings.h>
 
 #include <extensionsystem/pluginmanager.h>
 #include <utils/log.h>
+#include <utils/global.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_filepathxml.h>
 
 // TEST
 #include "alertitemeditordialog.h"
@@ -46,10 +51,13 @@
 #include <QPointer>
 // END TEST
 
+# include <QDir>
+
 using namespace Alert;
+using namespace Trans::ConstantTranslations;
 
 static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
-//static inline Core::IScriptManager *scriptManager() {return Core::ICore::instance()->scriptManager();}
+static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 
 AlertCore *AlertCore::_instance = 0;
 
@@ -247,6 +255,44 @@ bool AlertCore::removeAlert(const AlertItem &item)
     return ok;
 }
 
+/** Read all alerts in the alert pack \e absPath and feed the database with created alerts. */
+bool AlertCore::registerAlertPack(const QString &absPath)
+{
+    LOG(tr("Registering alert pack: %1").arg(QDir::cleanPath(absPath)));
+    QDir path(absPath);
+    if (!path.exists()) {
+        LOG_ERROR(tkTr(Trans::Constants::PATH_1_DOESNOT_EXISTS).arg(QDir::cleanPath(absPath)));
+        return false;
+    }
+
+    // get the packdescription file and save to database
+    QFileInfo descrFile(QString("%1/%2").arg(absPath).arg(Constants::PACK_DESCRIPTION_FILENAME));
+    if (!descrFile.exists()) {
+        LOG_ERROR(tr("No alert pack description"));
+        return false;
+    }
+    AlertPackDescription descr;
+    descr.fromXmlFile(descrFile.absoluteFilePath());
+    if (!d->_alertBase->saveAlertPackDescription(descr)) {
+        LOG_ERROR("Unable to save alert pack description to database");
+        return false;
+    }
+
+    // read all alerts
+    QFileInfoList files = Utils::getFiles(path, "*.xml");
+    if (files.isEmpty()) {
+        LOG_ERROR(tkTr(Trans::Constants::PATH_1_IS_EMPTY));
+        return false;
+    }
+    QList<AlertItem> alerts;
+    foreach(const QFileInfo &info, files) {
+        if (info.fileName()==QString(Constants::PACK_DESCRIPTION_FILENAME))
+            continue;
+        alerts << AlertItem::fromXml(Utils::readTextFile(info.absoluteFilePath(), Utils::DontWarnUser));
+    }
+    return saveAlerts(alerts);
+}
+
 /**
  Process alerts:\n
    - Execute check scripts
@@ -433,7 +479,7 @@ void AlertCore::postCoreInitialization()
                                  "true;"));
 
     // Db save/get
-    if (true) {
+    if (false) {
         if (!d->_alertBase->saveAlertItem(item))
             qWarning() << "ITEM WRONG";
         if (!d->_alertBase->saveAlertItem(item2))
@@ -477,7 +523,7 @@ void AlertCore::postCoreInitialization()
     }
 
     // To XML
-    if (true) {
+    if (false) {
         qWarning() << item.toXml();
         qWarning() << item11.toXml();
     }
@@ -511,6 +557,11 @@ void AlertCore::postCoreInitialization()
             dlg.submit(item);
         }
         qWarning() << item.toXml();
+    }
+
+    // Alert packs
+    if (true) {
+        registerAlertPack(settings()->path(Core::ISettings::BundledAlertPacks) + "/test");
     }
 
     // PlaceHolders

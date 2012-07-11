@@ -78,6 +78,9 @@ public:
     bool updateAlert(const AlertItem &item);
     bool removeAlert(const AlertItem &item);
 
+    // Alert packs
+    bool registerAlertPack(const QString &absPath);
+
     //    bool executeAlert(const AlertItem &alert);  // add a delay ?
 
     // Editors
