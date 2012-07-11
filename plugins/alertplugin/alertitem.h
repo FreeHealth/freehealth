@@ -261,6 +261,8 @@ public:
 
     virtual QString toXml() const;
     static AlertRelation fromDomElement(const QDomElement &element);
+    static QString relationTypeToXml(AlertRelation::RelatedTo rel);
+    static RelatedTo relationTypeFromXml(const QString &xmlValue);
 
 private:
     int _id;

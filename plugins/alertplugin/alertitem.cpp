@@ -89,7 +89,8 @@ public:
         MustBeRead,
         RemindLater,
         Editable,
-        StyleSheet
+        StyleSheet,
+        PackUid
     };
     enum Tr {
         Comment = Utils::GenericDescription::TranslatableExtraData + 1
@@ -106,6 +107,7 @@ public:
         addNonTranslatableExtraData(RemindLater, "remindLater");
         addNonTranslatableExtraData(Editable, "editable");
         addNonTranslatableExtraData(StyleSheet, "styleSheet");
+        addNonTranslatableExtraData(PackUid, "packUid");
         addTranslatableExtraData(Comment, "comment");
     }
 
@@ -216,6 +218,7 @@ public:
         priorityFromXml(descr.data(AlertXmlDescription::Priority).toString());
         _creationDate = QDateTime::fromString(descr.data(AlertXmlDescription::CreationDate).toString(), Qt::ISODate);
         _update = QDateTime::fromString(descr.data(AlertXmlDescription::LastModificationDate).toString(), Qt::ISODate);
+        _packUid = descr.data(AlertXmlDescription::PackUid).toString();
 
         foreach(const QString &l, descr.availableLanguages()) {
             q->setLabel(descr.data(Internal::AlertXmlDescription::Label, l).toString(), l);
@@ -1240,6 +1243,7 @@ QString AlertItem::toXml() const
     d->descr.setData(Internal::AlertXmlDescription::Editable, d->_editable);
     d->descr.setData(Internal::AlertXmlDescription::StyleSheet, d->_css);
     d->descr.setData(Internal::AlertXmlDescription::GeneralIcon, d->_themedIcon);
+    d->descr.setData(Internal::AlertXmlDescription::PackUid, d->_packUid);
 
     foreach(const QString &l, availableLanguages()) {
         d->descr.setData(Internal::AlertXmlDescription::Label, label(l) , l);
@@ -1684,6 +1688,40 @@ QString AlertRelation::relationTypeToString() const
     return QString::null;
 }
 
+/** Return a human readable string of the current relation. */
+QString AlertRelation::relationTypeToXml(AlertRelation::RelatedTo rel) // static
+{
+    switch (rel) {
+    case RelatedToPatient: return "patient";
+    case RelatedToAllPatients: return "allPatients";
+    case RelatedToFamily: return "family";
+    case RelatedToUser: return "user";
+    case RelatedToAllUsers: return "allUsers";
+    case RelatedToUserGroup: return "userGroup";
+    case RelatedToApplication: return "application";
+    }
+    return QString::null;
+}
+
+AlertRelation::RelatedTo AlertRelation::relationTypeFromXml(const QString &xmlValue) // static
+{
+    if (xmlValue.compare("patient", Qt::CaseInsensitive) == 0)
+        return RelatedToPatient;
+    else if (xmlValue.compare("allPatients", Qt::CaseInsensitive) == 0)
+        return RelatedToAllPatients;
+    else if (xmlValue.compare("family", Qt::CaseInsensitive) == 0)
+        return RelatedToFamily;
+    else if (xmlValue.compare("user", Qt::CaseInsensitive) == 0)
+        return RelatedToUser;
+    else if (xmlValue.compare("allUsers", Qt::CaseInsensitive) == 0)
+        return RelatedToAllUsers;
+    else if (xmlValue.compare("userGroup", Qt::CaseInsensitive) == 0)
+        return RelatedToUserGroup;
+    else if (xmlValue.compare("application", Qt::CaseInsensitive) == 0)
+        return RelatedToApplication;
+    return QString::null;
+}
+
 /** Transform the relation to XML */
 QString AlertRelation::toXml() const
 {
@@ -1691,12 +1729,12 @@ QString AlertRelation::toXml() const
         return QString("<%1 id='%2' to='%3'/>\n")
                 .arg(::XML_RELATED_ELEMENTTAG)
                 .arg(_id)
-                .arg(_related)
+                .arg(relationTypeToXml(_related))
                 ;
     return QString("<%1 id='%2' to='%3' uid='%4'/>\n")
             .arg(::XML_RELATED_ELEMENTTAG)
             .arg(_id)
-            .arg(_related)
+            .arg(relationTypeToXml(_related))
             .arg(_relatedUid)
             ;
 }
@@ -1708,7 +1746,7 @@ AlertRelation AlertRelation::fromDomElement(const QDomElement &element)
         return AlertRelation();
     AlertRelation rel;
     rel.setId(element.attribute("id").toInt());
-    rel.setRelatedTo(AlertRelation::RelatedTo(element.attribute("to").toInt()));
+    rel.setRelatedTo(AlertRelation::relationTypeFromXml(element.attribute("to")));
     rel.setRelatedToUid(element.attribute("uid"));
     return rel;
 }
