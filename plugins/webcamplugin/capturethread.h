@@ -39,8 +39,10 @@ class ImageBuffer;
 class CaptureThread : public QThread {
 public: 
     enum FrameSize { Size640, Size320 };
+
     CaptureThread(ImageBuffer* buffer);
     void run();
+
     bool startCapture(int framerate, FrameSize size);
     void stopCapture();
     double getFPS() { return fps; }

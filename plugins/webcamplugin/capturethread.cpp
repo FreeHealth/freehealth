@@ -81,8 +81,8 @@ void CaptureThread::updateFPS(int time) {
     }
 }
 
-/* 
- * Start the capture process
+/*!
+ * \brief Start the capture process
  */
 bool CaptureThread::startCapture(int framerate, FrameSize size) {
     if(!captureActive) {
@@ -121,8 +121,8 @@ bool CaptureThread::startCapture(int framerate, FrameSize size) {
     return false;
 }
 
-/* 
- * Stop the capture process
+/*!
+ * \brief Stop the capture process
  */
 void CaptureThread::stopCapture() {
     qDebug() << "Stop capture requested.";
