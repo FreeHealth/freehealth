@@ -3,15 +3,13 @@
 <Alert>
   <Descr>
     <!--Non translatable values-->
+    <uuid>34a22eed1616437aacde3c5480f7f325</uuid>  <!-- define an uuid to avoid duplicates -->
     <packUid>AlertPacks::Test::Alpha</packUid>
     <version>0.8.0</version>
     <authors>Eric Maeker, MD</authors>
-    <file/>
     <vendor>The FreeMedForms community</vendor>
     <validity>true</validity>
     <fmfv>0.8.0</fmfv>
-    <fdv/>
-    <fav/>
     <cdate>2012-07-12T09:57:09</cdate>
     <lmdate></lmdate>
     <icon>identity.png</icon>
@@ -23,7 +21,7 @@
     <mustBeRead>false</mustBeRead>
     <remindLater>true</remindLater>
     <editable>true</editable>
-    <styleSheet></styleSheet>
+    <styleSheet/> <!-- actually not processed -->
 
     <!--Translatable values-->
     <comment lang="xx">All language comment</comment>
@@ -44,11 +42,26 @@
     <category lang="fr">Fr Cat</category>
   </Descr>
   <Timings>
-    <Timing valid="1" end="2012-07-12T10:50:41" id="-1" start="2014-07-10T10:50:41"/>
+    <Timing valid="1" start="2012-07-10T10:50:41" end="2014-07-12T10:50:41"/>
   </Timings>
   <Rels>
-    <Rel id="-1" to="allPatients" uid="" />
+    <Rel to="allPatients"/>
   </Rels>
+  <Scripts>
+    <Script valid="true" type="check">
+      print("CHECK VALIDITY \n   CURRENT ALERT LABEL = " + alert.label());
+      // Finish the script with true --> alert is valid; false --> alert in invalid
+      // You don't need to use the return keyword
+      true;
+    </Script>
+    <Script valid="true" type="cyclingDateStart">
+      print("CYCLING DATE \n   CURRENT ALERT STARTDATE = " + alert.start());
+      var currentDate = new Date();
+      currentDate.setDate(currentDate.getDate()-2);
+      // Finish the script with the value you want to return (without the need to use the return keyword)
+      currentDate;
+    </Script>
+  </Scripts>
   <Xtra>
     <Bla>Extra XML</Bla>
   </Xtra>
