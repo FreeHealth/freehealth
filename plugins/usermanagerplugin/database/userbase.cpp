@@ -769,7 +769,7 @@ bool UserBase::createVirtualUser(const QString &uid, const QString &name, const 
     where.insert(USER_UUID, QString("='%1'").arg(uid));
     int uidAlreadyInBase = count(Table_USERS, USER_UUID, getWhereClause(Table_USERS, where));
     if (uidAlreadyInBase!=0) {
-        LOG_ERROR("User uuid is alreday used, virtual user not created");
+        LOG("User uuid is alreday used, virtual user not created");
         return false;
     }
     UserData* user = 0;
