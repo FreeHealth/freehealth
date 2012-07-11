@@ -710,6 +710,8 @@ QIcon AlertItem::priorityBigIcon() const
     return priorityBigIcon(d->_priority);
 }
 
+static const char *CSS = "text-indent:5px;padding:5px;font-weight:bold;font-size:large;background:qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0.464 rgba(255, 255, 176, 149), stop:1 rgba(255, 255, 255, 0))";
+
 QString AlertItem::htmlToolTip(bool showCategory) const
 {
     QString toolTip;
@@ -718,13 +720,14 @@ QString AlertItem::htmlToolTip(bool showCategory) const
     if (showCategory)
         header = QString("<table border=0 margin=0 width=100%>"
                          "<tr>"
-                         "<td valign=middle width=70% style=\"font-weight:bold\">%1</td>"
-                         "<td valign=middle align=center style=\"font-weight:bold;background-color:%3;text-transform:uppercase\">%4</td>"
+                         "<td valign=middle width=70% style=\"%1\">%2</td>"
+                         "<td valign=middle align=center style=\"font-size:large;font-weight:bold;background-color:%4;text-transform:uppercase\">%5</td>"
                          "</tr>"
                          "<tr>"
-                         "<td colspan=2 style=\"font-weight:bold;color:#101010;padding-left:10px\">%2</td>"
+                         "<td colspan=2 style=\"font-weight:bold;color:#101010;padding-left:10px\">%3</td>"
                          "</tr>"
                          "</table>")
+                .arg(CSS)
                 .arg(category())
                 .arg(label())
                 .arg(priorityBackgroundColor())
@@ -734,7 +737,7 @@ QString AlertItem::htmlToolTip(bool showCategory) const
         header = QString("<table border=0 margin=0 width=100%>"
                          "<tr>"
                          "<td valign=middle width=70% style=\"font-weight:bold\">%1</td>"
-                         "<td valign=middle align=center style=\"font-weight:bold;background-color:%2;text-transform:uppercase\">%3</td>"
+                         "<td valign=middle align=center style=\"font-size:large;font-weight:bold;background-color:%2;text-transform:uppercase\">%3</td>"
                          "</tr>"
                          "</table>")
                 .arg(label())
@@ -1513,7 +1516,8 @@ AlertTiming AlertTiming::fromDomElement(const QDomElement &element)
     if (element.tagName().compare(::XML_TIMING_ELEMENTTAG, Qt::CaseInsensitive)!=0)
         return AlertTiming();
     AlertTiming timing;
-    timing.setId(element.attribute("id").toInt());
+    if (!element.attribute("id").isEmpty())
+        timing.setId(element.attribute("id").toInt());
     timing.setValid(element.attribute("valid").toInt());
     timing.setStart(QDateTime::fromString(element.attribute("start"), Qt::ISODate));
     timing.setEnd(QDateTime::fromString(element.attribute("end"), Qt::ISODate));
@@ -1608,7 +1612,8 @@ AlertScript AlertScript::fromDomElement(const QDomElement &element)
     if (element.tagName().compare(::XML_SCRIPT_ELEMENTTAG, Qt::CaseInsensitive)!=0)
         return AlertScript();
     AlertScript script;
-    script.setId(element.attribute("id").toInt());
+    if (!element.attribute("id").isEmpty())
+        script.setId(element.attribute("id").toInt());
     script.setUuid(element.attribute("uid"));
     script.setValid(element.attribute("valid").toInt());
     script.setType(typeFromXml(element.attribute("type")));
@@ -1643,7 +1648,8 @@ AlertValidation AlertValidation::fromDomElement(const QDomElement &element)
     if (element.tagName().compare(::XML_VALIDATION_ELEMENTTAG, Qt::CaseInsensitive)!=0)
         return AlertValidation();
     AlertValidation val;
-    val.setId(element.attribute("id").toInt());
+    if (!element.attribute("id").isEmpty())
+        val.setId(element.attribute("id").toInt());
     val.setValidatorUuid(element.attribute("validator"));
     val.setUserComment(element.attribute("comment"));
     val.setValidatedUuid(element.attribute("validated"));
@@ -1745,7 +1751,8 @@ AlertRelation AlertRelation::fromDomElement(const QDomElement &element)
     if (element.tagName().compare(::XML_RELATED_ELEMENTTAG, Qt::CaseInsensitive)!=0)
         return AlertRelation();
     AlertRelation rel;
-    rel.setId(element.attribute("id").toInt());
+    if (!element.attribute("id").isEmpty())
+        rel.setId(element.attribute("id").toInt());
     rel.setRelatedTo(AlertRelation::relationTypeFromXml(element.attribute("to")));
     rel.setRelatedToUid(element.attribute("uid"));
     return rel;
