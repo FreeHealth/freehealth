@@ -1719,7 +1719,7 @@ AlertRelation::RelatedTo AlertRelation::relationTypeFromXml(const QString &xmlVa
         return RelatedToUserGroup;
     else if (xmlValue.compare("application", Qt::CaseInsensitive) == 0)
         return RelatedToApplication;
-    return QString::null;
+    return RelatedToApplication;
 }
 
 /** Transform the relation to XML */
