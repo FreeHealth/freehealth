@@ -28,6 +28,7 @@ static inline Core::ISettings *settings()  { return Core::ICore::instance()->set
 // This is just a code easier (for user's reading)
 static inline bool connectDatabase(QSqlDatabase &DB, const int line)
 {
+    Q_UNUSED(line);
     if (!DB.isOpen()) {
         if (!DB.open()) {
             LOG_ERROR_FOR("MPDatapack", tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)

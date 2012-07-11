@@ -218,8 +218,8 @@ QVariant MedicalProcedureModel::headerData(int section, Qt::Orientation orientat
     return d->m_SqlTable->headerData(section,orientation,role);
 }
 
-bool MedicalProcedureModel::setHeaderData(int section,Qt::Orientation orientation,
-                                          QVariant & value,int role ){
+bool MedicalProcedureModel::setHeaderData(int section, Qt::Orientation orientation,
+                                          const QVariant &value, int role ){
     return d->m_SqlTable->setHeaderData(section, orientation,value,role )  ;                                   
 }
 
