@@ -22,7 +22,8 @@ HEADERS += \
     $${PWD}/alertplaceholdertest.h \
     $${PWD}/nonblockingalertwidgets.h \
     $${PWD}/alertscriptmanager.h \
-    $${PWD}/alertitemscripteditor.h
+    $${PWD}/alertitemscripteditor.h \
+    $${PWD}/alertpackdescription.h
 
 SOURCES += \
     $${PWD}/alertplugin.cpp \
@@ -37,7 +38,8 @@ SOURCES += \
     $${PWD}/alertplaceholdertest.cpp \
     $${PWD}/nonblockingalertwidgets.cpp \
     $${PWD}/alertscriptmanager.cpp \
-    $${PWD}/alertitemscripteditor.cpp
+    $${PWD}/alertitemscripteditor.cpp \
+    $${PWD}/alertpackdescription.cpp
 
 FORMS += \
     $${PWD}/alertitemeditorwidget.ui \
