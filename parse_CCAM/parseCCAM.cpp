@@ -382,11 +382,11 @@ void ParseCcam::createMPDatapackDatabase()
     QApplication::setOverrideCursor(Qt::WaitCursor);
     bool ret = true;
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE","MPDatabase");
-    db.setDatabaseName("MPDatapack.db");
+    db.setDatabaseName("mp_datapack.db");
     if (!db.open())
     {
-    	  QMessageBox::critical(0,trUtf8("Critical"),trUtf8("MPDatapack : ")+db.lastError().text(),QMessageBox::Ok);
-    	  qWarning() << __FILE__ << QString::number(__LINE__) << trUtf8("MPDatapack : ")+db.lastError().text() ;
+          QMessageBox::critical(0,trUtf8("Critical"),trUtf8("mp_datapack : ")+db.lastError().text(),QMessageBox::Ok);
+          qWarning() << __FILE__ << QString::number(__LINE__) << trUtf8("mp_datapack : ")+db.lastError().text() ;
         }
     QSqlTableModel model(this,db);
     if (model.rowCount()<1)
@@ -466,7 +466,7 @@ void ParseCcam::createMPDatapackDatabase()
          	  	  QMessageBox::critical(0,trUtf8("Critical"),model.query().lastError().text(),QMessageBox::Ok);
          	      }
          	  else{*/
-         	      qWarning() << __FILE__ << QString::number(__LINE__) << "MPDatapack FINISHED !" ;
+                  qWarning() << __FILE__ << QString::number(__LINE__) << "mp_datapack FINISHED !" ;
          	      QApplication::restoreOverrideCursor();
          	      log.close();
          	  //}
