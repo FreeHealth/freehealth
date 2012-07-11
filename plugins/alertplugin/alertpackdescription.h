@@ -30,10 +30,17 @@
 #include <alertplugin/alertplugin_exporter.h>
 #include <utils/genericdescription.h>
 
-namespace Alert {
+#include <QHash>
+#include <QVariant>
 
+namespace Alert {
+namespace Internal {
+class AlertBase;
+}
 class ALERT_EXPORT AlertPackDescription : public Utils::GenericDescription
 {
+    friend class Alert::Internal::AlertBase;
+
 public:
     enum nonTrData {
         InUse = Utils::GenericDescription::NonTranslatableExtraData + 1
@@ -44,8 +51,22 @@ public:
     QString uid() const {return data(Utils::GenericDescription::Uuid).toString();}
 
     void setInUse(bool inUse) {setData(InUse, inUse);}
-    bool inUse() const {return data(Utils::GenericDescription::InUse).toBool();}
+    bool inUse() const {return data(InUse).toBool();}
 
+    QString label(const QString &lang = QString::null) const {return data(Utils::GenericDescription::Label, lang).toString();}
+    QString category(const QString &lang = QString::null) const {return data(Utils::GenericDescription::Category, lang).toString();}
+    QString description(const QString &lang = QString::null) const {return data(Utils::GenericDescription::HtmlDescription, lang).toString();}
+
+    void setLabel(const QString &txt, const QString &lang = QString::null) {setData(Utils::GenericDescription::Label, txt, lang);}
+    void setCategory(const QString &txt, const QString &lang = QString::null) {setData(Utils::GenericDescription::Category, txt, lang);}
+    void setDescription(const QString &txt, const QString &lang = QString::null) {setData(Utils::GenericDescription::HtmlDescription, txt, lang);}
+
+protected:
+    void setDbData(const int ref, const QVariant &data) {_dbData.insert(ref, data);}
+    QVariant dbData(const int ref) {return _dbData.value(ref, QVariant());}
+
+private:
+    QHash<int, QVariant> _dbData;
 };
 
 } // namespace Alert

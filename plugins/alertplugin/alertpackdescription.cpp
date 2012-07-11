@@ -34,5 +34,6 @@ using namespace Alert;
 AlertPackDescription::AlertPackDescription() :
     Utils::GenericDescription("AlertPackDescription")
 {
+    setData(InUse, false);
     addNonTranslatableExtraData(InUse, "InUse");
 }
