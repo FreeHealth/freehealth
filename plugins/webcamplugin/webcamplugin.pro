@@ -31,7 +31,6 @@ SOURCES += \
     $${PWD}/processingthread.cpp \
     $${PWD}/capturethread.cpp \
     $${PWD}/filter.cpp \
-    $${PWD}/capturethread.cpp \
     $${PWD}/renderwidget.cpp
 
 FORMS += \
