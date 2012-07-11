@@ -47,7 +47,7 @@ class RenderWidget;
 class WebcamDialog : public QDialog {
     Q_OBJECT
 public:
-    WebcamDialog(QWidget *parent);
+    WebcamDialog(QWidget *parent = 0);
     ~WebcamDialog();
 
     QPixmap photo() const;
