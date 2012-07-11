@@ -291,6 +291,7 @@ namespace {
     const char* const DEFAULTDATAPACK_APPINSTALLED               = "/datapacks/appinstalled";
     const char* const DEFAULTDATAPACK_APPINSTALLED_SUBFORMS      = "/datapacks/appinstalled/forms/subforms";
     const char* const DEFAULTDATAPACK_APPINSTALLED_COMPLETEFORMS = "/datapacks/appinstalled/forms/completeforms";
+    const char* const DEFAULT_BUNDLED_ALERTPACKS = "/alertpacks";
     const char* const DEFAULTTHEME_PATH    = "";
     const char* const DEFAULTTHEME_PIXMAP  = "/pixmap";
     const char* const DEFAULTTHEME_SPLASH  = "/pixmap/splashscreens";
@@ -565,6 +566,7 @@ void SettingsPrivate::setPath(const int type, const QString & absPath)
             m_Enum_Path.insert(DataPackApplicationPath, bundlePath + DEFAULTDATAPACK_APPINSTALLED);
             m_Enum_Path.insert(DataPackCompleteFormsPath, bundlePath + DEFAULTDATAPACK_APPINSTALLED_COMPLETEFORMS);
             m_Enum_Path.insert(DataPackSubFormsPath, bundlePath + DEFAULTDATAPACK_APPINSTALLED_SUBFORMS);
+            m_Enum_Path.insert(BundledAlertPacks, bundlePath + DEFAULT_BUNDLED_ALERTPACKS);
             QString appname = qApp->applicationName().toLower();
             if (qApp->applicationName().contains(" ")) {
                 appname = appname.left(appname.indexOf(" "));
