@@ -163,6 +163,9 @@ enum VersionFields {
     VERSION_TEXT = 0
 };
 
+// Pack description
+const char * const  PACK_DESCRIPTION_FILENAME   = "packdescription.xml";
+
 }  // namespace Constants
 }  // namespace Alert
 
