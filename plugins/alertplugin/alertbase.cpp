@@ -61,7 +61,7 @@
 #include <QHash>
 #include <QSqlQuery>
 
-enum { WarnGetAlertQuerySQLCommand = false };
+enum { WarnGetAlertQuerySQLCommand = false, WarnMemberNames = false };
 
 using namespace Alert;
 using namespace Internal;
@@ -597,6 +597,10 @@ bool AlertBase::saveAlertItem(AlertItem &item)
 {
     if (!connectDatabase(Constants::DB_NAME, __LINE__))
         return false;
+
+    if (WarnMemberNames)
+        qWarning() << "AlertBase::saveAlertItem";
+
     // update or save ?
     if (!item.db(ItemId).isValid()) {
         // try to catch the id using the uuid
@@ -685,6 +689,9 @@ bool AlertBase::updateAlertItem(AlertItem &item)
         return false;
     if (!item.db(ItemId).isValid())
         return false;
+
+    if (WarnMemberNames)
+        qWarning() << "AlertBase::updateAlertItem";
 
     database().transaction();
 
@@ -788,6 +795,10 @@ bool AlertBase::saveItemRelations(AlertItem &item)
     // we are inside a transaction opened by saveAlertItem
     if (!connectDatabase(Constants::DB_NAME, __LINE__))
         return false;
+
+    if (WarnMemberNames)
+        qWarning() << "AlertBase::saveItemRelations";
+
     // get the related REL_ID
     if (item.relations().count()==0)
         return true;
@@ -847,6 +858,10 @@ bool AlertBase::saveItemScripts(AlertItem &item)
     // we are inside a transaction opened by saveAlertItem
     if (!connectDatabase(Constants::DB_NAME, __LINE__))
         return false;
+
+    if (WarnMemberNames)
+        qWarning() << "AlertBase::saveItemScripts";
+
     if (item.scripts().count()==0)
         return true;
     // get the script script_id
@@ -911,6 +926,10 @@ bool AlertBase::saveItemTimings(AlertItem &item)
     // we are inside a transaction opened by saveAlertItem
     if (!connectDatabase(Constants::DB_NAME, __LINE__))
         return false;
+
+    if (WarnMemberNames)
+        qWarning() << "AlertBase::saveItemTimings";
+
     if (item.timings().count()==0)
         return true;
     // get the timind timing_id
@@ -989,6 +1008,10 @@ bool AlertBase::saveItemValidations(AlertItem &item)
     // we are inside a transaction opened by saveAlertItem
     if (!connectDatabase(Constants::DB_NAME, __LINE__))
         return false;
+
+    if (WarnMemberNames)
+        qWarning() << "AlertBase::saveItemValidations";
+
     if (item.validations().count()==0)
         return true;
     // get the validations val_id
@@ -1057,6 +1080,10 @@ bool AlertBase::saveItemLabels(AlertItem &item)
     // we are inside a transaction opened by saveAlertItem
     if (!connectDatabase(Constants::DB_NAME, __LINE__))
         return false;
+
+    if (WarnMemberNames)
+        qWarning() << "AlertBase::saveItemLabels";
+
     QSqlQuery query(database());
     QList<int> lids;
     QList<int> vals;
