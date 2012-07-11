@@ -208,11 +208,11 @@ public:
         _pass = descr.data(AlertXmlDescription::CryptedPass).toString();
         _themedIcon = descr.data(AlertXmlDescription::GeneralIcon).toString();
         _css = descr.data(AlertXmlDescription::StyleSheet).toString();
-        _valid = descr.data(AlertXmlDescription::Validity).toInt();
-        _overrideRequiresUserComment = descr.data(AlertXmlDescription::OverrideRequiresUserComment).toInt();
-        _mustBeRead = descr.data(AlertXmlDescription::MustBeRead).toInt();
-        _remindAllowed = descr.data(AlertXmlDescription::RemindLater).toInt();
-        _editable = descr.data(AlertXmlDescription::Editable).toInt();
+        _valid = descr.data(AlertXmlDescription::Validity).toBool();
+        _overrideRequiresUserComment = descr.data(AlertXmlDescription::OverrideRequiresUserComment).toBool();
+        _mustBeRead = descr.data(AlertXmlDescription::MustBeRead).toBool();
+        _remindAllowed = descr.data(AlertXmlDescription::RemindLater).toBool();
+        _editable = descr.data(AlertXmlDescription::Editable).toBool();
         viewTypeFromXml(descr.data(AlertXmlDescription::ViewType).toString());
         contentTypeFromXml(descr.data(AlertXmlDescription::ContentType).toString());
         priorityFromXml(descr.data(AlertXmlDescription::Priority).toString());
