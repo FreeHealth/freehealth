@@ -126,6 +126,7 @@ private:
 class ALERT_EXPORT AlertScript
 {
 public:
+    // THE ORDER OF THIS ENUM MUST NOT CHANGE
     enum ScriptType {
         CheckValidityOfAlert = 0,
         CyclingStartDate,
@@ -229,6 +230,7 @@ private:
 class ALERT_EXPORT AlertRelation
 {
 public:
+    // THE ORDER OF THIS ENUM MUST NOT CHANGE
     enum RelatedTo {
         RelatedToPatient = 0,
         RelatedToAllPatients,
