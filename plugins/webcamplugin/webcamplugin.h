@@ -26,7 +26,7 @@
 #ifndef WEBCAM_H
 #define WEBCAM_H
 
-#include "webcam_exporter.h"
+#include <webcam_exporter.h>
 #include <webcamphotoprovider.h>
 #include <extensionsystem/iplugin.h>
 

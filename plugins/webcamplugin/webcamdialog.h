@@ -28,12 +28,9 @@
 
 #include "ui_webcamdialog.h"
 #include "capturethread.h"
-#include <QDialog>
+#include <QtGui/QDialog>
 
-class QToolBar;
-class QDockWidget;
 //class SettingsWidget;
-
 
 namespace Webcam {
 
@@ -53,14 +50,20 @@ public:
     QPixmap photo() const;
 
 
-public slots:
+public Q_SLOTS:
     void onFlipVerticalChanged(bool flip);
     void startTracking();
     void stopTracking();
-    void takePhoto();
+    void freeze();
+    void unFreeze();
     void updateStats();
+
+private Q_SLOTS:
+    void usePhoto();
+
 protected:
     void closeEvent(QCloseEvent*);
+
 private:
     Ui::WebcamDialog *ui;
     TrackController* trackController;

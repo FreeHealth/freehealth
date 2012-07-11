@@ -31,7 +31,8 @@ SOURCES += \
     $${PWD}/processingthread.cpp \
     $${PWD}/capturethread.cpp \
     $${PWD}/filter.cpp \
-    $${PWD}/renderwidget.cpp
+    $${PWD}/renderwidget.cpp \
+    imagebuffer.cpp
 
 FORMS += \
-    $${PWD}/webcamdialog.ui
+    webcamdialog.ui

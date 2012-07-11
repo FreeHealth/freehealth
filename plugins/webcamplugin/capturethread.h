@@ -30,7 +30,7 @@
 #include <QMutex>
 #include <QWaitCondition>
 #include <QQueue>
-#include "opencv/highgui.h"
+#include <opencv/highgui.h>
 
 namespace Webcam {
 

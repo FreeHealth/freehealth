@@ -27,7 +27,7 @@
 #define RENDER_WIDGET_H
 
 #include <QWidget>
-#include "filter.h"
+#include <filter.h>
 
 namespace Webcam {
 
@@ -44,15 +44,17 @@ class RenderWidget : public QWidget, public Filter {
 public:
     RenderWidget(QWidget* parent);
     void processPoint(HeadState* state);
+    QPixmap currentPixmap() const;
 public slots:
     void onFrameSizeChanged(int width, int height);
 signals:
     void frameSizeChanged(int width, int height);
+//    void clicked();
+
 protected:
     void paintEvent(QPaintEvent*);
 private:
     void updatePixmap(const IplImage* frame);
-    QPixmap bufferPixmap;
     uchar* imageData;
     int imageWidth, imageHeight;
     int time;

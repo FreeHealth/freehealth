@@ -23,8 +23,8 @@
  *   Contributors:                                                         *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#include "capturethread.h"
-#include "imagebuffer.h"
+#include <capturethread.h>
+#include <imagebuffer.h>
 #include <QDebug>
 #include <QTime>
 

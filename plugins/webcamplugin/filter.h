@@ -26,7 +26,7 @@
 #ifndef FILTER_H
 #define FILTER_H
 
-#include "headstate.h"
+#include <headstate.h>
 
 namespace Webcam {
 

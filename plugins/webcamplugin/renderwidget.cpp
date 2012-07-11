@@ -23,7 +23,7 @@
  *   Contributors:                                                         *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#include "renderwidget.h"
+#include <renderwidget.h>
 #include <QPainter>
 #include <QDebug>
 #include <QTime>
@@ -100,6 +100,11 @@ void RenderWidget::processPoint(HeadState* state)
     update();
 
     notifyListener(state);
+}
+
+QPixmap RenderWidget::currentPixmap() const
+{
+    return QPixmap::fromImage(QImage(imageData, imageWidth, imageHeight, QImage::Format_RGB32));
 }
 
 void RenderWidget::paintEvent(QPaintEvent*)

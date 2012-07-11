@@ -24,6 +24,8 @@
 #include <coreplugin/core_exporter.h>
 #include <QObject>
 
+class QPixmap;
+
 namespace Core {
 /*!
   \class Patients::IPhotoProvider
@@ -44,7 +46,7 @@ public:
     explicit IPhotoProvider(QObject *parent = 0) : QObject(parent) {}
     virtual ~IPhotoProvider() {}
 
-    virtual QString recievePhotoFile() = 0;
+    virtual QPixmap recievePhoto() = 0;
 };
 
 } // end namespace Core

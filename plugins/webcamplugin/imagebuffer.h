@@ -30,12 +30,12 @@
 #include <QMutex>
 #include <QQueue>
 
-#include "opencv/cxcore.h"
+#include <opencv/cxcore.h>
 
 namespace Webcam {
 
 /*!
- * \class ImageBuffer
+ * \class Webcam::ImageBuffer
  * \brief Buffers images between the capture thread and the processing thread and provides synchronization between the two threads.
  */
 

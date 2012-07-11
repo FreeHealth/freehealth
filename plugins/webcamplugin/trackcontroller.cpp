@@ -23,48 +23,58 @@
  *   Contributors:                                                         *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#include "trackcontroller.h"
-#include "processingthread.h"
-#include "imagebuffer.h"
+#include <trackcontroller.h>
+#include <processingthread.h>
+#include <imagebuffer.h>
 
 #include <QDebug>
 
 using namespace Webcam;
 
 TrackController::TrackController() :
-    frameRate(15),
-    frameSize(CaptureThread::Size320)
+    m_frameRate(15),
+    m_frameSize(CaptureThread::Size320)
 {
     imageBuffer = new ImageBuffer(20);
-    captureThread = new CaptureThread(imageBuffer);
-    processingThread = new ProcessingThread(imageBuffer);
-    processingThread->start();
+    m_captureThread = new CaptureThread(imageBuffer);
+    m_processingThread = new ProcessingThread(imageBuffer);
+    m_processingThread->start();
 }
 
+/*!
+ * \brief Start capturing the webcam.
+ */
 void TrackController::startTracking()
 {
-    captureThread->startCapture(frameRate, frameSize);
+    m_captureThread->startCapture(m_frameRate, m_frameSize);
     qDebug() << "About to start the capture thread";
-    captureThread->start(QThread::IdlePriority);
+    m_captureThread->start(QThread::IdlePriority);
     qDebug() << "Started the capture thread";
 }
 
+/*!
+ * \brief Determine wether webcam is capturing at the moment.
+ * @return bool True if webcam is tracked now.
+ */
 bool TrackController::isTracking()
 {
-    return captureThread->isCapturing();
+    return m_captureThread->isCapturing();
 }
 
+/*!
+ * \brief Stop tracking of the webcam.
+ */
 void TrackController::stopTracking()
 {
-    captureThread->stopCapture();
+    m_captureThread->stopCapture();
 }
 
 void TrackController::setRootFilter(Filter* filter)
 {
-    processingThread->setRootFilter(filter);
+    m_processingThread->setRootFilter(filter);
 }
 
 double TrackController::getFPS()
 {
-    return captureThread->getFPS();
+    return m_captureThread->getFPS();
 }
