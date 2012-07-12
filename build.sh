@@ -443,7 +443,7 @@ RET=""
 
 createDefaultConfig()
 {
-    $CONFIG="FreeMedForms;Defaultdebugcompilation;Parallel;Notify;linux-g++"
+    $CONFIG="FreeMedForms;Default_debug_compilation_(recommended);Create_translations;Parallel_build;Notify_when_done;Run_application;linux-g++"
 }
 
 zenityBuild()
