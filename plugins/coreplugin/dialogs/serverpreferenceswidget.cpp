@@ -65,6 +65,7 @@ ServerPreferencesWidget::ServerPreferencesWidget(QWidget *parent) :
         on_testButton_clicked();
     connect(ui->testHostButton, SIGNAL(clicked()), this, SLOT(testHost()));
     ui->testButton->setEnabled(m_HostReachable);
+    ui->userGroupBox->setEnabled(false);
 }
 
 ServerPreferencesWidget::~ServerPreferencesWidget()
@@ -154,6 +155,7 @@ void ServerPreferencesWidget::testHost(const QString &hostName)
     }
 
     Q_EMIT hostConnectionChanged(m_HostReachable);
+    ui->userGroupBox->setEnabled(m_HostReachable);
 }
 
 void ServerPreferencesWidget::saveToSettings(Core::ISettings *sets)
@@ -192,9 +194,11 @@ void ServerPreferencesWidget::on_testButton_clicked()
 {
     if (!m_HostReachable) {
         ui->testConnectionLabel->setText(tr("Host not reachable..."));
+        ui->userGroupBox->setEnabled(false);
         Q_EMIT userConnectionChanged(false);
         return;
     }
+    ui->userGroupBox->setEnabled(true);
     if (ui->log->text().isEmpty() && !ui->useDefaultAdminLog->isChecked()) {
         ui->testConnectionLabel->setText(tr("No anonymous connection allowed"));
         Q_EMIT userConnectionChanged(false);
