@@ -92,7 +92,7 @@ detectSpec()
 
 detectGit()
 {
-    TEST_GIT=`git --version`
+    TEST_GIT=`git --version && [ -e ".git" ]`
     TEST_GIT=$?
     return $TEST_GIT
 }
@@ -448,6 +448,7 @@ createDefaultConfig()
 
 zenityBuild()
 {
+    loadConfig
     zenityConfigToBuildSystem
 
     if [[ "$SHOW_ZENITY_PROGRESS" == "n" ]]; then
@@ -543,10 +544,10 @@ thirdPage()
 {
     RET=$($ZENITY_SIZED --title "$ZENITY_TITLE" --list --text "Select options" --checklist --column "Select" --column "Options"  \
            `[ $(expr "$CONFIG" : ".*Create_translations.*") -ne 0 ] && echo 'True' ||  echo 'False'` "Create translations"  \
-           `[ $(expr "$CONFIG" : ".*Clean_build.*") -ne 0 ] && echo 'True' ||  echo 'False'` "Clean build path"  \
-           `[ $(expr "$CONFIG" : ".*Parallel.*") -ne 0 ] && echo 'True' ||  echo 'False'`  "Parallel build" \
-           `[ $(expr "$CONFIG" : ".*Notify.*") -ne 0 ] && echo 'True' ||  echo 'False'`  "Notify when done" \
-           `[ $(expr "$CONFIG" : ".*Run_app.*") -ne 0 ] && echo 'True' ||  echo 'False'`  "Run application")
+           `[ $(expr "$CONFIG" : ".*Clean_build_path.*") -ne 0 ] && echo 'True' ||  echo 'False'` "Clean build path"  \
+           `[ $(expr "$CONFIG" : ".*Parallel_build.*") -ne 0 ] && echo 'True' ||  echo 'False'`  "Parallel build" \
+           `[ $(expr "$CONFIG" : ".*Notify_when_done.*") -ne 0 ] && echo 'True' ||  echo 'False'`  "Notify when done" \
+           `[ $(expr "$CONFIG" : ".*Run_application.*") -ne 0 ] && echo 'True' ||  echo 'False'`  "Run application")
 }
 
 fourthPage()
@@ -569,13 +570,14 @@ loadConfig()
 
 zenityConfigToBuildSystem()
 {
+    echo "* CONFIG: $CONFIG"
     SPEC=`echo ${CONFIG##*;}`
     # Options
-    CLEAN="`[ $(expr "$CONFIG" : ".*Clean_build_path.*") -ne 0 ] && echo 'y' || 'n'`"
-    RUN="`[ $(expr "$CONFIG" : ".*Run_app.*") -ne 0 ] && echo 'y' || 'n'`"
-    TRANS="`[ $(expr "$CONFIG" : ".*Create_translations.*") -ne 0 ] && echo 'y' || 'n'`"
-    MAKE_OPTS="`[ $(expr "$CONFIG" : ".*Parallel.*") -ne 0 ] && echo '-j4' || '-j1'`"
-    NOTIFY="`[ $(expr "$CONFIG" : ".*Notify.*") -ne 0 ] && echo 'y' || 'n'`"
+    CLEAN="`[ $(expr "$CONFIG" : ".*Clean_build_path.*") -ne 0 ] && echo 'y' || echo 'n'`"
+    RUN="`[ $(expr "$CONFIG" : ".*Run_application.*") -ne 0 ] && echo 'y' || echo 'n'`"
+    TRANS="`[ $(expr "$CONFIG" : ".*Create_translations.*") -ne 0 ] && echo 'y' || echo 'n'`"
+    MAKE_OPTS="`[ $(expr "$CONFIG" : ".*Parallel_build.*") -ne 0 ] && echo '-j4' || echo '-j1'`"
+    NOTIFY="`[ $(expr "$CONFIG" : ".*Notify_when_done.*") -ne 0 ] && echo 'y' || echo 'n'`"
     # Build
     if [[ $(expr "$CONFIG" : ".*Default_debug_compilation.*") -ne 0 ]]; then
         BUILD="debug"
