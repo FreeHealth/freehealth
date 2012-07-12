@@ -31,7 +31,8 @@
 
 using namespace Webcam;
 
-TrackController::TrackController() :
+TrackController::TrackController(QObject *parent) :
+    QObject(parent),
     m_frameRate(15),
     m_frameSize(CaptureThread::Size320)
 {

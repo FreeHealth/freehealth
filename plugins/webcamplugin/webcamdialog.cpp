@@ -53,7 +53,7 @@ WebcamDialog::WebcamDialog(QWidget *parent) :
     m_snapshot(QPixmap())
 {
     ui->setupUi(this);
-    trackController = new TrackController();
+    trackController = new TrackController(this);
     trackController->setRootFilter(ui->renderWidget);
 
     QToolBar *toolbar = new QToolBar(this);
@@ -96,7 +96,6 @@ QPixmap WebcamDialog::photo() const
 WebcamDialog::~WebcamDialog()
 {
     stopTracking();
-    delete trackController;
     delete ui;
 }
 

@@ -38,7 +38,7 @@ class TrackController : public QObject {
     Q_OBJECT
 
 public:
-    TrackController();
+    TrackController(QObject *parent);
     ~TrackController();
     bool isTracking();
     void setFrameSize(CaptureThread::FrameSize size) { m_frameSize = size; }
@@ -49,7 +49,7 @@ public:
     ProcessingThread* getProcessingThread() { return m_processingThread; }
     double getFPS();
 
-public slots:
+public Q_SLOTS:
     void startTracking();
     void stopTracking();
 
