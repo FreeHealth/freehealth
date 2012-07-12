@@ -23,8 +23,9 @@
  *   Contributors:                                                         *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#include <capturethread.h>
-#include <imageBuffer.h>
+#include "capturethread.h"
+#include "imagebuffer.h"
+
 #include <QDebug>
 #include <QTime>
 
@@ -56,8 +57,8 @@ void CaptureThread::run() {
         if(!_captureActive) {
             _captureLock.lock();
             qDebug() << "Waiting on capture start...";
-            fps = 0;
-            frameTimes.clear();
+            _fps = 0;
+            _frameTimes.clear();
             _captureWait.wait(&_captureLock);
             time.restart();
             updateFPS(time.elapsed());
@@ -65,7 +66,7 @@ void CaptureThread::run() {
             _captureLock.unlock();
         }
         //sleep(1);
-        _imageBuffer->addFrame(cvQueryFrame(capture));
+        _imageBuffer->addFrame(cvQueryFrame(_capture));
         updateFPS(time.elapsed());
 //        numFrames++;
 

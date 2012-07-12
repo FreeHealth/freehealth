@@ -30,7 +30,7 @@
 #include <QMutex>
 #include <QWaitCondition>
 #include <QQueue>
-#include <opencv/highgui.h>
+#include <opencv2/highgui/highgui.hpp>
 
 namespace Webcam {
 
@@ -46,8 +46,8 @@ public:
 
     bool startCapture(int framerate, FrameSize size);
     void stopCapture();
-    double getFPS() { return fps; }
-    bool isCapturing() { return captureActive; }
+    double getFPS() { return _fps; }
+    bool isCapturing() { return _captureActive; }
 
 private:
     void updateFPS(int time);
