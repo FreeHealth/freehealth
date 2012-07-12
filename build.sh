@@ -22,6 +22,7 @@ RUN=""
 ZENITY="zenity"
 SHOW_ZENITY_PROGRESS="y"  # y / n
 LOG_FILE=""
+GIT_PULL=""
 SCRIPT_NAME=`basename $0`
 if [ "`echo $0 | cut -c1`" = "/" ]; then
   SCRIPT_PATH=`dirname $0`
@@ -89,12 +90,40 @@ detectSpec()
     return 0
 }
 
+detectGit()
+{
+    TEST_GIT=`git --version`
+    TEST_GIT=$?
+    return $TEST_GIT
+}
+
+gitPull()
+{
+    # zenity progress feature
+    echo "0"; sleep 1
+    echo "# Updating your local source copy" ; sleep 1
+    if [[ "$GIT_PULL" == "y" ]]; then
+        echo "    cd $SCRIPT_PATH; git pull"
+        if [[  "$DEBUG_BUILD_COMMANDS" == 1 ]]; then
+            echo "# cd $SCRIPT_PATH && git pull"; sleep 5
+        else
+            MAKE_STEP=`cd $SCRIPT_PATH && git pull`
+            MAKE_STEP=$?
+            if [[ ! $MAKE_STEP == 0 ]]; then
+                return 123
+            else
+                echo "        Source updated"
+           fi
+        fi
+    fi
+}
+
 makeClean()
 {
     # zenity progress feature
     echo "10"; sleep 1
     echo "# Cleaning build path" ; sleep 1
-    if [[ "$CLEAN" != "" ]]; then
+    if [[ "$CLEAN" == "y" ]]; then
         echo "* Cleaning build path"
         echo "# rm -R $SCRIPT_PATH/bin/$BUNDLE_NAME &&\nrm -R $SCRIPT_PATH/build"; >> $LOG_FILE
         if [[  "$DEBUG_BUILD_COMMANDS" == 1 ]]; then
@@ -129,7 +158,7 @@ createTranslations()
     # zenity progress feature
     echo "20"; sleep 1
     echo "# Creation translations" ; sleep 1
-    if [ "$TRANS" != "" ]; then
+    if [ "$TRANS" == "y" ]; then
         echo "* Creating translations"
             echo "# lrelease ./global_resources/translations/*.ts" >> $LOG_FILE
         if [[  "$DEBUG_BUILD_COMMANDS" == 1 ]]; then
@@ -446,6 +475,29 @@ zenityBuild()
     return 0
 }
 
+gitPage()
+{
+    echo "DETECTING GIT "`detectGit`
+    if [[ `detectGit` -eq 0 ]]; then
+        echo "* Git detected"
+        $ZENITY_NO_SIZE --title "$ZENITY_TITLE" --question \
+                        --text "A revision control (git clone) was found.\nDo you want to update your local working copy of the source ?" \
+                        --ok-label "Yes, update" --cancel-label "No, compil now"
+        if [[ "$?" -eq 0 ]]; then
+            echo "* git pull"
+            RET=""
+            GIT_PULL="y"
+            gitPull
+            exit $?
+        else
+            echo "* Don't update source copy"
+            RET=""
+        fi        
+    else
+        echo "* Git not detected"
+    fi
+}
+
 firstPage()
 {
     if [[ -f ./build.conf ]]; then
@@ -519,11 +571,11 @@ zenityConfigToBuildSystem()
 {
     SPEC=`echo ${CONFIG##*;}`
     # Options
-    CLEAN="`[ $(expr "$CONFIG" : ".*Clean_build_path.*") -ne 0 ] && echo 'y'`"
-    RUN="`[ $(expr "$CONFIG" : ".*Run_app.*") -ne 0 ] && echo 'y'`"
-    TRANS="`[ $(expr "$CONFIG" : ".*Create_translations.*") -ne 0 ] && echo 'y'`"
-    MAKE_OPTS="`[ $(expr "$CONFIG" : ".*Parallel.*") -ne 0 ] && echo '-j4'`"
-    NOTIFY="`[ $(expr "$CONFIG" : ".*Notify.*") -ne 0 ] && echo 'y'`"
+    CLEAN="`[ $(expr "$CONFIG" : ".*Clean_build_path.*") -ne 0 ] && echo 'y' || 'n'`"
+    RUN="`[ $(expr "$CONFIG" : ".*Run_app.*") -ne 0 ] && echo 'y' || 'n'`"
+    TRANS="`[ $(expr "$CONFIG" : ".*Create_translations.*") -ne 0 ] && echo 'y' || 'n'`"
+    MAKE_OPTS="`[ $(expr "$CONFIG" : ".*Parallel.*") -ne 0 ] && echo '-j4' || '-j1'`"
+    NOTIFY="`[ $(expr "$CONFIG" : ".*Notify.*") -ne 0 ] && echo 'y' || 'n'`"
     # Build
     if [[ $(expr "$CONFIG" : ".*Default_debug_compilation.*") -ne 0 ]]; then
         BUILD="debug"
@@ -551,6 +603,7 @@ zenityConfigToBuildSystem()
 
 startZenityDialog()
 {
+    gitPage
     firstPage
     CONF=$RET
     secondPage
