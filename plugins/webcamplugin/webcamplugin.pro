@@ -4,35 +4,43 @@ TEMPLATE = lib
 BUILD_PATH_POSTFIXE = FreeMedForms
 PROVIDER = FreeMedForms
 
-include(shared_sources.pri)
+DEFINES += WEBCAM_LIBRARY
+
+include(../fmf_plugins.pri)
+include(webcam_dependencies.pri)
+
+HEADERS = \
+   webcamplugin.h \
+   webcam_exporter.h \
+   webcamconstants.h \
+   webcamphotoprovider.h \
+   webcamdialog.h \
+   trackcontroller.h \
+   processingthread.h \
+   imagebuffer.h \
+   headstate.h \
+   filter.h \
+   capturethread.h \
+   renderwidget.h
+
+SOURCES += \
+   webcamplugin.cpp \
+   webcamphotoprovider.cpp \
+   webcamdialog.cpp \
+   trackcontroller.cpp \
+   processingthread.cpp \
+   capturethread.cpp \
+   filter.cpp \
+   renderwidget.cpp \
+   imagebuffer.cpp
+
+FORMS += \
+   webcamdialog.ui
+
+TRANSLATIONS += $${SOURCES_TRANSLATIONS_PATH}/webcam_fr.ts \
+                $${SOURCES_TRANSLATIONS_PATH}/webcam_de.ts \
+                $${SOURCES_TRANSLATIONS_PATH}/webcam_es.ts
 
 OTHER_FILES = \
     Webcam.pluginspec
 
-HEADERS = \
-    $${PWD}/webcamplugin.h \
-    $${PWD}/webcam_exporter.h \
-    $${PWD}/webcamconstants.h \
-    $${PWD}/webcamphotoprovider.h \
-    $${PWD}/webcamdialog.h \
-    $${PWD}/trackcontroller.h \
-    $${PWD}/processingthread.h \
-    $${PWD}/imagebuffer.h \
-    $${PWD}/headstate.h \
-    $${PWD}/filter.h \
-    $${PWD}/capturethread.h \
-    $${PWD}/renderwidget.h
-
-SOURCES += \
-    $${PWD}/webcamplugin.cpp \
-    $${PWD}/webcamphotoprovider.cpp \
-    $${PWD}/webcamdialog.cpp \
-    $${PWD}/trackcontroller.cpp \
-    $${PWD}/processingthread.cpp \
-    $${PWD}/capturethread.cpp \
-    $${PWD}/filter.cpp \
-    $${PWD}/renderwidget.cpp \
-    imagebuffer.cpp
-
-FORMS += \
-    webcamdialog.ui
