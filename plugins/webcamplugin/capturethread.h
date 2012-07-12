@@ -48,15 +48,18 @@ public:
     void stopCapture();
     double getFPS() { return fps; }
     bool isCapturing() { return captureActive; }
+
 private:
     void updateFPS(int time);
-    QMutex captureLock;
-    QWaitCondition captureWait;
-    ImageBuffer* imageBuffer;
-    bool captureActive;
-    CvCapture* capture;
-    double fps;
-    QQueue<int> frameTimes;
+
+private:
+    QMutex _captureLock;
+    QWaitCondition _captureWait;
+    ImageBuffer* _imageBuffer;
+    bool _captureActive;
+    CvCapture* _capture;
+    double _fps;
+    QQueue<int> _frameTimes;
 };
 
 }
