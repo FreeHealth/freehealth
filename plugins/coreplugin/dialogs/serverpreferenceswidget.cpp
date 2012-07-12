@@ -65,6 +65,7 @@ ServerPreferencesWidget::ServerPreferencesWidget(QWidget *parent) :
         on_testButton_clicked();
     connect(ui->testHostButton, SIGNAL(clicked()), this, SLOT(testHost()));
     ui->testButton->setEnabled(m_HostReachable);
+    ui->userGroupBox->setEnabled(false);
 }
 
 ServerPreferencesWidget::~ServerPreferencesWidget()
@@ -77,11 +78,16 @@ bool ServerPreferencesWidget::connectionSucceeded() const
     return m_ConnectionSucceeded;
 }
 
-void ServerPreferencesWidget::setUserLoginGroupTitle(const QString &text)
+void ServerPreferencesWidget::setUserLoginGroupTitle(const QString &trContext, const QString &untranslatedtext)
 {
-    // FIXME: this does not work ?
-    ui->userGroupBox->setTitle(text);
-    repaint();
+    _groupTitle = untranslatedtext;
+    _groupTitleTrContext = trContext;
+    ui->userGroupBox->setTitle(QApplication::translate(trContext.toUtf8(), untranslatedtext.toUtf8()));
+}
+
+void ServerPreferencesWidget::showUseDefaultAdminLogCheckbox(bool show)
+{
+    ui->useDefaultAdminLog->setVisible(show);
 }
 
 QString ServerPreferencesWidget::hostName() const
@@ -149,6 +155,7 @@ void ServerPreferencesWidget::testHost(const QString &hostName)
     }
 
     Q_EMIT hostConnectionChanged(m_HostReachable);
+    ui->userGroupBox->setEnabled(m_HostReachable);
 }
 
 void ServerPreferencesWidget::saveToSettings(Core::ISettings *sets)
@@ -187,9 +194,11 @@ void ServerPreferencesWidget::on_testButton_clicked()
 {
     if (!m_HostReachable) {
         ui->testConnectionLabel->setText(tr("Host not reachable..."));
+        ui->userGroupBox->setEnabled(false);
         Q_EMIT userConnectionChanged(false);
         return;
     }
+    ui->userGroupBox->setEnabled(true);
     if (ui->log->text().isEmpty() && !ui->useDefaultAdminLog->isChecked()) {
         ui->testConnectionLabel->setText(tr("No anonymous connection allowed"));
         Q_EMIT userConnectionChanged(false);
@@ -239,6 +248,8 @@ void ServerPreferencesWidget::changeEvent(QEvent *e)
     switch (e->type()) {
     case QEvent::LanguageChange:
         ui->retranslateUi(this);
+        if (!_groupTitle.isEmpty())
+            ui->userGroupBox->setTitle(QApplication::translate(_groupTitleTrContext.toUtf8(), _groupTitle.toUtf8()));
         break;
     default:
         break;

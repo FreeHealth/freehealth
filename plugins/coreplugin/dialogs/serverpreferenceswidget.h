@@ -51,7 +51,9 @@ public:
     ~ServerPreferencesWidget();
 
     bool connectionSucceeded() const;
-    void setUserLoginGroupTitle(const QString &text);
+    void setUserLoginGroupTitle(const QString &trContext, const QString &untranslatedtext);
+
+    void showUseDefaultAdminLogCheckbox(bool show);
 
     QString hostName() const;
     int port() const;
@@ -85,6 +87,7 @@ private:
     Internal::Ui::ServerPreferencesWidget *ui;
     bool m_HostReachable, m_ConnectionSucceeded;
     Utils::Database::Grants m_Grants;
+    QString _groupTitle, _groupTitleTrContext;
 };
 
 

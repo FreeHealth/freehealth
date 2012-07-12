@@ -46,6 +46,7 @@
 
 #include <translationutils/constants.h>
 #include <translationutils/trans_database.h>
+#include <translationutils/trans_user.h>
 
 #include <extensionsystem/pluginmanager.h>
 
@@ -290,7 +291,7 @@ ClientConfigPage::ClientConfigPage(QWidget *parent) :
     QGridLayout *layout = new QGridLayout(this);
     layout->setVerticalSpacing(30);
     serverWidget = new Core::ServerPreferencesWidget(this);
-    serverWidget->setUserLoginGroupTitle(tr("Personal login and password"));
+    serverWidget->setUserLoginGroupTitle(Trans::Constants::CONSTANTS_TR_CONTEXT, Trans::Constants::ENTER_YOUR_PERSONAL_LOGIN);
     layout->addWidget(serverWidget, 0, 0);
     setLayout(layout);
 
@@ -410,6 +411,8 @@ ServerConfigPage::ServerConfigPage(QWidget *parent) :
     QGridLayout *layout = new QGridLayout(this);
     layout->setVerticalSpacing(30);
     serverWidget = new Core::ServerPreferencesWidget(this);
+    serverWidget->showUseDefaultAdminLogCheckbox(false);
+    serverWidget->setUserLoginGroupTitle(Trans::Constants::CONSTANTS_TR_CONTEXT, Trans::Constants::ENTER_MYSQL_ADMIN_LOGIN);
     layout->addWidget(serverWidget, 0, 0);
     setLayout(layout);
 
@@ -440,7 +443,6 @@ void ServerConfigPage::retranslate()
     setSubTitle(tr("There were no automatic server configuration file found.<br />"
                    "You must configure the server manually.<br />"
                    "Use the <b>server super-administrator login and password</b> to connect the database."));
-    serverWidget->setUserLoginGroupTitle(tr("Server super-administrator login and password"));
 }
 
 bool ServerConfigPage::isComplete() const

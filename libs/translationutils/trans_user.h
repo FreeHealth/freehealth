@@ -49,6 +49,8 @@ const char* const TELEPHONE                         = QT_TRANSLATE_NOOP("tkConst
 const char* const FAX                               = QT_TRANSLATE_NOOP("tkConstants", "Fax");
 const char* const MAIL                              = QT_TRANSLATE_NOOP("tkConstants", "E-Mail");
 
+const char* const ENTER_MYSQL_ADMIN_LOGIN           = QT_TRANSLATE_NOOP("tkConstants", "Enter MySQL administrator login");
+const char* const ENTER_YOUR_PERSONAL_LOGIN         = QT_TRANSLATE_NOOP("tkConstants", "Enter your personal identifiants");
 const char* const SAVE_AND_RESTORE                  = QT_TRANSLATE_NOOP("tkConstants", "Save and restore");
 
 
