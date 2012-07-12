@@ -5,7 +5,7 @@
 # This script helps on the compilation on unices machines
 #
 
-SCRIPT_VERSION=1.0-1341512607  # see date "+%s"
+SCRIPT_VERSION=1.0-1342081307  # see date "+%s"
 
 DEBUG_BUILD_COMMANDS=0  # set to 1 to only debug commands (no commands are executed)
 
@@ -96,11 +96,11 @@ makeClean()
     echo "# Cleaning build path" ; sleep 1
     if [[ "$CLEAN" != "" ]]; then
         echo "* Cleaning build path"
-        echo "# make clean && \nrm -R $SCRIPT_PATH/bin/$BUNDLE_NAME &&\nrm -R $SCRIPT_PATH/build"; >> $LOG_FILE
+        echo "# rm -R $SCRIPT_PATH/bin/$BUNDLE_NAME &&\nrm -R $SCRIPT_PATH/build"; >> $LOG_FILE
         if [[  "$DEBUG_BUILD_COMMANDS" == 1 ]]; then
-            echo "# make clean && \nrm -R $SCRIPT_PATH/bin/$BUNDLE_NAME &&\nrm -R $SCRIPT_PATH/build"; sleep 5
+            echo "# rm -R $SCRIPT_PATH/bin/$BUNDLE_NAME &&\nrm -R $SCRIPT_PATH/build"; sleep 5
         else
-            MAKE_STEP=`make clean && rm -R $SCRIPT_PATH/bin/$BUNDLE_NAME && rm -R $SCRIPT_PATH/build >> $LOG_FILE`
+            MAKE_STEP=`rm -R $SCRIPT_PATH/bin/$BUNDLE_NAME && rm -R $SCRIPT_PATH/build >> $LOG_FILE`
             MAKE_STEP=$?
             if [[ ! $MAKE_STEP == 0 ]]; then
                 return 123
@@ -108,6 +108,18 @@ makeClean()
                 echo "        Cleaned"
            fi
         fi
+        if [[  "$DEBUG_BUILD_COMMANDS" == 1 ]]; then
+            echo "# find . -type f -name Makefile -delete"; sleep 5
+        else
+            MAKE_STEP=`find . -type f -name Makefile -delete >> $LOG_FILE`
+            MAKE_STEP=$?
+            if [[ ! $MAKE_STEP == 0 ]]; then
+                return 123
+            else
+                echo "        Cleaned"
+           fi
+        fi
+
     fi
     return 0
 }
