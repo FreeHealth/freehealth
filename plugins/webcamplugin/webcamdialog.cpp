@@ -49,8 +49,7 @@ static inline Core::ITheme *theme() { return Core::ICore::instance()->theme(); }
 
 WebcamDialog::WebcamDialog(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::WebcamDialog),
-    m_snapshot(QPixmap())
+    ui(new Ui::WebcamDialog)
 {
     ui->setupUi(this);
     trackController = new TrackController(this);

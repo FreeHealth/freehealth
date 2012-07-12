@@ -21,7 +21,8 @@ HEADERS = \
    headstate.h \
    filter.h \
    capturethread.h \
-   renderwidget.h
+   renderwidget.h \
+    webcamdialog_timerbased.h
 
 SOURCES += \
    webcamplugin.cpp \
@@ -32,7 +33,8 @@ SOURCES += \
    capturethread.cpp \
    filter.cpp \
    renderwidget.cpp \
-   imagebuffer.cpp
+   imagebuffer.cpp \
+    webcamdialog_timerbased.cpp
 
 FORMS += \
    webcamdialog.ui

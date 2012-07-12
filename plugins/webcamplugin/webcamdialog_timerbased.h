@@ -21,34 +21,63 @@
 /***************************************************************************
  *   Main Developer: Christian A. Reiter <christian.a.reiter@gmail.com>    *
  *   Contributors:                                                         *
- *       NAME <MAIL@ADDRESS.COM>                                           *
+ *       Eric Maeker <eric.maeker@gmail.com                                *
  ***************************************************************************/
-#include "webcamphotoprovider.h"
-//#include "webcamdialog.h"
-#include "webcamdialog_timerbased.h"
+#ifndef WEBCAMDIALOG_TIMERBASED_H
+#define WEBCAMDIALOG_TIMERBASED_H
 
-using namespace Webcam;
+#include <opencv/cv.h>
+#include <opencv/highgui.h>
 
-WebcamPhotoProvider::WebcamPhotoProvider()
+#include <QDialog>
+#include <QLabel>
+#include <QImage>
+#include <QPixmap>
+
+namespace Webcam {
+namespace Internal {
+class CvWidget : public QLabel
 {
-}
+public:
+    CvWidget(QWidget *parent = 0);
+    ~CvWidget();
 
-WebcamPhotoProvider::~WebcamPhotoProvider()
-{}
+    void toggleFreezeMode();
+    bool isFrozen() const {return frozen;}
 
-/*!
- * \brief returns Photo that is captured by the selected webcam.
- *
- * All of the code is in this function, there is no async calling, because
- * the dialog should be modal and no other functions should be possible
- * meanwhile.
- */
-QPixmap WebcamPhotoProvider::recievePhoto()
+    void setImageUpdateFrequency(const int ms);
+    int defaultUpdateFrequency() const;
+
+private:
+    void timerEvent(QTimerEvent *event);
+
+private:
+    QImage _image;
+    CvCapture *_camera;
+    bool frozen;
+    int _timerId, _updateFreq;
+};
+}  // namespace Internal
+
+class WebCamDialog_TimerBased : public QDialog
 {
-    WebCamDialog_TimerBased dialog;
-    if(dialog.exec() != QDialog::Accepted) {
-        return QPixmap();
-    }
-    return dialog.photo();
-}
+    Q_OBJECT
+public:
+    explicit WebCamDialog_TimerBased(QWidget *parent = 0);
 
+    QPixmap photo() const;
+
+private Q_SLOTS:
+    void toggleFreezeMode();
+
+private:
+    void changeEvent(QEvent *event);
+
+private:
+    Internal::CvWidget *_cvWidget;
+    QPushButton *_freeze;
+};
+
+}  // namespace WebCam
+
+#endif // WEBCAMDIALOG_TIMERBASED_H
