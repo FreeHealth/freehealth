@@ -153,7 +153,6 @@ void WebcamPlugin::extensionsInitialized()
     // Add here e.g. the DataPackPlugin::IDataPackListener objects to the pluginmanager object pool
     
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
-    connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
 }
 
 void WebcamPlugin::postCoreInitialization()
