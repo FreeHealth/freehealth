@@ -77,11 +77,16 @@ bool ServerPreferencesWidget::connectionSucceeded() const
     return m_ConnectionSucceeded;
 }
 
-void ServerPreferencesWidget::setUserLoginGroupTitle(const QString &text)
+void ServerPreferencesWidget::setUserLoginGroupTitle(const QString &trContext, const QString &untranslatedtext)
 {
-    // FIXME: this does not work ?
-    ui->userGroupBox->setTitle(text);
-    repaint();
+    _groupTitle = untranslatedtext;
+    _groupTitleTrContext = trContext;
+    ui->userGroupBox->setTitle(QApplication::translate(trContext.toUtf8(), untranslatedtext.toUtf8()));
+}
+
+void ServerPreferencesWidget::showUseDefaultAdminLogCheckbox(bool show)
+{
+    ui->useDefaultAdminLog->setVisible(show);
 }
 
 QString ServerPreferencesWidget::hostName() const
@@ -239,6 +244,8 @@ void ServerPreferencesWidget::changeEvent(QEvent *e)
     switch (e->type()) {
     case QEvent::LanguageChange:
         ui->retranslateUi(this);
+        if (!_groupTitle.isEmpty())
+            ui->userGroupBox->setTitle(QApplication::translate(_groupTitleTrContext.toUtf8(), _groupTitle.toUtf8()));
         break;
     default:
         break;
