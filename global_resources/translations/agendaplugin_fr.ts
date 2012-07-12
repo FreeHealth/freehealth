@@ -181,7 +181,7 @@
     <message>
         <location filename="../../plugins/agendaplugin/usercalendarviewer.ui" line="172"/>
         <source>Duration</source>
-        <translation>Duréé</translation>
+        <translation>Durée</translation>
     </message>
     <message>
         <location filename="../../plugins/agendaplugin/usercalendarviewer.ui" line="214"/>
