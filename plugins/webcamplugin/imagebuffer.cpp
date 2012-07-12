@@ -24,8 +24,11 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "imagebuffer.h"
-#include <QDebug>
+
+#include <opencv2/core/core_c.h>
+
 #include <QTime>
+#include <QDebug>
 
 using namespace Webcam;
 

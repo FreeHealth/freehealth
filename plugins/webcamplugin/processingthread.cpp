@@ -23,10 +23,13 @@
  *   Contributors:                                                         *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#include <processingthread.h>
-#include <headstate.h>
-#include <filter.h>
-#include <imagebuffer.h>
+#include "processingthread.h"
+#include "headstate.h"
+#include "filter.h"
+#include "imagebuffer.h"
+
+#include <opencv2/core/core_c.h>
+
 #include <QDebug>
 
 using namespace Webcam;

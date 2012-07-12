@@ -27,7 +27,7 @@
 #define HEAD_STATE_H
 
 #include <QPoint>
-#include <opencv/cxcore.h>
+#include <opencv2/core/core.hpp>
 
 namespace Webcam {
 
