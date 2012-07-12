@@ -572,7 +572,7 @@ saveConfig()
 loadConfig()
 {
     . ./build.conf
-    echo "* Load configuration: $CONFIG"
+    echo "* Previous configuration loaded"
 }
 
 zenityConfigToBuildSystem()
