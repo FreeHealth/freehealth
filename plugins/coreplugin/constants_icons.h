@@ -118,6 +118,7 @@ const char * const  ICONOVERRIDE      = "override.png";
 const char * const  ICONEYES =         "eyes.png";
 const char * const  ICONVIEWSIDE =     "view_sidetree.png";
 const char * const  ICONFULLSCREEN =   "view-fullscreen.png";
+const char * const  ICONCAMERAVIDEO =  "camera-video.png";
 
 // Network
 const char * const  ICONCOMPUTER = "computer.png";
