@@ -373,25 +373,32 @@ build()
 launchApplication()
 {
     if [[ "$RUN" == "y" ]]; then
-        # Launch the debug application with the good config file
+        echo "* Launch the application"
         if [[ "$BUILD" == "debug" ]]; then
             if [[ $OSTYPE == linux-gnu ]]; then
+                echo "    Launch $BUNDLE_NAME (debug_without_install, linux)"
                 $SCRIPT_PATH/bin/$BUNDLE_NAME/$BUNDLE_NAME_debug --config=../../global_resources/$BUNDLE_NAME_config.ini
             elif [[ $OSTYPE == darwin* ]]; then
+                echo "    Launch $BUNDLE_NAME (debug_without_install, MacOs)"
                 $SCRIPT_PATH/bin/$BUNDLE_NAME/$BUNDLE_NAME_debug.app/Contents/MacOs/$BUNDLE_NAME_debug --config=../../../../../global_resources/$BUNDLE_NAME_config.ini
             elif [[ $OSTYPE == freebsd ]]; then
+                echo "    Launch $BUNDLE_NAME (debug_without_install, freebsd)"
                 $SCRIPT_PATH/bin/$BUNDLE_NAME/$BUNDLE_NAME_debug --config=../../global_resources/$BUNDLE_NAME_config.ini
             fi
         elif [[ "$BUILD" == "linuxintegrated" ]]; then
             if [[ $OSTYPE == linux-gnu ]]; then
-                $BUNDLE_NAME
+                echo "    Launch $BUNDLE_NAME (release, linux integrated)"
+               $BUNDLE_NAME
             elif [[ $OSTYPE == freebsd ]]; then
+                echo "    Launch $BUNDLE_NAME (release, freebsd, linux integrated)"
                 $BUNDLE_NAME
             fi
         elif [[ "$BUILD" == "release" ]]; then
             if [[ $OSTYPE == linux-gnu ]]; then
+                echo "    Launch $BUNDLE_NAME (release, linux , bundled)"
                 $SCRIP_PATH/packages/linux/$BUNDLE_NAME/$BUNDLE_NAME
             elif [[ $OSTYPE == freebsd ]]; then
+                echo "    Launch $BUNDLE_NAME (release, freebsd, bundled)"
                 $SCRIP_PATH/packages/freebsd/$BUNDLE_NAME/$BUNDLE_NAME
             fi
         fi
@@ -443,7 +450,7 @@ RET=""
 
 createDefaultConfig()
 {
-    $CONFIG="FreeMedForms;Default_debug_compilation_(recommended);Create_translations;Parallel_build;Notify_when_done;Run_application;linux-g++"
+    $CONFIG="FreeMedForms;Default_debug_compilation_(recommended);Create_translations;Parallel_build;Notify_when_done;Run_application;$SPEC"
 }
 
 zenityBuild()
