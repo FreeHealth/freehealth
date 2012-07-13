@@ -50,6 +50,8 @@ public:
 
     void setImageUpdateFrequency(const int ms);
     int defaultUpdateFrequency() const;
+    
+    QRect frame() const;
 
 Q_SIGNALS:
     void frozen(bool);

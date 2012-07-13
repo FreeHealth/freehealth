@@ -247,3 +247,13 @@ int OpenCVWidget::defaultUpdateFrequency() const
 {
     return 50;
 }
+
+/**
+ * \brief returns a QRect with the coordinates of the current selection
+ */
+QRect OpenCVWidget::frame() const
+{
+    if (!m_frozen || !m_rubberBand || !m_rubberBand->geometry().isValid())
+        return QRect();
+    return m_rubberBand->geometry();
+}

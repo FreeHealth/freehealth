@@ -81,7 +81,7 @@ WebcamDialog::~WebcamDialog()
 
 QPixmap WebcamDialog::photo() const
 {
-    return QPixmap(*ui->openCVWidget->pixmap());
+    return ui->openCVWidget->pixmap()->copy(ui->openCVWidget->frame());
 }
 
 void WebcamDialog::toggleFreezeMode()
