@@ -167,8 +167,8 @@ void OpenCVWidget::mouseMoveEvent(QMouseEvent *event)
         QRect rect = QRect(m_clickOrigin, event->pos());
         rect.setHeight(rect.height() > 0? abs(rect.width()) : -abs(rect.width()));
         
-        // get rid of negative coordinates
         m_rubberBand->setGeometry(rect.normalized());
+        // get rid of negative coordinates
         restrictRubberBandConstraints();
         break;
     }
@@ -196,10 +196,19 @@ void OpenCVWidget::mouseReleaseEvent(QMouseEvent *event)
     if (!m_frozen | !m_rubberBand) {
         return;
     }
-    if (m_rubberBand->rect().isValid()) {
+    QRect rect(m_rubberBand->geometry().normalized());
+    qDebug() << m_rubberBand->geometry() << rect;
+    if (rect.isValid()) {
+        if (rect.height() < 64 || rect.width() < 64) {
+            rect.setHeight(64);
+            rect.setWidth(64);
+            m_rubberBand->setGeometry(rect);
+        }
+        
         // we have a valid rubberband square
         Q_EMIT imageReady(true);
     } else {
+        m_rubberBand->hide();
         Q_EMIT imageReady(false);
     }
 }
@@ -221,7 +230,8 @@ void OpenCVWidget::wheelEvent(QWheelEvent *event)
         m_rubberBand->resize(m_rubberBand->geometry().width()+4, m_rubberBand->height()+4);
         restrictRubberBandConstraints();        
     } else { // WheelDown
-        if (m_rubberBand->width() >= 24) {
+        // selection must not be smaller than 64x64
+        if (m_rubberBand->width() >= 64 + 4) {
             m_rubberBand->move(m_rubberBand->geometry().x()+2, m_rubberBand->y()+2);
             m_rubberBand->resize(m_rubberBand->geometry().width()-4, m_rubberBand->height()-4);
         }
@@ -236,12 +246,14 @@ void OpenCVWidget::restrictRubberBandConstraints()
 {
     // restrict new RubberBand to constraints of parent
     
-    // is too big
     QRect rect = m_rubberBand->geometry().normalized();
+    
+    // is too big
     if (rect.height() > this->rect().height()) {
         rect.setHeight(this->rect().height()-2);
         rect.setWidth(this->rect().height()-2);
     }
+    
     // check if possibly width < height, we have to crop again then
     // and take the width as smallest distance
     if (    this->rect().width() < this->rect().height() && 
