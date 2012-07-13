@@ -6,71 +6,85 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>538</width>
+    <height>420</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <layout class="QHBoxLayout" name="horizontalLayout">
+  <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <widget class="RenderWidget" name="renderWidget" native="true"/>
+    <widget class="Webcam::Internal::OpenCVWidget" name="openCVWidget" native="true">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>TextLabel</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QDialogButtonBox" name="buttonBox">
+       <property name="standardButtons">
+        <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
   </layout>
-  <action name="actionFreeze">
-   <property name="text">
-    <string>Freeze Picture</string>
-   </property>
-   <property name="toolTip">
-    <string>Make a snapshot of the current moment</string>
-   </property>
-   <property name="shortcut">
-    <string>Space</string>
-   </property>
-  </action>
-  <action name="actionRetry">
-   <property name="text">
-    <string>Retry</string>
-   </property>
-   <property name="toolTip">
-    <string>Proceed capturing, the current picture is not good enough</string>
-   </property>
-   <property name="shortcut">
-    <string>Space</string>
-   </property>
-  </action>
-  <action name="actionUse">
-   <property name="text">
-    <string>Use picture</string>
-   </property>
-   <property name="toolTip">
-    <string>Use this picture</string>
-   </property>
-   <property name="shortcut">
-    <string>Return</string>
-   </property>
-  </action>
-  <action name="actionCancel">
-   <property name="text">
-    <string>Cancel</string>
-   </property>
-   <property name="toolTip">
-    <string>Abort this dialog</string>
-   </property>
-   <property name="shortcut">
-    <string>Esc</string>
-   </property>
-  </action>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>RenderWidget</class>
+   <class>Webcam::Internal::OpenCVWidget</class>
    <extends>QWidget</extends>
-   <header>renderwidget.h</header>
+   <header>opencvwidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>Webcam::WebcamDialog</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>291</x>
+     <y>400</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>350</x>
+     <y>415</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>Webcam::WebcamDialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>231</x>
+     <y>396</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>224</x>
+     <y>415</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

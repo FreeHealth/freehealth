@@ -24,6 +24,7 @@
  *       Eric Maeker <eric.maeker@gmail.com                                *
  ***************************************************************************/
 #include "webcamdialog.h"
+#include "ui_webcamdialog.h"
 #include "webcamconstants.h"
 #include "opencvwidget.h"
 
@@ -38,50 +39,53 @@
 #include <QDialogButtonBox>
 #include <QPushButton>
 #include <QEvent>
+#include <QDebug>
 
 using namespace Webcam;
 using namespace Internal;
 
 static inline Core::ITheme *theme() { return Core::ICore::instance()->theme(); }
 
-WebCamDialog::WebCamDialog(QWidget *parent) :
+WebcamDialog::WebcamDialog(QWidget *parent) :
     QDialog(parent),
-    m_openCVWidget(new Internal::OpenCVWidget(this))
+    ui(new Ui::WebcamDialog())
 {
+    ui->setupUi(this);
+//    qDebug() << this->objectName();
     setObjectName("WebCamDialog");
     setWindowIcon(theme()->icon(Core::Constants::ICONCAMERAVIDEO));
     setWindowTitle(tr("Take a picture from your webcam"));
-    QVBoxLayout *layout = new QVBoxLayout;
-    layout->addWidget(m_openCVWidget);
-    QDialogButtonBox *box = new QDialogButtonBox(QDialogButtonBox::Cancel | QDialogButtonBox::Ok, Qt::Horizontal, this);
-    m_freezeButton = box->addButton(tr("Freeze"), QDialogButtonBox::ActionRole);
+    
+//    ui->openCVWidget = new Internal::OpenCVWidget(this);
+    
+    ui->openCVWidget->setToolTip(tr("<ul>"
+                                  "<li>Click on 'Freeze'</li>"
+                                  "<li>draw a frame with the mouse</li>"
+                                  "<li>use the mouse wheel to set the size of the frame</li></ul>"));
+    
+    m_freezeButton = ui->buttonBox->addButton(tr("Freeze"), QDialogButtonBox::ActionRole);
     m_freezeButton->setIcon(theme()->icon(Core::Constants::ICONTAKESCREENSHOT));
-
-    QPushButton *cancelButton;
-    cancelButton = box->button(QDialogButtonBox::Cancel);
-    cancelButton->setIcon(theme()->icon(Core::Constants::ICONQUIT));
-
-    cancelButton = box->button(QDialogButtonBox::Ok);
-    cancelButton->setIcon(theme()->icon(Core::Constants::ICONOK));
-
-    layout->addWidget(box);
-    setLayout(layout);
-    resize(500, 400);
-
+    
+    ui->buttonBox->button(QDialogButtonBox::Cancel)->setIcon(theme()->icon(Core::Constants::ICONQUIT));
+    ui->buttonBox->button(QDialogButtonBox::Ok)->setIcon(theme()->icon(Core::Constants::ICONOK));
+    
     connect(m_freezeButton, SIGNAL(clicked()), this, SLOT(toggleFreezeMode()));
-    connect(box, SIGNAL(accepted()), this, SLOT(accept()));
-    connect(box, SIGNAL(rejected()), this, SLOT(reject()));
 }
 
-QPixmap WebCamDialog::photo() const
+WebcamDialog::~WebcamDialog()
 {
-    return QPixmap(*m_openCVWidget->pixmap());
+    delete ui;
 }
 
-void WebCamDialog::toggleFreezeMode()
+QPixmap WebcamDialog::photo() const
 {
-    m_openCVWidget->toggleFreezeMode();
-    if (m_openCVWidget->isFrozen()) {
+    return QPixmap(*ui->openCVWidget->pixmap());
+}
+
+void WebcamDialog::toggleFreezeMode()
+{
+    ui->openCVWidget->toggleFreezeMode();
+    if (ui->openCVWidget->isFrozen()) {
         m_freezeButton->setText(tr("Unfreeze"));
         m_freezeButton->setIcon(theme()->icon(Core::Constants::ICONCAMERAVIDEO));
     } else {
@@ -90,10 +94,10 @@ void WebCamDialog::toggleFreezeMode()
     }
 }
 
-void WebCamDialog::changeEvent(QEvent *event)
+void WebcamDialog::changeEvent(QEvent *event)
 {
     if (event->type() == QEvent::LanguageChange) {
-        if (m_openCVWidget->isFrozen())
+        if (ui->openCVWidget->isFrozen())
             m_freezeButton->setText(tr("Unfreeze"));
         else
             m_freezeButton->setText(tr("Freeze"));

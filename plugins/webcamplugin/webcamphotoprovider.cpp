@@ -45,7 +45,7 @@ WebcamPhotoProvider::~WebcamPhotoProvider()
  */
 QPixmap WebcamPhotoProvider::recievePhoto()
 {
-    WebCamDialog dialog;
+    WebcamDialog dialog;
     if(dialog.exec() != QDialog::Accepted) {
         return QPixmap();
     }

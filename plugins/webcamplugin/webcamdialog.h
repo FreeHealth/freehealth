@@ -31,6 +31,7 @@
 #include <QImage>
 #include <QPixmap>
 
+#include "ui_webcamdialog.h"
 
 namespace Webcam {
 
@@ -38,12 +39,17 @@ namespace Internal {
 class OpenCVWidget;
 }
 
-class WebCamDialog : public QDialog
+namespace Ui {
+class WebcamDialog;
+}
+
+class WebcamDialog : public QDialog
 {
     Q_OBJECT
 public:
-    explicit WebCamDialog(QWidget *parent = 0);
-
+    explicit WebcamDialog(QWidget *parent = 0);
+    ~WebcamDialog();
+    
     QPixmap photo() const;
 
 private Q_SLOTS:
@@ -53,7 +59,7 @@ private:
     void changeEvent(QEvent *event);
 
 private:
-    Internal::OpenCVWidget *m_openCVWidget;
+    Ui::WebcamDialog *ui;
     QPushButton *m_freezeButton;
 };
 
