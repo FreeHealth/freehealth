@@ -14,6 +14,7 @@ PROJECT_VERSION=""
 TEST=""
 TRANS=""
 CLEAN=""
+WEBCAM=""
 SPEC=""
 BUILD="debug"
 QMAKE_CONFIG=""
@@ -48,6 +49,7 @@ showHelp()
     echo "        3. Compile application"
     echo "        4. Install application"
     echo "  -i  with 'linux integrated' configuration (release mode only) same as -ri"
+    echo "  -w  build the webcam plugin (require libopencv-dev)"
     echo "  -j  Parallel compilation (number of jobs: equivalent to make -jX)"
     echo "  -t  Create translations"
     echo "  -x  Create a test project (in the test path)"
@@ -182,6 +184,9 @@ qmakeCommand()
     # zenity progress feature
     echo "30"; sleep 1
     echo "# Preparing the build:\nthe qmake step" ; sleep 1
+    if [[ "$WEBCAM" == "y" ]]; then
+        $QMAKE_CONFIG="$QMAKE_CONFIG CONFIG+=with-webcam"
+    fi
     echo "* qmake $BUNDLE_NAME.pro -r $QMAKE_CONFIG $SPEC LOWERED_APPNAME=$BUNDLE_NAME"
     echo "# qmake $BUNDLE_NAME.pro -r $QMAKE_CONFIG $SPEC LOWERED_APPNAME=$BUNDLE_NAME" >> $LOG_FILE
     if [[  "$DEBUG_BUILD_COMMANDS" == 1 ]]; then
@@ -409,7 +414,7 @@ launchApplication()
 ## Analyse options
 #########################################################################################
 detectSpec
-while getopts "hdrRijcxtb:" option
+while getopts "hdrRijcxtwb:" option
 do
   case $option in
     h) showHelp
@@ -432,6 +437,8 @@ do
     s) SPEC=$OPTARG
     ;;
     t) TRANS="y"
+    ;;
+    w) WEBCAM="y"
     ;;
     b) BUNDLE_NAME=`echo "$OPTARG" | sed y/ABCDEFGHIJKLMNOPQRSTUVWXYZ/abcdefghijklmnopqrstuvwxyz/`
   esac
@@ -550,6 +557,7 @@ secondPage()
 thirdPage()
 {
     RET=$($ZENITY_SIZED --title "$ZENITY_TITLE" --list --text "Select options" --checklist --column "Select" --column "Options"  \
+           `[ $(expr "$CONFIG" : ".*Build_WebCam_plugin.*") -ne 0 ] && echo 'True' ||  echo 'False'` "Build WebCam plugin"  \
            `[ $(expr "$CONFIG" : ".*Create_translations.*") -ne 0 ] && echo 'True' ||  echo 'False'` "Create translations"  \
            `[ $(expr "$CONFIG" : ".*Clean_build_path.*") -ne 0 ] && echo 'True' ||  echo 'False'` "Clean build path"  \
            `[ $(expr "$CONFIG" : ".*Parallel_build.*") -ne 0 ] && echo 'True' ||  echo 'False'`  "Parallel build" \
@@ -581,6 +589,7 @@ zenityConfigToBuildSystem()
     SPEC=`echo ${CONFIG##*;}`
     # Options
     CLEAN="`[ $(expr "$CONFIG" : ".*Clean_build_path.*") -ne 0 ] && echo 'y' || echo 'n'`"
+    WEBCAM="`[ $(expr "$CONFIG" : ".*Build_WebCam_plugin.*") -ne 0 ] && echo 'y' || echo 'n'`"
     RUN="`[ $(expr "$CONFIG" : ".*Run_application.*") -ne 0 ] && echo 'y' || echo 'n'`"
     TRANS="`[ $(expr "$CONFIG" : ".*Create_translations.*") -ne 0 ] && echo 'y' || echo 'n'`"
     MAKE_OPTS="`[ $(expr "$CONFIG" : ".*Parallel_build.*") -ne 0 ] && echo '-j4' || echo '-j1'`"
