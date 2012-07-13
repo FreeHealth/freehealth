@@ -203,12 +203,10 @@ public:
         } else {
             req = patientBase()->prepareUpdateQuery(Constants::Table_PATIENT_PHOTO, Constants::PHOTO_BLOB, where);
             query.prepare(req);
-            query.bindValue(Constants::PHOTO_BLOB, ba);
+            query.bindValue(0, ba);
         }
-
-        query.exec();
-        if (!query.isActive()) {
-            Utils::Log::addQueryError(q, query);
+        if (!query.exec()) {
+            LOG_QUERY_ERROR_FOR(q, query);
             return false;
         }
         return true;
