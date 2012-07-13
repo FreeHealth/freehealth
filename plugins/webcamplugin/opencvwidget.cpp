@@ -1,11 +1,15 @@
 #include "opencvwidget.h"
+#include <QMouseEvent>
+#include <QtGui>
 
 using namespace Webcam::Internal;
 
 OpenCVWidget::OpenCVWidget(QWidget *parent) :
     QLabel(parent),
-    frozen(false),
-    _updateFreq(defaultUpdateFrequency())
+    m_frozen(false),
+    _updateFreq(defaultUpdateFrequency()),
+    m_rubberBand(0),
+    rbMode(Create)
 {
     _camera = cvCreateCameraCapture(CV_CAP_ANY);
     Q_ASSERT(_camera);
@@ -75,17 +79,128 @@ void OpenCVWidget::timerEvent(QTimerEvent *event)
     setPixmap(QPixmap::fromImage(_image));
 }
 
+void OpenCVWidget::mousePressEvent(QMouseEvent *event)
+{
+    // restrict to left mouse button and frozen state
+    if (event->button() != Qt::LeftButton)
+        return;
+    
+    if(!m_frozen) {
+//        toggleFreezeMode();
+        return;
+    }
+    
+    // if there is no QRubberBand, create one
+    if (!m_rubberBand) {
+        m_rubberBand = new QRubberBand(QRubberBand::Rectangle, this);
+        m_rubberBand->setWindowFlags(Qt::ToolTip);
+        rbMode = Create;
+    }
+
+    // remember the position where the user clicked and the QRubberBand was then
+    m_clickOrigin = event->pos();
+    m_rubberOrigin = m_rubberBand->pos();
+
+    // determine if the user has clicked *into* the QRubberBand boundaries
+    if (m_rubberBand->rect().translated(m_rubberBand->pos()).contains(m_clickOrigin, true)) {
+        rbMode = Move;
+    } else {
+        rbMode = Create;
+        // create an empty frame and show it
+        m_rubberBand->setGeometry(QRect(m_clickOrigin, QSize()));
+        m_rubberBand->show();
+    }
+}
+
+void OpenCVWidget::mouseMoveEvent(QMouseEvent *event)
+{
+    if (!m_frozen || !m_rubberBand)
+        return;
+
+    switch (rbMode) {
+    
+    case Create: {
+        // calculate the rectangle
+        QRect rect = QRect(m_clickOrigin, event->pos());
+        rect.setHeight(rect.height() > 0? abs(rect.width()) : -abs(rect.width()));
+        
+        // get rid of negative coordinates
+        m_rubberBand->setGeometry(rect.normalized());
+        break;
+    }
+
+    case Move: {
+        // remember the distance vector between the actual mouse pos and the original click
+        QPoint relativePosFromClick = event->pos() - m_clickOrigin;
+        // now relatively move the rectangle to that vector
+        m_rubberBand->move(m_rubberOrigin + relativePosFromClick);
+
+        // check if we are not out of the parent widget boundaries
+        restrictRubberBandConstraints();
+        break;
+    }
+    }
+}
+
+
+void OpenCVWidget::mouseReleaseEvent(QMouseEvent *event)
+{
+    Q_UNUSED(event);
+    if (!m_frozen)
+        return;
+    
+}
+
+void OpenCVWidget::wheelEvent(QWheelEvent *event)
+{
+    //only working when frozen and with active rubberband!
+    if (!m_frozen || !m_rubberBand)
+        return;
+
+    if (event->delta() > 0 && 
+            m_rubberBand->width()+4 < this->rect().width() &&
+            m_rubberBand->height()+4 < this->rect().height()) { // WheelUp
+        m_rubberBand->move(m_rubberBand->geometry().x()-2, m_rubberBand->y()-2);
+        m_rubberBand->resize(m_rubberBand->geometry().width()+4, m_rubberBand->height()+4);
+        restrictRubberBandConstraints();        
+    } else { // WheelDown
+        if (m_rubberBand->width() >= 24) {
+            m_rubberBand->move(m_rubberBand->geometry().x()+2, m_rubberBand->y()+2);
+            m_rubberBand->resize(m_rubberBand->geometry().width()-4, m_rubberBand->height()-4);
+        }
+        restrictRubberBandConstraints();
+    }
+}
+
+void OpenCVWidget::restrictRubberBandConstraints()
+{
+    // restrict new RubberBand to constraints of parent
+    if (m_rubberBand->x() < 0)
+        m_rubberBand->move(0, m_rubberBand->y());
+    if (m_rubberBand->geometry().right() > this->rect().right())
+        m_rubberBand->move(this->rect().right() - m_rubberBand->width(), m_rubberBand->y());
+
+    if (m_rubberBand->y() < 0)
+        m_rubberBand->move(m_rubberBand->x(), 0);
+    if (m_rubberBand->geometry().bottom() > this->rect().bottom())
+        m_rubberBand->move(m_rubberBand->x(), this->rect().bottom() - m_rubberBand->height());
+    
+}
+
 void OpenCVWidget::toggleFreezeMode()
 {
-    if (frozen) {
+    if (m_frozen) {
         // Unfreeze
+        if (m_rubberBand)
+            m_rubberBand->hide();
         _timerId = startTimer(_updateFreq);  // 0.1-second timer
     } else {
         // Freeze
         if (_timerId > 0)
             killTimer(_timerId);
     }
-    frozen = !frozen;
+    m_frozen = !m_frozen;
+//    Q_EMIT (frozen(m_frozen));
 }
 
 void OpenCVWidget::setImageUpdateFrequency(const int ms)

@@ -10,21 +10,21 @@ include(../fmf_plugins.pri)
 include(webcam_dependencies.pri)
 
 HEADERS = \
-   webcamplugin.h \
-   webcam_exporter.h \
-   webcamconstants.h \
-   webcamphotoprovider.h \
+    webcamplugin.h \
+    webcam_exporter.h \
+    webcamconstants.h \
+    webcamphotoprovider.h \
     webcamdialog_timerbased.h \
     opencvwidget.h
 
 SOURCES += \
-   webcamplugin.cpp \
-   webcamphotoprovider.cpp \
+    webcamplugin.cpp \
+    webcamphotoprovider.cpp \
     webcamdialog_timerbased.cpp \
     opencvwidget.cpp
 
 FORMS += \
-   webcamdialog.ui
+    webcamdialog.ui
 
 TRANSLATIONS += $${SOURCES_TRANSLATIONS_PATH}/webcam_fr.ts \
                 $${SOURCES_TRANSLATIONS_PATH}/webcam_de.ts \

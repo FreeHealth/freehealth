@@ -54,7 +54,7 @@ private:
 
 private:
     Internal::OpenCVWidget *m_openCVWidget;
-    QPushButton *_freeze;
+    QPushButton *m_freezeButton;
 };
 
 }  // namespace WebCam
