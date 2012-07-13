@@ -30,7 +30,6 @@ SUBDIRS = \
     script \
     mainwin \
 #    alerts \      # unstable
-#    webcam        # experimental
 
 
 
@@ -163,8 +162,11 @@ script.depends += formmanager
 datapack.subdir = ../../plugins/datapackplugin
 datapack.depends += core
 
-webcam.subdir = ../../plugins/webcamplugin
-webcam.depends += core
+with-webcam {
+    SUBDIRS += webcam
+    webcam.subdir = ../../plugins/webcamplugin
+    webcam.depends += core
+}
 
 # manage non free content
 #include(../buildspecs/config.pri)
