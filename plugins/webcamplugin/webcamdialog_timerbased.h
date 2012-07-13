@@ -26,38 +26,17 @@
 #ifndef WEBCAMDIALOG_TIMERBASED_H
 #define WEBCAMDIALOG_TIMERBASED_H
 
-#include <opencv/cv.h>
-#include <opencv/highgui.h>
-
 #include <QDialog>
 #include <QLabel>
 #include <QImage>
 #include <QPixmap>
 
+
 namespace Webcam {
+
 namespace Internal {
-class CvWidget : public QLabel
-{
-public:
-    CvWidget(QWidget *parent = 0);
-    ~CvWidget();
-
-    void toggleFreezeMode();
-    bool isFrozen() const {return frozen;}
-
-    void setImageUpdateFrequency(const int ms);
-    int defaultUpdateFrequency() const;
-
-private:
-    void timerEvent(QTimerEvent *event);
-
-private:
-    QImage _image;
-    CvCapture *_camera;
-    bool frozen;
-    int _timerId, _updateFreq;
-};
-}  // namespace Internal
+class OpenCVWidget;
+}
 
 class WebCamDialog_TimerBased : public QDialog
 {
@@ -74,7 +53,7 @@ private:
     void changeEvent(QEvent *event);
 
 private:
-    Internal::CvWidget *_cvWidget;
+    Internal::OpenCVWidget *m_openCVWidget;
     QPushButton *_freeze;
 };
 
