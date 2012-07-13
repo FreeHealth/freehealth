@@ -25,7 +25,7 @@
  ***************************************************************************/
 #include "webcamphotoprovider.h"
 //#include "webcamdialog.h"
-#include "webcamdialog_timerbased.h"
+#include "webcamdialog.h"
 
 using namespace Webcam;
 
@@ -45,7 +45,7 @@ WebcamPhotoProvider::~WebcamPhotoProvider()
  */
 QPixmap WebcamPhotoProvider::recievePhoto()
 {
-    WebCamDialog_TimerBased dialog;
+    WebCamDialog dialog;
     if(dialog.exec() != QDialog::Accepted) {
         return QPixmap();
     }

@@ -14,14 +14,14 @@ HEADERS = \
     webcam_exporter.h \
     webcamconstants.h \
     webcamphotoprovider.h \
-    webcamdialog_timerbased.h \
-    opencvwidget.h
+    opencvwidget.h \
+    webcamdialog.h
 
 SOURCES += \
     webcamplugin.cpp \
     webcamphotoprovider.cpp \
-    webcamdialog_timerbased.cpp \
-    opencvwidget.cpp
+    opencvwidget.cpp \
+    webcamdialog.cpp
 
 FORMS += \
     webcamdialog.ui

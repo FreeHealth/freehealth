@@ -23,8 +23,8 @@
  *   Contributors:                                                         *
  *       Eric Maeker <eric.maeker@gmail.com                                *
  ***************************************************************************/
-#ifndef WEBCAMDIALOG_TIMERBASED_H
-#define WEBCAMDIALOG_TIMERBASED_H
+#ifndef WEBCAMDIALOG_H
+#define WEBCAMDIALOG_H
 
 #include <QDialog>
 #include <QLabel>
@@ -38,11 +38,11 @@ namespace Internal {
 class OpenCVWidget;
 }
 
-class WebCamDialog_TimerBased : public QDialog
+class WebCamDialog : public QDialog
 {
     Q_OBJECT
 public:
-    explicit WebCamDialog_TimerBased(QWidget *parent = 0);
+    explicit WebCamDialog(QWidget *parent = 0);
 
     QPixmap photo() const;
 
@@ -59,4 +59,4 @@ private:
 
 }  // namespace WebCam
 
-#endif // WEBCAMDIALOG_TIMERBASED_H
+#endif // WEBCAMDIALOG_H

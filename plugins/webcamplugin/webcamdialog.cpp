@@ -23,7 +23,7 @@
  *   Contributors:                                                         *
  *       Eric Maeker <eric.maeker@gmail.com                                *
  ***************************************************************************/
-#include "webcamdialog_timerbased.h"
+#include "webcamdialog.h"
 #include "webcamconstants.h"
 #include "opencvwidget.h"
 
@@ -44,11 +44,11 @@ using namespace Internal;
 
 static inline Core::ITheme *theme() { return Core::ICore::instance()->theme(); }
 
-WebCamDialog_TimerBased::WebCamDialog_TimerBased(QWidget *parent) :
+WebCamDialog::WebCamDialog(QWidget *parent) :
     QDialog(parent),
     m_openCVWidget(new Internal::OpenCVWidget(this))
 {
-    setObjectName("WebCamDialog_TimerBased");
+    setObjectName("WebCamDialog");
     setWindowIcon(theme()->icon(Core::Constants::ICONCAMERAVIDEO));
     setWindowTitle(tr("Take a picture from your webcam"));
     QVBoxLayout *layout = new QVBoxLayout;
@@ -73,12 +73,12 @@ WebCamDialog_TimerBased::WebCamDialog_TimerBased(QWidget *parent) :
     connect(box, SIGNAL(rejected()), this, SLOT(reject()));
 }
 
-QPixmap WebCamDialog_TimerBased::photo() const
+QPixmap WebCamDialog::photo() const
 {
     return QPixmap(*m_openCVWidget->pixmap());
 }
 
-void WebCamDialog_TimerBased::toggleFreezeMode()
+void WebCamDialog::toggleFreezeMode()
 {
     m_openCVWidget->toggleFreezeMode();
     if (m_openCVWidget->isFrozen()) {
@@ -90,7 +90,7 @@ void WebCamDialog_TimerBased::toggleFreezeMode()
     }
 }
 
-void WebCamDialog_TimerBased::changeEvent(QEvent *event)
+void WebCamDialog::changeEvent(QEvent *event)
 {
     if (event->type() == QEvent::LanguageChange) {
         if (m_openCVWidget->isFrozen())
