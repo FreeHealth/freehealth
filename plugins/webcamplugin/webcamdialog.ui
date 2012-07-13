@@ -15,9 +15,6 @@
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <item>
-    <layout class="QVBoxLayout" name="verticalLayout"/>
-   </item>
-   <item>
     <widget class="RenderWidget" name="renderWidget" native="true"/>
    </item>
   </layout>
