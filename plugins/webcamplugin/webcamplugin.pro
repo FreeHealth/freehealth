@@ -1,5 +1,10 @@
+!with-webcam {
+    error(Wrong configuration, please use CONFIG+=with-webcam to compile the WebCam plugin)
+}
+
 TARGET = Webcam
 TEMPLATE = lib
+message(Building WebCam plugin)
 
 BUILD_PATH_POSTFIXE = FreeMedForms
 PROVIDER = FreeMedForms
