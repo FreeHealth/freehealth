@@ -67,12 +67,12 @@ private:
     void restrictRubberBandConstraints();
     
 private:
-    QImage _image;
-    CvCapture *_camera;
+    QImage m_image;
+    CvCapture *m_camera;
     bool m_frozen;
-    int _timerId, _updateFreq;
+    int m_timerId, m_updateFreq;
     QRubberBand *m_rubberBand;
-    RubberBandMode rbMode;
+    RubberBandMode m_Mode;
     QPoint m_clickOrigin;
     QPoint m_rubberOrigin;
 };
