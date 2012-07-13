@@ -130,10 +130,11 @@ void OpenCVWidget::mousePressEvent(QMouseEvent *event)
     }
     
     // if there is no QRubberBand, create one
-    if (!m_rubberBand) {
-        m_rubberBand = new QRubberBand(QRubberBand::Rectangle, this);
-        m_Mode = Create;
+    if (m_rubberBand) {
+        delete m_rubberBand;
     }
+    m_rubberBand = new QRubberBand(QRubberBand::Rectangle, this);
+    m_Mode = Create;
 
     // remember the position where the user clicked and the QRubberBand was then
     m_clickOrigin = event->pos();
