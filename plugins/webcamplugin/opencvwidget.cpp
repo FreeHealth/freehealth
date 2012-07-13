@@ -29,42 +29,50 @@
 
 using namespace Webcam::Internal;
 
+/*!
+ * \brief Creates an QOpenCVWidget and initializes the camera capturing
+ * \param parent
+ */
 OpenCVWidget::OpenCVWidget(QWidget *parent) :
     QLabel(parent),
     m_frozen(false),
-    _updateFreq(defaultUpdateFrequency()),
+    m_updateFreq(defaultUpdateFrequency()),
     m_rubberBand(0),
-    rbMode(Create)
+    m_Mode(Create)
 {
-    _camera = cvCreateCameraCapture(CV_CAP_ANY);
-    Q_ASSERT(_camera);
+    m_camera = cvCreateCameraCapture(CV_CAP_ANY);
+    Q_ASSERT(m_camera); //TODO: don't assert here, do error handling while runnning
 
     // Log some info about webcam image
-    IplImage *image = cvQueryFrame(_camera);
+    IplImage *image = cvQueryFrame(m_camera);
     Q_ASSERT(image);
-    printf("Image depth=%i\n", image->depth);
-    printf("Image nChannels=%i\n", image->nChannels);
+
+//    qDebug() << "Image depth=%i" << image->depth;
+//    qDebug() <<"Image nChannels=%i" << image->nChannels;
 
     // Create the QImage
-    _image = QImage(100,100,QImage::Format_RGB32);
+    m_image = QImage(100,100,QImage::Format_RGB32);
     for (int x = 0; x < 100; x ++) {
         for (int y =0; y < 100; y++) {
-            _image.setPixel(x,y,qRgb(x, y, y));
+            m_image.setPixel(x,y,qRgb(x, y, y));
         }
     }
-    setPixmap(QPixmap::fromImage(_image));
-    _timerId = startTimer(_updateFreq);
+    setPixmap(QPixmap::fromImage(m_image));
+    m_timerId = startTimer(m_updateFreq);
 }
 
+/*!
+ * \brief Releases the openCV camera capturing.
+ */
 OpenCVWidget::~OpenCVWidget()
 {
-    cvReleaseCapture(&_camera);
+    cvReleaseCapture(&m_camera);
 }
 
 void OpenCVWidget::timerEvent(QTimerEvent *event)
 {
     Q_UNUSED(event);
-    IplImage *cvimage = cvQueryFrame(_camera);
+    IplImage *cvimage = cvQueryFrame(m_camera);
 
     int cvIndex, cvLineStart;
     // switch between bit depths
@@ -72,9 +80,9 @@ void OpenCVWidget::timerEvent(QTimerEvent *event)
     case IPL_DEPTH_8U:
         switch (cvimage->nChannels) {
         case 3:
-            if ( (cvimage->width != _image.width()) || (cvimage->height != _image.height()) ) {
+            if ( (cvimage->width != m_image.width()) || (cvimage->height != m_image.height()) ) {
                 QImage temp(cvimage->width, cvimage->height, QImage::Format_RGB32);
-                _image = temp;
+                m_image = temp;
             }
             cvIndex = 0; cvLineStart = 0;
             for (int y = 0; y < cvimage->height; y++) {
@@ -86,7 +94,7 @@ void OpenCVWidget::timerEvent(QTimerEvent *event)
                     green = cvimage->imageData[cvIndex+1];
                     blue = cvimage->imageData[cvIndex+0];
 
-                    _image.setPixel(x,y,qRgb(red, green, blue));
+                    m_image.setPixel(x,y,qRgb(red, green, blue));
                     cvIndex += 3;
                 }
                 cvLineStart += cvimage->widthStep;
@@ -101,9 +109,15 @@ void OpenCVWidget::timerEvent(QTimerEvent *event)
         printf("This type of IplImage is not implemented in QOpenCVWidget\n");
         break;
     }
-    setPixmap(QPixmap::fromImage(_image));
+    setPixmap(QPixmap::fromImage(m_image));
 }
 
+/*!
+ * \brief Takes care of mouse clicks in the capturing phase.
+ * 
+ * Starts the rubberband, checks where the user has clicked.
+ * \param event
+ */
 void OpenCVWidget::mousePressEvent(QMouseEvent *event)
 {
     // restrict to left mouse button and frozen state
@@ -119,7 +133,7 @@ void OpenCVWidget::mousePressEvent(QMouseEvent *event)
     if (!m_rubberBand) {
         m_rubberBand = new QRubberBand(QRubberBand::Rectangle, this);
         m_rubberBand->setWindowFlags(Qt::ToolTip);
-        rbMode = Create;
+        m_Mode = Create;
     }
 
     // remember the position where the user clicked and the QRubberBand was then
@@ -128,21 +142,25 @@ void OpenCVWidget::mousePressEvent(QMouseEvent *event)
 
     // determine if the user has clicked *into* the QRubberBand boundaries
     if (m_rubberBand->rect().translated(m_rubberBand->pos()).contains(m_clickOrigin, true)) {
-        rbMode = Move;
+        m_Mode = Move;
     } else {
-        rbMode = Create;
+        m_Mode = Create;
         // create an empty frame and show it
         m_rubberBand->setGeometry(QRect(m_clickOrigin, QSize()));
         m_rubberBand->show();
     }
 }
 
+/*!
+ * \brief takes care of the mouse movement when creating or dragging the rubberband frame.
+ * \param event 
+ */
 void OpenCVWidget::mouseMoveEvent(QMouseEvent *event)
 {
     if (!m_frozen || !m_rubberBand)
         return;
 
-    switch (rbMode) {
+    switch (m_Mode) {
     
     case Create: {
         // calculate the rectangle
@@ -151,6 +169,7 @@ void OpenCVWidget::mouseMoveEvent(QMouseEvent *event)
         
         // get rid of negative coordinates
         m_rubberBand->setGeometry(rect.normalized());
+        restrictRubberBandConstraints();
         break;
     }
 
@@ -167,7 +186,10 @@ void OpenCVWidget::mouseMoveEvent(QMouseEvent *event)
     }
 }
 
-
+/*!
+ * \brief checks if there is a valid rubberband and fires the imageReady(true) signal then.
+ * \param event
+ */
 void OpenCVWidget::mouseReleaseEvent(QMouseEvent *event)
 {
     Q_UNUSED(event);
@@ -182,9 +204,13 @@ void OpenCVWidget::mouseReleaseEvent(QMouseEvent *event)
     }
 }
 
+/*!
+ * \brief Catches the mouse wheel events and resizes the rubberband.
+ * \param event QWheelEvent - method delta() is used to determind if mouse wheel is scrolled up/down
+ */
 void OpenCVWidget::wheelEvent(QWheelEvent *event)
 {
-    //only working when frozen and with active rubberband!
+    // only working when frozen and with active rubberband!
     if (!m_frozen || !m_rubberBand)
         return;
 
@@ -203,47 +229,87 @@ void OpenCVWidget::wheelEvent(QWheelEvent *event)
     }
 }
 
+/*!
+ * \brief Crops the RubberBand if not inside the parent widget.
+ */
 void OpenCVWidget::restrictRubberBandConstraints()
 {
     // restrict new RubberBand to constraints of parent
+    
+    // is too big
+    QRect rect = m_rubberBand->geometry().normalized();
+    if (rect.height() > this->rect().height()) {
+        rect.setHeight(this->rect().height()-2);
+        rect.setWidth(this->rect().height()-2);
+    }
+    // check if possibly width < height, we have to crop again then
+    // and take the width as smallest distance
+    if (    this->rect().width() < this->rect().height() && 
+            rect.width() > this->rect().width()) 
+    {
+        rect.setHeight(this->rect().width()-2);
+        rect.setWidth(this->rect().width()-2);
+    }        
+    
+    m_rubberBand->setGeometry(rect);    
+    
+    // is too far left
     if (m_rubberBand->x() < 0)
-        m_rubberBand->move(0, m_rubberBand->y());
+        m_rubberBand->move(1, m_rubberBand->y()-1);
+    // is too far right
     if (m_rubberBand->geometry().right() > this->rect().right())
         m_rubberBand->move(this->rect().right() - m_rubberBand->width(), m_rubberBand->y());
 
+    // ist too far to the top
     if (m_rubberBand->y() < 0)
-        m_rubberBand->move(m_rubberBand->x(), 0);
+        m_rubberBand->move(m_rubberBand->x()-1, 1);
+    // is too far to the bottom
     if (m_rubberBand->geometry().bottom() > this->rect().bottom())
         m_rubberBand->move(m_rubberBand->x(), this->rect().bottom() - m_rubberBand->height());
     
+
 }
 
+/*!
+ * \brief When called, stops the camera and freezes the picture. In the next call it continues 
+ * the camera again.
+ */
 void OpenCVWidget::toggleFreezeMode()
 {
     if (m_frozen) {
         // Unfreeze
         if (m_rubberBand)
             m_rubberBand->hide();
-        _timerId = startTimer(_updateFreq);  // 0.1-second timer
+        m_timerId = startTimer(m_updateFreq);  // 0.1-second timer
     } else {
         // Freeze
-        if (_timerId > 0)
-            killTimer(_timerId);
+        if (m_timerId > 0)
+            killTimer(m_timerId);
     }
     m_frozen = !m_frozen;
-//    Q_EMIT frozen(m_frozen);
+    Q_EMIT frozen(m_frozen);
 }
 
 void OpenCVWidget::setImageUpdateFrequency(const int ms)
 {
     Q_ASSERT(ms > 0);
-    if (_timerId > 0)
-        killTimer(_timerId);
-    _updateFreq = ms;
-    startTimer(_updateFreq);
+    if (m_timerId > 0)
+        killTimer(m_timerId);
+    m_updateFreq = ms;
+    startTimer(m_updateFreq);
 }
 
 int OpenCVWidget::defaultUpdateFrequency() const
 {
     return 50;
+}
+
+/*!
+ * \brief returns a QRect with the coordinates of the current selection
+ */
+QRect OpenCVWidget::frame() const
+{
+    if (!m_frozen || !m_rubberBand || !m_rubberBand->geometry().isValid())
+        return QRect();
+    return m_rubberBand->geometry();
 }
