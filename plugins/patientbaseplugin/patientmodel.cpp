@@ -203,7 +203,7 @@ public:
         } else {
             req = patientBase()->prepareUpdateQuery(Constants::Table_PATIENT_PHOTO, Constants::PHOTO_BLOB, where);
             query.prepare(req);
-            query.bindValue(Constants::PHOTO_BLOB, ba);
+            query.bindValue(0, ba);
         }
 
         query.exec();
