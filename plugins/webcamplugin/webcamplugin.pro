@@ -14,26 +14,11 @@ HEADERS = \
    webcam_exporter.h \
    webcamconstants.h \
    webcamphotoprovider.h \
-   webcamdialog.h \
-   trackcontroller.h \
-   processingthread.h \
-   imagebuffer.h \
-   headstate.h \
-   filter.h \
-   capturethread.h \
-   renderwidget.h \
     webcamdialog_timerbased.h
 
 SOURCES += \
    webcamplugin.cpp \
    webcamphotoprovider.cpp \
-   webcamdialog.cpp \
-   trackcontroller.cpp \
-   processingthread.cpp \
-   capturethread.cpp \
-   filter.cpp \
-   renderwidget.cpp \
-   imagebuffer.cpp \
     webcamdialog_timerbased.cpp
 
 FORMS += \
