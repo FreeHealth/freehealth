@@ -132,7 +132,6 @@ void OpenCVWidget::mousePressEvent(QMouseEvent *event)
     // if there is no QRubberBand, create one
     if (!m_rubberBand) {
         m_rubberBand = new QRubberBand(QRubberBand::Rectangle, this);
-        m_rubberBand->setWindowFlags(Qt::ToolTip);
         m_Mode = Create;
     }
 
