@@ -22,6 +22,9 @@
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
     </widget>
    </item>
    <item>
@@ -29,7 +32,7 @@
      <item>
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>TextLabel</string>
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Click on &lt;span style=&quot; font-weight:600;&quot;&gt;Freeze&lt;/span&gt; (or press space).&lt;br/&gt;Draw a frame around the part of the photo that you want.&lt;br/&gt;You can resize the frame with the &lt;span style=&quot; font-weight:600;&quot;&gt;mouse wheel&lt;/span&gt;.&lt;br/&gt;Finally click on &lt;span style=&quot; font-weight:600;&quot;&gt;Ok&lt;/span&gt; to take that photo for the patient.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
       </widget>
      </item>

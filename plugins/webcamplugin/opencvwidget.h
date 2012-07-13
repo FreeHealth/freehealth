@@ -13,6 +13,7 @@ namespace Internal {
 
 class OpenCVWidget : public QLabel
 {
+    Q_OBJECT
 public:
     enum RubberBandMode {Create, Move};
 
@@ -27,6 +28,7 @@ public:
 
 Q_SIGNALS:
     void frozen(bool);
+    void imageReady(bool);
     
 private:
     void timerEvent(QTimerEvent *event);

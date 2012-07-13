@@ -146,9 +146,15 @@ void OpenCVWidget::mouseMoveEvent(QMouseEvent *event)
 void OpenCVWidget::mouseReleaseEvent(QMouseEvent *event)
 {
     Q_UNUSED(event);
-    if (!m_frozen)
+    if (!m_frozen | !m_rubberBand) {
         return;
-    
+    }
+    if (m_rubberBand->rect().isValid()) {
+        // we have a valid rubberband square
+        Q_EMIT imageReady(true);
+    } else {
+        Q_EMIT imageReady(false);
+    }
 }
 
 void OpenCVWidget::wheelEvent(QWheelEvent *event)
@@ -200,7 +206,7 @@ void OpenCVWidget::toggleFreezeMode()
             killTimer(_timerId);
     }
     m_frozen = !m_frozen;
-//    Q_EMIT (frozen(m_frozen));
+//    Q_EMIT frozen(m_frozen);
 }
 
 void OpenCVWidget::setImageUpdateFrequency(const int ms)

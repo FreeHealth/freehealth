@@ -56,20 +56,22 @@ WebcamDialog::WebcamDialog(QWidget *parent) :
     setWindowIcon(theme()->icon(Core::Constants::ICONCAMERAVIDEO));
     setWindowTitle(tr("Take a picture from your webcam"));
     
-//    ui->openCVWidget = new Internal::OpenCVWidget(this);
-    
-    ui->openCVWidget->setToolTip(tr("<ul>"
-                                  "<li>Click on 'Freeze'</li>"
-                                  "<li>draw a frame with the mouse</li>"
-                                  "<li>use the mouse wheel to set the size of the frame</li></ul>"));
-    
+    // Freeze button
     m_freezeButton = ui->buttonBox->addButton(tr("Freeze"), QDialogButtonBox::ActionRole);
     m_freezeButton->setIcon(theme()->icon(Core::Constants::ICONTAKESCREENSHOT));
+    connect(m_freezeButton, SIGNAL(clicked()), this, SLOT(toggleFreezeMode()));    
     
-    ui->buttonBox->button(QDialogButtonBox::Cancel)->setIcon(theme()->icon(Core::Constants::ICONQUIT));
-    ui->buttonBox->button(QDialogButtonBox::Ok)->setIcon(theme()->icon(Core::Constants::ICONOK));
+    QPushButton *button;
+
+    // Cancel button
+    button = ui->buttonBox->button(QDialogButtonBox::Cancel);
+    button->setIcon(theme()->icon(Core::Constants::ICONQUIT));
     
-    connect(m_freezeButton, SIGNAL(clicked()), this, SLOT(toggleFreezeMode()));
+    // Ok button
+    button = ui->buttonBox->button(QDialogButtonBox::Ok);
+    button->setIcon(theme()->icon(Core::Constants::ICONOK));
+    button->setDisabled(true);
+    connect(ui->openCVWidget, SIGNAL(imageReady(bool)), button, SLOT(setEnabled(bool)));            
 }
 
 WebcamDialog::~WebcamDialog()
