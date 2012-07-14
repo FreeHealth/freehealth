@@ -126,6 +126,7 @@ private:
 class ALERT_EXPORT AlertScript
 {
 public:
+    // THE ORDER OF THIS ENUM MUST NOT CHANGE
     enum ScriptType {
         CheckValidityOfAlert = 0,
         CyclingStartDate,
@@ -229,6 +230,7 @@ private:
 class ALERT_EXPORT AlertRelation
 {
 public:
+    // THE ORDER OF THIS ENUM MUST NOT CHANGE
     enum RelatedTo {
         RelatedToPatient = 0,
         RelatedToAllPatients,
@@ -261,6 +263,8 @@ public:
 
     virtual QString toXml() const;
     static AlertRelation fromDomElement(const QDomElement &element);
+    static QString relationTypeToXml(AlertRelation::RelatedTo rel);
+    static RelatedTo relationTypeFromXml(const QString &xmlValue);
 
 private:
     int _id;
@@ -283,8 +287,8 @@ protected:
 
 public:
     enum ViewType {
-        DynamicAlert = 0,
-        StaticAlert
+        BlockingAlert = 0,
+        NonBlockingAlert
     };
     enum ContentType {
         ApplicationNotification = 0,
@@ -307,6 +311,9 @@ public:
 
     virtual QString uuid() const;
     virtual void setUuid(const QString &uid) const;
+
+    virtual QString packUid() const;
+    virtual void setPackUid(const QString &uid) const;
 
     virtual QString cryptedPassword() const;
     virtual void setCryptedPassword(const QString &pass);
@@ -385,7 +392,7 @@ public:
 
     bool remindLater();
     bool validateAlertWithCurrentUserAndConfirmationDialog();
-    bool validateAlert(const QString &validatorUid, bool override, const QString overrideComment, const QDateTime &dateOfValidation);
+    bool validateAlert(const QString &validatorUid, bool override, const QString &overrideComment, const QDateTime &dateOfValidation);
     bool isUserValidated() const;
     virtual void clearValidations();
     virtual AlertValidation &validation(int id) const;

@@ -66,6 +66,7 @@ const char* const TOKEN_1                            = QT_TRANSLATE_NOOP("tkCons
 const char* const EDIT_TOKEN                         = QT_TRANSLATE_NOOP("tkConstants", "Edit token");
 const char* const VALIDATE                           = QT_TRANSLATE_NOOP("tkConstants", "Validate");
 const char* const OVERRIDE                           = QT_TRANSLATE_NOOP("tkConstants", "Override");
+const char* const ADD_ALERT                          = QT_TRANSLATE_NOOP("tkConstants", "Add alert");
 const char* const EDIT_ALERT                         = QT_TRANSLATE_NOOP("tkConstants", "Edit alert");
 const char* const REMIND_LATER                       = QT_TRANSLATE_NOOP("tkConstants", "Remind later");
 const char* const _1_ALERTS                           = QT_TRANSLATE_NOOP("tkConstants", "%1 alerts");
@@ -78,6 +79,8 @@ const char* const EACH                          = QT_TRANSLATE_NOOP("tkConstants
 const char* const AND                           = QT_TRANSLATE_NOOP("tkConstants", "and");
 const char* const ALERT                         = QT_TRANSLATE_NOOP("tkConstants", "Alert");
 const char* const DYNAMIC_ALERT                 = QT_TRANSLATE_NOOP("tkConstants", "Dynamic alert");
+const char* const BLOCKING_ALERT                = QT_TRANSLATE_NOOP("tkConstants", "Blocking alert");
+const char* const NON_BLOCKING_ALERT                = QT_TRANSLATE_NOOP("tkConstants", "Non-blocking alert");
 
 // The "related to"
 const char* const RELATED_TO                    = QT_TRANSLATE_NOOP("tkConstants", "related to");

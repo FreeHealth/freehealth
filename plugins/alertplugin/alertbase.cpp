@@ -39,6 +39,7 @@
 #include "alertbase.h"
 #include "alertitem.h"
 #include "constants.h"
+#include "alertpackdescription.h"
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -60,7 +61,7 @@
 #include <QHash>
 #include <QSqlQuery>
 
-enum { WarnGetAlertQuerySQLCommand = true };
+enum { WarnGetAlertQuerySQLCommand = false, WarnMemberNames = false };
 
 using namespace Alert;
 using namespace Internal;
@@ -273,10 +274,12 @@ AlertBase::AlertBase(QObject *parent) :
     addTable(Table_ALERT_SCRIPTS, "SCR");
     addTable(Table_ALERT_TIMING, "TIM");
     addTable(Table_ALERT_VALIDATION, "VAL");
+    addTable(Table_ALERT_PACKS, "PACKS");
     addTable(Table_ALERT_VERSION, "VER");
 
     addField(Table_ALERT, ALERT_ID, "A_ID", FieldIsUniquePrimaryKey);
     addField(Table_ALERT, ALERT_UID, "A_UID", FieldIsUUID);
+    addField(Table_ALERT, ALERT_PACKUID, "A_PUID", FieldIsLongText);
     addField(Table_ALERT, ALERT_REL_ID, "R_ID", FieldIsUUID);
     addField(Table_ALERT, ALERT_CATEGORY_UID, "C_UID", FieldIsUUID);
     addField(Table_ALERT, ALERT_SID, "SCR_ID", FieldIsInteger);
@@ -292,19 +295,20 @@ AlertBase::AlertBase(QObject *parent) :
     addField(Table_ALERT, ALERT_OVERRIDEREQUIREUSERCOMMENT, "VRUC", FieldIsInteger);
     addField(Table_ALERT, ALERT_MUSTBEREAD, "MBR", FieldIsInteger);
 
-    addField(Table_ALERT, ALERT_LABELID, "LBL_LID", FieldIsInteger);
-    addField(Table_ALERT, ALERT_CATEGORYLID, "CAT_LID", FieldIsInteger);
-    addField(Table_ALERT, ALERT_DESCRIPTION_LABELID, "DES_LID", FieldIsInteger);
-    addField(Table_ALERT, ALERT_COMMENT_LABELID, "COM_LID", FieldIsInteger);
+    addField(Table_ALERT, ALERT_LABEL_LID, "LBL_LID", FieldIsInteger);
+    addField(Table_ALERT, ALERT_CATEGORY_LID, "CAT_LID", FieldIsInteger);
+    addField(Table_ALERT, ALERT_DESCRIPTION_LID, "DES_LID", FieldIsInteger);
+    addField(Table_ALERT, ALERT_COMMENT_LID, "COM_LID", FieldIsInteger);
     addField(Table_ALERT, ALERT_CREATION_DATE, "C_DATE", FieldIsDate);
     addField(Table_ALERT, ALERT_LAST_UPDATE_DATE, "U_DATE", FieldIsDate);
     addField(Table_ALERT, ALERT_THEMED_ICON, "THM_ICON", FieldIsDate);
     addField(Table_ALERT, ALERT_THEME_CSS, "CSS", FieldIsLongText);
     addField(Table_ALERT, ALERT_CRYPTED_PASSWORD, "PASS", FieldIsShortText);
-    addField(Table_ALERT, ALERT_EXTRA_XML, "EXTRA", FieldIsLongText);
+    addField(Table_ALERT, ALERT_EXTRA_XML, "EXTRA", FieldIsBlob);
 
     addIndex(Table_ALERT, ALERT_ID);
     addIndex(Table_ALERT, ALERT_UID);
+    addIndex(Table_ALERT, ALERT_PACKUID);
     addIndex(Table_ALERT, ALERT_REL_ID);
     addIndex(Table_ALERT, ALERT_CATEGORY_UID);
 
@@ -363,6 +367,26 @@ AlertBase::AlertBase(QObject *parent) :
     addIndex(Table_ALERT_VALIDATION, ALERT_VALIDATION_VAL_ID);
     addIndex(Table_ALERT_VALIDATION, ALERT_VALIDATION_VALIDATOR_UUID);
     addIndex(Table_ALERT_VALIDATION, ALERT_VALIDATION_VALIDATED_UUID);
+
+    // Packs
+    addField(Table_ALERT_PACKS, ALERT_PACKS_ID, "ID", FieldIsUniquePrimaryKey);
+    addField(Table_ALERT_PACKS, ALERT_PACKS_UID, "UID", FieldIsLongText);
+    addField(Table_ALERT_PACKS, ALERT_PACKS_ISVALID, "ISV", FieldIsBoolean);
+    addField(Table_ALERT_PACKS, ALERT_PACKS_IN_USE, "INU", FieldIsBoolean);
+    addField(Table_ALERT_PACKS, ALERT_PACKS_LABEL_LID, "LBL_LID", FieldIsInteger);
+    addField(Table_ALERT_PACKS, ALERT_PACKS_CATEGORY_LID, "CAT_LID", FieldIsInteger);
+    addField(Table_ALERT_PACKS, ALERT_PACKS_DESCRIPTION_LID, "DESC_LID", FieldIsInteger);
+    addField(Table_ALERT_PACKS, ALERT_PACKS_AUTHORS, "ATH", FieldIsShortText);
+    addField(Table_ALERT_PACKS, ALERT_PACKS_VENDOR, "VEN", FieldIsShortText);
+    addField(Table_ALERT_PACKS, ALERT_PACKS_URL, "URL", FieldIsShortText);
+    addField(Table_ALERT_PACKS, ALERT_PACKS_THEMEDICON, "ICO", FieldIsShortText);
+    addField(Table_ALERT_PACKS, ALERT_PACKS_VERSION, "VER", FieldIsShortText);
+    addField(Table_ALERT_PACKS, ALERT_PACKS_FMFVERSION, "FMFV", FieldIsShortText);
+    addField(Table_ALERT_PACKS, ALERT_PACKS_CREATEDATE, "CDT", FieldIsDateTime);
+    addField(Table_ALERT_PACKS, ALERT_PACKS_LASTUPDATE, "UDT", FieldIsDateTime);
+    addField(Table_ALERT_PACKS, ALERT_PACKS_XTRAXML, "XTR", FieldIsBlob);
+
+    addIndex(Table_ALERT_PACKS, ALERT_PACKS_UID);
 
     addField(Table_ALERT_VERSION, VERSION_TEXT, "TXT", FieldIsShortText);
 
@@ -529,7 +553,7 @@ AlertItem AlertBase::createVirtualItem()
         item.setComment(r.randomWords(r.randomInt(2, 10)), l);
     }
 
-    item.setViewType(AlertItem::ViewType(r.randomInt(0, AlertItem::StaticAlert)));
+    item.setViewType(AlertItem::ViewType(r.randomInt(0, AlertItem::NonBlockingAlert)));
     item.setContentType(AlertItem::ContentType(r.randomInt(0, AlertItem::UserNotification)));
     item.setPriority(AlertItem::Priority(r.randomInt(0, AlertItem::Low)));
     item.setCreationDate(r.randomDateTime(QDateTime::currentDateTime()));
@@ -573,6 +597,10 @@ bool AlertBase::saveAlertItem(AlertItem &item)
 {
     if (!connectDatabase(Constants::DB_NAME, __LINE__))
         return false;
+
+    if (WarnMemberNames)
+        qWarning() << "AlertBase::saveAlertItem";
+
     // update or save ?
     if (!item.db(ItemId).isValid()) {
         // try to catch the id using the uuid
@@ -618,6 +646,7 @@ bool AlertBase::saveAlertItem(AlertItem &item)
     query.prepare(req);
     query.bindValue(Constants::ALERT_ID, QVariant());
     query.bindValue(Constants::ALERT_UID, item.uuid());
+    query.bindValue(Constants::ALERT_PACKUID, item.packUid());
     query.bindValue(Constants::ALERT_CATEGORY_UID, item.db(CategoryUid));
     query.bindValue(Constants::ALERT_REL_ID, item.db(RelatedId));
     query.bindValue(Constants::ALERT_SID, item.db(ScriptId));
@@ -631,10 +660,10 @@ bool AlertBase::saveAlertItem(AlertItem &item)
     query.bindValue(Constants::ALERT_PRIORITY, item.priority());
     query.bindValue(Constants::ALERT_OVERRIDEREQUIREUSERCOMMENT, int(item.isOverrideRequiresUserComment()));
     query.bindValue(Constants::ALERT_MUSTBEREAD, int(item.mustBeRead()));
-    query.bindValue(Constants::ALERT_LABELID, item.db(LabelLID));
-    query.bindValue(Constants::ALERT_CATEGORYLID, item.db(CategoryLID));
-    query.bindValue(Constants::ALERT_DESCRIPTION_LABELID, item.db(DescrLID));
-    query.bindValue(Constants::ALERT_COMMENT_LABELID, item.db(CommentLID));
+    query.bindValue(Constants::ALERT_LABEL_LID, item.db(LabelLID));
+    query.bindValue(Constants::ALERT_CATEGORY_LID, item.db(CategoryLID));
+    query.bindValue(Constants::ALERT_DESCRIPTION_LID, item.db(DescrLID));
+    query.bindValue(Constants::ALERT_COMMENT_LID, item.db(CommentLID));
     query.bindValue(Constants::ALERT_CREATION_DATE, item.creationDate());
     query.bindValue(Constants::ALERT_LAST_UPDATE_DATE, item.lastUpdate());
     query.bindValue(Constants::ALERT_THEMED_ICON, item.themedIcon());
@@ -660,6 +689,9 @@ bool AlertBase::updateAlertItem(AlertItem &item)
         return false;
     if (!item.db(ItemId).isValid())
         return false;
+
+    if (WarnMemberNames)
+        qWarning() << "AlertBase::updateAlertItem";
 
     database().transaction();
 
@@ -690,6 +722,7 @@ bool AlertBase::updateAlertItem(AlertItem &item)
     QList<int> fields;
     fields
             << Constants::ALERT_UID
+            << Constants::ALERT_PACKUID
             << Constants::ALERT_CATEGORY_UID
             << Constants::ALERT_REL_ID
             << Constants::ALERT_SID
@@ -703,10 +736,10 @@ bool AlertBase::updateAlertItem(AlertItem &item)
             << Constants::ALERT_PRIORITY
             << Constants::ALERT_OVERRIDEREQUIREUSERCOMMENT
             << Constants::ALERT_MUSTBEREAD
-            << Constants::ALERT_LABELID
-            << Constants::ALERT_CATEGORYLID
-            << Constants::ALERT_DESCRIPTION_LABELID
-            << Constants::ALERT_COMMENT_LABELID
+            << Constants::ALERT_LABEL_LID
+            << Constants::ALERT_CATEGORY_LID
+            << Constants::ALERT_DESCRIPTION_LID
+            << Constants::ALERT_COMMENT_LID
             << Constants::ALERT_CREATION_DATE
             << Constants::ALERT_LAST_UPDATE_DATE
             << Constants::ALERT_THEMED_ICON
@@ -721,6 +754,7 @@ bool AlertBase::updateAlertItem(AlertItem &item)
     query.prepare(req);
     int i = 0;
     query.bindValue(i, item.uuid());
+    query.bindValue(++i, item.packUid());
     query.bindValue(++i, item.db(CategoryUid));
     query.bindValue(++i, item.db(RelatedId));
     query.bindValue(++i, item.db(ScriptId));
@@ -761,6 +795,10 @@ bool AlertBase::saveItemRelations(AlertItem &item)
     // we are inside a transaction opened by saveAlertItem
     if (!connectDatabase(Constants::DB_NAME, __LINE__))
         return false;
+
+    if (WarnMemberNames)
+        qWarning() << "AlertBase::saveItemRelations";
+
     // get the related REL_ID
     if (item.relations().count()==0)
         return true;
@@ -820,6 +858,10 @@ bool AlertBase::saveItemScripts(AlertItem &item)
     // we are inside a transaction opened by saveAlertItem
     if (!connectDatabase(Constants::DB_NAME, __LINE__))
         return false;
+
+    if (WarnMemberNames)
+        qWarning() << "AlertBase::saveItemScripts";
+
     if (item.scripts().count()==0)
         return true;
     // get the script script_id
@@ -884,6 +926,10 @@ bool AlertBase::saveItemTimings(AlertItem &item)
     // we are inside a transaction opened by saveAlertItem
     if (!connectDatabase(Constants::DB_NAME, __LINE__))
         return false;
+
+    if (WarnMemberNames)
+        qWarning() << "AlertBase::saveItemTimings";
+
     if (item.timings().count()==0)
         return true;
     // get the timind timing_id
@@ -962,6 +1008,10 @@ bool AlertBase::saveItemValidations(AlertItem &item)
     // we are inside a transaction opened by saveAlertItem
     if (!connectDatabase(Constants::DB_NAME, __LINE__))
         return false;
+
+    if (WarnMemberNames)
+        qWarning() << "AlertBase::saveItemValidations";
+
     if (item.validations().count()==0)
         return true;
     // get the validations val_id
@@ -1030,6 +1080,10 @@ bool AlertBase::saveItemLabels(AlertItem &item)
     // we are inside a transaction opened by saveAlertItem
     if (!connectDatabase(Constants::DB_NAME, __LINE__))
         return false;
+
+    if (WarnMemberNames)
+        qWarning() << "AlertBase::saveItemLabels";
+
     QSqlQuery query(database());
     QList<int> lids;
     QList<int> vals;
@@ -1312,11 +1366,12 @@ QVector<AlertItem> AlertBase::getAlertItems(const AlertBaseQuery &query)
             item.setDb(ScriptId, query.value(Constants::ALERT_SID));
             item.setDb(ValidationId, query.value(Constants::ALERT_VAL_ID));
             item.setDb(TimingId, query.value(Constants::ALERT_TIM_ID));
-            item.setDb(LabelLID, query.value(Constants::ALERT_LABELID));
-            item.setDb(CategoryLID, query.value(Constants::ALERT_CATEGORYLID));
-            item.setDb(DescrLID, query.value(Constants::ALERT_DESCRIPTION_LABELID));
-            item.setDb(CommentLID, query.value(Constants::ALERT_COMMENT_LABELID));
+            item.setDb(LabelLID, query.value(Constants::ALERT_LABEL_LID));
+            item.setDb(CategoryLID, query.value(Constants::ALERT_CATEGORY_LID));
+            item.setDb(DescrLID, query.value(Constants::ALERT_DESCRIPTION_LID));
+            item.setDb(CommentLID, query.value(Constants::ALERT_COMMENT_LID));
             item.setUuid(query.value(Constants::ALERT_UID).toString());
+            item.setPackUid(query.value(Constants::ALERT_PACKUID).toString());
             item.setValidity(query.value(Constants::ALERT_ISVALID).toBool());
             item.setRemindLaterAllowed(query.value(Constants::ALERT_ISREMINDABLE).toBool());
             item.setCryptedPassword(query.value(Constants::ALERT_CRYPTED_PASSWORD).toString());
@@ -1385,10 +1440,10 @@ AlertItem AlertBase::getAlertItemFromUuid(const QString &uuid)
             item.setDb(ScriptId, query.value(Constants::ALERT_SID));
             item.setDb(ValidationId, query.value(Constants::ALERT_VAL_ID));
             item.setDb(TimingId, query.value(Constants::ALERT_TIM_ID));
-            item.setDb(LabelLID, query.value(Constants::ALERT_LABELID));
-            item.setDb(CategoryLID, query.value(Constants::ALERT_CATEGORYLID));
-            item.setDb(DescrLID, query.value(Constants::ALERT_DESCRIPTION_LABELID));
-            item.setDb(CommentLID, query.value(Constants::ALERT_COMMENT_LABELID));
+            item.setDb(LabelLID, query.value(Constants::ALERT_LABEL_LID));
+            item.setDb(CategoryLID, query.value(Constants::ALERT_CATEGORY_LID));
+            item.setDb(DescrLID, query.value(Constants::ALERT_DESCRIPTION_LID));
+            item.setDb(CommentLID, query.value(Constants::ALERT_COMMENT_LID));
             item.setValidity(query.value(Constants::ALERT_ISVALID).toBool());
             item.setRemindLaterAllowed(query.value(Constants::ALERT_ISREMINDABLE).toBool());
             item.setCryptedPassword(query.value(Constants::ALERT_CRYPTED_PASSWORD).toString());
@@ -1550,6 +1605,7 @@ bool AlertBase::getItemValidations(AlertItem &item)
     }
     return true;
 }
+
 bool AlertBase::getItemLabels(AlertItem &item)
 {
     // we are inside a transaction opened by getAlertItem
@@ -1560,7 +1616,7 @@ bool AlertBase::getItemLabels(AlertItem &item)
     Utils::Field cond(Table_ALERT, ALERT_ID, QString("=%1").arg(item.db(ItemId).toString()));
 
     // get label
-    Utils::Join join(Table_ALERT_LABELS, ALERT_LABELS_LABELID, Table_ALERT, ALERT_LABELID);
+    Utils::Join join(Table_ALERT_LABELS, ALERT_LABELS_LABELID, Table_ALERT, ALERT_LABEL_LID);
     if (query.exec(select(Table_ALERT_LABELS, join, cond))) {
         while (query.next()) {
             item.setLabel(query.value(ALERT_LABELS_VALUE).toString(), query.value(ALERT_LABELS_LANG).toString());
@@ -1572,7 +1628,7 @@ bool AlertBase::getItemLabels(AlertItem &item)
     query.finish();
 
     // get category
-    join = Utils::Join(Table_ALERT_LABELS, ALERT_LABELS_LABELID, Table_ALERT, ALERT_CATEGORYLID);
+    join = Utils::Join(Table_ALERT_LABELS, ALERT_LABELS_LABELID, Table_ALERT, ALERT_CATEGORY_LID);
     if (query.exec(select(Table_ALERT_LABELS, join, cond))) {
         while (query.next()) {
             item.setCategory(query.value(ALERT_LABELS_VALUE).toString(), query.value(ALERT_LABELS_LANG).toString());
@@ -1584,7 +1640,7 @@ bool AlertBase::getItemLabels(AlertItem &item)
     query.finish();
 
     // get description
-    join = Utils::Join(Table_ALERT_LABELS, ALERT_LABELS_LABELID, Table_ALERT, ALERT_DESCRIPTION_LABELID);
+    join = Utils::Join(Table_ALERT_LABELS, ALERT_LABELS_LABELID, Table_ALERT, ALERT_DESCRIPTION_LID);
     if (query.exec(select(Table_ALERT_LABELS, join, cond))) {
         while (query.next()) {
             item.setDescription(query.value(ALERT_LABELS_VALUE).toString(), query.value(ALERT_LABELS_LANG).toString());
@@ -1596,7 +1652,7 @@ bool AlertBase::getItemLabels(AlertItem &item)
     query.finish();
 
     // get comment
-    join = Utils::Join(Table_ALERT_LABELS, ALERT_LABELS_LABELID, Table_ALERT, ALERT_COMMENT_LABELID);
+    join = Utils::Join(Table_ALERT_LABELS, ALERT_LABELS_LABELID, Table_ALERT, ALERT_COMMENT_LID);
     if (query.exec(select(Table_ALERT_LABELS, join, cond))) {
         while (query.next()) {
             item.setComment(query.value(ALERT_LABELS_VALUE).toString(), query.value(ALERT_LABELS_LANG).toString());
@@ -1606,6 +1662,208 @@ bool AlertBase::getItemLabels(AlertItem &item)
         return false;
     }
     query.finish();
+    return true;
+}
+
+bool AlertBase::updateAlertPackDescription(AlertPackDescription &descr, const int id)
+{
+    // We are inside a transaction created by saveAlertPackDescription()
+    QList<int> fields;
+    fields
+            << Constants::ALERT_PACKS_UID
+            << Constants::ALERT_PACKS_ISVALID
+            << Constants::ALERT_PACKS_IN_USE
+            << Constants::ALERT_PACKS_LABEL_LID
+            << Constants::ALERT_PACKS_CATEGORY_LID
+            << Constants::ALERT_PACKS_DESCRIPTION_LID
+            << Constants::ALERT_PACKS_AUTHORS
+            << Constants::ALERT_PACKS_VENDOR
+            << Constants::ALERT_PACKS_URL
+            << Constants::ALERT_PACKS_THEMEDICON
+            << Constants::ALERT_PACKS_VERSION
+            << Constants::ALERT_PACKS_FMFVERSION
+            << Constants::ALERT_PACKS_CREATEDATE
+            << Constants::ALERT_PACKS_LASTUPDATE
+            << Constants::ALERT_PACKS_XTRAXML
+               ;
+    QHash<int, QString> where;
+    where.insert(Constants::ALERT_PACKS_ID, QString("=%1").arg(id));
+    QString req = prepareUpdateQuery(Constants::Table_ALERT_PACKS, fields, where);
+    QSqlQuery query(database());
+    query.prepare(req);
+    int i = 0;
+    query.bindValue(i, descr.uid());
+    query.bindValue(++i, 1); // TODO: descr.isValid());
+    query.bindValue(++i, (int)descr.inUse());
+    query.bindValue(++i, descr.dbData(LabelLID).toInt());
+    query.bindValue(++i, descr.dbData(CategoryLID).toInt());
+    query.bindValue(++i, descr.dbData(DescrLID).toInt());
+    query.bindValue(++i, descr.data(AlertPackDescription::Author));
+    query.bindValue(++i, descr.data(AlertPackDescription::Vendor));
+    query.bindValue(++i, descr.data(AlertPackDescription::URL));
+    query.bindValue(++i, descr.data(AlertPackDescription::GeneralIcon));
+    query.bindValue(++i, descr.data(AlertPackDescription::Version));
+    query.bindValue(++i, descr.data(AlertPackDescription::FreeMedFormsCompatVersion));
+    query.bindValue(++i, descr.data(AlertPackDescription::CreationDate));
+    query.bindValue(++i, descr.data(AlertPackDescription::LastModificationDate));
+    query.bindValue(++i, QString()); //TODO:: descr.extraXml());
+    if (query.exec()) {
+//        descr.setModified(false);
+    } else {
+        LOG_QUERY_ERROR(query);
+        database().rollback();
+        return false;
+    }
+    query.finish();
+    database().commit();
+    return true;
+}
+
+bool AlertBase::saveAlertPackDescription(AlertPackDescription &descr)
+{
+    if (!connectDatabase(Constants::DB_NAME, __LINE__))
+        return false;
+    if (descr.uid().isEmpty()) {
+        LOG_ERROR("AlertPackDescription uuid can not be null");
+        return false;
+    }
+    database().transaction();
+    // update or save ?
+    // try to catch the id using the uuid
+    QHash<int, QString> where;
+    where.insert(Constants::ALERT_PACKS_UID, QString("='%1'").arg(descr.uid()));
+    QString req = select(Constants::Table_ALERT_PACKS, Constants::ALERT_PACKS_ID, where);
+    QSqlQuery query(database());
+    int id = -1;
+    if (query.exec(req)) {
+        if (query.next())
+            id = query.value(0).toInt();
+    } else {
+        LOG_QUERY_ERROR(query);
+    }
+    query.finish();
+
+    if (!saveAlertPackLabels(descr)) {
+        database().rollback();
+        return false;
+    }
+
+    if (id >= 0)
+        return updateAlertPackDescription(descr, id);
+
+    req = prepareInsertQuery(Constants::Table_ALERT_PACKS);
+    query.prepare(req);
+    query.bindValue(Constants::ALERT_PACKS_ID, QVariant());
+    query.bindValue(Constants::ALERT_PACKS_UID, descr.uid());
+    query.bindValue(Constants::ALERT_PACKS_ISVALID, 1); // TODO: descr.isValid());
+    query.bindValue(Constants::ALERT_PACKS_IN_USE, (int)descr.inUse());
+    query.bindValue(Constants::ALERT_PACKS_LABEL_LID, descr.dbData(LabelLID).toInt());
+    query.bindValue(Constants::ALERT_PACKS_CATEGORY_LID, descr.dbData(CategoryLID).toInt());
+    query.bindValue(Constants::ALERT_PACKS_DESCRIPTION_LID, descr.dbData(DescrLID).toInt());
+    query.bindValue(Constants::ALERT_PACKS_AUTHORS, descr.data(AlertPackDescription::Author));
+    query.bindValue(Constants::ALERT_PACKS_VENDOR, descr.data(AlertPackDescription::Vendor));
+    query.bindValue(Constants::ALERT_PACKS_URL, descr.data(AlertPackDescription::URL));
+    query.bindValue(Constants::ALERT_PACKS_THEMEDICON, descr.data(AlertPackDescription::GeneralIcon));
+    query.bindValue(Constants::ALERT_PACKS_VERSION, descr.data(AlertPackDescription::Version));
+    query.bindValue(Constants::ALERT_PACKS_FMFVERSION, descr.data(AlertPackDescription::FreeMedFormsCompatVersion));
+    query.bindValue(Constants::ALERT_PACKS_CREATEDATE, descr.data(AlertPackDescription::CreationDate));
+    query.bindValue(Constants::ALERT_PACKS_LASTUPDATE, descr.data(AlertPackDescription::LastModificationDate));
+    query.bindValue(Constants::ALERT_PACKS_XTRAXML, QString()); // TODO: descr.extraXml());
+    if (query.exec()) {
+        id = query.lastInsertId().toInt();
+    } else {
+        LOG_QUERY_ERROR(query);
+        database().rollback();
+        return false;
+    }
+    query.finish();
+    database().commit();
+    return true;
+}
+
+bool AlertBase::saveAlertPackLabels(AlertPackDescription &descr)
+{
+    // we are inside a transaction opened by saveAlertItem
+    if (!connectDatabase(Constants::DB_NAME, __LINE__))
+        return false;
+    QSqlQuery query(database());
+    QList<int> lids;
+    QList<int> vals;
+    const int LABEL = 0;
+    const int CATEGORY = 1;
+    const int DESCR = 2;
+
+    // get the labels lid for label, descr && comment
+    lids << -1 << -1 << -1;
+    vals << LabelLID << CategoryLID << DescrLID;
+    int lastLid = -1;
+    for(int i=0; i < vals.count(); ++i) {
+        if (descr.dbData(vals.at(i)).isValid() && descr.dbData(vals.at(i)).toInt()>-1) {
+            lids[i] = descr.dbData(vals.at(i)).toInt();
+            // delete all old relations
+            QHash<int, QString> where;
+            where.insert(Constants::ALERT_LABELS_LABELID, QString("=%1").arg(lids[i]));
+            QString req = prepareDeleteQuery(Constants::Table_ALERT_LABELS, where);
+            if (!query.exec(req)) {
+                LOG_QUERY_ERROR(query);
+                return false;
+            }
+        } else {
+            lids[i] = qMax(lastLid, max(Constants::Table_ALERT_LABELS, Constants::ALERT_LABELS_LABELID).toInt()) + 1;
+            descr.setDbData(vals.at(i), lids.at(i));
+        }
+        lastLid = lids[i];
+        query.finish();
+    }
+
+    // save all labels
+    foreach(const QString &l, descr.availableLanguages()) {
+        const QString &label = descr.label(l);
+        if (!label.isEmpty()) {
+            QString req = prepareInsertQuery(Constants::Table_ALERT_LABELS);
+            query.prepare(req);
+            query.bindValue(Constants::ALERT_LABELS_ID, QVariant());
+            query.bindValue(Constants::ALERT_LABELS_LABELID, lids[LABEL]);
+            query.bindValue(Constants::ALERT_LABELS_LANG, l);
+            query.bindValue(Constants::ALERT_LABELS_VALUE, label);
+            query.bindValue(Constants::ALERT_LABELS_ISVALID, 1);
+            if (!query.exec()) {
+                LOG_QUERY_ERROR(query);
+                return false;
+            }
+            query.finish();
+        }
+        const QString &cat = descr.category(l);
+        if (!cat.isEmpty()) {
+            QString req = prepareInsertQuery(Constants::Table_ALERT_LABELS);
+            query.prepare(req);
+            query.bindValue(Constants::ALERT_LABELS_ID, QVariant());
+            query.bindValue(Constants::ALERT_LABELS_LABELID, lids[CATEGORY]);
+            query.bindValue(Constants::ALERT_LABELS_LANG, l);
+            query.bindValue(Constants::ALERT_LABELS_VALUE, cat);
+            query.bindValue(Constants::ALERT_LABELS_ISVALID, 1);
+            if (!query.exec()) {
+                LOG_QUERY_ERROR(query);
+                return false;
+            }
+            query.finish();
+        }
+        const QString &description = descr.description(l);
+        if (!description.isEmpty()) {
+            QString req = prepareInsertQuery(Constants::Table_ALERT_LABELS);
+            query.prepare(req);
+            query.bindValue(Constants::ALERT_LABELS_ID, QVariant());
+            query.bindValue(Constants::ALERT_LABELS_LABELID, lids[DESCR]);
+            query.bindValue(Constants::ALERT_LABELS_LANG, l);
+            query.bindValue(Constants::ALERT_LABELS_VALUE, description);
+            query.bindValue(Constants::ALERT_LABELS_ISVALID, 1);
+            if (!query.exec()) {
+                LOG_QUERY_ERROR(query);
+                return false;
+            }
+            query.finish();
+        }
+    }
     return true;
 }
 

@@ -21,65 +21,54 @@
 /***************************************************************************
  *   Main Developpers:                                                     *
  *       Eric MAEKER, <eric.maeker@gmail.com>,                             *
- *       Pierre-Marie Desombre <pm.desombre@gmail.com>                     *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef ALERTITEMEDITORDIALOG_H
-#define ALERTITEMEDITORDIALOG_H
+#ifndef ALERTPACKDESCRIPTION_H
+#define ALERTPACKDESCRIPTION_H
 
 #include <alertplugin/alertplugin_exporter.h>
-#include <QDialog>
+#include <utils/genericdescription.h>
+
+#include <QHash>
+#include <QVariant>
 
 namespace Alert {
-class AlertItem;
-
-namespace Ui {
-class AlertItemEditorDialog;
+namespace Internal {
+class AlertBase;
 }
-
-class ALERT_EXPORT AlertItemEditorDialog : public QDialog
+class ALERT_EXPORT AlertPackDescription : public Utils::GenericDescription
 {
-    Q_OBJECT
+    friend class Alert::Internal::AlertBase;
+
 public:
-    enum EditableParam {
-        NoEditableParams     = 0x00000000,
-        Label                = 0x00000001,
-        Category             = 0x00000002,
-        Description          = 0x00000004,
-        Icon                 = 0x00000008,
-        Relation             = 0x00000010,
-        ViewType             = 0x00000100,
-        ContentType          = 0x00000200,
-        Priority             = 0x00000400,
-        Timing               = 0x00000800,
-        OverrideNeedsComment = 0x00001000,
-        CSS                  = 0x00002000,
-        ExtraXml             = 0x00004000,
-        Scripts              = 0x00010000,
-        Types                = Relation | ViewType | ContentType | Priority | OverrideNeedsComment,
-        FullDescription      = Label | Category | Description | Icon,
-        AllParams            = 0xFFFFFFFF
+    enum nonTrData {
+        InUse = Utils::GenericDescription::NonTranslatableExtraData + 1
     };
-    Q_DECLARE_FLAGS(EditableParams, EditableParam)
 
-    explicit AlertItemEditorDialog(QWidget *parent = 0);
-    ~AlertItemEditorDialog();
+    AlertPackDescription();
 
-    void setEditableParams(EditableParams params);
+    QString uid() const {return data(Utils::GenericDescription::Uuid).toString();}
 
-    void setAlertItem(const AlertItem &item);
+    void setInUse(bool inUse) {setData(InUse, inUse);}
+    bool inUse() const {return data(InUse).toBool();}
 
-public Q_SLOTS:
-    bool submit(AlertItem &item);
-    void reset();
+    QString label(const QString &lang = QString::null) const {return data(Utils::GenericDescription::Label, lang).toString();}
+    QString category(const QString &lang = QString::null) const {return data(Utils::GenericDescription::Category, lang).toString();}
+    QString description(const QString &lang = QString::null) const {return data(Utils::GenericDescription::HtmlDescription, lang).toString();}
+
+    void setLabel(const QString &txt, const QString &lang = QString::null) {setData(Utils::GenericDescription::Label, txt, lang);}
+    void setCategory(const QString &txt, const QString &lang = QString::null) {setData(Utils::GenericDescription::Category, txt, lang);}
+    void setDescription(const QString &txt, const QString &lang = QString::null) {setData(Utils::GenericDescription::HtmlDescription, txt, lang);}
+
+protected:
+    void setDbData(const int ref, const QVariant &data) {_dbData.insert(ref, data);}
+    QVariant dbData(const int ref) {return _dbData.value(ref, QVariant());}
 
 private:
-    Ui::AlertItemEditorDialog *ui;
+    QHash<int, QVariant> _dbData;
 };
 
-}  // namespace Alert
+} // namespace Alert
 
-Q_DECLARE_OPERATORS_FOR_FLAGS(Alert::AlertItemEditorDialog::EditableParams)
-
-#endif // ALERTITEMEDITORDIALOG_H
+#endif // ALERTPACKDESCRIPTION_H

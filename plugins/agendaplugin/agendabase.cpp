@@ -1266,7 +1266,7 @@ Agenda::UserCalendar *AgendaBase::createVirtualUserCalendar(const QString &owner
     where.insert(CAL_DEFAULTDURATION, QString("=%1").arg(defaultDurationInMinutes));
     int alreadyInBase = count(Table_CALENDAR, CAL_ID, getWhereClause(Table_CALENDAR, where));
     if (alreadyInBase!=0) {
-        LOG_ERROR("Calendar is alreday in base, virtual user calendar not created");
+        LOG("Calendar is already in base, virtual user calendar not created");
         return 0;
     }
     UserCalendar *u = new UserCalendar;

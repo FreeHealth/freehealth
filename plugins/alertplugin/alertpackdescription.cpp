@@ -25,28 +25,15 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef ALERT_ALERTMODEL_H
-#define ALERT_ALERTMODEL_H
+#include "alertpackdescription.h"
 
-#include <alertplugin/alertplugin_exporter.h>
-#include <QObject>
+using namespace Alert;
 
-namespace Alert {
+// TODO: add Extra-XML management
 
-class ALERT_EXPORT AlertModel : public QObject
+AlertPackDescription::AlertPackDescription() :
+    Utils::GenericDescription("AlertPackDescription")
 {
-    Q_OBJECT
-public:
-    explicit AlertModel(QObject *parent = 0);
-    
-public Q_SLOTS:
-
-private Q_SLOTS:
-
-Q_SIGNALS:
-
-};
-
-}  // namespace Alert
-
-#endif // ALERTMODEL_H
+    setData(InUse, false);
+    addNonTranslatableExtraData(InUse, "InUse");
+}

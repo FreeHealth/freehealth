@@ -15,7 +15,7 @@ public:
     FakeScriptManager(QObject *parent) : Core::IScriptManager(parent) {}
 
     QScriptValue evaluate(const QString &script) {return _engine.evaluate(script);}
-    QScriptValue addScriptObject(const QObject *object) {Q_UNUSED(object); return QScriptValue();}
+    QScriptValue addScriptObject(QObject *object) {Q_UNUSED(object); return QScriptValue();}
 
 private:
     QScriptEngine _engine;

@@ -29,26 +29,35 @@
 #include "alertbase.h"
 #include "alertitem.h"
 #include "ialertplaceholder.h"
+#include "alertscriptmanager.h"
+#include "alertpackdescription.h"
+#include "constants.h"
 
 #include <coreplugin/icore.h>
-#include <coreplugin/iscriptmanager.h>
+#include <coreplugin/isettings.h>
 
 #include <extensionsystem/pluginmanager.h>
 #include <utils/log.h>
+#include <utils/global.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_filepathxml.h>
 
 // TEST
 #include "alertitemeditordialog.h"
-#include "dynamicalertdialog.h"
+#include "blockingalertdialog.h"
 #include "alertplaceholdertest.h"
 #include <QToolButton>
 #include <QVBoxLayout>
 #include <QPointer>
 // END TEST
 
+# include <QDir>
+
 using namespace Alert;
+using namespace Trans::ConstantTranslations;
 
 static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
-static inline Core::IScriptManager *scriptManager() {return Core::ICore::instance()->scriptManager();}
+static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 
 AlertCore *AlertCore::_instance = 0;
 
@@ -67,7 +76,8 @@ class AlertCorePrivate
 public:
     AlertCorePrivate() :
         _alertBase(0),
-        _placeholdertest(0)
+        _placeholdertest(0),
+        _alertScriptManager(0)
 
     {}
 
@@ -78,6 +88,7 @@ public:
 public:
     AlertBase *_alertBase;
     QPointer<AlertPlaceHolderTest> _placeholdertest;
+    AlertScriptManager *_alertScriptManager;
 };
 }
 }
@@ -92,6 +103,7 @@ AlertCore::AlertCore(QObject *parent) :
 
     // Create all instance
     d->_alertBase = new Internal::AlertBase(this);
+    d->_alertScriptManager = new Internal::AlertScriptManager(this);
 
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
 }
@@ -203,17 +215,17 @@ bool AlertCore::registerAlert(const AlertItem &item)
 /**
   Update an already registered Alert::AlertItem. \n
   If the alert view type is a static alert, inform all IAlertPlaceHolder of the update otherwise
-  execute the dynamic alert. \n
+  execute the blocking alert. \n
   The modification are not saved into the database.
   \sa Alert::AlertCore::saveAlert(), Alert::AlertCore::registerAlert()
 */
 bool AlertCore::updateAlert(const AlertItem &item)
 {
-    if (item.viewType() == AlertItem::DynamicAlert) {
+    if (item.viewType() == AlertItem::BlockingAlert) {
         if (item.isUserValidated() || !item.isValid())
             return true;
-        DynamicAlertDialog::executeDynamicAlert(item);
-    } else if (item.viewType() == AlertItem::StaticAlert) {
+        BlockingAlertDialog::executeBlockingAlert(item);
+    } else if (item.viewType() == AlertItem::NonBlockingAlert) {
         // Get static place holders
         QList<Alert::IAlertPlaceHolder*> placeHolders = pluginManager()->getObjects<Alert::IAlertPlaceHolder>();
         foreach(Alert::IAlertPlaceHolder *ph, placeHolders) {
@@ -224,7 +236,7 @@ bool AlertCore::updateAlert(const AlertItem &item)
 }
 
 /**
-  Remove a registered static alert (do nothing with dynamic alerts).\n
+  Remove a registered static alert (do nothing with blocking alerts).\n
   Inform all IAlertPlaceHolder of the removal of the alert.\n
   The modification are not saved into the database.
   \sa Alert::AlertCore::saveAlert(), Alert::AlertCore::registerAlert()
@@ -232,7 +244,7 @@ bool AlertCore::updateAlert(const AlertItem &item)
 bool AlertCore::removeAlert(const AlertItem &item)
 {
     bool ok =true;
-    if (item.viewType() == AlertItem::StaticAlert) {
+    if (item.viewType() == AlertItem::NonBlockingAlert) {
         // Get static place holders
         QList<Alert::IAlertPlaceHolder*> placeHolders = pluginManager()->getObjects<Alert::IAlertPlaceHolder>();
         foreach(Alert::IAlertPlaceHolder *ph, placeHolders) {
@@ -243,10 +255,48 @@ bool AlertCore::removeAlert(const AlertItem &item)
     return ok;
 }
 
+/** Read all alerts in the alert pack \e absPath and feed the database with created alerts. */
+bool AlertCore::registerAlertPack(const QString &absPath)
+{
+    LOG(tr("Registering alert pack: %1").arg(QDir::cleanPath(absPath)));
+    QDir path(absPath);
+    if (!path.exists()) {
+        LOG_ERROR(tkTr(Trans::Constants::PATH_1_DOESNOT_EXISTS).arg(QDir::cleanPath(absPath)));
+        return false;
+    }
+
+    // get the packdescription file and save to database
+    QFileInfo descrFile(QString("%1/%2").arg(absPath).arg(Constants::PACK_DESCRIPTION_FILENAME));
+    if (!descrFile.exists()) {
+        LOG_ERROR(tr("No alert pack description"));
+        return false;
+    }
+    AlertPackDescription descr;
+    descr.fromXmlFile(descrFile.absoluteFilePath());
+    if (!d->_alertBase->saveAlertPackDescription(descr)) {
+        LOG_ERROR("Unable to save alert pack description to database");
+        return false;
+    }
+
+    // read all alerts
+    QFileInfoList files = Utils::getFiles(path, "*.xml");
+    if (files.isEmpty()) {
+        LOG_ERROR(tkTr(Trans::Constants::PATH_1_IS_EMPTY));
+        return false;
+    }
+    QList<AlertItem> alerts;
+    foreach(const QFileInfo &info, files) {
+        if (info.fileName()==QString(Constants::PACK_DESCRIPTION_FILENAME))
+            continue;
+        alerts << AlertItem::fromXml(Utils::readTextFile(info.absoluteFilePath(), Utils::DontWarnUser));
+    }
+    return saveAlerts(alerts);
+}
+
 /**
  Process alerts:\n
    - Execute check scripts
-   - Execute dynamic alerts if needed
+   - Execute blocking alerts if needed
    - Feed Alert::IAlertPlaceHolder
 */
 void AlertCore::processAlerts(QVector<AlertItem> &alerts)
@@ -255,44 +305,32 @@ void AlertCore::processAlerts(QVector<AlertItem> &alerts)
     QList<Alert::IAlertPlaceHolder*> placeHolders = pluginManager()->getObjects<Alert::IAlertPlaceHolder>();
 
     // Process alerts
-    QList<AlertItem> dynamics;
+    QList<AlertItem> blockings;
     for(int i = 0; i < alerts.count(); ++i) {
         AlertItem &item = alerts[i];
 
         // Check script ?
-        bool checked = true;
-        const AlertScript &checkScript = item.scriptType(AlertScript::CheckValidityOfAlert);
-        if (!checkScript.isNull()) {
-            QScriptValue v = scriptManager()->evaluate(checkScript.script());
-            LOG(tr("Checking alert validity using the 'CheckScript': %1; validity: %2").arg(item.label()).arg(v.toBool()));
-            if (!v.toBool()) {
-                checked = false;
-            }
-        }
-        if (!checked)
+        QVariant checkValid = d->_alertScriptManager->execute(item, AlertScript::CheckValidityOfAlert);
+        if (checkValid.isValid() && checkValid.canConvert(QVariant::Bool) && !checkValid.toBool())
             continue;
 
         // Cycling scripts
         for(int i =0; i < item.timings().count(); ++i) {
             AlertTiming &timing = item.timingAt(i);
             if (timing.isCycling()) {
-                const AlertScript &cyclingDateScript = item.scriptType(AlertScript::CyclingStartDate);
-                if (!cyclingDateScript.isNull()) {
-                    QScriptValue v = scriptManager()->evaluate(cyclingDateScript.script());
-                    LOG(tr("Cycling alert script: 'CyclingStartDate': %1; date: %2").arg(item.label()).arg(v.toDateTime().toString(Qt::ISODate)));
-                    if (v.isDate()) {
-                        // TODO: correctly the nearest starting date
-                        timing.setCycleStartDate(v.toDateTime());
-                        timing.setCycleExpirationDate(timing.start().addSecs(timing.cyclingDelayInMinutes()*60));
-                    }
+                QVariant startDate = d->_alertScriptManager->execute(item, AlertScript::CyclingStartDate);
+                if (startDate.isValid() && startDate.canConvert(QVariant::DateTime)) {
+                    // TODO: correctly the nearest starting date
+                    timing.setCycleStartDate(startDate.toDateTime());
+                    timing.setCycleExpirationDate(timing.start().addSecs(timing.cyclingDelayInMinutes()*60));
                 }
             }
         }
 
-        if (item.viewType() == AlertItem::DynamicAlert) {
+        if (item.viewType() == AlertItem::BlockingAlert) {
             if (!item.isValid() || item.isUserValidated())
                 continue;
-            dynamics << item;
+            blockings << item;
         } else {
             foreach(Alert::IAlertPlaceHolder *ph, placeHolders) {
                 ph->addAlert(item);
@@ -300,11 +338,11 @@ void AlertCore::processAlerts(QVector<AlertItem> &alerts)
         }
     }
 
-    if (!dynamics.isEmpty()) {
-        DynamicAlertResult result = DynamicAlertDialog::executeDynamicAlert(dynamics);
-        DynamicAlertDialog::applyResultToAlerts(dynamics, result);
-        if (!saveAlerts(dynamics))
-            LOG_ERROR("Unable to save validated dynamic alerts");
+    if (!blockings.isEmpty()) {
+        BlockingAlertResult result = BlockingAlertDialog::executeBlockingAlert(blockings);
+        BlockingAlertDialog::applyResultToAlerts(blockings, result);
+        if (!saveAlerts(blockings))
+            LOG_ERROR("Unable to save validated blockings alerts");
     }
 }
 
@@ -317,7 +355,7 @@ void AlertCore::postCoreInitialization()
     AlertItem item = d->_alertBase->createVirtualItem();
     item.setLabel(item.label() + " (item)");
     item.setThemedIcon("identity.png");
-    item.setViewType(AlertItem::StaticAlert);
+    item.setViewType(AlertItem::NonBlockingAlert);
     item.setPriority(AlertItem::High);
     item.setRemindLaterAllowed(true);
     item.clearRelations();
@@ -327,7 +365,7 @@ void AlertCore::postCoreInitialization()
 
     AlertItem item2 = d->_alertBase->createVirtualItem();
     item2.setThemedIcon("next.png");
-    item2.setViewType(AlertItem::StaticAlert);
+    item2.setViewType(AlertItem::NonBlockingAlert);
     item2.clearRelations();
     item2.clearTimings();
     item2.addRelation(AlertRelation(AlertRelation::RelatedToPatient, "patient2"));
@@ -339,7 +377,7 @@ void AlertCore::postCoreInitialization()
     item3.setLabel("Just a simple alert (item3)");
     item3.setCategory("Test");
     item3.setDescription("Simple basic static alert that needs a user comment on overriding");
-    item3.setViewType(AlertItem::StaticAlert);
+    item3.setViewType(AlertItem::NonBlockingAlert);
     item3.setPriority(AlertItem::Low);
     item3.setOverrideRequiresUserComment(true);
     item3.addRelation(AlertRelation(AlertRelation::RelatedToPatient, "patient1"));
@@ -351,7 +389,7 @@ void AlertCore::postCoreInitialization()
     item4.setLabel("Related to all patient (item4)");
     item4.setCategory("Test");
     item4.setDescription("Related to all patients and was validated for patient2 by user1.<br /> Static alert");
-    item4.setViewType(AlertItem::StaticAlert);
+    item4.setViewType(AlertItem::NonBlockingAlert);
     item4.setPriority(AlertItem::Medium);
     item4.addRelation(AlertRelation(AlertRelation::RelatedToAllPatients));
     item4.addValidation(AlertValidation(QDateTime::currentDateTime(), "user1", "patient2"));
@@ -359,10 +397,10 @@ void AlertCore::postCoreInitialization()
 
     AlertItem item5;
     item5.setUuid(Utils::Database::createUid());
-    item5.setLabel("Simple basic dynamic alert test (item5)");
+    item5.setLabel("Simple basic Blocking alert test (item5)");
     item5.setCategory("Test");
-    item5.setDescription("Aoutch this is a dynamic alert !");
-    item5.setViewType(AlertItem::DynamicAlert);
+    item5.setDescription("Aoutch this is a Blocking alert !");
+    item5.setViewType(AlertItem::BlockingAlert);
     item5.setRemindLaterAllowed(true);
     item5.setOverrideRequiresUserComment(true);
     item5.addRelation(AlertRelation(AlertRelation::RelatedToPatient, "patient1"));
@@ -370,10 +408,10 @@ void AlertCore::postCoreInitialization()
 
     AlertItem item6;
     item6.setUuid(Utils::Database::createUid());
-    item6.setLabel("Simple basic dynamic user alert (item6)");
+    item6.setLabel("Simple basic Blocking user alert (item6)");
     item6.setCategory("Test user alert");
-    item6.setDescription("Aoutch this is a dynamic alert !<br />For you, <b>user1</b>!");
-    item6.setViewType(AlertItem::DynamicAlert);
+    item6.setDescription("Aoutch this is a Blocking alert !<br />For you, <b>user1</b>!");
+    item6.setViewType(AlertItem::BlockingAlert);
     item6.setRemindLaterAllowed(true);
     item6.addRelation(AlertRelation(AlertRelation::RelatedToUser, "user1"));
     item6.addTiming(AlertTiming(start, expiration));
@@ -385,7 +423,7 @@ void AlertCore::postCoreInitialization()
     item7.setLabel("Simple basic alert (item7)");
     item7.setCategory("Test validated alert");
     item7.setDescription("Aoutch this is an error you should not see this !<br /><br />Validated for patient1.");
-    item7.setViewType(AlertItem::StaticAlert);
+    item7.setViewType(AlertItem::NonBlockingAlert);
     item7.addRelation(AlertRelation(AlertRelation::RelatedToAllPatients));
     item7.addValidation(AlertValidation(QDateTime::currentDateTime(), "user1", "patient1"));
     item7.addTiming(AlertTiming(start, expiration));
@@ -395,7 +433,7 @@ void AlertCore::postCoreInitialization()
     item8.setLabel("Scripted alert (item8)");
     item8.setCategory("Test scripted alert");
     item8.setDescription("A valid alert with multiple scripts.");
-    item8.setViewType(AlertItem::StaticAlert);
+    item8.setViewType(AlertItem::NonBlockingAlert);
     item8.addRelation(AlertRelation(AlertRelation::RelatedToAllPatients));
     item8.addTiming(AlertTiming(start, expiration));
     item8.addScript(AlertScript("check_item8", AlertScript::CheckValidityOfAlert, "(1+1)==2;"));
@@ -405,7 +443,7 @@ void AlertCore::postCoreInitialization()
     item9.setLabel("INVALID Scripted alert (item9)");
     item9.setCategory("Test scripted alert");
     item9.setDescription("A invalid alert with multiple scripts. YOU SHOULD NOT SEE IT !!!!");
-    item9.setViewType(AlertItem::StaticAlert);
+    item9.setViewType(AlertItem::NonBlockingAlert);
     item9.addRelation(AlertRelation(AlertRelation::RelatedToAllPatients));
     item9.addTiming(AlertTiming(start, expiration));
     item9.addScript(AlertScript("check_item9", AlertScript::CheckValidityOfAlert, "(1+1)==3;"));
@@ -415,7 +453,7 @@ void AlertCore::postCoreInitialization()
     item10.setLabel("Cycling alert for all patients (item10)");
     item10.setCategory("Test cycling alert");
     item10.setDescription("Testing a cycling alert with:<br />- scripts<br />- relation to all patients.<br />Static alert.");
-    item10.setViewType(AlertItem::StaticAlert);
+    item10.setViewType(AlertItem::NonBlockingAlert);
     item10.addRelation(AlertRelation(AlertRelation::RelatedToAllPatients));
     AlertTiming cycling(start, expiration);
     cycling.setCyclingDelayInYears(5);
@@ -424,8 +462,24 @@ void AlertCore::postCoreInitialization()
     item10.addScript(AlertScript("check_item10", AlertScript::CheckValidityOfAlert, "(1+1)==2;"));
     item10.addScript(AlertScript("startdate_item10", AlertScript::CyclingStartDate, "var currentDate = new Date(); currentDate.setDate(currentDate.getDate()-2); currentDate;"));
 
+    AlertItem item11;
+    item11.setUuid(Utils::Database::createUid());
+    item11.setLabel("Test script interactions (item11)");
+    item11.setCategory("Test script");
+    item11.setDescription("Test script interaction with alertitem:<br />- redefine priority to HIGH<br />- change the label adding \"WAAAAAAHHHHHHOOUUUUHHH\"<br/>- add a comment");
+    item11.setViewType(AlertItem::BlockingAlert);
+    item11.addRelation(AlertRelation(AlertRelation::RelatedToAllPatients));
+    item11.addTiming(AlertTiming(start, expiration));
+    item11.addScript(AlertScript("check_item11", AlertScript::CheckValidityOfAlert,
+                                 "print(\"CURRENT ALERT PROPERTY:\"+alert.priority());"
+                                 "alert.setPriority(0);"
+                                 "print(\"CURRENT ALERT LABEL:\"+alert.label());"
+                                 "alert.setLabel(alert.label()+\"<br />WAAAAAAHHHHHHOOUUUUHHH\");"
+                                 "alert.setComment(\"Niah niah niah comment added by the script...\");"
+                                 "true;"));
+
     // Db save/get
-    if (true) {
+    if (false) {
         if (!d->_alertBase->saveAlertItem(item))
             qWarning() << "ITEM WRONG";
         if (!d->_alertBase->saveAlertItem(item2))
@@ -446,6 +500,8 @@ void AlertCore::postCoreInitialization()
             qWarning() << "ITEM9 WRONG";
         if (!d->_alertBase->saveAlertItem(item10))
             qWarning() << "ITEM10 WRONG";
+        if (!d->_alertBase->saveAlertItem(item11))
+            qWarning() << "ITEM11 WRONG";
 
         Internal::AlertBaseQuery query;
         query.setAlertValidity(Internal::AlertBaseQuery::ValidAlerts);
@@ -458,17 +514,23 @@ void AlertCore::postCoreInitialization()
 //        query.addUserAlerts();
         QVector<AlertItem> test = d->_alertBase->getAlertItems(query);
         qWarning() << test.count();
-        for(int i=0; i < test.count(); ++i) {
-            qWarning() << "\n\n" << test.at(i).timingAt(0).start() << test.at(i).timingAt(0).end() << test.at(i).relationAt(1).relatedToUid();
-        }
-        qWarning() << "\n\n";
+//        for(int i=0; i < test.count(); ++i) {
+//            qWarning() << "\n\n" << test.at(i).timingAt(0).start() << test.at(i).timingAt(0).end() << test.at(i).relationAt(1).relatedToUid();
+//        }
+//        qWarning() << "\n\n";
         //    AlertItem t = AlertItem::fromXml(item.toXml());
         //    qWarning() << (t.toXml() == item.toXml());
     }
 
-    // Dynamic alerts
+    // To XML
     if (false) {
-        item.setViewType(AlertItem::DynamicAlert);
+        qWarning() << item.toXml();
+        qWarning() << item11.toXml();
+    }
+
+    // Blocking alerts
+    if (false) {
+        item.setViewType(AlertItem::BlockingAlert);
         item.setOverrideRequiresUserComment(true);
         QToolButton *test = new QToolButton;
         test->setText("Houlala");
@@ -476,8 +538,8 @@ void AlertCore::postCoreInitialization()
         QList<QAbstractButton*> buttons;
         buttons << test;
 
-        DynamicAlertDialog::executeDynamicAlert(QList<AlertItem>() <<  item << item2 << item3 << item4 << item5, buttons);
-        //    DynamicAlertDialog::executeDynamicAlert(item4);
+        BlockingAlertDialog::executeBlockingAlert(QList<AlertItem>() <<  item << item2 << item3 << item4 << item5, buttons);
+        //    BlockingAlertDialog::executeBlockingAlert(item4);
     }
 
     // Alert editor
@@ -495,6 +557,11 @@ void AlertCore::postCoreInitialization()
             dlg.submit(item);
         }
         qWarning() << item.toXml();
+    }
+
+    // Alert packs
+    if (true) {
+        registerAlertPack(settings()->path(Core::ISettings::BundledAlertPacks) + "/test");
     }
 
     // PlaceHolders

@@ -171,9 +171,9 @@ QScriptValue ScriptManager::evaluate(const QString &script)
     return val;
 }
 
-QScriptValue ScriptManager::addScriptObject(const QObject *object)
+QScriptValue ScriptManager::addScriptObject(QObject *object)
 {
-    return m_Engine->newQObject((QObject*)object);
+    return m_Engine->newQObject(object);
 }
 
 void ScriptManager::onAllFormsLoaded()

@@ -36,9 +36,9 @@
 namespace Core {
 namespace Constants {
 
-const char *const COLOR_BACKGROUND_ALERT_HIGH  = "#FFC8C8";
-const char *const COLOR_BACKGROUND_ALERT_MEDIUM  = "#FF6464";
-const char *const COLOR_BACKGROUND_ALERT_LOW  = "#FF3232";
+const char *const COLOR_BACKGROUND_ALERT_HIGH  = "#FF3030";
+const char *const COLOR_BACKGROUND_ALERT_MEDIUM  = "#FF8080";
+const char *const COLOR_BACKGROUND_ALERT_LOW  = "#FFD0D0";
 
 }  // end Constants
 }  // end Core

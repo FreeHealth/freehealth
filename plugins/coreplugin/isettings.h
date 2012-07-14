@@ -94,6 +94,8 @@ public:
         DataPackCompleteFormsInstallPath,
         DataPackSubFormsInstallPath,
         DataPackApplicationPath,
+        // Default alert packs
+        BundledAlertPacks,
         // WWW
         WebSiteUrl,
         UpdateUrl,

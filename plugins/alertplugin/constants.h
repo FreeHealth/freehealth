@@ -25,8 +25,8 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef CONSTANTS_H
-#define CONSTANTS_H
+#ifndef ALERT_PLUGIN_CONSTANTS_H
+#define ALERT_PLUGIN_CONSTANTS_H
 
 /**
  * \file constants.h
@@ -50,6 +50,7 @@ enum Tables {
     Table_ALERT_SCRIPTS,
     Table_ALERT_TIMING,
     Table_ALERT_VALIDATION,
+    Table_ALERT_PACKS,
     Table_ALERT_VERSION
 };
 
@@ -59,6 +60,7 @@ enum AlertFields {
 
     // Uids
     ALERT_UID,
+    ALERT_PACKUID,
     ALERT_CATEGORY_UID,  // for later use with category plugin
     ALERT_REL_ID,
     ALERT_SID,
@@ -77,10 +79,10 @@ enum AlertFields {
     ALERT_MUSTBEREAD,
 
     // Translatable description items
-    ALERT_LABELID,
-    ALERT_CATEGORYLID,  // while waiting integration of category plugin
-    ALERT_DESCRIPTION_LABELID,
-    ALERT_COMMENT_LABELID,
+    ALERT_LABEL_LID,
+    ALERT_CATEGORY_LID,  // while waiting integration of category plugin
+    ALERT_DESCRIPTION_LID,
+    ALERT_COMMENT_LID,
 
     // Non translable items
     ALERT_CREATION_DATE,
@@ -138,11 +140,33 @@ enum AlertValidationFields {
     ALERT_VALIDATION_VALIDATED_UUID
 };
 
+enum AlertPacksFields {
+    ALERT_PACKS_ID = 0,
+    ALERT_PACKS_UID,
+    ALERT_PACKS_ISVALID,
+    ALERT_PACKS_IN_USE,
+    ALERT_PACKS_LABEL_LID,
+    ALERT_PACKS_CATEGORY_LID,  // while waiting integration of category plugin
+    ALERT_PACKS_DESCRIPTION_LID,
+    ALERT_PACKS_AUTHORS,
+    ALERT_PACKS_VENDOR,
+    ALERT_PACKS_URL,
+    ALERT_PACKS_THEMEDICON,
+    ALERT_PACKS_VERSION,
+    ALERT_PACKS_FMFVERSION,
+    ALERT_PACKS_CREATEDATE,
+    ALERT_PACKS_LASTUPDATE,
+    ALERT_PACKS_XTRAXML
+};
+
 enum VersionFields {
     VERSION_TEXT = 0
 };
 
+// Pack description
+const char * const  PACK_DESCRIPTION_FILENAME   = "packdescription.xml";
+
 }  // namespace Constants
 }  // namespace Alert
 
-#endif // CONSTANTS_H
+#endif // ALERT_PLUGIN_CONSTANTS_H

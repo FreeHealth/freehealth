@@ -44,6 +44,7 @@ const char * const FILE_FILTER_ALL_FILES             = QT_TRANSLATE_NOOP("tkCons
 const char* const PATH                               = QT_TRANSLATE_NOOP("tkConstants", "Path");
 const char* const PATH_1_DOESNOT_EXISTS              = QT_TRANSLATE_NOOP("tkConstants", "Path %1 does not exist");
 const char* const PATH_1_ISNOT_EMPTY                 = QT_TRANSLATE_NOOP("tkConstants", "Path %1 is not empty");
+const char* const PATH_1_IS_EMPTY                    = QT_TRANSLATE_NOOP("tkConstants", "Path %1 is empty");
 const char* const PATH_1_CONTAINS_DIRS               = QT_TRANSLATE_NOOP("tkConstants", "Path %1 contains dirs");
 const char* const PATH_1_CANNOT_BE_REMOVED           = QT_TRANSLATE_NOOP("tkConstants", "Path %1 can not be removed");
 const char* const PATH_1_CANNOT_BE_CREATED           = QT_TRANSLATE_NOOP("tkConstants", "Path %1 can not be created");

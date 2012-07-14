@@ -92,7 +92,7 @@ class IPreventionEngine : public QObject {
        
 };
 
-};
+}
 
 #endif
 

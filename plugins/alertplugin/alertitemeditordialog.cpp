@@ -75,6 +75,7 @@ void AlertItemEditorDialog::setEditableParams(EditableParams params)
     ui->editor->setLabelVisible(params & Label);
     ui->editor->setCategoryVisible(params & Category);
     ui->editor->setDescriptionVisible(params & Description);
+    ui->editor->setIconVisible(params & Icon);
     ui->editor->setRelationVisible(params & Relation);
     ui->editor->setViewTypeVisible(params & ViewType);
     ui->editor->setContentTypeVisible(params & ContentType);

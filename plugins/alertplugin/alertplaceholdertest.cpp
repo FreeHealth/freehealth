@@ -27,19 +27,36 @@
  ***************************************************************************/
 #include "alertplaceholdertest.h"
 #include "alertitem.h"
-#include "staticalertwidgets.h"
+#include "alertcore.h"
+#include "nonblockingalertwidgets.h"
+#include "alertitemeditordialog.h"
+
+#include <coreplugin/icore.h>
+#include <coreplugin/itheme.h>
+#include <coreplugin/constants_icons.h>
+
+#include <utils/log.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_current.h>
 
 #include <QAction>
 #include <QWidget>
+#include <QEvent>
 
 #include <QDebug>
 
 using namespace Alert;
+using namespace Trans::ConstantTranslations;
+
+static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
+static inline Alert::AlertCore *alertCore() {return Alert::AlertCore::instance();}
 
 AlertPlaceHolderTest::AlertPlaceHolderTest(QObject *parent) :
     IAlertPlaceHolder(parent),
-    _widget(0)
+    _widget(0),
+    _newButton(0)
 {
+    setObjectName("AlertPlaceHolderTest");
 }
 
 AlertPlaceHolderTest::~AlertPlaceHolderTest()
@@ -74,13 +91,14 @@ void AlertPlaceHolderTest::clear()
         _widget->clear();
     alerts.clear();
     _buttons.clear();
+    addNewAlertButton();
 }
 
 bool AlertPlaceHolderTest::addAlert(const AlertItem &alert)
 {
     if (!containsAlertUuid(alert.uuid())) {
         if (_widget) {
-            StaticAlertToolButton *but = new StaticAlertToolButton(_widget);
+            NonBlockingAlertToolButton *but = new NonBlockingAlertToolButton(_widget);
             but->setAlertItem(alert);
 
             // keep alert sorted by priority
@@ -171,12 +189,10 @@ QWidget *AlertPlaceHolderTest::createWidget(QWidget *parent)
     if (!_widget) {
         _widget = new QToolBar(parent);
         _widget->setIconSize(QSize(16,16));
+        addNewAlertButton();
     }
     for(int i = 0; i < alerts.count(); ++i) {
-        StaticAlertToolButton *but = new StaticAlertToolButton(_widget);
-        but->setAlertItem(alerts.at(i));
-        _widget->addWidget(but);
-        // connect button signals
+        addAlert(alerts[i]);
     }
     return _widget;
 }
@@ -200,6 +216,49 @@ bool AlertPlaceHolderTest::removeAlertUuid(const QString &alertUid)
     for(int i = alerts.count()-1; i > -1 ; --i) {
         if (alerts.at(i).uuid() == alertUid)
             alerts.removeAt(i);
+    }
+    return false;
+}
+
+void AlertPlaceHolderTest::addNewAlertButton()
+{
+    if (!_newButton) {
+        _newButton = new QToolButton(_widget);
+        _newButton->setIconSize(QSize(16,16));
+        _newButton->setIcon(theme()->icon(Core::Constants::ICONADD));
+        _newButton->setText(tkTr(Trans::Constants::ADD_ALERT));
+        _newButton->setToolTip(tkTr(Trans::Constants::ADD_ALERT));
+        _newButton->installEventFilter(this);
+        connect(_newButton, SIGNAL(clicked()), this, SLOT(createAlert()));
+    }
+    _widget->addWidget(_newButton);
+    _widget->addSeparator();
+}
+
+void AlertPlaceHolderTest::createAlert()
+{
+    AlertItemEditorDialog dlg;
+    dlg.setEditableParams(AlertItemEditorDialog::FullDescription | AlertItemEditorDialog::Types | AlertItemEditorDialog::Timing | AlertItemEditorDialog::Scripts);
+    AlertItem item;
+    item.setValidity(true);
+    item.addTiming(AlertTiming(QDateTime::currentDateTime(), QDateTime::currentDateTime().addYears(1)));
+    dlg.setAlertItem(item);
+    if (dlg.exec()==QDialog::Accepted) {
+         if (!dlg.submit(item)) {
+             LOG_ERROR("Unable to submit alert");
+         } else {
+             alertCore()->saveAlert(item);
+             alertCore()->registerAlert(item);
+         }
+    }
+}
+
+bool AlertPlaceHolderTest::eventFilter(QObject *obj, QEvent *event)
+{
+    if (obj==_newButton && event->type()==QEvent::LanguageChange) {
+        _newButton->setText(tkTr(Trans::Constants::ADD_ALERT));
+        _newButton->setToolTip(tkTr(Trans::Constants::ADD_ALERT));
+        return true;
     }
     return false;
 }

@@ -89,7 +89,8 @@ public:
         MustBeRead,
         RemindLater,
         Editable,
-        StyleSheet
+        StyleSheet,
+        PackUid
     };
     enum Tr {
         Comment = Utils::GenericDescription::TranslatableExtraData + 1
@@ -106,6 +107,7 @@ public:
         addNonTranslatableExtraData(RemindLater, "remindLater");
         addNonTranslatableExtraData(Editable, "editable");
         addNonTranslatableExtraData(StyleSheet, "styleSheet");
+        addNonTranslatableExtraData(PackUid, "packUid");
         addTranslatableExtraData(Comment, "comment");
     }
 
@@ -131,7 +133,7 @@ public:
         _valid(true), _modified(false),
         _editable(true), _overrideRequiresUserComment(false),
         _mustBeRead(false), _remindAllowed(false),
-        _viewType(AlertItem::StaticAlert),
+        _viewType(AlertItem::NonBlockingAlert),
         _contentType(AlertItem::ApplicationNotification),
         _priority(AlertItem::Medium),
         q(parent)
@@ -142,8 +144,8 @@ public:
     QString viewTypeToXml()
     {
         switch (_viewType) {
-        case AlertItem::DynamicAlert: return "dynamic";
-        case AlertItem::StaticAlert: return "static";
+        case AlertItem::BlockingAlert: return "blocking";
+        case AlertItem::NonBlockingAlert: return "nonblocking";
         }
         return QString::null;
     }
@@ -170,10 +172,10 @@ public:
 
     void viewTypeFromXml(const QString &xml)
     {
-        // default is dynamic alert
-        _viewType = AlertItem::DynamicAlert;
+        // default is blocking alert
+        _viewType = AlertItem::BlockingAlert;
         if (xml.compare("static", Qt::CaseInsensitive)==0) {
-            _viewType = AlertItem::StaticAlert;
+            _viewType = AlertItem::NonBlockingAlert;
         }
     }
 
@@ -206,16 +208,17 @@ public:
         _pass = descr.data(AlertXmlDescription::CryptedPass).toString();
         _themedIcon = descr.data(AlertXmlDescription::GeneralIcon).toString();
         _css = descr.data(AlertXmlDescription::StyleSheet).toString();
-        _valid = descr.data(AlertXmlDescription::Validity).toInt();
-        _overrideRequiresUserComment = descr.data(AlertXmlDescription::OverrideRequiresUserComment).toInt();
-        _mustBeRead = descr.data(AlertXmlDescription::MustBeRead).toInt();
-        _remindAllowed = descr.data(AlertXmlDescription::RemindLater).toInt();
-        _editable = descr.data(AlertXmlDescription::Editable).toInt();
+        _valid = descr.data(AlertXmlDescription::Validity).toBool();
+        _overrideRequiresUserComment = descr.data(AlertXmlDescription::OverrideRequiresUserComment).toBool();
+        _mustBeRead = descr.data(AlertXmlDescription::MustBeRead).toBool();
+        _remindAllowed = descr.data(AlertXmlDescription::RemindLater).toBool();
+        _editable = descr.data(AlertXmlDescription::Editable).toBool();
         viewTypeFromXml(descr.data(AlertXmlDescription::ViewType).toString());
         contentTypeFromXml(descr.data(AlertXmlDescription::ContentType).toString());
         priorityFromXml(descr.data(AlertXmlDescription::Priority).toString());
         _creationDate = QDateTime::fromString(descr.data(AlertXmlDescription::CreationDate).toString(), Qt::ISODate);
         _update = QDateTime::fromString(descr.data(AlertXmlDescription::LastModificationDate).toString(), Qt::ISODate);
+        _packUid = descr.data(AlertXmlDescription::PackUid).toString();
 
         foreach(const QString &l, descr.availableLanguages()) {
             q->setLabel(descr.data(Internal::AlertXmlDescription::Label, l).toString(), l);
@@ -239,7 +242,7 @@ public:
     }
 
 public:
-    QString _uid, _pass, _themedIcon, _css, _extraXml;
+    QString _uid, _packUid, _pass, _themedIcon, _css, _extraXml;
     int _id;
     bool _valid, _modified, _editable, _overrideRequiresUserComment, _mustBeRead, _remindAllowed;
     AlertItem::ViewType _viewType;
@@ -384,6 +387,18 @@ QString AlertItem::uuid() const
 void AlertItem::setUuid(const QString &uid) const
 {
     d->_uid = uid;
+}
+
+/** Return the pacl uid of the item */
+QString AlertItem::packUid() const
+{
+    return d->_packUid;
+}
+
+/** Define the pack uid of the item. */
+void AlertItem::setPackUid(const QString &uid) const
+{
+    d->_packUid = uid;
 }
 
 QString AlertItem::cryptedPassword() const
@@ -573,7 +588,7 @@ bool AlertItem::isOverrideRequiresUserComment() const
     return d->_overrideRequiresUserComment;
 }
 
-/** When alert is included in a dynamic alert dialog with other alerts, setting the mustBeRead state ensure that user read the alert. */
+/** When alert is included in a blocking alert dialog with other alerts, setting the mustBeRead state ensure that user read the alert. */
 bool AlertItem::mustBeRead() const
 {
     return d->_mustBeRead;
@@ -609,7 +624,7 @@ void AlertItem::setOverrideRequiresUserComment(bool required)
     d->_overrideRequiresUserComment = required;
 }
 
-/** When alert is included in a dynamic alert dialog with other alerts, setting the mustBeRead state ensure that user read the alert. */
+/** When alert is included in a blocking alert dialog with other alerts, setting the mustBeRead state ensure that user read the alert. */
 void AlertItem::setMustBeRead(bool mustberead)
 {
     d->_mustBeRead = mustberead;
@@ -670,9 +685,9 @@ QString AlertItem::priorityBackgroundColor() const
 {
     QString background;
     switch (d->_priority) {
-    case AlertItem::Low: background = Core::Constants::COLOR_BACKGROUND_ALERT_HIGH; break;
+    case AlertItem::Low: background = Core::Constants::COLOR_BACKGROUND_ALERT_LOW; break;
     case AlertItem::Medium: background = Core::Constants::COLOR_BACKGROUND_ALERT_MEDIUM; break;
-    case AlertItem::High: background = Core::Constants::COLOR_BACKGROUND_ALERT_LOW; break;
+    case AlertItem::High: background = Core::Constants::COLOR_BACKGROUND_ALERT_HIGH; break;
     }
     return background;
 }
@@ -695,6 +710,8 @@ QIcon AlertItem::priorityBigIcon() const
     return priorityBigIcon(d->_priority);
 }
 
+static const char *CSS = "text-indent:5px;padding:5px;font-weight:bold;font-size:large;background:qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0.464 rgba(255, 255, 176, 149), stop:1 rgba(255, 255, 255, 0))";
+
 QString AlertItem::htmlToolTip(bool showCategory) const
 {
     QString toolTip;
@@ -703,13 +720,14 @@ QString AlertItem::htmlToolTip(bool showCategory) const
     if (showCategory)
         header = QString("<table border=0 margin=0 width=100%>"
                          "<tr>"
-                         "<td valign=middle width=70% style=\"font-weight:bold\">%1</td>"
-                         "<td valign=middle align=center style=\"font-weight:bold;background-color:%3;text-transform:uppercase\">%4</td>"
+                         "<td valign=middle width=70% style=\"%1\">%2</td>"
+                         "<td valign=middle align=center style=\"font-size:large;font-weight:bold;background-color:%4;text-transform:uppercase\">%5</td>"
                          "</tr>"
                          "<tr>"
-                         "<td colspan=2 style=\"font-weight:bold;color:#101010;padding-left:10px\">%2</td>"
+                         "<td colspan=2 style=\"font-weight:bold;color:#101010;padding-left:10px\">%3</td>"
                          "</tr>"
                          "</table>")
+                .arg(CSS)
                 .arg(category())
                 .arg(label())
                 .arg(priorityBackgroundColor())
@@ -719,7 +737,7 @@ QString AlertItem::htmlToolTip(bool showCategory) const
         header = QString("<table border=0 margin=0 width=100%>"
                          "<tr>"
                          "<td valign=middle width=70% style=\"font-weight:bold\">%1</td>"
-                         "<td valign=middle align=center style=\"font-weight:bold;background-color:%2;text-transform:uppercase\">%3</td>"
+                         "<td valign=middle align=center style=\"font-size:large;font-weight:bold;background-color:%2;text-transform:uppercase\">%3</td>"
                          "</tr>"
                          "</table>")
                 .arg(label())
@@ -956,7 +974,7 @@ bool AlertItem::validateAlertWithCurrentUserAndConfirmationDialog()
   The new state of the alert is not automatically saved into database, but
   the core is informed of this modification. \sa Alert::AlertCore::updateAlert()
 */
-bool AlertItem::validateAlert(const QString &validatorUid, bool override, const QString overrideComment, const QDateTime &dateOfValidation)
+bool AlertItem::validateAlert(const QString &validatorUid, bool override, const QString &overrideComment, const QDateTime &dateOfValidation)
 {
     // Create the validation
     AlertValidation val;
@@ -1052,6 +1070,7 @@ bool AlertItem::isUserValidated() const
 /** Remove all recorded validations. */
 void AlertItem::clearValidations()
 {
+    // TODO: check: clearValidations -> look at db (are all validations are removed ?)
     d->_modified = true;
     d->_validations.clear();
 }
@@ -1157,11 +1176,11 @@ QDebug operator<<(QDebug dbg, const Alert::AlertItem &a)
     s << "cat:" + a.category();
     s << "availableLang:" + a.availableLanguages().join(";");
     switch (a.viewType()) {
-    case AlertItem::DynamicAlert:
-        s << "view:dynamic";
+    case AlertItem::BlockingAlert:
+        s << "view:blocking";
         break;
-    case AlertItem::StaticAlert:
-        s << "view:staticAlert";
+    case AlertItem::NonBlockingAlert:
+        s << "view:nonblocking";
         break;
     default:
         s << "view:" + QString::number(a.viewType());
@@ -1211,7 +1230,7 @@ QString AlertItem::toXml() const
 //    d->descr.setData(Internal::AlertXmlDescription::URL, );
 //    d->descr.setData(Internal::AlertXmlDescription::AbsFileName, );
 //    d->descr.setData(Internal::AlertXmlDescription::Vendor, );
-    d->descr.setData(Internal::AlertXmlDescription::Validity, int(d->_valid));
+    d->descr.setData(Internal::AlertXmlDescription::Validity, d->_valid);
 //    d->descr.setData(Internal::AlertXmlDescription::FreeMedFormsCompatVersion, );
 //    d->descr.setData(Internal::AlertXmlDescription::FreeDiamsCompatVersion, );
 //    d->descr.setData(Internal::AlertXmlDescription::FreeAccountCompatVersion, );
@@ -1227,6 +1246,7 @@ QString AlertItem::toXml() const
     d->descr.setData(Internal::AlertXmlDescription::Editable, d->_editable);
     d->descr.setData(Internal::AlertXmlDescription::StyleSheet, d->_css);
     d->descr.setData(Internal::AlertXmlDescription::GeneralIcon, d->_themedIcon);
+    d->descr.setData(Internal::AlertXmlDescription::PackUid, d->_packUid);
 
     foreach(const QString &l, availableLanguages()) {
         d->descr.setData(Internal::AlertXmlDescription::Label, label(l) , l);
@@ -1496,7 +1516,8 @@ AlertTiming AlertTiming::fromDomElement(const QDomElement &element)
     if (element.tagName().compare(::XML_TIMING_ELEMENTTAG, Qt::CaseInsensitive)!=0)
         return AlertTiming();
     AlertTiming timing;
-    timing.setId(element.attribute("id").toInt());
+    if (!element.attribute("id").isEmpty())
+        timing.setId(element.attribute("id").toInt());
     timing.setValid(element.attribute("valid").toInt());
     timing.setStart(QDateTime::fromString(element.attribute("start"), Qt::ISODate));
     timing.setEnd(QDateTime::fromString(element.attribute("end"), Qt::ISODate));
@@ -1591,7 +1612,8 @@ AlertScript AlertScript::fromDomElement(const QDomElement &element)
     if (element.tagName().compare(::XML_SCRIPT_ELEMENTTAG, Qt::CaseInsensitive)!=0)
         return AlertScript();
     AlertScript script;
-    script.setId(element.attribute("id").toInt());
+    if (!element.attribute("id").isEmpty())
+        script.setId(element.attribute("id").toInt());
     script.setUuid(element.attribute("uid"));
     script.setValid(element.attribute("valid").toInt());
     script.setType(typeFromXml(element.attribute("type")));
@@ -1626,7 +1648,8 @@ AlertValidation AlertValidation::fromDomElement(const QDomElement &element)
     if (element.tagName().compare(::XML_VALIDATION_ELEMENTTAG, Qt::CaseInsensitive)!=0)
         return AlertValidation();
     AlertValidation val;
-    val.setId(element.attribute("id").toInt());
+    if (!element.attribute("id").isEmpty())
+        val.setId(element.attribute("id").toInt());
     val.setValidatorUuid(element.attribute("validator"));
     val.setUserComment(element.attribute("comment"));
     val.setValidatedUuid(element.attribute("validated"));
@@ -1671,6 +1694,40 @@ QString AlertRelation::relationTypeToString() const
     return QString::null;
 }
 
+/** Return a human readable string of the current relation. */
+QString AlertRelation::relationTypeToXml(AlertRelation::RelatedTo rel) // static
+{
+    switch (rel) {
+    case RelatedToPatient: return "patient";
+    case RelatedToAllPatients: return "allPatients";
+    case RelatedToFamily: return "family";
+    case RelatedToUser: return "user";
+    case RelatedToAllUsers: return "allUsers";
+    case RelatedToUserGroup: return "userGroup";
+    case RelatedToApplication: return "application";
+    }
+    return QString::null;
+}
+
+AlertRelation::RelatedTo AlertRelation::relationTypeFromXml(const QString &xmlValue) // static
+{
+    if (xmlValue.compare("patient", Qt::CaseInsensitive) == 0)
+        return RelatedToPatient;
+    else if (xmlValue.compare("allPatients", Qt::CaseInsensitive) == 0)
+        return RelatedToAllPatients;
+    else if (xmlValue.compare("family", Qt::CaseInsensitive) == 0)
+        return RelatedToFamily;
+    else if (xmlValue.compare("user", Qt::CaseInsensitive) == 0)
+        return RelatedToUser;
+    else if (xmlValue.compare("allUsers", Qt::CaseInsensitive) == 0)
+        return RelatedToAllUsers;
+    else if (xmlValue.compare("userGroup", Qt::CaseInsensitive) == 0)
+        return RelatedToUserGroup;
+    else if (xmlValue.compare("application", Qt::CaseInsensitive) == 0)
+        return RelatedToApplication;
+    return RelatedToApplication;
+}
+
 /** Transform the relation to XML */
 QString AlertRelation::toXml() const
 {
@@ -1678,12 +1735,12 @@ QString AlertRelation::toXml() const
         return QString("<%1 id='%2' to='%3'/>\n")
                 .arg(::XML_RELATED_ELEMENTTAG)
                 .arg(_id)
-                .arg(_related)
+                .arg(relationTypeToXml(_related))
                 ;
     return QString("<%1 id='%2' to='%3' uid='%4'/>\n")
             .arg(::XML_RELATED_ELEMENTTAG)
             .arg(_id)
-            .arg(_related)
+            .arg(relationTypeToXml(_related))
             .arg(_relatedUid)
             ;
 }
@@ -1694,8 +1751,9 @@ AlertRelation AlertRelation::fromDomElement(const QDomElement &element)
     if (element.tagName().compare(::XML_RELATED_ELEMENTTAG, Qt::CaseInsensitive)!=0)
         return AlertRelation();
     AlertRelation rel;
-    rel.setId(element.attribute("id").toInt());
-    rel.setRelatedTo(AlertRelation::RelatedTo(element.attribute("to").toInt()));
+    if (!element.attribute("id").isEmpty())
+        rel.setId(element.attribute("id").toInt());
+    rel.setRelatedTo(AlertRelation::relationTypeFromXml(element.attribute("to")));
     rel.setRelatedToUid(element.attribute("uid"));
     return rel;
 }

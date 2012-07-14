@@ -57,11 +57,14 @@ CommandLine::~CommandLine()
 
 void CommandLine::feedPatientDatas(Core::IPatient *patient)
 {
+    Q_UNUSED(patient);
 //    d->feedPatientDatas(patient);
 }
 
 QVariant CommandLine::value(int param, const QVariant &def) const
 {
+    Q_UNUSED(param);
+    Q_UNUSED(def);
     // TODO: code heree */
     return QVariant();
 //    return d->value.value(param,def);
@@ -69,6 +72,7 @@ QVariant CommandLine::value(int param, const QVariant &def) const
 
 QString CommandLine::paramName(int param) const
 {
+    Q_UNUSED(param);
     // TODO: code heree */
 //    if (d->params.keys().contains(param))
 //        return d->params.value(param);

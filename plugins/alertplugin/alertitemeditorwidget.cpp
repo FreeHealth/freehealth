@@ -89,10 +89,10 @@ AlertItemEditorWidget::AlertItemEditorWidget(QWidget *parent) :
     d->ui->priority->addItem(Utils::firstLetterUpperCase(tkTr(Trans::Constants::MEDIUM)));
     d->ui->priority->addItem(Utils::firstLetterUpperCase(tkTr(Trans::Constants::LOW)));
 
-    // DynamicAlert = 0,
-    // StaticAlert,
-    d->ui->viewType->addItem(tr("Dynamic alert"));
-    d->ui->viewType->addItem(tr("Static alert"));
+    // BlockingAlert = 0,
+    // NonBlockingAlert,
+    d->ui->viewType->addItem(tkTr(Trans::Constants::BLOCKING_ALERT));
+    d->ui->viewType->addItem(tkTr(Trans::Constants::NON_BLOCKING_ALERT));
 
     // ApplicationNotification = 0,
     // PatientCondition,
@@ -119,7 +119,7 @@ AlertItemEditorWidget::AlertItemEditorWidget(QWidget *parent) :
 
 AlertItemEditorWidget::~AlertItemEditorWidget()
 {
-    qWarning() << "~AlertItemEditorWidget()";
+//    qWarning() << "~AlertItemEditorWidget()";
     if (d)
         delete d;
     d = 0;
@@ -130,6 +130,7 @@ void AlertItemEditorWidget::clearUi()
     d->ui->alertLabel->clear();
     d->ui->alertCategory->clear();
     d->ui->alertDecsr->clear();
+    d->ui->iconLineEdit->clear();
     d->ui->contentType->setCurrentIndex(-1);
     d->ui->viewType->setCurrentIndex(-1);
     d->ui->priority->setCurrentIndex(-1);
@@ -156,13 +157,17 @@ void AlertItemEditorWidget::setAlertItem(const AlertItem &item)
         d->ui->alertDecsr->setPlainText(d->_item.description());
 
     // Types
-    if (d->_item.viewType()==AlertItem::DynamicAlert)
+    if (d->_item.viewType()==AlertItem::BlockingAlert)
         d->ui->viewType->setCurrentIndex(0);
-    else
+    else if (d->_item.viewType()==AlertItem::NonBlockingAlert)
         d->ui->viewType->setCurrentIndex(1);
+    else
+        d->ui->viewType->setCurrentIndex(-1);
+
     d->ui->contentType->setCurrentIndex(d->_item.contentType());
     d->ui->priority->setCurrentIndex(d->_item.priority());
     d->ui->overrideRequiresUserComment->setChecked(d->_item.isOverrideRequiresUserComment());
+    d->ui->iconLineEdit->setText(d->_item.themedIcon());
 
     // Timing
     d->ui->timingEditor->setAlertItem(item);
@@ -182,6 +187,9 @@ void AlertItemEditorWidget::setAlertItem(const AlertItem &item)
 
     // Scripts
     d->ui->scriptEditor->setAlertItem(d->_item);
+
+    // Set focus
+    d->ui->alertLabel->setFocus();
 }
 
 void AlertItemEditorWidget::reset()
@@ -205,6 +213,12 @@ void AlertItemEditorWidget::setDescriptionVisible(bool visible)
 {
     d->ui->alertDecsr->setVisible(visible);
     d->ui->alertDescription_Label->setVisible(visible);
+}
+
+void AlertItemEditorWidget::setIconVisible(bool visible)
+{
+    d->ui->iconLineEdit->setVisible(visible);
+    d->ui->iconLabel->setVisible(visible);
 }
 
 void AlertItemEditorWidget::setRelationVisible(bool visible)
@@ -282,19 +296,19 @@ void AlertItemEditorWidget::hideScriptsTab()
 
 bool AlertItemEditorWidget::submit(AlertItem &item)
 {
-    qWarning()<<"AlertItemEditorWidget::submit";
     // Description
     // remove all multi-lingual values
     item.removeAllLanguages();
     item.setLabel(d->ui->alertLabel->text());
     item.setCategory(d->ui->alertCategory->text());
     item.setDescription(d->ui->alertDecsr->toHtml());
+    item.setThemedIcon(d->ui->iconLineEdit->text());
 
     // Types
     if (d->ui->viewType->currentIndex() == 0)
-        item.setViewType(AlertItem::DynamicAlert);
+        item.setViewType(AlertItem::BlockingAlert);
     else
-        item.setViewType(AlertItem::StaticAlert);
+        item.setViewType(AlertItem::NonBlockingAlert);
     item.setContentType(AlertItem::ContentType(d->ui->contentType->currentIndex()));
     item.setPriority(AlertItem::Priority(d->ui->priority->currentIndex()));
     item.setOverrideRequiresUserComment(d->ui->overrideRequiresUserComment->isChecked());
@@ -315,7 +329,6 @@ bool AlertItemEditorWidget::submit(AlertItem &item)
     }
 
     // Scripts
-    qWarning() << "SUBMIT SCRIPTS";
     d->ui->scriptEditor->submit();
     item.clearScripts();
     item.setScripts(d->ui->scriptEditor->scripts());
