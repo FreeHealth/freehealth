@@ -30,8 +30,7 @@
 
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
-
-class QRubberBand;
+#include <QRubberBand>
 
 namespace Webcam {
 namespace Internal {
