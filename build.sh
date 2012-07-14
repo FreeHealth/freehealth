@@ -15,6 +15,7 @@ TEST=""
 TRANS=""
 CLEAN=""
 WEBCAM=""
+ALERT=""
 SPEC=""
 BUILD="debug"
 QMAKE_CONFIG=""
@@ -50,6 +51,7 @@ showHelp()
     echo "        4. Install application"
     echo "  -i  with 'linux integrated' configuration (release mode only) same as -ri"
     echo "  -w  build the webcam plugin (require libopencv-dev)"
+    echo "  -a  build the alert plugin"
     echo "  -j  Parallel compilation (number of jobs: equivalent to make -jX)"
     echo "  -t  Create translations"
     echo "  -x  Create a test project (in the test path)"
@@ -186,7 +188,11 @@ qmakeCommand()
     echo "# Preparing the build:\nthe qmake step" ; sleep 1
     if [[ "$WEBCAM" == "y" ]]; then
         $QMAKE_CONFIG="$QMAKE_CONFIG CONFIG+=with-webcam"
+    fi    
+    if [[ "$ALERT" == "y" ]]; then
+        $QMAKE_CONFIG="$QMAKE_CONFIG CONFIG+=with-alerts"
     fi
+
     echo "* qmake $BUNDLE_NAME.pro -r $QMAKE_CONFIG $SPEC LOWERED_APPNAME=$BUNDLE_NAME"
     echo "# qmake $BUNDLE_NAME.pro -r $QMAKE_CONFIG $SPEC LOWERED_APPNAME=$BUNDLE_NAME" >> $LOG_FILE
     if [[  "$DEBUG_BUILD_COMMANDS" == 1 ]]; then
@@ -414,7 +420,7 @@ launchApplication()
 ## Analyse options
 #########################################################################################
 detectSpec
-while getopts "hdrRijcxtwb:" option
+while getopts "hdrRijcxtwab:" option
 do
   case $option in
     h) showHelp
@@ -440,6 +446,8 @@ do
     ;;
     w) WEBCAM="y"
     ;;
+    a) ALERT="y"
+    ;;
     b) BUNDLE_NAME=`echo "$OPTARG" | sed y/ABCDEFGHIJKLMNOPQRSTUVWXYZ/abcdefghijklmnopqrstuvwxyz/`
   esac
 done
@@ -457,7 +465,8 @@ RET=""
 
 createDefaultConfig()
 {
-    $CONFIG="FreeMedForms;Default_debug_compilation_(recommended);Create_translations;Parallel_build;Notify_when_done;Run_application;$SPEC"
+    $CONFIG="FreeMedForms;Default_debug_compilation_(recommended)"
+    $CONFIG="$CONFIG;Create_translations;Parallel_build;Notify_when_done;Run_application;$SPEC"
 }
 
 zenityBuild()
@@ -558,6 +567,7 @@ thirdPage()
 {
     RET=$($ZENITY_SIZED --title "$ZENITY_TITLE" --list --text "Select options" --checklist --column "Select" --column "Options"  \
            `[ $(expr "$CONFIG" : ".*Build_WebCam_plugin.*") -ne 0 ] && echo 'True' ||  echo 'False'` "Build WebCam plugin"  \
+           `[ $(expr "$CONFIG" : ".*Build_Alert_plugin.*") -ne 0 ] && echo 'True' ||  echo 'False'` "Build Alert plugin"  \
            `[ $(expr "$CONFIG" : ".*Create_translations.*") -ne 0 ] && echo 'True' ||  echo 'False'` "Create translations"  \
            `[ $(expr "$CONFIG" : ".*Clean_build_path.*") -ne 0 ] && echo 'True' ||  echo 'False'` "Clean build path"  \
            `[ $(expr "$CONFIG" : ".*Parallel_build.*") -ne 0 ] && echo 'True' ||  echo 'False'`  "Parallel build" \
@@ -579,8 +589,13 @@ saveConfig()
 
 loadConfig()
 {
-    . ./build.conf
-    echo "* Previous configuration loaded"
+    if [[ -e ./build.conf ]]; then
+        . ./build.conf
+        echo "* Previous configuration loaded"
+    else
+        createDefaultConfig
+        echo "* Using default configuration"
+    fi
 }
 
 zenityConfigToBuildSystem()
@@ -590,6 +605,7 @@ zenityConfigToBuildSystem()
     # Options
     CLEAN="`[ $(expr "$CONFIG" : ".*Clean_build_path.*") -ne 0 ] && echo 'y' || echo 'n'`"
     WEBCAM="`[ $(expr "$CONFIG" : ".*Build_WebCam_plugin.*") -ne 0 ] && echo 'y' || echo 'n'`"
+    ALERT="`[ $(expr "$CONFIG" : ".*Build_Alert_plugin.*") -ne 0 ] && echo 'y' || echo 'n'`"
     RUN="`[ $(expr "$CONFIG" : ".*Run_application.*") -ne 0 ] && echo 'y' || echo 'n'`"
     TRANS="`[ $(expr "$CONFIG" : ".*Create_translations.*") -ne 0 ] && echo 'y' || echo 'n'`"
     MAKE_OPTS="`[ $(expr "$CONFIG" : ".*Parallel_build.*") -ne 0 ] && echo '-j4' || echo '-j1'`"

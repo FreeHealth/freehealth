@@ -28,10 +28,7 @@ SUBDIRS = \
     account \
     agenda \
     script \
-    mainwin \
-#    alerts \      # unstable
-
-
+    mainwin
 
 
 # root plugin
@@ -166,6 +163,12 @@ with-webcam {
     SUBDIRS += webcam
     webcam.subdir = ../../plugins/webcamplugin
     webcam.depends += core
+}
+
+with-alerts {
+    SUBDIRS += alerts
+    alerts.subdir = ../../plugins/alertplugin
+    alerts.depends += core
 }
 
 # manage non free content

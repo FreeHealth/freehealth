@@ -1,9 +1,13 @@
+!with-alerts{
+    error(Alert plugin not requested)
+}
+
 TEMPLATE = lib
 TARGET = Alert
 
 DEFINES += ALERT_LIBRARY
 
-QT += sql
+QT *= sql
 
 include(../fmf_plugins.pri)
 include(alertplugin_dependencies.pri)
