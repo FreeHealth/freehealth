@@ -53,9 +53,15 @@ public:
     
     QRect frame() const;
 
+public Q_SLOTS:
+    void setFrozen(bool aFreeze);
+    void freeze();
+    void unFreeze();
+    
 Q_SIGNALS:
     void frozen(bool);
     void imageReady(bool);
+    void clicked();
     
 private:
     void timerEvent(QTimerEvent *event);
@@ -63,6 +69,7 @@ private:
     void mouseMoveEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
     void wheelEvent(QWheelEvent *event);
+    void mouseDoubleClickEvent(QMouseEvent *event);
 
     void restrictRubberBandConstraints();
     

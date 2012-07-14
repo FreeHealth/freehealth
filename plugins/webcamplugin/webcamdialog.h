@@ -53,7 +53,7 @@ public:
     QPixmap photo() const;
 
 private Q_SLOTS:
-    void toggleFreezeMode();
+    void updatefreezeButton(bool aFreeze);
 
 private:
     void changeEvent(QEvent *event);

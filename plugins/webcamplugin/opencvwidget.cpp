@@ -42,14 +42,14 @@ OpenCVWidget::OpenCVWidget(QWidget *parent) :
 {
     m_camera = cvCreateCameraCapture(CV_CAP_ANY);
     Q_ASSERT(m_camera); //TODO: don't assert here, do error handling while runnning
-
+    
     // Log some info about webcam image
     IplImage *image = cvQueryFrame(m_camera);
     Q_ASSERT(image);
-
-//    qDebug() << "Image depth=%i" << image->depth;
-//    qDebug() <<"Image nChannels=%i" << image->nChannels;
-
+    
+    //    qDebug() << "Image depth=%i" << image->depth;
+    //    qDebug() <<"Image nChannels=%i" << image->nChannels;
+    
     // Create the QImage
     m_image = QImage(100,100,QImage::Format_RGB32);
     for (int x = 0; x < 100; x ++) {
@@ -73,7 +73,7 @@ void OpenCVWidget::timerEvent(QTimerEvent *event)
 {
     Q_UNUSED(event);
     IplImage *cvimage = cvQueryFrame(m_camera);
-
+    
     int cvIndex, cvLineStart;
     // switch between bit depths
     switch (cvimage->depth) {
@@ -93,7 +93,7 @@ void OpenCVWidget::timerEvent(QTimerEvent *event)
                     red = cvimage->imageData[cvIndex+2];
                     green = cvimage->imageData[cvIndex+1];
                     blue = cvimage->imageData[cvIndex+0];
-
+                    
                     m_image.setPixel(x,y,qRgb(red, green, blue));
                     cvIndex += 3;
                 }
@@ -112,6 +112,7 @@ void OpenCVWidget::timerEvent(QTimerEvent *event)
     setPixmap(QPixmap::fromImage(m_image));
 }
 
+
 /*!
  * \brief Takes care of mouse clicks in the capturing phase.
  * 
@@ -120,26 +121,33 @@ void OpenCVWidget::timerEvent(QTimerEvent *event)
  */
 void OpenCVWidget::mousePressEvent(QMouseEvent *event)
 {
-    // restrict to left mouse button and frozen state
-    if (event->button() != Qt::LeftButton)
+    // restrict to left mouse button
+    if (event->button() != Qt::LeftButton) {
+        QLabel::mousePressEvent(event);
         return;
+    }        
     
-    if(!m_frozen) {
-//        toggleFreezeMode();
+    // save click pos for later, also needed by mousereleaseEvent() to
+    // determine wether this is a click or drag start
+    m_clickOrigin = event->pos();
+    
+    // only when in frozen state
+    if (!m_frozen) {
+        QLabel::mousePressEvent(event);
         return;
     }
+    
+    //TODO:  mousepress on a border of the rubberband -> resize rubberband
     
     // if there is no QRubberBand, create one
-    if (m_rubberBand) {
-        delete m_rubberBand;
+    if (!m_rubberBand) {
+        m_rubberBand = new QRubberBand(QRubberBand::Rectangle, this);
     }
-    m_rubberBand = new QRubberBand(QRubberBand::Rectangle, this);
     m_Mode = Create;
-
+    
     // remember the position where the user clicked and the QRubberBand was then
-    m_clickOrigin = event->pos();
     m_rubberOrigin = m_rubberBand->pos();
-
+    
     // determine if the user has clicked *into* the QRubberBand boundaries
     if (m_rubberBand->rect().translated(m_rubberBand->pos()).contains(m_clickOrigin, true)) {
         m_Mode = Move;
@@ -149,6 +157,7 @@ void OpenCVWidget::mousePressEvent(QMouseEvent *event)
         m_rubberBand->setGeometry(QRect(m_clickOrigin, QSize()));
         m_rubberBand->show();
     }
+    QLabel::mousePressEvent(event);
 }
 
 /*!
@@ -159,7 +168,7 @@ void OpenCVWidget::mouseMoveEvent(QMouseEvent *event)
 {
     if (!m_frozen || !m_rubberBand)
         return;
-
+    
     switch (m_Mode) {
     
     case Create: {
@@ -172,13 +181,13 @@ void OpenCVWidget::mouseMoveEvent(QMouseEvent *event)
         restrictRubberBandConstraints();
         break;
     }
-
+        
     case Move: {
         // remember the distance vector between the actual mouse pos and the original click
         QPoint relativePosFromClick = event->pos() - m_clickOrigin;
         // now relatively move the rectangle to that vector
         m_rubberBand->move(m_rubberOrigin + relativePosFromClick);
-
+        
         // check if we are not out of the parent widget boundaries
         restrictRubberBandConstraints();
         break;
@@ -192,10 +201,26 @@ void OpenCVWidget::mouseMoveEvent(QMouseEvent *event)
  */
 void OpenCVWidget::mouseReleaseEvent(QMouseEvent *event)
 {
-    Q_UNUSED(event);
-    if (!m_frozen | !m_rubberBand) {
+    // wrong button?
+    if (event->button() != Qt::LeftButton) {
+        QLabel::mouseReleaseEvent(event);
         return;
     }
+    // left button, mouse was not moved since press - fire a click event and return
+    if (m_clickOrigin == event->pos()) {
+        Q_EMIT clicked();
+        QLabel::mouseReleaseEvent(event);
+        return;
+    }
+    
+    // here we can be sure the mouse has been moved
+    
+    // drag while capturing? no rubberband? exit!
+    if (!m_frozen | !m_rubberBand) {
+        QLabel::mouseReleaseEvent(event);
+        return;
+    }
+    
     QRect rect(m_rubberBand->geometry().normalized());
     qDebug() << m_rubberBand->geometry() << rect;
     if (rect.isValid()) {
@@ -222,7 +247,7 @@ void OpenCVWidget::wheelEvent(QWheelEvent *event)
     // only working when frozen and with active rubberband!
     if (!m_frozen || !m_rubberBand)
         return;
-
+    
     if (event->delta() > 0 && 
             m_rubberBand->width()+4 < this->rect().width() &&
             m_rubberBand->height()+4 < this->rect().height()) { // WheelUp
@@ -237,6 +262,15 @@ void OpenCVWidget::wheelEvent(QWheelEvent *event)
         }
         restrictRubberBandConstraints();
     }
+}
+
+void OpenCVWidget::mouseDoubleClickEvent(QMouseEvent *event)
+{
+    if (event->button() != Qt::LeftButton || !m_frozen) {
+        QLabel::mouseDoubleClickEvent(event);
+        return;
+    }
+    setFrozen(false);
 }
 
 /*!
@@ -271,7 +305,7 @@ void OpenCVWidget::restrictRubberBandConstraints()
     // is too far right
     if (m_rubberBand->geometry().right() > this->rect().right())
         m_rubberBand->move(this->rect().right() - m_rubberBand->width(), m_rubberBand->y());
-
+    
     // ist too far to the top
     if (m_rubberBand->y() < 0)
         m_rubberBand->move(m_rubberBand->x()-1, 1);
@@ -279,7 +313,7 @@ void OpenCVWidget::restrictRubberBandConstraints()
     if (m_rubberBand->geometry().bottom() > this->rect().bottom())
         m_rubberBand->move(m_rubberBand->x(), this->rect().bottom() - m_rubberBand->height());
     
-
+    
 }
 
 /*!
@@ -288,18 +322,8 @@ void OpenCVWidget::restrictRubberBandConstraints()
  */
 void OpenCVWidget::toggleFreezeMode()
 {
-    if (m_frozen) {
-        // Unfreeze
-        if (m_rubberBand)
-            m_rubberBand->hide();
-        m_timerId = startTimer(m_updateFreq);  // 0.1-second timer
-    } else {
-        // Freeze
-        if (m_timerId > 0)
-            killTimer(m_timerId);
-    }
     m_frozen = !m_frozen;
-    Q_EMIT frozen(m_frozen);
+    setFrozen(m_frozen);
 }
 
 void OpenCVWidget::setImageUpdateFrequency(const int ms)
@@ -324,4 +348,39 @@ QRect OpenCVWidget::frame() const
     if (!m_frozen || !m_rubberBand || !m_rubberBand->geometry().isValid())
         return QRect();
     return m_rubberBand->geometry();
+}
+
+/*!
+ * \brief Sets the frozen state to the given value and (un)freezes the capture stream.
+ *
+ * The widget then emits the frozen signal.
+ * \param aFrozen state that should be set.
+ */
+void OpenCVWidget::setFrozen(bool aFreeze)
+{
+    if (aFreeze) {
+        // Freeze
+        if (m_timerId > 0)
+            killTimer(m_timerId);
+    } else {
+        // remove QRubberBand
+        if (m_rubberBand)
+            m_rubberBand->hide();
+        // Unfreeze
+        m_timerId = startTimer(m_updateFreq);  // 0.1-second timer
+    }
+    m_frozen = aFreeze;
+    Q_EMIT frozen(aFreeze);
+}
+
+/*! \brief Convenience slot for freezing the widget */
+void OpenCVWidget::freeze()
+{
+    setFrozen(true);
+}
+
+/*! \brief Convenience slot for unfreezing the widget */
+void OpenCVWidget::unFreeze()
+{
+    setFrozen(false);
 }
