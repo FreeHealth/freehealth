@@ -24,8 +24,16 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "opencvwidget.h"
+
+#include <utils/log.h>
+
 #include <QMouseEvent>
-#include <QtGui>
+#include <QProgressDialog>
+#include <QImage>
+#include <QPixmap>
+#include <QTime>
+
+enum { WarnCameraProperties = false };
 
 using namespace Webcam::Internal;
 
@@ -40,24 +48,58 @@ OpenCVWidget::OpenCVWidget(QWidget *parent) :
     m_rubberBand(0),
     m_Mode(Create)
 {
+    setObjectName("OpenCVWidget");
+
+    QTime time;
+    time.start();
+
+    QProgressDialog dlg(this);
+    dlg.setRange(0, 0);
+    dlg.setValue(0);
+    dlg.setLabelText(tr("Acquiring webcam..."));
+    dlg.show();
+
     m_camera = cvCreateCameraCapture(CV_CAP_ANY);
     Q_ASSERT(m_camera); //TODO: don't assert here, do error handling while runnning
 
-    // Log some info about webcam image
-    IplImage *image = cvQueryFrame(m_camera);
-    Q_ASSERT(image);
+    LOG(tr("Acquiring WebCam (%1 ms)").arg(time.elapsed()));
 
-//    qDebug() << "Image depth=%i" << image->depth;
-//    qDebug() <<"Image nChannels=%i" << image->nChannels;
-
-    // Create the QImage
-    m_image = QImage(100,100,QImage::Format_RGB32);
-    for (int x = 0; x < 100; x ++) {
-        for (int y =0; y < 100; y++) {
-            m_image.setPixel(x,y,qRgb(x, y, y));
-        }
+    if (WarnCameraProperties) {
+        qWarning()
+                << "\nCV_CAP_PROP_POS_MSEC"
+                << cvGetCaptureProperty(m_camera, CV_CAP_PROP_POS_MSEC)
+                << "\nCV_CAP_PROP_POS_FRAMES"
+                << cvGetCaptureProperty(m_camera, CV_CAP_PROP_POS_FRAMES)
+                << "\nCV_CAP_PROP_POS_AVI_RATIO"
+                << cvGetCaptureProperty(m_camera, CV_CAP_PROP_POS_AVI_RATIO)
+                << "\nCV_CAP_PROP_FRAME_WIDTH"
+                << cvGetCaptureProperty(m_camera, CV_CAP_PROP_FRAME_WIDTH)
+                << "\nCV_CAP_PROP_FRAME_HEIGHT"
+                << cvGetCaptureProperty(m_camera, CV_CAP_PROP_FRAME_HEIGHT)
+                << "\nCV_CAP_PROP_FPS"
+                << cvGetCaptureProperty(m_camera, CV_CAP_PROP_FPS)
+                << "\nCV_CAP_PROP_FOURCC"
+                << cvGetCaptureProperty(m_camera, CV_CAP_PROP_FOURCC)
+                << "\nCV_CAP_PROP_FRAME_COUNT"
+                << cvGetCaptureProperty(m_camera, CV_CAP_PROP_FRAME_COUNT)
+                << "\nCV_CAP_PROP_FORMAT"
+                << cvGetCaptureProperty(m_camera, CV_CAP_PROP_FORMAT)
+                << "\nCV_CAP_PROP_MODE"
+                << cvGetCaptureProperty(m_camera, CV_CAP_PROP_MODE)
+                << "\nCV_CAP_PROP_BRIGHTNESS"
+                << cvGetCaptureProperty(m_camera, CV_CAP_PROP_BRIGHTNESS)
+                << "\nCV_CAP_PROP_CONTRAST"
+                << cvGetCaptureProperty(m_camera, CV_CAP_PROP_CONTRAST)
+                << "\nCV_CAP_PROP_SATURATION"
+                << cvGetCaptureProperty(m_camera, CV_CAP_PROP_SATURATION)
+                << "\nCV_CAP_PROP_HUE"
+                << cvGetCaptureProperty(m_camera, CV_CAP_PROP_HUE)
+                << "\nCV_CAP_PROP_GAIN"
+                << cvGetCaptureProperty(m_camera, CV_CAP_PROP_GAIN)
+                << "\nCV_CAP_PROP_EXPOSURE"
+                << cvGetCaptureProperty(m_camera, CV_CAP_PROP_EXPOSURE) ;
     }
-    setPixmap(QPixmap::fromImage(m_image));
+
     m_timerId = startTimer(m_updateFreq);
 }
 
