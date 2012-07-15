@@ -35,6 +35,8 @@
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
+#include <coreplugin/ipatient.h>
+#include <coreplugin/iuser.h>
 
 #include <extensionsystem/pluginmanager.h>
 #include <utils/log.h>
@@ -53,11 +55,15 @@
 
 # include <QDir>
 
+enum { WithTests = false };
+
 using namespace Alert;
 using namespace Trans::ConstantTranslations;
 
 static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
+static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
+static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 
 AlertCore *AlertCore::_instance = 0;
 
@@ -104,9 +110,6 @@ AlertCore::AlertCore(QObject *parent) :
     // Create all instance
     d->_alertBase = new Internal::AlertBase(this);
     d->_alertScriptManager = new Internal::AlertScriptManager(this);
-
-    // uncomment the following line to create tests
-//    connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
 }
 
 AlertCore::~AlertCore()
@@ -195,9 +198,7 @@ bool AlertCore::checkAlerts(AlertsToCheck check)
 
     // Get the alerts
     QVector<AlertItem> alerts = d->_alertBase->getAlertItems(query);
-
     processAlerts(alerts);
-
     return true;
 }
 
@@ -304,7 +305,6 @@ void AlertCore::processAlerts(QVector<AlertItem> &alerts)
 {
     // Get static place holders
     QList<Alert::IAlertPlaceHolder*> placeHolders = pluginManager()->getObjects<Alert::IAlertPlaceHolder>();
-
     // Process alerts
     QList<AlertItem> blockings;
     for(int i = 0; i < alerts.count(); ++i) {
@@ -348,6 +348,16 @@ void AlertCore::processAlerts(QVector<AlertItem> &alerts)
 }
 
 void AlertCore::postCoreInitialization()
+{
+    if (WithTests)
+        makeTests();
+    if (patient())
+        connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(checkPatientAlerts()));
+    if (user())
+        connect(user(), SIGNAL(userChanged()), this, SLOT(checkUserAlerts()));
+}
+
+void AlertCore::makeTests()
 {
     // TESTS
     QDateTime start = QDateTime::currentDateTime().addSecs(-60*60*24);
@@ -586,4 +596,3 @@ void AlertCore::postCoreInitialization()
 
     // END TESTS
 }
-

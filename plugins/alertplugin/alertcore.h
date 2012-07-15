@@ -58,7 +58,8 @@ public:
     enum AlertToCheck {
         CurrentPatientAlerts =      0x00000001,
         CurrentUserAlerts =         0x00000002,
-        CurrentApplicationAlerts =  0x00000004
+        CurrentApplicationAlerts =  0x00000004,
+        AllAlerts = CurrentPatientAlerts | CurrentUserAlerts | CurrentApplicationAlerts
     };
     Q_DECLARE_FLAGS(AlertsToCheck, AlertToCheck)
 
@@ -72,8 +73,15 @@ public:
     bool saveAlert(AlertItem &item);
     bool saveAlerts(QList<AlertItem> &items);
 
-    // Executers
+public Q_SLOTS:
+    // Checks
+    bool checkAllAlerts() {return checkAlerts(AllAlerts);}
+    bool checkPatientAlerts() {return checkAlerts(CurrentPatientAlerts);}
+    bool checkUserAlerts() {return checkAlerts(CurrentUserAlerts);}
+    bool checkApplicationAlerts() {return checkAlerts(CurrentApplicationAlerts);}
     bool checkAlerts(AlertsToCheck check);
+
+    // Alert management
     bool registerAlert(const AlertItem &item);
     bool updateAlert(const AlertItem &item);
     bool removeAlert(const AlertItem &item);
@@ -99,8 +107,9 @@ Q_SIGNALS:
 private:
     void processAlerts(QVector<AlertItem> &alerts);
 
-private Q_SLOTS:
+protected:
     void postCoreInitialization();
+    void makeTests();
 
 private:
     static AlertCore *_instance;
