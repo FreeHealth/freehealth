@@ -61,7 +61,7 @@
 #include <QHash>
 #include <QSqlQuery>
 
-enum { WarnGetAlertQuerySQLCommand = false, WarnMemberNames = false };
+enum { WarnGetAlertQuerySQLCommand = false, WarnMemberNames = true };
 
 using namespace Alert;
 using namespace Internal;
@@ -602,7 +602,7 @@ bool AlertBase::saveAlertItem(AlertItem &item)
         qWarning() << "AlertBase::saveAlertItem";
 
     // update or save ?
-    if (!item.db(ItemId).isValid()) {
+    if (!item.db(ItemId).isValid() || item.db(ItemId).toInt() <= 0) {
         // try to catch the id using the uuid
         QHash<int, QString> where;
         where.insert(Constants::ALERT_UID, QString("='%1'").arg(item.uuid()));
@@ -803,11 +803,11 @@ bool AlertBase::saveItemRelations(AlertItem &item)
     if (item.relations().count()==0)
         return true;
     int id = -1;
-    if (item.db(RelatedId).isValid()) {
-        id = item.db(RelatedId).toInt();
-    } else {
+    if (!item.db(RelatedId).isValid() || item.db(RelatedId).toInt() <= 0) {
         id = max(Constants::Table_ALERT_RELATED, Constants::ALERT_RELATED_REL_ID).toInt() + 1;
         item.setDb(RelatedId, id);
+    } else {
+        id = item.db(RelatedId).toInt();
     }
     // save all relations
     QSqlQuery query(database());
@@ -866,11 +866,11 @@ bool AlertBase::saveItemScripts(AlertItem &item)
         return true;
     // get the script script_id
     int id = -1;
-    if (item.db(ScriptId).isValid()) {
-        id = item.db(ScriptId).toInt();
-    } else {
+    if (!item.db(ScriptId).isValid() || item.db(ScriptId).toInt() <= 0) {
         id = max(Constants::Table_ALERT_SCRIPTS, Constants::ALERT_SCRIPTS_SID).toInt() + 1;
         item.setDb(ScriptId, id);
+    } else {
+        id = item.db(ScriptId).toInt();
     }
     QSqlQuery query(database());
     for(int i=0; i<item.scripts().count(); ++i) {
@@ -934,11 +934,11 @@ bool AlertBase::saveItemTimings(AlertItem &item)
         return true;
     // get the timind timing_id
     int id = -1;
-    if (item.db(TimingId).isValid()) {
-        id = item.db(TimingId).toInt();
-    } else {
+    if (item.db(TimingId).isValid() || item.db(TimingId).toInt() <= 0) {
         id = max(Constants::Table_ALERT_TIMING, Constants::ALERT_TIMING_TIM_ID).toInt() + 1;
         item.setDb(TimingId, id);
+    } else {
+        id = item.db(TimingId).toInt();
     }
     // save all timings
     QSqlQuery query(database());
@@ -1016,12 +1016,15 @@ bool AlertBase::saveItemValidations(AlertItem &item)
         return true;
     // get the validations val_id
     int id = -1;
-    if (!item.db(ValidationId).isValid()) {
+    if (!item.db(ValidationId).isValid() || item.db(ValidationId).toInt() <= 0) {
         id = max(Constants::Table_ALERT_VALIDATION, Constants::ALERT_VALIDATION_VAL_ID).toInt() + 1;
         item.setDb(ValidationId, id);
     } else {
         id = item.db(ValidationId).toInt();
     }
+
+    qWarning()<<"item valId" << item.db(ValidationId) << "id" << id;
+
     QSqlQuery query(database());
     for(int i=0; i < item.validations().count(); ++i) {
         AlertValidation &validation = item.validationAt(i);
@@ -1096,7 +1099,7 @@ bool AlertBase::saveItemLabels(AlertItem &item)
     vals << LabelLID << CategoryLID << DescrLID << CommentLID;
     int lastLid = -1;
     for(int i=0; i < vals.count(); ++i) {
-        if (item.db(vals.at(i)).isValid() && item.db(vals.at(i)).toInt()>-1) {
+        if (item.db(vals.at(i)).isValid() && item.db(vals.at(i)).toInt()>0) {
             lids[i] = item.db(vals.at(i)).toInt();
             // delete all old relations
             QHash<int, QString> where;
@@ -1185,6 +1188,9 @@ QVector<AlertItem> AlertBase::getAlertItems(const AlertBaseQuery &query)
     QVector<AlertItem> alerts;
     if (!connectDatabase(Constants::DB_NAME, __LINE__))
         return alerts;
+
+    if (WarnMemberNames)
+        qWarning() << "AlertBase::getAlertItems";
 
     // get unique alert by uuid
     if (!query.alertItemFromUuid().isEmpty()) {
@@ -1428,6 +1434,10 @@ AlertItem AlertBase::getAlertItemFromUuid(const QString &uuid)
     item.setUuid(uuid);
     if (!connectDatabase(Constants::DB_NAME, __LINE__))
         return item;
+
+    if (WarnMemberNames)
+        qWarning() << "AlertBase::getAlertItemFromUuid";
+
     database().transaction();
     QHash<int, QString> where;
     where.insert(Constants::ALERT_UID, QString("='%1'").arg(uuid));
@@ -1493,6 +1503,10 @@ bool AlertBase::getItemRelations(AlertItem &item)
     // we are inside a transaction opened by getAlertItem
     if (!connectDatabase(Constants::DB_NAME, __LINE__))
         return false;
+
+    if (WarnMemberNames)
+        qWarning() << "AlertBase::getItemRelations";
+
     using namespace Alert::Constants;
     QSqlQuery query(database());
     Utils::Field cond(Table_ALERT, ALERT_ID, QString("=%1").arg(item.db(ItemId).toString()));
@@ -1543,6 +1557,10 @@ bool AlertBase::getItemTimings(AlertItem &item)
     // we are inside a transaction opened by getAlertItem
     if (!connectDatabase(Constants::DB_NAME, __LINE__))
         return false;
+
+    if (WarnMemberNames)
+        qWarning() << "AlertBase::getItemTimings";
+
     using namespace Alert::Constants;
     QSqlQuery query(database());
     Utils::Field cond(Table_ALERT, ALERT_ID, QString("=%1").arg(item.db(ItemId).toString()));
@@ -1571,6 +1589,10 @@ bool AlertBase::getItemValidations(AlertItem &item)
     // we are inside a transaction opened by getAlertItem
     if (!connectDatabase(Constants::DB_NAME, __LINE__))
         return false;
+
+    if (WarnMemberNames)
+        qWarning() << "AlertBase::getItemValidations";
+
     using namespace Alert::Constants;
     if (item.relations().count() <= 0) {
         LOG_ERROR("No relations to link validations");
@@ -1611,6 +1633,10 @@ bool AlertBase::getItemLabels(AlertItem &item)
     // we are inside a transaction opened by getAlertItem
     if (!connectDatabase(Constants::DB_NAME, __LINE__))
         return false;
+
+    if (WarnMemberNames)
+        qWarning() << "AlertBase::getItemLabels";
+
     using namespace Alert::Constants;
     QSqlQuery query(database());
     Utils::Field cond(Table_ALERT, ALERT_ID, QString("=%1").arg(item.db(ItemId).toString()));
@@ -1668,6 +1694,12 @@ bool AlertBase::getItemLabels(AlertItem &item)
 bool AlertBase::updateAlertPackDescription(AlertPackDescription &descr, const int id)
 {
     // We are inside a transaction created by saveAlertPackDescription()
+    if (!connectDatabase(Constants::DB_NAME, __LINE__))
+        return false;
+
+    if (WarnMemberNames)
+        qWarning() << "AlertBase::updateAlertPackDescription";
+
     QList<int> fields;
     fields
             << Constants::ALERT_PACKS_UID
@@ -1723,6 +1755,10 @@ bool AlertBase::saveAlertPackDescription(AlertPackDescription &descr)
 {
     if (!connectDatabase(Constants::DB_NAME, __LINE__))
         return false;
+
+    if (WarnMemberNames)
+        qWarning() << "AlertBase::saveAlertPackDescription";
+
     if (descr.uid().isEmpty()) {
         LOG_ERROR("AlertPackDescription uuid can not be null");
         return false;
@@ -1786,6 +1822,10 @@ bool AlertBase::saveAlertPackLabels(AlertPackDescription &descr)
     // we are inside a transaction opened by saveAlertItem
     if (!connectDatabase(Constants::DB_NAME, __LINE__))
         return false;
+
+    if (WarnMemberNames)
+        qWarning() << "AlertBase::saveAlertPackLabels";
+
     QSqlQuery query(database());
     QList<int> lids;
     QList<int> vals;
@@ -1870,6 +1910,9 @@ bool AlertBase::saveAlertPackLabels(AlertPackDescription &descr)
 /** Reconnect the database when the database server changes. \sa Core::ICore::databaseServerChanged(), Core::ISettings::databaseConnector() */
 void AlertBase::onCoreDatabaseServerChanged()
 {
+    if (WarnMemberNames)
+        qWarning() << "AlertBase::onCoreDatabaseServerChanged";
+
     m_initialized = false;
     if (QSqlDatabase::connectionNames().contains(Constants::DB_NAME)) {
         QSqlDatabase::removeDatabase(Constants::DB_NAME);
@@ -1879,6 +1922,9 @@ void AlertBase::onCoreDatabaseServerChanged()
 
 void AlertBase::onCoreFirstRunCreationRequested()
 {
+    if (WarnMemberNames)
+        qWarning() << "AlertBase::onCoreFirstRunCreationRequested";
+
     disconnect(Core::ICore::instance(), SIGNAL(firstRunDatabaseCreation()), this, SLOT(onCoreFirstRunCreationRequested()));
     initialize();
 }
