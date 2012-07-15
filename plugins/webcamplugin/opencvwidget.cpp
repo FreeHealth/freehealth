@@ -49,21 +49,21 @@ OpenCVWidget::OpenCVWidget(QWidget *parent) :
     m_Mode(Create)
 {
     setObjectName("OpenCVWidget");
-
+    
     QTime time;
     time.start();
-
+    
     QProgressDialog dlg(this);
     dlg.setRange(0, 0);
     dlg.setValue(0);
     dlg.setLabelText(tr("Acquiring webcam..."));
     dlg.show();
-
+    
     m_camera = cvCreateCameraCapture(CV_CAP_ANY);
     Q_ASSERT(m_camera); //TODO: don't assert here, do error handling while runnning
-
+    
     LOG(tr("Acquiring WebCam (%1 ms)").arg(time.elapsed()));
-
+    
     if (WarnCameraProperties) {
         qWarning()
                 << "\nCV_CAP_PROP_POS_MSEC"
@@ -99,7 +99,20 @@ OpenCVWidget::OpenCVWidget(QWidget *parent) :
                 << "\nCV_CAP_PROP_EXPOSURE"
                 << cvGetCaptureProperty(m_camera, CV_CAP_PROP_EXPOSURE) ;
     }
-
+    
+    
+    // face recognition initialisation
+    
+    //FIXME: this is only working in Linux with fixed path when opencv is installed!
+    // how do you include an xml file in a resource and load it with a non-Qt function?
+    _cascade =  (CvHaarClassifierCascade*)cvLoad("/usr/share/opencv/haarcascades/haarcascade_frontalface_alt2.xml");
+    
+    _storage = cvCreateMemStorage(0);
+    _colors << cvScalar(0.0,0.0,255.0) << cvScalar(0.0,128.0,255.0)
+            << cvScalar(0.0,255.0,255.0) << cvScalar(0.0,255.0,0.0)
+            << cvScalar(255.0,128.0,0.0) << cvScalar(255.0,255.0,0.0)
+            << cvScalar(255.0,0.0,0.0) << cvScalar(255.0,0.0,255.0);
+    
     m_timerId = startTimer(m_updateFreq);
 }
 
@@ -113,15 +126,42 @@ OpenCVWidget::~OpenCVWidget()
 
 void OpenCVWidget::timerEvent(QTimerEvent *event)
 {
+    // thanks for some code snippets from Stef van den Elzen
+    // taken from http://sj.vdelzen.net/2011/05/31/realtime-face-detection-using-opencv-and-cqt/
+    
     Q_UNUSED(event);
     IplImage *cvimage = cvQueryFrame(m_camera);
+    if (!cvimage)
+        return;
     
     int cvIndex, cvLineStart;
     // switch between bit depths
     switch (cvimage->depth) {
     case IPL_DEPTH_8U:
         switch (cvimage->nChannels) {
-        case 3:
+        case 3: {
+            
+            // Detect face objects
+            cvClearMemStorage( _storage );
+            
+            qDebug() << _cascade;
+            CvSeq* objects = cvHaarDetectObjects(cvimage, _cascade, _storage, 1.1, 3, CV_HAAR_DO_CANNY_PRUNING, cvSize( 30, 30 ));
+            
+            //TODO: warn if more than one objects
+            int n = (objects ? objects->total : 0);
+            
+            CvRect* rect;
+            // Loop through objects and draw boxes
+            for( int i = 0; i < n; i++ )
+            {
+                rect = (CvRect*)cvGetSeqElem(objects, i);
+                cvRectangle( cvimage,
+                             cvPoint(rect->x, rect->y),
+                             cvPoint(rect->x + rect->width, rect->y + rect->height),
+                             _colors[i%8]
+                             );
+            }
+            
             if ( (cvimage->width != m_image.width()) || (cvimage->height != m_image.height()) ) {
                 QImage temp(cvimage->width, cvimage->height, QImage::Format_RGB32);
                 m_image = temp;
@@ -142,6 +182,7 @@ void OpenCVWidget::timerEvent(QTimerEvent *event)
                 cvLineStart += cvimage->widthStep;
             }
             break;
+        }
         default:
             printf("This number of channels is not supported\n");
             break;
@@ -426,4 +467,9 @@ void OpenCVWidget::freeze()
 void OpenCVWidget::unFreeze()
 {
     setFrozen(false);
+}
+
+void OpenCVWidget::onActionCaptureTriggered()
+{
+    
 }
