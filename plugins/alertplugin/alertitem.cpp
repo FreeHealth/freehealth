@@ -27,6 +27,7 @@
  ***************************************************************************/
 #include "alertitem.h"
 #include "alertcore.h"
+#include "alertpackdescription.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/iuser.h>
@@ -56,6 +57,7 @@ using namespace Trans::ConstantTranslations;
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
+static inline Alert::AlertCore *alertCore() {return Alert::AlertCore::instance();}
 
 namespace {
 const char * const XML_ROOT_TAG = "Alert";
@@ -779,6 +781,12 @@ QString AlertItem::htmlToolTip(bool showCategory) const
     if (!tim.isEmpty())
         content += QString("<span style=\"font-size:small;color:#303030\">%1</span>").arg(tim.join("<br />"));
 
+    // Alert pack description
+    if (!packUid().isEmpty()) {
+        AlertPackDescription pack = alertCore()->getAlertPackDescription(packUid());
+        content += QString("<span style=\"font-size:small;color:#303030\">%1</span>")
+                .arg(tkTr(Trans::Constants::FROM) + " " + pack.label());
+    }
     toolTip = QString("%1"
                       "<table border=0 cellpadding=0 cellspacing=0 width=100%>"
                       "<tr><td style=\"padding-left:10px;\">%2</td></tr>"
