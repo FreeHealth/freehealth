@@ -23,7 +23,7 @@ HEADERS += \
     $${PWD}/alertitemtimingeditorwidget.h \
     $${PWD}/alertitemeditordialog.h \
     $${PWD}/blockingalertdialog.h \
-    $${PWD}/alertplaceholdertest.h \
+    $${PWD}/alertplaceholderwidget.h \
     $${PWD}/nonblockingalertwidgets.h \
     $${PWD}/alertscriptmanager.h \
     $${PWD}/alertitemscripteditor.h \
@@ -39,7 +39,7 @@ SOURCES += \
     $${PWD}/alertitemtimingeditorwidget.cpp \
     $${PWD}/alertitemeditordialog.cpp \
     $${PWD}/blockingalertdialog.cpp \
-    $${PWD}/alertplaceholdertest.cpp \
+    $${PWD}/alertplaceholderwidget.cpp \
     $${PWD}/nonblockingalertwidgets.cpp \
     $${PWD}/alertscriptmanager.cpp \
     $${PWD}/alertitemscripteditor.cpp \
