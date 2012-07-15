@@ -107,11 +107,6 @@ usermanager.depends += listview
 usermanager.depends += zipcodes
 #usermanager.depends += agenda
 
-patientbase.subdir   = ../../plugins/patientbaseplugin
-patientbase.depends += core
-patientbase.depends += listview
-patientbase.depends += zipcodes
-
 agenda.subdir = ../../plugins/agendaplugin
 agenda.depends += core
 agenda.depends += patientbase
@@ -170,6 +165,12 @@ with-alerts {
     alerts.subdir = ../../plugins/alertplugin
     alerts.depends += core
 }
+
+patientbase.subdir   = ../../plugins/patientbaseplugin
+patientbase.depends += core
+patientbase.depends += listview
+patientbase.depends += zipcodes
+with-alerts { patientbase.depends += alerts }
 
 # manage non free content
 #include(../buildspecs/config.pri)

@@ -2,11 +2,16 @@ TEMPLATE = lib
 TARGET = PatientBase
 
 DEFINES += PATIENTBASE_LIBRARY
+with-alerts{
+    message(Build Alert part of PatientBase plugin)
+    DEFINES += WITH_ALERTS
+}
 
 BUILD_PATH_POSTFIXE = FreeMedForms
 
 include(../fmf_plugins.pri)
 include(patientbaseplugin_dependencies.pri)
+
 HEADERS = patientbaseplugin.h \
     patientbase_exporter.h \
     patientbase.h \
@@ -44,7 +49,13 @@ FORMS += identitywidget.ui \
     patientbar.ui \
     identityviewer.ui
 
-OTHER_FILES = PatientBase.pluginspec
+with-alerts{
+    HEADERS += with-alerts/patientbaralertplaceholder.h
+    SOURCES += with-alerts/patientbaralertplaceholder.cpp
+    OTHER_FILES = with-alerts/PatientBase.pluginspec
+}else{
+    OTHER_FILES = PatientBase.pluginspec
+}
 
 TRANSLATIONS += $${SOURCES_TRANSLATIONS_PATH}/patientbaseplugin_fr.ts \
     $${SOURCES_TRANSLATIONS_PATH}/patientbaseplugin_de.ts \

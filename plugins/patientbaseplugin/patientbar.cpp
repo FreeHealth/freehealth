@@ -37,6 +37,11 @@
 #include "patientbar.h"
 #include "patientmodel.h"
 #include "constants_settings.h"
+
+#ifdef WITH_ALERTS
+#   include "with-alerts/patientbaralertplaceholder.h"
+#endif
+
 #include "ui_patientbar.h"
 
 #include <coreplugin/ipatient.h>
@@ -45,6 +50,7 @@
 
 #include <utils/log.h>
 #include <utils/global.h>
+#include <extensionsystem/pluginmanager.h>
 
 #include <QDataWidgetMapper>
 #include <QIcon>
@@ -56,6 +62,7 @@ using namespace Patients;
 
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 static inline Core::IPatient *patient()  { return Core::ICore::instance()->patient(); }
+static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 
 namespace Patients {
 namespace Internal {
@@ -96,11 +103,32 @@ public:
         ui->photo->clear();
     }
 
+    void createAlertManager()
+    {
+    #ifdef WITH_ALERTS
+        LOG_FOR(q, "Creating patient alert placeholder");
+        _alertPlaceHolder = new PatientBarAlertPlaceHolder(q);
+        pluginManager()->addObject(_alertPlaceHolder);
+        ui->alertLayout->addWidget(_alertPlaceHolder->createWidget(q));
+    #endif
+    }
+
+    void removeAlertManager()
+    {
+    #ifdef WITH_ALERTS
+        pluginManager()->removeObject(_alertPlaceHolder);
+    #endif
+    }
+
+
 public:
     Ui::PatientBar *ui;
     PatientModel *m_Model;
     QDataWidgetMapper *m_Mapper;
     QPersistentModelIndex *m_Index;
+#ifdef WITH_ALERTS
+    PatientBarAlertPlaceHolder *_alertPlaceHolder;
+#endif
 
 private:
     PatientBar *q;
@@ -120,16 +148,19 @@ PatientBar::PatientBar(QWidget *parent) :
     QWidget(parent),
     d(new Internal::PatientBarPrivate(this))
 {
+    setObjectName("PatientBar");
     d->ui->setupUi(this);
     if (!PatientModel::activeModel()) {
         PatientModel::setActiveModel(new PatientModel(qApp));
     }
     setPatientModel(PatientModel::activeModel());
+    d->createAlertManager();
     connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onCurrentPatientChanged()));
 }
 
 PatientBar::~PatientBar()
 {
+    d->removeAlertManager();
 }
 
 void PatientBar::setPatientModel(PatientModel *model)
