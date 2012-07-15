@@ -57,7 +57,9 @@ AlertPlaceHolderWidget::AlertPlaceHolderWidget(QObject *parent) :
     _newButton(0),
     _iconSize(QSize(16,16)),
     _margin(0), _spacing(0), _border(0),
-    _drawBackgroundUsingAlertPriority(true)
+    _drawBackgroundUsingAlertPriority(true),
+    _autoSave(false),
+    _autoSaveOnEdit(false)
 {
     setObjectName("AlertPlaceHolderWidget");
 }
@@ -98,16 +100,26 @@ void AlertPlaceHolderWidget::setIconSize(const QSize &size)
     _iconSize = size;
 }
 
-void AlertPlaceHolderWidget::drawBackgroundUsingAlertPriority(bool useAlertPriority)
+void AlertPlaceHolderWidget::setDrawBackgroundUsingAlertPriority(bool useAlertPriority)
 {
     foreach(NonBlockingAlertToolButton *but, _buttons.values())
-        but->drawBackgroundUsingAlertPriority(useAlertPriority);
+        but->setDrawBackgroundUsingAlertPriority(useAlertPriority);
     _drawBackgroundUsingAlertPriority = useAlertPriority;
 }
 
-//void AlertPlaceHolderWidget::setContentsMargins(const QMargins &margins)
-//{
-//}
+void AlertPlaceHolderWidget::setAutoSaveOnValidationOrOverriding(bool autosave)
+{
+    foreach(NonBlockingAlertToolButton *but, _buttons.values())
+        but->setAutoSaveOnValidationOrOverriding(autosave);
+    _autoSave = autosave;
+}
+
+void AlertPlaceHolderWidget::setAutoSaveOnEditing(bool autosave)
+{
+    foreach(NonBlockingAlertToolButton *but, _buttons.values())
+        but->setAutoSaveOnEditing(autosave);
+    _autoSaveOnEdit = autosave;
+}
 
 void AlertPlaceHolderWidget::clear()
 {
@@ -124,7 +136,9 @@ bool AlertPlaceHolderWidget::addAlert(const AlertItem &alert)
         if (_widget) {
             NonBlockingAlertToolButton *but = new NonBlockingAlertToolButton(_widget);
             but->setAlertItem(alert);
-            but->drawBackgroundUsingAlertPriority(_drawBackgroundUsingAlertPriority);
+            but->setDrawBackgroundUsingAlertPriority(_drawBackgroundUsingAlertPriority);
+            but->setAutoSaveOnValidationOrOverriding(_autoSave);
+            but->setAutoSaveOnEditing(_autoSaveOnEdit);
 
             // keep alert sorted by priority
             _priorities << alert.priority()*10000000 + alerts.count();

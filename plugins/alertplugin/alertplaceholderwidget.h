@@ -53,12 +53,14 @@ public:
     virtual QString category(const QString &lang = QString::null) const;
     virtual QString description(const QString &lang = QString::null) const;
 
-    // Ui options
+    // Ui/automation options
     void setIconSize(const QSize &size);
     void setMargin(int margin) {_margin=margin;}
     void setSpacing(int spacing) {_spacing=spacing;}
     void setBorderSize(int borderSize) {_border=borderSize;}
-    void drawBackgroundUsingAlertPriority(bool useAlertPriority);
+    void setDrawBackgroundUsingAlertPriority(bool useAlertPriority);
+    void setAutoSaveOnValidationOrOverriding(bool autosave);
+    void setAutoSaveOnEditing(bool autosave);
 
     // AlertItem management
     void clear();
@@ -88,7 +90,7 @@ private:
     QToolButton *_newButton;
     QSize _iconSize;
     int _margin, _spacing, _border;
-    bool _drawBackgroundUsingAlertPriority;
+    bool _drawBackgroundUsingAlertPriority, _autoSave, _autoSaveOnEdit;
 };
 
 }  // namespace Alert

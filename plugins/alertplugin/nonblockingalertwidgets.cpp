@@ -82,7 +82,9 @@ static QIcon getIcon(const AlertItem &item)
 */
 NonBlockingAlertToolButton::NonBlockingAlertToolButton(QWidget *parent) :
     QToolButton(parent),
-    _drawBackgroundUsingAlertPriority(true)
+    _drawBackgroundUsingAlertPriority(true),
+    _autoSave(false),
+    _autoSaveOnEdit(false)
 {
     setMinimumSize(QSize(16,16));
     setToolButtonStyle(Qt::ToolButtonIconOnly);
@@ -158,10 +160,20 @@ void NonBlockingAlertToolButton::setAlertItem(const AlertItem &item)
     _item = item;
 }
 
-void NonBlockingAlertToolButton::drawBackgroundUsingAlertPriority(bool useAlertPriority)
+void NonBlockingAlertToolButton::setDrawBackgroundUsingAlertPriority(bool useAlertPriority)
 {
     _drawBackgroundUsingAlertPriority = useAlertPriority;
     refreshStyleSheet();
+}
+
+void NonBlockingAlertToolButton::setAutoSaveOnValidationOrOverriding(bool autosave)
+{
+    _autoSave = autosave;
+}
+
+void NonBlockingAlertToolButton::setAutoSaveOnEditing(bool autosave)
+{
+    _autoSaveOnEdit = autosave;
 }
 
 void NonBlockingAlertToolButton::refreshStyleSheet()
@@ -177,6 +189,8 @@ void NonBlockingAlertToolButton::refreshStyleSheet()
 void NonBlockingAlertToolButton::validateAlert()
 {
     _item.validateAlertWithCurrentUserAndConfirmationDialog();
+    if (_autoSave)
+        AlertCore::instance()->saveAlert(_item);
 }
 
 void NonBlockingAlertToolButton::editAlert()
@@ -188,7 +202,8 @@ void NonBlockingAlertToolButton::editAlert()
     if (dlg.exec() == QDialog::Accepted) {
         dlg.submit(_item);
         AlertCore::instance()->updateAlert(_item);
-        AlertCore::instance()->saveAlert(_item);
+        if (_autoSaveOnEdit)
+            AlertCore::instance()->saveAlert(_item);
     }
 }
 
@@ -222,9 +237,11 @@ void NonBlockingAlertToolButton::overrideAlert()
         QString validator;
         user() ? validator = user()->uuid() : validator = "UnknownUser";
         if (!_item.validateAlert(validator, true, comment, QDateTime::currentDateTime())) {
-            LOG_ERROR("Unable to validate the static alert");
+            LOG_ERROR("Unable to validate the non-blocking alert");
         } else {
-            AlertCore::instance()->saveAlert(_item);
+            AlertCore::instance()->updateAlert(_item);
+            if (_autoSave)
+                AlertCore::instance()->saveAlert(_item);
         }
     }
 }

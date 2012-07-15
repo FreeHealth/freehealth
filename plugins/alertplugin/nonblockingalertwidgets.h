@@ -46,7 +46,9 @@ public:
     ~NonBlockingAlertToolButton();
 
     void setAlertItem(const AlertItem &item);
-    void drawBackgroundUsingAlertPriority(bool useAlertPriority);
+    void setDrawBackgroundUsingAlertPriority(bool useAlertPriority);
+    void setAutoSaveOnValidationOrOverriding(bool autosave);
+    void setAutoSaveOnEditing(bool autosave);
 
 private Q_SLOTS:
     void validateAlert();
@@ -64,7 +66,7 @@ private:
     QAction *aCategory, *aLabel, *aValidate, *aEdit, *aOverride, *aRemindLater;
     QMenu *_menu;
     AlertItem _item;
-    bool _drawBackgroundUsingAlertPriority;
+    bool _drawBackgroundUsingAlertPriority, _autoSave, _autoSaveOnEdit;
 };
 
 class ALERT_EXPORT NonBlockingAlertLabel : public QLabel
