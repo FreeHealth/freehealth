@@ -1023,8 +1023,6 @@ bool AlertBase::saveItemValidations(AlertItem &item)
         id = item.db(ValidationId).toInt();
     }
 
-    qWarning()<<"item valId" << item.db(ValidationId) << "id" << id;
-
     QSqlQuery query(database());
     for(int i=0; i < item.validations().count(); ++i) {
         AlertValidation &validation = item.validationAt(i);
