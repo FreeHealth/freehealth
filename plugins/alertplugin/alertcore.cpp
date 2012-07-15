@@ -80,21 +80,26 @@ namespace Internal {
 class AlertCorePrivate
 {
 public:
-    AlertCorePrivate() :
+    AlertCorePrivate(AlertCore *parent) :
         _alertBase(0),
         _placeholdertest(0),
-        _alertScriptManager(0)
-
+        _alertScriptManager(0),
+        q(parent)
     {}
 
     ~AlertCorePrivate()
     {
     }
 
+    void makeTests();
+
 public:
     AlertBase *_alertBase;
     QPointer<AlertPlaceHolderWidget> _placeholdertest;
     AlertScriptManager *_alertScriptManager;
+
+private:
+    AlertCore *q;
 };
 }
 }
@@ -102,7 +107,7 @@ public:
 /** Construct the core of the Alert plugin. */
 AlertCore::AlertCore(QObject *parent) :
     QObject(parent),
-    d(new Internal::AlertCorePrivate)
+    d(new Internal::AlertCorePrivate(this))
 {
     _instance = this;
     setObjectName("AlertCore");
@@ -198,6 +203,7 @@ bool AlertCore::checkAlerts(AlertsToCheck check)
 
     // Get the alerts
     QVector<AlertItem> alerts = d->_alertBase->getAlertItems(query);
+    qWarning() << "RETRIEVED" << alerts.count() << "ALERTS";
     processAlerts(alerts);
     return true;
 }
@@ -350,20 +356,20 @@ void AlertCore::processAlerts(QVector<AlertItem> &alerts)
 void AlertCore::postCoreInitialization()
 {
     if (WithTests)
-        makeTests();
+        d->makeTests();
     if (patient())
         connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(checkPatientAlerts()));
     if (user())
         connect(user(), SIGNAL(userChanged()), this, SLOT(checkUserAlerts()));
 }
 
-void AlertCore::makeTests()
+void Internal::AlertCorePrivate::makeTests()
 {
     // TESTS
     QDateTime start = QDateTime::currentDateTime().addSecs(-60*60*24);
     QDateTime expiration = QDateTime::currentDateTime().addSecs(60*60*24);
 
-    AlertItem item = d->_alertBase->createVirtualItem();
+    AlertItem item = _alertBase->createVirtualItem();
     item.setLabel(item.label() + " (item)");
     item.setThemedIcon("identity.png");
     item.setViewType(AlertItem::NonBlockingAlert);
@@ -374,7 +380,7 @@ void AlertCore::makeTests()
     item.addRelation(AlertRelation(AlertRelation::RelatedToPatient, "patient1"));
     item.addTiming(AlertTiming(start, expiration));
 
-    AlertItem item2 = d->_alertBase->createVirtualItem();
+    AlertItem item2 = _alertBase->createVirtualItem();
     item2.setThemedIcon("next.png");
     item2.setViewType(AlertItem::NonBlockingAlert);
     item2.clearRelations();
@@ -491,27 +497,27 @@ void AlertCore::makeTests()
 
     // Db save/get
     if (false) {
-        if (!d->_alertBase->saveAlertItem(item))
+        if (!_alertBase->saveAlertItem(item))
             qWarning() << "ITEM WRONG";
-        if (!d->_alertBase->saveAlertItem(item2))
+        if (!_alertBase->saveAlertItem(item2))
             qWarning() << "ITEM2 WRONG";
-        if (!d->_alertBase->saveAlertItem(item3))
+        if (!_alertBase->saveAlertItem(item3))
             qWarning() << "ITEM3 WRONG";
-        if (!d->_alertBase->saveAlertItem(item4))
+        if (!_alertBase->saveAlertItem(item4))
             qWarning() << "ITEM4 WRONG";
-        if (!d->_alertBase->saveAlertItem(item5))
+        if (!_alertBase->saveAlertItem(item5))
             qWarning() << "ITEM5 WRONG";
-        if (!d->_alertBase->saveAlertItem(item6))
+        if (!_alertBase->saveAlertItem(item6))
             qWarning() << "ITEM6 WRONG";
-        if (!d->_alertBase->saveAlertItem(item7))
+        if (!_alertBase->saveAlertItem(item7))
             qWarning() << "ITEM7 WRONG";
-        if (!d->_alertBase->saveAlertItem(item8))
+        if (!_alertBase->saveAlertItem(item8))
             qWarning() << "ITEM8 WRONG";
-        if (!d->_alertBase->saveAlertItem(item9))
+        if (!_alertBase->saveAlertItem(item9))
             qWarning() << "ITEM9 WRONG";
-        if (!d->_alertBase->saveAlertItem(item10))
+        if (!_alertBase->saveAlertItem(item10))
             qWarning() << "ITEM10 WRONG";
-        if (!d->_alertBase->saveAlertItem(item11))
+        if (!_alertBase->saveAlertItem(item11))
             qWarning() << "ITEM11 WRONG";
 
         Internal::AlertBaseQuery query;
@@ -523,7 +529,7 @@ void AlertCore::makeTests()
         query.addPatientAlerts("patient2");
         query.addPatientAlerts("patient3");
 //        query.addUserAlerts();
-        QVector<AlertItem> test = d->_alertBase->getAlertItems(query);
+        QVector<AlertItem> test = _alertBase->getAlertItems(query);
         qWarning() << test.count();
 //        for(int i=0; i < test.count(); ++i) {
 //            qWarning() << "\n\n" << test.at(i).timingAt(0).start() << test.at(i).timingAt(0).end() << test.at(i).relationAt(1).relatedToUid();
@@ -572,23 +578,23 @@ void AlertCore::makeTests()
 
     // Alert packs
     if (true) {
-        registerAlertPack(settings()->path(Core::ISettings::BundledAlertPacks) + "/test");
+        q->registerAlertPack(settings()->path(Core::ISettings::BundledAlertPacks) + "/test");
     }
 
     // PlaceHolders
     if (true) {
         // Put placeholder in the plugin manager object pool
-        d->_placeholdertest = new AlertPlaceHolderWidget; // object should not be deleted
-        pluginManager()->addObject(d->_placeholdertest);
+        _placeholdertest = new AlertPlaceHolderWidget; // object should not be deleted
+        pluginManager()->addObject(_placeholdertest);
 
         // Create the dialog && the placeholder
         QDialog dlg;
         QVBoxLayout lay(&dlg);
         dlg.setLayout(&lay);
-        lay.addWidget(d->_placeholdertest->createWidget(&dlg));
+        lay.addWidget(_placeholdertest->createWidget(&dlg));
 
         // Check alerts
-        checkAlerts(CurrentPatientAlerts | CurrentUserAlerts | CurrentApplicationAlerts);
+        q->checkAlerts(AlertCore::CurrentPatientAlerts | AlertCore::CurrentUserAlerts | AlertCore::CurrentApplicationAlerts);
 
         // Exec the dialog
         dlg.exec();

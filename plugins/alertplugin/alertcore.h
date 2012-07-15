@@ -109,7 +109,6 @@ private:
 
 protected:
     void postCoreInitialization();
-    void makeTests();
 
 private:
     static AlertCore *_instance;
