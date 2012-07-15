@@ -281,7 +281,8 @@ void AlertPlaceHolderWidget::createAlert()
     dlg.setEditableParams(AlertItemEditorDialog::FullDescription | AlertItemEditorDialog::Types | AlertItemEditorDialog::Timing | AlertItemEditorDialog::Scripts);
     AlertItem item;
     item.setValidity(true);
-    item.addTiming(AlertTiming(QDateTime::currentDateTime(), QDateTime::currentDateTime().addYears(1)));
+    item.setCreationDate(QDateTime::currentDateTime());
+    item.addTiming(AlertTiming(QDateTime(QDate::currentDate(), QTime(0,0,0)), QDateTime(QDate::currentDate(), QTime(0,0,0)).addYears(1)));
     dlg.setAlertItem(item);
     if (dlg.exec()==QDialog::Accepted) {
          if (!dlg.submit(item)) {
