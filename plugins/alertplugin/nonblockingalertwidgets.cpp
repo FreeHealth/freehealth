@@ -130,7 +130,7 @@ void NonBlockingAlertToolButton::setAlertItem(const AlertItem &item)
     setIcon(getIcon(item));
     setToolTip(item.htmlToolTip());
     setText(QString("%1: %2").arg(item.category()).arg(item.label()));
-    setStyleSheet(QString("QToolButton {background-color: %1; border: 2px solid %1;}")
+    setStyleSheet(QString("QToolButton {background-color: %1; border: 1px solid %1;}")
                   .arg(item.priorityBackgroundColor())
                   );
 
