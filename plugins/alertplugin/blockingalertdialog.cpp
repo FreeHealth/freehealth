@@ -113,6 +113,9 @@
 
 #include <QDebug>
 
+// TODO: log the time an alert is visible to user -> mustBeRead == 5 sec per alert ?
+enum { WithChronoOnAlerts = false };
+
 using namespace Alert;
 using namespace Trans::ConstantTranslations;
 
@@ -343,10 +346,12 @@ BlockingAlertDialog::BlockingAlertDialog(const QList<AlertItem> &items,
     d->ui->buttonLayout->addWidget(d->_box);
 
     // EventFilter alert widgets -> catch mustBeRead
-    foreach(QWidget *w, d->_alertWidget.values()) {
-        w->installEventFilter(this);
-        QTime *time = new QTime;
-        d->_alertTimer.insert(w, time);
+    if (WithChronoOnAlerts) {
+        foreach(QWidget *w, d->_alertWidget.values()) {
+            w->installEventFilter(this);
+            QTime *time = new QTime;
+            d->_alertTimer.insert(w, time);
+        }
     }
 
     Utils::resizeAndCenter(this, QApplication::activeWindow());
@@ -454,6 +459,8 @@ BlockingAlertResult BlockingAlertDialog::executeBlockingAlert(const QList<AlertI
 BlockingAlertResult BlockingAlertDialog::executeBlockingAlert(const QList<AlertItem> &items, const QList<QAbstractButton*> &buttons, const QString &themedIcon, QWidget *parent)
 {
     BlockingAlertResult result;
+    if (!parent)
+        parent = qApp->activeWindow();
     BlockingAlertDialog dlg(items, themedIcon, buttons, parent);  // theme()->icon(themedIcon, Core::ITheme::BigIcon)
     if (dlg.exec()==QDialog::Accepted) {
         result.setAccepted(true);
