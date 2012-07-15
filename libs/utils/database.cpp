@@ -2301,7 +2301,11 @@ QString DatabasePrivate::getTypeOfField(const int &fieldref) const
             toReturn = "integer unsigned";
             break;
         case Database::FieldIsUnsignedLongInteger:
+        if (m_Driver==Database::SQLite) {
             toReturn = "unsigned bigint";
+        } else if (m_Driver==Database::MySQL) {
+            toReturn = "bigint unsigned";
+        }
             break;
         case Database::FieldIsReal :
             toReturn = "double";
