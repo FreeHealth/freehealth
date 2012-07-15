@@ -121,6 +121,7 @@ OpenCVWidget::OpenCVWidget(QWidget *parent) :
  */
 OpenCVWidget::~OpenCVWidget()
 {
+    cvReleaseHaarClassifierCascade(&_cascade);
     cvReleaseCapture(&m_camera);
 }
 
@@ -144,7 +145,7 @@ void OpenCVWidget::timerEvent(QTimerEvent *event)
             // Detect face objects
             cvClearMemStorage( _storage );
             
-            qDebug() << _cascade;
+//            qDebug() << _cascade;
             CvSeq* objects = cvHaarDetectObjects(cvimage, _cascade, _storage, 1.1, 3, CV_HAAR_DO_CANNY_PRUNING, cvSize( 30, 30 ));
             
             //TODO: warn if more than one objects
