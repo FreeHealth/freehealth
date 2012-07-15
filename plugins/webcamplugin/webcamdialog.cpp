@@ -59,8 +59,11 @@ WebcamDialog::WebcamDialog(QWidget *parent) :
     // Freeze button
     m_freezeButton = ui->buttonBox->addButton(tr("Freeze"), QDialogButtonBox::ActionRole);
     m_freezeButton->setIcon(theme()->icon(Core::Constants::ICONTAKESCREENSHOT));
-    connect(m_freezeButton, SIGNAL(clicked()), this, SLOT(toggleFreezeMode()));    
-    
+    m_freezeButton->setCheckable(true);
+    connect(m_freezeButton, SIGNAL(clicked(bool)), ui->openCVWidget, SLOT(setFrozen(bool))); 
+    connect(ui->openCVWidget, SIGNAL(frozen(bool)), this, SLOT(updatefreezeButton(bool)));
+    connect(ui->openCVWidget, SIGNAL(clicked()), m_freezeButton, SLOT(click()));
+            
     QPushButton *button;
 
     // Cancel button
@@ -84,17 +87,17 @@ QPixmap WebcamDialog::photo() const
     return ui->openCVWidget->pixmap()->copy(ui->openCVWidget->frame());
 }
 
-void WebcamDialog::toggleFreezeMode()
+void WebcamDialog::updatefreezeButton(bool aFreeze)
 {
-    ui->openCVWidget->toggleFreezeMode();
-    if (ui->openCVWidget->isFrozen()) {
+    if (aFreeze) {
         m_freezeButton->setText(tr("Unfreeze"));
         m_freezeButton->setIcon(theme()->icon(Core::Constants::ICONCAMERAVIDEO));
     } else {
         m_freezeButton->setText(tr("Freeze"));
         m_freezeButton->setIcon(theme()->icon(Core::Constants::ICONTAKESCREENSHOT));
-    }
+    }    
 }
+
 
 void WebcamDialog::changeEvent(QEvent *event)
 {
