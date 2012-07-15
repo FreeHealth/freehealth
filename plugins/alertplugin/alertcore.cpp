@@ -203,7 +203,6 @@ bool AlertCore::checkAlerts(AlertsToCheck check)
 
     // Get the alerts
     QVector<AlertItem> alerts = d->_alertBase->getAlertItems(query);
-    qWarning() << "RETRIEVED" << alerts.count() << "ALERTS";
     processAlerts(alerts);
     return true;
 }
@@ -311,6 +310,9 @@ void AlertCore::processAlerts(QVector<AlertItem> &alerts)
 {
     // Get static place holders
     QList<Alert::IAlertPlaceHolder*> placeHolders = pluginManager()->getObjects<Alert::IAlertPlaceHolder>();
+    foreach(Alert::IAlertPlaceHolder *ph, placeHolders)
+        ph->clear();
+
     // Process alerts
     QList<AlertItem> blockings;
     for(int i = 0; i < alerts.count(); ++i) {
