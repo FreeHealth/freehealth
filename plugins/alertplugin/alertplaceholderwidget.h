@@ -25,11 +25,13 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef ALERTPLACEHOLDERTEST_H
-#define ALERTPLACEHOLDERTEST_H
+#ifndef ALERT_PLUGIN__ALERTPLACEHOLDERWIDGET_H
+#define ALERT_PLUGIN__ALERTPLACEHOLDERWIDGET_H
 
 #include <alertplugin/ialertplaceholder.h>
+#include <alertplugin/alertplugin_exporter.h>
 #include <alertplugin/alertitem.h>
+
 #include <QToolBar>
 #include <QPointer>
 #include <QToolButton>
@@ -37,21 +39,19 @@
 namespace Alert {
 class NonBlockingAlertToolButton;
 
-class AlertPlaceHolderTest : public IAlertPlaceHolder
+class ALERT_EXPORT AlertPlaceHolderWidget : public IAlertPlaceHolder
 {
     Q_OBJECT
     
 public:
-    explicit AlertPlaceHolderTest(QObject *parent = 0);
-    ~AlertPlaceHolderTest();
+    explicit AlertPlaceHolderWidget(QObject *parent = 0);
+    ~AlertPlaceHolderWidget();
     
     // identification
-    QString uuid() const;
-
-    // for UI presentation of the place holder
-    QString name(const QString &lang = QString::null) const;
-    QString category(const QString &lang = QString::null) const;
-    QString description(const QString &lang = QString::null) const;
+    virtual QString uuid() const;
+    virtual QString name(const QString &lang = QString::null) const;
+    virtual QString category(const QString &lang = QString::null) const;
+    virtual QString description(const QString &lang = QString::null) const;
 
     // AlertItem management
     void clear();
@@ -83,4 +83,4 @@ private:
 
 }  // namespace Alert
 
-#endif // ALERTPLACEHOLDERTEST_H
+#endif // ALERT_PLUGIN__ALERTPLACEHOLDERWIDGET_H

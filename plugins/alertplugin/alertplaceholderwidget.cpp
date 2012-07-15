@@ -25,7 +25,7 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#include "alertplaceholdertest.h"
+#include "alertplaceholderwidget.h"
 #include "alertitem.h"
 #include "alertcore.h"
 #include "nonblockingalertwidgets.h"
@@ -51,41 +51,41 @@ using namespace Trans::ConstantTranslations;
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 static inline Alert::AlertCore *alertCore() {return Alert::AlertCore::instance();}
 
-AlertPlaceHolderTest::AlertPlaceHolderTest(QObject *parent) :
+AlertPlaceHolderWidget::AlertPlaceHolderWidget(QObject *parent) :
     IAlertPlaceHolder(parent),
     _widget(0),
     _newButton(0)
 {
-    setObjectName("AlertPlaceHolderTest");
+    setObjectName("AlertPlaceHolderWidget");
 }
 
-AlertPlaceHolderTest::~AlertPlaceHolderTest()
+AlertPlaceHolderWidget::~AlertPlaceHolderWidget()
 {
-    qWarning() << "AlertPlaceHolderTest::~AlertPlaceHolderTest()";
+    qWarning() << "AlertPlaceHolderWidget::~AlertPlaceHolderWidget()";
 }
 
-QString AlertPlaceHolderTest::uuid() const
+QString AlertPlaceHolderWidget::uuid() const
 {
     return "UID_TEST";
 }
 
 // for UI presentation of the place holder
-QString AlertPlaceHolderTest::name(const QString &lang) const
+QString AlertPlaceHolderWidget::name(const QString &lang) const
 {
     return "name";
 }
 
-QString AlertPlaceHolderTest::category(const QString &lang) const
+QString AlertPlaceHolderWidget::category(const QString &lang) const
 {
     return "category";
 }
 
-QString AlertPlaceHolderTest::description(const QString &lang) const
+QString AlertPlaceHolderWidget::description(const QString &lang) const
 {
     return "description";
 }
 
-void AlertPlaceHolderTest::clear()
+void AlertPlaceHolderWidget::clear()
 {
     if (_widget)
         _widget->clear();
@@ -94,7 +94,7 @@ void AlertPlaceHolderTest::clear()
     addNewAlertButton();
 }
 
-bool AlertPlaceHolderTest::addAlert(const AlertItem &alert)
+bool AlertPlaceHolderWidget::addAlert(const AlertItem &alert)
 {
     if (!containsAlertUuid(alert.uuid())) {
         if (_widget) {
@@ -138,7 +138,7 @@ bool AlertPlaceHolderTest::addAlert(const AlertItem &alert)
     return true;
 }
 
-bool AlertPlaceHolderTest::updateAlert(const AlertItem &alert)
+bool AlertPlaceHolderWidget::updateAlert(const AlertItem &alert)
 {
 //    qWarning() << "update Alert" << alert.label();
     if (containsAlertUuid(alert.uuid())) {
@@ -154,7 +154,7 @@ bool AlertPlaceHolderTest::updateAlert(const AlertItem &alert)
     return true;
 }
 
-bool AlertPlaceHolderTest::removeAlert(const AlertItem &alert)
+bool AlertPlaceHolderWidget::removeAlert(const AlertItem &alert)
 {
 //    qWarning() << "remove Alert" << alert.uuid();
     if (containsAlertUuid(alert.uuid())) {
@@ -178,13 +178,13 @@ bool AlertPlaceHolderTest::removeAlert(const AlertItem &alert)
     return true;
 }
 
-bool AlertPlaceHolderTest::highlightAlert(const AlertItem &alert)
+bool AlertPlaceHolderWidget::highlightAlert(const AlertItem &alert)
 {
     qWarning() << "highlighAlert" << alert.label();
     return true;
 }
 
-QWidget *AlertPlaceHolderTest::createWidget(QWidget *parent)
+QWidget *AlertPlaceHolderWidget::createWidget(QWidget *parent)
 {
     if (!_widget) {
         _widget = new QToolBar(parent);
@@ -197,12 +197,12 @@ QWidget *AlertPlaceHolderTest::createWidget(QWidget *parent)
     return _widget;
 }
 
-bool AlertPlaceHolderTest::containsAlert(const AlertItem &item)
+bool AlertPlaceHolderWidget::containsAlert(const AlertItem &item)
 {
     return alerts.contains(item);
 }
 
-bool AlertPlaceHolderTest::containsAlertUuid(const QString &alertUid)
+bool AlertPlaceHolderWidget::containsAlertUuid(const QString &alertUid)
 {
     for(int i = 0; i < alerts.count(); ++i) {
         if (alerts.at(i).uuid() == alertUid)
@@ -211,7 +211,7 @@ bool AlertPlaceHolderTest::containsAlertUuid(const QString &alertUid)
     return false;
 }
 
-bool AlertPlaceHolderTest::removeAlertUuid(const QString &alertUid)
+bool AlertPlaceHolderWidget::removeAlertUuid(const QString &alertUid)
 {
     for(int i = alerts.count()-1; i > -1 ; --i) {
         if (alerts.at(i).uuid() == alertUid)
@@ -220,7 +220,7 @@ bool AlertPlaceHolderTest::removeAlertUuid(const QString &alertUid)
     return false;
 }
 
-void AlertPlaceHolderTest::addNewAlertButton()
+void AlertPlaceHolderWidget::addNewAlertButton()
 {
     if (!_newButton) {
         _newButton = new QToolButton(_widget);
@@ -235,7 +235,7 @@ void AlertPlaceHolderTest::addNewAlertButton()
     _widget->addSeparator();
 }
 
-void AlertPlaceHolderTest::createAlert()
+void AlertPlaceHolderWidget::createAlert()
 {
     AlertItemEditorDialog dlg;
     dlg.setEditableParams(AlertItemEditorDialog::FullDescription | AlertItemEditorDialog::Types | AlertItemEditorDialog::Timing | AlertItemEditorDialog::Scripts);
@@ -253,7 +253,7 @@ void AlertPlaceHolderTest::createAlert()
     }
 }
 
-bool AlertPlaceHolderTest::eventFilter(QObject *obj, QEvent *event)
+bool AlertPlaceHolderWidget::eventFilter(QObject *obj, QEvent *event)
 {
     if (obj==_newButton && event->type()==QEvent::LanguageChange) {
         _newButton->setText(tkTr(Trans::Constants::ADD_ALERT));
