@@ -114,6 +114,8 @@ void AlertPlugin::postCoreInitialization()
 {
     // Core is fully intialized as well as all plugins
     // DataPacks are checked
+
+    AlertCore::instance()->postCoreInitialization();
 }
 
 void AlertPlugin::coreAboutToClose()
