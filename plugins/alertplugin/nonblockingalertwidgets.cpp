@@ -81,7 +81,8 @@ static QIcon getIcon(const AlertItem &item)
   using the menu of this button.
 */
 NonBlockingAlertToolButton::NonBlockingAlertToolButton(QWidget *parent) :
-    QToolButton(parent)
+    QToolButton(parent),
+    _drawBackgroundUsingAlertPriority(true)
 {
     setMinimumSize(QSize(16,16));
     setToolButtonStyle(Qt::ToolButtonIconOnly);
@@ -130,9 +131,7 @@ void NonBlockingAlertToolButton::setAlertItem(const AlertItem &item)
     setIcon(getIcon(item));
     setToolTip(item.htmlToolTip());
     setText(QString("%1: %2").arg(item.category()).arg(item.label()));
-    setStyleSheet(QString("QToolButton {background-color: %1; border: 1px solid %1;}")
-                  .arg(item.priorityBackgroundColor())
-                  );
+    refreshStyleSheet();
 
     if (aLabel)
         aLabel->setText(item.label());
@@ -157,6 +156,22 @@ void NonBlockingAlertToolButton::setAlertItem(const AlertItem &item)
     }
 
     _item = item;
+}
+
+void NonBlockingAlertToolButton::drawBackgroundUsingAlertPriority(bool useAlertPriority)
+{
+    _drawBackgroundUsingAlertPriority = useAlertPriority;
+    refreshStyleSheet();
+}
+
+void NonBlockingAlertToolButton::refreshStyleSheet()
+{
+    if (_drawBackgroundUsingAlertPriority)
+        setStyleSheet(QString("QToolButton {background-color: %1; border: 1px solid %1;}")
+                      .arg(_item.priorityBackgroundColor())
+                      );
+    else
+        setStyleSheet("");
 }
 
 void NonBlockingAlertToolButton::validateAlert()

@@ -58,6 +58,7 @@ public:
     void setMargin(int margin) {_margin=margin;}
     void setSpacing(int spacing) {_spacing=spacing;}
     void setBorderSize(int borderSize) {_border=borderSize;}
+    void drawBackgroundUsingAlertPriority(bool useAlertPriority);
 
     // AlertItem management
     void clear();
@@ -87,6 +88,7 @@ private:
     QToolButton *_newButton;
     QSize _iconSize;
     int _margin, _spacing, _border;
+    bool _drawBackgroundUsingAlertPriority;
 };
 
 }  // namespace Alert

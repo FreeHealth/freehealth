@@ -46,6 +46,7 @@ public:
     ~NonBlockingAlertToolButton();
 
     void setAlertItem(const AlertItem &item);
+    void drawBackgroundUsingAlertPriority(bool useAlertPriority);
 
 private Q_SLOTS:
     void validateAlert();
@@ -54,6 +55,7 @@ private Q_SLOTS:
     void overrideAlert();
 
 private:
+    void refreshStyleSheet();
     void retranslateUi();
     void changeEvent(QEvent *event);
     void hideEvent(QHideEvent *event);
@@ -62,6 +64,7 @@ private:
     QAction *aCategory, *aLabel, *aValidate, *aEdit, *aOverride, *aRemindLater;
     QMenu *_menu;
     AlertItem _item;
+    bool _drawBackgroundUsingAlertPriority;
 };
 
 class ALERT_EXPORT NonBlockingAlertLabel : public QLabel

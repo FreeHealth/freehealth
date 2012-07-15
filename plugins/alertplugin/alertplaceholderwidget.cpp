@@ -56,7 +56,8 @@ AlertPlaceHolderWidget::AlertPlaceHolderWidget(QObject *parent) :
     _widget(0),
     _newButton(0),
     _iconSize(QSize(16,16)),
-    _margin(0), _spacing(0), _border(0)
+    _margin(0), _spacing(0), _border(0),
+    _drawBackgroundUsingAlertPriority(true)
 {
     setObjectName("AlertPlaceHolderWidget");
 }
@@ -97,6 +98,13 @@ void AlertPlaceHolderWidget::setIconSize(const QSize &size)
     _iconSize = size;
 }
 
+void AlertPlaceHolderWidget::drawBackgroundUsingAlertPriority(bool useAlertPriority)
+{
+    foreach(NonBlockingAlertToolButton *but, _buttons.values())
+        but->drawBackgroundUsingAlertPriority(useAlertPriority);
+    _drawBackgroundUsingAlertPriority = useAlertPriority;
+}
+
 //void AlertPlaceHolderWidget::setContentsMargins(const QMargins &margins)
 //{
 //}
@@ -116,6 +124,7 @@ bool AlertPlaceHolderWidget::addAlert(const AlertItem &alert)
         if (_widget) {
             NonBlockingAlertToolButton *but = new NonBlockingAlertToolButton(_widget);
             but->setAlertItem(alert);
+            but->drawBackgroundUsingAlertPriority(_drawBackgroundUsingAlertPriority);
 
             // keep alert sorted by priority
             _priorities << alert.priority()*10000000 + alerts.count();
