@@ -42,7 +42,7 @@
  * \file alertbase.h
  * \author Eric MAEKER <eric.maeker@gmail.com>, Pierre-Marie Desombre <pm.desombre@gmail.com>
  * \version 0.8.0
- * \date 15 June 2012
+ * \date 15 July 2012
 */
 
 namespace Alert {
@@ -50,6 +50,7 @@ class AlertCore;
 class AlertItem;
 class AlertPackDescription;
 namespace Internal {
+class AlertCorePrivate;
 
 class AlertBaseQuery
 {
@@ -105,6 +106,7 @@ class AlertBase : public QObject, public Utils::Database
 {
     Q_OBJECT
     friend class Alert::AlertCore;
+    friend class Alert::Internal::AlertCorePrivate;
 
 protected:
     AlertBase(QObject * parent = 0);
