@@ -292,8 +292,8 @@ AlertBase::AlertBase(QObject *parent) :
     addField(Table_ALERT, ALERT_TIM_ID, "TIM_ID", FieldIsInteger);
     addField(Table_ALERT, ALERT_CONDITION_TYPE, "COND_ID", FieldIsInteger);
     addField(Table_ALERT, ALERT_PRIORITY, "PRIOR", FieldIsInteger);
-    addField(Table_ALERT, ALERT_OVERRIDEREQUIREUSERCOMMENT, "VRUC", FieldIsInteger);
-    addField(Table_ALERT, ALERT_MUSTBEREAD, "MBR", FieldIsInteger);
+    addField(Table_ALERT, ALERT_OVERRIDEREQUIREUSERCOMMENT, "VRUC", FieldIsBoolean);
+    addField(Table_ALERT, ALERT_MUSTBEREAD, "MBR", FieldIsBoolean);
 
     addField(Table_ALERT, ALERT_LABEL_LID, "LBL_LID", FieldIsInteger);
     addField(Table_ALERT, ALERT_CATEGORY_LID, "CAT_LID", FieldIsInteger);
@@ -301,7 +301,7 @@ AlertBase::AlertBase(QObject *parent) :
     addField(Table_ALERT, ALERT_COMMENT_LID, "COM_LID", FieldIsInteger);
     addField(Table_ALERT, ALERT_CREATION_DATE, "C_DATE", FieldIsDate);
     addField(Table_ALERT, ALERT_LAST_UPDATE_DATE, "U_DATE", FieldIsDate);
-    addField(Table_ALERT, ALERT_THEMED_ICON, "THM_ICON", FieldIsDate);
+    addField(Table_ALERT, ALERT_THEMED_ICON, "THM_ICON", FieldIsShortText);
     addField(Table_ALERT, ALERT_THEME_CSS, "CSS", FieldIsLongText);
     addField(Table_ALERT, ALERT_CRYPTED_PASSWORD, "PASS", FieldIsShortText);
     addField(Table_ALERT, ALERT_EXTRA_XML, "EXTRA", FieldIsBlob);
