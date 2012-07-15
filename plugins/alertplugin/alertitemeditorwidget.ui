@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>520</width>
-    <height>405</height>
+    <height>431</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -69,7 +69,7 @@
    <item row="1" column="0">
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>4</number>
      </property>
      <widget class="QWidget" name="tab_type">
       <attribute name="title">
@@ -200,6 +200,20 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>alertLabel</tabstop>
+  <tabstop>alertCategory</tabstop>
+  <tabstop>alertDecsr</tabstop>
+  <tabstop>iconLineEdit</tabstop>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>relatedTo</tabstop>
+  <tabstop>priority</tabstop>
+  <tabstop>viewType</tabstop>
+  <tabstop>contentType</tabstop>
+  <tabstop>overrideRequiresUserComment</tabstop>
+  <tabstop>css</tabstop>
+  <tabstop>xml</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
