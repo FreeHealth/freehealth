@@ -1911,6 +1911,104 @@ bool AlertBase::saveAlertPackLabels(AlertPackDescription &descr)
     return true;
 }
 
+AlertPackDescription AlertBase::getAlertPackDescription(const QString &uuid)
+{
+    AlertPackDescription pack;
+    pack.setData(AlertPackDescription::Uuid, uuid);
+    if (!connectDatabase(Constants::DB_NAME, __LINE__))
+        return pack;
+
+    if (WarnMemberNames)
+        qWarning() << "AlertBase::getAlertPackDescription";
+
+    database().transaction();
+    QHash<int, QString> where;
+    where.insert(Constants::ALERT_PACKS_UID, QString("='%1'").arg(uuid));
+    QSqlQuery query(database());
+    if (query.exec(select(Constants::Table_ALERT_PACKS, where))) {
+        if (query.next()) {
+            pack.setDbData(ItemId, query.value(Constants::ALERT_PACKS_ID));
+            pack.setData(AlertPackDescription::Uuid, query.value(Constants::ALERT_PACKS_UID));
+            pack.setData(AlertPackDescription::Validity, query.value(Constants::ALERT_PACKS_ISVALID));
+            pack.setData(AlertPackDescription::InUse, query.value(Constants::ALERT_PACKS_IN_USE));
+            pack.setDbData(LabelLID, query.value(Constants::ALERT_PACKS_LABEL_LID));
+            pack.setDbData(CategoryLID, query.value(Constants::ALERT_PACKS_CATEGORY_LID));
+            pack.setDbData(DescrLID, query.value(Constants::ALERT_PACKS_DESCRIPTION_LID));
+            pack.setData(AlertPackDescription::Author, query.value(Constants::ALERT_PACKS_AUTHORS));
+            pack.setData(AlertPackDescription::Vendor, query.value(Constants::ALERT_PACKS_VENDOR));
+            pack.setData(AlertPackDescription::WebLink, query.value(Constants::ALERT_PACKS_URL));
+            pack.setData(AlertPackDescription::GeneralIcon, query.value(Constants::ALERT_PACKS_THEMEDICON));
+            pack.setData(AlertPackDescription::Version, query.value(Constants::ALERT_PACKS_VERSION));
+            pack.setData(AlertPackDescription::FreeMedFormsCompatVersion, query.value(Constants::ALERT_PACKS_FMFVERSION));
+            pack.setData(AlertPackDescription::CreationDate, query.value(Constants::ALERT_PACKS_CREATEDATE));
+            pack.setData(AlertPackDescription::LastModificationDate, query.value(Constants::ALERT_PACKS_LASTUPDATE));
+//            pack.setData(AlertPackDescription::XtraXml, query.value(Constants::ALERT_PACKS_XTRAXML));
+        }
+    } else {
+        LOG_QUERY_ERROR(query);
+        database().rollback();
+        return pack;
+    }
+
+    if (!getAlertPackLabels(pack)) {
+        database().rollback();
+        return pack;
+    }
+    database().commit();
+    return pack;
+}
+
+bool AlertBase::getAlertPackLabels(AlertPackDescription &descr)
+{
+    // we are inside a transaction opened by saveAlertItem
+    if (!connectDatabase(Constants::DB_NAME, __LINE__))
+        return false;
+
+    if (WarnMemberNames)
+        qWarning() << "AlertBase::getAlertPackLabels";
+
+    using namespace Alert::Constants;
+    QSqlQuery query(database());
+    Utils::Field cond(Table_ALERT_PACKS, ALERT_PACKS_ID, QString("=%1").arg(descr.dbData(ItemId).toString()));
+
+    // get label
+    Utils::Join join(Table_ALERT_LABELS, ALERT_LABELS_LABELID, Table_ALERT_PACKS, ALERT_PACKS_LABEL_LID);
+    if (query.exec(select(Table_ALERT_LABELS, join, cond))) {
+        while (query.next()) {
+            descr.setLabel(query.value(ALERT_LABELS_VALUE).toString(), query.value(ALERT_LABELS_LANG).toString());
+        }
+    } else {
+        LOG_QUERY_ERROR(query);
+        return false;
+    }
+    query.finish();
+
+    // get category
+    join = Utils::Join(Table_ALERT_LABELS, ALERT_LABELS_LABELID, Table_ALERT_PACKS, ALERT_PACKS_CATEGORY_LID);
+    if (query.exec(select(Table_ALERT_LABELS, join, cond))) {
+        while (query.next()) {
+            descr.setCategory(query.value(ALERT_LABELS_VALUE).toString(), query.value(ALERT_LABELS_LANG).toString());
+        }
+    } else {
+        LOG_QUERY_ERROR(query);
+        return false;
+    }
+    query.finish();
+
+    // get description
+    join = Utils::Join(Table_ALERT_LABELS, ALERT_LABELS_LABELID, Table_ALERT_PACKS, ALERT_PACKS_DESCRIPTION_LID);
+    if (query.exec(select(Table_ALERT_LABELS, join, cond))) {
+        while (query.next()) {
+            descr.setDescription(query.value(ALERT_LABELS_VALUE).toString(), query.value(ALERT_LABELS_LANG).toString());
+        }
+    } else {
+        LOG_QUERY_ERROR(query);
+        return false;
+    }
+    query.finish();
+    return true;
+}
+
 /** Reconnect the database when the database server changes. \sa Core::ICore::databaseServerChanged(), Core::ISettings::databaseConnector() */
 void AlertBase::onCoreDatabaseServerChanged()
 {

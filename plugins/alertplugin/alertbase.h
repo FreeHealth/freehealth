@@ -124,6 +124,7 @@ public:
 
     // AlertPacks
     bool saveAlertPackDescription(AlertPackDescription &descr);
+    AlertPackDescription getAlertPackDescription(const QString &uuid);
 
     // For debugging purpose
     void toTreeWidget(QTreeWidget *tree);
@@ -155,6 +156,7 @@ private:
     // AlertPacks
     bool updateAlertPackDescription(AlertPackDescription &descr, const int id);
     bool saveAlertPackLabels(AlertPackDescription &descr);
+    bool getAlertPackLabels(AlertPackDescription &descr);
 
 private Q_SLOTS:
     void onCoreDatabaseServerChanged();
