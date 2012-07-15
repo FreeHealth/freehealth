@@ -280,7 +280,7 @@ AlertBase::AlertBase(QObject *parent) :
     addField(Table_ALERT, ALERT_ID, "A_ID", FieldIsUniquePrimaryKey);
     addField(Table_ALERT, ALERT_UID, "A_UID", FieldIsUUID);
     addField(Table_ALERT, ALERT_PACKUID, "A_PUID", FieldIsLongText);
-    addField(Table_ALERT, ALERT_REL_ID, "R_ID", FieldIsUUID);
+    addField(Table_ALERT, ALERT_REL_ID, "R_ID", FieldIsInteger);
     addField(Table_ALERT, ALERT_CATEGORY_UID, "C_UID", FieldIsUUID);
     addField(Table_ALERT, ALERT_SID, "SCR_ID", FieldIsInteger);
     addField(Table_ALERT, ALERT_VAL_ID, "VAL_ID", FieldIsInteger);
