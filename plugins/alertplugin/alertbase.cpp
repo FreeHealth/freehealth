@@ -61,7 +61,7 @@
 #include <QHash>
 #include <QSqlQuery>
 
-enum { WarnGetAlertQuerySQLCommand = false, WarnMemberNames = true };
+enum { WarnGetAlertQuerySQLCommand = true, WarnMemberNames = false };
 
 using namespace Alert;
 using namespace Internal;
@@ -1263,12 +1263,16 @@ QVector<AlertItem> AlertBase::getAlertItems(const AlertBaseQuery &query)
         relatedJoin = Utils::Join(Constants::Table_ALERT_RELATED, Constants::ALERT_RELATED_REL_ID, Constants::Table_ALERT, Constants::ALERT_REL_ID);
         validationJoin = Utils::Join(Constants::Table_ALERT_VALIDATION, Constants::ALERT_VALIDATION_VAL_ID, Constants::Table_ALERT, Constants::ALERT_VAL_ID);
         Utils::FieldList excludeValidatedUids;
-//        if (patient()) {
+        if (patient()) {
+            excludeValidatedUids << Utils::Field(Constants::Table_ALERT_VALIDATION, Constants::ALERT_VALIDATION_VALIDATED_UUID, QString("='%1'").arg(patient()->uuid()));
+        } else {
             excludeValidatedUids << Utils::Field(Constants::Table_ALERT_VALIDATION, Constants::ALERT_VALIDATION_VALIDATED_UUID, QString("='%1'").arg("patient1"));//patient()->uuid()));
-//        }
-//        if (user()) {
+        }
+        if (user()) {
+            excludeValidatedUids << Utils::Field(Constants::Table_ALERT_VALIDATION, Constants::ALERT_VALIDATION_VALIDATED_UUID, QString("='%1'").arg(user()->uuid()));
+        } else {
             excludeValidatedUids << Utils::Field(Constants::Table_ALERT_VALIDATION, Constants::ALERT_VALIDATION_VALIDATED_UUID, QString("='%1'").arg("user1"));//user()->uuid()));
-//        }
+        }
         if (!excludeValidatedUids.isEmpty()) {
             wExcludeValidatedUids += QString("\n AND %1\n").arg(getWhereClause(excludeValidatedUids, Utils::Database::OR));
         }
