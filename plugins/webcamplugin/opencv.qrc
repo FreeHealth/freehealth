@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/xml">
+        <file>haarcascade_frontalface_alt2.xml</file>
+    </qresource>
+</RCC>

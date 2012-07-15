@@ -38,3 +38,6 @@ TRANSLATIONS += $${SOURCES_TRANSLATIONS_PATH}/webcam_fr.ts \
 OTHER_FILES = \
     Webcam.pluginspec
 
+#RESOURCES += \
+#    opencv.qrc
+

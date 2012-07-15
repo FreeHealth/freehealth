@@ -186,11 +186,15 @@ qmakeCommand()
     # zenity progress feature
     echo "30"; sleep 1
     echo "# Preparing the build:\nthe qmake step" ; sleep 1
+    EXTRAPLUGS=""
     if [[ "$WEBCAM" == "y" ]]; then
-        $QMAKE_CONFIG="$QMAKE_CONFIG CONFIG+=with-webcam"
+        EXTRAPLUGS="with-webcam"
     fi    
     if [[ "$ALERT" == "y" ]]; then
-        $QMAKE_CONFIG="$QMAKE_CONFIG CONFIG+=with-alerts"
+        EXTRAPLUGS="$EXTRAPLUGS with-alerts"
+    fi
+    if [[ "$EXTRAPLUGS" != "" ]]; then
+        QMAKE_CONFIG="$QMAKE_CONFIG CONFIG+=\"$EXTRAPLUGS\""
     fi
 
     echo "* qmake $BUNDLE_NAME.pro -r $QMAKE_CONFIG $SPEC LOWERED_APPNAME=$BUNDLE_NAME"
@@ -625,14 +629,23 @@ zenityConfigToBuildSystem()
     BUNDLE_NAME=`echo ${CONFIG%%;*} | tr [:upper:] [:lower:]`
 
     echo "* Zenity build system"
-    echo "    Bundle: $BUNDLE_NAME"
-    echo "    Build: $BUILD"
+    echo "    Bundle: $BUNDLE_NAME ; $BUILD"
     echo "    Clean: $CLEAN"
     echo "    Translations: $TRANS"
     echo "    Parallel: $MAKE_OPTS"
     echo "    Run after build: $RUN"
     echo "    Notify: $NOTIFY"
-    echo "    SPEC: $SPEC"
+    echo "    Spec file: $SPEC"
+    EXTRA_PLUGS=""
+    if [[ "$WEBCAM" == "y" ]]; then
+        EXTRA_PLUGS="WebCam plugin; "
+    fi    
+    if [[ "$ALERT" == "y" ]]; then
+        EXTRA_PLUGS=$EXTRA_PLUGS"Alert plugin; "
+    fi
+    if [[ "$EXTRA_PLUGS" != "" ]]; then
+        echo "    Extra-plugins: $EXTRA_PLUGS"
+    fi
 }
 
 startZenityDialog()

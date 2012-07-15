@@ -27,10 +27,12 @@
 #define OPENCVWIDGET_H
 
 #include <QLabel>
+#include <QRubberBand>
 
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
-#include <QRubberBand>
+#include <opencv2/objdetect/objdetect.hpp>
+
 
 namespace Webcam {
 namespace Internal {
@@ -56,6 +58,9 @@ public Q_SLOTS:
     void setFrozen(bool aFreeze);
     void freeze();
     void unFreeze();
+
+private Q_SLOTS:    
+    void onActionCaptureTriggered();
     
 Q_SIGNALS:
     void frozen(bool);
@@ -81,6 +86,13 @@ private:
     RubberBandMode m_Mode;
     QPoint m_clickOrigin;
     QPoint m_rubberOrigin;
+
+    CvHaarClassifierCascade* _cascade;
+    CvMemStorage*   _storage;
+    QList<CvScalar>  _colors;
+    QPixmap*         _pixmap;
+    QTimer*          _timer;
+
 };
 
 } // end Internal
