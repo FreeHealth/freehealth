@@ -127,6 +127,7 @@ void AlertPlaceHolderWidget::clear()
         _widget->clear();
     alerts.clear();
     _buttons.clear();
+    _priorities.clear();
     addNewAlertButton();
 }
 
@@ -262,15 +263,16 @@ bool AlertPlaceHolderWidget::removeAlertUuid(const QString &alertUid)
 
 void AlertPlaceHolderWidget::addNewAlertButton()
 {
-    if (!_newButton) {
-        _newButton = new QToolButton(_widget);
-        _newButton->setIconSize(QSize(16,16));
-        _newButton->setIcon(theme()->icon(Core::Constants::ICONADD));
-        _newButton->setText(tkTr(Trans::Constants::ADD_ALERT));
-        _newButton->setToolTip(tkTr(Trans::Constants::ADD_ALERT));
-        _newButton->installEventFilter(this);
-        connect(_newButton, SIGNAL(clicked()), this, SLOT(createAlert()));
+    if (_newButton) {
+        delete _newButton;
     }
+    _newButton = new QToolButton(_widget);
+    _newButton->setIconSize(QSize(16,16));
+    _newButton->setIcon(theme()->icon(Core::Constants::ICONADD));
+    _newButton->setText(tkTr(Trans::Constants::ADD_ALERT));
+    _newButton->setToolTip(tkTr(Trans::Constants::ADD_ALERT));
+    _newButton->installEventFilter(this);
+    connect(_newButton, SIGNAL(clicked()), this, SLOT(createAlert()));
     _widget->addWidget(_newButton);
     _widget->addSeparator();
 }
