@@ -45,7 +45,7 @@
 // TEST
 #include "alertitemeditordialog.h"
 #include "blockingalertdialog.h"
-#include "alertplaceholdertest.h"
+#include "alertplaceholderwidget.h"
 #include <QToolButton>
 #include <QVBoxLayout>
 #include <QPointer>
@@ -87,7 +87,7 @@ public:
 
 public:
     AlertBase *_alertBase;
-    QPointer<AlertPlaceHolderTest> _placeholdertest;
+    QPointer<AlertPlaceHolderWidget> _placeholdertest;
     AlertScriptManager *_alertScriptManager;
 };
 }
@@ -105,7 +105,8 @@ AlertCore::AlertCore(QObject *parent) :
     d->_alertBase = new Internal::AlertBase(this);
     d->_alertScriptManager = new Internal::AlertScriptManager(this);
 
-    connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
+    // uncomment the following line to create tests
+//    connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
 }
 
 AlertCore::~AlertCore()
@@ -567,7 +568,7 @@ void AlertCore::postCoreInitialization()
     // PlaceHolders
     if (true) {
         // Put placeholder in the plugin manager object pool
-        d->_placeholdertest = new AlertPlaceHolderTest; // object should not be deleted
+        d->_placeholdertest = new AlertPlaceHolderWidget; // object should not be deleted
         pluginManager()->addObject(d->_placeholdertest);
 
         // Create the dialog && the placeholder
