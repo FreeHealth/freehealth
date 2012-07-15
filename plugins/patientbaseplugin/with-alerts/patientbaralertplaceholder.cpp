@@ -36,7 +36,9 @@ PatientBarAlertPlaceHolder::PatientBarAlertPlaceHolder(QObject *parent) :
     setMargin(0);
     setSpacing(2);
     setBorderSize(0);
-    drawBackgroundUsingAlertPriority(false);
+    setDrawBackgroundUsingAlertPriority(false);
+    setAutoSaveOnValidationOrOverriding(true);
+    setAutoSaveOnEditing(true);
 }
 
 QString PatientBarAlertPlaceHolder::uuid() const
