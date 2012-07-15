@@ -300,6 +300,11 @@ bool AlertCore::registerAlertPack(const QString &absPath)
     return saveAlerts(alerts);
 }
 
+AlertPackDescription AlertCore::getAlertPackDescription(const QString &uuid)
+{
+    return d->_alertBase->getAlertPackDescription(uuid);
+}
+
 /**
  Process alerts:\n
    - Execute check scripts

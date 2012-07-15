@@ -29,23 +29,24 @@
 #define ALERTCORE_H
 
 #include <QObject>
+#include <alertplugin/alertplugin_exporter.h>
+#include <alertplugin/alertitem.h>
+#include <alertplugin/alertpackdescription.h>
 
 /**
  * \file alertcore.h
  * \author Eric MAEKER <eric.maeker@gmail.com>, Pierre-Marie Desombre <pm.desombre@gmail.com>
  * \version 0.8.0
- * \date 13 June 2012
+ * \date 16 July 2012
 */
 
 namespace Alert {
-class AlertItem;
-
 namespace Internal {
 class AlertCorePrivate;
 class AlertPlugin;
 }
 
-class AlertCore : public QObject
+class ALERT_EXPORT AlertCore : public QObject
 {
     Q_OBJECT
     friend class Alert::Internal::AlertPlugin;
@@ -88,6 +89,7 @@ public Q_SLOTS:
 
     // Alert packs
     bool registerAlertPack(const QString &absPath);
+    AlertPackDescription getAlertPackDescription(const QString &uuid);
 
     //    bool executeAlert(const AlertItem &alert);  // add a delay ?
 
