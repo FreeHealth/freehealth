@@ -28,6 +28,10 @@
 #include "alertitemeditorwidget.h"
 #include "alertitem.h"
 
+#include <coreplugin/icore.h>
+#include <coreplugin/iuser.h>
+#include <coreplugin/ipatient.h>
+
 #include <utils/global.h>
 #include <translationutils/constants.h>
 #include <translationutils/trans_current.h>
@@ -40,6 +44,9 @@
 
 using namespace Alert;
 using namespace Trans::ConstantTranslations;
+
+static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
+static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 
 // TODO: manage multiple relations
 // TODO: manage multiple timings
@@ -322,11 +329,27 @@ bool AlertItemEditorWidget::submit(AlertItem &item)
     item.clearRelations();
     AlertRelation rel;
     switch (d->ui->relatedTo->currentIndex()) {
-    case 0: rel.setRelatedTo(AlertRelation::RelatedToPatient); break;
+    case 0:
+        rel.setRelatedTo(AlertRelation::RelatedToPatient);
+        if (patient())
+            rel.setRelatedToUid(patient()->uuid());
+        else
+            rel.setRelatedToUid("patient1");
+        break;
     case 1: rel.setRelatedTo(AlertRelation::RelatedToAllPatients); break;
-    case 2: rel.setRelatedTo(AlertRelation::RelatedToUser); break;
-    case 3: rel.setRelatedTo(AlertRelation::RelatedToApplication); break;
+    case 2:
+        rel.setRelatedTo(AlertRelation::RelatedToUser);
+        if (user())
+            rel.setRelatedToUid(user()->uuid());
+        else
+            rel.setRelatedToUid("user1");
+        break;
+    case 3:
+        rel.setRelatedTo(AlertRelation::RelatedToApplication);
+        rel.setRelatedToUid(qApp->applicationName().toLower());
+        break;
     }
+    item.addRelation(rel);
 
     // Scripts
     d->ui->scriptEditor->submit();
