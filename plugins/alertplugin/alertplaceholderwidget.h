@@ -53,6 +53,12 @@ public:
     virtual QString category(const QString &lang = QString::null) const;
     virtual QString description(const QString &lang = QString::null) const;
 
+    // Ui options
+    void setIconSize(const QSize &size);
+    void setMargin(int margin) {_margin=margin;}
+    void setSpacing(int spacing) {_spacing=spacing;}
+    void setBorderSize(int borderSize) {_border=borderSize;}
+
     // AlertItem management
     void clear();
     bool addAlert(const AlertItem &alert);
@@ -79,6 +85,8 @@ private:
     QList<int> _priorities;
     QHash<QString, NonBlockingAlertToolButton *> _buttons;
     QToolButton *_newButton;
+    QSize _iconSize;
+    int _margin, _spacing, _border;
 };
 
 }  // namespace Alert

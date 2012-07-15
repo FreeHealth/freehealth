@@ -54,7 +54,9 @@ static inline Alert::AlertCore *alertCore() {return Alert::AlertCore::instance()
 AlertPlaceHolderWidget::AlertPlaceHolderWidget(QObject *parent) :
     IAlertPlaceHolder(parent),
     _widget(0),
-    _newButton(0)
+    _newButton(0),
+    _iconSize(QSize(16,16)),
+    _margin(0), _spacing(0), _border(0)
 {
     setObjectName("AlertPlaceHolderWidget");
 }
@@ -72,18 +74,32 @@ QString AlertPlaceHolderWidget::uuid() const
 // for UI presentation of the place holder
 QString AlertPlaceHolderWidget::name(const QString &lang) const
 {
+    Q_UNUSED(lang);
     return "name";
 }
 
 QString AlertPlaceHolderWidget::category(const QString &lang) const
 {
+    Q_UNUSED(lang);
     return "category";
 }
 
 QString AlertPlaceHolderWidget::description(const QString &lang) const
 {
+    Q_UNUSED(lang);
     return "description";
 }
+
+void AlertPlaceHolderWidget::setIconSize(const QSize &size)
+{
+    if (_widget)
+        _widget->setIconSize(size);
+    _iconSize = size;
+}
+
+//void AlertPlaceHolderWidget::setContentsMargins(const QMargins &margins)
+//{
+//}
 
 void AlertPlaceHolderWidget::clear()
 {
@@ -188,7 +204,8 @@ QWidget *AlertPlaceHolderWidget::createWidget(QWidget *parent)
 {
     if (!_widget) {
         _widget = new QToolBar(parent);
-        _widget->setIconSize(QSize(16,16));
+        _widget->setIconSize(_iconSize);
+        _widget->setStyleSheet(QString("QToolBar {margin:%1px; border:%2px; spacing: %3px;}").arg(_margin).arg(_border).arg(_spacing));
         addNewAlertButton();
     }
     for(int i = 0; i < alerts.count(); ++i) {
