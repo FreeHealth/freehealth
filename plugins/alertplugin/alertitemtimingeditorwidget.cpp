@@ -111,6 +111,10 @@ void AlertItemTimingEditorWidget::setAlertItem(const AlertItem &item)
             ui->cycleCombo->setCurrentIndex(0);
         ui->cycles->setValue(time.numberOfCycles());
         cyclingToUi(time);
+    } else {
+        ui->startDate->setDateTime(QDateTime(QDate::currentDate(), QTime(0,0,0)));
+        ui->endDate->setDateTime(QDateTime(QDate::currentDate().addYears(1), QTime(23,59,0)));
+        ui->cycleCombo->setCurrentIndex(0);
     }
 }
 
@@ -139,7 +143,7 @@ bool AlertItemTimingEditorWidget::submit(AlertItem &item)
         item.addTiming(time);
     }
     AlertTiming &time = item.timingAt(0);
-    time.setStart(QDateTime(ui->startDate->date(), QTime(23,59,59)));
+    time.setStart(QDateTime(ui->startDate->date(), QTime(0,0,0)));
     if (ui->neverExpires->isChecked())
         time.setExpiration(QDateTime());
     else
