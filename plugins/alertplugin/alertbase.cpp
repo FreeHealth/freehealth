@@ -1253,11 +1253,6 @@ QVector<AlertItem> AlertBase::getAlertItems(const AlertBaseQuery &query)
 //        wNullValidity += QString("\n AND %1 ").arg(getWhereClause(conds));
         conds.clear();
 
-        conds << Utils::Field(Constants::Table_ALERT_RELATED, Constants::ALERT_RELATED_RELATED_TO, QString("=%1").arg(AlertRelation::RelatedToAllPatients));
-        conds << Utils::Field(Constants::Table_ALERT_RELATED, Constants::ALERT_RELATED_RELATED_TO, QString("=%1").arg(AlertRelation::RelatedToAllUsers));
-//        conds << Utils::Field(Constants::Table_ALERT_RELATED, Constants::ALERT_RELATED_RELATED_TO, QString("=%1").arg(AlertRelation::RelatedToApplication));
-        wNullValRelated = getWhereClause(conds, Utils::Database::OR);
-
         relatedJoin = Utils::Join(Constants::Table_ALERT_RELATED, Constants::ALERT_RELATED_REL_ID, Constants::Table_ALERT, Constants::ALERT_REL_ID);
         validationJoin = Utils::Join(Constants::Table_ALERT_VALIDATION, Constants::ALERT_VALIDATION_VAL_ID, Constants::Table_ALERT, Constants::ALERT_VAL_ID);
         Utils::FieldList excludeValidatedUids;
@@ -1299,6 +1294,10 @@ QVector<AlertItem> AlertBase::getAlertItems(const AlertBaseQuery &query)
         conds << Utils::Field(Constants::Table_ALERT_RELATED, Constants::ALERT_RELATED_RELATED_TO, QString("=%1").arg(AlertRelation::RelatedToUser));
         conds << Utils::Field(Constants::Table_ALERT_RELATED, Constants::ALERT_RELATED_RELATED_UID, w);
         wUids = getWhereClause(conds);
+        conds.clear();
+        conds << Utils::Field(Constants::Table_ALERT_RELATED, Constants::ALERT_RELATED_RELATED_TO, QString("=%1").arg(AlertRelation::RelatedToAllUsers));
+        wUids = QString("%1 OR %2").arg(wUids).arg(getWhereClause(conds));
+        qWarning() << "USERS" << wUids;
     }
     // patients
     if (!query.patientUids().isEmpty()) {
@@ -1307,10 +1306,15 @@ QVector<AlertItem> AlertBase::getAlertItems(const AlertBaseQuery &query)
         QString w = QString("IN ('%1')").arg(query.patientUids().join("','"));
         conds << Utils::Field(Constants::Table_ALERT_RELATED, Constants::ALERT_RELATED_RELATED_TO, QString("=%1").arg(AlertRelation::RelatedToPatient));
         conds << Utils::Field(Constants::Table_ALERT_RELATED, Constants::ALERT_RELATED_RELATED_UID, w);
+        QString pUids = getWhereClause(conds);
+        conds.clear();
+        conds << Utils::Field(Constants::Table_ALERT_RELATED, Constants::ALERT_RELATED_RELATED_TO, QString("=%1").arg(AlertRelation::RelatedToAllPatients));
+        pUids = QString("%1 OR %2").arg(pUids).arg(getWhereClause(conds));
         if (wUids.isEmpty())
-            wUids = getWhereClause(conds);
+            wUids = pUids;
         else
             wUids = QString("%1\n        OR %2").arg(wUids).arg(getWhereClause(conds));
+        qWarning() << "PATIENTS" << wUids;
     }
     // application
     if (!query.applicationNames().isEmpty()) {
@@ -1323,6 +1327,7 @@ QVector<AlertItem> AlertBase::getAlertItems(const AlertBaseQuery &query)
             wUids = getWhereClause(conds);
         else
             wUids = QString("%1\n        OR %2").arg(wUids).arg(getWhereClause(conds));
+        qWarning() << "APPLICATION" << wUids;
     }
     conds.clear();
 
@@ -1339,13 +1344,20 @@ QVector<AlertItem> AlertBase::getAlertItems(const AlertBaseQuery &query)
     if (wUids.isEmpty()) {
         req = QString("%1"
                       "WHERE %2\n"
-                      " AND %3").arg(select(Constants::Table_ALERT, joins, conds)).arg(where).arg(wNullValRelated);
+                      " AND %3")
+                .arg(select(Constants::Table_ALERT, joins, conds))
+                .arg(where)
+                .arg(wNullValRelated);
     } else {
         req = QString("%1"
                       "WHERE %2\n"
                       " AND ( %3\n"
-                      "       OR ( %4 )\n"
-                      "     )").arg(select(Constants::Table_ALERT, joins, conds)).arg(where).arg(wUids).arg(wNullValRelated);
+//                      "       OR ( %4 )\n"
+                      "     )")
+                .arg(select(Constants::Table_ALERT, joins, conds))
+                .arg(where)
+                .arg(wUids);
+//                .arg(wNullValRelated);
     }
 
     // second select == alert exclusion (validated for required uids)
