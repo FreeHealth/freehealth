@@ -378,9 +378,16 @@ bool BlockingAlertDialog::isRemindLaterRequested() const
 
 // TODO: create a done(int r) and check if alert tagged with mustBeRead() was visualized by the user.
 
+void BlockingAlertDialog::keyPressEvent(QKeyEvent *event)
+{
+    // Wrapper on Esc keypressed -> reject dialog
+    if (event->key() == Qt::Key_Escape)
+        return;
+    QDialog::keyPressEvent(event);
+}
+
 void BlockingAlertDialog::remindLater()
 {
-//    qWarning() << "BlockingAlertDialog::remindLater()";
     d->_remind = true;
     accept();
 }
