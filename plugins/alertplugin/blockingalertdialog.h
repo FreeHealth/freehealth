@@ -114,6 +114,7 @@ private Q_SLOTS:
 protected:
     void changeEvent(QEvent *e);
     bool eventFilter(QObject *o, QEvent *e);
+    void keyPressEvent(QKeyEvent *event);
 
 private:
     Internal::BlockingAlertDialogPrivate *d;
