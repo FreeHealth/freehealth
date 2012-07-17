@@ -25,8 +25,8 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef ALERTCORE_H
-#define ALERTCORE_H
+#ifndef ALERTPLUGIN_ALERTCORE_H
+#define ALERTPLUGIN_ALERTCORE_H
 
 #include <QObject>
 #include <alertplugin/alertplugin_exporter.h>
@@ -37,8 +37,12 @@
  * \file alertcore.h
  * \author Eric MAEKER <eric.maeker@gmail.com>, Pierre-Marie Desombre <pm.desombre@gmail.com>
  * \version 0.8.0
- * \date 16 July 2012
+ * \date 17 July 2012
 */
+
+namespace DataPack {
+class Pack;
+}
 
 namespace Alert {
 namespace Internal {
@@ -112,6 +116,10 @@ private:
 protected:
     void postCoreInitialization();
 
+private Q_SLOTS:
+    void packInstalled(const DataPack::Pack &pack);
+    void packRemoved(const DataPack::Pack &pack);
+
 private:
     static AlertCore *_instance;
     Internal::AlertCorePrivate *d;
@@ -121,5 +129,5 @@ private:
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Alert::AlertCore::AlertsToCheck)
 
-#endif
+#endif  // ALERTPLUGIN_ALERTCORE_H
 

@@ -47,6 +47,7 @@ public:
         ZipCodes,
         UserDocuments,
         Accountancy,
+        AlertPacks,
         UnknownType
     };
 

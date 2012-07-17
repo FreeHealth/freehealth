@@ -44,6 +44,10 @@
 #include <translationutils/constants.h>
 #include <translationutils/trans_filepathxml.h>
 
+#include <datapackutils/datapackcore.h>
+#include <datapackutils/ipackmanager.h>
+#include <datapackutils/pack.h>
+
 // TEST
 #include "alertitemeditordialog.h"
 #include "blockingalertdialog.h"
@@ -64,6 +68,10 @@ static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionS
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
+
+// Manage Datapacks
+static inline DataPack::DataPackCore &dataPackCore() { return DataPack::DataPackCore::instance(); }
+static inline DataPack::IPackManager *packManager() { return dataPackCore().packManager(); }
 
 AlertCore *AlertCore::_instance = 0;
 
@@ -115,6 +123,10 @@ AlertCore::AlertCore(QObject *parent) :
     // Create all instance
     d->_alertBase = new Internal::AlertBase(this);
     d->_alertScriptManager = new Internal::AlertScriptManager(this);
+
+    connect(packManager(), SIGNAL(packInstalled(DataPack::Pack)), this, SLOT(packInstalled(DataPack::Pack)));
+    connect(packManager(), SIGNAL(packRemoved(DataPack::Pack)), this, SLOT(packRemoved(DataPack::Pack)));
+//    connect(packManager(), SIGNAL(packUpdated(DataPack::Pack)), this, SLOT(packChanged(DataPack::Pack)));
 }
 
 AlertCore::~AlertCore()
@@ -362,6 +374,20 @@ void AlertCore::processAlerts(QVector<AlertItem> &alerts)
 
 void AlertCore::postCoreInitialization()
 {
+    QDateTime start = QDateTime::currentDateTime().addSecs(-60*60*24);
+    QDateTime expiration = QDateTime::currentDateTime().addSecs(60*60*24);
+    AlertItem item5;
+    item5.setUuid(Utils::Database::createUid());
+    item5.setLabel("Simple basic Blocking alert test (item5)");
+    item5.setCategory("Test");
+    item5.setDescription("Aoutch this is a Blocking alert !");
+    item5.setViewType(AlertItem::BlockingAlert);
+    item5.setRemindLaterAllowed(true);
+    item5.setOverrideRequiresUserComment(true);
+    item5.addRelation(AlertRelation(AlertRelation::RelatedToAllPatients));
+    item5.addTiming(AlertTiming(start, expiration));
+    d->_alertBase->saveAlertItem(item5);
+
     if (WithTests)
         d->makeTests();
     if (patient())
@@ -608,4 +634,18 @@ void Internal::AlertCorePrivate::makeTests()
     }
 
     // END TESTS
+}
+
+void AlertCore::packInstalled(const DataPack::Pack &pack)
+{
+    if (pack.dataType() == DataPack::Pack::AlertPacks) {
+        // TODO
+    }
+}
+
+void AlertCore::packRemoved(const DataPack::Pack &pack)
+{
+    if (pack.dataType() == DataPack::Pack::AlertPacks) {
+        // TODO
+    }
 }
