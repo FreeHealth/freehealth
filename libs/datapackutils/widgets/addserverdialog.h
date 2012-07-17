@@ -53,6 +53,10 @@ public:
 public Q_SLOTS:
     void submitTo(Server *server);
 
+private Q_SLOTS:
+    void on_serverType_currentIndexChanged(int index);
+    void on_selectPath_clicked();
+
 private:
     Internal::Ui::AddServerDialog *ui;
 };
