@@ -48,6 +48,8 @@ public:
     void addDateFormat(const QString &format);
     QStringList acceptedDateFormats() const {return m_dateFormatList;}
 
+    void translateFormats();
+
 private:
     QStringList m_dateFormatList;
     QString m_lastValidFormat;

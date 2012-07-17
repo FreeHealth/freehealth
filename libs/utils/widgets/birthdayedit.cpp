@@ -163,6 +163,12 @@ void BirthDayEdit::focusOutEvent(QFocusEvent *event)
 {
     // switching to displayMode
     setValidator(0);
+    // check validity of the current edition (if use does not it enter)
+    QString val = text();
+    int pos = 0;
+    if (_validator->validate(val, pos) == QValidator::Intermediate)
+        _validator->fixup(val);
+    setText(val);
     m_date = _validator->date();
     if (m_date.isValid()) {
         clearExtraStyleSheet();
@@ -267,6 +273,7 @@ void BirthDayEdit::retranslate()
         aNumericDisplay->setToolTip(aLongDisplay->text());
         aNumericDisplay->setData(tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR));
     }
+    _validator->translateFormats();
 }
 
 void BirthDayEdit::changeEvent(QEvent *e)
