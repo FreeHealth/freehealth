@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE FreeMedForms>
 
-<AlertPack>
+<DataPack_Pack>
 
-  <AlertPackDescription>
+  <PackDescription>
     <!-- Non translatable values -->
     <uuid>AlertPacks::Test::Alpha</uuid>
     <authors>Eric Maeker, MD</authors>
@@ -15,6 +15,8 @@
     <icon>__theme__/warning.png</icon>
     <weblink></weblink>
     <bibliography/>
+    <datatype>AlertPack</datatype>
+    <inuse>1</inuse>
 
     <!-- Translatable values -->
     <license>GPLv3</license>
@@ -39,6 +41,6 @@
       </updateversion>
     </updateinfo>
 
-  </AlertPackDescription>
+  </PackDescription>
 
-</AlertPack>
+</DataPack_Pack>
