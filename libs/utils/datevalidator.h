@@ -32,6 +32,13 @@
 #include <QStringList>
 #include <QDate>
 
+/**
+ * \file datevalidator.h
+ * \author Eric MAEKER <eric.maeker@gmail.com>
+ * \version 0.8.0
+ * \date 17 July 2012
+*/
+
 namespace Utils {
 
 class UTILS_EXPORT DateValidator : public QValidator
