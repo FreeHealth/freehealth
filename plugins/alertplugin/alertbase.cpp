@@ -883,7 +883,7 @@ bool AlertBase::saveItemScripts(AlertItem &item)
             query.bindValue(Constants::ALERT_SCRIPTS_SID, id);
             query.bindValue(Constants::ALERT_SCRIPT_UID, script.uuid());
             query.bindValue(Constants::ALERT_SCRIPT_ISVALID, int(script.isValid()));
-            query.bindValue(Constants::ALERT_SCRIPT_TYPE, script.type());
+            query.bindValue(Constants::ALERT_SCRIPT_TYPE, AlertScript::typeToXml(script.type()));
             query.bindValue(Constants::ALERT_SCRIPT_CONTENT, script.script());
             if (query.exec()) {
                 script.setId(query.lastInsertId().toInt());
@@ -906,7 +906,7 @@ bool AlertBase::saveItemScripts(AlertItem &item)
                 int i = 0;
                 query.bindValue(i, script.uuid());
                 query.bindValue(++i, int(script.isValid()));
-                query.bindValue(++i, script.type());
+                query.bindValue(++i, AlertScript::typeToXml(script.type()));
                 query.bindValue(++i, script.script());
                 if (query.exec()) {
                     script.setModified(false);
@@ -1555,7 +1555,7 @@ bool AlertBase::getItemScripts(AlertItem &item)
             scr.setId(query.value(ALERT_RELATED_ID).toInt());
             scr.setValid(query.value(ALERT_SCRIPT_ISVALID).toBool());
             scr.setUuid(query.value(ALERT_SCRIPT_UID).toString());
-            scr.setType(AlertScript::ScriptType(query.value(ALERT_SCRIPT_TYPE).toInt()));
+            scr.setType(AlertScript::typeFromXml(query.value(ALERT_SCRIPT_TYPE).toString()));
             scr.setScript(query.value(ALERT_SCRIPT_CONTENT).toString());
             item.addScript(scr);
         }
