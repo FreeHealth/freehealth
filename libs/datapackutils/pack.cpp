@@ -210,6 +210,10 @@ Pack::DataType Pack::dataType() const
         m_type = Pack::Accountancy;
     else if (type.compare("Account", Qt::CaseInsensitive)==0)
         m_type = Pack::Accountancy;
+    else if (type.compare("AlertPack", Qt::CaseInsensitive)==0)
+        m_type = Pack::AlertPacks;
+    else if (type.compare("AlertPacks", Qt::CaseInsensitive)==0)
+        m_type = Pack::AlertPacks;
     else
         m_type = Pack::UnknownType;
     return Pack::DataType(m_type);
@@ -227,6 +231,7 @@ QString Pack::dataTypeName() const
     case Pack::ICD: return tkTr(Trans::Constants::ICD10);
     case Pack::ZipCodes: return tkTr(Trans::Constants::ZIP_CODES);
     case Pack::UserDocuments: return tkTr(Trans::Constants::USER_DOCUMENTS);
+    case Pack::AlertPacks: return tkTr(Trans::Constants::ALERT_PACKS);
     default: return tkTr(Trans::Constants::UNKNOWN);
     }
     return tkTr(Trans::Constants::UNKNOWN);
