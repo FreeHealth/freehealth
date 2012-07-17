@@ -2019,6 +2019,55 @@ bool AlertBase::getAlertPackLabels(AlertPackDescription &descr)
     return true;
 }
 
+bool AlertBase::removeAlertPack(const QString &uid)
+{
+    if (!connectDatabase(Constants::DB_NAME, __LINE__))
+        return false;
+
+    if (WarnMemberNames)
+        qWarning() << "AlertBase::removeAlertPack" << uid;
+
+    if (uid.isEmpty()) {
+        LOG_ERROR("AlertPackDescription uuid can not be null");
+        return false;
+    }
+    database().transaction();
+    // try to catch the id using the uuid
+    QHash<int, QString> where;
+    where.insert(Constants::ALERT_PACKS_UID, QString("='%1'").arg(uid));
+    if (!count(Constants::Table_ALERT_PACKS, Constants::ALERT_PACKS_IN_USE, getWhereClause(Constants::Table_ALERT_PACKS, where))) {
+        LOG_ERROR("No AlertPackDescription found for the uid: " + uid);
+        return false;
+    }
+
+    QSqlQuery query(database());
+    // AlertPack no more 'inUse'
+    QString req = prepareUpdateQuery(Constants::Table_ALERT_PACKS, Constants::ALERT_PACKS_IN_USE, where);
+    query.prepare(req);
+    query.bindValue(0, int(false));
+    if (!query.exec()) {
+        LOG_QUERY_ERROR(query);
+        database().rollback();
+        return false;
+    }
+    query.finish();
+
+    // Alerts linked to this AlertPack no more 'valid'
+    where.clear();
+    where.insert(Constants::ALERT_PACKUID, QString("='%1'").arg(uid));
+    req = prepareUpdateQuery(Constants::Table_ALERT, Constants::ALERT_ISVALID, where);
+    query.prepare(req);
+    query.bindValue(0, int(false));
+    if (!query.exec()) {
+        LOG_QUERY_ERROR(query);
+        database().rollback();
+        return false;
+    }
+    query.finish();
+    database().commit();
+    return true;
+}
+
 /** Reconnect the database when the database server changes. \sa Core::ICore::databaseServerChanged(), Core::ISettings::databaseConnector() */
 void AlertBase::onCoreDatabaseServerChanged()
 {

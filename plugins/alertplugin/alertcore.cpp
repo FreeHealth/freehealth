@@ -274,7 +274,13 @@ bool AlertCore::removeAlert(const AlertItem &item)
     return ok;
 }
 
-/** Read all alerts in the alert pack \e absPath and feed the database with created alerts. */
+/**
+ * Register an AlertPack to the database. \n
+ * An alert pack is a specific datapack, containing only xml'd alerts. \n
+ * Read all alerts in the alert pack \e absPath and save them to database. \n
+ * Note that alerts are not processed.
+ * \sa Alert::AlertItem::fromXml(), Alert::AlertCore::checkAllAlerts(),Alert::AlertCore::checkPatientAlerts(), Alert::AlertCore::checkUserAlerts()
+*/
 bool AlertCore::registerAlertPack(const QString &absPath)
 {
     LOG(tr("Registering alert pack: %1").arg(QDir::cleanPath(absPath)));
@@ -305,11 +311,25 @@ bool AlertCore::registerAlertPack(const QString &absPath)
     }
     QList<AlertItem> alerts;
     foreach(const QFileInfo &info, files) {
+        // don't read the packdescription file here
         if (info.fileName()==QString(Constants::PACK_DESCRIPTION_FILENAME))
             continue;
+        // create the alert from the xml file
         alerts << AlertItem::fromXml(Utils::readTextFile(info.absoluteFilePath(), Utils::DontWarnUser));
     }
     return saveAlerts(alerts);
+}
+
+/**
+ * Remove a registered AlertPack from the database. \n
+ * An alert pack is a specific datapack, containing only xml'd alerts. \n
+ * All alerts related to this AlertPack will be invalidated in the database, causing them to be ignored.
+ * Note that alerts are not (re)processed.
+ * \sa Alert::AlertItem::fromXml(), Alert::AlertCore::checkAllAlerts(),Alert::AlertCore::checkPatientAlerts(), Alert::AlertCore::checkUserAlerts()
+*/
+bool AlertCore::removeAlertPack(const QString &uid)
+{
+    return d->_alertBase->removeAlertPack(uid);
 }
 
 AlertPackDescription AlertCore::getAlertPackDescription(const QString &uuid)
@@ -639,13 +659,20 @@ void Internal::AlertCorePrivate::makeTests()
 void AlertCore::packInstalled(const DataPack::Pack &pack)
 {
     if (pack.dataType() == DataPack::Pack::AlertPacks) {
-        // TODO
+        // register the alertpack
+        if (!registerAlertPack(pack.unzipPackToPath())) {
+            LOG_ERROR(tr("Unable to register AlertPack. Path: %1").arg(pack.unzipPackToPath()));
+            return;
+        }
+        // force a new alert checking
+        checkAllAlerts();
     }
 }
 
 void AlertCore::packRemoved(const DataPack::Pack &pack)
 {
     if (pack.dataType() == DataPack::Pack::AlertPacks) {
-        // TODO
+        if (!removeAlertPack(pack.uuid()))
+            LOG_ERROR("Unable to remove AlertPack " + pack.uuid());
     }
 }

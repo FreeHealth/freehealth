@@ -93,6 +93,7 @@ public Q_SLOTS:
 
     // Alert packs
     bool registerAlertPack(const QString &absPath);
+    bool removeAlertPack(const QString &uid);
     AlertPackDescription getAlertPackDescription(const QString &uuid);
 
     //    bool executeAlert(const AlertItem &alert);  // add a delay ?
