@@ -1550,6 +1550,7 @@ QString AlertScript::typeToString(ScriptType type)
     case OnUserAboutToChange: return QApplication::translate("Alert::AlertScript", "On user about to change");
     case OnEpisodeAboutToSave: return QApplication::translate("Alert::AlertScript", "On episode about to save");
     case OnEpisodeLoaded: return QApplication::translate("Alert::AlertScript", "On episode loaded");
+    case OnRemindLater: return QApplication::translate("Alert::AlertScript", "On remind later requested");
     }
     return QString::null;
 }
@@ -1568,6 +1569,7 @@ QString AlertScript::typeToXml(ScriptType type)
     case OnUserAboutToChange: return "onuserabouttochange";
     case OnEpisodeAboutToSave: return "onepisodeabouttosave";
     case OnEpisodeLoaded: return "onepisodeloaded";
+    case OnRemindLater: return "onremindlater";
     }
     return QString::null;
 }
@@ -1595,6 +1597,8 @@ AlertScript::ScriptType AlertScript::typeFromXml(const QString &xml)
         return OnEpisodeAboutToSave;
     else if (xml.compare("onepisodeloaded", Qt::CaseInsensitive)==0)
         return OnEpisodeLoaded;
+    else if (xml.compare("onremindlater", Qt::CaseInsensitive)==0)
+        return OnRemindLater;
     return CheckValidityOfAlert;
 }
 

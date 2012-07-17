@@ -126,7 +126,6 @@ private:
 class ALERT_EXPORT AlertScript
 {
 public:
-    // THE ORDER OF THIS ENUM MUST NOT CHANGE
     enum ScriptType {
         CheckValidityOfAlert = 0,
         CyclingStartDate,
@@ -137,7 +136,8 @@ public:
         OnPatientAboutToChange,
         OnUserAboutToChange,
         OnEpisodeAboutToSave,
-        OnEpisodeLoaded
+        OnEpisodeLoaded,
+        OnRemindLater
     };
 
     AlertScript() : _id(-1), _valid(true), _modified(false) {}
