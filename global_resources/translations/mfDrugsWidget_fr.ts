@@ -1479,7 +1479,7 @@ Voulez-vous réellement changer de mode d&apos;édition ?</translation>
     <message>
         <location filename="../../plugins/drugsplugin/constants.h" line="93"/>
         <source>Add long-term medications</source>
-        <translation>Ajouter les traitements choniques</translation>
+        <translation type="unfinished">Ajouter les traitements chroniques</translation>
     </message>
 </context>
 </TS>
