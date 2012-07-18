@@ -33,12 +33,13 @@
 /**
  * \file alertplugin.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.7.2
- * \date 05 May 2012
+ * \version 0.8.0
+ * \date 17 July 2012
 */
 
 namespace Alert {
 namespace Internal {
+class AlertPreferencesPage;
 
 class AlertPlugin : public ExtensionSystem::IPlugin
 {
@@ -53,6 +54,9 @@ public:
 private Q_SLOTS:
     void postCoreInitialization();
     void coreAboutToClose();
+
+private:
+    AlertPreferencesPage *_prefPage;
 };
 
 }  // End namespace Internal

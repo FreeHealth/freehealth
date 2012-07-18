@@ -138,6 +138,7 @@ const char * const  TAG_APPLICATION_USER_SUBFORMS_PATH = "__userSubForms__";
 const char * const  TAG_DATAPACK_COMPLETEFORMS_PATH = "__datapackCompleteForms__";
 const char * const  TAG_DATAPACK_SUBFORMS_PATH = "__datapackSubForms__";
 const char * const  TAG_USER_DOCUMENT_PATH = "__userDocuments__";
+const char * const  TAG_USER_RESOURCES_PATH = "__userResources__";
 
 // Settings keys
 const char * const  S_RECENTFILES_GROUP = "RecentFiles";

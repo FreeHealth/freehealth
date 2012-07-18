@@ -124,6 +124,7 @@ public:
 
     // AlertPacks
     bool saveAlertPackDescription(AlertPackDescription &descr);
+    bool removeAlertPack(const QString &uid);
     AlertPackDescription getAlertPackDescription(const QString &uuid);
 
     // For debugging purpose

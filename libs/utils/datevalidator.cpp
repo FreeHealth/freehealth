@@ -44,7 +44,8 @@ DateValidator::DateValidator(QObject *parent) :
 {
     // split localized dateFormat string and put the parts in a separated QStringList
     //: this is a comma separated list of formatStrings used by QDate::fromString();
-    m_dateFormatList = tr("ddMMyy,ddMMyyyy").simplified().split(",", QString::SkipEmptyParts);
+    m_dateFormatList << tr("ddMMyy");
+    m_dateFormatList << tr("ddMMyyyy");
     m_lastValidFormat = QString();
 
     // add the systems default date ShortFormat
@@ -69,7 +70,7 @@ QValidator::State DateValidator::validate(QString &input, int &pos) const
     Q_UNUSED(pos);
 
     // input contains only valid chars
-    if (!QRegExp(QString("[%10-9]*").arg(::SEPARATORS)).exactMatch(input)) {
+    if (!QRegExp(QString("[0-9%1]*").arg(::SEPARATORS)).exactMatch(input)) {
 //        qDebug() << "NON VALID CHAR" << input;
         return QValidator::Invalid;
     }
@@ -92,7 +93,7 @@ QValidator::State DateValidator::validate(QString &input, int &pos) const
     // no match by now
     // check if the user enters digits or a SEPARATOR
     // everything else is discouraged
-    if(QRegExp("[-./,;: 0-9]*").exactMatch(input)) {
+    if(QRegExp(QString("[0-9%1]*").arg(::SEPARATORS)).exactMatch(input)) {
 //        qDebug() << "probable date format with separators:" << input;
         return QValidator::Intermediate;
     }
@@ -117,6 +118,14 @@ void DateValidator::addDateFormat(const QString &format)
 {
     if (!m_dateFormatList.contains(format, Qt::CaseSensitive))
         m_dateFormatList.append(format);
+}
+
+void DateValidator::translateFormats()
+{
+    m_dateFormatList.takeFirst();
+    m_dateFormatList.takeFirst();
+    m_dateFormatList.prepend(tr("ddMMyy"));
+    m_dateFormatList.prepend(tr("ddMMyyyy"));
 }
 
 void DateValidator::fixup(QString &input) const

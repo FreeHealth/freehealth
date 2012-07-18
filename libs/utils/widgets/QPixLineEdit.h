@@ -34,9 +34,10 @@
 #include <QStyle>
 
 /**
- @author Eric MAEKER <eric.maeker@gmail.com>
-  \ingroup toolkit
-  \ingroup widget_toolkit
+ * \file QPixLineEdit.h
+ * \author Eric MAEKER <eric.maeker@gmail.com>
+ * \version 0.6.0
+ * \date 29 May 2011
 */
 
 namespace Utils {

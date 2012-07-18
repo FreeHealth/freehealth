@@ -33,6 +33,8 @@
 
 #include "ui_addserverdialog.h"
 
+#include <QFileDialog>
+
 using namespace DataPack;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
@@ -61,6 +63,7 @@ AddServerDialog::AddServerDialog(QWidget *parent) :
     ui->serverType->addItem(tr("Protected HTTP with zipped content"));   // 4
     ui->serverType->addItem(tr("Protected HTTP non-zipped"));            // 5
     ui->serverType->addItem(tr("FTP with zipped content"));              // 6
+    ui->selectPath->hide();
     adjustSize();
 }
 
@@ -112,13 +115,44 @@ void AddServerDialog::setServer(const Server &server)
 //        ui->updateServerReco->setText(tkTr(Trans::Constants::UNKNOWN));
 }
 
+void AddServerDialog::on_serverType_currentIndexChanged(int index)
+{
+    if (index==1) {
+        ui->selectPath->show();
+    } else {
+        ui->selectPath->hide();
+    }
+}
+
+void AddServerDialog::on_selectPath_clicked()
+{
+    QString path = QFileDialog::getExistingDirectory(this, tr("Select datapack local path"),
+                                                     QDir::homePath(),
+                                                     QFileDialog::ShowDirsOnly
+                                                     | QFileDialog::DontResolveSymlinks);
+    if (!path.isEmpty())
+        ui->serverUrl->setText("file:/" + path);
+    ui->serverUrl->setFocus();
+}
+
 void AddServerDialog::submitTo(Server *server)
 {
     Q_ASSERT(server);
     if (!server)
         return;
-    server->setUrl(ui->serverUrl->text());
     server->setUrlStyle(urlType(ui->serverType));
+    if (urlType(ui->serverType) == Server::NoStyle) {
+        QString path = ui->serverUrl->text();
+        if (!path.startsWith("file://")) {
+            if (path.startsWith("/"))
+                path.prepend("file:/");
+            else
+                path.prepend("file://");
+        }
+        server->setUrl(path);
+    } else {
+        server->setUrl(ui->serverUrl->text());
+    }
 //    server->setUserLogin(ui->userLogin->text());
 //    server->setUserPassword(ui->userPassword->text());
     server->setUserUpdateFrequency(ui->checkUpdate->currentIndex());

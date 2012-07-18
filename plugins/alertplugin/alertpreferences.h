@@ -19,50 +19,88 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developers :                                                    *
- *       Eric MAEKER, MD <eric.maeker@gmail.com>                           *
+ *   Main Developpers:                                                     *
+ *       Eric MAEKER, <eric.maeker@gmail.com>,                             *
+ *       Pierre-Marie Desombre <pm.desombre@gmail.com>                     *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef DATAPACK_ADDSERVERDIALOG_H
-#define DATAPACK_ADDSERVERDIALOG_H
+#ifndef ALERT_INTERNAL_ALERTPREFERENCES_H
+#define ALERT_INTERNAL_ALERTPREFERENCES_H
 
-#include <datapackutils/datapack_exporter.h>
+#include <coreplugin/ioptionspage.h>
 
-#include <QDialog>
+#include <QWidget>
+#include <QPointer>
 
-namespace DataPack {
-class Server;
+/**
+ * \file alertpreferences.h
+ * \author Eric MAEKER <eric.maeker@gmail.com>
+ * \version 0.8.0
+ * \date 17 July 2012
+*/
 
+namespace Core {
+class ISettings;
+}
+
+namespace Alert {
 namespace Internal {
 namespace Ui {
-    class AddServerDialog;
+class AlertPreferencesWidget;
 }
-}  // End namespace Internal
 
-class DATAPACK_EXPORT AddServerDialog : public QDialog
+class AlertPreferencesWidget : public QWidget
 {
     Q_OBJECT
-
+    
 public:
-    explicit AddServerDialog(QWidget *parent = 0);
-    ~AddServerDialog();
+    explicit AlertPreferencesWidget(QWidget *parent = 0);
+    ~AlertPreferencesWidget();
+    
+    void setDatasToUi();
 
-    void setServer(const Server &server);
+    static void writeDefaultSettings(Core::ISettings *s);
 
 public Q_SLOTS:
-    void submitTo(Server *server);
-
-private Q_SLOTS:
-    void on_serverType_currentIndexChanged(int index);
-    void on_selectPath_clicked();
+    void saveToSettings(Core::ISettings *s = 0);
 
 private:
-    Internal::Ui::AddServerDialog *ui;
+    void retranslateUi();
+    void changeEvent(QEvent *e);
+
+private:
+    Ui::AlertPreferencesWidget *ui;
 };
 
 
-} // namespace DataPack
+class AlertPreferencesPage : public Core::IOptionsPage
+{
+public:
+    AlertPreferencesPage(QObject *parent = 0);
+    ~AlertPreferencesPage();
+
+    QString id() const;
+    QString name() const;
+    QString category() const;
+    QString title() const {return name();}
+
+    void resetToDefaults();
+    void checkSettingsValidity();
+    void applyChanges();
+    void finish();
+
+    QString helpPage() {return QString();}
+
+    static void writeDefaultSettings(Core::ISettings *s) {AlertPreferencesWidget::writeDefaultSettings(s);}
+
+    QWidget *createPage(QWidget *parent = 0);
+
+private:
+    QPointer<Internal::AlertPreferencesWidget> m_Widget;
+};
 
 
-#endif // DATAPACK_ADDSERVERDIALOG_H
+} // namespace Internal
+} // namespace Alert
+#endif // ALERT_INTERNAL_ALERTPREFERENCES_H

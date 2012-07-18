@@ -31,8 +31,9 @@ using namespace Alert;
 
 // TODO: add Extra-XML management
 
+/** The Alert Pack description is the DataPack::Pack::PackDescription with some additional info. */
 AlertPackDescription::AlertPackDescription() :
-    Utils::GenericDescription("AlertPackDescription")
+    Utils::GenericDescription("PackDescription")
 {
     setData(InUse, false);
     addNonTranslatableExtraData(InUse, "InUse");

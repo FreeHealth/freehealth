@@ -27,7 +27,8 @@ HEADERS += \
     $${PWD}/nonblockingalertwidgets.h \
     $${PWD}/alertscriptmanager.h \
     $${PWD}/alertitemscripteditor.h \
-    $${PWD}/alertpackdescription.h
+    $${PWD}/alertpackdescription.h \
+    $${PWD}/alertpreferences.h
 
 SOURCES += \
     $${PWD}/alertplugin.cpp \
@@ -43,7 +44,8 @@ SOURCES += \
     $${PWD}/nonblockingalertwidgets.cpp \
     $${PWD}/alertscriptmanager.cpp \
     $${PWD}/alertitemscripteditor.cpp \
-    $${PWD}/alertpackdescription.cpp
+    $${PWD}/alertpackdescription.cpp \
+    $${PWD}/alertpreferences.cpp
 
 FORMS += \
     $${PWD}/alertitemeditorwidget.ui \
@@ -51,7 +53,8 @@ FORMS += \
     $${PWD}/alertitemeditordialog.ui \
     $${PWD}/blockingalertdialog.ui \
     $${PWD}/blockingalertdialogoverridingcomment.ui \
-    $${PWD}/alertitemscripteditor.ui
+    $${PWD}/alertitemscripteditor.ui \
+    $${PWD}/alertpreferences.ui
 
 OTHER_FILES += $${PWD}/Alert.pluginspec
 

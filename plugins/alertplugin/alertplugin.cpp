@@ -26,6 +26,7 @@
 #include "alertplugin.h"
 #include "alertcore.h"
 #include "alertitem.h"
+#include "alertpreferences.h"
 
 #include <utils/log.h>
 
@@ -46,7 +47,9 @@ static inline Core::IUser *user()  { return Core::ICore::instance()->user(); }
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline void messageSplash(const QString &s) {theme()->messageSplashScreen(s); }
 
-AlertPlugin::AlertPlugin()
+AlertPlugin::AlertPlugin() :
+    ExtensionSystem::IPlugin(),
+    _prefPage(0)
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating AlertPlugin";
@@ -57,7 +60,9 @@ AlertPlugin::AlertPlugin()
     // Add here the Core::IFirstConfigurationPage objects to the pluginmanager object pool
 
     // All preferences pages must be created in this part (before user connection)
+    _prefPage = new AlertPreferencesPage(this);
     // And included in the QObject pool
+    addObject(_prefPage);
 
     // Create the core instance
     new AlertCore(this);
@@ -68,6 +73,8 @@ AlertPlugin::AlertPlugin()
 
 AlertPlugin::~AlertPlugin()
 {
+    if (_prefPage)
+        removeObject(_prefPage);
 }
 
 bool AlertPlugin::initialize(const QStringList &arguments, QString *errorString)
