@@ -82,6 +82,8 @@ private:
     bool checkIfIsFirstVersion();
     bool versionHasChanged();
     QString checkAndReplaceVersionNumber();
+    bool checkIfVersionBeforeThirdVersion();
+    bool alterFieldPatientNameIntToVarchar();
 
 private Q_SLOTS:
     void onCoreDatabaseServerChanged();

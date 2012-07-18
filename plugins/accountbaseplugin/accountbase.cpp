@@ -68,6 +68,8 @@ using namespace AccountDB;
 using namespace AccountDB::Internal;
 using namespace Trans::ConstantTranslations;
 
+enum Warn {WarnDebugMessage = true};
+
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline Core::ICommandLine *commandLine()  { return Core::ICore::instance()->commandLine(); }
 
@@ -257,7 +259,7 @@ AccountBase::AccountBase(QObject *parent) :
     addField(Table_Account,  ACCOUNT_UID,             "ACCOUNT_UID",    FieldIsUUID);
     addField(Table_Account,  ACCOUNT_USER_UID,        "USER_UID",       FieldIsUUID);
     addField(Table_Account,  ACCOUNT_PATIENT_UID,     "PATIENT_UID",    FieldIsLongInteger);
-    addField(Table_Account,  ACCOUNT_PATIENT_NAME,    "PATIENT_NAME",   FieldIsLongInteger);
+    addField(Table_Account,  ACCOUNT_PATIENT_NAME,    "PATIENT_NAME",   FieldIsLongText);
     addField(Table_Account,  ACCOUNT_SITE_ID,         "SITE_ID",        FieldIsLongInteger);
     addField(Table_Account,  ACCOUNT_INSURANCE_ID,    "INSURANCE_ID",   FieldIsLongInteger);
     addField(Table_Account,  ACCOUNT_DATE,            "DATE",           FieldIsDate, "CURRENT_DATE");
@@ -588,6 +590,7 @@ bool AccountBase::initialize()
     } else {
         LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(database().connectionName()).arg(database().driverName()));
     }
+    QString driver = database().driverName();
     if (!checkDatabaseScheme()) {
        if(checkIfIsFirstVersion()){
         qDebug() << __FILE__ << QString::number(__LINE__) << "ISFIRSTVERSION";             
@@ -610,15 +613,26 @@ bool AccountBase::initialize()
                 }           	
                 
             }
+
         else
         {
         	LOG_ERROR(tkTr(Trans::Constants::DATABASE_1_SCHEMA_ERROR).arg(Constants::DB_ACCOUNTANCY));
         	return false;
             }
         
-    }
-
-    //checkDatabaseScheme
+        }//checkDatabaseScheme
+    if (checkIfVersionBeforeThirdVersion() && driver.contains("MYSQL"))
+        {
+        	  if (alterFieldPatientNameIntToVarchar())
+        	  {
+        	  	  LOG_FOR("AccountDatabase","Field PATIENT_NAME has been changed to varchar");
+        	      }
+        	  else
+        	  {
+        	  	LOG_ERROR(tkTr(Trans::Constants::DATABASE_1_SCHEMA_ERROR).arg(Constants::DB_ACCOUNTANCY));
+        	        return false;
+        	      }
+            }
     if (versionHasChanged()) {
         LOG("Version has changed , new version = "+checkAndReplaceVersionNumber());
     }
@@ -844,4 +858,47 @@ bool AccountBase::versionHasChanged()
     	  return true;
         }
     return false;
+}
+
+bool AccountBase::checkIfVersionBeforeThirdVersion()
+{
+    QString version;
+    QSqlQuery qy(database());
+    QString req = select(Constants::Table_VERSION, Constants::VERSION_ACTUAL);//QString("SELECT %1 FROM %2").arg("ACTUAL","VERSION");
+    if (!qy.exec(req))
+    {
+    	  LOG_QUERY_ERROR(qy);
+    	  return false;
+        }
+    while (qy.next())
+    {
+    	version = qy.value(0).toString();
+        }
+    double versionDouble = version.toDouble();
+    if (versionDouble == 0.0)
+    {
+    	  LOG_FOR("Alter field PATIENT_NAME","Error conversion of double");
+        }
+    if (versionDouble < 0.3)
+    {
+    	  return true;
+        }
+    return false;
+}
+
+bool AccountBase::alterFieldPatientNameIntToVarchar()
+{
+    QString tableName = table(AccountDB::Constants::Table_Account);
+    QString fieldPatientName    = fieldName(AccountDB::Constants::Table_Account,AccountDB::Constants::ACCOUNT_PATIENT_NAME);
+    if (WarnDebugMessage)
+    qDebug() << __FILE__ << QString::number(__LINE__) << " table + fielName =" 
+    << tableName+" + "+fieldPatientName  ;
+    QSqlQuery qy(database());
+    QString req = QString("ALTER TABLE %1 MODIFY %2 varchar(2000) NULL;").arg(tableName,fieldPatientName);
+    if (!qy.exec(req))
+    {
+    	LOG_QUERY_ERROR(qy);
+    	return false;  
+        }
+    return true;
 }
