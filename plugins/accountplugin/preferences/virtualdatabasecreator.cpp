@@ -74,7 +74,7 @@ static inline void createBankAccount(const QString &userUid, Utils::Randomizer *
     query.bindValue(AccountDB::Constants::BANKDETAILS_LABEL, random->getRandomString(50));
     query.bindValue(AccountDB::Constants::BANKDETAILS_USER_UID, userUid);
     if (!query.exec()) {
-        Utils::Log::addQueryError("VirtualDatabaseCreator", query, __FILE__, __LINE__);
+        LOG_QUERY_ERROR_FOR("VirtualDatabaseCreator", query);
     }
     query.finish();
 }
@@ -97,7 +97,7 @@ static inline void createMedicalProcedure(const QString &userUid, Utils::Randomi
     query.bindValue(AccountDB::Constants::MP_UID, Utils::Database::createUid());
     query.bindValue(AccountDB::Constants::MP_USER_UID, userUid);
     if (!query.exec()) {
-        Utils::Log::addQueryError("VirtualDatabaseCreator", query, __FILE__, __LINE__);
+        LOG_QUERY_ERROR_FOR("VirtualDatabaseCreator", query);
     }
     query.finish();
 }
@@ -122,7 +122,7 @@ static inline void createMovement(const QString &userUid, Utils::Randomizer *ran
     query.bindValue(AccountDB::Constants::MOV_USER_UID, userUid);
     query.bindValue(AccountDB::Constants::MOV_VALIDITY, QVariant());
     if (!query.exec()) {
-        Utils::Log::addQueryError("VirtualDatabaseCreator", query, __FILE__, __LINE__);
+        LOG_QUERY_ERROR_FOR("VirtualDatabaseCreator", query);
     }
     query.finish();
 }
@@ -153,7 +153,7 @@ static inline void createAccount(const QString &userUid, Utils::Randomizer *rand
     query.bindValue(AccountDB::Constants::ACCOUNT_USER_UID, userUid);
     query.bindValue(AccountDB::Constants::ACCOUNT_VISAAMOUNT, random->randomInt(100));
     if (!query.exec()) {
-        Utils::Log::addQueryError("VirtualDatabaseCreator", query, __FILE__, __LINE__);
+        LOG_QUERY_ERROR_FOR("VirtualDatabaseCreator", query);
     }
     query.finish();
 }
