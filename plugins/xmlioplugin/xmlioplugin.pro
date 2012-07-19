@@ -25,7 +25,12 @@ SOURCES = xmlioplugin.cpp \
     xmliobase.cpp \
     xmlformname.cpp
 
-OTHER_FILES = XmlIO.pluginspec
+with-alerts{
+    DEFINES += WITH_ALERTS
+    OTHER_FILES = with-alerts/XmlIO.pluginspec
+}else{
+    OTHER_FILES = XmlIO.pluginspec
+}
 
 # translators
 TRANSLATIONS = $${SOURCES_TRANSLATIONS_PATH}/xmlioplugin_fr.ts \

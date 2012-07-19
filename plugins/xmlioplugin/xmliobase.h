@@ -39,8 +39,8 @@ QT_END_NAMESPACE
 /**
  * \file xmliobase.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.7.2
- * \date 09 May 2012
+ * \version 0.8.0
+ * \date 17 July 2012
 */
 
 namespace Form {
@@ -101,6 +101,7 @@ public:
     bool saveForm(XmlFormName &form);
     bool savePmhxCategories(const XmlFormName &form, const QString &content);
     bool saveScreenShots(const XmlFormName &form);
+    bool registerAlertPacks(const XmlFormName &form);
     bool saveFiles(const XmlFormName &form, const QString &subDir, const QString &fileExtension, XmlIOBase::TypeOfContent type);
 
 private:

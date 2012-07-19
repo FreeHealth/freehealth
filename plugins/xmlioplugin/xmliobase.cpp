@@ -43,6 +43,10 @@
 
 #include <pmhplugin/constants.h>
 
+#ifdef WITH_ALERTS
+#   include <alertplugin/alertcore.h>
+#endif
+
 #include <utils/log.h>
 #include <utils/global.h>
 #include <utils/databaseconnector.h>
@@ -651,6 +655,13 @@ bool XmlIOBase::saveForm(XmlFormName &form)
         return false;
     }
 
+    // Register AlertPacks -- manages save/update of alertpacks
+    if (!registerAlertPacks(form)) {
+        LOG_ERROR("Unable to save screenshot files");
+        database().rollback();
+        return false;
+    }
+
     database().commit();
 
     if (isFormExists(form))
@@ -733,7 +744,7 @@ bool XmlIOBase::savePmhxCategories(const XmlFormName &form, const QString &conte
     return true;
 }
 
-/** Save screenshots files associated with the forms. */
+/** Save screenshots files associated with the \e form. */
 bool XmlIOBase::saveScreenShots(const XmlFormName &form)
 {
     QDir shotPath(form.absPath + QDir::separator() + "shots");
@@ -755,6 +766,29 @@ bool XmlIOBase::saveScreenShots(const XmlFormName &form)
         }
     }
     return true;
+}
+
+/** Register associated alertpacks for the \e form. */
+bool XmlIOBase::registerAlertPacks(const XmlFormName &form)
+{
+#ifndef WITH_ALERTS
+    // No alerts -> return true
+    return true;
+#else
+    QDir alertPacksPath(form.absPath + QDir::separator() + "alertpacks");
+    bool ok = true;
+    if (alertPacksPath.exists()) {
+        LOG_FOR("XmlFormIO","Saving attached alertpacks to database " + form.uid);
+        QFileInfoList files = Utils::getFiles(alertPacksPath, "packdescription.xml", Utils::Recursively);
+        foreach(const QFileInfo &f, files) {
+            if (!Alert::AlertCore::instance()->registerAlertPack(f.absolutePath())) {
+                LOG_ERROR("Unable to read alertpack: "+ f.absolutePath());
+                ok = false;
+            }
+        }
+    }
+    return ok;
+#endif
 }
 
 /** Save files associated with the forms. */
