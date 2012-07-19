@@ -520,11 +520,11 @@ QPixmap XmlIOBase::getScreenShot(const QString &formUid, const QString &shotName
 /** Returns the shots for the language \e lang associated to the form \e formUid */
 QHash<QString, QPixmap> XmlIOBase::getScreenShots(const QString &formUid, const QString &lang)
 {
+    // we are inside a transaction
     QHash<QString, QPixmap> pixmaps;
     QSqlDatabase DB = database();
     if (!connectedDatabase(DB, __LINE__))
         return pixmaps;
-    DB.transaction();
     QSqlQuery query(DB);
     Utils::FieldList gets;
     gets << Utils::Field(Constants::Table_FORM_CONTENT, Constants::FORMCONTENT_MODENAME);
@@ -538,18 +538,37 @@ QHash<QString, QPixmap> XmlIOBase::getScreenShots(const QString &formUid, const 
     conds << Utils::Field(Constants::Table_FORM_CONTENT, Constants::FORMCONTENT_MODENAME, QString("LIKE '%1/%'").arg(lang));
     QString req = select(gets, joins, conds);
 
+    int nbShotRead = 0;
     if (query.exec(req)) {
         while (query.next()) {
             QPixmap pix;
             pix.loadFromData(QByteArray::fromBase64(query.value(1).toByteArray()));
-            pixmaps.insert(query.value(0).toString() ,pix);
+            pixmaps.insert(query.value(0).toString(), pix);
+            ++nbShotRead;
         }
     } else {
         LOG_QUERY_ERROR(query);
-        DB.rollback();
         return pixmaps;
     }
-    DB.commit();
+    query.finish();
+
+    if (nbShotRead==0) {
+        // Try with xx language
+        conds.takeLast();
+        conds << Utils::Field(Constants::Table_FORM_CONTENT, Constants::FORMCONTENT_MODENAME, QString("LIKE '%1/%'").arg(Trans::Constants::ALL_LANGUAGE));
+        req = select(gets, joins, conds);
+        if (query.exec(req)) {
+            while (query.next()) {
+                QPixmap pix;
+                pix.loadFromData(QByteArray::fromBase64(query.value(1).toByteArray()));
+                pixmaps.insert(query.value(0).toString(), pix);
+                ++nbShotRead;
+            }
+        } else {
+            LOG_QUERY_ERROR(query);
+            return pixmaps;
+        }
+    }
     return pixmaps;
 }
 
