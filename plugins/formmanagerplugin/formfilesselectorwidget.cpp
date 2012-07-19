@@ -126,6 +126,7 @@ public:
             query.setTypeOfForms(Form::FormIOQuery::CompleteForms);
         else if (m_Type==FormFilesSelectorWidget::SubForms)
             query.setTypeOfForms(Form::FormIOQuery::SubForms);
+        query.setGetScreenShots(true);
         switch (m_Type) {
         case FormFilesSelectorWidget::AllForms: query.setTypeOfForms(Form::FormIOQuery::CompleteForms | Form::FormIOQuery::SubForms);break;
         case FormFilesSelectorWidget::CompleteForms: query.setTypeOfForms(Form::FormIOQuery::CompleteForms); break;
