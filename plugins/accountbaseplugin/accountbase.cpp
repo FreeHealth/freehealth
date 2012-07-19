@@ -258,22 +258,22 @@ AccountBase::AccountBase(QObject *parent) :
     addField(Table_Account,  ACCOUNT_ID,              "ACCOUNT_ID",     FieldIsUniquePrimaryKey);
     addField(Table_Account,  ACCOUNT_UID,             "ACCOUNT_UID",    FieldIsUUID);
     addField(Table_Account,  ACCOUNT_USER_UID,        "USER_UID",       FieldIsUUID);
-    addField(Table_Account,  ACCOUNT_PATIENT_UID,     "PATIENT_UID",    FieldIsLongInteger);
+    addField(Table_Account,  ACCOUNT_PATIENT_UID,     "PATIENT_UID",    FieldIsShortText);
     addField(Table_Account,  ACCOUNT_PATIENT_NAME,    "PATIENT_NAME",   FieldIsLongText);
     addField(Table_Account,  ACCOUNT_SITE_ID,         "SITE_ID",        FieldIsLongInteger);
     addField(Table_Account,  ACCOUNT_INSURANCE_ID,    "INSURANCE_ID",   FieldIsLongInteger);
     addField(Table_Account,  ACCOUNT_DATE,            "DATE",           FieldIsDate, "CURRENT_DATE");
-    addField(Table_Account,  ACCOUNT_MEDICALPROCEDURE_XML,   "MP_XML", FieldIsLongText);
+    addField(Table_Account,  ACCOUNT_MEDICALPROCEDURE_XML,   "MP_XML",  FieldIsLongText);
     addField(Table_Account,  ACCOUNT_MEDICALPROCEDURE_TEXT,   "MP_TXT", FieldIsLongText);
     addField(Table_Account,  ACCOUNT_COMMENT,         "COMMENT",        FieldIsLongText);
-    addField(Table_Account,  ACCOUNT_CASHAMOUNT,      "CASH",         FieldIsReal);
+    addField(Table_Account,  ACCOUNT_CASHAMOUNT,      "CASH",           FieldIsReal);
     addField(Table_Account,  ACCOUNT_CHEQUEAMOUNT,    "CHEQUE",         FieldIsReal);
-    addField(Table_Account,  ACCOUNT_VISAAMOUNT,      "VISA",         FieldIsReal);
-    addField(Table_Account,  ACCOUNT_INSURANCEAMOUNT, "BANKING",         FieldIsReal);
-    addField(Table_Account,  ACCOUNT_OTHERAMOUNT,     "OTHER",         FieldIsReal);
-    addField(Table_Account,  ACCOUNT_DUEAMOUNT,       "DUE",         FieldIsReal);
-    addField(Table_Account,  ACCOUNT_DUEBY,           "DUE_BY", FieldIsLongText);
-    addField(Table_Account,  ACCOUNT_ISVALID,         "VALID",         FieldIsBoolean);
+    addField(Table_Account,  ACCOUNT_VISAAMOUNT,      "VISA",           FieldIsReal);
+    addField(Table_Account,  ACCOUNT_INSURANCEAMOUNT, "BANKING",        FieldIsReal);
+    addField(Table_Account,  ACCOUNT_OTHERAMOUNT,     "OTHER",          FieldIsReal);
+    addField(Table_Account,  ACCOUNT_DUEAMOUNT,       "DUE",            FieldIsReal);
+    addField(Table_Account,  ACCOUNT_DUEBY,           "DUE_BY",         FieldIsLongText);
+    addField(Table_Account,  ACCOUNT_ISVALID,         "VALID",          FieldIsBoolean);
     addField(Table_Account,  ACCOUNT_TRACE,           "TRACE",          FieldIsBlob);
     
     
@@ -890,11 +890,13 @@ bool AccountBase::alterFieldPatientNameIntToVarchar()
 {
     QString tableName = table(AccountDB::Constants::Table_Account);
     QString fieldPatientName    = fieldName(AccountDB::Constants::Table_Account,AccountDB::Constants::ACCOUNT_PATIENT_NAME);
+    QString fieldPatientUuid = fieldName(AccountDB::Constants::Table_Account,AccountDB::Constants::ACCOUNT_PATIENT_UID);
     if (WarnDebugMessage)
     qDebug() << __FILE__ << QString::number(__LINE__) << " table + fielName =" 
     << tableName+" + "+fieldPatientName  ;
     QSqlQuery qy(database());
-    QString req = QString("ALTER TABLE %1 MODIFY %2 varchar(2000) NULL;").arg(tableName,fieldPatientName);
+    QString req = QString("ALTER TABLE %1 MODIFY %2 varchar(2000) NULL , MODIFY %3 varchar(200) NULL ;")
+                         .arg(tableName,fieldPatientName,fieldPatientUuid);
     if (!qy.exec(req))
     {
     	LOG_QUERY_ERROR(qy);
