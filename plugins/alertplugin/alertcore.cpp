@@ -416,6 +416,11 @@ void AlertCore::postCoreInitialization()
         connect(user(), SIGNAL(userChanged()), this, SLOT(checkUserAlerts()));
 }
 
+QVariant AlertCore::execute(AlertItem &item, const int scriptType)
+{
+    return d->_alertScriptManager->execute(item, scriptType);
+}
+
 void Internal::AlertCorePrivate::makeTests()
 {
     // TESTS

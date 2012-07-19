@@ -45,6 +45,7 @@ class Pack;
 }
 
 namespace Alert {
+class BlockingAlertDialog;
 namespace Internal {
 class AlertCorePrivate;
 class AlertPlugin;
@@ -54,6 +55,7 @@ class ALERT_EXPORT AlertCore : public QObject
 {
     Q_OBJECT
     friend class Alert::Internal::AlertPlugin;
+    friend class Alert::BlockingAlertDialog;
 
 protected:
     AlertCore(QObject *parent = 0);
@@ -116,6 +118,8 @@ private:
 
 protected:
     void postCoreInitialization();
+    // Script manager wrapper
+    QVariant execute(AlertItem &item, const int scriptType);
 
 private Q_SLOTS:
     void packInstalled(const DataPack::Pack &pack);
