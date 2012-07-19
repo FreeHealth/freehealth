@@ -1173,6 +1173,8 @@ void ReceiptViewer::save()
                                                                      << "act = "+act.toString();
                                                                      ;
     QString patientUid = patient()->uuid();
+    if (WarnDebugMessage)
+    qDebug() << __FILE__ << QString::number(__LINE__) << " patientUid =" << patientUid ;
     if (patientUid.isEmpty())
     {
     	  patientUid = "no-patient-uid";
