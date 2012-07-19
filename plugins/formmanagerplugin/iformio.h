@@ -125,6 +125,9 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(Form::FormIOQuery::TypesOfForm)
 
 namespace Form {
 class IFormIO;
+namespace Internal {
+struct FormIODescriptionPrivate;
+}
 
 class FORM_EXPORT FormIODescription : public Utils::GenericDescription
 {
@@ -142,25 +145,23 @@ public:
     FormIODescription();
     virtual ~FormIODescription();
 
-    void setIoFormReader(IFormIO *reader) {m_reader=reader;}
-    IFormIO *reader() const {return m_reader;}
+    void setIoFormReader(IFormIO *reader);
+    IFormIO *reader() const;
 
     QVariant data(const int ref, const QString &lang = QString::null) const;
     bool setData(const int ref, const QVariant &value, const QString &lang = QString::null);
 
     // Manage screenshots
-    bool hasScreenShots() const {return (!m_Shots.isEmpty());}
-    void addScreenShot(const QString &name, const QPixmap &shot) {m_Shots.insert(name, shot);}
-    QList<QPixmap> screenShots() const {return m_Shots.values();}
-    QPixmap screenShot(const QString &name) const {return m_Shots.value(name);}
+    bool hasScreenShots() const;
+    void addScreenShot(const QString &name, const QPixmap &shot);
+    QList<QPixmap> screenShots() const;
+    QPixmap screenShot(const QString &name) const;
 
     void toTreeWidget(QTreeWidget *tree) const;
     QString toHtml() const;
 
 private:
-    QList<Utils::GenericUpdateInformation> m_UpdateInfos;
-    IFormIO *m_reader;
-    QHash<QString, QPixmap> m_Shots;
+    Internal::FormIODescriptionPrivate *d_formIO;
 };
 
 class FORM_EXPORT IFormIO : public QObject

@@ -102,15 +102,41 @@ FormIOQuery::FormIOQuery() :
 /////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////  FormIODescription /////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
+namespace Form {
+namespace Internal {
+struct FormIODescriptionPrivate
+{
+    FormIODescriptionPrivate() : m_reader(0) {}
+
+    IFormIO *m_reader;
+    QHash<QString, QPixmap> m_Shots;
+};
+}
+}
+
+
 FormIODescription::FormIODescription() :
     Utils::GenericDescription(),
-    m_reader(0)
+    d_formIO(new Internal::FormIODescriptionPrivate)
 {
     setData(FromDatabase, false);
 }
 
 FormIODescription::~FormIODescription()
 {
+    if (d_formIO)
+        delete d_formIO;
+    d_formIO = 0;
+}
+
+void FormIODescription::setIoFormReader(IFormIO *reader)
+{
+    d_formIO->m_reader=reader;
+}
+
+IFormIO *FormIODescription::reader() const
+{
+    return d_formIO->m_reader;
 }
 
 QVariant FormIODescription::data(const int ref, const QString &lang) const
@@ -133,6 +159,28 @@ bool FormIODescription::setData(const int ref, const QVariant &value, const QStr
     return Utils::GenericDescription::setData(ref, value, lang);
 }
 
+bool FormIODescription::hasScreenShots() const
+{
+    qWarning() << "hasScreenShots "<< d_formIO->m_Shots.keys();
+    return (!d_formIO->m_Shots.isEmpty());
+}
+
+void FormIODescription::addScreenShot(const QString &name, const QPixmap &shot)
+{
+    qWarning() << "AddScreenShot "<< name;
+    d_formIO->m_Shots.insert(name, shot);
+}
+
+QList<QPixmap> FormIODescription::screenShots() const
+{
+    return d_formIO->m_Shots.values();
+}
+
+QPixmap FormIODescription::screenShot(const QString &name) const
+{
+    return d_formIO->m_Shots.value(name);
+}
+
 void FormIODescription::toTreeWidget(QTreeWidget *tree) const
 {
     // TODO: code here
@@ -147,7 +195,7 @@ void FormIODescription::toTreeWidget(QTreeWidget *tree) const
     new QTreeWidgetItem(general, QStringList() << tkTr(Trans::Constants::AUTHOR) << data(FormIODescription::Author).toString());
     new QTreeWidgetItem(general, QStringList() << tkTr(Trans::Constants::LICENSE) << data(FormIODescription::LicenseName).toString());
     new QTreeWidgetItem(general, QStringList() << tkTr(Trans::Constants::DESCRIPTION) << data(FormIODescription::ShortDescription).toString());
-    const QStringList &keys = m_Shots.keys();
+    const QStringList &keys = d_formIO->m_Shots.keys();
     new QTreeWidgetItem(general, QStringList() << tkTr(Trans::Constants::SCREENSHOTS) << keys.join(";"));
     new QTreeWidgetItem(general, QStringList() << QString("Extracted from database") << data(FormIODescription::FromDatabase).toString());
 
