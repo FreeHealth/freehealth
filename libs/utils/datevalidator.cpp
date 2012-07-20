@@ -59,7 +59,7 @@ DateValidator::DateValidator(QObject *parent) :
     addDateFormat(tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR));
 }
 
-/** \brief validates the input string with custom date formats
+/** \brief Validates the input string with custom date formats
  *
  * The function checks if the input string matches a string
  * in the format list. This list that is set up with FMF
@@ -103,6 +103,10 @@ QValidator::State DateValidator::validate(QString &input, int &pos) const
     return QValidator::Invalid;
 }
 
+/*! \brief Sets the internal date
+ *
+ * The date is internally saved as QDate.
+ */
 void DateValidator::setDate(const QDate &date)
 {
     _currentDate = date;
@@ -114,12 +118,17 @@ QDate DateValidator::date() const
     return _currentDate;
 }
 
+/*! \brief Adds a date format string to the internal list */
 void DateValidator::addDateFormat(const QString &format)
 {
     if (!m_dateFormatList.contains(format, Qt::CaseSensitive))
         m_dateFormatList.append(format);
 }
 
+/*! \brief Translates date formats on the fly
+ *
+ * This function is called e.g. when changing language of the program.
+ */
 void DateValidator::translateFormats()
 {
     m_dateFormatList.takeFirst();
