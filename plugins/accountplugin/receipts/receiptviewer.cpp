@@ -686,9 +686,10 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
     ui->amountsView->verticalHeader()->setDefaultAlignment(Qt::AlignTop);*/
     ui->amountsView->verticalHeader()->setResizeMode(QHeaderView::ResizeToContents);
     ui->amountsView->verticalHeader()->setStretchLastSection ( false );
-    ui->amountsView->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
+    //ui->amountsView->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
     ui->amountsView->horizontalHeader()->setResizeMode(QHeaderView::Interactive);
-    ui->amountsView->horizontalHeader()->setCascadingSectionResizes (true);
+    ui->amountsView->horizontalHeader()->setMinimumSectionSize(100);
+    //ui->amountsView->horizontalHeader()->setCascadingSectionResizes (true);
     //ui->amountsView->horizontalHeader()->setStretchLastSection ( true );
     m_model->setHeaderData(int(HDCash),Qt::Horizontal,tr("Cash"));
     m_model->setHeaderData(HDCheck,Qt::Horizontal,tr("Check"));
@@ -711,6 +712,7 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
     ui->amountsView->setColumnHidden(InternalAmount::AmountModel::Col_DistRule,true);
        
     ui->amountsView->resizeRowsToContents();
+    ui->amountsView->resizeColumnsToContents();
     
     ui->dateExecution->setDisplayFormat("yyyy-MM-dd");
     ui->dateExecution->setDate(QDate::currentDate());
@@ -1171,11 +1173,15 @@ void ReceiptViewer::save()
                                                                      << "act = "+act.toString();
                                                                      ;
     QString patientUid = patient()->uuid();
+    if (WarnDebugMessage)
+    qDebug() << __FILE__ << QString::number(__LINE__) << " patientUid =" << patientUid ;
     if (patientUid.isEmpty())
     {
     	  patientUid = "no-patient-uid";
         }
     QString patientName = patient()->data(Core::IPatient::FullName).toString();
+    if (WarnDebugMessage)
+    qDebug() << __FILE__ << QString::number(__LINE__) << " patientName =" << patientName ;
     if (patientName.isEmpty())
     {
     	  patientName = "Patient Name";
