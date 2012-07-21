@@ -675,7 +675,7 @@ bool AccountBase::createDatabase(const QString &connectionName ,
         DB = QSqlDatabase::addDatabase("QSQLITE", connectionName);
         if (!QDir(pathOrHostName).exists())
             if (!QDir().mkpath(pathOrHostName))
-                tkTr(Trans::Constants::_1_ISNOT_AVAILABLE_CANNOTBE_CREATED).arg(pathOrHostName);
+                LOG(tkTr(Trans::Constants::_1_ISNOT_AVAILABLE_CANNOTBE_CREATED).arg(pathOrHostName));
         DB.setDatabaseName(QDir::cleanPath(pathOrHostName + QDir::separator() + dbName));
         DB.open();
         setDriver(Utils::Database::SQLite);
