@@ -89,6 +89,18 @@ using namespace Utils;
 using namespace Utils::Internal;
 using namespace Trans::ConstantTranslations;
 
+// for internal use only
+static inline bool connectedDatabase(QSqlDatabase &db, int line)
+{
+    if (!db.isOpen()) {
+        if (!db.open()) {
+            Utils::Log::addError("Utils::Database", tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(db.connectionName()).arg(db.lastError().text()), __FILE__, line);
+            return false;
+        }
+    }
+    return true;
+}
+
 namespace Utils {
 namespace Internal {
 
@@ -100,8 +112,15 @@ struct DbIndex {
 class DatabasePrivate
 {
 public:
-    DatabasePrivate();
+    DatabasePrivate() :
+        m_initialized(false),
+        _transaction(false),
+        m_LastCorrectLogin(-1),
+        m_Driver(Database::SQLite)
+    {
+    }
     ~DatabasePrivate() {}
+
     QStringList getSQLCreateTable(const int & tableref);
     QString getTypeOfField(const int & fieldref) const;
 
@@ -171,7 +190,7 @@ public:
     QMap<int, QString>         m_Fields;         // fields should be sorted from first to last one using ref
     QHash<int, int>            m_TypeOfField;
     QHash<int, QString>        m_DefaultFieldValue;
-    bool                       m_initialized;
+    bool                       m_initialized, _transaction;
     int                        m_LastCorrectLogin;
     QString                    m_ConnectionName;
     QHash<QString, Database::Grants> m_Grants;
@@ -208,14 +227,6 @@ Database::~Database()
     d_database=0;
 }
 
-DatabasePrivate::DatabasePrivate() :
-        m_initialized(false),
-        m_LastCorrectLogin(-1),
-        m_Driver(Database::SQLite)
-{
-    m_ConnectionName = "";
-}
-
 //--------------------------------------------------------------------------------------------------------
 //------------------------------- Managing Databases files and connections -------------------------------
 //--------------------------------------------------------------------------------------------------------
@@ -232,14 +243,16 @@ QString Database::prefixedDatabaseName(AvailableDrivers driver, const QString &d
     return dbName;
 }
 
-/** Creates a MySQL database on an opened database. The current connection must be opened.*/
+/**
+ * Creates a MySQL database on an opened database. The current connection must be opened.
+ * Creates its own transaction.
+*/
 bool Database::createMySQLDatabase(const QString &dbName)
 {
-    if (!database().isOpen()) {
-        LOG_ERROR_FOR("Database", tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
-                      .arg(database().connectionName()).arg(database().lastError().text()));
+    QSqlDatabase DB = database();
+    if (!connectedDatabase(DB, __LINE__))
         return false;
-    }
+
     // Testing current connected user grants
     Grants userGrants = d_database->m_Grants.value(d_database->m_ConnectionName, Grant_NoGrant);
     if (userGrants & Grant_Create) {
@@ -251,28 +264,31 @@ bool Database::createMySQLDatabase(const QString &dbName)
                                 "       with user: %4")
             .arg(dbName).arg(database().hostName()).arg(database().port()).arg(database().userName()));
 
-    QSqlQuery query(database());
+    DB.transaction();
+    QSqlQuery query(DB);
     if (!query.exec(QString("CREATE DATABASE `%1`;").arg(dbName))) {
         LOG_QUERY_ERROR_FOR("Database", query);
+        DB.rollback();
         return false;
     }
     LOG_FOR("Database", tkTr(Trans::Constants::DATABASE_1_CORRECTLY_CREATED).arg(dbName));
     query.finish();
+    DB.commit();
     return true;
 }
 
-/** Create a MySQL server user using the \e log and \e pass, with the specified \e grants on the \e userHost and the \e userDatabases. */
+/**
+ * Create a MySQL server user using the \e log and \e pass, with the specified \e grants
+ * on the \e userHost and the \e userDatabases.
+ * Creates its own transaction.
+*/
 bool Database::createMySQLUser(const QString &log, const QString &password,
                                const Grants grants,
                                const QString &userHost, const QString &userDatabases)
 {
-    if (!database().isOpen()) {
-        if (!database().open()) {
-            LOG_ERROR_FOR("Database", tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
-                          .arg(database().connectionName()).arg(database().lastError().text()));
-            return false;
-        }
-    }
+    QSqlDatabase DB = database();
+    if (!connectedDatabase(DB, __LINE__))
+        return false;
 
     // Testing current connected user grants
     Grants userGrants = d_database->m_Grants.value(d_database->m_ConnectionName, Grant_NoGrant);
@@ -333,13 +349,13 @@ bool Database::createMySQLUser(const QString &log, const QString &password,
                                 "       with user: %4")
             .arg(log).arg(database().hostName()).arg(database().port()).arg(database().userName()));
 
-    QSqlQuery query(database());
-    QString req;
-
-    req = QString("CREATE USER '%1'@'%2' IDENTIFIED BY '%3';").arg(log).arg(uh).arg(password);
+    DB.transaction();
+    QSqlQuery query(DB);
+    QString req = QString("CREATE USER '%1'@'%2' IDENTIFIED BY '%3';").arg(log).arg(uh).arg(password);
     if (!query.exec(req)) {
         LOG_QUERY_ERROR_FOR("Database", query);
         LOG_DATABASE_FOR("Database", database());
+        DB.rollback();
         return false;
     }
     query.finish();
@@ -357,6 +373,7 @@ bool Database::createMySQLUser(const QString &log, const QString &password,
         if (!query.exec(req)) {
             LOG_QUERY_ERROR_FOR("Database", query);
             LOG_DATABASE_FOR("Database", database());
+            DB.rollback();
             return false;
         }
         query.finish();
@@ -375,6 +392,7 @@ bool Database::createMySQLUser(const QString &log, const QString &password,
         } else {
             LOG_ERROR_FOR("Database", QString("User %1 removed").arg(log));
         }
+        DB.rollback();
         return false;
     }
     query.finish();
@@ -392,25 +410,26 @@ bool Database::createMySQLUser(const QString &log, const QString &password,
             } else {
                 LOG_ERROR_FOR("Database", QString("User %1 removed").arg(log));
             }
+            DB.rollback();
             return false;
         }
         query.finish();
     }
 
+    DB.commit();
     LOG_FOR("Database", tkTr(Trans::Constants::DATABASE_USER_1_CORRECTLY_CREATED).arg(log));
     return true;
 }
 
-/** Drop a MySQL user identified by his \e log and the \e userHostName. */
+/**
+ * Drop a MySQL user identified by his \e log and the \e userHostName.
+ * Creates its own transaction.
+*/
 bool Database::dropMySQLUser(const QString &log, const QString &userHost)
 {
-    if (!database().isOpen()) {
-        if (!database().open()) {
-            LOG_ERROR_FOR("Database", tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
-                          .arg(database().connectionName()).arg(database().lastError().text()));
-            return false;
-        }
-    }
+    QSqlDatabase DB = database();
+    if (!connectedDatabase(DB, __LINE__))
+        return false;
 
     // Testing current connected user grants
     Grants userGrants = d_database->m_Grants.value(d_database->m_ConnectionName, Grant_NoGrant);
@@ -433,30 +452,32 @@ bool Database::dropMySQLUser(const QString &log, const QString &userHost)
     } else {
         req = QString("DROP USER '%1'@'%2';").arg(log).arg(userHost);
     }
-    QSqlQuery query(database());
+    DB.transaction();
+    QSqlQuery query(DB);
     if (!query.exec(req)) {
         LOG_QUERY_ERROR_FOR("Database", query);
         LOG_DATABASE_FOR("Database", database());
+        DB.rollback();
         return false;
     } else {
         LOG_FOR("Database", QString("User %1 removed").arg(log));
     }
+    DB.commit();
     return true;
 }
 
-/** Change the password to \e newPassword for a MySQL user identified by his \e login. */
+/**
+ * Change the password to \e newPassword for a MySQL user identified by his \e login.
+ * Creates its own transaction.
+*/
 bool Database::changeMySQLUserPassword(const QString &login, const QString &newPassword)
 {
     if (login.isEmpty())
         return false;
 
-    if (!database().isOpen()) {
-        if (!database().open()) {
-            LOG_ERROR_FOR("Database", tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
-                          .arg(database().connectionName()).arg(database().lastError().text()));
-            return false;
-        }
-    }
+    QSqlDatabase DB = database();
+    if (!connectedDatabase(DB, __LINE__))
+        return false;
 
     // TODO: manage user grants
 //    // Testing current connected user grants
@@ -475,18 +496,22 @@ bool Database::changeMySQLUserPassword(const QString &login, const QString &newP
     QString req;
     req = QString("UPDATE `mysql`.`user` SET `Password` = PASSWORD('%1') WHERE `User` = '%2';")
             .arg(newPassword).arg(login);
-    QSqlQuery query(database());
+    DB.transaction();
+    QSqlQuery query(DB);
     if (!query.exec(req)) {
         LOG_QUERY_ERROR_FOR("Database", query);
         LOG_DATABASE_FOR("Database", database());
+        DB.rollback();
         return false;
     }
     query.finish();
     if (!query.exec("FLUSH PRIVILEGES;")) {
         LOG_QUERY_ERROR_FOR("Database", query);
         LOG_DATABASE_FOR("Database", database());
+        DB.rollback();
         return false;
     }
+    DB.commit();
     LOG_FOR("Database", QString("User %1 password modified").arg(login));
     return true;
 }
@@ -514,6 +539,7 @@ bool Database::createConnection(const QString &connectionName, const QString &no
                                 CreationOption createOption
                                 )
 {
+    // TODO: manage transactions here...
     bool toReturn = true;
     d_database->m_ConnectionName.clear();
     d_database->m_Driver = connector.driver();
@@ -825,19 +851,17 @@ Database::Grants Database::grants(const QString &connectionName) const
 }
 
 /**
-   Returns the grants according to the database \e connectionName.
-   Database must be open and connected with a specific user.
+ * Returns the grants according to the database \e connectionName.
+ * Database must be open and connected with a specific user.
+ * Creates its own transaction.
 */
 Database::Grants Database::getConnectionGrants(const QString &connectionName) // static
 {
     QSqlDatabase DB = QSqlDatabase::database(connectionName);
-    if (!DB.isOpen()) {
-        if (!DB.open()) {
-            LOG_ERROR_FOR("Database", tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
-                          .arg(connectionName).arg(DB.lastError().text()));
-            return Database::Grant_NoGrant;
-        }
-    }
+    if (!connectedDatabase(DB, __LINE__))
+        return Database::Grant_NoGrant;
+    DB.transaction();
+
     if (DB.driverName()=="QSQLITE") {
         return Grant_All;
     }
@@ -847,6 +871,7 @@ Database::Grants Database::getConnectionGrants(const QString &connectionName) //
         if (!query.isActive()) {
             LOG_ERROR_FOR("Database", "No grants for user on database?");
             LOG_QUERY_ERROR_FOR("Database", query);
+            DB.rollback();
             return Grant_NoGrant;
         } else {
             while (query.next()) {
@@ -854,6 +879,7 @@ Database::Grants Database::getConnectionGrants(const QString &connectionName) //
             }
         }
         query.finish();
+        DB.commit();
         return DatabasePrivate::getGrants(connectionName, grants);
     }
     // TODO: code here : PostGreSQL and other drivers
@@ -926,7 +952,10 @@ void Database::addIndex(const Utils::Field &field, const QString &name)
     d_database->m_DbIndexes.append(index);
 }
 
-/**  Verify that the dynamically scheme passed is corresponding to the real database scheme. */
+/**
+ * Verify that the dynamically scheme passed is corresponding to the real database scheme.
+ * Creates its own transaction.
+*/
 bool Database::checkDatabaseScheme()
 {
     if (d_database->m_ConnectionName.isEmpty())
@@ -937,13 +966,9 @@ bool Database::checkDatabaseScheme()
         return false;
 
     QSqlDatabase DB = QSqlDatabase::database(d_database->m_ConnectionName);
-    if (!DB.isOpen()) {
-        if (!DB.open()) {
-            LOG_ERROR_FOR("Database", tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
-                          .arg(d_database->m_ConnectionName).arg(DB.lastError().text()));
-            return false;
-        }
-    }
+    if (!connectedDatabase(DB, __LINE__))
+        return false;
+    DB.transaction();
 
     QList<int> list = d_database->m_Tables.keys();
     qSort(list);
@@ -966,6 +991,7 @@ bool Database::checkDatabaseScheme()
             id++;
         }
     }
+    DB.commit();
     return true;
 }
 
@@ -1025,11 +1051,13 @@ QStringList Database::fieldNames(const int &tableref) const
     return toReturn;
 }
 
-/**  Return all fields names of a table by a sql query and not according to tableref.
-This permits to test the real number of fields of the sql table regarding to code table references.
-@author Pierre-Marie Desombre
+/**
+ * Return all fields names of a table by a sql query and not according to tableref.
+ * This permits to test the real number of fields of the sql table regarding to code table
+ * references.
+ * Creates its own transaction.
+ * @author Pierre-Marie Desombre
 */
-
 QStringList Database::fieldNamesSql(const int &tableref) const
 {
     if (!d_database->m_Tables.contains(tableref))
@@ -1038,28 +1066,33 @@ QStringList Database::fieldNamesSql(const int &tableref) const
         return QStringList();
     QStringList fieldNamesList;
     QString tableString = table(tableref);
-    QSqlQuery q(database());
+
+    QSqlDatabase DB = database();
+    if (!connectedDatabase(DB, __LINE__))
+        return QStringList();
+    DB.transaction();
+
+    QSqlQuery query(DB);
     QString req;
-    if (database().driverName().contains("MYSQL"))
-    {
+    if (database().driverName().contains("MYSQL")) {
         req = QString("SHOW COLUMNS FROM %1").arg(tableString);
-        }
-    if (database().driverName().contains("SQLITE"))
-    {
+    }
+    if (database().driverName().contains("SQLITE")) {
         req = QString("PRAGMA table_info('%1');")
              .arg(tableString);
+    }
+    if (query.exec(req)) {
+        while (query.next()) {
+            fieldNamesList << query.value(Name_PragmaValue).toString();
         }
-    if (!q.exec(req))
-    {
-    	  LOG_QUERY_ERROR_FOR("Database", q);
-    	  Utils::warningMessageBox("Warning",QString("Unable to get the fields of %1").arg(tableString));
-    	  return QStringList();
-        }    
-     while (q.next())
-     {
-     	fieldNamesList << q.value(Name_PragmaValue).toString();
-         }
-     return fieldNamesList;      
+    } else {
+        LOG_QUERY_ERROR_FOR("Database", query);
+        Utils::warningMessageBox("Warning",QString("Unable to get the fields of %1").arg(tableString));
+        DB.rollback();
+        return QStringList();
+    }
+    DB.commit();
+    return fieldNamesList;
 }
 
 QString Database::table(const int & tableref) const
@@ -1558,35 +1591,51 @@ QString Database::fieldEquality(const int tableRef1, const int fieldRef1, const 
 }
 
 /**
-   Return a a COUNT SQL command on the table \e tableref, field \e fieldref with the filter \e filter.
-  Filter whould be not contains the "WHERE" word.
+ * Return -1 in case of an error or
+ * returns a COUNT SQL command on the table \e tableref, field \e fieldref
+ * with the filter \e filter. Filter whould be not contains the "WHERE" word.
+ * Creates its own transaction.
 */
 int Database::count(const int & tableref, const int & fieldref, const QString &filter) const
 {
+    int count = -1;
+    QSqlDatabase DB = database();
+    if (!connectedDatabase(DB, __LINE__))
+        return count;
+    DB.transaction();
+
     QString req = QString("SELECT count(`%1`) FROM `%2`").arg(d_database->m_Fields.value(d_database->index(tableref, fieldref))).arg(d_database->m_Tables[tableref]);
     if (!filter.isEmpty())
         req += " WHERE " + filter;
     if (WarnSqlCommands)
         qWarning() << req;
-    QSqlQuery q(req, database());
-    if (q.isActive()) {
-        if (q.next()) {
-            return q.value(0).toInt();
+    QSqlQuery query(DB);
+    if (query.exec(req)) {
+        if (query.next()) {
+            count = query.value(0).toInt();
         } else {
-            LOG_QUERY_ERROR_FOR("Database", q);
+            LOG_QUERY_ERROR_FOR("Database", query);
         }
     } else {
-        LOG_QUERY_ERROR_FOR("Database", q);
+        LOG_QUERY_ERROR_FOR("Database", query);
     }
-    return -1;
+    (count==-1) ? DB.rollback() : DB.commit();
+    return count;
 }
 
 /**
-   Return a MAX SQL command on the table \e tableref, field \e fieldref with the filter \e filter.
-  Filter whould be not contains the "WHERE" word.
+ * Return a MAX SQL command on the table \e tableref, field \e fieldref with
+ * the filter \e filter. Filter whould be not contains the "WHERE" word.
+ * Creates its own transaction.
 */
 QVariant Database::max(const int &tableref, const int &fieldref, const QString &filter) const
 {
+    QVariant toReturn;
+    QSqlDatabase DB = database();
+    if (!connectedDatabase(DB, __LINE__))
+        return toReturn;
+    DB.transaction();
+
     QString req = QString("SELECT max(%1) FROM %2")
                   .arg(d_database->m_Fields.value(d_database->index(tableref, fieldref)))
                   .arg(d_database->m_Tables[tableref]);
@@ -1594,25 +1643,35 @@ QVariant Database::max(const int &tableref, const int &fieldref, const QString &
         req += " WHERE " + filter;
     if (WarnSqlCommands)
         qWarning() << req;
-    QSqlQuery q(req, database());
-    if (q.isActive()) {
-        if (q.next()) {
-            return q.value(0);
+    QSqlQuery query(DB);
+    if (query.exec(req)) {
+        if (query.next()) {
+            toReturn = query.value(0);
+            DB.commit();
         } else {
-            LOG_QUERY_ERROR_FOR("Database", q);
+            LOG_QUERY_ERROR_FOR("Database", query);
+            DB.rollback();
         }
     } else {
-        LOG_QUERY_ERROR_FOR("Database", q);
+        LOG_QUERY_ERROR_FOR("Database", query);
+        DB.rollback();
     }
-    return QVariant();
+    return toReturn;
 }
 
 /**
-   Return a MAX SQL command with grouping on the table \e tableref, field \e fieldref, grouped by field \e groupBy with the filter \e filter.
-  Filter whould be not contains the "WHERE" word.
+ * Return a MAX SQL command with grouping on the table \e tableref, field \e fieldref,
+ * grouped by field \e groupBy with the filter \e filter. Filter whould be not
+ * contains the "WHERE" word.
+ * Creates its own transaction.
 */
 QVariant Database::max(const int &tableref, const int &fieldref, const int &groupBy, const QString &filter) const
 {
+    QVariant toReturn;
+    QSqlDatabase DB = database();
+    if (!connectedDatabase(DB, __LINE__))
+        return toReturn;
+    DB.transaction();
     QString req = QString("SELECT max(%1) FROM %2 GROUP BY %3")
                   .arg(d_database->m_Fields.value(d_database->index(tableref, fieldref)))
                   .arg(d_database->m_Tables[tableref])
@@ -1621,25 +1680,36 @@ QVariant Database::max(const int &tableref, const int &fieldref, const int &grou
         req += " WHERE " + filter;
     if (WarnSqlCommands)
         qWarning() << req;
-    QSqlQuery q(req, database());
-    if (q.isActive()) {
-        if (q.next()) {
-            return q.value(0);
+    QSqlQuery query(DB);
+    if (query.exec(req)) {
+        if (query.next()) {
+            toReturn = query.value(0);
+            DB.commit();
         } else {
-            LOG_QUERY_ERROR_FOR("Database", q);
+            LOG_QUERY_ERROR_FOR("Database", query);
+            DB.rollback();
         }
     } else {
-        LOG_QUERY_ERROR_FOR("Database", q);
+        LOG_QUERY_ERROR_FOR("Database", query);
+        DB.rollback();
     }
-    return QVariant();
+    return toReturn;
 }
 
 /**
-   Return a MIN SQL command with grouping on the table \e tableref, field \e fieldref, grouped by field \e groupBy with the filter \e filter.
-  Filter whould be not contains the "WHERE" word.
+ * Return a MIN SQL command with grouping on the table \e tableref, field \e fieldref,
+ * grouped by field \e groupBy with the filter \e filter. Filter whould be not contains
+ * the "WHERE" word.
+ * Creates its own transaction.
 */
 QVariant Database::min(const int &tableref, const int &fieldref, const QString &filter) const
 {
+    QVariant toReturn;
+    QSqlDatabase DB = database();
+    if (!connectedDatabase(DB, __LINE__))
+        return toReturn;
+    DB.transaction();
+
     QString req = QString("SELECT MIN(%1) FROM %2")
                   .arg(d_database->m_Fields.value(d_database->index(tableref, fieldref)))
                   .arg(d_database->m_Tables[tableref]);
@@ -1647,22 +1717,25 @@ QVariant Database::min(const int &tableref, const int &fieldref, const QString &
         req += " WHERE " + filter;
     if (WarnSqlCommands)
         qWarning() << req;
-    QSqlQuery q(req, database());
-    if (q.isActive()) {
-        if (q.next()) {
-            return q.value(0);
+    QSqlQuery query(DB);
+    if (query.exec(req)) {
+        if (query.next()) {
+            toReturn = query.value(0);
+            DB.commit();
         } else {
-            LOG_QUERY_ERROR_FOR("Database", q);
+            LOG_QUERY_ERROR_FOR("Database", query);
+            DB.rollback();
         }
     } else {
-        LOG_QUERY_ERROR_FOR("Database", q);
+        LOG_QUERY_ERROR_FOR("Database", query);
+        DB.rollback();
     }
-    return QVariant();
+    return toReturn;
 }
 
 /**
-   Return a TOTAL SQL command on the table \e tableref, field \e fieldref with the filter \e filter.
-   Filter whould be not contains the "WHERE" word.
+ * Return a TOTAL SQL command on the table \e tableref, field \e fieldref with
+ * the filter \e filter.
 */
 QString Database::totalSqlCommand(const int tableRef, const int fieldRef, const QHash<int, QString> &where) const
 {
@@ -1690,34 +1763,49 @@ QString Database::totalSqlCommand(const int tableref, const int fieldref) const
     return toReturn;
 }
 
+/**
+ * Execute and return a SUM sql command on the table \e tableRef, field \e fieldRef, with
+ * or without the \e where filter (which can be empty).
+ * Creates its own transaction.
+*/
 double Database::sum(const int tableRef, const int fieldRef, const QHash<int, QString> &where) const
 {
-    QSqlQuery q(totalSqlCommand(tableRef, fieldRef, where), database());
-    if (q.isActive()) {
-        if (q.next()) {
-            return q.value(0).toDouble();
+    double toReturn = 0.0;
+    QSqlDatabase DB = database();
+    if (!connectedDatabase(DB, __LINE__))
+        return toReturn;
+    DB.transaction();
+
+    QSqlQuery query(DB);
+    QString req;
+    if (where.isEmpty())
+        req = totalSqlCommand(tableRef, fieldRef);
+    else
+        req = totalSqlCommand(tableRef, fieldRef, where);
+
+    if (query.exec(req)) {
+        if (query.next()) {
+            toReturn = query.value(0).toDouble();
+            DB.commit();
         } else {
-            LOG_QUERY_ERROR_FOR("Database", q);
+            LOG_QUERY_ERROR_FOR("Database", query);
+            DB.rollback();
         }
     } else {
-        LOG_QUERY_ERROR_FOR("Database", q);
+        LOG_QUERY_ERROR_FOR("Database", query);
+        DB.rollback();
     }
-    return 0.0;
+    return toReturn;
 }
 
+/**
+ * Execute and return a SUM sql command on the table \e tableRef and the field \e fieldRef.
+ * Creates its own transaction.
+*/
 double Database::sum(const int tableRef, const int fieldRef) const
 {
-    QSqlQuery q(totalSqlCommand(tableRef, fieldRef), database());
-    if (q.isActive()) {
-        if (q.next()) {
-            return q.value(0).toDouble();
-        } else {
-            LOG_QUERY_ERROR_FOR("Database", q);
-        }
-    } else {
-        LOG_QUERY_ERROR_FOR("Database", q);
-    }
-    return 0.0;
+    QHash<int, QString> where;
+    return sum(tableRef, fieldRef, where);
 }
 
 /** Return a SQL command usable for QSqlQuery::prepareInsertQuery(). Fields are ordered. */
@@ -1858,7 +1946,11 @@ QString Database::prepareDeleteQuery(const int tableref, const QHash<int,QString
     return toReturn;
 }
 
-/** Create table \e tableref in the database. */
+/**
+ * Create table \e tableref in the database according to its description.\n
+ * Manages internal transaction.
+ * \sa Utils::Database::addField(), Utils::Database::addTable(), Utils::Database::addIndex(), Utils::Database::addPrimaryKey(), Utils::Database::checkDatabaseScheme()
+*/
 bool Database::createTable(const int &tableref) const
 {
     if (!d_database->m_Tables.contains(tableref))
@@ -1868,93 +1960,177 @@ bool Database::createTable(const int &tableref) const
     if (d_database->m_ConnectionName.isEmpty())
         return false;
 
-    // get database and open
-    QSqlDatabase DB = QSqlDatabase::database(d_database->m_ConnectionName);
-    if (!DB.isOpen())
+    QSqlDatabase DB = database();
+    if (!connectedDatabase(DB, __LINE__))
         return false;
+    bool insideTransaction = true;
+    if (!d_database->_transaction) {
+        DB.transaction();
+        d_database->_transaction = true;
+        insideTransaction = false;
+    }
 
     // create query
     QStringList req;
     req = d_database->getSQLCreateTable(tableref);
 
-    return executeSQL(req, DB);
+    if (!executeSQL(req, DB)) {
+        if (!insideTransaction) {
+            d_database->_transaction = false;
+            DB.rollback();
+        }
+        return false;
+    } else {
+        if (!insideTransaction) {
+            d_database->_transaction = false;
+            DB.commit();
+        }
+    }
+    return true;
 }
 
-/** Create all the tables in the database. */
+/**
+ * Create all the tables in the database.\n
+ * Manages internal transaction.
+ * \sa Utils::Database::createTable(), Utils::Database::addField(), Utils::Database::addTable(), Utils::Database::addIndex(), Utils::Database::addPrimaryKey(), Utils::Database::checkDatabaseScheme()
+*/
 bool Database::createTables() const
 {
     QSqlDatabase DB = database();
-    if (!DB.isOpen()) {
-        if (!DB.open()) {
-            LOG_ERROR_FOR("Database", tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
-                          .arg(DB.connectionName()).arg(DB.lastError().text()));
-            return false;
-        }
+    if (!connectedDatabase(DB, __LINE__))
+        return false;
+
+    bool insideTransaction = true;
+    if (!d_database->_transaction) {
+        DB.transaction();
+        d_database->_transaction = true;
+        insideTransaction = false;
     }
+
     QList<int> list = d_database->m_Tables.keys();
     qSort(list);
-    DB.transaction();
     foreach(const int & i, list) {
         if(!createTable(i)) {
             LOG_ERROR_FOR("Database", QCoreApplication::translate("Database", "Can not create table %1").arg(table(i)));
+            if (!insideTransaction) {
+                DB.rollback();
+                d_database->_transaction = false;
+            }
+            return false;
+        }
+    }
+    if (!insideTransaction) {
+        DB.commit();
+        d_database->_transaction = false;
+    }
+    return true;
+}
+
+/**
+ * Alter an existing table adding a new field.\n
+ * Manages internal transaction.
+ * @param tableRef: table reference,
+ * @param newFieldRef: "to create field" reference,
+ * @param TypeOfField: Unused
+ * @param nullOption: default null value. WARNING: nullOption must not include any 'DEFAULT', 'SET DEFAULT', 'DROP DEFAULT' sql commands.
+ * @return true if the sql command was correctly executed
+ * \sa Utils::Database::addTable(), Utils::Database::addField()
+ * \note Fields are only added at the end of the table.
+*/
+bool Database::alterTableForNewField(const int tableRef, const int newFieldRef, const int TypeOfField, const QString &nullOption)
+{
+    Q_UNUSED(TypeOfField);
+    QSqlDatabase DB = database();
+    if (!connectedDatabase(DB, __LINE__))
+        return false;
+    QString defaultSql;
+    if (!nullOption.isEmpty()) {
+        // TODO: manage NULL, numbers, string (that needs to be escaped)
+        if (driver()==MySQL)
+            defaultSql = QString("DEFAULT %1").arg(nullOption);
+        else if (driver()==SQLite)
+            defaultSql = QString("DEFAULT %1").arg(nullOption);
+    }
+
+    QString type = d_database->getTypeOfField(d_database->index(tableRef, newFieldRef));
+    QString req;
+    req = QString("ALTER TABLE `%1`"
+                  "  ADD `%2` %3 %4;")
+            .arg(table(tableRef), fieldName(tableRef, newFieldRef), type, defaultSql);
+
+    DB.transaction();
+    QSqlQuery query(DB);
+    if (!query.exec(req)) {
+          LOG_QUERY_ERROR_FOR("Database", query);
+          LOG_FOR("Database",QString("Unable to add the fields %1").arg(fieldName(tableRef, newFieldRef)));
+          query.finish();
+          DB.rollback();
+          return false;
+    }
+    query.finish();
+    DB.commit();
+    return true;
+}
+
+/**
+ * Execute simple SQL commands on the QSqlDatabase \e DB. Return \e true if all was fine.\n
+ * Creates a transaction on the database \e DB.
+*/
+bool Database::executeSQL(const QStringList &list, QSqlDatabase &DB)
+{
+    if (!connectedDatabase(DB, __LINE__))
+        return false;
+    DB.transaction();
+    QSqlQuery query(DB);
+    foreach(const QString &r, list) {
+        if (r.isEmpty())
+            continue;
+        if (!query.exec(r)) {
+            LOG_QUERY_ERROR_FOR("Database", query);
+            query.finish();
             DB.rollback();
             return false;
         }
+        query.finish();
     }
     DB.commit();
     return true;
 }
 
-/** Execute simple SQL commands on the QSqlDatabase \e DB. */
-bool Database::executeSQL(const QStringList &list, QSqlDatabase &DB)
-{
-    if (!DB.isOpen()) {
-        if (!DB.open()) {
-            LOG_ERROR_FOR("Database", tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
-                          .arg(DB.connectionName()).arg(DB.lastError().text()));
-            return false;
-        }
-    }
-    foreach(const QString &r, list) {
-        if (r.isEmpty())
-            continue;
-
-        QSqlQuery q(r, DB);
-        if (!q.isActive()) {
-            Log::addQueryError("Database", q);
-            return false;
-        }
-        q.finish();
-    }
-    return true;
-}
-
-/** Execute simple SQL commands on the QSqlDatabase \e DB. */
+/**
+ * Execute SQL commands on the QSqlDatabase \e DB. \n
+ * WARNING: All SQL commands must be separated by a \e ; followed by a linefeed. \n
+ * Creates a transaction on the database \e DB.
+*/
 bool Database::executeSQL(const QString &req, QSqlDatabase & DB)
 {
     if (req.isEmpty())
         return false;
-    if (!DB.isOpen()) {
-        if (!DB.open()) {
-            LOG_ERROR_FOR("Database", tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
-                          .arg(DB.connectionName()).arg(DB.lastError().text()));
-            return false;
-        }
-    }
+    if (!connectedDatabase(DB, __LINE__))
+        return false;
     // TODO: manage ; inside "" or ''
     QStringList list = req.split(";\n", QString::SkipEmptyParts);
     return executeSQL(list, DB);
 }
 
 /**
-   Execute simple SQL commands stored in a file on the QSqlDatabase connected as \e connectionName.
-  Line starting with '-- ' are ignored.\n
-  All SQL commands must end with a ;
+ * Execute simple SQL commands stored in a file on the QSqlDatabase connected as \e connectionName.
+ * Line starting with '-- ' are ignored.\n
+ * All SQL commands must end with a \e ; followed by a linefeed. \n
+ * Creates a transaction on the database \e DB.
 */
 bool Database::executeSqlFile(const QString &connectionName, const QString &fileName, QProgressDialog *dlg, QString *error)
 {
     if (error)
         error->clear();
+
+    QSqlDatabase DB = QSqlDatabase::database(connectionName);
+    if (!connectedDatabase(DB, __LINE__)) {
+        if (error)
+            error->append(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+                          .arg(DB.connectionName()).arg(DB.lastError().text()));
+        return false;
+    }
 
     if (!QFile::exists(fileName)) {
         LOG_ERROR_FOR("Database", tkTr(Trans::Constants::FILE_1_DOESNOT_EXISTS).arg(fileName));
@@ -1980,24 +2156,6 @@ bool Database::executeSqlFile(const QString &connectionName, const QString &file
     req.replace("\n\n", "\n");
 
     QStringList list = req.split("\n");
-    QSqlDatabase DB = QSqlDatabase::database(connectionName);
-    if (!DB.isOpen()) {
-        if (!DB.open()) {
-            LOG_ERROR_FOR("Database", tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
-                          .arg(DB.connectionName()).arg(DB.lastError().text()));
-            if (error)
-                error->append(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
-                              .arg(DB.connectionName()).arg(DB.lastError().text()));
-            return false;
-        }
-    }
-
-//    if (!DB.transaction()) {
-//        LOG_ERROR_FOR("Tools", "Can not create transaction. Tools::executeSqlFile()", __FILE__, __LINE__);
-//        return false;
-//    }
-
-    req.clear();
     QStringList queries;
     // Reconstruct req : removes comments
     foreach(const QString &s, list) {
@@ -2015,49 +2173,52 @@ bool Database::executeSqlFile(const QString &connectionName, const QString &file
     if (dlg)
         dlg->setRange(0, queries.count());
 
+    QSqlQuery query(DB);
     foreach(const QString &sql, queries) {
-        QString q = sql.simplified();
+        QString _req = sql.simplified();
         // Do not processed empty strings
-        if (q.isEmpty())
+        if (_req.isEmpty())
             continue;
 
         // No SQLite extra commands
-        if (q.startsWith("."))
+        if (_req.startsWith("."))
             continue;
 
         // No BEGIN, No COMMIT
-        if (q.startsWith("BEGIN", Qt::CaseInsensitive) || q.startsWith("COMMIT", Qt::CaseInsensitive))
+        if (_req.startsWith("BEGIN", Qt::CaseInsensitive)
+                || _req.startsWith("COMMIT", Qt::CaseInsensitive))
             continue;
 
-        QSqlQuery query(sql, DB);
-        if (!query.isActive()) {
+        if (!query.exec(sql)) {
             LOG_QUERY_ERROR_FOR("Database", query);
             if (error)
                 error->append("Query error: " + DB.lastError().text());
             qWarning() << DB.database() << DB.hostName() << DB.userName() << DB.isOpenError();
-//            DB.rollback();
+            query.finish();
+            DB.rollback();
             return false;
         }
+        query.finish();
 
         if (dlg)
             dlg->setValue(dlg->value()+1);
     }
-//    DB.commit();
+    DB.commit();
     return true;
 }
 
-/** Import a CSV structured file \e fielName into a database \e connectionName, table \e table, using the speficied \e separator, and \e ingoreFirstLine or not.*/
+/**
+ * Import a CSV structured file \e fielName into a database \e connectionName,
+ * table \e table, using the speficied \e separator, and \e ingoreFirstLine or not.\n
+ * Creates a transaction on the database.
+*/
 bool Database::importCsvToDatabase(const QString &connectionName, const QString &fileName, const QString &table, const QString &separator, bool ignoreFirstLine)
 {
     // get database
-    QSqlDatabase db = QSqlDatabase::database(connectionName);
-    if (!db.isOpen()) {
-        if (!db.open()) {
-            LOG_ERROR_FOR("Database", tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
-                          .arg(db.connectionName(), db.lastError().text()));
-            return false;
-        }
-    }
+    QSqlDatabase DB = QSqlDatabase::database(connectionName);
+    if (!connectedDatabase(DB, __LINE__))
+        return false;
+    DB.transaction();
 
     QString content = Utils::readTextFile(fileName, Utils::DontWarnUser);
     if (content.isEmpty())
@@ -2069,12 +2230,13 @@ bool Database::importCsvToDatabase(const QString &connectionName, const QString 
         start = 1;
 
     // get table field's name
-    if (!db.tables().contains(table)) {
+    if (!DB.tables().contains(table)) {
         LOG_ERROR_FOR("Database", "No table found");
+        DB.rollback();
         return false;
     }
     // prepare the sql query
-    QSqlRecord record = db.record(table);
+    QSqlRecord record = DB.record(table);
     QString req = "INSERT INTO " + table + " (\n";
     for(int i = 0; i < record.count(); ++i) {
         req += "`" + record.fieldName(i) + "`, ";
@@ -2082,10 +2244,8 @@ bool Database::importCsvToDatabase(const QString &connectionName, const QString 
     req.chop(2);
     req += ")\n VALUES (";
 
-    db.transaction();
-
+    QSqlQuery query(DB);
     for(int i = start; i < lines.count(); ++i) {
-
         QStringList values = lines.at(i).split(separator, QString::KeepEmptyParts);
 //        qWarning() << lines.at(i) << separator << values;
         QString reqValues;
@@ -2110,22 +2270,15 @@ bool Database::importCsvToDatabase(const QString &connectionName, const QString 
         }
         reqValues.chop(2);
         reqValues += ");\n";
-        QSqlQuery query(req + reqValues, db);
-        if (!query.isActive()) {
+        if (!query.exec(req + reqValues)) {
             LOG_QUERY_ERROR_FOR("Database", query);
+            query.finish();
+            DB.rollback();
             return false;
         }
-//        else{
-//            if (counter < 5)
-//            {
-//            	  qDebug() << __FILE__ << QString::number(__LINE__) << " query  =" << query.lastQuery() ;
-//                }
-//        }
-//        qWarning() << lines.at(i) << req + reqValues << values;
+        query.finish();
     }
-
-    db.commit();
-
+    DB.commit();
     return true;
 }
 
@@ -2315,31 +2468,6 @@ QString DatabasePrivate::getTypeOfField(const int &fieldref) const
     return toReturn;
 }
 
-/**  Used for the debugging. */
-void Database::warn() const
-{
-    QSqlDatabase DB = QSqlDatabase::database(d_database->m_ConnectionName);
-    if (WarnLogMessages)
-        Log::addMessage("Database", QString("Connection name: %1, Database Name: %2, Driver: %3, Opened: %4, Can open: %5 ")
-                       .arg(d_database->m_ConnectionName, DB.databaseName(), DB.driverName())
-                       .arg(DB.isOpen())
-                       .arg(DB.open()));
-
-    foreach(int i, d_database->m_Tables.keys())
-    {
-        if (WarnLogMessages)
-            Log::addMessage("Database", QString("Tables = %1: %2").arg(i).arg(d_database->m_Tables[i]));
-        QList<int> list = d_database->m_Tables_Fields.values(i);
-        qSort(list);
-        foreach(int f, list)
-            if (WarnLogMessages)
-                Log::addMessage("Database", QString("    Fields = %1: %2 %3 %4")
-                               .arg(f)
-                               .arg(d_database->m_Fields[f], d_database->getTypeOfField(f), d_database->m_DefaultFieldValue[i]));
-
-    }
-}
-
 /**  Used for debugging and information purpose. */
 void Database::toTreeWidget(QTreeWidget *tree)
 {
@@ -2426,33 +2554,34 @@ void Database::toTreeWidget(QTreeWidget *tree)
     tree->resizeColumnToContents(1);
 }
 
-/**
-Add a fied to table referenced by 
-    code tableRef, 
-    new constant newFieldRef that is int referencing the new field, 
-    the type of field (ie varchar, blob, ...) by the enum Utils::Database::TypeOfField ,
-    the sql option ("NULL" or "NOT NULL"),
-    and after the last field referenced by is code field reference.
-@author Pierre-Marie Desombre
-*/
-bool Database::alterTableForNewField(const int tableRef, const int newFieldRef,const int TypeOfField, const QString & nullOption)
+QDebug operator<<(QDebug dbg, const Utils::Database &database)
 {
-    Q_UNUSED(TypeOfField);
-    bool b = true;
-    QString tableString = table(tableRef);
-    QString newField = fieldName(tableRef,newFieldRef);
-    QString type = d_database->getTypeOfField(d_database->index(tableRef, newFieldRef));
-    QSqlQuery q(database());
-    QString req = QString("ALTER TABLE `%1` ADD `%2` %3 %4;")
-    	       .arg(tableString,newField,type,nullOption);
-
-    if (!q.exec(req))
-    {
-    	  LOG_QUERY_ERROR_FOR("Database", q);
-    	  LOG_FOR("Database",QString("Unable to add the fields %1").arg(newField));
-    	  b = false;
-        }    
-    return b;
+    QSqlDatabase DB = database.database();
+    QString msg = "Database(";
+    msg += QString("connection: %1, name: %2, driver: %3, open: %4, canOpen: %5")
+            .arg(DB.connectionName())
+            .arg(DB.databaseName())
+            .arg(DB.driverName())
+            .arg(DB.isOpen())
+            .arg(DB.open());
+    for(int i = 0; i>=0; ++i) {
+        const QString &table = database.table(i);
+        if (table.isNull())
+            break;
+        msg += QString("\n          table: %1").arg(table);
+        for(int j=0; j>=0; ++j) {
+            const QString &field = database.field(i, j).fieldName;
+            if (field.isNull())
+                break;
+            msg += QString("\n            field: %1").arg(field);
+        }
+    }
+    // TODO: improve this: add a complet sqldatabase schema of the database
+    dbg.nospace() << msg;
+    return dbg.space();
 }
 
-
+QDebug operator<<(QDebug dbg, const Utils::Database *database)
+{
+    return operator<<(dbg, *database);
+}
