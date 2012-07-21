@@ -26,8 +26,6 @@
 #ifndef %PluginName:u%_%CppHeaderSuffix:u%
 #define %PluginName:u%_%CppHeaderSuffix:u%
 
-#include "%PluginName:l%_exporter.%CppHeaderSuffix%"
-
 #include <extensionsystem/iplugin.h>
 
 namespace %PluginName% {
