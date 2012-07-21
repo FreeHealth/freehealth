@@ -397,7 +397,7 @@ void treeViewsActions::deleteBox(bool b){
 
 void treeViewsActions::choosepreferredValue(bool b){
     Q_UNUSED(b);
-    bool yes = Utils::yesNoMessageBox(tr("Do you want to set this item as preferred value?"),
+    bool yes = Utils::yesNoMessageBox(tr("Preferred value : "),
                            tr("Do you want to set this item as preferred value?"));
     if (yes) {
         QModelIndex index = currentIndex();

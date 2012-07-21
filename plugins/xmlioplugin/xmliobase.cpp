@@ -106,7 +106,8 @@ XmlIOBase *XmlIOBase::instance()
 
 XmlIOBase::XmlIOBase(QObject *parent) :
     QObject(parent), Utils::Database(),
-    m_initialized(false)
+    m_initialized(false),
+    _transaction(false)
 {
     m_Instance = this;
     setObjectName("XmlIOBase");
@@ -269,13 +270,16 @@ bool XmlIOBase::createDatabase(const QString &connectionName , const QString &db
     }
 
     // Table INFORMATION
+    DB.transaction();
     QSqlQuery query(DB);
     query.prepare(prepareInsertQuery(Constants::Table_VERSION));
     query.bindValue(Constants::VERSION_ACTUAL, Constants::DB_VERSION);
     if (!query.exec()) {
         LOG_QUERY_ERROR(query);
+        DB.rollback();
     }
     query.finish();
+    DB.commit();
 
     // database is readable/writable
     LOG(tkTr(Trans::Constants::DATABASE_1_CORRECTLY_CREATED).arg(pathOrHostName + QDir::separator() + dbName));
@@ -365,6 +369,7 @@ QList<Form::FormIODescription *> XmlIOBase::getFormDescription(const Form::FormI
 
     // Just manage type of forms
     DB.transaction();
+    _transaction =true;
     QSqlQuery query(DB);
     Utils::FieldList gets;
     gets << Utils::Field(Constants::Table_FORMS, Constants::FORM_UUID);
@@ -410,6 +415,7 @@ QList<Form::FormIODescription *> XmlIOBase::getFormDescription(const Form::FormI
     }
     query.finish();
     DB.commit();
+    _transaction = false;
     return toReturn;
 }
 
@@ -423,6 +429,7 @@ QHash<QString, QString> XmlIOBase::getAllFormFullContent(const QString &formUid)
     // Get all formIds from Forms table
     QVector<int> ids;
     DB.transaction();
+    _transaction = true;
     QSqlQuery query(DB);
     QHash<int, QString> where;
     where.insert(Constants::FORM_UUID, QString("='%1'").arg(normalizedFormUid(formUid)));
@@ -434,6 +441,7 @@ QHash<QString, QString> XmlIOBase::getAllFormFullContent(const QString &formUid)
     } else {
         LOG_QUERY_ERROR(query);
         DB.rollback();
+        _transaction = false;
         return toReturn;
     }
     query.finish();
@@ -463,10 +471,18 @@ QHash<QString, QString> XmlIOBase::getAllFormFullContent(const QString &formUid)
         }
         query.finish();
     }
+    _transaction = false;
+    DB.commit();
     return toReturn;
 }
 
-/** Return the XML content of the form according to the XmlIOBase::TypeOfForm \e type and the \e formUid */
+/**
+ * Return the XML content of the form according to the XmlIOBase::TypeOfForm \e type
+ * and the \e formUid. \n
+ * This member can be called inside or outside a database transaction. If it is called
+ * inside a transaction it does not call neither QSqlDatabase::commit(), nor
+ * QSqlDatabase::rollback().
+*/
 QString XmlIOBase::getFormContent(const QString &formUid, const int type, const QString &modeName)
 {
 //    qWarning() << Q_FUNC_INFO << formUid << type << modeName;
@@ -474,7 +490,12 @@ QString XmlIOBase::getFormContent(const QString &formUid, const int type, const 
     QSqlDatabase DB = database();
     if (!connectedDatabase(DB, __LINE__))
         return QString::null;
-    DB.transaction();
+    bool insideTransaction = true;
+    if (!_transaction) {
+        DB.transaction();
+        _transaction = true;
+        insideTransaction = false;
+    }
     QSqlQuery query(DB);
     Utils::FieldList gets;
     gets << Utils::Field(Constants::Table_FORM_CONTENT, Constants::FORMCONTENT_CONTENT);
@@ -494,17 +515,30 @@ QString XmlIOBase::getFormContent(const QString &formUid, const int type, const 
     if (query.exec(req)) {
         if (query.next()) {
             QString var = query.value(0).toString();
-            DB.commit();
+            if (!insideTransaction) {
+                DB.commit();
+                _transaction = false;
+            }
             return var;
         }
     } else {
         LOG_QUERY_ERROR(query);
-        DB.rollback();
+        if (!insideTransaction) {
+            DB.rollback();
+            _transaction = false;
+        }
     }
+    if (!insideTransaction)
+        _transaction = false;
     return QString();
 }
 
-/** Returns the shot \e shotName associated to the form \e formUid */
+/**
+ * Returns the shot \e shotName associated to the form \e formUid
+ * This member can be called inside or outside a database transaction. If it is called
+ * inside a transaction it does not call neither QSqlDatabase::commit(), nor
+ * QSqlDatabase::rollback().
+*/
 QPixmap XmlIOBase::getScreenShot(const QString &formUid, const QString &shotName)
 {
     // Get shot content
@@ -513,18 +547,30 @@ QPixmap XmlIOBase::getScreenShot(const QString &formUid, const QString &shotName
         return QPixmap();
     // Create pixmap
     QPixmap pix;
-    pix.loadFromData(QByteArray::fromBase64(content.toAscii()));
+    if (!content.isEmpty())
+        pix.loadFromData(QByteArray::fromBase64(content.toAscii()));
     return pix;
 }
 
-/** Returns the shots for the language \e lang associated to the form \e formUid */
+/**
+ * Returns the shots for the language \e lang associated to the form \e formUid
+ * This member can be called inside or outside a database transaction. If it is called
+ * inside a transaction it does not call neither QSqlDatabase::commit(), nor
+ * QSqlDatabase::rollback().
+*/
 QHash<QString, QPixmap> XmlIOBase::getScreenShots(const QString &formUid, const QString &lang)
 {
-    // we are inside a transaction
+    // can be accessed within ou without a transaction
     QHash<QString, QPixmap> pixmaps;
     QSqlDatabase DB = database();
     if (!connectedDatabase(DB, __LINE__))
         return pixmaps;
+    bool insideTransaction = true;
+    if (!_transaction) {
+        DB.transaction();
+        _transaction = true;
+        insideTransaction = false;
+    }
     QSqlQuery query(DB);
     Utils::FieldList gets;
     gets << Utils::Field(Constants::Table_FORM_CONTENT, Constants::FORMCONTENT_MODENAME);
@@ -542,12 +588,17 @@ QHash<QString, QPixmap> XmlIOBase::getScreenShots(const QString &formUid, const 
     if (query.exec(req)) {
         while (query.next()) {
             QPixmap pix;
-            pix.loadFromData(QByteArray::fromBase64(query.value(1).toByteArray()));
+            if (!query.value(1).toByteArray().isEmpty())
+                pix.loadFromData(QByteArray::fromBase64(query.value(1).toByteArray()));
             pixmaps.insert(query.value(0).toString(), pix);
             ++nbShotRead;
         }
     } else {
         LOG_QUERY_ERROR(query);
+        if (!insideTransaction) {
+            DB.rollback();
+            _transaction = false;
+        }
         return pixmaps;
     }
     query.finish();
@@ -560,22 +611,32 @@ QHash<QString, QPixmap> XmlIOBase::getScreenShots(const QString &formUid, const 
         if (query.exec(req)) {
             while (query.next()) {
                 QPixmap pix;
-                pix.loadFromData(QByteArray::fromBase64(query.value(1).toByteArray()));
+                if (!query.value(1).toByteArray().isEmpty())
+                    pix.loadFromData(QByteArray::fromBase64(query.value(1).toByteArray()));
                 pixmaps.insert(query.value(0).toString(), pix);
                 ++nbShotRead;
             }
         } else {
             LOG_QUERY_ERROR(query);
+            if (!insideTransaction) {
+                DB.rollback();
+                _transaction = false;
+            }
             return pixmaps;
         }
+    }
+    if (!insideTransaction) {
+        DB.commit();
+        _transaction = false;
     }
     return pixmaps;
 }
 
 /**
- Save the \e content of the form \e form to the database and return the used formUid.\n
- If the \e content is empty the form file is accessed.\n
- The \e form is modified and populated with the database content.
+ * Save the \e content of the form \e form to the database and return the used formUid.\n
+ * If the \e content is empty the form file is accessed.\n
+ * The \e form is modified and populated with the database content. \n
+ * This member creates its own transaction.
 */
 bool XmlIOBase::saveForm(XmlFormName &form)
 {
@@ -591,6 +652,7 @@ bool XmlIOBase::saveForm(XmlFormName &form)
     QDir dir(form.absPath);
 
     database().transaction();
+    _transaction = true;
 
     // save all XML files && files included in the form using the <file> XML tag
     foreach(const QFileInfo &f, dir.entryInfoList(QStringList() << "*.xml", QDir::Files | QDir::Readable)) {
@@ -601,6 +663,7 @@ bool XmlIOBase::saveForm(XmlFormName &form)
             if (!saveContent(form.uid, content, XmlIOBase::PmhCategories, modeName)) {
                 LOG_ERROR("Can not save pmhx categories associated with the form to database");
                 database().rollback();
+                _transaction = false;
                 return false;
             } else {
                 LOG("Saving pmhx categories file to database " + f.absoluteFilePath());
@@ -608,12 +671,14 @@ bool XmlIOBase::saveForm(XmlFormName &form)
             if (!savePmhxCategories(form, content)) {
                 LOG_ERROR("Can not save pmhx categories associated with the form to database");
                 database().rollback();
+                _transaction = false;
                 return false;
             }
         } else {
             if (!saveContent(form.uid, content, XmlIOBase::FullContent, modeName)) {
                 LOG_ERROR("Can not save form to database");
                 database().rollback();
+                _transaction = false;
                 return false;
             } else {
                 LOG("Saving attached *xml files to database " + f.absoluteFilePath());
@@ -626,6 +691,7 @@ bool XmlIOBase::saveForm(XmlFormName &form)
         if (!doc.setContent(content)) {
             LOG_ERROR("XML Error");
             database().rollback();
+            _transaction = false;
             return false;
         }
         QDomNodeList list = doc.elementsByTagName("file");
@@ -638,6 +704,7 @@ bool XmlIOBase::saveForm(XmlFormName &form)
                 if (!saveForm(includeForm)) {
                     LOG_ERROR("unable to save included form: " + includeForm.uid);
                     database().rollback();
+                    _transaction = false;
                     return false;
                 }
             }
@@ -648,6 +715,7 @@ bool XmlIOBase::saveForm(XmlFormName &form)
     if (!saveFiles(form, "scripts", "js", XmlIOBase::ScriptFile)) {
         LOG_ERROR("Unable to save script files");
         database().rollback();
+        _transaction = false;
         return false;
     }
 
@@ -655,6 +723,7 @@ bool XmlIOBase::saveForm(XmlFormName &form)
     if (!saveFiles(form, "ui", "ui", XmlIOBase::UiFile)) {
         LOG_ERROR("Unable to save UI files");
         database().rollback();
+        _transaction = false;
         return false;
     }
     // Save qml
@@ -664,6 +733,7 @@ bool XmlIOBase::saveForm(XmlFormName &form)
     if (!saveFiles(form, "html", "html", XmlIOBase::HtmlFile)) {
         LOG_ERROR("Unable to save HTML files");
         database().rollback();
+        _transaction = false;
         return false;
     }
 
@@ -671,6 +741,7 @@ bool XmlIOBase::saveForm(XmlFormName &form)
     if (!saveScreenShots(form)) {
         LOG_ERROR("Unable to save screenshot files");
         database().rollback();
+        _transaction = false;
         return false;
     }
 
@@ -678,10 +749,12 @@ bool XmlIOBase::saveForm(XmlFormName &form)
     if (!registerAlertPacks(form)) {
         LOG_ERROR("Unable to save screenshot files");
         database().rollback();
+        _transaction = false;
         return false;
     }
 
     database().commit();
+    _transaction = false;
 
     if (isFormExists(form))
         return true;
@@ -689,6 +762,11 @@ bool XmlIOBase::saveForm(XmlFormName &form)
     return true;
 }
 
+/**
+ * Creates the PMHx categories related to the \e form
+ * reading the QDomDocument from the \e element
+ * with the parent category \e parent.
+ */
 Category::CategoryItem * XmlIOBase::createCategory(const XmlFormName &form, const QDomElement &element, Category::CategoryItem *parent) const
 {
     // create the category
@@ -729,7 +807,10 @@ Category::CategoryItem * XmlIOBase::createCategory(const XmlFormName &form, cons
     return item;
 }
 
-/** Save PMHx categories to the categories database. The pmhx category file must be already in the database. */
+/**
+ * Save PMHx categories to the categories database.
+ * The PMHx category file must be already in the database.
+*/
 bool XmlIOBase::savePmhxCategories(const XmlFormName &form, const QString &content)
 {
     Q_UNUSED(form);
@@ -763,13 +844,25 @@ bool XmlIOBase::savePmhxCategories(const XmlFormName &form, const QString &conte
     return true;
 }
 
-/** Save screenshots files associated with the \e form. */
+/**
+ * Save screenshots files associated with the \e form.
+*/
 bool XmlIOBase::saveScreenShots(const XmlFormName &form)
 {
     QDir shotPath(form.absPath + QDir::separator() + "shots");
     if (shotPath.exists()) {
         LOG_FOR("XmlFormIO","Saving attached screenshots to database " + form.uid);
         QFileInfoList files = Utils::getFiles(shotPath, "*.png", Utils::Recursively);
+        if (files.isEmpty())
+            return true;
+
+        // Start a transaction
+        QSqlDatabase DB = database();
+        if (!connectedDatabase(DB, __LINE__))
+            return false;
+        DB.transaction();
+        _transaction = true;
+
         foreach(const QFileInfo &f, files) {
             QString fp = f.absoluteFilePath();
             QFile file(fp);
@@ -779,10 +872,16 @@ bool XmlIOBase::saveScreenShots(const XmlFormName &form)
             QString mode = fp.mid(begin, end-begin) + "/" + f.fileName();
             if (file.open(QFile::ReadOnly)) {
                 QByteArray ba = file.readAll();
-                if (!saveContent(form.uid, ba.toBase64(), XmlIOBase::ScreenShot, mode))
+                if (!saveContent(form.uid, ba.toBase64(), XmlIOBase::ScreenShot, mode)) {
+                    DB.rollback();
+                    _transaction = false;
                     return false;
+                }
             }
         }
+
+        DB.commit();
+        _transaction = false;
     }
     return true;
 }
@@ -820,25 +919,53 @@ bool XmlIOBase::saveFiles(const XmlFormName &form, const QString &subDir, const 
     if (path.exists()) {
         LOG_FOR("XmlFormIO","Saving attached *." + fileExtension + " files to database " + form.uid);
         QFileInfoList files = Utils::getFiles(path, "*." + fileExtension, Utils::Recursively);
+        if (files.isEmpty())
+            return true;
+
+        // Start a transaction
+        QSqlDatabase DB = database();
+        if (!connectedDatabase(DB, __LINE__))
+            return false;
+        DB.transaction();
+        _transaction = true;
+
         foreach(const QFileInfo &f, files) {
             QString fp = f.absoluteFilePath();
             QString mode = fp;
             mode = "." + mode.remove(form.absPath);
-            if (!saveContent(form.uid, Utils::readTextFile(fp, Utils::DontWarnUser), type, mode))
+            if (!saveContent(form.uid, Utils::readTextFile(fp, Utils::DontWarnUser), type, mode)) {
+                DB.rollback();
+                _transaction = false;
                 return false;
+            }
         }
+
+        DB.commit();
+        _transaction = false;
     }
     return true;
 }
 
-/** Save the content of an XML form content \e xmlContent into the database using the Form Uuid \e formUid, XmlIOBase::TypeOfForm \e type, Mode name \e modeName and \e date */
+/**
+ * Save the content of an XML form content \e xmlContent into the database
+ * using the Form Uuid \e formUid, XmlIOBase::TypeOfForm \e type,
+ * Mode name \e modeName and \e date
+ * This member can be called inside or outside a database transaction. If it is called
+ * inside a transaction it does not call neither QSqlDatabase::commit(), nor
+ * QSqlDatabase::rollback().
+*/
 bool XmlIOBase::saveContent(const QString &formUid, const QString &xmlContent, const int type, const QString &modeName, const QDateTime &date)
 {
     QSqlDatabase DB = database();
     if (!connectedDatabase(DB, __LINE__))
         return false;
 
-    DB.transaction();
+    bool insideTransaction = true;
+    if (!_transaction) {
+        insideTransaction = false;
+        DB.transaction();
+        _transaction = true;
+    }
     QSqlQuery query(DB);
     int formId = -1;
     QString req;
@@ -864,7 +991,10 @@ bool XmlIOBase::saveContent(const QString &formUid, const QString &xmlContent, c
             formId = query.lastInsertId().toInt();
         } else {
             LOG_QUERY_ERROR(query);
-            DB.rollback();
+            if (!insideTransaction) {
+                DB.rollback();
+                _transaction = false;
+            }
             return false;
         }
         query.finish();
@@ -877,7 +1007,10 @@ bool XmlIOBase::saveContent(const QString &formUid, const QString &xmlContent, c
             }
         } else {
             LOG_QUERY_ERROR(query);
-            DB.rollback();
+            if (!insideTransaction) {
+                DB.rollback();
+                _transaction = false;
+            }
             return false;
         }
         query.finish();
@@ -903,7 +1036,10 @@ bool XmlIOBase::saveContent(const QString &formUid, const QString &xmlContent, c
         query.bindValue(FORMCONTENT_CONTENT, xmlContent);
         if (!query.exec()) {
             LOG_QUERY_ERROR(query);
-            DB.rollback();
+            if (!insideTransaction) {
+                DB.rollback();
+                _transaction = false;
+            }
             return false;
         }
         query.finish();
@@ -914,7 +1050,10 @@ bool XmlIOBase::saveContent(const QString &formUid, const QString &xmlContent, c
             int end = xmlContent.indexOf(QString("</%1>").arg(Constants::TAG_FORM_DESCRIPTION), beg);
             if (beg==-1 || end==-1) {
                 LOG_ERROR("no description found");
-                DB.rollback();
+                if (!insideTransaction) {
+                    DB.rollback();
+                    _transaction = false;
+                }
                 return false;
             }
             end += QString("</%1>").arg(Constants::TAG_FORM_DESCRIPTION).length();
@@ -930,7 +1069,10 @@ bool XmlIOBase::saveContent(const QString &formUid, const QString &xmlContent, c
             query.bindValue(FORMCONTENT_CONTENT, descr);
             if (!query.exec()) {
                 LOG_QUERY_ERROR(query);
-                DB.rollback();
+                if (!insideTransaction) {
+                    DB.rollback();
+                    _transaction = false;
+                }
                 return false;
             }
             query.finish();
@@ -943,7 +1085,10 @@ bool XmlIOBase::saveContent(const QString &formUid, const QString &xmlContent, c
         query.bindValue(0, xmlContent);
         if (!query.exec()) {
             LOG_QUERY_ERROR(query);
-            DB.rollback();
+            if (!insideTransaction) {
+                DB.rollback();
+                _transaction = false;
+            }
             return false;
         }
         query.finish();
@@ -954,7 +1099,10 @@ bool XmlIOBase::saveContent(const QString &formUid, const QString &xmlContent, c
             int end = xmlContent.indexOf(QString("</%1>").arg(Constants::TAG_FORM_DESCRIPTION), beg);
             if (beg==-1 || end==-1) {
                 LOG_ERROR("no description found");
-                DB.rollback();
+                if (!insideTransaction) {
+                    DB.rollback();
+                    _transaction = false;
+                }
                 return false;
             }
             end += QString("</%1>").arg(Constants::TAG_FORM_DESCRIPTION).length();
@@ -966,13 +1114,19 @@ bool XmlIOBase::saveContent(const QString &formUid, const QString &xmlContent, c
             query.bindValue(0, descr);
             if (!query.exec()) {
                 LOG_QUERY_ERROR(query);
-                DB.rollback();
+                if (!insideTransaction) {
+                    DB.rollback();
+                    _transaction = false;
+                }
                 return false;
             }
             query.finish();
         }
     }
-    DB.commit();
+    if (!insideTransaction) {
+        DB.commit();
+        _transaction = false;
+    }
     return true;
 }
 

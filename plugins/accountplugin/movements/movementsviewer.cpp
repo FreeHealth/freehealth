@@ -51,7 +51,7 @@ using namespace AccountDB;
 using namespace Constants;
 using namespace Trans::ConstantTranslations;
 
-enum { WarnDebugMessage = false };
+enum { WarnDebugMessage = true };
 
 /*********************/
 // TODO: bank system and deposit

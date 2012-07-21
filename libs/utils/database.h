@@ -353,7 +353,6 @@ public:
     static bool executeSQL(const QString &req, QSqlDatabase &DB);
     static bool executeSqlFile(const QString &connectionName, const QString &fileName, QProgressDialog *dlg = 0, QString *error = 0);
     static bool importCsvToDatabase(const QString &connectionName, const QString &fileName, const QString &table, const QString &separator = QString(";"), bool ignoreFirstLine = false);
-    virtual void warn() const;
     virtual void toTreeWidget(QTreeWidget *tree);
 
     virtual void setConnectionName(const QString &c);
@@ -369,5 +368,8 @@ private:
 }
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Utils::Database::Grants)
+
+QDebug operator<<(QDebug dbg, const Utils::Database &database);
+QDebug operator<<(QDebug dbg, const Utils::Database *database);
 
 #endif // UTILS_DATABASE_H

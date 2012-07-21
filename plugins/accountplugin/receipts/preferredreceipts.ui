@@ -35,7 +35,7 @@
         <string notr="true">color: rgb(255, 0, 0);</string>
        </property>
        <property name="text">
-        <string>Add a rapid receipts</string>
+        <string>Add the prefered receipts</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>

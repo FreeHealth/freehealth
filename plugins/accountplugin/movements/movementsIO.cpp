@@ -50,7 +50,7 @@
 
 #include <QDebug>
 
-enum { WarnDebugMessage = false };
+enum { WarnDebugMessage = true };
 
 using namespace AccountDB;
 using namespace Constants;
