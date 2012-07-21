@@ -123,7 +123,7 @@ private Q_SLOTS:
     void onCoreFirstRunCreationRequested();
 
 private:
-    bool m_initialized;
+    bool m_initialized, _transaction;
     static XmlIOBase *m_Instance;
 };
 
