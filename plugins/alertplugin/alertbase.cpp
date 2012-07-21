@@ -521,13 +521,19 @@ bool AlertBase::createDatabase(const QString &connectionName , const QString &db
     }
 
     // inform the version
+    QSqlDatabase DB = database();
+    DB.transaction();
     QSqlQuery query(database());
     query.prepare(prepareInsertQuery(Constants::Table_ALERT_VERSION));
     query.bindValue(Constants::VERSION_TEXT, Constants::DB_ACTUALVERSION);
     if (!query.exec()) {
         LOG_QUERY_ERROR(query);
+        query.finish();
+        DB.rollback();
         return false;
     }
+    query.finish();
+    DB.commit();
 
     return true;
 }
@@ -607,6 +613,7 @@ bool AlertBase::saveAlertItem(AlertItem &item)
         QHash<int, QString> where;
         where.insert(Constants::ALERT_UID, QString("='%1'").arg(item.uuid()));
         QString req = select(Constants::Table_ALERT, Constants::ALERT_ID, where);
+        database().transaction();
         QSqlQuery query(database());
         if (query.exec(req)) {
             if (query.next())
@@ -614,6 +621,8 @@ bool AlertBase::saveAlertItem(AlertItem &item)
         } else {
             LOG_QUERY_ERROR(query);
         }
+        query.finish();
+        database().commit();
     }
     if (item.db(ItemId).isValid())
         return updateAlertItem(item);
@@ -675,6 +684,7 @@ bool AlertBase::saveAlertItem(AlertItem &item)
         item.setModified(false);
     } else {
         LOG_QUERY_ERROR(query);
+        query.finish();
         database().rollback();
         return false;
     }
@@ -782,6 +792,7 @@ bool AlertBase::updateAlertItem(AlertItem &item)
         item.setModified(false);
     } else {
         LOG_QUERY_ERROR(query);
+        query.finish();
         database().rollback();
         return false;
     }
@@ -1409,6 +1420,7 @@ QVector<AlertItem> AlertBase::getAlertItems(const AlertBaseQuery &query)
         }
     } else {
         LOG_QUERY_ERROR(query);
+        query.finish();
         database().rollback();
         return alerts;
     }
@@ -1484,6 +1496,7 @@ AlertItem AlertBase::getAlertItemFromUuid(const QString &uuid)
         }
     } else {
         LOG_QUERY_ERROR(query);
+        query.finish();
         database().rollback();
         return item;
     }
@@ -1753,15 +1766,11 @@ bool AlertBase::updateAlertPackDescription(AlertPackDescription &descr, const in
     query.bindValue(++i, descr.data(AlertPackDescription::CreationDate));
     query.bindValue(++i, descr.data(AlertPackDescription::LastModificationDate));
     query.bindValue(++i, QString()); //TODO:: descr.extraXml());
-    if (query.exec()) {
-//        descr.setModified(false);
-    } else {
+    if (!query.exec()) {
         LOG_QUERY_ERROR(query);
-        database().rollback();
         return false;
     }
     query.finish();
-    database().commit();
     return true;
 }
 
@@ -1823,6 +1832,7 @@ bool AlertBase::saveAlertPackDescription(AlertPackDescription &descr)
         id = query.lastInsertId().toInt();
     } else {
         LOG_QUERY_ERROR(query);
+        query.finish();
         database().rollback();
         return false;
     }
@@ -1956,6 +1966,7 @@ AlertPackDescription AlertBase::getAlertPackDescription(const QString &uuid)
         }
     } else {
         LOG_QUERY_ERROR(query);
+        query.finish();
         database().rollback();
         return pack;
     }
@@ -2037,6 +2048,7 @@ bool AlertBase::removeAlertPack(const QString &uid)
     where.insert(Constants::ALERT_PACKS_UID, QString("='%1'").arg(uid));
     if (!count(Constants::Table_ALERT_PACKS, Constants::ALERT_PACKS_IN_USE, getWhereClause(Constants::Table_ALERT_PACKS, where))) {
         LOG_ERROR("No AlertPackDescription found for the uid: " + uid);
+        database().rollback();
         return false;
     }
 
@@ -2047,6 +2059,7 @@ bool AlertBase::removeAlertPack(const QString &uid)
     query.bindValue(0, int(false));
     if (!query.exec()) {
         LOG_QUERY_ERROR(query);
+        query.finish();
         database().rollback();
         return false;
     }
@@ -2060,6 +2073,7 @@ bool AlertBase::removeAlertPack(const QString &uid)
     query.bindValue(0, int(false));
     if (!query.exec()) {
         LOG_QUERY_ERROR(query);
+        query.finish();
         database().rollback();
         return false;
     }
