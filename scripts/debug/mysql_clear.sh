@@ -40,6 +40,8 @@ checkMySQLPath()
         MYSQL=/usr/sbin/mysql
     elif [[ -e /usr/local/bin/mysql ]]; then
         MYSQL=/usr/local/bin/mysql
+    elif [[ -e /usr/local/mysql/bin/mysql ]]; then
+        MYSQL=/usr/local/mysql/bin/mysql
     else
         echo "* WARNING: unable to find mysql"
         exit 123
@@ -53,7 +55,8 @@ showHelp()
   echo "Version: $SCRIPT_VERSION"
   echo "Usage : $SCRIPT_NAME -p rootpassword"
   echo "Options :"
-  echo " -p  define the mysql root password"
+  echo " -u  define the mysql root user login"
+  echo " -p  define the mysql root user password"
   echo " -s  define the mysql hostname"
   echo " -t  define the mysql port"
   echo " -h  show this help"
@@ -71,7 +74,6 @@ checkZenity()
 
 logConfig()
 {
-    checkMySQLPath
     if [[ "$MYSQL_PASS" == "" ]]; then
         echo "*** No password"
     else
@@ -182,11 +184,12 @@ dropDatabases()
     rm ./drop.sql
 }
 
+checkMySQLPath
 # Parse options
-while getopts "p:s:t:h" option
+while getopts "u:p:s:t:h" option
 do
         case $option in
-                u) MYSQL_USER=`echo "-p$OPTARG" | tr -d " "`;
+                u) MYSQL_USER=`echo "-u$OPTARG" | tr -d " "`;
                 ;;
                 p) MYSQL_PASS=`echo "-p$OPTARG" | tr -d " "`;
                 ;;
@@ -200,19 +203,12 @@ do
         esac
 done
 
+MYSQL="$MYSQL $MYSQL_USER $MYSQL_PASS $MYSQL_HOST $MYSQL_PORT"
+
 logConfig
 getMySQLUser
 dropUsers
 dropDatabases
-
-if [[ -f $ZENITY ]]; then
-    ;
-else
-    ;
-fi
-
-MYSQL="$MYSQL -u$MYSQL_USER $MYSQ_PASS $MYSQL_HOST $MYSQL_PORT"
-
 
 echo
 echo "*** Finished ***"
