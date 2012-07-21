@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wizard version="1" kind="class" id="A.PreferencesPage" category="B.FMFClasses">
+    <icon>freemedforms_24.png</icon>
+    <description>Creates a class for a FreeMedForms preferences page.</description>
+    <description xml:lang="de">Erstellt eine Klasse für eine FreeMedForms-Einstellungen-Seite.</description>
+    <displayname>Settings Page</displayname>
+    <displayname xml:lang="de">Einstellungen-Seite</displayname>
+    <displaycategory>FreeMedForms</displaycategory>
+    <files>
+        <file source="preferences.cpp" target="%PluginName:l%preferences.%CppSourceSuffix%" openeditor="true"/>
+        <file source="preferences.h" target="%PluginName:l%preferences.%CppHeaderSuffix%" openeditor="true"/>
+        <file source="preferences.ui" target="%PluginName:l%preferences.ui" openeditor="true"/> 
+    </files>
+    <!-- Create a 2nd wizard page with parameters -->
+    <fieldpagetitle>Settings Page Parameters</fieldpagetitle>
+    <fieldpagetitle xml:lang="de">Parameter für Einstellungen-Seite</fieldpagetitle>
+    <fields>
+        <field name="PluginName">
+            <fieldcontrol class="QLineEdit" validator="^[a-zA-Z0-9_]+$" defaulttext="" />
+            <fielddescription>Plugin name (without "plugin"):</fielddescription>
+            <fielddescription xml:lang="de">Name des Plugins, zu dem diese Einstellungen gehören (ohne:</fielddescription>
+        </field>
+        <field name="Author">
+            <fieldcontrol class="QLineEdit" defaulttext="" />
+            <fielddescription>Author:</fielddescription>
+            <fielddescription xml:lang="de">Autor:</fielddescription>
+        </field>
+        <field name="AuthorEmail">
+            <fieldcontrol class="QLineEdit" validator="^[a-z0-9_.@]?$" defaulttext="" />
+            <fielddescription>Author email:</fielddescription>
+            <fielddescription xml:lang="de">Emailadresse des Autors:</fielddescription>
+        </field>
+        <!--
+        <field mandatory="true" name="PLUGIN">
+            <fieldcontrol class="QLineEdit" validator='^[^"]+$'
+                          defaulttext="" />
+            <fielddescription>Hello world message:</fielddescription>
+            <fielddescription xml:lang="de">Hallo-Welt-Nachricht:</fielddescription>
+        </field>
+        -->
+	<!-- Checkbox technique 1: Comment out network in profile according to user's wishes -->
+        <!--
+        <field name="NETWORK">
+            <fieldcontrol class="QCheckBox" truevalue="" falsevalue="# "/>
+            <fielddescription>Include network module</fielddescription>
+            <fielddescription xml:lang="de">Netzwerk-Modul verwenden</fielddescription>
+        </field>
+        -->
+	<!-- Checkbox technique 2: Use preprocessor for profile according to user's wishes -->
+        <!--
+        <field name="SCRIPT">
+            <fieldcontrol class="QCheckBox"/>
+            <fielddescription>Include script module</fielddescription>
+            <fielddescription xml:lang="de">Script-Modul verwenden</fielddescription>
+        </field>
+        -->
+    </fields>
+    <validationrules>
+        <validationrule condition='"%PluginName:l%".indexOf("plugin") != -1'>
+            <message>The plugin name may not contain "plugin". Please remove the suffix "plugin".</message>
+            <message xml:lang="de">Der Name des Plugins darf nicht "plugin" enthalten, bitte diesen Wortteil entfernen.</message>
+        </validationrule>
+    </validationrules>    
+</wizard>
