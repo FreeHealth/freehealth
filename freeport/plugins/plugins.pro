@@ -4,7 +4,8 @@ SUBDIRS = \
     core \
     mainwindow \
     texteditor \
-    port
+    port \
+    axisante4
 
 core.subdir = coreplugin
 
