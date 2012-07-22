@@ -46,7 +46,8 @@ OpenCVWidget::OpenCVWidget(QWidget *parent) :
     m_frozen(false),
     m_updateFreq(defaultUpdateFrequency()),
     m_rubberBand(0),
-    m_Mode(Create)
+    m_Mode(Create),
+    m_counter(0)
 {
     setObjectName("OpenCVWidget");
     
@@ -113,6 +114,10 @@ OpenCVWidget::OpenCVWidget(QWidget *parent) :
             << cvScalar(255.0,128.0,0.0) << cvScalar(255.0,255.0,0.0)
             << cvScalar(255.0,0.0,0.0) << cvScalar(255.0,0.0,255.0);
     
+    // create a model that contains the captured images
+    // 8 images, 1 column (image)
+    m_imageModel = new QStandardItemModel(this);
+    
     m_timerId = startTimer(m_updateFreq);
 }
 
@@ -127,13 +132,18 @@ OpenCVWidget::~OpenCVWidget()
 
 void OpenCVWidget::timerEvent(QTimerEvent *event)
 {
-    // thanks for some code snippets from Stef van den Elzen
-    // taken from http://sj.vdelzen.net/2011/05/31/realtime-face-detection-using-opencv-and-cqt/
-    
-    Q_UNUSED(event);
+    Q_UNUSED(event);    
     IplImage *cvimage = cvQueryFrame(m_camera);
     if (!cvimage)
+        return;  
+    
+    // maximum of 5 pictures
+    //TODO: make image count configurable
+    if (++m_counter > 5) {
         return;
+    }
+    
+    // now convert IplImage into a QImage
     
     int cvIndex, cvLineStart;
     // switch between bit depths
@@ -141,32 +151,12 @@ void OpenCVWidget::timerEvent(QTimerEvent *event)
     case IPL_DEPTH_8U:
         switch (cvimage->nChannels) {
         case 3: {
-            
-            // Detect face objects
-            cvClearMemStorage( _storage );
-            
-//            qDebug() << _cascade;
-            CvSeq* objects = cvHaarDetectObjects(cvimage, _cascade, _storage, 1.1, 3, CV_HAAR_DO_CANNY_PRUNING, cvSize( 30, 30 ));
-            
-            //TODO: warn if more than one objects
-            int n = (objects ? objects->total : 0);
-            
-            CvRect* rect;
-            // Loop through objects and draw boxes
-            for( int i = 0; i < n; i++ )
-            {
-                rect = (CvRect*)cvGetSeqElem(objects, i);
-                cvRectangle( cvimage,
-                             cvPoint(rect->x, rect->y),
-                             cvPoint(rect->x + rect->width, rect->y + rect->height),
-                             _colors[i%8]
-                             );
-            }
-            
             if ( (cvimage->width != m_image.width()) || (cvimage->height != m_image.height()) ) {
                 QImage temp(cvimage->width, cvimage->height, QImage::Format_RGB32);
                 m_image = temp;
             }
+            drawFaceDetectionFrame(cvimage);
+            
             cvIndex = 0; cvLineStart = 0;
             for (int y = 0; y < cvimage->height; y++) {
                 unsigned char red,green,blue;
@@ -190,10 +180,11 @@ void OpenCVWidget::timerEvent(QTimerEvent *event)
         }
         break;
     default:
-        printf("This type of IplImage is not implemented in QOpenCVWidget\n");
+        printf("This type of IplImage is not implemented in OpenCVWidget\n");
         break;
     }
-    setPixmap(QPixmap::fromImage(m_image));
+    QStandardItem *item = new QStandardItem(QIcon(QPixmap::fromImage(m_image)), "photo");
+    m_imageModel->appendRow(item);
 }
 
 
@@ -358,6 +349,56 @@ void OpenCVWidget::mouseDoubleClickEvent(QMouseEvent *event)
     setFrozen(false);
 }
 
+void OpenCVWidget::drawFaceDetectionFrame(IplImage *cvimage)
+{
+    if(!cvimage)
+        return;
+
+    // thanks for some code snippets from Stef van den Elzen
+    // taken from http://sj.vdelzen.net/2011/05/31/realtime-face-detection-using-opencv-and-cqt/
+    
+    // switch between bit depths
+    switch (cvimage->depth) {
+    case IPL_DEPTH_8U:
+        switch (cvimage->nChannels) {
+        case 3: {
+            
+            // Detect face objects
+            cvClearMemStorage( _storage );
+            
+            //            qDebug() << _cascade;
+            CvSeq* objects = cvHaarDetectObjects(cvimage, _cascade, _storage, 1.2, 3, CV_HAAR_DO_CANNY_PRUNING, cvSize( 64, 64 ));
+            
+            int n = (objects ? objects->total : 0);
+            
+            //if more than one objects, ignore this sequence
+            if (n > 1) {
+                n = 0;
+            }
+            CvRect* rect;
+            // Loop through objects and draw boxes
+            for( int i = 0; i < n; i++ )
+            {
+                rect = (CvRect*)cvGetSeqElem(objects, i);
+                cvRectangle( cvimage,
+                             cvPoint(rect->x - 30, rect->y - 50),
+                             cvPoint(rect->x + rect->width + 30, rect->y + rect->height + 50),
+                             _colors[i%8]
+                             );
+            }
+            break;
+        }
+        default:
+            printf("This number of channels is not supported\n");
+            break;
+        }
+        break;
+    default:
+        printf("This type of IplImage is not implemented in QOpenCVWidget\n");
+        break;
+    }
+}
+
 /*!
  * \brief Crops the RubberBand if not inside the parent widget.
  */
@@ -413,7 +454,7 @@ void OpenCVWidget::toggleFreezeMode()
 
 void OpenCVWidget::setImageUpdateFrequency(const int ms)
 {
-    Q_ASSERT(ms > 0);
+    Q_ASSERT(ms > 0); //TODO: don't assert here, do error handling while runnning
     if (m_timerId > 0)
         killTimer(m_timerId);
     m_updateFreq = ms;
@@ -422,7 +463,7 @@ void OpenCVWidget::setImageUpdateFrequency(const int ms)
 
 int OpenCVWidget::defaultUpdateFrequency() const
 {
-    return 50;
+    return 250;
 }
 
 /*!

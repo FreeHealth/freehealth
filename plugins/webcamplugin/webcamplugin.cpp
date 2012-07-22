@@ -26,6 +26,7 @@
 #include "webcamplugin.h"
 #include "webcamconstants.h"
 #include "webcamphotoprovider.h"
+#include "webcampreferences.h"
 
 #include <utils/log.h>
 
@@ -51,12 +52,15 @@
 #include <QDebug>
 
 using namespace Webcam;
+using namespace Internal;
 
 static inline Core::IUser *user()  { return Core::ICore::instance()->user(); }
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline void messageSplash(const QString &s) {theme()->messageSplashScreen(s); }
 
-WebcamPlugin::WebcamPlugin()
+WebcamPlugin::WebcamPlugin() :
+    ExtensionSystem::IPlugin(),
+    m_prefPage(0)
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating Webcam";
@@ -67,8 +71,10 @@ WebcamPlugin::WebcamPlugin()
     // Add here the Core::IFirstConfigurationPage objects to the pluginmanager object pool
     
     // All preferences pages must be created in this part (before user connection)
+    m_prefPage = new WebcamPreferencesPage(this);
     // And included in the QObject pool
-
+    addObject(m_prefPage);
+    
     m_webcamProvider = new WebcamPhotoProvider();
 
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
@@ -77,9 +83,17 @@ WebcamPlugin::WebcamPlugin()
 
 WebcamPlugin::~WebcamPlugin()
 {
-    ExtensionSystem::PluginManager::instance()->removeObject(m_webcamProvider);
     // Unregister objects from the plugin manager's object pool
     // Delete members
+
+    if(m_webcamProvider) {
+        removeObject(m_webcamProvider);
+        delete m_webcamProvider;
+    }
+    if (m_prefPage) {
+        removeObject(m_prefPage);
+        delete(m_prefPage);
+    }
 }
 
 bool WebcamPlugin::initialize(const QStringList &arguments, QString *errorString)

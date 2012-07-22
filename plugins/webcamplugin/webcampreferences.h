@@ -19,43 +19,81 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developer: Christian A. Reiter <christian.a.reiter@gmail.com>    *
- *   Contributors:                                                         *
+ *   Main Developpers:                                                     *
+ *       ChristianAReiter <christian.a.reiter@gmail.com>                             *
+ *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef WEBCAM_H
-#define WEBCAM_H
+#ifndef WEBCAM_INTERNAL_WEBCAMPREFERENCES_H
+#define WEBCAM_INTERNAL_WEBCAMPREFERENCES_H
 
-#include "webcam_exporter.h"
-#include "webcamphotoprovider.h"
-#include "webcampreferences.h"
+#include <coreplugin/ioptionspage.h>
 
-#include <extensionsystem/iplugin.h>
+#include <QWidget>
+#include <QPointer>
+
+namespace Core {
+class ISettings;
+}
 
 namespace Webcam {
+namespace Internal {
+namespace Ui {
+class WebcamPreferencesWidget;
+}
 
-class WebcamPlugin : public ExtensionSystem::IPlugin
+class WebcamPreferencesWidget : public QWidget
 {
     Q_OBJECT
-public:
-    WebcamPlugin();
-    ~WebcamPlugin();
     
-    bool initialize(const QStringList &arguments, QString *errorString);
-    void extensionsInitialized();
-    //    ShutdownFlag aboutToShutdown();
+public:
+    explicit WebcamPreferencesWidget(QWidget *parent = 0);
+    ~WebcamPreferencesWidget();
+    
+    void setDataToUi();
+    
+    static void writeDefaultSettings(Core::ISettings *s);
+    
+public Q_SLOTS:
+    void saveToSettings(Core::ISettings *s = 0);
     
 private:
-    WebcamPhotoProvider *m_webcamProvider;
-    Internal::WebcamPreferencesPage *m_prefPage;
+    void retranslateUi();
+    void changeEvent(QEvent *e);
     
-private Q_SLOTS:
-    void postCoreInitialization();
-    void coreAboutToClose();
-    //    void triggerAction();
+private:
+    Ui::WebcamPreferencesWidget *ui;
 };
 
-} // namespace Webcam
 
-#endif // WEBCAM_H
+class WebcamPreferencesPage : public Core::IOptionsPage
+{
+public:
+    WebcamPreferencesPage(QObject *parent = 0);
+    ~WebcamPreferencesPage();
+    
+    QString id() const;
+    QString name() const;
+    QString category() const;
+    QString title() const {return name();}
+    
+    void resetToDefaults();
+    void checkSettingsValidity();
+    void applyChanges();
+    void finish();
+    
+    QString helpPage() {return QString();}
+    
+    static void writeDefaultSettings(Core::ISettings *s) {WebcamPreferencesWidget::writeDefaultSettings(s);}
+    
+    QWidget *createPage(QWidget *parent = 0);
+    
+private:
+    QPointer<Internal::WebcamPreferencesWidget> m_Widget;
+};
+
+
+} // namespace Internal
+} // namespace Webcam
+#endif // WEBCAM_INTERNAL_WEBCAMPREFERENCES_H
 
