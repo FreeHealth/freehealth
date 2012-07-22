@@ -1,1 +1,1 @@
-include(../aggregation/aggregation.pri)
+include(../aggregation.pri)

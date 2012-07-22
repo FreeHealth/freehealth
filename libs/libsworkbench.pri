@@ -7,9 +7,18 @@ win32 {
 
 include(rpath.pri)
 
-CONFIG *= dll
+CONFIG *= shared dll
 
 DESTDIR  = $${BUILD_LIB_PATH}
 
 
-# TARGET = $$qtLibraryTarget($$TARGET)
+# TARGET = $$qtLibraryName($$TARGET)
+
+#!macx {
+#    win32 {
+#        target.path = /bin
+#    } else {
+#        target.path = /$$IDE_LIBRARY_BASENAME/qtcreator
+#    }
+#    INSTALLS += target
+#}
