@@ -253,11 +253,14 @@ bool CategoryBase::createDatabase(const QString &connectionName , const QString 
     }
 
     // Add version number
+    DB.commit();
     QSqlQuery query(DB);
     query.prepare(prepareInsertQuery(Constants::Table_VERSION));
     query.bindValue(Constants::VERSION_TEXT, Constants::DB_ACTUALVERSION);
     if (!query.exec()) {
         LOG_QUERY_ERROR(query);
+        query.finish();
+        DB.rollback();
         return false;
     }
 
@@ -472,8 +475,10 @@ bool CategoryBase::saveCategories(const QVector<CategoryItem *> &categories, boo
             category->setData(CategoryItem::DbOnly_Id, query.lastInsertId());
         } else {
             LOG_QUERY_ERROR(query);
-            if (createTransaction)
+            query.finish();
+            if (createTransaction) {
                 DB.rollback();
+            }
             return false;
         }
         category->setDirty(false);

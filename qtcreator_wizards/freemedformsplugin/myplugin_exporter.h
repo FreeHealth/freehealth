@@ -29,9 +29,9 @@
 #include <QtCore/QtGlobal>
 
 #if defined(%PluginName:u%_LIBRARY)
-#  define %PluginName:u%SHARED_EXPORT Q_DECL_EXPORT
+#  define %PluginName:u%_EXPORT Q_DECL_EXPORT
 #else
-#  define %PluginName:u%SHARED_EXPORT Q_DECL_IMPORT
+#  define %PluginName:u%_EXPORT Q_DECL_IMPORT
 #endif
 
 #endif // %PluginName:u%_EXPORTER_H

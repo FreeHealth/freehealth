@@ -19,37 +19,21 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developer: %Author% <%AuthorEmail%>                  *
+ *   Main Developer: Fredman, Eric Maeker <eric.maeker@gmail.com>          *
  *   Contributors:                                                         *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef %PluginName:u%_%CppHeaderSuffix:u%
-#define %PluginName:u%_%CppHeaderSuffix:u%
+#ifndef AXISANTE4CONSTANTS_H
+#define AXISANTE4CONSTANTS_H
 
-#include <extensionsystem/iplugin.h>
+namespace Axisante4 {
+namespace Constants {
 
-namespace %PluginName% {
-namespace Internal {
+const char * const ACTION_ID = "Axisante4.Action";
+const char * const MENU_ID = "Axisante4.Menu";
 
-class %PluginName%Plugin : public ExtensionSystem::IPlugin
-{
-    Q_OBJECT
+} // namespace Axisante4
+} // namespace Constants
 
-public:
-    %PluginName%Plugin();
-    ~%PluginName%Plugin();
+#endif // AXISANTE4CONSTANTS_H
 
-    bool initialize(const QStringList &arguments, QString *errorString);
-    void extensionsInitialized();
-//    ShutdownFlag aboutToShutdown();
-
-private Q_SLOTS:
-    void postCoreInitialization();
-    void coreAboutToClose();
-//    void triggerAction();
-};
-
-} // namespace Internal
-} // namespace %PluginName%
-
-#endif // %PluginName:u%_%CppHeaderSuffix:u%

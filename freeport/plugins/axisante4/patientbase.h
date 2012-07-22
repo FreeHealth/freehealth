@@ -19,37 +19,34 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developer: %Author% <%AuthorEmail%>                  *
+ *   Main Developer: Fredman, Eric Maeker <eric.maeker@gmail.com>          *
  *   Contributors:                                                         *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef %PluginName:u%_%CppHeaderSuffix:u%
-#define %PluginName:u%_%CppHeaderSuffix:u%
+#ifndef AXISANTE4_PATIENTBASE_H
+#define AXISANTE4_PATIENTBASE_H
 
-#include <extensionsystem/iplugin.h>
+#include <QObject>
+#include <QString>
 
-namespace %PluginName% {
-namespace Internal {
+namespace AxiSante4 {
 
-class %PluginName%Plugin : public ExtensionSystem::IPlugin
+class PatientBase : public QObject
 {
     Q_OBJECT
-
 public:
-    %PluginName%Plugin();
-    ~%PluginName%Plugin();
+    PatientBase(QObject *parent);
+    bool initialize();
 
-    bool initialize(const QStringList &arguments, QString *errorString);
-    void extensionsInitialized();
-//    ShutdownFlag aboutToShutdown();
+    void setDatabasePath(const QString &absFilePath);
 
-private Q_SLOTS:
-    void postCoreInitialization();
-    void coreAboutToClose();
-//    void triggerAction();
+    bool startDataExtraction();
+    bool extractNextPatient();
+
+private:
+    QString _dbFilePath;
 };
 
-} // namespace Internal
-} // namespace %PluginName%
+} // namespace AxiSante4
 
-#endif // %PluginName:u%_%CppHeaderSuffix:u%
+#endif // AXISANTE4_PATIENTBASE_H

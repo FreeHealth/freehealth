@@ -19,37 +19,21 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developer: %Author% <%AuthorEmail%>                  *
- *   Contributors:                                                         *
+ *   Main Developper : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef %PluginName:u%_%CppHeaderSuffix:u%
-#define %PluginName:u%_%CppHeaderSuffix:u%
+/**
+ * \class Port::RecoverableData
+ * Define all the recoverable data for any plugin. This class will be called
+ * to correctly the UI and manage the different steps of data integration.\n
+ * Inert data class (non-thread safe).
+*/
 
-#include <extensionsystem/iplugin.h>
+#include "recoverabledata.h"
 
-namespace %PluginName% {
-namespace Internal {
+using namespace Port;
 
-class %PluginName%Plugin : public ExtensionSystem::IPlugin
+RecoverableData::RecoverableData()
 {
-    Q_OBJECT
-
-public:
-    %PluginName%Plugin();
-    ~%PluginName%Plugin();
-
-    bool initialize(const QStringList &arguments, QString *errorString);
-    void extensionsInitialized();
-//    ShutdownFlag aboutToShutdown();
-
-private Q_SLOTS:
-    void postCoreInitialization();
-    void coreAboutToClose();
-//    void triggerAction();
-};
-
-} // namespace Internal
-} // namespace %PluginName%
-
-#endif // %PluginName:u%_%CppHeaderSuffix:u%
+}

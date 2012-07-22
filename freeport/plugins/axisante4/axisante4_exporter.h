@@ -19,37 +19,20 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developer: %Author% <%AuthorEmail%>                  *
+ *   Main Developer: Fredman, Eric Maeker <eric.maeker@gmail.com>                  *
  *   Contributors:                                                         *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef %PluginName:u%_%CppHeaderSuffix:u%
-#define %PluginName:u%_%CppHeaderSuffix:u%
+#ifndef AXISANTE4_EXPORTER_H
+#define AXISANTE4_EXPORTER_H
 
-#include <extensionsystem/iplugin.h>
+#include <QtCore/QtGlobal>
 
-namespace %PluginName% {
-namespace Internal {
+#if defined(AXISANTE4_LIBRARY)
+#  define AXISANTE4_EXPORT Q_DECL_EXPORT
+#else
+#  define AXISANTE4_EXPORT Q_DECL_IMPORT
+#endif
 
-class %PluginName%Plugin : public ExtensionSystem::IPlugin
-{
-    Q_OBJECT
+#endif // AXISANTE4_EXPORTER_H
 
-public:
-    %PluginName%Plugin();
-    ~%PluginName%Plugin();
-
-    bool initialize(const QStringList &arguments, QString *errorString);
-    void extensionsInitialized();
-//    ShutdownFlag aboutToShutdown();
-
-private Q_SLOTS:
-    void postCoreInitialization();
-    void coreAboutToClose();
-//    void triggerAction();
-};
-
-} // namespace Internal
-} // namespace %PluginName%
-
-#endif // %PluginName:u%_%CppHeaderSuffix:u%

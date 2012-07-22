@@ -15,8 +15,10 @@ include( portplugin_dependencies.pri )
 
 HEADERS += portplugin.h \
     port_exporter.h \
-    constants.h
+    constants.h \
+    recoverabledata.h
 
 SOURCES += portplugin.cpp \
+    recoverabledata.cpp
 
 OTHER_FILES += Port.pluginspec
