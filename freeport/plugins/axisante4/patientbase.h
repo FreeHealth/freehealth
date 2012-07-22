@@ -26,12 +26,16 @@
 #ifndef AXISANTE4_PATIENTBASE_H
 #define AXISANTE4_PATIENTBASE_H
 
+#include <QObject>
+#include <QString>
+
 namespace AxiSante4 {
 
-class PatientBase
+class PatientBase : public QObject
 {
+    Q_OBJECT
 public:
-    PatientBase();
+    PatientBase(QObject *parent);
     bool initialize();
 
     void setDatabasePath(const QString &absFilePath);
