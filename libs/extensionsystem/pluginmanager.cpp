@@ -2,28 +2,31 @@
 **
 ** This file is part of Qt Creator
 **
-** Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+** Copyright (c) 2012 Nokia Corporation and/or its subsidiary(-ies).
 **
 ** Contact: Nokia Corporation (qt-info@nokia.com)
 **
-** Commercial Usage
-**
-** Licensees holding valid Qt Commercial licenses may use this file in
-** accordance with the Qt Commercial License Agreement provided with the
-** Software or, alternatively, in accordance with the terms contained in
-** a written agreement between you and Nokia.
 **
 ** GNU Lesser General Public License Usage
 **
-** Alternatively, this file may be used under the terms of the GNU Lesser
-** General Public License version 2.1 as published by the Free Software
-** Foundation and appearing in the file LICENSE.LGPL included in the
-** packaging of this file.  Please review the following information to
-** ensure the GNU Lesser General Public License version 2.1 requirements
-** will be met: http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
+** This file may be used under the terms of the GNU Lesser General Public
+** License version 2.1 as published by the Free Software Foundation and
+** appearing in the file LICENSE.LGPL included in the packaging of this file.
+** Please review the following information to ensure the GNU Lesser General
+** Public License version 2.1 requirements will be met:
+** http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
 **
-** If you are unsure which license is appropriate for your use, please
-** contact the sales department at http://www.qtsoftware.com/contact.
+** In addition, as a special exception, Nokia gives you certain additional
+** rights. These rights are described in the Nokia Qt LGPL Exception
+** version 1.1, included in the file LGPL_EXCEPTION.txt in this package.
+**
+** Other Usage
+**
+** Alternatively, this file may be used in accordance with the terms and
+** conditions contained in a signed written agreement between you and Nokia.
+**
+** If you have questions regarding the use of this file, please contact
+** Nokia at qt-info@nokia.com.
 **
 **************************************************************************/
 
@@ -33,15 +36,26 @@
 #include "pluginspec_p.h"
 #include "optionsparser.h"
 #include "iplugin.h"
+#include "plugincollection.h"
 
-#include <QtCore/QMetaProperty>
-#include <QtCore/QDir>
-#include <QtCore/QTextStream>
-#include <QtCore/QWriteLocker>
+#include <QEventLoop>
+#include <QDateTime>
+#include <QDir>
+#include <QMetaProperty>
+#include <QSettings>
+#include <QTextStream>
+#include <QTime>
+#include <QWriteLocker>
 #include <QtDebug>
+#include <QTimer>
+
 #ifdef WITH_TESTS
 #include <QTest>
 #endif
+
+static const char C_IGNORED_PLUGINS[] = "Plugins/Ignored";
+static const char C_FORCEENABLED_PLUGINS[] = "Plugins/ForceEnabled";
+static const int DELAYED_INITIALIZE_INTERVAL = 20; // ms
 
 typedef QList<ExtensionSystem::PluginSpec *> PluginSpecSet;
 
@@ -49,9 +63,10 @@ enum { debugLeaks = 0 };
 
 /*!
     \namespace ExtensionSystem
-    \brief The ExtensionSystem namespace provides classes that belong to the core plugin system.
+    \brief The ExtensionSystem namespace provides classes that belong to the
+           core plugin system.
 
-    The basic extension system contains of the plugin manager and its supporting classes,
+    The basic extension system contains the plugin manager and its supporting classes,
     and the IPlugin interface that must be implemented by plugin providers.
 */
 
@@ -103,14 +118,82 @@ enum { debugLeaks = 0 };
     be implemented and added to the object pool. The plugin that provides the
     extension point looks for implementations of the class / interface in the object pool.
     \code
-        // plugin A provides a "MimeTypeHandler" extension point
+        // Plugin A provides a "MimeTypeHandler" extension point
         // in plugin B:
         MyMimeTypeHandler *handler = new MyMimeTypeHandler();
         ExtensionSystem::PluginManager::instance()->addObject(handler);
-        // in plugin A:
+        // In plugin A:
         QList<MimeTypeHandler *> mimeHandlers =
             ExtensionSystem::PluginManager::instance()->getObjects<MimeTypeHandler>();
     \endcode
+
+
+    The \c{ExtensionSystem::Invoker} class template provides "syntactic sugar"
+    for using "soft" extension points that may or may not be provided by an
+    object in the pool. This approach does neither require the "user" plugin being
+    linked against the "provider" plugin nor a common shared
+    header file. The exposed interface is implicitly given by the
+    invokable methods of the "provider" object in the object pool.
+
+    The \c{ExtensionSystem::invoke} function template encapsulates
+    {ExtensionSystem::Invoker} construction for the common case where 
+    the success of the call is not checked.
+
+    \code
+        // In the "provide" plugin A:
+        namespace PluginA {
+        class SomeProvider : public QObject
+        {
+            Q_OBJECT
+
+        public:
+            Q_INVOKABLE QString doit(const QString &msg, int n) {
+            {
+                qDebug() << "I AM DOING IT " << msg;
+                return QString::number(n);
+            }
+        };
+        } // namespace PluginA
+
+
+        // In the "user" plugin B:
+        int someFuntionUsingPluginA()
+        {
+            using namespace ExtensionSystem;
+
+            QObject *target = PluginManager::instance()
+                ->getObjectByClassName("PluginA::SomeProvider");
+
+            if (target) {
+                // Some random argument.
+                QString msg = "REALLY.";
+
+                // Plain function call, no return value.
+                invoke<void>(target, "doit", msg, 2);
+
+                // Plain function with no return value.
+                qDebug() << "Result: " << invoke<QString>(target, "doit", msg, 21);
+
+                // Record success of function call with return value.
+                Invoker<QString> in1(target, "doit", msg, 21);
+                qDebug() << "Success: (expected)" << in1.wasSuccessful();
+
+                // Try to invoke a non-existing function.
+                Invoker<QString> in2(target, "doitWrong", msg, 22);
+                qDebug() << "Success (not expected):" << in2.wasSuccessful();
+
+            } else {
+
+                // We have to cope with plugin A's absence.
+            }
+        };
+    \endcode
+
+    \bold Note: The type of the parameters passed to the \c{invoke()} calls
+    is deduced from the parameters themselves and must match the type of
+    the arguments of the called functions \e{exactly}. No conversion or even
+    integer promotions are applicable, so to invoke a function with a \c{long}
+    parameter explicitly use \c{long(43)} or such.
 
     \bold Note: The object pool manipulating functions are thread-safe.
 */
@@ -247,6 +330,31 @@ void PluginManager::loadPlugins()
 }
 
 /*!
+    \fn bool PluginManager::hasError() const
+    Returns true if any plugin has errors even though it is enabled.
+    Most useful to call after loadPlugins().
+*/
+bool PluginManager::hasError() const
+{
+    foreach (PluginSpec *spec, plugins()) {
+        // only show errors on startup if plugin is enabled.
+        if (spec->hasError() && spec->isEnabled() && !spec->isDisabledIndirectly()) {
+            return true;
+        }
+    }
+    return false;
+}
+
+/*!
+    \fn void PluginManager::shutdown()
+    Shuts down and deletes all plugins.
+*/
+void PluginManager::shutdown()
+{
+    d->shutdown();
+}
+
+/*!
     \fn QStringList PluginManager::pluginPaths() const
     The list of paths were the plugin manager searches for plugins.
 
@@ -296,6 +404,45 @@ void PluginManager::setFileExtension(const QString &extension)
 }
 
 /*!
+    Define the user specific settings to use for information about enabled/disabled plugins.
+    Needs to be set before the plugin search path is set with setPluginPaths().
+*/
+void PluginManager::setSettings(QSettings *settings)
+{
+    d->setSettings(settings);
+}
+
+/*!
+    Define the global (user-independent) settings to use for information about default disabled plugins.
+    Needs to be set before the plugin search path is set with setPluginPaths().
+*/
+void PluginManager::setGlobalSettings(QSettings *settings)
+{
+    d->setGlobalSettings(settings);
+}
+
+/*!
+    Returns the user specific settings used for information about enabled/disabled plugins.
+*/
+QSettings *PluginManager::settings() const
+{
+    return d->settings;
+}
+
+/*!
+    Returns the global (user-independent) settings used for information about default disabled plugins.
+*/
+QSettings *PluginManager::globalSettings() const
+{
+    return d->globalSettings;
+}
+
+void PluginManager::writeSettings()
+{
+    d->writeSettings();
+}
+
+/*!
     \fn QStringList PluginManager::arguments() const
     The arguments left over after parsing (Neither startup nor plugin
     arguments). Typically, this will be the list of files to open.
@@ -320,6 +467,96 @@ QList<PluginSpec *> PluginManager::plugins() const
     return d->pluginSpecs;
 }
 
+QHash<QString, PluginCollection *> PluginManager::pluginCollections() const
+{
+    return d->pluginCategories;
+}
+
+/*!
+    \fn QString PluginManager::serializedArguments() const
+
+    Serialize plugin options and arguments for sending in a single string
+    via QtSingleApplication:
+    ":myplugin|-option1|-option2|:arguments|argument1|argument2",
+    as a list of lists started by a keyword with a colon. Arguments are last.
+
+    \sa setPluginPaths()
+*/
+
+static const char argumentKeywordC[] = ":arguments";
+
+QString PluginManager::serializedArguments() const
+{
+    const QChar separator = QLatin1Char('|');
+    QString rc;
+    foreach (const PluginSpec *ps, plugins()) {
+        if (!ps->arguments().isEmpty()) {
+            if (!rc.isEmpty())
+                rc += separator;
+            rc += QLatin1Char(':');
+            rc += ps->name();
+            rc += separator;
+            rc +=  ps->arguments().join(QString(separator));
+        }
+    }
+    if (!d->arguments.isEmpty()) {
+        if (!rc.isEmpty())
+            rc += separator;
+        rc += QLatin1String(argumentKeywordC);
+        // If the argument appears to be a file, make it absolute
+        // when sending to another instance.
+        foreach(const QString &argument, d->arguments) {
+            rc += separator;
+            const QFileInfo fi(argument);
+            if (fi.exists() && fi.isRelative()) {
+                rc += fi.absoluteFilePath();
+            } else {
+                rc += argument;
+            }
+        }
+    }
+    return rc;
+}
+
+/* Extract a sublist from the serialized arguments
+ * indicated by a keyword starting with a colon indicator:
+ * ":a,i1,i2,:b:i3,i4" with ":a" -> "i1,i2"
+ */
+static QStringList subList(const QStringList &in, const QString &key)
+{
+    QStringList rc;
+    // Find keyword and copy arguments until end or next keyword
+    const QStringList::const_iterator inEnd = in.constEnd();
+    QStringList::const_iterator it = qFind(in.constBegin(), inEnd, key);
+    if (it != inEnd) {
+        const QChar nextIndicator = QLatin1Char(':');
+        for (++it; it != inEnd && !it->startsWith(nextIndicator); ++it)
+            rc.append(*it);
+    }
+    return rc;
+}
+
+/*!
+    \fn PluginManager::remoteArguments(const QString &argument)
+
+    Parses the options encoded by serializedArguments() const
+    and passes them on to the respective plugins along with the arguments.
+*/
+
+void PluginManager::remoteArguments(const QString &serializedArgument)
+{
+    if (serializedArgument.isEmpty())
+        return;
+    QStringList serializedArguments = serializedArgument.split(QLatin1Char('|'));
+    const QStringList arguments = subList(serializedArguments, QLatin1String(argumentKeywordC));
+    foreach (const PluginSpec *ps, plugins()) {
+        if (ps->state() == PluginSpec::Running) {
+            const QStringList pluginOptions = subList(serializedArguments, QLatin1Char(':') + ps->name());
+            ps->plugin()->remoteCommand(pluginOptions, arguments);
+        }
+    }
+}
+
 /*!
     \fn bool PluginManager::parseOptions(const QStringList &args, const QMap<QString, bool> &appOptions, QMap<QString, QString> *foundAppOptions, QString *errorString)
     Takes the list of command line options in \a args and parses them.
@@ -328,12 +565,12 @@ QList<PluginSpec *> PluginManager::plugins() const
     The caller (the application) may register itself for options via the \a appOptions list, containing pairs
     of "option string" and a bool that indicates if the option requires an argument.
     Application options always override any plugin's options.
-    
+
     \a foundAppOptions is set to pairs of ("option string", "argument") for any application options that were found.
     The command line options that were not processed can be retrieved via the arguments() method.
     If an error occurred (like missing argument for an option that requires one), \a errorString contains
     a descriptive message of the error.
-    
+
     Returns if there was an error.
  */
 bool PluginManager::parseOptions(const QStringList &args,
@@ -365,7 +602,7 @@ static inline void formatOption(QTextStream &str,
         str << " <" << parm << '>';
         remainingIndent -= 3 + parm.size();
     }
-    indent(str, qMax(0, remainingIndent));
+    indent(str, qMax(1, remainingIndent));
     str << description << '\n';
 }
 
@@ -380,6 +617,14 @@ void PluginManager::formatOptions(QTextStream &str, int optionIndentation, int d
     formatOption(str, QLatin1String(OptionsParser::NO_LOAD_OPTION),
                  QLatin1String("plugin"), QLatin1String("Do not load <plugin>"),
                  optionIndentation, descriptionIndentation);
+    formatOption(str, QLatin1String(OptionsParser::PROFILE_OPTION),
+                 QString(), QLatin1String("Profile plugin loading"),
+                 optionIndentation, descriptionIndentation);
+#ifdef WITH_TESTS
+    formatOption(str, QLatin1String(OptionsParser::TEST_OPTION),
+                 QLatin1String("plugin|all"), QLatin1String("Run plugin's tests"),
+                 optionIndentation, descriptionIndentation);
+#endif
 }
 
 /*!
@@ -423,19 +668,26 @@ void PluginManager::startTests()
 {
 #ifdef WITH_TESTS
     foreach (PluginSpec *pluginSpec, d->testSpecs) {
+        if (!pluginSpec->plugin())
+            continue;
         const QMetaObject *mo = pluginSpec->plugin()->metaObject();
         QStringList methods;
         methods.append("arg0");
         // We only want slots starting with "test"
         for (int i = mo->methodOffset(); i < mo->methodCount(); ++i) {
-            if (QByteArray(mo->method(i).signature()).startsWith("test")) {
+            if (QByteArray(mo->method(i).signature()).startsWith("test") &&
+                !QByteArray(mo->method(i).signature()).endsWith("_data()")) {
                 QString method = QString::fromLatin1(mo->method(i).signature());
                 methods.append(method.left(method.size()-2));
             }
         }
-        QTest::qExec(pluginSpec->plugin(), methods);
-
+        // Don't run QTest::qExec with only one argument, that'd run
+        // *all* slots as tests.
+        if (methods.size() > 1)
+            QTest::qExec(pluginSpec->plugin(), methods);
     }
+    if (!d->testSpecs.isEmpty())
+        QTimer::singleShot(1, QCoreApplication::instance(), SLOT(quit()));
 #endif
 }
 
@@ -454,7 +706,7 @@ bool PluginManager::runningTests() const
  */
 QString PluginManager::testDataDirectory() const
 {
-    QByteArray ba = qgetenv("IDETESTDIR");
+    QByteArray ba = qgetenv("QTCREATOR_TEST_DIR");
     QString s = QString::fromLocal8Bit(ba.constData(), ba.size());
     if (s.isEmpty()) {
         s = IDE_TEST_DIR;
@@ -462,6 +714,28 @@ QString PluginManager::testDataDirectory() const
     }
     s = QDir::cleanPath(s);
     return s;
+}
+
+/*!
+    \fn void PluginManager::profilingReport(const char *what, const PluginSpec *spec = 0)
+
+    Create a profiling entry showing the elapsed time if profiling is activated.
+*/
+
+void PluginManager::profilingReport(const char *what, const PluginSpec *spec)
+{
+    d->profilingReport(what, spec);
+}
+
+
+/*!
+    \fn void PluginManager::loadQueue()
+
+    Returns a list of plugins in load order.
+*/
+QList<PluginSpec *> PluginManager::loadQueue()
+{
+    return d->loadQueue();
 }
 
 //============PluginManagerPrivate===========
@@ -476,6 +750,31 @@ PluginSpec *PluginManagerPrivate::createSpec()
 }
 
 /*!
+    \fn void PluginManagerPrivate::setSettings(QSettings *settings)
+    \internal
+*/
+void PluginManagerPrivate::setSettings(QSettings *s)
+{
+    if (settings)
+        delete settings;
+    settings = s;
+    if (settings)
+        settings->setParent(this);
+}
+
+/*!
+    \internal
+*/
+void PluginManagerPrivate::setGlobalSettings(QSettings *s)
+{
+    if (globalSettings)
+        delete globalSettings;
+    globalSettings = s;
+    if (globalSettings)
+        globalSettings->setParent(this);
+}
+
+/*!
     \fn PluginSpecPrivate *PluginManagerPrivate::privateSpec(PluginSpec *spec)
     \internal
 */
@@ -484,14 +783,40 @@ PluginSpecPrivate *PluginManagerPrivate::privateSpec(PluginSpec *spec)
     return spec->d;
 }
 
+void PluginManagerPrivate::nextDelayedInitialize()
+{
+    while (!delayedInitializeQueue.isEmpty()) {
+        PluginSpec *spec = delayedInitializeQueue.takeFirst();
+        profilingReport(">delayedInitialize", spec);
+        bool delay = spec->d->delayedInitialize();
+        profilingReport("<delayedInitialize", spec);
+        if (delay)
+            break; // do next delayedInitialize after a delay
+    }
+    if (delayedInitializeQueue.isEmpty()) {
+        delete delayedInitializeTimer;
+        delayedInitializeTimer = 0;
+    } else {
+        delayedInitializeTimer->start();
+    }
+}
+
 /*!
     \fn PluginManagerPrivate::PluginManagerPrivate(PluginManager *pluginManager)
     \internal
 */
-PluginManagerPrivate::PluginManagerPrivate(PluginManager *pluginManager)
-    : extension("xml"), q(pluginManager)
+PluginManagerPrivate::PluginManagerPrivate(PluginManager *pluginManager) :
+    extension(QLatin1String("xml")),
+    delayedInitializeTimer(0),
+    shutdownEventLoop(0),
+    m_profileElapsedMS(0),
+    m_profilingVerbosity(0),
+    settings(0),
+    globalSettings(0),
+    q(pluginManager)
 {
 }
+
 
 /*!
     \fn PluginManagerPrivate::~PluginManagerPrivate()
@@ -499,19 +824,70 @@ PluginManagerPrivate::PluginManagerPrivate(PluginManager *pluginManager)
 */
 PluginManagerPrivate::~PluginManagerPrivate()
 {
-    stopAll();
     qDeleteAll(pluginSpecs);
-    if (!allObjects.isEmpty()) {
-        qDebug() << "There are" << allObjects.size() << "objects left in the plugin manager pool: " << allObjects;
+    qDeleteAll(pluginCategories);
+}
+
+/*!
+    \fn void PluginManagerPrivate::writeSettings()
+    \internal
+*/
+void PluginManagerPrivate::writeSettings()
+{
+    if (!settings)
+        return;
+    QStringList tempDisabledPlugins;
+    QStringList tempForceEnabledPlugins;
+    foreach(PluginSpec *spec, pluginSpecs) {
+        if (!spec->isDisabledByDefault() && !spec->isEnabled())
+            tempDisabledPlugins.append(spec->name());
+        if (spec->isDisabledByDefault() && spec->isEnabled())
+            tempForceEnabledPlugins.append(spec->name());
+    }
+
+    settings->setValue(QLatin1String(C_IGNORED_PLUGINS), tempDisabledPlugins);
+    settings->setValue(QLatin1String(C_FORCEENABLED_PLUGINS), tempForceEnabledPlugins);
+}
+
+/*!
+    \fn void PluginManagerPrivate::readSettings()
+    \internal
+*/
+void PluginManagerPrivate::readSettings()
+{
+    if (globalSettings) {
+        defaultDisabledPlugins = globalSettings->value(QLatin1String(C_IGNORED_PLUGINS)).toStringList();
+    }
+    if (settings) {
+        disabledPlugins = settings->value(QLatin1String(C_IGNORED_PLUGINS)).toStringList();
+        forceEnabledPlugins = settings->value(QLatin1String(C_FORCEENABLED_PLUGINS)).toStringList();
     }
 }
 
+/*!
+    \fn void PluginManagerPrivate::stopAll()
+    \internal
+*/
 void PluginManagerPrivate::stopAll()
 {
+    if (delayedInitializeTimer && delayedInitializeTimer->isActive()) {
+        delayedInitializeTimer->stop();
+        delete delayedInitializeTimer;
+        delayedInitializeTimer = 0;
+    }
     QList<PluginSpec *> queue = loadQueue();
     foreach (PluginSpec *spec, queue) {
         loadPlugin(spec, PluginSpec::Stopped);
     }
+}
+
+/*!
+    \fn void PluginManagerPrivate::deleteAll()
+    \internal
+*/
+void PluginManagerPrivate::deleteAll()
+{
+    QList<PluginSpec *> queue = loadQueue();
     QListIterator<PluginSpec *> it(queue);
     it.toBack();
     while (it.hasPrevious()) {
@@ -538,6 +914,13 @@ void PluginManagerPrivate::addObject(QObject *obj)
 
         if (debugLeaks)
             qDebug() << "PluginManagerPrivate::addObject" << obj << obj->objectName();
+
+        if (m_profilingVerbosity && !m_profileTimer.isNull()) {
+            // Report a timestamp when adding an object. Useful for profiling
+            // its initialization time.
+            const int absoluteElapsedMS = m_profileTimer->elapsed();
+            qDebug("  %-43s %8dms", obj->metaObject()->className(), absoluteElapsedMS);
+        }
 
         allObjects.append(obj);
     }
@@ -584,9 +967,49 @@ void PluginManagerPrivate::loadPlugins()
     QListIterator<PluginSpec *> it(queue);
     it.toBack();
     while (it.hasPrevious()) {
-        loadPlugin(it.previous(), PluginSpec::Running);
+        PluginSpec *spec = it.previous();
+        loadPlugin(spec, PluginSpec::Running);
+        if (spec->state() == PluginSpec::Running)
+            delayedInitializeQueue.append(spec);
     }
     emit q->pluginsChanged();
+
+    delayedInitializeTimer = new QTimer;
+    delayedInitializeTimer->setInterval(DELAYED_INITIALIZE_INTERVAL);
+    delayedInitializeTimer->setSingleShot(true);
+    connect(delayedInitializeTimer, SIGNAL(timeout()),
+            this, SLOT(nextDelayedInitialize()));
+    delayedInitializeTimer->start();
+}
+
+/*!
+    \fn void PluginManagerPrivate::shutdown()
+    \internal
+*/
+void PluginManagerPrivate::shutdown()
+{
+    stopAll();
+    if (!asynchronousPlugins.isEmpty()) {
+        shutdownEventLoop = new QEventLoop;
+        shutdownEventLoop->exec();
+    }
+    deleteAll();
+    if (!allObjects.isEmpty()) {
+        qDebug() << "There are" << allObjects.size() << "objects left in the plugin manager pool: " << allObjects;
+    }
+}
+
+/*!
+    \fn void PluginManagerPrivate::asyncShutdownFinished()
+    \internal
+*/
+void PluginManagerPrivate::asyncShutdownFinished()
+{
+    IPlugin *plugin = qobject_cast<IPlugin *>(sender());
+    Q_ASSERT(plugin);
+    asynchronousPlugins.removeAll(plugin->pluginSpec());
+    if (asynchronousPlugins.isEmpty())
+        shutdownEventLoop->exit();
 }
 
 /*!
@@ -627,11 +1050,10 @@ bool PluginManagerPrivate::loadQueue(PluginSpec *spec, QList<PluginSpec *> &queu
     circularityCheckQueue.append(spec);
     // check if we have the dependencies
     if (spec->state() == PluginSpec::Invalid || spec->state() == PluginSpec::Read) {
-        spec->d->hasError = true;
-        spec->d->errorString += "\n";
-        spec->d->errorString += PluginManager::tr("Cannot load plugin because dependencies are not resolved");
+        queue.append(spec);
         return false;
     }
+
     // add dependencies
     foreach (PluginSpec *depSpec, spec->dependencySpecs()) {
         if (!loadQueue(depSpec, queue, circularityCheckQueue)) {
@@ -653,16 +1075,34 @@ bool PluginManagerPrivate::loadQueue(PluginSpec *spec, QList<PluginSpec *> &queu
 */
 void PluginManagerPrivate::loadPlugin(PluginSpec *spec, PluginSpec::State destState)
 {
-    if (spec->hasError())
+    if (spec->hasError() || spec->state() != destState-1)
         return;
-    if (destState == PluginSpec::Running) {
+
+    // don't load disabled plugins.
+    if ((spec->isDisabledIndirectly() || !spec->isEnabled()) && destState == PluginSpec::Loaded)
+        return;
+
+    switch (destState) {
+    case PluginSpec::Running:
+        profilingReport(">initializeExtensions", spec);
         spec->d->initializeExtensions();
+        profilingReport("<initializeExtensions", spec);
         return;
-    } else if (destState == PluginSpec::Deleted) {
+    case PluginSpec::Deleted:
+        profilingReport(">delete", spec);
         spec->d->kill();
+        profilingReport("<delete", spec);
         return;
+    default:
+        break;
     }
-    foreach (PluginSpec *depSpec, spec->dependencySpecs()) {
+    // check if dependencies have loaded without error
+    QHashIterator<PluginDependency, PluginSpec *> it(spec->dependencySpecs());
+    while (it.hasNext()) {
+        it.next();
+        if (it.key().type == PluginDependency::Optional)
+            continue;
+        PluginSpec *depSpec = it.value();
         if (depSpec->state() != destState) {
             spec->d->hasError = true;
             spec->d->errorString =
@@ -671,12 +1111,29 @@ void PluginManagerPrivate::loadPlugin(PluginSpec *spec, PluginSpec::State destSt
             return;
         }
     }
-    if (destState == PluginSpec::Loaded)
+    switch (destState) {
+    case PluginSpec::Loaded:
+        profilingReport(">loadLibrary", spec);
         spec->d->loadLibrary();
-    else if (destState == PluginSpec::Initialized)
+        profilingReport("<loadLibrary", spec);
+        break;
+    case PluginSpec::Initialized:
+        profilingReport(">initializePlugin", spec);
         spec->d->initializePlugin();
-    else if (destState == PluginSpec::Stopped)
-        spec->d->stop();
+        profilingReport("<initializePlugin", spec);
+        break;
+    case PluginSpec::Stopped:
+        profilingReport(">stop", spec);
+        if (spec->d->stop() == IPlugin::AsynchronousShutdown) {
+            asynchronousPlugins << spec;
+            connect(spec->plugin(), SIGNAL(asynchronousShutdownFinished()),
+                    this, SLOT(asyncShutdownFinished()));
+        }
+        profilingReport("<stop", spec);
+        break;
+    default:
+        break;
+    }
 }
 
 /*!
@@ -686,6 +1143,7 @@ void PluginManagerPrivate::loadPlugin(PluginSpec *spec, PluginSpec::State destSt
 void PluginManagerPrivate::setPluginPaths(const QStringList &paths)
 {
     pluginPaths = paths;
+    readSettings();
     readPluginPaths();
 }
 
@@ -695,23 +1153,48 @@ void PluginManagerPrivate::setPluginPaths(const QStringList &paths)
 */
 void PluginManagerPrivate::readPluginPaths()
 {
+    qDeleteAll(pluginCategories);
     qDeleteAll(pluginSpecs);
     pluginSpecs.clear();
+    pluginCategories.clear();
 
     QStringList specFiles;
     QStringList searchPaths = pluginPaths;
     while (!searchPaths.isEmpty()) {
         const QDir dir(searchPaths.takeFirst());
-        const QFileInfoList files = dir.entryInfoList(QStringList() << QString("*.%1").arg(extension), QDir::Files);
+        const QString pattern = QLatin1String("*.") + extension;
+        const QFileInfoList files = dir.entryInfoList(QStringList(pattern), QDir::Files);
         foreach (const QFileInfo &file, files)
             specFiles << file.absoluteFilePath();
         const QFileInfoList dirs = dir.entryInfoList(QDir::Dirs|QDir::NoDotAndDotDot);
         foreach (const QFileInfo &subdir, dirs)
             searchPaths << subdir.absoluteFilePath();
     }
+    defaultCollection = new PluginCollection(QString());
+    pluginCategories.insert("", defaultCollection);
+
     foreach (const QString &specFile, specFiles) {
         PluginSpec *spec = new PluginSpec;
         spec->d->read(specFile);
+
+        PluginCollection *collection = 0;
+        // find correct plugin collection or create a new one
+        if (pluginCategories.contains(spec->category()))
+            collection = pluginCategories.value(spec->category());
+        else {
+            collection = new PluginCollection(spec->category());
+            pluginCategories.insert(spec->category(), collection);
+        }
+        if (defaultDisabledPlugins.contains(spec->name())) {
+            spec->setDisabledByDefault(true);
+            spec->setEnabled(false);
+        }
+        if (spec->isDisabledByDefault() && forceEnabledPlugins.contains(spec->name()))
+            spec->setEnabled(true);
+        if (!spec->isDisabledByDefault() && disabledPlugins.contains(spec->name()))
+            spec->setEnabled(false);
+
+        collection->addPlugin(spec);
         pluginSpecs.append(spec);
     }
     resolveDependencies();
@@ -724,6 +1207,9 @@ void PluginManagerPrivate::resolveDependencies()
 {
     foreach (PluginSpec *spec, pluginSpecs) {
         spec->d->resolveDependencies(pluginSpecs);
+    }
+    foreach (PluginSpec *spec, loadQueue()) {
+        spec->d->disableIndirectlyIfDependencyDisabled();
     }
 }
 
@@ -751,6 +1237,11 @@ PluginSpec *PluginManagerPrivate::pluginForOption(const QString &option, bool *r
     return 0;
 }
 
+void PluginManagerPrivate::disablePluginIndirectly(PluginSpec *spec)
+{
+    spec->d->disabledIndirectly = true;
+}
+
 PluginSpec *PluginManagerPrivate::pluginByName(const QString &name) const
 {
     foreach (PluginSpec *spec, pluginSpecs)
@@ -759,3 +1250,63 @@ PluginSpec *PluginManagerPrivate::pluginByName(const QString &name) const
     return 0;
 }
 
+void PluginManagerPrivate::initProfiling()
+{
+    if (m_profileTimer.isNull()) {
+        m_profileTimer.reset(new QTime);
+        m_profileTimer->start();
+        m_profileElapsedMS = 0;
+        qDebug("Profiling started");
+    } else {
+        m_profilingVerbosity++;
+    }
+}
+
+void PluginManagerPrivate::profilingReport(const char *what, const PluginSpec *spec /* = 0 */)
+{
+    if (!m_profileTimer.isNull()) {
+        const int absoluteElapsedMS = m_profileTimer->elapsed();
+        const int elapsedMS = absoluteElapsedMS - m_profileElapsedMS;
+        m_profileElapsedMS = absoluteElapsedMS;
+        if (spec) {
+            qDebug("%-22s %-22s %8dms (%8dms)", what, qPrintable(spec->name()), absoluteElapsedMS, elapsedMS);
+        } else {
+            qDebug("%-45s %8dms (%8dms)", what, absoluteElapsedMS, elapsedMS);
+        }
+    }
+}
+
+/*!
+    \fn void PluginManager::getObjectByName(const QString &name) const
+    \brief Retrieves one object with a given name from the object pool.
+    \sa addObject()
+*/
+
+QObject *PluginManager::getObjectByName(const QString &name) const
+{
+    QReadLocker lock(&m_lock);
+    QList<QObject *> all = allObjects();
+    foreach (QObject *obj, all) {
+        if (obj->objectName() == name)
+            return obj;
+    }
+    return 0;
+}
+
+/*!
+    \fn void PluginManager::getObjectByClassName(const QString &className) const
+    Retrieves one object inheriting a class with a given name from the object pool.
+    \sa addObject()
+*/
+
+QObject *PluginManager::getObjectByClassName(const QString &className) const
+{
+    const QByteArray ba = className.toUtf8();
+    QReadLocker lock(&m_lock);
+    QList<QObject *> all = allObjects();
+    foreach (QObject *obj, all) {
+        if (obj->inherits(ba.constData()))
+            return obj;
+    }
+    return 0;
+}

@@ -2,43 +2,47 @@
 **
 ** This file is part of Qt Creator
 **
-** Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+** Copyright (c) 2012 Nokia Corporation and/or its subsidiary(-ies).
 **
 ** Contact: Nokia Corporation (qt-info@nokia.com)
 **
-** Commercial Usage
-**
-** Licensees holding valid Qt Commercial licenses may use this file in
-** accordance with the Qt Commercial License Agreement provided with the
-** Software or, alternatively, in accordance with the terms contained in
-** a written agreement between you and Nokia.
 **
 ** GNU Lesser General Public License Usage
 **
-** Alternatively, this file may be used under the terms of the GNU Lesser
-** General Public License version 2.1 as published by the Free Software
-** Foundation and appearing in the file LICENSE.LGPL included in the
-** packaging of this file.  Please review the following information to
-** ensure the GNU Lesser General Public License version 2.1 requirements
-** will be met: http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
+** This file may be used under the terms of the GNU Lesser General Public
+** License version 2.1 as published by the Free Software Foundation and
+** appearing in the file LICENSE.LGPL included in the packaging of this file.
+** Please review the following information to ensure the GNU Lesser General
+** Public License version 2.1 requirements will be met:
+** http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
 **
-** If you are unsure which license is appropriate for your use, please
-** contact the sales department at http://www.qtsoftware.com/contact.
+** In addition, as a special exception, Nokia gives you certain additional
+** rights. These rights are described in the Nokia Qt LGPL Exception
+** version 1.1, included in the file LGPL_EXCEPTION.txt in this package.
+**
+** Other Usage
+**
+** Alternatively, this file may be used in accordance with the terms and
+** conditions contained in a signed written agreement between you and Nokia.
+**
+** If you have questions regarding the use of this file, please contact
+** Nokia at qt-info@nokia.com.
 **
 **************************************************************************/
 
 #include "pluginspec.h"
-#include "pluginspec.h"
+
 #include "pluginspec_p.h"
 #include "iplugin.h"
 #include "iplugin_p.h"
 #include "pluginmanager.h"
 
-#include <QtCore/QFile>
-#include <QtCore/QFileInfo>
-#include <QtCore/QXmlStreamReader>
-#include <QtCore/QRegExp>
-#include <QtCore/QCoreApplication>
+#include <QDir>
+#include <QFile>
+#include <QFileInfo>
+#include <QXmlStreamReader>
+#include <QRegExp>
+#include <QCoreApplication>
 #include <QtDebug>
 
 #ifdef Q_OS_LINUX
@@ -50,7 +54,7 @@
 
 #if USE_UNPATCHED_QPLUGINLOADER
 
-#   include <QtCore/QPluginLoader>
+#   include <QPluginLoader>
     typedef QT_PREPEND_NAMESPACE(QPluginLoader) PluginLoader;
 
 #else
@@ -80,6 +84,23 @@
 /*!
     \variable ExtensionSystem::PluginDependency::version
     Version string that a plugin must match to fill this dependency.
+*/
+
+/*!
+    \variable ExtensionSystem::PluginDependency::type
+    Defines whether the dependency is required or optional.
+    \sa ExtensionSystem::PluginDependency::Type
+*/
+
+/*!
+    \enum ExtensionSystem::PluginDependency::Type
+    Whether the dependency is required or optional.
+    \value Required
+           Dependency needs to be there.
+    \value Optional
+           Dependency is not necessarily needed. You need to make sure that
+           the plugin is able to load without this dependency installed, so
+           for example you may not link to the dependency's library.
 */
 
 /*!
@@ -118,20 +139,30 @@
             extensionsInitialized has been called. The loading process is
             complete.
     \value Stopped
-            The plugin has been shut down, i.e. the plugin's IPlugin::shutdown() method has been called.
+            The plugin has been shut down, i.e. the plugin's IPlugin::aboutToShutdown() method has been called.
     \value Deleted
             The plugin instance has been deleted.
 */
+
 using namespace ExtensionSystem;
 using namespace ExtensionSystem::Internal;
 
 /*!
-    \fn bool PluginDependency::operator==(const PluginDependency &other)
+    \fn uint qHash(const ExtensionSystem::PluginDependency &value)
     \internal
 */
-bool PluginDependency::operator==(const PluginDependency &other)
+uint ExtensionSystem::qHash(const ExtensionSystem::PluginDependency &value)
 {
-    return name == other.name && version == other.version;
+    return qHash(value.name);
+}
+
+/*!
+    \fn bool PluginDependency::operator==(const PluginDependency &other) const
+    \internal
+*/
+bool PluginDependency::operator==(const PluginDependency &other) const
+{
+    return name == other.name && version == other.version && type == other.type;
 }
 
 /*!
@@ -223,6 +254,54 @@ QString PluginSpec::description() const
 QString PluginSpec::url() const
 {
     return d->url;
+}
+
+/*!
+    \fn QString PluginSpec::category() const
+    The category that the plugin belongs to. Categories are groups of plugins which allow for keeping them together in the UI.
+    Returns an empty string if the plugin does not belong to a category.
+*/
+QString PluginSpec::category() const
+{
+    return d->category;
+}
+
+/*!
+    \fn bool PluginSpec::isExperimental() const
+    Returns if the plugin has its experimental flag set.
+*/
+bool PluginSpec::isExperimental() const
+{
+    return d->experimental;
+}
+
+/*!
+    Returns if the plugin is disabled by default.
+    This might be because the plugin is experimental, or because
+    the plugin manager's settings define it as disabled by default.
+*/
+bool PluginSpec::isDisabledByDefault() const
+{
+    return d->disabledByDefault;
+}
+
+/*!
+    \fn bool PluginSpec::isEnabled() const
+    Returns if the plugin is loaded at startup. True by default - the user can change it from the Plugin settings.
+*/
+bool PluginSpec::isEnabled() const
+{
+    return d->enabled;
+}
+
+/*!
+    \fn bool PluginSpec::isDisabledIndirectly() const
+    Returns true if loading was not done due to user unselecting this plugin or its dependencies,
+    or if command-line parameter -noload was used.
+*/
+bool PluginSpec::isDisabledIndirectly() const
+{
+    return d->disabledIndirectly;
 }
 
 /*!
@@ -352,7 +431,7 @@ IPlugin *PluginSpec::plugin() const
 
     \sa PluginSpec::dependencies()
 */
-QList<PluginSpec *> PluginSpec::dependencySpecs() const
+QHash<PluginDependency, PluginSpec *> PluginSpec::dependencySpecs() const
 {
     return d->dependencySpecs;
 }
@@ -360,30 +439,40 @@ QList<PluginSpec *> PluginSpec::dependencySpecs() const
 //==========PluginSpecPrivate==================
 
 namespace {
-    const char * const PLUGIN = "plugin";
-    const char * const PLUGIN_NAME = "name";
-    const char * const PLUGIN_VERSION = "version";
-    const char * const PLUGIN_COMPATVERSION = "compatVersion";
-    const char * const VENDOR = "vendor";
-    const char * const COPYRIGHT = "copyright";
-    const char * const LICENSE = "license";
-    const char * const DESCRIPTION = "description";
-    const char * const URL = "url";
-    const char * const DEPENDENCYLIST = "dependencyList";
-    const char * const DEPENDENCY = "dependency";
-    const char * const DEPENDENCY_NAME = "name";
-    const char * const DEPENDENCY_VERSION = "version";
-    const char * const ARGUMENTLIST = "argumentList";
-    const char * const ARGUMENT = "argument";
-    const char * const ARGUMENT_NAME = "name";
-    const char * const ARGUMENT_PARAMETER = "parameter";
+    const char PLUGIN[] = "plugin";
+    const char PLUGIN_NAME[] = "name";
+    const char PLUGIN_VERSION[] = "version";
+    const char PLUGIN_COMPATVERSION[] = "compatVersion";
+    const char PLUGIN_EXPERIMENTAL[] = "experimental";
+    const char VENDOR[] = "vendor";
+    const char COPYRIGHT[] = "copyright";
+    const char LICENSE[] = "license";
+    const char DESCRIPTION[] = "description";
+    const char URL[] = "url";
+    const char CATEGORY[] = "category";
+    const char DEPENDENCYLIST[] = "dependencyList";
+    const char DEPENDENCY[] = "dependency";
+    const char DEPENDENCY_NAME[] = "name";
+    const char DEPENDENCY_VERSION[] = "version";
+    const char DEPENDENCY_TYPE[] = "type";
+    const char DEPENDENCY_TYPE_SOFT[] = "optional";
+    const char DEPENDENCY_TYPE_HARD[] = "required";
+    const char ARGUMENTLIST[] = "argumentList";
+    const char ARGUMENT[] = "argument";
+    const char ARGUMENT_NAME[] = "name";
+    const char ARGUMENT_PARAMETER[] = "parameter";
 }
 /*!
     \fn PluginSpecPrivate::PluginSpecPrivate(PluginSpec *spec)
     \internal
 */
 PluginSpecPrivate::PluginSpecPrivate(PluginSpec *spec)
-    : plugin(0),
+    :
+    experimental(false),
+    disabledByDefault(false),
+    enabled(true),
+    disabledIndirectly(false),
+    plugin(0),
     state(PluginSpec::Invalid),
     hasError(false),
     q(spec)
@@ -404,6 +493,7 @@ bool PluginSpecPrivate::read(const QString &fileName)
         = license
         = description
         = url
+        = category
         = location
         = "";
     state = PluginSpec::Invalid;
@@ -411,10 +501,9 @@ bool PluginSpecPrivate::read(const QString &fileName)
     errorString = "";
     dependencies.clear();
     QFile file(fileName);
-    if (!file.exists())
-        return reportError(tr("File does not exist: %1").arg(file.fileName()));
     if (!file.open(QIODevice::ReadOnly))
-        return reportError(tr("Could not open file for read: %1").arg(file.fileName()));
+        return reportError(tr("Cannot open file %1 for reading: %2")
+                           .arg(QDir::toNativeSeparators(file.fileName()), file.errorString()));
     QFileInfo fileInfo(file);
     location = fileInfo.absolutePath();
     filePath = fileInfo.absoluteFilePath();
@@ -431,12 +520,27 @@ bool PluginSpecPrivate::read(const QString &fileName)
     }
     if (reader.hasError())
         return reportError(tr("Error parsing file %1: %2, at line %3, column %4")
-                .arg(file.fileName())
+                .arg(QDir::toNativeSeparators(file.fileName()))
                 .arg(reader.errorString())
                 .arg(reader.lineNumber())
                 .arg(reader.columnNumber()));
     state = PluginSpec::Read;
     return true;
+}
+
+void PluginSpec::setEnabled(bool value)
+{
+    d->enabled = value;
+}
+
+void PluginSpec::setDisabledByDefault(bool value)
+{
+    d->disabledByDefault = value;
+}
+
+void PluginSpec::setDisabledIndirectly(bool value)
+{
+    d->disabledIndirectly = value;
 }
 
 /*!
@@ -507,6 +611,15 @@ void PluginSpecPrivate::readPluginSpec(QXmlStreamReader &reader)
     } else if (compatVersion.isEmpty()) {
         compatVersion = version;
     }
+    QString experimentalString = reader.attributes().value(PLUGIN_EXPERIMENTAL).toString();
+    experimental = (experimentalString.compare(QLatin1String("true"), Qt::CaseInsensitive) == 0);
+    if (!experimentalString.isEmpty() && !experimental
+            && experimentalString.compare(QLatin1String("false"), Qt::CaseInsensitive) != 0) {
+        reader.raiseError(msgInvalidFormat(PLUGIN_EXPERIMENTAL));
+        return;
+    }
+    disabledByDefault = experimental;
+    enabled = !experimental;
     while (!reader.atEnd()) {
         reader.readNext();
         switch (reader.tokenType()) {
@@ -522,6 +635,8 @@ void PluginSpecPrivate::readPluginSpec(QXmlStreamReader &reader)
                 description = reader.readElementText().trimmed();
             else if (element == URL)
                 url = reader.readElementText().trimmed();
+            else if (element == CATEGORY)
+                category = reader.readElementText().trimmed();
             else if (element == DEPENDENCYLIST)
                 readDependencies(reader);
             else if (element == ARGUMENTLIST)
@@ -646,6 +761,18 @@ void PluginSpecPrivate::readDependencyEntry(QXmlStreamReader &reader)
         reader.raiseError(msgInvalidFormat(DEPENDENCY_VERSION));
         return;
     }
+    dep.type = PluginDependency::Required;
+    if (reader.attributes().hasAttribute(DEPENDENCY_TYPE)) {
+        QString typeValue = reader.attributes().value(DEPENDENCY_TYPE).toString();
+        if (typeValue == QLatin1String(DEPENDENCY_TYPE_HARD)) {
+            dep.type = PluginDependency::Required;
+        } else if (typeValue == QLatin1String(DEPENDENCY_TYPE_SOFT)) {
+            dep.type = PluginDependency::Optional;
+        } else {
+            reader.raiseError(msgInvalidFormat(DEPENDENCY_TYPE));
+            return;
+        }
+    }
     dependencies.append(dep);
     reader.readNext();
     if (reader.tokenType() != QXmlStreamReader::EndElement)
@@ -721,9 +848,10 @@ bool PluginSpecPrivate::resolveDependencies(const QList<PluginSpec *> &specs)
         hasError = true;
         return false;
     }
-    QList<PluginSpec *> resolvedDependencies;
+    QHash<PluginDependency, PluginSpec *> resolvedDependencies;
     foreach (const PluginDependency &dependency, dependencies) {
         PluginSpec *found = 0;
+
         foreach (PluginSpec *spec, specs) {
             if (spec->provides(dependency.name, dependency.version)) {
                 found = spec;
@@ -731,20 +859,46 @@ bool PluginSpecPrivate::resolveDependencies(const QList<PluginSpec *> &specs)
             }
         }
         if (!found) {
-            hasError = true;
-            if (!errorString.isEmpty())
-                errorString.append("\n");
-            errorString.append(QCoreApplication::translate("PluginSpec", "Could not resolve dependency '%1(%2)'")
-                .arg(dependency.name).arg(dependency.version));
+            if (dependency.type == PluginDependency::Required) {
+                hasError = true;
+                if (!errorString.isEmpty())
+                    errorString.append(QLatin1Char('\n'));
+                errorString.append(QCoreApplication::translate("PluginSpec", "Could not resolve dependency '%1(%2)'")
+                    .arg(dependency.name).arg(dependency.version));
+            }
             continue;
         }
-        resolvedDependencies.append(found);
+        resolvedDependencies.insert(dependency, found);
     }
     if (hasError)
         return false;
+
     dependencySpecs = resolvedDependencies;
+
     state = PluginSpec::Resolved;
+
     return true;
+}
+
+void PluginSpecPrivate::disableIndirectlyIfDependencyDisabled()
+{
+    if (!enabled)
+        return;
+
+    if (disabledIndirectly)
+        return;
+
+    QHashIterator<PluginDependency, PluginSpec *> it(dependencySpecs);
+    while (it.hasNext()) {
+        it.next();
+        if (it.key().type == PluginDependency::Optional)
+            continue;
+        PluginSpec *dependencySpec = it.value();
+        if (dependencySpec->isDisabledIndirectly() || !dependencySpec->isEnabled()) {
+            disabledIndirectly = true;
+            break;
+        }
+    }
 }
 
 /*!
@@ -753,11 +907,8 @@ bool PluginSpecPrivate::resolveDependencies(const QList<PluginSpec *> &specs)
 */
 bool PluginSpecPrivate::loadLibrary()
 {
-//    qWarning() << "LOADING PLUGIN :: " << name;
-    if (hasError) {
-        qWarning() << this->errorString;
+    if (hasError)
         return false;
-    }
     if (state != PluginSpec::Resolved) {
         if (state == PluginSpec::Loaded)
             return true;
@@ -778,11 +929,11 @@ bool PluginSpecPrivate::loadLibrary()
 #else //Q_NO_DEBUG
 
 #ifdef Q_OS_WIN
-    QString libName = QString("%1/%2_d.dll").arg(location).arg(name);
+    QString libName = QString("%1/%2d.dll").arg(location).arg(name);
 #elif defined(Q_OS_MAC)
     QString libName = QString("%1/lib%2_debug.dylib").arg(location).arg(name);
 #else
-    QString libName = QString("%1/lib%2_debug.so").arg(location).arg(name);
+    QString libName = QString("%1/lib%2.so").arg(location).arg(name);
 #endif
 
 #endif
@@ -790,19 +941,17 @@ bool PluginSpecPrivate::loadLibrary()
     PluginLoader loader(libName);
     if (!loader.load()) {
         hasError = true;
-        errorString = loader.errorString();
-        errorString.append(QCoreApplication::translate("PluginSpec", "\nLibrary base name: %1").arg(libName));
-        qWarning() << errorString;
+        errorString = QDir::toNativeSeparators(libName)
+            + QString::fromLatin1(": ") + loader.errorString();
         return false;
     }
     IPlugin *pluginObject = qobject_cast<IPlugin*>(loader.instance());
     if (!pluginObject) {
         hasError = true;
-        errorString = QCoreApplication::translate("PluginSpec", "Plugin is not valid (doesn't derive from IPlugin)");
+        errorString = QCoreApplication::translate("PluginSpec", "Plugin is not valid (does not derive from IPlugin)");
         loader.unload();
         return false;
     }
-//    qWarning() << "LOADED PLUGIN :: " << libName;
     state = PluginSpec::Loaded;
     plugin = pluginObject;
     plugin->d->pluginSpec = q;
@@ -865,15 +1014,34 @@ bool PluginSpecPrivate::initializeExtensions()
 }
 
 /*!
+    \fn bool PluginSpecPrivate::delayedInitialize()
+    \internal
+*/
+bool PluginSpecPrivate::delayedInitialize()
+{
+    if (hasError)
+        return false;
+    if (state != PluginSpec::Running) {
+        return false;
+    }
+    if (!plugin) {
+        errorString = QCoreApplication::translate("PluginSpec", "Internal error: have no plugin instance to perform delayedInitialize");
+        hasError = true;
+        return false;
+    }
+    return plugin->delayedInitialize();
+}
+
+/*!
     \fn bool PluginSpecPrivate::stop()
     \internal
 */
-void PluginSpecPrivate::stop()
+IPlugin::ShutdownFlag PluginSpecPrivate::stop()
 {
     if (!plugin)
-        return;
-    plugin->shutdown();
+        return IPlugin::SynchronousShutdown;
     state = PluginSpec::Stopped;
+    return plugin->aboutToShutdown();
 }
 
 /*!
@@ -888,4 +1056,3 @@ void PluginSpecPrivate::kill()
     plugin = 0;
     state = PluginSpec::Deleted;
 }
-

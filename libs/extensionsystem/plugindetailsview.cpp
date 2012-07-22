@@ -2,35 +2,39 @@
 **
 ** This file is part of Qt Creator
 **
-** Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+** Copyright (c) 2012 Nokia Corporation and/or its subsidiary(-ies).
 **
 ** Contact: Nokia Corporation (qt-info@nokia.com)
 **
-** Commercial Usage
-**
-** Licensees holding valid Qt Commercial licenses may use this file in
-** accordance with the Qt Commercial License Agreement provided with the
-** Software or, alternatively, in accordance with the terms contained in
-** a written agreement between you and Nokia.
 **
 ** GNU Lesser General Public License Usage
 **
-** Alternatively, this file may be used under the terms of the GNU Lesser
-** General Public License version 2.1 as published by the Free Software
-** Foundation and appearing in the file LICENSE.LGPL included in the
-** packaging of this file.  Please review the following information to
-** ensure the GNU Lesser General Public License version 2.1 requirements
-** will be met: http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
+** This file may be used under the terms of the GNU Lesser General Public
+** License version 2.1 as published by the Free Software Foundation and
+** appearing in the file LICENSE.LGPL included in the packaging of this file.
+** Please review the following information to ensure the GNU Lesser General
+** Public License version 2.1 requirements will be met:
+** http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
 **
-** If you are unsure which license is appropriate for your use, please
-** contact the sales department at http://www.qtsoftware.com/contact.
+** In addition, as a special exception, Nokia gives you certain additional
+** rights. These rights are described in the Nokia Qt LGPL Exception
+** version 1.1, included in the file LGPL_EXCEPTION.txt in this package.
+**
+** Other Usage
+**
+** Alternatively, this file may be used in accordance with the terms and
+** conditions contained in a signed written agreement between you and Nokia.
+**
+** If you have questions regarding the use of this file, please contact
+** Nokia at qt-info@nokia.com.
 **
 **************************************************************************/
 
 #include "plugindetailsview.h"
 #include "ui_plugindetailsview.h"
+#include "pluginspec.h"
 
-#include <QtCore/QDir>
+#include <QDir>
 
 /*!
     \class ExtensionSystem::PluginDetailsView
@@ -77,13 +81,23 @@ void PluginDetailsView::update(PluginSpec *spec)
     m_ui->vendor->setText(spec->vendor());
     const QString link = QString::fromLatin1("<a href=\"%1\">%1</a>").arg(spec->url());
     m_ui->url->setText(link);
+    QString component = tr("None");
+    if (!spec->category().isEmpty())
+        component = spec->category();
+    m_ui->component->setText(component);
     m_ui->location->setText(QDir::toNativeSeparators(spec->filePath()));
     m_ui->description->setText(spec->description());
     m_ui->copyright->setText(spec->copyright());
     m_ui->license->setText(spec->license());
     QStringList depStrings;
-    foreach (PluginDependency dep, spec->dependencies()) {
-        depStrings << QString("%1 (%2)").arg(dep.name).arg(dep.version);
+    foreach (const PluginDependency &dep, spec->dependencies()) {
+        QString depString = dep.name;
+        depString += QLatin1String(" (");
+        depString += dep.version;
+        if (dep.type == PluginDependency::Optional)
+            depString += QLatin1String(", optional");
+        depString += QLatin1Char(')');
+        depStrings.append(depString);
     }
     m_ui->dependencies->addItems(depStrings);
 }
