@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>%PluginName:c%::Internal::%PluginName:c%PreferencesWidget</class>
+ <widget class="QWidget" name="%PluginName:c%::Internal::%PluginName:c%PreferencesWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>%PluginName:c% Preferences</string>
+  </property>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

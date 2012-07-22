@@ -40,6 +40,7 @@ using namespace Trans::ConstantTranslations;
 
 static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
 
+/*! Creates a new preferences widget with a given parent. */
 AlertPreferencesWidget::AlertPreferencesWidget(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::AlertPreferencesWidget)
@@ -52,25 +53,26 @@ AlertPreferencesWidget::~AlertPreferencesWidget()
     delete ui;
 }
 
-void AlertPreferencesWidget::setDatasToUi()
+/*! Sets data of a changed data model to the ui's widgets. */
+void AlertPreferencesWidget::setDataToUi()
 {
 }
 
+/*! Saves the settings in the ui to the settings data model. */
 void AlertPreferencesWidget::saveToSettings(Core::ISettings *sets)
 {
-    Core::ISettings *s;
-    if (!sets)
-        s = settings();
-    else
-        s = sets;
+    // if no sets given as param, take default interface
+    Core::ISettings *s = sets? sets : settings();
 }
 
+/*! Writes the default settings to the data model. */
 void AlertPreferencesWidget::writeDefaultSettings(Core::ISettings *s)
 {
     Q_UNUSED(s);
 //    LOG_FOR(tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("AlertPreferencesWidget"));
 }
 
+/*! Retranslates the ui widgets to the changed language. */
 void AlertPreferencesWidget::retranslateUi()
 {
 }
@@ -88,7 +90,7 @@ void AlertPreferencesWidget::changeEvent(QEvent *e)
 }
 
 
-
+/*! Creates a new preferences page with a given parent. */
 AlertPreferencesPage::AlertPreferencesPage(QObject *parent) :
         IOptionsPage(parent),
         m_Widget(0)
@@ -103,27 +105,32 @@ AlertPreferencesPage::~AlertPreferencesPage()
     m_Widget = 0;
 }
 
+/*! Returns the id if the preferences page. */
 QString AlertPreferencesPage::id() const
 {
     return objectName();
 }
 
+/*! Returns the (translated) name of the preferences page. */
 QString AlertPreferencesPage::name() const
 {
     return tkTr(Trans::Constants::ALERTS);
 }
 
+/*! Returns the (translated) category of the preferences page. */
 QString AlertPreferencesPage::category() const
 {
     return tkTr(Trans::Constants::ALERTS);
 }
 
+/*! Resets the whole preferences page to the default settings of the settings data model. */
 void AlertPreferencesPage::resetToDefaults()
 {
     m_Widget->writeDefaultSettings(settings());
-    m_Widget->setDatasToUi();
+    m_Widget->setDataToUi();
 }
 
+/*! Overridden function that apllies pending changes to the data model without closing the dialog. */
 void AlertPreferencesPage::applyChanges()
 {
     if (!m_Widget) {
@@ -137,6 +144,10 @@ void AlertPreferencesPage::finish()
     delete m_Widget;
 }
 
+/*! \brief Checks if the entered settings are valid.
+ * 
+ * Overloads the interface method. For each empty value the default settings value is written.
+ */
 void AlertPreferencesPage::checkSettingsValidity()
 {
     QHash<QString, QVariant> defaultvalues;
@@ -149,6 +160,7 @@ void AlertPreferencesPage::checkSettingsValidity()
     settings()->sync();
 }
 
+/*! Creates the settings page */
 QWidget *AlertPreferencesPage::createPage(QWidget *parent)
 {
     if (m_Widget)

@@ -89,7 +89,7 @@ bool IcdDownloader::createDatabase()
     DB = QSqlDatabase::addDatabase("QSQLITE", Constants::DB_ICD10);
     if (!QDir(pathOrHostName).exists())
         if (!QDir().mkpath(pathOrHostName))
-            tkTr(Trans::Constants::_1_ISNOT_AVAILABLE_CANNOTBE_CREATED).arg(pathOrHostName);
+            LOG(tkTr(Trans::Constants::_1_ISNOT_AVAILABLE_CANNOTBE_CREATED).arg(pathOrHostName));
     DB.setDatabaseName(absFileName);
     if (!DB.open()) {
         LOG_ERROR(DB.lastError().text());

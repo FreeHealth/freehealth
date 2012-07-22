@@ -58,7 +58,7 @@ public:
     explicit AlertPreferencesWidget(QWidget *parent = 0);
     ~AlertPreferencesWidget();
     
-    void setDatasToUi();
+    void setDataToUi();
 
     static void writeDefaultSettings(Core::ISettings *s);
 
