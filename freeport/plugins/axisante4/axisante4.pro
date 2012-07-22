@@ -4,7 +4,7 @@ TEMPLATE = lib
 DEFINES += AXISANTE4_LIBRARY
 BUILD_PATH_POSTFIXE = FreePort
 
-include(../fmf_plugins.pri)
+include(../../../plugins/fmf_plugins.pri)
 include(axisante4_dependencies.pri)
 
 HEADERS += \
