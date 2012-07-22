@@ -77,7 +77,7 @@
         </field>
         -->
     </fields>
-    <validationrules>
+    <validationrules> <!-- DOES NOT WORK - Js function "indexOf()" is not supported?? -->
         <validationrule condition='"%PluginName:l%".indexOf("plugin") != -1'>
             <message>The plugin name may not contain "plugin". Please remove the suffix "plugin".</message>
             <message xml:lang="de">Der Name des Plugins darf nicht "plugin" enthalten, bitte diesen Wortteil entfernen.</message>
