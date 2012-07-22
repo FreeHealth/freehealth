@@ -41,7 +41,6 @@ static inline Core::ISettings *settings() { return Core::ICore::instance()->sett
 
 /* ----------------------  Preferences Widget ---------------------- */
 
-
 /*! Creates a new preferences widget with a given parent. */
 %PluginName:c%PreferencesWidget::%PluginName:c%PreferencesWidget(QWidget *parent) :
     QWidget(parent),
@@ -92,6 +91,25 @@ void %PluginName:c%PreferencesWidget::changeEvent(QEvent *e)
 }
 
 /* ----------------------  Preferences Page ---------------------- */
+
+/*! 
+ * \class %PluginName:c%PreferencesPage
+ * \brief Generic FreeMedForms preferences page for %PluginName:c% plugin.
+ *
+ * A %PluginName:c%PreferencesPage creates a page in the FMF settings dialog, it is listed in
+ * the category returned by \sa category().
+ *
+ * All you have to do is to load this preferences page in the constructor if the %PluginName:c% plugin.
+ * Do this like this:
+ * \code
+ * %PluginName:c%Plugin::%PluginName:c%Plugin():
+ *     ExtensionSystem::IPlugin()
+ * {
+ *     _prefPage = new %PluginName:c%PreferencesPage(this);
+ *     addObject(_prefPage);
+ * }
+ * \endcode
+ */
 
 /*! Creates a new preferences page with a given parent. */
 %PluginName:c%PreferencesPage::%PluginName:c%PreferencesPage(QObject *parent) :
