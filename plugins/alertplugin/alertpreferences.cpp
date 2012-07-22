@@ -151,7 +151,7 @@ void AlertPreferencesPage::finish()
 void AlertPreferencesPage::checkSettingsValidity()
 {
     QHash<QString, QVariant> defaultvalues;
-//    defaultvalues.insert(DrugsDB::Constants::S_AVAILABLEDOSAGESBACKGROUNGCOLOR, DrugsDB::Constants::S_DEF_AVAILABLEDOSAGESBACKGROUNGCOLOR);
+//    defaultvalues.insert(Webcam::Constants::FOO_SETTING_KEY, Webcam::Constants::FOO_SETTING_VALUE);
 
     foreach(const QString &k, defaultvalues.keys()) {
         if (settings()->value(k) == QVariant())
