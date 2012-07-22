@@ -41,6 +41,7 @@ public:
         PatientDateOfBirth  = 0x00000100,
         PatientTitle        = 0x00000200,
         PatientGender       = 0x00000400,
+        PatientDateOfDeath  = 0x00000800,
         PatientSocialNumber = 0x00010000,
         PatientIsOwnerOfSocialNumber = 0x00020000,
         PatientSocialNumberOwner     = 0x00040000,
