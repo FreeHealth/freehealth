@@ -118,6 +118,51 @@ public:
     };
     Q_DECLARE_FLAGS(PrescriptionsData, PrescriptionData)
 
+    enum FormData {
+        Forms_NoData                = 0x00000000,
+        Form_EpisodeDate            = 0x000000001,
+        Form_EpisodeLabel           = 0x000000002,
+        Form_EpisodeUserCreator     = 0x000000004,
+        Form_Content                = 0x000000008,
+        AllFormsData                = 0xFFFFFFFFF
+    };
+    Q_DECLARE_FLAGS(FormsData, FormData)
+
+    enum UserData {
+        User_NoData         = 0x00000000,
+        User_FullName       = 0x00000001,
+        User_Title          = 0x00000002,
+        User_Gender         = 0x00000004,
+        User_Profession     = 0x00000008,
+        User_Rights         = 0x00000010,
+        User_Adress         = 0x00000020,
+        User_City           = 0x00000040,
+        User_ZipCode        = 0x00000080,
+        User_Country        = 0x00000100,
+        User_Tel1           = 0x00000200,
+        User_Tel2           = 0x00000400,
+        User_Tel3           = 0x00000800,
+        User_MobilePhone    = 0x00001000,
+        User_Fax            = 0x00002000,
+        User_Mail           = 0x00004000,
+        AllUserData         = 0xFFFFFFFF
+    };
+    Q_DECLARE_FLAGS(UsersData, UserData)
+
+    enum AlertData {
+        Alert_NoData            = 0x00000000,
+        Alert_Label             = 0x00000001,
+        Alert_Priority          = 0x00000002,
+        Alert_FreeMedFormsType  = 0x00000004,
+        Alert_StartDate         = 0x00000008,
+        Alert_Cycling           = 0x00000010,
+        Alert_ExpirationDate    = 0x00000020,
+        AllAlertData            = 0xFFFFFFFF
+    };
+    Q_DECLARE_FLAGS(AlertsData, AlertData)
+
+    // TODO: Lab results, scan docs, mails, e-mails, correspondants, vaccines...
+
     RecoverableData();
 
     void setPatientIdentity(PatientIdentitiesData data) {_patientIdentity = data;}
@@ -127,6 +172,9 @@ public:
     void setDrugAllergy(DrugAllergiesData data) {_drugAllergy = data;}
     void setChronicTherapy(ChronicTherapiesData data) {_chronicTherapy = data;}
     void setPrescription(PrescriptionsData data) {_prescription = data;}
+    void setForm(FormsData data) {_form = data;}
+    void setUser(UsersData data) {_user = data;}
+    void setAlert(AlertsData data) {_alert = data;}
 
     PatientIdentitiesData patientIdentity() const {return _patientIdentity;}
     PatientContactsData patientContact() const {return _patientContact;}
@@ -135,6 +183,9 @@ public:
     DrugAllergiesData drugAllergy() const {return _drugAllergy;}
     ChronicTherapiesData chronicTherapy() const {return _chronicTherapy;}
     PrescriptionsData prescription() const {return _prescription;}
+    FormsData form() const {return _form;}
+    UsersData user() const {return _user;}
+    AlertsData alert() const {return _alert;}
 
 private:
     PatientIdentitiesData _patientIdentity;
@@ -144,6 +195,9 @@ private:
     DrugAllergiesData _drugAllergy;
     ChronicTherapiesData _chronicTherapy;
     PrescriptionsData _prescription;
+    FormsData _form;
+    UsersData _user;
+    AlertsData _alert;
 };
 
 } // namespace Port
@@ -155,5 +209,8 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(Port::RecoverableData::PMHxData)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Port::RecoverableData::DrugAllergiesData)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Port::RecoverableData::ChronicTherapiesData)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Port::RecoverableData::PrescriptionsData)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Port::RecoverableData::FormsData)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Port::RecoverableData::UsersData)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Port::RecoverableData::AlertsData)
 
 #endif // PORT_RECOVERABLEDATA_H
