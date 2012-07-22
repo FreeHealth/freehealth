@@ -1,7 +1,8 @@
 TEMPLATE = lib
 TARGET = Aggregation
 
-include(../../qtcreatorlibrary.pri)
+include( ../libsworkbench.pri )
+#include(../../qtcreatorlibrary.pri)
 
 DEFINES += AGGREGATION_LIBRARY
 
