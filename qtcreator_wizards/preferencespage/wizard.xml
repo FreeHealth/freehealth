@@ -23,8 +23,8 @@
  -->
  <wizard version="1" kind="class" id="A.PreferencesPage" category="B.FMFClasses">
     <icon>freemedforms_24.png</icon>
-    <description>Creates a class for a FreeMedForms preferences page.</description>
-    <description xml:lang="de">Erstellt eine Klasse für eine FreeMedForms-Einstellungen-Seite.</description>
+    <description>Creates a class for a FreeMedForms preferences page. Choose this template if you already have created a plugin.</description>
+    <description xml:lang="de">Erstellt eine Klasse für eine FreeMedForms-Einstellungen-Seite. Wählen Sie diese Vorlage, wenn Sie bereits ein Plugin erstellt haben.</description>
     <displayname>Settings Page</displayname>
     <displayname xml:lang="de">Einstellungen-Seite</displayname>
     <displaycategory>FreeMedForms</displaycategory>
@@ -40,7 +40,7 @@
         <field name="PluginName">
             <fieldcontrol class="QLineEdit" validator="^[a-zA-Z0-9_]+$" defaulttext="" />
             <fielddescription>Plugin name (without "plugin"):</fielddescription>
-            <fielddescription xml:lang="de">Name des Plugins, zu dem diese Einstellungen gehören (ohne:</fielddescription>
+            <fielddescription xml:lang="de">Name des Plugins, zu dem diese Einstellungen gehören (ohne "plugin"):</fielddescription>
         </field>
         <field name="Author">
             <fieldcontrol class="QLineEdit" defaulttext="" />
