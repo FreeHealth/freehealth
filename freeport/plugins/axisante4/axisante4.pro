@@ -10,10 +10,12 @@ include(axisante4_dependencies.pri)
 HEADERS += \
     axisante4plugin.h\
     axisante4_exporter.h\
-    axisante4constants.h
+    axisante4constants.h \
+    patientbase.h
         
 SOURCES += \
-    axisante4plugin.cpp
+    axisante4plugin.cpp \
+    patientbase.cpp
 
 OTHER_FILES = Axisante4.pluginspec
 

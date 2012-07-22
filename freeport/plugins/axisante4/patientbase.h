@@ -23,17 +23,26 @@
  *   Contributors:                                                         *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef AXISANTE4CONSTANTS_H
-#define AXISANTE4CONSTANTS_H
+#ifndef AXISANTE4_PATIENTBASE_H
+#define AXISANTE4_PATIENTBASE_H
 
-namespace Axisante4 {
-namespace Constants {
+namespace AxiSante4 {
 
-const char * const ACTION_ID = "Axisante4.Action";
-const char * const MENU_ID = "Axisante4.Menu";
+class PatientBase
+{
+public:
+    PatientBase();
+    bool initialize();
 
-} // namespace Axisante4
-} // namespace Constants
+    void setDatabasePath(const QString &absFilePath);
 
-#endif // AXISANTE4CONSTANTS_H
+    bool startDataExtraction();
+    bool extractNextPatient();
 
+private:
+    QString _dbFilePath;
+};
+
+} // namespace AxiSante4
+
+#endif // AXISANTE4_PATIENTBASE_H
