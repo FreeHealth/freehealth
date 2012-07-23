@@ -20,13 +20,12 @@
  ***************************************************************************/
 /***************************************************************************
  *   Main Developpers:                                                     *
- *       Eric MAEKER, <eric.maeker@gmail.com>,                             *
- *       Pierre-Marie Desombre <pm.desombre@gmail.com>                     *
+ *       ChristianAReiter <christian.a.reiter@gmail.com>                             *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#include "alertpreferences.h"
-#include "ui_alertpreferences.h"
+#include "webcampreferences.h"
+#include "ui_webcampreferences.h"
 
 #include <translationutils/constants.h>
 #include <translationutils/trans_current.h>
@@ -34,50 +33,53 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
 
-using namespace Alert;
+using namespace Webcam;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
 static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
 
+/* ----------------------  Preferences Widget ---------------------- */
+
+
 /*! Creates a new preferences widget with a given parent. */
-AlertPreferencesWidget::AlertPreferencesWidget(QWidget *parent) :
+WebcamPreferencesWidget::WebcamPreferencesWidget(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::AlertPreferencesWidget)
+    ui(new Ui::WebcamPreferencesWidget)
 {
     ui->setupUi(this);
 }
 
-AlertPreferencesWidget::~AlertPreferencesWidget()
+WebcamPreferencesWidget::~WebcamPreferencesWidget()
 {
     delete ui;
 }
 
 /*! Sets data of a changed data model to the ui's widgets. */
-void AlertPreferencesWidget::setDataToUi()
+void WebcamPreferencesWidget::setDataToUi()
 {
 }
 
 /*! Saves the settings in the ui to the settings data model. */
-void AlertPreferencesWidget::saveToSettings(Core::ISettings *sets)
+void WebcamPreferencesWidget::saveToSettings(Core::ISettings *sets)
 {
     // if no sets given as param, take default interface
     Core::ISettings *s = sets? sets : settings();
 }
 
 /*! Writes the default settings to the data model. */
-void AlertPreferencesWidget::writeDefaultSettings(Core::ISettings *s)
+void WebcamPreferencesWidget::writeDefaultSettings(Core::ISettings *s)
 {
     Q_UNUSED(s);
-//    LOG_FOR(tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("AlertPreferencesWidget"));
+    //    LOG_FOR(tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("WebcamPreferencesWidget"));
 }
 
 /*! Retranslates the ui widgets to the changed language. */
-void AlertPreferencesWidget::retranslateUi()
+void WebcamPreferencesWidget::retranslateUi()
 {
 }
 
-void AlertPreferencesWidget::changeEvent(QEvent *e)
+void WebcamPreferencesWidget::changeEvent(QEvent *e)
 {
     QWidget::changeEvent(e);
     switch (e->type()) {
@@ -89,16 +91,35 @@ void AlertPreferencesWidget::changeEvent(QEvent *e)
     }
 }
 
+/* ----------------------  Preferences Page ---------------------- */
+/*! 
+ * \class WebcamPreferencesPage
+ * \brief Generic FreeMedForms preferences page for %PluginName:c% plugin.
+ *
+ * A WebcamPreferencesPage creates a page in the FMF settings dialog, it is listed in
+ * the category returned by \sa category().
+ *
+ * All you have to do is to load this preferences page in the constructor if the %PluginName:c% plugin.
+ * Do this like this:
+ * \code
+ * WebcamPlugin::WebcamPlugin():
+ *     ExtensionSystem::IPlugin()
+ * {
+ *     _prefPage = new WebcamPreferencesPage(this);
+ *     addObject(_prefPage);
+ * }
+ * \endcode
+ */
 
 /*! Creates a new preferences page with a given parent. */
-AlertPreferencesPage::AlertPreferencesPage(QObject *parent) :
-        IOptionsPage(parent),
-        m_Widget(0)
+WebcamPreferencesPage::WebcamPreferencesPage(QObject *parent) :
+    IOptionsPage(parent),
+    m_Widget(0)
 {
-    setObjectName("AlertPreferencesPage");
+    setObjectName("WebcamPreferencesPage");
 }
 
-AlertPreferencesPage::~AlertPreferencesPage()
+WebcamPreferencesPage::~WebcamPreferencesPage()
 {
     if (m_Widget)
         delete m_Widget;
@@ -106,32 +127,32 @@ AlertPreferencesPage::~AlertPreferencesPage()
 }
 
 /*! Returns the id if the preferences page. */
-QString AlertPreferencesPage::id() const
+QString WebcamPreferencesPage::id() const
 {
     return objectName();
 }
 
 /*! Returns the (translated) name of the preferences page. */
-QString AlertPreferencesPage::name() const
+QString WebcamPreferencesPage::name() const
 {
-    return tkTr(Trans::Constants::ALERTS);
+    return tr("General");
 }
 
 /*! Returns the (translated) category of the preferences page. */
-QString AlertPreferencesPage::category() const
+QString WebcamPreferencesPage::category() const
 {
-    return tkTr(Trans::Constants::ALERTS);
+    return tr("Webcam");
 }
 
 /*! Resets the whole preferences page to the default settings of the settings data model. */
-void AlertPreferencesPage::resetToDefaults()
+void WebcamPreferencesPage::resetToDefaults()
 {
     m_Widget->writeDefaultSettings(settings());
     m_Widget->setDataToUi();
 }
 
 /*! Overridden function that apllies pending changes to the data model without closing the dialog. */
-void AlertPreferencesPage::applyChanges()
+void WebcamPreferencesPage::applyChanges()
 {
     if (!m_Widget) {
         return;
@@ -139,20 +160,20 @@ void AlertPreferencesPage::applyChanges()
     m_Widget->saveToSettings(settings());
 }
 
-void AlertPreferencesPage::finish()
+void WebcamPreferencesPage::finish()
 {
     delete m_Widget;
 }
-
+#include <coreplugin/constants.h>
 /*! \brief Checks if the entered settings are valid.
  * 
  * Overloads the interface method. For each empty value the default settings value is written.
  */
-void AlertPreferencesPage::checkSettingsValidity()
+void WebcamPreferencesPage::checkSettingsValidity()
 {
     QHash<QString, QVariant> defaultvalues;
-//    defaultvalues.insert(Webcam::Constants::FOO_SETTING_KEY, Webcam::Constants::FOO_SETTING_VALUE);
-
+//    defaultvalues.insert("Webcam/General","-");
+    
     foreach(const QString &k, defaultvalues.keys()) {
         if (settings()->value(k) == QVariant())
             settings()->setValue(k, defaultvalues.value(k));
@@ -161,12 +182,13 @@ void AlertPreferencesPage::checkSettingsValidity()
 }
 
 /*! Creates the settings page */
-QWidget *AlertPreferencesPage::createPage(QWidget *parent)
+QWidget *WebcamPreferencesPage::createPage(QWidget *parent)
 {
     if (m_Widget)
         delete m_Widget;
-    m_Widget = new AlertPreferencesWidget(parent);
+    m_Widget = new WebcamPreferencesWidget(parent);
     return m_Widget;
 }
+
 
 

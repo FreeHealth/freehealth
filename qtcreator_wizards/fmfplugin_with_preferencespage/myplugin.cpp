@@ -19,14 +19,12 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developer: Christian A. Reiter <christian.a.reiter@gmail.com>    *
+ *   Main Developer: %Author% <%AuthorEmail%>                  *
  *   Contributors:                                                         *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#include "webcamplugin.h"
-#include "webcamconstants.h"
-#include "webcamphotoprovider.h"
-#include "webcampreferences.h"
+#include "%PluginName:l%plugin.%CppHeaderSuffix%"
+#include "%PluginName:l%constants.%CppHeaderSuffix%"
 
 #include <utils/log.h>
 
@@ -39,9 +37,11 @@
 
 #include <extensionsystem/pluginmanager.h>
 
+//#include <coreplugin/contextmanager/icontext.h>
 #include <coreplugin/actionmanager/actionmanager.h>
 #include <coreplugin/actionmanager/command.h>
 #include <coreplugin/actionmanager/actioncontainer.h>
+//#include <coreplugin/coreconstants.h>
 
 #include <QtGui/QAction>
 #include <QtGui/QMessageBox>
@@ -51,59 +51,45 @@
 #include <QtCore/QtPlugin>
 #include <QDebug>
 
-using namespace Webcam;
-using namespace Internal;
+using namespace %PluginName%::Internal;
 
 static inline Core::IUser *user()  { return Core::ICore::instance()->user(); }
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline void messageSplash(const QString &s) {theme()->messageSplashScreen(s); }
 
-WebcamPlugin::WebcamPlugin() :
-    ExtensionSystem::IPlugin(),
-    m_prefPage(0)
+%PluginName%Plugin::%PluginName%Plugin()
 {
     if (Utils::Log::warnPluginsCreation())
-        qWarning() << "creating Webcam";
-    
+        qWarning() << "creating %PluginName%";
+
     // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("webcam"); 
+    Core::ICore::instance()->translators()->addNewTranslator("%PluginName:l%"); 
     
     // Add here the Core::IFirstConfigurationPage objects to the pluginmanager object pool
-    
+
     // All preferences pages must be created in this part (before user connection)
-    m_prefPage = new WebcamPreferencesPage(this);
     // And included in the QObject pool
+    m_prefPage = new %PluginName:c%PreferencesPage(this);
     addObject(m_prefPage);
-    
-    m_webcamProvider = new WebcamPhotoProvider();
 
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
     connect(Core::ICore::instance(), SIGNAL(coreAboutToClose()), this, SLOT(coreAboutToClose()));
 }
 
-WebcamPlugin::~WebcamPlugin()
+%PluginName%Plugin::~%PluginName%Plugin()
 {
     // Unregister objects from the plugin manager's object pool
     // Delete members
-
-    if(m_webcamProvider) {
-        removeObject(m_webcamProvider);
-        delete m_webcamProvider;
-    }
-    if (m_prefPage) {
-        removeObject(m_prefPage);
-        delete(m_prefPage);
-    }
 }
 
-bool WebcamPlugin::initialize(const QStringList &arguments, QString *errorString)
+bool %PluginName%Plugin::initialize(const QStringList &arguments, QString *errorString)
 {
     Q_UNUSED(arguments)
     Q_UNUSED(errorString)
     
-    setObjectName("Webcam");
+    setObjectName("%PluginName%");
     if (Utils::Log::warnPluginsCreation()) {
-        qDebug() << "creating Webcam";
+        qWarning() << "creating %PluginName%";
     }
     
     // Register objects in the plugin manager's object pool
@@ -112,7 +98,7 @@ bool WebcamPlugin::initialize(const QStringList &arguments, QString *errorString
     // connect to other plugins' signals
     // "In the initialize method, a plugin can be sure that the plugins it
     //  depends on have initialized their members."
-    
+
     // FreeMedForms:
     // Initialize database here
     // Initialize the drugs engines
@@ -120,56 +106,55 @@ bool WebcamPlugin::initialize(const QStringList &arguments, QString *errorString
     
     // No user is logged in until here
     
-
-    ExtensionSystem::PluginManager::instance()->addObject(m_webcamProvider);
-
-    //    Core::ActionManager *am = Core::ICore::instance()->actionManager();
-    //
-    //    QAction *action = new QAction(tr("Webcam action"), this);
-    //    Core::Command *cmd = am->registerAction(action, Constants::ACTION_ID,
-    //                         Core::Context(Core::Constants::C_GLOBAL));
-    //    cmd->setDefaultKeySequence(QKeySequence(tr("Ctrl+Alt+Shift+Meta+A")));
-    //    connect(action, SIGNAL(triggered()), this, SLOT(triggerAction()));
-    //
-    //    Core::ActionContainer *menu = am->createMenu(Constants::CUSTOM_MENU_ID);
-    //    menu->menu()->setTitle(tr("Webcam"));
-    //    menu->addAction(cmd);
-    //    am->actionContainer(Core::Constants::M_TOOLS)->addMenu(menu);
     
+//    Core::ActionManager *am = Core::ICore::instance()->actionManager();
+//
+//    QAction *action = new QAction(tr("%PluginName% action"), this);
+//    Core::Command *cmd = am->registerAction(action, Constants::ACTION_ID,
+//                         Core::Context(Core::Constants::C_GLOBAL));
+//    cmd->setDefaultKeySequence(QKeySequence(tr("Ctrl+Alt+Shift+Meta+A")));
+//    connect(action, SIGNAL(triggered()), this, SLOT(triggerAction()));
+//
+//    Core::ActionContainer *menu = am->createMenu(Constants::CUSTOM_MENU_ID);
+//    menu->menu()->setTitle(tr("%PluginName%"));
+//    menu->addAction(cmd);
+//    am->actionContainer(Core::Constants::M_TOOLS)->addMenu(menu);
+
     return true;
 }
 
-void WebcamPlugin::extensionsInitialized()
+void %PluginName%Plugin::extensionsInitialized()
 {
     if (Utils::Log::warnPluginsCreation()) {
-        qDebug() << "Webcam::extensionsInitialized";
+        qWarning() << "%PluginName%::extensionsInitialized";
     }
-    
+
     // Add Translator to the Application
     //Core::ICore::instance()->translators()->addNewTranslator("mf_XXX_Widget");
     
     // Retrieve other objects from the plugin manager's object pool
     // "In the extensionsInitialized method, a plugin can be sure that all
     //  plugins that depend on it are completely initialized."
-    
+
     // If you want to stop the plugin initialization if there are no identified user
     // Just uncomment the following code
-    //    // no user -> stop here
-    //    if (!user())
-    //        return;
-    //    if (user()->uuid().isEmpty())
-    //        return;
-    
-    messageSplash(tr("Initializing Webcam..."));
-    
+//    // no user -> stop here
+//    if (!user())
+//        return;
+//    if (user()->uuid().isEmpty())
+//        return;
+
+    messageSplash(tr("Initializing %PluginName%..."));
+
     // At this point, user is connected
-    
+
     // Add here e.g. the DataPackPlugin::IDataPackListener objects to the pluginmanager object pool
-    
+
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
+    connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
 }
 
-void WebcamPlugin::postCoreInitialization()
+void %PluginName%Plugin::postCoreInitialization()
 {
     // Core is fully intialized as well as all plugins
     // DataPacks are checked
@@ -177,7 +162,7 @@ void WebcamPlugin::postCoreInitialization()
 
 // aboutToShutdown does not exist in the old QtCreator code.
 // we have to wait until FMF is updatet to a newer QtCreator source
-// ExtensionSystem::IPlugin::ShutdownFlag WebcamPlugin::aboutToShutdown()
+// ExtensionSystem::IPlugin::ShutdownFlag %PluginName%Plugin::aboutToShutdown()
 // {
 //     // Save settings
 //     // Disconnect from signals that are not needed during shutdown
@@ -185,18 +170,17 @@ void WebcamPlugin::postCoreInitialization()
 //     return SynchronousShutdown;
 // }
 
-// void WebcamPlugin::triggerAction()
+// void %PluginName%Plugin::triggerAction()
 // {
 //     QMessageBox::information(Core::ICore::instance()->mainWindow(),
 //                              tr("Action triggered"),
-//                              tr("This is an action from Webcam."));
+//                              tr("This is an action from %PluginName%."));
 // }
 
-void WebcamPlugin::coreAboutToClose()
+void %PluginName%Plugin::coreAboutToClose()
 {
     // Core is about to close
     // ICore::user() is still available
 }
 
-Q_EXPORT_PLUGIN2(Webcam, WebcamPlugin)
-
+Q_EXPORT_PLUGIN2(%PluginName%, %PluginName%Plugin)

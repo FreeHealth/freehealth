@@ -20,16 +20,20 @@ HEADERS = \
     webcamconstants.h \
     webcamphotoprovider.h \
     opencvwidget.h \
-    webcamdialog.h
+    webcamdialog.h \
+    webcampreferences.h
 
 SOURCES += \
     webcamplugin.cpp \
     webcamphotoprovider.cpp \
     opencvwidget.cpp \
-    webcamdialog.cpp
+    webcamdialog.cpp \
+    webcampreferences.cpp
 
 FORMS += \
-    webcamdialog.ui
+    webcamdialog.ui \
+    webcampreferenceswidget.ui \
+    webcampreferences.ui
 
 TRANSLATIONS += $${SOURCES_TRANSLATIONS_PATH}/webcam_fr.ts \
                 $${SOURCES_TRANSLATIONS_PATH}/webcam_de.ts \

@@ -19,43 +19,20 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developer: Christian A. Reiter <christian.a.reiter@gmail.com>    *
+ *   Main Developer: %Author% <%AuthorEmail%>                  *
  *   Contributors:                                                         *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef WEBCAM_H
-#define WEBCAM_H
+#ifndef %PluginName:u%CONSTANTS_%CppHeaderSuffix:u%
+#define %PluginName:u%CONSTANTS_%CppHeaderSuffix:u%
 
-#include "webcam_exporter.h"
-#include "webcamphotoprovider.h"
-#include "webcampreferences.h"
+namespace %PluginName% {
+namespace Constants {
 
-#include <extensionsystem/iplugin.h>
+    const char * const ACTION_ID = "%PluginName%.Action";
+    const char * const MENU_ID = "%PluginName%.Menu";
 
-namespace Webcam {
+} // namespace %PluginName%
+} // namespace Constants
 
-class WebcamPlugin : public ExtensionSystem::IPlugin
-{
-    Q_OBJECT
-public:
-    WebcamPlugin();
-    ~WebcamPlugin();
-    
-    bool initialize(const QStringList &arguments, QString *errorString);
-    void extensionsInitialized();
-    //    ShutdownFlag aboutToShutdown();
-    
-private:
-    WebcamPhotoProvider *m_webcamProvider;
-    Internal::WebcamPreferencesPage *m_prefPage;
-    
-private Q_SLOTS:
-    void postCoreInitialization();
-    void coreAboutToClose();
-    //    void triggerAction();
-};
-
-} // namespace Webcam
-
-#endif // WEBCAM_H
-
+#endif // %PluginName:u%CONSTANTS_%CppHeaderSuffix:u%

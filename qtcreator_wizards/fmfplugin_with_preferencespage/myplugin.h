@@ -19,43 +19,43 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developer: Christian A. Reiter <christian.a.reiter@gmail.com>    *
+ *   Main Developer: %Author% <%AuthorEmail%>                  *
  *   Contributors:                                                         *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef WEBCAM_H
-#define WEBCAM_H
+#ifndef %PluginName:u%_%CppHeaderSuffix:u%
+#define %PluginName:u%_%CppHeaderSuffix:u%
 
-#include "webcam_exporter.h"
-#include "webcamphotoprovider.h"
-#include "webcampreferences.h"
+#include "%PluginName:l%_exporter.%CppHeaderSuffix%"
+#include "%PluginName:l%preferences.%CppHeaderSuffix%"
 
 #include <extensionsystem/iplugin.h>
 
-namespace Webcam {
+namespace %PluginName% {
+namespace Internal {
 
-class WebcamPlugin : public ExtensionSystem::IPlugin
+class %PluginName%Plugin : public ExtensionSystem::IPlugin
 {
     Q_OBJECT
+
 public:
-    WebcamPlugin();
-    ~WebcamPlugin();
-    
+    %PluginName%Plugin();
+    ~%PluginName%Plugin();
+
     bool initialize(const QStringList &arguments, QString *errorString);
     void extensionsInitialized();
-    //    ShutdownFlag aboutToShutdown();
-    
-private:
-    WebcamPhotoProvider *m_webcamProvider;
-    Internal::WebcamPreferencesPage *m_prefPage;
-    
+//    ShutdownFlag aboutToShutdown();
+
 private Q_SLOTS:
     void postCoreInitialization();
     void coreAboutToClose();
-    //    void triggerAction();
+//    void triggerAction();
+
+private:
+    %PluginName:c%PreferencesPage *m_prefPage;
 };
 
-} // namespace Webcam
+} // namespace Internal
+} // namespace %PluginName%
 
-#endif // WEBCAM_H
-
+#endif // %PluginName:u%_%CppHeaderSuffix:u%

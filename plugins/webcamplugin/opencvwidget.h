@@ -32,6 +32,7 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/objdetect/objdetect.hpp>
+#include <QStandardItemModel>
 
 
 namespace Webcam {
@@ -53,6 +54,7 @@ public:
     int defaultUpdateFrequency() const;
     
     QRect frame() const;
+    QStandardItemModel* model() { return m_imageModel; }
 
 public Q_SLOTS:
     void setFrozen(bool aFreeze);
@@ -75,7 +77,10 @@ private:
     void wheelEvent(QWheelEvent *event);
     void mouseDoubleClickEvent(QMouseEvent *event);
 
+    void drawFaceDetectionFrame(IplImage *cvimage);
+    
     void restrictRubberBandConstraints();
+    
     
 private:
     QImage m_image;
@@ -88,11 +93,12 @@ private:
     QPoint m_rubberOrigin;
 
     CvHaarClassifierCascade* _cascade;
-    CvMemStorage*   _storage;
-    QList<CvScalar>  _colors;
-    QPixmap*         _pixmap;
-    QTimer*          _timer;
-
+    CvMemStorage* _storage;
+    QList<CvScalar> _colors;
+    QPixmap* _pixmap;
+    int m_counter;
+//    QList<IplImage *> m_imageList;
+    QStandardItemModel *m_imageModel;
 };
 
 } // end Internal

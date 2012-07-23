@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/***************************************************************************
+ *  The FreeMedForms project is a set of free, open source medical         *
+ *  applications.                                                          *
+ *  (C) 2008-2012 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
+ *  All rights reserved.                                                   *
+ *                                                                         *
+ *  This program is free software: you can redistribute it and/or modify   *
+ *  it under the terms of the GNU General Public License as published by   *
+ *  the Free Software Foundation, either version 3 of the License, or      *
+ *  (at your option) any later version.                                    *
+ *                                                                         *
+ *  This program is distributed in the hope that it will be useful,        *
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
+ *  GNU General Public License for more details.                           *
+ *                                                                         *
+ *  You should have received a copy of the GNU General Public License      *
+ *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  If not, see <http://www.gnu.org/licenses/>.                            *
+ ***************************************************************************/
+
+Project wizard configuration file for FreeMedForms plugins.
+Note that by convention, the project file page goes last.
+The "class" and "firstpage" attributes specify that it is a Qt 4 wizard and 
+leave room for the Qt 4 target page.
+-->
+<wizard version="1" kind="project"
+        class="qt4project" firstpage="10"
+        id="A.FMFPlugin" category="X.FMFProjects">
+    <icon>freemedforms_24.png</icon>
+    <description>Creates a FreeMedForms plugin with preferences page.</description>
+    <description xml:lang="fr">Créer un greffon pour la suite FreeMedForms.</description><!-- please UPDATE!!! -->
+    <description xml:lang="de">Erstellt ein FreeMedForms-Plugin mit integrierter Einstellungsseite.</description>
+    <displayname>FreeMedForms plugin/preferences </displayname>;
+    <displayname xml:lang="fr">Greffon FreeMedForms</displayname>;
+    <displayname xml:lang="de">FreeMedForms-Plugin mit Einstellungen-Seite</displayname>;
+    <displaycategory>FreeMedForms</displaycategory>
+    <displaycategory xml:lang="fr">FreeMedForms</displaycategory>
+    <displaycategory xml:lang="de">FreeMedForms</displaycategory>
+    <files>
+        <file source="myplugin.pro" target="%PluginName:l%.pro" openproject="true"/>
+        <file source="myplugin_dependencies.pri" target="%PluginName:l%_dependencies.pri" openproject="true"/>
+        <file source="myplugin.pri" target="%PluginName:l%.pri" openproject="true"/>
+        <file source="MyPlugin.pluginspec" target="%PluginName%.pluginspec" openeditor="true"/>
+        <file source="myplugin_exporter.h" target="%PluginName:l%_exporter.%CppHeaderSuffix%" openeditor="true"/>
+        <file source="mypluginconstants.h" target="%PluginName:l%constants.%CppHeaderSuffix%" openeditor="true"/>
+        <file source="myplugin.h" target="%PluginName:l%plugin.%CppHeaderSuffix%" openeditor="true"/>
+        <file source="myplugin.cpp" target="%PluginName:l%plugin.%CppSourceSuffix%" openeditor="true"/>
+        <file source="preferences.cpp" target="%PluginName:l%preferences.%CppSourceSuffix%" openeditor="false"/>
+        <file source="preferences.h" target="%PluginName:l%preferences.%CppHeaderSuffix%" openeditor="false"/>
+        <file source="preferences.ui" target="%PluginName:l%preferences.ui" openeditor="false"/> 
+    </files>
+    <!-- Create a 2nd wizard page with parameters -->
+    <fieldpagetitle>Plugin Information</fieldpagetitle>
+    <fieldpagetitle xml:lang="de">Plugin-Information</fieldpagetitle>
+    <fields>
+        <field mandatory="true" name="PluginName">
+            <fieldcontrol class="QLineEdit" validator="^[a-zA-Z0-9_]+$"
+                          defaulttext="%ProjectName:c%" />
+            <fielddescription>Plugin name (without "plugin"):</fielddescription>
+            <fielddescription xml:lang="de">Name des Plugins (ohne "plugin"):</fielddescription>
+        </field>
+        <field mandatory="true" name="Author">
+            <fieldcontrol class="QLineEdit"
+                          defaulttext="" />
+            <fielddescription>Author:</fielddescription>
+            <fielddescription xml:lang="de">Autor:</fielddescription>
+            <fielddescription xml:lang="fr">Auteur:</fielddescription>
+        </field>
+        <field mandatory="true" name="AuthorEmail">
+            <fieldcontrol class="QLineEdit" validator="^[a-z0-9_\.]+@[a-z0-9_\.]+\.[a-z0-9_\.]+$"
+                          defaulttext="email@example.com" />
+            <fielddescription>Author email address:</fielddescription>
+            <fielddescription xml:lang="de">Emailadresse des Autors:</fielddescription>
+            <fielddescription xml:lang="fr">Adresse émail de l'auteur:</fielddescription>
+        </field>
+        <field mandatory="true" name="VendorName">
+            <fieldcontrol class="QLineEdit" validator="^[a-zA-Z0-9_]+$"
+                          defaulttext="FreeMedForms" />
+            <fielddescription>Vendor name:</fielddescription>
+            <fielddescription xml:lang="de">Anbieter:</fielddescription>
+        </field>
+        <field name="License">
+            <fieldcontrol class="QTextEdit"
+                          defaulttext="GNU General Public License version 3" />
+            <fielddescription>License:</fielddescription>
+            <fielddescription xml:lang="de">Lizenz</fielddescription>
+        </field>
+        <field name="Description">
+            <fieldcontrol class="QTextEdit"
+                          defaulttext="Put a short description of your plugin here"/>
+            <fielddescription>Description:</fielddescription>
+        </field>
+        <field name="URL">
+            <fieldcontrol class="QLineEdit"
+                          defaulttext="http://www.freemedforms.com" />
+            <fielddescription>URL:</fielddescription>
+            <fielddescription xml:lang="fr">URL:</fielddescription>
+            <fielddescription xml:lang="de">URL:</fielddescription>
+        </field>
+<!--
+        <field mandatory="true" name="FreeMedFormsSources">
+            <fieldcontrol class="Utils::PathChooser"
+                          defaulttext="%Path%" />
+            <fielddescription>FreeMedForms sources:</fielddescription>
+            <fielddescription xml:lang="de">Freemedforms-Quellcode:</fielddescription>
+        </field>
+
+        <field mandatory="true" name="FreeMedFormsBuild">
+            <fieldcontrol class="Utils::PathChooser"
+                          defaulttext="" />
+            <fielddescription>FreeMedForms build directory:</fielddescription>
+        </field>
+-->
+
+
+<!-- destination directory is not used in FMF:-->
+<!--
+        <field name="DestDir">
+            <fieldcontrol class="QComboBox" defaultindex="0">
+                <comboentries>
+                    <comboentry value="# ">
+                        <comboentrytext>FreeMedForms build</comboentrytext>
+                    </comboentry>
+                    <comboentry value="">
+                        <comboentrytext>Local user settings</comboentrytext>
+                    </comboentry>
+                </comboentries>
+            </fieldcontrol>
+            <fielddescription>Deploy into:</fielddescription>
+        </field>
+-->
+    </fields>
+</wizard>
