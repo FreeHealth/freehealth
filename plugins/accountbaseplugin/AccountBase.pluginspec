@@ -2,6 +2,7 @@
     <vendor>FreeMedForms</vendor>
     <copyright>(C) 2008-2012 by Eric MAEKER, MD and Pierre-Marie Desombre</copyright>
     <license>Released under GPLv3.</license>
+    <category>Accountancy</category>
     <description>Accountancy databases and models managers plugin.</description>
     <url>http://www.freemedforms.com/</url>
     <dependencyList>
