@@ -706,14 +706,15 @@ bool PluginManager::runningTests() const
  */
 QString PluginManager::testDataDirectory() const
 {
-    QByteArray ba = qgetenv("QTCREATOR_TEST_DIR");
-    QString s = QString::fromLocal8Bit(ba.constData(), ba.size());
-    if (s.isEmpty()) {
-        s = IDE_TEST_DIR;
-        s.append("/tests");
-    }
-    s = QDir::cleanPath(s);
-    return s;
+//    QByteArray ba = qgetenv("QTCREATOR_TEST_DIR");
+//    QString s = QString::fromLocal8Bit(ba.constData(), ba.size());
+//    if (s.isEmpty()) {
+//        s = IDE_TEST_DIR;
+//        s.append("/tests");
+//    }
+//    s = QDir::cleanPath(s);
+//    return s;
+    return QString();
 }
 
 /*!

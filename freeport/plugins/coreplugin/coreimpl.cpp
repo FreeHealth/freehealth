@@ -226,6 +226,7 @@ void CoreImpl::extensionsInitialized()
 {
     // pad
     m_padTools = ExtensionSystem::PluginManager::instance()->getObject<IPadTools>();
+    m_Theme->finishSplashScreen(m_MainWindow);
     Q_EMIT coreOpened();
 }
 

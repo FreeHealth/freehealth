@@ -150,7 +150,6 @@ void MainWindow::extensionsInitialized()
 {
     setCentralWidget(new QLabel("WORK IN PROGRESS..."));
 
-    finishSplash(this);
     readSettings();
     show();
     raise();
