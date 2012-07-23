@@ -2,6 +2,7 @@
     <vendor>FreeDiams</vendor>
     <copyright>(C) 2008-2012 by Eric MAEKER, MD</copyright>
     <license>Released under GPLv3.</license>
+    <category>Data recovering</category>
     <description>The plugin manages user's datas saving and restoring.</description>
     <url>http://www.freemedforms.com</url>
     <dependencyList>
