@@ -2,6 +2,7 @@
     <vendor>FreeMedForms</vendor>
     <copyright>(C) 2008-2012 by Eric MAEKER, MD</copyright>
     <license>Released under GPLv3 license.</license>
+    <category>Patient data</category>
     <description>The plugin manages the past medical history of patients.</description>
     <url>http://www.freemedforms.com/</url>
     <dependencyList>

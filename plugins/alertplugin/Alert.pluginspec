@@ -2,6 +2,7 @@
     <vendor>FreeMedForms</vendor>
     <copyright>(C) 2008-2012 Eric Maeker, MD</copyright>
     <license>Released the GPLv3 license.</license>
+    <category>Alerts</category>
     <description>The alert plugin manages all type of alerts in the project.</description>
     <url>http://www.freemedforms.com</url>
     <dependencyList>

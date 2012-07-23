@@ -2,6 +2,7 @@
     <vendor>FreeMedForms</vendor>
     <copyright>(C) 2008-2012 Eric Maeker, MD</copyright>
     <license>Non free license.</license>
+    <category>Drug manager</category>
     <description>This plugin allow drug interaction calculation (allergies, drug-drug interaction, potentially inappropriate medication).</description>
     <url>http://www.freemedforms.com</url>
     <dependencyList>

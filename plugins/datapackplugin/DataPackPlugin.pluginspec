@@ -2,6 +2,7 @@
     <vendor>FreeMedForms</vendor>
     <copyright>(C) 2008-2012 Eric Maeker, MD</copyright>
     <license>Released the GPLv3 license.</license>
+    <category>Data packs</category>
     <description>The plugin does nothing. It's only an infra-structure to ease creation of new plugins.</description>
     <url>http://www.freemedforms.com</url>
     <dependencyList>

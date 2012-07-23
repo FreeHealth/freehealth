@@ -3,6 +3,7 @@
     <copyright>(C) 2008-2012 by Eric MAEKER, MD</copyright>
     <license>Released under GPLv3.</license>
     <description>The XML form loader/saver for FreeMedForms.</description>
+    <category>Patient data</category>
     <url>http://www.freemedforms.com/</url>
     <dependencyList>
       <dependency name="Core" version="0.0.1"/>

@@ -2,6 +2,7 @@
     <vendor>FreeMedForms</vendor>
     <copyright>(C) 2008-2012 by Eric MAEKER, MD</copyright>
     <license>Released under GPLv3.</license>
+    <category>Print engine</category>
     <description>The printer plugin for FreeMedForms.</description>
     <url>http://www.freemedforms.com/</url>
     <dependencyList>
