@@ -521,7 +521,7 @@ bool AlertBase::createDatabase(const QString &connectionName , const QString &db
     }
 
     // inform the version
-    QSqlDatabase DB = database();
+    DB = database();
     DB.transaction();
     QSqlQuery query(database());
     query.prepare(prepareInsertQuery(Constants::Table_ALERT_VERSION));
