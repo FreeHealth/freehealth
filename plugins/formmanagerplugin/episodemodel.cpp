@@ -55,11 +55,9 @@
 #include <extensionsystem/pluginmanager.h>
 
 #include <QSqlTableModel>
-#include <QSqlDatabase>
-#include <QSqlQuery>
-#include <QFutureWatcher>
-#include <QFuture>
-#include <QtConcurrentRun>
+//#include <QFutureWatcher>
+//#include <QFuture>
+//#include <QtConcurrentRun>
 
 enum { base64MimeDatas = true  };
 
