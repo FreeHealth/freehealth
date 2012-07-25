@@ -238,7 +238,7 @@ void UserManagerPlugin::extensionsInitialized()
     a->setIcon(QIcon(Core::Constants::ICONUSER));
     cmd = actionManager()->registerAction(aChangeUser, "aChangeCurrentUser", ctx);
     Q_ASSERT(cmd);
-    cmd->setTranslations(tr("Change current user"));
+    cmd->setTranslations(Trans::Constants::CHANGE_USER);
     menu->addAction(cmd, groupUsers);
     cmd->retranslate();
     connect(aChangeUser, SIGNAL(triggered()), this, SLOT(changeCurrentUser()));
