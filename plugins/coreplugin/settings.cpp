@@ -801,6 +801,7 @@ QString SettingsPrivate::getIniFile(const QString & appName, const QString & fil
         QString content = Utils::readTextFile(QString("%1/pathtoconfig.ini").arg(qApp->applicationDirPath()), Utils::DontWarnUser);
         content = content.trimmed();
         if (!content.isEmpty()) {
+            LOG_FOR("Settings", tr("Found a configuration file next to the binary. Reading file."));
             if (QDir::isRelativePath(content))
                 content.prepend(qApp->applicationDirPath() + QDir::separator());
             content = QDir::cleanPath(content);
@@ -823,6 +824,7 @@ QString SettingsPrivate::getIniFile(const QString & appName, const QString & fil
                 else
                     LOG_FOR("Settings", tr("WARNING: Ini file %1 can not be used.").arg(content));
             }
+            LOG_ERROR_FOR("Settings", tr("File does not exists and can not be created: %1").arg(content);
         }
     }
 
