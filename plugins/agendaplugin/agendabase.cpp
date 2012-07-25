@@ -89,13 +89,13 @@ static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 static inline UserPlugin::UserModel *userModel() {return UserPlugin::UserModel::instance();}
 static inline Core::ICommandLine *commandLine()  { return Core::ICore::instance()->commandLine(); }
 
-static inline bool connectDatabase(const QString &connectionName, const int line)
+static inline bool connectDatabase(QSqlDatabase &DB, const int line)
 {
-    QSqlDatabase db = QSqlDatabase::database(connectionName);
-    if (!db.isOpen()) {
-        if (!db.open()) {
+    if (!DB.isOpen()) {
+        if (!DB.open()) {
             Utils::Log::addError("AgendaBase", tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
-                      .arg(db.connectionName()).arg(db.lastError().text()), __FILE__, line);
+                                 .arg(DB.connectionName()).arg(DB.lastError().text()),
+                                 __FILE__, line);
             return false;
         }
     }
@@ -450,13 +450,18 @@ bool AgendaBase::createDatabase(const QString &connectionName, const QString &db
     }
 
     // Table INFORMATION
+    DB.transaction();
     QSqlQuery query(DB);
     query.prepare(prepareInsertQuery(Constants::Table_VERSION));
     query.bindValue(Constants::VERSION_ACTUAL, Constants::DB_VERSION);
     if (!query.exec()) {
         LOG_QUERY_ERROR(query);
+        query.finish();
+        DB.rollback();
+        return false;
     }
     query.finish();
+    DB.commit();
 
     // database is readable/writable
     LOG(tkTr(Trans::Constants::DATABASE_1_CORRECTLY_CREATED).arg(pathOrHostName + QDir::separator() + dbName));
@@ -506,19 +511,25 @@ Agenda::UserCalendar *AgendaBase::createEmptyCalendar(const QString &userUid)
 /** Return true if the user \e userUid has recorded calendar(s) in the database. */
 bool AgendaBase::hasCalendar(const QString &userUuid)
 {
-    if (!connectDatabase(Constants::DB_NAME, __LINE__))
+    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
+    if (!connectDatabase(DB, __LINE__)) {
         return false;
+    }
+    DB.transaction();
     QString uid = userUuid;
     if (uid.isEmpty())
         uid = user()->uuid();
     Utils::Field get(Constants::Table_CALENDAR, Constants::CAL_ID);
     Utils::Join join(Constants::Table_CALENDAR, Constants::USERCAL_USER_UUID, Constants::Table_CALENDAR, Constants::CAL_ID);
     Utils::Field cond(Constants::Table_USERCALENDARS, Constants::USERCAL_USER_UUID, QString("='%1'").arg(uid));
-    QSqlQuery query(database());
+    QSqlQuery query(DB);
     if (query.exec(select(get, join, cond))) {
-        if (query.next())
+        if (query.next()) {
+            DB.commit();
             return true;
+        }
     }
+    DB.commit();
     return false;
 }
 
@@ -526,8 +537,10 @@ bool AgendaBase::hasCalendar(const QString &userUuid)
 QList<Agenda::UserCalendar *> AgendaBase::getUserCalendars(const QString &userUuid)
 {
     QList<Agenda::UserCalendar *> toReturn;
-    if (!connectDatabase(Constants::DB_NAME, __LINE__))
+    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
+    if (!connectDatabase(DB, __LINE__)) {
         return toReturn;
+    }
 
     QString uid = userUuid;
     if (userUuid.isEmpty())
@@ -554,7 +567,8 @@ QList<Agenda::UserCalendar *> AgendaBase::getUserCalendars(const QString &userUu
     get << Utils::Field(Constants::Table_USERCALENDARS, Constants::USERCAL_USER_UUID);
     reqs << select(get, joins, conds);
 
-    QSqlQuery query(database());
+    DB.transaction();
+    QSqlQuery query(DB);
     for(int i = 0; i < reqs.count(); ++i) {
         if (query.exec(reqs.at(i))) {
             while (query.next()) {
@@ -593,6 +607,9 @@ QList<Agenda::UserCalendar *> AgendaBase::getUserCalendars(const QString &userUu
             }
         } else {
             LOG_QUERY_ERROR(query);
+            query.finish();
+            DB.rollback();
+            return toReturn;
         }
         query.finish();
     }
@@ -650,9 +667,13 @@ QList<Agenda::UserCalendar *> AgendaBase::getUserCalendars(const QString &userUu
             tr.clear();
         } else {
             LOG_QUERY_ERROR(query);
+            query.finish();
+            DB.rollback();
+            return toReturn;
         }
     }
     query.finish();
+    DB.commit();
 
     // Get Peoples
     for(int i = 0; i < toReturn.count(); ++i) {
@@ -666,9 +687,6 @@ QList<Agenda::UserCalendar *> AgendaBase::getUserCalendars(const QString &userUu
 /** Save the user's calendar availabilities for the specified \e calendar to database. The \e calendar is modified during this process (ids are set if needed). */
 bool AgendaBase::saveCalendarAvailabilities(Agenda::UserCalendar *calendar)
 {
-    if (!connectDatabase(Constants::DB_NAME, __LINE__))
-        return false;
-
     if (calendar->data(Constants::Db_CalId).isNull() ||
         !calendar->data(Constants::Db_CalId).isValid() ||
         calendar->data(Constants::Db_CalId).toInt()==-1) {
@@ -676,10 +694,15 @@ bool AgendaBase::saveCalendarAvailabilities(Agenda::UserCalendar *calendar)
         return false;
     }
 
+    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
+    if (!connectDatabase(DB, __LINE__)) {
+        return false;
+    }
+
     // delete all recorded availabilities of this calendar
     // get all availIds for the calId
-    database().transaction();
-    QSqlQuery query(database());
+    DB.transaction();
+    QSqlQuery query(DB);
     QHash<int, QString> where;
     QStringList availIds;
     // select avail_id from avail where cal_id=6
@@ -690,6 +713,7 @@ bool AgendaBase::saveCalendarAvailabilities(Agenda::UserCalendar *calendar)
         }
     } else {
         LOG_QUERY_ERROR(query);
+        query.finish();
         database().rollback();
         return false;
     }
@@ -707,6 +731,7 @@ bool AgendaBase::saveCalendarAvailabilities(Agenda::UserCalendar *calendar)
         } else {
             LOG_QUERY_ERROR(query);
             database().rollback();
+            query.finish();
             return false;
         }
         query.finish();
@@ -716,6 +741,7 @@ bool AgendaBase::saveCalendarAvailabilities(Agenda::UserCalendar *calendar)
         where.insert(Constants::AVAIL_ID, QString("IN (%1)").arg(availIds.join(",")));
         if (!query.exec(this->prepareDeleteQuery(Constants::Table_AVAILABILITIES, where))) {
             LOG_QUERY_ERROR(query);
+            query.finish();
             database().rollback();
             return false;
         }
@@ -724,6 +750,7 @@ bool AgendaBase::saveCalendarAvailabilities(Agenda::UserCalendar *calendar)
         where.insert(Constants::AVTOTR_AVID, QString("IN (%1)").arg(availIds.join(",")));
         if (!query.exec(this->prepareDeleteQuery(Constants::Table_AVAIL_TO_TIMERANGE, where))) {
             LOG_QUERY_ERROR(query);
+            query.finish();
             database().rollback();
             return false;
         }
@@ -732,6 +759,7 @@ bool AgendaBase::saveCalendarAvailabilities(Agenda::UserCalendar *calendar)
         where.insert(Constants::TIMERANGE_ID, QString("IN (%1)").arg(trIds.join(",")));
         if (!query.exec(this->prepareDeleteQuery(Constants::Table_TIMERANGE, where))) {
             LOG_QUERY_ERROR(query);
+            query.finish();
             database().rollback();
             return false;
         }
@@ -740,6 +768,7 @@ bool AgendaBase::saveCalendarAvailabilities(Agenda::UserCalendar *calendar)
 
     // No availabilities -> finished
     if (!calendar->hasAvailability()) {
+        DB.commit();
         return true;
     }
 
@@ -767,6 +796,7 @@ bool AgendaBase::saveCalendarAvailabilities(Agenda::UserCalendar *calendar)
         query.bindValue(Constants::AVAIL_WEEKDAY, it.key());
         if (!query.exec()) {
             LOG_QUERY_ERROR(query);
+            query.finish();
             database().rollback();
             return false;
         }
@@ -783,6 +813,7 @@ bool AgendaBase::saveCalendarAvailabilities(Agenda::UserCalendar *calendar)
             query.bindValue(Constants::TIMERANGE_TO, range.to.toString());
             if (!query.exec()) {
                 LOG_QUERY_ERROR(query);
+                query.finish();
                 database().rollback();
                 return false;
             }
@@ -796,6 +827,7 @@ bool AgendaBase::saveCalendarAvailabilities(Agenda::UserCalendar *calendar)
             query.bindValue(Constants::AVTOTR_TRID, trId);
             if (!query.exec()) {
                 LOG_QUERY_ERROR(query);
+                query.finish();
                 database().rollback();
                 return false;
             }
@@ -805,7 +837,7 @@ bool AgendaBase::saveCalendarAvailabilities(Agenda::UserCalendar *calendar)
         hashAv[it.key()].setId(avId);
     }
     calendar->setAvailabilities(hashAv.values());
-    database().commit();
+    DB.commit();
     LOG("User agenda correctly saved");
     return true;
 }
@@ -815,13 +847,16 @@ bool AgendaBase::saveUserCalendar(Agenda::UserCalendar *calendar)
 {
     if (!calendar->isModified())
         return true;
-    if (!connectDatabase(Constants::DB_NAME, __LINE__))
+    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
+    if (!connectDatabase(DB, __LINE__)) {
         return false;
+    }
+    DB.transaction();
     if (calendar->data(Constants::Db_CalId).isNull() ||
         !calendar->data(Constants::Db_CalId).isValid() ||
         calendar->data(Constants::Db_CalId).toInt()==-1) {
         // save
-        QSqlQuery query(database());
+        QSqlQuery query(DB);
         query.prepare(prepareInsertQuery(Constants::Table_CALENDAR));
         query.bindValue(Constants::CAL_ID, QVariant());
         query.bindValue(Constants::CAL_UID, calendar->data(Agenda::UserCalendar::Uid).toString());
@@ -842,6 +877,8 @@ bool AgendaBase::saveUserCalendar(Agenda::UserCalendar *calendar)
         query.bindValue(Constants::CAL_XMLOPTIONS, calendar->xmlOptions());
         if (!query.exec()) {
             LOG_QUERY_ERROR(query);
+            query.finish();
+            DB.rollback();
             return false;
         }
         calendar->setData(Constants::Db_CalId, query.lastInsertId());
@@ -858,20 +895,26 @@ bool AgendaBase::saveUserCalendar(Agenda::UserCalendar *calendar)
         query.bindValue(Constants::USERCAL_USER_UUID, calendar->data(Agenda::UserCalendar::UserOwnerUid));
         if (!query.exec()) {
             LOG_QUERY_ERROR(query);
+            query.finish();
+            DB.rollback();
             return false;
         }
         calendar->setData(Constants::Db_UserCalId, query.lastInsertId());
         calendar->setModified(false);
         query.finish();
 
-        if (!saveCalendarAvailabilities(calendar))
+        if (!saveCalendarAvailabilities(calendar)) {
+            DB.rollback();
             return false;
+        }
 
-        if (!saveRelatedPeoples(RelatedToCalendar, calendar->data(Constants::Db_CalId).toInt(), calendar))
+        if (!saveRelatedPeoples(RelatedToCalendar, calendar->data(Constants::Db_CalId).toInt(), calendar)) {
+            DB.rollback();
             return false;
+        }
     } else {
         // update
-        QSqlQuery query(database());
+        QSqlQuery query(DB);
         QHash<int, QString> where;
         where.insert(Constants::CAL_ID, "=" + calendar->data(Constants::Db_CalId).toString());
         query.prepare(prepareUpdateQuery(Constants::Table_CALENDAR,
@@ -909,17 +952,24 @@ bool AgendaBase::saveUserCalendar(Agenda::UserCalendar *calendar)
         query.bindValue(14, calendar->data(Constants::Db_IsVirtual).toInt());
         if (!query.exec()) {
             LOG_QUERY_ERROR(query);
+            query.finish();
+            DB.rollback();
             return false;
         }
         calendar->setModified(false);
         query.finish();
 
-        if (!saveCalendarAvailabilities(calendar))
+        if (!saveCalendarAvailabilities(calendar)) {
+            DB.rollback();
             return false;
+        }
 
-        if (!saveRelatedPeoples(RelatedToCalendar, calendar->data(Constants::Db_CalId).toInt(), calendar))
+        if (!saveRelatedPeoples(RelatedToCalendar, calendar->data(Constants::Db_CalId).toInt(), calendar)) {
+            DB.rollback();
             return false;
+        }
     }
+    DB.commit();
     return true;
 }
 
@@ -927,11 +977,11 @@ bool AgendaBase::saveUserCalendar(Agenda::UserCalendar *calendar)
 QList<Appointement *> AgendaBase::getCalendarEvents(const CalendarEventQuery &calQuery)
 {
     QList<Appointement *> toReturn;
-    if (!connectDatabase(Constants::DB_NAME, __LINE__)) {
+    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
+    if (!connectDatabase(DB, __LINE__)) {
         return toReturn;
     }
     QString req;
-    QSqlQuery query(database());
     // get events according to the query
     Utils::JoinList joins;
 //    joins << Utils::Join(Constants::Table_COMMON, Constants::COMMON_ID, Constants::Table_EVENTS, Constants::EVENT_COMMON_ID);
@@ -993,6 +1043,8 @@ QList<Appointement *> AgendaBase::getCalendarEvents(const CalendarEventQuery &ca
 
 //    qWarning() << req;
 
+    DB.transaction();
+    QSqlQuery query(DB);
     if (query.exec(req)) {
         while (query.next()) {
             Appointement *ev = new Appointement;
@@ -1007,10 +1059,15 @@ QList<Appointement *> AgendaBase::getCalendarEvents(const CalendarEventQuery &ca
         }
     } else {
         LOG_QUERY_ERROR(query);
+        query.finish();
+        DB.rollback();
+        return toReturn;
     }
     query.finish();
-    if (toReturn.isEmpty())
+    if (toReturn.isEmpty()) {
+        DB.commit();
         return toReturn;
+    }
 
     // Get common data
     QHash<int, QString> where;
@@ -1038,6 +1095,9 @@ QList<Appointement *> AgendaBase::getCalendarEvents(const CalendarEventQuery &ca
             }
         } else {
             LOG_QUERY_ERROR(query);
+            query.finish();
+            DB.rollback();
+            return toReturn;
         }
         query.finish();
 
@@ -1046,14 +1106,19 @@ QList<Appointement *> AgendaBase::getCalendarEvents(const CalendarEventQuery &ca
     }
 
 //    getPatientNames(toReturn);
-
+    DB.commit();
     return toReturn;
 }
 
 /** Save or update the common part of events and set the commonId() in the event */
 bool AgendaBase::saveCommonEvent(Appointement *event)
 {
-    QSqlQuery query(database());
+    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
+    if (!connectDatabase(DB, __LINE__)) {
+        return false;
+    }
+    DB.transaction();
+    QSqlQuery query(DB);
     if (event->eventId() == -1) {
         // save
         query.prepare(prepareInsertQuery(Constants::Table_COMMON));
@@ -1075,6 +1140,8 @@ bool AgendaBase::saveCommonEvent(Appointement *event)
         query.bindValue(Constants::COMMON_XMLCALOPTIONS, event->data(Constants::Db_XmlOptions));
         if (!query.exec()) {
             LOG_QUERY_ERROR(query);
+            query.finish();
+            DB.rollback();
             return false;
         }
         int commonId = query.lastInsertId().toInt();
@@ -1119,10 +1186,13 @@ bool AgendaBase::saveCommonEvent(Appointement *event)
         query.bindValue(14, event->data(Constants::Db_IsVirtual).toInt());
         if (!query.exec()) {
             LOG_QUERY_ERROR(query);
+            query.finish();
+            DB.rollback();
             return false;
         }
     }
     query.finish();
+    DB.commit();
     return true;
 }
 
@@ -1133,12 +1203,14 @@ bool AgendaBase::saveRelatedPeoples(RelatedEventFor relatedTo, const int eventOr
         LOG_ERROR("No Event/Calendar ID");
         return false;
     }
-    if (!connectDatabase(Constants::DB_NAME, __LINE__)) {
+    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
+    if (!connectDatabase(DB, __LINE__)) {
         return false;
     }
 
     // Delete old entries
-    QSqlQuery query(database());
+    DB.transaction();
+    QSqlQuery query(DB);
     QHash<int, QString> where;
     if (relatedTo == RelatedToCalendar) {
         where.insert(PEOPLE_CAL_ID, QString("=%1").arg(eventOrCalendarId));
@@ -1147,6 +1219,8 @@ bool AgendaBase::saveRelatedPeoples(RelatedEventFor relatedTo, const int eventOr
     }
     if (!query.exec(prepareDeleteQuery(Table_PEOPLE, where))) {
         LOG_QUERY_ERROR(query);
+        query.finish();
+        DB.rollback();
         return false;
     }
     query.finish();
@@ -1169,11 +1243,15 @@ bool AgendaBase::saveRelatedPeoples(RelatedEventFor relatedTo, const int eventOr
             query.bindValue(PEOPLE_TYPE, i);
             if (!query.exec()) {
                 LOG_QUERY_ERROR(query);
+                query.finish();
+                DB.rollback();
                 return false;
             }
             query.finish();
         }
     }
+    query.finish();
+    DB.commit();
     return true;
 }
 
@@ -1184,11 +1262,12 @@ bool AgendaBase::getRelatedPeoples(RelatedEventFor relatedTo, const int eventOrC
         LOG_ERROR("No Event/Calendar ID");
         return false;
     }
-    if (!connectDatabase(Constants::DB_NAME, __LINE__)) {
+    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
+    if (!connectDatabase(DB, __LINE__)) {
         return false;
     }
-
-    QSqlQuery query(database());
+    DB.transaction();
+    QSqlQuery query(DB);
     QHash<int, QString> where;
     if (relatedTo == RelatedToCalendar) {
         where.insert(Constants::PEOPLE_CAL_ID, QString("=%1").arg(eventOrCalendarId));
@@ -1203,6 +1282,8 @@ bool AgendaBase::getRelatedPeoples(RelatedEventFor relatedTo, const int eventOrC
         }
     } else {
         LOG_QUERY_ERROR(query);
+        query.finish();
+        DB.rollback();
         return false;
     }
     query.finish();
@@ -1218,7 +1299,7 @@ bool AgendaBase::getRelatedPeoples(RelatedEventFor relatedTo, const int eventOrC
             }
         }
     }
-
+    DB.commit();
     return true;
 }
 
@@ -1315,7 +1396,12 @@ bool AgendaBase::saveNonCyclingEvent(Appointement *event)
     if (!saveCommonEvent(event))
         return false;
 
-    QSqlQuery query(database());
+    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
+    if (!connectDatabase(DB, __LINE__)) {
+        return false;
+    }
+    DB.transaction();
+    QSqlQuery query(DB);
     if (event->eventId() == -1) {
         // save
         query.prepare(prepareInsertQuery(Constants::Table_EVENTS));
@@ -1327,6 +1413,8 @@ bool AgendaBase::saveNonCyclingEvent(Appointement *event)
         query.bindValue(Constants::EVENT_DATEEND, event->ending());
         if (!query.exec()) {
             LOG_QUERY_ERROR(query);
+            query.finish();
+            DB.rollback();
             return false;
         }
         event->setData(Constants::Db_EvId, query.lastInsertId());
@@ -1334,8 +1422,10 @@ bool AgendaBase::saveNonCyclingEvent(Appointement *event)
 
         event->setModified(false);
 
-        if (!saveRelatedPeoples(RelatedToAppointement, event->eventId(), event))
+        if (!saveRelatedPeoples(RelatedToAppointement, event->eventId(), event)) {
+            DB.rollback();
             return false;
+        }
 
     } else {
         // update
@@ -1354,6 +1444,8 @@ bool AgendaBase::saveNonCyclingEvent(Appointement *event)
         query.bindValue(3, event->ending());
         if (!query.exec()) {
             LOG_QUERY_ERROR(query);
+            query.finish();
+            DB.rollback();
             return false;
         }
         query.finish();
@@ -1364,23 +1456,24 @@ bool AgendaBase::saveNonCyclingEvent(Appointement *event)
         query.exec(prepareDeleteQuery(Table_PEOPLE, where));
         if (!query.exec()) {
             LOG_QUERY_ERROR(query);
+            query.finish();
+            DB.rollback();
             return false;
         }
         query.finish();
 
-        if (!saveRelatedPeoples(RelatedToAppointement, event->eventId(), event))
+        if (!saveRelatedPeoples(RelatedToAppointement, event->eventId(), event)) {
+            DB.rollback();
             return false;
+        }
     }
+    DB.commit();
     return true;
 }
 
 /** Save or update events in the database, when saved events are set to non modified. Return false in case of an error. */
 bool AgendaBase::saveCalendarEvents(const QList<Appointement *> &events)
 {
-    if (!connectDatabase(Constants::DB_NAME, __LINE__))
-        return false;
-    // update or save ?
-    QList<Appointement *> save, update;
     bool ok = true;
     for(int i = 0; i < events.count(); ++i) {
         qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
@@ -1424,8 +1517,10 @@ QList<QDateTime> AgendaBase::nextAvailableTime(const QDateTime &startSearch, con
     if (calendar.data(UserCalendar::DefaultDuration).toInt() == 0)
         return toReturn;
 
-    if (!connectDatabase(Constants::DB_NAME, __LINE__))
-        return toReturn;
+    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
+    if (!connectDatabase(DB, __LINE__)) {
+        return false;
+    }
 
     // Here we can go on
     QDateTime start, currentStart, currentEnd;
@@ -1448,7 +1543,6 @@ QList<QDateTime> AgendaBase::nextAvailableTime(const QDateTime &startSearch, con
     QString limit = QString("\n LIMIT 0,1");
 
     // get the first event and make tests
-    QSqlDatabase DB = database();
     DB.transaction();
     QSqlQuery query(DB);
     QRect nextAppointement;
@@ -1460,6 +1554,9 @@ QList<QDateTime> AgendaBase::nextAvailableTime(const QDateTime &startSearch, con
         }
     } else {
         LOG_QUERY_ERROR(query);
+        query.finish();
+        DB.rollback();
+        return toReturn;
     }
 
     // Transform availabilities to QRect
@@ -1497,6 +1594,7 @@ QList<QDateTime> AgendaBase::nextAvailableTime(const QDateTime &startSearch, con
                 }
             } else {
                 LOG_QUERY_ERROR(query);
+                query.finish();
                 DB.rollback();
                 return toReturn;
             }
