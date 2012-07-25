@@ -309,13 +309,17 @@ bool EpisodeBase::createDatabase(const QString &connectionName , const QString &
     }
 
     // Add version number
+    DB.transaction();
     QSqlQuery query(DB);
     query.prepare(prepareInsertQuery(Table_VERSION));
     query.bindValue(VERSION_TEXT, DB_ACTUALVERSION);
     if (!query.exec()) {
         LOG_QUERY_ERROR(query);
+        query.finish();
+        DB.rollback();
         return false;
     }
+    DB.commit();
 
     populateWithDefaultValues();
 
@@ -367,6 +371,7 @@ bool EpisodeBase::setGenericPatientFormFile(const QString &absPathOrUid)
         query.bindValue(0, absPathOrUid);
         if (!query.exec()) {
             LOG_QUERY_ERROR(query);
+            query.finish();
             DB.rollback();
             return false;
         }
@@ -386,10 +391,12 @@ bool EpisodeBase::setGenericPatientFormFile(const QString &absPathOrUid)
         query.bindValue(FORM_USER_RESTRICTION_ID, QVariant());
         if (!query.exec()) {
             LOG_QUERY_ERROR(query);
+            query.finish();
             DB.rollback();
             return false;
         }
     }
+    query.finish();
     DB.commit();
     return true;
 }
@@ -417,9 +424,11 @@ QString EpisodeBase::getGenericFormFile()
         }
     } else {
         LOG_QUERY_ERROR(query);
+        query.finish();
         DB.rollback();
         return QString();
     }
+    query.finish();
     DB.commit();
     return path;
 }
@@ -458,9 +467,11 @@ QVector<Form::SubFormInsertionPoint> EpisodeBase::getSubFormFiles()
         }
     } else {
         LOG_QUERY_ERROR(query);
+        query.finish();
         DB.rollback();
         return toReturn;
     }
+    query.finish();
     DB.commit();
     return toReturn;
 }
@@ -491,11 +502,13 @@ bool EpisodeBase::addSubForms(const QVector<SubFormInsertionPoint> &insertions)
         query.bindValue(FORM_USER_RESTRICTION_ID, QVariant());
         if (!query.exec()) {
             LOG_QUERY_ERROR(query);
+            query.finish();
             DB.rollback();
             return false;
         }
         query.finish();
     }
+    query.finish();
     DB.commit();
     return true;
 }
@@ -653,6 +666,7 @@ bool EpisodeBase::saveEpisode(const QList<EpisodeData *> &episodes)
             query.bindValue(EPISODES_USERCREATOR, episode->data(EpisodeData::UserCreatorUuid));
             if (!query.exec()) {
                 LOG_QUERY_ERROR(query);
+                query.finish();
                 DB.rollback();
                 return false;
             } else {
@@ -668,6 +682,7 @@ bool EpisodeBase::saveEpisode(const QList<EpisodeData *> &episodes)
                 query.bindValue(EPISODE_CONTENT_XML, episode->data(EpisodeData::XmlContent));
                 if (!query.exec()) {
                     LOG_QUERY_ERROR(query);
+                    query.finish();
                     DB.rollback();
                     return false;
                 } else {
@@ -713,6 +728,7 @@ bool EpisodeBase::saveEpisode(const QList<EpisodeData *> &episodes)
             query.bindValue(6, episode->data(EpisodeData::UserCreatorUuid));
             if (!query.exec()) {
                 LOG_QUERY_ERROR(query);
+                query.finish();
                 DB.rollback();
                 return false;
             }
@@ -728,6 +744,7 @@ bool EpisodeBase::saveEpisode(const QList<EpisodeData *> &episodes)
                 query.bindValue(0, episode->data(EpisodeData::XmlContent));
                 if (!query.exec()) {
                     LOG_QUERY_ERROR(query);
+                    query.finish();
                     DB.rollback();
                     return false;
                 }
@@ -749,6 +766,7 @@ bool EpisodeBase::saveEpisode(const QList<EpisodeData *> &episodes)
             episode->setModified(true);
         }
     }
+    query.finish();
     DB.commit();
     return true;
 }
@@ -762,7 +780,6 @@ QList<EpisodeData *> EpisodeBase::getEpisodes(const EpisodeBaseQuery &baseQuery)
     if (!connectDatabase(DB, __LINE__)) {
         return toReturn;
     }
-    DB.transaction();
 
     // Manage filter
     QString order, limit, req;
@@ -809,6 +826,7 @@ QList<EpisodeData *> EpisodeBase::getEpisodes(const EpisodeBaseQuery &baseQuery)
 
 //    qWarning() << req;
 
+    DB.transaction();
     QSqlQuery query(DB);
     if (query.exec(req)) {
         while (query.next()) {
@@ -845,6 +863,9 @@ QList<EpisodeData *> EpisodeBase::getEpisodes(const EpisodeBaseQuery &baseQuery)
                 }
             } else {
                 LOG_QUERY_ERROR(query2);
+                query2.finish();
+                DB.rollback();
+                return toReturn;
             }
             query2.finish();
 
@@ -864,20 +885,23 @@ QList<EpisodeData *> EpisodeBase::getEpisodes(const EpisodeBaseQuery &baseQuery)
                 }
             } else {
                 LOG_QUERY_ERROR(query2);
+                query2.finish();
+                DB.rollback();
+                return toReturn;
             }
             query2.finish();
 
             e->setModified(false);
-
-//            qWarning() << e;
-//            qWarning() << e->data(EpisodeData::Label);
             toReturn << e;
         }
     } else {
         LOG_QUERY_ERROR(query);
+        query.finish();
+        DB.rollback();
+        return toReturn;
     }
+    query.finish();
     DB.commit();
-//    qWarning() << toReturn;
     return toReturn;
 }
 
@@ -903,6 +927,7 @@ bool EpisodeBase::getEpisodeContent(EpisodeData *episode)
         }
     } else {
         LOG_QUERY_ERROR(query);
+        query.finish();
         DB.rollback();
         return false;
     }
