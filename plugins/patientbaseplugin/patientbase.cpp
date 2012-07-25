@@ -255,6 +255,7 @@ bool PatientBase::createVirtualPatient(const QString &name, const QString &secon
     qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     if (!query.exec()) {
         LOG_QUERY_ERROR_FOR("PatientBase", query);
+        query.finish();
         DB.rollback();
         return false;
     }
@@ -275,10 +276,12 @@ bool PatientBase::createVirtualPatient(const QString &name, const QString &secon
         query.bindValue(PHOTO_BLOB, ba);
         if (!query.exec()) {
             LOG_QUERY_ERROR_FOR("PatientBase", query);
+            query.finish();
             DB.rollback();
             return false;
         }
     }
+    query.finish();
     DB.commit();
     qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     return true;
@@ -313,6 +316,7 @@ QString PatientBase::patientUuid(const QString &birthname,
     } else {
         LOG_QUERY_ERROR_FOR("PatientBase", query);
     }
+    query.finish();
     DB.commit();
     return toReturn;
 }
@@ -408,14 +412,17 @@ bool PatientBase::createDatabase(const QString &connectionName , const QString &
     }
 
     // inform the version
-    QSqlQuery query(database());
+    DB.transaction();
+    QSqlQuery query(DB);
     query.prepare(prepareInsertQuery(Constants::Table_VERSION));
     query.bindValue(Constants::VERSION_TEXT, Constants::DB_ACTUALVERSION);
     if (!query.exec()) {
         LOG_QUERY_ERROR(query);
+        DB.rollback();
         return false;
     }
-
+    query.finish();
+    DB.commit();
     return true;
 }
 
