@@ -190,8 +190,9 @@ public:
         QHash<int, QString> where;
         where.insert(Constants::PHOTO_PATIENT_UID, QString("='%1'").arg(patientUid));
         bool create = patientBase()->count(Constants::Table_PATIENT_PHOTO, Constants::PHOTO_PATIENT_UID, patientBase()->getWhereClause(Constants::Table_PATIENT_PHOTO, where)) == 0;
-
-        QSqlQuery query(patientBase()->database());
+        QSqlDatabase DB = patientBase()->database();
+        DB.transaction();
+        QSqlQuery query(DB);
         QString req;
         if (create) {
             req = patientBase()->prepareInsertQuery(Constants::Table_PATIENT_PHOTO);
@@ -207,8 +208,12 @@ public:
         }
         if (!query.exec()) {
             LOG_QUERY_ERROR_FOR(q, query);
+            query.finish();
+            DB.rollback();
             return false;
         }
+        query.finish();
+        DB.commit();
         return true;
     }
 
@@ -225,18 +230,26 @@ public:
             return QPixmap();
         }
 
-        QSqlQuery query(patientBase()->database());
+        QSqlDatabase DB = patientBase()->database();
+        DB.transaction();
+        QSqlQuery query(DB);
         QString req = patientBase()->select(Constants::Table_PATIENT_PHOTO, Constants::PHOTO_BLOB, where);
         if (!query.exec(req)) {
             LOG_QUERY_ERROR_FOR(q, query);
+            query.finish();
+            DB.rollback();
             return QPixmap();
         } else {
             if (query.next()) {
                 QPixmap pix;
                 pix.loadFromData(query.value(0).toByteArray());
+                query.finish();
+                DB.commit();
                 return pix;
             }
         }
+        query.finish();
+        DB.commit();
         return QPixmap();
     }
 
@@ -854,11 +867,9 @@ bool PatientModel::refreshModel()
 QHash<QString, QString> PatientModel::patientName(const QList<QString> &uuids)
 {
     QHash<QString, QString> names;
-
-    if (!patientBase()->database().transaction())
-        LOG_ERROR_FOR("PatientModel", "Unable to set transaction with patient database");
-
-    QSqlQuery query(patientBase()->database());
+    QSqlDatabase DB = patientBase()->database();
+    DB.transaction();
+    QSqlQuery query(DB);
     const QStringList &titles = Trans::ConstantTranslations::titles();
 
     foreach(const QString &u, uuids) {
@@ -876,11 +887,12 @@ QHash<QString, QString> PatientModel::patientName(const QList<QString> &uuids)
             }
         } else {
             LOG_QUERY_ERROR_FOR("PatientModel", query);
+            query.finish();
+            DB.rollback();
+            return names;
         }
         query.finish();
     }
-
-    patientBase()->database().commit();
-
+    DB.commit();
     return names;
 }
