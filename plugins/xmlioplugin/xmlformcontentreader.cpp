@@ -238,6 +238,7 @@ bool XmlFormContentReader::checkFileContent(const QString &formUidOrFullAbsPath,
             warnXmlReadError(m_Mute, formUidOrFullAbsPath, error);
             ok = false;
         }
+        qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
         if (ok)
             m_DomDocFormCache.insert(formUidOrFullAbsPath, doc);
     }
@@ -256,6 +257,7 @@ bool XmlFormContentReader::checkFileContent(const QString &formUidOrFullAbsPath,
             m_Error.append(msg);
             ok = false;
         }
+        qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     }
     return ok;
 }
@@ -335,6 +337,7 @@ Form::FormIODescription *XmlFormContentReader::readFileInformation(const QString
                     toReturn->addScreenShot(file.absoluteFilePath().remove(shotPath), pix);
                 }
             }
+            qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
         } else {
             // Get from database
             QHash<QString, QPixmap> pix = base()->getScreenShots(form.uid, QLocale().name().left(2).toLower());
@@ -342,6 +345,7 @@ Form::FormIODescription *XmlFormContentReader::readFileInformation(const QString
             foreach(const QString &k, pix.keys()) {
                 toReturn->addScreenShot(k, pix.value(k));
             }
+            qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
         }
     }
     return toReturn;
@@ -385,6 +389,7 @@ bool XmlFormContentReader::loadForm(const XmlFormName &form, Form::FormMain *roo
 {
 //    qWarning() << Q_FUNC_INFO << form.uid << form.absFileName << m_ActualForm;
 
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     QDomDocument *doc = 0;
     if (!m_DomDocFormCache.keys().contains(form.absFileName)) {
         LOG_ERROR_FOR("XmlFormContentReader","Form not in cache: " + form.absFileName);
@@ -411,6 +416,7 @@ bool XmlFormContentReader::loadForm(const XmlFormName &form, Form::FormMain *roo
     }
 
 //    rootForm->createDebugPage();
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     createWidgets(rootForm);
 
     // Manage uuid equivalence
@@ -429,6 +435,7 @@ bool XmlFormContentReader::loadForm(const XmlFormName &form, Form::FormMain *roo
             }
         }
     }
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
 
     return true;
 }

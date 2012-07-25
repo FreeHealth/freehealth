@@ -564,7 +564,9 @@ void CoreDatabaseCreationPage::startDbCreation()
     Core::ICore::instance()->requestFirstRunDatabaseCreation();
     _completed = true;
     Q_EMIT completeChanged();
+    qApp->processEvents();
     wizard()->next();
+    qApp->processEvents();
 }
 
 bool CoreDatabaseCreationPage::isComplete() const

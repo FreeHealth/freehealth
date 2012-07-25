@@ -438,11 +438,14 @@ bool CategoryBase::saveCategories(const QVector<CategoryItem *> &categories, boo
     }
     if (createTransaction)
         DB.transaction();
+
     for(int i=0; i < categories.count(); ++i) {
+        qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
         CategoryItem *category = categories.at(i);
 
         // save or update ?
         if (categoryNeedsUpdate(category)) {
+            qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
             if (!updateCategory(category)) {
                 if (createTransaction)
                     DB.rollback();
@@ -452,6 +455,7 @@ bool CategoryBase::saveCategories(const QVector<CategoryItem *> &categories, boo
         }
 
         // save labels
+        qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
         if (!saveCategoryLabels(category)) {
             if (createTransaction)
                 DB.rollback();
@@ -482,9 +486,12 @@ bool CategoryBase::saveCategories(const QVector<CategoryItem *> &categories, boo
             return false;
         }
         category->setDirty(false);
+
+        qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
         for(int i=0; i < category->childCount(); ++i)
             category->child(i)->setData(CategoryItem::DbOnly_ParentId, category->id());
 
+        qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
         if (!saveCategories(category->children().toVector(), false)) {
             if (createTransaction)
                 DB.rollback();

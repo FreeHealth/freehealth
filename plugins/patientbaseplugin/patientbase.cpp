@@ -198,6 +198,7 @@ bool PatientBase::createVirtualPatient(const QString &name, const QString &secon
                           QString uuid, const int lkid,
                           const QString &photoFile, const QDate &death)
 {
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
     if (!connectDatabase(DB, __LINE__)) {
         return false;
@@ -251,6 +252,7 @@ bool PatientBase::createVirtualPatient(const QString &name, const QString &secon
     query.bindValue(IDENTITY_TELS, QVariant());
     query.bindValue(IDENTITY_FAXES, QVariant());
 
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     if (!query.exec()) {
         LOG_QUERY_ERROR_FOR("PatientBase", query);
         DB.rollback();
@@ -278,6 +280,7 @@ bool PatientBase::createVirtualPatient(const QString &name, const QString &secon
         }
     }
     DB.commit();
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     return true;
 }
 

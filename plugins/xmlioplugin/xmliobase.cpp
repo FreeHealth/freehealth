@@ -656,6 +656,7 @@ bool XmlIOBase::saveForm(XmlFormName &form)
 
     // save all XML files && files included in the form using the <file> XML tag
     foreach(const QFileInfo &f, dir.entryInfoList(QStringList() << "*.xml", QDir::Files | QDir::Readable)) {
+        qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
         // save the content of the form file
         QString modeName = f.baseName();
         QString content = Utils::readTextFile(f.absoluteFilePath(), Utils::DontWarnUser);
@@ -685,6 +686,7 @@ bool XmlIOBase::saveForm(XmlFormName &form)
             }
         }
 
+        qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
         // Try to catch file addition
         // File addition is done using the tag ‘file’ or an attrib of the same name
         QDomDocument doc;
@@ -712,6 +714,7 @@ bool XmlIOBase::saveForm(XmlFormName &form)
     }
 
     // Save scripts
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     if (!saveFiles(form, "scripts", "js", XmlIOBase::ScriptFile)) {
         LOG_ERROR("Unable to save script files");
         database().rollback();
@@ -720,6 +723,7 @@ bool XmlIOBase::saveForm(XmlFormName &form)
     }
 
     // Save uis
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     if (!saveFiles(form, "ui", "ui", XmlIOBase::UiFile)) {
         LOG_ERROR("Unable to save UI files");
         database().rollback();
@@ -730,6 +734,7 @@ bool XmlIOBase::saveForm(XmlFormName &form)
 //    saveFiles(form, "qml", "qml", XmlIOBase::QmlFile);
 
     // Save html
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     if (!saveFiles(form, "html", "html", XmlIOBase::HtmlFile)) {
         LOG_ERROR("Unable to save HTML files");
         database().rollback();
@@ -738,6 +743,7 @@ bool XmlIOBase::saveForm(XmlFormName &form)
     }
 
     // Save screenshots
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     if (!saveScreenShots(form)) {
         LOG_ERROR("Unable to save screenshot files");
         database().rollback();
@@ -746,6 +752,7 @@ bool XmlIOBase::saveForm(XmlFormName &form)
     }
 
     // Register AlertPacks -- manages save/update of alertpacks
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     if (!registerAlertPacks(form)) {
         LOG_ERROR("Unable to save screenshot files");
         database().rollback();
@@ -753,6 +760,7 @@ bool XmlIOBase::saveForm(XmlFormName &form)
         return false;
     }
 
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     database().commit();
     _transaction = false;
 
@@ -769,6 +777,7 @@ bool XmlIOBase::saveForm(XmlFormName &form)
  */
 Category::CategoryItem * XmlIOBase::createCategory(const XmlFormName &form, const QDomElement &element, Category::CategoryItem *parent) const
 {
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     // create the category
     Category::CategoryItem *item = new Category::CategoryItem;
     item->setData(Category::CategoryItem::DbOnly_Mime, QString("%1@%2").arg(PMH::Constants::CATEGORY_MIME).arg(form.uid));
@@ -801,6 +810,7 @@ Category::CategoryItem * XmlIOBase::createCategory(const XmlFormName &form, cons
     // has children ?
     QDomElement child = element.firstChildElement(::Constants::TAG_CATEGORY);
     while (!child.isNull()) {
+        qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
         createCategory(form, child, item);
         child = child.nextSiblingElement(::Constants::TAG_CATEGORY);
     }
@@ -814,6 +824,7 @@ Category::CategoryItem * XmlIOBase::createCategory(const XmlFormName &form, cons
 bool XmlIOBase::savePmhxCategories(const XmlFormName &form, const QString &content)
 {
     Q_UNUSED(form);
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     if (content.isEmpty()) {
         LOG_ERROR("Empty content.");
         return false;
@@ -837,6 +848,7 @@ bool XmlIOBase::savePmhxCategories(const XmlFormName &form, const QString &conte
     }
 
     // save categories in the categories plugin
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     if (!categoryCore()->saveCategories(rootCategories)) {
         LOG_ERROR(tr("Error while saving PMHxCateogries (%1)").arg(form.uid));
         return false;
@@ -931,6 +943,7 @@ bool XmlIOBase::saveFiles(const XmlFormName &form, const QString &subDir, const 
         _transaction = true;
 
         foreach(const QFileInfo &f, files) {
+            qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
             QString fp = f.absoluteFilePath();
             QString mode = fp;
             mode = "." + mode.remove(form.absPath);
@@ -976,6 +989,7 @@ bool XmlIOBase::saveContent(const QString &formUid, const QString &xmlContent, c
     }
     mode.remove(".xml");
 
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     QHash<int, QString> where;
     // create in form table ?
     where.insert(FORM_UUID, QString("='%1'").arg(normalizedFormUid(formUid)));
@@ -1045,6 +1059,7 @@ bool XmlIOBase::saveContent(const QString &formUid, const QString &xmlContent, c
         }
         query.finish();
 
+        qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
         // add the description
         if (mode.compare("central",Qt::CaseInsensitive)==0) {
             int beg = xmlContent.indexOf(QString("<%1>").arg(Constants::TAG_FORM_DESCRIPTION));
@@ -1094,6 +1109,7 @@ bool XmlIOBase::saveContent(const QString &formUid, const QString &xmlContent, c
         }
         query.finish();
 
+        qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
         // update the description
         if (mode.compare("central",Qt::CaseInsensitive)==0) {
             int beg = xmlContent.indexOf(QString("<%1>").arg(Constants::TAG_FORM_DESCRIPTION));
@@ -1128,6 +1144,7 @@ bool XmlIOBase::saveContent(const QString &formUid, const QString &xmlContent, c
         DB.commit();
         _transaction = false;
     }
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     return true;
 }
 

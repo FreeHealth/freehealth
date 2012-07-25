@@ -151,6 +151,7 @@ void AgendaPlugin::extensionsInitialized()
         QList<Calendar::People> peoples;
         UserCalendar *u = 0;
         // McCoy calendar (Uhura as delegate)
+        qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
         peoples.append(Calendar::People(Calendar::People::PeopleUserDelegate, "", "0f148ea3de6e47b8bbf9c2cedea47511"));
         u = base().createVirtualUserCalendar("d1f29ad4a4ea4dabbe40ec888d153228", "McCoy @Enterprise",
                                           "Virtual calendar for the virtual user McCoy",
@@ -160,6 +161,7 @@ void AgendaPlugin::extensionsInitialized()
         createVirtualAppointements(u);
 
         // Phlox calendar (no delegates)
+        qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
         peoples.clear();
         u = base().createVirtualUserCalendar("b5caead635a246a2a87ce676e9d2ef4d", "Phlox @Enterprise",
                                           "Virtual calendar for the virtual user Phlox",
@@ -208,6 +210,7 @@ static QString patientUid(const int row)
 
 void AgendaPlugin::createVirtualAppointements(UserCalendar *calendar)
 {
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     QList<Appointement *> list;
     Utils::Randomizer r;
     r.setPathToFiles(settings()->path(Core::ISettings::BundleResourcesPath) + "/textfiles/");
@@ -219,8 +222,10 @@ void AgendaPlugin::createVirtualAppointements(UserCalendar *calendar)
     int maxDb = numberOfPatients();
     int defaultDuration = calendar->data(UserCalendar::DefaultDuration).toInt();
     int calendarId = calendar->data(Constants::Db_CalId).toInt();
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
 
     for(int i = 0; i < nbEvents; ++i) {
+        qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
         Appointement *ev = 0;
 
         // add a duration to last start date
@@ -257,6 +262,7 @@ void AgendaPlugin::createVirtualAppointements(UserCalendar *calendar)
         ev->setData(CalendarItemModel::Location, r.getRandomString(r.randomInt(1,145)));
         ev->setData(CalendarItemModel::IconPath, r.randomFile(pix, QStringList() << "*.png").fileName());
 
+        qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
         // Add 1 to 3 patients
         for(int y = 0; y < r.randomInt(1, 3); ++y) {
             int zz = r.randomInt(0, maxDb);

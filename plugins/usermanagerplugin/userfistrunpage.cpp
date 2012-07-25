@@ -95,13 +95,6 @@ void UserCreationPage::userWizard()
 void UserCreationPage::initializePage()
 {
     // Create the user database
-    QProgressDialog dlg(tr("Processing user database"), tr("Please wait"), 0, 0, parentWidget());
-    dlg.setWindowModality(Qt::WindowModal);
-    dlg.setMinimumDuration(100);
-    dlg.show();
-    dlg.setFocus();
-    dlg.setValue(0);
-
     userBase()->initialize();
 
     const Utils::DatabaseConnector &db = settings()->databaseConnector();
@@ -125,7 +118,6 @@ void UserCreationPage::initializePage()
     // Set current user into user model
     userModel()->setCurrentUserIsServerManager();
 
-    dlg.close();
     adjustSize();
     Utils::centerWidget(this);
 }

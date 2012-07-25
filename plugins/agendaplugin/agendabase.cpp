@@ -1260,6 +1260,7 @@ Agenda::UserCalendar *AgendaBase::createVirtualUserCalendar(const QString &owner
                                            const QString &password, const QString &iconPath,
                                            const QList<Calendar::People> &peoples)
 {
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     QHash<int, QString> where;
     where.insert(CAL_LABEL, QString("='%1'").arg(label));
     where.insert(CAL_FULLCONTENT, QString("='%1'").arg(description));
@@ -1292,10 +1293,12 @@ Agenda::UserCalendar *AgendaBase::createVirtualUserCalendar(const QString &owner
         av.addTimeRange(QTime(7,0,0), QTime(20,0,0));
         u->addAvailabilities(av);
     }
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     if (!saveUserCalendar(u)) {
         delete u;
         u = 0;
     }
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     return u;
 }
 
@@ -1380,6 +1383,7 @@ bool AgendaBase::saveCalendarEvents(const QList<Appointement *> &events)
     QList<Appointement *> save, update;
     bool ok = true;
     for(int i = 0; i < events.count(); ++i) {
+        qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
         Appointement *ev = events.at(i);
         if (!saveNonCyclingEvent(ev))
             ok = false;

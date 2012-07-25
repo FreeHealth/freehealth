@@ -134,6 +134,7 @@ bool XmlFormIO::canReadForms(const Form::FormIOQuery &query) const
         if (formFile.suffix().toLower()=="xml")
             content = Utils::readTextFile(formFile.absoluteFilePath(), Utils::DontWarnUser);
     }
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
 
     // check form content
     if (!reader()->checkFileContent(formFile.absoluteFilePath(), content)) {
@@ -148,6 +149,7 @@ bool XmlFormIO::canReadForms(const Form::FormIOQuery &query) const
         m_ReadableForms.insert(form.uid, false);
         return false;
     }
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
 
     // check included xml files too
     QDomDocument *doc = reader()->fromCache(formFile.absoluteFilePath());
@@ -165,6 +167,7 @@ bool XmlFormIO::canReadForms(const Form::FormIOQuery &query) const
                 if (!canReadForms(queryInclude))
                     LOG_ERROR("Unable to read included form: " + include);
             }
+            qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
         }
     }
 
@@ -204,6 +207,7 @@ bool XmlFormIO::canReadScripts(const Form::FormIOQuery &query) const
             content = Utils::readTextFile(scriptFile.absoluteFilePath(), Utils::DontWarnUser);
     }
 
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     // check form content
     if (!reader()->checkFileContent(scriptFile.absoluteFilePath(), content)) {
         LOG_ERROR(tr("Invalid script file detected: %1").arg(scriptFile.absoluteFilePath()));
@@ -216,6 +220,7 @@ bool XmlFormIO::canReadScripts(const Form::FormIOQuery &query) const
         m_ReadableScripts.insert(form.absFileName, false);
         return false;
     }
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     m_AbsFileName = form.absFileName;
     m_ReadableScripts.insert(form.absFileName, true);
     return true;
@@ -228,6 +233,7 @@ Form::FormIODescription *XmlFormIO::readFileInformation(const QString &uuidOrAbs
 
 QList<Form::FormIODescription *> XmlFormIO::getFormFileDescriptions(const Form::FormIOQuery &query) const
 {
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     QList<Form::FormIODescription *> toReturn;
     QStringList includedUids;
 //    qWarning() << query.formUuid() << query.forceFileReading();
@@ -242,6 +248,7 @@ QList<Form::FormIODescription *> XmlFormIO::getFormFileDescriptions(const Form::
         }
     }
 
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     // Get a specific form description
     if (!query.formUuid().isEmpty()) {
         XmlFormName &form = formName(query.formUuid(), m_FormNames);
@@ -257,6 +264,7 @@ QList<Form::FormIODescription *> XmlFormIO::getFormFileDescriptions(const Form::
         return toReturn;
     }
 
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     // Get all form files
     if (query.typeOfForms() & Form::FormIOQuery::CompleteForms) {
         QStringList path;
@@ -282,6 +290,8 @@ QList<Form::FormIODescription *> XmlFormIO::getFormFileDescriptions(const Form::
             }
         }
     }
+
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     if (query.typeOfForms() & Form::FormIOQuery::SubForms) {
         QStringList path;
         path << settings()->path(Core::ISettings::SubFormsPath);
@@ -306,6 +316,7 @@ QList<Form::FormIODescription *> XmlFormIO::getFormFileDescriptions(const Form::
         }
     }
 
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     // TODO: check all forms for params of Query, check forms versions, remove duplicates
     for(int i = 0; i < toReturn.count(); ++i) {
         toReturn.at(i)->setIoFormReader((Form::IFormIO*)this);
@@ -329,6 +340,7 @@ QList<Form::FormMain *> XmlFormIO::loadAllRootForms(const QString &uuidOrAbsPath
             uuid = m_AbsFileName;
         }
     }
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     if (!canReadForms(form.uid)) {
         LOG_ERROR("Can not read form " + form.uid);
         return toReturn;
@@ -347,6 +359,7 @@ QList<Form::FormMain *> XmlFormIO::loadAllRootForms(const QString &uuidOrAbsPath
         base()->saveForm(form);
     }
 
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     QHash<QString, QString> mode_contents = base()->getAllFormFullContent(form.uid);
 
     reader()->refreshPluginFactories();
@@ -421,10 +434,12 @@ bool XmlFormIO::checkDatabaseFormFileForUpdates() const
     QList<Form::FormIODescription *> fromDb;
     LOG("Checking for form update");
 
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     // get all available descriptions from database
     Form::FormIOQuery querydb;
     querydb.setGetAllAvailableFormDescriptions(true);
     fromDb = base()->getFormDescription(querydb);
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
 
     // Test all forms for an update and populate a list
     QList<XmlFormName> formsToUpdate;
@@ -461,6 +476,7 @@ bool XmlFormIO::checkDatabaseFormFileForUpdates() const
         }
     }
 
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     if (!readError && !formsToUpdate.isEmpty()) {
         // Ask user for update
         bool yes = Utils::yesNoMessageBox(tr("Form update detected."),
@@ -469,6 +485,7 @@ bool XmlFormIO::checkDatabaseFormFileForUpdates() const
         if (yes) {
             // Update all checked forms
             for(int i = 0; i < formsToUpdate.count(); ++i) {
+                qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
                 XmlFormName &form = formsToUpdate[i];
                 if (!base()->saveForm(form)) { //, doc->toString(2), XmlIOBase::FullContent, file.baseName(), QDateTime::currentDateTime())) {
                     LOG_ERROR("Unable to update form database. Form: " + form.uid + " " + form.absFileName);
