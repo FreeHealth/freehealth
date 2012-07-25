@@ -1308,7 +1308,6 @@ QVector<AlertItem> AlertBase::getAlertItems(const AlertBaseQuery &query)
         conds.clear();
         conds << Utils::Field(Constants::Table_ALERT_RELATED, Constants::ALERT_RELATED_RELATED_TO, QString("=%1").arg(AlertRelation::RelatedToAllUsers));
         wUids = QString("%1 OR %2").arg(wUids).arg(getWhereClause(conds));
-        qWarning() << "USERS" << wUids;
     }
     // patients
     if (!query.patientUids().isEmpty()) {
@@ -1325,7 +1324,6 @@ QVector<AlertItem> AlertBase::getAlertItems(const AlertBaseQuery &query)
             wUids = pUids;
         else
             wUids = QString("%1\n        OR %2").arg(wUids).arg(getWhereClause(conds));
-        qWarning() << "PATIENTS" << wUids;
     }
     // application
     if (!query.applicationNames().isEmpty()) {
@@ -1338,7 +1336,6 @@ QVector<AlertItem> AlertBase::getAlertItems(const AlertBaseQuery &query)
             wUids = getWhereClause(conds);
         else
             wUids = QString("%1\n        OR %2").arg(wUids).arg(getWhereClause(conds));
-        qWarning() << "APPLICATION" << wUids;
     }
     conds.clear();
 
