@@ -55,8 +55,6 @@ class USER_EXPORT UserBase :  public QObject, public Utils::Database
     friend class UserPlugin::UserModel;
     friend class UserPlugin::Internal::UserManagerPlugin;
 
-    bool testConnexion() const;
-
 protected:
     UserBase(QObject *parent = 0);
     void onCoreDatabaseServerChanged();
@@ -115,7 +113,7 @@ public:
 
     // Linkers
     int getMaxLinkId();
-    void updateMaxLinkId(const int max);
+    bool updateMaxLinkId(const int max);
 
 private:
     // privates retreivers

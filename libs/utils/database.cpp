@@ -540,6 +540,7 @@ bool Database::createConnection(const QString &connectionName, const QString &no
                                 )
 {
     // TODO: manage transactions here...
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     bool toReturn = true;
     d_database->m_ConnectionName.clear();
     d_database->m_Driver = connector.driver();
@@ -580,6 +581,7 @@ bool Database::createConnection(const QString &connectionName, const QString &no
     }
     QFileInfo sqliteFileInfo(fileName);
 
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     // if DeleteAndRecreateDatabase only for read/write databases
     if (createOption == DeleteAndRecreateDatabase && connector.accessMode()==DatabaseConnector::ReadWrite) {
         LOG_FOR("Database", "Delete database before re-creating it. Connection: " + connectionName + "; PathOrHost: " + dbName);
@@ -623,6 +625,7 @@ bool Database::createConnection(const QString &connectionName, const QString &no
         QSqlDatabase::removeDatabase("__DB_DELETOR" + connectionName);
     }
 
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     // check server connection
     switch (connector.driver()) {
     case SQLite: break;
@@ -649,6 +652,7 @@ bool Database::createConnection(const QString &connectionName, const QString &no
         }
     }
 
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     // create database is not exists and user ask for database creation
     switch (connector.driver()) {
     case SQLite:
@@ -663,6 +667,7 @@ bool Database::createConnection(const QString &connectionName, const QString &no
                     LOG_ERROR_FOR("Database", tkTr(Trans::Constants::DATABASE_1_CANNOT_BE_CREATED_ERROR_2).arg(dbName + "@" + fileName).arg(""));
                     return false;
                 }
+                qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
             }
             // now that the file was created, reload the fileinfo
             sqliteFileInfo.setFile(sqliteFileInfo.absoluteFilePath());
@@ -683,6 +688,7 @@ bool Database::createConnection(const QString &connectionName, const QString &no
                         LOG_ERROR_FOR("Database", tkTr(Trans::Constants::DATABASE_1_CANNOT_BE_CREATED_ERROR_2).arg(dbName + "@" + connector.host()).arg(""));
                     return false;
                 }
+                qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
             }
             if (WarnLogMessages)
                 LOG_FOR("Database", tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(dbName).arg(DB.driverName()));
@@ -695,6 +701,7 @@ bool Database::createConnection(const QString &connectionName, const QString &no
         }
     }
 
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     // test read access to database
     switch (connector.driver()) {
     case SQLite:
@@ -709,12 +716,14 @@ bool Database::createConnection(const QString &connectionName, const QString &no
     case MySQL:
         {
             if (!DB.isOpen()) {
+                qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
                 if (!DB.open()) {
                     LOG_ERROR_FOR("Database", QCoreApplication::translate("Database",
                                                                           "ERROR: Database %1 is not readable. Host: %2")
                                   .arg(dbName, connector.host()));
                     return false;
                 }
+                qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
             }
             QSqlQuery query("SHOW GRANTS FOR CURRENT_USER;", DB);
             if (!query.isActive()) {
@@ -728,6 +737,7 @@ bool Database::createConnection(const QString &connectionName, const QString &no
                 while (query.next()) {
                     grants << query.value(0).toString();
                 }
+                qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
                 d_database->m_Grants.insert(connectionName, d_database->getGrants(connectionName, grants));
             }
             break;
@@ -739,6 +749,7 @@ bool Database::createConnection(const QString &connectionName, const QString &no
         }
     }
 
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     // test write access
     if (connector.accessMode() == DatabaseConnector::ReadWrite) {
         switch (connector.driver()) {
@@ -765,6 +776,7 @@ bool Database::createConnection(const QString &connectionName, const QString &no
         }
     }
 
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     // create connection
     switch (connector.driver())
     {
@@ -784,7 +796,10 @@ bool Database::createConnection(const QString &connectionName, const QString &no
              break;
     }
 
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     DB.open();
+
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     if (WarnLogMessages)
         LOG_FOR("Database", QCoreApplication::translate("Database",  "INFO: database %1 connection = %2")
                        .arg(dbName).arg(DB.isOpen()));
@@ -798,6 +813,7 @@ bool Database::createConnection(const QString &connectionName, const QString &no
             LOG_FOR("Database", tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(dbName).arg(DB.driverName()));
     }
 
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     // return boolean
     if (toReturn)
         d_database->m_ConnectionName = connectionName;
@@ -965,14 +981,17 @@ bool Database::checkDatabaseScheme()
     if (d_database->m_Tables_Fields.keys().count() == 0)
         return false;
 
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     QSqlDatabase DB = QSqlDatabase::database(d_database->m_ConnectionName);
     if (!connectedDatabase(DB, __LINE__))
         return false;
     DB.transaction();
 
+    qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     QList<int> list = d_database->m_Tables.keys();
     qSort(list);
     foreach(int i, list) {
+        qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
         QSqlRecord rec = DB.record(d_database->m_Tables.value(i));
         if (rec.count() != d_database->m_Tables_Fields.values(i).count()) {
             LOG_ERROR_FOR("Database", QCoreApplication::translate("Database", "Database Scheme Error: wrong number of fields for table %1")
@@ -2010,6 +2029,7 @@ bool Database::createTables() const
     QList<int> list = d_database->m_Tables.keys();
     qSort(list);
     foreach(const int & i, list) {
+        qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
         if(!createTable(i)) {
             LOG_ERROR_FOR("Database", QCoreApplication::translate("Database", "Can not create table %1").arg(table(i)));
             if (!insideTransaction) {
