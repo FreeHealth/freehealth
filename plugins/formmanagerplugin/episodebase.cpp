@@ -396,7 +396,6 @@ bool EpisodeBase::setGenericPatientFormFile(const QString &absPathOrUid)
             return false;
         }
     }
-    query.finish();
     DB.commit();
     return true;
 }
@@ -766,7 +765,6 @@ bool EpisodeBase::saveEpisode(const QList<EpisodeData *> &episodes)
             episode->setModified(true);
         }
     }
-    query.finish();
     DB.commit();
     return true;
 }
