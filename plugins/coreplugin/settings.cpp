@@ -824,7 +824,7 @@ QString SettingsPrivate::getIniFile(const QString & appName, const QString & fil
                 else
                     LOG_FOR("Settings", tr("WARNING: Ini file %1 can not be used.").arg(content));
             }
-            LOG_ERROR_FOR("Settings", tr("File does not exists and can not be created: %1").arg(content);
+            LOG_ERROR_FOR("Settings", tr("File does not exists and can not be created: %1").arg(content));
         }
     }
 
