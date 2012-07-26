@@ -37,7 +37,7 @@
 namespace ICD {
 namespace Constants {
 
-    const char * const DB_ICD10 = "icd10";
+    const char * const DB_NAME = "icd10";
 
     // Database abstraction
     enum Tables {

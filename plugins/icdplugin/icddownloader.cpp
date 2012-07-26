@@ -59,7 +59,7 @@ namespace {
     // Sources: http://www.icd10.ch/telechargement/Exp_XML.zip
 
     static QString tmpPath() {return settings()->path(Core::ISettings::ApplicationTempPath) + "/freeicd_downloads";}
-    static QString dbAbsFileName() {return QDir::cleanPath(settings()->path(Core::ISettings::ReadWriteDatabasesPath) + QDir::separator() + QString(Constants::DB_ICD10) + QDir::separator() + QString(Constants::DB_ICD10) + ".db");}
+    static QString dbAbsFileName() {return QDir::cleanPath(settings()->path(Core::ISettings::ReadWriteDatabasesPath) + QDir::separator() + QString(Constants::DB_NAME) + QDir::separator() + QString(Constants::DB_NAME) + ".db");}
     static QString sqlSchemaAbsFileName() {return settings()->path(Core::ISettings::BundleResourcesPath) + "/sql/icd10.sql";}
 }
 
@@ -86,7 +86,7 @@ bool IcdDownloader::createDatabase()
 
     // create an empty database and connect
     QSqlDatabase DB;
-    DB = QSqlDatabase::addDatabase("QSQLITE", Constants::DB_ICD10);
+    DB = QSqlDatabase::addDatabase("QSQLITE", Constants::DB_NAME);
     if (!QDir(pathOrHostName).exists())
         if (!QDir().mkpath(pathOrHostName))
             LOG(tkTr(Trans::Constants::_1_ISNOT_AVAILABLE_CANNOTBE_CREATED).arg(pathOrHostName));
@@ -106,11 +106,11 @@ bool IcdDownloader::createDatabase()
     }
 
     // Create SQL schema
-    if (Utils::Database::executeSqlFile(Constants::DB_ICD10, QFileInfo(sqlFile).absoluteFilePath())) {
-        LOG(tkTr(Trans::Constants::DATABASE_1_CORRECTLY_CREATED).arg(Constants::DB_ICD10));
+    if (Utils::Database::executeSqlFile(Constants::DB_NAME, QFileInfo(sqlFile).absoluteFilePath())) {
+        LOG(tkTr(Trans::Constants::DATABASE_1_CORRECTLY_CREATED).arg(Constants::DB_NAME));
     } else {
         LOG_ERROR(tkTr(Trans::Constants::DATABASE_1_CANNOT_BE_CREATED_ERROR_2)
-                  .arg(Constants::DB_ICD10).arg(DB.lastError().text()));
+                  .arg(Constants::DB_NAME).arg(DB.lastError().text()));
         return false;
     }
 
@@ -182,9 +182,9 @@ bool IcdDownloader::populateDatabaseWithRawSources()
     m_Progress->setValue(1);
 
 
-    QSqlDatabase DB = QSqlDatabase::addDatabase("QSQLITE", Constants::DB_ICD10);
-    QString dbName = QString(Constants::DB_ICD10) + ".db";
-    QString pathOrHostName = settings()->path(Core::ISettings::ReadOnlyDatabasesPath) + QDir::separator() + Constants::DB_ICD10;
+    QSqlDatabase DB = QSqlDatabase::addDatabase("QSQLITE", Constants::DB_NAME);
+    QString dbName = QString(Constants::DB_NAME) + ".db";
+    QString pathOrHostName = settings()->path(Core::ISettings::ReadOnlyDatabasesPath) + QDir::separator() + Constants::DB_NAME;
     QString absFileName = QDir::cleanPath(pathOrHostName + QDir::separator() + dbName);
     DB.setDatabaseName(absFileName);
 
@@ -221,7 +221,7 @@ bool IcdDownloader::populateDatabaseWithRawSources()
         }
 
         // import files
-        if (!Utils::Database::importCsvToDatabase(Constants::DB_ICD10, path + file + "-utf8.txt", file.toLower(), "¦", true)) {
+        if (!Utils::Database::importCsvToDatabase(Constants::DB_NAME, path + file + "-utf8.txt", file.toLower(), "¦", true)) {
             LOG_ERROR("Error");
             continue;
         }

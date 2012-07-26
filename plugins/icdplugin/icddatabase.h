@@ -94,7 +94,7 @@ Q_SIGNALS:
     void databaseInitialized();
 
 protected:
-    bool init();
+    bool initialize();
     bool refreshDatabase();
 
 private Q_SLOTS:

@@ -79,8 +79,8 @@ static inline QString fullDatabasePath() {
 #ifdef FREETOOLBOX
     return QDir::cleanPath(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString() + "/icd10/");
 #else
-//    return settings()->path(Core::ISettings::ReadOnlyDatabasesPath) + QDir::separator() + QString(ICD::Constants::DB_ICD10);
-    QString dbRelPath = QString("/%1").arg(Constants::DB_ICD10);
+//    return settings()->path(Core::ISettings::ReadOnlyDatabasesPath) + QDir::separator() + QString(ICD::Constants::DB_NAME);
+    QString dbRelPath = QString("/%1").arg(Constants::DB_NAME);
     QString tmp;
     tmp = settings()->dataPackInstallPath() + dbRelPath;
     if (QFileInfo(tmp).exists())
@@ -146,7 +146,6 @@ IcdDatabase *IcdDatabase::instance()
 {
     if (!m_Instance) {
         m_Instance = new IcdDatabase(qApp);
-        m_Instance->init();
     }
     return m_Instance;
 }
@@ -294,7 +293,7 @@ IcdDatabase::~IcdDatabase()
     d=0;
 }
 
-bool IcdDatabase::init()
+bool IcdDatabase::initialize()
 {
     // only one base can be initialized
     if (m_initialized)
@@ -311,11 +310,11 @@ bool IcdDatabase::init()
 
      // log the path of the database
      QString pathToDb = fullDatabasePath();
-     LOG(tkTr(Trans::Constants::SEARCHING_DATABASE_1_IN_PATH_2).arg(Constants::DB_ICD10).arg(pathToDb));
+     LOG(tkTr(Trans::Constants::SEARCHING_DATABASE_1_IN_PATH_2).arg(Constants::DB_NAME).arg(pathToDb));
 
      // Removing existing old connections
-     if (QSqlDatabase::contains(Constants::DB_ICD10)) {
-         QSqlDatabase::removeDatabase(Constants::DB_ICD10);
+     if (QSqlDatabase::contains(Constants::DB_NAME)) {
+         QSqlDatabase::removeDatabase(Constants::DB_NAME);
      }
 
      // Connect normal Account Database
@@ -323,17 +322,17 @@ bool IcdDatabase::init()
      Utils::DatabaseConnector connector;
 //     connector.setAbsPathToReadOnlySqliteDatabase(settings()->path(Core::ISettings::ReadOnlyDatabasesPath));
      connector.setAbsPathToReadOnlySqliteDatabase(fullDatabasePath());
-     connector.setHost(QString(Constants::DB_ICD10) + ".db");
+     connector.setHost(QString(Constants::DB_NAME) + ".db");
      connector.setAccessMode(Utils::DatabaseConnector::ReadOnly);
      connector.setDriver(Utils::Database::SQLite);
 
-     if (!createConnection(Constants::DB_ICD10, QString(Constants::DB_ICD10) + ".db", connector)) {
+     if (!createConnection(Constants::DB_NAME, QString(Constants::DB_NAME) + ".db", connector)) {
          d->m_DownloadAndPopulate = true;
      }
 
      if (!database().isOpen()) {
          if (!database().open()) {
-             LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_ICD10).arg(database().lastError().text()));
+             LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_NAME).arg(database().lastError().text()));
          } else { // db successfully opened
              LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(database().connectionName()).arg(database().driverName()));
 
@@ -360,9 +359,11 @@ bool IcdDatabase::init()
 
 bool IcdDatabase::refreshDatabase()
 {
+    WARN_FUNC;
     m_initialized = false;
-    QSqlDatabase::removeDatabase(Constants::DB_ICD10);
-    return init();
+    if (QSqlDatabase::connectionNames().contains(Constants::DB_NAME))
+        QSqlDatabase::removeDatabase(Constants::DB_NAME);
+    return initialize();
 }
 
 void IcdDatabase::packChanged(const DataPack::Pack &pack)
@@ -391,7 +392,7 @@ QString IcdDatabase::getDatabaseVersion()
         return toReturn;
     if (!database().isOpen()) {
         if (!database().open()) {
-            LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_ICD10).arg(database().lastError().text()));
+            LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_NAME).arg(database().lastError().text()));
             return toReturn;
         }
     }
@@ -459,7 +460,7 @@ QList<int> IcdDatabase::getHeadersSID(const QVariant &SID)
     QList<int> toReturn;
     if (!database().isOpen()) {
         if (!database().open()) {
-            LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_ICD10).arg(database().lastError().text()));
+            LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_NAME).arg(database().lastError().text()));
             return toReturn;
         }
     }
@@ -496,7 +497,7 @@ QVariant IcdDatabase::getSid(const QString &code)
 {
     if (!database().isOpen()) {
         if (!database().open()) {
-            LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_ICD10).arg(database().lastError().text()));
+            LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_NAME).arg(database().lastError().text()));
             return QVariant();
         }
     }
@@ -523,7 +524,7 @@ QVariant IcdDatabase::getIcdCode(const QVariant &SID)
     }
     if (!database().isOpen()) {
         if (!database().open()) {
-            LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_ICD10).arg(database().lastError().text()));
+            LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_NAME).arg(database().lastError().text()));
             return QVariant();
         }
     }
@@ -551,7 +552,7 @@ QString IcdDatabase::getDagStarCode(const QVariant &SID)
     }
     if (!database().isOpen()) {
         if (!database().open()) {
-            LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_ICD10).arg(database().lastError().text()));
+            LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_NAME).arg(database().lastError().text()));
             return QString();
         }
     }
@@ -612,7 +613,7 @@ QVector<int> IcdDatabase::getDagStarDependencies(const QVariant &SID)
 {
     if (!database().isOpen()) {
         if (!database().open()) {
-            LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_ICD10).arg(database().lastError().text()));
+            LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_NAME).arg(database().lastError().text()));
             return QVector<int>();
         }
     }
@@ -645,7 +646,7 @@ Internal::IcdAssociation IcdDatabase::getAssociation(const QVariant &mainSID, co
     }
     if (!database().isOpen()) {
         if (!database().open()) {
-            LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_ICD10).arg(database().lastError().text()));
+            LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_NAME).arg(database().lastError().text()));
             return Internal::IcdAssociation();
         }
     }
@@ -693,7 +694,7 @@ bool IcdDatabase::codeCanBeUsedAlone(const QVariant &SID)
 //    }
 //    if (!database().isOpen()) {
 //        if (!database().open()) {
-//            LOG_ERROR(this, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_ICD10).arg(database().lastError().text()));
+//            LOG_ERROR(this, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_NAME).arg(database().lastError().text()));
 //            return QString();
 //        }
 //    }
@@ -730,7 +731,7 @@ QString IcdDatabase::getLabelFromLid(const QVariant &LID)
     }
     if (!database().isOpen()) {
         if (!database().open()) {
-            LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_ICD10).arg(database().lastError().text()));
+            LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_NAME).arg(database().lastError().text()));
             return QString();
         }
     }
@@ -758,7 +759,7 @@ QString IcdDatabase::getSystemLabel(const QVariant &SID)
     }
     if (!database().isOpen()) {
         if (!database().open()) {
-            LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_ICD10).arg(database().lastError().text()));
+            LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_NAME).arg(database().lastError().text()));
             return QString();
         }
     }
@@ -788,7 +789,7 @@ QStringList IcdDatabase::getAllLabels(const QVariant &SID, const int libelleFiel
 {
     if (!database().isOpen()) {
         if (!database().open()) {
-            LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_ICD10).arg(database().lastError().text()));
+            LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_NAME).arg(database().lastError().text()));
             return QStringList();
         }
     }
@@ -819,7 +820,7 @@ QString IcdDatabase::getAssociatedLabel(const QVariant &mainSID, const QVariant 
 {
     if (!database().isOpen()) {
         if (!database().open()) {
-            LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_ICD10).arg(database().lastError().text()));
+            LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_NAME).arg(database().lastError().text()));
             return QString();
         }
     }
@@ -847,7 +848,7 @@ QStringList IcdDatabase::getIncludedLabels(const QVariant &SID)
 {
     if (!database().isOpen()) {
         if (!database().open()) {
-            LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_ICD10).arg(database().lastError().text()));
+            LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_NAME).arg(database().lastError().text()));
             return QStringList();
         }
     }
@@ -879,7 +880,7 @@ QVector<int> IcdDatabase::getExclusions(const QVariant &SID)
 {
     if (!database().isOpen()) {
         if (!database().open()) {
-            LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_ICD10).arg(database().lastError().text()));
+            LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_NAME).arg(database().lastError().text()));
             return QVector<int>();
         }
     }
@@ -912,7 +913,7 @@ QString IcdDatabase::getMemo(const QVariant &SID)
     // get the Note
     if (!database().isOpen()) {
         if (!database().open()) {
-            LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_ICD10).arg(database().lastError().text()));
+            LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DB_NAME).arg(database().lastError().text()));
             return QString();
         }
     }
