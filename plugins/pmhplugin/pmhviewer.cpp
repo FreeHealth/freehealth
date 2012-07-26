@@ -231,6 +231,7 @@ void PmhViewer::setShowPatientInformation(bool show)
 /** Defines the edit mode to use (Read only or Read Write). \sa PMH::PmhViewer::EditMode */
 void PmhViewer::setEditMode(EditMode mode)
 {
+    d->ui->simple_icd10->setEnabled(ICD::IcdIO::isDatabaseInitialized());
     d->setEditMode(mode);
 }
 
@@ -245,6 +246,7 @@ void PmhViewer::setPmhData(Internal::PmhData *pmh)
             return;
     }
     d->populateUiWithPmh(pmh);
+    d->ui->simple_icd10->setEnabled(ICD::IcdIO::isDatabaseInitialized());
 }
 
 void PmhViewer::setCategoryForPmh(Category::CategoryItem *category)
@@ -312,7 +314,6 @@ void PmhViewer::onSimpleViewLabelChanged(const QString &text)
 {
     d->m_Pmh->episodeModel()->setData(d->m_Pmh->episodeModel()->index(0, PmhEpisodeModel::Label), text);
 }
-
 
 void PmhViewer::changeEvent(QEvent *e)
 {
