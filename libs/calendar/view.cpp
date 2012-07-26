@@ -26,52 +26,53 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 /**
- * \class Calendar::ViewWidget
+ * \class Calendar::Internal::ViewWidget
  * \brief a view is an abstract class which defines common things about calendar views (headers, body, etc)
 */
 
-/** \fn const QDate &Calendar::ViewWidget::firstDate() const
+/** \fn const QDate &Calendar::Internal::ViewWidget::firstDate() const
  * returns the first date of the view
 */
 
 /**
- * \fn  void Calendar::ViewWidget::setFirstDate(const QDate &firstDate);
+ * \fn  void Calendar::Internal::ViewWidget::setFirstDate(const QDate &firstDate);
  * sets a date for the view
 */
 
 /**
- * \fn virtual void Calendar::ViewWidget::refreshCurrentDateTimeStuff();
+ * \fn virtual void Calendar::Internal::ViewWidget::refreshCurrentDateTimeStuff();
  * used to refresh all current date time stuffs
 */
 
 /**
- * \fn AbstractCalendarModel *Calendar::ViewWidget::model() const
+ * \fn AbstractCalendarModel *Calendar::Internal::ViewWidget::model() const
  * returns the current model
 */
 
 /**
- * \fn void Calendar::ViewWidget::setModel(AbstractCalendarModel *model);
+ * \fn void Calendar::Internal::ViewWidget::setModel(AbstractCalendarModel *model);
  * called when a new model has been defined
 */
 
 /**
- * \fn void Calendar::ViewWidget::setMasterScrollArea(QScrollArea *scrollArea);
+ * \fn void Calendar::Internal::ViewWidget::setMasterScrollArea(QScrollArea *scrollArea);
  * set the master widget scrollarea used to paint (generally used for header to know how the body is painted)
 */
 
 /**
- * \fn void Calendar::ViewWidget::setContextMenuForItems(QMenu *menu)
+ * \fn void Calendar::Internal::ViewWidget::setContextMenuForItems(QMenu *menu)
  * set the context menu to use on items
 */
+
+#include "view.h"
 
 #include <QPainter>
 #include <QPixmapCache>
 #include <QResizeEvent>
 #include <QScrollArea>
 
-#include "view.h"
-
 using namespace Calendar;
+using namespace Internal;
 
 ViewWidget::ViewWidget(QWidget *parent) :
     QWidget(parent),

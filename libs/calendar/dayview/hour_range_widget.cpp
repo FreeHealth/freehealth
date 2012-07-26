@@ -33,6 +33,7 @@
 #include <QColor>
 
 using namespace Calendar;
+using namespace Internal;
 
 /**
  * if uid is empty, this calendar item is considered as temporary and will be drawn with transparence

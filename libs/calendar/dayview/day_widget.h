@@ -30,37 +30,47 @@
 
 #include <calendar/modelanditem/calendar_item_widget.h>
 
+/**
+ * \file day_widget.h
+ * \author Guillaume Denry, Eric Maeker
+ * \version 0.6.0
+ * \date 12 Aug 2011
+*/
+
 namespace Calendar {
-	class AbstractCalendarModel;
+class AbstractCalendarModel;
+namespace Internal {
 
-	/**
-	 * This class represents a day event without hour range specification
-	 */
-	class DayWidget : public CalendarItemWidget
-	{
-		Q_OBJECT
-	public:
-		/** if uid is empty, this calendar item is considered as temporary and will be drawn with transparence
-		 */
-		DayWidget(QWidget *parent = 0, const QString &uid = "", AbstractCalendarModel *model = 0);
+/**
+ * This class represents a day event without hour range specification
+*/
+class DayWidget : public CalendarItemWidget
+{
+    Q_OBJECT
+public:
+    /** if uid is empty, this calendar item is considered as temporary and will be drawn with transparence
+         */
+    DayWidget(QWidget *parent = 0, const QString &uid = "", AbstractCalendarModel *model = 0);
 
-		bool inMotion() const { return m_inMotion; }
-		void setInMotion(bool value);
+    bool inMotion() const { return m_inMotion; }
+    void setInMotion(bool value);
 
-		QSize sizeHint() const;
-		static QSize staticSizeHint();
+    QSize sizeHint() const;
+    static QSize staticSizeHint();
 
-	private:
-		bool m_inMotion;
-		QWidget *m_aboveWidget;
-		QFont m_titleFont; // TODO: choose a better font than the default one
+private:
+    bool m_inMotion;
+    QWidget *m_aboveWidget;
+    QFont m_titleFont; // TODO: choose a better font than the default one
 
-		static QFont getTitleFont();
+    static QFont getTitleFont();
 
-	protected:
-		virtual void paintEvent(QPaintEvent *event);
-	};
-}
+protected:
+    virtual void paintEvent(QPaintEvent *event);
+};
+
+}  // namespace Internal
+}  // namespace Calendar
 
 
 #endif

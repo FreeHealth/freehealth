@@ -40,7 +40,6 @@
 namespace Calendar {
 namespace Internal {
 class DayRangeBodyPrivate;
-}
 
 class DayRangeBody : public ViewWidget
 {
@@ -98,6 +97,8 @@ protected:
     static int m_leftScaleWidth;
     static int m_minimumItemHeight;
 };
+
+}  // namespace Internal
 }  // namespace Calendar
 
 #endif  // LIBCALENDAR_DAYRANGEBODY_H

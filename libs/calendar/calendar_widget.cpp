@@ -50,6 +50,7 @@
 #include <QLabel>
 
 using namespace Calendar;
+using namespace Internal;
 
 namespace {
     enum { RefreshInterval = 60 }; // in secondes

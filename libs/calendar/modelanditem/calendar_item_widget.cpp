@@ -31,6 +31,7 @@
 #include <QEvent>
 
 using namespace Calendar;
+using namespace Internal;
 
 CalendarItemWidget::CalendarItemWidget(QWidget *parent, const QString &uid, AbstractCalendarModel *model) :
 	QWidget(parent), m_uid(uid), m_model(model) {
@@ -65,7 +66,7 @@ bool CalendarItemWidget::event(QEvent *event)
     return QWidget::event(event);
 }
 
-QDebug Calendar::operator<<(QDebug dbg, const Calendar::CalendarItemWidget &c)
+QDebug operator<<(QDebug dbg, const Calendar::Internal::CalendarItemWidget &c)
 {
     dbg.nospace() << "CalendarItemWidget("
                   << c.beginDateTime().toString(QLocale().dateTimeFormat(QLocale::ShortFormat))
@@ -75,7 +76,7 @@ QDebug Calendar::operator<<(QDebug dbg, const Calendar::CalendarItemWidget &c)
     return dbg.space();
 }
 
-QDebug Calendar::operator<<(QDebug dbg, const Calendar::CalendarItemWidget *c)
+QDebug operator<<(QDebug dbg, const Calendar::Internal::CalendarItemWidget *c)
 {
     if (!c) {
         dbg.nospace() << "CalendarItemWidget(0x0)";

@@ -25,41 +25,45 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef CALENDAR_ITEM_WIDGET_H
-#define CALENDAR_ITEM_WIDGET_H
+#ifndef LIBCALENDAR_ITEM_WIDGET_H
+#define LIBCALENDAR_ITEM_WIDGET_H
 
 #include <QWidget>
 #include <QDateTime>
 
 namespace Calendar {
-	class AbstractCalendarModel;
+class AbstractCalendarModel;
+namespace Internal {
 
-	class CalendarItemWidget : public QWidget
-	{
-		Q_OBJECT
-	public:
-		CalendarItemWidget(QWidget *parent = 0, const QString &uid = "", AbstractCalendarModel *model = 0);
+class CalendarItemWidget : public QWidget
+{
+    Q_OBJECT
+public:
+    CalendarItemWidget(QWidget *parent = 0, const QString &uid = "", AbstractCalendarModel *model = 0);
 
-		const QString &uid() const { return m_uid; }
-		const QDateTime &beginDateTime() const { return m_beginDateTime; }
-		void setBeginDateTime(const QDateTime &dateTime);
-                const QDateTime &endDateTime() const { return m_endDateTime; }
-		void setEndDateTime(const QDateTime &dateTime);
-                int durationInSeconds() const {return m_beginDateTime.secsTo(m_endDateTime);}
-		AbstractCalendarModel *model() const { return m_model; }
-        private:
-                bool event(QEvent *);
+    const QString &uid() const { return m_uid; }
+    const QDateTime &beginDateTime() const { return m_beginDateTime; }
+    void setBeginDateTime(const QDateTime &dateTime);
+    const QDateTime &endDateTime() const { return m_endDateTime; }
+    void setEndDateTime(const QDateTime &dateTime);
+    int durationInSeconds() const {return m_beginDateTime.secsTo(m_endDateTime);}
+    AbstractCalendarModel *model() const { return m_model; }
+private:
+    bool event(QEvent *);
 
-	private:
-		// TMP : all date will probably be moved into a pure data class for events/tasks, etc
-		QDateTime m_beginDateTime;
-		QDateTime m_endDateTime;
-		QString m_uid;
-		AbstractCalendarModel *m_model;
-	};
+private:
+    // TMP : all date will probably be moved into a pure data class for events/tasks, etc
+    QDateTime m_beginDateTime;
+    QDateTime m_endDateTime;
+    QString m_uid;
+    AbstractCalendarModel *m_model;
+};
 
-        QDebug operator<<(QDebug dbg, const Calendar::CalendarItemWidget &c);
-        QDebug operator<<(QDebug dbg, const Calendar::CalendarItemWidget *c);
-}
+}  // namespace Internal
+}  // namespace Calendar
 
-#endif
+QDebug operator<<(QDebug dbg, const Calendar::Internal::CalendarItemWidget &c);
+QDebug operator<<(QDebug dbg, const Calendar::Internal::CalendarItemWidget *c);
+
+
+#endif  // LIBCALENDAR_ITEM_WIDGET_H

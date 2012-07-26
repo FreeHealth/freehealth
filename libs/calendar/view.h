@@ -42,12 +42,13 @@ class QScrollArea;
 
 /**
  * \file view.h
- * \author Guillaume Denry <guillaume.denry@gmail.com>
+ * \author Guillaume Denry, Eric Maeker
  * \version 0.6.0
  * \date 12 Aug 2011
 */
 
 namespace Calendar {
+namespace Internal {
 
 class ViewWidget : public QWidget
 {
@@ -101,6 +102,7 @@ private:
     QPointer<QMenu> m_ItemContextMenu;
 };
 
+}  // namespace Internal
 }  // namespace Calendar
 
 #endif  // LIBCALENDAR_VIEW_H

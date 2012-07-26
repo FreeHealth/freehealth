@@ -32,6 +32,7 @@
 #include <QMouseEvent>
 
 using namespace Calendar;
+using namespace Internal;
 
 DayWidget::DayWidget(QWidget *parent, const QString &uid, AbstractCalendarModel *model)
     : CalendarItemWidget(parent, uid, model), m_aboveWidget(0)

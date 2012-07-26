@@ -38,7 +38,7 @@
 */
 
 namespace Calendar {
-// TODO: should be internal
+namespace Internal {
 
 class MonthHeader : public ViewWidget
 {
@@ -75,6 +75,8 @@ private:
 private slots:
     void firstDateChanged();
 };
-}
+
+}  // namespace Internal
+}  // namespace Calendar
 
 #endif  // LIBCALENDAR_MONTH_VIEW_H

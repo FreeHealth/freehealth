@@ -32,13 +32,14 @@
 
 /**
  * \file hour_range_widget.h
- * \author Guillaume Denry <guillaume.denry@gmail.com>
+ * \author Guillaume Denry, Eric Maeker
  * \version 0.6.0
  * \date 12 Aug 2011
 */
 
 namespace Calendar {
 class AbstractCalendarModel;
+namespace Internal {
 
 class HourRangeWidget : public CalendarItemWidget
 {
@@ -58,6 +59,8 @@ protected:
     virtual void mouseMoveEvent(QMouseEvent *event);
     //		virtual void mouseReleaseEvent(QMouseEvent *event);
 };
-}
 
-#endif
+}  // namespace Internal
+}  // namespace Calendar
+
+#endif  // HOUR_RANGE_WIDGET_H

@@ -40,8 +40,7 @@
 namespace Calendar {
 namespace Internal {
 class DayRangeHeaderPrivate;
-}
-// TODO: everything should be internal here
+
 class HourRangeWidget;
 class DayWidget;
 
@@ -72,6 +71,7 @@ private:
     Internal::DayRangeHeaderPrivate *d_header;
 };
 
+}  // namespace Internal
 }  // namespace Calendar
 
 #endif  // LIBCALENDAR_DAYRANGEHEADER_H

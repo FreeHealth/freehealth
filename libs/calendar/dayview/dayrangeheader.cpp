@@ -49,6 +49,7 @@
 #include <QDebug>
 
 enum { WarnBodyMouseEvents = true, WarnHeaderMouseEvents = false, WarnDragDropFromBody = true};
+
 using namespace Calendar;
 using namespace Internal;
 

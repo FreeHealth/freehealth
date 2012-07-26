@@ -32,6 +32,7 @@
 #include "month_day_widget.h"
 
 using namespace Calendar;
+using namespace Internal;
 
 MonthHeader::MonthHeader(QWidget *parent) : ViewWidget(parent) {
 	setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
