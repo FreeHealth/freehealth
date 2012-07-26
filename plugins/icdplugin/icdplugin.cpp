@@ -62,6 +62,9 @@ IcdPlugin::IcdPlugin()
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating IcdPlugin";
+
+    // Create the database instance
+    IcdDatabase::instance();
 }
 
 IcdPlugin::~IcdPlugin()
@@ -91,9 +94,6 @@ void IcdPlugin::extensionsInitialized()
 
     messageSplash(tr("Initializing ICD10 plugin..."));
 
-    // Create the database instance
-    IcdDatabase::instance();
-
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 
 #ifdef FREEMEDFORMS
@@ -107,6 +107,9 @@ void IcdPlugin::postCoreInitialization()
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << Q_FUNC_INFO;
+
+    IcdDatabase::instance()->initialize();
+
     // Create the widgetmanager instance (here because we need that MainWindow has done its initialization)
 #ifndef FREETOOLBOX
     IcdWidgetManager::instance();
