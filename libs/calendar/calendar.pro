@@ -33,7 +33,8 @@ HEADERS += calendar_exporter.h \
     dayview/day_widget.h \
     dayview/day_node.h \
     monthview/month_day_widget.h \
-    monthview/month_view.h
+    monthview/month_view.h \
+    hourmark.h
 
 SOURCES += \
     calendar_navbar.cpp \
@@ -57,7 +58,8 @@ SOURCES += \
     dayview/day_widget.cpp \
     dayview/day_node.cpp \
     monthview/month_day_widget.cpp \
-    monthview/month_view.cpp
+    monthview/month_view.cpp \
+    hourmark.cpp
 
 FORMS += modelanditem/basic_item_edition_dialog.ui \
     modelanditem/item_editor_widget.ui
