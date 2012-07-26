@@ -612,7 +612,7 @@ void DayRangeBody::mouseReleaseEvent(QMouseEvent *event)
     case DayRangeBodyPrivate::MouseMode_Move:
     case DayRangeBodyPrivate::MouseMode_Resize:
     {
-        if (!d_body->m_pressItemWidget->inMotion()) {
+        if (!d_body->m_pressItemWidget->inMotion() && event->button()==Qt::RightButton) {
             if (!itemContextMenu()) {
                 // display a default contextual menu
                 QMenu menu;
@@ -647,13 +647,26 @@ void DayRangeBody::mouseReleaseEvent(QMouseEvent *event)
 
 }
 
-void DayRangeBody::mouseDoubleClickEvent(QMouseEvent *)
+void DayRangeBody::mouseDoubleClickEvent(QMouseEvent *event)
 {
-    d_body->m_pressItem = model()->insertItem(d_body->m_previousDateTime, d_body->m_previousDateTime.addSecs(d_body->m_itemDefaultDuration*60));
-    BasicItemEditionDialog dialog(model(), this);
-    dialog.init(d_body->m_pressItem);
-    if (dialog.exec()==QDialog::Rejected) {
-        removePressItem();
+    // dblclick on item?
+    d_body->m_pressItemWidget = qobject_cast<HourRangeWidget*>(childAt(event->pos()));
+    if (d_body->m_pressItemWidget) {
+        d_body->m_pressItem = model()->getItemByUid(d_body->m_pressItemWidget->uid());
+        BasicItemEditionDialog dialog(model(), this);
+        dialog.init(d_body->m_pressItem);
+        if (dialog.exec()==QDialog::Accepted) {
+            d_body->m_previousDateTime = QDateTime();
+            d_body->m_pressItemWidget = 0;
+            d_body->m_pressItem = CalendarItem();
+        }
+    } else {
+        d_body->m_pressItem = model()->insertItem(d_body->m_previousDateTime, d_body->m_previousDateTime.addSecs(d_body->m_itemDefaultDuration*60));
+        BasicItemEditionDialog dialog(model(), this);
+        dialog.init(d_body->m_pressItem);
+        if (dialog.exec()==QDialog::Rejected) {
+            removePressItem();
+        }
     }
     if (WarnBodyMouseEvents) {
         qWarning() << "DayBody::mousePressed" << d_body->m_pressItem.uid() << d_body->m_pressItem.beginning() << d_body->m_pressItem.ending();
