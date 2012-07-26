@@ -68,6 +68,7 @@ Q_SIGNALS:
     void frozen(bool);
     void imageReady(bool);
     void clicked();
+    void autoFaceShot(const QPixmap &shot);
     
 private:
     void timerEvent(QTimerEvent *event);
@@ -77,6 +78,7 @@ private:
     void wheelEvent(QWheelEvent *event);
     void mouseDoubleClickEvent(QMouseEvent *event);
 
+    QRect getFaceRect(IplImage *cvimage);
     void drawFaceDetectionFrame(IplImage *cvimage);
     
     void restrictRubberBandConstraints();

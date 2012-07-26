@@ -145,6 +145,7 @@ void OpenCVWidget::timerEvent(QTimerEvent *event)
     
     // maximum of 5 pictures
     //TODO: make image count configurable
+    //TODO: increase counter only if shot is OK
     if (++m_counter > 5) {
         return;
     }
@@ -157,12 +158,18 @@ void OpenCVWidget::timerEvent(QTimerEvent *event)
     case IPL_DEPTH_8U:
         switch (cvimage->nChannels) {
         case 3: {
-            if ( (cvimage->width != m_image.width()) || (cvimage->height != m_image.height()) ) {
+            // resize QImage
+            if ((cvimage->width != m_image.width()) || (cvimage->height != m_image.height())) {
                 QImage temp(cvimage->width, cvimage->height, QImage::Format_RGB32);
                 m_image = temp;
             }
-            drawFaceDetectionFrame(cvimage);
-            
+//            drawFaceDetectionFrame(cvimage);
+            // Find the face
+            QRect rect = getFaceRect(cvimage);
+            if (rect.isEmpty() || !rect.isValid() || rect.width() < 64) {
+                return;
+            }
+            // If found -> get the QImage and cut the face
             cvIndex = 0; cvLineStart = 0;
             for (int y = 0; y < cvimage->height; y++) {
                 unsigned char red,green,blue;
@@ -172,12 +179,16 @@ void OpenCVWidget::timerEvent(QTimerEvent *event)
                     red = cvimage->imageData[cvIndex+2];
                     green = cvimage->imageData[cvIndex+1];
                     blue = cvimage->imageData[cvIndex+0];
-                    
+
                     m_image.setPixel(x,y,qRgb(red, green, blue));
                     cvIndex += 3;
                 }
                 cvLineStart += cvimage->widthStep;
             }
+            m_image = m_image.copy(rect);
+            //                QPixmap pix(rect.size());
+            //                pix.fromImage(m_image);
+            //                Q_EMIT autoFaceShot(pix);
             break;
         }
         default:
@@ -355,9 +366,52 @@ void OpenCVWidget::mouseDoubleClickEvent(QMouseEvent *event)
     setFrozen(false);
 }
 
+/** Find the rect around the face. Increase is surface of 20%. */
+QRect OpenCVWidget::getFaceRect(IplImage *cvimage)
+{
+    if (!cvimage)
+        return QRect();
+
+    // thanks for some code snippets from Stef van den Elzen
+    // taken from http://sj.vdelzen.net/2011/05/31/realtime-face-detection-using-opencv-and-cqt/
+
+    // switch between bit depths
+    switch (cvimage->depth) {
+    case IPL_DEPTH_8U:
+        switch (cvimage->nChannels) {
+        case 3: {
+            // Detect face objects
+            cvClearMemStorage(_storage);
+            CvSeq* objects = cvHaarDetectObjects(cvimage, _cascade, _storage, 1.2, 3, CV_HAAR_DO_CANNY_PRUNING, cvSize( 64, 64 ));
+            int n = (objects ? objects->total : 0);
+            if (n <= 0)
+                return QRect();
+            CvRect* rect;
+            // we only work with one face
+            rect = (CvRect*)cvGetSeqElem(objects, 0);
+            QRect qRect(rect->x, rect->y, rect->width, rect->height);
+            QPoint center = qRect.center();
+            qRect.setWidth(qRect.width() * 1.2);
+            qRect.setHeight(qRect.width() * 1.2);
+            qRect.moveCenter(center);
+            // TODO: keep center pos, increase surface of 20%, recenter the rect
+            return qRect;
+        }
+        default:
+            printf("This number of channels is not supported\n");
+            break;
+        }
+        break;
+    default:
+        printf("This type of IplImage is not implemented in QOpenCVWidget\n");
+        break;
+    }
+    return QRect();
+}
+
 void OpenCVWidget::drawFaceDetectionFrame(IplImage *cvimage)
 {
-    if(!cvimage)
+    if (!cvimage)
         return;
 
     // thanks for some code snippets from Stef van den Elzen
