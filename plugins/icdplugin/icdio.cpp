@@ -230,6 +230,11 @@ bool IcdIO::icdCollectionFromXml(IcdCollectionModel *model, const QString &xml, 
         LOG_ERROR_FOR("IcdIO", "fromXml: No model");
         return false;
     }
+    if (xml.isEmpty()) {
+        model->clear();
+        return true;
+    }
+
     QDomDocument root;
     root.setContent(xml);
     QDomElement element = root.firstChildElement(Constants::XML_MAINTAG);
