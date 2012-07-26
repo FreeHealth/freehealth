@@ -35,10 +35,11 @@
 */
 
 #include "calendar_widget.h"
-#include "day_range_view.h"
-#include "month_view.h"
-#include "basic_calendar_model.h"
 #include "calendar_navbar.h"
+#include <calendar/dayview/dayrangeheader.h>
+#include <calendar/dayview/dayrangebody.h>
+#include <calendar/monthview/month_view.h>
+#include <calendar/modelanditem/basic_calendar_model.h>
 
 #include <QRect>
 #include <QPushButton>

@@ -28,7 +28,7 @@
 #define CALENDARITEMMODEL_H
 
 #include <agendaplugin/agenda_exporter.h>
-#include <calendar/abstract_calendar_model.h>
+#include <calendar/modelanditem/abstract_calendar_model.h>
 
 /**
  * \file calendaritemmodel.h

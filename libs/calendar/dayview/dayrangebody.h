@@ -25,82 +25,79 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef LIBCALENDAR_VIEW_H
-#define LIBCALENDAR_VIEW_H
+#ifndef LIBCALENDAR_DAYRANGEBODY_H
+#define LIBCALENDAR_DAYRANGEBODY_H
 
-#include <QWidget>
-#include <QDate>
-#include <QPointer>
-#include <QMenu>
-
-#include <calendar/modelanditem/calendar_item_widget.h>
-#include <calendar/modelanditem/abstract_calendar_model.h>
-
-class QPainter;
-class QRect;
-class QScrollArea;
+#include "view.h"
 
 /**
- * \file view.h
- * \author Guillaume Denry <guillaume.denry@gmail.com>
- * \version 0.6.0
- * \date 12 Aug 2011
+ * \file dayrangebody.h
+ * \author Guillaume Denry, Eric Maeker
+ * \version 0.8.0
+ * \date 26 July 2012
 */
 
 namespace Calendar {
+namespace Internal {
+class DayRangeBodyPrivate;
+}
 
-class ViewWidget : public QWidget
+class DayRangeBody : public ViewWidget
 {
     Q_OBJECT
+    friend class Calendar::Internal::DayRangeBodyPrivate;
 
 public:
-    ViewWidget(QWidget *parent = 0);
+    DayRangeBody(QWidget *parent = 0, int rangeWidth = 7);
 
-    const QDate &firstDate() const { return m_firstDate; }
-    void setFirstDate(const QDate &firstDate);
-    virtual void refreshCurrentDateTimeStuff();
-    AbstractCalendarModel *model() const { return m_model; }
-    void setModel(AbstractCalendarModel *model);
-    void setMasterScrollArea(QScrollArea *scrollArea);
-    void setContextMenuForItems(QMenu *menu) {m_ItemContextMenu = menu;}
+    int rangeWidth() const;
+    void setRangeWidth(int width);
 
-    // TODO: this was protected
-    QScrollArea *masterScrollArea;
+    int granularity() const;
+    void setGranularity(int value);
 
-Q_SIGNALS:
-    void firstDateChanged();
+    int itemDefaultDuration() const;
+    void setItemDefaultDuration(int value);
+
+    int dayScaleHourDivider() const;
+    void setDayScaleHourDivider(int value);
+
+    int hourHeight() const;
+    void setHourHeight(int value);
+
+    virtual QSize sizeHint() const;
 
 protected:
-    QPixmap generatePixmap();
-    void forceUpdate() { m_refreshGrid = true; update(); }
-
-    virtual void paintBody(QPainter *, const QRect &) {}
-    virtual void paintEvent(QPaintEvent *event);
-    virtual void resizeEvent(QResizeEvent *event);
-    virtual void refreshItemSizeAndPosition(CalendarItemWidget *) {}
+    virtual void paintBody(QPainter *painter, const QRect &visibleRect);
     virtual void refreshItemsSizesAndPositions();
-    virtual void resetItemWidgets() {}
-    bool eventFilter(QObject *obj, QEvent *event);
 
-    QMenu *itemContextMenu() const {return m_ItemContextMenu;}
+    virtual void dragEnterEvent(QDragEnterEvent *event);
+    virtual void dragMoveEvent(QDragMoveEvent *event);
+    virtual void dragLeaveEvent(QDragLeaveEvent *event);
+    virtual void dropEvent(QDropEvent *event);
 
-    CalendarItemWidget *getWidgetByUid(const QString &uid) const;
-    QList<CalendarItemWidget*> getWidgetsByDate(const QDate &dayDate) const;
-    void deleteAllWidgets();
+    virtual void mousePressEvent(QMouseEvent *event);
+    virtual void mouseMoveEvent(QMouseEvent *event);
+    virtual void mouseReleaseEvent(QMouseEvent *event);
+    virtual void mouseDoubleClickEvent(QMouseEvent *event);
+    virtual void resetItemWidgets();
 
 protected Q_SLOTS:
-    virtual void itemInserted(const Calendar::CalendarItem &item) { Q_UNUSED(item); }
-    virtual void itemModified(const Calendar::CalendarItem &oldItem, const Calendar::CalendarItem &newItem) { Q_UNUSED(oldItem); Q_UNUSED(newItem); }
-    virtual void itemRemoved(const Calendar::CalendarItem &removedItem) { Q_UNUSED(removedItem); }
-    virtual void reset();
+    void itemInserted(const Calendar::CalendarItem &item);
+    void itemModified(const Calendar::CalendarItem &oldItem, const Calendar::CalendarItem &newItem);
+    void itemRemoved(const Calendar::CalendarItem &removedItem);
+
+private Q_SLOTS:
+    void modifyPressItem();
+    void removePressItem();
 
 private:
-    QDate m_firstDate;
-    bool m_refreshGrid;
-    AbstractCalendarModel *m_model;
-    QPointer<QMenu> m_ItemContextMenu;
-};
+    Internal::DayRangeBodyPrivate *d_body;
 
+protected:
+    static int m_leftScaleWidth;
+    static int m_minimumItemHeight;
+};
 }  // namespace Calendar
 
-#endif  // LIBCALENDAR_VIEW_H
+#endif  // LIBCALENDAR_DAYRANGEBODY_H

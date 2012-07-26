@@ -37,9 +37,9 @@
 #include <coreplugin/constants_tokensandsettings.h>
 #include <coreplugin/actionmanager/actionmanager.h>
 
-#include <calendar/calendar_item.h>
-#include <calendar/calendar_people.h>
-#include <calendar/abstract_calendar_model.h>
+#include <calendar/modelanditem/calendar_item.h>
+#include <calendar/modelanditem/calendar_people.h>
+#include <calendar/modelanditem/abstract_calendar_model.h>
 #include <translationutils/constants.h>
 #include <translationutils/trans_agenda.h>
 

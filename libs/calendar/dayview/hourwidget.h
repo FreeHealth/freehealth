@@ -25,80 +25,34 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef CALENDAR_WIDGET_H
-#define CALENDAR_WIDGET_H
+#ifndef LIBCALENDAR_DAYRANGEHEADER_H
+#define LIBCALENDAR_DAYRANGEHEADER_H
 
-#include <calendar/calendar_exporter.h>
-#include <calendar/common.h>
-
-#include <QScrollArea>
-#include <QTimer>
-
-class QVBoxLayout;
+#include "view.h"
 
 /**
- * \file calendar_widget.h
- * \author Guillaume Denry <guillaume.denry@gmail.com>
- * \version 0.6.0
- * \date 12 Aug 2011
+ * \file hourwidget.h
+ * \author Guillaume Denry, Eric Maeker
+ * \version 0.8.0
+ * \date 26 July 2012
 */
 
 namespace Calendar {
-struct CalendarWidgetPrivate;
-class AbstractCalendarModel;
+namespace Internal {
 
-class CALENDAR_EXPORT CalendarWidget : public QWidget
+class HourWidget : public QWidget
 {
     Q_OBJECT
-    /** The number of minutes used when we want to move of size items. Worth 15 by default. */
-    Q_PROPERTY(int dayGranularity READ dayGranularity WRITE setDayGranularity)
-    /** default item duration. 30 minutes by default. */
-    Q_PROPERTY(int dayItemDefaultDuration READ dayItemDefaultDuration WRITE setDayItemDefaultDuration)
-    /** Divider for the vertical day scale in views.
-     * For instance, to have a line every half-hour, use 2. For a line every fifteen minutes, use 4.
-     * Worth 2 by default.
-     */
-    Q_PROPERTY(int dayScaleHourDivider READ dayScaleHourDivider WRITE setDayScaleHourDivider)
-    /** Height (in pixels) of an hour. 40 by default. */
-    Q_PROPERTY(int hourHeight READ hourHeight WRITE setHourHeight)
 public:
-    CalendarWidget(QWidget *parent = 0);
+    HourWidget(QWidget *parent = 0);
 
-    AbstractCalendarModel *model() const { return m_model; }
-    void setModel(AbstractCalendarModel *model);
+    virtual QSize sizeHint() const { return QSize(0, 2); }
 
-    ViewType viewType() const;
-    void setViewType(Calendar::ViewType viewType);
-
-    void setDate(const QDate &date);
-
-    int dayGranularity() const;
-    int dayItemDefaultDuration() const;
-    int dayScaleHourDivider() const;
-    int hourHeight() const;
-
-public Q_SLOTS:
-    void setDayGranularity(int minutes);
-    void setDayItemDefaultDuration(int minutes);
-    void setDayScaleHourDivider(int divider);
-    void setHourHeight(int pixels);
-
-    void scrollToTime(const QTime &time);
-
-private Q_SLOTS:
-    // navigation bar slots
-    void firstDateChanged();
-    void viewTypeChanged();
-
-    // timer
-    void timeout();
-
-private:
-    CalendarWidgetPrivate *m_d;
-    ViewType m_viewType;
-    AbstractCalendarModel *m_model;
+protected:
+    void paintEvent(QPaintEvent *event);
 };
 
-}  // End namespace Calendar
+}  // namespace Internal
+}  // namespace Calendar
 
-#endif
+#endif  // LIBCALENDAR_DAYRANGEHEADER_H

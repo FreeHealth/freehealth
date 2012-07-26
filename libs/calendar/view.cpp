@@ -73,7 +73,7 @@
 
 using namespace Calendar;
 
-ViewWidget::ViewWidget(QWidget *parent = 0) :
+ViewWidget::ViewWidget(QWidget *parent) :
     QWidget(parent),
     masterScrollArea(0),
     m_refreshGrid(false),

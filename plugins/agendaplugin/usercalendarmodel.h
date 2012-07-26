@@ -27,7 +27,7 @@
 #ifndef USERCALENDARMODEL_H
 #define USERCALENDARMODEL_H
 
-#include <calendar/calendar_people.h>
+#include <calendar/modelanditem/calendar_people.h>
 
 #include <QAbstractTableModel>
 #include <QStandardItemModel>

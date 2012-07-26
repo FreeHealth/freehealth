@@ -39,7 +39,7 @@
 
 #include <usermanagerplugin/usermodel.h>
 
-#include <calendar/calendar_item.h>
+#include <calendar/modelanditem/calendar_item.h>
 
 #include <utils/log.h>
 #include <translationutils/constants.h>

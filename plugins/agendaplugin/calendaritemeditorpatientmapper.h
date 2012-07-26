@@ -29,7 +29,7 @@
 #define CALENDARITEMEDITORPATIENTMAPPER_H
 
 #include <calendar/icalendaritemdatawidget.h>
-#include <calendar/calendar_people.h>
+#include <calendar/modelanditem/calendar_people.h>
 
 #include <QWidget>
 #include <QHash>

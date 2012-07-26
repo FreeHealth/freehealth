@@ -12,51 +12,55 @@ include(../libsworkbench.pri)
 include(../calendar_dependencies.pri)
 
 HEADERS += calendar_exporter.h \
-    abstract_calendar_model.h \
-    basic_calendar_model.h \
-    calendar_item.h \
-    calendar_item_widget.h \
-    calendar_navbar.h \
     calendar_widget.h \
     common.h \
-    day_range_view.h \
-    month_view.h \
     view.h \
-    hour_range_widget.h \
-    hour_range_node.h \
-    month_day_widget.h \
-    basic_item_edition_dialog.h \
-    day_widget.h \
-    day_node.h \
-    item_editor_widget.h \
     icalendaritemdatawidget.h \
     calendar_theme.h \
-    calendar_people.h
+    calendar_navbar.h \
+    modelanditem/abstract_calendar_model.h \
+    modelanditem/basic_calendar_model.h \
+    modelanditem/basic_item_edition_dialog.h \
+    modelanditem/calendar_item.h \
+    modelanditem/calendar_item_widget.h \
+    modelanditem/item_editor_widget.h \
+    modelanditem/calendar_people.h \
+    dayview/dayrangeheader.h \
+    dayview/dayrangebody.h \
+    dayview/hour_range_widget.h \
+    dayview/hour_range_node.h \
+    dayview/hourwidget.h \
+    dayview/day_widget.h \
+    dayview/day_node.h \
+    monthview/month_day_widget.h \
+    monthview/month_view.h
 
 SOURCES += \
-    abstract_calendar_model.cpp \
-    basic_calendar_model.cpp \
-    calendar_item.cpp \
-    calendar_item_widget.cpp \
     calendar_navbar.cpp \
     calendar_widget.cpp \
     common.cpp \
-    day_range_view.cpp \
-    month_view.cpp \
     view.cpp \
-    hour_range_widget.cpp \
-    hour_range_node.cpp \
-    month_day_widget.cpp \
-    basic_item_edition_dialog.cpp \
-    day_widget.cpp \
-    day_node.cpp \
-    item_editor_widget.cpp \
     icalendaritemdatawidget.cpp \
     calendar_theme.cpp \
-    calendar_people.cpp
+    modelanditem/abstract_calendar_model.cpp \
+    modelanditem/basic_calendar_model.cpp \
+    modelanditem/basic_item_edition_dialog.cpp \
+    modelanditem/calendar_item.cpp \
+    modelanditem/calendar_item_widget.cpp \
+    modelanditem/calendar_people.cpp \
+    modelanditem/item_editor_widget.cpp \
+    dayview/dayrangeheader.cpp \
+    dayview/dayrangebody.cpp \
+    dayview/hour_range_widget.cpp \
+    dayview/hour_range_node.cpp \
+    dayview/hourwidget.cpp \
+    dayview/day_widget.cpp \
+    dayview/day_node.cpp \
+    monthview/month_day_widget.cpp \
+    monthview/month_view.cpp
 
-FORMS += basic_item_edition_dialog.ui \
-    item_editor_widget.ui
+FORMS += modelanditem/basic_item_edition_dialog.ui \
+    modelanditem/item_editor_widget.ui
 
 # translators
 TRANSLATIONS += $${SOURCES_TRANSLATIONS_PATH}/calendar_fr.ts \

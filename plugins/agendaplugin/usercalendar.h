@@ -28,7 +28,7 @@
 #define USERCALENDAR_H
 
 #include <agendaplugin/agenda_exporter.h>
-#include <calendar/calendar_people.h>
+#include <calendar/modelanditem/calendar_people.h>
 
 #include <QVariant>
 #include <QVector>

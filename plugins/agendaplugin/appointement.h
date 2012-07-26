@@ -28,7 +28,7 @@
 #define APPOINTEMENT_H
 
 #include <agendaplugin/constants.h>
-#include <calendar/calendar_people.h>
+#include <calendar/modelanditem/calendar_people.h>
 
 #include <QVariant>
 #include <QHash>

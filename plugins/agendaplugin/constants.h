@@ -27,7 +27,7 @@
 #ifndef AGENDA_CONSTANTS_H
 #define AGENDA_CONSTANTS_H
 
-#include <calendar/calendar_item.h>
+#include <calendar/modelanditem/calendar_item.h>
 
 namespace Agenda {
 namespace Constants {

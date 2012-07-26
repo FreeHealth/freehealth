@@ -47,7 +47,7 @@
 #include <coreplugin/constants_icons.h>
 #include <coreplugin/actionmanager/actionmanager.h>
 
-#include <calendar/basic_item_edition_dialog.h>
+#include <calendar/modelanditem/basic_item_edition_dialog.h>
 #include <utils/log.h>
 #include <translationutils/constants.h>
 #include <translationutils/trans_agenda.h>
