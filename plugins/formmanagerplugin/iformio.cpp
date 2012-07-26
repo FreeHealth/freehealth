@@ -161,13 +161,11 @@ bool FormIODescription::setData(const int ref, const QVariant &value, const QStr
 
 bool FormIODescription::hasScreenShots() const
 {
-    qWarning() << "hasScreenShots "<< d_formIO->m_Shots.keys();
     return (!d_formIO->m_Shots.isEmpty());
 }
 
 void FormIODescription::addScreenShot(const QString &name, const QPixmap &shot)
 {
-    qWarning() << "AddScreenShot "<< name;
     d_formIO->m_Shots.insert(name, shot);
 }
 
