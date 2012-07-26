@@ -1,10 +1,17 @@
 FreeMedForms
 0.8.0
 ===== News =====
+
   * Activation of forms now per single instead of double click
+  * First release of the alert plugin
+  * First release of the webcam plugin
 
 ===== Bug correction =====
 
+  * Managing transaction in all databases
+  * Birth date editor in patient creator corrected
+  * Segfault when closing FreeAccount
+  * Updating Plugin information dialog
   * Many typos corrected
   * Many bug fixes
 
@@ -16,6 +23,7 @@ FreeMedForms
   * Compilation
   * Documentation
     * Updating the FreeDiams documentation [French section only]
+    * Updating the FreeMedForms documentation [French section only]
     * First version of the FreeMedForms documentation
 
 *********************************************************************************************
