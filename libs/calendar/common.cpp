@@ -26,7 +26,7 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "common.h"
-#include "calendar_item.h"
+#include "modelanditem/calendar_item.h"
 
 #include <translationutils/constants.h>
 #include <translationutils/trans_agenda.h>
@@ -115,4 +115,9 @@ QStringList availableStatus() {
 		// vertical lines
 		return QPair<int, int>(top, height);
 	}
+
+    QString calendarMimeType()
+    {
+        return "freemedforms-calendar/calendar-item";
+    }
 }

@@ -48,19 +48,19 @@ namespace Calendar {
 		Date_Date
 	};
 
-        /** Return the translated available status for the CalendarItem. Recall each QEvent::LanguageChange. */
-        CALENDAR_EXPORT QStringList availableStatus();
+    /** Return the translated available status for the CalendarItem. Recall each QEvent::LanguageChange. */
+    CALENDAR_EXPORT QStringList availableStatus();
 
 	/** returns the first date of the view in function of a random date */
-        CALENDAR_EXPORT QDate getFirstDateByRandomDate(ViewType viewType, const QDate &randomDate);
+    CALENDAR_EXPORT QDate getFirstDateByRandomDate(ViewType viewType, const QDate &randomDate);
 
 	/** returns the bounding days interval for a month. WARNING: days are not necessarily inside the month. */
-        CALENDAR_EXPORT QPair<QDate, QDate> getBoundingMonthDaysInterval(int year, int month);
+    CALENDAR_EXPORT QPair<QDate, QDate> getBoundingMonthDaysInterval(int year, int month);
 
 	/** returns the bounding days interval for a month. WARNING: days are not necessarily inside the month.
 	 * Same function as the previous one but with a QDate instead of a year+month.
 	 */
-        CALENDAR_EXPORT QPair<QDate, QDate> getBoundingMonthDaysInterval(const QDate &date);
+    CALENDAR_EXPORT QPair<QDate, QDate> getBoundingMonthDaysInterval(const QDate &date);
 
 	/** compute an intersection value (int) between a range of QDateTime and a day range
 	 * @param beginning The lower bound of the QDateTime range
@@ -71,7 +71,7 @@ namespace Calendar {
 	 * @return 0 if the range intersects [firstDay, lastDay]
 	 * @return 1 if the range is entirely after lastDay
 	 */
-        CALENDAR_EXPORT int intersectsDays(const QDateTime &beginning, const QDateTime &ending,
+    CALENDAR_EXPORT int intersectsDays(const QDateTime &beginning, const QDateTime &ending,
                                            const QDate &firstDay, const QDate &lastDay);
 
 	/** returns the first and last day intersecting a given range
@@ -80,10 +80,13 @@ namespace Calendar {
 	 * \param ending A QDateTime representing the upper bound of a QDateTime range
 	 * \return {QPair<QDate,QDate>} The first and last day intersecting the given range
 	 */
-        CALENDAR_EXPORT QPair<QDate, QDate> getIntersectDayRange(const QDateTime &beginning, const QDateTime &ending);
+    CALENDAR_EXPORT QPair<QDate, QDate> getIntersectDayRange(const QDateTime &beginning, const QDateTime &ending);
 
 	/** returns the top and the height of an item, taking account of a minimum item height */
-	QPair<int, int> getItemTopAndHeight(const QTime &begin, const QTime &end, int hourHeight, int minimumItemHeight);
+    CALENDAR_EXPORT QPair<int, int> getItemTopAndHeight(const QTime &begin, const QTime &end, int hourHeight, int minimumItemHeight);
+
+    /** Return the mime-type of the calendar lib (used in drag/drop of appointements inside the calendar view) */
+    CALENDAR_EXPORT QString calendarMimeType();
 }
 
 #endif
