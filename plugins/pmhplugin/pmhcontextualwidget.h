@@ -37,7 +37,6 @@
  * \internal
 */
 
-
 namespace PMH {
 namespace Internal {
 class PmhContext;

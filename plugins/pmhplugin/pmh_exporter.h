@@ -27,6 +27,13 @@
 #ifndef MEDICALHISTORYEXPORTER_H
 #define MEDICALHISTORYEXPORTER_H
 
+/**
+ * \file pmh_exporter.h
+ * \author Eric MAEKER <eric.maeker@gmail.com>
+ * \version 0.8.0
+ * \date 25 July 2012
+*/
+
 #include <qglobal.h>
 
 #if defined(PMH_LIBRARY)

@@ -31,6 +31,13 @@
 
 #include <QObject>
 
+/**
+ * \file pmhcore.h
+ * \author Eric MAEKER <eric.maeker@gmail.com>
+ * \version 0.8.0
+ * \date 25 July 2012
+*/
+
 namespace PMH {
 namespace Internal {
 class PmhCorePrivate;
