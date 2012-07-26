@@ -12,6 +12,7 @@ FreeMedForms
   * Birth date editor in patient creator corrected
   * Segfault when closing FreeAccount
   * Updating Plugin information dialog
+  * ICD10 coding assistant access in PMHx is always sync to the ICD10 database initialization
   * Many typos corrected
   * Many bug fixes
 
