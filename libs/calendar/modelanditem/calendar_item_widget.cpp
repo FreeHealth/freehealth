@@ -29,28 +29,34 @@
 #include "abstract_calendar_model.h"
 
 #include <QEvent>
+#include <QPainter>
 
 using namespace Calendar;
 using namespace Internal;
 
 CalendarItemWidget::CalendarItemWidget(QWidget *parent, const QString &uid, AbstractCalendarModel *model) :
-	QWidget(parent), m_uid(uid), m_model(model) {
+    QWidget(parent),
+    m_uid(uid),
+    m_model(model)
+{
 }
 
-void CalendarItemWidget::setBeginDateTime(const QDateTime &dateTime) {
-	if (m_beginDateTime == dateTime)
-		return;
+void CalendarItemWidget::setBeginDateTime(const QDateTime &dateTime)
+{
+    if (m_beginDateTime == dateTime)
+        return;
 
-	m_beginDateTime = dateTime;
-	update();
+    m_beginDateTime = dateTime;
+    update();
 }
 
-void CalendarItemWidget::setEndDateTime(const QDateTime &dateTime) {
-	if (m_endDateTime == dateTime)
-		return;
+void CalendarItemWidget::setEndDateTime(const QDateTime &dateTime)
+{
+    if (m_endDateTime == dateTime)
+        return;
 
-	m_endDateTime = dateTime;
-	update();
+    m_endDateTime = dateTime;
+    update();
 }
 
 bool CalendarItemWidget::event(QEvent *event)

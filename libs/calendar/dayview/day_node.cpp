@@ -25,12 +25,14 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#include "calendar_item.h"
 #include "day_node.h"
+#include <calendar/modelanditem/calendar_item.h>
 
 using namespace Calendar;
+using namespace Internal;
 
-int DayStore::store(const CalendarItem &item) {
+int DayStore::store(const CalendarItem &item)
+{
 	int depth = 0;
 	for (; depth < m_items.count(); depth++) {
 		QList<CalendarItem> &layer = m_items[depth];
