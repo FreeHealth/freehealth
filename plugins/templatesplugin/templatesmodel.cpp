@@ -372,21 +372,24 @@ public:
         m_Tree = m_RootItem;
 
         // getting categories
-        Utils::Log::addMessage(q, "Getting Templates Categories");
+        LOG_FOR(q, "Getting Templates Categories");
         QSqlDatabase DB = QSqlDatabase::database(Constants::DB_TEMPLATES_NAME);
-        if (!DB.open()) {
-            Utils::Log::addError(q, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
-                                 .arg(Constants::DB_TEMPLATES_NAME)
-                                 .arg(DB.lastError().text()),
-                                 __FILE__, __LINE__);
-            return;
+        if (!DB.isOpen()) {
+            if (!DB.open()) {
+                Utils::Log::addError(q, tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+                                     .arg(Constants::DB_TEMPLATES_NAME)
+                                     .arg(DB.lastError().text()),
+                                     __FILE__, __LINE__);
+                return;
+            }
         }
 
         // get categories
         m_IdToCategory.clear();
         // TODO: Filter user's templates
-        QSqlQuery query(templateBase()->select(Templates::Constants::Table_Categories), DB);
-        if (query.isActive()) {
+        DB.transaction();
+        QSqlQuery query(DB);
+        if (query.exec(templateBase()->select(Templates::Constants::Table_Categories))) {
             QHash<int, QVariant> datas;
             while (query.next()) {
                 datas.insert(Constants::Data_Id, query.value(Constants::CATEGORIES_ID));
@@ -401,7 +404,10 @@ public:
                 datas.clear();
             }
         } else {
-            Utils::Log::addQueryError(q, query, __FILE__, __LINE__);
+            LOG_QUERY_ERROR_FOR(q, query);
+            query.finish();
+            DB.rollback();
+            return;
         }
         query.finish();
         foreach(TreeItem *item, m_IdToCategory.values()) {
@@ -413,11 +419,10 @@ public:
         }
 
         // get templates
-        Utils::Log::addMessage(q, "Getting Templates");
+        LOG_FOR(q, "Getting Templates");
         QList<TreeItem *> templates;
         // TODO: filter user's uuid
-        query.exec(templateBase()->select(Templates::Constants::Table_Templates));
-        if (query.isActive()) {
+        if (query.exec(templateBase()->select(Templates::Constants::Table_Templates))) {
             QHash<int, QVariant> datas;
             while (query.next()) {
                 datas.insert(Constants::Data_Id, query.value(Constants::TEMPLATE_ID));
@@ -437,9 +442,14 @@ public:
                 datas.clear();
             }
         } else {
-            Utils::Log::addQueryError(q, query, __FILE__, __LINE__);
+            LOG_QUERY_ERROR_FOR(q, query);
+            query.finish();
+            DB.rollback();
+            return;
         }
         query.finish();
+        DB.commit();
+
         // add templates to categories
         foreach(TreeItem *item, templates) {
             // need to be reparented
@@ -469,6 +479,8 @@ public:
         }
 
         QModelIndex idx = start;
+        DB.transaction();
+        QSqlQuery query(DB);
         for(int i = 0; i< q->rowCount(start); ++i) {
             idx = q->index(i, 0, start);
             TreeItem *t = getItem(idx);
@@ -476,7 +488,6 @@ public:
                 qWarning() << "   saving" << t->label().leftJustified(50,' ') << "user" << t->ownerUuid().leftJustified(50,' ') << "parent" << t->parent()->label().leftJustified(50,' ');
                 qWarning() << "   newly" << t->isNewlyCreated() << "modified" << t->isModified();
             }
-            QSqlQuery query(DB);
             QString req;
             if (t->isNewlyCreated()) {
                 if (t->isTemplate()) {
@@ -492,9 +503,11 @@ public:
                     query.bindValue(Constants::TEMPLATE_DATEMODIF, t->data(Constants::Data_ModifDate).toDate().toString(Qt::ISODate));
                     query.bindValue(Constants::TEMPLATE_THEMEDICON, t->data(Constants::Data_ThemedIcon).toString());
                     query.bindValue(Constants::TEMPLATE_TRANSMISSIONDATE, QVariant());
-                    query.exec();
-                    if (!query.isActive()) {
-                        Utils::Log::addQueryError(q, query, __FILE__, __LINE__);
+                    if (!query.exec()) {
+                        LOG_QUERY_ERROR_FOR(q, query);
+                        query.finish();
+                        DB.rollback();
+                        return;
                     } else {
                         t->setNewlyCreated(false);
                         t->setModified(false);
@@ -514,9 +527,11 @@ public:
                     query.bindValue(Constants::CATEGORIES_THEMEDICON, t->data(Constants::Data_ThemedIcon).toString());
                     query.bindValue(Constants::CATEGORIES_TRANSMISSIONDATE, QVariant());
                     // save category
-                    query.exec();
-                    if (!query.isActive()) {
-                        Utils::Log::addQueryError(q, query, __FILE__, __LINE__);
+                    if (!query.exec()) {
+                        LOG_QUERY_ERROR_FOR(q, query);
+                        query.finish();
+                        DB.rollback();
+                        return;
                     } else {
                         t->setNewlyCreated(false);
                         t->setModified(false);
@@ -547,9 +562,11 @@ public:
                     query.bindValue(Constants::TEMPLATE_DATEMODIF, t->data(Constants::Data_ModifDate).toDate().toString(Qt::ISODate));
                     query.bindValue(Constants::TEMPLATE_THEMEDICON, t->data(Constants::Data_ThemedIcon).toString());
                     query.bindValue(Constants::TEMPLATE_TRANSMISSIONDATE, QVariant());
-                    query.exec();
-                    if (!query.isActive()) {
-                        Utils::Log::addQueryError(q, query, __FILE__, __LINE__);
+                    if (!query.exec()) {
+                        LOG_QUERY_ERROR_FOR(q, query);
+                        query.finish();
+                        DB.rollback();
+                        return;
                     }
                     req.clear();
                     query.finish();
@@ -569,9 +586,11 @@ public:
                     query.bindValue(Constants::CATEGORIES_DATEMODIF, t->data(Constants::Data_ModifDate).toDate().toString(Qt::ISODate));
                     query.bindValue(Constants::CATEGORIES_THEMEDICON, t->data(Constants::Data_ThemedIcon).toString());
                     query.bindValue(Constants::CATEGORIES_TRANSMISSIONDATE, QVariant());
-                    query.exec();
-                    if (!query.isActive()) {
-                        Utils::Log::addQueryError(q, query, __FILE__, __LINE__);
+                    if (!query.exec()) {
+                        LOG_QUERY_ERROR_FOR(q, query);
+                        query.finish();
+                        DB.rollback();
+                        return;
                     }
                     req.clear();
                     query.finish();
@@ -580,6 +599,9 @@ public:
                 }
             }
         }
+        query.finish();
+        DB.commit();
+
         // save all its children
         for(int i = 0; i < q->rowCount(start); ++i) {
             saveModelDatas(q->index(i, 0, start));
@@ -599,12 +621,16 @@ public:
                 return toReturn;
             }
         }
+        DB.transaction();
         QHash<int, QString> where;
         where.insert(Constants::CATEGORIES_PARENT_ID, QString("=%1").arg(idCategory));
         req = templateBase()->select(Constants::Table_Categories, Constants::CATEGORIES_ID, where);
-        QSqlQuery query(req, DB);
-        if (!query.isActive()) {
+        QSqlQuery query(DB);
+        if (!query.exec(req)) {
             LOG_QUERY_ERROR_FOR(q, query);
+            query.finish();
+            DB.rollback();
+            return toReturn;
         } else {
             while (query.next()) {
                 toReturn << query.value(0).toInt();
@@ -612,6 +638,7 @@ public:
             }
         }
         query.finish();
+        DB.commit();
         return toReturn;
     }
 
@@ -629,6 +656,8 @@ public:
                 return;
             }
         }
+        DB.transaction();
+        QSqlQuery query(DB);
         QString req;
 
         if (m_CategoriesToDelete.count()) {
@@ -650,11 +679,14 @@ public:
             where.insert(Constants::CATEGORIES_ID, QString(" IN (%1)").arg(req));
             req = templateBase()->prepareDeleteQuery(Constants::Table_Categories, where);
 
-            QSqlQuery query(req, DB);
-            if (!query.isActive())
-                Utils::Log::addQueryError(q, query, __FILE__, __LINE__);
-            else
+            if (!query.exec(req)) {
+                LOG_QUERY_ERROR_FOR(q, query);
+                query.finish();
+                DB.rollback();
+                return;
+            } else {
                 m_CategoriesToDelete.clear();
+            }
         }
 
         req.clear();
@@ -667,12 +699,17 @@ public:
             QHash<int, QString> where;
             where.insert(Constants::TEMPLATE_ID, QString(" IN (%1)").arg(req));
             req = templateBase()->prepareDeleteQuery(Constants::Table_Templates, where);
-            QSqlQuery query(req, DB);
-            if (!query.isActive())
-                Utils::Log::addQueryError(q, query, __FILE__, __LINE__);
-            else
+            if (!query.exec(req)) {
+                LOG_QUERY_ERROR_FOR(q, query);
+                query.finish();
+                DB.rollback();
+                return;
+            } else {
                 m_TemplatesToDelete.clear();
+            }
         }
+        query.finish();
+        DB.commit();
     }
 
     void sortItems(TreeItem *root = 0)

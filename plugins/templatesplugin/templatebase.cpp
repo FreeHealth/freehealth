@@ -56,6 +56,19 @@ using namespace Trans::ConstantTranslations;
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline Core::ICommandLine *commandLine()  { return Core::ICore::instance()->commandLine(); }
 
+static inline bool connectDatabase(QSqlDatabase &DB, const int line)
+{
+    if (!DB.isOpen()) {
+        if (!DB.open()) {
+            Utils::Log::addError("TemplateBase", tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+                                 .arg(DB.connectionName()).arg(DB.lastError().text()),
+                                 __FILE__, line);
+            return false;
+        }
+    }
+    return true;
+}
+
 namespace Templates {
 namespace Internal {
 /**
@@ -75,13 +88,21 @@ public:
 
     void checkDatabaseVersion()
     {
+        QSqlDatabase DB = QSqlDatabase::database(Constants::DB_TEMPLATES_NAME);
+        if (!connectDatabase(DB, __LINE__)) {
+            return;
+        }
+        DB.transaction();
+        QSqlQuery query(DB);
         QString version;
-        QSqlQuery query(q->select(Constants::Table_Version, QList<int>() << Constants::VERSION_ACTUAL), QSqlDatabase::database(Constants::DB_TEMPLATES_NAME));
-        if (query.isActive()) {
+        if (query.exec(q->select(Constants::Table_Version, QList<int>() << Constants::VERSION_ACTUAL))) {
             if (query.next())
                 version = query.value(0).toString();
         } else {
             LOG_QUERY_ERROR_FOR(q, query);
+            query.finish();
+            DB.rollback();
+            return;
         }
         query.finish();
         bool updateVersionNumber = false;
@@ -100,7 +121,6 @@ public:
                     << "ALTER TABLE `CATEGORIES` RENAME TO `OLD_CATEGORIES`;"
                     << "ALTER TABLE `TEMPLATES` RENAME TO `OLD_TEMPLATES`;";
 
-            QSqlDatabase DB = q->database();
             if (!q->executeSQL(reqs, DB))
                 LOG_ERROR_FOR(q, "Unable to recreate template database during update (0.3.0 to 0.4.0)");
 
@@ -153,9 +173,14 @@ public:
             query.exec();
             if (!query.isActive()) {
                 LOG_QUERY_ERROR_FOR(q, query);
+                query.finish();
+                DB.rollback();
+                return;
             }
             query.finish();
         }
+        query.finish();
+        DB.commit();
     }
 
 public:
@@ -372,14 +397,18 @@ bool TemplateBase::createDatabase(const QString &connectionName , const QString 
     }
 
     // inform the version
-    QSqlQuery query(database());
+    DB.transaction();
+    QSqlQuery query(DB);
     query.prepare(prepareInsertQuery(Constants::Table_Version));
     query.bindValue(Constants::VERSION_ACTUAL, Constants::DB_ACTUAL_VERSION);
     if (!query.exec()) {
         LOG_QUERY_ERROR(query);
+        query.finish();
+        DB.rollback();
         return false;
     }
-
+    query.finish();
+    DB.commit();
     return true;
 }
 

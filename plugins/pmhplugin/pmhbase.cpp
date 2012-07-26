@@ -76,7 +76,7 @@ static inline bool connectDatabase(QSqlDatabase &DB, const int line)
 {
     if (!DB.isOpen()) {
         if (!DB.open()) {
-            Utils::Log::addError("EpisodeBase", tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
+            Utils::Log::addError("PmhBase", tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
                                  .arg(DB.connectionName()).arg(DB.lastError().text()),
                                  __FILE__, line);
             return false;
@@ -318,6 +318,7 @@ QVector<PmhData *> PmhBase::getPmh(const QString &patientUid) const
         }
     } else {
         LOG_QUERY_ERROR(query);
+        query.finish();
         DB.rollback();
         return pmhs;
     }
@@ -345,6 +346,7 @@ QVector<PmhData *> PmhBase::getPmh(const QString &patientUid) const
             }
         } else {
             LOG_QUERY_ERROR(query);
+            query.finish();
             DB.rollback();
             return pmhs;
         }
@@ -352,6 +354,7 @@ QVector<PmhData *> PmhBase::getPmh(const QString &patientUid) const
 
     // Get Contacts
     where.clear();
+    query.finish();
     DB.commit();
     return pmhs;
 }
@@ -416,6 +419,7 @@ bool PmhBase::savePmhData(PmhData *pmh)
         pmh->setData(PmhData::Uid, query.lastInsertId());
     } else {
         LOG_QUERY_ERROR(query);
+        query.finish();
         DB.rollback();
     }
 
@@ -423,6 +427,7 @@ bool PmhBase::savePmhData(PmhData *pmh)
         savePmhEpisodeData(ep);
     }
 
+    query.finish();
     DB.commit();
     return true;
 }
@@ -469,6 +474,7 @@ bool PmhBase::updatePmhData(PmhData *pmh)
     query.bindValue(9, pmh->data(PmhData::IsPrivate).toInt());
     if (!query.exec()) {
         LOG_QUERY_ERROR(query);
+        query.finish();
         DB.rollback();
         return false;
     }
