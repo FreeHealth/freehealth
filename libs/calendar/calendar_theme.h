@@ -34,6 +34,13 @@
 #include <QString>
 #include <QColor>
 
+/**
+ * \file calendar_theme.h
+ * \author Eric Maeker
+ * \version 0.6.0
+ * \date 12 Aug 2011
+*/
+
 namespace Calendar {
 
 class CALENDAR_EXPORT CalendarTheme

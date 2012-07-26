@@ -46,7 +46,7 @@ class CalendarItemWidget : public QWidget
 {
     Q_OBJECT
 public:
-    CalendarItemWidget(QWidget *parent = 0, const QString &uid = "", AbstractCalendarModel *model = 0);
+    CalendarItemWidget(QWidget *parent = 0, const QString &uid = QString::null, AbstractCalendarModel *model = 0);
 
     const QString &uid() const { return m_uid; }
     const QDateTime &beginDateTime() const { return m_beginDateTime; }
@@ -65,7 +65,6 @@ private:
     QDateTime m_endDateTime;
     QString m_uid;
     AbstractCalendarModel *m_model;
-    double _opacity;
 };
 
 }  // namespace Internal

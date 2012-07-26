@@ -32,6 +32,13 @@
 
 #include <QPair>
 
+/**
+ * \file common.h
+ * \author Guillaume Denry, Eric Maeker
+ * \version 0.6.0
+ * \date 12 Aug 2011
+*/
+
 class QDate;
 class QDateTime;
 class QTime;
