@@ -82,7 +82,8 @@ ViewWidget::ViewWidget(QWidget *parent) :
 {
 }
 
-void ViewWidget::setFirstDate(const QDate &firstDate) {
+void ViewWidget::setFirstDate(const QDate &firstDate)
+{
 	if (m_firstDate == firstDate)
 		return;
 
@@ -94,14 +95,16 @@ void ViewWidget::setFirstDate(const QDate &firstDate) {
 	update();
 }
 
-QPixmap ViewWidget::generatePixmap() {
+QPixmap ViewWidget::generatePixmap()
+{
 	QPixmap pixmap(width(), height());
 	QPainter painter(&pixmap);
         paintBody(&painter, rect());
 	return pixmap;
 }
 
-void ViewWidget::paintEvent(QPaintEvent *) {
+void ViewWidget::paintEvent(QPaintEvent *)
+{
 	QPixmap pixmap;
 	QString key = "grid";
 
@@ -114,7 +117,8 @@ void ViewWidget::paintEvent(QPaintEvent *) {
 	painter.drawPixmap(0, 0, pixmap);
 }
 
-void ViewWidget::resizeEvent(QResizeEvent *event) {
+void ViewWidget::resizeEvent(QResizeEvent *event)
+{
 	if (!masterScrollArea) {
 		m_refreshGrid = true;
 		refreshItemsSizesAndPositions();
@@ -123,7 +127,8 @@ void ViewWidget::resizeEvent(QResizeEvent *event) {
 	QWidget::resizeEvent(event);
 }
 
-void ViewWidget::refreshItemsSizesAndPositions() {
+void ViewWidget::refreshItemsSizesAndPositions()
+{
 	foreach (QObject *object, children()) {
 		CalendarItemWidget *widget = qobject_cast<CalendarItemWidget*>(object);
 		if (widget)
@@ -131,12 +136,14 @@ void ViewWidget::refreshItemsSizesAndPositions() {
 	}
 }
 
-void ViewWidget::refreshCurrentDateTimeStuff() {
+void ViewWidget::refreshCurrentDateTimeStuff()
+{
 	m_refreshGrid = true;
 	update();
 }
 
-void ViewWidget::setModel(AbstractCalendarModel *model) {
+void ViewWidget::setModel(AbstractCalendarModel *model)
+{
 	// disconnect slots
 	if (m_model){
 		disconnect(m_model, SIGNAL(itemInserted(const Calendar::CalendarItem &)), this, SLOT(itemInserted(const Calendar::CalendarItem &)));
@@ -158,7 +165,8 @@ void ViewWidget::setModel(AbstractCalendarModel *model) {
 	resetItemWidgets();
 }
 
-CalendarItemWidget *ViewWidget::getWidgetByUid(const QString &uid) const {
+CalendarItemWidget *ViewWidget::getWidgetByUid(const QString &uid) const
+{
 	foreach (QObject *object, children()) {
 		CalendarItemWidget *widget = qobject_cast<CalendarItemWidget*>(object);
 		if (widget && widget->uid() == uid)
@@ -167,7 +175,8 @@ CalendarItemWidget *ViewWidget::getWidgetByUid(const QString &uid) const {
         return 0;
 }
 
-QList<CalendarItemWidget*> ViewWidget::getWidgetsByDate(const QDate &dayDate) const {
+QList<CalendarItemWidget*> ViewWidget::getWidgetsByDate(const QDate &dayDate) const
+{
 	QList<CalendarItemWidget*> list;
 	foreach (QObject *obj, children()) {
 		CalendarItemWidget *widget = qobject_cast<CalendarItemWidget*>(obj);
@@ -177,7 +186,8 @@ QList<CalendarItemWidget*> ViewWidget::getWidgetsByDate(const QDate &dayDate) co
 	return list;
 }
 
-void ViewWidget::deleteAllWidgets() {
+void ViewWidget::deleteAllWidgets()
+{
 	QList<CalendarItemWidget*> list;
 	foreach (QObject *obj, children()) {
 		CalendarItemWidget *widget = qobject_cast<CalendarItemWidget*>(obj);
@@ -187,14 +197,16 @@ void ViewWidget::deleteAllWidgets() {
 	qDeleteAll(list);
 }
 
-void ViewWidget::setMasterScrollArea(QScrollArea *scrollArea) {
+void ViewWidget::setMasterScrollArea(QScrollArea *scrollArea)
+{
 	masterScrollArea = scrollArea;
 	if (masterScrollArea) {
 		masterScrollArea->viewport()->installEventFilter(this);
 	}
 }
 
-bool ViewWidget::eventFilter(QObject *obj, QEvent *event) {
+bool ViewWidget::eventFilter(QObject *obj, QEvent *event)
+{
 	bool r = QWidget::eventFilter(obj, event);
 	if (event->type() == QEvent::Resize) {
 //		QWidget *w = qobject_cast<QWidget*>(obj);
@@ -206,7 +218,8 @@ bool ViewWidget::eventFilter(QObject *obj, QEvent *event) {
 	return r;
 }
 
-void ViewWidget::reset() {
+void ViewWidget::reset()
+{
 	resetItemWidgets();
 	update();
 }

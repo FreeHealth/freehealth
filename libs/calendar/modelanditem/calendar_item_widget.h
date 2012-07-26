@@ -31,6 +31,13 @@
 #include <QWidget>
 #include <QDateTime>
 
+/**
+ * \file calendar_item_widget.h
+ * \author Guillaume Denry, Eric Maeker
+ * \version 0.6.0
+ * \date 12 Aug 2011
+*/
+
 namespace Calendar {
 class AbstractCalendarModel;
 namespace Internal {
@@ -48,8 +55,9 @@ public:
     void setEndDateTime(const QDateTime &dateTime);
     int durationInSeconds() const {return m_beginDateTime.secsTo(m_endDateTime);}
     AbstractCalendarModel *model() const { return m_model; }
+
 private:
-    bool event(QEvent *);
+    bool event(QEvent *event);
 
 private:
     // TMP : all date will probably be moved into a pure data class for events/tasks, etc
@@ -57,6 +65,7 @@ private:
     QDateTime m_endDateTime;
     QString m_uid;
     AbstractCalendarModel *m_model;
+    double _opacity;
 };
 
 }  // namespace Internal
