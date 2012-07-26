@@ -247,7 +247,7 @@ void MainWindow::extensionsInitialized()
 //        statusBar()->addWidget(new QLabel(tkTr(Trans::Constants::CHECKING_UPDATES), this));
 //        statusBar()->addWidget(updateChecker()->progressBar(this),1);
         connect(updateChecker(), SIGNAL(updateFound()), this, SLOT(updateFound()));
-        connect(updateChecker(), SIGNAL(done(bool)), this, SLOT(updateCheckerEnd()));
+        connect(updateChecker(), SIGNAL(done(bool)), this, SLOT(updateCheckerEnd(bool)));
         updateChecker()->check(Utils::Constants::FREEMEDFORMS_UPDATE_URL);
         settings()->setValue(Utils::Constants::S_LAST_CHECKUPDATE, QDate::currentDate());
     }

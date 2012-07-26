@@ -1252,7 +1252,7 @@ bool MainWindowActionHandler::checkUpdate()
         statusBar()->addWidget(new QLabel(tkTr(Trans::Constants::CHECKING_UPDATES), this));
         statusBar()->addWidget(updateChecker()->progressBar(this),1);
         connect(updateChecker(), SIGNAL(updateFound()), this, SLOT(updateFound()));
-        connect(updateChecker(), SIGNAL(done(bool)), this, SLOT(updateCheckerEnd()));
+        connect(updateChecker(), SIGNAL(done(bool)), this, SLOT(updateCheckerEnd(bool)));
         updateChecker()->check(settings()->path(Core::ISettings::UpdateUrl));
     }
     return true;
