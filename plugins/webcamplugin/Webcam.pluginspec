@@ -1,4 +1,4 @@
-<plugin name="Webcam" version="0.0.1" compatVersion="0.0.1" experimental="true">
+<plugin name="Webcam" version="0.0.1" compatVersion="0.0.1">
     <vendor>FreeMedForms</vendor>
     <copyright>(C) 2008-2012 by Eric MAEKER, MD</copyright>
     <license>GNU General Public License version 3</license>
