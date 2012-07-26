@@ -25,47 +25,56 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef MONTH_VIEW_H
-#define MONTH_VIEW_H
+#ifndef LIBCALENDAR_MONTH_VIEW_H
+#define LIBCALENDAR_MONTH_VIEW_H
 
-#include "view.h"
+#include <calendar/view.h>
+
+/**
+ * \file month_view.h
+ * \author Guillaume Denry, Eric Maeker
+ * \version 0.6.0
+ * \date 12 Aug 2011
+*/
 
 namespace Calendar {
-	class MonthHeader : public ViewWidget
-	{
-		Q_OBJECT
-	public:
-		MonthHeader(QWidget *parent = 0);
+// TODO: should be internal
 
-		QSize sizeHint() const;
+class MonthHeader : public ViewWidget
+{
+    Q_OBJECT
+public:
+    MonthHeader(QWidget *parent = 0);
 
-	protected:
-		void paintEvent(QPaintEvent *event);
-	};
+    QSize sizeHint() const;
 
-	class MonthBody : public ViewWidget
-	{
-		Q_OBJECT
-	public:
-		MonthBody(QWidget *parent = 0);
+protected:
+    void paintEvent(QPaintEvent *event);
+};
 
-		virtual int topHeaderHeight() const;
-		virtual int leftHeaderWidth() const;
+class MonthBody : public ViewWidget
+{
+    Q_OBJECT
+public:
+    MonthBody(QWidget *parent = 0);
 
-	protected:
-		virtual void paintBody(QPainter *painter, const QRect &visibleRect);
-		virtual void resetItemWidgets();
-		virtual void refreshItemsSizesAndPositions();
-		QRect getDayRect(const QDate &day) const;
+    virtual int topHeaderHeight() const;
+    virtual int leftHeaderWidth() const;
 
-	private:
-		int m_weekCount;
-		QPair<QDate,QDate> m_monthBoundingDays;
-//		void paintEvents(QPainter &painter, const QDate &day, const QRect &dayRect);
+protected:
+    virtual void paintBody(QPainter *painter, const QRect &visibleRect);
+    virtual void resetItemWidgets();
+    virtual void refreshItemsSizesAndPositions();
+    QRect getDayRect(const QDate &day) const;
 
-	private slots:
-		void firstDateChanged();
-	};
+private:
+    int m_weekCount;
+    QPair<QDate,QDate> m_monthBoundingDays;
+    //		void paintEvents(QPainter &painter, const QDate &day, const QRect &dayRect);
+
+private slots:
+    void firstDateChanged();
+};
 }
 
-#endif
+#endif  // LIBCALENDAR_MONTH_VIEW_H

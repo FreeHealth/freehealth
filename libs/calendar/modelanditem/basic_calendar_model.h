@@ -30,50 +30,57 @@
 
 #include <QPair>
 
-#include <calendar/calendar_item.h>
-#include <calendar/abstract_calendar_model.h>
+#include <calendar/modelanditem/calendar_item.h>
+#include <calendar/modelanditem/abstract_calendar_model.h>
+
+/**
+ * \file basic_calendar_model.h
+ * \author Guillaume Denry, Eric Maeker
+ * \version 0.6.0
+ * \date 11 Jul 2011
+*/
 
 namespace Calendar {
-	/**
-	 * This model offers an optimized version of <getItemsBetween()> based on dichotomy method and double lists.
-	 */
-	class BasicCalendarModel : public AbstractCalendarModel
-	{
-		Q_OBJECT
-	public:
-		BasicCalendarModel(QObject *parent = 0);
-		virtual ~BasicCalendarModel();
+/**
+ * This model offers an optimized version of <getItemsBetween()> based on dichotomy method and double lists.
+*/
+class BasicCalendarModel : public AbstractCalendarModel
+{
+    Q_OBJECT
+public:
+    BasicCalendarModel(QObject *parent = 0);
+    virtual ~BasicCalendarModel();
 
-		QList<CalendarItem> getItemsBetween(const QDate &from, const QDate &to) const;
+    QList<CalendarItem> getItemsBetween(const QDate &from, const QDate &to) const;
 
-		int count() const { return m_sortedByBeginList.count(); }
+    int count() const { return m_sortedByBeginList.count(); }
 
-                CalendarItem insertItem(const QDateTime &beginning, const QDateTime &ending);
-                Calendar::CalendarItem addCalendarItem(const Calendar::CalendarItem &item);
-                void removeItem(const QString &uid);
-                bool moveItem(const Calendar::CalendarItem &from, Calendar::CalendarItem &to){Q_UNUSED(from); Q_UNUSED(to); return false;}
+    CalendarItem insertItem(const QDateTime &beginning, const QDateTime &ending);
+    Calendar::CalendarItem addCalendarItem(const Calendar::CalendarItem &item);
+    void removeItem(const QString &uid);
+    bool moveItem(const Calendar::CalendarItem &from, Calendar::CalendarItem &to){Q_UNUSED(from); Q_UNUSED(to); return false;}
 
-		CalendarItem getItemByUid(const QString &uid) const;
+    CalendarItem getItemByUid(const QString &uid) const;
 
-		void clearAll();
+    void clearAll();
 
-	private:
-		QList<CalendarItem*> m_sortedByBeginList;
-		QList<CalendarItem*> m_sortedByEndList;
+private:
+    QList<CalendarItem*> m_sortedByBeginList;
+    QList<CalendarItem*> m_sortedByEndList;
 
-		void setItemByUid(const QString &uid, const CalendarItem &item);
+    void setItemByUid(const QString &uid, const CalendarItem &item);
 
-		// returns an insertion index for a datetime in <list> from <first> to <last> (dichotomy method)
-		int getInsertionIndex(bool begin, const QDateTime &dateTime, const QList<CalendarItem*> &list, int first, int last) const;
+    // returns an insertion index for a datetime in <list> from <first> to <last> (dichotomy method)
+    int getInsertionIndex(bool begin, const QDateTime &dateTime, const QList<CalendarItem*> &list, int first, int last) const;
 
-		// search for an intersected item, the first found item is enough
-		int searchForIntersectedItem(const QList<CalendarItem*> &list, const QDate &from, const QDate &to, int first, int last) const;
+    // search for an intersected item, the first found item is enough
+    int searchForIntersectedItem(const QList<CalendarItem*> &list, const QDate &from, const QDate &to, int first, int last) const;
 
-		// create a uniq uid
-		QString createUid() const;
+    // create a uniq uid
+    QString createUid() const;
 
-		CalendarItem *getItemPointerByUid(const QString &uid) const;
-	};
+    CalendarItem *getItemPointerByUid(const QString &uid) const;
+};
 }
 
 #endif

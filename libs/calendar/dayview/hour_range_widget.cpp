@@ -25,15 +25,18 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
+#include "hour_range_widget.h"
+#include <calendar/modelanditem/abstract_calendar_model.h>
+
 #include <QPainter>
 #include <QMouseEvent>
 #include <QColor>
 
-#include "hour_range_widget.h"
-#include "abstract_calendar_model.h"
-
 using namespace Calendar;
 
+/**
+ * if uid is empty, this calendar item is considered as temporary and will be drawn with transparence
+*/
 HourRangeWidget::HourRangeWidget(QWidget *parent, const QString &uid, AbstractCalendarModel *model) :
         CalendarItemWidget(parent, uid, model), m_aboveWidget(0)
 {
@@ -42,7 +45,8 @@ HourRangeWidget::HourRangeWidget(QWidget *parent, const QString &uid, AbstractCa
     connect(model, SIGNAL(dataChanged(Calendar::CalendarItem)), this, SLOT(update()));
 }
 
-void HourRangeWidget::paintEvent(QPaintEvent *) {
+void HourRangeWidget::paintEvent(QPaintEvent *)
+{
 	// title
 	QPixmap titlePixmap(size().width(), 20);
 	titlePixmap.fill(Qt::transparent);

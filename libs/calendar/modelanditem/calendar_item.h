@@ -29,6 +29,7 @@
 #define CALENDAR_ITEM_H
 
 #include <calendar/calendar_exporter.h>
+#include <calendar/common.h>
 
 #include <QVariant>
 #include <QHash>
@@ -38,7 +39,12 @@
 
 #include <QDebug>
 
-#include "common.h"
+/**
+ * \file calendar_item.h
+ * \author Eric MAEKER <eric.maeker@gmail.com>
+ * \version 0.7.0
+ * \date 04 Aug 2011
+*/
 
 namespace Calendar {
     class AbstractCalendarModel;

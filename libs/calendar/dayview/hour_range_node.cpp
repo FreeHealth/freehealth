@@ -25,10 +25,10 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#include <QRect>
-
-#include "calendar_item.h"
 #include "hour_range_node.h"
+#include <calendar/modelanditem/calendar_item.h>
+
+#include <QRect>
 
 using namespace Calendar;
 

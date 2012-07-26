@@ -62,7 +62,7 @@
   <customwidget>
    <class>Calendar::ItemEditorWidget</class>
    <extends>QWidget</extends>
-   <header location="global">calendar/item_editor_widget.h</header>
+   <header location="global">calendar/modelanditem/item_editor_widget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

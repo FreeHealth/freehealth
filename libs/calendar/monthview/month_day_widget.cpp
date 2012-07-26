@@ -25,13 +25,13 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
+#include "month_day_widget.h"
+#include <calendar/modelanditem/basic_item_edition_dialog.h>
+
 #include <QVBoxLayout>
 #include <QLabel>
 #include <QEvent>
 #include <QTimer>
-
-#include "month_day_widget.h"
-#include "basic_item_edition_dialog.h"
 
 using namespace Calendar;
 

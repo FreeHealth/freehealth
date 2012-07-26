@@ -28,7 +28,7 @@
 #ifndef DAY_WIDGET_H
 #define DAY_WIDGET_H
 
-#include "calendar_item_widget.h"
+#include <calendar/modelanditem/calendar_item_widget.h>
 
 namespace Calendar {
 	class AbstractCalendarModel;

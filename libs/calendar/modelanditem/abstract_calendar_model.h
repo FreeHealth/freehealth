@@ -29,8 +29,8 @@
 #define ABSTRACT_CALENDAR_MODEL_H
 
 #include <calendar/calendar_exporter.h>
-#include <calendar/calendar_item.h>
-#include <calendar/calendar_people.h>
+#include <calendar/modelanditem/calendar_item.h>
+#include <calendar/modelanditem/calendar_people.h>
 
 #include <QObject>
 QT_BEGIN_NAMESPACE

@@ -25,35 +25,40 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
+#include "day_widget.h"
+#include <calendar/modelanditem/abstract_calendar_model.h>
+
 #include <QPainter>
 #include <QMouseEvent>
-
-#include "abstract_calendar_model.h"
-#include "day_widget.h"
 
 using namespace Calendar;
 
 DayWidget::DayWidget(QWidget *parent, const QString &uid, AbstractCalendarModel *model)
-	: CalendarItemWidget(parent, uid, model), m_aboveWidget(0) {
+    : CalendarItemWidget(parent, uid, model), m_aboveWidget(0)
+{
 	m_titleFont = getTitleFont();
 	m_inMotion = uid.isEmpty();
 	setMouseTracking(true);
 //	setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
 }
 
-QSize DayWidget::sizeHint() const {
+QSize DayWidget::sizeHint() const
+{
 	return QSize(0, QFontMetrics(m_titleFont).height() + 4);
 }
 
-QFont DayWidget::getTitleFont() {
+QFont DayWidget::getTitleFont()
+{
 	return QFont();
 }
 
-QSize DayWidget::staticSizeHint() {
+QSize DayWidget::staticSizeHint()
+{
 	return QSize(0, QFontMetrics(getTitleFont()).height() + 4);
 }
 
-void DayWidget::paintEvent(QPaintEvent *) {
+void DayWidget::paintEvent(QPaintEvent *)
+{
         QPainter painter(this);
 	painter.setRenderHint(QPainter::Antialiasing);
 	painter.setPen(Qt::NoPen);
@@ -70,7 +75,8 @@ void DayWidget::paintEvent(QPaintEvent *) {
 	}
 }
 
-void DayWidget::setInMotion(bool value) {
+void DayWidget::setInMotion(bool value)
+{
 	if (m_inMotion == value)
 		return;
 

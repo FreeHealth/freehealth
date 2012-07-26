@@ -29,7 +29,7 @@
 #define BASIC_ITEM_EDITION_DIALOG_H
 
 #include <calendar/calendar_exporter.h>
-#include <calendar/calendar_item.h>
+#include <calendar/modelanditem/calendar_item.h>
 
 #include <QDialog>
 #include <QPushButton>
