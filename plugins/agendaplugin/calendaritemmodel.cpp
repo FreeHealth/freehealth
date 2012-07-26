@@ -264,11 +264,19 @@ bool CalendarItemModel::moveItem(const Calendar::CalendarItem &from, Calendar::C
         return false;
     }
 
-    Q_EMIT itemRemoved(from);
     item->setData(DateStart, to.beginning());
     item->setData(DateEnd, to.ending());
-    base().saveCalendarEvent(item);
-    Q_EMIT itemInserted(toCalendarItem(item));
+
+    m_sortedByBeginList.removeAll(item);
+    m_sortedByEndList.removeAll(item);
+    m_sortedByBeginList.insert(getInsertionIndex(true, item->beginning(), m_sortedByBeginList, 0, m_sortedByBeginList.count() - 1), item);
+    m_sortedByEndList.insert(getInsertionIndex(false, item->ending(), m_sortedByEndList, 0, m_sortedByEndList.count() - 1), item);
+
+    if (!base().saveCalendarEvent(item)) {
+        LOG_ERROR("Unable to moveItem");
+        return false;
+    }
+    Q_EMIT itemModified(from, toCalendarItem(item));
     return true;
 }
 
