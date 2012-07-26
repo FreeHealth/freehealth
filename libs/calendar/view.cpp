@@ -99,7 +99,7 @@ QPixmap ViewWidget::generatePixmap()
 {
 	QPixmap pixmap(width(), height());
 	QPainter painter(&pixmap);
-        paintBody(&painter, rect());
+    paintBody(&painter, rect());
 	return pixmap;
 }
 
