@@ -25,6 +25,9 @@
  ***************************************************************************/
 #include "opencvwidget.h"
 
+#include <coreplugin/icore.h>
+#include <coreplugin/isettings.h>
+
 #include <utils/log.h>
 
 #include <QMouseEvent>
@@ -36,6 +39,8 @@
 enum { WarnCameraProperties = false };
 
 using namespace Webcam::Internal;
+
+static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 
 /*!
  * \brief Creates an QOpenCVWidget and initializes the camera capturing
@@ -106,7 +111,8 @@ OpenCVWidget::OpenCVWidget(QWidget *parent) :
     
     //FIXME: this is only working in Linux with fixed path when opencv is installed!
     // how do you include an xml file in a resource and load it with a non-Qt function?
-    _cascade =  (CvHaarClassifierCascade*)cvLoad("/usr/share/opencv/haarcascades/haarcascade_frontalface_alt2.xml");
+    QString filename = settings()->path(Core::ISettings::BundleResourcesPath) + "/textfiles/haarcascade_frontalface_alt2.xml";
+    _cascade =  (CvHaarClassifierCascade*)cvLoad(filename.toUtf8());
     
     _storage = cvCreateMemStorage(0);
     _colors << cvScalar(0.0,0.0,255.0) << cvScalar(0.0,128.0,255.0)
