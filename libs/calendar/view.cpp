@@ -25,6 +25,45 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
+/**
+ * \class Calendar::ViewWidget
+ * \brief a view is an abstract class which defines common things about calendar views (headers, body, etc)
+*/
+
+/** \fn const QDate &Calendar::ViewWidget::firstDate() const
+ * returns the first date of the view
+*/
+
+/**
+ * \fn  void Calendar::ViewWidget::setFirstDate(const QDate &firstDate);
+ * sets a date for the view
+*/
+
+/**
+ * \fn virtual void Calendar::ViewWidget::refreshCurrentDateTimeStuff();
+ * used to refresh all current date time stuffs
+*/
+
+/**
+ * \fn AbstractCalendarModel *Calendar::ViewWidget::model() const
+ * returns the current model
+*/
+
+/**
+ * \fn void Calendar::ViewWidget::setModel(AbstractCalendarModel *model);
+ * called when a new model has been defined
+*/
+
+/**
+ * \fn void Calendar::ViewWidget::setMasterScrollArea(QScrollArea *scrollArea);
+ * set the master widget scrollarea used to paint (generally used for header to know how the body is painted)
+*/
+
+/**
+ * \fn void Calendar::ViewWidget::setContextMenuForItems(QMenu *menu)
+ * set the context menu to use on items
+*/
+
 #include <QPainter>
 #include <QPixmapCache>
 #include <QResizeEvent>
@@ -33,6 +72,14 @@
 #include "view.h"
 
 using namespace Calendar;
+
+ViewWidget::ViewWidget(QWidget *parent = 0) :
+    QWidget(parent),
+    masterScrollArea(0),
+    m_refreshGrid(false),
+    m_model(0)
+{
+}
 
 void ViewWidget::setFirstDate(const QDate &firstDate) {
 	if (m_firstDate == firstDate)

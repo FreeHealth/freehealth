@@ -25,21 +25,20 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef VIEW_H
-#define VIEW_H
+#ifndef LIBCALENDAR_VIEW_H
+#define LIBCALENDAR_VIEW_H
 
 #include <QWidget>
 #include <QDate>
 #include <QPointer>
 #include <QMenu>
 
-#include "calendar_item_widget.h"
-#include "abstract_calendar_model.h"
+#include <calendar/calendar_item_widget.h>
+#include <calendar/abstract_calendar_model.h>
 
 class QPainter;
 class QRect;
 class QScrollArea;
-
 
 /**
  * \file view.h
@@ -49,72 +48,57 @@ class QScrollArea;
 */
 
 namespace Calendar {
-	/**
-	 * \brief a view is an abstract class which defines common things about calendar views (headers, body, etc)
-	 */
-	class ViewWidget : public QWidget
-	{
-		Q_OBJECT
-	public:
-		ViewWidget(QWidget *parent = 0) : QWidget(parent), masterScrollArea(0), m_refreshGrid(false), m_model(0) {}
 
-		/** returns the first date of the view */
-		const QDate &firstDate() const { return m_firstDate; }
+class ViewWidget : public QWidget
+{
+    Q_OBJECT
+public:
+    ViewWidget(QWidget *parent = 0);
 
-		/** sets a date for the view
-		 */
-		void setFirstDate(const QDate &firstDate);
+    const QDate &firstDate() const { return m_firstDate; }
+    void setFirstDate(const QDate &firstDate);
+    virtual void refreshCurrentDateTimeStuff();
+    AbstractCalendarModel *model() const { return m_model; }
+    void setModel(AbstractCalendarModel *model);
+    void setMasterScrollArea(QScrollArea *scrollArea);
+    void setContextMenuForItems(QMenu *menu) {m_ItemContextMenu = menu;}
 
-		/** used to refresh all current date time stuffs */
-		virtual void refreshCurrentDateTimeStuff();
+signals:
+    void firstDateChanged();
 
-		/** returns the current model */
-		AbstractCalendarModel *model() const { return m_model; }
+protected:
+    QScrollArea *masterScrollArea;
 
-		/** called when a new model has been defined */
-		void setModel(AbstractCalendarModel *model);
+    QPixmap generatePixmap();
+    void forceUpdate() { m_refreshGrid = true; update(); }
 
-        /** set the master widget scrollarea used to paint (generally used for header to know how the body is painted) */
-        void setMasterScrollArea(QScrollArea *scrollArea);
+    virtual void paintBody(QPainter *, const QRect &) {}
+    virtual void paintEvent(QPaintEvent *event);
+    virtual void resizeEvent(QResizeEvent *event);
+    virtual void refreshItemSizeAndPosition(CalendarItemWidget *) {}
+    virtual void refreshItemsSizesAndPositions();
+    virtual void resetItemWidgets() {}
+    bool eventFilter(QObject *obj, QEvent *event);
 
-        /** set the context menu to use on items */
-        void setContextMenuForItems(QMenu *menu) {m_ItemContextMenu = menu;}
+    QMenu *itemContextMenu() const {return m_ItemContextMenu;}
 
-	signals:
-		void firstDateChanged();
+    CalendarItemWidget *getWidgetByUid(const QString &uid) const;
+    QList<CalendarItemWidget*> getWidgetsByDate(const QDate &dayDate) const;
+    void deleteAllWidgets();
 
-	protected:
-		QScrollArea *masterScrollArea;
+protected slots:
+    virtual void itemInserted(const Calendar::CalendarItem &item) { Q_UNUSED(item); }
+    virtual void itemModified(const Calendar::CalendarItem &oldItem, const Calendar::CalendarItem &newItem) { Q_UNUSED(oldItem); Q_UNUSED(newItem); }
+    virtual void itemRemoved(const Calendar::CalendarItem &removedItem) { Q_UNUSED(removedItem); }
+    virtual void reset();
 
-		QPixmap generatePixmap();
-		void forceUpdate() { m_refreshGrid = true; update(); }
+private:
+    QDate m_firstDate;
+    bool m_refreshGrid;
+    AbstractCalendarModel *m_model;
+    QPointer<QMenu> m_ItemContextMenu;
+};
 
-        virtual void paintBody(QPainter *, const QRect &) {}
-		virtual void paintEvent(QPaintEvent *event);
-		virtual void resizeEvent(QResizeEvent *event);
-		virtual void refreshItemSizeAndPosition(CalendarItemWidget *) {}
-		virtual void refreshItemsSizesAndPositions();
-		virtual void resetItemWidgets() {}
-		bool eventFilter(QObject *obj, QEvent *event);
+}  // namespace Calendar
 
-        QMenu *itemContextMenu() const {return m_ItemContextMenu;}
-
-		CalendarItemWidget *getWidgetByUid(const QString &uid) const;
-		QList<CalendarItemWidget*> getWidgetsByDate(const QDate &dayDate) const;
-		void deleteAllWidgets();
-
-	protected slots:
-		virtual void itemInserted(const Calendar::CalendarItem &item) { Q_UNUSED(item); }
-		virtual void itemModified(const Calendar::CalendarItem &oldItem, const Calendar::CalendarItem &newItem) { Q_UNUSED(oldItem); Q_UNUSED(newItem); }
-		virtual void itemRemoved(const Calendar::CalendarItem &removedItem) { Q_UNUSED(removedItem); }
-		virtual void reset();
-
-	private:
-		QDate m_firstDate;
-		bool m_refreshGrid;
-		AbstractCalendarModel *m_model;
-        QPointer<QMenu> m_ItemContextMenu;
-	};
-}
-
-#endif
+#endif  // LIBCALENDAR_VIEW_H
