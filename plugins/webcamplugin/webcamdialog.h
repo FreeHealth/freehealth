@@ -54,6 +54,7 @@ public:
 
 private Q_SLOTS:
     void updatefreezeButton(bool aFreeze);
+    void autoFaceShot(const QPixmap &pix);
 
 private:
     void changeEvent(QEvent *event);
@@ -61,6 +62,7 @@ private:
 private:
     Ui::WebcamDialog *ui;
     QPushButton *m_freezeButton;
+    int _faces;
 };
 
 }  // namespace WebCam

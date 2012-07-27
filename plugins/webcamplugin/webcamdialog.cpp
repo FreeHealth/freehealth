@@ -32,6 +32,8 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
 
+#include <utils/global.h>
+
 //#include <translationutils/constants.h>
 //#include <translationutils/trans
 
@@ -62,7 +64,8 @@ static inline Core::ITheme *theme() { return Core::ICore::instance()->theme(); }
 
 WebcamDialog::WebcamDialog(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::WebcamDialog())
+    ui(new Ui::WebcamDialog()),
+    _faces(0)
 {
     ui->setupUi(this);
 //    qDebug() << this->objectName();
@@ -89,7 +92,8 @@ WebcamDialog::WebcamDialog(QWidget *parent) :
     button->setIcon(theme()->icon(Core::Constants::ICONOK));
     button->setDisabled(true);
     connect(ui->openCVWidget, SIGNAL(imageReady(bool)), button, SLOT(setEnabled(bool)));   
-    ui->imagesListView->setModel(ui->openCVWidget->model());
+    connect(ui->openCVWidget, SIGNAL(autoFaceShot(QPixmap)), this, SLOT(autoFaceShot(QPixmap)));
+//    ui->imagesListView->setModel(ui->openCVWidget->model());
 }
 
 WebcamDialog::~WebcamDialog()
@@ -113,6 +117,16 @@ void WebcamDialog::updatefreezeButton(bool aFreeze)
     }    
 }
 
+void WebcamDialog::autoFaceShot(const QPixmap &pix)
+{
+    switch (_faces) {
+    case 0: ui->photo1->setPixmap(pix.scaled(ui->photo1->size(), Qt::KeepAspectRatio)); break;
+    case 1: ui->photo2->setPixmap(pix.scaled(ui->photo1->size(), Qt::KeepAspectRatio)); break;
+    case 2: ui->photo3->setPixmap(pix.scaled(ui->photo1->size(), Qt::KeepAspectRatio)); break;
+    case 3: ui->photo4->setPixmap(pix.scaled(ui->photo1->size(), Qt::KeepAspectRatio)); break;
+    }
+    ++_faces;
+}
 
 void WebcamDialog::changeEvent(QEvent *event)
 {

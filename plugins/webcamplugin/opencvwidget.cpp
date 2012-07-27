@@ -52,22 +52,24 @@ OpenCVWidget::OpenCVWidget(QWidget *parent) :
     m_updateFreq(defaultUpdateFrequency()),
     m_rubberBand(0),
     m_Mode(Create),
-    m_counter(0)
+    m_counter(0),
+    m_frames(0)
 {
     setObjectName("OpenCVWidget");
     
     QTime time;
     time.start();
     
-    QProgressDialog dlg(this);
-    dlg.setRange(0, 0);
-    dlg.setValue(0);
-    dlg.setLabelText(tr("Acquiring webcam..."));
-    dlg.show();
-    
-    m_camera = cvCreateCameraCapture(CV_CAP_ANY);
-    Q_ASSERT(m_camera); //TODO: don't assert here, do error handling while runnning
-    
+    {
+        QProgressDialog dlg(this);
+        dlg.setRange(0, 0);
+        dlg.setValue(0);
+        dlg.setLabelText(tr("Acquiring webcam..."));
+        dlg.show();
+
+        m_camera = cvCreateCameraCapture(CV_CAP_ANY);
+        Q_ASSERT(m_camera); //TODO: don't assert here, do error handling while runnning
+    }
     LOG(tr("Acquiring WebCam (%1 ms)").arg(time.elapsed()));
     
     if (WarnCameraProperties) {
@@ -122,7 +124,7 @@ OpenCVWidget::OpenCVWidget(QWidget *parent) :
     
     // create a model that contains the captured images
     // 8 images, 1 column (image)
-    m_imageModel = new QStandardItemModel(this);
+//    m_imageModel = new QStandardItemModel(this);
     
     m_timerId = startTimer(m_updateFreq);
 }
@@ -143,15 +145,7 @@ void OpenCVWidget::timerEvent(QTimerEvent *event)
     if (!cvimage)
         return;  
     
-    // maximum of 5 pictures
-    //TODO: make image count configurable
-    //TODO: increase counter only if shot is OK
-    if (++m_counter > 5) {
-        return;
-    }
-    
-    // now convert IplImage into a QImage
-    
+    // now convert IplImage into a QImage    
     int cvIndex, cvLineStart;
     // switch between bit depths
     switch (cvimage->depth) {
@@ -163,13 +157,7 @@ void OpenCVWidget::timerEvent(QTimerEvent *event)
                 QImage temp(cvimage->width, cvimage->height, QImage::Format_RGB32);
                 m_image = temp;
             }
-//            drawFaceDetectionFrame(cvimage);
-            // Find the face
-            QRect rect = getFaceRect(cvimage);
-            if (rect.isEmpty() || !rect.isValid() || rect.width() < 64) {
-                return;
-            }
-            // If found -> get the QImage and cut the face
+            // draw inside the QImage
             cvIndex = 0; cvLineStart = 0;
             for (int y = 0; y < cvimage->height; y++) {
                 unsigned char red,green,blue;
@@ -185,10 +173,25 @@ void OpenCVWidget::timerEvent(QTimerEvent *event)
                 }
                 cvLineStart += cvimage->widthStep;
             }
-            m_image = m_image.copy(rect);
-            //                QPixmap pix(rect.size());
-            //                pix.fromImage(m_image);
-            //                Q_EMIT autoFaceShot(pix);
+
+            // Find the face
+            if (m_counter < 4) {
+                ++m_frames; // count frames between last autoshot
+                // one shot every 1000ms
+                if (m_frames >= (1000/m_updateFreq)) {
+                    m_frames = 0;  // reset frame counter
+                    QRect rect = getFaceRect(cvimage);
+                    if (rect.isEmpty() || !rect.isValid() || rect.width() < 80) {
+                        return;
+                    }
+                    // If found -> get the QImage and cut the face
+                    QImage face = m_image.copy(rect);
+                    QPixmap pix(face.size());
+                    pix = QPixmap::fromImage(face);
+                    ++m_counter;
+                    Q_EMIT autoFaceShot(pix);
+                }
+            }
             break;
         }
         default:
@@ -200,8 +203,9 @@ void OpenCVWidget::timerEvent(QTimerEvent *event)
         printf("This type of IplImage is not implemented in OpenCVWidget\n");
         break;
     }
-    QStandardItem *item = new QStandardItem(QIcon(QPixmap::fromImage(m_image)), "photo");
-    m_imageModel->appendRow(item);
+    setPixmap(QPixmap::fromImage(m_image));
+//    QStandardItem *item = new QStandardItem(QIcon(QPixmap::fromImage(m_image)), "photo");
+//    m_imageModel->appendRow(item);
 }
 
 
@@ -394,7 +398,6 @@ QRect OpenCVWidget::getFaceRect(IplImage *cvimage)
             qRect.setWidth(qRect.width() * 1.2);
             qRect.setHeight(qRect.width() * 1.2);
             qRect.moveCenter(center);
-            // TODO: keep center pos, increase surface of 20%, recenter the rect
             return qRect;
         }
         default:
@@ -523,7 +526,7 @@ void OpenCVWidget::setImageUpdateFrequency(const int ms)
 
 int OpenCVWidget::defaultUpdateFrequency() const
 {
-    return 250;
+    return 50;
 }
 
 /*!

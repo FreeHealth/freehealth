@@ -98,7 +98,7 @@ private:
     CvMemStorage* _storage;
     QList<CvScalar> _colors;
     QPixmap* _pixmap;
-    int m_counter;
+    int m_counter, m_frames;
 //    QList<IplImage *> m_imageList;
     QStandardItemModel *m_imageModel;
 };
