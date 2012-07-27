@@ -824,6 +824,9 @@ Category::CategoryItem * XmlIOBase::createCategory(const XmlFormName &form, cons
 bool XmlIOBase::savePmhxCategories(const XmlFormName &form, const QString &content)
 {
     Q_UNUSED(form);
+    WARN_FUNC;
+    QTime chr;
+    chr.start();
     qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     if (content.isEmpty()) {
         LOG_ERROR("Empty content.");
@@ -846,6 +849,7 @@ bool XmlIOBase::savePmhxCategories(const XmlFormName &form, const QString &conte
         rootCategories << createCategory(form, element, 0);
         element = element.nextSiblingElement(::Constants::TAG_CATEGORY);
     }
+    Utils::Log::logTimeElapsed(chr, "---", "create categories");
 
     // save categories in the categories plugin
     qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
@@ -853,6 +857,8 @@ bool XmlIOBase::savePmhxCategories(const XmlFormName &form, const QString &conte
         LOG_ERROR(tr("Error while saving PMHxCateogries (%1)").arg(form.uid));
         return false;
     }
+    Utils::Log::logTimeElapsed(chr, "---", "save categories");
+    qWarning() << "END";
     return true;
 }
 

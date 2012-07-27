@@ -446,6 +446,7 @@ bool XmlFormIO::checkDatabaseFormFileForUpdates() const
     bool readError = false;
     QStringList msg;
     foreach(Form::FormIODescription *descDb, fromDb) {
+        qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
         qDeleteAll(fromFiles);
         fromFiles.clear();
         Form::FormIOQuery query;
@@ -487,7 +488,7 @@ bool XmlFormIO::checkDatabaseFormFileForUpdates() const
             for(int i = 0; i < formsToUpdate.count(); ++i) {
                 qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
                 XmlFormName &form = formsToUpdate[i];
-                if (!base()->saveForm(form)) { //, doc->toString(2), XmlIOBase::FullContent, file.baseName(), QDateTime::currentDateTime())) {
+                if (!base()->saveForm(form)) {
                     LOG_ERROR("Unable to update form database. Form: " + form.uid + " " + form.absFileName);
                 } else {
                     LOG("Form updated: "  + form.uid + " " + form.absFileName);
