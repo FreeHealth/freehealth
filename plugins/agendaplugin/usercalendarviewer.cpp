@@ -306,7 +306,7 @@ void UserCalendarViewer::recalculateAvailabilitiesWithDurationIndex(const int in
         QDate dt = dates.at(i).date();
         QStandardItem *parent = main.value(dt.toString(Qt::ISODate), 0);
         if (!parent) {
-            parent = new QStandardItem(dt.toString(QLocale().dateFormat(QLocale::LongFormat)));
+            parent = new QStandardItem((QLocale().toString(dt, QLocale::LongFormat)));
             parent->setFont(bold);
             d->m_AvailModel->invisibleRootItem()->appendRow(parent);
             main.insert(dt.toString(Qt::ISODate), parent);
