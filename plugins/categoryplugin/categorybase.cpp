@@ -432,6 +432,8 @@ bool CategoryBase::saveCategory(CategoryItem *category)
 */
 bool CategoryBase::saveCategories(const QVector<CategoryItem *> &categories, bool createTransaction)
 {
+    QTime chr;
+    chr.start();
     QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
     if (!connectDatabase(DB, __LINE__)) {
         return false;
@@ -439,6 +441,10 @@ bool CategoryBase::saveCategories(const QVector<CategoryItem *> &categories, boo
     if (createTransaction)
         DB.transaction();
 
+    QSqlQuery query(DB);
+
+    if (createTransaction)
+        Utils::Log::logTimeElapsed(chr, "---", "create transaction");
     for(int i=0; i < categories.count(); ++i) {
         qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
         CategoryItem *category = categories.at(i);
@@ -446,11 +452,13 @@ bool CategoryBase::saveCategories(const QVector<CategoryItem *> &categories, boo
         // save or update ?
         if (categoryNeedsUpdate(category)) {
             qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
+            Utils::Log::logTimeElapsed(chr, "---", "needs update");
             if (!updateCategory(category)) {
                 if (createTransaction)
                     DB.rollback();
                 return false;
             }
+            Utils::Log::logTimeElapsed(chr, "---", "update");
             continue;
         }
 
@@ -461,8 +469,9 @@ bool CategoryBase::saveCategories(const QVector<CategoryItem *> &categories, boo
                 DB.rollback();
             return false;
         }
+        Utils::Log::logTimeElapsed(chr, "---", "save labels");
+
         // save category itself
-        QSqlQuery query(DB);
         query.prepare(prepareInsertQuery(Constants::Table_CATEGORIES));
         query.bindValue(Constants::CATEGORY_ID, QVariant());
         query.bindValue(Constants::CATEGORY_UUID, category->data(CategoryItem::Uuid));
@@ -485,7 +494,9 @@ bool CategoryBase::saveCategories(const QVector<CategoryItem *> &categories, boo
             }
             return false;
         }
+        query.finish();
         category->setDirty(false);
+        Utils::Log::logTimeElapsed(chr, "---", "save");
 
         qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
         for(int i=0; i < category->childCount(); ++i)
@@ -499,6 +510,8 @@ bool CategoryBase::saveCategories(const QVector<CategoryItem *> &categories, boo
         }
     }
     DB.commit();
+    Utils::Log::logTimeElapsed(chr, "---", "commit");
+
     return true;
 }
 
@@ -526,6 +539,7 @@ bool CategoryBase::categoryNeedsUpdate(CategoryItem *category)
             }
         } else {
             LOG_QUERY_ERROR(query);
+            return false;
         }
         // id found --> return true
         return (id >= 0);
@@ -589,18 +603,27 @@ bool CategoryBase::updateCategory(CategoryItem *category)
 /** \brief Save or update categories labels. */
 bool CategoryBase::saveCategoryLabels(CategoryItem *category)
 {
+    QTime chr;
+    chr.start();
     // we are inside a transaction
     if (!category->isDirty())
         return true;
     // get label_id
     int labelId = -1;
+    QSqlQuery query(database());
     if (category->data(CategoryItem::DbOnly_LabelId).isNull() ||
         category->data(CategoryItem::DbOnly_LabelId).toInt()==-1) {
-        labelId = max(Constants::Table_CATEGORY_LABEL, Constants::CATEGORYLABEL_LABEL_ID).toInt();
-        ++labelId;
+        if (query.exec(maxSqlCommand(Constants::Table_CATEGORY_LABEL, Constants::CATEGORYLABEL_LABEL_ID))) {
+            if (query.next())
+                labelId = query.value(0).toInt() + 1;
+        } else {
+            LOG_QUERY_ERROR(query);
+            return false;
+        }
+        query.finish();
+        Utils::Log::logTimeElapsed(chr, "--- label", "get max");
         category->setData(CategoryItem::DbOnly_LabelId, labelId);
         // create an empty label using this LabelId
-        QSqlQuery query(database());
         query.prepare(prepareInsertQuery(Constants::Table_CATEGORY_LABEL));
         query.bindValue(Constants::CATEGORYLABEL_ID, QVariant());
         query.bindValue(Constants::CATEGORYLABEL_LABEL_ID, labelId);
@@ -611,16 +634,16 @@ bool CategoryBase::saveCategoryLabels(CategoryItem *category)
             LOG_QUERY_ERROR(query);
             return false;
         }
-        query.finish();
     } else {
         labelId = category->data(CategoryItem::DbOnly_LabelId).toInt();
     }
+    query.finish();
+    Utils::Log::logTimeElapsed(chr, "--- label", "get max");
 
     // delete all labels related to this LabelId
     QHash<int, QString> where;
     where.clear();
     where.insert(Constants::CATEGORYLABEL_LABEL_ID, QString("=%1").arg(labelId));
-    QSqlQuery query(database());
     // TODO: improve this, no need to delete before adding
     if (!category->allLanguagesForLabel().isEmpty())
         query.exec(prepareDeleteQuery(Constants::Table_CATEGORY_LABEL, where));
@@ -649,6 +672,7 @@ bool CategoryBase::saveCategoryLabels(CategoryItem *category)
             return false;
         }
         query.finish();
+        Utils::Log::logTimeElapsed(chr, "--- label", "saved one label");
     }
     return true;
 }
