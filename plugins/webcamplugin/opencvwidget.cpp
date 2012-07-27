@@ -19,7 +19,9 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developer: Christian A. Reiter <christian.a.reiter@gmail.com>    *
+ *   Main Developers:                                                      *
+ *       Christian A. Reiter <christian.a.reiter@gmail.com>                *
+ *       Eric Maeker <eric.maeker@gmail.com>                               *
  *   Contributors:                                                         *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
