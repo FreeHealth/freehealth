@@ -82,7 +82,9 @@ public:
     UserCalendarViewerPrivate(UserCalendarViewer *parent) :
         ui(new Ui::UserCalendarViewer),
         m_CalendarItemModel(0),
+        m_ItemContextMenu(0),
         m_UserCalendarModel(agendaCore().userCalendarModel(user()->uuid())),
+        aSwitchToPatient(0), aEditItem(0), aPrintItem(0),
         m_AvailModel(0),
         q(parent)
     {
@@ -107,15 +109,32 @@ public:
         ui->calendarViewer->setModel(m_CalendarItemModel);
     }
 
+    void createCalendarItemContextMenu()
+    {
+        if (!m_ItemContextMenu) {
+            m_ItemContextMenu = new QMenu(q);
+            aSwitchToPatient = new QAction(q);
+            aEditItem = new QAction(q);
+            aPrintItem = new QAction(q);
+            m_ItemContextMenu->addAction(aSwitchToPatient);
+            m_ItemContextMenu->addAction(aEditItem);
+            m_ItemContextMenu->addAction(aPrintItem);
+            ui->calendarViewer->setContextMenuForItems(m_ItemContextMenu);
+            QObject::connect(aSwitchToPatient, SIGNAL(triggered()), q, SLOT(onSwitchToPatientClicked()));
+            QObject::connect(aEditItem, SIGNAL(triggered()), q, SLOT(onEditAppointementClicked()));
+            QObject::connect(aPrintItem, SIGNAL(triggered()), q, SLOT(onPrintAppointementClicked()));
+        }
+    }
 
 public:
     Ui::UserCalendarViewer *ui;
     CalendarItemModel *m_CalendarItemModel;
+    QMenu *m_ItemContextMenu;
     UserCalendarModel *m_UserCalendarModel;
     QHash<QString, int> m_UidToListIndex;
     bool scrollOnShow;
 
-    QAction *aToday, *aTomorrow, *aNextWeek, *aNextMonth;
+    QAction *aToday, *aTomorrow, *aNextWeek, *aNextMonth, *aSwitchToPatient, *aEditItem, *aPrintItem;
     QStandardItemModel *m_AvailModel;
 
 private:
@@ -155,8 +174,7 @@ UserCalendarViewer::UserCalendarViewer(QWidget *parent) :
     d->ui->calendarViewer->setDayScaleHourDivider(2);
     d->ui->calendarViewer->setDayGranularity(5);
     d->ui->calendarViewer->setHourHeight(4*20); // 20pixels per minutes
-    // TODO: add menu to the calendarViewer (when user right click on items)
-
+    d->createCalendarItemContextMenu();
 
     // populate the availabilities duration selector combo (every five minutes)
     for(int i = 1; i < 19; ++i) {
@@ -442,6 +460,22 @@ void UserCalendarViewer::updateCalendarData(const QModelIndex &top, const QModel
     }
 }
 
+void UserCalendarViewer::onSwitchToPatientClicked()
+{
+    // TODO
+//    patient()->setCurrentPatient();
+}
+
+void UserCalendarViewer::onEditAppointementClicked()
+{
+    // TODO
+}
+
+void UserCalendarViewer::onPrintAppointementClicked()
+{
+    // TODO
+}
+
 bool UserCalendarViewer::event(QEvent *e)
 {
     switch (e->type()) {
@@ -463,6 +497,14 @@ bool UserCalendarViewer::event(QEvent *e)
         d->aNextWeek->setToolTip(d->aNextWeek->text());
         d->aNextMonth->setText(tkTr(Trans::Constants::NEXT_MONTH));
         d->aNextMonth->setToolTip(d->aNextMonth->text());
+
+        if (d->aSwitchToPatient)
+            d->aSwitchToPatient->setText(tr("Switch to patient"));
+        if (d->aEditItem)
+            d->aEditItem->setText(tr("Edit appointement"));
+        if (d->aPrintItem)
+                d->aPrintItem->setText(tr("Print appointement"));
+
         break;
     }
     case QEvent::Show:
