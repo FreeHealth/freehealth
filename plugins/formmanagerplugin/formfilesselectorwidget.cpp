@@ -213,8 +213,8 @@ FormFilesSelectorWidget::FormFilesSelectorWidget(QWidget *parent, const FormType
     connect(d->aBySpecialties, SIGNAL(triggered()), this, SLOT(onFilterSelected()));
     connect(d->aByType, SIGNAL(triggered()), this, SLOT(onFilterSelected()));
 
-    // get all Forms description
-    d->getDescriptions();
+//    // get all Forms description
+//    d->getDescriptions();
 
     // prepare the first model = category tree model
     d->aByCategory->trigger();

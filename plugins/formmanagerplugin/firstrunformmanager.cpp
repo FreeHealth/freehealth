@@ -32,6 +32,7 @@
 #include <coreplugin/isettings.h>
 
 #include <utils/global.h>
+#include <extensionsystem/pluginmanager.h>
 
 #include <QEvent>
 #include <QGridLayout>
@@ -40,6 +41,7 @@
 using namespace Form;
 using namespace Internal;
 
+static inline ExtensionSystem::PluginManager *pluginManager() { return ExtensionSystem::PluginManager::instance(); }
 static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
 
 FirstRunFormManagerWizardPage::FirstRunFormManagerWizardPage(QWidget *parent) :
@@ -67,11 +69,20 @@ void FirstRunFormManagerWizardPage::initializePage()
 
         QGridLayout *layout = new QGridLayout(this);
         setLayout(layout);
-        selector = new Form::FormFilesSelectorWidget(this, Form::FormFilesSelectorWidget::CompleteForms);
+        selector = new Form::FormFilesSelectorWidget(this);
+        selector->setFormType(Form::FormFilesSelectorWidget::CompleteForms);
         selector->expandAllItems();
         layout->addWidget(selector, 0, 0);
         adjustSize();
         selector->updateGeometry();
+
+        // check all forms (using IFormIO::checkForUpdates)
+        QList<Form::IFormIO *> list = pluginManager()->getObjects<Form::IFormIO>();
+        if (!list.isEmpty()) {
+            foreach(Form::IFormIO *io, list) {
+                io->checkForUpdates();
+            }
+        }
 
         dlg.close();
     }
