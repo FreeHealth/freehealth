@@ -34,12 +34,15 @@
 #include <QScrollArea>
 #include <QTimer>
 
+QT_BEGIN_NAMESPACE
 class QVBoxLayout;
+class QMenu;
+QT_END_NAMESPACE
 
 /**
  * \file calendar_widget.h
- * \author Guillaume Denry <guillaume.denry@gmail.com>
- * \version 0.6.0
+ * \author Guillaume Denry, Eric Maeker
+ * \version 0.8.0
  * \date 12 Aug 2011
 */
 
@@ -82,6 +85,7 @@ public Q_SLOTS:
     void setDayItemDefaultDuration(int minutes);
     void setDayScaleHourDivider(int divider);
     void setHourHeight(int pixels);
+    void setContextMenuForItems(QMenu *menu);
 
     void scrollToTime(const QTime &time);
 

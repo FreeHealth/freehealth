@@ -45,9 +45,10 @@
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <QScrollBar>
+#include <QLabel>
+#include <QMenu>
 
 #include <QDebug>
-#include <QLabel>
 
 using namespace Calendar;
 using namespace Internal;
@@ -69,10 +70,11 @@ struct Calendar::CalendarWidgetPrivate
     int m_dayScaleHourDivider;
     int m_hourHeight;
 	QTimer m_timer; // used to refresh every date/time stuffs
+    QMenu *_contextMenu;
 };
 
 CalendarWidgetPrivate::CalendarWidgetPrivate(CalendarWidget *calendar) :
-    m_header(0), m_body(0)
+    m_header(0), m_body(0), _contextMenu(0)
 {
     m_mainLayout = new QVBoxLayout(calendar);
     m_mainLayout->setContentsMargins(0, 0, 0, 0);
@@ -248,6 +250,13 @@ void CalendarWidget::setHourHeight(int pixels) {
     m_d->m_hourHeight = pixels;
     if (qobject_cast<DayRangeBody*>(m_d->m_body))
         qobject_cast<DayRangeBody*>(m_d->m_body)->setHourHeight(pixels);
+}
+
+void CalendarWidget::setContextMenuForItems(QMenu *menu)
+{
+    m_d->_contextMenu = menu;
+    if (qobject_cast<DayRangeBody*>(m_d->m_body))
+        qobject_cast<DayRangeBody*>(m_d->m_body)->setContextMenuForItems(menu);
 }
 
 void CalendarWidget::scrollToTime(const QTime &time) {
