@@ -51,7 +51,7 @@ public:
     void setTime(const QTime &time);
 
 protected:
-    void paintEvent(QPaintEvent *event);
+    void paintEvent(QPaintEvent *);
 
 private:
     int _day;

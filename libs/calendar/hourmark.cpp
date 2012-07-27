@@ -53,7 +53,7 @@ void HourMark::setTime(const QTime &time)
     _time=time;
 }
 
-void HourMark::paintEvent(QPaintEvent *event)
+void HourMark::paintEvent(QPaintEvent *)
 {
     // on the top draw a line
     QPixmap linepixmap(size().width(), 22);

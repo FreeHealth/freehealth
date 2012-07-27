@@ -458,7 +458,7 @@ void DayRangeBody::dragMoveEvent(QDragMoveEvent *event)
     d_body->_dragLabel->move(rect.x(), rect.y());
 }
 
-void DayRangeBody::dragLeaveEvent(QDragLeaveEvent *event)
+void DayRangeBody::dragLeaveEvent(QDragLeaveEvent *)
 {
     if (WarnDragDropFromBody)
         WARN_FUNC;
