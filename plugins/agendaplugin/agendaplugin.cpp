@@ -86,6 +86,7 @@ AgendaPlugin::AgendaPlugin() :
         qWarning() << "creating AgendaPlugin";
     // Add Translator to the Application
     Core::ICore::instance()->translators()->addNewTranslator("agendaplugin");
+    Core::ICore::instance()->translators()->addNewTranslator("calendar");
 
     // Create the core object
     m_Core = new AgendaCore(this);
@@ -210,6 +211,9 @@ static QString patientUid(const int row)
 
 void AgendaPlugin::createVirtualAppointements(UserCalendar *calendar)
 {
+//    QTime chr;
+//    chr.start();
+
     qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
     QList<Appointement *> list;
     Utils::Randomizer r;
@@ -273,6 +277,7 @@ void AgendaPlugin::createVirtualAppointements(UserCalendar *calendar)
     if (!base().saveCalendarEvents(list))
         ok = false;
 
+//    Utils::Log::logTimeElapsed(chr, "---", "creating virtual events");
     if (ok)
         qWarning() << nbEvents << "events successfully created and saved";
 }
