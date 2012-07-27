@@ -88,7 +88,6 @@ BasicItemEditionDialog::BasicItemEditionDialog(AbstractCalendarModel *model, QWi
     // Ask plugin manager for extended widgets
     QList<ICalendarItemDataWidget*> extended = pluginManager()->getObjects<ICalendarItemDataWidget>();
 
-    // TODO: better use foreach here?
     for(int i = 0; i < extended.count(); ++i)
         addCalendarDataWidget(extended.at(i));
 
@@ -132,6 +131,11 @@ void BasicItemEditionDialog::init(const CalendarItem &item)
 void BasicItemEditionDialog::showMoreTriggered()
 {
     ui->viewer->toogleExtraInformation();
+    if (ui->viewer->isShowingExtraInformation())
+        m_moreInfo->setText(tkTr(Trans::Constants::HIDE_EXTRA_INFORMATION));
+    else
+        m_moreInfo->setText(tkTr(Trans::Constants::MORE_INFORMATION));
+
     adjustSize();
     Utils::centerWidget(this);
 }
