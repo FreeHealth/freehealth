@@ -155,6 +155,8 @@ UserCalendarViewer::UserCalendarViewer(QWidget *parent) :
     d->ui->calendarViewer->setDayScaleHourDivider(2);
     d->ui->calendarViewer->setDayGranularity(5);
     d->ui->calendarViewer->setHourHeight(4*20); // 20pixels per minutes
+    // TODO: add menu to the calendarViewer (when user right click on items)
+
 
     // populate the availabilities duration selector combo (every five minutes)
     for(int i = 1; i < 19; ++i) {
