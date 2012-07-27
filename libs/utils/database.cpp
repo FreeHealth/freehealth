@@ -1753,6 +1753,22 @@ QVariant Database::min(const int &tableref, const int &fieldref, const QString &
 }
 
 /**
+ * Return a MAX SQL command on the table \e tableref, field \e fieldref with
+ * the filter \e filter. Filter whould be not contains the "WHERE" word.
+*/
+QString Database::maxSqlCommand(const int &tableref, const int &fieldref, const QString &filter) const
+{
+    QString req = QString("SELECT max(%1) FROM %2")
+                  .arg(d_database->m_Fields.value(d_database->index(tableref, fieldref)))
+                  .arg(d_database->m_Tables[tableref]);
+    if (!filter.isEmpty())
+        req += " WHERE " + filter;
+    if (WarnSqlCommands)
+        qWarning() << req;
+    return req;
+}
+
+/**
  * Return a TOTAL SQL command on the table \e tableref, field \e fieldref with
  * the filter \e filter.
 */

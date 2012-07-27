@@ -328,6 +328,7 @@ public:
     virtual QVariant max(const int &tableref, const int &fieldref, const int &groupBy, const QString &filter = QString()) const;
     virtual QVariant min(const int &tableref, const int &fieldref, const QString &filter) const;
 
+    virtual QString maxSqlCommand(const int &tableref, const int &fieldref, const QString &filter = QString()) const;
     virtual QString totalSqlCommand(const int tableRef, const int fieldRef, const QHash<int, QString> &where) const;
     virtual QString totalSqlCommand(const int tableRef, const int fieldRef) const;
     double sum(const int tableRef, const int fieldRef, const QHash<int, QString> &where) const;
