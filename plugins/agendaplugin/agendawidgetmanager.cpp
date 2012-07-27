@@ -138,16 +138,16 @@ AgendaActionHandler::AgendaActionHandler(QObject *parent) :
     QList<int> ctx = QList<int>() << uid->uniqueIdentifier(Agenda::Constants::C_AGENDA_PLUGIN);
     QList<int> globalcontext = QList<int>() << Core::Constants::C_GLOBAL_ID;
 
-    Core::ActionContainer *menu = actionManager()->actionContainer(Constants::M_PLUGINS_AGENDA);
-    if (!menu) {
-        menu = actionManager()->createMenu(Constants::M_PLUGINS_AGENDA);
-        menu->appendGroup(Constants::G_AGENDA_VIEW);
-        menu->appendGroup(Constants::G_AGENDA_EDIT);
-        menu->appendGroup(Constants::G_AGENDA_OPTIONS);
-        menu->setTranslations(Trans::Constants::AGENDA);
-    }
-    Q_ASSERT(menu);
-    actionManager()->actionContainer(Core::Constants::M_PLUGINS)->addMenu(menu, Core::Constants::G_PLUGINS_CALENDAR);
+//    Core::ActionContainer *menu = actionManager()->actionContainer(Constants::M_PLUGINS_AGENDA);
+//    if (!menu) {
+//        menu = actionManager()->createMenu(Constants::M_PLUGINS_AGENDA);
+//        menu->appendGroup(Constants::G_AGENDA_VIEW);
+//        menu->appendGroup(Constants::G_AGENDA_EDIT);
+//        menu->appendGroup(Constants::G_AGENDA_OPTIONS);
+//        menu->setTranslations(Trans::Constants::AGENDA);
+//    }
+//    Q_ASSERT(menu);
+//    actionManager()->actionContainer(Core::Constants::M_PLUGINS)->addMenu(menu, Core::Constants::G_PLUGINS_CALENDAR);
 
     // Create local actions
 //    a = aClear = new QAction(this);
