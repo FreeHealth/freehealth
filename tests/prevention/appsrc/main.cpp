@@ -224,8 +224,11 @@ int main( int argc, char *argv[] )
     }
 
 
-    int r = app.exec();
+    // shutdown plugin manager on the exit
+    QObject::connect(&app, SIGNAL(aboutToQuit()), &pluginManager, SLOT(shutdown()));
 
+    int r = app.exec();
+//    Utils::Log::saveLog();
     return r;
 }
 
