@@ -83,7 +83,8 @@ DataPackPluginIPlugin::DataPackPluginIPlugin()
 
 DataPackPluginIPlugin::~DataPackPluginIPlugin()
 {    
-    qWarning() << "DataPackPluginIPlugin::~DataPackPluginIPlugin";
+    if (Utils::Log::warnPluginsCreation())
+        WARN_FUNC;
 
     if (m_prefPage) {
         removeObject(m_prefPage);

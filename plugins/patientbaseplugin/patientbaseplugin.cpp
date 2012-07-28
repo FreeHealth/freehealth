@@ -92,7 +92,8 @@ PatientBasePlugin::PatientBasePlugin() :
 
 PatientBasePlugin::~PatientBasePlugin()
 {
-    qWarning() << "PatientBasePlugin::~PatientBasePlugin()";
+    if (Utils::Log::warnPluginsCreation())
+        WARN_FUNC;
     if (m_Mode) {
         removeObject(m_Mode);
         delete m_Mode;

@@ -63,6 +63,8 @@ ScriptPlugin::ScriptPlugin() :
 
 ScriptPlugin::~ScriptPlugin()
 {
+    if (Utils::Log::warnPluginsCreation())
+        WARN_FUNC;
 }
 
 bool ScriptPlugin::initialize(const QStringList &arguments, QString *errorString)

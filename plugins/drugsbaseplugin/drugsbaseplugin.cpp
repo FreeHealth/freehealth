@@ -69,6 +69,8 @@ DrugsBasePlugin::DrugsBasePlugin() :
 
 DrugsBasePlugin::~DrugsBasePlugin()
 {
+    if (Utils::Log::warnPluginsCreation())
+        WARN_FUNC;
 }
 
 bool DrugsBasePlugin::initialize(const QStringList &arguments, QString *errorString)

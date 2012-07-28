@@ -114,6 +114,8 @@ DrugsPlugin::DrugsPlugin() :
 
 DrugsPlugin::~DrugsPlugin()
 {
+    if (Utils::Log::warnPluginsCreation())
+        WARN_FUNC;
     if (viewPage) {
         removeObject(viewPage);
         delete viewPage; viewPage=0;

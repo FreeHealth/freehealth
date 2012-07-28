@@ -63,7 +63,8 @@ TemplatesPlugin::TemplatesPlugin()
 
 TemplatesPlugin::~TemplatesPlugin()
 {
-    qWarning() << "TemplatesPlugin::~TemplatesPlugin()";
+    if (Utils::Log::warnPluginsCreation())
+        WARN_FUNC;
     if (prefPage) {
         removeObject(prefPage);
         delete prefPage; prefPage=0;

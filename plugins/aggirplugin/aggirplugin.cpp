@@ -50,6 +50,8 @@ GirPlugin::GirPlugin() : m_Factory(0)
 
 GirPlugin::~GirPlugin()
 {
+    if (Utils::Log::warnPluginsCreation())
+        WARN_FUNC;
     if (m_Factory){
         removeObject(m_Factory);
         delete m_Factory;

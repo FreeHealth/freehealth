@@ -69,6 +69,8 @@ IcdPlugin::IcdPlugin()
 
 IcdPlugin::~IcdPlugin()
 {
+    if (Utils::Log::warnPluginsCreation())
+        WARN_FUNC;
 }
 
 bool IcdPlugin::initialize(const QStringList &arguments, QString *errorString)
@@ -106,7 +108,7 @@ void IcdPlugin::extensionsInitialized()
 void IcdPlugin::postCoreInitialization()
 {
     if (Utils::Log::warnPluginsCreation())
-        qWarning() << Q_FUNC_INFO;
+        WARN_FUNC;
 
     IcdDatabase::instance()->initialize();
 

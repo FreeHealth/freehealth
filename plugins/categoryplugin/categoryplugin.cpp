@@ -63,6 +63,8 @@ CategoryPlugin::CategoryPlugin()
 
 CategoryPlugin::~CategoryPlugin()
 {
+    if (Utils::Log::warnPluginsCreation())
+        WARN_FUNC;
 }
 
 bool CategoryPlugin::initialize(const QStringList &arguments, QString *errorString)

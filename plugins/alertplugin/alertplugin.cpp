@@ -73,6 +73,8 @@ AlertPlugin::AlertPlugin() :
 
 AlertPlugin::~AlertPlugin()
 {
+    if (Utils::Log::warnPluginsCreation())
+        WARN_FUNC;
     if (_prefPage)
         removeObject(_prefPage);
 }

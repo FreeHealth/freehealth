@@ -70,7 +70,8 @@ XmlFormIOPlugin::XmlFormIOPlugin() :
 
 XmlFormIOPlugin::~XmlFormIOPlugin()
 {
-    qWarning() << "XmlFormIOPlugin::~XmlFormIOPlugin()";
+    if (Utils::Log::warnPluginsCreation())
+        WARN_FUNC;
     // delete XmlFormContentReader singleton
     if (m_XmlReader)
         delete m_XmlReader;

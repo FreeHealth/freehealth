@@ -94,6 +94,8 @@ AgendaPlugin::AgendaPlugin() :
 
 AgendaPlugin::~AgendaPlugin()
 {
+    if (Utils::Log::warnPluginsCreation())
+        WARN_FUNC;
     if (m_Core)
         delete m_Core;
     m_Core = 0;

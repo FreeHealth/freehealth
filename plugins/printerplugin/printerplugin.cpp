@@ -60,7 +60,8 @@ PrinterPlugin::PrinterPlugin() :
 
 PrinterPlugin::~PrinterPlugin()
 {
-    qWarning() << "PrinterPlugin::~PrinterPlugin()";
+    if (Utils::Log::warnPluginsCreation())
+        WARN_FUNC;
     if (prefPage) {
         removeObject(prefPage);
         delete prefPage; prefPage=0;

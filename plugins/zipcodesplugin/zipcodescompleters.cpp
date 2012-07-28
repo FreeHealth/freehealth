@@ -36,6 +36,8 @@
 #include <datapackutils/datapackcore.h>
 #include <datapackutils/ipackmanager.h>
 #include <datapackutils/pack.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_database.h>
 
 #include <QLineEdit>
 #include <QSqlTableModel>
@@ -53,6 +55,7 @@
 
 using namespace ZipCodes;
 using namespace Internal;
+using namespace Trans::ConstantTranslations;
 
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
@@ -215,7 +218,7 @@ static QString databaseFileName()
 */
 ZipCountryCompleters::ZipCountryCompleters(QObject *parent) :
     QObject(parent), m_City(0), m_Zip(0), m_Country(0), m_Model(0),
-    m_ZipButton(0), m_CityButton(0)
+    m_ZipButton(0), m_CityButton(0), m_DbAvailable(false)
 {
     setObjectName("ZipCountryCompleters");
     createModel();
@@ -249,9 +252,10 @@ void ZipCountryCompleters::createModel()
         if (!db.open()) {
             LOG_ERROR("Unable to open Zip database");
             m_DbAvailable = false;
+        } else {
+            LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg("zipcodes").arg("sqlite"));
         }
     }
-
     m_Model = new ZipCountryModel(this, db, m_DbAvailable);
 }
 
@@ -287,7 +291,6 @@ void ZipCountryCompleters::setCityLineEdit(Utils::QButtonLineEdit *city)
 
     m_City->installEventFilter(this);
 }
-
 
 /** Define the QLineEdit to use as zip code editor */
 void ZipCountryCompleters::setZipLineEdit(Utils::QButtonLineEdit *zip)

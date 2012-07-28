@@ -108,7 +108,8 @@ void AccountPlugin::removeAndDelete(QObject *o)
 
 AccountPlugin::~AccountPlugin()
 {
-    qWarning() << "AccountPlugin::~AccountPlugin()";
+    if (Utils::Log::warnPluginsCreation())
+        qWarning() << "AccountPlugin::~AccountPlugin()";
     // Remove preferences pages to plugins manager object pool
     removeAndDelete(m_UserPage);
     removeAndDelete(m_BankPage);

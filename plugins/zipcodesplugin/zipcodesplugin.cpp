@@ -46,6 +46,8 @@ ZipCodesPlugin::ZipCodesPlugin()
 
 ZipCodesPlugin::~ZipCodesPlugin()
 {
+    if (Utils::Log::warnPluginsCreation())
+        WARN_FUNC;
 }
 
 bool ZipCodesPlugin::initialize(const QStringList &arguments, QString *errorString)

@@ -55,6 +55,8 @@ BaseWidgetsPlugin::BaseWidgetsPlugin() :
 
 BaseWidgetsPlugin::~BaseWidgetsPlugin()
 {
+    if (Utils::Log::warnPluginsCreation())
+        WARN_FUNC;
     if (m_Factory) {
         removeObject(m_Factory);
         delete m_Factory;

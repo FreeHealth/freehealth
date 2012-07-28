@@ -83,6 +83,8 @@ WebcamPlugin::WebcamPlugin() :
 
 WebcamPlugin::~WebcamPlugin()
 {
+    if (Utils::Log::warnPluginsCreation())
+        WARN_FUNC;
     // Unregister objects from the plugin manager's object pool
     // Delete members
 

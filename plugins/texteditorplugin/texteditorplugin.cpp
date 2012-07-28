@@ -66,6 +66,8 @@ TextEditorPlugin::TextEditorPlugin()
 
 TextEditorPlugin::~TextEditorPlugin()
 {
+    if (Utils::Log::warnPluginsCreation())
+        WARN_FUNC;
 }
 
 bool TextEditorPlugin::initialize(const QStringList &arguments, QString *errorString)

@@ -66,7 +66,8 @@ CorePlugin::CorePlugin() :
 
 CorePlugin::~CorePlugin()
 {
-    qWarning() << "CorePlugin::~CorePlugin()";
+    if (Utils::Log::warnPluginsCreation())
+        WARN_FUNC;
     if (prefPage) {
         removeObject(prefPage);
         delete prefPage; prefPage=0;

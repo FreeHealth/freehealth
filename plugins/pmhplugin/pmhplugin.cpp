@@ -73,7 +73,8 @@ PmhPlugin::PmhPlugin() :
 
 PmhPlugin::~PmhPlugin()
 {
-    qWarning() << "PmhPlugin::~PmhPlugin()";
+    if (Utils::Log::warnPluginsCreation())
+        WARN_FUNC;
     delete PmhCore::instance();
 }
 

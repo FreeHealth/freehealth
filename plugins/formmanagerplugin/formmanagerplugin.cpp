@@ -89,7 +89,8 @@ FormManagerPlugin::FormManagerPlugin() :
 
 FormManagerPlugin::~FormManagerPlugin()
 {
-    qWarning() << "FormManagerPlugin::~FormManagerPlugin()";
+    if (Utils::Log::warnPluginsCreation())
+        WARN_FUNC;
     if (m_FirstRun) {
         removeObject(m_FirstRun);
         delete m_FirstRun;

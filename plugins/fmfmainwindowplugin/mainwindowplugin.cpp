@@ -64,7 +64,8 @@ MainWinPlugin::MainWinPlugin() :
 
 MainWinPlugin::~MainWinPlugin()
 {
-    qWarning() << "MainWinPlugin::~MainWinPlugin()";
+    if (Utils::Log::warnPluginsCreation())
+        WARN_FUNC;
     if (virtualBasePage) {
         removeObject(virtualBasePage);
         delete virtualBasePage; virtualBasePage=0;
