@@ -162,8 +162,6 @@ void %PluginName%Plugin::postCoreInitialization()
     // DataPacks are checked
 }
 
-// aboutToShutdown does not exist in the old QtCreator code.
-// we have to wait until FMF is updatet to a newer QtCreator source
 ExtensionSystem::IPlugin::ShutdownFlag %PluginName%Plugin::aboutToShutdown()
 {
     if (Utils::Log::warnPluginsCreation())
