@@ -617,7 +617,7 @@ bool AccountBase::initialize()
 
     if (checkIfVersionBeforeThirdVersion() && driver() == Utils::Database::MySQL) {
         if (alterFieldPatientNameIntToVarchar()) {
-            LOG_FOR("AccountDatabase","Field PATIENT_NAME has been changed to varchar");
+            LOG("Field PATIENT_NAME has been changed to varchar");
         } else {
             LOG_ERROR(tkTr(Trans::Constants::DATABASE_1_SCHEMA_ERROR).arg(Constants::DB_ACCOUNTANCY));
             return false;
@@ -889,7 +889,7 @@ bool AccountBase::checkIfVersionBeforeThirdVersion()
     DB.commit();
     double versionDouble = version.toDouble();
     if (versionDouble == 0.0) {
-        LOG_FOR("Alter field PATIENT_NAME","Error conversion of double");
+        LOG("Alter field PATIENT_NAME: Error conversion of double");
     }
     if (versionDouble < 0.3) {
         return true;
