@@ -162,7 +162,7 @@ public:
     // refresh all widgets of a day
     void refreshDayWidgets(const QDate &dayDate)
     {
-        Q_ASSERT(q->model());
+//        Q_ASSERT(q->model());
         if (!q->model())
             return;
 
