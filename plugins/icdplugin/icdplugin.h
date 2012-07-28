@@ -33,8 +33,8 @@
 /**
  * \file icdplugin.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.5.0
- * \date 09 Oct 2010
+ * \version 0.8.0
+ * \date 25 July 2012
 */
 
 namespace ICD {
@@ -48,6 +48,7 @@ public:
 
     bool initialize(const QStringList &arguments, QString *errorString);
     void extensionsInitialized();
+    ShutdownFlag aboutToShutdown();
 
     static QString pluginVersion() {return m_PlugVersion;}
 

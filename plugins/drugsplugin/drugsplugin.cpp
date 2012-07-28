@@ -116,38 +116,6 @@ DrugsPlugin::~DrugsPlugin()
 {
     if (Utils::Log::warnPluginsCreation())
         WARN_FUNC;
-    if (viewPage) {
-        removeObject(viewPage);
-        delete viewPage; viewPage=0;
-    }
-    if (selectorPage) {
-        removeObject(selectorPage);
-        delete selectorPage; selectorPage=0;
-    }
-    if (userPage) {
-        removeObject(userPage);
-        delete userPage; userPage=0;
-    }
-    if (extraPage) {
-        removeObject(extraPage);
-        delete extraPage; extraPage=0;
-    }
-    if (printPage) {
-        removeObject(printPage);
-        delete printPage; printPage=0;
-    }
-    if (databaseSelectorPage) {
-        removeObject(databaseSelectorPage);
-        delete databaseSelectorPage; databaseSelectorPage=0;
-    }
-    if (protocolPage) {
-        removeObject(protocolPage);
-        delete protocolPage; protocolPage=0;
-    }
-    if (enginePage) {
-        removeObject(enginePage);
-        delete enginePage; enginePage=0;
-    }
 }
 
 bool DrugsPlugin::initialize(const QStringList &arguments, QString *errorMessage)
@@ -218,6 +186,49 @@ void DrugsPlugin::postCoreOpened()
     DrugsMode *mode = new DrugsMode(this);
     Q_UNUSED(mode);
 #endif
+}
+
+ExtensionSystem::IPlugin::ShutdownFlag DrugsPlugin::aboutToShutdown()
+{
+    if (Utils::Log::warnPluginsCreation())
+        WARN_FUNC;
+    // Save settings
+    // Disconnect from signals that are not needed during shutdown
+    // Hide UI (if you add UI that is not in the main window directly)
+    // Remove preferences pages to plugins manager object pool
+    if (viewPage) {
+        removeObject(viewPage);
+        delete viewPage; viewPage=0;
+    }
+    if (selectorPage) {
+        removeObject(selectorPage);
+        delete selectorPage; selectorPage=0;
+    }
+    if (userPage) {
+        removeObject(userPage);
+        delete userPage; userPage=0;
+    }
+    if (extraPage) {
+        removeObject(extraPage);
+        delete extraPage; extraPage=0;
+    }
+    if (printPage) {
+        removeObject(printPage);
+        delete printPage; printPage=0;
+    }
+    if (databaseSelectorPage) {
+        removeObject(databaseSelectorPage);
+        delete databaseSelectorPage; databaseSelectorPage=0;
+    }
+    if (protocolPage) {
+        removeObject(protocolPage);
+        delete protocolPage; protocolPage=0;
+    }
+    if (enginePage) {
+        removeObject(enginePage);
+        delete enginePage; enginePage=0;
+    }
+    return SynchronousShutdown;
 }
 
 Q_EXPORT_PLUGIN(DrugsPlugin)

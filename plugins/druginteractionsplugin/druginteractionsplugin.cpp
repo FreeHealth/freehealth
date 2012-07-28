@@ -55,20 +55,6 @@ DrugInteractionsPlugin::~DrugInteractionsPlugin()
 {
     if (Utils::Log::warnPluginsCreation())
         WARN_FUNC;
-    removeObject(m_DDIEngine);
-    if (m_DDIEngine)
-        delete m_DDIEngine;
-    m_DDIEngine = 0;
-
-    removeObject(m_PimEngine);
-    if (m_PimEngine)
-        delete m_PimEngine;
-    m_PimEngine = 0;
-
-    removeObject(m_AllergyEngine);
-    if (m_AllergyEngine)
-        delete m_AllergyEngine;
-    m_AllergyEngine = 0;
 }
 
 bool DrugInteractionsPlugin::initialize(const QStringList &arguments, QString *errorString)
@@ -105,5 +91,29 @@ void DrugInteractionsPlugin::postCoreInitialization()
     // Core is fully intialized as well as all plugins
 }
 
+ExtensionSystem::IPlugin::ShutdownFlag DrugInteractionsPlugin::aboutToShutdown()
+{
+    if (Utils::Log::warnPluginsCreation())
+        WARN_FUNC;
+    // Save settings
+    // Disconnect from signals that are not needed during shutdown
+    // Hide UI (if you add UI that is not in the main window directly)
+    // Remove preferences pages to plugins manager object pool
+    removeObject(m_DDIEngine);
+    if (m_DDIEngine)
+        delete m_DDIEngine;
+    m_DDIEngine = 0;
+
+    removeObject(m_PimEngine);
+    if (m_PimEngine)
+        delete m_PimEngine;
+    m_PimEngine = 0;
+
+    removeObject(m_AllergyEngine);
+    if (m_AllergyEngine)
+        delete m_AllergyEngine;
+    m_AllergyEngine = 0;
+    return SynchronousShutdown;
+}
 
 Q_EXPORT_PLUGIN(DrugInteractionsPlugin)

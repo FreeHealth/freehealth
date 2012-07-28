@@ -33,8 +33,8 @@
 /**
  * \file zipcodesplugin.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.0
- * \date 19 Aug 2011
+ * \version 0.8.0
+ * \date 25 July 2012
 */
 
 namespace ZipCodes {
@@ -48,6 +48,7 @@ public:
 
     bool initialize(const QStringList &arguments, QString *errorString);
     void extensionsInitialized();
+    ShutdownFlag aboutToShutdown();
 
 };
 

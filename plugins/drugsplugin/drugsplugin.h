@@ -32,9 +32,8 @@
 /**
  * \file drugsplugin.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.0
- * \date 07 Sept 2011
- * \internal
+ * \version 0.8.0
+ * \date 25 July 2012
 */
 
 
@@ -49,7 +48,6 @@ class ProtocolPreferencesPage;
 class DrugsDatabaseSelectorPage;
 class DrugEnginesPreferencesPage;
 
-
 class DrugsPlugin : public ExtensionSystem::IPlugin
 {
     Q_OBJECT
@@ -60,6 +58,8 @@ public:
 
     bool initialize(const QStringList &arguments, QString *errorMessage = 0);
     void extensionsInitialized();
+    ShutdownFlag aboutToShutdown();
+
 private Q_SLOTS:
     void postCoreOpened();
 

@@ -87,15 +87,6 @@ WebcamPlugin::~WebcamPlugin()
         WARN_FUNC;
     // Unregister objects from the plugin manager's object pool
     // Delete members
-
-    if(m_webcamProvider) {
-        removeObject(m_webcamProvider);
-        delete m_webcamProvider;
-    }
-    if (m_prefPage) {
-        removeObject(m_prefPage);
-        delete(m_prefPage);
-    }
 }
 
 bool WebcamPlugin::initialize(const QStringList &arguments, QString *errorString)
@@ -178,15 +169,26 @@ void WebcamPlugin::postCoreInitialization()
     // DataPacks are checked
 }
 
-// aboutToShutdown does not exist in the old QtCreator code.
-// we have to wait until FMF is updatet to a newer QtCreator source
-// ExtensionSystem::IPlugin::ShutdownFlag WebcamPlugin::aboutToShutdown()
-// {
-//     // Save settings
-//     // Disconnect from signals that are not needed during shutdown
-//     // Hide UI (if you add UI that is not in the main window directly)
-//     return SynchronousShutdown;
-// }
+ExtensionSystem::IPlugin::ShutdownFlag WebcamPlugin::aboutToShutdown()
+{
+    if (Utils::Log::warnPluginsCreation())
+        WARN_FUNC;
+    // Save settings
+    // Disconnect from signals that are not needed during shutdown
+    // Hide UI (if you add UI that is not in the main window directly)
+    // Remove preferences pages to plugins manager object pool
+    if(m_webcamProvider) {
+        removeObject(m_webcamProvider);
+        delete m_webcamProvider;
+        m_webcamProvider = 0;
+    }
+    if (m_prefPage) {
+        removeObject(m_prefPage);
+        delete(m_prefPage);
+        m_prefPage = 0;
+    }
+    return SynchronousShutdown;
+}
 
 // void WebcamPlugin::triggerAction()
 // {

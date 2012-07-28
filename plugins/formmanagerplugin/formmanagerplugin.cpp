@@ -91,12 +91,6 @@ FormManagerPlugin::~FormManagerPlugin()
 {
     if (Utils::Log::warnPluginsCreation())
         WARN_FUNC;
-    if (m_FirstRun) {
-        removeObject(m_FirstRun);
-        delete m_FirstRun;
-        m_FirstRun = 0;
-    }
-    delete FormManager::instance();
 }
 
 bool FormManagerPlugin::initialize(const QStringList &arguments, QString *errorString)
@@ -149,6 +143,23 @@ void FormManagerPlugin::postCoreInitialization()
         settings()->setDefaultForm("");
     }
 
+}
+
+ExtensionSystem::IPlugin::ShutdownFlag FormManagerPlugin::aboutToShutdown()
+{
+    if (Utils::Log::warnPluginsCreation())
+        WARN_FUNC;
+    // Save settings
+    // Disconnect from signals that are not needed during shutdown
+    // Hide UI (if you add UI that is not in the main window directly)
+    // Remove preferences pages to plugins manager object pool
+    if (m_FirstRun) {
+        removeObject(m_FirstRun);
+        delete m_FirstRun;
+        m_FirstRun = 0;
+    }
+    delete FormManager::instance();
+    return SynchronousShutdown;
 }
 
 Q_EXPORT_PLUGIN(FormManagerPlugin)

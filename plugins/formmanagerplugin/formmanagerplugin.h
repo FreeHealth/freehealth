@@ -34,8 +34,8 @@
 /**
  * \file formmanagerplugin.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.4.0
- * \date 05 Apr 2010
+ * \version 0.8.0
+ * \date 25 July 2012
 */
 
 namespace Form {
@@ -54,6 +54,7 @@ public:
 
     bool initialize(const QStringList &arguments, QString *errorString);
     void extensionsInitialized();
+    ShutdownFlag aboutToShutdown();
 
 private Q_SLOTS:
     void postCoreInitialization();

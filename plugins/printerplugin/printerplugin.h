@@ -33,8 +33,8 @@
 /**
  * \file printerplugin.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.3.0
- * \date 30 Jan 2010
+ * \version 0.8.0
+ * \date 25 July 2012
 */
 
 namespace Print {
@@ -52,6 +52,7 @@ public:
 
     bool initialize(const QStringList &arguments, QString *errorString);
     void extensionsInitialized();
+    ShutdownFlag aboutToShutdown();
 
 private:
     Print::Internal::PrinterPreferencesPage *prefPage;

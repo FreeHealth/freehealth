@@ -33,8 +33,8 @@
 /**
  * \file drugsbaseplugin.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.7.5
- * \date 21 Jun 2012
+ * \version 0.8.0
+ * \date 25 July 2012
 */
 
 namespace DrugsDB {
@@ -49,6 +49,8 @@ public:
 
     bool initialize(const QStringList &arguments, QString *errorString);
     void extensionsInitialized();
+    ShutdownFlag aboutToShutdown();
+
 };
 
 

@@ -94,16 +94,6 @@ PatientBasePlugin::~PatientBasePlugin()
 {
     if (Utils::Log::warnPluginsCreation())
         WARN_FUNC;
-    if (m_Mode) {
-        removeObject(m_Mode);
-        delete m_Mode;
-        m_Mode = 0;
-    }
-    if (prefpage) {
-        removeObject(prefpage);
-        delete prefpage;
-        prefpage = 0;
-    }
 }
 
 bool PatientBasePlugin::initialize(const QStringList &arguments, QString *errorString)
@@ -186,5 +176,25 @@ void PatientBasePlugin::postCoreInitialization()
     PatientWidgetManager::instance()->postCoreInitialization();
 }
 
+ExtensionSystem::IPlugin::ShutdownFlag PatientBasePlugin::aboutToShutdown()
+{
+    if (Utils::Log::warnPluginsCreation())
+        WARN_FUNC;
+    // Save settings
+    // Disconnect from signals that are not needed during shutdown
+    // Hide UI (if you add UI that is not in the main window directly)
+    // Remove preferences pages to plugins manager object pool
+    if (m_Mode) {
+        removeObject(m_Mode);
+        delete m_Mode;
+        m_Mode = 0;
+    }
+    if (prefpage) {
+        removeObject(prefpage);
+        delete prefpage;
+        prefpage = 0;
+    }
+    return SynchronousShutdown;
+}
 
 Q_EXPORT_PLUGIN(PatientBasePlugin)

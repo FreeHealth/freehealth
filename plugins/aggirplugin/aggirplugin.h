@@ -33,8 +33,8 @@
 /**
  * \file emptyplugin.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.0.4
- * \date 11 Aug 2009
+ * \version 0.8.0
+ * \date 25 July 2012
 */
 
 namespace Gir {
@@ -51,6 +51,8 @@ public:
 
     bool initialize(const QStringList &arguments, QString *errorString);
     void extensionsInitialized();
+    ShutdownFlag aboutToShutdown();
+
 private:
     Internal::GirWidgetFactory *m_Factory;
 };

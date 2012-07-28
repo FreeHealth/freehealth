@@ -32,6 +32,13 @@
 
 #include <extensionsystem/iplugin.h>
 
+/**
+ * \file webcamplugin.h
+ * \author Eric MAEKER <eric.maeker@gmail.com>
+ * \version 0.8.0
+ * \date 25 July 2012
+*/
+
 namespace Webcam {
 
 class WebcamPlugin : public ExtensionSystem::IPlugin
@@ -43,8 +50,8 @@ public:
     
     bool initialize(const QStringList &arguments, QString *errorString);
     void extensionsInitialized();
-    //    ShutdownFlag aboutToShutdown();
-    
+    ShutdownFlag aboutToShutdown();
+
 private:
     WebcamPhotoProvider *m_webcamProvider;
     Internal::WebcamPreferencesPage *m_prefPage;

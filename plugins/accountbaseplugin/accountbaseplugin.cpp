@@ -94,8 +94,17 @@ void AccountBasePlugin::extensionsInitialized()
     AccountBase::instance()->initialize();
     DatapackBase::instance()->initialize();
 
-addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
+    addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 }
 
+ExtensionSystem::IPlugin::ShutdownFlag AccountBasePlugin::aboutToShutdown()
+{
+    if (Utils::Log::warnPluginsCreation())
+        WARN_FUNC;
+    // Save settings
+    // Disconnect from signals that are not needed during shutdown
+    // Hide UI (if you add UI that is not in the main window directly)
+    return SynchronousShutdown;
+}
 
 Q_EXPORT_PLUGIN(AccountBasePlugin)

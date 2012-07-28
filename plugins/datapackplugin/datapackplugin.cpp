@@ -85,32 +85,6 @@ DataPackPluginIPlugin::~DataPackPluginIPlugin()
 {    
     if (Utils::Log::warnPluginsCreation())
         WARN_FUNC;
-
-    if (m_prefPage) {
-        removeObject(m_prefPage);
-        delete m_prefPage;
-        m_prefPage = 0;
-    }
-
-    // Core is about to close
-    // Core::user() is still available
-    DataPack::DataPackCore &core = DataPack::DataPackCore::instance(this);
-#ifdef FREEMEDFORMS
-    if (user())
-        user()->setValue(Core::IUser::DataPackConfig, core.serverManager()->xmlConfiguration());
-#endif
-
-#ifdef FREEACCOUNT
-    if (user())
-        user()->setValue(Core::IUser::DataPackConfig, core.serverManager()->xmlConfiguration());
-#endif
-
-#ifdef FREEDIAMS
-    QByteArray s = QByteArray(core.serverManager()->xmlConfiguration().toUtf8()).toBase64();
-    settings()->setValue("datapack/server/config", s);
-#endif
-
-
 }
 
 bool DataPackPluginIPlugin::initialize(const QStringList &arguments, QString *errorString)
@@ -275,6 +249,42 @@ void DataPackPluginIPlugin::togglePackManager()
     dlg.show();
     editor->refreshServerContent();
     dlg.exec();
+}
+
+ExtensionSystem::IPlugin::ShutdownFlag DataPackPluginIPlugin::aboutToShutdown()
+{
+    if (Utils::Log::warnPluginsCreation())
+        WARN_FUNC;
+    // Save settings
+    // Disconnect from signals that are not needed during shutdown
+    // Hide UI (if you add UI that is not in the main window directly)
+    // Remove preferences pages to plugins manager object pool
+    if (m_prefPage) {
+        removeObject(m_prefPage);
+        delete m_prefPage;
+        m_prefPage = 0;
+    }
+
+    // Core is about to close
+    // Core::user() is still available
+    DataPack::DataPackCore &core = DataPack::DataPackCore::instance(this);
+#ifdef FREEMEDFORMS
+    if (user())
+        user()->setValue(Core::IUser::DataPackConfig, core.serverManager()->xmlConfiguration());
+#endif
+
+#ifdef FREEACCOUNT
+    if (user())
+        user()->setValue(Core::IUser::DataPackConfig, core.serverManager()->xmlConfiguration());
+#endif
+
+#ifdef FREEDIAMS
+    QByteArray s = QByteArray(core.serverManager()->xmlConfiguration().toUtf8()).toBase64();
+    settings()->setValue("datapack/server/config", s);
+#endif
+
+
+    return SynchronousShutdown;
 }
 
 

@@ -65,10 +65,6 @@ TemplatesPlugin::~TemplatesPlugin()
 {
     if (Utils::Log::warnPluginsCreation())
         WARN_FUNC;
-    if (prefPage) {
-        removeObject(prefPage);
-        delete prefPage; prefPage=0;
-    }
 }
 
 bool TemplatesPlugin::initialize(const QStringList &arguments, QString *errorString)
@@ -95,5 +91,19 @@ void TemplatesPlugin::extensionsInitialized()
     prefPage->checkSettingsValidity();
 }
 
+ExtensionSystem::IPlugin::ShutdownFlag TemplatesPlugin::aboutToShutdown()
+{
+    if (Utils::Log::warnPluginsCreation())
+        WARN_FUNC;
+    // Save settings
+    // Disconnect from signals that are not needed during shutdown
+    // Hide UI (if you add UI that is not in the main window directly)
+    // Remove preferences pages to plugins manager object pool
+    if (prefPage) {
+        removeObject(prefPage);
+        delete prefPage; prefPage=0;
+    }
+    return SynchronousShutdown;
+}
 
 Q_EXPORT_PLUGIN(TemplatesPlugin)

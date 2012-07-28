@@ -98,5 +98,15 @@ void DrugsBasePlugin::extensionsInitialized()
     addAutoReleasedObject(new DrugsDB::Internal::DrugsTemplatePrinter(this));
 }
 
+ExtensionSystem::IPlugin::ShutdownFlag DrugsBasePlugin::aboutToShutdown()
+{
+    if (Utils::Log::warnPluginsCreation())
+        WARN_FUNC;
+    // Save settings
+    // Disconnect from signals that are not needed during shutdown
+    // Hide UI (if you add UI that is not in the main window directly)
+    // Remove preferences pages to plugins manager object pool
+    return SynchronousShutdown;
+}
 
 Q_EXPORT_PLUGIN(DrugsBasePlugin)

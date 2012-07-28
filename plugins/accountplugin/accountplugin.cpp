@@ -110,18 +110,6 @@ AccountPlugin::~AccountPlugin()
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "AccountPlugin::~AccountPlugin()";
-    // Remove preferences pages to plugins manager object pool
-    removeAndDelete(m_UserPage);
-    removeAndDelete(m_BankPage);
-    removeAndDelete(m_AvMovPage);
-    removeAndDelete(m_MPPage);
-    removeAndDelete(m_VirtPage);
-    removeAndDelete(m_SitesPage);
-    removeAndDelete(m_InsurPage);
-    removeAndDelete(m_PercentPage);
-    removeAndDelete(m_DistancePage);
-    removeAndDelete(m_AssetsRatesPage);
-    removeAndDelete(m_DefaultPage);
 }
 
 bool AccountPlugin::initialize(const QStringList &arguments, QString *errorString)
@@ -176,5 +164,26 @@ void AccountPlugin::extensionsInitialized()
     m_DefaultPage->checkSettingsValidity();
 }
 
+ExtensionSystem::IPlugin::ShutdownFlag AccountPlugin::aboutToShutdown()
+{
+    if (Utils::Log::warnPluginsCreation())
+        WARN_FUNC;
+    // Save settings
+    // Disconnect from signals that are not needed during shutdown
+    // Hide UI (if you add UI that is not in the main window directly)
+    // Remove preferences pages to plugins manager object pool
+    removeAndDelete(m_UserPage);
+    removeAndDelete(m_BankPage);
+    removeAndDelete(m_AvMovPage);
+    removeAndDelete(m_MPPage);
+    removeAndDelete(m_VirtPage);
+    removeAndDelete(m_SitesPage);
+    removeAndDelete(m_InsurPage);
+    removeAndDelete(m_PercentPage);
+    removeAndDelete(m_DistancePage);
+    removeAndDelete(m_AssetsRatesPage);
+    removeAndDelete(m_DefaultPage);
+    return SynchronousShutdown;
+}
 
 Q_EXPORT_PLUGIN(AccountPlugin)

@@ -34,8 +34,8 @@
 /**
  * \file xmlioplugin.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.7.6
- * \date 28 Jun 2012
+ * \version 0.8.0
+ * \date 25 July 2012
 */
 
 namespace XmlForms {
@@ -52,6 +52,7 @@ public:
 
     bool initialize(const QStringList &arguments, QString *errorString);
     void extensionsInitialized();
+    ShutdownFlag aboutToShutdown();
 
 private:
     Internal::XmlFormContentReader *m_XmlReader;
