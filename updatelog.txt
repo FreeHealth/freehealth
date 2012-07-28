@@ -8,11 +8,27 @@ FreeMedForms
 
 ===== Bug correction =====
 
-  * Managing transaction in all databases
-  * Birth date editor in patient creator corrected
-  * Segfault when closing FreeAccount
-  * Updating Plugin information dialog
-  * ICD10 coding assistant access in PMHx is always sync to the ICD10 database initialization
+  * FreeMedForms
+    * Birth date editor in patient creator corrected
+    * Preferences dialog appears without any latency
+    * Ultra-fast application closing
+    * Faster start of the app
+  * FreeAccount
+    * Segfault when closing FreeAccount
+  * Installation && configuration / databases
+    * Avoid UI freezing when creating && populating databases
+    * Network configuration && database transactions
+  * PMHx
+    * correctly manages the ICD10 database now
+  * Agenda:
+    * Drag'n drop corrected
+    * Correcting the appointement context menu
+  * Debian specific
+    * kFreeBSD compilation corrected
+    * hurd compilation corrected
+  * Under the hood
+    * Updating QtCreator libs to 4.5 release
+    * Updating Plugin information dialog
   * Many typos corrected
   * Many bug fixes
 
