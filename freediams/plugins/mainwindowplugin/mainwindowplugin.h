@@ -34,8 +34,8 @@
 /**
  * \file mainwindowplugin.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.4.0
- * \date 15 June 2010
+ * \version 0.80
+ * \date 26 July 2012
 */
 
 namespace MainWin {
@@ -50,6 +50,7 @@ public:
 
     bool initialize(const QStringList &arguments, QString *errorString);
     void extensionsInitialized();
+    ShutdownFlag aboutToShutdown();
 
 private:
     MainWindow *m_MainWindow;

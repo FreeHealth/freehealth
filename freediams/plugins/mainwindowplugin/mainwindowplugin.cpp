@@ -73,5 +73,23 @@ void MainWinPlugin::extensionsInitialized()
     m_MainWindow->extensionsInitialized();
 }
 
+ExtensionSystem::IPlugin::ShutdownFlag MainWinPlugin::aboutToShutdown()
+{
+    if (Utils::Log::warnPluginsCreation())
+        WARN_FUNC;
+    // Save settings
+    // Disconnect from signals that are not needed during shutdown
+    // Hide UI (if you add UI that is not in the main window directly)
+    // Remove preferences pages to plugins manager object pool
+    if (virtualBasePage) {
+        removeObject(virtualBasePage);
+        delete virtualBasePage; virtualBasePage=0;
+    }
+    if (m_MainWindow->isVisible())
+        m_MainWindow->hide();
+
+    // m_MainWindow is deleted by Core
+    return SynchronousShutdown;
+}
 
 Q_EXPORT_PLUGIN(MainWinPlugin)

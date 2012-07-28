@@ -108,6 +108,10 @@ ExtensionSystem::IPlugin::ShutdownFlag MainWinPlugin::aboutToShutdown()
         removeObject(virtualBasePage);
         delete virtualBasePage; virtualBasePage=0;
     }
+
+    if (m_MainWindow->isVisible())
+        m_MainWindow->hide();
+
     // m_MainWindow is deleted by Core
     return SynchronousShutdown;
 }
