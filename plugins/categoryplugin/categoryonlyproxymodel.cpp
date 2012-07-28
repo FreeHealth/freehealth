@@ -73,7 +73,9 @@ CategoryOnlyProxyModel::CategoryOnlyProxyModel(ICategoryModelHelper *parent) :
 
 CategoryOnlyProxyModel::~CategoryOnlyProxyModel()
 {
-    delete d; d=0;
+    if (d)
+        delete d;
+    d=0;
 }
 
 int CategoryOnlyProxyModel::rowCount(const QModelIndex &parent) const
