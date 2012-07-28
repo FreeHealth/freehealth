@@ -69,6 +69,7 @@ public:
     bool initialize();
     bool isInitialized() const ;
     void logChronos(bool state);
+
 private:    
     bool createDatabase(const QString &connectionName , const QString &dbName,
                         const QString &pathOrHostName,

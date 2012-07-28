@@ -590,51 +590,43 @@ bool AccountBase::initialize()
     } else {
         LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(database().connectionName()).arg(database().driverName()));
     }
-    QString driver = database().driverName();
+
+    // TODO: start a global transaction for all this code, remove the transactions inside the sub-members, close the transaction
     if (!checkDatabaseScheme()) {
-       if(checkIfIsFirstVersion()){
-        qDebug() << __FILE__ << QString::number(__LINE__) << "ISFIRSTVERSION";             
-        if (fieldNamesSql(AccountDB::Constants::Table_MedicalProcedure).size()< AccountDB::Constants::MP_MaxParam)
-        {
-        	  if (   !alterTableForNewField(AccountDB::Constants::Table_MedicalProcedure, AccountDB::Constants::MP_OTHERS,FieldIsBlob, QString("NULL"))
-        	      && !alterTableForNewField(AccountDB::Constants::Table_MedicalProcedure, AccountDB::Constants::MP_COUNTRY,FieldIsBlob, QString("NULL")))
-        	  {
-        	  	  LOG_ERROR("Unable to add new field in table MP");
-        	  	  return false;
-        	      }
-        	  else
-        	  {
-        	      foreach(QString field,fieldNamesSql(AccountDB::Constants::Table_MedicalProcedure)){
-        	          qWarning() << __FILE__ << QString::number(__LINE__) << " field =" << field ;
-                          }
-                        LOG("New Version = "+checkAndReplaceVersionNumber());
-        	  	return true;
-        	      }
-                }           	
-                
+        if(checkIfIsFirstVersion()){
+            qDebug() << __FILE__ << QString::number(__LINE__) << "ISFIRSTVERSION";
+            if (fieldNamesSql(AccountDB::Constants::Table_MedicalProcedure).size()< AccountDB::Constants::MP_MaxParam) {
+                if (!alterTableForNewField(AccountDB::Constants::Table_MedicalProcedure, AccountDB::Constants::MP_OTHERS,FieldIsBlob, QString("NULL"))
+                       && !alterTableForNewField(AccountDB::Constants::Table_MedicalProcedure, AccountDB::Constants::MP_COUNTRY,FieldIsBlob, QString("NULL"))) {
+                    LOG_ERROR("Unable to add new field in table MP");
+                    return false;
+                } else {
+                    foreach(QString field,fieldNamesSql(AccountDB::Constants::Table_MedicalProcedure)) {
+                        qWarning() << __FILE__ << QString::number(__LINE__) << " field =" << field ;
+                    }
+                    LOG("New Version = "+checkAndReplaceVersionNumber());
+                    return true;
+                }
             }
 
-        else
-        {
-        	LOG_ERROR(tkTr(Trans::Constants::DATABASE_1_SCHEMA_ERROR).arg(Constants::DB_ACCOUNTANCY));
-        	return false;
-            }
-        
-        }//checkDatabaseScheme
-    if (checkIfVersionBeforeThirdVersion() && driver.contains("MYSQL"))
-        {
-        	  if (alterFieldPatientNameIntToVarchar())
-        	  {
-        	  	  LOG_FOR("AccountDatabase","Field PATIENT_NAME has been changed to varchar");
-        	      }
-        	  else
-        	  {
-        	  	LOG_ERROR(tkTr(Trans::Constants::DATABASE_1_SCHEMA_ERROR).arg(Constants::DB_ACCOUNTANCY));
-        	        return false;
-        	      }
-            }
+        } else {
+            LOG_ERROR(tkTr(Trans::Constants::DATABASE_1_SCHEMA_ERROR).arg(Constants::DB_ACCOUNTANCY));
+            return false;
+        }
+    }  //checkDatabaseScheme
+
+    if (checkIfVersionBeforeThirdVersion() && driver() == Utils::Database::MySQL) {
+        if (alterFieldPatientNameIntToVarchar()) {
+            LOG_FOR("AccountDatabase","Field PATIENT_NAME has been changed to varchar");
+        } else {
+            LOG_ERROR(tkTr(Trans::Constants::DATABASE_1_SCHEMA_ERROR).arg(Constants::DB_ACCOUNTANCY));
+            return false;
+        }
+    }
+    // End of todo commit transaction
+
     if (versionHasChanged()) {
-        LOG("Version has changed , new version = "+checkAndReplaceVersionNumber());
+        LOG("Version has changed , new version = " + checkAndReplaceVersionNumber());
     }
 
     connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
@@ -729,14 +721,18 @@ bool AccountBase::createDatabase(const QString &connectionName ,
     }
 
     // Add version number
+    DB.transaction();
     QSqlQuery query(DB);
     query.prepare(prepareInsertQuery(Constants::Table_VERSION));
     query.bindValue(Constants::VERSION_ACTUAL, Constants::DB_VERSION_NUMBER);
     if (!query.exec()) {
         LOG_QUERY_ERROR(query);
+        query.finish();
+        DB.commit();
         return false;
     }
-
+    query.finish();
+    DB.rollback();
     return true;
 }
 
@@ -752,6 +748,7 @@ AccountData *AccountBase::getAccountByUid(const QString &uid)
     QHash<int, QString> where;
     where.insert(Constants::ACCOUNT_UID, QString("=%1").arg(uid));
     QString req = select(Constants::Table_Account, where);
+    DB.transaction();
     QSqlQuery q(req,DB);
     if (q.isActive()) {
         if (q.next()) {
@@ -759,14 +756,20 @@ AccountData *AccountBase::getAccountByUid(const QString &uid)
             for(int i = 0 ; i < Constants::ACCOUNT_MaxParam; ++i) {
                 data->setDatasFromDb(i, q.value(i));
             }
+            q.finish();
+            DB.commit();
             return data;
         } else {
             LOG_ERROR("No account with an UID like " + uid);
+            q.finish();
+            DB.rollback();
             return 0;
         }
     } else {
         LOG_ERROR("No account with an UID like " + uid);
         LOG_QUERY_ERROR(q);
+        q.finish();
+        DB.rollback();
         return 0;
     }
     return 0;
@@ -792,24 +795,26 @@ bool AccountBase::checkIfIsFirstVersion()
 {
     QSqlDatabase DB = QSqlDatabase::database(Constants::DB_ACCOUNTANCY);
     if (!connectDatabase(DB, __LINE__))
-        return 0;
+        return false;
     QVariant version;
-    QSqlQuery qy(database());
+    DB.transaction();
+    QSqlQuery qy(DB);
     QString req = select(Constants::Table_VERSION, Constants::VERSION_ACTUAL);//QString("SELECT %1 FROM %2").arg("ACTUAL","VERSION");
-    if (!qy.exec(req))
-    {
-    	  LOG_QUERY_ERROR(qy);
-    	  return false;
-        }
-    while (qy.next())
-    {
-    	version = qy.value(0);
-        }
-    if (version == QVariant("0.1"))
-    {
-    	  LOG(QString("VERSION == 0.1"));
-    	  return true;
-        }
+    if (!qy.exec(req)) {
+        LOG_QUERY_ERROR(qy);
+        qy.finish();
+        DB.rollback();
+        return false;
+    }
+    while (qy.next()) {
+        version = qy.value(0);
+    }
+    qy.finish();
+    DB.commit();
+    if (version == QVariant("0.1")) {
+        LOG(QString("VERSION == 0.1"));
+        return true;
+    }
     return false;
 }
 
@@ -818,22 +823,25 @@ QString AccountBase::checkAndReplaceVersionNumber()
     QSqlDatabase DB = QSqlDatabase::database(Constants::DB_ACCOUNTANCY);
     if (!connectDatabase(DB, __LINE__))
         return 0;
-   // if (versionHasChanged())
-   // {
-    	  QSqlQuery qy(database());
-    	  /*QString req = QString("INSERT INTO %1 (%2) VALUES ('%3')")
-    	               .arg("VERSION","ACTUAL",QString(Constants::VERSION_ACTUAL));*/
-    	  qy.prepare(prepareInsertQuery(Constants::Table_VERSION));
-          qy.bindValue(Constants::VERSION_ACTUAL, Constants::DB_VERSION_NUMBER);
-	  
-    	  if (!qy.exec())
-    	  {
-    	  	  LOG_QUERY_ERROR(qy);
-    	  	  return QString(qy.lastError().text());
-    	      }
-    	  return QString(Constants::DB_VERSION_NUMBER);
-     //   }
-     
+    // if (versionHasChanged())
+    // {
+    DB.transaction();
+    QSqlQuery qy(DB);
+    /*QString req = QString("INSERT INTO %1 (%2) VALUES ('%3')")
+                       .arg("VERSION","ACTUAL",QString(Constants::VERSION_ACTUAL));*/
+    qy.prepare(prepareInsertQuery(Constants::Table_VERSION));
+    qy.bindValue(Constants::VERSION_ACTUAL, Constants::DB_VERSION_NUMBER);
+
+    if (!qy.exec()) {
+        LOG_QUERY_ERROR(qy);
+        qy.finish();
+        DB.rollback();
+        return QString(qy.lastError().text());
+    }
+    qy.finish();
+    DB.commit();
+    return QString(Constants::DB_VERSION_NUMBER);
+    //   }
 }
 
 bool AccountBase::versionHasChanged()
@@ -842,65 +850,75 @@ bool AccountBase::versionHasChanged()
     if (!connectDatabase(DB, __LINE__))
         return 0;
     QString version;
-    QSqlQuery qy(database());
+    DB.transaction();
+    QSqlQuery qy(DB);
     QString req = select(Constants::Table_VERSION, Constants::VERSION_ACTUAL);//QString("SELECT %1 FROM %2").arg("ACTUAL","VERSION");
-    if (!qy.exec(req))
-    {
-    	  LOG_QUERY_ERROR(qy);
-    	  return false;
-        }
-    while (qy.next())
-    {
-    	version = qy.value(0).toString();
-        }
-    if (!version.contains(QString(Constants::DB_VERSION_NUMBER)))
-    {
-    	  return true;
-        }
+    if (!qy.exec(req)) {
+        LOG_QUERY_ERROR(qy);
+        return false;
+    }
+    while (qy.next()) {
+        version = qy.value(0).toString();
+    }
+    qy.finish();
+    DB.commit();
+    if (!version.contains(QString(Constants::DB_VERSION_NUMBER))) {
+        return true;
+    }
     return false;
 }
 
 bool AccountBase::checkIfVersionBeforeThirdVersion()
 {
     QString version;
-    QSqlQuery qy(database());
+    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_ACCOUNTANCY);
+    if (!connectDatabase(DB, __LINE__))
+        return false;
+    DB.transaction();
+    QSqlQuery qy(DB);
     QString req = select(Constants::Table_VERSION, Constants::VERSION_ACTUAL);//QString("SELECT %1 FROM %2").arg("ACTUAL","VERSION");
-    if (!qy.exec(req))
-    {
-    	  LOG_QUERY_ERROR(qy);
-    	  return false;
-        }
-    while (qy.next())
-    {
-    	version = qy.value(0).toString();
-        }
+    if (!qy.exec(req))  {
+        LOG_QUERY_ERROR(qy);
+        DB.rollback();
+        return false;
+    }
+    while (qy.next())  {
+        version = qy.value(0).toString();
+    }
+    qy.finish();
+    DB.commit();
     double versionDouble = version.toDouble();
-    if (versionDouble == 0.0)
-    {
-    	  LOG_FOR("Alter field PATIENT_NAME","Error conversion of double");
-        }
-    if (versionDouble < 0.3)
-    {
-    	  return true;
-        }
+    if (versionDouble == 0.0) {
+        LOG_FOR("Alter field PATIENT_NAME","Error conversion of double");
+    }
+    if (versionDouble < 0.3) {
+        return true;
+    }
     return false;
 }
 
 bool AccountBase::alterFieldPatientNameIntToVarchar()
 {
+    QSqlDatabase DB = QSqlDatabase::database(Constants::DB_ACCOUNTANCY);
+    if (!connectDatabase(DB, __LINE__))
+        return false;
     QString tableName = table(AccountDB::Constants::Table_Account);
     QString fieldPatientName    = fieldName(AccountDB::Constants::Table_Account,AccountDB::Constants::ACCOUNT_PATIENT_NAME);
     QString fieldPatientUuid = fieldName(AccountDB::Constants::Table_Account,AccountDB::Constants::ACCOUNT_PATIENT_UID);
     if (WarnDebugMessage)
     qDebug() << __FILE__ << QString::number(__LINE__) << " table + fielName =" 
     << tableName+" + "+fieldPatientName  ;
-    QSqlQuery qy(database());
+    DB.transaction();
+    QSqlQuery qy(DB);
     QString req = QString("ALTER TABLE %1 MODIFY %2 varchar(2000) NULL , MODIFY %3 varchar(200) NULL ;")
                          .arg(tableName,fieldPatientName,fieldPatientUuid);
-    if (!qy.exec(req))
-    {
+    if (!qy.exec(req)) {
     	LOG_QUERY_ERROR(qy);
+        qy.finish();
+        DB.rollback();
     	return false;  
-        }
+    }
+    qy.finish();
+    DB.commit();
     return true;
 }
