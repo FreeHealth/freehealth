@@ -133,6 +133,7 @@ AccountBase::AccountBase(QObject *parent) :
     QObject(parent), Utils::Database(),
     d(0)
 {
+    m_Instance = this;
     d = new AccountBasePrivate(this);
     setObjectName("AccountBase");
 
