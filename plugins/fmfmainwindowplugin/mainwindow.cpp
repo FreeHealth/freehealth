@@ -360,6 +360,8 @@ void MainWindow::closeEvent(QCloseEvent *event)
             return;
         }
     }
+    if (isVisible())
+        hide();
     event->accept();
 }
 
