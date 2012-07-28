@@ -138,7 +138,8 @@ void FormManagerPlugin::extensionsInitialized()
 
 void FormManagerPlugin::postCoreInitialization()
 {
-    qWarning() << Q_FUNC_INFO;
+    if (Utils::Log::warnPluginsCreation())
+        qWarning() << Q_FUNC_INFO;
     // Check FirstRun Default Form
     const QString &uid = settings()->defaultForm();
     if (!uid.isEmpty()) {

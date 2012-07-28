@@ -81,6 +81,8 @@ QString AgendaMode::name() const
 
 void AgendaMode::postCoreInitialization()
 {
+    if (Utils::Log::warnPluginsCreation())
+        qWarning() << Q_FUNC_INFO;
 }
 
 void AgendaMode::userChanged()

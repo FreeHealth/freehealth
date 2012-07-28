@@ -100,6 +100,8 @@ void DrugInteractionsPlugin::extensionsInitialized()
 
 void DrugInteractionsPlugin::postCoreInitialization()
 {
+    if (Utils::Log::warnPluginsCreation())
+        qWarning() << Q_FUNC_INFO;
     // Core is fully intialized as well as all plugins
 }
 

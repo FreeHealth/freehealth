@@ -394,6 +394,9 @@ void AlertCore::processAlerts(QVector<AlertItem> &alerts)
 
 void AlertCore::postCoreInitialization()
 {
+    if (Utils::Log::warnPluginsCreation())
+        qWarning() << Q_FUNC_INFO;
+
     QDateTime start = QDateTime::currentDateTime().addSecs(-60*60*24);
     QDateTime expiration = QDateTime::currentDateTime().addSecs(60*60*24);
     AlertItem item5;

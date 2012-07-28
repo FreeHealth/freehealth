@@ -210,6 +210,8 @@ void DataPackPluginIPlugin::extensionsInitialized()
 
 void DataPackPluginIPlugin::postCoreInitialization()
 {
+    if (Utils::Log::warnPluginsCreation())
+        qWarning() << Q_FUNC_INFO;
     // Core is fully intialized as well as all plugins
     // Add pack manager action to "Preferences" menu
     QAction *a = 0;

@@ -123,6 +123,8 @@ bool DrugBaseCore::init()
 
 void DrugBaseCore::postCoreInitialization()
 {
+    if (Utils::Log::warnPluginsCreation())
+        qWarning() << Q_FUNC_INFO;
     init();
 }
 

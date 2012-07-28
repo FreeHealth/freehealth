@@ -122,6 +122,7 @@ using namespace Trans::ConstantTranslations;
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
+static inline Alert::AlertCore *alertCore() {return Alert::AlertCore::instance();}
 
 static QWidget *addAlertToLayout(const AlertItem &alert, bool showCategory, QLayout *lay)
 {
@@ -507,7 +508,11 @@ bool BlockingAlertDialog::applyResultToAlerts(QList<AlertItem> &items, const Blo
     if (result.isRemindLaterRequested()) {
         for(int i=0; i < items.count(); ++i) {
             AlertItem &item = items[i];
-            item.remindLater();
+
+//            QVariant remindOk = alertCore()->execute(item, AlertScript::OnRemindLater);
+//            if (remindOk.isValid() && remindOk.canConvert(QVariant::Bool) && !remindOk.toBool()) {
+//                item.remindLater();
+//            }
         }
         return true;
     }
