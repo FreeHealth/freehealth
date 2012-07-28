@@ -42,6 +42,8 @@
 #include <coreplugin/modemanager/modemanager.h>
 #include <coreplugin/actionmanager/actionmanager.h>
 
+#include <utils/log.h>
+
 using namespace Agenda;
 using namespace Internal;
 
