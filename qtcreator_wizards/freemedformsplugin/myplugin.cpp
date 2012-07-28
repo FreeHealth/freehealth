@@ -164,15 +164,15 @@ void %PluginName%Plugin::postCoreInitialization()
 
 // aboutToShutdown does not exist in the old QtCreator code.
 // we have to wait until FMF is updatet to a newer QtCreator source
-// ExtensionSystem::IPlugin::ShutdownFlag %PluginName%Plugin::aboutToShutdown()
-// {
-//     if (Utils::Log::warnPluginsCreation())
-//         qWarning() << WARN_FUNC;
-//     // Save settings
-//     // Disconnect from signals that are not needed during shutdown
-//     // Hide UI (if you add UI that is not in the main window directly)
-//     return SynchronousShutdown;
-// }
+ExtensionSystem::IPlugin::ShutdownFlag %PluginName%Plugin::aboutToShutdown()
+{
+    if (Utils::Log::warnPluginsCreation())
+        qWarning() << WARN_FUNC;
+    // Save settings
+    // Disconnect from signals that are not needed during shutdown
+    // Hide UI (if you add UI that is not in the main window directly)
+    return SynchronousShutdown;
+}
 
 // void %PluginName%Plugin::triggerAction()
 // {
