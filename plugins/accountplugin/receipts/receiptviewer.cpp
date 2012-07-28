@@ -82,6 +82,9 @@ namespace InternalAmount {
 
     class AmountModel : public QAbstractTableModel
     {
+        // TODO: missing Q_OBJECT macro --> no sig/slot here  PLUS  MERGE the other amountmodel.h
+        // may be that's the buggy Object::connect: No such signal QObject::dataChanged(QModelIndex,QModelIndex) at the end of the app ??
+
     public:
         enum ColumnRepresentation {
             Col_Cash = 0,
@@ -592,7 +595,7 @@ void treeViewsActions::changeEvent(QEvent *e) {
 ///LISTVIEW
 ///////////////////////////////////////////////////////////////
 
-ChosenListView::ChosenListView(QObject * parent,InternalAmount::AmountModel *amountModel) {
+ChosenListView::ChosenListView(QObject * parent, InternalAmount::AmountModel *amountModel) {
     setObjectName("ChosenListView");
     m_parent = parent;
     m_deleteInReturnedList = new QAction(trUtf8("Delete this item"),parent);
@@ -1315,4 +1318,3 @@ void ReceiptViewer::userUid(){
         }
     m_fileFirstTime->close();
 }*/
-
