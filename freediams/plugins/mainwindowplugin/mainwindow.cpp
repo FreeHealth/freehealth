@@ -256,7 +256,8 @@ static const char* const  SETTINGS_COUNTDOWN = "transmissionCountDown";
 //--------------------------------------------------------------------------------------------------------
 MainWindow::MainWindow( QWidget * parent ) :
         Core::IMainWindow(parent),
-        aClearPatient(0),
+        aClearPatient(new QAction(this)),
+        m_ui(0),
         d(new Internal::MainWinPrivate(this))
 {
     setObjectName("MainWindow");
@@ -326,7 +327,6 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
     connectHelpActions();
 
     // aClearPatient
-    aClearPatient = new QAction(this);
     aClearPatient->setObjectName("aClearPatient");
     aClearPatient->setIcon(theme()->icon(Core::Constants::ICONCLEAR));
     Core::Command *cmd = actionManager()->registerAction(aClearPatient, "aClearPatient", QList<int>() << Core::Constants::C_GLOBAL_ID);
@@ -374,7 +374,7 @@ void MainWindow::extensionsInitialized()
     /** end */
 
     // Creating MainWindow interface
-    m_ui = new Internal::Ui::MainWindow();
+    m_ui = new Ui::MainWindow;
     m_ui->setupUi(this);
     m_ui->centralLayout->setMargin(5);
     m_ui->sexCombo->addItems(genders());
@@ -448,9 +448,6 @@ void MainWindow::extensionsInitialized()
         m_ui->clearPatient->setEnabled(false);
     }
 
-    show();
-    raise();
-
     // Connect post core initialization
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
     connect(&drugsBase(), SIGNAL(drugsBaseHasChanged()), this, SLOT(refreshPatient()));
@@ -478,6 +475,9 @@ void MainWindow::postCoreInitialization()
 {
     createDockWindows();
     readSettings();
+
+    show();
+    raise();
 
     contextManager()->updateContext();
     actionManager()->retranslateMenusAndActions();
@@ -617,46 +617,47 @@ void MainWindow::closeEvent(QCloseEvent *event)
 void MainWindow::changeEvent(QEvent *event)
 {
     if (event->type()==QEvent::LanguageChange) {
-        QVariant sex = patient()->data(Core::IPatient::Gender);
-        bool state = true;
-        m_ui->centralwidget->blockSignals(state);
-        m_ui->crClUnit->blockSignals(state);
-        m_ui->creatinineUnit->blockSignals(state);
-        m_ui->dobDateEdit->blockSignals(state);
-        m_ui->m_CentralWidget->blockSignals(state);
-        m_ui->patientClCr->blockSignals(state);
-        m_ui->patientCreatinin->blockSignals(state);
-        m_ui->patientInformation->blockSignals(state);
-        m_ui->patientName->blockSignals(state);
-        m_ui->patientSize->blockSignals(state);
-        m_ui->patientFirstname->blockSignals(state);
-        m_ui->patientWeight->blockSignals(state);
-        m_ui->sexCombo->blockSignals(state);
-        m_ui->sizeUnit->blockSignals(state);
-        m_ui->weightUnit->blockSignals(state);
+        if (m_ui) {
+            QVariant sex = patient()->data(Core::IPatient::Gender);
+            bool state = true;
+            m_ui->centralwidget->blockSignals(state);
+            m_ui->crClUnit->blockSignals(state);
+            m_ui->creatinineUnit->blockSignals(state);
+            m_ui->dobDateEdit->blockSignals(state);
+            m_ui->m_CentralWidget->blockSignals(state);
+            m_ui->patientClCr->blockSignals(state);
+            m_ui->patientCreatinin->blockSignals(state);
+            m_ui->patientInformation->blockSignals(state);
+            m_ui->patientName->blockSignals(state);
+            m_ui->patientSize->blockSignals(state);
+            m_ui->patientFirstname->blockSignals(state);
+            m_ui->patientWeight->blockSignals(state);
+            m_ui->sexCombo->blockSignals(state);
+            m_ui->sizeUnit->blockSignals(state);
+            m_ui->weightUnit->blockSignals(state);
 
-	m_ui->retranslateUi(this);
+            m_ui->retranslateUi(this);
 
-        state = false;
-        m_ui->centralwidget->blockSignals(state);
-        m_ui->crClUnit->blockSignals(state);
-        m_ui->creatinineUnit->blockSignals(state);
-        m_ui->dobDateEdit->blockSignals(state);
-        m_ui->m_CentralWidget->blockSignals(state);
-        m_ui->patientClCr->blockSignals(state);
-        m_ui->patientCreatinin->blockSignals(state);
-        m_ui->patientInformation->blockSignals(state);
-        m_ui->patientName->blockSignals(state);
-        m_ui->patientSize->blockSignals(state);
-        m_ui->patientFirstname->blockSignals(state);
-        m_ui->patientWeight->blockSignals(state);
-        m_ui->sexCombo->blockSignals(state);
-        m_ui->sizeUnit->blockSignals(state);
-        m_ui->weightUnit->blockSignals(state);
-
-        actionManager()->retranslateMenusAndActions();
-        patient()->setData(patient()->index(0, Core::IPatient::Gender), sex);
-        refreshPatient();
+            state = false;
+            m_ui->centralwidget->blockSignals(state);
+            m_ui->crClUnit->blockSignals(state);
+            m_ui->creatinineUnit->blockSignals(state);
+            m_ui->dobDateEdit->blockSignals(state);
+            m_ui->m_CentralWidget->blockSignals(state);
+            m_ui->patientClCr->blockSignals(state);
+            m_ui->patientCreatinin->blockSignals(state);
+            m_ui->patientInformation->blockSignals(state);
+            m_ui->patientName->blockSignals(state);
+            m_ui->patientSize->blockSignals(state);
+            m_ui->patientFirstname->blockSignals(state);
+            m_ui->patientWeight->blockSignals(state);
+            m_ui->sexCombo->blockSignals(state);
+            m_ui->sizeUnit->blockSignals(state);
+            m_ui->weightUnit->blockSignals(state);
+            actionManager()->retranslateMenusAndActions();
+            patient()->setData(patient()->index(0, Core::IPatient::Gender), sex);
+            refreshPatient();
+        }
     }
 }
 
