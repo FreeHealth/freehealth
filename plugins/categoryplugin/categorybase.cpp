@@ -511,7 +511,8 @@ bool CategoryBase::saveCategories(const QVector<CategoryItem *> &categories, boo
     }
 //    Utils::Log::logTimeElapsed(chr, "---", "commit");
 
-    DB.commit();
+    if (createTransaction)
+        DB.commit();
     return true;
 }
 
