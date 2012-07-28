@@ -119,9 +119,7 @@ AccountBase *AccountBase::m_Instance = 0;
 /** \brief Returns the unique instance of AccountBase. If it does not exist, it is created */
 AccountBase *AccountBase::instance()
 {
-    if (!m_Instance) {
-        m_Instance = new AccountBase(qApp);
-    }
+    Q_ASSERT(m_Instance);
     return m_Instance;
 }
 
