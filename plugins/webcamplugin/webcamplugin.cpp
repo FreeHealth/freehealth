@@ -101,9 +101,8 @@ bool WebcamPlugin::initialize(const QStringList &arguments, QString *errorString
     Q_UNUSED(arguments)
     Q_UNUSED(errorString)
     
-    setObjectName("Webcam");
     if (Utils::Log::warnPluginsCreation()) {
-        qDebug() << "creating Webcam";
+        qDebug() << "WebcamPlugin::initialize";
     }
     
     // Register objects in the plugin manager's object pool
