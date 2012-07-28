@@ -601,6 +601,9 @@ AlertItem AlertBase::createVirtualItem()
 /** Save or update the Alert::AlertItem in the alert database. Return true in case of success. The AlertItem is modified during this process. */
 bool AlertBase::saveAlertItem(AlertItem &item)
 {
+//    QTime chr;
+//    chr.start();
+
     if (!connectDatabase(Constants::DB_NAME, __LINE__))
         return false;
 
@@ -608,49 +611,62 @@ bool AlertBase::saveAlertItem(AlertItem &item)
         qWarning() << "AlertBase::saveAlertItem";
 
     // update or save ?
+    QSqlDatabase DB = database();
+    DB.transaction();
+    QSqlQuery query(DB);
     if (!item.db(ItemId).isValid() || item.db(ItemId).toInt() <= 0) {
         // try to catch the id using the uuid
         QHash<int, QString> where;
         where.insert(Constants::ALERT_UID, QString("='%1'").arg(item.uuid()));
         QString req = select(Constants::Table_ALERT, Constants::ALERT_ID, where);
-        database().transaction();
-        QSqlQuery query(database());
         if (query.exec(req)) {
             if (query.next())
                 item.setDb(ItemId, query.value(0).toInt());
         } else {
             LOG_QUERY_ERROR(query);
         }
-        query.finish();
-        database().commit();
     }
-    if (item.db(ItemId).isValid())
-        return updateAlertItem(item);
+    query.finish();
+//    Utils::Log::logTimeElapsed(chr, "AlertBase", "SaveAlertItem: get ID");
 
-    database().transaction();
+    if (item.db(ItemId).isValid()) {
+        bool r = updateAlertItem(item);
+//        Utils::Log::logTimeElapsed(chr, "AlertBase", "SaveAlertItem: item updated");
+        return r;
+    }
+
     if (!saveItemRelations(item)) {
-        database().rollback();
+        DB.rollback();
         return false;
     }
+//    Utils::Log::logTimeElapsed(chr, "AlertBase", "SaveAlertItem: save relations");
+
     if (!saveItemScripts(item)) {
-        database().rollback();
+        DB.rollback();
         return false;
     }
+//    Utils::Log::logTimeElapsed(chr, "AlertBase", "SaveAlertItem: save scripts");
+
     if (!saveItemTimings(item)) {
-        database().rollback();
+        DB.rollback();
         return false;
     }
+//    Utils::Log::logTimeElapsed(chr, "AlertBase", "SaveAlertItem: save timings");
+
     if (!saveItemValidations(item)) {
-        database().rollback();
+        DB.rollback();
         return false;
     }
+//    Utils::Log::logTimeElapsed(chr, "AlertBase", "SaveAlertItem: save validations");
+
     if (!saveItemLabels(item)) {
-        database().rollback();
+        DB.rollback();
         return false;
     }
+//    Utils::Log::logTimeElapsed(chr, "AlertBase", "SaveAlertItem: save labels");
+
     if (item.uuid().isEmpty())
         item.setUuid(Database::createUid());
-    QSqlQuery query(database());
     QString req = prepareInsertQuery(Constants::Table_ALERT);
     query.prepare(req);
     query.bindValue(Constants::ALERT_ID, QVariant());
@@ -685,11 +701,15 @@ bool AlertBase::saveAlertItem(AlertItem &item)
     } else {
         LOG_QUERY_ERROR(query);
         query.finish();
-        database().rollback();
+        DB.rollback();
         return false;
     }
+//    Utils::Log::logTimeElapsed(chr, "AlertBase", "SaveAlertItem: save item");
+
     query.finish();
-    database().commit();
+    DB.commit();
+//    Utils::Log::logTimeElapsed(chr, "AlertBase", "SaveAlertItem: commit");
+
     return true;
 }
 
@@ -703,32 +723,33 @@ bool AlertBase::updateAlertItem(AlertItem &item)
     if (WarnMemberNames)
         qWarning() << "AlertBase::updateAlertItem";
 
-    database().transaction();
+    QSqlDatabase DB = database();
+    DB.transaction();
 
     if (!saveItemRelations(item)) {
-        database().rollback();
+        DB.rollback();
         return false;
     }
     if (!saveItemScripts(item)) {
-        database().rollback();
+        DB.rollback();
         return false;
     }
     if (!saveItemTimings(item)) {
-        database().rollback();
+        DB.rollback();
         return false;
     }
     if (!saveItemValidations(item)) {
-        database().rollback();
+        DB.rollback();
         return false;
     }
     if (!saveItemLabels(item)) {
-        database().rollback();
+        DB.rollback();
         return false;
     }
 
     if (item.uuid().isEmpty())
         item.setUuid(Database::createUid());
-    QSqlQuery query(database());
+    QSqlQuery query(DB);
     QList<int> fields;
     fields
             << Constants::ALERT_UID
@@ -793,11 +814,11 @@ bool AlertBase::updateAlertItem(AlertItem &item)
     } else {
         LOG_QUERY_ERROR(query);
         query.finish();
-        database().rollback();
+        DB.rollback();
         return false;
     }
     query.finish();
-    database().commit();
+    DB.commit();
     return true;
 }
 
