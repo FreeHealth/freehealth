@@ -223,7 +223,6 @@ void NonBlockingAlertToolButton::remindAlert()
     if ((remindOk.isValid() && remindOk.canConvert(QVariant::Bool) && remindOk.toBool())||
         remindOk.isNull() || !remindOk.isValid()) {
         _item.remindLater();
-        AlertCore::instance()->saveAlert(_item);
     }
 }
 
