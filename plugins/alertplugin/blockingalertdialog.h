@@ -107,6 +107,7 @@ public:
     static bool applyResultToAlerts(QList<AlertItem> &items, const BlockingAlertResult &result);
 
 private Q_SLOTS:
+    void done(int result);
     void remindLater();
     void override();
     void validateUserOverridingComment();

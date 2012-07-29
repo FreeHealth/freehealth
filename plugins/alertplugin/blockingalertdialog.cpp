@@ -377,14 +377,19 @@ bool BlockingAlertDialog::isRemindLaterRequested() const
     return d->_remind;
 }
 
-// TODO: create a done(int r) and check if alert tagged with mustBeRead() was visualized by the user.
-
 void BlockingAlertDialog::keyPressEvent(QKeyEvent *event)
 {
     // Wrapper on Esc keypressed -> reject dialog
     if (event->key() == Qt::Key_Escape)
         return;
     QDialog::keyPressEvent(event);
+}
+
+void BlockingAlertDialog::done(int result)
+{
+    // TODO: create a done(int r) and check if alert tagged with mustBeRead() was visualized by the user.
+    // TODO: in done(int r) also check the OnOverridden script
+    QDialog::done(result);
 }
 
 void BlockingAlertDialog::remindLater()
@@ -395,6 +400,7 @@ void BlockingAlertDialog::remindLater()
 
 void BlockingAlertDialog::override()
 {
+//    TODO: alertCore()->execute(item, AlertScript::OnAboutOverride);
     if (!d->_overrideCommentRequired) {
         reject();
         return;

@@ -1545,13 +1545,15 @@ QString AlertScript::typeToString(ScriptType type)
     case BeforeAlert: return QApplication::translate("Alert::AlertScript", "Before showing the alert");
     case DuringAlert: return QApplication::translate("Alert::AlertScript", "During the alert presentation");
     case AfterAlert: return QApplication::translate("Alert::AlertScript", "After showing the alert");
-    case OnOverride: return QApplication::translate("Alert::AlertScript", "On alert override");
+    case OnAboutOverride: return QApplication::translate("Alert::AlertScript", "On alert about to be overridden");
+    case OnOverridden: return QApplication::translate("Alert::AlertScript", "On alert overridden");
     case OnPatientAboutToChange: return QApplication::translate("Alert::AlertScript", "On patient about to change");
     case OnUserAboutToChange: return QApplication::translate("Alert::AlertScript", "On user about to change");
     case OnEpisodeAboutToSave: return QApplication::translate("Alert::AlertScript", "On episode about to save");
     case OnEpisodeLoaded: return QApplication::translate("Alert::AlertScript", "On episode loaded");
     case OnRemindLater: return QApplication::translate("Alert::AlertScript", "On remind later requested");
     }
+
     return QString::null;
 }
 
@@ -1564,7 +1566,8 @@ QString AlertScript::typeToXml(ScriptType type)
     case BeforeAlert: return "before";
     case DuringAlert: return "during";
     case AfterAlert: return "after";
-    case OnOverride: return "onoverride";
+    case OnAboutOverride: return "onaboutoverride";
+    case OnOverridden: return "onoverride";
     case OnPatientAboutToChange: return "onpatientabouttochange";
     case OnUserAboutToChange: return "onuserabouttochange";
     case OnEpisodeAboutToSave: return "onepisodeabouttosave";
@@ -1587,8 +1590,10 @@ AlertScript::ScriptType AlertScript::typeFromXml(const QString &xml)
         return AfterAlert;
     else if (xml.compare("during", Qt::CaseInsensitive)==0)
         return DuringAlert;
+    else if (xml.compare("onaboutoverride", Qt::CaseInsensitive)==0)
+        return OnAboutOverride;
     else if (xml.compare("onoverride", Qt::CaseInsensitive)==0)
-        return OnOverride;
+        return OnOverridden;
     else if (xml.compare("onpatientabouttochange", Qt::CaseInsensitive)==0)
         return OnPatientAboutToChange;
     else if (xml.compare("onuserabouttochange", Qt::CaseInsensitive)==0)

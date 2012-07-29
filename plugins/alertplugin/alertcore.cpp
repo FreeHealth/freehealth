@@ -494,7 +494,7 @@ void Internal::AlertCorePrivate::makeTests()
     item6.addRelation(AlertRelation(AlertRelation::RelatedToUser, "user1"));
     item6.addTiming(AlertTiming(start, expiration));
     item6.addScript(AlertScript("check_item6", AlertScript::CheckValidityOfAlert, "(1+1)==2;"));
-    item6.addScript(AlertScript("onoverride_item6", AlertScript::OnOverride, "(1+1)==2;"));
+    item6.addScript(AlertScript("onoverride_item6", AlertScript::OnOverridden, "(1+1)==2;"));
 
     AlertItem item7;
     item7.setUuid(Utils::Database::createUid());
