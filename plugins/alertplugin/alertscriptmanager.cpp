@@ -33,7 +33,7 @@
 #include <QScriptEngine>
 
 #include <QDebug>
-enum { WarnExecutedScripts = true };
+enum { WarnExecutedScripts = false };
 
 using namespace Alert;
 using namespace Internal;
