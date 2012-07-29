@@ -37,7 +37,7 @@
  * \file alertcore.h
  * \author Eric MAEKER <eric.maeker@gmail.com>, Pierre-Marie Desombre <pm.desombre@gmail.com>
  * \version 0.8.0
- * \date 17 July 2012
+ * \date 29 July 2012
 */
 
 namespace DataPack {
@@ -46,6 +46,7 @@ class Pack;
 
 namespace Alert {
 class BlockingAlertDialog;
+class NonBlockingAlertToolButton;
 namespace Internal {
 class AlertCorePrivate;
 class AlertPlugin;
@@ -56,6 +57,7 @@ class ALERT_EXPORT AlertCore : public QObject
     Q_OBJECT
     friend class Alert::Internal::AlertPlugin;
     friend class Alert::BlockingAlertDialog;
+    friend class Alert::NonBlockingAlertToolButton;
 
 protected:
     AlertCore(QObject *parent = 0);

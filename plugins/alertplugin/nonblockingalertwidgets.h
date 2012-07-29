@@ -60,13 +60,14 @@ private:
     void refreshStyleSheet();
     void retranslateUi();
     void changeEvent(QEvent *event);
+    void showEvent(QShowEvent *event);
     void hideEvent(QHideEvent *event);
 
 private:
     QAction *aCategory, *aLabel, *aValidate, *aEdit, *aOverride, *aRemindLater;
     QMenu *_menu;
     AlertItem _item;
-    bool _drawBackgroundUsingAlertPriority, _autoSave, _autoSaveOnEdit;
+    bool _drawBackgroundUsingAlertPriority, _autoSave, _autoSaveOnEdit, _aboutToShowScriptExecuted;
 };
 
 class ALERT_EXPORT NonBlockingAlertLabel : public QLabel

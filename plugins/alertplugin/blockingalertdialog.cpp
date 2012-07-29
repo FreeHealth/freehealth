@@ -170,6 +170,7 @@ public:
     QWidget *_lastVisibleWidget;
     QHash<QWidget *, QTime *> _alertTimer;
     QHash<QString, bool> _alertShown;
+    QList<AlertItem> _items;
 
 private:
     BlockingAlertDialog *q;
@@ -191,6 +192,13 @@ BlockingAlertDialog::BlockingAlertDialog(const QList<AlertItem> &items,
             d->_overrideCommentRequired = true;
             break;
         }
+    }
+    d->_items = items;
+
+    // Execute AboutToShow script
+    for(int i=0; i < d->_items.count(); ++i) {
+        AlertItem &item = d->_items[i];
+        alertCore()->execute(item, AlertScript::OnAboutToShow);
     }
 
     // Prepare the ui
@@ -338,7 +346,7 @@ BlockingAlertDialog::BlockingAlertDialog(const QList<AlertItem> &items,
         d->_box->addButton(buttons.at(i), QDialogButtonBox::ActionRole);
     }
 
-    connect(accept, SIGNAL(clicked()), this, SLOT(accept()));
+    connect(accept, SIGNAL(clicked()), this, SLOT(validate()));
     if (d->_remindLaterButton)
         connect(d->_remindLaterButton, SIGNAL(clicked()), this, SLOT(remindLater()));
     connect(d->_overrideButton, SIGNAL(clicked()), this, SLOT(override()));
@@ -355,6 +363,7 @@ BlockingAlertDialog::BlockingAlertDialog(const QList<AlertItem> &items,
         }
     }
 
+    qApp->setOverrideCursor(QCursor(Qt::WhatsThisCursor));
     Utils::resizeAndCenter(this, QApplication::activeWindow());
 }
 
@@ -365,6 +374,7 @@ BlockingAlertDialog::~BlockingAlertDialog()
     if (d)
         delete d;
     d=0;
+    qApp->restoreOverrideCursor();
 }
 
 bool BlockingAlertDialog::isOverridingUserCommentRequired() const
@@ -388,8 +398,32 @@ void BlockingAlertDialog::keyPressEvent(QKeyEvent *event)
 void BlockingAlertDialog::done(int result)
 {
     // TODO: create a done(int r) and check if alert tagged with mustBeRead() was visualized by the user.
-    // TODO: in done(int r) also check the OnOverridden script
+    if (result==QDialog::Rejected) {
+        // Overridden
+        for(int i=0; i < d->_items.count(); ++i) {
+            AlertItem &item = d->_items[i];
+            alertCore()->execute(item, AlertScript::OnOverridden);
+        }
+    }
     QDialog::done(result);
+}
+
+void BlockingAlertDialog::validate()
+{
+    bool canValidate = true;
+    for(int i=0; i < d->_items.count(); ++i) {
+        AlertItem &item = d->_items[i];
+        QVariant validate = alertCore()->execute(item, AlertScript::OnAboutToValidate);
+        if ((validate.isValid() && validate.canConvert(QVariant::Bool) && validate.toBool()) ||
+                validate.isNull() || !validate.isValid()) {
+            // ok
+        } else {
+            // wrong
+            canValidate = false;
+        }
+    }
+    if (canValidate)
+        accept();
 }
 
 void BlockingAlertDialog::remindLater()
@@ -400,7 +434,11 @@ void BlockingAlertDialog::remindLater()
 
 void BlockingAlertDialog::override()
 {
-//    TODO: alertCore()->execute(item, AlertScript::OnAboutOverride);
+    for(int i=0; i < d->_items.count(); ++i) {
+        AlertItem &item = d->_items[i];
+        alertCore()->execute(item, AlertScript::OnAboutToOverride);
+    }
+
     if (!d->_overrideCommentRequired) {
         reject();
         return;
@@ -514,11 +552,11 @@ bool BlockingAlertDialog::applyResultToAlerts(QList<AlertItem> &items, const Blo
     if (result.isRemindLaterRequested()) {
         for(int i=0; i < items.count(); ++i) {
             AlertItem &item = items[i];
-
-//            QVariant remindOk = alertCore()->execute(item, AlertScript::OnRemindLater);
-//            if (remindOk.isValid() && remindOk.canConvert(QVariant::Bool) && !remindOk.toBool()) {
-//                item.remindLater();
-//            }
+            QVariant remindOk = alertCore()->execute(item, AlertScript::OnRemindLater);
+            if ((remindOk.isValid() && remindOk.canConvert(QVariant::Bool) && remindOk.toBool())||
+                remindOk.isNull() || !remindOk.isValid()) {
+                item.remindLater();
+            }
         }
         return true;
     }

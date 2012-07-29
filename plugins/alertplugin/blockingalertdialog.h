@@ -108,6 +108,7 @@ public:
 
 private Q_SLOTS:
     void done(int result);
+    void validate();
     void remindLater();
     void override();
     void validateUserOverridingComment();

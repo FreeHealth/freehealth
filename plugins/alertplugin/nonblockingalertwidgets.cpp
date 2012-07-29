@@ -53,6 +53,7 @@ using namespace Trans::ConstantTranslations;
 
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
+static inline Alert::AlertCore *alertCore() {return Alert::AlertCore::instance();}
 
 namespace {
 static QIcon getIcon(const AlertItem &item)
@@ -84,7 +85,8 @@ NonBlockingAlertToolButton::NonBlockingAlertToolButton(QWidget *parent) :
     QToolButton(parent),
     _drawBackgroundUsingAlertPriority(true),
     _autoSave(false),
-    _autoSaveOnEdit(false)
+    _autoSaveOnEdit(false),
+    _aboutToShowScriptExecuted(false)
 {
     setMinimumSize(QSize(16,16));
     setToolButtonStyle(Qt::ToolButtonIconOnly);
@@ -188,19 +190,25 @@ void NonBlockingAlertToolButton::refreshStyleSheet()
 
 void NonBlockingAlertToolButton::validateAlert()
 {
-    _item.validateAlertWithCurrentUserAndConfirmationDialog();
-    if (_autoSave)
-        AlertCore::instance()->saveAlert(_item);
+    QVariant validate = alertCore()->execute(_item, AlertScript::OnAboutToValidate);
+    if ((validate.isValid() && validate.canConvert(QVariant::Bool) && validate.toBool()) ||
+            validate.isNull() || !validate.isValid()) {
+        _item.validateAlertWithCurrentUserAndConfirmationDialog();
+        if (_autoSave)
+            AlertCore::instance()->saveAlert(_item);
+    }
 }
 
 void NonBlockingAlertToolButton::editAlert()
 {
+    // TODO: add a script onAboutToEdit
     if (!_item.isEditable())
         return;
     AlertItemEditorDialog dlg(this);
     dlg.setAlertItem(_item);
     if (dlg.exec() == QDialog::Accepted) {
         dlg.submit(_item);
+        // TODO: add a script onEditionFinished
         AlertCore::instance()->updateAlert(_item);
         if (_autoSaveOnEdit)
             AlertCore::instance()->saveAlert(_item);
@@ -211,13 +219,18 @@ void NonBlockingAlertToolButton::remindAlert()
 {
     if (!_item.isRemindLaterAllowed())
         return;
-    _item.remindLater();
-    AlertCore::instance()->saveAlert(_item);
+    QVariant remindOk = alertCore()->execute(_item, AlertScript::OnRemindLater);
+    if ((remindOk.isValid() && remindOk.canConvert(QVariant::Bool) && remindOk.toBool())||
+        remindOk.isNull() || !remindOk.isValid()) {
+        _item.remindLater();
+        AlertCore::instance()->saveAlert(_item);
+    }
 }
 
 void NonBlockingAlertToolButton::overrideAlert()
 {
     // TODO: improve the dialog by creating a specific AlertOverridingConfirmationDialog
+    alertCore()->execute(_item, AlertScript::OnAboutToOverride);
     bool yes = Utils::yesNoMessageBox(tr("Override alert"),
                                       tr("Do you really want to override this alert ?"),
                                       tr("By overriding an alert, you report your disagreement "
@@ -239,6 +252,7 @@ void NonBlockingAlertToolButton::overrideAlert()
         if (!_item.validateAlert(validator, true, comment, QDateTime::currentDateTime())) {
             LOG_ERROR("Unable to validate the non-blocking alert");
         } else {
+            alertCore()->execute(_item, AlertScript::OnOverridden);
             AlertCore::instance()->updateAlert(_item);
             if (_autoSave)
                 AlertCore::instance()->saveAlert(_item);
@@ -267,6 +281,14 @@ void NonBlockingAlertToolButton::changeEvent(QEvent *event)
     QToolButton::changeEvent(event);
 }
 
+void NonBlockingAlertToolButton::showEvent(QShowEvent *event)
+{
+    // only once
+    if (!_aboutToShowScriptExecuted)
+        alertCore()->execute(_item, AlertScript::OnAboutToShow);
+    _aboutToShowScriptExecuted = true;
+}
+
 void NonBlockingAlertToolButton::hideEvent(QHideEvent *event)
 {
     // INFO: wrapper to Qt bug, when qtoolbutton is hidden the menu stays opened if it was opened
@@ -283,6 +305,7 @@ void NonBlockingAlertToolButton::hideEvent(QHideEvent *event)
 NonBlockingAlertLabel::NonBlockingAlertLabel(QWidget *parent) :
     QLabel(parent)
 {
+    // TODO: connect scripts
     setMinimumSize(QSize(16,16));
 }
 
