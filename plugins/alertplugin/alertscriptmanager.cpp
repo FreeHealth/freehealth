@@ -33,6 +33,7 @@
 #include <QScriptEngine>
 
 #include <QDebug>
+enum { WarnExecutedScripts = true };
 
 using namespace Alert;
 using namespace Internal;
@@ -65,6 +66,16 @@ QVariant AlertScriptManager::execute(AlertItem &item, const int scriptType)
     }
 
     const QString &script = item.scriptType(AlertScript::ScriptType(scriptType)).script();
+    if (WarnExecutedScripts) {
+        qWarning() << "Alert::Execute script"
+                   << AlertScript::typeToXml(AlertScript::ScriptType(scriptType))
+                   << "\n    "
+                   << item.uuid()
+                   << "\n    "
+                   << item.label()
+                   << "\n    "
+                   << script;
+    }
 
     if (script.isEmpty())
         return QVariant();
@@ -93,7 +104,8 @@ QVariant AlertScriptManager::execute(AlertItem &item, const int scriptType)
         _wrapper = 0;
     }
 
-    qWarning() << "EXECUTE" << scriptType << script << toReturn.toVariant();
+    if (WarnExecutedScripts)
+        qWarning() << "Alert::returned value" << toReturn.toVariant();
 
     return toReturn.toVariant();
 }
