@@ -928,24 +928,23 @@ void AlertItem::setScripts(const QVector<AlertScript> &scripts)
 }
 
 /**
-  Removes the alert from the core\n
-  Also add one day to the current start and expiration dates.\n
-  Modification are not saved in the database.
-  \sa  Alert::AlertCore::removeAlert()
+ * Removes the alert from the core.\n
+ * Modification are not saved in the database.
+ * \sa  Alert::AlertCore::removeAlert()
 */
 bool AlertItem::remindLater()
 {
     // move start date +1 day
-    QDate today = QDate::currentDate();
-    for(int i=0; i < d->_timings.count(); ++i) {
-        AlertTiming &timing = d->_timings[i];
-        if (timing.start().date() <= today) {
-            QDateTime from = timing.start();
-            QDateTime to = QDateTime(today.addDays(1), QTime(0,0,0));
-            timing.setStart(to);
-            timing.setExpiration(timing.expiration().addDays(from.daysTo(to)));
-        }
-    }
+//    QDate today = QDate::currentDate();
+//    for(int i=0; i < d->_timings.count(); ++i) {
+//        AlertTiming &timing = d->_timings[i];
+//        if (timing.start().date() <= today) {
+//            QDateTime from = timing.start();
+//            QDateTime to = QDateTime(today.addDays(1), QTime(0,0,0));
+//            timing.setStart(to);
+//            timing.setExpiration(timing.expiration().addDays(from.daysTo(to)));
+//        }
+//    }
     // inform the core
     AlertCore::instance()->removeAlert(*this);
     return true;
