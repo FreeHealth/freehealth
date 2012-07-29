@@ -41,7 +41,10 @@
 #include <QDialogButtonBox>
 #include <QPushButton>
 #include <QEvent>
+#include <QScrollBar>
 #include <QDebug>
+
+#include "ui_webcamdialog.h"
 
 
 /*TODO:  improve webcam usability:
@@ -94,6 +97,15 @@ WebcamDialog::WebcamDialog(QWidget *parent) :
     connect(ui->openCVWidget, SIGNAL(imageReady(bool)), button, SLOT(setEnabled(bool)));   
     connect(ui->openCVWidget, SIGNAL(autoFaceShot(QPixmap)), this, SLOT(autoFaceShot(QPixmap)));
 //    ui->imagesListView->setModel(ui->openCVWidget->model());
+
+    // AutoShot scrollArea
+    QWidget *w = new QWidget(this);
+    _autoshotLayout = new QHBoxLayout(w);
+    _autoshotLayout->setMargin(0);
+    _autoshotLayout->setSpacing(5);
+    w->setLayout(_autoshotLayout);
+    _autoshotLayout->insertStretch(-1, 100000);
+    ui->scrollArea->setWidget(w);
 }
 
 WebcamDialog::~WebcamDialog()
@@ -103,7 +115,9 @@ WebcamDialog::~WebcamDialog()
 
 QPixmap WebcamDialog::photo() const
 {
-    return ui->openCVWidget->pixmap()->copy(ui->openCVWidget->frame());
+    if (_pixmap.isNull())
+        return ui->openCVWidget->pixmap()->copy(ui->openCVWidget->frame());
+    return _pixmap;
 }
 
 void WebcamDialog::updatefreezeButton(bool aFreeze)
@@ -119,13 +133,29 @@ void WebcamDialog::updatefreezeButton(bool aFreeze)
 
 void WebcamDialog::autoFaceShot(const QPixmap &pix)
 {
-    switch (_faces) {
-    case 0: ui->photo1->setPixmap(pix.scaled(ui->photo1->size(), Qt::KeepAspectRatio)); break;
-    case 1: ui->photo2->setPixmap(pix.scaled(ui->photo1->size(), Qt::KeepAspectRatio)); break;
-    case 2: ui->photo3->setPixmap(pix.scaled(ui->photo1->size(), Qt::KeepAspectRatio)); break;
-    case 3: ui->photo4->setPixmap(pix.scaled(ui->photo1->size(), Qt::KeepAspectRatio)); break;
-    }
+    QLabel *lbl = new QLabel(this);
+    lbl->setMinimumSize(100,100);
+    lbl->setMaximumSize(100,100);
+    lbl->setPixmap(pix.scaled(QSize(100,100), Qt::KeepAspectRatio));
+    lbl->installEventFilter(this);
+    _autoshotLayout->insertWidget(_faces, lbl);
+    ui->scrollArea->horizontalScrollBar()->setValue(ui->scrollArea->horizontalScrollBar()->maximum());
     ++_faces;
+}
+
+// Catch the mouse dbl click on autoshot labels
+// validate the dialog if one label was dble clicked
+bool WebcamDialog::eventFilter(QObject *o, QEvent *e)
+{
+    if (e->type()==QEvent::MouseButtonDblClick) {
+        QLabel *lbl = qobject_cast<QLabel*>(o);
+        if (lbl) {
+            _pixmap = QPixmap(*lbl->pixmap());
+            accept();
+            return true;
+        }
+    }
+    return false;
 }
 
 void WebcamDialog::changeEvent(QEvent *event)

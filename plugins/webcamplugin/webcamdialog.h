@@ -30,8 +30,7 @@
 #include <QLabel>
 #include <QImage>
 #include <QPixmap>
-
-#include "ui_webcamdialog.h"
+#include <QHBoxLayout>
 
 namespace Webcam {
 
@@ -57,12 +56,15 @@ private Q_SLOTS:
     void autoFaceShot(const QPixmap &pix);
 
 private:
+    bool eventFilter(QObject *o, QEvent *e);
     void changeEvent(QEvent *event);
 
 private:
     Ui::WebcamDialog *ui;
     QPushButton *m_freezeButton;
     int _faces;
+    QHBoxLayout *_autoshotLayout;
+    QPixmap _pixmap;
 };
 
 }  // namespace WebCam

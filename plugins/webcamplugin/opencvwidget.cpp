@@ -177,7 +177,7 @@ void OpenCVWidget::timerEvent(QTimerEvent *event)
             }
 
             // Find the face
-            if (m_counter < 4) {
+            if (true) { //m_counter < 4) {
                 ++m_frames; // count frames between last autoshot
                 // one shot every 1000ms
                 if (m_frames >= (1000/m_updateFreq)) {
