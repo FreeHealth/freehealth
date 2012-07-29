@@ -1542,10 +1542,10 @@ QString AlertScript::typeToString(ScriptType type)
     switch (type) {
     case CheckValidityOfAlert: return QApplication::translate("Alert::AlertScript", "Check alert validity");
     case CyclingStartDate: return QApplication::translate("Alert::AlertScript", "Compute cycling starting date");
-    case BeforeAlert: return QApplication::translate("Alert::AlertScript", "Before showing the alert");
+    case OnAboutToShow: return QApplication::translate("Alert::AlertScript", "About to show alert");
     case DuringAlert: return QApplication::translate("Alert::AlertScript", "During the alert presentation");
-    case AfterAlert: return QApplication::translate("Alert::AlertScript", "After showing the alert");
-    case OnAboutOverride: return QApplication::translate("Alert::AlertScript", "On alert about to be overridden");
+    case OnAboutToValidate: return QApplication::translate("Alert::AlertScript", "About to validate the alert");
+    case OnAboutToOverride: return QApplication::translate("Alert::AlertScript", "On alert about to be overridden");
     case OnOverridden: return QApplication::translate("Alert::AlertScript", "On alert overridden");
     case OnPatientAboutToChange: return QApplication::translate("Alert::AlertScript", "On patient about to change");
     case OnUserAboutToChange: return QApplication::translate("Alert::AlertScript", "On user about to change");
@@ -1563,10 +1563,10 @@ QString AlertScript::typeToXml(ScriptType type)
     switch (type) {
     case CheckValidityOfAlert: return "check";
     case CyclingStartDate: return "cyclingStartDate";
-    case BeforeAlert: return "before";
+    case OnAboutToShow: return "onabouttoshow";
     case DuringAlert: return "during";
-    case AfterAlert: return "after";
-    case OnAboutOverride: return "onaboutoverride";
+    case OnAboutToValidate: return "onabouttovalidate";
+    case OnAboutToOverride: return "onabouttooverride";
     case OnOverridden: return "onoverride";
     case OnPatientAboutToChange: return "onpatientabouttochange";
     case OnUserAboutToChange: return "onuserabouttochange";
@@ -1584,14 +1584,14 @@ AlertScript::ScriptType AlertScript::typeFromXml(const QString &xml)
         return CheckValidityOfAlert;
     else if (xml.compare("cyclingStartDate", Qt::CaseInsensitive)==0)
         return CyclingStartDate;
-    else if (xml.compare("before", Qt::CaseInsensitive)==0)
-        return BeforeAlert;
-    else if (xml.compare("after", Qt::CaseInsensitive)==0)
-        return AfterAlert;
+    else if (xml.compare("onabouttoshow", Qt::CaseInsensitive)==0)
+        return OnAboutToShow;
+    else if (xml.compare("onabouttovalidate", Qt::CaseInsensitive)==0)
+        return OnAboutToValidate;
     else if (xml.compare("during", Qt::CaseInsensitive)==0)
         return DuringAlert;
-    else if (xml.compare("onaboutoverride", Qt::CaseInsensitive)==0)
-        return OnAboutOverride;
+    else if (xml.compare("onabouttooverride", Qt::CaseInsensitive)==0)
+        return OnAboutToOverride;
     else if (xml.compare("onoverride", Qt::CaseInsensitive)==0)
         return OnOverridden;
     else if (xml.compare("onpatientabouttochange", Qt::CaseInsensitive)==0)

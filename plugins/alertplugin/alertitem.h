@@ -129,10 +129,10 @@ public:
     enum ScriptType {
         CheckValidityOfAlert = 0,
         CyclingStartDate,
-        BeforeAlert,
+        OnAboutToShow,
         DuringAlert,
-        AfterAlert,
-        OnAboutOverride,
+        OnAboutToValidate,
+        OnAboutToOverride,
         OnOverridden,
         OnPatientAboutToChange,
         OnUserAboutToChange,
