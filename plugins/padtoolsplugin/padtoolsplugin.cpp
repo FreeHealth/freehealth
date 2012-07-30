@@ -50,6 +50,25 @@
 
 using namespace PadTools;
 
+namespace {
+class TestingToken : public Core::IToken
+{
+public:
+    TestingToken(const QString &name, const QVariant &value) :
+        IToken(name),
+        _value(value)
+    {
+    }
+
+    QVariant testValue() const {return "TEST";}
+    QVariant value() const {return _value;}
+
+private:
+     QVariant _value;
+};
+
+}
+
 PadToolsPlugin::PadToolsPlugin()
 {
     if (Utils::Log::warnPluginsCreation())
@@ -75,6 +94,34 @@ bool PadToolsPlugin::initialize(const QStringList &arguments, QString *errorStri
     Core::ICore::instance()->setPadTools(impl);
     Core::ICore::instance()->patient()->registerPatientTokens();
     Core::ICore::instance()->user()->registerUserTokens();
+
+    // Register testing tokens (A, B, C, D)
+    Core::IToken *t;
+    QVector<Core::IToken *> _tokens;
+
+    t = new TestingToken("test.A", "Token A");
+    t->setUntranslatedHumanReadableName("TokenA");
+    _tokens << t;
+
+    t = new TestingToken("test.B", "Token B");
+    t->setUntranslatedHumanReadableName("TokenB");
+    _tokens << t;
+
+    t = new TestingToken("test.C", "Token C");
+    t->setUntranslatedHumanReadableName("TokenC");
+    _tokens << t;
+
+    t = new TestingToken("test.D", "Token D");
+    t->setUntranslatedHumanReadableName("TokenD");
+    _tokens << t;
+
+    if (impl->tokenPool()) {
+        LOG("Registering  testing tokens");
+        impl->tokenPool()->addTokens(_tokens);
+    } else {
+        LOG_ERROR("PadTools object is not available, can not register the testing tokens");
+    }
+
     return true;
 }
 
