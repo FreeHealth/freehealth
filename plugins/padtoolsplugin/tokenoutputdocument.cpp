@@ -24,8 +24,9 @@
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
 /**
-  \class PadTools::TokenOutputDocument
-  Text editor that allow user to interact with the output text of a PadDocument.
+ * \class PadTools::TokenOutputDocument
+ * Text editor that allow user to interact with the output text of a PadDocument.\n
+ * PadItem are highlighted when user hover on them, and the cursor can be modified too.
 */
 
 #include "tokenoutputdocument.h"
@@ -83,7 +84,8 @@ public:
     TokenOutputDocumentPrivate() :
         _pad(0),
         _lastHoveredItem(0),
-        _lastUnderCursorItem(0)
+        _lastUnderCursorItem(0),
+        _changeCursor(true)
     {
         _coreFormat.setBackground(QBrush(QColor(Qt::yellow)));//"#FFF8C6"))); //("#dedeff")));
         _tokenFormat.setBackground(QBrush(QColor(Qt::lightGray)));//"#FDEEF4"))); //"#efefef")));
@@ -227,6 +229,7 @@ public:
     QTextCharFormat _coreFormat;
     QTextCharFormat _tokenFormat;
     QMultiMap<PadItem *, QTextEdit::ExtraSelection> _tokenExtraSelection;
+    bool _changeCursor;
 };
 }
 }
@@ -262,6 +265,11 @@ void TokenOutputDocument::setPadDocument(PadDocument *pad)
     connectPadDocument();
     connectOutputDocumentChanges();
     onDocumentAnalyzeReset();
+}
+
+void TokenOutputDocument::setChangeCursorOnPadItemHover(bool changeCursor)
+{
+    d->_changeCursor = changeCursor;
 }
 
 /** Manage PadTools::PadDocument clear signal */
@@ -493,13 +501,7 @@ void TokenOutputDocument::dropEvent(QDropEvent *event)
 
 bool TokenOutputDocument::event(QEvent *event)
 {
-    if (!d->_pad)
-        return Editor::TextEditor::event(event);
-
-    QTime c;
-    c.start();
-
-    return Editor::TextEditor::event(event);;
+    return Editor::TextEditor::event(event);
 }
 
 bool TokenOutputDocument::eventFilter(QObject *o, QEvent *e)
@@ -521,30 +523,46 @@ bool TokenOutputDocument::eventFilter(QObject *o, QEvent *e)
     // Catch KeyEvent in QTextEdit
     if (o==textEdit()) {
         if (e->type()==QEvent::HoverMove) {
-            // TODO: improve PadCore highlighting */
+            // TODO: improve PadCore highlighting
             QHoverEvent *me = static_cast<QHoverEvent*>(e);
             // compute pos
             int position = cursorForPosition(me->pos()).position();
+            // do we change of hovered paditem ?
             if (d->_lastHoveredItem) {
-                if (d->_lastHoveredItem->containsOutputPosition(position))
+                if (d->_lastHoveredItem->containsOutputPosition(position)) {
+                    // hover does not change of item
                     return true;
+                }
             }
+
             PadItem *item = d->_pad->padItemForOutputPosition(position);
             if (!item) {
+                // we are outside any paditem
                 if (d->_lastHoveredItem) {
+                    // but before we was hovering a paditem
                     textEdit()->setExtraSelections(QList<QTextEdit::ExtraSelection>());
                     d->_lastHoveredItem = 0;
+                    if (d->_changeCursor)
+                        qApp->restoreOverrideCursor();
                 }
                 return QWidget::eventFilter(o, e);
             }
 
+            // we are hovering a paditem
             if (d->_lastHoveredItem) {
+                // same as last one ? -> exit
                 if (d->_lastHoveredItem == item)
                     return true;
+                // clear old selections
                 textEdit()->setExtraSelections(QList<QTextEdit::ExtraSelection>());
                 d->_lastHoveredItem = item;
             } else {
                 d->_lastHoveredItem = item;
+            }
+            if (d->_changeCursor) {
+                if ((qApp->overrideCursor() && qApp->overrideCursor()->shape() != Qt::PointingHandCursor) ||
+                        !qApp->overrideCursor())
+                    qApp->setOverrideCursor(QCursor(Qt::PointingHandCursor));
             }
             textEdit()->setExtraSelections(d->_tokenExtraSelection.values(item));
             me->accept();
@@ -552,6 +570,8 @@ bool TokenOutputDocument::eventFilter(QObject *o, QEvent *e)
         } else if (e->type()==QEvent::HoverLeave && d->_lastHoveredItem) {
             textEdit()->setExtraSelections(QList<QTextEdit::ExtraSelection>());
             d->_lastHoveredItem = 0;
+            if (d->_changeCursor)
+                qApp->restoreOverrideCursor();
             e->accept();
             return true;
         } else if (e->type() == QEvent::InputMethod) {

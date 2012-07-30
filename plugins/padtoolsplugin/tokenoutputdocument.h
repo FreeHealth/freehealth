@@ -63,6 +63,7 @@ public:
     ~TokenOutputDocument();
 
     void setPadDocument(PadDocument *pad);
+    void setChangeCursorOnPadItemHover(bool changeCursor);
 
 private Q_SLOTS:
     void onPadCleared();
