@@ -164,12 +164,6 @@ PadWriter::PadWriter(QWidget *parent) :
 
     // TEST
     QAction *a;
-
-    d->ui->nextBlock->setText(tr("Next block"));
-    connect(d->ui->nextBlock, SIGNAL(clicked()), this, SLOT(highLightNextBlock()));
-    d->ui->prevBlock->setText(tr("Previous block"));
-    connect(d->ui->prevBlock, SIGNAL(clicked()), this, SLOT(highLightPreviousBlock()));
-
     a = d->aTest1 = new QAction(this);
     a->setText("Tokens and strings");
     d->ui->scenari->addAction(a);
@@ -447,32 +441,4 @@ void PadWriter::onPadFragmentChanged(PadFragment *fragment)
 //    QTextDocument *doc = d->ui->wysiwyg->document();
 //    Constants::removePadFragmentFormat("Follow", doc, d->_followedItemCharFormats);
 //    Constants::setPadFragmentFormat("Follow", d->_followedItem->outputStart(), d->_followedItem->outputEnd(), doc, d->_followedItemCharFormats, d->_followedCharFormat);
-}
-
-void PadWriter::highLightNextBlock()
-{
-    WARN_FUNC;
-    QTextCursor c(d->ui->wysiwyg->document());
-    qWarning() << c.blockNumber();
-    QTextBlockFormat f;
-    f.setBackground(QBrush(QColor(Qt::white)));
-    c.blockFormat().merge(f);
-
-    f.setBackground(QBrush(QColor(Qt::lightGray)));
-    QTextBlock b = c.block().next();
-    b.blockFormat().merge(f);
-}
-
-void PadWriter::highLightPreviousBlock()
-{
-    WARN_FUNC;
-    QTextCursor c(d->ui->wysiwyg->document());
-    qWarning() << c.blockNumber();
-    QTextBlockFormat f;
-    f.setBackground(QBrush(QColor(Qt::white)));
-    c.blockFormat().merge(f);
-
-    f.setBackground(QBrush(QColor(Qt::lightGray)));
-    QTextBlock b = c.block().previous();
-    b.blockFormat().merge(f);
 }

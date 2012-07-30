@@ -80,9 +80,6 @@ private Q_SLOTS:
     void setTestValues(bool state);
     void onPadFragmentChanged(PadFragment *fragment);
 
-    void highLightNextBlock();
-    void highLightPreviousBlock();
-
 //private:
 //    bool eventFilter(QObject *obj, QEvent *event);
 //    void mouseMoveEvent(QMouseEvent *e);
