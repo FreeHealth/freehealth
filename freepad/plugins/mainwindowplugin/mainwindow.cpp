@@ -58,7 +58,7 @@
 #include <utils/updatechecker.h>
 
 #include <calendar/calendar_widget.h>
-#include <calendar/basic_calendar_model.h>
+#include <calendar/modelanditem/basic_calendar_model.h>
 
 #include "ui_mainwindow.h"
 
