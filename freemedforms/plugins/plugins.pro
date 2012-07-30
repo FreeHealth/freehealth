@@ -9,7 +9,6 @@ SUBDIRS = \
     formmanager \
     zipcodes \
     datapack \
-#    padtools \       # unstable
 #    saverestore \    # unstable
     # Depend to more than one plugin
     printer \
@@ -164,6 +163,12 @@ with-alerts {
     SUBDIRS += alerts
     alerts.subdir = ../../plugins/alertplugin
     alerts.depends += core
+}
+
+with-pad {
+    SUBDIRS += padtools
+    padtools.subdir = ../../plugins/padtoolsplugin
+    padtools.depends += core
 }
 
 patientbase.subdir   = ../../plugins/patientbaseplugin

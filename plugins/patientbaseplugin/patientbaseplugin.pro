@@ -6,6 +6,7 @@ with-alerts{
     message(Build Alert part of PatientBase plugin)
     DEFINES += WITH_ALERTS
 }
+with-pad { DEFINES += WITH_PAD }
 
 BUILD_PATH_POSTFIXE = FreeMedForms
 

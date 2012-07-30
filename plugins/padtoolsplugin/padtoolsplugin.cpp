@@ -69,12 +69,18 @@ private:
 
 }
 
-PadToolsPlugin::PadToolsPlugin()
+PadToolsPlugin::PadToolsPlugin() :
+    ExtensionSystem::IPlugin(),
+    _impl(0)
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating PadToolsPlugin";
     // Add Translator to the Application
     Core::ICore::instance()->translators()->addNewTranslator("padtoolsplugin");
+
+    // Create the Core::IPadTools implementation and register it to the Core::ICore::instance()
+    _impl = new PadToolsImpl(this);
+    Core::ICore::instance()->setPadTools(_impl);
 }
 
 PadToolsPlugin::~PadToolsPlugin()
@@ -88,10 +94,6 @@ bool PadToolsPlugin::initialize(const QStringList &arguments, QString *errorStri
         qWarning() << "PadToolsPlugin::initialize";
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
-
-    // Create the Core::IPadTools implementation and register it to the Core::ICore::instance()
-    PadToolsImpl *impl = new PadToolsImpl(this);
-    Core::ICore::instance()->setPadTools(impl);
 
 #ifdef FREEPAD
     Core::ICore::instance()->patient()->registerPatientTokens();
@@ -118,9 +120,9 @@ bool PadToolsPlugin::initialize(const QStringList &arguments, QString *errorStri
     t->setUntranslatedHumanReadableName("TokenD");
     _tokens << t;
 
-    if (impl->tokenPool()) {
+    if (_impl->tokenPool()) {
         LOG("Registering  testing tokens");
-        impl->tokenPool()->addTokens(_tokens);
+        _impl->tokenPool()->addTokens(_tokens);
     } else {
         LOG_ERROR("PadTools object is not available, can not register the testing tokens");
     }

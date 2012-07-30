@@ -3,6 +3,7 @@ TARGET = Drugs
 
 DEFINES += DRUGS_LIBRARY
 DEFINES += FREEMEDFORMS
+with-pad { DEFINES += WITH_PAD }
 BUILD_PATH_POSTFIXE = FreeMedForms
 
 # include DrugsWidgets sources

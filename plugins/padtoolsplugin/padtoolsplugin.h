@@ -39,6 +39,7 @@
 */
 
 namespace PadTools {
+class PadToolsImpl;
 
 class PadToolsPlugin : public ExtensionSystem::IPlugin
 {
@@ -51,6 +52,8 @@ public:
     void extensionsInitialized();
     ShutdownFlag aboutToShutdown();
 
+private:
+    PadToolsImpl *_impl;
 };
 
 }

@@ -75,79 +75,82 @@ IPatient::IPatient(QObject * parent) :
 
 void IPatient::registerPatientTokens()
 {
+#ifndef WITH_PAD
+    return;
+#endif
+
     // Create and register namespaces
     // Create tokens
-
     // For 0.8.0 ONLY
-//    Core::IToken *t;
-//    QVector<Core::IToken *> _tokens;
+    Core::IToken *t;
+    QVector<Core::IToken *> _tokens;
 
-//    t = new PatientToken(Constants::TOKEN_PATIENTNAME, BirthName);
-//    t->setUntranslatedHumanReadableName(Trans::Constants::BIRTHNAME);
-//    _tokens << t;
+    t = new PatientToken(Constants::TOKEN_PATIENTNAME, BirthName);
+    t->setUntranslatedHumanReadableName(Trans::Constants::BIRTHNAME);
+    _tokens << t;
 
-//    t = new PatientToken(Constants::TOKEN_PATIENTFIRSTNAME, Firstname);
-//    t->setUntranslatedHumanReadableName(Trans::Constants::FIRSTNAME);
-//    _tokens << t;
+    t = new PatientToken(Constants::TOKEN_PATIENTFIRSTNAME, Firstname);
+    t->setUntranslatedHumanReadableName(Trans::Constants::FIRSTNAME);
+    _tokens << t;
 
-//    t = new PatientToken(Constants::TOKEN_PATIENTSECONDNAME, SecondName);
-//    t->setUntranslatedHumanReadableName(Trans::Constants::SECONDNAME);
-//    _tokens << t;
+    t = new PatientToken(Constants::TOKEN_PATIENTSECONDNAME, SecondName);
+    t->setUntranslatedHumanReadableName(Trans::Constants::SECONDNAME);
+    _tokens << t;
 
-//    t = new PatientToken(Constants::TOKEN_PATIENTFULLNAME, FullName);
-//    t->setUntranslatedHumanReadableName(Trans::Constants::FULLNAME);
-//    _tokens << t;
+    t = new PatientToken(Constants::TOKEN_PATIENTFULLNAME, FullName);
+    t->setUntranslatedHumanReadableName(Trans::Constants::FULLNAME);
+    _tokens << t;
 
-//    t = new PatientToken(Constants::TOKEN_PATIENTFULLADDRESS, FullAddress);
-//    t->setUntranslatedHumanReadableName(Trans::Constants::FULLNAME);
-//    _tokens << t;
+    t = new PatientToken(Constants::TOKEN_PATIENTFULLADDRESS, FullAddress);
+    t->setUntranslatedHumanReadableName(Trans::Constants::FULLNAME);
+    _tokens << t;
 
-//    t = new PatientToken(Constants::TOKEN_PATIENTYEARSOLD, YearsOld);
-////    t->setUntranslatedHumanReadableName(Trans::Constants::);
-//    _tokens << t;
+    t = new PatientToken(Constants::TOKEN_PATIENTYEARSOLD, YearsOld);
+//    t->setUntranslatedHumanReadableName(Trans::Constants::);
+    _tokens << t;
 
-//    t = new PatientToken(Constants::TOKEN_PATIENTAGE, Age);
-////    t->setUntranslatedHumanReadableName(Trans::Constants::);
-//    _tokens << t;
+    t = new PatientToken(Constants::TOKEN_PATIENTAGE, Age);
+//    t->setUntranslatedHumanReadableName(Trans::Constants::);
+    _tokens << t;
 
-//    t = new PatientToken(Constants::TOKEN_WEIGHT, Weight);
-////    t->setUntranslatedHumanReadableName(Trans::Constants::);
-//    _tokens << t;
+    t = new PatientToken(Constants::TOKEN_WEIGHT, Weight);
+//    t->setUntranslatedHumanReadableName(Trans::Constants::);
+    _tokens << t;
 
-//    t = new PatientToken(Constants::TOKEN_WEIGHT_UNIT, WeightUnit);
-////    t->setUntranslatedHumanReadableName(Trans::Constants::);
-//    _tokens << t;
+    t = new PatientToken(Constants::TOKEN_WEIGHT_UNIT, WeightUnit);
+//    t->setUntranslatedHumanReadableName(Trans::Constants::);
+    _tokens << t;
 
-//    t = new PatientToken(Constants::TOKEN_HEIGHT, Height);
-////    t->setUntranslatedHumanReadableName(Trans::Constants::);
-//    _tokens << t;
+    t = new PatientToken(Constants::TOKEN_HEIGHT, Height);
+//    t->setUntranslatedHumanReadableName(Trans::Constants::);
+    _tokens << t;
 
-//    t = new PatientToken(Constants::TOKEN_HEIGHT_UNIT, HeightUnit);
-////    t->setUntranslatedHumanReadableName(Trans::Constants::);
-//    _tokens << t;
+    t = new PatientToken(Constants::TOKEN_HEIGHT_UNIT, HeightUnit);
+//    t->setUntranslatedHumanReadableName(Trans::Constants::);
+    _tokens << t;
 
-//    t = new PatientToken(Constants::TOKEN_PATIENTDATEOFBIRTH, DateOfBirth);
-////    t->setUntranslatedHumanReadableName(Trans::Constants::);
-//    _tokens << t;
+    t = new PatientToken(Constants::TOKEN_PATIENTDATEOFBIRTH, DateOfBirth);
+//    t->setUntranslatedHumanReadableName(Trans::Constants::);
+    _tokens << t;
 
-//    t = new PatientToken(Constants::TOKEN_CLCR, CreatinClearance);
-////    t->setUntranslatedHumanReadableName(Trans::Constants::);
-//    _tokens << t;
+    t = new PatientToken(Constants::TOKEN_CLCR, CreatinClearance);
+//    t->setUntranslatedHumanReadableName(Trans::Constants::);
+    _tokens << t;
 
-//    t = new PatientToken(Constants::TOKEN_CLCR_UNIT, CreatinClearanceUnit);
-////    t->setUntranslatedHumanReadableName(Trans::Constants::);
-//    _tokens << t;
+    t = new PatientToken(Constants::TOKEN_CLCR_UNIT, CreatinClearanceUnit);
+//    t->setUntranslatedHumanReadableName(Trans::Constants::);
+    _tokens << t;
 
-//    t = new PatientToken(Constants::TOKEN_PATIENTTITLE, Title);
-////    t->setUntranslatedHumanReadableName(Trans::Constants::);
-//    _tokens << t;
+    t = new PatientToken(Constants::TOKEN_PATIENTTITLE, Title);
+//    t->setUntranslatedHumanReadableName(Trans::Constants::);
+    _tokens << t;
 
-//    if (tokenPool()) {
-//        LOG("Registering Core::IPatient tokens");
-//        tokenPool()->addTokens(_tokens);
-//    } else {
-//        LOG_ERROR("PadTools object is not available, can not register the Core::IPatient tokens");
-//    }
+    if (tokenPool()) {
+        LOG("Registering Core::IPatient tokens");
+        tokenPool()->addTokens(_tokens);
+    } else {
+        LOG_ERROR("PadTools object is not available, can not register the Core::IPatient tokens");
+    }
     // END
 }
 

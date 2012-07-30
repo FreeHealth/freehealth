@@ -74,90 +74,93 @@ IUser::~IUser()
 
 void IUser::registerUserTokens() const
 {
+#ifndef WITH_PAD
+    return;
+#endif
     // Create and register namespaces
     // Create tokens
 
     // For 0.8.0 ONLY
-//    Core::IToken *t;
-//    QVector<Core::IToken *> _tokens;
-//    t = new UserToken(Constants::TOKEN_USERBIRTHNAME, Name);
-//    t->setUntranslatedHumanReadableName(Trans::Constants::BIRTHNAME);
+    Core::IToken *t;
+    QVector<Core::IToken *> _tokens;
+    t = new UserToken(Constants::TOKEN_USERBIRTHNAME, Name);
+    t->setUntranslatedHumanReadableName(Trans::Constants::BIRTHNAME);
+    _tokens << t;
+
+    t = new UserToken(Constants::TOKEN_USERFIRSTNAME, Firstname);
+    t->setUntranslatedHumanReadableName(Trans::Constants::FIRSTNAME);
+    _tokens << t;
+
+    t = new UserToken(Constants::TOKEN_USERSECONDNAME, SecondName);
+    t->setUntranslatedHumanReadableName(Trans::Constants::SECONDNAME);
+    _tokens << t;
+
+    t = new UserToken(Constants::TOKEN_USERFULLNAME, FullName);
+    t->setUntranslatedHumanReadableName(Trans::Constants::FULLNAME);
+    _tokens << t;
+
+//    t = new UserToken(Constants::TOKEN_PATIENTYEARSOLD, YearsOld);
+//    t->setUntranslatedHumanReadableName(Trans::Constants::);
 //    _tokens << t;
 
-//    t = new UserToken(Constants::TOKEN_USERFIRSTNAME, Firstname);
-//    t->setUntranslatedHumanReadableName(Trans::Constants::FIRSTNAME);
+//    t = new UserToken(Constants::TOKEN_USERAGE, Age);
+//    t->setUntranslatedHumanReadableName(Trans::Constants::);
 //    _tokens << t;
 
-//    t = new UserToken(Constants::TOKEN_USERSECONDNAME, SecondName);
-//    t->setUntranslatedHumanReadableName(Trans::Constants::SECONDNAME);
-//    _tokens << t;
+    t = new UserToken(Constants::TOKEN_USERTITLE, Title);
+    t->setUntranslatedHumanReadableName(Trans::Constants::TITLE);
+    _tokens << t;
 
-//    t = new UserToken(Constants::TOKEN_USERFULLNAME, FullName);
-//    t->setUntranslatedHumanReadableName(Trans::Constants::FULLNAME);
-//    _tokens << t;
+    t = new UserToken(Constants::TOKEN_USERSPECIALITIES, Specialities);
+    t->setUntranslatedHumanReadableName(Trans::Constants::SPECIALTIES);
+    _tokens << t;
 
-////    t = new UserToken(Constants::TOKEN_PATIENTYEARSOLD, YearsOld);
-////    t->setUntranslatedHumanReadableName(Trans::Constants::);
-////    _tokens << t;
+    t = new UserToken(Constants::TOKEN_USERIDENTIFIER, PractitionerId);
+//    t->setUntranslatedHumanReadableName(Trans::Constants::);
+    _tokens << t;
 
-////    t = new UserToken(Constants::TOKEN_USERAGE, Age);
-////    t->setUntranslatedHumanReadableName(Trans::Constants::);
-////    _tokens << t;
+    t = new UserToken(Constants::TOKEN_USERQUALIFICATIONS, Qualifications);
+//    t->setUntranslatedHumanReadableName(Trans::Constants::);
+    _tokens << t;
 
-//    t = new UserToken(Constants::TOKEN_USERTITLE, Title);
-//    t->setUntranslatedHumanReadableName(Trans::Constants::TITLE);
-//    _tokens << t;
+    t = new UserToken(Constants::TOKEN_USERFULLCONTACT, FullHtmlContact);
+//    t->setUntranslatedHumanReadableName(Trans::Constants::);
+    _tokens << t;
 
-//    t = new UserToken(Constants::TOKEN_USERSPECIALITIES, Specialities);
-//    t->setUntranslatedHumanReadableName(Trans::Constants::SPECIALTIES);
-//    _tokens << t;
+    t = new UserToken(Constants::TOKEN_USERFULLADDRESS, FullHtmlAddress);
+//    t->setUntranslatedHumanReadableName(Trans::Constants::);
+    _tokens << t;
 
-//    t = new UserToken(Constants::TOKEN_USERIDENTIFIER, PractitionerId);
-////    t->setUntranslatedHumanReadableName(Trans::Constants::);
-//    _tokens << t;
+    t = new UserToken(Constants::TOKEN_USERADDRESS, Address);
+//    t->setUntranslatedHumanReadableName(Trans::Constants::);
+    _tokens << t;
 
-//    t = new UserToken(Constants::TOKEN_USERQUALIFICATIONS, Qualifications);
-////    t->setUntranslatedHumanReadableName(Trans::Constants::);
-//    _tokens << t;
+    t = new UserToken(Constants::TOKEN_USERMAIL, Mail);
+//    t->setUntranslatedHumanReadableName(Trans::Constants::);
+    _tokens << t;
 
-//    t = new UserToken(Constants::TOKEN_USERFULLCONTACT, FullHtmlContact);
-////    t->setUntranslatedHumanReadableName(Trans::Constants::);
-//    _tokens << t;
+    t = new UserToken(Constants::TOKEN_USERTEL1, Tel1);
+//    t->setUntranslatedHumanReadableName(Trans::Constants::);
+    _tokens << t;
 
-//    t = new UserToken(Constants::TOKEN_USERFULLADDRESS, FullHtmlAddress);
-////    t->setUntranslatedHumanReadableName(Trans::Constants::);
-//    _tokens << t;
+    t = new UserToken(Constants::TOKEN_USERTEL2, Tel2);
+//    t->setUntranslatedHumanReadableName(Trans::Constants::);
+    _tokens << t;
 
-//    t = new UserToken(Constants::TOKEN_USERADDRESS, Address);
-////    t->setUntranslatedHumanReadableName(Trans::Constants::);
-//    _tokens << t;
+    t = new UserToken(Constants::TOKEN_USERTEL3, Tel3);
+//    t->setUntranslatedHumanReadableName(Trans::Constants::);
+    _tokens << t;
 
-//    t = new UserToken(Constants::TOKEN_USERMAIL, Mail);
-////    t->setUntranslatedHumanReadableName(Trans::Constants::);
-//    _tokens << t;
+    t = new UserToken(Constants::TOKEN_USERFAX, Fax);
+//    t->setUntranslatedHumanReadableName(Trans::Constants::);
+    _tokens << t;
 
-//    t = new UserToken(Constants::TOKEN_USERTEL1, Tel1);
-////    t->setUntranslatedHumanReadableName(Trans::Constants::);
-//    _tokens << t;
-
-//    t = new UserToken(Constants::TOKEN_USERTEL2, Tel2);
-////    t->setUntranslatedHumanReadableName(Trans::Constants::);
-//    _tokens << t;
-
-//    t = new UserToken(Constants::TOKEN_USERTEL3, Tel3);
-////    t->setUntranslatedHumanReadableName(Trans::Constants::);
-//    _tokens << t;
-
-//    t = new UserToken(Constants::TOKEN_USERFAX, Fax);
-////    t->setUntranslatedHumanReadableName(Trans::Constants::);
-//    _tokens << t;
-
-//    if (tokenPool()) {
-//        LOG("Registering Core::IUser tokens");
-//        tokenPool()->addTokens(_tokens);
-//    } else {
-//        LOG_ERROR("PadTools object is not available, can not register the Core::IUser tokens");
-//    }
+    if (tokenPool()) {
+        LOG("Registering Core::IUser tokens");
+        tokenPool()->addTokens(_tokens);
+    } else {
+        LOG_ERROR("PadTools object is not available, can not register the Core::IUser tokens");
+    }
     // END
 }
 
