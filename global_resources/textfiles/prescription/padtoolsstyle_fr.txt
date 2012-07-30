@@ -1,0 +1,10 @@
+<html><body><p style="margin:0px; -qt-block-indent:0; text-indent:0px;">
+<span style="font-weight:600;">[[DRUG]]</span><span style="font-style:italic;">[<br />
+Take [Q_FROM]][ to [Q_TO]] [[Q_SCHEME]][ [REPEATED_DAILY_SCHEME]][ [MEAL]][ each [[PERIOD] ][PERIOD_SCHEME]][ for [D_FROM]][ to [D_TO]][ [D_SCHEME]][<br />
+Route: [ROUTE]][<br />
+Daily Distribution: [DISTRIBUTED_DAILY_SCHEME]][<br />
+Minimum interval between intakes: [MIN_INTERVAL]][<br />
+[NOTE] ]</span></p>
+</body></html>
+
+^$~Prescription.~$^
