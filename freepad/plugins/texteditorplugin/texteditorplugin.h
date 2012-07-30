@@ -34,8 +34,8 @@
 /**
  * \file texteditorplugin.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.2.1
- * \date 25 Oct 2009
+ * \version 0.8.0
+ * \date 30 July 2012
 */
 
 namespace Editor {
@@ -49,6 +49,8 @@ public:
 
     bool initialize(const QStringList &arguments, QString *errorString);
     void extensionsInitialized();
+    ShutdownFlag aboutToShutdown();
+
 };
 
 

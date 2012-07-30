@@ -49,6 +49,8 @@ public:
 
     bool initialize(const QStringList &arguments, QString *errorString);
     void extensionsInitialized();
+    ShutdownFlag aboutToShutdown();
+
 };
 
 }
