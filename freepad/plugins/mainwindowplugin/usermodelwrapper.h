@@ -59,9 +59,9 @@ public:
     virtual QString toXml() const {return QString();}
     virtual bool fromXml(const QString &xml)  {Q_UNUSED(xml); return true;}
 
-    virtual bool saveChanges() {}
+    virtual bool saveChanges() {return true;}
 
-    virtual QString fullNameOfUser(const QVariant &uid) {Q_UNUSED(uid);}
+    virtual QString fullNameOfUser(const QVariant &uid) {Q_UNUSED(uid); return "FullName";}
 
 };
 
