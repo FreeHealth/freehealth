@@ -49,8 +49,6 @@ namespace Internal {
 class PadAnalyzerPrivate;
 }
 
-/** \todo make jobs asynchronous and threaded */
-
 class PadAnalyzer : public QObject
 {
     Q_OBJECT

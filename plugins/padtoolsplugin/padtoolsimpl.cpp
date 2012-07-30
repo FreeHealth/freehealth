@@ -50,6 +50,35 @@ Core::ITokenPool *PadToolsImpl::tokenPool() const
     return _pool;
 }
 
+/** Process a \e plainText pad document and return a plaintext string. */
+QString PadToolsImpl::processPlainText(const QString &plainText)
+{
+    PadAnalyzer analyzer;
+//    QString t = templ;
+//    if (t.contains("&lt;")) {
+//        t = t.replace("&lt;","<").replace("&gt;",">");
+//    }
+    PadDocument *pad = analyzer.analyze(plainText);
+//    errors = analyzer.lastErrors();
+
+    pad->toOutput(_pool);
+    return pad->outputDocument()->toPlainText();
+}
+
+/** Process a \e html pad document and return a html string. */
+QString PadToolsImpl::processHtml(const QString &html)
+{
+    PadAnalyzer analyzer;
+    QString t = html;
+    if (t.contains("&lt;")) {
+        t = t.replace("&lt;","<").replace("&gt;",">");
+    }
+    PadDocument *pad = analyzer.analyze(t);
+//    errors = analyzer.lastErrors();
+
+    pad->toOutput(_pool);
+    return pad->outputDocument()->toHtml();
+}
 
 /** Analyse a string \e templ for \e tokens, manages a list of \e errors (output) and returns the parsed string.*/
 QString PadToolsImpl::parse(const QString &templ, QMap<QString,QVariant> &tokens, QList<Core::PadAnalyzerError> &errors)

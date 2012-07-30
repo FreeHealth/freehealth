@@ -123,6 +123,7 @@ private:
 }
 }
 
+// TODO: PadAnalyzer::PadAnalyzer -> make jobs asynchronous and threaded
 PadAnalyzer::PadAnalyzer(QObject *parent) :
     QObject(parent),
     d(new Internal::PadAnalyzerPrivate(this))

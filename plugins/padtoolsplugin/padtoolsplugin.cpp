@@ -92,8 +92,11 @@ bool PadToolsPlugin::initialize(const QStringList &arguments, QString *errorStri
     // Create the Core::IPadTools implementation and register it to the Core::ICore::instance()
     PadToolsImpl *impl = new PadToolsImpl(this);
     Core::ICore::instance()->setPadTools(impl);
+
+#ifdef FREEPAD
     Core::ICore::instance()->patient()->registerPatientTokens();
     Core::ICore::instance()->user()->registerUserTokens();
+#endif
 
     // Register testing tokens (A, B, C, D)
     Core::IToken *t;
@@ -121,7 +124,6 @@ bool PadToolsPlugin::initialize(const QStringList &arguments, QString *errorStri
     } else {
         LOG_ERROR("PadTools object is not available, can not register the testing tokens");
     }
-
     return true;
 }
 
@@ -132,7 +134,6 @@ void PadToolsPlugin::extensionsInitialized()
         qWarning() << "PadToolsPlugin::extensionsInitialized";
 
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
-
 }
 
 ExtensionSystem::IPlugin::ShutdownFlag PadToolsPlugin::aboutToShutdown()

@@ -155,6 +155,10 @@ public:
     virtual ~IPadTools() {}
 
     virtual Core::ITokenPool *tokenPool() const = 0;
+
+    virtual QString processPlainText(const QString &plainText) {Q_UNUSED(plainText); return QString::null;}
+    virtual QString processHtml(const QString &html) {Q_UNUSED(html); return QString::null;}
+
     virtual QString parse(const QString &templ, QMap<QString,QVariant> &tokens, QList<PadAnalyzerError> &errors) = 0;
     virtual QSyntaxHighlighter *createSyntaxHighlighter(QTextEdit *textEdit, QMap<QString,QVariant> &tokens) { Q_UNUSED(textEdit); Q_UNUSED(tokens); return NULL ; }
 };
