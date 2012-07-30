@@ -232,6 +232,7 @@ void DrugsPrintOptionsPage::applyChanges()
 
 void DrugsPrintOptionsPage::checkSettingsValidity()
 {
+    // TODO: remove const and use a AppBundledResources file
     QHash<QString, QVariant> defaultvalues;
     defaultvalues.insert(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_HTML,
                          QCoreApplication::translate(Constants::DRUGCONSTANTS_TR_CONTEXT, DrugsDB::Constants::S_DEF_PRESCRIPTIONFORMATTING));
