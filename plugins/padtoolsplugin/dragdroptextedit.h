@@ -43,6 +43,7 @@ public:
     DragDropTextEdit(QWidget *parent = 0);
     ~DragDropTextEdit();
 
+private:
     void dragEnterEvent(QDragEnterEvent *event);
     void dragMoveEvent(QDragMoveEvent *event);
     void dragLeaveEvent(QDragLeaveEvent *event);

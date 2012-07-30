@@ -24,6 +24,11 @@
  *  Contributors :                                                         *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
+/**
+ * \class PadTools::TokenModel
+ * Transform the Core::ITokenPool to a QStandardItemModel (tree model).
+ */
+
 #include "tokenmodel.h"
 #include "constants.h"
 

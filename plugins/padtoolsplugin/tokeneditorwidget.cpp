@@ -24,6 +24,11 @@
  *  Contributors :                                                         *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
+/**
+ * \class PadTools::TokenEditorWidget
+ * Widget that allow to edit pre and post conditionnal texts of a token.
+ */
+
 #include "tokeneditorwidget.h"
 #include "constants.h"
 #include "pad_item.h"
