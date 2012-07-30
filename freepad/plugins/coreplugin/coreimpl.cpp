@@ -195,7 +195,6 @@ bool CoreImpl::initialize(const QStringList &arguments, QString *errorString)
     Q_UNUSED(errorString);
     // first time runnning ?
     QString msg;
-    bool first = false;
     if (m_Settings->firstTimeRunning()) {
         msg = QCoreApplication::translate("Core", "You are running FreePad for the first time. You need to approve the licence terms.");
         first = true;
