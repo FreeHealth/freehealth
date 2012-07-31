@@ -191,8 +191,9 @@ public:
             // Label
             q->labelLineEdit->setText(m_DosageModel->index(row, Dosages::Constants::Label).data().toString());
             // Intakes
+            QString intakescheme = m_DosageModel->index(row, Dosages::Constants::IntakesScheme).data().toString();
             q->intakesCombo->setCurrentIndex(-1);
-            q->intakesCombo->setEditText(m_DosageModel->index(row, Dosages::Constants::IntakesScheme).data().toString());
+            q->intakesCombo->setEditText(intakescheme);
             // Period
             q->periodSpin->setValue(m_DosageModel->index(row, Dosages::Constants::Period).data().toDouble());
             q->periodSchemeCombo->setEditText(m_DosageModel->index(row, Dosages::Constants::PeriodScheme).data().toString());
@@ -229,8 +230,10 @@ public:
             q->labelOfDosageLabel->hide();
 
             // Intakes
+            QString intakescheme = drugModel()->drugData(m_DrugId, Prescription::IntakesScheme).toString();
             q->intakesCombo->setCurrentIndex(-1);
-            q->intakesCombo->setEditText(drugModel()->drugData(m_DrugId, Prescription::IntakesScheme).toString());
+            q->intakesCombo->setEditText(intakescheme);
+
             // Period
             q->periodSpin->setValue(drugModel()->drugData(m_DrugId, Prescription::Period).toDouble());
             q->periodSchemeCombo->setEditText(drugModel()->drugData(m_DrugId, Prescription::PeriodScheme).toString());
