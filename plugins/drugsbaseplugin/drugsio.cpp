@@ -121,7 +121,15 @@ public:
             const QVariant &v = _model->data(_model->index(_row, _ref));
             if (!v.isValid() || v.isNull())
                 return QVariant();
-            return mealTime(v.toInt());
+            return period(v.toInt());
+        } else if (_ref==Prescription::IntakesIntervalOfTime) {
+            const QVariant &v = _model->data(_model->index(_row, _ref));
+            if (!v.isValid() || v.isNull())
+                return QVariant();
+            if (v.toInt() <= 0)
+                return QVariant();
+            return v;
+
         }
         return _model->data(_model->index(_row, _ref));
     }
