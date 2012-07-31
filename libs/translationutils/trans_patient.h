@@ -45,6 +45,16 @@ const char* const FULLNAME                    = QT_TRANSLATE_NOOP("tkConstants",
 const char* const NAME                        = QT_TRANSLATE_NOOP("tkConstants", "Name");
 const char* const TITLE                       = QT_TRANSLATE_NOOP("tkConstants", "Title");
 
+const char* const FULLADDRESS       = QT_TRANSLATE_NOOP("tkConstants", "Full address");
+const char* const STREET            = QT_TRANSLATE_NOOP("tkConstants", "Street");
+const char* const CITY              = QT_TRANSLATE_NOOP("tkConstants", "City");
+const char* const ZIPCODE           = QT_TRANSLATE_NOOP("tkConstants", "Zipcode");
+const char* const COUNTRY           = QT_TRANSLATE_NOOP("tkConstants", "Country");
+const char* const EMAILS            = QT_TRANSLATE_NOOP("tkConstants", "E-Mails");
+const char* const EMAIL             = QT_TRANSLATE_NOOP("tkConstants", "E-Mail");
+const char* const TELS              = QT_TRANSLATE_NOOP("tkConstants", "Tels");
+const char* const MOBILEPHONE       = QT_TRANSLATE_NOOP("tkConstants", "Mobile phone");
+
 const char* const DATE_OF_BIRTH               = QT_TRANSLATE_NOOP("tkConstants", "Date of birth");
 const char* const DATE_OF_DEATH               = QT_TRANSLATE_NOOP("tkConstants", "Date of death");
 const char* const AGE                         = QT_TRANSLATE_NOOP("tkConstants", "Age");
