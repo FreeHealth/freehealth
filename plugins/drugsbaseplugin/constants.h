@@ -358,7 +358,7 @@ namespace Prescription
         SerializedDailyScheme,
         MealTimeSchemeIndex,
         IntakesIntervalOfTime,
-        IntakesIntervalScheme,
+        IntakesIntervalSchemeIndex,
         Note,
         IsINNPrescription,
         SpecifyForm,

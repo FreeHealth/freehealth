@@ -126,7 +126,7 @@ public:
             m_Mapper->addMapping(q->durationCombo, Prescription::DurationScheme, "currentText");
 
             m_Mapper->addMapping(q->minIntervalIntakesSpin, Prescription::IntakesIntervalOfTime, "value");
-            m_Mapper->addMapping(q->intervalTimeSchemeCombo, Prescription::IntakesIntervalScheme, "currentIndex");
+            m_Mapper->addMapping(q->intervalTimeSchemeCombo, Prescription::IntakesIntervalSchemeIndex, "currentIndex");
             m_Mapper->addMapping(q->mealTimeCombo, Prescription::MealTimeSchemeIndex, "currentIndex");
             m_Mapper->addMapping(q->noteTextEdit, Prescription::Note, "plainText");
 

@@ -103,17 +103,21 @@ public:
     QVariant testValue() const {return "TESTINGVALUE";}
     QVariant value() const
     {
+        using namespace DrugsDB::Constants;
         if (_isRepeatedDailyScheme) {
-            using namespace DrugsDB::Constants;
             DrugsDB::DailySchemeModel *day = new DrugsDB::DailySchemeModel;
             day->setSerializedContent(_model->data(_model->index(_row, Prescription::SerializedDailyScheme)).toString());
             return day->humanReadableRepeatedDailyScheme();
         } else if (_isDistributedDailyScheme) {
-            using namespace DrugsDB::Constants;
             DrugsDB::DailySchemeModel *day = new DrugsDB::DailySchemeModel;
             day->setSerializedContent(_model->data(_model->index(_row, Prescription::SerializedDailyScheme)).toString());
             return day->humanReadableDistributedDailyScheme();
         } else if (_isMeal) {
+            const QVariant &v = _model->data(_model->index(_row, _ref));
+            if (!v.isValid() || v.isNull())
+                return QVariant();
+            return mealTime(v.toInt());
+        } else if (_ref==Prescription::IntakesIntervalSchemeIndex) {
             const QVariant &v = _model->data(_model->index(_row, _ref));
             if (!v.isValid() || v.isNull())
                 return QVariant();
@@ -235,7 +239,7 @@ public:
             m_PrescriptionXmlTags.insert(Prescription::IntakesUsesFromTo, XML_PRESCRIPTION_INTAKEFROMTO);
             m_PrescriptionXmlTags.insert(Prescription::IntakesFullString, XML_PRESCRIPTION_INTAKEFULLSTRING);
             m_PrescriptionXmlTags.insert(Prescription::IntakesIntervalOfTime, XML_PRESCRIPTION_INTAKEINTERVALTIME);
-            m_PrescriptionXmlTags.insert(Prescription::IntakesIntervalScheme, XML_PRESCRIPTION_INTAKEINTERVALSCHEME);
+            m_PrescriptionXmlTags.insert(Prescription::IntakesIntervalSchemeIndex, XML_PRESCRIPTION_INTAKEINTERVALSCHEME);
             m_PrescriptionXmlTags.insert(Prescription::DurationFrom, XML_PRESCRIPTION_DURATIONFROM);
             m_PrescriptionXmlTags.insert(Prescription::DurationTo, XML_PRESCRIPTION_DURATIONTO);
             m_PrescriptionXmlTags.insert(Prescription::DurationScheme, XML_PRESCRIPTION_DURATIONSCHEME);
@@ -305,7 +309,7 @@ public:
         t = new PrescriptionToken(Core::Constants::TOKEN_PRESC_MININTERVAL_VALUE, Prescription::IntakesIntervalOfTime);
 //        t->setUntranslatedHumanReadableName(Trans::Constants::);
         _tokens << t;
-        t = new PrescriptionToken(Core::Constants::TOKEN_PRESC_MININTERVAL_SCHEME, Prescription::IntakesIntervalScheme);
+        t = new PrescriptionToken(Core::Constants::TOKEN_PRESC_MININTERVAL_SCHEME, Prescription::IntakesIntervalSchemeIndex);
 //        t->setUntranslatedHumanReadableName(Trans::Constants::);
         _tokens << t;
         t = new PrescriptionToken(Core::Constants::TOKEN_PRESC_MEAL, Prescription::MealTimeSchemeIndex);
@@ -411,7 +415,7 @@ public:
                 << Prescription::SerializedDailyScheme
                 << Prescription::MealTimeSchemeIndex
                 << Prescription::IntakesIntervalOfTime
-                << Prescription::IntakesIntervalScheme
+                << Prescription::IntakesIntervalSchemeIndex
                 << Prescription::Note
                 << Prescription::IsINNPrescription
                 << Prescription::SpecifyForm

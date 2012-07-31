@@ -653,7 +653,7 @@ DrugsPrintWidget::DrugsPrintWidget(QWidget *parent) :
         drug->setPrescriptionValue(Prescription::Period, 2);
         drug->setPrescriptionValue(Prescription::PeriodScheme, tkTr(Trans::Constants::DAY_S));
         drug->setPrescriptionValue(Prescription::IntakesIntervalOfTime, 2);
-        drug->setPrescriptionValue(Prescription::IntakesIntervalScheme, tkTr(Trans::Constants::DAY_S));
+        drug->setPrescriptionValue(Prescription::IntakesIntervalSchemeIndex, tkTr(Trans::Constants::DAY_S));
         drug->setPrescriptionValue(Prescription::DurationFrom, 1);
         drug->setPrescriptionValue(Prescription::DurationTo, 3);
         drug->setPrescriptionValue(Prescription::DurationScheme, tkTr(Trans::Constants::WEEK_S));
