@@ -60,13 +60,15 @@ static QString getPrescriptionTokenHtmlFileContent()
 {
     QString content;
 #ifdef WITH_PAD
-    content = Utils::readTextFile(settings()->path(Core::ISettings::BundleResourcesPath) + QString("/textfiles/prescription/padtoolsstyle_%1.txt").arg(QLocale().name().left(2).toLower()));
+    content = Utils::readTextFile(settings()->path(Core::ISettings::BundleResourcesPath) + QString("/textfiles/prescription/padtoolsstyle_%1.html").arg(QLocale().name().left(2).toLower()));
     if (content.isEmpty()) {
-        content = Utils::readTextFile(settings()->path(Core::ISettings::BundleResourcesPath) + QString("/textfiles/prescription/padtoolsstyle_%1.txt").arg(Trans::Constants::ALL_LANGUAGE));
+        content = Utils::readTextFile(settings()->path(Core::ISettings::BundleResourcesPath) + QString("/textfiles/prescription/padtoolsstyle_%1.html").arg(Trans::Constants::ALL_LANGUAGE));
         if (content.isEmpty()) {
             LOG_ERROR_FOR("DrugsPrintWidget", "No token'd prescription file found");
         }
     }
+    if (content.contains("<body"))
+        content = content.remove("\n");
 #else
     // Old style
     content = QCoreApplication::translate(Constants::DRUGCONSTANTS_TR_CONTEXT, DrugsDB::Constants::S_DEF_PRESCRIPTIONFORMATTING));
