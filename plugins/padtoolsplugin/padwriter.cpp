@@ -36,6 +36,7 @@
 #include "pad_highlighter.h"
 
 #include <coreplugin/icore.h>
+#include <coreplugin/isettings.h>
 #include <coreplugin/constants_menus.h>
 #include <coreplugin/ipadtools.h>
 #include <coreplugin/itheme.h>
@@ -56,6 +57,7 @@ using namespace Internal;
 static inline Core::UniqueIDManager *uid() { return Core::ICore::instance()->uniqueIDManager(); }
 static inline Core::ActionManager *actionManager() { return Core::ICore::instance()->actionManager(); }
 static inline Core::ITheme *theme() { return Core::ICore::instance()->theme(); }
+static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
 static inline Core::IPadTools *padTools() {return Core::ICore::instance()->padTools();}
 
 namespace PadTools {
@@ -117,7 +119,7 @@ public:
     Ui::PadWriter *ui;
     TokenModel *_tokenModel;
     QAction *aFindCursor, *aAutoUpdate, *aSetDefaultValues;
-    QAction *aTest1, *aTest2, *aTest3, *aTest4, *aTest5; // actions used to test different rawsource scenari
+    QAction *aTest1, *aTest2, *aTest3, *aTest4, *aTest5, *aTest6; // actions used to test different rawsource scenari
     PadDocument *_pad;
     PadFragment *_followedItem; // should not be deleted
     QList<QTextCharFormat> m_LastHoveredItemCharFormats, _followedItemCharFormats;
@@ -182,6 +184,10 @@ PadWriter::PadWriter(QWidget *parent) :
 
     a = d->aTest5 = new QAction(this);
     a->setText("Multinested tokens in table");
+    d->ui->scenari->addAction(a);
+
+    a = d->aTest6 = new QAction(this);
+    a->setText("Read prescription file");
     d->ui->scenari->addAction(a);
 
     connect(d->ui->scenari, SIGNAL(triggered(QAction*)), this, SLOT(changeRawSourceScenario(QAction*)));
@@ -257,22 +263,24 @@ void PadWriter::changeRawSourceScenario(QAction *a)
             "</table>"
             "</p>";
     } else if (a == d->aTest5) {
-    source = "<p><b>Testing nested tokens inside a table</b><br />"
-            "<table border=1>"
-            "<tr>"
-            "  <td>{{<span style=' text-decoration: underline; color:#ff00ff;'>_A_</span> ~test.A~ _A_}} 10 chars </td>"
-            "</tr>"
-            "<tr>"
-            "  <td> 10 chars {{ _D_ ~test.D~ _D_}}</td>"
-            "</tr>"
-            "<tr>"
-            "  <td>Two nested: {{ _D_ ~test.D~ _{{Nested C ~test.C~... }}D_}}</td>"
-            "</tr>"
-            "<tr>"
-            "  <td>Multi-nested: {{ _D_ ~test.D~ _{{Nested C ~test.C~..{{//~test.A~//}}.. }}D_}}</td>"
-            "</tr>"
-            "</table>"
-            "</p>";
+        source = "<p><b>Testing nested tokens inside a table</b><br />"
+                "<table border=1>"
+                "<tr>"
+                "  <td>{{<span style=' text-decoration: underline; color:#ff00ff;'>_A_</span> ~test.A~ _A_}} 10 chars </td>"
+                "</tr>"
+                "<tr>"
+                "  <td> 10 chars {{ _D_ ~test.D~ _D_}}</td>"
+                "</tr>"
+                "<tr>"
+                "  <td>Two nested: {{ _D_ ~test.D~ _{{Nested C ~test.C~... }}D_}}</td>"
+                "</tr>"
+                "<tr>"
+                "  <td>Multi-nested: {{ _D_ ~test.D~ _{{Nested C ~test.C~..{{//~test.A~//}}.. }}D_}}</td>"
+                "</tr>"
+                "</table>"
+                "</p>";
+    } else if (a == d->aTest6) {
+        source = Utils::readTextFile(settings()->path(Core::ISettings::BundleResourcesPath) + "/textfiles/prescription/padtoolsstyle_fr.txt");
     }
 
 //    if (d->_pad) {
