@@ -58,13 +58,19 @@ static inline Core::ISettings *settings() { return Core::ICore::instance()->sett
 static inline DrugsDB::DrugsBase &drugsBase() {return DrugsDB::DrugBaseCore::instance().drugsBase();}
 static QString getPrescriptionTokenHtmlFileContent()
 {
-    QString content = Utils::readTextFile(settings()->path(Core::ISettings::BundleResourcesPath) + QString("/textfiles/prescription/padtoolsstyle_%1.txt").arg(QLocale().name().left(2).toLower()));
+    QString content;
+#ifdef WITH_PAD
+    content = Utils::readTextFile(settings()->path(Core::ISettings::BundleResourcesPath) + QString("/textfiles/prescription/padtoolsstyle_%1.txt").arg(QLocale().name().left(2).toLower()));
     if (content.isEmpty()) {
         content = Utils::readTextFile(settings()->path(Core::ISettings::BundleResourcesPath) + QString("/textfiles/prescription/padtoolsstyle_%1.txt").arg(Trans::Constants::ALL_LANGUAGE));
         if (content.isEmpty()) {
             LOG_ERROR_FOR("DrugsPrintWidget", "No token'd prescription file found");
         }
     }
+#else
+    // Old style
+    content = QCoreApplication::translate(Constants::DRUGCONSTANTS_TR_CONTEXT, DrugsDB::Constants::S_DEF_PRESCRIPTIONFORMATTING));
+#endif
     return content;
 }
 
