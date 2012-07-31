@@ -77,6 +77,8 @@ namespace Constants {
 
     const char * const S_PRESCRIPTIONFORMATTING_HTML      = "DrugsWidget/print/prescription/HtmlFormatting";      /*!< \brief Key for settings. */
     const char * const S_PRESCRIPTIONFORMATTING_PLAIN     = "DrugsWidget/print/prescription/PlainFormatting";      /*!< \brief Key for settings. */
+
+    const char * const S_DEF_PRESCRIPTION_TOKENFILE_1_LANG = "/textfiles/prescription/padtoolsstyle_%1.html";
     const char * const S_DEF_PRESCRIPTIONFORMATTING       = QT_TRANSLATE_NOOP("mfDrugsConstants",
                                                                               "<p style=\" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;\"><span style=\" font-weight:600;\">"
                                                                               "[[DRUG]]</span><span style=\"font-style:italic;\">[<br />"
