@@ -23,6 +23,11 @@
  *  Contributors :                                                         *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
+/**
+ * \class PadTools::TokenPool
+ * Manage the token. Deletes all registered token in dtor
+ */
+
 #include "tokenpool.h"
 
 #include <translationutils/constants.h>
