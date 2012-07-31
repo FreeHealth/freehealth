@@ -85,6 +85,7 @@ PadToolsPlugin::PadToolsPlugin() :
 
 PadToolsPlugin::~PadToolsPlugin()
 {
+    Core::ICore::instance()->setPadTools(0);
 }
 
 bool PadToolsPlugin::initialize(const QStringList &arguments, QString *errorString)
@@ -120,36 +121,36 @@ bool PadToolsPlugin::initialize(const QStringList &arguments, QString *errorStri
     t->setUntranslatedHumanReadableName("TokenD");
     _tokens << t;
 
-    t = new TestingToken("Prescription.Drug.brandname", "Drug");
-    _tokens << t;
-    t = new TestingToken("Prescription.Protocol.Quantity.From", "1");
-    _tokens << t;
-    t = new TestingToken("Prescription.Protocol.Quantity.to", "2");
-    _tokens << t;
-    t = new TestingToken("Prescription.Protocol.Quantity.Scheme", "Day");
-    _tokens << t;
-    t = new TestingToken("Prescription.Protocol.RepeatedDailyScheme", "repeat");
-    _tokens << t;
-    t = new TestingToken("Prescription.Protocol.Meal", "meal");
-    _tokens << t;
-    t = new TestingToken("Prescription.Protocol.Period.Value", "3");
-    _tokens << t;
-    t = new TestingToken("Prescription.Protocol.Period.Scheme", "month");
-    _tokens << t;
-    t = new TestingToken("Prescription.Protocol.Duration.From", "4");
-    _tokens << t;
-    t = new TestingToken("Prescription.Protocol.Duration.To", "5");
-    _tokens << t;
-    t = new TestingToken("Prescription.Protocol.Duration.Scheme", "weeks");
-    _tokens << t;
-    t = new TestingToken("Prescription.Protocol.Route", "route");
-    _tokens << t;
-    t = new TestingToken("Prescription.Protocol.Distribution.DailyScheme", "distrib");
-    _tokens << t;
-    t = new TestingToken("Prescription.Protocol.Quantity.MinInterval", "6");
-    _tokens << t;
-    t = new TestingToken("Prescription.Protocol.Note", "Note");
-    _tokens << t;
+//    t = new TestingToken("Prescription.Drug.brandname", "Drug");
+//    _tokens << t;
+//    t = new TestingToken("Prescription.Protocol.Quantity.From", "1");
+//    _tokens << t;
+//    t = new TestingToken("Prescription.Protocol.Quantity.to", "2");
+//    _tokens << t;
+//    t = new TestingToken("Prescription.Protocol.Quantity.Scheme", "Day");
+//    _tokens << t;
+//    t = new TestingToken("Prescription.Protocol.RepeatedDailyScheme", "repeat");
+//    _tokens << t;
+//    t = new TestingToken("Prescription.Protocol.Meal", "meal");
+//    _tokens << t;
+//    t = new TestingToken("Prescription.Protocol.Period.Value", "3");
+//    _tokens << t;
+//    t = new TestingToken("Prescription.Protocol.Period.Scheme", "month");
+//    _tokens << t;
+//    t = new TestingToken("Prescription.Protocol.Duration.From", "4");
+//    _tokens << t;
+//    t = new TestingToken("Prescription.Protocol.Duration.To", "5");
+//    _tokens << t;
+//    t = new TestingToken("Prescription.Protocol.Duration.Scheme", "weeks");
+//    _tokens << t;
+//    t = new TestingToken("Prescription.Protocol.Route", "route");
+//    _tokens << t;
+//    t = new TestingToken("Prescription.Protocol.Distribution.DailyScheme", "distrib");
+//    _tokens << t;
+//    t = new TestingToken("Prescription.Protocol.Quantity.MinInterval", "6");
+//    _tokens << t;
+//    t = new TestingToken("Prescription.Protocol.Note", "Note");
+//    _tokens << t;
 
     if (_impl->tokenPool()) {
         LOG("Registering  testing tokens");
