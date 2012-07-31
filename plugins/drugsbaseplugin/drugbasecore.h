@@ -33,8 +33,8 @@
 /**
  * \file drugsbasecore.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.7.5
- * \date 21 Jun 2012
+ * \version 0.8.0
+ * \date 31 July 2012
 */
 
 namespace DataPack {
@@ -46,6 +46,7 @@ class DrugsBase;
 class ProtocolsBase;
 class InteractionManager;
 class VersionUpdater;
+class DrugsIO;
 
 namespace Internal {
 class DrugsBasePlugin;
@@ -62,13 +63,14 @@ protected:
     bool init();
 
 public:
-    static DrugBaseCore &instance(QObject *parent = 0);
+    static DrugBaseCore &instance();
     virtual ~DrugBaseCore();
 
     DrugsBase &drugsBase() const;
     ProtocolsBase &protocolsBase() const;
     InteractionManager &interactionManager() const;
     VersionUpdater &versionUpdater() const;
+    DrugsIO &drugsIo() const;
 
 private Q_SLOTS:
     void postCoreInitialization();
