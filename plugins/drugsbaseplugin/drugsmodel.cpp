@@ -90,6 +90,7 @@ static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); 
 static inline DrugsDB::InteractionManager &interactionManager() {return DrugsDB::DrugBaseCore::instance().interactionManager();}
 static inline DrugsDB::DrugsBase &drugsBase() {return DrugsDB::DrugBaseCore::instance().drugsBase();}
 static inline DrugsDB::ProtocolsBase &protocolsBase() {return DrugsDB::DrugBaseCore::instance().protocolsBase();}
+static inline DrugsDB::DrugsIO &drugsIo() {return DrugsDB::DrugBaseCore::instance().drugsIo();}
 
 DrugsDB::DrugsModel *DrugsDB::DrugsModel::m_ActiveModel = 0;
 
@@ -99,10 +100,11 @@ namespace Internal {
 class DrugsModelPrivate
 {
 public:
-    DrugsModelPrivate() :
+    DrugsModelPrivate(DrugsModel *parent) :
         m_LastDrugRequiered(0), m_ShowTestingDrugs(true),
         m_SelectionOnlyMode(false), m_IsDirty(false),
-        m_InteractionResult(0), m_AllergyEngine(0), m_ComputeInteraction(true)
+        m_InteractionResult(0), m_AllergyEngine(0), m_ComputeInteraction(true),
+        q(parent)
     {
     }
 
@@ -269,7 +271,7 @@ public:
                         return pres->innComposition() + " [" + tkTr(Trans::Constants::INN) + "]";
                     else return pres->brandName();
                 }
-                return ::DrugsDB::DrugsModel::getFullPrescription(drug,false);
+                return q->getFullPrescription(drug, false);
             }
         case Drug::OwnInteractionsSynthesis:
             {
@@ -287,7 +289,7 @@ public:
         if (!drug)
             return QVariant();
         if (column ==  Prescription::ToHtml) {
-            return ::DrugsDB::DrugsModel::getFullPrescription(drug, true);
+            return q->getFullPrescription(drug, true);
         } else {
             return drug->prescriptionValue(column);
         }
@@ -368,6 +370,9 @@ public:
     DrugInteractionQuery *m_InteractionQuery;
     IDrugAllergyEngine *m_AllergyEngine;
     bool m_ComputeInteraction;
+
+private:
+    DrugsModel *q;
 };
 }  // End Internal
 }  // End DrugsDB
@@ -377,7 +382,7 @@ using namespace DrugsDB;
 /** Constructor */
 DrugsModel::DrugsModel(QObject * parent) :
     QAbstractTableModel(parent),
-    d(new Internal::DrugsModelPrivate)
+    d(new Internal::DrugsModelPrivate(this))
 {
     static int handler = 0;
     ++handler;
@@ -916,6 +921,9 @@ void DrugsModel::checkInteractions()
 
 QString DrugsModel::getFullPrescription(const IDrug *drug, bool toHtml, const QString &mask)
 {
+#ifdef WITH_PAD
+    return drugsIo().getDrugPrescription(this, d->m_DrugsList.indexOf((IDrug*)drug), toHtml, mask);
+#else
     QString tmp;
     if (mask.isEmpty()) {
         if (!toHtml)
@@ -978,7 +986,7 @@ QString DrugsModel::getFullPrescription(const IDrug *drug, bool toHtml, const QS
 
     // Manage Daily Scheme See DailySchemeModel::setSerializedContent
     DrugsDB::DailySchemeModel *day = new DrugsDB::DailySchemeModel;
-    day->setSerializedContent(drug->prescriptionValue(Constants::Prescription::DailyScheme).toString());
+    day->setSerializedContent(drug->prescriptionValue(Constants::Prescription::SerializedDailyScheme).toString());
     tokens_value["REPEATED_DAILY_SCHEME"] = day->humanReadableRepeatedDailyScheme();
     tokens_value["DISTRIBUTED_DAILY_SCHEME"] = day->humanReadableDistributedDailyScheme();
     delete day;
@@ -1042,6 +1050,7 @@ QString DrugsModel::getFullPrescription(const IDrug *drug, bool toHtml, const QS
     if (toHtml)
         tmp = Utils::toHtmlAccent(tmp);
     return tmp;
+#endif
 }
 
 Qt::DropActions DrugsModel::supportedDropActions() const
@@ -1094,8 +1103,7 @@ bool DrugsModel::dropMimeData(const QMimeData *data, Qt::DropAction action, int 
         if (model->isCategory(idx))
             continue;
         // add content to model
-        DrugsDB::DrugsIO io;
-        io.prescriptionFromXml(this, model->index(idx.row(), Templates::Constants::Data_Content, idx.parent()).data().toString(), DrugsDB::DrugsIO::AppendPrescription);
+        drugsIo().prescriptionFromXml(this, model->index(idx.row(), Templates::Constants::Data_Content, idx.parent()).data().toString(), DrugsDB::DrugsIO::AppendPrescription);
     }
 
     // never move templates but copy them
@@ -1105,15 +1113,15 @@ bool DrugsModel::dropMimeData(const QMimeData *data, Qt::DropAction action, int 
     return true;
 }
 
-QDebug operator<<(QDebug dbg, const DrugsDB::DrugsModel *c)
-{
-    if (!c) {
-        dbg.nospace() << "DrugsModel(0x0)";
-        return dbg.space();
-    }
-    dbg.nospace() << "DrugsModel("
-                  << "Memory: " << c->drugsList().count()
-                  << ")";
-    return dbg.space();
-}
+//QDebug operator<<(QDebug dbg, const DrugsDB::DrugsModel *c)
+//{
+//    if (!c) {
+//        dbg.nospace() << "DrugsModel(0x0)";
+//        return dbg.space();
+//    }
+//    dbg.nospace() << "DrugsModel("
+//                  << "Memory: " << c->drugsList().count()
+//                  << ")";
+//    return dbg.space();
+//}
 

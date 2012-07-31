@@ -663,7 +663,7 @@ DrugsPrintWidget::DrugsPrintWidget(QWidget *parent) :
         QString daily = "<" + Trans::ConstantTranslations::dailySchemeXmlTagList().at(1) + "=1>";
         daily += "<" + Trans::ConstantTranslations::dailySchemeXmlTagList().at(3) + "=1>";
         daily += "<" + Trans::ConstantTranslations::dailySchemeXmlTagList().at(6) + "=1>";
-        drug->setPrescriptionValue(Prescription::DailyScheme, daily);
+        drug->setPrescriptionValue(Prescription::SerializedDailyScheme, daily);
 
         setDatasToUi();
 
@@ -694,7 +694,8 @@ void DrugsPrintWidget::resetToDefaultFormatting()
 
 static inline QString getFullPrescription(DrugsDB::IDrug *drug, bool toHtml, const QString &tmp)
 {
-    return DrugsDB::DrugsModel::getFullPrescription(drug,toHtml,tmp);
+    // TODO: this will not work with padtools
+    return DrugsDB::DrugsModel().getFullPrescription(drug, toHtml, tmp);
 }
 
 void DrugsPrintWidget::updateFormatting()
