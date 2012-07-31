@@ -56,6 +56,17 @@ using namespace Trans::ConstantTranslations;
 
 static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
 static inline DrugsDB::DrugsBase &drugsBase() {return DrugsDB::DrugBaseCore::instance().drugsBase();}
+static QString getPrescriptionTokenHtmlFileContent()
+{
+    QString content = Utils::readTextFile(settings()->path(Core::ISettings::BundleResourcesPath) + QString("/textfiles/prescription/padtoolsstyle_%1.txt").arg(QLocale().name().left(2).toLower()));
+    if (content.isEmpty()) {
+        content = Utils::readTextFile(settings()->path(Core::ISettings::BundleResourcesPath) + QString("/textfiles/prescription/padtoolsstyle_%1.txt").arg(Trans::Constants::ALL_LANGUAGE));
+        if (content.isEmpty()) {
+            LOG_ERROR_FOR("DrugsPrintWidget", "No token'd prescription file found");
+        }
+    }
+    return content;
+}
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////  DrugsViewOptionsPage  //////////////////////////////////////////
@@ -233,17 +244,19 @@ void DrugsPrintOptionsPage::applyChanges()
 void DrugsPrintOptionsPage::checkSettingsValidity()
 {
     QHash<QString, QVariant> defaultvalues;
-    QString content = Utils::readTextFile(settings()->path(Core::ISettings::BundleResourcesPath) + QString("/textfiles/prescription/padtoolsstyle_%1.txt").arg(QLocale().name().left(2).toLower()));
-    if (content.isEmpty()) {
-        content = Utils::readTextFile(settings()->path(Core::ISettings::BundleResourcesPath) + QString("/textfiles/prescription/padtoolsstyle_%1.txt").arg(Trans::Constants::ALL_LANGUAGE));
-        if (content.isEmpty()) {
-            LOG_ERROR("No token'd prescription file found");
-        }
-    }
+    QString content = getPrescriptionTokenHtmlFileContent();
+
     QTextDocument doc;
     doc.setHtml(content);
     defaultvalues.insert(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_HTML, content);
     defaultvalues.insert(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_PLAIN, doc.toPlainText());
+
+    if (Core::ICore::instance()->updatePreferences()) {
+        LOG(tr("Updating posologic sentence."));
+        foreach(const QString &k, defaultvalues.keys()) {
+            settings()->setValue(k, defaultvalues.value(k));
+        }
+    }
 
     defaultvalues.insert(DrugsDB::Constants::S_PRINTLINEBREAKBETWEENDRUGS, true);
     defaultvalues.insert(DrugsDB::Constants::S_PRINTDUPLICATAS, true);
@@ -254,17 +267,6 @@ void DrugsPrintOptionsPage::checkSettingsValidity()
     }
 
     defaultvalues.clear();
-
-    if (Core::ICore::instance()->updatePreferences()) {
-        Utils::Log::addMessage(this, tr("Updating posologic sentence."));
-        defaultvalues.insert(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_HTML,
-                             QCoreApplication::translate(Constants::DRUGCONSTANTS_TR_CONTEXT, DrugsDB::Constants::S_DEF_PRESCRIPTIONFORMATTING));
-        defaultvalues.insert(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_PLAIN,
-                             QCoreApplication::translate(Constants::DRUGCONSTANTS_TR_CONTEXT, DrugsDB::Constants::S_DEF_PRESCRIPTIONFORMATTING_PLAIN));
-        foreach(const QString &k, defaultvalues.keys()) {
-            settings()->setValue(k, defaultvalues.value(k));
-        }
-    }
 
 //    QTextDocument t;
 //    t.setHtml(settings()->value(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_HTML).toString());
@@ -680,11 +682,14 @@ void DrugsPrintWidget::setDatasToUi()
 
 void DrugsPrintWidget::resetToDefaultFormatting()
 {
-    prescriptionFormatting->setHtml(qApp->translate("mfDrugsConstants", DrugsDB::Constants::S_DEF_PRESCRIPTIONFORMATTING));
+    QString content = getPrescriptionTokenHtmlFileContent();
+    prescriptionFormatting->setHtml(content);
 }
 
 static inline QString getFullPrescription(DrugsDB::IDrug *drug, bool toHtml, const QString &tmp)
-{ return DrugsDB::DrugsModel::getFullPrescription(drug,toHtml,tmp); }
+{
+    return DrugsDB::DrugsModel::getFullPrescription(drug,toHtml,tmp);
+}
 
 void DrugsPrintWidget::updateFormatting()
 {
@@ -715,18 +720,12 @@ void DrugsPrintWidget::writeDefaultSettings(Core::ISettings *s)
 //    qWarning() << "---------> writedefaults";
     LOG_FOR("DrugsPrintWidget", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("DrugsPrintWidget"));
     s->setValue(S_CONFIGURED, true);
-    QHash<QString, QVariant> defaultvalues;
-    QString content = Utils::readTextFile(settings()->path(Core::ISettings::BundleResourcesPath) + QString("/textfiles/prescription/padtoolsstyle_%1.txt").arg(QLocale().name().left(2).toLower()));
-    if (content.isEmpty()) {
-        content = Utils::readTextFile(settings()->path(Core::ISettings::BundleResourcesPath) + QString("/textfiles/prescription/padtoolsstyle_%1.txt").arg(Trans::Constants::ALL_LANGUAGE));
-        if (content.isEmpty()) {
-            LOG_ERROR_FOR("DrugsPrintWidget", "No token'd prescription file found");
-        }
-    }
+
+    QString content = getPrescriptionTokenHtmlFileContent();
     QTextDocument doc;
     doc.setHtml(content);
-    defaultvalues.insert(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_HTML, content);
-    defaultvalues.insert(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_PLAIN, doc.toPlainText());
+    s->setValue(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_HTML, content);
+    s->setValue(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_PLAIN, doc.toPlainText());
 
     s->setValue(DrugsDB::Constants::S_PRINTLINEBREAKBETWEENDRUGS, true);
     s->setValue(DrugsDB::Constants::S_PRINTDUPLICATAS, true);
