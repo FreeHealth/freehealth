@@ -214,7 +214,7 @@ public:
             // populate DailSchemeModel
             DrugsDB::DailySchemeModel *daily = q->dailyScheme->model();
             Q_ASSERT(daily);
-            daily->setSerializedContent(m_DosageModel->index(row, Dosages::Constants::DailyScheme).data().toString());
+            daily->setSerializedContent(m_DosageModel->index(row, Dosages::Constants::SerializedDailyScheme).data().toString());
 //            q->dailySchemeView->resizeColumnsToContents();
 
             int  inn = m_DosageModel->index(row, Dosages::Constants::INN_LK).data().toInt();
@@ -253,7 +253,7 @@ public:
             // populate DailSchemeModel
             DrugsDB::DailySchemeModel *daily = q->dailyScheme->model();
             Q_ASSERT(daily);
-            daily->setSerializedContent(drugModel()->drugData(m_DrugId, Prescription::DailyScheme).toString());
+            daily->setSerializedContent(drugModel()->drugData(m_DrugId, Prescription::SerializedDailyScheme).toString());
 //            q->dailySchemeView->resizeColumnsToContents();
         }
 
@@ -510,12 +510,12 @@ void DosageViewer::commitToModel()
     Q_ASSERT(daily);
     if (d->m_DosageModel) {
         if (daily) {
-            d->m_DosageModel->setData(d->m_DosageModel->index(d->m_Mapper->currentIndex(), Dosages::Constants::DailyScheme), daily->serializedContent());
+            d->m_DosageModel->setData(d->m_DosageModel->index(d->m_Mapper->currentIndex(), Dosages::Constants::SerializedDailyScheme), daily->serializedContent());
         }
 //        d->m_DosageModel->setData(d->m_DosageModel->index(d->m_Mapper->currentIndex(), Dosages::Constants::Route), routeId);
     } else {
         if (daily) {
-            drugModel()->setDrugData(d->m_DrugId, DrugsDB::Constants::Prescription::DailyScheme, daily->serializedContent());
+            drugModel()->setDrugData(d->m_DrugId, DrugsDB::Constants::Prescription::SerializedDailyScheme, daily->serializedContent());
         }
 //        drugModel()->setDrugData(d->m_DrugId, DrugsDB::Constants::Prescription::Route, routeId);
     }

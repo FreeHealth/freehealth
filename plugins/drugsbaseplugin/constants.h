@@ -355,7 +355,7 @@ namespace Prescription
         DurationUsesFromTo,
         Period,
         PeriodScheme,
-        DailyScheme,
+        SerializedDailyScheme,
         MealTimeSchemeIndex,
         IntakesIntervalOfTime,
         IntakesIntervalScheme,
@@ -426,7 +426,7 @@ namespace Constants {
         Period,
         PeriodScheme,
         AdministrationScheme,
-        DailyScheme,            /*!< \brief  */
+        SerializedDailyScheme,
         MealScheme,             /*!< \brief Schéma de prise par rapport aux repas // cf enum mfDrugDosage::MealTime */
         IsALD,                  /*!< \brief Prescription en ALD */
         TypeOfTreatment,        /*!< \brief Type de traitement (chronique, aiguë...) enumerator à créer  \todo this */

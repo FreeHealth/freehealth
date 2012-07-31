@@ -541,7 +541,7 @@ void DosageModel::toPrescription(const int row)
     prescr_dosage.insert(Constants::Prescription::IntakesIntervalOfTime,Dosages::Constants::IntakesIntervalOfTime);
     prescr_dosage.insert(Constants::Prescription::IntakesIntervalScheme,Dosages::Constants::IntakesIntervalScheme);
     prescr_dosage.insert(Constants::Prescription::Note,                 Dosages::Constants::Note);
-    prescr_dosage.insert(Constants::Prescription::DailyScheme,          Dosages::Constants::DailyScheme);
+    prescr_dosage.insert(Constants::Prescription::SerializedDailyScheme,Dosages::Constants::SerializedDailyScheme);
     prescr_dosage.insert(Constants::Prescription::MealTimeSchemeIndex,  Dosages::Constants::MealScheme);
     prescr_dosage.insert(Constants::Prescription::IsALD,                Dosages::Constants::IsALD);
     foreach(const int i, prescr_dosage.keys()) {
