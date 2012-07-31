@@ -8,6 +8,6 @@ Take ~Prescription.Protocol.Quantity.From~}}{{ to ~Prescription.Protocol.Quantit
 {{ ~Prescription.Protocol.Duration.Scheme~}}{{<br />
 Route: ~Prescription.Protocol.Route~}}{{<br />
 Daily Distribution: ~Prescription.Protocol.DailyScheme.Distributed~}}{{<br />
-Minimum interval between intakes: ~Prescription.Protocol.Quantity.MinInterval~}}{{<br />
+Minimum interval between intakes: ~Prescription.Protocol.Quantity.MinInterval.Value~ {{~Prescription.Protocol.Quantity.MinInterval.Scheme~}}}}{{<br />
 ~Prescription.Protocol.Note~ }}</span></p>
 </body></html>
