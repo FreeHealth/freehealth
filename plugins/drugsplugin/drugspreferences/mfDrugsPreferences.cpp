@@ -720,7 +720,7 @@ void DrugsPrintWidget::writeDefaultSettings(Core::ISettings *s)
     if (content.isEmpty()) {
         content = Utils::readTextFile(settings()->path(Core::ISettings::BundleResourcesPath) + QString("/textfiles/prescription/padtoolsstyle_%1.txt").arg(Trans::Constants::ALL_LANGUAGE));
         if (content.isEmpty()) {
-            LOG_ERROR("No token'd prescription file found");
+            LOG_ERROR_FOR("DrugsPrintWidget", "No token'd prescription file found");
         }
     }
     QTextDocument doc;
