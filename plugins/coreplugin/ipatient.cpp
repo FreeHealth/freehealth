@@ -43,6 +43,7 @@
 #include <utils/global.h>
 #include <translationutils/constants.h>
 #include <translationutils/trans_patient.h>
+#include <translationutils/trans_user.h>
 
 using namespace Core;
 
@@ -85,36 +86,69 @@ void IPatient::registerPatientTokens()
     Core::IToken *t;
     QVector<Core::IToken *> _tokens;
 
+    // Identity
     t = new PatientToken(Constants::TOKEN_PATIENTNAME, BirthName);
     t->setUntranslatedHumanReadableName(Trans::Constants::BIRTHNAME);
     _tokens << t;
-
     t = new PatientToken(Constants::TOKEN_PATIENTFIRSTNAME, Firstname);
     t->setUntranslatedHumanReadableName(Trans::Constants::FIRSTNAME);
     _tokens << t;
-
     t = new PatientToken(Constants::TOKEN_PATIENTSECONDNAME, SecondName);
     t->setUntranslatedHumanReadableName(Trans::Constants::SECONDNAME);
     _tokens << t;
-
     t = new PatientToken(Constants::TOKEN_PATIENTFULLNAME, FullName);
     t->setUntranslatedHumanReadableName(Trans::Constants::FULLNAME);
     _tokens << t;
-
-    t = new PatientToken(Constants::TOKEN_PATIENTFULLADDRESS, FullAddress);
-    t->setUntranslatedHumanReadableName(Trans::Constants::FULLNAME);
+    t = new PatientToken(Constants::TOKEN_PATIENTTITLE, Title);
+    t->setUntranslatedHumanReadableName(Trans::Constants::TITLE);
     _tokens << t;
 
+    // Dates && age
+    t = new PatientToken(Constants::TOKEN_PATIENTDATEOFBIRTH, DateOfBirth);
+    t->setUntranslatedHumanReadableName(Trans::Constants::DATE_OF_BIRTH);
+    _tokens << t;
+    t = new PatientToken(Constants::TOKEN_PATIENTDATEOFBIRTH, DateOfDeath);
+    t->setUntranslatedHumanReadableName(Trans::Constants::DATE_OF_DEATH);
+    _tokens << t;
     t = new PatientToken(Constants::TOKEN_PATIENTYEARSOLD, YearsOld);
-//    t->setUntranslatedHumanReadableName(Trans::Constants::);
+    t->setUntranslatedHumanReadableName(Trans::Constants::AGE_IN_YEARS);
+    _tokens << t;
+    t = new PatientToken(Constants::TOKEN_PATIENTAGE, Age);
+    t->setUntranslatedHumanReadableName(Trans::Constants::AGE);
     _tokens << t;
 
-    t = new PatientToken(Constants::TOKEN_PATIENTAGE, Age);
-//    t->setUntranslatedHumanReadableName(Trans::Constants::);
+    // Address & contact
+    t = new PatientToken(Constants::TOKEN_PATIENTFULLADDRESS, FullAddress);
+    t->setUntranslatedHumanReadableName(Trans::Constants::FULLADDRESS);
     _tokens << t;
+    t = new PatientToken(Constants::TOKEN_PATIENTADDRESS_STREET, Street);
+    t->setUntranslatedHumanReadableName(Trans::Constants::STREET);
+    _tokens << t;
+    t = new PatientToken(Constants::TOKEN_PATIENTADDRESS_CITY, City);
+    t->setUntranslatedHumanReadableName(Trans::Constants::CITY);
+    _tokens << t;
+    t = new PatientToken(Constants::TOKEN_PATIENTADDRESS_ZIP, ZipCode);
+    t->setUntranslatedHumanReadableName(Trans::Constants::ZIPCODE);
+    _tokens << t;
+    t = new PatientToken(Constants::TOKEN_PATIENTADDRESS_COUNTRY, Country);
+    t->setUntranslatedHumanReadableName(Trans::Constants::COUNTRY);
+    _tokens << t;
+    t = new PatientToken(Constants::TOKEN_PATIENTCONTACT_EMAIL, Mails);
+    t->setUntranslatedHumanReadableName(Trans::Constants::EMAIL);
+    _tokens << t;
+    t = new PatientToken(Constants::TOKEN_PATIENTCONTACT_TELS, Tels);
+    t->setUntranslatedHumanReadableName(Trans::Constants::TELS);
+    _tokens << t;
+    t = new PatientToken(Constants::TOKEN_PATIENTCONTACT_FAX, Faxes);
+    t->setUntranslatedHumanReadableName(Trans::Constants::FAX);
+    _tokens << t;
+    // TODO: add mobile phone (form patient data representation, patientmodel, tokens)
+//    t = new PatientToken(Constants::TOKEN_PATIENTCONTACT_MOBILEPHONE, MobilePhone);
+//    t->setUntranslatedHumanReadableName(Trans::Constants::MOBILEPHONE);
+//    _tokens << t;
 
     t = new PatientToken(Constants::TOKEN_WEIGHT, Weight);
-//    t->setUntranslatedHumanReadableName(Trans::Constants::);
+    t->setUntranslatedHumanReadableName(Trans::Constants::WEIGHT);
     _tokens << t;
 
     t = new PatientToken(Constants::TOKEN_WEIGHT_UNIT, WeightUnit);
@@ -122,26 +156,19 @@ void IPatient::registerPatientTokens()
     _tokens << t;
 
     t = new PatientToken(Constants::TOKEN_HEIGHT, Height);
-//    t->setUntranslatedHumanReadableName(Trans::Constants::);
+    t->setUntranslatedHumanReadableName(Trans::Constants::HEIGHT);
     _tokens << t;
 
     t = new PatientToken(Constants::TOKEN_HEIGHT_UNIT, HeightUnit);
 //    t->setUntranslatedHumanReadableName(Trans::Constants::);
     _tokens << t;
 
-    t = new PatientToken(Constants::TOKEN_PATIENTDATEOFBIRTH, DateOfBirth);
-//    t->setUntranslatedHumanReadableName(Trans::Constants::);
-    _tokens << t;
 
     t = new PatientToken(Constants::TOKEN_CLCR, CreatinClearance);
-//    t->setUntranslatedHumanReadableName(Trans::Constants::);
+    t->setUntranslatedHumanReadableName(Trans::Constants::CREATININ_CLEARANCE);
     _tokens << t;
 
     t = new PatientToken(Constants::TOKEN_CLCR_UNIT, CreatinClearanceUnit);
-//    t->setUntranslatedHumanReadableName(Trans::Constants::);
-    _tokens << t;
-
-    t = new PatientToken(Constants::TOKEN_PATIENTTITLE, Title);
 //    t->setUntranslatedHumanReadableName(Trans::Constants::);
     _tokens << t;
 
