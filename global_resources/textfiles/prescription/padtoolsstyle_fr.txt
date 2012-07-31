@@ -1,10 +1,13 @@
 <html><body><p style="margin:0px; -qt-block-indent:0; text-indent:0px;">
-<span style="font-weight:600;">[[DRUG]]</span><span style="font-style:italic;">[<br />
-Take [Q_FROM]][ to [Q_TO]] [[Q_SCHEME]][ [REPEATED_DAILY_SCHEME]][ [MEAL]][ each [[PERIOD] ][PERIOD_SCHEME]][ for [D_FROM]][ to [D_TO]][ [D_SCHEME]][<br />
-Route: [ROUTE]][<br />
-Daily Distribution: [DISTRIBUTED_DAILY_SCHEME]][<br />
-Minimum interval between intakes: [MIN_INTERVAL]][<br />
-[NOTE] ]</span></p>
+<span style="font-weight:600;">{{~Prescription.Drug.brandname~}}</span><span style="font-style:italic;">{{<br />
+Take ~Prescription.Protocol.Quantity.From~}}{{ to ~Prescription.Protocol.Quantity.to~}}
+{{~Prescription.Protocol.Quantity.Scheme~}}{{ ~Prescription.Protocol.RepeatedDailyScheme~}}
+{{ ~Prescription.Protocol.Meal~}}
+{{ each ~Prescription.Protocol.Period.Value~}}{{~Prescription.Protocol.Period.Scheme~}}
+{{ for ~Prescription.Protocol.Duration.From~}}{{ to ~Prescription.Protocol.Duration.To~}}
+{{ ~Prescription.Protocol.Duration.Scheme~}}{{<br />
+Route: ~Prescription.Protocol.Route~}}{{<br />
+Daily Distribution: ~Prescription.Protocol.Distribution.DailyScheme~}}{{<br />
+Minimum interval between intakes: ~Prescription.Protocol.Quantity.MinInterval~}}{{<br />
+~Prescription.Protocol.Note~ }}</span></p>
 </body></html>
-
-^$~Prescription.~$^
