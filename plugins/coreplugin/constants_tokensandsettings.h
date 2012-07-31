@@ -139,6 +139,26 @@ const char * const  TOKEN_USERFULLADDRESS    = "User.Contact.FullAddress";
 const char * const  TOKEN_USERFULLCONTACT    = "User.Contact.FullContact";
 #endif
 
+// For Prescriptions
+#ifdef WITH_PAD
+const char * const  TOKEN_PRESC_DRUGNAME    = "Prescription.Drug.brandname";
+const char * const  TOKEN_PRESC_Q_FROM    = "Prescription.Protocol.Quantity.From";
+const char * const  TOKEN_PRESC_Q_TO    = "Prescription.Protocol.Quantity.to";
+const char * const  TOKEN_PRESC_Q_SCHEME  = "Prescription.Protocol.Quantity.Scheme";
+const char * const  TOKEN_PRESC_REPEATDAILYSCHEME    = "Prescription.Protocol.RepeatedDailyScheme";
+const char * const  TOKEN_PRESC_MEAL    = "Prescription.Protocol.Meal";
+const char * const  TOKEN_PRESC_PERIOD_VALUE    = "Prescription.Protocol.Period.Value";
+const char * const  TOKEN_PRESC_PERIOD_SCHEME    = "Prescription.Protocol.Period.Scheme";
+const char * const  TOKEN_PRESC_D_FROM    = "Prescription.Protocol.Duration.From";
+const char * const  TOKEN_PRESC_D_TO    = "Prescription.Protocol.Duration.To";
+const char * const  TOKEN_PRESC_D_SCHEME    = "Prescription.Protocol.Duration.Scheme";
+const char * const  TOKEN_PRESC_ROUTE    = "Prescription.Protocol.Route";
+const char * const  TOKEN_PRESC_DAILYSCHEME    = "Prescription.Protocol.Distribution.DailyScheme";
+const char * const  TOKEN_PRESC_MININTERVAL_VALUE    = "Prescription.Protocol.Quantity.MinInterval.Value";
+const char * const  TOKEN_PRESC_MININTERVAL_SCHEME    = "Prescription.Protocol.Quantity.MinInterval.Scheme";
+const char * const  TOKEN_PRESC_NOTE    = "Prescription.Protocol.Note";
+#endif
+
 // Some path tags
 const char * const  TAG_APPLICATION_RESOURCES_PATH = "__appResources__";
 const char * const  TAG_APPLICATION_THEME_PATH     = "__theme__";
