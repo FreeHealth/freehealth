@@ -25,6 +25,7 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "drugstemplateprinter.h"
+#include "drugbasecore.h"
 #include "drugsmodel.h"
 #include "drugsio.h"
 
@@ -35,11 +36,11 @@
 #include <coreplugin/imainwindow.h>
 #include <coreplugin/dialogs/simpletextdialog.h>
 
-
 using namespace DrugsDB;
-using namespace DrugsDB::Internal;
+using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
+static inline DrugsDB::DrugsIO &drugsIo() {return DrugsDB::DrugBaseCore::instance().drugsIo();}
 
 QString DrugsTemplatePrinter::mimeType() const
 {
@@ -57,8 +58,7 @@ bool DrugsTemplatePrinter::printTemplates(const QList<const Templates::ITemplate
     if (n > 1) {
         // Check interactions in the merged templates
         foreach(const Templates::ITemplate *t, iTemplates) {
-            DrugsIO io;
-            io.prescriptionFromXml(model, t->content(), DrugsIO::AppendPrescription);
+            drugsIo().prescriptionFromXml(model, t->content(), DrugsIO::AppendPrescription);
         }
         bool interactions = model->prescriptionHasInteractions();
         bool allergy = model->prescriptionHasAllergies();
@@ -104,8 +104,7 @@ bool DrugsTemplatePrinter::printTemplates(const QList<const Templates::ITemplate
                                   "on a single order?"), "",
                                QStringList() << tr("Print separately") << tr("Merge and print") << tkTr(Trans::Constants::CANCEL));
         if (r==1) {
-            DrugsIO io;
-            bool ok = io.printPrescription(model);
+            bool ok = drugsIo().printPrescription(model);
             delete model;
             model = 0;
             return ok;
@@ -115,10 +114,9 @@ bool DrugsTemplatePrinter::printTemplates(const QList<const Templates::ITemplate
     }
 
     model->clearDrugsList();
-    DrugsIO io;
     foreach(const Templates::ITemplate *t, iTemplates) {
-        io.prescriptionFromXml(model, t->content(), DrugsIO::ReplacePrescription);
-        io.printPrescription(model);
+        drugsIo().prescriptionFromXml(model, t->content(), DrugsIO::ReplacePrescription);
+        drugsIo().printPrescription(model);
     }
     delete model;
     model = 0;
