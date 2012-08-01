@@ -135,11 +135,15 @@ void HourRangeWidget::setInMotion(bool value)
 
 void HourRangeWidget::mouseMoveEvent(QMouseEvent *event)
 {
-    if (event->pos().y() >= height() - 5 && event->pos().y() < height())
+    // mouse at bottom edge of widget
+    if ((event->pos().y() >= height() - 5 && event->pos().y() < height()) ||
+            // or at top edge
+            (event->pos().y() >= rect().y() && event->pos().y() < rect ().y() + 5))
+    {
         setCursor(Qt::SizeVerCursor);
-    else
+    } else {
         setCursor(Qt::ArrowCursor);
-
+    }
     QWidget::mouseMoveEvent(event);
 }
 

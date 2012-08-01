@@ -69,7 +69,8 @@ public:
     enum MouseMode {
         MouseMode_None,
         MouseMode_Move,
-        MouseMode_Resize,
+        MouseMode_ResizeTop,
+        MouseMode_ResizeBottom,
         MouseMode_Creation
     };
 
@@ -499,10 +500,17 @@ void DayRangeBody::mousePressEvent(QMouseEvent *event) {
     if (d_body->m_pressItemWidget) {
         d_body->m_pressItem = model()->getItemByUid(d_body->m_pressItemWidget->uid());
         QPoint pos = d_body->m_pressItemWidget->mapFromParent(event->pos());
-        if (pos.y() >= d_body->m_pressItemWidget->height() - 5 && pos.y() < d_body->m_pressItemWidget->height())
-            d_body->m_mouseMode = DayRangeBodyPrivate::MouseMode_Resize;
-        else
+        // if mouse pos is at item bottom, switch to resize mode
+        if (pos.y() >= d_body->m_pressItemWidget->height() - 5 && pos.y() < d_body->m_pressItemWidget->height()) {
+            d_body->m_mouseMode = DayRangeBodyPrivate::MouseMode_ResizeBottom;
+        }
+        // if mouse pos is at item top, switch to resize mode
+        else if (pos.y() >= 0 && pos.y() < 5){
+            d_body->m_mouseMode = DayRangeBodyPrivate::MouseMode_ResizeTop;
+        } else {
+            // switch to move mode
             d_body->m_mouseMode = DayRangeBodyPrivate::MouseMode_Move;
+        }
     } else {
         d_body->m_mouseMode = DayRangeBodyPrivate::MouseMode_None;
     }
@@ -519,16 +527,17 @@ void DayRangeBody::mouseMoveEvent(QMouseEvent *event)
         QWidget::mouseMoveEvent(event);
         return;
     }
-
-    QDateTime dateTime = d_body->quantized(d_body->getDateTime(event->pos()));
+    
+    
+    QDateTime mousePosDateTime = d_body->quantized(d_body->getDateTime(event->pos()));
     QRect rect;
-    int seconds, limits;
+    int secondsDifference, limit;
     QDateTime beginning, ending;
 
-    if (d_body->m_previousDateTime == dateTime)
+    // save last mouse position
+    if (d_body->m_previousDateTime == mousePosDateTime)
         return;
-
-    d_body->m_previousDateTime = dateTime;
+    d_body->m_previousDateTime = mousePosDateTime;
 
     switch (d_body->m_mouseMode) {
     case DayRangeBodyPrivate::MouseMode_Move:
@@ -557,7 +566,8 @@ void DayRangeBody::mouseMoveEvent(QMouseEvent *event)
         d_body->m_mouseMode = DayRangeBodyPrivate::MouseMode_None;
         break;
     }
-    case DayRangeBodyPrivate::MouseMode_Resize:
+    case DayRangeBodyPrivate::MouseMode_ResizeTop:
+    case DayRangeBodyPrivate::MouseMode_ResizeBottom:
     {
         if (WarnBodyMouseEvents) {
             qWarning() << "DayBody::mouseMove (resize/moveMode)" << d_body->m_pressItem.uid() << d_body->m_pressItem.beginning() << d_body->m_pressItem.ending();
@@ -565,34 +575,63 @@ void DayRangeBody::mouseMoveEvent(QMouseEvent *event)
             qWarning() << "   previousDateTime" << d_body->m_previousDateTime;
         }
         d_body->m_pressItemWidget->setInMotion(true);
-        seconds = d_body->m_pressDateTime.time().secsTo(dateTime.time()); // seconds to add
-        if (event->pos().y() > d_body->m_pressPos.y()) {
-            QDateTime l = d_body->m_pressItem.ending().addDays(1);
-            l.setTime(QTime(0, 0));
-            limits = d_body->m_pressItem.ending().secsTo(l);
-            if (seconds > limits)
-                seconds = limits;
-        } else {
-            QDateTime l = d_body->m_pressItem.beginning();
-            l.setTime(QTime(0, 0));
-            limits = d_body->m_pressItem.beginning().secsTo(l);
-            if (seconds < limits)
-                seconds = limits;
+        
+         // seconds to add - if mouse is above, value is negative
+        secondsDifference = d_body->m_pressDateTime.time().secsTo(mousePosDateTime.time());
+        
+        if (event->pos().y() > d_body->m_pressPos.y()) {  // mouse moved down
+            
+            // define a time at the end of the day
+            QDateTime endOfDay = d_body->m_pressItem.ending().addDays(1);
+            endOfDay.setTime(QTime(0, 0));
+            
+            // seconds difference from appointment end to end of day
+            limit = d_body->m_pressItem.ending().secsTo(endOfDay);
+            if (secondsDifference > limit)
+                secondsDifference = limit;
+        
+        } else { // mouse moved up
+            // define a time at beginning of the day
+            QDateTime beginningOfDay = d_body->m_pressItem.beginning();
+            beginningOfDay.setTime(QTime(0, 0));
+            
+            limit = d_body->m_pressItem.beginning().secsTo(beginningOfDay);
+            if (secondsDifference < limit)
+                secondsDifference = limit;
         }
 
+        // THIS CODE IS NEVER EXECUTED - we are in MouseMode_Resize mode!!!!
         if (d_body->m_mouseMode == DayRangeBodyPrivate::MouseMode_Move) {
-            beginning = d_body->m_pressItem.beginning().addSecs(seconds);
-            beginning.setDate(dateTime.date());
-        } else
-            beginning = d_body->m_pressItem.beginning();
-
-        ending = d_body->m_pressItem.ending().addSecs(seconds);
+            beginning = d_body->m_pressItem.beginning().addSecs(secondsDifference);
+            beginning.setDate(mousePosDateTime.date());
+        } else {
+            // now set the new time borders
+            if (d_body->m_mouseMode == DayRangeBodyPrivate::MouseMode_ResizeBottom){
+                beginning = d_body->m_pressItem.beginning();
+                ending = d_body->m_pressItem.ending().addSecs(secondsDifference);
+            }
+            else if (d_body->m_mouseMode == DayRangeBodyPrivate::MouseMode_ResizeTop){
+                beginning = d_body->m_pressItem.beginning().addSecs(secondsDifference);
+                ending = d_body->m_pressItem.ending();        
+            }
+        }
+        
+//        if (d_body->m_pressPos.y() <= d_body->m_pressItemWidget->geometry().y() + 5) {
+//            beginning.addSecs(secondsDifference);    
+//        } else if (d_body->m_pressPos.y() >= d_body->m_pressItemWidget->geometry().bottom() - 5) {
+//            ending.addSecs(secondsDifference);
+//        }
+        
+        
+        // THIS CODE IS NEVER EXECUTED - we are in MouseMode_Resize mode!!!!
         if (d_body->m_mouseMode == DayRangeBodyPrivate::MouseMode_Move) {
-            ending.setDate(dateTime.date());
+            ending.setDate(mousePosDateTime.date());
             d_body->m_pressItemWidget->setBeginDateTime(beginning);
         } else {
+            
             if (ending <= beginning)
                 ending = beginning.addSecs(1800);
+            
         }
         d_body->m_pressItemWidget->setEndDateTime(ending);
         rect = d_body->getTimeIntervalRect(beginning.date().dayOfWeek(), beginning.time(), ending.time());
@@ -610,7 +649,8 @@ void DayRangeBody::mouseReleaseEvent(QMouseEvent *event)
 
     switch (d_body->m_mouseMode) {
     case DayRangeBodyPrivate::MouseMode_Move:
-    case DayRangeBodyPrivate::MouseMode_Resize:
+    case DayRangeBodyPrivate::MouseMode_ResizeTop:
+    case DayRangeBodyPrivate::MouseMode_ResizeBottom:
     {
         if (!d_body->m_pressItemWidget->inMotion() && event->button()==Qt::RightButton) {
             if (!itemContextMenu()) {

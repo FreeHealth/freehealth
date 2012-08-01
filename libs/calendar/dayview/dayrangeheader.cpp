@@ -63,10 +63,12 @@ public:
     {}
 
 public:
+    // FIXME: remove MouseMode enum here as it's not used??
     enum MouseMode {
         MouseMode_None,
         MouseMode_Move,
-        MouseMode_Resize,
+        MouseMode_ResizeTop,
+        MouseMode_ResizeBottom,
         MouseMode_Creation
     };
     int m_rangeWidth;
