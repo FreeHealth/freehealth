@@ -694,6 +694,7 @@ void DayRangeBody::mouseDoubleClickEvent(QMouseEvent *event)
             d_body->m_pressedCalItem = CalendarItem();
         }
     } else {
+        // TODO: better code this in a drag version, not double click!
         d_body->m_pressedCalItem = model()->insertItem(d_body->m_previousDateTime, d_body->m_previousDateTime.addSecs(d_body->m_itemDefaultDuration*60));
         BasicItemEditorDialog dialog(model(), this);
         dialog.init(d_body->m_pressedCalItem);
