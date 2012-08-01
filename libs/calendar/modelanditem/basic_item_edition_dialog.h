@@ -52,12 +52,12 @@ class BasicItemEditionDialog;
 }  // End namespace Internal
 
 
-class CALENDAR_EXPORT BasicItemEditionDialog : public QDialog
+class CALENDAR_EXPORT BasicItemEditorDialog : public QDialog
 {
     Q_OBJECT
 public:
-    BasicItemEditionDialog(AbstractCalendarModel *model, QWidget *parent = 0);
-    ~BasicItemEditionDialog();
+    BasicItemEditorDialog(AbstractCalendarModel *model, QWidget *parent = 0);
+    ~BasicItemEditorDialog();
 
     void addCalendarDataWidget(Calendar::ICalendarItemDataWidget *dataWidget);
 

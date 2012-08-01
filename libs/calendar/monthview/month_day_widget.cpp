@@ -105,7 +105,7 @@ bool MonthDayWidget::eventFilter(QObject *obj, QEvent *event)
         QLabel *label = qobject_cast<QLabel*>(obj);
         QString uid = m_uidByWidget[label];
         CalendarItem *item = getItemByUid(uid);
-        BasicItemEditionDialog dialog(m_model, this);
+        BasicItemEditorDialog dialog(m_model, this);
         dialog.init(*item);
         if (dialog.exec() == QDialog::Accepted) {
             // refresh cell

@@ -73,7 +73,7 @@ using namespace Trans::ConstantTranslations;
 
 static inline ExtensionSystem::PluginManager *pluginManager() { return ExtensionSystem::PluginManager::instance(); }
 
-BasicItemEditionDialog::BasicItemEditionDialog(AbstractCalendarModel *model, QWidget *parent) :
+BasicItemEditorDialog::BasicItemEditorDialog(AbstractCalendarModel *model, QWidget *parent) :
     QDialog(parent),
     m_Model(model),
     ui(new Internal::Ui::BasicItemEditionDialog)
@@ -95,12 +95,12 @@ BasicItemEditionDialog::BasicItemEditionDialog(AbstractCalendarModel *model, QWi
     Utils::centerWidget(this);
 }
 
-BasicItemEditionDialog::~BasicItemEditionDialog()
+BasicItemEditorDialog::~BasicItemEditionDialog()
 {
     delete ui;
 }
 
-void BasicItemEditionDialog::done(int r)
+void BasicItemEditorDialog::done(int r)
 {
     if (r==QDialog::Accepted) {
         ui->viewer->submit();
@@ -115,20 +115,20 @@ void BasicItemEditionDialog::done(int r)
   Add specific widgets to the editor using the Calendar::ICalendarItemDataWidget interface.
   You must set the Calendar::CalendarItem AFTER you have added ALL your Calendar::ICalendarItemDataWidget.
 */
-void BasicItemEditionDialog::addCalendarDataWidget(Calendar::ICalendarItemDataWidget *dataWidget)
+void BasicItemEditorDialog::addCalendarDataWidget(Calendar::ICalendarItemDataWidget *dataWidget)
 {
     ui->viewer->addCalendarDataWidget(dataWidget);
     ui->viewer->adjustSize();
 }
 
 /** Initialize the dialog with the specified Calendar::CalendarItem \e item. */
-void BasicItemEditionDialog::init(const CalendarItem &item)
+void BasicItemEditorDialog::init(const CalendarItem &item)
 {
     m_Item = item;
     ui->viewer->setCalendarItem(item);
 }
 
-void BasicItemEditionDialog::showMoreTriggered()
+void BasicItemEditorDialog::showMoreTriggered()
 {
     ui->viewer->toogleExtraInformation();
     if (ui->viewer->isShowingExtraInformation())

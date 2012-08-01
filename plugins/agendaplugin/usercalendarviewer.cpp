@@ -236,7 +236,7 @@ void UserCalendarViewer::newEventAtAvailabity(const QModelIndex &index)
         idx = d->m_AvailModel->index(0,0);
         idx = d->m_AvailModel->index(0,0, idx);
     }
-    Calendar::BasicItemEditionDialog dlg(d->m_CalendarItemModel, this);
+    Calendar::BasicItemEditorDialog dlg(d->m_CalendarItemModel, this);
     QDateTime start = d->m_AvailModel->itemFromIndex(idx)->data().toDateTime();
     if (start.isNull())
         return;
