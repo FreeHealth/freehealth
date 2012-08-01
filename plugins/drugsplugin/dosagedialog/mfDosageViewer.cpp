@@ -506,7 +506,6 @@ void DosageViewer::changeCurrentRow(const int dosageRow)
 /** \brief Only provided because of focus bug */
 void DosageViewer::commitToModel()
 {
-    d->m_Mapper->submit();
     // populate DailyShemeModel
     // TODO: Create and Use DailySchemeViewer Properties
     DrugsDB::DailySchemeModel *daily = dailyScheme->model();
@@ -522,6 +521,7 @@ void DosageViewer::commitToModel()
         }
 //        drugModel()->setDrugData(d->m_DrugId, DrugsDB::Constants::Prescription::Route, routeId);
     }
+    d->m_Mapper->submit();
 }
 
 

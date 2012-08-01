@@ -66,6 +66,7 @@ private Q_SLOTS:
     void done(int r);
     void on_drugNameButton_clicked();
     void on_innButton_clicked();
+    void updatePosologicSentence(const QModelIndex &, const QModelIndex &);
 
 private:
     DosageDialogPrivate *d;

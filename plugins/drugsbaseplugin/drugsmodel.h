@@ -144,13 +144,14 @@ public:
     QString getFullPrescription(const IDrug *drug, bool toHtml = false, const QString &mask = QString::null);
 
 Q_SIGNALS:
-    void prescriptionResultChanged(const QString & html);
+//    void prescriptionResultChanged(const QString & html);
     void numberOfRowsChanged();
 
 protected:
     void checkInteractions();
 
 protected Q_SLOTS:
+    bool submit();
     void resetModel();
 
 private Q_SLOTS:

@@ -75,7 +75,6 @@
 #include <QDomDocument>
 #include <QDir>
 
-
 namespace {
     const char * const ALD_BACKGROUND_COLOR               = "khaki";
     const char * const FORTEST_BACKGROUND_COLOR           = "#EFEFEF";
@@ -149,6 +148,7 @@ public:
             if (textualdrug) {
                 textualdrug->setDenomination(value.toString());
                 m_IsDirty = true;
+                _posologicSentence.remove(drug);
                 return true;
             } else {
                 return false;
@@ -167,6 +167,7 @@ public:
             drug->setPrescriptionValue(column, value);
             m_IsDirty = true;
         }
+        _posologicSentence.remove(drug);
         return true;
     }
 
@@ -370,6 +371,7 @@ public:
     DrugInteractionQuery *m_InteractionQuery;
     IDrugAllergyEngine *m_AllergyEngine;
     bool m_ComputeInteraction;
+    QHash<const IDrug*, QString> _posologicSentence;
 
 private:
     DrugsModel *q;
@@ -453,9 +455,6 @@ bool DrugsModel::setData(const QModelIndex &index, const QVariant &value, int ro
     IDrug *drug = d->m_DrugsList.at(row);
     if (d->setDrugData(drug, index.column(), value)) {
         Q_EMIT dataChanged(index, index);
-        QModelIndex fullPrescr = this->index(index.row(), Constants::Drug::FullPrescription);
-        Q_EMIT dataChanged(fullPrescr, fullPrescr);
-        Q_EMIT prescriptionResultChanged(getFullPrescription(drug,false));
     }
     return true;
 }
@@ -471,15 +470,22 @@ bool DrugsModel::setDrugData(const QVariant &drugId, const int column, const QVa
     if (!drug)
         return false;
     if (d->setDrugData(drug, column, value)) {
-        Q_EMIT prescriptionResultChanged(getFullPrescription(drug,false));
+        QModelIndex index = this->index(d->m_DrugsList.indexOf(drug), column);
+        Q_EMIT dataChanged(index, index);
         return true;
     }
     return false;
 }
 
+bool DrugsModel::submit()
+{
+    return QAbstractTableModel::submit();
+}
+
 /** Reset the model */
 void DrugsModel::resetModel()
 {
+    d->_posologicSentence.clear();
     reset();
 }
 
@@ -681,6 +687,7 @@ void DrugsModel::clearDrugsList()
     d->m_TestingDrugsList.clear();
     d->m_InteractionQuery->clearDrugsList();
     d->m_InteractionResult->clear();
+    d->_posologicSentence.clear();
     d->m_levelOfWarning = settings()->value(Constants::S_LEVELOFWARNING_STATICALERT).toInt();
     reset();
     d->m_IsDirty = true;
@@ -878,6 +885,7 @@ int DrugsModel::removeDrug(const QVariant &drugId)
     foreach(IDrug * drug, d->m_DrugsList) {
         if (drug->drugId() == drugId) {
             d->m_DrugsList.removeAt(d->m_DrugsList.indexOf(drug));
+            d->_posologicSentence.remove(drug);
             delete drug;
             ++i;
         } else {
@@ -897,6 +905,7 @@ int DrugsModel::removeLastInsertedDrug()
     d->m_LastDrugRequiered = 0;
     if (d->m_DrugsList.count() == 0)
         return 0;
+    d->_posologicSentence.remove(d->m_DrugsList.last());
     delete d->m_DrugsList.last();
     d->m_DrugsList.removeLast();
     d->m_InteractionQuery->setDrugsList(d->m_DrugsList.toVector());
@@ -921,8 +930,11 @@ void DrugsModel::checkInteractions()
 
 QString DrugsModel::getFullPrescription(const IDrug *drug, bool toHtml, const QString &mask)
 {
+    if (d->_posologicSentence.contains(drug))
+        return d->_posologicSentence.value(drug);
+    QString result;
 #ifdef WITH_PAD
-    return drugsIo().getDrugPrescription(this, d->m_DrugsList.indexOf((IDrug*)drug), toHtml, mask);
+    result = drugsIo().getDrugPrescription(this, d->m_DrugsList.indexOf((IDrug*)drug), toHtml, mask);
 #else
     QString tmp;
     if (mask.isEmpty()) {
@@ -1049,8 +1061,10 @@ QString DrugsModel::getFullPrescription(const IDrug *drug, bool toHtml, const QS
     Utils::replaceTokens(tmp, tokens_value);
     if (toHtml)
         tmp = Utils::toHtmlAccent(tmp);
-    return tmp;
+    result = tmp;
 #endif
+    d->_posologicSentence.insert(drug, result);
+    return result;
 }
 
 Qt::DropActions DrugsModel::supportedDropActions() const
