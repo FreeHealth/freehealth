@@ -95,7 +95,7 @@ BasicItemEditorDialog::BasicItemEditorDialog(AbstractCalendarModel *model, QWidg
     Utils::centerWidget(this);
 }
 
-BasicItemEditorDialog::~BasicItemEditionDialog()
+BasicItemEditorDialog::~BasicItemEditorDialog()
 {
     delete ui;
 }
