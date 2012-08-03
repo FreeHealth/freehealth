@@ -303,15 +303,15 @@ choiceDialog::choiceDialog(QWidget * parent,bool roundtrip, QString preferredVal
     m_row = 0;
     m_timerUp = new QTimer(this);
     m_timerDown = new QTimer(this);
-    connect(ui->okButton,SIGNAL(pressed()),this,SLOT(beforeAccepted()));
-    connect(ui->quitButton,SIGNAL(pressed()),this,SLOT(reject()));
+    connect(ui->buttonBox,SIGNAL(accepted()),this,SLOT(beforeAccepted()));
+//    connect(ui->quitButton,SIGNAL(clicked()),this,SLOT(reject()));
     connect(ui->percentDoubleSpinBox,SIGNAL(valueChanged(double)),this,SLOT(value(double)));
     connect(ui->plusButton,SIGNAL(pressed()),this,SLOT(valueUp()));
     connect(ui->plusButton,SIGNAL(released()),this,SLOT(valueUpStop()));
     connect(ui->lessButton,SIGNAL(pressed()),this,SLOT(valueDown()));
     connect(ui->lessButton,SIGNAL(released()),this,SLOT(valueDownStop()));
-    connect(ui->plusConstButton,SIGNAL(pressed()),this,SLOT(quickPlus()));
-    connect(ui->lessConstButton,SIGNAL(pressed()),this,SLOT(quickLess()));
+    connect(ui->plusConstButton,SIGNAL(clicked()),this,SLOT(quickPlus()));
+    connect(ui->lessConstButton,SIGNAL(clicked()),this,SLOT(quickLess()));
     connect(m_actionTreeView,SIGNAL(clicked(const QModelIndex&)),this,SLOT(actionsOfTreeView(const QModelIndex&)));
 }
 
@@ -401,14 +401,14 @@ void choiceDialog::quickPlus(){
 
 void choiceDialog::quickLess(){
     if(m_quickInt == 1)
-	    return;
-  	/*else if(m_percent == 100){
+        return;
+    /*else if(m_percent == 100){
             m_percent = list[0].toDouble();
- 		}*/
-    else{
+        }*/
+    else {
         m_quickInt--;
         m_percent = m_hashPercentages.value(m_quickInt).toDouble();
- 		}
+    }
     ui->percentDoubleSpinBox->setValue(m_percent);
 }
 
@@ -420,22 +420,29 @@ QList<double> choiceDialog::listOfPercentValues(){
     return m_listOfPercentValues;
 }
 
+/*! \brief called when the user clicks the ok button
+ *
+ * Does a few checks like percentage == 100, etc. 
+ */
 void choiceDialog::beforeAccepted(){
      receiptsEngine rIO;
 
      if (WarnDebugMessage)
-         qDebug() << __FILE__ << QString::number(__LINE__) << " m_insuranceUid =" << QString::number(m_insuranceUid.toInt()) ;
+         qDebug() << __FILE__ << QString::number(__LINE__) << " m_insuranceUid =" << QString::number(m_insuranceUid.toInt());
      QString debtor = rIO.getStringFromInsuranceUid(m_insuranceUid);
      if (WarnDebugMessage)
-         qDebug() << __FILE__ << QString::number(__LINE__) << " debtor =" << debtor ;
+         qDebug() << __FILE__ << QString::number(__LINE__) << " debtor =" << debtor;
      
      
-     if (m_percent!=100.00) {
-         bool yes = Utils::yesNoMessageBox(tr("Choose another percentage value."), tr("Do you want to choose another percentage?"));
+     if (m_percent != 100.00) {
+         bool yes = Utils::yesNoMessageBox(tr("The percentage value is lower than 100%."),
+                                           tr("Do you want to choose another percentage?"),
+                                           0,
+                                           tr("Unusual percentage"));
          if (yes) {
              int row = m_modelChoicePercentDebtorSiteDistruleValues->rowCount();
              if (WarnDebugMessage)
-                 LOG_ERROR("row = "+QString::number(row));
+                 LOG_ERROR("row = " + QString::number(row));
              m_modelChoicePercentDebtorSiteDistruleValues->insertRows(row,1,QModelIndex());
              m_modelChoicePercentDebtorSiteDistruleValues->setData(m_modelChoicePercentDebtorSiteDistruleValues->index(row,TYPE_OF_CHOICE),returnChoiceDialog(),Qt::EditRole);
              m_modelChoicePercentDebtorSiteDistruleValues->setData(m_modelChoicePercentDebtorSiteDistruleValues->index(row,PERCENTAGE),m_percent,Qt::EditRole);
@@ -444,14 +451,13 @@ void choiceDialog::beforeAccepted(){
              m_modelChoicePercentDebtorSiteDistruleValues->setData(m_modelChoicePercentDebtorSiteDistruleValues->index(row,DISTRULES),m_distanceRuleType,Qt::EditRole);
              m_modelChoicePercentDebtorSiteDistruleValues->submit();
              if (WarnDebugMessage)
-                 LOG_ERROR("rowCount = "+QString::number(m_modelChoicePercentDebtorSiteDistruleValues->rowCount()));
+                 LOG_ERROR("rowCount = " + QString::number(m_modelChoicePercentDebtorSiteDistruleValues->rowCount()));
              //++m_row;
              
-         }
-         else{
+         } else {
              int row = m_modelChoicePercentDebtorSiteDistruleValues->rowCount();
              if (WarnDebugMessage)
-                 LOG_ERROR("row = "+QString::number(row));
+                 LOG_ERROR("row = " + QString::number(row));
              m_modelChoicePercentDebtorSiteDistruleValues->insertRows(row,1,QModelIndex());
              m_modelChoicePercentDebtorSiteDistruleValues->setData(m_modelChoicePercentDebtorSiteDistruleValues->index(row,TYPE_OF_CHOICE),returnChoiceDialog(),Qt::EditRole);
              m_modelChoicePercentDebtorSiteDistruleValues->setData(m_modelChoicePercentDebtorSiteDistruleValues->index(row,PERCENTAGE),m_percent,Qt::EditRole);
@@ -459,14 +465,14 @@ void choiceDialog::beforeAccepted(){
              m_modelChoicePercentDebtorSiteDistruleValues->setData(m_modelChoicePercentDebtorSiteDistruleValues->index(row,SITE),m_siteUid,Qt::EditRole);
              m_modelChoicePercentDebtorSiteDistruleValues->setData(m_modelChoicePercentDebtorSiteDistruleValues->index(row,DISTRULES),m_distanceRuleType,Qt::EditRole);
              m_modelChoicePercentDebtorSiteDistruleValues->submit();
-         
+             
              accept();
-             }
+         }
      }
      else
      {
          if (WarnDebugMessage)
-                 LOG_ERROR("in percentage == 100.00");
+             LOG_ERROR("in percentage == 100.00");
          m_modelChoicePercentDebtorSiteDistruleValues->insertRows(m_row,1,QModelIndex());
          m_modelChoicePercentDebtorSiteDistruleValues->setData(m_modelChoicePercentDebtorSiteDistruleValues->index(m_row,TYPE_OF_CHOICE),returnChoiceDialog(),Qt::EditRole);
          m_modelChoicePercentDebtorSiteDistruleValues->setData(m_modelChoicePercentDebtorSiteDistruleValues->index(m_row,PERCENTAGE),m_percent,Qt::EditRole);

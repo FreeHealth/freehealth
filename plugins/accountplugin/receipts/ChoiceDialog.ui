@@ -16,66 +16,18 @@
   <layout class="QGridLayout" name="gridLayout_4">
    <item row="0" column="0">
     <layout class="QGridLayout" name="gridLayout_3">
+     <item row="2" column="2">
+      <widget class="QPushButton" name="quitButton">
+       <property name="text">
+        <string>&amp;Quit</string>
+       </property>
+      </widget>
+     </item>
      <item row="0" column="0" rowspan="3">
       <widget class="QGroupBox" name="paramsGroupBox">
        <property name="title">
         <string>Parameters</string>
        </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="QGroupBox" name="typeGroupBox">
-       <property name="title">
-        <string>Type of payment</string>
-       </property>
-       <layout class="QGridLayout" name="gridLayout_5">
-        <item row="0" column="0">
-         <layout class="QGridLayout" name="gridLayout">
-          <item row="0" column="0">
-           <widget class="QRadioButton" name="cashButton">
-            <property name="text">
-             <string>Cash</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QRadioButton" name="checkButton">
-            <property name="text">
-             <string>Check</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0">
-           <widget class="QRadioButton" name="visaButton">
-            <property name="text">
-             <string>Credit Card</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="0">
-           <widget class="QRadioButton" name="otherButton">
-            <property name="text">
-             <string>Other</string>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="0">
-           <widget class="QRadioButton" name="bankingButton">
-            <property name="text">
-             <string>Banking</string>
-            </property>
-           </widget>
-          </item>
-          <item row="5" column="0">
-           <widget class="QRadioButton" name="dueButton">
-            <property name="text">
-             <string>Due</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-       </layout>
       </widget>
      </item>
      <item row="0" column="2">
@@ -141,6 +93,68 @@
        </layout>
       </widget>
      </item>
+     <item row="0" column="1">
+      <widget class="QGroupBox" name="typeGroupBox">
+       <property name="title">
+        <string>Type of payment</string>
+       </property>
+       <layout class="QGridLayout" name="gridLayout_5">
+        <item row="0" column="0">
+         <layout class="QGridLayout" name="gridLayout">
+          <item row="0" column="0">
+           <widget class="QRadioButton" name="cashButton">
+            <property name="text">
+             <string>Cash</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QRadioButton" name="checkButton">
+            <property name="text">
+             <string>Check</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QRadioButton" name="visaButton">
+            <property name="text">
+             <string>Credit Card</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QRadioButton" name="otherButton">
+            <property name="text">
+             <string>Other</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0">
+           <widget class="QRadioButton" name="bankingButton">
+            <property name="text">
+             <string>Banking</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0">
+           <widget class="QRadioButton" name="dueButton">
+            <property name="text">
+             <string>Due</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item row="1" column="2">
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>TextLabel</string>
+       </property>
+      </widget>
+     </item>
      <item row="2" column="1">
       <widget class="QPushButton" name="okButton">
        <property name="minimumSize">
@@ -157,17 +171,10 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="2">
-      <widget class="QPushButton" name="quitButton">
-       <property name="text">
-        <string>&amp;Quit</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="2">
-      <widget class="QLabel" name="label">
-       <property name="text">
-        <string>TextLabel</string>
+     <item row="3" column="1" colspan="2">
+      <widget class="QDialogButtonBox" name="buttonBox">
+       <property name="standardButtons">
+        <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
        </property>
       </widget>
      </item>
