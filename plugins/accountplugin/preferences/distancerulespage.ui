@@ -167,6 +167,12 @@ p, li { white-space: pre-wrap; }
    </item>
    <item row="7" column="1">
     <widget class="QLabel" name="distanceRulesUidLabel">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+       <horstretch>100</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="text">
       <string>uid</string>
      </property>
