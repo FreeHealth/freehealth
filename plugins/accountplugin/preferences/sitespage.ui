@@ -24,14 +24,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QComboBox" name="wpComboBox">
-       <property name="minimumSize">
-        <size>
-         <width>200</width>
-         <height>0</height>
-        </size>
-       </property>
-      </widget>
+      <widget class="QComboBox" name="wpComboBox"/>
      </item>
      <item>
       <widget class="QPushButton" name="addButton">
@@ -106,7 +99,10 @@
          </property>
         </widget>
        </item>
-       <item row="2" column="0">
+       <item row="0" column="1">
+        <widget class="QLineEdit" name="nameEdit"/>
+       </item>
+       <item row="1" column="0">
         <widget class="QLabel" name="adressLabel">
          <property name="text">
           <string>Adress</string>
@@ -116,17 +112,20 @@
          </property>
         </widget>
        </item>
-       <item row="4" column="0">
+       <item row="1" column="1">
+        <widget class="QLineEdit" name="adressEdit"/>
+       </item>
+       <item row="2" column="0">
         <widget class="QLabel" name="zipLabel">
          <property name="text">
           <string>ZIP</string>
          </property>
         </widget>
        </item>
-       <item row="4" column="1">
+       <item row="2" column="1">
         <widget class="Utils::QButtonLineEdit" name="zip"/>
        </item>
-       <item row="5" column="0">
+       <item row="3" column="0">
         <widget class="QLabel" name="cityLabel">
          <property name="text">
           <string>City</string>
@@ -136,26 +135,10 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="1">
-        <widget class="QLineEdit" name="nameEdit">
-         <property name="minimumSize">
-          <size>
-           <width>200</width>
-           <height>0</height>
-          </size>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="1">
-        <widget class="QLineEdit" name="adressEdit"/>
-       </item>
-       <item row="5" column="1">
+       <item row="3" column="1">
         <widget class="Utils::QButtonLineEdit" name="cityEdit"/>
        </item>
-       <item row="6" column="1">
-        <widget class="Views::CountryComboBox" name="countryComboBox"/>
-       </item>
-       <item row="6" column="0">
+       <item row="5" column="0">
         <widget class="QLabel" name="countryLabel">
          <property name="text">
           <string>Country</string>
@@ -164,6 +147,9 @@
           <cstring>countryComboBox</cstring>
          </property>
         </widget>
+       </item>
+       <item row="5" column="1">
+        <widget class="Views::CountryComboBox" name="countryComboBox"/>
        </item>
       </layout>
      </widget>
@@ -192,12 +178,6 @@
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>371</width>
-           <height>0</height>
-          </size>
          </property>
         </widget>
        </item>
@@ -254,7 +234,7 @@
         <widget class="QLineEdit" name="contactEdit">
          <property name="minimumSize">
           <size>
-           <width>371</width>
+           <width>0</width>
            <height>45</height>
           </size>
          </property>

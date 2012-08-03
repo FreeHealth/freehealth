@@ -80,14 +80,14 @@ This feature is useful for testers and should not be used by normal users.</stri
       <item row="0" column="0" colspan="2">
        <widget class="QCheckBox" name="checkBox">
         <property name="text">
-         <string>Delete actual database (data will be definitively lost)</string>
+         <string>Delete actual database (ATTENTION: data will be definitively lost!)</string>
         </property>
        </widget>
       </item>
       <item row="1" column="0">
        <widget class="QLabel" name="label_3">
         <property name="text">
-         <string>Number of bank accounts to create</string>
+         <string>Bank accounts to create</string>
         </property>
        </widget>
       </item>
@@ -97,7 +97,7 @@ This feature is useful for testers and should not be used by normal users.</stri
       <item row="2" column="0">
        <widget class="QLabel" name="label_4">
         <property name="text">
-         <string>Number of movements to create</string>
+         <string>Movements to create</string>
         </property>
        </widget>
       </item>
@@ -107,7 +107,7 @@ This feature is useful for testers and should not be used by normal users.</stri
       <item row="3" column="0">
        <widget class="QLabel" name="label_5">
         <property name="text">
-         <string>Number of medical procedures to create</string>
+         <string>Medical procedures to create</string>
         </property>
        </widget>
       </item>
@@ -117,7 +117,7 @@ This feature is useful for testers and should not be used by normal users.</stri
       <item row="4" column="0">
        <widget class="QLabel" name="label_6">
         <property name="text">
-         <string>Number of accounts to create</string>
+         <string>Accounts to create</string>
         </property>
        </widget>
       </item>

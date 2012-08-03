@@ -130,9 +130,9 @@ PercentagesWidget::PercentagesWidget(QWidget *parent) :
         m_user_fullName = "Admin_Test";
     }
     addButton->setIcon(theme()->icon(Core::Constants::ICONADD));
-    addButton->setText("New");
+//    addButton->setText("New");
     deleteButton->setIcon(theme()->icon(Core::Constants::ICONREMOVE));
-    deleteButton->setText("Delete");
+//    deleteButton->setText("Delete");
     
     m_Model = new AccountDB::PercentModel(this);
     // TODO: m_Model->setUserUuid();

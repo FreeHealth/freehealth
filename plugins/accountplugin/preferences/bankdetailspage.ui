@@ -7,27 +7,122 @@
     <x>0</x>
     <y>0</y>
     <width>627</width>
-    <height>424</height>
+    <height>489</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
+   <item row="2" column="1">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
    <item row="0" column="1" rowspan="2">
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
       <string>Bank details</string>
      </property>
-     <layout class="QGridLayout" name="gridLayout">
-      <item row="0" column="0" colspan="2">
+     <layout class="QFormLayout" name="formLayout">
+      <item row="4" column="1">
+       <widget class="QLineEdit" name="currentLabel"/>
+      </item>
+      <item row="6" column="1">
+       <widget class="QLineEdit" name="owner"/>
+      </item>
+      <item row="8" column="1">
+       <widget class="QLineEdit" name="ownerAdress"/>
+      </item>
+      <item row="10" column="1">
+       <widget class="QLineEdit" name="iban"/>
+      </item>
+      <item row="12" column="1">
+       <widget class="QLineEdit" name="number"/>
+      </item>
+      <item row="14" column="1">
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <item>
+         <widget class="QDoubleSpinBox" name="balanceSpin">
+          <property name="minimum">
+           <double>-1000000000.000000000000000</double>
+          </property>
+          <property name="maximum">
+           <double>999999999.000000000000000</double>
+          </property>
+          <property name="value">
+           <double>0.000000000000000</double>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_8">
+          <property name="text">
+           <string>on</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QDateEdit" name="balanceDate"/>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </item>
+      <item row="15" column="0">
+       <widget class="QLabel" name="defaultLabel">
+        <property name="text">
+         <string>Use by default</string>
+        </property>
+       </widget>
+      </item>
+      <item row="15" column="1">
+       <widget class="QComboBox" name="defaultCombo"/>
+      </item>
+      <item row="17" column="0">
+       <widget class="QLabel" name="uid">
+        <property name="text">
+         <string>User UUID</string>
+        </property>
+       </widget>
+      </item>
+      <item row="17" column="1">
+       <widget class="QLabel" name="uidLabel">
+        <property name="text">
+         <string>uid</string>
+        </property>
+        <property name="textInteractionFlags">
+         <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByMouse</set>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
        <widget class="QLabel" name="accountLabel">
         <property name="text">
          <string>Available bank account</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="2">
+      <item row="2" column="1">
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
          <widget class="QComboBox" name="accountComboBox"/>
@@ -72,133 +167,50 @@
         </item>
        </layout>
       </item>
-      <item row="1" column="0">
+      <item row="4" column="0">
        <widget class="QLabel" name="labelLabel">
         <property name="text">
          <string>Label</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="2">
-       <widget class="QLineEdit" name="currentLabel"/>
-      </item>
-      <item row="2" column="0">
+      <item row="6" column="0">
        <widget class="QLabel" name="ownerLabel">
         <property name="text">
          <string>Owner</string>
         </property>
        </widget>
       </item>
-      <item row="2" column="2">
-       <widget class="QLineEdit" name="owner"/>
-      </item>
-      <item row="3" column="0">
+      <item row="8" column="0">
        <widget class="QLabel" name="adressLabel">
         <property name="text">
          <string>Owner address</string>
         </property>
        </widget>
       </item>
-      <item row="3" column="2">
-       <widget class="QLineEdit" name="ownerAdress"/>
-      </item>
-      <item row="4" column="0">
+      <item row="10" column="0">
        <widget class="QLabel" name="ibanLabel">
         <property name="text">
          <string>IBAN</string>
         </property>
        </widget>
       </item>
-      <item row="4" column="2">
-       <widget class="QLineEdit" name="iban"/>
-      </item>
-      <item row="5" column="0">
+      <item row="12" column="0">
        <widget class="QLabel" name="accountNumberLabel">
         <property name="text">
          <string>Bank account number</string>
         </property>
        </widget>
       </item>
-      <item row="5" column="2">
-       <widget class="QLineEdit" name="number"/>
-      </item>
-      <item row="6" column="0">
+      <item row="14" column="0">
        <widget class="QLabel" name="balanceLabel">
         <property name="text">
          <string>Balance</string>
         </property>
        </widget>
       </item>
-      <item row="6" column="2">
-       <layout class="QHBoxLayout" name="horizontalLayout_2">
-        <item>
-         <widget class="QDoubleSpinBox" name="balanceSpin">
-          <property name="minimum">
-           <double>-1000000000.000000000000000</double>
-          </property>
-          <property name="maximum">
-           <double>999999999.000000000000000</double>
-          </property>
-          <property name="value">
-           <double>0.000000000000000</double>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="label_8">
-          <property name="text">
-           <string>on</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QDateEdit" name="balanceDate">
-          <property name="displayFormat">
-           <string notr="true">dd/MM/yy</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item row="7" column="0">
-       <widget class="QLabel" name="defaultLabel">
-        <property name="text">
-         <string>Use by default</string>
-        </property>
-       </widget>
-      </item>
-      <item row="7" column="1" colspan="2">
-       <widget class="QComboBox" name="defaultCombo"/>
-      </item>
-      <item row="8" column="0">
-       <widget class="QLabel" name="uid">
-        <property name="text">
-         <string>uid</string>
-        </property>
-       </widget>
-      </item>
-      <item row="8" column="1" colspan="2">
-       <widget class="QLabel" name="uidLabel">
-        <property name="text">
-         <string/>
-        </property>
-       </widget>
-      </item>
      </layout>
     </widget>
-   </item>
-   <item row="2" column="1">
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>40</height>
-      </size>
-     </property>
-    </spacer>
    </item>
   </layout>
  </widget>

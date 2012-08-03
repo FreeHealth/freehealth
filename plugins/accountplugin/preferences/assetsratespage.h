@@ -76,7 +76,7 @@ public Q_SLOTS:
     void on_assetsNameComboBox_currentIndexChanged(int index);
     void on_addButton_clicked();
     void on_deleteButton_clicked();
-    void changeSpinBoxes(int index);
+    void updateSpinBoxes(int index);
 
 private:
     void changeEvent(QEvent *e);
