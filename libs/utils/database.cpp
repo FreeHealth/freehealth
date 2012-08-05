@@ -1610,10 +1610,12 @@ QString Database::fieldEquality(const int tableRef1, const int fieldRef1, const 
 }
 
 /**
- * Return -1 in case of an error or
- * returns a COUNT SQL command on the table \e tableref, field \e fieldref
- * with the filter \e filter. Filter whould be not contains the "WHERE" word.
+ * \brief returns amount if database records matching given filter
+ * 
+ * Executes a COUNT SQL command on the table \e tableref, field \e fieldref
+ * with the filter \e filter. Filter should not contain the "WHERE" keyword.
  * Creates its own transaction.
+ * \return int The counted items, -1 in case of an error.
 */
 int Database::count(const int & tableref, const int & fieldref, const QString &filter) const
 {
@@ -1644,7 +1646,7 @@ int Database::count(const int & tableref, const int & fieldref, const QString &f
 
 /**
  * Return a MAX SQL command on the table \e tableref, field \e fieldref with
- * the filter \e filter. Filter whould be not contains the "WHERE" word.
+ * the filter \e filter. Filter should not contain the "WHERE" keyword.
  * Creates its own transaction.
 */
 QVariant Database::max(const int &tableref, const int &fieldref, const QString &filter) const
@@ -1680,8 +1682,8 @@ QVariant Database::max(const int &tableref, const int &fieldref, const QString &
 
 /**
  * Return a MAX SQL command with grouping on the table \e tableref, field \e fieldref,
- * grouped by field \e groupBy with the filter \e filter. Filter whould be not
- * contains the "WHERE" word.
+ * grouped by field \e groupBy with the filter \e filter. 
+ * Filter should not contain the "WHERE" keyword.
  * Creates its own transaction.
 */
 QVariant Database::max(const int &tableref, const int &fieldref, const int &groupBy, const QString &filter) const
@@ -1717,8 +1719,8 @@ QVariant Database::max(const int &tableref, const int &fieldref, const int &grou
 
 /**
  * Return a MIN SQL command with grouping on the table \e tableref, field \e fieldref,
- * grouped by field \e groupBy with the filter \e filter. Filter whould be not contains
- * the "WHERE" word.
+ * grouped by field \e groupBy with the filter \e filter. 
+ * Filter should not contain the "WHERE" keyword.
  * Creates its own transaction.
 */
 QVariant Database::min(const int &tableref, const int &fieldref, const QString &filter) const
@@ -1754,7 +1756,7 @@ QVariant Database::min(const int &tableref, const int &fieldref, const QString &
 
 /**
  * Return a MAX SQL command on the table \e tableref, field \e fieldref with
- * the filter \e filter. Filter whould be not contains the "WHERE" word.
+ * the filter \e filter. Filter should not contain the "WHERE" keyword.
 */
 QString Database::maxSqlCommand(const int &tableref, const int &fieldref, const QString &filter) const
 {
