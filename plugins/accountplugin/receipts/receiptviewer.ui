@@ -31,7 +31,7 @@
         </size>
        </property>
        <property name="title">
-        <string>Amount</string>
+        <string>Amount before acceptation</string>
        </property>
        <layout class="QGridLayout" name="gridLayout">
         <item row="0" column="0">
@@ -65,7 +65,7 @@
         </size>
        </property>
        <property name="title">
-        <string>Values</string>
+        <string>Choose your billing values</string>
        </property>
       </widget>
      </item>
@@ -141,13 +141,6 @@
         <widget class="QRadioButton" name="displayRadioButton">
          <property name="text">
           <string>View</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="freeTextCheckBox">
-         <property name="text">
-          <string>Free text</string>
          </property>
         </widget>
        </item>

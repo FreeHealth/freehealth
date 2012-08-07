@@ -34,6 +34,7 @@
 #include "receiptsIO.h"
 #include "ui_ChoiceDialog.h"
 #include "constants.h"
+#include "tools.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/iuser.h>
@@ -51,6 +52,8 @@ enum { WarnDebugMessage = false };
 
 using namespace ChoiceActions;
 using namespace Trans::ConstantTranslations;
+using namespace ReceiptsConstants;
+using namespace Tools;
 
 static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
 
@@ -132,69 +135,75 @@ bool treeViewsActions::isChildOfThesaurus(){
 void treeViewsActions::fillActionTreeView()
 {
     m_actionsTreeModel = new QStandardItemModel;
+    ReceiptsTools rt;
     QStringList listOfMainActions;
-    QMap<QString,QString> parametersMap;
-    parametersMap.insert(trUtf8("Debtor"),"insurance");
-    parametersMap.insert(trUtf8("Sites"),"sites");
-    parametersMap.insert(trUtf8("Distance rules"),"distance_rules");
-    listOfMainActions = parametersMap.keys();
+    QMap<int,QString> parametersMap;
+    parametersMap.insert(DEBTOR_ITEM,rt.getStringFromRows(DEBTOR_ITEM));
+    parametersMap.insert(SITES_ITEM,rt.getStringFromRows(SITES_ITEM));
+    parametersMap.insert(DISTANCE_RULES_ITEM,rt.getStringFromRows(DISTANCE_RULES_ITEM));
+    listOfMainActions = parametersMap.values();
+    QList<int> listOfEnums;
+    listOfEnums << DEBTOR_ITEM << SITES_ITEM << DISTANCE_RULES_ITEM;
     //insert items from tables if available
     QMap<QString,QString> mapSubItems;
     ReceiptsManager manager;
-    QString strKeysParameters;
-    foreach(strKeysParameters,listOfMainActions){
-        QString table = parametersMap.value(strKeysParameters);
+    //QString strKeysParameters;
+    for (int item = 0; item < listOfEnums.size();++item){
+        QString table = rt.getStringFromRows(item);
         QStringList listOfItemsOfTable;
         QString null = QString();
-        listOfItemsOfTable = manager.getParametersDatas(null,table).keys();//QHash<QString,QVariant> name,uid
+        listOfItemsOfTable = manager.getParametersDatas(null,item).keys();//QHash<QString,QVariant> name,uid
         QString strItemsOfTable;
         foreach(strItemsOfTable,listOfItemsOfTable){
-            mapSubItems.insertMulti(strKeysParameters,strItemsOfTable);
-        }
+            mapSubItems.insertMulti(table,strItemsOfTable);
+            }
         //default values if unavailables :
         if (listOfItemsOfTable.size()<1)
         {
-        	  if (strKeysParameters.contains(trUtf8("Debtor")))
+        	  if (item == DEBTOR_ITEM)
         	  {
-        	       mapSubItems.insertMulti(strKeysParameters,"Patient");
-                       mapSubItems.insertMulti(strKeysParameters,"CPAM28");  
+        	       mapSubItems.insertMulti(table,"Patient");
+                       mapSubItems.insertMulti(table,"CPAM28");  
         	      }
-        	  else if (strKeysParameters.contains(trUtf8("Sites")))
+        	  else if (item == SITES_ITEM)
         	  {
-        	       mapSubItems.insertMulti("Sites","cabinet");
-                       mapSubItems.insertMulti("Sites","clinique");  
+        	       mapSubItems.insertMulti(table,"cabinet");
+                       mapSubItems.insertMulti(table,"clinique");  
         	      }
-        	  else if (strKeysParameters.contains(trUtf8("Distance rules")))
+        	  else if (item == DISTANCE_RULES_ITEM)
         	  {
-        	  	  mapSubItems.insertMulti("Distance rules","DistPrice");
+        	  	  mapSubItems.insertMulti(table,"DistPrice");
         	      }
         	  else
         	  {
         	       qWarning() << __FILE__ << QString::number(__LINE__) 
-        	       << " No default value for "<< strKeysParameters ;
+        	       << " No default value for "<< table ;
         	       }
             }
     }
     QStandardItem *parentItem = treeModel()->invisibleRootItem();
     QString strMainActions;
+    
     foreach(strMainActions,listOfMainActions){
         if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " strMainActions =" << strMainActions ;
         QStandardItem *actionItem = new QStandardItem(strMainActions);
+        int parentEnumItem = 0;
+        parentEnumItem = rt.getEnumItemFromRow(strMainActions);
         //treeViewsActions colors
-        if (strMainActions.contains(trUtf8("Debtor")))
+        if (parentEnumItem == DEBTOR_ITEM)
         {
         	  QBrush green(Qt::darkGreen);
                   actionItem->setForeground(green);
             }
 
-        else if (strMainActions.contains(trUtf8("Sites")))
+        else if (parentEnumItem == SITES_ITEM)
         {
         	  QBrush green(Qt::darkGreen);
                   actionItem->setForeground(green);       	  
             }
 
-        else if (strMainActions.contains(trUtf8("Distance rules")))
+        else if (parentEnumItem == DISTANCE_RULES_ITEM)
         {
         	  QBrush green(Qt::darkGreen);
                   actionItem->setForeground(green);
@@ -256,7 +265,7 @@ choiceDialog::choiceDialog(QWidget * parent,bool roundtrip, QString preferredVal
     ui->distanceDoubleSpinBox->hide();
     ui->distanceGroupBox->hide();
     m_percent = 100.00;
-    m_percentValue = 100.00;
+    //m_percentValue = 100.00;
     ReceiptsManager manager;
     manager.getpreferredValues();
     m_hashPercentages = manager.getPercentages();
@@ -303,8 +312,9 @@ choiceDialog::choiceDialog(QWidget * parent,bool roundtrip, QString preferredVal
     m_row = 0;
     m_timerUp = new QTimer(this);
     m_timerDown = new QTimer(this);
-    connect(ui->buttonBox,SIGNAL(accepted()),this,SLOT(beforeAccepted()));
-//    connect(ui->quitButton,SIGNAL(clicked()),this,SLOT(reject()));
+   // connect(ui->buttonBox,SIGNAL(accepted()),this,SLOT(beforeAccepted()));
+    connect(ui->okButton,SIGNAL(pressed()),this,SLOT(beforeAccepted()));
+    connect(ui->quitButton,SIGNAL(pressed()),this,SLOT(reject()));
     connect(ui->percentDoubleSpinBox,SIGNAL(valueChanged(double)),this,SLOT(value(double)));
     connect(ui->plusButton,SIGNAL(pressed()),this,SLOT(valueUp()));
     connect(ui->plusButton,SIGNAL(released()),this,SLOT(valueUpStop()));
@@ -366,7 +376,7 @@ int choiceDialog::returnChoiceDialog(){
 }
 
 void choiceDialog::value(double val){
-    m_percentValue = val;
+    m_percent = val;
 }
 
 void choiceDialog::valueUp(){

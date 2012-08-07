@@ -39,6 +39,8 @@
 
 #include "constants.h"
 
+#include "tools.h"
+
 #include "ui_receiptviewer.h"
 
 #include <accountbaseplugin/constants.h>
@@ -68,15 +70,18 @@
 #include <QBrush>
 #include <QColor>
 
-enum { WarnDebugMessage = false };
+enum { WarnDebugMessage = true };
 
 using namespace ReceiptsConstants;
 using namespace Constants;
 using namespace Trans::ConstantTranslations;
+using namespace Tools;
 
 static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
 static inline Core::IPatient *patient() { return Core::ICore::instance()->patient(); }
 static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
+
+
 
 namespace InternalAmount {
 
@@ -439,46 +444,53 @@ bool treeViewsActions::isChildOfThesaurus() {
 bool treeViewsActions::fillActionTreeView()
 {
     bool b = true;
+    ReceiptsTools rt;
     m_actionsTreeModel = new QStandardItemModel;
     QStringList listOfMainActions;
-    QMap<QString,QString> parametersMap;
-    parametersMap.insert(tr("Thesaurus"),"thesaurus");
-    parametersMap.insert(tr("Values"),"values");
-    parametersMap.insert(tr("Preferred Value"),"Preferred Value");
-    parametersMap.insert(tr("Round trip"),"Round trip");
-
-    listOfMainActions = parametersMap.keys();
+    QMap<int,QString> parametersMap;
+    qDebug() << __FILE__ << QString::number(__LINE__) << " RECEIPTS "   ;
+    parametersMap.insert(THESAURUS_ITEM,rt.getStringFromRows(THESAURUS_ITEM));
+    parametersMap.insert(ALL_VALUES_ITEM,rt.getStringFromRows(ALL_VALUES_ITEM));
+    parametersMap.insert(PREFERED_VALUE_ITEM,rt.getStringFromRows(PREFERED_VALUE_ITEM));
+    parametersMap.insert(ROUND_TRIP_ITEM,rt.getStringFromRows(ROUND_TRIP_ITEM));
+    parametersMap.insert(FREE_VALUE_ITEM,rt.getStringFromRows(FREE_VALUE_ITEM));
+    qDebug() << __FILE__ << QString::number(__LINE__) << " RECEIPTS "   ;
+    listOfMainActions = parametersMap.values();
     //insert items from tables if available
     //QMap<QString,QString> m_mapSubItems;
     m_mapSubItems.clear();
     ReceiptsManager manager;
-    QString strKeysParameters;
-    foreach(strKeysParameters,listOfMainActions){
-        QString table = parametersMap.value(strKeysParameters);
+    QList<int> listOfEnums;
+    listOfEnums << THESAURUS_ITEM << ALL_VALUES_ITEM << PREFERED_VALUE_ITEM 
+                << ROUND_TRIP_ITEM << FREE_VALUE_ITEM ;
+    //QString strKeysParameters;
+    for (int item = 0; item < listOfEnums.size(); ++item)
+    {
+        QString table = parametersMap.value(item);
         if (WarnDebugMessage)
         qDebug() << __FILE__ << QString::number(__LINE__) << "table" << table;
         QStringList listOfItemsOfTable;
-        listOfItemsOfTable = manager.getParametersDatas(m_userUuid,table).keys();//QHash<QString,QVariant> name,uid
+        listOfItemsOfTable = manager.getParametersDatas(m_userUuid,item).keys();//QHash<QString,QVariant> name,uid
         QString strItemsOfTable;
         foreach(strItemsOfTable,listOfItemsOfTable){
-            m_mapSubItems.insertMulti(strKeysParameters,strItemsOfTable);
-        }
+            m_mapSubItems.insertMulti(table,strItemsOfTable);
+            }
         //default values if unavailables :
         if (listOfItemsOfTable.size()<1) {
             if (WarnDebugMessage) {
                 qDebug() << __FILE__ << QString::number(__LINE__) << "listOfItemsOfTable.size()<1"  ;
-                qDebug() << __FILE__ << QString::number(__LINE__) << "strKeysParameters  =" << strKeysParameters ;
+                qDebug() << __FILE__ << QString::number(__LINE__) << "table  =" << table ;
             }
-            if (strKeysParameters == tr("Thesaurus")) {
+            if (item == THESAURUS_ITEM) {
                 if (WarnDebugMessage)
                     qDebug() << __FILE__ << QString::number(__LINE__) << " in thesaurus " ;
-                m_mapSubItems.insertMulti(tr("Thesaurus"),"CS");
-                m_mapSubItems.insertMulti(tr("Thesaurus"),"V");
+                m_mapSubItems.insertMulti(table,"CS");
+                m_mapSubItems.insertMulti(table,"V");
             }
             else {
                 if (WarnDebugMessage)
                     qWarning() << __FILE__ << QString::number(__LINE__)
-                               << " No default value for "<< strKeysParameters ;
+                               << " No default value for "<< table ;
             }
         }
     }
@@ -498,28 +510,38 @@ bool treeViewsActions::fillActionTreeView()
         actionItem->setEditable(false);
         actionItem->setEnabled(true);
         int row = 0;
-        //treeViewsActions colors
-        if (strMainActions == tr("Preferred Value")) {
+        qDebug() << __FILE__ << QString::number(__LINE__) << " RECEIPTS "   ;
+        //treeViewsActions and colors
+        if (strMainActions == rt.getStringFromRows(PREFERED_VALUE_ITEM)) {
             QBrush red(Qt::red);
             actionItem->setForeground(red);
-            m_mapOfMainItems.insert(PREFERENTIAL_VALUE,actionItem);
-            row = 0;
-        } else if (strMainActions == tr("Thesaurus")) {
+            m_mapOfMainItems.insert(PREFERED_VALUE_ITEM,actionItem);
+            row = PREFERED_VALUE_ITEM;qDebug() << __FILE__ << QString::number(__LINE__) << " RECEIPTS "   ;
+        } else if (strMainActions == rt.getStringFromRows(THESAURUS_ITEM)) {
             QBrush red(Qt::red);
             actionItem->setForeground(red);
-            m_mapOfMainItems.insert(THESAURUS,actionItem);
-            row = 1;
-        } else if (strMainActions == tr("Values")) {
+            m_mapOfMainItems.insert(THESAURUS_ITEM,actionItem);
+            row = THESAURUS_ITEM;
+        } else if (strMainActions == rt.getStringFromRows(ALL_VALUES_ITEM)) {
             QBrush blue(Qt::blue);
             actionItem->setForeground(blue);
-            m_mapOfMainItems.insert(VALUES,actionItem);
-            row = 2;
-        } else if (strMainActions == tr("Round trip")) {
+            m_mapOfMainItems.insert(ALL_VALUES_ITEM,actionItem);
+            row = ALL_VALUES_ITEM;
+        } else if (strMainActions == rt.getStringFromRows(ROUND_TRIP_ITEM)) {
             QBrush blue(Qt::blue);
             actionItem->setForeground(blue);
-            m_mapOfMainItems.insert(ROUND_TRIP,actionItem);
-            row = 3;
-        } else {
+            m_mapOfMainItems.insert(ROUND_TRIP_ITEM,actionItem);
+            row = ROUND_TRIP_ITEM;          
+        } else if (strMainActions == rt.getStringFromRows(FREE_VALUE_ITEM))
+        {
+           QBrush green(Qt::green);
+            actionItem->setForeground(green);
+            m_mapOfMainItems.insert(FREE_VALUE_ITEM,actionItem);
+            row = FREE_VALUE_ITEM;	  
+            }
+        
+        
+        else {
             if (WarnDebugMessage)
                 qWarning() << __FILE__ << QString::number(__LINE__) << "Error color treeViewsActions." ;
         }
@@ -529,7 +551,7 @@ bool treeViewsActions::fillActionTreeView()
         
         }//
         
-        for (int i = 0; i < rows_MaxParam; i += 1)
+        for (int i = 0; i < listOfEnums.size(); ++i)
         {
         	QStandardItem *actionItem = m_mapOfMainItems.value(i);
         	treeModel()->insertRow(i,actionItem);
@@ -721,6 +743,10 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
     ui->dateExecution->setDate(QDate::currentDate());
     ui->datePayment->setDisplayFormat("yyyy-MM-dd");
     ui->datePayment->setDate(QDate::currentDate());
+    
+    ui->datePayment->hide();
+    ui->paymentLabel->hide();
+    
     /*ui->dateBanked->setDisplayFormat("yyyy-MM-dd");
     ui->dateBanked->setDate(QDate::currentDate());
     ui->dateBook->setDisplayFormat("yyyy-MM-dd");
@@ -845,6 +871,7 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex & index) {
     QString data = index.data(Qt::DisplayRole).toString();
     if (WarnDebugMessage)
         qDebug() << __FILE__ << QString::number(__LINE__) << " DATA =" << data;
+    ReceiptsTools rt;
     ReceiptsManager manager;
     QHash<QString,QString> hashOfValues;
     int typeOfPayment = ReceiptsConstants::Cash;
@@ -852,7 +879,7 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex & index) {
     QVariant  debtor;
     QVariant site;
     QVariant distrules;
-    if(index.row() == VALUES && index.parent() == QModelIndex() ){ //values
+    if(index.row() == ALL_VALUES_ITEM && index.parent() == QModelIndex() ){ //values
         findReceiptsValues *rv = new findReceiptsValues(this);
         if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " in findReceiptsValues AND VALUES "  ;
@@ -880,7 +907,7 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex & index) {
                }
              }
          }
-    if(index.row() == PREFERENTIAL_VALUE && index.parent() == QModelIndex()){// preferential act of payment
+    if(index.row() == PREFERED_VALUE_ITEM && index.parent() == QModelIndex()){// preferential act of payment
         if (WarnDebugMessage)
             	qDebug() << __FILE__ << QString::number(__LINE__) << " PREFERENTIAL_VALUE";
         choiceDialog choice(this,false);
@@ -927,7 +954,7 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex & index) {
             }
         }
         
-    if (manager.getDistanceRules().keys().contains(data))
+   /* if (manager.getDistanceRules().keys().contains(rt.getStringFromRows(ROUND_TRIP_ITEM)))
     {
     	  if (WarnDebugMessage)
             	qDebug() << __FILE__ << QString::number(__LINE__) << " in getDistanceRules";
@@ -937,8 +964,8 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex & index) {
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " m_distanceRuleValue =" << QString::number(m_distanceRuleValue) ;
     	  if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " m_distanceRuleType =" << m_distanceRuleType ;
-        }
-    if (index.row() == ROUND_TRIP && index.parent() == QModelIndex())
+        }*/
+    if (index.row() == ROUND_TRIP_ITEM && index.parent() == QModelIndex())
     {
     	  if (WarnDebugMessage)
             	qDebug() << __FILE__ << QString::number(__LINE__) << " in ROUND_TRIP";
@@ -980,7 +1007,7 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex & index) {
     	  
         }
 
-    if (manager.getHashOfThesaurus().keys().contains(data))
+    if (manager.getHashOfThesaurus().keys().contains(rt.getStringFromRows(THESAURUS_ITEM)))
     {
         if (WarnDebugMessage)
                 qDebug() << __FILE__ << QString::number(__LINE__) << " IN THESAURUS " ;
@@ -1193,7 +1220,7 @@ void ReceiptViewer::save()
     {
     	patientName = manager.getFullName();
         }
-    if (ui->freeTextCheckBox->isChecked())
+   /* if (ui->freeTextCheckBox->isChecked())
     {
     	FreeText freeTextDialog(this);
     	if (freeTextDialog.exec()==QDialog::Accepted)
@@ -1201,7 +1228,7 @@ void ReceiptViewer::save()
     		patientName = freeTextDialog.getFreeText();
     	    }
     	ui->freeTextCheckBox->setChecked(false);
-        }
+        }*/
     QHash<int,QVariant> hash;
     hash.insert(ACCOUNT_UID,"UID");
     hash.insert(ACCOUNT_USER_UID,userUuid);

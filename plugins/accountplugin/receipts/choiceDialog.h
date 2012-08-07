@@ -102,7 +102,7 @@ public:
   double getDistanceNumber(const QString & data);
   int returnChoiceDialog();
   double returnPercentValue();
-  double m_percentValue;
+  //double m_percentValue;
   QList<double> m_listOfPercentValues;
   QStandardItemModel * m_modelChoicePercentDebtorSiteDistruleValues;
   QList<double> listOfPercentValues();

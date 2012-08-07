@@ -32,6 +32,9 @@
 #ifndef ACCOUNTRECEIPTS_CONTANTS_H
 #define ACCOUNTRECEIPTS_CONTANTS_H
 
+#include <QObject>
+
+
 namespace ReceiptsConstants{
     enum TypeOfPayment{
         Cash = 0,
@@ -55,7 +58,21 @@ namespace ReceiptsConstants{
         HDAct,
         MaxOfHeaderDatas
     };
-
+    enum ItemsOfTreeView 
+    {
+        THESAURUS_ITEM = 0,
+        ALL_VALUES_ITEM,
+        PREFERED_VALUE_ITEM,
+        ROUND_TRIP_ITEM,
+        FREE_VALUE_ITEM,
+        DEBTOR_ITEM,
+        SITES_ITEM,
+        DISTANCE_RULES_ITEM,
+        BANK_ITEM,
+        RULES_ITEM,
+        ItemsOfTreeView_MaxParam
+    };
+    
 }
 
 #endif
