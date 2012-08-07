@@ -54,18 +54,18 @@ namespace Ui {
     class ReceiptViewer;
 }
 
-// TODO: this is not correct. Two choices: create its own files or hide it in the cpp in an anonymous namespace.
 namespace InternalAmount {
 class AmountModel;
 }  // End namespace Internal
 
-enum Rows {
+/*enum Rows {
         PREFERENTIAL_VALUE = 0,
         THESAURUS,
         VALUES,
         ROUND_TRIP,
         rows_MaxParam
-        };
+        };*/
+
 
 class treeViewsActions: public QTreeView
 {

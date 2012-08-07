@@ -32,6 +32,8 @@
 #include "receiptsmanager.h"
 #include "receiptsIO.h"
 #include "xmlcategoriesparser.h"
+#include "constants.h"
+//#include "tools.h"
 
 #include <accountbaseplugin/constants.h>
 #include <accountbaseplugin/accountmodel.h>
@@ -67,6 +69,7 @@ enum { WarnDebugMessage = false };
 using namespace AccountDB;
 using namespace Constants;
 using namespace Trans::ConstantTranslations;
+using namespace ReceiptsConstants;
 
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 
@@ -139,12 +142,12 @@ QHash<int,QString> ReceiptsManager::getPercentages()
   return hash;
 }
 
-QHash<QString,QVariant> ReceiptsManager::getParametersDatas(QString & userUid , const QString & table)
+QHash<QString,QVariant> ReceiptsManager::getParametersDatas(QString & userUid , int table)
 {
    QHash<QString,QVariant> hashForReturn;
    if (WarnDebugMessage)
        qDebug() << __FILE__ << QString::number(__LINE__) << " ReceiptsManager: in getComboBoxesDatas";
-   if (table == "insurance") {
+   if (table == DEBTOR_ITEM) {
        InsuranceModel  model(this);
        for (int row = 0; row < model.rowCount(); row += 1) {
            QString str = model.data(model.index(row,INSURANCE_NAME),Qt::DisplayRole).toString();
@@ -157,7 +160,7 @@ QHash<QString,QVariant> ReceiptsManager::getParametersDatas(QString & userUid , 
            hashForReturn.insert("patient","uid");
        }
    }
-   if (table == "sites") {
+   if (table == SITES_ITEM) {
        WorkingPlacesModel model(this);
        for (int row = 0; row < model.rowCount(); row += 1) {
            QString str = model.data(model.index(row,SITES_NAME),Qt::DisplayRole).toString();
@@ -175,7 +178,7 @@ QHash<QString,QVariant> ReceiptsManager::getParametersDatas(QString & userUid , 
        }
 
    }
-   if (table == "bank_details") {
+   if (table == BANK_ITEM) {
        BankAccountModel model(this);
        for (int row = 0; row < model.rowCount(); row += 1) {
            QString str = model.data(model.index(row,BANKDETAILS_LABEL),Qt::DisplayRole).toString();
@@ -189,7 +192,7 @@ QHash<QString,QVariant> ReceiptsManager::getParametersDatas(QString & userUid , 
        }
 
    }
-   if (table == "rules")
+   if (table == RULES_ITEM)
    {
        RulesModel model(this);
        for (int row = 0; row < model.rowCount(); row += 1)
@@ -205,7 +208,7 @@ QHash<QString,QVariant> ReceiptsManager::getParametersDatas(QString & userUid , 
        }
 
    }
-   if (table == "distance_rules")
+   if (table == DISTANCE_RULES_ITEM)
    {
        DistanceRulesModel model(this);
        if (WarnDebugMessage)
@@ -223,7 +226,7 @@ QHash<QString,QVariant> ReceiptsManager::getParametersDatas(QString & userUid , 
        }
 
    }
-   if (table == "thesaurus")
+   if (table == THESAURUS_ITEM)
    {
        ThesaurusModel model(this);
        QString userFilter = QString("%1 = '%2'").arg("THESAURUS_USERUID",userUid);

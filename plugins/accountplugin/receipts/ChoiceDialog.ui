@@ -16,20 +16,6 @@
   <layout class="QGridLayout" name="gridLayout_4">
    <item row="0" column="0">
     <layout class="QGridLayout" name="gridLayout_3">
-     <item row="2" column="2">
-      <widget class="QPushButton" name="quitButton">
-       <property name="text">
-        <string>&amp;Quit</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="0" rowspan="3">
-      <widget class="QGroupBox" name="paramsGroupBox">
-       <property name="title">
-        <string>Parameters</string>
-       </property>
-      </widget>
-     </item>
      <item row="0" column="2">
       <widget class="QGroupBox" name="percentGroupBox">
        <property name="title">
@@ -91,6 +77,20 @@
          <widget class="QDoubleSpinBox" name="distanceDoubleSpinBox"/>
         </item>
        </layout>
+      </widget>
+     </item>
+     <item row="2" column="2">
+      <widget class="QPushButton" name="quitButton">
+       <property name="text">
+        <string>&amp;Quit</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0" rowspan="3">
+      <widget class="QGroupBox" name="paramsGroupBox">
+       <property name="title">
+        <string>Parameters</string>
+       </property>
       </widget>
      </item>
      <item row="0" column="1">
@@ -164,17 +164,10 @@
         </size>
        </property>
        <property name="text">
-        <string>&amp;Ok</string>
+        <string>Choose and &amp;Ok</string>
        </property>
        <property name="default">
         <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="1" colspan="2">
-      <widget class="QDialogButtonBox" name="buttonBox">
-       <property name="standardButtons">
-        <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
        </property>
       </widget>
      </item>
