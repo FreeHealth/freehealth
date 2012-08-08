@@ -260,10 +260,16 @@ QModelIndex treeViewsActions::indexWithItem(int row)
 ///////////////////////////////////////////////////////////////////////////
 
 using namespace ReceiptsConstants;
-choiceDialog::choiceDialog(QWidget * parent,bool roundtrip, QString preferredValue):QDialog(parent),ui(new Ui::ChoiceDialog){
+
+choiceDialog::choiceDialog(QWidget * parent,bool roundtrip, bool freevalue, QString preferredValue):QDialog(parent),ui(new Ui::ChoiceDialog){
     ui->setupUi(this);
     ui->distanceDoubleSpinBox->hide();
     ui->distanceGroupBox->hide();
+    ui->freeBox->hide();
+    ui->freeLabel->hide();
+    ui->freeEdit->hide();
+    ui->freeValueLabel->hide();
+    ui->freeValueSpinBox->hide();
     m_percent = 100.00;
     //m_percentValue = 100.00;
     ReceiptsManager manager;
@@ -288,7 +294,16 @@ choiceDialog::choiceDialog(QWidget * parent,bool roundtrip, QString preferredVal
         ui->distanceDoubleSpinBox->setRange(0.00,100000.00);
         ui->distanceDoubleSpinBox->setSingleStep(0.10);
         }
-
+    if (freevalue)
+    {
+        ui->freeBox->show();
+        ui->freeLabel->show();
+        ui->freeEdit->show();
+        ui->freeValueLabel->show();
+        ui->freeValueSpinBox->show();
+        ui->freeValueSpinBox->setRange(0.00,100000.00);
+        ui->freeValueSpinBox->setSingleStep(0.10); 	  
+        }
     //treeViewsActions
     m_actionTreeView = new treeViewsActions(this);
     QVBoxLayout *vbox = new QVBoxLayout;
@@ -554,4 +569,12 @@ void choiceDialog::actionsOfTreeView(const QModelIndex &index){
         //actionTreeView->reset();
 }
 
+QString choiceDialog::getFreeText()
+{
+    return ui->freeEdit->text();
+}
 
+QString choiceDialog::getFreeValue()
+{
+    return QString::number(ui->freeValueSpinBox->value());
+}

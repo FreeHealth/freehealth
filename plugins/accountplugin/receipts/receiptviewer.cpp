@@ -885,7 +885,7 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex & index) {
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " in findReceiptsValues AND VALUES "  ;
         if(rv->exec() == QDialog::Accepted) {
             hashOfValues = rv -> getchosenValues();
-            choiceDialog choice(rv,false);
+            choiceDialog choice(rv,false,false);
             if(hashOfValues.keys().size() > 0){
                 if(choice.exec() == QDialog::Accepted){
                     QStandardItemModel * model = choice.getChoicePercentageDebtorSiteDistruleModel();
@@ -910,7 +910,7 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex & index) {
     if(index.row() == PREFERED_VALUE_ITEM && index.parent() == QModelIndex()){// preferential act of payment
         if (WarnDebugMessage)
             	qDebug() << __FILE__ << QString::number(__LINE__) << " PREFERENTIAL_VALUE";
-        choiceDialog choice(this,false);
+        choiceDialog choice(this,false,false);
         if(choice.exec() == QDialog::Accepted){
             QStandardItemModel * model = choice.getChoicePercentageDebtorSiteDistruleModel();
             if (WarnDebugMessage)
@@ -969,7 +969,7 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex & index) {
     {
     	  if (WarnDebugMessage)
             	qDebug() << __FILE__ << QString::number(__LINE__) << " in ROUND_TRIP";
-    	  choiceDialog dist(this,true);
+    	  choiceDialog dist(this,true,false);
     	  if (dist.exec()== QDialog::Accepted)
     	  {
               QStandardItemModel * model = dist.getChoicePercentageDebtorSiteDistruleModel();
@@ -1011,7 +1011,7 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex & index) {
     {
         if (WarnDebugMessage)
                 qDebug() << __FILE__ << QString::number(__LINE__) << " IN THESAURUS " ;
-        choiceDialog choice(this,false);
+        choiceDialog choice(this,false,false);
         if(choice.exec() == QDialog::Accepted){
             QStandardItemModel * model = choice.getChoicePercentageDebtorSiteDistruleModel();
             for (int i = 0; i < model->rowCount(); i += 1)
@@ -1082,7 +1082,40 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex & index) {
                 delete model;
             }
         }
-        //actionTreeView->reset();
+        if (index.row() == FREE_VALUE_ITEM && index.parent() == QModelIndex())
+        {
+        if (WarnDebugMessage)
+            	qDebug() << __FILE__ << QString::number(__LINE__) << " PREFERENTIAL_VALUE";
+        choiceDialog choice(this,false,true);
+        if(choice.exec() == QDialog::Accepted){
+            QStandardItemModel * model = choice.getChoicePercentageDebtorSiteDistruleModel();
+            if (WarnDebugMessage)
+            	qDebug() << __FILE__ << QString::number(__LINE__) << " model->rowCount() =" << QString::number(model->rowCount()) ;
+
+            for (int i = 0; i < model->rowCount(); ++i) {
+                QHash<QString,QString> hashOfValues;
+                const QString userUuid = m_userUuid;
+                typeOfPayment = model->data(model->index(i,choice.TYPE_OF_CHOICE),Qt::DisplayRole).toInt();
+                if (WarnDebugMessage)
+                      qDebug() << __FILE__ << QString::number(__LINE__) << " typeOfPayment =" << QString::number(typeOfPayment) ;
+                
+                percentage = model->data(model->index(i,choice.PERCENTAGE),Qt::DisplayRole).toDouble();
+                debtor = model->data(model->index(i,choice.DEBTOR),Qt::DisplayRole);
+                if (WarnDebugMessage)
+    	              qDebug() << __FILE__ << QString::number(__LINE__) << " debtor =" << debtor.toString() ;
+                site = model->data(model->index(i,choice.SITE),Qt::DisplayRole);
+                distrules = model->data(model->index(i,choice.DISTRULES),Qt::DisplayRole);
+                QString freeText = choice.getFreeText();
+                hashOfValues.insertMulti(freeText,choice.getFreeValue());
+                m_listOfValues << hashOfValues.keys();
+                //m_listOfValues.removeDuplicates();
+                m_modelReturnedList->setStringList(m_listOfValues);
+                fillModel(hashOfValues,typeOfPayment,percentage,debtor,site,distrules,i);
+                }
+            delete model;
+            }        	  
+            }
+
 }
 
 void ReceiptViewer::fillModel(QHash<QString,QString> &hashOfValues, 
