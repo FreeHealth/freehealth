@@ -97,7 +97,7 @@ public:
       DISTRULES,
       returningModel_MaxParam
       };
-  choiceDialog(QWidget *parent = 0,bool roundtrip = false, QString preferredValue = QString());
+  choiceDialog(QWidget *parent = 0,bool roundtrip = false, bool freetext = false, QString preferredValue = QString());
   ~choiceDialog();
   double getDistanceNumber(const QString & data);
   int returnChoiceDialog();
@@ -107,6 +107,9 @@ public:
   QStandardItemModel * m_modelChoicePercentDebtorSiteDistruleValues;
   QList<double> listOfPercentValues();
   QStandardItemModel * getChoicePercentageDebtorSiteDistruleModel();
+  //free value and text
+  QString getFreeText();
+  QString getFreeValue();
 private slots:
   void value(double val);
   void valueUp();

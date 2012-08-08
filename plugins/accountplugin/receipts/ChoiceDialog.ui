@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>435</width>
-    <height>363</height>
+    <height>411</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,6 +16,32 @@
   <layout class="QGridLayout" name="gridLayout_4">
    <item row="0" column="0">
     <layout class="QGridLayout" name="gridLayout_3">
+     <item row="2" column="1">
+      <widget class="QGroupBox" name="distanceGroupBox">
+       <property name="title">
+        <string>Round Trip</string>
+       </property>
+       <layout class="QGridLayout" name="gridLayout_7">
+        <item row="0" column="0">
+         <widget class="QDoubleSpinBox" name="distanceDoubleSpinBox"/>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item row="3" column="2">
+      <widget class="QPushButton" name="quitButton">
+       <property name="text">
+        <string>&amp;Quit and cancel</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0" rowspan="4">
+      <widget class="QGroupBox" name="paramsGroupBox">
+       <property name="title">
+        <string>Parameters</string>
+       </property>
+      </widget>
+     </item>
      <item row="0" column="2">
       <widget class="QGroupBox" name="percentGroupBox">
        <property name="title">
@@ -65,32 +91,6 @@
          </layout>
         </item>
        </layout>
-      </widget>
-     </item>
-     <item row="1" column="1">
-      <widget class="QGroupBox" name="distanceGroupBox">
-       <property name="title">
-        <string>Round Trip</string>
-       </property>
-       <layout class="QGridLayout" name="gridLayout_7">
-        <item row="0" column="0">
-         <widget class="QDoubleSpinBox" name="distanceDoubleSpinBox"/>
-        </item>
-       </layout>
-      </widget>
-     </item>
-     <item row="2" column="2">
-      <widget class="QPushButton" name="quitButton">
-       <property name="text">
-        <string>&amp;Quit</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="0" rowspan="3">
-      <widget class="QGroupBox" name="paramsGroupBox">
-       <property name="title">
-        <string>Parameters</string>
-       </property>
       </widget>
      </item>
      <item row="0" column="1">
@@ -148,14 +148,14 @@
        </layout>
       </widget>
      </item>
-     <item row="1" column="2">
+     <item row="2" column="2">
       <widget class="QLabel" name="label">
        <property name="text">
         <string>TextLabel</string>
        </property>
       </widget>
      </item>
-     <item row="2" column="1">
+     <item row="3" column="1">
       <widget class="QPushButton" name="okButton">
        <property name="minimumSize">
         <size>
@@ -169,6 +169,52 @@
        <property name="default">
         <bool>true</bool>
        </property>
+      </widget>
+     </item>
+     <item row="1" column="1" colspan="2">
+      <widget class="QGroupBox" name="freeBox">
+       <property name="title">
+        <string>Free Values</string>
+       </property>
+       <widget class="QWidget" name="">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>20</y>
+          <width>271</width>
+          <height>46</height>
+         </rect>
+        </property>
+        <layout class="QGridLayout" name="gridLayout_8">
+         <item row="0" column="0">
+          <widget class="QLabel" name="freeLabel">
+           <property name="text">
+            <string>Text</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QLabel" name="freeValueLabel">
+           <property name="text">
+            <string>Value</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QLineEdit" name="freeEdit"/>
+         </item>
+         <item row="1" column="1">
+          <widget class="QDoubleSpinBox" name="freeValueSpinBox">
+           <property name="minimumSize">
+            <size>
+             <width>70</width>
+             <height>0</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
       </widget>
      </item>
     </layout>
