@@ -80,7 +80,7 @@ private:
     /** \create a pimpl */
     QAction *m_choosepreferredValue;
     QAction *m_deleteThesaurusValue;
-    QMenu *m_menuRightClic;
+    QMenu *m_menuRightClick;
     QStandardItemModel *m_actionsTreeModel;
 };
 }

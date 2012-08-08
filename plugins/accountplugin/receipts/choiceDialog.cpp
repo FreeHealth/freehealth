@@ -70,10 +70,10 @@ void treeViewsActions::mousePressEvent(QMouseEvent *event){
     if(event->button() == Qt::RightButton){
         if(isChildOfThesaurus()){
             blockSignals(true);
-            m_menuRightClic = new QMenu(this); 
-            m_menuRightClic -> addAction(m_choosepreferredValue);
-            m_menuRightClic-> addAction(m_deleteThesaurusValue);
-            m_menuRightClic->exec(event->globalPos());
+            m_menuRightClick = new QMenu(this); 
+            m_menuRightClick -> addAction(m_choosepreferredValue);
+            m_menuRightClick-> addAction(m_deleteThesaurusValue);
+            m_menuRightClick->exec(event->globalPos());
             blockSignals(false);
         }
 
