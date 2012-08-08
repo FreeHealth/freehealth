@@ -58,8 +58,8 @@ using namespace Tools;
 static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
 
 treeViewsActions::treeViewsActions(QWidget *parent):QTreeView(parent){
-    m_deleteThesaurusValue = new QAction(trUtf8("Delete this value."),this);
-    m_choosepreferredValue = new QAction(trUtf8("Choose this value like the preferred."),this);
+    m_deleteThesaurusValue = new QAction(trUtf8("Delete value"),this);
+    m_choosepreferredValue = new QAction(trUtf8("Choose value as preferred"),this);
     connect(m_choosepreferredValue,SIGNAL(triggered(bool)),this,SLOT(choosepreferredValue(bool)));
     connect(m_deleteThesaurusValue,SIGNAL(triggered(bool)),this,SLOT(deleteBox(bool)));
     }
