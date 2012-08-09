@@ -4,72 +4,72 @@
 <context>
     <name>PMH</name>
     <message>
-        <location filename="../../plugins/pmhplugin/constants.h" line="143"/>
+        <location filename="../../plugins/pmhplugin/constants.h" line="150"/>
         <source>New past medical history</source>
         <translation>Nouvel antécédent</translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/constants.h" line="144"/>
+        <location filename="../../plugins/pmhplugin/constants.h" line="151"/>
         <source>Remove past medical history</source>
         <translation>Enlever l&apos;antécédent</translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/constants.h" line="145"/>
+        <location filename="../../plugins/pmhplugin/constants.h" line="152"/>
         <source>Create a new category</source>
         <translation>Créer une nouvelle catégorie</translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/constants.h" line="146"/>
+        <location filename="../../plugins/pmhplugin/constants.h" line="153"/>
         <source>Remove category</source>
         <translation>Retirer la catégorie</translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/constants.h" line="147"/>
+        <location filename="../../plugins/pmhplugin/constants.h" line="154"/>
         <source>Past medical history category manager</source>
         <translation>Gestionnaire des catégories pour les antécédents</translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/constants.h" line="149"/>
+        <location filename="../../plugins/pmhplugin/constants.h" line="156"/>
         <source>Not defined</source>
         <translation>Non défini</translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/constants.h" line="150"/>
+        <location filename="../../plugins/pmhplugin/constants.h" line="157"/>
         <source>Chronic disease</source>
         <translation>Maladie chronique</translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/constants.h" line="151"/>
+        <location filename="../../plugins/pmhplugin/constants.h" line="158"/>
         <source>Chronic disease without acute episode</source>
         <translation>Maladie chronique avec épisodes aigus</translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/constants.h" line="152"/>
+        <location filename="../../plugins/pmhplugin/constants.h" line="159"/>
         <source>Acute disease</source>
         <translation>Maladie aiguë</translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/constants.h" line="153"/>
+        <location filename="../../plugins/pmhplugin/constants.h" line="160"/>
         <source>Risk factor</source>
         <translation>Facteur de risque</translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/constants.h" line="155"/>
+        <location filename="../../plugins/pmhplugin/constants.h" line="162"/>
         <source>Active</source>
         <translation>Actif</translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/constants.h" line="156"/>
+        <location filename="../../plugins/pmhplugin/constants.h" line="163"/>
         <source>In remission</source>
         <translation>En rémission</translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/constants.h" line="157"/>
+        <location filename="../../plugins/pmhplugin/constants.h" line="164"/>
         <source>Quiescent</source>
         <translation>Quiescent</translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/constants.h" line="158"/>
+        <location filename="../../plugins/pmhplugin/constants.h" line="165"/>
         <source>Cured</source>
         <translation>Guéri</translation>
     </message>
@@ -90,6 +90,15 @@
         <location filename="../../plugins/pmhplugin/pmhmode.cpp" line="295"/>
         <source>Do you really want to remove the PMHx called &lt;br /&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;b&gt;%1&lt;/b&gt;?</source>
         <translation>Voulez-vous réellement effacer l&apos;antécédent nommé &lt;br /&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;b&gt;%1&lt;/b&gt;?</translation>
+    </message>
+</context>
+<context>
+    <name>PMH::Internal::PmhPlugin</name>
+    <message>
+        <location filename="../../plugins/pmhplugin/pmhplugin.cpp" line="87"/>
+        <location filename="../../plugins/pmhplugin/pmhplugin.cpp" line="103"/>
+        <source>Initializing PMHx database plugin...</source>
+        <translation type="unfinished">Initialisation de la base de données des antécédents...</translation>
     </message>
 </context>
 <context>
@@ -308,18 +317,9 @@
     </message>
 </context>
 <context>
-    <name>PMH::PmhPlugin</name>
-    <message>
-        <location filename="../../plugins/pmhplugin/pmhplugin.cpp" line="84"/>
-        <location filename="../../plugins/pmhplugin/pmhplugin.cpp" line="100"/>
-        <source>Initializing PMHx database plugin...</source>
-        <translation>Initialisation de la base de données des antécédents...</translation>
-    </message>
-</context>
-<context>
     <name>PMH::PmhViewer</name>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhviewer.cpp" line="267"/>
+        <location filename="../../plugins/pmhplugin/pmhviewer.cpp" line="269"/>
         <source>Replacing pmh data</source>
         <translation>Remplacement des données de l&apos;antécédent</translation>
     </message>

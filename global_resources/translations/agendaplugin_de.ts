@@ -12,17 +12,17 @@
 <context>
     <name>Agenda::AgendaPlugin</name>
     <message>
-        <location filename="../../plugins/agendaplugin/agendaplugin.cpp" line="115"/>
+        <location filename="../../plugins/agendaplugin/agendaplugin.cpp" line="116"/>
         <source>Initializing agenda plugin...</source>
         <translation>Agenda-Plugin wird initialisiert...</translation>
     </message>
     <message>
-        <location filename="../../plugins/agendaplugin/agendaplugin.cpp" line="122"/>
+        <location filename="../../plugins/agendaplugin/agendaplugin.cpp" line="123"/>
         <source>Creating agenda base...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/agendaplugin/agendaplugin.cpp" line="122"/>
+        <location filename="../../plugins/agendaplugin/agendaplugin.cpp" line="123"/>
         <source>Please wait</source>
         <translation type="unfinished"></translation>
     </message>
@@ -60,7 +60,7 @@
 <context>
     <name>Agenda::CalendarItemModel</name>
     <message>
-        <location filename="../../plugins/agendaplugin/calendaritemmodel.cpp" line="321"/>
+        <location filename="../../plugins/agendaplugin/calendaritemmodel.cpp" line="330"/>
         <source>Empty</source>
         <translation>Leer</translation>
     </message>
@@ -68,8 +68,8 @@
 <context>
     <name>Agenda::Internal::AgendaMode</name>
     <message>
-        <location filename="../../plugins/agendaplugin/agendamode.cpp" line="61"/>
-        <location filename="../../plugins/agendaplugin/agendamode.cpp" line="79"/>
+        <location filename="../../plugins/agendaplugin/agendamode.cpp" line="63"/>
+        <location filename="../../plugins/agendaplugin/agendamode.cpp" line="81"/>
         <source>Agenda</source>
         <translation>Agenda</translation>
     </message>
@@ -113,10 +113,10 @@
 <context>
     <name>Agenda::Internal::CalendarItemEditorPatientMapperWidget</name>
     <message>
-        <location filename="../../plugins/agendaplugin/calendaritemeditorpatientmapper.cpp" line="157"/>
-        <location filename="../../plugins/agendaplugin/calendaritemeditorpatientmapper.cpp" line="158"/>
-        <location filename="../../plugins/agendaplugin/calendaritemeditorpatientmapper.cpp" line="288"/>
-        <location filename="../../plugins/agendaplugin/calendaritemeditorpatientmapper.cpp" line="289"/>
+        <location filename="../../plugins/agendaplugin/calendaritemeditorpatientmapper.cpp" line="155"/>
+        <location filename="../../plugins/agendaplugin/calendaritemeditorpatientmapper.cpp" line="156"/>
+        <location filename="../../plugins/agendaplugin/calendaritemeditorpatientmapper.cpp" line="286"/>
+        <location filename="../../plugins/agendaplugin/calendaritemeditorpatientmapper.cpp" line="287"/>
         <source>Add current patient</source>
         <translation>Aktuellen Patienten hinzufügen</translation>
     </message>
@@ -197,21 +197,36 @@
         <translation>Beschreibung</translation>
     </message>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendarviewer.cpp" line="366"/>
-        <location filename="../../plugins/agendaplugin/usercalendarviewer.cpp" line="432"/>
+        <location filename="../../plugins/agendaplugin/usercalendarviewer.cpp" line="386"/>
+        <location filename="../../plugins/agendaplugin/usercalendarviewer.cpp" line="452"/>
         <source>Set back to default: </source>
         <extracomment>default agenda duration time (in minutes)
 ----------
 default agenda duration time (in minutes)</extracomment>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../../plugins/agendaplugin/usercalendarviewer.cpp" line="502"/>
+        <source>Switch to patient</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/agendaplugin/usercalendarviewer.cpp" line="504"/>
+        <source>Edit appointement</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/agendaplugin/usercalendarviewer.cpp" line="506"/>
+        <source>Print appointement</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Agenda::Internal::UserCalendarWizardCreatorPage</name>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.cpp" line="62"/>
-        <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.cpp" line="67"/>
-        <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.cpp" line="72"/>
+        <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.cpp" line="63"/>
+        <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.cpp" line="68"/>
+        <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.cpp" line="73"/>
         <source>User&apos;s agendas</source>
         <translation>Benutzer-Agendas</translation>
     </message>
@@ -269,29 +284,29 @@ default agenda duration time (in minutes)</extracomment>
 <context>
     <name>Agenda::Internal::UserCalendarWizardPage</name>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.cpp" line="124"/>
+        <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.cpp" line="125"/>
         <source>Please specify a label for this agenda.</source>
         <translation>Bitte geben Sie eine Bezeichnung für diese Agenda an.</translation>
     </message>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.cpp" line="127"/>
+        <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.cpp" line="128"/>
         <source>The default duration can not be null.</source>
         <translatorcomment>???&quot;null&quot; maybe should be in &lt;i&gt; or &quot;</translatorcomment>
         <translation>Die Standarddauer kann nicht &lt;i&gt;Null&lt;/i&gt; sein.</translation>
     </message>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.cpp" line="130"/>
+        <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.cpp" line="131"/>
         <source>Error detected</source>
         <translation>Fehler gefunden</translation>
     </message>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.cpp" line="140"/>
+        <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.cpp" line="141"/>
         <source>Manage an agenda.</source>
         <translatorcomment>??? why a &quot;.&quot; at the end? Maybe without &quot;an&quot;</translatorcomment>
         <translation>Eine Agenda verwalten.</translation>
     </message>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.cpp" line="141"/>
+        <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.cpp" line="142"/>
         <source>You can quickly define an agenda for this user. This agenda will be the default one.</source>
         <translation>Sie können schnell eine Agenda für diesen Benutzer definieren. Diese Agenda wird dann die Standard-Agenda.</translation>
     </message>
@@ -418,8 +433,8 @@ default agenda duration time (in minutes)</extracomment>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendarmodelfulleditorwidget.cpp" line="72"/>
-        <location filename="../../plugins/agendaplugin/usercalendarmodelfulleditorwidget.cpp" line="127"/>
+        <location filename="../../plugins/agendaplugin/usercalendarmodelfulleditorwidget.cpp" line="71"/>
+        <location filename="../../plugins/agendaplugin/usercalendarmodelfulleditorwidget.cpp" line="126"/>
         <source>Create a new calendar</source>
         <translation>Neuen Kalender erstellen</translation>
     </message>
@@ -427,7 +442,7 @@ default agenda duration time (in minutes)</extracomment>
 <context>
     <name>AgendaBase</name>
     <message>
-        <location filename="../../plugins/agendaplugin/agendabase.cpp" line="410"/>
+        <location filename="../../plugins/agendaplugin/agendabase.cpp" line="396"/>
         <source>Trying to create empty database.
        Location: %1
        FileName: %2

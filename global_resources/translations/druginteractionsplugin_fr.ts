@@ -20,7 +20,7 @@
 <context>
     <name>DrugInteractions::Internal::DrugInteractionsPlugin</name>
     <message>
-        <location filename="../../plugins/druginteractionsplugin/druginteractionsplugin.cpp" line="89"/>
+        <location filename="../../plugins/druginteractionsplugin/druginteractionsplugin.cpp" line="75"/>
         <source>Initializing drugs interactions plugin...</source>
         <translation>Initialisation du greffon des interactions médicamenteuses...</translation>
     </message>

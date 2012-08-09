@@ -987,7 +987,7 @@ Do you really want to change the editing mode?</source>
 <context>
     <name>DrugsWidget::Internal::DrugsPlugin</name>
     <message>
-        <location filename="../../plugins/drugsplugin/drugsplugin.cpp" line="158"/>
+        <location filename="../../plugins/drugsplugin/drugsplugin.cpp" line="128"/>
         <source>Initializing drugs plugin...</source>
         <translation type="unfinished"></translation>
     </message>

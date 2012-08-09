@@ -69,8 +69,8 @@
 <context>
     <name>MainWin::MainWinPlugin</name>
     <message>
-        <location filename="../../plugins/fmfmainwindowplugin/mainwindowplugin.cpp" line="83"/>
-        <location filename="../../plugins/fmfmainwindowplugin/mainwindowplugin.cpp" line="94"/>
+        <location filename="../../plugins/fmfmainwindowplugin/mainwindowplugin.cpp" line="79"/>
+        <location filename="../../plugins/fmfmainwindowplugin/mainwindowplugin.cpp" line="90"/>
         <source>Initializing main window plugin...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -83,7 +83,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfmainwindowplugin/mainwindow.cpp" line="401"/>
+        <location filename="../../plugins/fmfmainwindowplugin/mainwindow.cpp" line="402"/>
         <source>Choose a patient file directory</source>
         <translation type="unfinished"></translation>
     </message>

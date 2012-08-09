@@ -4,47 +4,47 @@
 <context>
     <name>Database</name>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="518"/>
+        <location filename="../../libs/utils/database.cpp" line="563"/>
         <source>WARNING: %1 database already in use</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="660"/>
+        <location filename="../../libs/utils/database.cpp" line="710"/>
         <source>ERROR: Database `%1` is not readable. Path: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="670"/>
+        <location filename="../../libs/utils/database.cpp" line="721"/>
         <source>ERROR: Database %1 is not readable. Host: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="678"/>
+        <location filename="../../libs/utils/database.cpp" line="730"/>
         <source>ERROR: Database %1 is not readable. Path: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="705"/>
+        <location filename="../../libs/utils/database.cpp" line="759"/>
         <source>ERROR: Database %1 is not writable. Path: %2.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="746"/>
+        <location filename="../../libs/utils/database.cpp" line="804"/>
         <source>INFO: database %1 connection = %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="936"/>
+        <location filename="../../libs/utils/database.cpp" line="997"/>
         <source>Database Scheme Error: wrong number of fields for table %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="945"/>
+        <location filename="../../libs/utils/database.cpp" line="1006"/>
         <source>Database Scheme Error: field number %1 differs: %2 instead of %3 in table %4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/utils/database.cpp" line="1880"/>
+        <location filename="../../libs/utils/database.cpp" line="2052"/>
         <source>Can not create table %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -249,8 +249,15 @@
     <name>Utils::DateValidator</name>
     <message>
         <location filename="../../libs/utils/datevalidator.cpp" line="47"/>
-        <source>ddMMyy,ddMMyyyy</source>
-        <extracomment>this is a comma separated list of formatStrings used by QDate::fromString();</extracomment>
+        <location filename="../../libs/utils/datevalidator.cpp" line="136"/>
+        <source>ddMMyy</source>
+        <extracomment>this is a input mask for the local date format for BirthDayEdit that can be used by QDate::fromString()</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/utils/datevalidator.cpp" line="48"/>
+        <location filename="../../libs/utils/datevalidator.cpp" line="137"/>
+        <source>ddMMyyyy</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -652,7 +659,7 @@
 <context>
     <name>Utils::QButtonLineEdit</name>
     <message>
-        <location filename="../../libs/utils/widgets/qbuttonlineedit.cpp" line="115"/>
+        <location filename="../../libs/utils/widgets/qbuttonlineedit.cpp" line="112"/>
         <source>(press Alt up/down cursor to cycle)</source>
         <translation type="unfinished"></translation>
     </message>

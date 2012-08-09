@@ -179,7 +179,7 @@ Répondre &quot;Non&quot; causera une perte de données irréversible.</translat
 <context>
     <name>Templates::TemplatesModel</name>
     <message>
-        <location filename="../../plugins/templatesplugin/templatesmodel.cpp" line="1020"/>
+        <location filename="../../plugins/templatesplugin/templatesmodel.cpp" line="1057"/>
         <source>New</source>
         <translation>Nouveau</translation>
     </message>

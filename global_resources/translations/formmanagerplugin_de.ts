@@ -4,18 +4,18 @@
 <context>
     <name>EpisodeModel</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="567"/>
+        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="565"/>
         <source>Save episode?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="568"/>
+        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="566"/>
         <source>The actual episode has been modified. Do you want to save changes in your database?
 Answering &apos;No&apos; will cause definitve data lose.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="570"/>
+        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="568"/>
         <source>Save episode</source>
         <translation type="unfinished"></translation>
     </message>
@@ -23,17 +23,17 @@ Answering &apos;No&apos; will cause definitve data lose.</source>
 <context>
     <name>Form::EpisodeModel</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="989"/>
+        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="987"/>
         <source>Created: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="1106"/>
+        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="1104"/>
         <source>New episode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="1319"/>
+        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="1317"/>
         <source>No user</source>
         <translation type="unfinished"></translation>
     </message>
@@ -108,32 +108,32 @@ Answering &apos;No&apos; will cause definitve data lose.</source>
 <context>
     <name>Form::Internal::FirstRunFormManagerWizardPage</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/firstrunformmanager.cpp" line="52"/>
+        <location filename="../../plugins/formmanagerplugin/firstrunformmanager.cpp" line="54"/>
         <source>General patient form selection</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/firstrunformmanager.cpp" line="53"/>
+        <location filename="../../plugins/formmanagerplugin/firstrunformmanager.cpp" line="55"/>
         <source>You can define your own patient form file, or use the default one. Select it from here. All patients will have the same forms, but you can add subforms anywhere in the form.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/firstrunformmanager.cpp" line="61"/>
+        <location filename="../../plugins/formmanagerplugin/firstrunformmanager.cpp" line="63"/>
         <source>Reading available forms</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/firstrunformmanager.cpp" line="61"/>
+        <location filename="../../plugins/formmanagerplugin/firstrunformmanager.cpp" line="63"/>
         <source>Please wait</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/firstrunformmanager.cpp" line="84"/>
+        <location filename="../../plugins/formmanagerplugin/firstrunformmanager.cpp" line="95"/>
         <source>Please one (and only one) form for your default patient file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/firstrunformmanager.cpp" line="85"/>
+        <location filename="../../plugins/formmanagerplugin/firstrunformmanager.cpp" line="96"/>
         <source>You must select one file to be used by default.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -150,8 +150,8 @@ Answering &apos;No&apos; will cause definitve data lose.</source>
 <context>
     <name>Form::Internal::FormManagerPlugin</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formmanagerplugin.cpp" line="105"/>
-        <location filename="../../plugins/formmanagerplugin/formmanagerplugin.cpp" line="121"/>
+        <location filename="../../plugins/formmanagerplugin/formmanagerplugin.cpp" line="103"/>
+        <location filename="../../plugins/formmanagerplugin/formmanagerplugin.cpp" line="119"/>
         <source>Initializing form manager plugin...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -300,7 +300,7 @@ Answering &apos;No&apos; will cause definitve data lose.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="161"/>
+        <location filename="../../plugins/formmanagerplugin/formfilesselectorwidget.cpp" line="162"/>
         <source>Default Forms</source>
         <translation type="unfinished"></translation>
     </message>
@@ -308,17 +308,17 @@ Answering &apos;No&apos; will cause definitve data lose.</source>
 <context>
     <name>FormIODescription</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="120"/>
+        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="146"/>
         <source>Complete form</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="122"/>
+        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="148"/>
         <source>Sub-form</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="124"/>
+        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="150"/>
         <source>Page only</source>
         <translation type="unfinished"></translation>
     </message>
@@ -326,19 +326,19 @@ Answering &apos;No&apos; will cause definitve data lose.</source>
 <context>
     <name>Forms</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="157"/>
-        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="183"/>
+        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="203"/>
+        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="229"/>
         <source>Creation date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="159"/>
-        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="185"/>
+        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="205"/>
+        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="231"/>
         <source>Last modification date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="196"/>
+        <location filename="../../plugins/formmanagerplugin/iformio.cpp" line="242"/>
         <source>ScreenShots are available.</source>
         <translation type="unfinished"></translation>
     </message>

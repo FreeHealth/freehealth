@@ -4,38 +4,43 @@
 <context>
     <name>DataPack::AddServerDialog</name>
     <message>
-        <location filename="../../libs/datapackutils/widgets/addserverdialog.cpp" line="57"/>
+        <location filename="../../libs/datapackutils/widgets/addserverdialog.cpp" line="59"/>
         <source>Default FreeMedForms server (mirror)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/addserverdialog.cpp" line="58"/>
+        <location filename="../../libs/datapackutils/widgets/addserverdialog.cpp" line="60"/>
         <source>Local file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/addserverdialog.cpp" line="59"/>
+        <location filename="../../libs/datapackutils/widgets/addserverdialog.cpp" line="61"/>
         <source>HTTP (standard mode)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/addserverdialog.cpp" line="60"/>
+        <location filename="../../libs/datapackutils/widgets/addserverdialog.cpp" line="62"/>
         <source>FTP (standard mode)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/addserverdialog.cpp" line="61"/>
+        <location filename="../../libs/datapackutils/widgets/addserverdialog.cpp" line="63"/>
         <source>Protected HTTP with zipped content</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/addserverdialog.cpp" line="62"/>
+        <location filename="../../libs/datapackutils/widgets/addserverdialog.cpp" line="64"/>
         <source>Protected HTTP non-zipped</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/addserverdialog.cpp" line="63"/>
+        <location filename="../../libs/datapackutils/widgets/addserverdialog.cpp" line="65"/>
         <source>FTP with zipped content</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/datapackutils/widgets/addserverdialog.cpp" line="129"/>
+        <source>Select datapack local path</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -57,37 +62,42 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/addserverdialog.ui" line="55"/>
+        <location filename="../../libs/datapackutils/widgets/addserverdialog.ui" line="62"/>
         <source>Server URL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/addserverdialog.ui" line="65"/>
+        <location filename="../../libs/datapackutils/widgets/addserverdialog.ui" line="55"/>
         <source>Server type</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/addserverdialog.ui" line="78"/>
+        <location filename="../../libs/datapackutils/widgets/addserverdialog.ui" line="72"/>
+        <source>Select</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/datapackutils/widgets/addserverdialog.ui" line="85"/>
         <source>User params</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/addserverdialog.ui" line="84"/>
+        <location filename="../../libs/datapackutils/widgets/addserverdialog.ui" line="91"/>
         <source>Login</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/addserverdialog.ui" line="91"/>
+        <location filename="../../libs/datapackutils/widgets/addserverdialog.ui" line="98"/>
         <source>Password</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/addserverdialog.ui" line="107"/>
+        <location filename="../../libs/datapackutils/widgets/addserverdialog.ui" line="114"/>
         <source>Update checking</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/addserverdialog.ui" line="113"/>
+        <location filename="../../libs/datapackutils/widgets/addserverdialog.ui" line="120"/>
         <source>Check for update</source>
         <translation type="unfinished"></translation>
     </message>
@@ -173,17 +183,17 @@
 <context>
     <name>DataPack::Internal::PackDownloadPage</name>
     <message>
-        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="329"/>
+        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="326"/>
         <source>Downloading packs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="331"/>
+        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="328"/>
         <source>You just have to wait until all packs are downloaded.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="450"/>
+        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="447"/>
         <source>Download failed</source>
         <translation type="unfinished"></translation>
     </message>
@@ -191,7 +201,7 @@
 <context>
     <name>DataPack::Internal::PackEndPage</name>
     <message>
-        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="685"/>
+        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="682"/>
         <source>Pack(s) processed.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -199,12 +209,12 @@
 <context>
     <name>DataPack::Internal::PackInstallPage</name>
     <message>
-        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="480"/>
+        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="477"/>
         <source>Installing pack(s)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="481"/>
+        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="478"/>
         <source>Please wait until all packs are installed.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -222,18 +232,17 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="194"/>
-        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="196"/>
+        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="193"/>
         <source>%1 Pack(s) to install</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="198"/>
+        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="195"/>
         <source>%1 Pack(s) to update</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="200"/>
+        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="197"/>
         <source>%1 Pack(s) to remove</source>
         <translation type="unfinished"></translation>
     </message>
@@ -241,17 +250,17 @@
 <context>
     <name>DataPack::Internal::PackLicensePage</name>
     <message>
-        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="234"/>
+        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="231"/>
         <source>License agreement</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="235"/>
+        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="232"/>
         <source>The following packs need a license agreement.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="238"/>
+        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="235"/>
         <source>Accept all license terms</source>
         <translation type="unfinished"></translation>
     </message>
@@ -318,12 +327,12 @@
 <context>
     <name>DataPack::Internal::PackRemovePage</name>
     <message>
-        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="609"/>
+        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="606"/>
         <source>Removing pack(s)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="611"/>
+        <location filename="../../libs/datapackutils/widgets/packwizard.cpp" line="608"/>
         <source>Wait until all removal are done.</source>
         <translation type="unfinished"></translation>
     </message>

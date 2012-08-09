@@ -295,8 +295,8 @@ Do you want to add them to the file?</source>
 <context>
     <name>DrugsDB::Internal::DrugsBasePlugin</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsbaseplugin.cpp" line="82"/>
-        <location filename="../../plugins/drugsbaseplugin/drugsbaseplugin.cpp" line="93"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbaseplugin.cpp" line="84"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsbaseplugin.cpp" line="95"/>
         <source>Initializing drugs database plugin...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -353,19 +353,19 @@ Do you want to add them to the file?</source>
 <context>
     <name>DrugsDB::ProtocolsBase</name>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/protocolsbase.cpp" line="346"/>
-        <location filename="../../plugins/drugsbaseplugin/protocolsbase.cpp" line="352"/>
-        <location filename="../../plugins/drugsbaseplugin/protocolsbase.cpp" line="357"/>
+        <location filename="../../plugins/drugsbaseplugin/protocolsbase.cpp" line="363"/>
+        <location filename="../../plugins/drugsbaseplugin/protocolsbase.cpp" line="369"/>
+        <location filename="../../plugins/drugsbaseplugin/protocolsbase.cpp" line="374"/>
         <source>Unable to create the Protocol database.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/protocolsbase.cpp" line="398"/>
+        <location filename="../../plugins/drugsbaseplugin/protocolsbase.cpp" line="415"/>
         <source>Standardized protocols database can not be updated successfully</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/protocolsbase.cpp" line="463"/>
+        <location filename="../../plugins/drugsbaseplugin/protocolsbase.cpp" line="480"/>
         <source>Unable to update the protocol&apos;s transmission date.</source>
         <translation type="unfinished"></translation>
     </message>

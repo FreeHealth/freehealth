@@ -4,20 +4,20 @@
 <context>
     <name>ZipCodes::ZipCountryCompleters</name>
     <message>
-        <location filename="../../plugins/zipcodesplugin/zipcodescompleters.cpp" line="365"/>
-        <location filename="../../plugins/zipcodesplugin/zipcodescompleters.cpp" line="366"/>
+        <location filename="../../plugins/zipcodesplugin/zipcodescompleters.cpp" line="368"/>
+        <location filename="../../plugins/zipcodesplugin/zipcodescompleters.cpp" line="369"/>
         <source>No country selected</source>
         <translation>Pas de pays sélectionné</translation>
     </message>
     <message>
-        <location filename="../../plugins/zipcodesplugin/zipcodescompleters.cpp" line="382"/>
-        <location filename="../../plugins/zipcodesplugin/zipcodescompleters.cpp" line="383"/>
+        <location filename="../../plugins/zipcodesplugin/zipcodescompleters.cpp" line="385"/>
+        <location filename="../../plugins/zipcodesplugin/zipcodescompleters.cpp" line="386"/>
         <source>Zip/city/country association checked</source>
         <translation>Association code postal/ville/pays vérifiée</translation>
     </message>
     <message>
-        <location filename="../../plugins/zipcodesplugin/zipcodescompleters.cpp" line="387"/>
-        <location filename="../../plugins/zipcodesplugin/zipcodescompleters.cpp" line="388"/>
+        <location filename="../../plugins/zipcodesplugin/zipcodescompleters.cpp" line="390"/>
+        <location filename="../../plugins/zipcodesplugin/zipcodescompleters.cpp" line="391"/>
         <source>Wrong zip/city/country association</source>
         <translation>Mauvaise association code postal/ville/pays</translation>
     </message>

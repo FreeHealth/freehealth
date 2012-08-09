@@ -12,22 +12,22 @@
 <context>
     <name>DataPackPlugin::Internal::DataPackPluginIPlugin</name>
     <message>
-        <location filename="../../plugins/datapackplugin/datapackplugin.cpp" line="135"/>
+        <location filename="../../plugins/datapackplugin/datapackplugin.cpp" line="117"/>
         <source>Initializing DataPackPlugin...</source>
         <translation>Datenpaket-Verwaltung wird inialisiert...</translation>
     </message>
     <message>
-        <location filename="../../plugins/datapackplugin/datapackplugin.cpp" line="163"/>
+        <location filename="../../plugins/datapackplugin/datapackplugin.cpp" line="151"/>
         <source>Trying to set the default datapack servers using file %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/datapackplugin/datapackplugin.cpp" line="176"/>
+        <location filename="../../plugins/datapackplugin/datapackplugin.cpp" line="164"/>
         <source>Unable to add default server %1 (%2)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/datapackplugin/datapackplugin.cpp" line="178"/>
+        <location filename="../../plugins/datapackplugin/datapackplugin.cpp" line="166"/>
         <source>Adding default server %1 (%2)</source>
         <translation type="unfinished"></translation>
     </message>
