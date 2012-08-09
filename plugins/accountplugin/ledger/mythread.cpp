@@ -32,6 +32,9 @@
 #include "mythread.h"
 #include "ledgerIO.h"
 #include <QDebug>
+
+//TODO: use English variable and method names
+
 enum { WarnDebugMessage = true };
 ProduceDoc::ProduceDoc(){
     m_fieldsToJoin     = 0;
