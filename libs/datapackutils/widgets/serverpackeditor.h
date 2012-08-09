@@ -74,8 +74,8 @@ private:
     void populateServerView(const int serverId);
 
 private Q_SLOTS:
-    void swithToPackView();
-    void swithToServerView();
+    void switchToPackView();
+    void switchToServerView();
     void onPackCategoriesChanged(const QModelIndex &index, const QModelIndex &previous);
     void onPackIndexActivated(const QModelIndex &index, const QModelIndex &previous);
     void serverActionTriggered(QAction *a);

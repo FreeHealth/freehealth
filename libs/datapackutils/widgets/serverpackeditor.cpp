@@ -218,7 +218,7 @@ ServerPackEditor::ServerPackEditor(QWidget *parent) :
 
     createActions();
     createToolbar();
-    d->processToolBar(::PACK_MODE);
+    switchToPackView();
 //    createServerDataWidgetMapper();
     retranslate();
 
@@ -320,8 +320,8 @@ void ServerPackEditor::createToolbar()
     d->ui->toolbarLayout->addWidget(d->m_ToolBarPacks);
 
     connect(d->m_ToolBarPacks, SIGNAL(actionTriggered(QAction*)), this, SLOT(serverActionTriggered(QAction*)));
-    connect(d->bPack, SIGNAL(clicked()), this, SLOT(swithToPackView()));
-    connect(d->bServer, SIGNAL(clicked()), this, SLOT(swithToServerView()));
+    connect(d->bPack, SIGNAL(clicked()), this, SLOT(switchToPackView()));
+    connect(d->bServer, SIGNAL(clicked()), this, SLOT(switchToServerView()));
 }
 
 //void ServerPackEditor::createServerDataWidgetMapper()
@@ -420,15 +420,17 @@ void ServerPackEditor::populatePackView(const int packId)
     d->ui->packSummary->setText(summary);
 }
 
-void ServerPackEditor::swithToPackView()
+void ServerPackEditor::switchToPackView()
 {
     d->ui->stackedWidget->setCurrentWidget(d->ui->packPage);
+    d->bPack->setChecked(true);
     d->processToolBar(::PACK_MODE);
 }
 
-void ServerPackEditor::swithToServerView()
+void ServerPackEditor::switchToServerView()
 {
     d->ui->stackedWidget->setCurrentWidget(d->ui->serverPage);
+    d->bServer->setChecked(true);
     d->processToolBar(::SERVER_MODE);
 }
 
@@ -474,7 +476,7 @@ void ServerPackEditor::serverActionTriggered(QAction *a)
         int row = d->ui->serverListView->selectionModel()->currentIndex().row();
         serverManager()->removeServerAt(row);
     } else if (a==d->aServerEdit) {
-        swithToServerView();
+        switchToServerView();
     }
 }
 
