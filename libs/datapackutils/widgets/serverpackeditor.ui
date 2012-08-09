@@ -124,7 +124,7 @@
            <item row="0" column="0">
             <widget class="QLabel" name="serverName">
              <property name="text">
-              <string/>
+              <string>Servername</string>
              </property>
              <property name="wordWrap">
               <bool>true</bool>
