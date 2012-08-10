@@ -125,13 +125,13 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/accountview.cpp" line="187"/>
-        <source>Line deleted.</source>
+        <location filename="../../plugins/accountplugin/accountview.cpp" line="181"/>
+        <source>Please select a line to delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/accountview.cpp" line="181"/>
-        <source>Please select a line to delete.</source>
+        <location filename="../../plugins/accountplugin/accountview.cpp" line="187"/>
+        <source>Line deleted</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1104,7 +1104,7 @@ This feature is useful for testers and should not be used by normal users.</sour
     </message>
     <message>
         <location filename="../../plugins/accountplugin/accountview.ui" line="26"/>
-        <source>Start Date</source>
+        <source>Start date</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1449,7 +1449,7 @@ Otherwise result will be wrong !</source>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="242"/>
-        <source>Cannot delete in thesaurus : </source>
+        <source>Cannot delete in thesaurus: </source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2811,7 +2811,7 @@ and choose it as preferred.</source>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="595"/>
-        <source>Cannot delete in thesaurus :</source>
+        <source>Cannot delete in thesaurus:</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

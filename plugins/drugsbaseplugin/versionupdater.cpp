@@ -1019,7 +1019,7 @@ bool VersionUpdater::updateDosageDatabase()
             return false;
         }
         if (!step->saveUpdatedValuesToDatabase()) {
-            Utils::Log::addError("VersionUpdater", QString("Error while updating %1 from %2 to %3 : %4")
+            Utils::Log::addError("VersionUpdater", QString("Error while updating %1 from %2 to %3: %4")
                                  .arg(Dosages::Constants::DB_DOSAGES_NAME, step->fromVersion(), step->toVersion()),
                                  __FILE__, __LINE__);
             return false;

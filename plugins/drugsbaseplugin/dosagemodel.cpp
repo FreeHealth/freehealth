@@ -28,7 +28,7 @@
 /**
   \class DosageModel
   \brief Manages predetermined dosage.
-  A \b "dosage" is a set of values that defines what, when and how to prescribe a drug. A dosage can apply :
+  A \b "dosage" is a set of values that defines what, when and how to prescribe a drug. A dosage can apply:
   \li on a specific drug base on its CIS,
   \li on the INN molecule of the drug which are presented in the same "dosage" (100mg, 1g...).
   For example :

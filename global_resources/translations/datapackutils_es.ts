@@ -344,6 +344,11 @@
         <source>Form</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.ui" line="127"/>
+        <source>Servername</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>DataPack::ServerModel</name>
@@ -391,42 +396,42 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="464"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="466"/>
         <source>Downloading server information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="528"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="530"/>
         <source>Native URL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="595"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="597"/>
         <source>Refresh datapack servers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="596"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="598"/>
         <source>Server editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="597"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="599"/>
         <source>Add a server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="598"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="600"/>
         <source>Remove a server</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="599"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="601"/>
         <source>Refresh packs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="600"/>
+        <location filename="../../libs/datapackutils/widgets/serverpackeditor.cpp" line="602"/>
         <source>Apply changes</source>
         <translation type="unfinished"></translation>
     </message>
