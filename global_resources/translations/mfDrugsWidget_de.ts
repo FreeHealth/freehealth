@@ -1161,7 +1161,7 @@ Do you really want to change the editing mode?</source>
     <message>
         <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="73"/>
         <source>View</source>
-        <translation type="unfinished">Schauen</translation>
+        <translation type="unfinished">Ansicht</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/drugspreferences/mfDrugsPreferences.cpp" line="75"/>
@@ -1179,7 +1179,7 @@ Do you really want to change the editing mode?</source>
     <message>
         <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="26"/>
         <source>View</source>
-        <translation>Schauen</translation>
+        <translation>Aussehen</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/drugspreferences/drugsviewoptionspage.ui" line="44"/>
