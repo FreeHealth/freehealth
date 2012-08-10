@@ -13,21 +13,8 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout_2">
-   <item row="2" column="1">
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>40</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="0" column="1" rowspan="2">
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
       <string>Bank details</string>
@@ -192,16 +179,6 @@
         </item>
        </layout>
       </item>
-      <item row="15" column="0">
-       <widget class="QLabel" name="defaultLabel">
-        <property name="text">
-         <string>Use by default</string>
-        </property>
-       </widget>
-      </item>
-      <item row="15" column="1">
-       <widget class="QComboBox" name="defaultCombo"/>
-      </item>
       <item row="16" column="0">
        <widget class="QLabel" name="uid">
         <property name="text">
@@ -219,8 +196,35 @@
         </property>
        </widget>
       </item>
+      <item row="12" column="0">
+       <widget class="QLabel" name="labelLabel_2">
+        <property name="text">
+         <string>Default</string>
+        </property>
+       </widget>
+      </item>
+      <item row="12" column="1">
+       <widget class="QCheckBox" name="defaultCheckBox">
+        <property name="text">
+         <string>Use this account as the default</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
+   </item>
+   <item>
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
    </item>
   </layout>
  </widget>
@@ -232,7 +236,6 @@
   <tabstop>number</tabstop>
   <tabstop>balanceSpin</tabstop>
   <tabstop>balanceDate</tabstop>
-  <tabstop>defaultCombo</tabstop>
   <tabstop>accountComboBox</tabstop>
   <tabstop>addButton</tabstop>
   <tabstop>removeButton</tabstop>

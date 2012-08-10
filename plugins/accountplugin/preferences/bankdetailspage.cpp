@@ -125,8 +125,6 @@ BankDetailsWidget::BankDetailsWidget(QWidget *parent) :
         m_user_fullName = "Admin_Test";
     }
     uidLabel->setText(m_user_uid);
-    defaultCombo->addItem(tkTr(Trans::Constants::NO));
-    defaultCombo->addItem(tkTr(Trans::Constants::YES));
     addButton->setIcon(theme()->icon(Core::Constants::ICONADD));
     removeButton->setIcon(theme()->icon(Core::Constants::ICONREMOVE));
     m_Model = new AccountDB::BankAccountModel(this);
@@ -148,7 +146,7 @@ BankDetailsWidget::BankDetailsWidget(QWidget *parent) :
     m_Mapper->addMapping(number, AccountDB::Constants::BANKDETAILS_ACCOUNTNUMBER, "text");
     m_Mapper->addMapping(balanceSpin, AccountDB::Constants::BANKDETAILS_BALANCE, "value");
     m_Mapper->addMapping(balanceDate, AccountDB::Constants::BANKDETAILS_BALANCEDATE, "date");
-    m_Mapper->addMapping(defaultCombo, AccountDB::Constants::BANKDETAILS_DEFAULT, "currentIndex");
+    m_Mapper->addMapping(defaultCheckBox, AccountDB::Constants::BANKDETAILS_DEFAULT);
     accountComboBox->setModel(m_Model);
     accountComboBox->setModelColumn(AccountDB::Constants::BANKDETAILS_LABEL);
     setDatasToUi();
@@ -228,11 +226,6 @@ void BankDetailsWidget::changeEvent(QEvent *e)
             retranslateUi(this);
             addButton->setToolTip(tkTr(Trans::Constants::FILENEW_TEXT));
             removeButton->setToolTip(tkTr(Trans::Constants::REMOVE_TEXT));
-            int s = defaultCombo->currentIndex();
-            defaultCombo->clear();
-            defaultCombo->addItem(tkTr(Trans::Constants::NO));
-            defaultCombo->addItem(tkTr(Trans::Constants::YES));
-            defaultCombo->setCurrentIndex(s);
             break;
         }
     default:
