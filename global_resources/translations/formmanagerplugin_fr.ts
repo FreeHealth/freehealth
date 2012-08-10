@@ -68,7 +68,7 @@ Answering &apos;No&apos; will cause definitve data lose.</source>
     <message>
         <location filename="../../plugins/formmanagerplugin/formeditordialog.cpp" line="94"/>
         <source>You did not selected a form, do you want to add the sub-form as root form?</source>
-        <translation>Vous n&apos;avez pas sélectionné de formulaire, voulez)cous ajouter ce formulaire comme formulaire racine ?</translation>
+        <translation>Vous n&apos;avez pas sélectionné de formulaire, voulez vous ajouter ce formulaire comme formulaire racine?</translation>
     </message>
 </context>
 <context>
