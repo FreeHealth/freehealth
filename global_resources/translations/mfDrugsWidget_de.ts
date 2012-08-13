@@ -1403,7 +1403,7 @@ Do you really want to change the editing mode?</source>
     <message>
         <location filename="../../plugins/drugsplugin/constants.h" line="79"/>
         <source>Search by commercial name</source>
-        <translation>Suchen nach dem Kommerziellen Namen</translation>
+        <translation>Suchen nach kommerziellem Namen</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/constants.h" line="80"/>
@@ -1413,7 +1413,7 @@ Do you really want to change the editing mode?</source>
     <message>
         <location filename="../../plugins/drugsplugin/constants.h" line="81"/>
         <source>Search by molecules</source>
-        <translation></translation>
+        <translation>Suche nach  Molekül</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/constants.h" line="82"/>

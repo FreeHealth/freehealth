@@ -723,7 +723,6 @@
     <message>
         <location filename="../../libs/translationutils/trans_account.h" line="40"/>
         <source>Insurance</source>
-        <translation>Versicherung</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_account.h" line="41"/>
@@ -2081,7 +2080,7 @@ Ort: %2</translation>
     <message>
         <location filename="../../libs/translationutils/trans_drugs.h" line="41"/>
         <source>Drugs</source>
-        <translation type="unfinished"></translation>
+        <translation>Medikamente</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_drugs.h" line="42"/>
