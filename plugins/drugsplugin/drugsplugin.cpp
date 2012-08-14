@@ -35,7 +35,11 @@
 
 #include "drugsplugin.h"
 #include "constants.h"
-#include "drugspreferences/mfDrugsPreferences.h"
+#include "drugspreferences/druggeneralpreferences.h"
+#include "drugspreferences/drugselectorpreferences.h"
+#include "drugspreferences/drugprintingpreferences.h"
+#include "drugspreferences/druguserpreferences.h"
+#include "drugspreferences/drugextrapreferences.h"
 #include "drugspreferences/databaseselectorwidget.h"
 #include "drugspreferences/protocolpreferencespage.h"
 #include "drugspreferences/drugenginespreferences.h"

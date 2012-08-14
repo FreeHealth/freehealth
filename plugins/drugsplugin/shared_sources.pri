@@ -30,12 +30,24 @@ FORMS += $${PWD}/dosagedialog/mfDosageDialog.ui \
     $${PWD}/dosagedialog/mfDosageViewer.ui
 
 # DrugsWidget Preferences
-HEADERS += $${PWD}/drugspreferences/mfDrugsPreferences.h \
+HEADERS += \
+#    $${PWD}/drugspreferences/mfDrugsPreferences.h \
+    $${PWD}/drugspreferences/drugselectorpreferences.h \
+    $${PWD}/drugspreferences/drugprintingpreferences.h \
+    $${PWD}/drugspreferences/druggeneralpreferences.h \
+    $${PWD}/drugspreferences/druguserpreferences.h \
+    $${PWD}/drugspreferences/drugextrapreferences.h \
     $${PWD}/drugspreferences/databaseselectorwidget.h \
     $${PWD}/drugspreferences/protocolpreferencespage.h \
     $${PWD}/drugspreferences/drugenginespreferences.h
 
-SOURCES += $${PWD}/drugspreferences/mfDrugsPreferences.cpp \
+SOURCES += \
+#    $${PWD}/drugspreferences/mfDrugsPreferences.cpp \
+    $${PWD}/drugspreferences/drugselectorpreferences.cpp \
+    $${PWD}/drugspreferences/drugprintingpreferences.cpp \
+    $${PWD}/drugspreferences/druggeneralpreferences.cpp \
+    $${PWD}/drugspreferences/druguserpreferences.cpp \
+    $${PWD}/drugspreferences/drugextrapreferences.cpp \
     $${PWD}/drugspreferences/databaseselectorwidget.cpp \
     $${PWD}/drugspreferences/protocolpreferencespage.cpp \
     $${PWD}/drugspreferences/drugenginespreferences.cpp
