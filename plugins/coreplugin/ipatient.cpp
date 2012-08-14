@@ -78,7 +78,7 @@ void IPatient::registerPatientTokens()
 {
 #ifndef WITH_PAD
     return;
-#endif
+#else
 
     // Create and register namespaces
     // Create tokens
@@ -179,6 +179,9 @@ void IPatient::registerPatientTokens()
         LOG_ERROR("PadTools object is not available, can not register the Core::IPatient tokens");
     }
     // END
+
+#endif
+
 }
 
 IPatient::~IPatient()
