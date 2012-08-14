@@ -83,8 +83,15 @@ static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionS
 static inline QString workingPath()     {return QDir::cleanPath(settings()->value(Core::Constants::S_TMP_PATH).toString() + "/ZARawSources/") + QDir::separator();}
 static inline QString databaseAbsPath()  {return Core::Tools::drugsDatabaseAbsFileName();}
 
+static inline QString databaseDescriptionFile() {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + "/global_resources/sql/drugdb/za/description.xml");}
 static inline QString databaseFinalizationScript() {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + "/global_resources/sql/drugdb/za/za_db_finalize.sql");}
 static inline QString uidFile() {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + "/global_resources/sql/drugdb/za/za_uids.csv");}
+
+SouthAfricanDrugsDatabasePage::SouthAfricanDrugsDatabasePage(QObject *parent) :
+    IToolPage(parent)
+{
+    setObjectName("SouthAfricanDrugsDatabasePage");
+}
 
 QString SouthAfricanDrugsDatabasePage::category() const
 {
@@ -102,6 +109,7 @@ ZaDrugDatatabaseStep::ZaDrugDatatabaseStep(QObject *parent) :
     Core::IFullReleaseStep(parent),
     m_Progress(0), m_WithProgress(false)
 {
+    setObjectName("ZaDrugDatatabaseStep");
 }
 
 ZaDrugDatatabaseStep::~ZaDrugDatatabaseStep()
@@ -314,7 +322,7 @@ bool ZaDrugDatatabaseStep::createDatabase()
         LOG_ERROR("Unable to create the French drugs sources");
         return false;
     }
-
+    Core::Tools::saveDrugDatabaseDescription(databaseDescriptionFile(), 0);
     LOG(QString("Database schema created"));
     return true;
 }
@@ -561,8 +569,8 @@ static bool saveUids(const QHash<QString, int> &drugs_uids)
     QString content;
     content += "// /***************************************************************************\n"
                "//  *   FreeMedicalForms                                                      *\n"
-               "//  *   (C) 2008-2010 by Eric MAEKER, MD                                      *\n"
-               "//  *   eric.maeker@gmail.com                                                   *\n"
+               "//  *   (C) 2008-2012 by Eric MAEKER, MD                                      *\n"
+               "//  *   eric.maeker@gmail.com                                                 *\n"
                "//  *   All rights reserved.                                                  *\n"
                "//  ***************************************************************************/\n"
                "// /***************************************************************************\n"
@@ -671,12 +679,14 @@ bool ZaDrugDatatabaseStep::populateDatabase()
     Drug::saveDrugsIntoDatabase(Core::Constants::MASTER_DATABASE_NAME, drugs, ZA_DRUGS_DATABASE_NAME);
     Q_EMIT progress(2);
 
+    Core::Tools::saveDrugDatabaseDescription(databaseDescriptionFile(), 50);
+
     // Run SQL commands one by one
-    Q_EMIT progressLabelChanged(tr("Running database finalization script"));
-    if (!Core::Tools::executeSqlFile(Core::Constants::MASTER_DATABASE_NAME, databaseFinalizationScript())) {
-        LOG_ERROR("Can not create ZA DB.");
-        return false;
-    }
+//    Q_EMIT progressLabelChanged(tr("Running database finalization script"));
+//    if (!Core::Tools::executeSqlFile(Core::Constants::MASTER_DATABASE_NAME, databaseFinalizationScript())) {
+//        LOG_ERROR("Can not create ZA DB.");
+//        return false;
+//    }
 
     qDeleteAll(drugs);
     return true;
@@ -770,16 +780,16 @@ bool ZaDrugDatatabaseStep::linkMolecules()
     corrected.insert("D-ALPHA TOCOPHEROL", "TOCOPHEROL");
     corrected.insert("D-PANTOTHENIC ACID (CALCIUM D-PANTOTHENATE)" ,"CALCIUM PANTOTHENATE" );
 
-    // Associate Mol <-> ATC for drugs with one molecule only
-    QStringList unfound;
-    QMultiHash<int, int> mol_atc = ExtraMoleculeLinkerModel::instance()->moleculeLinker(ZA_DRUGS_DATABASE_NAME, "en", &unfound, corrected, QMultiHash<QString, QString>());
-    qWarning() << "unfound" << unfound.count();
-
     int sid = Core::Tools::getSourceId(Core::Constants::MASTER_DATABASE_NAME, ZA_DRUGS_DATABASE_NAME);
     if (sid==-1) {
         LOG_ERROR("NO SID DEFINED");
         return false;
     }
+
+    // Associate Mol <-> ATC for drugs with one molecule only
+    QStringList unfound;
+    QMultiHash<int, int> mol_atc = ExtraMoleculeLinkerModel::instance()->moleculeLinker(ZA_DRUGS_DATABASE_NAME, "en", &unfound, corrected, QMultiHash<QString, QString>());
+    qWarning() << "unfound" << unfound.count();
 
     Q_EMIT progressLabelChanged(tr("Saving components to ATC links to database"));
     Q_EMIT progressRangeChanged(0, 1);
