@@ -600,6 +600,7 @@ bool ZaDrugDatatabaseStep::populateDatabase()
     if (!Core::Tools::connectDatabase(ZA_DRUGS_DATABASE_NAME, databaseAbsPath()))
         return false;
 
+    // 14 Aug 2012 : 2732 Drugs ->
     // 24 juin 2010 : 2682 drugs -> 1073 usable drugs
 
     Q_EMIT progressLabelChanged(tr("South African database creation : reading drugs uids"));
