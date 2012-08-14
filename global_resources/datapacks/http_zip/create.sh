@@ -24,6 +24,14 @@ do
     zipdir=`dirname $xmlfile`
     zipfile=`ls $zipdir/*.zip | head -1` # we assume that the first zip file in the directory is the good one
 
+    if [[ ! -e $zipfile ]]; then
+        echo "No zip file found for $xmlfile"
+        continue;
+    fi
+
+    echo "Preparing $xmlfile."
+    echo "  . Zip: $zipfile"
+
     # Compute data to insert
     zipmd5=$($md5 $zipfile | cut -d ' ' -f 1)
     if [ "$sys" == "Linux" ] ; then
@@ -32,7 +40,8 @@ do
         zipsize=`du -k $zipfile | awk '{print $1}'`
     fi
 
-    echo "For $zipfile, md5=$zipmd5 and size=$zipsize"
+    echo "  . md5: $zipmd5"
+    echo "  . size: $zipsize"
 
     # Proceed to the replacement
     sed -i $sedbak "s/<size>.*<\/size>/<size>$zipsize<\/size>/g" $xmlfile
