@@ -63,8 +63,7 @@ static inline QString masterDatabaseSqlSchema() {return settings()->value(Core::
 static inline QString routesCsvAbsFile() {return settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + QString(Core::Constants::FILE_DRUGS_ROUTES);}
 
 namespace Core {
-namespace Tools
-{
+namespace Tools {
 
 QString noAccent(const QString & s)
 {
@@ -134,15 +133,15 @@ bool executeProcess(const QString &proc)
     LOG_FOR("Tools", QString("Executing process : %1").arg(proc));
 
     if (!process.waitForStarted())
-        Utils::Log::addError("Tools", QString("Process %1 can not start").arg(proc.left(20)));
+        LOG_ERROR_FOR("Tools", QString("Process %1 can not start").arg(proc.left(20)));
 
     if (!process.waitForFinished(100000))
-        Utils::Log::addError("Tools", QString("Process %1 does not end").arg(proc.left(20)));
+        LOG_ERROR_FOR("Tools", QString("Process %1 does not end").arg(proc.left(20)));
 
     QString error = process.readAllStandardError();
     if (!error.isEmpty()) {
-        Utils::Log::addError("Tools", QString("ERROR : %1").arg(proc));
-        Utils::Log::addError("Tools", QString("ERROR : %1").arg(error));
+        LOG_ERROR_FOR("Tools", QString("ERROR : %1").arg(proc));
+        LOG_ERROR_FOR("Tools", QString("ERROR : %1").arg(error));
         return false;
     }
     LOG_FOR("Tools", QString("Process done : %1, output : %2").arg(proc.left(20)).arg(QString(process.readAllStandardOutput())));
@@ -152,14 +151,14 @@ bool executeProcess(const QString &proc)
 bool executeSqlFile(const QString &connectionName, const QString &fileName, QProgressDialog *dlg)
 {
     if (!QFile::exists(fileName)) {
-        Utils::Log::addError("Tools", QString("ERROR: missing database schema file : %1.").arg(fileName));
+        LOG_ERROR_FOR("Tools", QString("ERROR: missing database schema file : %1.").arg(fileName));
         return false;
     }
 
     // execute all sql queries
     QString req = Utils::readTextFile(fileName);
     if (req.isEmpty()) {
-        Utils::Log::addError("Tools", "File is empty : " + fileName);
+        LOG_ERROR_FOR("Tools", "File is empty : " + fileName);
         return false;
     }
 
@@ -174,14 +173,11 @@ bool executeSqlFile(const QString &connectionName, const QString &fileName, QPro
     QSqlDatabase DB = QSqlDatabase::database(connectionName);
     if (!DB.isOpen()) {
         if (!DB.open()) {
-            Utils::Log::addError("Tools", "Database not opened");
+            LOG_ERROR_FOR("Tools", "Database not opened");
             return false;
         }
     }
-//    if (!DB.transaction()) {
-//        Utils::Log::addError("Tools", "Can not create transaction. Tools::executeSqlFile()");
-//        return false;
-//    }
+    DB.transaction();
 
     req.clear();
     QStringList queries;
@@ -223,7 +219,7 @@ bool executeSqlFile(const QString &connectionName, const QString &fileName, QPro
 
         QSqlQuery query(sql, DB);
         if (!query.isActive()) {
-            Utils::Log::addError("Tools", QString("SQL ERROR : %1 \"%2\"").arg(query.lastError().text(), sql));
+            LOG_ERROR_FOR("Tools", QString("SQL ERROR : %1 \"%2\"").arg(query.lastError().text(), sql));
 //            DB.rollback();
             return false;
         } else {
@@ -233,7 +229,7 @@ bool executeSqlFile(const QString &connectionName, const QString &fileName, QPro
         if (dlg)
             dlg->setValue(dlg->value()+1);
     }
-//    DB.commit();
+    DB.commit();
     return true;
 }
 
@@ -242,7 +238,7 @@ bool executeSqlQuery(const QString &sql, const QString &dbName, const QString &f
     QSqlDatabase DB = QSqlDatabase::database(dbName);
     if (!DB.isOpen()) {
         if (file.isEmpty())
-            Utils::Log::addError("Tools", "Unable to connect to " + dbName);
+            LOG_ERROR_FOR("Tools", "Unable to connect to " + dbName);
         else
             Utils::Log::addError("Tools", "Unable to connect to " + dbName, file, line);
         return false;
@@ -250,7 +246,7 @@ bool executeSqlQuery(const QString &sql, const QString &dbName, const QString &f
     QSqlQuery query(sql, DB);
     if (!query.isActive()) {
         if (file.isEmpty())
-            Utils::Log::addError("Tools", "Query Error : " + sql + " // " + query.lastError().text());
+            LOG_ERROR_FOR("Tools", "Query Error : " + sql + " // " + query.lastError().text());
         else
             Utils::Log::addError("Tools", "Query Error : " + sql + " // " + query.lastError().text(), file, line);
         return false;
