@@ -245,7 +245,8 @@ public:
         case Drug::AvailableForms :
             {
                 QStringList toReturn;
-                toReturn << drug->forms();
+                if (!drug->forms().isEmpty())
+                    toReturn << drug->forms();
                 toReturn << tkTr(Trans::Constants::INTAKES);
                 if (drug->numberOfInn() == 1) {
                     toReturn << QApplication::translate("DrugsModel", "x %1 of %2")

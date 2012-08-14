@@ -1349,7 +1349,9 @@ QStringList DrugsBase::getFormLabels(const QVariant &drugId, const QString &lang
     QSqlQuery query(req, DB);
     if (query.isActive()) {
         while (query.next()) {
-            toReturn << query.value(0).toString();
+            const QString &form = query.value(0).toString();
+            if (!form.isEmpty())
+                toReturn << form;
         }
     } else {
         LOG_QUERY_ERROR(query);
