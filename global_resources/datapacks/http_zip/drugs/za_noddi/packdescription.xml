@@ -17,8 +17,8 @@
     <bibliography/>
     <file>drugs/za_noddi/master.db.zip</file>
     <unziptopath>drugs</unziptopath>
-    <size></size>
-    <md5></md5>
+    <size>268</size>
+    <md5>d4e4c519d99e00b9dbcc5cf1f3569515</md5>
     <sha1></sha1>
     <datatype>DrugsWithoutInteractions</datatype>
 
@@ -38,7 +38,7 @@
       &lt;br />
       Cette base de données ne permet pas le calcul des interactions médicamenteuses&lt;br />
       &lt;br />
-      Le site affiche la note d'avertissement suivante :&ltbr />
+      &lt;b>Le site affiche la note d'avertissement suivante :&lt;/b>&lt;br />
       Although every effort has been made to ensure accuracy and currency
       in compiling/producing the information at this site, no warranties are made as to the accuracy,
       completeness or currency of any of the information.&lt;br />
@@ -48,6 +48,7 @@
       of the information is disclaimed. &lt;br />
       Users' licence/right to use this information is conditioned upon their acceptance of
       these limitations and disclaimers. &lt;br />
+      &lt;br />
       &lt;/p>
     </htmldescription>
 
@@ -59,7 +60,7 @@
       &lt;br />
       Data for drug interaction engines are not included in this database.&lt;br />
       &lt;br />
-      Web site gives the following disclaimer:&ltbr />
+      &lt;b>Web site gives the following disclaimer:&lt;/b>&lt;br />
       Although every effort has been made to ensure accuracy and currency
       in compiling/producing the information at this site, no warranties are made as to the accuracy,
       completeness or currency of any of the information.&lt;br />
@@ -69,6 +70,7 @@
       of the information is disclaimed. &lt;br />
       Users' licence/right to use this information is conditioned upon their acceptance of
       these limitations and disclaimers. &lt;br />
+      &lt;br />
       &lt;/p>
     </htmldescription>
 
