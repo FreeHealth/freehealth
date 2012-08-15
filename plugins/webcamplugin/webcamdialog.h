@@ -31,6 +31,7 @@
 #include <QImage>
 #include <QPixmap>
 #include <QHBoxLayout>
+#include <QStandardItemModel>
 
 namespace Webcam {
 
@@ -48,23 +49,22 @@ class WebcamDialog : public QDialog
 public:
     explicit WebcamDialog(QWidget *parent = 0);
     ~WebcamDialog();
-    
+
     QPixmap photo() const;
 
 private Q_SLOTS:
     void updatefreezeButton(bool aFreeze);
     void autoFaceShot(const QPixmap &pix);
+    void faceShotActivated(const QModelIndex &index);
 
 private:
-    bool eventFilter(QObject *o, QEvent *e);
     void changeEvent(QEvent *event);
 
 private:
     Ui::WebcamDialog *ui;
     QPushButton *m_freezeButton;
-    int _faces;
-    QHBoxLayout *_autoshotLayout;
     QPixmap _pixmap;
+    QStandardItemModel *m_imageModel;
 };
 
 }  // namespace WebCam
