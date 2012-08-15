@@ -30,6 +30,7 @@
 #include <drugsplugin/drugswidgetmanager.h>
 #include <drugsplugin/drugswidget/drugselector.h>
 #include <drugsbaseplugin/idrug.h>
+#include <drugsbaseplugin/prescriptiontoken.h>
 
 #include <drugsbaseplugin/drugbasecore.h>
 #include <drugsbaseplugin/drugsbase.h>
@@ -42,6 +43,7 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/itheme.h>
+#include <coreplugin/ipadtools.h>
 
 #include <QPixmap>
 
@@ -51,6 +53,7 @@ using namespace DrugsWidget::Constants;
 using namespace Trans::ConstantTranslations;
 
 static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
+static inline Core::IPadTools *padTools() { return Core::ICore::instance()->padTools(); }
 static inline DrugsDB::DrugsBase &drugsBase() {return DrugsDB::DrugBaseCore::instance().drugsBase();}
 static QString getPrescriptionTokenHtmlFileContent()
 {
@@ -133,13 +136,27 @@ void DrugsPrintWidget::resetToDefaultFormatting()
 
 static inline QString getFullPrescription(DrugsDB::IDrug *drug, bool toHtml, const QString &tmp)
 {
-    // TODO: this will not work with padtools
+#ifdef WITH_PAD
+    // ~drugsmodel deletes all registered drugs ==> use a copy *drug
+    DrugsDB::IDrug *cp = new DrugsDB::IDrug(*drug);
+    DrugsDB::DrugsModel model;
+    model.addDrug(cp);
+    DrugsDB::PrescriptionToken::setPrescriptionModel(&model);
+    DrugsDB::PrescriptionToken::setPrescriptionModelRow(0);
+    if (toHtml)
+        return padTools()->processHtml(tmp);
+    return padTools()->processPlainText(tmp);
+#else
     return DrugsDB::DrugsModel().getFullPrescription(drug, toHtml, tmp);
+#endif
 }
 
 void DrugsPrintWidget::updateFormatting()
 {
     QString tmp = prescriptionFormatting->textEdit()->toHtml();
+
+    qWarning()  << getFullPrescription(drug, true, tmp);
+
     formatingSample->setHtml(getFullPrescription(drug, true, tmp));
 }
 

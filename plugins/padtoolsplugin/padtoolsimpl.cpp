@@ -69,11 +69,13 @@ QString PadToolsImpl::processPlainText(const QString &plainText)
 QString PadToolsImpl::processHtml(const QString &html)
 {
     PadAnalyzer analyzer;
-    QString t = html;
-    if (t.contains("&lt;")) {
-        t = t.replace("&lt;","<").replace("&gt;",">");
-    }
-    PadDocument *pad = analyzer.analyze(t);
+//    QString t = html;
+//    if (t.contains("&lt;")) {
+//        t = t.replace("&lt;","<").replace("&gt;",">");
+//    }
+    QTextDocument *doc = new QTextDocument(this);
+    doc->setHtml(html);
+    PadDocument *pad = analyzer.analyze(doc, 0);
 //    errors = analyzer.lastErrors();
 
     pad->toOutput(_pool);
