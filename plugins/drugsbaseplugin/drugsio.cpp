@@ -42,6 +42,7 @@
 #include <drugsbaseplugin/versionupdater.h>
 #include <drugsbaseplugin/dailyschememodel.h>
 #include <drugsbaseplugin/drugsdatabaseselector.h>
+#include <drugsbaseplugin/prescriptiontoken.h>
 
 #include <printerplugin/printer.h>
 #include <printerplugin/constants.h>
@@ -80,69 +81,6 @@ static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 static inline Core::IDocumentPrinter *printer() {return ExtensionSystem::PluginManager::instance()->getObject<Core::IDocumentPrinter>();}
 
 namespace {
-
-class PrescriptionToken : public Core::IToken
-{
-public:
-    PrescriptionToken(const QString &name, const int ref) :
-        Core::IToken(name),
-        _ref(ref),
-        _isRepeatedDailyScheme(false),
-        _isDistributedDailyScheme(false),
-        _isMeal(false)
-    {
-        _isDistributedDailyScheme = (name==Core::Constants::TOKEN_PRESC_DISTRIB_DAILYSCHEME);
-        _isRepeatedDailyScheme = (name==Core::Constants::TOKEN_PRESC_REPEATED_DAILYSCHEME);
-        _isMeal = (ref==DrugsDB::Constants::Prescription::MealTimeSchemeIndex);
-    }
-    ~PrescriptionToken() {}
-
-    static void setPrescriptionModel(DrugsDB::DrugsModel *model) {_model = model;}
-    static void setPrescriptionModelRow(int row) {_row = row;}
-
-    QVariant testValue() const {return "TESTINGVALUE";}
-    QVariant value() const
-    {
-        using namespace DrugsDB::Constants;
-        if (_isRepeatedDailyScheme) {
-            DrugsDB::DailySchemeModel *day = new DrugsDB::DailySchemeModel;
-            day->setSerializedContent(_model->data(_model->index(_row, Prescription::SerializedDailyScheme)).toString());
-            return day->humanReadableRepeatedDailyScheme();
-        } else if (_isDistributedDailyScheme) {
-            DrugsDB::DailySchemeModel *day = new DrugsDB::DailySchemeModel;
-            day->setSerializedContent(_model->data(_model->index(_row, Prescription::SerializedDailyScheme)).toString());
-            return day->humanReadableDistributedDailyScheme();
-        } else if (_isMeal) {
-            const QVariant &v = _model->data(_model->index(_row, _ref));
-            if (!v.isValid() || v.isNull())
-                return QVariant();
-            return mealTime(v.toInt());
-        } else if (_ref==Prescription::IntakesIntervalSchemeIndex) {
-            const QVariant &v = _model->data(_model->index(_row, _ref));
-            if (!v.isValid() || v.isNull())
-                return QVariant();
-            return period(v.toInt());
-        } else if (_ref==Prescription::IntakesIntervalOfTime) {
-            const QVariant &v = _model->data(_model->index(_row, _ref));
-            if (!v.isValid() || v.isNull())
-                return QVariant();
-            if (v.toInt() <= 0)
-                return QVariant();
-            return v;
-
-        }
-        return _model->data(_model->index(_row, _ref));
-    }
-
-private:
-    static DrugsDB::DrugsModel *_model;
-    static int _row;
-    int _ref;
-    bool _isRepeatedDailyScheme, _isDistributedDailyScheme, _isMeal;
-};
-
-DrugsDB::DrugsModel *PrescriptionToken::_model = 0;
-int PrescriptionToken::_row = 0;
 
     const char *const XML_HEADER                           = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE FreeMedForms>\n";
     const char *const XML_ROOT_TAG                         = "FreeDiams";
