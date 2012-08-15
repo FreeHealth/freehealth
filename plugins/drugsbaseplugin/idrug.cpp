@@ -122,12 +122,13 @@ namespace Internal {
 class IComponentPrivate
 {
 public:
-    IComponentPrivate() : m_Drug(0), m_Link(0) {}
+    IComponentPrivate() : m_Drug(0), m_Link(0), m_LinkOwned(false) {}
 
     QHash<int, QMultiHash<QString, QVariant> > m_Content;
     IDrug *m_Drug;
     QVector<int> m_7CharAtcIds, m_InteractingClassAtcIds;
     IComponent *m_Link;
+    bool m_LinkOwned;
 };
 
 class IDrugPrivate
@@ -174,8 +175,24 @@ IComponent::IComponent(IDrug *parent) :
     setDataFromDb(IsActiveSubstance, true);
 }
 
+IComponent::IComponent(IDrug *parent, const IComponent &copy) :
+    d_component(new Internal::IComponentPrivate(*copy.d_component))
+{
+    d_component->m_Drug = parent;
+    d_component->m_LinkOwned = true;
+    if (d_component->m_Link)
+        d_component->m_Link = new IComponent(parent, *copy.d_component->m_Link);
+    if (d_component->m_Drug)
+        d_component->m_Drug->addComponent(this);
+    setDataFromDb(IsActiveSubstance, true);
+}
+
 IComponent::~IComponent()
 {
+    if (d_component->m_LinkOwned) {
+        delete d_component->m_Link;
+        d_component->m_Link = 0;
+    }
     if (d_component)
         delete d_component;
     d_component = 0;
@@ -374,9 +391,18 @@ DrugRoute::DrugRoute(IDrug *drug) :
     d->m_Syst = UnknownSystemicEffect;
 }
 
+DrugRoute::DrugRoute(IDrug *drug, const DrugRoute &copy) :
+    d(new Internal::DrugRoutePrivate(*copy.d))
+{
+    d->m_Drug = drug;
+    if (d->m_Drug)
+        d->m_Drug->addRoute(this);
+}
+
 DrugRoute::~DrugRoute()
 {
-    if (d) delete d;
+    if (d)
+        delete d;
     d = 0;
 }
 
@@ -465,6 +491,11 @@ IPrescription::IPrescription() :
     d_pres->m_PrescriptionChanges = false;
 }
 
+IPrescription::IPrescription(const IPrescription &copy) :
+    d_pres(new Internal::IPrescriptionPrivate(*copy.d_pres))
+{
+}
+
 IPrescription::~IPrescription()
 {
     if (d_pres)
@@ -546,6 +577,22 @@ IDrug::IDrug() :
         IPrescription(),
         d_drug(new Internal::IDrugPrivate)
 {
+}
+
+IDrug::IDrug(const IDrug &copy) :
+        IPrescription(copy),
+        d_drug(new Internal::IDrugPrivate(*copy.d_drug))
+{
+    // make copies of components
+    d_drug->m_Compo.clear();
+    foreach(IComponent *compo, copy.d_drug->m_Compo) {
+        new IComponent(this, *compo); // component is added to the drug in the ctor
+    }
+    // make copies of routes
+    d_drug->m_Compo.clear();
+    foreach(DrugRoute *route, copy.d_drug->m_Routes) {
+        new DrugRoute(this, *route); // route is added to the drug in the ctor
+    }
 }
 
 IDrug::~IDrug()
