@@ -154,9 +154,6 @@ static inline QString getFullPrescription(DrugsDB::IDrug *drug, bool toHtml, con
 void DrugsPrintWidget::updateFormatting()
 {
     QString tmp = prescriptionFormatting->textEdit()->toHtml();
-
-    qWarning()  << getFullPrescription(drug, true, tmp);
-
     formatingSample->setHtml(getFullPrescription(drug, true, tmp));
 }
 
