@@ -56,8 +56,7 @@ public:
     QString processPlainText(const QString &plainText);
     QString processHtml(const QString &html);
 
-    QString parse(const QString &templ, QMap<QString,QVariant> &tokens, QList<Core::PadAnalyzerError> &errors);
-    QSyntaxHighlighter *createSyntaxHighlighter(QTextEdit *textEdit, QMap<QString,QVariant> &tokens);
+    Core::IPadWriter *createWriter(QWidget *parent = 0);
 
 private:
     PadTools::TokenPool *_pool;

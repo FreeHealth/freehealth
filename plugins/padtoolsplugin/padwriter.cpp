@@ -26,7 +26,9 @@
  ***************************************************************************/
 
 /**
-  \class PadTools::PadWriter
+ * \class PadTools::PadWriter
+ * To avoid dependencies to the pad plugin, the PadTools::PadWriter can be created
+ * by the Core::IPadTools::createWriter().
 */
 
 #include "padwriter.h"
@@ -133,7 +135,7 @@ private:
 }  // PadTools
 
 PadWriter::PadWriter(QWidget *parent) :
-    QWidget(parent),
+    Core::IPadWriter(parent),
     d(new Internal::PadWriterPrivate(this))
 {
     d->ui = new Internal::Ui::PadWriter;
@@ -207,6 +209,48 @@ PadWriter::~PadWriter()
         delete d;
         d = 0;
     }
+}
+
+void PadWriter::setPlainTextSource(const QString &plainText)
+{
+    d->ui->rawSource->setPlainText(plainText);
+    analyseRawSource();
+}
+
+void PadWriter::setHtmlSource(const QString &html)
+{
+    d->ui->rawSource->setHtml(html);
+    analyseRawSource();
+}
+
+void PadWriter::filterTokenPool(const QString &tokenNamespace)
+{
+    // TODO: here
+}
+
+void PadWriter::filterTokenPool(const QStringList &tokenNamespaces)
+{
+    // TODO: here
+}
+
+QString PadWriter::outputToPlainText() const
+{
+    return d->ui->wysiwyg->toPlainText();
+}
+
+QString PadWriter::outputToHtml() const
+{
+    return d->ui->wysiwyg->toHtml();
+}
+
+QString PadWriter::rawSourceToPlainText() const
+{
+    return d->ui->rawSource->toPlainText();
+}
+
+QString PadWriter::rawSourceToHtml() const
+{
+    return d->ui->rawSource->toHtml();
 }
 
 void PadWriter::wysiwygCursorChanged()
@@ -289,16 +333,6 @@ void PadWriter::changeRawSourceScenario(QAction *a)
 //    }
     d->ui->rawSource->setHtml(source);
     analyseRawSource();
-}
-
-QString PadWriter::htmlResult() const
-{
-    return d->ui->wysiwyg->toHtml();
-}
-
-QString PadWriter::rawSource() const
-{
-    return d->ui->rawSource->toPlainText();
 }
 
 void PadWriter::expandTokenTreeView()
@@ -450,3 +484,11 @@ void PadWriter::onPadFragmentChanged(PadFragment *fragment)
 //    Constants::removePadFragmentFormat("Follow", doc, d->_followedItemCharFormats);
 //    Constants::setPadFragmentFormat("Follow", d->_followedItem->outputStart(), d->_followedItem->outputEnd(), doc, d->_followedItemCharFormats, d->_followedCharFormat);
 }
+
+//bool PadWriter::event(QEvent *event)
+//{
+//    if (event->type()==QEvent::ToolTip) {
+
+//    }
+//    return Core::IPadWriter::event(event);
+//}

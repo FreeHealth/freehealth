@@ -33,6 +33,7 @@
 #include "tokenpool.h"
 #include "pad_analyzer.h"
 #include "pad_highlighter.h"
+#include "padwriter.h"
 
 #include <utils/log.h>
 
@@ -103,26 +104,8 @@ QString PadToolsImpl::processHtml(const QString &html)
     return out;
 }
 
-/** Analyse a string \e templ for \e tokens, manages a list of \e errors (output) and returns the parsed string.*/
-QString PadToolsImpl::parse(const QString &templ, QMap<QString,QVariant> &tokens, QList<Core::PadAnalyzerError> &errors)
+Core::IPadWriter *PadToolsImpl::createWriter(QWidget *parent)
 {
-    Q_UNUSED(tokens); //TMP
-
-    PadAnalyzer analyzer;
-    QString t = templ;
-    if (t.contains("&lt;")) {
-        t = t.replace("&lt;","<").replace("&gt;",">");
-    }
-    PadDocument *pad = analyzer.analyze(t);
-    errors = analyzer.lastErrors();
-
-    pad->run(tokens);
-    return pad->outputDocument()->toHtml();
+    return new PadWriter(parent);
 }
 
-/** Creates a syntax highlighter for the \e textEdit usng the \e tokens.*/
-QSyntaxHighlighter *PadToolsImpl::createSyntaxHighlighter(QTextEdit *textEdit, QMap<QString,QVariant> &tokens)
-{
-    Q_UNUSED(tokens); //TMP
-    return new PadHighlighter(textEdit);
-}

@@ -27,6 +27,7 @@
 #define CORE_IPADTOOLS_H
 
 #include <QObject>
+#include <QWidget>
 #include <QMap>
 #include <QString>
 #include <QVariant>
@@ -40,7 +41,7 @@ class QTextEdit;
  * \file ipadtools.h
  * \author Eric Maeker, Guillaume DENRY
  * \version 0.8.0
- * \date 05 May 2012
+ * \date 16 Aug 2012
  */
 
 namespace Core {
@@ -143,6 +144,31 @@ Q_SIGNALS:
     void tokenRemoved(Core::IToken *token);
 };
 
+class IPadTools;
+class CORE_EXPORT IPadWriter : public QWidget
+{
+    Q_OBJECT
+    friend class IPadTools;
+protected:
+    explicit IPadWriter(QWidget *parent = 0) : QWidget(parent) {}
+
+public:
+    virtual ~IPadWriter() {}
+
+public Q_SLOTS:
+    virtual void setPlainTextSource(const QString &plainText) = 0;
+    virtual void setHtmlSource(const QString &html) = 0;
+    virtual void filterTokenPool(const QString &tokenNamespace) = 0;
+    virtual void filterTokenPool(const QStringList &tokenNamespaces) = 0;
+
+public:
+    virtual QString outputToPlainText() const = 0;
+    virtual QString outputToHtml() const = 0;
+
+    virtual QString rawSourceToPlainText() const = 0;
+    virtual QString rawSourceToHtml() const = 0;
+};
+
 class CORE_EXPORT IPadTools : public QObject
 {
     Q_OBJECT
@@ -155,8 +181,7 @@ public:
     virtual QString processPlainText(const QString &plainText) {Q_UNUSED(plainText); return QString::null;}
     virtual QString processHtml(const QString &html) {Q_UNUSED(html); return QString::null;}
 
-    virtual QString parse(const QString &templ, QMap<QString,QVariant> &tokens, QList<PadAnalyzerError> &errors) = 0;
-    virtual QSyntaxHighlighter *createSyntaxHighlighter(QTextEdit *textEdit, QMap<QString,QVariant> &tokens) { Q_UNUSED(textEdit); Q_UNUSED(tokens); return NULL ; }
+    virtual Core::IPadWriter *createWriter(QWidget *parent = 0) = 0;
 };
 
 }  // namespace Core
