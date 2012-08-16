@@ -40,7 +40,7 @@ namespace DrugsWidget {
 namespace Internal {
 class DrugGeneralOptionsPage;
 class DrugsSelectorOptionsPage;
-class DrugsPrintOptionsPage;
+class DrugPosologicSentencePage;
 class DrugsUserOptionsPage;
 class DrugsExtraOptionsPage;
 class ProtocolPreferencesPage;
@@ -65,7 +65,7 @@ private Q_SLOTS:
 private:
     DrugGeneralOptionsPage *viewPage;
     DrugsSelectorOptionsPage *selectorPage;
-    DrugsPrintOptionsPage *printPage;
+    DrugPosologicSentencePage *posologicPage;
     DrugsUserOptionsPage *userPage;
     DrugsExtraOptionsPage *extraPage;
     DrugsDatabaseSelectorPage *databaseSelectorPage;

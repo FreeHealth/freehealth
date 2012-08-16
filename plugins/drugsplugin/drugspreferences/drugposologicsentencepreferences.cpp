@@ -24,7 +24,7 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#include "drugprintingpreferences.h"
+#include "drugposologicsentencepreferences.h"
 
 #include <drugsplugin/constants.h>
 #include <drugsplugin/drugswidgetmanager.h>
@@ -63,7 +63,7 @@ static QString getPrescriptionTokenHtmlFileContent()
     if (content.isEmpty()) {
         content = Utils::readTextFile(settings()->path(Core::ISettings::BundleResourcesPath) + QString(DrugsDB::Constants::S_DEF_PRESCRIPTION_TOKENFILE_1_LANG).arg(Trans::Constants::ALL_LANGUAGE));
         if (content.isEmpty()) {
-            LOG_ERROR_FOR("DrugsPrintWidget", "No token'd prescription file found");
+            LOG_ERROR_FOR("DrugPosologicSentencePreferencesWidget", "No token'd prescription file found");
         }
     }
     if (content.contains("<body"))
@@ -75,10 +75,10 @@ static QString getPrescriptionTokenHtmlFileContent()
     return content;
 }
 
-DrugsPrintWidget::DrugsPrintWidget(QWidget *parent) :
+DrugPosologicSentencePreferencesWidget::DrugPosologicSentencePreferencesWidget(QWidget *parent) :
         QWidget(parent)
 {
-    setObjectName("DrugsPrintWidget");
+    setObjectName("DrugPosologicSentencePreferencesWidget");
     setupUi(this);
 
     // Create a virtual drug and prescription
@@ -114,13 +114,13 @@ DrugsPrintWidget::DrugsPrintWidget(QWidget *parent) :
     // formatingSample
 }
 
-void DrugsPrintWidget::setDatasToUi()
+void DrugPosologicSentencePreferencesWidget::setDatasToUi()
 {
     prescriptionFormatting->textEdit()->setHtml(settings()->value(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_HTML).toString());
     updateFormatting();
 }
 
-void DrugsPrintWidget::resetToDefaultFormatting()
+void DrugPosologicSentencePreferencesWidget::resetToDefaultFormatting()
 {
     QString content = getPrescriptionTokenHtmlFileContent();
     prescriptionFormatting->setHtml(content);
@@ -143,13 +143,13 @@ static inline QString getFullPrescription(DrugsDB::IDrug *drug, bool toHtml, con
 #endif
 }
 
-void DrugsPrintWidget::updateFormatting()
+void DrugPosologicSentencePreferencesWidget::updateFormatting()
 {
     QString tmp = prescriptionFormatting->textEdit()->toHtml();
     formatingSample->setHtml(getFullPrescription(drug, true, tmp));
 }
 
-void DrugsPrintWidget::saveToSettings(Core::ISettings *sets)
+void DrugPosologicSentencePreferencesWidget::saveToSettings(Core::ISettings *sets)
 {
     Core::ISettings *s;
     if (!sets)
@@ -165,10 +165,10 @@ void DrugsPrintWidget::saveToSettings(Core::ISettings *sets)
     s->setValue(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_PLAIN, prescriptionFormatting->textEdit()->toPlainText());
 }
 
-void DrugsPrintWidget::writeDefaultSettings(Core::ISettings *s)
+void DrugPosologicSentencePreferencesWidget::writeDefaultSettings(Core::ISettings *s)
 {
 //    qWarning() << "---------> writedefaults";
-    LOG_FOR("DrugsPrintWidget", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("DrugsPrintWidget"));
+    LOG_FOR("DrugPosologicSentencePreferencesWidget", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("DrugPosologicSentencePreferencesWidget"));
     s->setValue(S_CONFIGURED, true);
 
     QString content = getPrescriptionTokenHtmlFileContent();
@@ -178,7 +178,7 @@ void DrugsPrintWidget::writeDefaultSettings(Core::ISettings *s)
     s->setValue(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_PLAIN, doc.toPlainText());
 }
 
-void DrugsPrintWidget::changeEvent(QEvent *e)
+void DrugPosologicSentencePreferencesWidget::changeEvent(QEvent *e)
 {
     QWidget::changeEvent(e);
     switch (e->type()) {
@@ -190,32 +190,32 @@ void DrugsPrintWidget::changeEvent(QEvent *e)
     }
 }
 
-DrugsPrintOptionsPage::DrugsPrintOptionsPage(QObject *parent) :
+DrugPosologicSentencePage::DrugPosologicSentencePage(QObject *parent) :
         IOptionsPage(parent), m_Widget(0)
 {
-    setObjectName("DrugsPrintOptionsPage");
+    setObjectName("DrugPosologicSentencePage");
 }
 
-DrugsPrintOptionsPage::~DrugsPrintOptionsPage()
+DrugPosologicSentencePage::~DrugPosologicSentencePage()
 {
     if (m_Widget)
         delete m_Widget;
     m_Widget = 0;
 }
 
-QString DrugsPrintOptionsPage::id() const { return objectName(); }
-QString DrugsPrintOptionsPage::name() const { return tr("Printing"); }
-QString DrugsPrintOptionsPage::category() const { return tkTr(Trans::Constants::DRUGS); }
-QString DrugsPrintOptionsPage::title() const {return tr("Drug's printing preferences");}
-int DrugsPrintOptionsPage::sortIndex() const {return 30;}
+QString DrugPosologicSentencePage::id() const { return objectName(); }
+QString DrugPosologicSentencePage::name() const { return tr("Printing"); }
+QString DrugPosologicSentencePage::category() const { return tkTr(Trans::Constants::DRUGS); }
+QString DrugPosologicSentencePage::title() const {return tr("Drug's printing preferences");}
+int DrugPosologicSentencePage::sortIndex() const {return 30;}
 
-void DrugsPrintOptionsPage::resetToDefaults()
+void DrugPosologicSentencePage::resetToDefaults()
 {
     m_Widget->writeDefaultSettings(settings());
     m_Widget->setDatasToUi();
 }
 
-void DrugsPrintOptionsPage::applyChanges()
+void DrugPosologicSentencePage::applyChanges()
 {
     if (!m_Widget) {
         return;
@@ -223,7 +223,7 @@ void DrugsPrintOptionsPage::applyChanges()
     m_Widget->saveToSettings(settings());
 }
 
-void DrugsPrintOptionsPage::checkSettingsValidity()
+void DrugPosologicSentencePage::checkSettingsValidity()
 {
     QHash<QString, QVariant> defaultvalues;
     QString content = getPrescriptionTokenHtmlFileContent();
@@ -261,8 +261,8 @@ void DrugsPrintOptionsPage::checkSettingsValidity()
     settings()->sync();
 }
 
-void DrugsPrintOptionsPage::finish() { delete m_Widget; }
-QString DrugsPrintOptionsPage::helpPage()
+void DrugPosologicSentencePage::finish() { delete m_Widget; }
+QString DrugPosologicSentencePage::helpPage()
 {
     QString l = QLocale().name().left(2);
     if (l=="fr")
@@ -270,10 +270,10 @@ QString DrugsPrintOptionsPage::helpPage()
     return Constants::H_PREFERENCES_PRINT_EN;
 }
 
-QWidget *DrugsPrintOptionsPage::createPage(QWidget *parent)
+QWidget *DrugPosologicSentencePage::createPage(QWidget *parent)
 {
     if (m_Widget)
         delete m_Widget;
-    m_Widget = new DrugsPrintWidget(parent);
+    m_Widget = new DrugPosologicSentencePreferencesWidget(parent);
     return m_Widget;
 }

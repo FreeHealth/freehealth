@@ -33,7 +33,7 @@ FORMS += $${PWD}/dosagedialog/mfDosageDialog.ui \
 HEADERS += \
 #    $${PWD}/drugspreferences/mfDrugsPreferences.h \
     $${PWD}/drugspreferences/drugselectorpreferences.h \
-    $${PWD}/drugspreferences/drugprintingpreferences.h \
+    $${PWD}/drugspreferences/drugposologicsentencepreferences.h \
     $${PWD}/drugspreferences/druggeneralpreferences.h \
     $${PWD}/drugspreferences/druguserpreferences.h \
     $${PWD}/drugspreferences/drugextrapreferences.h \
@@ -44,7 +44,7 @@ HEADERS += \
 SOURCES += \
 #    $${PWD}/drugspreferences/mfDrugsPreferences.cpp \
     $${PWD}/drugspreferences/drugselectorpreferences.cpp \
-    $${PWD}/drugspreferences/drugprintingpreferences.cpp \
+    $${PWD}/drugspreferences/drugposologicsentencepreferences.cpp \
     $${PWD}/drugspreferences/druggeneralpreferences.cpp \
     $${PWD}/drugspreferences/druguserpreferences.cpp \
     $${PWD}/drugspreferences/drugextrapreferences.cpp \
@@ -55,7 +55,7 @@ SOURCES += \
 FORMS += $${PWD}/drugspreferences/drugsextraoptionspage.ui \
     $${PWD}/drugspreferences/druggeneralpreferencespage.ui \
     $${PWD}/drugspreferences/drugsuseroptionspage.ui \
-    $${PWD}/drugspreferences/drugsprintoptionspage.ui \
+    $${PWD}/drugspreferences/drugposologicsentencepreferences.ui \
     $${PWD}/drugspreferences/databaseselectorwidget.ui \
     $${PWD}/drugspreferences/drugselectorwidget.ui \
     $${PWD}/drugspreferences/protocolpreferencespage.ui \

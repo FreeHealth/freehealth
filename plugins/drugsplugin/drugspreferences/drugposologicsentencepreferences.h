@@ -24,17 +24,17 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef DRUGS_DRUGPRINTING_PREFERENCES
-#define DRUGS_DRUGPRINTING_PREFERENCES
+#ifndef DRUGS_POSOLOGICSENTENCE_PREFERENCES
+#define DRUGS_POSOLOGICSENTENCE_PREFERENCES
 
 #include <coreplugin/ioptionspage.h>
 
 #include <QPointer>
 
-#include "ui_drugsprintoptionspage.h"
+#include "ui_drugposologicsentencepreferences.h"
 
 /**
- * \file drugprintingpreferences.h
+ * \file drugposologicsentencepreferences.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.8.0
  * \date 16 Aug 2012
@@ -51,13 +51,13 @@ class IDrug;
 namespace DrugsWidget {
 namespace Internal {
 
-class DrugsPrintWidget : public QWidget, private Ui::DrugsPrintWidget
+class DrugPosologicSentencePreferencesWidget : public QWidget, private Ui::DrugPosologicSentencePreferencesWidget
 {
     Q_OBJECT
-    Q_DISABLE_COPY(DrugsPrintWidget)
+    Q_DISABLE_COPY(DrugPosologicSentencePreferencesWidget)
 
 public:
-    explicit DrugsPrintWidget(QWidget *parent = 0);
+    explicit DrugPosologicSentencePreferencesWidget(QWidget *parent = 0);
     void setDatasToUi();
 
     static void writeDefaultSettings( Core::ISettings *s );
@@ -76,12 +76,12 @@ private:
     DrugsDB::IDrug *drug;
 };
 
-class DrugsPrintOptionsPage : public Core::IOptionsPage
+class DrugPosologicSentencePage : public Core::IOptionsPage
 {
     Q_OBJECT
 public:
-    DrugsPrintOptionsPage(QObject *parent = 0);
-    ~DrugsPrintOptionsPage();
+    DrugPosologicSentencePage(QObject *parent = 0);
+    ~DrugPosologicSentencePage();
 
     QString id() const;
     QString name() const;
@@ -96,15 +96,15 @@ public:
 
     QString helpPage();
 
-    static void writeDefaultSettings(Core::ISettings *s) {Internal::DrugsPrintWidget::writeDefaultSettings(s);}
+    static void writeDefaultSettings(Core::ISettings *s) {Internal::DrugPosologicSentencePreferencesWidget::writeDefaultSettings(s);}
 
     QWidget *createPage(QWidget *parent = 0);
 private:
-    QPointer<Internal::DrugsPrintWidget> m_Widget;
+    QPointer<Internal::DrugPosologicSentencePreferencesWidget> m_Widget;
 };
 
 
 }  // End namespace Internal
 }  // End namespace Drugs
 
-#endif // DRUGS_DRUGPRINTING_PREFERENCES
+#endif // DRUGS_POSOLOGICSENTENCE_PREFERENCES
