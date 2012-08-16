@@ -196,6 +196,7 @@ QString DrugGeneralOptionsPage::id() const { return objectName(); }
 QString DrugGeneralOptionsPage::name() const { return tkTr(Trans::Constants::GENERAL_PREFERENCES); }
 QString DrugGeneralOptionsPage::category() const { return tkTr(Trans::Constants::DRUGS); }
 QString DrugGeneralOptionsPage::title() const {return tr("Drug's general preferences");}
+int DrugGeneralOptionsPage::sortIndex() const {return 0;}
 
 void DrugGeneralOptionsPage::resetToDefaults()
 {

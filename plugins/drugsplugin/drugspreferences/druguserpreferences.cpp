@@ -130,6 +130,7 @@ QString DrugsUserOptionsPage::id() const { return objectName(); }
 QString DrugsUserOptionsPage::name() const { return tr("User's documents"); }
 QString DrugsUserOptionsPage::category() const { return tkTr(Trans::Constants::DRUGS); }
 QString DrugsUserOptionsPage::title() const {return tr("User preferences");}
+int DrugsUserOptionsPage::sortIndex() const {return 50;}
 
 void DrugsUserOptionsPage::resetToDefaults()
 {

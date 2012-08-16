@@ -118,6 +118,7 @@ QString ApplicationGeneralPreferencesPage::id() const { return objectName(); }
 QString ApplicationGeneralPreferencesPage::name() const { return tkTr(Trans::Constants::GENERAL); }
 QString ApplicationGeneralPreferencesPage::title() const {return tkTr(Trans::Constants::GENERAL_PREFERENCES);}
 QString ApplicationGeneralPreferencesPage::category() const { return tkTr(Trans::Constants::GENERAL_PREFERENCES); }
+int ApplicationGeneralPreferencesPage::sortIndex() const {return 0;}
 
 void ApplicationGeneralPreferencesPage::resetToDefaults()
 {

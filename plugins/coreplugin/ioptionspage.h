@@ -31,8 +31,8 @@
 /**
  * \file ioptionspage.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.0
- * \date 12 Jul 2011
+ * \version 0.8.0
+ * \date 16 Aug 2012
  * \class Core::IOptionsPage
  * \brief Represents an application preferences page. Derive objects from this interface and set it inside the PluginManager object pool to get the page in the Core::SettingsDialog.
 */
@@ -49,6 +49,7 @@ public:
     virtual QString id() const = 0;
     virtual QString name() const = 0;
     virtual QString category() const = 0;
+    virtual int sortIndex() const = 0;
 
     virtual void resetToDefaults() = 0;
 

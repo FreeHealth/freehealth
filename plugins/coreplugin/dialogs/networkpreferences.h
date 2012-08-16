@@ -40,8 +40,8 @@
 /**
  * \file networkpreferences.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.4
- * \date 19 Feb 2012
+ * \version 0.8.0
+ * \date 16 Aug 2012
 */
 
 namespace Core {
@@ -87,6 +87,7 @@ public:
     QString name() const;
     QString category() const;
     QString title() const;
+    int sortIndex() const;
 
     void resetToDefaults();
     void checkSettingsValidity();

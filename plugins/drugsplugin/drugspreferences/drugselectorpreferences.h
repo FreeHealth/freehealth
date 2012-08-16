@@ -37,7 +37,7 @@
  * \file drugselectorpreferences.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.8.0
- * \date 14 Aug 2012
+ * \date 16 Aug 2012
 */
 
 namespace Core {
@@ -84,6 +84,7 @@ public:
     QString name() const;
     QString category() const;
     QString title() const;
+    int sortIndex() const;
 
     void resetToDefaults();
     void checkSettingsValidity();

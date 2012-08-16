@@ -207,6 +207,7 @@ QString DrugsPrintOptionsPage::id() const { return objectName(); }
 QString DrugsPrintOptionsPage::name() const { return tr("Printing"); }
 QString DrugsPrintOptionsPage::category() const { return tkTr(Trans::Constants::DRUGS); }
 QString DrugsPrintOptionsPage::title() const {return tr("Drug's printing preferences");}
+int DrugsPrintOptionsPage::sortIndex() const {return 30;}
 
 void DrugsPrintOptionsPage::resetToDefaults()
 {

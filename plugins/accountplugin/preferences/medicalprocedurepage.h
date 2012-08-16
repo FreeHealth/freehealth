@@ -44,8 +44,8 @@
 /**
  * \file medicalprocedurepage.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.4.0
- * \date 31 Mar 2010
+ * \version 0.8.0
+ * \date 16 Aug 2012
 */
 
 namespace Core {
@@ -139,6 +139,7 @@ public:
     QString name() const;
     QString category() const;
     QString title() const {return name();}
+    int sortIndex() const;
 
     void resetToDefaults();
     void checkSettingsValidity();

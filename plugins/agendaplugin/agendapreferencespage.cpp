@@ -75,6 +75,12 @@ QString AgendaPreferencesPage::title() const
     return tr("Agenda preferences");
 }
 
+int AgendaPreferencesPage::sortIndex() const
+{
+    return 1000;
+}
+
+
 void AgendaPreferencesPage::resetToDefaults()
 {
     m_Widget->writeDefaultSettings(settings());

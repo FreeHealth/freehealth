@@ -63,6 +63,7 @@ QString TemplatesPreferencesPage::id() const { return objectName(); }
 QString TemplatesPreferencesPage::name() const { return tkTr(Trans::Constants::TEMPLATES); }
 QString TemplatesPreferencesPage::category() const { return tkTr(Trans::Constants::TEMPLATES); }
 QString TemplatesPreferencesPage::title() const {return tr("Templates preferences"); }
+int TemplatesPreferencesPage::sortIndex() const {return 0;}
 
 void TemplatesPreferencesPage::resetToDefaults()
 {

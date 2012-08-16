@@ -96,6 +96,11 @@ QString BaseFormWidgetsOptionsPage::category() const
     return Trans::ConstantTranslations::tkTr(Trans::Constants::PLUGINS_CATEGORY);
 }
 
+int BaseFormWidgetsOptionsPage::sortIndex() const
+{
+    return 0;
+}
+
 void BaseFormWidgetsOptionsPage::resetToDefaults()
 {
     if (m_Widget)

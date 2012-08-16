@@ -144,6 +144,18 @@ QString %PluginName:c%PreferencesPage::category() const
     return tr("%PluginName:u%");
 }
 
+/*! Returns the (translated) title of the preferences page. */
+QString %PluginName:c%PreferencesPage::title() const
+{
+    return tr("%PluginName");
+}
+
+/*! Returns the sorting order (pages are sorted starting from 0). */
+int %PluginName:c%PreferencesPage::sortIndex() const
+{
+    return 0;
+}
+
 /*! Resets the whole preferences page to the default settings of the settings data model. */
 void %PluginName:c%PreferencesPage::resetToDefaults()
 {

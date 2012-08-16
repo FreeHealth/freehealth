@@ -80,6 +80,7 @@ public:
     QString name() const;
     QString category() const;
     QString title() const;
+    int sortIndex() const;
 
     void resetToDefaults();
     void checkSettingsValidity();
