@@ -180,8 +180,7 @@ IComponent::IComponent(IDrug *parent, const IComponent &copy) :
 {
     d_component->m_Drug = parent;
     d_component->m_LinkOwned = true;
-    // TODO: Managing linked component can lead to infinite looping
-    if (d_component->m_Link)
+    if (d_component->m_Link && !d_component->m_LinkOwned)
         d_component->m_Link = new IComponent(parent, *copy.d_component->m_Link);
     if (d_component->m_Drug)
         d_component->m_Drug->addComponent(this);
