@@ -34,6 +34,13 @@
 #include "pad_analyzer.h"
 #include "pad_highlighter.h"
 
+#include <utils/log.h>
+
+#include <QTime>
+#include <QCryptographicHash>
+
+#include <QDebug>
+
 using namespace PadTools;
 
 PadToolsImpl::PadToolsImpl(QObject *parent) :
@@ -53,6 +60,9 @@ Core::ITokenPool *PadToolsImpl::tokenPool() const
 /** Process a \e plainText pad document and return a plaintext string. */
 QString PadToolsImpl::processPlainText(const QString &plainText)
 {
+    QTime chr;
+    chr.start();
+
     PadAnalyzer analyzer;
 //    QString t = templ;
 //    if (t.contains("&lt;")) {
@@ -60,14 +70,22 @@ QString PadToolsImpl::processPlainText(const QString &plainText)
 //    }
     PadDocument *pad = analyzer.analyze(plainText);
 //    errors = analyzer.lastErrors();
+    Utils::Log::logTimeElapsed(chr, "PadTools", "Analyze text source");
 
     pad->toOutput(_pool);
-    return pad->outputDocument()->toPlainText();
+    const QString &text = pad->outputDocument()->toPlainText();
+    Utils::Log::logTimeElapsed(chr, "PadTools", "Process text");
+    return text;
 }
 
 /** Process a \e html pad document and return a html string. */
 QString PadToolsImpl::processHtml(const QString &html)
 {
+    QTime chr;
+    chr.start();
+//    qWarning() << QCryptographicHash::hash(html.toUtf8(), QCryptographicHash::Md5);
+//    Utils::Log::logTimeElapsed(chr, "PadAnalyzer", "MD5");
+
     PadAnalyzer analyzer;
 //    QString t = html;
 //    if (t.contains("&lt;")) {
@@ -77,9 +95,12 @@ QString PadToolsImpl::processHtml(const QString &html)
     doc->setHtml(html);
     PadDocument *pad = analyzer.analyze(doc, 0);
 //    errors = analyzer.lastErrors();
+    Utils::Log::logTimeElapsed(chr, "PadTools", "Analyze HTML source");
 
     pad->toOutput(_pool);
-    return pad->outputDocument()->toHtml();
+    const QString &out = pad->outputDocument()->toHtml();
+    Utils::Log::logTimeElapsed(chr, "PadTools", "Process HTML");
+    return out;
 }
 
 /** Analyse a string \e templ for \e tokens, manages a list of \e errors (output) and returns the parsed string.*/
