@@ -94,6 +94,6 @@ FORMS += $${PWD}/drugswidget/druginfo.ui \
 #    $${PWD}/drugswidget/druginteractionreport.ui \
 
 # translations
-TRANSLATIONS += $${SOURCES_TRANSLATIONS_PATH}/mfDrugsWidget_fr.ts \
-    $${SOURCES_TRANSLATIONS_PATH}/mfDrugsWidget_de.ts \
-    $${SOURCES_TRANSLATIONS_PATH}/mfDrugsWidget_es.ts
+TRANSLATIONS += $${SOURCES_TRANSLATIONS_PATH}/drugsplugin_fr.ts \
+    $${SOURCES_TRANSLATIONS_PATH}/drugsplugin_de.ts \
+    $${SOURCES_TRANSLATIONS_PATH}/drugsplugin_es.ts

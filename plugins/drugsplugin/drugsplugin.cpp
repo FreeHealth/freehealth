@@ -91,7 +91,7 @@ DrugsPlugin::DrugsPlugin() :
 #endif
 
     // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("mfDrugsWidget");
+    Core::ICore::instance()->translators()->addNewTranslator("drugsplugin");
 
     viewPage = new DrugGeneralOptionsPage(this);
     selectorPage = new DrugsSelectorOptionsPage(this);
