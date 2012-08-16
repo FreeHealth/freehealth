@@ -167,9 +167,6 @@ const QList<Core::PadAnalyzerError> PadAnalyzer::lastErrors() const
 
 PadDocument *PadAnalyzerPrivate::startAnalyze(PadDocument *padDocument)
 {
-    QTime c;
-    c.start();
-
     Lexem lex;
     PadDocument *pad;
     // TODO: where, when and who delete the PadDocument pointer ? */
@@ -237,8 +234,6 @@ PadDocument *PadAnalyzerPrivate::startAnalyze(PadDocument *padDocument)
         if (fragment)
             pad->addChild(fragment);
 	}
-
-    Utils::Log::logTimeElapsed(c, "PadTools::PadAnalyzer", "analyze");
     pad->endRawSourceAnalyze();
     return pad;
 }

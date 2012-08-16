@@ -45,6 +45,8 @@
 */
 
 namespace PadTools {
+class PadDocument;
+
 namespace Internal {
 class PadAnalyzerPrivate;
 }
