@@ -31,13 +31,13 @@
 
 #include <QPointer>
 
-#include "ui_drugsviewoptionspage.h"
+#include "ui_druggeneralpreferencespage.h"
 
 /**
  * \file druggeneralpreferences.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.8.0
- * \date 14 Aug 2012
+ * \date 16 Aug 2012
 */
 
 namespace Core {
@@ -51,13 +51,13 @@ class IDrug;
 namespace DrugsWidget {
 namespace Internal {
 
-class DrugsViewWidget : public QWidget, private Ui::DrugsViewWidget
+class DrugGeneralPreferencesWidget : public QWidget, private Ui::DrugGeneralPreferencesWidget
 {
     Q_OBJECT
-    Q_DISABLE_COPY(DrugsViewWidget)
+    Q_DISABLE_COPY(DrugGeneralPreferencesWidget)
 
 public:
-    explicit DrugsViewWidget(QWidget *parent = 0);
+    explicit DrugGeneralPreferencesWidget(QWidget *parent = 0);
     void setDatasToUi();
 
     static void writeDefaultSettings( Core::ISettings *s );
@@ -69,12 +69,12 @@ protected:
     virtual void changeEvent(QEvent *e);
 };
 
-class DrugsViewOptionsPage : public Core::IOptionsPage
+class DrugGeneralOptionsPage : public Core::IOptionsPage
 {
     Q_OBJECT
 public:
-    DrugsViewOptionsPage(QObject *parent = 0);
-    ~DrugsViewOptionsPage();
+    DrugGeneralOptionsPage(QObject *parent = 0);
+    ~DrugGeneralOptionsPage();
 
     QString id() const;
     QString name() const;
@@ -88,11 +88,11 @@ public:
 
     QString helpPage();
 
-    static void writeDefaultSettings(Core::ISettings *s) {Internal::DrugsViewWidget::writeDefaultSettings(s);}
+    static void writeDefaultSettings(Core::ISettings *s) {Internal::DrugGeneralPreferencesWidget::writeDefaultSettings(s);}
 
     QWidget *createPage(QWidget *parent = 0);
 private:
-    QPointer<Internal::DrugsViewWidget> m_Widget;
+    QPointer<Internal::DrugGeneralPreferencesWidget> m_Widget;
 };
 
 }  // End namespace Internal

@@ -93,7 +93,7 @@ DrugsPlugin::DrugsPlugin() :
     // Add Translator to the Application
     Core::ICore::instance()->translators()->addNewTranslator("mfDrugsWidget");
 
-    viewPage = new DrugsViewOptionsPage(this);
+    viewPage = new DrugGeneralOptionsPage(this);
     selectorPage = new DrugsSelectorOptionsPage(this);
     printPage = new DrugsPrintOptionsPage(this);
 #ifdef FREEDIAMS

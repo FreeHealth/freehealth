@@ -80,7 +80,6 @@ DrugsPrintWidget::DrugsPrintWidget(QWidget *parent) :
 {
     setObjectName("DrugsPrintWidget");
     setupUi(this);
-    oldGroupBox->hide();
 
     // Create a virtual drug and prescription
     using namespace DrugsDB::Constants;
@@ -117,15 +116,8 @@ DrugsPrintWidget::DrugsPrintWidget(QWidget *parent) :
 
 void DrugsPrintWidget::setDatasToUi()
 {
-    QFont drugsFont;
-    drugsFont.fromString(settings()->value(S_DRUGFONT).toString());
-    QFont prescrFont;
-    prescrFont.fromString(settings()->value(S_PRESCRIPTIONFONT).toString());
-
     prescriptionFormatting->textEdit()->setHtml(settings()->value(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_HTML).toString());
     updateFormatting();
-    lineBreakCheck->setChecked(settings()->value(DrugsDB::Constants::S_PRINTLINEBREAKBETWEENDRUGS).toBool());
-    printDuplicataCheck->setChecked(settings()->value(DrugsDB::Constants::S_PRINTDUPLICATAS).toBool());
 }
 
 void DrugsPrintWidget::resetToDefaultFormatting()
@@ -171,8 +163,6 @@ void DrugsPrintWidget::saveToSettings(Core::ISettings *sets)
     int cutEnd = tmp.indexOf("</body>");
     s->setValue(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_HTML, tmp.mid(cutBegin, cutEnd-cutBegin));
     s->setValue(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_PLAIN, prescriptionFormatting->textEdit()->toPlainText());
-    s->setValue(DrugsDB::Constants::S_PRINTLINEBREAKBETWEENDRUGS, lineBreakCheck->isChecked());
-    s->setValue(DrugsDB::Constants::S_PRINTDUPLICATAS, printDuplicataCheck->isChecked());
 }
 
 void DrugsPrintWidget::writeDefaultSettings(Core::ISettings *s)
@@ -186,9 +176,6 @@ void DrugsPrintWidget::writeDefaultSettings(Core::ISettings *s)
     doc.setHtml(content);
     s->setValue(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_HTML, content);
     s->setValue(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_PLAIN, doc.toPlainText());
-
-    s->setValue(DrugsDB::Constants::S_PRINTLINEBREAKBETWEENDRUGS, true);
-    s->setValue(DrugsDB::Constants::S_PRINTDUPLICATAS, true);
 }
 
 void DrugsPrintWidget::changeEvent(QEvent *e)
@@ -251,9 +238,6 @@ void DrugsPrintOptionsPage::checkSettingsValidity()
             settings()->setValue(k, defaultvalues.value(k));
         }
     }
-
-    defaultvalues.insert(DrugsDB::Constants::S_PRINTLINEBREAKBETWEENDRUGS, true);
-    defaultvalues.insert(DrugsDB::Constants::S_PRINTDUPLICATAS, true);
 
     foreach(const QString &k, defaultvalues.keys()) {
         if (settings()->value(k) == QVariant())

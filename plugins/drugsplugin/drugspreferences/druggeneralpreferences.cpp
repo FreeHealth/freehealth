@@ -57,7 +57,7 @@ using namespace Trans::ConstantTranslations;
 static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
 static inline DrugsDB::DrugsBase &drugsBase() {return DrugsDB::DrugBaseCore::instance().drugsBase();}
 
-DrugsViewWidget::DrugsViewWidget(QWidget *parent) :
+DrugGeneralPreferencesWidget::DrugGeneralPreferencesWidget(QWidget *parent) :
         QWidget(parent)
 {
     setupUi(this);
@@ -69,7 +69,7 @@ DrugsViewWidget::DrugsViewWidget(QWidget *parent) :
 #endif
 }
 
-void DrugsViewWidget::setDatasToUi()
+void DrugGeneralPreferencesWidget::setDatasToUi()
 {
     Core::ISettings *s = settings();
     //    fontSizeSpin->setValue(m_fontSize);
@@ -100,9 +100,12 @@ void DrugsViewWidget::setDatasToUi()
     case DrugsDB::Constants::ModerateLevelOfWarning: dynamicAlertsLevel->setCurrentIndex(1); break;
     case DrugsDB::Constants::MaximumLevelOfWarning: dynamicAlertsLevel->setCurrentIndex(0); break;
     }
+
+    lineBreakCheck->setChecked(settings()->value(DrugsDB::Constants::S_PRINTLINEBREAKBETWEENDRUGS).toBool());
+    printDuplicataCheck->setChecked(settings()->value(DrugsDB::Constants::S_PRINTDUPLICATAS).toBool());
 }
 
-void DrugsViewWidget::saveToSettings(Core::ISettings *sets)
+void DrugGeneralPreferencesWidget::saveToSettings(Core::ISettings *sets)
 {
     Core::ISettings *s;
     if (!sets)
@@ -141,12 +144,15 @@ void DrugsViewWidget::saveToSettings(Core::ISettings *sets)
     case 1: s->setValue(DrugsDB::Constants::S_LEVELOFWARNING_DYNAMICALERT, DrugsDB::Constants::ModerateLevelOfWarning); break;
     case 0: s->setValue(DrugsDB::Constants::S_LEVELOFWARNING_DYNAMICALERT, DrugsDB::Constants::MaximumLevelOfWarning); break;
     }
+
+    s->setValue(DrugsDB::Constants::S_PRINTLINEBREAKBETWEENDRUGS, lineBreakCheck->isChecked());
+    s->setValue(DrugsDB::Constants::S_PRINTDUPLICATAS, printDuplicataCheck->isChecked());
 }
 
-void DrugsViewWidget::writeDefaultSettings(Core::ISettings *s)
+void DrugGeneralPreferencesWidget::writeDefaultSettings(Core::ISettings *s)
 {
 //    qWarning() << "---------> writedefaults";
-    LOG_FOR("DrugsViewWidget", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("DrugsWidget"));
+    LOG_FOR("DrugGeneralPreferencesWidget", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("DrugsWidget"));
     s->setValue(S_CONFIGURED, true);
     s->setValue(S_VIEWFONT , QFont());
     s->setValue(S_VIEWFONTSIZE, QFont().pointSize());
@@ -158,11 +164,11 @@ void DrugsViewWidget::writeDefaultSettings(Core::ISettings *s)
     s->setValue(DrugsDB::Constants::S_LEVELOFWARNING_DYNAMICALERT, DrugsDB::Constants::MinimumLevelOfWarning);
     s->setValue(S_PATIENTNAMESORDER, 0);
 
-    s->setValue(S_DRUGFONT , QFont().toString());
-    s->setValue(S_PRESCRIPTIONFONT , QFont().toString());
+    s->setValue(DrugsDB::Constants::S_PRINTLINEBREAKBETWEENDRUGS, true);
+    s->setValue(DrugsDB::Constants::S_PRINTDUPLICATAS, true);
 }
 
-void DrugsViewWidget::changeEvent(QEvent *e)
+void DrugGeneralPreferencesWidget::changeEvent(QEvent *e)
 {
     QWidget::changeEvent(e);
     switch (e->type()) {
@@ -174,27 +180,30 @@ void DrugsViewWidget::changeEvent(QEvent *e)
     }
 }
 
-DrugsViewOptionsPage::DrugsViewOptionsPage(QObject *parent) :
-        IOptionsPage(parent), m_Widget(0) { setObjectName("DrugsViewOptionsPage"); }
+DrugGeneralOptionsPage::DrugGeneralOptionsPage(QObject *parent) :
+        IOptionsPage(parent), m_Widget(0)
+{
+    setObjectName("DrugGeneralOptionsPage");
+}
 
-DrugsViewOptionsPage::~DrugsViewOptionsPage()
+DrugGeneralOptionsPage::~DrugGeneralOptionsPage()
 {
     if (m_Widget) delete m_Widget;
     m_Widget = 0;
 }
 
-QString DrugsViewOptionsPage::id() const { return objectName(); }
-QString DrugsViewOptionsPage::name() const { return tr("View"); }
-QString DrugsViewOptionsPage::category() const { return tkTr(Trans::Constants::DRUGS); }
-QString DrugsViewOptionsPage::title() const {return tr("Drug's view preferences");}
+QString DrugGeneralOptionsPage::id() const { return objectName(); }
+QString DrugGeneralOptionsPage::name() const { return tkTr(Trans::Constants::GENERAL_PREFERENCES); }
+QString DrugGeneralOptionsPage::category() const { return tkTr(Trans::Constants::DRUGS); }
+QString DrugGeneralOptionsPage::title() const {return tr("Drug's general preferences");}
 
-void DrugsViewOptionsPage::resetToDefaults()
+void DrugGeneralOptionsPage::resetToDefaults()
 {
     m_Widget->writeDefaultSettings(settings());
     m_Widget->setDatasToUi();
 }
 
-void DrugsViewOptionsPage::applyChanges()
+void DrugGeneralOptionsPage::applyChanges()
 {
     if (!m_Widget) {
         return;
@@ -202,25 +211,23 @@ void DrugsViewOptionsPage::applyChanges()
     m_Widget->saveToSettings(settings());
 }
 
-void DrugsViewOptionsPage::finish() { delete m_Widget; }
+void DrugGeneralOptionsPage::finish() { delete m_Widget; }
 
-QString DrugsViewOptionsPage::helpPage()
+QString DrugGeneralOptionsPage::helpPage()
 {
-    QString l = QLocale().name().left(2);
+    const QString &l = QLocale().name().left(2);
     if (l=="fr")
         return Constants::H_PREFERENCES_VIEW_FR;
     return Constants::H_PREFERENCES_VIEW_EN;
 }
 
-void DrugsViewOptionsPage::checkSettingsValidity()
+void DrugGeneralOptionsPage::checkSettingsValidity()
 {
     QHash<QString, QVariant> defaultvalues;
     defaultvalues.insert(S_VIEWFONT, QFont());
     defaultvalues.insert(S_VIEWFONTSIZE, QFont().pointSize());
     defaultvalues.insert(S_HISTORYSIZE, 20);
     defaultvalues.insert(S_DRUGHISTORY, QVariant());
-    defaultvalues.insert(S_DRUGFONT,QFont());
-    defaultvalues.insert(S_PRESCRIPTIONFONT,QFont());
     defaultvalues.insert(DrugsDB::Constants::S_LEVELOFWARNING_STATICALERT, DrugsDB::Constants::MaximumLevelOfWarning);
     defaultvalues.insert(DrugsDB::Constants::S_SHOWICONSINPRESCRIPTION,true);
     defaultvalues.insert(DrugsDB::Constants::S_MARKDRUGSWITHAVAILABLEDOSAGES,true);
@@ -228,6 +235,8 @@ void DrugsViewOptionsPage::checkSettingsValidity()
     defaultvalues.insert(DrugsDB::Constants::S_USEDYNAMICALERTS, true);
     defaultvalues.insert(DrugsDB::Constants::S_LEVELOFWARNING_DYNAMICALERT, DrugsDB::Constants::MinimumLevelOfWarning);
     defaultvalues.insert(S_PATIENTNAMESORDER, 0);
+    defaultvalues.insert(DrugsDB::Constants::S_PRINTLINEBREAKBETWEENDRUGS, true);
+    defaultvalues.insert(DrugsDB::Constants::S_PRINTDUPLICATAS, true);
 
     foreach(const QString &k, defaultvalues.keys()) {
         if (settings()->value(k) == QVariant())
@@ -236,10 +245,10 @@ void DrugsViewOptionsPage::checkSettingsValidity()
     settings()->sync();
 }
 
-QWidget *DrugsViewOptionsPage::createPage(QWidget *parent)
+QWidget *DrugGeneralOptionsPage::createPage(QWidget *parent)
 {
     if (m_Widget)
         delete m_Widget;
-    m_Widget = new DrugsViewWidget(parent);
+    m_Widget = new DrugGeneralPreferencesWidget(parent);
     return m_Widget;
 }

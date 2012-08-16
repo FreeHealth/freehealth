@@ -53,7 +53,7 @@ SOURCES += \
     $${PWD}/drugspreferences/drugenginespreferences.cpp
 
 FORMS += $${PWD}/drugspreferences/drugsextraoptionspage.ui \
-    $${PWD}/drugspreferences/drugsviewoptionspage.ui \
+    $${PWD}/drugspreferences/druggeneralpreferencespage.ui \
     $${PWD}/drugspreferences/drugsuseroptionspage.ui \
     $${PWD}/drugspreferences/drugsprintoptionspage.ui \
     $${PWD}/drugspreferences/databaseselectorwidget.ui \
