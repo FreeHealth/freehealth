@@ -143,43 +143,23 @@ TokenModel::TokenModel(QObject *parent) :
     d(new Internal::TokenModelPrivate(this))
 {
     Q_ASSERT(tokenPool());
-
-    // create tree
     d->createTree();
-
-//    // tmp: fill with dummy tokens
-//    d->m_Tokens.insert("Prescription.Drug.DRUG", "drug");
-//    d->m_Tokens.insert("Prescription.Drug.Q_FROM", "q_from");
-//    d->m_Tokens.insert("Prescription.Drug.Q_TO", "q_to");
-//    d->m_Tokens.insert("Prescription.Drug.Q_SCHEME", "q_scheme");
-//    d->m_Tokens.insert("Prescription.Drug.REPEATED_DAILY_SCHEME", "repeated daily scheme");
-//    d->m_Tokens.insert("Prescription.Drug.MEAL", "meal");
-//    d->m_Tokens.insert("PERIOD", "period");
-//    d->m_Tokens.insert("PERIOD_SCHEME", "period scheme");
-//    d->m_Tokens.insert("A", "This is A");
-//    d->m_Tokens.insert("B", "This is B");
-//    d->m_Tokens.insert("C", "This is C");
-//    d->m_Tokens.insert("D", "This is D");
-//    d->m_Tokens.insert("NULL", "");
-//    d->m_Tokens.insert("HTMLTOKEN", "<b>htmlToken</b>");
-
-//    d->createTree();
 }
 
 
-// OBSOLETE
-void TokenModel::setTokens(const QMap<QString, QVariant> &tokens)
-{
-    d->m_Tokens.clear();
-    d->m_Tokens = tokens;
-    reset();
-}
+//// OBSOLETE
+//void TokenModel::setTokens(const QMap<QString, QVariant> &tokens)
+//{
+//    d->m_Tokens.clear();
+//    d->m_Tokens = tokens;
+//    reset();
+//}
 
-QMap<QString, QVariant> &TokenModel::tokens()
-{
-    return d->m_Tokens;
-}
-// END OBSOLETE
+//QMap<QString, QVariant> &TokenModel::tokens()
+//{
+//    return d->m_Tokens;
+//}
+//// END OBSOLETE
 
 Core::ITokenPool *TokenModel::tokenPool() const
 {

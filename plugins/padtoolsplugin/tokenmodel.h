@@ -60,11 +60,6 @@ public:
 
     explicit TokenModel(QObject *parent = 0);
 
-    // OBSOLETE
-    void setTokens(const QMap<QString, QVariant> &tokens);
-    QMap<QString, QVariant> &tokens();
-    // END
-
     Core::ITokenPool *tokenPool() const;
 
     void addToken(Core::IToken *token);
