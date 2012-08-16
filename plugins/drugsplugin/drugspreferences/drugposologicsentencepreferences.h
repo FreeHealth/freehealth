@@ -42,6 +42,7 @@
 
 namespace Core {
 class ISettings;
+class IPadWriter;
 }
 
 namespace DrugsDB {
@@ -50,6 +51,32 @@ class IDrug;
 
 namespace DrugsWidget {
 namespace Internal {
+
+class DrugPosologicSentenceWithPadPreferencesWidget : public QWidget //, private Ui::DrugPosologicSentencePreferencesWithPadWidget
+{
+    Q_OBJECT
+    Q_DISABLE_COPY(DrugPosologicSentenceWithPadPreferencesWidget)
+
+public:
+    explicit DrugPosologicSentenceWithPadPreferencesWidget(QWidget *parent = 0);
+    ~DrugPosologicSentenceWithPadPreferencesWidget();
+
+    void setDatasToUi();
+
+public Q_SLOTS:
+    void saveToSettings(Core::ISettings *s = 0);
+    void resetToDefaultFormatting();
+
+//private Q_SLOTS:
+//    void updateFormatting();
+
+protected:
+    virtual void changeEvent(QEvent *e);
+
+private:
+    DrugsDB::IDrug *_drug;
+    Core::IPadWriter *_writer;
+};
 
 class DrugPosologicSentencePreferencesWidget : public QWidget, private Ui::DrugPosologicSentencePreferencesWidget
 {
@@ -99,8 +126,13 @@ public:
     static void writeDefaultSettings(Core::ISettings *s) {Internal::DrugPosologicSentencePreferencesWidget::writeDefaultSettings(s);}
 
     QWidget *createPage(QWidget *parent = 0);
+
 private:
+#ifdef WITH_PAD
+    QPointer<Internal::DrugPosologicSentenceWithPadPreferencesWidget> m_Widget;
+#else
     QPointer<Internal::DrugPosologicSentencePreferencesWidget> m_Widget;
+#endif
 };
 
 

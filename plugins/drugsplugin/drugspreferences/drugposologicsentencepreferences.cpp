@@ -75,57 +75,6 @@ static QString getPrescriptionTokenHtmlFileContent()
     return content;
 }
 
-DrugPosologicSentencePreferencesWidget::DrugPosologicSentencePreferencesWidget(QWidget *parent) :
-        QWidget(parent)
-{
-    setObjectName("DrugPosologicSentencePreferencesWidget");
-    setupUi(this);
-
-    // Create a virtual drug and prescription
-    using namespace DrugsDB::Constants;
-    drug = drugsBase().getDrugByUID("-1");
-    if (!drug) {
-        LOG_ERROR("Unable to retreive a drug from the database");
-    } else {
-        drug->setPrescriptionValue(Prescription::IntakesFrom, 1);
-        drug->setPrescriptionValue(Prescription::IntakesTo, 3);
-        drug->setPrescriptionValue(Prescription::IntakesScheme, tkTr(Trans::Constants::INTAKES));
-        drug->setPrescriptionValue(Prescription::IntakesUsesFromTo, true);
-        drug->setPrescriptionValue(Prescription::Period, 2);
-        drug->setPrescriptionValue(Prescription::PeriodScheme, tkTr(Trans::Constants::DAY_S));
-        drug->setPrescriptionValue(Prescription::IntakesIntervalOfTime, 2);
-        drug->setPrescriptionValue(Prescription::IntakesIntervalSchemeIndex, tkTr(Trans::Constants::DAY_S));
-        drug->setPrescriptionValue(Prescription::DurationFrom, 1);
-        drug->setPrescriptionValue(Prescription::DurationTo, 3);
-        drug->setPrescriptionValue(Prescription::DurationScheme, tkTr(Trans::Constants::WEEK_S));
-        drug->setPrescriptionValue(Prescription::DurationUsesFromTo, true);
-        drug->setPrescriptionValue(Prescription::MealTimeSchemeIndex, 1);
-        drug->setPrescriptionValue(Prescription::Note, tr("This a note to take into account<br />written in two lines..."));
-        QString daily = "<" + Trans::ConstantTranslations::dailySchemeXmlTagList().at(1) + "=1>";
-        daily += "<" + Trans::ConstantTranslations::dailySchemeXmlTagList().at(3) + "=1>";
-        daily += "<" + Trans::ConstantTranslations::dailySchemeXmlTagList().at(6) + "=1>";
-        drug->setPrescriptionValue(Prescription::SerializedDailyScheme, daily);
-
-        setDatasToUi();
-
-        connect(defaultFormattingButton, SIGNAL(clicked()), this, SLOT(resetToDefaultFormatting()));
-        connect(prescriptionFormatting->textEdit(), SIGNAL(textChanged()), this, SLOT(updateFormatting()));
-    }
-    // formatingSample
-}
-
-void DrugPosologicSentencePreferencesWidget::setDatasToUi()
-{
-    prescriptionFormatting->textEdit()->setHtml(settings()->value(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_HTML).toString());
-    updateFormatting();
-}
-
-void DrugPosologicSentencePreferencesWidget::resetToDefaultFormatting()
-{
-    QString content = getPrescriptionTokenHtmlFileContent();
-    prescriptionFormatting->setHtml(content);
-}
-
 static inline QString getFullPrescription(DrugsDB::IDrug *drug, bool toHtml, const QString &tmp)
 {
 #ifdef WITH_PAD
@@ -141,6 +90,59 @@ static inline QString getFullPrescription(DrugsDB::IDrug *drug, bool toHtml, con
 #else
     return DrugsDB::DrugsModel().getFullPrescription(drug, toHtml, tmp);
 #endif
+}
+
+static inline DrugsDB::IDrug *getDrug()
+{
+    // Create a virtual drug and prescription
+    using namespace DrugsDB::Constants;
+    DrugsDB::IDrug *drug = drugsBase().getDrugByUID("-1");
+    if (!drug) {
+        LOG_ERROR_FOR("DrugPosologicSentencePreferences", "Unable to retreive a drug from the database");
+    } else {
+        drug->setPrescriptionValue(Prescription::IntakesFrom, 1);
+        drug->setPrescriptionValue(Prescription::IntakesTo, 3);
+        drug->setPrescriptionValue(Prescription::IntakesScheme, tkTr(Trans::Constants::INTAKES));
+        drug->setPrescriptionValue(Prescription::IntakesUsesFromTo, true);
+        drug->setPrescriptionValue(Prescription::Period, 2);
+        drug->setPrescriptionValue(Prescription::PeriodScheme, tkTr(Trans::Constants::DAY_S));
+        drug->setPrescriptionValue(Prescription::IntakesIntervalOfTime, 2);
+        drug->setPrescriptionValue(Prescription::IntakesIntervalSchemeIndex, tkTr(Trans::Constants::DAY_S));
+        drug->setPrescriptionValue(Prescription::DurationFrom, 1);
+        drug->setPrescriptionValue(Prescription::DurationTo, 3);
+        drug->setPrescriptionValue(Prescription::DurationScheme, tkTr(Trans::Constants::WEEK_S));
+        drug->setPrescriptionValue(Prescription::DurationUsesFromTo, true);
+        drug->setPrescriptionValue(Prescription::MealTimeSchemeIndex, 1);
+        drug->setPrescriptionValue(Prescription::Note, QApplication::translate("DrugPosologicSentencePreferencesWidget", "This a note to take into account<br />written in two lines..."));
+        QString daily = "<" + Trans::ConstantTranslations::dailySchemeXmlTagList().at(1) + "=1>";
+        daily += "<" + Trans::ConstantTranslations::dailySchemeXmlTagList().at(3) + "=1>";
+        daily += "<" + Trans::ConstantTranslations::dailySchemeXmlTagList().at(6) + "=1>";
+        drug->setPrescriptionValue(Prescription::SerializedDailyScheme, daily);
+    }
+    return drug;
+}
+
+DrugPosologicSentencePreferencesWidget::DrugPosologicSentencePreferencesWidget(QWidget *parent) :
+    QWidget(parent)
+{
+    setObjectName("DrugPosologicSentencePreferencesWidget");
+    setupUi(this);
+    connect(defaultFormattingButton, SIGNAL(clicked()), this, SLOT(resetToDefaultFormatting()));
+    connect(prescriptionFormatting->textEdit(), SIGNAL(textChanged()), this, SLOT(updateFormatting()));
+    drug = getDrug();
+    setDatasToUi();
+}
+
+void DrugPosologicSentencePreferencesWidget::setDatasToUi()
+{
+    prescriptionFormatting->textEdit()->setHtml(settings()->value(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_HTML).toString());
+    updateFormatting();
+}
+
+void DrugPosologicSentencePreferencesWidget::resetToDefaultFormatting()
+{
+    QString content = getPrescriptionTokenHtmlFileContent();
+    prescriptionFormatting->setHtml(content);
 }
 
 void DrugPosologicSentencePreferencesWidget::updateFormatting()
@@ -190,6 +192,78 @@ void DrugPosologicSentencePreferencesWidget::changeEvent(QEvent *e)
     }
 }
 
+DrugPosologicSentenceWithPadPreferencesWidget::DrugPosologicSentenceWithPadPreferencesWidget(QWidget *parent) :
+    QWidget(parent)
+{
+    setObjectName("DrugPosologicSentenceWithPadPreferencesWidget");
+    // create the ui by hand
+    QGridLayout *lay = new QGridLayout(this);
+    setLayout(lay);
+    _writer = padTools()->createWriter(this);
+    lay->addWidget(_writer);
+
+    // Manage prescription tokens
+    DrugsDB::DrugsModel *model = new DrugsDB::DrugsModel(this);
+    model->addDrug(getDrug());
+    DrugsDB::PrescriptionToken::setPrescriptionModel(model);
+    DrugsDB::PrescriptionToken::setPrescriptionModelRow(0);
+
+//    connect(defaultFormattingButton, SIGNAL(clicked()), this, SLOT(resetToDefaultFormatting()));
+//    connect(prescriptionFormatting->textEdit(), SIGNAL(textChanged()), this, SLOT(updateFormatting()));
+
+    setDatasToUi();
+}
+
+DrugPosologicSentenceWithPadPreferencesWidget::~DrugPosologicSentenceWithPadPreferencesWidget()
+{}
+
+void DrugPosologicSentenceWithPadPreferencesWidget::setDatasToUi()
+{
+    _writer->setHtmlSource(settings()->value(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_HTML).toString());
+//    updateFormatting();
+}
+
+void DrugPosologicSentenceWithPadPreferencesWidget::resetToDefaultFormatting()
+{
+    QString content = getPrescriptionTokenHtmlFileContent();
+    _writer->setHtmlSource(content);
+}
+
+//void DrugPosologicSentenceWithPadPreferencesWidget::updateFormatting()
+//{
+//    QString tmp = prescriptionFormatting->textEdit()->toHtml();
+//    formatingSample->setHtml(getFullPrescription(drug, true, tmp));
+//}
+
+void DrugPosologicSentenceWithPadPreferencesWidget::saveToSettings(Core::ISettings *sets)
+{
+    Core::ISettings *s;
+    if (!sets)
+        s = settings();
+    else
+        s = sets;
+
+    QString tmp = _writer->outputToHtml();
+    tmp = Utils::toHtmlAccent(tmp);
+    int cutBegin = tmp.indexOf("<p ");
+    int cutEnd = tmp.indexOf("</body>");
+    s->setValue(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_HTML, tmp.mid(cutBegin, cutEnd-cutBegin));
+    s->setValue(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_PLAIN, _writer->outputToPlainText());
+}
+
+void DrugPosologicSentenceWithPadPreferencesWidget::changeEvent(QEvent *e)
+{
+    QWidget::changeEvent(e);
+    switch (e->type()) {
+    case QEvent::LanguageChange:
+//        retranslateUi(this);
+        break;
+    default:
+        break;
+    }
+}
+
+
 DrugPosologicSentencePage::DrugPosologicSentencePage(QObject *parent) :
         IOptionsPage(parent), m_Widget(0)
 {
@@ -204,14 +278,14 @@ DrugPosologicSentencePage::~DrugPosologicSentencePage()
 }
 
 QString DrugPosologicSentencePage::id() const { return objectName(); }
-QString DrugPosologicSentencePage::name() const { return tr("Printing"); }
+QString DrugPosologicSentencePage::name() const { return tr("Posologic sentence"); }
 QString DrugPosologicSentencePage::category() const { return tkTr(Trans::Constants::DRUGS); }
-QString DrugPosologicSentencePage::title() const {return tr("Drug's printing preferences");}
+QString DrugPosologicSentencePage::title() const {return tr("Posologic sentence");}
 int DrugPosologicSentencePage::sortIndex() const {return 30;}
 
 void DrugPosologicSentencePage::resetToDefaults()
 {
-    m_Widget->writeDefaultSettings(settings());
+    DrugPosologicSentencePreferencesWidget::writeDefaultSettings(settings());
     m_Widget->setDatasToUi();
 }
 
@@ -274,6 +348,10 @@ QWidget *DrugPosologicSentencePage::createPage(QWidget *parent)
 {
     if (m_Widget)
         delete m_Widget;
+#ifdef WITH_PAD
+    m_Widget = new DrugPosologicSentenceWithPadPreferencesWidget(parent);
+#else
     m_Widget = new DrugPosologicSentencePreferencesWidget(parent);
+#endif
     return m_Widget;
 }
