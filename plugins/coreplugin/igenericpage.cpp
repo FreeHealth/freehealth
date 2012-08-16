@@ -18,50 +18,25 @@
  *  along with this program (COPYING.FREEMEDFORMS file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
-/***************************************************************************
- *   Main Developper : Eric MAEKER, <eric.maeker@gmail.com>                *
- *   Contributors :                                                        *
- *       NAME <MAIL@ADDRESS.COM>                                           *
- ***************************************************************************/
-#ifndef APPABOUTPAGE_H
-#define APPABOUTPAGE_H
+#include "igenericpage.h"
 
-#include <coreplugin/iaboutpage.h>
+#include <QDebug>
 
-namespace Core {
-namespace Internal {
+/**
+ * \class Core::IGenericPage
+ * \brief Represents an application preferences page. Derive objects from this interface and set it inside the PluginManager object pool to get a paged widget Core::PageWidget.
+ */
 
-class AppAboutPage : public IAboutPage
+/** Use this to sort page list by category && sort index. */
+bool Core::IGenericPage::lessThan(IGenericPage *one, IGenericPage *two)
 {
-    Q_OBJECT
-public:
-    AppAboutPage(QObject *parent);
-    ~AppAboutPage();
+    qWarning() << "LESS THAN" << one->category() << two->category() << one->sortIndex() << two->sortIndex();
+    if (one->category() < two->category())
+        return true;
+    else if (one->category() == two->category()
+             && one->sortIndex() < two->sortIndex())
+             return true;
+    qWarning() << "    FALSE";
+    return false;
+}
 
-    QString id() const       { return objectName();   }
-    QString name() const     { return tr("General"); }
-    QString category() const { return tr("Application"); }
-    int sortIndex() const    { return 1;}
-
-    QWidget *createPage(QWidget *parent = 0);
-};
-
-class CommandLineAboutPage : public IAboutPage
-{
-    Q_OBJECT
-public:
-    CommandLineAboutPage(QObject *parent) : IAboutPage(parent) {}
-    ~CommandLineAboutPage() {}
-
-    QString id() const       { return objectName();   }
-    QString name() const     { return tr("Command line"); }
-    QString category() const { return tr("Application"); }
-    int sortIndex() const    { return 50;}
-
-    QWidget *createPage(QWidget *parent = 0);
-};
-
-} // End Internal
-} // End Core
-
-#endif // APPABOUTPAGE_H
