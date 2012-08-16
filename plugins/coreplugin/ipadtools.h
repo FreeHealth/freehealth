@@ -23,9 +23,8 @@
  *   Contributors :                                                        *
  *       Guillaume Denry <guillaume.denry@gmail.com>                       *
  ***************************************************************************/
-
-#ifndef IPADTOOLS_H
-#define IPADTOOLS_H
+#ifndef CORE_IPADTOOLS_H
+#define CORE_IPADTOOLS_H
 
 #include <QObject>
 #include <QMap>
@@ -39,7 +38,7 @@ class QTextEdit;
 
 /**
  * \file ipadtools.h
- * \author Eric Maeker <eric.maeker@gmail.com>, Guillaume DENRY <guillaume.denry@gmail.com>
+ * \author Eric Maeker, Guillaume DENRY
  * \version 0.8.0
  * \date 05 May 2012
  */
@@ -47,7 +46,8 @@ class QTextEdit;
 namespace Core {
 class ICore;
 
-class CORE_EXPORT PadAnalyzerError {
+class CORE_EXPORT PadAnalyzerError
+{
 public:
     enum Type {
         Error_NoError,
@@ -69,7 +69,6 @@ private:
     int _pos;
     QMap<QString,QVariant> _errorTokens;
 };
-
 
 class CORE_EXPORT TokenDescription
 {
@@ -104,7 +103,6 @@ public:
     bool isValid() const {return !fullName().isEmpty();}
 };
 
-
 class CORE_EXPORT IToken : public TokenDescription
 {
 public:
@@ -114,7 +112,6 @@ public:
     virtual QVariant testValue() const = 0;
     virtual QVariant value() const = 0;
 };
-
 
 class CORE_EXPORT ITokenPool : public QObject
 {
@@ -146,7 +143,6 @@ Q_SIGNALS:
     void tokenRemoved(Core::IToken *token);
 };
 
-
 class CORE_EXPORT IPadTools : public QObject
 {
     Q_OBJECT
@@ -163,7 +159,7 @@ public:
     virtual QSyntaxHighlighter *createSyntaxHighlighter(QTextEdit *textEdit, QMap<QString,QVariant> &tokens) { Q_UNUSED(textEdit); Q_UNUSED(tokens); return NULL ; }
 };
 
-}
+}  // namespace Core
 
 
-#endif
+#endif  // CORE_IPADTOOLS_H
