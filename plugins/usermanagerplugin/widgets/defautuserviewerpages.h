@@ -95,6 +95,7 @@ public:
     QString name() const;
     QString category() const;
     QString title() const;
+    int sortIndex() const;
 
     QWidget *createPage(QWidget *parent);
 };
@@ -134,6 +135,7 @@ public:
     QString name() const;
     QString category() const;
     QString title() const;
+    int sortIndex() const;
 
     QWidget *createPage(QWidget *parent = 0);
 };
@@ -172,6 +174,7 @@ public:
     QString name() const;
     QString category() const;
     QString title() const;
+    int sortIndex() const;
 
     QWidget *createPage(QWidget *parent = 0);
 
@@ -219,6 +222,7 @@ public:
     QString name() const;
     QString category() const;
     QString title() const;
+    int sortIndex() const;
 
     QWidget *createPage(QWidget *parent = 0);
 
@@ -274,6 +278,7 @@ public:
     QString name() const;
     QString category() const;
     QString title() const;
+    int sortIndex() const;
 
     QWidget *createPage(QWidget *parent = 0);
 
@@ -300,6 +305,7 @@ public:
     QString name() const;
     QString category() const;
     QString title() const;
+    int sortIndex() const;
 
     QWidget *createPage(QWidget *parent = 0);
 
