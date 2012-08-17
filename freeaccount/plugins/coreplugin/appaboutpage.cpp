@@ -72,6 +72,11 @@ QString AppAboutPage::category() const
     return tr("Application");
 }
 
+int AppAboutPage::sortIndex() const
+{
+    return 10;
+}
+
 QWidget *AppAboutPage::createPage(QWidget *parent)
 {
     QWidget *w = new QWidget(parent);
@@ -103,6 +108,11 @@ QString CommandLineAboutPage::name() const
 QString CommandLineAboutPage::category() const
 {
     return tr("Application");
+}
+
+int CommandLineAboutPage::sortIndex() const
+{
+    return 20;
 }
 
 QWidget *CommandLineAboutPage::createPage(QWidget *parent)
