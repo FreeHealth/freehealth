@@ -26,7 +26,7 @@
 #ifndef CONSTANTTRANSLATIONS_DATABASE_H
 #define CONSTANTTRANSLATIONS_DATABASE_H
 
-#include <QCoreApplication>
+#include <qglobal.h>
 
 namespace Trans {
 namespace Constants {

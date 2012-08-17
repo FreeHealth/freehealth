@@ -26,7 +26,7 @@
 #ifndef CONSTANTTRANSLATIONS_MSGERROR_H
 #define CONSTANTTRANSLATIONS_MSGERROR_H
 
-#include <QCoreApplication>
+#include <qglobal.h>
 
 namespace Trans {
 namespace Constants {
