@@ -44,6 +44,8 @@
 #include <translationutils/constants.h>
 #include <translationutils/trans_patient.h>
 #include <translationutils/trans_user.h>
+#include <translationutils/trans_current.h>
+#include <translationutils/trans_menu.h>
 
 using namespace Core;
 
@@ -51,6 +53,11 @@ static inline Core::IPatient *patient() {return Core::ICore::instance()->patient
 static inline Core::ITokenPool *tokenPool() {return Core::ICore::instance()->padTools()->tokenPool();}
 
 namespace {
+
+const char * const NAMESPACE_DESCRIPTION = QT_TRANSLATE_NOOP("tkConstants", "This token namespace contains all patient's related tokens.\n"
+                                                             "It does include the form's extracted token (when forms use 'patientDataRepresentation'),\n"
+                                                             "but does not contains all other form items.");
+
 class PatientToken : public Core::IToken
 {
 public:
@@ -81,6 +88,44 @@ void IPatient::registerPatientTokens()
     return;
 #else
     // Create and register namespaces
+    TokenNamespace patientNs("Patient");
+    patientNs.setTrContext(Trans::Constants::CONSTANTS_TR_CONTEXT);
+    patientNs.setUntranslatedHumanReadableName(Trans::Constants::PATIENT);
+    patientNs.setUntranslatedHelpText(::NAMESPACE_DESCRIPTION);
+    patientNs.setUntranslatedTooltip(::NAMESPACE_DESCRIPTION);
+
+    TokenNamespace patientIdentNs("Identity");
+    patientIdentNs.setTrContext(Trans::Constants::CONSTANTS_TR_CONTEXT);
+    patientIdentNs.setUntranslatedHumanReadableName(Trans::Constants::IDENTITY_TEXT);
+
+    TokenNamespace patientAgeNs("Age");
+    patientAgeNs.setTrContext(Trans::Constants::CONSTANTS_TR_CONTEXT);
+    patientAgeNs.setUntranslatedHumanReadableName(Trans::Constants::AGE);
+
+    TokenNamespace patientAddressNs("Address");
+    patientAddressNs.setTrContext(Trans::Constants::CONSTANTS_TR_CONTEXT);
+    patientAddressNs.setUntranslatedHumanReadableName(Trans::Constants::ADDRESS);
+
+    TokenNamespace patientContactNs("Contact");
+    patientContactNs.setTrContext(Trans::Constants::CONSTANTS_TR_CONTEXT);
+    patientContactNs.setUntranslatedHumanReadableName(Trans::Constants::CONTACT);
+
+    TokenNamespace patientMetricsNs("Metrics");
+    patientMetricsNs.setTrContext(Trans::Constants::CONSTANTS_TR_CONTEXT);
+    patientMetricsNs.setUntranslatedHumanReadableName(Trans::Constants::METRICS);
+
+    TokenNamespace patientBioNs("Biology");
+    patientBioNs.setTrContext(Trans::Constants::CONSTANTS_TR_CONTEXT);
+    patientBioNs.setUntranslatedHumanReadableName(Trans::Constants::BIOLOGY);
+
+    patientNs.addChild(patientIdentNs);
+    patientNs.addChild(patientAgeNs);
+    patientNs.addChild(patientAddressNs);
+    patientNs.addChild(patientContactNs);
+    patientNs.addChild(patientMetricsNs);
+    patientNs.addChild(patientBioNs);
+    tokenPool()->registerNamespace(patientNs);
+
     // Create tokens
     Core::IToken *t;
     QVector<Core::IToken *> _tokens;
