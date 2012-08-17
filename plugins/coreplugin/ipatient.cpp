@@ -72,6 +72,7 @@ private:
 IPatient::IPatient(QObject * parent) :
     QAbstractListModel(parent)
 {
+    setObjectName("Core::IPatient");
 }
 
 void IPatient::registerPatientTokens()
@@ -79,10 +80,8 @@ void IPatient::registerPatientTokens()
 #ifndef WITH_PAD
     return;
 #else
-
     // Create and register namespaces
     // Create tokens
-    // For 0.8.0 ONLY
     Core::IToken *t;
     QVector<Core::IToken *> _tokens;
 

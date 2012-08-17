@@ -67,7 +67,9 @@ private:
 }
 
 IUser::IUser(QObject *parent) : QObject(parent)
-{}
+{
+    setObjectName("Core::IUser");
+}
 
 IUser::~IUser()
 {}
@@ -76,11 +78,9 @@ void IUser::registerUserTokens() const
 {
 #ifndef WITH_PAD
     return;
-#endif
+#else
     // Create and register namespaces
     // Create tokens
-
-    // For 0.8.0 ONLY
     Core::IToken *t;
     QVector<Core::IToken *> _tokens;
     t = new UserToken(Constants::TOKEN_USERBIRTHNAME, Name);
@@ -161,7 +161,7 @@ void IUser::registerUserTokens() const
     } else {
         LOG_ERROR("PadTools object is not available, can not register the Core::IUser tokens");
     }
-    // END
+#endif
 }
 
 void IUser::replaceTokens(QString &stringWillBeModified)
