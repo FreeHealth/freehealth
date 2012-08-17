@@ -35,6 +35,8 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/ipadtools.h>
 
+#include <utils/log.h>
+
 #include <QStandardItem>
 #include <QStringList>
 #include <QMimeData>
@@ -46,6 +48,9 @@ using namespace Internal;
 
 namespace {
 static inline Core::ITokenPool *tokenPool() {return Core::ICore::instance()->padTools()->tokenPool();}
+
+const int TOKEN_UID = Qt::UserRole + 1;
+
 }
 
 namespace PadTools {
@@ -73,9 +78,37 @@ public:
         return ns;
     }
 
+    void createNamespace(const Core::TokenNamespace &ns, QStandardItem *parent = 0)
+    {
+        if (!parent)
+            parent = q->invisibleRootItem();
+        QString fullNs = parent->data(TOKEN_UID).toString();
+        fullNs.isEmpty() ? fullNs = ns.fullName() : fullNs += "." + ns.fullName();
+        QStandardItem *item = new QStandardItem(ns.humanReadableName());
+        item->setData(fullNs, TOKEN_UID);
+        if (!ns.tooltip().isEmpty())
+            item->setToolTip(ns.tooltip());
+        parent->appendRow(item);
+        _tokensNamespaceToItem.insert(fullNs, item);
+        foreach(const Core::TokenNamespace &child, ns.children()) {
+            createNamespace(child, item);
+        }
+    }
+
     void createTree()
     {
         // Create namespaces
+        for(int i=0; i < tokenPool()->rootNamespaceCount(); ++i) {
+            const Core::TokenNamespace &ns = tokenPool()->rootNamespaceAt(i);
+            Q_ASSERT(ns.isValid());
+            if (!ns.isValid()) {
+                LOG_ERROR_FOR("TokenModel", "Namespace not valid?");
+                continue;
+            }
+            createNamespace(ns);
+        }
+
+        // Add tokens to namespaces
         _tokens = tokenPool()->tokens();
         for(int i=0; i < _tokens.count(); ++i) {
             Core::IToken *token = _tokens.at(i);
@@ -90,37 +123,19 @@ public:
                 q->invisibleRootItem()->appendRow(QList<QStandardItem*>() << item << new QStandardItem());
                 continue;
             }
-            // Create root category && all subs
-            QStandardItem *item = 0;
-            QStandardItem *parent = 0;
-            QString fullNs;
-            foreach(const QString &n, ns) {
-                // get parent
-                if (fullNs.isEmpty()) {
-                    parent = q->invisibleRootItem();
-                } else {
-                    parent = _tokensNamespaceToItem[fullNs];
-                    fullNs += ".";
-                }
-                // recreate ns
-                fullNs += n;
-
-                // create ns
-                item = _tokensNamespaceToItem[fullNs];
-                if (!item) {
-                    if (n==ns.last()) {
-                        token->humanReadableName().isEmpty() ? name=n : name=token->humanReadableName();
-                        item = new QStandardItem(name);
-                        item->setToolTip(token->tooltip());
-                        _tokensToItem.insert(token, item);
-                    } else {
-                        item = new QStandardItem(n);
-                        _tokensNamespaceToItem.insert(fullNs, item);
-                    }
-                    parent->appendRow(QList<QStandardItem*>() << item << new QStandardItem());
-                }
-
+            // get NS item
+            QString tokenUid = ns.takeLast();
+            QStandardItem *nsItem = _tokensNamespaceToItem.value(ns.join("."));
+            if (!nsItem) {
+                LOG_ERROR_FOR("TokenModel", "Namespace not found? " + token->fullName());
+                nsItem = q->invisibleRootItem();
             }
+            // create token item
+            token->humanReadableName().isEmpty() ? name=token->fullName() : name=token->humanReadableName();
+            QStandardItem *item = new QStandardItem(name);
+            item->setToolTip(token->tooltip());
+            _tokensToItem.insert(token, item);
+            nsItem->appendRow(QList<QStandardItem*>() << item << new QStandardItem());
         }
     }
 
@@ -145,21 +160,6 @@ TokenModel::TokenModel(QObject *parent) :
     Q_ASSERT(tokenPool());
     d->createTree();
 }
-
-
-//// OBSOLETE
-//void TokenModel::setTokens(const QMap<QString, QVariant> &tokens)
-//{
-//    d->m_Tokens.clear();
-//    d->m_Tokens = tokens;
-//    reset();
-//}
-
-//QMap<QString, QVariant> &TokenModel::tokens()
-//{
-//    return d->m_Tokens;
-//}
-//// END OBSOLETE
 
 Core::ITokenPool *TokenModel::tokenPool() const
 {

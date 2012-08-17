@@ -93,10 +93,21 @@ bool TokenDescription::operator<(const TokenDescription &descr) const
     return _name < descr._name;
 }
 
+void TokenNamespace::addChild(const Core::TokenNamespace &child)
+{
+    _children.append(child);
+}
+
+QList<Core::TokenNamespace> TokenNamespace::children() const
+{
+    return _children;
+}
+
 
 /**
-  \class Core::ITokenPool
-  Manages the Core::IToken objects. You can register your Core::IToken pointers to make them available for the whole application.
-  The pointer pool is deleted by this manager, so you must not delete your registered pointers.
-*/
+ * \class Core::ITokenPool
+ * Manages the Core::IToken objects. You can register your Core::IToken pointers
+ * to make them available for the whole application.
+ * The pointer pool is deleted by this manager, so you must not delete your registered pointers.
+ */
 

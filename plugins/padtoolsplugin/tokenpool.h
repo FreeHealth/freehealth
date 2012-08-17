@@ -51,9 +51,10 @@ public:
     TokenPool(QObject *parent = 0);
     ~TokenPool();
 
-//    TokenNamespace &createNamespace(const QString &name);
-//    void registerNamespace(const TokenNamespace &ns);
-//    const TokenNamespace &getTokenNamespace(const QString &name) const;
+    void registerNamespace(const Core::TokenNamespace &ns);
+    int rootNamespaceCount() const;
+    const Core::TokenNamespace &rootNamespaceAt(int index) const;
+    const Core::TokenNamespace &getTokenNamespace(const QString &name) const;
 
     void addToken(Core::IToken *token);
     void addTokens(QVector<Core::IToken *> &tokens);

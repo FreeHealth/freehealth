@@ -30,6 +30,7 @@
 
 #include "tokenpool.h"
 
+#include <utils/global.h>
 #include <translationutils/constants.h>
 
 #include <QApplication>
@@ -69,25 +70,52 @@ TokenPool::~TokenPool()
     }
 }
 
-//TokenNamespace &TokenPool::createNamespace(const QString &name)
-//{
-//    TokenNamespace ns(name);
-//    d->_namespace << ns;
-//    return ns;
-//}
+void TokenPool::registerNamespace(const Core::TokenNamespace &ns)
+{
+    d->_namespace << ns;
+}
 
-//void TokenPool::registerNamespace(const TokenNamespace &ns)
-//{
-//    d->_namespace << ns;
-//}
+int TokenPool::rootNamespaceCount() const
+{
+    return d->_namespace.count();
+}
 
-//const TokenNamespace &TokenPool::getTokenNamespace(const QString &name) const
-//{
-//    foreach(const TokenNamespace &ns, d->_namespace)
-//        if (ns.fullName().compare(name,Qt::CaseInsensitive)==0)
-//            return ns;
-//    return d->nullNamespace;
-//}
+const Core::TokenNamespace &TokenPool::rootNamespaceAt(int index) const
+{
+    if (IN_RANGE_STRICT_MAX(index, 0, d->_namespace.count()))
+        return d->_namespace.at(index);
+    return d->nullNamespace;
+}
+
+static QStringList tokenNamespaces(const QString &token)
+{
+    // split token using the following separators: :: . :
+    QString sep;
+    if (token.contains("."))
+        sep = ".";
+    else if (token.contains("::"))
+        sep = "::";
+    else if (token.contains(":"))
+        sep = ":";
+    QStringList ns;
+    if (!sep.isEmpty())
+        ns = token.split(sep, QString::SkipEmptyParts);
+    else
+        ns << token;
+    return ns;
+}
+
+const Core::TokenNamespace &TokenPool::getTokenNamespace(const QString &name) const
+{
+    QStringList ns = tokenNamespaces(name);
+    if (ns.isEmpty())
+        return d->nullNamespace;
+
+    foreach(const Core::TokenNamespace &ns, d->_namespace)
+        if (ns.fullName().compare(name,Qt::CaseInsensitive)==0)
+            return ns;
+    return d->nullNamespace;
+}
 
 void TokenPool::addToken(Core::IToken *token)
 {
