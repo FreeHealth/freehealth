@@ -36,7 +36,6 @@
  * \date 25 Apr 2012
 */
 
-
 namespace Core {
 class ITokenPool;
 }
