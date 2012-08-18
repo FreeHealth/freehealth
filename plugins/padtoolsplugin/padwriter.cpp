@@ -40,6 +40,7 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/constants_menus.h>
+#include <coreplugin/constants_icons.h>
 #include <coreplugin/ipadtools.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/uniqueidmanager.h>
@@ -73,6 +74,7 @@ public:
         _pad(0),
         _followedItem(0),
         _cursorHighlighTimer(0),
+        _toolBar(0),
         q(parent)
     {
         _followedCharFormat.setUnderlineColor(QColor(Qt::cyan));
@@ -115,6 +117,61 @@ public:
         cmd = actionManager()->registerAction(a, a->objectName(), context);
         cmd->setTranslations(Constants::SET_TEST_VALUE_TO_TOKENS, Constants::SET_TEST_VALUE_TO_TOKENS, Constants::PADWRITER_TRANS_CONTEXT);
         button->addAction(cmd->action());
+
+        // TEST
+        a = aTest1 = new QAction(q);
+        a->setText("Tokens and strings");
+        a->setIcon(theme()->icon(Core::Constants::ICONHELP));
+
+        a = aTest2 = new QAction(q);
+        a->setText("Simple nested tokens & strings");
+        a->setIcon(theme()->icon(Core::Constants::ICONHELP));
+
+        a = aTest3 = new QAction(q);
+        a->setText("Multinested tokens & strings");
+        a->setIcon(theme()->icon(Core::Constants::ICONHELP));
+
+        a = aTest4 = new QAction(q);
+        a->setText("Tokens in table");
+        a->setIcon(theme()->icon(Core::Constants::ICONHELP));
+
+        a = aTest5 = new QAction(q);
+        a->setText("Multinested tokens in table");
+        a->setIcon(theme()->icon(Core::Constants::ICONHELP));
+
+        a = aTest6 = new QAction(q);
+        a->setText("Read prescription file");
+        a->setIcon(theme()->icon(Core::Constants::ICONHELP));
+    }
+
+    void connectActions()
+    {
+        QObject::connect(aFindCursor, SIGNAL(triggered()), q, SLOT(highlightCursor()));
+        QObject::connect(aAutoUpdate, SIGNAL(triggered(bool)), q, SLOT(setAutoUpdateOfResult(bool)));
+        QObject::connect(aSetDefaultValues, SIGNAL(triggered(bool)), q, SLOT(setTestValues(bool)));
+        QObject::connect(ui->viewResult, SIGNAL(clicked()), q, SLOT(analyseRawSource()));
+        QObject::connect(ui->viewError, SIGNAL(clicked()), q, SLOT(viewErrors()));
+        QObject::connect(ui->findCursor, SIGNAL(clicked()), q, SLOT(highlightCursor()));
+        QObject::connect(ui->outputToRaw, SIGNAL(clicked()), q, SLOT(outputToRaw()));
+    }
+
+    void createToolBar()
+    {
+        _toolBar = new QToolBar(q);
+        QToolButton *scenariTester = new QToolButton(q);
+        scenariTester->setIcon(theme()->icon(Core::Constants::ICONHELP));
+        scenariTester->setToolButtonStyle(Qt::ToolButtonIconOnly);
+        scenariTester->setPopupMode(QToolButton::InstantPopup);
+        scenariTester->addAction(aTest1);
+        scenariTester->addAction(aTest2);
+        scenariTester->addAction(aTest3);
+        scenariTester->addAction(aTest4);
+        scenariTester->addAction(aTest5);
+        scenariTester->addAction(aTest6);
+        scenariTester->setDefaultAction(aTest1);
+        _toolBar->addWidget(scenariTester);
+        ui->toolbarLayout->addWidget(_toolBar);
+        aTest1->trigger();
     }
 
 public:
@@ -127,6 +184,7 @@ public:
     QList<QTextCharFormat> m_LastHoveredItemCharFormats, _followedItemCharFormats;
     QTextCharFormat _followedCharFormat;
     QTimer *_cursorHighlighTimer;
+    QToolBar *_toolBar;
 
 private:
     PadWriter *q;
@@ -158,43 +216,10 @@ PadWriter::PadWriter(QWidget *parent) :
 
     // Add options action
     d->createActions(d->ui->optionsButton);
-    connect(d->aFindCursor, SIGNAL(triggered()), this, SLOT(highlightCursor()));
-    connect(d->aAutoUpdate, SIGNAL(triggered(bool)), this, SLOT(setAutoUpdateOfResult(bool)));
-    connect(d->aSetDefaultValues, SIGNAL(triggered(bool)), this, SLOT(setTestValues(bool)));
-    connect(d->ui->viewResult, SIGNAL(clicked()), this, SLOT(analyseRawSource()));
-    connect(d->ui->viewError, SIGNAL(clicked()), this, SLOT(viewErrors()));
-    connect(d->ui->findCursor, SIGNAL(clicked()), this, SLOT(highlightCursor()));
-    connect(d->ui->outputToRaw, SIGNAL(clicked()), this, SLOT(outputToRaw()));
+    d->connectActions();
+    d->createToolBar();
 
     // TEST
-    QAction *a;
-    a = d->aTest1 = new QAction(this);
-    a->setText("Tokens and strings");
-    d->ui->scenari->addAction(a);
-
-    a = d->aTest2 = new QAction(this);
-    a->setText("Simple nested tokens & strings");
-    d->ui->scenari->addAction(a);
-
-    a = d->aTest3 = new QAction(this);
-    a->setText("Multinested tokens & strings");
-    d->ui->scenari->addAction(a);
-
-    a = d->aTest4 = new QAction(this);
-    a->setText("Tokens in table");
-    d->ui->scenari->addAction(a);
-
-    a = d->aTest5 = new QAction(this);
-    a->setText("Multinested tokens in table");
-    d->ui->scenari->addAction(a);
-
-    a = d->aTest6 = new QAction(this);
-    a->setText("Read prescription file");
-    d->ui->scenari->addAction(a);
-
-    connect(d->ui->scenari, SIGNAL(triggered(QAction*)), this, SLOT(changeRawSourceScenario(QAction*)));
-    d->ui->scenari->setDefaultAction(d->aTest1);
-    d->aTest1->trigger();
 
     connect(d->ui->wysiwyg->textEdit(), SIGNAL(cursorPositionChanged()), this, SLOT(wysiwygCursorChanged()));
     connect(d->ui->rawSource->textEdit(), SIGNAL(cursorPositionChanged()), this, SLOT(rawSourceCursorChanged()));
