@@ -182,6 +182,8 @@ PatientSelector::PatientSelector(QWidget *parent, const FieldsToShow fields) :
     connect(d->ui->searchLine, SIGNAL(textChanged(QString)), this, SLOT(refreshFilter(QString)));
     connect(d->ui->tableView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(changeIdentity(QModelIndex,QModelIndex)));
     connect(d->ui->tableView, SIGNAL(activated(QModelIndex)), this, SLOT(onPatientSelected(QModelIndex)));
+
+    d->ui->identity->setCurrentIndex(QModelIndex());
 }
 
 PatientSelector::~PatientSelector()
