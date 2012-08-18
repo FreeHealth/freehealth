@@ -105,6 +105,7 @@ public:
 
     void addChild(const Core::TokenNamespace &child);
     QList<Core::TokenNamespace> children() const;
+    void clearChildren();
 
 private:
     QList<Core::TokenNamespace> _children;

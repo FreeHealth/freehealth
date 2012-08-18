@@ -103,6 +103,10 @@ QList<Core::TokenNamespace> TokenNamespace::children() const
     return _children;
 }
 
+void TokenNamespace::clearChildren()
+{
+    _children.clear();
+}
 
 /**
  * \class Core::ITokenPool
