@@ -133,7 +133,7 @@ bool FrenchZipCodesStep::downloadFiles(QProgressBar *bar)
 bool FrenchZipCodesStep::process()
 {
     unzipFiles();
-    prepareDatas();
+    prepareData();
     createDatabase();
     populateDatabase();
     Q_EMIT processFinished();
@@ -162,7 +162,7 @@ bool FrenchZipCodesStep::unzipFiles()
     return true;
 }
 
-bool FrenchZipCodesStep::prepareDatas()
+bool FrenchZipCodesStep::prepareData()
 {
     LOG(tr("Preparing raw source files"));
     Q_EMIT progressLabelChanged(tr("Preparing raw source files"));

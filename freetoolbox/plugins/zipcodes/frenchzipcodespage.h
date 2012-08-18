@@ -67,7 +67,7 @@ public:
     QString processMessage() const {return tr("French zip codes database creation");}
 
     bool unzipFiles();
-    bool prepareDatas();
+    bool prepareData();
     bool createDatabase();
     bool populateDatabase();
     bool linkMolecules();
