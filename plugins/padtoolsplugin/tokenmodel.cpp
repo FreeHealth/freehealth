@@ -51,18 +51,6 @@ using namespace Trans::ConstantTranslations;
 
 namespace {
 static inline Core::ITokenPool *tokenPool() {return Core::ICore::instance()->padTools()->tokenPool();}
-static QString fullNamespace(Core::TokenNamespace &ns)
-{
-    QStringList r;
-    Core::TokenNamespace *current = const_cast<Core::TokenNamespace *>(&ns);
-    while (current->children().count() > 0) {
-        r << current->humanReadableName();
-        current = const_cast<Core::TokenNamespace *>(&current->children().at(0));
-    }
-    if (current)
-        r << current->humanReadableName();
-    return r.join(".");
-}
 
 const int TOKEN_UID = Qt::UserRole + 1;
 
@@ -209,20 +197,7 @@ QVariant TokenModel::data(const QModelIndex &index, int role) const
         Core::IToken *token = d->_tokensToItem.key(itemFromIndex(index));
         if (!token)
             return QStandardItemModel::data(index, role);
-        // Construct name
-        Core::TokenNamespace ns = tokenPool()->getTokenNamespace(token->uid());
-        QString name;
-        token->humanReadableName().isEmpty() ? name = token->uid() : name = token->humanReadableName();
-        QString tooltip;
-        tooltip = QString("<b>%1<br /><b>%2<br /><b>%3: %4")
-                .arg(tkTr(Trans::Constants::TOKEN_NAMESPACE_1).arg(fullNamespace(ns).replace(" ", "&nbsp;")))
-                .arg(tkTr(Trans::Constants::TOKEN_1).arg(name))
-                .arg(tr("Value"))
-                .arg(token->value().toString())
-                .replace(":", ":</b>");
-        if (!token->tooltip().isEmpty())
-            tooltip += "<br />" + token->tooltip().replace("\n", "<br />");
-        return tooltip;
+        return token->tooltip();
     }
 
     return QStandardItemModel::data(index, role);

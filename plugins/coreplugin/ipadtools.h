@@ -117,6 +117,8 @@ public:
     IToken(const QString &fullName) : TokenDescription(fullName) {}
     virtual ~IToken() {}
 
+    virtual QString tooltip() const;
+
     virtual QVariant testValue() const = 0;
     virtual QVariant value() const = 0;
 };

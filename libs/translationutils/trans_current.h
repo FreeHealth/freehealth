@@ -60,6 +60,8 @@ const char* const LICENSE                            = QT_TRANSLATE_NOOP("tkCons
 const char* const LABEL                              = QT_TRANSLATE_NOOP("tkConstants", "Label");
 const char* const UNIQUE_IDENTIFIER                  = QT_TRANSLATE_NOOP("tkConstants", "Unique identifier");
 const char* const URL                                = QT_TRANSLATE_NOOP("tkConstants", "URL");
+const char* const VALUE                              = QT_TRANSLATE_NOOP("tkConstants", "Value");
+const char* const VALUE_1                            = QT_TRANSLATE_NOOP("tkConstants", "Value: %1");
 
 const char* const TOKEN                              = QT_TRANSLATE_NOOP("tkConstants", "Token");
 const char* const TOKEN_1                            = QT_TRANSLATE_NOOP("tkConstants", "Token: %1");
