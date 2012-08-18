@@ -186,8 +186,8 @@ PatientSelector::PatientSelector(QWidget *parent, const FieldsToShow fields) :
 
 PatientSelector::~PatientSelector()
 {
-    d->saveSettings();
     if (d) {
+        d->saveSettings();
         delete d;
         d = 0;
     }
