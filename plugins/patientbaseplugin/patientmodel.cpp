@@ -217,16 +217,14 @@ public:
         return true;
     }
 
-    QPixmap getPatientPhoto(const QString &patientUid, const QString &gender)
+    QPixmap getPatientPhoto(const QModelIndex &index)
     {
         QHash<int, QString> where;
+        QString patientUid = m_SqlPatient->index(index.row(), Constants::IDENTITY_UID).data().toString();
+
         where.insert(Constants::PHOTO_PATIENT_UID, QString("='%1'").arg(patientUid));
         if (patientBase()->count(Constants::Table_PATIENT_PHOTO, Constants::PHOTO_PATIENT_UID, patientBase()->getWhereClause(Constants::Table_PATIENT_PHOTO, where)) == 0) {
-            // load a generic icon according to the sex && age of the patient
-            if (gender=="M")
-                return QPixmap(theme()->iconFullPath(Core::Constants::ICONMALE, Core::ITheme::BigIcon));
-            else if (gender=="F")
-                return QPixmap(theme()->iconFullPath(Core::Constants::ICONFEMALE, Core::ITheme::BigIcon));
+            // no photo found, return QPixmap()
             return QPixmap();
         }
 
@@ -481,9 +479,7 @@ QVariant PatientModel::data(const QModelIndex &index, int role) const
         case IPatient::GenderPixmap: return d->iconizedGender(index).pixmap(16,16);
         case IPatient::Photo_32x32 :
         {
-            const QString &gender = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_GENDER)).toString();
-            QString patientUid = d->m_SqlPatient->index(index.row(), Constants::IDENTITY_UID).data().toString();
-            QPixmap pix = d->getPatientPhoto(patientUid, gender);
+            QPixmap pix = d->getPatientPhoto(index);
             if (pix.size()==QSize(32,32)) {
                 return pix;
             }
@@ -491,9 +487,7 @@ QVariant PatientModel::data(const QModelIndex &index, int role) const
         }
         case IPatient::Photo_64x64 :
         {
-            const QString &gender = d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_GENDER)).toString();
-            QString patientUid = d->m_SqlPatient->index(index.row(), Constants::IDENTITY_UID).data().toString();
-            QPixmap pix = d->getPatientPhoto(patientUid, gender);
+            QPixmap pix = d->getPatientPhoto(index);
             if (pix.size()==QSize(64,64)) {
                 return pix;
             }

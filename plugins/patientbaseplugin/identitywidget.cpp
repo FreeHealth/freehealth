@@ -60,6 +60,8 @@
 
 #include <QDebug>
 
+#include <pixmapdelegate.h>
+
 using namespace Patients;
 using namespace Trans::ConstantTranslations;
 
@@ -75,10 +77,11 @@ namespace Patients {
 namespace Internal {
 
 //TODO: extract this class into Utils?
-/** \brief wrapper function for QDataWidgetMapper with isDirty() method
- *
- * Thanks to Davor Josipovic for the code, http://davor.no-ip.com/blog/2010/05/11/isdirty-class-member-for-qdatawidgetmapper/
- */
+
+// Thanks to Davor Josipovic for the custom DataWidgetWrapper code,
+// found at http://davor.no-ip.com/blog/2010/05/11/isdirty-class-member-for-qdatawidgetmapper/
+
+/** \brief wrapper function for QDataWidgetMapper with isDirty() method*/
 class FMFWidgetMapper: public QDataWidgetMapper
 {
 public:
@@ -91,7 +94,7 @@ public:
         Q_ASSERT(orientation() == Qt::Horizontal);
         Q_ASSERT(rootIndex() == QModelIndex());
 
-//        qDebug() << "FMWidgetmapper.isDirty() called:";
+        //        qDebug() << "FMWidgetmapper.isDirty() called:";
 
         // cycle through all widgets the mapper supports
         for(int i = 0; i < model()->columnCount(); i++) {
@@ -103,15 +106,15 @@ public:
                 qDebug() << mapWidget->objectName() << "DB:" << idx.data(Qt::EditRole) << "- Widget value:" << mapWidget->property(p);
 
                 QVariant data = idx.data(Qt::EditRole);
-//                qDebug(mapWidget->metaObject()->className());
+                //                qDebug(mapWidget->metaObject()->className());
 
                 // special case: QDateEdit can not display NULL value. so compare here manually
                 if (mapWidget->metaObject()->className() == QString("QDateEdit")) {
                     QDateEdit* dateEdit = qobject_cast<QDateEdit*>(mapWidget);
                     if (dateEdit) {
-//                        qDebug() << data.toDate();
-//                        qDebug() << dateEdit->date();
-//                        qDebug() << dateEdit->minimumDate();
+                        //                        qDebug() << data.toDate();
+                        //                        qDebug() << dateEdit->date();
+                        //                        qDebug() << dateEdit->minimumDate();
                         if (data.toDate() == QDate() && dateEdit->date() != dateEdit->minimumDate()) {
                             return true;
                         }
@@ -132,12 +135,15 @@ class IdentityWidgetPrivate
 public:
     IdentityWidgetPrivate(IdentityWidget *parent, IdentityWidget::EditMode mode) :
         editUi(0), viewUi(0), m_Mapper(0), m_EditMode(mode), zipCompleter(0),
+        m_hasRealPhoto(false),
         q(parent)
     {
-        if (mode==IdentityWidget::ReadOnlyMode) {
+        switch (mode) {
+        case IdentityWidget::ReadOnlyMode: {
             viewUi = new Ui::IdentityViewer;
             viewUi->setupUi(q);
-        } else {
+        }
+        case IdentityWidget::ReadWriteMode: {
             editUi = new Ui::IdentityWidget;
             editUi->setupUi(q);
             editUi->dob->setDateIcon(theme()->iconFullPath(Core::Constants::ICONDATE));
@@ -145,19 +151,22 @@ public:
 
             editUi->genderCombo->addItems(genders());
             editUi->titleCombo->addItems(titles());
-            Utils::UpperCaseValidator *val = new Utils::UpperCaseValidator(q);
-            editUi->birthName->setValidator(val);
-            editUi->secondName->setValidator(val);
-            editUi->photoButton->setDefault(false);
-            editUi->photoButton->setAutoDefault(false);
-            Utils::CapitalizationValidator *firstletterval = new Utils::CapitalizationValidator(q);
-            editUi->firstname->setValidator(firstletterval);
+
+            Utils::UpperCaseValidator *upperVal = new Utils::UpperCaseValidator(q);
+            editUi->birthName->setValidator(upperVal);
+            editUi->secondName->setValidator(upperVal);
+
+            Utils::CapitalizationValidator *capVal = new Utils::CapitalizationValidator(q);
+            editUi->firstname->setValidator(capVal);
 
             zipCompleter = new ZipCodes::ZipCountryCompleters(q);
             zipCompleter->setCityLineEdit(editUi->city);
             zipCompleter->setZipLineEdit(editUi->zipcode);
             zipCompleter->setCountryComboBox(editUi->country);
+
             q->connect(editUi->photoButton, SIGNAL(clicked()), q, SLOT(photoButton_clicked()));
+            q->connect(editUi->genderCombo, SIGNAL(currentIndexChanged(int)), q, SLOT(updateGenderImage()));
+        }
         }
     }
 
@@ -187,6 +196,7 @@ public:
             m_Mapper = new FMFWidgetMapper(q);
             m_Mapper->setSubmitPolicy(FMFWidgetMapper::ManualSubmit);
             m_Mapper->setModel(m_PatientModel);
+            m_Mapper->setItemDelegate(new PixmapDelegate(q));
             m_Mapper->addMapping(editUi->birthName, Core::IPatient::BirthName, "text");
             m_Mapper->addMapping(editUi->secondName, Core::IPatient::SecondName, "text");
             m_Mapper->addMapping(editUi->firstname, Core::IPatient::Firstname, "text");
@@ -197,13 +207,15 @@ public:
             m_Mapper->addMapping(editUi->street, Core::IPatient::Street, "plainText");
             m_Mapper->addMapping(editUi->city, Core::IPatient::City, "text");
             m_Mapper->addMapping(editUi->zipcode, Core::IPatient::ZipCode, "text");
+            m_Mapper->addMapping(editUi->photoButton, Core::IPatient::Photo_64x64, "pixmap");
 
             //FIXME: buggy: country widget has FR(,DE,AT,...) as value while model holds a NULL
             // this prevents m_Mapper.isDirty from working correctly!
-//            m_Mapper->addMapping(editUi->country, Core::IPatient::Country, "currentIsoCountry");
+            //            m_Mapper->addMapping(editUi->country, Core::IPatient::Country, "currentIsoCountry");
             m_Mapper->toFirst();
         }
     }
+
 public:
     Ui::IdentityWidget *editUi;
     Ui::IdentityViewer *viewUi;
@@ -212,11 +224,19 @@ public:
     IdentityWidget::EditMode m_EditMode;
     ZipCodes::ZipCountryCompleters *zipCompleter;
     QPixmap m_Photo;
+    bool m_hasRealPhoto;
 
 private:
     IdentityWidget *q;
 };
-}  // End namespace Internal
+}
+
+bool IdentityWidget::hasPhoto() const
+{
+    return d->m_hasRealPhoto;
+}
+
+// End namespace Internal
 }  // End namespace Patients
 
 /**
@@ -239,7 +259,8 @@ IdentityWidget::~IdentityWidget()
 void IdentityWidget::setCurrentPatientModel(Patients::PatientModel *model)
 {
     d->m_PatientModel = model;
-    d->createMapper();
+    if (d->m_EditMode == ReadWriteMode)
+        d->createMapper();
 }
 
 /** \brief Return the actual PatientModel or 0 if it was not set. */
@@ -248,15 +269,19 @@ Patients::PatientModel *IdentityWidget::patientModel() const
     return d->m_PatientModel;
 }
 
-/** \brief Change the current identity to the model index \e patientIndex. */
+/** \brief Change the current identity to the QModelIndex \e patientIndex. */
 void IdentityWidget::setCurrentIndex(const QModelIndex &patientIndex)
 {
-    QPixmap photo = d->m_PatientModel->index(patientIndex.row(), Core::IPatient::Photo_64x64).data().value<QPixmap>();
-    if (d->m_Mapper) {
+    switch (d->m_EditMode) {
+    case ReadWriteMode:
         d->m_Mapper->setCurrentModelIndex(patientIndex);
-        d->editUi->photoButton->setIcon(photo);
         d->zipCompleter->checkData();
-    } else {
+        updateGenderImage();
+        break;
+
+    case ReadOnlyMode:
+        //read only mode, no QDataWidgetMapper needed
+
         d->viewUi->name->clear();
         d->viewUi->photoLabel->clear();
         d->viewUi->ageDOB->clear();
@@ -265,7 +290,10 @@ void IdentityWidget::setCurrentIndex(const QModelIndex &patientIndex)
         d->viewUi->fullAdress2->clear();
         QString name = d->m_PatientModel->index(patientIndex.row(), Core::IPatient::FullName).data().toString();
         d->viewUi->name->setText(name);
+
+        QPixmap photo = d->m_PatientModel->index(patientIndex.row(), Core::IPatient::Photo_64x64).data().value<QPixmap>();
         d->viewUi->photoLabel->setPixmap(photo);
+
         const QString &age = d->m_PatientModel->index(patientIndex.row(), Core::IPatient::Age).data().toString();
         const QString &dob = d->m_PatientModel->index(patientIndex.row(), Core::IPatient::DateOfBirth).data().toDate().toString(QLocale().dateFormat(QLocale::LongFormat));
         if (!age.isEmpty() && !dob.isEmpty())
@@ -276,6 +304,7 @@ void IdentityWidget::setCurrentIndex(const QModelIndex &patientIndex)
         d->viewUi->fullAdress2->setText(d->m_PatientModel->index(patientIndex.row(), Core::IPatient::City).data().toString() + " " +
                                         d->m_PatientModel->index(patientIndex.row(), Core::IPatient::ZipCode).data().toString() + " " +
                                         d->m_PatientModel->index(patientIndex.row(), Core::IPatient::Country).data().toString());
+        break;
     }
 }
 
@@ -312,7 +341,7 @@ bool IdentityWidget::isIdentityValid() const
 /** \brief Avoid duplicates. */
 bool IdentityWidget::isIdentityAlreadyInDatabase() const
 {
-    // check database for doublons
+    // check database for double entries
     QString where = QString("`%1`='%2' AND ").arg(patientBase()->fieldName(Constants::Table_IDENT, Constants::IDENTITY_BIRTHNAME), d->editUi->birthName->text());
     if (!d->editUi->secondName->text().isEmpty())
         where += QString("`%1`='%2' AND ").arg(patientBase()->fieldName(Constants::Table_IDENT, Constants::IDENTITY_SECONDNAME), d->editUi->secondName->text());
@@ -352,12 +381,13 @@ QString IdentityWidget::currentGender() const
 {
     switch (d->editUi->genderCombo->currentIndex())
     {
-    case 0: return "M"; break;
-    case 1: return "F"; break;
-    case 2: return "H"; break;
+    case 0: return "M";
+    case 1: return "F";
+    case 2: return "H";
     }
     return QString::null;
 }
+
 
 /** Return the current editing value */
 QDate IdentityWidget::currentDateOfBirth() const
@@ -365,17 +395,69 @@ QDate IdentityWidget::currentDateOfBirth() const
     return d->editUi->dob->date();
 }
 
+/*!
+ * \brief Returns current widget photo of patient
+ *
+ * \returns QPixmap current widget photo of patient.
+ * If patient has no photo in the current widget (this function does NOT query the database!),
+ * it returns QPixmap()
+ */
+QPixmap IdentityWidget::currentPhoto() const
+{
+    QPixmap photo;
+
+    switch (d->m_EditMode) {
+    case ReadWriteMode:
+        photo = d->m_hasRealPhoto ? d->editUi->photoButton->pixmap() : QPixmap();
+        break;
+    case ReadOnlyMode:
+        photo = d->m_hasRealPhoto ? *d->viewUi->photoLabel->pixmap() : QPixmap();
+        break;
+    }
+    return photo;
+}
+
+/*! \brief returns a default picture for that gender. */
+QPixmap IdentityWidget::currentDefaultPhoto() const
+{
+    const QString gender = currentGender();
+    if (gender == "M") {
+        return QPixmap(theme()->iconFullPath(Core::Constants::ICONMALE, Core::ITheme::BigIcon));
+    } else if (gender == "F") {
+        return QPixmap(theme()->iconFullPath(Core::Constants::ICONFEMALE, Core::ITheme::BigIcon));
+    } else if (gender == "H") {
+        return QPixmap(theme()->iconFullPath(Core::Constants::ICONHERMAPHRODISM , Core::ITheme::BigIcon));
+    } else {
+        return QPixmap();
+    }
+}
+
 /** \brief Submit the Identity to the model and the database. */
 bool IdentityWidget::submit()
 {
-    if ((d->m_EditMode == ReadWriteMode) && (d->m_Mapper)) {
+    if ((d->m_EditMode == ReadWriteMode) && d->m_Mapper) {
         // save photo
-        if (!d->m_Photo.isNull())
-            d->m_PatientModel->setData(d->m_PatientModel->index(d->m_Mapper->currentIndex(), Core::IPatient::Photo_64x64), d->m_Photo);
+        //        if (!d->m_Photo.isNull())
+        //            d->m_PatientModel->setData(d->m_PatientModel->index(d->m_Mapper->currentIndex(), Core::IPatient::Photo_64x64), d->m_Photo);
         // submit mapper
         return d->m_Mapper->submit();
     }
     return false;
+}
+
+void IdentityWidget::updateGenderImage()
+{
+//    the following both should be always true because this slot is only called
+//    in editMode by SIGNAL editUi->genderCombo->currentIndexChanged()
+    Q_ASSERT(d->m_EditMode == ReadWriteMode);
+    Q_ASSERT(d->m_Mapper);
+
+    // check if photoButton has a real pixmap ATM
+    if ( d->editUi->photoButton->pixmap().isNull()) {
+
+        // if not, set default gendered icon
+        setDefaultGenderPhoto();
+    }
 }
 
 void IdentityWidget::changeEvent(QEvent *e)
@@ -397,7 +479,10 @@ void IdentityWidget::photoButton_clicked()
     if (d->m_EditMode != ReadWriteMode)
         return;
 
-    // TODO: if a photo is already loaded --> ask user what to do
+    QPixmap photo;
+
+    // TODO: right click: menu -> "delete photo" (or how to do better?)
+    // TODO: if a photo is already there -> ask user what to do
 
     // get a list of plugin implementations that provide a photo
     QList<Core::IPhotoProvider *> photoProviders = ExtensionSystem::PluginManager::instance()->getObjects<Core::IPhotoProvider>();
@@ -409,29 +494,54 @@ void IdentityWidget::photoButton_clicked()
         // by now just get first plugin
 
         Core::IPhotoProvider *photoProvider = photoProviders.first();
-        d->m_Photo = photoProvider->recievePhoto();
-        if (d->m_Photo.isNull()) {
-            return;
-        }
-
+        photo = photoProvider->recievePhoto();
     } else {   // if no plugins installed/active, fall back to default behaviour
 
         QString fileName = QFileDialog::getOpenFileName(this, tr("Choose a photo"),
-                                            QDir::homePath(),
-                                            "Image (*.png *.jpg *.gif *.tiff)");
-        if (fileName.isEmpty())
+                                                        QDir::homePath(),
+                                                        "Image (*.png *.jpg *.gif *.tiff)");
+        if (fileName.isEmpty()) {
             return;
-        d->m_Photo.load(fileName);
+        }
+        photo.load(fileName);
     }
 
-    if (d->m_Photo.isNull())
+    if (photo.isNull()) {
+        d->editUi->photoButton->setIcon(currentDefaultPhoto());
+        d->m_hasRealPhoto = false;
         return;
+    }
 
     // resize pixmap
-    d->m_Photo = d->m_Photo.scaled(QSize(64,64), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    photo = photo.scaled(QSize(64,64), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    d->m_hasRealPhoto = true;
 
     // change button pixmap
-    QIcon icon(d->m_Photo);
+    d->editUi->photoButton->setPixmap(photo);
+}
+
+void IdentityWidget::setDefaultGenderPhoto()
+{
+//    const QModelIndex patientIndex = d->m_PatientModel->currentPatient();
+//    if (patientIndex != QModelIndex()) {
+//        if (d->m_PatientModel->index(patientIndex.row(), Core::IPatient::Photo_64x64) != QModelIndex())
+//            // no photo was saved yet in database!
+//            return;
+//    }
+
+    // get current gender from genderCombo (NOT from database, only Widget here!)
+    const QString gender = currentGender();
+
+    QIcon icon;
+    if (gender == "F") {
+        icon = QIcon(QPixmap(theme()->iconFullPath(Core::Constants::ICONFEMALE, Core::ITheme::BigIcon)));
+    } else if (gender == "H") {
+        icon = QIcon(QPixmap(theme()->iconFullPath(Core::Constants::ICONHERMAPHRODISM , Core::ITheme::BigIcon)));
+    } else /* if (gender == "M")*/ { // standard icon = male
+        icon = QIcon(QPixmap(theme()->iconFullPath(Core::Constants::ICONMALE, Core::ITheme::BigIcon)));
+    }
+    //    set an empty underlying pixmap, but set the displayed button icon to the default placeholder icon
+    d->editUi->photoButton->setPixmap(QPixmap());
     d->editUi->photoButton->setIcon(icon);
 }
 

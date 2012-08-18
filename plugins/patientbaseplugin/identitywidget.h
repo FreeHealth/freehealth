@@ -67,6 +67,10 @@ public:
     QString currentGender() const;
     QDate currentDateOfBirth() const;
 
+    QPixmap currentPhoto() const;
+    QPixmap currentDefaultPhoto() const;
+    bool hasPhoto() const;
+
 public Q_SLOTS:
     void setCurrentIndex(const QModelIndex &patientIndex);
     bool submit();
@@ -76,6 +80,8 @@ protected:
 
 protected Q_SLOTS:
     void photoButton_clicked();
+    void setDefaultGenderPhoto();
+    void updateGenderImage();
 
 private:
     Internal::IdentityWidgetPrivate *d;
