@@ -96,7 +96,7 @@ bool FrenchZipCodesStep::createDir()
 {
     // Create the wortking path
     if (!QDir().mkpath(workingPath()))
-        LOG_ERROR("Unable to create ICD10 Working Path :" + workingPath());
+        LOG_ERROR("Unable to create ICD10 Working Path: " + workingPath());
     else
         LOG("Tmp dir created");
 
@@ -104,7 +104,7 @@ bool FrenchZipCodesStep::createDir()
     const QString &dbpath = QFileInfo(databaseAbsPath()).absolutePath();
     if (!QDir().exists(dbpath)) {
         if (!QDir().mkpath(dbpath))
-            LOG_ERROR("Unable to create ZipCodes database output path :" + dbpath);
+            LOG_ERROR("Unable to create ZipCodes database output path: " + dbpath);
         else
             LOG("ZipCodes database output dir created");
     }
