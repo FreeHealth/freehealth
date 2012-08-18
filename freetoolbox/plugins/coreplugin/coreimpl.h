@@ -87,7 +87,7 @@ public:
 
     Utils::UpdateChecker *updateChecker() const;
 
-    // Patient's datas wrapper
+    // Patient's data wrapper
     IPatient *patient() const {return 0;}
     void setPatient(IPatient *) {}
 

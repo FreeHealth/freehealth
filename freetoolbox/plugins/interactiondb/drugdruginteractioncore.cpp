@@ -177,7 +177,7 @@ void DrugDrugInteractionCore::updateXmlFileForDrugDrugInteraction(DrugDrugIntera
     // TODO: code here ??? */
 }
 
-/** Will overwrite the thesaurus file with a new one created on the basis of the \e ddis. All precedent datas will be lost. */
+/** Will overwrite the thesaurus file with a new one created on the basis of the \e ddis. All precedent data will be lost. */
 void DrugDrugInteractionCore::saveCompleteList(const QList<DrugDrugInteraction *> &ddis)
 {
     QString xml = "<?xml version='1.0' encoding='UTF-8'?>\n"
@@ -200,7 +200,7 @@ void DrugDrugInteractionCore::saveCompleteList(const QList<DrugDrugInteraction *
     Utils::saveStringToFile(xml, ddiNewXmlFile(), Utils::Overwrite, Utils::DontWarnUser);
 }
 
-/** Will overwrite the thesaurus file with a new one created on the basis of the \e interactors. All precedent datas will be lost. */
+/** Will overwrite the thesaurus file with a new one created on the basis of the \e interactors. All precedent data will be lost. */
 void DrugDrugInteractionCore::saveCompleteList(const QList<DrugInteractor *> &interactors)
 {
     QString xml = "<?xml version='1.0' encoding='UTF-8'?>\n"

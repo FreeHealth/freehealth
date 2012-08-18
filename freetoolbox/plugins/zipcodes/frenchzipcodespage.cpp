@@ -46,7 +46,7 @@
 
 #include "ui_frenchzipcodeswidget.h"
 
-// Datas are extracted from URL: http://www.galichon.com/codesgeo/
+// Data are extracted from URL: http://www.galichon.com/codesgeo/
 
 using namespace ZipCodes;
 

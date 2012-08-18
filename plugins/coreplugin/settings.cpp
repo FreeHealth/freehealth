@@ -947,7 +947,7 @@ void SettingsPrivate::appendToValue(const QString &key, const QString &value)
 /**
   \fn QTreeWidget* Core::ISettings::getTreeWidget(QWidget *parent) const
   \brief For debugging purpose.
-  If \e parent is a QTreeWidget, it will be populated with datas and returned. Otherwise a
+  If \e parent is a QTreeWidget, it will be populated with data and returned. Otherwise a
   QTreeWidget is created with \e parent as parent and returned.
 */
 QTreeWidget* SettingsPrivate::getTreeWidget(QWidget *parent) const

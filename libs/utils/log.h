@@ -90,7 +90,7 @@ public:
         return QString("%1 - %2: %3").arg(object).arg(date.toString(), message);
     }
 
-    // Datas
+    // Data
     QString object, message;
     QDateTime date;
     int type;

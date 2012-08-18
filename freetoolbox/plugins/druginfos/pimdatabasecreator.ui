@@ -49,7 +49,7 @@
      <item>
       <widget class="QPushButton" name="checkDatas">
        <property name="text">
-        <string>Check Datas</string>
+        <string>Check Data</string>
        </property>
       </widget>
      </item>

@@ -58,7 +58,7 @@ public:
     QString categoryForTreeWiget() const {return QString("My Text to show for the debug dialog");}
 };
 
-// Then is the MyMultiLingualClass find your datas by lang name
+// Then is the MyMultiLingualClass find your data by lang name
 // lang should be 2 char locale
 if (d->hasLanguage(lang))
     s = d->getLanguage(lang);
@@ -92,7 +92,7 @@ public:
     }
 
     /**
-        Return a pointer to the datas class for one unique \e language,
+        Return a pointer to the data class for one unique \e language,
         or if it does not exist for the default common language.
         If \e language does not exists return 0.
      */
@@ -108,7 +108,7 @@ public:
         return 0;
     }
 
-    /** Return a pointer to the datas class for one unique \e language. If \e language doesnot exists it is created. */
+    /** Return a pointer to the data class for one unique \e language. If \e language doesnot exists it is created. */
     T *createLanguage(const QString &lang)
     {
         QString tmp = lang.left(2);

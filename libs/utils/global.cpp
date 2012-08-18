@@ -1412,7 +1412,7 @@ QString removeAccents(const QString &text)
 /////////////////////////////////////////   XML FUNCTIONS   //////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /**
-  \brief Create a simple Xml content with a \e mainTag and a hash \e datas.
+  \brief Create a simple Xml content with a \e mainTag and a hash \e data.
   You can specify the indentation of the resulting Xml.\n
   You can automatically encode to base64 the values of the tags.\n
   The \e mainTag represents the first englobing Xml tag of the output.\n
@@ -1430,26 +1430,26 @@ QString removeAccents(const QString &text)
       // </MyXmlFirstTag>
   \endcode
 */
-QString createXml(const QString &mainTag, const QHash<QString,QString> &datas, const int indent,const bool valueToBase64 )
+QString createXml(const QString &mainTag, const QHash<QString,QString> &data, const int indent,const bool valueToBase64 )
 {
     QDomDocument doc;
     QDomElement main = doc.createElement(mainTag);
     doc.appendChild(main);
     if (valueToBase64) {
-        foreach(const QString &k, datas.keys()) {
+        foreach(const QString &k, data.keys()) {
             QDomElement data  = doc.createElement(k);
             main.appendChild(data);
-            if (!datas.value(k).isEmpty()) {
-                QDomText dataText = doc.createTextNode(datas.value(k).toAscii().toBase64());
+            if (!data.value(k).isEmpty()) {
+                QDomText dataText = doc.createTextNode(data.value(k).toAscii().toBase64());
                 data.appendChild(dataText);
             }
         }
     } else {
-        foreach(const QString &k, datas.keys()) {
+        foreach(const QString &k, data.keys()) {
             QDomElement data  = doc.createElement(k);
             main.appendChild(data);
-            if (!datas.value(k).isEmpty()) {
-                QDomText dataText = doc.createTextNode(datas.value(k));
+            if (!data.value(k).isEmpty()) {
+                QDomText dataText = doc.createTextNode(data.value(k));
                 data.appendChild(dataText);
             }
         }

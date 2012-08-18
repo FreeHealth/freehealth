@@ -163,7 +163,7 @@ UTILS_EXPORT QString firstLetterUpperCase(const QString &s);
 UTILS_EXPORT QString removeAccents(const QString &text);
 
 // Some functions for XML Handling
-UTILS_EXPORT QString createXml( const QString &mainTag, const QHash<QString,QString> &datas, const int indent = 0, const bool valueToBase64 = false );
+UTILS_EXPORT QString createXml( const QString &mainTag, const QHash<QString,QString> &data, const int indent = 0, const bool valueToBase64 = false );
 UTILS_EXPORT bool    readXml( const QString &xmlContent, const QString &generalTag, QHash<QString,QString> &readDatas,const bool valueFromBase64 = false );
 UTILS_EXPORT QString xmlRead(const QDomElement &father, const QString &name, const QString &defaultValue);
 UTILS_EXPORT QString xmlRead(const QDomElement &father, const QString &name, const char *defaultValue);

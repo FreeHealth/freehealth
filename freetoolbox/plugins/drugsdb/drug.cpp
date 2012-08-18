@@ -69,7 +69,7 @@ Drug::~Drug()
 }
 
 /**
-  \brief Define drugs datas.
+  \brief Define drugs data.
   When setting Drug::Routes, the ids are guessed from the official routes.
   When setting Drug::Forms, labels and link to label are automatically created.
   For Routes and Forms, must be set as QStringList.

@@ -105,7 +105,7 @@ public:
     virtual void setPadTools(IPadTools *) = 0;
     virtual IPadTools *padTools() const = 0;
 
-    // Patient's datas wrapper
+    // Patient's data wrapper
     virtual IPatient *patient() const = 0;
     virtual void setPatient(IPatient *patient) = 0;
 
