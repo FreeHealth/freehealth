@@ -153,9 +153,9 @@ IdentityFormWidget::IdentityFormWidget(Form::FormItem *formItem, QWidget *parent
     onCurrentPatientChanged();
 
     // create itemdata
-    IdentityWidgetData *datas = new IdentityWidgetData(m_FormItem);
-    datas->setIdentityFormWiget(this);
-    m_FormItem->setItemDatas(datas);
+    IdentityWidgetData *data = new IdentityWidgetData(m_FormItem);
+    data->setIdentityFormWiget(this);
+    m_FormItem->setItemDatas(data);
 }
 
 IdentityFormWidget::~IdentityFormWidget()
