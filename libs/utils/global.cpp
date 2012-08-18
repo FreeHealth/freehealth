@@ -1437,20 +1437,20 @@ QString createXml(const QString &mainTag, const QHash<QString,QString> &data, co
     doc.appendChild(main);
     if (valueToBase64) {
         foreach(const QString &k, data.keys()) {
-            QDomElement data  = doc.createElement(k);
-            main.appendChild(data);
+            QDomElement dataElement  = doc.createElement(k);
+            main.appendChild(dataElement);
             if (!data.value(k).isEmpty()) {
                 QDomText dataText = doc.createTextNode(data.value(k).toAscii().toBase64());
-                data.appendChild(dataText);
+                dataElement.appendChild(dataText);
             }
         }
     } else {
         foreach(const QString &k, data.keys()) {
-            QDomElement data  = doc.createElement(k);
-            main.appendChild(data);
+            QDomElement dataElement  = doc.createElement(k);
+            main.appendChild(dataElement);
             if (!data.value(k).isEmpty()) {
                 QDomText dataText = doc.createTextNode(data.value(k));
-                data.appendChild(dataText);
+                dataElement.appendChild(dataText);
             }
         }
     }
