@@ -36,6 +36,8 @@
 #include <coreplugin/ipadtools.h>
 
 #include <utils/log.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_current.h>
 
 #include <QStandardItem>
 #include <QStringList>
@@ -45,6 +47,7 @@
 
 using namespace PadTools;
 using namespace Internal;
+using namespace Trans::ConstantTranslations;
 
 namespace {
 static inline Core::ITokenPool *tokenPool() {return Core::ICore::instance()->padTools()->tokenPool();}
@@ -124,7 +127,7 @@ public:
                 continue;
             }
             // get NS item
-            QString tokenUid = ns.takeLast();
+            ns.takeLast();
             QStandardItem *nsItem = _tokensNamespaceToItem.value(ns.join("."));
             if (!nsItem) {
                 LOG_ERROR_FOR("TokenModel", "Namespace not found? " + token->fullName());
@@ -188,6 +191,22 @@ QVariant TokenModel::data(const QModelIndex &index, int role) const
         QFont bold;
         bold.setBold(true);
         return bold;
+    }
+
+    if (role==Qt::ToolTipRole) {
+        Core::IToken *token = d->_tokensToItem.key(itemFromIndex(index));
+        if (!token)
+            return QStandardItemModel::data(index, role);
+        QString name;
+        token->humanReadableName().isEmpty() ? name = token->fullName() : name = token->humanReadableName();
+        QString tooltip;
+        tooltip = QString("%1<br />%2: %3")
+                .arg(tkTr(Trans::Constants::TOKEN_1).arg(name))
+                .arg(tr("Value"))
+                .arg(token->value().toString());
+        if (!token->tooltip().isEmpty())
+            tooltip += "<br />" + token->tooltip().replace("\n", "<br />");
+        return tooltip;
     }
 
     return QStandardItemModel::data(index, role);
