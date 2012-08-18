@@ -74,10 +74,10 @@ private:
 class CORE_EXPORT TokenDescription
 {
 public:
-    TokenDescription(const QString &name);
+    TokenDescription(const QString &uid);
     virtual ~TokenDescription() {}
 
-    virtual QString fullName() const {return _name;}
+    virtual QString uid() const {return _uid;}
     virtual QString humanReadableName() const;
     virtual QString tooltip() const;
     virtual QString helpText() const;
@@ -92,7 +92,7 @@ public:
     bool operator<(const TokenDescription &descr) const;
 
 private:
-    QString _name, _human, _tooltip, _descr, _help, _trContext;
+    QString _uid, _human, _tooltip, _descr, _help, _trContext;
 };
 
 class CORE_EXPORT TokenNamespace : public Core::TokenDescription
@@ -101,7 +101,7 @@ public:
     TokenNamespace(const QString &name = QString::null) : Core::TokenDescription(name) {}
     ~TokenNamespace() {}
 
-    bool isValid() const {return !fullName().isEmpty();}
+    bool isValid() const {return !uid().isEmpty();}
 
     void addChild(const Core::TokenNamespace &child);
     QList<Core::TokenNamespace> children() const;
@@ -136,7 +136,7 @@ public:
     virtual void registerNamespace(const Core::TokenNamespace &ns) = 0;
     virtual int rootNamespaceCount() const = 0;
     virtual const Core::TokenNamespace &rootNamespaceAt(int index) const = 0;
-    virtual const Core::TokenNamespace &getTokenNamespace(const QString &name) const = 0;
+    virtual Core::TokenNamespace getTokenNamespace(const QString &name) const = 0;
 
     // Tokens
     virtual void addToken(Core::IToken *token) = 0;

@@ -67,7 +67,7 @@ public:
     {
     }
 
-    QVariant testValue() const {return fullName();}
+    QVariant testValue() const {return uid();}
     QVariant value() const {return patient()->data(_ref);}
 
 private:

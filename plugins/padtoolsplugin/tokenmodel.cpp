@@ -51,6 +51,18 @@ using namespace Trans::ConstantTranslations;
 
 namespace {
 static inline Core::ITokenPool *tokenPool() {return Core::ICore::instance()->padTools()->tokenPool();}
+static QString fullNamespace(Core::TokenNamespace &ns)
+{
+    QStringList r;
+    Core::TokenNamespace *current = const_cast<Core::TokenNamespace *>(&ns);
+    while (current->children().count() > 0) {
+        r << current->humanReadableName();
+        current = const_cast<Core::TokenNamespace *>(&current->children().at(0));
+    }
+    if (current)
+        r << current->humanReadableName();
+    return r.join(".");
+}
 
 const int TOKEN_UID = Qt::UserRole + 1;
 
@@ -86,7 +98,7 @@ public:
         if (!parent)
             parent = q->invisibleRootItem();
         QString fullNs = parent->data(TOKEN_UID).toString();
-        fullNs.isEmpty() ? fullNs = ns.fullName() : fullNs += "." + ns.fullName();
+        fullNs.isEmpty() ? fullNs = ns.uid() : fullNs += "." + ns.uid();
         QStandardItem *item = new QStandardItem(ns.humanReadableName());
         item->setData(fullNs, TOKEN_UID);
         if (!ns.tooltip().isEmpty())
@@ -115,9 +127,9 @@ public:
         _tokens = tokenPool()->tokens();
         for(int i=0; i < _tokens.count(); ++i) {
             Core::IToken *token = _tokens.at(i);
-            QStringList ns = tokenNamespaces(token->fullName());
+            QStringList ns = tokenNamespaces(token->uid());
             QString name;
-            token->humanReadableName().isEmpty() ? name=token->fullName() : name=token->humanReadableName();
+            token->humanReadableName().isEmpty() ? name=token->uid() : name=token->humanReadableName();
 
             // token without namespace
             if (ns.count()==1) {
@@ -130,11 +142,11 @@ public:
             ns.takeLast();
             QStandardItem *nsItem = _tokensNamespaceToItem.value(ns.join("."));
             if (!nsItem) {
-                LOG_ERROR_FOR("TokenModel", "Namespace not found? " + token->fullName());
+                LOG_ERROR_FOR("TokenModel", "Namespace not found? " + token->uid());
                 nsItem = q->invisibleRootItem();
             }
             // create token item
-            token->humanReadableName().isEmpty() ? name=token->fullName() : name=token->humanReadableName();
+            token->humanReadableName().isEmpty() ? name=token->uid() : name=token->humanReadableName();
             QStandardItem *item = new QStandardItem(name);
             item->setToolTip(token->tooltip());
             _tokensToItem.insert(token, item);
@@ -197,13 +209,17 @@ QVariant TokenModel::data(const QModelIndex &index, int role) const
         Core::IToken *token = d->_tokensToItem.key(itemFromIndex(index));
         if (!token)
             return QStandardItemModel::data(index, role);
+        // Construct name
+        Core::TokenNamespace ns = tokenPool()->getTokenNamespace(token->uid());
         QString name;
-        token->humanReadableName().isEmpty() ? name = token->fullName() : name = token->humanReadableName();
+        token->humanReadableName().isEmpty() ? name = token->uid() : name = token->humanReadableName();
         QString tooltip;
-        tooltip = QString("%1<br />%2: %3")
+        tooltip = QString("<b>%1<br /><b>%2<br /><b>%3: %4")
+                .arg(tkTr(Trans::Constants::TOKEN_NAMESPACE_1).arg(fullNamespace(ns).replace(" ", "&nbsp;")))
                 .arg(tkTr(Trans::Constants::TOKEN_1).arg(name))
                 .arg(tr("Value"))
-                .arg(token->value().toString());
+                .arg(token->value().toString())
+                .replace(":", ":</b>");
         if (!token->tooltip().isEmpty())
             tooltip += "<br />" + token->tooltip().replace("\n", "<br />");
         return tooltip;
@@ -276,7 +292,7 @@ QMimeData *TokenModel::mimeData(const QModelIndexList &indexes) const
 //        }
 //    }
     Core::IToken *token = d->_tokensToItem.key(itemFromIndex(indexes.at(0)));
-    QString name = token->fullName(); // d->m_Tokens.keys().at(indexes.at(0).row());
+    QString name = token->uid(); // d->m_Tokens.keys().at(indexes.at(0).row());
     const QVariant &value = token->value();
     mimeData->setData(Constants::TOKENVALUE_MIME, value.toByteArray());
     mimeData->setData(Constants::TOKENNAME_MIME, name.toUtf8());

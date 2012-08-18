@@ -54,7 +54,7 @@ public:
     void registerNamespace(const Core::TokenNamespace &ns);
     int rootNamespaceCount() const;
     const Core::TokenNamespace &rootNamespaceAt(int index) const;
-    const Core::TokenNamespace &getTokenNamespace(const QString &name) const;
+    Core::TokenNamespace getTokenNamespace(const QString &name) const;
 
     void addToken(Core::IToken *token);
     void addTokens(QVector<Core::IToken *> &tokens);

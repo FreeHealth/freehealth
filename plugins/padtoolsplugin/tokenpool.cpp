@@ -34,6 +34,7 @@
 #include <translationutils/constants.h>
 
 #include <QApplication>
+#include <QDebug>
 
 using namespace PadTools;
 using namespace Internal;
@@ -49,7 +50,7 @@ public:
 
 public:
     QVector<Core::IToken*> _tokens;
-    QList<Core::TokenNamespace> _namespace;
+    QList<Core::TokenNamespace*> _namespace;
     Core::TokenNamespace nullNamespace;
 };
 }
@@ -72,7 +73,8 @@ TokenPool::~TokenPool()
 
 void TokenPool::registerNamespace(const Core::TokenNamespace &ns)
 {
-    d->_namespace << ns;
+    Core::TokenNamespace *pns = new Core::TokenNamespace(ns);
+    d->_namespace << pns;
 }
 
 int TokenPool::rootNamespaceCount() const
@@ -83,7 +85,7 @@ int TokenPool::rootNamespaceCount() const
 const Core::TokenNamespace &TokenPool::rootNamespaceAt(int index) const
 {
     if (IN_RANGE_STRICT_MAX(index, 0, d->_namespace.count()))
-        return d->_namespace.at(index);
+        return *d->_namespace.at(index);
     return d->nullNamespace;
 }
 
@@ -105,16 +107,48 @@ static QStringList tokenNamespaces(const QString &token)
     return ns;
 }
 
-const Core::TokenNamespace &TokenPool::getTokenNamespace(const QString &name) const
+Core::TokenNamespace TokenPool::getTokenNamespace(const QString &name) const
 {
-    QStringList ns = tokenNamespaces(name);
-    if (ns.isEmpty())
+    // Split token uid to namespaces + tokenUid
+    QStringList namespaces = tokenNamespaces(name);
+    if (namespaces.isEmpty())
         return d->nullNamespace;
 
-    foreach(const Core::TokenNamespace &ns, d->_namespace)
-        if (ns.fullName().compare(name,Qt::CaseInsensitive)==0)
-            return ns;
-    return d->nullNamespace;
+    // Get the root namespace
+    QString root = namespaces.takeFirst();
+    Core::TokenNamespace *rootNs = 0;
+    for(int i = 0; i < d->_namespace.count(); ++i) {
+        if (d->_namespace.at(i)->uid().compare(root, Qt::CaseInsensitive)==0) {
+            rootNs = d->_namespace.at(i);
+            break;
+        }
+    }
+    if (!rootNs)
+        return d->nullNamespace;
+
+    // remove token uid
+    namespaces.takeLast();
+
+    // create a copy of the root namespace
+    Core::TokenNamespace returnNs(*rootNs);
+    returnNs.clearChildren();
+
+    Core::TokenNamespace *lastChild = rootNs;
+    Core::TokenNamespace *addTo = const_cast<Core::TokenNamespace *>(&returnNs);
+    // scan all children of the ns
+    foreach(const QString &ns, namespaces) {
+        foreach(const Core::TokenNamespace &chNs, lastChild->children()) {
+            if (chNs.uid() == ns) {
+                Core::TokenNamespace addMe(chNs);
+                addMe.clearChildren();
+                addTo->addChild(addMe);
+                lastChild = const_cast<Core::TokenNamespace *>(&chNs);
+                addTo = const_cast<Core::TokenNamespace *>(&addMe);
+                break;
+            }
+        }
+    }
+    return returnNs;
 }
 
 void TokenPool::addToken(Core::IToken *token)
@@ -131,8 +165,8 @@ void TokenPool::addTokens(QVector<Core::IToken *> &tokens)
 Core::IToken *TokenPool::token(const QString &name)
 {
     foreach(Core::IToken *t, d->_tokens) {
-        if (name.startsWith(t->fullName().left(10), Qt::CaseInsensitive)) {
-            if (name.compare(t->fullName(), Qt::CaseInsensitive)==0)
+        if (name.startsWith(t->uid().left(10), Qt::CaseInsensitive)) {
+            if (name.compare(t->uid(), Qt::CaseInsensitive)==0)
                 return t;
         }
     }

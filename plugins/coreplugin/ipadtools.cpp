@@ -54,8 +54,8 @@
 
 using namespace Core;
 
-TokenDescription::TokenDescription(const QString &name) :
-    _name(name),
+TokenDescription::TokenDescription(const QString &uid) :
+    _uid(uid),
     _trContext(Trans::Constants::CONSTANTS_TR_CONTEXT)
 {
 }
@@ -88,9 +88,10 @@ QString TokenDescription::shortHtmlDescription() const
     return QApplication::translate(Trans::Constants::CONSTANTS_TR_CONTEXT, _descr.toUtf8());;
 }
 
+/** Sort description using the uids of items */
 bool TokenDescription::operator<(const TokenDescription &descr) const
 {
-    return _name < descr._name;
+    return _uid < descr._uid;
 }
 
 void TokenNamespace::addChild(const Core::TokenNamespace &child)
