@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>DrugsWidget::Internal::DrugsViewWidget</class>
- <widget class="QWidget" name="DrugsWidget::Internal::DrugsViewWidget">
+ <class>DrugsWidget::Internal::DrugGeneralPreferencesWidget</class>
+ <widget class="QWidget" name="DrugsWidget::Internal::DrugGeneralPreferencesWidget">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -282,6 +282,29 @@
        <widget class="QCheckBox" name="dynamicAlerts">
         <property name="text">
          <string>Enable alerts needing acceptance (dynamic alerts)</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QGroupBox" name="printingGroupBox">
+     <property name="title">
+      <string>Printing</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_5">
+      <item row="0" column="0">
+       <widget class="QCheckBox" name="lineBreakCheck">
+        <property name="text">
+         <string>Add a line break between drugs when printing</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QCheckBox" name="printDuplicataCheck">
+        <property name="text">
+         <string>Print duplicatas</string>
         </property>
        </widget>
       </item>

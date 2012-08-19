@@ -474,7 +474,8 @@ void PadDocument::softReset()
     a.analyze(_docSource, this);
     // TODO: use ITokenPool */
     if (_tokenModel)
-        run(_tokenModel->tokens());//, _docSource, _docOutput);
+        toOutput(_tokenModel->tokenPool());
+//        run(_tokenModel->tokens());//, _docSource, _docOutput);
 
     Utils::Log::logTimeElapsed(c, "PadTools::PadDocument", "reset");
 }

@@ -36,11 +36,12 @@
 /**
  * \file drugsio.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.0
- * \date 04 Mar 2011
+ * \version 0.8.0
+ * \date 31 July 2012
 */
 
 namespace DrugsDB {
+class DrugBaseCore;
 class DrugsModel;
 namespace Internal {
 class DrugsData;
@@ -50,6 +51,12 @@ class DrugsIOPrivate;
 class DRUGSBASE_EXPORT DrugsIO : public QObject
 {
     Q_OBJECT
+    friend class DrugsDB::DrugBaseCore;
+
+protected:
+    DrugsIO(QObject *parent = 0);
+    bool init();
+
 public:
     enum Loader {
         AppendPrescription,
@@ -62,7 +69,6 @@ public:
         DrugsOnlyVersion
     };
 
-//    static DrugsIO *instance(QObject *parent=0);
     ~DrugsIO();
 
     bool startsDosageTransmission();
@@ -78,6 +84,7 @@ public:
 
     QString prescriptionToXml(DrugsDB::DrugsModel *model, const QString &xmlExtraData = QString::null);
     QString prescriptionToHtml(DrugsDB::DrugsModel *model, const QString &xmlExtraDatas = QString::null, int version = MedinTuxVersion);
+    QString getDrugPrescription(DrugsDB::DrugsModel *model, const int drugRow, bool toHtml = false, const QString &mask = QString::null);
 
     bool printPrescription(DrugsDB::DrugsModel *model); //,
 //                                  const QString &header, const QString &footer,
@@ -86,8 +93,6 @@ public:
     void prescriptionPreview(DrugsDB::DrugsModel *model);
 
     static QStringList prescriptionMimeTypes();
-
-    DrugsIO(QObject *parent = 0);
 
 private Q_SLOTS:
     void dosageTransmissionDone();

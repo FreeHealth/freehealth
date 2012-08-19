@@ -60,6 +60,7 @@ QString PrinterPreferencesPage::id() const { return objectName(); }
 QString PrinterPreferencesPage::name() const { return tkTr(Trans::Constants::DEFAULTS); }
 QString PrinterPreferencesPage::category() const { return tkTr(Trans::Constants::PRINTING); }
 QString PrinterPreferencesPage::title() const {return tr("Printer preferences");}
+int PrinterPreferencesPage::sortIndex() const {return 0;}
 
 void PrinterPreferencesPage::resetToDefaults()
 {

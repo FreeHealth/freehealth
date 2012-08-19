@@ -26,7 +26,7 @@
 #ifndef CONSTANTTRANSLATIONS_CURRENT_H
 #define CONSTANTTRANSLATIONS_CURRENT_H
 
-#include <QCoreApplication>
+#include <qglobal.h>
 
 namespace Trans {
 namespace Constants {
@@ -60,9 +60,12 @@ const char* const LICENSE                            = QT_TRANSLATE_NOOP("tkCons
 const char* const LABEL                              = QT_TRANSLATE_NOOP("tkConstants", "Label");
 const char* const UNIQUE_IDENTIFIER                  = QT_TRANSLATE_NOOP("tkConstants", "Unique identifier");
 const char* const URL                                = QT_TRANSLATE_NOOP("tkConstants", "URL");
+const char* const VALUE                              = QT_TRANSLATE_NOOP("tkConstants", "Value");
+const char* const VALUE_1                            = QT_TRANSLATE_NOOP("tkConstants", "Value: %1");
 
 const char* const TOKEN                              = QT_TRANSLATE_NOOP("tkConstants", "Token");
 const char* const TOKEN_1                            = QT_TRANSLATE_NOOP("tkConstants", "Token: %1");
+const char* const TOKEN_NAMESPACE_1                  = QT_TRANSLATE_NOOP("tkConstants", "Token namespace: %1");
 const char* const EDIT_TOKEN                         = QT_TRANSLATE_NOOP("tkConstants", "Edit token");
 const char* const VALIDATE                           = QT_TRANSLATE_NOOP("tkConstants", "Validate");
 const char* const OVERRIDE                           = QT_TRANSLATE_NOOP("tkConstants", "Override");

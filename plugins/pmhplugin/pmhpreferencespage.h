@@ -36,8 +36,8 @@
 /**
  * \file pmhpreferencespages.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.5.0
- * \date 18 Feb 2011
+ * \version 0.8.0
+ * \date 16 Aug 2012
 */
 namespace Core {
 class ISettings;
@@ -80,6 +80,7 @@ public:
     QString name() const;
     QString category() const;
     QString title() const;
+    int sortIndex() const;
 
     void resetToDefaults();
     void checkSettingsValidity();

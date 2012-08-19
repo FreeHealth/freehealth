@@ -72,6 +72,7 @@ static inline Core::ContextManager *contextManager() {return Core::ICore::instan
 static inline Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 static inline DrugsDB::DrugsBase &drugsBase() {return DrugsDB::DrugBaseCore::instance().drugsBase();}
+static inline DrugsDB::DrugsIO &drugsIo() {return DrugsDB::DrugBaseCore::instance().drugsIo();}
 //static inline DrugsDB::InteractionManager &interactionManager() {return DrugsDB::DrugBaseCore::instance().interactionManager();}
 
 /** \brief Constructor */
@@ -231,14 +232,12 @@ void DrugsCentralWidget::changeFontTo(const QFont &font)
 
 bool DrugsCentralWidget::printPrescription()
 {
-    DrugsDB::DrugsIO io;
-    return io.printPrescription(m_CurrentDrugModel);
+    return drugsIo().printPrescription(m_CurrentDrugModel);
 }
 
 void DrugsCentralWidget::printPreview()
 {
-    DrugsDB::DrugsIO io;
-    io.prescriptionPreview(m_CurrentDrugModel);
+    drugsIo().prescriptionPreview(m_CurrentDrugModel);
 }
 
 bool DrugsCentralWidget::createTemplate()
@@ -246,13 +245,12 @@ bool DrugsCentralWidget::createTemplate()
     if (m_CurrentDrugModel->rowCount() == 0)
         return false;
     // get the template content
-    DrugsDB::DrugsIO io;
-    QString content = io.prescriptionToXml(m_CurrentDrugModel, "");
+    QString content = drugsIo().prescriptionToXml(m_CurrentDrugModel, "");
     // create a new template with it
     Templates::TemplatesCreationDialog dlg(this);
     dlg.setTemplateContent(content);
-    dlg.setTemplateSummary(io.prescriptionToHtml(m_CurrentDrugModel, "", DrugsDB::DrugsIO::SimpleVersion));
-    dlg.setTemplateMimeTypes(io.prescriptionMimeTypes());
+    dlg.setTemplateSummary(drugsIo().prescriptionToHtml(m_CurrentDrugModel, "", DrugsDB::DrugsIO::SimpleVersion));
+    dlg.setTemplateMimeTypes(drugsIo().prescriptionMimeTypes());
     dlg.setUserUuid(user()->uuid());
     dlg.exec();
     return true;

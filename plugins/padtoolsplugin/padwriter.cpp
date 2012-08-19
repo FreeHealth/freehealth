@@ -26,7 +26,9 @@
  ***************************************************************************/
 
 /**
-  \class PadTools::PadWriter
+ * \class PadTools::PadWriter
+ * To avoid dependencies to the pad plugin, the PadTools::PadWriter can be created
+ * by the Core::IPadTools::createWriter().
 */
 
 #include "padwriter.h"
@@ -36,7 +38,9 @@
 #include "pad_highlighter.h"
 
 #include <coreplugin/icore.h>
+#include <coreplugin/isettings.h>
 #include <coreplugin/constants_menus.h>
+#include <coreplugin/constants_icons.h>
 #include <coreplugin/ipadtools.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/uniqueidmanager.h>
@@ -56,6 +60,7 @@ using namespace Internal;
 static inline Core::UniqueIDManager *uid() { return Core::ICore::instance()->uniqueIDManager(); }
 static inline Core::ActionManager *actionManager() { return Core::ICore::instance()->actionManager(); }
 static inline Core::ITheme *theme() { return Core::ICore::instance()->theme(); }
+static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
 static inline Core::IPadTools *padTools() {return Core::ICore::instance()->padTools();}
 
 namespace PadTools {
@@ -69,6 +74,7 @@ public:
         _pad(0),
         _followedItem(0),
         _cursorHighlighTimer(0),
+        _toolBar(0),
         q(parent)
     {
         _followedCharFormat.setUnderlineColor(QColor(Qt::cyan));
@@ -111,18 +117,74 @@ public:
         cmd = actionManager()->registerAction(a, a->objectName(), context);
         cmd->setTranslations(Constants::SET_TEST_VALUE_TO_TOKENS, Constants::SET_TEST_VALUE_TO_TOKENS, Constants::PADWRITER_TRANS_CONTEXT);
         button->addAction(cmd->action());
+
+        // TEST
+        a = aTest1 = new QAction(q);
+        a->setText("Tokens and strings");
+        a->setIcon(theme()->icon(Core::Constants::ICONHELP));
+
+        a = aTest2 = new QAction(q);
+        a->setText("Simple nested tokens & strings");
+        a->setIcon(theme()->icon(Core::Constants::ICONHELP));
+
+        a = aTest3 = new QAction(q);
+        a->setText("Multinested tokens & strings");
+        a->setIcon(theme()->icon(Core::Constants::ICONHELP));
+
+        a = aTest4 = new QAction(q);
+        a->setText("Tokens in table");
+        a->setIcon(theme()->icon(Core::Constants::ICONHELP));
+
+        a = aTest5 = new QAction(q);
+        a->setText("Multinested tokens in table");
+        a->setIcon(theme()->icon(Core::Constants::ICONHELP));
+
+        a = aTest6 = new QAction(q);
+        a->setText("Read prescription file");
+        a->setIcon(theme()->icon(Core::Constants::ICONHELP));
+    }
+
+    void connectActions()
+    {
+        QObject::connect(aFindCursor, SIGNAL(triggered()), q, SLOT(highlightCursor()));
+        QObject::connect(aAutoUpdate, SIGNAL(triggered(bool)), q, SLOT(setAutoUpdateOfResult(bool)));
+        QObject::connect(aSetDefaultValues, SIGNAL(triggered(bool)), q, SLOT(setTestValues(bool)));
+        QObject::connect(ui->viewResult, SIGNAL(clicked()), q, SLOT(analyseRawSource()));
+        QObject::connect(ui->viewError, SIGNAL(clicked()), q, SLOT(viewErrors()));
+        QObject::connect(ui->findCursor, SIGNAL(clicked()), q, SLOT(highlightCursor()));
+        QObject::connect(ui->outputToRaw, SIGNAL(clicked()), q, SLOT(outputToRaw()));
+    }
+
+    void createToolBar()
+    {
+        _toolBar = new QToolBar(q);
+        QToolButton *scenariTester = new QToolButton(q);
+        scenariTester->setIcon(theme()->icon(Core::Constants::ICONHELP));
+        scenariTester->setToolButtonStyle(Qt::ToolButtonIconOnly);
+        scenariTester->setPopupMode(QToolButton::InstantPopup);
+        scenariTester->addAction(aTest1);
+        scenariTester->addAction(aTest2);
+        scenariTester->addAction(aTest3);
+        scenariTester->addAction(aTest4);
+        scenariTester->addAction(aTest5);
+        scenariTester->addAction(aTest6);
+        scenariTester->setDefaultAction(aTest1);
+        _toolBar->addWidget(scenariTester);
+        ui->toolbarLayout->addWidget(_toolBar);
+        aTest1->trigger();
     }
 
 public:
     Ui::PadWriter *ui;
     TokenModel *_tokenModel;
     QAction *aFindCursor, *aAutoUpdate, *aSetDefaultValues;
-    QAction *aTest1, *aTest2, *aTest3, *aTest4, *aTest5; // actions used to test different rawsource scenari
+    QAction *aTest1, *aTest2, *aTest3, *aTest4, *aTest5, *aTest6; // actions used to test different rawsource scenari
     PadDocument *_pad;
     PadFragment *_followedItem; // should not be deleted
     QList<QTextCharFormat> m_LastHoveredItemCharFormats, _followedItemCharFormats;
     QTextCharFormat _followedCharFormat;
     QTimer *_cursorHighlighTimer;
+    QToolBar *_toolBar;
 
 private:
     PadWriter *q;
@@ -131,7 +193,7 @@ private:
 }  // PadTools
 
 PadWriter::PadWriter(QWidget *parent) :
-    QWidget(parent),
+    Core::IPadWriter(parent),
     d(new Internal::PadWriterPrivate(this))
 {
     d->ui = new Internal::Ui::PadWriter;
@@ -154,45 +216,10 @@ PadWriter::PadWriter(QWidget *parent) :
 
     // Add options action
     d->createActions(d->ui->optionsButton);
-    connect(d->aFindCursor, SIGNAL(triggered()), this, SLOT(highlightCursor()));
-    connect(d->aAutoUpdate, SIGNAL(triggered(bool)), this, SLOT(setAutoUpdateOfResult(bool)));
-    connect(d->aSetDefaultValues, SIGNAL(triggered(bool)), this, SLOT(setTestValues(bool)));
-    connect(d->ui->viewResult, SIGNAL(clicked()), this, SLOT(analyseRawSource()));
-    connect(d->ui->viewError, SIGNAL(clicked()), this, SLOT(viewErrors()));
-    connect(d->ui->findCursor, SIGNAL(clicked()), this, SLOT(highlightCursor()));
-    connect(d->ui->outputToRaw, SIGNAL(clicked()), this, SLOT(outputToRaw()));
+    d->connectActions();
+    d->createToolBar();
 
     // TEST
-    QAction *a;
-
-    d->ui->nextBlock->setText(tr("Next block"));
-    connect(d->ui->nextBlock, SIGNAL(clicked()), this, SLOT(highLightNextBlock()));
-    d->ui->prevBlock->setText(tr("Previous block"));
-    connect(d->ui->prevBlock, SIGNAL(clicked()), this, SLOT(highLightPreviousBlock()));
-
-    a = d->aTest1 = new QAction(this);
-    a->setText("Tokens and strings");
-    d->ui->scenari->addAction(a);
-
-    a = d->aTest2 = new QAction(this);
-    a->setText("Simple nested tokens & strings");
-    d->ui->scenari->addAction(a);
-
-    a = d->aTest3 = new QAction(this);
-    a->setText("Multinested tokens & strings");
-    d->ui->scenari->addAction(a);
-
-    a = d->aTest4 = new QAction(this);
-    a->setText("Tokens in table");
-    d->ui->scenari->addAction(a);
-
-    a = d->aTest5 = new QAction(this);
-    a->setText("Multinested tokens in table");
-    d->ui->scenari->addAction(a);
-
-    connect(d->ui->scenari, SIGNAL(triggered(QAction*)), this, SLOT(changeRawSourceScenario(QAction*)));
-    d->ui->scenari->setDefaultAction(d->aTest1);
-    d->aTest1->trigger();
 
     connect(d->ui->wysiwyg->textEdit(), SIGNAL(cursorPositionChanged()), this, SLOT(wysiwygCursorChanged()));
     connect(d->ui->rawSource->textEdit(), SIGNAL(cursorPositionChanged()), this, SLOT(rawSourceCursorChanged()));
@@ -207,6 +234,48 @@ PadWriter::~PadWriter()
         delete d;
         d = 0;
     }
+}
+
+void PadWriter::setPlainTextSource(const QString &plainText)
+{
+    d->ui->rawSource->setPlainText(plainText);
+    analyseRawSource();
+}
+
+void PadWriter::setHtmlSource(const QString &html)
+{
+    d->ui->rawSource->setHtml(html);
+    analyseRawSource();
+}
+
+void PadWriter::filterTokenPool(const QString &tokenNamespace)
+{
+    // TODO: here
+}
+
+void PadWriter::filterTokenPool(const QStringList &tokenNamespaces)
+{
+    // TODO: here
+}
+
+QString PadWriter::outputToPlainText() const
+{
+    return d->ui->wysiwyg->toPlainText();
+}
+
+QString PadWriter::outputToHtml() const
+{
+    return d->ui->wysiwyg->toHtml();
+}
+
+QString PadWriter::rawSourceToPlainText() const
+{
+    return d->ui->rawSource->toPlainText();
+}
+
+QString PadWriter::rawSourceToHtml() const
+{
+    return d->ui->rawSource->toHtml();
 }
 
 void PadWriter::wysiwygCursorChanged()
@@ -227,58 +296,60 @@ void PadWriter::changeRawSourceScenario(QAction *a)
     if (a == d->aTest1) {
         source = "<p>"
                 "<b><center>Simple token test</center></b></p><p>"
-                "&nbsp;&nbsp;* To^$~test.A~) no before text$^ken D: ^$\"...~test.D~...\"$^<br />"
-//                "&nbsp;&nbsp;* Null token: (^$All this text ~NULL~ should not appear in the output$^)<br />"
-                "&nbsp;&nbsp;* Token D without 'after conditionnal text':^$ ~test.D~$^<br />"
-                "&nbsp;&nbsp;* Token D without 'before conditionnal text': ^$~test.D~. $^<br />"
-                "&nbsp;&nbsp;* Long token A: ^$this text should appear in the output document, <u>including the core value</u> \"<b>~test.A~</b>\" (in bold) as defined in the <span style=' text-decoration: underline; color:#ff00ff;'>TokenModel</span>.$^<br />"
+                "&nbsp;&nbsp;* To{{~test.A~) no before text}}ken D: {{\"...~test.D~...\"}}<br />"
+//                "&nbsp;&nbsp;* Null token: ({{All this text ~NULL~ should not appear in the output}})<br />"
+                "&nbsp;&nbsp;* Token D without 'after conditionnal text':{{ ~test.D~}}<br />"
+                "&nbsp;&nbsp;* Token D without 'before conditionnal text': {{~test.D~. }}<br />"
+                "&nbsp;&nbsp;* Long token A: {{this text should appear in the output document, <u>including the core value</u> \"<b>~test.A~</b>\" (in bold) as defined in the <span style=' text-decoration: underline; color:#ff00ff;'>TokenModel</span>.}}<br />"
                 "&nbsp;&nbsp;* HTML Token:<br />"
                 "&nbsp;&nbsp;&nbsp;&nbsp;* Result should be \" <u><b>htmlToken</b></u> \"<br />"
-                "&nbsp;&nbsp;&nbsp;&nbsp;* Result should be ^$\" <u>~test.HTMLTOKEN~</u> \"$^<br />"
+                "&nbsp;&nbsp;&nbsp;&nbsp;* Result should be {{\" <u>~test.HTMLTOKEN~</u> \"}}<br />"
                 "</p>"
                 ;
     } else if (a == d->aTest2) {
         source = "<p>"
                 "<b><center>Nested tokens test</center></b></p><p>"
                 "&nbsp;&nbsp;* Testing tokens:<br />"
-                "&nbsp;&nbsp;&nbsp;&nbsp;* ^$\"Token B: (~test.B~) ^$[[Token ^$this text ~NULL~ should not appear in output$^C: ~test.C~]]$^.\"$^<br />"
+                "&nbsp;&nbsp;&nbsp;&nbsp;* {{\"Token B: (~test.B~) {{[[Token {{this text ~NULL~ should not appear in output}}C: ~test.C~]]}}.\"}}<br />"
                 "&nbsp;&nbsp;* Result should be:<br />"
                 "&nbsp;&nbsp;&nbsp;&nbsp;* \"Token B: (This is B) [[Token C: This is C]].\"<br />"
-//                "^$ _^$‘‘nestedB’’~test.B~$^C_ ~test.C~ _C_$^<br />"
-//                " 10 chars ^$ _D_ ~test.D~ _D_$^<br />"
+//                "{{ _{{‘‘nestedB’’~test.B~}}C_ ~test.C~ _C_}}<br />"
+//                " 10 chars {{ _D_ ~test.D~ _D_}}<br />"
                 ;
     } else if (a == d->aTest3) {
-        source = "<p><b>^$(<span style='text-decoration: underline; color:#ff00ff;'>A:</span> ~test.A~)$^. Some strings.</b><br />"
-                "^$(<span style='text-decoration: underline; color:#0000ff;'>D:</span> ^$[C: ~test.C~]$^ ~test.D~)$^<br/>"
-                "^$(B: ~test.B~)$^<br />";
+        source = "<p><b>{{(<span style='text-decoration: underline; color:#ff00ff;'>A:</span> ~test.A~)}}. Some strings.</b><br />"
+                "{{(<span style='text-decoration: underline; color:#0000ff;'>D:</span> {{[C: ~test.C~]}} ~test.D~)}}<br/>"
+                "{{(B: ~test.B~)}}<br />";
     } else if (a == d->aTest4) {
     source = "<p><b>Testing tokens inside a table</b><br />"
             "<table border=1>"
             "<tr>"
-            "  <td>^$_<span style=' text-decoration: underline; color:#ff00ff;'>A_</span> ~test.A~ _A_$^ 10 chars </td>"
+            "  <td>{{_<span style=' text-decoration: underline; color:#ff00ff;'>A_</span> ~test.A~ _A_}} 10 chars </td>"
             "</tr>"
             "<tr>"
-            "  <td> 10 chars ^$ _D_ ~test.D~ _D_$^</td>"
+            "  <td> 10 chars {{ _D_ ~test.D~ _D_}}</td>"
             "</tr>"
             "</table>"
             "</p>";
     } else if (a == d->aTest5) {
-    source = "<p><b>Testing nested tokens inside a table</b><br />"
-            "<table border=1>"
-            "<tr>"
-            "  <td>^$<span style=' text-decoration: underline; color:#ff00ff;'>_A_</span> ~test.A~ _A_$^ 10 chars </td>"
-            "</tr>"
-            "<tr>"
-            "  <td> 10 chars ^$ _D_ ~test.D~ _D_$^</td>"
-            "</tr>"
-            "<tr>"
-            "  <td>Two nested: ^$ _D_ ~test.D~ _^$Nested C ~test.C~... $^D_$^</td>"
-            "</tr>"
-            "<tr>"
-            "  <td>Multi-nested: ^$ _D_ ~test.D~ _^$Nested C ~test.C~..^$//~test.A~//$^.. $^D_$^</td>"
-            "</tr>"
-            "</table>"
-            "</p>";
+        source = "<p><b>Testing nested tokens inside a table</b><br />"
+                "<table border=1>"
+                "<tr>"
+                "  <td>{{<span style=' text-decoration: underline; color:#ff00ff;'>_A_</span> ~test.A~ _A_}} 10 chars </td>"
+                "</tr>"
+                "<tr>"
+                "  <td> 10 chars {{ _D_ ~test.D~ _D_}}</td>"
+                "</tr>"
+                "<tr>"
+                "  <td>Two nested: {{ _D_ ~test.D~ _{{Nested C ~test.C~... }}D_}}</td>"
+                "</tr>"
+                "<tr>"
+                "  <td>Multi-nested: {{ _D_ ~test.D~ _{{Nested C ~test.C~..{{//~test.A~//}}.. }}D_}}</td>"
+                "</tr>"
+                "</table>"
+                "</p>";
+    } else if (a == d->aTest6) {
+        source = Utils::readTextFile(settings()->path(Core::ISettings::BundleResourcesPath) + "/textfiles/prescription/padtoolsstyle_fr.txt");
     }
 
 //    if (d->_pad) {
@@ -287,16 +358,6 @@ void PadWriter::changeRawSourceScenario(QAction *a)
 //    }
     d->ui->rawSource->setHtml(source);
     analyseRawSource();
-}
-
-QString PadWriter::htmlResult() const
-{
-    return d->ui->wysiwyg->toHtml();
-}
-
-QString PadWriter::rawSource() const
-{
-    return d->ui->rawSource->toPlainText();
 }
 
 void PadWriter::expandTokenTreeView()
@@ -449,30 +510,10 @@ void PadWriter::onPadFragmentChanged(PadFragment *fragment)
 //    Constants::setPadFragmentFormat("Follow", d->_followedItem->outputStart(), d->_followedItem->outputEnd(), doc, d->_followedItemCharFormats, d->_followedCharFormat);
 }
 
-void PadWriter::highLightNextBlock()
-{
-    WARN_FUNC;
-    QTextCursor c(d->ui->wysiwyg->document());
-    qWarning() << c.blockNumber();
-    QTextBlockFormat f;
-    f.setBackground(QBrush(QColor(Qt::white)));
-    c.blockFormat().merge(f);
+//bool PadWriter::event(QEvent *event)
+//{
+//    if (event->type()==QEvent::ToolTip) {
 
-    f.setBackground(QBrush(QColor(Qt::lightGray)));
-    QTextBlock b = c.block().next();
-    b.blockFormat().merge(f);
-}
-
-void PadWriter::highLightPreviousBlock()
-{
-    WARN_FUNC;
-    QTextCursor c(d->ui->wysiwyg->document());
-    qWarning() << c.blockNumber();
-    QTextBlockFormat f;
-    f.setBackground(QBrush(QColor(Qt::white)));
-    c.blockFormat().merge(f);
-
-    f.setBackground(QBrush(QColor(Qt::lightGray)));
-    QTextBlock b = c.block().previous();
-    b.blockFormat().merge(f);
-}
+//    }
+//    return Core::IPadWriter::event(event);
+//}

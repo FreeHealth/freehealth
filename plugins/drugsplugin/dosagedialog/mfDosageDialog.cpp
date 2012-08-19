@@ -28,6 +28,7 @@
 
 #include <drugsbaseplugin/dosagemodel.h>
 #include <drugsbaseplugin/drugsmodel.h>
+#include <drugsbaseplugin/constants.h>
 
 #include <drugsplugin/constants.h>
 #include <drugsplugin/drugswidget/druginfo.h>
@@ -90,8 +91,8 @@ DosageDialog::DosageDialog(QWidget *parent)
     setWindowTitle(tr("Drug Dosage") + " - " + qApp->applicationName());
 
     // make connections
-    connect(drugModel(), SIGNAL(prescriptionResultChanged(const QString &)),
-             resultTextBrowser, SLOT(setPlainText(const QString &)));
+    connect(drugModel(), SIGNAL(dataChanged(QModelIndex,QModelIndex)),
+             this, SLOT(updatePosologicSentence(QModelIndex,QModelIndex)));
 }
 
 /** \brief Destructor, frees mapper */
@@ -130,12 +131,15 @@ void DosageDialog::changeRow(const QVariant &drugUid, const int drugRow)
 /**
   \brief Closes the dialog.
   \li If the dialog is accepted, retreive the prescribed form and store it into the settings is needed.
-  \todo If the dialog is accepted and no dosage exists in the dosage model --> create a dosage in the dosage model
 */
 void DosageDialog::done(int r)
 {
     // modify focus for the dosage viewer mapper to commit changes
     drugNameButton->setFocus();
+
+    disconnect(drugModel(), SIGNAL(dataChanged(QModelIndex,QModelIndex)),
+             this, SLOT(updatePosologicSentence(QModelIndex,QModelIndex)));
+
     dosageViewer->commitToModel();
 
     if (r == QDialog::Accepted) {
@@ -163,3 +167,7 @@ void DosageDialog::on_innButton_clicked()
     }
 }
 
+void DosageDialog::updatePosologicSentence(const QModelIndex &, const QModelIndex &)
+{
+    resultTextBrowser->setPlainText(drugModel()->data(drugModel()->index(d->m_DrugRow, DrugsDB::Constants::Drug::FullPrescription)).toString());
+}

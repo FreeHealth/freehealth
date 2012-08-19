@@ -123,6 +123,12 @@ QString AlertPreferencesPage::category() const
     return tkTr(Trans::Constants::ALERTS);
 }
 
+int AlertPreferencesPage::sortIndex() const
+{
+    return 0;
+}
+
+
 /*! Resets the whole preferences page to the default settings of the settings data model. */
 void AlertPreferencesPage::resetToDefaults()
 {

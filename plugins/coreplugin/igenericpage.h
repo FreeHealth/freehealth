@@ -31,10 +31,8 @@
 /**
  * \file igenericpage.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.0
- * \date 12 Jul 2011
- * \class Core::IGenericPage
-* \brief Represents an application preferences page. Derive objects from this interface and set it inside the PluginManager object pool to get a paged widget Core::PageWidget.
+ * \version 0.8.0
+ * \date 16 Aug 2012
 */
 
 namespace Core {
@@ -57,18 +55,13 @@ public:
     /** Define the category to use. You can use path encoded tree for eg: <em>first/second/third</em>.*/
     virtual QString category() const = 0;
 
+    /** Define the sort index of the page. Larger the index, the higher is the element at the end of the list.*/
+    virtual int sortIndex() const = 0;
+
     /** Create the widget. */
     virtual QWidget *createPage(QWidget *parent = 0) = 0;
 
-
-/*
-    virtual void resetToDefaults() = 0;
-    virtual void checkSettingsValidity() = 0;
-    virtual void applyChanges() = 0;
-    virtual void finish() = 0;
-
-    virtual QString helpPage() = 0;
-*/
+    static bool lessThan(IGenericPage *one, IGenericPage *two);
 };
 
 } // namespace Core

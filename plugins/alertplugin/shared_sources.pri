@@ -6,6 +6,7 @@ TEMPLATE = lib
 TARGET = Alert
 
 DEFINES += ALERT_LIBRARY
+with-pad { DEFINES += WITH_PAD }
 
 QT *= sql
 

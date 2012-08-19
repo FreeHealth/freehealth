@@ -27,8 +27,6 @@
 #ifndef VIRTUALDATABASEPREFERENCES_H
 #define VIRTUALDATABASEPREFERENCES_H
 
-#include <coreplugin/ioptionspage.h>
-
 #include <QWidget>
 
 #include "ui_virtualbasepage.h"

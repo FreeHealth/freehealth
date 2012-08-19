@@ -54,16 +54,11 @@ class TokenModel : public QStandardItemModel
 public:
     enum DataRepresentation {
         TokenName = 0,
-        TokenValue,
+//        TokenValue,
         ColumnCount
     };
 
     explicit TokenModel(QObject *parent = 0);
-
-    // OBSOLETE
-    void setTokens(const QMap<QString, QVariant> &tokens);
-    QMap<QString, QVariant> &tokens();
-    // END
 
     Core::ITokenPool *tokenPool() const;
 

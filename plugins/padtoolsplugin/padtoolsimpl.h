@@ -36,7 +36,6 @@
  * \date 25 Apr 2012
 */
 
-
 namespace Core {
 class ITokenPool;
 }
@@ -53,8 +52,10 @@ public:
 
     Core::ITokenPool *tokenPool() const;
 
-    QString parse(const QString &templ, QMap<QString,QVariant> &tokens, QList<Core::PadAnalyzerError> &errors);
-    QSyntaxHighlighter *createSyntaxHighlighter(QTextEdit *textEdit, QMap<QString,QVariant> &tokens);
+    QString processPlainText(const QString &plainText);
+    QString processHtml(const QString &html);
+
+    Core::IPadWriter *createWriter(QWidget *parent = 0);
 
 private:
     PadTools::TokenPool *_pool;
@@ -62,4 +63,4 @@ private:
 
 }
 
-#endif
+#endif  // PADTOOLS_IMPL_H

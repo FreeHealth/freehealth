@@ -24,8 +24,8 @@
  *  Contributors :                                                         *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
-#ifndef PAD_ANALYZER_H
-#define PAD_ANALYZER_H
+#ifndef PADTOOLS_PAD_ANALYZER_H
+#define PADTOOLS_PAD_ANALYZER_H
 
 #include <QString>
 #include <QStack>
@@ -45,11 +45,11 @@
 */
 
 namespace PadTools {
+class PadDocument;
+
 namespace Internal {
 class PadAnalyzerPrivate;
 }
-
-/** \todo make jobs asynchronous and threaded */
 
 class PadAnalyzer : public QObject
 {
@@ -69,4 +69,4 @@ private:
 
 } // PadTools
 
-#endif
+#endif  // PADTOOLS_PAD_ANALYZER

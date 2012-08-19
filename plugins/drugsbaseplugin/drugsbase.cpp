@@ -1041,40 +1041,6 @@ QString DrugsBase::getDrugName(const QString &uid1, const QString &uid2, const Q
 /** \brief Retrieve and return the drug according to its uids. */
 IDrug *DrugsBase::getDrugByUID(const QVariant &uid1, const QVariant &uid2, const QVariant &uid3, const QVariant &oldUid, const QString &srcUid)
 {
-    // Before SID caching
-//    "Chrono - DrugsIO" "1 ms: xxxxx"
-//    "Chrono - DrugsBase" "0 ms: Reading drug"
-//    "Chrono - DrugsBase" "0 ms: Prepare query"
-//    "Chrono - DrugsBase" "60 ms: Query.next()"
-//    "Chrono - DrugsBase" "1 ms: Query.finish"
-//    "Chrono - DrugsBase" "22 ms: Get Compo"
-//    "Chrono - DrugsIO" "95 ms: Reading drug0.30% POTASSIUM CHLORIDE IN 5% DEXTROSE AND 0.45% SODIUM CHLORIDE INJECTION"
-//    "Chrono - DrugsIO" "0 ms: Reading dose0.30% POTASSIUM CHLORIDE IN 5% DEXTROSE AND 0.45% SODIUM CHLORIDE INJECTION"
-//    "Chrono - DrugsBase" "0 ms: Reading drug"
-//    "Chrono - DrugsBase" "1 ms: Prepare query"
-//    "Chrono - DrugsBase" "60 ms: Query.next()"
-//    "Chrono - DrugsBase" "0 ms: Query.finish"
-//    "Chrono - DrugsBase" "9 ms: Get Compo"
-//    "Chrono - DrugsIO" "71 ms: Reading drugALDACTAZIDE 25"
-//    "Chrono - DrugsIO" "0 ms: Reading doseALDACTAZIDE 25"
-
-    // After SID caching
-//    "Chrono - DrugsIO" "1 ms: xxxxx"
-//    "Chrono - DrugsBase" "0 ms: Reading drug"
-//    "Chrono - DrugsBase" "1 ms: Prepare query"
-//    "Chrono - DrugsBase" "20 ms: Query.next()"
-//    "Chrono - DrugsBase" "1 ms: Query.finish"
-//    "Chrono - DrugsBase" "39 ms: Get Compo"
-//    "Chrono - DrugsIO" "71 ms: Reading drug0.30% POTASSIUM CHLORIDE IN 5% DEXTROSE AND 0.45% SODIUM CHLORIDE INJECTION"
-//    "Chrono - DrugsIO" "0 ms: Reading dose0.30% POTASSIUM CHLORIDE IN 5% DEXTROSE AND 0.45% SODIUM CHLORIDE INJECTION"
-//    "Chrono - DrugsBase" "0 ms: Reading drug"
-//    "Chrono - DrugsBase" "0 ms: Prepare query"
-//    "Chrono - DrugsBase" "11 ms: Query.next()"
-//    "Chrono - DrugsBase" "0 ms: Query.finish"
-//    "Chrono - DrugsBase" "4 ms: Get Compo"
-//    "Chrono - DrugsIO" "15 ms: Reading drugALDACTAZIDE 25"
-//    "Chrono - DrugsIO" "0 ms: Reading doseALDACTAZIDE 25"
-
 //    QTime time;
 //    time.start();
 
@@ -1383,7 +1349,9 @@ QStringList DrugsBase::getFormLabels(const QVariant &drugId, const QString &lang
     QSqlQuery query(req, DB);
     if (query.isActive()) {
         while (query.next()) {
-            toReturn << query.value(0).toString();
+            const QString &form = query.value(0).toString();
+            if (!form.isEmpty())
+                toReturn << form;
         }
     } else {
         LOG_QUERY_ERROR(query);

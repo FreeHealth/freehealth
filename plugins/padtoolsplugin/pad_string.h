@@ -24,8 +24,8 @@
  *  Contributors :                                                         *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
-#ifndef MASK_STRING_H
-#define MASK_STRING_H
+#ifndef PADTOOLS_PAD_STRING_H
+#define PADTOOLS_PAD_STRING_H
 
 #include <QString>
 
@@ -62,4 +62,4 @@ private:
 
 }  // PadTools
 
-#endif
+#endif  // PADTOOLS_PAD_STRING

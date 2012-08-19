@@ -300,6 +300,7 @@ public:
     QString id() const       { return objectName();   }
     QString name() const;
     QString category() const;
+    int sortIndex() const;
 
     void refreshContents();
 

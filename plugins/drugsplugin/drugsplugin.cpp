@@ -35,7 +35,11 @@
 
 #include "drugsplugin.h"
 #include "constants.h"
-#include "drugspreferences/mfDrugsPreferences.h"
+#include "drugspreferences/druggeneralpreferences.h"
+#include "drugspreferences/drugselectorpreferences.h"
+#include "drugspreferences/drugposologicsentencepreferences.h"
+#include "drugspreferences/druguserpreferences.h"
+#include "drugspreferences/drugextrapreferences.h"
 #include "drugspreferences/databaseselectorwidget.h"
 #include "drugspreferences/protocolpreferencespage.h"
 #include "drugspreferences/drugenginespreferences.h"
@@ -70,7 +74,7 @@ static inline DrugsDB::DrugsBase &drugsBase() {return DrugsDB::DrugBaseCore::ins
 DrugsPlugin::DrugsPlugin() :
     viewPage(0),
     selectorPage(0),
-    printPage(0),
+    posologicPage(0),
     userPage(0),
     extraPage(0),
     databaseSelectorPage(0),
@@ -87,11 +91,11 @@ DrugsPlugin::DrugsPlugin() :
 #endif
 
     // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("mfDrugsWidget");
+    Core::ICore::instance()->translators()->addNewTranslator("drugsplugin");
 
-    viewPage = new DrugsViewOptionsPage(this);
+    viewPage = new DrugGeneralOptionsPage(this);
     selectorPage = new DrugsSelectorOptionsPage(this);
-    printPage = new DrugsPrintOptionsPage(this);
+    posologicPage = new DrugPosologicSentencePage(this);
 #ifdef FREEDIAMS
     userPage = new DrugsUserOptionsPage(this);
 #endif
@@ -102,7 +106,7 @@ DrugsPlugin::DrugsPlugin() :
 
     addObject(viewPage);
     addObject(selectorPage);
-    addObject(printPage);
+    addObject(posologicPage);
 #ifdef FREEDIAMS
     addObject(userPage);
 #endif
@@ -158,7 +162,7 @@ void DrugsPlugin::postCoreOpened()
     if (!settings()->value(Constants::S_CONFIGURED, false).toBool()) {
         viewPage->writeDefaultSettings(Core::ICore::instance()->settings());
         selectorPage->writeDefaultSettings(Core::ICore::instance()->settings());
-        printPage->writeDefaultSettings(Core::ICore::instance()->settings());
+        posologicPage->writeDefaultSettings(Core::ICore::instance()->settings());
 #ifdef FREEDIAMS
         userPage->writeDefaultSettings(Core::ICore::instance()->settings());
 #endif
@@ -171,7 +175,7 @@ void DrugsPlugin::postCoreOpened()
     } else {
         viewPage->checkSettingsValidity();
         selectorPage->checkSettingsValidity();
-        printPage->checkSettingsValidity();
+        posologicPage->checkSettingsValidity();
 #ifdef FREEDIAMS
         userPage->checkSettingsValidity();
 #endif
@@ -212,9 +216,9 @@ ExtensionSystem::IPlugin::ShutdownFlag DrugsPlugin::aboutToShutdown()
         removeObject(extraPage);
         delete extraPage; extraPage=0;
     }
-    if (printPage) {
-        removeObject(printPage);
-        delete printPage; printPage=0;
+    if (posologicPage) {
+        removeObject(posologicPage);
+        delete posologicPage; posologicPage=0;
     }
     if (databaseSelectorPage) {
         removeObject(databaseSelectorPage);

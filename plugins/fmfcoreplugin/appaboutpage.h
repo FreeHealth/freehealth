@@ -55,6 +55,7 @@ public:
     QString id() const       { return objectName();   }
     QString name() const     { return tr("1. General"); }
     QString category() const { return tr("Application"); }
+    int sortIndex() const    { return 10;}
 
     QWidget *createPage(QWidget *parent = 0);
 };

@@ -69,16 +69,23 @@ private:
 
 }
 
-PadToolsPlugin::PadToolsPlugin()
+PadToolsPlugin::PadToolsPlugin() :
+    ExtensionSystem::IPlugin(),
+    _impl(0)
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating PadToolsPlugin";
     // Add Translator to the Application
     Core::ICore::instance()->translators()->addNewTranslator("padtoolsplugin");
+
+    // Create the Core::IPadTools implementation and register it to the Core::ICore::instance()
+    _impl = new PadToolsImpl(this);
+    Core::ICore::instance()->setPadTools(_impl);
 }
 
 PadToolsPlugin::~PadToolsPlugin()
 {
+    Core::ICore::instance()->setPadTools(0);
 }
 
 bool PadToolsPlugin::initialize(const QStringList &arguments, QString *errorString)
@@ -89,11 +96,10 @@ bool PadToolsPlugin::initialize(const QStringList &arguments, QString *errorStri
     Q_UNUSED(arguments);
     Q_UNUSED(errorString);
 
-    // Create the Core::IPadTools implementation and register it to the Core::ICore::instance()
-    PadToolsImpl *impl = new PadToolsImpl(this);
-    Core::ICore::instance()->setPadTools(impl);
+#ifdef FREEPAD
     Core::ICore::instance()->patient()->registerPatientTokens();
     Core::ICore::instance()->user()->registerUserTokens();
+#endif
 
     // Register testing tokens (A, B, C, D)
     Core::IToken *t;
@@ -115,13 +121,43 @@ bool PadToolsPlugin::initialize(const QStringList &arguments, QString *errorStri
     t->setUntranslatedHumanReadableName("TokenD");
     _tokens << t;
 
-    if (impl->tokenPool()) {
+//    t = new TestingToken("Prescription.Drug.brandname", "Drug");
+//    _tokens << t;
+//    t = new TestingToken("Prescription.Protocol.Quantity.From", "1");
+//    _tokens << t;
+//    t = new TestingToken("Prescription.Protocol.Quantity.to", "2");
+//    _tokens << t;
+//    t = new TestingToken("Prescription.Protocol.Quantity.Scheme", "Day");
+//    _tokens << t;
+//    t = new TestingToken("Prescription.Protocol.RepeatedDailyScheme", "repeat");
+//    _tokens << t;
+//    t = new TestingToken("Prescription.Protocol.Meal", "meal");
+//    _tokens << t;
+//    t = new TestingToken("Prescription.Protocol.Period.Value", "3");
+//    _tokens << t;
+//    t = new TestingToken("Prescription.Protocol.Period.Scheme", "month");
+//    _tokens << t;
+//    t = new TestingToken("Prescription.Protocol.Duration.From", "4");
+//    _tokens << t;
+//    t = new TestingToken("Prescription.Protocol.Duration.To", "5");
+//    _tokens << t;
+//    t = new TestingToken("Prescription.Protocol.Duration.Scheme", "weeks");
+//    _tokens << t;
+//    t = new TestingToken("Prescription.Protocol.Route", "route");
+//    _tokens << t;
+//    t = new TestingToken("Prescription.Protocol.Distribution.DailyScheme", "distrib");
+//    _tokens << t;
+//    t = new TestingToken("Prescription.Protocol.Quantity.MinInterval", "6");
+//    _tokens << t;
+//    t = new TestingToken("Prescription.Protocol.Note", "Note");
+//    _tokens << t;
+
+    if (_impl->tokenPool()) {
         LOG("Registering  testing tokens");
-        impl->tokenPool()->addTokens(_tokens);
+        _impl->tokenPool()->addTokens(_tokens);
     } else {
         LOG_ERROR("PadTools object is not available, can not register the testing tokens");
     }
-
     return true;
 }
 
@@ -132,7 +168,6 @@ void PadToolsPlugin::extensionsInitialized()
         qWarning() << "PadToolsPlugin::extensionsInitialized";
 
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
-
 }
 
 ExtensionSystem::IPlugin::ShutdownFlag PadToolsPlugin::aboutToShutdown()

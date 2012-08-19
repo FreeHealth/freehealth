@@ -513,7 +513,7 @@ void UserLastPage::initializePage()
 
     QTreeWidgetItem *contact = new QTreeWidgetItem(tree, QStringList() << tr("Contact"));
     contact->setFont(0, bold);
-    new QTreeWidgetItem(contact, QStringList() << tkTr(Trans::Constants::ADDRESS) << field("Address").toString());
+    new QTreeWidgetItem(contact, QStringList() << tkTr(Trans::Constants::FULLADDRESS) << field("Address").toString());
     new QTreeWidgetItem(contact, QStringList() << tkTr(Trans::Constants::ZIP_CODES) << field("Zipcode").toString());
     new QTreeWidgetItem(contact, QStringList() << tr("City") << field("City").toString());
     new QTreeWidgetItem(contact, QStringList() << tr("Country") << field("Country").toString());

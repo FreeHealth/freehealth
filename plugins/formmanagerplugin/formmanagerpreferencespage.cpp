@@ -71,6 +71,10 @@ QString FormPreferencesFileSelectorPage::id() const { return objectName(); }
 QString FormPreferencesFileSelectorPage::name() const { return tkTr(Trans::Constants::SELECTOR); }
 QString FormPreferencesFileSelectorPage::category() const { return tkTr(Trans::Constants::FORMS); }
 QString FormPreferencesFileSelectorPage::title() const {return tr("Patient file form selector");}
+int FormPreferencesFileSelectorPage::sortIndex() const
+{
+    return 0;
+}
 
 void FormPreferencesFileSelectorPage::resetToDefaults()
 {
@@ -165,6 +169,10 @@ QString FormPreferencesPage::id() const { return objectName(); }
 QString FormPreferencesPage::name() const { return tkTr(Trans::Constants::VIEWER); }
 QString FormPreferencesPage::category() const { return tkTr(Trans::Constants::FORMS); }
 QString FormPreferencesPage::title() const {return tr("Form and episode tree viewer");}
+int FormPreferencesPage::sortIndex() const
+{
+    return 10;
+}
 
 void FormPreferencesPage::resetToDefaults()
 {

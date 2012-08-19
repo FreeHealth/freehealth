@@ -35,6 +35,10 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/ipadtools.h>
 
+#include <utils/log.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_current.h>
+
 #include <QStandardItem>
 #include <QStringList>
 #include <QMimeData>
@@ -43,9 +47,13 @@
 
 using namespace PadTools;
 using namespace Internal;
+using namespace Trans::ConstantTranslations;
 
 namespace {
 static inline Core::ITokenPool *tokenPool() {return Core::ICore::instance()->padTools()->tokenPool();}
+
+const int TOKEN_UID = Qt::UserRole + 1;
+
 }
 
 namespace PadTools {
@@ -73,15 +81,43 @@ public:
         return ns;
     }
 
+    void createNamespace(const Core::TokenNamespace &ns, QStandardItem *parent = 0)
+    {
+        if (!parent)
+            parent = q->invisibleRootItem();
+        QString fullNs = parent->data(TOKEN_UID).toString();
+        fullNs.isEmpty() ? fullNs = ns.uid() : fullNs += "." + ns.uid();
+        QStandardItem *item = new QStandardItem(ns.humanReadableName());
+        item->setData(fullNs, TOKEN_UID);
+        if (!ns.tooltip().isEmpty())
+            item->setToolTip(ns.tooltip());
+        parent->appendRow(item);
+        _tokensNamespaceToItem.insert(fullNs, item);
+        foreach(const Core::TokenNamespace &child, ns.children()) {
+            createNamespace(child, item);
+        }
+    }
+
     void createTree()
     {
         // Create namespaces
+        for(int i=0; i < tokenPool()->rootNamespaceCount(); ++i) {
+            const Core::TokenNamespace &ns = tokenPool()->rootNamespaceAt(i);
+            Q_ASSERT(ns.isValid());
+            if (!ns.isValid()) {
+                LOG_ERROR_FOR("TokenModel", "Namespace not valid?");
+                continue;
+            }
+            createNamespace(ns);
+        }
+
+        // Add tokens to namespaces
         _tokens = tokenPool()->tokens();
         for(int i=0; i < _tokens.count(); ++i) {
             Core::IToken *token = _tokens.at(i);
-            QStringList ns = tokenNamespaces(token->fullName());
+            QStringList ns = tokenNamespaces(token->uid());
             QString name;
-            token->humanReadableName().isEmpty() ? name=token->fullName() : name=token->humanReadableName();
+            token->humanReadableName().isEmpty() ? name=token->uid() : name=token->humanReadableName();
 
             // token without namespace
             if (ns.count()==1) {
@@ -90,37 +126,19 @@ public:
                 q->invisibleRootItem()->appendRow(QList<QStandardItem*>() << item << new QStandardItem());
                 continue;
             }
-            // Create root category && all subs
-            QStandardItem *item = 0;
-            QStandardItem *parent = 0;
-            QString fullNs;
-            foreach(const QString &n, ns) {
-                // get parent
-                if (fullNs.isEmpty()) {
-                    parent = q->invisibleRootItem();
-                } else {
-                    parent = _tokensNamespaceToItem[fullNs];
-                    fullNs += ".";
-                }
-                // recreate ns
-                fullNs += n;
-
-                // create ns
-                item = _tokensNamespaceToItem[fullNs];
-                if (!item) {
-                    if (n==ns.last()) {
-                        token->humanReadableName().isEmpty() ? name=n : name=token->humanReadableName();
-                        item = new QStandardItem(name);
-                        item->setToolTip(token->tooltip());
-                        _tokensToItem.insert(token, item);
-                    } else {
-                        item = new QStandardItem(n);
-                        _tokensNamespaceToItem.insert(fullNs, item);
-                    }
-                    parent->appendRow(QList<QStandardItem*>() << item << new QStandardItem());
-                }
-
+            // get NS item
+            ns.takeLast();
+            QStandardItem *nsItem = _tokensNamespaceToItem.value(ns.join("."));
+            if (!nsItem) {
+                LOG_ERROR_FOR("TokenModel", "Namespace not found? " + token->uid());
+                nsItem = q->invisibleRootItem();
             }
+            // create token item
+            token->humanReadableName().isEmpty() ? name=token->uid() : name=token->humanReadableName();
+            QStandardItem *item = new QStandardItem(name);
+            item->setToolTip(token->tooltip());
+            _tokensToItem.insert(token, item);
+            nsItem->appendRow(QList<QStandardItem*>() << item << new QStandardItem());
         }
     }
 
@@ -143,43 +161,8 @@ TokenModel::TokenModel(QObject *parent) :
     d(new Internal::TokenModelPrivate(this))
 {
     Q_ASSERT(tokenPool());
-
-    // create tree
     d->createTree();
-
-//    // tmp: fill with dummy tokens
-//    d->m_Tokens.insert("Prescription.Drug.DRUG", "drug");
-//    d->m_Tokens.insert("Prescription.Drug.Q_FROM", "q_from");
-//    d->m_Tokens.insert("Prescription.Drug.Q_TO", "q_to");
-//    d->m_Tokens.insert("Prescription.Drug.Q_SCHEME", "q_scheme");
-//    d->m_Tokens.insert("Prescription.Drug.REPEATED_DAILY_SCHEME", "repeated daily scheme");
-//    d->m_Tokens.insert("Prescription.Drug.MEAL", "meal");
-//    d->m_Tokens.insert("PERIOD", "period");
-//    d->m_Tokens.insert("PERIOD_SCHEME", "period scheme");
-//    d->m_Tokens.insert("A", "This is A");
-//    d->m_Tokens.insert("B", "This is B");
-//    d->m_Tokens.insert("C", "This is C");
-//    d->m_Tokens.insert("D", "This is D");
-//    d->m_Tokens.insert("NULL", "");
-//    d->m_Tokens.insert("HTMLTOKEN", "<b>htmlToken</b>");
-
-//    d->createTree();
 }
-
-
-// OBSOLETE
-void TokenModel::setTokens(const QMap<QString, QVariant> &tokens)
-{
-    d->m_Tokens.clear();
-    d->m_Tokens = tokens;
-    reset();
-}
-
-QMap<QString, QVariant> &TokenModel::tokens()
-{
-    return d->m_Tokens;
-}
-// END OBSOLETE
 
 Core::ITokenPool *TokenModel::tokenPool() const
 {
@@ -208,6 +191,13 @@ QVariant TokenModel::data(const QModelIndex &index, int role) const
         QFont bold;
         bold.setBold(true);
         return bold;
+    }
+
+    if (role==Qt::ToolTipRole) {
+        Core::IToken *token = d->_tokensToItem.key(itemFromIndex(index));
+        if (!token)
+            return QStandardItemModel::data(index, role);
+        return token->tooltip();
     }
 
     return QStandardItemModel::data(index, role);
@@ -277,7 +267,7 @@ QMimeData *TokenModel::mimeData(const QModelIndexList &indexes) const
 //        }
 //    }
     Core::IToken *token = d->_tokensToItem.key(itemFromIndex(indexes.at(0)));
-    QString name = token->fullName(); // d->m_Tokens.keys().at(indexes.at(0).row());
+    QString name = token->uid(); // d->m_Tokens.keys().at(indexes.at(0).row());
     const QVariant &value = token->value();
     mimeData->setData(Constants::TOKENVALUE_MIME, value.toByteArray());
     mimeData->setData(Constants::TOKENNAME_MIME, name.toUtf8());

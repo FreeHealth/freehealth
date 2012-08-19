@@ -60,6 +60,10 @@ QString VirtualPatientBasePage::id() const { return objectName(); }
 QString VirtualPatientBasePage::name() const { return tr("Virtual database"); }
 QString VirtualPatientBasePage::category() const { return tkTr(Trans::Constants::GENERAL_PREFERENCES); }
 QString VirtualPatientBasePage::title() const {return tr("Virtual database");}
+int VirtualPatientBasePage::sortIndex() const
+{
+    return 0;
+}
 
 void VirtualPatientBasePage::finish() { delete m_Widget; }
 

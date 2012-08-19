@@ -26,7 +26,7 @@
 #ifndef CONSTANTTRANSLATIONS_DRUGS_H
 #define CONSTANTTRANSLATIONS_DRUGS_H
 
-#include <QCoreApplication>
+#include <qglobal.h>
 
 namespace Trans {
 namespace Constants {

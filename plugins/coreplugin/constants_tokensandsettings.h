@@ -44,6 +44,7 @@ namespace Constants {
 const char * const  TOKEN_DOCUMENTTITLE     = "DOCUMENTTITLE";
 
 // For Patients
+#ifndef WITH_PAD
 // OLD TOKENS (before v0.8.0)
 const char * const  TOKEN_PATIENTAGE        = "PATIENTAGE";
 const char * const  TOKEN_PATIENTYEARSOLD   = "PATIENTYEARSOLD";
@@ -62,31 +63,43 @@ const char * const  TOKEN_CLCR_UNIT         = "CLCR_UNIT";
 const char * const  TOKEN_DATE              = "DATE";
 const char * const  TOKEN_NUMBEROFDRUGS     = "NBDRUGS";
 // END
-
+#else
 // NEW TOKENS (>= v0.8.0)
-//const char * const  TOKEN_PATIENTAGE        = "Patient.Age.FullAge";
-//const char * const  TOKEN_PATIENTYEARSOLD   = "Patient.Age.YearsOld";
-//const char * const  TOKEN_PATIENTDATEOFBIRTH= "Patient.Age.DateOfBirth";
-//const char * const  TOKEN_PATIENTDATEOFDEATH= "Patient.Age.DateOfDeath";
-//const char * const  TOKEN_PATIENTFULLNAME   = "Patient.Name.Full";
-//const char * const  TOKEN_PATIENTNAME       = "Patient.Name.BirthName";
-//const char * const  TOKEN_PATIENTSECONDNAME = "Patient.Name.SecondName";
-//const char * const  TOKEN_PATIENTFIRSTNAME  = "Patient.Name.FirstName";
-//const char * const  TOKEN_PATIENTTITLE      = "Patient.Name.Title";
-//const char * const  TOKEN_PATIENTFULLADDRESS= "Patient.Address.Full";
+const char * const  TOKEN_PATIENT_NAMESPACE          = "Patient";
 
-//const char * const  TOKEN_WEIGHT            = "Patient.Metrics.Weight";
-//const char * const  TOKEN_WEIGHT_UNIT       = "Patient.Metrics.WeightUnit";
-//const char * const  TOKEN_HEIGHT            = "Patient.Metrics.Height";
-//const char * const  TOKEN_HEIGHT_UNIT       = "Patient.Metrics.HeightUnit";
-//const char * const  TOKEN_CLCR              = "Patient.Biology.CreatininClearance";
-//const char * const  TOKEN_CLCR_UNIT         = "Patient.Biology.CreatininClearanceUnit";
+const char * const  TOKEN_PATIENTAGE                 = "Patient.Age.FullAge";
+const char * const  TOKEN_PATIENTYEARSOLD            = "Patient.Age.YearsOld";
+const char * const  TOKEN_PATIENTDATEOFBIRTH         = "Patient.Age.DateOfBirth";
+const char * const  TOKEN_PATIENTDATEOFDEATH         = "Patient.Age.DateOfDeath";
+const char * const  TOKEN_PATIENTFULLNAME            = "Patient.Identity.FullName";
+const char * const  TOKEN_PATIENTNAME                = "Patient.Identity.BirthName";
+const char * const  TOKEN_PATIENTSECONDNAME          = "Patient.Identity.SecondName";
+const char * const  TOKEN_PATIENTFIRSTNAME           = "Patient.Identity.FirstName";
+const char * const  TOKEN_PATIENTTITLE               = "Patient.Identity.Title";
+const char * const  TOKEN_PATIENTFULLADDRESS         = "Patient.Address.FullAddress";
+const char * const  TOKEN_PATIENTADDRESS_STREET      = "Patient.Address.Street";
+const char * const  TOKEN_PATIENTADDRESS_CITY        = "Patient.Address.City";
+const char * const  TOKEN_PATIENTADDRESS_ZIP         = "Patient.Address.Zip";
+const char * const  TOKEN_PATIENTADDRESS_COUNTRY     = "Patient.Address.Country";
+const char * const  TOKEN_PATIENTCONTACT_EMAIL       = "Patient.Contact.Email";
+const char * const  TOKEN_PATIENTCONTACT_TELS        = "Patient.Contact.Tels";
+const char * const  TOKEN_PATIENTCONTACT_FAX         = "Patient.Contact.Fax";
+const char * const  TOKEN_PATIENTCONTACT_MOBILEPHONE = "Patient.Contact.MobilePhone";
 
-//const char * const  TOKEN_DATE              = "DATE";
-//const char * const  TOKEN_NUMBEROFDRUGS     = "NBDRUGS";
+const char * const  TOKEN_WEIGHT            = "Patient.Metrics.Weight";
+const char * const  TOKEN_WEIGHT_UNIT       = "Patient.Metrics.WeightUnit";
+const char * const  TOKEN_HEIGHT            = "Patient.Metrics.Height";
+const char * const  TOKEN_HEIGHT_UNIT       = "Patient.Metrics.HeightUnit";
+const char * const  TOKEN_CLCR              = "Patient.Biology.CreatininClearance";
+const char * const  TOKEN_CLCR_UNIT         = "Patient.Biology.CreatininClearanceUnit";
+
+const char * const  TOKEN_DATE              = "DATE";
+const char * const  TOKEN_NUMBEROFDRUGS     = "NBDRUGS";
 // END
+#endif
 
 // For Users
+#ifndef WITH_PAD
 // OLD TOKENS (before v0.8.0)
 const char * const  TOKEN_USERAGE            = "USERAGE";
 const char * const  TOKEN_USERYEARSOLD       = "USERYEARSOLD";
@@ -107,50 +120,73 @@ const char * const  TOKEN_USERFAX            = "USERFAX";
 const char * const  TOKEN_USERFULLADDRESS    = "USERFULLADDRESS";
 const char * const  TOKEN_USERFULLCONTACT    = "USERFULLCONTACT";
 // END
+#else
+const char * const  TOKEN_USER_NAMESPACE     = "User";
 
-//const char * const  TOKEN_USERAGE            = "User.Age.FullAge";
-//const char * const  TOKEN_USERYEARSOLD       = "User.Age.YearsOld";
-//const char * const  TOKEN_USERFULLNAME       = "User.Name.FullName";
-//const char * const  TOKEN_USERTITLE          = "User.Name.Title";
-//const char * const  TOKEN_USERBIRTHNAME      = "User.Name.BirthName";
-//const char * const  TOKEN_USERSECONDNAME     = "User.Name.SecondName";
-//const char * const  TOKEN_USERFIRSTNAME      = "User.Name.FirstName";
-//const char * const  TOKEN_USERSPECIALITIES   = "User.Professional.Specialties";
-//const char * const  TOKEN_USERIDENTIFIER     = "User.Professional.Identifiants";
-//const char * const  TOKEN_USERQUALIFICATIONS = "User.Professional.Qualifications";
-//const char * const  TOKEN_USERADDRESS        = "User.Contact.Address";
-//const char * const  TOKEN_USERMAIL           = "User.Contact.Mail";
-//const char * const  TOKEN_USERTEL1           = "User.Contact.Tel1";
-//const char * const  TOKEN_USERTEL2           = "User.Contact.Tel2";
-//const char * const  TOKEN_USERTEL3           = "User.Contact.Tel3";
-//const char * const  TOKEN_USERFAX            = "User.Contact.Fax";
-//const char * const  TOKEN_USERFULLADDRESS    = "User.Contact.FullAddress";
-//const char * const  TOKEN_USERFULLCONTACT    = "User.Contact.FullContact";
+const char * const  TOKEN_USERDATEOFBIRTH    = "User.Age.DateOfBirth";
+const char * const  TOKEN_USERAGE            = "User.Age.FullAge";
+const char * const  TOKEN_USERYEARSOLD       = "User.Age.YearsOld";
+const char * const  TOKEN_USERFULLNAME       = "User.Identity.FullName";
+const char * const  TOKEN_USERTITLE          = "User.Identity.Title";
+const char * const  TOKEN_USERBIRTHNAME      = "User.Identity.BirthName";
+const char * const  TOKEN_USERSECONDNAME     = "User.Identity.SecondName";
+const char * const  TOKEN_USERFIRSTNAME      = "User.Identity.FirstName";
+const char * const  TOKEN_USERSPECIALITIES   = "User.Professional.Specialties";
+const char * const  TOKEN_USERIDENTIFIER     = "User.Professional.Identifiants";
+const char * const  TOKEN_USERQUALIFICATIONS = "User.Professional.Qualifications";
+const char * const  TOKEN_USERADDRESS        = "User.Contact.Address";
+const char * const  TOKEN_USERMAIL           = "User.Contact.Mail";
+const char * const  TOKEN_USERTEL1           = "User.Contact.Tel1";
+const char * const  TOKEN_USERTEL2           = "User.Contact.Tel2";
+const char * const  TOKEN_USERTEL3           = "User.Contact.Tel3";
+const char * const  TOKEN_USERFAX            = "User.Contact.Fax";
+const char * const  TOKEN_USERFULLADDRESS    = "User.Contact.FullAddress";
+const char * const  TOKEN_USERFULLCONTACT    = "User.Contact.FullContact";
+#endif
 
+// For Prescriptions
+#ifdef WITH_PAD
+const char * const  TOKEN_PRESC_DRUGNAME             = "Prescription.Drug.brandname";
+const char * const  TOKEN_PRESC_Q_FROM               = "Prescription.Protocol.Quantity.From";
+const char * const  TOKEN_PRESC_Q_TO                 = "Prescription.Protocol.Quantity.to";
+const char * const  TOKEN_PRESC_Q_SCHEME             = "Prescription.Protocol.Quantity.Scheme";
+const char * const  TOKEN_PRESC_MEAL                 = "Prescription.Protocol.Meal";
+const char * const  TOKEN_PRESC_PERIOD_VALUE         = "Prescription.Protocol.Period.Value";
+const char * const  TOKEN_PRESC_PERIOD_SCHEME        = "Prescription.Protocol.Period.Scheme";
+const char * const  TOKEN_PRESC_D_FROM               = "Prescription.Protocol.Duration.From";
+const char * const  TOKEN_PRESC_D_TO                 = "Prescription.Protocol.Duration.To";
+const char * const  TOKEN_PRESC_D_SCHEME             = "Prescription.Protocol.Duration.Scheme";
+const char * const  TOKEN_PRESC_ROUTE                = "Prescription.Protocol.Route";
+const char * const  TOKEN_PRESC_DISTRIB_DAILYSCHEME  = "Prescription.Protocol.DailyScheme.Distributed";
+const char * const  TOKEN_PRESC_REPEATED_DAILYSCHEME = "Prescription.Protocol.DailyScheme.Repeated";
+const char * const  TOKEN_PRESC_MININTERVAL_VALUE    = "Prescription.Protocol.Quantity.MinInterval.Value";
+const char * const  TOKEN_PRESC_MININTERVAL_SCHEME   = "Prescription.Protocol.Quantity.MinInterval.Scheme";
+const char * const  TOKEN_PRESC_NOTE                 = "Prescription.Protocol.Note";
+#endif
 
 // Some path tags
-const char * const  TAG_APPLICATION_RESOURCES_PATH = "__appResources__";
-const char * const  TAG_APPLICATION_THEME_PATH     = "__theme__";
-const char * const  TAG_APPLICATION_COMPLETEFORMS_PATH = "__completeForms__";
-const char * const  TAG_APPLICATION_SUBFORMS_PATH = "__subForms__";
+const char * const  TAG_APPLICATION_RESOURCES_PATH          = "__appResources__";
+const char * const  TAG_APPLICATION_THEME_PATH              = "__theme__";
+const char * const  TAG_APPLICATION_COMPLETEFORMS_PATH      = "__completeForms__";
+const char * const  TAG_APPLICATION_SUBFORMS_PATH           = "__subForms__";
 const char * const  TAG_APPLICATION_USER_COMPLETEFORMS_PATH = "__userCompleteForms__";
-const char * const  TAG_APPLICATION_USER_SUBFORMS_PATH = "__userSubForms__";
-const char * const  TAG_DATAPACK_COMPLETEFORMS_PATH = "__datapackCompleteForms__";
-const char * const  TAG_DATAPACK_SUBFORMS_PATH = "__datapackSubForms__";
-const char * const  TAG_USER_DOCUMENT_PATH = "__userDocuments__";
-const char * const  TAG_USER_RESOURCES_PATH = "__userResources__";
+const char * const  TAG_APPLICATION_USER_SUBFORMS_PATH      = "__userSubForms__";
+const char * const  TAG_DATAPACK_COMPLETEFORMS_PATH         = "__datapackCompleteForms__";
+const char * const  TAG_DATAPACK_SUBFORMS_PATH              = "__datapackSubForms__";
+const char * const  TAG_USER_DOCUMENT_PATH                  = "__userDocuments__";
+const char * const  TAG_USER_RESOURCES_PATH                 = "__userResources__";
 
 // Settings keys
-const char * const  S_RECENTFILES_GROUP = "RecentFiles";
-const char * const  S_RECENTFILES_KEY   = "File";
+const char * const  S_RECENTFILES_GROUP    = "RecentFiles";
+const char * const  S_RECENTFILES_KEY      = "File";
 const char * const  S_PATIENT_UUID_HISTORY = "PatientsUuids";
-const char * const  S_SAVEINTERVAL      = "Core/SaveInterval";
-const char * const  S_OPENLAST          = "Core/OpenLastOpenedFile";
-const char * const  S_SHOWHELPTEXT      = "Core/ShowFormHelpText";
-const char * const  S_LASTLOGIN         = "Login/userLogin";
-const char * const  S_LASTPASSWORD      = "Login/userPassword";
-const char * const  S_DATEFORMAT        = "Dates/Format";
-const char * const  S_PREFERREDLANGUAGE  = "Core/preferredLanguage";
+const char * const  S_SAVEINTERVAL         = "Core/SaveInterval";
+const char * const  S_OPENLAST             = "Core/OpenLastOpenedFile";
+const char * const  S_SHOWHELPTEXT         = "Core/ShowFormHelpText";
+const char * const  S_LASTLOGIN            = "Login/userLogin";
+const char * const  S_LASTPASSWORD         = "Login/userPassword";
+const char * const  S_DATEFORMAT           = "Dates/Format";
+const char * const  S_PREFERREDLANGUAGE    = "Core/preferredLanguage";
 
 const char * const  S_DEF_PATIENTFORMS_FILENAME  = "gp_basic1";
 
@@ -161,7 +197,7 @@ const char * const  S_EXTERNAL_DATABASE_HOST = "ExternalDatabase/Host";
 const char * const  S_EXTERNAL_DATABASE_PORT = "ExternalDatabase/Port";
 
 const char * const  S_ALWAYS_SAVE_WITHOUT_PROMPTING = "Core/SaveInDatabaseWithoutPrompringUser";
-const char * const  S_ALLOW_VIRTUAL_DATA = "Core/AllowAndUseVirtuals";
+const char * const  S_ALLOW_VIRTUAL_DATA            = "Core/AllowAndUseVirtuals";
 
 const char * const  S_PROXY = "Core/Proxy";
 

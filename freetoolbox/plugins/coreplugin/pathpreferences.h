@@ -87,6 +87,7 @@ public:
     QString name() const;
     QString category() const;
     QString title() const {return name();}
+    int sortIndex() const    { return 20;}
 
     void resetToDefaults();
     void checkSettingsValidity();

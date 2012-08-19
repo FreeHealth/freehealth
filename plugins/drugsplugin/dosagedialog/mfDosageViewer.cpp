@@ -126,7 +126,7 @@ public:
             m_Mapper->addMapping(q->durationCombo, Prescription::DurationScheme, "currentText");
 
             m_Mapper->addMapping(q->minIntervalIntakesSpin, Prescription::IntakesIntervalOfTime, "value");
-            m_Mapper->addMapping(q->intervalTimeSchemeCombo, Prescription::IntakesIntervalScheme, "currentIndex");
+            m_Mapper->addMapping(q->intervalTimeSchemeCombo, Prescription::IntakesIntervalSchemeIndex, "currentIndex");
             m_Mapper->addMapping(q->mealTimeCombo, Prescription::MealTimeSchemeIndex, "currentIndex");
             m_Mapper->addMapping(q->noteTextEdit, Prescription::Note, "plainText");
 
@@ -191,8 +191,9 @@ public:
             // Label
             q->labelLineEdit->setText(m_DosageModel->index(row, Dosages::Constants::Label).data().toString());
             // Intakes
+            QString intakescheme = m_DosageModel->index(row, Dosages::Constants::IntakesScheme).data().toString();
             q->intakesCombo->setCurrentIndex(-1);
-            q->intakesCombo->setEditText(m_DosageModel->index(row, Dosages::Constants::IntakesScheme).data().toString());
+            q->intakesCombo->setEditText(intakescheme);
             // Period
             q->periodSpin->setValue(m_DosageModel->index(row, Dosages::Constants::Period).data().toDouble());
             q->periodSchemeCombo->setEditText(m_DosageModel->index(row, Dosages::Constants::PeriodScheme).data().toString());
@@ -214,7 +215,7 @@ public:
             // populate DailSchemeModel
             DrugsDB::DailySchemeModel *daily = q->dailyScheme->model();
             Q_ASSERT(daily);
-            daily->setSerializedContent(m_DosageModel->index(row, Dosages::Constants::DailyScheme).data().toString());
+            daily->setSerializedContent(m_DosageModel->index(row, Dosages::Constants::SerializedDailyScheme).data().toString());
 //            q->dailySchemeView->resizeColumnsToContents();
 
             int  inn = m_DosageModel->index(row, Dosages::Constants::INN_LK).data().toInt();
@@ -229,8 +230,10 @@ public:
             q->labelOfDosageLabel->hide();
 
             // Intakes
+            QString intakescheme = drugModel()->drugData(m_DrugId, Prescription::IntakesScheme).toString();
             q->intakesCombo->setCurrentIndex(-1);
-            q->intakesCombo->setEditText(drugModel()->drugData(m_DrugId, Prescription::IntakesScheme).toString());
+            q->intakesCombo->setEditText(intakescheme);
+
             // Period
             q->periodSpin->setValue(drugModel()->drugData(m_DrugId, Prescription::Period).toDouble());
             q->periodSchemeCombo->setEditText(drugModel()->drugData(m_DrugId, Prescription::PeriodScheme).toString());
@@ -253,7 +256,7 @@ public:
             // populate DailSchemeModel
             DrugsDB::DailySchemeModel *daily = q->dailyScheme->model();
             Q_ASSERT(daily);
-            daily->setSerializedContent(drugModel()->drugData(m_DrugId, Prescription::DailyScheme).toString());
+            daily->setSerializedContent(drugModel()->drugData(m_DrugId, Prescription::SerializedDailyScheme).toString());
 //            q->dailySchemeView->resizeColumnsToContents();
         }
 
@@ -503,22 +506,22 @@ void DosageViewer::changeCurrentRow(const int dosageRow)
 /** \brief Only provided because of focus bug */
 void DosageViewer::commitToModel()
 {
-    d->m_Mapper->submit();
     // populate DailyShemeModel
     // TODO: Create and Use DailySchemeViewer Properties
     DrugsDB::DailySchemeModel *daily = dailyScheme->model();
     Q_ASSERT(daily);
     if (d->m_DosageModel) {
         if (daily) {
-            d->m_DosageModel->setData(d->m_DosageModel->index(d->m_Mapper->currentIndex(), Dosages::Constants::DailyScheme), daily->serializedContent());
+            d->m_DosageModel->setData(d->m_DosageModel->index(d->m_Mapper->currentIndex(), Dosages::Constants::SerializedDailyScheme), daily->serializedContent());
         }
 //        d->m_DosageModel->setData(d->m_DosageModel->index(d->m_Mapper->currentIndex(), Dosages::Constants::Route), routeId);
     } else {
         if (daily) {
-            drugModel()->setDrugData(d->m_DrugId, DrugsDB::Constants::Prescription::DailyScheme, daily->serializedContent());
+            drugModel()->setDrugData(d->m_DrugId, DrugsDB::Constants::Prescription::SerializedDailyScheme, daily->serializedContent());
         }
 //        drugModel()->setDrugData(d->m_DrugId, DrugsDB::Constants::Prescription::Route, routeId);
     }
+    d->m_Mapper->submit();
 }
 
 
