@@ -100,7 +100,7 @@ bool FrenchZipCodesStep::createDir()
 {
     // Create the wortking path
     if (!QDir().mkpath(workingPath()))
-        LOG_ERROR("Unable to create ICD10 Working Path: " + workingPath());
+        LOG_ERROR("Unable to create ZipCodes Working Path: " + workingPath());
     else
         LOG("Tmp dir created");
 
