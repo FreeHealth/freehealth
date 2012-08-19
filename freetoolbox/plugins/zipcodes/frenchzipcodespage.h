@@ -70,7 +70,6 @@ public:
     bool prepareData();
     bool createDatabase();
     bool populateDatabase();
-//    bool linkMolecules();
 
     QStringList errors() const {return m_Errors;}
 
