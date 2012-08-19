@@ -19,8 +19,8 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developper : Eric MAEKER, MD <eric.maeker@gmail.com>             *
- *   Contributors :                                                        *
+ *   Main Developer: Eric MAEKER, MD <eric.maeker@gmail.com>               *
+ *   Contributors:                                                         *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
@@ -146,7 +146,7 @@ bool FrenchZipCodesStep::process()
 
 bool FrenchZipCodesStep::unzipFiles()
 {
-    Q_EMIT progressLabelChanged(tr("French zip codes database creation : unziping files..."));
+    Q_EMIT progressLabelChanged(tr("French zip codes database creation: unziping files..."));
     Q_EMIT progressRangeChanged(0, 1);
     Q_EMIT progress(0);
 
