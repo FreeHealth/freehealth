@@ -43,5 +43,5 @@ SOURCES += $${PWD}/uniqueidmanager.cpp \
     $${PWD}/iuser.cpp \
     $${PWD}/idocumentprinter.cpp \
     $${PWD}/ipadtools.cpp \
-    ../../../plugins/coreplugin/igenericpage.cpp
+    $${PWD}/igenericpage.cpp
 
