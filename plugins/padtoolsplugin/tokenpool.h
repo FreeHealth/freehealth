@@ -23,8 +23,8 @@
  *  Contributors :                                                         *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
-#ifndef PADTOOLS_ITOKEN_H
-#define PADTOOLS_ITOKEN_H
+#ifndef PADTOOLS_TOKENPOOL_H
+#define PADTOOLS_TOKENPOOL_H
 
 #include <padtoolsplugin/padtools_exporter.h>
 #include <coreplugin/ipadtools.h>
@@ -73,4 +73,4 @@ private:
 
 } // namespace PadTools
 
-#endif // PADTOOLS_ITOKEN_H
+#endif // PADTOOLS_TOKENPOOL_H

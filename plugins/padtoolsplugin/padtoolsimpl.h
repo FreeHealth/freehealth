@@ -63,4 +63,4 @@ private:
 
 }
 
-#endif
+#endif  // PADTOOLS_IMPL_H

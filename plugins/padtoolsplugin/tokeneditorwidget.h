@@ -80,6 +80,6 @@ private:
     TokenModel *_model;
 };
 
-
 } // namespace PadTools
+
 #endif // PADTOOLS_TOKENEDITORWIDGET_H

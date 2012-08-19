@@ -24,8 +24,8 @@
  *  Contributors :                                                         *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
-#ifndef PAD_ANALYZER_H
-#define PAD_ANALYZER_H
+#ifndef PADTOOLS_PAD_ANALYZER_H
+#define PADTOOLS_PAD_ANALYZER_H
 
 #include <QString>
 #include <QStack>
@@ -69,4 +69,4 @@ private:
 
 } // PadTools
 
-#endif
+#endif  // PADTOOLS_PAD_ANALYZER

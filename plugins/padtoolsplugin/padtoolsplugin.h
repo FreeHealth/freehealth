@@ -58,4 +58,4 @@ private:
 
 }
 
-#endif
+#endif  // PADTOOLSPLUGIN_H
