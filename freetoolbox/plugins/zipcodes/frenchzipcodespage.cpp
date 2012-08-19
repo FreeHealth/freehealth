@@ -68,6 +68,8 @@ static inline QString sqlImportFileAbsPath()   {return QDir::cleanPath(settings(
 
 }
 
+// #################### FrenchZipCodesPage #######################
+
 FrenchZipCodesPage::FrenchZipCodesPage(QObject *parent) :
         IToolPage(parent)
 {
@@ -79,6 +81,8 @@ QWidget *FrenchZipCodesPage::createPage(QWidget *parent)
     return new FrenchZipCodesWidget(parent);
 }
 
+
+// #################### FrenchZipCodesStep #######################
 
 FrenchZipCodesStep::FrenchZipCodesStep(QObject *parent) :
     Core::IFullReleaseStep(parent),
@@ -260,6 +264,7 @@ bool FrenchZipCodesStep::populateDatabase()
 }
 
 
+// #################### FrenchZipCodesWidget #######################
 
 FrenchZipCodesWidget::FrenchZipCodesWidget(QWidget *parent) :
     QWidget(parent),
