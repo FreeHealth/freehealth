@@ -92,13 +92,14 @@ public:
     QString name() const;
     QString category() const;
     QString title() const {return name();}
+    int sortIndex() const;
 
     void resetToDefaults();
     void checkSettingsValidity();
     void applyChanges();
     void finish();
 
-    QString helpPage() {return "parametrer.html";}
+    QString helpPage();
 
     static void writeDefaultSettings(Core::ISettings *s) {MainWindowPreferencesWidget::writeDefaultSettings(s);}
 

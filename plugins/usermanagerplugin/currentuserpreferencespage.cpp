@@ -58,6 +58,7 @@ QString CurrentUserPreferencesPage::id() const { return objectName(); }
 QString CurrentUserPreferencesPage::name() const { return tkTr(Trans::Constants::USER); }
 QString CurrentUserPreferencesPage::category() const { return tkTr(Trans::Constants::GENERAL_PREFERENCES); }
 QString CurrentUserPreferencesPage::title() const { return tkTr(Trans::Constants::USER_PREFERENCES); }
+int CurrentUserPreferencesPage::sortIndex() const {return 0;}
 
 void CurrentUserPreferencesPage::resetToDefaults()
 {

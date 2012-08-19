@@ -27,7 +27,8 @@
 #ifndef PADTOOLS_PADWRITER_H
 #define PADTOOLS_PADWRITER_H
 
-#include <QWidget>
+#include <coreplugin/ipadtools.h>
+
 QT_BEGIN_NAMESPACE
 class QTextCursor;
 QT_END_NAMESPACE
@@ -36,7 +37,7 @@ QT_END_NAMESPACE
  * \file padwriter.h
  * \author Eric Maeker
  * \version 0.8.0
- * \date 25 Apr 2012
+ * \date 16 Aug 2012
 */
 
 namespace PadTools {
@@ -49,7 +50,7 @@ class PadWriter;
 }
 }
 
-class PadWriter : public QWidget
+class PadWriter : public Core::IPadWriter
 {
     Q_OBJECT
     
@@ -57,8 +58,19 @@ public:
     explicit PadWriter(QWidget *parent = 0);
     ~PadWriter();
 
-    QString htmlResult() const;
-    QString rawSource() const;
+public Q_SLOTS:
+    // Core::IPadWriter interface
+    void setPlainTextSource(const QString &plainText);
+    void setHtmlSource(const QString &html);
+    void filterTokenPool(const QString &tokenNamespace);
+    void filterTokenPool(const QStringList &tokenNamespaces);
+
+public:
+    // Core::IPadWriter interface
+    QString outputToPlainText() const;
+    QString outputToHtml() const;
+    QString rawSourceToPlainText() const;
+    QString rawSourceToHtml() const;
 
 public Q_SLOTS:
     void highlightCursor();
@@ -80,8 +92,8 @@ private Q_SLOTS:
     void setTestValues(bool state);
     void onPadFragmentChanged(PadFragment *fragment);
 
-    void highLightNextBlock();
-    void highLightPreviousBlock();
+//private:
+//    bool event(QEvent *event);
 
 //private:
 //    bool eventFilter(QObject *obj, QEvent *event);

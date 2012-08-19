@@ -78,6 +78,7 @@ AccountUserOptionsPage::~AccountUserOptionsPage()
 QString AccountUserOptionsPage::id() const { return objectName(); }
 QString AccountUserOptionsPage::name() const { return tkTr(Trans::Constants::USER); }
 QString AccountUserOptionsPage::category() const { return tkTr(Trans::Constants::ACCOUNTANCY); }
+int AccountUserOptionsPage::sortIndex() const {return 0;}
 
 void AccountUserOptionsPage::resetToDefaults()
 {
@@ -198,6 +199,7 @@ AccountDatabaseDefautsPage::~AccountDatabaseDefautsPage()
 QString AccountDatabaseDefautsPage::id() const { return objectName(); }
 QString AccountDatabaseDefautsPage::name() const { return tkTr(Trans::Constants::DEFAULTS); }
 QString AccountDatabaseDefautsPage::category() const { return tkTr(Trans::Constants::ACCOUNTANCY); }
+int AccountDatabaseDefautsPage::sortIndex() const {return 10;}
 
 void AccountDatabaseDefautsPage::resetToDefaults()
 {

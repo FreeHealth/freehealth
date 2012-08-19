@@ -65,6 +65,7 @@
     <Pack serverFileName="./drugs/fr_noddi/packdescription.xml"/>
     <Pack serverFileName="./drugs/fda_noddi/packdescription.xml"/>
     <Pack serverFileName="./drugs/ca_noddi/packdescription.xml"/>
+    <Pack serverFileName="./drugs/za_noddi/packdescription.xml"/>
   </ServerContents>
 
 </DataPackServer>

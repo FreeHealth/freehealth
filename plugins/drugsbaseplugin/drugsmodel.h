@@ -89,7 +89,7 @@ public:
     int columnCount(const QModelIndex & = QModelIndex()) const { return DrugsDB::Constants::Drug::MaxParam; }
     bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
     bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
-    QVariant data(const QModelIndex &index, int role) const;
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
     QVariant drugData(const QVariant &drugId, const int column);
     bool setDrugData(const QVariant &drugId, const int column, const QVariant &value);
     Qt::ItemFlags flags(const QModelIndex &index) const;
@@ -141,16 +141,17 @@ public:
     Internal::DosageModel *dosageModel(const QModelIndex &drugIndex);
 
     // FOR PRESCRIPTION FORMATTING
-    static QString getFullPrescription(const IDrug *drug, bool toHtml = false, const QString &mask = QString::null);
+    QString getFullPrescription(const IDrug *drug, bool toHtml = false, const QString &mask = QString::null);
 
 Q_SIGNALS:
-    void prescriptionResultChanged(const QString & html);
+//    void prescriptionResultChanged(const QString & html);
     void numberOfRowsChanged();
 
 protected:
     void checkInteractions();
 
 protected Q_SLOTS:
+    bool submit();
     void resetModel();
 
 private Q_SLOTS:
@@ -163,7 +164,7 @@ private:
 
 }  // End DrugsDB
 
-DRUGSBASE_EXPORT QDebug operator<<(QDebug dbg, const DrugsDB::DrugsModel *c);
+//DRUGSBASE_EXPORT QDebug operator<<(QDebug dbg, const DrugsDB::DrugsModel *c);
 
 
 

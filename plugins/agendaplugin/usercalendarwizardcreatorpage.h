@@ -80,6 +80,8 @@ public:
     QString name() const;
     QString title() const;
     QString category() const;
+    int sortIndex() const;
+
     QWidget *createPage(QWidget *parent = 0) {Q_UNUSED(parent); return 0;}
 
     // UserPlugin::IUserWizardPage

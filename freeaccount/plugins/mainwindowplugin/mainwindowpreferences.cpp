@@ -73,6 +73,7 @@ MainWindowPreferencesPage::~MainWindowPreferencesPage()
 QString MainWindowPreferencesPage::id() const { return objectName(); }
 QString MainWindowPreferencesPage::name() const { return tkTr(Trans::Constants::GENERAL); }
 QString MainWindowPreferencesPage::category() const { return tkTr(Trans::Constants::GENERAL); }
+int MainWindowPreferencesPage::sortIndex() const {return 0;}
 
 void MainWindowPreferencesPage::resetToDefaults()
 {
@@ -88,7 +89,15 @@ void MainWindowPreferencesPage::applyChanges()
     m_Widget->saveToSettings(settings());
 }
 
-void MainWindowPreferencesPage::finish() { delete m_Widget; }
+void MainWindowPreferencesPage::finish()
+{
+    delete m_Widget;
+}
+
+QString MainWindowPreferencesPage::helpPage()
+{
+    return "parametrer.html";
+}
 
 void MainWindowPreferencesPage::checkSettingsValidity()
 {

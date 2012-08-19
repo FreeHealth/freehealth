@@ -64,6 +64,50 @@
        </property>
        <widget class="QWidget" name="layoutWidget_2">
         <layout class="QGridLayout" name="gridLayout">
+         <property name="spacing">
+          <number>0</number>
+         </property>
+         <item row="3" column="3">
+          <widget class="QSpinBox" name="ouputPos">
+           <property name="toolTip">
+            <string>OUTPUT</string>
+           </property>
+           <property name="maximum">
+            <number>16777215</number>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="7">
+          <widget class="QToolButton" name="outputToRaw">
+           <property name="text">
+            <string>output to raw</string>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="3">
+          <widget class="QToolButton" name="optionsButton">
+           <property name="text">
+            <string>Options</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="2">
+          <widget class="QSpinBox" name="rawPos">
+           <property name="toolTip">
+            <string>RAW</string>
+           </property>
+           <property name="maximum">
+            <number>16777215</number>
+           </property>
+          </widget>
+         </item>
+         <item row="2" column="6">
+          <widget class="QToolButton" name="viewResult">
+           <property name="text">
+            <string>raw to output</string>
+           </property>
+          </widget>
+         </item>
          <item row="1" column="0" colspan="9">
           <widget class="PadTools::DragDropTextEdit" name="rawSource">
            <property name="toolTip">
@@ -71,10 +115,10 @@
            </property>
           </widget>
          </item>
-         <item row="2" column="2">
-          <widget class="QToolButton" name="viewError">
+         <item row="2" column="4">
+          <widget class="QToolButton" name="scenari">
            <property name="text">
-            <string>View errors</string>
+            <string>Scenari</string>
            </property>
           </widget>
          </item>
@@ -91,34 +135,6 @@
            </property>
           </spacer>
          </item>
-         <item row="2" column="3">
-          <widget class="QToolButton" name="optionsButton">
-           <property name="text">
-            <string>Options</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="4">
-          <widget class="QToolButton" name="scenari">
-           <property name="text">
-            <string>Scenari</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="6">
-          <widget class="QToolButton" name="viewResult">
-           <property name="text">
-            <string>raw to output</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="7">
-          <widget class="QToolButton" name="outputToRaw">
-           <property name="text">
-            <string>output to raw</string>
-           </property>
-          </widget>
-         </item>
          <item row="2" column="5">
           <widget class="QToolButton" name="findCursor">
            <property name="text">
@@ -126,39 +142,19 @@
            </property>
           </widget>
          </item>
-         <item row="3" column="6">
-          <widget class="QToolButton" name="nextBlock">
+         <item row="2" column="2">
+          <widget class="QToolButton" name="viewError">
            <property name="text">
-            <string/>
+            <string>View errors</string>
            </property>
           </widget>
          </item>
-         <item row="3" column="7">
-          <widget class="QToolButton" name="prevBlock">
-           <property name="text">
-            <string/>
+         <item row="0" column="0" colspan="9">
+          <layout class="QVBoxLayout" name="toolbarLayout">
+           <property name="spacing">
+            <number>0</number>
            </property>
-          </widget>
-         </item>
-         <item row="3" column="2">
-          <widget class="QSpinBox" name="rawPos">
-           <property name="toolTip">
-            <string>RAW</string>
-           </property>
-           <property name="maximum">
-            <number>16777215</number>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="3">
-          <widget class="QSpinBox" name="ouputPos">
-           <property name="toolTip">
-            <string>OUTPUT</string>
-           </property>
-           <property name="maximum">
-            <number>16777215</number>
-           </property>
-          </widget>
+          </layout>
          </item>
         </layout>
        </widget>

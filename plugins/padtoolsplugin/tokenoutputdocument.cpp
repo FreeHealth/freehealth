@@ -36,6 +36,9 @@
 #include "pad_item.h"
 #include "pad_fragment.h"
 
+#include <coreplugin/icore.h>
+#include <coreplugin/ipadtools.h>
+
 #include <utils/log.h>
 #include <utils/global.h>
 #include <translationutils/constants.h>
@@ -46,11 +49,14 @@
 #include <QMenu>
 #include <QKeyEvent>
 #include <QApplication>
+#include <QToolTip>
 
 #include <QDebug>
 
 using namespace PadTools;
 using namespace Trans::ConstantTranslations;
+
+static inline Core::ITokenPool *tokenPool() {return Core::ICore::instance()->padTools()->tokenPool();}
 
 namespace PadTools {
 namespace Internal {
@@ -501,6 +507,20 @@ void TokenOutputDocument::dropEvent(QDropEvent *event)
 
 bool TokenOutputDocument::event(QEvent *event)
 {
+    if (event->type() == QEvent::ToolTip) {
+        QHelpEvent *helpEvent = static_cast<QHelpEvent*>(event);
+        int position = cursorForPosition(helpEvent->pos()).position();
+        PadItem *item = d->_pad->padItemForOutputPosition(position);
+        if (item) {
+            Core::IToken *token = tokenPool()->token(item->getCore()->name());
+            if (token) {
+                QToolTip::showText(helpEvent->globalPos(), token->tooltip());
+                return Editor::TextEditor::event(event);
+            }
+        }
+        QToolTip::hideText();
+        event->ignore();
+    }
     return Editor::TextEditor::event(event);
 }
 

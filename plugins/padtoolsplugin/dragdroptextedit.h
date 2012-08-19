@@ -23,8 +23,8 @@
  *  Contributors :                                                         *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
-#ifndef DRAGDROPTEXTEDIT_H
-#define DRAGDROPTEXTEDIT_H
+#ifndef PADTOOLS_DRAGDROPTEXTEDIT_H
+#define PADTOOLS_DRAGDROPTEXTEDIT_H
 
 #include <texteditorplugin/texteditor.h>
 
@@ -53,4 +53,4 @@ private:
 
 }  // PadTools
 
-#endif // DRAGDROPTEXTEDIT_H
+#endif // PADTOOLS_DRAGDROPTEXTEDIT_H

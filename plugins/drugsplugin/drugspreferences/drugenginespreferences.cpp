@@ -151,6 +151,7 @@ QString DrugEnginesPreferencesPage::id() const { return objectName(); }
 QString DrugEnginesPreferencesPage::name() const { return tr("Interaction engines"); }
 QString DrugEnginesPreferencesPage::category() const { return tkTr(Trans::Constants::DRUGS); }
 QString DrugEnginesPreferencesPage::title() const {return tr("Interaction engines");}
+int DrugEnginesPreferencesPage::sortIndex() const {return 30;}
 
 void DrugEnginesPreferencesPage::resetToDefaults()
 {

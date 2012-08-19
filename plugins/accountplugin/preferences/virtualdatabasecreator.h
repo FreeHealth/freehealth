@@ -36,15 +36,13 @@
 
 #include <QPointer>
 #include <QString>
-
 #include <QWidget>
-
 
 /**
  * \file virtualdatabasecreator.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.1.0
- * \date 02 Oct 2010
+ * \version 0.8.0
+ * \date 16 Aug 2012
 */
 
 namespace Core {
@@ -98,6 +96,7 @@ public:
     QString name() const;
     QString category() const;
     QString title() const;
+    int sortIndex() const;
 
     void resetToDefaults();
     void checkSettingsValidity();

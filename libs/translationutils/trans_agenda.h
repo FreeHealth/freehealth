@@ -26,7 +26,7 @@
 #ifndef CONSTANTTRANSLATIONS_AGENDA_H
 #define CONSTANTTRANSLATIONS_AGENDA_H
 
-#include <QCoreApplication>
+#include <qglobal.h>
 
 namespace Trans {
 namespace Constants {

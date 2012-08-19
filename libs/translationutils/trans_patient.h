@@ -26,7 +26,7 @@
 #ifndef CONSTANTTRANSLATIONS_PATIENT_H
 #define CONSTANTTRANSLATIONS_PATIENT_H
 
-#include <QCoreApplication>
+#include <qglobal.h>
 
 namespace Trans {
 namespace Constants {
@@ -45,6 +45,20 @@ const char* const FULLNAME                    = QT_TRANSLATE_NOOP("tkConstants",
 const char* const NAME                        = QT_TRANSLATE_NOOP("tkConstants", "Name");
 const char* const TITLE                       = QT_TRANSLATE_NOOP("tkConstants", "Title");
 
+const char* const CONTACT           = QT_TRANSLATE_NOOP("tkConstants", "Contact");
+const char* const FULLCONTACT_HTML  = QT_TRANSLATE_NOOP("tkConstants", "Full contact (html)");
+const char* const ADDRESS           = QT_TRANSLATE_NOOP("tkConstants", "Address");
+const char* const FULLADDRESS       = QT_TRANSLATE_NOOP("tkConstants", "Full address");
+const char* const FULLADDRESS_HTML  = QT_TRANSLATE_NOOP("tkConstants", "Full address (html)");
+const char* const STREET            = QT_TRANSLATE_NOOP("tkConstants", "Street");
+const char* const CITY              = QT_TRANSLATE_NOOP("tkConstants", "City");
+const char* const ZIPCODE           = QT_TRANSLATE_NOOP("tkConstants", "Zipcode");
+const char* const COUNTRY           = QT_TRANSLATE_NOOP("tkConstants", "Country");
+const char* const EMAILS            = QT_TRANSLATE_NOOP("tkConstants", "E-Mails");
+const char* const EMAIL             = QT_TRANSLATE_NOOP("tkConstants", "E-Mail");
+const char* const TELS              = QT_TRANSLATE_NOOP("tkConstants", "Tels");
+const char* const MOBILEPHONE       = QT_TRANSLATE_NOOP("tkConstants", "Mobile phone");
+
 const char* const DATE_OF_BIRTH               = QT_TRANSLATE_NOOP("tkConstants", "Date of birth");
 const char* const DATE_OF_DEATH               = QT_TRANSLATE_NOOP("tkConstants", "Date of death");
 const char* const AGE                         = QT_TRANSLATE_NOOP("tkConstants", "Age");
@@ -55,6 +69,8 @@ const char* const HEIGHT                      = QT_TRANSLATE_NOOP("tkConstants",
 const char* const CREATININ_CLEARANCE         = QT_TRANSLATE_NOOP("tkConstants", "Creatinin clerance");
 
 const char* const UNITS                       = QT_TRANSLATE_NOOP("tkConstants", "Units");
+const char* const METRICS                     = QT_TRANSLATE_NOOP("tkConstants", "Metrics");
+const char* const BIOLOGY                     = QT_TRANSLATE_NOOP("tkConstants", "Biology");
 
 const char* const PATIENT                     = QT_TRANSLATE_NOOP("tkConstants", "Patient");
 const char* const PATIENTS                    = QT_TRANSLATE_NOOP("tkConstants", "Patients");
@@ -64,9 +80,6 @@ const char* const CLEAR_PATIENT_INFOS         = QT_TRANSLATE_NOOP("tkConstants",
 const char* const TOGGLE_PATIENT_INFORMATION  = QT_TRANSLATE_NOOP("tkConstants", "Toggle patient's information");
 
 const char* const PATIENT_SYNTHESIS           = QT_TRANSLATE_NOOP("tkConstants", "Patient synthesis");
-
-const char* const SPECIALTIES     = QT_TRANSLATE_NOOP("tkConstants", "Specialties");
-
 
 } // end Constants
 } // end TranslationUtils

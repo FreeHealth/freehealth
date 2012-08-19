@@ -82,6 +82,7 @@ InsurancePage::~InsurancePage()
 QString InsurancePage::id() const { return objectName(); }
 QString InsurancePage::name() const { return tkTr(Trans::Constants::INSURANCE); }
 QString InsurancePage::category() const { return tkTr(Trans::Constants::ACCOUNTANCY); }
+int InsurancePage::sortIndex() const {return 60;}
 
 void InsurancePage::resetToDefaults()
 {

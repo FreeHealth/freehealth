@@ -24,12 +24,25 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
+/**
+ * \class DrugsDB::DrugBaseCore
+ * Central place of the DrugsBase plugin. \n
+ * Available objects:
+ *   DrugsDB::DrugsBase \sa drugsBase()
+ *   DrugsDB::ProtocolsBase \sa protocolsBase()
+ *   DrugsDB::InteractionManager \sa interactionManager()
+ *   DrugsDB::VersionUpdater \sa versionUpdater()
+ *   DrugsDB::DrugsIO \sa drugsIo()
+ * Manages Drug DataPack installation, removal
+ */
+
 #include "drugbasecore.h"
 #include <drugsbaseplugin/constants.h>
 #include <drugsbaseplugin/drugsbase.h>
 #include <drugsbaseplugin/protocolsbase.h>
 #include <drugsbaseplugin/interactionmanager.h>
 #include <drugsbaseplugin/versionupdater.h>
+#include <drugsbaseplugin/drugsio.h>
 
 #include <coreplugin/icore.h>
 
@@ -56,7 +69,8 @@ public:
         m_DrugsBase(0),
         m_ProtocolsBase(0),
         m_InteractionManager(0),
-        m_VersionUpdater(0)
+        m_VersionUpdater(0),
+        _drugsIo(0)
     {
     }
 
@@ -75,6 +89,7 @@ public:
     ProtocolsBase *m_ProtocolsBase;
     InteractionManager *m_InteractionManager;
     VersionUpdater *m_VersionUpdater;
+    DrugsIO *_drugsIo;
 };
 }  // End Internal
 }  // End DrugsDB
@@ -83,9 +98,8 @@ public:
 DrugBaseCore *DrugBaseCore::m_Instance = 0;
 
 /** \brief Returns the unique instance of DrugsDB::DrugBaseCore. If it does not exist, it is created */
-DrugBaseCore &DrugBaseCore::instance(QObject *parent)
+DrugBaseCore &DrugBaseCore::instance()
 {
-    Q_UNUSED(parent);
     Q_ASSERT(m_Instance);
     return *m_Instance;
 }
@@ -98,6 +112,7 @@ DrugBaseCore::DrugBaseCore(QObject *parent) :
     d->m_DrugsBase = new DrugsBase(this);
     d->m_ProtocolsBase = new ProtocolsBase(this);
     d->m_VersionUpdater = new VersionUpdater;
+    d->_drugsIo = new DrugsIO(this);
 
     connect(packManager(), SIGNAL(packInstalled(DataPack::Pack)), this, SLOT(packChanged(DataPack::Pack)));
     connect(packManager(), SIGNAL(packRemoved(DataPack::Pack)), this, SLOT(packChanged(DataPack::Pack)));
@@ -117,6 +132,7 @@ bool DrugBaseCore::init()
     d->m_DrugsBase->init();
     d->m_ProtocolsBase->init();
     d->m_InteractionManager = new InteractionManager(this);
+    d->_drugsIo->init();
     connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
     return true;
 }
@@ -150,6 +166,11 @@ VersionUpdater &DrugBaseCore::versionUpdater() const
 {
     Q_ASSERT(d->m_VersionUpdater);
     return *d->m_VersionUpdater;
+}
+
+DrugsIO &DrugBaseCore::drugsIo() const
+{
+    return *d->_drugsIo;
 }
 
 void DrugBaseCore::onCoreDatabaseServerChanged()

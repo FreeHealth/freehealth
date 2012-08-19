@@ -144,6 +144,11 @@ QString WebcamPreferencesPage::category() const
     return tr("Webcam");
 }
 
+int WebcamPreferencesPage::sortIndex() const
+{
+    return 0;
+}
+
 /*! Resets the whole preferences page to the default settings of the settings data model. */
 void WebcamPreferencesPage::resetToDefaults()
 {

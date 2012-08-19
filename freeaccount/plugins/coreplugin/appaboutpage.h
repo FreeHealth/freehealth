@@ -41,6 +41,7 @@ public:
     QString id() const {return objectName();}
     QString name() const;
     QString category() const;
+    int sortIndex() const;
 
     QWidget *createPage(QWidget *parent = 0);
 };
@@ -54,6 +55,7 @@ public:
     QString id() const {return objectName();}
     QString name() const;
     QString category() const;
+    int sortIndex() const;
 
     QWidget *createPage(QWidget *parent = 0);
 };

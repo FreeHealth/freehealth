@@ -73,6 +73,11 @@ QString UserCalendarWizardCreatorPage::category() const
     return tr("User's agendas");
 }
 
+int UserCalendarWizardCreatorPage::sortIndex() const
+{
+    return 20;
+}
+
 // UserPlugin::IUserWizardPage
 QWizardPage *UserCalendarWizardCreatorPage::createWizardPage(QWidget *parent)
 {

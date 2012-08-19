@@ -45,8 +45,8 @@ const char * const TOKENRAWSOURCE_MIME = "freepad/token/rawsource";
 const char * const TOKENNAME_MIME = "freepad/token/name";
 
 const char * const TOKEN_CORE_DELIMITER  = "~";
-const char * const TOKEN_OPEN_DELIMITER  = "^$";
-const char * const TOKEN_CLOSE_DELIMITER = "$^";
+const char * const TOKEN_OPEN_DELIMITER  = "{{";
+const char * const TOKEN_CLOSE_DELIMITER = "}}";
 
 const char * const C_PADWRITER_CONTEXT = "cPadWriter";
 

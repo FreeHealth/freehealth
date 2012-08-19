@@ -123,10 +123,12 @@ void PageWidget::setupUi(bool sortCategoryView)
         initialPage = settings()->value(m_settingKey+"/LastPage", QVariant(QString())).toString();
     }
 
+    // sort pages
+    qSort(m_pages.begin(), m_pages.end(), Core::IGenericPage::lessThan);
+
     QMap<QString, QTreeWidgetItem *> categories;
     QFont bold;
     bold.setBold(true);
-
     int index = 0;
     foreach(IGenericPage *page, m_pages) {
         PageData pageData;
@@ -190,8 +192,8 @@ void PageWidget::setupUi(bool sortCategoryView)
     sizes << 150 << 300;
     m_ui->splitter->setSizes(sizes);
 
-    if (sortCategoryView)
-        m_ui->pageTree->sortItems(0, Qt::AscendingOrder);
+//    if (sortCategoryView)
+//        m_ui->pageTree->sortItems(0, Qt::AscendingOrder);
 
     m_ui->stackedPages->layout()->setMargin(0);
     m_ui->layoutWidget->layout()->setContentsMargins(12,0,12,0);

@@ -40,8 +40,9 @@ public:
     ~BuildAboutPage();
 
     QString id() const       { return objectName();   }
-    QString name() const     { return tr("4. Build information"); }
+    QString name() const     { return tr("Build information"); }
     QString category() const { return tr("Application"); }
+    int sortIndex() const    { return 4;}
 
     QWidget *createPage(QWidget *parent = 0);
 };
@@ -54,8 +55,9 @@ public:
     ~LicenseAboutPage();
 
     QString id() const       { return objectName();   }
-    QString name() const     { return tr("3. License"); }
+    QString name() const     { return tr("License"); }
     QString category() const { return tr("Application"); }
+    int sortIndex() const    { return 3;}
 
     QWidget *createPage(QWidget *parent);
 };
@@ -68,8 +70,9 @@ public:
     ~TeamAboutPage();
 
     QString id() const       { return objectName();   }
-    QString name() const     { return tr("2. Team"); }
+    QString name() const     { return tr("Team"); }
     QString category() const { return tr("Application"); }
+    int sortIndex() const    { return 2;}
 
     QWidget *createPage(QWidget *parent = 0);
 

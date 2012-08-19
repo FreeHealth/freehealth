@@ -34,6 +34,7 @@
 #include <drugsplugin/drugswidget/textualprescriptiondialog.h>
 #include <drugsplugin/drugswidget/interactionsynthesisdialog.h>
 
+#include <drugsbaseplugin/drugbasecore.h>
 #include <drugsbaseplugin/drugsmodel.h>
 #include <drugsbaseplugin/drugsio.h>
 
@@ -63,8 +64,8 @@ using namespace DrugsWidget::Constants;
 using namespace Trans::ConstantTranslations;
 
 static inline DrugsDB::DrugsModel *drugModel() { return DrugsDB::DrugsModel::activeModel(); }
+static inline DrugsDB::DrugsIO &drugsIo() {return DrugsDB::DrugBaseCore::instance().drugsIo();}
 static inline Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
-
 
 /** \brief Constructor. You must call initialize() after instanciation */
 PrescriptionViewer::PrescriptionViewer(QWidget *parent) :
@@ -200,16 +201,14 @@ void PrescriptionViewer::on_listView_customContextMenuRequested(const QPoint &)
 
 bool PrescriptionViewer::savePrescription()
 {
-    DrugsDB::DrugsIO io;
     QHash<QString, QString> extra;
-    return io.savePrescription(drugModel(), extra);
+    return drugsIo().savePrescription(drugModel(), extra);
 }
 
 bool PrescriptionViewer::saveAsPrescription()
 {
-    DrugsDB::DrugsIO io;
     QHash<QString, QString> extra;
-    return io.savePrescription(drugModel(), extra);
+    return drugsIo().savePrescription(drugModel(), extra);
 }
 
 /** \brief Clears the prescription */

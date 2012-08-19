@@ -26,7 +26,7 @@
 #ifndef CONSTANTTRANSLATIONS_COUNTRIES_H
 #define CONSTANTTRANSLATIONS_COUNTRIES_H
 
-#include <QCoreApplication>
+#include <qglobal.h>
 
 namespace Trans {
 namespace Constants {

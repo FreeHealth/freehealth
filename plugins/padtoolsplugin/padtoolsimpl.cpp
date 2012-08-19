@@ -33,6 +33,14 @@
 #include "tokenpool.h"
 #include "pad_analyzer.h"
 #include "pad_highlighter.h"
+#include "padwriter.h"
+
+#include <utils/log.h>
+
+#include <QTime>
+#include <QCryptographicHash>
+
+#include <QDebug>
 
 using namespace PadTools;
 
@@ -50,27 +58,54 @@ Core::ITokenPool *PadToolsImpl::tokenPool() const
     return _pool;
 }
 
-
-/** Analyse a string \e templ for \e tokens, manages a list of \e errors (output) and returns the parsed string.*/
-QString PadToolsImpl::parse(const QString &templ, QMap<QString,QVariant> &tokens, QList<Core::PadAnalyzerError> &errors)
+/** Process a \e plainText pad document and return a plaintext string. */
+QString PadToolsImpl::processPlainText(const QString &plainText)
 {
-    Q_UNUSED(tokens); //TMP
+    QTime chr;
+    chr.start();
 
     PadAnalyzer analyzer;
-    QString t = templ;
-    if (t.contains("&lt;")) {
-        t = t.replace("&lt;","<").replace("&gt;",">");
-    }
-    PadDocument *pad = analyzer.analyze(t);
-    errors = analyzer.lastErrors();
+//    QString t = templ;
+//    if (t.contains("&lt;")) {
+//        t = t.replace("&lt;","<").replace("&gt;",">");
+//    }
+    PadDocument *pad = analyzer.analyze(plainText);
+//    errors = analyzer.lastErrors();
+    Utils::Log::logTimeElapsed(chr, "PadTools", "Analyze text source");
 
-    pad->run(tokens);
-    return pad->outputDocument()->toHtml();
+    pad->toOutput(_pool);
+    const QString &text = pad->outputDocument()->toPlainText();
+    Utils::Log::logTimeElapsed(chr, "PadTools", "Process text");
+    return text;
 }
 
-/** Creates a syntax highlighter for the \e textEdit usng the \e tokens.*/
-QSyntaxHighlighter *PadToolsImpl::createSyntaxHighlighter(QTextEdit *textEdit, QMap<QString,QVariant> &tokens)
+/** Process a \e html pad document and return a html string. */
+QString PadToolsImpl::processHtml(const QString &html)
 {
-    Q_UNUSED(tokens); //TMP
-    return new PadHighlighter(textEdit);
+    QTime chr;
+    chr.start();
+//    qWarning() << QCryptographicHash::hash(html.toUtf8(), QCryptographicHash::Md5);
+//    Utils::Log::logTimeElapsed(chr, "PadAnalyzer", "MD5");
+
+    PadAnalyzer analyzer;
+//    QString t = html;
+//    if (t.contains("&lt;")) {
+//        t = t.replace("&lt;","<").replace("&gt;",">");
+//    }
+    QTextDocument *doc = new QTextDocument(this);
+    doc->setHtml(html);
+    PadDocument *pad = analyzer.analyze(doc, 0);
+//    errors = analyzer.lastErrors();
+    Utils::Log::logTimeElapsed(chr, "PadTools", "Analyze HTML source");
+
+    pad->toOutput(_pool);
+    const QString &out = pad->outputDocument()->toHtml();
+    Utils::Log::logTimeElapsed(chr, "PadTools", "Process HTML");
+    return out;
 }
+
+Core::IPadWriter *PadToolsImpl::createWriter(QWidget *parent)
+{
+    return new PadWriter(parent);
+}
+

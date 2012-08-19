@@ -32,6 +32,13 @@
 #include <QWidget>
 #include <QPointer>
 
+/**
+ * \file %PluginName:l%preferences.h
+ * \author %Author%
+ * \version 0.8.0
+ * \date
+*/
+
 namespace Core {
 class ISettings;
 }
@@ -75,7 +82,8 @@ public:
     QString id() const;
     QString name() const;
     QString category() const;
-    QString title() const {return name();}
+    QString title() const;
+    int sortIndex() const;
 
     void resetToDefaults();
     void checkSettingsValidity();
