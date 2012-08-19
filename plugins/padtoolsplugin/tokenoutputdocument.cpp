@@ -150,8 +150,8 @@ public:
                                              QApplication::translate(Constants::PADWRITER_TRANS_CONTEXT,
                                                                      "You have dropped a token inside the value of a token. \n"
                                                                      "You must specify where the dropped token should be inserted:\n"
-                                                                     "- inside the conditionnal text before the token, \n"
-                                                                     "- inside the conditionnal text after the token \n"
+                                                                     "- inside the conditional text before the token, \n"
+                                                                     "- inside the conditional text after the token \n"
                                                                      "- or the before/after the token"),
                                              "",
                                              buttons, "",
@@ -159,10 +159,10 @@ public:
                                              true
                                              );
         switch (s) {
-        case 0: // inside before conditionnal
+        case 0: // inside before conditional
             pos = core->start() - 1;
             break;
-        case 1: // inside after conditionnal
+        case 1: // inside after conditional
             pos = core->end() + 1;
             break;
         case 2: // before the token
