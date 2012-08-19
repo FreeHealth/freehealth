@@ -139,6 +139,11 @@ QString UserCalendarPageForUserViewer::title() const
     return tr("User agendas");
 }
 
+int UserCalendarPageForUserViewer::sortIndex() const
+{
+    return 10;
+}
+
 QWidget *UserCalendarPageForUserViewer::createPage(QWidget *parent)
 {
     return new UserCalendarPageForUserViewerWidget(parent);
