@@ -939,6 +939,13 @@ QString DrugsIO::getDrugPrescription(DrugsDB::DrugsModel *model, const int drugR
     }
     return padTools()->processPlainText(tmp);
 #else
+    QHash<QString, QString> tokens_value;
+    if (!IN_RANGE_STRICT_MAX(drugRow, 0, model->drugsList().count())) {
+        LOG_ERROR("row > model list count");
+        return QString::null;
+    }
+    IDrug *drug = model->drugsList().at(drugRow);
+
     // Manage Textual drugs only
     if (drug->prescriptionValue(Constants::Prescription::IsTextualOnly).toBool()) {
         if (toHtml) {
@@ -1022,7 +1029,7 @@ QString DrugsIO::getDrugPrescription(DrugsDB::DrugsModel *model, const int drugR
 
     // Min interval
     const QVariant &interval = drug->prescriptionValue(Constants::Prescription::IntakesIntervalOfTime);
-    const QVariant &intervalScheme = drug->prescriptionValue(Constants::Prescription::IntakesIntervalScheme);
+    const QVariant &intervalScheme = drug->prescriptionValue(Constants::Prescription::IntakesIntervalSchemeIndex);
     if ((!interval.isNull() && !intervalScheme.isNull()) &&
         interval.toInt() > 0) {
         tokens_value["MIN_INTERVAL"] = interval.toString() + " " + periodPlurialForm(intervalScheme.toInt(), interval.toInt());

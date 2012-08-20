@@ -52,6 +52,7 @@ class IDrug;
 namespace DrugsWidget {
 namespace Internal {
 
+#ifdef WITH_PAD
 class DrugPosologicSentenceWithPadPreferencesWidget : public QWidget //, private Ui::DrugPosologicSentencePreferencesWithPadWidget
 {
     Q_OBJECT
@@ -77,6 +78,8 @@ private:
     DrugsDB::IDrug *_drug;
     Core::IPadWriter *_writer;
 };
+#endif
+
 
 class DrugPosologicSentencePreferencesWidget : public QWidget, private Ui::DrugPosologicSentencePreferencesWidget
 {

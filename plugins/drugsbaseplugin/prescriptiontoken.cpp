@@ -26,6 +26,7 @@
  ***************************************************************************/
 #include "prescriptiontoken.h"
 
+#ifdef WITH_PAD
 #include <drugsbaseplugin/constants.h>
 #include <drugsbaseplugin/dailyschememodel.h>
 #include <drugsbaseplugin/drugsmodel.h>
@@ -91,3 +92,5 @@ QVariant PrescriptionToken::value() const
     }
     return _model->data(_model->index(_row, _ref));
 }
+
+#endif  // ifdef WITH_PAD

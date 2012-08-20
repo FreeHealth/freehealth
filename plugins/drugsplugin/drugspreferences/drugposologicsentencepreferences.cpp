@@ -70,7 +70,7 @@ static QString getPrescriptionTokenHtmlFileContent()
         content = content.remove("\n");
 #else
     // Old style
-    content = QCoreApplication::translate(Constants::DRUGCONSTANTS_TR_CONTEXT, DrugsDB::Constants::S_DEF_PRESCRIPTIONFORMATTING));
+    content = QCoreApplication::translate(Constants::DRUGCONSTANTS_TR_CONTEXT, DrugsDB::Constants::S_DEF_PRESCRIPTIONFORMATTING);
 #endif
     return content;
 }
@@ -192,6 +192,7 @@ void DrugPosologicSentencePreferencesWidget::changeEvent(QEvent *e)
     }
 }
 
+#ifdef WITH_PAD
 DrugPosologicSentenceWithPadPreferencesWidget::DrugPosologicSentenceWithPadPreferencesWidget(QWidget *parent) :
     QWidget(parent)
 {
@@ -262,7 +263,7 @@ void DrugPosologicSentenceWithPadPreferencesWidget::changeEvent(QEvent *e)
         break;
     }
 }
-
+#endif
 
 DrugPosologicSentencePage::DrugPosologicSentencePage(QObject *parent) :
         IOptionsPage(parent), m_Widget(0)
