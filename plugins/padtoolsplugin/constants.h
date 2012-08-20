@@ -62,8 +62,8 @@ const char * const AUTO_UPDATE_RESULT = QT_TRANSLATE_NOOP("PadWriter", "Automati
 const char * const SET_TEST_VALUE_TO_TOKENS = QT_TRANSLATE_NOOP("PadWriter", "Set a test value to all available tokens");
 
 // Translations used for the TokenOutputDocument drag'n drop
-const char * const INSIDE_CONDITIONNAL_BEFORE_TEXT = QT_TRANSLATE_NOOP("PadWriter", "Inside conditionnal before text");
-const char * const INSIDE_CONDITIONNAL_AFTER_TEXT = QT_TRANSLATE_NOOP("PadWriter", "Inside conditionnal after text");
+const char * const INSIDE_CONDITIONNAL_BEFORE_TEXT = QT_TRANSLATE_NOOP("PadWriter", "Inside conditional before text");
+const char * const INSIDE_CONDITIONNAL_AFTER_TEXT = QT_TRANSLATE_NOOP("PadWriter", "Inside conditional after text");
 const char * const BEFORE_TOKEN = QT_TRANSLATE_NOOP("PadWriter", "Before the token");
 const char * const AFTER_TOKEN = QT_TRANSLATE_NOOP("PadWriter", "After the token");
 const char * const NESTED_TOKEN = QT_TRANSLATE_NOOP("PadWriter", "Nested token");
