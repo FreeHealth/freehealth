@@ -1050,7 +1050,7 @@ QString DrugsModel::getFullPrescription(const IDrug *drug, bool toHtml, const QS
 
     // Min interval
     const QVariant &interval = drug->prescriptionValue(Constants::Prescription::IntakesIntervalOfTime);
-    const QVariant &intervalScheme = drug->prescriptionValue(Constants::Prescription::IntakesIntervalScheme);
+    const QVariant &intervalScheme = drug->prescriptionValue(Constants::Prescription::IntakesIntervalSchemeIndex);
     if ((!interval.isNull() && !intervalScheme.isNull()) &&
         interval.toInt() > 0) {
         tokens_value["MIN_INTERVAL"] = interval.toString() + " " + periodPlurialForm(intervalScheme.toInt(), interval.toInt());
