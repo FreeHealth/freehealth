@@ -107,8 +107,11 @@ p, li { white-space: pre-wrap; }
         </item>
         <item row="1" column="0">
          <widget class="QLabel" name="countryCodeLabel">
+          <property name="toolTip">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This code is the official &lt;a href=&quot;http://en.wikipedia.org/wiki/ISO_3166-1&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#0057ae;&quot;&gt;ISO-3166-1 Alpha-2&lt;/span&gt;&lt;/a&gt; code&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
           <property name="text">
-           <string>&amp;Country code (to save as):</string>
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&amp;amp;Country code (to save as):&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
           </property>
           <property name="buddy">
            <cstring>countryCodeLineEdit</cstring>
@@ -145,7 +148,7 @@ p, li { white-space: pre-wrap; }
   <customwidget>
    <class>Utils::CountryComboBox</class>
    <extends>QComboBox</extends>
-   <header location="global">utils_countrycombobox.h</header>
+   <header location="global">utils/widgets/countrycombobox.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>
