@@ -1161,7 +1161,7 @@ bool inRange(const QModelIndex &topLeft, const QModelIndex &bottomRight, const Q
     return inRange(min, max, val);
 }
 
-/** Return the ISO 2 char encoded of the \e country */
+/** Return the ISO-3166-1 2-char code of the \e country */
 QString countryToIso(QLocale::Country country)
 {
     if (country == QLocale::AnyCountry)
@@ -1175,10 +1175,19 @@ QString countryToIso(QLocale::Country country)
     return code;
 }
 
+/*!
+ * \brief Takes  \e country and returns a localized string using QLocale::countryToString()
+ *
+ * \param country QString an ISO-3166-1 2-char code of the country
+ * \returns a localized string for the given code using QLocale::countryToString()
+ */
 QString countryIsoToName(const QString &country)
 {
     if (country.size() != 2)
         return QString();
+    // TODO: maybe remove all this code and do just
+    // return QLocale::countryToString(countryIsoToCountry(country));
+    // for code duplication decrease
     QString t;
     t.resize(2);
     int c = 2;
@@ -1191,9 +1200,36 @@ QString countryIsoToName(const QString &country)
         if (t.compare(country, Qt::CaseInsensitive)==0) {
             return QLocale::countryToString(QLocale::Country(i/2));
         }
-        i += 2;
+        ++i;
+        ++i;
     }
     return QString();
+}
+
+/*!
+ * \brief Maps an ISO string to Qt's internal Country code.
+ * \param country an ISO-3166-1 2-char string
+ * \returns a QLocale::Country code for the given \e country
+ */
+QLocale::Country countryIsoToCountry(const QString &country) {
+    if (country.size() != 2)
+        return QLocale::AnyCountry;
+    QString t;
+    t.resize(2);
+    int c = 2;
+    int max = sizeof(two_letter_country_code_list)/sizeof (*two_letter_country_code_list);
+    int i = c;
+    while (i < max) {
+        const unsigned char *c = two_letter_country_code_list + i;
+        t[0] = ushort(c[0]);
+        t[1] = ushort(c[1]);
+        if (t.compare(country, Qt::CaseInsensitive) == 0) {
+            return QLocale::Country(i/2);
+        }
+        ++i;
+        ++i;
+    }
+    return QLocale::AnyCountry;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -154,6 +154,7 @@ UTILS_EXPORT bool inRange(const QModelIndex &topLeft, const QModelIndex &bottomR
 // Some locale functions
 UTILS_EXPORT QString countryToIso(QLocale::Country country);
 UTILS_EXPORT QString countryIsoToName(const QString &country);
+UTILS_EXPORT QLocale::Country countryIsoToCountry(const QString &country);
 
 // Some functions for HTML work
 UTILS_EXPORT QString fontToHtml( const QFont &font, const QColor &color = QColor("black") );
