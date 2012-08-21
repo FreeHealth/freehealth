@@ -25,6 +25,7 @@
  ***************************************************************************/
 #include "zipcodesplugin.h"
 #include "frenchzipcodespage.h"
+#include "genericzipcodespage.h"
 
 #include <coreplugin/dialogs/pluginaboutpage.h>
 
@@ -66,6 +67,7 @@ bool ZipCodesPlugin::initialize(const QStringList &arguments, QString *errorMess
     // add plugin info page
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
     addAutoReleasedObject(new FrenchZipCodesPage(this));
+    addAutoReleasedObject(new GenericZipCodesPage(this));
 
     return true;
 }
