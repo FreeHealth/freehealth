@@ -143,7 +143,6 @@ UTILS_EXPORT QString isFileExists(const QString &absPath);
 UTILS_EXPORT QByteArray md5(const QString &fileName);
 
 // Some useful widgets specific functions
-/** \brief Toggle the echomode of a QLineEdit. */
 UTILS_EXPORT void switchEchoMode( QLineEdit * l );
 
 // Some date & numbering functions

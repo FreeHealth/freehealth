@@ -1121,7 +1121,7 @@ void resizeAndCenter(QWidget *widget, QWidget *reference)
     centerWidget(widget, ref);
 }
 
-/** \brief Switch echo mode af a lineEdit. **/
+/** \brief Toggle the EchoMode property of a QLineEdit between Normal and Password. */
 void switchEchoMode(QLineEdit * l)
 {
     if (l->echoMode() == QLineEdit::Normal)
