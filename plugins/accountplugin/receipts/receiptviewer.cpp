@@ -448,13 +448,15 @@ bool treeViewsActions::fillActionTreeView()
     m_actionsTreeModel = new QStandardItemModel;
     QStringList listOfMainActions;
     QMap<int,QString> parametersMap;
-    qDebug() << __FILE__ << QString::number(__LINE__) << " RECEIPTS "   ;
+    if (WarnDebugMessage)
+        qDebug() << __FILE__ << QString::number(__LINE__) << " RECEIPTS "   ;
     parametersMap.insert(THESAURUS_ITEM,rt.getStringFromRows(THESAURUS_ITEM));
     parametersMap.insert(ALL_VALUES_ITEM,rt.getStringFromRows(ALL_VALUES_ITEM));
     parametersMap.insert(PREFERED_VALUE_ITEM,rt.getStringFromRows(PREFERED_VALUE_ITEM));
     parametersMap.insert(ROUND_TRIP_ITEM,rt.getStringFromRows(ROUND_TRIP_ITEM));
     parametersMap.insert(FREE_VALUE_ITEM,rt.getStringFromRows(FREE_VALUE_ITEM));
-    qDebug() << __FILE__ << QString::number(__LINE__) << " RECEIPTS "   ;
+    if (WarnDebugMessage)
+        qDebug() << __FILE__ << QString::number(__LINE__) << " RECEIPTS "   ;
     listOfMainActions = parametersMap.values();
     //insert items from tables if available
     //QMap<QString,QString> m_mapSubItems;
@@ -510,13 +512,16 @@ bool treeViewsActions::fillActionTreeView()
         actionItem->setEditable(false);
         actionItem->setEnabled(true);
         int row = 0;
-        qDebug() << __FILE__ << QString::number(__LINE__) << " RECEIPTS "   ;
+        if (WarnDebugMessage)
+            qDebug() << __FILE__ << QString::number(__LINE__) << " RECEIPTS "   ;
         //treeViewsActions and colors
         if (strMainActions == rt.getStringFromRows(PREFERED_VALUE_ITEM)) {
             QBrush red(Qt::red);
             actionItem->setForeground(red);
             m_mapOfMainItems.insert(PREFERED_VALUE_ITEM,actionItem);
-            row = PREFERED_VALUE_ITEM;qDebug() << __FILE__ << QString::number(__LINE__) << " RECEIPTS "   ;
+            row = PREFERED_VALUE_ITEM;
+            if (WarnDebugMessage)
+               qDebug() << __FILE__ << QString::number(__LINE__) << " RECEIPTS "   ;
         } else if (strMainActions == rt.getStringFromRows(THESAURUS_ITEM)) {
             QBrush red(Qt::red);
             actionItem->setForeground(red);
