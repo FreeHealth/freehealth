@@ -112,9 +112,6 @@ OpenCVWidget::OpenCVWidget(QWidget *parent) :
 
 
     // face recognition initialisation
-
-    //FIXME: this is only working in Linux with fixed path when opencv is installed!
-    // how do you include an xml file in a resource and load it with a non-Qt function?
     QString filename = settings()->path(Core::ISettings::BundleResourcesPath) + "/textfiles/haarcascade_frontalface_alt2.xml";
     _cascade =  (CvHaarClassifierCascade*)cvLoad(filename.toUtf8());
 
