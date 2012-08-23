@@ -142,6 +142,7 @@ public:
         case IdentityWidget::ReadOnlyMode: {
             viewUi = new Ui::IdentityViewer;
             viewUi->setupUi(q);
+            break;
         }
         case IdentityWidget::ReadWriteMode: {
             editUi = new Ui::IdentityWidget;
@@ -166,6 +167,7 @@ public:
 
             q->connect(editUi->photoButton, SIGNAL(clicked()), q, SLOT(photoButton_clicked()));
             q->connect(editUi->genderCombo, SIGNAL(currentIndexChanged(int)), q, SLOT(updateGenderImage()));
+            break;
         }
         }
     }
@@ -289,10 +291,10 @@ void IdentityWidget::setCurrentIndex(const QModelIndex &patientIndex)
         d->viewUi->sex->clear();
         d->viewUi->fullAdress1->clear();
         d->viewUi->fullAdress2->clear();
-        QString name = d->m_PatientModel->index(patientIndex.row(), Core::IPatient::FullName).data().toString();
+        const QString &name = d->m_PatientModel->index(patientIndex.row(), Core::IPatient::FullName).data().toString();
         d->viewUi->name->setText(name);
 
-        QPixmap photo = d->m_PatientModel->index(patientIndex.row(), Core::IPatient::Photo_64x64).data().value<QPixmap>();
+        const QPixmap &photo = d->m_PatientModel->index(patientIndex.row(), Core::IPatient::Photo_64x64).data().value<QPixmap>();
         d->viewUi->photoLabel->setPixmap(photo);
         updateGenderImage();
 
