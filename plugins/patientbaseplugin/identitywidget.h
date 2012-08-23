@@ -68,7 +68,7 @@ public:
     QDate currentDateOfBirth() const;
 
     QPixmap currentPhoto() const;
-    QPixmap currentDefaultPhoto() const;
+//    QPixmap currentDefaultPhoto() const;
     bool hasPhoto() const;
 
 public Q_SLOTS:

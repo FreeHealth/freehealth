@@ -453,20 +453,20 @@ QPixmap IdentityWidget::currentPhoto() const
     return photo;
 }
 
-/*! \brief returns a default picture for that gender. */
-QPixmap IdentityWidget::currentDefaultPhoto() const
-{
-    const QString gender = currentGender();
-    if (gender == "M") {
-        return QPixmap(theme()->iconFullPath(Core::Constants::ICONMALE, Core::ITheme::BigIcon));
-    } else if (gender == "F") {
-        return QPixmap(theme()->iconFullPath(Core::Constants::ICONFEMALE, Core::ITheme::BigIcon));
-    } else if (gender == "H") {
-        return QPixmap(theme()->iconFullPath(Core::Constants::ICONHERMAPHRODISM , Core::ITheme::BigIcon));
-    } else {
-        return QPixmap();
-    }
-}
+///*! \brief returns a default picture for that gender. */
+//QPixmap IdentityWidget::currentDefaultPhoto() const
+//{
+//    const QString gender = currentGender();
+//    if (gender == "M") {
+//        return QPixmap(theme()->iconFullPath(Core::Constants::ICONMALE, Core::ITheme::BigIcon));
+//    } else if (gender == "F") {
+//        return QPixmap(theme()->iconFullPath(Core::Constants::ICONFEMALE, Core::ITheme::BigIcon));
+//    } else if (gender == "H") {
+//        return QPixmap(theme()->iconFullPath(Core::Constants::ICONHERMAPHRODISM , Core::ITheme::BigIcon));
+//    } else {
+//        return QPixmap();
+//    }
+//}
 
 /** \brief Submit the Identity to the model and the database if in ReadWriteMode. */
 bool IdentityWidget::submit()
