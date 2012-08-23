@@ -70,7 +70,7 @@
 #include <QBrush>
 #include <QColor>
 
-enum { WarnDebugMessage = true };
+enum { WarnDebugMessage = false };
 
 using namespace ReceiptsConstants;
 using namespace Constants;
