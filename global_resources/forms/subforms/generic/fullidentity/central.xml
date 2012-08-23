@@ -6,7 +6,7 @@
   <formdescription>
     <!-- Non translatable values -->
     <authors>Eric Maeker, MD</authors>
-    <version>0.7.0</version>
+    <version>0.7.1</version>
     <fmfv>0.7.0</fmfv>
     <cdate>2012-01-01</cdate>
     <lmdate>2012-02-26</lmdate>
@@ -102,6 +102,12 @@
         <tooltip lang="fr">Liste séparée par un point-virgule</tooltip>
         <options>DontPrintEmptyValues</options>
         <patientdata>patient::email</patientdata>
+      </Item>
+
+      <Item type="button" name="ContactGroup::SendMailButton">
+        <uilink widget="sendMailButton"/>
+        <label lang="xx">Send mail</label>
+        <label lang="fr">Envoyer un courriel</label>
       </Item>
 
     </Item>

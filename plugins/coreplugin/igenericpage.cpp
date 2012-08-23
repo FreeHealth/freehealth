@@ -30,13 +30,13 @@
 /** Use this to sort page list by category && sort index. */
 bool Core::IGenericPage::lessThan(IGenericPage *one, IGenericPage *two)
 {
-    qWarning() << "LESS THAN" << one->category() << two->category() << one->sortIndex() << two->sortIndex();
+//    qWarning() << "LESS THAN" << one->category() << two->category() << one->sortIndex() << two->sortIndex();
     if (one->category() < two->category())
         return true;
     else if (one->category() == two->category()
              && one->sortIndex() < two->sortIndex())
              return true;
-    qWarning() << "    FALSE";
+//    qWarning() << "    FALSE";
     return false;
 }
 
