@@ -161,10 +161,10 @@ void OpenCVWidget::timerEvent(QTimerEvent *event)
             }
             // draw inside the QImage
             cvIndex = 0; cvLineStart = 0;
-            for (int y = 0; y < cvimage->height; y++) {
+            for (int y = 0; y < cvimage->height; ++y) {
                 unsigned char red,green,blue;
                 cvIndex = cvLineStart;
-                for (int x = 0; x < cvimage->width; x++) {
+                for (int x = 0; x < cvimage->width; ++x) {
                     // DO it
                     red = cvimage->imageData[cvIndex+2];
                     green = cvimage->imageData[cvIndex+1];
