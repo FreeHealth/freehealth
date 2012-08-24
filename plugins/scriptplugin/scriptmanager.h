@@ -31,10 +31,22 @@
 
 #include <QScriptEngine>
 
+/**
+ * \file scriptmanager.h
+ * \author Eric MAEKER <eric.maeker@gmail.com>
+ * \version 0.8.0
+ * \date 24 Aug 2012
+*/
+
+// TODO: everything should be in the internal namespace
+
 namespace Script {
+namespace Internal {
+
+class UiTools;
 class ScriptPatientWrapper;
 class FormManagerScriptWrapper;
-class UiTools;
+class Tools;
 
 class SCRIPT_EXPORT ScriptManager : public Core::IScriptManager
 {
@@ -56,11 +68,13 @@ private:
     static ScriptManager *m_Instance;
     QScriptEngine *m_Engine;
     // wrappers
-    ScriptPatientWrapper *patient;
-    FormManagerScriptWrapper *forms;
-    UiTools *tools;
+    Internal::ScriptPatientWrapper *patient;
+    Internal::FormManagerScriptWrapper *forms;
+    UiTools *uitools;
+    Internal::Tools *tools;
 };
 
-} // namespace Script
+}  // namespace Internal
+}  // namespace Script
 
 #endif // SCRIPT_SCRIPTMANAGER_H

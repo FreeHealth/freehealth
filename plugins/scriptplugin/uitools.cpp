@@ -43,12 +43,14 @@
 #include <QDebug>
 
 using namespace Script;
+using namespace Internal;
+
 static inline Form::FormManager *formManager() { return Form::FormManager::instance(); }
 
 UiTools::UiTools(QObject *parent) :
     QObject(parent)
 {
-    setObjectName("UiTools");
+    setObjectName("Script::UiTools");
 }
 
 static void warnObject(QObject *o, const QString &indent)

@@ -23,67 +23,34 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef SCRIPTPATIENTWRAPPER_H
-#define SCRIPTPATIENTWRAPPER_H
+#ifndef SCRIPT_INTERNAL_TOOLS_H
+#define SCRIPT_INTERNAL_TOOLS_H
 
 #include <QObject>
-#include <QDate>
-#include <QVariant>
-#include <QString>
 
 /**
- * \file scriptpatientwrapper.h
+ * \file tools.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.7.6
- * \date 01 Jun 2012
+ * \version 0.8.0
+ * \date 24 Aug 2012
 */
 
 namespace Script {
 namespace Internal {
 
-class ScriptPatientWrapper : public QObject  //, public QScriptClass
+class Tools : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(bool     isActive    READ isActive())
-    Q_PROPERTY(QString  fullName    READ fullName())
-    Q_PROPERTY(QDate    dateOfBirth READ dateOfBirth())
-    Q_PROPERTY(int      yearsOld    READ yearsOld())
-    Q_PROPERTY(bool     isMale      READ isMale())
-    Q_PROPERTY(bool     isFemale    READ isFemale())
-    Q_PROPERTY(double   weight      READ weight())
-    Q_PROPERTY(QString  weightUnit  READ weightUnit())
-    Q_PROPERTY(double   height      READ height())
-    Q_PROPERTY(QString  heightUnit  READ heightUnit())
-
-    Q_PROPERTY(double   creatinine              READ creatinine())
-    Q_PROPERTY(QString  creatinineUnit          READ creatinineUnit())
-    Q_PROPERTY(double   clearanceCreatinine     READ clearanceCreatinine())
-    Q_PROPERTY(QString  clearanceCreatinineUnit READ clearanceCreatinineUnit())
-
 public:
-    ScriptPatientWrapper(QObject *parent);
-
+    explicit Tools(QObject *parent = 0);
+    
 public Q_SLOTS:
-    bool isActive() const;
-    QString fullName() const;
-    QDate dateOfBirth() const;
-    int yearsOld() const;
-    bool isMale() const;
-    bool isFemale() const;
-    double weight() const;
-    QString weightUnit() const;
-    double height() const;
-    QString heightUnit() const;
-    double bmi() const;
-    double imc() const {return bmi();}
-    double creatinine() const;
-    QString creatinineUnit() const;
-    double clearanceCreatinine() const;
-    QString clearanceCreatinineUnit() const;
+    void openUrl(const QString &url);
+
+
 };
 
+} // namespace Internal
+} // namespace Script
 
-}  // namespace Internal
-}  //  End namespace Script
-
-#endif // SCRIPTPATIENTWRAPPER_H
+#endif // SCRIPT_INTERNAL_TOOLS_H

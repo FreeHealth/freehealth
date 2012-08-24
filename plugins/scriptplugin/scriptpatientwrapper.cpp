@@ -29,6 +29,7 @@
 #include <coreplugin/ipatient.h>
 
 using namespace Script;
+using namespace Internal;
 
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 

@@ -19,56 +19,30 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Main developers: Eric MAEKER, <eric.maeker@gmail.com>                 *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef SCRIPT_UITOOLS_H
-#define SCRIPT_UITOOLS_H
+#include "tools.h"
 
-#include <QObject>
-#include <QStringList>
-class QWidget;
-class QScriptValue;
+#include <utils/log.h>
 
-/**
- * \file uitools.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.7.6
- * \date 01 Jun 2012
-*/
+#include <QDesktopServices>
+#include <QUrl>
 
-namespace Script {
-namespace Internal {
+using namespace Script;
+using namespace Internal;
 
-class FormItemScriptWrapper;
-
-class UiTools : public QObject
+Tools::Tools(QObject *parent) :
+    QObject(parent)
 {
-    Q_OBJECT
-public:
-    explicit UiTools(QObject *parent = 0);
+    setObjectName("Script::Tools");
+}
 
-Q_SIGNALS:
-
-public Q_SLOTS:
-    void printQObjectChildrenList(QObject *obj);
-
-    bool addItem(QWidget *widget, const QString &item);
-    bool addItems(QWidget *widget, const QStringList &items);
-    bool addJoinedItem(QWidget *widget, const QString &item, const QString &separator);
-
-    bool setItemText(QWidget *widget, const int row, const QString &item);
-
-    bool clear(QWidget *widget);
-
-    QStringList selectedItems(QWidget *widget);
-
-    void showScreenshot(const QString &formUid, const QString &fileName) const;
-
-};
-
-}  // namespace Internal
-}  // namespace Script
-
-#endif // SCRIPT_UITOOLS_H
+void Tools::openUrl(const QString &url)
+{
+    if (!QDesktopServices::openUrl(QUrl(url)))
+        LOG_ERROR("When requested openUrl with " + url);
+    else
+        LOG("URL opened: " + url);
+}

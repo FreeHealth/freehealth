@@ -47,6 +47,7 @@ static inline Core::ActionManager *actionManager() {return Core::ICore::instance
 // END
 
 using namespace Script;
+using namespace Internal;
 
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 
