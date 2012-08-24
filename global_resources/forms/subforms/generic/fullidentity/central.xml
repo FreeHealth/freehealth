@@ -6,7 +6,7 @@
   <formdescription>
     <!-- Non translatable values -->
     <authors>Eric Maeker, MD</authors>
-    <version>0.7.1</version>
+    <version>test</version>
     <fmfv>0.7.0</fmfv>
     <cdate>2012-01-01</cdate>
     <lmdate>2012-02-26</lmdate>
@@ -108,6 +108,16 @@
         <uilink widget="sendMailButton"/>
         <label lang="xx">Send mail</label>
         <label lang="fr">Envoyer un courriel</label>
+        <script>
+          <onclicked>
+          freemedforms.forms.namespaceInUse = "Subs::Tools::Identity::ContactGroup::";
+          var address = freemedforms.forms.item("Mail");
+          if (address.isValid) {
+              if (address.currentValue != "")
+                  freemedforms.tools.openUrl("mailto:" + address.currentValue + "?subject:");
+          }
+          </onclicked>
+        </script>
       </Item>
 
     </Item>
