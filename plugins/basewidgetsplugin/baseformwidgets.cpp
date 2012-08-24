@@ -2391,8 +2391,6 @@ BaseButton::BaseButton(Form::FormItem *formItem, QWidget *parent) :
 {
     setObjectName("BaseButton");
 
-    qWarning() << "BUTTON" << formItem->spec()->label();
-
     // QtUi Loaded ?
     const QString &widget = formItem->spec()->value(Form::FormItemSpec::Spec_UiWidget).toString();
     if (!widget.isEmpty()) {
@@ -2431,12 +2429,12 @@ BaseButton::~BaseButton()
 
 void BaseButton::buttonClicked()
 {
-    executeOnValueChangedScript(m_FormItem);
+    if (!m_FormItem->scripts()->onClicked().isEmpty())
+        scriptManager()->evaluate(m_FormItem->scripts()->onClicked());
 }
 
 void BaseButton::retranslate()
 {
-    qWarning() << "RETARNS " << m_Button;
     if (m_Button)
         m_Button->setText(m_FormItem->spec()->label());
 }
