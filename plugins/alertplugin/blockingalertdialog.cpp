@@ -206,8 +206,6 @@ BlockingAlertDialog::BlockingAlertDialog(const QList<AlertItem> &items,
     layout()->setSpacing(5);
     setWindowTitle(tkTr(Trans::Constants::BLOCKING_ALERT));
     setWindowModality(Qt::WindowModal);
-    //TODO: imporve the mouse cursor on Blocking dialog
-    qApp->setOverrideCursor(QCursor(Qt::WhatsThisCursor));
 
     // Manage the general icon of the dialog
     if (!themedIcon.isEmpty() && QFile(theme()->iconFullPath(themedIcon, Core::ITheme::BigIcon)).exists()) {
