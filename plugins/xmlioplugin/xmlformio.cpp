@@ -468,7 +468,7 @@ bool XmlFormIO::checkDatabaseFormFileForUpdates() const
                         .arg(tr("Database version: %1").arg(db.versionString()))
                         ;
                 foreach(const Utils::GenericUpdateInformation &u, descFile->updateInformationForVersion(db)) {
-                    html += "&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;" + Utils::firstLetterUpperCase(tkTr(Trans::Constants::FROM_1_TO_2).arg(u.fromVersion()).arg(u.toVersion())) + "&nbsp;: " + u.text() + "<br />";
+                    html += "&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;" + Utils::firstLetterUpperCase(tkTr(Trans::Constants::FROM_1_TO_2).arg(u.fromVersion()).arg(u.toVersion())) + "&nbsp;:<br /> " + u.text() + "<br />";
                 }
                 msg << html;
                 if (!formsToUpdate.contains(form))

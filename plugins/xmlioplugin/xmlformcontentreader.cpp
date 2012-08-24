@@ -144,6 +144,7 @@ XmlFormContentReader::XmlFormContentReader() :
    m_PatientDatas.insert(Constants::TAG_DATAPATIENT_EMAIL, Core::IPatient::Mails);
    m_PatientDatas.insert(Constants::TAG_DATAPATIENT_FAX, Core::IPatient::Faxes);
    m_PatientDatas.insert(Constants::TAG_DATAPATIENT_TELS, Core::IPatient::Tels);
+   m_PatientDatas.insert(Constants::TAG_DATAPATIENT_MOBILETEL, Core::IPatient::MobilePhone);
 }
 
 XmlFormContentReader::~XmlFormContentReader()

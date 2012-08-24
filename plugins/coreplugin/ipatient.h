@@ -86,6 +86,7 @@ public:
         FullAddress,
         Mails,
         Tels,  // 30
+        MobilePhone,
         Faxes,
 
         // Biometrics

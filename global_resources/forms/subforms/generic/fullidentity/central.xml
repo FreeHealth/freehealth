@@ -23,6 +23,13 @@
     <specialties lang="fr">Outils</specialties>
     <specialties lang="xx">Tools</specialties>
 
+    <updateinfo>
+      <updateversion from="0.7.0" to="0.8.0">
+        <text lang="fr">Ajout du numéro de téléphone mobile&lt;br />Bouton 'envoyer un courriel' connecté</text>
+        <text lang="en">Adding the mobile phone number&lt;br />'Send mail' button is now connected</text>
+      </updateversion>
+    </updateinfo>
+
   </formdescription>
 
   <MedForm name="Subs::Tools::Identity" uifilename="./ui/xx/identity.ui">
@@ -86,6 +93,16 @@
         <patientdata>patient::tels</patientdata>
       </Item>
 
+      <Item type="shorttext" name="ContactGroup::MobileTel">
+        <uilink label="mobileLabel" widget="mobileEdit"/>
+        <label lang="xx">Mobile phone</label>
+        <label lang="fr">Numéros de mobile</label>
+        <tooltip lang="xx">Inform the mobile phone number</tooltip>
+        <tooltip lang="fr">Renseignez le numéro de téléphone mobile</tooltip>
+        <options>DontPrintEmptyValues</options>
+        <patientdata>patient::mobiletel</patientdata>
+      </Item>
+
       <Item type="shorttext" name="ContactGroup::Fax">
         <uilink label="faxLabel" widget="faxEdit"/>
         <label lang="xx">Fax number</label>
@@ -119,6 +136,13 @@
           </onclicked>
         </script>
       </Item>
+
+      <Item type="button" name="ContactGroup::SendMailButton">
+        <uilink widget="sendSmsButton"/>
+        <label lang="xx">Send SMS</label>
+        <label lang="fr">Envoyer un SMS</label>
+      </Item>
+
 
     </Item>
 
