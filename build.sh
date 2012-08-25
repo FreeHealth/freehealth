@@ -185,7 +185,7 @@ qmakeCommand()
 {
     # zenity progress feature
     echo "30"; sleep 1
-    echo "# Preparing the build:\nthe qmake step" ; sleep 1
+    echo "# Preparing the build:\nrunning qmake" ; sleep 1
     EXTRAPLUGS=""
     if [[ "$WEBCAM" == "y" ]]; then
         EXTRAPLUGS="with-webcam"
@@ -510,7 +510,7 @@ gitPage()
         echo "* Git detected"
         $ZENITY_NO_SIZE --title "$ZENITY_TITLE" --question \
                         --text "A revision control (git clone) was found.\nDo you want to update your local working copy of the source ?" \
-                        --ok-label "Yes, update" --cancel-label "No, compil now"
+                        --ok-label "Yes, update" --cancel-label "No, compile now"
         if [[ "$?" -eq 0 ]]; then
             echo "* git pull"
             RET=""
