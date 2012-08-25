@@ -282,6 +282,7 @@ void NonBlockingAlertToolButton::changeEvent(QEvent *event)
 
 void NonBlockingAlertToolButton::showEvent(QShowEvent *event)
 {
+    Q_UNUSED(event);
     // only once
     if (!_aboutToShowScriptExecuted)
         alertCore()->execute(_item, AlertScript::OnAboutToShow);

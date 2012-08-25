@@ -194,6 +194,7 @@ void PageWidget::setupUi(bool sortCategoryView)
 
 //    if (sortCategoryView)
 //        m_ui->pageTree->sortItems(0, Qt::AscendingOrder);
+    Q_UNUSED(sortCategoryView);
 
     m_ui->stackedPages->layout()->setMargin(0);
     m_ui->layoutWidget->layout()->setContentsMargins(12,0,12,0);
