@@ -10,7 +10,7 @@
     <fmfv>0.7.0</fmfv>
     <cdate>2012-01-01</cdate>
     <lmdate>2012-02-26</lmdate>
-    <icon>identity.png</icon>
+    <icon>__theme__/identity.png</icon>
     <weblink></weblink>
     <bibliography/>
 
@@ -125,6 +125,7 @@
         <uilink widget="sendMailButton"/>
         <label lang="xx">Send mail</label>
         <label lang="fr">Envoyer un courriel</label>
+        <icon>__theme__/mail_new.png</icon>
         <script>
           <onclicked>
           freemedforms.forms.namespaceInUse = "Subs::Tools::Identity::ContactGroup::";
@@ -137,7 +138,7 @@
         </script>
       </Item>
 
-      <Item type="button" name="ContactGroup::SendMailButton">
+      <Item type="button" name="ContactGroup::SendSmsButton">
         <uilink widget="sendSmsButton"/>
         <label lang="xx">Send SMS</label>
         <label lang="fr">Envoyer un SMS</label>

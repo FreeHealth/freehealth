@@ -2415,8 +2415,7 @@ BaseButton::BaseButton(Form::FormItem *formItem, QWidget *parent) :
     QString icon = formItem->spec()->value(Form::FormItemSpec::Spec_IconFileName).toString();
     if (!icon.isEmpty()) {
         if (icon.startsWith(Core::Constants::TAG_APPLICATION_THEME_PATH, Qt::CaseInsensitive)) {
-            icon = icon.replace(Core::Constants::TAG_APPLICATION_THEME_PATH, settings()->path(Core::ISettings::ThemeRootPath));
-            qWarning() << icon;
+            icon = icon.replace(Core::Constants::TAG_APPLICATION_THEME_PATH, settings()->path(Core::ISettings::SmallPixmapPath));
         }
         m_Button->setIcon(QIcon(icon));
     }
