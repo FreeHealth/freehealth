@@ -65,6 +65,7 @@ mainwin.depends += texteditor
 mainwin.depends += printer
 mainwin.depends += usermanager
 mainwin.depends += formmanager
+mainwin.depends += patientbase
 
 xmlio.subdir   = ../../plugins/xmlioplugin
 xmlio.depends += core
