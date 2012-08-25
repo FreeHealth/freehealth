@@ -86,14 +86,14 @@ public:
         m_EmitCreationAtSubmit(false),
         q(parent)
     {
-//        m_UserUuid = user()->uuid();
-
-        // install the Core Patient wrapper
-//        Core::ICore::instance()->setPatient(q);
+        _defaultMalePhoto = new QPixmap(theme()->iconFullPath(Core::Constants::ICONMALE, Core::ITheme::BigIcon));
+        _defaultFemalePhoto = new QPixmap(theme()->iconFullPath(Core::Constants::ICONFEMALE, Core::ITheme::BigIcon));
     }
 
     ~PatientModelPrivate ()
     {
+        delete _defaultMalePhoto;
+        delete _defaultFemalePhoto;
         if (m_SqlPatient) {
             delete m_SqlPatient;
             m_SqlPatient = 0;
@@ -224,7 +224,13 @@ public:
 
         where.insert(Constants::PHOTO_PATIENT_UID, QString("='%1'").arg(patientUid));
         if (patientBase()->count(Constants::Table_PATIENT_PHOTO, Constants::PHOTO_PATIENT_UID, patientBase()->getWhereClause(Constants::Table_PATIENT_PHOTO, where)) == 0) {
-            // no photo found, return QPixmap()
+            QModelIndex genderIndex = q->index(index.row(), Core::IPatient::Gender);
+            const QString &gender = q->data(genderIndex).toString();
+            if (gender == "M")
+                return QPixmap(*_defaultMalePhoto);
+            else if (gender == "F")
+                return QPixmap(*_defaultFemalePhoto);
+            // TODO: manage hermaphrodism
             return QPixmap();
         }
 
@@ -259,6 +265,7 @@ public:
     QString m_UserUuid;
     QStringList m_CreatedPatientUid;
     bool m_EmitCreationAtSubmit;
+    QPixmap *_defaultMalePhoto, *_defaultFemalePhoto;
 
 private:
     PatientModel *q;
@@ -563,15 +570,18 @@ bool PatientModel::setData(const QModelIndex &index, const QVariant &value, int 
         {
             col = Constants::IDENTITY_GENDER;
             QString g;
-            switch (value.toInt())
-            {
+            switch (value.toInt()) {
             case 0: g = "M"; break;
             case 1: g = "F"; break;
             case 2: g = "H"; break;
             }
+            // value not changed ? -> return
+            if (d->m_SqlPatient->index(index.row(), Constants::IDENTITY_GENDER).data().toString() == g)
+                return true;
+
             d->m_SqlPatient->setData(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_GENDER), g, role);
             col=-1;
-            colsToEmit << Core::IPatient::Gender << Core::IPatient::GenderPixmap;
+            colsToEmit << Core::IPatient::Gender << Core::IPatient::GenderPixmap << Core::IPatient::Photo_32x32 << Core::IPatient::Photo_64x64;
             break;
         }
         case IPatient::Gender:
@@ -584,9 +594,13 @@ bool PatientModel::setData(const QModelIndex &index, const QVariant &value, int 
             case 2:  toSave = "H"; break;
             default: LOG_ERROR("Unknown gender " + g);
             }
+            // value not changed ? -> return
+            if (d->m_SqlPatient->index(index.row(), Constants::IDENTITY_GENDER).data().toString() == toSave)
+                return true;
+
             d->m_SqlPatient->setData(d->m_SqlPatient->index(index.row(), Constants::IDENTITY_GENDER), toSave, role);
             col = -1;
-            colsToEmit << Core::IPatient::GenderIndex << Core::IPatient::GenderPixmap;
+            colsToEmit << Core::IPatient::GenderIndex << Core::IPatient::GenderPixmap << Core::IPatient::Photo_32x32 << Core::IPatient::Photo_64x64;
             break;
         }
         case IPatient::DateOfBirth:
@@ -651,6 +665,9 @@ bool PatientModel::setData(const QModelIndex &index, const QVariant &value, int 
                     id = Trans::Constants::Captain;
                 }
                 if (id != -1) {
+                    if (d->m_SqlPatient->data(d->m_SqlPatient->index(index.row(), col)).toInt() == id)
+                        return true;
+
                     d->m_SqlPatient->setData(d->m_SqlPatient->index(index.row(), col), id, role);
                     colsToEmit << Core::IPatient::TitleIndex << Core::IPatient::FullName;
                 }
@@ -664,11 +681,19 @@ bool PatientModel::setData(const QModelIndex &index, const QVariant &value, int 
                 QString patientUid = d->m_SqlPatient->index(index.row(), Constants::IDENTITY_UID).data().toString();
                 d->savePatientPhoto(pix, patientUid);
                 col = -1;
+                colsToEmit << Core::IPatient::Photo_32x32 << Core::IPatient::Photo_64x64;
                 break;
             }
         }
 
         if (col != -1) {
+            // value not changed ? -> return
+            if (d->m_SqlPatient->index(index.row(), col).data() == value)
+                return true;
+            if (value.isNull() && d->m_SqlPatient->index(index.row(), col).data().toString().isEmpty())
+                return true;
+
+            // value changed -> save to database
             bool ok = d->m_SqlPatient->setData(d->m_SqlPatient->index(index.row(), col), value, role);
             if (!ok)
                 LOG_QUERY_ERROR(d->m_SqlPatient->query());
