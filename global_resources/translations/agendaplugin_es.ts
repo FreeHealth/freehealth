@@ -6,7 +6,7 @@
     <message>
         <location filename="../../plugins/agendaplugin/constants.h" line="190"/>
         <source>Print current selection</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Imprimir seleccion</translation>
     </message>
 </context>
 <context>
@@ -14,17 +14,17 @@
     <message>
         <location filename="../../plugins/agendaplugin/agendaplugin.cpp" line="115"/>
         <source>Initializing agenda plugin...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Iniciando agenda...</translation>
     </message>
     <message>
         <location filename="../../plugins/agendaplugin/agendaplugin.cpp" line="122"/>
         <source>Creating agenda base...</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Creando agenda...</translation>
     </message>
     <message>
         <location filename="../../plugins/agendaplugin/agendaplugin.cpp" line="122"/>
         <source>Please wait</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Aguarde un instante</translation>
     </message>
 </context>
 <context>
@@ -32,27 +32,30 @@
     <message>
         <location filename="../../plugins/agendaplugin/availabilitycreatordialog.ui" line="14"/>
         <source>Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/agendaplugin/availabilitycreatordialog.ui" line="32"/>
         <source>Day availability creator</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Dias y horas de atencion</translation>
     </message>
     <message>
         <location filename="../../plugins/agendaplugin/availabilitycreatordialog.ui" line="49"/>
         <source>Day of week</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Dias de la semana</translatorcomment>
+        <translation type="unfinished">Dias de la semana</translation>
     </message>
     <message>
         <location filename="../../plugins/agendaplugin/availabilitycreatordialog.ui" line="59"/>
         <source>Start time</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Primer turno</translatorcomment>
+        <translation type="unfinished">Hora de comienzo</translation>
     </message>
     <message>
         <location filename="../../plugins/agendaplugin/availabilitycreatordialog.ui" line="69"/>
         <source>End time</source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Ultimo turno</translatorcomment>
+        <translation type="unfinished">Fin atencion</translation>
     </message>
 </context>
 <context>
@@ -60,7 +63,7 @@
     <message>
         <location filename="../../plugins/agendaplugin/calendaritemmodel.cpp" line="321"/>
         <source>Empty</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">vacio</translation>
     </message>
 </context>
 <context>
@@ -69,7 +72,7 @@
         <location filename="../../plugins/agendaplugin/agendamode.cpp" line="61"/>
         <location filename="../../plugins/agendaplugin/agendamode.cpp" line="79"/>
         <source>Agenda</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Agenda</translation>
     </message>
 </context>
 <context>
@@ -77,7 +80,7 @@
     <message>
         <location filename="../../plugins/agendaplugin/agendapreferencespage.cpp" line="75"/>
         <source>Agenda preferences</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Preferencias de Agenda</translation>
     </message>
 </context>
 <context>
@@ -85,7 +88,7 @@
     <message>
         <location filename="../../plugins/agendaplugin/agendapreferencespage.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -93,17 +96,17 @@
     <message>
         <location filename="../../plugins/agendaplugin/calendaritemeditorpatientmapper.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/agendaplugin/calendaritemeditorpatientmapper.ui" line="26"/>
         <source>Patients</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Pacientes</translation>
     </message>
     <message>
         <location filename="../../plugins/agendaplugin/calendaritemeditorpatientmapper.ui" line="46"/>
         <source>Search</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Buscar</translation>
     </message>
 </context>
 <context>
@@ -114,7 +117,7 @@
         <location filename="../../plugins/agendaplugin/calendaritemeditorpatientmapper.cpp" line="288"/>
         <location filename="../../plugins/agendaplugin/calendaritemeditorpatientmapper.cpp" line="289"/>
         <source>Add current patient</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Agregar paciente actual</translation>
     </message>
 </context>
 <context>
@@ -122,7 +125,7 @@
     <message>
         <location filename="../../plugins/agendaplugin/nextavailabiliystepviewer.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -130,17 +133,17 @@
     <message>
         <location filename="../../plugins/agendaplugin/usercalendardelegatesmapper.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/agendaplugin/usercalendardelegatesmapper.ui" line="23"/>
         <source>Delegates</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/agendaplugin/usercalendardelegatesmapper.ui" line="43"/>
         <source>Search</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Buscar</translation>
     </message>
 </context>
 <context>
@@ -148,7 +151,7 @@
     <message>
         <location filename="../../plugins/agendaplugin/usercalendarpageforuserviewer.cpp" line="139"/>
         <source>User agendas</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Agendas de Usuarios</translation>
     </message>
 </context>
 <context>
@@ -161,12 +164,12 @@
     <message>
         <location filename="../../plugins/agendaplugin/usercalendarviewer.ui" line="27"/>
         <source>You are</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Usted es</translation>
     </message>
     <message>
         <location filename="../../plugins/agendaplugin/usercalendarviewer.ui" line="52"/>
         <source>Your agendas</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Sus agendas</translation>
     </message>
     <message>
         <location filename="../../plugins/agendaplugin/usercalendarviewer.ui" line="68"/>
@@ -176,17 +179,17 @@
     <message>
         <location filename="../../plugins/agendaplugin/usercalendarviewer.ui" line="97"/>
         <source>Search parameters</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Buscar parametros</translation>
     </message>
     <message>
         <location filename="../../plugins/agendaplugin/usercalendarviewer.ui" line="172"/>
         <source>Duration</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Duracion</translation>
     </message>
     <message>
         <location filename="../../plugins/agendaplugin/usercalendarviewer.ui" line="214"/>
         <source>Description</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Descripcion</translation>
     </message>
     <message>
         <location filename="../../plugins/agendaplugin/usercalendarviewer.cpp" line="366"/>
@@ -195,7 +198,7 @@
         <extracomment>default agenda duration time (in minutes)
 ----------
 default agenda duration time (in minutes)</extracomment>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -205,7 +208,7 @@ default agenda duration time (in minutes)</extracomment>
         <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.cpp" line="67"/>
         <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.cpp" line="72"/>
         <source>User&apos;s agendas</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Agendas de Usuarios</translation>
     </message>
 </context>
 <context>
@@ -213,47 +216,47 @@ default agenda duration time (in minutes)</extracomment>
     <message>
         <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.ui" line="20"/>
         <source>Quick params</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Parametros rapidos</translation>
     </message>
     <message>
         <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.ui" line="32"/>
         <source>Label</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Etiqueta</translation>
     </message>
     <message>
         <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.ui" line="61"/>
         <source>Description</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Descripcion</translation>
     </message>
     <message>
         <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.ui" line="84"/>
         <source>Default appointement duration</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Duracion de la consulta por defecto</translation>
     </message>
     <message>
         <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.ui" line="104"/>
         <source>minutes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">minutos</translation>
     </message>
     <message>
         <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.ui" line="111"/>
         <source>Default location</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Localizacion por defecto</translation>
     </message>
     <message>
         <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.ui" line="137"/>
         <source>Do you want to create an agenda for this user ?</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Usted desea crear una agenda para este usuario?</translation>
     </message>
     <message>
         <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.ui" line="143"/>
         <source>Create an agenda</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Crear una agenda</translation>
     </message>
 </context>
 <context>
@@ -261,27 +264,27 @@ default agenda duration time (in minutes)</extracomment>
     <message>
         <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.cpp" line="124"/>
         <source>Please specify a label for this agenda.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Por favor especifique una etiqueta para esta agenda.</translation>
     </message>
     <message>
         <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.cpp" line="127"/>
         <source>The default duration can not be null.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">La duracion por defecto no puede ser cero.</translation>
     </message>
     <message>
         <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.cpp" line="130"/>
         <source>Error detected</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Se detecto un error</translation>
     </message>
     <message>
         <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.cpp" line="140"/>
         <source>Manage an agenda.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Manejar una agenda.</translation>
     </message>
     <message>
         <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.cpp" line="141"/>
         <source>You can quickly define an agenda for this user. This agenda will be the default one.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Usted puede definir una agenda para este usuario. Esta agenda sera usada por defecto.</translation>
     </message>
 </context>
 <context>
@@ -289,110 +292,110 @@ default agenda duration time (in minutes)</extracomment>
     <message>
         <location filename="../../plugins/agendaplugin/usercalendareditor.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/agendaplugin/usercalendareditor.ui" line="20"/>
         <location filename="../../plugins/agendaplugin/usercalendareditor.ui" line="67"/>
         <source>Description</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/agendaplugin/usercalendareditor.ui" line="103"/>
         <source>Label</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/agendaplugin/usercalendareditor.ui" line="48"/>
         <source>Icon</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/agendaplugin/usercalendareditor.ui" line="90"/>
         <source>Select</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Seleccionar</translation>
     </message>
     <message>
         <location filename="../../plugins/agendaplugin/usercalendareditor.ui" line="134"/>
         <source>General</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/agendaplugin/usercalendareditor.ui" line="149"/>
         <source>Default event duration</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/agendaplugin/usercalendareditor.ui" line="172"/>
         <source>Default location</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/agendaplugin/usercalendareditor.ui" line="156"/>
         <source> minutes</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">minutos</translation>
     </message>
     <message>
         <location filename="../../plugins/agendaplugin/usercalendareditor.ui" line="182"/>
         <source>Password</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Password</translation>
     </message>
     <message>
         <location filename="../../plugins/agendaplugin/usercalendareditor.ui" line="195"/>
         <source>Agenda is the default agenda</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/agendaplugin/usercalendareditor.ui" line="202"/>
         <source>Agenda is private</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Agendar como privado</translation>
     </message>
     <message>
         <location filename="../../plugins/agendaplugin/usercalendareditor.ui" line="210"/>
         <source>Shared</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Compartir</translation>
     </message>
     <message>
         <location filename="../../plugins/agendaplugin/usercalendareditor.ui" line="236"/>
         <source>Availabilities</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/agendaplugin/usercalendareditor.ui" line="261"/>
         <source>Add</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Agregar</translation>
     </message>
     <message>
         <location filename="../../plugins/agendaplugin/usercalendareditor.ui" line="271"/>
         <source>Clear</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/agendaplugin/usercalendareditor.ui" line="278"/>
         <source>Remove</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Eliminar</translation>
     </message>
     <message>
         <location filename="../../plugins/agendaplugin/usercalendareditor.cpp" line="150"/>
         <location filename="../../plugins/agendaplugin/usercalendareditor.cpp" line="162"/>
         <source>Can not delete all availabilities</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/agendaplugin/usercalendareditor.cpp" line="151"/>
         <location filename="../../plugins/agendaplugin/usercalendareditor.cpp" line="163"/>
         <source>Agenda must have at least one availability. You can not delete all its availabilities.</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/agendaplugin/usercalendareditor.cpp" line="155"/>
         <source>Delete full day.</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/agendaplugin/usercalendareditor.cpp" line="156"/>
         <source>You are about to delete all recorded time range for one specific day of the week (%1). Do you really want to delete all time range?</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -400,13 +403,13 @@ default agenda duration time (in minutes)</extracomment>
     <message>
         <location filename="../../plugins/agendaplugin/usercalendarmodelfulleditorwidget.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/agendaplugin/usercalendarmodelfulleditorwidget.cpp" line="72"/>
         <location filename="../../plugins/agendaplugin/usercalendarmodelfulleditorwidget.cpp" line="127"/>
         <source>Create a new calendar</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Crear un nuevo calendario</translation>
     </message>
 </context>
 <context>
@@ -417,7 +420,7 @@ default agenda duration time (in minutes)</extracomment>
        Location: %1
        FileName: %2
        Driver: %3</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 </TS>

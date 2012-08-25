@@ -277,7 +277,7 @@ Then parametrize your user, sites, bank and so on.</source>
     <message>
         <location filename="../../plugins/accountplugin/preferences/assetsratespage.ui" line="28"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nombre</translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/preferences/assetsratespage.ui" line="88"/>
@@ -297,7 +297,7 @@ Then parametrize your user, sites, bank and so on.</source>
     <message>
         <location filename="../../plugins/accountplugin/preferences/assetsratespage.ui" line="123"/>
         <source>Period</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Periodo</translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/preferences/assetsratespage.ui" line="130"/>
@@ -338,7 +338,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../../plugins/accountplugin/preferences/assetsratespage.cpp" line="175"/>
         <source>Save changes?</source>
-        <translation type="unfinished"></translation>
+        <translation>Guardar cambios?</translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/preferences/assetsratespage.cpp" line="176"/>

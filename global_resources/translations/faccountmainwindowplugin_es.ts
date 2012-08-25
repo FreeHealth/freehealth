@@ -6,12 +6,12 @@
     <message>
         <location filename="../../plugins/faccountmainwindowplugin/mainwindow.ui" line="20"/>
         <source>Patient Firstname</source>
-        <translation type="unfinished"></translation>
+        <translation>Primer nombre del paciente</translation>
     </message>
     <message>
         <location filename="../../plugins/faccountmainwindowplugin/mainwindow.ui" line="30"/>
         <source>Surname</source>
-        <translation type="unfinished"></translation>
+        <translation>Apellido</translation>
     </message>
 </context>
 <context>
@@ -20,7 +20,7 @@
         <location filename="../../plugins/faccountmainwindowplugin/mainwindowpreferences.cpp" line="72"/>
         <location filename="../../plugins/faccountmainwindowplugin/mainwindowpreferences.cpp" line="73"/>
         <source>General</source>
-        <translation type="unfinished"></translation>
+        <translation>General</translation>
     </message>
 </context>
 <context>
@@ -38,27 +38,27 @@
     <message>
         <location filename="../../plugins/faccountmainwindowplugin/mainwindowpreferenceswidget.ui" line="28"/>
         <source>At startup</source>
-        <translation type="unfinished"></translation>
+        <translation>Al inicio</translation>
     </message>
     <message>
         <location filename="../../plugins/faccountmainwindowplugin/mainwindowpreferenceswidget.ui" line="33"/>
         <source>Each weeks</source>
-        <translation type="unfinished"></translation>
+        <translation>Una vez por semana</translation>
     </message>
     <message>
         <location filename="../../plugins/faccountmainwindowplugin/mainwindowpreferenceswidget.ui" line="38"/>
         <source>Each months</source>
-        <translation type="unfinished"></translation>
+        <translation>Una vez por mes</translation>
     </message>
     <message>
         <location filename="../../plugins/faccountmainwindowplugin/mainwindowpreferenceswidget.ui" line="43"/>
         <source>Each quarters</source>
-        <translation type="unfinished"></translation>
+        <translation>Trimestralmente</translation>
     </message>
     <message>
         <location filename="../../plugins/faccountmainwindowplugin/mainwindowpreferenceswidget.ui" line="48"/>
         <source>Never (on user&apos;s demand)</source>
-        <translation type="unfinished"></translation>
+        <translation>Nunca (manualmente)</translation>
     </message>
 </context>
 <context>
@@ -66,7 +66,7 @@
     <message>
         <location filename="../../plugins/faccountmainwindowplugin/mainwindow.cpp" line="120"/>
         <source>Creating Main Window</source>
-        <translation type="unfinished"></translation>
+        <translation>Creando ventana principal</translation>
     </message>
     <message>
         <location filename="../../plugins/faccountmainwindowplugin/mainwindow.cpp" line="206"/>
