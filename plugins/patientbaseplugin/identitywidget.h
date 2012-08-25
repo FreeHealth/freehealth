@@ -68,7 +68,6 @@ public:
     QDate currentDateOfBirth() const;
 
     QPixmap currentPhoto() const;
-//    QPixmap currentDefaultPhoto() const;
     bool hasPhoto() const;
 
 public Q_SLOTS:
@@ -80,8 +79,8 @@ protected:
 
 protected Q_SLOTS:
     void photoButton_clicked();
-    void setDefaultGenderPhoto();
-    void updateGenderImage();
+//    void setDefaultGenderPhoto();
+//    void updateGenderImage();
 
 private:
     Internal::IdentityWidgetPrivate *d;
