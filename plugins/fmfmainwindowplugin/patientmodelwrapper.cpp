@@ -110,8 +110,8 @@ QVariant PatientModelWrapper::data(const QModelIndex &index, int role) const
 
 /**
   \brief Return the Patient's Data represented by the \e column.
-  The wrapper model searches in the identity model (Patient::PatientModel) and if it does not found
-  value, searches in the Forms (some Form::FormItem can represent patient values).
+  The wrapper model searches in the identity model (Patient::PatientModel) and if it has not found the
+  value, it searches in the Forms (some Form::FormItem can represent patient values).
 */
 QVariant PatientModelWrapper::data(int column) const
 {
