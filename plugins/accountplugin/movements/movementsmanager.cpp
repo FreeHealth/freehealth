@@ -33,6 +33,7 @@
 #include <accountbaseplugin/constants.h>
 
 #ifndef FREEMEDFORMS
+#include <coreplugin/icore.h>
 #include <coreplugin/icommandline.h>
 #include <coreplugin/freeaccount_constants.h>
 static inline Core::ICommandLine *commandLine() {return Core::ICore::instance()->commandLine();}
