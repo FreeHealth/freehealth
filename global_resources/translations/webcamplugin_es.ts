@@ -6,7 +6,7 @@
     <message>
         <location filename="../../plugins/webcamplugin/webcamplugin.cpp" line="116"/>
         <source>Initializing webcamplugin...</source>
-        <translation type="unfinished"></translation>
+        <translation>Iniciando webcam...</translation>
     </message>
 </context>
 </TS>

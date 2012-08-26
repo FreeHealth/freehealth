@@ -32,7 +32,7 @@
     <message>
         <location filename="../../plugins/categoryplugin/categorydialog.ui" line="43"/>
         <source>Categories</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Categorias</translation>
     </message>
     <message>
         <location filename="../../plugins/categoryplugin/categorydialog.ui" line="65"/>
@@ -47,17 +47,17 @@
     <message>
         <location filename="../../plugins/categoryplugin/categorydialog.ui" line="96"/>
         <source>Protect with a password</source>
-        <translation type="unfinished"></translation>
+        <translation>Protejer con una contraseña</translation>
     </message>
     <message>
         <location filename="../../plugins/categoryplugin/categorydialog.ui" line="103"/>
         <source>Password</source>
-        <translation type="unfinished"></translation>
+        <translation>Contraseña</translation>
     </message>
     <message>
         <location filename="../../plugins/categoryplugin/categorydialog.ui" line="113"/>
         <source>Confirm</source>
-        <translation type="unfinished"></translation>
+        <translation>Confirmar</translation>
     </message>
     <message>
         <location filename="../../plugins/categoryplugin/categorydialog.ui" line="123"/>

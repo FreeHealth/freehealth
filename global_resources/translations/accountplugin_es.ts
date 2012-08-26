@@ -293,7 +293,7 @@ Then parametrize your user, sites, bank and so on.</source>
     <message>
         <location filename="../../plugins/accountplugin/preferences/assetsratespage.ui" line="23"/>
         <source>Name</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Nombre</translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/preferences/assetsratespage.ui" line="107"/>
@@ -321,6 +321,13 @@ p, li { white-space: pre-wrap; }
 &lt;li style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;choose a period (between x years and y years)&lt;/li&gt;
 &lt;li style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;select a rate factor&lt;/li&gt;&lt;/ul&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        
+        <location filename="../../plugins/accountplugin/preferences/assetsratespage.ui" line="123"/>
+        <source>Period</source>
+        <translation type="unfinished">Periodo</translation>
+
     </message>
     <message>
         <location filename="../../plugins/accountplugin/preferences/assetsratespage.ui" line="202"/>
@@ -360,7 +367,7 @@ p, li { white-space: pre-wrap; }
     <message>
         <location filename="../../plugins/accountplugin/preferences/assetsratespage.cpp" line="182"/>
         <source>Save changes?</source>
-        <translation type="unfinished"></translation>
+        <translation>Guardar cambios?</translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/preferences/assetsratespage.cpp" line="183"/>
