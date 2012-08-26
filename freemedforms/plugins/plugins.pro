@@ -40,10 +40,6 @@ listview.depends += core
 texteditor.subdir   = ../../plugins/texteditorplugin
 texteditor.depends += core
 
-padtools.subdir = ../../plugins/padtoolsplugin
-padtools.depends += core
-padtools.depends += texteditor
-
 saverestore.subdir   = ../../plugins/saverestoreplugin
 saverestore.depends += core
 
@@ -170,6 +166,7 @@ with-pad {
     SUBDIRS += padtools
     padtools.subdir = ../../plugins/padtoolsplugin
     padtools.depends += core
+    padtools.depends += texteditor
 }
 
 patientbase.subdir   = ../../plugins/patientbaseplugin
