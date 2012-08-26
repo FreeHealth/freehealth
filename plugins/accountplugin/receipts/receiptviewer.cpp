@@ -70,7 +70,7 @@
 #include <QBrush>
 #include <QColor>
 
-enum { WarnDebugMessage = true };
+enum { WarnDebugMessage = false };
 
 using namespace ReceiptsConstants;
 using namespace Constants;
@@ -395,7 +395,7 @@ void treeViewsActions::mouseReleaseEvent(QMouseEvent *event){
 
 void treeViewsActions::deleteBox(bool b){
     Q_UNUSED(b);
-    bool yes = Utils::yesNoMessageBox(tr("Do you want to delete selected item?"),
+    bool yes = Utils::yesNoMessageBox(tr("Delete :"),
                            tr("Do you want to delete selected item?"));
     if (yes) {
         QModelIndex index = currentIndex();
@@ -432,10 +432,11 @@ bool treeViewsActions::isChildOfThesaurus() {
     QModelIndex current = currentIndex();
     QModelIndex indexParent = treeModel()->parent(current);
     QString dataParent = treeModel()->data(indexParent).toString();
-    QStringList valuesOfThesaurus = m_mapSubItems.values("Thesaurus");
     if (WarnDebugMessage)
         qDebug() << __FILE__ << QString::number(__LINE__) << " dataParent =" << dataParent ;
-    if (dataParent .contains(trUtf8("Thesaurus"))|| valuesOfThesaurus.contains(dataParent)) {
+    if (indexParent.row()==THESAURUS_ITEM) {
+        if (WarnDebugMessage)
+        qDebug() << __FILE__ << QString::number(__LINE__) << " isChildOfThesaurus " ;
         ret = true;
     }
     return ret;
@@ -448,13 +449,13 @@ bool treeViewsActions::fillActionTreeView()
     m_actionsTreeModel = new QStandardItemModel;
     QStringList listOfMainActions;
     QMap<int,QString> parametersMap;
-    qDebug() << __FILE__ << QString::number(__LINE__) << " RECEIPTS "   ;
+    
     parametersMap.insert(THESAURUS_ITEM,rt.getStringFromRows(THESAURUS_ITEM));
     parametersMap.insert(ALL_VALUES_ITEM,rt.getStringFromRows(ALL_VALUES_ITEM));
     parametersMap.insert(PREFERED_VALUE_ITEM,rt.getStringFromRows(PREFERED_VALUE_ITEM));
     parametersMap.insert(ROUND_TRIP_ITEM,rt.getStringFromRows(ROUND_TRIP_ITEM));
     parametersMap.insert(FREE_VALUE_ITEM,rt.getStringFromRows(FREE_VALUE_ITEM));
-    qDebug() << __FILE__ << QString::number(__LINE__) << " RECEIPTS "   ;
+    
     listOfMainActions = parametersMap.values();
     //insert items from tables if available
     //QMap<QString,QString> m_mapSubItems;
@@ -510,13 +511,13 @@ bool treeViewsActions::fillActionTreeView()
         actionItem->setEditable(false);
         actionItem->setEnabled(true);
         int row = 0;
-        qDebug() << __FILE__ << QString::number(__LINE__) << " RECEIPTS "   ;
+
         //treeViewsActions and colors
         if (strMainActions == rt.getStringFromRows(PREFERED_VALUE_ITEM)) {
             QBrush red(Qt::red);
             actionItem->setForeground(red);
             m_mapOfMainItems.insert(PREFERED_VALUE_ITEM,actionItem);
-            row = PREFERED_VALUE_ITEM;qDebug() << __FILE__ << QString::number(__LINE__) << " RECEIPTS "   ;
+            row = PREFERED_VALUE_ITEM;
         } else if (strMainActions == rt.getStringFromRows(THESAURUS_ITEM)) {
             QBrush red(Qt::red);
             actionItem->setForeground(red);
@@ -534,7 +535,8 @@ bool treeViewsActions::fillActionTreeView()
             row = ROUND_TRIP_ITEM;          
         } else if (strMainActions == rt.getStringFromRows(FREE_VALUE_ITEM))
         {
-           QBrush green(Qt::green);
+           QColor greenColor(54,147,0,255);
+           QBrush green(greenColor);
             actionItem->setForeground(green);
             m_mapOfMainItems.insert(FREE_VALUE_ITEM,actionItem);
             row = FREE_VALUE_ITEM;	  
@@ -554,6 +556,7 @@ bool treeViewsActions::fillActionTreeView()
         for (int i = 0; i < listOfEnums.size(); ++i)
         {
         	QStandardItem *actionItem = m_mapOfMainItems.value(i);
+        	actionItem->setEditable(false);
         	treeModel()->insertRow(i,actionItem);
                 QStringList listSubActions;
                 listSubActions = m_mapSubItems.values(actionItem->text());
@@ -566,6 +569,7 @@ bool treeViewsActions::fillActionTreeView()
                         qDebug() << __FILE__ << QString::number(__LINE__) << " strSubActions =" << 
                          strSubActions ;
                     QStandardItem *subActionItem = new QStandardItem(strSubActions);
+                    subActionItem->setEditable(false);
                     actionItem->appendRow(subActionItem);
                     if (!subActionItem->index().isValid()) {
                         if (WarnDebugMessage)
@@ -795,6 +799,7 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
     ui->othersBox->hide();
     ui->othersLabel->hide();
     ui->displayRadioButton->setCheckable(true);
+    ui->displayRadioButton->setShortcut(QKeySequence("Ctrl+d"));
     connect(ui->quitButton,SIGNAL(pressed()),this,SLOT(quitFreeAccount()));
     connect(ui->saveButton,SIGNAL(pressed()),this,SLOT(save()));
     //connect(ui->othersBox,SIGNAL(activated(const QString&)),this,SLOT(othersWidgets(const QString&)));
@@ -1006,8 +1011,7 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex & index) {
     	      }
     	  
         }
-
-    if (manager.getHashOfThesaurus().keys().contains(rt.getStringFromRows(THESAURUS_ITEM)))
+    if (index.parent().row()==THESAURUS_ITEM)
     {
         if (WarnDebugMessage)
                 qDebug() << __FILE__ << QString::number(__LINE__) << " IN THESAURUS " ;

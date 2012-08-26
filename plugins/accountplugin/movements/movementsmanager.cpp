@@ -32,6 +32,12 @@
 #include "movementsmanager.h"
 #include <accountbaseplugin/constants.h>
 
+#ifndef FREEMEDFORMS
+#include <coreplugin/icommandline.h>
+#include <coreplugin/freeaccount_constants.h>
+static inline Core::ICommandLine *commandLine() {return Core::ICore::instance()->commandLine();}
+#endif
+
 using namespace AccountDB;
 using namespace Constants;
 
@@ -74,4 +80,13 @@ double MovementsManager::getCalculatedValue(double value, double percentage)
     double calculation = 0.00;
     calculation = value * percentage/100.00;
     return calculation;
+}
+
+bool MovementsManager::isMedintuxArg()
+{
+#ifdef FREEMEDFORMS
+    return false;
+#else
+    return commandLine()->value(Core::Constants::CL_MedinTux).toBool();
+#endif
 }

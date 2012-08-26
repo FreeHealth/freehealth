@@ -44,6 +44,11 @@ namespace AccountDB {
 class ACCOUNT_EXPORT MovementsIODb : public QObject
 {
     Q_OBJECT
+enum Icons
+{
+    ICON_NOT_PREF = 0,
+    ICON_PREF
+    };
 public:
     MovementsIODb(QObject *parent);
     ~MovementsIODb();

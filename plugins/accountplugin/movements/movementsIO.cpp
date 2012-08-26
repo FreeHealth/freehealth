@@ -50,7 +50,7 @@
 
 #include <QDebug>
 
-enum { WarnDebugMessage = true };
+enum { WarnDebugMessage = false };
 
 using namespace AccountDB;
 using namespace Constants;
@@ -195,11 +195,11 @@ QStandardItemModel * MovementsIODb::getBankComboBoxModel(QObject * parent){
     for (int i = 0; i < rows; i += 1)
     {
     	QString bankLabel = bankmodel.data(bankmodel.index(i,BANKDETAILS_LABEL),Qt::DisplayRole).toString();
-    	QString bankDefault = bankmodel.data(bankmodel.index(i,BANKDETAILS_DEFAULT),Qt::DisplayRole).toString();
+    	int bankDefault = bankmodel.data(bankmodel.index(i,BANKDETAILS_DEFAULT),Qt::DisplayRole).toInt();
     	QStandardItem *item = new QStandardItem(bankLabel);
     	QIcon icon;
-        if (bankDefault == "1") {
-            icon = QIcon(theme()->icon(Core::Constants::ICONADD));
+        if (bankDefault == ICON_PREF) {
+            icon = QIcon(theme()->icon(Core::Constants::ICONOK));
             item->setIcon(icon);
             if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " item def =" << item->text() ;
@@ -209,12 +209,12 @@ QStandardItemModel * MovementsIODb::getBankComboBoxModel(QObject * parent){
     for (int i = 0; i < rows; i += 1)
     {
     	QString bankLabel = bankmodel.data(bankmodel.index(i,BANKDETAILS_LABEL),Qt::DisplayRole).toString();
-    	QString bankDefault = bankmodel.data(bankmodel.index(i,BANKDETAILS_DEFAULT),Qt::DisplayRole).toString();
+    	int bankDefault = bankmodel.data(bankmodel.index(i,BANKDETAILS_DEFAULT),Qt::DisplayRole).toInt();
     	QStandardItem *item = new QStandardItem(bankLabel);
     	QIcon icon;   
-    	if (bankDefault != "1")
+    	if (bankDefault < ICON_PREF)
     	{
-    	    icon = QIcon(theme()->icon(Core::Constants::ICONREMOVE));
+    	    icon = QIcon(theme()->icon(QString()/*Core::Constants::ICONREMOVE*/));
             item->setIcon(icon);
             if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " item def =" << item->text() ;

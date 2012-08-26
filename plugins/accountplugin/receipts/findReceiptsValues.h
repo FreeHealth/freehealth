@@ -99,6 +99,9 @@ private slots:
     void setModifier(double);
     void chooseUserModel(bool);
     void chooseDatapackModel(bool);
+    void wipeFilterEdit(bool b);
+    void wipeFilterEdit();
+    void setLessButtonEnabled(QListWidgetItem * item);
 };
 
 

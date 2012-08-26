@@ -79,8 +79,10 @@ private:
             DUE
         };
    QString getDateWhereClause();
+   bool datapackIsAvalaible();
    AccountModel *m_mpmodel;
    QSqlDatabase  m_db;
+   QSqlDatabase  m_dbMP;
 };
 
 

@@ -306,7 +306,7 @@ bool AccountModel::canFetchMore ( const QModelIndex & parent  ) const  {
 }
     
 void AccountModel::fetchMore ( const QModelIndex & parent ) {
-    d->m_SqlTable->canFetchMore ( parent  );
+    d->m_SqlTable->fetchMore ( parent  );
 }
 
 void AccountModel::setFilter(const QString & filter){

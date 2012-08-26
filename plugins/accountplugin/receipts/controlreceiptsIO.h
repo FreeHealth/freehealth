@@ -37,6 +37,8 @@
 #include <accountplugin/account_exporter.h>
 
 #include <QWidget>
+#include <QPoint>
+#include <QRect>
 #include <QMap>
 
 namespace Ui{
@@ -72,7 +74,7 @@ class ACCOUNT_EXPORT ControlReceipts : public QWidget
         void deleteLine();
         void printDues();
         void print();
-        void closeAction();
+        void closeAction(bool);
     
     private:
         void coloringDoubles();

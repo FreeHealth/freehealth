@@ -66,6 +66,9 @@ public:
     bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
     bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
     
+    bool canFetchMore(const QModelIndex &parent = QModelIndex()) const;
+    void fetchMore(const QModelIndex &parent = QModelIndex());
+    
     void clearFilters();
     void setFilter(const QString & filter);
     QString filter();

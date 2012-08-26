@@ -48,7 +48,7 @@
        <item>
         <widget class="QPushButton" name="quitButton">
          <property name="text">
-          <string>&amp;Quit</string>
+          <string>&amp;Back</string>
          </property>
         </widget>
        </item>

@@ -190,6 +190,15 @@ QString MovementModel::filter(){
     return d->m_SqlTable->filter();
 }
 
+bool MovementModel::canFetchMore ( const QModelIndex & parent  ) const  {
+    return d->m_SqlTable->canFetchMore ( parent  );
+}
+    
+void MovementModel::fetchMore ( const QModelIndex & parent ) {
+    d->m_SqlTable->fetchMore ( parent  );
+}
+
+
 void MovementModel::clearFilters(){
     QString filter = QString();
     d->m_SqlTable->setFilter(filter);

@@ -42,7 +42,7 @@
 #include <QSqlQuery>
 #include <QSqlTableModel>
 
-enum { WarnDebugMessage = false };
+enum { WarnDebugMessage = true };
 
 using namespace AccountDB;
 using namespace Constants;
@@ -50,23 +50,29 @@ using namespace Trans::ConstantTranslations;
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static QString databasePath()
 {
-    QString dbRelPath = QString("/%1/%2").arg(Constants::DATAPACK_ACCOUNTANCY).arg(Constants::DATAPACK_ACCOUNTANCY_FILENAME);
+    QString dbRelPath = QString("/%1/%2").arg(Constants::DATAPACK_DB).arg(Constants::DATAPACK_ACCOUNTANCY_FILENAME);
     QString tmp;
     tmp = settings()->dataPackInstallPath() + dbRelPath;
-    qDebug() << __FILE__ << QString::number(__LINE__) << " tmp =" << tmp ;
+    if (WarnDebugMessage)
+        qDebug() << __FILE__ << QString::number(__LINE__) << " tmp =" << tmp ;
     if (QFileInfo(tmp).exists())
-        return settings()->dataPackInstallPath();
+        return settings()->dataPackInstallPath()+ QDir::separator() + Constants::DATAPACK_DB;
     tmp = settings()->dataPackApplicationInstalledPath() + dbRelPath;
-    return settings()->dataPackApplicationInstalledPath();
+    if (WarnDebugMessage)
+        qDebug() << __FILE__ << QString::number(__LINE__) << " databasePath =" << settings()->dataPackApplicationInstalledPath()+ QDir::separator() + Constants::DATAPACK_ACCOUNTANCY;
+    return settings()->dataPackApplicationInstalledPath()+ QDir::separator() + Constants::DATAPACK_DB;
 }
 
 static QString databaseFileName()
 {
-    return databasePath() + QDir::separator() + Constants::DATAPACK_ACCOUNTANCY;
+    if (WarnDebugMessage)
+    qDebug() << __FILE__ << QString::number(__LINE__) << " databaseFileName =" << databasePath() + QDir::separator() + Constants::DATAPACK_ACCOUNTANCY_FILENAME ;
+    return databasePath() + QDir::separator() + Constants::DATAPACK_ACCOUNTANCY_FILENAME;
 }
 
 
-findReceiptsValues::findReceiptsValues(QWidget * parent):QDialog(parent){
+findReceiptsValues::findReceiptsValues(QWidget * parent):QDialog(parent)
+{
   ui = new Ui::findValueDialog;
   ui->setupUi(this);
   ui->nextButton->hide();
@@ -74,6 +80,8 @@ findReceiptsValues::findReceiptsValues(QWidget * parent):QDialog(parent){
   ui->modifSpinBox->setValue(1.0);
   ui->abstractTextEdit->setText("");
   ui->othersTextEdit->setText("");
+  ui->abstractTextEdit->setReadOnly(true);
+  ui->othersTextEdit->setReadOnly(true);
   //m_db = QSqlDatabase::database(Constants::DB_ACCOUNTANCY);
   //test of choice of user base or datapack
   if (datapackIsAvalaible())//verify
@@ -90,12 +98,15 @@ findReceiptsValues::findReceiptsValues(QWidget * parent):QDialog(parent){
       }
   m_modifier = 1.0;
   //fillComboCategories();
+  ui->comboBoxCategories->setEditable(false);
   initialize();
   QString comboValue = ui->comboBoxCategories->currentText().trimmed();
   ui->plusButton->setIcon(QIcon(qApp->applicationDirPath()+"/../../global_resources/pixmap/16x16/next.png"));
   ui->lessButton->setIcon(QIcon(qApp->applicationDirPath()+"/../../global_resources/pixmap/16x16/previous.png"));
   ui->plusButton->setShortcut(QKeySequence("CTRL+p"));
   ui->lessButton->setShortcut(QKeySequence("CTRL+l"));
+  //disable lessButton
+  ui->lessButton->setEnabled(false);
   //fillListViewValues(comboValue);
 
   connect(ui->comboBoxCategories,SIGNAL(activated(const QString&)),this,SLOT(fillListViewValues(const QString&)));
@@ -107,7 +118,11 @@ findReceiptsValues::findReceiptsValues(QWidget * parent):QDialog(parent){
   connect(qApp,SIGNAL(focusChanged(QWidget*,QWidget*)),this,SLOT(setModifSpinBox(QWidget*,QWidget*)));
   connect(ui->modifSpinBox,SIGNAL(valueChanged(double)),this,SLOT(setModifier(double)));
   connect(ui->userRadioButton,SIGNAL(clicked(bool)),this,SLOT(chooseUserModel(bool)));
-  connect(ui->datapackRadioButton,SIGNAL(clicked(bool)),this,SLOT(chooseDatapackModel(bool)));   
+  connect(ui->datapackRadioButton,SIGNAL(clicked(bool)),this,SLOT(chooseDatapackModel(bool)));
+  connect(ui->nameRadioButton,SIGNAL(toggled(bool)),this,SLOT(wipeFilterEdit(bool)));
+  connect(ui->plusButton,SIGNAL(pressed()),this,SLOT(wipeFilterEdit()));
+  connect(ui->listchosenWidget,SIGNAL(itemClicked(QListWidgetItem *)),this,SLOT(setLessButtonEnabled(QListWidgetItem *)));
+  
 }
 
 findReceiptsValues::~findReceiptsValues()
@@ -196,6 +211,7 @@ void findReceiptsValues::fillListViewValues(const QString & comboItem){
     ui->tableViewOfValues->setModel(model);
     ui->tableViewOfValues-> setSelectionBehavior(QAbstractItemView::SelectRows);
     ui->tableViewOfValues-> setSelectionMode(QAbstractItemView::SingleSelection);
+    ui->tableViewOfValues->setEditTriggers(QAbstractItemView::NoEditTriggers);
     ui->tableViewOfValues->horizontalHeader()->setStretchLastSection ( true );
     ui->tableViewOfValues->setGridStyle(Qt::NoPen);
 
@@ -306,6 +322,7 @@ void findReceiptsValues::deleteValue()
     QString dataToRemove = item->data(Qt::DisplayRole).toString();
     m_hashValueschosen.remove(dataToRemove);
     delete item;
+    ui->lessButton->setEnabled(false);
 }
 
 void findReceiptsValues::setModifSpinBox(QWidget*old,QWidget*newWidget){
@@ -434,6 +451,7 @@ void findReceiptsValues::on_lineEditFilter_textChanged(const QString & text){
     ui->tableViewOfValues->setModel(model);
     ui->tableViewOfValues-> setSelectionBehavior(QAbstractItemView::SelectRows);
     ui->tableViewOfValues-> setSelectionMode(QAbstractItemView::SingleSelection);
+    ui->tableViewOfValues->setEditTriggers(QAbstractItemView::NoEditTriggers);
     ui->tableViewOfValues->horizontalHeader()->setStretchLastSection ( true );
     ui->tableViewOfValues->setGridStyle(Qt::NoPen);
 }
@@ -562,7 +580,8 @@ void findReceiptsValues::chooseDatapackModel(bool b)
 {
     if (b)
     {
-    	  m_db = QSqlDatabase::database(DATAPACK_ACCOUNTANCY);
+    	  m_db = QSqlDatabase::database(DATAPACK_DB);
+    	  qDebug() << __FILE__ << QString::number(__LINE__) << " database name =" << m_db.databaseName() ;
     	  fillComboCategories();
     	  const QString comboText = ui->comboBoxCategories->currentText();
     	  fillListViewValues(comboText);
@@ -575,11 +594,13 @@ QHash<QString,QString> findReceiptsValues::getHashFatherSonFromOthers(const QMod
     int row = index.row();
     QString othersString = m_otherInformations.value(row);
     othersString.remove("<?xml version=1.0 encoding=ISO-8859-1?>");
-    qDebug() << __FILE__ << QString::number(__LINE__) << " othersString =" << othersString ;
+    if (WarnDebugMessage)
+        qDebug() << __FILE__ << QString::number(__LINE__) << " othersString =" << othersString ;
     othersString.replace("</",";");
     QRegExp exp(";[a-z]*>");
     othersString.replace(exp,";");
-    qDebug() << __FILE__ << QString::number(__LINE__) << " othersString =" << othersString ;
+    if (WarnDebugMessage)
+        qDebug() << __FILE__ << QString::number(__LINE__) << " othersString =" << othersString ;
     QStringList list;
     list = othersString.split(";");
     foreach(QString part,list){
@@ -598,9 +619,28 @@ QHash<QString,QString> findReceiptsValues::getHashFatherSonFromOthers(const QMod
         }
         for (int i = 0; i < hash.count(); i += 1)
         {
+        	  if (WarnDebugMessage)
         	  qDebug() << __FILE__ << QString::number(__LINE__) << " father =" << hash.keys()[i] ;
+        	  if (WarnDebugMessage)
         	  qDebug() << __FILE__ << QString::number(__LINE__) << " son =" << hash.values()[i] ;
             }
     return hash;
+}
+
+void findReceiptsValues::wipeFilterEdit(bool b)
+{
+    Q_UNUSED(b);
+    ui->lineEditFilter->setText("");
+}
+
+void findReceiptsValues::wipeFilterEdit()
+{
+    ui->lineEditFilter->setText("");
+}
+
+void findReceiptsValues::setLessButtonEnabled(QListWidgetItem * item)
+{
+    Q_UNUSED(item);
+    ui->lessButton->setEnabled(true);
 }
 

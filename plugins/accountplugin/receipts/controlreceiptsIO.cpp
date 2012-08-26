@@ -43,6 +43,8 @@
 
 #include <coreplugin/idocumentprinter.h> //coreplugin/idocumentprinter.h
 #include <coreplugin/constants.h>
+#include <QTimer>
+#include <QProgressBar>
 
 #include <QDebug>
 
@@ -60,12 +62,15 @@ inline static Core::IDocumentPrinter *printer() {return ExtensionSystem::PluginM
 ControlReceipts::ControlReceipts(QWidget * parent):QWidget(parent),ui(new Ui::ControlReceiptsWidget)
 {
     ui->setupUi(this);
+    //setAttribute(Qt::WA_DeleteOnClose);
     ui->beginDateEdit->setDisplayFormat(tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR));
     ui->endDateEdit->setDisplayFormat(tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR));
     int h = parent->height();
     int w = parent->width();
     resize(w,h);
     setAutoFillBackground(true);
+    //radioButtons
+    ui->outRadioButton->setChecked(true);
     ui->resultLabel->setText("");
     ui->resultLabel->setWordWrap(true);
     m_accountModel = new AccountModel(this);
@@ -75,16 +80,20 @@ ControlReceipts::ControlReceipts(QWidget * parent):QWidget(parent),ui(new Ui::Co
     ui->endDateEdit->setDate(QDate::currentDate());
     ui->searchButton->setShortcut(QKeySequence::InsertParagraphSeparator);
     ui->deleteButton->setShortcut(QKeySequence::Delete);
-    ui->quitButton->setShortcut(QKeySequence("Ctrl+q"));
+    ui->inRadioButton->setShortcut(QKeySequence("Ctrl+q"));
     search();
     connect(ui->searchButton,SIGNAL(pressed()),this,SLOT(search()));
     connect(ui->deleteButton,SIGNAL(pressed()),this,SLOT(deleteLine()));
     connect(ui->duesButton,SIGNAL(pressed()),this,SLOT(printDues()));
     connect(ui->printButton,SIGNAL(pressed()),this,SLOT(print()));
-    connect(ui->quitButton,SIGNAL(pressed()),this,SLOT(closeAction()));
+    connect(ui->inRadioButton,SIGNAL(clicked(bool)),this,SLOT(closeAction(bool)));
 }
 
-ControlReceipts::~ControlReceipts(){}
+ControlReceipts::~ControlReceipts()
+{
+    if (WarnDebugMessage)
+        qWarning() << __FILE__ << QString::number(__LINE__) << "ControlReceipts::~ControlReceipts() " ;
+}
 
 void ControlReceipts::resizeControlReceipts(QWidget * parent){
     int h = parent->height();
@@ -94,6 +103,7 @@ void ControlReceipts::resizeControlReceipts(QWidget * parent){
 
 void ControlReceipts::search(){
     refresh();
+    QApplication::setOverrideCursor(Qt::WaitCursor);
     QString dateBeginStr = ui->beginDateEdit->date().toString("yyyy-MM-dd");
     QString dateEndStr = ui->endDateEdit->date().toString("yyyy-MM-dd");
     QString filterEdit = "%"+ui->filterEdit->text()+"%";
@@ -106,10 +116,20 @@ void ControlReceipts::search(){
     filter += QString("%1 NOT LIKE '%2' AND ").arg(field,"0.0");
     filter += QString("DATE BETWEEN '%1' AND '%2'").arg(dateBeginStr,dateEndStr);
     m_accountModel->setFilter(filter);
+    while (m_accountModel->canFetchMore())
+    {
+    	  m_accountModel->fetchMore();
+        }
     if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " filter =" << m_accountModel->filter() ;
     if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount =" << QString::number(m_accountModel->rowCount()) ;
+        QAbstractItemModel * lastModel = ui->tableView->model();
+    if (lastModel)
+    {
+    	  delete lastModel;
+        }
+    
     ui->tableView->setModel(m_accountModel);
     ui->tableView->setShowGrid(false);
     ui->tableView->setColumnHidden(ACCOUNT_ID,true);
@@ -128,7 +148,7 @@ void ControlReceipts::search(){
     coloringDoubles();
     QString textResult = textOfSums(m_accountModel);
     ui->resultLabel->setText(textResult);
-    //refreshFilter(filter);
+    QApplication::restoreOverrideCursor();
 }
 
 void ControlReceipts::deleteLine(){
@@ -216,7 +236,7 @@ QString ControlReceipts::textOfSums(AccountModel * model){
     labelTextStr = totStr+totReceived+sumsStr;
     labelText = "<html><body>"+labelTextStr+"</body></html>";
     return labelText;
-    }
+}
 
 void ControlReceipts::printDues(){
     Utils::informativeMessageBox(tkTr(Trans::Constants::INFORMATION), tkTr(Trans::Constants::FEATURE_NOT_IMPLEMENTED));
@@ -364,9 +384,11 @@ void ControlReceipts::refreshFilter(const QString & filter){
     ui->tableView->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
 }
 
-void ControlReceipts::closeAction(){
+void ControlReceipts::closeAction(bool b){
+    Q_UNUSED(b);
     emit isClosing();
     emit close();
+    ui->outRadioButton->setChecked(true);
 }
 
 void ControlReceipts::changeEvent(QEvent *e) {

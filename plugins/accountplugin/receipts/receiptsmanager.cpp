@@ -125,7 +125,8 @@ QHash<int,QString> ReceiptsManager::getPercentages()
         {
               minValue = values[0];
             }
-        qDebug() << __FILE__ << QString::number(__LINE__) << " minValue =" << minValue ;
+        if (WarnDebugMessage)
+            qDebug() << __FILE__ << QString::number(__LINE__) << " minValue =" << minValue ;
         if (!listOfPercents.contains(minValue))
         {
         	  listOfPercents.append(minValue);
@@ -240,7 +241,8 @@ QHash<QString,QVariant> ReceiptsManager::getParametersDatas(QString & userUid , 
            hashForReturn.insert(str,uid);
            }
        if(hashForReturn.size()< 1){
-           hashForReturn.insert("thesaurus","uid");
+           hashForReturn.insert("Act for example","uid");
+           hashForReturn.insert("Please create your own series.","uid");
            }
 
    }

@@ -33,18 +33,16 @@
 #include "ledgerIO.h"
 #include <QDebug>
 
-//TODO: use English variable and method names
 
-enum { WarnDebugMessage = true };
-ProduceDoc::ProduceDoc(){
+enum { WarnDebugMessage = false };
+ProduceDoc::ProduceDoc()
+{
     m_fieldsToJoin     = 0;
     m_tableFormatParameters = "200,200,150,250,170";//the last is not used in fact
     m_tablesRecapParameters = "400,400";
 }
     
-ProduceDoc::~ProduceDoc(){
-    //delete m_textDocument; sinon segfault
-}
+ProduceDoc::~ProduceDoc(){}
 
 void ProduceDoc::run(){
     if (WarnDebugMessage)
@@ -289,28 +287,16 @@ bool ProduceDoc::modele(QString & month,
                 }
             }
        }
-       if (WarnDebugMessage)
-    
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " thread 5 "   ;
+
     QStringList sumsReceipts;
                 sumsReceipts   = calculateReceipts( un, trenteetquelque);
-                if (WarnDebugMessage)
-    
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " thread 5+1 "   ;
-    if (WarnDebugMessage)
-    
+    if (WarnDebugMessage)    
     	      qDebug() << "tableLedgerTypeReceipts.size()= "+ QString::number(tableLedgerTypeReceipts.size()) << __LINE__;
     QString emptyStringForReceipts;
     fillTable(tableLedgerTypeReceipts,tableFormatModele,cursorForFillFunction,thisMonth,sumsReceipts,RECEIPTS_TYPE,emptyStringForReceipts);
 //----------------tableau depenses---------------------------------------------------------
-    if (WarnDebugMessage)
-    
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " thread 6 "   ;
     QList<QVector<QString> > tableLedgerMonthDepenses;
     tableLedgerMonthDepenses = lio.getDatasMovementsInVector(un,trenteetquelque);
-    if (WarnDebugMessage)
-    
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " thread 7 "   ;    
 
 //----------------iteration des depenses par type------------------------------------------------------
     QList<QVector<QString> > tableauLivreTypeDepense;
@@ -340,9 +326,6 @@ bool ProduceDoc::modele(QString & month,
     	  //sommedepenses.removeAt(0);
         }
     fillTable(tableauLivreTypeDepense,tableFormatModele,cursorForFillFunction,thisMonth,sommedepenses,MOVEMENTS_TYPE,totalOfMovements);
-    if (WarnDebugMessage)
-    
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " thread 8 "   ;
     return true;
 }
 ///////////////////////////////////////////////////////////////////////////////////
@@ -380,13 +363,9 @@ void ProduceDoc::fillTable(QList<QVector<QString> > & tableau,
             type = trUtf8("Movements");
             total = totalMovementString;
             }
-        if (WarnDebugMessage)
-    
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " thread 9 "   ;
         QTextBlockFormat centerHead ;
        //centrer                       .setBackground(Qt::yellow) ;
-       if (WarnDebugMessage)
-    
+       if (WarnDebugMessage)    
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " thisMonthfonction =" << thisMonthfonction ;
            QString heads = trUtf8("Month of ")+thisMonthfonction+" = "+type;
        if (thisMonthfonction == trUtf8("complete year"))
@@ -424,7 +403,7 @@ void ProduceDoc::fillTable(QList<QVector<QString> > & tableau,
                     QString str = vectorString[a];
                          list << str;
                          if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " str =" << str ;
+    	                 qDebug() << __FILE__ << QString::number(__LINE__) << " str =" << str ;
                    }
                    double s = list[2].toDouble();
                    if(s > 0){
@@ -435,9 +414,6 @@ void ProduceDoc::fillTable(QList<QVector<QString> > & tableau,
                       }
                    }
             }
-     if (WarnDebugMessage)
-    
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " thread 11 "   ; 
     QTextBlockFormat centrer ;
        //centrer                       .setBackground(Qt::yellow) ;
        centrer                        .setAlignment(Qt::AlignCenter) ;
@@ -463,7 +439,7 @@ void ProduceDoc::fillTable(QList<QVector<QString> > & tableau,
        //centrer1                       .setBackground(Qt::yellow) ;
        centrer1                        .setForeground(Qt::red) ;
        centrer1                        .setAlignment(Qt::AlignCenter);
-       QString headAccumulation = trUtf8("Accumulation of ")+type+trUtf8(" of ")+thisMonthfonction;
+       QString headAccumulation = trUtf8("Accumulation of ")+type+" "+trUtf8("of")+" "+thisMonthfonction;
        cursortrieinfunction          -> insertBlock(centrer1);
        cursortrieinfunction          -> insertHtml ("<font size = 6 color = #3300FF><bold><br/>"
                                                     "<br/>"+headAccumulation+"<bold></font>"
@@ -516,11 +492,6 @@ void ProduceDoc::fillTable(QList<QVector<QString> > & tableau,
             QTextCursor cellCursor41  = cell41.firstCursorPosition();
             cellCursor41              . insertText(totalReceipts);  
             }
-
-        
-
-    if (WarnDebugMessage)    
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " thread 13 "   ;
     if(choice == MOVEMENTS_TYPE){
         //nbreLignesTableau = m_typesMovements.size();
         if (WarnDebugMessage)
@@ -569,13 +540,9 @@ void ProduceDoc::fillTable(QList<QVector<QString> > & tableau,
     	      qDebug() << __FILE__ << QString::number(__LINE__) << "end of for";
         }
     }
-    if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " thread 14 "   ;
     //calculparmois(listforquery,table, un,trenteetquelque);//calcul par type recette et mois
     cursortrieinfunction  ->movePosition(QTextCursor::End,QTextCursor::MoveAnchor,1);
    }
-    if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " thread 15 "   ;
 }//end of fillTable
 
 void ProduceDoc::recupSlot(const QString & text){
@@ -583,8 +550,8 @@ void ProduceDoc::recupSlot(const QString & text){
 }
 
 QTextDocument *ProduceDoc::getTextDocument(){
-    //if (WarnDebugMessage)
-    	      //qDebug() << __FILE__ << QString::number(__LINE__) << " m_textDocument =" << m_textDocument->toPlainText() ;
+    if (WarnDebugMessage)
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " m_textDocument =" << m_textDocument->toPlainText() ;
     return m_textDocument;
 }
 

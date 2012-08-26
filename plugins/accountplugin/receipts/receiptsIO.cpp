@@ -36,12 +36,15 @@
 
 #include <utils/database.h>
 #include <utils/global.h>
+#include <coreplugin/isettings.h>
+#include <coreplugin/icore.h>
 #include <translationutils/constants.h>
 #include <translationutils/trans_msgerror.h>
 
 #include <QSqlDriver>
 #include <QDate>
 #include <QSqlQuery>
+#include <QDir>
 
 #include <QDebug>
 
@@ -51,10 +54,32 @@ using namespace AccountDB;
 using namespace Constants;
 using namespace Trans::ConstantTranslations;
 
+static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
+static QString databasePath()
+{
+    QString dbRelPath = QString("/%1/%2").arg(Constants::DATAPACK_ACCOUNTANCY).arg(Constants::DATAPACK_ACCOUNTANCY_FILENAME);
+    QString tmp;
+    tmp = settings()->dataPackInstallPath() + dbRelPath;
+    if (WarnDebugMessage)
+        qDebug() << __FILE__ << QString::number(__LINE__) << " tmp =" << tmp ;
+    if (QFileInfo(tmp).exists())
+        return settings()->dataPackInstallPath()+ QDir::separator() + Constants::DATAPACK_DB;
+    tmp = settings()->dataPackApplicationInstalledPath() + dbRelPath;
+    if (WarnDebugMessage)
+        qDebug() << __FILE__ << QString::number(__LINE__) << " databasePath =" << settings()->dataPackApplicationInstalledPath()+ QDir::separator() + Constants::DATAPACK_ACCOUNTANCY;
+    return settings()->dataPackApplicationInstalledPath()+ QDir::separator() + Constants::DATAPACK_DB;
+}
+
+static QString databaseFileName()
+{
+    return databasePath() + QDir::separator() + Constants::DATAPACK_ACCOUNTANCY_FILENAME;
+}
+
 receiptsEngine::receiptsEngine()
 {
     m_mpmodel = new AccountModel(this);
     m_db = QSqlDatabase::database(Constants::DB_ACCOUNTANCY);
+    m_dbMP = QSqlDatabase::database(Constants::DATAPACK_DB);
 }
 
 receiptsEngine::~receiptsEngine()
@@ -324,7 +349,12 @@ QHash<QString,double> receiptsEngine::getFilteredValueFromMedicalProcedure(const
     const QString type = field;
     QString filter = QString("WHERE %1 = '%2'").arg(type,act);
     QString req = QString("SELECT %1 FROM %2 ").arg(amount,baseName )+filter;
-    QSqlQuery q(m_db);
+    QSqlDatabase db = m_dbMP;
+    if (!datapackIsAvalaible())
+    {
+    	  db = m_db;
+        }
+    QSqlQuery q(db);
     if (!q.exec(req))
     {
     	 qWarning() << __FILE__ << QString::number(__LINE__) 
@@ -479,5 +509,16 @@ QString receiptsEngine::getJustDayBeforeLastRelease()
         }    
     lastDateBefore = lastDate.addDays(-1).toString("yyyy-MM-dd");  
     return lastDateBefore;
-//>>>>>>> pmd
+}
+
+bool receiptsEngine::datapackIsAvalaible()
+{
+    bool b = true;
+    QString datapack = databaseFileName();
+    QFile file(datapack);
+    if (!file.exists())
+    {
+    	  b = false;
+        }
+    return b;
 }

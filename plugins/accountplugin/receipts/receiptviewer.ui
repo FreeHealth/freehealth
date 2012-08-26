@@ -140,7 +140,7 @@
        <item>
         <widget class="QRadioButton" name="displayRadioButton">
          <property name="text">
-          <string>View</string>
+          <string>Control</string>
          </property>
         </widget>
        </item>

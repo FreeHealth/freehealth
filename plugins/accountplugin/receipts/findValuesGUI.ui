@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Find your values</string>
+   <string>Find your redefined values</string>
   </property>
   <property name="locale">
    <locale language="English" country="UnitedStates"/>
@@ -175,6 +175,16 @@
           </size>
          </property>
         </spacer>
+       </item>
+       <item>
+        <widget class="QLabel" name="ratioLabel">
+         <property name="text">
+          <string>Ratio</string>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+        </widget>
        </item>
        <item>
         <widget class="QDoubleSpinBox" name="modifSpinBox"/>

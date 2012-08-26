@@ -44,7 +44,7 @@ static inline bool connectDatabase(QSqlDatabase &DB, const int line)
 // - Application installed datapack
 static QString databasePath()
 {
-    QString dbRelPath = QString("/%1/%2").arg(Constants::DATAPACK_ACCOUNTANCY).arg(Constants::DATAPACK_ACCOUNTANCY_FILENAME);
+    QString dbRelPath = QString("/%1/%2").arg(Constants::DATAPACK_DB).arg(Constants::DATAPACK_ACCOUNTANCY_FILENAME);
     QString tmp;
     tmp = settings()->dataPackInstallPath() + dbRelPath;
     qDebug() << __FILE__ << QString::number(__LINE__) << " tmp =" << tmp ;
@@ -56,7 +56,7 @@ static QString databasePath()
 
 static QString databaseFileName()
 {
-    return databasePath() + QDir::separator() + Constants::DATAPACK_ACCOUNTANCY;
+    return databasePath() + QDir::separator() + Constants::DATAPACK_DB;
 }
 
 DatapackBase::DatapackBase(QObject *parent): QObject(parent), Utils::Database()
@@ -90,7 +90,7 @@ bool DatapackBase::initialize()
     qDebug() << __FILE__ << QString::number(__LINE__) << " initialize =" << "INITIALIZE" ;
     if (_init)
         return true;
-    setConnectionName(Constants::DATAPACK_ACCOUNTANCY);
+    setConnectionName(Constants::DATAPACK_DB);
     setDriver(Utils::Database::SQLite);
     if(WarnDebug)
     qDebug() << __FILE__ << QString::number(__LINE__) << " initialize =" << "INITIALIZE again" ;
@@ -117,7 +117,7 @@ bool DatapackBase::initialize()
 
     LOG_FOR("DatapackBase", tkTr(Trans::Constants::SEARCHING_DATABASE_1_IN_PATH_2).arg(Constants::DATAPACK_ACCOUNTANCY).arg(pathToDb));
 
-    createConnection(Constants::DATAPACK_ACCOUNTANCY, Constants::DATAPACK_ACCOUNTANCY_FILENAME,
+    createConnection(Constants::DATAPACK_DB, Constants::DATAPACK_ACCOUNTANCY_FILENAME,
                      connector,
                      Utils::Database::WarnOnly);
 
@@ -125,17 +125,21 @@ bool DatapackBase::initialize()
         if (!database().open()) {
             LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2).arg(Constants::DATAPACK_ACCOUNTANCY).arg(database().lastError().text()));
         } else {
+            qDebug() << __FILE__ << QString::number(__LINE__) << " !database().isOpen() "   ;
             LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(database().connectionName()).arg(database().driverName()));
         }
     } else {
+        qDebug() << __FILE__ << QString::number(__LINE__) << " database().isOpen() "   ;
         LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(database().connectionName()).arg(database().driverName()));
     }
 
     // Code optionnel de vérification de la base
-    if (!checkDatabaseScheme()) {
+    /*if (!checkDatabaseScheme()) {
         LOG_ERROR_FOR("DatapackBase", tkTr(Trans::Constants::DATABASE_1_SCHEMA_ERROR).arg(Constants::DATAPACK_ACCOUNTANCY));
+        setConnectionName(Constants::DATAPACK_DB);
+        qWarning() << __FILE__ << QString::number(__LINE__) << "connectionName err = " << connectionName() ;
         return false;
-    }
+    }*/
 
     //if (!checkDatabaseVersion()) {
     //    LOG_ERROR_FOR("DatapackBase", QString("Wrong database version. Db: %1; Current: %2").arg(version()).arg(::CURRENTVERSION));
@@ -144,8 +148,8 @@ bool DatapackBase::initialize()
     //    LOG_FOR("DatapackBase", QString("Using DatapackBase database version " + version()));
     //}
 
-    setConnectionName(Constants::DATAPACK_ACCOUNTANCY);
-
+    setConnectionName(Constants::DATAPACK_DB);
+    qWarning() << __FILE__ << QString::number(__LINE__) << "connectionName = " << connectionName() ;
     _init = true;
     return true;
 }

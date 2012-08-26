@@ -274,7 +274,7 @@ void ParseCcam::writeMedicalProcedureCsv()
     	QString mpUserUuid = "{00000000-0000-0000-0000-000000000000}";
     	QString mpInsuranceUuid = "2";
     	QString mpType = listOfLine[NGAP_TYPE];
-    	
+    	QString reimbursment = "70.00";
     	QString mpDate = QDate::currentDate().toString("yyyy-MM-dd");
     	QString code = listOfLine[NGAP_CODE];
     	QString text = listOfLine[NGAP_TEXT];
@@ -285,11 +285,11 @@ void ParseCcam::writeMedicalProcedureCsv()
     	{
     		  price = "0.00";
     	    }
-    	QString line = "\""+QString::number(id)+"\";"+"\""+mpUuid+"\";"+"\""+mpUserUuid+"\";"+"\""+mpInsuranceUuid+"\";"+"\""+code+"\";"+"\""+text+"\";"+"\""+mpType+"\";"+"\""+price+"\";"+"\""+mpDate+"\";"+"\""+blob+"\";"+"\""+country+"";
+    	QString line = "\""+QString::number(id)+"\";"+"\""+mpUuid+"\";"+"\""+mpUserUuid+"\";"+"\""+mpInsuranceUuid+"\";"+"\""+code+"\";"+"\""+text+"\";"+"\""+mpType+"\";"+"\""+price+"\";"+"\""+reimbursment+"\";"+"\""+mpDate+"\";"+"\""+blob+"\";"+"\""+country+"";
     	listOfMedicalProcedureSineCcam << line;    	
         ++id;
         }
-    //"31","{91d2a429-dd3d-44cc-8782-1115a80adb71}","{00000000-0000-0000-0000-000000000000}","CST","majoration du forfait de cure thermal","Forfaits","10.0","70.0","2011-04-12"
+    //"31","{91d2a429-dd3d-44cc-8782-1115a80adb71}","{00000000-0000-0000-0000-000000000000}","CST","majoration du forfait de cure thermal","Forfaits","10.0","70.0","2011-04-12",blob,FR
     //insert ccam items into MPcsv after the last procedure
     
     if (QFile::exists(qApp->applicationDirPath()+"/../texts/medical_procedure_fr_FR.csv"))
@@ -330,13 +330,14 @@ void ParseCcam::writeMedicalProcedureCsv()
     	QString code = m_model->data(m_model->index(i,MODEL_CODE),Qt::DisplayRole).toString();
     	QString text = m_model->data(m_model->index(i,MODEL_TEXT),Qt::DisplayRole).toString();
     	QString price = m_model->data(m_model->index(i,MODEL_PRICE),Qt::DisplayRole).toString();
+    	QString reimbursment = "70.00";
     	QString blob = m_model->data(m_model->index(i,MODEL_BLOB),Qt::DisplayRole).toString();
     	const QString country = "FR";
     	if (price == "Non pris en charge")
     	{
     		  price = "0.00";
     	    }
-    	QString line = "\""+QString::number(MPId)+"\";"+"\""+mpUuid+"\";"+"\""+mpUserUuid+"\";"+"\""+mpInsuranceUuid+"\";"+"\""+code+"\";"+"\""+text+"\";"+"\""+mpType+"\";"+"\""+price+"\";"+"\""+mpDate+"\";"+"\""+blob+"\";"+"\""+country+"\"\n";
+    	QString line = "\""+QString::number(MPId)+"\";"+"\""+mpUuid+"\";"+"\""+mpUserUuid+"\";"+"\""+mpInsuranceUuid+"\";"+"\""+code+"\";"+"\""+text+"\";"+"\""+mpType+"\";"+"\""+price+"\";"+"\""+reimbursment+"\";"+"\""+mpDate+"\";"+"\""+blob+"\";"+"\""+country+"\"\n";
     	streamNew << line;
     	++id;
         }
@@ -400,7 +401,8 @@ void ParseCcam::createMPDatapackDatabase()
     	                      "NAME varchar(200) NULL,"
     	                      "ABSTRACT varchar(2000) NULL,"
     	                      "TYPE varchar(200) NULL,"
-    	                      "AMOUNT double NULL,"    	                      
+    	                      "AMOUNT double NULL,"
+    	                      "REIMBOURSEMENT double NULL,"   	                      
     	                      "DATE date NULL,"
     	                      "OTHERS blob NULL,"
     	                      "COUNTRY blob NULL);";
@@ -435,6 +437,7 @@ void ParseCcam::createMPDatapackDatabase()
      		  continue;
      	    }
      	++row;
+     	qDebug() << __FILE__ << QString::number(__LINE__) << " row =" << QString::number(row) ;
      	line = line.remove("\"");
      	QStringList listOfLineDatas = line.split(";");
      	//qDebug() << __FILE__ << QString::number(__LINE__) << " line =" << line ;
@@ -450,12 +453,13 @@ void ParseCcam::createMPDatapackDatabase()
      	QString lineOfDatas = listOfStrings.join(",");
         QString req = QString("INSERT INTO %1 (%2) VALUES(%3)")
                      .arg("medical_procedure",
-                          "MP_ID,MP_UUID,MP_USER_UID,MP_INSURANCE_UID,NAME,ABSTRACT,TYPE,AMOUNT,DATE,OTHERS,COUNTRY",
+                          "MP_ID,MP_UUID,MP_USER_UID,MP_INSURANCE_UID,NAME,ABSTRACT,TYPE,AMOUNT,REIMBOURSEMENT, DATE,OTHERS,COUNTRY",
                           lineOfDatas);
         if (!qy.exec(req))
         {
         	  qWarning() << __FILE__ << QString::number(__LINE__) << qy.lastError().text() ;
         	  qWarning() << __FILE__ << QString::number(__LINE__) << lineOfDatas ;
+        	  QApplication::restoreOverrideCursor();
         	  return;        	  
             }
          }
@@ -470,6 +474,12 @@ void ParseCcam::createMPDatapackDatabase()
          	      QApplication::restoreOverrideCursor();
          	      log.close();
          	  //}
-             }        
+             } 
+          else
+          {
+          	QApplication::restoreOverrideCursor();
+          	qWarning() << __FILE__ << QString::number(__LINE__) << "Unable to create mp_datapack" ;
+          	log.close();
+              }       
              
 }

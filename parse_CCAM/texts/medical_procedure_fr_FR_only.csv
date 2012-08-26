@@ -32,7 +32,7 @@ STH;forfait de surveillance thermal;Forfaits;64.03;NULL;FR
 CST;majoration du forfait de cure thermal;Forfaits;10.0;NULL;FR
 CA;consultation annuelle de bilan ALD;NGAP;26.00;NULL;FR
 VL;Visite longue maladies neuro-dégénératives;NGAP;46.00;NULL;FR
-P;Nuit de 20h-24h et 6h-8h (si appel après 19h,CCAM);Forfaits;35.0;NULL;FR
+P;Nuit de 20h-24h et 6h-8h (si appel après 19h);Forfaits;35.00;NULL;FR
 S;Milieu de Nuit de 0h-6h (CCAM);Forfaits;40.0;NULL;FR
 F;Dimanche et J fériés + Samedi AM en garde si acte non régulé (CCAM);Forfaits;19.06;NULL;FR
 CRD;Consultation de Dimanche et férié;Forfaits;26.50;NULL;FR

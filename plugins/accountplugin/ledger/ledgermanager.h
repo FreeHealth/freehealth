@@ -55,6 +55,8 @@ class LedgerManager : public QObject {
         
         QStringList getListOfYears();
         QStringList getListOfMonths();
+        double getSums();
+    private :
         double m_sums;
        
 };

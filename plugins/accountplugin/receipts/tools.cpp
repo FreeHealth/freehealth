@@ -9,7 +9,7 @@ QHash<int,QString> ReceiptsTools::hashOfItems()
 {
         QHash<int,QString> treeviewRows;
         treeviewRows.insert(THESAURUS_ITEM,QObject::tr("Thesaurus of preestablished billing"));
-        treeviewRows.insert(ALL_VALUES_ITEM,QObject::tr("All Values"));
+        treeviewRows.insert(ALL_VALUES_ITEM,QObject::tr("All predefined Values"));
         treeviewRows.insert(PREFERED_VALUE_ITEM,QObject::tr("My Preferred Value"));
         treeviewRows.insert(ROUND_TRIP_ITEM,QObject::tr("Round trip"));
         treeviewRows.insert(FREE_VALUE_ITEM,QObject::tr("Free value"));

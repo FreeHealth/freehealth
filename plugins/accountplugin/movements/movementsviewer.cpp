@@ -51,7 +51,7 @@ using namespace AccountDB;
 using namespace Constants;
 using namespace Trans::ConstantTranslations;
 
-enum { WarnDebugMessage = true };
+enum { WarnDebugMessage = false };
 
 /*********************/
 // TODO: bank system and deposit
@@ -63,7 +63,13 @@ MovementsViewer::MovementsViewer(QWidget * parent) :
 {
     ui->setupUi(this);
     ui->dateEdit->setDisplayFormat(tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR));
-
+    ui->quitButton->hide();
+    MovementsManager rManager;
+    if (rManager.isMedintuxArg())
+    {
+        ui->quitButton->show();
+        setAttribute(Qt::WA_DeleteOnClose);
+        }
     //instanciate
     m_valid = 0; //bill not received
     ui->valueDoubleSpinBox->setRange(0.00,999999999999999.00);

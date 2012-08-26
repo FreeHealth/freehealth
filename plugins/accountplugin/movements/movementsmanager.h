@@ -41,11 +41,11 @@
 class ACCOUNT_EXPORT MovementsManager : public QObject
 {
     Q_OBJECT
-public:
-    MovementsManager();
-    ~MovementsManager();
+    public:
+        MovementsManager();
+        ~MovementsManager();
 
-    QHash<int,QVariant> getHashOfValues(int acMovId,
+        QHash<int,QVariant> getHashOfValues(int acMovId,
                                         QString &userUid,
                                         int bankId,
                                         int type,
@@ -59,7 +59,9 @@ public:
                                         int isValid,
                                         QString &details);
 
-    double getCalculatedValue(double value,double percentage);
+        double getCalculatedValue(double value,double percentage);
+        bool isMedintuxArg();
+    
 };
 
 
