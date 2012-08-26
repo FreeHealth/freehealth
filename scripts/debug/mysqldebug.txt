@@ -1,0 +1,13 @@
+*** Starting MySQL debugging script at: vendredi 29 juin 2012, 13:38:21 (UTC+0200) on pmddeb
+## TESTING MYSQL SERVER
+
+## MySQL CONFIGURATION \n
+
+ 
+
+ 
+
+ 
+
+ 
+## DATA EXTRACTION\n
