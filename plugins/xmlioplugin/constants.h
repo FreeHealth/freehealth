@@ -140,6 +140,7 @@ const char* const TAG_SCRIPT_ONDEMAND           = "ondemand";
 const char* const TAG_SCRIPT_ONVALUECHANGED     = "onvaluechanged";
 const char* const TAG_SCRIPT_ONVALUEREQUIERED   = "onvaluerequiered";
 const char* const TAG_SCRIPT_ONDEPENDENCIESCHANGED = "ondependencieschanged";
+const char* const TAG_SCRIPT_ONCLICKED          = "onclicked";
 
 const char* const TAG_DATAPATIENT                = "patientdata";
 const char* const TAG_DATAPATIENT_WEIGHT         = "patient::weight";
@@ -149,6 +150,7 @@ const char* const TAG_DATAPATIENT_HEIGHTUNIT     = "patient::heightunit";
 const char* const TAG_DATAPATIENT_EMAIL          = "patient::email";
 const char* const TAG_DATAPATIENT_FAX            = "patient::fax";
 const char* const TAG_DATAPATIENT_TELS           = "patient::tels";
+const char* const TAG_DATAPATIENT_MOBILETEL      = "patient::mobiletel";
 
 const char* const TAG_DATAPATIENT_CREAT          = "patient::creatinin";
 const char* const TAG_DATAPATIENT_CREATUNIT      = "patient::creatininunit";

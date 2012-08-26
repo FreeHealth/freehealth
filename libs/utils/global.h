@@ -143,7 +143,6 @@ UTILS_EXPORT QString isFileExists(const QString &absPath);
 UTILS_EXPORT QByteArray md5(const QString &fileName);
 
 // Some useful widgets specific functions
-/** \brief Toggle the echomode of a QLineEdit. */
 UTILS_EXPORT void switchEchoMode( QLineEdit * l );
 
 // Some date & numbering functions
@@ -154,6 +153,7 @@ UTILS_EXPORT bool inRange(const QModelIndex &topLeft, const QModelIndex &bottomR
 // Some locale functions
 UTILS_EXPORT QString countryToIso(QLocale::Country country);
 UTILS_EXPORT QString countryIsoToName(const QString &country);
+UTILS_EXPORT QLocale::Country countryIsoToCountry(const QString &country);
 
 // Some functions for HTML work
 UTILS_EXPORT QString fontToHtml( const QFont &font, const QColor &color = QColor("black") );
@@ -163,7 +163,7 @@ UTILS_EXPORT QString firstLetterUpperCase(const QString &s);
 UTILS_EXPORT QString removeAccents(const QString &text);
 
 // Some functions for XML Handling
-UTILS_EXPORT QString createXml( const QString &mainTag, const QHash<QString,QString> &datas, const int indent = 0, const bool valueToBase64 = false );
+UTILS_EXPORT QString createXml( const QString &mainTag, const QHash<QString,QString> &data, const int indent = 0, const bool valueToBase64 = false );
 UTILS_EXPORT bool    readXml( const QString &xmlContent, const QString &generalTag, QHash<QString,QString> &readDatas,const bool valueFromBase64 = false );
 UTILS_EXPORT QString xmlRead(const QDomElement &father, const QString &name, const QString &defaultValue);
 UTILS_EXPORT QString xmlRead(const QDomElement &father, const QString &name, const char *defaultValue);

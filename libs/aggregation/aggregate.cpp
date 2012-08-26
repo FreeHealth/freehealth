@@ -66,8 +66,8 @@
     You can use an Aggregate to simulate multiple inheritance by aggregation. Assume we have
     \code
         using namespace Aggregation;
-        class MyInterface : public QObject { ........ };
-        class MyInterfaceEx : public QObject { ........ };
+        class MyInterface: public QObject { ........ };
+        class MyInterfaceEx: public QObject { ........ };
         [...]
         MyInterface *object = new MyInterface; // this is single inheritance
     \endcode

@@ -25,6 +25,7 @@
  ***************************************************************************/
 #include "zipcodesplugin.h"
 #include "frenchzipcodespage.h"
+#include "genericzipcodespage.h"
 
 #include <coreplugin/dialogs/pluginaboutpage.h>
 
@@ -38,7 +39,9 @@
 // TODO: USA zipcodes: http://www.populardata.com/zipcode_database.html // http://federalgovernmentzipcodes.us/ //  http://www.free-zipcodes.com/download-zip-code-database.php */
 // UK: http://www.freemaptools.com/download-uk-postcode-lat-lng.htm
 // Australia http://auspost.com.au/apps/postcode.html
-// ALL !!!! : http://download.geonames.org/export/dump/ (no zip codes)
+// Austria: http://www.post.at/geschaeftlich_adress_management_postlexikon.php -> "PLZ-Verzeichnis %Month% %YEAR%"
+// (ALL !!!! : http://download.geonames.org/export/dump/ (no zip codes))
+// ALL !!!! : http://download.geonames.org/export/zip/
 
 using namespace ZipCodes;
 using namespace Internal;
@@ -64,6 +67,7 @@ bool ZipCodesPlugin::initialize(const QStringList &arguments, QString *errorMess
     // add plugin info page
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
     addAutoReleasedObject(new FrenchZipCodesPage(this));
+    addAutoReleasedObject(new GenericZipCodesPage(this));
 
     return true;
 }

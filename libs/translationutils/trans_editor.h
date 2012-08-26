@@ -26,7 +26,7 @@
 #ifndef CONSTANTTRANSLATIONS_EDITOR_H
 #define CONSTANTTRANSLATIONS_EDITOR_H
 
-#include <QCoreApplication>
+#include <qglobal.h>
 
 namespace Trans {
 namespace Constants {

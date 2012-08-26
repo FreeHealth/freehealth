@@ -38,6 +38,7 @@
 */
 
 namespace Script {
+namespace Internal {
 class ScriptManager;
 
 class ScriptPlugin : public ExtensionSystem::IPlugin
@@ -59,7 +60,7 @@ private:
     ScriptManager *m_Manager;
 };
 
-
-}  // End namespace Script
+}  // namespace Internal
+}  // namespace Script
 
 #endif  // End SCRIPT_PLUGIN_H

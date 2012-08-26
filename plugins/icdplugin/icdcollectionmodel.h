@@ -64,7 +64,7 @@ public:
     bool addCode(const QString &code);
     bool addAssociation(const Internal::IcdAssociation &pair);
 
-    // Direct access to datas and model cleaning
+    // Direct access to data and model cleaning
     void clearCollection();
     QStringList includedCodesWithDaget() const;
     QStringList includedCodesWithoutDaget() const;

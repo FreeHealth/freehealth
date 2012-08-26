@@ -107,7 +107,7 @@ public:
 
     void setData(const int id, const QVariant &value) {m_Datas.insert(id, value.toString());}
 
-    // Access to datas
+    // Access to data
     QString data(const int id) const {return m_Datas.value(id);}
     QString code() const {return m_Datas.value(AtcModel::ATC_Code);}
     QString english() const {return m_Datas.value(AtcModel::ATC_EnglishLabel);}

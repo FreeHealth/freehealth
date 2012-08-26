@@ -166,6 +166,7 @@ QString ProxyPreferencesPage::id() const { return objectName(); }
 QString ProxyPreferencesPage::name() const { return tkTr(Trans::Constants::PROXY); }
 QString ProxyPreferencesPage::title() const {return tkTr(Trans::Constants::INTERNET_CONNECTION_PREFERENCES);}
 QString ProxyPreferencesPage::category() const { return tkTr(Trans::Constants::GENERAL_PREFERENCES); }
+int ProxyPreferencesPage::sortIndex() const {return 1;}
 
 void ProxyPreferencesPage::resetToDefaults()
 {

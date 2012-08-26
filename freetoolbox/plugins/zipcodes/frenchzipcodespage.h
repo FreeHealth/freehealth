@@ -40,7 +40,7 @@ public:
     FrenchZipCodesPage(QObject *parent = 0);
 
     virtual QString id() const {return "FrenchZipCodesPage";}
-    virtual QString name() const {return "ZipCodes: Fr";}
+    virtual QString name() const {return tr("ZipCodes: Fr");}
     virtual QString category() const {return Core::Constants::CATEGORY_ZIPCODESDATABASE;}
     virtual QIcon icon() const {return QIcon();}
 
@@ -67,10 +67,9 @@ public:
     QString processMessage() const {return tr("French zip codes database creation");}
 
     bool unzipFiles();
-    bool prepareDatas();
+    bool prepareData();
     bool createDatabase();
     bool populateDatabase();
-    bool linkMolecules();
 
     QStringList errors() const {return m_Errors;}
 

@@ -72,7 +72,7 @@ bool DrugsDbPlugin::initialize(const QStringList &arguments, QString *errorMessa
     addAutoReleasedObject(new CanadianDrugsDatabasePage(this));
     addAutoReleasedObject(new FdaDrugsDatabasePage(this));
     addAutoReleasedObject(new FrenchDrugsDatabasePage(this));
-//    addAutoReleasedObject(new SouthAfricanDrugsDatabasePage(this));
+    addAutoReleasedObject(new SouthAfricanDrugsDatabasePage(this));
 //    addAutoReleasedObject(new BeDrugsDatabasePage(this));
 //    addAutoReleasedObject(new PtDrugsDatabasePage(this));
 

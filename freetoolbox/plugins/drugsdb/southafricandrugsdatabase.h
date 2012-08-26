@@ -49,7 +49,7 @@ class SouthAfricanDrugsDatabase;
 class SouthAfricanDrugsDatabasePage : public Core::IToolPage
 {
 public:
-    SouthAfricanDrugsDatabasePage(QObject *parent) : IToolPage(parent) {}
+    SouthAfricanDrugsDatabasePage(QObject *parent);
 
     virtual QString id() const {return "ZADrugsDatabase";}
     virtual QString name() const {return "ZA Drugs Database Creator";}

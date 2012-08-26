@@ -24,8 +24,8 @@
  *  Contributors :                                                         *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
-#ifndef PAD_ITEM_H
-#define PAD_ITEM_H
+#ifndef PADTOOLS_PAD_ITEM_H
+#define PADTOOLS_PAD_ITEM_H
 
 #include <padtoolsplugin/pad_fragment.h>
 
@@ -144,4 +144,4 @@ private:
 
 }  // PadTools
 
-#endif
+#endif  // PADTOOLS_PAD_ITEM

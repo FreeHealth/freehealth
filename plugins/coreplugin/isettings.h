@@ -143,7 +143,7 @@ public:
     virtual QString dataPackCompleteFormsInstallPath() const  { return path(DataPackCompleteFormsPath); }
     virtual QString dataPackSubFormsInstallPath() const  { return path(DataPackSubFormsInstallPath); }
 
-    // Network datas
+    // Network data
     virtual Utils::DatabaseConnector databaseConnector() const = 0;
     virtual void setDatabaseConnector(Utils::DatabaseConnector &dbConnector) = 0;
     virtual void setDefaultForm(const QString &formUid) = 0;

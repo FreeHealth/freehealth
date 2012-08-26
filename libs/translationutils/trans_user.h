@@ -26,7 +26,7 @@
 #ifndef CONSTANTTRANSLATIONS_USER_H
 #define CONSTANTTRANSLATIONS_USER_H
 
-#include <QCoreApplication>
+#include <qglobal.h>
 
 namespace Trans {
 namespace Constants {
@@ -38,7 +38,7 @@ const char* const NO_USER_CONNECTED                 = QT_TRANSLATE_NOOP("tkConst
 const char* const USER                              = QT_TRANSLATE_NOOP("tkConstants", "User");
 const char* const CHANGE_USER                       = QT_TRANSLATE_NOOP("tkConstants", "Change current user");
 const char* const USERS                             = QT_TRANSLATE_NOOP("tkConstants", "Users");
-const char* const USER_DATAS                        = QT_TRANSLATE_NOOP("tkConstants", "User datas");
+const char* const USER_DATA                         = QT_TRANSLATE_NOOP("tkConstants", "User data");
 const char* const RIGHTS                            = QT_TRANSLATE_NOOP("tkConstants", "Rights");
 const char* const USER_RIGHTS                       = QT_TRANSLATE_NOOP("tkConstants", "User rights");
 const char* const RIGHTS_MEDICAL                    = QT_TRANSLATE_NOOP("tkConstants", "Medical rights");
@@ -49,6 +49,10 @@ const char* const RIGHTS_DRUGS                      = QT_TRANSLATE_NOOP("tkConst
 const char* const TELEPHONE                         = QT_TRANSLATE_NOOP("tkConstants", "Telephone");
 const char* const FAX                               = QT_TRANSLATE_NOOP("tkConstants", "Fax");
 const char* const MAIL                              = QT_TRANSLATE_NOOP("tkConstants", "E-Mail");
+const char* const PROFESSIONAL                      = QT_TRANSLATE_NOOP("tkConstants", "Professional");
+const char* const SPECIALTIES                       = QT_TRANSLATE_NOOP("tkConstants", "Specialties");
+const char* const IDENTIFIANTS                      = QT_TRANSLATE_NOOP("tkConstants", "Identifiants");
+const char* const QUALIFICATIONS                    = QT_TRANSLATE_NOOP("tkConstants", "Qualifications");
 
 const char* const ENTER_MYSQL_ADMIN_LOGIN           = QT_TRANSLATE_NOOP("tkConstants", "Enter MySQL administrator login");
 const char* const ENTER_YOUR_PERSONAL_LOGIN         = QT_TRANSLATE_NOOP("tkConstants", "Enter your personal identifiants");

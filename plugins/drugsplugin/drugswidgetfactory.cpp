@@ -47,7 +47,6 @@
 
 #include <drugsplugin/constants.h>
 #include <drugsplugin/drugswidget/druginfo.h>
-#include <drugsplugin/drugspreferences/mfDrugsPreferences.h>
 #include <drugsplugin/drugswidget/drugscentralwidget.h>
 
 #include <coreplugin/icore.h>
@@ -70,7 +69,7 @@
 #include <QGridLayout>
 #include <QModelIndex>
 #include <QSpacerItem>
-
+#include <QPushButton>
 
 namespace {
     const char* const OPTION_HIDESELECTOR     = "hideselector";
@@ -85,6 +84,7 @@ using namespace DrugsWidget;
 using namespace Internal;
 
 static inline DrugsDB::DrugsBase &drugsBase() {return DrugsDB::DrugBaseCore::instance().drugsBase();}
+static inline DrugsDB::DrugsIO &drugsIo() {return DrugsDB::DrugBaseCore::instance().drugsIo();}
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 
@@ -204,7 +204,7 @@ QString DrugsPrescriptorWidget::printableHtml(bool withValues) const
     if (withValues && dontPrintEmptyValues(m_FormItem) && m_PrescriptionModel->rowCount()==0) {
         return QString();
     }
-    QString html = DrugsDB::DrugsIO().prescriptionToHtml(m_PrescriptionModel);
+    QString html = drugsIo().prescriptionToHtml(m_PrescriptionModel);
     int begin = html.indexOf("<body");
     begin = html.indexOf(">", begin) + 1;
     int end = html.indexOf("</body>");
@@ -239,8 +239,7 @@ void DrugsPrescriptorWidget::addChronicTherapeutics()
 {
     const QString &chronic = patient()->data(Core::IPatient::DrugsChronicTherapeutics).toString();
     if (!chronic.isEmpty()) {
-        DrugsDB::DrugsIO io;
-        io.prescriptionFromXml(m_PrescriptionModel, chronic, DrugsDB::DrugsIO::AppendPrescription);
+        drugsIo().prescriptionFromXml(m_PrescriptionModel, chronic, DrugsDB::DrugsIO::AppendPrescription);
     }
 }
 
@@ -325,8 +324,7 @@ QVariant DrugsWidgetData::data(const int ref, const int role) const
     }
     case Core::IPatient::DrugsChronicTherapeutics:
     {
-        DrugsDB::DrugsIO io;
-        return io.prescriptionToXml(model);
+        return drugsIo().prescriptionToXml(model);
     }
 
     }  // End switch
@@ -338,13 +336,11 @@ void DrugsWidgetData::setStorableData(const QVariant &data)
 {
     if (!data.isValid())
         return;
-    DrugsDB::DrugsIO io;
-    io.prescriptionFromXml(m_Widget->m_PrescriptionModel, data.toString(), DrugsDB::DrugsIO::ReplacePrescription);
+    drugsIo().prescriptionFromXml(m_Widget->m_PrescriptionModel, data.toString(), DrugsDB::DrugsIO::ReplacePrescription);
     m_Widget->m_PrescriptionModel->setModified(false);
 }
 
 QVariant DrugsWidgetData::storableData() const
 {
-    DrugsDB::DrugsIO io;
-    return io.prescriptionToXml(m_Widget->m_PrescriptionModel);
+    return drugsIo().prescriptionToXml(m_Widget->m_PrescriptionModel);
 }

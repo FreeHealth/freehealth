@@ -72,13 +72,13 @@ französischen AFSSAPS synchronisiert.
 
     \subsection intro_platforms Availables platforms
 
-FreeMedForms and derivatives are availables for :
+FreeMedForms and derivatives are availables for:
   - Linux
   - FreeBSD (need some adaptation, please contact development team)
   - MacOs X universal
   - Windows
 
-FreeMedForms and derivatives use :
+FreeMedForms and derivatives use:
   - C++ language
   - Qt libs (latests)
   - SQLite / MySQL

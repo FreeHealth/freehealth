@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>419</width>
+    <width>474</width>
     <height>300</height>
    </rect>
   </property>
@@ -49,14 +49,14 @@
      <item>
       <widget class="QPushButton" name="checkDatas">
        <property name="text">
-        <string>Check Datas</string>
+        <string>Check Data</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="recreateRoutes">
        <property name="text">
-        <string>Recreate Routes</string>
+        <string>Recreate routes</string>
        </property>
       </widget>
      </item>

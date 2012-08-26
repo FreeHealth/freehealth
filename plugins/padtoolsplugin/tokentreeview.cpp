@@ -51,30 +51,36 @@ QPixmap TokenTreeView::renderToPixmap(const QModelIndexList &indexes, QRect *r)
     w = 0;
     QStringList names;
     foreach(const QModelIndex &i, indexes) {
-        const QString &n = i.data().toString();
+        QString n = i.data().toString();
         if (n.isEmpty())
             continue;
+        QModelIndex parent = i.parent();
+        while (parent.parent() != QModelIndex()) {
+            n.prepend(parent.data().toString() + ".");
+            parent = parent.parent();
+        }
         const QRect &rect = visualRect(i);
         h += rect.height();
         w = qMax(w, rect.width());
         names += n;
     }
 
-    w += 4;
-    h += 4;
+    QFontMetrics metric(font());
+    QSize size = metric.size(Qt::TextSingleLine, names.join("\n"));
+
+    w = size.width() + 10;
+    h = size.height() + 6;
     r->setRect(0, 0, w, h);
 
     // Create the pixmap
     QPixmap pix(w, h);
     pix.fill(Qt::transparent);
 
-    QFontMetrics metric(font());
-    QSize size = metric.size(Qt::TextSingleLine, names.join("\n"));
-
     QLinearGradient gradient(0, 0, 0, pix.height()-1);
     gradient.setColorAt(0, Qt::white);
-    gradient.setColorAt(0.6, QColor("#dddddd"));
-//    gradient.setColorAt(0.6, QColor(Qt::lightGray));
+    gradient.setColorAt(0.3, QColor("#eeeeee"));
+    gradient.setColorAt(0.5, QColor("#e9e9e9"));
+    gradient.setColorAt(0.7, QColor("#eeeeee"));
     gradient.setColorAt(1.0, Qt::white);
 
     QPainter painter;

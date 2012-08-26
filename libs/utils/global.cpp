@@ -1121,7 +1121,7 @@ void resizeAndCenter(QWidget *widget, QWidget *reference)
     centerWidget(widget, ref);
 }
 
-/** \brief Switch echo mode af a lineEdit. **/
+/** \brief Toggle the EchoMode property of a QLineEdit between Normal and Password. */
 void switchEchoMode(QLineEdit * l)
 {
     if (l->echoMode() == QLineEdit::Normal)
@@ -1161,7 +1161,7 @@ bool inRange(const QModelIndex &topLeft, const QModelIndex &bottomRight, const Q
     return inRange(min, max, val);
 }
 
-/** Return the ISO 2 char encoded of the \e country */
+/** Return the ISO-3166-1 2-char code of the \e country */
 QString countryToIso(QLocale::Country country)
 {
     if (country == QLocale::AnyCountry)
@@ -1175,10 +1175,19 @@ QString countryToIso(QLocale::Country country)
     return code;
 }
 
+/*!
+ * \brief Takes  \e country and returns a localized string using QLocale::countryToString()
+ *
+ * \param country QString an ISO-3166-1 2-char code of the country
+ * \returns a localized string for the given code using QLocale::countryToString()
+ */
 QString countryIsoToName(const QString &country)
 {
     if (country.size() != 2)
         return QString();
+    // TODO: maybe remove all this code and do just
+    // return QLocale::countryToString(countryIsoToCountry(country));
+    // for code duplication decrease
     QString t;
     t.resize(2);
     int c = 2;
@@ -1191,9 +1200,36 @@ QString countryIsoToName(const QString &country)
         if (t.compare(country, Qt::CaseInsensitive)==0) {
             return QLocale::countryToString(QLocale::Country(i/2));
         }
-        i += 2;
+        ++i;
+        ++i;
     }
     return QString();
+}
+
+/*!
+ * \brief Maps an ISO string to Qt's internal Country code.
+ * \param country an ISO-3166-1 2-char string
+ * \returns a QLocale::Country code for the given \e country
+ */
+QLocale::Country countryIsoToCountry(const QString &country) {
+    if (country.size() != 2)
+        return QLocale::AnyCountry;
+    QString t;
+    t.resize(2);
+    int c = 2;
+    int max = sizeof(two_letter_country_code_list)/sizeof (*two_letter_country_code_list);
+    int i = c;
+    while (i < max) {
+        const unsigned char *c = two_letter_country_code_list + i;
+        t[0] = ushort(c[0]);
+        t[1] = ushort(c[1]);
+        if (t.compare(country, Qt::CaseInsensitive) == 0) {
+            return QLocale::Country(i/2);
+        }
+        ++i;
+        ++i;
+    }
+    return QLocale::AnyCountry;
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1412,7 +1448,7 @@ QString removeAccents(const QString &text)
 /////////////////////////////////////////   XML FUNCTIONS   //////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /**
-  \brief Create a simple Xml content with a \e mainTag and a hash \e datas.
+  \brief Create a simple Xml content with a \e mainTag and a hash \e data.
   You can specify the indentation of the resulting Xml.\n
   You can automatically encode to base64 the values of the tags.\n
   The \e mainTag represents the first englobing Xml tag of the output.\n
@@ -1430,27 +1466,27 @@ QString removeAccents(const QString &text)
       // </MyXmlFirstTag>
   \endcode
 */
-QString createXml(const QString &mainTag, const QHash<QString,QString> &datas, const int indent,const bool valueToBase64 )
+QString createXml(const QString &mainTag, const QHash<QString,QString> &data, const int indent,const bool valueToBase64 )
 {
     QDomDocument doc;
     QDomElement main = doc.createElement(mainTag);
     doc.appendChild(main);
     if (valueToBase64) {
-        foreach(const QString &k, datas.keys()) {
-            QDomElement data  = doc.createElement(k);
-            main.appendChild(data);
-            if (!datas.value(k).isEmpty()) {
-                QDomText dataText = doc.createTextNode(datas.value(k).toAscii().toBase64());
-                data.appendChild(dataText);
+        foreach(const QString &k, data.keys()) {
+            QDomElement dataElement  = doc.createElement(k);
+            main.appendChild(dataElement);
+            if (!data.value(k).isEmpty()) {
+                QDomText dataText = doc.createTextNode(data.value(k).toAscii().toBase64());
+                dataElement.appendChild(dataText);
             }
         }
     } else {
-        foreach(const QString &k, datas.keys()) {
-            QDomElement data  = doc.createElement(k);
-            main.appendChild(data);
-            if (!datas.value(k).isEmpty()) {
-                QDomText dataText = doc.createTextNode(datas.value(k));
-                data.appendChild(dataText);
+        foreach(const QString &k, data.keys()) {
+            QDomElement dataElement  = doc.createElement(k);
+            main.appendChild(dataElement);
+            if (!data.value(k).isEmpty()) {
+                QDomText dataText = doc.createTextNode(data.value(k));
+                dataElement.appendChild(dataText);
             }
         }
     }

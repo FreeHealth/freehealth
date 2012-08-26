@@ -196,7 +196,7 @@
       <item>
        <layout class="QVBoxLayout" name="verticalLayout">
         <item>
-         <widget class="QPushButton" name="photoButton">
+         <widget class="Patients::PixmapButton" name="photoButton">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
             <horstretch>0</horstretch>
@@ -230,6 +230,12 @@
             <height>50</height>
            </size>
           </property>
+          <property name="autoDefault">
+           <bool>false</bool>
+          </property>
+          <property name="default">
+           <bool>false</bool>
+          </property>
          </widget>
         </item>
         <item>
@@ -261,12 +267,17 @@
   <customwidget>
    <class>Utils::QButtonLineEdit</class>
    <extends>QLineEdit</extends>
-   <header>utils/widgets/qbuttonlineedit.h</header>
+   <header location="global">utils/widgets/qbuttonlineedit.h</header>
   </customwidget>
   <customwidget>
    <class>Utils::BirthDayEdit</class>
    <extends>QLineEdit</extends>
    <header location="global">utils/widgets/birthdayedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>Patients::PixmapButton</class>
+   <extends>QPushButton</extends>
+   <header location="global">pixmapbutton.h</header>
   </customwidget>
  </customwidgets>
  <tabstops>

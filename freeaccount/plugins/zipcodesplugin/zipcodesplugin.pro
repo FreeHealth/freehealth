@@ -1,6 +1,7 @@
 TEMPLATE        = lib
 TARGET          = ZipCodes
 
+with-pad:DEFINES+=WITH_PAD
 DEFINES *= FREEACCOUNT
 FREEACCOUNT = 1
 

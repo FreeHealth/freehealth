@@ -23,8 +23,8 @@
  *  Contributors :                                                         *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
-#ifndef TOKENOUTPUTDOCUMENT_H
-#define TOKENOUTPUTDOCUMENT_H
+#ifndef PADTOOLS_TOKENOUTPUTDOCUMENT_H
+#define PADTOOLS_TOKENOUTPUTDOCUMENT_H
 
 #include <texteditorplugin/texteditor.h>
 
@@ -91,5 +91,5 @@ private:
 
 }  // PadTools
 
-#endif // TOKENOUTPUTDOCUMENT_H
+#endif // PADTOOLS_TOKENOUTPUTDOCUMENT_H
 

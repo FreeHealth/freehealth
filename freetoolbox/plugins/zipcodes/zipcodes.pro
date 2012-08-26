@@ -16,19 +16,26 @@ DEPENDPATH += ../
 
 SOURCES += \
     zipcodesplugin.cpp \
-    frenchzipcodespage.cpp
+    frenchzipcodespage.cpp \
+    genericzipcodespage.cpp \
+    genericzipcodeswidget.cpp \
+    genericzipcodesstep.cpp
 
 
 HEADERS  += \
     zipcodesplugin.h \
-    frenchzipcodespage.h
+    frenchzipcodespage.h \
+    genericzipcodespage.h \
+    genericzipcodeswidget.h \
+    genericzipcodesstep.h
 
 
 FORMS += \
-    frenchzipcodeswidget.ui
+    frenchzipcodeswidget.ui \
+    genericzipcodeswidget.ui
 
 
 OTHER_FILES += \
-    ../global_resources/sql/zipcodes/zipcodes.sql \
+    ../global_resources/sql/zipcodes/zipcodes.sql
 
 OTHER_FILES += ZipCodes.pluginspec

@@ -70,7 +70,9 @@ public:
         Script_OnDemand,
         Script_OnValueChanged,
         Script_OnValueRequiered,
-        Script_OnDependentValueChanged
+        Script_OnDependentValueChanged,
+        Script_OnClicked
+
     };
 
 
@@ -95,6 +97,7 @@ public:
     QString onValueChangedScript() const {return script(Script_OnValueChanged);}
     QString onValueRequieredScript() const {return script(Script_OnValueRequiered);}
     QString onDependentValueChangedScript() const {return script(Script_OnDependentValueChanged);}
+    QString onClicked() const {return script(Script_OnClicked);}
 
     void toTreeWidget(QTreeWidgetItem *tree);
 private:

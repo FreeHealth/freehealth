@@ -215,7 +215,7 @@ QVariant stringToVariant(const QString &s)
 
 /**
   \brief Serialize a QStringList into a simple QString.
-  You can protect the serialization/deserialization with base64 encoding. In this case, datas from the
+  You can protect the serialization/deserialization with base64 encoding. In this case, data from the
   object to serialize/deserialize are encoded/decoded from base64.
 */
 const QString toString( const QStringList &list, bool base64Protection )
@@ -234,7 +234,7 @@ const QString toString( const QStringList &list, bool base64Protection )
 
 /**
   \brief Deserialize a QStringList from a simple QString.
-  You can protect the serialization/deserialization with base64 encoding. In this case, datas from the
+  You can protect the serialization/deserialization with base64 encoding. In this case, data from the
   object to serialize/deserialize are encoded/decoded from base64.
 */
 const QStringList toStringList( const QString &serialized, bool base64Protection )
@@ -250,7 +250,7 @@ const QStringList toStringList( const QString &serialized, bool base64Protection
 
 /**
   \brief Serialize a QHash<int, QString> into a simple QString.
-  You can protect the serialization/deserialization with base64 encoding. In this case, datas from the
+  You can protect the serialization/deserialization with base64 encoding. In this case, data from the
   object to serialize/deserialize are encoded/decoded from base64.
 */
 const QString toString( const QHash<int,QString> &hash, bool base64Protection )
@@ -275,7 +275,7 @@ const QString toString( const QHash<int,QString> &hash, bool base64Protection )
 
 /**
   \brief Deserialize a QHash<int, QString> from a simple QString.
-  You can protect the serialization/deserialization with base64 encoding. In this case, datas from the
+  You can protect the serialization/deserialization with base64 encoding. In this case, data from the
   object to serialize/deserialize are encoded/decoded from base64.
 */
 const QHash<int,QString> toHash( const QString & serialized, bool base64Protection )
@@ -312,7 +312,7 @@ const QHash<int,QString> toHash( const QString & serialized, bool base64Protecti
 
 /**
   \brief Serialize a QHash<int, QVariant> into a simple QString.
-  You can protect the serialization/deserialization with base64 encoding. In this case, datas from the
+  You can protect the serialization/deserialization with base64 encoding. In this case, data from the
   object to serialize/deserialize are encoded/decoded from base64.
 */
 const QString toString(const QHash<int,QVariant> &hash, bool base64Protection)
@@ -336,7 +336,7 @@ const QString toString(const QHash<int,QVariant> &hash, bool base64Protection)
 
 /**
   \brief Deserialize a QHash<int, QVariant> from a simple QString.
-  You can protect the serialization/deserialization with base64 encoding. In this case, datas from the
+  You can protect the serialization/deserialization with base64 encoding. In this case, data from the
   object to serialize/deserialize are encoded/decoded from base64.
 */
 const QHash<int,QVariant> toVariantHash( const QString &serialized, bool base64Protection )

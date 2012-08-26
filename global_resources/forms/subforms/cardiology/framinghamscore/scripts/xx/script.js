@@ -28,12 +28,12 @@ namespace.module('com.freemedforms.cardiology.framingham.score', function (expor
                          cholCombo = formUi.findChild("cholTotalCombo");
                          hdlCombo = formUi.findChild("cholHDLCombo");
                          systCombo = formUi.findChild("bpSystCombo");
-						 tobaccoCheckbox = formUi.findChild("currentlySmoking");
+                         tobaccoCheckbox = formUi.findChild("currentlySmoking");
                          bpSystTreatedCheckbox = formUi.findChild("bpSystTreated");
                          populateCombos();
-                         // Update patient datas
+                         // Update patient data
                          retranslateUi();
-						 enableDependAge();
+                         enableDependAge();
                      }
 
                      function retranslateUi() {
@@ -81,8 +81,8 @@ namespace.module('com.freemedforms.cardiology.framingham.score', function (expor
                      function getSystolicInRange() {
                          return 115 + (systCombo.currentIndex * 10);
                      }
-					 
-					 function enableDependAge() {
+
+                                         function enableDependAge() {
                          var age =  freemedforms.patient.yearsOld;
                          if (age < 20 || age >= 80 ) {
                          cholCombo.enabled = false;
@@ -91,7 +91,7 @@ namespace.module('com.freemedforms.cardiology.framingham.score', function (expor
                          bpSystTreatedCheckbox.enabled = false;
                          tobaccoCheckbox.enabled = false; }
                      }
-					 
+
                      function computeScore() {
                          freemedforms.forms.namespaceInUse = "Subs::Cardiology::Scores::Framingham";
                          var chol = getTotalCholesterolInRange();

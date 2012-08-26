@@ -51,6 +51,7 @@ public:
     QString id() const;
     QString name() const;
     QString category() const;
+    int sortIndex() const    { return 10;}
 
     void refreshContents();
 

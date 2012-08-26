@@ -125,14 +125,14 @@
         <translation>Du par</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/accountview.cpp" line="187"/>
-        <source>Line deleted.</source>
-        <translation>Ligne supprimée.</translation>
+        <location filename="../../plugins/accountplugin/accountview.cpp" line="181"/>
+        <source>Please select a line to delete</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountplugin/accountview.cpp" line="181"/>
-        <source>Please select a line to delete.</source>
-        <translation>Sélectionnez une ligne à effacer, s&apos;il vous plaît.</translation>
+        <location filename="../../plugins/accountplugin/accountview.cpp" line="187"/>
+        <source>Line deleted</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1127,8 +1127,8 @@ Ce mécanisme est utile pour les testeurs et ne devrait pas être utilisé pour 
     </message>
     <message>
         <location filename="../../plugins/accountplugin/accountview.ui" line="26"/>
-        <source>Start Date</source>
-        <translation>Date de début</translation>
+        <source>Start date</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/accountview.ui" line="36"/>
@@ -1474,8 +1474,8 @@ Autrement le résultat sera faux!</translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/receipts/choiceDialog.cpp" line="242"/>
-        <source>Cannot delete in thesaurus : </source>
-        <translation>Impossible d&apos;effacer dans le thésaurus la valeur : </translation>
+        <source>Cannot delete in thesaurus: </source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -2845,8 +2845,8 @@ et la choisir comme préférée.</translation>
     </message>
     <message>
         <location filename="../../plugins/accountplugin/receipts/receiptviewer.cpp" line="595"/>
-        <source>Cannot delete in thesaurus :</source>
-        <translation>Impossible d&apos;effacer dans thésaurus :</translation>
+        <source>Cannot delete in thesaurus:</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

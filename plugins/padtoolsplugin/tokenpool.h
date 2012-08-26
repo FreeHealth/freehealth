@@ -23,8 +23,8 @@
  *  Contributors :                                                         *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
-#ifndef PADTOOLS_ITOKEN_H
-#define PADTOOLS_ITOKEN_H
+#ifndef PADTOOLS_TOKENPOOL_H
+#define PADTOOLS_TOKENPOOL_H
 
 #include <padtoolsplugin/padtools_exporter.h>
 #include <coreplugin/ipadtools.h>
@@ -51,9 +51,10 @@ public:
     TokenPool(QObject *parent = 0);
     ~TokenPool();
 
-//    TokenNamespace &createNamespace(const QString &name);
-//    void registerNamespace(const TokenNamespace &ns);
-//    const TokenNamespace &getTokenNamespace(const QString &name) const;
+    void registerNamespace(const Core::TokenNamespace &ns);
+    int rootNamespaceCount() const;
+    const Core::TokenNamespace &rootNamespaceAt(int index) const;
+    Core::TokenNamespace getTokenNamespace(const QString &name) const;
 
     void addToken(Core::IToken *token);
     void addTokens(QVector<Core::IToken *> &tokens);
@@ -72,4 +73,4 @@ private:
 
 } // namespace PadTools
 
-#endif // PADTOOLS_ITOKEN_H
+#endif // PADTOOLS_TOKENPOOL_H

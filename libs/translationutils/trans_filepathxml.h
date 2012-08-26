@@ -26,7 +26,7 @@
 #ifndef CONSTANTTRANSLATIONS_FILEPATHXML_H
 #define CONSTANTTRANSLATIONS_FILEPATHXML_H
 
-#include <QCoreApplication>
+#include <qglobal.h>
 
 namespace Trans {
 namespace Constants {

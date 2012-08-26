@@ -28,7 +28,7 @@
 /**
   \class DosageModel
   \brief Manages predetermined dosage.
-  A \b "dosage" is a set of values that defines what, when and how to prescribe a drug. A dosage can apply :
+  A \b "dosage" is a set of values that defines what, when and how to prescribe a drug. A dosage can apply:
   \li on a specific drug base on its CIS,
   \li on the INN molecule of the drug which are presented in the same "dosage" (100mg, 1g...).
   For example :
@@ -290,8 +290,7 @@ QVariant DosageModel::data(const QModelIndex & item, int role) const
         {
             if (m_DirtyRows.contains(item.row()))
                 return QColor(DIRTYROW_BACKGROUNDCOLOR);
-            else
-                return QColor("white");
+            return QColor("white");
         }
     case Qt::DisplayRole:
     case Qt::EditRole:
@@ -314,7 +313,6 @@ QVariant DosageModel::data(const QModelIndex & item, int role) const
                 return m_Route;
             }
             return QSqlTableModel::data(item, role);
-            break;
         }
     case Qt::DecorationRole :
         {
@@ -335,14 +333,14 @@ bool DosageModel::insertRows(int row, int count, const QModelIndex & parent)
     Q_ASSERT_X(!m_UID.isNull(), "DosageModel::insertRows", "before inserting row, you must specify the UID of the related drug");
     if (WarnDebuggingDatas)
         qWarning() << "DosageModel::insertRows (row:" << row << ";count" << count << ")" << parent;
-    QString userUuid = user()->uuid();
+//    QString userUuid = user()->uuid();
     int i;
     int createdRow;
     bool toReturn = true;
     for (i=0; i < count; ++i) {
         createdRow = row+i;
         if (!QSqlTableModel::insertRows(createdRow, 1, parent)) {
-            Utils::Log::addError(this, tr("Model Error: unable to insert a row"),__FILE__, __LINE__);
+            LOG_ERROR(tr("Model Error: unable to insert a row"));
             toReturn = false;
         } else {
             setData(index(createdRow, Dosages::Constants::Uuid), Utils::Database::createUid());
@@ -359,6 +357,8 @@ bool DosageModel::insertRows(int row, int count, const QModelIndex & parent)
                 QStringList list = m_DrugsModel->drugData(m_UID, Constants::Drug::AvailableForms).toStringList();
                 if (!list.isEmpty())
                     setData(index(createdRow, Dosages::Constants::IntakesScheme), list.at(0));
+                else
+                    setData(index(createdRow, Dosages::Constants::IntakesScheme), s);
             } else if (s=="||") {
                 setData(index(createdRow, Dosages::Constants::IntakesScheme), tkTr(Trans::Constants::INTAKES, 1));
             } else {
@@ -539,9 +539,9 @@ void DosageModel::toPrescription(const int row)
     prescr_dosage.insert(Constants::Prescription::DurationUsesFromTo,   Dosages::Constants::DurationUsesFromTo);
     prescr_dosage.insert(Constants::Prescription::DurationScheme,       Dosages::Constants::DurationScheme);
     prescr_dosage.insert(Constants::Prescription::IntakesIntervalOfTime,Dosages::Constants::IntakesIntervalOfTime);
-    prescr_dosage.insert(Constants::Prescription::IntakesIntervalScheme,Dosages::Constants::IntakesIntervalScheme);
+    prescr_dosage.insert(Constants::Prescription::IntakesIntervalSchemeIndex,Dosages::Constants::IntakesIntervalScheme);
     prescr_dosage.insert(Constants::Prescription::Note,                 Dosages::Constants::Note);
-    prescr_dosage.insert(Constants::Prescription::DailyScheme,          Dosages::Constants::DailyScheme);
+    prescr_dosage.insert(Constants::Prescription::SerializedDailyScheme,Dosages::Constants::SerializedDailyScheme);
     prescr_dosage.insert(Constants::Prescription::MealTimeSchemeIndex,  Dosages::Constants::MealScheme);
     prescr_dosage.insert(Constants::Prescription::IsALD,                Dosages::Constants::IsALD);
     foreach(const int i, prescr_dosage.keys()) {

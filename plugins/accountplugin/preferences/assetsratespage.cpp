@@ -86,6 +86,7 @@ AssetsRatesPage::~AssetsRatesPage()
 QString AssetsRatesPage::id() const { return objectName(); }
 QString AssetsRatesPage::name() const { return tkTr(Trans::Constants::ASSETSRATES); }
 QString AssetsRatesPage::category() const { return tkTr(Trans::Constants::ACCOUNTANCY); }
+int AssetsRatesPage::sortIndex() const {return 20;}
 
 void AssetsRatesPage::resetToDefaults()
 {

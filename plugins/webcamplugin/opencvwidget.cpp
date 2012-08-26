@@ -58,10 +58,10 @@ OpenCVWidget::OpenCVWidget(QWidget *parent) :
     m_frames(0)
 {
     setObjectName("OpenCVWidget");
-    
+
     QTime time;
     time.start();
-    
+
     {
         QProgressDialog dlg(this);
         dlg.setRange(0, 0);
@@ -73,7 +73,7 @@ OpenCVWidget::OpenCVWidget(QWidget *parent) :
         Q_ASSERT(m_camera); //TODO: don't assert here, do error handling while runnning
     }
     LOG(tr("Acquiring WebCam (%1 ms)").arg(time.elapsed()));
-    
+
     if (WarnCameraProperties) {
         qWarning()
                 << "\nCV_CAP_PROP_POS_MSEC"
@@ -109,25 +109,22 @@ OpenCVWidget::OpenCVWidget(QWidget *parent) :
                 << "\nCV_CAP_PROP_EXPOSURE"
                 << cvGetCaptureProperty(m_camera, CV_CAP_PROP_EXPOSURE) ;
     }
-    
-    
+
+
     // face recognition initialisation
-    
-    //FIXME: this is only working in Linux with fixed path when opencv is installed!
-    // how do you include an xml file in a resource and load it with a non-Qt function?
     QString filename = settings()->path(Core::ISettings::BundleResourcesPath) + "/textfiles/haarcascade_frontalface_alt2.xml";
     _cascade =  (CvHaarClassifierCascade*)cvLoad(filename.toUtf8());
-    
+
     _storage = cvCreateMemStorage(0);
     _colors << cvScalar(0.0,0.0,255.0) << cvScalar(0.0,128.0,255.0)
             << cvScalar(0.0,255.0,255.0) << cvScalar(0.0,255.0,0.0)
             << cvScalar(255.0,128.0,0.0) << cvScalar(255.0,255.0,0.0)
             << cvScalar(255.0,0.0,0.0) << cvScalar(255.0,0.0,255.0);
-    
+
     // create a model that contains the captured images
     // 8 images, 1 column (image)
-//    m_imageModel = new QStandardItemModel(this);
-    
+    m_imageModel = new QStandardItemModel(this);
+
     m_timerId = startTimer(m_updateFreq);
 }
 
@@ -142,12 +139,12 @@ OpenCVWidget::~OpenCVWidget()
 
 void OpenCVWidget::timerEvent(QTimerEvent *event)
 {
-    Q_UNUSED(event);    
+    Q_UNUSED(event);
     IplImage *cvimage = cvQueryFrame(m_camera);
     if (!cvimage)
-        return;  
-    
-    // now convert IplImage into a QImage    
+        return;
+
+    // now convert IplImage into a QImage
     int cvIndex, cvLineStart;
     // switch between bit depths
     switch (cvimage->depth) {
@@ -161,10 +158,10 @@ void OpenCVWidget::timerEvent(QTimerEvent *event)
             }
             // draw inside the QImage
             cvIndex = 0; cvLineStart = 0;
-            for (int y = 0; y < cvimage->height; y++) {
+            for (int y = 0; y < cvimage->height; ++y) {
                 unsigned char red,green,blue;
                 cvIndex = cvLineStart;
-                for (int x = 0; x < cvimage->width; x++) {
+                for (int x = 0; x < cvimage->width; ++x) {
                     // DO it
                     red = cvimage->imageData[cvIndex+2];
                     green = cvimage->imageData[cvIndex+1];
@@ -206,14 +203,12 @@ void OpenCVWidget::timerEvent(QTimerEvent *event)
         break;
     }
     setPixmap(QPixmap::fromImage(m_image));
-//    QStandardItem *item = new QStandardItem(QIcon(QPixmap::fromImage(m_image)), "photo");
-//    m_imageModel->appendRow(item);
 }
 
 
 /*!
  * \brief Takes care of mouse clicks in the capturing phase.
- * 
+ *
  * Starts the rubberband, checks where the user has clicked.
  * \param event
  */
@@ -223,28 +218,28 @@ void OpenCVWidget::mousePressEvent(QMouseEvent *event)
     if (event->button() != Qt::LeftButton) {
         QLabel::mousePressEvent(event);
         return;
-    }        
-    
+    }
+
     // save click pos for later, also needed by mousereleaseEvent() to
     // determine wether this is a click or drag start
     m_clickOrigin = event->pos();
-    
+
     // only when in frozen state
     if (!m_frozen) {
         QLabel::mousePressEvent(event);
         return;
     }
-    
+
     //TODO:  mousepress on a border of the rubberband -> resize rubberband
-    
+
     // if there is no QRubberBand, create one
     if (!m_rubberBand) {
         m_rubberBand = new QRubberBand(QRubberBand::Rectangle, this);
     }
-    
+
     // remember the position where the user clicked and the QRubberBand was then
     m_rubberOrigin = m_rubberBand->pos();
-    
+
     // determine if the user has clicked *into* the QRubberBand boundaries
     if (m_rubberBand->rect().translated(m_rubberBand->pos()).contains(m_clickOrigin, true)) {
         m_Mode = Move;
@@ -261,32 +256,32 @@ void OpenCVWidget::mousePressEvent(QMouseEvent *event)
 
 /*!
  * \brief takes care of the mouse movement when creating or dragging the rubberband frame.
- * \param event 
+ * \param event
  */
 void OpenCVWidget::mouseMoveEvent(QMouseEvent *event)
 {
     if (!m_frozen || !m_rubberBand)
         return;
-    
+
     switch (m_Mode) {
-    
+
     case Create: {
         // calculate the rectangle
         QRect rect = QRect(m_clickOrigin, event->pos());
         rect.setHeight(rect.height() > 0? abs(rect.width()) : -abs(rect.width()));
-        
+
         m_rubberBand->setGeometry(rect.normalized());
         // get rid of negative coordinates
         restrictRubberBandConstraints();
         break;
     }
-        
+
     case Move: {
         // remember the distance vector between the actual mouse pos and the original click
         QPoint relativePosFromClick = event->pos() - m_clickOrigin;
         // now relatively move the rectangle to that vector
         m_rubberBand->move(m_rubberOrigin + relativePosFromClick);
-        
+
         // check if we are not out of the parent widget boundaries
         restrictRubberBandConstraints();
         break;
@@ -311,15 +306,15 @@ void OpenCVWidget::mouseReleaseEvent(QMouseEvent *event)
         QLabel::mouseReleaseEvent(event);
         return;
     }
-    
+
     // here we can be sure the mouse has been moved
-    
+
     // drag while capturing? no rubberband? exit!
     if (!m_frozen | !m_rubberBand) {
         QLabel::mouseReleaseEvent(event);
         return;
     }
-    
+
     QRect rect(m_rubberBand->geometry().normalized());
     qDebug() << m_rubberBand->geometry() << rect;
     if (rect.isValid()) {
@@ -328,7 +323,7 @@ void OpenCVWidget::mouseReleaseEvent(QMouseEvent *event)
             rect.setWidth(64);
             m_rubberBand->setGeometry(rect);
         }
-        
+
         // we have a valid rubberband square
         Q_EMIT imageReady(true);
     } else {
@@ -346,13 +341,13 @@ void OpenCVWidget::wheelEvent(QWheelEvent *event)
     // only working when frozen and with active rubberband!
     if (!m_frozen || !m_rubberBand)
         return;
-    
-    if (event->delta() > 0 && 
+
+    if (event->delta() > 0 &&
             m_rubberBand->width()+4 < this->rect().width() &&
             m_rubberBand->height()+4 < this->rect().height()) { // WheelUp
         m_rubberBand->move(m_rubberBand->geometry().x()-2, m_rubberBand->y()-2);
         m_rubberBand->resize(m_rubberBand->geometry().width()+4, m_rubberBand->height()+4);
-        restrictRubberBandConstraints();        
+        restrictRubberBandConstraints();
     } else { // WheelDown
         // selection must not be smaller than 64x64
         if (m_rubberBand->width() >= 64 + 4) {
@@ -421,21 +416,21 @@ void OpenCVWidget::drawFaceDetectionFrame(IplImage *cvimage)
 
     // thanks for some code snippets from Stef van den Elzen
     // taken from http://sj.vdelzen.net/2011/05/31/realtime-face-detection-using-opencv-and-cqt/
-    
+
     // switch between bit depths
     switch (cvimage->depth) {
     case IPL_DEPTH_8U:
         switch (cvimage->nChannels) {
         case 3: {
-            
+
             // Detect face objects
             cvClearMemStorage( _storage );
-            
+
             //            qDebug() << _cascade;
             CvSeq* objects = cvHaarDetectObjects(cvimage, _cascade, _storage, 1.2, 3, CV_HAAR_DO_CANNY_PRUNING, cvSize( 64, 64 ));
-            
+
             int n = (objects ? objects->total : 0);
-            
+
             //if more than one objects, ignore this sequence
             if (n > 1) {
                 n = 0;
@@ -470,45 +465,45 @@ void OpenCVWidget::drawFaceDetectionFrame(IplImage *cvimage)
 void OpenCVWidget::restrictRubberBandConstraints()
 {
     // restrict new RubberBand to constraints of parent
-    
+
     QRect rect = m_rubberBand->geometry().normalized();
-    
+
     // is too big
     if (rect.height() > this->rect().height()) {
         rect.setHeight(this->rect().height()-2);
         rect.setWidth(this->rect().height()-2);
     }
-    
+
     // check if possibly width < height, we have to crop again then
     // and take the width as smallest distance
-    if (    this->rect().width() < this->rect().height() && 
-            rect.width() > this->rect().width()) 
+    if (    this->rect().width() < this->rect().height() &&
+            rect.width() > this->rect().width())
     {
         rect.setHeight(this->rect().width()-2);
         rect.setWidth(this->rect().width()-2);
-    }        
-    
-    m_rubberBand->setGeometry(rect);    
-    
+    }
+
+    m_rubberBand->setGeometry(rect);
+
     // is too far left
     if (m_rubberBand->x() < 0)
         m_rubberBand->move(1, m_rubberBand->y()-1);
     // is too far right
     if (m_rubberBand->geometry().right() > this->rect().right())
         m_rubberBand->move(this->rect().right() - m_rubberBand->width(), m_rubberBand->y());
-    
+
     // ist too far to the top
     if (m_rubberBand->y() < 0)
         m_rubberBand->move(m_rubberBand->x()-1, 1);
     // is too far to the bottom
     if (m_rubberBand->geometry().bottom() > this->rect().bottom())
         m_rubberBand->move(m_rubberBand->x(), this->rect().bottom() - m_rubberBand->height());
-    
-    
+
+
 }
 
 /*!
- * \brief When called, stops the camera and freezes the picture. In the next call it continues 
+ * \brief When called, stops the camera and freezes the picture. In the next call it continues
  * the camera again.
  */
 void OpenCVWidget::toggleFreezeMode()
@@ -578,5 +573,5 @@ void OpenCVWidget::unFreeze()
 
 void OpenCVWidget::onActionCaptureTriggered()
 {
-    
+
 }

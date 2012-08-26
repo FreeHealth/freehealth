@@ -24,8 +24,8 @@
  *  Contributors :                                                         *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
-#ifndef PAD_FRAGMENT_H
-#define PAD_FRAGMENT_H
+#ifndef PADTOOLS_PAD_FRAGMENT_H
+#define PADTOOLS_PAD_FRAGMENT_H
 
 #include <coreplugin/ipadtools.h>
 
@@ -119,4 +119,4 @@ private:
 
 }  // PadTools
 
-#endif
+#endif  // PADTOOLS_PAD_FRAGMENT

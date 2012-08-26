@@ -171,6 +171,11 @@ QString DefaultUserIdentityPage::title() const
     return tr("User identity");
 }
 
+int DefaultUserIdentityPage::sortIndex() const
+{
+    return 10;
+}
+
 QWidget *DefaultUserIdentityPage::createPage(QWidget *parent)
 {
     return new DefaultUserIdentityWidget(parent);
@@ -273,6 +278,11 @@ QString DefaultUserContactPage::title() const
     return tr("Contact");
 }
 
+int DefaultUserContactPage::sortIndex() const
+{
+    return 20;
+}
+
 QWidget *DefaultUserContactPage::createPage(QWidget *parent)
 {
     return new DefaultUserContactWidget(parent);
@@ -369,6 +379,11 @@ QString DefaultUserProfessionalPage::title() const
     return tr("Professional identifiers");
 }
 
+int DefaultUserProfessionalPage::sortIndex() const
+{
+    return 30;
+}
+
 QWidget *DefaultUserProfessionalPage::createPage(QWidget *parent)
 {
     return new DefaultUserProfessionalWidget(parent);
@@ -459,6 +474,11 @@ QString DefaultUserRightsPage::category() const
 QString DefaultUserRightsPage::title() const
 {
     return tkTr(Trans::Constants::USER_RIGHTS);
+}
+
+int DefaultUserRightsPage::sortIndex() const
+{
+    return 40;
 }
 
 QWidget *DefaultUserRightsPage::createPage(QWidget *parent)
@@ -610,6 +630,11 @@ QString DefaultUserPapersPage::category() const
 QString DefaultUserPapersPage::title() const
 {
     return name();
+}
+
+int DefaultUserPapersPage::sortIndex() const
+{
+    return 50;
 }
 
 QWidget *DefaultUserPapersPage::createPage(QWidget *parent)

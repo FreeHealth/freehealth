@@ -57,6 +57,8 @@ class FormMain;
 }
 
 namespace Script {
+namespace Internal {
+
 class ScriptManager;
 
 // FormItem
@@ -116,7 +118,7 @@ public:
 // FormManager
 class FormManagerScriptWrapper : public QObject
 {
-    friend class Script::ScriptManager;
+    friend class Script::Internal::ScriptManager;
     Q_OBJECT
     Q_PROPERTY(QString  currentLanguage READ currentLanguage)
     Q_PROPERTY(bool     areLoaded       READ areLoaded)
@@ -155,8 +157,9 @@ private:
     QVector<FormItemScriptWrapper*> m_Wrappers;
 };
 
-} // namespace Script
+}  // namespace Internal
+}  // namespace Script
 
-Q_DECLARE_METATYPE(Script::FormItemScriptWrapper*)
+Q_DECLARE_METATYPE(Script::Internal::FormItemScriptWrapper*)
 
 #endif // SCRIPT_SCRIPTWRAPPERS_H

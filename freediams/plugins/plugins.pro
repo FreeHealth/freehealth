@@ -58,6 +58,12 @@ ddi.subdir   = druginteractionsplugin
 ddi.depends += drugsbase
 ddi.depends += core
 
+with-pad {
+    SUBDIRS += padtools
+    padtools.subdir = padtoolsplugin
+    padtools.depends += core
+}
+
 # manage non free content
 #include(../../buildspecs/config.pri)
 #!isEmpty(HAS_NONFREE):include($${NONFREE_SOURCES_PLUGINS_PATH}/plugins.pri)

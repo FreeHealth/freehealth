@@ -33,15 +33,14 @@
  * \file drugsplugin.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.8.0
- * \date 25 July 2012
+ * \date 16 Aug 2012
 */
-
 
 namespace DrugsWidget {
 namespace Internal {
-class DrugsViewOptionsPage;
+class DrugGeneralOptionsPage;
 class DrugsSelectorOptionsPage;
-class DrugsPrintOptionsPage;
+class DrugPosologicSentencePage;
 class DrugsUserOptionsPage;
 class DrugsExtraOptionsPage;
 class ProtocolPreferencesPage;
@@ -64,9 +63,9 @@ private Q_SLOTS:
     void postCoreOpened();
 
 private:
-    DrugsViewOptionsPage *viewPage;
+    DrugGeneralOptionsPage *viewPage;
     DrugsSelectorOptionsPage *selectorPage;
-    DrugsPrintOptionsPage *printPage;
+    DrugPosologicSentencePage *posologicPage;
     DrugsUserOptionsPage *userPage;
     DrugsExtraOptionsPage *extraPage;
     DrugsDatabaseSelectorPage *databaseSelectorPage;

@@ -26,7 +26,7 @@
 #ifndef CONSTANTTRANSLATIONS_SPLASHANDUPADTE_H
 #define CONSTANTTRANSLATIONS_SPLASHANDUPADTE_H
 
-#include <QCoreApplication>
+#include <qglobal.h>
 
 namespace Trans {
 namespace Constants {

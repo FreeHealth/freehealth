@@ -9,7 +9,6 @@ SUBDIRS = \
     formmanager \
     zipcodes \
     datapack \
-#    padtools \       # unstable
 #    saverestore \    # unstable
     # Depend to more than one plugin
     printer \
@@ -66,6 +65,7 @@ mainwin.depends += texteditor
 mainwin.depends += printer
 mainwin.depends += usermanager
 mainwin.depends += formmanager
+mainwin.depends += patientbase
 
 xmlio.subdir   = ../../plugins/xmlioplugin
 xmlio.depends += core
@@ -164,6 +164,12 @@ with-alerts {
     SUBDIRS += alerts
     alerts.subdir = ../../plugins/alertplugin
     alerts.depends += core
+}
+
+with-pad {
+    SUBDIRS += padtools
+    padtools.subdir = ../../plugins/padtoolsplugin
+    padtools.depends += core
 }
 
 patientbase.subdir   = ../../plugins/patientbaseplugin

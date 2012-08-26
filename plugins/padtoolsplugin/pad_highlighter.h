@@ -24,8 +24,8 @@
  *  Contributors :                                                         *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
-#ifndef PAD_HIGHLIGHTER_H
-#define PAD_HIGHLIGHTER_H
+#ifndef PADTOOLS_PAD_HIGHLIGHTER_H
+#define PADTOOLS_PAD_HIGHLIGHTER_H
 
 #include <QSyntaxHighlighter>
 
@@ -86,4 +86,4 @@ private:
 }  // PadTools
 
 
-#endif
+#endif  // PADTOOLS_PAD_HIGHLIGHTER

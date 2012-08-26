@@ -85,6 +85,8 @@ public:
     };
 
     IComponent(IDrug *parent);
+    IComponent(IDrug *parent, const IComponent &copy);
+
     virtual ~IComponent();
 
     virtual void linkWithComposition(IComponent *compo);
@@ -157,6 +159,8 @@ public:
     };
 
     DrugRoute(IDrug *drug);
+    DrugRoute(IDrug *drug, const DrugRoute &copy);
+
     ~DrugRoute();
 
     IDrug *drug() const;
@@ -181,6 +185,8 @@ class DRUGSBASE_EXPORT IPrescription
 {
 public:
     IPrescription();
+    IPrescription(const IPrescription &copy);
+
     virtual ~IPrescription();
 
     // Acces to some IDrug values
@@ -244,6 +250,8 @@ public:
     };
 
     IDrug();
+    IDrug(const IDrug &copy);
+
     virtual ~IDrug();
 
     virtual bool isVirtual() const {return false;}

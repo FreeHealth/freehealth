@@ -67,45 +67,40 @@ static inline Core::ITheme *theme() { return Core::ICore::instance()->theme(); }
 
 WebcamDialog::WebcamDialog(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::WebcamDialog()),
-    _faces(0)
+    ui(new Ui::WebcamDialog())
 {
     ui->setupUi(this);
 //    qDebug() << this->objectName();
     setObjectName("WebCamDialog");
     setWindowIcon(theme()->icon(Core::Constants::ICONCAMERAVIDEO));
     setWindowTitle(tr("Take a picture from your webcam"));
-    
+
     // Freeze button
     m_freezeButton = ui->buttonBox->addButton(tr("Freeze"), QDialogButtonBox::ActionRole);
     m_freezeButton->setIcon(theme()->icon(Core::Constants::ICONTAKESCREENSHOT));
     m_freezeButton->setCheckable(true);
-    connect(m_freezeButton, SIGNAL(clicked(bool)), ui->openCVWidget, SLOT(setFrozen(bool))); 
-    connect(ui->openCVWidget, SIGNAL(frozen(bool)), this, SLOT(updatefreezeButton(bool)));
-    connect(ui->openCVWidget, SIGNAL(clicked()), m_freezeButton, SLOT(click()));
-            
+
     QPushButton *button;
 
     // Cancel button
     button = ui->buttonBox->button(QDialogButtonBox::Cancel);
     button->setIcon(theme()->icon(Core::Constants::ICONQUIT));
-    
+
     // Ok button
     button = ui->buttonBox->button(QDialogButtonBox::Ok);
     button->setIcon(theme()->icon(Core::Constants::ICONOK));
     button->setDisabled(true);
-    connect(ui->openCVWidget, SIGNAL(imageReady(bool)), button, SLOT(setEnabled(bool)));   
-    connect(ui->openCVWidget, SIGNAL(autoFaceShot(QPixmap)), this, SLOT(autoFaceShot(QPixmap)));
-//    ui->imagesListView->setModel(ui->openCVWidget->model());
 
-    // AutoShot scrollArea
-    QWidget *w = new QWidget(this);
-    _autoshotLayout = new QHBoxLayout(w);
-    _autoshotLayout->setMargin(0);
-    _autoshotLayout->setSpacing(5);
-    w->setLayout(_autoshotLayout);
-    _autoshotLayout->insertStretch(-1, 100000);
-    ui->scrollArea->setWidget(w);
+    m_imageModel = new QStandardItemModel(this);
+    ui->listViewPhotos->setModel(m_imageModel);
+
+    connect(m_freezeButton, SIGNAL(clicked(bool)), ui->openCVWidget, SLOT(setFrozen(bool)));
+    connect(ui->openCVWidget, SIGNAL(frozen(bool)), this, SLOT(updatefreezeButton(bool)));
+    connect(ui->openCVWidget, SIGNAL(clicked()), m_freezeButton, SLOT(click()));
+    connect(ui->listViewPhotos, SIGNAL(activated(QModelIndex)), this, SLOT(faceShotActivated(QModelIndex)));
+
+    connect(ui->openCVWidget, SIGNAL(imageReady(bool)), button, SLOT(setEnabled(bool)));
+    connect(ui->openCVWidget, SIGNAL(autoFaceShot(QPixmap)), this, SLOT(autoFaceShot(QPixmap)));
 }
 
 WebcamDialog::~WebcamDialog()
@@ -128,34 +123,26 @@ void WebcamDialog::updatefreezeButton(bool aFreeze)
     } else {
         m_freezeButton->setText(tr("Freeze"));
         m_freezeButton->setIcon(theme()->icon(Core::Constants::ICONTAKESCREENSHOT));
-    }    
+    }
 }
 
-void WebcamDialog::autoFaceShot(const QPixmap &pix)
+void WebcamDialog::autoFaceShot(const QPixmap &pixmap)
 {
-    QLabel *lbl = new QLabel(this);
-    lbl->setMinimumSize(100,100);
-    lbl->setMaximumSize(100,100);
-    lbl->setPixmap(pix.scaled(QSize(100,100), Qt::KeepAspectRatio));
-    lbl->installEventFilter(this);
-    _autoshotLayout->insertWidget(_faces, lbl);
-    ui->scrollArea->horizontalScrollBar()->setValue(ui->scrollArea->horizontalScrollBar()->maximum());
-    ++_faces;
+    QStandardItem *item = new QStandardItem(QIcon(pixmap), tr("Photo %1").arg(QString::number(m_imageModel->rowCount()+1)));
+    m_imageModel->appendRow(item);
 }
 
 // Catch the mouse dbl click on autoshot labels
 // validate the dialog if one label was dble clicked
-bool WebcamDialog::eventFilter(QObject *o, QEvent *e)
+void WebcamDialog::faceShotActivated(const QModelIndex &index)
 {
-    if (e->type()==QEvent::MouseButtonDblClick) {
-        QLabel *lbl = qobject_cast<QLabel*>(o);
-        if (lbl) {
-            _pixmap = QPixmap(*lbl->pixmap());
-            accept();
-            return true;
-        }
-    }
-    return false;
+    if (!index.isValid())
+        return;
+
+    // set internal pixmap to return later
+    _pixmap = m_imageModel->data(index).value<QPixmap>();
+    accept();
+    return;
 }
 
 void WebcamDialog::changeEvent(QEvent *event)

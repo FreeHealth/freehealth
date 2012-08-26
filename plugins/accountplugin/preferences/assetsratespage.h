@@ -42,7 +42,12 @@
 #include <QSpinBox>
 #include <QStandardItemModel>
 
-
+/**
+ * \file assetsratespage.h
+ * \author Eric MAEKER <eric.maeker@gmail.com>
+ * \version 0.8.0
+ * \date 16 Aug 2012
+*/
 
 namespace Core {
 class ISettings;
@@ -110,6 +115,7 @@ public:
     QString name() const;
     QString category() const;
     QString title() const {return name();}
+    int sortIndex() const;
 
     void resetToDefaults();
     void checkSettingsValidity();

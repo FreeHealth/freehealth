@@ -36,6 +36,9 @@
 #include "pad_item.h"
 #include "pad_fragment.h"
 
+#include <coreplugin/icore.h>
+#include <coreplugin/ipadtools.h>
+
 #include <utils/log.h>
 #include <utils/global.h>
 #include <translationutils/constants.h>
@@ -46,11 +49,14 @@
 #include <QMenu>
 #include <QKeyEvent>
 #include <QApplication>
+#include <QToolTip>
 
 #include <QDebug>
 
 using namespace PadTools;
 using namespace Trans::ConstantTranslations;
+
+static inline Core::ITokenPool *tokenPool() {return Core::ICore::instance()->padTools()->tokenPool();}
 
 namespace PadTools {
 namespace Internal {
@@ -144,8 +150,8 @@ public:
                                              QApplication::translate(Constants::PADWRITER_TRANS_CONTEXT,
                                                                      "You have dropped a token inside the value of a token. \n"
                                                                      "You must specify where the dropped token should be inserted:\n"
-                                                                     "- inside the conditionnal text before the token, \n"
-                                                                     "- inside the conditionnal text after the token \n"
+                                                                     "- inside the conditional text before the token, \n"
+                                                                     "- inside the conditional text after the token \n"
                                                                      "- or the before/after the token"),
                                              "",
                                              buttons, "",
@@ -153,10 +159,10 @@ public:
                                              true
                                              );
         switch (s) {
-        case 0: // inside before conditionnal
+        case 0: // inside before conditional
             pos = core->start() - 1;
             break;
-        case 1: // inside after conditionnal
+        case 1: // inside after conditional
             pos = core->end() + 1;
             break;
         case 2: // before the token
@@ -501,6 +507,20 @@ void TokenOutputDocument::dropEvent(QDropEvent *event)
 
 bool TokenOutputDocument::event(QEvent *event)
 {
+    if (event->type() == QEvent::ToolTip) {
+        QHelpEvent *helpEvent = static_cast<QHelpEvent*>(event);
+        int position = cursorForPosition(helpEvent->pos()).position();
+        PadItem *item = d->_pad->padItemForOutputPosition(position);
+        if (item) {
+            Core::IToken *token = tokenPool()->token(item->getCore()->name());
+            if (token) {
+                QToolTip::showText(helpEvent->globalPos(), token->tooltip());
+                return Editor::TextEditor::event(event);
+            }
+        }
+        QToolTip::hideText();
+        event->ignore();
+    }
     return Editor::TextEditor::event(event);
 }
 

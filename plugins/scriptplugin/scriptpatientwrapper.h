@@ -31,7 +31,15 @@
 #include <QVariant>
 #include <QString>
 
+/**
+ * \file scriptpatientwrapper.h
+ * \author Eric MAEKER <eric.maeker@gmail.com>
+ * \version 0.7.6
+ * \date 01 Jun 2012
+*/
+
 namespace Script {
+namespace Internal {
 
 class ScriptPatientWrapper : public QObject  //, public QScriptClass
 {
@@ -75,7 +83,7 @@ public Q_SLOTS:
 };
 
 
-
+}  // namespace Internal
 }  //  End namespace Script
 
 #endif // SCRIPTPATIENTWRAPPER_H

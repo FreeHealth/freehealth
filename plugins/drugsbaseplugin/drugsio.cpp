@@ -42,6 +42,7 @@
 #include <drugsbaseplugin/versionupdater.h>
 #include <drugsbaseplugin/dailyschememodel.h>
 #include <drugsbaseplugin/drugsdatabaseselector.h>
+#include <drugsbaseplugin/prescriptiontoken.h>
 
 #include <printerplugin/printer.h>
 #include <printerplugin/constants.h>
@@ -52,8 +53,10 @@
 #include <coreplugin/ipatient.h>
 #include <coreplugin/iuser.h>
 #include <coreplugin/idocumentprinter.h>
+#include <coreplugin/constants_tokensandsettings.h>
+#include <coreplugin/ipadtools.h>
 
-#include <translationutils/constanttranslations.h>
+#include <translationutils/constants.h>
 #include <utils/log.h>
 #include <utils/global.h>
 #include <utils/messagesender.h>
@@ -65,16 +68,20 @@
 #include <QDir>
 #include <QDomDocument>
 
+using namespace Trans::ConstantTranslations;
+
 static inline DrugsDB::DrugBaseCore &core() {return DrugsDB::DrugBaseCore::instance();}
 static inline DrugsDB::DrugsBase &drugsBase() {return core().drugsBase();}
 static inline DrugsDB::ProtocolsBase &protocolsBase() {return core().protocolsBase();}
 static inline DrugsDB::VersionUpdater &versionUpdater() {return core().versionUpdater();}
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
+static inline Core::IPadTools *padTools() {return Core::ICore::instance()->padTools();}
 static inline DrugsDB::DrugsModel *drugModel() { return DrugsDB::DrugsModel::activeModel(); }
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 static inline Core::IDocumentPrinter *printer() {return ExtensionSystem::PluginManager::instance()->getObject<Core::IDocumentPrinter>();}
 
-namespace DrugsIOConstants {
+namespace {
+
     const char *const XML_HEADER                           = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<!DOCTYPE FreeMedForms>\n";
     const char *const XML_ROOT_TAG                         = "FreeDiams";
     const char *const XML_DRUGS_DATABASE_NAME              = "DrugsDatabaseName";
@@ -143,15 +150,11 @@ namespace DrugsIOConstants {
     const char *const XML_EXTRADATAS_TAG                   = "ExtraDatas";
     const char *const XML_FULLPRESCRIPTION_TAG             = "FullPrescription";
     const char *const XML_DATEOFGENERATION_TAG             = "DateOfGeneration";
+}  // namespace Anonymous
 
-}
-
-using namespace DrugsIOConstants;
 using namespace DrugsDB;
 using namespace DrugsDB::Constants;
 using namespace Trans::ConstantTranslations;
-
-// TODO: memory leak potential when using static functions -> who is deleting the instance singleton?
 
 namespace DrugsDB {
 namespace Internal {
@@ -165,6 +168,7 @@ public:
 
     ~DrugsIOPrivate()
     {
+        // _tokens are deleted by the padTools()->tokenPool()
     }
 
     void populateXmlTags()
@@ -181,7 +185,7 @@ public:
             m_PrescriptionXmlTags.insert(Prescription::IntakesUsesFromTo, XML_PRESCRIPTION_INTAKEFROMTO);
             m_PrescriptionXmlTags.insert(Prescription::IntakesFullString, XML_PRESCRIPTION_INTAKEFULLSTRING);
             m_PrescriptionXmlTags.insert(Prescription::IntakesIntervalOfTime, XML_PRESCRIPTION_INTAKEINTERVALTIME);
-            m_PrescriptionXmlTags.insert(Prescription::IntakesIntervalScheme, XML_PRESCRIPTION_INTAKEINTERVALSCHEME);
+            m_PrescriptionXmlTags.insert(Prescription::IntakesIntervalSchemeIndex, XML_PRESCRIPTION_INTAKEINTERVALSCHEME);
             m_PrescriptionXmlTags.insert(Prescription::DurationFrom, XML_PRESCRIPTION_DURATIONFROM);
             m_PrescriptionXmlTags.insert(Prescription::DurationTo, XML_PRESCRIPTION_DURATIONTO);
             m_PrescriptionXmlTags.insert(Prescription::DurationScheme, XML_PRESCRIPTION_DURATIONSCHEME);
@@ -189,7 +193,7 @@ public:
             m_PrescriptionXmlTags.insert(Prescription::Period, XML_PRESCRIPTION_PERIOD);
             m_PrescriptionXmlTags.insert(Prescription::PeriodScheme, XML_PRESCRIPTION_PERIODSCHEME);
             m_PrescriptionXmlTags.insert(Prescription::RouteId, XML_PRESCRIPTION_ROUTEID);
-            m_PrescriptionXmlTags.insert(Prescription::DailyScheme, XML_PRESCRIPTION_DAILYSCHEME);
+            m_PrescriptionXmlTags.insert(Prescription::SerializedDailyScheme, XML_PRESCRIPTION_DAILYSCHEME);
             m_PrescriptionXmlTags.insert(Prescription::MealTimeSchemeIndex, XML_PRESCRIPTION_MEALSCHEME);
             m_PrescriptionXmlTags.insert(Prescription::Note, XML_PRESCRIPTION_NOTE);
             m_PrescriptionXmlTags.insert(Prescription::IsINNPrescription, XML_PRESCRIPTION_ISINN);
@@ -206,6 +210,65 @@ public:
             m_PrescriptionXmlTags.insert(Drug::Route, XML_DRUG_ROUTE);
             m_PrescriptionXmlTags.insert(Drug::GlobalStrength, XML_DRUG_STRENGTH);
         }
+    }
+
+    void populateTokens()
+    {
+#ifdef WITH_PAD
+        Core::IToken *t = 0;
+        t = new PrescriptionToken(Core::Constants::TOKEN_PRESC_DRUGNAME, Drug::Denomination);
+//        t->setUntranslatedHumanReadableName(Trans::Constants::);
+        _tokens << t;
+        t = new PrescriptionToken(Core::Constants::TOKEN_PRESC_Q_FROM, Prescription::IntakesFrom);
+//        t->setUntranslatedHumanReadableName(Trans::Constants::);
+        _tokens << t;
+        t = new PrescriptionToken(Core::Constants::TOKEN_PRESC_Q_TO, Prescription::IntakesTo);
+//        t->setUntranslatedHumanReadableName(Trans::Constants::);
+        _tokens << t;
+        t = new PrescriptionToken(Core::Constants::TOKEN_PRESC_Q_SCHEME, Prescription::IntakesScheme);
+//        t->setUntranslatedHumanReadableName(Trans::Constants::);
+        _tokens << t;
+        t = new PrescriptionToken(Core::Constants::TOKEN_PRESC_DISTRIB_DAILYSCHEME, -1);
+//        t->setUntranslatedHumanReadableName(Trans::Constants::);
+        _tokens << t;
+        t = new PrescriptionToken(Core::Constants::TOKEN_PRESC_PERIOD_VALUE, Prescription::Period);
+//        t->setUntranslatedHumanReadableName(Trans::Constants::);
+        _tokens << t;
+        t = new PrescriptionToken(Core::Constants::TOKEN_PRESC_PERIOD_SCHEME, Prescription::PeriodScheme);
+//        t->setUntranslatedHumanReadableName(Trans::Constants::);
+        _tokens << t;
+        t = new PrescriptionToken(Core::Constants::TOKEN_PRESC_D_FROM, Prescription::DurationFrom);
+//        t->setUntranslatedHumanReadableName(Trans::Constants::);
+        _tokens << t;
+        t = new PrescriptionToken(Core::Constants::TOKEN_PRESC_D_TO, Prescription::DurationTo);
+//        t->setUntranslatedHumanReadableName(Trans::Constants::);
+        _tokens << t;
+        t = new PrescriptionToken(Core::Constants::TOKEN_PRESC_D_SCHEME, Prescription::DurationScheme);
+//        t->setUntranslatedHumanReadableName(Trans::Constants::);
+        _tokens << t;
+        t = new PrescriptionToken(Core::Constants::TOKEN_PRESC_ROUTE, Prescription::Route);
+//        t->setUntranslatedHumanReadableName(Trans::Constants::);
+        _tokens << t;
+        t = new PrescriptionToken(Core::Constants::TOKEN_PRESC_REPEATED_DAILYSCHEME, -1);
+//        t->setUntranslatedHumanReadableName(Trans::Constants::);
+        _tokens << t;
+        t = new PrescriptionToken(Core::Constants::TOKEN_PRESC_MININTERVAL_VALUE, Prescription::IntakesIntervalOfTime);
+//        t->setUntranslatedHumanReadableName(Trans::Constants::);
+        _tokens << t;
+        t = new PrescriptionToken(Core::Constants::TOKEN_PRESC_MININTERVAL_SCHEME, Prescription::IntakesIntervalSchemeIndex);
+//        t->setUntranslatedHumanReadableName(Trans::Constants::);
+        _tokens << t;
+        t = new PrescriptionToken(Core::Constants::TOKEN_PRESC_MEAL, Prescription::MealTimeSchemeIndex);
+//        t->setUntranslatedHumanReadableName(Trans::Constants::);
+        _tokens << t;
+        t = new PrescriptionToken(Core::Constants::TOKEN_PRESC_NOTE, Prescription::Note);
+//        t->setUntranslatedHumanReadableName(Trans::Constants::);
+        _tokens << t;
+        if (padTools() && padTools()->tokenPool()) {
+            LOG_FOR("DrugsIO", "Adding prescription tokens");
+            padTools()->tokenPool()->addTokens(_tokens);
+        }
+#endif
     }
 
     /** \brief For the Xml transformation of the prescription, returns the xml tag for the mfDrugsConstants::Prescription \e row */
@@ -295,10 +358,10 @@ public:
                 << Prescription::Period
                 << Prescription::PeriodScheme
                 << Prescription::RouteId
-                << Prescription::DailyScheme
+                << Prescription::SerializedDailyScheme
                 << Prescription::MealTimeSchemeIndex
                 << Prescription::IntakesIntervalOfTime
-                << Prescription::IntakesIntervalScheme
+                << Prescription::IntakesIntervalSchemeIndex
                 << Prescription::Note
                 << Prescription::IsINNPrescription
                 << Prescription::SpecifyForm
@@ -487,30 +550,18 @@ public:
     Utils::MessageSender m_Sender;  /*!< \brief Message sender instance */
     QHash<QString,QString> m_Datas;   /*!< \brief Dosages to transmit : key == uuid, value == xml'd dosage */
     QHash<int,QString> m_PrescriptionXmlTags;
+    QVector<Core::IToken *> _tokens;
 };
-}
-}
-
-//DrugsIO *DrugsIO::m_Instance = 0;
-
-/** \brief Returns the unique instance of DrugsIO */
-//DrugsIO *DrugsIO::instance(QObject *parent)
-//{
-//    if (!m_Instance) {
-//        if (parent)
-//            m_Instance = new DrugsIO(parent);
-//        else
-//            m_Instance = new DrugsIO(qApp);
-//    }
-//    return m_Instance;
-//}
+}  // namespace Internal
+}  // namespace DrugsDB
 
 /** \brief Private constructor */
-DrugsIO::DrugsIO(QObject *parent) : QObject(parent), d(0)
+DrugsIO::DrugsIO(QObject *parent) :
+    QObject(parent),
+    d(0)
 {
     setObjectName("DrugsIO");
     d = new Internal::DrugsIOPrivate();
-    d->populateXmlTags();
 }
 
 /** \brief Destructor */
@@ -520,6 +571,18 @@ DrugsIO::~DrugsIO()
         delete d;
         d=0;
     }
+}
+
+/**
+ * Initialize the object:
+ *   - prepare the XML transformation
+ *   - create the tokens
+ */
+bool DrugsIO::init()
+{
+    d->populateXmlTags();
+    d->populateTokens();
+    return true;
 }
 
 /**
@@ -779,7 +842,7 @@ QString DrugsIO::prescriptionToHtml(DrugsDB::DrugsModel *m, const QString &xmlEx
                 tokens_value.insert("Q_SCHEME", m->index(i, Prescription::IntakesScheme).data().toString());
                 // Manage Daily Scheme See DailySchemeModel::setSerializedContent
                 DrugsDB::DailySchemeModel *day = new DrugsDB::DailySchemeModel;
-                day->setSerializedContent(m->index(i, Prescription::DailyScheme).data().toString());
+                day->setSerializedContent(m->index(i, Prescription::SerializedDailyScheme).data().toString());
                 QString d = day->humanReadableDistributedDailyScheme();
                 if (d.isEmpty())
                     d = day->humanReadableRepeatedDailyScheme();
@@ -857,6 +920,131 @@ QString DrugsIO::prescriptionToHtml(DrugsDB::DrugsModel *m, const QString &xmlEx
     return toReturn;
 }
 
+QString DrugsIO::getDrugPrescription(DrugsDB::DrugsModel *model, const int drugRow, bool toHtml, const QString &mask)
+{
+    QString tmp;
+    if (mask.isEmpty()) {
+        if (!toHtml)
+            tmp = settings()->value(Constants::S_PRESCRIPTIONFORMATTING_PLAIN).toString();
+        else
+            tmp = settings()->value(Constants::S_PRESCRIPTIONFORMATTING_HTML).toString();
+    } else {
+        tmp = mask;
+    }
+#ifdef WITH_PAD
+    PrescriptionToken::setPrescriptionModel(model);
+    PrescriptionToken::setPrescriptionModelRow(drugRow);
+    if (toHtml) {
+        return padTools()->processHtml(tmp);
+    }
+    return padTools()->processPlainText(tmp);
+#else
+    QHash<QString, QString> tokens_value;
+    if (!IN_RANGE_STRICT_MAX(drugRow, 0, model->drugsList().count())) {
+        LOG_ERROR("row > model list count");
+        return QString::null;
+    }
+    IDrug *drug = model->drugsList().at(drugRow);
+
+    // Manage Textual drugs only
+    if (drug->prescriptionValue(Constants::Prescription::IsTextualOnly).toBool()) {
+        if (toHtml) {
+            tokens_value["DRUG"] = drug->brandName().replace("\n","<br />");
+            tokens_value["NOTE"] = drug->prescriptionValue(Constants::Prescription::Note).toString().replace("\n","<br />");
+        } else {
+            tokens_value["DRUG"] = drug->brandName();
+            tokens_value["NOTE"] = drug->prescriptionValue(Constants::Prescription::Note).toString();
+        }
+        Utils::replaceTokens(tmp, tokens_value);
+        return tmp;
+    }
+
+    // Manage full prescriptions
+    if (drug->prescriptionValue(Constants::Prescription::IsINNPrescription).toBool()) {
+        tokens_value["DRUG"] = drug->innComposition() + " [" + tkTr(Trans::Constants::INN) + "]";
+    } else {
+        tokens_value["DRUG"] =  drug->brandName();
+    }
+
+    if (drug->prescriptionValue(Constants::Prescription::IntakesFrom).toDouble()) {
+        tokens_value["Q_FROM"] = QString::number(drug->prescriptionValue(Constants::Prescription::IntakesFrom).toDouble());
+        if (drug->prescriptionValue(Constants::Prescription::IntakesUsesFromTo).toBool())
+            tokens_value["Q_TO"] = QString::number(drug->prescriptionValue(Constants::Prescription::IntakesTo).toDouble());
+
+        tokens_value["Q_SCHEME"] = drug->prescriptionValue(Constants::Prescription::IntakesScheme).toString();
+    } else {
+        tokens_value["Q_FROM"] = tokens_value["Q_TO"] = tokens_value["Q_SCHEME"] = "";
+    }
+
+    // Manage Daily Scheme See DailySchemeModel::setSerializedContent
+    DrugsDB::DailySchemeModel *day = new DrugsDB::DailySchemeModel;
+    day->setSerializedContent(drug->prescriptionValue(Constants::Prescription::SerializedDailyScheme).toString());
+    tokens_value["REPEATED_DAILY_SCHEME"] = day->humanReadableRepeatedDailyScheme();
+    tokens_value["DISTRIBUTED_DAILY_SCHEME"] = day->humanReadableDistributedDailyScheme();
+    delete day;
+    if (tokens_value.value("REPEATED_DAILY_SCHEME").isEmpty()) {
+        tokens_value["DAILY_SCHEME"] = tokens_value.value("DISTRIBUTED_DAILY_SCHEME");
+    } else {
+        tokens_value["DAILY_SCHEME"] = tokens_value.value("REPEATED_DAILY_SCHEME");
+    }
+
+    // Duration
+    if (drug->prescriptionValue(Constants::Prescription::DurationFrom).toDouble()) {
+        tokens_value["D_FROM"] = QString::number(drug->prescriptionValue(Constants::Prescription::DurationFrom).toDouble());
+        if (drug->prescriptionValue(Constants::Prescription::DurationUsesFromTo).toBool())
+            tokens_value["D_TO"] = QString::number(drug->prescriptionValue(Constants::Prescription::DurationTo).toDouble());
+
+        // Manage plurial form
+        tokens_value["PERIOD_SCHEME"] = drug->prescriptionValue(Constants::Prescription::PeriodScheme).toString();
+        tokens_value["D_SCHEME"] = drug->prescriptionValue(Constants::Prescription::DurationScheme).toString();
+        int max = qMax(drug->prescriptionValue(Constants::Prescription::DurationFrom).toDouble(), drug->prescriptionValue(Constants::Prescription::DurationTo).toDouble());
+        if (periods().contains(tokens_value["D_SCHEME"])) {
+            tokens_value["D_SCHEME"] = periodPlurialForm(periods().indexOf(tokens_value["D_SCHEME"]), max, tokens_value["D_SCHEME"]);
+        }
+        max = drug->prescriptionValue(Constants::Prescription::Period).toDouble();
+        if (max==1 && QLocale().name().left(2)=="fr")
+            ++max;
+       if (periods().contains(tokens_value["PERIOD_SCHEME"])) {
+            tokens_value["PERIOD_SCHEME"] = periodPlurialForm(periods().indexOf(tokens_value["PERIOD_SCHEME"]), max, tokens_value["PERIOD_SCHEME"]);
+        }
+    } else {
+        tokens_value["PERIOD_SCHEME"] = tokens_value["D_FROM"] = tokens_value["D_TO"] = tokens_value["D_SCHEME"] = "";
+    }
+
+    tokens_value["MEAL"] = Trans::ConstantTranslations::mealTime(drug->prescriptionValue(Constants::Prescription::MealTimeSchemeIndex).toInt());
+    QString tmp2 = drug->prescriptionValue(Constants::Prescription::Period).toString();
+
+    // TODO: provide a better management of 'EACH DAY__S__' here .. \sa Translation::periodPlurialForm()
+    // Period management of 'EACH DAY__S'
+    if (tmp2 == "1") {
+        tmp2.clear();
+    }
+    tokens_value["PERIOD"] = tmp2;
+
+    if (toHtml) {
+        tokens_value["NOTE"] = drug->prescriptionValue(Constants::Prescription::Note).toString().replace("\n","<br />");
+    } else {
+        tokens_value["NOTE"] = drug->prescriptionValue(Constants::Prescription::Note).toString();
+    }
+
+    // Min interval
+    const QVariant &interval = drug->prescriptionValue(Constants::Prescription::IntakesIntervalOfTime);
+    const QVariant &intervalScheme = drug->prescriptionValue(Constants::Prescription::IntakesIntervalSchemeIndex);
+    if ((!interval.isNull() && !intervalScheme.isNull()) &&
+        interval.toInt() > 0) {
+        tokens_value["MIN_INTERVAL"] = interval.toString() + " " + periodPlurialForm(intervalScheme.toInt(), interval.toInt());
+    }
+
+    // Route
+    tokens_value["ROUTE"] = drug->prescriptionValue(Constants::Prescription::Route).toString();
+
+    Utils::replaceTokens(tmp, tokens_value);
+    if (toHtml)
+        tmp = Utils::toHtmlAccent(tmp);
+    return tmp;
+#endif
+}
+
 /**
   \brief Transforms the DrugsModel's prescription into a XML encoded string.
 */
@@ -932,7 +1120,7 @@ QString DrugsIO::prescriptionToXml(DrugsDB::DrugsModel *m, const QString &xmlExt
 //                << Prescription::Period
 //                << Prescription::PeriodScheme
 //                << Prescription::RouteId
-//                << Prescription::DailyScheme
+//                << Prescription::SerializedDailyScheme
 //                << Prescription::MealTimeSchemeIndex
 //                << Prescription::IntakesIntervalOfTime
 //                << Prescription::IntakesIntervalScheme

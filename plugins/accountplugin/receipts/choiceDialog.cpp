@@ -239,7 +239,7 @@ bool treeViewsActions::deleteItemFromThesaurus(QModelIndex &index){
     receiptsEngine r;
     const QString userUid = user()->uuid();
     if (!r.deleteFromThesaurus(data,userUid)) {
-        Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("Cannot delete in thesaurus : ")+data);
+        Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("Cannot delete in thesaurus: ")+data);
         ret = false;
     }
     fillActionTreeView();

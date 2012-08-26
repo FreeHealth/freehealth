@@ -61,8 +61,9 @@ void AlertPreferencesWidget::setDataToUi()
 /*! Saves the settings in the ui to the settings data model. */
 void AlertPreferencesWidget::saveToSettings(Core::ISettings *sets)
 {
+    Q_UNUSED(sets);
     // if no sets given as param, take default interface
-    Core::ISettings *s = sets? sets : settings();
+//    Core::ISettings *s = sets? sets : settings();
 }
 
 /*! Writes the default settings to the data model. */
@@ -122,6 +123,12 @@ QString AlertPreferencesPage::category() const
 {
     return tkTr(Trans::Constants::ALERTS);
 }
+
+int AlertPreferencesPage::sortIndex() const
+{
+    return 0;
+}
+
 
 /*! Resets the whole preferences page to the default settings of the settings data model. */
 void AlertPreferencesPage::resetToDefaults()

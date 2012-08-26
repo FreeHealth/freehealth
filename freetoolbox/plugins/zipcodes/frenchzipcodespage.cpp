@@ -19,8 +19,8 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developper : Eric MAEKER, MD <eric.maeker@gmail.com>             *
- *   Contributors :                                                        *
+ *   Main Developer: Eric MAEKER, MD <eric.maeker@gmail.com>               *
+ *   Contributors:                                                         *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
@@ -46,7 +46,7 @@
 
 #include "ui_frenchzipcodeswidget.h"
 
-// Datas are extracted from URL: http://www.galichon.com/codesgeo/
+// Data are extracted from URL: http://www.galichon.com/codesgeo/
 
 using namespace ZipCodes;
 
@@ -68,6 +68,8 @@ static inline QString sqlImportFileAbsPath()   {return QDir::cleanPath(settings(
 
 }
 
+// #################### FrenchZipCodesPage #######################
+
 FrenchZipCodesPage::FrenchZipCodesPage(QObject *parent) :
         IToolPage(parent)
 {
@@ -79,6 +81,8 @@ QWidget *FrenchZipCodesPage::createPage(QWidget *parent)
     return new FrenchZipCodesWidget(parent);
 }
 
+
+// #################### FrenchZipCodesStep #######################
 
 FrenchZipCodesStep::FrenchZipCodesStep(QObject *parent) :
     Core::IFullReleaseStep(parent),
@@ -96,7 +100,7 @@ bool FrenchZipCodesStep::createDir()
 {
     // Create the wortking path
     if (!QDir().mkpath(workingPath()))
-        LOG_ERROR("Unable to create ICD10 Working Path :" + workingPath());
+        LOG_ERROR("Unable to create ZipCodes Working Path: " + workingPath());
     else
         LOG("Tmp dir created");
 
@@ -104,7 +108,7 @@ bool FrenchZipCodesStep::createDir()
     const QString &dbpath = QFileInfo(databaseAbsPath()).absolutePath();
     if (!QDir().exists(dbpath)) {
         if (!QDir().mkpath(dbpath))
-            LOG_ERROR("Unable to create ZipCodes database output path :" + dbpath);
+            LOG_ERROR("Unable to create ZipCodes database output path: " + dbpath);
         else
             LOG("ZipCodes database output dir created");
     }
@@ -133,7 +137,7 @@ bool FrenchZipCodesStep::downloadFiles(QProgressBar *bar)
 bool FrenchZipCodesStep::process()
 {
     unzipFiles();
-    prepareDatas();
+    prepareData();
     createDatabase();
     populateDatabase();
     Q_EMIT processFinished();
@@ -142,7 +146,7 @@ bool FrenchZipCodesStep::process()
 
 bool FrenchZipCodesStep::unzipFiles()
 {
-    Q_EMIT progressLabelChanged(tr("French zip codes database creation : unziping files..."));
+    Q_EMIT progressLabelChanged(tr("French zip codes database creation: unziping files..."));
     Q_EMIT progressRangeChanged(0, 1);
     Q_EMIT progress(0);
 
@@ -162,7 +166,7 @@ bool FrenchZipCodesStep::unzipFiles()
     return true;
 }
 
-bool FrenchZipCodesStep::prepareDatas()
+bool FrenchZipCodesStep::prepareData()
 {
     LOG(tr("Preparing raw source files"));
     Q_EMIT progressLabelChanged(tr("Preparing raw source files"));
@@ -260,6 +264,7 @@ bool FrenchZipCodesStep::populateDatabase()
 }
 
 
+// #################### FrenchZipCodesWidget #######################
 
 FrenchZipCodesWidget::FrenchZipCodesWidget(QWidget *parent) :
     QWidget(parent),

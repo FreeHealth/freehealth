@@ -26,7 +26,7 @@
  ***************************************************************************/
 /**
  * \class PadTools::TokenEditorWidget
- * Widget that allow to edit pre and post conditionnal texts of a token.
+ * Widget that allow to edit pre and post conditional texts of a token.
  */
 
 #include "tokeneditorwidget.h"

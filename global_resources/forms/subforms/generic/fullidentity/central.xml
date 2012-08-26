@@ -6,11 +6,11 @@
   <formdescription>
     <!-- Non translatable values -->
     <authors>Eric Maeker, MD</authors>
-    <version>0.7.0</version>
+    <version>test</version>
     <fmfv>0.7.0</fmfv>
     <cdate>2012-01-01</cdate>
     <lmdate>2012-02-26</lmdate>
-    <icon>identity.png</icon>
+    <icon>__theme__/identity.png</icon>
     <weblink></weblink>
     <bibliography/>
 
@@ -22,6 +22,13 @@
     <category lang="fr">Outils généraux</category>
     <specialties lang="fr">Outils</specialties>
     <specialties lang="xx">Tools</specialties>
+
+    <updateinfo>
+      <updateversion from="0.7.0" to="0.8.0">
+        <text lang="fr">Ajout du numéro de téléphone mobile&lt;br />Bouton 'envoyer un courriel' connecté</text>
+        <text lang="en">Adding the mobile phone number&lt;br />'Send mail' button is now connected</text>
+      </updateversion>
+    </updateinfo>
 
   </formdescription>
 
@@ -86,6 +93,16 @@
         <patientdata>patient::tels</patientdata>
       </Item>
 
+      <Item type="shorttext" name="ContactGroup::MobileTel">
+        <uilink label="mobileLabel" widget="mobileEdit"/>
+        <label lang="xx">Mobile phone</label>
+        <label lang="fr">Numéros de mobile</label>
+        <tooltip lang="xx">Inform the mobile phone number</tooltip>
+        <tooltip lang="fr">Renseignez le numéro de téléphone mobile</tooltip>
+        <options>DontPrintEmptyValues</options>
+        <patientdata>patient::mobiletel</patientdata>
+      </Item>
+
       <Item type="shorttext" name="ContactGroup::Fax">
         <uilink label="faxLabel" widget="faxEdit"/>
         <label lang="xx">Fax number</label>
@@ -102,6 +119,30 @@
         <tooltip lang="fr">Liste séparée par un point-virgule</tooltip>
         <options>DontPrintEmptyValues</options>
         <patientdata>patient::email</patientdata>
+      </Item>
+
+      <Item type="button" name="ContactGroup::SendMailButton">
+        <uilink widget="sendMailButton"/>
+        <label lang="xx">Send mail</label>
+        <label lang="fr">Envoyer un courriel</label>
+        <icon>__theme__/mail_new.png</icon>
+        <script>
+          <onclicked>
+          freemedforms.forms.namespaceInUse = "Subs::Tools::Identity::ContactGroup::";
+          var address = freemedforms.forms.item("Mail");
+          if (address.isValid) {
+              if (address.currentValue != "")
+                  freemedforms.tools.openUrl("mailto:" + address.currentValue + "?subject:");
+          }
+          </onclicked>
+        </script>
+      </Item>
+
+      <Item type="button" name="ContactGroup::SendSmsButton">
+        <uilink widget="sendSmsButton"/>
+        <label lang="xx">Send SMS</label>
+        <label lang="fr">Envoyer un SMS</label>
+        <icon>__theme__/iphone.png</icon>
       </Item>
 
     </Item>

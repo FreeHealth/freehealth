@@ -26,7 +26,7 @@
 #ifndef CONSTANTTRANSLATIONS_MENU_H
 #define CONSTANTTRANSLATIONS_MENU_H
 
-#include <QCoreApplication>
+#include <qglobal.h>
 
 namespace Trans {
 namespace Constants {

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FreeMedForms>
+
+<DataPack_Pack>
+
+  <PackDescription>
+    <!-- Non translatable values -->
+    <uuid>freemedforms.certified.drugs.za.noddi</uuid>
+    <authors>Eric Maeker, MD</authors>
+    <version>0.7.0</version>
+    <fmfv>0.7.0</fmfv>
+    <fdv>0.7.0</fdv>
+    <cdate>2012-08-14</cdate>
+    <lmdate>2012-08-14</lmdate>
+    <icon>__theme__/freediams.png</icon>
+    <weblink></weblink>
+    <bibliography/>
+    <file>drugs/za_noddi/master.db.zip</file>
+    <unziptopath>drugs</unziptopath>
+    <size>268</size>
+    <md5>d4e4c519d99e00b9dbcc5cf1f3569515</md5>
+    <sha1></sha1>
+    <datatype>DrugsWithoutInteractions</datatype>
+
+    <!-- Translatable values -->
+    <license>GPLv3</license>
+    <label lang="fr">Base de données thérapeutique sud africaine (sans interactions)</label>
+    <label lang="xx">South African pharmaceutical drug database (without interactions)</label>
+    <description lang="fr">Données thérapeutiques sud africaine pour FreeMedForms (sans interactions)</description>
+    <description lang="xx">South African pharmaceutical data for FreeMedForms (without interactions)</description>
+
+    <htmldescription lang="fr">&lt;p>
+      La base de données thérapeutique sud africaine est construite sur la base
+      des données publiées par le SAEPI. Vous y trouverez une partie des médicaments
+      commercialisés en Afrique du Sud.&lt;br />
+      &lt;br />
+      L'utilisation de cette base de données est probablement soumise à une restriction de licence.&lt;br />
+      &lt;br />
+      Cette base de données ne permet pas le calcul des interactions médicamenteuses&lt;br />
+      &lt;br />
+      &lt;b>Le site affiche la note d'avertissement suivante :&lt;/b>&lt;br />
+      Although every effort has been made to ensure accuracy and currency
+      in compiling/producing the information at this site, no warranties are made as to the accuracy,
+      completeness or currency of any of the information.&lt;br />
+      All implied warranties are disclaimed including an implied warranty of merchantability and
+      fitness for a particular purpose. &lt;br />
+      Users of the information assume all risks. All liability for any damages related to the use
+      of the information is disclaimed. &lt;br />
+      Users' licence/right to use this information is conditioned upon their acceptance of
+      these limitations and disclaimers. &lt;br />
+      &lt;br />
+      &lt;/p>
+    </htmldescription>
+
+    <htmldescription lang="xx">&lt;p>
+      The south african pharmaceutical drug database is build upon SAEPI' data.
+      You will find a part of available and marketed drugs in South Africa.&lt;br />
+      &lt;br />
+      You can use the database according to the limiting license of the data.&lt;br />
+      &lt;br />
+      Data for drug interaction engines are not included in this database.&lt;br />
+      &lt;br />
+      &lt;b>Web site gives the following disclaimer:&lt;/b>&lt;br />
+      Although every effort has been made to ensure accuracy and currency
+      in compiling/producing the information at this site, no warranties are made as to the accuracy,
+      completeness or currency of any of the information.&lt;br />
+      All implied warranties are disclaimed including an implied warranty of merchantability and
+      fitness for a particular purpose. &lt;br />
+      Users of the information assume all risks. All liability for any damages related to the use
+      of the information is disclaimed. &lt;br />
+      Users' licence/right to use this information is conditioned upon their acceptance of
+      these limitations and disclaimers. &lt;br />
+      &lt;br />
+      &lt;/p>
+    </htmldescription>
+
+    <updateinfo>
+      <updateversion from="0.7.0">
+        <text lang="fr">Première mise à disposition.</text>
+        <text lang="en">First release.</text>
+      </updateversion>
+    </updateinfo>
+
+  </PackDescription>
+
+</DataPack_Pack>

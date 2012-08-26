@@ -76,6 +76,7 @@ QString DataPackPreferencePage::id() const { return objectName(); }
 QString DataPackPreferencePage::name() const { return tkTr(Trans::Constants::DATAPACK_MANAGER); }
 QString DataPackPreferencePage::category() const { return tkTr(Trans::Constants::DATAPACK); }
 QString DataPackPreferencePage::title() const {return tkTr(Trans::Constants::DATAPACK_MANAGER); }
+int DataPackPreferencePage::sortIndex() const {return 0;}
 
 void DataPackPreferencePage::resetToDefaults()
 {

@@ -600,32 +600,32 @@
         <translation>Voir la synthèse des interactions</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="74"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="77"/>
         <source>from</source>
         <translation>de</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="75"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="78"/>
         <source>to</source>
         <translation>à</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="76"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="79"/>
         <source>from %1 to %2</source>
         <translation>de %1 à %2</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="77"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="80"/>
         <source>during</source>
         <translation>durant</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="78"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="81"/>
         <source>each</source>
         <translation>tous les</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="79"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="82"/>
         <source>and</source>
         <translation>et</translation>
     </message>
@@ -1243,7 +1243,7 @@ Emplacement : %2</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_current.h" line="47"/>
-        <location filename="../../libs/translationutils/trans_current.h" line="123"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="126"/>
         <source>Subforms</source>
         <translation>Sous-formulaires</translation>
     </message>
@@ -1323,198 +1323,213 @@ Emplacement : %2</translation>
         <translation>URL</translation>
     </message>
     <message>
+        <location filename="../../libs/translationutils/trans_current.h" line="63"/>
+        <source>Value</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../libs/translationutils/trans_current.h" line="64"/>
+        <source>Value: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_current.h" line="66"/>
         <source>Token</source>
         <translation>Étiquette</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="65"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="67"/>
         <source>Token: %1</source>
         <translation>Étiquette: %1</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="66"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="68"/>
+        <source>Token namespace: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_current.h" line="69"/>
         <source>Edit token</source>
         <translation>Éditeur d&apos;étiquette</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="67"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="70"/>
         <source>Validate</source>
         <translation>Valider</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="68"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="71"/>
         <source>Override</source>
         <translation>Outrepasser</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="69"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="72"/>
         <source>Add alert</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="70"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="73"/>
         <source>Edit alert</source>
         <translation>Éditer l&apos;alerte</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="71"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="74"/>
         <source>Remind later</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="72"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="75"/>
         <source>%1 alerts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="80"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="83"/>
         <source>Alert</source>
         <translation>Alerte</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="81"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="84"/>
         <source>Alerts</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="82"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="85"/>
         <source>Dynamic alert</source>
         <translation>Alerte dynamique</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="83"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="86"/>
         <source>Blocking alert</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="84"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="87"/>
         <source>Non-blocking alert</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="87"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="90"/>
         <source>related to</source>
         <translation>lié à</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="88"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="91"/>
         <source>related to patient %1</source>
         <translation>lié au patient %1</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="89"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="92"/>
         <source>related to current patient</source>
         <translation>lié au patient courant</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="90"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="93"/>
         <source>related to all patients</source>
         <translation>lié à tous les patients</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="91"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="94"/>
         <source>related to user %1</source>
         <translation>lié à l&apos;utilisateur %1</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="92"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="95"/>
         <source>related to current user</source>
         <translation>lié à l&apos;utilisateur courant</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="93"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="96"/>
         <source>related to all users</source>
         <translation>lié à tous les utilisateurs</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="94"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="97"/>
         <source>related to application</source>
         <translation>lié à l&apos;application</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="95"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="98"/>
         <source>related to the family %1</source>
         <translation>lié à la famille %1</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="96"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="99"/>
         <source>related to user group %1</source>
         <translation>lié au groupe d&apos;utilisateurs %1</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="99"/>
-        <location filename="../../libs/translationutils/trans_current.h" line="101"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="102"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="104"/>
         <source>Settings recovered</source>
         <translation>Paramètres récupérés</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="103"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="106"/>
         <source>Show details</source>
         <translation>Montrer les détails</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="104"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="107"/>
         <source>More information</source>
         <translation>Plus d&apos;informations</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="105"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="108"/>
         <source>Hide extra information</source>
         <translation>Cacher les informations additionnelles</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="114"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="117"/>
         <source>Data pack</source>
         <translation>Gestionnaire de paquets de données</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="115"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="118"/>
         <source>Data pack manager</source>
         <translation>Gestionnaire de paquets de données</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="116"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="119"/>
         <source>Last modification</source>
         <translation>Dernière modification</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="117"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="120"/>
         <source>Data type</source>
         <translation>Type de données</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="120"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="123"/>
         <source>Zip codes</source>
         <translation>Code postaux</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="121"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="124"/>
         <source>User documents</source>
         <translation>Documents utilisateur</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="122"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="125"/>
         <source>Full set of forms</source>
         <translation>Set complet de formulaires</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="124"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="127"/>
         <source>International classification of diseases</source>
         <translation>Classification internationale des maladies</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="125"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="128"/>
         <source>Diseases classifications</source>
         <translation>Classification des maladies</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="126"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="129"/>
         <source>Alert packs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="127"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="130"/>
         <source>Various</source>
         <translation>Divers</translation>
     </message>
@@ -1522,6 +1537,11 @@ Emplacement : %2</translation>
         <location filename="../../libs/translationutils/trans_user.h" line="40"/>
         <source>Users</source>
         <translation>Utilisateurs</translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_user.h" line="41"/>
+        <source>User data</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_user.h" line="42"/>
@@ -1564,6 +1584,22 @@ Emplacement : %2</translation>
         <translation>Fax</translation>
     </message>
     <message>
+        <location filename="../../libs/translationutils/trans_user.h" line="52"/>
+        <source>Professional</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_user.h" line="54"/>
+        <source>Identifiants</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_user.h" line="55"/>
+        <source>Qualifications</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_patient.h" line="58"/>
         <location filename="../../libs/translationutils/trans_user.h" line="51"/>
         <source>E-Mail</source>
         <translation>Courriel</translation>
@@ -1794,7 +1830,7 @@ Emplacement : %2</translation>
         <translation>Titre</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_patient.h" line="63"/>
+        <location filename="../../libs/translationutils/trans_patient.h" line="79"/>
         <source>Clear patient&apos;s information</source>
         <translation>Effacer les informations concernant le patient</translation>
     </message>
@@ -1804,22 +1840,22 @@ Emplacement : %2</translation>
         <translation>Genre</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_titles.h" line="58"/>
+        <location filename="../../libs/translationutils/trans_titles.h" line="57"/>
         <source>Nurse</source>
         <translation>Infirmière</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_titles.h" line="60"/>
+        <location filename="../../libs/translationutils/trans_titles.h" line="59"/>
         <source>Caregiver</source>
         <translation>Aide-soignant</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_titles.h" line="61"/>
+        <location filename="../../libs/translationutils/trans_titles.h" line="60"/>
         <source>Medical student</source>
         <translation>Etudiant en médecine</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_titles.h" line="62"/>
+        <location filename="../../libs/translationutils/trans_titles.h" line="61"/>
         <source>Software administrator</source>
         <translation>Administrateur logiciel</translation>
     </message>
@@ -2049,7 +2085,7 @@ Emplacement : %2</translation>
         <translation>L&apos;erreur %1 est survenue depuis la base de données %2</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="102"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="105"/>
         <source>Creating default settings for %1</source>
         <translation>Création des paramètres par défaut pour %1</translation>
     </message>
@@ -2119,7 +2155,7 @@ Emplacement : %2</translation>
         <translation>pas de relation avec le repas</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="100"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="103"/>
         <source>Reading settings file</source>
         <translation>Lecture du fichier de paramètres</translation>
     </message>
@@ -2141,22 +2177,21 @@ Emplacement : %2</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_user.h" line="41"/>
         <source>User datas</source>
-        <translation>Données de l&apos;utilisateur</translation>
+        <translation type="obsolete">Données de l&apos;utilisateur</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_user.h" line="53"/>
+        <location filename="../../libs/translationutils/trans_user.h" line="57"/>
         <source>Enter MySQL administrator login</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_user.h" line="54"/>
+        <location filename="../../libs/translationutils/trans_user.h" line="58"/>
         <source>Enter your personal identifiants</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_user.h" line="55"/>
+        <location filename="../../libs/translationutils/trans_user.h" line="59"/>
         <source>Save and restore</source>
         <translation>Sauvegarder et restaurer</translation>
     </message>
@@ -2351,22 +2386,22 @@ Emplacement : %2</translation>
         <translation>Application complète</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="108"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="111"/>
         <source>Header</source>
         <translation>Entête</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="109"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="112"/>
         <source>Footer</source>
         <translation>Pied de page</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="110"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="113"/>
         <source>Watermark</source>
         <translation>Filigrane</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_current.h" line="111"/>
+        <location filename="../../libs/translationutils/trans_current.h" line="114"/>
         <source>Printing</source>
         <translation>Impression</translation>
     </message>
@@ -2447,131 +2482,196 @@ Emplacement : %2</translation>
     </message>
     <message>
         <location filename="../../libs/translationutils/trans_patient.h" line="48"/>
+        <source>Contact</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_patient.h" line="49"/>
+        <source>Full contact (html)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_patient.h" line="51"/>
+        <source>Full address</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_patient.h" line="52"/>
+        <source>Full address (html)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_patient.h" line="53"/>
+        <source>Street</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_patient.h" line="54"/>
+        <source>City</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_patient.h" line="55"/>
+        <source>Zipcode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_patient.h" line="56"/>
+        <source>Country</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_patient.h" line="57"/>
+        <source>E-Mails</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_patient.h" line="59"/>
+        <source>Tels</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_patient.h" line="60"/>
+        <source>Mobile phone</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_patient.h" line="62"/>
         <source>Date of birth</source>
         <translation>Date de naissance</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_patient.h" line="49"/>
+        <location filename="../../libs/translationutils/trans_patient.h" line="63"/>
         <source>Date of death</source>
         <translation>Date de décès</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_patient.h" line="50"/>
+        <location filename="../../libs/translationutils/trans_patient.h" line="64"/>
         <source>Age</source>
         <translation>Âge</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_patient.h" line="51"/>
+        <location filename="../../libs/translationutils/trans_patient.h" line="65"/>
         <source>Age in years</source>
         <translation>Âge en années</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_patient.h" line="53"/>
+        <location filename="../../libs/translationutils/trans_patient.h" line="67"/>
         <source>Weight</source>
         <translation>Poids</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_patient.h" line="54"/>
+        <location filename="../../libs/translationutils/trans_patient.h" line="68"/>
         <source>Height</source>
         <translation>Taille</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_patient.h" line="55"/>
+        <location filename="../../libs/translationutils/trans_patient.h" line="69"/>
         <source>Creatinin clerance</source>
         <translation>Clearance de créatinine</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_patient.h" line="57"/>
+        <location filename="../../libs/translationutils/trans_patient.h" line="71"/>
         <source>Units</source>
         <translation>Unités</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_patient.h" line="59"/>
+        <location filename="../../libs/translationutils/trans_patient.h" line="72"/>
+        <source>Metrics</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_patient.h" line="73"/>
+        <source>Biology</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../libs/translationutils/trans_patient.h" line="75"/>
         <source>Patient</source>
         <translation>Patient</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_patient.h" line="60"/>
+        <location filename="../../libs/translationutils/trans_patient.h" line="76"/>
         <source>Patients</source>
         <translation>Patients</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_patient.h" line="61"/>
+        <location filename="../../libs/translationutils/trans_patient.h" line="77"/>
         <source>Patient information</source>
         <translation>Informations sur le patient</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_patient.h" line="62"/>
+        <location filename="../../libs/translationutils/trans_patient.h" line="78"/>
         <source>Patient database</source>
         <translation>Base de données patient</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_patient.h" line="64"/>
+        <location filename="../../libs/translationutils/trans_patient.h" line="80"/>
         <source>Toggle patient&apos;s information</source>
         <translation>Afficher/cacher les informations concernant le patient</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_patient.h" line="66"/>
+        <location filename="../../libs/translationutils/trans_patient.h" line="82"/>
         <source>Patient synthesis</source>
         <translation>Synthèse patient</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_patient.h" line="68"/>
+        <location filename="../../libs/translationutils/trans_user.h" line="53"/>
         <source>Specialties</source>
         <translation>Spécialités</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_titles.h" line="46"/>
+        <location filename="../../libs/translationutils/trans_patient.h" line="50"/>
         <source>Address</source>
         <translation>Adresse</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_titles.h" line="47"/>
+        <location filename="../../libs/translationutils/trans_titles.h" line="46"/>
         <source>Male</source>
         <translation>Masculin</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_titles.h" line="48"/>
+        <location filename="../../libs/translationutils/trans_titles.h" line="47"/>
         <source>Female</source>
         <translation>Féminin</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_titles.h" line="49"/>
+        <location filename="../../libs/translationutils/trans_titles.h" line="48"/>
         <source>Hermaphrodism</source>
         <translation>Hémaphrodisme</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_titles.h" line="52"/>
+        <location filename="../../libs/translationutils/trans_titles.h" line="51"/>
         <source>Mister</source>
         <translation>Monsieur</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_titles.h" line="53"/>
+        <location filename="../../libs/translationutils/trans_titles.h" line="52"/>
         <source>Miss</source>
         <translation>Mademoiselle</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_titles.h" line="54"/>
+        <location filename="../../libs/translationutils/trans_titles.h" line="53"/>
         <source>Madam</source>
         <translation>Madame</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_titles.h" line="55"/>
+        <location filename="../../libs/translationutils/trans_titles.h" line="54"/>
         <source>Doctor</source>
         <translation>Docteur</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_titles.h" line="56"/>
+        <location filename="../../libs/translationutils/trans_titles.h" line="55"/>
         <source>Professor</source>
         <translation>Professeur</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_titles.h" line="57"/>
+        <location filename="../../libs/translationutils/trans_titles.h" line="56"/>
         <source>Captain</source>
         <translation>Capitaine</translation>
     </message>
     <message>
-        <location filename="../../libs/translationutils/trans_titles.h" line="59"/>
+        <location filename="../../libs/translationutils/trans_titles.h" line="58"/>
         <source>Secretary</source>
         <translation>Secrétaire</translation>
     </message>

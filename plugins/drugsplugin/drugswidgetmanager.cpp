@@ -55,6 +55,7 @@
 #include <QGridLayout>
 #include <QTreeView>
 #include <QStandardItemModel>
+#include <QTextDocument>
 
 using namespace DrugsWidget::Constants;
 using namespace DrugsWidget;
@@ -753,6 +754,22 @@ void DrugsActionHandler::openProtocolPreferencesDialog()
 
 void DrugsActionHandler::resetPrescriptionSentenceToDefault()
 {
+#ifdef WITH_PAD
+    QString content = Utils::readTextFile(settings()->path(Core::ISettings::BundleResourcesPath) + QString(DrugsDB::Constants::S_DEF_PRESCRIPTION_TOKENFILE_1_LANG).arg(QLocale().name().left(2).toLower()));
+    if (content.isEmpty()) {
+        content = Utils::readTextFile(settings()->path(Core::ISettings::BundleResourcesPath) + QString(DrugsDB::Constants::S_DEF_PRESCRIPTION_TOKENFILE_1_LANG).arg(Trans::Constants::ALL_LANGUAGE));
+        if (content.isEmpty()) {
+            LOG_ERROR_FOR("DrugsPrintWidget", "No token'd prescription file found");
+        }
+    }
+    if (content.contains("<body"))
+        content = content.remove("\n");
+
+    settings()->setValue(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_HTML, content);
+    QTextDocument doc;
+    doc.setHtml(content);
+    settings()->setValue(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_PLAIN, doc.toPlainText());
+#else
     settings()->setValue(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_HTML,
                          QCoreApplication::translate(
                                  Constants::DRUGCONSTANTS_TR_CONTEXT,
@@ -761,6 +778,7 @@ void DrugsActionHandler::resetPrescriptionSentenceToDefault()
                          QCoreApplication::translate(
                                  Constants::DRUGCONSTANTS_TR_CONTEXT,
                                  DrugsDB::Constants::S_DEF_PRESCRIPTIONFORMATTING_PLAIN));
+#endif
     DrugsDB::DrugsModel::activeModel()->resetModel();
 }
 

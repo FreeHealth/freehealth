@@ -374,7 +374,7 @@ void InteractionEditorWidget::interactionActivated(const QModelIndex &index)
     d->m_Mapper->setRootIndex(index.parent());
     d->m_Mapper->setCurrentModelIndex(index);
 
-    // set datas
+    // set data
     // manage a OSX bug with checkboxes in mappers
     QModelIndex rev = d->m_DDIModel->index(index.row(), DrugDrugInteractionModel::IsReviewedCheckState, index.parent());
     ui->isReviewed->setChecked(rev.data().toBool());

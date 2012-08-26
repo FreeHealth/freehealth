@@ -2390,6 +2390,7 @@ BaseButton::BaseButton(Form::FormItem *formItem, QWidget *parent) :
     Form::IFormWidget(formItem,parent), m_Button(0)
 {
     setObjectName("BaseButton");
+
     // QtUi Loaded ?
     const QString &widget = formItem->spec()->value(Form::FormItemSpec::Spec_UiWidget).toString();
     if (!widget.isEmpty()) {
@@ -2414,8 +2415,7 @@ BaseButton::BaseButton(Form::FormItem *formItem, QWidget *parent) :
     QString icon = formItem->spec()->value(Form::FormItemSpec::Spec_IconFileName).toString();
     if (!icon.isEmpty()) {
         if (icon.startsWith(Core::Constants::TAG_APPLICATION_THEME_PATH, Qt::CaseInsensitive)) {
-            icon = icon.replace(Core::Constants::TAG_APPLICATION_THEME_PATH, settings()->path(Core::ISettings::ThemeRootPath));
-            qWarning() << icon;
+            icon = icon.replace(Core::Constants::TAG_APPLICATION_THEME_PATH, settings()->path(Core::ISettings::SmallPixmapPath));
         }
         m_Button->setIcon(QIcon(icon));
     }
@@ -2428,7 +2428,8 @@ BaseButton::~BaseButton()
 
 void BaseButton::buttonClicked()
 {
-    executeOnValueChangedScript(m_FormItem);
+    if (!m_FormItem->scripts()->onClicked().isEmpty())
+        scriptManager()->evaluate(m_FormItem->scripts()->onClicked());
 }
 
 void BaseButton::retranslate()

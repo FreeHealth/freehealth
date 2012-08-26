@@ -6,6 +6,7 @@ with-alerts{
     message(Build Alert part of PatientBase plugin)
     DEFINES += WITH_ALERTS
 }
+with-pad { DEFINES += WITH_PAD }
 
 BUILD_PATH_POSTFIXE = FreeMedForms
 
@@ -28,7 +29,9 @@ HEADERS = patientbaseplugin.h \
     patientbasepreferencespage.h \
     patientbar.h \
     patientcreatorwizard.h \
-    patientlineeditcompletersearch.h
+    patientlineeditcompletersearch.h \
+    pixmapdelegate.h \
+    pixmapbutton.h
 
 SOURCES = patientbaseplugin.cpp \
     patientbase.cpp \
@@ -41,7 +44,9 @@ SOURCES = patientbaseplugin.cpp \
     patientbasepreferencespage.cpp \
     patientbar.cpp \
     patientcreatorwizard.cpp \
-    patientlineeditcompletersearch.cpp
+    patientlineeditcompletersearch.cpp \
+    pixmapdelegate.cpp \
+    pixmapbutton.cpp
 
 FORMS += identitywidget.ui \
     patientselector.ui \

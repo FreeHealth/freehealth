@@ -178,13 +178,13 @@ void AccountView::filterChanged()
 void AccountView::deleteLine(){
     QModelIndex index = m_ui->tableView->QAbstractItemView::currentIndex();
     if(!index.isValid()) {
-        Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("Please select a line to delete."));
+        Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("Please select a line to delete"));
         return;
     }
     int i = index.row();
     QAbstractItemModel *model = m_ui->tableView->model();
     if (model->removeRows(i,1,QModelIndex())) {
-        Utils::informativeMessageBox(tkTr(Trans::Constants::INFORMATION), tr("Line deleted."));
+        Utils::informativeMessageBox(tkTr(Trans::Constants::INFORMATION), tr("Line deleted"));
     }
     refresh();
 }

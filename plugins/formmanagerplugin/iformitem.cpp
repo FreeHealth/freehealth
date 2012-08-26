@@ -778,6 +778,9 @@ QString FormMainDebugPage::name() const
 QString FormMainDebugPage::category() const
 { return tr("Forms: ") + m_Form->spec()->label(); }
 
+int FormMainDebugPage::sortIndex() const
+{ return 20; }
+
 void FormMainDebugPage::refreshContents()
 {
     tree->clear();

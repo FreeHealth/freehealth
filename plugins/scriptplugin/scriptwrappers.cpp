@@ -42,7 +42,7 @@
 #include <QLocale>
 
 using namespace Script;
-//using namespace Internal;
+using namespace Internal;
 
 static inline Form::FormManager *formManager() { return Form::FormManager::instance(); }
 static inline Core::IScriptManager *scriptManager() { return Core::ICore::instance()->scriptManager(); }
@@ -196,7 +196,10 @@ QVariant FormItemScriptWrapper::currentValue() const
 {
     if (m_Item) {
         if (m_Item->itemData()) {
-            return m_Item->itemData()->data(0, Form::IFormItemData::CalculationsRole);
+            QVariant toReturn = m_Item->itemData()->data(0, Form::IFormItemData::CalculationsRole);
+            if (toReturn.isNull() || !toReturn.isValid())
+                return QVariant(QString());
+            return toReturn;
         }
     }
     return QVariant(QString());

@@ -71,6 +71,7 @@ QString SaveRestorePage::id() const { return objectName(); }
 QString SaveRestorePage::name() const { return tkTr(Trans::Constants::USER_DATAS); }
 QString SaveRestorePage::category() const { return tkTr(Trans::Constants::SAVE_AND_RESTORE); }
 QString SaveRestorePage::title() const {return tr("Save / Restore / Import / Export user's datas");}
+int SaveRestorePage::sortIndex() const {return 0;}
 
 void SaveRestorePage::resetToDefaults()
 {

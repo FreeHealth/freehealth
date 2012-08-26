@@ -99,7 +99,7 @@ public:
     QTreeWidget *getTreeWidget(QWidget *parent) const;
     QString toString() const;
 
-    // Network datas
+    // Network data
     Utils::DatabaseConnector databaseConnector() const;
     void setDatabaseConnector(Utils::DatabaseConnector &dbConnector);
     void readDatabaseConnector();

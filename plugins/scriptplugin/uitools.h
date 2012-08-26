@@ -31,7 +31,16 @@
 class QWidget;
 class QScriptValue;
 
+/**
+ * \file uitools.h
+ * \author Eric MAEKER <eric.maeker@gmail.com>
+ * \version 0.7.6
+ * \date 01 Jun 2012
+*/
+
 namespace Script {
+namespace Internal {
+
 class FormItemScriptWrapper;
 
 class UiTools : public QObject
@@ -59,6 +68,7 @@ public Q_SLOTS:
 
 };
 
-} // namespace Script
+}  // namespace Internal
+}  // namespace Script
 
 #endif // SCRIPT_UITOOLS_H

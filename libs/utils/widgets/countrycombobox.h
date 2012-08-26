@@ -41,7 +41,7 @@ class UTILS_EXPORT CountryComboBox : public QComboBox
 public:
     explicit CountryComboBox(QWidget *parent = 0);
     void setFlagPath(const QString &absPath);
-    void initialize();
+    virtual void initialize();
 
     QLocale::Country currentCountry() const;
     QString currentIsoCountry() const;

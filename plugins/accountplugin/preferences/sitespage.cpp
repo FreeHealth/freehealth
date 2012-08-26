@@ -82,6 +82,7 @@ SitesPage::~SitesPage()
 QString SitesPage::id() const { return objectName(); }
 QString SitesPage::name() const { return tkTr(Trans::Constants::SITES); }
 QString SitesPage::category() const { return tkTr(Trans::Constants::ACCOUNTANCY); }
+int SitesPage::sortIndex() const {return 80;}
 
 void SitesPage::resetToDefaults()
 {

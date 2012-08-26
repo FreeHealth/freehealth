@@ -23,11 +23,11 @@
  *   Contributors :                                                        *
  *       Guillaume Denry <guillaume.denry@gmail.com>                       *
  ***************************************************************************/
-
-#ifndef IPADTOOLS_H
-#define IPADTOOLS_H
+#ifndef CORE_IPADTOOLS_H
+#define CORE_IPADTOOLS_H
 
 #include <QObject>
+#include <QWidget>
 #include <QMap>
 #include <QString>
 #include <QVariant>
@@ -39,15 +39,16 @@ class QTextEdit;
 
 /**
  * \file ipadtools.h
- * \author Eric Maeker <eric.maeker@gmail.com>, Guillaume DENRY <guillaume.denry@gmail.com>
+ * \author Eric Maeker, Guillaume DENRY
  * \version 0.8.0
- * \date 05 May 2012
+ * \date 16 Aug 2012
  */
 
 namespace Core {
 class ICore;
 
-class CORE_EXPORT PadAnalyzerError {
+class CORE_EXPORT PadAnalyzerError
+{
 public:
     enum Type {
         Error_NoError,
@@ -70,14 +71,13 @@ private:
     QMap<QString,QVariant> _errorTokens;
 };
 
-
 class CORE_EXPORT TokenDescription
 {
 public:
-    TokenDescription(const QString &name);
+    TokenDescription(const QString &uid);
     virtual ~TokenDescription() {}
 
-    virtual QString fullName() const {return _name;}
+    virtual QString uid() const {return _uid;}
     virtual QString humanReadableName() const;
     virtual QString tooltip() const;
     virtual QString helpText() const;
@@ -92,18 +92,24 @@ public:
     bool operator<(const TokenDescription &descr) const;
 
 private:
-    QString _name, _human, _tooltip, _descr, _help, _trContext;
+    QString _uid, _human, _tooltip, _descr, _help, _trContext;
 };
 
-class CORE_EXPORT TokenNamespace : public TokenDescription
+class CORE_EXPORT TokenNamespace : public Core::TokenDescription
 {
 public:
-    TokenNamespace(const QString &name = QString::null) : TokenDescription(name) {}
+    TokenNamespace(const QString &name = QString::null) : Core::TokenDescription(name) {}
     ~TokenNamespace() {}
 
-    bool isValid() const {return !fullName().isEmpty();}
-};
+    bool isValid() const {return !uid().isEmpty();}
 
+    void addChild(const Core::TokenNamespace &child);
+    QList<Core::TokenNamespace> children() const;
+    void clearChildren();
+
+private:
+    QList<Core::TokenNamespace> _children;
+};
 
 class CORE_EXPORT IToken : public TokenDescription
 {
@@ -111,10 +117,11 @@ public:
     IToken(const QString &fullName) : TokenDescription(fullName) {}
     virtual ~IToken() {}
 
+    virtual QString tooltip() const;
+
     virtual QVariant testValue() const = 0;
     virtual QVariant value() const = 0;
 };
-
 
 class CORE_EXPORT ITokenPool : public QObject
 {
@@ -127,10 +134,13 @@ protected:
 public:
     virtual ~ITokenPool() {}
 
-//    virtual TokenNamespace &createNamespace(const QString &name) = 0;
-//    virtual void registerNamespace(const TokenNamespace &ns) = 0;
-//    virtual const TokenNamespace &getTokenNamespace(const QString &name) const = 0;
+    // Token namespaces
+    virtual void registerNamespace(const Core::TokenNamespace &ns) = 0;
+    virtual int rootNamespaceCount() const = 0;
+    virtual const Core::TokenNamespace &rootNamespaceAt(int index) const = 0;
+    virtual Core::TokenNamespace getTokenNamespace(const QString &name) const = 0;
 
+    // Tokens
     virtual void addToken(Core::IToken *token) = 0;
     virtual void addTokens(QVector<Core::IToken *> &tokens) = 0;
     virtual Core::IToken *token(const QString &name) = 0;
@@ -138,6 +148,7 @@ public:
 
     virtual QVector<Core::IToken *> tokens() const = 0;
 
+    // Get token values
     virtual QVariant tokenTestingValue(const QString &name) = 0;
     virtual QVariant tokenCurrentValue(const QString &name) = 0;
 
@@ -146,6 +157,30 @@ Q_SIGNALS:
     void tokenRemoved(Core::IToken *token);
 };
 
+class IPadTools;
+class CORE_EXPORT IPadWriter : public QWidget
+{
+    Q_OBJECT
+    friend class IPadTools;
+protected:
+    explicit IPadWriter(QWidget *parent = 0) : QWidget(parent) {}
+
+public:
+    virtual ~IPadWriter() {}
+
+public Q_SLOTS:
+    virtual void setPlainTextSource(const QString &plainText) = 0;
+    virtual void setHtmlSource(const QString &html) = 0;
+    virtual void filterTokenPool(const QString &tokenNamespace) = 0;
+    virtual void filterTokenPool(const QStringList &tokenNamespaces) = 0;
+
+public:
+    virtual QString outputToPlainText() const = 0;
+    virtual QString outputToHtml() const = 0;
+
+    virtual QString rawSourceToPlainText() const = 0;
+    virtual QString rawSourceToHtml() const = 0;
+};
 
 class CORE_EXPORT IPadTools : public QObject
 {
@@ -155,11 +190,14 @@ public:
     virtual ~IPadTools() {}
 
     virtual Core::ITokenPool *tokenPool() const = 0;
-    virtual QString parse(const QString &templ, QMap<QString,QVariant> &tokens, QList<PadAnalyzerError> &errors) = 0;
-    virtual QSyntaxHighlighter *createSyntaxHighlighter(QTextEdit *textEdit, QMap<QString,QVariant> &tokens) { Q_UNUSED(textEdit); Q_UNUSED(tokens); return NULL ; }
+
+    virtual QString processPlainText(const QString &plainText) {Q_UNUSED(plainText); return QString::null;}
+    virtual QString processHtml(const QString &html) {Q_UNUSED(html); return QString::null;}
+
+    virtual Core::IPadWriter *createWriter(QWidget *parent = 0) = 0;
 };
 
-}
+}  // namespace Core
 
 
-#endif
+#endif  // CORE_IPADTOOLS_H

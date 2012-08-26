@@ -644,8 +644,8 @@ bool XmlIOBase::saveForm(XmlFormName &form)
     if (!connectedDatabase(DB, __LINE__))
         return false;
 
-    if (isFormExists(form))
-        return true;
+//    if (isFormExists(form))
+//        return true;
 
     LOG("Saving forms to database: " + form.uid);
 

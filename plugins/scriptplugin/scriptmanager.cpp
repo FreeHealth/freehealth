@@ -27,6 +27,7 @@
 #include "scriptwrappers.h"
 #include "scriptpatientwrapper.h"
 #include "uitools.h"
+#include "tools.h"
 
 #include <coreplugin/icore.h>
 
@@ -38,6 +39,7 @@
 #include <QDebug>
 
 using namespace Script;
+using namespace Internal;
 
 static inline Form::FormManager *formManager() {return Form::FormManager::instance();}
 
@@ -101,10 +103,12 @@ const char * const SCRIPT_FREEMEDFORMS_NAMESPACE_CREATION =
         "var forms;"
         "var patient;"
         "var uiTools;"
+        "var tools;"
         "  exports.extend({"
         "    'forms': forms,"
         "    'patient': patient,"
-        "    'uiTools': uiTools"
+        "    'uiTools': uiTools,"
+        "    'tools': tools"
         "  });"
         "});"
         "var freemedforms = namespace.com.freemedforms;";
@@ -119,7 +123,11 @@ void FormItemScriptWrapperFromScriptValue(const QScriptValue &object, FormItemSc
 
 ScriptManager::ScriptManager(QObject *parent) :
     Core::IScriptManager(parent),
-    m_Engine(new QScriptEngine(this))
+    m_Engine(new QScriptEngine(this)),
+    patient(0),
+    forms(0),
+    uitools(0),
+    tools(0)
 {
     // Inject default scripts
     evaluate(SCRIPT_NAMESPACE);
@@ -136,12 +144,17 @@ ScriptManager::ScriptManager(QObject *parent) :
     m_Engine->evaluate("namespace.com.freemedforms").setProperty("forms", formsValue);
 
     // Add meta types
-    qScriptRegisterMetaType<Script::FormItemScriptWrapper*>(m_Engine, ::FormItemScriptWrapperToScriptValue, ::FormItemScriptWrapperFromScriptValue);
+    qScriptRegisterMetaType<Script::Internal::FormItemScriptWrapper*>(m_Engine, ::FormItemScriptWrapperToScriptValue, ::FormItemScriptWrapperFromScriptValue);
 
     // Add UiTools
-    tools = new UiTools(this);
+    uitools = new UiTools(this);
+    QScriptValue uitoolsValue = m_Engine->newQObject(uitools, QScriptEngine::QtOwnership);
+    m_Engine->evaluate("namespace.com.freemedforms").setProperty("uiTools", uitoolsValue);
+
+    // Add Tools
+    tools = new Internal::Tools(this);
     QScriptValue toolsValue = m_Engine->newQObject(tools, QScriptEngine::QtOwnership);
-    m_Engine->evaluate("namespace.com.freemedforms").setProperty("uiTools", toolsValue);
+    m_Engine->evaluate("namespace.com.freemedforms").setProperty("tools", toolsValue);
 
     // Register to Core::ICore
     Core::ICore::instance()->setScriptManager(this);

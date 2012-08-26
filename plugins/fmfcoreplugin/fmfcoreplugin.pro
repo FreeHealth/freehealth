@@ -9,6 +9,7 @@ BUILD_PATH_POSTFIXE = FreeMedForms
 # <fmfcoreplugin/...>
 include(../coreplugin/common_core.pri)
 DEFINES += FREEMEDFORMS
+with-pad { DEFINES += WITH_PAD }
 
 # specific derivative files
 HEADERS += coreplugin.h \

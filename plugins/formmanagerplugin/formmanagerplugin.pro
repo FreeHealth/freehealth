@@ -2,6 +2,7 @@ TEMPLATE = lib
 TARGET = FormManager
 
 DEFINES += FORMMANAGER_LIBRARY
+with-pad { DEFINES += WITH_PAD }
 
 BUILD_PATH_POSTFIXE = FreeMedForms
 

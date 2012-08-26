@@ -101,13 +101,13 @@ int ZCALLBACK qiodevice_seek_file_func (
     int ret;
     switch (origin)
     {
-    case ZLIB_FILEFUNC_SEEK_CUR :
+    case ZLIB_FILEFUNC_SEEK_CUR:
         qiodevice_seek_result = ((QIODevice*)stream)->pos() + offset;
         break;
-    case ZLIB_FILEFUNC_SEEK_END :
+    case ZLIB_FILEFUNC_SEEK_END:
         qiodevice_seek_result = ((QIODevice*)stream)->size() - offset;
         break;
-    case ZLIB_FILEFUNC_SEEK_SET :
+    case ZLIB_FILEFUNC_SEEK_SET:
         qiodevice_seek_result = offset;
         break;
     default: return -1;
