@@ -51,14 +51,6 @@
 <context>
     <name>PadTools::PadWriter</name>
     <message>
-        <source>Next block</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Previous block</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Unexpected &apos;%1&apos; found at pos %2</source>
         <translation type="unfinished"></translation>
     </message>
@@ -101,15 +93,15 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Conditionnal texts</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Before</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>After</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Conditional texts</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -132,14 +124,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Inside conditionnal before text</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Inside conditionnal after text</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Before the token</source>
         <translation type="unfinished"></translation>
     </message>
@@ -149,6 +133,14 @@
     </message>
     <message>
         <source>Nested token</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Inside conditional before text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Inside conditional after text</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

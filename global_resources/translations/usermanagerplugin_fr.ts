@@ -93,8 +93,8 @@
 <context>
     <name>UserPlugin::Internal::DefaultUserContactPage</name>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/defautuserviewerpages.cpp" line="263"/>
-        <location filename="../../plugins/usermanagerplugin/widgets/defautuserviewerpages.cpp" line="273"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/defautuserviewerpages.cpp" line="268"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/defautuserviewerpages.cpp" line="278"/>
         <source>Contact</source>
         <translation>Contact</translation>
     </message>
@@ -135,22 +135,22 @@ Dernière connexion : %2</translation>
 <context>
     <name>UserPlugin::Internal::DefaultUserPapersPage</name>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/defautuserviewerpages.cpp" line="598"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/defautuserviewerpages.cpp" line="618"/>
         <source>Generic papers</source>
         <translation>Documents génériques</translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/defautuserviewerpages.cpp" line="599"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/defautuserviewerpages.cpp" line="619"/>
         <source>Administrative papers</source>
         <translation>Documents administratifs</translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/defautuserviewerpages.cpp" line="600"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/defautuserviewerpages.cpp" line="620"/>
         <source>Prescription papers</source>
         <translation>Documents pour les prescriptions</translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/defautuserviewerpages.cpp" line="607"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/defautuserviewerpages.cpp" line="627"/>
         <source>Documents</source>
         <translation></translation>
     </message>
@@ -158,8 +158,8 @@ Dernière connexion : %2</translation>
 <context>
     <name>UserPlugin::Internal::DefaultUserProfessionalPage</name>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/defautuserviewerpages.cpp" line="359"/>
         <location filename="../../plugins/usermanagerplugin/widgets/defautuserviewerpages.cpp" line="369"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/defautuserviewerpages.cpp" line="379"/>
         <source>Professional identifiers</source>
         <translation>Identifiants professionnels</translation>
     </message>

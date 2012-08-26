@@ -96,8 +96,8 @@
 <context>
     <name>UserPlugin::Internal::DefaultUserContactPage</name>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/defautuserviewerpages.cpp" line="263"/>
-        <location filename="../../plugins/usermanagerplugin/widgets/defautuserviewerpages.cpp" line="273"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/defautuserviewerpages.cpp" line="268"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/defautuserviewerpages.cpp" line="278"/>
         <source>Contact</source>
         <translation>Contacto</translation>
     </message>
@@ -138,22 +138,22 @@ Last connection: %2</source>
 <context>
     <name>UserPlugin::Internal::DefaultUserPapersPage</name>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/defautuserviewerpages.cpp" line="598"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/defautuserviewerpages.cpp" line="618"/>
         <source>Generic papers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/defautuserviewerpages.cpp" line="599"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/defautuserviewerpages.cpp" line="619"/>
         <source>Administrative papers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/defautuserviewerpages.cpp" line="600"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/defautuserviewerpages.cpp" line="620"/>
         <source>Prescription papers</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/defautuserviewerpages.cpp" line="607"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/defautuserviewerpages.cpp" line="627"/>
         <source>Documents</source>
         <translation type="unfinished"></translation>
     </message>
@@ -161,8 +161,8 @@ Last connection: %2</source>
 <context>
     <name>UserPlugin::Internal::DefaultUserProfessionalPage</name>
     <message>
-        <location filename="../../plugins/usermanagerplugin/widgets/defautuserviewerpages.cpp" line="359"/>
         <location filename="../../plugins/usermanagerplugin/widgets/defautuserviewerpages.cpp" line="369"/>
+        <location filename="../../plugins/usermanagerplugin/widgets/defautuserviewerpages.cpp" line="379"/>
         <source>Professional identifiers</source>
         <translation type="unfinished"></translation>
     </message>
@@ -489,12 +489,12 @@ Application will stop.</source>
     <message>
         <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="132"/>
         <source>Please wait</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Aguarde por favor</translation>
     </message>
     <message>
         <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="175"/>
         <source>User is not identified.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Usuario no identificado.</translation>
     </message>
     <message>
         <location filename="../../plugins/usermanagerplugin/usermanagerplugin.cpp" line="266"/>
@@ -580,7 +580,7 @@ Application will stop.</source>
     <message>
         <location filename="../../plugins/usermanagerplugin/widgets/userpassworddialog.ui" line="14"/>
         <source>Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Diálogo</translation>
     </message>
     <message>
         <location filename="../../plugins/usermanagerplugin/widgets/userpassworddialog.ui" line="32"/>
@@ -767,7 +767,7 @@ Application will stop.</source>
     <message>
         <location filename="../../plugins/usermanagerplugin/widgets/userviewer_identity.ui" line="105"/>
         <source>Identity</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Identidad</translation>
     </message>
     <message>
         <location filename="../../plugins/usermanagerplugin/widgets/userviewer_identity.ui" line="111"/>
@@ -931,17 +931,7 @@ Application will stop.</source>
 <context>
     <name>UserPlugin::UserCreationPage</name>
     <message>
-        <location filename="../../plugins/usermanagerplugin/userfistrunpage.cpp" line="98"/>
-        <source>Processing user database</source>
-        <translation>Procesando base de datos de usuario</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/usermanagerplugin/userfistrunpage.cpp" line="98"/>
-        <source>Please wait</source>
-        <translation>Aguarde por favor</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/usermanagerplugin/userfistrunpage.cpp" line="154"/>
+        <location filename="../../plugins/usermanagerplugin/userfistrunpage.cpp" line="146"/>
         <source>You can use the full user manager dialog to create user or create simple users using the user wizard.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -966,12 +956,12 @@ Application will stop.</source>
     <message>
         <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="514"/>
         <source>Contact</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Contacto</translation>
     </message>
     <message>
         <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="518"/>
         <source>City</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Ciudad</translation>
     </message>
     <message>
         <location filename="../../plugins/usermanagerplugin/widgets/userwizard.cpp" line="519"/>

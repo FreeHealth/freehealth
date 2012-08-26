@@ -284,29 +284,29 @@ default agenda duration time (in minutes)</extracomment>
 <context>
     <name>Agenda::Internal::UserCalendarWizardPage</name>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.cpp" line="125"/>
+        <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.cpp" line="130"/>
         <source>Please specify a label for this agenda.</source>
         <translation>Bitte geben Sie eine Bezeichnung für diese Agenda an.</translation>
     </message>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.cpp" line="128"/>
+        <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.cpp" line="133"/>
         <source>The default duration can not be null.</source>
         <translatorcomment>???&quot;null&quot; maybe should be in &lt;i&gt; or &quot;</translatorcomment>
         <translation>Die Standarddauer kann nicht &lt;i&gt;Null&lt;/i&gt; sein.</translation>
     </message>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.cpp" line="131"/>
+        <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.cpp" line="136"/>
         <source>Error detected</source>
         <translation>Fehler gefunden</translation>
     </message>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.cpp" line="141"/>
+        <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.cpp" line="146"/>
         <source>Manage an agenda.</source>
         <translatorcomment>??? why a &quot;.&quot; at the end? Maybe without &quot;an&quot;</translatorcomment>
         <translation>Eine Agenda verwalten.</translation>
     </message>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.cpp" line="142"/>
+        <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.cpp" line="147"/>
         <source>You can quickly define an agenda for this user. This agenda will be the default one.</source>
         <translation>Sie können schnell eine Agenda für diesen Benutzer definieren. Diese Agenda wird dann die Standard-Agenda.</translation>
     </message>

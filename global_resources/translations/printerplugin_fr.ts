@@ -191,7 +191,7 @@
 <context>
     <name>Print::Internal::PrinterPreferencesWidget</name>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="123"/>
+        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="124"/>
         <source>WARNING !
 No configurated printer found on your system.
 Printing and print preview should not work at all.
@@ -205,17 +205,17 @@ Veuillez configurer une imprimante.
 Référez-vous à la documentation de votre système d&apos;exploitation.</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="151"/>
+        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="152"/>
         <source>Always use system&apos;s default printer</source>
         <translation>Toujours utiliser l&apos;imprimante système par défaut</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="155"/>
+        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="156"/>
         <source>Always ask user for the printer</source>
         <translation>Toujours demander à l&apos;utilisateur</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="226"/>
+        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="227"/>
         <source>Select a directory</source>
         <translation>Sélectionnez un répertoire</translation>
     </message>

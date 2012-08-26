@@ -111,72 +111,72 @@
 <context>
     <name>Patients::IdentityWidget</name>
     <message>
-        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="321"/>
-        <source>born on</source>
+        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="304"/>
+        <source>%1; born on %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="335"/>
+        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="322"/>
         <source>You must specify a birthname.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="336"/>
+        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="323"/>
         <source>You can not create a patient without a birthname</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="337"/>
+        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="324"/>
         <source>No birthname</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="341"/>
+        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="328"/>
         <source>You must specify a first name.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="342"/>
+        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="329"/>
         <source>You can not create a patient without a first name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="343"/>
+        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="330"/>
         <source>No firstname</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="347"/>
+        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="334"/>
         <source>You must specify a date of birth.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="348"/>
+        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="335"/>
         <source>You can not create a patient without a date of birth</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="349"/>
+        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="336"/>
         <source>No date of birth</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="353"/>
+        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="340"/>
         <source>You must specify a gender.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="354"/>
+        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="341"/>
         <source>You can not create a patient without a gender</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="355"/>
+        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="342"/>
         <source>No gender</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="513"/>
+        <location filename="../../plugins/patientbaseplugin/identitywidget.cpp" line="523"/>
         <source>Choose a photo</source>
         <translation type="unfinished"></translation>
     </message>
@@ -189,12 +189,42 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/identityviewer.ui" line="148"/>
+        <location filename="../../plugins/patientbaseplugin/identityviewer.ui" line="42"/>
+        <source>photo</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/patientbaseplugin/identityviewer.ui" line="88"/>
+        <source>Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/patientbaseplugin/identityviewer.ui" line="107"/>
+        <source>sex</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/patientbaseplugin/identityviewer.ui" line="126"/>
+        <source>age &amp; DOB</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/patientbaseplugin/identityviewer.ui" line="154"/>
         <source>Address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/patientbaseplugin/identityviewer.ui" line="171"/>
+        <location filename="../../plugins/patientbaseplugin/identityviewer.ui" line="160"/>
+        <source>fulladdress1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/patientbaseplugin/identityviewer.ui" line="167"/>
+        <source>fulladdress2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/patientbaseplugin/identityviewer.ui" line="177"/>
         <source>Contact</source>
         <translation type="unfinished"></translation>
     </message>

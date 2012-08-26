@@ -2177,10 +2177,6 @@ Emplacement : %2</translation>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>User datas</source>
-        <translation type="obsolete">Données de l&apos;utilisateur</translation>
-    </message>
-    <message>
         <location filename="../../libs/translationutils/trans_user.h" line="57"/>
         <source>Enter MySQL administrator login</source>
         <translation type="unfinished"></translation>

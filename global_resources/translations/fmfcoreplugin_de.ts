@@ -238,7 +238,7 @@ Please check that this host contains a FreeMedForms server configuration.</sourc
     <name>Core::Internal::BuildAboutPage</name>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/commonaboutpages.h" line="43"/>
-        <source>4. Build information</source>
+        <source>Build information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -325,12 +325,12 @@ Using Url: %1
 <context>
     <name>Core::Internal::LicenseAboutPage</name>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/commonaboutpages.h" line="57"/>
-        <source>3. License</source>
+        <location filename="../../plugins/coreplugin/dialogs/commonaboutpages.h" line="58"/>
+        <source>License</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/commonaboutpages.h" line="58"/>
+        <location filename="../../plugins/coreplugin/dialogs/commonaboutpages.h" line="59"/>
         <source>Application</source>
         <translation type="unfinished"></translation>
     </message>
@@ -452,8 +452,8 @@ Using Url: %1
 <context>
     <name>Core::Internal::SettingDebugPage</name>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/commondebugpages.h" line="78"/>
-        <location filename="../../plugins/coreplugin/dialogs/commondebugpages.h" line="79"/>
+        <location filename="../../plugins/coreplugin/dialogs/commondebugpages.h" line="80"/>
+        <location filename="../../plugins/coreplugin/dialogs/commondebugpages.h" line="81"/>
         <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
@@ -839,12 +839,12 @@ Using Url: %1
 <context>
     <name>Core::Internal::TeamAboutPage</name>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/commonaboutpages.h" line="71"/>
-        <source>2. Team</source>
+        <location filename="../../plugins/coreplugin/dialogs/commonaboutpages.h" line="73"/>
+        <source>Team</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/commonaboutpages.h" line="72"/>
+        <location filename="../../plugins/coreplugin/dialogs/commonaboutpages.h" line="74"/>
         <source>Application</source>
         <translation type="unfinished"></translation>
     </message>
@@ -868,7 +868,7 @@ Using Url: %1
 <context>
     <name>Core::PageWidget</name>
     <message>
-        <location filename="../../plugins/coreplugin/dialogs/pagewidget.cpp" line="348"/>
+        <location filename="../../plugins/coreplugin/dialogs/pagewidget.cpp" line="351"/>
         <source>Full view</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1061,6 +1061,18 @@ Please check out the log files and contact your administrator.</source>
     <message>
         <location filename="../../plugins/coreplugin/constants.h" line="45"/>
         <source>FreeMedForms Forms File (*.xml)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/coreplugin/ipatient.cpp" line="57"/>
+        <source>This token namespace contains all patient&apos;s related tokens.
+It does include the form&apos;s extracted token (when forms use &apos;patientDataRepresentation&apos;),
+but does not contains all other form items.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/coreplugin/iuser.cpp" line="56"/>
+        <source>This token namespace contains all user&apos;s related tokens.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

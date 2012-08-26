@@ -277,27 +277,27 @@ default agenda duration time (in minutes)</extracomment>
 <context>
     <name>Agenda::Internal::UserCalendarWizardPage</name>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.cpp" line="125"/>
+        <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.cpp" line="130"/>
         <source>Please specify a label for this agenda.</source>
         <translation type="unfinished">Por favor especifique una etiqueta para esta agenda.</translation>
     </message>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.cpp" line="128"/>
+        <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.cpp" line="133"/>
         <source>The default duration can not be null.</source>
         <translation type="unfinished">La duracion por defecto no puede ser cero.</translation>
     </message>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.cpp" line="131"/>
+        <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.cpp" line="136"/>
         <source>Error detected</source>
         <translation type="unfinished">Se detecto un error</translation>
     </message>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.cpp" line="141"/>
+        <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.cpp" line="146"/>
         <source>Manage an agenda.</source>
         <translation type="unfinished">Manejar una agenda.</translation>
     </message>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.cpp" line="142"/>
+        <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.cpp" line="147"/>
         <source>You can quickly define an agenda for this user. This agenda will be the default one.</source>
         <translation type="unfinished">Usted puede definir una agenda para este usuario. Esta agenda sera usada por defecto.</translation>
     </message>

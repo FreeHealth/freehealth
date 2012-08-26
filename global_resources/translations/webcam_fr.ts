@@ -43,21 +43,26 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/webcamplugin/webcamdialog.cpp" line="77"/>
+        <location filename="../../plugins/webcamplugin/webcamdialog.cpp" line="76"/>
         <source>Take a picture from your webcam</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/webcamplugin/webcamdialog.cpp" line="80"/>
-        <location filename="../../plugins/webcamplugin/webcamdialog.cpp" line="129"/>
-        <location filename="../../plugins/webcamplugin/webcamdialog.cpp" line="167"/>
+        <location filename="../../plugins/webcamplugin/webcamdialog.cpp" line="79"/>
+        <location filename="../../plugins/webcamplugin/webcamdialog.cpp" line="124"/>
+        <location filename="../../plugins/webcamplugin/webcamdialog.cpp" line="154"/>
         <source>Freeze</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/webcamplugin/webcamdialog.cpp" line="126"/>
-        <location filename="../../plugins/webcamplugin/webcamdialog.cpp" line="165"/>
+        <location filename="../../plugins/webcamplugin/webcamdialog.cpp" line="121"/>
+        <location filename="../../plugins/webcamplugin/webcamdialog.cpp" line="152"/>
         <source>Unfreeze</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/webcamplugin/webcamdialog.cpp" line="131"/>
+        <source>Photo %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

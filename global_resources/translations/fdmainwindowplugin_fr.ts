@@ -103,37 +103,37 @@
         <translation>Ouverture du fichier d&apos;échange...</translation>
     </message>
     <message>
-        <location filename="../../freediams/plugins/mainwindowplugin/mainwindow.cpp" line="751"/>
+        <location filename="../../freediams/plugins/mainwindowplugin/mainwindow.cpp" line="750"/>
         <source>Save actual prescription?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freediams/plugins/mainwindowplugin/mainwindow.cpp" line="752"/>
+        <location filename="../../freediams/plugins/mainwindowplugin/mainwindow.cpp" line="751"/>
         <source>The actual prescription is not empty. Do you want to save it before creating a new one?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freediams/plugins/mainwindowplugin/mainwindow.cpp" line="856"/>
+        <location filename="../../freediams/plugins/mainwindowplugin/mainwindow.cpp" line="853"/>
         <source>Opening a prescription : merge or replace?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freediams/plugins/mainwindowplugin/mainwindow.cpp" line="857"/>
+        <location filename="../../freediams/plugins/mainwindowplugin/mainwindow.cpp" line="854"/>
         <source>There is a prescription inside editor, do you to replace it or to add the opened prescription?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freediams/plugins/mainwindowplugin/mainwindow.cpp" line="858"/>
+        <location filename="../../freediams/plugins/mainwindowplugin/mainwindow.cpp" line="855"/>
         <source>Replace prescription</source>
         <translation>Remplacer la prescription</translation>
     </message>
     <message>
-        <location filename="../../freediams/plugins/mainwindowplugin/mainwindow.cpp" line="858"/>
+        <location filename="../../freediams/plugins/mainwindowplugin/mainwindow.cpp" line="855"/>
         <source>Add to prescription</source>
         <translation>Ajouter à la prescription</translation>
     </message>
     <message>
-        <location filename="../../freediams/plugins/mainwindowplugin/mainwindow.cpp" line="859"/>
+        <location filename="../../freediams/plugins/mainwindowplugin/mainwindow.cpp" line="856"/>
         <source>Open a prescription</source>
         <translation>Ouvrerture d&apos;une prescription</translation>
     </message>

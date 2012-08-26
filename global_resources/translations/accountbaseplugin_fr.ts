@@ -4,52 +4,52 @@
 <context>
     <name>Account</name>
     <message>
-        <location filename="../../plugins/accountbaseplugin/constants.h" line="331"/>
+        <location filename="../../plugins/accountbaseplugin/constants.h" line="332"/>
         <source>Account book</source>
         <translation>Livre des comptes</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountbaseplugin/constants.h" line="332"/>
+        <location filename="../../plugins/accountbaseplugin/constants.h" line="333"/>
         <source>Revenues</source>
         <translation>Revenus</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountbaseplugin/constants.h" line="333"/>
+        <location filename="../../plugins/accountbaseplugin/constants.h" line="334"/>
         <source>Expenses</source>
         <translation>Dépenses</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountbaseplugin/constants.h" line="335"/>
+        <location filename="../../plugins/accountbaseplugin/constants.h" line="336"/>
         <source>Cash</source>
         <translation>Cash</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountbaseplugin/constants.h" line="336"/>
+        <location filename="../../plugins/accountbaseplugin/constants.h" line="337"/>
         <source>Cheques</source>
         <translation>Chèques</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountbaseplugin/constants.h" line="339"/>
+        <location filename="../../plugins/accountbaseplugin/constants.h" line="340"/>
         <source>VISA</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../../plugins/accountbaseplugin/constants.h" line="340"/>
+        <location filename="../../plugins/accountbaseplugin/constants.h" line="341"/>
         <source>Money</source>
         <translation>Espèce</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountbaseplugin/constants.h" line="341"/>
+        <location filename="../../plugins/accountbaseplugin/constants.h" line="342"/>
         <source>Due</source>
         <translation>Due</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountbaseplugin/constants.h" line="342"/>
+        <location filename="../../plugins/accountbaseplugin/constants.h" line="343"/>
         <source>Insurance</source>
         <translation>Assurance</translation>
     </message>
     <message>
-        <location filename="../../plugins/accountbaseplugin/constants.h" line="343"/>
+        <location filename="../../plugins/accountbaseplugin/constants.h" line="344"/>
         <source>Other</source>
         <translation>Autre</translation>
     </message>
