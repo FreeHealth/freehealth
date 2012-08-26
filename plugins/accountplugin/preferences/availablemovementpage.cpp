@@ -123,11 +123,11 @@ AvailableMovementWidget::AvailableMovementWidget(QWidget *parent) :
     taxDeductibilityComboBox->addItem(tkTr(Trans::Constants::YES));//1
     addButton->setIcon(theme()->icon(Core::Constants::ICONADD));
     removeButton->setIcon(theme()->icon(Core::Constants::ICONREMOVE));
-    QString add = trUtf8("Add");
-    QString less = trUtf8("Less");
+    QString add = tr("Add");
+    QString less = tr("Less");
     typeComboBox->addItem(theme()->icon(Core::Constants::ICONADD),less);
     typeComboBox->addItem(theme()->icon(Core::Constants::ICONADD),add);
-    m_completionList << trUtf8("Receipts");
+    m_completionList << tr("Receipts");
 }
 
 AvailableMovementWidget::~AvailableMovementWidget()

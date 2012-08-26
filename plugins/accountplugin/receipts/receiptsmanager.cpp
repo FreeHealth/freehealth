@@ -368,7 +368,7 @@ QHash<QString,QString> ReceiptsManager::getPreferentialActFromThesaurus(const QS
     	data = "NULL";
     	value = 0.00;
     	hash.insert(data,QString::number(value));
-        const QString information = trUtf8("You have to create a preferred value in Thesaurus.");
+        const QString information = tr("You have to create a preferred value in Thesaurus.");
         Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), information);
     }
     return hash;
@@ -585,7 +585,7 @@ QStringList ReceiptsManager::getChoiceFromCategories(QString & categoriesItem){
         QSqlQuery q(db);
         if(!q.exec(req)){
            LOG_QUERY_ERROR(q);
-           listOfItems << trUtf8("Error");
+           listOfItems << tr("Error");
            }
         while(q.next()){
             QString name = q.value(0).toString();

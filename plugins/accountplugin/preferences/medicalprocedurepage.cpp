@@ -144,8 +144,8 @@ MedicalProcedureWidget::MedicalProcedureWidget(QWidget *parent) :
     
     //fill alphabet combo
     QStringList listOfAlphabet;
-    //QString alphabet = trUtf8("abcdefghijklmnopqrstuvwxyz");
-    QString alphabet = trUtf8("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
+    //QString alphabet = tr("abcdefghijklmnopqrstuvwxyz");
+    QString alphabet = tr("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
     for (int i = 0; i < alphabet.size(); i += 1)
     {
     	QString letter = alphabet.mid(i,1);
@@ -153,7 +153,7 @@ MedicalProcedureWidget::MedicalProcedureWidget(QWidget *parent) :
         }
     alphabetBox->addItems(listOfAlphabet);
     
-    const QString insuranceInfo = trUtf8("Insurances are created in another preference widget.");
+    const QString insuranceInfo = tr("Insurances are created in another preference widget.");
     insuranceBox->setToolTip(insuranceInfo);
     
     /*const QString filterMaxNumber = QString("%1 < '%2'").arg("MP_ID","10");
@@ -532,7 +532,7 @@ QHash<int,QString> MedicalProcedureWidget::fillHashOfInsurances(){
 //void MedicalProcedureWidget::createDefaultMedicalProcedures()
 //{
 //    int max = numberOfLinesForProgressBar();
-//    m_progressDialog = new QProgressDialog(trUtf8("Wait ..."),trUtf8("Abort"),0,max,this);
+//    m_progressDialog = new QProgressDialog(tr("Wait ..."), tr("Abort"),0,max,this);
 //    m_progressDialog->setWindowModality(Qt::WindowModal);
 //    m_progressDialog->setAutoReset(true);
 //    m_progressDialog->setAutoClose(true);

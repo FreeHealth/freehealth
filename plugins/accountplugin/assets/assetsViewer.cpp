@@ -94,18 +94,18 @@ void AssetsViewer::showAssets()
     AssetModel * model = mov.getModelAssets();
 
     // TODO: move header naming into the model
-    model->setHeaderData(ASSETS_ACCOUNT_ID,Qt::Horizontal,trUtf8("Account id"));
-    model->setHeaderData(ASSETS_LABEL,Qt::Horizontal,trUtf8("Label"));
-    model->setHeaderData(ASSETS_DATE,Qt::Horizontal,trUtf8("Date"));
-    model->setHeaderData(ASSETS_DURATION,Qt::Horizontal,trUtf8("Duration"));
-    model->setHeaderData(ASSETS_MODE,Qt::Horizontal,trUtf8("Mode"));
-    model->setHeaderData(ASSETS_VALUE,Qt::Horizontal,trUtf8("Value"));
-    model->setHeaderData(ASSETS_YEARLY_RESULT,Qt::Horizontal,trUtf8("Yearly value"));
-    model->setHeaderData(ASSETS_RESIDUAL_VALUE,Qt::Horizontal,trUtf8("Residual value"));
-    model->setHeaderData(ASSETS_YEARS,Qt::Horizontal,trUtf8("Years to run"));
-    model->setHeaderData(ASSETS_RATE,Qt::Horizontal,trUtf8("Rate"));
-    model->setHeaderData(ASSETS_MOVEMENT,Qt::Horizontal,trUtf8("Movement"));
-    model->setHeaderData(ASSETS_COMMENT,Qt::Horizontal,trUtf8("Comment"));
+    model->setHeaderData(ASSETS_ACCOUNT_ID,Qt::Horizontal, tr("Account id"));
+    model->setHeaderData(ASSETS_LABEL,Qt::Horizontal, tr("Label"));
+    model->setHeaderData(ASSETS_DATE,Qt::Horizontal, tr("Date"));
+    model->setHeaderData(ASSETS_DURATION,Qt::Horizontal, tr("Duration"));
+    model->setHeaderData(ASSETS_MODE,Qt::Horizontal, tr("Mode"));
+    model->setHeaderData(ASSETS_VALUE,Qt::Horizontal, tr("Value"));
+    model->setHeaderData(ASSETS_YEARLY_RESULT,Qt::Horizontal, tr("Yearly value"));
+    model->setHeaderData(ASSETS_RESIDUAL_VALUE,Qt::Horizontal, tr("Residual value"));
+    model->setHeaderData(ASSETS_YEARS,Qt::Horizontal, tr("Years to run"));
+    model->setHeaderData(ASSETS_RATE,Qt::Horizontal, tr("Rate"));
+    model->setHeaderData(ASSETS_MOVEMENT,Qt::Horizontal, tr("Movement"));
+    model->setHeaderData(ASSETS_COMMENT,Qt::Horizontal, tr("Comment"));
     ui->tableView->setModel(model);
     ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
     ui->tableView->setSelectionMode(QAbstractItemView::SingleSelection);
@@ -150,7 +150,7 @@ void AssetsViewer::recordAsset(){
 
     int avMovIdForAsset = -2;
     int type = SPENDING;
-    QString labelMov = trUtf8("Fixed Asset");
+    QString labelMov = tr("Fixed Asset");
     int validity = 0;
     int isValid = 1;
     QString traceMov = QString();

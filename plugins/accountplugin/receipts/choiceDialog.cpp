@@ -58,8 +58,8 @@ using namespace Tools;
 static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
 
 treeViewsActions::treeViewsActions(QWidget *parent):QTreeView(parent){
-    m_deleteThesaurusValue = new QAction(trUtf8("Delete value"),this);
-    m_choosepreferredValue = new QAction(trUtf8("Choose value as preferred"),this);
+    m_deleteThesaurusValue = new QAction(tr("Delete value"),this);
+    m_choosepreferredValue = new QAction(tr("Choose value as preferred"),this);
     connect(m_choosepreferredValue,SIGNAL(triggered(bool)),this,SLOT(choosepreferredValue(bool)));
     connect(m_deleteThesaurusValue,SIGNAL(triggered(bool)),this,SLOT(deleteBox(bool)));
     }
@@ -313,9 +313,9 @@ choiceDialog::choiceDialog(QWidget * parent,bool roundtrip, bool freevalue, QStr
     QModelIndex indexDebtor = m_actionTreeView->indexWithItem(treeViewsActions::DEBTOR);
     m_actionTreeView->expand(indexDebtor);
     //preferential choices in the tree view.
-    QString site = trUtf8("Sites");
-    QString distRule = trUtf8("Distance rules");
-    QString debtor = trUtf8("Debtor");
+    QString site = tr("Sites");
+    QString distRule = tr("Distance rules");
+    QString debtor = tr("Debtor");
     m_siteUid = firstItemchosenAsPreferential(site);
     m_distanceRuleValue = firstItemchosenAsPreferential(distRule).toDouble();
     m_distanceRuleType = manager.getpreferredDistanceRule().toString();
@@ -518,15 +518,15 @@ QVariant choiceDialog::firstItemchosenAsPreferential(QString & item)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " item =" << item ;
     QVariant variantValue = QVariant("No item");
     ReceiptsManager manager;
-    if (item == trUtf8("Distance rules"))
+    if (item == tr("Distance rules"))
     {
     	  variantValue = manager.m_preferredDistanceValue;
         }
-    if (item == trUtf8("Sites"))
+    if (item == tr("Sites"))
     {
     	  variantValue = manager.m_preferredSite;
         }
-    if (item== trUtf8("Debtor"))
+    if (item== tr("Debtor"))
     {
     	  variantValue = manager.m_preferredInsurance;
         }

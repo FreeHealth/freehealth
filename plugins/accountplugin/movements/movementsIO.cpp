@@ -391,7 +391,7 @@ bool MovementsIODb::debitOrCreditInBankBalance(const QString & bank, double & va
 bool MovementsIODb::containsFixAsset(int & row){
     bool ret = false;
     QString assetStr = m_modelMovements->data(m_modelMovements->index(row,MOV_LABEL),Qt::DisplayRole).toString();
-    if (assetStr == trUtf8("Fixed Asset"))
+    if (assetStr == tr("Fixed Asset"))
     {
     	  qWarning() << __FILE__ << QString::number(__LINE__) << "You try to delete an asset in movements !" ;
     	  ret = true;

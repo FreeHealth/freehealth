@@ -138,7 +138,7 @@ void AccountMode::modeActivated(Core::IMode *mode)
         int b = Utils::withButtonsMessageBox(tkTr(Trans::Constants::ACCOUNTANCY),
                                              firstExplanationText,
                                              detail,
-                                             QStringList() << tr("Ok") << trUtf8("Do not show this message again"),
+                                             QStringList() << tr("Ok") << tr("Do not show this message again"),
                                              tkTr(Trans::Constants::ACCOUNTANCY), false);
 
         if (b==1) { // Don't show again

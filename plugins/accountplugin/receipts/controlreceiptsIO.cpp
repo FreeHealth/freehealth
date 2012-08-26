@@ -75,7 +75,7 @@ ControlReceipts::ControlReceipts(QWidget * parent):QWidget(parent),ui(new Ui::Co
     ui->resultLabel->setWordWrap(true);
     m_accountModel = new AccountModel(this);
     m_userUuid = m_accountModel->getUserUuid();
-    m_typeOfMoney = trUtf8("Euros");
+    m_typeOfMoney = tr("Euros");
     ui->beginDateEdit->setDate(QDate::currentDate());
     ui->endDateEdit->setDate(QDate::currentDate());
     ui->searchButton->setShortcut(QKeySequence::InsertParagraphSeparator);
@@ -98,7 +98,7 @@ ControlReceipts::~ControlReceipts()
 void ControlReceipts::resizeControlReceipts(QWidget * parent){
     int h = parent->height();
     int w = parent->width();
-    resize(w,h);    
+    resize(w,h);
 }
 
 void ControlReceipts::search(){
@@ -118,18 +118,18 @@ void ControlReceipts::search(){
     m_accountModel->setFilter(filter);
     while (m_accountModel->canFetchMore())
     {
-    	  m_accountModel->fetchMore();
+          m_accountModel->fetchMore();
         }
     if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " filter =" << m_accountModel->filter() ;
+              qDebug() << __FILE__ << QString::number(__LINE__) << " filter =" << m_accountModel->filter() ;
     if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount =" << QString::number(m_accountModel->rowCount()) ;
+              qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount =" << QString::number(m_accountModel->rowCount()) ;
         QAbstractItemModel * lastModel = ui->tableView->model();
     if (lastModel)
     {
-    	  delete lastModel;
+          delete lastModel;
         }
-    
+
     ui->tableView->setModel(m_accountModel);
     ui->tableView->setShowGrid(false);
     ui->tableView->setColumnHidden(ACCOUNT_ID,true);
@@ -173,7 +173,7 @@ void ControlReceipts::deleteLine(){
   coloringDoubles();
           search();
   /*if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " filter =" << filter ;
+              qDebug() << __FILE__ << QString::number(__LINE__) << " filter =" << filter ;
   refreshFilter(filter);*/
 }
 
@@ -190,7 +190,7 @@ QString ControlReceipts::textOfSums(AccountModel * model){
     double totals = 0.00;
    int modelRowCount = model->rowCount(QModelIndex());
    if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " modelRowCount = " << QString::number(modelRowCount);
+              qDebug() << __FILE__ << QString::number(__LINE__) << " modelRowCount = " << QString::number(modelRowCount);
    for(int i = 0; i < modelRowCount ; i ++){
        QSqlRecord rowRecord = model->record(i);//ligne d'enregistrement
        QString c  = rowRecord.value(ACCOUNT_CASHAMOUNT).toString();
@@ -204,11 +204,11 @@ QString ControlReceipts::textOfSums(AccountModel * model){
        if (c.toDouble() == 0.0 || ch.toDouble() == 0.0 || v.toDouble() == 0.0 || b.toDouble() == 0.0
            || o.toDouble() == 0.0 || d.toDouble() == 0.0)
        {
-       	   foreach(QString s,list){
-       	       s.replace(",",QLocale::c().decimalPoint ());
-       	       s.replace(".",QLocale::c().decimalPoint ());
-       	       }
-       	   
+           foreach(QString s,list){
+               s.replace(",",QLocale::c().decimalPoint ());
+               s.replace(".",QLocale::c().decimalPoint ());
+               }
+
            }
        cash  += list[ReceiptsConstants::Cash].toDouble();
        chq  += list[ReceiptsConstants::Check].toDouble();
@@ -219,12 +219,12 @@ QString ControlReceipts::textOfSums(AccountModel * model){
        }
     totals = cash + chq + visa + banking + other + dues;
     totalReceived = cash + chq + banking + other + visa;
-    QString cashStr = trUtf8("Cash");
-    QString chqStr = trUtf8("Chq");
-    QString visaStr = trUtf8("CB");
-    QString bankingStr = trUtf8("Banking");
-    QString otherStr = trUtf8("Others");
-    QString duesStr = trUtf8("Dues");
+    QString cashStr = tr("Cash");
+    QString chqStr = tr("Chq");
+    QString visaStr = tr("CB");
+    QString bankingStr = tr("Banking");
+    QString otherStr = tr("Others");
+    QString duesStr = tr("Dues");
     QString totStr = "<font size = 3 color = ""blue"">Totaux = </font><font size = 3 color = ""red"">"+QString::number(totals)+" "+m_typeOfMoney+" </font>  ";
     QString totReceived = "<font size = 3 color = ""blue"">Totaux reçus = </font><font size = 3 color = ""red"">"+QString::number(totalReceived)+" "+m_typeOfMoney+" </font><br/>";
     QString sumsStr = "<font size = 3 color = ""blue"">"+cashStr+" = </font><font size = 3 color = ""red"">"+QString::number(cash)+" "+m_typeOfMoney+"  </font>"+
@@ -261,7 +261,7 @@ void ControlReceipts::print(QString & html)
       QHash<QString, QVariant> tokens;
       tokens.insert(Core::Constants::TOKEN_DOCUMENTTITLE, this->windowTitle());
       p->addTokens(Core::IDocumentPrinter::Tokens_Global, tokens);
-      p->print(html);   
+      p->print(html);
 }
 
 
@@ -274,38 +274,38 @@ void ControlReceipts::coloringDoubles(){
     QList<int> listRows;
     for (int i = 0; i < rowCount; i += 1)
     {
-    	QList<QVariant> dataRow ;
+        QList<QVariant> dataRow ;
 
-    	for (int c = 1; c < columnCount; c += 1)
-    	{
-    	        QModelIndex index = m_accountModel->index(i,c,QModelIndex());
-    		dataRow << m_accountModel->data(index,Qt::DisplayRole);
-    	}
+        for (int c = 1; c < columnCount; c += 1)
+        {
+                QModelIndex index = m_accountModel->index(i,c,QModelIndex());
+            dataRow << m_accountModel->data(index,Qt::DisplayRole);
+        }
         if (WarnDebugMessage)
             qDebug() << __FILE__ << QString::number(__LINE__) << " dataRow.size =" << QString::number(dataRow.size());
-    	for (int j = i; j < rowCount ; j += 1)
-    	{
-    	           if(j!=i){
-    		    	QList<QVariant> dataAfterRow ;
-    	                for (int c = 1; c < columnCount; c += 1)
-    	                {
-    	                        QModelIndex indexAfter = m_accountModel->index(j,c,QModelIndex());
-    		                dataAfterRow += m_accountModel->data(indexAfter,Qt::DisplayRole);
-    	                }
-    	                
+        for (int j = i; j < rowCount ; j += 1)
+        {
+                   if(j!=i){
+                    QList<QVariant> dataAfterRow ;
+                        for (int c = 1; c < columnCount; c += 1)
+                        {
+                                QModelIndex indexAfter = m_accountModel->index(j,c,QModelIndex());
+                            dataAfterRow += m_accountModel->data(indexAfter,Qt::DisplayRole);
+                        }
+
                         if (WarnDebugMessage)
                             qDebug() << __FILE__ << QString::number(__LINE__) << " dataAfterRow.size =" << QString::number(dataAfterRow.size());
-    	                if (dataAfterRow == dataRow)
-    	                {
+                        if (dataAfterRow == dataRow)
+                        {
                             if (WarnDebugMessage) {
                                 qDebug() << __FILE__ << QString::number(__LINE__) << " dataAfterRow= "<< dataAfterRow;
-    	                        qDebug() << __FILE__ << QString::number(__LINE__) << QString::number(i) << QString::number(j);
+                                qDebug() << __FILE__ << QString::number(__LINE__) << QString::number(i) << QString::number(j);
                             }
                             listRows << i << j;
-    	                }
-    	                else{}
-    	           }
-    	}
+                        }
+                        else{}
+                   }
+        }
 
     }
     m_accountModel->getDoublesRows = listRows;
@@ -318,59 +318,59 @@ void ControlReceipts::coloringDoubles(){
 void ControlReceipts::refresh(){
     delete m_accountModel;
     m_accountModel = new AccountModel(this);
-    if (!m_accountModel->setHeaderData(ACCOUNT_PATIENT_NAME,Qt::Horizontal ,trUtf8("Patient") , Qt::EditRole)) {
+    if (!m_accountModel->setHeaderData(ACCOUNT_PATIENT_NAME,Qt::Horizontal , tr("Patient") , Qt::EditRole)) {
         if (WarnDebugMessage)
             qWarning() << __FILE__ << QString::number(__LINE__) << "Unable to set header data" ;
     }
-    m_accountModel->setHeaderData(ACCOUNT_DATE,Qt::Horizontal ,trUtf8("Date") , Qt::EditRole);
-    m_accountModel->setHeaderData(ACCOUNT_MEDICALPROCEDURE_TEXT,Qt::Horizontal ,trUtf8("Acts") , Qt::EditRole);
-    m_accountModel->setHeaderData(ACCOUNT_COMMENT,Qt::Horizontal ,trUtf8("Comment") , Qt::EditRole);
-    m_accountModel->setHeaderData(ACCOUNT_CASHAMOUNT,Qt::Horizontal ,trUtf8("Cash") , Qt::EditRole);
-    m_accountModel->setHeaderData(ACCOUNT_CHEQUEAMOUNT,Qt::Horizontal ,trUtf8("Checks") , Qt::EditRole);
-    m_accountModel->setHeaderData(ACCOUNT_VISAAMOUNT,Qt::Horizontal ,trUtf8("Credit card") , Qt::EditRole);
-    m_accountModel->setHeaderData(ACCOUNT_INSURANCEAMOUNT,Qt::Horizontal ,trUtf8("Insurance") , Qt::EditRole);
-    m_accountModel->setHeaderData(ACCOUNT_OTHERAMOUNT,Qt::Horizontal ,trUtf8("Other") , Qt::EditRole);
-    m_accountModel->setHeaderData(ACCOUNT_DUEAMOUNT,Qt::Horizontal ,trUtf8("Due") , Qt::EditRole);
-    m_accountModel->setHeaderData(ACCOUNT_DUEBY,Qt::Horizontal ,trUtf8("by") , Qt::EditRole);
-    m_accountModel->setHeaderData(ACCOUNT_ISVALID,Qt::Horizontal ,trUtf8("Valid") , Qt::EditRole);
+    m_accountModel->setHeaderData(ACCOUNT_DATE,Qt::Horizontal , tr("Date") , Qt::EditRole);
+    m_accountModel->setHeaderData(ACCOUNT_MEDICALPROCEDURE_TEXT,Qt::Horizontal , tr("Acts") , Qt::EditRole);
+    m_accountModel->setHeaderData(ACCOUNT_COMMENT,Qt::Horizontal , tr("Comment") , Qt::EditRole);
+    m_accountModel->setHeaderData(ACCOUNT_CASHAMOUNT,Qt::Horizontal , tr("Cash") , Qt::EditRole);
+    m_accountModel->setHeaderData(ACCOUNT_CHEQUEAMOUNT,Qt::Horizontal , tr("Checks") , Qt::EditRole);
+    m_accountModel->setHeaderData(ACCOUNT_VISAAMOUNT,Qt::Horizontal , tr("Credit card") , Qt::EditRole);
+    m_accountModel->setHeaderData(ACCOUNT_INSURANCEAMOUNT,Qt::Horizontal , tr("Insurance") , Qt::EditRole);
+    m_accountModel->setHeaderData(ACCOUNT_OTHERAMOUNT,Qt::Horizontal , tr("Other") , Qt::EditRole);
+    m_accountModel->setHeaderData(ACCOUNT_DUEAMOUNT,Qt::Horizontal , tr("Due") , Qt::EditRole);
+    m_accountModel->setHeaderData(ACCOUNT_DUEBY,Qt::Horizontal , tr("by") , Qt::EditRole);
+    m_accountModel->setHeaderData(ACCOUNT_ISVALID,Qt::Horizontal , tr("Valid") , Qt::EditRole);
     m_mapCombo.clear();
-    m_mapCombo.insert(trUtf8("Patient"),"PATIENT_NAME");
-    m_mapCombo.insert(trUtf8("Cash"),"CASH");
-    m_mapCombo.insert(trUtf8("Check"),"CHEQUE");
-    m_mapCombo.insert(trUtf8("Credit card"),"VISA");
-    m_mapCombo.insert(trUtf8("Banking"),"BANKING");
-    m_mapCombo.insert(trUtf8("Other"),"OTHER");
-    m_mapCombo.insert(trUtf8("Due"),"DUE");
-    m_mapCombo.insert(trUtf8("Due by"),"DUE_BY");
+    m_mapCombo.insert(tr("Patient"),"PATIENT_NAME");
+    m_mapCombo.insert(tr("Cash"),"CASH");
+    m_mapCombo.insert(tr("Check"),"CHEQUE");
+    m_mapCombo.insert(tr("Credit card"),"VISA");
+    m_mapCombo.insert(tr("Banking"),"BANKING");
+    m_mapCombo.insert(tr("Other"),"OTHER");
+    m_mapCombo.insert(tr("Due"),"DUE");
+    m_mapCombo.insert(tr("Due by"),"DUE_BY");
     QStringList listForCombo;
     listForCombo = m_mapCombo.keys();
-    listForCombo.prepend(trUtf8("Patient"));
+    listForCombo.prepend(tr("Patient"));
     listForCombo.removeDuplicates();
     ui->fieldComboBox->clear();
     ui->fieldComboBox->addItems(listForCombo);
-    ui->fieldComboBox->setEditText(trUtf8("Patient"));
+    ui->fieldComboBox->setEditText(tr("Patient"));
 }
 
 void ControlReceipts::refreshFilter(const QString & filter){
     delete m_accountModel;
     m_accountModel = new AccountModel(this);
     m_accountModel->setFilter(filter);
-    if (!m_accountModel->setHeaderData(ACCOUNT_PATIENT_NAME,Qt::Horizontal ,trUtf8("Patient") , Qt::EditRole))
+    if (!m_accountModel->setHeaderData(ACCOUNT_PATIENT_NAME,Qt::Horizontal , tr("Patient") , Qt::EditRole))
     {
         if (WarnDebugMessage)
             qWarning() << __FILE__ << QString::number(__LINE__) << "Unable to set header data" ;
         }
-    m_accountModel->setHeaderData(ACCOUNT_DATE,Qt::Horizontal ,trUtf8("Date") , Qt::EditRole);
-    m_accountModel->setHeaderData(ACCOUNT_MEDICALPROCEDURE_TEXT,Qt::Horizontal ,trUtf8("Acts") , Qt::EditRole);
-    m_accountModel->setHeaderData(ACCOUNT_COMMENT,Qt::Horizontal ,trUtf8("Comment") , Qt::EditRole);
-    m_accountModel->setHeaderData(ACCOUNT_CASHAMOUNT,Qt::Horizontal ,trUtf8("Cash") , Qt::EditRole);
-    m_accountModel->setHeaderData(ACCOUNT_CHEQUEAMOUNT,Qt::Horizontal ,trUtf8("Checks") , Qt::EditRole);
-    m_accountModel->setHeaderData(ACCOUNT_VISAAMOUNT,Qt::Horizontal ,trUtf8("Credit card") , Qt::EditRole);
-    m_accountModel->setHeaderData(ACCOUNT_INSURANCEAMOUNT,Qt::Horizontal ,trUtf8("Insurance") , Qt::EditRole);
-    m_accountModel->setHeaderData(ACCOUNT_OTHERAMOUNT,Qt::Horizontal ,trUtf8("Other") , Qt::EditRole);
-    m_accountModel->setHeaderData(ACCOUNT_DUEAMOUNT,Qt::Horizontal ,trUtf8("Due") , Qt::EditRole);
-    m_accountModel->setHeaderData(ACCOUNT_DUEBY,Qt::Horizontal ,trUtf8("by") , Qt::EditRole);
-    m_accountModel->setHeaderData(ACCOUNT_ISVALID,Qt::Horizontal ,trUtf8("Valid") , Qt::EditRole);
+    m_accountModel->setHeaderData(ACCOUNT_DATE,Qt::Horizontal , tr("Date"), Qt::EditRole);
+    m_accountModel->setHeaderData(ACCOUNT_MEDICALPROCEDURE_TEXT,Qt::Horizontal, tr("Acts"), Qt::EditRole);
+    m_accountModel->setHeaderData(ACCOUNT_COMMENT,Qt::Horizontal, tr("Comment"), Qt::EditRole);
+    m_accountModel->setHeaderData(ACCOUNT_CASHAMOUNT,Qt::Horizontal, tr("Cash"), Qt::EditRole);
+    m_accountModel->setHeaderData(ACCOUNT_CHEQUEAMOUNT,Qt::Horizontal, tr("Checks"), Qt::EditRole);
+    m_accountModel->setHeaderData(ACCOUNT_VISAAMOUNT,Qt::Horizontal, tr("Credit card"), Qt::EditRole);
+    m_accountModel->setHeaderData(ACCOUNT_INSURANCEAMOUNT,Qt::Horizontal, tr("Insurance"), Qt::EditRole);
+    m_accountModel->setHeaderData(ACCOUNT_OTHERAMOUNT,Qt::Horizontal, tr("Other"), Qt::EditRole);
+    m_accountModel->setHeaderData(ACCOUNT_DUEAMOUNT,Qt::Horizontal, tr("Due"), Qt::EditRole);
+    m_accountModel->setHeaderData(ACCOUNT_DUEBY,Qt::Horizontal, tr("by") , Qt::EditRole);
+    m_accountModel->setHeaderData(ACCOUNT_ISVALID,Qt::Horizontal, tr("Valid"), Qt::EditRole);
     ui->tableView->setModel(m_accountModel);
     ui->tableView->setColumnHidden(ACCOUNT_ID,true);
     ui->tableView->setColumnHidden(ACCOUNT_UID,true);
@@ -407,30 +407,30 @@ QString ControlReceipts::getHtmlDocAccordingToTableView()
     listOfSums = getListOfSums();
     QString htmlDocument = "<html><body><font size=3>";
     htmlDocument += "<TABLE BORDER=1>";
-    htmlDocument += "<CAPTION><font color = red size = 6>"+trUtf8("Extract of receipts")+"</font></CAPTION>";
+    htmlDocument += "<CAPTION><font color = red size = 6>"+tr("Extract of receipts")+"</font></CAPTION>";
     htmlDocument += "<TR>";
-    htmlDocument += "<TH><font color = blue><bold>"+trUtf8("Patient")+"</bold></font></TH>";
-    htmlDocument += "<TH><font color = blue><bold>"+trUtf8("Date")+"</bold></font></TH>";
-    htmlDocument += "<TH><font color = blue><bold>"+trUtf8("Acts")+"</bold></font></TH>";
-    htmlDocument += "<TH><font color = blue><bold>"+trUtf8("Cash")+"</bold></font></TH>";
-    htmlDocument += "<TH><font color = blue><bold>"+trUtf8("Checks")+"</bold></font></TH>";
-    htmlDocument += "<TH><font color = blue><bold>"+trUtf8("Credit Cards")+"</bold></font></TH>";
-    htmlDocument += "<TH><font color = blue><bold>"+trUtf8("Insurance")+"</bold></font></TH>";
-    htmlDocument += "<TH><font color = blue><bold>"+trUtf8("Others")+"</bold></font></TH>";
-    htmlDocument += "<TH><font color = blue><bold>"+trUtf8("Dues")+"</bold></font></TH>";
-    htmlDocument += "<TH><font color = blue><bold>"+trUtf8("Due by")+"</bold></font></TH>";
+    htmlDocument += "<TH><font color = blue><bold>"+tr("Patient")+"</bold></font></TH>";
+    htmlDocument += "<TH><font color = blue><bold>"+tr("Date")+"</bold></font></TH>";
+    htmlDocument += "<TH><font color = blue><bold>"+tr("Acts")+"</bold></font></TH>";
+    htmlDocument += "<TH><font color = blue><bold>"+tr("Cash")+"</bold></font></TH>";
+    htmlDocument += "<TH><font color = blue><bold>"+tr("Checks")+"</bold></font></TH>";
+    htmlDocument += "<TH><font color = blue><bold>"+tr("Credit Cards")+"</bold></font></TH>";
+    htmlDocument += "<TH><font color = blue><bold>"+tr("Insurance")+"</bold></font></TH>";
+    htmlDocument += "<TH><font color = blue><bold>"+tr("Others")+"</bold></font></TH>";
+    htmlDocument += "<TH><font color = blue><bold>"+tr("Dues")+"</bold></font></TH>";
+    htmlDocument += "<TH><font color = blue><bold>"+tr("Due by")+"</bold></font></TH>";
     htmlDocument += "</TR>";
-    
+
     QAbstractItemModel *model = ui->tableView->model();
     QList<int> listOfColumnsExcluded;
-    listOfColumnsExcluded << ACCOUNT_ID 
+    listOfColumnsExcluded << ACCOUNT_ID
                           << ACCOUNT_SITE_ID
                           << ACCOUNT_INSURANCE_ID
                           << ACCOUNT_MEDICALPROCEDURE_XML
                           << ACCOUNT_COMMENT
-                          << ACCOUNT_UID 
-                          << ACCOUNT_USER_UID 
-                          << ACCOUNT_PATIENT_UID 
+                          << ACCOUNT_UID
+                          << ACCOUNT_USER_UID
+                          << ACCOUNT_PATIENT_UID
                           << ACCOUNT_ISVALID
                           << ACCOUNT_TRACE ;
     QList<int> listOfHeadersNumbers;
@@ -447,46 +447,46 @@ QString ControlReceipts::getHtmlDocAccordingToTableView()
 
     for (int row = 0; row < model->rowCount(); ++row )
     {
-    	  htmlDocument += "<TR>";
-    	  for (int col = 0; col < model->columnCount() ; ++col)
-    	  {
-    	  	  
-    	  	  if (!listOfColumnsExcluded.contains(col))
-    	  	  {
-    	  	  htmlDocument += "<TD>";
-     	  	  htmlDocument += model->data(model->index(row,col),Qt::DisplayRole).toString();
-    	  	  htmlDocument += "</TD>";
+          htmlDocument += "<TR>";
+          for (int col = 0; col < model->columnCount() ; ++col)
+          {
+
+              if (!listOfColumnsExcluded.contains(col))
+              {
+              htmlDocument += "<TD>";
+              htmlDocument += model->data(model->index(row,col),Qt::DisplayRole).toString();
+              htmlDocument += "</TD>";
                   }
-    	      }
-    	  htmlDocument += "</TR>";
+              }
+          htmlDocument += "</TR>";
         }
     htmlDocument += "<TR>";
     for (int cell = 0; cell < HeadersForPrint_MaxParam; ++cell)
     {
-    	  if (cell < CASH_HEADER || cell > DUE_HEADER)
-    	  {
-    	  	  if (cell == ACTS_HEADER)
-    	  	  {
-    	  	     htmlDocument += "<TD>";
-    	  	     htmlDocument+= trUtf8("TOTAL");
-    	  	     htmlDocument += "</TD>";
-    	  	      }
-    	  	  else
-    	  	  {
-    	  	      htmlDocument += "<TD>";
-    	  	      htmlDocument+= "";
-    	  	      htmlDocument += "</TD>";
-    	  	      }
-    	  	  
-    	      }
-    	  else
-    	  {
-    	  	  htmlDocument += "<TD>";
-    	  	  qDebug() << __FILE__ << QString::number(__LINE__) << " listOfSums =" << QString::number(cell-ACTS_HEADER) ;
-    	  	  htmlDocument+= listOfSums[cell-CASH_HEADER];
-    	  	  htmlDocument += "</TD>";    	  	
-    	      }
-    	  
+          if (cell < CASH_HEADER || cell > DUE_HEADER)
+          {
+              if (cell == ACTS_HEADER)
+              {
+                 htmlDocument += "<TD>";
+                 htmlDocument+= tr("TOTAL");
+                 htmlDocument += "</TD>";
+                  }
+              else
+              {
+                  htmlDocument += "<TD>";
+                  htmlDocument+= "";
+                  htmlDocument += "</TD>";
+                  }
+
+              }
+          else
+          {
+              htmlDocument += "<TD>";
+              qDebug() << __FILE__ << QString::number(__LINE__) << " listOfSums =" << QString::number(cell-ACTS_HEADER) ;
+              htmlDocument+= listOfSums[cell-CASH_HEADER];
+              htmlDocument += "</TD>";
+              }
+
         }
     htmlDocument += "</TR>";
     htmlDocument += "</TABLE></font></body></html>";
@@ -518,10 +518,10 @@ QStringList ControlReceipts::getListOfSums()
        if (c.toDouble() == 0.0 || ch.toDouble() == 0.0 || v.toDouble() == 0.0 || b.toDouble() == 0.0
            || o.toDouble() == 0.0 || d.toDouble() == 0.0)
        {
-       	   foreach(QString s,list){
-       	       s.replace(",",QLocale::c().decimalPoint ());
-       	       s.replace(".",QLocale::c().decimalPoint ());
-       	       }
+           foreach(QString s,list){
+               s.replace(",",QLocale::c().decimalPoint ());
+               s.replace(".",QLocale::c().decimalPoint ());
+               }
            }
        cash  += list[ReceiptsConstants::Cash].toDouble();
        chq  += list[ReceiptsConstants::Check].toDouble();

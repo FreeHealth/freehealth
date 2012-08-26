@@ -88,7 +88,7 @@ AccountView::AccountView(QWidget *parent) :
     m_ui->startDate->setDisplayFormat(tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR));
     m_ui->endDate->setDisplayFormat(tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR));
     m_ui->startDate->setDate(QDate(2000,01,01));
-    m_ui->endDate->setDate(QDate::currentDate()); 
+    m_ui->endDate->setDate(QDate::currentDate());
     refresh();
     calc();
     connect(m_ui->deleteButton,SIGNAL(pressed()),this,SLOT(deleteLine()));
@@ -98,9 +98,9 @@ AccountView::~AccountView()
 {
         qWarning() << "AccountView::~AccountView()" ;
         if (m_ui) {
-            
+
             delete m_ui;
-            m_ui = 0;}    
+            m_ui = 0;}
 }
 
 void AccountView::setHeadersOfTable(){
@@ -108,18 +108,18 @@ void AccountView::setHeadersOfTable(){
     m_Model = NULL;
     m_Model = new AccountDB::AccountModel(this);
     m_Model->select();
-    m_Model->setHeaderData(AccountDB::Constants::ACCOUNT_PATIENT_NAME,Qt::Horizontal,trUtf8("Name"));
-    m_Model->setHeaderData(AccountDB::Constants::ACCOUNT_SITE_ID,Qt::Horizontal,trUtf8("Site id"));
-    m_Model->setHeaderData(AccountDB::Constants::ACCOUNT_DATE,Qt::Horizontal,trUtf8("Date"));
-    m_Model->setHeaderData(AccountDB::Constants::ACCOUNT_MEDICALPROCEDURE_TEXT,Qt::Horizontal,trUtf8("Act"));
-    m_Model->setHeaderData(AccountDB::Constants::ACCOUNT_COMMENT,Qt::Horizontal,trUtf8("Comment"));
-    m_Model->setHeaderData(AccountDB::Constants::ACCOUNT_CASHAMOUNT,Qt::Horizontal,trUtf8("Cash"));
-    m_Model->setHeaderData(AccountDB::Constants::ACCOUNT_CHEQUEAMOUNT,Qt::Horizontal,trUtf8("Check"));
-    m_Model->setHeaderData(AccountDB::Constants::ACCOUNT_VISAAMOUNT,Qt::Horizontal,trUtf8("Credit Card"));
-    m_Model->setHeaderData(AccountDB::Constants::ACCOUNT_INSURANCEAMOUNT,Qt::Horizontal,trUtf8("Banking"));
-    m_Model->setHeaderData(AccountDB::Constants::ACCOUNT_OTHERAMOUNT,Qt::Horizontal,trUtf8("Other"));
-    m_Model->setHeaderData(AccountDB::Constants::ACCOUNT_DUEAMOUNT,Qt::Horizontal,trUtf8("Due"));
-    m_Model->setHeaderData(AccountDB::Constants::ACCOUNT_DUEBY,Qt::Horizontal,trUtf8("Due by"));
+    m_Model->setHeaderData(AccountDB::Constants::ACCOUNT_PATIENT_NAME,Qt::Horizontal, tr("Name"));
+    m_Model->setHeaderData(AccountDB::Constants::ACCOUNT_SITE_ID,Qt::Horizontal, tr("Site id"));
+    m_Model->setHeaderData(AccountDB::Constants::ACCOUNT_DATE,Qt::Horizontal, tr("Date"));
+    m_Model->setHeaderData(AccountDB::Constants::ACCOUNT_MEDICALPROCEDURE_TEXT,Qt::Horizontal, tr("Act"));
+    m_Model->setHeaderData(AccountDB::Constants::ACCOUNT_COMMENT,Qt::Horizontal, tr("Comment"));
+    m_Model->setHeaderData(AccountDB::Constants::ACCOUNT_CASHAMOUNT,Qt::Horizontal, tr("Cash"));
+    m_Model->setHeaderData(AccountDB::Constants::ACCOUNT_CHEQUEAMOUNT,Qt::Horizontal, tr("Check"));
+    m_Model->setHeaderData(AccountDB::Constants::ACCOUNT_VISAAMOUNT,Qt::Horizontal, tr("Credit Card"));
+    m_Model->setHeaderData(AccountDB::Constants::ACCOUNT_INSURANCEAMOUNT,Qt::Horizontal, tr("Banking"));
+    m_Model->setHeaderData(AccountDB::Constants::ACCOUNT_OTHERAMOUNT,Qt::Horizontal, tr("Other"));
+    m_Model->setHeaderData(AccountDB::Constants::ACCOUNT_DUEAMOUNT,Qt::Horizontal, tr("Due"));
+    m_Model->setHeaderData(AccountDB::Constants::ACCOUNT_DUEBY,Qt::Horizontal, tr("Due by"));
     m_ui->tableView->setModel(m_Model);
     m_ui->tableView->horizontalHeader()->setResizeMode(QHeaderView::Interactive);
     m_ui->tableView->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
@@ -134,14 +134,14 @@ void AccountView::refresh(){
     filter += QString("DATE BETWEEN '%1' AND '%2'").arg(dateBeginStr,dateEndStr);
     qDebug() << __FILE__ << QString::number(__LINE__) << " filter =" << filter ;
     //AccountDB::AccountModel *model = new AccountDB::AccountModel(this);
-    
+
     m_Model->setFilter(filter);
     if(WarnDebugMessage)
     qDebug() << __FILE__ << QString::number(__LINE__) << " filter =" << m_Model->filter() ;
     if(WarnDebugMessage)
     qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount =" << QString::number(m_Model->rowCount()) ;
     m_ui->tableView->setModel(m_Model);
-       
+
     QList<int> hide;
     hide
             << AccountDB::Constants::ACCOUNT_ID
@@ -259,19 +259,19 @@ void AccountView::calc()
     QAbstractItemModel *model = m_ui->tableView->model();
     for (int col = AccountDB::Constants::ACCOUNT_CASHAMOUNT; col < AccountDB::Constants::ACCOUNT_DUEAMOUNT+1; col += 1)
     {
-    	double sum = 0.00;
-    	for (int row = 0; row < model->rowCount(); row += 1)
-    	{
-    		double tot = model->data(model->index(row,col),Qt::DisplayRole).toDouble();
-    		if (WarnDebugMessage)
-    		    		qDebug() << __FILE__ << QString::number(__LINE__) << " tot =" << QString::number(tot) ;
-    		sum += tot;
-    		
-    	    }
-    	    QString textSum = QString::number(sum);
-    	    if (WarnDebugMessage)
-    	        	    qDebug() << __FILE__ << QString::number(__LINE__) << " textSum =" << textSum;
-    	    hash.value(col)->setText(textSum);
+        double sum = 0.00;
+        for (int row = 0; row < model->rowCount(); row += 1)
+        {
+            double tot = model->data(model->index(row,col),Qt::DisplayRole).toDouble();
+            if (WarnDebugMessage)
+                        qDebug() << __FILE__ << QString::number(__LINE__) << " tot =" << QString::number(tot) ;
+            sum += tot;
+
+            }
+            QString textSum = QString::number(sum);
+            if (WarnDebugMessage)
+                        qDebug() << __FILE__ << QString::number(__LINE__) << " textSum =" << textSum;
+            hash.value(col)->setText(textSum);
         }
 }
 
@@ -280,7 +280,7 @@ void AccountView::changeEvent(QEvent *e)
     QWidget::changeEvent(e);
     if (e->type()== QEvent::LanguageChange)
     {
-    	  m_ui->retranslateUi(this);
-    	  setHeadersOfTable();
+          m_ui->retranslateUi(this);
+          setHeadersOfTable();
     }
 }

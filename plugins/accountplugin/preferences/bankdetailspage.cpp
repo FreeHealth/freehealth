@@ -239,8 +239,8 @@ bool BankDetailsWidget::setCashBox()
     if (!m_Model->insertRows(m_Model->rowCount(),1,QModelIndex())) {
         LOG_ERROR("Unable to insertRow in model");
     }
-    QString label = trUtf8("cash box") ;
-    QString comment = trUtf8("Your cash till");
+    QString label = tr("cash box") ;
+    QString comment = tr("Your cash till");
     m_Model->setData(m_Model->index(m_Model->rowCount()-1,AccountDB::Constants::BANKDETAILS_USER_UID),m_user_uid,Qt::EditRole);
     m_Model->setData(m_Model->index(m_Model->rowCount()-1,AccountDB::Constants::BANKDETAILS_LABEL),label,Qt::EditRole);
     m_Model->setData(m_Model->index(m_Model->rowCount()-1,AccountDB::Constants::BANKDETAILS_OWNER),m_user_fullName,Qt::EditRole);

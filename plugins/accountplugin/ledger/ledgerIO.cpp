@@ -482,7 +482,7 @@ QStringList LedgerIO::getListOfSumsMonthlyMovementsIO(QObject * parent, const QS
         list << strPair;
          
     }
-    QString totalString = trUtf8("Total");
+    QString totalString = tr("Total");
     QString totalMovementValueStr = QString::number(totalMovementValue);
     list.append(totalString+"="+totalMovementValueStr);
     return list;

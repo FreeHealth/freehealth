@@ -323,8 +323,8 @@ namespace InternalAmount {
 ///////////////////////////////////////////////////////////////////////////
 
 treeViewsActions::treeViewsActions(QWidget *parent):QTreeView(parent){
-    m_deleteThesaurusValue = new QAction(trUtf8("Delete value"),this);
-    m_choosepreferredValue = new QAction(trUtf8("Choose value as preferred"),this);
+    m_deleteThesaurusValue = new QAction(tr("Delete value"),this);
+    m_choosepreferredValue = new QAction(tr("Choose value as preferred"),this);
     m_userUuid = user()->uuid();
     connect(m_choosepreferredValue,SIGNAL(triggered(bool)),this,SLOT(choosepreferredValue(bool)));
     connect(m_deleteThesaurusValue,SIGNAL(triggered(bool)),this,SLOT(deleteBox(bool)));
@@ -622,8 +622,8 @@ void treeViewsActions::changeEvent(QEvent *e) {
 ChosenListView::ChosenListView(QObject * parent, InternalAmount::AmountModel *amountModel) {
     setObjectName("ChosenListView");
     m_parent = parent;
-    m_deleteInReturnedList = new QAction(trUtf8("Delete this item"),parent);
-    m_clear = new QAction(trUtf8("Clear all."),parent);
+    m_deleteInReturnedList = new QAction(tr("Delete this item"),parent);
+    m_clear = new QAction(tr("Clear all."),parent);
     //m_deleteInReturnedList->setCheckable(true);
     m_deleteInReturnedList->setEnabled(true);
     m_clear->setEnabled(true);
@@ -641,8 +641,8 @@ ChosenListView::~ChosenListView(){
 void ChosenListView::changeEvent(QEvent *e) {
     QWidget::changeEvent(e);
     if (e->type()==QEvent::LanguageChange) {
-        m_deleteInReturnedList = new QAction(trUtf8("Delete this item"),m_parent);
-        m_clear = new QAction(trUtf8("Clear all."),m_parent);
+        m_deleteInReturnedList = new QAction(tr("Delete this item"),m_parent);
+        m_clear = new QAction(tr("Clear all."),m_parent);
         m_deleteInReturnedList->setEnabled(true);
         m_clear->setEnabled(true);
         //m_deleteInReturnedList->setCheckable(true);
@@ -1000,7 +1000,7 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex & index) {
                   qDebug() << __FILE__ << QString::number(__LINE__) << " distance =" << QString::number(m_kilometers) ;
                   if (WarnDebugMessage)
                   qDebug() << __FILE__ << QString::number(__LINE__) << " value =" << QString::number(value) ;
-                  m_listOfValues << trUtf8("Kilometers");
+                  m_listOfValues << tr("Kilometers");
                   //m_listOfValues.removeDuplicates();
                   m_modelReturnedList->setStringList(m_listOfValues);
                   fillModel(hashOfValues,typeOfPayment,percentage,debtor,site,distrules,i);
@@ -1035,7 +1035,7 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex & index) {
                 foreach(str,list){
                     if (WarnDebugMessage)
                     qDebug() << __FILE__ << QString::number(__LINE__) << " str =" << str ;
-                    if (str .contains( trUtf8("thesaurus")))
+                    if (str .contains( tr("thesaurus")))
                     {
                           qWarning() << __FILE__ << QString::number(__LINE__) << "no thesaurus value available" ;
                           return;
@@ -1307,7 +1307,7 @@ void ReceiptViewer::saveInThesaurus(){
     QString listOfValuesStr = m_listOfValues.join("+");
     receiptsEngine r;
     if(r.insertInThesaurus(listOfValuesStr,m_userUuid)){
-        Utils::informativeMessageBox(tkTr(Trans::Constants::INFORMATION), listOfValuesStr+"\n"+trUtf8(" has been saved in thesaurus!"));
+        Utils::informativeMessageBox(tkTr(Trans::Constants::INFORMATION), listOfValuesStr+"\n"+tr(" has been saved in thesaurus!"));
     }
     m_actionTreeView->fillActionTreeView();
 }

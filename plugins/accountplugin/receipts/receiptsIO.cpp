@@ -317,7 +317,7 @@ QHash<int,QVariant> receiptsEngine::getListOfpreferredValues(QString & userUuid,
             break;    
         }    
          
-    QVariant comment = QVariant(trUtf8("preferred act"));
+    QVariant comment = QVariant(tr("preferred act"));
     hash.insert(ACCOUNT_UID,"UID");
     hash.insert(ACCOUNT_USER_UID,userUuid);
     hash.insert(ACCOUNT_PATIENT_UID,patientUid);

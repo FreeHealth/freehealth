@@ -119,44 +119,44 @@ void LedgerViewer::createMenus(){
 
 bool LedgerViewer::createActions(){
     bool b = true;
-    m_closeAction = new QAction(trUtf8("E&xit"),this);
+    m_closeAction = new QAction(tr("E&xit"),this);
     m_closeAction->setShortcut(QKeySequence::Close);
-    m_closeAction->setStatusTip(trUtf8("Close Ledger"));
+    m_closeAction->setStatusTip(tr("Close Ledger"));
     m_hashTextAndAction.insert(m_closeAction->text(),m_closeAction);
     b = connect(m_closeAction, SIGNAL(triggered()), this, SLOT(close()));
     
-    m_monthlyReceiptsAnalysis = new QAction(trUtf8("Receipts by month"),this);
-    m_monthlyReceiptsAnalysis->setStatusTip(trUtf8("See receipts by month."));
+    m_monthlyReceiptsAnalysis = new QAction(tr("Receipts by month"),this);
+    m_monthlyReceiptsAnalysis->setStatusTip(tr("See receipts by month."));
     m_hashTextAndAction.insert(m_monthlyReceiptsAnalysis->text(),m_monthlyReceiptsAnalysis);
     b = connect(m_monthlyReceiptsAnalysis, SIGNAL(triggered()), this, SLOT(monthlyReceiptsAnalysis()));
     
-    m_monthlyAndTypeReceiptsAnalysis = new QAction(trUtf8("Receipts by month and type"),this);
-    m_monthlyAndTypeReceiptsAnalysis->setStatusTip(trUtf8("See receipts by month and type."));
+    m_monthlyAndTypeReceiptsAnalysis = new QAction(tr("Receipts by month and type"),this);
+    m_monthlyAndTypeReceiptsAnalysis->setStatusTip(tr("See receipts by month and type."));
     m_hashTextAndAction.insert(m_monthlyAndTypeReceiptsAnalysis->text(),m_monthlyAndTypeReceiptsAnalysis);
     b = connect(m_monthlyAndTypeReceiptsAnalysis, SIGNAL(triggered()), this, SLOT(monthlyAndTypeReceiptsAnalysis()));
     
-    m_yearlyAndTypeReceiptsAnalysis = new QAction(trUtf8("Receipts by year and type"),this);
-    m_yearlyAndTypeReceiptsAnalysis->setStatusTip(trUtf8("See receipts by year and type."));
+    m_yearlyAndTypeReceiptsAnalysis = new QAction(tr("Receipts by year and type"),this);
+    m_yearlyAndTypeReceiptsAnalysis->setStatusTip(tr("See receipts by year and type."));
     m_hashTextAndAction.insert(m_yearlyAndTypeReceiptsAnalysis->text(),m_yearlyAndTypeReceiptsAnalysis);
     b = connect(m_yearlyAndTypeReceiptsAnalysis, SIGNAL(triggered()), this, SLOT(yearlyAndTypeReceiptsAnalysis()));
     
-    m_monthlyMovementsAnalysis = new QAction(trUtf8("Movements by month"),this);
-    m_monthlyMovementsAnalysis->setStatusTip(trUtf8("See receipts by month."));
+    m_monthlyMovementsAnalysis = new QAction(tr("Movements by month"),this);
+    m_monthlyMovementsAnalysis->setStatusTip(tr("See receipts by month."));
     m_hashTextAndAction.insert(m_monthlyMovementsAnalysis->text(),m_monthlyMovementsAnalysis);
     b = connect(m_monthlyMovementsAnalysis, SIGNAL(triggered()), this, SLOT(monthlyMovementsAnalysis()));
     
-    m_monthlyAndTypeMovementsAnalysis = new QAction(trUtf8("Movements by month and type"),this);
-    m_monthlyAndTypeMovementsAnalysis->setStatusTip(trUtf8("See receipts by month and type."));
+    m_monthlyAndTypeMovementsAnalysis = new QAction(tr("Movements by month and type"),this);
+    m_monthlyAndTypeMovementsAnalysis->setStatusTip(tr("See receipts by month and type."));
     m_hashTextAndAction.insert(m_monthlyAndTypeMovementsAnalysis->text(),m_monthlyAndTypeMovementsAnalysis);
     b = connect(m_monthlyAndTypeMovementsAnalysis, SIGNAL(triggered()), this, SLOT(monthlyAndTypeMovementsAnalysis()));
     
-    m_yearlyAndTypeMovementsAnalysis = new QAction(trUtf8("Movements by year and type"),this);
-    m_yearlyAndTypeMovementsAnalysis->setStatusTip(trUtf8("See receipts by year and type."));
+    m_yearlyAndTypeMovementsAnalysis = new QAction(tr("Movements by year and type"),this);
+    m_yearlyAndTypeMovementsAnalysis->setStatusTip(tr("See receipts by year and type."));
     m_hashTextAndAction.insert(m_monthlyAndTypeMovementsAnalysis->text(),m_monthlyAndTypeMovementsAnalysis);
     b = connect(m_yearlyAndTypeMovementsAnalysis, SIGNAL(triggered()), this, SLOT(yearlyAndTypeMovementsAnalysis()));
     
-    m_ledgerActionShow = new QAction(trUtf8("&Ledger"),this);
-    m_ledgerActionShow->setStatusTip(trUtf8("See ledger."));
+    m_ledgerActionShow = new QAction(tr("&Ledger"),this);
+    m_ledgerActionShow->setStatusTip(tr("See ledger."));
     m_hashTextAndAction.insert(m_ledgerActionShow->text(),m_ledgerActionShow);
     b = connect(m_ledgerActionShow, SIGNAL(triggered()), this, SLOT(ledgerActionShow()));
     return b;
@@ -169,10 +169,10 @@ void LedgerViewer::monthlyReceiptsAnalysis(){
     AccountModel * model = m_lm->getModelMonthlyReceiptsAnalysis(this,
                                                               month,
                                                               year);
-    model->setHeaderData( ACCOUNT_PATIENT_NAME, Qt::Horizontal, trUtf8("PATIENT NAME"), Qt::EditRole );
-    model->setHeaderData( ACCOUNT_SITE_ID, Qt::Horizontal, trUtf8("SITE ID"), Qt::EditRole );
-    model->setHeaderData( ACCOUNT_INSURANCE_ID, Qt::Horizontal, trUtf8("INSURANCE ID"), Qt::EditRole );
-    model->setHeaderData( ACCOUNT_MEDICALPROCEDURE_TEXT, Qt::Horizontal, trUtf8("TEXT"), Qt::EditRole );
+    model->setHeaderData( ACCOUNT_PATIENT_NAME, Qt::Horizontal, tr("PATIENT NAME"), Qt::EditRole );
+    model->setHeaderData( ACCOUNT_SITE_ID, Qt::Horizontal, tr("SITE ID"), Qt::EditRole );
+    model->setHeaderData( ACCOUNT_INSURANCE_ID, Qt::Horizontal, tr("INSURANCE ID"), Qt::EditRole );
+    model->setHeaderData( ACCOUNT_MEDICALPROCEDURE_TEXT, Qt::Horizontal, tr("TEXT"), Qt::EditRole );
     ui->tableView->setModel(model);
     QList<int> listOff ;
     listOff << ACCOUNT_ID 
@@ -200,8 +200,8 @@ void LedgerViewer::monthlyAndTypeReceiptsAnalysis(){
     QStandardItemModel * modelStd = m_lm->getModelMonthlyAndTypeReceiptsAnalysis(this,
                                                                                  month,
                                                                                  year);
-    modelStd->setHeaderData( 0, Qt::Horizontal, trUtf8("TYPE"), Qt::EditRole );
-    modelStd->setHeaderData( 1, Qt::Horizontal, trUtf8("VALUE"), Qt::EditRole );
+    modelStd->setHeaderData( 0, Qt::Horizontal, tr("TYPE"), Qt::EditRole );
+    modelStd->setHeaderData( 1, Qt::Horizontal, tr("VALUE"), Qt::EditRole );
     ui->tableView->setModel(modelStd);
     ui->tableView->resizeColumnsToContents();
     QString labelText = "Total = "+QString::number(m_lm->getSums())+" "+m_currency;
@@ -211,8 +211,8 @@ void LedgerViewer::yearlyAndTypeReceiptsAnalysis(){
     m_actionText = m_yearlyAndTypeReceiptsAnalysis->text();
     QString year = ui->yearsComboBox->currentText();
     QStandardItemModel * model = m_lm->getModelYearlyAndTypeReceiptsAnalysis(this,year);
-    model->setHeaderData( 0, Qt::Horizontal, trUtf8("TYPE"), Qt::EditRole );
-    model->setHeaderData( 1, Qt::Horizontal, trUtf8("VALUE"), Qt::EditRole );
+    model->setHeaderData( 0, Qt::Horizontal, tr("TYPE"), Qt::EditRole );
+    model->setHeaderData( 1, Qt::Horizontal, tr("VALUE"), Qt::EditRole );
     ui->tableView->setModel(model);
     ui->tableView->resizeColumnsToContents();
     QString labelText = "Total = "+QString::number(m_lm->getSums())+" "+m_currency;
@@ -245,8 +245,8 @@ void LedgerViewer::monthlyAndTypeMovementsAnalysis(){
     QStandardItemModel * model = m_lm->getModelMonthlyAndTypeMovementAnalysis(this,
                                                                               month,
                                                                               year);
-    model->setHeaderData( 0, Qt::Horizontal, trUtf8("TYPE"), Qt::EditRole );
-    model->setHeaderData( 1, Qt::Horizontal, trUtf8("VALUE"), Qt::EditRole );                                                                              
+    model->setHeaderData( 0, Qt::Horizontal, tr("TYPE"), Qt::EditRole );
+    model->setHeaderData( 1, Qt::Horizontal, tr("VALUE"), Qt::EditRole );                                                                              
     ui->tableView->setModel(model);
     ui->tableView->resizeColumnsToContents();
     QString labelText = "Total = "+QString::number(m_lm->getSums())+" "+m_currency;
@@ -256,8 +256,8 @@ void LedgerViewer::yearlyAndTypeMovementsAnalysis(){
     m_actionText = m_yearlyAndTypeMovementsAnalysis->text();
     QString year = ui->yearsComboBox->currentText();
     QStandardItemModel * model = m_lm->getModelYearlyAndTypeMovementAnalysis(this,year);
-    model->setHeaderData( 0, Qt::Horizontal, trUtf8("TYPE"), Qt::EditRole );
-    model->setHeaderData( 1, Qt::Horizontal, trUtf8("VALUE"), Qt::EditRole );
+    model->setHeaderData( 0, Qt::Horizontal, tr("TYPE"), Qt::EditRole );
+    model->setHeaderData( 1, Qt::Horizontal, tr("VALUE"), Qt::EditRole );
     ui->tableView->setModel(model);
     ui->tableView->resizeColumnsToContents();
     QString labelText = "Total = "+QString::number(m_lm->getSums())+" "+m_currency;

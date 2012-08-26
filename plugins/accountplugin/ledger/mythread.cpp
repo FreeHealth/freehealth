@@ -62,7 +62,7 @@ void ProduceDoc::organize(){
     
 //-----------------------insertion du titre du document-----------------------------------
 
-    QString titreDoc                   = "<font size = 10 color = #3300FF><bold>"+trUtf8("Ledger")+"<bold></font>"
+    QString titreDoc                   = "<font size = 10 color = #3300FF><bold>"+tr("Ledger")+"<bold></font>"
                                          "<br/><br/><br/>";
     //QFont   titreFont                  ("Times", 40, QFont::Bold);
     //QTextCharFormat titreFormat ;
@@ -83,7 +83,7 @@ void ProduceDoc::organize(){
 //janvier
     QString unjanv                    = m_date.toString("yyyy")+"-01-01";
     QString trenteetunjanv            = m_date.toString("yyyy")+"-01-31";
-    QString janvier                   = trUtf8("january");
+    QString janvier                   = tr("january");
     QString janvList;
     janvList                          = unjanv +","+ trenteetunjanv;
     
@@ -94,74 +94,74 @@ void ProduceDoc::organize(){
         if(nombrejoursannee == 366){
             vingthuitfev  = m_date.toString("yyyy")+"-02-29";
             }
-    QString fevrier                   =  trUtf8("february");
+    QString fevrier                   =  tr("february");
     QString fevList;
     fevList                           = unfev +","+ vingthuitfev;
 //mars
     	QString unmars                = m_date.toString("yyyy")+"-03-01";
 	QString trenteetunmars        = m_date.toString("yyyy")+"-03-31";
-	QString mars = trUtf8("march");
+	QString mars = tr("march");
 	QString marsList;
 	marsList                      = unmars +","+ trenteetunmars;
  //avril
     	QString unavril               = m_date.toString("yyyy")+"-04-01";
 	QString trenteavril           = m_date.toString("yyyy")+"-04-30";
-	QString avril                 = trUtf8("april");
+	QString avril                 = tr("april");
 	QString avrList;
 	avrList                       = unavril +","+ trenteavril;
  //mai
     	QString unmai                 = m_date.toString("yyyy")+"-05-01";
 	QString trenteetunmai         = m_date.toString("yyyy")+"-05-31";
-	QString mai                   = trUtf8("may");
+	QString mai                   = tr("may");
 	QString maiList;
 	maiList                       = unmai +","+ trenteetunmai;
  //juin
     	QString unjuin                = m_date.toString("yyyy")+"-06-01";
 	QString trentejuin            = m_date.toString("yyyy")+"-06-30";
-	QString juin                  = trUtf8("june");
+	QString juin                  = tr("june");
 	QString juinList;
 	juinList                     = unjuin +","+ trentejuin;
  //juillet
      	QString unjuillet            = m_date.toString("yyyy")+"-07-01";
 	QString trenteetunjuillet    = m_date.toString("yyyy")+"-07-31";
-	QString juillet              = trUtf8("july");
+	QString juillet              = tr("july");
 	QString juillList;
 	juillList                    = unjuillet +","+ trenteetunjuillet;
  //aout
     	QString unaout               = m_date.toString("yyyy")+"-08-01";
 	QString trenteetunaout       = m_date.toString("yyyy")+"-08-31";
-	QString aout                 = trUtf8("august");
+	QString aout                 = tr("august");
 	QString aouList;
 	aouList                      = unaout +","+ trenteetunaout;
  //septembre
     	QString unsept               = m_date.toString("yyyy")+"-09-01";
 	QString trentesept           = m_date.toString("yyyy")+"-09-30";
-	QString sept                 = trUtf8("september");
+	QString sept                 = tr("september");
 	QString sepList;
 	sepList                      = unsept +","+ trentesept;
  //octobre
     	QString unoct                = m_date.toString("yyyy")+"-10-01";
 	QString trenteetunoct        = m_date.toString("yyyy")+"-10-31";
-	QString oct                  = trUtf8("october");
+	QString oct                  = tr("october");
 	QString octList;
 	octList                      = unoct +","+ trenteetunoct;
  //novembre
     	QString unnov                = m_date.toString("yyyy")+"-11-01";
 	QString trentenov            = m_date.toString("yyyy")+"-11-30";
-	QString nov                  = trUtf8("november");
+	QString nov                  = tr("november");
 	QString novList;
 	novList                      = unnov +","+ trentenov;
  //decembre
     	QString undec                = m_date.toString("yyyy")+"-12-01";
 	QString trenteetundec        = m_date.toString("yyyy")+"-12-31";
-	QString dec                  = trUtf8("december");
+	QString dec                  = tr("december");
 	//modele(dec, undec , trenteetundec ,tableFormat,cursortrie,m_listforquery);
 	//cursortrie->movePosition(QTextCursor::End,QTextCursor::MoveAnchor,1);
 	QString decList;
 	decList                      = undec +","+ trenteetundec;
 	
 //annee
-        QString annee                = trUtf8("complete year");
+        QString annee                = tr("complete year");
 	QString anneeList;	             
 	anneeList                    = unjanv+","+ trenteetundec;
 //--------------construction de listes des types----------------------------------------------------------
@@ -270,7 +270,7 @@ bool ProduceDoc::modele(QString & month,
             if (WarnDebugMessage)
                 qDebug() << __FILE__ << QString::number(__LINE__) << " m_typesReceipts[i] =" << m_typesReceipts[i] ;
             QStringList listeLibelle;
-            listeLibelle << trUtf8("Cash") << trUtf8("Cheques") << trUtf8("Credit cards") << trUtf8("Bankings");
+            listeLibelle << tr("Cash") << tr("Cheques") << tr("Credit cards") << tr("Bankings");
             for (int j = 0 ; j < listeLibelle.size() ; j++){
                QVector<QString> vector;
                foreach(vector,tableLedgerMonth){
@@ -356,21 +356,21 @@ void ProduceDoc::fillTable(QList<QVector<QString> > & tableau,
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " totalSumsList =" << totalSumsList[i] ;
             }*/
         if(choice == RECEIPTS_TYPE){
-            type = trUtf8("Receipts");
+            type = tr("Receipts");
             total = totalSumsList[SUMS_SUM];
                         }
         if(choice == MOVEMENTS_TYPE){
-            type = trUtf8("Movements");
+            type = tr("Movements");
             total = totalMovementString;
             }
         QTextBlockFormat centerHead ;
        //centrer                       .setBackground(Qt::yellow) ;
        if (WarnDebugMessage)    
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " thisMonthfonction =" << thisMonthfonction ;
-           QString heads = trUtf8("Month of ")+thisMonthfonction+" = "+type;
-       if (thisMonthfonction == trUtf8("complete year"))
+           QString heads = tr("Month of ")+thisMonthfonction+" = "+type;
+       if (thisMonthfonction == tr("complete year"))
        {
-       	   heads = trUtf8("Total of ")+thisMonthfonction+" = "+type;
+       	   heads = tr("Total of ")+thisMonthfonction+" = "+type;
            }
            centerHead                    .setAlignment(Qt::AlignCenter) ;
            cursortrieinfunction         -> insertBlock(centerHead);
@@ -383,7 +383,7 @@ void ProduceDoc::fillTable(QList<QVector<QString> > & tableau,
     
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " thread 10 "   ;
         if(sizeOfTable!= 0){
-            if((thisMonthfonction != trUtf8("complete year")) ){
+            if((thisMonthfonction != tr("complete year")) ){
                 QTextTable * table = cursortrieinfunction->insertTable(nbreLignesTableau,
                                                                        nbreColonnesTableau,
                                                                        tableFormat);
@@ -427,7 +427,7 @@ void ProduceDoc::fillTable(QList<QVector<QString> > & tableau,
     QTextTableCell cell              = table->cellAt(table->rows()-1,0);
      QTextCursor cellCursor          = cell.firstCursorPosition();
      QString totalMonth = QString("<html><font size = 4 color = #FF0000><bold>%1 %2 <bold></font></html>")
-                          .arg(trUtf8("Total of "),thisMonthfonction);
+                          .arg(tr("Total of "),thisMonthfonction);
      cellCursor                       .insertHtml(totalMonth);
     QTextTableCell cell2             = table->cellAt(table->rows()-1,2);
      QTextCursor cellCursor2         = cell2.firstCursorPosition();
@@ -439,7 +439,7 @@ void ProduceDoc::fillTable(QList<QVector<QString> > & tableau,
        //centrer1                       .setBackground(Qt::yellow) ;
        centrer1                        .setForeground(Qt::red) ;
        centrer1                        .setAlignment(Qt::AlignCenter);
-       QString headAccumulation = trUtf8("Accumulation of ")+type+" "+trUtf8("of")+" "+thisMonthfonction;
+       QString headAccumulation = tr("Accumulation of ")+type+" "+tr("of")+" "+thisMonthfonction;
        cursortrieinfunction          -> insertBlock(centrer1);
        cursortrieinfunction          -> insertHtml ("<font size = 6 color = #3300FF><bold><br/>"
                                                     "<br/>"+headAccumulation+"<bold></font>"
@@ -461,32 +461,32 @@ void ProduceDoc::fillTable(QList<QVector<QString> > & tableau,
         tableRecap                = cursortrieinfunction->insertTable(nbreLignesTableau,2,tableFormatDone);
         QTextTableCell cell00     = tableRecap->cellAt(0,0);//verify all table
          QTextCursor cellCursor00 = cell00.firstCursorPosition();
-         cellCursor00             . insertText(trUtf8("Total Cash"));
+         cellCursor00             . insertText(tr("Total Cash"));
         QTextTableCell cell01     = tableRecap->cellAt(0,1);
          QTextCursor cellCursor01 = cell01.firstCursorPosition();
          cellCursor01             . insertText(esp);
         QTextTableCell cell10     = tableRecap->cellAt(1,0);
          QTextCursor cellCursor10 = cell10.firstCursorPosition();
-         cellCursor10             . insertText(trUtf8("Total checks"));
+         cellCursor10             . insertText(tr("Total checks"));
         QTextTableCell cell11     = tableRecap->cellAt(1,1);
          QTextCursor cellCursor11 = cell11.firstCursorPosition();
          cellCursor11             . insertText(chq);
         QTextTableCell cell20     = tableRecap->cellAt(2,0);
          QTextCursor cellCursor20 = cell20.firstCursorPosition();
-         cellCursor20             . insertText(trUtf8("Total credit cards"));
+         cellCursor20             . insertText(tr("Total credit cards"));
         QTextTableCell cell21     = tableRecap->cellAt(2,1);
          QTextCursor cellCursor21 = cell21.firstCursorPosition();
          cellCursor21             . insertText(cb);
         QTextTableCell cell30     = tableRecap->cellAt(3,0);
          QTextCursor cellCursor30 = cell30.firstCursorPosition();
-         cellCursor30             . insertText(trUtf8("Total bankings"));
+         cellCursor30             . insertText(tr("Total bankings"));
         QTextTableCell cell31     = tableRecap->cellAt(3,1);
          QTextCursor cellCursor31 = cell31.firstCursorPosition();
          cellCursor31             . insertText(banking);
             QTextTableCell cell40     = tableRecap->cellAt(4,0);
             QTextCursor cellCursor40  = cell40.firstCursorPosition();
             QString totalReceiptsHtml = QString("<html><font size = 4 color = #FF0000><bold>%1 %2 <bold></font></html>")
-                                        .arg(trUtf8("Total of "),trUtf8("receipts"));
+                                        .arg(tr("Total of "), tr("receipts"));
             cellCursor40              . insertHtml(totalReceiptsHtml);
             QTextTableCell cell41     = tableRecap->cellAt(4,1);
             QTextCursor cellCursor41  = cell41.firstCursorPosition();
@@ -519,7 +519,7 @@ void ProduceDoc::fillTable(QList<QVector<QString> > & tableau,
              QString paireDepenseMontantLeft = paireDepenseMontant[0];
              if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << "paireDepenseMontantLeft  =" << paireDepenseMontantLeft ;
-             if (paireDepenseMontantLeft == trUtf8("Total"))
+             if (paireDepenseMontantLeft == tr("Total"))
              {
              	  
              	  if (WarnDebugMessage)

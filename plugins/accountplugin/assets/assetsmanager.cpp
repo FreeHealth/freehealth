@@ -113,8 +113,8 @@ QHash<int,QVariant> AssetsManager::getHashOfValuesMovements(
 
 QHash<int,QString> AssetsManager::getHashForModeComboBox(){
     QHash<int,QString> hash;
-    hash.insert(1,trUtf8("strait line depreciation"));
-    hash.insert(2,trUtf8("declining balance"));
+    hash.insert(1, tr("strait line depreciation"));
+    hash.insert(2, tr("declining balance"));
     return hash;
 }
 

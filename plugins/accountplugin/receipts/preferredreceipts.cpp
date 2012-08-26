@@ -80,7 +80,7 @@ PreferredReceipts::PreferredReceipts(QWidget * parent) :
 PreferredReceipts::~PreferredReceipts(){}
 
 void PreferredReceipts::insertpreferredValuesIntoAccount(){
-    QString currency = trUtf8("euros");
+    QString currency = tr("euros");
     receiptsEngine receiptsIO;
     QString userUuid = user()->uuid();
     QString patientUid = patient()->uuid();
@@ -147,12 +147,12 @@ void PreferredReceipts::insertpreferredValuesIntoAccount(){
         }
     listOfValuesStr = listOfValues.join("+") ;
         
-    const QString resultText = trUtf8("The value ")
+    const QString resultText = tr("The value ")
                                +m_preferredAct
                                +": "
                                +listOfValuesStr
                                +" "+currency
-                               +trUtf8(" has been inserted.");
+                               +tr(" has been inserted.");
     const QString resultTextHtml = "<html><body><font size = 4 color = green><bold>"+resultText+"<bold></font>"
                                    "</body></html>";
     ui->resultLabel->setText(resultTextHtml);

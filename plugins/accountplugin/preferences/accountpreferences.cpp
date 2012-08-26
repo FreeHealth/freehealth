@@ -419,7 +419,7 @@ bool AccountDatabaseDefautsWidget::createMinimalDefaultsFor(const QString &conne
         if (listOfDates.contains(dateDapapack))
         {
         	  LOG_ERROR("Datapack has already been loaded.");
-        	  Utils::warningMessageBox( trUtf8("Warning"), trUtf8("Datapack has already been loaded."));
+        	  Utils::warningMessageBox( tr("Warning"), tr("Datapack has already been loaded."));
         	  return;
             }
         if (!MPmodel.insertRows(MPmodelRowCount,dtpkRowCount,QModelIndex()))

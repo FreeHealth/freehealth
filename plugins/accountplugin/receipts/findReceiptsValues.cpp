@@ -366,8 +366,8 @@ QHash<QString,QString> findReceiptsValues::getchosenValues(){
     QString comboChoice = ui->comboBoxCategories->currentText();
     QString filterText = ""+text+"%";
     QString filter = QString("%1 LIKE '%2' AND %3 LIKE '%4'").arg("TYPE",comboChoice,"NAME",filterText);
-    QVariant act = QVariant(trUtf8("Name"));
-    QVariant value = QVariant(trUtf8("Value"));
+    QVariant act = QVariant(tr("Name"));
+    QVariant value = QVariant(tr("Value"));
     model->setFilter(filter);
     int count =   model->rowCountWithFilter(QModelIndex(),filter);
     for (int i = 0; i < count; i += 1)
@@ -501,8 +501,8 @@ void findReceiptsValues::enableShowNextTable(){
     	itemModel->appendRow(list);
         }
     model->setFilter("");
-    QVariant act = QVariant(trUtf8("Name"));
-    QVariant value = QVariant(trUtf8("Value"));
+    QVariant act = QVariant(tr("Name"));
+    QVariant value = QVariant(tr("Value"));
     if (!itemModel->setHeaderData(0,Qt::Horizontal,act,Qt::EditRole))
     {
     	  qWarning() << __FILE__ << QString::number(__LINE__) << "no header data available";
