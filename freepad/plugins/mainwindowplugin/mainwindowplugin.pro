@@ -7,8 +7,8 @@ DEFINES += WITH_PAD
 
 BUILD_PATH_POSTFIXE = FreePad
 
-include( ../../../plugins/fmf_plugins.pri)
-include( mainwindowplugin_dependencies.pri )
+include(../../../plugins/fmf_plugins.pri)
+include(mainwindowplugin_dependencies.pri)
 
 INCLUDEPATH += ../
 DEPENDPATH += ../

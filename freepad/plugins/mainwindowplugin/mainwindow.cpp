@@ -57,9 +57,6 @@
 #include <utils/global.h>
 #include <utils/updatechecker.h>
 
-#include <calendar/calendar_widget.h>
-#include <calendar/modelanditem/basic_calendar_model.h>
-
 #include "ui_mainwindow.h"
 
 #include <QSettings>
@@ -166,44 +163,6 @@ void MainWindow::extensionsInitialized()
 
     // Connect post core initialization
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
-
-//    m_padTools = ExtensionSystem::PluginManager::instance()->getObject<Core::IPadTools>();
-//**    m_padTools->createSyntaxHighlighter(m_ui->padTextEdit->textEdit(), m_TokenModel->tokens());
-
-//	QHBoxLayout *layout = new QHBoxLayout(m_ui->tabCalendar);
-//        Calendar::CalendarWidget *calendarWidget = new Calendar::CalendarWidget(this);
-//        calendarWidget->setModel(new Calendar::BasicCalendarModel(this));
-//        layout->addWidget(calendarWidget);
-
-//	// tmp: fill with dummy tokens
-//	m_tokens.insert("DRUG", "drug");
-//	m_tokens.insert("Q_FROM", "q_from");
-//	m_tokens.insert("Q_TO", "q_to");
-//	m_tokens.insert("Q_SCHEME", "q_scheme");
-//	m_tokens.insert("REPEATED_DAILY_SCHEME", "repeated daily scheme");
-//	m_tokens.insert("MEAL", "meal");
-//	m_tokens.insert("PERIOD", "period");
-//	m_tokens.insert("PERIOD_SCHEME", "period scheme");
-//	m_tokens.insert("D_FROM", "d_from");
-//	m_tokens.insert("D_TO", "d_to");
-//	m_tokens.insert("D_SCHEME", "d_scheme");
-//	m_tokens.insert("ROUTE", "route");
-//	m_tokens.insert("DISTRIBUTED_DAILY_SCHEME", "distributed daily scheme");
-//	m_tokens.insert("MIN_INTERVAL", "min interval");
-//	m_tokens.insert("NOTE", "note");
-
-//    m_ui->tableViewTokens->clear();
-//    m_TokenModel = new PadTools::TokenModel(this);
-//**    m_ui->tableViewTokens->setModel(m_TokenModel);
-
-//	foreach (const QString &key, m_tokens.keys()) {
-//		QTreeWidgetItem *item = new QTreeWidgetItem(QStringList() << key << m_tokens[key].toString());
-//		item->setFlags(item->flags() | Qt::ItemIsEditable);
-//		m_ui->treeWidgetTokens->addTopLevelItem(item);
-//	}
-
-//**	connect(m_ui->padTextEdit, SIGNAL(textChanged()), this, SLOT(padTextChanged()));
-//    connect(m_TokenModel, SIGNAL(tokenChanged(QString,QString)), this, SLOT(tokenChanged(QString, QString)));
 }
 
 void MainWindow::padTextChanged()
