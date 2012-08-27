@@ -47,8 +47,7 @@ namespace Internal {
 class PadWriterPrivate;
 namespace Ui {
 class PadWriter;
-}
-}
+}  // namespace Ui
 
 class PadWriter : public Core::IPadWriter
 {
@@ -103,6 +102,7 @@ private:
     Internal::PadWriterPrivate *d;
 };
 
-} // namespace PadTools
+}  // namespace Internal
+}  // namespace PadTools
 
 #endif // PADTOOLS_PADWRITER_H

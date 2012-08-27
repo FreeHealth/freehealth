@@ -35,7 +35,7 @@
 #include "tokenmodel.h"
 #include "constants.h"
 #include "pad_analyzer.h"
-#include "pad_highlighter.h"
+//#include "pad_highlighter.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>

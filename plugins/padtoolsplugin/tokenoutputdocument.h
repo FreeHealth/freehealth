@@ -41,20 +41,6 @@ class PadDocument;
 namespace Internal {
 class TokenOutputDocumentPrivate;
 
-//class TokenOutputDocumentControl : public Editor::ITextControl
-//{
-//    Q_OBJECT
-//public:
-//    TokenOutputDocumentControl(QObject *parent);
-//    ~TokenOutputDocumentControl();
-
-//    bool canInsertFromMimeData (const QMimeData *source) const;
-//    QMimeData *createMimeDataFromSelection() const;
-//    void insertFromMimeData(const QMimeData *source);
-//};
-
-}
-
 class TokenOutputDocument : public Editor::TextEditor
 {
     Q_OBJECT
@@ -63,7 +49,7 @@ public:
     ~TokenOutputDocument();
 
     void setPadDocument(PadDocument *pad);
-    void setChangeCursorOnPadItemHover(bool changeCursor);
+    void setChangeCursorOnPadItemHover(bool ChangeCursor);
 
 private Q_SLOTS:
     void onPadCleared();
@@ -89,7 +75,8 @@ private:
     Internal::TokenOutputDocumentPrivate *d;
 };
 
-}  // PadTools
+}  // namespace Internal
+}  // namespace PadTools
 
 #endif // PADTOOLS_TOKENOUTPUTDOCUMENT_H
 

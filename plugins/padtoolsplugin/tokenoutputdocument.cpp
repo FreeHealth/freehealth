@@ -54,36 +54,13 @@
 #include <QDebug>
 
 using namespace PadTools;
+using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
 static inline Core::ITokenPool *tokenPool() {return Core::ICore::instance()->padTools()->tokenPool();}
 
 namespace PadTools {
 namespace Internal {
-
-//TokenOutputDocumentControl::TokenOutputDocumentControl(QObject *parent)
-//{}
-
-//TokenOutputDocumentControl::~TokenOutputDocumentControl()
-//{}
-
-//bool TokenOutputDocumentControl::canInsertFromMimeData (const QMimeData *source) const
-//{
-//    WARN_FUNC;
-//}
-
-//QMimeData *TokenOutputDocumentControl::createMimeDataFromSelection() const
-//{
-//    WARN_FUNC;
-//    return new QMimeData();
-//}
-
-//void TokenOutputDocumentControl::insertFromMimeData(const QMimeData *source)
-//{
-//    WARN_FUNC;
-//}
-
-
 class TokenOutputDocumentPrivate
 {
 public:
