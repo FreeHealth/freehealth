@@ -158,7 +158,7 @@
          </item>
         </layout>
        </widget>
-       <widget class="PadTools::TokenOutputDocument" name="wysiwyg"/>
+       <widget class="PadTools::Internal::TokenOutputDocument" name="wysiwyg"/>
       </widget>
       <widget class="QListWidget" name="listWidgetErrors">
        <property name="toolTip">
@@ -177,9 +177,9 @@
    <header location="global">padtoolsplugin/dragdroptextedit.h</header>
   </customwidget>
   <customwidget>
-   <class>PadTools::TokenOutputDocument</class>
+   <class>PadTools::Internal::TokenOutputDocument</class>
    <extends>QTextEdit</extends>
-   <header location="global">padtoolsplugin/tokenoutputdocument.cpp</header>
+   <header location="global">padtoolsplugin/tokenoutputdocument.h</header>
   </customwidget>
   <customwidget>
    <class>TokenTreeView</class>
