@@ -106,6 +106,6 @@ QString PadToolsImpl::processHtml(const QString &html)
 
 Core::IPadWriter *PadToolsImpl::createWriter(QWidget *parent)
 {
-    return new PadWriter(parent);
+    return new Internal::PadWriter(parent);
 }
 
