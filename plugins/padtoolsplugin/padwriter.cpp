@@ -47,6 +47,7 @@
 #include <coreplugin/actionmanager/actionmanager.h>
 
 #include <utils/log.h>
+#include <utils/global.h>
 
 #include <QTimer>
 
