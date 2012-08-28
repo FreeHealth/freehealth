@@ -440,18 +440,18 @@ QPixmap FormManager::getScreenshot(const QString &formUid, const QString &fileNa
     return pix;
 }
 
-/** Execute all OnLoad scripts of the \e emptyRootForm */
-void FormManager::executeOnloadScript(Form::FormMain *emptyRootForm)
-{
-    scriptManager()->evaluate(emptyRootForm->scripts()->onLoadScript());
-    QList<Form::FormMain *> children = emptyRootForm->flattenFormMainChildren();
-    foreach(Form::FormMain *mainChild, children) {
-        scriptManager()->evaluate(mainChild->scripts()->onLoadScript());
-        foreach(Form::FormItem *item, mainChild->flattenFormItemChildren()) {
-            scriptManager()->evaluate(item->scripts()->onLoadScript());
-        }
-    }
-}
+///** Execute all OnLoad scripts of the \e emptyRootForm */
+//void FormManager::executeOnloadScript(Form::FormMain *emptyRootForm)
+//{
+//    scriptManager()->evaluate(emptyRootForm->scripts()->onLoadScript());
+//    QList<Form::FormMain *> children = emptyRootForm->flattenFormMainChildren();
+//    foreach(Form::FormMain *mainChild, children) {
+//        scriptManager()->evaluate(mainChild->scripts()->onLoadScript());
+//        foreach(Form::FormItem *item, mainChild->flattenFormItemChildren()) {
+//            scriptManager()->evaluate(item->scripts()->onLoadScript());
+//        }
+//    }
+//}
 
 void FormManager::packChanged(const DataPack::Pack &pack)
 {

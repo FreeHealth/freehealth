@@ -45,10 +45,6 @@ QT_END_NAMESPACE
  * \date 28 Aug 2012
 */
 
-namespace Core {
-class UniqueIDManager;
-}
-
 namespace DataPack {
 class Pack;
 }
@@ -103,9 +99,6 @@ public:
     QList<Form::FormMain *> loadFormFile(const QString &formUid);
     QPixmap getScreenshot(const QString &formUid, const QString &fileName);
 
-private:
-    void executeOnloadScript(Form::FormMain *emptyRootForm);
-
 public Q_SLOTS:
     bool loadPatientFile();
     bool insertSubForm(const SubFormInsertionPoint &insertionPoint);
@@ -118,11 +111,13 @@ Q_SIGNALS:
 private Q_SLOTS:
     void packChanged(const DataPack::Pack &pack);
 
+//private:
+//    void executeOnloadScript(Form::FormMain *emptyRootForm);
+
 private:
     Internal::FormManagerPrivate *d;
     static FormManager *m_Instance;
 };
-
 
 } // End Form
 
