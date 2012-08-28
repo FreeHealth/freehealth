@@ -119,6 +119,7 @@ public:
     QString label(const QString &lang = QString::null) const {return value(Spec_Label,lang).toString();}
     QString pluginName(const QString &lang = QString::null) const {return value(Spec_Plugin,lang).toString();}
     QString iconFileName(const QString &lang = QString::null) const {return value(Spec_IconFileName,lang).toString();}
+    QString tooltip(const QString &lang = QString::null) const {return value(Spec_Tooltip,lang).toString();}
 
     void toTreeWidget(QTreeWidgetItem *tree) const;
 

@@ -579,7 +579,9 @@ IFormIO *FormMain::reader() const
 
 /**
  * \fn bool Form::FormMain::isEmptyRootForm() const
- * Return true is the Form::FormMain is a empty root form. This kind of form is the only one who owns a link to the Form::IFormIO reader. \sa Form::FormMain::reader().
+ * Return true is the Form::FormMain is a empty root form.
+ * This kind of form is the only one who owns a link
+ * to the Form::IFormIO reader. \sa Form::FormMain::reader().
  */
 
 
