@@ -108,9 +108,7 @@ private:
 
 public Q_SLOTS:
     bool loadPatientFile();
-    bool loadSubForms();
     bool insertSubForm(const SubFormInsertionPoint &insertionPoint);
-
     bool readPmhxCategories(const QString &formUuidOrAbsPath);
 
 Q_SIGNALS:

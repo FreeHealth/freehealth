@@ -210,10 +210,6 @@ public:
         return ok;
     }
 
-    /**
-     * Insert a sub-form to a form to the specified \e insertionPoint.
-     * A signal is emitted before Form::FormMain are getting reparented.
-     */
     bool insertSubForm(const SubFormInsertionPoint &insertionPoint)
     {
         // read all sub-forms and emit signal if requiered
@@ -259,7 +255,6 @@ public:
         return true;
     }
 
-    /** Read the PMHx categories associated the \e formUidOrAbsPath form. */
     bool readPmhxCategories(const QString &formUuidOrAbsPath)
     {
         Q_UNUSED(formUuidOrAbsPath);
@@ -358,6 +353,15 @@ QList<Form::FormMain *> FormManager::loadFormFile(const QString &formUid)
     return d->loadFormFile(formUid);
 }
 
+/**
+ * Insert a sub-form to a form to the specified \e insertionPoint.
+ * A signal is emitted before Form::FormMain are getting reparented.
+ */
+bool FormManager::insertSubForm(const SubFormInsertionPoint &insertionPoint)
+{
+    return d->insertSubForm(insertionPoint);
+}
+
 /** Load the generic patient file (and included subforms) and emit patientFormsLoaded() when finished. */
 bool FormManager::loadPatientFile()
 {
@@ -386,6 +390,12 @@ bool FormManager::loadPatientFile()
 //    d->m_RootForms.clear();
 
     return true;
+}
+
+/** Read the PMHx categories associated the \e formUidOrAbsPath form. */
+bool FormManager::readPmhxCategories(const QString &formUuidOrAbsPath)
+{
+    return d->readPmhxCategories(formUuidOrAbsPath);
 }
 
 /**
