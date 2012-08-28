@@ -39,8 +39,8 @@
        </property>
        <property name="minimumSize">
         <size>
-         <width>100</width>
-         <height>100</height>
+         <width>640</width>
+         <height>480</height>
         </size>
        </property>
        <property name="baseSize">
@@ -78,7 +78,7 @@
      <property name="minimumSize">
       <size>
        <width>0</width>
-       <height>140</height>
+       <height>110</height>
       </size>
      </property>
      <property name="editTriggers">
