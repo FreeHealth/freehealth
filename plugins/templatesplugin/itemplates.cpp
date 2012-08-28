@@ -98,12 +98,12 @@ bool ITemplate::fromMimeData(QMimeData *)
 
 QString ITemplate::serialize()
 {
-    return Utils::Serializer::toString(m_Datas, base64MimeDatas);
+    return Utils::Serializer::toString(m_Data, base64MimeDatas);
 }
 
 bool ITemplate::deserialize(const QString &serialized)
 {
-    m_Datas.clear();
-    m_Datas = Utils::Serializer::toVariantHash(serialized, base64MimeDatas);
+    m_Data.clear();
+    m_Data = Utils::Serializer::toVariantHash(serialized, base64MimeDatas);
     return true;
 }

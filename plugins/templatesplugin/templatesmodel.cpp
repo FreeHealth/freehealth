@@ -672,7 +672,7 @@ public:
                 req += QString::number(children.at(i)) + " , ";
             }
             req.chop(3);
-            
+
             // The Trigger cleans all children of each categories
 //            req = "DELETE FROM `CATEGORIES` WHERE `CATEGORY_ID` IN ( " + req + " )";
             QHash<int, QString> where;
@@ -1148,7 +1148,7 @@ bool TemplatesModel::dropMimeData(const QMimeData *data, Qt::DropAction action, 
 
     if (!data->hasFormat(mimeTypes().at(0)))
         return false;
-    
+
     QModelIndex parentIndex = parent;
     while (isTemplate(parentIndex)) {
         parentIndex = parentIndex.parent();
@@ -1182,7 +1182,7 @@ bool TemplatesModel::dropMimeData(const QMimeData *data, Qt::DropAction action, 
             Internal::TreeItem *item = d->getItem(idx);
             Internal::TreeItem *newItem = d->getItem(index(row,0,parent));
             int id = newItem->id();
-            newItem->setDatas(item->datas());
+            newItem->replaceData(item->data());
             newItem->setData(Constants::Data_ParentId, parentId);
             newItem->setIsTemplate(item->isTemplate());
             newItem->setId(id);
