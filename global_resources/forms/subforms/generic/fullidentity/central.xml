@@ -131,8 +131,8 @@
           freemedforms.forms.namespaceInUse = "Subs::Tools::Identity::ContactGroup::";
           var address = freemedforms.forms.item("Mail");
           if (address.isValid) {
-              if (address.currentValue != "")
-                  freemedforms.tools.openUrl("mailto:" + address.currentValue + "?subject:");
+              if (address.currentText != "")
+                  freemedforms.tools.openUrl("mailto:" + address.currentText);
           }
           </onclicked>
         </script>
