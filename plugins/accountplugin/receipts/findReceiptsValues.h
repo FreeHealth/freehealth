@@ -52,13 +52,13 @@ namespace Ui{
 class ACCOUNT_EXPORT findReceiptsValues:public QDialog
 {
   Q_OBJECT
-  enum LabelsDatas
+  enum LabelsData
   {
       NAME = 0,
       AMOUNT,
       EXPLANATION,
       OTHERS,
-      LabelsDatas_MaxParam
+      LabelsData_MaxParam
       };
   enum FatherSon
   {
@@ -85,7 +85,7 @@ private:
     //QString getDateWhereClause();
     bool datapackIsAvalaible();
     QHash<QString,QString> getHashFatherSonFromOthers(const QModelIndex & index);
-    
+
 private Q_SLOTS:
     void fillListViewValues(const QString & comboItem);
 //    void chooseValue(const QModelIndex& index);

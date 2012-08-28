@@ -75,7 +75,7 @@ class InsuranceWidget : public QWidget
 public:
     explicit InsuranceWidget(QWidget *parent = 0);
     ~InsuranceWidget();
-    void setDatasToUi();
+    void setDataToUi();
 
     static void writeDefaultSettings( Core::ISettings *s );
 

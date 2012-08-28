@@ -130,10 +130,10 @@ DrugPosologicSentencePreferencesWidget::DrugPosologicSentencePreferencesWidget(Q
     connect(defaultFormattingButton, SIGNAL(clicked()), this, SLOT(resetToDefaultFormatting()));
     connect(prescriptionFormatting->textEdit(), SIGNAL(textChanged()), this, SLOT(updateFormatting()));
     drug = getDrug();
-    setDatasToUi();
+    setDataToUi();
 }
 
-void DrugPosologicSentencePreferencesWidget::setDatasToUi()
+void DrugPosologicSentencePreferencesWidget::setDataToUi()
 {
     prescriptionFormatting->textEdit()->setHtml(settings()->value(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_HTML).toString());
     updateFormatting();
@@ -212,13 +212,13 @@ DrugPosologicSentenceWithPadPreferencesWidget::DrugPosologicSentenceWithPadPrefe
 //    connect(defaultFormattingButton, SIGNAL(clicked()), this, SLOT(resetToDefaultFormatting()));
 //    connect(prescriptionFormatting->textEdit(), SIGNAL(textChanged()), this, SLOT(updateFormatting()));
 
-    setDatasToUi();
+    setDataToUi();
 }
 
 DrugPosologicSentenceWithPadPreferencesWidget::~DrugPosologicSentenceWithPadPreferencesWidget()
 {}
 
-void DrugPosologicSentenceWithPadPreferencesWidget::setDatasToUi()
+void DrugPosologicSentenceWithPadPreferencesWidget::setDataToUi()
 {
     _writer->setHtmlSource(settings()->value(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_HTML).toString());
 //    updateFormatting();
@@ -287,7 +287,7 @@ int DrugPosologicSentencePage::sortIndex() const {return 30;}
 void DrugPosologicSentencePage::resetToDefaults()
 {
     DrugPosologicSentencePreferencesWidget::writeDefaultSettings(settings());
-    m_Widget->setDatasToUi();
+    m_Widget->setDataToUi();
 }
 
 void DrugPosologicSentencePage::applyChanges()

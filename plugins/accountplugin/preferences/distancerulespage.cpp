@@ -85,7 +85,7 @@ int DistanceRulesPage::sortIndex() const {return 50;}
 void DistanceRulesPage::resetToDefaults()
 {
     m_Widget->writeDefaultSettings(settings());
-    m_Widget->setDatasToUi();
+    m_Widget->setDataToUi();
 }
 
 void DistanceRulesPage::applyChanges()
@@ -144,7 +144,7 @@ DistanceRulesWidget::DistanceRulesWidget(QWidget *parent) :
     //m_Mapper->toFirst();
     distanceRulesComboBox->setModel(m_Model);
     distanceRulesComboBox->setModelColumn(AccountDB::Constants::DISTRULES_TYPE);
-    setDatasToUi();
+    setDataToUi();
 }
 
 DistanceRulesWidget::~DistanceRulesWidget()
@@ -152,7 +152,7 @@ DistanceRulesWidget::~DistanceRulesWidget()
     //saveModel();
 }
 
-void DistanceRulesWidget::setDatasToUi()
+void DistanceRulesWidget::setDataToUi()
 {
     if (WarnDebugMessage)
         LOG("index row  =" + QString::number(distanceRulesComboBox->currentIndex()));

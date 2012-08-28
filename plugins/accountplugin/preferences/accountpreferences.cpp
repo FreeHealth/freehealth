@@ -83,7 +83,7 @@ int AccountUserOptionsPage::sortIndex() const {return 0;}
 void AccountUserOptionsPage::resetToDefaults()
 {
     m_Widget->writeDefaultSettings(settings());
-    m_Widget->setDatasToUi();
+    m_Widget->setDataToUi();
 }
 
 void AccountUserOptionsPage::applyChanges()
@@ -126,10 +126,10 @@ AccountUserWidget::AccountUserWidget(QWidget *parent) :
     setupUi(this);
     previewer = Print::Printer::previewer(this);
     userLayout->addWidget(previewer);
-    setDatasToUi();
+    setDataToUi();
 }
 
-void AccountUserWidget::setDatasToUi()
+void AccountUserWidget::setDataToUi()
 {
     header = Print::TextDocumentExtra::fromXml(settings()->value(Account::Constants::S_USER_HEADER).toString());
     footer = Print::TextDocumentExtra::fromXml(settings()->value(Account::Constants::S_USER_FOOTER).toString());
@@ -204,7 +204,7 @@ int AccountDatabaseDefautsPage::sortIndex() const {return 10;}
 void AccountDatabaseDefautsPage::resetToDefaults()
 {
     m_Widget->writeDefaultSettings(settings());
-    m_Widget->setDatasToUi();
+    m_Widget->setDataToUi();
 }
 
 void AccountDatabaseDefautsPage::applyChanges()
@@ -303,7 +303,7 @@ void AccountDatabaseDefautsWidget::on_createButton_clicked()
     }
 }
 
-void AccountDatabaseDefautsWidget::setDatasToUi()
+void AccountDatabaseDefautsWidget::setDataToUi()
 {
     // TODO: For each defaults checkbox: check if defaults are: 1) available (if no -> unable checkbox) 2) not already inserted (unable checkbox)
 }

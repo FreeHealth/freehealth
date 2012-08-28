@@ -313,7 +313,7 @@ Form::IFormWidget *BaseWidgetsFactory::createWidget(const QString &name, Form::F
 //--------------------------------------------------------------------------------------------------------
 /** \class BaseForm
    \brief Creates a form
-   Manages some Form::FormItem::extraDatas() (that is a QHash<QString, QString>) :
+   Manages some Form::FormItem::extraData() (that is a QHash<QString, QString>) :
    - "col=" ; "numberOfColumns"
 */
 BaseForm::BaseForm(Form::FormItem *formItem, QWidget *parent) :
@@ -363,7 +363,7 @@ BaseForm::BaseForm(Form::FormItem *formItem, QWidget *parent) :
         mainWidget = new QWidget(this);
         // create container layout
         m_ContainerLayout = new QGridLayout(mainWidget);
-        // Retrieve the number of columns for the gridlayout (lays in extraDatas() of linked FormItem)
+        // Retrieve the number of columns for the gridlayout (lays in extraData() of linked FormItem)
         numberColumns = getNumberOfColumns(m_FormItem);
         if (isCompactView(m_FormItem)) {
             mainLayout->setMargin(5);
@@ -384,7 +384,7 @@ BaseForm::BaseForm(Form::FormItem *formItem, QWidget *parent) :
     // create itemdata
     BaseFormData *baseFormData = new BaseFormData(formItem);
     baseFormData->setForm(this);
-    formItem->setItemDatas(baseFormData);
+    formItem->setItemData(baseFormData);
 
     retranslate();
 }
@@ -604,7 +604,7 @@ BaseGroup::BaseGroup(Form::FormItem *formItem, QWidget *parent) :
         setLayout(vblayout);
         vblayout->setMargin(0);
 
-        // Retrieve the number of columns for the gridlayout (lays in extraDatas() of linked FormItem)
+        // Retrieve the number of columns for the gridlayout (lays in extraData() of linked FormItem)
         numberColumns = getNumberOfColumns(m_FormItem, 2);
 
         // Create the gridlayout with all the widgets
@@ -631,7 +631,7 @@ BaseGroup::BaseGroup(Form::FormItem *formItem, QWidget *parent) :
     // create itemdata
     m_ItemData = new BaseGroupData(formItem);
     m_ItemData->setBaseGroup(this);
-    formItem->setItemDatas(m_ItemData);
+    formItem->setItemData(m_ItemData);
 }
 
 BaseGroup::~BaseGroup()
@@ -884,7 +884,7 @@ BaseCheck::BaseCheck(Form::FormItem *formItem, QWidget *parent) :
     // create itemdata
     m_ItemData = new BaseCheckData(formItem);
     m_ItemData->setCheckBox(m_Check);
-    formItem->setItemDatas(m_ItemData);
+    formItem->setItemData(m_ItemData);
     connect(m_Check, SIGNAL(clicked()), m_ItemData, SLOT(onValueChanged()));
 }
 
@@ -1092,7 +1092,7 @@ BaseRadio::BaseRadio(Form::FormItem *formItem, QWidget *parent) :
     // create the FormItemData
     BaseRadioData *data = new BaseRadioData(m_FormItem);
     data->setBaseRadio(this);
-    m_FormItem->setItemDatas(data);
+    m_FormItem->setItemData(data);
 
     connect(m_ButGroup,SIGNAL(buttonClicked(QAbstractButton*)), this, SLOT(buttonClicked(QAbstractButton*)));
     connect(m_ButGroup, SIGNAL(buttonClicked(QAbstractButton*)), data, SLOT(onValueChanged()));
@@ -1366,7 +1366,7 @@ BaseSimpleText::BaseSimpleText(Form::FormItem *formItem, QWidget *parent, bool s
     // Create the FormItemData
     BaseSimpleTextData *data = new BaseSimpleTextData(m_FormItem);
     data->setBaseSimpleText(this);
-    m_FormItem->setItemDatas(data);
+    m_FormItem->setItemData(data);
     if (m_Line)
         connect(m_Line, SIGNAL(textChanged(QString)), data, SLOT(onValueChanged()));
     if (m_Text)
@@ -1624,7 +1624,7 @@ BaseList::BaseList(Form::FormItem *formItem, QWidget *parent, bool uniqueList) :
     // create FormItemData
     BaseListData *data = new BaseListData(m_FormItem);
     data->setBaseList(this);
-    m_FormItem->setItemDatas(data);
+    m_FormItem->setItemData(data);
 
     connect(m_List->selectionModel(), SIGNAL(selectionChanged(QItemSelection,QItemSelection)), data, SLOT(onValueChanged()));
 }
@@ -1838,7 +1838,7 @@ BaseCombo::BaseCombo(Form::FormItem *formItem, QWidget *parent) :
     // create FormItemData
     BaseComboData *data = new BaseComboData(m_FormItem);
     data->setBaseCombo(this);
-    m_FormItem->setItemDatas(data);
+    m_FormItem->setItemData(data);
 
     connect(m_Combo, SIGNAL(currentIndexChanged(int)), data, SLOT(onValueChanged()));
 }
@@ -2021,7 +2021,7 @@ BaseDate::BaseDate(Form::FormItem *formItem, QWidget *parent) :
     // create FormItemData
     BaseDateData *data = new BaseDateData(m_FormItem);
     data->setBaseDate(this);
-    m_FormItem->setItemDatas(data);
+    m_FormItem->setItemData(data);
 
     connect(m_Date, SIGNAL(dateChanged(QDate)), data, SLOT(onValueChanged()));
 }
@@ -2224,7 +2224,7 @@ BaseSpin::BaseSpin(Form::FormItem *formItem, QWidget *parent, bool doubleSpin) :
 
     // manage options
     data->setBaseSpin(this);
-    m_FormItem->setItemDatas(data);
+    m_FormItem->setItemData(data);
 }
 
 BaseSpin::~BaseSpin()

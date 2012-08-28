@@ -87,7 +87,7 @@ int SitesPage::sortIndex() const {return 80;}
 void SitesPage::resetToDefaults()
 {
     m_Widget->writeDefaultSettings(settings());
-    m_Widget->setDatasToUi();
+    m_Widget->setDataToUi();
 }
 
 void SitesPage::applyChanges()
@@ -177,7 +177,7 @@ SitesWidget::SitesWidget(QWidget *parent) :
     ui->wpComboBox->setModelColumn(AccountDB::Constants::SITES_NAME);
     //hash of towns and zipcode
 
-    setDatasToUi();
+    setDataToUi();
 }
 
 SitesWidget::~SitesWidget()
@@ -206,7 +206,7 @@ SitesWidget::~SitesWidget()
 //    countryComboBox->addItems(listForCountry);
 //}
 
-void SitesWidget::setDatasToUi()
+void SitesWidget::setDataToUi()
 {
     if (WarnDebugMessage)
         qDebug() << __FILE__ << QString::number(__LINE__) << "index row  =" << QString::number(ui->wpComboBox->currentIndex());

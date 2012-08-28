@@ -87,7 +87,7 @@ int InsurancePage::sortIndex() const {return 60;}
 void InsurancePage::resetToDefaults()
 {
     m_Widget->writeDefaultSettings(settings());
-    m_Widget->setDatasToUi();
+    m_Widget->setDataToUi();
 }
 
 void InsurancePage::applyChanges()
@@ -176,7 +176,7 @@ InsuranceWidget::InsuranceWidget(QWidget *parent) :
     ui->insuranceComboBox->setModel(m_Model);
     ui->insuranceComboBox->setModelColumn(AccountDB::Constants::INSURANCE_NAME);
 
-    setDatasToUi();
+    setDataToUi();
 }
 
 InsuranceWidget::~InsuranceWidget()
@@ -209,7 +209,7 @@ InsuranceWidget::~InsuranceWidget()
 //    emit findCityFromZipCode(zipComboBox->currentText());
 //}
 
-void InsuranceWidget::setDatasToUi()
+void InsuranceWidget::setDataToUi()
 {
     if (WarnDebugMessage)
         LOG("index row  = " + QString::number(ui->insuranceComboBox->currentIndex()));

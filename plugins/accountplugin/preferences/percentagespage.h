@@ -71,7 +71,7 @@ class PercentagesWidget : public QWidget, private Ui::PercentagesWidget
 public:
     explicit PercentagesWidget(QWidget *parent = 0);
     ~PercentagesWidget();
-    void setDatasToUi();
+    void setDataToUi();
     static void writeDefaultSettings( Core::ISettings *s );
 
 public Q_SLOTS:

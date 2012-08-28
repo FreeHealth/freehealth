@@ -83,7 +83,7 @@ int PercentagesPage::sortIndex() const {return 70;}
 void PercentagesPage::resetToDefaults()
 {
     m_Widget->writeDefaultSettings(settings());
-    m_Widget->setDatasToUi();
+    m_Widget->setDataToUi();
 }
 
 void PercentagesPage::applyChanges()
@@ -155,7 +155,7 @@ PercentagesWidget::PercentagesWidget(QWidget *parent) :
     //m_Mapper->toFirst();
     percentagesComboBox->setModel(m_Model);
     percentagesComboBox->setModelColumn(AccountDB::Constants::PERCENT_TYPE);
-    setDatasToUi();
+    setDataToUi();
 }
 
 PercentagesWidget::~PercentagesWidget()
@@ -163,7 +163,7 @@ PercentagesWidget::~PercentagesWidget()
     //saveModel();
 }
 
-void PercentagesWidget::setDatasToUi()
+void PercentagesWidget::setDataToUi()
 {
     if (WarnDebugMessage)
         qDebug() << __FILE__ << QString::number(__LINE__) << "index row  =" << QString::number(percentagesComboBox->currentIndex());

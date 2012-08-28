@@ -192,7 +192,7 @@ DrugsPrescriptorWidget::DrugsPrescriptorWidget(const QString &name, Form::FormIt
     // create formitemdata
     DrugsWidgetData *drugsWidgetData = new DrugsWidgetData(formItem);
     drugsWidgetData->setDrugsPrescriptorWidget(this);
-    formItem->setItemDatas(drugsWidgetData);
+    formItem->setItemData(drugsWidgetData);
 }
 
 DrugsPrescriptorWidget::~DrugsPrescriptorWidget()

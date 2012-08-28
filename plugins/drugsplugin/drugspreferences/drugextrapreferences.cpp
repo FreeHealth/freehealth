@@ -63,10 +63,10 @@ DrugsExtraWidget::DrugsExtraWidget(QWidget *parent) :
     setupUi(this);
     ALDBefore->setTypes(Editor::TextEditor::Simple | Editor::TextEditor::WithIO | Editor::TextEditor::WithTables);
     ALDAfter->setTypes(Editor::TextEditor::Simple | Editor::TextEditor::WithIO | Editor::TextEditor::WithTables);
-    setDatasToUi();
+    setDataToUi();
 }
 
-void DrugsExtraWidget::setDatasToUi()
+void DrugsExtraWidget::setDataToUi()
 {
     Core::ISettings *s = settings();
     hideLabCheck->setChecked(s->value(DrugsDB::Constants::S_HIDELABORATORY).toBool());
@@ -132,7 +132,7 @@ int DrugsExtraOptionsPage::sortIndex() const {return 1000;}
 void DrugsExtraOptionsPage::resetToDefaults()
 {
     m_Widget->writeDefaultSettings(settings());
-    m_Widget->setDatasToUi();
+    m_Widget->setDataToUi();
 }
 
 void DrugsExtraOptionsPage::applyChanges()

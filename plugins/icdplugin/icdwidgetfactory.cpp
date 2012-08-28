@@ -89,7 +89,7 @@ IcdFormWidget::IcdFormWidget(Form::FormItem *formItem, QWidget *parent) :
     // create formitemdata
     IcdFormData *formData = new IcdFormData(formItem);
     formData->setForm(this);
-    formItem->setItemDatas(formData);
+    formItem->setItemData(formData);
 }
 
 IcdFormWidget::~IcdFormWidget()

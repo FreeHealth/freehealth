@@ -61,7 +61,7 @@ public:
     explicit ProxyPreferencesWidget(QWidget *parent = 0);
 
     static void writeDefaultSettings(Core::ISettings *s);
-    void setDatasToUi();
+    void setDataToUi();
 
 public Q_SLOTS:
     void saveToSettings(Core::ISettings *s = 0);

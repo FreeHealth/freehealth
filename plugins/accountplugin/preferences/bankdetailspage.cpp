@@ -78,7 +78,7 @@ int BankDetailsPage::sortIndex() const {return 40;}
 void BankDetailsPage::resetToDefaults()
 {
     m_Widget->writeDefaultSettings(settings());
-    m_Widget->setDatasToUi();
+    m_Widget->setDataToUi();
 }
 
 void BankDetailsPage::applyChanges()
@@ -150,7 +150,7 @@ BankDetailsWidget::BankDetailsWidget(QWidget *parent) :
     m_Mapper->addMapping(defaultCheckBox, AccountDB::Constants::BANKDETAILS_DEFAULT);
     accountComboBox->setModel(m_Model);
     accountComboBox->setModelColumn(AccountDB::Constants::BANKDETAILS_LABEL);
-    setDatasToUi();
+    setDataToUi();
 }
 
 BankDetailsWidget::~BankDetailsWidget()
@@ -158,7 +158,7 @@ BankDetailsWidget::~BankDetailsWidget()
     //saveModel();
 }
 
-void BankDetailsWidget::setDatasToUi()
+void BankDetailsWidget::setDataToUi()
 {
     m_Mapper->setCurrentIndex(accountComboBox->currentIndex());
 }

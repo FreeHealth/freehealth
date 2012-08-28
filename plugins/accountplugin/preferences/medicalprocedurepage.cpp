@@ -85,7 +85,7 @@ int MedicalProcedurePage::sortIndex() const {return 70;}
 void MedicalProcedurePage::resetToDefaults()
 {
     m_Widget->writeDefaultSettings(settings());
-    m_Widget->setDatasToUi();
+    m_Widget->setDataToUi();
 }
 
 void MedicalProcedurePage::applyChanges()
@@ -184,7 +184,7 @@ void MedicalProcedureWidget::fillHugeWidgets(){
     fillMPCombo();
 }
 
-void MedicalProcedureWidget::setDatasToUi()
+void MedicalProcedureWidget::setDataToUi()
 {
     //m_Mapper->setCurrentIndex(900);
 }

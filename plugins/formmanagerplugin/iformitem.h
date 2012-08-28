@@ -82,7 +82,7 @@ public:
     Form::FormItemValues *valueReferences() const {return m_Values;}
 
     // Access to database values. Pointer will not be deleted
-    void setItemDatas(Form::IFormItemData *data) {m_ItemData = data;}
+    void setItemData(Form::IFormItemData *data) {m_ItemData = data;}
     Form::IFormItemData *itemData() {return m_ItemData;}
 
     // Access to the user's widget

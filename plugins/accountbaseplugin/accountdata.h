@@ -85,7 +85,7 @@ public:
      AmountModel *amountModel() const;
 
 protected:
-    void setDatasFromDb(const int field, const QVariant &value);
+    void setDataFromDb(const int field, const QVariant &value);
 
 private:
     Internal::AccountDataPrivate *d;

@@ -79,7 +79,7 @@ int AvailableMovementPage::sortIndex() const {return 30;}
 void AvailableMovementPage::resetToDefaults()
 {
     m_Widget->writeDefaultSettings(settings());
-    m_Widget->setDatasToUi();
+    m_Widget->setDataToUi();
 }
 
 void AvailableMovementPage::applyChanges()
@@ -135,7 +135,7 @@ AvailableMovementWidget::~AvailableMovementWidget()
     //saveModel();
 }
 
-void AvailableMovementWidget::setDatasToUi()
+void AvailableMovementWidget::setDataToUi()
 {
     m_Mapper->setCurrentIndex(movComboBox->currentIndex());
 }
@@ -158,7 +158,7 @@ void AvailableMovementWidget::fillHugeWidgets(){
     m_Mapper->addMapping(taxDeductibilityComboBox,AccountDB::Constants::AVAILMOV_DEDUCTIBILITY,"currentIndex");
     movComboBox->setModel(m_Model);
     movComboBox->setModelColumn(AccountDB::Constants::AVAILMOV_LABEL);
-    setDatasToUi();
+    setDataToUi();
 }
 
 void AvailableMovementWidget::saveModel()

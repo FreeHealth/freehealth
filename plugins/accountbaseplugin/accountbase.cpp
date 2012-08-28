@@ -274,8 +274,8 @@ AccountBase::AccountBase(QObject *parent) :
     addField(Table_Account,  ACCOUNT_DUEBY,           "DUE_BY",         FieldIsLongText);
     addField(Table_Account,  ACCOUNT_ISVALID,         "VALID",          FieldIsBoolean);
     addField(Table_Account,  ACCOUNT_TRACE,           "TRACE",          FieldIsBlob);
-    
-    
+
+
     addField(Table_Acts,  ACTS_ID,              "ACTS_ID",     FieldIsUniquePrimaryKey);
     addField(Table_Acts,  ACTS_UID,             "ACTS_UID",    FieldIsUUID);
     addField(Table_Acts,  ACTS_USER_UID,        "USER_UID",       FieldIsUUID);
@@ -352,7 +352,7 @@ AccountBase::AccountBase(QObject *parent) :
     addField(Table_AssetsRates,  ASSETSRATES_YEARS,    "YEARS_RANGE",    FieldIsBlob);
     addField(Table_AssetsRates,  ASSETSRATES_RATES,    "RATE",           FieldIsReal);
     addField(Table_AssetsRates,  ASSETSRATES_DATE,     "DATE",           FieldIsDate,"CURRENT_DATE");
-    
+
 //    addTable(Table_Movement, "movement");
     addField(Table_Movement,  MOV_ID,             "MOV_ID",     FieldIsUniquePrimaryKey);
     addField(Table_Movement,  MOV_AV_MOVEMENT_ID, "AV_MOV_ID",  FieldIsLongInteger);
@@ -416,7 +416,7 @@ AccountBase::AccountBase(QObject *parent) :
     addField(Table_Insurance,  INSURANCE_MAIL,        "MAIL",   FieldIsShortText);
     addField(Table_Insurance,  INSURANCE_CONTACT,     "CONTACT",   FieldIsShortText);
     addField(Table_Insurance,  INSURANCE_PREF,        "PREFERRED",  FieldIsBoolean);
-    
+
     /** Create an IDENTITY table */
 
 //    "CREATE TABLE 	payeurs	("  --> insurance
@@ -485,8 +485,8 @@ AccountBase::AccountBase(QObject *parent) :
     addField(Table_Rules,  RULES_TYPE,    "TYPE",          FieldIsShortText);
     addField(Table_Rules,  RULES_VALUES,  "VALUES",        FieldIsShortText);
     addField(Table_Rules,  RULES_PREF,    "PREFERRED",      FieldIsBoolean);
-    
-    
+
+
     addField(Table_DistanceRules,  DISTRULES_ID,      "DISTRULES_ID",      FieldIsUniquePrimaryKey);
     addField(Table_DistanceRules,  DISTRULES_UID,     "DISTRULES_UID",     FieldIsUUID);
     addField(Table_DistanceRules,  DISTRULES_TYPE,    "TYPE",              FieldIsShortText);
@@ -644,12 +644,12 @@ void AccountBase::logChronos(bool log)
     d->m_LogChrono = log;
 }
 
-bool AccountBase::createDatabase(const QString &connectionName , 
+bool AccountBase::createDatabase(const QString &connectionName ,
                                  const QString &dbName,
                                  const QString &pathOrHostName,
-                                 TypeOfAccess , 
+                                 TypeOfAccess ,
                                  AvailableDrivers driver,
-                                 const QString & login, 
+                                 const QString & login,
                                  const QString & pass,
                                  const int port,
                                  CreationOption
@@ -755,7 +755,7 @@ AccountData *AccountBase::getAccountByUid(const QString &uid)
         if (q.next()) {
             AccountData *data = new AccountData();
             for(int i = 0 ; i < Constants::ACCOUNT_MaxParam; ++i) {
-                data->setDatasFromDb(i, q.value(i));
+                data->setDataFromDb(i, q.value(i));
             }
             q.finish();
             DB.commit();
@@ -907,17 +907,17 @@ bool AccountBase::alterFieldPatientNameIntToVarchar()
     QString fieldPatientName    = fieldName(AccountDB::Constants::Table_Account,AccountDB::Constants::ACCOUNT_PATIENT_NAME);
     QString fieldPatientUuid = fieldName(AccountDB::Constants::Table_Account,AccountDB::Constants::ACCOUNT_PATIENT_UID);
     if (WarnDebugMessage)
-    qDebug() << __FILE__ << QString::number(__LINE__) << " table + fielName =" 
+    qDebug() << __FILE__ << QString::number(__LINE__) << " table + fielName ="
     << tableName+" + "+fieldPatientName  ;
     DB.transaction();
     QSqlQuery qy(DB);
     QString req = QString("ALTER TABLE %1 MODIFY %2 varchar(2000) NULL , MODIFY %3 varchar(200) NULL ;")
                          .arg(tableName,fieldPatientName,fieldPatientUuid);
     if (!qy.exec(req)) {
-    	LOG_QUERY_ERROR(qy);
+        LOG_QUERY_ERROR(qy);
         qy.finish();
         DB.rollback();
-    	return false;  
+        return false;
     }
     qy.finish();
     DB.commit();

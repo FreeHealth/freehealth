@@ -91,7 +91,7 @@ int AssetsRatesPage::sortIndex() const {return 20;}
 void AssetsRatesPage::resetToDefaults()
 {
     m_Widget->writeDefaultSettings(settings());
-    m_Widget->setDatasToUi();
+    m_Widget->setDataToUi();
 }
 
 void AssetsRatesPage::applyChanges()
@@ -158,7 +158,7 @@ AssetsRatesWidget::AssetsRatesWidget(QWidget *parent) :
     //m_Mapper->toFirst();
     assetsNameComboBox->setModel(m_Model);
     assetsNameComboBox->setModelColumn(AccountDB::Constants::ASSETSRATES_NAME);
-    setDatasToUi();
+    setDataToUi();
     connect(m_Mapper, SIGNAL(currentIndexChanged(int)), this, SLOT(updateSpinBoxes(int)));
 //    connect(createDefaults, SIGNAL(clicked()), this, SLOT(createDefaultAssetsRates()));
 }
@@ -168,7 +168,7 @@ AssetsRatesWidget::~AssetsRatesWidget()
     //saveModel();
 }
 
-void AssetsRatesWidget::setDatasToUi()
+void AssetsRatesWidget::setDataToUi()
 {
     if (WarnDebugMessage)
         qDebug() << __FILE__ << QString::number(__LINE__) << "index row  =" << QString::number(assetsNameComboBox->currentIndex());

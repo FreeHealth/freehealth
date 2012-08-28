@@ -508,7 +508,7 @@ FrenchSocialNumberFormWidget::FrenchSocialNumberFormWidget(Form::FormItem *formI
     // create itemdata
     m_ItemData = new FrenchSocialNumberFormData(formItem);
     m_ItemData->setWidget(m_NSS);
-    formItem->setItemDatas(m_ItemData);
+    formItem->setItemData(m_ItemData);
 }
 
 FrenchSocialNumberFormWidget::~FrenchSocialNumberFormWidget()

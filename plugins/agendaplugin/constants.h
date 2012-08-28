@@ -151,7 +151,7 @@ namespace Constants {
     };
 
     // Private data for Calendar items
-    enum PrivateDatasCalendarItem {
+    enum PrivateDataCalendarItem {
         Db_CalId = Calendar::CalendarItem::UserData + 1,
         Db_UserCalId,
         Db_CatId,

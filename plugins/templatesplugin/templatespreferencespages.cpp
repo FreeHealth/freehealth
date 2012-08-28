@@ -68,7 +68,7 @@ int TemplatesPreferencesPage::sortIndex() const {return 0;}
 void TemplatesPreferencesPage::resetToDefaults()
 {
     m_Widget->writeDefaultSettings(settings());
-    m_Widget->setDatasToUi();
+    m_Widget->setDataToUi();
 }
 
 void TemplatesPreferencesPage::applyChanges()
@@ -115,10 +115,10 @@ TemplatesPreferencesWidget::TemplatesPreferencesWidget(QWidget *parent) :
         QWidget(parent)
 {
     setupUi(this);
-    setDatasToUi();
+    setDataToUi();
 }
 
-void TemplatesPreferencesWidget::setDatasToUi()
+void TemplatesPreferencesWidget::setDataToUi()
 {
     deletionBox->setChecked(settings()->value(Constants::S_PROMPTFORDELETION).toBool());
     autoExpandBox->setChecked(settings()->value(Constants::S_ALWAYSSHOWEXPANDED).toBool());

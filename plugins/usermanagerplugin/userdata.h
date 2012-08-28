@@ -162,33 +162,33 @@ public:
     void  setLocaleLanguage(QLocale::Language lang)    { setValue(Table_USERS, USER_LANGUAGE, QLocale(lang).name().left(2)); }
     void  setMail(const QVariant & val)                { setValue(Table_USERS, USER_MAIL, val); }
 
-    void  setAddress(const QVariant & val)             { setDynamicDataValue(USER_DATAS_ADDRESS , val); }
-    void  setZipcode(const QVariant & val)             { setDynamicDataValue(USER_DATAS_ZIPCODE , val); }
-    void  setCity(const QVariant & val)                { setDynamicDataValue(USER_DATAS_CITY , val); }
-    void  setCountry(const QVariant & val)             { setDynamicDataValue(USER_DATAS_COUNTRY , val); }
-    void  setCountryIso(const QVariant & val)          { setDynamicDataValue(USER_DATAS_COUNTRY , val); }
-    void  setTel1(const QVariant & val)                { setDynamicDataValue(USER_DATAS_TEL1 , val); }
-    void  setTel2(const QVariant & val)                { setDynamicDataValue(USER_DATAS_TEL2 , val); }
-    void  setTel3(const QVariant & val)                { setDynamicDataValue(USER_DATAS_TEL3 , val); }
-    void  setFax(const QVariant & val)                 { setDynamicDataValue(USER_DATAS_FAX , val); }
-    void  setPractitionerIdentifiant(const QStringList & val) { setDynamicDataValue(USER_DATAS_PRACTIDENTIFIANT, Utils::Serializer::toString(val)); }
+    void  setAddress(const QVariant & val)             { setDynamicDataValue(USER_DATA_ADDRESS , val); }
+    void  setZipcode(const QVariant & val)             { setDynamicDataValue(USER_DATA_ZIPCODE , val); }
+    void  setCity(const QVariant & val)                { setDynamicDataValue(USER_DATA_CITY , val); }
+    void  setCountry(const QVariant & val)             { setDynamicDataValue(USER_DATA_COUNTRY , val); }
+    void  setCountryIso(const QVariant & val)          { setDynamicDataValue(USER_DATA_COUNTRY , val); }
+    void  setTel1(const QVariant & val)                { setDynamicDataValue(USER_DATA_TEL1 , val); }
+    void  setTel2(const QVariant & val)                { setDynamicDataValue(USER_DATA_TEL2 , val); }
+    void  setTel3(const QVariant & val)                { setDynamicDataValue(USER_DATA_TEL3 , val); }
+    void  setFax(const QVariant & val)                 { setDynamicDataValue(USER_DATA_FAX , val); }
+    void  setPractitionerIdentifiant(const QStringList & val) { setDynamicDataValue(USER_DATA_PRACTIDENTIFIANT, Utils::Serializer::toString(val)); }
 
-    void  setSpecialty(const QStringList & val)         { setDynamicDataValue(USER_DATAS_SPECIALTY, Utils::Serializer::toString(val)); }
-    void  setQualification(const QStringList & val)     { setDynamicDataValue(USER_DATAS_QUALIFICATION, Utils::Serializer::toString(val)); }
+    void  setSpecialty(const QStringList & val)         { setDynamicDataValue(USER_DATA_SPECIALTY, Utils::Serializer::toString(val)); }
+    void  setQualification(const QStringList & val)     { setDynamicDataValue(USER_DATA_QUALIFICATION, Utils::Serializer::toString(val)); }
 
-    void  setGenericHeader(const QVariant & val)        { setDynamicDataValue(USER_DATAS_GENERICHEADER , val); }
-    void  setGenericFooter(const QVariant & val)        { setDynamicDataValue(USER_DATAS_GENERICFOOTER , val); }
-    void  setGenericWatermark(const QVariant &val)      { setDynamicDataValue(USER_DATAS_GENERICWATERMARK , val); }
+    void  setGenericHeader(const QVariant & val)        { setDynamicDataValue(USER_DATA_GENERICHEADER , val); }
+    void  setGenericFooter(const QVariant & val)        { setDynamicDataValue(USER_DATA_GENERICFOOTER , val); }
+    void  setGenericWatermark(const QVariant &val)      { setDynamicDataValue(USER_DATA_GENERICWATERMARK , val); }
 
-    void  setAdminHeader(const QVariant & val)          { setDynamicDataValue(USER_DATAS_ADMINISTRATIVEHEADER , val); }
-    void  setAdminFooter(const QVariant & val)          { setDynamicDataValue(USER_DATAS_ADMINISTRATIVEFOOTER , val); }
-    void  setAdminWatermark(const QVariant &val)        { setDynamicDataValue(USER_DATAS_ADMINISTRATIVEWATERMARK , val); }
+    void  setAdminHeader(const QVariant & val)          { setDynamicDataValue(USER_DATA_ADMINISTRATIVEHEADER , val); }
+    void  setAdminFooter(const QVariant & val)          { setDynamicDataValue(USER_DATA_ADMINISTRATIVEFOOTER , val); }
+    void  setAdminWatermark(const QVariant &val)        { setDynamicDataValue(USER_DATA_ADMINISTRATIVEWATERMARK , val); }
 
-    void  setPrescriptionHeader(const QVariant & val)   { setDynamicDataValue(USER_DATAS_PRESCRIPTIONHEADER , val); }
-    void  setPrescriptionFooter(const QVariant & val)   { setDynamicDataValue(USER_DATAS_PRESCRIPTIONFOOTER , val); }
-    void  setPrescriptionWatermark(const QVariant &val) { setDynamicDataValue(USER_DATAS_PRESCRIPTIONWATERMARK , val); }
+    void  setPrescriptionHeader(const QVariant & val)   { setDynamicDataValue(USER_DATA_PRESCRIPTIONHEADER , val); }
+    void  setPrescriptionFooter(const QVariant & val)   { setDynamicDataValue(USER_DATA_PRESCRIPTIONFOOTER , val); }
+    void  setPrescriptionWatermark(const QVariant &val) { setDynamicDataValue(USER_DATA_PRESCRIPTIONWATERMARK , val); }
 
-    void  setPreferences(const QVariant & val)          { setDynamicDataValue(USER_DATAS_PREFERENCES , val); }
+    void  setPreferences(const QVariant & val)          { setDynamicDataValue(USER_DATA_PREFERENCES , val); }
 
     void  addLoginToHistory();
 
@@ -216,28 +216,28 @@ public:
     QLocale::Language localeLanguage() const {return QLocale(languageIso()).language(); }
     QString mail() const                 { return value(Table_USERS, USER_MAIL).toString(); }
 
-    QString address() const              { return dynamicDataValue(USER_DATAS_ADDRESS).toString(); }
-    QString zipcode() const              { return dynamicDataValue(USER_DATAS_ZIPCODE).toString(); }
-    QString city() const                 { return dynamicDataValue(USER_DATAS_CITY).toString(); }
-    QString country() const              { return dynamicDataValue(USER_DATAS_COUNTRY).toString(); }
-    QString countryIso() const           { return dynamicDataValue(USER_DATAS_COUNTRY).toString(); }
+    QString address() const              { return dynamicDataValue(USER_DATA_ADDRESS).toString(); }
+    QString zipcode() const              { return dynamicDataValue(USER_DATA_ZIPCODE).toString(); }
+    QString city() const                 { return dynamicDataValue(USER_DATA_CITY).toString(); }
+    QString country() const              { return dynamicDataValue(USER_DATA_COUNTRY).toString(); }
+    QString countryIso() const           { return dynamicDataValue(USER_DATA_COUNTRY).toString(); }
     QStringList tels() const             { return QStringList()
-                                           << dynamicDataValue(USER_DATAS_TEL1).toString()
-                                           << dynamicDataValue(USER_DATAS_TEL2).toString()
-                                           << dynamicDataValue(USER_DATAS_TEL3).toString(); }
-    QString fax() const                  { return dynamicDataValue(USER_DATAS_FAX).toString(); }
+                                           << dynamicDataValue(USER_DATA_TEL1).toString()
+                                           << dynamicDataValue(USER_DATA_TEL2).toString()
+                                           << dynamicDataValue(USER_DATA_TEL3).toString(); }
+    QString fax() const                  { return dynamicDataValue(USER_DATA_FAX).toString(); }
 
 
-    QStringList practitionerId() const   { return Utils::Serializer::toStringList(dynamicDataValue(USER_DATAS_PRACTIDENTIFIANT).toString()); }
-    QStringList specialty() const        { return Utils::Serializer::toStringList(dynamicDataValue(USER_DATAS_SPECIALTY).toString());  }
-    QStringList qualifications() const   { return Utils::Serializer::toStringList(dynamicDataValue(USER_DATAS_QUALIFICATION).toString()); }
+    QStringList practitionerId() const   { return Utils::Serializer::toStringList(dynamicDataValue(USER_DATA_PRACTIDENTIFIANT).toString()); }
+    QStringList specialty() const        { return Utils::Serializer::toStringList(dynamicDataValue(USER_DATA_SPECIALTY).toString());  }
+    QStringList qualifications() const   { return Utils::Serializer::toStringList(dynamicDataValue(USER_DATA_QUALIFICATION).toString()); }
 
     QStringList adminPapers() const      { return QStringList()
-                                           << dynamicDataValue(USER_DATAS_ADMINISTRATIVEHEADER).toString()
-                                           << dynamicDataValue(USER_DATAS_ADMINISTRATIVEFOOTER).toString(); }
+                                           << dynamicDataValue(USER_DATA_ADMINISTRATIVEHEADER).toString()
+                                           << dynamicDataValue(USER_DATA_ADMINISTRATIVEFOOTER).toString(); }
     QStringList prescrPapers() const     { return QStringList()
-                                           << dynamicDataValue(USER_DATAS_PRESCRIPTIONHEADER).toString()
-                                           << dynamicDataValue(USER_DATAS_PRESCRIPTIONFOOTER).toString();}
+                                           << dynamicDataValue(USER_DATA_PRESCRIPTIONHEADER).toString()
+                                           << dynamicDataValue(USER_DATA_PRESCRIPTIONFOOTER).toString();}
 
     void setExtraDocument(Print::TextDocumentExtra *extra, const int index);
     void setExtraDocumentHtml(const QVariant &val, const int index);
@@ -246,8 +246,8 @@ public:
     QVariant extraDocumentHtml(const int index) const;
     Print::TextDocumentExtra *extraDocument(const int index) const;
 
-    QString preferences() const          { return dynamicDataValue(USER_DATAS_PREFERENCES).toString(); }
-    QString loginHistory() const         { return dynamicDataValue(USER_DATAS_LOGINHISTORY).toString(); }
+    QString preferences() const          { return dynamicDataValue(USER_DATA_PREFERENCES).toString(); }
+    QString loginHistory() const         { return dynamicDataValue(USER_DATA_LOGINHISTORY).toString(); }
 
     // Rights getters
     QVariant rightsValue(const char *name) const;

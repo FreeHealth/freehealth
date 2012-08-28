@@ -47,7 +47,7 @@
   Some members are reserved for the use with UserBase and shouldn't be assessed outside of the UserBase class.\n
   You can set/get values using database tables representations with :
   - setValue() and value() for the USERS table,
-  - addDynamicDataFromDatabase() and dynamicDataValue() for the DATAS table,
+  - addDynamicDataFromDatabase() and dynamicDataValue() for the DATA table,
   - addRightsFromDatabase() and rightsValue() for the RIGHTS table,
   - hasModifiedDynamicDatasToStore(), hasModifiedRightsToStore inform UserBase of needed changes,
   - modifiedDynamicDatas(), modifiedRoles() inform UserBase of the dynamic data and rights to save to base.
@@ -213,7 +213,7 @@ void UserDynamicData::feedFromSql(const int field, const QVariant& value)
     Q_ASSERT(field>=DATAS_ID && field <= DATAS_TRACE_ID);
     switch (field) {
             case DATAS_ID : d->m_Id = value.toInt(); break;
-            case DATAS_USER_UUID : d->m_UserUuid = value.toString(); break;
+            case DATA_USER_UUID : d->m_UserUuid = value.toString(); break;
             case DATAS_DATANAME: setName(value.toString()); break;
             case DATAS_LANGUAGE: d->m_Language = value.toString(); break;
             case DATAS_LASTCHANGE: d->m_Lastchange = value.toDateTime(); break;
@@ -300,10 +300,10 @@ QVariant UserDynamicData::value() const
 */
 void UserDynamicData::prepareQuery(QSqlQuery &bindedQuery) const
 {
-    bindedQuery.bindValue(DATAS_USER_UUID,  d->m_UserUuid);
+    bindedQuery.bindValue(DATA_USER_UUID,  d->m_UserUuid);
     bindedQuery.bindValue(DATAS_DATANAME ,  d->m_Name);
 
-    if (d->m_Name==Constants::USER_DATAS_PREFERENCES) {
+    if (d->m_Name==Constants::USER_DATA_PREFERENCES) {
         bindedQuery.bindValue(DATAS_STRING ,    QVariant());
         bindedQuery.bindValue(DATAS_LONGSTRING, QVariant());
         bindedQuery.bindValue(DATAS_FILE,       d->m_Value);
@@ -405,15 +405,15 @@ public:
 
     void feedStaticHash()
     {
-        m_Link_PaperName_ModelIndex.insert(USER_DATAS_GENERICHEADER, Core::IUser::GenericHeader);
-        m_Link_PaperName_ModelIndex.insert(USER_DATAS_GENERICFOOTER, Core::IUser::GenericFooter);
-        m_Link_PaperName_ModelIndex.insert(USER_DATAS_GENERICWATERMARK, Core::IUser::GenericWatermark);
-        m_Link_PaperName_ModelIndex.insert(USER_DATAS_ADMINISTRATIVEHEADER, Core::IUser::AdministrativeHeader);
-        m_Link_PaperName_ModelIndex.insert(USER_DATAS_ADMINISTRATIVEFOOTER, Core::IUser::AdministrativeFooter);
-        m_Link_PaperName_ModelIndex.insert(USER_DATAS_ADMINISTRATIVEWATERMARK, Core::IUser::AdministrativeWatermark);
-        m_Link_PaperName_ModelIndex.insert(USER_DATAS_PRESCRIPTIONHEADER, Core::IUser::PrescriptionHeader);
-        m_Link_PaperName_ModelIndex.insert(USER_DATAS_PRESCRIPTIONFOOTER, Core::IUser::PrescriptionFooter);
-        m_Link_PaperName_ModelIndex.insert(USER_DATAS_PRESCRIPTIONWATERMARK, Core::IUser::PrescriptionWatermark);
+        m_Link_PaperName_ModelIndex.insert(USER_DATA_GENERICHEADER, Core::IUser::GenericHeader);
+        m_Link_PaperName_ModelIndex.insert(USER_DATA_GENERICFOOTER, Core::IUser::GenericFooter);
+        m_Link_PaperName_ModelIndex.insert(USER_DATA_GENERICWATERMARK, Core::IUser::GenericWatermark);
+        m_Link_PaperName_ModelIndex.insert(USER_DATA_ADMINISTRATIVEHEADER, Core::IUser::AdministrativeHeader);
+        m_Link_PaperName_ModelIndex.insert(USER_DATA_ADMINISTRATIVEFOOTER, Core::IUser::AdministrativeFooter);
+        m_Link_PaperName_ModelIndex.insert(USER_DATA_ADMINISTRATIVEWATERMARK, Core::IUser::AdministrativeWatermark);
+        m_Link_PaperName_ModelIndex.insert(USER_DATA_PRESCRIPTIONHEADER, Core::IUser::PrescriptionHeader);
+        m_Link_PaperName_ModelIndex.insert(USER_DATA_PRESCRIPTIONFOOTER, Core::IUser::PrescriptionFooter);
+        m_Link_PaperName_ModelIndex.insert(USER_DATA_PRESCRIPTIONWATERMARK, Core::IUser::PrescriptionWatermark);
     }
 
     ~UserDataPrivate()
@@ -843,8 +843,8 @@ void UserData::setCryptedPassword(const QVariant &val)
 /** Add the current login to the login history of the user. */
 void UserData::addLoginToHistory()
 {
-    setDynamicDataValue(USER_DATAS_LOGINHISTORY,
-                        dynamicDataValue(USER_DATAS_LOGINHISTORY).toString() +
+    setDynamicDataValue(USER_DATA_LOGINHISTORY,
+                        dynamicDataValue(USER_DATA_LOGINHISTORY).toString() +
                         QCoreApplication::translate("tkUser", "User logged at %1\n")
                         .arg(lastLogin().toString(Qt::DefaultLocaleLongDate))
               );

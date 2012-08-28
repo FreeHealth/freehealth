@@ -40,20 +40,20 @@ static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
 
 LedgerIO::LedgerIO(QObject * parent){
     if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " IO constructeur 1" ;
+              qDebug() << __FILE__ << QString::number(__LINE__) << " IO constructeur 1" ;
     if ((m_accountModel = new AccountModel(parent)) == NULL)
     {
-    	  qWarning() << __FILE__ << QString::number(__LINE__) << "AccountModel is null" ;
+          qWarning() << __FILE__ << QString::number(__LINE__) << "AccountModel is null" ;
         }
     m_userUuid = user()->uuid(); //m_accountModel->getUserUuid();
     if (WarnDebugMessage)
     qDebug() << __FILE__ << QString::number(__LINE__) << " m_userUuid =" << m_userUuid ;
     if ((m_movementModel = new MovementModel(parent))== NULL)
     {
-    	  qWarning() << __FILE__ << QString::number(__LINE__) << "MovementModel is null" ;
+          qWarning() << __FILE__ << QString::number(__LINE__) << "MovementModel is null" ;
         }
     if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " IO constructeur 2" ;
+              qDebug() << __FILE__ << QString::number(__LINE__) << " IO constructeur 2" ;
 }
 
 LedgerIO::~LedgerIO(){}
@@ -64,28 +64,28 @@ QStringList LedgerIO::getListOfYears(){
     m_accountModel->setFilter(filter);
     while (m_accountModel->canFetchMore())
     {
-    	  m_accountModel->fetchMore();
+          m_accountModel->fetchMore();
         }
     int rows = m_accountModel->rowCount();
     if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " rows =" << QString::number(rows) ;
+              qDebug() << __FILE__ << QString::number(__LINE__) << " rows =" << QString::number(rows) ;
     for (int i = 0; i < rows; ++i)
     {
-    	QString dateS = m_accountModel->data(m_accountModel->index(i,ACCOUNT_DATE),Qt::DisplayRole).toString();
-    	/*if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " dateS =" << dateS ;*/
-    	QString yearOfDate = dateS.split(" ").last();
-    	list << yearOfDate;
-    	/*if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " yearOfDate = " << yearOfDate ;*/
+        QString dateS = m_accountModel->data(m_accountModel->index(i,ACCOUNT_DATE),Qt::DisplayRole).toString();
+        /*if (WarnDebugMessage)
+              qDebug() << __FILE__ << QString::number(__LINE__) << " dateS =" << dateS ;*/
+        QString yearOfDate = dateS.split(" ").last();
+        list << yearOfDate;
+        /*if (WarnDebugMessage)
+              qDebug() << __FILE__ << QString::number(__LINE__) << " yearOfDate = " << yearOfDate ;*/
     }
     if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " listOfYears =" << QString::number(list.size()) ;
+              qDebug() << __FILE__ << QString::number(__LINE__) << " listOfYears =" << QString::number(list.size()) ;
     list.removeDuplicates();
-    
+
     return list;
 }
-    
+
 
 AccountModel * LedgerIO::getModelMonthlyReceiptsIO(QObject * parent,QString & month , QString & year){
     QString dateBeginStr = year+"-"+month+"-01";
@@ -94,14 +94,14 @@ AccountModel * LedgerIO::getModelMonthlyReceiptsIO(QObject * parent,QString & mo
     int numberOfDays = 0;
     if (month.toInt() < 12)
     {
-    	   dateMonthAfter = dateBegin.addMonths(1);
-    	   numberOfDays = dateBegin.daysTo(dateMonthAfter);
+           dateMonthAfter = dateBegin.addMonths(1);
+           numberOfDays = dateBegin.daysTo(dateMonthAfter);
         }
     else{
         numberOfDays = dateBegin.daysTo(QDate::fromString(year+"-12-31","yyyy-MM-dd"));
         }
     if (WarnDebugMessage)
-        qDebug() << __FILE__ << QString::number(__LINE__) << " numberOfDays =" << QString::number(numberOfDays); 
+        qDebug() << __FILE__ << QString::number(__LINE__) << " numberOfDays =" << QString::number(numberOfDays);
     AccountModel * accountModel = new AccountModel(parent);
     QString dateEndStr = year+"-"+month+"-"+QString::number(numberOfDays+1);
     QString filter = QString("%1='%2'").arg("USER_UID",m_userUuid);
@@ -110,12 +110,12 @@ AccountModel * LedgerIO::getModelMonthlyReceiptsIO(QObject * parent,QString & mo
     accountModel->setFilter(filter);
     while (accountModel->canFetchMore())
     {
-    	  accountModel->fetchMore();
+          accountModel->fetchMore();
         }
     if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " filter  =" << accountModel->filter() ;
+              qDebug() << __FILE__ << QString::number(__LINE__) << " filter  =" << accountModel->filter() ;
     if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " rows =" << accountModel->rowCount() ;
+              qDebug() << __FILE__ << QString::number(__LINE__) << " rows =" << accountModel->rowCount() ;
     return accountModel;
 }
 
@@ -134,24 +134,24 @@ QStringList LedgerIO::getTypesByMonth(QObject * parent,QString & month,QString &
     accountModel->setFilter(filter);
     while (accountModel->canFetchMore())
     {
-    	  accountModel->fetchMore();
+          accountModel->fetchMore();
         }
     if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " filter  =" << accountModel->filter() ;
+              qDebug() << __FILE__ << QString::number(__LINE__) << " filter  =" << accountModel->filter() ;
     int rowsNumber = accountModel->rowCount();
     if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " rowsNumber =" << QString::number(rowsNumber) ;
+              qDebug() << __FILE__ << QString::number(__LINE__) << " rowsNumber =" << QString::number(rowsNumber) ;
     for (int i = 0; i < rowsNumber; ++i)
     {
-    	QString dataType = accountModel->data(accountModel->index(i,ACCOUNT_MEDICALPROCEDURE_TEXT),Qt::DisplayRole)
-    	                   .toString();
-    	if (dataType.contains("+"))
-    	{
-    		  list << dataType.split("+");
-    	    }
-    	else{
-    	          list << dataType;
-    	}
+        QString dataType = accountModel->data(accountModel->index(i,ACCOUNT_MEDICALPROCEDURE_TEXT),Qt::DisplayRole)
+                           .toString();
+        if (dataType.contains("+"))
+        {
+              list << dataType.split("+");
+            }
+        else{
+                  list << dataType;
+        }
     }
     list.removeDuplicates();
     return list;
@@ -170,30 +170,30 @@ int LedgerIO::getNbrOfRowsByTypeAndMonth(QObject * parent,QString & month,QStrin
     accountModel->setFilter(filter);
     while (accountModel->canFetchMore())
     {
-    	  accountModel->fetchMore();
+          accountModel->fetchMore();
         }
     int rowsNumber = accountModel->rowCount();
     for (int i = 0; i < rowsNumber; ++i)
     {
-    	QString dataType = accountModel->data(accountModel->index(i,ACCOUNT_MEDICALPROCEDURE_TEXT),Qt::DisplayRole)
-    	                  .toString();
-    	if (dataType.contains("+"))
-    	{
-    		  QStringList list = dataType.split("+");
-    		  QString str;
-    		  foreach(str,list){
-    		      if (str == type)
-    		      {
-    		      	  rows++;
-    		          }
-    		      }
-    	    }
-    	else{
-    	    if (dataType == type)
-    	    {
-    	    	  rows++;
-    	        }
-    	}
+        QString dataType = accountModel->data(accountModel->index(i,ACCOUNT_MEDICALPROCEDURE_TEXT),Qt::DisplayRole)
+                          .toString();
+        if (dataType.contains("+"))
+        {
+              QStringList list = dataType.split("+");
+              QString str;
+              foreach(str,list){
+                  if (str == type)
+                  {
+                      rows++;
+                      }
+                  }
+            }
+        else{
+            if (dataType == type)
+            {
+                  rows++;
+                }
+        }
     }
     return rows;
 }
@@ -208,20 +208,20 @@ QStringList LedgerIO::listOfTypesByYear(QString & year){
     m_accountModel->setFilter(filter);
     while (m_accountModel->canFetchMore())
     {
-    	  m_accountModel->fetchMore();
+          m_accountModel->fetchMore();
         }
     int rowsNumber = m_accountModel->rowCount();
     for (int i = 0; i < rowsNumber; ++i)
     {
-    	QString dataType = m_accountModel->data(m_accountModel->index(i,ACCOUNT_MEDICALPROCEDURE_TEXT),Qt::DisplayRole)
-    	                   .toString();
-    	if (dataType.contains("+"))
-    	{
-    		  list << dataType.split("+");
-    	    }
-    	else{
-    	          list << dataType;
-    	}
+        QString dataType = m_accountModel->data(m_accountModel->index(i,ACCOUNT_MEDICALPROCEDURE_TEXT),Qt::DisplayRole)
+                           .toString();
+        if (dataType.contains("+"))
+        {
+              list << dataType.split("+");
+            }
+        else{
+                  list << dataType;
+        }
     }
     list.removeDuplicates();
     return list;
@@ -238,30 +238,30 @@ int LedgerIO::getNbrOfRowsByTypeAndYear(QObject * parent,QString & year,QString 
     m_accountModel->setFilter(filter);
     while (m_accountModel->canFetchMore())
     {
-    	  m_accountModel->fetchMore();
+          m_accountModel->fetchMore();
         }
     int rowsNumber = m_accountModel->rowCount();
     for (int i = 0; i < rowsNumber; ++i)
     {
-    	QString dataType = m_accountModel->data(m_accountModel->index(i,ACCOUNT_MEDICALPROCEDURE_TEXT),Qt::DisplayRole)
-    	                   .toString();
-    	if (dataType.contains("+"))
-    	{
-    		  QStringList list = dataType.split("+");
-    		  QString str;
-    		  foreach(str,list){
-    		      if (str == type)
-    		      {
-    		      	  rows++;
-    		          }
-    		      }
-    	    }
-    	else{
-    	    if (dataType == type)
-    	    {
-    	    	  rows++;
-    	        }
-    	}
+        QString dataType = m_accountModel->data(m_accountModel->index(i,ACCOUNT_MEDICALPROCEDURE_TEXT),Qt::DisplayRole)
+                           .toString();
+        if (dataType.contains("+"))
+        {
+              QStringList list = dataType.split("+");
+              QString str;
+              foreach(str,list){
+                  if (str == type)
+                  {
+                      rows++;
+                      }
+                  }
+            }
+        else{
+            if (dataType == type)
+            {
+                  rows++;
+                }
+        }
     }
     return rows;
 
@@ -278,17 +278,17 @@ double LedgerIO::getYearlyReceiptsSum(QObject * parent,QString & year){
     m_accountModel->setFilter(filter);
     while (m_accountModel->canFetchMore())
     {
-    	  m_accountModel->fetchMore();
+          m_accountModel->fetchMore();
         }
     int rows = 0;
-    rows = m_accountModel->rowCount();    
+    rows = m_accountModel->rowCount();
     for (int i = 0; i < rows; ++i)
     {
-    	totalValue += m_accountModel->data(m_accountModel->index(i,ACCOUNT_CASHAMOUNT),Qt::DisplayRole).toDouble();
-    	totalValue += m_accountModel->data(m_accountModel->index(i,ACCOUNT_CHEQUEAMOUNT),Qt::DisplayRole).toDouble();
-    	totalValue += m_accountModel->data(m_accountModel->index(i,ACCOUNT_VISAAMOUNT),Qt::DisplayRole).toDouble();
-    	totalValue += m_accountModel->data(m_accountModel->index(i,ACCOUNT_INSURANCEAMOUNT),Qt::DisplayRole).toDouble();
-    	totalValue += m_accountModel->data(m_accountModel->index(i,ACCOUNT_OTHERAMOUNT),Qt::DisplayRole).toDouble();    	
+        totalValue += m_accountModel->data(m_accountModel->index(i,ACCOUNT_CASHAMOUNT),Qt::DisplayRole).toDouble();
+        totalValue += m_accountModel->data(m_accountModel->index(i,ACCOUNT_CHEQUEAMOUNT),Qt::DisplayRole).toDouble();
+        totalValue += m_accountModel->data(m_accountModel->index(i,ACCOUNT_VISAAMOUNT),Qt::DisplayRole).toDouble();
+        totalValue += m_accountModel->data(m_accountModel->index(i,ACCOUNT_INSURANCEAMOUNT),Qt::DisplayRole).toDouble();
+        totalValue += m_accountModel->data(m_accountModel->index(i,ACCOUNT_OTHERAMOUNT),Qt::DisplayRole).toDouble();
     }
     return totalValue;
 }
@@ -303,7 +303,7 @@ MovementModel *LedgerIO::getModelMonthlyMovementsIO(QObject * parent, const QStr
     m_movementModel->setDatesBeginEndAndUserFilter(start,end,m_userUuid);
     while (m_movementModel->canFetchMore())
     {
-    	  m_movementModel->fetchMore();
+          m_movementModel->fetchMore();
         }
     return m_movementModel;
 }
@@ -318,7 +318,7 @@ QStandardItemModel *LedgerIO::getModelMonthlyAndTypeMovementsIO(QObject *parent,
     m_movementModel->setDatesBeginEndAndUserFilter(start,end,m_userUuid);
     while (m_movementModel->canFetchMore())
     {
-    	  m_movementModel->fetchMore();
+          m_movementModel->fetchMore();
         }
     if (WarnDebugMessage)
     qDebug() << __FILE__ << QString::number(__LINE__) << " movementModel filter =" << m_movementModel->filter() ;
@@ -330,9 +330,9 @@ QStandardItemModel *LedgerIO::getModelMonthlyAndTypeMovementsIO(QObject *parent,
         if (WarnDebugMessage)
         qDebug() << __FILE__ << QString::number(__LINE__) << " labelOfMovement =" << labelOfMovement ;
         double value = m_movementModel->data(m_movementModel->index(i,MOV_AMOUNT/*MovementModel::Amount*/),Qt::DisplayRole).toDouble();
-    	if (WarnDebugMessage)
-    	qDebug() << __FILE__ << QString::number(__LINE__) << " value =" << QString::number(value) ;
-    	hash.insertMulti(labelOfMovement,value);
+        if (WarnDebugMessage)
+        qDebug() << __FILE__ << QString::number(__LINE__) << " value =" << QString::number(value) ;
+        hash.insertMulti(labelOfMovement,value);
     }
     QStringList keysList = hash.uniqueKeys();
     QString keyStr;
@@ -362,13 +362,13 @@ QStandardItemModel * LedgerIO::getModelYearlyAndTypeMovementsIO(QObject * parent
     m_movementModel->setDatesBeginEndAndUserFilter(start,end,m_userUuid);
     while (m_movementModel->canFetchMore())
     {
-    	  m_movementModel->fetchMore();
+          m_movementModel->fetchMore();
         }
     rows = m_movementModel->rowCount();
     for (int i = 0; i < rows; ++i) {
         QString labelOfMovement = m_movementModel->data(m_movementModel->index(i,MOV_LABEL),Qt::DisplayRole).toString();
         double value = m_movementModel->data(m_movementModel->index(i,MOV_AMOUNT),Qt::DisplayRole).toDouble();
-    	hash.insertMulti(labelOfMovement,value);    	
+        hash.insertMulti(labelOfMovement,value);
     }
     QStringList keysList = hash.uniqueKeys();
     QString keyStr;
@@ -399,7 +399,7 @@ QStringList LedgerIO::getListOfSumsMonthlyReceiptsIO(QObject * parent,QString & 
     accountModel.setFilter(filter);
     while (accountModel.canFetchMore())
     {
-    	  accountModel.fetchMore();
+          accountModel.fetchMore();
         }
     double sum = 0.00;
     double cash = 0.00;
@@ -408,34 +408,34 @@ QStringList LedgerIO::getListOfSumsMonthlyReceiptsIO(QObject * parent,QString & 
     double banking = 0.00;
     int rowsNumber = accountModel.rowCount();
     for (int i = 0; i < rowsNumber; ++i) {
-    	double cashPartial = accountModel.data(accountModel.index(i,ACCOUNT_CASHAMOUNT),Qt::DisplayRole).toDouble();
-    	cash        += cashPartial;
-    	/*if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << "cash  =" << QString::number(cash) ;*/
-    	double checksPartial = accountModel.data(accountModel.index(i,ACCOUNT_CHEQUEAMOUNT),Qt::DisplayRole).toDouble();
-    	checks      += checksPartial;
-    	/*if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << "checks  =" << QString::number(checks) ;*/
-    	double creditCardPartial = accountModel.data(accountModel.index(i,ACCOUNT_VISAAMOUNT),Qt::DisplayRole).toDouble();
-    	creditCard  += creditCardPartial;
-     	/*if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << "creditCard  =" << QString::number(creditCard) ;*/
-     	double bankingPartial = accountModel.data(accountModel.index(i,ACCOUNT_INSURANCEAMOUNT),Qt::DisplayRole).toDouble();
-    	banking     += bankingPartial;
-    	/*if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << "banking  =" << QString::number(banking)  ;*/
-    	/*if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " sum =" << QString::number(sum) ;*/
-    	sum += cashPartial+checksPartial+creditCardPartial+bankingPartial;
-    	/*if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " sum =" << QString::number(sum) ;*/
+        double cashPartial = accountModel.data(accountModel.index(i,ACCOUNT_CASHAMOUNT),Qt::DisplayRole).toDouble();
+        cash        += cashPartial;
+        /*if (WarnDebugMessage)
+              qDebug() << __FILE__ << QString::number(__LINE__) << "cash  =" << QString::number(cash) ;*/
+        double checksPartial = accountModel.data(accountModel.index(i,ACCOUNT_CHEQUEAMOUNT),Qt::DisplayRole).toDouble();
+        checks      += checksPartial;
+        /*if (WarnDebugMessage)
+              qDebug() << __FILE__ << QString::number(__LINE__) << "checks  =" << QString::number(checks) ;*/
+        double creditCardPartial = accountModel.data(accountModel.index(i,ACCOUNT_VISAAMOUNT),Qt::DisplayRole).toDouble();
+        creditCard  += creditCardPartial;
+        /*if (WarnDebugMessage)
+              qDebug() << __FILE__ << QString::number(__LINE__) << "creditCard  =" << QString::number(creditCard) ;*/
+        double bankingPartial = accountModel.data(accountModel.index(i,ACCOUNT_INSURANCEAMOUNT),Qt::DisplayRole).toDouble();
+        banking     += bankingPartial;
+        /*if (WarnDebugMessage)
+              qDebug() << __FILE__ << QString::number(__LINE__) << "banking  =" << QString::number(banking)  ;*/
+        /*if (WarnDebugMessage)
+              qDebug() << __FILE__ << QString::number(__LINE__) << " sum =" << QString::number(sum) ;*/
+        sum += cashPartial+checksPartial+creditCardPartial+bankingPartial;
+        /*if (WarnDebugMessage)
+              qDebug() << __FILE__ << QString::number(__LINE__) << " sum =" << QString::number(sum) ;*/
     }
     /*if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " sumsReceipts =" << QString::number(sum) ;*/
+              qDebug() << __FILE__ << QString::number(__LINE__) << " sumsReceipts =" << QString::number(sum) ;*/
     list << QString::number(sum)
-         << QString::number(cash) 
-         << QString::number(checks) 
-         << QString::number(creditCard) 
+         << QString::number(cash)
+         << QString::number(checks)
+         << QString::number(creditCard)
          << QString::number(banking);
     return list;
 }
@@ -460,12 +460,12 @@ QStringList LedgerIO::getListOfSumsMonthlyMovementsIO(QObject * parent, const QS
         qDebug() << __FILE__ << QString::number(__LINE__) << " labelOfMovement =" << labelOfMovement ;
         if (labelOfMovement.isEmpty())
         {
-        	  labelOfMovement = "NULL";
+              labelOfMovement = "NULL";
             }
         double value = m_movementModel->data(m_movementModel->index(i,MOV_AMOUNT),Qt::DisplayRole).toDouble();
-    	if (WarnDebugMessage)
-    	qDebug() << __FILE__ << QString::number(__LINE__) << " value =" << QString::number(value) ;
-    	hash.insertMulti(labelOfMovement,value);
+        if (WarnDebugMessage)
+        qDebug() << __FILE__ << QString::number(__LINE__) << " value =" << QString::number(value) ;
+        hash.insertMulti(labelOfMovement,value);
     }
     QStringList keysList = hash.uniqueKeys();
     QString keyStr;
@@ -478,9 +478,9 @@ QStringList LedgerIO::getListOfSumsMonthlyMovementsIO(QObject * parent, const QS
         totalMovementValue += valueAssocWithKey;
         QString strPair = keyStr+"="+QString::number(valueAssocWithKey);
         if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " strPair =" << strPair ;
+              qDebug() << __FILE__ << QString::number(__LINE__) << " strPair =" << strPair ;
         list << strPair;
-         
+
     }
     QString totalString = tr("Total");
     QString totalMovementValueStr = QString::number(totalMovementValue);
@@ -495,15 +495,15 @@ QStringList LedgerIO::listOfReceiptsTypes(){
     accountModel.setFilter("");
     while (accountModel.canFetchMore())
     {
-    	  accountModel.fetchMore();
+          accountModel.fetchMore();
         }
     int rowsNumber = accountModel.rowCount();
     for (int i = 0; i < rowsNumber; ++i) {
-    	QString type = accountModel.data(accountModel.index(i,ACCOUNT_MEDICALPROCEDURE_TEXT),Qt::DisplayRole)
-    	               .toString();
-    	if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " type =" << type ;
-    	list << type;
+        QString type = accountModel.data(accountModel.index(i,ACCOUNT_MEDICALPROCEDURE_TEXT),Qt::DisplayRole)
+                       .toString();
+        if (WarnDebugMessage)
+              qDebug() << __FILE__ << QString::number(__LINE__) << " type =" << type ;
+        list << type;
     }
     return list;
 }
@@ -512,14 +512,14 @@ QStringList LedgerIO::listOfMovementsTypes(){
     QStringList list;
     int rowsNumber = m_movementModel->rowCount();
     for (int i = 0; i < rowsNumber; ++i) {
-    	QString type = m_movementModel->data(m_movementModel->index(i,MOV_LABEL),Qt::DisplayRole)
-    	               .toString();
-    	list << type;
+        QString type = m_movementModel->data(m_movementModel->index(i,MOV_LABEL),Qt::DisplayRole)
+                       .toString();
+        list << type;
     }
-    return list;    
+    return list;
 }
 
-QList<QVector<QString> > LedgerIO::getDatasReceiptsInVector(const QString & dateBegin,const QString & dateEnd){
+QList<QVector<QString> > LedgerIO::getDataReceiptsInVector(const QString & dateBegin,const QString & dateEnd){
     QList<QVector<QString> > tableLedgerMonth;
     QString filter = QString("%1 = '%2'").arg("USER_UID",user()->uuid());
     filter += " AND ";
@@ -529,34 +529,34 @@ QList<QVector<QString> > LedgerIO::getDatasReceiptsInVector(const QString & date
     accountModel.setFilter(filter);
     while (accountModel.canFetchMore())
     {
-    	  accountModel.fetchMore();
+          accountModel.fetchMore();
         }
     if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " filter =" << accountModel.filter() ;
+              qDebug() << __FILE__ << QString::number(__LINE__) << " filter =" << accountModel.filter() ;
     int rows = accountModel.rowCount();
     if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount =" << QString::number(rows) ;
+              qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount =" << QString::number(rows) ;
     for (int i = 0; i < rows; ++i)
     {
-    	QString vectorDate = accountModel.data(accountModel.index(i,ACCOUNT_DATE),Qt::DisplayRole).toString();
+        QString vectorDate = accountModel.data(accountModel.index(i,ACCOUNT_DATE),Qt::DisplayRole).toString();
         QString vectorPatient = accountModel.data(accountModel.index(i,ACCOUNT_PATIENT_NAME),Qt::DisplayRole)
-                                                                                                     .toString();       
+                                                                                                     .toString();
         QString vectorCash = accountModel.data(accountModel.index(i,ACCOUNT_CASHAMOUNT),Qt::DisplayRole)
-    	                                                                                        .toString();
+                                                                                                .toString();
         QString vectorChecks = accountModel.data(accountModel.index(i,ACCOUNT_CHEQUEAMOUNT),Qt::DisplayRole)
                                                                                                    .toString();
         QString vectorVisa = accountModel.data(accountModel.index(i,ACCOUNT_VISAAMOUNT),Qt::DisplayRole).toString();
         QString vectorBanking = accountModel.data(accountModel.index(i,ACCOUNT_INSURANCEAMOUNT),Qt::DisplayRole)
                                                                                                          .toString();
         QString vectorActs = accountModel.data(accountModel.index(i,ACCOUNT_MEDICALPROCEDURE_TEXT),Qt::DisplayRole)
-    	                                                                                         .toString();//acts
+                                                                                                 .toString();//acts
         QVector<QString> vector;
-        vector << vectorDate 
-               << vectorPatient 
-               << vectorCash 
-               << vectorChecks 
-               << vectorVisa 
-               << vectorBanking 
+        vector << vectorDate
+               << vectorPatient
+               << vectorCash
+               << vectorChecks
+               << vectorVisa
+               << vectorBanking
                << vectorActs;
         tableLedgerMonth << vector;
     }
@@ -564,7 +564,7 @@ QList<QVector<QString> > LedgerIO::getDatasReceiptsInVector(const QString & date
     return tableLedgerMonth;
 }
 
-QList<QVector<QString> > LedgerIO::getDatasMovementsInVector(const QString &dateBegin, const QString &dateEnd)
+QList<QVector<QString> > LedgerIO::getDataMovementsInVector(const QString &dateBegin, const QString &dateEnd)
 {
     QList<QVector<QString> > tableLedgerMonth;
     QString totalAmount;
@@ -575,7 +575,7 @@ QList<QVector<QString> > LedgerIO::getDatasMovementsInVector(const QString &date
     m_movementModel->setDatesBeginEndAndUserFilter(start,end,m_userUuid);
     while (m_movementModel->canFetchMore())
     {
-    	  m_movementModel->fetchMore();
+          m_movementModel->fetchMore();
         }
     int rows = m_movementModel->rowCount();
     for (int i = 0; i < rows; ++i) {
@@ -605,7 +605,7 @@ double LedgerIO::getMovementSum(QObject * parent,QString & month, QString & year
     QString dateEndStr = year+"-"+month+"-"+QString::number(lastDayInMonth);
     if (month == "0")
     {
-    	 dateBeginStr = year+"-01-01";
+         dateBeginStr = year+"-01-01";
          dateEndStr = year+"-12-31";
         }
     else{
@@ -620,13 +620,13 @@ double LedgerIO::getMovementSum(QObject * parent,QString & month, QString & year
     m_movementModel->setFilter(filter);
     while (m_movementModel->canFetchMore())
     {
-    	  m_movementModel->fetchMore();
+          m_movementModel->fetchMore();
         }
     int rows = 0;
-    rows = m_movementModel->rowCount();    
+    rows = m_movementModel->rowCount();
     for (int i = 0; i < rows; i += 1)
     {
-    	totalValue += m_movementModel->data(m_movementModel->index(i,MOV_AMOUNT),Qt::DisplayRole).toDouble();
+        totalValue += m_movementModel->data(m_movementModel->index(i,MOV_AMOUNT),Qt::DisplayRole).toDouble();
     }
     return totalValue;
 }

@@ -152,7 +152,7 @@ TextEditorForm::TextEditorForm(Form::FormItem *formItem, QWidget *parent) :
     // create item data
     TextEditorData *data = new TextEditorData(formItem);
     data->setEditor(m_Text);
-    formItem->setItemDatas(data);
+    formItem->setItemData(data);
 
     connect(m_Text->textEdit(), SIGNAL(textChanged()), data, SLOT(onValueChanged()));
     retranslate();

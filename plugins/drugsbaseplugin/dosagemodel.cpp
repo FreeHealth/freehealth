@@ -74,7 +74,7 @@
 #include <QColor>
 #include <QLocale>
 
-enum Warn { WarnDebuggingDatas = false };
+enum Warn { WarnDebuggingData = false };
 
 /**
   \todo remove QCache of DosageModels
@@ -331,7 +331,7 @@ QVariant DosageModel::data(const QModelIndex & item, int role) const
 bool DosageModel::insertRows(int row, int count, const QModelIndex & parent)
 {
     Q_ASSERT_X(!m_UID.isNull(), "DosageModel::insertRows", "before inserting row, you must specify the UID of the related drug");
-    if (WarnDebuggingDatas)
+    if (WarnDebuggingData)
         qWarning() << "DosageModel::insertRows (row:" << row << ";count" << count << ")" << parent;
 //    QString userUuid = user()->uuid();
     int i;
@@ -392,7 +392,7 @@ bool DosageModel::insertRows(int row, int count, const QModelIndex & parent)
 bool DosageModel::removeRows(int row, int count, const QModelIndex & parent)
 {
     Q_ASSERT_X(!m_UID.isNull(), "DosageModel::removeRows", "before using the dosagemodel, you must specify the UID of the related drug");
-    if (WarnDebuggingDatas)
+    if (WarnDebuggingData)
         qWarning() << "DosageModel::removeRows (row:" << row << ";count" << count << ")" << parent;
 
     if (row < 0)
@@ -469,7 +469,7 @@ bool DosageModel::setDrugId(const QVariant &drugId)
         filter = QString("((%1) OR (%2))").arg(filter).arg(innFilter);
     }
 
-    if (WarnDebuggingDatas)
+    if (WarnDebuggingData)
         LOG("DosageModel filter" + filter);
 
     setFilter(filter);

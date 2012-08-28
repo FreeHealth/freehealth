@@ -58,7 +58,7 @@ public:
     explicit DrugEnginesPreferences(QWidget *parent = 0);
     ~DrugEnginesPreferences();
 
-    void setDatasToUi();
+    void setDataToUi();
     void saveToSettings(Core::ISettings *sets = 0);
 
     static void writeDefaultSettings(Core::ISettings *s);

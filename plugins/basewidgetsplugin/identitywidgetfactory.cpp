@@ -155,7 +155,7 @@ IdentityFormWidget::IdentityFormWidget(Form::FormItem *formItem, QWidget *parent
     // create itemdata
     IdentityWidgetData *data = new IdentityWidgetData(m_FormItem);
     data->setIdentityFormWiget(this);
-    m_FormItem->setItemDatas(data);
+    m_FormItem->setItemData(data);
 }
 
 IdentityFormWidget::~IdentityFormWidget()

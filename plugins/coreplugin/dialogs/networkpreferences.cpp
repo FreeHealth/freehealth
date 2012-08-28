@@ -58,11 +58,11 @@ ProxyPreferencesWidget::ProxyPreferencesWidget(QWidget *parent) :
     ui->setupUi(this);
     ui->proxyUserName->setIcon(theme()->icon(Core::Constants::ICONEYES));
     ui->proxyUserPassword->setIcon(theme()->icon(Core::Constants::ICONEYES));
-    setDatasToUi();
+    setDataToUi();
     connect(ui->autoDetect, SIGNAL(clicked()), this, SLOT(autoDetectProxy()));
 }
 
-void ProxyPreferencesWidget::setDatasToUi()
+void ProxyPreferencesWidget::setDataToUi()
 {
     ui->proxyHostName->clear();
     ui->proxyPort->setValue(0);

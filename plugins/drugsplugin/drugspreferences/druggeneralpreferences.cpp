@@ -61,7 +61,7 @@ DrugGeneralPreferencesWidget::DrugGeneralPreferencesWidget(QWidget *parent) :
         QWidget(parent)
 {
     setupUi(this);
-    setDatasToUi();
+    setDataToUi();
     testerBox->hide();
 #ifdef FREEMEDFORMS
     patientNameOrder->hide();
@@ -69,7 +69,7 @@ DrugGeneralPreferencesWidget::DrugGeneralPreferencesWidget(QWidget *parent) :
 #endif
 }
 
-void DrugGeneralPreferencesWidget::setDatasToUi()
+void DrugGeneralPreferencesWidget::setDataToUi()
 {
     Core::ISettings *s = settings();
     //    fontSizeSpin->setValue(m_fontSize);
@@ -201,7 +201,7 @@ int DrugGeneralOptionsPage::sortIndex() const {return 0;}
 void DrugGeneralOptionsPage::resetToDefaults()
 {
     m_Widget->writeDefaultSettings(settings());
-    m_Widget->setDatasToUi();
+    m_Widget->setDataToUi();
 }
 
 void DrugGeneralOptionsPage::applyChanges()

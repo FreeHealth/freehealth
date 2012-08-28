@@ -93,10 +93,10 @@ QHash<int,QString> ReceiptsManager::getPercentages()
   receiptsEngine io;
   QHash<QString,QString> hashFromModel;
   hashFromModel = io.getPercentagesAccordingToUser();
-  QStringList values = hashFromModel.values(); 
+  QStringList values = hashFromModel.values();
   if (hashFromModel.size()==0)
   {
-  	hash.insert(1,"0.00");
+    hash.insert(1,"0.00");
         hash.insert(2,"10.00");
         hash.insert(3,"20.00");
         hash.insert(4,"30.00");
@@ -115,10 +115,10 @@ QHash<int,QString> ReceiptsManager::getPercentages()
        {
            for (int j = 0; j < values.size(); j += 1)
            {
-           	if (values[i].toDouble() < values[j].toDouble())
-           	{
-           		minValue = values[i];
-           	    }
+            if (values[i].toDouble() < values[j].toDouble())
+            {
+                minValue = values[i];
+                }
                }
             }
         if (values.size()<2)
@@ -129,25 +129,25 @@ QHash<int,QString> ReceiptsManager::getPercentages()
             qDebug() << __FILE__ << QString::number(__LINE__) << " minValue =" << minValue ;
         if (!listOfPercents.contains(minValue))
         {
-        	  listOfPercents.append(minValue);
-        	  values.removeOne(minValue)  ; 
-            }    	        
+              listOfPercents.append(minValue);
+              values.removeOne(minValue)  ;
+            }
         }
     listOfPercents << "100.00";
     for (int i = 0; i < listOfPercents.size() ; ++i)
     {
-    	hash.insert(i+1,listOfPercents[i]);
+        hash.insert(i+1,listOfPercents[i]);
         }
     }
-  
+
   return hash;
 }
 
-QHash<QString,QVariant> ReceiptsManager::getParametersDatas(QString & userUid , int table)
+QHash<QString,QVariant> ReceiptsManager::getParametersData(QString & userUid , int table)
 {
    QHash<QString,QVariant> hashForReturn;
    if (WarnDebugMessage)
-       qDebug() << __FILE__ << QString::number(__LINE__) << " ReceiptsManager: in getComboBoxesDatas";
+       qDebug() << __FILE__ << QString::number(__LINE__) << " ReceiptsManager: in getComboBoxesData";
    if (table == DEBTOR_ITEM) {
        InsuranceModel  model(this);
        for (int row = 0; row < model.rowCount(); row += 1) {
@@ -268,7 +268,7 @@ QHash<QString,QVariant> ReceiptsManager::getHashOfSites(){
     if(hash.size()< 1){
         hash.insert("cabinet","uid");
     }
-    return hash; 
+    return hash;
 }
 
 QHash<QString,QVariant> ReceiptsManager::getHashOfInsurance()
@@ -285,7 +285,7 @@ QHash<QString,QVariant> ReceiptsManager::getHashOfInsurance()
     if(hash.size()< 1) {
         hash.insert("patient","uid");
     }
-    return hash; 
+    return hash;
 }
 
 QHash<QString,QVariant> ReceiptsManager::getDistanceRules()
@@ -333,19 +333,19 @@ QHash<QString,QString> ReceiptsManager::getPreferentialActFromThesaurus(const QS
     model.setFilter(filter);
     model.select();
     QString data = model.data(model.index(0,THESAURUS_VALUES)).toString();
-    
+
     double value = 0.00;
     QString MPfilter ;
     QStringList list;
     if(!data.isEmpty()){
     if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " data is not empty " ;
+              qDebug() << __FILE__ << QString::number(__LINE__) << " data is not empty " ;
         if (data.contains("+"))
         {
-    	    if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << "data.contains(+)"   ;
-    	    
-    	    list = data.split("+");
+            if (WarnDebugMessage)
+              qDebug() << __FILE__ << QString::number(__LINE__) << "data.contains(+)"   ;
+
+            list = data.split("+");
           }
         else{
               list << data;
@@ -353,11 +353,11 @@ QHash<QString,QString> ReceiptsManager::getPreferentialActFromThesaurus(const QS
         QString str;
         foreach(str,list){
             const QString field = "NAME";
-            QHash<QString,double> hashActAmount = rIO.getFilteredValueFromMedicalProcedure(str,field); 
+            QHash<QString,double> hashActAmount = rIO.getFilteredValueFromMedicalProcedure(str,field);
             if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " str =" << str ;
+              qDebug() << __FILE__ << QString::number(__LINE__) << " str =" << str ;
             if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " valueBef =" << QString::number(hashActAmount.value(str)) ;
+              qDebug() << __FILE__ << QString::number(__LINE__) << " valueBef =" << QString::number(hashActAmount.value(str)) ;
             value += hashActAmount.value(str);
             }
         hash.insert(data,QString::number(value));
@@ -365,9 +365,9 @@ QHash<QString,QString> ReceiptsManager::getPreferentialActFromThesaurus(const QS
     else
     {
         qWarning() << __FILE__ << QString::number(__LINE__) << "data is empty !" ;
-    	data = "NULL";
-    	value = 0.00;
-    	hash.insert(data,QString::number(value));
+        data = "NULL";
+        value = 0.00;
+        hash.insert(data,QString::number(value));
         const QString information = tr("You have to create a preferred value in Thesaurus.");
         Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), information);
     }
@@ -377,7 +377,7 @@ QHash<QString,QString> ReceiptsManager::getPreferentialActFromThesaurus(const QS
 /*QString ReceiptsManager::createTablesAndFields(){
     QString result = "Ok";
     if (WarnDebugMessage)
-    	      qDebug() <<  __FILE__ << QString::number(__LINE__) ;
+              qDebug() <<  __FILE__ << QString::number(__LINE__) ;
     QSqlDatabase db = QSqlDatabase::database("freeaccount");
     QString reqMP = QString("create table if not exists %1 (%2) ")
                                           .arg("medical_procedure",
@@ -446,7 +446,7 @@ QHash<QString,QString> ReceiptsManager::getPreferentialActFromThesaurus(const QS
                              "BD_BALANCEDATE DATETIME,"
                              "BD_COMMENT LONGTEXT,"
                              "BD_ISDEFAULT BOOL");
-    
+
     QString reqRules = QString("create table if not exists %1 (%2)")
                           .arg("rules",
                                "ID_RULES INTEGER PRIMARY KEY,"
@@ -458,7 +458,7 @@ QHash<QString,QString> ReceiptsManager::getPreferentialActFromThesaurus(const QS
                                        "ID_DISTANCE_RULE INTEGER PRIMARY KEY,"
                                        "NAME_DIST_RULE TEXT,"
                                        "TYPE_DIST_RULE TEXT");
-                                       
+
     QString reqDebtor = QString("create table if not exists %1 (%2)")
                            .arg("insurance",
                                 "INSURANCE_ID INTEGER PRIMARY KEY,"
@@ -472,10 +472,10 @@ QHash<QString,QString> ReceiptsManager::getPreferentialActFromThesaurus(const QS
                                 "FAX TEXT,"
                                 "MAIL TEXT,"
                                 "CONTACT TEXT");
-                          
+
 
     QStringList listOfReq;
-    listOfReq << reqMP 
+    listOfReq << reqMP
               << reqAccount << reqSites << reqWho << reqBankDetails << reqRules << reqDistanceRules << reqDebtor ;
     QString strReq;
     foreach(strReq,listOfReq){
@@ -483,12 +483,12 @@ QHash<QString,QString> ReceiptsManager::getPreferentialActFromThesaurus(const QS
         if(!q.exec(strReq)){
             qWarning() << __FILE__ << QString::number(__LINE__) << q.lastError().text() ;
             result = q.lastError().text() ;
-            
+
             }
-    
-         }                                              
+
+         }
         if (WarnDebugMessage)
-    	      qDebug() <<  __FILE__ << QString::number(__LINE__) ;
+              qDebug() <<  __FILE__ << QString::number(__LINE__) ;
         return result;
 }*/
 
@@ -504,27 +504,27 @@ QHash<QString,QString> ReceiptsManager::getPreferentialActFromThesaurus(const QS
   nameOfActsList.removeAll("typesOfReceipts");
   QString nameOfKeys = nameOfActsList.join(",");
   if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << nameOfKeys;
-  
+              qDebug() << __FILE__ << QString::number(__LINE__) << nameOfKeys;
+
   QString strAct;
   foreach(strAct,nameOfActsList){
       QHash<QString,QString> hashValues;
       QString xmlValue = hash.value(strAct);
       if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << "strAct ="+strAct+" values = "+xmlValue;
+              qDebug() << __FILE__ << QString::number(__LINE__) << "strAct ="+strAct+" values = "+xmlValue;
       QStringList valuesList = xmlValue.split(",");
       QString strValue;
       foreach(strValue,valuesList){
             if(strValue.contains("=")){
                 QStringList pair = strValue.replace(" ","").split("=");
                 if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << pair[0] << " "<<pair[1];
+              qDebug() << __FILE__ << QString::number(__LINE__) << pair[0] << " "<<pair[1];
                 hashValues.insert(pair[0],pair[1]);
             }
-            
+
             }
             if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " TYPE = "+hashValues.value("TYPE");
+              qDebug() << __FILE__ << QString::number(__LINE__) << " TYPE = "+hashValues.value("TYPE");
       listOfReq << QString("INSERT INTO %1 (%2) VALUES(%3)")
                           .arg("medical_procedure",
                                "NAME,ABSTRACT,TYPE,AMOUNT,REIMBOURSEMENT,DATE",
@@ -539,7 +539,7 @@ QHash<QString,QString> ReceiptsManager::getPreferentialActFromThesaurus(const QS
    QString req;
    foreach(req,listOfReq){
        if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << "requetes = "+req;
+              qDebug() << __FILE__ << QString::number(__LINE__) << "requetes = "+req;
        m_rbmReq += req;
        if(!q.exec(req)){
            qWarning()  << __FILE__ << QString::number(__LINE__) << q.lastError().text();
@@ -556,7 +556,7 @@ bool ReceiptsManager::getpreferredValues(){
     m_preferredDistanceRule = modelDR.data(modelDR.index(0,DISTRULES_TYPE),Qt::DisplayRole);
     m_preferredDistanceValue = modelDR.data(modelDR.index(0,DISTRULES_VALUES),Qt::DisplayRole);
     if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " m_preferredDistanceRule =" << m_preferredDistanceRule.toString() ;
+              qDebug() << __FILE__ << QString::number(__LINE__) << " m_preferredDistanceRule =" << m_preferredDistanceRule.toString() ;
     WorkingPlacesModel modelWP(this);
     modelWP.setFilter("PREFERRED = '1'");
     m_preferredSite = modelWP.data(modelWP.index(0,SITES_NAME),Qt::DisplayRole);
@@ -575,7 +575,7 @@ QStringList ReceiptsManager::getChoiceFromCategories(QString & categoriesItem){
     QSqlDatabase db = QSqlDatabase::database(Constants::DB_ACCOUNTANCY);
     QString item = categoriesItem;
     if (WarnDebugMessage)
-    	      qDebug()  << __FILE__ << QString::number(__LINE__) << " categories item ="+item;
+              qDebug()  << __FILE__ << QString::number(__LINE__) << " categories item ="+item;
     if (item == "thesaurus") {
         Utils::informativeMessageBox(tkTr(Trans::Constants::INFORMATION), "item = "+item);
     } else if (item == "CCAM") {
@@ -590,7 +590,7 @@ QStringList ReceiptsManager::getChoiceFromCategories(QString & categoriesItem){
         while(q.next()){
             QString name = q.value(0).toString();
             if (WarnDebugMessage)
-    	      qDebug()  << __FILE__ << QString::number(__LINE__) << " choice item ="+name;
+              qDebug()  << __FILE__ << QString::number(__LINE__) << " choice item ="+name;
             listOfItems << name;
             }
        }
@@ -600,7 +600,7 @@ QStringList ReceiptsManager::getChoiceFromCategories(QString & categoriesItem){
 QVariant ReceiptsManager::getpreferredDistanceRule(){
       return m_preferredDistanceRule;
   }
-  
+
 QString ReceiptsManager::getStringPerferedActAndValues(const QString & act){
     receiptsEngine r;
     return r.getStringOfpreferredActAndHisValue(act);

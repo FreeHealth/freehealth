@@ -621,7 +621,7 @@ public:
         else
             form->itemData()->setData(IFormItemData::ID_UserName, username);
 
-        // feed the formitemdatas for this form and get the data for the patientmodel
+        // feed the formitemdata for this form and get the data for the patientmodel
         foreach(FormItem *it, items.values()) {
             if (!it) {
                 qWarning() << "FormManager::activateForm :: ERROR: no item: " << items.key(it);

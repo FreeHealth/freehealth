@@ -294,7 +294,7 @@ public:
         case Core::IUser::Qualifications : toReturn = user->qualifications(); break;
 
         case Core::IUser::Preferences : toReturn = user->preferences(); break;
-        case Core::IUser::DataPackConfig: userBase()->getUserDynamicData(user->uuid(), Constants::USER_DATAS_DATAPACK_CONFIG); break;
+        case Core::IUser::DataPackConfig: userBase()->getUserDynamicData(user->uuid(), Constants::USER_DATA_DATAPACK_CONFIG); break;
 
         case Core::IUser::GenericHeader : toReturn = user->extraDocumentHtml(Core::IUser::GenericHeader); break;
         case Core::IUser::GenericFooter : toReturn = user->extraDocumentHtml(Core::IUser::GenericFooter); break;
@@ -972,7 +972,7 @@ bool UserModel::setData(const QModelIndex &item, const QVariant &value, int role
     case Core::IUser::Specialities :  user->setSpecialty(value.toStringList()); break;
     case Core::IUser::Qualifications :  user->setQualification(value.toStringList()); break;
     case Core::IUser::Preferences :  user->setPreferences(value); break;
-    case Core::IUser::DataPackConfig: return userBase()->saveUserDynamicData(user->uuid(), Constants::USER_DATAS_DATAPACK_CONFIG, value);
+    case Core::IUser::DataPackConfig: return userBase()->saveUserDynamicData(user->uuid(), Constants::USER_DATA_DATAPACK_CONFIG, value);
 
         // TODO: Add Xml extra document to model
     case Core::IUser::GenericHeader : user->setExtraDocumentHtml(value, Core::IUser::GenericHeader); Q_EMIT(userDocumentsChanged()); break;

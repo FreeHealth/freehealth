@@ -731,28 +731,28 @@ bool DrugsIO::prescriptionFromXml(DrugsDB::DrugsModel *m, const QString &xmlCont
 /**
   \brief Load a Prescription file and assumed the transmission to the DrugsModel
   You can add to or replace the actual prescription using the enumerator DrugsIO::Loader \e loader.\n
-  The \e extraDatas receives the extracted extra data from the loaded prescription file.
+  The \e extraData receives the extracted extra data from the loaded prescription file.
   \sa savePrescription()
   \todo manage xml document version
 */
-bool DrugsIO::loadPrescription(DrugsDB::DrugsModel *m, const QString &fileName, QHash<QString,QString> &extraDatas, Loader loader )
+bool DrugsIO::loadPrescription(DrugsDB::DrugsModel *m, const QString &fileName, QHash<QString,QString> &extraData, Loader loader )
 {
     Q_ASSERT(m);
     QString extras;
     if (!loadPrescription(m, fileName, extras, loader))
         return false;
-    Utils::readXml(extras, XML_EXTRADATAS_TAG, extraDatas, false);
+    Utils::readXml(extras, XML_EXTRADATAS_TAG, extraData, false);
     return true;
 }
 
 /**
   \brief Load a Prescription file and assumed the transmission to the DrugsModel.
   You can add to or replace the actual prescription using the enumerator DrugsIO::Loader \e loader.\n
-  The \e xmlExtraDatas receives the extracted extra data from the loaded prescription file.
+  The \e xmlExtraData receives the extracted extra data from the loaded prescription file.
   \sa savePrescription()
   \todo manage xml document version
 */
-bool DrugsIO::loadPrescription(DrugsDB::DrugsModel *m, const QString &fileName, QString &xmlExtraDatas, Loader loader )
+bool DrugsIO::loadPrescription(DrugsDB::DrugsModel *m, const QString &fileName, QString &xmlExtraData, Loader loader )
 {
     Q_ASSERT(m);
     if (fileName.isEmpty()) {
@@ -771,13 +771,13 @@ bool DrugsIO::loadPrescription(DrugsDB::DrugsModel *m, const QString &fileName, 
         LOG_ERROR_FOR("DrugsIO", tkTr(Trans::Constants::FILE_1_ISNOT_READABLE).arg(info.absoluteFilePath()));
         return false;
     }
-    xmlExtraDatas.clear();
+    xmlExtraData.clear();
     QString xml = Utils::readTextFile(info.absoluteFilePath());
 
     // retreive prescription
     prescriptionFromXml(m, xml,loader);
 
-    // get extradatas
+    // get extraData
     QString start = QString("<%1>").arg(XML_EXTRADATAS_TAG);
     QString finish = QString("</%1>").arg(XML_EXTRADATAS_TAG);
     int begin = xml.indexOf(start) + start.length();
@@ -785,7 +785,7 @@ bool DrugsIO::loadPrescription(DrugsDB::DrugsModel *m, const QString &fileName, 
     if (begin==-1 || end==-1) {
         return true;
     }
-    xmlExtraDatas = xml.mid( begin, end - begin);
+    xmlExtraData = xml.mid( begin, end - begin);
     m->reset();
     return true;
 }
@@ -795,7 +795,7 @@ bool DrugsIO::loadPrescription(DrugsDB::DrugsModel *m, const QString &fileName, 
   Prescription is automatically sorted.\n
   The XML encoded prescription is added inside the HTML code.\n
 */
-QString DrugsIO::prescriptionToHtml(DrugsDB::DrugsModel *m, const QString &xmlExtraDatas, int version)
+QString DrugsIO::prescriptionToHtml(DrugsDB::DrugsModel *m, const QString &xmlExtraData, int version)
 {
     Q_ASSERT(m);
     // clean the model (sort it, hide testing drugs)
@@ -905,8 +905,8 @@ QString DrugsIO::prescriptionToHtml(DrugsDB::DrugsModel *m, const QString &xmlEx
     toReturn.replace("{GENERATOR}", qApp->applicationName());
     toReturn.replace("{PRESCRIPTION}", tmp );
 
-    // add XML extraDatas
-    QString xmldPrescription = prescriptionToXml(m, xmlExtraDatas);
+    // add XML extraData
+    QString xmldPrescription = prescriptionToXml(m, xmlExtraData);
 
     toReturn.replace("{ENCODEDPRESCRIPTION}", QString("%1%2")
                      .arg(ENCODEDHTML_FREEDIAMSTAG)
@@ -1229,15 +1229,15 @@ QString DrugsIO::prescriptionToXml(DrugsDB::DrugsModel *m, const QString &xmlExt
 
 /**
   \brief Save the DrugsModel's prescription into a XML file.
-  You can add \e extraDatas to the xml. \e extraDatas must be xml'd.\n
+  You can add \e extraData to the xml. \e extraData must be xml'd.\n
   If \e toFileName is empty, user is prompted to select a filename.
 */
-bool DrugsIO::savePrescription(DrugsDB::DrugsModel *model, const QHash<QString,QString> &extraDatas, const QString &toFileName)
+bool DrugsIO::savePrescription(DrugsDB::DrugsModel *model, const QHash<QString,QString> &extraData, const QString &toFileName)
 {
     Q_ASSERT(model);
     QString extra;
-    if (!extraDatas.isEmpty()) {
-        extra = Utils::createXml(XML_EXTRADATAS_TAG, extraDatas);
+    if (!extraData.isEmpty()) {
+        extra = Utils::createXml(XML_EXTRADATAS_TAG, extraData);
     }
     QString xmldPrescription = prescriptionToXml(model, extra);
     if (toFileName.isEmpty())

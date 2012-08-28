@@ -43,9 +43,9 @@ namespace ReceiptsConstants{
         Banking,
         Other,
         Due,
-        MaxOfTypeOfPayments        
+        MaxOfTypeOfPayments
     };
-    enum HeaderDatas{
+    enum HeaderData{
         HDCash = 0,
         HDCheck,
         HDVisa,
@@ -56,9 +56,9 @@ namespace ReceiptsConstants{
         HDSite,
         HDDistRules,
         HDAct,
-        MaxOfHeaderDatas
+        MaxOfHeaderData
     };
-    enum ItemsOfTreeView 
+    enum ItemsOfTreeView
     {
         THESAURUS_ITEM = 0,
         ALL_VALUES_ITEM,
@@ -72,7 +72,7 @@ namespace ReceiptsConstants{
         RULES_ITEM,
         ItemsOfTreeView_MaxParam
     };
-    
+
 }
 
 #endif

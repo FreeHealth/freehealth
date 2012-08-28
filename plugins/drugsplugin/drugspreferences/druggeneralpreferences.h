@@ -58,7 +58,7 @@ class DrugGeneralPreferencesWidget : public QWidget, private Ui::DrugGeneralPref
 
 public:
     explicit DrugGeneralPreferencesWidget(QWidget *parent = 0);
-    void setDatasToUi();
+    void setDataToUi();
 
     static void writeDefaultSettings( Core::ISettings *s );
 
