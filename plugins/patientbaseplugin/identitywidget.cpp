@@ -231,15 +231,15 @@ public:
 private:
     IdentityWidget *q;
 };
-}
+
+}  // namespace Internal
+}  // namespace Patients
 
 bool IdentityWidget::hasPhoto() const
 {
     return d->m_hasRealPhoto;
 }
 
-// End namespace Internal
-}  // End namespace Patients
 
 /**
   \brief Create an Identity viewer with the specific \e mode of edition.
@@ -250,6 +250,7 @@ IdentityWidget::IdentityWidget(QWidget *parent, EditMode mode) :
     QWidget(parent),
     d(new Internal::IdentityWidgetPrivate(this, mode))
 {
+    setObjectName("Patient::IdentityWidget");
 }
 
 IdentityWidget::~IdentityWidget()
