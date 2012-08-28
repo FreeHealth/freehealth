@@ -165,7 +165,10 @@ void FormManager::activateMode()
     modeManager()->activateMode(Core::Constants::MODE_PATIENT_FILE);
 }
 
-/**  Return all available empty root forms for the current patient. \sa Form::FormManager::subFormsEmptyRoot(), Form::FormMain */
+/**
+ * Return all available empty root forms for the current patient.
+ * \sa Form::FormManager::subFormsEmptyRoot(), Form::FormMain
+ */
 QList<FormMain *> FormManager::forms() const
 {
     return d->m_RootForms;
@@ -178,9 +181,9 @@ QList<FormMain *> FormManager::subFormsEmptyRoot() const
 }
 
 /**
-  Return the empty root forms loaded from the \e formUid by the Forms::IFormIO objects. \n
-  All these forms are stored in the plugin manager object pool and can be accessed using
-  Forms::FormManager::forms().
+ * Return the empty root forms loaded from the \e formUid by the Forms::IFormIO objects. \n
+ * All these forms are stored in the plugin manager object pool and can be accessed using
+ * Forms::FormManager::forms().
  */
 QList<Form::FormMain *> FormManager::loadFormFile(const QString &formUid)
 {
@@ -254,7 +257,10 @@ Form::FormMain *FormManager::rootForm(const char *modeUniqueName)
     return 0;
 }
 
-/** Load all requiered subforms and insert them according to data extracted from the episode database. */
+/**
+ * Load all requiered subforms and insert them according to data extracted from the episode database.
+ * \sa Form::SubFormInsertionPoint
+ */
 bool FormManager::loadSubForms()
 {
     d->m_SubFormsEmptyRoot.clear();
@@ -273,7 +279,11 @@ bool FormManager::loadSubForms()
     return ok;
 }
 
-/** Insert a sub-form to a form to the specified \e insertionPoint. A signal is emitted before Form::FormMain are getting reparented. */
+/**
+* Insert a sub-form to a form to the specified \e insertionPoint.
+* A signal is emitted before Form::FormMain are getting reparented.
+\sa Form::FormManager::loadSubForms()
+*/
 bool FormManager::insertSubForm(const SubFormInsertionPoint &insertionPoint)
 {
     // read all sub-forms and emit signal if requiered
