@@ -86,7 +86,7 @@ private:
     bool datapackIsAvalaible();
     QHash<QString,QString> getHashFatherSonFromOthers(const QModelIndex & index);
     
-private slots:
+private Q_SLOTS:
     void fillListViewValues(const QString & comboItem);
 //    void chooseValue(const QModelIndex& index);
     void chooseValue();

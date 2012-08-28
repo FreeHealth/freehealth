@@ -63,7 +63,7 @@ protected:
     void mouseMoveEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
 
-private slots:
+private Q_SLOTS:
     void modifyPressItem();
     void removePressItem();
 

@@ -113,7 +113,7 @@ public:
     static PluginSpec *createSpec();
     static PluginSpecPrivate *privateSpec(PluginSpec *spec);
 
-private slots:
+private Q_SLOTS:
     void nextDelayedInitialize();
     void asyncShutdownFinished();
 

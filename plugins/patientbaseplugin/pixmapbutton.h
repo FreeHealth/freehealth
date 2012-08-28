@@ -28,7 +28,7 @@
 #define PIXMAPBUTTON_H
 
 #include <QPushButton>
-
+   
 namespace Patients {
 /*!
  * \class PixmapButton
@@ -50,7 +50,7 @@ public:
     explicit PixmapButton(QWidget* parent = 0);
     QPixmap pixmap() const;
 
-signals:
+Q_SIGNALS:
 
 public Q_SLOTS:
     void setPixmap(const QPixmap&);

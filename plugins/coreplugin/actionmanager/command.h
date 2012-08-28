@@ -78,7 +78,7 @@ public:
                                   const QString &trContext = QString::null ) = 0;
     virtual void retranslate() = 0;
 
-signals:
+Q_SIGNALS:
     void keySequenceChanged();
 };
 

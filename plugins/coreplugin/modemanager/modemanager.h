@@ -74,15 +74,15 @@ public:
     void addAction(Command *command, int priority, QMenu *menu = 0);
     void addWidget(QWidget *widget);
 
-signals:
+Q_SIGNALS:
     void currentModeAboutToChange(Core::IMode *mode);
     void currentModeChanged(Core::IMode *mode);
 
-public slots:
+public Q_SLOTS:
     void activateMode(const QString &id);
     void setFocusToCurrentMode();
 
-private slots:
+private Q_SLOTS:
     void objectAdded(QObject *obj);
     void aboutToRemoveObject(QObject *obj);
     void currentTabAboutToChange(int index);

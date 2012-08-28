@@ -66,12 +66,12 @@ public:
 
     PluginSpec *currentPlugin() const;
 
-signals:
+Q_SIGNALS:
     void currentPluginChanged(ExtensionSystem::PluginSpec *spec);
     void pluginActivated(ExtensionSystem::PluginSpec *spec);
     void pluginSettingsChanged(ExtensionSystem::PluginSpec *spec);
 
-private slots:
+private Q_SLOTS:
     void updatePluginSettings(QTreeWidgetItem *item, int column);
     void updateList();
     void selectPlugin(QTreeWidgetItem *current);

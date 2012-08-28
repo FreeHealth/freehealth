@@ -110,7 +110,7 @@ public:
   //free value and text
   QString getFreeText();
   QString getFreeValue();
-private slots:
+private Q_SLOTS:
   void value(double val);
   void valueUp();
   void valueDown();

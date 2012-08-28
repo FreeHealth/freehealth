@@ -55,7 +55,7 @@ private:
 
     CalendarItem *getItemByUid(const QString &uid);
 
-private slots:
+private Q_SLOTS:
     void refreshItems();
 };
 }
