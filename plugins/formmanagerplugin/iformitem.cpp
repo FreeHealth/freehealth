@@ -128,6 +128,8 @@ enum {WarnFormCreation=false};
 /** Defines the FreeMedForms UUID of the item. */
 void FormItemIdentifier::setUuid(const QString &uuid)
 {
+    if (uuid.contains(".xml"))
+        id = 0;
     id = uuidManager()->uniqueIdentifier(uuid);
     m_Uuid = uuid;
 

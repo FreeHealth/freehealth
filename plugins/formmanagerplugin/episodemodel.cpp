@@ -80,10 +80,7 @@ enum {
 #endif
 
 
-/**
-  \todo When currentpatient change --> read all last episodes of forms and feed the patient model of the
-  PatientDataRepresentation
-*/
+//TODO: When currentpatient change --> read all last episodes of forms and feed the patient model of the PatientDataRepresentation
 
 using namespace Form;
 using namespace Internal;
@@ -101,7 +98,6 @@ static inline Core::ActionManager *actionManager() { return Core::ICore::instanc
 static inline ExtensionSystem::PluginManager *pluginManager() { return ExtensionSystem::PluginManager::instance(); }
 
 namespace {
-
     // TODO: create an Utils::GenericTreeItem \sa Templates::TemplateModel, PMH::PmhCategoryModel
     class EpisodeModelTreeItem
     {
@@ -276,8 +272,6 @@ namespace {
         bool m_IsEpisode, m_IsModified;
         QHash<int, QVariant> m_Datas;
     };
-
-
 }
 
 namespace Form {
@@ -293,7 +287,7 @@ namespace Internal {
 
     bool EpisodeModelCoreListener::coreAboutToClose()
     {
-        qWarning() << Q_FUNC_INFO;
+//        qWarning() << Q_FUNC_INFO;
         m_EpisodeModel->submit();
         return true;
     }
@@ -654,6 +648,7 @@ public:
 
     void getLastEpisodes(bool andFeedPatientModel = true)
     {
+        qWarning() << "GetLastEpisode (feedPatientModel=" <<feedPatientModel << ")";
         if (patient()->uuid().isEmpty())
             return;
 
@@ -897,8 +892,9 @@ QVariant EpisodeModel::data(const QModelIndex &item, int role) const
         return QVariant();
 
     EpisodeModelTreeItem *it = d->getItem(item);
-    if (it==d->m_RootItem)
+    if (it==d->m_RootItem) {
         return QVariant();
+    }
 
     if (it==d->m_ShowLastEpisodes) {
         switch (role) {

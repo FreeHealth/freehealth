@@ -41,8 +41,8 @@ QT_END_NAMESPACE
 /**
  * \file formmanager.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.4
- * \date 15 Feb 2012
+ * \version 0.8.0
+ * \date 28 Aug 2012
 */
 
 namespace Core {
@@ -86,6 +86,8 @@ private:
 class FORM_EXPORT FormManager : public Internal::FormActionHandler
 {
     Q_OBJECT
+    friend class Form::Internal::FormManagerPrivate;
+
     FormManager(QObject *parent = 0);
 
 public:

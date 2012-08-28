@@ -26,8 +26,8 @@
  ***************************************************************************/
 
 /**
-   \class Form::FormManager
-    This class manages all aspect of the patient's forms.
+ * \class Form::FormManager
+ * This class manages all aspect of the patient's forms.
 */
 
 #include "formmanager.h"
@@ -103,27 +103,195 @@ class FormManagerPrivate
 {
 public:
     FormManagerPrivate(FormManager *parent) :
-            m_ActualEpisode(-1), q(parent)
+        q(parent)
     {}
 
     ~FormManagerPrivate()
     {
         qDeleteAll(m_RootForms);
         m_RootForms.clear();
+        _formParents.clear();
+    }
+
+    bool isFormLoaded(QString formUid)
+    {
+        QHashIterator<Form::FormMain *, Form::FormMain *> i(_formParents);
+         while (i.hasNext()) {
+             i.next();
+             if (i.value()->uuid() == formUid)
+                 return true;
+         }
+         return false;
+    }
+
+    QList<Form::FormMain *> loadFormFile(const QString &formUid)
+    {
+        QList<Form::FormMain *> toReturn;
+
+        if (formUid.isEmpty()) {
+            LOG_ERROR_FOR(q, "No formUid to load...");
+            return toReturn;
+        }
+
+        // Check from cache (we suppose that the forms are reparented to their original empty root parent)
+        if (isFormLoaded(formUid)) {
+            QHashIterator<Form::FormMain *, Form::FormMain *> i(_formParents);
+             while (i.hasNext()) {
+                 i.next();
+                 if (i.value()->uuid() == formUid)
+                     toReturn << i.value();
+             }
+            return toReturn;
+        }
+
+
+        // Not in cache -> ask IFormIO plugins
+        QList<Form::IFormIO *> list = pluginManager()->getObjects<Form::IFormIO>();
+        if (list.isEmpty()) {
+            LOG_ERROR_FOR(q, "No IFormIO loaded...");
+            return toReturn;
+        }
+
+        // Load root forms
+        foreach(Form::IFormIO *io, list) {
+            if (io->canReadForms(formUid)) {
+                QList<Form::FormMain *> list = io->loadAllRootForms(formUid);
+                // Keep trace of form parents (first QObject of the rootForm)
+                for(int i=0; i < list.count(); ++i) {
+                    Form::FormMain *rootForm = list.at(i);
+                    foreach(Form::FormMain *form, rootForm->firstLevelFormMainChildren()) {
+                        _formParents.insert(form, rootForm);
+                    }
+                }
+                toReturn << list;
+            }
+        }
+        return toReturn;
+    }
+
+    bool getRootForm()
+    {
+        // get form general form absPath from episodeBase
+        QString absDirPath = episodeBase()->getGenericFormFile();
+        if (absDirPath.isEmpty()) {
+            // TODO: code here: manage no patient form file recorded in episodebase
+            LOG_ERROR_FOR(q, "No patient central form defined");
+            return false;
+        }
+        // load central root forms
+        m_RootForms = loadFormFile(absDirPath);
+
+        // load pmhx
+        if (!m_RootForms.isEmpty()) {
+            m_RootForms.at(0)->reader()->loadPmhCategories(absDirPath);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Load all requiered subforms and insert them according to data extracted from the episode database.
+     */
+    bool loadSubForms()
+    {
+        // TODO: ???   d->m_SubFormsEmptyRoot.clear();
+        // get sub-forms from database
+        const QVector<SubFormInsertionPoint> &subs = episodeBase()->getSubFormFiles();
+        if (subs.isEmpty()) {
+            return true;
+        }
+
+        bool ok = true;
+        for(int i = 0; i < subs.count(); ++i) {
+            if (!insertSubForm(subs.at(i)))
+                ok = false;
+        }
+
+        return ok;
+    }
+
+    /**
+     * Insert a sub-form to a form to the specified \e insertionPoint.
+     * A signal is emitted before Form::FormMain are getting reparented.
+     */
+    bool insertSubForm(const SubFormInsertionPoint &insertionPoint)
+    {
+        // read all sub-forms and emit signal if requiered
+        QList<Form::FormMain*> subs = loadFormFile(insertionPoint.subFormUid());
+//        TODO: ???m_SubFormsEmptyRoot << subs;
+        if (insertionPoint.emitInsertionSignal())
+            Q_EMIT q->subFormLoaded(insertionPoint.subFormUid());
+
+        // insert sub-forms to the forms tree
+        const QString &insertIntoUuid = insertionPoint.receiverUid();
+        for(int i=0; i < subs.count(); ++i) {
+            FormMain *sub = subs.at(i);
+    //        qWarning() << "insert" << sub->uuid() << "to" << insertIntoUuid;
+            if (insertIntoUuid == Constants::ROOT_FORM_TAG) {
+                // insert into its mode root form
+                FormMain *rootMode = q->rootForm(sub->modeUniqueName().toAscii());
+                if (!rootMode) {
+                    LOG_ERROR_FOR(q, "Unable to find the mode root form: " + sub->modeUniqueName());
+                    continue;
+                }
+                foreach(Form::FormMain *form, sub->firstLevelFormMainChildren())
+                    form->setParent(rootMode);
+            }
+
+            // find point of insertion
+            QList<Form::FormMain *> allForms = q->forms();
+            for(int j=0; j < allForms.count(); ++j) {
+                FormMain *parent = allForms.at(j);
+                // search inside flatten children
+                QList<Form::FormMain *> children = parent->flattenFormMainChildren();
+                for(int k=0; k < children.count(); ++k) {
+                    FormMain *child = children.at(k);
+                    if (child->uuid()==insertIntoUuid) {
+    //                    qWarning() << "inserting subForm"<< insertionPoint.subFormUid() << "to" << insertionPoint.receiverUid();
+                        foreach(Form::FormMain *form, sub->firstLevelFormMainChildren()) {
+                            form->setParent(child);
+                        }
+                        break;
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    /** Read the PMHx categories associated the \e formUidOrAbsPath form. */
+    bool readPmhxCategories(const QString &formUuidOrAbsPath)
+    {
+        Q_UNUSED(formUuidOrAbsPath);
+        // TODO: code here why don't we use the \e formUuidOrAbsPath param?
+        // get all form readers (IFormIO)
+        QList<Form::IFormIO *> list = pluginManager()->getObjects<Form::IFormIO>();
+
+        // get form general form absPath from episodeBase
+        QString absDirPath = episodeBase()->getGenericFormFile();
+        if (absDirPath.isEmpty()) {
+            // TODO: code here: manage no patient form file recorded in episodebase
+            return false;
+        }
+        foreach(Form::IFormIO *io, list) {
+            if (io->canReadForms(absDirPath)) {
+                if (io->loadPmhCategories(absDirPath))
+                    break;
+            }
+        }
+        return true;
     }
 
 public:
-    // TODO: create an EpisodeData class
-    int m_ActualEpisode;
-    QString m_ActualEpisode_FormUid;
     QList<Form::FormMain *> m_RootForms, m_SubFormsEmptyRoot;
+    QHash<Form::FormMain *, Form::FormMain *> _formParents; // keep the formMain parent in cache (K=form to reparent, V=emptyrootform)
 
 
 private:
     FormManager *q;
 };
-} // End Internal
-} // End Form
+} // namespace Internal
+} // namespace Form
 
 
 FormManager *FormManager::m_Instance = 0;
@@ -187,63 +355,43 @@ QList<FormMain *> FormManager::subFormsEmptyRoot() const
  */
 QList<Form::FormMain *> FormManager::loadFormFile(const QString &formUid)
 {
-    QList<Form::FormMain *> toReturn;
-
-    if (formUid.isEmpty()) {
-        LOG_ERROR("No formUid to load...");
-        return toReturn;
-    }
-
-    // get all form readers (IFormIO)
-    QList<Form::IFormIO *> list = pluginManager()->getObjects<Form::IFormIO>();
-    if (list.isEmpty()) {
-        LOG_ERROR("No IFormIO loaded...");
-        return toReturn;
-    }
-
-    // Load root forms
-    foreach(Form::IFormIO *io, list) {
-        if (io->canReadForms(formUid)) {
-            toReturn << io->loadAllRootForms(formUid);
-        }
-    }
-
-    return toReturn;
+    return d->loadFormFile(formUid);
 }
 
 /** Load the generic patient file (and included subforms) and emit patientFormsLoaded() when finished. */
 bool FormManager::loadPatientFile()
 {
-    qDeleteAll(d->m_RootForms);
-    d->m_RootForms.clear();
-
-    // get form general form absPath from episodeBase
-    QString absDirPath = episodeBase()->getGenericFormFile();
-    if (absDirPath.isEmpty()) {
-        // TODO: code here: manage no patient form file recorded in episodebase
-        return false;
+    // Patient root form already loaded ?
+    if (d->m_RootForms.isEmpty()) {
+        if (d->getRootForm()) {
+            LOG("Central patient file loaded");
+            Q_EMIT patientFormsLoaded();
+        } else {
+            LOG_ERROR("Unable to load central patient file");
+            return false;
+        }
+    } else {
+        // Remove subforms from the root form (just reparent all forms to their initial empty root)
+        QHashIterator<Form::FormMain *, Form::FormMain *> i(d->_formParents);
+         while (i.hasNext()) {
+             i.next();
+             i.key()->setParent(i.value());
+         }
     }
-    // load central root forms
-    d->m_RootForms = loadFormFile(absDirPath);
 
     // load subforms
-    loadSubForms();
+    d->loadSubForms();
 
-    // load pmhx
-    if (!d->m_RootForms.isEmpty()) {
-        d->m_RootForms.at(0)->reader()->loadPmhCategories(absDirPath);
-    }
-
-    // emit signal
-    Q_EMIT patientFormsLoaded();
+//    qDeleteAll(d->m_RootForms);
+//    d->m_RootForms.clear();
 
     return true;
 }
 
 /**
-  Extract from the <b>patient file form</b> the empty root form corresponding to the \e modeUniqueName
-  or 0 if no form matches the \e modeUniqueName.
-  \sa loadPatientFile()
+ * Extract from the patient file form the empty root form corresponding to the \e modeUniqueName
+ * or 0 if no form matches the \e modeUniqueName.
+ * \sa loadPatientFile()
 */
 Form::FormMain *FormManager::rootForm(const char *modeUniqueName)
 {
@@ -255,101 +403,6 @@ Form::FormMain *FormManager::rootForm(const char *modeUniqueName)
         }
     }
     return 0;
-}
-
-/**
- * Load all requiered subforms and insert them according to data extracted from the episode database.
- * \sa Form::SubFormInsertionPoint
- */
-bool FormManager::loadSubForms()
-{
-    d->m_SubFormsEmptyRoot.clear();
-    // get sub-forms from database
-    const QVector<SubFormInsertionPoint> &subs = episodeBase()->getSubFormFiles();
-    if (subs.isEmpty()) {
-        return true;
-    }
-
-    bool ok = true;
-    for(int i = 0; i < subs.count(); ++i) {
-        if (!insertSubForm(subs.at(i)))
-            ok = false;
-    }
-
-    return ok;
-}
-
-/**
-* Insert a sub-form to a form to the specified \e insertionPoint.
-* A signal is emitted before Form::FormMain are getting reparented.
-\sa Form::FormManager::loadSubForms()
-*/
-bool FormManager::insertSubForm(const SubFormInsertionPoint &insertionPoint)
-{
-    // read all sub-forms and emit signal if requiered
-    QList<Form::FormMain*> subs = loadFormFile(insertionPoint.subFormUid());
-    d->m_SubFormsEmptyRoot << subs;
-    if (insertionPoint.emitInsertionSignal())
-        Q_EMIT subFormLoaded(insertionPoint.subFormUid());
-
-    // insert sub-forms to the forms tree
-    const QString &insertIntoUuid = insertionPoint.receiverUid();
-    for(int i=0; i < subs.count(); ++i) {
-        FormMain *sub = subs.at(i);
-//        qWarning() << "insert" << sub->uuid() << "to" << insertIntoUuid;
-        if (insertIntoUuid == Constants::ROOT_FORM_TAG) {
-            // insert into its mode root form
-            FormMain *rootMode = rootForm(sub->modeUniqueName().toAscii());
-            if (!rootMode) {
-                LOG_ERROR("unable to find the mode root form: " + sub->modeUniqueName());
-                continue;
-            }
-            foreach(Form::FormMain *form, sub->firstLevelFormMainChildren())
-                form->setParent(rootMode);
-        }
-
-        // find point of insertion
-        QList<Form::FormMain *> allForms = forms();
-        for(int j=0; j < allForms.count(); ++j) {
-            FormMain *parent = allForms.at(j);
-            // search inside flatten children
-            QList<Form::FormMain *> children = parent->flattenFormMainChildren();
-            for(int k=0; k < children.count(); ++k) {
-                FormMain *child = children.at(k);
-                if (child->uuid()==insertIntoUuid) {
-//                    qWarning() << "inserting subForm"<< insertionPoint.subFormUid() << "to" << insertionPoint.receiverUid();
-                    foreach(Form::FormMain *form, sub->firstLevelFormMainChildren()) {
-                        form->setParent(child);
-                    }
-                    break;
-                }
-            }
-        }
-    }
-    return true;
-}
-
-/** Read the PMHx categories associated the \e formUidOrAbsPath form. */
-bool FormManager::readPmhxCategories(const QString &formUuidOrAbsPath)
-{
-    Q_UNUSED(formUuidOrAbsPath);
-    // TODO: code here why don't we use the \e formUuidOrAbsPath param?
-    // get all form readers (IFormIO)
-    QList<Form::IFormIO *> list = pluginManager()->getObjects<Form::IFormIO>();
-
-    // get form general form absPath from episodeBase
-    QString absDirPath = episodeBase()->getGenericFormFile();
-    if (absDirPath.isEmpty()) {
-        // TODO: code here: manage no patient form file recorded in episodebase
-        return false;
-    }
-    foreach(Form::IFormIO *io, list) {
-        if (io->canReadForms(absDirPath)) {
-            if (io->loadPmhCategories(absDirPath))
-                break;
-        }
-    }
-    return true;
 }
 
 /** Return one specific screenshot for the form \e formUid and nammed \e fileName. */
