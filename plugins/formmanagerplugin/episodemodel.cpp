@@ -38,16 +38,15 @@
 #include <coreplugin/constants_tokensandsettings.h>
 #include <coreplugin/constants_icons.h>
 #include <coreplugin/actionmanager/actionmanager.h>
+#include <coreplugin/icore.h>
+#include <coreplugin/icorelistener.h>
+#include <coreplugin/isettings.h>
+#include <coreplugin/itheme.h>
 
 #include <formmanagerplugin/formmanager.h>
 #include <formmanagerplugin/iformitem.h>
 #include <formmanagerplugin/iformitemspec.h>
 #include <formmanagerplugin/iformitemdata.h>
-
-#include <coreplugin/icore.h>
-#include <coreplugin/icorelistener.h>
-#include <coreplugin/isettings.h>
-#include <coreplugin/itheme.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -648,7 +647,7 @@ public:
 
     void getLastEpisodes(bool andFeedPatientModel = true)
     {
-        qWarning() << "GetLastEpisode (feedPatientModel=" <<feedPatientModel << ")";
+        qWarning() << "GetLastEpisode (feedPatientModel=" <<andFeedPatientModel << ")";
         if (patient()->uuid().isEmpty())
             return;
 
