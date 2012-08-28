@@ -34,10 +34,10 @@
   \sa UserPlugin::Internal::UserData
   \sa UserPlugin::IUserListener
 
-  \todo write documentation+++
-  \todo code LOCKER
-  \todo when QDataWidgetMapper (UserViewer) is set, it calls ALL the datas of the user, even for the hidden widgets. This causes an important memory usage. This is to improve ++++
 */
+//TODO: write documentation+++
+//TODO: code LOCKER
+//TODO: when QDataWidgetMapper (UserViewer) is set, it calls ALL the data of the user, even for the hidden widgets. This causes an important memory usage. Improve this ++++
 
 #include "usermodel.h"
 
