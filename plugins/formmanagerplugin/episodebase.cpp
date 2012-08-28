@@ -934,6 +934,16 @@ bool EpisodeBase::getEpisodeContent(EpisodeData *episode)
     return true;
 }
 
+/** Return the total number of episodes recorded for one Form identified by its \e formUid */
+int EpisodeBase::getNumberOfEpisodes(const QString &formUid)
+{
+    QHash<int, QString> where;
+    where.insert(Constants::EPISODES_PATIENT_UID, QString("='%1'").arg(patient()->uuid()));
+    where.insert(Constants::EPISODES_FORM_PAGE_UID, QString("='%1'").arg(formUid));
+    where.insert(Constants::EPISODES_ISVALID, QString("=1"));
+    return count(Constants::Table_EPISODES, Constants::EPISODES_ID, getWhereClause(Constants::Table_EPISODES, where));
+}
+
 void EpisodeBase::toTreeWidget(QTreeWidget *tree)
 {
     Database::toTreeWidget(tree);

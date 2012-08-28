@@ -142,6 +142,7 @@ public:
     bool saveEpisode(const QList<EpisodeData *> &episode);
     QList<EpisodeData *> getEpisodes(const EpisodeBaseQuery &query);
     bool getEpisodeContent(EpisodeData *episode);
+    int getNumberOfEpisodes(const QString &formUid);
 
 private:
     bool createDatabase(const QString &connectionName, const QString &dbName,
