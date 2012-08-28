@@ -51,9 +51,9 @@ QT_END_NAMESPACE
 
 /**
  * \file iformitem.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.7.3
- * \date 27 May 2012
+ * \author Eric MAEKER
+ * \version 0.8.0
+ * \date 27 Aug 2012
 */
 
 namespace Form {
