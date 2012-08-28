@@ -194,7 +194,7 @@ void UserViewer::changeUserTo(const int modelRow)
             }
         }
     } else {
-        Utils::informativeMessageBox(tr("You can not access to these datas."), tr("You don't have these rights."), "");
+        Utils::informativeMessageBox(tr("You can not access to these data."), tr("You don't have access rights."), "");
     }
 }
 
@@ -210,7 +210,7 @@ void UserViewer::submitChangesToModel()
 }
 
 void UserViewer::pluginManagerObjectAdded(QObject *o)
-{    
+{
     IUserViewerPage *page = qobject_cast<IUserViewerPage *>(o);
     if (page) {
         d->m_pages << page;
