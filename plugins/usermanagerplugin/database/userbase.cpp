@@ -99,7 +99,7 @@ static inline bool connectDatabase(QSqlDatabase &DB, const int line)
     return true;
 }
 
-// Initializing static datas
+// Initializing static data
 UserBase *UserBase::m_Instance = 0;
 
 /**
@@ -263,7 +263,7 @@ void UserBase::onCoreFirstRunCreationRequested()
 }
 
 //--------------------------------------------------------------------------------------------------------
-//------------------------------------------- Datas retreivers -------------------------------------------
+//------------------------------------------- Data retreivers --------------------------------------------
 //--------------------------------------------------------------------------------------------------------
 /** Retreive all users data from the users' database. If an error occurs, it returns 0. */
 UserData *UserBase::getUser(const QHash<int, QString> &conditions) const
@@ -614,7 +614,7 @@ QString UserBase::getUserDynamicData(const QString &userUid, const QString &dynD
     return QString::null;
 }
 //--------------------------------------------------------------------------------------------------------
-//--------------------------------------------- Datas savers ---------------------------------------------
+//--------------------------------------------- Data savers ----------------------------------------------
 //--------------------------------------------------------------------------------------------------------
 static inline QString defaultPaper(const QString &profession, const QString &paper, const QString &paperType = QString::null)
 {
@@ -1040,7 +1040,7 @@ bool UserBase::saveUser(UserData *user)
         }
         query.finish();
 
-        // update dynamic datas
+        // update dynamic data
         qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
         if (user->hasModifiedDynamicDatasToStore()) {
             const QList<UserDynamicData*> &datasToUpdate = user->modifiedDynamicDatas();
@@ -1146,7 +1146,7 @@ bool UserBase::saveUser(UserData *user)
         user->setId(query.lastInsertId());
         query.finish();
 
-        // add dynamic datas
+        // add dynamic data
         qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
         if (user->hasModifiedDynamicDatasToStore()) {
             const QList<UserDynamicData *> &datasToUpdate = user->modifiedDynamicDatas();

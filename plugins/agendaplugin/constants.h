@@ -150,7 +150,7 @@ namespace Constants {
         VERSION_ACTUAL = 0
     };
 
-    // Private datas for Calendar items
+    // Private data for Calendar items
     enum PrivateDatasCalendarItem {
         Db_CalId = Calendar::CalendarItem::UserData + 1,
         Db_UserCalId,

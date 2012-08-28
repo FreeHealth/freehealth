@@ -147,15 +147,15 @@ inline static Form::IFormWidget::LabelOptions labelAlignement(Form::FormItem *it
 
 inline static QStringList getCountries(Form::FormItem *item)
 {
-    if (!item->extraDatas().value(::EXTRAS_COUNTRY).isEmpty())
-        return item->extraDatas().value(::EXTRAS_COUNTRY).split(";");
+    if (!item->extraData().value(::EXTRAS_COUNTRY).isEmpty())
+        return item->extraData().value(::EXTRAS_COUNTRY).split(";");
     return QStringList();
 }
 
 inline static int getNumberOfColumns(Form::FormItem *item, int defaultValue = 1)
 {
-    if (!item->extraDatas().value(::EXTRAS_KEY_COLUMN).isEmpty())
-        return item->extraDatas().value(::EXTRAS_KEY_COLUMN).toInt();
+    if (!item->extraData().value(::EXTRAS_KEY_COLUMN).isEmpty())
+        return item->extraData().value(::EXTRAS_KEY_COLUMN).toInt();
     else
         return defaultValue;
 }
@@ -206,8 +206,8 @@ inline static int isRadioHorizontalAlign(Form::FormItem *item, bool defaultValue
 
 inline static QString getDateFormat(Form::FormItem *item, const QString & defaultValue = "dd MM yyyy")
 {
-    if (!item->extraDatas().value(::DATE_EXTRAS_KEY).isEmpty()) {
-        return item->extraDatas().value(::DATE_EXTRAS_KEY);
+    if (!item->extraData().value(::DATE_EXTRAS_KEY).isEmpty()) {
+        return item->extraData().value(::DATE_EXTRAS_KEY);
     }
     return defaultValue;
 }
@@ -2204,17 +2204,17 @@ BaseSpin::BaseSpin(Form::FormItem *formItem, QWidget *parent, bool doubleSpin) :
         if (doubleSpin) {
             QDoubleSpinBox *spin = new QDoubleSpinBox(this);
             spin->setObjectName("DoubleSpin_" + m_FormItem->uuid());
-            spin->setMinimum(formItem->extraDatas().value(::SPIN_EXTRAS_KEY_MIN, "0").toDouble());
-            spin->setMaximum(formItem->extraDatas().value(::SPIN_EXTRAS_KEY_MAX, "10000").toDouble());
-            spin->setSingleStep(formItem->extraDatas().value(::SPIN_EXTRAS_KEY_STEP, "0.1").toDouble());
+            spin->setMinimum(formItem->extraData().value(::SPIN_EXTRAS_KEY_MIN, "0").toDouble());
+            spin->setMaximum(formItem->extraData().value(::SPIN_EXTRAS_KEY_MAX, "10000").toDouble());
+            spin->setSingleStep(formItem->extraData().value(::SPIN_EXTRAS_KEY_STEP, "0.1").toDouble());
             connect(spin, SIGNAL(valueChanged(double)), data, SLOT(onValueChanged()));
             m_Spin = spin;
         } else {
             QSpinBox *spin = new QSpinBox(this);
             spin->setObjectName("Spin_" + m_FormItem->uuid());
-            spin->setMinimum(formItem->extraDatas().value(::SPIN_EXTRAS_KEY_MIN, "0").toInt());
-            spin->setMaximum(formItem->extraDatas().value(::SPIN_EXTRAS_KEY_MAX, "10000").toInt());
-            spin->setSingleStep(formItem->extraDatas().value(::SPIN_EXTRAS_KEY_STEP, "1").toInt());
+            spin->setMinimum(formItem->extraData().value(::SPIN_EXTRAS_KEY_MIN, "0").toInt());
+            spin->setMaximum(formItem->extraData().value(::SPIN_EXTRAS_KEY_MAX, "10000").toInt());
+            spin->setSingleStep(formItem->extraData().value(::SPIN_EXTRAS_KEY_STEP, "1").toInt());
             m_Spin = spin;
             connect(spin, SIGNAL(valueChanged(int)), data, SLOT(onValueChanged()));
         }

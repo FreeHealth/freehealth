@@ -450,7 +450,7 @@ public:
 //        m_DataName_Datas[name].insert(DATAS_LASTCHANGE, QDateTime::currentDateTime());
 //        m_IsNull = false;
 //        m_Modified = true;
-//        // store modified dynamic datas changed into a list to limit database access
+//        // store modified dynamic data changed into a list to limit database access
 //        if (!m_ModifiedDynamicDatas.contains(name))
 //            m_ModifiedDynamicDatas << name;
 //    }

@@ -158,7 +158,7 @@ public:
                     << "DROP TABLE `OLD_TEMPLATES`;";
 
 
-            // Reinsert datas to new tables
+            // Reinsert data to new tables
             if (!q->executeSQL(reqs, DB))
                 LOG_ERROR_FOR(q, "Unable to recreate template database during update (0.3.0 to 0.4.0)");
 

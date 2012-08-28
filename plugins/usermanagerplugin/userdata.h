@@ -268,7 +268,7 @@ public:
 protected:
     // use only with database UserBase
 
-    // generic setters to use only when retreiving datas from database
+    // generic setters to use only when retreiving data from database
     void setValue(const int tableref, const int fieldref, const QVariant & val);
     void addDynamicDatasFromDatabase(const QList<UserDynamicData*> &list);
     void addRightsFromDatabase(const char * roleName, const int fieldref, const QVariant & val);

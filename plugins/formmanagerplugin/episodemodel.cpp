@@ -603,7 +603,7 @@ public:
             return;
         }
 
-        // put datas into the FormItems of the form
+        // put data into the FormItems of the form
         // XML content ==
         // <formitemuid>value</formitemuid>
         QHash<QString, FormItem *> items;
@@ -1326,7 +1326,7 @@ bool EpisodeModel::activateEpisode(const QModelIndex &index, const QString &form
         return false;
     }
 
-    // put datas into the FormItems of the form
+    // put data into the FormItems of the form
     // XML content ==
     // <formitemuid>value</formitemuid>
     QHash<QString, FormItem *> items;

@@ -62,7 +62,7 @@
   \todo Add a UUID to templates and categories
   \todo Add user filter, MimeType filter
   \todo Don't get the contents of templates to memory
-  \todo Remove the static datas. instead use a new member getDatas() to be called after setCategoryOnly(bool)
+  \todo Remove the static data. instead use a new member getDatas() to be called after setCategoryOnly(bool)
   \todo Detect corrupted templates database --> ask user what to do
   \todo Add a coreListener --> save templates database before closing application
   \todo Manage transmission date
@@ -1033,7 +1033,7 @@ bool TemplatesModel::insertTemplate(const Templates::ITemplate *t)
     // setDatas of newly created row
 //    Internal::TreeItem *parentItem = d->getItem(item)->parent();
 //    // TODO: manage user
-//    Internal::TreeItem *newItem = new Internal::TreeItem(t.datas(),parentItem);
+//    Internal::TreeItem *newItem = new Internal::TreeItem(t.data(),parentItem);
 //    // TODO: reset all instances of the model
 //    d->resetAllInstances();
     return true;

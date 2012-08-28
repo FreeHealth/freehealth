@@ -903,7 +903,7 @@ void DrugsBase::onCoreDatabaseServerChanged()
 //    if (!connectDatabase(DrugsDB, __FILE__, __LINE__))
 //        return toReturn;
 
-//    // get all needed datas from database
+//    // get all needed data from database
 //    QMultiHash<QString, minimalCompo> cis_compo;
 //    foreach(int inn, inn_dosageRef.keys()) {
 //        const QVector<int> &molIds = getLinkedMoleculeCodes(inn);

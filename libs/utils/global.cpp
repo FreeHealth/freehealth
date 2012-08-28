@@ -1626,7 +1626,7 @@ int replaceToken(QString &textToAnalyse, const QString &token, const QString &va
 {
     if (!textToAnalyse.contains(token))
         return 0;
-    // replace all occurences of token : token must not contains [ and ]
+    // replace all occurences of token: token must not contain [ and ]
     QString t = token;
     t.remove(Constants::TOKEN_OPEN);
     t.remove(Constants::TOKEN_CLOSE);

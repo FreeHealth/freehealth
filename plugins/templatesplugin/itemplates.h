@@ -77,7 +77,7 @@ public:
     virtual QStringList contentMimeTypes() const {return data(Constants::Data_ContentMimeTypes).toStringList();}
 
     virtual QMimeData *toMimeData();
-    virtual bool fromMimeData(QMimeData *data);
+    virtual bool fromMimeData(QMimeData *);
     virtual QString serialize();
     virtual bool deserialize(const QString &serialized);
 

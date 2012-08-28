@@ -304,7 +304,7 @@ QString InteractionManager::synthesisToHtml(const QVector<IDrugInteraction *> &l
 ////            categories.insert(catName, category);
 ////        }
 
-////        // Include the interaction's datas
+////        // Include the interaction's data
 ////        QTreeWidgetItem *interactors = new QTreeWidgetItem(category, QStringList()
 ////                                                           << QString("%1 <-> %2").arg(di->value(Internal::DrugsInteraction::DI_ATC1_Label).toString()).arg(di->value(Internal::DrugsInteraction::DI_ATC2_Label).toString()));
 ////        interactors->setFont(0, bold);

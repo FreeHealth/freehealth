@@ -63,7 +63,7 @@ namespace {
     const char * const C = "Correctement: si la case est coché, signifie que le patient ne fait pas correctement";
     const char * const NOPB = "Aucun problème";
 
-    // Datas references
+    // Data references
     const int ITEM_KEY = Qt::UserRole + 2;
     const int SUBITEM = Qt::UserRole + 3;
     const int RESPONSE = Qt::UserRole + 4;

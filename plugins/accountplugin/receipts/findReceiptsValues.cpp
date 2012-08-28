@@ -86,15 +86,15 @@ findReceiptsValues::findReceiptsValues(QWidget * parent):QDialog(parent)
   //test of choice of user base or datapack
   if (datapackIsAvalaible())//verify
   {
-  	  ui->datapackRadioButton->setChecked(true);
-  	  chooseDatapackModel(true);
-  	  qWarning() << __FILE__ << QString::number(__LINE__) << "DATAPACK FREEACCOUNT AVALAIBLE" ;
+      ui->datapackRadioButton->setChecked(true);
+      chooseDatapackModel(true);
+      qWarning() << __FILE__ << QString::number(__LINE__) << "DATAPACK FREEACCOUNT AVALAIBLE" ;
       }
   else
   {
-  	ui->userRadioButton->setChecked(true);
-  	chooseUserModel(true);
-  	qWarning() << __FILE__ << QString::number(__LINE__) << "USER MODEL IS CHOOSEN" ;
+    ui->userRadioButton->setChecked(true);
+    chooseUserModel(true);
+    qWarning() << __FILE__ << QString::number(__LINE__) << "USER MODEL IS CHOOSEN" ;
       }
   m_modifier = 1.0;
   //fillComboCategories();
@@ -122,7 +122,7 @@ findReceiptsValues::findReceiptsValues(QWidget * parent):QDialog(parent)
   connect(ui->nameRadioButton,SIGNAL(toggled(bool)),this,SLOT(wipeFilterEdit(bool)));
   connect(ui->plusButton,SIGNAL(pressed()),this,SLOT(wipeFilterEdit()));
   connect(ui->listchosenWidget,SIGNAL(itemClicked(QListWidgetItem *)),this,SLOT(setLessButtonEnabled(QListWidgetItem *)));
-  
+
 }
 
 findReceiptsValues::~findReceiptsValues()
@@ -147,12 +147,12 @@ void findReceiptsValues::fillComboCategories(){
     const QString req = QString("SELECT %1 FROM %2").arg("TYPE","medical_procedure");
     if (!q.exec(req))
     {
-    	  qWarning() << __FILE__ << QString::number(__LINE__) << q.lastError().text() ;
+          qWarning() << __FILE__ << QString::number(__LINE__) << q.lastError().text() ;
         }
     while (q.next())
     {
-    	QString type = q.value(0).toString();
-    	choiceList << type;
+        QString type = q.value(0).toString();
+        choiceList << type;
         }
     choiceList.removeDuplicates();
     ui->comboBoxCategories->clear();
@@ -168,13 +168,13 @@ void findReceiptsValues::fillListViewValues(const QString & comboItem){
     const QString baseName = "medical_procedure";
     const QString strItem = comboItem.trimmed();
     if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << strItem  ;
+              qDebug() << __FILE__ << QString::number(__LINE__) << strItem  ;
     const QString name = "NAME";
     const QString amount = "AMOUNT";
     const QString explanation = "ABSTRACT";
     const QString others = "OTHERS";
     const QString type = "TYPE";
-    
+
     QString filter = QString("WHERE %1 = '%2'").arg(type,strItem);
     //add date release test
     //filter += getDateWhereClause();
@@ -185,17 +185,17 @@ void findReceiptsValues::fillListViewValues(const QString & comboItem){
     QSqlQuery q(m_db);
     if (!q.exec(req))
     {
-    	 qWarning() << __FILE__ << QString::number(__LINE__) 
-    	                        << "Error __FILE__"+QString::number(__LINE__)+q.lastError().text() ; 
+         qWarning() << __FILE__ << QString::number(__LINE__)
+                                << "Error __FILE__"+QString::number(__LINE__)+q.lastError().text() ;
         }
     while (q.next())
     {
-    	QString n = q.value(NAME).toString();
-    	QString a = q.value(AMOUNT).toString();
-    	QString expl = q.value(EXPLANATION).toString();
-    	QString otherInformation = q.value(OTHERS).toString();
-    	model->insertRows(row,1,QModelIndex());
-    	model->setData(model->index(row,0),n,Qt::EditRole);
+        QString n = q.value(NAME).toString();
+        QString a = q.value(AMOUNT).toString();
+        QString expl = q.value(EXPLANATION).toString();
+        QString otherInformation = q.value(OTHERS).toString();
+        model->insertRows(row,1,QModelIndex());
+        model->setData(model->index(row,0),n,Qt::EditRole);
         model->setData(model->index(row,1),a,Qt::EditRole);
         model->submit();
         m_hashExplanations.insert(row,expl);
@@ -229,12 +229,12 @@ void findReceiptsValues::showInformations(const QModelIndex & index)
     QHash<QString,QString> hash = getHashFatherSonFromOthers(index);
     for (int i = 0; i < hash.count(); ++i)
     {
-    	  QString father = hash.keys()[i];
-    	  QString son = hash.values()[i];
-    	  if (!father.isEmpty())
-    	  {
-    	  	  othersText += father+":"+son+"<br/>";
-    	      }
+          QString father = hash.keys()[i];
+          QString son = hash.values()[i];
+          if (!father.isEmpty())
+          {
+              othersText += father+":"+son+"<br/>";
+              }
         }
     othersText += "</font></body></html>";
     ui->abstractTextEdit->insertHtml(explanation);
@@ -247,7 +247,7 @@ void findReceiptsValues::showInformations(const QModelIndex & index)
 
 /*void findReceiptsValues::chooseValue(const QModelIndex& index){
     QModelIndex inIndex(index);
-    //get datas
+    //get data
     int row = inIndex.row();
     QAbstractItemModel * model = ui->tableViewOfValues->model();
     QModelIndex indexData = model->index(row,0,QModelIndex());
@@ -255,16 +255,16 @@ void findReceiptsValues::showInformations(const QModelIndex & index)
     QString data = model->data(indexData,Qt::DisplayRole).toString();//NAME
     QString amount = model->data(indexAmount,Qt::DisplayRole).toString();//AMOUNT
     if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " data = " << data;
+              qDebug() << __FILE__ << QString::number(__LINE__) << " data = " << data;
     if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " amount = " << amount;
+              qDebug() << __FILE__ << QString::number(__LINE__) << " amount = " << amount;
     ui->listchosenWidget->addItem(data);
     m_hashValueschosen.insert(data,amount);
 }*/
 
 void findReceiptsValues::chooseValue()
 {
-    //get datas
+    //get data
     QAbstractItemModel * model = ui->tableViewOfValues->model();
     QModelIndex inIndex = ui->tableViewOfValues->currentIndex();
     if (!inIndex.isValid()) {
@@ -277,32 +277,32 @@ void findReceiptsValues::chooseValue()
     QString data = model->data(indexData,Qt::DisplayRole).toString();//NAME
     QString amount = model->data(indexAmount,Qt::DisplayRole).toString();//AMOUNT
     if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " data = " << data;
+              qDebug() << __FILE__ << QString::number(__LINE__) << " data = " << data;
     if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " amount = " << amount;
+              qDebug() << __FILE__ << QString::number(__LINE__) << " amount = " << amount;
     if (m_modifier < 1.0 || m_modifier > 1.0)
     {
-    	  data = data+"*"+QString::number(m_modifier);
-    	  double amountDouble = amount.toDouble();
-    	  if (amountDouble == 0.0)
+          data = data+"*"+QString::number(m_modifier);
+          double amountDouble = amount.toDouble();
+          if (amountDouble == 0.0)
              {
-        	  qWarning() << __FILE__ << QString::number(__LINE__) << "value null" ;
-        	  if (amount.contains(","))
-        	  {
-        	  	  if (WarnDebugMessage)
-        	  	  qDebug() << __FILE__ << QString::number(__LINE__) << " in , "  ;
-        	  	  amount.replace(",",QLocale::c().decimalPoint ());
-        	  	  amountDouble = amount.toDouble();
-        	      }
-        	  else if (amount.contains("."))
-        	  {
-        	  	  amount.replace(".",QLocale::c().decimalPoint ());
-        	  	  amountDouble = amount.toDouble();
-        	      }
+              qWarning() << __FILE__ << QString::number(__LINE__) << "value null" ;
+              if (amount.contains(","))
+              {
+                  if (WarnDebugMessage)
+                  qDebug() << __FILE__ << QString::number(__LINE__) << " in , "  ;
+                  amount.replace(",",QLocale::c().decimalPoint ());
+                  amountDouble = amount.toDouble();
+                  }
+              else if (amount.contains("."))
+              {
+                  amount.replace(".",QLocale::c().decimalPoint ());
+                  amountDouble = amount.toDouble();
+                  }
             }
-    	  amount = QString::number(amountDouble * m_modifier);
+          amount = QString::number(amountDouble * m_modifier);
         }
-    	      
+
     ui->listchosenWidget->addItem(data);
     m_hashValueschosen.insert(data,amount);
 }
@@ -318,7 +318,7 @@ void findReceiptsValues::deleteValue()
     }
     item = ui->listchosenWidget->currentItem();
     if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " item = " << item->text();
+              qDebug() << __FILE__ << QString::number(__LINE__) << " item = " << item->text();
     QString dataToRemove = item->data(Qt::DisplayRole).toString();
     m_hashValueschosen.remove(dataToRemove);
     delete item;
@@ -329,14 +329,14 @@ void findReceiptsValues::setModifSpinBox(QWidget*old,QWidget*newWidget){
     Q_UNUSED(old);
     if (newWidget == ui->modifSpinBox)
     {
-    	  if (ui->modifSpinBox->value()== 1.0)
-    	  {
-    	  	  ui->modifSpinBox->setValue(0.5);
-    	      }
-    	  else
-    	  {
-    	  	ui->modifSpinBox->setValue(1.0);
-    	      }
+          if (ui->modifSpinBox->value()== 1.0)
+          {
+              ui->modifSpinBox->setValue(0.5);
+              }
+          else
+          {
+            ui->modifSpinBox->setValue(1.0);
+              }
         }
 
 }
@@ -348,7 +348,7 @@ void findReceiptsValues::setModifier(double modif)
 
 /*void findReceiptsValues::supprItemchosen(QListWidgetItem * item){
     if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " item = " << item->text();
+              qDebug() << __FILE__ << QString::number(__LINE__) << " item = " << item->text();
     QString dataToRemove = item->data(Qt::DisplayRole).toString();
     m_hashValueschosen.remove(dataToRemove);
     delete item;
@@ -372,25 +372,25 @@ QHash<QString,QString> findReceiptsValues::getchosenValues(){
     int count =   model->rowCountWithFilter(QModelIndex(),filter);
     for (int i = 0; i < count; i += 1)
     {
-    	QString name = model->dataWithFilter(model->index(i,MP_NAME),Qt::DisplayRole,filter).toString();
-    	if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " names =" << name ;
-    	QString value = model->dataWithFilter(model->index(i,MP_AMOUNT),Qt::DisplayRole,filter).toString();
-    	QStandardItem *itemName = new QStandardItem(name);
-    	QStandardItem *itemValue = new QStandardItem(value);
-    	QList<QStandardItem*> list;
-    	list << itemName << itemValue;
-    	itemModel->appendRow(list);
+        QString name = model->dataWithFilter(model->index(i,MP_NAME),Qt::DisplayRole,filter).toString();
+        if (WarnDebugMessage)
+              qDebug() << __FILE__ << QString::number(__LINE__) << " names =" << name ;
+        QString value = model->dataWithFilter(model->index(i,MP_AMOUNT),Qt::DisplayRole,filter).toString();
+        QStandardItem *itemName = new QStandardItem(name);
+        QStandardItem *itemValue = new QStandardItem(value);
+        QList<QStandardItem*> list;
+        list << itemName << itemValue;
+        itemModel->appendRow(list);
         }
     model->setFilter("");
     if (!itemModel->setHeaderData(0,Qt::Horizontal,act,Qt::EditRole))
     {
-    	  qWarning() << __FILE__ << QString::number(__LINE__) << "no header data available";
-    	  }
+          qWarning() << __FILE__ << QString::number(__LINE__) << "no header data available";
+          }
     if (!itemModel->setHeaderData(1,Qt::Horizontal,value,Qt::EditRole)	)
     {
-    	  qWarning() << __FILE__ << QString::number(__LINE__) << "no header data available";
-        } 
+          qWarning() << __FILE__ << QString::number(__LINE__) << "no header data available";
+        }
     ui->tableViewOfValues->setModel(itemModel);
     ui->tableViewOfValues-> setSelectionBehavior(QAbstractItemView::SelectRows);
     ui->tableViewOfValues-> setSelectionMode(QAbstractItemView::SingleSelection);
@@ -398,27 +398,27 @@ QHash<QString,QString> findReceiptsValues::getchosenValues(){
     ui->tableViewOfValues->setGridStyle(Qt::NoPen);
     if (tableViewIsFull(ui->tableViewOfValues->model()))
     {
-    	  enableShowNextTable();
+          enableShowNextTable();
         }
 }*/
 
 void findReceiptsValues::on_lineEditFilter_textChanged(const QString & text){
     QString comboChoice = ui->comboBoxCategories->currentText();
     QString filterText ;
-    QString filter; 
+    QString filter;
     const QString baseName = "medical_procedure";
     const QString name = "NAME";
     const QString amount = "AMOUNT";
     const QString type = "TYPE";
     if (ui->nameRadioButton->isChecked())
     {
-    	  filterText = ""+text+"%";
-    	  filter = QString("WHERE %1 LIKE '%2' AND %3 LIKE '%4'").arg("TYPE",comboChoice,"NAME",filterText); 
+          filterText = ""+text+"%";
+          filter = QString("WHERE %1 LIKE '%2' AND %3 LIKE '%4'").arg("TYPE",comboChoice,"NAME",filterText);
         }
     else if (ui->abstractRadioButton->isChecked())
     {
-    	  filterText = "%"+text+"%";
-    	  filter = QString("WHERE %1 LIKE '%2' AND %3 LIKE '%4'").arg("TYPE",comboChoice,"ABSTRACT",filterText); 
+          filterText = "%"+text+"%";
+          filter = QString("WHERE %1 LIKE '%2' AND %3 LIKE '%4'").arg("TYPE",comboChoice,"ABSTRACT",filterText);
         }
     else{
         Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("Check a button."));
@@ -429,24 +429,24 @@ void findReceiptsValues::on_lineEditFilter_textChanged(const QString & text){
     QSqlQuery q(m_db);
     if (!q.exec(req))
     {
-    	 qWarning() << __FILE__ << QString::number(__LINE__) 
-    	                        << "Error __FILE__"+QString::number(__LINE__)+q.lastError().text() ; 
+         qWarning() << __FILE__ << QString::number(__LINE__)
+                                << "Error __FILE__"+QString::number(__LINE__)+q.lastError().text() ;
         }
     while (q.next())
     {
-    	QString n = q.value(0).toString();
-    	QString a = q.value(1).toString();
-    	//if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " n and a	= " << n << a;
-    	model->insertRows(row,1,QModelIndex());
-    	model->setData(model->index(row,0),n,Qt::EditRole);
+        QString n = q.value(0).toString();
+        QString a = q.value(1).toString();
+        //if (WarnDebugMessage)
+              qDebug() << __FILE__ << QString::number(__LINE__) << " n and a	= " << n << a;
+        model->insertRows(row,1,QModelIndex());
+        model->setData(model->index(row,0),n,Qt::EditRole);
         model->setData(model->index(row,1),a,Qt::EditRole);
         model->submit();
         //if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " model data =" << model->data(model->index(row,0),Qt::DisplayRole).toString();
+              qDebug() << __FILE__ << QString::number(__LINE__) << " model data =" << model->data(model->index(row,0),Qt::DisplayRole).toString();
         ++row;
         //if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " rows =" << QString::number(row) ;
+              qDebug() << __FILE__ << QString::number(__LINE__) << " rows =" << QString::number(row) ;
         }
     ui->tableViewOfValues->setModel(model);
     ui->tableViewOfValues-> setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -461,15 +461,15 @@ bool findReceiptsValues::tableViewIsFull(QAbstractItemModel * model){
     int count = model->rowCount();
     if (count > 255)
     {
-    	  qWarning() << __FILE__ << QString::number(__LINE__) << "table view is full" ;
-    	  ret = true;
+          qWarning() << __FILE__ << QString::number(__LINE__) << "table view is full" ;
+          ret = true;
         }
     return ret;
 }
 
 void findReceiptsValues::enableShowNextTable(){
     if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " enableshownet "   ;
+              qDebug() << __FILE__ << QString::number(__LINE__) << " enableshownet "   ;
     ui->nextButton->show();
 }
 
@@ -477,40 +477,40 @@ void findReceiptsValues::enableShowNextTable(){
     QAbstractItemModel * abModel = ui->tableViewOfValues->model();
     int rows = abModel->rowCount();
     if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " row =" << QString::number(rows) ;
+              qDebug() << __FILE__ << QString::number(__LINE__) << " row =" << QString::number(rows) ;
     int numberOfLastRow = abModel->headerData(rows -1,Qt::Vertical,Qt::DisplayRole).toInt();
     QString lastData = abModel->data(abModel->index(numberOfLastRow -1,0 ),Qt::DisplayRole).toString();
     if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " numberOfLastRow =" << QString::number(numberOfLastRow) ;
+              qDebug() << __FILE__ << QString::number(__LINE__) << " numberOfLastRow =" << QString::number(numberOfLastRow) ;
     if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " shownext data =" <<  lastData;
+              qDebug() << __FILE__ << QString::number(__LINE__) << " shownext data =" <<  lastData;
     QString comboChoice = ui->comboBoxCategories->currentText();
     QString afterSqlFilter = QString("%1 LIKE '%2' AND %3 >= '%4'").arg("TYPE",comboChoice,"NAME",lastData);
     model->setFilter(afterSqlFilter);
     int count =   model->rowCountWithFilter(QModelIndex(),afterSqlFilter);
     for (int i = 0; i < count; i += 1)
     {
-    	QString name = model->dataWithFilter(model->index(i,MP_NAME),Qt::DisplayRole,afterSqlFilter).toString();
-    	//if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " names =" << name ;
-    	QString value = model->dataWithFilter(model->index(i,MP_AMOUNT),Qt::DisplayRole,afterSqlFilter).toString();
-    	QStandardItem *itemName = new QStandardItem(name);
-    	QStandardItem *itemValue = new QStandardItem(value);
-    	QList<QStandardItem*> list;
-    	list << itemName << itemValue;
-    	itemModel->appendRow(list);
+        QString name = model->dataWithFilter(model->index(i,MP_NAME),Qt::DisplayRole,afterSqlFilter).toString();
+        //if (WarnDebugMessage)
+              qDebug() << __FILE__ << QString::number(__LINE__) << " names =" << name ;
+        QString value = model->dataWithFilter(model->index(i,MP_AMOUNT),Qt::DisplayRole,afterSqlFilter).toString();
+        QStandardItem *itemName = new QStandardItem(name);
+        QStandardItem *itemValue = new QStandardItem(value);
+        QList<QStandardItem*> list;
+        list << itemName << itemValue;
+        itemModel->appendRow(list);
         }
     model->setFilter("");
     QVariant act = QVariant(tr("Name"));
     QVariant value = QVariant(tr("Value"));
     if (!itemModel->setHeaderData(0,Qt::Horizontal,act,Qt::EditRole))
     {
-    	  qWarning() << __FILE__ << QString::number(__LINE__) << "no header data available";
-    	  }
+          qWarning() << __FILE__ << QString::number(__LINE__) << "no header data available";
+          }
     if (!itemModel->setHeaderData(1,Qt::Horizontal,value,Qt::EditRole)	)
     {
-    	  qWarning() << __FILE__ << QString::number(__LINE__) << "no header data available";
-        } 
+          qWarning() << __FILE__ << QString::number(__LINE__) << "no header data available";
+        }
     ui->tableViewOfValues->setModel(itemModel);
     ui->tableViewOfValues-> setSelectionBehavior(QAbstractItemView::SelectRows);
     ui->tableViewOfValues-> setSelectionMode(QAbstractItemView::SingleSelection);
@@ -522,7 +522,7 @@ void findReceiptsValues::showNext(){//the button is hiden
     QAbstractItemModel * abModel = ui->tableViewOfValues->model();
     int rows = abModel->rowCount();
     if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " row =" << QString::number(rows) ;
+              qDebug() << __FILE__ << QString::number(__LINE__) << " row =" << QString::number(rows) ;
     int numberOfLastRow = abModel->headerData(rows -1,Qt::Vertical,Qt::DisplayRole).toInt();
     QString lastData = abModel->data(abModel->index(numberOfLastRow -1,0 ),Qt::DisplayRole).toString();
     QString comboChoice = ui->comboBoxCategories->currentText();
@@ -537,7 +537,7 @@ void findReceiptsValues::showNext(){//the button is hiden
     ui->tableViewOfValues->setColumnHidden(MP_REIMBOURSEMENT,true);
     ui->tableViewOfValues->setColumnHidden(MP_ABSTRACT,true);
     ui->tableViewOfValues->setColumnHidden(MP_TYPE,true);
-    ui->tableViewOfValues->setColumnHidden(MP_DATE,true);    
+    ui->tableViewOfValues->setColumnHidden(MP_DATE,true);
     ui->tableViewOfValues-> setSelectionBehavior(QAbstractItemView::SelectRows);
     ui->tableViewOfValues-> setSelectionMode(QAbstractItemView::SingleSelection);
     ui->tableViewOfValues->horizontalHeader()->setStretchLastSection ( true );
@@ -560,7 +560,7 @@ bool findReceiptsValues::datapackIsAvalaible()
     QFile file(datapack);
     if (!file.exists())
     {
-    	  b = false;
+          b = false;
         }
     return b;
 }
@@ -569,10 +569,10 @@ void findReceiptsValues::chooseUserModel(bool b)
 {
     if (b)
     {
-    	  m_db = QSqlDatabase::database(DB_ACCOUNTANCY);
-    	  fillComboCategories();
-    	  const QString comboText = ui->comboBoxCategories->currentText();
-    	  fillListViewValues(comboText);
+          m_db = QSqlDatabase::database(DB_ACCOUNTANCY);
+          fillComboCategories();
+          const QString comboText = ui->comboBoxCategories->currentText();
+          fillListViewValues(comboText);
         }
 }
 
@@ -580,11 +580,11 @@ void findReceiptsValues::chooseDatapackModel(bool b)
 {
     if (b)
     {
-    	  m_db = QSqlDatabase::database(DATAPACK_DB);
-    	  qDebug() << __FILE__ << QString::number(__LINE__) << " database name =" << m_db.databaseName() ;
-    	  fillComboCategories();
-    	  const QString comboText = ui->comboBoxCategories->currentText();
-    	  fillListViewValues(comboText);
+          m_db = QSqlDatabase::database(DATAPACK_DB);
+          qDebug() << __FILE__ << QString::number(__LINE__) << " database name =" << m_db.databaseName() ;
+          fillComboCategories();
+          const QString comboText = ui->comboBoxCategories->currentText();
+          fillListViewValues(comboText);
         }
 }
 
@@ -610,19 +610,19 @@ QHash<QString,QString> findReceiptsValues::getHashFatherSonFromOthers(const QMod
         partList = part.split(";");
         if (partList.size()==2)
         {
-        	  hash.insert(partList[FATHER],partList[SON]);
+              hash.insert(partList[FATHER],partList[SON]);
             }
         if(partList.size()==1)
         {
-        	hash.insert(partList[FATHER],"NULL");
+            hash.insert(partList[FATHER],"NULL");
             }
         }
         for (int i = 0; i < hash.count(); i += 1)
         {
-        	  if (WarnDebugMessage)
-        	  qDebug() << __FILE__ << QString::number(__LINE__) << " father =" << hash.keys()[i] ;
-        	  if (WarnDebugMessage)
-        	  qDebug() << __FILE__ << QString::number(__LINE__) << " son =" << hash.values()[i] ;
+              if (WarnDebugMessage)
+              qDebug() << __FILE__ << QString::number(__LINE__) << " father =" << hash.keys()[i] ;
+              if (WarnDebugMessage)
+              qDebug() << __FILE__ << QString::number(__LINE__) << " son =" << hash.values()[i] ;
             }
     return hash;
 }

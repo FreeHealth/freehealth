@@ -126,11 +126,11 @@ public:
     Form::FormItem *parentItem() const {return m_FormItem;}
     bool isModified() const;
 
-    // Use setData/Data for episode datas
+    // Use setData/Data for episode data
     bool setData(const int ref, const QVariant &data, const int role = Qt::EditRole);
     QVariant data(const int ref, const int role = Qt::DisplayRole) const;
 
-    // No storable datas for forms
+    // No storable data for forms
     void setStorableData(const QVariant &) {}
     QVariant storableData() const {return QVariant();}
 

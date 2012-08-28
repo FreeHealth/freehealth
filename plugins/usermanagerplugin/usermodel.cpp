@@ -923,7 +923,7 @@ bool UserModel::setData(const QModelIndex &item, const QVariant &value, int role
 
     // TODO: if user if a delegate of current user
 
-    // set datas directly into database using QSqlTableModel if possible
+    // set data directly into database using QSqlTableModel if possible
     if (item.column() < USER_MaxParam) {
         // prepare SQL update
         if (!d->m_Sql->setData(item, value, role)) {
@@ -1073,7 +1073,7 @@ QVariant UserModel::data(const QModelIndex &item, int role) const
     else if ((role == Qt::DisplayRole) || (role == Qt::EditRole)) {
         // Manage table USERS using the QSqlTableModel WITHOUT retreiving whole user from database
         if ((item.column() < Core::IUser::LocaleLanguage)) {
-            // here we suppose that it is the currentUser the ask for datas
+            // here we suppose that it is the currentUser the ask for data
 //            qWarning() << (bool)(d->m_CurrentUserRights & Core::IUser::ReadAll) << (bool)(d->m_CurrentUserRights & Core::IUser::ReadOwn) << (d->m_CurrentUserUuid == uuid);
             // TODO: code here : has delegates rights
             if (d->m_CurrentUserRights & Core::IUser::ReadAll)
@@ -1099,7 +1099,7 @@ QVariant UserModel::data(const QModelIndex &item, int role) const
             return QVariant();
         // TODO: if user is a delegate of current user
 
-        // get datas directly from database using QSqlTableModel if possible
+        // get data directly from database using QSqlTableModel if possible
         if (item.column() < USER_LANGUAGE)
             return d->m_Sql->data(item, role);
 

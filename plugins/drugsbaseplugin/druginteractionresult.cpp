@@ -206,7 +206,7 @@ QStandardItemModel *DrugInteractionResult::toStandardModel() const
                 levels.insert(di->type(), level);
             }
 
-            // Include the interaction's datas
+            // Include the interaction's data
             QStringList h = di->header("@@").split("@@", QString::SkipEmptyParts);
             if (h.count()==0)
                 continue;

@@ -163,7 +163,7 @@ MedicalProcedureWidget::MedicalProcedureWidget(QWidget *parent) :
      //mpComboBox->setModel(modelMP);
     //mpComboBox->setMaxCount(20);
     //mpComboBox->setModelColumn(AccountDB::Constants::MP_NAME);
-    //setDatasToUi();
+    //setDataToUi();
 
 
 //    connect(createDefault, SIGNAL(clicked()), SLOT(createDefaultMedicalProcedures()));

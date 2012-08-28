@@ -47,8 +47,8 @@ static inline Core::IPatient *patient() {return Core::ICore::instance()->patient
 inline static QStringList getOptions(Form::FormItem *item)
 {
     QStringList l;
-    l = item->extraDatas().value("options").split(";", QString::SkipEmptyParts);
-    l += item->extraDatas().value("option").split(";", QString::SkipEmptyParts);
+    l = item->extraData().value("options").split(";", QString::SkipEmptyParts);
+    l += item->extraData().value("option").split(";", QString::SkipEmptyParts);
     return l;
 }
 
@@ -97,8 +97,8 @@ Form::IFormWidget *IdentityWidgetFactory::createWidget(const QString &name, Form
 
 inline static int getNumberOfColumns(Form::FormItem *item, int defaultValue = 1)
 {
-    if (!item->extraDatas().value("column").isEmpty())
-        return item->extraDatas().value("column").toInt();
+    if (!item->extraData().value("column").isEmpty())
+        return item->extraData().value("column").toInt();
     else
         return defaultValue;
 }

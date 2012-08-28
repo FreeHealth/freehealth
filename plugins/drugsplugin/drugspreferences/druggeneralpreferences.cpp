@@ -115,7 +115,7 @@ void DrugGeneralPreferencesWidget::saveToSettings(Core::ISettings *sets)
 
     // manage font size
     s->setValue(S_VIEWFONTSIZE, viewFontSizeSpin->value());
-    // set testers datas
+    // set testers data
     if ((userNameEdit->text().startsWith("test_")))
         s->setValue(S_USER, userNameEdit->text());
 
