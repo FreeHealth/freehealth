@@ -27,7 +27,7 @@
 /**
   \class Templates::TemplatesModel
   Manages the templates database in/out and link to views.
-  Datas are statically stored so that you can instanciate how many requiered models
+  Data are statically stored so that you can instanciate how many requiered models
   as you want without consuming RAM.
 */
 
@@ -131,14 +131,14 @@ private:
 class TreeItem : public Templates::ITemplate
 {
 public:
-    TreeItem(const QHash<int, QVariant> &datas, TreeItem *parent = 0) :
-            ITemplate(datas),
+    TreeItem(const QHash<int, QVariant> &hashData, TreeItem *parent = 0) :
+            ITemplate(hashData),
             m_Parent(parent),
             m_IsTemplate(false),
             m_IsModified(false)
     {
         setData(Constants::Data_UserUuid, "FreeDiams");
-        setIsTemplate(datas.value(Constants::Data_IsTemplate).toBool());
+        setIsTemplate(hashData.value(Constants::Data_IsTemplate).toBool());
     }
     ~TreeItem() { qDeleteAll(m_Children); }
 
@@ -364,10 +364,10 @@ public:
         }
 
         // create root item
-        QHash<int, QVariant> datas;
-        datas.insert(Constants::Data_Label, "ROOT");
-        datas.insert(Constants::Data_ParentId, -1);
-        m_RootItem = new TreeItem(datas, 0);
+        QHash<int, QVariant> hashData;
+        hashData.insert(Constants::Data_Label, "ROOT");
+        hashData.insert(Constants::Data_ParentId, -1);
+        m_RootItem = new TreeItem(hashData, 0);
         m_RootItem->setIsTemplate(false);
         m_Tree = m_RootItem;
 
@@ -390,18 +390,18 @@ public:
         DB.transaction();
         QSqlQuery query(DB);
         if (query.exec(templateBase()->select(Templates::Constants::Table_Categories))) {
-            QHash<int, QVariant> datas;
+            QHash<int, QVariant> hashData;
             while (query.next()) {
-                datas.insert(Constants::Data_Id, query.value(Constants::CATEGORIES_ID));
-                datas.insert(Constants::Data_Uuid, query.value(Constants::CATEGORIES_UUID));
-                datas.insert(Constants::Data_UserUuid, query.value(Constants::CATEGORIES_USER_UID));
-                datas.insert(Constants::Data_ParentId, query.value(Constants::CATEGORIES_PARENT_ID));
-                datas.insert(Constants::Data_Label, query.value(Constants::CATEGORIES_LABEL));
-                datas.insert(Constants::Data_Summary, query.value(Constants::CATEGORIES_SUMMARY));
-                datas.insert(Constants::Data_CreationDate, query.value(Constants::CATEGORIES_DATECREATION));
-                datas.insert(Constants::Data_ModifDate, query.value(Constants::CATEGORIES_DATEMODIF));
-                m_IdToCategory.insert(datas.value(Constants::Data_Id).toInt(), new TreeItem(datas,0));
-                datas.clear();
+                hashData.insert(Constants::Data_Id, query.value(Constants::CATEGORIES_ID));
+                hashData.insert(Constants::Data_Uuid, query.value(Constants::CATEGORIES_UUID));
+                hashData.insert(Constants::Data_UserUuid, query.value(Constants::CATEGORIES_USER_UID));
+                hashData.insert(Constants::Data_ParentId, query.value(Constants::CATEGORIES_PARENT_ID));
+                hashData.insert(Constants::Data_Label, query.value(Constants::CATEGORIES_LABEL));
+                hashData.insert(Constants::Data_Summary, query.value(Constants::CATEGORIES_SUMMARY));
+                hashData.insert(Constants::Data_CreationDate, query.value(Constants::CATEGORIES_DATECREATION));
+                hashData.insert(Constants::Data_ModifDate, query.value(Constants::CATEGORIES_DATEMODIF));
+                m_IdToCategory.insert(hashData.value(Constants::Data_Id).toInt(), new TreeItem(hashData,0));
+                hashData.clear();
             }
         } else {
             LOG_QUERY_ERROR_FOR(q, query);
@@ -423,23 +423,23 @@ public:
         QList<TreeItem *> templates;
         // TODO: filter user's uuid
         if (query.exec(templateBase()->select(Templates::Constants::Table_Templates))) {
-            QHash<int, QVariant> datas;
+            QHash<int, QVariant> hashData;
             while (query.next()) {
-                datas.insert(Constants::Data_Id, query.value(Constants::TEMPLATE_ID));
-                datas.insert(Constants::Data_Uuid, query.value(Constants::TEMPLATE_UUID));
-                datas.insert(Constants::Data_UserUuid, query.value(Constants::TEMPLATE_USER_UID));
-                datas.insert(Constants::Data_ParentId, query.value(Constants::TEMPLATE_ID_CATEGORY));
-                datas.insert(Constants::Data_Label, query.value(Constants::TEMPLATE_LABEL));
-                datas.insert(Constants::Data_Summary, query.value(Constants::TEMPLATE_SUMMARY));
-                datas.insert(Constants::Data_Content, query.value(Constants::TEMPLATE_CONTENT));
-                datas.insert(Constants::Data_ContentMimeTypes, query.value(Constants::TEMPLATE_CONTENTMIMETYPES));
-                datas.insert(Constants::Data_CreationDate, query.value(Constants::TEMPLATE_DATECREATION));
-                datas.insert(Constants::Data_ModifDate, query.value(Constants::TEMPLATE_DATEMODIF));
-                datas.insert(Constants::Data_ThemedIcon, query.value(Constants::TEMPLATE_THEMEDICON));
-                TreeItem *it = new TreeItem(datas,0);
+                hashData.insert(Constants::Data_Id, query.value(Constants::TEMPLATE_ID));
+                hashData.insert(Constants::Data_Uuid, query.value(Constants::TEMPLATE_UUID));
+                hashData.insert(Constants::Data_UserUuid, query.value(Constants::TEMPLATE_USER_UID));
+                hashData.insert(Constants::Data_ParentId, query.value(Constants::TEMPLATE_ID_CATEGORY));
+                hashData.insert(Constants::Data_Label, query.value(Constants::TEMPLATE_LABEL));
+                hashData.insert(Constants::Data_Summary, query.value(Constants::TEMPLATE_SUMMARY));
+                hashData.insert(Constants::Data_Content, query.value(Constants::TEMPLATE_CONTENT));
+                hashData.insert(Constants::Data_ContentMimeTypes, query.value(Constants::TEMPLATE_CONTENTMIMETYPES));
+                hashData.insert(Constants::Data_CreationDate, query.value(Constants::TEMPLATE_DATECREATION));
+                hashData.insert(Constants::Data_ModifDate, query.value(Constants::TEMPLATE_DATEMODIF));
+                hashData.insert(Constants::Data_ThemedIcon, query.value(Constants::TEMPLATE_THEMEDICON));
+                TreeItem *it = new TreeItem(hashData,0);
                 it->setIsTemplate(true);
-                templates.insert(datas.value(Constants::Data_Id).toInt(), it);
-                datas.clear();
+                templates.insert(hashData.value(Constants::Data_Id).toInt(), it);
+                hashData.clear();
             }
         } else {
             LOG_QUERY_ERROR_FOR(q, query);
@@ -1053,14 +1053,14 @@ bool TemplatesModel::insertRows(int row, int count, const QModelIndex &parent)
 //    if (!parent.isValid())
 //        return false;
 //    Internal::TreeItem *parentItem = d->getItem(parent);
-    QHash<int, QVariant> datas;
-    datas.insert(Constants::Data_Label, tr("New"));
-    datas.insert(Constants::Data_ParentId, parentItem->data(Constants::Data_Id));
-    datas.insert(Constants::Data_CreationDate, QDateTime::currentDateTime());
-    datas.insert(Constants::Data_IsTemplate, false);
+    QHash<int, QVariant> hashData;
+    hashData.insert(Constants::Data_Label, tr("New"));
+    hashData.insert(Constants::Data_ParentId, parentItem->data(Constants::Data_Id));
+    hashData.insert(Constants::Data_CreationDate, QDateTime::currentDateTime());
+    hashData.insert(Constants::Data_IsTemplate, false);
     d->allInstancesBeginInsertRows(parent, row, row+count-1);
     for(int i=0; i<count; ++i) {
-        Internal::TreeItem *item = new Internal::TreeItem(datas, parentItem);
+        Internal::TreeItem *item = new Internal::TreeItem(hashData, parentItem);
         if (!parentItem->insertChild(row+i, item))
             return false;
     }

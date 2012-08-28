@@ -548,7 +548,7 @@ public:
 
 public:
     Utils::MessageSender m_Sender;  /*!< \brief Message sender instance */
-    QHash<QString,QString> m_Datas;   /*!< \brief Dosages to transmit : key == uuid, value == xml'd dosage */
+    QHash<QString,QString> m_Data;   /*!< \brief Dosages to transmit : key == uuid, value == xml'd dosage */
     QHash<int,QString> m_PrescriptionXmlTags;
     QVector<Core::IToken *> _tokens;
 };
@@ -592,11 +592,11 @@ bool DrugsIO::init()
 bool DrugsIO::startsDosageTransmission()
 {
     connect(&d->m_Sender, SIGNAL(sent()), this, SLOT(dosageTransmissionDone()));
-    d->m_Datas = protocolsBase().getDosageToTransmit();
-    if (d->m_Datas.count()==0) {
+    d->m_Data = protocolsBase().getDosageToTransmit();
+    if (d->m_Data.count()==0) {
         return false;
     }
-    QStringList list = d->m_Datas.values();
+    QStringList list = d->m_Data.values();
     d->m_Sender.setMessage(list.join("\n\n"));
     d->m_Sender.setUser(qApp->applicationName() + " - " + qApp->applicationVersion());
     d->m_Sender.setTypeOfMessage(Utils::MessageSender::DosageTransmission);
@@ -613,11 +613,11 @@ void DrugsIO::dosageTransmissionDone()
 {
     if (d->m_Sender.resultMessage().contains("OK")) {
         LOG(tr("Dosages transmitted."));
-        protocolsBase().markAllDosageTransmitted(d->m_Datas.keys());
+        protocolsBase().markAllDosageTransmitted(d->m_Data.keys());
     } else {
         LOG_ERROR(tr("Dosage not successfully transmitted"));
     }
-    d->m_Datas.clear();
+    d->m_Data.clear();
     Q_EMIT transmissionDone();
 }
 
@@ -731,7 +731,7 @@ bool DrugsIO::prescriptionFromXml(DrugsDB::DrugsModel *m, const QString &xmlCont
 /**
   \brief Load a Prescription file and assumed the transmission to the DrugsModel
   You can add to or replace the actual prescription using the enumerator DrugsIO::Loader \e loader.\n
-  The \e extraDatas receives the extracted extra datas from the loaded prescription file.
+  The \e extraDatas receives the extracted extra data from the loaded prescription file.
   \sa savePrescription()
   \todo manage xml document version
 */
@@ -748,7 +748,7 @@ bool DrugsIO::loadPrescription(DrugsDB::DrugsModel *m, const QString &fileName, 
 /**
   \brief Load a Prescription file and assumed the transmission to the DrugsModel.
   You can add to or replace the actual prescription using the enumerator DrugsIO::Loader \e loader.\n
-  The \e xmlExtraDatas receives the extracted extra datas from the loaded prescription file.
+  The \e xmlExtraDatas receives the extracted extra data from the loaded prescription file.
   \sa savePrescription()
   \todo manage xml document version
 */

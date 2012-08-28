@@ -190,9 +190,9 @@ DrugsPrescriptorWidget::DrugsPrescriptorWidget(const QString &name, Form::FormIt
     }
 
     // create formitemdata
-    DrugsWidgetData *datas = new DrugsWidgetData(formItem);
-    datas->setDrugsPrescriptorWidget(this);
-    formItem->setItemDatas(datas);
+    DrugsWidgetData *drugsWidgetData = new DrugsWidgetData(formItem);
+    drugsWidgetData->setDrugsPrescriptorWidget(this);
+    formItem->setItemDatas(drugsWidgetData);
 }
 
 DrugsPrescriptorWidget::~DrugsPrescriptorWidget()

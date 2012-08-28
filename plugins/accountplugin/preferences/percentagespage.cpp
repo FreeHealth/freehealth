@@ -134,7 +134,7 @@ PercentagesWidget::PercentagesWidget(QWidget *parent) :
 //    addButton->setText("New");
     deleteButton->setIcon(theme()->icon(Core::Constants::ICONREMOVE));
 //    deleteButton->setText("Delete");
-    
+
     m_Model = new AccountDB::PercentModel(this);
     // TODO: m_Model->setUserUuid();
     if (WarnDebugMessage)
@@ -183,7 +183,7 @@ void PercentagesWidget::saveModel()
                 LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_SAVE_DATA_IN_DATABASE_1).
                                                    arg(tr("percentages")));
             }
-        } 
+        }
         else {
             m_Model->revert();
         }
@@ -212,11 +212,11 @@ void PercentagesWidget::on_addButton_clicked()
     userEditedLabel->setFocus();
     percentUidLabel->setText(calcPercentagesUid());
     percentUidLabel->setFocus();
-    
+
     if (WarnDebugMessage) {
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " userEditedLabel =" << userEditedLabel->text() ;
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " percentUidLabel =" << percentUidLabel->text();
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " currentIndex =" << QString::number(m_Mapper->currentIndex());
+              qDebug() << __FILE__ << QString::number(__LINE__) << " userEditedLabel =" << userEditedLabel->text() ;
+              qDebug() << __FILE__ << QString::number(__LINE__) << " percentUidLabel =" << percentUidLabel->text();
+              qDebug() << __FILE__ << QString::number(__LINE__) << " currentIndex =" << QString::number(m_Mapper->currentIndex());
     }
 }
 
@@ -234,7 +234,7 @@ void PercentagesWidget::saveToSettings(Core::ISettings *sets)
     if (!m_Model->submit()) {
         LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_SAVE_DATA_IN_DATABASE_1).arg(tr("percentages")));
         Utils::warningMessageBox(tr("Can not submit percentages to your personnal database."),
-                                 tr("An error occured during percentages saving. Datas are corrupted."));
+                                 tr("An error occured during percentages saving. Data are corrupted."));
     }
     connect(typeEdit,SIGNAL(textEdited(const QString &)),percentagesComboBox,SLOT(setEditText(const QString &)));
     update();
@@ -267,18 +267,18 @@ void PercentagesWidget::changeEvent(QEvent *e)
 QString PercentagesWidget::calcPercentagesUid(){
     QString Uid = Utils::Database::createUid();
     /*if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount =" << m_Model->rowCount() ;
+              qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount =" << m_Model->rowCount() ;
     QModelIndex index = m_Model->index(m_Model->rowCount()-2,AccountDB::Constants::PERCENT_UID);
     if (!index.isValid())
     {
-    	  qWarning() << __FILE__ << QString::number(__LINE__) << "index is not valid" ;
+          qWarning() << __FILE__ << QString::number(__LINE__) << "index is not valid" ;
         }
     int percentageUidBefore = m_Model->data(index,Qt::DisplayRole).toInt();
     if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " percentageUidBefore =" << QString::number(percentageUidBefore) ;
+              qDebug() << __FILE__ << QString::number(__LINE__) << " percentageUidBefore =" << QString::number(percentageUidBefore) ;
     int percentageUid =  percentageUidBefore + 1;
     if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " percentageUid =" << QString::number(percentageUid);*/
+              qDebug() << __FILE__ << QString::number(__LINE__) << " percentageUid =" << QString::number(percentageUid);*/
     return Uid;
 }
 

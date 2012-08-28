@@ -382,9 +382,9 @@ BaseForm::BaseForm(Form::FormItem *formItem, QWidget *parent) :
     mainLayout->addStretch();
 
     // create itemdata
-    BaseFormData *datas = new BaseFormData(formItem);
-    datas->setForm(this);
-    formItem->setItemDatas(datas);
+    BaseFormData *baseFormData = new BaseFormData(formItem);
+    baseFormData->setForm(this);
+    formItem->setItemDatas(baseFormData);
 
     retranslate();
 }

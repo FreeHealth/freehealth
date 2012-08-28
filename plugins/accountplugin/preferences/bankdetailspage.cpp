@@ -207,7 +207,7 @@ void BankDetailsWidget::saveToSettings(Core::ISettings *sets)
     if (!m_Model->submit()) {
         LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_SAVE_DATA_IN_DATABASE_1).arg(tr("bank account details")));
         Utils::warningMessageBox(tr("Can not submit bank account details to your personnal database."),
-                                 tr("An error occured during bank account details saving. Datas are corrupted."));
+                                 tr("An error occured during bank account details saving. Data are corrupted."));
     }
 }
 

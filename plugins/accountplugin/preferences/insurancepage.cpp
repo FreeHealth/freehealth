@@ -166,16 +166,16 @@ InsuranceWidget::InsuranceWidget(QWidget *parent) :
     m_Mapper->addMapping(ui->cityEdit, AccountDB::Constants::INSURANCE_CITY,"text");
     m_Mapper->addMapping(ui->zip, AccountDB::Constants::INSURANCE_ZIPCODE, "currentText");
     m_Mapper->addMapping(ui->countryComboBox, AccountDB::Constants::INSURANCE_COUNTRY, "currentIsoCountry");
-    
+
     m_Mapper->addMapping(ui->phoneEdit, AccountDB::Constants::INSURANCE_TEL);
     m_Mapper->addMapping(ui->faxEdit, AccountDB::Constants::INSURANCE_FAX);
     m_Mapper->addMapping(ui->mailEdit, AccountDB::Constants::INSURANCE_MAIL);
-    
+
     m_Mapper->addMapping(ui->contactEdit, AccountDB::Constants::INSURANCE_CONTACT);
     m_Mapper->toFirst();
     ui->insuranceComboBox->setModel(m_Model);
     ui->insuranceComboBox->setModelColumn(AccountDB::Constants::INSURANCE_NAME);
-  
+
     setDatasToUi();
 }
 
@@ -229,7 +229,7 @@ void InsuranceWidget::saveModel()
                 LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_SAVE_DATA_IN_DATABASE_1).
                           arg(tr("insurance")));
             }
-        } 
+        }
         else {
             m_Model->revert();
         }
@@ -266,7 +266,7 @@ void InsuranceWidget::on_addButton_clicked()
     cityEdit->setText("city");
     countryComboBox->addItem("country");
     countryComboBox->setFocus();
-    
+
     zipComboBox->setFocus();
     phoneEdit->setText("123457");
     faxEdit->setText("1245677");
@@ -289,7 +289,7 @@ void InsuranceWidget::saveToSettings(Core::ISettings *sets)
     if (!m_Model->submit()) {
         LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_SAVE_DATA_IN_DATABASE_1).arg(tr("insurance")));
         Utils::warningMessageBox(tr("Can not submit insurance to your personnal database."),
-                                 tr("An error occured during insurance saving. Datas are corrupted."));
+                                 tr("An error occured during insurance saving. Data are corrupted."));
     }
     connect(ui->nameEdit,SIGNAL(textEdited(const QString &)), ui->insuranceComboBox,SLOT(setEditText(const QString &)));
     update();

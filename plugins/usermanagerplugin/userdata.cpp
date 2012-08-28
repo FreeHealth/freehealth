@@ -26,8 +26,8 @@
  ***************************************************************************/
 /**
   \class UserPlugin::UserDynamicData
-  \brief Stores dynamic datas of users.
-  Dynamic datas can be :
+  \brief Stores dynamic data of users.
+  Dynamic data can be :
   \li strings
   \li datetime value
   \li files and images (coded into database into base64)
@@ -40,9 +40,9 @@
 
 /**
   \class UserPlugin::UserData
-  \brief This class owns the user datas.
-  This class is a link between UserBase and UserModel. You should never use it directly to access user's datas.\n
-  All the user's datas are available via the UserModel.
+  \brief This class owns the user data.
+  This class is a link between UserBase and UserModel. You should never use it directly to access user's data.\n
+  All the user's data are available via the UserModel.
 
   Some members are reserved for the use with UserBase and shouldn't be assessed outside of the UserBase class.\n
   You can set/get values using database tables representations with :
@@ -50,7 +50,7 @@
   - addDynamicDataFromDatabase() and dynamicDataValue() for the DATAS table,
   - addRightsFromDatabase() and rightsValue() for the RIGHTS table,
   - hasModifiedDynamicDatasToStore(), hasModifiedRightsToStore inform UserBase of needed changes,
-  - modifiedDynamicDatas(), modifiedRoles() inform UserBase of the dynamic datas and rights to save to base.
+  - modifiedDynamicDatas(), modifiedRoles() inform UserBase of the dynamic data and rights to save to base.
 
   Some members are reserved for users interactions. Theses members are mainly assessed by the UserModel.
   - setDynamicData() can be used for creating a new dynamic data or change the value of the dynamic data,
@@ -205,7 +205,7 @@ void UserDynamicData::setUserUuid(const QString &uuid)
 }
 
 /**
-  \brief Feed the class with datas without marking it as dirty. Only used by UserBase.
+  \brief Feed the class with data without marking it as dirty. Only used by UserBase.
   TextDocumentExtra values should be set from complete xml encoded TextDocumentExtra.
 */
 void UserDynamicData::feedFromSql(const int field, const QVariant& value)
@@ -314,21 +314,21 @@ void UserDynamicData::prepareQuery(QSqlQuery &bindedQuery) const
         {
         case QVariant::DateTime :
         {
-	    bindedQuery.bindValue(DATAS_STRING ,    QVariant());
-	    bindedQuery.bindValue(DATAS_LONGSTRING, QVariant());
-	    bindedQuery.bindValue(DATAS_FILE,       QVariant());
-	    bindedQuery.bindValue(DATAS_NUMERIC,    QVariant());
-	    bindedQuery.bindValue(DATAS_DATE,       d->m_Value);
+        bindedQuery.bindValue(DATAS_STRING ,    QVariant());
+        bindedQuery.bindValue(DATAS_LONGSTRING, QVariant());
+        bindedQuery.bindValue(DATAS_FILE,       QVariant());
+        bindedQuery.bindValue(DATAS_NUMERIC,    QVariant());
+        bindedQuery.bindValue(DATAS_DATE,       d->m_Value);
             break;
         }
         case QVariant::Double :
         case QVariant::Int :
         {
-	    bindedQuery.bindValue(DATAS_STRING ,    QVariant());
-	    bindedQuery.bindValue(DATAS_LONGSTRING, QVariant());
-	    bindedQuery.bindValue(DATAS_FILE,       QVariant());
-	    bindedQuery.bindValue(DATAS_NUMERIC,    d->m_Value);
-	    bindedQuery.bindValue(DATAS_DATE,       QVariant());
+        bindedQuery.bindValue(DATAS_STRING ,    QVariant());
+        bindedQuery.bindValue(DATAS_LONGSTRING, QVariant());
+        bindedQuery.bindValue(DATAS_FILE,       QVariant());
+        bindedQuery.bindValue(DATAS_NUMERIC,    d->m_Value);
+        bindedQuery.bindValue(DATAS_DATE,       QVariant());
             break;
         }
         default:
@@ -337,20 +337,20 @@ void UserDynamicData::prepareQuery(QSqlQuery &bindedQuery) const
             if (type() == ExtraDocument)
                 tmp = d->m_Doc->toXml();
             if (tmp.length() < 200) {
-		bindedQuery.bindValue(DATAS_STRING ,    tmp);
-		bindedQuery.bindValue(DATAS_LONGSTRING, QVariant());
-		bindedQuery.bindValue(DATAS_FILE,       QVariant());
+        bindedQuery.bindValue(DATAS_STRING ,    tmp);
+        bindedQuery.bindValue(DATAS_LONGSTRING, QVariant());
+        bindedQuery.bindValue(DATAS_FILE,       QVariant());
             } else if (tmp.length() < 2000) {
-		bindedQuery.bindValue(DATAS_STRING ,    QVariant());
-		bindedQuery.bindValue(DATAS_LONGSTRING, tmp);
-		bindedQuery.bindValue(DATAS_FILE,       QVariant());
+        bindedQuery.bindValue(DATAS_STRING ,    QVariant());
+        bindedQuery.bindValue(DATAS_LONGSTRING, tmp);
+        bindedQuery.bindValue(DATAS_FILE,       QVariant());
             } else {
-		bindedQuery.bindValue(DATAS_STRING ,    QVariant());
-		bindedQuery.bindValue(DATAS_LONGSTRING, QVariant());
-		bindedQuery.bindValue(DATAS_FILE,       tmp);
+        bindedQuery.bindValue(DATAS_STRING ,    QVariant());
+        bindedQuery.bindValue(DATAS_LONGSTRING, QVariant());
+        bindedQuery.bindValue(DATAS_FILE,       tmp);
             }
-	    bindedQuery.bindValue(DATAS_NUMERIC,    QVariant());
-	    bindedQuery.bindValue(DATAS_DATE,       QVariant());
+        bindedQuery.bindValue(DATAS_NUMERIC,    QVariant());
+        bindedQuery.bindValue(DATAS_DATE,       QVariant());
             break;
         }
         }
@@ -632,7 +632,7 @@ bool UserData::createUuid()
     return true;
 }
 
-/** \brief Defines the Uuid of the user. Modify all users' datas uuid. */
+/** \brief Defines the Uuid of the user. Modify all users' data uuid. */
 void UserData::setUuid(const QString & val)
 {
     Q_ASSERT(!val.isEmpty());
@@ -702,7 +702,7 @@ void UserData::addRightsFromDatabase(const char *roleName, const int fieldref, c
     if (fieldref == RIGHTS_USER_UUID)// don't store user's uuid
         return;
 
-    // datas are stored into a QHash<int, QHash< int, QVariant > >  int is the row
+    // data are stored into a QHash<int, QHash< int, QVariant > >  int is the row
     d->m_Role_Rights[roleName].insert(fieldref, val);
     d->m_IsNull = false;
     setModified(true);
@@ -748,7 +748,7 @@ int UserData::personalLinkId() const
 }
 
 /**
-  \brief Stores into cached datas the dynamic datas of users.
+  \brief Stores into cached data the dynamic data of users.
   This member SHOULD NEVER BE USED by UserBase.
   Mark the UserDynamicData as dirty if value \e val differs of the stored data.
   \todo documentation
@@ -847,7 +847,7 @@ void UserData::addLoginToHistory()
                         dynamicDataValue(USER_DATAS_LOGINHISTORY).toString() +
                         QCoreApplication::translate("tkUser", "User logged at %1\n")
                         .arg(lastLogin().toString(Qt::DefaultLocaleLongDate))
-		      );
+              );
     setModified(true);
 }
 
@@ -1052,7 +1052,7 @@ QString UserData::fullName() const
 void UserData::warn() const
 {
     foreach(const QString &s, warnText())
-	Utils::Log::addMessage("UserData", s);
+    Utils::Log::addMessage("UserData", s);
 }
 
 QStringList UserData::warnText() const

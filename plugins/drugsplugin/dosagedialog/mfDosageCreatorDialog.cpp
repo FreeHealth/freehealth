@@ -27,7 +27,7 @@
 
 /**
   \class DrugsWidget::DosageCreator
-  \brief Dialog for dosage creation / edition / modification. A dosage is a standard set of datas that will be used to help
+  \brief Dialog for dosage creation / edition / modification. A dosage is a standard set of data that will be used to help
   doctors when prescribing a drug.
   If you want to create a new dosage, you must create a new row onto the model BEFORE.
   If you want to edit or modify a dosage, you must inform the dialog of the row and the CIS of the drug.

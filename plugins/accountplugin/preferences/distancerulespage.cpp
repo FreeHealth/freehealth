@@ -128,7 +128,7 @@ DistanceRulesWidget::DistanceRulesWidget(QWidget *parent) :
     addButton->setIcon(theme()->icon(Core::Constants::ICONADD));
     deleteButton->setIcon(theme()->icon(Core::Constants::ICONREMOVE));
     preferredSpinBox->setRange(0,1);
-    
+
     m_Model = new AccountDB::DistanceRulesModel(this);
     // TODO:  m_Model->setUserUuid();
     distanceRulesUidLabel->setText("");
@@ -169,11 +169,11 @@ void DistanceRulesWidget::saveModel()
                                              "Do you want to save them?"));
         if (yes) {
            if (!m_Model->submit()) {if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " distancerules no submit ";
+              qDebug() << __FILE__ << QString::number(__LINE__) << " distancerules no submit ";
                 LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_SAVE_DATA_IN_DATABASE_1).
                                                    arg(tr("distancerules")));
             }
-        } 
+        }
         else {
             m_Model->revert();
         }
@@ -217,7 +217,7 @@ void DistanceRulesWidget::saveToSettings(Core::ISettings *sets)
     if (!m_Model->submit()) {
         LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_SAVE_DATA_IN_DATABASE_1).arg(tr("distancerules")));
         Utils::warningMessageBox(tr("Can not submit distancerules to your personnal database."),
-                                 tr("An error occured during distancerules saving. Datas are corrupted."));
+                                 tr("An error occured during distancerules saving. Data are corrupted."));
     }
     connect(typeEdit,SIGNAL(textEdited(const QString &)),distanceRulesComboBox,SLOT(setEditText(const QString &)));
     update();

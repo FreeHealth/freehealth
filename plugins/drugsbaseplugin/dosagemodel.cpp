@@ -199,7 +199,7 @@ DosageModel::DosageModel(DrugsDB::DrugsModel *parent)
     }
 }
 
-/** \brief Defines datas for the dosage. Database is only updated when calling submitAll(). */
+/** \brief Defines data for the dosage. Database is only updated when calling submitAll(). */
 bool DosageModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
     Q_ASSERT_X(!m_UID.isNull(), "DosageModel::setData", "before using the dosagemodel, you must specify the UID of the related drug");
@@ -269,7 +269,7 @@ bool DosageModel::setData(const QModelIndex &index, const QVariant &value, int r
     return false;
 }
 
-/** \brief Retreive dosage's datas. */
+/** \brief Retreive dosage's data. */
 QVariant DosageModel::data(const QModelIndex & item, int role) const
 {
     Q_ASSERT_X(!m_UID.isNull(), "DosageModel::data", "before using the dosagemodel, you must specify the UID of the related drug");
@@ -467,7 +467,7 @@ bool DosageModel::setDrugId(const QVariant &drugId)
                     .arg(record().fieldName(Dosages::Constants::InnLinkedDosage))
                     .arg(m_DrugsModel->drugData(drugId, Constants::Drug::MainInnDosage).toString());
         filter = QString("((%1) OR (%2))").arg(filter).arg(innFilter);
-    }        
+    }
 
     if (WarnDebuggingDatas)
         LOG("DosageModel filter" + filter);
@@ -562,11 +562,11 @@ void DosageModel::toPrescription(const int row)
 QString DosageModel::toXml(const int row)
 {
     int j;
-    QHash<QString,QString> datas;
+    QHash<QString,QString> xmlData;
     for(j=0; j < columnCount(); ++j) {
-        datas.insert(record().fieldName(j).toLower(), index(row, j).data().toString());
+        xmlData.insert(record().fieldName(j).toLower(), index(row, j).data().toString());
     }
-    return Utils::createXml(XML_DOSAGE_MAINTAG,datas,4,false);
+    return Utils::createXml(XML_DOSAGE_MAINTAG, xmlData, 4, false);
 }
 
 /**
@@ -577,15 +577,15 @@ bool DosageModel::addFromXml(const QString &xml)
 {
     Q_UNUSED(xml);
     // TODO: here
-    //    QHash<QString, QString> datas;
+    //    QHash<QString, QString> xmlData;
     //    int n = xml.count("<"+XML_DOSAGE_MAINTAG+">");
     //    if (n<=0)
     //        return false;
     //    foreach(const QString &s, xml.split("</"+XML_DOSAGE_MAINTAG+">")) {
-    //        if (!Utils::readXml(xml,XML_DOSAGE_MAINTAG,datas,false))
+    //        if (!Utils::readXml(xml,XML_DOSAGE_MAINTAG, xmlData, false))
     //            return false;
     //        // insert row, get the index of it
-    //        foreach(const QString &k, datas.keys()) {
+    //        foreach(const QString &k, xmlData.keys()) {
     //            int id = record().indexOf(k);
     //            if (id==-1)
     //                continue;

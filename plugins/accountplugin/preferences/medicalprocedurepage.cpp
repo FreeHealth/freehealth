@@ -141,21 +141,21 @@ MedicalProcedureWidget::MedicalProcedureWidget(QWidget *parent) :
     dateEdit->setDate(QDate::currentDate());
     amountSpin->setRange(0.00,1000000000.00);
     rateSpin->setRange(0.00,100.00);
-    
+
     //fill alphabet combo
     QStringList listOfAlphabet;
     //QString alphabet = tr("abcdefghijklmnopqrstuvwxyz");
     QString alphabet = tr("ABCDEFGHIJKLMNOPQRSTUVWXYZ");
     for (int i = 0; i < alphabet.size(); i += 1)
     {
-    	QString letter = alphabet.mid(i,1);
-    	listOfAlphabet << letter;
+        QString letter = alphabet.mid(i,1);
+        listOfAlphabet << letter;
         }
     alphabetBox->addItems(listOfAlphabet);
-    
+
     const QString insuranceInfo = tr("Insurances are created in another preference widget.");
     insuranceBox->setToolTip(insuranceInfo);
-    
+
     /*const QString filterMaxNumber = QString("%1 < '%2'").arg("MP_ID","10");
     modelMP->setFilter(filterMaxNumber);
     modelMP->select();*/
@@ -164,8 +164,8 @@ MedicalProcedureWidget::MedicalProcedureWidget(QWidget *parent) :
     //mpComboBox->setMaxCount(20);
     //mpComboBox->setModelColumn(AccountDB::Constants::MP_NAME);
     //setDatasToUi();
-     
-    
+
+
 //    connect(createDefault, SIGNAL(clicked()), SLOT(createDefaultMedicalProcedures()));
 }
 
@@ -176,12 +176,12 @@ MedicalProcedureWidget::~MedicalProcedureWidget()
 }
 
 void MedicalProcedureWidget::fillHugeWidgets(){
-    
+
     fillTypeCompletionList();
     m_hashInsuranceBox = fillHashOfInsurances();
     QStringList listInsurances = m_hashInsuranceBox.values();
     insuranceBox->addItems(listInsurances);
-    fillMPCombo();       
+    fillMPCombo();
 }
 
 void MedicalProcedureWidget::setDatasToUi()
@@ -206,7 +206,7 @@ void MedicalProcedureWidget::on_mpComboBox_currentIndexChanged(const QString & t
         LOG_QUERY_ERROR(q);
     }
     while (q.next()) {
-    	QString str = q.value(1).toString();
+        QString str = q.value(1).toString();
         if (str == text) {
             m_index = row;
             //ownersComboBox->setEditText(q.value(WN_MP_USER_UID).toString());
@@ -219,11 +219,11 @@ void MedicalProcedureWidget::on_mpComboBox_currentIndexChanged(const QString & t
             if (WarnDebugMessage)
                 qDebug() << __FILE__ << QString::number(__LINE__) << " index =" << QString::number(row) ;
         }
-    	++row;
+        ++row;
     }
-    
+
     //m_Mapper->setCurrentIndex(m_index);
-    
+
     if (WarnDebugMessage)
         qDebug() << __FILE__ << QString::number(__LINE__) << "index   =" << QString::number(m_index);
 }
@@ -269,7 +269,7 @@ void MedicalProcedureWidget::on_removeButton_clicked()
         fillMPCombo();
     }
 
-    
+
     /*if (!modelMP->removeRow(mpComboBox->currentIndex()))
     {
           LOG_ERROR("Unable to remove row");
@@ -286,7 +286,7 @@ void MedicalProcedureWidget::saveToSettings(Core::ISettings *sets)
     /*if (!modelMP->submit()) {
         LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_SAVE_DATA_IN_DATABASE_1).arg(tr("medical_procedures")));
         Utils::warningMessageBox(tr("Can not submit medical procedure to your personnal database."),
-                                 tr("An error occured during medical procedures saving. Datas are corrupted."));
+                                 tr("An error occured during medical procedures saving. Data are corrupted."));
     }
         QString typeText = type->text();
         setCompletionList(typeText);
@@ -365,10 +365,10 @@ void  MedicalProcedureWidget::fillMPCombo(){
         LOG_QUERY_ERROR(q);
     QStringList list;
     while (q.next()) {
-    	QString str = q.value(0).toString();
-    	if (WarnDebugMessage)
+        QString str = q.value(0).toString();
+        if (WarnDebugMessage)
             qDebug() << __FILE__ << QString::number(__LINE__) << " strItem =" << str ;
-    	list << str;
+        list << str;
     }
     mpComboBox->clear();
     mpComboBox->addItems(list);
@@ -382,14 +382,14 @@ void MedicalProcedureWidget::save(){
     if (!q.exec(req))
         LOG_QUERY_ERROR(q);
     while (q.next()) {
-    	QString str = q.value(0).toString();
+        QString str = q.value(0).toString();
         str = str.trimmed();
         if (str==nameStr) {
-    		  test = true;
+              test = true;
         }
     }
     if (test) {
-    	 QSqlQuery qInsert(m_db);
+         QSqlQuery qInsert(m_db);
          const QString medicalProcedure = tr("medical_procedure");
          const QString abstractUpdate = QString("ABSTRACT = '%1'").arg(abstractEdit->text());
          const QString typeUpdate = QString("TYPE = '%1'").arg(type->text());
@@ -421,7 +421,7 @@ void MedicalProcedureWidget::save(){
         int numberOfRows = modelMP->rowCount()  ;
         if (!modelMP->insertRows(numberOfRows,1,QModelIndex()))
         {
-        	  qWarning() << __FILE__ << QString::number(__LINE__) << "unable to insert row to MP" ;
+              qWarning() << __FILE__ << QString::number(__LINE__) << "unable to insert row to MP" ;
             }
         if (WarnDebugMessage)
             qDebug() << __FILE__ << QString::number(__LINE__) << " numberOfRows =" << QString::number(numberOfRows) ;
@@ -482,10 +482,10 @@ void MedicalProcedureWidget::fillTypeCompletionList(){
     if (!q.exec(req))
         LOG_QUERY_ERROR(q);
     while (q.next()) {
-    	QString str = q.value(0).toString();
+        QString str = q.value(0).toString();
         m_completionList << str;
     }
-    m_completionList.removeDuplicates(); 
+    m_completionList.removeDuplicates();
 }
 
 QHash<int,QString> MedicalProcedureWidget::fillHashOfInsurances(){
@@ -495,9 +495,9 @@ QHash<int,QString> MedicalProcedureWidget::fillHashOfInsurances(){
     if (!q.exec(req))
         LOG_QUERY_ERROR(q);
     while (q.next()) {
-    	int insuranceUid = q.value(0).toInt();
-    	QString name = q.value(1).toString();
-    	hash.insertMulti(insuranceUid,name);        
+        int insuranceUid = q.value(0).toInt();
+        QString name = q.value(1).toString();
+        hash.insertMulti(insuranceUid,name);
     }
     return hash;
 }

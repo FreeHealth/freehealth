@@ -166,17 +166,17 @@ SitesWidget::SitesWidget(QWidget *parent) :
     m_Mapper->addMapping(ui->cityEdit, AccountDB::Constants::SITES_CITY,"text");
     m_Mapper->addMapping(ui->zip, AccountDB::Constants::SITES_ZIPCODE,"currentText");
     m_Mapper->addMapping(ui->countryComboBox, AccountDB::Constants::SITES_COUNTRY,"currentIsoCountry");
-    
+
     m_Mapper->addMapping(ui->phoneEdit, AccountDB::Constants::SITES_TEL);
     m_Mapper->addMapping(ui->faxEdit, AccountDB::Constants::SITES_FAX);
     m_Mapper->addMapping(ui->mailEdit, AccountDB::Constants::SITES_MAIL);
-    
+
     m_Mapper->addMapping(ui->contactEdit, AccountDB::Constants::SITES_CONTACT);
     m_Mapper->toFirst();
     ui->wpComboBox->setModel(m_Model);
     ui->wpComboBox->setModelColumn(AccountDB::Constants::SITES_NAME);
     //hash of towns and zipcode
-    
+
     setDatasToUi();
 }
 
@@ -200,9 +200,9 @@ SitesWidget::~SitesWidget()
 //    listForCountry = listOfCountries();
 //    listForCountry.sort();
 //    listForCountry.prepend(localCountry);
-    
+
 //    zipComboBox->addItems(listOfZipcodes);
-    
+
 //    countryComboBox->addItems(listForCountry);
 //}
 
@@ -226,7 +226,7 @@ void SitesWidget::saveModel()
                 LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_SAVE_DATA_IN_DATABASE_1).
                                                    arg(tr("sites")));
             }
-        } 
+        }
         else {
             m_Model->revert();
         }
@@ -273,7 +273,7 @@ void SitesWidget::saveToSettings(Core::ISettings *sets)
     if (!m_Model->submit()) {
         LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_SAVE_DATA_IN_DATABASE_1).arg(tr("sites")));
         Utils::warningMessageBox(tr("Can not submit sites to your personnal database."),
-                                 tr("An error occured during sites saving. Datas are corrupted."));
+                                 tr("An error occured during sites saving. Data are corrupted."));
     }
     connect(ui->nameEdit, SIGNAL(textEdited(const QString &)), ui->wpComboBox, SLOT(setEditText(const QString &)));
     update();

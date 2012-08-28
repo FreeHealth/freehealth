@@ -174,7 +174,7 @@ public:
     }
 
     /**
-      Retreive all users datas and store it to the cache of the model.
+      Retreive all users data and store it to the cache of the model.
       \sa numberOfUsersInMemory(), m_Uuid_UserList
     */
     bool addUserFromDatabase(const QString &uuid)
@@ -192,7 +192,7 @@ public:
     }
 
     /**
-      Retreive all users datas and store it to the cache of the model. Return the created uuid.
+      Retreive all users data and store it to the cache of the model. Return the created uuid.
       \sa numberOfUsersInMemory(), m_Uuid_UserList
     */
     QString addUserFromDatabase(const QString &log64, const QString &pass64)
@@ -883,7 +883,7 @@ Qt::ItemFlags UserModel::flags(const QModelIndex &index) const
     return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsEditable;
 }
 
-/** Define the datas of users.  */
+/** Define the data of users.  */
 bool UserModel::setData(const QModelIndex &item, const QVariant &value, int role)
 {
 //    qWarning() << Q_FUNC_INFO ;
@@ -1025,7 +1025,7 @@ QVariant UserModel::currentUserData(const int column) const
     return d->getUserData(user, column);
 }
 
-/** Returns the datas of users. \sa Core::IUser::Model */
+/** Returns the data of users. \sa Core::IUser::Model */
 QVariant UserModel::data(const QModelIndex &item, int role) const
 {
     if (!item.isValid()) {

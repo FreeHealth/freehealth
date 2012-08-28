@@ -39,7 +39,7 @@
   3. Users saver\n
   You can regardless save or update users to database using the unique member : saveUser().
 
-  4. Users datas checkers\n
+  4. Users data checkers\n
   You can check the identifiers of users with the checkLogin() member.
 
   5. Users trace keeper\n
@@ -265,7 +265,7 @@ void UserBase::onCoreFirstRunCreationRequested()
 //--------------------------------------------------------------------------------------------------------
 //------------------------------------------- Datas retreivers -------------------------------------------
 //--------------------------------------------------------------------------------------------------------
-/** Retreive all users datas from the users' database. If an error occurs, it returns 0. */
+/** Retreive all users data from the users' database. If an error occurs, it returns 0. */
 UserData *UserBase::getUser(const QHash<int, QString> &conditions) const
 {
     QSqlDatabase DB = QSqlDatabase::database(Constants::USER_DB_CONNECTION);
@@ -361,7 +361,7 @@ UserData *UserBase::getUser(const QHash<int, QString> &conditions) const
     return toReturn;
 }
 
-/** Retreive all users datas from the users' database. If an error occurs, it returns 0. \sa getUser() */
+/** Retreive all users data from the users' database. If an error occurs, it returns 0. \sa getUser() */
 UserData *UserBase::getUserById(const QVariant & _id) const
 {
     // retreive corresponding user
@@ -373,7 +373,7 @@ UserData *UserBase::getUserById(const QVariant & _id) const
     return getUser(where);
 }
 
-/** Retreive all users datas from the users' database. If an error occurs, it returns 0. \sa getUser() */
+/** Retreive all users data from the users' database. If an error occurs, it returns 0. \sa getUser() */
 UserData* UserBase::getUserByUuid(const QString & uuid) const
 {
     // retreive corresponding user
@@ -385,7 +385,7 @@ UserData* UserBase::getUserByUuid(const QString & uuid) const
     return getUser(where);
 }
 
-/** Retreive all users datas from the users' database. If an error occurs, it returns 0. \sa getUser() */
+/** Retreive all users data from the users' database. If an error occurs, it returns 0. \sa getUser() */
 UserData *UserBase::getUserByLoginPassword(const QVariant &login, const QVariant &cryptedPassword) const
 {
     // retreive corresponding user
@@ -983,7 +983,7 @@ bool UserBase::createUser(UserData *user)
 }
 
 /**
-  Save users datas to the database. \n
+  Save users data to the database. \n
   You can use this function to save a newly created user or to update an already existing user. This function
   manages both cases.
 */

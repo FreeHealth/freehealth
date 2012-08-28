@@ -56,13 +56,13 @@ using namespace Templates;
 ////            qWarning() << QString().fill(' ', indent) + "  " + e.tagName() + ": " + e.text().mid(14, e.text().indexOf(")#", 14) - 14) << e.childNodes().count();
 //            // Manage templates
 //            if (e.tagName().compare("Template", Qt::CaseInsensitive) == 0) {
-//                QHash<int, QVariant> datas = Utils::Serializer::toVariantHash(e.attribute("content"), base64MimeDatas);
+//                QHash<int, QVariant> data = Utils::Serializer::toVariantHash(e.attribute("content"), base64MimeDatas);
 ////                qWarning() << e.attribute("content");
-////                qWarning() << datas;
-//                datas.insert(TemplatesModel::Data_ParentId, model->index(parent.row(), TemplatesModel::Data_Id, parent.parent()).data());
+////                qWarning() << data;
+//                data.insert(TemplatesModel::Data_ParentId, model->index(parent.row(), TemplatesModel::Data_Id, parent.parent()).data());
 //                model->insertRow(row+zz, parent);
 //                for(int i=0; i<TemplatesModel::Data_Max_Param; ++i) {
-//                    model->setData(model->index(row+zz, i, parent), datas.value(i, QVariant()));
+//                    model->setData(model->index(row+zz, i, parent), data.value(i, QVariant()));
 //                }
 //                ++zz;
 //            }

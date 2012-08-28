@@ -1494,17 +1494,17 @@ QString createXml(const QString &mainTag, const QHash<QString,QString> &data, co
 }
 
 /**
-  \brief Reads a Xml content. Content must be like the one produced by createXml(). The \e readDatas is cleared and filled.
+  \brief Reads a Xml content. Content must be like the one produced by createXml(). The \e readData is cleared and filled.
   \sa createXml().
 */
-bool readXml(const QString &xmlContent, const QString &generalTag, QHash<QString,QString> &readDatas, const bool valueFromBase64)
+bool readXml(const QString &xmlContent, const QString &generalTag, QHash<QString,QString> &readData, const bool valueFromBase64)
 {
     if (!xmlContent.contains(generalTag)) {
         Utils::Log::addError("Utils::readXml",QString("Error while reading Xml: tag %1 not found").arg(generalTag),
                              __FILE__, __LINE__);
         return false;
     }
-    readDatas.clear();
+    readData.clear();
 
     QDomDocument doc;
     doc.setContent(xmlContent);
@@ -1517,7 +1517,7 @@ bool readXml(const QString &xmlContent, const QString &generalTag, QHash<QString
                 paramElem = paramElem.nextSiblingElement();
                 continue;
             }
-            readDatas.insert(paramElem.tagName(), QByteArray::fromBase64(paramElem.text().trimmed().toAscii()));
+            readData.insert(paramElem.tagName(), QByteArray::fromBase64(paramElem.text().trimmed().toAscii()));
             paramElem = paramElem.nextSiblingElement();
         }
     } else {
@@ -1526,7 +1526,7 @@ bool readXml(const QString &xmlContent, const QString &generalTag, QHash<QString
                 paramElem = paramElem.nextSiblingElement();
                 continue;
             }
-            readDatas.insert(paramElem.tagName(), paramElem.text().trimmed().toAscii());
+            readData.insert(paramElem.tagName(), paramElem.text().trimmed().toAscii());
             paramElem = paramElem.nextSiblingElement();
         }
     }

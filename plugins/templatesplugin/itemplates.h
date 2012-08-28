@@ -52,9 +52,9 @@ class TEMPLATES_EXPORT ITemplate
 {
 public:
     ITemplate() { setId(-1); setParentId(-1); }
-    ITemplate(const QHash<int, QVariant> &datas) : m_Data(datas) {}
-//    ITemplate(const QHash<int, QVariant> &datas, ITemplate *parent) :
-//            m_Id(-1), m_ParentId(parent->id()), m_Datas(datas) {}
+    ITemplate(const QHash<int, QVariant> &hashData) : m_Data(hashData) {}
+//    ITemplate(const QHash<int, QVariant> &hashData, ITemplate *parent) :
+//            m_Id(-1), m_ParentId(parent->id()), m_Data(hashData) {}
 
     virtual ~ITemplate() {}
 
