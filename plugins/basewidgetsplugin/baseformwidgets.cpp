@@ -1774,7 +1774,7 @@ QVariant BaseListData::data(const int ref, const int role) const
 }
 
 void BaseListData::setStorableData(const QVariant &data)
-{    
+{
     setSelectedItems(data.toString());
     m_OriginalValue = data.toStringList();
     qSort(m_OriginalValue);

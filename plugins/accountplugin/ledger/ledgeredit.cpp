@@ -66,8 +66,8 @@ LedgerEdit::LedgerEdit(QWidget * parent):QWidget(parent),ui(new Ui::LedgerEditWi
     qDebug() << __FILE__ << QString::number(__LINE__) << " listOfYears.size() =" <<QString::number(listOfYears.size())  ;
     for (int i = 0; i < listOfYears.size(); i += 1)
     {
-    	if (WarnDebugMessage)
-    	    	qDebug() << __FILE__ << QString::number(__LINE__) << " listOfYears[i] =" << listOfYears[i] ;
+        if (WarnDebugMessage)
+                qDebug() << __FILE__ << QString::number(__LINE__) << " listOfYears[i] =" << listOfYears[i] ;
         }
     ui->yearComboBox->addItems(listOfYears);
     ui->infoLabel->setText("");
@@ -99,9 +99,9 @@ void LedgerEdit::showLedger(){
     m_myThread->dateChosen(m_date);
     if (m_myThread->isRunning())
     {
-    	  m_myThread->terminate();
-    	  if (WarnDebugMessage)
-    	      	  qDebug() << __FILE__ << QString::number(__LINE__) << " in  m_myThread->terminate"   ;
+          m_myThread->terminate();
+          if (WarnDebugMessage)
+                  qDebug() << __FILE__ << QString::number(__LINE__) << " in  m_myThread->terminate"   ;
         }
     m_myThread->start();
     connect(m_myThread ,SIGNAL(finished()),this,SLOT(getDocument()));
@@ -126,7 +126,7 @@ void LedgerEdit::printLedger(){
     if (WarnDebugMessage)
     qDebug() << __FILE__ << QString::number(__LINE__) << " print "   ;
     // Ensuite on demande l'impression (avec les entêtes/pieds de page et duplicata ou non)
-    p->print(m_doc, m_typeOfPaper, m_duplicata);    
+    p->print(m_doc, m_typeOfPaper, m_duplicata);
 }
 
 void LedgerEdit::chosenDate(const QString & dateText){
@@ -145,17 +145,17 @@ void LedgerEdit::inThread(){
 void LedgerEdit::getDocument(){
     ////qDebug() << __FILE__ << QString::number(__LINE__) << " getDocument " ;
     m_doc = m_myThread->getTextDocument()->clone();
-    emit  deleteThread();
+    Q_EMIT deleteThread();
     ui->textEdit->setDocument(m_doc);
 }
 
 void LedgerEdit::slotDeleteThread(){
     if (m_myThread)
     {
-        delete m_myThread;    	  
+        delete m_myThread;
         }
 
-    m_myThread = new ProduceDoc(); 
+    m_myThread = new ProduceDoc();
 }
 
 void LedgerEdit::resizeLedgerEdit(QWidget * parent){
@@ -168,7 +168,7 @@ void LedgerEdit::changeEvent(QEvent * e){
     QWidget::changeEvent(e);
     if (e->type()== QEvent::LanguageChange)
     {
-    	  ui->retranslateUi(this);
-    	  fillInfoLabel("");
+          ui->retranslateUi(this);
+          fillInfoLabel("");
         }
 }
