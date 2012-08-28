@@ -34,6 +34,8 @@
 #include <coreplugin/isettings.h>
 
 #include <utils/log.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_current.h>
 
 #include <QDebug>
 
@@ -41,6 +43,7 @@ enum {WarnFormRetreiving=true};
 
 using namespace Form;
 using namespace Internal;
+using namespace Trans::ConstantTranslations;
 
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
@@ -69,6 +72,11 @@ public:
     QStandardItem *formToItem(Form::FormMain *form)
     {
         return _formToItem.key(form);
+    }
+
+    Form::FormMain *formForIndex(const QModelIndex &index)
+    {
+        return itemToForm(q->itemFromIndex(index));
     }
 
     void createFormTree()
@@ -107,7 +115,10 @@ public:
             } else {
                 parent = formToItem(form->formParent());
             }
-            parent->appendRow(item);
+            QStandardItem *itemUuid = new QStandardItem(form->uuid());
+            QStandardItem *itemEmpty1 = new QStandardItem;
+            QStandardItem *itemEmpty2 = new QStandardItem;
+            parent->appendRow(QList<QStandardItem*>() << item << itemUuid << itemEmpty1 << itemEmpty2);
         }
     }
 
@@ -146,6 +157,67 @@ void FormTreeModel::refreshFormTree()
 {
     d->createFormTree();
     reset();
+}
+
+static QString formTooltip(Form::FormMain *form)
+{
+    QString tooltip = form->spec()->tooltip();
+    if (!tooltip.isEmpty())
+        tooltip.prepend("<br />");
+    // find the empty root parent
+    Form::FormMain *root = form->rootFormParent();
+    if (!root)
+        root = form;
+    return QString("<p style=\"font-weight:bold;\">%1</p>%2"
+//                   "<p style=\"font-size:small;margin-left:10px;color:gray\">"
+//                   "%2: %3<br />"
+//                   "%4: %5<br />"
+//                   "%6: %7"
+//                   "%8</p>"
+//                   "%8: %9<br />"
+//                   "%10: %11"
+//                   "</p>"
+                   )
+            .arg(form->spec()->label().replace(" ","&nbsp;"))
+//            .arg(tkTr(Trans::Constants::VERSION))
+//            .arg(root->spec()->version())
+//            .arg(tkTr(Trans::Constants::LAST_MODIFICATION))
+//            .arg(QLocale().toString(form->spec()->modificationDate(), QLocale::LongFormat).replace(" ","&nbsp;"))
+//            .arg(tkTr(Trans::Constants::AUTHOR))
+//            .arg(root->spec()->author())
+            .arg(tooltip)
+
+//            .arg(tkTr(Trans::Constants::VENDOR))
+//            .arg(tkTr(Trans::Constants::DATA_TYPE))
+//            .arg(item.pack.dataTypeName())
+            ;
+    return QString();
+}
+
+QVariant FormTreeModel::data(const QModelIndex &index, int role) const
+{
+    if (!index.isValid())
+        return QVariant();
+
+    switch (role) {
+//    case Qt::DisplayRole:
+//    {
+//        if (index.column()==Uuid) {
+//            Form::FormMain *form = d->formForIndex(index);
+//            if (form)
+//                return form->uuid();
+//        }
+//        break;
+//    }
+    case Qt::ToolTipRole:
+    {
+        Form::FormMain *form = d->formForIndex(index);
+        if (!form)
+            return QVariant();
+        return formTooltip(form);
+    }
+    } // switch (role)
+    return QStandardItemModel::data(index, role);
 }
 
 Qt::ItemFlags FormTreeModel::flags(const QModelIndex &index) const

@@ -50,6 +50,7 @@ class FORM_EXPORT FormTreeModel : public QStandardItemModel
 public:
     enum DataRepresentation {
         Label = 0,
+        Uuid,
         EmptyColumn1,
         EmptyColumn2,
         MaxData
@@ -61,8 +62,9 @@ public:
     void init();
     void refreshFormTree();
 
-//    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 //    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
+
     Qt::ItemFlags flags(const QModelIndex &index) const;
 
 private:
