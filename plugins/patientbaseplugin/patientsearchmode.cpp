@@ -71,7 +71,7 @@ PatientSearchMode::PatientSearchMode(QObject *parent) :
         Core::IMode(parent), m_Selector(0)
 {
     m_Selector = new PatientSelector;
-    m_Selector->setFieldsToShow(PatientSelector::Gender | PatientSelector::BirthName | PatientSelector::SecondName | PatientSelector::FirstName | PatientSelector::DateOfBirth | PatientSelector::FullAdress);
+    m_Selector->setFieldsToShow(PatientSelector::Title | PatientSelector::BirthName | PatientSelector::SecondName | PatientSelector::FirstName | PatientSelector::DateOfBirth | PatientSelector::FullAdress);
     PatientWidgetManager::instance()->setCurrentView(m_Selector);
     Core::Command *cmd = actionManager()->command(Core::Constants::A_PATIENT_NEW);
     modeManager()->addAction(cmd, Core::Constants::P_MODE_PATIENT_SEARCH);

@@ -374,7 +374,12 @@ QVariant PatientModel::data(const QModelIndex &index, int role) const
     if (!index.isValid())
         return QVariant();
 
-    if (role==Qt::DisplayRole || role==Qt::ToolTipRole || role==Qt::EditRole) {
+    if (role==Qt::DecorationRole) {
+        using namespace Core;
+        if (index.column() == IPatient::BirthName) {
+            return d->iconizedGender(index);
+        }
+    } else if (role==Qt::DisplayRole || role==Qt::ToolTipRole || role==Qt::EditRole) {
         using namespace Core;
         int col = -1;
         switch (index.column()) {
