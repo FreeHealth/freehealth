@@ -64,7 +64,7 @@ void WebcamPreferencesWidget::setDataToUi()
 void WebcamPreferencesWidget::saveToSettings(Core::ISettings *sets)
 {
     // if no sets given as param, take default interface
-    Core::ISettings *s = sets? sets : settings();
+//    Core::ISettings *s = sets? sets : settings();
 }
 
 /*! Writes the default settings to the data model. */
@@ -92,7 +92,7 @@ void WebcamPreferencesWidget::changeEvent(QEvent *e)
 }
 
 /* ----------------------  Preferences Page ---------------------- */
-/*! 
+/*!
  * \class WebcamPreferencesPage
  * \brief Generic FreeMedForms preferences page for %PluginName:c% plugin.
  *
@@ -171,14 +171,14 @@ void WebcamPreferencesPage::finish()
 }
 #include <coreplugin/constants.h>
 /*! \brief Checks if the entered settings are valid.
- * 
+ *
  * Overloads the interface method. For each empty value the default settings value is written.
  */
 void WebcamPreferencesPage::checkSettingsValidity()
 {
     QHash<QString, QVariant> defaultvalues;
 //    defaultvalues.insert("Webcam/General","-");
-    
+
     foreach(const QString &k, defaultvalues.keys()) {
         if (settings()->value(k) == QVariant())
             settings()->setValue(k, defaultvalues.value(k));
