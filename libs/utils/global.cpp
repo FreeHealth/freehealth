@@ -1756,4 +1756,28 @@ QString decrypt(const QByteArray &texte, const QString &key)
     return codeFinal;
 }
 
+/** Link all signals of the first model \e model1 to the second model \e model2 signals. */
+void linkSignalsFromFirstModelToSecondModel(QAbstractItemModel *model1, QAbstractItemModel *model2, bool connectDataChanged)
+{
+    QObject::connect(model1, SIGNAL(columnsAboutToBeInserted(QModelIndex, int , int )), model2, SIGNAL(columnsAboutToBeInserted(QModelIndex, int , int )));
+    QObject::connect(model1, SIGNAL(columnsAboutToBeMoved(QModelIndex, int , int , QModelIndex, int )), model2, SIGNAL(columnsAboutToBeMoved(QModelIndex, int , int , QModelIndex, int )));
+    QObject::connect(model1, SIGNAL(columnsAboutToBeRemoved(QModelIndex, int , int )), model2, SIGNAL( columnsAboutToBeRemoved(QModelIndex, int , int )));
+    QObject::connect(model1, SIGNAL(columnsInserted(QModelIndex, int , int )), model2, SIGNAL(columnsInserted(QModelIndex, int , int )));
+    QObject::connect(model1, SIGNAL(columnsMoved(QModelIndex, int , int , QModelIndex, int )), model2, SIGNAL(columnsMoved(QModelIndex, int , int , QModelIndex, int )));
+    QObject::connect(model1, SIGNAL(columnsRemoved(QModelIndex, int , int )), model2, SIGNAL(columnsRemoved(QModelIndex, int , int )));
+    if (connectDataChanged)
+        QObject::connect(model1, SIGNAL(dataChanged(QModelIndex,QModelIndex)), model2, SIGNAL(dataChanged(QModelIndex,QModelIndex)));
+    QObject::connect(model1, SIGNAL(headerDataChanged(Qt::Orientation, int, int)), model2, SIGNAL(headerDataChanged(Qt::Orientation, int, int)));
+    QObject::connect(model1, SIGNAL(layoutAboutToBeChanged()), model2, SIGNAL(layoutAboutToBeChanged()));
+    QObject::connect(model1, SIGNAL(layoutChanged()), model2, SIGNAL(layoutChanged()));
+    QObject::connect(model1, SIGNAL(modelAboutToBeReset()), model2, SIGNAL(modelAboutToBeReset()));
+    QObject::connect(model1, SIGNAL(modelReset()), model2, SIGNAL(modelReset()));
+    QObject::connect(model1, SIGNAL(rowsAboutToBeInserted(QModelIndex, int , int )), model2, SIGNAL(rowsAboutToBeInserted(QModelIndex, int , int )));
+    QObject::connect(model1, SIGNAL(rowsAboutToBeMoved(QModelIndex, int, int , QModelIndex, int)), model2, SIGNAL(rowsAboutToBeMoved(QModelIndex, int, int , QModelIndex, int)));
+    QObject::connect(model1, SIGNAL(rowsAboutToBeRemoved(QModelIndex, int , int )), model2, SIGNAL(rowsAboutToBeRemoved(QModelIndex, int , int )));
+    QObject::connect(model1, SIGNAL(rowsInserted(QModelIndex, int , int )), model2, SIGNAL(rowsInserted(QModelIndex, int , int )));
+    QObject::connect(model1, SIGNAL(rowsMoved(QModelIndex, int , int , QModelIndex, int )), model2, SIGNAL(rowsMoved(QModelIndex, int , int , QModelIndex, int )));
+    QObject::connect(model1, SIGNAL(rowsRemoved(QModelIndex, int , int )), model2, SIGNAL(rowsRemoved(QModelIndex, int , int )));
+}
+
 } // End Utils

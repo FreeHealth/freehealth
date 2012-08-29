@@ -36,6 +36,7 @@ class QFont;
 class QDomElement;
 class QWidget;
 class QModelIndex;
+class QAbstractItemModel;
 QT_END_NAMESPACE
 
 #include <QFileInfo>
@@ -190,6 +191,9 @@ UTILS_EXPORT QString loginFromSQL(const QVariant &sql);
 UTILS_EXPORT QString loginFromSQL(const QString &sql);
 UTILS_EXPORT QByteArray crypt(const QString &text, const QString &key = QString::null);
 UTILS_EXPORT QString decrypt(const QByteArray &text, const QString &key = QString::null);
+
+// Models
+UTILS_EXPORT void linkSignalsFromFirstModelToSecondModel(QAbstractItemModel *model1, QAbstractItemModel *model2, bool connectDataChanged);
 
 }  // end Utils
 
