@@ -30,7 +30,7 @@
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
 #include "assetsmanager.h"
-#include "assetsIO.h"
+#include "assetsio.h"
 #include <accountbaseplugin/constants.h>
 #include <accountbaseplugin/assetmodel.h>
 
@@ -130,7 +130,7 @@ double AssetsManager::getYearlyValue(const QString &dateBegin , const QDate &cur
         default :
             break;
         }
-        
+
     return yearlyValue;
 }
 
@@ -147,8 +147,8 @@ double AssetsManager::getYearlyValue(const QString &year, int row){
     QString dateYear = date.toString("yyyy");
     if (mode == DECREASING_MODE && dateYear == year)
     {
-    	 dateBegin = date.toString("yyyy-MM-dd"); 
-        }
+        dateBegin = date.toString("yyyy-MM-dd");
+    }
     yValue = getYearlyValue(dateBegin ,currentDate ,value ,mode ,duration);
     return yValue;
 }
@@ -188,26 +188,26 @@ QList<double> AssetsManager::decreasingCalc(int row, double value , double durat
     if (WarnDebugMessage)
         qDebug() << __FILE__ << QString::number(__LINE__) << " currDateYear =" << QString::number(currentDateYear) ;
     //----------------first year---------------------------------------
-    
+
     double    numberOfMonths          = double(12 - month +1);//from the beginning of month
     if (WarnDebugMessage)
         qDebug() << __FILE__ << QString::number(__LINE__) << " numberOfMonths =" << QString::number(numberOfMonths) ;
     double    decreasingRatePercent      = 100/duration * rate;
     double    decreasingRate          = (decreasingRatePercent)/100;
-    
+
     int diffOfYears = currentDateYear - beginDateYear;
     if (WarnDebugMessage)
         qDebug() << __FILE__ << QString::number(__LINE__) << " diffOfYears =" << QString::number(diffOfYears) ;
     if (diffOfYears == 0)
     {
-    	yearlyValue         = (value * decreasingRate) * (numberOfMonths/12) ;
-    	if (WarnDebugMessage)
-    	qDebug() << __FILE__ << QString::number(__LINE__) << " yearlyValue =" <<  QString::number(yearlyValue);
+        yearlyValue         = (value * decreasingRate) * (numberOfMonths/12) ;
+        if (WarnDebugMessage)
+        qDebug() << __FILE__ << QString::number(__LINE__) << " yearlyValue =" <<  QString::number(yearlyValue);
         residualValue          = value - yearlyValue;
         }
     //------------------other years--------------------------------------
     else
-    {           
+    {
         double residualValueRefreshed = assetIO.getResidualValueWhenRefresh(row);
         if (WarnDebugMessage)
         qDebug() << __FILE__ << QString::number(__LINE__) << "old residualValue =" << QString::number(residualValueRefreshed) ;
@@ -224,12 +224,12 @@ QList<double> AssetsManager::decreasingCalc(int row, double value , double durat
         double residualValueNew = residualValueRefreshed;
         if (WarnDebugMessage)
         qDebug() << __FILE__ << QString::number(__LINE__) << " newYearlyValue =" << QString::number(newYearlyValue) ;
-     	residualValueNew  -= newYearlyValue;
+        residualValueNew  -= newYearlyValue;
         if (WarnDebugMessage)
         qDebug() << __FILE__ << QString::number(__LINE__) << " residualValue =" << QString::number(residualValueNew) ;
            yearlyValue            = newYearlyValue ;
            residualValue = residualValueNew;
-        }  
+        }
     if (WarnDebugMessage)
         qDebug() << __FILE__ << QString::number(__LINE__) << " yearlyValue =" << QString::number(yearlyValue) ;
     if (WarnDebugMessage)
@@ -254,57 +254,57 @@ bool AssetsManager::setRefreshedResidualValue(){
     if (WarnDebugMessage)
         qDebug() << __FILE__ << QString::number(__LINE__) << " model rowCount =" << QString::number(model->rowCount()) ;
     for (int i = 0; i < model->rowCount(); i += 1)
-    {   
-    	double residualValue = 0.00;
-    	double yearlyValue = 0.00;
+    {
+        double residualValue = 0.00;
+        double yearlyValue = 0.00;
         QString beginDateStr = model->data(model->index(i,ITEM_ENUM_DATE),Qt::DisplayRole).toString();
         QDate beginDate = QDate::fromString(beginDateStr,"yyyy-MM-dd");
-    	QDate currentDate = QDate::currentDate();
-    	int daysFromBeginDateToCurrentDate = beginDate.daysTo(currentDate);
-    	int beginYear = beginDate.year();
-    	int currentYear = currentDate.year();
-    	double yearFromBeginDateToCurrentDate = daysFromBeginDateToCurrentDate/currentDate.daysInYear();
-    	int yearsFactor = (int)yearFromBeginDateToCurrentDate +1;
-    	int mode = model->data(model->index(i,ITEM_ENUM_MODE),Qt::DisplayRole).toInt();
-    	double value = model->data(model->index(i,ITEM_ENUM_VALUE),Qt::DisplayRole).toDouble();
-    	double duration = model->data(model->index(i,ITEM_ENUM_DURATION),Qt::DisplayRole).toDouble();
-    	int yearsToRun = model->data(model->index(i,ITEM_ENUM_YEARS),Qt::DisplayRole).toInt();
-    	int diffOfYears = currentYear - beginYear;
-    	int lessYearsToRun = duration - yearsToRun;
-    	if (WarnDebugMessage)
+        QDate currentDate = QDate::currentDate();
+        int daysFromBeginDateToCurrentDate = beginDate.daysTo(currentDate);
+        int beginYear = beginDate.year();
+        int currentYear = currentDate.year();
+        double yearFromBeginDateToCurrentDate = daysFromBeginDateToCurrentDate/currentDate.daysInYear();
+        int yearsFactor = (int)yearFromBeginDateToCurrentDate +1;
+        int mode = model->data(model->index(i,ITEM_ENUM_MODE),Qt::DisplayRole).toInt();
+        double value = model->data(model->index(i,ITEM_ENUM_VALUE),Qt::DisplayRole).toDouble();
+        double duration = model->data(model->index(i,ITEM_ENUM_DURATION),Qt::DisplayRole).toDouble();
+        int yearsToRun = model->data(model->index(i,ITEM_ENUM_YEARS),Qt::DisplayRole).toInt();
+        int diffOfYears = currentYear - beginYear;
+        int lessYearsToRun = duration - yearsToRun;
+        if (WarnDebugMessage)
         qDebug() << __FILE__ << QString::number(__LINE__);
-    	if(lessYearsToRun != diffOfYears && yearsToRun > 0){
-    	QList<double> listFromDecreasingCalc;
-    	if (WarnDebugMessage)
+        if(lessYearsToRun != diffOfYears && yearsToRun > 0){
+        QList<double> listFromDecreasingCalc;
+        if (WarnDebugMessage)
         qDebug() << __FILE__ << QString::number(__LINE__) << " mode =" << QString::number(mode) ;
-    	if (!assetIO.deleteOneYearToRun(i))
+        if (!assetIO.deleteOneYearToRun(i))
         {
-    	      qWarning() << __FILE__ << QString::number(__LINE__) << "Unable to delete one year !" ;
+              qWarning() << __FILE__ << QString::number(__LINE__) << "Unable to delete one year !" ;
             }
-      	switch(mode){
-    	    case LINEAR_MODE :
-    	        yearlyValue = linearCalc(value ,duration, beginDateStr , currentDate);
-    	        residualValue = value - (yearlyValue*yearsFactor);
-    	        if (WarnDebugMessage)
+        switch(mode){
+            case LINEAR_MODE :
+                yearlyValue = linearCalc(value ,duration, beginDateStr , currentDate);
+                residualValue = value - (yearlyValue*yearsFactor);
+                if (WarnDebugMessage)
         qDebug() << __FILE__ << QString::number(__LINE__) << " residualValue = " << QString::number(residualValue) ;
-    	        break;
-    	    case DECREASING_MODE :
-    	        listFromDecreasingCalc = decreasingCalc(i,value ,duration, beginDateStr , currentDate);
-    	        yearlyValue = listFromDecreasingCalc[YEARLY_DECR_VALUE];
-    	        if (WarnDebugMessage)
+                break;
+            case DECREASING_MODE :
+                listFromDecreasingCalc = decreasingCalc(i,value ,duration, beginDateStr , currentDate);
+                yearlyValue = listFromDecreasingCalc[YEARLY_DECR_VALUE];
+                if (WarnDebugMessage)
         qDebug() << __FILE__ << QString::number(__LINE__) << " yearlyValue = " << QString::number(yearlyValue) ;
-    	        residualValue = listFromDecreasingCalc[1];
-    	        break;
-    	    default :
-    	        break;    
-    	    }
-    	assetModel.setData(assetModel.index(i,ASSETS_YEARLY_RESULT),yearlyValue,Qt::EditRole);
-    	assetModel.setData(assetModel.index(i,ASSETS_RESIDUAL_VALUE),residualValue,Qt::EditRole);
-    	if (!assetModel.submit())
-    	{
-    		  qWarning() << __FILE__ << QString::number(__LINE__) << "Residual value not replaced !" ;
-    		  ret = false;
-    	    }
+                residualValue = listFromDecreasingCalc[1];
+                break;
+            default :
+                break;
+            }
+        assetModel.setData(assetModel.index(i,ASSETS_YEARLY_RESULT),yearlyValue,Qt::EditRole);
+        assetModel.setData(assetModel.index(i,ASSETS_RESIDUAL_VALUE),residualValue,Qt::EditRole);
+        if (!assetModel.submit())
+        {
+              qWarning() << __FILE__ << QString::number(__LINE__) << "Residual value not replaced !" ;
+              ret = false;
+            }
         }
         }
         if (WarnDebugMessage)
@@ -315,15 +315,15 @@ bool AssetsManager::setRefreshedResidualValue(){
 double AssetsManager::getRate(const QDate &date,double duration,int mode){
     double rate = 0.00;
     switch(mode){
-    	    case LINEAR_MODE :
+            case LINEAR_MODE :
                 rate = 1/duration;
-    	        break;
-    	    case DECREASING_MODE :
+                break;
+            case DECREASING_MODE :
                 rate = getRateFromAssetsRates(date,duration);
-    	        break;
-    	    default :
-    	        break;    
-    	    }
+                break;
+            default :
+                break;
+            }
     return rate;
 }
 
@@ -345,40 +345,40 @@ QStandardItemModel * AssetsManager::getYearlyValues(const QDate &year){
     model = assetIO.getYearlyValues(year,this);
     for (int i = 0; i < model->rowCount(); i += 1)
     {
-    	QString label = model->data(model->index(i,LABEL),Qt::DisplayRole).toString();
-    	double value = model->data(model->index(i,VALUE),Qt::DisplayRole).toDouble();
-    	int mode = model->data(model->index(i,MODE),Qt::DisplayRole).toInt();
-    	double duration = model->data(model->index(i,DURATION),Qt::DisplayRole).toDouble();
-    	QDate date = model->data(model->index(i,DATE),Qt::DisplayRole).toDate();
-    	QString dateYear = date.toString("yyyy");
-    	QString yearlyValue ;
+        QString label = model->data(model->index(i,LABEL),Qt::DisplayRole).toString();
+        double value = model->data(model->index(i,VALUE),Qt::DisplayRole).toDouble();
+        int mode = model->data(model->index(i,MODE),Qt::DisplayRole).toInt();
+        double duration = model->data(model->index(i,DURATION),Qt::DisplayRole).toDouble();
+        QDate date = model->data(model->index(i,DATE),Qt::DisplayRole).toDate();
+        QString dateYear = date.toString("yyyy");
+        QString yearlyValue ;
         QStandardItem * itemLabel = new QStandardItem();
         QStandardItem * itemYearlyValue = new QStandardItem();
         QList<QStandardItem*> listOfItems;
         if (WarnDebugMessage)
         qDebug() << __FILE__ << QString::number(__LINE__) << " dateYear =" << dateYear << "yearStr = "<< yearStr ;
-    	switch(mode){
-    	    case LINEAR_MODE :
-    	        yearlyValue = QString::number(linearCalc(value ,duration , dateBegin, refDate));
-    	        break;
-    	    case DECREASING_MODE :
-    	        if (dateYear == yearStr)
-    	        {
+        switch(mode){
+            case LINEAR_MODE :
+                yearlyValue = QString::number(linearCalc(value ,duration , dateBegin, refDate));
+                break;
+            case DECREASING_MODE :
+                if (dateYear == yearStr)
+                {
                     dateBegin = date.toString("yyyy-MM-dd");
-    	            }
-    	        yearlyValue = QString::number(decreasingCalc(i,value ,duration , dateBegin, refDate)[YEARLY_DECR_VALUE]);
-    	        break;
-    	    default :
-    	        break;    
-    	    }
-    	itemLabel->setText(label);
+                    }
+                yearlyValue = QString::number(decreasingCalc(i,value ,duration , dateBegin, refDate)[YEARLY_DECR_VALUE]);
+                break;
+            default :
+                break;
+            }
+        itemLabel->setText(label);
         itemYearlyValue->setText(yearlyValue);
-    	listOfItems << itemLabel << itemYearlyValue;
-    	newModel->appendRow(listOfItems);
-    	if (WarnDebugMessage)
+        listOfItems << itemLabel << itemYearlyValue;
+        newModel->appendRow(listOfItems);
+        if (WarnDebugMessage)
         qDebug() << __FILE__ << QString::number(__LINE__) << " yearlyValue in manager  =" << yearlyValue ;
         }
-    
+
     return newModel;
 }
 

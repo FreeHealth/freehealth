@@ -31,9 +31,9 @@
  ***************************************************************************/
 #include "receiptviewer.h"
 #include "receiptsmanager.h"
-#include "receiptsIO.h"
-#include "findReceiptsValues.h"
-#include "choiceDialog.h"
+#include "receiptsio.h"
+#include "findreceiptsvalues.h"
+#include "choicedialog.h"
 #include "distance.h"
 #include "freetext.h"
 
@@ -562,9 +562,9 @@ bool treeViewsActions::fillActionTreeView()
 
         for (int i = 0; i < listOfEnums.size(); ++i)
         {
-        	QStandardItem *actionItem = m_mapOfMainItems.value(i);
-        	actionItem->setEditable(false);
-        	treeModel()->insertRow(i,actionItem);
+            QStandardItem *actionItem = m_mapOfMainItems.value(i);
+            actionItem->setEditable(false);
+            treeModel()->insertRow(i,actionItem);
                 QStringList listSubActions;
                 listSubActions = m_mapSubItems.values(actionItem->text());
                 if (WarnDebugMessage)
@@ -761,7 +761,7 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
     ui->dateBanked->setDate(QDate::currentDate());
     ui->dateBook->setDisplayFormat("yyyy-MM-dd");
     ui->dateBook->setDate(QDate::currentDate());*/
-    
+
     //icons and shortcuts
     ui->saveButton->setShortcut(QKeySequence::InsertParagraphSeparator);
     ui->saveButton->setToolTip(QKeySequence(QKeySequence::InsertParagraphSeparator).toString());

@@ -34,7 +34,7 @@
 
 #include <accountplugin/receipts/preferredreceipts.h>
 #include <accountplugin/receipts/receiptviewer.h>
-#include <accountplugin/assets/assetsViewer.h>
+#include <accountplugin/assets/assetsviewer.h>
 #include <accountplugin/ledger/ledgerviewer.h>
 #include <accountplugin/movements/movementsviewer.h>
 #include <accountplugin/accountview.h>

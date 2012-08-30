@@ -29,9 +29,9 @@
  *  Contributors :                                                         *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
-#include "assetsViewer.h"
+#include "assetsviewer.h"
 #include "assetsmanager.h"
-#include "assetsIO.h"
+#include "assetsio.h"
 #include "ui_assetsviewer.h"
 
 #include <accountbaseplugin/assetmodel.h>
@@ -125,7 +125,7 @@ void AssetsViewer::recordAsset(){
     QHash<int,QVariant>  hashValuesMovements;
     QString bankName = ui->bankComboBox->currentText();
     QDate year = ui->yearEdit->date();
-    
+
     AssetsManager manager;
     AssetsIO asIO(this);
     QString userUid = asIO.getUserUid();
@@ -177,7 +177,7 @@ void AssetsViewer::recordAsset(){
     if (movementLastId == -1) {
         Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("Unable to get last movement id."));
     }
-    movement = QVariant(movementLastId);                                        
+    movement = QVariant(movementLastId);
     hashValues = manager.getHashOfValues(userUid,
                                          accountId,
                                          label,
@@ -193,7 +193,7 @@ void AssetsViewer::recordAsset(){
                                          movement,
                                          comments,
                                          trace);
-    
+
     if (!asIO.insertIntoAssets(hashValues)) {
         Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("Asset not recorded."));
     } else {
@@ -209,7 +209,7 @@ void AssetsViewer::deleteAsset(){
         Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("Select a line."));
     }
     QString bankName = ui->bankComboBox->currentText();
-    int row = index.row(); 
+    int row = index.row();
     AssetsIO  assetIO(this) ;
     int idMovement = assetIO.getMovementId(row);
     int idBank = assetIO.getIdFromBankName(bankName);
@@ -247,16 +247,16 @@ void AssetsViewer::yearDateChanged(const QDate & year){
     double sumOfYearlyValues = 0.00;
     QString yearString = year.toString("yyyy");
     AssetsManager manager;
-    QStandardItemModel *model = new QStandardItemModel(this); 
+    QStandardItemModel *model = new QStandardItemModel(this);
     model = manager.getYearlyValues(year);
     if (WarnDebugMessage)
         qDebug() << __FILE__ << QString::number(__LINE__)<< "model in viewer = "<< model->rowCount();
     for (int i = 0; i < model->rowCount(); i += 1)
     {
-    	double yearlyValue = model->data(model->index(i,YEARLY_VALUE),Qt::DisplayRole).toDouble();
-    	if (WarnDebugMessage)
+        double yearlyValue = model->data(model->index(i,YEARLY_VALUE),Qt::DisplayRole).toDouble();
+        if (WarnDebugMessage)
         qDebug() << __FILE__ << QString::number(__LINE__) << " yearlyValue =" << QString::number(yearlyValue) ;
-    	sumOfYearlyValues += yearlyValue;
+        sumOfYearlyValues += yearlyValue;
         }
     QString textLabel = "Total value to declare for "+yearString+" = "+QString::number(sumOfYearlyValues);
     ui->declareLabel->setText(textLabel);
@@ -273,15 +273,15 @@ void AssetsViewer::writeLabelByRow(const QModelIndex& index){
     QString textLabel = QString("Value to declare for %1 and %2 = %3").arg(yearString,
                                                                            label,
                                                                            QString::number(yearlyValue));
-    ui->declareLabel->setText(textLabel);    
+    ui->declareLabel->setText(textLabel);
 }
 
 void AssetsViewer::changeEvent(QEvent *e){
     QWidget::changeEvent(e);
     if (e->type()== QEvent::LanguageChange)
     {
-    	  ui->retranslateUi(this);
-    	  //fillBankComboBox();
-    	  fillModeComboBox();
+          ui->retranslateUi(this);
+          //fillBankComboBox();
+          fillModeComboBox();
         }
 }

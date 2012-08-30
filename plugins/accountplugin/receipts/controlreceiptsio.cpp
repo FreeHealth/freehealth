@@ -29,7 +29,7 @@
  *  Contributors :                                                         *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
-#include "controlreceiptsIO.h"
+#include "controlreceiptsio.h"
 #include "constants.h"
 #include "ui_controlreceipts.h"
 
@@ -79,10 +79,10 @@ ControlReceipts::ControlReceipts(QWidget * parent):QWidget(parent),ui(new Ui::Co
     m_typeOfMoney = tr("Euros");
     ui->beginDateEdit->setDate(QDate::currentDate());
     ui->endDateEdit->setDate(QDate::currentDate());
-    
+
     //DUES CONTROL
     ui->duesButton->hide();
-    
+
     //icons and shortcuts
     ui->backButton->setIcon(theme()->icon(Core::Constants::ICONPREVIOUS));
     ui->backButton->setShortcut(QKeySequence::Back);

@@ -29,10 +29,10 @@
  *  Contributors :                                                         *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
-#include "choiceDialog.h"
+#include "choicedialog.h"
 #include "receiptsmanager.h"
-#include "receiptsIO.h"
-#include "ui_ChoiceDialog.h"
+#include "receiptsio.h"
+#include "ui_choicedialog.h"
 #include "constants.h"
 #include "tools.h"
 

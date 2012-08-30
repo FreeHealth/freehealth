@@ -30,7 +30,7 @@
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
 #include "movementsviewer.h"
-#include "movementsIO.h"
+#include "movementsio.h"
 #include "movementsmanager.h"
 #include "../accountwidgetmanager.h"
 
@@ -91,9 +91,9 @@ MovementsViewer::MovementsViewer(QWidget * parent) :
     connect(ui->movementsComboBox,SIGNAL(highlighted(int)),this,
                                   SLOT(setMovementsComboBoxToolTips(int)));
     connect(ui->yearComboBox,SIGNAL(activated(int)),this,SLOT(setYearIsChanged(int)));
-    
+
     connect(user(), SIGNAL(userChanged()), this, SLOT(userIsChanged()));
-    
+
 }
 
 MovementsViewer::~MovementsViewer()
@@ -155,7 +155,7 @@ void MovementsViewer::recordMovement()
     QString date = QDate::currentDate().toString("yyyy-MM-dd");
     QString dateValue = ui->dateEdit->date().toString("yyyy-MM-dd");
     double valueCalculated = 0.00;
-    valueCalculated = manager.getCalculatedValue(ui->valueDoubleSpinBox->value(),ui->percentDoubleSpinBox->value());    
+    valueCalculated = manager.getCalculatedValue(ui->valueDoubleSpinBox->value(),ui->percentDoubleSpinBox->value());
     QString comment;//no comment
     int validity = 0;
     QString trace;// ??
@@ -174,7 +174,7 @@ void MovementsViewer::recordMovement()
                                          trace ,
                                          isValid ,
                                          details);
-    
+
     if (!mov.insertIntoMovements(hashValues)) {
         Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("Movement not inserted."));
     } else {
@@ -190,13 +190,13 @@ void MovementsViewer::deleteMovement()
     if(!index.isValid()) {
         Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("Select a line."));
     }
-    int row = index.row(); 
+    int row = index.row();
     if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " row =" << QString::number(row) ;
+              qDebug() << __FILE__ << QString::number(__LINE__) << " row =" << QString::number(row) ;
     MovementsIODb  mov(this) ;
     if (mov.containsFixAsset(row)) {
         Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("This fixed asset cannot be deleted.\nDo it in assets."));
-    	  return;
+          return;
     }
     if (!mov.deleteMovement(row,year)) {
         Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("Movement is not deleted."));
@@ -212,7 +212,7 @@ void MovementsViewer::validMovement()
     if (!index.isValid()) {
         Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("Select a line."));
     }
-    int row = index.row(); 
+    int row = index.row();
     MovementsIODb  mov(this) ;
     if (!mov.validMovement(row)) {
         Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("Movement is not validated."));
@@ -260,7 +260,7 @@ void MovementsViewer::fillYearComboBox()
     }
     for (int i = listOfYears.size()-1; i > -1 ; i--)
     {
-    	listOfYearsInverted << listOfYears[i];
+        listOfYearsInverted << listOfYears[i];
         }
     ui->yearComboBox->addItems(listOfYearsInverted);
 }
@@ -282,9 +282,9 @@ void MovementsViewer::changeEvent(QEvent * e){
         }
     else
     {
-    	if (WarnDebugMessage)
+        if (WarnDebugMessage)
             qDebug() << __FILE__ << QString::number(__LINE__) << " langage not changed " ;
-    	showMovements();
+        showMovements();
         }
     if (WarnDebugMessage)
             qDebug() << __FILE__ << QString::number(__LINE__) << "after langage changed";
@@ -296,6 +296,6 @@ void MovementsViewer::setYearIsChanged(int row){
     qDebug() << __FILE__ << QString::number(__LINE__) << " in setYearIsChanged ";
     if (!showMovements())
     {
-    	  qWarning() << __FILE__ << QString::number(__LINE__) << "unable to show new movements" ;
+          qWarning() << __FILE__ << QString::number(__LINE__) << "unable to show new movements" ;
         }
 }

@@ -55,30 +55,30 @@ FORMS += $${PWD}/preferences/accountuseroptionspage.ui \
 
 # include receipts
 HEADERS += $${PWD}/receipts/receiptsmanager.h \
-    $${PWD}/receipts/receiptsIO.h \
-    $${PWD}/receipts/findReceiptsValues.h \
+    $${PWD}/receipts/receiptsio.h \
+    $${PWD}/receipts/findreceiptsvalues.h \
     $${PWD}/receipts/xmlcategoriesparser.h \
-    $${PWD}/receipts/choiceDialog.h \
+    $${PWD}/receipts/choicedialog.h \
     $${PWD}/receipts/constants.h \
     $${PWD}/receipts/distance.h \
-    $${PWD}/receipts/controlreceiptsIO.h \
+    $${PWD}/receipts/controlreceiptsio.h \
     $${PWD}/receipts/preferredreceipts.h \
     $${PWD}/receipts/receiptviewer.h \
     $${PWD}/receipts/freetext.h  \
-    $${PWD}/receipts/tools.h      
+    $${PWD}/receipts/tools.h
 
-FORMS += $${PWD}/receipts/findValuesGUI.ui \
-    $${PWD}/receipts/ChoiceDialog.ui \
+FORMS += $${PWD}/receipts/findvaluesgui.ui \
+    $${PWD}/receipts/choicedialog.ui \
     $${PWD}/receipts/controlreceipts.ui \
     $${PWD}/receipts/preferredreceipts.ui \
     $${PWD}/receipts/receiptviewer.ui \
-    $${PWD}/receipts/FreeTextDialog.ui
+    $${PWD}/receipts/freetextdialog.ui
 
 SOURCES += $${PWD}/receipts/receiptsmanager.cpp \
-    $${PWD}/receipts/receiptsIO.cpp \
-    $${PWD}/receipts/findReceiptsValues.cpp \
-    $${PWD}/receipts/choiceDialog.cpp \
-    $${PWD}/receipts/xmlcategoriesparser.cpp \   
+    $${PWD}/receipts/receiptsio.cpp \
+    $${PWD}/receipts/findreceiptsvalues.cpp \
+    $${PWD}/receipts/choicedialog.cpp \
+    $${PWD}/receipts/xmlcategoriesparser.cpp \
     $${PWD}/receipts/distance.cpp \
     $${PWD}/receipts/controlreceiptsIO.cpp \
     $${PWD}/receipts/preferredreceipts.cpp \
@@ -88,29 +88,29 @@ SOURCES += $${PWD}/receipts/receiptsmanager.cpp \
 
 
 # include assets
-HEADERS += $${PWD}/assets/assetsIO.h \
+HEADERS += $${PWD}/assets/assetsio.h \
     $${PWD}/assets/assetsmanager.h \
-    $${PWD}/assets/assetsViewer.h
+    $${PWD}/assets/assetsviewer.h
 
 FORMS += $${PWD}/assets/assetsviewer.ui \
 
-SOURCES += $${PWD}/assets/assetsIO.cpp \
+SOURCES += $${PWD}/assets/assetsio.cpp \
     $${PWD}/assets/assetsmanager.cpp \
-    $${PWD}/assets/assetsViewer.cpp
+    $${PWD}/assets/assetsviewer.cpp
 
 # include movements
 HEADERS += $${PWD}/movements/movementsviewer.h \
-    $${PWD}/movements/movementsIO.h \
+    $${PWD}/movements/movementsio.h \
     $${PWD}/movements/movementsmanager.h
 
 FORMS += $${PWD}/movements/movementsviewer.ui
 
 SOURCES += $${PWD}/movements/movementsviewer.cpp \
-    $${PWD}/movements/movementsIO.cpp \
+    $${PWD}/movements/movementsio.cpp \
     $${PWD}/movements/movementsmanager.cpp
 
 # include ledger
-HEADERS += $${PWD}/ledger/ledgerIO.h \
+HEADERS += $${PWD}/ledger/ledgerio.h \
     $${PWD}/ledger/ledgermanager.h \
     $${PWD}/ledger/ledgerviewer.h \
     $${PWD}/ledger/ledgeredit.h \
@@ -119,7 +119,7 @@ HEADERS += $${PWD}/ledger/ledgerIO.h \
 FORMS += $${PWD}/ledger/ledgerviewer.ui \
     $${PWD}/ledger/ledgeredit.ui
 
-SOURCES += $${PWD}/ledger/ledgerIO.cpp \
+SOURCES += $${PWD}/ledger/ledgerio.cpp \
     $${PWD}/ledger/ledgermanager.cpp \
     $${PWD}/ledger/ledgerviewer.cpp \
     $${PWD}/ledger/ledgeredit.cpp \
