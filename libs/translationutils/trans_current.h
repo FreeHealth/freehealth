@@ -97,6 +97,7 @@ const char* const RELATED_TO_ALL_USERS          = QT_TRANSLATE_NOOP("tkConstants
 const char* const RELATED_TO_APPLICATION        = QT_TRANSLATE_NOOP("tkConstants", "related to application");
 const char* const RELATED_TO_PATIENT_FAMILY_1   = QT_TRANSLATE_NOOP("tkConstants", "related to the family %1");
 const char* const RELATED_TO_USER_GROUP_1       = QT_TRANSLATE_NOOP("tkConstants", "related to user group %1");
+const char* const YOU                           = QT_TRANSLATE_NOOP("tkConstants", "You");
 
 // Settings related messages
 const char* const SETTINGS_RECOVERED                = QT_TRANSLATE_NOOP("tkConstants", "Settings recovered" );
