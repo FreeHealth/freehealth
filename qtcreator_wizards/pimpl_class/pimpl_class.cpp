@@ -88,7 +88,8 @@ private:
 
 @if "%Doxygen%" == "true"
 /*! Destructor of the %ClassName:c% class */
-@endif%ClassName:c%::~%ClassName:c%()
+@endif
+%ClassName:c%::~%ClassName:c%()
 {
 }
 
