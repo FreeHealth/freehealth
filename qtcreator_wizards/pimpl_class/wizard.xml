@@ -66,8 +66,8 @@
             <fielddescription>Additional "Internal" namespace</fielddescription>
             <fielddescription xml:lang="de">Zusätzliche "Internal"-Namensraum</fielddescription>
         </field>
-        <field name="PIMPL" defaulttext="true">
-            <fieldcontrol class="QCheckBox"/>
+        <field name="PIMPL" >
+            <fieldcontrol class="QCheckBox" defaultvalue="true"/>
             <fielddescription>Create a private implementation (PIMPL idioma, Opaque pointer)</fielddescription>
             <fielddescription xml:lang="de">Private Implementation erzeugen (PIMPL-Idiom, "Opaque pointer")</fielddescription>
         </field>
@@ -76,8 +76,8 @@
             <fielddescription>Export class</fielddescription>
             <fielddescription xml:lang="de">Klasse wird exportiert</fielddescription>
         </field>
-        <field name="Doxygen" defaulttext="true">
-            <fieldcontrol class="QCheckBox"/>
+        <field name="Doxygen">
+            <fieldcontrol class="QCheckBox" defaultvalue="true"/>
             <fielddescription>Add Doxygen documentation</fielddescription>
             <fielddescription xml:lang="de">Doxygen-Dokumentation erzeugen</fielddescription>
         </field>
@@ -100,10 +100,10 @@
         </field>-->
     </fields>
     <!-- Example of a validation rule -->
-<!--    <validationrules>
-        <validationrule condition='"%ClassName%" != "QAbstractListModel"'>
-            <message>%ClassName% cannot be used as class name.</message>
-            <message xml:lang="de">%ClassName% kann nicht als Klassenname verwendet werden.</message>
+    <validationrules>
+        <validationrule condition='"%PluginNamespace%" != ""'>
+            <message>The plugin namespace cannot be empty.</message>
+            <message xml:lang="de">Der Plugin-Name darf nicht leer sein.</message>
         </validationrule>
-    </validationrules>-->
+    </validationrules>
 </wizard>
