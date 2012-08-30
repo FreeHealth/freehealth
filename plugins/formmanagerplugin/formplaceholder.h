@@ -77,18 +77,14 @@ public:
     FormPlaceHolder(QWidget *parent = 0);
     ~FormPlaceHolder();
 
-    void setObjectName(const QString &name);
     void setRootForm(Form::FormMain *rootForm);
 
-    QTreeView *formTree() const;
-    QStackedLayout *formStackLayout() const;
-    
-//    void addTopWidget(QWidget *top);
     void addBottomWidget(QWidget *bottom);
 
 public Q_SLOTS:
-    void setCurrentForm(const QString &formUuid);
-    void setCurrentEpisode(const QModelIndex &index);
+    void setCurrentForm(Form::FormMain *form);
+    void setCurrentForm(const QString &formUid);
+    void setCurrentEditingItem(const QModelIndex &index);
 
 protected Q_SLOTS:
     void handlePressed(const QModelIndex &index);

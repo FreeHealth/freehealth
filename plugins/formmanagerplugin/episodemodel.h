@@ -32,18 +32,19 @@
 #include <coreplugin/icorelistener.h>
 #include <coreplugin/ipatientlistener.h>
 
-#include <QAbstractItemModel>
+#include <QAbstractListModel>
 
 /**
  * \file episodemodel.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.7.6
- * \date jun 2012
+ * \author Eric MAEKER
+ * \version 0.8.0
+ * \date 27 Aug 2012
 */
 
 namespace Form {
 class FormMain;
 class EpisodeModel;
+class FormManager;
 
 namespace Internal {
 class EpisodeModelPrivate;
@@ -70,42 +71,39 @@ private:
     Form::EpisodeModel *m_EpisodeModel;
 };
 
-}
+}  // namespace Internal
 
-class FORM_EXPORT EpisodeModel : public QAbstractItemModel
+class FORM_EXPORT EpisodeModel : public QAbstractListModel
 {
     Q_OBJECT
-public:
+    friend class Form::FormManager;
 
+protected:
+    EpisodeModel(Form::FormMain *rootEmptyForm, QObject *parent = 0);
+    bool initialize();
+
+public:
     enum DataRepresentation {
         Label = 0,
-        Date,
         IsValid,
-        Summary,
-//        FullContent,
-//        Id,
-//        UserUuid,
-//        PatientUuid,
-        FormUuid,
-//        IsNewlyCreated,
-        IsEpisode,
+        CreationDate,
+        UserDate,
+//        Summary,
+        UserCreatorName,
         XmlContent,
         Icon,
         EmptyColumn1,
         EmptyColumn2,
         MaxData
     };
-
-    EpisodeModel(Form::FormMain *rootEmptyForm, QObject *parent = 0);
     virtual ~EpisodeModel();
-    void init(bool addLastEpisodeIndex = true);
-    void refreshFormTree();
+    QString formUid() const;
 
-    QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
-    QModelIndex parent(const QModelIndex &index) const;
     Qt::ItemFlags flags(const QModelIndex &index) const;
+    void fetchMore(const QModelIndex &parent);
+    bool canFetchMore(const QModelIndex &parent) const;
 
-    virtual int rowCount(const QModelIndex &parent = QModelIndex()) const;
+    int rowCount(const QModelIndex &parent = QModelIndex()) const;
     int columnCount(const QModelIndex &parent = QModelIndex()) const;
 
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
@@ -117,19 +115,11 @@ public:
     bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
     bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
 
-    bool isEpisode(const QModelIndex &index) const;
-    bool isForm(const QModelIndex &index) const {return !isEpisode(index);}
-    bool isUniqueEpisode(const QModelIndex &index) const;
-    bool isNoEpisode(const QModelIndex &index);
-    bool isMultiEpisode(const QModelIndex &index) const {return !isUniqueEpisode(index);}
     void setReadOnly(const bool state);
     bool isReadOnly() const;
     bool isDirty() const;
-    bool isLastEpisodeIndex(const QModelIndex &index) const;
 
-    Form::FormMain *formForIndex(const QModelIndex &index) const;
-    QModelIndex indexForForm(const QString &formUid) const;
-
+public Q_SLOTS:
     bool submit();
 
 Q_SIGNALS:

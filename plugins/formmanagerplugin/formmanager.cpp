@@ -35,6 +35,7 @@
 #include "iformio.h"
 #include "formplaceholder.h"
 #include "episodebase.h"
+#include "episodemodel.h"
 #include "constants_db.h"
 #include "subforminsertionpoint.h"
 
@@ -111,6 +112,7 @@ public:
         qDeleteAll(m_RootForms);
         m_RootForms.clear();
         _formParents.clear();
+        // EpisodeModel are deleted by QObject mecanism
     }
 
     bool isFormLoaded(QString formUid)
@@ -281,6 +283,7 @@ public:
     QList<Form::FormMain *> m_RootForms, m_SubFormsEmptyRoot;
     QHash<Form::FormMain *, Form::FormMain *> _formParents; // keep the formMain parent in cache (K=form to reparent, V=emptyrootform)
 
+    QHash<Form::FormMain*, EpisodeModel *> _episodeModels;
 
 private:
     FormManager *q;
@@ -326,6 +329,34 @@ FormManager::~FormManager()
 void FormManager::activateMode()
 {
     modeManager()->activateMode(Core::Constants::MODE_PATIENT_FILE);
+}
+
+/** Return the form (Form::FormMain*) wiht the uuid \e formUid or return zero. This function checks the central and all loaded subforms */
+FormMain *FormManager::form(const QString &formUid) const
+{
+    for(int i=0; i < d->m_RootForms.count(); ++i) {
+        Form::FormMain *form = d->m_RootForms.at(i);
+        if (form->uuid()==formUid)
+            return form;
+        const QList<Form::FormMain*> &children = form->flattenFormMainChildren();
+        for(int j=0; j < children.count(); ++j) {
+            Form::FormMain *test = children.at(j);
+            if (test->uuid()==formUid)
+                return test;
+        }
+    }
+    for(int i=0; i < d->m_SubFormsEmptyRoot.count(); ++i) {
+        Form::FormMain *form = d->m_SubFormsEmptyRoot.at(i);
+        if (form->uuid()==formUid)
+            return form;
+        const QList<Form::FormMain*> &children = form->flattenFormMainChildren();
+        for(int j=0; j < children.count(); ++j) {
+            Form::FormMain *test = children.at(j);
+            if (test->uuid()==formUid)
+                return test;
+        }
+    }
+    return 0;
 }
 
 /**
@@ -439,6 +470,38 @@ QPixmap FormManager::getScreenshot(const QString &formUid, const QString &fileNa
     }
     return pix;
 }
+
+//FormTreeModel *FormManager::formTreeModel(const char* modeUniqueName)
+//{
+//}
+
+/**
+ * Return the unique Form::EpisodeModel linked to the patient form \e form.
+ * Return zero if the form is not null.
+ */
+EpisodeModel *FormManager::episodeModel(Form::FormMain *form)
+{
+    if (!form)
+        return 0;
+    // Not in cache ?
+    if (!d->_episodeModels.value(form, 0)) {
+        // Create the model
+        EpisodeModel *model = new EpisodeModel(form, this);
+        d->_episodeModels.insert(form, model);
+        return model;
+    }
+    return d->_episodeModels.value(form);
+}
+
+/**
+ * Return the unique Form::EpisodeModel linked to the patient form identified by \e formUid.
+ * Return zero if the form \e formUid is not available.
+ */
+EpisodeModel *FormManager::episodeModel(const QString &formUid)
+{
+    return episodeModel(form(formUid));
+}
+
 
 ///** Execute all OnLoad scripts of the \e emptyRootForm */
 //void FormManager::executeOnloadScript(Form::FormMain *emptyRootForm)

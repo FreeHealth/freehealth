@@ -33,7 +33,8 @@ HEADERS = formmanagerplugin.h \
     formioquery.h \
     subforminsertionpoint.h \
     episodedata.h \
-    formtreemodel.h
+    formtreemodel.h \
+    formdatawidgetmapper.h
 
 SOURCES = formmanagerplugin.cpp \
     formmanager.cpp \
@@ -50,7 +51,8 @@ SOURCES = formmanagerplugin.cpp \
     formeditordialog.cpp \
     firstrunformmanager.cpp \
     episodedata.cpp \
-    formtreemodel.cpp
+    formtreemodel.cpp \
+    formdatawidgetmapper.cpp
 
 OTHER_FILES = FormManager.pluginspec
 
@@ -61,5 +63,6 @@ TRANSLATIONS += $${SOURCES_TRANSLATIONS_PATH}/formmanagerplugin_fr.ts \
 FORMS += formfilesselectorwidget.ui \
     formeditordialog.ui \
     formmanagerpreferenceswidget.ui \
-    formpreferenceswidget.ui
+    formpreferenceswidget.ui \
+    formplaceholder.ui
 

@@ -59,13 +59,18 @@ public:
     explicit FormTreeModel(Form::FormMain *emptyRootForm, QObject *parent = 0);
     ~FormTreeModel();
 
-    void init();
+    void initialize();
     void refreshFormTree();
 
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 //    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
 
     Qt::ItemFlags flags(const QModelIndex &index) const;
+
+    bool isUniqueEpisode(const QModelIndex &index) const;
+    bool isNoEpisode(const QModelIndex &index);
+    bool isMultiEpisode(const QModelIndex &index) const {return !isUniqueEpisode(index);}
+    Form::FormMain *formForIndex(const QModelIndex &index) const;
 
 private:
     Internal::FormTreeModelPrivate *d;

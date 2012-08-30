@@ -277,19 +277,20 @@ public:
 
     void episodeModelToTreeItem(Form::FormMain *form, TreeItem *parentItem, Form::EpisodeModel *model, const QModelIndex &index = QModelIndex())
     {
-        for(int i = 0; i < model->rowCount(index); ++i) {
-            QModelIndex idx = model->index(i, Form::EpisodeModel::Label, index);
-            // Do not include the episodes
-            if (!model->isForm(idx))
-                continue;
-            if (model->isLastEpisodeIndex(idx))
-                continue;
-            TreeItem *newItem = new TreeItem(parentItem);
-            newItem->setLabel(idx.data().toString());
-            newItem->setForm(model->formForIndex(idx), model);
-            // Read all its children
-            episodeModelToTreeItem(form, newItem, model, idx);
-        }
+        // TODO: manage FormManager
+//        for(int i = 0; i < model->rowCount(index); ++i) {
+//            QModelIndex idx = model->index(i, Form::EpisodeModel::Label, index);
+//            // Do not include the episodes
+//            if (!model->isForm(idx))
+//                continue;
+//            if (model->isLastEpisodeIndex(idx))
+//                continue;
+//            TreeItem *newItem = new TreeItem(parentItem);
+//            newItem->setLabel(idx.data().toString());
+//            newItem->setForm(model->formForIndex(idx), model);
+//            // Read all its children
+//            episodeModelToTreeItem(form, newItem, model, idx);
+//        }
     }
 
     void categoryToItem(Category::CategoryItem *cat, TreeItem *item)
@@ -312,10 +313,10 @@ public:
                 QList<Form::FormMain*> forms = formManager()->loadFormFile(addFile.text());
                 if (!forms.isEmpty()) {
                     // Create the EpisodeModel with the form
-                    Form::EpisodeModel *model = new Form::EpisodeModel(forms.at(0), q);
-                    model->init(false);
-                    // Translate all modelindex to TreeItem
-                    episodeModelToTreeItem(forms.at(0), item, model);
+//                    Form::EpisodeModel *model = new Form::EpisodeModel(forms.at(0), q);
+//                    model->init(false);
+//                    // Translate all modelindex to TreeItem
+//                    episodeModelToTreeItem(forms.at(0), item, model);
                 }
             }
         }
@@ -1080,26 +1081,26 @@ bool PmhCategoryModel::activateFormEpisode(const QModelIndex &formIndex)
     if (!formIndex.isValid())
         return false;
 
-    TreeItem *it = d->getItem(formIndex);
-    if (!it)
-        return false;
-    if (!it->isForm())
-        return false;
+//    TreeItem *it = d->getItem(formIndex);
+//    if (!it)
+//        return false;
+//    if (!it->isForm())
+//        return false;
 
-    // get the Form::FormMain index
-    Form::EpisodeModel *model = it->episodeModel();
-    if (!model)
-        return false;
-    QModelIndex idx = model->indexForForm(it->form()->uuid());
-    if (!idx.isValid())
-        return false;
+//    // get the Form::FormMain index
+//    Form::EpisodeModel *model = it->episodeModel();
+//    if (!model)
+//        return false;
+//    QModelIndex idx = model->indexForForm(it->form()->uuid());
+//    if (!idx.isValid())
+//        return false;
 
-    if (!model->hasChildren(idx)) {
-        // Create the unique episode
-        model->insertRow(0, idx);
-    }
+//    if (!model->hasChildren(idx)) {
+//        // Create the unique episode
+//        model->insertRow(0, idx);
+//    }
 
-    model->activateEpisode(model->index(0, 0, idx), model->index(idx.row(), Form::EpisodeModel::FormUuid, idx.parent()).data().toString());
+//    model->activateEpisode(model->index(0, 0, idx), model->index(idx.row(), Form::EpisodeModel::FormUuid, idx.parent()).data().toString());
 
     return true;
 }

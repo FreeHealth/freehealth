@@ -32,8 +32,15 @@ QT_BEGIN_NAMESPACE
 class QSortFilterProxyModel;
 QT_END_NAMESPACE
 
+/**
+ * \file formeditordialog.h
+ * \author Eric MAEKER <eric.maeker@gmail.com>
+ * \version 0.7.6
+ * \date 23 May 2012
+*/
+
 namespace Form {
-class EpisodeModel;
+class FormTreeModel;
 namespace Ui {
     class FormEditorDialog;
 }
@@ -52,7 +59,7 @@ public:
     };
     Q_DECLARE_FLAGS(EditionModes, EditionMode)
 
-    explicit FormEditorDialog(EpisodeModel *model, EditionModes mode = DefaultMode, QWidget *parent = 0);
+    explicit FormEditorDialog(FormTreeModel *model, EditionModes mode = DefaultMode, QWidget *parent = 0);
     ~FormEditorDialog();
 
 //    QString lastInsertedFormUid() const {return m_LastInsertedFormUid;}
@@ -65,8 +72,7 @@ private Q_SLOTS:
 
 private:
     Ui::FormEditorDialog *ui;
-    QSortFilterProxyModel *proxyModel;
-    Form::EpisodeModel *m_EpisodeModel;
+    Form::FormTreeModel *m_FormModel;
 //    QString m_LastInsertedFormUid;
 };
 

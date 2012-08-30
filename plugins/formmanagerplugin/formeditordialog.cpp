@@ -31,7 +31,7 @@
 
 
 #include "formeditordialog.h"
-#include "episodemodel.h"
+#include "formtreemodel.h"
 #include "constants_db.h"
 #include "episodebase.h"
 #include "subforminsertionpoint.h"
@@ -55,25 +55,24 @@ static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); 
 static inline Form::FormManager *formManager() {return Form::FormManager::instance();}
 static inline Core::IMainWindow *mainWindow() {return Core::ICore::instance()->mainWindow();}
 
-FormEditorDialog::FormEditorDialog(EpisodeModel *model, EditionModes mode, QWidget *parent) :
+
+// TODO test with the new FormModel
+FormEditorDialog::FormEditorDialog(FormTreeModel *model, EditionModes mode, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::FormEditorDialog),
-    m_EpisodeModel(model)
+    m_FormModel(model)
 {
     Q_UNUSED(mode);
 
     ui->setupUi(this);
     ui->formSelector->setFormType(Form::FormFilesSelectorWidget::SubForms);
 
-    proxyModel = new QSortFilterProxyModel(this);
-    proxyModel->setSourceModel(model);
-    proxyModel->setFilterKeyColumn(EpisodeModel::IsEpisode);
-    proxyModel->setFilterFixedString("false");
-    ui->treeView->setModel(proxyModel);
+    m_FormModel = model;
+    ui->treeView->setModel(model);
     ui->treeView->header()->hide();
-    for(int i = 0; i< EpisodeModel::MaxData; ++i)
+    for(int i = 0; i< FormTreeModel::MaxData; ++i)
         ui->treeView->hideColumn(i);
-    ui->treeView->showColumn(EpisodeModel::Label);
+    ui->treeView->showColumn(FormTreeModel::Label);
     ui->stackedWidget->setCurrentWidget(ui->formAdder);
 
     setWindowTitle(tr("Form Editor"));
@@ -97,9 +96,9 @@ void FormEditorDialog::on_addForm_clicked()
         else
             return;
     } else {
-        QModelIndex idx = ui->treeView->selectionModel()->currentIndex();
-        idx = proxyModel->mapToSource(idx);
-        insertTo = m_EpisodeModel->index(idx.row(), EpisodeModel::FormUuid, idx.parent()).data().toString();
+//        QModelIndex idx = ui->treeView->selectionModel()->currentIndex();
+//        idx = proxyModel->mapToSource(idx);
+//        insertTo = m_FormModel->index(idx.row(), EpisodeModel::FormUuid, idx.parent()).data().toString();
     }
 
     // Save to database
@@ -118,7 +117,7 @@ void FormEditorDialog::on_addForm_clicked()
     episodeBase()->addSubForms(insertions);
 
     // Re-create the patient form
-    m_EpisodeModel->refreshFormTree();
+//    m_FormModel->refreshFormTree();
 
 }
 

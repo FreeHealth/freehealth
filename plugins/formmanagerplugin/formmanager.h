@@ -55,6 +55,8 @@ class FormItem;
 class IFormIO;
 class FormPlaceHolder;
 class SubFormInsertionPoint;
+class FormTreeModel;
+class EpisodeModel;
 
 namespace Internal {
 class FormManagerPrivate;
@@ -92,16 +94,26 @@ public:
 
     void activateMode();
 
+    // Form management (load, save)
+    FormMain *form(const QString &formUid) const;
     QList<FormMain *> forms() const;
     QList<FormMain *> subFormsEmptyRoot() const;
     Form::FormMain *rootForm(const char *modeUniqueName);
-
     QList<Form::FormMain *> loadFormFile(const QString &formUid);
     QPixmap getScreenshot(const QString &formUid, const QString &fileName);
 
+    // Models management
+//    FormTreeModel *formTreeModel(const char* modeUniqueName);
+    EpisodeModel *episodeModel(Form::FormMain *form);
+    EpisodeModel *episodeModel(const QString &formUid);
+
+
 public Q_SLOTS:
+    // Form management
     bool loadPatientFile();
     bool insertSubForm(const SubFormInsertionPoint &insertionPoint);
+
+    // PMHx categories of forms management
     bool readPmhxCategories(const QString &formUuidOrAbsPath);
 
 Q_SIGNALS:

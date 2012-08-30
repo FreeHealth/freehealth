@@ -85,27 +85,24 @@ public:
 
         // getting Forms
         if (WarnFormRetreiving)
-            LOG_FOR(q, "Getting Forms");
+            LOG_FOR(q, "Generating FormTreeModel");
         QFont bold;
         bold.setBold(true);
 
         // create one item per form
         foreach(Form::FormMain *form, _rootForm->flattenFormMainChildren()) {
-            QStandardItem *item = new QStandardItem;
 
             QString label = form->spec()->label();
             int nb = episodeBase()->getNumberOfEpisodes(form->uuid());
             if (nb>0)
                 label += QString(" (%1)").arg(nb);
-            item->setText(label);
-
             QString iconFile = form->spec()->iconFileName();
             iconFile.replace(Core::Constants::TAG_APPLICATION_THEME_PATH, settings()->path(Core::ISettings::SmallPixmapPath));
-            item->setIcon(QIcon(iconFile));
-
+            QStandardItem *item = new QStandardItem(QIcon(iconFile), label);
             item->setFont(bold);
             linkFormAndItem(form, item);
         }
+
         // reparent items
         foreach(Form::FormMain *form, _rootForm->flattenFormMainChildren()) {
             QStandardItem *item = formToItem(form);
@@ -118,7 +115,9 @@ public:
             QStandardItem *itemUuid = new QStandardItem(form->uuid());
             QStandardItem *itemEmpty1 = new QStandardItem;
             QStandardItem *itemEmpty2 = new QStandardItem;
-            parent->appendRow(QList<QStandardItem*>() << item << itemUuid << itemEmpty1 << itemEmpty2);
+            QList<QStandardItem*> cols;
+            cols << item << itemUuid << itemEmpty1 << itemEmpty2;
+            parent->appendRow(cols);
         }
     }
 
@@ -148,7 +147,7 @@ FormTreeModel::~FormTreeModel()
     d = 0;
 }
 
-void FormTreeModel::init()
+void FormTreeModel::initialize()
 {
     d->createFormTree();
 }
@@ -199,24 +198,12 @@ QVariant FormTreeModel::data(const QModelIndex &index, int role) const
     if (!index.isValid())
         return QVariant();
 
-    switch (role) {
-//    case Qt::DisplayRole:
-//    {
-//        if (index.column()==Uuid) {
-//            Form::FormMain *form = d->formForIndex(index);
-//            if (form)
-//                return form->uuid();
-//        }
-//        break;
-//    }
-    case Qt::ToolTipRole:
-    {
+    if (role == Qt::ToolTipRole) {
         Form::FormMain *form = d->formForIndex(index);
         if (!form)
             return QVariant();
         return formTooltip(form);
     }
-    } // switch (role)
     return QStandardItemModel::data(index, role);
 }
 
@@ -226,3 +213,29 @@ Qt::ItemFlags FormTreeModel::flags(const QModelIndex &index) const
     return Qt::ItemIsSelectable | Qt::ItemIsEnabled;
 }
 
+/** Return true is the \e index only owns one unique episode. It is supposed that the \e index points to a form */
+bool FormTreeModel::isUniqueEpisode(const QModelIndex &index) const
+{
+    if (!index.isValid())
+        return false;
+    FormMain *form = d->formForIndex(index);
+    if (form)
+        return (form->episodePossibilities()==FormMain::UniqueEpisode);
+    return false;
+}
+
+/** Return true is the \e index does not own episodes. It is supposed that the \e index points to a form */
+bool FormTreeModel::isNoEpisode(const QModelIndex &index)
+{
+    if (!index.isValid())
+        return false;
+    FormMain *form = d->formForIndex(index);
+    if (form)
+        return (form->episodePossibilities()==FormMain::NoEpisode);
+    return false;
+}
+
+Form::FormMain *FormTreeModel::formForIndex(const QModelIndex &index) const
+{
+    return d->formForIndex(index);
+}
