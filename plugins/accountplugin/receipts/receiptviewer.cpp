@@ -514,10 +514,15 @@ bool treeViewsActions::fillActionTreeView()
         actionItem->setEditable(false);
         actionItem->setEnabled(true);
         int row = 0;
+        int width = 100;
         //treeViewsActions and colors
+        width = actionItem->sizeHint().width();
+        QFont itemsFont("Times", 14, QFont::Bold);
+        actionItem->setSizeHint(QSize(width,30));
+        actionItem->setFont(itemsFont);       
         if (strMainActions == rt.getStringFromRows(PREFERED_VALUE_ITEM)) {
             QBrush red(Qt::red);
-            actionItem->setForeground(red);
+            actionItem->setForeground(red);            
             m_mapOfMainItems.insert(PREFERED_VALUE_ITEM,actionItem);
             row = PREFERED_VALUE_ITEM;
         } else if (strMainActions == rt.getStringFromRows(THESAURUS_ITEM)) {
