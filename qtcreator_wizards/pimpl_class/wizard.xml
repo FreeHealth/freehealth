@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/***************************************************************************
+ *  The FreeMedForms project is a set of free, open source medical         *
+ *  applications.                                                          *
+ *  (C) 2008-2012 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
+ *  All rights reserved.                                                   *
+ *                                                                         *
+ *  This program is free software: you can redistribute it and/or modify   *
+ *  it under the terms of the GNU General Public License as published by   *
+ *  the Free Software Foundation, either version 3 of the License, or      *
+ *  (at your option) any later version.                                    *
+ *                                                                         *
+ *  This program is distributed in the hope that it will be useful,        *
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
+ *  GNU General Public License for more details.                           *
+ *                                                                         *
+ *  You should have received a copy of the GNU General Public License      *
+ *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  If not, see <http://www.gnu.org/licenses/>.                            *
+ ***************************************************************************/
+ /***************************************************************************
+ *   Main developers : Christian A. Reiter <christian.a.reiter@gmail.com>  *
+ *   Contributors :                                                        *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
+ ***************************************************************************/
+
+ Wizard should ask:
+- plugin namespace 				DONE
+- internal / not internal?			DONE
+- exported or not?				DONE
+- create a pimpl? (checked by default)		DONE
+- doxygen doc content				PARTLY
+- with or without UI (aggregate fully hidden in the pimpl part)
+-->
+<wizard version="1" kind="class" id="P.PimplClass" category="B.FMFClasses">
+    <displayname>C++ class with optional PIMPL</displayname>
+    <displayname xml:lang="de">C++-Klasse mit optionaler PIMPL</displayname>;
+    <displaycategory>FreeMedForms</displaycategory>
+    <displaycategory xml:lang="de">FreeMedForms</displaycategory>
+    <displaycategory xml:lang="fr">FreeMedForms</displaycategory>
+    <description>Creates a C++ class with an optional private implementation (PIMPL idioma).</description>
+    <description xml:lang="de">Erzeugt eine C++-Klasse mit einer optionalen privaten Implementierung</description>
+    <files>
+        <file source="pimpl_class.cpp" target="%ClassName:l%.%CppSourceSuffix%" openeditor="true"/>
+        <file source="pimpl_class.h" target="%ClassName:l%.%CppHeaderSuffix%" openeditor="true"/>
+    </files>
+    <!-- Create parameter wizard page -->
+    <fieldpagetitle>Class parameters</fieldpagetitle>
+    <fieldpagetitle xml:lang="de">Parameter der Klasse</fieldpagetitle>
+    <fields>
+        <field name="ClassName">
+            <fieldcontrol class="QLineEdit" validator="^[a-zA-Z0-9_]+$" defaulttext="MyClass" />
+            <fielddescription>Name:</fielddescription>
+            <fielddescription xml:lang="de">Name:</fielddescription>
+        </field>
+        <field name="PluginNamespace">
+            <fieldcontrol class="QLineEdit" validator="^[a-zA-Z0-9_]+$" defaulttext="" />
+            <fielddescription>Namespace of the plugin the class belongs to:</fielddescription>
+            <fielddescription xml:lang="de">Namensraum des Plugins, zu dem die Klasse gehören soll:</fielddescription>
+        </field>
+        <field name="Internal">
+            <fieldcontrol class="QCheckBox"/>
+            <fielddescription>Additional "Internal" namespace</fielddescription>
+            <fielddescription xml:lang="de">Zusätzliche "Internal"-Namensraum</fielddescription>
+        </field>
+        <field name="PIMPL" defaulttext="true">
+            <fieldcontrol class="QCheckBox"/>
+            <fielddescription>Create a private implementation (PIMPL idioma, Opaque pointer)</fielddescription>
+            <fielddescription xml:lang="de">Private Implementation erzeugen (PIMPL-Idiom, "Opaque pointer")</fielddescription>
+        </field>
+        <field name="Exported">
+            <fieldcontrol class="QCheckBox"/>
+            <fielddescription>Export class</fielddescription>
+            <fielddescription xml:lang="de">Klasse wird exportiert</fielddescription>
+        </field>
+        <field name="Doxygen" defaulttext="true">
+            <fieldcontrol class="QCheckBox"/>
+            <fielddescription>Add Doxygen documentation</fielddescription>
+            <fielddescription xml:lang="de">Doxygen-Dokumentation erzeugen</fielddescription>
+        </field>
+
+<!--        <field name="Datatype">
+            <fieldcontrol class="QComboBox" defaultindex="0">
+	        <comboentries>
+		    <comboentry value="QString">
+		        <comboentrytext>class QString</comboentrytext>
+		        <comboentrytext xml:lang="de">Klasse QString</comboentrytext>
+		    </comboentry>
+		    <comboentry value="int">
+		        <comboentrytext>Integer</comboentrytext>
+		        <comboentrytext xml:lang="de">Ganzzahlwert</comboentrytext>
+		    </comboentry>
+	        </comboentries>
+	    </fieldcontrol>
+            <fielddescription>Data type:</fielddescription>
+            <fielddescription xml:lang="de">Datentyp:</fielddescription>
+        </field>-->
+    </fields>
+    <!-- Example of a validation rule -->
+<!--    <validationrules>
+        <validationrule condition='"%ClassName%" != "QAbstractListModel"'>
+            <message>%ClassName% cannot be used as class name.</message>
+            <message xml:lang="de">%ClassName% kann nicht als Klassenname verwendet werden.</message>
+        </validationrule>
+    </validationrules>-->
+</wizard>
