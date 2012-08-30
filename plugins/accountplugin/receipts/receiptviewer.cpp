@@ -759,9 +759,14 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
     
     //icons and shortcuts
     ui->saveButton->setShortcut(QKeySequence::InsertParagraphSeparator);
-    ui->quitButton->setShortcut(QKeySequence("Ctrl+q"));
+    ui->saveButton->setToolTip(QKeySequence(QKeySequence::InsertParagraphSeparator).toString());
+    ui->quitButton->setShortcut(QKeySequence::Close);
+    ui->quitButton->setToolTip(QKeySequence(QKeySequence::Close).toString());
     ui->thesaurusButton->setShortcut(QKeySequence("Ctrl+t"));
+    ui->thesaurusButton->setToolTip(QKeySequence(QKeySequence("Ctrl+t")).toString());
     ui->goToControlButton->setIcon(theme()->icon(Core::Constants::ICONNEXT));
+    ui->goToControlButton->setShortcut(QKeySequence::Forward);
+    ui->goToControlButton->setToolTip(QKeySequence(QKeySequence::Forward).toString());
     //---------------------------------------------------------------------
     m_actionTreeView = new treeViewsActions(this);
     m_vbox = new QVBoxLayout;

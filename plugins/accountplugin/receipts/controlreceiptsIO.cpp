@@ -79,10 +79,18 @@ ControlReceipts::ControlReceipts(QWidget * parent):QWidget(parent),ui(new Ui::Co
     m_typeOfMoney = tr("Euros");
     ui->beginDateEdit->setDate(QDate::currentDate());
     ui->endDateEdit->setDate(QDate::currentDate());
+    
+    //DUES CONTROL
+    ui->duesButton->hide();
+    
     //icons and shortcuts
     ui->backButton->setIcon(theme()->icon(Core::Constants::ICONPREVIOUS));
+    ui->backButton->setShortcut(QKeySequence::Back);
+    ui->backButton->setToolTip(QKeySequence(QKeySequence::Back).toString());
     ui->searchButton->setShortcut(QKeySequence::InsertParagraphSeparator);
+    ui->searchButton->setToolTip(QKeySequence(QKeySequence::InsertParagraphSeparator).toString());
     ui->deleteButton->setShortcut(QKeySequence::Delete);
+    ui->deleteButton->setToolTip(QKeySequence(QKeySequence::Delete).toString());
     search();
     connect(ui->searchButton,SIGNAL(pressed()),this,SLOT(search()));
     connect(ui->deleteButton,SIGNAL(pressed()),this,SLOT(deleteLine()));

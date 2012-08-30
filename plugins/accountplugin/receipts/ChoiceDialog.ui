@@ -16,32 +16,6 @@
   <layout class="QGridLayout" name="gridLayout_4">
    <item row="0" column="0">
     <layout class="QGridLayout" name="gridLayout_3">
-     <item row="2" column="1">
-      <widget class="QGroupBox" name="distanceGroupBox">
-       <property name="title">
-        <string>Round Trip</string>
-       </property>
-       <layout class="QGridLayout" name="gridLayout_7">
-        <item row="0" column="0">
-         <widget class="QDoubleSpinBox" name="distanceDoubleSpinBox"/>
-        </item>
-       </layout>
-      </widget>
-     </item>
-     <item row="3" column="2">
-      <widget class="QPushButton" name="quitButton">
-       <property name="text">
-        <string>&amp;Quit and cancel</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="0" rowspan="4">
-      <widget class="QGroupBox" name="paramsGroupBox">
-       <property name="title">
-        <string>Parameters</string>
-       </property>
-      </widget>
-     </item>
      <item row="0" column="2">
       <widget class="QGroupBox" name="percentGroupBox">
        <property name="title">
@@ -91,6 +65,25 @@
          </layout>
         </item>
        </layout>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QGroupBox" name="distanceGroupBox">
+       <property name="title">
+        <string>Round Trip</string>
+       </property>
+       <layout class="QGridLayout" name="gridLayout_7">
+        <item row="0" column="0">
+         <widget class="QDoubleSpinBox" name="distanceDoubleSpinBox"/>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item row="0" column="0" rowspan="4">
+      <widget class="QGroupBox" name="paramsGroupBox">
+       <property name="title">
+        <string>Parameters</string>
+       </property>
       </widget>
      </item>
      <item row="0" column="1">
@@ -155,28 +148,12 @@
        </property>
       </widget>
      </item>
-     <item row="3" column="1">
-      <widget class="QPushButton" name="okButton">
-       <property name="minimumSize">
-        <size>
-         <width>0</width>
-         <height>40</height>
-        </size>
-       </property>
-       <property name="text">
-        <string>Choose and &amp;Ok</string>
-       </property>
-       <property name="default">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
      <item row="1" column="1" colspan="2">
       <widget class="QGroupBox" name="freeBox">
        <property name="title">
         <string>Free Values</string>
        </property>
-       <widget class="QWidget" name="">
+       <widget class="QWidget" name="layoutWidget">
         <property name="geometry">
          <rect>
           <x>0</x>
@@ -215,6 +192,35 @@
          </item>
         </layout>
        </widget>
+      </widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="QPushButton" name="quitButton">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>50</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>&amp;Quit and cancel</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="2">
+      <widget class="QPushButton" name="okButton">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>50</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Choose and &amp;Ok</string>
+       </property>
+       <property name="default">
+        <bool>true</bool>
+       </property>
       </widget>
      </item>
     </layout>
