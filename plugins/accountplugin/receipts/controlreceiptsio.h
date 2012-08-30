@@ -29,80 +29,68 @@
  *  Contributors :                                                         *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
-#ifndef  FINDRECEIPTSVALUES_H
-#define  FINDRECEIPTSVALUES_H
-#include "ui_findValuesGUI.h"
+#ifndef CONTROLRECEIPTSIO_H
+#define CONTROLRECEIPTSIO_H
 
-#include <accountplugin/account_exporter.h>
-//#include <accountplugin/receipts/xmlcategoriesparser.h>
-
-#include <accountbaseplugin/medicalproceduremodel.h>
-#include <accountbaseplugin/datapackmodel.h>
-#include <accountbaseplugin/thesaurusmodel.h>
+#include <accountbaseplugin/accountmodel.h>
 #include <accountbaseplugin/constants.h>
+#include <accountplugin/account_exporter.h>
 
-#include <QtGui>
-#include <QtCore>
-#include <QSqlDatabase>
+#include <QWidget>
+#include <QPoint>
+#include <QRect>
+#include <QMap>
+
+namespace Ui{
+    class ControlReceiptsWidget;
+}
 
 using namespace AccountDB;
-namespace Ui{
-  class findValueDialog;
-}
-class ACCOUNT_EXPORT findReceiptsValues:public QDialog
+class ACCOUNT_EXPORT ControlReceipts : public QWidget
 {
-  Q_OBJECT
-  enum LabelsData
-  {
-      NAME = 0,
-      AMOUNT,
-      EXPLANATION,
-      OTHERS,
-      LabelsData_MaxParam
-      };
-  enum FatherSon
-  {
-      FATHER = 0,
-      SON
-    };
-public:
-    QHash<QString,QString> returnValuesHash();
-    findReceiptsValues(QWidget * parent = 0);
-    ~findReceiptsValues();
-    QHash<QString,QString> getchosenValues();
-    void clear();
-private:
-    Ui::findValueDialog * ui;
-    QSqlDatabase m_db;
-    double m_modifier;
-    QHash<int,QString> m_hashExplanations;
-    QHash<int,QString> m_otherInformations;
-    QHash<QString,QString> m_hashValueschosen;
-    void initialize();
-    void fillComboCategories();
-    bool tableViewIsFull(QAbstractItemModel * model);
-    void enableShowNextTable();
-    //QString getDateWhereClause();
-    bool datapackIsAvalaible();
-    QHash<QString,QString> getHashFatherSonFromOthers(const QModelIndex & index);
+    Q_OBJECT
+    enum HeadersForPrint
+    {
+        PATIENT_NAME_HEADER = 0,
+        DATE_HEADER,
+        ACTS_HEADER,
+        CASH_HEADER,
+        CHQ_HEADER,
+        VISA_HEADER,
+        BANKING_HEADER,
+        OTHER_HEADER,
+        DUE_HEADER,
+        DUE_BY_HEADER,
+        HeadersForPrint_MaxParam
+        };
+    public :
+        ControlReceipts(QWidget * parent);
+        ~ControlReceipts();
+        void resizeControlReceipts(QWidget * parent);
+    signals :
+        void isClosing();
+    private slots :
+        void search();
+        void deleteLine();
+        void printDues();
+        void print();
+        void closeAction(bool);
 
-private Q_SLOTS:
-    void fillListViewValues(const QString & comboItem);
-//    void chooseValue(const QModelIndex& index);
-    void chooseValue();
-    void deleteValue();
-//    void supprItemchosen(QListWidgetItem * item);
-    void showInformations(const QModelIndex & index);
-    void on_lineEditFilter_textChanged(const QString & text);
-    void showNext();
-    void setModifSpinBox(QWidget*,QWidget*);
-    void setModifier(double);
-    void chooseUserModel(bool);
-    void chooseDatapackModel(bool);
-    void wipeFilterEdit(bool b);
-    void wipeFilterEdit();
-    void setLessButtonEnabled(QListWidgetItem * item);
+    private:
+        void coloringDoubles();
+        void refresh();
+        void refreshFilter(const QString & filter);
+        QString textOfSums(AccountModel * model);
+        void changeEvent(QEvent *e);
+        void print(QString & html);
+        QString getHtmlDocAccordingToTableView();
+        QStringList getListOfSums();
+        Ui::ControlReceiptsWidget * ui;
+        AccountModel * m_accountModel;
+        QString m_userUuid;
+        QMap<QString,QString> m_mapCombo;
+        QString m_typeOfMoney;
 };
 
-
 #endif
+

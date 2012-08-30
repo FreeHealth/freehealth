@@ -32,7 +32,7 @@
 #ifndef RECEIPTVIEWER_H
 #define RECEIPTVIEWER_H
 
-#include "controlreceiptsIO.h"
+#include "controlreceiptsio.h"
 #include <accountplugin/accountmode.h>
 #include <accountplugin/account_exporter.h>
 
@@ -72,7 +72,7 @@ class treeViewsActions: public QTreeView
     Q_OBJECT
 
 public:
-    
+
     treeViewsActions(QWidget *parent);
     ~treeViewsActions();
 
@@ -86,7 +86,7 @@ private:
     bool deleteItemFromThesaurus(QModelIndex &index);
     bool addpreferredItem(QModelIndex &index);
     bool isChildOfThesaurus();
-    
+
 /*Q_SIGNALS :
     void pressed(const QModelIndex&) { emit QAbstractItemView::pressed(const QModelIndex&);}*/
 
@@ -121,12 +121,12 @@ class ChosenListView: public QListView{
         void deleteItem(bool b);
     private:
         void changeEvent(QEvent *e);
-        
+
         QAction *m_clear;
         QAction * m_deleteInReturnedList;
         QMenu *m_menu;
         QObject *m_parent;
-        
+
 };
 
 
@@ -138,18 +138,18 @@ public:
     explicit ReceiptViewer(QWidget *parent = 0);
     ~ReceiptViewer();
     void setPosition(QWidget *parent);
-    
+
     QString m_userUuid;
     treeViewsActions *m_actionTreeView;
     ChosenListView *m_returnedListView;
 
 protected:
     void changeEvent(QEvent *e);
-    void fillModel(QHash<QString,QString> &hashOfValues, 
-                   int typeOfPayment, 
-                   double percentage, 
-                   const QVariant & debtor, 
-                   const QVariant & site, 
+    void fillModel(QHash<QString,QString> &hashOfValues,
+                   int typeOfPayment,
+                   double percentage,
+                   const QVariant & debtor,
+                   const QVariant & site,
                    const QVariant & distrules,
                    const int row);
 
@@ -158,7 +158,7 @@ protected:
     QVBoxLayout *m_vboxForList;
 
 private:
-    
+
     QVariant firstItemchosenAsPreferential(QString &item);
     void resizeEvent(QResizeEvent *event);
 
@@ -173,7 +173,7 @@ private Q_SLOTS:
     void clearAll(bool b);
     void controlReceiptsDestroyed();
     void userUid();
-    
+
     //void createFirstTimeTxt();
 
 private:
@@ -189,7 +189,7 @@ private:
     QString m_distanceRuleType;
     QStringList m_listOfValues;
     //QMenu * m_returnedListMenu;
-    
+
     //QFile m_fileFirstTime;
 };
 

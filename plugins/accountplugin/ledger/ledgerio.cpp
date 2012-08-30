@@ -29,7 +29,7 @@
  *  Contributors :                                                         *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
-#include "ledgerIO.h"
+#include "ledgerio.h"
 #include <coreplugin/icore.h>
 #include <coreplugin/iuser.h>
 #include <QDate>

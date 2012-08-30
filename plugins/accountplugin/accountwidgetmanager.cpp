@@ -35,7 +35,7 @@
 
 #include <accountplugin/receipts/preferredreceipts.h>
 #include <accountplugin/receipts/receiptviewer.h>
-#include <accountplugin/assets/assetsViewer.h>
+#include <accountplugin/assets/assetsviewer.h>
 #include <accountplugin/ledger/ledgerviewer.h>
 #include <accountplugin/movements/movementsviewer.h>
 #include <accountplugin/accountview.h>
@@ -215,7 +215,7 @@ AccountActionHandler::AccountActionHandler(QObject *parent) :
     cmd->setDefaultKeySequence(QKeySequence("Alt+z"));
     menu->addAction(cmd, Constants::G_ACCOUNT_APPS);
     connect(a, SIGNAL(triggered()), this, SLOT(assets()));
-    
+
     a = aAccount = new QAction(this);
     a->setObjectName("aAccount");
     a->setIcon(th->icon(Core::Constants::ICONHELP));
@@ -311,7 +311,7 @@ void AccountActionHandler::account(){
     QWidget *w = mainWindow()->centralWidget();
     delete w;
     w = 0;
-    mainWindow()->setCentralWidget(new AccountView(mainWindow()));    
+    mainWindow()->setCentralWidget(new AccountView(mainWindow()));
 }
 #else
 void AccountActionHandler::addReceipts()

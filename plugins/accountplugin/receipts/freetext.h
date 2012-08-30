@@ -1,7 +1,7 @@
 #ifndef FREETEXT_H
 #define FREETEXT_H
 
-#include "ui_FreeTextDialog.h"
+#include "ui_freetextdialog.h"
 #include <QDialog>
 #include <QString>
 

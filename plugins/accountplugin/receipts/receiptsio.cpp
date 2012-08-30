@@ -29,7 +29,7 @@
  *  Contributors :                                                         *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
-#include "receiptsIO.h"
+#include "receiptsio.h"
 
 #include <accountbaseplugin/constants.h>
 #include <accountbaseplugin/percentmodel.h>
@@ -91,7 +91,7 @@ bool receiptsEngine::insertIntoAccount(const QHash<int,QVariant> &hashValues, co
     // fetch all the account model
     /*while (m_mpmodel->canFetchMore(QModelIndex())) {
         if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__)<< " while ";
+              qDebug() << __FILE__ << QString::number(__LINE__)<< " while ";
         m_mpmodel->QAbstractItemModel::fetchMore(QModelIndex());
     }*/
 
@@ -99,43 +99,43 @@ bool receiptsEngine::insertIntoAccount(const QHash<int,QVariant> &hashValues, co
     QSqlDriver *driver = db.driver();
     if (driver->hasFeature(QSqlDriver::QuerySize)) {
         if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << "driver has feature";
+              qDebug() << __FILE__ << QString::number(__LINE__) << "driver has feature";
     }
     QString filterUser = QString("%1='%2'").arg("USER_UID",userUuid);
     m_mpmodel->AccountModel::setFilter(filterUser);
     int rowBefore = m_mpmodel->AccountModel::rowCount(QModelIndex());
     if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " rowBefore = " << QString::number(rowBefore);
+              qDebug() << __FILE__ << QString::number(__LINE__) << " rowBefore = " << QString::number(rowBefore);
     if (m_mpmodel->insertRows(rowBefore,1,QModelIndex()))
     {
-    	  qWarning() << __FILE__ << QString::number(__LINE__) << "Row inserted !" ;
+          qWarning() << __FILE__ << QString::number(__LINE__) << "Row inserted !" ;
         }
     bool ret = true;
     QVariant data;
-    
+
     for(int i = 1 ; i < ACCOUNT_MaxParam ; i ++){
          data = hashValues.value(i);
          if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " data + i =" << data.toString()+" "+QString::number(i);
+              qDebug() << __FILE__ << QString::number(__LINE__) << " data + i =" << data.toString()+" "+QString::number(i);
          if (i == ACCOUNT_PATIENT_NAME)
          {
-         	QString dataString = data.toString();
-         	dataString.replace("'","''");
-         	data = QVariant(dataString);
+            QString dataString = data.toString();
+            dataString.replace("'","''");
+            data = QVariant(dataString);
              }
              if (WarnDebugMessage)
              qDebug() << __FILE__ << QString::number(__LINE__) << " data after =" << data.toString()+" "+QString::number(i);
          if (!m_mpmodel-> setData(m_mpmodel->index(rowBefore,i), data ,Qt::EditRole))
             {
-            	qWarning() << __FILE__ << QString::number(__LINE__) << " model account error = " 
+                qWarning() << __FILE__ << QString::number(__LINE__) << " model account error = "
                                                                     << m_mpmodel->lastError().text() ;
                 }
         }
         if (!m_mpmodel->AccountModel::submit())
         {
-        	  qWarning() << __FILE__ << QString::number(__LINE__) << " submit error = " 
-        	                         << m_mpmodel->lastError().text() ;
-        	  ret = false;
+              qWarning() << __FILE__ << QString::number(__LINE__) << " submit error = "
+                                     << m_mpmodel->lastError().text() ;
+              ret = false;
             }
 
     return ret;
@@ -149,9 +149,9 @@ bool receiptsEngine::insertIntoAccount(const QHash<int,QVariant> &hashValues, co
         qDebug() << __FILE__ << QString::number(__LINE__) << " MP row count =" << QString::number(rows) ;
     for (int i = 0; i < rows; i += 1)
     {
-    	QString name = model.data(model.index(i,MP_NAME),Qt::DisplayRole).toString();
-    	QVariant value = model.data(model.index(i,MP_AMOUNT),Qt::DisplayRole);
-    	hash.insert(name,value);
+        QString name = model.data(model.index(i,MP_NAME),Qt::DisplayRole).toString();
+        QVariant value = model.data(model.index(i,MP_AMOUNT),Qt::DisplayRole);
+        hash.insert(name,value);
     }
     return hash;
 }*/
@@ -162,19 +162,19 @@ bool receiptsEngine::insertInThesaurus(const QString &listOfValuesStr, const QSt
     ThesaurusModel model(this);
     int rowBefore = model.ThesaurusModel::rowCount(QModelIndex());
     if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount thesaurus =" << QString::number(rowBefore) ;
+              qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount thesaurus =" << QString::number(rowBefore) ;
     if (model.insertRows(rowBefore,1,QModelIndex())) {
-    	  qWarning() << __FILE__ << QString::number(__LINE__) << "Row inserted !" ;
+          qWarning() << __FILE__ << QString::number(__LINE__) << "Row inserted !" ;
         }
     if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount thesaurus =" << QString::number(model.ThesaurusModel::rowCount(QModelIndex())) ;
+              qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount thesaurus =" << QString::number(model.ThesaurusModel::rowCount(QModelIndex())) ;
     model.setData(model.index(rowBefore,THESAURUS_UID), uuidStr,Qt::EditRole);
     model.setData(model.index(rowBefore,THESAURUS_USERUID), userUuid,Qt::EditRole);
     model.setData(model.index(rowBefore,THESAURUS_VALUES),listOfValuesStr,Qt::EditRole);
     model.setData(model.index(rowBefore,THESAURUS_PREF),0,Qt::EditRole);
     if (!model.submit())
     {
-    	  ret = false;
+          ret = false;
         }
     return ret;
 }
@@ -187,15 +187,15 @@ bool receiptsEngine::deleteFromThesaurus(const QString & data , const QString & 
     int row = 0;
     for (int i = 0; i < model.rowCount(); i += 1)
     {
-    	QString dataReturned = model.data(model.index(i,THESAURUS_VALUES)).toString();
-    	if (dataReturned == data)
-    	{
-    		  row = i;
-    	    }
+        QString dataReturned = model.data(model.index(i,THESAURUS_VALUES)).toString();
+        if (dataReturned == data)
+        {
+              row = i;
+            }
     }
     if (!model.removeRow(row))
     {
-    	  ret = false;
+          ret = false;
         }
     return ret;
 }
@@ -206,25 +206,25 @@ bool receiptsEngine::addBoolTrue(QString & data){
     int row = 0;
     for (int i = 0; i < model.rowCount(); i += 1)
     {
-    	QString dataReturned = model.data(model.index(i,THESAURUS_VALUES)).toString();
-    	int b = model.data(model.index(i,THESAURUS_PREF)).toInt();
-    	if (dataReturned == data)
-    	{
-    		  row = i;
-    	    }
-    	if(b == 1){
-    	    if (!model.setData(model.index(i,THESAURUS_PREF),0,Qt::EditRole))
-    	    {
-    	    	  qWarning() << __FILE__ << QString::number(__LINE__) << "thesaurusModel cannot set bool to false !" ;
+        QString dataReturned = model.data(model.index(i,THESAURUS_VALUES)).toString();
+        int b = model.data(model.index(i,THESAURUS_PREF)).toInt();
+        if (dataReturned == data)
+        {
+              row = i;
+            }
+        if(b == 1){
+            if (!model.setData(model.index(i,THESAURUS_PREF),0,Qt::EditRole))
+            {
+                  qWarning() << __FILE__ << QString::number(__LINE__) << "thesaurusModel cannot set bool to false !" ;
 
-    	    	  ret = false;
+                  ret = false;
 
-    	        }
-    	}
+                }
+        }
     }
     if (!model.setData(model.index(row,THESAURUS_PREF),1,Qt::EditRole))
     {
-    	  ret = false;
+          ret = false;
         }
     return ret;
 }
@@ -235,7 +235,7 @@ double receiptsEngine::getMinDistanceValue(const QString & data){
     QString filter = QString("%1 = '%2'").arg("TYPE",data);
     model.setFilter(filter);
     if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " filter =" << model.filter() ;
+              qDebug() << __FILE__ << QString::number(__LINE__) << " filter =" << model.filter() ;
     minDistance = model.data(model.index(0,DISTRULES_MIN_KM),Qt::DisplayRole).toDouble();
     return minDistance;
 }
@@ -314,9 +314,9 @@ QHash<int,QVariant> receiptsEngine::getListOfpreferredValues(QString & userUuid,
             due = preferredValue;
             break;
         default :
-            break;    
-        }    
-         
+            break;
+        }
+
     QVariant comment = QVariant(tr("preferred act"));
     hash.insert(ACCOUNT_UID,"UID");
     hash.insert(ACCOUNT_USER_UID,userUuid);
@@ -340,7 +340,7 @@ QHash<int,QVariant> receiptsEngine::getListOfpreferredValues(QString & userUuid,
     return hash;
 }
 
-QHash<QString,double> receiptsEngine::getFilteredValueFromMedicalProcedure(const QString & act, 
+QHash<QString,double> receiptsEngine::getFilteredValueFromMedicalProcedure(const QString & act,
                                                                            const QString & field){
     QHash<QString,double> hash;
     const QString baseName = "medical_procedure";
@@ -352,36 +352,36 @@ QHash<QString,double> receiptsEngine::getFilteredValueFromMedicalProcedure(const
     QSqlDatabase db = m_dbMP;
     if (!datapackIsAvalaible())
     {
-    	  db = m_db;
+          db = m_db;
         }
     QSqlQuery q(db);
     if (!q.exec(req))
     {
-    	 qWarning() << __FILE__ << QString::number(__LINE__) 
-    	                        << "Error "+QString::number(__LINE__)+" "+q.lastError().text() ; 
-    	 if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " " << q.lastQuery();
+         qWarning() << __FILE__ << QString::number(__LINE__)
+                                << "Error "+QString::number(__LINE__)+" "+q.lastError().text() ;
+         if (WarnDebugMessage)
+              qDebug() << __FILE__ << QString::number(__LINE__) << " " << q.lastQuery();
         }
     while (q.next())
     {
-    	QString valueStr = q.value(0).toString();
-    	if (valueStr.toDouble() == 0.0)
+        QString valueStr = q.value(0).toString();
+        if (valueStr.toDouble() == 0.0)
         {
-        	  qWarning() << __FILE__ << QString::number(__LINE__) << "value null" ;
-        	  if (valueStr.contains(","))
-        	  {
-        	  	  if (WarnDebugMessage)
-        	  	  qDebug() << __FILE__ << QString::number(__LINE__) << " in , "  ;
-        	  	  valueStr.replace(",",QLocale::c().decimalPoint ());
-        	      }
-        	  else if (valueStr.contains("."))
-        	  {
-        	  	  valueStr.replace(".",QLocale::c().decimalPoint ());
-        	      }
+              qWarning() << __FILE__ << QString::number(__LINE__) << "value null" ;
+              if (valueStr.contains(","))
+              {
+                  if (WarnDebugMessage)
+                  qDebug() << __FILE__ << QString::number(__LINE__) << " in , "  ;
+                  valueStr.replace(",",QLocale::c().decimalPoint ());
+                  }
+              else if (valueStr.contains("."))
+              {
+                  valueStr.replace(".",QLocale::c().decimalPoint ());
+                  }
             }
-    	double amount = valueStr.toDouble();
+        double amount = valueStr.toDouble();
         hash.insertMulti(act,amount);
-        } 
+        }
     if (hash.size()>1) {
         Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("More than one value")+__FILE__+QString::number(__LINE__));
     }
@@ -390,7 +390,7 @@ QHash<QString,double> receiptsEngine::getFilteredValueFromMedicalProcedure(const
 
 QString receiptsEngine::getStringFromInsuranceUid(const QVariant & insuranceUid){
     QString debtor;
-    const QString baseName = "insurance";    
+    const QString baseName = "insurance";
     const QString insuranceUidField = "INSURANCE_UID";
     const QString name = "NAME";
     QString filter = QString("WHERE %1 = '%2'").arg(insuranceUidField,insuranceUid.toString());
@@ -398,11 +398,11 @@ QString receiptsEngine::getStringFromInsuranceUid(const QVariant & insuranceUid)
     QSqlQuery q(m_db);
     if (!q.exec(req))
     {
-    	 qWarning() << __FILE__ << QString::number(__LINE__) 
-    	                        << "Error "+QString::number(__LINE__)+" "+q.lastError().text() ; 
+         qWarning() << __FILE__ << QString::number(__LINE__)
+                                << "Error "+QString::number(__LINE__)+" "+q.lastError().text() ;
         }
     while (q.next())
-    { 
+    {
         debtor = q.value(0).toString();
         }
     return debtor;
@@ -410,7 +410,7 @@ QString receiptsEngine::getStringFromInsuranceUid(const QVariant & insuranceUid)
 
 QVariant receiptsEngine::getSiteUidFromSite(const QString & site){
     QVariant uid = QVariant();
-    const QString baseName = "sites";    
+    const QString baseName = "sites";
     const QString uidField = "SITE_UID";
     const QString name = "NAME";
     QString filter = QString("WHERE %1 = '%2'").arg(name,site);
@@ -418,19 +418,19 @@ QVariant receiptsEngine::getSiteUidFromSite(const QString & site){
     QSqlQuery q(m_db);
     if (!q.exec(req))
     {
-    	 qWarning() << __FILE__ << QString::number(__LINE__) 
-    	                        << "Error "+QString::number(__LINE__)+" "+q.lastError().text() ; 
+         qWarning() << __FILE__ << QString::number(__LINE__)
+                                << "Error "+QString::number(__LINE__)+" "+q.lastError().text() ;
         }
     while (q.next())
-    { 
+    {
         uid = q.value(0);
-        }    
+        }
     return uid;
 }
 
 QVariant receiptsEngine::getInsuranceUidFromInsurance(const QString & insurance){
     QVariant uid = QVariant();
-    const QString baseName = "insurance";    
+    const QString baseName = "insurance";
     const QString uidField = "INSURANCE_UID";
     const QString name = "NAME";
     QString filter = QString("WHERE %1 = '%2'").arg(name,insurance);
@@ -438,15 +438,15 @@ QVariant receiptsEngine::getInsuranceUidFromInsurance(const QString & insurance)
     QSqlQuery q(m_db);
     if (!q.exec(req))
     {
-    	 qWarning() << __FILE__ << QString::number(__LINE__) 
-    	                        << "Error "+QString::number(__LINE__)+" "+q.lastError().text() ; 
+         qWarning() << __FILE__ << QString::number(__LINE__)
+                                << "Error "+QString::number(__LINE__)+" "+q.lastError().text() ;
         }
     while (q.next())
-    { 
+    {
         uid = q.value(0);
-        } 
+        }
     if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " uid insuranceUid =" << uid.toString() ;   
+              qDebug() << __FILE__ << QString::number(__LINE__) << " uid insuranceUid =" << uid.toString() ;
     return uid;
 }
 
@@ -457,11 +457,11 @@ QString receiptsEngine::getStringOfpreferredActAndHisValue(const QString & prefe
     QStringList listOfActs;
     if (data.contains("+"))
     {
-    	  listOfActs = data.split("+");
+          listOfActs = data.split("+");
         }
     else
     {
-    	listOfActs << data;
+        listOfActs << data;
         }
     QString act;
     double totalValue = 0.00;
@@ -480,9 +480,9 @@ QHash<QString,QString> receiptsEngine::getPercentagesAccordingToUser()
     PercentModel model(this);
     for (int i = 0; i < model.rowCount(); i += 1)
     {
-    	QString type = model.data(model.index(i,AccountDB::Constants::PERCENT_TYPE),Qt::DisplayRole).toString();
-    	QString value = model.data(model.index(i,AccountDB::Constants::PERCENT_VALUES),Qt::DisplayRole).toString();
-    	hash.insert(type,value);
+        QString type = model.data(model.index(i,AccountDB::Constants::PERCENT_TYPE),Qt::DisplayRole).toString();
+        QString value = model.data(model.index(i,AccountDB::Constants::PERCENT_VALUES),Qt::DisplayRole).toString();
+        hash.insert(type,value);
     }
     return hash;
 }
@@ -504,10 +504,10 @@ QString receiptsEngine::getJustDayBeforeLastRelease()
         QDate date = QDate::fromString(dateStr,"yyyy-MM-dd");
         if (date > lastDate)
         {
-        	  lastDate = date;
+              lastDate = date;
             }
-        }    
-    lastDateBefore = lastDate.addDays(-1).toString("yyyy-MM-dd");  
+        }
+    lastDateBefore = lastDate.addDays(-1).toString("yyyy-MM-dd");
     return lastDateBefore;
 }
 
@@ -518,7 +518,7 @@ bool receiptsEngine::datapackIsAvalaible()
     QFile file(datapack);
     if (!file.exists())
     {
-    	  b = false;
+          b = false;
         }
     return b;
 }

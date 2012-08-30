@@ -29,68 +29,63 @@
  *  Contributors :                                                         *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
-#ifndef CONTROLRECEIPTSIO_H
-#define CONTROLRECEIPTSIO_H
+#ifndef ASSETSIO_H
+#define ASSETSIO_H
 
-#include <accountbaseplugin/accountmodel.h>
-#include <accountbaseplugin/constants.h>
 #include <accountplugin/account_exporter.h>
 
-#include <QWidget>
-#include <QPoint>
-#include <QRect>
-#include <QMap>
+#include <QObject>
+#include <QVariant>
+#include <QHash>
+#include <QStandardItemModel>
 
-namespace Ui{
-    class ControlReceiptsWidget;
+// #include "../../accountbaseplugin/constants.h"//<accountbaseplugin/constants.h>  A eviter+++
+
+// #include "../../accountbaseplugin/assetmodel.h"
+// NON à la place déclare la class comme ça et met le include dans le cpp
+// Intérêt == si modification du assetModel header pas de recompilation de cet objet avec ma méthode
+// alors qu'il aurait été recompilé avec ton include.
+
+namespace AccountDB {
+class AssetModel;
 }
 
-using namespace AccountDB;
-class ACCOUNT_EXPORT ControlReceipts : public QWidget
+class ACCOUNT_EXPORT AssetsIO : public QObject
 {
     Q_OBJECT
-    enum HeadersForPrint
-    {
-        PATIENT_NAME_HEADER = 0,
-        DATE_HEADER,
-        ACTS_HEADER,
-        CASH_HEADER,
-        CHQ_HEADER,
-        VISA_HEADER,
-        BANKING_HEADER,
-        OTHER_HEADER,
-        DUE_HEADER,
-        DUE_BY_HEADER,
-        HeadersForPrint_MaxParam
-        };
-    public :
-        ControlReceipts(QWidget * parent);
-        ~ControlReceipts();
-        void resizeControlReceipts(QWidget * parent);
-    signals :
-        void isClosing();
-    private slots :
-        void search();
-        void deleteLine();
-        void printDues();
-        void print();
-        void closeAction(bool);
-    
-    private:
-        void coloringDoubles();
-        void refresh();
-        void refreshFilter(const QString & filter);
-        QString textOfSums(AccountModel * model);
-        void changeEvent(QEvent *e);
-        void print(QString & html);
-        QString getHtmlDocAccordingToTableView();
-        QStringList getListOfSums();
-        Ui::ControlReceiptsWidget * ui;
-        AccountModel * m_accountModel;
-        QString m_userUuid;
-        QMap<QString,QString> m_mapCombo;
-        QString m_typeOfMoney;
+
+public:
+    AssetsIO(QObject *parent);
+    ~AssetsIO();
+    AccountDB::AssetModel *getModelAssets();
+    QString getUserUid();
+    bool insertIntoAssets(const QHash<int,QVariant> &hashValues);
+    bool insertIntoMovements(const QHash<int,QVariant> &hashValues);
+    bool deleteAsset(int row);
+
+    QStandardItemModel *getListsOfValuesForRefresh(QObject *parent);
+    QStandardItemModel *getBankComboBoxModel(QObject *parent);
+
+    int getLastMovementId();
+    bool deleteMovement(int idMovement, int idBank);
+    int getMovementId(int row);
+    int getIdFromBankName(const QString &bankName);
+    double getResidualValueWhenRefresh(int row);
+    bool deleteOneYearToRun(int row);
+    double getRate(const QDate &date, double duration);
+    QStandardItemModel * getYearlyValues(const QDate &year, QObject *parent);
+    double getValueFromRow(int row);
+    int getModeFromRow(int row);
+    double getDurationFromRow(int row);
+    QDate getDateFromRow(int row);
+    QString getLabelFromRow(int row);
+private:
+    QString getBankNameFromId(int id);
+    bool debitOrCreditInBankBalance(const QString &bank, double value);
+    bool creditValueDeletedToBankAccount(double value, int idBank);
+    AccountDB::AssetModel *m_assetModel;
+    QString m_user_uid;
 };
 
-#endif
 
+#endif

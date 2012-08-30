@@ -31,7 +31,7 @@
  ***************************************************************************/
 #include "ledgeredit.h"
 #include "ui_ledgeredit.h"
-#include "ledgerIO.h"
+#include "ledgerio.h"
 #include <coreplugin/idocumentprinter.h>
 #include <extensionsystem/pluginmanager.h>
 #include <coreplugin/constants_tokensandsettings.h>

@@ -29,9 +29,9 @@
  *  Contributors :                                                         *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
-#include "findReceiptsValues.h"
+#include "findreceiptsvalues.h"
 #include "constants.h"
-#include "receiptsIO.h"
+#include "receiptsio.h"
 
 #include <utils/global.h>
 #include <coreplugin/isettings.h>

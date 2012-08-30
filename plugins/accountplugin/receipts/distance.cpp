@@ -32,8 +32,8 @@
 #include "distance.h"
 #include "constants.h"
 #include "receiptsmanager.h"
-#include "receiptsIO.h"
-#include "ui_ChoiceDialog.h"
+#include "receiptsio.h"
+#include "ui_choicedialog.h"
 
 #include <QDebug>
 
@@ -71,12 +71,12 @@ distance::~distance(){}
 
 double distance::getDistanceNumber(const QString & data){
     if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " data =" << data  ;
+              qDebug() << __FILE__ << QString::number(__LINE__) << " data =" << data  ;
     receiptsEngine recIO;
     double dist = 0.00;
     double minDistance = recIO.getMinDistanceValue(data);
     if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " minDistance =" << QString::number(minDistance) ;
+              qDebug() << __FILE__ << QString::number(__LINE__) << " minDistance =" << QString::number(minDistance) ;
     dist = ui->distanceDoubleSpinBox->value() - minDistance;
     return dist;
 }
@@ -85,27 +85,27 @@ int distance::returnDistanceDialog(){
     int ret = 0;
         if (ui->cashButton->isChecked())
     {
-    	ret = Cash;
+        ret = Cash;
         }
         if (ui->checkButton->isChecked())
     {
-    	ret = Check;
+        ret = Check;
         }
         if (ui->visaButton->isChecked())
     {
-    	ret = Visa;
+        ret = Visa;
         }
         if (ui->bankingButton->isChecked())
     {
-    	ret = Banking;
+        ret = Banking;
         }
         if (ui->otherButton->isChecked())
     {
-    	ret = Other;
+        ret = Other;
         }
         if (ui->dueButton->isChecked())
     {
-    	ret = Due;
+        ret = Due;
         }
     return ret;
 }
@@ -140,19 +140,19 @@ void distance::quickPlus(){
     else{
         m_quickInt++;
         m_percent = m_hashPercentages.value(m_quickInt).toDouble();
- 	}
+    }
     ui->percentDoubleSpinBox->setValue(m_percent);
 }
 
 void distance::quickLess(){
     if(m_quickInt == 1)
-	    return;
-  	/*else if(m_percent == 100){
+        return;
+    /*else if(m_percent == 100){
             m_percent = list[0].toDouble();
- 		}*/
+        }*/
     else{
         m_quickInt--;
         m_percent = m_hashPercentages.value(m_quickInt).toDouble();
- 		}
+        }
     ui->percentDoubleSpinBox->setValue(m_percent);
 }

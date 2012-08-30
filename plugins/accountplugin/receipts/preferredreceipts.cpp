@@ -32,8 +32,8 @@
 #include "preferredreceipts.h"
 #include "receiptsmanager.h"
 #include "ui_preferredreceipts.h"
-#include "choiceDialog.h"
-#include "receiptsIO.h"
+#include "choicedialog.h"
+#include "receiptsio.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/iuser.h>

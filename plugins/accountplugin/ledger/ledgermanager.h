@@ -24,14 +24,14 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *  Main Developers : Pierre-Marie DESOMBRE <pm.desombre@medsyn.fr>,      *
+ *  Main Developers:   Pierre-Marie DESOMBRE <pm.desombre@medsyn.fr>,      *
  *                     Eric MAEKER, <eric.maeker@gmail.com>                *
- *  Contributors :                                                         *
+ *  Contributors:                                                          *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
 #ifndef LEDGERMANAGER_H
 #define LEDGERMANAGER_H
-#include "ledgerIO.h"
+#include "ledgerio.h"
 #include <QObject>
 #include <QStandardItemModel>
 
@@ -48,17 +48,17 @@ class LedgerManager : public QObject {
         AccountModel * getModelMonthlyReceiptsAnalysis(QObject * parent,QString & month , QString & year);
         QStandardItemModel * getModelMonthlyAndTypeReceiptsAnalysis(QObject * parent,QString & month,QString & year);
         QStandardItemModel * getModelYearlyAndTypeReceiptsAnalysis(QObject * parent,QString & year);
-        
+
         MovementModel * getModelMonthlyMovementsAnalysis(QObject * parent,QString & month , QString & year);
         QStandardItemModel * getModelMonthlyAndTypeMovementAnalysis(QObject * parent,QString & month,QString & year);
         QStandardItemModel * getModelYearlyAndTypeMovementAnalysis(QObject * parent,QString & year);
-        
+
         QStringList getListOfYears();
         QStringList getListOfMonths();
         double getSums();
     private :
         double m_sums;
-       
+
 };
 
 #endif

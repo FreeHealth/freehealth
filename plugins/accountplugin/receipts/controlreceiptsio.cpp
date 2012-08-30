@@ -29,7 +29,7 @@
  *  Contributors :                                                         *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
-#include "controlreceiptsIO.h"
+#include "controlreceiptsio.h"
 #include "constants.h"
 #include "ui_controlreceipts.h"
 
