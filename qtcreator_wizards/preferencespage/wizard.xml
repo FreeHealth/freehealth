@@ -22,11 +22,11 @@
  ***************************************************************************/
  -->
  <wizard version="1" kind="class" id="A.PreferencesPage" category="B.FMFClasses">
-    <icon>freemedforms_24.png</icon>
-    <description>Creates a class for a FreeMedForms preferences page. Choose this template if you already have created a plugin.</description>
-    <description xml:lang="de">Erstellt eine Klasse für eine FreeMedForms-Einstellungen-Seite. Wählen Sie diese Vorlage, wenn Sie bereits ein Plugin erstellt haben.</description>
     <displayname>Settings Page</displayname>
     <displayname xml:lang="de">Einstellungen-Seite</displayname>
+    <icon>../shared/preferences-system.png</icon>
+    <description>Creates a class for a FreeMedForms preferences page. Choose this template if you already have created a plugin.</description>
+    <description xml:lang="de">Erstellt eine Klasse für eine FreeMedForms-Einstellungen-Seite. Wählen Sie diese Vorlage, wenn Sie bereits ein Plugin erstellt haben.</description>
     <displaycategory>FreeMedForms</displaycategory>
     <files>
         <file source="preferences.cpp" target="%PluginName:l%preferences.%CppSourceSuffix%" openeditor="true"/>

@@ -29,7 +29,7 @@ leave room for the Qt 4 target page.
 <wizard version="1" kind="project"
         class="qt4project" firstpage="10"
         id="A.FMFPlugin" category="X.FMFProjects">
-    <icon>freemedforms_24.png</icon>
+    <icon>../shared/freemedforms_24.png</icon>
     <description>Creates a FreeMedForms plugin with preferences page.</description>
     <description xml:lang="fr">Créer un greffon pour la suite FreeMedForms.</description><!-- please UPDATE!!! -->
     <description xml:lang="de">Erstellt ein FreeMedForms-Plugin mit integrierter Einstellungsseite.</description>
