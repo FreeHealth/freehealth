@@ -54,12 +54,18 @@ namespace Internal {
 
 @if "%PIMPL%" == "true"
 // ********************** BEGIN private model implementation **********************
+@if "%Doxygen%" == "true"
+/*!
+ * \class %PluginNamespace:c%::%ClassName:c%Private
+ * \brief Private implementation of the %PluginNamespace:c%::%ClassName:c% class.
+ *
+ * documentation here
+ */
+@endif
 class %ClassName:c%Private
 {
 public:
     %ClassName:c%Private(%ClassName:c% *parent) : q(parent) {}
-
-public:
 
 private:
     %ClassName:c% *q;
@@ -72,17 +78,26 @@ private:
 @endif
 } // end namespace %PluginNamespace:c%
 
+@if "%Doxygen%" == "true"
+/*! Constructor of the %ClassName:c% class */
+@endif
 %ClassName:c%::%ClassName:c%(QWidget *parent) :
     QWidget(parent)
 {
 }
 
-%ClassName:c%::~%ClassName:c%()
+@if "%Doxygen%" == "true"
+/*! Destructor of the %ClassName:c% class */
+@endif%ClassName:c%::~%ClassName:c%()
 {
 }
 
+@if "%Doxygen%" == "true"
+/*! initializes the %ClassName:c% instance with default values */
+@endif
 bool %ClassName:c%::initialize()
-{}
+{
+}
 
 /*
 void %ClassName:c%::setCurrentForm(const QString &formUid)
