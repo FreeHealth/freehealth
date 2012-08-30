@@ -52,11 +52,11 @@ class %PluginName:c%PreferencesWidget;
 class %PluginName:c%PreferencesWidget : public QWidget
 {
     Q_OBJECT
-    
+
 public:
     explicit %PluginName:c%PreferencesWidget(QWidget *parent = 0);
     ~%PluginName:c%PreferencesWidget();
-    
+
     void setDataToUi();
 
     static void writeDefaultSettings(Core::ISettings *s);
@@ -102,5 +102,5 @@ private:
 
 
 } // namespace Internal
-} // namespace %PluginName:c%
-#endif // %PluginName:u%_INTERNAL_%PluginName:u%PREFERENCES_H
+} // namespace %Namespace:c%
+#endif // %Namespace:u%_INTERNAL_%ClassName:u%_H
