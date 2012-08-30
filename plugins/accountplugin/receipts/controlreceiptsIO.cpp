@@ -41,6 +41,8 @@
 //#include <extensionsystem/iplugin.h>
 #include <extensionsystem/pluginmanager.h>
 
+#include <coreplugin/icore.h>
+#include <coreplugin/itheme.h>
 #include <coreplugin/idocumentprinter.h> //coreplugin/idocumentprinter.h
 #include <coreplugin/constants.h>
 #include <QTimer>
@@ -57,7 +59,7 @@ using namespace ExtensionSystem;
 using namespace Core;
 
 inline static Core::IDocumentPrinter *printer() {return ExtensionSystem::PluginManager::instance()->getObject<Core::IDocumentPrinter>();}
-
+static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 
 ControlReceipts::ControlReceipts(QWidget * parent):QWidget(parent),ui(new Ui::ControlReceiptsWidget)
 {
@@ -70,7 +72,6 @@ ControlReceipts::ControlReceipts(QWidget * parent):QWidget(parent),ui(new Ui::Co
     resize(w,h);
     setAutoFillBackground(true);
     //radioButtons
-    ui->outRadioButton->setChecked(true);
     ui->resultLabel->setText("");
     ui->resultLabel->setWordWrap(true);
     m_accountModel = new AccountModel(this);
@@ -78,15 +79,16 @@ ControlReceipts::ControlReceipts(QWidget * parent):QWidget(parent),ui(new Ui::Co
     m_typeOfMoney = tr("Euros");
     ui->beginDateEdit->setDate(QDate::currentDate());
     ui->endDateEdit->setDate(QDate::currentDate());
+    //icons and shortcuts
+    ui->backButton->setIcon(theme()->icon(Core::Constants::ICONPREVIOUS));
     ui->searchButton->setShortcut(QKeySequence::InsertParagraphSeparator);
     ui->deleteButton->setShortcut(QKeySequence::Delete);
-    ui->inRadioButton->setShortcut(QKeySequence("Ctrl+q"));
     search();
     connect(ui->searchButton,SIGNAL(pressed()),this,SLOT(search()));
     connect(ui->deleteButton,SIGNAL(pressed()),this,SLOT(deleteLine()));
     connect(ui->duesButton,SIGNAL(pressed()),this,SLOT(printDues()));
     connect(ui->printButton,SIGNAL(pressed()),this,SLOT(print()));
-    connect(ui->inRadioButton,SIGNAL(clicked(bool)),this,SLOT(closeAction(bool)));
+    connect(ui->backButton,SIGNAL(pressed()),this,SLOT(closeAction()));
 }
 
 ControlReceipts::~ControlReceipts()
@@ -384,11 +386,9 @@ void ControlReceipts::refreshFilter(const QString & filter){
     ui->tableView->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
 }
 
-void ControlReceipts::closeAction(bool b){
-    Q_UNUSED(b);
+void ControlReceipts::closeAction(){
     emit isClosing();
     emit close();
-    ui->outRadioButton->setChecked(true);
 }
 
 void ControlReceipts::changeEvent(QEvent *e) {

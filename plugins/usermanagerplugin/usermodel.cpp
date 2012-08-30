@@ -34,10 +34,10 @@
   \sa UserPlugin::Internal::UserData
   \sa UserPlugin::IUserListener
 
-  \todo write documentation+++
-  \todo code LOCKER
-  \todo when QDataWidgetMapper (UserViewer) is set, it calls ALL the datas of the user, even for the hidden widgets. This causes an important memory usage. This is to improve ++++
 */
+//TODO: write documentation+++
+//TODO: code LOCKER
+//TODO: when QDataWidgetMapper (UserViewer) is set, it calls ALL the data of the user, even for the hidden widgets. This causes an important memory usage. Improve this ++++
 
 #include "usermodel.h"
 
@@ -174,7 +174,7 @@ public:
     }
 
     /**
-      Retreive all users datas and store it to the cache of the model.
+      Retreive all users data and store it to the cache of the model.
       \sa numberOfUsersInMemory(), m_Uuid_UserList
     */
     bool addUserFromDatabase(const QString &uuid)
@@ -192,7 +192,7 @@ public:
     }
 
     /**
-      Retreive all users datas and store it to the cache of the model. Return the created uuid.
+      Retreive all users data and store it to the cache of the model. Return the created uuid.
       \sa numberOfUsersInMemory(), m_Uuid_UserList
     */
     QString addUserFromDatabase(const QString &log64, const QString &pass64)
@@ -294,7 +294,7 @@ public:
         case Core::IUser::Qualifications : toReturn = user->qualifications(); break;
 
         case Core::IUser::Preferences : toReturn = user->preferences(); break;
-        case Core::IUser::DataPackConfig: userBase()->getUserDynamicData(user->uuid(), Constants::USER_DATAS_DATAPACK_CONFIG); break;
+        case Core::IUser::DataPackConfig: userBase()->getUserDynamicData(user->uuid(), Constants::USER_DATA_DATAPACK_CONFIG); break;
 
         case Core::IUser::GenericHeader : toReturn = user->extraDocumentHtml(Core::IUser::GenericHeader); break;
         case Core::IUser::GenericFooter : toReturn = user->extraDocumentHtml(Core::IUser::GenericFooter); break;
@@ -883,7 +883,7 @@ Qt::ItemFlags UserModel::flags(const QModelIndex &index) const
     return Qt::ItemIsEnabled | Qt::ItemIsSelectable | Qt::ItemIsEditable;
 }
 
-/** Define the datas of users.  */
+/** Define the data of users.  */
 bool UserModel::setData(const QModelIndex &item, const QVariant &value, int role)
 {
 //    qWarning() << Q_FUNC_INFO ;
@@ -923,7 +923,7 @@ bool UserModel::setData(const QModelIndex &item, const QVariant &value, int role
 
     // TODO: if user if a delegate of current user
 
-    // set datas directly into database using QSqlTableModel if possible
+    // set data directly into database using QSqlTableModel if possible
     if (item.column() < USER_MaxParam) {
         // prepare SQL update
         if (!d->m_Sql->setData(item, value, role)) {
@@ -972,7 +972,7 @@ bool UserModel::setData(const QModelIndex &item, const QVariant &value, int role
     case Core::IUser::Specialities :  user->setSpecialty(value.toStringList()); break;
     case Core::IUser::Qualifications :  user->setQualification(value.toStringList()); break;
     case Core::IUser::Preferences :  user->setPreferences(value); break;
-    case Core::IUser::DataPackConfig: return userBase()->saveUserDynamicData(user->uuid(), Constants::USER_DATAS_DATAPACK_CONFIG, value);
+    case Core::IUser::DataPackConfig: return userBase()->saveUserDynamicData(user->uuid(), Constants::USER_DATA_DATAPACK_CONFIG, value);
 
         // TODO: Add Xml extra document to model
     case Core::IUser::GenericHeader : user->setExtraDocumentHtml(value, Core::IUser::GenericHeader); Q_EMIT(userDocumentsChanged()); break;
@@ -1025,7 +1025,7 @@ QVariant UserModel::currentUserData(const int column) const
     return d->getUserData(user, column);
 }
 
-/** Returns the datas of users. \sa Core::IUser::Model */
+/** Returns the data of users. \sa Core::IUser::Model */
 QVariant UserModel::data(const QModelIndex &item, int role) const
 {
     if (!item.isValid()) {
@@ -1073,7 +1073,7 @@ QVariant UserModel::data(const QModelIndex &item, int role) const
     else if ((role == Qt::DisplayRole) || (role == Qt::EditRole)) {
         // Manage table USERS using the QSqlTableModel WITHOUT retreiving whole user from database
         if ((item.column() < Core::IUser::LocaleLanguage)) {
-            // here we suppose that it is the currentUser the ask for datas
+            // here we suppose that it is the currentUser the ask for data
 //            qWarning() << (bool)(d->m_CurrentUserRights & Core::IUser::ReadAll) << (bool)(d->m_CurrentUserRights & Core::IUser::ReadOwn) << (d->m_CurrentUserUuid == uuid);
             // TODO: code here : has delegates rights
             if (d->m_CurrentUserRights & Core::IUser::ReadAll)
@@ -1099,7 +1099,7 @@ QVariant UserModel::data(const QModelIndex &item, int role) const
             return QVariant();
         // TODO: if user is a delegate of current user
 
-        // get datas directly from database using QSqlTableModel if possible
+        // get data directly from database using QSqlTableModel if possible
         if (item.column() < USER_LANGUAGE)
             return d->m_Sql->data(item, role);
 

@@ -62,7 +62,7 @@ class DrugsUserWidget : public QWidget, private Ui::DrugsUserWidget
 
 public:
     explicit DrugsUserWidget(QWidget *parent = 0);
-    void setDatasToUi();
+    void setDataToUi();
 
     static void writeDefaultSettings( Core::ISettings *s );
 

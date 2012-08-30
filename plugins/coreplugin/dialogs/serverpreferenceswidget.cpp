@@ -57,7 +57,7 @@ ServerPreferencesWidget::ServerPreferencesWidget(QWidget *parent) :
     setObjectName("ServerPreferencesWidget");
     ui->setupUi(this);
     connect(ui->useDefaultAdminLog, SIGNAL(clicked(bool)), this, SLOT(toggleLogPass(bool)));
-    setDatasToUi();
+    setDataToUi();
     ui->log->setIcon(theme()->icon(Core::Constants::ICONEYES));
     ui->pass->setIcon(theme()->icon(Core::Constants::ICONEYES));
     ui->pass->toogleEchoMode();
@@ -107,7 +107,7 @@ QString ServerPreferencesWidget::password() const
     return ui->pass->text();
 }
 
-void ServerPreferencesWidget::setDatasToUi()
+void ServerPreferencesWidget::setDataToUi()
 {
     // Get from settings()->databaseConnector()
     const Utils::DatabaseConnector &db = settings()->databaseConnector();

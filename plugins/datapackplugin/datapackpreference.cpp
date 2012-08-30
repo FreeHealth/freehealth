@@ -81,7 +81,7 @@ int DataPackPreferencePage::sortIndex() const {return 0;}
 void DataPackPreferencePage::resetToDefaults()
 {
     m_Widget->writeDefaultSettings(settings());
-    m_Widget->setDatasToUi();
+    m_Widget->setDataToUi();
 }
 
 void DataPackPreferencePage::applyChanges()
@@ -136,7 +136,7 @@ DataPackPreferenceWidget::DataPackPreferenceWidget(QWidget *parent) :
     setLayout(lay);
     DataPack::ServerPackEditor *packEditor = new DataPack::ServerPackEditor(this);
     lay->addWidget(packEditor);
-    setDatasToUi();
+    setDataToUi();
     connect(packManager(), SIGNAL(packInstalled(DataPack::Pack)), this, SLOT(packInstalled(DataPack::Pack)));
 }
 
@@ -145,7 +145,7 @@ DataPackPreferenceWidget::~DataPackPreferenceWidget()
     delete ui;
 }
 
-void DataPackPreferenceWidget::setDatasToUi()
+void DataPackPreferenceWidget::setDataToUi()
 {
 }
 

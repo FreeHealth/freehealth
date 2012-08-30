@@ -48,7 +48,7 @@ public:
     {}
 
 public:
-    QHash<int, QVariant> m_DbDatas;
+    QHash<int, QVariant> m_DbData;
     QVector<int> m_Dirty;
 
 private:
@@ -76,7 +76,7 @@ QVariant AccountData::value(const int ref) const
 {
     if (ref >= Max_Params || ref < 0)
         return QVariant();
-    return d->m_DbDatas.value(ref);
+    return d->m_DbData.value(ref);
 }
 
 bool AccountData::setValue(const int ref, const QVariant &value)
@@ -84,7 +84,7 @@ bool AccountData::setValue(const int ref, const QVariant &value)
     if (ref >= Max_Params || ref < 0)
         return false;
 
-    d->m_DbDatas.insert(ref, value);
+    d->m_DbData.insert(ref, value);
 
     if (!d->m_Dirty.contains(ref))
         d->m_Dirty.append(ref);
@@ -99,28 +99,28 @@ AmountModel *AccountData::amountModel() const
 }
 
 /** \brief This member should only be used by AcocuntBase. \e field is a representation of AccountDb::Constants::TableAcc_Fields. */
-void AccountData::setDatasFromDb(const int ref, const QVariant &value)
+void AccountData::setDataFromDb(const int ref, const QVariant &value)
 {
     switch (ref) {
-    case Constants::ACCOUNT_ID : d->m_DbDatas.insert(Id, value); break;
-    case Constants::ACCOUNT_UID : d->m_DbDatas.insert(Uid, value); break;
-    case Constants::ACCOUNT_USER_UID : d->m_DbDatas.insert(UserUid, value); break;
-    case Constants::ACCOUNT_PATIENT_UID : d->m_DbDatas.insert(PatientUid, value); break;
-    case Constants::ACCOUNT_PATIENT_NAME : d->m_DbDatas.insert(PatientFullName, value); break;
-    case Constants::ACCOUNT_SITE_ID: d->m_DbDatas.insert(SiteId, value); break;
-    case Constants::ACCOUNT_INSURANCE_ID: d->m_DbDatas.insert(InsuranceId, value); break;
-    case Constants::ACCOUNT_DATE : d->m_DbDatas.insert(Date, value); break;
+    case Constants::ACCOUNT_ID : d->m_DbData.insert(Id, value); break;
+    case Constants::ACCOUNT_UID : d->m_DbData.insert(Uid, value); break;
+    case Constants::ACCOUNT_USER_UID : d->m_DbData.insert(UserUid, value); break;
+    case Constants::ACCOUNT_PATIENT_UID : d->m_DbData.insert(PatientUid, value); break;
+    case Constants::ACCOUNT_PATIENT_NAME : d->m_DbData.insert(PatientFullName, value); break;
+    case Constants::ACCOUNT_SITE_ID: d->m_DbData.insert(SiteId, value); break;
+    case Constants::ACCOUNT_INSURANCE_ID: d->m_DbData.insert(InsuranceId, value); break;
+    case Constants::ACCOUNT_DATE : d->m_DbData.insert(Date, value); break;
 //    case MedicalProcedureHtml : return "// TODO: here */"; //TODO: remove this line?
-    case Constants::ACCOUNT_COMMENT : d->m_DbDatas.insert(Comment, value); break;
-    case Constants::ACCOUNT_CASHAMOUNT: d->m_DbDatas.insert(Cash, value); break;
-    case Constants::ACCOUNT_CHEQUEAMOUNT: d->m_DbDatas.insert(Cheque, value); break;
-    case Constants::ACCOUNT_VISAAMOUNT: d->m_DbDatas.insert(Visa, value); break;
-    case Constants::ACCOUNT_INSURANCEAMOUNT: d->m_DbDatas.insert(Insurance, value); break;
-    case Constants::ACCOUNT_OTHERAMOUNT: d->m_DbDatas.insert(Other, value); break;
-    case Constants::ACCOUNT_DUEAMOUNT: d->m_DbDatas.insert(DueAmount, value); break;
-    case Constants::ACCOUNT_DUEBY : d->m_DbDatas.insert(DueBy, value); break;
-    case Constants::ACCOUNT_ISVALID :d->m_DbDatas.insert(IsValid, value); break;
-    case Constants::ACCOUNT_TRACE : d->m_DbDatas.insert(Trace, value); break;
+    case Constants::ACCOUNT_COMMENT : d->m_DbData.insert(Comment, value); break;
+    case Constants::ACCOUNT_CASHAMOUNT: d->m_DbData.insert(Cash, value); break;
+    case Constants::ACCOUNT_CHEQUEAMOUNT: d->m_DbData.insert(Cheque, value); break;
+    case Constants::ACCOUNT_VISAAMOUNT: d->m_DbData.insert(Visa, value); break;
+    case Constants::ACCOUNT_INSURANCEAMOUNT: d->m_DbData.insert(Insurance, value); break;
+    case Constants::ACCOUNT_OTHERAMOUNT: d->m_DbData.insert(Other, value); break;
+    case Constants::ACCOUNT_DUEAMOUNT: d->m_DbData.insert(DueAmount, value); break;
+    case Constants::ACCOUNT_DUEBY : d->m_DbData.insert(DueBy, value); break;
+    case Constants::ACCOUNT_ISVALID :d->m_DbData.insert(IsValid, value); break;
+    case Constants::ACCOUNT_TRACE : d->m_DbData.insert(Trace, value); break;
     default : break;
     }
 }

@@ -70,7 +70,7 @@ public:
     void paintEvent(QPaintEvent *event);
     void insertAction(int index, QAction *action, QMenu *menu = 0);
 
-private slots:
+private Q_SLOTS:
     void toolButtonContextMenuActionTriggered(QAction*);
 
 private:

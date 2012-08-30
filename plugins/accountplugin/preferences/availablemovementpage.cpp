@@ -79,7 +79,7 @@ int AvailableMovementPage::sortIndex() const {return 30;}
 void AvailableMovementPage::resetToDefaults()
 {
     m_Widget->writeDefaultSettings(settings());
-    m_Widget->setDatasToUi();
+    m_Widget->setDataToUi();
 }
 
 void AvailableMovementPage::applyChanges()
@@ -135,7 +135,7 @@ AvailableMovementWidget::~AvailableMovementWidget()
     //saveModel();
 }
 
-void AvailableMovementWidget::setDatasToUi()
+void AvailableMovementWidget::setDataToUi()
 {
     m_Mapper->setCurrentIndex(movComboBox->currentIndex());
 }
@@ -157,8 +157,8 @@ void AvailableMovementWidget::fillHugeWidgets(){
     m_Mapper->addMapping(parentEdit, AccountDB::Constants::AVAILMOV_PARENT,"text");//parent movement
     m_Mapper->addMapping(taxDeductibilityComboBox,AccountDB::Constants::AVAILMOV_DEDUCTIBILITY,"currentIndex");
     movComboBox->setModel(m_Model);
-    movComboBox->setModelColumn(AccountDB::Constants::AVAILMOV_LABEL);  
-    setDatasToUi(); 
+    movComboBox->setModelColumn(AccountDB::Constants::AVAILMOV_LABEL);
+    setDataToUi();
 }
 
 void AvailableMovementWidget::saveModel()
@@ -216,12 +216,12 @@ void AvailableMovementWidget::saveToSettings(Core::ISettings *sets)
     if (!m_Model->submit()) {
         LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_SAVE_DATA_IN_DATABASE_1).arg(tr("available_movement")));
         Utils::warningMessageBox(tr("Can not submit available movements to your personnal database."),
-                                 tr("An error occured during available movements saving. Datas are corrupted."));
+                                 tr("An error occured during available movements saving. Data are corrupted."));
     }
 }
 
 void AvailableMovementWidget::writeDefaultSettings(Core::ISettings *s)
-{    
+{
     Q_UNUSED(s);
 //    Utils::Log::addMessage("AvailableMovementWidget", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("AvailableMovementWidget"));
 //    s->sync();
@@ -346,7 +346,7 @@ void AvailableMovementWidget::showEvent(QShowEvent *event){
 //    	  	    strList += strValues+"\n";
 //    	      test = m_Model->submit();
 //    	      }
-//    	      
+//
 //    return test;
 //}
 

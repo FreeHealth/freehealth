@@ -27,7 +27,7 @@
 
 /**
   \class DrugsWidget::DosageCreator
-  \brief Dialog for dosage creation / edition / modification. A dosage is a standard set of datas that will be used to help
+  \brief Dialog for dosage creation / edition / modification. A dosage is a standard set of data that will be used to help
   doctors when prescribing a drug.
   If you want to create a new dosage, you must create a new row onto the model BEFORE.
   If you want to edit or modify a dosage, you must inform the dialog of the row and the CIS of the drug.
@@ -330,9 +330,9 @@ void DosageCreatorDialog::keyPressEvent(QKeyEvent *e)
 void DosageCreatorDialog::updateSettings()
 {
     if (settings()->value(Constants::S_PROTOCOLCREATOR_AUTOCHANGE).toBool())
-        connect(dosageViewer, SIGNAL(protocolDataschanged()), this, SLOT(protocolDatasChanged()));
+        connect(dosageViewer, SIGNAL(protocolDataschanged()), this, SLOT(protocolDataChanged()));
     else
-        disconnect(dosageViewer, SIGNAL(protocolDataschanged()), this, SLOT(protocolDatasChanged()));
+        disconnect(dosageViewer, SIGNAL(protocolDataschanged()), this, SLOT(protocolDataChanged()));
 
     const QString &defButton = settings()->value(Constants::S_PROTOCOLCREATOR_DEFAULTBUTTON).toString();
     validateButton->setDefaultAction(d->prescribe);
@@ -346,7 +346,7 @@ void DosageCreatorDialog::updateSettings()
         validateButton->setDefaultAction(d->test);
 }
 
-void DosageCreatorDialog::protocolDatasChanged()
+void DosageCreatorDialog::protocolDataChanged()
 {
     // Set window modified
     const QString &winTitle = windowTitle();
@@ -380,7 +380,7 @@ void DosageCreatorDialog::saveRequested()
     done(QDialog::Rejected);
 }
 
-/** \brief Accept the dialog (prescription's done), no changes is done on the database. */
+/** \brief Accept the dialog (prescription's done), no changes are done on the database. */
 void DosageCreatorDialog::prescribeRequested()
 {
     // modify focus for the mapper to commit changes

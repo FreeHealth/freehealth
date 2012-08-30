@@ -96,10 +96,10 @@ public:
     QRect tabRect(int index) const;
 
 
-signals:
+Q_SIGNALS:
     void currentChanged(int);
 
-public slots:
+public Q_SLOTS:
     void updateHover();
 
 private:
@@ -140,14 +140,14 @@ public:
     int currentIndex() const;
     QStatusBar *statusBar() const;
 
-signals:
+Q_SIGNALS:
     void currentAboutToShow(int index);
     void currentChanged(int index);
 
-public slots:
+public Q_SLOTS:
     void setCurrentIndex(int index);
 
-private slots:
+private Q_SLOTS:
     void showWidget(int index);
 
 private:

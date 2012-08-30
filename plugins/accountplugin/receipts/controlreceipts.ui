@@ -6,13 +6,13 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>710</width>
-    <height>482</height>
+    <width>682</width>
+    <height>468</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>710</width>
+    <width>600</width>
     <height>300</height>
    </size>
   </property>
@@ -22,12 +22,74 @@
   <layout class="QGridLayout" name="gridLayout_2">
    <item row="0" column="0">
     <layout class="QGridLayout" name="gridLayout">
-     <item row="0" column="0" colspan="2">
+     <item row="0" column="0">
+      <layout class="QGridLayout" name="gridLayout_3">
+       <item row="0" column="1">
+        <widget class="QPushButton" name="duesButton">
+         <property name="minimumSize">
+          <size>
+           <width>80</width>
+           <height>50</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>D&amp;ues</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QPushButton" name="deleteButton">
+         <property name="minimumSize">
+          <size>
+           <width>80</width>
+           <height>50</height>
+          </size>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>16777215</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>&amp;Delete</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="3">
+        <widget class="QPushButton" name="printButton">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>50</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>&amp;Print</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="2">
+        <widget class="QPushButton" name="backButton">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>50</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Back to Inputs</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="1" column="0">
       <widget class="QTableView" name="tableView">
        <property name="minimumSize">
         <size>
-         <width>691</width>
-         <height>100</height>
+         <width>500</width>
+         <height>200</height>
         </size>
        </property>
        <property name="maximumSize">
@@ -38,11 +100,11 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="0" colspan="2">
+     <item row="2" column="0">
       <widget class="QLabel" name="resultLabel">
        <property name="minimumSize">
         <size>
-         <width>680</width>
+         <width>490</width>
          <height>55</height>
         </size>
        </property>
@@ -51,7 +113,7 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="0">
+     <item row="3" column="0">
       <widget class="QGroupBox" name="groupBox">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -62,7 +124,7 @@
        <property name="minimumSize">
         <size>
          <width>371</width>
-         <height>201</height>
+         <height>100</height>
         </size>
        </property>
        <property name="maximumSize">
@@ -74,165 +136,134 @@
        <property name="title">
         <string>Filtering data</string>
        </property>
+       <widget class="QLabel" name="filterLabel">
+        <property name="geometry">
+         <rect>
+          <x>12</x>
+          <y>32</y>
+          <width>70</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>70</width>
+          <height>21</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Filter</string>
+        </property>
+        <property name="buddy">
+         <cstring>filterEdit</cstring>
+        </property>
+       </widget>
+       <widget class="QLabel" name="comboLabel">
+        <property name="geometry">
+         <rect>
+          <x>12</x>
+          <y>62</y>
+          <width>70</width>
+          <height>21</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>70</width>
+          <height>21</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>with</string>
+        </property>
+        <property name="buddy">
+         <cstring>fieldComboBox</cstring>
+        </property>
+       </widget>
+       <widget class="QComboBox" name="fieldComboBox">
+        <property name="geometry">
+         <rect>
+          <x>105</x>
+          <y>62</y>
+          <width>224</width>
+          <height>24</height>
+         </rect>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>161</width>
+          <height>24</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>2000</width>
+          <height>24</height>
+         </size>
+        </property>
+       </widget>
        <widget class="QWidget" name="layoutWidget">
         <property name="geometry">
          <rect>
-          <x>10</x>
+          <x>350</x>
           <y>30</y>
-          <width>341</width>
-          <height>161</height>
+          <width>180</width>
+          <height>58</height>
          </rect>
         </property>
-        <layout class="QVBoxLayout" name="verticalLayout">
+        <layout class="QVBoxLayout">
          <item>
-          <layout class="QGridLayout">
-           <item row="0" column="0">
-            <widget class="QLabel" name="filterLabel">
-             <property name="minimumSize">
-              <size>
-               <width>70</width>
-               <height>21</height>
-              </size>
-             </property>
+          <widget class="QSplitter" name="splitter">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <widget class="QLabel" name="beginDateLabel">
+            <property name="text">
+             <string>Date begin</string>
+            </property>
+            <property name="buddy">
+             <cstring>beginDateEdit</cstring>
+            </property>
+           </widget>
+           <widget class="QDateEdit" name="beginDateEdit">
+            <property name="minimumSize">
+             <size>
+              <width>100</width>
+              <height>24</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>76</width>
+              <height>24</height>
+             </size>
+            </property>
+           </widget>
+          </widget>
+         </item>
+         <item>
+          <layout class="QHBoxLayout">
+           <item>
+            <widget class="QLabel" name="endDateLabel">
              <property name="text">
-              <string>Filter</string>
+              <string>Date end</string>
              </property>
              <property name="buddy">
-              <cstring>filterEdit</cstring>
+              <cstring>endDateEdit</cstring>
              </property>
             </widget>
            </item>
-           <item row="1" column="0">
-            <widget class="QLabel" name="comboLabel">
+           <item>
+            <widget class="QDateEdit" name="endDateEdit">
              <property name="minimumSize">
               <size>
-               <width>70</width>
-               <height>21</height>
-              </size>
-             </property>
-             <property name="text">
-              <string>with</string>
-             </property>
-             <property name="buddy">
-              <cstring>fieldComboBox</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1" colspan="2">
-            <widget class="QComboBox" name="fieldComboBox">
-             <property name="minimumSize">
-              <size>
-               <width>161</width>
+               <width>100</width>
                <height>24</height>
               </size>
              </property>
              <property name="maximumSize">
               <size>
-               <width>2000</width>
-               <height>24</height>
-              </size>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="0" colspan="2">
-            <layout class="QVBoxLayout">
-             <item>
-              <widget class="QSplitter" name="splitter">
-               <property name="orientation">
-                <enum>Qt::Horizontal</enum>
-               </property>
-               <widget class="QLabel" name="beginDateLabel">
-                <property name="text">
-                 <string>Date begin</string>
-                </property>
-                <property name="buddy">
-                 <cstring>beginDateEdit</cstring>
-                </property>
-               </widget>
-               <widget class="QDateEdit" name="beginDateEdit">
-                <property name="minimumSize">
-                 <size>
-                  <width>100</width>
-                  <height>24</height>
-                 </size>
-                </property>
-                <property name="maximumSize">
-                 <size>
-                  <width>76</width>
-                  <height>24</height>
-                 </size>
-                </property>
-               </widget>
-              </widget>
-             </item>
-             <item>
-              <layout class="QHBoxLayout">
-               <item>
-                <widget class="QLabel" name="endDateLabel">
-                 <property name="text">
-                  <string>Date end</string>
-                 </property>
-                 <property name="buddy">
-                  <cstring>endDateEdit</cstring>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QDateEdit" name="endDateEdit">
-                 <property name="minimumSize">
-                  <size>
-                   <width>100</width>
-                   <height>24</height>
-                  </size>
-                 </property>
-                 <property name="maximumSize">
-                  <size>
-                   <width>76</width>
-                   <height>24</height>
-                  </size>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </item>
-            </layout>
-           </item>
-           <item row="2" column="2">
-            <widget class="QPushButton" name="searchButton">
-             <property name="minimumSize">
-              <size>
-               <width>131</width>
-               <height>51</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>16777215</width>
-               <height>16777215</height>
-              </size>
-             </property>
-             <property name="text">
-              <string>Sea&amp;rch</string>
-             </property>
-             <property name="autoDefault">
-              <bool>false</bool>
-             </property>
-             <property name="default">
-              <bool>true</bool>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1" colspan="2">
-            <widget class="QLineEdit" name="filterEdit">
-             <property name="minimumSize">
-              <size>
-               <width>110</width>
-               <height>24</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>10000</width>
+               <width>76</width>
                <height>24</height>
               </size>
              </property>
@@ -242,95 +273,58 @@
          </item>
         </layout>
        </widget>
-      </widget>
-     </item>
-     <item row="2" column="1">
-      <widget class="QGroupBox" name="groupBox_2">
-       <property name="minimumSize">
-        <size>
-         <width>300</width>
-         <height>211</height>
-        </size>
-       </property>
-       <property name="title">
-        <string>Actions</string>
-       </property>
-       <widget class="QWidget" name="layoutWidget_2">
+       <widget class="QPushButton" name="searchButton">
         <property name="geometry">
          <rect>
-          <x>20</x>
-          <y>110</y>
-          <width>271</width>
-          <height>91</height>
+          <x>540</x>
+          <y>30</y>
+          <width>100</width>
+          <height>55</height>
          </rect>
         </property>
-        <layout class="QGridLayout" name="gridLayout_3">
-         <item row="2" column="0" colspan="2">
-          <widget class="QPushButton" name="printButton">
-           <property name="text">
-            <string>&amp;Print</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="0">
-          <widget class="QPushButton" name="deleteButton">
-           <property name="minimumSize">
-            <size>
-             <width>80</width>
-             <height>51</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>16777215</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>&amp;Delete</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="QPushButton" name="duesButton">
-           <property name="minimumSize">
-            <size>
-             <width>80</width>
-             <height>51</height>
-            </size>
-           </property>
-           <property name="text">
-            <string>D&amp;ues</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
+        <property name="minimumSize">
+         <size>
+          <width>100</width>
+          <height>55</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Sea&amp;rch</string>
+        </property>
+        <property name="autoDefault">
+         <bool>false</bool>
+        </property>
+        <property name="default">
+         <bool>true</bool>
+        </property>
        </widget>
-       <widget class="QWidget" name="layoutWidget_3">
+       <widget class="QLineEdit" name="filterEdit">
         <property name="geometry">
          <rect>
-          <x>20</x>
-          <y>70</y>
-          <width>271</width>
-          <height>22</height>
+          <x>105</x>
+          <y>32</y>
+          <width>221</width>
+          <height>24</height>
          </rect>
         </property>
-        <layout class="QHBoxLayout" name="horizontalLayout">
-         <item>
-          <widget class="QRadioButton" name="inRadioButton">
-           <property name="text">
-            <string>Input</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QRadioButton" name="outRadioButton">
-           <property name="text">
-            <string>Control</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
+        <property name="minimumSize">
+         <size>
+          <width>110</width>
+          <height>24</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>10000</width>
+          <height>24</height>
+         </size>
+        </property>
        </widget>
       </widget>
      </item>
@@ -342,11 +336,9 @@
   <tabstop>filterEdit</tabstop>
   <tabstop>fieldComboBox</tabstop>
   <tabstop>beginDateEdit</tabstop>
-  <tabstop>endDateEdit</tabstop>
   <tabstop>searchButton</tabstop>
   <tabstop>tableView</tabstop>
   <tabstop>deleteButton</tabstop>
-  <tabstop>printButton</tabstop>
   <tabstop>duesButton</tabstop>
  </tabstops>
  <resources/>

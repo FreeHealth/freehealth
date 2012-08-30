@@ -132,17 +132,17 @@ public:
 
     void profilingReport(const char *what, const PluginSpec *spec = 0);
 
-signals:
+Q_SIGNALS:
     void objectAdded(QObject *obj);
     void aboutToRemoveObject(QObject *obj);
 
     void pluginsChanged();
 
-public slots:
+public Q_SLOTS:
     void remoteArguments(const QString &serializedArguments);
     void shutdown();
 
-private slots:
+private Q_SLOTS:
     void startTests();
 
 private:

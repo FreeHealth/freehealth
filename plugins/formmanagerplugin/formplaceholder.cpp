@@ -28,7 +28,7 @@
   \class Form::FormPlaceHolder
   Widget containing the Episode treeView and the forms in a QStackedLayout
   When an episode is activated by the user, the formViewer is set to the corresponding form
-  and episode datas. Datas are automatically saved (without any user intervention).
+  and episode data. Data are automatically saved (without any user intervention).
 */
 
 #include "formplaceholder.h"

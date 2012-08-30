@@ -64,7 +64,7 @@ int ProtocolPreferencesPage::sortIndex() const {return 70;}
 void ProtocolPreferencesPage::resetToDefaults()
 {
     m_Widget->writeDefaultSettings(settings());
-    m_Widget->setDatasToUi();
+    m_Widget->setDataToUi();
 }
 
 void ProtocolPreferencesPage::applyChanges()
@@ -114,7 +114,7 @@ ProtocolPreferencesWidget::ProtocolPreferencesWidget(QWidget *parent) :
     ui(new Ui::ProtocolPreferencesWidget)
 {
     ui->setupUi(this);
-    setDatasToUi();
+    setDataToUi();
 }
 
 ProtocolPreferencesWidget::~ProtocolPreferencesWidget()
@@ -123,7 +123,7 @@ ProtocolPreferencesWidget::~ProtocolPreferencesWidget()
     ui = 0;
 }
 
-void ProtocolPreferencesWidget::setDatasToUi()
+void ProtocolPreferencesWidget::setDataToUi()
 {
     QString s = settings()->value(DrugsDB::Constants::S_PROTOCOL_DEFAULT_SCHEMA).toString();
     ui->drugFormRadio->setChecked(s.isEmpty());

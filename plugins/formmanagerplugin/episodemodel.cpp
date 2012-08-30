@@ -200,11 +200,11 @@ public:
 
 //        if (formIsModified) {
             // create the XML episode file
-            QHash<QString, QString> datas;
+            QHash<QString, QString> xmlData;
             foreach(FormItem *it, items) {
-                datas.insert(it->uuid(), it->itemData()->storableData().toString());
+                xmlData.insert(it->uuid(), it->itemData()->storableData().toString());
             }
-            return Utils::createXml(Form::Constants::XML_FORM_GENERAL_TAG, datas, 2, false);
+            return Utils::createXml(Form::Constants::XML_FORM_GENERAL_TAG, xmlData, 2, false);
 //        }
 
 //        return QString();
@@ -322,7 +322,6 @@ public:
 //        }
 //        if (WarnLogChronos)
 //            Utils::Log::logTimeElapsed(chrono, q->objectName(), "feedFormWithEpisodeContent");
-
 //    }
 
 //    void getLastEpisodes(bool andFeedPatientModel = true)
@@ -773,6 +772,7 @@ bool EpisodeModel::activateEpisode(const QModelIndex &index, const QString &form
 //    if (xml.isEmpty())
 //        return true;
 
+<<<<<<< HEAD
 //    // read the xml'd content
 //    QHash<QString, QString> datas;
 //    if (!Utils::readXml(xml, Form::Constants::XML_FORM_GENERAL_TAG, datas, false)) {
@@ -791,7 +791,6 @@ bool EpisodeModel::activateEpisode(const QModelIndex &index, const QString &form
 ////            items.insert(uuid, it);
 ////        }
 //    }
-
 ////    qWarning() << "ITEMS" << items;
 
 //    foreach(const QString &s, datas.keys()) {

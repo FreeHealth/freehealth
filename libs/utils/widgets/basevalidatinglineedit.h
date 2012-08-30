@@ -79,7 +79,7 @@ public:
     static QColor textColor(const QWidget *w);
     static void setTextColor(QWidget *w, const QColor &c);
 
-signals:
+Q_SIGNALS:
     void validChanged();
     void validChanged(bool validState);
     void validReturnPressed();
@@ -87,7 +87,7 @@ signals:
 protected:
     virtual bool validate(const QString &value, QString *errorMessage) const = 0;
 
-protected slots:
+protected Q_SLOTS:
     // Custom behaviour can be added here. The base implementation must
     // be called.
     virtual void slotReturnPressed();

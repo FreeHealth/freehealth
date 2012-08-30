@@ -81,7 +81,7 @@ int DrugsDatabaseSelectorPage::sortIndex() const {return 20;}
 void DrugsDatabaseSelectorPage::resetToDefaults()
 {
     m_Widget->writeDefaultSettings(settings());
-    m_Widget->setDatasToUi();
+    m_Widget->setDataToUi();
 }
 
 void DrugsDatabaseSelectorPage::applyChanges()
@@ -155,7 +155,7 @@ DatabaseSelectorWidget::DatabaseSelectorWidget(QWidget *parent) :
 
     ui->setupUi(this);
     connect(ui->databaseList, SIGNAL(currentRowChanged(int)), this, SLOT(updateDatabaseInfos(int)));
-    setDatasToUi();
+    setDataToUi();
 }
 
 DatabaseSelectorWidget::~DatabaseSelectorWidget()
@@ -167,7 +167,7 @@ DatabaseSelectorWidget::~DatabaseSelectorWidget()
     d = 0;
 }
 
-void DatabaseSelectorWidget::setDatasToUi()
+void DatabaseSelectorWidget::setDataToUi()
 {
     ui->databaseList->clear();
     d->m_Infos = drugsBase().getAllDrugSourceInformation();

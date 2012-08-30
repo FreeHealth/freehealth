@@ -73,7 +73,7 @@ int PmhPreferencesPage::sortIndex() const
 void PmhPreferencesPage::resetToDefaults()
 {
     m_Widget->writeDefaultSettings(settings());
-    m_Widget->setDatasToUi();
+    m_Widget->setDataToUi();
 }
 
 void PmhPreferencesPage::applyChanges()
@@ -120,10 +120,10 @@ PmhPreferencesWidget::PmhPreferencesWidget(QWidget *parent) :
 {
     setObjectName("PmhPreferencesWidget");
     setupUi(this);
-    setDatasToUi();
+    setDataToUi();
 }
 
-void PmhPreferencesWidget::setDatasToUi()
+void PmhPreferencesWidget::setDataToUi()
 {
     categoryBackgroundButton->setColor(QColor(settings()->value(Constants::S_BACKGROUND_CATEGORIES).toString()));
     categoryForegroundButton->setColor(QColor(settings()->value(Constants::S_FOREGROUND_CATEGORIES).toString()));

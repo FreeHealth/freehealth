@@ -77,7 +77,7 @@ class MedicalProcedureWidget : public QWidget, private Ui::MedicalProcedureWidge
 public:
     explicit MedicalProcedureWidget(QWidget *parent = 0);
     ~MedicalProcedureWidget();
-    void setDatasToUi();
+    void setDataToUi();
 
     static void writeDefaultSettings( Core::ISettings *s );
 

@@ -41,33 +41,33 @@ namespace Constants {
     const char * const USER_DB_CONNECTION           = "users";
     const char * const USER_DB_VERSION              = "0.4";
 
-    // constants for DATAS table represent DATANAME field
-    const char * const USER_DATAS_ADDRESS           = "identity.adress";
-    const char * const USER_DATAS_ZIPCODE           = "identity.zip";
-    const char * const USER_DATAS_CITY              = "identity.city";
-    const char * const USER_DATAS_COUNTRY           = "identity.country";
-    const char * const USER_DATAS_TEL1              = "identity.tel1";
-    const char * const USER_DATAS_TEL2              = "identity.tel2";
-    const char * const USER_DATAS_TEL3              = "identity.tel3";
-    const char * const USER_DATAS_FAX               = "identity.fax";
-    const char * const USER_DATAS_PRACTIDENTIFIANT  = "identity.identifiant";
-    const char * const USER_DATAS_SPECIALTY         = "identity.specialty";
-    const char * const USER_DATAS_QUALIFICATION     = "identity.qualification";
-    const char * const USER_DATAS_PREFERENCES       = "pref";
-    const char * const USER_DATAS_DATAPACK_CONFIG   = "config.datapack";
-    const char * const USER_DATAS_LOGINHISTORY      = "loginHistory";
+    // constants for DATA table represent DATANAME field
+    const char * const USER_DATA_ADDRESS           = "identity.adress";
+    const char * const USER_DATA_ZIPCODE           = "identity.zip";
+    const char * const USER_DATA_CITY              = "identity.city";
+    const char * const USER_DATA_COUNTRY           = "identity.country";
+    const char * const USER_DATA_TEL1              = "identity.tel1";
+    const char * const USER_DATA_TEL2              = "identity.tel2";
+    const char * const USER_DATA_TEL3              = "identity.tel3";
+    const char * const USER_DATA_FAX               = "identity.fax";
+    const char * const USER_DATA_PRACTIDENTIFIANT  = "identity.identifiant";
+    const char * const USER_DATA_SPECIALTY         = "identity.specialty";
+    const char * const USER_DATA_QUALIFICATION     = "identity.qualification";
+    const char * const USER_DATA_PREFERENCES       = "pref";
+    const char * const USER_DATA_DATAPACK_CONFIG   = "config.datapack";
+    const char * const USER_DATA_LOGINHISTORY      = "loginHistory";
 
 
     const char* const  PAPERS_MARK                     = "papers";                  /** \brief x \sa tkUser::setDynamicDataValue() */
-    const char * const USER_DATAS_GENERICHEADER        = "papers.generic.header";   /** \brief x \sa tkUser::setDynamicDataValue() */
-    const char * const USER_DATAS_GENERICFOOTER        = "papers.generic.footer";   /** \brief x \sa tkUser::setDynamicDataValue() */
-    const char * const USER_DATAS_GENERICWATERMARK     = "papers.generic.watermark";   /** \brief x \sa tkUser::setDynamicDataValue() */
-    const char * const USER_DATAS_ADMINISTRATIVEHEADER = "papers.admin.header";   /** \brief x \sa tkUser::setDynamicDataValue() */
-    const char * const USER_DATAS_ADMINISTRATIVEFOOTER = "papers.admin.footer";   /** \brief x \sa tkUser::setDynamicDataValue() */
-    const char * const USER_DATAS_ADMINISTRATIVEWATERMARK = "papers.admin.watermark";   /** \brief x \sa tkUser::setDynamicDataValue() */
-    const char * const USER_DATAS_PRESCRIPTIONHEADER   = "papers.prescription.header";   /** \brief x \sa tkUser::setDynamicDataValue() */
-    const char * const USER_DATAS_PRESCRIPTIONFOOTER   = "papers.prescription.footer";   /** \brief x \sa tkUser::setDynamicDataValue() */
-    const char * const USER_DATAS_PRESCRIPTIONWATERMARK= "papers.prescription.watermark";   /** \brief x \sa tkUser::setDynamicDataValue() */
+    const char * const USER_DATA_GENERICHEADER        = "papers.generic.header";   /** \brief x \sa tkUser::setDynamicDataValue() */
+    const char * const USER_DATA_GENERICFOOTER        = "papers.generic.footer";   /** \brief x \sa tkUser::setDynamicDataValue() */
+    const char * const USER_DATA_GENERICWATERMARK     = "papers.generic.watermark";   /** \brief x \sa tkUser::setDynamicDataValue() */
+    const char * const USER_DATA_ADMINISTRATIVEHEADER = "papers.admin.header";   /** \brief x \sa tkUser::setDynamicDataValue() */
+    const char * const USER_DATA_ADMINISTRATIVEFOOTER = "papers.admin.footer";   /** \brief x \sa tkUser::setDynamicDataValue() */
+    const char * const USER_DATA_ADMINISTRATIVEWATERMARK = "papers.admin.watermark";   /** \brief x \sa tkUser::setDynamicDataValue() */
+    const char * const USER_DATA_PRESCRIPTIONHEADER   = "papers.prescription.header";   /** \brief x \sa tkUser::setDynamicDataValue() */
+    const char * const USER_DATA_PRESCRIPTIONFOOTER   = "papers.prescription.footer";   /** \brief x \sa tkUser::setDynamicDataValue() */
+    const char * const USER_DATA_PRESCRIPTIONWATERMARK= "papers.prescription.watermark";   /** \brief x \sa tkUser::setDynamicDataValue() */
 
 //    const char * const USER_ROLE_SUPERADMIN      = "role.superadmin";
     // if you add or delete a role, you must change UserRightsWidget
@@ -128,7 +128,7 @@ namespace Constants {
     enum Tables
     {
         Table_USERS=0,
-        Table_DATAS,
+        Table_DATA,
         Table_RIGHTS,
         Table_GROUPS,
         Table_USER_LK_ID,
@@ -151,10 +151,10 @@ namespace Constants {
     /** \brief Enumerates the fields of the table USERS_DATAS */
     enum DATASfields
     {
-        DATAS_ID = 0 , DATAS_USER_UUID,
+        DATAS_ID = 0 , DATA_USER_UUID,
         DATAS_DATANAME, DATAS_STRING, DATAS_LONGSTRING, DATAS_FILE, DATAS_NUMERIC, DATAS_DATE,
         DATAS_LANGUAGE, DATAS_LASTCHANGE, DATAS_TRACE_ID,
-        DATAS_MaxParam
+        DATA_MaxParam
     };
 
     /** \brief Enumerates the fields of the table USERS_RIGHTS */

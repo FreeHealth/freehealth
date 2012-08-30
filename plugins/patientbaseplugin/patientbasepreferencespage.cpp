@@ -116,7 +116,7 @@ PatientBasePreferencesWidget::PatientBasePreferencesWidget(QWidget *parent) :
     ui = new Ui::PatientBasePreferencesWidget;
     setObjectName("PatientBasePreferencesWidget");
     ui->setupUi(this);
-    setDatasToUi();
+    setDataToUi();
 }
 
 PatientBasePreferencesWidget::~PatientBasePreferencesWidget()
@@ -124,7 +124,7 @@ PatientBasePreferencesWidget::~PatientBasePreferencesWidget()
     delete ui;
 }
 
-void PatientBasePreferencesWidget::setDatasToUi()
+void PatientBasePreferencesWidget::setDataToUi()
 {
     ui->selectNewlyCreatedBox->setChecked(settings()->value(Core::Constants::S_PATIENTCHANGEONCREATION).toBool());
     ui->genderColor->setChecked(settings()->value(Constants::S_SELECTOR_USEGENDERCOLORS).toBool());

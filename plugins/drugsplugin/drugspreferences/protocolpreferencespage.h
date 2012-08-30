@@ -61,7 +61,7 @@ public:
     ProtocolPreferencesWidget(QWidget *parent = 0);
     ~ProtocolPreferencesWidget();
 
-    void setDatasToUi();
+    void setDataToUi();
     static void writeDefaultSettings(Core::ISettings *s = 0);
 
 public Q_SLOTS:

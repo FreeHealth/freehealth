@@ -47,7 +47,7 @@ public:
     PluginErrorOverviewPrivate(PluginManager *manager, QDialog *dialog);
     ~PluginErrorOverviewPrivate();
 
-private slots:
+private Q_SLOTS:
     void showDetails(QListWidgetItem *item);
 
 private:

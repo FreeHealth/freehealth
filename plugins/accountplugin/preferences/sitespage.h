@@ -74,7 +74,7 @@ class SitesWidget : public QWidget
 public:
     explicit SitesWidget(QWidget *parent = 0);
     ~SitesWidget();
-    void setDatasToUi();
+    void setDataToUi();
 
     static void writeDefaultSettings( Core::ISettings *s );
 

@@ -89,12 +89,12 @@ public:
         qSort(m_Children.begin(), m_Children.end(), AtcItem::lessThan);
     }
 
-    void setData(const int id, const QVariant &value) {m_Datas.insert(id, value.toString());}
+    void setData(const int id, const QVariant &value) {m_Data.insert(id, value.toString());}
 
-    // Access to datas
-    QString data(const int id) const { return m_Datas.value(id); }
+    // Access to data
+    QString data(const int id) const { return m_Data.value(id); }
 
-    QString code() const {return m_Datas.value(AtcTreeModel::ATC_Code);}
+    QString code() const {return m_Data.value(AtcTreeModel::ATC_Code);}
 
     // For sort functions
     static bool lessThan(AtcItem *item1, AtcItem *item2)
@@ -105,7 +105,7 @@ public:
 private:
     AtcItem *m_Parent;
     QList<AtcItem*> m_Children;
-    QHash<int, QString> m_Datas;
+    QHash<int, QString> m_Data;
 };
 
 

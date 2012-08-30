@@ -27,7 +27,7 @@
   Then set the translation path to use with : setPathToTranslations().
 
   You can add new translations file using members addNewTranslator().
-  - specifying filename only (eg : 'myTrans' the suffix ('_lang') is automatcally added (using QLocale::staticDatas).
+  - specifying filename only (eg : 'myTrans' the suffix ('_lang') is automatcally added (using QLocale::staticData).
   - specifying full path of the file.
 
   Use changeLangage() to automacally reload all translators with the right language.Toolkit manages its own translator.
@@ -218,7 +218,7 @@ QMap<QString, QString> Translators::availableLocalesAndLanguages()
 {
     static QMap<QString, QString> toReturn;
     if (!toReturn.isEmpty())
-	return toReturn;
+    return toReturn;
 
     toReturn.insert("en", "English");
 

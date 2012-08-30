@@ -72,9 +72,9 @@ static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
 //////////////////////////////////////  AccountUserPage  //////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 AssetsRatesPage::AssetsRatesPage(QObject *parent) :
-    IOptionsPage(parent), m_Widget(0) 
-{ 
-    setObjectName("AssetsRatesPage"); 
+    IOptionsPage(parent), m_Widget(0)
+{
+    setObjectName("AssetsRatesPage");
 }
 
 AssetsRatesPage::~AssetsRatesPage()
@@ -91,21 +91,21 @@ int AssetsRatesPage::sortIndex() const {return 20;}
 void AssetsRatesPage::resetToDefaults()
 {
     m_Widget->writeDefaultSettings(settings());
-    m_Widget->setDatasToUi();
+    m_Widget->setDataToUi();
 }
 
 void AssetsRatesPage::applyChanges()
 {
     if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " applyChanges ";
+              qDebug() << __FILE__ << QString::number(__LINE__) << " applyChanges ";
     if (!m_Widget) {
         return;
     }
     m_Widget->saveToSettings(settings());
 }
 
-void AssetsRatesPage::finish() { 
-    delete m_Widget; 
+void AssetsRatesPage::finish() {
+    delete m_Widget;
 }
 
 void AssetsRatesPage::checkSettingsValidity()
@@ -145,7 +145,7 @@ AssetsRatesWidget::AssetsRatesWidget(QWidget *parent) :
     rateDoubleSpinBox->setSingleStep(0.01);
     m_Model = new AccountDB::AssetsRatesModel(this);
     assetsRatesUidLabel->setText("");
-    
+
     nameEdit->setPlaceholderText(tr("Please enter a name here"));
     m_Mapper = new QDataWidgetMapper(this);
     m_Mapper->setSubmitPolicy(QDataWidgetMapper::AutoSubmit);
@@ -158,7 +158,7 @@ AssetsRatesWidget::AssetsRatesWidget(QWidget *parent) :
     //m_Mapper->toFirst();
     assetsNameComboBox->setModel(m_Model);
     assetsNameComboBox->setModelColumn(AccountDB::Constants::ASSETSRATES_NAME);
-    setDatasToUi();
+    setDataToUi();
     connect(m_Mapper, SIGNAL(currentIndexChanged(int)), this, SLOT(updateSpinBoxes(int)));
 //    connect(createDefaults, SIGNAL(clicked()), this, SLOT(createDefaultAssetsRates()));
 }
@@ -168,7 +168,7 @@ AssetsRatesWidget::~AssetsRatesWidget()
     //saveModel();
 }
 
-void AssetsRatesWidget::setDatasToUi()
+void AssetsRatesWidget::setDataToUi()
 {
     if (WarnDebugMessage)
         qDebug() << __FILE__ << QString::number(__LINE__) << "index row  =" << QString::number(assetsNameComboBox->currentIndex());
@@ -185,7 +185,7 @@ void AssetsRatesWidget::saveModel()
                                              "Do you want to save them?"));
         if (yes) {
            if (!m_Model->submit()) {if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " assetsrates no submit ";
+              qDebug() << __FILE__ << QString::number(__LINE__) << " assetsrates no submit ";
                 LOG_ERROR( tkTr(Trans::Constants::UNABLE_TO_SAVE_DATA_IN_DATABASE_1).arg(tr("assetsrates")));
             }
         } else {
@@ -231,12 +231,12 @@ void AssetsRatesWidget::on_deleteButton_clicked()
 
 
 void AssetsRatesWidget::saveToSettings(Core::ISettings *sets)
-{   
+{
     Q_UNUSED(sets);
     if (!m_Model->submit()) {
         LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_SAVE_DATA_IN_DATABASE_1).arg(tr("assetsrates")));
         Utils::warningMessageBox(tr("Can not submit assetsrates to your personnal database."),
-                                 tr("An error occured during assetsrates saving. Datas are corrupted."));
+                                 tr("An error occured during assetsrates saving. Data are corrupted."));
     }
     if (!insertYearsRange()) {
         LOG_ERROR("Unable to insert years range");
@@ -246,7 +246,7 @@ void AssetsRatesWidget::saveToSettings(Core::ISettings *sets)
 }
 
 void AssetsRatesWidget::writeDefaultSettings(Core::ISettings *s)
-{   
+{
     Q_UNUSED(s);
 //    Utils::Log::addMessage("AssetsRatesWidget", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("AssetsRatesWidget"));
 //    s->sync();
@@ -287,7 +287,7 @@ bool AssetsRatesWidget::insertYearsRange()
     m_Model->setFilter("");
     if (WarnDebugMessage)
         qDebug() << __FILE__ << QString::number(__LINE__) << " m_Model->rowCount =" << QString::number((m_Model->rowCount())) ;
-    
+
     if (!m_Model->setData(m_Model->index(m_Model->rowCount()-1, AccountDB::Constants::ASSETSRATES_YEARS),
                           yearRange, Qt::EditRole)) {
         LOG_ERROR("unable to insert years range: " + m_Model->lastError().text());
@@ -363,8 +363,8 @@ void AssetsRatesWidget::updateSpinBoxes(int index)
     QString years = model.data(m_Model->index(0,AccountDB::Constants::ASSETSRATES_YEARS),Qt::DisplayRole).toString();
     QStringList listYears = years.split("_");
     if (listYears.size()>1) {
-    	beginYear = listYears[0].toInt();
-        endYear= listYears[1].toInt(); 
+        beginYear = listYears[0].toInt();
+        endYear= listYears[1].toInt();
         }
     beginSpinBox->setValue(beginYear);
     endSpinBox->setValue(endYear);

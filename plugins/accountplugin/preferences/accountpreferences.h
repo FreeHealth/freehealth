@@ -70,7 +70,7 @@ class AccountUserWidget : public QWidget, private Ui::AccountUserWidget
 
 public:
     explicit AccountUserWidget(QWidget *parent = 0);
-    void setDatasToUi();
+    void setDataToUi();
 
     static void writeDefaultSettings( Core::ISettings *s );
 
@@ -126,7 +126,7 @@ class AccountDatabaseDefautsWidget : public QWidget, private Ui::AccountDatabase
 
 public:
     explicit AccountDatabaseDefautsWidget(QWidget *parent = 0);
-    void setDatasToUi();
+    void setDataToUi();
 
     static void writeDefaultSettings( Core::ISettings *s );
 

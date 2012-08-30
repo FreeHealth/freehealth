@@ -39,7 +39,7 @@
   3. Users saver\n
   You can regardless save or update users to database using the unique member : saveUser().
 
-  4. Users datas checkers\n
+  4. Users data checkers\n
   You can check the identifiers of users with the checkLogin() member.
 
   5. Users trace keeper\n
@@ -99,7 +99,7 @@ static inline bool connectDatabase(QSqlDatabase &DB, const int line)
     return true;
 }
 
-// Initializing static datas
+// Initializing static data
 UserBase *UserBase::m_Instance = 0;
 
 /**
@@ -122,7 +122,7 @@ UserBase::UserBase(QObject *parent) :
 
     // populate tables and fields of database
     addTable(Table_USERS,  "USERS");
-    addTable(Table_DATAS,  "DATAS");
+    addTable(Table_DATA,  "DATAS");
     addTable(Table_RIGHTS, "RIGHTS");
 
     addField(Table_USERS, USER_ID,           "USER_ID",         FieldIsUniquePrimaryKey);
@@ -146,18 +146,18 @@ UserBase::UserBase(QObject *parent) :
     addIndex(Table_USERS, USER_SECONDNAME);
     addIndex(Table_USERS, USER_FIRSTNAME);
 
-    addField(Table_DATAS, DATAS_ID,          "DATAS_ID",        FieldIsUniquePrimaryKey);
-    addField(Table_DATAS, DATAS_USER_UUID,   "USER_UUID",       FieldIsUUID);
-    addField(Table_DATAS, DATAS_DATANAME,    "DATANAME",        FieldIsShortText);
-    addField(Table_DATAS, DATAS_STRING,      "DATA_STRING",     FieldIsShortText);
-    addField(Table_DATAS, DATAS_LONGSTRING,  "DATA_LONGSTRING", FieldIsLongText);
-    addField(Table_DATAS, DATAS_FILE,        "DATA_FILE",       FieldIsBlob);
-    addField(Table_DATAS, DATAS_NUMERIC,     "DATA_NUMERIC",    FieldIsInteger);
-    addField(Table_DATAS, DATAS_DATE,        "DATA_DATE",       FieldIsDate);
-    addField(Table_DATAS, DATAS_LANGUAGE,    "DATA_LANGUAGE",   FieldIsShortText);
-    addField(Table_DATAS, DATAS_LASTCHANGE,  "LASTCHANGE",      FieldIsDate);
-    addField(Table_DATAS, DATAS_TRACE_ID,    "TRACE_ID",        FieldIsInteger);
-    addIndex(Table_DATAS, DATAS_USER_UUID);
+    addField(Table_DATA, DATAS_ID,          "DATAS_ID",        FieldIsUniquePrimaryKey);
+    addField(Table_DATA, DATA_USER_UUID,   "USER_UUID",       FieldIsUUID);
+    addField(Table_DATA, DATAS_DATANAME,    "DATANAME",        FieldIsShortText);
+    addField(Table_DATA, DATAS_STRING,      "DATA_STRING",     FieldIsShortText);
+    addField(Table_DATA, DATAS_LONGSTRING,  "DATA_LONGSTRING", FieldIsLongText);
+    addField(Table_DATA, DATAS_FILE,        "DATA_FILE",       FieldIsBlob);
+    addField(Table_DATA, DATAS_NUMERIC,     "DATA_NUMERIC",    FieldIsInteger);
+    addField(Table_DATA, DATAS_DATE,        "DATA_DATE",       FieldIsDate);
+    addField(Table_DATA, DATAS_LANGUAGE,    "DATA_LANGUAGE",   FieldIsShortText);
+    addField(Table_DATA, DATAS_LASTCHANGE,  "LASTCHANGE",      FieldIsDate);
+    addField(Table_DATA, DATAS_TRACE_ID,    "TRACE_ID",        FieldIsInteger);
+    addIndex(Table_DATA, DATA_USER_UUID);
 
     addField(Table_RIGHTS, RIGHTS_ID,        "RIGHTS_ID",       FieldIsUniquePrimaryKey);
     addField(Table_RIGHTS, RIGHTS_USER_UUID, "USER_UUID",       FieldIsUUID);
@@ -263,9 +263,9 @@ void UserBase::onCoreFirstRunCreationRequested()
 }
 
 //--------------------------------------------------------------------------------------------------------
-//------------------------------------------- Datas retreivers -------------------------------------------
+//------------------------------------------- Data retreivers --------------------------------------------
 //--------------------------------------------------------------------------------------------------------
-/** Retreive all users datas from the users' database. If an error occurs, it returns 0. */
+/** Retreive all users data from the users' database. If an error occurs, it returns 0. */
 UserData *UserBase::getUser(const QHash<int, QString> &conditions) const
 {
     QSqlDatabase DB = QSqlDatabase::database(Constants::USER_DB_CONNECTION);
@@ -308,16 +308,16 @@ UserData *UserBase::getUser(const QHash<int, QString> &conditions) const
     }
     query.finish();
 
-    // get DATAS table  ***************************************** -1
+    // get DATA table  ***************************************** -1
     where.clear();
-    where.insert(DATAS_USER_UUID, QString("='%1'").arg(uuid));
-    req = select(Table_DATAS, where);
+    where.insert(DATA_USER_UUID, QString("='%1'").arg(uuid));
+    req = select(Table_DATA, where);
     QList<UserDynamicData*> list;
     if (query.exec(req)) {
         while (query.next()) {
             int i = 0;
             UserDynamicData *data = new UserDynamicData();
-            for (i = 0; i < DATAS_MaxParam; ++i) {
+            for (i = 0; i < DATA_MaxParam; ++i) {
                 data->feedFromSql(i, query.value(i));
             }
             list << data;
@@ -361,7 +361,7 @@ UserData *UserBase::getUser(const QHash<int, QString> &conditions) const
     return toReturn;
 }
 
-/** Retreive all users datas from the users' database. If an error occurs, it returns 0. \sa getUser() */
+/** Retreive all users data from the users' database. If an error occurs, it returns 0. \sa getUser() */
 UserData *UserBase::getUserById(const QVariant & _id) const
 {
     // retreive corresponding user
@@ -373,7 +373,7 @@ UserData *UserBase::getUserById(const QVariant & _id) const
     return getUser(where);
 }
 
-/** Retreive all users datas from the users' database. If an error occurs, it returns 0. \sa getUser() */
+/** Retreive all users data from the users' database. If an error occurs, it returns 0. \sa getUser() */
 UserData* UserBase::getUserByUuid(const QString & uuid) const
 {
     // retreive corresponding user
@@ -385,7 +385,7 @@ UserData* UserBase::getUserByUuid(const QString & uuid) const
     return getUser(where);
 }
 
-/** Retreive all users datas from the users' database. If an error occurs, it returns 0. \sa getUser() */
+/** Retreive all users data from the users' database. If an error occurs, it returns 0. \sa getUser() */
 UserData *UserBase::getUserByLoginPassword(const QVariant &login, const QVariant &cryptedPassword) const
 {
     // retreive corresponding user
@@ -592,14 +592,14 @@ QString UserBase::getUserDynamicData(const QString &userUid, const QString &dynD
     DB.transaction();
     QSqlQuery query(DB);
     QHash<int, QString> where;
-    where.insert(DATAS_USER_UUID, QString("='%1'").arg(userUid));
+    where.insert(DATA_USER_UUID, QString("='%1'").arg(userUid));
     where.insert(DATAS_DATANAME, QString("='%1'").arg(dynDataUuid));
-    QString req = select(Table_DATAS, where);
+    QString req = select(Table_DATA, where);
     if (query.exec(req)) {
         if (query.next()) {
             int i = 0;
             UserDynamicData *data = new UserDynamicData();
-            for (i = 0; i < DATAS_MaxParam; ++i) {
+            for (i = 0; i < DATA_MaxParam; ++i) {
                 data->feedFromSql(i, query.value(i));
             }
             query.finish();
@@ -614,7 +614,7 @@ QString UserBase::getUserDynamicData(const QString &userUid, const QString &dynD
     return QString::null;
 }
 //--------------------------------------------------------------------------------------------------------
-//--------------------------------------------- Datas savers ---------------------------------------------
+//--------------------------------------------- Data savers ----------------------------------------------
 //--------------------------------------------------------------------------------------------------------
 static inline QString defaultPaper(const QString &profession, const QString &paper, const QString &paperType = QString::null)
 {
@@ -983,7 +983,7 @@ bool UserBase::createUser(UserData *user)
 }
 
 /**
-  Save users datas to the database. \n
+  Save users data to the database. \n
   You can use this function to save a newly created user or to update an already existing user. This function
   manages both cases.
 */
@@ -1040,24 +1040,24 @@ bool UserBase::saveUser(UserData *user)
         }
         query.finish();
 
-        // update dynamic datas
+        // update dynamic data
         qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
         if (user->hasModifiedDynamicDatasToStore()) {
-            const QList<UserDynamicData*> &datasToUpdate = user->modifiedDynamicDatas();
-            foreach(UserDynamicData *dyn, datasToUpdate) {
+            const QList<UserDynamicData*> &dataToUpdate = user->modifiedDynamicDatas();
+            foreach(UserDynamicData *dyn, dataToUpdate) {
                 //                qWarning() << "SAVE UDD TO BASE" ;
                 //                dyn->warn();
                 if (dyn->id() == -1) {
                     // create the dynamic data
-                    query.prepare(prepareInsertQuery(Table_DATAS));
+                    query.prepare(prepareInsertQuery(Table_DATA));
                     query.bindValue(DATAS_ID, QVariant()); // auto-id
                 } else {
                     // update the dynamic data
                     QHash<int , QString> w;
-                    w.insert(DATAS_USER_UUID, QString("='%1'").arg(user->uuid()));
+                    w.insert(DATA_USER_UUID, QString("='%1'").arg(user->uuid()));
                     w.insert(DATAS_ID, QString ("=%1").arg(dyn->id()));
                     w.insert(DATAS_DATANAME, QString("='%1'").arg(dyn->name()));
-                    query.prepare(prepareUpdateQuery(Table_DATAS, w));
+                    query.prepare(prepareUpdateQuery(Table_DATA, w));
                     query.bindValue(DATAS_ID, dyn->id());
                 }
                 dyn->prepareQuery(query);
@@ -1146,12 +1146,12 @@ bool UserBase::saveUser(UserData *user)
         user->setId(query.lastInsertId());
         query.finish();
 
-        // add dynamic datas
+        // add dynamic data
         qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
         if (user->hasModifiedDynamicDatasToStore()) {
-            const QList<UserDynamicData *> &datasToUpdate = user->modifiedDynamicDatas();
-            foreach(UserDynamicData *dyn, datasToUpdate) {
-                query.prepare(prepareInsertQuery(Table_DATAS));
+            const QList<UserDynamicData *> &dataToUpdate = user->modifiedDynamicDatas();
+            foreach(UserDynamicData *dyn, dataToUpdate) {
+                query.prepare(prepareInsertQuery(Table_DATA));
                 query.bindValue(DATAS_ID, QVariant());
                 dyn->prepareQuery(query);
                 if (!query.exec()) {
@@ -1257,7 +1257,7 @@ bool UserBase::deleteUser(const QString &uuid)
     }
     query.finish();
     where.clear();
-    where.insert(Constants::DATAS_USER_UUID, QString("='%1'").arg(uuid));
+    where.insert(Constants::DATA_USER_UUID, QString("='%1'").arg(uuid));
     if (!query.exec(prepareDeleteQuery(Table_RIGHTS, where))) {
         LOG_QUERY_ERROR(query);
         query.finish();
@@ -1267,7 +1267,7 @@ bool UserBase::deleteUser(const QString &uuid)
     query.finish();
     where.clear();
     where.insert(Constants::RIGHTS_USER_UUID, QString("='%1'").arg(uuid));
-    if (!query.exec(prepareDeleteQuery(Table_DATAS, where))) {
+    if (!query.exec(prepareDeleteQuery(Table_DATA, where))) {
         LOG_QUERY_ERROR(query);
         query.finish();
         DB.rollback();
@@ -1305,7 +1305,7 @@ bool UserBase::saveUserPreferences(const QString &uid, const QString &content)
         return false;
     }
 
-    if (saveUserDynamicData(uid, Constants::USER_DATAS_PREFERENCES, content)) {
+    if (saveUserDynamicData(uid, Constants::USER_DATA_PREFERENCES, content)) {
         if (WarnUserPreferences)
             qWarning() << "    successfully saved";
         return true;
@@ -1330,35 +1330,35 @@ bool UserBase::savePapers(UserData *user)
     }
 
     QStringList papersId;
-    papersId.append(USER_DATAS_GENERICHEADER);
-    papersId.append(USER_DATAS_GENERICFOOTER);
-    papersId.append(USER_DATAS_GENERICWATERMARK);
-    papersId.append(USER_DATAS_ADMINISTRATIVEHEADER);
-    papersId.append(USER_DATAS_ADMINISTRATIVEFOOTER);
-    papersId.append(USER_DATAS_ADMINISTRATIVEWATERMARK);
-    papersId.append(USER_DATAS_PRESCRIPTIONHEADER);
-    papersId.append(USER_DATAS_PRESCRIPTIONFOOTER);
-    papersId.append(USER_DATAS_PRESCRIPTIONWATERMARK);
+    papersId.append(USER_DATA_GENERICHEADER);
+    papersId.append(USER_DATA_GENERICFOOTER);
+    papersId.append(USER_DATA_GENERICWATERMARK);
+    papersId.append(USER_DATA_ADMINISTRATIVEHEADER);
+    papersId.append(USER_DATA_ADMINISTRATIVEFOOTER);
+    papersId.append(USER_DATA_ADMINISTRATIVEWATERMARK);
+    papersId.append(USER_DATA_PRESCRIPTIONHEADER);
+    papersId.append(USER_DATA_PRESCRIPTIONFOOTER);
+    papersId.append(USER_DATA_PRESCRIPTIONWATERMARK);
 
-    const QList<UserDynamicData*> &datasToUpdate = user->modifiedDynamicDatas();
+    const QList<UserDynamicData*> &dataToUpdate = user->modifiedDynamicDatas();
     DB.transaction();
     QSqlQuery query(DB);
-    foreach(UserDynamicData *dyn, datasToUpdate) {
+    foreach(UserDynamicData *dyn, dataToUpdate) {
         if (!papersId.contains(dyn->name()))
             continue;
         //            qWarning() << "SAVE PAPER TO BASE" << dyn->name();
         //                dyn->warn();
         if (dyn->id() == -1) {
             // create the dynamic data
-            query.prepare(prepareInsertQuery(Table_DATAS));
+            query.prepare(prepareInsertQuery(Table_DATA));
             query.bindValue(DATAS_ID, QVariant()); // auto-id
         } else {
             // update the dynamic data
             QHash<int , QString> w;
-            w.insert(DATAS_USER_UUID, QString("='%1'").arg(user->uuid()));
+            w.insert(DATA_USER_UUID, QString("='%1'").arg(user->uuid()));
             w.insert(DATAS_ID, QString ("=%1").arg(dyn->id()));
             w.insert(DATAS_DATANAME, QString("='%1'").arg(dyn->name()));
-            query.prepare(prepareUpdateQuery(Table_DATAS, w));
+            query.prepare(prepareUpdateQuery(Table_DATA, w));
             query.bindValue(DATAS_ID, dyn->id());
         }
         dyn->prepareQuery(query);
@@ -1430,13 +1430,13 @@ bool UserBase::saveUserDynamicData(const QString &userUid, const QString &dynDat
     QSqlQuery query(DB);
 
     QHash<int, QString> where;
-    where.insert(DATAS_USER_UUID, QString("='%1'").arg(userUid));
+    where.insert(DATA_USER_UUID, QString("='%1'").arg(userUid));
     where.insert(DATAS_DATANAME, QString("='%1'").arg(dynDataUuid));
     // save the dynamic data
-    if (count(Constants::Table_DATAS, Constants::DATAS_ID, getWhereClause(Constants::Table_DATAS, where))==0) {
+    if (count(Constants::Table_DATA, Constants::DATAS_ID, getWhereClause(Constants::Table_DATA, where))==0) {
         // save
-        query.prepare(prepareInsertQuery(Table_DATAS));
-        query.bindValue(DATAS_USER_UUID,  userUid);
+        query.prepare(prepareInsertQuery(Table_DATA));
+        query.bindValue(DATA_USER_UUID,  userUid);
         query.bindValue(DATAS_DATANAME ,  dynDataUuid);
         query.bindValue(DATAS_STRING ,    QVariant());
         query.bindValue(DATAS_LONGSTRING, QVariant());
@@ -1454,7 +1454,7 @@ bool UserBase::saveUserDynamicData(const QString &userUid, const QString &dynDat
         }
     } else {
         // update
-        query.prepare(prepareUpdateQuery(Table_DATAS, DATAS_FILE, where));
+        query.prepare(prepareUpdateQuery(Table_DATA, DATAS_FILE, where));
         query.bindValue(0, value.toString());
         if (!query.exec()) {
             LOG_QUERY_ERROR(query);

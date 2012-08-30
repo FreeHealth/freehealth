@@ -63,7 +63,7 @@ public:
     DatabaseSelectorWidget(QWidget *parent = 0);
     ~DatabaseSelectorWidget();
 
-    void setDatasToUi();
+    void setDataToUi();
     static void writeDefaultSettings(Core::ISettings *s = 0);
 
 public Q_SLOTS:

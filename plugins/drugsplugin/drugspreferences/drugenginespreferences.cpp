@@ -57,7 +57,7 @@ DrugEnginesPreferences::DrugEnginesPreferences(QWidget *parent) :
     ui(new Ui::DrugEnginesPreferences)
 {
     ui->setupUi(this);
-    setDatasToUi();
+    setDataToUi();
 }
 
 DrugEnginesPreferences::~DrugEnginesPreferences()
@@ -65,7 +65,7 @@ DrugEnginesPreferences::~DrugEnginesPreferences()
     delete ui;
 }
 
-void DrugEnginesPreferences::setDatasToUi()
+void DrugEnginesPreferences::setDataToUi()
 {
     // Get all IDrugEngine objects
     QList<DrugsDB::IDrugEngine *> engines = pluginManager()->getObjects<DrugsDB::IDrugEngine>();
@@ -156,7 +156,7 @@ int DrugEnginesPreferencesPage::sortIndex() const {return 30;}
 void DrugEnginesPreferencesPage::resetToDefaults()
 {
     m_Widget->writeDefaultSettings(settings());
-    m_Widget->setDatasToUi();
+    m_Widget->setDataToUi();
 }
 
 void DrugEnginesPreferencesPage::applyChanges()

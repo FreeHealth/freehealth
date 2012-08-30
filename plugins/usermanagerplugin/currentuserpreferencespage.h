@@ -59,7 +59,7 @@ class CurrentUserPreferencesWidget : public QWidget, private Ui::CurrentUserPref
 
 public:
     explicit CurrentUserPreferencesWidget(QWidget *parent = 0);
-    void setDatasToUi();
+    void setDataToUi();
 
     static void writeDefaultSettings( Core::ISettings *s );
 

@@ -27,7 +27,7 @@
 
 /**
   \class DrugsWidget::DosageViewer
-  \brief QWidget for dosage creation / edition / modification. A dosage is a standard set of datas that will be used to help
+  \brief QWidget for dosage creation / edition / modification. A dosage is a standard set of data that will be used to help
   doctors when prescribing a drug.
   If you want to create a new dosage, you must create a new row onto the model BEFORE.\n
   If you want to edit or modify a dosage, you must inform the widget of the row and the CIS of the drug.\n
@@ -178,10 +178,11 @@ public:
         }
     }
 
-    /**
-       \brief Manage non mapped datas from the model to the ui
-       Manages Sex limitation, Age limitations, Clearance limitations
-    */
+    /*!
+     * \brief Manage non mapped data from the model to the UI
+     *
+     *  Manages Sex limitation, Age limitations, Clearance limitations
+     */
     void changeNonMappedDataFromModelToUi(const int row)
     {
         Q_ASSERT(q);
@@ -479,7 +480,7 @@ void DosageViewer::setDosageModel(DrugsDB::Internal::DosageModel *model)
         changeCurrentRow(0);
     }
 
-    // Connect Widgets datas modifications to datasChanged signal
+    // Connect Widgets data modifications to dataChanged signal
     connect(d->m_DosageModel,SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SIGNAL(protocolDataschanged()));
 }
 

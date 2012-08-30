@@ -74,7 +74,7 @@ QVariant Appointement::data(const int ref) const
 
 bool Appointement::setData(const int ref, const QVariant &value)
 {
-    // TODO: set datas to the model
+    // TODO: set data to the model
     m_Modified = true;
     m_Data.insert(ref, value);
     return true;

@@ -91,7 +91,7 @@ static inline QString normalizedFormUid(const QString &formUid)
     return newUid;
 }
 
-// Initializing static datas
+// Initializing static data
 XmlIOBase *XmlIOBase::m_Instance = 0;
 
 /**

@@ -55,10 +55,10 @@ ApplicationGeneralPreferencesWidget::ApplicationGeneralPreferencesWidget(QWidget
     setObjectName("ApplicationGeneralPreferencesWidget");
     ui->setupUi(this);
     ui->updateCheckingCombo->addItems(Trans::ConstantTranslations::checkUpdateLabels());
-    setDatasToUi();
+    setDataToUi();
 }
 
-void ApplicationGeneralPreferencesWidget::setDatasToUi()
+void ApplicationGeneralPreferencesWidget::setDataToUi()
 {
     ui->autoSave->setChecked(settings()->value(Core::Constants::S_ALWAYS_SAVE_WITHOUT_PROMPTING).toBool());
     ui->updateCheckingCombo->setCurrentIndex(settings()->value(Utils::Constants::S_CHECKUPDATE).toInt());

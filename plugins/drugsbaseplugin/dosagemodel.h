@@ -112,7 +112,7 @@ public:
     //---------------------------------------- STATIC MEMBERS ------------------------------------------------
     //--------------------------------------------------------------------------------------------------------
     // static viewers to use for ui generation
-    static void         initStaticDatas()      { retranslate() ; }
+    static void         initStaticData()      { retranslate() ; }
     static int          periodDefault()        { return 4; }
     static QStringList  scoredTabletScheme();
     static QStringList  predeterminedForms();
@@ -128,7 +128,7 @@ private Q_SLOTS:
     static void retranslate();
 
     //--------------------------------------------------------------------------------------------------------
-    //----------------------------------------- PRIVATE DATAS ------------------------------------------------
+    //----------------------------------------- PRIVATE DATA -------------------------------------------------
     //--------------------------------------------------------------------------------------------------------
 private:
     DrugsDB::DrugsModel *m_DrugsModel;

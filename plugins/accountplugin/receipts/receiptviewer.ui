@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>875</width>
-    <height>428</height>
+    <width>672</width>
+    <height>480</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -19,10 +19,85 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout_4">
+  <layout class="QGridLayout" name="gridLayout_3">
    <item row="0" column="0">
-    <layout class="QGridLayout" name="gridLayout_3">
+    <layout class="QGridLayout" name="gridLayout_2">
      <item row="0" column="0" colspan="2">
+      <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <item>
+        <widget class="QPushButton" name="thesaurusButton">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>50</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Save in thesaurus</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="saveButton">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>50</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>&amp;Save</string>
+         </property>
+         <property name="default">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="saveAndQuitButton">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>50</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Sa&amp;ve and quit</string>
+         </property>
+         <property name="default">
+          <bool>false</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="goToControlButton">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>50</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Go To Control</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="quitButton">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>50</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>&amp;Quit</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="1" column="0" colspan="2">
       <widget class="QGroupBox" name="amoutsGroup">
        <property name="minimumSize">
         <size>
@@ -56,12 +131,62 @@
        </layout>
       </widget>
      </item>
-     <item row="1" column="0" rowspan="4">
+     <item row="2" column="0">
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>Date of execution</string>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+         <property name="buddy">
+          <cstring>dateExecution</cstring>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QDateEdit" name="dateExecution">
+         <property name="minimumSize">
+          <size>
+           <width>100</width>
+           <height>27</height>
+          </size>
+         </property>
+         <property name="displayFormat">
+          <string notr="true">dd/MM/yy</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="paymentLabel">
+         <property name="text">
+          <string>Date of payment</string>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+         <property name="buddy">
+          <cstring>datePayment</cstring>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QDateEdit" name="datePayment">
+         <property name="displayFormat">
+          <string notr="true">dd/MM/yy</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item row="3" column="0">
       <widget class="QGroupBox" name="actionsBox">
        <property name="minimumSize">
         <size>
-         <width>240</width>
-         <height>141</height>
+         <width>250</width>
+         <height>150</height>
         </size>
        </property>
        <property name="title">
@@ -69,149 +194,12 @@
        </property>
       </widget>
      </item>
-     <item row="1" column="1">
-      <widget class="QGroupBox" name="dateGroup">
-       <property name="minimumSize">
-        <size>
-         <width>240</width>
-         <height>100</height>
-        </size>
-       </property>
-       <property name="title">
-        <string>Dates</string>
-       </property>
-       <layout class="QGridLayout" name="gridLayout_5">
-        <item row="0" column="0">
-         <layout class="QGridLayout" name="gridLayout_2">
-          <item row="0" column="0">
-           <widget class="QLabel" name="label">
-            <property name="text">
-             <string>Execution</string>
-            </property>
-            <property name="buddy">
-             <cstring>dateExecution</cstring>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="1">
-           <widget class="QDateEdit" name="dateExecution">
-            <property name="minimumSize">
-             <size>
-              <width>100</width>
-              <height>27</height>
-             </size>
-            </property>
-            <property name="displayFormat">
-             <string notr="true">dd/MM/yy</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="paymentLabel">
-            <property name="text">
-             <string>Payment</string>
-            </property>
-            <property name="buddy">
-             <cstring>datePayment</cstring>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="1">
-           <widget class="QDateEdit" name="datePayment">
-            <property name="displayFormat">
-             <string notr="true">dd/MM/yy</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-       </layout>
-      </widget>
-     </item>
      <item row="3" column="1">
-      <layout class="QHBoxLayout" name="horizontalLayout">
-       <item>
-        <widget class="QRadioButton" name="inputRadioButton">
-         <property name="text">
-          <string>Input</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QRadioButton" name="displayRadioButton">
-         <property name="text">
-          <string>Control</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item row="4" column="1">
-      <layout class="QHBoxLayout" name="horizontalLayout_2">
-       <item>
-        <widget class="QPushButton" name="thesaurusButton">
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>0</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>Save in thesaurus</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="saveButton">
-         <property name="text">
-          <string>&amp;Save</string>
-         </property>
-         <property name="default">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="othersLabel">
-         <property name="text">
-          <string>Other</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="saveAndQuitButton">
-         <property name="text">
-          <string>Sa&amp;ve and quit</string>
-         </property>
-         <property name="default">
-          <bool>false</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="quitButton">
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>0</height>
-          </size>
-         </property>
-         <property name="text">
-          <string>&amp;Quit</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QComboBox" name="othersBox"/>
-       </item>
-      </layout>
-     </item>
-     <item row="2" column="1">
       <widget class="QGroupBox" name="chosenValuesBox">
        <property name="minimumSize">
         <size>
-         <width>0</width>
-         <height>100</height>
+         <width>290</width>
+         <height>150</height>
         </size>
        </property>
        <property name="title">

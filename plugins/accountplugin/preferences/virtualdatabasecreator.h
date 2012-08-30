@@ -67,7 +67,7 @@ class VirtualDatabaseCreator : public QWidget
 public:
     explicit VirtualDatabaseCreator(QWidget *parent = 0);
     ~VirtualDatabaseCreator();
-    void setDatasToUi();
+    void setDataToUi();
 
     static void writeDefaultSettings(Core::ISettings *s);
 

@@ -84,7 +84,7 @@ public:
     // MODEL FUNCTIONS
     QModelIndex index(int row, int column, const QModelIndex &drugParent = QModelIndex()) const;
 
-    // GETTING DATAS
+    // GETTING DATA
     int rowCount(const QModelIndex & = QModelIndex()) const;
     int columnCount(const QModelIndex & = QModelIndex()) const { return DrugsDB::Constants::Drug::MaxParam; }
     bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
@@ -94,7 +94,7 @@ public:
     bool setDrugData(const QVariant &drugId, const int column, const QVariant &value);
     Qt::ItemFlags flags(const QModelIndex &index) const;
 
-    // GET INTERACTIONS SPECIFIC STRUCTURED DATAS
+    // GET INTERACTIONS SPECIFIC STRUCTURED DATA
     void setComputeDrugInteractions(bool compute);
     bool prescriptionHasInteractions();
     DrugInteractionQuery *drugInteractionQuery() const;

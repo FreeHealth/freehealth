@@ -69,7 +69,7 @@ Q_SIGNALS:
     void userConnectionChanged(bool coonected);
 
 private:
-    void setDatasToUi();
+    void setDataToUi();
 
 protected Q_SLOTS:
     void testHost();

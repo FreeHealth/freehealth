@@ -451,10 +451,10 @@ namespace Constants {
         CIM10LimitsLinks,       /*!< \brief CIM10 codes that must not be used with the prescription. Codes are separated by a ';'.  \todo this */
         EDRCLinks,              /*!< \brief EDRC codes related to the prescription. Codes are separated by a ';'.  \todo this  */
 
-        Extras,                 /*!< \brief blob that contains extra datas XML formatted (not used for now */
+        Extras,                 /*!< \brief blob that contains extra data, XML formatted (not used by now) */
         UserValidatorName,      /*!< \brief nom de celui qui a validé la posologie */
-        CreationDate,           /*!< \brief Date création      --> date */
-        ModificationDate,       /*!< \brief Date modification  --> date */
+        CreationDate,           /*!< \brief Creation date --> date */
+        ModificationDate,       /*!< \brief Modification date --> date */
         Transmitted,            /*!< \brief Sera utilisé pour récupérer via internet les dosages référencés en local. date */
         Route,                  /*!< \brief Outside SQL */
         MaxParam                /*!< \brief Nombre maximum de colonnes du modèle (et de la table SQL) */

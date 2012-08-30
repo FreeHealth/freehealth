@@ -72,7 +72,7 @@ public:
     void addAutoReleasedObject(QObject *obj);
     void removeObject(QObject *obj);
 
-signals:
+Q_SIGNALS:
     void asynchronousShutdownFinished();
 
 private:

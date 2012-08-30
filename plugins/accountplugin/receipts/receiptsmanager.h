@@ -48,7 +48,7 @@ class ACCOUNT_EXPORT ReceiptsManager : public QObject
   ~ReceiptsManager();
 
   QHash<int,QString> getPercentages();
-  QHash<QString,QVariant> getParametersDatas(QString & userUid , int table);//uid,name
+  QHash<QString,QVariant> getParametersData(QString & userUid , int table);//uid,name
   QHash<QString,QVariant> getHashOfSites();
   QHash<QString,QVariant> getHashOfInsurance();
   QHash<QString,QVariant> getDistanceRules();

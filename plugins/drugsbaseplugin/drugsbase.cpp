@@ -38,7 +38,7 @@
      One UID code can be associated to many CIP, many Substances, many INNs, and many IamClasses.
 
   1. Initialization\n
-  This class is pure static, so you can not instanciate it. To initialize datas, just do once : init().
+  This class is pure static, so you can not instanciate it. To initialize data, just do once \e init().
   isInitialized() alerts you of the state of intialization.
   These two members returns true if all is ok.
 
@@ -903,7 +903,7 @@ void DrugsBase::onCoreDatabaseServerChanged()
 //    if (!connectDatabase(DrugsDB, __FILE__, __LINE__))
 //        return toReturn;
 
-//    // get all needed datas from database
+//    // get all needed data from database
 //    QMultiHash<QString, minimalCompo> cis_compo;
 //    foreach(int inn, inn_dosageRef.keys()) {
 //        const QVector<int> &molIds = getLinkedMoleculeCodes(inn);

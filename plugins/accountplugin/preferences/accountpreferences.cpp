@@ -83,7 +83,7 @@ int AccountUserOptionsPage::sortIndex() const {return 0;}
 void AccountUserOptionsPage::resetToDefaults()
 {
     m_Widget->writeDefaultSettings(settings());
-    m_Widget->setDatasToUi();
+    m_Widget->setDataToUi();
 }
 
 void AccountUserOptionsPage::applyChanges()
@@ -126,10 +126,10 @@ AccountUserWidget::AccountUserWidget(QWidget *parent) :
     setupUi(this);
     previewer = Print::Printer::previewer(this);
     userLayout->addWidget(previewer);
-    setDatasToUi();
+    setDataToUi();
 }
 
-void AccountUserWidget::setDatasToUi()
+void AccountUserWidget::setDataToUi()
 {
     header = Print::TextDocumentExtra::fromXml(settings()->value(Account::Constants::S_USER_HEADER).toString());
     footer = Print::TextDocumentExtra::fromXml(settings()->value(Account::Constants::S_USER_FOOTER).toString());
@@ -185,15 +185,15 @@ void AccountUserWidget::changeEvent(QEvent *e)
 ///////////////////////////////  AccountDatabaseDefautsPage  ////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////////////////
 AccountDatabaseDefautsPage::AccountDatabaseDefautsPage(QObject *parent) :
-        IOptionsPage(parent), m_Widget(0) 
-{ 
+        IOptionsPage(parent), m_Widget(0)
+{
     setObjectName("AccountDatabaseDefautsPage");
 }
 
 AccountDatabaseDefautsPage::~AccountDatabaseDefautsPage()
 {
     if (m_Widget) delete m_Widget;
-        m_Widget = 0;    
+        m_Widget = 0;
 }
 
 QString AccountDatabaseDefautsPage::id() const { return objectName(); }
@@ -204,7 +204,7 @@ int AccountDatabaseDefautsPage::sortIndex() const {return 10;}
 void AccountDatabaseDefautsPage::resetToDefaults()
 {
     m_Widget->writeDefaultSettings(settings());
-    m_Widget->setDatasToUi();
+    m_Widget->setDataToUi();
 }
 
 void AccountDatabaseDefautsPage::applyChanges()
@@ -244,7 +244,7 @@ AccountDatabaseDefautsWidget::AccountDatabaseDefautsWidget(QWidget *parent) :
     setupUi(this);
     others->hide();
     datapackButton->hide();
-//    setDatasToUi();
+//    setDataToUi();
 }
 
 void AccountDatabaseDefautsWidget::on_createButton_clicked()
@@ -258,7 +258,7 @@ void AccountDatabaseDefautsWidget::on_createButton_clicked()
                 success = false;
              if (!createMinimalsDefaults(AccountDB::Constants::Table_MedicalProcedure))
              {
-             	Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("Medical procedure minimal defaults can not be included."));  
+                Utils::warningMessageBox(tkTr(Trans::Constants::ERROR), tr("Medical procedure minimal defaults can not be included."));
                 success = false;
                  }
              else{
@@ -298,12 +298,12 @@ void AccountDatabaseDefautsWidget::on_createButton_clicked()
 //    }
     QApplication::restoreOverrideCursor ();
     if (success) {
-    	  qWarning() << __FILE__ << QString::number(__LINE__) << "Defaults have been created." ;
+          qWarning() << __FILE__ << QString::number(__LINE__) << "Defaults have been created." ;
           Utils::informativeMessageBox(tkTr(Trans::Constants::INFORMATION), tr("Defaults have been created."));
     }
 }
 
-void AccountDatabaseDefautsWidget::setDatasToUi()
+void AccountDatabaseDefautsWidget::setDataToUi()
 {
     // TODO: For each defaults checkbox: check if defaults are: 1) available (if no -> unable checkbox) 2) not already inserted (unable checkbox)
 }
@@ -351,7 +351,7 @@ bool AccountDatabaseDefautsWidget::createMinimalsDefaults(const int tableRef)
     valuesList <<  "'1';'{07262c6f-9d08-4208-ae74-ba9b7d74daea}';'{00000000-0000-0000-0000-000000000000}';'2';'C';'consultation';'NGAP';'1';'70';'2012-06-22';'NULL';'FR'"
                <<  "'2';'{78521164-5ea9-4dcf-926f-b0518fcbf580}';'{00000000-0000-0000-0000-000000000000}';'2';'MNO';'majoration pour les enfants de 0 à 2 ans';'Forfaits';'5';'70';'2012-06-22';'NULL';'FR'"
                <<  "'3';'{f8593736-b517-4098-847e-f7c6cc15e051}';'{00000000-0000-0000-0000-000000000000}';'2';'DEQP003';'Électrocardiographie sur au moins 12 dérivations';'CCAM';'13';'70';'2012-06-22';'<?xml version=1.0 encoding=ISO-8859-1?><activity>1</activity><phase>0</phase><reimbursment></reimbursment><agreement></agreement><exemption>2</exemption><regroupment>ATM</regroupment>';'FR'";
-    
+
     success = createMinimalDefaultsFor(AccountDB::Constants::DB_ACCOUNTANCY,tableRef,valuesList);
     return success;
 }
@@ -368,9 +368,9 @@ bool AccountDatabaseDefautsWidget::createMinimalDefaultsFor(const QString &conne
         }
     if (!db.transaction())
     {
-    	  LOG_FOR("Account","Database cannot support transaction");
-    	  return false;
-        }  
+          LOG_FOR("Account","Database cannot support transaction");
+          return false;
+        }
     foreach(QString line , valuesList){
         QStringList values = line.split(";",QString::KeepEmptyParts);
         QString req = base()->prepareInsertQuery(tableRef);
@@ -381,19 +381,19 @@ bool AccountDatabaseDefautsWidget::createMinimalDefaultsFor(const QString &conne
             }
         if (!query.exec(req))
         {
-        	  LOG_QUERY_ERROR(query);
-        	  if (!db.rollback())
-        	  {
-        	  	  LOG_FOR("Account","Unable to roll back the transaction.");
-        	  	  return false;
-        	      }
-        	  return false;
+              LOG_QUERY_ERROR(query);
+              if (!db.rollback())
+              {
+                  LOG_FOR("Account","Unable to roll back the transaction.");
+                  return false;
+                  }
+              return false;
             }
         }
     if (!db.commit())
     {
-    	  LOG_FOR("Account",db.lastError().text());
-    	  return false;
+          LOG_FOR("Account",db.lastError().text());
+          return false;
         }
     return true;
 }
@@ -412,30 +412,30 @@ bool AccountDatabaseDefautsWidget::createMinimalDefaultsFor(const QString &conne
         QList<QDate> listOfDates;
         for (int r = 0; r < MPmodelRowCount; ++r)
         {
-        	  QDate date = MPmodel.data(MPmodel.index(r,AccountDB::Constants::MP_DATE),Qt::DisplayRole).toDate();
-        	  listOfDates << date;
+              QDate date = MPmodel.data(MPmodel.index(r,AccountDB::Constants::MP_DATE),Qt::DisplayRole).toDate();
+              listOfDates << date;
             }
         QDate dateDapapack = dtpkmodel.data(dtpkmodel.index(1,AccountDB::Constants::MP_DATE),Qt::DisplayRole).toDate();
         if (listOfDates.contains(dateDapapack))
         {
-        	  LOG_ERROR("Datapack has already been loaded.");
-        	  Utils::warningMessageBox( tr("Warning"), tr("Datapack has already been loaded."));
-        	  return;
+              LOG_ERROR("Datapack has already been loaded.");
+              Utils::warningMessageBox( tr("Warning"), tr("Datapack has already been loaded."));
+              return;
             }
         if (!MPmodel.insertRows(MPmodelRowCount,dtpkRowCount,QModelIndex()))
         {
-        	  LOG_ERROR(MPmodel.lastError().text());
+              LOG_ERROR(MPmodel.lastError().text());
             }
         for (int row = 0; row < dtpkRowCount ; ++row)
-        {        	 
-        	 for (int col = 0; col < dtpkmodel.columnCount(); ++col)
-        	 {
-        	 	  QVariant data = dtpkmodel.data(dtpkmodel.index(row,col),Qt::DisplayRole);
-        	 	  if (!MPmodel.setData(MPmodel.index(MPmodelRowCount+row,col),data,Qt::EditRole))
-        	 	  {
-        	 	  	  LOG_ERROR(MPmodel.lastError().text());
-        	 	      }
-        	     }
+        {
+             for (int col = 0; col < dtpkmodel.columnCount(); ++col)
+             {
+                  QVariant data = dtpkmodel.data(dtpkmodel.index(row,col),Qt::DisplayRole);
+                  if (!MPmodel.setData(MPmodel.index(MPmodelRowCount+row,col),data,Qt::EditRole))
+                  {
+                      LOG_ERROR(MPmodel.lastError().text());
+                      }
+                 }
             }
-        
+
 }*/
