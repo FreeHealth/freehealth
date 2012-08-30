@@ -327,6 +327,11 @@ choiceDialog::choiceDialog(QWidget * parent,bool roundtrip, bool freevalue, QStr
     m_row = 0;
     m_timerUp = new QTimer(this);
     m_timerDown = new QTimer(this);
+    //icons and shortcuts
+    ui->okButton->setShortcut(QKeySequence::InsertParagraphSeparator);
+    ui->okButton->setToolTip(QKeySequence(QKeySequence::InsertParagraphSeparator).toString());
+    ui->quitButton->setShortcut(QKeySequence::Close);
+    ui->quitButton->setToolTip(QKeySequence(QKeySequence::Close).toString());
    // connect(ui->buttonBox,SIGNAL(accepted()),this,SLOT(beforeAccepted()));
     connect(ui->okButton,SIGNAL(pressed()),this,SLOT(beforeAccepted()));
     connect(ui->quitButton,SIGNAL(pressed()),this,SLOT(reject()));

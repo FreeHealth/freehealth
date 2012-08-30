@@ -74,8 +74,7 @@ class ACCOUNT_EXPORT ControlReceipts : public QWidget
         void deleteLine();
         void printDues();
         void print();
-        void closeAction(bool);
-
+        void closeAction();
     private:
         void coloringDoubles();
         void refresh();

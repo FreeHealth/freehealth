@@ -52,6 +52,8 @@
 #include <coreplugin/iuser.h>
 #include <coreplugin/ipatient.h>
 #include <coreplugin/isettings.h>
+#include <coreplugin/itheme.h>
+#include <coreplugin/constants_icons.h>
 
 #include <utils/widgets/spinboxdelegate.h>
 #include <utils/global.h>
@@ -80,6 +82,7 @@ using namespace Tools;
 static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
 static inline Core::IPatient *patient() { return Core::ICore::instance()->patient(); }
 static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
+static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 
 
 
@@ -753,11 +756,18 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
     ui->dateBanked->setDate(QDate::currentDate());
     ui->dateBook->setDisplayFormat("yyyy-MM-dd");
     ui->dateBook->setDate(QDate::currentDate());*/
-    ui->inputRadioButton->setChecked(true);
-    ui->saveButton->setShortcut(QKeySequence::InsertParagraphSeparator);
-    ui->quitButton->setShortcut(QKeySequence("Ctrl+q"));
-    ui->thesaurusButton->setShortcut(QKeySequence("Ctrl+t"));
 
+    //icons and shortcuts
+    ui->saveButton->setShortcut(QKeySequence::InsertParagraphSeparator);
+    ui->saveButton->setToolTip(QKeySequence(QKeySequence::InsertParagraphSeparator).toString());
+    ui->quitButton->setShortcut(QKeySequence::Close);
+    ui->quitButton->setToolTip(QKeySequence(QKeySequence::Close).toString());
+    ui->thesaurusButton->setShortcut(QKeySequence("Ctrl+t"));
+    ui->thesaurusButton->setToolTip(QKeySequence(QKeySequence("Ctrl+t")).toString());
+    ui->goToControlButton->setIcon(theme()->icon(Core::Constants::ICONNEXT));
+    ui->goToControlButton->setShortcut(QKeySequence::Forward);
+    ui->goToControlButton->setToolTip(QKeySequence(QKeySequence::Forward).toString());
+    //---------------------------------------------------------------------
     m_actionTreeView = new treeViewsActions(this);
     m_vbox = new QVBoxLayout;
     m_vbox->addWidget(m_actionTreeView);
@@ -794,16 +804,11 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
     //ui_controlreceipts
     m_control = new ControlReceipts(this);
     m_control->hide();
-    ui->othersBox->hide();
-    ui->othersLabel->hide();
-    ui->displayRadioButton->setCheckable(true);
-    ui->displayRadioButton->setShortcut(QKeySequence("Ctrl+d"));
     connect(ui->quitButton,SIGNAL(pressed()),this,SLOT(quitFreeAccount()));
     connect(ui->saveButton,SIGNAL(pressed()),this,SLOT(save()));
-    //connect(ui->othersBox,SIGNAL(activated(const QString&)),this,SLOT(othersWidgets(const QString&)));
     connect(ui->saveAndQuitButton,SIGNAL(pressed()),this,SLOT(saveAndQuit()));
     connect(ui->thesaurusButton,SIGNAL(pressed()),this,SLOT(saveInThesaurus()));
-    connect(ui->displayRadioButton,SIGNAL(clicked(bool)),this,SLOT(showControlReceipts(bool)));
+    connect(ui->goToControlButton,SIGNAL(pressed()),this,SLOT(showControlReceipts()));
     if (!connect(m_actionTreeView,SIGNAL(clicked(const QModelIndex&)),this,SLOT(actionsOfTreeView(const QModelIndex&))))
     {
         if (WarnDebugMessage)
@@ -1350,11 +1355,8 @@ QVariant ReceiptViewer::firstItemchosenAsPreferential(QString & item)
     return variantValue;
 }
 
-void ReceiptViewer::showControlReceipts(bool b){
-    if (b)
-    {
-          m_control->show();
-        }
+void ReceiptViewer::showControlReceipts(){
+    m_control->show();
 }
 
 void ReceiptViewer::resizeEvent(QResizeEvent *event){
@@ -1365,7 +1367,6 @@ void ReceiptViewer::resizeEvent(QResizeEvent *event){
 void ReceiptViewer::controlReceiptsDestroyed(){
     if (WarnDebugMessage)
               qDebug() << __FILE__ << QString::number(__LINE__) << " in controlReceiptsDestroyed " ;
-    ui->inputRadioButton->setChecked(true);
 }
 
 void ReceiptViewer::userUid(){
