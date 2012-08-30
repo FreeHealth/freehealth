@@ -64,7 +64,7 @@
         <field name="Internal">
             <fieldcontrol class="QCheckBox"/>
             <fielddescription>Additional "Internal" namespace</fielddescription>
-            <fielddescription xml:lang="de">Zusätzliche "Internal"-Namensraum</fielddescription>
+            <fielddescription xml:lang="de">Zusätzlicher "Internal"-Namensraum</fielddescription>
         </field>
         <field name="PIMPL" >
             <fieldcontrol class="QCheckBox" defaultvalue="true"/>
