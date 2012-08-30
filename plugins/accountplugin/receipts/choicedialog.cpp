@@ -248,6 +248,7 @@ bool treeViewsActions::deleteItemFromThesaurus(QModelIndex &index){
 
 QModelIndex treeViewsActions::indexWithItem(int row)
 {
+    // FIXME: shouldn't this be a "const" QModelIndex? and const function?
     QModelIndex index;
     index = treeModel()->indexFromItem(treeModel()->item(row));
     return index;
