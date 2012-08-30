@@ -55,7 +55,7 @@ class PrinterPreferencesWidget : public QWidget, private Ui::PrinterPreferences
 
 public:
     explicit PrinterPreferencesWidget(QWidget *parent = 0);
-    void setDatasToUi();
+    void setDataToUi();
 
     static void writeDefaultSettings(Core::ISettings *s);
 

@@ -7,7 +7,7 @@
       <label lang="fr">Facteurs de risque</label>
       <label lang="de">Risikofaktoren</label>
       <extra>
-        <file>__subForms__/cardiology/riskfactors/central.xml</file>
+        <file>__subForms__/cardiology/riskfactors</file>
       </extra>
     </Category>
     <Category icon="__theme__/stethoscope.png" uuid="GP::Basic::WithDrugPage::Perso" sortId="1">

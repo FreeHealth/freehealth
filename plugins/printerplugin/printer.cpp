@@ -141,7 +141,7 @@ static inline Core::ISettings *settings() {return Core::ICore::instance()->setti
 namespace Print {
 namespace Internal {
 
-/** \brief Only keeps some private members and private datas */
+/** \brief Only keeps some private members and private data */
 class PrinterPrivate
 {
 public:

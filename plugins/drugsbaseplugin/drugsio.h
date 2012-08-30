@@ -77,7 +77,7 @@ public:
 
     bool loadPrescription(DrugsDB::DrugsModel *model, const QString &fileName, QHash<QString,QString> &extraDatas, Loader loader = ReplacePrescription);
     bool loadPrescription(DrugsDB::DrugsModel *model, const QString &fileName, Loader loader = ReplacePrescription);
-    bool loadPrescription(DrugsDB::DrugsModel *model, const QString &fileName, QString &xmlExtraDatas, Loader loader = ReplacePrescription);
+    bool loadPrescription(DrugsDB::DrugsModel *model, const QString &fileName, QString &xmlExtraData, Loader loader = ReplacePrescription);
 
     bool savePrescription(DrugsDB::DrugsModel *model, const QHash<QString,QString> &extraDatas, const QString &toFileName = QString::null);
     bool savePrescription(DrugsDB::DrugsModel *model, const QString &extraDatas, const QString &toFileName = QString::null);

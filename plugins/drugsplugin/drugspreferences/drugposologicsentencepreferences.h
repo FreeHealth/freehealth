@@ -62,7 +62,7 @@ public:
     explicit DrugPosologicSentenceWithPadPreferencesWidget(QWidget *parent = 0);
     ~DrugPosologicSentenceWithPadPreferencesWidget();
 
-    void setDatasToUi();
+    void setDataToUi();
 
 public Q_SLOTS:
     void saveToSettings(Core::ISettings *s = 0);
@@ -88,7 +88,7 @@ class DrugPosologicSentencePreferencesWidget : public QWidget, private Ui::DrugP
 
 public:
     explicit DrugPosologicSentencePreferencesWidget(QWidget *parent = 0);
-    void setDatasToUi();
+    void setDataToUi();
 
     static void writeDefaultSettings( Core::ISettings *s );
 

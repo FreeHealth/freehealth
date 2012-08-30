@@ -72,7 +72,7 @@ class AssetsRatesWidget : public QWidget, private Ui::AssetsRatesWidget
 public:
     explicit AssetsRatesWidget(QWidget *parent = 0);
     ~AssetsRatesWidget();
-    void setDatasToUi();
+    void setDataToUi();
 
     static void writeDefaultSettings( Core::ISettings *s );
 

@@ -74,7 +74,7 @@ class AvailableMovementWidget : public QWidget, private Ui::AvailableMovementWid
 public:
     explicit AvailableMovementWidget(QWidget *parent = 0);
     ~AvailableMovementWidget();
-    void setDatasToUi();
+    void setDataToUi();
 
     static void writeDefaultSettings( Core::ISettings *s );
 

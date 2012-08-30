@@ -72,7 +72,7 @@ private:
     QPair<QDate,QDate> m_monthBoundingDays;
     //		void paintEvents(QPainter &painter, const QDate &day, const QRect &dayRect);
 
-private slots:
+private Q_SLOTS:
     void firstDateChanged();
 };
 

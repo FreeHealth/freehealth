@@ -34,6 +34,12 @@
 
 #include <QAbstractItemModel>
 
+/**
+ * \file episodemodel.h
+ * \author Eric MAEKER <eric.maeker@gmail.com>
+ * \version 0.7.6
+ * \date jun 2012
+*/
 
 namespace Form {
 class FormMain;

@@ -188,7 +188,7 @@ GirWidget::GirWidget(Form::FormItem *formItem, QWidget *parent) :
     // create FormItemData
     GirItemData *data = new GirItemData(m_FormItem);
     data->setGirWidget(this);
-    m_FormItem->setItemDatas(data);
+    m_FormItem->setItemData(data);
 }
 
 GirWidget::~GirWidget()

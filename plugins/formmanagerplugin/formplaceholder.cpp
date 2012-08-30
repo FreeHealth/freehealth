@@ -28,13 +28,14 @@
   \class Form::FormPlaceHolder
   Widget containing the Episode treeView and the forms in a QStackedLayout
   When an episode is activated by the user, the formViewer is set to the corresponding form
-  and episode datas. Datas are automatically saved (without any user intervention).
+  and episode data. Data are automatically saved (without any user intervention).
 */
 
 #include "formplaceholder.h"
 #include "constants_settings.h"
 #include "constants_db.h"
 #include "formeditordialog.h"
+#include "formtreemodel.h"
 
 #include <formmanagerplugin/formmanager.h>
 #include <formmanagerplugin/iformitem.h>
@@ -408,7 +409,7 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
     d->horizSplitter->addWidget(d->m_FileTree);
 //    d->horizSplitter->addWidget(wb);
 //    vertic->addWidget(d->m_EpisodesTable);
-	vertic->addWidget(w);
+    vertic->addWidget(w);
     d->horizSplitter->addWidget(vertic);
 
     int width = size().width();
@@ -485,12 +486,14 @@ void FormPlaceHolder::setRootForm(Form::FormMain *rootForm)
         return;
 
     // Create models
-    d->m_EpisodeModel = new EpisodeModel(rootForm, this);
-    d->m_EpisodeModel->setObjectName(objectName()+"EpisodeModel");
-    d->m_Delegate->setEpisodeModel(d->m_EpisodeModel);
-
+//    d->m_EpisodeModel = new EpisodeModel(rootForm, this);
+//    d->m_EpisodeModel->setObjectName(objectName()+"EpisodeModel");
+//    d->m_Delegate->setEpisodeModel(d->m_EpisodeModel);
+    FormTreeModel *formTreeModel = new FormTreeModel(rootForm, this);
+    formTreeModel->init();
     QTreeView *tree = d->m_FileTree->treeView();
-    tree->setModel(d->m_EpisodeModel);
+//    tree->setModel(d->m_EpisodeModel);
+    tree->setModel(formTreeModel);
     tree->setSelectionMode(QAbstractItemView::SingleSelection);
     tree->setSelectionBehavior(QAbstractItemView::SelectRows);
     for(int i=0; i < Form::EpisodeModel::MaxData; ++i)
@@ -510,7 +513,7 @@ void FormPlaceHolder::setRootForm(Form::FormMain *rootForm)
     connect(cmd->action(), SIGNAL(triggered()), this, SLOT(showLastEpisodeSynthesis()));
 
     // start on the Last Episode Synthesis view
-    tree->setCurrentIndex(d->m_EpisodeModel->index(0,0));
+//    tree->setCurrentIndex(d->m_EpisodeModel->index(0,0));
     setCurrentForm(Constants::PATIENTLASTEPISODES_UUID);
 }
 
@@ -569,8 +572,9 @@ void FormPlaceHolder::setCurrentForm(const QString &formUuid)
     // change the stack and populate as needed
     d->m_Stack->setCurrentIndex(d->m_StackId_FormUuid.key(formUuid));
     if (d->m_Stack->currentWidget()) {
-//        qobject_cast<QScrollArea*>(d->m_Stack->currentWidget())->widget()->setEnabled(false);
         if (formUuid==Constants::PATIENTLASTEPISODES_UUID) {
+            if (!d->m_EpisodeModel)
+                return;
             qApp->setOverrideCursor(QCursor(Qt::BusyCursor));
             QTextBrowser *browser = d->m_Stack->currentWidget()->findChild<QTextBrowser*>();
             browser->setText(d->m_EpisodeModel->lastEpisodesSynthesis());

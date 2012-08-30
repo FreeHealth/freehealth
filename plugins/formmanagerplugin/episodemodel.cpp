@@ -38,16 +38,15 @@
 #include <coreplugin/constants_tokensandsettings.h>
 #include <coreplugin/constants_icons.h>
 #include <coreplugin/actionmanager/actionmanager.h>
+#include <coreplugin/icore.h>
+#include <coreplugin/icorelistener.h>
+#include <coreplugin/isettings.h>
+#include <coreplugin/itheme.h>
 
 #include <formmanagerplugin/formmanager.h>
 #include <formmanagerplugin/iformitem.h>
 #include <formmanagerplugin/iformitemspec.h>
 #include <formmanagerplugin/iformitemdata.h>
-
-#include <coreplugin/icore.h>
-#include <coreplugin/icorelistener.h>
-#include <coreplugin/isettings.h>
-#include <coreplugin/itheme.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -80,10 +79,7 @@ enum {
 #endif
 
 
-/**
-  \todo When currentpatient change --> read all last episodes of forms and feed the patient model of the
-  PatientDataRepresentation
-*/
+//TODO: When currentpatient change --> read all last episodes of forms and feed the patient model of the PatientDataRepresentation
 
 using namespace Form;
 using namespace Internal;
@@ -101,7 +97,6 @@ static inline Core::ActionManager *actionManager() { return Core::ICore::instanc
 static inline ExtensionSystem::PluginManager *pluginManager() { return ExtensionSystem::PluginManager::instance(); }
 
 namespace {
-
     // TODO: create an Utils::GenericTreeItem \sa Templates::TemplateModel, PMH::PmhCategoryModel
     class EpisodeModelTreeItem
     {
@@ -110,10 +105,10 @@ namespace {
                 m_Parent(parent),
                 m_IsEpisode(false),
                 m_IsModified(false)
-//                m_Datas(datas)
+//                m_Data(data)
         {
 //            setData(EpisodeModel::UserUuid, user()->uuid());
-//            setIsEpisode(datas.value(EpisodeModel::IsEpisode).toBool());
+//            setIsEpisode(data.value(EpisodeModel::IsEpisode).toBool());
         }
         ~EpisodeModelTreeItem() { qDeleteAll(m_Children); }
 
@@ -276,8 +271,6 @@ namespace {
         bool m_IsEpisode, m_IsModified;
         QHash<int, QVariant> m_Datas;
     };
-
-
 }
 
 namespace Form {
@@ -293,7 +286,7 @@ namespace Internal {
 
     bool EpisodeModelCoreListener::coreAboutToClose()
     {
-        qWarning() << Q_FUNC_INFO;
+//        qWarning() << Q_FUNC_INFO;
         m_EpisodeModel->submit();
         return true;
     }
@@ -527,11 +520,11 @@ public:
 
 //        if (formIsModified) {
             // create the XML episode file
-            QHash<QString, QString> datas;
+            QHash<QString, QString> xmlData;
             foreach(FormItem *it, items) {
-                datas.insert(it->uuid(), it->itemData()->storableData().toString());
+                xmlData.insert(it->uuid(), it->itemData()->storableData().toString());
             }
-            return Utils::createXml(Form::Constants::XML_FORM_GENERAL_TAG, datas, 2, false);
+            return Utils::createXml(Form::Constants::XML_FORM_GENERAL_TAG, xmlData, 2, false);
 //        }
 
 //        return QString();
@@ -604,13 +597,13 @@ public:
         }
 
         // read the xml'd content
-        QHash<QString, QString> datas;
-        if (!Utils::readXml(xml, Form::Constants::XML_FORM_GENERAL_TAG, datas, false)) {
+        QHash<QString, QString> xmlData;
+        if (!Utils::readXml(xml, Form::Constants::XML_FORM_GENERAL_TAG, xmlData, false)) {
             LOG_ERROR_FOR(q, QString("Error while reading EpisodeContent"));
             return;
         }
 
-        // put datas into the FormItems of the form
+        // put data into the FormItems of the form
         // XML content ==
         // <formitemuid>value</formitemuid>
         QHash<QString, FormItem *> items;
@@ -628,7 +621,7 @@ public:
         else
             form->itemData()->setData(IFormItemData::ID_UserName, username);
 
-        // feed the formitemdatas for this form and get the data for the patientmodel
+        // feed the formitemdata for this form and get the data for the patientmodel
         foreach(FormItem *it, items.values()) {
             if (!it) {
                 qWarning() << "FormManager::activateForm :: ERROR: no item: " << items.key(it);
@@ -637,7 +630,7 @@ public:
             if (!it->itemData())
                 continue;
 
-            it->itemData()->setStorableData(datas.value(it->uuid()));
+            it->itemData()->setStorableData(xmlData.value(it->uuid()));
             if (feedPatientModel) {
 //                qWarning() << "Feeding patientModel data with" << it->patientDataRepresentation() << it->itemDatas()->data(it->patientDataRepresentation(), IFormItemData::ID_ForPatientModel);
                 if (it->patientDataRepresentation() >= 0) {
@@ -654,6 +647,7 @@ public:
 
     void getLastEpisodes(bool andFeedPatientModel = true)
     {
+        qWarning() << "GetLastEpisode (feedPatientModel=" <<andFeedPatientModel << ")";
         if (patient()->uuid().isEmpty())
             return;
 
@@ -897,8 +891,9 @@ QVariant EpisodeModel::data(const QModelIndex &item, int role) const
         return QVariant();
 
     EpisodeModelTreeItem *it = d->getItem(item);
-    if (it==d->m_RootItem)
+    if (it==d->m_RootItem) {
         return QVariant();
+    }
 
     if (it==d->m_ShowLastEpisodes) {
         switch (role) {
@@ -1004,7 +999,7 @@ QVariant EpisodeModel::data(const QModelIndex &item, int role) const
             return QColor(settings()->value(Constants::S_EPISODEMODEL_FORM_FOREGROUND, "#000").toString());
         }
         break;
-    }        
+    }
     case Qt::FontRole :
     {
         if (form) {
@@ -1325,13 +1320,13 @@ bool EpisodeModel::activateEpisode(const QModelIndex &index, const QString &form
         return true;
 
     // read the xml'd content
-    QHash<QString, QString> datas;
-    if (!Utils::readXml(xml, Form::Constants::XML_FORM_GENERAL_TAG, datas, false)) {
+    QHash<QString, QString> xmlData;
+    if (!Utils::readXml(xml, Form::Constants::XML_FORM_GENERAL_TAG, xmlData, false)) {
         LOG_ERROR(QString("Error while reading EpisodeContent %2:%1").arg(__LINE__).arg(__FILE__));
         return false;
     }
 
-    // put datas into the FormItems of the form
+    // put data into the FormItems of the form
     // XML content ==
     // <formitemuid>value</formitemuid>
     QHash<QString, FormItem *> items;
@@ -1345,14 +1340,14 @@ bool EpisodeModel::activateEpisode(const QModelIndex &index, const QString &form
 
 //    qWarning() << "ITEMS" << items;
 
-    foreach(const QString &s, datas.keys()) {
+    foreach(const QString &s, xmlData.keys()) {
         FormItem *it = items.value(s, 0);
         if (!it) {
             qWarning() << "FormManager::activateForm :: ERROR: no item: " << s;
             continue;
         }
         if (it->itemData())
-            it->itemData()->setStorableData(datas.value(s));
+            it->itemData()->setStorableData(xmlData.value(s));
         else
             qWarning() << "FormManager::activateForm :: ERROR: no itemData: " << s;
     }

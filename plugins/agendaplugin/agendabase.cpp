@@ -573,7 +573,7 @@ QList<Agenda::UserCalendar *> AgendaBase::getUserCalendars(const QString &userUu
         if (query.exec(reqs.at(i))) {
             while (query.next()) {
                 Agenda::UserCalendar *u = new Agenda::UserCalendar;
-                // set private datas
+                // set private data
                 //            u->setData(IUserCalendar::DbOnly_UserCalId, query.value());
                 u->setData(Constants::Db_CalId, query.value(Constants::CAL_ID));
                 u->setData(Agenda::UserCalendar::Uid, query.value(Constants::CAL_UID));

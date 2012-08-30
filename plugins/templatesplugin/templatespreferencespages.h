@@ -54,7 +54,7 @@ class TemplatesPreferencesWidget : public QWidget, private Ui::TemplatesPreferen
 
 public:
     explicit TemplatesPreferencesWidget(QWidget *parent = 0);
-    void setDatasToUi();
+    void setDataToUi();
 
     static void writeDefaultSettings(Core::ISettings *s);
     static void appliFontToViews(const QFont &font);

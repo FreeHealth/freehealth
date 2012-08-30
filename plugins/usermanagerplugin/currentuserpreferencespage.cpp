@@ -63,7 +63,7 @@ int CurrentUserPreferencesPage::sortIndex() const {return 0;}
 void CurrentUserPreferencesPage::resetToDefaults()
 {
     m_Widget->writeDefaultSettings(settings());
-    m_Widget->setDatasToUi();
+    m_Widget->setDataToUi();
 }
 
 void CurrentUserPreferencesPage::applyChanges()
@@ -96,11 +96,11 @@ CurrentUserPreferencesWidget::CurrentUserPreferencesWidget(QWidget *parent) :
     setupUi(this);
     m_Viewer = new UserViewer(this);
     userLayout->addWidget(m_Viewer);
-    setDatasToUi();
+    setDataToUi();
     // TODO: connect userchange
 }
 
-void CurrentUserPreferencesWidget::setDatasToUi()
+void CurrentUserPreferencesWidget::setDataToUi()
 {
     if (userModel()->hasCurrentUser())
         m_Viewer->changeUserTo(userModel()->currentUserIndex().row());

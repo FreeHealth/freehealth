@@ -171,7 +171,7 @@ public:
     bool isActive() const;
     void retranslate();
 
-private slots:
+private Q_SLOTS:
     void actionChanged();
 
 private:

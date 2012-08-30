@@ -27,13 +27,14 @@ HEADERS = formmanagerplugin.h \
     formfilesselectorwidget.h \
     formmanagerpreferencespage.h \
     formcontextualwidget.h \
-    formfile.h \
     formeditordialog.h \
     firstrunformmanager.h \
     formiodescription.h \
     formioquery.h \
     subforminsertionpoint.h \
-    episodedata.h
+    episodedata.h \
+    formtreemodel.h
+
 SOURCES = formmanagerplugin.cpp \
     formmanager.cpp \
     iformitem.cpp \
@@ -46,10 +47,10 @@ SOURCES = formmanagerplugin.cpp \
     formmanagerpreferencespage.cpp \
     iformio.cpp \
     formcontextualwidget.cpp \
-    formfile.cpp \
     formeditordialog.cpp \
     firstrunformmanager.cpp \
-    episodedata.cpp
+    episodedata.cpp \
+    formtreemodel.cpp
 
 OTHER_FILES = FormManager.pluginspec
 

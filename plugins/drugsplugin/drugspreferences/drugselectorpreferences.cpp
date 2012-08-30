@@ -61,10 +61,10 @@ DrugsSelectorWidget::DrugsSelectorWidget(QWidget *parent) :
         QWidget(parent)
 {
     setupUi(this);
-    setDatasToUi();
+    setDataToUi();
 }
 
-void DrugsSelectorWidget::setDatasToUi()
+void DrugsSelectorWidget::setDataToUi()
 {
     drugsBrandNameBox->setChecked(settings()->value(DrugsDB::Constants::S_SELECTOR_SHOWDRUGSNAME).toBool());
     routeBox->setChecked(settings()->value(DrugsDB::Constants::S_SELECTOR_SHOWROUTE).toBool());
@@ -150,7 +150,7 @@ int DrugsSelectorOptionsPage::sortIndex() const {return 40;}
 void DrugsSelectorOptionsPage::resetToDefaults()
 {
     m_Widget->writeDefaultSettings(settings());
-    m_Widget->setDatasToUi();
+    m_Widget->setDataToUi();
 }
 
 void DrugsSelectorOptionsPage::applyChanges()

@@ -72,7 +72,7 @@ class DistanceRulesWidget : public QWidget, private Ui::DistanceRulesWidget
 public:
     explicit DistanceRulesWidget(QWidget *parent = 0);
     ~DistanceRulesWidget();
-    void setDatasToUi();
+    void setDataToUi();
 
     static void writeDefaultSettings( Core::ISettings *s );
 

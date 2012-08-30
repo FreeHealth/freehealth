@@ -41,14 +41,14 @@ ProduceDoc::ProduceDoc()
     m_tableFormatParameters = "200,200,150,250,170";//the last is not used in fact
     m_tablesRecapParameters = "400,400";
 }
-    
+
 ProduceDoc::~ProduceDoc(){}
 
 void ProduceDoc::run(){
     if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " RUN !!! "  ;
     m_mutex.lock();
-    m_textDocument = new QTextDocument;  
+    m_textDocument = new QTextDocument;
     organize();
     m_mutex.unlock();
 }
@@ -59,7 +59,7 @@ void ProduceDoc::organize(){
     myFormat(tableFormat,parametersForTableFormat);
     int nombrejoursannee              = m_date.daysInYear();
     QTextCursor   *cursortrie         = new QTextCursor(m_textDocument);
-    
+
 //-----------------------insertion du titre du document-----------------------------------
 
     QString titreDoc                   = "<font size = 10 color = #3300FF><bold>"+tr("Ledger")+"<bold></font>"
@@ -75,7 +75,7 @@ void ProduceDoc::organize(){
        centrer                        .setRightMargin(32.0) ;
        centrer                        .setTopMargin(16.0) ;
        centrer                        .setBottomMargin(24.0) ;
-   
+
     cursortrie                        ->insertBlock(centrer);
     //cursortrie                        ->insertFragment(titredoc);
     cursortrie                        ->insertHtml(titreDoc);
@@ -86,7 +86,7 @@ void ProduceDoc::organize(){
     QString janvier                   = tr("january");
     QString janvList;
     janvList                          = unjanv +","+ trenteetunjanv;
-    
+
 
 //fevrier------------mois particulier !
     QString unfev                     = m_date.toString("yyyy")+"-02-01";
@@ -159,10 +159,10 @@ void ProduceDoc::organize(){
 	//cursortrie->movePosition(QTextCursor::End,QTextCursor::MoveAnchor,1);
 	QString decList;
 	decList                      = undec +","+ trenteetundec;
-	
+
 //annee
         QString annee                = tr("complete year");
-	QString anneeList;	             
+	QString anneeList;
 	anneeList                    = unjanv+","+ trenteetundec;
 //--------------construction de listes des types----------------------------------------------------------
     if (WarnDebugMessage)
@@ -176,7 +176,7 @@ void ProduceDoc::organize(){
       	      qDebug() << __FILE__ << QString::number(__LINE__) << " thread 2 "   ;
 //------------boucles mois ---------------------------------------------------------------------
     QStringList listeMois;
-        listeMois << janvier << fevrier << mars << avril << mai << juin 
+        listeMois << janvier << fevrier << mars << avril << mai << juin
                   << juillet << aout << sept << oct << nov << dec << annee ;
     QStringList datesMois;
         datesMois << janvList << fevList << marsList << avrList << maiList << juinList << juillList
@@ -188,7 +188,7 @@ void ProduceDoc::organize(){
         QStringList list  = dates.split(",");
         QString debutMois = list[0];
         QString finMois   = list[1];
-        
+
         modele(listeMois[i], debutMois , finMois ,tableFormat,cursortrie);
         cursortrie->movePosition(QTextCursor::End,QTextCursor::MoveAnchor,1);
     }
@@ -198,7 +198,7 @@ QTextTableFormat ProduceDoc::myFormat(QTextTableFormat & tableFormat,QString & p
      QTextTableFormat table         = tableFormat;
      QStringList parametersList     = parametersForTableFormat.split(",");
      if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << " parametersList.size =" 
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << " parametersList.size ="
               << QString::number(parametersList.size()) ;
      tableFormat                     .setBackground(QColor("#C0C0C0"));
      tableFormat                     .setAlignment(Qt::AlignCenter);
@@ -239,7 +239,7 @@ QStringList ProduceDoc::calculateMovements(QString & dateBegin, QString & dateEn
     	if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << "typeAndSumsList[i]  =" << typeAndSumsList[i] ;
         }
-    
+
     return typeAndSumsList;
 }
 //--------------------fonction de remplissage de tableau par mois-------------------------------------------
@@ -253,15 +253,15 @@ bool ProduceDoc::modele(QString & month,
     QString trenteetquelque              = lastDay;
     QTextTableFormat tableFormatModele   = tableFormatOrganized;
     QTextCursor *cursorForFillFunction   = cursorForFunction;
-    
+
     LedgerIO lio(0);
     QList<QVector<QString> > tableLedgerMonth;
     if (WarnDebugMessage)
-    
+
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " thread 3 "   ;
-    tableLedgerMonth = lio.getDatasReceiptsInVector(un,trenteetquelque);  
+    tableLedgerMonth = lio.getDataReceiptsInVector(un,trenteetquelque);
     if (WarnDebugMessage)
-    
+
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " thread 4 "   ;
 //---------------itération recettes par type-----------------------------------------------------------------
     QList<QVector<QString> > tableLedgerTypeReceipts;
@@ -278,9 +278,9 @@ bool ProduceDoc::modele(QString & month,
                   {
                       QVector<QString> vectorLibelle;
                       emit recupSlot(thisMonth+": "+vector[DATE]);//renseigne le QLabel label_5
-                      vectorLibelle           << vector[DATE] 
-                                              << vector[PATIENT_NAME] 
-                                              << vector[j+PLACE_OF_CASH] 
+                      vectorLibelle           << vector[DATE]
+                                              << vector[PATIENT_NAME]
+                                              << vector[j+PLACE_OF_CASH]
                                               << vector[ACTS] ;
                       tableLedgerTypeReceipts << vectorLibelle;
                   }
@@ -290,27 +290,27 @@ bool ProduceDoc::modele(QString & month,
 
     QStringList sumsReceipts;
                 sumsReceipts   = calculateReceipts( un, trenteetquelque);
-    if (WarnDebugMessage)    
+    if (WarnDebugMessage)
     	      qDebug() << "tableLedgerTypeReceipts.size()= "+ QString::number(tableLedgerTypeReceipts.size()) << __LINE__;
     QString emptyStringForReceipts;
     fillTable(tableLedgerTypeReceipts,tableFormatModele,cursorForFillFunction,thisMonth,sumsReceipts,RECEIPTS_TYPE,emptyStringForReceipts);
 //----------------tableau depenses---------------------------------------------------------
     QList<QVector<QString> > tableLedgerMonthDepenses;
-    tableLedgerMonthDepenses = lio.getDatasMovementsInVector(un,trenteetquelque);
+    tableLedgerMonthDepenses = lio.getDataMovementsInVector(un,trenteetquelque);
 
 //----------------iteration des depenses par type------------------------------------------------------
     QList<QVector<QString> > tableauLivreTypeDepense;
     QStringList listOfTypeMovements;
     listOfTypeMovements = m_typesMovements;
     if (WarnDebugMessage)
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << "m_typesMovements.size()  =" 
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << "m_typesMovements.size()  ="
     	      <<  QString::number(m_typesMovements.size());
     for(int i = 0 ; i < listOfTypeMovements.size() ; i++){
             QVector<QString> vector;
             foreach(vector,tableLedgerMonthDepenses){
                  if(vector[VM_LABEL] == listOfTypeMovements[i]){
-                     if (WarnDebugMessage)    
-    	                 qDebug() << __FILE__ << QString::number(__LINE__) 
+                     if (WarnDebugMessage)
+    	                 qDebug() << __FILE__ << QString::number(__LINE__)
     	                 << "vector[VM_LABEL]  =" << vector[VM_LABEL] ;
                      tableauLivreTypeDepense << vector;
                      }
@@ -322,7 +322,7 @@ bool ProduceDoc::modele(QString & month,
     if (sommedepenses.size()>0)
     {
     	  totalOfMovements = sommedepenses.last().split("=")[1];
-    	  
+
     	  //sommedepenses.removeAt(0);
         }
     fillTable(tableauLivreTypeDepense,tableFormatModele,cursorForFillFunction,thisMonth,sommedepenses,MOVEMENTS_TYPE,totalOfMovements);
@@ -334,8 +334,8 @@ bool ProduceDoc::modele(QString & month,
 void ProduceDoc::fillTable(QList<QVector<QString> > & tableau,
                            QTextTableFormat & tableFormatOrganized,
                            QTextCursor * cursorForFillFunction,
-                           QString & thisMonth, 
-                           QStringList & listSums, 
+                           QString & thisMonth,
+                           QStringList & listSums,
                            int choice,
                            const QString & totalMovementString){
     QList<QVector<QString> > tableauInFonction;
@@ -352,7 +352,7 @@ void ProduceDoc::fillTable(QList<QVector<QString> > & tableau,
         /*for (int i = 0; i < totalSumsList.size(); i += 1)
         {
         	if (WarnDebugMessage)
-    
+
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " totalSumsList =" << totalSumsList[i] ;
             }*/
         if(choice == RECEIPTS_TYPE){
@@ -365,7 +365,7 @@ void ProduceDoc::fillTable(QList<QVector<QString> > & tableau,
             }
         QTextBlockFormat centerHead ;
        //centrer                       .setBackground(Qt::yellow) ;
-       if (WarnDebugMessage)    
+       if (WarnDebugMessage)
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " thisMonthfonction =" << thisMonthfonction ;
            QString heads = tr("Month of ")+thisMonthfonction+" = "+type;
        if (thisMonthfonction == tr("complete year"))
@@ -377,10 +377,10 @@ void ProduceDoc::fillTable(QList<QVector<QString> > & tableau,
            cursortrieinfunction         -> insertHtml("<font size = 6 color = #3300FF><bold><br/>"
                                                       "<br/>"+heads+"<bold>"
                                                       "</font><br/><br/>");
-        QTextTableFormat tableFormatDone;   
+        QTextTableFormat tableFormatDone;
         myFormat(tableFormatDone,m_tablesRecapParameters);
         if (WarnDebugMessage)
-    
+
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " thread 10 "   ;
         if(sizeOfTable!= 0){
             if((thisMonthfonction != tr("complete year")) ){
@@ -391,13 +391,13 @@ void ProduceDoc::fillTable(QList<QVector<QString> > & tableau,
                 QVector<QString> vectorString;
                     vectorString = tableauInFonction[i];
                 /*if (WarnDebugMessage)
-    
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << "vectorString size  =" 
+
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << "vectorString size  ="
                                      <<  QString::number(vectorString.size());*/
                 QStringList list; // liste des données de la ligne
                 /*if (WarnDebugMessage)
-    
-    	      qDebug() << __FILE__ << QString::number(__LINE__) << "nbreColonnesTableau  = " 
+
+    	      qDebug() << __FILE__ << QString::number(__LINE__) << "nbreColonnesTableau  = "
                          << QString::number(nbreColonnesTableau)  ;*/
     	        for (int a = 0 ;a < nbreColonnesTableau ; a++){
                     QString str = vectorString[a];
@@ -434,7 +434,7 @@ void ProduceDoc::fillTable(QList<QVector<QString> > & tableau,
      table                          -> mergeCells(table->rows()-1,2,1,3);
      cellCursor2                      .insertText(total);
     cursortrieinfunction            -> movePosition(QTextCursor::End,QTextCursor::MoveAnchor,1);
-    
+
     QTextBlockFormat centrer1 ;
        //centrer1                       .setBackground(Qt::yellow) ;
        centrer1                        .setForeground(Qt::red) ;
@@ -443,10 +443,10 @@ void ProduceDoc::fillTable(QList<QVector<QString> > & tableau,
        cursortrieinfunction          -> insertBlock(centrer1);
        cursortrieinfunction          -> insertHtml ("<font size = 6 color = #3300FF><bold><br/>"
                                                     "<br/>"+headAccumulation+"<bold></font>"
-                                                    "<br/><br/>");       
+                                                    "<br/><br/>");
     }
     if (WarnDebugMessage)
-    
+
     	      qDebug() << __FILE__ << QString::number(__LINE__) << " thread 12 "   ;
 //---------------insertion table recapitulative----------------------------------
 //---------------complete year---------------------------------------------------
@@ -490,7 +490,7 @@ void ProduceDoc::fillTable(QList<QVector<QString> > & tableau,
             cellCursor40              . insertHtml(totalReceiptsHtml);
             QTextTableCell cell41     = tableRecap->cellAt(4,1);
             QTextCursor cellCursor41  = cell41.firstCursorPosition();
-            cellCursor41              . insertText(totalReceipts);  
+            cellCursor41              . insertText(totalReceipts);
             }
     if(choice == MOVEMENTS_TYPE){
         //nbreLignesTableau = m_typesMovements.size();
@@ -521,7 +521,7 @@ void ProduceDoc::fillTable(QList<QVector<QString> > & tableau,
     	      qDebug() << __FILE__ << QString::number(__LINE__) << "paireDepenseMontantLeft  =" << paireDepenseMontantLeft ;
              if (paireDepenseMontantLeft == tr("Total"))
              {
-             	  
+
              	  if (WarnDebugMessage)
     	          qDebug() << __FILE__ << QString::number(__LINE__) << "in total";
              	  QString totalInHtml = QString("<html><font size = 4 color = #FF0000><bold>%1<bold></font></html>")

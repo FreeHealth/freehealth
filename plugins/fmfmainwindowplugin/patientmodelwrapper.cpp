@@ -77,8 +77,8 @@ QModelIndex PatientModelWrapper::currentPatientIndex() const
 
 /**
   \brief Return the Patient's Data represented by the \e index.column().
-  The wrapper model searches in the identity model (Patient::PatientModel) and if it does not found
-  value, searches in the Forms (some Form::FormItem can represent patient values).
+  The wrapper model searches in the identity model (Patient::PatientModel) and if it cannot find
+  a value, it searches in the Forms (some Form::FormItem can represent patient values).
 */
 QVariant PatientModelWrapper::data(const QModelIndex &index, int role) const
 {
@@ -88,7 +88,7 @@ QVariant PatientModelWrapper::data(const QModelIndex &index, int role) const
     if (role != Qt::DisplayRole && role != Qt::EditRole)
         return QVariant();
 
-    // get datas from the model
+    // get data from the model
     QModelIndex idx = m_Model->index(index.row(), index.column());
     QVariant result = m_Model->data(idx, role);
     if (!result.isNull())

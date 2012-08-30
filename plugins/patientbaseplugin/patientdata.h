@@ -44,7 +44,7 @@ public:
     PatientData();
     ~PatientData();
 
-    // inalterable datas --> use a model
+    // inalterable data --> use a model
     QString uuid() const;
     QString name() const;
     QString firstname() const;

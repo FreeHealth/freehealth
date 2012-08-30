@@ -91,7 +91,7 @@ public:
     UserData *getUserByLoginPassword(const QVariant &login, const QVariant &cryptedPassword) const;
     UserData *getUserByUuid(const QString &uuid) const;
 
-    // datas retrievers
+    // data retrievers
     QString getUuid(const QString &log64, const QString &cryptpass64);
     QString createNewUuid();
     QString getLogin64(const QString &uuid);
@@ -106,7 +106,7 @@ public:
     bool changeUserPassword(UserData *user, const QString &clearPassword);
     bool saveUserDynamicData(const QString &userUid, const QString &dynDataUuid, const QVariant &value);
 
-    // datas checkers
+    // data checkers
     bool checkLogin(const QString &clearLogin, const QString &clearPassword) const;
     bool isLoginAlreadyExists(const QString &clearLogin) const;
     QDateTime recordLastLogin(const QString &log, const QString &pass);

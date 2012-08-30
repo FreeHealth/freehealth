@@ -82,7 +82,7 @@ public:
     Form::FormItemValues *valueReferences() const {return m_Values;}
 
     // Access to database values. Pointer will not be deleted
-    void setItemDatas(Form::IFormItemData *data) {m_ItemData = data;}
+    void setItemData(Form::IFormItemData *data) {m_ItemData = data;}
     Form::IFormItemData *itemData() {return m_ItemData;}
 
     // Access to the user's widget
@@ -96,10 +96,10 @@ public:
     virtual QList<FormItem *> formItemChildren() const;
     virtual QList<FormItem *> flattenFormItemChildren() const;
 
-    // FormIO extra datas
+    // FormIO extra data
     virtual void addExtraData(const QString &id, const QString &data);
-    virtual QHash<QString,QString> extraDatas() const {return m_ExtraData;}
-    virtual void clearExtraDatas() {m_ExtraData.clear();}
+    virtual QHash<QString,QString> extraData() const {return m_ExtraData;}
+    virtual void clearExtraData() {m_ExtraData.clear();}
     virtual QStringList getOptions() const;
 
     // Data representation

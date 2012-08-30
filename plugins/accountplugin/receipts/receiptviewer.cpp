@@ -474,7 +474,7 @@ bool treeViewsActions::fillActionTreeView()
         if (WarnDebugMessage)
         qDebug() << __FILE__ << QString::number(__LINE__) << "table" << table;
         QStringList listOfItemsOfTable;
-        listOfItemsOfTable = manager.getParametersDatas(m_userUuid,item).keys();//QHash<QString,QVariant> name,uid
+        listOfItemsOfTable = manager.getParametersData(m_userUuid,item).keys();//QHash<QString,QVariant> name,uid
         QString strItemsOfTable;
         foreach(strItemsOfTable,listOfItemsOfTable){
             m_mapSubItems.insertMulti(table,strItemsOfTable);

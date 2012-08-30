@@ -272,8 +272,8 @@ void SumWidget::retranslate()
 
 void SumWidget::connectFormItems()
 {
-//    qWarning() << "SUM requiered" << formItem()->extraDatas().value(::SUM_EXTRA_KEY) << formItem()->extraDatas().value(::SUM_REGEXP_EXTRA_KEY);
-    if (formItem()->extraDatas().value(::SUM_EXTRA_KEY).isEmpty() && formItem()->extraDatas().value(::SUM_REGEXP_EXTRA_KEY).isEmpty()) {
+//    qWarning() << "SUM requiered" << formItem()->extraData().value(::SUM_EXTRA_KEY) << formItem()->extraData().value(::SUM_REGEXP_EXTRA_KEY);
+    if (formItem()->extraData().value(::SUM_EXTRA_KEY).isEmpty() && formItem()->extraData().value(::SUM_REGEXP_EXTRA_KEY).isEmpty()) {
         LOG_ERROR("Sum widget: No sumof tag <sumof> or <sumof_regexp>.");
         return;
     }
@@ -283,8 +283,8 @@ void SumWidget::connectFormItems()
         return;
     }
 //            qWarning() << "Parent = " << p->uuid();
-    if (!formItem()->extraDatas().value(::SUM_EXTRA_KEY).isEmpty()) {
-        QStringList uuids = formItem()->extraDatas().value(::SUM_EXTRA_KEY).split(";");
+    if (!formItem()->extraData().value(::SUM_EXTRA_KEY).isEmpty()) {
+        QStringList uuids = formItem()->extraData().value(::SUM_EXTRA_KEY).split(";");
         // get all formitems and connect to the dataChanged signal
         QList<Form::FormItem *> items = p->flattenFormItemChildren();
         foreach(QString uid, uuids) {
@@ -301,8 +301,8 @@ void SumWidget::connectFormItems()
                 }
             }
         }
-    } else if (!formItem()->extraDatas().value(::SUM_REGEXP_EXTRA_KEY).isEmpty()) {
-        QRegExp reg(formItem()->extraDatas().value(::SUM_REGEXP_EXTRA_KEY), Qt::CaseInsensitive, QRegExp::Wildcard);
+    } else if (!formItem()->extraData().value(::SUM_REGEXP_EXTRA_KEY).isEmpty()) {
+        QRegExp reg(formItem()->extraData().value(::SUM_REGEXP_EXTRA_KEY), Qt::CaseInsensitive, QRegExp::Wildcard);
         QList<Form::FormItem *> items = p->flattenFormItemChildren();
         for(int i = 0; i < items.count(); ++i) {
             Form::FormItem *item = items.at(i);
@@ -319,15 +319,15 @@ void SumWidget::connectFormItems()
 void SumWidget::recalculate(const int modifiedRef)
 {
     Q_UNUSED(modifiedRef);
-//    qWarning() << "SUM recalculate" << formItem()->extraDatas().value(::SUM_EXTRA_KEY);
+//    qWarning() << "SUM recalculate" << formItem()->extraData().value(::SUM_EXTRA_KEY);
     Form::FormMain *p = formItem()->parentFormMain();
     if (!p) {
         LOG_ERROR("No FormMain parent");
         return;
     }
     double sum = 0;
-    if (!formItem()->extraDatas().value(::SUM_EXTRA_KEY).isEmpty()) {
-        QStringList uuids = formItem()->extraDatas().value(::SUM_EXTRA_KEY).split(";");
+    if (!formItem()->extraData().value(::SUM_EXTRA_KEY).isEmpty()) {
+        QStringList uuids = formItem()->extraData().value(::SUM_EXTRA_KEY).split(";");
         // get all formitems and connect to the dataChanged signal
         QList<Form::FormItem *> items = p->flattenFormItemChildren();
         foreach(const QString &uid, uuids) {
@@ -339,8 +339,8 @@ void SumWidget::recalculate(const int modifiedRef)
                 }
             }
         }
-    } else if (!formItem()->extraDatas().value(::SUM_REGEXP_EXTRA_KEY).isEmpty()) {
-        QRegExp reg(formItem()->extraDatas().value(::SUM_REGEXP_EXTRA_KEY), Qt::CaseInsensitive, QRegExp::Wildcard);
+    } else if (!formItem()->extraData().value(::SUM_REGEXP_EXTRA_KEY).isEmpty()) {
+        QRegExp reg(formItem()->extraData().value(::SUM_REGEXP_EXTRA_KEY), Qt::CaseInsensitive, QRegExp::Wildcard);
         QList<Form::FormItem *> items = p->flattenFormItemChildren();
         for(int i = 0; i < items.count(); ++i) {
             Form::FormItem *item = items.at(i);
@@ -478,9 +478,9 @@ void ScriptWidget::retranslate()
 
 void ScriptWidget::connectFormItems()
 {
-//    qWarning() << "CalculationScript" << formItem()->extraDatas().value(::CONNECT_EXTRA_KEY) << formItem()->extraDatas().value(::CONNECT_REGEXP_EXTRA_KEY);
-    if (formItem()->extraDatas().value(::CONNECT_EXTRA_KEY).isEmpty() &&
-            formItem()->extraDatas().value(::CONNECT_REGEXP_EXTRA_KEY).isEmpty()) {
+//    qWarning() << "CalculationScript" << formItem()->extraData().value(::CONNECT_EXTRA_KEY) << formItem()->extraData().value(::CONNECT_REGEXP_EXTRA_KEY);
+    if (formItem()->extraData().value(::CONNECT_EXTRA_KEY).isEmpty() &&
+            formItem()->extraData().value(::CONNECT_REGEXP_EXTRA_KEY).isEmpty()) {
         LOG_ERROR("Calculation script widget: No <connect> tag.");
         return;
     }
@@ -490,9 +490,9 @@ void ScriptWidget::connectFormItems()
         return;
     }
 //    qWarning() << "Parent = " << p->uuid();
-//    QString ns = formItem()->extraDatas().value(::SCRIPT_NS_EXTRA_KEY);
-    QString itemList = formItem()->extraDatas().value(::CONNECT_EXTRA_KEY);
-    QString regexp = formItem()->extraDatas().value(::CONNECT_REGEXP_EXTRA_KEY);
+//    QString ns = formItem()->extraData().value(::SCRIPT_NS_EXTRA_KEY);
+    QString itemList = formItem()->extraData().value(::CONNECT_EXTRA_KEY);
+    QString regexp = formItem()->extraData().value(::CONNECT_REGEXP_EXTRA_KEY);
     // Find all items to connect
     QList<Form::FormItem *> children = p->flattenFormItemChildren();
     if (!itemList.isEmpty()) {
@@ -529,13 +529,13 @@ void ScriptWidget::connectFormItems()
 void ScriptWidget::recalculate(const int modifiedRef)
 {
     Q_UNUSED(modifiedRef);
-//    qWarning() << "CalculationScript recalculate" << formItem()->extraDatas().value(::SCRIPT_EXTRA_KEY);
+//    qWarning() << "CalculationScript recalculate" << formItem()->extraData().value(::SCRIPT_EXTRA_KEY);
     Form::FormMain *p = formItem()->parentFormMain();
     if (!p) {
         LOG_ERROR("No FormMain parent");
         return;
     }
-    QString script = formItem()->extraDatas().value(::SCRIPT_EXTRA_KEY);
+    QString script = formItem()->extraData().value(::SCRIPT_EXTRA_KEY);
 
     // evaluate the script using the Core::IScriptEngine
     QScriptValue val = scriptManager()->evaluate(script);

@@ -19,46 +19,56 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developer : Christian A. Reiter <christian.a.reiter@gmail.com>   *
+ *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef PIXMAPBUTTON_H
-#define PIXMAPBUTTON_H
+#ifndef FORM_FORMTREEMODEL_H
+#define FORM_FORMTREEMODEL_H
 
-#include <QPushButton>
-   
-namespace Patients {
-/*!
- * \class PixmapButton
- * \brief This class provides a QPushButton with a displayed Pixmap on it.
- *
- * The normal Qt QPushButton only can store a QIcon and has ho pixmap property. This
- * can be unconvenient when using the button as display widget in a MVC pattern as
- * widget - a QDataWidgetMapper doesn't know how to handle a QPushbutton.
- * Here comes the PixmapButton. It still displays a QIcon, but stores a QPixmap underneath.
- * It also provides a \e pixmap property for easy interacting with a QDataWidgetMapper.
- *
- */
-class PixmapButton : public QPushButton
+#include <formmanagerplugin/formmanager_exporter.h>
+
+#include <QStandardItemModel>
+
+/**
+ * \file formtreemodel.h
+ * \author Eric MAEKER <eric.maeker@gmail.com>
+ * \version 0.8.0
+ * \date 26 Aug 2012
+*/
+
+namespace Form {
+class FormMain;
+namespace Internal {
+class FormTreeModelPrivate;
+}
+
+class FORM_EXPORT FormTreeModel : public QStandardItemModel
 {
     Q_OBJECT
-    Q_PROPERTY(QPixmap pixmap READ pixmap WRITE setPixmap)
-
 public:
-    explicit PixmapButton(QWidget* parent = 0);
-    QPixmap pixmap() const;
+    enum DataRepresentation {
+        Label = 0,
+        EmptyColumn1,
+        EmptyColumn2,
+        MaxData
+    };
 
-Q_SIGNALS:
+    explicit FormTreeModel(Form::FormMain *emptyRootForm, QObject *parent = 0);
+    ~FormTreeModel();
 
-public Q_SLOTS:
-    void setPixmap(const QPixmap&);
+    void init();
+    void refreshFormTree();
+
+//    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+//    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
+    Qt::ItemFlags flags(const QModelIndex &index) const;
 
 private:
-    QPixmap m_pixmap;
+    Internal::FormTreeModelPrivate *d;
 };
 
-} // end Patients
+} // namespace Form
 
-#endif // PIXMAPBUTTON_H
+#endif // FORM_FORMTREEMODEL_H

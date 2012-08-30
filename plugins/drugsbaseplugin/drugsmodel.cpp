@@ -463,7 +463,7 @@ bool DrugsModel::setData(const QModelIndex &index, const QVariant &value, int ro
 /**
   Set data for the specified drug with the corresponding \e CIS.
   Drug must be set into the model otherwise, this function returns false.\n
-  If you want the model to be refreshed call resetModel() after all datas were set.
+  If you want the model to be refreshed, call resetModel() after all data were set.
 */
 bool DrugsModel::setDrugData(const QVariant &drugId, const int column, const QVariant &value)
 {
@@ -493,10 +493,10 @@ void DrugsModel::resetModel()
 /**
   Returns the values of drugs and prescription, you can not access to the dosage model this way.
   DosageModel regarding a specific drug is accessible using dosageModel().\n
-  Available datas index :
-  \li Drugs specific datas : see DrugsDB::Constants::Drug enumerator
-  \li Interactions specific datas : see DrugsDB::Constants::Interaction enumerator
-  \li Prescription datas : see DrugsDB::Constants::Prescription enumerator
+  Available data index:
+  \li Drugs specific data: see DrugsDB::Constants::Drug enumerator
+  \li Interactions specific data: see DrugsDB::Constants::Interaction enumerator
+  \li Prescription data: see DrugsDB::Constants::Prescription enumerator
 */
 QVariant DrugsModel::data(const QModelIndex &index, int role) const
 {

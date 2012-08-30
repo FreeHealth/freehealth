@@ -63,10 +63,10 @@ DrugsUserWidget::DrugsUserWidget(QWidget *parent) :
     setupUi(this);
     previewer = Print::Printer::previewer(this);
     userLayout->addWidget(previewer, 0,0);
-    setDatasToUi();
+    setDataToUi();
 }
 
-void DrugsUserWidget::setDatasToUi()
+void DrugsUserWidget::setDataToUi()
 {
     Core::ISettings *s = settings();
     previewer->setHeaderHtml(s->value(DrugsDB::Constants::S_USERHEADER).toString());
@@ -135,7 +135,7 @@ int DrugsUserOptionsPage::sortIndex() const {return 50;}
 void DrugsUserOptionsPage::resetToDefaults()
 {
     m_Widget->writeDefaultSettings(settings());
-    m_Widget->setDatasToUi();
+    m_Widget->setDataToUi();
 }
 
 void DrugsUserOptionsPage::applyChanges()

@@ -221,7 +221,7 @@ VirtualDatabaseCreator::~VirtualDatabaseCreator()
     delete ui;
 }
 
-void VirtualDatabaseCreator::setDatasToUi()
+void VirtualDatabaseCreator::setDataToUi()
 {
 }
 

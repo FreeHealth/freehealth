@@ -70,7 +70,7 @@ class BankDetailsWidget : public QWidget, private Ui::BankDetailsWidget
 public:
     explicit BankDetailsWidget(QWidget *parent = 0);
     ~BankDetailsWidget();
-    void setDatasToUi();
+    void setDataToUi();
     static void writeDefaultSettings( Core::ISettings *s );
 
 public Q_SLOTS:

@@ -68,7 +68,7 @@ private:
 private Q_SLOTS:
     void done(int r);
     void updateSettings();
-    void protocolDatasChanged();
+    void protocolDataChanged();
     void saveRequested();
     void prescribeRequested();
     void saveAndPrescribeRequested();

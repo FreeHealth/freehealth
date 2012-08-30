@@ -54,7 +54,7 @@ class PmhPreferencesWidget : public QWidget, private Ui::PmhPreferencesWidget
 
 public:
     explicit PmhPreferencesWidget(QWidget *parent = 0);
-    void setDatasToUi();
+    void setDataToUi();
 
     static void writeDefaultSettings(Core::ISettings *s);
     static void applyToModel();

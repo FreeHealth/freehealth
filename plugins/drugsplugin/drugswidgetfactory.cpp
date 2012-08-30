@@ -162,7 +162,7 @@ DrugsPrescriptorWidget::DrugsPrescriptorWidget(const QString &name, Form::FormIt
 
     // create main widget
     m_CentralWidget = new DrugsCentralWidget(this);
-    m_CentralWidget->initialize(formItem->extraDatas().value("options").contains(OPTION_HIDESELECTOR, Qt::CaseInsensitive));
+    m_CentralWidget->initialize(formItem->extraData().value("options").contains(OPTION_HIDESELECTOR, Qt::CaseInsensitive));
     m_PrescriptionModel = m_CentralWidget->currentDrugsModel();
 
     // Manage options
@@ -190,9 +190,9 @@ DrugsPrescriptorWidget::DrugsPrescriptorWidget(const QString &name, Form::FormIt
     }
 
     // create formitemdata
-    DrugsWidgetData *datas = new DrugsWidgetData(formItem);
-    datas->setDrugsPrescriptorWidget(this);
-    formItem->setItemDatas(datas);
+    DrugsWidgetData *drugsWidgetData = new DrugsWidgetData(formItem);
+    drugsWidgetData->setDrugsPrescriptorWidget(this);
+    formItem->setItemData(drugsWidgetData);
 }
 
 DrugsPrescriptorWidget::~DrugsPrescriptorWidget()

@@ -623,7 +623,7 @@ bool XmlFormContentReader::createElement(Form::FormItem *item, QDomElement &elem
             }
 
             loadElement(item, element, form);
-            // read specific form's datas
+            // read specific form's data
             m_ActualForm = oldRootForm;
             return true;
         }
@@ -648,7 +648,7 @@ bool XmlFormContentReader::createElement(Form::FormItem *item, QDomElement &elem
                 item->spec()->setValue(Form::FormItemSpec::Spec_Plugin, element.attribute(Constants::ATTRIB_TYPE), Trans::Constants::ALL_LANGUAGE);
 
             loadElement(item, element, form);
-            // read specific page's datas
+            // read specific page's data
             return true;
         }
         else

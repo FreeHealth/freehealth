@@ -51,7 +51,7 @@ class CORE_EXPORT PluginDialog : public QDialog
 public:
     explicit PluginDialog(QWidget *parent);
 
-private slots:
+private Q_SLOTS:
     void updateButtons();
     void openDetails();
     void openDetails(ExtensionSystem::PluginSpec *spec);

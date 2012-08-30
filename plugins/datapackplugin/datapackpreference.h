@@ -60,7 +60,7 @@ public:
     explicit DataPackPreferenceWidget(QWidget *parent = 0);
     ~DataPackPreferenceWidget();
 
-    void setDatasToUi();
+    void setDataToUi();
     static void writeDefaultSettings(Core::ISettings *s = 0);
 
 public Q_SLOTS:

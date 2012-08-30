@@ -65,7 +65,7 @@ int PrinterPreferencesPage::sortIndex() const {return 0;}
 void PrinterPreferencesPage::resetToDefaults()
 {
     m_Widget->writeDefaultSettings(settings());
-    m_Widget->setDatasToUi();
+    m_Widget->setDataToUi();
 }
 
 void PrinterPreferencesPage::applyChanges()
@@ -108,10 +108,10 @@ PrinterPreferencesWidget::PrinterPreferencesWidget(QWidget *parent) :
         QWidget(parent)
 {
     setupUi(this);
-    setDatasToUi();
+    setDataToUi();
 }
 
-void PrinterPreferencesWidget::setDatasToUi()
+void PrinterPreferencesWidget::setDataToUi()
 {
     printerList->clear();
     if (!QPrinterInfo::availablePrinters().count()) {

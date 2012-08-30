@@ -97,7 +97,7 @@ private:
     // Returns overridden title or the one from <title>
     QString makeDialogTitle(const QString &title);
 
-signals:
+Q_SIGNALS:
     void validChanged();
     void validChanged(bool validState);
     void changed(const QString &text);
@@ -106,10 +106,10 @@ signals:
     void browsingFinished();
     void returnPressed();
 
-public slots:
+public Q_SLOTS:
     void setPath(const QString &);
 
-private slots:
+private Q_SLOTS:
     void slotBrowse();
 
 private:

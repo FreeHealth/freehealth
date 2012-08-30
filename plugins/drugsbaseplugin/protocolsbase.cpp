@@ -523,7 +523,7 @@ QList<QVariant> ProtocolsBase::getAllUIDThatHaveRecordedDosages() const
     if (!connectDatabase(DrugsDB, __FILE__, __LINE__))
         return toReturn;
 
-    // get all needed datas from database
+    // get all needed data from database
     foreach(int inn, inn_dosageRef.keys()) {
         const QVector<int> &molIds = drugsBase().getLinkedMoleculeCodes(inn);
         for(int i = 0; i < molIds.count(); ++i) {

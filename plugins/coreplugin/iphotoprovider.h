@@ -28,15 +28,16 @@ class QPixmap;
 
 namespace Core {
 /*!
-  \class Patients::IPhotoProvider
-  \brief Provides a hook for plugins that return a photo path.
-
-  Implement this interface if you want to provide another way of
-  fetching a foto for the user instead of the default (searching for it
-  in the files system).
-  Possibilities are webcams, scanners, other databases, LDAP, etc.
-
-  The recievePhotoFile() method should return a filename of an \e existing photo.
+ * \interface Patients::IPhotoProvider
+ * \brief Provides a hook for plugins that return a photo path.
+ *
+ * Implement this interface if you want to provide another way of
+ * fetching a foto for the user instead of the default (searching for it
+ * in the files system).
+ * Possibilities are webcams, scanners, other databases, LDAP, etc.
+ *
+ * The recievePhotoFile() method must return a QPixmap - if there was an error
+ * it should return an empty QPixmap().
  */
 
 class CORE_EXPORT IPhotoProvider : public QObject
@@ -46,6 +47,7 @@ public:
     explicit IPhotoProvider(QObject *parent = 0) : QObject(parent) {}
     virtual ~IPhotoProvider() {}
 
+    /*! returns a photo as a Pixmap. In case or errors return a QPixmap() */
     virtual QPixmap recievePhoto() = 0;
 };
 
