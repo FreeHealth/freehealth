@@ -16,7 +16,6 @@ include(patientbaseplugin_dependencies.pri)
 HEADERS = patientbaseplugin.h \
     patientbase_exporter.h \
     patientbase.h \
-    patientdata.h \
     patientmodel.h \
     identitywidget.h \
     constants_db.h \
@@ -35,7 +34,6 @@ HEADERS = patientbaseplugin.h \
 
 SOURCES = patientbaseplugin.cpp \
     patientbase.cpp \
-    patientdata.cpp \
     patientmodel.cpp \
     identitywidget.cpp \
     patientselector.cpp \
