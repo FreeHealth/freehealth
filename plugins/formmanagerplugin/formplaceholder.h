@@ -44,6 +44,7 @@ namespace Form {
 class EpisodeModel;
 class FormMain;
 class FormPlaceHolder;
+class FormTreeModel;
 
 namespace Internal {
 class FormPlaceHolderPrivate;
@@ -53,7 +54,7 @@ class FormItemDelegate : public QStyledItemDelegate
     Q_OBJECT
 public:
     FormItemDelegate(QObject *parent = 0);
-    void setEpisodeModel(EpisodeModel *model);
+    void setFormTreeModel(FormTreeModel *model);
 
     void paint(QPainter *painter, const QStyleOptionViewItem &option,
                const QModelIndex &index) const;
@@ -63,7 +64,7 @@ public:
 
 public:
     mutable QModelIndex pressedIndex;
-    EpisodeModel *m_EpisodeModel;
+    FormTreeModel *_formTreeModel;
 };
 }  // End namespace Internal
 
@@ -78,7 +79,6 @@ public:
     ~FormPlaceHolder();
 
     void setRootForm(Form::FormMain *rootForm);
-
     void addBottomWidget(QWidget *bottom);
 
 public Q_SLOTS:
@@ -86,7 +86,8 @@ public Q_SLOTS:
     void setCurrentForm(const QString &formUid);
     void setCurrentEditingItem(const QModelIndex &index);
 
-protected Q_SLOTS:
+private Q_SLOTS:
+    void episodeChanged(const QModelIndex &current, const QModelIndex &previous);
     void handlePressed(const QModelIndex &index);
     void handleClicked(const QModelIndex &index);
 

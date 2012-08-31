@@ -26,14 +26,20 @@
       </property>
       <widget class="QWidget" name="">
        <layout class="QVBoxLayout" name="verticalLayout">
-        <property name="spacing">
-         <number>0</number>
-        </property>
+       <property name="spacing">
+        <number>0</number>
+       </property>
+       <property name="margin">
+        <number>0</number>
+       </property>
         <item>
          <layout class="QHBoxLayout" name="toolbarLayout">
-          <property name="spacing">
-           <number>0</number>
-          </property>
+         <property name="spacing">
+          <number>0</number>
+         </property>
+         <property name="margin">
+          <number>0</number>
+         </property>
          </layout>
         </item>
         <item>

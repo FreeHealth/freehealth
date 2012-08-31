@@ -157,16 +157,6 @@ public:
         delete ui;
     }
 
-    void useEpisodeModel(Form::FormMain *form)
-    {
-        if (!form)
-            return;
-        EpisodeModel *model = formManager()->episodeModel(form);
-        if (!model)
-            LOG_ERROR_FOR(q, "No episode model for form " + form->uuid());
-        ui->episodeView->setModel(model);
-    }
-
 public:
     Ui::FormPlaceHolder *ui;
     FormMain *_rootForm;
@@ -180,13 +170,14 @@ private:
 };
 
 FormItemDelegate::FormItemDelegate(QObject *parent) :
-        QStyledItemDelegate(parent)
+    QStyledItemDelegate(parent),
+    _formTreeModel(0)
 {
 }
 
-void FormItemDelegate::setEpisodeModel(EpisodeModel *model)
+void FormItemDelegate::setFormTreeModel(FormTreeModel *model)
 {
-//    _episodeModel = model;
+    _formTreeModel = model;
 }
 
 QSize FormItemDelegate::sizeHint(const QStyleOptionViewItem &option,const QModelIndex &index) const
@@ -201,58 +192,49 @@ QSize FormItemDelegate::sizeHint(const QStyleOptionViewItem &option,const QModel
 void FormItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
            const QModelIndex &index) const
 {
-//    const bool topLevel = !index.parent().isValid();
-
     // Add the fancy button
-//    if (option.state & QStyle::State_MouseOver) {
-//        if ((QApplication::mouseButtons() & Qt::LeftButton) == 0)
-//            pressedIndex = QModelIndex();
-//        QBrush brush = option.palette.alternateBase();
-//        if (index == pressedIndex)
-//            brush = option.palette.dark();
-//        painter->fillRect(option.rect, brush);
-//    }
+    if (option.state & QStyle::State_MouseOver) {
+        if ((QApplication::mouseButtons() & Qt::LeftButton) == 0)
+            pressedIndex = QModelIndex();
+        QBrush brush = option.palette.alternateBase();
+        if (index == pressedIndex)
+            brush = option.palette.dark();
+        painter->fillRect(option.rect, brush);
+    }
 
-//    QStyledItemDelegate::paint(painter, option, index);
+    QStyledItemDelegate::paint(painter, option, index);
 
-//    // Draw fancy button
-//    if (index.column()==FormTreeModel::EmptyColumn1 && option.state & QStyle::State_MouseOver) {
-//        QIcon icon;
-//        if (option.state & QStyle::State_Selected) {
-//            if (_episodeModel->isEpisode(index)) {
-//                icon = theme()->icon(Core::Constants::ICONVALIDATELIGHT);
-//            } else {
-//                // test the form to be unique or multiple episode
-//                if (_episodeModel->isUniqueEpisode(index) && _episodeModel->rowCount(index) == 1)
-//                    return;
-//                if (_episodeModel->isNoEpisode(index))
-//                    return;
-//                icon = theme()->icon(Core::Constants::ICONADDLIGHT);
-//            }
-//        } else {
-//            if (_episodeModel->isEpisode(index)) {
-//                icon = theme()->icon(Core::Constants::ICONVALIDATEDARK);
-//            } else {
-//                // test the form to be unique or multiple episode
-//                if (_episodeModel->isUniqueEpisode(index) && _episodeModel->rowCount(index) == 1)
-//                    return;
-//                if (_episodeModel->isNoEpisode(index))
-//                    return;
-//                icon = theme()->icon(Core::Constants::ICONADDDARK);
-//            }
-//        }
+    // Draw fancy button
+    if (index.column()==FormTreeModel::EmptyColumn1 &&
+            (option.state & QStyle::State_MouseOver)) {
+        QIcon icon;
+        if (option.state & QStyle::State_Selected) {
+            // test the form to be unique or multiple episode
+            if (_formTreeModel->isUniqueEpisode(index))
+                return;
+            if (_formTreeModel->isNoEpisode(index))
+                return;
+            icon = theme()->icon(Core::Constants::ICONADDLIGHT);
+        } else {
+            // test the form to be unique or multiple episode
+            if (_formTreeModel->isUniqueEpisode(index))
+                return;
+            if (_formTreeModel->isNoEpisode(index))
+                return;
+            icon = theme()->icon(Core::Constants::ICONADDDARK);
+        }
 
-//        QRect iconRect(option.rect.right() - option.rect.height(),
-//                       option.rect.top(),
-//                       option.rect.height(),
-//                       option.rect.height());
+        QRect iconRect(option.rect.right() - option.rect.height(),
+                       option.rect.top(),
+                       option.rect.height(),
+                       option.rect.height());
 
-//        icon.paint(painter, iconRect, Qt::AlignRight | Qt::AlignVCenter);
-//    }
+        icon.paint(painter, iconRect, Qt::AlignRight | Qt::AlignVCenter);
+    }
 }
 
-}
-}
+}  // namespace Internal
+}  // namespace Form
 
 FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
         FormContextualWidget(parent),
@@ -263,6 +245,7 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
     layout()->setMargin(0);
     layout()->setSpacing(0);
 
+    d->_delegate = new Internal::FormItemDelegate(d->ui->formView);
     d->ui->formDataMapper->initialize();
 
     // Manage Form File tree view
@@ -275,24 +258,22 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
     d->ui->formView->addContexts(contexts());
     d->ui->formView->setDeselectable(false);
     d->ui->formView->disconnectActionsToDefaultSlots();
-//    d->ui->formView->viewport()->setAttribute(Qt::WA_Hover);
-//    tree->setItemDelegate((d->_delegate = new Internal::FormItemDelegate(d->ui->formView)));
+    d->ui->formView->treeView()->viewport()->setAttribute(Qt::WA_Hover);
+    d->ui->formView->treeView()->setItemDelegate(d->_delegate);
     d->ui->formView->treeView()->setFrameStyle(QFrame::NoFrame);
     d->ui->formView->treeView()->setAttribute(Qt::WA_MacShowFocusRect, false);
     d->ui->formView->treeView()->setSelectionMode(QAbstractItemView::SingleSelection);
     d->ui->formView->treeView()->setSelectionBehavior(QAbstractItemView::SelectRows);
     d->ui->formView->treeView()->setAlternatingRowColors(settings()->value(Constants::S_USEALTERNATEROWCOLOR).toBool());
-//    tree->setRootIsDecorated(false);
-//    QString css = ::TREEVIEW_SHEET;
-//    if (settings()->value(Constants::S_USESPECIFICCOLORFORROOTS).toBool()) {
-//        css += QString("QTreeView:item:top {background:%1;}")
-////                       "QTreeView::branch:top {background:%1;}")
-//                .arg(settings()->value(Constants::S_FOREGROUNDCOLORFORROOTS).toString());
-//    }
     d->ui->formView->treeView()->setStyleSheet(::TREEVIEW_SHEET);
 
     connect(d->ui->formView, SIGNAL(clicked(QModelIndex)), this, SLOT(handleClicked(QModelIndex)));
     connect(d->ui->formView, SIGNAL(pressed(QModelIndex)), this, SLOT(handlePressed(QModelIndex)));
+
+    d->ui->episodeView->verticalHeader()->hide();
+    d->ui->episodeView->setFrameStyle(QFrame::NoFrame);
+    d->ui->episodeView->setSelectionMode(QAbstractItemView::SingleSelection);
+    d->ui->episodeView->setSelectionBehavior(QAbstractItemView::SelectRows);
 
     Core::Command *cmd = actionManager()->command(Constants::A_ADDEPISODE);
     connect(cmd->action(), SIGNAL(triggered()), this, SLOT(newEpisode()));
@@ -305,8 +286,9 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
     int third = width/3;
     d->ui->horizontalSplitter->setSizes(QList<int>() << third << width-third);
 
-    d->ui->verticalSplitter->setStretchFactor(0, 1);
-    d->ui->verticalSplitter->setStretchFactor(1, 3);
+    int height = size().height();
+    third = height/3;
+    d->ui->verticalSplitter->setSizes(QList<int>() << third << height-third);
 }
 
 FormPlaceHolder::~FormPlaceHolder()
@@ -332,9 +314,10 @@ void FormPlaceHolder::setRootForm(Form::FormMain *rootForm)
         delete d->_formTreeModel;
     d->_formTreeModel = new FormTreeModel(rootForm, this);
     d->_formTreeModel->initialize();
+    d->ui->formView->setModel(d->_formTreeModel);
+    d->_delegate->setFormTreeModel(d->_formTreeModel);
 
     QTreeView *tree = d->ui->formView->treeView();
-    tree->setModel(d->_formTreeModel);
     tree->setSelectionMode(QAbstractItemView::SingleSelection);
     tree->setSelectionBehavior(QAbstractItemView::SelectRows);
     for(int i=0; i < FormTreeModel::MaxData; ++i)
@@ -348,16 +331,6 @@ void FormPlaceHolder::setRootForm(Form::FormMain *rootForm)
     tree->header()->resizeSection(FormTreeModel::EmptyColumn1, 16);
     tree->expandAll();
 
-    // Manage Episode table view / model
-    QTableView *table = d->ui->episodeView;
-    for(int i=0; i < EpisodeModel::MaxData; ++i)
-        table->setColumnHidden(i, true);
-    table->setColumnHidden(EpisodeModel::Label, false);
-    table->setColumnHidden(EpisodeModel::UserCreatorName, false);
-    table->setColumnHidden(EpisodeModel::UserDate, false);
-//    table->setColumnHidden(EpisodeModel::CreationDate, false);
-
-
     Core::Command *cmd = actionManager()->command(Constants::A_SHOWPATIENTLASTEPISODES);
     connect(cmd->action(), SIGNAL(triggered()), this, SLOT(showLastEpisodeSynthesis()));
 
@@ -366,9 +339,9 @@ void FormPlaceHolder::setRootForm(Form::FormMain *rootForm)
     setCurrentForm(Constants::PATIENTLASTEPISODES_UUID);
 }
 
+// Used for the delegate
 void FormPlaceHolder::handlePressed(const QModelIndex &index)
 {
-    qWarning() << "handlePressed";
     if (index.column() == FormTreeModel::Label) {
 //        d->_episodeModel->activateEpisode(index);
     } else if (index.column() == FormTreeModel::EmptyColumn1) {
@@ -376,16 +349,13 @@ void FormPlaceHolder::handlePressed(const QModelIndex &index)
     }
 }
 
+// Used for the delegate
 void FormPlaceHolder::handleClicked(const QModelIndex &index)
 {
-    qWarning() << "handleClicked";
+    setCurrentEditingItem(index);
     if (index.column() == FormTreeModel::EmptyColumn1) { // the funky button
-//        if (d->_episodeModel->isForm(index)) {
-//            newEpisode();
-//        } else {
-//            // TODO: validateEpisode
-////            validateEpisode();
-//        }
+        if (!d->_formTreeModel->isNoEpisode(index))
+            newEpisode();
 
         // work around a bug in itemviews where the delegate wouldn't get the QStyle::State_MouseOver
         QPoint cursorPos = QCursor::pos();
@@ -393,8 +363,6 @@ void FormPlaceHolder::handleClicked(const QModelIndex &index)
         QWidget *vp = tree->viewport();
         QMouseEvent e(QEvent::MouseMove, vp->mapFromGlobal(cursorPos), cursorPos, Qt::NoButton, 0, 0);
         QCoreApplication::sendEvent(vp, &e);
-    } else if(index.column() == FormTreeModel::Label) {
-        setCurrentEditingItem(index);
     }
 }
 
@@ -410,14 +378,35 @@ void FormPlaceHolder::showLastEpisodeSynthesis()
     setCurrentForm(Constants::PATIENTLASTEPISODES_UUID);
 }
 
+/**
+ * Define the current editing form.
+ * \sa setCurrentEditingItem()
+ */
 void FormPlaceHolder::setCurrentForm(Form::FormMain *form)
 {
     if (form)
         qWarning() << "FormPlaceHolder::setCurrentForm" << form->uuid();
     else
         qWarning() << "FormPlaceHolder::setCurrentForm (0x0)";
+
+    if (d->ui->episodeView->selectionModel())
+        disconnect(d->ui->episodeView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(episodeChanged(QModelIndex, QModelIndex)));
+
     d->ui->formDataMapper->setCurrentForm(form);
     d->ui->episodeView->setModel(formManager()->episodeModel(form));
+    for(int i=0; i < EpisodeModel::MaxData; ++i)
+        d->ui->episodeView->hideColumn(i);
+    d->ui->episodeView->showColumn(EpisodeModel::Label);
+    d->ui->episodeView->showColumn(EpisodeModel::UserCreatorName);
+    d->ui->episodeView->showColumn(EpisodeModel::UserDate);
+
+    d->ui->episodeView->horizontalHeader()->setResizeMode(EpisodeModel::UserDate, QHeaderView::ResizeToContents);
+    d->ui->episodeView->horizontalHeader()->setResizeMode(EpisodeModel::Label, QHeaderView::Stretch);
+    d->ui->episodeView->horizontalHeader()->setResizeMode(EpisodeModel::UserCreatorName, QHeaderView::ResizeToContents);
+    d->ui->episodeView->horizontalHeader()->hide();
+
+    connect(d->ui->episodeView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(episodeChanged(QModelIndex, QModelIndex)));
+    d->ui->episodeView->selectRow(0);
 }
 
 void FormPlaceHolder::setCurrentForm(const QString &formUid)
@@ -438,11 +427,15 @@ void FormPlaceHolder::setCurrentForm(const QString &formUid)
 //    }
 }
 
+/**
+ * When using a FormTreeModel you can set the current for with this.
+ * \sa setCurrentForm()
+ */
 void FormPlaceHolder::setCurrentEditingItem(const QModelIndex &index)
 {
+    qWarning() << "FormPlaceHolder::setCurrentEditingItem";
     Form::FormMain *form = d->_formTreeModel->formForIndex(index);
-    d->ui->formDataMapper->setCurrentForm(form);
-    d->useEpisodeModel(form);
+    setCurrentForm(form);
 
 
 //    if (!d) {
@@ -471,6 +464,14 @@ void FormPlaceHolder::setCurrentEditingItem(const QModelIndex &index)
 //            break;
 //        }
 //    }
+}
+
+void FormPlaceHolder::episodeChanged(const QModelIndex &current, const QModelIndex &previous)
+{
+    qWarning() << "FormPlaceHolder::EpisodeChanged" << current.data().toString();
+    if (d->ui->formDataMapper->isDirty())
+        d->ui->formDataMapper->submit();
+    d->ui->formDataMapper->setCurrentEpisode(current);
 }
 
 //void FormPlaceHolder::reset()
