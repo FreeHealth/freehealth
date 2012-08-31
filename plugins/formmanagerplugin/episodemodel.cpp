@@ -146,7 +146,7 @@ class EpisodeModelPrivate
 {
 public:
     EpisodeModelPrivate(EpisodeModel *parent) :
-        _rootForm(0),
+        _formMain(0),
         _readOnly(false),
         _sqlModel(0),
         q(parent)
@@ -165,6 +165,7 @@ public:
         QHash<int, QString> where;
         where.insert(Constants::EPISODES_ISVALID, "=1");
         where.insert(Constants::EPISODES_PATIENT_UID, QString("='%1'").arg(patient()->uuid()));
+        where.insert(Constants::EPISODES_FORM_PAGE_UID, QString("='%1'").arg(_formMain->uuid()));
         _sqlModel->setFilter(episodeBase()->getWhereClause(Constants::Table_EPISODES, where).remove("WHERE"));
         _sqlModel->select();
     }
@@ -198,7 +199,7 @@ public:
     QString createXmlEpisode(const QString &formUid)
     {
         // TODO: code here : use a QDomDocument
-        FormMain *form = _rootForm->formMainChild(formUid);
+        FormMain *form = _formMain->formMainChild(formUid);
         if (!form)
             return QString::null;
 //        bool formIsModified = false;
@@ -398,7 +399,7 @@ public:
 //    }
 
 public:
-    FormMain *_rootForm;
+    FormMain *_formMain;
     bool _readOnly;
     EpisodeModelCoreListener *m_CoreListener;
     EpisodeModelPatientListener *m_PatientListener;
@@ -417,7 +418,7 @@ EpisodeModel::EpisodeModel(FormMain *rootEmptyForm, QObject *parent) :
 {
     Q_ASSERT(rootEmptyForm);
     setObjectName("Form::EpisodeModel");
-    d->_rootForm = rootEmptyForm;
+    d->_formMain = rootEmptyForm;
 
     // Autosave feature
     // -> Core Listener
@@ -467,7 +468,7 @@ EpisodeModel::~EpisodeModel()
 
 QString EpisodeModel::formUid() const
 {
-    return d->_rootForm->uuid();
+    return d->_formMain->uuid();
 }
 
 void EpisodeModel::onCoreDatabaseServerChanged()
@@ -665,7 +666,7 @@ bool EpisodeModel::insertRows(int row, int count, const QModelIndex &parent)
 
     return d->_sqlModel->insertRows(row, count, parent);
 
-//    const QString &formUid = d->_rootForm->uuid();
+//    const QString &formUid = d->_formMain->uuid();
 
 //    beginInsertRows(parent, row, row + count);
 //    for(int i = 0; i < count; ++i) {
@@ -854,7 +855,7 @@ QString EpisodeModel::lastEpisodesSynthesis() const
 //        Utils::Log::logTimeElapsed(chrono, objectName(), "Compute last episode Part 1");
 
     QString html;
-//    foreach(FormMain *f, d->_rootForm->firstLevelFormMainChildren()) {
+//    foreach(FormMain *f, d->_formMain->firstLevelFormMainChildren()) {
 //        if (!f) {
 //            LOG_ERROR("??");
 //            continue;
