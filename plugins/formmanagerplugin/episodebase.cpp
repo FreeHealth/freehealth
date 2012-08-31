@@ -934,6 +934,40 @@ bool EpisodeBase::getEpisodeContent(EpisodeData *episode)
     return true;
 }
 
+/** Return the raw xml content of a episode identified by its \e uid */
+QString EpisodeBase::getEpisodeContent(const QVariant &uid)
+{
+    if (!uid.isValid())
+        return QString::null;
+    if (uid.toInt() < 0)
+        return QString::null;
+    QSqlDatabase DB = QSqlDatabase::database(DB_NAME);
+    if (!connectDatabase(DB, __LINE__)) {
+        return false;
+    }
+    QHash<int, QString> where;
+    where.insert(Constants::EPISODE_CONTENT_EPISODE_ID, QString("=%1").arg(uid.toString()));
+    QString req = select(Constants::Table_EPISODE_CONTENT, Constants::EPISODE_CONTENT_XML, where);
+    DB.transaction();
+    QSqlQuery query(DB);
+    if (query.exec(req)) {
+        if (query.next()) {
+            const QString &xml = query.value(0).toString();
+            query.finish();
+            DB.commit();
+            return xml;
+        }
+    } else {
+        LOG_QUERY_ERROR(query);
+        query.finish();
+        DB.rollback();
+        return QString::null;
+    }
+    query.finish();
+    DB.commit();
+    return QString::null;
+}
+
 /** Return the total number of episodes recorded for one Form identified by its \e formUid */
 int EpisodeBase::getNumberOfEpisodes(const QString &formUid)
 {
