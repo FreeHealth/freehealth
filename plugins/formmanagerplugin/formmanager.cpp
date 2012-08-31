@@ -483,10 +483,12 @@ EpisodeModel *FormManager::episodeModel(Form::FormMain *form)
 {
     if (!form)
         return 0;
+
     // Not in cache ?
     if (!d->_episodeModels.value(form, 0)) {
         // Create the model
         EpisodeModel *model = new EpisodeModel(form, this);
+        model->initialize();
         d->_episodeModels.insert(form, model);
         return model;
     }
