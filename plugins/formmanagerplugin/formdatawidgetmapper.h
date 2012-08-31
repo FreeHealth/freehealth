@@ -50,19 +50,21 @@ class FormDataWidgetMapper : public QWidget
 public:
     explicit FormDataWidgetMapper(QWidget *parent = 0);
     ~FormDataWidgetMapper();
-
     bool initialize();
 
+    bool isDirty() const;
+
+Q_SIGNALS:
+    
+public Q_SLOTS:
     void setCurrentForm(const QString &formUid);
     void setCurrentForm(FormMain *form);
 
     void setCurrentEpisode(const QVariant &uid);
     void setCurrentEpisode(const QModelIndex &index);
 
-Q_SIGNALS:
-    
-public Q_SLOTS:
-    
+    bool submit();
+
 private Q_SLOTS:
 
 private:
