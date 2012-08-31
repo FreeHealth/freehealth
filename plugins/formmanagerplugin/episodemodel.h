@@ -84,14 +84,15 @@ protected:
 
 public:
     enum DataRepresentation {
-        Label = 0,
+        UserDate = 0,
+        Label,
         IsValid,
         CreationDate,
-        UserDate,
 //        Summary,
         UserCreatorName,
         XmlContent,
         Icon,
+        Uuid,
         EmptyColumn1,
         EmptyColumn2,
         MaxData

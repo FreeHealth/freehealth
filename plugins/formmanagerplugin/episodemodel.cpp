@@ -159,6 +159,7 @@ public:
 
     void updateFilter()
     {
+        _xmlContentCache.clear();
         QString filter;
         // Filter valid episodes
         QHash<int, QString> where;
@@ -168,14 +169,30 @@ public:
         _sqlModel->select();
     }
 
-    // TODO: code here : limit memory usage by getting/saving XmlContent separately from base()->getEpisodes()
-    void getEpisodeContent(EpisodeData *episode)
+    bool isEpisodeContentInCache(const QModelIndex &index)
     {
-        if (episode->data(EpisodeData::Id).toInt()<0)
-            return;
-        if (episode->data(EpisodeData::IsXmlContentPopulated).toBool())
-            return;
-        episodeBase()->getEpisodeContent(episode);
+        QModelIndex id = _sqlModel->index(index.row(), Constants::EPISODES_ID);
+        return (_xmlContentCache.keys().contains(_sqlModel->data(id).toInt()));
+    }
+
+    QString getEpisodeContentFormCache(const QModelIndex &index)
+    {
+        QModelIndex id = _sqlModel->index(index.row(), Constants::EPISODES_ID);
+        return _xmlContentCache.value(_sqlModel->data(id).toInt());
+    }
+
+    void storeEpisodeContentInCache(const QModelIndex &index, const QString &xml)
+    {
+        QModelIndex id = _sqlModel->index(index.row(), Constants::EPISODES_ID);
+        _xmlContentCache.insert(_sqlModel->data(id).toInt(), xml);
+    }
+
+    QString getEpisodeContent(const QModelIndex &index)
+    {
+        if (isEpisodeContentInCache(index))
+            return getEpisodeContentFormCache(index);
+        QModelIndex id = _sqlModel->index(index.row(), Constants::EPISODES_ID);
+        return episodeBase()->getEpisodeContent(_sqlModel->data(id));
     }
 
     QString createXmlEpisode(const QString &formUid)
@@ -386,6 +403,7 @@ public:
     EpisodeModelCoreListener *m_CoreListener;
     EpisodeModelPatientListener *m_PatientListener;
     QSqlTableModel *_sqlModel;
+    QHash<int, QString> _xmlContentCache;
 
 private:
     EpisodeModel *q;
@@ -515,8 +533,9 @@ QVariant EpisodeModel::data(const QModelIndex &index, int role) const
             return user()->fullNameOfUser(userUid);
         }
 //        case Summary:  sqlColumn = Constants::EPISODES_ISVALID; break;
-//        case XmlContent:  sqlColumn = Constants::EPISODES_ISVALID; break;
-        case Icon:  sqlColumn = Constants::EPISODES_ISVALID; break;
+        case XmlContent:  return d->getEpisodeContent(index); break;
+        case Icon: sqlColumn = Constants::EPISODES_ISVALID; break;
+        case Uuid: sqlColumn = Constants::EPISODES_ID; break;
         }
         if (sqlColumn!=-1) {
             QModelIndex sqlIndex = d->_sqlModel->index(index.row(), sqlColumn);
@@ -533,11 +552,12 @@ QVariant EpisodeModel::data(const QModelIndex &index, int role) const
         QString uDate = QLocale().toString(userDate, settings()->value(Constants::S_EPISODEMODEL_SHORTDATEFORMAT, tkTr(Trans::Constants::DATEFORMAT_FOR_MODEL)).toString());
         QString label = d->_sqlModel->data(d->_sqlModel->index(index.row(), Constants::EPISODES_LABEL)).toString();
         QString userUid = d->_sqlModel->data(d->_sqlModel->index(index.row(), Constants::EPISODES_USERCREATOR)).toString();
-        return QString("<p align=\"right\">%1&nbsp;-&nbsp;%2<br /><span style=\"color:gray;font-size:9pt\">%3</span></p>")
+        return QString("<p align=\"right\">%1&nbsp;-&nbsp;%2<br />"
+                       "<span style=\"color:gray;font-size:9pt\">%3<br />%4</span></p>")
                 .arg(uDate.replace(" ", "&nbsp;"))
                 .arg(label.replace(" ", "&nbsp;"))
-                .arg(user()->fullNameOfUser(userUid) + "<br/>" +
-                     tr("Created: ") +  cDate);
+                .arg(tkTr(Trans::Constants::CREATED_BY_1).arg(user()->fullNameOfUser(userUid)))
+                .arg(tkTr(Trans::Constants::ON_THE_1).arg(cDate));
     }
 //    case Qt::ForegroundRole :
 //    {
