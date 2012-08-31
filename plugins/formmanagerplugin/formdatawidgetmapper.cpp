@@ -92,24 +92,13 @@ public:
         Q_ASSERT(_stack);
         if (!_stack)
             return;
-
         clearStackLayout();
-
         _formMain = rootForm;
 
         // Add the synthesis form
         QScrollArea *sa = new QScrollArea(q);
         sa->setWidgetResizable(true);
         QWidget *w = new QWidget(sa);
-//        QPalette palette = w->palette();
-//        QString gender = patient()->data(Core::IPatient::Gender).toString();
-//        if (gender=="M")
-//            palette.setColor(QPalette::Background, Patients::Constants::maleColor.lighter(140));
-//        else if (gender=="F")
-//            palette.setColor(QPalette::Background, Patients::Constants::femaleColor.lighter(140));
-//        else
-//            palette.setColor(QPalette::Background, Patients::Constants::hermaColor.lighter());
-//        w->setPalette(palette);
         sa->setWidget(w);
         QVBoxLayout *vl = new QVBoxLayout(w);
         vl->setSpacing(0);
@@ -190,7 +179,6 @@ public:
 //    void feedFormWithEpisodeContent(Form::FormMain *form, EpisodeData *episode, bool feedPatientModel = false)
     void feedFormWithEpisodeContent(const QModelIndex &index, bool feedPatientModel = false)
     {
-        qWarning() << "feedForm" << _formMain << _stackId_FormUuid << _stack->currentIndex();
         if (!_episodeModel) {
             if (_formMain)
                 LOG_ERROR_FOR(q, "No episode model. FormUid: " + _formMain->uuid());
@@ -213,12 +201,8 @@ public:
 
         QModelIndex xmlIndex = _episodeModel->index(index.row(), EpisodeModel::XmlContent);
         const QString &xml = _episodeModel->data(xmlIndex).toString();
-
-//        qWarning() << xml;
-
-        if (xml.isEmpty()) {
+        if (xml.isEmpty())
             return;
-        }
 
         // read the xml'd content
         QHash<QString, QString> datas;
@@ -247,7 +231,7 @@ public:
         // Populate FormItem data and the patientmodel
         foreach(FormItem *it, items.values()) {
             if (!it) {
-                qWarning() << "FormManager::activateForm :: ERROR: no item: " << items.key(it);
+                LOG_ERROR_FOR(q, "activateForm :: ERROR: no item: " + items.key(it));
                 continue;
             }
             if (!it->itemData())
@@ -280,7 +264,6 @@ FormDataWidgetMapper::FormDataWidgetMapper(QWidget *parent) :
     d(new FormDataWidgetMapperPrivate(this))
 {
     setObjectName("FormDataWidgetMapper");
-    // Create the ui
 }
 
 FormDataWidgetMapper::~FormDataWidgetMapper()
