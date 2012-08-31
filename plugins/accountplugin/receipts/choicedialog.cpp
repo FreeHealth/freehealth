@@ -38,6 +38,8 @@
 
 #include <coreplugin/icore.h>
 #include <coreplugin/iuser.h>
+#include <coreplugin/itheme.h>
+#include <coreplugin/constants.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -56,6 +58,7 @@ using namespace ReceiptsConstants;
 using namespace Tools;
 
 static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
+static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 
 treeViewsActions::treeViewsActions(QWidget *parent):QTreeView(parent){
     m_deleteThesaurusValue = new QAction(tr("Delete value"),this);
@@ -330,9 +333,21 @@ choiceDialog::choiceDialog(QWidget * parent,bool roundtrip, bool freevalue, QStr
     m_timerDown = new QTimer(this);
     //icons and shortcuts
     ui->okButton->setShortcut(QKeySequence::InsertParagraphSeparator);
+    ui->okButton->setIcon(theme()->icon(Core::Constants::ICONOK));
     ui->okButton->setToolTip(QKeySequence(QKeySequence::InsertParagraphSeparator).toString());
     ui->quitButton->setShortcut(QKeySequence::Close);
     ui->quitButton->setToolTip(QKeySequence(QKeySequence::Close).toString());
+    ui->quitButton->setIcon(theme()->icon(Core::Constants::ICONQUIT));
+    ui->plusButton->setShortcut(QKeySequence("CTRL+UP"));
+    ui->plusButton->setToolTip(QKeySequence("CTRL+UP").toString());
+    ui->lessButton->setShortcut(QKeySequence("CTRL+DOWN"));
+    ui->lessButton->setToolTip(QKeySequence("CTRL+DOWN").toString());
+    
+    ui->plusConstButton->setShortcut(QKeySequence("CTRL+PgUp"));
+    ui->plusConstButton->setToolTip(QKeySequence("CTRL+PgUp").toString());
+    ui->lessConstButton->setShortcut(QKeySequence("CTRL+PgDown"));
+    ui->lessConstButton->setToolTip(QKeySequence("CTRL+PgDown").toString());
+    
     // connect(ui->buttonBox,SIGNAL(accepted()),this,SLOT(beforeAccepted()));
     connect(ui->okButton,SIGNAL(pressed()),this,SLOT(beforeAccepted()));
     connect(ui->quitButton,SIGNAL(pressed()),this,SLOT(reject()));

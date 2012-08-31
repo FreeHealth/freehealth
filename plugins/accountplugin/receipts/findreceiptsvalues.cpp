@@ -36,6 +36,8 @@
 #include <utils/global.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/icore.h>
+#include <coreplugin/itheme.h>
+#include <coreplugin/constants.h>
 #include <translationutils/constants.h>
 #include <translationutils/trans_msgerror.h>
 
@@ -48,6 +50,8 @@ using namespace AccountDB;
 using namespace Constants;
 using namespace Trans::ConstantTranslations;
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
+static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
+
 static QString databasePath()
 {
     QString dbRelPath = QString("/%1/%2").arg(Constants::DATAPACK_DB).arg(Constants::DATAPACK_ACCOUNTANCY_FILENAME);
@@ -101,10 +105,25 @@ findReceiptsValues::findReceiptsValues(QWidget * parent):QDialog(parent)
   ui->comboBoxCategories->setEditable(false);
   initialize();
   QString comboValue = ui->comboBoxCategories->currentText().trimmed();
+  for (int i = 0; i < ui->buttonBox->buttons().size(); ++i)
+  {
+  	  ui->buttonBox->buttons()[i]->setMinimumSize(100,50);
+      }
+  //icons and shortcuts
   ui->plusButton->setIcon(QIcon(qApp->applicationDirPath()+"/../../global_resources/pixmap/16x16/next.png"));
   ui->lessButton->setIcon(QIcon(qApp->applicationDirPath()+"/../../global_resources/pixmap/16x16/previous.png"));
   ui->plusButton->setShortcut(QKeySequence("CTRL+p"));
   ui->lessButton->setShortcut(QKeySequence("CTRL+l"));
+  ui->plusButton->setToolTip(QKeySequence("CTRL+p").toString());
+  ui->lessButton->setToolTip(QKeySequence("CTRL+l").toString());
+  ui->buttonBox->button(QDialogButtonBox::Save)->setShortcut(QKeySequence::Save);
+  ui->buttonBox->button(QDialogButtonBox::Save)->setToolTip(QKeySequence(QKeySequence::Save).toString());
+  ui->buttonBox->button(QDialogButtonBox::Save)->setIcon(theme()->icon(Core::Constants::ICONSAVE));
+
+  ui->buttonBox->button(QDialogButtonBox::Cancel)->setShortcut(QKeySequence::Quit);
+  ui->buttonBox->button(QDialogButtonBox::Cancel)->setToolTip(QKeySequence(QKeySequence::Quit).toString());
+  ui->buttonBox->button(QDialogButtonBox::Cancel)->setIcon(theme()->icon(Core::Constants::ICONEXIT));
+  
   //disable lessButton
   ui->lessButton->setEnabled(false);
   //fillListViewValues(comboValue);
