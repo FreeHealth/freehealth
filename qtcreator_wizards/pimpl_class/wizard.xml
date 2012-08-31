@@ -56,8 +56,15 @@
             <fielddescription>Name:</fielddescription>
             <fielddescription xml:lang="de">Name:</fielddescription>
         </field>
-        <field name="PluginNamespace">
+<!--        <field name="PluginNamespace">
             <fieldcontrol class="QLineEdit" validator="^[a-zA-Z0-9_]+$" defaulttext="" />
+            <fielddescription>Namespace of the plugin the class belongs to:</fielddescription>
+            <fielddescription xml:lang="de">Namensraum des Plugins, zu dem die Klasse gehören soll:</fielddescription>
+        </field>-->
+        <field name="PluginNamespace">
+            <fieldcontrol class="QComboBox"
+            combochoices="AccountDB,Account,Agenda,Gir,Alert,BaseWidgets,Category,DataPackPlugin,DrugInteractions,DrugsDB,DrugsWidget,Empty,Form,ICD,Views,PadTools,Patients,PMH,Print,SaveRestore,Script,Templates,Editor,UserPlugin,Webcam,XmlForms,ZipCodes"
+            defaultindex="-1" />
             <fielddescription>Namespace of the plugin the class belongs to:</fielddescription>
             <fielddescription xml:lang="de">Namensraum des Plugins, zu dem die Klasse gehören soll:</fielddescription>
         </field>
