@@ -19,88 +19,79 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developpers:                                                     *
- *       %Author% <%AuthorEmail%>                             *
+ *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef %PluginName:u%_INTERNAL_%PluginName:u%PREFERENCES_H
-#define %PluginName:u%_INTERNAL_%PluginName:u%PREFERENCES_H
 
-#include <coreplugin/ioptionspage.h>
+@if "%Internal%" == "true"
+#ifndef %PluginNamespace:u%_INTERNAL_%ClassName:u%_H
+#define %PluginNamespace:u%_INTERNAL_%ClassName:u%_H
+@else
+#ifndef %PluginNamespace:u%_%ClassName:u%_H
+#define %PluginNamespace:u%_%ClassName:u%_H
+@endif
 
 #include <QWidget>
-#include <QPointer>
+
+QT_BEGIN_NAMESPACE
+class QModelIndex;
+QT_END_NAMESPACE
 
 /**
- * \file %PluginName:l%preferences.h
- * \author %Author%
+ * \file %ClassName%.h
+ * \author
  * \version 0.8.0
- * \date
+ * \date 30 Aug 2012
 */
+namespace %PluginNamespace:c% {
+// class FormMain;
 
-namespace Core {
-class ISettings;
-}
-
-namespace %PluginName:c% {
+@if "%Internal%" == "true"
 namespace Internal {
-namespace Ui {
-class %PluginName:c%PreferencesWidget;
-}
 
-class %PluginName:c%PreferencesWidget : public QWidget
+@endif
+@if  "%PIMPL%" == "true"
+class %ClassName:c%Private;
+
+@endif
+@if "%Exported%" == "true"
+class %PluginNamespace:u%_EXPORT %ClassName:c% : public QWidget
+@else
+class %ClassName:c% : public QWidget
+@endif
 {
     Q_OBJECT
-
 public:
-    explicit %PluginName:c%PreferencesWidget(QWidget *parent = 0);
-    ~%PluginName:c%PreferencesWidget();
+    explicit %ClassName:c%(QWidget *parent = 0);
+    ~%ClassName:c%();
 
-    void setDataToUi();
+    bool initialize();
 
-    static void writeDefaultSettings(Core::ISettings *s);
+//     void setCurrentForm(const QString &formUid);
+//     void setCurrentForm(const Form::FormMain *form);
+//
+//     void setCurrentEpisode(const QVariant &uid);
+//     void setCurrentEpisode(const QModelIndex &index);
+
+Q_SIGNALS:
 
 public Q_SLOTS:
-    void saveToSettings(Core::ISettings *s = 0);
 
+@if "%PIMPL%" == "true"
 private:
-    void retranslateUi();
-    void changeEvent(QEvent *e);
-
-private:
-    Ui::%PluginName:c%PreferencesWidget *ui;
+    %ClassName:c%Private *d;
+@endif
 };
 
-
-class %PluginName:c%PreferencesPage : public Core::IOptionsPage
-{
-public:
-    %PluginName:c%PreferencesPage(QObject *parent = 0);
-    ~%PluginName:c%PreferencesPage();
-
-    QString id() const;
-    QString name() const;
-    QString category() const;
-    QString title() const;
-    int sortIndex() const;
-
-    void resetToDefaults();
-    void checkSettingsValidity();
-    void applyChanges();
-    void finish();
-
-    QString helpPage() {return QString();}
-
-    static void writeDefaultSettings(Core::ISettings *s) {%PluginName:c%PreferencesWidget::writeDefaultSettings(s);}
-
-    QWidget *createPage(QWidget *parent = 0);
-
-private:
-    QPointer<Internal::%PluginName:c%PreferencesWidget> m_Widget;
-};
-
-
+@if "%Internal%" == "true"
 } // namespace Internal
-} // namespace %Namespace:c%
-#endif // %Namespace:u%_INTERNAL_%ClassName:u%_H
+@endif
+} // namespace %PluginNamespace:c%
+
+@if "%Internal%" == "true"
+#endif // %PluginNamespace:u%_INTERNAL_%ClassName:u%_H
+@else
+#endif  // %PluginNamespace:u%_%ClassName:u%_H
+@endif

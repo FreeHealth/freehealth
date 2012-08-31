@@ -30,7 +30,7 @@
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
 #include "receiptsmanager.h"
-#include "receiptsIO.h"
+#include "receiptsio.h"
 #include "xmlcategoriesparser.h"
 #include "constants.h"
 //#include "tools.h"

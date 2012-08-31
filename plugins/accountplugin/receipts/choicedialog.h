@@ -56,7 +56,7 @@ public:
     enum Actions{
         DEBTOR = 0,
         DISTRULES,
-        SITES        
+        SITES
     };
     treeViewsActions(QWidget *parent);
     ~treeViewsActions();

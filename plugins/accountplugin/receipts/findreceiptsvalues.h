@@ -29,62 +29,79 @@
  *  Contributors :                                                         *
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
-#ifndef ASSETSIO_H
-#define ASSETSIO_H
+#ifndef  FINDRECEIPTSVALUES_H
+#define  FINDRECEIPTSVALUES_H
+#include "ui_findvaluesgui.h"
 
 #include <accountplugin/account_exporter.h>
+//#include <accountplugin/receipts/xmlcategoriesparser.h>
 
-#include <QObject>
-#include <QVariant>
-#include <QHash>
-#include <QStandardItemModel>
+#include <accountbaseplugin/medicalproceduremodel.h>
+#include <accountbaseplugin/datapackmodel.h>
+#include <accountbaseplugin/thesaurusmodel.h>
+#include <accountbaseplugin/constants.h>
 
-// #include "../../accountbaseplugin/constants.h"//<accountbaseplugin/constants.h>  A eviter+++
+#include <QtGui>
+#include <QtCore>
+#include <QSqlDatabase>
 
-// #include "../../accountbaseplugin/assetmodel.h"
-// NON à la place déclare la class comme ça et met le include dans le cpp
-// Intérêt == si modification du assetModel header pas de recompilation de cet objet avec ma méthode
-// alors qu'il aurait été recompilé avec ton include.
-
-namespace AccountDB {
-class AssetModel;
+using namespace AccountDB;
+namespace Ui{
+  class findValueDialog;
 }
-
-class ACCOUNT_EXPORT AssetsIO : public QObject
+class ACCOUNT_EXPORT findReceiptsValues:public QDialog
 {
-    Q_OBJECT
-
+  Q_OBJECT
+  enum LabelsData
+  {
+      NAME = 0,
+      AMOUNT,
+      EXPLANATION,
+      OTHERS,
+      LabelsData_MaxParam
+      };
+  enum FatherSon
+  {
+      FATHER = 0,
+      SON
+    };
 public:
-    AssetsIO(QObject *parent);
-    ~AssetsIO();
-    AccountDB::AssetModel *getModelAssets();
-    QString getUserUid();
-    bool insertIntoAssets(const QHash<int,QVariant> &hashValues);
-    bool insertIntoMovements(const QHash<int,QVariant> &hashValues);
-    bool deleteAsset(int row);
-
-    QStandardItemModel *getListsOfValuesForRefresh(QObject *parent);
-    QStandardItemModel *getBankComboBoxModel(QObject *parent);
-
-    int getLastMovementId();
-    bool deleteMovement(int idMovement, int idBank);    
-    int getMovementId(int row);
-    int getIdFromBankName(const QString &bankName);
-    double getResidualValueWhenRefresh(int row);
-    bool deleteOneYearToRun(int row);
-    double getRate(const QDate &date, double duration);
-    QStandardItemModel * getYearlyValues(const QDate &year, QObject *parent);
-    double getValueFromRow(int row);
-    int getModeFromRow(int row);
-    double getDurationFromRow(int row);
-    QDate getDateFromRow(int row);
-    QString getLabelFromRow(int row);
+    QHash<QString,QString> returnValuesHash();
+    findReceiptsValues(QWidget * parent = 0);
+    ~findReceiptsValues();
+    QHash<QString,QString> getchosenValues();
+    void clear();
 private:
-    QString getBankNameFromId(int id);
-    bool debitOrCreditInBankBalance(const QString &bank, double value);
-    bool creditValueDeletedToBankAccount(double value, int idBank);
-    AccountDB::AssetModel *m_assetModel;
-    QString m_user_uid;
+    Ui::findValueDialog * ui;
+    QSqlDatabase m_db;
+    double m_modifier;
+    QHash<int,QString> m_hashExplanations;
+    QHash<int,QString> m_otherInformations;
+    QHash<QString,QString> m_hashValueschosen;
+    void initialize();
+    void fillComboCategories();
+    bool tableViewIsFull(QAbstractItemModel * model);
+    void enableShowNextTable();
+    //QString getDateWhereClause();
+    bool datapackIsAvalaible();
+    QHash<QString,QString> getHashFatherSonFromOthers(const QModelIndex & index);
+
+private Q_SLOTS:
+    void fillListViewValues(const QString & comboItem);
+//    void chooseValue(const QModelIndex& index);
+    void chooseValue();
+    void deleteValue();
+//    void supprItemchosen(QListWidgetItem * item);
+    void showInformations(const QModelIndex & index);
+    void on_lineEditFilter_textChanged(const QString & text);
+    void showNext();
+    void setModifSpinBox(QWidget*,QWidget*);
+    void setModifier(double);
+    void chooseUserModel(bool);
+    void chooseDatapackModel(bool);
+    void wipeFilterEdit(bool b);
+    void wipeFilterEdit();
+    void setLessButtonEnabled(QListWidgetItem * item);
 };
 
 
