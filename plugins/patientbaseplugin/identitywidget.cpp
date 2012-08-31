@@ -103,7 +103,7 @@ public:
                 QByteArray p = mappedPropertyName(mapWidget);
                 QModelIndex idx = model()->index(currentIndex(), i);
 
-                qDebug() << mapWidget->objectName() << "DB:" << idx.data(Qt::EditRole) << "- Widget value:" << mapWidget->property(p);
+//                qDebug() << mapWidget->objectName() << "DB:" << idx.data(Qt::EditRole) << "- Widget value:" << mapWidget->property(p);
 
                 QVariant data = idx.data(Qt::EditRole);
                 //                qDebug(mapWidget->metaObject()->className());
