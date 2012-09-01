@@ -33,12 +33,15 @@
 #include <coreplugin/ipatientlistener.h>
 
 #include <QAbstractListModel>
+QT_BEGIN_NAMESPACE
+class QSqlRecord;
+QT_END_NAMESPACE
 
 /**
  * \file episodemodel.h
  * \author Eric MAEKER
  * \version 0.8.0
- * \date 27 Aug 2012
+ * \date 01 Sept 2012
 */
 
 namespace Form {
@@ -135,6 +138,7 @@ Q_SIGNALS:
 private Q_SLOTS:
     void onUserChanged();
     void onPatientChanged();
+    void populateNewRowWithDefault(int row, QSqlRecord &record);
 
 public Q_SLOTS:
     bool activateEpisode(const QModelIndex &index, const QString &formUid); //const int id, const QString &formUid, const QString &xmlcontent);

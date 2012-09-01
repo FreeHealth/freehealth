@@ -92,9 +92,8 @@ private Q_SLOTS:
     void handleClicked(const QModelIndex &index);
 
     void showLastEpisodeSynthesis();
-    void newEpisode();
-    void removeEpisode();
-    void validateEpisode();
+    bool newEpisode();
+    bool saveCurrentEditingEpisode();
     void addForm();
     void printCurrentItem();
 

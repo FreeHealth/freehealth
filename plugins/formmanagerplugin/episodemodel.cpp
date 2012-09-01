@@ -55,6 +55,7 @@
 #include <extensionsystem/pluginmanager.h>
 
 #include <QSqlTableModel>
+#include <QSqlRecord>
 
 enum { base64MimeDatas = true  };
 
@@ -160,7 +161,6 @@ public:
     void updateFilter()
     {
         _xmlContentCache.clear();
-        QString filter;
         // Filter valid episodes
         QHash<int, QString> where;
         where.insert(Constants::EPISODES_ISVALID, "=1");
@@ -195,152 +195,6 @@ public:
         QModelIndex id = _sqlModel->index(index.row(), Constants::EPISODES_ID);
         return episodeBase()->getEpisodeContent(_sqlModel->data(id));
     }
-
-    QString createXmlEpisode(const QString &formUid)
-    {
-        // TODO: code here : use a QDomDocument
-        FormMain *form = _formMain->formMainChild(formUid);
-        if (!form)
-            return QString::null;
-//        bool formIsModified = false;
-
-        QHash<QString, FormItem *> items;
-        foreach(FormItem *it, form->flattenFormItemChildren()) {
-            // TODO: check nested items?
-            if (it->itemData()) {
-//                if (it->itemDatas()->isModified()) {
-//                    qWarning() << it->uuid() << "is modified";
-//                    formIsModified = true;
-//                }
-                items.insert(it->uuid(), it);
-            }
-        }
-
-//        if (formIsModified) {
-            // create the XML episode file
-            QHash<QString, QString> xmlData;
-            foreach(FormItem *it, items) {
-                xmlData.insert(it->uuid(), it->itemData()->storableData().toString());
-            }
-            return Utils::createXml(Form::Constants::XML_FORM_GENERAL_TAG, xmlData, 2, false);
-//        }
-
-//        return QString();
-    }
-
-//    bool saveEpisode(EpisodeModelTreeItem *item, const QString &formUid)
-//    {
-//        if (!item)
-//            return true;
-//        if (formUid.isEmpty()) {
-//            LOG_ERROR_FOR("EpisodeModel", "No formUid");
-//            return false;
-//        }
-
-//        EpisodeData *episode = m_EpisodeItems.key(item);
-//        FormMain *form = 0;
-//        foreach(FormMain *f, m_FormItems.keys()) {
-//            if (f->uuid()==formUid) {
-//                form = f;
-//                break;
-//            }
-//        }
-
-//        if (episode && form) {
-//            episode->setData(EpisodeData::XmlContent, createXmlEpisode(formUid));
-//            episode->setData(EpisodeData::IsXmlContentPopulated, true);
-//            episode->setData(EpisodeData::Label, form->itemData()->data(IFormItemData::ID_EpisodeLabel));
-//            episode->setData(EpisodeData::UserDate, form->itemData()->data(IFormItemData::ID_EpisodeDate));
-//            LOG_FOR("EpisodeModel", "Save episode: " + episode->data(EpisodeData::Label).toString());
-//            if (!settings()->value(Core::Constants::S_ALWAYS_SAVE_WITHOUT_PROMPTING, true).toBool()) {
-//                bool yes = Utils::yesNoMessageBox(QCoreApplication::translate("EpisodeModel", "Save episode?"),
-//                                                  QCoreApplication::translate("EpisodeModel", "The actual episode has been modified. Do you want to save changes in your database?\n"
-//                                                     "Answering 'No' will cause definitve data lose."),
-//                                                  "", QCoreApplication::translate("EpisodeModel", "Save episode"));
-//                if (!yes) {
-//                    return false;
-//                }
-//            }
-
-//            // inform the patient model
-//            foreach(FormItem *it, form->flattenFormItemChildren()) {
-//                if (!it->itemData())
-//                    continue;
-////                qWarning() << "Feeding patientModel data with" << it->patientDataRepresentation() << it->itemDatas()->data(it->patientDataRepresentation(), IFormItemData::PatientModelRole);
-//                patient()->setValue(it->patientDataRepresentation(), it->itemData()->data(it->patientDataRepresentation(), IFormItemData::PatientModelRole));
-//            }
-
-//            // save episode to database
-//            return episodeBase()->saveEpisode(episode);
-//        }
-//        return false;
-//    }
-
-//    void feedFormWithEpisodeContent(Form::FormMain *form, EpisodeModelTreeItem *item, bool feedPatientModel = false)
-//    {
-//        EpisodeData *episode = m_EpisodeItems.key(item);
-//        feedFormWithEpisodeContent(form, episode, feedPatientModel);
-//    }
-
-//    void feedFormWithEpisodeContent(Form::FormMain *form, EpisodeData *episode, bool feedPatientModel = false)
-//    {
-//        QTime chrono;
-//        if (WarnLogChronos)
-//            chrono.start();
-
-//        getEpisodeContent(episode);
-//        const QString &xml = episode->data(EpisodeData::XmlContent).toString();
-//        if (xml.isEmpty()) {
-//            return;
-//        }
-
-//        // read the xml'd content
-//        QHash<QString, QString> datas;
-//        if (!Utils::readXml(xml, Form::Constants::XML_FORM_GENERAL_TAG, datas, false)) {
-//            LOG_ERROR_FOR(q, QString("Error while reading EpisodeContent"));
-//            return;
-//        }
-
-//        // put datas into the FormItems of the form
-//        // XML content ==
-//        // <formitemuid>value</formitemuid>
-//        QHash<QString, FormItem *> items;
-//        foreach(FormItem *it, form->flattenFormItemChildren()) {
-//            items.insert(it->uuid(), it);
-//        }
-
-////        qWarning() << Q_FUNC_INFO << feedPatientModel << form->uuid();
-//        form->clear();
-//        form->itemData()->setData(IFormItemData::ID_EpisodeDate, episode->data(EpisodeData::UserDate));
-//        form->itemData()->setData(IFormItemData::ID_EpisodeLabel, episode->data(EpisodeData::Label));
-//        const QString &username = user()->fullNameOfUser(episode->data(EpisodeData::UserCreatorUuid)); //value(Core::IUser::FullName).toString();
-//        if (username.isEmpty())
-//            form->itemData()->setData(IFormItemData::ID_UserName, "No user");
-//        else
-//            form->itemData()->setData(IFormItemData::ID_UserName, username);
-
-//        // feed the formitemdatas for this form and get the data for the patientmodel
-//        foreach(FormItem *it, items.values()) {
-//            if (!it) {
-//                qWarning() << "FormManager::activateForm :: ERROR: no item: " << items.key(it);
-//                continue;
-//            }
-//            if (!it->itemData())
-//                continue;
-
-//            it->itemData()->setStorableData(datas.value(it->uuid()));
-//            if (feedPatientModel) {
-////                qWarning() << "Feeding patientModel data with" << it->patientDataRepresentation() << it->itemDatas()->data(it->patientDataRepresentation(), IFormItemData::ID_ForPatientModel);
-//                if (it->patientDataRepresentation() >= 0) {
-//                    if (WarnLogChronos)
-//                        Utils::Log::logTimeElapsed(chrono, q->objectName(), "feedFormWithEpisodeContent: feed patient model: " + it->uuid());
-//                    patient()->setValue(it->patientDataRepresentation(), it->itemData()->data(it->patientDataRepresentation(), IFormItemData::PatientModelRole));
-//                }
-//            }
-//        }
-//        if (WarnLogChronos)
-//            Utils::Log::logTimeElapsed(chrono, q->objectName(), "feedFormWithEpisodeContent");
-//    }
 
 //    void getLastEpisodes(bool andFeedPatientModel = true)
 //    {
@@ -437,12 +291,6 @@ EpisodeModel::EpisodeModel(FormMain *rootEmptyForm, QObject *parent) :
 
 bool EpisodeModel::initialize()
 {
-
-    // TODO: connect save -> move to FormManager
-//    // connect the save action
-//    Core::Command * cmd = actionManager()->command(Core::Constants::A_FILE_SAVE);
-//    connect(cmd->action(), SIGNAL(triggered()), this, SLOT(submit()));
-
     onUserChanged();
     onPatientChanged();
 
@@ -482,6 +330,7 @@ void EpisodeModel::onCoreDatabaseServerChanged()
     d->_sqlModel = new QSqlTableModel(this, episodeBase()->database());
     d->_sqlModel->setTable(episodeBase()->table(Constants::Table_EPISODES));
     Utils::linkSignalsFromFirstModelToSecondModel(d->_sqlModel, this, false);
+    connect(d->_sqlModel, SIGNAL(primeInsert(int,QSqlRecord&)), this, SLOT(populateNewRowWithDefault(int, QSqlRecord&)));
     d->updateFilter();
 }
 
@@ -553,11 +402,16 @@ QVariant EpisodeModel::data(const QModelIndex &index, int role) const
         QString uDate = QLocale().toString(userDate, settings()->value(Constants::S_EPISODEMODEL_SHORTDATEFORMAT, tkTr(Trans::Constants::DATEFORMAT_FOR_MODEL)).toString());
         QString label = d->_sqlModel->data(d->_sqlModel->index(index.row(), Constants::EPISODES_LABEL)).toString();
         QString userUid = d->_sqlModel->data(d->_sqlModel->index(index.row(), Constants::EPISODES_USERCREATOR)).toString();
+        if (userUid == user()->uuid())
+            userUid = tkTr(Trans::Constants::YOU);
+        else
+            userUid = user()->fullNameOfUser(userUid);
+
         return QString("<p align=\"right\">%1&nbsp;-&nbsp;%2<br />"
                        "<span style=\"color:gray;font-size:9pt\">%3<br />%4</span></p>")
                 .arg(uDate.replace(" ", "&nbsp;"))
                 .arg(label.replace(" ", "&nbsp;"))
-                .arg(tkTr(Trans::Constants::CREATED_BY_1).arg(user()->fullNameOfUser(userUid)))
+                .arg(tkTr(Trans::Constants::CREATED_BY_1).arg(userUid))
                 .arg(tkTr(Trans::Constants::ON_THE_1).arg(cDate));
     }
 //    case Qt::ForegroundRole :
@@ -614,13 +468,24 @@ bool EpisodeModel::setData(const QModelIndex &index, const QVariant &value, int 
         int sqlColumn = -1;
         switch (index.column()) {
         case Label: sqlColumn = Constants::EPISODES_LABEL; break;
-        case IsValid:  sqlColumn = Constants::EPISODES_ISVALID; break;
-        case CreationDate:  sqlColumn = Constants::EPISODES_DATEOFCREATION; break;
-        case UserDate:  sqlColumn = Constants::EPISODES_USERDATE; break;
+        case IsValid: sqlColumn = Constants::EPISODES_ISVALID; break;
+        case CreationDate: sqlColumn = Constants::EPISODES_DATEOFCREATION; break;
+        case UserDate: sqlColumn = Constants::EPISODES_USERDATE; break;
             //            case Summary:  sqlColumn = Constants::EPISODES_; break;
-            //        case XmlContent:  sqlColumn = Constants::EPISODES_ISVALID; break;
-        case Icon:  sqlColumn = Constants::EPISODES_ISVALID; break;
+        case XmlContent:
+        {
+            QModelIndex id = d->_sqlModel->index(index.row(), Constants::EPISODES_ID);
+            QVariant episodeId = d->_sqlModel->data(id);
+            // update internal cache
+            d->_xmlContentCache.insert(episodeId.toInt(), value.toString());
+            // send to database
+            return episodeBase()->saveEpisodeContent(episodeId, value.toString());
         }
+        case Icon: sqlColumn = Constants::EPISODES_ISVALID; break;
+        }
+
+        qWarning() << "SETDATA" << episodeBase()->fieldName(Constants::Table_EPISODES, sqlColumn) << value;
+
         if (sqlColumn!=-1) {
             QModelIndex sqlIndex = d->_sqlModel->index(index.row(), sqlColumn);
             bool ok = d->_sqlModel->setData(sqlIndex, value, role);
@@ -648,52 +513,69 @@ bool EpisodeModel::canFetchMore(const QModelIndex &parent) const
     return d->_sqlModel->canFetchMore(parent);
 }
 
-/** Not implemented */
 QVariant EpisodeModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    Q_UNUSED(section);
-    Q_UNUSED(orientation);
-    Q_UNUSED(role);
+    if (role!=Qt::DisplayRole)
+        return d->_sqlModel->headerData(section, orientation, role);
+    if (orientation!=Qt::Horizontal)
+        return d->_sqlModel->headerData(section, orientation, role);
+
+    switch (section) {
+    case UserDate: return tkTr(Trans::Constants::DATE);
+    case Label: return tkTr(Trans::Constants::LABEL);
+    case Uuid: return tkTr(Trans::Constants::UNIQUE_IDENTIFIER);
+    case IsValid: return tkTr(Trans::Constants::ISVALID);
+    case CreationDate: return tkTr(Trans::Constants::CREATION_DATE);
+    case UserCreatorName: return tkTr(Trans::Constants::AUTHOR);
+    case XmlContent: return tr("Xml content");
+    case Icon: return tkTr(Trans::Constants::ICON);
+    case EmptyColumn1: return QString();
+    case EmptyColumn2: return QString();
+    default: break;
+    }
     return QVariant();
 }
 
 /** Insert new episodes to the \e parent. The parent must be a form. */
 bool EpisodeModel::insertRows(int row, int count, const QModelIndex &parent)
 {
-//    qWarning() << "insertRows" << row << count << parent.data();
     if (d->_readOnly)
         return false;
 
-    return d->_sqlModel->insertRows(row, count, parent);
+    bool ok = d->_sqlModel->insertRows(row, count);
+    if (!ok) {
+        LOG_ERROR("Unable to insert rows: " + d->_sqlModel->lastError().text());
+        return false;
+    }
 
-//    const QString &formUid = d->_formMain->uuid();
+    for(int i=0; i<count; ++i) {
+        i+=row;
+        d->_sqlModel->setData(d->_sqlModel->index(i, Constants::EPISODES_ISVALID), 1);
+    }
 
-//    beginInsertRows(parent, row, row + count);
-//    for(int i = 0; i < count; ++i) {
-//        // create the episode
-//        Internal::EpisodeData *episode = new Internal::EpisodeData;
-//        episode->setData(Internal::EpisodeData::Label, tr("New episode"));
-//        episode->setData(Internal::EpisodeData::FormUuid, formUid);
-//        episode->setData(Internal::EpisodeData::UserCreatorUuid, user()->uuid());
-//        episode->setData(Internal::EpisodeData::PatientUuid, patient()->uuid());
-//        episode->setData(Internal::EpisodeData::CreationDate, QDateTime::currentDateTime());
-//        episode->setData(Internal::EpisodeData::UserDate, QDateTime::currentDateTime());
-//        episode->setData(Internal::EpisodeData::IsValid, true);
-//        // TODO: code here : create an episode modification to store the user creator?
-
-//        // create the tree item
-//        EpisodeModelTreeItem *it = new EpisodeModelTreeItem(parentItem);
-//        parentItem->insertChild(row+i, it);
-
-//        // link episode/item
-//        d->m_EpisodeItems.insert(episode, it);
-//        d->m_Episodes.append(episode);
-//    }
-//    endInsertRows();
-//    return true;
+//    d->_sqlModel->blockSignals(true);
+//    d->_sqlModel->submit();
+//    d->_sqlModel->blockSignals(false);
+    return true;
 }
 
-/** Not implemented */
+void EpisodeModel::populateNewRowWithDefault(int row, QSqlRecord &record)
+{
+    for(int i = 0; i < record.count(); ++i) {
+        record.setNull(i);
+        record.setGenerated(i, true);
+    }
+    record.setValue(Constants::EPISODES_LABEL, tr("New episode"));
+    record.setValue(Constants::EPISODES_FORM_PAGE_UID, d->_formMain->uuid());
+    record.setValue(Constants::EPISODES_USERCREATOR, user()->uuid());
+    record.setValue(Constants::EPISODES_USERDATE, QDateTime::currentDateTime());
+    record.setValue(Constants::EPISODES_PATIENT_UID, patient()->uuid());
+    record.setValue(Constants::EPISODES_DATEOFCREATION, QDateTime::currentDateTime());
+    record.setValue(Constants::EPISODES_ISVALID, 1);
+    qWarning() << "EpisodeModel::populateNewRowWithDefault" << row << record;
+}
+
+/** Invalidate an episode. The episode will stay in database but will not be show in the view (unless you ask for invalid episode not to be filtered). */
 bool EpisodeModel::removeRows(int row, int count, const QModelIndex &parent)
 {
     Q_UNUSED(row);
@@ -703,9 +585,14 @@ bool EpisodeModel::removeRows(int row, int count, const QModelIndex &parent)
     if (d->_readOnly)
         return false;
 
-    // TODO: manage episode removal (change the validity of the episode)
+    beginRemoveRows(parent, row, row+count-1);
+    d->_sqlModel->blockSignals(true);
+    for(int i = row; i < count; ++i) {
+        d->_sqlModel->setData(d->_sqlModel->index(i, Constants::EPISODES_ISVALID), 0);
+    }
+    d->_sqlModel->blockSignals(false);
+    endRemoveRows();
     return true;
-//    return d->_sqlModel->removeRows(row, count, parent);
 }
 
 /** Define the whole model read mode */
@@ -735,13 +622,6 @@ bool EpisodeModel::submit()
         return false;
 
     return d->_sqlModel->submit();
-    // save actual episode if needed
-//    if (d->m_ActualEpisode) {
-//        if (!d->saveEpisode(d->m_ActualEpisode, d->m_ActualEpisode_FormUid)) {
-//            LOG_ERROR("Unable to save actual episode before editing a new one");
-//        }
-//    }
-//    return true;
 }
 
 bool EpisodeModel::activateEpisode(const QModelIndex &index, const QString &formUid) //, const QString &xmlcontent)

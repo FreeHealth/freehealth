@@ -144,40 +144,27 @@ public:
         _episodeModel = formManager()->episodeModel(rootForm);
     }
 
-    QString createXmlEpisode(const QString &formUid)
+    QString getCurrentXmlEpisode()
     {
-        // TODO: code here : use a QDomDocument
-        FormMain *form = _formMain->formMainChild(formUid);
-        if (!form)
+        if (!_formMain)
             return QString::null;
-//        bool formIsModified = false;
 
         QHash<QString, FormItem *> items;
-        foreach(FormItem *it, form->flattenFormItemChildren()) {
-            // TODO: check nested items?
+        foreach(FormItem *it, _formMain->flattenFormItemChildren()) {
             if (it->itemData()) {
-//                if (it->itemDatas()->isModified()) {
-//                    qWarning() << it->uuid() << "is modified";
-//                    formIsModified = true;
-//                }
                 items.insert(it->uuid(), it);
             }
         }
-
-//        if (formIsModified) {
-            // create the XML episode file
-            QHash<QString, QString> xmlData;
-            foreach(FormItem *it, items) {
-                xmlData.insert(it->uuid(), it->itemData()->storableData().toString());
-            }
-            return Utils::createXml(Form::Constants::XML_FORM_GENERAL_TAG, xmlData, 2, false);
-//        }
-
-//        return QString();
+        // create the XML episode file
+        QHash<QString, QString> xmlData;
+        foreach(FormItem *it, items) {
+            xmlData.insert(it->uuid(), it->itemData()->storableData().toString());
+        }
+        return Utils::createXml(Form::Constants::XML_FORM_GENERAL_TAG, xmlData, 2, false);
     }
 
-//    void feedFormWithEpisodeContent(Form::FormMain *form, EpisodeData *episode, bool feedPatientModel = false)
-    void feedFormWithEpisodeContent(const QModelIndex &index, bool feedPatientModel = false)
+    // Set the current episode into the form and populate the patientmodel too
+    void setCurrentEpisode(const QModelIndex &index)
     {
         if (!_episodeModel) {
             if (_formMain)
@@ -186,6 +173,7 @@ public:
                 LOG_ERROR_FOR(q, "No episode model. FormUid: (0x0)");
             return;
         }
+        _currentEpisode = index;
 
         // show the form widgets
         int stackIndex;
@@ -197,27 +185,25 @@ public:
             chrono.start();
 
         _formMain->clear();
-        q->setEnabled(false);
+        _formMain->formWidget()->setEnabled(false);
 
         QModelIndex xmlIndex = _episodeModel->index(index.row(), EpisodeModel::XmlContent);
         const QString &xml = _episodeModel->data(xmlIndex).toString();
-        if (xml.isEmpty())
-            return;
 
-        // read the xml'd content
-        QHash<QString, QString> datas;
-        if (!Utils::readXml(xml, Form::Constants::XML_FORM_GENERAL_TAG, datas, false)) {
-            QModelIndex uid = _episodeModel->index(index.row(), EpisodeModel::Uuid);
-            LOG_ERROR_FOR(q, QString("Error while reading episode content (%1)").arg(_episodeModel->data(uid).toString()));
-            return;
-        }
-
-        // put datas into the FormItems of the form
-        // XML content ==
-        // <formitemuid>value</formitemuid>
         QHash<QString, FormItem *> items;
-        foreach(FormItem *it, _formMain->flattenFormItemChildren()) {
-            items.insert(it->uuid(), it);
+        QHash<QString, QString> datas;
+        if (!xml.isEmpty()) {
+            // read the xml'd content
+            if (!Utils::readXml(xml, Form::Constants::XML_FORM_GENERAL_TAG, datas, false)) {
+                QModelIndex uid = _episodeModel->index(index.row(), EpisodeModel::Uuid);
+                LOG_ERROR_FOR(q, QString("Error while reading episode content (%1)").arg(_episodeModel->data(uid).toString()));
+                return;
+            }
+
+            // put datas into the FormItems of the form
+            foreach(FormItem *it, _formMain->flattenFormItemChildren()) {
+                items.insert(it->uuid(), it);
+            }
         }
 
         // Populate the FormMain item data (username, userdate, label)
@@ -227,6 +213,7 @@ public:
         _formMain->itemData()->setData(IFormItemData::ID_EpisodeDate, _episodeModel->data(userDate));
         _formMain->itemData()->setData(IFormItemData::ID_EpisodeLabel, _episodeModel->data(label));
         _formMain->itemData()->setData(IFormItemData::ID_UserName, _episodeModel->data(userName));
+        _formMain->itemData()->setStorableData(false); // equal: _formMain->itemData()->setModified(false)
 
         // Populate FormItem data and the patientmodel
         foreach(FormItem *it, items.values()) {
@@ -238,11 +225,12 @@ public:
                 continue;
 
             it->itemData()->setStorableData(datas.value(it->uuid()));
-            if (feedPatientModel && it->patientDataRepresentation() >= 0)
+//            if (feedPatientModel && it->patientDataRepresentation() >= 0)
+            if (it->patientDataRepresentation() >= 0)
                     patient()->setValue(it->patientDataRepresentation(), it->itemData()->data(it->patientDataRepresentation(), IFormItemData::PatientModelRole));
         }
 
-        q->setEnabled(true);
+        _formMain->formWidget()->setEnabled(true);
         if (WarnLogChronos)
             Utils::Log::logTimeElapsed(chrono, q->objectName(), "feedFormWithEpisodeContent");
     }
@@ -252,6 +240,7 @@ public:
     QHash<int, QString>_stackId_FormUuid;
     Form::FormMain *_formMain;
     EpisodeModel *_episodeModel;
+    QPersistentModelIndex _currentEpisode;
 
 private:
     FormDataWidgetMapper *q;
@@ -279,9 +268,16 @@ bool FormDataWidgetMapper::isDirty() const
 {
     if (!d->_formMain)
         return false;
+
+    // form isModified() (using storableData)
+    if (d->_formMain->itemData()->isModified()) {
+        qWarning() << "FormDataWidgetMapper::isDirty" << d->_formMain->uuid() << d->_formMain->itemData()->isModified();
+        return true;
+    }
     // ask all current form item data
     foreach(FormItem *it, d->_formMain->flattenFormItemChildren()) {
         if (it->itemData() && it->itemData()->isModified()) {
+            qWarning() << "FormDataWidgetMapper::isDirty" << it->uuid() << it->itemData()->isModified();
             return true;
         }
     }
@@ -309,14 +305,26 @@ void FormDataWidgetMapper::setCurrentEpisode(const QVariant &uid)
 
 void FormDataWidgetMapper::setCurrentEpisode(const QModelIndex &index)
 {
-    qWarning() << "FormDataWidgetMapper::setCurrentEpisode" << index.data().toString();
-
-    // populate the form item data
-    d->feedFormWithEpisodeContent(index, true);
+    WARN_FUNC;
+    d->setCurrentEpisode(index);
 }
 
 bool FormDataWidgetMapper::submit()
 {
-    return true;
+    qWarning() << "FormDataWidgetMapper::submit";
+    const QString &xml = d->getCurrentXmlEpisode();
+    QModelIndex xmlIndex = d->_episodeModel->index(d->_currentEpisode.row(), EpisodeModel::XmlContent);
+    if (!d->_episodeModel->setData(xmlIndex, xml))
+        return false;
+
+    QModelIndex userName = d->_episodeModel->index(d->_currentEpisode.row(), EpisodeModel::UserCreatorName);
+    QModelIndex userDate = d->_episodeModel->index(d->_currentEpisode.row(), EpisodeModel::UserDate);
+    QModelIndex label = d->_episodeModel->index(d->_currentEpisode.row(), EpisodeModel::Label);
+
+    d->_episodeModel->setData(label, d->_formMain->itemData()->data(IFormItemData::ID_EpisodeLabel));
+    d->_episodeModel->setData(userName, d->_formMain->itemData()->data(IFormItemData::ID_UserName));
+    d->_episodeModel->setData(userDate, d->_formMain->itemData()->data(IFormItemData::ID_EpisodeDate));
+
+    return d->_episodeModel->submit();
 }
 

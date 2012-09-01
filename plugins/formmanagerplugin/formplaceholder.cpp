@@ -61,6 +61,7 @@
 #include <patientbaseplugin/constants_db.h>
 
 #include <utils/log.h>
+#include <utils/global.h>
 #include <utils/widgets/minisplitter.h>
 #include <extensionsystem/pluginmanager.h>
 
@@ -76,6 +77,7 @@
 #include <QMouseEvent>
 #include <QPainter>
 #include <QEvent>
+#include <QItemSelectionModel>
 
 // Test
 #include <QTextBrowser>
@@ -155,6 +157,31 @@ public:
     ~FormPlaceHolderPrivate()
     {
         delete ui;
+    }
+
+    bool isAutosaveOn()
+    {
+        return settings()->value(Core::Constants::S_ALWAYS_SAVE_WITHOUT_PROMPTING, false).toBool();
+    }
+
+    bool saveCurrentEditingEpisode()
+    {
+        // Something to save?
+        if (!ui->formDataMapper->isDirty())
+            return true;
+        // Autosave or ask user?
+        if (!isAutosaveOn()) {
+            // Ask user
+            bool save = Utils::yesNoMessageBox(QApplication::translate("Form::FormPlaceHolder",
+                                                                       "Save episode?"),
+                                               QApplication::translate("Form::FormPlaceHolder",
+                                                                       "The actual episode has been modified. Do you want to save changes in your database?\n"
+                                                                       "Answering 'No' will cause definitve data lose."),
+                                               "", QApplication::translate("Form::FormPlaceHolder", "Save episode"));
+            if (!save)
+                return false;
+        }
+        return ui->formDataMapper->submit();
     }
 
 public:
@@ -281,13 +308,15 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
     connect(cmd->action(), SIGNAL(triggered()), this, SLOT(addForm()));
     cmd = actionManager()->command(Constants::A_PRINTFORM);
     connect(cmd->action(), SIGNAL(triggered()), this, SLOT(printCurrentItem()));
+    cmd = actionManager()->command(Core::Constants::A_FILE_SAVE);
+    connect(cmd->action(), SIGNAL(triggered()), this, SLOT(saveCurrentEditingEpisode()));
 
     int width = size().width();
     int third = width/3;
     d->ui->horizontalSplitter->setSizes(QList<int>() << third << width-third);
 
     int height = size().height();
-    third = height/3;
+    third = height/5;
     d->ui->verticalSplitter->setSizes(QList<int>() << third << height-third);
 }
 
@@ -409,22 +438,13 @@ void FormPlaceHolder::setCurrentForm(Form::FormMain *form)
     d->ui->episodeView->selectRow(0);
 }
 
+/**
+ * Define the current editing form.
+ * \sa setCurrentEditingItem()
+ */
 void FormPlaceHolder::setCurrentForm(const QString &formUid)
 {
     setCurrentForm(formManager()->form(formUid));
-
-//    // change the stack and populate as needed
-//    d->m_Stack->setCurrentIndex(d->m_StackId_FormUuid.key(formUuid));
-//    if (d->m_Stack->currentWidget()) {
-//        if (formUuid==Constants::PATIENTLASTEPISODES_UUID) {
-//            if (!d->_episodeModel)
-//                return;
-//            qApp->setOverrideCursor(QCursor(Qt::BusyCursor));
-//            QTextBrowser *browser = d->m_Stack->currentWidget()->findChild<QTextBrowser*>();
-//            browser->setText(d->_episodeModel->lastEpisodesSynthesis());
-//            qApp->restoreOverrideCursor();
-//        }
-//    }
 }
 
 /**
@@ -433,105 +453,52 @@ void FormPlaceHolder::setCurrentForm(const QString &formUid)
  */
 void FormPlaceHolder::setCurrentEditingItem(const QModelIndex &index)
 {
-    qWarning() << "FormPlaceHolder::setCurrentEditingItem";
     Form::FormMain *form = d->_formTreeModel->formForIndex(index);
     setCurrentForm(form);
-
-
-//    if (!d) {
-//        return;
-//    }
-//    if (!d->_episodeModel) {
-//        return;
-//    }
-
-//    const QString &formUuid = d->_episodeModel->index(index.row(), FormTreeModel::FormUuid, index.parent()).data().toString();
-//    if (formUuid==Constants::PATIENTLASTEPISODES_UUID && d->m_Stack->currentIndex()==0) {
-//        return;
-//    }
-//    setCurrentForm(formUuid);
-//    bool isEpisode = d->_episodeModel->isEpisode(index);
-//    if (isEpisode) {
-//        qobject_cast<QScrollArea*>(d->m_Stack->currentWidget())->widget()->setEnabled(true);
-//        d->_episodeModel->activateEpisode(index, formUuid);
-//    } else {
-//        // TODO: code here : show HtmlSynthesis in a label
-//        d->_episodeModel->activateEpisode(QModelIndex(), formUuid);
-//    }
-//    foreach(Form::FormMain *form, d->_rootForm->flattenFormMainChildren()) {
-//        if (form->uuid()==formUuid) {
-//            form->formWidget()->setEnabled(isEpisode);
-//            break;
-//        }
-//    }
 }
 
 void FormPlaceHolder::episodeChanged(const QModelIndex &current, const QModelIndex &previous)
 {
-    qWarning() << "FormPlaceHolder::EpisodeChanged" << current.data().toString();
-    if (d->ui->formDataMapper->isDirty())
-        d->ui->formDataMapper->submit();
+    qWarning() << "FormPlaceHolder::EpisodeChanged" << current << previous;
+    d->saveCurrentEditingEpisode();
     d->ui->formDataMapper->setCurrentEpisode(current);
 }
 
-//void FormPlaceHolder::reset()
-//{
-//    d->ui->formView->update();
-//    d->ui->formView->expandAll();
-//    d->populateStackLayout();
-//}
-
-void FormPlaceHolder::newEpisode()
+/** Private slot. Creates a new episode for the current selected form */
+bool FormPlaceHolder::newEpisode()
 {
     if (!d->ui->formView->selectionModel())
-        return;
+        return false;
     if (!d->ui->formView->selectionModel()->hasSelection())
-        return;
-    // get the parent form
-//    QModelIndex index;
-//    index = d->ui->formView->selectionModel()->selectedIndexes().at(0);
-//    while (!d->_episodeModel->isForm(index)) {
-//        index = index.parent();
-//    }
+        return false;
 
-//    // test the form to be unique or multiple episode
-//    if (d->_episodeModel->isUniqueEpisode(index) && d->_episodeModel->rowCount(index) == 1)
-//        return;
-//    if (d->_episodeModel->isNoEpisode(index))
-//        return;
+    // get the form
+    qWarning() << "FormPlaceHolder::newEpisode";
+    QModelIndex index = d->ui->formView->selectionModel()->selectedIndexes().at(0);
+    if (d->_formTreeModel->isNoEpisode(index))
+        return false;
+    if (d->_formTreeModel->isUniqueEpisode(index))
+        return false;
+    setCurrentEditingItem(index);
 
-//    // create a new episode the selected form and its children
-//    if (!d->_episodeModel->insertRow(0, index)) {
-//        LOG_ERROR("Unable to create new episode");
-//        return;
-//    }
-//    // activate the newly created main episode
-//    d->ui->formView->selectionModel()->clearSelection();
-//    d->ui->formView->selectionModel()->setCurrentIndex(d->_episodeModel->index(0,0,index), QItemSelectionModel::Select | QItemSelectionModel::Rows);
-//    const QString &formUuid = d->_episodeModel->index(index.row(), Form::FormTreeModel::FormUuid, index.parent()).data().toString();
-//    setCurrentForm(formUuid);
-//    qobject_cast<QScrollArea*>(d->m_Stack->currentWidget())->widget()->setEnabled(true);
-//    d->_episodeModel->activateEpisode(d->_episodeModel->index(0,0,index), formUuid);
-//    foreach(Form::FormMain *form, d->_rootForm->flattenFormMainChildren()) {
-//        if (form->uuid()==formUuid) {
-//            form->formWidget()->setEnabled(true);
-//            break;
-//        }
-//    }
+    // create a new episode the selected form and its children
+    Form::FormMain *form = d->_formTreeModel->formForIndex(index);
+    EpisodeModel *model = formManager()->episodeModel(form);
+    if (!model->insertRow(0)) {
+        LOG_ERROR("Unable to create new episode");
+        return false;
+    }
+
+    // activate the newly created main episode
+    d->ui->episodeView->selectRow(0);
+    d->ui->formDataMapper->setCurrentEpisode(model->index(0, EpisodeModel::Label));
+    return true;
 }
 
-void FormPlaceHolder::removeEpisode()
+bool FormPlaceHolder::saveCurrentEditingEpisode()
 {
-    if (!d->ui->formView->selectionModel())
-        return;
-    // TODO: code here: removeEpisode
-}
-
-void FormPlaceHolder::validateEpisode()
-{
-    if (!d->ui->formView->selectionModel())
-        return;
-    // TODO: code here: validateEpisode
+    qWarning() << "FormPlaceHolder::saveCurrentEditingEpisode";
+    return d->saveCurrentEditingEpisode();
 }
 
 void FormPlaceHolder::addForm()

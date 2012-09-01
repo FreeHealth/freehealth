@@ -76,7 +76,8 @@ public:
 
     Form::FormMain *formForIndex(const QModelIndex &index)
     {
-        return itemToForm(q->itemFromIndex(index));
+        QModelIndex firstRow = q->index(index.row(), 0, index.parent());
+        return itemToForm(q->itemFromIndex(firstRow));
     }
 
     void createFormTree()
