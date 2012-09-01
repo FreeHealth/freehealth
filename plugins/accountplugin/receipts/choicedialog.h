@@ -85,7 +85,7 @@ private:
 };
 }
 
-class ACCOUNT_EXPORT choiceDialog : public QDialog
+class ACCOUNT_EXPORT ChoiceDialog : public QDialog
 {
   Q_OBJECT
 public:
@@ -97,8 +97,8 @@ public:
       DISTRULES,
       returningModel_MaxParam
       };
-  choiceDialog(QWidget *parent = 0,bool roundtrip = false, bool freetext = false, QString preferredValue = QString());
-  ~choiceDialog();
+  ChoiceDialog(QWidget *parent = 0,bool roundtrip = false, bool freetext = false, QString preferredValue = QString());
+  ~ChoiceDialog();
   double getDistanceNumber(const QString & data);
   int returnChoiceDialog();
   double returnPercentValue();

@@ -901,7 +901,7 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex & index) {
             qDebug() << __FILE__ << QString::number(__LINE__) << " in findReceiptsValues AND VALUES "  ;
         if(rv->exec() == QDialog::Accepted) {
             hashOfValues = rv -> getchosenValues();
-            choiceDialog choice(rv,false,false);
+            ChoiceDialog choice(rv,false,false);
             if(hashOfValues.keys().size() > 0){
                 if(choice.exec() == QDialog::Accepted){
                     QStandardItemModel * model = choice.getChoicePercentageDebtorSiteDistruleModel();
@@ -926,7 +926,7 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex & index) {
     if(index.row() == PREFERED_VALUE_ITEM && index.parent() == QModelIndex()){// preferential act of payment
         if (WarnDebugMessage)
             qDebug() << __FILE__ << QString::number(__LINE__) << " PREFERENTIAL_VALUE";
-        choiceDialog choice(this,false,false);
+        ChoiceDialog choice(this,false,false);
         if(choice.exec() == QDialog::Accepted){
             QStandardItemModel * model = choice.getChoicePercentageDebtorSiteDistruleModel();
             if (WarnDebugMessage)
@@ -985,7 +985,7 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex & index) {
     {
         if (WarnDebugMessage)
             qDebug() << __FILE__ << QString::number(__LINE__) << " in ROUND_TRIP";
-        choiceDialog dist(this,true,false);
+        ChoiceDialog dist(this,true,false);
         if (dist.exec()== QDialog::Accepted)
         {
             QStandardItemModel * model = dist.getChoicePercentageDebtorSiteDistruleModel();
@@ -1026,7 +1026,7 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex & index) {
     {
         if (WarnDebugMessage)
             qDebug() << __FILE__ << QString::number(__LINE__) << " IN THESAURUS " ;
-        choiceDialog choice(this,false,false);
+        ChoiceDialog choice(this,false,false);
         if(choice.exec() == QDialog::Accepted){
             QStandardItemModel * model = choice.getChoicePercentageDebtorSiteDistruleModel();
             for (int i = 0; i < model->rowCount(); i += 1)
@@ -1101,7 +1101,7 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex & index) {
     {
         if (WarnDebugMessage)
             qDebug() << __FILE__ << QString::number(__LINE__) << " PREFERENTIAL_VALUE";
-        choiceDialog choice(this,false,true);
+        ChoiceDialog choice(this,false,true);
         if(choice.exec() == QDialog::Accepted){
             QStandardItemModel * model = choice.getChoicePercentageDebtorSiteDistruleModel();
             if (WarnDebugMessage)

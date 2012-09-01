@@ -159,7 +159,7 @@ void PreferredReceipts::insertpreferredValuesIntoAccount(){
 }
 
 void PreferredReceipts::showChoiceDialog(){
-    choiceDialog * choice = new choiceDialog(this,false,false,m_preferredAct);
+    ChoiceDialog * choice = new ChoiceDialog(this,false,false,m_preferredAct);
     if (choice->exec() == QDialog::Accepted)
     {
           m_typeOfChoice = choice->returnChoiceDialog();
