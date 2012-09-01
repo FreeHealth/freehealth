@@ -490,8 +490,8 @@ bool FormPlaceHolder::newEpisode()
     }
 
     // activate the newly created main episode
-    d->ui->episodeView->selectRow(0);
-    d->ui->formDataMapper->setCurrentEpisode(model->index(0, EpisodeModel::Label));
+    d->ui->episodeView->selectRow(model->rowCount() - 1);
+    d->ui->formDataMapper->setCurrentEpisode(model->index(model->rowCount() - 1, EpisodeModel::Label));
     return true;
 }
 
