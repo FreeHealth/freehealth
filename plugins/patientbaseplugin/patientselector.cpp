@@ -57,16 +57,10 @@
 using namespace Patients;
 using namespace Trans::ConstantTranslations;
 
-
-/**
-  \todo Two modes of searching : small db --> update on typing, big db --> update on validation
-*/
-
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 static inline Core::IMainWindow *mainWindow() {return Core::ICore::instance()->mainWindow();}
 static inline Core::ActionManager *actionManager() { return Core::ICore::instance()->actionManager(); }
-
 
 namespace Patients {
 namespace Internal {

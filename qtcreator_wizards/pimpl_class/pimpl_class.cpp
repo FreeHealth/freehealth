@@ -26,37 +26,37 @@
  ***************************************************************************/
 
 @if "%Doxygen%" == "true"
+@if "%Internal%" == "true"
 /*!
-@IF "%Internal%" == "true"
  * \class %PluginNamespace:c%::Internal::%ClassName:c%
-@ELSE
+ * \brief short description of class
+ *
+ * Long description of class
+ * \sa %PluginNamespace:c%::
+ */
+@else
+/*!
  * \class %PluginNamespace:c%::%ClassName:c%
-@ENDIF
  * \brief short description of class
  *
  * Long description of class
  * \sa %PluginNamespace:c%::
  */
 @endif
+@endif
 
 
 #include "%ClassName:l%.h"
 
 using namespace %PluginNamespace:c%;
-@if "%Internal%" == "true"
 using namespace Internal;
-@endif
-
-namespace %PluginNamespace:c% {
-@if "%Internal%" == "true"
-namespace Internal {
-@endif
 
 @if "%PIMPL%" == "true"
-// ********************** BEGIN private model implementation **********************
+namespace %PluginNamespace:c% {
+namespace Internal {
 @if "%Doxygen%" == "true"
 /*!
- * \class %PluginNamespace:c%::%ClassName:c%Private
+ * \class %PluginNamespace:c%::Internal::%ClassName:c%Private
  * \brief Private implementation of the %PluginNamespace:c%::%ClassName:c% class.
  *
  * documentation here
@@ -70,19 +70,14 @@ public:
 private:
     %ClassName:c% *q;
 };
-
-// ********************** END private model implementation **********************
-@endif
-@if "%Internal%" == "true"
 }  // namespace Internal
-@endif
 } // end namespace %PluginNamespace:c%
+@endif
 
 @if "%Doxygen%" == "true"
 /*! Constructor of the %ClassName:c% class */
 @endif
-%ClassName:c%::%ClassName:c%(QWidget *parent) :
-    QWidget(parent)
+%ClassName:c%::%ClassName:c%()
 {
 }
 
@@ -99,17 +94,3 @@ private:
 bool %ClassName:c%::initialize()
 {
 }
-
-/*
-void %ClassName:c%::setCurrentForm(const QString &formUid)
-{}
-
-void %ClassName:c%::setCurrentForm(const Form::FormMain *form)
-{}
-
-void %ClassName:c%::setCurrentEpisode(const QVariant &uid)
-{}
-
-void %ClassName:c%::setCurrentEpisode(const QModelIndex &index)
-{}
-*/
