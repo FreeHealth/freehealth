@@ -386,6 +386,8 @@ QVariant EpisodeModel::data(const QModelIndex &index, int role) const
         case XmlContent:  return d->getEpisodeContent(index); break;
         case Icon: sqlColumn = Constants::EPISODES_ISVALID; break;
         case Uuid: sqlColumn = Constants::EPISODES_ID; break;
+        case FormUuid: if (d->_formMain) return d->_formMain->uuid(); else return QString();
+        case FormLabel: if (d->_formMain) return d->_formMain->spec()->label();
         }
         if (sqlColumn!=-1) {
             QModelIndex sqlIndex = d->_sqlModel->index(index.row(), sqlColumn);
@@ -441,17 +443,19 @@ QVariant EpisodeModel::data(const QModelIndex &index, int role) const
 //        }
 //        return QFont();
 //    }
-//    case Qt::DecorationRole :
-//    {
-//        if (form) {
-//            QString icon = form->spec()->value(FormItemSpec::Spec_IconFileName).toString();
-//            icon.replace(Core::Constants::TAG_APPLICATION_THEME_PATH, settings()->path(Core::ISettings::SmallPixmapPath));
-//            if (QFileInfo(icon).isRelative())
-//                icon.append(qApp->applicationDirPath());
-//            return QIcon(icon);
-//        }
-//        break;
-//    }
+    case Qt::DecorationRole :
+    {
+        switch (index.column()) {
+        case FormLabel:
+        {
+            if (!d->_formMain)
+                return QVariant();
+            QString iconFile = d->_formMain->spec()->iconFileName();
+            iconFile.replace(Core::Constants::TAG_APPLICATION_THEME_PATH, settings()->path(Core::ISettings::SmallPixmapPath));
+            return QIcon(iconFile);
+        }
+        }
+    }
     }
     return QVariant();
 }
@@ -537,10 +541,13 @@ QVariant EpisodeModel::headerData(int section, Qt::Orientation orientation, int 
 }
 
 /** Insert new episodes to the \e parent. The parent must be a form. */
-bool EpisodeModel::insertRows(int row, int count, const QModelIndex &parent)
+bool EpisodeModel::insertRows(int row, int count, const QModelIndex &)
 {
     if (d->_readOnly)
         return false;
+
+//    QSqlTableModel::EditStrategy strategy = d->_sqlModel->editStrategy();
+//    d->_sqlModel->setEditStrategy(QSqlTableModel::OnManualSubmit);
 
     bool ok = d->_sqlModel->insertRows(row, count);
     if (!ok) {
@@ -548,20 +555,25 @@ bool EpisodeModel::insertRows(int row, int count, const QModelIndex &parent)
         return false;
     }
 
-    for(int i=0; i<count; ++i) {
-        i+=row;
-        d->_sqlModel->setData(d->_sqlModel->index(i, Constants::EPISODES_ISVALID), 1);
-    }
+//    for(int i=0; i<count; ++i) {
+//        i+=row;
+//        d->_sqlModel->setData(d->_sqlModel->index(i, Constants::EPISODES_ISVALID), 1);
+//        qWarning() << d->_sqlModel->data(d->_sqlModel->index(i, Constants::EPISODES_ID));
+//    }
 
+    d->_sqlModel->submitAll();
 //    d->_sqlModel->blockSignals(true);
 //    d->_sqlModel->submit();
 //    d->_sqlModel->blockSignals(false);
+
+//    d->_sqlModel->setEditStrategy(strategy);
+
     return true;
 }
 
 void EpisodeModel::populateNewRowWithDefault(int row, QSqlRecord &record)
 {
-    for(int i = 0; i < record.count(); ++i) {
+    for(int i = 1; i < record.count(); ++i) {
         record.setNull(i);
         record.setGenerated(i, true);
     }
@@ -572,16 +584,11 @@ void EpisodeModel::populateNewRowWithDefault(int row, QSqlRecord &record)
     record.setValue(Constants::EPISODES_PATIENT_UID, patient()->uuid());
     record.setValue(Constants::EPISODES_DATEOFCREATION, QDateTime::currentDateTime());
     record.setValue(Constants::EPISODES_ISVALID, 1);
-    qWarning() << "EpisodeModel::populateNewRowWithDefault" << row << record;
 }
 
 /** Invalidate an episode. The episode will stay in database but will not be show in the view (unless you ask for invalid episode not to be filtered). */
 bool EpisodeModel::removeRows(int row, int count, const QModelIndex &parent)
 {
-    Q_UNUSED(row);
-    Q_UNUSED(count);
-    Q_UNUSED(parent);
-
     if (d->_readOnly)
         return false;
 
