@@ -62,6 +62,8 @@ const char* const UNIQUE_IDENTIFIER                  = QT_TRANSLATE_NOOP("tkCons
 const char* const URL                                = QT_TRANSLATE_NOOP("tkConstants", "URL");
 const char* const VALUE                              = QT_TRANSLATE_NOOP("tkConstants", "Value");
 const char* const VALUE_1                            = QT_TRANSLATE_NOOP("tkConstants", "Value: %1");
+const char* const ISVALID                            = QT_TRANSLATE_NOOP("tkConstants", "Is valid");
+const char* const ICON                               = QT_TRANSLATE_NOOP("tkConstants", "Icon");
 
 const char* const TOKEN                              = QT_TRANSLATE_NOOP("tkConstants", "Token");
 const char* const TOKEN_1                            = QT_TRANSLATE_NOOP("tkConstants", "Token: %1");
@@ -98,6 +100,8 @@ const char* const RELATED_TO_APPLICATION        = QT_TRANSLATE_NOOP("tkConstants
 const char* const RELATED_TO_PATIENT_FAMILY_1   = QT_TRANSLATE_NOOP("tkConstants", "related to the family %1");
 const char* const RELATED_TO_USER_GROUP_1       = QT_TRANSLATE_NOOP("tkConstants", "related to user group %1");
 const char* const YOU                           = QT_TRANSLATE_NOOP("tkConstants", "You");
+const char* const CREATION_DATE                 = QT_TRANSLATE_NOOP("tkConstants", "Creation date");
+const char* const DATE                          = QT_TRANSLATE_NOOP("tkConstants", "Date");
 const char* const CREATED_BY_1                  = QT_TRANSLATE_NOOP("tkConstants", "Created by: %1");
 const char* const ON_THE_1                      = QT_TRANSLATE_NOOP("tkConstants", "On the: %1");
 
