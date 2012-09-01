@@ -330,7 +330,7 @@ BaseForm::BaseForm(Form::FormItem *formItem, QWidget *parent) :
     m_Header = new Ui::BaseFormWidget;
     m_Header->setupUi(header);
 
-    m_EpisodeDate = m_Header->dateEdit;
+    m_EpisodeDate = m_Header->dateTimeEdit;
     m_EpisodeDate->setDisplayFormat(tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR));
 
     m_EpisodeDate->setEnabled(false);
@@ -520,7 +520,7 @@ BaseFormData::~BaseFormData()
 void BaseFormData::clear()
 {
     m_Data.clear();
-    m_Form->m_EpisodeDate->setDate(QDate::currentDate());
+    m_Form->m_EpisodeDate->setDateTime(QDateTime::currentDateTime());
     m_Form->m_EpisodeLabel->clear();
     m_Form->m_EpisodeLabel->setEnabled(false);
     m_Form->m_EpisodeDate->setEnabled(false);
@@ -541,7 +541,7 @@ bool BaseFormData::setData(const int ref, const QVariant &data, const int role)
     m_Modified = true;
     switch (ref) {
     case ID_EpisodeDate:
-        m_Form->m_EpisodeDate->setDate(m_Data.value(ref).toDate());
+        m_Form->m_EpisodeDate->setDateTime(m_Data.value(ref).toDateTime());
         m_Form->m_EpisodeDate->setEnabled(true);
         break;
     case ID_EpisodeLabel:
@@ -550,11 +550,11 @@ bool BaseFormData::setData(const int ref, const QVariant &data, const int role)
         break;
     }
     m_Form->m_EpisodeDate->setToolTip(QString("<p align=\"right\">%1&nbsp;-&nbsp;%2<br /><span style=\"color:gray;font-size:9pt\">%3</span></p>")
-                                      .arg(QLocale().toString(m_Data.value(ID_EpisodeDate).toDate(),QLocale::LongFormat).replace(" ","&nbsp;"))
+                                      .arg(QLocale().toString(m_Data.value(ID_EpisodeDate).toDateTime(), QLocale::LongFormat).replace(" ","&nbsp;"))
                                        .arg(m_Data.value(ID_EpisodeLabel).toString().replace(" ", "&nbsp;"))
                                        .arg(m_Data.value(ID_UserName).toString().replace(" ", "&nbsp;")));
     m_Form->m_EpisodeLabel->setToolTip(QString("<p align=\"right\">%1&nbsp;-&nbsp;%2<br /><span style=\"color:gray;font-size:9pt\">%3</span></p>")
-                                       .arg(QLocale().toString(m_Data.value(ID_EpisodeDate).toDate(),QLocale::LongFormat).replace(" ","&nbsp;"))
+                                       .arg(QLocale().toString(m_Data.value(ID_EpisodeDate).toDateTime(), QLocale::LongFormat).replace(" ","&nbsp;"))
                                        .arg(m_Data.value(ID_EpisodeLabel).toString().replace(" ", "&nbsp;"))
                                        .arg(m_Data.value(ID_UserName).toString().replace(" ", "&nbsp;")));
     return true;
@@ -566,7 +566,7 @@ QVariant BaseFormData::data(const int ref, const int role) const
     if (role!=Qt::DisplayRole)
         return false;
     switch (ref) {
-    case ID_EpisodeDate: return m_Form->m_EpisodeDate->date();
+    case ID_EpisodeDate: return m_Form->m_EpisodeDate->dateTime();
     case ID_EpisodeLabel: return m_Form->m_EpisodeLabel->text();
     case ID_UserName: return m_Data.value(ID_UserName);
     }
