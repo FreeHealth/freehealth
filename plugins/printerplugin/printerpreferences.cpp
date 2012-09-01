@@ -149,7 +149,7 @@ void PrinterPreferencesWidget::setDataToUi()
     }
     // Add settings name if printer is not connected !
 
-    QListWidgetItem *system = new QListWidgetItem(tr("Always use system's default printer"), printerList);
+    QListWidgetItem *system = new QListWidgetItem(tr("Always use system default printer"), printerList);
     system->setData(Qt::UserRole, "System");
     if (select == "System")
         system->setSelected(true);
