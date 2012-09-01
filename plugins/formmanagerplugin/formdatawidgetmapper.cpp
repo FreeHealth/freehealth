@@ -175,6 +175,9 @@ public:
         }
         _currentEpisode = index;
 
+        if (!index.isValid())
+            return;
+
         // show the form widgets
         int stackIndex;
         (_formMain) ? stackIndex = _stackId_FormUuid.key(_formMain->uuid()) : stackIndex = 0;
@@ -297,6 +300,7 @@ void FormDataWidgetMapper::setCurrentForm(Form::FormMain *form)
     qWarning() << "FormDataWidgetMapper::setCurrentForm" << form->uuid();
     d->populateStack(form);
     d->useEpisodeModel(form);
+    d->_formMain->itemData()->setStorableData(false);  // equal == form->setModified(false);
 }
 
 void FormDataWidgetMapper::setCurrentEpisode(const QVariant &uid)
@@ -325,6 +329,7 @@ bool FormDataWidgetMapper::submit()
     d->_episodeModel->setData(userName, d->_formMain->itemData()->data(IFormItemData::ID_UserName));
     d->_episodeModel->setData(userDate, d->_formMain->itemData()->data(IFormItemData::ID_EpisodeDate));
 
-    return d->_episodeModel->submit();
+    return true;
+//    return d->_episodeModel->submit();
 }
 
