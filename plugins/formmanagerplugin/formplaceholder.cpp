@@ -147,7 +147,7 @@ class FormPlaceHolderPrivate
 public:
     FormPlaceHolderPrivate(FormPlaceHolder *parent) :
         ui(new Ui::FormPlaceHolder),
-            _rootForm(0),
+            _formMain(0),
             _formTreeModel(0),
             _delegate(0),
             q(parent)
@@ -186,7 +186,7 @@ public:
 
 public:
     Ui::FormPlaceHolder *ui;
-    FormMain *_rootForm;
+    FormMain *_formMain;
     FormTreeModel *_formTreeModel;
     FormItemDelegate *_delegate;
 
@@ -336,7 +336,7 @@ void FormPlaceHolder::setRootForm(Form::FormMain *rootForm)
 {
     if (!rootForm)
         return;
-    d->_rootForm = rootForm;
+    d->_formMain = rootForm;
 
     // Manage Form tree view / model
     if (d->_formTreeModel)
@@ -548,8 +548,7 @@ void FormPlaceHolder::printCurrentItem()
 //    if (!form.isValid())
 //        return;
 
-//    QString htmlToPrint;
-//    QString title;
+
 //    QModelIndex formUid = d->_episodeModel->index(form.row(), Form::FormTreeModel::FormUuid, form.parent());
 //    if (formUid.data().toString()==Constants::PATIENTLASTEPISODES_UUID) {
 //        // Print patient synthesis
@@ -561,32 +560,41 @@ void FormPlaceHolder::printCurrentItem()
 //            setCurrentEpisode(index);
 //        Form::FormMain *formMain = d->_episodeModel->formForIndex(form);
 //        if (formMain) {
-//            htmlToPrint = "<html><body>" + formMain->printableHtml(d->_episodeModel->isEpisode(index)) + "</body></html>";
-//            title = formMain->spec()->label();
+//                htmlToPrint = "<html><body>" + formMain->printableHtml(d->_episodeModel->isEpisode(index)) + "</body></html>";
+//                title = formMain->spec()->label();
 //        }
 //    }
 
-//    if (htmlToPrint.isEmpty())
-//        return;
+    Form::FormMain *formMain = d->_formTreeModel->formForIndex(d->ui->formView->currentIndex());
+    if (!formMain)
+        return;
 
-//    Core::IDocumentPrinter *p = printer();
-//    if (!p) {
-//        LOG_ERROR("No IDocumentPrinter found");
-//        return;
+    QString htmlToPrint;
+    QString title;
+    htmlToPrint = "<html><body>" + formMain->printableHtml(true) + "</body></html>";
+    title = formMain->spec()->label();
+
+    if (htmlToPrint.isEmpty())
+        return;
+
+    Core::IDocumentPrinter *p = printer();
+    if (!p) {
+        LOG_ERROR("No IDocumentPrinter found");
+        return;
+    }
+    p->clearTokens();
+    QHash<QString, QVariant> tokens;
+
+    tokens.insert(Core::Constants::TOKEN_DOCUMENTTITLE, title);
+//    // create a token for each FormItem of the FormMain
+//    foreach(FormItem *item, formMain->flattenFormItemChildren()) {
+//        if (item->itemDatas())
+//            tokens.insert(item->uuid(), item->itemDatas()->data(0, Form::IFormItemData::ID_Printable));
 //    }
-//    p->clearTokens();
-//    QHash<QString, QVariant> tokens;
+    p->addTokens(Core::IDocumentPrinter::Tokens_Global, tokens);
 
-//    tokens.insert(Core::Constants::TOKEN_DOCUMENTTITLE, title);
-////    // create a token for each FormItem of the FormMain
-////    foreach(FormItem *item, formMain->flattenFormItemChildren()) {
-////        if (item->itemDatas())
-////            tokens.insert(item->uuid(), item->itemDatas()->data(0, Form::IFormItemData::ID_Printable));
-////    }
-//    p->addTokens(Core::IDocumentPrinter::Tokens_Global, tokens);
-
-//    // print
-//    p->print(htmlToPrint, Core::IDocumentPrinter::Papers_Generic_User, false);
+    // print
+    p->print(htmlToPrint, Core::IDocumentPrinter::Papers_Generic_User, false);
 }
 
 void FormPlaceHolder::changeEvent(QEvent *event)
