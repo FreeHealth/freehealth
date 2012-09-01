@@ -328,7 +328,7 @@ UserData *UserBase::getUser(const QHash<int, QString> &conditions) const
     query.finish();
 
     if (list.count())
-        toReturn->addDynamicDatasFromDatabase(list);
+        toReturn->addDynamicDataFromDatabase(list);
 
     // get personal LINK_ID
     // TODO: this must be updated: manage groups too

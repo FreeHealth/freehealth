@@ -818,7 +818,7 @@ bool Printer::askForPrinter(QWidget *parent)
 {
     d->renewPrinter();
     QPrintDialog dialog(d->m_Printer, parent);
-    dialog.setWindowTitle(tr("Print Document"));
+    dialog.setWindowTitle(tr("Print document"));
     if (dialog.exec() == QDialog::Accepted)
         return true;
     return false;

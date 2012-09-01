@@ -6,7 +6,7 @@
     <message>
         <location filename="../../plugins/printerplugin/documentprinter.cpp" line="163"/>
         <source>Made with %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Erstellt mit %1.</translation>
     </message>
 </context>
 <context>
@@ -14,37 +14,37 @@
     <message>
         <location filename="../../plugins/printerplugin/printdialog.ui" line="23"/>
         <source>Print</source>
-        <translation type="unfinished"></translation>
+        <translation>Drucken</translation>
     </message>
     <message>
         <location filename="../../plugins/printerplugin/printdialog.ui" line="106"/>
         <source>First page</source>
-        <translation type="unfinished"></translation>
+        <translation>Erste Seite</translation>
     </message>
     <message>
         <location filename="../../plugins/printerplugin/printdialog.ui" line="134"/>
         <source>Previous page</source>
-        <translation type="unfinished"></translation>
+        <translation>Vorige Seite</translation>
     </message>
     <message>
         <location filename="../../plugins/printerplugin/printdialog.ui" line="156"/>
         <source># of ##</source>
-        <translation type="unfinished"></translation>
+        <translation># von ##</translation>
     </message>
     <message>
         <location filename="../../plugins/printerplugin/printdialog.ui" line="178"/>
         <source>Next page</source>
-        <translation type="unfinished"></translation>
+        <translation>Nächste Seite</translation>
     </message>
     <message>
         <location filename="../../plugins/printerplugin/printdialog.ui" line="206"/>
         <source>Last page</source>
-        <translation type="unfinished"></translation>
+        <translation>Letzte Seite</translation>
     </message>
     <message>
         <location filename="../../plugins/printerplugin/printdialog.ui" line="228"/>
         <source>Printer :</source>
-        <translation type="unfinished"></translation>
+        <translation>Drucker:</translation>
     </message>
     <message>
         <location filename="../../plugins/printerplugin/printdialog.ui" line="248"/>
@@ -230,12 +230,12 @@ Refer to your operating system documentation.</source>
     <message>
         <location filename="../../plugins/printerplugin/printerpreviewer_p.ui" line="62"/>
         <source>Show page</source>
-        <translation>Schaue Seite</translation>
+        <translation>Zeige Seite</translation>
     </message>
     <message>
         <location filename="../../plugins/printerplugin/printerpreviewer_p.ui" line="72"/>
         <source>Show Duplicates</source>
-        <translation type="unfinished"></translation>
+        <translation>Duplikate anzeigen</translation>
     </message>
     <message>
         <location filename="../../plugins/printerplugin/printerpreviewer_p.ui" line="79"/>
@@ -252,7 +252,7 @@ Dies kann eine starke CPU Belastung sein.</translation>
     <message>
         <location filename="../../plugins/printerplugin/printerpreviewer_p.ui" line="111"/>
         <source>Toogle preview</source>
-        <translation type="unfinished"></translation>
+        <translation>Vorschau ein/ausblenden</translation>
     </message>
     <message>
         <location filename="../../plugins/printerplugin/printerpreviewer_p.ui" line="118"/>
@@ -305,7 +305,7 @@ Dies kann eine starke CPU Belastung sein.</translation>
     <message>
         <location filename="../../plugins/printerplugin/printer.cpp" line="821"/>
         <source>Print Document</source>
-        <translation type="unfinished"></translation>
+        <translation>Dokument drucken</translation>
     </message>
 </context>
 <context>

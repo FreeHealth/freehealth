@@ -30,6 +30,40 @@
    <item row="0" column="1">
     <widget class="QWidget" name="previewWidget" native="true">
      <layout class="QGridLayout" name="gridLayout_3">
+      <item row="2" column="0" colspan="2">
+       <widget class="QCheckBox" name="duplicataCheck">
+        <property name="text">
+         <string>Show Duplicates</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QSpinBox" name="pageNumberSpinBox"/>
+      </item>
+      <item row="3" column="0" colspan="2">
+       <widget class="QCheckBox" name="automaticUpdateCheck">
+        <property name="toolTip">
+         <string>If it's checked the preview will update at each changes of text.
+ This can be heavy CPU consuming.</string>
+        </property>
+        <property name="text">
+         <string>Automatic update</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="label">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="text">
+         <string>Show page</string>
+        </property>
+       </widget>
+      </item>
       <item row="0" column="0" colspan="2">
        <layout class="QGridLayout" name="gridLayout">
         <item row="0" column="0">
@@ -50,37 +84,10 @@
         </item>
        </layout>
       </item>
-      <item row="1" column="0">
-       <widget class="QLabel" name="label">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
+      <item row="4" column="0">
+       <widget class="QPushButton" name="updatePreviewButton">
         <property name="text">
-         <string>Show page</string>
-        </property>
-       </widget>
-      </item>
-      <item row="1" column="1">
-       <widget class="QSpinBox" name="pageNumberSpinBox"/>
-      </item>
-      <item row="2" column="0" colspan="2">
-       <widget class="QCheckBox" name="duplicataCheck">
-        <property name="text">
-         <string>Show Duplicates</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="0" colspan="2">
-       <widget class="QCheckBox" name="automaticUpdateCheck">
-        <property name="toolTip">
-         <string>If it's checked the preview will update at each changes of text.
- This can be heavy CPU consuming.</string>
-        </property>
-        <property name="text">
-         <string>Automatic update</string>
+         <string>Update</string>
         </property>
        </widget>
       </item>
@@ -108,14 +115,13 @@
      <item>
       <widget class="QPushButton" name="tooglePreviewButton">
        <property name="text">
-        <string>Toogle preview</string>
+        <string>Preview</string>
        </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="updatePreviewButton">
-       <property name="text">
-        <string>Update preview</string>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+       <property name="checked">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
@@ -124,5 +130,38 @@
   </layout>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>tooglePreviewButton</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>previewWidget</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>366</x>
+     <y>289</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>366</x>
+     <y>272</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>automaticUpdateCheck</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>updatePreviewButton</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>240</x>
+     <y>233</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>238</x>
+     <y>256</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

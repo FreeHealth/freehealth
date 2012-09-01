@@ -270,7 +270,7 @@ protected:
 
     // generic setters to use only when retreiving data from database
     void setValue(const int tableref, const int fieldref, const QVariant & val);
-    void addDynamicDatasFromDatabase(const QList<UserDynamicData*> &list);
+    void addDynamicDataFromDatabase(const QList<UserDynamicData*> &list);
     void addRightsFromDatabase(const char * roleName, const int fieldref, const QVariant & val);
     void setLkIds(const QList<int> &lkids);
 

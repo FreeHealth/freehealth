@@ -434,7 +434,7 @@ void PrinterPreviewerPrivate::on_pageNumberSpinBox_valueChanged(int value)
     Q_UNUSED(value);
 }
 
-void PrinterPreviewerPrivate::on_tooglePreviewButton_clicked()
-{
-    previewWidget->setVisible(!previewWidget->isVisible());
-}
+//void PrinterPreviewerPrivate::on_tooglePreviewButton_clicked()
+//{
+//    previewWidget->setVisible(!previewWidget->isVisible());
+//}
