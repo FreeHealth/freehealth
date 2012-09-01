@@ -533,7 +533,7 @@ QStandardItemModel * ChoiceDialog::getChoicePercentageDebtorSiteDistruleModel(){
     return m_modelChoicePercentDebtorSiteDistruleValues;
 }
 
-QVariant ChoiceDialog::firstItemchosenAsPreferential(returningModel item)
+QVariant ChoiceDialog::firstItemchosenAsPreferential(ReturningModel item)
 {
     if (WarnDebugMessage)
         qDebug() << __FILE__ << QString::number(__LINE__) << " item =" << item ;

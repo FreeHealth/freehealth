@@ -89,7 +89,7 @@ class ACCOUNT_EXPORT ChoiceDialog : public QDialog
 {
   Q_OBJECT
 public:
-  enum returningModel{
+  enum ReturningModel{
       TYPE_OF_CHOICE = 0,
       PERCENTAGE,
       DEBTOR,
@@ -135,7 +135,7 @@ private:
   int m_quickInt;
   QHash<int,QString> m_hashPercentages;
 private:
-  QVariant firstItemchosenAsPreferential(returningModel item);
+  QVariant firstItemchosenAsPreferential(ReturningModel item);
 
 };
 
