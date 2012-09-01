@@ -24,6 +24,14 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
+/**
+ * \class Form::EpisodeModel
+ * Create a model to episode database. Episode model are linked to a specific form.
+ * Form::FormManager centralizes all the Form::EpisodeModel for each
+ * forms.
+ * \sa Form::FormManager::episodeModel()
+ */
+
 #include "episodemodel.h"
 #include "episodebase.h"
 #include "constants_db.h"
@@ -156,6 +164,8 @@ public:
 
     ~EpisodeModelPrivate()
     {
+        qDeleteAll(_validationCache.values());
+        _validationCache.clear();
     }
 
     void updateFilter()
@@ -194,6 +204,29 @@ public:
             return getEpisodeContentFormCache(index);
         QModelIndex id = _sqlModel->index(index.row(), Constants::EPISODES_ID);
         return episodeBase()->getEpisodeContent(_sqlModel->data(id));
+    }
+
+    bool isEpisodeValidated(const QModelIndex &index)
+    {
+        QVariant uid = _sqlModel->data(_sqlModel->index(index.row(), Constants::EPISODES_ID)).toString();
+        QList<EpisodeValidationData *>val;
+        // in cache ?
+        if (_validationCache.keys().contains(uid.toInt())) {
+            val = _validationCache.values(uid.toInt());
+        } else {
+            // get from db
+            val = episodeBase()->getEpisodeValidations(uid);
+            int id = uid.toInt();
+            if (val.isEmpty()) {
+                _validationCache.insertMulti(id, 0);
+                val.append(0);
+            } else {
+                foreach(EpisodeValidationData *data, val)
+                    _validationCache.insertMulti(id, data);
+            }
+        }
+        // episode validated ?
+        return (!(val.count()==1 && val.at(0)==0));
     }
 
 //    void getLastEpisodes(bool andFeedPatientModel = true)
@@ -259,13 +292,15 @@ public:
     EpisodeModelPatientListener *m_PatientListener;
     QSqlTableModel *_sqlModel;
     QHash<int, QString> _xmlContentCache;
+    QMultiHash<int, EpisodeValidationData *> _validationCache;
 
 private:
     EpisodeModel *q;
 };
-}
-}
+}  // namespace Internal
+}  // namespace Form
 
+/** Create a specific episode model for the specified Form::FormMain \e rootEmptyForm */
 EpisodeModel::EpisodeModel(FormMain *rootEmptyForm, QObject *parent) :
         QAbstractListModel(parent),
         d(new Internal::EpisodeModelPrivate(this))
@@ -289,6 +324,7 @@ EpisodeModel::EpisodeModel(FormMain *rootEmptyForm, QObject *parent) :
     onCoreDatabaseServerChanged();
 }
 
+/** Initialize the model */
 bool EpisodeModel::initialize()
 {
     onUserChanged();
@@ -314,11 +350,13 @@ EpisodeModel::~EpisodeModel()
     }
 }
 
+/** Return the current form unique identifier linked to this model */
 QString EpisodeModel::formUid() const
 {
     return d->_formMain->uuid();
 }
 
+/** Update the model if the Core sever changed. */
 void EpisodeModel::onCoreDatabaseServerChanged()
 {
     // Destroy old model and recreate it
@@ -334,10 +372,12 @@ void EpisodeModel::onCoreDatabaseServerChanged()
     d->updateFilter();
 }
 
+/** Reacts on user changes. */
 void EpisodeModel::onUserChanged()
 {
 }
 
+/** Reacts on patient changes. */
 void EpisodeModel::onPatientChanged()
 {
     d->updateFilter();
@@ -388,7 +428,8 @@ QVariant EpisodeModel::data(const QModelIndex &index, int role) const
         case Uuid: sqlColumn = Constants::EPISODES_ID; break;
         case FormUuid: if (d->_formMain) return d->_formMain->uuid(); else return QString();
         case FormLabel: if (d->_formMain) return d->_formMain->spec()->label();
-        }
+        }  // switch (column)
+
         if (sqlColumn!=-1) {
             QModelIndex sqlIndex = d->_sqlModel->index(index.row(), sqlColumn);
             return d->_sqlModel->data(sqlIndex, role);
@@ -416,36 +457,17 @@ QVariant EpisodeModel::data(const QModelIndex &index, int role) const
                 .arg(tkTr(Trans::Constants::CREATED_BY_1).arg(userUid))
                 .arg(tkTr(Trans::Constants::ON_THE_1).arg(cDate));
     }
-//    case Qt::ForegroundRole :
-//    {
-//        if (episode) {
-//            return QColor(settings()->value(Constants::S_EPISODEMODEL_EPISODE_FOREGROUND, "darkblue").toString());
-//        } else if (form) {
-//            if (it->parent() == d->m_RootItem) {
-//                if (settings()->value(Constants::S_USESPECIFICCOLORFORROOTS).toBool()) {
-//                    return QColor(settings()->value(Constants::S_FOREGROUNDCOLORFORROOTS, "darkblue").toString());
-//                }
-//            }
-//            return QColor(settings()->value(Constants::S_EPISODEMODEL_FORM_FOREGROUND, "#000").toString());
-//        }
-//        break;
-//    }
-//    case Qt::FontRole :
-//    {
-//        if (form) {
-//            QFont f;
-//            f.fromString(settings()->value(Constants::S_EPISODEMODEL_FORM_FONT).toString());
-//            return f;
-//        } else {
-//            QFont f;
-//            f.fromString(settings()->value(Constants::S_EPISODEMODEL_EPISODE_FONT).toString());
-//            return f;
-//        }
-//        return QFont();
-//    }
     case Qt::DecorationRole :
     {
         switch (index.column()) {
+        case UserDate:
+        {
+            // TODO add a preference (show/hide episode validation icon in episode view) / or use a specific delegate
+            // Scale down the icons to 12x12 or 10x10
+            if (d->isEpisodeValidated(index))
+                return theme()->icon(Core::Constants::ICONLOCK_BLACKWHITE).pixmap(12,12);
+            return theme()->icon(Core::Constants::ICONUNLOCK_BLACKWHITE).pixmap(12,12);
+        }
         case FormLabel:
         {
             if (!d->_formMain)
@@ -454,9 +476,9 @@ QVariant EpisodeModel::data(const QModelIndex &index, int role) const
             iconFile.replace(Core::Constants::TAG_APPLICATION_THEME_PATH, settings()->path(Core::ISettings::SmallPixmapPath));
             return QIcon(iconFile);
         }
-        }
+        }  // switch (index.column())
     }
-    }
+    }  // switch (role)
     return QVariant();
 }
 

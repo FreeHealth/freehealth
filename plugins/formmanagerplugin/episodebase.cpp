@@ -769,6 +769,54 @@ bool EpisodeBase::saveEpisode(const QList<EpisodeData *> &episodes)
     return true;
 }
 
+/** Save the raw XML episode content. Does not manage modification traces. */
+bool EpisodeBase::saveEpisodeContent(const QVariant &uid, const QString &xml)
+{
+    if (!uid.isValid())
+        return false;
+    if (uid.toInt() < 0)
+        return false;
+    QSqlDatabase DB = QSqlDatabase::database(DB_NAME);
+    if (!connectDatabase(DB, __LINE__)) {
+        return false;
+    }
+    QHash<int, QString> where;
+    where.insert(Constants::EPISODE_CONTENT_EPISODE_ID, QString("=%1").arg(uid.toString()));
+    if (count(Constants::Table_EPISODE_CONTENT, Constants::EPISODE_CONTENT_EPISODE_ID, getWhereClause(Constants::Table_EPISODE_CONTENT, where)) == 0) {
+        // save
+        DB.transaction();
+        QSqlQuery query(DB);
+        query.prepare(prepareInsertQuery(Table_EPISODE_CONTENT));
+        query.bindValue(EPISODE_CONTENT_ID, QVariant());
+        query.bindValue(EPISODE_CONTENT_EPISODE_ID, uid.toInt());
+        query.bindValue(EPISODE_CONTENT_XML, xml);
+        if (!query.exec()) {
+            LOG_QUERY_ERROR(query);
+            query.finish();
+            DB.rollback();
+            return false;
+        }
+        query.finish();
+        DB.commit();
+    } else {
+        // update
+        // TODO: manage modification traces
+        DB.transaction();
+        QSqlQuery query(DB);
+        query.prepare(prepareUpdateQuery(Table_EPISODE_CONTENT, EPISODE_CONTENT_XML, where));
+        query.bindValue(0, xml);
+        if (!query.exec()) {
+            LOG_QUERY_ERROR(query);
+            query.finish();
+            DB.rollback();
+            return false;
+        }
+        query.finish();
+        DB.commit();
+    }
+    return true;
+}
+
 /** Return all recorded episodes form the database according to the Form::Internal::EpisodeBaseQuery \e baseQuery. Episodes are sorted by UserDate. */
 QList<EpisodeData *> EpisodeBase::getEpisodes(const EpisodeBaseQuery &baseQuery)
 {
@@ -943,7 +991,7 @@ QString EpisodeBase::getEpisodeContent(const QVariant &uid)
         return QString::null;
     QSqlDatabase DB = QSqlDatabase::database(DB_NAME);
     if (!connectDatabase(DB, __LINE__)) {
-        return false;
+        return QString::null;
     }
     QHash<int, QString> where;
     where.insert(Constants::EPISODE_CONTENT_EPISODE_ID, QString("=%1").arg(uid.toString()));
@@ -968,52 +1016,41 @@ QString EpisodeBase::getEpisodeContent(const QVariant &uid)
     return QString::null;
 }
 
-/** Save the raw XML episode content. Does not manage modification traces. */
-bool EpisodeBase::saveEpisodeContent(const QVariant &uid, const QString &xml)
+QList<EpisodeValidationData *> EpisodeBase::getEpisodeValidations(const QVariant &uid)
 {
+    QList<EpisodeValidationData*> toReturn;
     if (!uid.isValid())
-        return false;
+        return toReturn;
     if (uid.toInt() < 0)
-        return false;
+        return toReturn;
     QSqlDatabase DB = QSqlDatabase::database(DB_NAME);
     if (!connectDatabase(DB, __LINE__)) {
-        return false;
+        return toReturn;
     }
+    DB.transaction();
+    QSqlQuery query(DB);
     QHash<int, QString> where;
-    where.insert(Constants::EPISODE_CONTENT_EPISODE_ID, QString("=%1").arg(uid.toString()));
-    if (count(Constants::Table_EPISODE_CONTENT, Constants::EPISODE_CONTENT_EPISODE_ID, getWhereClause(Constants::Table_EPISODE_CONTENT, where)) == 0) {
-        // save
-        DB.transaction();
-        QSqlQuery query(DB);
-        query.prepare(prepareInsertQuery(Table_EPISODE_CONTENT));
-        query.bindValue(EPISODE_CONTENT_ID, QVariant());
-        query.bindValue(EPISODE_CONTENT_EPISODE_ID, uid.toInt());
-        query.bindValue(EPISODE_CONTENT_XML, xml);
-        if (!query.exec()) {
-            LOG_QUERY_ERROR(query);
-            query.finish();
-            DB.rollback();
-            return false;
+    where.insert(VALIDATION_EPISODE_ID, QString("=%1").arg(uid.toInt()));
+    QString req = select(Table_VALIDATION, where);
+    if (query.exec(req)) {
+        while (query.next()) {
+            EpisodeValidationData *v;
+            v->setData(EpisodeValidationData::ValidationId, query.value(VALIDATION_ID));
+            v->setData(EpisodeValidationData::ValidationDate, query.value(VALIDATION_DATEOFVALIDATION));
+            v->setData(EpisodeValidationData::UserUid, query.value(VALIDATION_USERUID));
+            v->setData(EpisodeValidationData::IsValid, query.value(VALIDATION_ISVALID));
+            v->setModified(false);
+            toReturn << v;
         }
-        query.finish();
-        DB.commit();
     } else {
-        // update
-        // TODO: manage modification traces
-        DB.transaction();
-        QSqlQuery query(DB);
-        query.prepare(prepareUpdateQuery(Table_EPISODE_CONTENT, EPISODE_CONTENT_XML, where));
-        query.bindValue(0, xml);
-        if (!query.exec()) {
-            LOG_QUERY_ERROR(query);
-            query.finish();
-            DB.rollback();
-            return false;
-        }
+        LOG_QUERY_ERROR(query);
         query.finish();
-        DB.commit();
+        DB.rollback();
+        return toReturn;
     }
-    return true;
+    query.finish();
+    DB.commit();
+    return toReturn;
 }
 
 /** Return the total number of episodes recorded for one Form identified by its \e formUid */

@@ -38,8 +38,8 @@
 /**
  * \file episodebase.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.7.6
- * \date 28 Jun 2012
+ * \version 0.8.0
+ * \date 01 Sept 2012
 */
 
 namespace Form {
@@ -50,6 +50,7 @@ namespace Internal {
 class FormManagerPlugin;
 class EpisodeBasePrivate;
 class EpisodeData;
+class EpisodeValidationData;
 
 class EpisodeBaseQuery
 {
@@ -140,11 +141,13 @@ public:
     // Episodes
     bool saveEpisode(EpisodeData *episode);
     bool saveEpisode(const QList<EpisodeData *> &episode);
+    bool saveEpisodeContent(const QVariant &uid, const QString &xml);
+
     QList<EpisodeData *> getEpisodes(const EpisodeBaseQuery &query);
     bool getEpisodeContent(EpisodeData *episode);
     int getNumberOfEpisodes(const QString &formUid);
     QString getEpisodeContent(const QVariant &uid);
-    bool saveEpisodeContent(const QVariant &uid, const QString &xml);
+    QList<EpisodeValidationData*> getEpisodeValidations(const QVariant &uid);
 
 private:
     bool createDatabase(const QString &connectionName, const QString &dbName,
