@@ -1756,7 +1756,10 @@ QString decrypt(const QByteArray &texte, const QString &key)
     return codeFinal;
 }
 
-/** Link all signals of the first model \e model1 to the second model \e model2 signals. */
+/**
+ * Link all QAbstractItemModel signals of the first model \e model1 to the second model \e model2 signals.
+ * The SQLModel specific signal are not connected (primeInsert...)
+ */
 void linkSignalsFromFirstModelToSecondModel(QAbstractItemModel *model1, QAbstractItemModel *model2, bool connectDataChanged)
 {
     QObject::connect(model1, SIGNAL(columnsAboutToBeInserted(QModelIndex, int , int )), model2, SIGNAL(columnsAboutToBeInserted(QModelIndex, int , int )));
