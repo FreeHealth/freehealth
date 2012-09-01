@@ -135,7 +135,7 @@ private:
   int m_quickInt;
   QHash<int,QString> m_hashPercentages;
 private:
-  QVariant firstItemchosenAsPreferential(QString &item);
+  QVariant firstItemchosenAsPreferential(returningModel item);
 
 };
 

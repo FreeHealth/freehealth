@@ -317,13 +317,13 @@ choiceDialog::choiceDialog(QWidget * parent,bool roundtrip, bool freevalue, QStr
     QModelIndex indexDebtor = m_actionTreeView->indexWithItem(treeViewsActions::DEBTOR);
     m_actionTreeView->expand(indexDebtor);
     //preferential choices in the tree view.
-    QString site = tr("Sites");
-    QString distRule = tr("Distance rules");
+    QString site = Trans::Constants::SITES;
+    QString distRule = Trans::Constants::DISTRULES;
     QString debtor = tr("Debtor");
-    m_siteUid = firstItemchosenAsPreferential(site);
-    m_distanceRuleValue = firstItemchosenAsPreferential(distRule).toDouble();
+    m_siteUid = firstItemchosenAsPreferential(choiceDialog::SITE);
+    m_distanceRuleValue = firstItemchosenAsPreferential(choiceDialog::DISTRULES).toDouble();
     m_distanceRuleType = manager.getpreferredDistanceRule().toString();
-    m_insurance = firstItemchosenAsPreferential(debtor);
+    m_insurance = firstItemchosenAsPreferential(choiceDialog::DEBTOR);
     m_insuranceUid = manager.m_preferredInsuranceUid;
     if (WarnDebugMessage)
         qDebug() << __FILE__ << QString::number(__LINE__) << " m_insuranceUid =" << m_insuranceUid.toString() ;
@@ -342,12 +342,12 @@ choiceDialog::choiceDialog(QWidget * parent,bool roundtrip, bool freevalue, QStr
     ui->plusButton->setToolTip(QKeySequence("CTRL+UP").toString());
     ui->lessButton->setShortcut(QKeySequence("CTRL+DOWN"));
     ui->lessButton->setToolTip(QKeySequence("CTRL+DOWN").toString());
-    
+
     ui->plusConstButton->setShortcut(QKeySequence("CTRL+PgUp"));
     ui->plusConstButton->setToolTip(QKeySequence("CTRL+PgUp").toString());
     ui->lessConstButton->setShortcut(QKeySequence("CTRL+PgDown"));
     ui->lessConstButton->setToolTip(QKeySequence("CTRL+PgDown").toString());
-    
+
     // connect(ui->buttonBox,SIGNAL(accepted()),this,SLOT(beforeAccepted()));
     connect(ui->okButton,SIGNAL(pressed()),this,SLOT(beforeAccepted()));
     connect(ui->quitButton,SIGNAL(pressed()),this,SLOT(reject()));
@@ -533,25 +533,22 @@ QStandardItemModel * choiceDialog::getChoicePercentageDebtorSiteDistruleModel(){
     return m_modelChoicePercentDebtorSiteDistruleValues;
 }
 
-QVariant choiceDialog::firstItemchosenAsPreferential(QString & item)
+QVariant choiceDialog::firstItemchosenAsPreferential(returningModel item)
 {
     if (WarnDebugMessage)
         qDebug() << __FILE__ << QString::number(__LINE__) << " item =" << item ;
-    QVariant variantValue = QVariant("No item");
     ReceiptsManager manager;
-    if (item == tr("Distance rules"))
-    {
-        variantValue = manager.m_preferredDistanceValue;
+
+    switch (item) {
+    case choiceDialog::DEBTOR:
+        return manager.m_preferredInsurance;
+    case choiceDialog::SITE:
+        return manager.m_preferredSite;
+    case choiceDialog::DISTRULES:
+        return manager.m_preferredDistanceValue;
+    default:
+        return QVariant(tr("No item"));
     }
-    if (item == tr("Sites"))
-    {
-        variantValue = manager.m_preferredSite;
-    }
-    if (item== tr("Debtor"))
-    {
-        variantValue = manager.m_preferredInsurance;
-    }
-    return variantValue;
 }
 
 void choiceDialog::actionsOfTreeView(const QModelIndex &index){
