@@ -361,7 +361,8 @@ ChoiceDialog::ChoiceDialog(QWidget * parent,bool roundtrip, bool freevalue, QStr
     connect(m_actionTreeView,SIGNAL(clicked(const QModelIndex&)),this,SLOT(actionsOfTreeView(const QModelIndex&)));
 }
 
-ChoiceDialog::~choiceDialog(){
+ChoiceDialog::~ChoiceDialog()
+{
     delete m_timerUp;
     delete m_timerDown;
 }
