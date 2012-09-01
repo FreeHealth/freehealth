@@ -397,7 +397,7 @@ void FormPlaceHolder::handleClicked(const QModelIndex &index)
 
 void FormPlaceHolder::addBottomWidget(QWidget *bottom)
 {
-    // TODO: here
+    // TODO: here addBottomWidget
 //    d->m_GeneralLayout->addWidget(bottom, d->m_GeneralLayout->rowCount(), 0, 0, d->m_GeneralLayout->columnCount());
 }
 
@@ -426,6 +426,7 @@ void FormPlaceHolder::setCurrentForm(Form::FormMain *form)
     for(int i=0; i < EpisodeModel::MaxData; ++i)
         d->ui->episodeView->hideColumn(i);
     d->ui->episodeView->showColumn(EpisodeModel::Label);
+//    d->ui->episodeView->showColumn(EpisodeModel::FormLabel);
     d->ui->episodeView->showColumn(EpisodeModel::UserCreatorName);
     d->ui->episodeView->showColumn(EpisodeModel::UserDate);
 
@@ -473,7 +474,6 @@ bool FormPlaceHolder::newEpisode()
         return false;
 
     // get the form
-    qWarning() << "FormPlaceHolder::newEpisode";
     QModelIndex index = d->ui->formView->selectionModel()->selectedIndexes().at(0);
     if (d->_formTreeModel->isNoEpisode(index))
         return false;
