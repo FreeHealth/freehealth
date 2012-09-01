@@ -511,7 +511,7 @@ void BaseForm::triggered(QAction *action)
 
 ////////////////////////////////////////// ItemData /////////////////////////////////////////////
 BaseFormData::BaseFormData(Form::FormItem *item) :
-        m_FormItem(item), m_Form(0)
+    m_FormItem(item), m_Form(0), m_Modified(false)
 {}
 
 BaseFormData::~BaseFormData()
@@ -528,8 +528,7 @@ void BaseFormData::clear()
 
 bool BaseFormData::isModified() const
 {
-    // TODO: here
-    return true;
+    return m_Modified;
 }
 
 bool BaseFormData::setData(const int ref, const QVariant &data, const int role)
@@ -539,6 +538,7 @@ bool BaseFormData::setData(const int ref, const QVariant &data, const int role)
         return false;
 
     m_Data.insert(ref, data);
+    m_Modified = true;
     switch (ref) {
     case ID_EpisodeDate:
         m_Form->m_EpisodeDate->setDate(m_Data.value(ref).toDate());
@@ -571,6 +571,18 @@ QVariant BaseFormData::data(const int ref, const int role) const
     case ID_UserName: return m_Data.value(ID_UserName);
     }
     return QVariant();
+}
+
+/** Use as setStorableData(bool) == setModified(bool) */
+void BaseFormData::setStorableData(const QVariant &modified)
+{
+    m_Modified = modified.toBool();
+}
+
+/** Use as bool storableData() == bool isModified() */
+QVariant BaseFormData::storableData() const
+{
+    return QVariant(m_Modified);
 }
 
 

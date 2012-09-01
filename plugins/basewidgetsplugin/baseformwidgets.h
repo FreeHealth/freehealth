@@ -130,14 +130,15 @@ public:
     bool setData(const int ref, const QVariant &data, const int role = Qt::EditRole);
     QVariant data(const int ref, const int role = Qt::DisplayRole) const;
 
-    // No storable data for forms
-    void setStorableData(const QVariant &) {}
-    QVariant storableData() const {return QVariant();}
+    // Used storable data for forms
+    void setStorableData(const QVariant &modified);
+    QVariant storableData() const;
 
 private:
     Form::FormItem *m_FormItem;
     BaseForm *m_Form;
     QHash<int, QVariant> m_Data;
+    bool m_Modified;
 };
 
 //--------------------------------------------------------------------------------------------------------
