@@ -36,7 +36,9 @@
 
 #include <accountbaseplugin/constants.h>
 #include <coreplugin/icore.h>
+#include <coreplugin/itheme.h>
 #include <coreplugin/iuser.h>
+#include <coreplugin/constants.h>
 
 #include <utils/global.h>
 #include <translationutils/constants.h>
@@ -50,6 +52,9 @@ using namespace AccountDB;
 //using namespace Account;
 using namespace Constants;
 using namespace Trans::ConstantTranslations;
+using namespace Core;
+
+static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 
 enum { WarnDebugMessage = false };
 
@@ -83,6 +88,28 @@ MovementsViewer::MovementsViewer(QWidget * parent) :
     if(!showMovements())
     Utils::warningMessageBox( tr("Unable to show movements correctly."), tr("Contact the development team."),
     QString(), QString() );
+    //icons and shortcuts
+    ui->quitButton->setIcon(theme()->icon(Core::Constants::ICONQUIT));
+    ui->quitButton->setShortcut(QKeySequence::Quit);
+    ui->quitButton->setToolTip(QKeySequence(QKeySequence::Quit).toString());
+    
+    ui->deleteButton->setIcon(theme()->icon(Core::Constants::ICONREMOVE));
+    ui->deleteButton->setShortcut(QKeySequence::Delete);
+    ui->deleteButton->setToolTip(QKeySequence(QKeySequence::Delete).toString());
+    
+    ui->validButton->setIcon(theme()->icon(Core::Constants::ICONOK));
+    ui->validButton->setShortcut(QKeySequence("CTRL+V"));
+    ui->validButton->setToolTip(QKeySequence(QKeySequence("CTRL+V")).toString());    
+    
+    ui->valAndRecButton->setIcon(theme()->icon(Core::Constants::ICONSAVE));
+    ui->valAndRecButton->setShortcut(QKeySequence::InsertParagraphSeparator);
+    ui->valAndRecButton->setToolTip(QKeySequence(QKeySequence::InsertParagraphSeparator).toString()); 
+
+    ui->recordButton->setIcon(theme()->icon(Core::Constants::ICONSAVE));
+    ui->recordButton->setShortcut(QKeySequence::Save);
+    ui->recordButton->setToolTip(QKeySequence(QKeySequence::Save).toString()); 
+
+    
     connect(ui->quitButton,SIGNAL(pressed()),this,SLOT(close()));
     connect(ui->recordButton,SIGNAL(pressed()),this,SLOT(recordMovement()));
     connect(ui->deleteButton,SIGNAL(pressed()),this,SLOT(deleteMovement()));
@@ -91,9 +118,7 @@ MovementsViewer::MovementsViewer(QWidget * parent) :
     connect(ui->movementsComboBox,SIGNAL(highlighted(int)),this,
                                   SLOT(setMovementsComboBoxToolTips(int)));
     connect(ui->yearComboBox,SIGNAL(activated(int)),this,SLOT(setYearIsChanged(int)));
-
     connect(user(), SIGNAL(userChanged()), this, SLOT(userIsChanged()));
-
 }
 
 MovementsViewer::~MovementsViewer()

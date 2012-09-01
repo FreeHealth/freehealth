@@ -85,11 +85,11 @@ private:
 };
 }
 
-class ACCOUNT_EXPORT choiceDialog : public QDialog
+class ACCOUNT_EXPORT ChoiceDialog : public QDialog
 {
   Q_OBJECT
 public:
-  enum returningModel{
+  enum ReturningModel{
       TYPE_OF_CHOICE = 0,
       PERCENTAGE,
       DEBTOR,
@@ -97,8 +97,8 @@ public:
       DISTRULES,
       returningModel_MaxParam
       };
-  choiceDialog(QWidget *parent = 0,bool roundtrip = false, bool freetext = false, QString preferredValue = QString());
-  ~choiceDialog();
+  ChoiceDialog(QWidget *parent = 0,bool roundtrip = false, bool freetext = false, QString preferredValue = QString());
+  ~ChoiceDialog();
   double getDistanceNumber(const QString & data);
   int returnChoiceDialog();
   double returnPercentValue();
@@ -135,7 +135,7 @@ private:
   int m_quickInt;
   QHash<int,QString> m_hashPercentages;
 private:
-  QVariant firstItemchosenAsPreferential(QString &item);
+  QVariant firstItemchosenAsPreferential(ReturningModel item);
 
 };
 

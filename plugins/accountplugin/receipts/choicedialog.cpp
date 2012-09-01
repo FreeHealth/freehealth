@@ -38,6 +38,8 @@
 
 #include <coreplugin/icore.h>
 #include <coreplugin/iuser.h>
+#include <coreplugin/itheme.h>
+#include <coreplugin/constants.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -56,6 +58,7 @@ using namespace ReceiptsConstants;
 using namespace Tools;
 
 static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
+static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 
 treeViewsActions::treeViewsActions(QWidget *parent):QTreeView(parent){
     m_deleteThesaurusValue = new QAction(tr("Delete value"),this);
@@ -262,7 +265,7 @@ QModelIndex treeViewsActions::indexWithItem(int row)
 
 using namespace ReceiptsConstants;
 
-choiceDialog::choiceDialog(QWidget * parent,bool roundtrip, bool freevalue, QString preferredValue):QDialog(parent),ui(new Ui::ChoiceDialog){
+ChoiceDialog::ChoiceDialog(QWidget * parent,bool roundtrip, bool freevalue, QString preferredValue):QDialog(parent),ui(new Ui::ChoiceDialog){
     ui->setupUi(this);
     ui->distanceDoubleSpinBox->hide();
     ui->distanceGroupBox->hide();
@@ -314,13 +317,13 @@ choiceDialog::choiceDialog(QWidget * parent,bool roundtrip, bool freevalue, QStr
     QModelIndex indexDebtor = m_actionTreeView->indexWithItem(treeViewsActions::DEBTOR);
     m_actionTreeView->expand(indexDebtor);
     //preferential choices in the tree view.
-    QString site = tr("Sites");
-    QString distRule = tr("Distance rules");
+    QString site = Trans::Constants::SITES;
+    QString distRule = Trans::Constants::DISTRULES;
     QString debtor = tr("Debtor");
-    m_siteUid = firstItemchosenAsPreferential(site);
-    m_distanceRuleValue = firstItemchosenAsPreferential(distRule).toDouble();
+    m_siteUid = firstItemchosenAsPreferential(ChoiceDialog::SITE);
+    m_distanceRuleValue = firstItemchosenAsPreferential(ChoiceDialog::DISTRULES).toDouble();
     m_distanceRuleType = manager.getpreferredDistanceRule().toString();
-    m_insurance = firstItemchosenAsPreferential(debtor);
+    m_insurance = firstItemchosenAsPreferential(ChoiceDialog::DEBTOR);
     m_insuranceUid = manager.m_preferredInsuranceUid;
     if (WarnDebugMessage)
         qDebug() << __FILE__ << QString::number(__LINE__) << " m_insuranceUid =" << m_insuranceUid.toString() ;
@@ -330,9 +333,21 @@ choiceDialog::choiceDialog(QWidget * parent,bool roundtrip, bool freevalue, QStr
     m_timerDown = new QTimer(this);
     //icons and shortcuts
     ui->okButton->setShortcut(QKeySequence::InsertParagraphSeparator);
+    ui->okButton->setIcon(theme()->icon(Core::Constants::ICONOK));
     ui->okButton->setToolTip(QKeySequence(QKeySequence::InsertParagraphSeparator).toString());
     ui->quitButton->setShortcut(QKeySequence::Close);
     ui->quitButton->setToolTip(QKeySequence(QKeySequence::Close).toString());
+    ui->quitButton->setIcon(theme()->icon(Core::Constants::ICONQUIT));
+    ui->plusButton->setShortcut(QKeySequence("CTRL+UP"));
+    ui->plusButton->setToolTip(QKeySequence("CTRL+UP").toString());
+    ui->lessButton->setShortcut(QKeySequence("CTRL+DOWN"));
+    ui->lessButton->setToolTip(QKeySequence("CTRL+DOWN").toString());
+
+    ui->plusConstButton->setShortcut(QKeySequence("CTRL+PgUp"));
+    ui->plusConstButton->setToolTip(QKeySequence("CTRL+PgUp").toString());
+    ui->lessConstButton->setShortcut(QKeySequence("CTRL+PgDown"));
+    ui->lessConstButton->setToolTip(QKeySequence("CTRL+PgDown").toString());
+
     // connect(ui->buttonBox,SIGNAL(accepted()),this,SLOT(beforeAccepted()));
     connect(ui->okButton,SIGNAL(pressed()),this,SLOT(beforeAccepted()));
     connect(ui->quitButton,SIGNAL(pressed()),this,SLOT(reject()));
@@ -346,12 +361,12 @@ choiceDialog::choiceDialog(QWidget * parent,bool roundtrip, bool freevalue, QStr
     connect(m_actionTreeView,SIGNAL(clicked(const QModelIndex&)),this,SLOT(actionsOfTreeView(const QModelIndex&)));
 }
 
-choiceDialog::~choiceDialog(){
+ChoiceDialog::~choiceDialog(){
     delete m_timerUp;
     delete m_timerDown;
 }
 
-double choiceDialog::getDistanceNumber(const QString & data){
+double ChoiceDialog::getDistanceNumber(const QString & data){
     if (WarnDebugMessage)
         qDebug() << __FILE__ << QString::number(__LINE__) << " data =" << data  ;
     receiptsEngine recIO;
@@ -367,7 +382,7 @@ double choiceDialog::getDistanceNumber(const QString & data){
     return dist;
 }
 
-int choiceDialog::returnChoiceDialog(){
+int ChoiceDialog::returnChoiceDialog(){
     int ret = 0;
     if (ui->cashButton->isChecked())
     {
@@ -396,31 +411,31 @@ int choiceDialog::returnChoiceDialog(){
     return ret;
 }
 
-void choiceDialog::value(double val){
+void ChoiceDialog::value(double val){
     m_percent = val;
 }
 
-void choiceDialog::valueUp(){
+void ChoiceDialog::valueUp(){
     connect(m_timerUp,SIGNAL(timeout()),ui->percentDoubleSpinBox,SLOT(stepUp()));
     m_timerUp->start(10);
 }
 
-void choiceDialog::valueDown(){
+void ChoiceDialog::valueDown(){
     connect(m_timerDown,SIGNAL(timeout()),ui->percentDoubleSpinBox,SLOT(stepDown()));
     m_timerDown->start(10);
 }
 
 
-void choiceDialog::valueUpStop(){
+void ChoiceDialog::valueUpStop(){
     m_timerUp->stop();
 }
 
-void choiceDialog::valueDownStop(){
+void ChoiceDialog::valueDownStop(){
     m_timerDown->stop();
 }
 
 
-void choiceDialog::quickPlus(){
+void ChoiceDialog::quickPlus(){
     if(m_quickInt == m_hashPercentages.keys().last())
         return;
     else{
@@ -430,7 +445,7 @@ void choiceDialog::quickPlus(){
     ui->percentDoubleSpinBox->setValue(m_percent);
 }
 
-void choiceDialog::quickLess(){
+void ChoiceDialog::quickLess(){
     if(m_quickInt == 1)
         return;
     /*else if(m_percent == 100){
@@ -443,11 +458,11 @@ void choiceDialog::quickLess(){
     ui->percentDoubleSpinBox->setValue(m_percent);
 }
 
-double choiceDialog::returnPercentValue(){
+double ChoiceDialog::returnPercentValue(){
     return m_percent;
 }
 
-QList<double> choiceDialog::listOfPercentValues(){
+QList<double> ChoiceDialog::listOfPercentValues(){
     return m_listOfPercentValues;
 }
 
@@ -455,7 +470,7 @@ QList<double> choiceDialog::listOfPercentValues(){
  *
  * Does a few checks like percentage == 100, etc.
  */
-void choiceDialog::beforeAccepted(){
+void ChoiceDialog::beforeAccepted(){
     receiptsEngine rIO;
 
     if (WarnDebugMessage)
@@ -514,32 +529,29 @@ void choiceDialog::beforeAccepted(){
     }
 }
 
-QStandardItemModel * choiceDialog::getChoicePercentageDebtorSiteDistruleModel(){
+QStandardItemModel * ChoiceDialog::getChoicePercentageDebtorSiteDistruleModel(){
     return m_modelChoicePercentDebtorSiteDistruleValues;
 }
 
-QVariant choiceDialog::firstItemchosenAsPreferential(QString & item)
+QVariant ChoiceDialog::firstItemchosenAsPreferential(ReturningModel item)
 {
     if (WarnDebugMessage)
         qDebug() << __FILE__ << QString::number(__LINE__) << " item =" << item ;
-    QVariant variantValue = QVariant("No item");
     ReceiptsManager manager;
-    if (item == tr("Distance rules"))
-    {
-        variantValue = manager.m_preferredDistanceValue;
+
+    switch (item) {
+    case ChoiceDialog::DEBTOR:
+        return manager.m_preferredInsurance;
+    case ChoiceDialog::SITE:
+        return manager.m_preferredSite;
+    case ChoiceDialog::DISTRULES:
+        return manager.m_preferredDistanceValue;
+    default:
+        return QVariant(tr("No item"));
     }
-    if (item == tr("Sites"))
-    {
-        variantValue = manager.m_preferredSite;
-    }
-    if (item== tr("Debtor"))
-    {
-        variantValue = manager.m_preferredInsurance;
-    }
-    return variantValue;
 }
 
-void choiceDialog::actionsOfTreeView(const QModelIndex &index){
+void ChoiceDialog::actionsOfTreeView(const QModelIndex &index){
     QString data = index.data(Qt::DisplayRole).toString();
     if (WarnDebugMessage)
         qDebug() << __FILE__ << QString::number(__LINE__) << " data =" << data;
@@ -575,12 +587,12 @@ void choiceDialog::actionsOfTreeView(const QModelIndex &index){
     //actionTreeView->reset();
 }
 
-QString choiceDialog::getFreeText()
+QString ChoiceDialog::getFreeText()
 {
     return ui->freeEdit->text();
 }
 
-QString choiceDialog::getFreeValue()
+QString ChoiceDialog::getFreeValue()
 {
     return QString::number(ui->freeValueSpinBox->value());
 }
