@@ -111,7 +111,7 @@ void PrintDialog::accept()
         m_Printer->printer()->setFromTo(ui->pageFrom->value(), ui->pageTo->value());
     }
 
-    // Print to printer    
+    // Print to printer
     if (!m_Printer->reprint(m_Printer->printer())) {
         LOG_FOR("Printer", "Printing error on device " + m_Printer->printer()->printerName());
         return;
@@ -146,11 +146,11 @@ void PrintDialog::setPrinter(Print::Printer *printer)
     const QString &name = printer->printer()->printerName();
     ui->printerCombo->setCurrentIndex(ui->printerCombo->findText(name, Qt::MatchCaseSensitive));
     // read options
-    ui->duplicatas->blockSignals(true);
+    ui->duplicates->blockSignals(true);
     ui->nup->blockSignals(true);
-    ui->duplicatas->setChecked(printer->printWithDuplicatas());
+    ui->duplicates->setChecked(printer->printWithDuplicatas());
     ui->nup->setChecked(printer->isTwoNUp());
-    ui->duplicatas->blockSignals(false);
+    ui->duplicates->blockSignals(false);
     ui->nup->blockSignals(false);
     // read settings
     ui->createPdf->setChecked(settings()->value(Constants::S_KEEP_PDF).toBool());
