@@ -678,7 +678,7 @@ void UserData::setValue(const int tableref, const int fieldref, const QVariant &
  If user is modifiable, set the dynamic value \e val named \e name and \e fieldref field index.
  \todo explain dynamicValues / values
 */
-void UserData::addDynamicDatasFromDatabase(const QList<UserDynamicData*> &list)
+void UserData::addDynamicDataFromDatabase(const QList<UserDynamicData*> &list)
 {
     if (!d->m_Modifiable)
         return;
