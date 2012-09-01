@@ -214,6 +214,7 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
     a = aToggleDrugSelector = new QAction(this);
     a->setObjectName("aToggleDrugSelector");
     a->setIcon(th->icon(Constants::I_TOGGLEDRUGSELECTOR));
+    a->setCheckable(true);
     cmd = actionManager()->registerAction(a, Constants::A_TOGGLE_DRUGSELECTOR, ctx);
     cmd->setTranslations(Constants::TOGGLEDRUGSELECTOR_TEXT, Constants::TOGGLEDRUGSELECTOR_TEXT, Constants::DRUGCONSTANTS_TR_CONTEXT);
     menu->addAction(cmd, DrugsWidget::Constants::G_PLUGINS_VIEWS);
@@ -552,6 +553,7 @@ void DrugsActionHandler::toggleDrugSelector()
         bool setToVisible = !m_CurrentView->drugSelector()->isVisible();
         m_CurrentView->setMinimumHeight(setToVisible ? 600 : 200);
         m_CurrentView->drugSelector()->setVisible(setToVisible);
+        aToggleDrugSelector->setChecked(setToVisible);
     }
 }
 
