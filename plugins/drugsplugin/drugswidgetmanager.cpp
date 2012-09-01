@@ -548,7 +548,7 @@ void DrugsActionHandler::saveAsPrescription()
 
 void DrugsActionHandler::toggleDrugSelector()
 {
-    if (m_CurrentView) {
+    if (m_CurrentView && m_CurrentView->drugSelector()) {
         bool setToVisible = !m_CurrentView->drugSelector()->isVisible();
         m_CurrentView->setMinimumHeight(setToVisible ? 600 : 200);
         m_CurrentView->drugSelector()->setVisible(setToVisible);
