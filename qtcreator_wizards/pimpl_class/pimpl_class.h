@@ -19,12 +19,11 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Main developers : %AuthorName%                *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-
 @if "%Internal%" == "true"
 #ifndef %PluginNamespace:u%_INTERNAL_%ClassName:u%_H
 #define %PluginNamespace:u%_INTERNAL_%ClassName:u%_H
@@ -33,47 +32,35 @@
 #define %PluginNamespace:u%_%ClassName:u%_H
 @endif
 
-#include <QWidget>
-
-QT_BEGIN_NAMESPACE
-class QModelIndex;
-QT_END_NAMESPACE
+#include <missing/plugin_exporter.h>
 
 /**
  * \file %ClassName%.h
- * \author
+ * \author %AuthorName%
  * \version 0.8.0
  * \date 30 Aug 2012
 */
 namespace %PluginNamespace:c% {
-// class FormMain;
-
-@if "%Internal%" == "true"
 namespace Internal {
-
-@endif
 @if  "%PIMPL%" == "true"
 class %ClassName:c%Private;
-
+@if "%Internal%" == "false"
+}  // namespace Internal
 @endif
+@endif
+
 @if "%Exported%" == "true"
-class %PluginNamespace:u%_EXPORT %ClassName:c% : public QWidget
+class %PluginNamespace:u%_EXPORT %ClassName:c%
 @else
-class %ClassName:c% : public QWidget
+class %ClassName:c%
 @endif
 {
     Q_OBJECT
 public:
-    explicit %ClassName:c%(QWidget *parent = 0);
+    explicit %ClassName:c%();
     ~%ClassName:c%();
 
     bool initialize();
-
-//     void setCurrentForm(const QString &formUid);
-//     void setCurrentForm(const Form::FormMain *form);
-//
-//     void setCurrentEpisode(const QVariant &uid);
-//     void setCurrentEpisode(const QModelIndex &index);
 
 Q_SIGNALS:
 
@@ -81,7 +68,7 @@ public Q_SLOTS:
 
 @if "%PIMPL%" == "true"
 private:
-    %ClassName:c%Private *d;
+    Internal::%ClassName:c%Private *d;
 @endif
 };
 
