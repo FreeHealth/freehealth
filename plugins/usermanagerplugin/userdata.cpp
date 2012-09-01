@@ -418,8 +418,8 @@ public:
 
     ~UserDataPrivate()
     {
-        qDeleteAll(m_DynamicDatas);
-        m_DynamicDatas.clear();
+        qDeleteAll(m_DynamicData);
+        m_DynamicData.clear();
     }
 
     /**
@@ -474,7 +474,7 @@ public:
 //    QHash< QString, QHash< int, QVariant > >  m_DataName_Datas;
     bool  m_Modifiable, m_Modified,  m_IsNull, m_IsCurrent;
     QSet< QString > m_ModifiedRoles;
-    QHash<QString, UserDynamicData*> m_DynamicDatas;
+    QHash<QString, UserDynamicData*> m_DynamicData;
     bool m_HasModifiedDynamicDatas;
     QList<int> m_LkIds;
     int m_PersonalLkId;
@@ -637,7 +637,7 @@ void UserData::setUuid(const QString & val)
 {
     Q_ASSERT(!val.isEmpty());
     setValue(Table_USERS, USER_UUID, val);
-    foreach(UserDynamicData *dyn, d->m_DynamicDatas)
+    foreach(UserDynamicData *dyn, d->m_DynamicData)
         dyn->setUserUuid(val);
 }
 
@@ -685,8 +685,8 @@ void UserData::addDynamicDatasFromDatabase(const QList<UserDynamicData*> &list)
     d->m_IsNull = false;
     foreach(UserDynamicData *dyn, list) {
         // no double
-        if (!d->m_DynamicDatas.keys().contains(dyn->name()))
-            d->m_DynamicDatas.insert(dyn->name(), dyn);
+        if (!d->m_DynamicData.keys().contains(dyn->name()))
+            d->m_DynamicData.insert(dyn->name(), dyn);
     }
 }
 
@@ -766,17 +766,17 @@ void UserData::setDynamicDataValue(const char *name, const QVariant &val, UserDy
     if ((val.isNull()) ||
          (((val.type() == QVariant::String) || (val.type() == QVariant::StringList))
            && (val.toString().isEmpty()))) {
-        if (!d->m_DynamicDatas.keys().contains(name))
+        if (!d->m_DynamicData.keys().contains(name))
             return;
     }
 
-    if (!d->m_DynamicDatas.keys().contains(name)) {
+    if (!d->m_DynamicData.keys().contains(name)) {
         UserDynamicData *data = new UserDynamicData();
         data->setName(name);
         data->setUserUuid(uuid());
-        d->m_DynamicDatas.insert(name,data);
+        d->m_DynamicData.insert(name,data);
     }
-    UserDynamicData *data = d->m_DynamicDatas[name];
+    UserDynamicData *data = d->m_DynamicData[name];
     data->setValue(val);
 
 //    qWarning() << d->m_DynamicDatas;
@@ -873,9 +873,9 @@ QVariant UserData::value(const int tableref, const int fieldref) const
 */
 QVariant UserData::dynamicDataValue(const char*name) const
 {
-    if (!d->m_DynamicDatas.keys().contains(name))
+    if (!d->m_DynamicData.keys().contains(name))
         return QVariant();
-    return d->m_DynamicDatas.value(name)->value();
+    return d->m_DynamicData.value(name)->value();
 }
 
 /**
@@ -928,7 +928,7 @@ bool UserData::hasModifiedDynamicDatasToStore() const
 QList<UserDynamicData*> UserData::modifiedDynamicDatas() const
 {
     QList<UserDynamicData*> list;
-    foreach(UserDynamicData *dyn, d->m_DynamicDatas.values()) {
+    foreach(UserDynamicData *dyn, d->m_DynamicData.values()) {
         if (dyn->isDirty()) {
             list << dyn;
         }
@@ -963,14 +963,14 @@ void UserData::setExtraDocument(Print::TextDocumentExtra *extra, const int index
     Q_ASSERT(!name.isEmpty());
     if (name.isEmpty())
         return;
-    if (!d->m_DynamicDatas.keys().contains(name)) {
+    if (!d->m_DynamicData.keys().contains(name)) {
         UserDynamicData *data = new UserDynamicData();
         data->setName(name);
         data->setUserUuid(uuid());
-        d->m_DynamicDatas.insert(name, data);
+        d->m_DynamicData.insert(name, data);
     }
-    d->m_DynamicDatas[name]->setValue(extra);
-    d->m_DynamicDatas[name]->setDirty(true);
+    d->m_DynamicData[name]->setValue(extra);
+    d->m_DynamicData[name]->setDirty(true);
 }
 
 /**
@@ -983,14 +983,14 @@ void UserData::setExtraDocumentHtml(const QVariant &val, const int index)
     Q_ASSERT(!name.isEmpty());
     if (name.isEmpty())
         return ;
-    if (!d->m_DynamicDatas.keys().contains(name)) {
+    if (!d->m_DynamicData.keys().contains(name)) {
         UserDynamicData *data = new UserDynamicData();
         data->setName(name);
         data->setUserUuid(uuid());
-        d->m_DynamicDatas.insert(name,data);
+        d->m_DynamicData.insert(name,data);
     }
-    d->m_DynamicDatas[name]->setValue(val);
-    d->m_DynamicDatas[name]->setDirty(true);
+    d->m_DynamicData[name]->setValue(val);
+    d->m_DynamicData[name]->setDirty(true);
 }
 
 void UserData::setExtraDocumentPresence(const int presence, const int index)
@@ -999,15 +999,15 @@ void UserData::setExtraDocumentPresence(const int presence, const int index)
     Q_ASSERT(!name.isEmpty());
     if (name.isEmpty())
         return ;
-    if (!d->m_DynamicDatas.keys().contains(name)) {
+    if (!d->m_DynamicData.keys().contains(name)) {
         UserDynamicData *data = new UserDynamicData();
         data->setName(name); // define type as well
         data->setUserUuid(uuid());
-        d->m_DynamicDatas.insert(name,data);
+        d->m_DynamicData.insert(name,data);
     }
-    Print::TextDocumentExtra *t = d->m_DynamicDatas.value(name)->extraDocument();
+    Print::TextDocumentExtra *t = d->m_DynamicData.value(name)->extraDocument();
     t->setPresence(Print::Printer::Presence(presence));
-    d->m_DynamicDatas[name]->setDirty(true);
+    d->m_DynamicData[name]->setDirty(true);
 }
 
 QVariant UserData::extraDocumentHtml(const int index) const
@@ -1017,9 +1017,9 @@ QVariant UserData::extraDocumentHtml(const int index) const
     if (name.isEmpty())
         return QVariant();
 
-    if (d->m_DynamicDatas.keys().contains(name)) {
-        if (d->m_DynamicDatas.value(name)->type() == UserDynamicData::ExtraDocument)
-            return d->m_DynamicDatas.value(name)->value();
+    if (d->m_DynamicData.keys().contains(name)) {
+        if (d->m_DynamicData.value(name)->type() == UserDynamicData::ExtraDocument)
+            return d->m_DynamicData.value(name)->value();
     }
     return QVariant();
 }
@@ -1031,9 +1031,9 @@ Print::TextDocumentExtra *UserData::extraDocument(const int index) const
     if (name.isEmpty())
         return 0;
 
-    if (d->m_DynamicDatas.keys().contains(name)) {
-        if (d->m_DynamicDatas.value(name)->type() == UserDynamicData::ExtraDocument)
-            return d->m_DynamicDatas.value(name)->extraDocument();
+    if (d->m_DynamicData.keys().contains(name)) {
+        if (d->m_DynamicData.value(name)->type() == UserDynamicData::ExtraDocument)
+            return d->m_DynamicData.value(name)->extraDocument();
     }
     return 0;
 }
@@ -1078,7 +1078,7 @@ QStringList UserData::warnText() const
 
     const QList<UserDynamicData*> &dynList = modifiedDynamicDatas();
 
-    foreach(const UserDynamicData *dyn, d->m_DynamicDatas.values()) {
+    foreach(const UserDynamicData *dyn, d->m_DynamicData.values()) {
         tmp += "\nDATA: " + dyn->name() + "\n";
         tmp += QString("%1\n").arg(dyn->warnText());
     }
