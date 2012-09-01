@@ -595,6 +595,7 @@ bool EpisodeModel::insertRows(int row, int count, const QModelIndex &)
 
 void EpisodeModel::populateNewRowWithDefault(int row, QSqlRecord &record)
 {
+    Q_UNUSED(row);
     for(int i = 1; i < record.count(); ++i) {
         record.setNull(i);
         record.setGenerated(i, true);
