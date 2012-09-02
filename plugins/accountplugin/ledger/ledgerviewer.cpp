@@ -50,7 +50,7 @@
 using namespace Trans::ConstantTranslations;
 using namespace Constants;
 
-enum { WarnDebugMessage = true };
+enum { WarnDebugMessage = false };
 
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 
@@ -142,9 +142,13 @@ void LedgerViewer::createMenus(){
 
 bool LedgerViewer::createActions(){
     bool b = true;
-    m_closeAction = new QAction(tr("E&xit"),this);
+    m_closeAction = new QAction(this);
+    m_closeAction->setText(tr("E&xit"));
     m_closeAction->setShortcut(QKeySequence::Close);
-    m_closeAction->setIcon(QIcon(theme()->icon(Core::Constants::ICONQUIT)));
+    m_closeAction->setIcon(theme()->icon(Core::Constants::ICONQUIT));
+    m_closeAction->setIconVisibleInMenu(true);
+    if (WarnDebugMessage)
+    qDebug() << __FILE__ << QString::number(__LINE__) << " m_closeAction icon =" << qApp->applicationDirPath()+"/../../global_resources/pixmap/16x16/exit.png";
     m_closeAction->setStatusTip(tr("Close Ledger"));
     m_hashTextAndAction.insert(m_closeAction->text(),m_closeAction);
     b = connect(m_closeAction, SIGNAL(triggered()), this, SLOT(close()));
@@ -181,6 +185,9 @@ bool LedgerViewer::createActions(){
 
     m_ledgerActionShow = new QAction(tr("&Ledger"),this);
     m_ledgerActionShow->setStatusTip(tr("See ledger."));
+    m_ledgerActionShow->setShortcut(QKeySequence("CTRL+L"));
+    m_ledgerActionShow->setIcon(theme()->icon(Core::Constants::ICONEDIT));
+    m_ledgerActionShow->setIconVisibleInMenu(true);
     m_hashTextAndAction.insert(m_ledgerActionShow->text(),m_ledgerActionShow);
     b = connect(m_ledgerActionShow, SIGNAL(triggered()), this, SLOT(ledgerActionShow()));
     return b;
@@ -276,6 +283,7 @@ void LedgerViewer::monthlyAndTypeMovementsAnalysis(){
     QString labelText = "Total = "+QString::number(m_lm->getSums())+" "+m_currency;
     ui->sumLabel->setText(labelText);
 }
+
 void LedgerViewer::yearlyAndTypeMovementsAnalysis(){
     m_actionText = m_yearlyAndTypeMovementsAnalysis->text();
     QString year = ui->yearsComboBox->currentText();
@@ -287,6 +295,7 @@ void LedgerViewer::yearlyAndTypeMovementsAnalysis(){
     QString labelText = "Total = "+QString::number(m_lm->getSums())+" "+m_currency;
     ui->sumLabel->setText(labelText);
 }
+
 void LedgerViewer::ledgerActionShow(){
     ui->sumLabel->setText("");
     m_ledgerEdit->show();
