@@ -32,7 +32,10 @@
 #include "ledgeredit.h"
 #include "ui_ledgeredit.h"
 #include "ledgerio.h"
-#include <coreplugin/idocumentprinter.h>
+#include <coreplugin/icore.h>
+#include <coreplugin/itheme.h>
+#include <coreplugin/idocumentprinter.h> //coreplugin/idocumentprinter.h
+#include <coreplugin/constants.h>
 #include <extensionsystem/pluginmanager.h>
 #include <coreplugin/constants_tokensandsettings.h>
 #include <utils/log.h>
@@ -49,6 +52,7 @@ using namespace Core;
 using namespace Core::Constants;
 inline static Core::IDocumentPrinter *printer() {return ExtensionSystem::PluginManager::instance()
                                                  ->getObject<Core::IDocumentPrinter>();}
+static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 
 LedgerEdit::LedgerEdit(QWidget * parent):QWidget(parent),ui(new Ui::LedgerEditWidget){
     ui->setupUi(this);
@@ -73,6 +77,16 @@ LedgerEdit::LedgerEdit(QWidget * parent):QWidget(parent),ui(new Ui::LedgerEditWi
     ui->infoLabel->setText("");
     emit chosenDate(currentDate);
     fillInfoLabel("");
+    //icons and shortcut
+    ui->quitButton->setShortcut(QKeySequence::Quit);
+    ui->quitButton->setToolTip(QKeySequence(QKeySequence::Quit).toString());
+    ui->quitButton->setIcon(theme()->icon(Core::Constants::ICONQUIT));
+    ui->showButton->setShortcut(QKeySequence::Open);
+    ui->showButton->setToolTip(QKeySequence(QKeySequence::Open).toString());
+    ui->showButton->setIcon(theme()->icon(Core::Constants::ICONEYES));
+    ui->printButton->setShortcut(QKeySequence::Print);
+    ui->printButton->setToolTip(QKeySequence(QKeySequence::Print).toString());
+    ui->printButton->setIcon(theme()->icon(Core::Constants::ICONPRINT));
     m_doc = new QTextDocument(ui->textEdit);
     QPalette p = palette();
     p.setColor(QPalette::Active, QPalette::Base, QColor ("#DDDDDD"));
