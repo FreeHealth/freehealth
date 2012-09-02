@@ -37,13 +37,22 @@
 #include <translationutils/constants.h>
 #include <translationutils/trans_msgerror.h>
 
+#include <coreplugin/icore.h>
+#include <coreplugin/itheme.h>
+#include <coreplugin/constants.h>
+
 #include <QRect>
+#include <QGraphicsDropShadowEffect>
+#include <QPainter>
 
 #include <QDebug>
 
 using namespace Trans::ConstantTranslations;
+using namespace Constants;
 
 enum { WarnDebugMessage = true };
+
+static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 
 LedgerViewer::LedgerViewer(QWidget * parent): QWidget(parent),ui(new Ui::LedgerViewerWidget){
     ui->setupUi(this);
@@ -51,8 +60,23 @@ LedgerViewer::LedgerViewer(QWidget * parent): QWidget(parent),ui(new Ui::LedgerV
     m_lm = new LedgerManager(this);
     m_ledgerEdit = new LedgerEdit(this);
     m_ledgerEdit->hide();
+    /*"QMenuBar {"
+                           " background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1,"
+                           "stop:0 lightgray, stop:1 darkgray);}"*/
     m_menuBar = new QMenuBar(this);
-
+    m_menuBar->setAttribute(Qt::WA_TranslucentBackground);
+    QString menuBarStyle = "QMenuBar {"
+                           " background-color:lightgray ;}"
+                           "QMenuBar::item {"
+                           "spacing: 3px; // spacing between menu bar items"
+                           "padding: 1px 4px;"
+                           "background: transparent;"
+                           "border-radius: 4px;}"
+                           "QMenuBar::item:selected {" // when selected using mouse or keyboard 
+                           "background: #a8a8a8;}"
+                           "QMenuBar::item:pressed {"
+                           "background: #888888;}";
+    m_menuBar->setStyleSheet(menuBarStyle);
     QStringList listOfMonths;
     listOfMonths = m_lm->getListOfMonths();
     ui->monthsComboBox->addItems(listOfMonths);
@@ -78,6 +102,7 @@ void LedgerViewer::changeEvent(QEvent *e) {
     QWidget::changeEvent(e);
     if (e->type()==QEvent::LanguageChange) {
         ui->retranslateUi(this);
+        if (WarnDebugMessage)
         qDebug() << __FILE__ << QString::number(__LINE__) << "LedgerViewer::changeEvent(QEvent *e)"  ;
         /*m_menuWidgetAction = new QMenu(QObject::tr("&Program","Ledger file"),this);
         m_menuAnalyze = new QMenu(tr("&Analyse"),this);
@@ -93,9 +118,7 @@ void LedgerViewer::changeEvent(QEvent *e) {
 }
 
 void LedgerViewer::fillMenuBar(){
-
-    m_menuBar->setAttribute(Qt::WA_TranslucentBackground);
-    m_menuBar->setWindowOpacity(0.0);
+    
     m_menuBar->addMenu(m_menuWidgetAction);
     m_menuBar->addMenu(m_menuAnalyze);
     m_menuBar->addMenu(m_ledger);
@@ -121,6 +144,7 @@ bool LedgerViewer::createActions(){
     bool b = true;
     m_closeAction = new QAction(tr("E&xit"),this);
     m_closeAction->setShortcut(QKeySequence::Close);
+    m_closeAction->setIcon(QIcon(theme()->icon(Core::Constants::ICONQUIT)));
     m_closeAction->setStatusTip(tr("Close Ledger"));
     m_hashTextAndAction.insert(m_closeAction->text(),m_closeAction);
     b = connect(m_closeAction, SIGNAL(triggered()), this, SLOT(close()));

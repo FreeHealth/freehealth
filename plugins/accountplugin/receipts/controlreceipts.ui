@@ -185,13 +185,13 @@
          <rect>
           <x>105</x>
           <y>62</y>
-          <width>224</width>
+          <width>181</width>
           <height>24</height>
          </rect>
         </property>
         <property name="minimumSize">
          <size>
-          <width>161</width>
+          <width>150</width>
           <height>24</height>
          </size>
         </property>
@@ -205,7 +205,7 @@
        <widget class="QWidget" name="layoutWidget">
         <property name="geometry">
          <rect>
-          <x>350</x>
+          <x>320</x>
           <y>30</y>
           <width>180</width>
           <height>58</height>
@@ -220,6 +220,9 @@
            <widget class="QLabel" name="beginDateLabel">
             <property name="text">
              <string>Date begin</string>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
             </property>
             <property name="buddy">
              <cstring>beginDateEdit</cstring>
@@ -247,6 +250,9 @@
             <widget class="QLabel" name="endDateLabel">
              <property name="text">
               <string>Date end</string>
+             </property>
+             <property name="wordWrap">
+              <bool>true</bool>
              </property>
              <property name="buddy">
               <cstring>endDateEdit</cstring>
@@ -309,13 +315,13 @@
          <rect>
           <x>105</x>
           <y>32</y>
-          <width>221</width>
+          <width>181</width>
           <height>24</height>
          </rect>
         </property>
         <property name="minimumSize">
          <size>
-          <width>110</width>
+          <width>100</width>
           <height>24</height>
          </size>
         </property>
