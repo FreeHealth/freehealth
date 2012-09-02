@@ -63,7 +63,8 @@ HEADERS += global_exporter.h \
     widgets/segmentedbutton.h \
     widgets/periodselectortoolbutton.h \
     widgets/birthdayedit.h \
-    datevalidator.h
+    datevalidator.h \
+    widgets/fadewidgethack.h
 #    widgets/dialogbuttonbox.h
 
 SOURCES += global.cpp \
@@ -113,7 +114,8 @@ SOURCES += global.cpp \
     widgets/segmentedbutton.cpp \
     widgets/periodselectortoolbutton.cpp \
     widgets/birthdayedit.cpp \
-    datevalidator.cpp
+    datevalidator.cpp \
+    widgets/fadewidgethack.cpp
 #    widgets/dialogbuttonbox.cpp
 
 macx {

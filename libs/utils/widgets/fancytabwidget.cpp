@@ -30,26 +30,32 @@
 #include "fancytabwidget.h"
 #include <utils/stylehelper.h>
 #include <utils/widgets/styledbar.h>
+#include <utils/widgets/fadewidgethack.h>
 
 #include <QDebug>
 
-#include <QtGui/QColorDialog>
-#include <QtGui/QHBoxLayout>
-#include <QtGui/QVBoxLayout>
-#include <QtGui/QMouseEvent>
-#include <QtGui/QWindowsStyle>
-#include <QtGui/QPainter>
-#include <QtGui/QSplitter>
-#include <QtGui/QStackedLayout>
-#include <QtGui/QStatusBar>
-#include <QtGui/QToolButton>
-#include <QtGui/QToolTip>
+#include <QColorDialog>
+#include <QHBoxLayout>
+#include <QVBoxLayout>
+#include <QMouseEvent>
+#include <QWindowsStyle>
+#include <QPainter>
+#include <QSplitter>
+#include <QStackedLayout>
+#include <QStatusBar>
+#include <QToolButton>
+#include <QToolTip>
+#include <QTimer>
 
 using namespace Utils;
 using namespace Internal;
 
 const int FancyTabBar::m_rounding = 22;
 const int FancyTabBar::m_textPadding = 4;
+
+namespace {
+const int FADE_DURATION = 300;
+}
 
 FancyTabBar::FancyTabBar(QWidget *parent)
     : QWidget(parent)
@@ -301,9 +307,13 @@ private:
 //////
 
 FancyTabWidget::FancyTabWidget(QWidget *parent)
-    : QWidget(parent)
+    : QWidget(parent),
+      _fader(0)
 {
     m_tabBar = new FancyTabBar(this);
+
+    m_fadeInDuration = ::FADE_DURATION;
+    m_fadeOutDuration = ::FADE_DURATION;
 
     m_selectionWidget = new QWidget(this);
     QVBoxLayout *selectionLayout = new QVBoxLayout;
@@ -425,11 +435,47 @@ void FancyTabWidget::setCurrentIndex(int index)
 
 void FancyTabWidget::showWidget(int index)
 {
+    if (index == m_modesStack->currentIndex())
+        return;
     emit currentAboutToShow(index);
-    m_modesStack->setCurrentIndex(index);
-    emit currentChanged(index);
+    m_requestedIndex = index;
+
+    // fade out previous widget
+    delete _fader;
+    _fader = new FaderWidget(m_modesStack->currentWidget());
+    _fader->setFadeDuration(m_fadeOutDuration);
+    _fader->setFadeType(FaderWidget::FadeOutParentWidget);
+    _fader->start();
+    connect(_fader, SIGNAL(fadeDone()), this, SLOT(fadeInCurrentIndex()));
+    fadeInCurrentIndex();
 }
 
+void FancyTabWidget::fadeInCurrentIndex()
+{
+    if (m_requestedIndex == -1)
+        return;
+
+    m_modesStack->setCurrentIndex(m_requestedIndex);
+
+    // fade in current widget
+    delete _fader;
+    _fader = new FaderWidget(m_modesStack->currentWidget());
+    _fader->setFadeDuration(m_fadeInDuration);
+    _fader->setFadeType(FaderWidget::FadeInParentWidget);
+    _fader->start();
+    connect(_fader, SIGNAL(fadeDone()), this, SLOT(fadeInDone()));
+}
+
+void FancyTabWidget::fadeInDone()
+{
+    // Give some time to the fader to destroy itself
+    QTimer::singleShot(::FADE_DURATION, this, SLOT(emitCurrentChanged()));
+}
+
+void FancyTabWidget::emitCurrentChanged()
+{
+    emit currentChanged(m_requestedIndex);
+}
 void FancyTabWidget::setTabToolTip(int index, const QString &toolTip)
 {
     m_tabBar->setTabToolTip(index, toolTip);

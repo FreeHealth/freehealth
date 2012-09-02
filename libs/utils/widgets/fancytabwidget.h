@@ -32,10 +32,11 @@
 
 #include <utils/global_exporter.h>
 
-#include <QtGui/QPushButton>
-#include <QtGui/QTabBar>
-#include <QtGui/QStyleOptionTabV2>
-#include <QtCore/QTimeLine>
+#include <QPushButton>
+#include <QTabBar>
+#include <QStyleOptionTabV2>
+#include <QTimeLine>
+#include <QPointer>
 
 QT_BEGIN_NAMESPACE
 class QPainter;
@@ -45,6 +46,8 @@ class QVBoxLayout;
 QT_END_NAMESPACE
 
 namespace Utils {
+class FaderWidget;
+
 namespace Internal {
 
     struct FancyTab {
@@ -125,6 +128,9 @@ class UTILS_EXPORT FancyTabWidget : public QWidget
 public:
     FancyTabWidget(QWidget *parent = 0);
 
+    void setFadeInDuration(const int duration) {m_fadeInDuration = duration;}
+    void setFadeOutDuration(const int duration) {m_fadeInDuration = duration;}
+
     void insertTab(int index, QWidget *tab, const QIcon &icon, const QString &label);
     void removeTab(int index);
     void setBackgroundBrush(const QBrush &brush);
@@ -149,6 +155,9 @@ public Q_SLOTS:
 
 private Q_SLOTS:
     void showWidget(int index);
+    void fadeInCurrentIndex();
+    void fadeInDone();
+    void emitCurrentChanged();
 
 private:
     Internal::FancyTabBar *m_tabBar;
@@ -157,6 +166,8 @@ private:
     QWidget *m_selectionWidget;
     QStatusBar *m_statusBar;
     QVBoxLayout *m_centralLayout;
+    int m_requestedIndex, m_fadeInDuration, m_fadeOutDuration;
+    QPointer<FaderWidget> _fader;
 };
 
 } // namespace Core
