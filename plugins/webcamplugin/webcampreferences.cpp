@@ -32,6 +32,9 @@
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
+#include <opencv2/core/core.hpp>
+//#include <opencv2/highgui/highgui.hpp>
+
 
 using namespace Webcam;
 using namespace Internal;
@@ -48,6 +51,8 @@ WebcamPreferencesWidget::WebcamPreferencesWidget(QWidget *parent) :
     ui(new Ui::WebcamPreferencesWidget)
 {
     ui->setupUi(this);
+
+//    ui->devicesCombo->addItem();
 }
 
 WebcamPreferencesWidget::~WebcamPreferencesWidget()

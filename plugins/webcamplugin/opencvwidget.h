@@ -36,7 +36,6 @@
 #include <opencv2/objdetect/objdetect.hpp>
 #include <QStandardItemModel>
 
-
 namespace Webcam {
 namespace Internal {
 
@@ -54,7 +53,7 @@ public:
 
     void setImageUpdateFrequency(const int ms);
     int defaultUpdateFrequency() const;
-    
+
     QRect frame() const;
     QStandardItemModel* model() { return m_imageModel; }
 
@@ -63,15 +62,15 @@ public Q_SLOTS:
     void freeze();
     void unFreeze();
 
-private Q_SLOTS:    
+private Q_SLOTS:
     void onActionCaptureTriggered();
-    
+
 Q_SIGNALS:
     void frozen(bool);
     void imageReady(bool);
     void clicked();
     void autoFaceShot(const QPixmap &shot);
-    
+
 private:
     void timerEvent(QTimerEvent *event);
     void mousePressEvent(QMouseEvent *event);
@@ -80,15 +79,13 @@ private:
     void wheelEvent(QWheelEvent *event);
     void mouseDoubleClickEvent(QMouseEvent *event);
 
-    QRect getFaceRect(IplImage *cvimage);
-    void drawFaceDetectionFrame(IplImage *cvimage);
-    
     void restrictRubberBandConstraints();
-    
-    
+    QImage Mat2QImage(const cv::Mat3b &src);
+
 private:
     QImage m_image;
-    CvCapture *m_camera;
+    cv::VideoCapture m_camera;
+//    CvCapture *m_camera;
     bool m_frozen;
     int m_timerId, m_updateFreq;
     QRubberBand *m_rubberBand;
@@ -96,9 +93,9 @@ private:
     QPoint m_clickOrigin;
     QPoint m_rubberOrigin;
 
-    CvHaarClassifierCascade* _cascade;
-    CvMemStorage* _storage;
-    QList<CvScalar> _colors;
+    cv::CascadeClassifier _cascade;
+    cv::MemStorage _storage;
+    cv::Mat _frame;
     QPixmap* _pixmap;
     int m_counter, m_frames;
 //    QList<IplImage *> m_imageList;

@@ -37,10 +37,12 @@
 #include <QImage>
 #include <QPixmap>
 #include <QTime>
+#include <opencv2/highgui/highgui.hpp>
 
 enum { WarnCameraProperties = false };
 
 using namespace Webcam::Internal;
+using namespace cv;
 
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 
@@ -69,57 +71,56 @@ OpenCVWidget::OpenCVWidget(QWidget *parent) :
         dlg.setLabelText(tr("Acquiring webcam..."));
         dlg.show();
 
-        m_camera = cvCreateCameraCapture(CV_CAP_ANY);
-        Q_ASSERT(m_camera); //TODO: don't assert here, do error handling while runnning
+        m_camera = VideoCapture(0);
+        if (!m_camera.isOpened()) {
+            //TODO: error handling!
+        }
+//        m_camera = cvCreateCameraCapture(CV_CAP_ANY);
+//        Q_ASSERT(m_camera); //TODO: don't assert here, do error handling while runnning
     }
     LOG(tr("Acquiring WebCam (%1 ms)").arg(time.elapsed()));
 
     if (WarnCameraProperties) {
         qWarning()
                 << "\nCV_CAP_PROP_POS_MSEC"
-                << cvGetCaptureProperty(m_camera, CV_CAP_PROP_POS_MSEC)
+                << m_camera.get(CV_CAP_PROP_POS_MSEC)
                 << "\nCV_CAP_PROP_POS_FRAMES"
-                << cvGetCaptureProperty(m_camera, CV_CAP_PROP_POS_FRAMES)
+                << m_camera.get(CV_CAP_PROP_POS_FRAMES)
                 << "\nCV_CAP_PROP_POS_AVI_RATIO"
-                << cvGetCaptureProperty(m_camera, CV_CAP_PROP_POS_AVI_RATIO)
+                << m_camera.get(CV_CAP_PROP_POS_AVI_RATIO)
                 << "\nCV_CAP_PROP_FRAME_WIDTH"
-                << cvGetCaptureProperty(m_camera, CV_CAP_PROP_FRAME_WIDTH)
+                << m_camera.get(CV_CAP_PROP_FRAME_WIDTH)
                 << "\nCV_CAP_PROP_FRAME_HEIGHT"
-                << cvGetCaptureProperty(m_camera, CV_CAP_PROP_FRAME_HEIGHT)
+                << m_camera.get(CV_CAP_PROP_FRAME_HEIGHT)
                 << "\nCV_CAP_PROP_FPS"
-                << cvGetCaptureProperty(m_camera, CV_CAP_PROP_FPS)
+                << m_camera.get(CV_CAP_PROP_FPS)
                 << "\nCV_CAP_PROP_FOURCC"
-                << cvGetCaptureProperty(m_camera, CV_CAP_PROP_FOURCC)
+                << m_camera.get(CV_CAP_PROP_FOURCC)
                 << "\nCV_CAP_PROP_FRAME_COUNT"
-                << cvGetCaptureProperty(m_camera, CV_CAP_PROP_FRAME_COUNT)
+                << m_camera.get(CV_CAP_PROP_FRAME_COUNT)
                 << "\nCV_CAP_PROP_FORMAT"
-                << cvGetCaptureProperty(m_camera, CV_CAP_PROP_FORMAT)
+                << m_camera.get(CV_CAP_PROP_FORMAT)
                 << "\nCV_CAP_PROP_MODE"
-                << cvGetCaptureProperty(m_camera, CV_CAP_PROP_MODE)
+                << m_camera.get(CV_CAP_PROP_MODE)
                 << "\nCV_CAP_PROP_BRIGHTNESS"
-                << cvGetCaptureProperty(m_camera, CV_CAP_PROP_BRIGHTNESS)
+                << m_camera.get(CV_CAP_PROP_BRIGHTNESS)
                 << "\nCV_CAP_PROP_CONTRAST"
-                << cvGetCaptureProperty(m_camera, CV_CAP_PROP_CONTRAST)
+                << m_camera.get(CV_CAP_PROP_CONTRAST)
                 << "\nCV_CAP_PROP_SATURATION"
-                << cvGetCaptureProperty(m_camera, CV_CAP_PROP_SATURATION)
+                << m_camera.get(CV_CAP_PROP_SATURATION)
                 << "\nCV_CAP_PROP_HUE"
-                << cvGetCaptureProperty(m_camera, CV_CAP_PROP_HUE)
+                << m_camera.get(CV_CAP_PROP_HUE)
                 << "\nCV_CAP_PROP_GAIN"
-                << cvGetCaptureProperty(m_camera, CV_CAP_PROP_GAIN)
+                << m_camera.get(CV_CAP_PROP_GAIN)
                 << "\nCV_CAP_PROP_EXPOSURE"
-                << cvGetCaptureProperty(m_camera, CV_CAP_PROP_EXPOSURE) ;
+                << m_camera.get(CV_CAP_PROP_EXPOSURE);
     }
 
 
     // face recognition initialisation
     QString filename = settings()->path(Core::ISettings::BundleResourcesPath) + "/textfiles/haarcascade_frontalface_alt2.xml";
-    _cascade =  (CvHaarClassifierCascade*)cvLoad(filename.toUtf8());
-
-    _storage = cvCreateMemStorage(0);
-    _colors << cvScalar(0.0,0.0,255.0) << cvScalar(0.0,128.0,255.0)
-            << cvScalar(0.0,255.0,255.0) << cvScalar(0.0,255.0,0.0)
-            << cvScalar(255.0,128.0,0.0) << cvScalar(255.0,255.0,0.0)
-            << cvScalar(255.0,0.0,0.0) << cvScalar(255.0,0.0,255.0);
+    _cascade.load(filename.toStdString());
+    _storage = MemStorage();
 
     // create a model that contains the captured images
     // 8 images, 1 column (image)
@@ -133,78 +134,55 @@ OpenCVWidget::OpenCVWidget(QWidget *parent) :
  */
 OpenCVWidget::~OpenCVWidget()
 {
-    cvReleaseHaarClassifierCascade(&_cascade);
-    cvReleaseCapture(&m_camera);
+//    cvReleaseHaarClassifierCascade(&_cascade);
+    m_camera.release();
 }
 
 void OpenCVWidget::timerEvent(QTimerEvent *event)
 {
     Q_UNUSED(event);
-    IplImage *cvimage = cvQueryFrame(m_camera);
-    if (!cvimage)
+
+    if (!m_camera.isOpened())
         return;
 
-    // now convert IplImage into a QImage
-    int cvIndex, cvLineStart;
-    // switch between bit depths
-    switch (cvimage->depth) {
-    case IPL_DEPTH_8U:
-        switch (cvimage->nChannels) {
-        case 3: {
-            // resize QImage
-            if ((cvimage->width != m_image.width()) || (cvimage->height != m_image.height())) {
-                QImage temp(cvimage->width, cvimage->height, QImage::Format_RGB32);
-                m_image = temp;
-            }
-            // draw inside the QImage
-            cvIndex = 0; cvLineStart = 0;
-            for (int y = 0; y < cvimage->height; ++y) {
-                unsigned char red,green,blue;
-                cvIndex = cvLineStart;
-                for (int x = 0; x < cvimage->width; ++x) {
-                    // DO it
-                    red = cvimage->imageData[cvIndex+2];
-                    green = cvimage->imageData[cvIndex+1];
-                    blue = cvimage->imageData[cvIndex+0];
+    std::vector<Rect> faces;
 
-                    m_image.setPixel(x,y,qRgb(red, green, blue));
-                    cvIndex += 3;
-                }
-                cvLineStart += cvimage->widthStep;
-            }
+     if (m_camera.read(_frame)) {
+         if (!_frame.empty()) {
 
-            // Find the face
-            if (true) { //m_counter < 4) {
-                ++m_frames; // count frames between last autoshot
-                // one shot every 1000ms
-                if (m_frames >= (1000/m_updateFreq)) {
-                    m_frames = 0;  // reset frame counter
-                    QRect rect = getFaceRect(cvimage);
-                    if (rect.isEmpty() || !rect.isValid() || rect.width() < 80) {
-                        return;
-                    }
-                    // If found -> get the QImage and cut the face
-                    QImage face = m_image.copy(rect);
-                    QPixmap pix(face.size());
-                    pix = QPixmap::fromImage(face);
-                    ++m_counter;
-                    Q_EMIT autoFaceShot(pix);
-                }
-            }
-            break;
-        }
-        default:
-            printf("This number of channels is not supported\n");
-            break;
-        }
-        break;
-    default:
-        printf("This type of IplImage is not implemented in OpenCVWidget\n");
-        break;
-    }
-    setPixmap(QPixmap::fromImage(m_image));
+             _cascade.detectMultiScale(_frame, faces, 1.1, 2, 0|CV_HAAR_SCALE_IMAGE, Size(30, 30));
+
+             // now convert Mat image into a QImage
+             m_image = Mat2QImage(_frame);
+             setPixmap(QPixmap::fromImage(m_image));
+
+             // Find the face
+             ++m_frames; // count frames between last autoshot
+             // one shot every 1000ms
+             if (m_frames >= (1000/m_updateFreq)) {
+                 m_frames = 0;  // reset frame counter
+
+                 // more than one faces are just ignored.
+                 if (faces.size() != 1)
+                     return;
+
+                 Rect tmpRect = faces.front();
+                 QRect rect(tmpRect.x, tmpRect.y, tmpRect.width, tmpRect.height);
+
+                 if (rect.isEmpty() || !rect.isValid() || rect.width() < 80) {
+                     return;
+                 }
+                 // If found -> get the QImage and cut the face
+                 QImage face = m_image.copy(rect);
+                 QPixmap pix(face.size());
+                 pix = QPixmap::fromImage(face);
+                 ++m_counter;
+                 Q_EMIT autoFaceShot(pix);
+             }
+
+         }
+     }
 }
-
 
 /*!
  * \brief Takes care of mouse clicks in the capturing phase.
@@ -367,97 +345,6 @@ void OpenCVWidget::mouseDoubleClickEvent(QMouseEvent *event)
     setFrozen(false);
 }
 
-/** Find the rect around the face. Increase is surface of 20%. */
-QRect OpenCVWidget::getFaceRect(IplImage *cvimage)
-{
-    if (!cvimage)
-        return QRect();
-
-    // thanks for some code snippets from Stef van den Elzen
-    // taken from http://sj.vdelzen.net/2011/05/31/realtime-face-detection-using-opencv-and-cqt/
-
-    // switch between bit depths
-    switch (cvimage->depth) {
-    case IPL_DEPTH_8U:
-        switch (cvimage->nChannels) {
-        case 3: {
-            // Detect face objects
-            cvClearMemStorage(_storage);
-            CvSeq* objects = cvHaarDetectObjects(cvimage, _cascade, _storage, 1.2, 3, CV_HAAR_DO_CANNY_PRUNING, cvSize( 64, 64 ));
-            int n = (objects ? objects->total : 0);
-            if (n <= 0)
-                return QRect();
-            CvRect* rect;
-            // we only work with one face
-            rect = (CvRect*)cvGetSeqElem(objects, 0);
-            QRect qRect(rect->x, rect->y, rect->width, rect->height);
-            QPoint center = qRect.center();
-            qRect.setWidth(qRect.width() * 1.2);
-            qRect.setHeight(qRect.width() * 1.2);
-            qRect.moveCenter(center);
-            return qRect;
-        }
-        default:
-            printf("This number of channels is not supported\n");
-            break;
-        }
-        break;
-    default:
-        printf("This type of IplImage is not implemented in QOpenCVWidget\n");
-        break;
-    }
-    return QRect();
-}
-
-void OpenCVWidget::drawFaceDetectionFrame(IplImage *cvimage)
-{
-    if (!cvimage)
-        return;
-
-    // thanks for some code snippets from Stef van den Elzen
-    // taken from http://sj.vdelzen.net/2011/05/31/realtime-face-detection-using-opencv-and-cqt/
-
-    // switch between bit depths
-    switch (cvimage->depth) {
-    case IPL_DEPTH_8U:
-        switch (cvimage->nChannels) {
-        case 3: {
-
-            // Detect face objects
-            cvClearMemStorage( _storage );
-
-            //            qDebug() << _cascade;
-            CvSeq* objects = cvHaarDetectObjects(cvimage, _cascade, _storage, 1.2, 3, CV_HAAR_DO_CANNY_PRUNING, cvSize( 64, 64 ));
-
-            int n = (objects ? objects->total : 0);
-
-            //if more than one objects, ignore this sequence
-            if (n > 1) {
-                n = 0;
-            }
-            CvRect* rect;
-            // Loop through objects and draw boxes
-            for( int i = 0; i < n; i++ )
-            {
-                rect = (CvRect*)cvGetSeqElem(objects, i);
-                cvRectangle( cvimage,
-                             cvPoint(rect->x - 30, rect->y - 50),
-                             cvPoint(rect->x + rect->width + 30, rect->y + rect->height + 50),
-                             _colors[i%8]
-                             );
-            }
-            break;
-        }
-        default:
-            printf("This number of channels is not supported\n");
-            break;
-        }
-        break;
-    default:
-        printf("This type of IplImage is not implemented in QOpenCVWidget\n");
-        break;
-    }
-}
 
 /*!
  * \brief Crops the RubberBand if not inside the parent widget.
@@ -501,6 +388,20 @@ void OpenCVWidget::restrictRubberBandConstraints()
 
 
 }
+
+QImage OpenCVWidget::Mat2QImage(const cv::Mat3b &src)
+{
+    QImage dest(src.cols, src.rows, QImage::Format_ARGB32);
+    for (int y = 0; y < src.rows; ++y) {
+        const cv::Vec3b *srcrow = src[y];
+        QRgb *destrow = (QRgb*)dest.scanLine(y);
+        for (int x = 0; x < src.cols; ++x) {
+            destrow[x] = qRgba(srcrow[x][2], srcrow[x][1], srcrow[x][0], 255);
+        }
+    }
+    return dest;
+}
+
 
 /*!
  * \brief When called, stops the camera and freezes the picture. In the next call it continues
