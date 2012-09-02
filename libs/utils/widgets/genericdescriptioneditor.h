@@ -32,6 +32,13 @@
 
 #include <QWidget>
 
+/**
+ * \file genericdescriptioneditor.h
+ * \author Eric MAEKER <eric.maeker@gmail.com>
+ * \version 0.6.2
+ * \date 10 Jan 2012
+*/
+
 namespace Utils {
 class GenericDescription;
 namespace Internal {
