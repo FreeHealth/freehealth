@@ -34,17 +34,6 @@
 #include <QDebug>
 
 namespace Utils {
-void FadeWidgetHack::paintEvent(QPaintEvent *)
-{
-    if (m_opacity == 0)
-        return;
-
-    QPainter p(this);
-    p.setOpacity(m_opacity);
-    if (m_opacity > 0)
-        Utils::StyleHelper::verticalGradient(&p, rect(), rect());
-}
-
 
 FaderWidget::FaderWidget(QWidget *parent)
     : QWidget(parent)
