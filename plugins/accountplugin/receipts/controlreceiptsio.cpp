@@ -89,8 +89,13 @@ ControlReceipts::ControlReceipts(QWidget * parent):QWidget(parent),ui(new Ui::Co
     ui->backButton->setToolTip(QKeySequence(QKeySequence::Back).toString());
     ui->searchButton->setShortcut(QKeySequence::InsertParagraphSeparator);
     ui->searchButton->setToolTip(QKeySequence(QKeySequence::InsertParagraphSeparator).toString());
+    ui->searchButton->setIcon(theme()->icon(Core::Constants::ICONFIND));
     ui->deleteButton->setShortcut(QKeySequence::Delete);
     ui->deleteButton->setToolTip(QKeySequence(QKeySequence::Delete).toString());
+    ui->deleteButton->setIcon(theme()->icon(Core::Constants::ICONREMOVE));
+    ui->printButton->setShortcut(QKeySequence::Print);
+    ui->printButton->setToolTip(QKeySequence(QKeySequence::Print).toString());
+    ui->printButton->setIcon(theme()->icon(Core::Constants::ICONPRINT));
     search();
     connect(ui->searchButton,SIGNAL(pressed()),this,SLOT(search()));
     connect(ui->deleteButton,SIGNAL(pressed()),this,SLOT(deleteLine()));
