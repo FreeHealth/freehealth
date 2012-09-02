@@ -28,7 +28,7 @@
 #define PIXMAPBUTTON_H
 
 #include <QPushButton>
-   
+
 namespace Patients {
 /*!
  * \class PixmapButton
@@ -54,9 +54,11 @@ Q_SIGNALS:
 
 public Q_SLOTS:
     void setPixmap(const QPixmap&);
+    void clearPixmap();
 
 private:
     QPixmap m_pixmap;
+    QAction* m_actionDeletePhoto;
 };
 
 } // end Patients

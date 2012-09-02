@@ -25,6 +25,10 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "pixmapbutton.h"
+#include <QtGui/QMenu>
+#include <coreplugin/itheme.h>
+#include <coreplugin/icore.h>
+#include <coreplugin/constants.h>
 
 using namespace Patients;
 
@@ -38,6 +42,14 @@ PixmapButton::PixmapButton(QWidget *parent) :
     QPushButton(parent),
     m_pixmap(QPixmap())
 {
+    setContextMenuPolicy(Qt::ActionsContextMenu);
+
+    m_actionDeletePhoto = new QAction(Core::ICore::instance()->theme()->icon(Core::Constants::ICONREMOVE),
+                                      tr("Delete photo"), this);
+    connect(m_actionDeletePhoto, SIGNAL(triggered()),this, SLOT(clearPixmap()));
+    addAction(m_actionDeletePhoto);
+    m_actionDeletePhoto->setEnabled(false);
+
 }
 
 QPixmap PixmapButton::pixmap() const
@@ -49,4 +61,10 @@ void PixmapButton::setPixmap(const QPixmap& pixmap)
 {
     setIcon(QIcon(pixmap));
     m_pixmap = pixmap;
+    m_actionDeletePhoto->setEnabled(!pixmap.isNull());
+}
+
+void PixmapButton::clearPixmap()
+{
+    setPixmap(QPixmap());
 }
