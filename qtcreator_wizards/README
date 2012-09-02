@@ -3,10 +3,17 @@ you can put a link in the QtCreator templates directory tho one or more of
 this directories here and they then can be used as templates within 
 QtCreator.
 
-put the link in one of the following directories:
-* $HOME/.config/Nokia/qtcreator/templates/wizards (the local user's configuration folder, RECOMMENDED!)
-* share/qtcreator/templates/wizards
-* %APPDATA%\Nokia\qtcreator\templates\wizards
+Put the link in one of the following directories:
+
+	* $HOME/.config/Nokia/qtcreator/templates/wizards (the local user's configuration folder, RECOMMENDED!)
+	* share/qtcreator/templates/wizards
+	* %APPDATA%\Nokia\qtcreator\templates\wizards
 
 
-Detailed instructions how to install this are on http://www.freemedforms.com/en/code/howto_write_a_fmf_plugin
+Installation procedure:
+
+	http://www.freemedforms.com/en/code/howto_write_a_fmf_plugin
+
+Qt Creator documentation:
+
+	http://doc-snapshot.qt-project.org/qtcreator-latest/creator-project-wizards.html
