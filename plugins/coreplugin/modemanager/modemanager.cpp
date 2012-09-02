@@ -49,14 +49,14 @@
 
 #include <extensionsystem/pluginmanager.h>
 
-#include <QtCore/QObject>
-#include <QtCore/QDebug>
-#include <QtCore/QSignalMapper>
-#include <QtGui/QShortcut>
+#include <QObject>
+#include <QDebug>
+#include <QSignalMapper>
+#include <QShortcut>
 
-#include <QtGui/QAction>
-#include <QtGui/QTabWidget>
-#include <QtGui/QVBoxLayout>
+#include <QAction>
+#include <QTabWidget>
+#include <QVBoxLayout>
 
 using namespace Core;
 using namespace Core::Internal;
@@ -230,6 +230,15 @@ void ModeManager::currentTabAboutToChange(int index)
         IMode *mode = m_modes.at(index);
         if (mode)
             emit currentModeAboutToChange(mode);
+
+        // modify PatientBar visibility
+        if (patient()) {
+            if (mode->isPatientBarVisible())
+                patient()->showPatientBar();
+            else
+                patient()->hidePatientBar();
+        }
+
     }
 }
 
@@ -251,14 +260,6 @@ void ModeManager::currentTabChanged(int index)
             contextManager()->addAdditionalContext(context);
         emit currentModeChanged(mode);
         contextManager()->updateContext();
-
-        // modify PatientBar visibility
-        if (patient()) {
-            if (mode->isPatientBarVisible())
-                patient()->showPatientBar();
-            else
-                patient()->hidePatientBar();
-        }
     }
 }
 
