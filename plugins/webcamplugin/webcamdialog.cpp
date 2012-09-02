@@ -46,20 +46,6 @@
 
 #include "ui_webcamdialog.h"
 
-
-/*TODO:  improve webcam usability:
- * practitioner tells the patient to stand in front of the webcam
- * he clicks on a webcam symbol (that we can add in the identity widget or in a menu or anywhere else)
- * progress bar during the webcam acquiring
- * Dialog appears with e.g. 8 auto-shots (empty slots) + webcam capturing (+ freeze/unfreeze buttons),
- * FreeMedForms automatically takes 8 shots of the patient (2-3 per second) (select face, trim, color normalization)
- * Asks the practitioner to select his preferred one or to freeze/unfreeze the webcam
- * practitioner clicks on his preferred photo and it gets integrated in the patient identity widget
- -> Two clicks feature if practitioner select an auto-shot
- -> three/four clicks if he select the webcam freeze himself.
-*/
-
-
 using namespace Webcam;
 using namespace Internal;
 
