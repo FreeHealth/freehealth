@@ -1,3 +1,0 @@
-generated file by ./update_plugin_namespaces.sh
-Please copy the following line into the combochoices attribute of the PluginNamespace field in wizard.xml
-AccountDB,Account,Agenda,Gir,Alert,BaseWidgets,Category,DataPackPlugin,DrugInteractions,DrugsDB,DrugsWidget,Empty,Form,ICD,Views,PadTools,Patients,PMH,Print,SaveRestore,Script,Templates,Editor,UserPlugin,Webcam,XmlForms,ZipCodes,

@@ -1,46 +1,23 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
-/***************************************************************************
- *  The FreeMedForms project is a set of free, open source medical         *
- *  applications.                                                          *
- *  (C) 2008-2012 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
- *  All rights reserved.                                                   *
- *                                                                         *
- *  This program is free software: you can redistribute it and/or modify   *
- *  it under the terms of the GNU General Public License as published by   *
- *  the Free Software Foundation, either version 3 of the License, or      *
- *  (at your option) any later version.                                    *
- *                                                                         *
- *  This program is distributed in the hope that it will be useful,        *
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
- *  GNU General Public License for more details.                           *
- *                                                                         *
- *  You should have received a copy of the GNU General Public License      *
- *  along with this program (COPYING.FREEMEDFORMS file).                   *
- *  If not, see <http://www.gnu.org/licenses/>.                            *
- ***************************************************************************/
- -->
- <wizard version="1" kind="class" id="A.PreferencesPage" category="B.FMFClasses">
+<wizard category="B.FMFClasses" id="A.PreferencesPage" kind="class" version="1">
     <displayname>Settings Page</displayname>
     <displayname xml:lang="de">Einstellungen-Seite</displayname>
     <icon>../shared/preferences-system.png</icon>
     <description>Creates a class for a FreeMedForms preferences page. Choose this template if you already have created a plugin.</description>
-    <description xml:lang="de">Erstellt eine Klasse für eine FreeMedForms-Einstellungen-Seite. Wählen Sie diese Vorlage, wenn Sie bereits ein Plugin erstellt haben.</description>
+    <description xml:lang="de">Erstellt eine Klasse f&#252;r eine FreeMedForms-Einstellungen-Seite. W&#228;hlen Sie diese Vorlage, wenn Sie bereits ein Plugin erstellt haben.</description>
     <displaycategory>FreeMedForms</displaycategory>
     <files>
-        <file source="preferences.cpp" target="%PluginName:l%preferences.%CppSourceSuffix%" openeditor="true"/>
-        <file source="preferences.h" target="%PluginName:l%preferences.%CppHeaderSuffix%" openeditor="true"/>
-        <file source="preferences.ui" target="%PluginName:l%preferences.ui" openeditor="true"/> 
+        <file openeditor="true" source="preferences.cpp" target="%PluginName:l%preferences.%CppSourceSuffix%" />
+        <file openeditor="true" source="preferences.h" target="%PluginName:l%preferences.%CppHeaderSuffix%" />
+        <file openeditor="true" source="preferences.ui" target="%PluginName:l%preferences.ui" />
     </files>
-    <!-- Create a 2nd wizard page with parameters -->
+
     <fieldpagetitle>Settings Page Parameters</fieldpagetitle>
-    <fieldpagetitle xml:lang="de">Parameter für Einstellungen-Seite</fieldpagetitle>
+    <fieldpagetitle xml:lang="de">Parameter f&#252;r Einstellungen-Seite</fieldpagetitle>
     <fields>
         <field name="PluginName">
-            <fieldcontrol class="QLineEdit" validator="^[a-zA-Z0-9_]+$" defaulttext="" />
-            <fielddescription>Plugin name (without "plugin"):</fielddescription>
-            <fielddescription xml:lang="de">Name des Plugins, zu dem diese Einstellungen gehören (ohne "plugin"):</fielddescription>
+            <fieldcontrol class="QComboBox" combochoices="Account,AccountDB,Agenda,Alert,BaseWidgets,Category,Core,DataPackPlugin,DrugInteractions,DrugsDB,DrugsWidget,Editor,Empty,Form,Gir,ICD,MainWin,PMH,PadTools,Patients,Print,SaveRestore,Script,Templates,UserPlugin,Views,Webcam,XmlForms,ZipCodes" defaultindex="-1" />
+            <fielddescription>Plugin:</fielddescription>
+            <fielddescription xml:lang="de">Plugin:</fielddescription>
         </field>
         <field name="Author">
             <fieldcontrol class="QLineEdit" defaulttext="" />
@@ -48,39 +25,15 @@
             <fielddescription xml:lang="de">Autor:</fielddescription>
         </field>
         <field name="AuthorEmail">
-            <fieldcontrol class="QLineEdit" validator="^[a-z0-9_.@]?$" defaulttext="" />
+            <fieldcontrol class="QLineEdit" defaulttext="" validator="^[a-z0-9_.@]?$" />
             <fielddescription>Author email:</fielddescription>
             <fielddescription xml:lang="de">Emailadresse des Autors:</fielddescription>
         </field>
-        <!--
-        <field mandatory="true" name="PLUGIN">
-            <fieldcontrol class="QLineEdit" validator='^[^"]+$'
-                          defaulttext="" />
-            <fielddescription>Hello world message:</fielddescription>
-            <fielddescription xml:lang="de">Hallo-Welt-Nachricht:</fielddescription>
-        </field>
-        -->
-	<!-- Checkbox technique 1: Comment out network in profile according to user's wishes -->
-        <!--
-        <field name="NETWORK">
-            <fieldcontrol class="QCheckBox" truevalue="" falsevalue="# "/>
-            <fielddescription>Include network module</fielddescription>
-            <fielddescription xml:lang="de">Netzwerk-Modul verwenden</fielddescription>
-        </field>
-        -->
-	<!-- Checkbox technique 2: Use preprocessor for profile according to user's wishes -->
-        <!--
-        <field name="SCRIPT">
-            <fieldcontrol class="QCheckBox"/>
-            <fielddescription>Include script module</fielddescription>
-            <fielddescription xml:lang="de">Script-Modul verwenden</fielddescription>
-        </field>
-        -->
     </fields>
-    <validationrules> <!-- DOES NOT WORK - Js function "indexOf()" is not supported?? -->
-        <validationrule condition='"%PluginName:l%".indexOf("plugin") != -1'>
+    <validationrules>
+        <validationrule condition="&quot;%PluginName:l%&quot;.indexOf(&quot;plugin&quot;) != -1">
             <message>The plugin name may not contain "plugin". Please remove the suffix "plugin".</message>
             <message xml:lang="de">Der Name des Plugins darf nicht "plugin" enthalten, bitte diesen Wortteil entfernen.</message>
         </validationrule>
-    </validationrules>    
+    </validationrules>
 </wizard>
