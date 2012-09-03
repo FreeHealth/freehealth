@@ -18,13 +18,18 @@
  *  along with this program (COPYING.FREEMEDFORMS file).                   *
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
-/**
-  \class Core::AboutDialog
-  \brief This dialog shows a complete About dialog with a tabwidget containing : a short about text, a complete team list, a full license text.
-   It also shows the compilation date and time and the actual version of the application. \n
-   The name of the application is picked into qApp->applicationName() and the version into qApp->applicationVersion(). \n
-   You can inform the team using the addTeamList().\n
-   You can get the default license terms using the static getLicenseTerms() function. This function manages english and french language by looking the default QLocale()::name().\n
+/*!
+ *\class Core::AboutDialog
+ *\brief This dialog shows a complete About dialog with a tabwidget
+ *
+ *It contains:
+ * \li a short about text
+ * \li a complete team list
+ * \li a full license text
+ * \li Compilation date and time and the actual version of the application.
+ *
+ * The name of the application is picked from qApp->applicationName() and the version
+ * from qApp->applicationVersion(). \n
 */
 
 #include "aboutdialog.h"
