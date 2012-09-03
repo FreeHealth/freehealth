@@ -47,9 +47,6 @@
         <source>OUTPUT</source>
         <translation type="unfinished"></translation>
     </message>
-</context>
-<context>
-    <name>PadTools::PadWriter</name>
     <message>
         <source>Unexpected &apos;%1&apos; found at pos %2</source>
         <translation type="unfinished"></translation>

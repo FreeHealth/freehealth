@@ -691,18 +691,18 @@ p, li { white-space: pre-wrap; }
         <translation>Alterner avec</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.cpp" line="428"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.cpp" line="429"/>
         <source>Drug Dosage Creator</source>
         <translation>Créateur de posologie</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.cpp" line="610"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.cpp" line="611"/>
         <source>Clear this list</source>
         <comment>Clear the user&apos;s intakes recorded forms</comment>
         <translation>Effacer cette liste</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.cpp" line="649"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.cpp" line="650"/>
         <source>Linking to: </source>
         <translation>Lié à : </translation>
     </message>
@@ -1085,12 +1085,12 @@ Voulez-vous les envoyer ?</translation>
 <context>
     <name>DrugsWidget::Internal::DrugsActionHandler</name>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidgetmanager.cpp" line="697"/>
+        <location filename="../../plugins/drugsplugin/drugswidgetmanager.cpp" line="699"/>
         <source>Prescription is not empty. Clear it?</source>
         <translation>La prescription n&apos;est pas vide. L&apos;effacer ?</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidgetmanager.cpp" line="698"/>
+        <location filename="../../plugins/drugsplugin/drugswidgetmanager.cpp" line="700"/>
         <source>You select another editing mode than the actual one. Changing of mode during edition may cause prescription lose.
 Do you really want to change the editing mode?</source>
         <translation>Vous avez sélectionné un autre mode d&apos;édition que celui en cours. Changer le mode d&apos;édition fera disparaître votre prescription actuelle.

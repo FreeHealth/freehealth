@@ -266,8 +266,8 @@
 <context>
     <name>PMH::PmhCategoryModel</name>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhcategorymodel.cpp" line="1224"/>
-        <location filename="../../plugins/pmhplugin/pmhcategorymodel.cpp" line="1234"/>
+        <location filename="../../plugins/pmhplugin/pmhcategorymodel.cpp" line="1225"/>
+        <location filename="../../plugins/pmhplugin/pmhcategorymodel.cpp" line="1235"/>
         <source>Patient PMHx synthesis</source>
         <translation type="unfinished"></translation>
     </message>

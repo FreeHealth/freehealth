@@ -695,18 +695,18 @@ p, li { white-space: pre-wrap; }
         <translation>Austauschbar mit</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.cpp" line="428"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.cpp" line="429"/>
         <source>Drug Dosage Creator</source>
         <translation type="unfinished">Medikamenten Dosis Creator</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.cpp" line="610"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.cpp" line="611"/>
         <source>Clear this list</source>
         <comment>Clear the user&apos;s intakes recorded forms</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.cpp" line="649"/>
+        <location filename="../../plugins/drugsplugin/dosagedialog/mfDosageViewer.cpp" line="650"/>
         <source>Linking to: </source>
         <translation type="unfinished"></translation>
     </message>
@@ -1080,12 +1080,12 @@ Do you want to send them?</source>
 <context>
     <name>DrugsWidget::Internal::DrugsActionHandler</name>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidgetmanager.cpp" line="697"/>
+        <location filename="../../plugins/drugsplugin/drugswidgetmanager.cpp" line="699"/>
         <source>Prescription is not empty. Clear it?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidgetmanager.cpp" line="698"/>
+        <location filename="../../plugins/drugsplugin/drugswidgetmanager.cpp" line="700"/>
         <source>You select another editing mode than the actual one. Changing of mode during edition may cause prescription lose.
 Do you really want to change the editing mode?</source>
         <translation type="unfinished"></translation>

@@ -4,12 +4,12 @@
 <context>
     <name>Webcam::Internal::OpenCVWidget</name>
     <message>
-        <location filename="../../plugins/webcamplugin/opencvwidget.cpp" line="69"/>
+        <location filename="../../plugins/webcamplugin/opencvwidget.cpp" line="71"/>
         <source>Acquiring webcam...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/webcamplugin/opencvwidget.cpp" line="75"/>
+        <location filename="../../plugins/webcamplugin/opencvwidget.cpp" line="81"/>
         <source>Acquiring WebCam (%1 ms)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -17,12 +17,12 @@
 <context>
     <name>Webcam::Internal::WebcamPreferencesPage</name>
     <message>
-        <location filename="../../plugins/webcamplugin/webcampreferences.cpp" line="138"/>
+        <location filename="../../plugins/webcamplugin/webcampreferences.cpp" line="143"/>
         <source>General</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/webcamplugin/webcampreferences.cpp" line="144"/>
+        <location filename="../../plugins/webcamplugin/webcampreferences.cpp" line="149"/>
         <source>Webcam</source>
         <translation type="unfinished"></translation>
     </message>
@@ -34,6 +34,21 @@
         <source>Webcam Preferences</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../../plugins/webcamplugin/webcampreferences.ui" line="22"/>
+        <source>Camera &amp;device:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/webcamplugin/webcampreferences.ui" line="50"/>
+        <source>Camera information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/webcamplugin/webcampreferences.ui" line="56"/>
+        <source>TextLabel</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Webcam::WebcamDialog</name>
@@ -43,25 +58,25 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/webcamplugin/webcamdialog.cpp" line="76"/>
+        <location filename="../../plugins/webcamplugin/webcamdialog.cpp" line="62"/>
         <source>Take a picture from your webcam</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/webcamplugin/webcamdialog.cpp" line="79"/>
-        <location filename="../../plugins/webcamplugin/webcamdialog.cpp" line="124"/>
-        <location filename="../../plugins/webcamplugin/webcamdialog.cpp" line="154"/>
+        <location filename="../../plugins/webcamplugin/webcamdialog.cpp" line="65"/>
+        <location filename="../../plugins/webcamplugin/webcamdialog.cpp" line="110"/>
+        <location filename="../../plugins/webcamplugin/webcamdialog.cpp" line="140"/>
         <source>Freeze</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/webcamplugin/webcamdialog.cpp" line="121"/>
-        <location filename="../../plugins/webcamplugin/webcamdialog.cpp" line="152"/>
+        <location filename="../../plugins/webcamplugin/webcamdialog.cpp" line="107"/>
+        <location filename="../../plugins/webcamplugin/webcamdialog.cpp" line="138"/>
         <source>Unfreeze</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/webcamplugin/webcamdialog.cpp" line="131"/>
+        <location filename="../../plugins/webcamplugin/webcamdialog.cpp" line="117"/>
         <source>Photo %1</source>
         <translation type="unfinished"></translation>
     </message>

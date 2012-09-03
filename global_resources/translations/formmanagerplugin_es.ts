@@ -2,39 +2,15 @@
 <!DOCTYPE TS>
 <TS version="2.0" language="es_ES">
 <context>
-    <name>EpisodeModel</name>
-    <message>
-        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="565"/>
-        <source>Save episode?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="566"/>
-        <source>The actual episode has been modified. Do you want to save changes in your database?
-Answering &apos;No&apos; will cause definitve data lose.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="568"/>
-        <source>Save episode</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>Form::EpisodeModel</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="987"/>
-        <source>Created: </source>
+        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="556"/>
+        <source>Xml content</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="1104"/>
+        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="603"/>
         <source>New episode</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="1317"/>
-        <source>No user</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -56,17 +32,17 @@ Answering &apos;No&apos; will cause definitve data lose.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formeditordialog.cpp" line="79"/>
+        <location filename="../../plugins/formmanagerplugin/formeditordialog.cpp" line="78"/>
         <source>Form Editor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formeditordialog.cpp" line="94"/>
+        <location filename="../../plugins/formmanagerplugin/formeditordialog.cpp" line="93"/>
         <source>Insert as root form?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formeditordialog.cpp" line="94"/>
+        <location filename="../../plugins/formmanagerplugin/formeditordialog.cpp" line="93"/>
         <source>You did not selected a form, do you want to add the sub-form as root form?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -92,7 +68,7 @@ Answering &apos;No&apos; will cause definitve data lose.</source>
 <context>
     <name>Form::FormMain</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/iformitem.cpp" line="653"/>
+        <location filename="../../plugins/formmanagerplugin/iformitem.cpp" line="657"/>
         <source>Form: </source>
         <translation type="unfinished"></translation>
     </message>
@@ -100,8 +76,27 @@ Answering &apos;No&apos; will cause definitve data lose.</source>
 <context>
     <name>Form::FormMainDebugPage</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/iformitem.cpp" line="779"/>
+        <location filename="../../plugins/formmanagerplugin/iformitem.cpp" line="783"/>
         <source>Forms: </source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Form::FormPlaceHolder</name>
+    <message>
+        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="175"/>
+        <source>Save episode?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="177"/>
+        <source>The actual episode has been modified. Do you want to save changes in your database?
+Answering &apos;No&apos; will cause definitve data lose.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="180"/>
+        <source>Save episode</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -153,6 +148,14 @@ Answering &apos;No&apos; will cause definitve data lose.</source>
         <location filename="../../plugins/formmanagerplugin/formmanagerplugin.cpp" line="103"/>
         <location filename="../../plugins/formmanagerplugin/formmanagerplugin.cpp" line="119"/>
         <source>Initializing form manager plugin...</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Form::Internal::FormPlaceHolder</name>
+    <message>
+        <location filename="../../plugins/formmanagerplugin/formplaceholder.ui" line="14"/>
+        <source>Form</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
