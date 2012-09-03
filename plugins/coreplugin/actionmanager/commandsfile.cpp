@@ -42,7 +42,7 @@ using namespace Core::Internal;
 /*!
     \class CommandsFile
     \brief The CommandsFile class provides a collection of import and export commands.
-    \inheaderfile commandsfile.h
+    \headerfile commandsfile.h
 */
 
 /*!

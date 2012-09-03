@@ -39,7 +39,7 @@
     \mainclass
 
     \brief The class Command represents an action like a menu item, tool button, or shortcut.
-    You don't create Command objects directly, instead use \l{ActionManager::registerAction()}
+    You don't create Command objects directly, instead use ActionManager::registerAction()
     to register an action and retrieve a Command. The Command object represents the user visible
     action and its properties. If multiple actions are registered with the same ID (but
     different contexts) the returned Command is the shared one between these actions.
@@ -53,11 +53,11 @@
     The user visible action is updated to represent the state of the active action (if any).
     For performance reasons only the enabled and visible state are considered by default though.
     You can tell a Command to also update the actions icon and text by setting the
-    corresponding \l{Command::CommandAttribute}{attribute}.
+    corresponding Command::CommandAttribute.
 
     If there is no active action, the default behavior of the visible action is to be disabled.
     You can change that behavior to make the visible action hide instead via the Command's
-    \l{Command::CommandAttribute}{attributes}.
+    Command::CommandAttribute.
 */
 
 /*!
