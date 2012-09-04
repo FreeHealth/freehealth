@@ -147,9 +147,6 @@ void WebcamDialog::faceShotActivated(const QModelIndex &index)
 void WebcamDialog::changeEvent(QEvent *event)
 {
     if (event->type() == QEvent::LanguageChange) {
-        if (ui->openCVWidget->isFrozen())
-            m_freezeButton->setText(tr("Continue"));
-        else
-            m_freezeButton->setText(tr("Stop"));
+        updatefreezeButton(ui->openCVWidget->isFrozen());
     }
 }
