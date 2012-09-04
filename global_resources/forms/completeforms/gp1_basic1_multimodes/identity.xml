@@ -43,6 +43,14 @@
     <field old="GP::Basic::Identity::ContactGroup::Mail" new="Subs::Tools::Identity::ContactGroup::Mail" setInVersion=""/>
   </fieldsupdate>
 
+  <Page name="IdentityPage">
+    <label lang="fr">Identité</label>
+    <label lang="xx">Identity</label>
+    <tooltip lang="fr">Identité patient</tooltip>
+    <tooltip lang="xx">Patient identity</tooltip>
+    <priority>10</priority>
+  </Page>
+
   <MedForm name="GP::Basic::SOAP">
     <label>SOAP</label>
     <icon>__theme__/edit.png</icon>

@@ -400,7 +400,7 @@ bool XmlFormContentReader::loadForm(const XmlFormName &form, Form::FormMain *roo
     doc = m_DomDocFormCache[form.absFileName];
     QDomElement root = doc->firstChildElement(Constants::TAG_MAINXMLTAG);
     QDomElement newForm = root.firstChildElement(Constants::TAG_NEW_FORM);
-//    QDomElement newMode = root.firstChildElement(Constants::TAG_NEW_MODE);
+    QDomElement newMode = root.firstChildElement(Constants::TAG_NEW_PAGE);
     QDomElement addFile = root.firstChildElement(Constants::TAG_ADDFILE);
 
     // in case of no rootForm is passed --> XML must start with a file inclusion or a newform tag
@@ -634,29 +634,29 @@ bool XmlFormContentReader::createElement(Form::FormItem *item, QDomElement &elem
 
     // TODO xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx MODE
 
-//    if (element.tagName().compare(Constants::TAG_NEW_MODE, Qt::CaseInsensitive)==0) {
-//        // create a new page
-//        item = item->createPage(element.firstChildElement(Constants::TAG_NAME).text());
-//        // TODO: add page to a form
-//        if (item) {
-//            QString uidNS = getNamespace(item);
-//            // read attributes (type, uid/name, patient representation...)
-//            if (element.hasAttribute(Constants::ATTRIB_UUID))
-//                item->setUuid(uidNS + element.attribute(Constants::ATTRIB_UUID));
+    if (element.tagName().compare(Constants::TAG_NEW_PAGE, Qt::CaseInsensitive)==0) {
+        // create a new page
+        item = item->createPage(element.firstChildElement(Constants::TAG_NAME).text());
+        // TODO: add page to a form
+        if (item) {
+            QString uidNS = getNamespace(item);
+            // read attributes (type, uid/name, patient representation...)
+            if (element.hasAttribute(Constants::ATTRIB_UUID))
+                item->setUuid(uidNS + element.attribute(Constants::ATTRIB_UUID));
 
-//            if (element.hasAttribute(Constants::ATTRIB_NAME))
-//                item->setUuid(uidNS + element.attribute(Constants::ATTRIB_NAME));
+            if (element.hasAttribute(Constants::ATTRIB_NAME))
+                item->setUuid(uidNS + element.attribute(Constants::ATTRIB_NAME));
 
 //            if (element.hasAttribute(Constants::ATTRIB_TYPE))
 //                item->spec()->setValue(Form::FormItemSpec::Spec_Plugin, element.attribute(Constants::ATTRIB_TYPE), Trans::Constants::ALL_LANGUAGE);
 
-//            loadElement(item, element, form);
-//            // read specific page's data
-//            return true;
-//        }
-//        else
-//            return false;
-//    }
+            loadElement(item, element, form);
+            // read specific page's data
+            return true;
+        }
+        else
+            return false;
+    }
 
     return false;
 }
