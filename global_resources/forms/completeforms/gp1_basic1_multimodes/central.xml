@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FreeMedForms>
+
+<FreeMedForms>
+
+  <formdescription>
+    <!-- Non translatable values -->
+    <authors>Eric Maeker, MD</authors>
+    <version>0.7.2</version>
+    <fmfv>0.7.2</fmfv>
+    <cdate>2011-09-02</cdate>
+    <lmdate>2012-05-12</lmdate>
+    <icon>generalpractitioner.png</icon>
+    <weblink></weblink>
+    <bibliography/>
+
+    <!-- Translatable values -->
+    <license>GPLv3</license>
+    <description lang="fr">Dossier médical générique avec page médicaments</description>
+    <description lang="xx">Generic patient file with drugs page</description>
+    <category lang="xx">General practice</category>
+    <category lang="fr">Médecine générale</category>
+    <specialties lang="fr">Médecine générale</specialties>
+    <specialties lang="xx">General practice</specialties>
+    <updateinfo>
+    <updateversion from="0.7.0" to="0.7.2">
+      <text lang="fr">Faute de frappe dans les catégories des antécédents&lt;br />Ajout des identifiants aux catégories des antécédents.</text>
+      <text lang="en">Typo in PHMx categories&lt;br />Adding uuid to PMHx categories.</text>
+    </updateversion>
+      <updateversion from="0.6.0" to="0.7.0">
+        <text lang="fr">Amélioration du processus d'impression.&lt;br />Ajoute un bouton pour importer dans la prescription courante les traitements chroniques.&lt;br />Ajout des éléments de contact des patients</text>
+        <text lang="en">Improvements in the printing process.&lt;br />Add a button next to the current prescription to append the long-term medications.&lt;br />Adding contact items to patient identity</text>
+      </updateversion>
+      <updateversion from="0.5.0~alpha" to="0.6.0">
+        <text lang="fr">Amélioration du nommage des items grâce à l'utilisation d'espace de nom.&lt;br>Ajout du numéro de sécurité dociale française dans l'identité.&lt;br>Amélioration du processus d'impression.&lt;Ne vérifie plus les interactions médicamenteuses pour les allergies.</text>
+        <text lang="en">Improving naming of items by using namespace.&lt;br>Adding the french social number in the identiy form.&lt;>Improvements in the printing process.&lt;No more drug interactions checking for the allergies selector.</text>
+      </updateversion>
+    </updateinfo>
+
+  </formdescription>
+
+  <fieldsupdate>
+    <field old="GP::Basic::IdentityForm" new="Subs::Tools::Identity" setInVersion=""/>
+    <field old="GP::Basic::IdentityItem" new="Subs::Tools::Identity::IdentityWidget" setInVersion=""/>
+    <field old="GP::Basic::Identity::ExtraFrench" new="Subs::Tools::Identity::FrGroup" setInVersion=""/>
+    <field old="GP::Basic::Identity::NSS" new="Subs::Tools::Identity::FrGroup::NSS" setInVersion=""/>
+    <field old="GP::Basic::Identity::IsNSSOwner" new="Subs::Tools::Identity::FrGroup::IsNSSOwner" setInVersion=""/>
+    <field old="GP::Basic::Identity::ContactGroup" new="Subs::Tools::Identity::ContactGroup" setInVersion=""/>
+    <field old="GP::Basic::Identity::ContactGroup::Tels" new="Subs::Tools::Identity::ContactGroup::Tels" setInVersion=""/>
+    <field old="GP::Basic::Identity::ContactGroup::Fax" new="Subs::Tools::Identity::ContactGroup::Fax" setInVersion=""/>
+    <field old="GP::Basic::Identity::ContactGroup::Mail" new="Subs::Tools::Identity::ContactGroup::Mail" setInVersion=""/>
+  </fieldsupdate>
+
+  <file>__subForms__/generic/fullidentity/central.xml</file>
+
+  <MedForm name="GP::Basic::SOAP">
+    <label>SOAP</label>
+    <icon>__theme__/edit.png</icon>
+    <options>DontPrintEmptyValues</options>
+    <Item type="texteditor" name="GP::Basic::SOAP::S">
+      <label lang="xx">Subjective</label>
+      <label lang="fr">Subjectif</label>
+      <options>FullEditor;DontPrintEmptyValues</options>
+    </Item>
+    <Item type="texteditor" name="GP::Basic::SOAP::O">
+      <label lang="xx">Objective</label>
+      <label lang="fr">Objectif</label>
+      <options>FullEditor;DontPrintEmptyValues</options>
+    </Item>
+    <Item type="texteditor" name="GP::Basic::SOAP::A">
+      <label lang="xx">Assessment</label>
+      <label lang="fr">Appréciation clinique</label>
+      <options>FullEditor;DontPrintEmptyValues</options>
+    </Item>
+    <Item type="texteditor" name="GP::Basic::SOAP::P">
+      <label lang="xx">Plan</label>
+      <label lang="fr">Prise en charge</label>
+      <options>FullEditor;DontPrintEmptyValues</options>
+    </Item>
+
+  </MedForm>
+
+  <MedForm name="GP::Basic::Prescr">
+    <label>Prescriptions</label>
+    <icon>__theme__/edit.png</icon>
+    <options>NoEpisode;DontPrintEmptyValues</options>
+
+    <MedForm name="GP::Basic::Prescr::Text">
+      <label lang="xx">Textual prescriptions</label>
+      <label lang="fr">Prescriptions textuelles</label>
+      <options>DontPrintEmptyValues</options>
+
+      <Item type="texteditor" name="GP::Basic::Prescr::Text::Content">
+        <label lang="xx">Textual prescription</label>
+        <label lang="fr">Prescription textuelle</label>
+        <options>FullEditor;DontPrintEmptyValues</options>
+      </Item>
+    </MedForm>
+
+
+    <MedForm name="GP::Basic::Prescr::Drugs">
+      <label lang="xx">Drugs prescriptions</label>
+      <label lang="fr">Prescriptions médicamenteuses</label>
+      <icon>__theme__/drugs.png</icon>
+      <options>DontPrintEmptyValues</options>
+      <Item type="prescriptor" name="GP::Basic::Prescr::Drugs::Content">
+        <label lang="xx">Therapeutic prescription</label>
+        <label lang="fr">Prescription médicamenteuse</label>
+        <options>AddChronicTherapyButton;DontPrintEmptyValues</options>
+      </Item>
+    </MedForm>
+
+  </MedForm>
+
+  <MedForm name="GP::Basic::ICD10">
+    <label lang="xx">ICD10 coding</label>
+    <label lang="fr">Codes CIM10</label>
+    <options>DontPrintEmptyValues</options>
+    <Item type="icd" name="GP::Basic::ICD10::Content">
+      <label lang="xx">ICD10 coding</label>
+      <label lang="fr">Codes CIM10</label>
+      <options>DontPrintEmptyValues</options>
+    </Item>
+  </MedForm>
+
+</FreeMedForms>
