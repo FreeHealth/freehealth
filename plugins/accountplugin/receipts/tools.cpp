@@ -1,7 +1,13 @@
 #include "tools.h"
+#include <coreplugin/icore.h>
+#include <coreplugin/itheme.h>
+#include <QDir>
+#include <QDebug>
 
 using namespace ReceiptsConstants;
 using namespace Tools;
+
+enum { WarnDebugMessage = true };
 
 ReceiptsTools::ReceiptsTools(){}
 ReceiptsTools::~ReceiptsTools(){}
@@ -37,6 +43,35 @@ int ReceiptsTools::getEnumItemFromRow(const QString itemText)
         treeviewRows = hashOfItems();
         enumItem = treeviewRows.key(itemText);
         return enumItem;
+    }
+    
+QHash<QString,QString> ReceiptsTools::flagsHash()
+{
+        QHash<QString,QString> hash;     
+        //hash.insert("FR",Core::ICore::instance()->theme()->iconFullPath("flags/FR.png",Core::ITheme::SmallIcon));
+        QString flagsDirPath;
+        QStringList listPath = Core::ICore::instance()->theme()->iconFullPath("flags/FR.png",Core::ITheme::SmallIcon)
+                       .split(QDir::separator());
+        listPath.removeLast();
+        flagsDirPath = listPath.join(QDir::separator());
+        if (WarnDebugMessage)
+        qDebug() << __FILE__ << QString::number(__LINE__) << " iconfullpath =" << flagsDirPath;        
+        QDir dirFlags(flagsDirPath);
+        QStringList listOfFlags;
+        listOfFlags = dirFlags.entryList();
+        foreach(QString flag,listOfFlags){
+            QStringList listOfStr;
+            listOfStr = flag.split(".");
+            QString country;
+            QString type;
+            if (listOfStr.size()>1)
+            {
+            	  country = listOfStr[0];
+            	  type = listOfStr[1];
+                }
+            hash.insert(country,dirFlags.absolutePath()+QDir::separator()+country+"."+type);
+            }                
+        return hash;
     }
 
 

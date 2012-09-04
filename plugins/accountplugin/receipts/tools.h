@@ -15,7 +15,7 @@ class ReceiptsTools : public QObject{
         QHash<int,QString> hashOfItems();
         QString getStringFromRows(int item);
         int getEnumItemFromRow(const QString itemText);
-
+        QHash<QString,QString> flagsHash();
     };
 };
 

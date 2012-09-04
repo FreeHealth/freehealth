@@ -33,7 +33,7 @@
 #define ACCOUNTRECEIPTS_CONTANTS_H
 
 #include <QObject>
-
+#include <QHash>
 
 namespace ReceiptsConstants{
     enum TypeOfPayment{
@@ -72,7 +72,7 @@ namespace ReceiptsConstants{
         RULES_ITEM,
         ItemsOfTreeView_MaxParam
     };
-
+    
 }
 
 #endif

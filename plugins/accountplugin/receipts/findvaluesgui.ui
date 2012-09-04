@@ -263,6 +263,23 @@
      <item row="2" column="2">
       <widget class="QLineEdit" name="lineEditFilter"/>
      </item>
+     <item row="0" column="1">
+      <widget class="QLabel" name="flagLabel">
+       <property name="text">
+        <string>flag</string>
+       </property>
+       <property name="wordWrap">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QLabel" name="flagPixmapLabel">
+       <property name="text">
+        <string>TextLabel</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
   </layout>

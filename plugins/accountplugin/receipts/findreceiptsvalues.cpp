@@ -32,6 +32,7 @@
 #include "findreceiptsvalues.h"
 #include "constants.h"
 #include "receiptsio.h"
+#include "tools.h"
 
 #include <utils/global.h>
 #include <coreplugin/isettings.h>
@@ -44,7 +45,7 @@
 #include <QSqlQuery>
 #include <QSqlTableModel>
 
-enum { WarnDebugMessage = true };
+enum { WarnDebugMessage = false };
 
 using namespace AccountDB;
 using namespace Constants;
@@ -124,6 +125,8 @@ findReceiptsValues::findReceiptsValues(QWidget * parent):QDialog(parent)
   ui->buttonBox->button(QDialogButtonBox::Cancel)->setToolTip(QKeySequence(QKeySequence::Quit).toString());
   ui->buttonBox->button(QDialogButtonBox::Cancel)->setIcon(theme()->icon(Core::Constants::ICONEXIT));
   
+  //flag
+  setFlagAccordingToMProcedureCountry();
   //disable lessButton
   ui->lessButton->setEnabled(false);
   //fillListViewValues(comboValue);
@@ -661,5 +664,34 @@ void findReceiptsValues::setLessButtonEnabled(QListWidgetItem * item)
 {
     Q_UNUSED(item);
     ui->lessButton->setEnabled(true);
+}
+
+void findReceiptsValues::setFlagAccordingToMProcedureCountry()
+{
+  int counterId = 0;
+  QString reqCountry; 
+  QString flagText;  
+  while(reqCountry.isEmpty())
+  {
+      ++counterId;
+      reqCountry = QString("SELECT %1 FROM %2 WHERE %3 = '%4'")
+                      .arg("COUNTRY","medical_procedure","MP_ID",QString::number(counterId));
+      if (WarnDebugMessage)
+      qDebug() << __FILE__ << QString::number(__LINE__) << " reqCountry =" << reqCountry ;
+  }
+  QSqlQuery queryCountry(m_db);
+  if (!queryCountry.exec(reqCountry))
+  {
+  	  qWarning() << __FILE__ << QString::number(__LINE__) << queryCountry.lastError().text() ;
+      }
+  while (queryCountry.next())
+  {
+  	flagText = queryCountry.value(0).toString();
+      }
+  if (WarnDebugMessage)
+  qDebug() << __FILE__ << QString::number(__LINE__) << " flagText =" << flagText ;
+  ui->flagLabel->setText(flagText);
+  Tools::ReceiptsTools rt;
+  ui->flagPixmapLabel->setPixmap(rt.flagsHash().value(flagText));
 }
 

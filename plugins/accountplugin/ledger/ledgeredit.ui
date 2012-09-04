@@ -32,6 +32,13 @@
         <widget class="QComboBox" name="yearComboBox"/>
        </item>
        <item>
+        <widget class="QPushButton" name="quitButton">
+         <property name="text">
+          <string>&amp;Back</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QPushButton" name="showButton">
          <property name="text">
           <string>S&amp;how</string>
@@ -42,13 +49,6 @@
         <widget class="QPushButton" name="printButton">
          <property name="text">
           <string>&amp;Print</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="quitButton">
-         <property name="text">
-          <string>&amp;Back</string>
          </property>
         </widget>
        </item>

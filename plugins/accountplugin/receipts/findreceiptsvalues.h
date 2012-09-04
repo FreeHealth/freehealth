@@ -85,6 +85,7 @@ private:
     //QString getDateWhereClause();
     bool datapackIsAvalaible();
     QHash<QString,QString> getHashFatherSonFromOthers(const QModelIndex & index);
+    void setFlagAccordingToMProcedureCountry();
 
 private Q_SLOTS:
     void fillListViewValues(const QString & comboItem);
