@@ -505,6 +505,7 @@ EpisodeModel *FormManager::episodeModel(Form::FormMain *form)
         EpisodeModel *model = new EpisodeModel(form, this);
         model->initialize();
         d->_episodeModels.insert(form, model);
+        // TODO connect rowCountChanged from episode to formtreemodel -> recompute the form label count
         return model;
     }
     return d->_episodeModels.value(form);
