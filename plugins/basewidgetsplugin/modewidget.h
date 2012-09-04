@@ -1,0 +1,105 @@
+/***************************************************************************
+ *  The FreeMedForms project is a set of free, open source medical         *
+ *  applications.                                                          *
+ *  (C) 2008-2012 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
+ *  All rights reserved.                                                   *
+ *                                                                         *
+ *  This program is free software: you can redistribute it and/or modify   *
+ *  it under the terms of the GNU General Public License as published by   *
+ *  the Free Software Foundation, either version 3 of the License, or      *
+ *  (at your option) any later version.                                    *
+ *                                                                         *
+ *  This program is distributed in the hope that it will be useful,        *
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
+ *  GNU General Public License for more details.                           *
+ *                                                                         *
+ *  You should have received a copy of the GNU General Public License      *
+ *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  If not, see <http://www.gnu.org/licenses/>.                            *
+ ***************************************************************************/
+/***************************************************************************
+ *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Contributors :                                                        *
+ *       Guillaume DENRY <guillaume.denry@gmail.com>                       *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
+ ***************************************************************************/
+#ifndef BASEWIDGETS_MODEWIDGET_H
+#define BASEWIDGETS_MODEWIDGET_H
+
+#include <QWidget>
+#include <QVariant>
+
+#include <formmanagerplugin/iformwidgetfactory.h>
+#include <formmanagerplugin/iformitemdata.h>
+
+/**
+ * \file modewidget.h
+ * \author Eric MAEKER
+ * \version 0.8.0
+ * \date 04 Sept 2012
+*/
+
+namespace Core {
+class BaseMode;
+}
+
+namespace Form {
+class FormPlaceHolder;
+}
+
+namespace BaseWidgets {
+
+class ModeWidget : public Form::IFormWidget
+{
+    Q_OBJECT
+public:
+    explicit ModeWidget(Form::FormItem *item, QWidget *parent = 0);
+    ~ModeWidget();
+
+    void addWidgetToContainer(Form::IFormWidget *widget);
+    bool isContainer() const;
+
+    // Printing
+    QString printableHtml(bool withValues = true) const;
+
+private Q_SLOTS:
+    void getPatientForm();
+    void retranslate();
+
+private:
+    Form::FormItem *_formItem;
+    Core::BaseMode *_mode;
+    Form::FormPlaceHolder *_placeHolder;
+    bool _inPool;
+};
+
+// Used to pass episode date, label, user...
+//class ModeData : public Form::IFormItemData
+//{
+//public:
+//    ModeData(Form::FormItem *item);
+//    ~ModeData();
+
+//    void setModeWidget(ModeWidget *mode) {m_Mode = mode; clear();}
+//    void clear();
+
+//    Form::FormItem *parentItem() const {return m_FormItem;}
+//    bool isModified() const;
+
+//    // Use setData/Data for episode data
+//    bool setData(const int ref, const QVariant &data, const int role = Qt::EditRole);
+//    QVariant data(const int ref, const int role = Qt::DisplayRole) const;
+
+//    // Used storable data for forms
+//    void setStorableData(const QVariant &modified);
+//    QVariant storableData() const;
+
+//private:
+//    Form::FormItem *m_FormItem;
+//    ModeWidget *m_Mode;
+//};
+
+} // namespace BaseWidgets
+
+#endif // BASEWIDGETS_MODEWIDGET_H
