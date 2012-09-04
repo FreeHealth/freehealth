@@ -26,6 +26,18 @@
  ***************************************************************************/
 
 /**
+ * \class Form::FormIOQuery
+ * Use this class to create specific queries in the Form::IFormIO engines.
+ */
+
+/**
+ * \class Form::FormIODescription
+ * Description of a form extracted from a Form::IFormIO engine. This is different than
+ * Form::FormItemSpec. This description only handles information from the IO engine, not usable in
+ * forms view/model computation.
+ */
+
+/**
  * \class Form::IFormIO
  * This object interface is the in/out form object. It is used to read and create the patient files.\n
  * All Form::IFormIO engines are in charge of :

@@ -26,60 +26,90 @@
  ***************************************************************************/
 
 /**
- \class Form::FormItem
- This object represents one element of the patient file form.\n
- It contains:
-  - one Form::FormItemSpec with description of the item: author, version, license...
-  - one Form::FormItemScripts for the script management
-  - one Form::FormItemValues
-  - you can set its Form::IFormItemData for the database access
-  - you can set its Form::IFormWidget
- If you intend to create a child of this item use the specific members:
-  - createChildForm() to create a new Form::FormMain
-  - createChildItem() to create a new Form::FormItem
-  - createPage() to create a new Form::FormPage
- You can get all its children by calling: formItemChildren().\n
- You can define extra-data (options) with the addExtraData(), extraData() and clearExtraData().
- You can define the Core::IPatient representation of this Form::FormItem with setPatientDataRepresentation(),
- patientDataRepresentation().
+ * \class Form::FormItem
+ * This object represents one element of the patient file form. The forms are a tree of QObject.
+ * The root parent is an empty Form::FormMain item with some information about the Form::IFormIO reader,
+ * the form internal information.\n
+ *
+ * Each Form::FormItem contains:
+ * - one Form::FormItemSpec with description of the item (or the form for the empty root object):
+ *   - author, version, license...
+ *   - theses data are fully translatable and can be used in any form model/view/controller
+ * - one Form::FormItemScripts book of javascript of the item
+ * - one Form::FormItemValues book of different type of values of the item
+ * - you can set its Form::IFormItemData for the database access
+ * - you can set its Form::IFormWidget for the user view
+ *
+ * In your own Form::IFormIO engine, you may want to create children of item, you can use:
+ * - createChildForm() to create a new Form::FormMain
+ * - createChildItem() to create a new Form::FormItem
+ * - createPage() to create a new Form::FormPage
+ *
+ * You can get all its first branch children by calling: Form::FormItem::formItemChildren() and the
+ * full list of its children (flattened) using Form::FormItem::flattenFormItemChildren.
+ *
+ * You can define extra-data (options) with the addExtraData(), extraData() and clearExtraData().
+ *
+ * You can define the Core::IPatient representation of this Form::FormItem with
+ * setPatientDataRepresentation(), patientDataRepresentation(). The patient data representation is used
+ * in the Core::IPatient model wrapper to find requested values that are not stored in the patient
+ * database.
+ */
 
- \todo - Options d'affichage et d'impression ??
- \todo - Options de "droit" / utilisateurs autorisés
- \todo - Base de règles
- \todo - 1 QWidget historique
- \todo - checkValueIntegrity() qui se base sur les règles de l'item pour vérifier son exactitude
-*/
-
-/**
-  \class Form::FormPage
-  Actually unused.
-*/
-
-/**
-  \class Form::FormMain
-  A Form::FormMain represents a root item of a form. Usually, the Form::FormMain are created by the
-  Form::IFormIO engines. The first item returned by the Form::IFormIO when loading files is empty and represents
-  the root of the form.\n
-  When you need to create a FormMain as child of one another, use the createChildForm() member. Get all its children
-  (including sub-trees) using the flattenFormMainChildren() member or the formMainChild() if you want a specific child.\n
-  setEpisodePossibilities() and episodePossibilities() are used in the Form::EpisodeModel when creating the tree model.\n
-  When a mode creates a root Form::FormMain it should declare the main empty root object
-  it in the plugin manager object pool to allow another object to access the data of forms (eg: PatientModelWrapper).\n
-  \code
-  ExtensionSystem::PluginManager::instance()->addObject(myRootFormMain);
-  \endcode
-*/
+// TODO - Options d'affichage et d'impression ??
+// TODO - Options de "droit" / utilisateurs autorisés
+// TODO - Base de règles
+// TODO - 1 QWidget historique
+// TODO - checkValueIntegrity() qui se base sur les règles de l'item pour vérifier son exactitude
 
 /**
-  \class Form::FormItemSpec
-  \todo Documentation
-*/
+ * \class Form::FormPage
+ * Actually unused.
+ */
 
 /**
-  \class Form::FormItemScripts
-  Stores the scripts associated with the Form::FormItem
-  \todo Documentation
-*/
+ * \class Form::FormMain
+ * A Form::FormMain represents a root item of a form. Usually, the Form::FormMain are created by the
+ * Form::IFormIO engines. The first item returned by the Form::IFormIO when loading files is empty
+ * and represents the root of the form (it does only handle some basic information).\n
+ *
+ * Object tree management:\n
+ * When you need to create a Form::FormMain as child of one another, use the createChildForm() member.
+ * Get all its children (including sub-trees) using the Form::FormMain::flattenFormMainChildren()
+ * member or the formMainChild() if you want a specific child.\n
+ *
+ * Managing episode behavior:\n
+ * Forms can be populated by episodes. Episodes are mainly created by the user when he wants to save
+ * some data using a specific form. \n
+ * The Form::EpisodeModel and the Form::FormTreeModel perfectly manages three type of forms:
+ * - Forms with any episodes (just like a category)
+ * - Forms with only one episode
+ * - Forms with multiple episodes
+ * You can define the episode possibilities using the Form::FormMain::setEpisodePossibilities() and
+ * Form::FormMain::episodePossibilities().\n
+ *
+ * Form pointer accessing: \n
+ * All Form::FormMain pointers are created by the Form::IFormIO engines and then managed by the
+ * Form::FormManager. You should never:
+ * - delete a Form::FormMain pointer
+ * - reparent it outside the internal part of the Form plugin
+ * - create a cache of theses pointers, the Form::FormManager already manages this cache
+ */
+
+/**
+ * \class Form::FormItemSpec
+ * Contains all descriptives informations of a Form::FormItem (like the author name, compatibility version,
+ * version of the form, label, tooltip, license...).\n
+ * You should never delete a Form::FormItemSpec pointer outside the internal part of the Form plugin.
+ */
+// TODO: change Form::FormItemSpec pointers to references
+
+
+/**
+ * \class Form::FormItemScripts
+ * Stores the scripts associated with the Form::FormItem.
+ * \todo Documentation
+ */
 
 /**
   \class Form::FormItemValues
