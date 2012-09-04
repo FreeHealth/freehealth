@@ -365,7 +365,8 @@ void FormPlaceHolder::setRootForm(Form::FormMain *rootForm)
 
     // start on the Last Episode Synthesis view
 //    tree->setCurrentIndex(d->_episodeModel->index(0,0));
-    setCurrentForm(Constants::PATIENTLASTEPISODES_UUID);
+//    setCurrentForm(Constants::PATIENTLASTEPISODES_UUID);
+    setCurrentForm(rootForm);
 }
 
 // Used for the delegate
@@ -422,7 +423,8 @@ void FormPlaceHolder::setCurrentForm(Form::FormMain *form)
         disconnect(d->ui->episodeView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(episodeChanged(QModelIndex, QModelIndex)));
 
     d->ui->formDataMapper->setCurrentForm(form);
-    d->ui->episodeView->setModel(formManager()->episodeModel(form));
+    EpisodeModel *episodeModel = formManager()->episodeModel(form);
+    d->ui->episodeView->setModel(episodeModel);
     for(int i=0; i < EpisodeModel::MaxData; ++i)
         d->ui->episodeView->hideColumn(i);
     d->ui->episodeView->showColumn(EpisodeModel::Label);
@@ -436,7 +438,11 @@ void FormPlaceHolder::setCurrentForm(Form::FormMain *form)
     d->ui->episodeView->horizontalHeader()->hide();
 
     connect(d->ui->episodeView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(episodeChanged(QModelIndex, QModelIndex)));
-    d->ui->episodeView->selectRow(0);
+    if (!d->ui->episodeView->selectionModel()->hasSelection()) {
+        d->ui->episodeView->selectRow(0);
+        if (episodeModel)
+            episodeChanged(episodeModel->index(0,0), QModelIndex());
+    }
 }
 
 /**
@@ -461,7 +467,8 @@ void FormPlaceHolder::setCurrentEditingItem(const QModelIndex &index)
 void FormPlaceHolder::episodeChanged(const QModelIndex &current, const QModelIndex &previous)
 {
     qWarning() << "FormPlaceHolder::EpisodeChanged" << current << previous;
-    d->saveCurrentEditingEpisode();
+    if (previous.isValid())
+        d->saveCurrentEditingEpisode();
     d->ui->formDataMapper->setCurrentEpisode(current);
 }
 
