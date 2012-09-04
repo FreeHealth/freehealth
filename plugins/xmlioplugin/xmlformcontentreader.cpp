@@ -44,6 +44,7 @@
 #include <formmanagerplugin/iformitem.h>
 #include <formmanagerplugin/iformwidgetfactory.h>
 #include <formmanagerplugin/iformio.h>
+#include <formmanagerplugin/formmanager.h>
 
 #include <categoryplugin/categoryitem.h>
 #include <categoryplugin/categorycore.h>
@@ -66,7 +67,7 @@ using namespace XmlForms;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
-//inline static Form::FormManager *formManager() { return Form::FormManager::instance(); }
+inline static Form::FormManager *formManager() { return Form::FormManager::instance(); }
 inline static ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline Category::CategoryCore *categoryCore() {return  Category::CategoryCore::instance();}
@@ -130,6 +131,7 @@ XmlFormContentReader::XmlFormContentReader() :
    m_SpecsTypes.insert(Constants::TAG_SPEC_VERSION, Form::FormItemSpec::Spec_Version);
    m_SpecsTypes.insert(Constants::TAG_SPEC_ICON, Form::FormItemSpec::Spec_IconFileName);
    m_SpecsTypes.insert(Constants::TAG_SPEC_TOOLTIP, Form::FormItemSpec::Spec_Tooltip);
+   m_SpecsTypes.insert(Constants::TAG_SPEC_PRIORITY, Form::FormItemSpec::Spec_Priority);
 
    m_PatientDatas.clear();
    m_PatientDatas.insert(Constants::TAG_DATAPATIENT_DRUGSALLERGIES, Core::IPatient::DrugsAtcAllergies);
@@ -400,7 +402,7 @@ bool XmlFormContentReader::loadForm(const XmlFormName &form, Form::FormMain *roo
     doc = m_DomDocFormCache[form.absFileName];
     QDomElement root = doc->firstChildElement(Constants::TAG_MAINXMLTAG);
     QDomElement newForm = root.firstChildElement(Constants::TAG_NEW_FORM);
-//    QDomElement newMode = root.firstChildElement(Constants::TAG_NEW_MODE);
+    QDomElement newMode = root.firstChildElement(Constants::TAG_NEW_PAGE);
     QDomElement addFile = root.firstChildElement(Constants::TAG_ADDFILE);
 
     // in case of no rootForm is passed --> XML must start with a file inclusion or a newform tag
@@ -632,31 +634,26 @@ bool XmlFormContentReader::createElement(Form::FormItem *item, QDomElement &elem
             return false;
     }
 
-    // TODO xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx MODE
+    if (element.tagName().compare(Constants::TAG_NEW_PAGE, Qt::CaseInsensitive)==0) {
+        // create a new page
+        QString uuid = element.attribute(Constants::ATTRIB_UUID);
+        if (uuid.isEmpty())
+            uuid = element.attribute(Constants::ATTRIB_NAME);
+        if (uuid.isEmpty())
+            uuid = element.firstChildElement(Constants::TAG_NAME).text();
+        if (uuid.isEmpty())
+            LOG_ERROR_FOR("XMLIO", "No uuid specified for the FormPage");
 
-//    if (element.tagName().compare(Constants::TAG_NEW_MODE, Qt::CaseInsensitive)==0) {
-//        // create a new page
-//        item = item->createPage(element.firstChildElement(Constants::TAG_NAME).text());
-//        // TODO: add page to a form
-//        if (item) {
-//            QString uidNS = getNamespace(item);
-//            // read attributes (type, uid/name, patient representation...)
-//            if (element.hasAttribute(Constants::ATTRIB_UUID))
-//                item->setUuid(uidNS + element.attribute(Constants::ATTRIB_UUID));
-
-//            if (element.hasAttribute(Constants::ATTRIB_NAME))
-//                item->setUuid(uidNS + element.attribute(Constants::ATTRIB_NAME));
-
-//            if (element.hasAttribute(Constants::ATTRIB_TYPE))
-//                item->spec()->setValue(Form::FormItemSpec::Spec_Plugin, element.attribute(Constants::ATTRIB_TYPE), Trans::Constants::ALL_LANGUAGE);
-
-//            loadElement(item, element, form);
-//            // read specific page's data
-//            return true;
-//        }
-//        else
-//            return false;
-//    }
+        Form::FormPage *page = formManager()->createFormPage(uuid);
+        if (item) {
+            item = page;
+            loadElement(item, element, form);
+            page->specLoaded();
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     return false;
 }

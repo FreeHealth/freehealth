@@ -50,6 +50,7 @@ class Pack;
 }
 
 namespace Form {
+class FormPage;
 class FormMain;
 class FormItem;
 class IFormIO;
@@ -95,6 +96,7 @@ public:
     void activateMode();
 
     // Form management (load, save)
+    FormPage *createFormPage(const QString &uuid);
     FormMain *form(const QString &formUid) const;
     QList<FormMain *> forms() const;
     QList<FormMain *> subFormsEmptyRoot() const;

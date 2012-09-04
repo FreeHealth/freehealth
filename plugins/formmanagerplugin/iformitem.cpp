@@ -125,7 +125,10 @@
 #include "formplaceholder.h"
 
 #include <coreplugin/icore.h>
+#include <coreplugin/isettings.h>
 #include <coreplugin/uniqueidmanager.h>
+#include <coreplugin/modemanager/basemode.h>
+#include <coreplugin/constants_tokensandsettings.h>
 
 #include <formmanagerplugin/formmanager.h>
 #include <formmanagerplugin/iformitemdata.h>
@@ -149,8 +152,10 @@
 using namespace Form;
 using namespace Form::Internal;
 
+inline static ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 inline static Form::FormManager *formManager() { return Form::FormManager::instance(); }
-static inline Core::UniqueIDManager *uuidManager() {return Core::ICore::instance()->uniqueIDManager();}
+inline static Core::UniqueIDManager *uuidManager() {return Core::ICore::instance()->uniqueIDManager();}
+inline static Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 
 #ifdef DEBUG
 enum {WarnFormCreation=false};
@@ -518,57 +523,65 @@ void FormItem::languageChanged()
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 FormPage::FormPage(QObject *parent):
     Form::FormItem(parent),
+    _mode(new Core::BaseMode(this)),
     _placeHolder(0),
     _inPool(false)
 {
-//    if (spec())
-//        setObjectName("Form::FormMode::" + spec()->uuid());
-//    else
-//        setObjectName("Form::FormMode");
+    if (spec())
+        setObjectName("Form::FormMode::" + spec()->uuid());
+    else
+        setObjectName("Form::FormMode");
 
-//    _placeHolder = new Form::FormPlaceHolder;
-//    _placeHolder->setObjectName("BaseWidget::Mode::FormPlaceHolder");
+    _placeHolder = new Form::FormPlaceHolder;
+    _placeHolder->setObjectName("BaseWidget::Mode::FormPlaceHolder");
 
-//    if (spec())
-//        setUniqueModeName(spec()->uuid().toUtf8());
-//    setPatientBarVisibility(true);
-//    retranslate();
+    if (spec())
+        _mode->setUniqueModeName(spec()->uuid().toUtf8());
+    _mode->setPatientBarVisibility(true);
+    _mode->setWidget(_placeHolder);
+    languageChanged();
 
-//    connect(formManager(), SIGNAL(patientFormsLoaded()), this, SLOT(getPatientForm()));
-//    qWarning() << "FormMode" << objectName();
+    connect(formManager(), SIGNAL(patientFormsLoaded()), this, SLOT(getPatientForm()));
+    qWarning() << "FormPage" << objectName() << spec()->value(Form::FormItemSpec::Spec_Priority).toInt();
 }
 
 FormPage::~FormPage()
 {
-//    if (_inPool)
-//        pluginManager()->removeObject(this);
+    if (_inPool)
+        pluginManager()->removeObject(_mode);
 }
 
 void FormPage::getPatientForm()
 {
-//    //    qWarning() << Q_FUNC_INFO;
-//    Form::FormMain *root = formManager()->rootForm(spec()->uuid().toUtf8());
-//    if (!root) {
-//        if (_inPool)
-//            pluginManager()->removeObject(this);
-//        _inPool = false;
-//    } else {
-//        if (!_inPool)
-//            pluginManager()->addObject(this);
-//        _inPool = true;
-//    }
-//    _placeHolder->setRootForm(root);
+    Form::FormMain *root = formManager()->rootForm(spec()->uuid().toUtf8());
+    _mode->setPriority(spec()->value(Form::FormItemSpec::Spec_Priority).toInt());
+    if (!root) {
+        if (_inPool)
+            pluginManager()->removeObject(_mode);
+        _inPool = false;
+    } else {
+        if (!_inPool)
+            pluginManager()->addObject(_mode);
+        _inPool = true;
+    }
+    _placeHolder->setRootForm(root);
 }
 
 void FormPage::languageChanged()
 {
-    qWarning() << "FormPage language changed" << uuid();
-    //    setName(_spec->label());
-    //    QString icon = _spec->iconFileName();
-    //    icon.replace(Core::Constants::TAG_APPLICATION_THEME_PATH, settings()->path(Core::ISettings::BigPixmapPath));
-    //    setIcon(QIcon(icon));
-    //    // TODO: move the extradata inside the spec to have a fully translated extra-values
-    //    setPriority(_spec->value(Form::FormItemSpec::Spec_Priority, "100").toInt());
+    qWarning() << "FormPage language changed" << uuid() << spec()->value(Form::FormItemSpec::Spec_Priority).toInt();
+    _mode->setName(spec()->label());
+    QString icon = spec()->iconFileName();
+    icon.replace(Core::Constants::TAG_APPLICATION_THEME_PATH, settings()->path(Core::ISettings::BigPixmapPath));
+    qWarning() << icon;
+    _mode->setIcon(QIcon(icon));
+    _mode->setPriority(spec()->value(Form::FormItemSpec::Spec_Priority).toInt());
+    // TODO: move the extradata inside the spec to have a fully translated extra-values
+}
+
+void FormPage::specLoaded()
+{
+    languageChanged();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -745,7 +758,7 @@ public:
 } // End Form
 
 FormItemSpec::FormItemSpec() :
-        d(new Form::Internal::FormItemSpecPrivate)
+    d(new Form::Internal::FormItemSpecPrivate)
 {
 }
 
@@ -826,7 +839,7 @@ void FormItemSpec::toTreeWidget(QTreeWidgetItem *tree) const
 ///////////////////////////////////////  FormMainDebugPage  ////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 FormMainDebugPage::FormMainDebugPage(FormMain *form, QObject *parent) :
-        IDebugPage(parent), m_Form(form)
+    IDebugPage(parent), m_Form(form)
 {
     setObjectName("FormMainDebugPage_" + m_Form->uuid());
     m_Widget = new QWidget();

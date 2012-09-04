@@ -81,7 +81,7 @@ const char* const PMHXCATEGORIES_FILENAME = "pmhcategories.xml";
 
 const char* const TAG_MAINXMLTAG   = "FreeMedForms";
 const char* const TAG_NEW_FORM     = "MedForm";
-const char* const TAG_NEW_MODE     = "Mode";
+const char* const TAG_NEW_PAGE     = "Page";
 const char* const TAG_NEW_ITEM     = "Item";
 const char* const TAG_PMHX_CATEGORIES = "PMHx";
 const char* const TAG_CATEGORY     = "Category";
@@ -112,6 +112,7 @@ const char* const TAG_SPEC_COMPTAVERSION= "compatversion";
 const char* const TAG_SPEC_WEBLINK      = "weblink";
 const char* const TAG_SPEC_ICON         = "icon";
 const char* const TAG_SPEC_TOOLTIP      = "tooltip";
+const char* const TAG_SPEC_PRIORITY      = "priority";
 const char* const TAG_SPEC_EXTRA        = "extra";
 const char* const TAG_SPEC_UPDATEINFO   = "updateinfo";
 const char* const TAG_SPEC_UPDATEINFOVERSION  = "updateversion";
@@ -188,7 +189,7 @@ enum creationTagsEnum {
 };
 
 static const QStringList createTags =
-        QStringList() << TAG_NEW_FORM << TAG_NEW_MODE << TAG_NEW_ITEM;
+        QStringList() << TAG_NEW_FORM << TAG_NEW_PAGE << TAG_NEW_ITEM;
 
 enum uiTagsEnum {
     Option

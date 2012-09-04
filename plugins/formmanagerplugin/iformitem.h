@@ -178,6 +178,7 @@ public:
     ~FormPage();
 
     virtual void languageChanged();
+    void specLoaded();
 
 private Q_SLOTS:
     void getPatientForm();
