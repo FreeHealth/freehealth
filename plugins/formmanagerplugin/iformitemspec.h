@@ -49,34 +49,11 @@ QT_END_NAMESPACE
 /**
  * \file iformitem.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.7.3
- * \date 27 May 2012
+ * \version 0.8.0
+ * \date 04 Sept 2012
 */
 
 namespace Form {
-class IFormWidget;
-
-class FORM_EXPORT FormItemIdentifier : public QObject
-{
-    Q_OBJECT
-public:
-    FormItemIdentifier(QObject *parent =0) : QObject(parent) {}
-    ~FormItemIdentifier() {}
-
-    void setUuid(const QString &uuid);
-    QString uuid() const;
-
-    void setEquivalentUuid(const QStringList &list);
-    QStringList equivalentUuid() const;
-
-    // define operator< or > or == for the sorting method of items
-private:
-    QString m_Name;
-    QString m_Uuid;
-    QStringList m_EquivalentUuid;
-    int id;
-};
-
 namespace Internal{
 class FormItemSpecPrivate;
 }
@@ -85,7 +62,8 @@ class FORM_EXPORT FormItemSpec
 {
 public:
     enum {
-        Spec_Author = 0,
+        Spec_Uuid = 0,
+        Spec_Author,
         Spec_License,
         Spec_Category,
         Spec_CreationDate,
@@ -94,6 +72,7 @@ public:
         Spec_Description,
         Spec_Bibliography,
         Spec_Label,
+        Spec_Priority,
         Spec_Plugin,
         Spec_UiFileContent, // only used for FormMain (non empty roots)
         Spec_UiLabel,
@@ -104,6 +83,9 @@ public:
     };
     FormItemSpec();
     ~FormItemSpec();
+
+    QString uuid() const;
+    void setUuid(const QString &uuid);
 
     void setValue(int type, const QVariant &val, const QString &lang = QString::null);
     QVariant value(const int type, const QString &lang = QString::null) const;
@@ -120,6 +102,9 @@ public:
     QString pluginName(const QString &lang = QString::null) const {return value(Spec_Plugin,lang).toString();}
     QString iconFileName(const QString &lang = QString::null) const {return value(Spec_IconFileName,lang).toString();}
     QString tooltip(const QString &lang = QString::null) const {return value(Spec_Tooltip,lang).toString();}
+
+    void setEquivalentUuid(const QStringList &list);
+    QStringList equivalentUuid() const;
 
     void toTreeWidget(QTreeWidgetItem *tree) const;
 

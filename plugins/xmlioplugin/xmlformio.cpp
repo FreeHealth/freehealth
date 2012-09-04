@@ -385,6 +385,7 @@ QList<Form::FormMain *> XmlFormIO::loadAllRootForms(const QString &uuidOrAbsPath
         }
         XmlFormName mode(form.uid);
         mode.absFileName = fakeFileName;
+        mode.modeName = it.key();
 //        qWarning() << "MODE" << mode.absFileName << mode.uid;
         if (!reader()->loadForm(mode, root)) {
             LOG_ERROR("Form not readable: " + fakeFileName);

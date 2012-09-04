@@ -24,7 +24,7 @@
  *       Guillaume DENRY <guillaume.denry@gmail.com>                       *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#include "modewidget.h"
+#include "formmode.h"
 
 #include <formmanagerplugin/formplaceholder.h>
 #include <formmanagerplugin/formmanager.h>
@@ -34,7 +34,6 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/isettings.h>
-#include <coreplugin/modemanager/basemode.h>
 #include <coreplugin/constants_menus.h>
 #include <coreplugin/constants_tokensandsettings.h>
 
@@ -42,82 +41,61 @@
 
 #include <QDebug>
 
-using namespace BaseWidgets;
+using namespace Form;
 
 static inline ExtensionSystem::PluginManager *pluginManager() { return ExtensionSystem::PluginManager::instance(); }
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline Form::FormManager *formManager() {return Form::FormManager::instance();}
 
-ModeWidget::ModeWidget(Form::FormItem *item, QWidget *parent) :
-    Form::IFormWidget(item, parent),
-    _formItem(item),
-    _mode(0),
+FormMode::FormMode(FormItemSpec *spec, QObject *parent) :
+    Core::BaseMode(parent),
     _placeHolder(0),
     _inPool(false)
 {
-    Q_ASSERT(item);
-    setObjectName("BaseWidget::Mode::" + _formItem->uuid());
+    Q_ASSERT(spec);
+    setObjectName("Form::FormMode::" + _spec->uuid());
 
     _placeHolder = new Form::FormPlaceHolder;
-    _placeHolder->setObjectName("BaseWidget::Mode::FormPlaceHolder" + _formItem->uuid());
+    _placeHolder->setObjectName("BaseWidget::Mode::FormPlaceHolder" + _spec->uuid());
 
-    _mode = new Core::BaseMode(this);
-    _mode->setUniqueModeName(_formItem->uuid().toUtf8());
-    _mode->setPatientBarVisibility(true);
-
-    qWarning() << "ModeWidget" << _placeHolder->objectName();
-
+    setUniqueModeName(_spec->uuid().toUtf8());
+    setPatientBarVisibility(true);
     retranslate();
 
     connect(formManager(), SIGNAL(patientFormsLoaded()), this, SLOT(getPatientForm()));
+    qWarning() << "FormMode" << _placeHolder->objectName();
 }
 
-ModeWidget::~ModeWidget()
+FormMode::~FormMode()
 {
     if (_inPool)
-        pluginManager()->removeObject(_mode);
+        pluginManager()->removeObject(this);
 }
 
-void ModeWidget::addWidgetToContainer(Form::IFormWidget *widget)
-{
-    Q_UNUSED(widget);
-}
-
-bool ModeWidget::isContainer() const
-{
-    return false;
-}
-
-QString ModeWidget::printableHtml(bool withValues) const
-{
-    Q_UNUSED(withValues);
-    return QString::null;
-}
-
-void ModeWidget::getPatientForm()
+void FormMode::getPatientForm()
 {
 //    qWarning() << Q_FUNC_INFO;
-    Form::FormMain *root = formManager()->rootForm(_formItem->uuid().toUtf8());
+    Form::FormMain *root = formManager()->rootForm(_spec->uuid().toUtf8());
     if (!root) {
         if (_inPool)
-            pluginManager()->removeObject(_mode);
+            pluginManager()->removeObject(this);
         _inPool = false;
     } else {
         if (!_inPool)
-            pluginManager()->addObject(_mode);
+            pluginManager()->addObject(this);
         _inPool = true;
     }
     _placeHolder->setRootForm(root);
 }
 
-void ModeWidget::retranslate()
+void FormMode::retranslate()
 {
-    _mode->setName(_formItem->spec()->label());
-    QString icon = _formItem->spec()->iconFileName();
+    setName(_spec->label());
+    QString icon = _spec->iconFileName();
     icon.replace(Core::Constants::TAG_APPLICATION_THEME_PATH, settings()->path(Core::ISettings::BigPixmapPath));
-    _mode->setIcon(QIcon(icon));
+    setIcon(QIcon(icon));
     // TODO: move the extradata inside the spec to have a fully translated extra-values
-    _mode->setPriority(_formItem->extraData().value("priority", "100").toInt());
+    setPriority(_spec->value(Form::FormItemSpec::Spec_Priority, "100").toInt());
 }
 

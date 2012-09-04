@@ -53,8 +53,12 @@ QT_END_NAMESPACE
  * \file iformitem.h
  * \author Eric MAEKER
  * \version 0.8.0
- * \date 27 Aug 2012
+ * \date 04 Sept 2012
 */
+
+namespace Core {
+class BaseMode;
+}
 
 namespace Form {
 class IFormWidget;
@@ -64,8 +68,9 @@ class FormPage;
 class FormMain;
 class IFormIO;
 class FormMainDebugPage;
+class FormPlaceHolder;
 
-class FORM_EXPORT FormItem : public Form::FormItemIdentifier
+class FORM_EXPORT FormItem : public QObject
 {
     Q_OBJECT
 //    Q_PROPERTY(QVariant value READ value WRITE setValue USER true)
@@ -76,6 +81,9 @@ public:
 
     Form::FormItem *parentFormItem() const;
     Form::FormMain *parentFormMain() const;
+
+    QString uuid() const {return m_Spec->uuid();}
+    void setUuid(const QString &uuid) {m_Spec->setUuid(uuid);}
 
     Form::FormItemSpec *spec() const {return m_Spec;}
     Form::FormItemScripts *scripts() const {return m_Scripts;}
@@ -166,15 +174,18 @@ class FORM_EXPORT FormPage : public FormItem
 {
     Q_OBJECT
 public:
-    FormPage(QObject *parent=0) :
-            FormItem(parent) {}
-    ~FormPage() {}
-
-    virtual FormPage *createPage(const QString &uuid = QString::null) {Q_UNUSED(uuid); return 0;}
+    FormPage(QObject *parent=0);
+    ~FormPage();
 
     virtual void languageChanged();
 
+private Q_SLOTS:
+    void getPatientForm();
+
 private:
+    Core::BaseMode *_mode;
+    Form::FormPlaceHolder *_placeHolder;
+    bool _inPool;
 };
 
 class FORM_EXPORT FormMain : public FormItem

@@ -122,6 +122,7 @@
 // TODO: change Form::FormItemValues pointers to references distributed by the Form::FormManager? like getValues(Form::FormMainIndex &index, const ValueType &type)?
 
 #include "iformitem.h"
+#include "formplaceholder.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/uniqueidmanager.h>
@@ -157,53 +158,6 @@ enum {WarnFormCreation=false};
 enum {WarnFormCreation=false};
 #endif
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////  FormItemIdentifiers   //////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/** Defines the FreeMedForms persistent in time UUID of the item. */
-void FormItemIdentifier::setUuid(const QString &uuid)
-{
-    if (uuid.contains(".xml"))
-        id = 0;
-    id = uuidManager()->uniqueIdentifier(uuid);
-    m_Uuid = uuid;
-
-    // TODO: Define the objectName according to the parent to simplify the scripting
-//    QString objName = uuid;
-//    if (parent()) {
-//        qWarning() << "xxxxxx" << parent()->objectName() << uuid;
-//        if (uuid.startsWith(parent()->objectName())) {
-//            objName = objName.mid(parent()->objectName().length());
-//            while (objName.startsWith(".")) {
-//                objName = objName.mid(1);
-//            }
-//            while (objName.startsWith(":")) {
-//                objName = objName.mid(1);
-//            }
-//        }
-//    }
-//    setObjectName(objName);
-}
-
-/** Returns the FreeMedForms persistent in time UUID of the item. This UUID is used for database accesses. */
-QString FormItemIdentifier::uuid() const
-{
-    return m_Uuid;
-}
-
-/** Defines the FreeMedForms equivalence in persistent in time UUID for the item. Equivalence UUID is used to keep data correspondance when a form was updated and uuid of item changed. */
-void FormItemIdentifier::setEquivalentUuid(const QStringList &list)
-{
-    m_EquivalentUuid = list;
-    m_EquivalentUuid.removeDuplicates();
-    m_EquivalentUuid.removeAll("");
-}
-
-/** Returns the FreeMedForms equivalence in persistent in time UUID for the item. \sa FormItemIdentifier::setEquivalentUuid */
-QStringList FormItemIdentifier::equivalentUuid() const
-{
-    return m_EquivalentUuid;
-}
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////  FormItemScripts  ////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -497,7 +451,7 @@ void FormItemValues::toTreeWidget(QTreeWidgetItem *tree) const
 /////////////////////////////////////////////  FormItem  ///////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 FormItem::FormItem(QObject *parent) :
-    FormItemIdentifier(parent),
+    QObject(parent),
     m_Spec(new FormItemSpec),
     m_Scripts(new FormItemScripts),
     m_Values(new FormItemValues),
@@ -559,20 +513,63 @@ void FormItem::languageChanged()
     qWarning() << "FormItem language changed" << uuid();
 }
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////  FormPage  ///////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+FormPage::FormPage(QObject *parent):
+    Form::FormItem(parent),
+    _placeHolder(0),
+    _inPool(false)
+{
+//    if (spec())
+//        setObjectName("Form::FormMode::" + spec()->uuid());
+//    else
+//        setObjectName("Form::FormMode");
+
+//    _placeHolder = new Form::FormPlaceHolder;
+//    _placeHolder->setObjectName("BaseWidget::Mode::FormPlaceHolder");
+
+//    if (spec())
+//        setUniqueModeName(spec()->uuid().toUtf8());
+//    setPatientBarVisibility(true);
+//    retranslate();
+
+//    connect(formManager(), SIGNAL(patientFormsLoaded()), this, SLOT(getPatientForm()));
+//    qWarning() << "FormMode" << objectName();
+}
+
+FormPage::~FormPage()
+{
+//    if (_inPool)
+//        pluginManager()->removeObject(this);
+}
+
+void FormPage::getPatientForm()
+{
+//    //    qWarning() << Q_FUNC_INFO;
+//    Form::FormMain *root = formManager()->rootForm(spec()->uuid().toUtf8());
+//    if (!root) {
+//        if (_inPool)
+//            pluginManager()->removeObject(this);
+//        _inPool = false;
+//    } else {
+//        if (!_inPool)
+//            pluginManager()->addObject(this);
+//        _inPool = true;
+//    }
+//    _placeHolder->setRootForm(root);
+}
+
 void FormPage::languageChanged()
 {
     qWarning() << "FormPage language changed" << uuid();
+    //    setName(_spec->label());
+    //    QString icon = _spec->iconFileName();
+    //    icon.replace(Core::Constants::TAG_APPLICATION_THEME_PATH, settings()->path(Core::ISettings::BigPixmapPath));
+    //    setIcon(QIcon(icon));
+    //    // TODO: move the extradata inside the spec to have a fully translated extra-values
+    //    setPriority(_spec->value(Form::FormItemSpec::Spec_Priority, "100").toInt());
 }
-
-
-//FormPage *FormPage::createPage(const QString &uuid)
-//{
-//    FormPage *p = new FormPage(this);
-//    if (!uuid.isEmpty())
-//        p->setUuid(uuid);
-//    return p;
-//}
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////  FormMain  ///////////////////////////////////////////////////
@@ -588,7 +585,7 @@ FormMain::FormMain(QObject *parent) :
 
 FormMain::~FormMain()
 {
-    // TODO: this is buggy
+// TODO: this is buggy
 //    if (m_DebugPage)
 //        ExtensionSystem::PluginManager::instance()->removeObject(m_DebugPage);
 }
@@ -738,6 +735,10 @@ public:
     ~FormItemSpecPrivate() {}
 
     QString categoryForTreeWiget() const {return QString("Specs");}
+
+    QString m_Uuid;
+    QStringList m_EquivalentUuid;
+
 };
 
 } // End Internal
@@ -761,6 +762,10 @@ FormItemSpec::~FormItemSpec()
 void FormItemSpec::setValue(int type, const QVariant &val, const QString &language)
 {
 //    qWarning() << "SPEC" << type << val << language;
+    if (type == Spec_Uuid) {
+        d->m_Uuid = val.toString();
+        return;
+    }
     QString l = language;
     if (language.isEmpty())
         l = Trans::Constants::ALL_LANGUAGE;
@@ -770,6 +775,9 @@ void FormItemSpec::setValue(int type, const QVariant &val, const QString &langua
 
 QVariant FormItemSpec::value(const int type, const QString &lang) const
 {
+    if (type == Spec_Uuid) {
+        return d->m_Uuid;
+    }
     QString l = lang;
     if (lang.isEmpty())
         l = QLocale().name().left(2);
@@ -781,6 +789,32 @@ QVariant FormItemSpec::value(const int type, const QString &lang) const
         val = value(type, Trans::Constants::ALL_LANGUAGE);
     }
     return val;
+}
+
+/** Defines the FreeMedForms persistent in time UUID of the item. */
+void FormItemSpec::setUuid(const QString &uuid)
+{
+    d->m_Uuid = uuid;
+}
+
+/** Returns the FreeMedForms persistent in time UUID of the item. This UUID is used for database accesses. */
+QString FormItemSpec::uuid() const
+{
+    return d->m_Uuid;
+}
+
+/** Defines the FreeMedForms equivalence in persistent in time UUID for the item. Equivalence UUID is used to keep data correspondance when a form was updated and uuid of item changed. */
+void FormItemSpec::setEquivalentUuid(const QStringList &list)
+{
+    d->m_EquivalentUuid = list;
+    d->m_EquivalentUuid.removeDuplicates();
+    d->m_EquivalentUuid.removeAll("");
+}
+
+/** Returns the FreeMedForms equivalence in persistent in time UUID for the item. \sa FormItemIdentifier::setEquivalentUuid */
+QStringList FormItemSpec::equivalentUuid() const
+{
+    return d->m_EquivalentUuid;
 }
 
 void FormItemSpec::toTreeWidget(QTreeWidgetItem *tree) const

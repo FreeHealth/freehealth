@@ -15,9 +15,7 @@ HEADERS += basewidgetsplugin.h \
     texteditorfactory.h \
     identitywidgetfactory.h \
     calculationwidgets.h \
-    frenchsocialnumber.h \
-    modewidget.h
-
+    frenchsocialnumber.h
 
 SOURCES += basewidgetsplugin.cpp \
     baseformwidgets.cpp \
@@ -25,9 +23,7 @@ SOURCES += basewidgetsplugin.cpp \
     texteditorfactory.cpp \
     identitywidgetfactory.cpp \
     frenchsocialnumber.cpp \
-    calculationwidgets.cpp \
-    modewidget.cpp
-
+    calculationwidgets.cpp
 
 FORMS += baseformwidgetsoptionspage.ui \
     baseformwidget.ui \

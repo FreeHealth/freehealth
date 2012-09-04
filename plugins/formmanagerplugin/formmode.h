@@ -24,8 +24,8 @@
  *       Guillaume DENRY <guillaume.denry@gmail.com>                       *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef BASEWIDGETS_MODEWIDGET_H
-#define BASEWIDGETS_MODEWIDGET_H
+#ifndef FORM_FORMMODE_H
+#define FORM_FORMMODE_H
 
 #include <QWidget>
 #include <QVariant>
@@ -34,7 +34,7 @@
 #include <formmanagerplugin/iformitemdata.h>
 
 /**
- * \file modewidget.h
+ * \file formmode.h
  * \author Eric MAEKER
  * \version 0.8.0
  * \date 04 Sept 2012
@@ -46,22 +46,13 @@ class BaseMode;
 
 namespace Form {
 class FormPlaceHolder;
-}
 
-namespace BaseWidgets {
-
-class ModeWidget : public Form::IFormWidget
+class FormMode : public Form::FormItem
 {
     Q_OBJECT
 public:
-    explicit ModeWidget(Form::FormItem *item, QWidget *parent = 0);
-    ~ModeWidget();
-
-    void addWidgetToContainer(Form::IFormWidget *widget);
-    bool isContainer() const;
-
-    // Printing
-    QString printableHtml(bool withValues = true) const;
+    explicit FormMode(Form::FormItem *item, QWidget *parent = 0);
+    ~FormMode();
 
 private Q_SLOTS:
     void getPatientForm();
@@ -102,4 +93,4 @@ private:
 
 } // namespace BaseWidgets
 
-#endif // BASEWIDGETS_MODEWIDGET_H
+#endif // FORM_FORMMODE_H
