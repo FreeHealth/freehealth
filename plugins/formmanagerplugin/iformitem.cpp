@@ -538,10 +538,11 @@ FormPage::FormPage(QObject *parent):
     if (spec())
         _mode->setUniqueModeName(spec()->uuid().toUtf8());
     _mode->setPatientBarVisibility(true);
+    _mode->setWidget(_placeHolder);
     languageChanged();
 
     connect(formManager(), SIGNAL(patientFormsLoaded()), this, SLOT(getPatientForm()));
-//    qWarning() << "FormMode" << objectName();
+    qWarning() << "FormPage" << objectName() << spec()->value(Form::FormItemSpec::Spec_Priority).toInt();
 }
 
 FormPage::~FormPage()
@@ -552,8 +553,8 @@ FormPage::~FormPage()
 
 void FormPage::getPatientForm()
 {
-//    //    qWarning() << Q_FUNC_INFO;
     Form::FormMain *root = formManager()->rootForm(spec()->uuid().toUtf8());
+    _mode->setPriority(spec()->value(Form::FormItemSpec::Spec_Priority).toInt());
     if (!root) {
         if (_inPool)
             pluginManager()->removeObject(_mode);
@@ -568,13 +569,19 @@ void FormPage::getPatientForm()
 
 void FormPage::languageChanged()
 {
-    qWarning() << "FormPage language changed" << uuid();
+    qWarning() << "FormPage language changed" << uuid() << spec()->value(Form::FormItemSpec::Spec_Priority).toInt();
     _mode->setName(spec()->label());
     QString icon = spec()->iconFileName();
     icon.replace(Core::Constants::TAG_APPLICATION_THEME_PATH, settings()->path(Core::ISettings::BigPixmapPath));
+    qWarning() << icon;
     _mode->setIcon(QIcon(icon));
+    _mode->setPriority(spec()->value(Form::FormItemSpec::Spec_Priority).toInt());
     // TODO: move the extradata inside the spec to have a fully translated extra-values
-    _mode->setPriority(spec()->value(Form::FormItemSpec::Spec_Priority, "100").toInt());
+}
+
+void FormPage::specLoaded()
+{
+    languageChanged();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////

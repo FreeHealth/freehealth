@@ -136,6 +136,7 @@ FormIOQuery::FormIOQuery() :
     m_ForceFile(false),
     m_AllForms(false),
     m_AllDescr(false),
+//    m_Local(true),
     m_GetShots(true)
 {
 }

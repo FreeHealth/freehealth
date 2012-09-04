@@ -280,10 +280,10 @@ public:
     }
 
 public:
+    QVector<Form::FormPage *> _formPages;
     QList<Form::FormMain *> m_RootForms, m_SubFormsEmptyRoot;
     QHash<Form::FormMain *, Form::FormMain *> _formParents; // keep the formMain parent in cache (K=form to reparent, V=emptyrootform)
-
-    QHash<Form::FormMain*, EpisodeModel *> _episodeModels;
+    QHash<Form::FormMain *, EpisodeModel *> _episodeModels;
 
 private:
     FormManager *q;
@@ -329,6 +329,21 @@ FormManager::~FormManager()
 void FormManager::activateMode()
 {
     modeManager()->activateMode(Core::Constants::MODE_PATIENT_FILE);
+}
+
+/** Create a Form::FormPage with the specified \e uuid. There are no uuid duplicates. */
+FormPage *FormManager::createFormPage(const QString &uuid)
+{
+    for(int i=0; i < d->_formPages.count(); ++i) {
+        FormPage *p = d->_formPages.at(i);
+        if (p->uuid()==uuid)
+            return p;
+    }
+    FormPage *p = new FormPage(this);
+    if (!uuid.isEmpty())
+        p->setUuid(uuid);
+    d->_formPages.append(p);
+    return p;
 }
 
 /** Return the form (Form::FormMain*) wiht the uuid \e formUid or return zero. This function checks the central and all loaded subforms */

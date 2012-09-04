@@ -88,6 +88,9 @@ public:
     void setForceFileReading(const bool force) {m_ForceFile = force;}
     bool forceFileReading() const {return m_ForceFile;}
 
+//    void setIncludeLocalFiles(const bool includeLocal) {m_Local = includeLocal;}
+//    bool includeLocalFiles() const {return m_Local;}
+
     void setGetAllAvailableForms(bool state) {m_AllForms=state;}
     bool getAllAvailableForms() {return m_AllForms;}
 
