@@ -229,6 +229,17 @@ public:
         return (!(val.count()==1 && val.at(0)==0));
     }
 
+    void checkModelContent()
+    {
+        if (_formMain->episodePossibilities() == Form::FormMain::UniqueEpisode) {
+            if (_sqlModel->rowCount() < 1)
+                _sqlModel->insertRow(0);
+        } else if (_formMain->episodePossibilities() == Form::FormMain::NoEpisode) {
+            if (_sqlModel->rowCount() > 0)
+                LOG_ERROR_FOR(q, QString("NoEpisode Form (%1) with episodes?").arg(_formMain->uuid()));
+        }
+    }
+
 //    void getLastEpisodes(bool andFeedPatientModel = true)
 //    {
 //        qWarning() << "GetLastEpisode (feedPatientModel=" <<andFeedPatientModel << ")";
@@ -382,6 +393,7 @@ void EpisodeModel::onPatientChanged()
 {
     d->updateFilter();
     d->_sqlModel->select();
+    d->checkModelContent();
 }
 
 int EpisodeModel::rowCount(const QModelIndex &parent) const
