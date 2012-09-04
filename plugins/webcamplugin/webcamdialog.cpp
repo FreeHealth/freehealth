@@ -51,6 +51,7 @@ using namespace Internal;
 
 static inline Core::ITheme *theme() { return Core::ICore::instance()->theme(); }
 
+/*! Default constructor, creates the Dialog and initializes the camera and the OpenCVWidget. */
 WebcamDialog::WebcamDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::WebcamDialog())
@@ -62,8 +63,8 @@ WebcamDialog::WebcamDialog(QWidget *parent) :
     setWindowTitle(tr("Take a picture from your webcam"));
 
     // Freeze button
-    m_freezeButton = ui->buttonBox->addButton(tr("Freeze"), QDialogButtonBox::ActionRole);
-    m_freezeButton->setIcon(theme()->icon(Core::Constants::ICONTAKESCREENSHOT));
+    m_freezeButton = ui->buttonBox->addButton(tr("Stop"), QDialogButtonBox::ActionRole);
+    m_freezeButton->setIcon(theme()->icon(Core::Constants::ICONMEDIAPAUSE));
     m_freezeButton->setCheckable(true);
 
     QPushButton *button;
@@ -88,12 +89,13 @@ WebcamDialog::WebcamDialog(QWidget *parent) :
     connect(ui->openCVWidget, SIGNAL(imageReady(bool)), button, SLOT(setEnabled(bool)));
     connect(ui->openCVWidget, SIGNAL(autoFaceShot(QPixmap)), this, SLOT(autoFaceShot(QPixmap)));
 }
-
+/*! Default destructor, deletes the UI */
 WebcamDialog::~WebcamDialog()
 {
     delete ui;
 }
 
+/*! Returns the current or choosen pixmap */
 QPixmap WebcamDialog::photo() const
 {
     if (_pixmap.isNull())
@@ -101,25 +103,35 @@ QPixmap WebcamDialog::photo() const
     return _pixmap;
 }
 
+/*!
+ * \brief Updates the "Freeze" or "Stop" button (text, checked state) aaccording to the OpenCVWidget state.
+ * \param aFreeze true if widget is frozen, false if not
+ */
 void WebcamDialog::updatefreezeButton(bool aFreeze)
 {
     if (aFreeze) {
-        m_freezeButton->setText(tr("Unfreeze"));
-        m_freezeButton->setIcon(theme()->icon(Core::Constants::ICONCAMERAVIDEO));
+        m_freezeButton->setText(tr("Continue"));
+        m_freezeButton->setIcon(theme()->icon(Core::Constants::ICONMEDIASTART));
     } else {
-        m_freezeButton->setText(tr("Freeze"));
-        m_freezeButton->setIcon(theme()->icon(Core::Constants::ICONTAKESCREENSHOT));
+        m_freezeButton->setText(tr("Stop"));
+        m_freezeButton->setIcon(theme()->icon(Core::Constants::ICONMEDIAPAUSE));
     }
 }
 
+/*!
+ * \brief Takes a picture as argument and adds it to the picture list from which the user can choose a good one.
+ * \param pixmap A QPixmap with the picture to save.
+ */
 void WebcamDialog::autoFaceShot(const QPixmap &pixmap)
 {
     QStandardItem *item = new QStandardItem(QIcon(pixmap), tr("Photo %1").arg(QString::number(m_imageModel->rowCount()+1)));
     m_imageModel->appendRow(item);
 }
 
-// Catch the mouse dbl click on autoshot labels
-// validate the dialog if one label was dble clicked
+/*! \brief Catches the activation (mostly a mouse double click) on autoshot pictures.
+ *
+ * \param index QModelIndex that points to the picture that was activated.
+ */
 void WebcamDialog::faceShotActivated(const QModelIndex &index)
 {
     if (!index.isValid())
@@ -131,12 +143,13 @@ void WebcamDialog::faceShotActivated(const QModelIndex &index)
     return;
 }
 
+/*! Makes sure that the "Stop"/"Continue" buttons' text is updated after a language change. */
 void WebcamDialog::changeEvent(QEvent *event)
 {
     if (event->type() == QEvent::LanguageChange) {
         if (ui->openCVWidget->isFrozen())
-            m_freezeButton->setText(tr("Unfreeze"));
+            m_freezeButton->setText(tr("Continue"));
         else
-            m_freezeButton->setText(tr("Freeze"));
+            m_freezeButton->setText(tr("Stop"));
     }
 }
