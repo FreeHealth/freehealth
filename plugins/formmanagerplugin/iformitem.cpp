@@ -55,6 +55,7 @@
  * in the Core::IPatient model wrapper to find requested values that are not stored in the patient
  * database.
  */
+// TODO: change Form::FormItem pointers to references distributed by the Form::FormManager? like getItem(Form::FormMainIndex &index, const QString &uid)?
 
 // TODO - Options d'affichage et d'impression ??
 // TODO - Options de "droit" / utilisateurs autorisés
@@ -159,7 +160,7 @@ enum {WarnFormCreation=false};
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////  FormItemIdentifiers   //////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/** Defines the FreeMedForms UUID of the item. */
+/** Defines the FreeMedForms persistent in time UUID of the item. */
 void FormItemIdentifier::setUuid(const QString &uuid)
 {
     if (uuid.contains(".xml"))
@@ -184,13 +185,13 @@ void FormItemIdentifier::setUuid(const QString &uuid)
 //    setObjectName(objName);
 }
 
-/** Returns the FreeMedForms UUID of the item. This UUID is used for database accesses. */
+/** Returns the FreeMedForms persistent in time UUID of the item. This UUID is used for database accesses. */
 QString FormItemIdentifier::uuid() const
 {
     return m_Uuid;
 }
 
-/** Defines the FreeMedForms equivalence in UUID for the item. Equivalence UUID is used to keep data correspondance when a form was updated and uuid of item changed. */
+/** Defines the FreeMedForms equivalence in persistent in time UUID for the item. Equivalence UUID is used to keep data correspondance when a form was updated and uuid of item changed. */
 void FormItemIdentifier::setEquivalentUuid(const QStringList &list)
 {
     m_EquivalentUuid = list;
@@ -198,7 +199,7 @@ void FormItemIdentifier::setEquivalentUuid(const QStringList &list)
     m_EquivalentUuid.removeAll("");
 }
 
-/** Returns the FreeMedForms equivalence in UUID for the item. \sa FormItemIdentifier::setEquivalentUuid */
+/** Returns the FreeMedForms equivalence in persistent in time UUID for the item. \sa FormItemIdentifier::setEquivalentUuid */
 QStringList FormItemIdentifier::equivalentUuid() const
 {
     return m_EquivalentUuid;
@@ -592,7 +593,7 @@ FormMain::~FormMain()
 //        ExtensionSystem::PluginManager::instance()->removeObject(m_DebugPage);
 }
 
-/** Defines the Form::IFormIO reader of the Form::FormMain root. */
+/** Defines the Form::IFormIO reader of the Form::FormMain empty root parent. */
 void FormMain::setIoFormReader(IFormIO *reader)
 {
     if (rootFormParent()==this) {
@@ -602,7 +603,7 @@ void FormMain::setIoFormReader(IFormIO *reader)
     }
 }
 
-/** Returns the Form::IFormIO reader of the Form::FormMain root. */
+/** Returns the Form::IFormIO reader of the Form::FormMain empty root parent. */
 IFormIO *FormMain::reader() const
 {
     if (rootFormParent()==(FormMain*)this) {
@@ -613,7 +614,7 @@ IFormIO *FormMain::reader() const
 
 /**
  * \fn bool Form::FormMain::isEmptyRootForm() const
- * Return true is the Form::FormMain is a empty root form.
+ * Return true is the Form::FormMain is an empty root form.
  * This kind of form is the only one who owns a link
  * to the Form::IFormIO reader. \sa Form::FormMain::reader().
  */
@@ -716,13 +717,13 @@ public:
         new QTreeWidgetItem(i, QStringList() << "Authors" << m_Specs.value(Form::FormItemSpec::Spec_Author).toString() );
         new QTreeWidgetItem(i, QStringList() << "License" << m_Specs.value(Form::FormItemSpec::Spec_License).toString() );
         new QTreeWidgetItem(i, QStringList() << "version" << m_Specs.value(Form::FormItemSpec::Spec_Version).toString() );
-        new QTreeWidgetItem(i, QStringList() << "biblio" << m_Specs.value(Form::FormItemSpec::Spec_Bibliography).toString() );
+        new QTreeWidgetItem(i, QStringList() << "References" << m_Specs.value(Form::FormItemSpec::Spec_Bibliography).toString() );
         new QTreeWidgetItem(i, QStringList() << "Description" << m_Specs.value(Form::FormItemSpec::Spec_Description).toString() );
-        new QTreeWidgetItem(i, QStringList() << "category" << m_Specs.value(Form::FormItemSpec::Spec_Category).toString() );
-        new QTreeWidgetItem(i, QStringList() << "creationDate" << m_Specs.value(Form::FormItemSpec::Spec_CreationDate).toString() );
-        new QTreeWidgetItem(i, QStringList() << "LastModification" << m_Specs.value(Form::FormItemSpec::Spec_LastModified).toString() );
+        new QTreeWidgetItem(i, QStringList() << "Category" << m_Specs.value(Form::FormItemSpec::Spec_Category).toString() );
+        new QTreeWidgetItem(i, QStringList() << "Creation date" << m_Specs.value(Form::FormItemSpec::Spec_CreationDate).toString() );
+        new QTreeWidgetItem(i, QStringList() << "Last modification" << m_Specs.value(Form::FormItemSpec::Spec_LastModified).toString() );
         new QTreeWidgetItem(i, QStringList() << "Plugin Name" << m_Specs.value(Form::FormItemSpec::Spec_Plugin).toString() );
-        new QTreeWidgetItem(i, QStringList() << "IconFileName" << m_Specs.value(Form::FormItemSpec::Spec_IconFileName).toString() );
+        new QTreeWidgetItem(i, QStringList() << "Icon filename" << m_Specs.value(Form::FormItemSpec::Spec_IconFileName).toString() );
     }
 
     QHash<int, QVariant> m_Specs;

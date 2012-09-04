@@ -28,9 +28,9 @@
 #include "iformitem.h"
 
 /**
-  \class IFormWidgetFactory
- This class is an interface for the form's widget. Object need to be created by plugins and added to
- the plugins manager objects pool.
+ * \class IFormWidgetFactory
+ * This class is an interface for the form's widget. Object need to be created by plugins and added to
+ * the plugins manager objects pool.
 */
 
 #include <QLocale>
