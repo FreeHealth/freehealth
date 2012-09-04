@@ -95,6 +95,8 @@
  * - reparent it outside the internal part of the Form plugin
  * - create a cache of theses pointers, the Form::FormManager already manages this cache
  */
+// TODO: change Form::FormMain pointers to references distributed by the Form::FormManager?
+
 
 /**
  * \class Form::FormItemSpec
@@ -110,11 +112,13 @@
  * Stores the scripts associated with the Form::FormItem.
  * \todo Documentation
  */
+// TODO: change Form::FormItemScripts pointers to references distributed by the Form::FormManager? like getScript(Form::FormMainIndex &index, const ScriptType &type)?
 
 /**
   \class Form::FormItemValues
   \todo Documentation
 */
+// TODO: change Form::FormItemValues pointers to references distributed by the Form::FormManager? like getValues(Form::FormMainIndex &index, const ValueType &type)?
 
 #include "iformitem.h"
 
