@@ -28,8 +28,8 @@
 
         <field name="PluginNamespace">
             <fieldcontrol class="QComboBox" combochoices="Account,AccountDB,Agenda,Alert,BaseWidgets,Category,Core,DataPackPlugin,DrugInteractions,DrugsDB,DrugsWidget,Editor,Empty,Form,Gir,ICD,MainWin,PMH,PadTools,Patients,Print,SaveRestore,Script,Templates,UserPlugin,Views,Webcam,XmlForms,ZipCodes" defaultindex="-1" />
-            <fielddescription>Namespace of the plugin the class belongs to:</fielddescription>
-            <fielddescription xml:lang="de">Namensraum des Plugins, zu dem die Klasse geh&#246;ren soll:</fielddescription>
+            <fielddescription>Plugin namespace:</fielddescription>
+            <fielddescription xml:lang="de">Namensraum des Plugins:</fielddescription>
             <fielddescription xml:lang="fr">Espace de nommage du plugin</fielddescription>
         </field>
         <field name="Internal">
