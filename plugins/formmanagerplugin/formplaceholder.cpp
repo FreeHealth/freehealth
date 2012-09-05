@@ -363,10 +363,11 @@ void FormPlaceHolder::setRootForm(Form::FormMain *rootForm)
     Core::Command *cmd = actionManager()->command(Constants::A_SHOWPATIENTLASTEPISODES);
     connect(cmd->action(), SIGNAL(triggered()), this, SLOT(showLastEpisodeSynthesis()));
 
-    // start on the Last Episode Synthesis view
-//    tree->setCurrentIndex(d->_episodeModel->index(0,0));
-//    setCurrentForm(Constants::PATIENTLASTEPISODES_UUID);
-    setCurrentForm(rootForm);
+    if (rootForm->firstLevelFormMainChildren().count() > 0) {
+        setCurrentForm(rootForm->firstLevelFormMainChildren().at(0));
+        QModelIndex index = d->_formTreeModel->index(0,0);
+        d->ui->formView->selectionModel()->select(index, QItemSelectionModel::Rows | QItemSelectionModel::SelectCurrent);
+    }
 }
 
 // Used for the delegate
@@ -512,31 +513,21 @@ void FormPlaceHolder::addForm()
 {
     if (!isVisible())
         return;
-    // save current episode
-//    if (d->ui->formView->selectionModel()->hasSelection()) {
-//        // something to save ?
-//        QModelIndex index = d->ui->formView->selectionModel()->selectedIndexes().at(0);
-//        if (d->_episodeModel->isEpisode(index)) {
-//            // get the parent form
-//            QModelIndex formIndex = index.parent();
-//            while (!d->_episodeModel->isForm(formIndex)) {
-//                formIndex = formIndex.parent();
-//            }
-//            d->_episodeModel->saveEpisode(d->ui->formView->currentIndex(), d->_episodeModel->index(formIndex.row(), FormTreeModel::FormUuid, formIndex.parent()).data().toString());
-//        }
-//    }
-//    // open the form editor dialog
-//    FormEditorDialog dlg(d->_episodeModel, FormEditorDialog::DefaultMode, this);
-//    if (dlg.exec()==QDialog::Accepted) {
-//        // refresh stack widget
+
+    d->saveCurrentEditingEpisode();
+
+    // open the form editor dialog
+    FormEditorDialog dlg(d->_formTreeModel, FormEditorDialog::DefaultMode, this);
+    if (dlg.exec()==QDialog::Accepted) {
+        // refresh stack widget
 //        d->populateStackLayout();
-//        // activate last episode synthesis
-//        d->ui->formView->treeView()->setCurrentIndex(d->_episodeModel->index(0,0));
+        // activate last episode synthesis
+//        d->ui->formView->setCurrentIndex(d->_episodeModel->index(0,0));
 //        showLastEpisodeSynthesis();
-////        d->m_Stack->setCurrentIndex(d->m_StackId_FormUuid.key(dlg.lastInsertedFormUid()));
-//    }
+    }
 }
 
+/** Print the current editing episode */
 void FormPlaceHolder::printCurrentItem()
 {
 //    qWarning() << Q_FUNC_INFO;
