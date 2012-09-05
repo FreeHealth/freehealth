@@ -43,6 +43,17 @@ namespace Ui {
 class WebcamDialog;
 }
 
+/*!
+ * \brief The WebcamDialog class
+ *
+ * This class constucts a dialog with a webcam widget that enables you to make a photo with the webcam.
+ * It generates shots automatically and saves them in a view. Therefore it detects the face in the
+ * picture and  saves only a frame around it. Additionally you can freeze the picture manually and
+ * select the face with the mouse using a "rubberband" selection.
+ *
+ * The dialog returns the chosen picture. If the user presses Escape or clicks on "Cancel",
+ * a QPixmap() is returned instead.
+ */
 class WebcamDialog : public QDialog
 {
     Q_OBJECT

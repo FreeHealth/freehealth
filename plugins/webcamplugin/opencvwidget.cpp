@@ -138,6 +138,10 @@ OpenCVWidget::~OpenCVWidget()
     m_camera.release();
 }
 
+/*!
+ * \brief Handles the event
+ * \param event
+ */
 void OpenCVWidget::timerEvent(QTimerEvent *event)
 {
     Q_UNUSED(event);
@@ -147,41 +151,41 @@ void OpenCVWidget::timerEvent(QTimerEvent *event)
 
     std::vector<Rect> faces;
 
-     if (m_camera.read(_frame)) {
-         if (!_frame.empty()) {
+    if (m_camera.read(_frame)) {
+        if (!_frame.empty()) {
 
-             _cascade.detectMultiScale(_frame, faces, 1.1, 2, 0|CV_HAAR_SCALE_IMAGE, Size(30, 30));
+            // now convert Mat image into a QImage
+            m_image = Mat2QImage(_frame);
+            setPixmap(QPixmap::fromImage(m_image));
 
-             // now convert Mat image into a QImage
-             m_image = Mat2QImage(_frame);
-             setPixmap(QPixmap::fromImage(m_image));
+            // Find the face
+            ++m_frames; // count frames between last autoshot
+            // one shot every 1000ms
+            if (m_frames >= (1000/m_updateFreq)) {
+                m_frames = 0;  // reset frame counter
 
-             // Find the face
-             ++m_frames; // count frames between last autoshot
-             // one shot every 1000ms
-             if (m_frames >= (1000/m_updateFreq)) {
-                 m_frames = 0;  // reset frame counter
+                _cascade.detectMultiScale(_frame, faces, 1.1, 2, 0|CV_HAAR_SCALE_IMAGE, Size(30, 30));
 
-                 // more than one faces are just ignored.
-                 if (faces.size() != 1)
-                     return;
+                // more than one faces are just ignored.
+                if (faces.size() != 1)
+                    return;
 
-                 Rect tmpRect = faces.front();
-                 QRect rect(tmpRect.x, tmpRect.y, tmpRect.width, tmpRect.height);
+                Rect tmpRect = faces.front();
+                QRect rect(tmpRect.x, tmpRect.y, tmpRect.width, tmpRect.height);
 
-                 if (rect.isEmpty() || !rect.isValid() || rect.width() < 80) {
-                     return;
-                 }
-                 // If found -> get the QImage and cut the face
-                 QImage face = m_image.copy(rect);
-                 QPixmap pix(face.size());
-                 pix = QPixmap::fromImage(face);
-                 ++m_counter;
-                 Q_EMIT autoFaceShot(pix);
-             }
+                if (rect.isEmpty() || !rect.isValid() || rect.width() < 80) {
+                    return;
+                }
+                // If found -> get the QImage and cut the face
+                QImage face = m_image.copy(rect);
+                QPixmap pix(face.size());
+                pix = QPixmap::fromImage(face);
+                ++m_counter;
+                Q_EMIT autoFaceShot(pix);
+            }
 
-         }
-     }
+        }
+    }
 }
 
 /*!
@@ -389,6 +393,11 @@ void OpenCVWidget::restrictRubberBandConstraints()
 
 }
 
+/*!
+ * \brief Converts an OpenCV Mat image to a QImage
+ * \param src
+ * \return the converted QImage
+ */
 QImage OpenCVWidget::Mat2QImage(const cv::Mat3b &src)
 {
     QImage dest(src.cols, src.rows, QImage::Format_ARGB32);
@@ -409,8 +418,7 @@ QImage OpenCVWidget::Mat2QImage(const cv::Mat3b &src)
  */
 void OpenCVWidget::toggleFreezeMode()
 {
-    m_frozen = !m_frozen;
-    setFrozen(m_frozen);
+    setFrozen(!m_frozen);
 }
 
 void OpenCVWidget::setImageUpdateFrequency(const int ms)
@@ -422,13 +430,16 @@ void OpenCVWidget::setImageUpdateFrequency(const int ms)
     startTimer(m_updateFreq);
 }
 
+/*!
+ * \returns Frequency in Hz - how often frame updates in the widget should happen.
+ */
 int OpenCVWidget::defaultUpdateFrequency() const
 {
     return 50;
 }
 
 /*!
- * \brief returns a QRect with the coordinates of the current selection
+ * \returns a QRect with the coordinates of the current selection
  */
 QRect OpenCVWidget::frame() const
 {
