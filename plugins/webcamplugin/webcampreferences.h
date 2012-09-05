@@ -52,24 +52,25 @@ class WebcamPreferencesWidget;
 class WebcamPreferencesWidget : public QWidget
 {
     Q_OBJECT
-    
+
 public:
     explicit WebcamPreferencesWidget(QWidget *parent = 0);
     ~WebcamPreferencesWidget();
-    
+
     void setDataToUi();
-    
+
     static void writeDefaultSettings(Core::ISettings *s);
-    
+
 public Q_SLOTS:
     void saveToSettings(Core::ISettings *s = 0);
-    
+
 private:
     void retranslateUi();
     void changeEvent(QEvent *e);
-    
+
 private:
     Ui::WebcamPreferencesWidget *ui;
+    QList<int> m_availableDevices;
 };
 
 
@@ -78,7 +79,7 @@ class WebcamPreferencesPage : public Core::IOptionsPage
 public:
     WebcamPreferencesPage(QObject *parent = 0);
     ~WebcamPreferencesPage();
-    
+
     QString id() const;
     QString name() const;
     QString category() const;
@@ -89,13 +90,13 @@ public:
     void checkSettingsValidity();
     void applyChanges();
     void finish();
-    
+
     QString helpPage() {return QString();}
-    
+
     static void writeDefaultSettings(Core::ISettings *s) {WebcamPreferencesWidget::writeDefaultSettings(s);}
-    
+
     QWidget *createPage(QWidget *parent = 0);
-    
+
 private:
     QPointer<Internal::WebcamPreferencesWidget> m_Widget;
 };

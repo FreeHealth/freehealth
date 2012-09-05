@@ -33,7 +33,7 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
 #include <opencv2/core/core.hpp>
-//#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/highgui/highgui.hpp>
 
 
 using namespace Webcam;
@@ -41,6 +41,21 @@ using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
 static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
+
+struct CamProperties {
+    double CV_CAP_PROP_FRAME_WIDTH;
+    double CV_CAP_PROP_FRAME_HEIGHT;
+    double CV_CAP_PROP_FPS;
+    double CV_CAP_PROP_FOURCC;
+//    double CV_CAP_PROP_FORMAT;
+    double CV_CAP_PROP_BRIGHTNESS;
+    double CV_CAP_PROP_CONTRAST;
+    double CV_CAP_PROP_SATURATION;
+    double CV_CAP_PROP_HUE;
+    double CV_CAP_PROP_GAIN;
+    double CV_CAP_PROP_EXPOSURE;
+
+};
 
 /* ----------------------  Preferences Widget ---------------------- */
 
@@ -51,8 +66,21 @@ WebcamPreferencesWidget::WebcamPreferencesWidget(QWidget *parent) :
     ui(new Ui::WebcamPreferencesWidget)
 {
     ui->setupUi(this);
+    m_availableDevices.clear();
 
-//    ui->devicesCombo->addItem();
+    cv::VideoCapture *testCapture;
+    for( int deviceNumber = 8; deviceNumber > 0; --deviceNumber)
+    {
+        testCapture = new cv::VideoCapture(deviceNumber);
+        if (!testCapture)
+            continue;
+        m_availableDevices.prepend(deviceNumber);
+        delete testCapture;
+    }
+    QList<int>::Iterator iter;
+    for( iter = m_availableDevices.begin(); iter != m_availableDevices.end(); ++iter) {
+        ui->devicesCombo->addItem(QString::number(*iter), *iter);
+    }
 }
 
 WebcamPreferencesWidget::~WebcamPreferencesWidget()
@@ -63,6 +91,7 @@ WebcamPreferencesWidget::~WebcamPreferencesWidget()
 /*! Sets data of a changed data model to the ui's widgets. */
 void WebcamPreferencesWidget::setDataToUi()
 {
+
 }
 
 /*! Saves the settings in the ui to the settings data model. */
