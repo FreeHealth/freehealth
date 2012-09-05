@@ -19,7 +19,7 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main developers : %AuthorName%                *
+ *   Main developers : %AuthorName%
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
@@ -35,10 +35,11 @@
 #include <missing/plugin_exporter.h>
 
 /**
- * \file %ClassName%.h
+ * \file %ClassName:l%.%CppHeaderSuffix:l%
  * \author %AuthorName%
  * \version 0.8.0
- * \date 30 Aug 2012
+ * \date %CurrentDate%
+ * \time %CurrentTime%
 */
 namespace %PluginNamespace:c% {
 namespace Internal {
