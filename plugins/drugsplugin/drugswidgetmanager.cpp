@@ -291,10 +291,10 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
     Q_ASSERT(searchmenu);
 
     gSearchMethod = new QActionGroup(this);
-    int m = settings()->value(Constants::S_SEARCHMETHOD).toInt();
+    int searchMethod = settings()->value(Constants::S_SEARCHMETHOD).toInt();
     a = aSearchCommercial = new QAction(this);
     a->setCheckable(true);
-    a->setChecked(m==Constants::SearchCommercial);
+    a->setChecked(searchMethod == Constants::SearchCommercial);
     a->setIcon(th->icon(DrugsDB::Constants::I_SEARCHCOMMERCIAL));
     cmd = actionManager()->registerAction(a, DrugsWidget::Constants::A_SEARCH_COMMERCIAL, ctx);
     cmd->setTranslations(DrugsWidget::Constants::SEARCHCOMMERCIAL_TEXT, "", DRUGCONSTANTS_TR_CONTEXT);
@@ -304,7 +304,7 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
 
     a = aSearchMolecules = new QAction(this);
     a->setCheckable(true);
-    a->setChecked(m==Constants::SearchMolecules);
+    a->setChecked(searchMethod == Constants::SearchMolecules);
     a->setIcon(th->icon(DrugsDB::Constants::I_SEARCHMOLS));
     cmd = actionManager()->registerAction(a, DrugsWidget::Constants::A_SEARCH_MOLECULES, ctx);
     cmd->setTranslations(DrugsWidget::Constants::SEARCHMOLECULES_TEXT, "", DRUGCONSTANTS_TR_CONTEXT);
@@ -314,7 +314,7 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
 
     a = aSearchInn = new QAction(this);
     a->setCheckable(true);
-    a->setChecked(m==Constants::SearchInn);
+    a->setChecked(searchMethod == Constants::SearchInn);
     a->setIcon(th->icon(DrugsDB::Constants::I_SEARCHINN));
     cmd = actionManager()->registerAction(a, DrugsWidget::Constants::A_SEARCH_INN, ctx);
     cmd->setTranslations(DrugsWidget::Constants::SEARCHINN_TEXT, "", DRUGCONSTANTS_TR_CONTEXT);

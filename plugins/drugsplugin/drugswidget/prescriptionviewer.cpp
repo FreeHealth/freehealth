@@ -80,7 +80,11 @@ PrescriptionViewer::PrescriptionViewer(QWidget *parent) :
 void PrescriptionViewer::initialize()
 {
     createActionsAndToolbar();
+
+    // TODO: don't insert here, better in DrugSelector?
+    // then the toggle button is *above* the DrugSelector and doesn't jump up/down
     verticalLayout->insertWidget(0, m_ToolBar);
+
     listView->setObjectName("PrescriptionListView");
     setListViewPadding(5);
     listView->setAcceptDrops(true);
