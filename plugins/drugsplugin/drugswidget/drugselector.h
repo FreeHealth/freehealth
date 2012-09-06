@@ -112,7 +112,7 @@ private:
 
     // widgets and actions
     QToolButton  *m_SearchToolButton;      // toolbutton that goes to the searchline (left)
-    QToolButton  *m_DrugsHistoricButton;   // toolbutton that goes to the searchline (right)
+    QToolButton  *m_DrugsHistoryButton;   // toolbutton that goes to the searchline (right)
     QActionGroup *m_HistoryAct;
 
     // filter for drugs model

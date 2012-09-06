@@ -117,7 +117,7 @@ DrugSelector::DrugSelector(QWidget *parent) :
         QWidget(parent),
         m_GlobalDrugsModel(0), m_InnModel(0), m_AtcProxyModel(0),
         m_SearchToolButton(0),
-        m_DrugsHistoricButton(0),
+        m_DrugsHistoryButton(0),
         m_HistoryAct(0)
 {
     setupUi(this);
@@ -194,14 +194,14 @@ void DrugSelector::createToolButtons()
     m_SearchToolButton->setPopupMode(QToolButton::InstantPopup);
     m_SearchToolButton->setIcon(theme()->icon(Core::Constants::ICONSEARCH));
 
-    m_DrugsHistoricButton = new QToolButton(searchLine);
-    m_DrugsHistoricButton->setPopupMode(QToolButton::InstantPopup);
-    m_DrugsHistoricButton->setToolTip(tr("Selected drugs historic."));
-    m_DrugsHistoricButton->setIcon(theme()->icon(Core::Constants::ICONEDIT));
+    m_DrugsHistoryButton = new QToolButton(searchLine);
+    m_DrugsHistoryButton->setPopupMode(QToolButton::InstantPopup);
+    m_DrugsHistoryButton->setToolTip(tr("Selected drugs historic."));
+    m_DrugsHistoryButton->setIcon(theme()->icon(Core::Constants::ICONEDIT));
 
     // add buttons to search line
     searchLine->setLeftButton(m_SearchToolButton);
-    searchLine->setRightButton(m_DrugsHistoricButton);
+    searchLine->setRightButton(m_DrugsHistoryButton);
 
     refreshSearchToolButton();
     refreshAvailableDrugsDatabaseButtons();
@@ -337,7 +337,7 @@ void DrugSelector::createDrugsHistoryActions()
     connect(m_HistoryAct, SIGNAL(triggered(QAction *)),
              this, SLOT(historyAct_triggered(QAction *)));
 
-    m_DrugsHistoricButton->addActions(m_HistoryAct->actions());
+    m_DrugsHistoryButton->addActions(m_HistoryAct->actions());
 }
 
 /** \brief Connect the search line edit to the filter update */
