@@ -35,6 +35,7 @@
 
 
 enum { WarnDebugMessage = false };
+
 ProduceDoc::ProduceDoc()
 {
     m_fieldsToJoin     = 0;

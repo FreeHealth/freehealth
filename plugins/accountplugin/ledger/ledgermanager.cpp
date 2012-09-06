@@ -32,7 +32,8 @@
 #include "ledgermanager.h"
 #include <QDebug>
 
-enum { WarnDebugMessage = true };
+enum { WarnDebugMessage = false };
+
 LedgerManager::LedgerManager(QObject * parent):m_sums(0.00){
     Q_UNUSED(parent);
 }

@@ -172,23 +172,23 @@
       </widget>
      </item>
      <item row="3" column="0">
-      <widget class="QPushButton" name="recordButton">
-       <property name="text">
-        <string>&amp;Record</string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="1">
       <widget class="QPushButton" name="deleteButton">
        <property name="text">
         <string>&amp;Delete</string>
        </property>
       </widget>
      </item>
-     <item row="3" column="2">
+     <item row="3" column="1">
       <widget class="QPushButton" name="quitButton">
        <property name="text">
         <string>&amp;Quit</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="2">
+      <widget class="QPushButton" name="recordButton">
+       <property name="text">
+        <string>&amp;Record</string>
        </property>
       </widget>
      </item>
@@ -204,9 +204,6 @@
   <tabstop>detailsEdit</tabstop>
   <tabstop>commentsEdit</tabstop>
   <tabstop>tableView</tabstop>
-  <tabstop>recordButton</tabstop>
-  <tabstop>deleteButton</tabstop>
-  <tabstop>quitButton</tabstop>
  </tabstops>
  <resources/>
  <connections/>
