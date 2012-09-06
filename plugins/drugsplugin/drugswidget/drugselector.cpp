@@ -196,7 +196,7 @@ void DrugSelector::createToolButtons()
 
     m_DrugsHistoryButton = new QToolButton(searchLine);
     m_DrugsHistoryButton->setPopupMode(QToolButton::InstantPopup);
-    m_DrugsHistoryButton->setToolTip(tr("Selected drugs historic."));
+    m_DrugsHistoryButton->setToolTip(tr("Selected drugs history"));
     m_DrugsHistoryButton->setIcon(theme()->icon(Core::Constants::ICONEDIT));
 
     // add buttons to search line
