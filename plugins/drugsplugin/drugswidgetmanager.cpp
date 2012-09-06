@@ -797,6 +797,7 @@ void DrugsActionHandler::showDrugPrecautions()
         tree->header()->hide();
         tree->setModel(engine->drugPrecautionModel());
         tree->expandAll();
+        tree->setEditTriggers(QTreeView::NoEditTriggers);
         m_PrecautionDock->setWidget(tree);
         m_PrecautionDock->setFloating(false);
         m_PrecautionDock->setAllowedAreas(Qt::RightDockWidgetArea);
