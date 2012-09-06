@@ -146,16 +146,20 @@ void treeViewsActions::fillActionTreeView()
     parametersMap.insert(DISTANCE_RULES_ITEM,rt.getStringFromRows(DISTANCE_RULES_ITEM));
     listOfMainActions = parametersMap.values();
     QList<int> listOfEnums;
-    listOfEnums << DEBTOR_ITEM << SITES_ITEM << DISTANCE_RULES_ITEM;
+    listOfEnums = parametersMap.keys();
     //insert items from tables if available
     QMap<QString,QString> mapSubItems;
     ReceiptsManager manager;
     //QString strKeysParameters;
-    for (int item = 0; item < listOfEnums.size();++item){
+    foreach (int item,listOfEnums){
         QString table = rt.getStringFromRows(item);
+        if (WarnDebugMessage)
+        qDebug() << __FILE__ << QString::number(__LINE__) << " table =" << table ;
         QStringList listOfItemsOfTable;
         QString null = QString();
         listOfItemsOfTable = manager.getParametersData(null,item).keys(); // QHash<QString,QVariant> name,uid
+        if (WarnDebugMessage)
+        qDebug() << __FILE__ << QString::number(__LINE__) << "listOfItemsOfTable size  =" <<  QString::number(listOfItemsOfTable.size());
         QString strItemsOfTable;
         foreach(strItemsOfTable,listOfItemsOfTable){
             mapSubItems.insertMulti(table,strItemsOfTable);
