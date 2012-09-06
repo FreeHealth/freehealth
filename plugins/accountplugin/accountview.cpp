@@ -33,6 +33,8 @@
 #include "ui_accountview.h"
 
 #include <coreplugin/icore.h>
+#include <coreplugin/itheme.h>
+#include <coreplugin/constants.h>
 
 #include <accountbaseplugin/constants.h>
 
@@ -48,8 +50,11 @@
 using namespace AccountDB;
 using namespace Account;
 using namespace Trans::ConstantTranslations;
+using namespace Constants;
 
 enum { WarnDebugMessage = false };
+
+static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 
 /*namespace Account {
 namespace Internal {
@@ -85,10 +90,20 @@ AccountView::AccountView(QWidget *parent) :
     setHeadersOfTable();
 
     m_userUuid = m_Model->getUserUuid();
+    int thisYear = QDate::currentDate().year();
+    QDate beginDate = QDate(thisYear,01,01);
     m_ui->startDate->setDisplayFormat(tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR));
     m_ui->endDate->setDisplayFormat(tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR));
-    m_ui->startDate->setDate(QDate(2000,01,01));
+    m_ui->startDate->setDate(beginDate);
     m_ui->endDate->setDate(QDate::currentDate());
+    //icons and shortcuts
+    m_ui->deleteButton->setShortcut(QKeySequence::Delete);
+    m_ui->deleteButton->setToolTip(QKeySequence(QKeySequence::Delete).toString());
+    m_ui->deleteButton->setIcon(theme()->icon(Core::Constants::ICONREMOVE));
+    //-------------
+    const QString sumTextLabel = QString("<html><body><font color=blue size=3>%1</font></body></html>")
+                                .arg(tr("Sum"));
+    m_ui->sumLabel->setText(sumTextLabel);
     refresh();
     calc();
     connect(m_ui->deleteButton,SIGNAL(pressed()),this,SLOT(deleteLine()));
@@ -120,6 +135,10 @@ void AccountView::setHeadersOfTable(){
     m_Model->setHeaderData(AccountDB::Constants::ACCOUNT_OTHERAMOUNT,Qt::Horizontal, tr("Other"));
     m_Model->setHeaderData(AccountDB::Constants::ACCOUNT_DUEAMOUNT,Qt::Horizontal, tr("Due"));
     m_Model->setHeaderData(AccountDB::Constants::ACCOUNT_DUEBY,Qt::Horizontal, tr("Due by"));
+    while (m_Model->canFetchMore())
+    {
+          m_Model->fetchMore();
+        }
     m_ui->tableView->setModel(m_Model);
     m_ui->tableView->horizontalHeader()->setResizeMode(QHeaderView::Interactive);
     m_ui->tableView->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
@@ -134,8 +153,11 @@ void AccountView::refresh(){
     filter += QString("DATE BETWEEN '%1' AND '%2'").arg(dateBeginStr,dateEndStr);
     qDebug() << __FILE__ << QString::number(__LINE__) << " filter =" << filter ;
     //AccountDB::AccountModel *model = new AccountDB::AccountModel(this);
-
     m_Model->setFilter(filter);
+    while (m_Model->canFetchMore())
+    {
+          m_Model->fetchMore();
+        }
     if(WarnDebugMessage)
     qDebug() << __FILE__ << QString::number(__LINE__) << " filter =" << m_Model->filter() ;
     if(WarnDebugMessage)
@@ -257,6 +279,7 @@ void AccountView::calc()
     hash.insert(AccountDB::Constants::ACCOUNT_OTHERAMOUNT,m_ui->other);
     hash.insert(AccountDB::Constants::ACCOUNT_INSURANCEAMOUNT,m_ui->insurance);
     QAbstractItemModel *model = m_ui->tableView->model();
+    double totalSum = 0.00;
     for (int col = AccountDB::Constants::ACCOUNT_CASHAMOUNT; col < AccountDB::Constants::ACCOUNT_DUEAMOUNT+1; col += 1)
     {
         double sum = 0.00;
@@ -266,13 +289,14 @@ void AccountView::calc()
             if (WarnDebugMessage)
                         qDebug() << __FILE__ << QString::number(__LINE__) << " tot =" << QString::number(tot) ;
             sum += tot;
-
             }
+            totalSum += sum;
             QString textSum = QString::number(sum);
             if (WarnDebugMessage)
                         qDebug() << __FILE__ << QString::number(__LINE__) << " textSum =" << textSum;
             hash.value(col)->setText(textSum);
         }
+     m_ui->sumEdit->setText(QString::number(totalSum));
 }
 
 void AccountView::changeEvent(QEvent *e)
