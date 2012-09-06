@@ -43,12 +43,12 @@
 #include <QAction>
 #include <QTreeView>
 
-namespace Ui{
+namespace Ui {
     class ChoiceDialog;
 }
 
-namespace ChoiceActions{
-class treeViewsActions: public QTreeView
+namespace ChoiceActions {
+class ActionsTreeView: public QTreeView
 {
     Q_OBJECT
 
@@ -58,8 +58,8 @@ public:
         DISTRULES,
         SITES
     };
-    treeViewsActions(QWidget *parent);
-    ~treeViewsActions();
+    ActionsTreeView(QWidget *parent);
+    ~ActionsTreeView();
 
     void reset() {QTreeView::reset();}
     void fillActionTreeView();
@@ -124,7 +124,7 @@ private:
   Ui::ChoiceDialog * ui;
   QTimer * m_timerUp;
   QTimer * m_timerDown;
-  ChoiceActions::treeViewsActions *m_actionTreeView;
+  ChoiceActions::ActionsTreeView *m_actionTreeView;
   QVariant m_siteUid;
   QVariant m_insuranceUid;
   QVariant m_insurance;
