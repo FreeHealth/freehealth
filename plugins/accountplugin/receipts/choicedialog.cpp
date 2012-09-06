@@ -60,11 +60,13 @@ using namespace Tools;
 static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 
-ActionsTreeView::ActionsTreeView(QWidget *parent):QTreeView(parent){
+ActionsTreeView::ActionsTreeView(QWidget *parent):QTreeView(parent)
+{
     m_deleteThesaurusValue = new QAction(tr("Delete value"),this);
     m_choosepreferredValue = new QAction(tr("Choose value as preferred"),this);
     connect(m_choosepreferredValue,SIGNAL(triggered(bool)),this,SLOT(choosepreferredValue(bool)));
     connect(m_deleteThesaurusValue,SIGNAL(triggered(bool)),this,SLOT(deleteBox(bool)));
+    setEditTriggers(NoEditTriggers);
 }
 
 ActionsTreeView::~ActionsTreeView(){}
