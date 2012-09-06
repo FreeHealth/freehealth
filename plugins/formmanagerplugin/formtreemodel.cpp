@@ -239,11 +239,13 @@ bool FormTreeModel::isNoEpisode(const QModelIndex &index)
     return false;
 }
 
+/** Return the Form::FormMain pointer corresponding to the index. */
 Form::FormMain *FormTreeModel::formForIndex(const QModelIndex &index) const
 {
     return d->formForIndex(index);
 }
 
+/** Update the episode count of each form of the model. The number count is directly extracted from the episode database. */
 bool FormTreeModel::updateFormCount()
 {
     QHashIterator<QStandardItem *, Form::FormMain *> i(d->_formToItem);
@@ -257,4 +259,5 @@ bool FormTreeModel::updateFormCount()
             label += QString(" (%1)").arg(nb);
         item->setText(label);
     }
+    return true;
 }
