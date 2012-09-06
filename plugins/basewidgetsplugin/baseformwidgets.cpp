@@ -311,10 +311,11 @@ Form::IFormWidget *BaseWidgetsFactory::createWidget(const QString &name, Form::F
 //--------------------------------------------------------------------------------------------------------
 //-------------------------------------- BaseForm implementation ---------------------------------------
 //--------------------------------------------------------------------------------------------------------
-/** \class BaseForm
-   \brief Creates a form
-   Manages some Form::FormItem::extraData() (that is a QHash<QString, QString>) :
-   - "col=" ; "numberOfColumns"
+/**
+ * \class BaseForm
+ * \brief Creates a form
+ *  Manages some Form::FormItem::extraData() (that is a QHash<QString, QString>) :
+ *  - "col=" ; "numberOfColumns"
 */
 BaseForm::BaseForm(Form::FormItem *formItem, QWidget *parent) :
     Form::IFormWidget(formItem, parent),

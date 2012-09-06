@@ -363,9 +363,11 @@ void FormPlaceHolder::setRootForm(Form::FormMain *rootForm)
     Core::Command *cmd = actionManager()->command(Constants::A_SHOWPATIENTLASTEPISODES);
     connect(cmd->action(), SIGNAL(triggered()), this, SLOT(showLastEpisodeSynthesis()));
 
-    // start on the Last Episode Synthesis view
-//    tree->setCurrentIndex(d->_episodeModel->index(0,0));
-    setCurrentForm(Constants::PATIENTLASTEPISODES_UUID);
+    if (rootForm->firstLevelFormMainChildren().count() > 0) {
+        setCurrentForm(rootForm->firstLevelFormMainChildren().at(0));
+        QModelIndex index = d->_formTreeModel->index(0,0);
+        d->ui->formView->selectionModel()->select(index, QItemSelectionModel::Rows | QItemSelectionModel::SelectCurrent);
+    }
 }
 
 // Used for the delegate
@@ -422,7 +424,8 @@ void FormPlaceHolder::setCurrentForm(Form::FormMain *form)
         disconnect(d->ui->episodeView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(episodeChanged(QModelIndex, QModelIndex)));
 
     d->ui->formDataMapper->setCurrentForm(form);
-    d->ui->episodeView->setModel(formManager()->episodeModel(form));
+    EpisodeModel *episodeModel = formManager()->episodeModel(form);
+    d->ui->episodeView->setModel(episodeModel);
     for(int i=0; i < EpisodeModel::MaxData; ++i)
         d->ui->episodeView->hideColumn(i);
     d->ui->episodeView->showColumn(EpisodeModel::Label);
@@ -436,7 +439,11 @@ void FormPlaceHolder::setCurrentForm(Form::FormMain *form)
     d->ui->episodeView->horizontalHeader()->hide();
 
     connect(d->ui->episodeView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(episodeChanged(QModelIndex, QModelIndex)));
-    d->ui->episodeView->selectRow(0);
+    if (!d->ui->episodeView->selectionModel()->hasSelection()) {
+        d->ui->episodeView->selectRow(0);
+        if (episodeModel)
+            episodeChanged(episodeModel->index(0,0), QModelIndex());
+    }
 }
 
 /**
@@ -461,7 +468,8 @@ void FormPlaceHolder::setCurrentEditingItem(const QModelIndex &index)
 void FormPlaceHolder::episodeChanged(const QModelIndex &current, const QModelIndex &previous)
 {
     qWarning() << "FormPlaceHolder::EpisodeChanged" << current << previous;
-    d->saveCurrentEditingEpisode();
+    if (previous.isValid())
+        d->saveCurrentEditingEpisode();
     d->ui->formDataMapper->setCurrentEpisode(current);
 }
 
@@ -505,31 +513,21 @@ void FormPlaceHolder::addForm()
 {
     if (!isVisible())
         return;
-    // save current episode
-//    if (d->ui->formView->selectionModel()->hasSelection()) {
-//        // something to save ?
-//        QModelIndex index = d->ui->formView->selectionModel()->selectedIndexes().at(0);
-//        if (d->_episodeModel->isEpisode(index)) {
-//            // get the parent form
-//            QModelIndex formIndex = index.parent();
-//            while (!d->_episodeModel->isForm(formIndex)) {
-//                formIndex = formIndex.parent();
-//            }
-//            d->_episodeModel->saveEpisode(d->ui->formView->currentIndex(), d->_episodeModel->index(formIndex.row(), FormTreeModel::FormUuid, formIndex.parent()).data().toString());
-//        }
-//    }
-//    // open the form editor dialog
-//    FormEditorDialog dlg(d->_episodeModel, FormEditorDialog::DefaultMode, this);
-//    if (dlg.exec()==QDialog::Accepted) {
-//        // refresh stack widget
+
+    d->saveCurrentEditingEpisode();
+
+    // open the form editor dialog
+    FormEditorDialog dlg(d->_formTreeModel, FormEditorDialog::DefaultMode, this);
+    if (dlg.exec()==QDialog::Accepted) {
+        // refresh stack widget
 //        d->populateStackLayout();
-//        // activate last episode synthesis
-//        d->ui->formView->treeView()->setCurrentIndex(d->_episodeModel->index(0,0));
+        // activate last episode synthesis
+//        d->ui->formView->setCurrentIndex(d->_episodeModel->index(0,0));
 //        showLastEpisodeSynthesis();
-////        d->m_Stack->setCurrentIndex(d->m_StackId_FormUuid.key(dlg.lastInsertedFormUid()));
-//    }
+    }
 }
 
+/** Print the current editing episode */
 void FormPlaceHolder::printCurrentItem()
 {
 //    qWarning() << Q_FUNC_INFO;

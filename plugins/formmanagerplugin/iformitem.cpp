@@ -26,70 +26,109 @@
  ***************************************************************************/
 
 /**
- \class Form::FormItem
- This object represents one element of the patient file form.\n
- It contains:
-  - one Form::FormItemSpec with description of the item: author, version, license...
-  - one Form::FormItemScripts for the script management
-  - one Form::FormItemValues
-  - you can set its Form::IFormItemData for the database access
-  - you can set its Form::IFormWidget
- If you intend to create a child of this item use the specific members:
-  - createChildForm() to create a new Form::FormMain
-  - createChildItem() to create a new Form::FormItem
-  - createPage() to create a new Form::FormPage
- You can get all its children by calling: formItemChildren().\n
- You can define extra-data (options) with the addExtraData(), extraData() and clearExtraData().
- You can define the Core::IPatient representation of this Form::FormItem with setPatientDataRepresentation(),
- patientDataRepresentation().
+ * \class Form::FormItem
+ * This object represents one element of the patient file form. The forms are a tree of QObject.
+ * The root parent is an empty Form::FormMain item with some information about the Form::IFormIO reader,
+ * the form internal information.\n
+ *
+ * Each Form::FormItem contains:
+ * - one Form::FormItemSpec with description of the item (or the form for the empty root object):
+ *   - author, version, license...
+ *   - theses data are fully translatable and can be used in any form model/view/controller
+ * - one Form::FormItemScripts book of javascript of the item
+ * - one Form::FormItemValues book of different type of values of the item
+ * - you can set its Form::IFormItemData for the database access
+ * - you can set its Form::IFormWidget for the user view
+ *
+ * In your own Form::IFormIO engine, you may want to create children of item, you can use:
+ * - createChildForm() to create a new Form::FormMain
+ * - createChildItem() to create a new Form::FormItem
+ * - createPage() to create a new Form::FormPage
+ *
+ * You can get all its first branch children by calling: Form::FormItem::formItemChildren() and the
+ * full list of its children (flattened) using Form::FormItem::flattenFormItemChildren.
+ *
+ * You can define extra-data (options) with the addExtraData(), extraData() and clearExtraData().
+ *
+ * You can define the Core::IPatient representation of this Form::FormItem with
+ * setPatientDataRepresentation(), patientDataRepresentation(). The patient data representation is used
+ * in the Core::IPatient model wrapper to find requested values that are not stored in the patient
+ * database.
+ */
+// TODO: change Form::FormItem pointers to references distributed by the Form::FormManager? like getItem(Form::FormMainIndex &index, const QString &uid)?
 
- \todo - Options d'affichage et d'impression ??
- \todo - Options de "droit" / utilisateurs autorisés
- \todo - Base de règles
- \todo - 1 QWidget historique
- \todo - checkValueIntegrity() qui se base sur les règles de l'item pour vérifier son exactitude
-*/
-
-/**
-  \class Form::FormPage
-  Actually unused.
-*/
-
-/**
-  \class Form::FormMain
-  A Form::FormMain represents a root item of a form. Usually, the Form::FormMain are created by the
-  Form::IFormIO engines. The first item returned by the Form::IFormIO when loading files is empty and represents
-  the root of the form.\n
-  When you need to create a FormMain as child of one another, use the createChildForm() member. Get all its children
-  (including sub-trees) using the flattenFormMainChildren() member or the formMainChild() if you want a specific child.\n
-  setEpisodePossibilities() and episodePossibilities() are used in the Form::EpisodeModel when creating the tree model.\n
-  When a mode creates a root Form::FormMain it should declare the main empty root object
-  it in the plugin manager object pool to allow another object to access the data of forms (eg: PatientModelWrapper).\n
-  \code
-  ExtensionSystem::PluginManager::instance()->addObject(myRootFormMain);
-  \endcode
-*/
+// TODO - Options d'affichage et d'impression ??
+// TODO - Options de "droit" / utilisateurs autorisés
+// TODO - Base de règles
+// TODO - 1 QWidget historique
+// TODO - checkValueIntegrity() qui se base sur les règles de l'item pour vérifier son exactitude
 
 /**
-  \class Form::FormItemSpec
-  \todo Documentation
-*/
+ * \class Form::FormPage
+ * Actually unused.
+ */
 
 /**
-  \class Form::FormItemScripts
-  Stores the scripts associated with the Form::FormItem
-  \todo Documentation
-*/
+ * \class Form::FormMain
+ * A Form::FormMain represents a root item of a form. Usually, the Form::FormMain are created by the
+ * Form::IFormIO engines. The first item returned by the Form::IFormIO when loading files is empty
+ * and represents the root of the form (it does only handle some basic information).\n
+ *
+ * Object tree management:\n
+ * When you need to create a Form::FormMain as child of one another, use the createChildForm() member.
+ * Get all its children (including sub-trees) using the Form::FormMain::flattenFormMainChildren()
+ * member or the formMainChild() if you want a specific child.\n
+ *
+ * Managing episode behavior:\n
+ * Forms can be populated by episodes. Episodes are mainly created by the user when he wants to save
+ * some data using a specific form. \n
+ * The Form::EpisodeModel and the Form::FormTreeModel perfectly manages three type of forms:
+ * - Forms with any episodes (just like a category)
+ * - Forms with only one episode
+ * - Forms with multiple episodes
+ * You can define the episode possibilities using the Form::FormMain::setEpisodePossibilities() and
+ * Form::FormMain::episodePossibilities().\n
+ *
+ * Form pointer accessing: \n
+ * All Form::FormMain pointers are created by the Form::IFormIO engines and then managed by the
+ * Form::FormManager. You should never:
+ * - delete a Form::FormMain pointer
+ * - reparent it outside the internal part of the Form plugin
+ * - create a cache of theses pointers, the Form::FormManager already manages this cache
+ */
+// TODO: change Form::FormMain pointers to references distributed by the Form::FormManager?
+
+
+/**
+ * \class Form::FormItemSpec
+ * Contains all descriptives informations of a Form::FormItem (like the author name, compatibility version,
+ * version of the form, label, tooltip, license...).\n
+ * You should never delete a Form::FormItemSpec pointer outside the internal part of the Form plugin.
+ */
+// TODO: change Form::FormItemSpec pointers to references
+
+
+/**
+ * \class Form::FormItemScripts
+ * Stores the scripts associated with the Form::FormItem.
+ * \todo Documentation
+ */
+// TODO: change Form::FormItemScripts pointers to references distributed by the Form::FormManager? like getScript(Form::FormMainIndex &index, const ScriptType &type)?
 
 /**
   \class Form::FormItemValues
   \todo Documentation
 */
+// TODO: change Form::FormItemValues pointers to references distributed by the Form::FormManager? like getValues(Form::FormMainIndex &index, const ValueType &type)?
 
 #include "iformitem.h"
+#include "formplaceholder.h"
 
 #include <coreplugin/icore.h>
+#include <coreplugin/isettings.h>
 #include <coreplugin/uniqueidmanager.h>
+#include <coreplugin/modemanager/basemode.h>
+#include <coreplugin/constants_tokensandsettings.h>
 
 #include <formmanagerplugin/formmanager.h>
 #include <formmanagerplugin/iformitemdata.h>
@@ -113,8 +152,10 @@
 using namespace Form;
 using namespace Form::Internal;
 
+inline static ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 inline static Form::FormManager *formManager() { return Form::FormManager::instance(); }
-static inline Core::UniqueIDManager *uuidManager() {return Core::ICore::instance()->uniqueIDManager();}
+inline static Core::UniqueIDManager *uuidManager() {return Core::ICore::instance()->uniqueIDManager();}
+inline static Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 
 #ifdef DEBUG
 enum {WarnFormCreation=false};
@@ -122,53 +163,6 @@ enum {WarnFormCreation=false};
 enum {WarnFormCreation=false};
 #endif
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////  FormItemIdentifiers   //////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////////////
-/** Defines the FreeMedForms UUID of the item. */
-void FormItemIdentifier::setUuid(const QString &uuid)
-{
-    if (uuid.contains(".xml"))
-        id = 0;
-    id = uuidManager()->uniqueIdentifier(uuid);
-    m_Uuid = uuid;
-
-    // TODO: Define the objectName according to the parent to simplify the scripting
-//    QString objName = uuid;
-//    if (parent()) {
-//        qWarning() << "xxxxxx" << parent()->objectName() << uuid;
-//        if (uuid.startsWith(parent()->objectName())) {
-//            objName = objName.mid(parent()->objectName().length());
-//            while (objName.startsWith(".")) {
-//                objName = objName.mid(1);
-//            }
-//            while (objName.startsWith(":")) {
-//                objName = objName.mid(1);
-//            }
-//        }
-//    }
-//    setObjectName(objName);
-}
-
-/** Returns the FreeMedForms UUID of the item. This UUID is used for database accesses. */
-QString FormItemIdentifier::uuid() const
-{
-    return m_Uuid;
-}
-
-/** Defines the FreeMedForms equivalence in UUID for the item. Equivalence UUID is used to keep data correspondance when a form was updated and uuid of item changed. */
-void FormItemIdentifier::setEquivalentUuid(const QStringList &list)
-{
-    m_EquivalentUuid = list;
-    m_EquivalentUuid.removeDuplicates();
-    m_EquivalentUuid.removeAll("");
-}
-
-/** Returns the FreeMedForms equivalence in UUID for the item. \sa FormItemIdentifier::setEquivalentUuid */
-QStringList FormItemIdentifier::equivalentUuid() const
-{
-    return m_EquivalentUuid;
-}
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////  FormItemScripts  ////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -462,7 +456,7 @@ void FormItemValues::toTreeWidget(QTreeWidgetItem *tree) const
 /////////////////////////////////////////////  FormItem  ///////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 FormItem::FormItem(QObject *parent) :
-    FormItemIdentifier(parent),
+    QObject(parent),
     m_Spec(new FormItemSpec),
     m_Scripts(new FormItemScripts),
     m_Values(new FormItemValues),
@@ -524,20 +518,71 @@ void FormItem::languageChanged()
     qWarning() << "FormItem language changed" << uuid();
 }
 
-void FormPage::languageChanged()
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////  FormPage  ///////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+FormPage::FormPage(QObject *parent):
+    Form::FormItem(parent),
+    _mode(new Core::BaseMode(this)),
+    _placeHolder(0),
+    _inPool(false)
 {
-    qWarning() << "FormPage language changed" << uuid();
+    if (spec())
+        setObjectName("Form::FormMode::" + spec()->uuid());
+    else
+        setObjectName("Form::FormMode");
+
+    _placeHolder = new Form::FormPlaceHolder;
+    _placeHolder->setObjectName("BaseWidget::Mode::FormPlaceHolder");
+
+    if (spec())
+        _mode->setUniqueModeName(spec()->uuid().toUtf8());
+    _mode->setPatientBarVisibility(true);
+    _mode->setWidget(_placeHolder);
+    languageChanged();
+
+    connect(formManager(), SIGNAL(patientFormsLoaded()), this, SLOT(getPatientForm()));
+    qWarning() << "FormPage" << objectName() << spec()->value(Form::FormItemSpec::Spec_Priority).toInt();
 }
 
+FormPage::~FormPage()
+{
+    if (_inPool)
+        pluginManager()->removeObject(_mode);
+}
 
-//FormPage *FormPage::createPage(const QString &uuid)
-//{
-//    FormPage *p = new FormPage(this);
-//    if (!uuid.isEmpty())
-//        p->setUuid(uuid);
-//    return p;
-//}
+void FormPage::getPatientForm()
+{
+    Form::FormMain *root = formManager()->rootForm(spec()->uuid().toUtf8());
+    _mode->setPriority(spec()->value(Form::FormItemSpec::Spec_Priority).toInt());
+    if (!root) {
+        if (_inPool)
+            pluginManager()->removeObject(_mode);
+        _inPool = false;
+    } else {
+        if (!_inPool)
+            pluginManager()->addObject(_mode);
+        _inPool = true;
+    }
+    _placeHolder->setRootForm(root);
+}
 
+void FormPage::languageChanged()
+{
+    qWarning() << "FormPage language changed" << uuid() << spec()->value(Form::FormItemSpec::Spec_Priority).toInt();
+    _mode->setName(spec()->label());
+    QString icon = spec()->iconFileName();
+    icon.replace(Core::Constants::TAG_APPLICATION_THEME_PATH, settings()->path(Core::ISettings::BigPixmapPath));
+    qWarning() << icon;
+    _mode->setIcon(QIcon(icon));
+    _mode->setPriority(spec()->value(Form::FormItemSpec::Spec_Priority).toInt());
+    // TODO: move the extradata inside the spec to have a fully translated extra-values
+}
+
+void FormPage::specLoaded()
+{
+    languageChanged();
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////  FormMain  ///////////////////////////////////////////////////
@@ -553,12 +598,12 @@ FormMain::FormMain(QObject *parent) :
 
 FormMain::~FormMain()
 {
-    // TODO: this is buggy
+// TODO: this is buggy
 //    if (m_DebugPage)
 //        ExtensionSystem::PluginManager::instance()->removeObject(m_DebugPage);
 }
 
-/** Defines the Form::IFormIO reader of the Form::FormMain root. */
+/** Defines the Form::IFormIO reader of the Form::FormMain empty root parent. */
 void FormMain::setIoFormReader(IFormIO *reader)
 {
     if (rootFormParent()==this) {
@@ -568,7 +613,7 @@ void FormMain::setIoFormReader(IFormIO *reader)
     }
 }
 
-/** Returns the Form::IFormIO reader of the Form::FormMain root. */
+/** Returns the Form::IFormIO reader of the Form::FormMain empty root parent. */
 IFormIO *FormMain::reader() const
 {
     if (rootFormParent()==(FormMain*)this) {
@@ -579,7 +624,7 @@ IFormIO *FormMain::reader() const
 
 /**
  * \fn bool Form::FormMain::isEmptyRootForm() const
- * Return true is the Form::FormMain is a empty root form.
+ * Return true is the Form::FormMain is an empty root form.
  * This kind of form is the only one who owns a link
  * to the Form::IFormIO reader. \sa Form::FormMain::reader().
  */
@@ -682,13 +727,13 @@ public:
         new QTreeWidgetItem(i, QStringList() << "Authors" << m_Specs.value(Form::FormItemSpec::Spec_Author).toString() );
         new QTreeWidgetItem(i, QStringList() << "License" << m_Specs.value(Form::FormItemSpec::Spec_License).toString() );
         new QTreeWidgetItem(i, QStringList() << "version" << m_Specs.value(Form::FormItemSpec::Spec_Version).toString() );
-        new QTreeWidgetItem(i, QStringList() << "biblio" << m_Specs.value(Form::FormItemSpec::Spec_Bibliography).toString() );
+        new QTreeWidgetItem(i, QStringList() << "References" << m_Specs.value(Form::FormItemSpec::Spec_Bibliography).toString() );
         new QTreeWidgetItem(i, QStringList() << "Description" << m_Specs.value(Form::FormItemSpec::Spec_Description).toString() );
-        new QTreeWidgetItem(i, QStringList() << "category" << m_Specs.value(Form::FormItemSpec::Spec_Category).toString() );
-        new QTreeWidgetItem(i, QStringList() << "creationDate" << m_Specs.value(Form::FormItemSpec::Spec_CreationDate).toString() );
-        new QTreeWidgetItem(i, QStringList() << "LastModification" << m_Specs.value(Form::FormItemSpec::Spec_LastModified).toString() );
+        new QTreeWidgetItem(i, QStringList() << "Category" << m_Specs.value(Form::FormItemSpec::Spec_Category).toString() );
+        new QTreeWidgetItem(i, QStringList() << "Creation date" << m_Specs.value(Form::FormItemSpec::Spec_CreationDate).toString() );
+        new QTreeWidgetItem(i, QStringList() << "Last modification" << m_Specs.value(Form::FormItemSpec::Spec_LastModified).toString() );
         new QTreeWidgetItem(i, QStringList() << "Plugin Name" << m_Specs.value(Form::FormItemSpec::Spec_Plugin).toString() );
-        new QTreeWidgetItem(i, QStringList() << "IconFileName" << m_Specs.value(Form::FormItemSpec::Spec_IconFileName).toString() );
+        new QTreeWidgetItem(i, QStringList() << "Icon filename" << m_Specs.value(Form::FormItemSpec::Spec_IconFileName).toString() );
     }
 
     QHash<int, QVariant> m_Specs;
@@ -703,13 +748,17 @@ public:
     ~FormItemSpecPrivate() {}
 
     QString categoryForTreeWiget() const {return QString("Specs");}
+
+    QString m_Uuid;
+    QStringList m_EquivalentUuid;
+
 };
 
 } // End Internal
 } // End Form
 
 FormItemSpec::FormItemSpec() :
-        d(new Form::Internal::FormItemSpecPrivate)
+    d(new Form::Internal::FormItemSpecPrivate)
 {
 }
 
@@ -726,6 +775,10 @@ FormItemSpec::~FormItemSpec()
 void FormItemSpec::setValue(int type, const QVariant &val, const QString &language)
 {
 //    qWarning() << "SPEC" << type << val << language;
+    if (type == Spec_Uuid) {
+        d->m_Uuid = val.toString();
+        return;
+    }
     QString l = language;
     if (language.isEmpty())
         l = Trans::Constants::ALL_LANGUAGE;
@@ -735,6 +788,9 @@ void FormItemSpec::setValue(int type, const QVariant &val, const QString &langua
 
 QVariant FormItemSpec::value(const int type, const QString &lang) const
 {
+    if (type == Spec_Uuid) {
+        return d->m_Uuid;
+    }
     QString l = lang;
     if (lang.isEmpty())
         l = QLocale().name().left(2);
@@ -748,6 +804,32 @@ QVariant FormItemSpec::value(const int type, const QString &lang) const
     return val;
 }
 
+/** Defines the FreeMedForms persistent in time UUID of the item. */
+void FormItemSpec::setUuid(const QString &uuid)
+{
+    d->m_Uuid = uuid;
+}
+
+/** Returns the FreeMedForms persistent in time UUID of the item. This UUID is used for database accesses. */
+QString FormItemSpec::uuid() const
+{
+    return d->m_Uuid;
+}
+
+/** Defines the FreeMedForms equivalence in persistent in time UUID for the item. Equivalence UUID is used to keep data correspondance when a form was updated and uuid of item changed. */
+void FormItemSpec::setEquivalentUuid(const QStringList &list)
+{
+    d->m_EquivalentUuid = list;
+    d->m_EquivalentUuid.removeDuplicates();
+    d->m_EquivalentUuid.removeAll("");
+}
+
+/** Returns the FreeMedForms equivalence in persistent in time UUID for the item. \sa FormItemIdentifier::setEquivalentUuid */
+QStringList FormItemSpec::equivalentUuid() const
+{
+    return d->m_EquivalentUuid;
+}
+
 void FormItemSpec::toTreeWidget(QTreeWidgetItem *tree) const
 {
     d->toTreeWidget(tree);
@@ -757,7 +839,7 @@ void FormItemSpec::toTreeWidget(QTreeWidgetItem *tree) const
 ///////////////////////////////////////  FormMainDebugPage  ////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 FormMainDebugPage::FormMainDebugPage(FormMain *form, QObject *parent) :
-        IDebugPage(parent), m_Form(form)
+    IDebugPage(parent), m_Form(form)
 {
     setObjectName("FormMainDebugPage_" + m_Form->uuid());
     m_Widget = new QWidget();

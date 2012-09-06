@@ -96,19 +96,19 @@ public:
         _formMain = rootForm;
 
         // Add the synthesis form
-        QScrollArea *sa = new QScrollArea(q);
-        sa->setWidgetResizable(true);
-        QWidget *w = new QWidget(sa);
-        sa->setWidget(w);
-        QVBoxLayout *vl = new QVBoxLayout(w);
-        vl->setSpacing(0);
-        vl->setMargin(0);
-        QTextBrowser *t = new QTextBrowser(w);
-        t->setReadOnly(true);
-        t->setEnabled(true);
-        vl->addWidget(t);
-        int id = _stack->addWidget(sa);
-        _stackId_FormUuid.insert(id, Constants::PATIENTLASTEPISODES_UUID);
+//        QScrollArea *sa = new QScrollArea(q);
+//        sa->setWidgetResizable(true);
+//        QWidget *w = new QWidget(sa);
+//        sa->setWidget(w);
+//        QVBoxLayout *vl = new QVBoxLayout(w);
+//        vl->setSpacing(0);
+//        vl->setMargin(0);
+//        QTextBrowser *t = new QTextBrowser(w);
+//        t->setReadOnly(true);
+//        t->setEnabled(true);
+//        vl->addWidget(t);
+//        int id = _stack->addWidget(sa);
+//        _stackId_FormUuid.insert(id, Constants::PATIENTLASTEPISODES_UUID);
 
         // add all form's widgets
         if (!rootForm)
@@ -273,7 +273,7 @@ bool FormDataWidgetMapper::isDirty() const
         return false;
 
     // form isModified() (using storableData)
-    if (d->_formMain->itemData()->isModified()) {
+    if (d->_formMain->itemData() && d->_formMain->itemData()->isModified()) {
         qWarning() << "FormDataWidgetMapper::isDirty" << d->_formMain->uuid() << d->_formMain->itemData()->isModified();
         return true;
     }
@@ -300,7 +300,8 @@ void FormDataWidgetMapper::setCurrentForm(Form::FormMain *form)
     qWarning() << "FormDataWidgetMapper::setCurrentForm" << form->uuid();
     d->populateStack(form);
     d->useEpisodeModel(form);
-    d->_formMain->itemData()->setStorableData(false);  // equal == form->setModified(false);
+    if (d->_formMain->itemData())
+        d->_formMain->itemData()->setStorableData(false);  // equal == form->setModified(false);
 }
 
 void FormDataWidgetMapper::setCurrentEpisode(const QVariant &uid)

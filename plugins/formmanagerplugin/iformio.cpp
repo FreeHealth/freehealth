@@ -26,9 +26,30 @@
  ***************************************************************************/
 
 /**
-  \class Form::IFormIO
-  This object interface is the in/out form object. It will be used to read patient files in order to
-  construct patient files structure.
+ * \class Form::FormIOQuery
+ * Use this class to create specific queries in the Form::IFormIO engines.
+ */
+
+/**
+ * \class Form::FormIODescription
+ * Description of a form extracted from a Form::IFormIO engine. This is different than
+ * Form::FormItemSpec. This description only handles information from the IO engine, not usable in
+ * forms view/model computation.
+ */
+
+/**
+ * \class Form::IFormIO
+ * This object interface is the in/out form object. It is used to read and create the patient files.\n
+ * All Form::IFormIO engines are in charge of :
+ * - correctly manage form uids in a persistent in time format
+ * - reading and interpreting raw source form files
+ * - retrieving all informations on Form::IFormItem like specs, scripts, translations, full description...
+ * - creating the forms QObject tree. The root parent is an empty Form::FormMain.
+ * - preparing the forms widgets using the Form::IFormWidgetFactory objects stored in the
+ *   plugin manager object pool
+ * - store raw source into a specific user database (to ensure that anyone in the network can create the form)
+ * The engines must not :\n
+ * - create a cache of Form::FormMain objects. This cache is managed by the Form::FormManager
 */
 
 /** \fn virtual QString Form::IFormIO::name() const
@@ -39,40 +60,60 @@
   For debugging purpose, mute/unmute console warnings.
 */
 
-/** \fn virtual bool Form::IFormIO::setFileName(const QString &absFileName);
-  Set the filename to process, if IO device is a file. Return \e true if the IO engine
-  can read this file according to its name and existence on the disk.
+/** \fn virtual  bool Form::IFormIO::canReadForms(const QString &uuidOrAbsPath) const
+ * Return \e true if the IO engine can read the form identified by its uid (persistent in time).
+ * \sa Form::FormIODescription::data(), Form::FormIODescription::UuidOrAbsPath
 */
 
-/** \fn virtual QStringList Form::IFormIO::fileFilters() const;
-  Return the file filters that the IO engine can read. Eg: <em>*.xml</em>
+/** \fn virtual FormIODescription *Form::IFormIO::readFileInformation(const QString &uuidOrAbsPath) const = 0;
+  * If the form (identified by its persistent in time uuid) can be read by this object, return its
+  * Form::FormIODescription or a null pointer in case of an error.
 */
 
-/** \fn virtual QString Form::IFormIO::managedFileExtension() const;
-  Return the file extension managed by the IO engine.
+/** \fn virtual QList<FormIODescription *> Form::IFormIO::getFormFileDescriptions(const FormIOQuery &query) const = 0;
+  * If forms (identified by its persistent in time uuid) can be read by this object, return the
+  * Form::FormIODescription list corresponding to the Form::FormIOQuery.
 */
 
-/** \fn virtual bool Form::IFormIO::canReadFile() const;
-  If the file is accessible to the IO engine, start the read process. Return \e true if the
-  IO engine can read the file. \sa Form::IFormIO::setFileName()
+/** \fn virtual QList<Form::FormMain *> Form::IFormIO::loadAllRootForms(const QString &uuidOrAbsPath = QString::null) const = 0;
+  * Return the list of Form::FormMain * empty root object corresponding to the persistent in time
+  * form uuid \e uuidOrAbsPath.\n
+  * The uuid can be any of the following:
+  * - a string uuid
+  * - a absolute path to a file. The engine is in charge of computing the corresponding persistent in time uuid.
+*/
+
+/** \fn virtual bool Form::IFormIO::loadPmhCategories(const QString &uuidOrAbsPath) const = 0;
+  * Load the categories to use in the PMH tree model and inform the PMH::PmhCategoryModel.
+  * Return true in case of success, false in case of failure.
+  * \sa PMH::PmhCore::pmhCategoryModel(), PMH::PmhCategoryModel
+*/
+
+/** \fn virtual QList<QPixmap> Form::IFormIO::screenShots(const QString &uuidOrAbsPath) const = 0;
+  * Return all the screenshot linked to the form identified by the persistent in time uuid
+  * \e uuidOrAbsPath
+*/
+
+/** \fn virtual QPixmap Form::IFormIO::screenShot(const QString &uuidOrAbsPath, const QString &name) const = 0;
+  * Return the screenshot linked to the form identified by the persistent in time uuid
+  * \e uuidOrAbsPath with a filename like \e name
+*/
+
+/** \fn virtual bool Form::IFormIO::saveForm(QObject *treeRoot) = 0;
+  * Not yet implemented.
+*/
+
+/** \fn virtual QString Form::IFormIO::lastError() const = 0;
+  * Return the last error message of the engine.
+*/
+
+/** \fn virtual void Form::IFormIO::checkForUpdates() const = 0;
+  * Check all stored form for any update.
 */
 
 /** \fn virtual void toTreeWidget(QTreeWidget *tree, const QString &lang = Trans::Constants::ALL_LANGUAGE) const;
-  If the file is accessible to the IO device and is readable, read its description and populate a
-  QTreeWidget with it. Form::IFormIO::canReadFile() must be called first.
-*/
-
-/** \fn virtual Form::FormMain *Form::IFormIO::loadForm();
-  Load the form, recreate the form tree and return the empty root Form::FormMain.
-  Form::IFormIO::canReadFile() must be called first.
-*/
-
-/** \fn virtual bool Form::IFormIO::saveForm(QObject *treeRoot);
-  Save a form (not its data).
-*/
-
-/** \fn virtual QString Form::IFormIO::lastError() const;
-  Return the last error encountered wy the IO engine.
+ * If the file is accessible to the IO device and is readable, read its description and populate a
+ * QTreeWidget with it. Form::IFormIO::canReadFile() must be called first.
 */
 
 #include "iformio.h"
@@ -95,6 +136,7 @@ FormIOQuery::FormIOQuery() :
     m_ForceFile(false),
     m_AllForms(false),
     m_AllDescr(false),
+//    m_Local(true),
     m_GetShots(true)
 {
 }

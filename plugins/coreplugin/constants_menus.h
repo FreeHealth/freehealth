@@ -306,13 +306,13 @@ const char * const MODE_ACCOUNT           = "account";
 const char * const MODE_AGENDA            = "agenda";
 const char * const MODE_USERMANAGER       = "usermanager";
 
-const int          P_MODE_PATIENT_SEARCH  = 100;
-const int          P_MODE_AGENDA          = 90;
-const int          P_MODE_PATIENT_HISTORY = 80;
-const int          P_MODE_PATIENT_DRUGS   = 60;
-const int          P_MODE_PATIENT_FILE    = 40;
-const int          P_MODE_USERMANAGER     = 30;
-const int          P_MODE_ACCOUNT         = 20;
+const int          P_MODE_PATIENT_SEARCH  = 1000;
+const int          P_MODE_AGENDA          = 900;
+const int          P_MODE_PATIENT_HISTORY = 800;
+const int          P_MODE_PATIENT_DRUGS   = 600;
+const int          P_MODE_PATIENT_FILE    = 400;
+const int          P_MODE_USERMANAGER     = 300;
+const int          P_MODE_ACCOUNT         = 200;
 
 // Contexts
 const char* const   C_GLOBAL             = "context.global";

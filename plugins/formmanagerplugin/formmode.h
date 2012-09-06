@@ -19,90 +19,78 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developpers:                                                     *
- *       Christian A Reiter <christian.a.reiter@gmail.com>                 *
+ *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
  *   Contributors :                                                        *
+ *       Guillaume DENRY <guillaume.denry@gmail.com>                       *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef WEBCAM_INTERNAL_WEBCAMPREFERENCES_H
-#define WEBCAM_INTERNAL_WEBCAMPREFERENCES_H
-
-#include <coreplugin/ioptionspage.h>
+#ifndef FORM_FORMMODE_H
+#define FORM_FORMMODE_H
 
 #include <QWidget>
-#include <QPointer>
+#include <QVariant>
+
+#include <formmanagerplugin/iformwidgetfactory.h>
+#include <formmanagerplugin/iformitemdata.h>
 
 /**
- * \file webcampreferences.h
- * \author Christian A Reiter
+ * \file formmode.h
+ * \author Eric MAEKER
  * \version 0.8.0
- * \date 16 Aug 2012
+ * \date 04 Sept 2012
 */
 
 namespace Core {
-class ISettings;
+class BaseMode;
 }
 
-namespace Webcam {
-namespace Internal {
-namespace Ui {
-class WebcamPreferencesWidget;
-}
+namespace Form {
+class FormPlaceHolder;
 
-class WebcamPreferencesWidget : public QWidget
+class FormMode : public Form::FormItem
 {
     Q_OBJECT
-
 public:
-    explicit WebcamPreferencesWidget(QWidget *parent = 0);
-    ~WebcamPreferencesWidget();
+    explicit FormMode(Form::FormItem *item, QWidget *parent = 0);
+    ~FormMode();
 
-    void setDataToUi();
-
-    static void writeDefaultSettings(Core::ISettings *s);
-
-public Q_SLOTS:
-    void saveToSettings(Core::ISettings *s = 0);
+private Q_SLOTS:
+    void getPatientForm();
+    void retranslate();
 
 private:
-    void retranslateUi();
-    void changeEvent(QEvent *e);
-
-private:
-    Ui::WebcamPreferencesWidget *ui;
-    QList<int> m_availableDevices;
+    Form::FormItem *_formItem;
+    Core::BaseMode *_mode;
+    Form::FormPlaceHolder *_placeHolder;
+    bool _inPool;
 };
 
+// Used to pass episode date, label, user...
+//class ModeData : public Form::IFormItemData
+//{
+//public:
+//    ModeData(Form::FormItem *item);
+//    ~ModeData();
 
-class WebcamPreferencesPage : public Core::IOptionsPage
-{
-public:
-    WebcamPreferencesPage(QObject *parent = 0);
-    ~WebcamPreferencesPage();
+//    void setModeWidget(ModeWidget *mode) {m_Mode = mode; clear();}
+//    void clear();
 
-    QString id() const;
-    QString name() const;
-    QString category() const;
-    QString title() const {return name();}
-    int sortIndex() const;
+//    Form::FormItem *parentItem() const {return m_FormItem;}
+//    bool isModified() const;
 
-    void resetToDefaults();
-    void checkSettingsValidity();
-    void applyChanges();
-    void finish();
+//    // Use setData/Data for episode data
+//    bool setData(const int ref, const QVariant &data, const int role = Qt::EditRole);
+//    QVariant data(const int ref, const int role = Qt::DisplayRole) const;
 
-    QString helpPage() {return QString();}
+//    // Used storable data for forms
+//    void setStorableData(const QVariant &modified);
+//    QVariant storableData() const;
 
-    static void writeDefaultSettings(Core::ISettings *s) {WebcamPreferencesWidget::writeDefaultSettings(s);}
+//private:
+//    Form::FormItem *m_FormItem;
+//    ModeWidget *m_Mode;
+//};
 
-    QWidget *createPage(QWidget *parent = 0);
+} // namespace BaseWidgets
 
-private:
-    QPointer<Internal::WebcamPreferencesWidget> m_Widget;
-};
-
-
-} // namespace Internal
-} // namespace Webcam
-#endif // WEBCAM_INTERNAL_WEBCAMPREFERENCES_H
-
+#endif // FORM_FORMMODE_H

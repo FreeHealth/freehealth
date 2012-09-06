@@ -32,7 +32,6 @@ SOURCES += \
 
 FORMS += \
     webcamdialog.ui \
-    webcampreferenceswidget.ui \
     webcampreferences.ui
 
 TRANSLATIONS += $${SOURCES_TRANSLATIONS_PATH}/webcam_fr.ts \

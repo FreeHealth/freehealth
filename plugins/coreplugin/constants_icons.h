@@ -213,6 +213,9 @@ const char * const  ICONCHROMOSOME    = "chromosome.png";
 const char * const  ICONDRUGMODE      = "drugmode.png";
 const char * const  ICONACCOUNTMODE   = "accountancymode.png";
 
+// media
+const char * const ICONMEDIAPAUSE     = "media-playback-pause.png";
+const char * const ICONMEDIASTART     = "media-playback-start.png";
 
 }  // end Constants
 } // end Core

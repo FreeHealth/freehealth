@@ -363,6 +363,8 @@ QList<Form::FormMain *> XmlFormIO::loadAllRootForms(const QString &uuidOrAbsPath
     QHash<QString, QString> mode_contents = base()->getAllFormFullContent(form.uid);
 
     reader()->refreshPluginFactories();
+
+    // TODO: manage mode creation... How???
     QHashIterator<QString, QString> it(mode_contents);
     while (it.hasNext()) {
         it.next();
@@ -383,6 +385,7 @@ QList<Form::FormMain *> XmlFormIO::loadAllRootForms(const QString &uuidOrAbsPath
         }
         XmlFormName mode(form.uid);
         mode.absFileName = fakeFileName;
+        mode.modeName = it.key();
 //        qWarning() << "MODE" << mode.absFileName << mode.uid;
         if (!reader()->loadForm(mode, root)) {
             LOG_ERROR("Form not readable: " + fakeFileName);

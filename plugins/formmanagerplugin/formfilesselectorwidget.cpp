@@ -72,7 +72,8 @@ public:
             ui(new Ui::FormFilesSelectorWidget),
             aByCategory(0), aByAuthor(0), aBySpecialties(0), aByType(0),
             m_TreeModel(0),
-            m_ActualTreeModelColumn(-1)
+            m_ActualTreeModelColumn(-1),
+            m_GetLocal(false)
     {}
 
     ~FormFilesSelectorWidgetPrivate()
@@ -121,7 +122,7 @@ public:
         m_FormDescr.clear();
         ios = refreshIOPlugs();
         Form::FormIOQuery query;
-        query.setGetAllAvailableFormDescriptions((m_Type==FormFilesSelectorWidget::AllForms));
+        query.setGetAllAvailableFormDescriptions(m_GetLocal);
         if (m_Type==FormFilesSelectorWidget::CompleteForms)
             query.setTypeOfForms(Form::FormIOQuery::CompleteForms);
         else if (m_Type==FormFilesSelectorWidget::SubForms)
@@ -189,6 +190,7 @@ public:
     QStandardItemModel *m_TreeModel;
     int m_ActualTreeModelColumn, m_SelType;
     QString m_HightlightUuid;
+    bool m_GetLocal;
 };
 
 }  // End namespace Internal
@@ -254,6 +256,16 @@ void FormFilesSelectorWidget::setSelectionType(SelectionType type)
 void FormFilesSelectorWidget::expandAllItems() const
 {
     d->ui->treeView->expandAll();
+}
+
+/**
+ * The form selector asks Form::IFormIO engines for forms. You can require only
+ * forms from database and include local files. By default, local files are not
+ * included in the form selector.
+ */
+void FormFilesSelectorWidget::setIncludeLocalFles(bool includeLocal)
+{
+    d->m_GetLocal = includeLocal;
 }
 
 /** Return the currently selected form descriptions */

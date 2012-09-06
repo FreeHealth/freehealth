@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FreeMedForms>
+<FreeMedForms>
+  <PMHx>
+    <Category icon="__theme__/stethoscope.png" uuid="GP::Basic::WithDrugPage::RiskFactors" sortId="0">
+      <label lang="xx">Risk factors</label>
+      <label lang="fr">Facteurs de risque</label>
+      <label lang="de">Risikofaktoren</label>
+      <extra>
+        <file>__subForms__/cardiology/riskfactors</file>
+      </extra>
+    </Category>
+    <Category icon="__theme__/stethoscope.png" uuid="GP::Basic::WithDrugPage::Perso" sortId="1">
+      <label lang="xx">Personal</label>
+      <label lang="fr">Personnel</label>
+      <label lang="de">Persönlich</label>
+      <Category icon="__theme__/stethoscope.png" uuid="GP::Basic::WithDrugPage::Med"  sortId="0">
+        <label lang="xx">Medical</label>
+        <label lang="fr">Médicaux</label>
+        <label lang="de">Medizinisch</label>
+      </Category>
+      <Category icon="__theme__/stethoscope.png" uuid="GP::Basic::WithDrugPage::Surg"  sortId="1">
+        <label lang="xx">Surgical</label>
+        <label lang="fr">Chirurgicaux</label>
+        <label lang="de">Chirurgisch</label>
+      </Category>
+      <Category icon="__theme__/stethoscope.png" uuid="GP::Basic::WithDrugPage::Obst" sortId="2">
+        <label lang="xx">Obstetric</label>
+        <label lang="fr">Obstétricaux</label>
+        <label lang="de">Geburtshilflich</label>
+      </Category>
+    </Category>
+    <Category icon="__theme__/stethoscope.png" uuid="GP::Basic::WithDrugPage::Family"  sortId="2">
+      <label lang="xx">Family</label>
+      <label lang="fr">Familiaux</label>
+      <label lang="de">Familiär</label>
+    </Category>
+  </PMHx>
+</FreeMedForms>
