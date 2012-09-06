@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>435</width>
-    <height>411</height>
+    <height>421</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -63,18 +63,6 @@
            </widget>
           </item>
          </layout>
-        </item>
-       </layout>
-      </widget>
-     </item>
-     <item row="2" column="1">
-      <widget class="QGroupBox" name="distanceGroupBox">
-       <property name="title">
-        <string>Round Trip</string>
-       </property>
-       <layout class="QGridLayout" name="gridLayout_7">
-        <item row="0" column="0">
-         <widget class="QDoubleSpinBox" name="distanceDoubleSpinBox"/>
         </item>
        </layout>
       </widget>
@@ -150,6 +138,12 @@
      </item>
      <item row="1" column="1" colspan="2">
       <widget class="QGroupBox" name="freeBox">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>75</height>
+        </size>
+       </property>
        <property name="title">
         <string>Free Values</string>
        </property>
@@ -159,7 +153,7 @@
           <x>0</x>
           <y>20</y>
           <width>271</width>
-          <height>46</height>
+          <height>54</height>
          </rect>
         </property>
         <layout class="QGridLayout" name="gridLayout_8">
@@ -167,13 +161,6 @@
           <widget class="QLabel" name="freeLabel">
            <property name="text">
             <string>Text</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="1">
-          <widget class="QLabel" name="freeValueLabel">
-           <property name="text">
-            <string>Value</string>
            </property>
           </widget>
          </item>
@@ -187,6 +174,13 @@
              <width>70</width>
              <height>0</height>
             </size>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QLabel" name="freeValueLabel">
+           <property name="text">
+            <string>Value</string>
            </property>
           </widget>
          </item>
@@ -221,6 +215,18 @@
        <property name="default">
         <bool>true</bool>
        </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QGroupBox" name="distanceGroupBox">
+       <property name="title">
+        <string>Round Trip</string>
+       </property>
+       <layout class="QGridLayout" name="gridLayout_7">
+        <item row="0" column="0">
+         <widget class="QDoubleSpinBox" name="distanceDoubleSpinBox"/>
+        </item>
+       </layout>
       </widget>
      </item>
     </layout>

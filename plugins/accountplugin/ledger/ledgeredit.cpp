@@ -34,6 +34,7 @@
 #include "ledgerio.h"
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
+#include <coreplugin/iuser.h>
 #include <coreplugin/idocumentprinter.h> //coreplugin/idocumentprinter.h
 #include <coreplugin/constants.h>
 #include <extensionsystem/pluginmanager.h>
@@ -45,14 +46,14 @@ enum { WarnDebugMessage = false };
 
 using namespace AccountDB;
 
-//enum { WarnDebugMessage = true };
-
 using namespace ExtensionSystem;
 using namespace Core;
 using namespace Core::Constants;
+
 inline static Core::IDocumentPrinter *printer() {return ExtensionSystem::PluginManager::instance()
                                                  ->getObject<Core::IDocumentPrinter>();}
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
+static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
 
 LedgerEdit::LedgerEdit(QWidget * parent):QWidget(parent),ui(new Ui::LedgerEditWidget){
     ui->setupUi(this);
@@ -108,8 +109,6 @@ LedgerEdit::~LedgerEdit(){
 }
 
 void LedgerEdit::showLedger(){
-    //qDebug() << __FILE__ << QString::number(__LINE__) << " SHOW !!! "  ;
-    //m_doc->clear();
     m_myThread->dateChosen(m_date);
     if (m_myThread->isRunning())
     {
@@ -133,9 +132,11 @@ void LedgerEdit::printLedger(){
     }
     p->clearTokens();
     QHash<QString, QVariant> tokens;
+    
 
     // Là tu ajoutes tes tokens pour l'impression (lire la doc de FreeDiams sur le gestionnaire d'étiquettes)
     tokens.insert(Core::Constants::TOKEN_DOCUMENTTITLE, this->windowTitle());
+    tokens.insert(TOKEN_USERTITLE,user()->fullNameOfUser(user()->uuid()));
     p->addTokens(Core::IDocumentPrinter::Tokens_Global, tokens);
     if (WarnDebugMessage)
     qDebug() << __FILE__ << QString::number(__LINE__) << " print "   ;
