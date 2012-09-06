@@ -72,6 +72,9 @@ public:
     bool isMultiEpisode(const QModelIndex &index) const {return !isUniqueEpisode(index);}
     Form::FormMain *formForIndex(const QModelIndex &index) const;
 
+private Q_SLOTS:
+    bool updateFormCount();
+
 private:
     Internal::FormTreeModelPrivate *d;
 };
