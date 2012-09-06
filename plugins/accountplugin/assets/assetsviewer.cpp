@@ -39,6 +39,8 @@
 
 #include <coreplugin/icore.h>
 #include <coreplugin/iuser.h>
+#include <coreplugin/itheme.h>
+#include <coreplugin/constants.h>
 
 #include <utils/global.h>
 #include <translationutils/constants.h>
@@ -46,23 +48,31 @@
 
 #include <QDebug>
 
-enum { WarnDebugMessage = true };
+enum { WarnDebugMessage = false };
 
 using namespace AccountDB;
 using namespace Constants;
 using namespace Trans::ConstantTranslations;
 
 static inline Core::IUser *user() { return  Core::ICore::instance()->user(); }
+static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 
 AssetsViewer::AssetsViewer(QWidget * parent):QWidget(parent),ui(new Ui::AssetsViewerWidget){
     ui->setupUi(this);
     ui->dateEdit->setDisplayFormat(tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR));
-
     //instanciate
     ui->valueDoubleSpinBox->setRange(0.00,999999999999999.00);
+    //icons and shortcut
     ui->recordButton->setShortcut(QKeySequence::InsertParagraphSeparator);
+    ui->recordButton->setIcon(theme()->icon(Core::Constants::ICONSAVE));
+    ui->recordButton->setToolTip(QKeySequence(QKeySequence::InsertParagraphSeparator).toString());
     ui->deleteButton->setShortcut(QKeySequence::Delete);
-    ui->quitButton->setShortcut(QKeySequence::Quit);
+    ui->deleteButton->setIcon(theme()->icon(Core::Constants::ICONREMOVE));
+    ui->deleteButton->setToolTip(QKeySequence(QKeySequence::Delete).toString());
+    ui->quitButton->setShortcut(QKeySequence::Close);
+    ui->quitButton->setIcon(theme()->icon(Core::Constants::ICONEXIT));
+    ui->quitButton->setToolTip(QKeySequence(QKeySequence::Close).toString());
+    
     fillModeComboBox();
     fillBankComboBox();
     ui->dateEdit->setDate(QDate::currentDate());
@@ -112,7 +122,9 @@ void AssetsViewer::showAssets()
     ui->tableView->setEditTriggers(QAbstractItemView::SelectedClicked);
     ui->tableView->setSortingEnabled(true);
     ui->tableView->horizontalHeader()->setResizeMode(QHeaderView::Interactive);
-    ui->tableView->horizontalHeader()->setStretchLastSection ( true );
+    ui->tableView->horizontalHeader()->setResizeMode(QHeaderView::ResizeToContents);
+    ui->tableView->horizontalHeader()->setCascadingSectionResizes (true);
+    ui->tableView->horizontalHeader()->setStretchLastSection(true);
     ui->tableView->verticalHeader()  ->setResizeMode(QHeaderView::Stretch);
     ui->tableView->setColumnHidden(ASSETS_ID,true);
     ui->tableView->setColumnHidden(ASSETS_USER_UID,true);

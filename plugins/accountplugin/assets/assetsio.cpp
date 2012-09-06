@@ -229,14 +229,14 @@ QStandardItemModel * AssetsIO::getBankComboBoxModel(QObject * parent){
         QStandardItem *item = new QStandardItem(bankLabel);
         QIcon icon;
         if (bankDefault == "1") {
-            icon = QIcon(theme()->icon(Core::Constants::ICONADD));
+            icon = QIcon(theme()->icon(Core::Constants::ICONOK));
             item->setIcon(icon);
             if (WarnDebugMessage)
                 qDebug() << __FILE__ << QString::number(__LINE__) << " item def =" << item->text() ;
+            }
             model->appendRow(item);
-        }
     }
-    for (int i = 0; i < rows; i += 1)
+    /*for (int i = 0; i < rows; i += 1)
     {
         QString bankLabel = bankmodel.data(bankmodel.index(i,BANKDETAILS_LABEL),Qt::DisplayRole).toString();
         QString bankDefault = bankmodel.data(bankmodel.index(i,BANKDETAILS_DEFAULT),Qt::DisplayRole).toString();
@@ -250,7 +250,7 @@ QStandardItemModel * AssetsIO::getBankComboBoxModel(QObject * parent){
                 qDebug() << __FILE__ << QString::number(__LINE__) << " item def =" << item->text() ;
             model->appendRow(item);
         }
-    }
+    }*/
     return model;
 }
 
