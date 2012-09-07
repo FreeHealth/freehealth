@@ -1,110 +1,151 @@
 /*!
-   \page coderules FreeMedForms Code Rules
+\page coderules FreeMedForms Coding Rules
 
 \section coderule_intro Introduction
 
-Lorsque plusieurs personnes travaillent à un même ouvrage, il est important qu'ils sachent échanger,
-se faire comprendre. C'est pour cette raison que nous avons édité ces "règles de codage"
-/ "règles de bonne conduite".
+When several people are working on the same software, it is extremely important that they have a
+common coding style for inter-readability and exchange.
+Therefore we are publishing this "code rules" / "rules of conduct".
 
-Avant d'entreprendre des modifications dans le code de FreeMedForms ou de ses libs, il est essentiel
-d'en discuter sur le mailing liste. Tout changement réalisé sans concertation peut induire des
-comportement non désiré sur les plugins ou les applications dérivées de FreeMedForms.
+Before making any changes in the code or the FreeMedForms libs, it is essential
+to discuss the intents on the mailing list (freemedforms@googlegroups.com). Any change made ​​without
+consultation can induce unwanted and unexpected behavior on plugins or applications derived from
+the base FreeMedForms.
 
+\section headers Source headers
 
-\section entetes Entêtes de vos sources
+Each .h and .cpp file \e must contain the FreeMedForms header.
 
-Chacun des fichiers .h et .cpp, doivent contenir l'entête de FreeMedForms,
-telle quel, que vous trouverez dans toutes les sources de ce projet.
-
-Si vous vous êtes inspiré d'un projet externe à FreeMedForms pour votre code,
-vous devez le préciser dans l'entête (le .h et ce selon la licence de distribution de cette application)
-à l'intérieur d'un cadre de commentaire comme suit :
+If you are writing some code that is inspired by some other (open source) software, you must include
+the following paragraph in the header file (and where the software demands this else):
 
 \verbatim
 /***************************************************************************
- *   This code is inspired of NAME_OF_THE_SOFTWARE, VERSION                *
- *   URL_OF_THIS_SOFT_INSPIRATION                                          *
- *   MAIL_ADRESS_OF_THE_ORIGINAL, NAME_OF_THIS_AUTHOR                      *
- *   LICENSE_OF_THE_ORIGINAL                                               *
+ *   This code is inspired by NAME_OF_THE_SOFTWARE, VERSION                *
+ *   URL_OF_THE_INSPIRING_SOFTWARE                                         *
+ *   NAME_OF_ORIGINAL_AUTHOR, MAIL_ADRESS_OF_THE_ORIGINAL_AUTHOR           *
+ *   LICENSE_OF_THE_ORIGINAL_SOFTWARE                                      *
  *                                                                         *
- *   Adaptations to FreeMedForms by :                                      *
- *       YOUR_NAME, YOURMAILADRESS                                         *
- **************************************************************************\/
+ *   Adaptations to FreeMedForms by:                                       *
+ *       YOUR_NAME <MAIL@ADRESS>                                           *
+ ***************************************************************************\/
 \endverbatim
 
-Vous pouvez ajouter un cadre de commentaire en dessous précisant votre participation.
+You can add a comment frame like below stating your participation.
 
 \verbatim
 /***************************************************************************
- *   Main Developer : NAME <MAIL@ADRESS>                                  *
- *   Contributors :                                                        *
+ *   Main Developer: NAME <MAIL@ADRESS>                                    *
+ *   Contributors:                                                         *
  *       NAME <MAIL@ADRESS>                                                *
  *       NAME <MAIL@ADRESS>                                                *
- **************************************************************************\/
+ ***************************************************************************\/
 \endverbatim
 
-\section indentation Indentation du code
+\section intendation Code Intendation
 
-Tout code présenté aux administrateurs de la suite doit répondre aux exigences d'indentation suivante :
-    - Quatre espaces d'indentation pour chaque bloc
-    - Une ligne de code trop longue est une gène pour la relecture,
-    il n'y pas de règle stricte dans ce domaine, mais n'hésitez pas à "casser"
-    votre ligne de code (retour à la ligne et indentation) lorsqu'elle dépasse environ
-    une centaine de caractères.
-    - Les parenthèses s'ouvrent sur la même ligne
+All code presented to the administrators of the suite must meet indentation rules as follows:
+- One instruction per line
 \code
-      if (test) {
-           function();
-           othertest();
-       }
+//BAD:
+if(blah){triggerHappyFunction();a++; whyNotThisAlso(new Foo("hello"),QString("bla %1").arg(x));}
+
+//GOOD:
+if (blah) {
+    triggerHappyFunction();
+    a++;
+    const Foo *foo = new Foo("hello")
+    whyNotThisAlso(foo, QString("bla %1").arg(x));
+}
 \endcode
-    - Aucun espace inutile n'est laissé sur une ligne vierge ou en fin de ligne
-    - Une instruction par ligne
-    - Éviter de modifier la valeur des variables dans un appel de fonction (`getValue( i++ ) ;` )
+- \b Four \b spaces (no tabs!) for each indentation
+- A line of code which is too long for proofreading easily should be wrapped at ~80-100 characters.
+There is no strict rule in this area, but do not hesitate to "break"
+your line of code (line break + indentation) when it exceeds about
+80-100 characters.
+\code
+OuterNamespace::Internal::FooClass::someStaticMethod("This is the first very long argument",
+                                        otherMethod->toString(),
+                                        thirdMethod->calculate());
+\endcode
+- Open curly brackets always on the \b same \b line for \b normal \b blocks (if, do, while, switch, etc.)
+\code
+if (test) {
+    fooMethod();
+    otherTest();
+} else {
+    barMethod();
+}
+\endcode
+- Open curly brackets always on the \b next \b line for \b function \b blocks
+\code
+void foo(int blah)
+{
+    doSomething();
+}
+\endcode
 
-Nous préférons :
-    - lire du code aéré et bien construit visuellement
-    - que de lire un "paquet"
+- No unnecessary whitespace at the end of lines or at empty lines. There is a QtCreator feature
+that automatically removes this whitespaceson saving files - just turn it on and you'll be fine.
+- Don't change the value of variables in a function call
+\code
+//BAD:
+getValue(i++);
 
-Les nombreuses IDE permettent en règle générale de paramétrer le style du code.\n
-N'hésitez pas à utiliser ces fonctions.\n
-Lisez le code déjà écrit et présentez votre code de la même manière.
+//GOOD:
+getValue(i);
+++i;
+\endcode
 
-\section export Exporter/Importer pour win32
+We prefer:
+- well readable, "airy" code
+- group code parts that belong together visually by separating them from others with newlines
 
-Lorsque vous ajoutez une classe à freemedforms ou aux toolkits, assurez-vous d'exporter correctement votre travail.
-    - inclure le fichier d'import/export adéquat qui se nomme `xxXxxxExporter.h`
-        - `pluginname_exporter.h` pour freemedforms
-        - `libname_exporter.h` pour les librairies
-    - utilisez ensuite la macro d'import/export
-        - \e CORE_EXPORT pour les objects de freemedforms
-        - \e UTILS_EXPORT pour les librairies (ici l'exemple de la librairie Utils)
-        - ...
+Many IDEs can generally set the style of the code. Feel free to use these functions.\n
+Read the code that is already there and try to submit your code in the same way.
 
+\section export Exporter/Importer for win32
 
-\section namespaces Règle de nommage des classes, espaces de noms et données de classe
+When you add a new class to FreeMedForms or one of its toolkits, make sure you export your class properly.
+    - Include a file for import/export, which is properly called xxxxxxx_exporter.h
+        - pluginname_exporter.h for FreeMedForms
+        - libraryname_exporter.h for libraries
+    - Then use the macro XXXX_EXPORT to import/export
+        - \e CORE_EXPORT for objects within FreeMedForms
+        - e.g. \e UTILS_EXPORT for libraries and plugins (here e.g. of the \e Utils library)
 
-Nom des fichiers:
-    - Doivent TOUJOURS être en minuscule.
-    - Au besoin créez des sous-répertoires à vos plugins.
+\Hint: If you use QtCreator, you can easily create these files automatically using the template wizards
+that are provided with FreeMedforms.
+<a href="http://www.freemedforms.com/en/code/howto_write_a_fmf_plugin">More information here</a>.
 
-Nom des classes :
-    - Doivent être le plus explicite possible
-    - La première lettre de chacun des mots constituant le nom de la classe est en majuscule
-    - Stéréotypes :
-        - post-fixe pour les gestionnaires des bases de données : `Base` pour le gestionnaire de la base
-        - post-fixe : `Dialog` et `Model` pour les dialogues et les modèles spécifiques à une classe concrète
+\section namespaces Naming rules for namespaces, classes, and class data
 
-  Les données de classes, celles déclarées dans l'entête, sont préfixées par `m_` immédiatement suivi
-  d'une majuscule. Au besoin, il est bon de rappeler dans le nom de la variable son type. \n
-  Exemple :
+File names:
+     - Should \b always be \b lowercase.
+     - If necessary, create subdirectories in your plugins.
+
+Classes:
+- As meaningful as possible. Think about what exactly the class will do and name it very carefully. Don't
+create clases like "PatientThings" etc. that don't explicitely tell the purpose of the class.
+- Class names are \e CamelCased (first letter of each word constituting the class name is capitalized)
+- Stereotypes
+    - Postfixes:
+        - 'Base' for databases managers: 'Base' after the database manager name
+        - 'Dialog' or 'Model' for dialogs and models specific to a concrete class, e.g. a dialog
+for class "Webcam" should be named "WebcamDialog"
+        - 'Widget' for a widget
+        - 'Plugin' for a plugin
+        - etc.
+    - Prefixes:
+        - 'm_' for member variables and method names
+
+Example:
 \code
 class YOUR_EXPORTER YourObject
 {
 public:
     YourObject();
-    ~ YourObject() {}
+    ~YourObject() {}
     [...]
 
 private:
@@ -114,26 +155,29 @@ private:
 };
 \endcode
 
-\section objects Structure des objets
+\section objects Object Structure
 
-    - L'interface publique doit être simple et claire.
-    - Lorsqu'un membre est suffisamment général pour s'appliquer à plusieurs sous-projets de FreeMedForms,
-    celui-ci doit être introduit dans la partie globale de la librairie Utils (`utils/global.h`).
-    - Lorsqu'un objet entier est suffisamment général pour être réutilisé par d'autres sous-projet,
-    il doit être ajouté aux librairies ou à un plugin générique (Editor par exemple).
+- Public interfaces must be simple and clear.
+- When a member is sufficiently general to apply to several subprojects of FreeMedForms,
+it should be introduced in the global library 'Utils' (\e utils/global.h).
+- When a whole object is general enough to be reused by other subprojects
+it should be added to a library or a plugin (Editor for example).
 
-\section dirs Structure des répertoires
+\section dirs Directory structure
 
-    - L'arborescence est fixée. Respectez la.
+- The directory tree is fixed. Please respect this.
 
-\section codedocumentation Documentation du code
+\section codedocumentation Code Documentation
 
-  Le code sera \b obligatoirement \b documenté selon la méthode de `doxygen`.
-  Merci de vous référer à la <a href="http://www.doxygen.org">documentation de Doxygen</a>.
-  Les fonctions dont le nom seul permet de comprendre son action ne sont pas forcément documentées.
-  Les fonctions complexes seront documentées.
-  Pour améliorer la correction de bugs merci d'ajouter ce cadre de documentation dans le fichier
-  entête de votre code (ou la version correspond à la version de release de l'objet).
+We document our code with Doxygen.
+Thank you for referring to the Doxygen documentation at <a href="http://www.doxygen.org">www.doxygen.org</a>.
+- Small functions with a name that undoubtedly express its purpose must not necessarily be documented.
+- Complex functions must be documented.
+To improve bugfixing please add this framework documentation in the header file of your code (or
+the version is the release version of the object).
+
+\e Hint: If you use QtCreator and create classes using the template wizards provided by FreeMedForms
+this documentation part will be done automatically.
 
 \verbatim
 /**
@@ -141,43 +185,46 @@ private:
  * \author AUTHOR_NAME <MAIL@ADRESS>
  * \version 0.0.3
  * \date DATE_DD_MMM_YYYY
-*\/
+ *\/
 \endverbatim
 
-  Un descripteur rapide de la classe est écrit en anglais dans la partie supérieure de l'entête (.h). Ex :
+A quick class descriptor is written \e in \e English in the upper part of the header file (.h) above the
+class itself:
 \verbatim
 /**
-  \brief This class owns all information about the structure of the drugs database.
-  All tables are described into an enum and a static stringlist.
-  Get fields and tables using : getFields() and getTables().
-  Get where clauses using getWhereClause( )
-*\/
+ * \class Drugs::DrugsBase
+ * \brief This class owns all information about the structure of the drugs database.
+ *
+ * All tables are described in an enum and a static QStringList.
+ * Get fields and tables using \e getFields() and \e getTables().
+ * Get where clauses using \e getWhereClause()
+ *\/
 \endverbatim
 
 
-    - Il peut être utile pour des membres complexes de documenter le code au fur et à mesure de son
-    implémentation. Les commentaires sont ajoutés à la mode C++ `//`. Pour des raison de commodité,
-    les commentaires marqués par \verbatim `\/*`et `*\/` \endverbatim sont utilisés uniquement
-    par les administrateur pour neutraliser de grandes parties de code lors de tests.
+- It may be useful for complex members to document the code in the
+implementation (.cpp file).
+- Comments are written using the C++ style '//'.
+For reasons of convenience, comments marked by
+\verbatim
+\/* comment *\/
+\endverbatim
+are used only by administrators to neutralize large portions of code in tests.
 
-    - Ne commentez pas \e abusivement votre code source, cela peut nuire à la lisibilité.
-    Privilégiez des variables et des fonctions bien nommées (`DrugBase` plutôt que `m1`) et
-    le code devrait pouvoir se lire naturellement. Par exemple, pas la peine d'écrire en commentaire
-    que l'appel à la méthode `resetDatabase()` va remettre à zero la base de données.
-    Néanmoins, certaines portions de code compliquées méritent parfois des commentaires.
+- Don't comment \e each and everything in your source code, it can affect the readability.
+- Prefer variables and functions with meaningful ('drugsCounter' rather than 'm1').
+- It should be possible to read the code naturally. For example, do not write a comment
+that the call to 'resetDatabaseValue()' will reset the database value to zero - this is obvious by the name.
+- The documentation is written in English.
+- Inclusions paths are defined in the project as following:
+    - \e ./plugins
+    - \e ./libs
+    - \e ./contrib
 
-    - La documentation est rédigée en anglais.
-
-    - Les chemins d'inclusions sont définis dans le projet comme suit:
-        - \e ./plugins
-        - \e ./libs
-        - \e ./contrib
-
-    - Pour faciliter la lecture, lors de l'inclusion des entêtes au sein de vos classes,
-    respectez l'ordre suivant :
-        - plugins (regroupés en bloques par plugins)
-        - librairies FreeMedForms (regroupés en bloques par librairies)
-        - Qt headers
+- For reading convenience, use the following order for inclusion of headers:
+    - Plugins (grouped into blocks by plugins)
+    - FreeMedForms libraries (grouped into blocks by libraries)
+    - Qt headers
 
 
 \code
@@ -191,80 +238,90 @@ private:
 #include <utils/global.h>
 #include <translationutils/constanttranslations.h>
 
-#include <QApplication>
-#include <QMessageBox>
+#include <QString>
+#include <QDate>
 \endcode
 
-\section interactions Interface et interaction avec l'utilisateur
+\section interactions User Interface and Interaction with the User
 
-\subsection messageboxes Utilisation des Message Box
+\subsection messageboxes Using of MessageBox
 
-    - <b>Les QMessageBox ne doivent pas être utilisées</b>.
-    - La librairie Utils fournit toutes les fonctions pour vos MessageBoxes.
-    - Utils::informativeMessageBox() (juste avec Ok)
-    - Utils::yesNoMessageBox() (renvoie true si Yes)
-    - Utils::okCancelMessageBox() (renvoie true si Ok)
-    - Un texte d'une à deux phrases décrit brièvement le message à l'utilisateur.
-    - Un texte d'information et un texte détaillé accompagnent ce message.
+- <b>QMessageBox should \u not be used.</b>
+- The Utils library provides all the functions for your MessageBoxes.
+    - void Utils::informativeMessageBox() (just with Ok)
+    - bool Utils::yesNoMessageBox() (returns true if Yes)
+    - bool Utils::okCancelMessageBox() (returns true if OK)
+- A text with one to two sentences should briefly describe the message to the user.
+- Information text and a detailed text can accompany this message.
+
 \code
-    // CECI EST ACCEPTE
-    Utils::okCancelMessageBox( tr("Text") , tr("Informative"), tr("Detailled"), tr("Title is faculative, application name will appear if no text is passed.") );
+    // BAD:
+    QMessageBox(...)
 
-    // CECI NE L'EST PAS
-    QMessageBox[...]
+    // GOOD:
+    Utils::okCancelMessageBox( tr("Text"),
+                        tr("Informative"),
+                        tr("Detailed text"),
+                        tr("Title is faculative, application name will appear if no text is passed."));
 
-    // Si vous ne trouvez pas votre bonheur dans Utils, merci d'enrichir sur le même modèle
+    // If you do not find your happiness in the Utils version, please extend it and use the same model.
 \endcode
 
 \subsection i18n Internationalisation
 
-    - Tous les textes à traduire sont écrits dans un anglais correct et simple.
-    - Les fonctions tr(), QCoreApplication::transalate() sont utilisées pour traduire le texte.
-    - Toutes les widgets doivent pouvoir être traduits lorsqu'un nouveau dictionnaire est chargé
-      par l'application. Pour cela, utilisez l'évènement QEvent::LanguageChange qui est émis
-      à chaque modification de dictionnaire.
+- All user visible texts must translated and must be written in simple and correct English.
+- The functions tr() or QCoreApplication::transalate() are used to translate the text.
+- All widgets must be translated when a new language is loaded by the application. To achieve this,
+reimplement the method changeEvent() and query for QEvent::LanguageChange.
 \code
 void MyWidget::changeEvent(QEvent *e)
 {
-    if ( (e->type() == QEvent::LanguageChange) )
+    if (e->type() == QEvent::LanguageChange)
         retranslate();
 }
 \endcode
-    - La classe Form::IFormItem implémente déjà cette fonctionnalité (cf doc).
+Sometimes this is done inin automatically created code by QtCreator in the ui_mywidget.cpp file.
 
-\section building Gestion des OS et mode de compilation
+The class Form::FormItem already implements the i18n feature
 
-  - La librairie `utils` propose des fonctions d'identification de l'OS :
-  `isRunningOn...()`. Lorsque cela est possible utilisez ces fontions au lieu de `#ifdef Q_OS_MAC`.
-   Bien évidemment, si votre code est hautement spécifique à l'OS, alors l'utilisation
-   des macros sera incontournable.
+\section building OS Management and Compilation Mode
 
-  - Deux fonctions permettent d'identifier le mode de compilation de l'application : `isDebugCompilation()` et
-  `isFullApplication()`. Ces fonctions utilisent des macros définies dans `config.pri` qui est utilisé par tous
-   les projets de FreeMedForms.
+The Utils library provides functions for identifying the Operating system:
+Utils::isRunningOn(). Where possible use these functions instead of using preprocessor instructions
+(#ifdef Q_OS_MAC). Of course, if your code is highly specific to one OS, then the use of macros
+will be ignored.
+<i>//TODO: please correct from original: "Bien évidemment, si votre code est hautement spécifique à l'OS, alors l'utilisation
+   des macros sera incontournable."</i>
+
+Two functions are used to identify the application compilation mode: \e isDebugCompilation() and
+\e isFullApplication(). These functions use macros defined in \e config.pri which is used by all
+ FreeMedForms projects.
 
 \section optimisations Optimisations
 
-Un code optimisé est préférable à du code inutilement lourd, néanmoins de manière générale,
-il faut éviter d'écrire du code optimisé au détriment de la lisibilité et de l'évolutivité;
- nous n'écrivons pas un OS temps réel mais des outils qui ne devraient pas mettre votre machine à genoux :)
+Optimized code is generally more prefered than unnecessarily cumbersome code. However, in general,
+avoid writing 'highly optimized code' at the expense of readability and scalability;
+we do not write a RTOS (RealTime Operating System), but the tools should not force your machine to
+its knees :)
 
-N'utilisez pas les objets pour leurs performances mais pour leur spécificité.
- Par exemple, pour stocker une liste d'objets, le QList est plus indiqué que le QVector,
- même si ce dernier est plus performant dans certains cas.
+Do not choose objects for their performance, but for their specificity to a problem.
+For example, to store a list of objects, QList is better than a QVector, although the latter
+is more efficient in some cases.
 
-Gardons les idées d'optimisations pour les endroits clefs et à usage intensif
-des applications (comme par exemple des manipulations lourdes dans les bases de données).
+Keep the optimization ideas for key locations and intensive use of specific parts of the application
+(e.g. heavy manipulation of the database).
 
-\subsection useforeach Utilisez foreach
+\subsection useforeach The Use of 'foreach'
 
-    - Il est préférable d'utiliser la fonction `foreach` pour parcourir un conteneur.
-    - Chaque fois qu'il est possible, utilisez comme variable du foreach une référence constante (pour limiter les copies)
+It is preferable to use 'foreach' to iterate through a container. Whenever possible, create the
+foreach variable as a constant reference (to limit copies in memory)
+
 \code
-    // Ceci est correct si s n'est pas modifié dans la boucle
-    foreach(const QString &s, stringList) {
-        [ ... ]
-    }
+foreach(const QString &s, stringList) {
+    if (s.endsWith('.cpp'))  // OK
+        useCppSource();
+    s = s.trimmed(); // ERROR! not possible!
+}
 \endcode
 
 */
