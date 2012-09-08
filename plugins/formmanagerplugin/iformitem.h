@@ -105,8 +105,12 @@ public:
     virtual QList<FormItem *> flattenFormItemChildren() const;
 
     // FormIO extra data
-    virtual void addExtraData(const QString &id, const QString &data);
+    virtual void addExtraData(const QString &key, const QString &value);
+
+    /*! Returns the FormItem extra data as QHash */
     virtual QHash<QString,QString> extraData() const {return m_ExtraData;}
+
+    /*! Clears the internal extra data of the FormItem */
     virtual void clearExtraData() {m_ExtraData.clear();}
     virtual QStringList getOptions() const;
 

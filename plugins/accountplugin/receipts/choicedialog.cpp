@@ -60,16 +60,18 @@ using namespace Tools;
 static inline Core::IUser *user() { return Core::ICore::instance()->user(); }
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 
-treeViewsActions::treeViewsActions(QWidget *parent):QTreeView(parent){
+ActionsTreeView::ActionsTreeView(QWidget *parent):QTreeView(parent)
+{
     m_deleteThesaurusValue = new QAction(tr("Delete value"),this);
     m_choosepreferredValue = new QAction(tr("Choose value as preferred"),this);
     connect(m_choosepreferredValue,SIGNAL(triggered(bool)),this,SLOT(choosepreferredValue(bool)));
     connect(m_deleteThesaurusValue,SIGNAL(triggered(bool)),this,SLOT(deleteBox(bool)));
+    setEditTriggers(NoEditTriggers);
 }
 
-treeViewsActions::~treeViewsActions(){}
+ActionsTreeView::~ActionsTreeView(){}
 
-void treeViewsActions::mousePressEvent(QMouseEvent *event){
+void ActionsTreeView::mousePressEvent(QMouseEvent *event){
     if(event->button() == Qt::RightButton){
         if(isChildOfThesaurus()){
             blockSignals(true);
@@ -87,7 +89,7 @@ void treeViewsActions::mousePressEvent(QMouseEvent *event){
     }
 }
 
-void treeViewsActions::deleteBox(bool b){
+void ActionsTreeView::deleteBox(bool b){
     Q_UNUSED(b);
     bool yes = Utils::yesNoMessageBox(tr("Do you want to delete selected item?"),
                                       tr("Do you want to delete selected item?"));
@@ -97,7 +99,7 @@ void treeViewsActions::deleteBox(bool b){
     }
 }
 
-void treeViewsActions::choosepreferredValue(bool b){
+void ActionsTreeView::choosepreferredValue(bool b){
     Q_UNUSED(b);
     bool yes = Utils::yesNoMessageBox(tr("Do you want to set this item as preferred value?"),
                                       tr("Do you want to set this item as preferred value?"));
@@ -109,7 +111,7 @@ void treeViewsActions::choosepreferredValue(bool b){
     }
 }
 
-bool treeViewsActions::addpreferredItem(QModelIndex &index){
+bool ActionsTreeView::addpreferredItem(QModelIndex &index){
     bool ret = true;
     QString data = index.data().toString();
     receiptsEngine r;
@@ -121,7 +123,7 @@ bool treeViewsActions::addpreferredItem(QModelIndex &index){
     return ret;
 }
 
-bool treeViewsActions::isChildOfThesaurus(){
+bool ActionsTreeView::isChildOfThesaurus(){
     bool ret = true;
     QModelIndex current = currentIndex();
     QModelIndex indexParent = treeModel()->parent(current);
@@ -135,7 +137,7 @@ bool treeViewsActions::isChildOfThesaurus(){
     return ret;
 }
 
-void treeViewsActions::fillActionTreeView()
+void ActionsTreeView::fillActionTreeView()
 {
     m_actionsTreeModel = new QStandardItemModel;
     ReceiptsTools rt;
@@ -240,7 +242,7 @@ void treeViewsActions::fillActionTreeView()
         qDebug() << __FILE__ << QString::number(__LINE__)  ;
 }
 
-bool treeViewsActions::deleteItemFromThesaurus(QModelIndex &index){
+bool ActionsTreeView::deleteItemFromThesaurus(QModelIndex &index){
     bool ret = true;
     QString data = index.data().toString();
     receiptsEngine r;
@@ -253,7 +255,7 @@ bool treeViewsActions::deleteItemFromThesaurus(QModelIndex &index){
     return ret;
 }
 
-QModelIndex treeViewsActions::indexWithItem(int row)
+QModelIndex ActionsTreeView::indexWithItem(int row)
 {
     // FIXME: shouldn't this be a "const" QModelIndex? and const function?
     QModelIndex index;
@@ -313,12 +315,12 @@ ChoiceDialog::ChoiceDialog(QWidget * parent,bool roundtrip, bool freevalue, QStr
         ui->freeValueSpinBox->setSingleStep(0.10);
     }
     //treeViewsActions
-    m_actionTreeView = new treeViewsActions(this);
+    m_actionTreeView = new ActionsTreeView(this);
     QVBoxLayout *vbox = new QVBoxLayout;
     vbox-> addWidget(m_actionTreeView);
     ui->paramsGroupBox->setLayout(vbox);
     m_actionTreeView->fillActionTreeView();
-    QModelIndex indexDebtor = m_actionTreeView->indexWithItem(treeViewsActions::DEBTOR);
+    QModelIndex indexDebtor = m_actionTreeView->indexWithItem(ActionsTreeView::DEBTOR);
     m_actionTreeView->expand(indexDebtor);
     //preferential choices in the tree view.
     QString site = Trans::Constants::SITES;

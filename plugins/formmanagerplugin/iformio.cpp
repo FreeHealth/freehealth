@@ -43,7 +43,7 @@
  * All Form::IFormIO engines are in charge of :
  * - correctly manage form uids in a persistent in time format
  * - reading and interpreting raw source form files
- * - retrieving all informations on Form::IFormItem like specs, scripts, translations, full description...
+ * - retrieving all informations on Form::FormItem like specs, scripts, translations, full description...
  * - creating the forms QObject tree. The root parent is an empty Form::FormMain.
  * - preparing the forms widgets using the Form::IFormWidgetFactory objects stored in the
  *   plugin manager object pool
