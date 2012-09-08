@@ -59,6 +59,7 @@ private Q_SLOTS:
     void yearDateChanged(const QDate &year);
     void writeLabelByRow(const QModelIndex &index);
     void userIsChanged();
+    void quitFreeAccount();
 
 private:
     void fillModeComboBox();

@@ -34,6 +34,8 @@
 #include "assetsio.h"
 #include "ui_assetsviewer.h"
 
+#include "../receipts/receiptsmanager.h"
+
 #include <accountbaseplugin/assetmodel.h>
 #include <accountbaseplugin/constants.h>
 
@@ -84,7 +86,7 @@ AssetsViewer::AssetsViewer(QWidget * parent):QWidget(parent),ui(new Ui::AssetsVi
     yearDateChanged(thisYear);
     connect(ui->recordButton,SIGNAL(pressed()),this,SLOT(recordAsset()));
     connect(ui->deleteButton,SIGNAL(pressed()),this,SLOT(deleteAsset()));
-    connect(ui->quitButton,SIGNAL(pressed()),this,SLOT(close()));
+    connect(ui->quitButton,SIGNAL(pressed()),this,SLOT(quitFreeAccount()));
     connect(ui->yearEdit,SIGNAL(dateChanged(const QDate&)),this,SLOT(yearDateChanged(const QDate&)));
     connect(ui->tableView,SIGNAL(clicked(const QModelIndex&)),this,SLOT(writeLabelByRow(const QModelIndex&)));
     connect(user(), SIGNAL(userChanged()), this, SLOT(userIsChanged()));
@@ -296,4 +298,18 @@ void AssetsViewer::changeEvent(QEvent *e){
           //fillBankComboBox();
           fillModeComboBox();
         }
+}
+
+void AssetsViewer::quitFreeAccount()
+{
+    ReceiptsManager r;
+    if (r.isMedintuxArg())
+    {
+    	  setAttribute(Qt::WA_DeleteOnClose);
+    	  QApplication::closeAllWindows();
+        }
+    else
+    {
+    	close();
+        }    
 }

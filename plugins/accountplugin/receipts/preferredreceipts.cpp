@@ -62,6 +62,10 @@ PreferredReceipts::PreferredReceipts(QWidget * parent) :
     m_typeOfChoice = 0;
     QString userUuid = user()->uuid();
     ReceiptsManager manager;
+    if (manager.isMedintuxArg())
+    {
+        setAttribute(Qt::WA_DeleteOnClose);
+    }
     QStringList listOfActs;
     listOfActs = manager.getPreferentialActFromThesaurus(userUuid).keys();
     if (listOfActs.size()>0)
@@ -182,6 +186,11 @@ void PreferredReceipts::showChoiceDialog(){
           delete model;
           delete choice;
         }
+    ReceiptsManager manager;
+    if (manager.isMedintuxArg())
+    {
+        QApplication::closeAllWindows();
+    }
 }
 
 
