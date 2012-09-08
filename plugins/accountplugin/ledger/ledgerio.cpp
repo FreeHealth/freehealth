@@ -520,7 +520,7 @@ QStringList LedgerIO::listOfMovementsTypes(){
     return list;
 }
 
-QList<QVector<QString> > LedgerIO::getDataReceiptsInVector(const QString & dateBegin,const QString & dateEnd){
+QList<QVector<QString> > LedgerIO::getDataReceiptsInVector(const QString & dateBegin,const QString & dateEnd , bool noName){
     QList<QVector<QString> > tableLedgerMonth;
     QString filter = QString("%1 = '%2'").arg("USER_UID",user()->uuid());
     filter += " AND ";
@@ -551,6 +551,10 @@ QList<QVector<QString> > LedgerIO::getDataReceiptsInVector(const QString & dateB
                                                                                                          .toString();
         QString vectorActs = accountModel.data(accountModel.index(i,ACCOUNT_MEDICALPROCEDURE_TEXT),Qt::DisplayRole)
                                                                                                  .toString();//acts
+        if (noName)
+        {
+        	  vectorPatient = getNoName(vectorPatient);
+            }
         QVector<QString> vector;
         vector << vectorDate
                << vectorPatient
@@ -630,5 +634,44 @@ double LedgerIO::getMovementSum(QObject * parent,QString & month, QString & year
         totalValue += m_movementModel->data(m_movementModel->index(i,MOV_AMOUNT),Qt::DisplayRole).toDouble();
     }
     return totalValue;
+}
+
+QString LedgerIO::getNoName(const QString nameSurname)
+{
+    enum Name {NAME=0,SURNAME};
+    QStringList nameList;
+    	if (nameSurname.contains(","))
+    	{
+    		nameList = nameSurname.split(",");  
+    	    }
+    	if (nameSurname.contains(" ")&& !nameSurname.contains(","))
+    	{
+    		nameList = nameSurname.split(" ");
+    	    }
+    	
+    	QString name;
+    	QString surname;
+    	if (nameList.size()>1)
+    	{
+    		  name = nameList[NAME];
+    		  surname = nameList[SURNAME];
+    		  QStringList listOfPrefix;
+    		  listOfPrefix << "DI" << "DA" << "DE" << "LE" << "LA"  ;
+    		  foreach(QString prefix,listOfPrefix){
+    		      if (name == prefix && nameList.size() > 2)
+    		      {
+    		  	  name = surname;
+    		  	  surname = nameList[SURNAME+1];
+    		          }
+    		      }		  
+    		  
+    	    }
+    	for (int i = 1; i < name.size(); ++i)
+    	{
+    		  name.replace(i,1,"x");
+    	    }
+    	QString newNameSurname;
+    	newNameSurname = name+","+surname;    
+    return newNameSurname;
 }
 

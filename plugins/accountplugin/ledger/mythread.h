@@ -92,10 +92,12 @@ class ProduceDoc: public QThread {
         QStringList    m_typesMovements;
         QTextDocument* getTextDocument();
         void           dateChosen(QDate & date);
+        void           nameChecked(bool checked);
     private :
         QDate           m_date;
         QDate           m_date1;
         QTextDocument * m_textDocument;
+        bool            m_noNameChecked;
         void        run();
         void        organize();
         void        fillTable(QList<QVector<QString> > & tableau,

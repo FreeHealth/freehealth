@@ -260,7 +260,7 @@ bool ProduceDoc::modele(QString & month,
     if (WarnDebugMessage)
 
               qDebug() << __FILE__ << QString::number(__LINE__) << " thread 3 "   ;
-    tableLedgerMonth = lio.getDataReceiptsInVector(un,trenteetquelque);
+    tableLedgerMonth = lio.getDataReceiptsInVector(un,trenteetquelque,m_noNameChecked);
     if (WarnDebugMessage)
 
               qDebug() << __FILE__ << QString::number(__LINE__) << " thread 4 "   ;
@@ -564,3 +564,9 @@ void ProduceDoc::dateChosen(QDate & date){
               qDebug() << __FILE__ << QString::number(__LINE__) << " date SSS =" << s ;
     m_mutex.unlock();
 }
+
+void ProduceDoc::nameChecked(bool checked)
+{
+    m_noNameChecked = checked;
+}
+

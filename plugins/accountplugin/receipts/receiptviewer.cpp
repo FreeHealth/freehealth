@@ -697,6 +697,8 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
 {
     if (user())
         m_userUuid = user()->uuid();
+    /*receiptsEngine re;
+    re.hideNamesOfPatients();*/
     ReceiptsManager rManager;
     m_kilometers = 0.00 ;
     m_distanceRuleValue = 0.00;

@@ -65,9 +65,10 @@ class LedgerIO : public QObject {
         QStringList getListOfSumsMonthlyMovementsIO(QObject * parent,const QString & dateBegin ,const QString & dateEnd);
         QStringList listOfReceiptsTypes();
         QStringList listOfMovementsTypes();
-        QList<QVector<QString> > getDataReceiptsInVector(const QString & dateBegin,const QString & dateEnd);
+        QList<QVector<QString> > getDataReceiptsInVector(const QString & dateBegin,const QString & dateEnd, bool noName);
         QList<QVector<QString> > getDataMovementsInVector(const QString & dateBegin,const QString & dateEnd);
     private :
+        QString getNoName(const QString name);
         AccountModel * m_accountModel;
         MovementModel * m_movementModel;
         QString m_userUuid;
