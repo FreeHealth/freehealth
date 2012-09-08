@@ -353,6 +353,21 @@ ChoiceDialog::ChoiceDialog(QWidget * parent,bool roundtrip, bool freevalue, QStr
     ui->plusConstButton->setToolTip(QKeySequence("CTRL+PgUp").toString());
     ui->lessConstButton->setShortcut(QKeySequence("CTRL+PgDown"));
     ui->lessConstButton->setToolTip(QKeySequence("CTRL+PgDown").toString());
+    
+    ui->cashButton->setShortcut(QKeySequence("ALT+E"));
+    ui->cashButton->setToolTip(QKeySequence("ALT+E").toString());
+    ui->checkButton->setShortcut(QKeySequence("ALT+C"));
+    ui->checkButton->setToolTip(QKeySequence("ALT+C").toString());
+    ui->visaButton->setShortcut(QKeySequence("ALT+V"));
+    ui->visaButton->setToolTip(QKeySequence("ALT+V").toString());
+    ui->otherButton->setShortcut(QKeySequence("ALT+O"));
+    ui->otherButton->setToolTip(QKeySequence("ALT+O").toString());
+    ui->bankingButton->setShortcut(QKeySequence("ALT+B"));
+    ui->bankingButton->setToolTip(QKeySequence("ALT+B").toString());
+    ui->dueButton->setShortcut(QKeySequence("ALT+D"));
+    ui->dueButton->setToolTip(QKeySequence("ALT+D").toString());
+    
+    ui->cashButton->setChecked(true);
 
     // connect(ui->buttonBox,SIGNAL(accepted()),this,SLOT(beforeAccepted()));
     connect(ui->okButton,SIGNAL(pressed()),this,SLOT(beforeAccepted()));

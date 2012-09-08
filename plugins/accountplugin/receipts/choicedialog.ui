@@ -233,6 +233,24 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>cashButton</tabstop>
+  <tabstop>checkButton</tabstop>
+  <tabstop>visaButton</tabstop>
+  <tabstop>otherButton</tabstop>
+  <tabstop>bankingButton</tabstop>
+  <tabstop>dueButton</tabstop>
+  <tabstop>plusButton</tabstop>
+  <tabstop>percentDoubleSpinBox</tabstop>
+  <tabstop>lessButton</tabstop>
+  <tabstop>lessConstButton</tabstop>
+  <tabstop>plusConstButton</tabstop>
+  <tabstop>freeEdit</tabstop>
+  <tabstop>freeValueSpinBox</tabstop>
+  <tabstop>quitButton</tabstop>
+  <tabstop>okButton</tabstop>
+  <tabstop>distanceDoubleSpinBox</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
