@@ -27,28 +27,28 @@
 
 /**
  * \class Form::FormItem
- * This object represents one element of the patient file form. The forms are a tree of QObject.
+ * This object represents one element of the patient file form. The forms are a tree of QObjects.
  * The root parent is an empty Form::FormMain item with some information about the Form::IFormIO reader,
  * the form internal information.\n
  *
  * Each Form::FormItem contains:
- * - one Form::FormItemSpec with description of the item (or the form for the empty root object):
+ * - one Form::FormItemSpec with a description of the item (or the form for the empty root object):
  *   - author, version, license...
- *   - theses data are fully translatable and can be used in any form model/view/controller
- * - one Form::FormItemScripts book of javascript of the item
- * - one Form::FormItemValues book of different type of values of the item
+ *   - these data are fully translatable and can be used in any form model/view/controller
+ * - one Form::FormItemScripts book of JavaScript of the item
+ * - one Form::FormItemValues book of different types of values of the item
  * - you can set its Form::IFormItemData for the database access
- * - you can set its Form::IFormWidget for the user view
+ * - you can set its Form::IFormWidget for a more specialized graphical user interface
  *
  * In your own Form::IFormIO engine, you may want to create children of item, you can use:
  * - createChildForm() to create a new Form::FormMain
  * - createChildItem() to create a new Form::FormItem
  * - createPage() to create a new Form::FormPage
  *
- * You can get all its first branch children by calling: Form::FormItem::formItemChildren() and the
- * full list of its children (flattened) using Form::FormItem::flattenFormItemChildren.
+ * You can get all of its first level children by calling Form::FormItem::formItemChildren() and the
+ * full list of its children (flattened) using Form::FormItem::flattenFormItemChildren().
  *
- * You can define extra-data (options) with the addExtraData(), extraData() and clearExtraData().
+ * You can define extra data (options) with the addExtraData(), extraData() and clearExtraData().
  *
  * You can define the Core::IPatient representation of this Form::FormItem with
  * setPatientDataRepresentation(), patientDataRepresentation(). The patient data representation is used
@@ -57,11 +57,11 @@
  */
 // TODO: change Form::FormItem pointers to references distributed by the Form::FormManager? like getItem(Form::FormMainIndex &index, const QString &uid)?
 
-// TODO - Options d'affichage et d'impression ??
-// TODO - Options de "droit" / utilisateurs autorisés
-// TODO - Base de règles
-// TODO - 1 QWidget historique
-// TODO - checkValueIntegrity() qui se base sur les règles de l'item pour vérifier son exactitude
+// TODO - Display options and printing??
+// TODO - Rights options / authorized users
+// TODO - Rule base
+// TODO - 1 QWidget history
+// TODO - add a checkValueIntegrity() method, based on the rules of the item to verify its accuracy
 
 /**
  * \class Form::FormPage
@@ -485,13 +485,20 @@ FormItem::~FormItem()
     }
 }
 
-void FormItem::addExtraData(const QString &id, const QString &data)
+/*!
+ * \brief Adds user defined extra data to the FormItem.
+ *
+ * The data in \e value is saved as \e key-value pairs using a QHash<QString, QString>. If the key
+ * already exists, the \e value is appended to that \e key with a ";" as delimiter.
+ * \sa extraData(), clearExtraData()
+ */
+void FormItem::addExtraData(const QString &key, const QString &value)
 {
-    if (m_ExtraData.keys().indexOf(id, Qt::CaseInsensitive) != -1) {
-        QString add = m_ExtraData.value(id) + ";" + data;
-        m_ExtraData.insert(id, add);
+    if (m_ExtraData.keys().indexOf(key, Qt::CaseInsensitive) != -1) {
+        const QString add = m_ExtraData.value(key) + ";" + value;
+        m_ExtraData.insert(key, add);
     } else {
-        m_ExtraData.insert(id,data);
+        m_ExtraData.insert(key,value);
     }
 }
 
