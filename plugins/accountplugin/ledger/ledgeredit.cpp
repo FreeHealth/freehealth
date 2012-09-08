@@ -110,7 +110,8 @@ LedgerEdit::~LedgerEdit(){
 
 void LedgerEdit::showLedger(){
     m_myThread->dateChosen(m_date);
-    if (m_myThread->isRunning())
+    m_myThread->nameChecked(ui->nameChecked->isChecked());
+    if (m_myThread->isRunning());
     {
           m_myThread->terminate();
           if (WarnDebugMessage)

@@ -55,6 +55,7 @@ class ACCOUNT_EXPORT MovementsViewer : public QWidget
         void setMovementsComboBoxToolTips(int);
         void userIsChanged();
         void setYearIsChanged(int);
+        void quitFreeaccout();
     private:
         bool showMovements();
         void fillMovementsComboBox();

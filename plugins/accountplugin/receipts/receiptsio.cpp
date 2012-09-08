@@ -522,3 +522,66 @@ bool receiptsEngine::datapackIsAvalaible()
         }
     return b;
 }
+
+//only to manage a database to try
+/*bool receiptsEngine::hideNamesOfPatients()
+{
+    bool success = true;
+    enum nameEnum {NAME=0,SURNAME};
+    enum queryEnum {ACCOUNT_ID=0,PATIENT_NAME};
+    QSqlQuery qy(m_db);
+    QString req = QString("SELECT %1,%2 FROM %3").arg("ACCOUNT_ID","PATIENT_NAME","account");
+    if (!qy.exec(req))
+    {
+    	  qWarning() << __FILE__ << QString::number(__LINE__) << qy.lastError().text() ;
+    	  return false;
+        }
+    while (qy.next())
+    {
+    	QString id = qy.value(ACCOUNT_ID).toString();
+    	QString nameSurname = qy.value(PATIENT_NAME).toString();
+    	QStringList nameList;
+    	if (nameSurname.contains(","))
+    	{
+    		nameList = nameSurname.split(",");  
+    	    }
+    	if (nameSurname.contains(" ")&& !nameSurname.contains(","))
+    	{
+    		nameList = nameSurname.split(" ");
+    	    }
+    	
+    	QString name;
+    	QString surname;
+    	if (nameList.size()>1)
+    	{
+    		  name = nameList[NAME];
+    		  surname = nameList[SURNAME];
+    		  QStringList listOfPrefix;
+    		  listOfPrefix << "DI" << "DA" << "DE" << "LE" << "LA"  ;
+    		  foreach(QString prefix,listOfPrefix){
+    		      if (name == prefix && nameList.size() > 2)
+    		      {
+    		  	  name = surname;
+    		  	  surname = nameList[SURNAME+1];
+    		          }
+    		      }		  
+    		  
+    	    }
+    	for (int i = 1; i < name.size(); ++i)
+    	{
+    		  name.replace(i,1,"x");
+    	    }
+    	nameSurname = name+","+surname;
+    	QSqlQuery qUpdate(m_db);
+    	QString reqUp = QString("UPDATE %1 SET %2 = '%3' WHERE %4 = '%5'")
+    	                .arg("account","PATIENT_NAME",nameSurname,"ACCOUNT_ID",id);
+    	if (!qUpdate.exec(reqUp))
+    	{
+    		  qWarning() << __FILE__ << QString::number(__LINE__) << qUpdate.lastError().text() ;
+    		  return false;
+    		  
+    	    }
+        }//while
+       
+    return success;
+}*/

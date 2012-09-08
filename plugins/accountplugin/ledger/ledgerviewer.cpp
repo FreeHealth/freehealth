@@ -33,6 +33,8 @@
 #include "ui_ledgerviewer.h"
 #include "ledgerio.h"
 
+#include "../receipts/receiptsmanager.h"
+
 #include <utils/global.h>
 #include <translationutils/constants.h>
 #include <translationutils/trans_msgerror.h>
@@ -151,7 +153,7 @@ bool LedgerViewer::createActions(){
     qDebug() << __FILE__ << QString::number(__LINE__) << " m_closeAction icon =" << qApp->applicationDirPath()+"/../../global_resources/pixmap/16x16/exit.png";
     m_closeAction->setStatusTip(tr("Close Ledger"));
     m_hashTextAndAction.insert(m_closeAction->text(),m_closeAction);
-    b = connect(m_closeAction, SIGNAL(triggered()), this, SLOT(close()));
+    b = connect(m_closeAction, SIGNAL(triggered()), this, SLOT(quitFreeAccount()));
 
     m_monthlyReceiptsAnalysis = new QAction(tr("Receipts by month"),this);
     m_monthlyReceiptsAnalysis->setStatusTip(tr("See receipts by month."));
@@ -320,4 +322,19 @@ void LedgerViewer::monthsComboBoxcurrentIndexChanged(const QString& month){
         QAction * chosenAction = m_hashTextAndAction.value(m_actionText);
         chosenAction->activate(QAction::Trigger);
     }
+}
+
+void LedgerViewer::quitFreeAccount()
+{
+    ReceiptsManager r;
+    if (r.isMedintuxArg())
+    {
+    	  setAttribute(Qt::WA_DeleteOnClose);
+    	  QApplication::closeAllWindows();
+        }
+    else
+    {
+    	close();
+        }
+    
 }

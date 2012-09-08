@@ -110,7 +110,7 @@ MovementsViewer::MovementsViewer(QWidget * parent) :
     ui->recordButton->setToolTip(QKeySequence(QKeySequence::Save).toString()); 
 
     
-    connect(ui->quitButton,SIGNAL(pressed()),this,SLOT(close()));
+    connect(ui->quitButton,SIGNAL(pressed()),this,SLOT(quitFreeaccout()));
     connect(ui->recordButton,SIGNAL(pressed()),this,SLOT(recordMovement()));
     connect(ui->deleteButton,SIGNAL(pressed()),this,SLOT(deleteMovement()));
     connect(ui->validButton,SIGNAL(pressed()),this,SLOT(validMovement()));
@@ -123,6 +123,11 @@ MovementsViewer::MovementsViewer(QWidget * parent) :
 
 MovementsViewer::~MovementsViewer()
 {
+}
+
+void MovementsViewer::quitFreeaccout()
+{
+    QApplication::closeAllWindows();
 }
 
 void MovementsViewer::userIsChanged(){

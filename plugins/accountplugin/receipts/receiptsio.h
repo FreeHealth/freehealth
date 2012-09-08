@@ -68,6 +68,7 @@ public:
     QString getStringOfpreferredActAndHisValue(const QString & preferredAct);
     QHash<QString,QString> getPercentagesAccordingToUser();
     QString getJustDayBeforeLastRelease();
+    //bool hideNamesOfPatients();
 
 private:
     enum typeOfChoice {

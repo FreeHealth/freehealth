@@ -32,6 +32,8 @@
 #include "accountview.h"
 #include "ui_accountview.h"
 
+#include "receipts/receiptsmanager.h"
+
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/constants.h>
@@ -92,6 +94,14 @@ AccountView::AccountView(QWidget *parent) :
     m_userUuid = m_Model->getUserUuid();
     int thisYear = QDate::currentDate().year();
     QDate beginDate = QDate(thisYear,01,01);
+    m_ui->quitButton->setEnabled(false);
+    m_ui->quitButton->hide();
+    ReceiptsManager receiptsManager;
+    if (receiptsManager.isMedintuxArg())
+    {
+        m_ui->quitButton->setEnabled(true);
+        m_ui->quitButton->show();
+        }
     m_ui->startDate->setDisplayFormat(tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR));
     m_ui->endDate->setDisplayFormat(tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR));
     m_ui->startDate->setDate(beginDate);
@@ -107,6 +117,8 @@ AccountView::AccountView(QWidget *parent) :
     refresh();
     calc();
     connect(m_ui->deleteButton,SIGNAL(pressed()),this,SLOT(deleteLine()));
+    connect(m_ui->quitButton,SIGNAL(pressed()),this,SLOT(quitFreeAccount()));
+    
 }
 
 AccountView::~AccountView()
@@ -307,4 +319,18 @@ void AccountView::changeEvent(QEvent *e)
           m_ui->retranslateUi(this);
           setHeadersOfTable();
     }
+}
+
+void AccountView::quitFreeAccount()
+{
+    ReceiptsManager r;
+    if (r.isMedintuxArg())
+    {
+    	  setAttribute(Qt::WA_DeleteOnClose);
+    	  QApplication::closeAllWindows();
+        }
+    else
+    {
+    	close();
+        }    
 }

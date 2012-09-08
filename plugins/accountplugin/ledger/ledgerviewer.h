@@ -58,6 +58,7 @@ class LedgerViewer : public QWidget {
         void yearlyAndTypeMovementsAnalysis();
         void ledgerActionShow();
         void monthsComboBoxcurrentIndexChanged(const QString& month);
+        void quitFreeAccount();
 
     private :
         void fillMenuBar();
