@@ -280,7 +280,7 @@ void MyWidget::changeEvent(QEvent *e)
         retranslate();
 }
 \endcode
-Sometimes this is done inin automatically created code by QtCreator in the ui_mywidget.cpp file.
+Sometimes this is done in automatically created code by QtCreator in the ui_mywidget.cpp file.
 
 The class Form::FormItem already implements the i18n feature
 
