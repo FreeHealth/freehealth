@@ -104,7 +104,8 @@ inline static int getNumberOfColumns(Form::FormItem *item, int defaultValue = 1)
 }
 
 IdentityFormWidget::IdentityFormWidget(Form::FormItem *formItem, QWidget *parent) :
-    Form::IFormWidget(formItem,parent), m_ContainerLayout(0)
+    Form::IFormWidget(formItem,parent),
+    m_ContainerLayout(0)
 {
     setObjectName("IdentityFormWidget");
     // Create the central widget / layout
@@ -133,6 +134,8 @@ IdentityFormWidget::IdentityFormWidget(Form::FormItem *formItem, QWidget *parent
         QLayout *lay = qFindChild<QLayout*>(formItem->parentFormMain()->formWidget(), layout);
         if (lay) {
             lay->addWidget(m_Identity);
+            lay->setMargin(0);
+            lay->setSpacing(0);
         } else {
             LOG_ERROR("Using the QtUiLinkage, layout not found in the ui: " + formItem->uuid());
         }

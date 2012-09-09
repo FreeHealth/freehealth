@@ -62,6 +62,11 @@ QVariant PrescriptionToken::testValue() const
 
 QVariant PrescriptionToken::value() const
 {
+    if (!_model)
+        return QVariant();
+    if (_row < 0 || _row > _model->rowCount())
+        return QVariant();
+
     using namespace DrugsDB::Constants;
     if (_isRepeatedDailyScheme) {
         DrugsDB::DailySchemeModel day;

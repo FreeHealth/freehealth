@@ -137,7 +137,10 @@ for class "Webcam" should be named "WebcamDialog"
         - 'Plugin' for a plugin
         - etc.
     - Prefixes:
-        - 'm_' for member variables and method names
+        - 'm_' for member variables
+        - \b no prefix for methods
+    - member variable and method names should be "camelCased", beginning with a \e lowercase
+      letter (see example below).
 
 Example:
 \code
@@ -146,6 +149,9 @@ class YOUR_EXPORTER YourObject
 public:
     YourObject();
     ~YourObject() {}
+
+    void fooMethod(int value);
+    bool isAvailable();
     [...]
 
 private:
@@ -169,12 +175,12 @@ it should be added to a library or a plugin (Editor for example).
 
 \section codedocumentation Code Documentation
 
-We document our code with Doxygen.
-Thank you for referring to the Doxygen documentation at <a href="http://www.doxygen.org">www.doxygen.org</a>.
-- Small functions with a name that undoubtedly express its purpose must not necessarily be documented.
-- Complex functions must be documented.
-To improve bugfixing please add this framework documentation in the header file of your code (or
-the version is the release version of the object).
+We document our code with Doxygen. If you want to dive into howto document with Doxygen, look at the official
+Doxygen documentation at <a href="http://www.doxygen.org">www.doxygen.org</a>.
+- Generally should all methods have at least a single line documentation explaining the purpose.
+- Complex functions \b must be documented.
+To improve bugfixing please add the following framework documentation block in the header file of your
+code (\e version is the release version of the object).
 
 \e Hint: If you use QtCreator and create classes using the template wizards provided by FreeMedForms
 this documentation part will be done automatically.
@@ -184,7 +190,7 @@ this documentation part will be done automatically.
  * \file nameofthecurrentfile.h
  * \author AUTHOR_NAME <MAIL@ADRESS>
  * \version 0.0.3
- * \date DATE_DD_MMM_YYYY
+ * \date DATE_YYYY_MM_DD
  *\/
 \endverbatim
 
@@ -202,30 +208,29 @@ class itself:
 \endverbatim
 
 
-- It may be useful for complex members to document the code in the
-implementation (.cpp file).
+- Generally try to document code in the implementation (.cpp file), not in the header files.
+This keeps the header files smaller (faster compile times) and cleaner.
 - Comments are written using the C++ style '//'.
-For reasons of convenience, comments marked by
+For convenience reasons, comments like
 \verbatim
 \/* comment *\/
 \endverbatim
-are used only by administrators to neutralize large portions of code in tests.
+are used \e only by administrators to neutralize large portions of code in tests.
 
-- Don't comment \e each and everything in your source code, it can affect the readability.
-- Prefer variables and functions with meaningful ('drugsCounter' rather than 'm1').
-- It should be possible to read the code naturally. For example, do not write a comment
-that the call to 'resetDatabaseValue()' will reset the database value to zero - this is obvious by the name.
-- The documentation is written in English.
+- Don't comment \e every single bit in your source code, it can affect the readability.
+- Prefer variables and functions with meaningful names ('drugsCounter' rather than 'm1').
+- It should be possible to read the code naturally, without much explanation. For example,
+do not write a comment that the call to 'resetDatabaseValue()' will reset the database value - this is obvious by the name.
+- The documentation is written in \e English \e only.
 - Inclusions paths are defined in the project as following:
     - \e ./plugins
     - \e ./libs
     - \e ./contrib
 
 - For reading convenience, use the following order for inclusion of headers:
-    - Plugins (grouped into blocks by plugins)
-    - FreeMedForms libraries (grouped into blocks by libraries)
-    - Qt headers
-
+    -# Plugins (grouped into blocks by plugins)
+    -# FreeMedForms libraries (grouped into blocks by libraries)
+    -# Qt headers
 
 \code
 #include <pluginname1/filename.h>
@@ -264,15 +269,15 @@ that the call to 'resetDatabaseValue()' will reset the database value to zero - 
                         tr("Detailed text"),
                         tr("Title is faculative, application name will appear if no text is passed."));
 
-    // If you do not find your happiness in the Utils version, please extend it and use the same model.
+    // If the Utils version doesn't fit your needs, please extend/subclass it and use the same model.
 \endcode
 
 \subsection i18n Internationalisation
 
-- All user visible texts must translated and must be written in simple and correct English.
-- The functions tr() or QCoreApplication::transalate() are used to translate the text.
-- All widgets must be translated when a new language is loaded by the application. To achieve this,
-reimplement the method changeEvent() and query for QEvent::LanguageChange.
+- \e All user visible text must be written in simple and correct English, and translatable
+using the functions \e tr() or \e QCoreApplication::translate().
+- All widgets must be instantly translated when a new language is loaded by the application. To achieve this,
+reimplement the method changeEvent() in the widget and query for QEvent::LanguageChange:
 \code
 void MyWidget::changeEvent(QEvent *e)
 {
@@ -280,9 +285,8 @@ void MyWidget::changeEvent(QEvent *e)
         retranslate();
 }
 \endcode
-Sometimes this is done in automatically created code by QtCreator in the ui_mywidget.cpp file.
-
-The class Form::FormItem already implements the i18n feature
+Sometimes this is done automatically in auto-created code by QtCreator in the ui_mywidget.cpp file.
+The class Form::FormItem already implements the i18n feature.
 
 \section building OS Management and Compilation Mode
 

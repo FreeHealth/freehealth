@@ -132,6 +132,7 @@ namespace {
     const char * const  LABEL_ALIGN_TOP      = "labelontop";
     const char * const  LABEL_ALIGN_LEFT     = "labelonleft";
     const char * const  DONTPRINTEMPTYVALUES = "DontPrintEmptyValues";
+    const char * const  HIDEHEADERONUNIQUEEPISODE = "HideHeaderOnUniqueEpisode";
     const char * const  NOT_PRINTABLE        = "notprintable";
 }
 
@@ -215,6 +216,11 @@ inline static QString getDateFormat(Form::FormItem *item, const QString & defaul
 inline static bool dontPrintEmptyValues(Form::FormItem *item)
 {
     return item->getOptions().contains(::DONTPRINTEMPTYVALUES, Qt::CaseInsensitive);
+}
+
+inline static bool hideHeaderOnUniqueEpisode(Form::FormItem *item)
+{
+    return item->getOptions().contains(::HIDEHEADERONUNIQUEEPISODE, Qt::CaseInsensitive);
 }
 
 inline static void executeOnValueChangedScript(Form::FormItem *item)
@@ -357,7 +363,16 @@ BaseForm::BaseForm(Form::FormItem *formItem, QWidget *parent) :
         QBuffer buf;
         buf.setData(uiContent.toAscii());
         mainWidget = loader.load(&buf, this);
-        mainLayout->addWidget(header);
+
+        // Manage options
+        Form::FormMain *form = qobject_cast<Form::FormMain*>(formItem);
+        if (form) {
+            if (!(form->episodePossibilities()==Form::FormMain::UniqueEpisode && hideHeaderOnUniqueEpisode(formItem))) {
+                mainLayout->addWidget(header);
+            } else {
+                header->hide();
+            }
+        }
     } else {
         mainLayout->setSpacing(0);
         mainLayout->setMargin(0);
@@ -373,8 +388,16 @@ BaseForm::BaseForm(Form::FormItem *formItem, QWidget *parent) :
             m_ContainerLayout->setSpacing(5);
         }
 
-        m_ContainerLayout->addWidget(header, 0, 0, 1, numberColumns);
-        i = numberColumns * 2;
+        // Manage options
+        Form::FormMain *form = qobject_cast<Form::FormMain*>(formItem);
+        if (form) {
+            if (!(form->episodePossibilities()==Form::FormMain::UniqueEpisode && hideHeaderOnUniqueEpisode(formItem))) {
+                m_ContainerLayout->addWidget(header, 0, 0, 1, numberColumns);
+                i = numberColumns * 2;
+            } else {
+                header->hide();
+            }
+        }
         row = 0;
         col = 0;
     }
@@ -409,6 +432,8 @@ void BaseForm::addWidgetToContainer(IFormWidget * widget)
         return;
     col = (i % numberColumns);
     row = (i / numberColumns);
+    qWarning() << "ADDING to" << m_FormItem->uuid() << "widget" << widget->formItem()->uuid()
+               << "i" << i << "col" << col << "row" << row;
     m_ContainerLayout->addWidget(widget , row, col);
     i++;
 }
