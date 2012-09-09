@@ -1277,6 +1277,10 @@ void ReceiptViewer::save()
         {
             patientName = manager.getFullName();
         }
+        if (manager.isFreaccountIndependant())
+        {
+        	  patientName = ui->nameEdit->text();
+            }
         /* if (ui->freeTextCheckBox->isChecked())
     {
         FreeText freeTextDialog(this);
