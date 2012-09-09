@@ -184,6 +184,15 @@ public:
         return ui->formDataMapper->submit();
     }
 
+    void setEpisodeViewVisibility(bool visible)
+    {
+        if (visible) {
+            ui->episodeView->show();
+        } else {
+            ui->episodeView->hide();
+        }
+    }
+
 public:
     Ui::FormPlaceHolder *ui;
     FormMain *_formMain;
@@ -271,6 +280,8 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
     d->ui->setupUi(this);
     layout()->setMargin(0);
     layout()->setSpacing(0);
+    d->ui->verticalLayout_2->setMargin(0);
+    d->ui->verticalLayout_2->setSpacing(0);
 
     d->_delegate = new Internal::FormItemDelegate(d->ui->formView);
     d->ui->formDataMapper->initialize();
@@ -363,6 +374,7 @@ void FormPlaceHolder::setRootForm(Form::FormMain *rootForm)
     Core::Command *cmd = actionManager()->command(Constants::A_SHOWPATIENTLASTEPISODES);
     connect(cmd->action(), SIGNAL(triggered()), this, SLOT(showLastEpisodeSynthesis()));
 
+    // Select the first available form in the tree model
     if (rootForm->firstLevelFormMainChildren().count() > 0) {
         setCurrentForm(rootForm->firstLevelFormMainChildren().at(0));
         QModelIndex index = d->_formTreeModel->index(0,0);
@@ -432,6 +444,13 @@ void FormPlaceHolder::setCurrentForm(Form::FormMain *form)
 //    d->ui->episodeView->showColumn(EpisodeModel::FormLabel);
     d->ui->episodeView->showColumn(EpisodeModel::UserCreatorName);
     d->ui->episodeView->showColumn(EpisodeModel::UserDate);
+
+    // Unique épisode || no episode -> hide episodeview
+    if (form->episodePossibilities()==FormMain::UniqueEpisode || form->episodePossibilities()==FormMain::NoEpisode) {
+        d->setEpisodeViewVisibility(false);
+    } else {
+        d->setEpisodeViewVisibility(true);
+    }
 
     d->ui->episodeView->horizontalHeader()->setResizeMode(EpisodeModel::UserDate, QHeaderView::ResizeToContents);
     d->ui->episodeView->horizontalHeader()->setResizeMode(EpisodeModel::Label, QHeaderView::Stretch);
