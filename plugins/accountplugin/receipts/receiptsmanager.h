@@ -69,6 +69,7 @@ class ACCOUNT_EXPORT ReceiptsManager : public QObject
 
   //medintux
   bool isMedintuxArg();
+  bool isFreaccountIndependant();
   QString getFullName();
 
 };

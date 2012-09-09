@@ -48,6 +48,7 @@ namespace Constants {
 // Anywhere in the freeaccount code
 enum FreeAccountCommandLine {
     CL_MedinTux = 0,
+    CL_Independant,
     CL_Test,
     CL_ReceiptsCreator,
     CL_EMR_Name,
@@ -66,8 +67,6 @@ enum FreeAccountCommandLine {
     CL_DbPort,
     CL_MaxParam
 };
-
-
 }
 }
 
