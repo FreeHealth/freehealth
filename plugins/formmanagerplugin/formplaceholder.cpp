@@ -176,20 +176,24 @@ public:
         QAction *a = aRemoveEpisode = new QAction(q);
         a->setIcon(theme()->icon(Core::Constants::ICONREMOVE));
         QObject::connect(a, SIGNAL(triggered()), q, SLOT(removeEpisode()));
+        aRemoveEpisode->setEnabled(false);
         _episodeToolBar->addAction(aRemoveEpisode);
 
         a = aValidateEpisode = new QAction(q);
         a->setIcon(theme()->icon(Core::Constants::ICONOK));
         QObject::connect(a, SIGNAL(triggered()), q, SLOT(validateEpisode()));
+        aValidateEpisode->setEnabled(false);
         _episodeToolBar->addAction(aValidateEpisode);
 
-        cmd = actionManager()->command(Core::Constants::A_FILE_SAVE);
-        QObject::connect(cmd->action(), SIGNAL(triggered()), q, SLOT(saveCurrentEditingEpisode()));
-        _episodeToolBar->addAction(cmd->action());
+        a = aSaveEpisode = actionManager()->command(Core::Constants::A_FILE_SAVE)->action();
+        QObject::connect(a, SIGNAL(triggered()), q, SLOT(saveCurrentEditingEpisode()));
+        a->setEnabled(false);
+        _episodeToolBar->addAction(a);
 
-        cmd = actionManager()->command(Constants::A_PRINTFORM);
-        QObject::connect(cmd->action(), SIGNAL(triggered()), q, SLOT(printCurrentItem()));
-        _episodeToolBar->addAction(cmd->action());
+        a = aPrintForm = actionManager()->command(Constants::A_PRINTFORM)->action();
+        QObject::connect(a, SIGNAL(triggered()), q, SLOT(printCurrentItem()));
+        a->setEnabled(false);
+        _episodeToolBar->addAction(a);
 
         a = aTakeScreenShot = new QAction(q);
         a->setIcon(theme()->icon(Core::Constants::ICONTAKESCREENSHOT));
@@ -226,11 +230,16 @@ public:
 
     void setEpisodeViewVisibility(bool visible)
     {
-        if (visible) {
-            ui->episodeView->show();
-        } else {
-            ui->episodeView->hide();
-        }
+        ui->episodeView->setVisible(visible);
+    }
+
+    void updateEpisodeActions(const QModelIndex &index)
+    {
+        const bool enabled = index.isValid();
+        aRemoveEpisode->setEnabled(enabled);
+        aValidateEpisode->setEnabled(enabled);
+        aSaveEpisode->setEnabled(enabled);
+        aPrintForm->setEnabled(enabled);
     }
 
 public:
@@ -239,7 +248,7 @@ public:
     FormTreeModel *_formTreeModel;
     FormItemDelegate *_delegate;
     QToolBar *_episodeToolBar;
-    QAction *aValidateEpisode, *aRemoveEpisode, *aTakeScreenShot;
+    QAction *aValidateEpisode, *aRemoveEpisode, *aTakeScreenShot, *aSaveEpisode, *aPrintForm;
     QHash<int, QString> m_StackId_FormUuid;
 
 private:
@@ -533,6 +542,7 @@ void FormPlaceHolder::episodeChanged(const QModelIndex &current, const QModelInd
     if (previous.isValid())
         d->saveCurrentEditingEpisode();
     d->ui->formDataMapper->setCurrentEpisode(current);
+    d->updateEpisodeActions(current);
 }
 
 /** Private slot. Creates a new episode for the current selected form */
