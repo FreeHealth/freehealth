@@ -234,6 +234,9 @@ public:
         }
 
         _formMain->formWidget()->setEnabled(true);
+
+        // TODO: if episode is validated ==> read-only
+
         if (WarnLogChronos)
             Utils::Log::logTimeElapsed(chrono, q->objectName(), "feedFormWithEpisodeContent");
     }
