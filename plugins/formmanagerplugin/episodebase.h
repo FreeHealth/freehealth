@@ -142,12 +142,13 @@ public:
     bool saveEpisode(EpisodeData *episode);
     bool saveEpisode(const QList<EpisodeData *> &episode);
     bool saveEpisodeContent(const QVariant &uid, const QString &xml);
+    bool saveEpisodeValidation(EpisodeValidationData *validation);
 
     QList<EpisodeData *> getEpisodes(const EpisodeBaseQuery &query);
     bool getEpisodeContent(EpisodeData *episode);
     int getNumberOfEpisodes(const QString &formUid);
     QString getEpisodeContent(const QVariant &uid);
-    QList<EpisodeValidationData*> getEpisodeValidations(const QVariant &uid);
+    QList<EpisodeValidationData *> getEpisodeValidations(const QVariant &uid);
 
 private:
     bool createDatabase(const QString &connectionName, const QString &dbName,
