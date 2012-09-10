@@ -56,12 +56,12 @@
 #include <coreplugin/dialogs/settingsdialog.h>
 
 #include <QAction>
-#include <QToolBar>
-#include <QMenuBar>
-#include <QWidget>
-#include <QDebug>
-#include <QKeySequence>
-#include <QLocale>
+//#include <QToolBar>
+//#include <QMenuBar>
+//#include <QWidget>
+//#include <QDebug>
+//#include <QKeySequence>
+//#include <QLocale>
 #include <QStatusBar>
 #include <QLabel>
 #include <QDesktopServices>
@@ -178,7 +178,7 @@ void MainWindowActionHandler::createGeneralActions(const int actions)
         cmd->setTranslations(Trans::Constants::FILENEW_TEXT);
         newmenu->addAction(cmd, Constants::G_GENERAL_NEW);
     }
-    
+
     // Open Action
     if (actions & Core::MainWindowActions::A_FileOpen) {
         // Create action
