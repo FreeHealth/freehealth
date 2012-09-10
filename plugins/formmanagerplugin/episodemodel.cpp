@@ -474,7 +474,9 @@ QVariant EpisodeModel::data(const QModelIndex &index, int role) const
         switch (index.column()) {
         case UserDate:
         {
-            // TODO add a preference (show/hide episode validation icon in episode view) / or use a specific delegate
+            // TODO: add a preference (show/hide episode validation icon in episode view)
+            // or use a specific delegate
+
             // Scale down the icons to 12x12 or 10x10
             if (d->isEpisodeValidated(index))
                 return theme()->icon(Core::Constants::ICONLOCK_BLACKWHITE).pixmap(12,12);
