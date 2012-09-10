@@ -523,13 +523,9 @@ void BaseForm::triggered(QAction *action)
                                                         settings()->path(Core::ISettings::UserDocumentsPath),
                                                         tr("Images (*.png)"));
         if (!fileName.isEmpty()) {
-
-            /** \badcode this is a dirty hack to workaround a Qt "bug" that
-              makes it impossible to add a default suffix with the
-              static function getSaveFileName() */
-            if (fileName.right(4) != ".png") {
+            QFileInfo info(fileName);
+            if (info.completeSuffix().isEmpty())
                 fileName.append(".png");
-            }
             pix.save(fileName);
         }
     }
