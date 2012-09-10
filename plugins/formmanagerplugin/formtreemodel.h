@@ -68,8 +68,8 @@ public:
     Qt::ItemFlags flags(const QModelIndex &index) const;
 
     bool isUniqueEpisode(const QModelIndex &index) const;
-    bool isNoEpisode(const QModelIndex &index);
-    bool isMultiEpisode(const QModelIndex &index) const {return !isUniqueEpisode(index);}
+    bool isNoEpisode(const QModelIndex &index) const;
+    bool isMultiEpisode(const QModelIndex &index) const {return (!isUniqueEpisode(index) && !isNoEpisode(index));}
     Form::FormMain *formForIndex(const QModelIndex &index) const;
 
 private Q_SLOTS:

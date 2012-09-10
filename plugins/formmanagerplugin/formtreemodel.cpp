@@ -217,25 +217,25 @@ Qt::ItemFlags FormTreeModel::flags(const QModelIndex &index) const
     return Qt::ItemIsSelectable | Qt::ItemIsEnabled;
 }
 
-/** Return true is the \e index only owns one unique episode. It is supposed that the \e index points to a form */
+/** Return true if the \e index only owns one unique episode. It is supposed that the \e index points to a form */
 bool FormTreeModel::isUniqueEpisode(const QModelIndex &index) const
 {
     if (!index.isValid())
         return false;
-    FormMain *form = d->formForIndex(index);
+    const FormMain *form = d->formForIndex(index);
     if (form)
-        return (form->episodePossibilities()==FormMain::UniqueEpisode);
+        return (form->episodePossibilities() == FormMain::UniqueEpisode);
     return false;
 }
 
-/** Return true is the \e index does not own episodes. It is supposed that the \e index points to a form */
-bool FormTreeModel::isNoEpisode(const QModelIndex &index)
+/*! Return true if the \e index does not own episodes. It is supposed that the \e index points to a form */
+bool FormTreeModel::isNoEpisode(const QModelIndex &index) const
 {
     if (!index.isValid())
         return false;
-    FormMain *form = d->formForIndex(index);
+    const FormMain *form = d->formForIndex(index);
     if (form)
-        return (form->episodePossibilities()==FormMain::NoEpisode);
+        return (form->episodePossibilities() == FormMain::NoEpisode);
     return false;
 }
 
