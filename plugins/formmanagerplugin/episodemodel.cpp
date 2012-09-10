@@ -579,29 +579,12 @@ bool EpisodeModel::insertRows(int row, int count, const QModelIndex &)
 {
     if (d->_readOnly)
         return false;
-
-//    QSqlTableModel::EditStrategy strategy = d->_sqlModel->editStrategy();
-//    d->_sqlModel->setEditStrategy(QSqlTableModel::OnManualSubmit);
-
     bool ok = d->_sqlModel->insertRows(row, count);
     if (!ok) {
         LOG_ERROR("Unable to insert rows: " + d->_sqlModel->lastError().text());
         return false;
     }
-
-//    for(int i=0; i<count; ++i) {
-//        i+=row;
-//        d->_sqlModel->setData(d->_sqlModel->index(i, Constants::EPISODES_ISVALID), 1);
-//        qWarning() << d->_sqlModel->data(d->_sqlModel->index(i, Constants::EPISODES_ID));
-//    }
-
     d->_sqlModel->submitAll();
-//    d->_sqlModel->blockSignals(true);
-//    d->_sqlModel->submit();
-//    d->_sqlModel->blockSignals(false);
-
-//    d->_sqlModel->setEditStrategy(strategy);
-
     return true;
 }
 
@@ -649,11 +632,30 @@ bool EpisodeModel::isReadOnly() const
     return d->_readOnly;
 }
 
-/** Return true if the model has unsaved data */
+/** Return true if the model has unsaved data (NOT CODED) */
 bool EpisodeModel::isDirty() const
 {
+    // TODO: code here
     return false;
 //    return d->_sqlModel->isDirty();
+}
+
+/** Validate an episode using the current user and the current date time. */
+bool EpisodeModel::validateEpisode(const QModelIndex &index)
+{
+    if (!index.isValid())
+        return false;
+    EpisodeValidationData *validation = new EpisodeValidationData;
+    QModelIndex idindex = d->_sqlModel->index(index.row(), Constants::EPISODES_ID);
+    QVariant id = d->_sqlModel->data(idindex);
+    validation->setData(EpisodeValidationData::EpisodeId, id);
+    validation->setData(EpisodeValidationData::ValidationDate, QDateTime::currentDateTime());
+    validation->setData(EpisodeValidationData::UserUid, user()->uuid());
+    validation->setData(EpisodeValidationData::IsValid, 1);
+    d->_validationCache.insertMulti(id.toInt(), validation);
+    bool ok = episodeBase()->saveEpisodeValidation(validation);
+    Q_EMIT dataChanged(index(index.row(), 0), index(index.row(), columnCount() - 1));
+    return ok;
 }
 
 /** Save the whole model. \sa isDirty() */
