@@ -173,28 +173,27 @@ public:
         QObject::connect(cmd->action(), SIGNAL(triggered()), q, SLOT(newEpisode()));
         _episodeToolBar->addAction(cmd->action());
 
-        cmd = actionManager()->command(Constants::A_PRINTFORM);
-        QObject::connect(cmd->action(), SIGNAL(triggered()), q, SLOT(printCurrentItem()));
-        _episodeToolBar->addAction(cmd->action());
+        QAction *a = aRemoveEpisode = new QAction(q);
+        a->setIcon(theme()->icon(Core::Constants::ICONREMOVE));
+        QObject::connect(a, SIGNAL(triggered()), q, SLOT(removeEpisode()));
+        _episodeToolBar->addAction(aRemoveEpisode);
+
+        a = aValidateEpisode = new QAction(q);
+        a->setIcon(theme()->icon(Core::Constants::ICONOK));
+        QObject::connect(a, SIGNAL(triggered()), q, SLOT(validateEpisode()));
+        _episodeToolBar->addAction(aValidateEpisode);
 
         cmd = actionManager()->command(Core::Constants::A_FILE_SAVE);
         QObject::connect(cmd->action(), SIGNAL(triggered()), q, SLOT(saveCurrentEditingEpisode()));
         _episodeToolBar->addAction(cmd->action());
 
-        QAction *a = aValidateEpisode = new QAction(q);
-        a->setIcon(theme()->icon(Core::Constants::ICONOK));
-        QObject::connect(a, SIGNAL(triggered()), q, SLOT(validateEpisode()));
-
-        a = aRemoveEpisode = new QAction(q);
-        a->setIcon(theme()->icon(Core::Constants::ICONREMOVE));
-        QObject::connect(a, SIGNAL(triggered()), q, SLOT(removeEpisode()));
+        cmd = actionManager()->command(Constants::A_PRINTFORM);
+        QObject::connect(cmd->action(), SIGNAL(triggered()), q, SLOT(printCurrentItem()));
+        _episodeToolBar->addAction(cmd->action());
 
         a = aTakeScreenShot = new QAction(q);
         a->setIcon(theme()->icon(Core::Constants::ICONTAKESCREENSHOT));
         QObject::connect(a, SIGNAL(triggered()), q, SLOT(takeScreenShotEpisode()));
-
-        _episodeToolBar->addAction(aValidateEpisode);
-        _episodeToolBar->addAction(aRemoveEpisode);
         _episodeToolBar->addAction(aTakeScreenShot);
 
         ui->toolbarLayout->addWidget(_episodeToolBar);
