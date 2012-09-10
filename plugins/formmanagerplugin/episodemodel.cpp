@@ -654,7 +654,7 @@ bool EpisodeModel::validateEpisode(const QModelIndex &index)
     validation->setData(EpisodeValidationData::IsValid, 1);
     d->_validationCache.insertMulti(id.toInt(), validation);
     bool ok = episodeBase()->saveEpisodeValidation(validation);
-    Q_EMIT dataChanged(index(index.row(), 0), index(index.row(), columnCount() - 1));
+    Q_EMIT dataChanged(this->index(index.row(), 0), this->index(index.row(), columnCount() - 1));
     return ok;
 }
 
