@@ -432,8 +432,8 @@ void BaseForm::addWidgetToContainer(IFormWidget * widget)
         return;
     col = (i % numberColumns);
     row = (i / numberColumns);
-    qWarning() << "ADDING to" << m_FormItem->uuid() << "widget" << widget->formItem()->uuid()
-               << "i" << i << "col" << col << "row" << row;
+//    qWarning() << "ADDING to" << m_FormItem->uuid() << "widget" << widget->formItem()->uuid()
+//               << "i" << i << "col" << col << "row" << row;
     m_ContainerLayout->addWidget(widget , row, col);
     i++;
 }

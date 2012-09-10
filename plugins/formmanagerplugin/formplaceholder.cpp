@@ -658,8 +658,15 @@ void FormPlaceHolder::printCurrentItem()
     p->print(htmlToPrint, Core::IDocumentPrinter::Papers_Generic_User, false);
 }
 
+/**
+ * Validate the currently selected episode
+ * \sa Form::EpisodeModel::validateEpisode()
+ */
 void FormPlaceHolder::validateEpisode()
 {
+    if (!d->ui->episodeView->selectionModel()->hasSelection())
+        return;
+
     // message box
     bool yes = Utils::yesNoMessageBox(tr("Validate the current episode"),
                                       tr("When you validate an episode, you prevent all subsequent amendments. "
@@ -668,8 +675,18 @@ void FormPlaceHolder::validateEpisode()
     if (!yes)
         return;
 
+    // get the episodeModel corresponding to the currently selected form
+    Form::FormMain *form = d->_formTreeModel->formForIndex(d->ui->formView->selectionModel()->currentIndex());
+    EpisodeModel *model = formManager()->episodeModel(form);
+    if (!model)
+        return;
+    model->validateEpisode(d->ui->episodeView->currentIndex());
 }
 
+/**
+ * Remove the currently selected episode
+ * \sa Form::EpisodeModel::removeEpisode()
+ */
 void FormPlaceHolder::removeEpisode()
 {
     // message box

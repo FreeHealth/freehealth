@@ -41,7 +41,7 @@ QT_END_NAMESPACE
  * \file episodemodel.h
  * \author Eric MAEKER
  * \version 0.8.0
- * \date 01 Sept 2012
+ * \date 10 Sept 2012
 */
 
 namespace Form {
@@ -124,6 +124,8 @@ public:
     void setReadOnly(const bool state);
     bool isReadOnly() const;
     bool isDirty() const;
+
+    bool validateEpisode(const QModelIndex &index);
 
 public Q_SLOTS:
     bool submit();

@@ -817,6 +817,65 @@ bool EpisodeBase::saveEpisodeContent(const QVariant &uid, const QString &xml)
     return true;
 }
 
+/**
+ * Save a specific episode validation \e validation.
+ * If needed, the Form::EpisodeValidationData::ValidationId is defined in the validation data.
+ * This member manages its own transaction.
+ */
+bool EpisodeBase::saveEpisodeValidation(EpisodeValidationData *validation)
+{
+    if (!validation->isModified())
+        return false;
+    QSqlDatabase DB = QSqlDatabase::database(DB_NAME);
+    if (!connectDatabase(DB, __LINE__)) {
+        return false;
+    }
+    DB.transaction();
+    QSqlQuery query(DB);
+    QHash<int, QString> where;
+    if (validation->validationId()!=-1) {
+        // update
+        where.insert(EP_MODIF_ID, QString("=%1").arg(validation->validationId()));
+        query.prepare(prepareUpdateQuery(Table_VALIDATION,
+                                         QList<int>()
+                                         << VALIDATION_DATEOFVALIDATION
+                                         << VALIDATION_USERUID
+                                         << VALIDATION_ISVALID
+                                         , where));
+        query.bindValue(0, validation->data(EpisodeValidationData::ValidationDate));
+        query.bindValue(1, validation->data(EpisodeValidationData::UserUid));
+        query.bindValue(2, validation->data(EpisodeValidationData::IsValid));
+        if (!query.exec()) {
+            LOG_QUERY_ERROR(query);
+            query.finish();
+            DB.rollback();
+            return false;
+        } else {
+            validation->setModified(false);
+        }
+    } else {
+        // save
+        query.prepare(prepareInsertQuery(Table_VALIDATION));
+        query.bindValue(VALIDATION_ID, QVariant());
+        query.bindValue(VALIDATION_EPISODE_ID, validation->data(EpisodeValidationData::EpisodeId));
+        query.bindValue(VALIDATION_DATEOFVALIDATION, validation->data(EpisodeValidationData::ValidationDate));
+        query.bindValue(VALIDATION_USERUID, validation->data(EpisodeValidationData::UserUid));
+        query.bindValue(VALIDATION_ISVALID, validation->data(EpisodeValidationData::IsValid).toInt());
+        if (!query.exec()) {
+            LOG_QUERY_ERROR(query);
+            query.finish();
+            DB.rollback();
+            return false;
+        } else {
+            validation->setData(EpisodeValidationData::ValidationId, query.lastInsertId());
+            validation->setModified(false);
+        }
+    }
+    query.finish();
+    DB.commit();
+    return true;
+}
+
 /** Return all recorded episodes form the database according to the Form::Internal::EpisodeBaseQuery \e baseQuery. Episodes are sorted by UserDate. */
 QList<EpisodeData *> EpisodeBase::getEpisodes(const EpisodeBaseQuery &baseQuery)
 {
@@ -1016,6 +1075,7 @@ QString EpisodeBase::getEpisodeContent(const QVariant &uid)
     return QString::null;
 }
 
+/** Return all the episode validation of an episode. */
 QList<EpisodeValidationData *> EpisodeBase::getEpisodeValidations(const QVariant &uid)
 {
     QList<EpisodeValidationData*> toReturn;
@@ -1034,7 +1094,7 @@ QList<EpisodeValidationData *> EpisodeBase::getEpisodeValidations(const QVariant
     QString req = select(Table_VALIDATION, where);
     if (query.exec(req)) {
         while (query.next()) {
-            EpisodeValidationData *v;
+            EpisodeValidationData *v = new EpisodeValidationData;
             v->setData(EpisodeValidationData::ValidationId, query.value(VALIDATION_ID));
             v->setData(EpisodeValidationData::ValidationDate, query.value(VALIDATION_DATEOFVALIDATION));
             v->setData(EpisodeValidationData::UserUid, query.value(VALIDATION_USERUID));

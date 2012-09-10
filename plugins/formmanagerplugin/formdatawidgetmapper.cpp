@@ -234,6 +234,9 @@ public:
         }
 
         _formMain->formWidget()->setEnabled(true);
+
+        // TODO: if episode is validated ==> read-only
+
         if (WarnLogChronos)
             Utils::Log::logTimeElapsed(chrono, q->objectName(), "feedFormWithEpisodeContent");
     }
@@ -297,7 +300,6 @@ void FormDataWidgetMapper::setCurrentForm(Form::FormMain *form)
     d->clearStackLayout();
     if (!form)
         return;
-    qWarning() << "FormDataWidgetMapper::setCurrentForm" << form->uuid();
     d->populateStack(form);
     d->useEpisodeModel(form);
     if (d->_formMain->itemData())
@@ -310,13 +312,11 @@ void FormDataWidgetMapper::setCurrentEpisode(const QVariant &uid)
 
 void FormDataWidgetMapper::setCurrentEpisode(const QModelIndex &index)
 {
-    WARN_FUNC;
     d->setCurrentEpisode(index);
 }
 
 bool FormDataWidgetMapper::submit()
 {
-    qWarning() << "FormDataWidgetMapper::submit";
     const QString &xml = d->getCurrentXmlEpisode();
     QModelIndex xmlIndex = d->_episodeModel->index(d->_currentEpisode.row(), EpisodeModel::XmlContent);
     if (!d->_episodeModel->setData(xmlIndex, xml))
