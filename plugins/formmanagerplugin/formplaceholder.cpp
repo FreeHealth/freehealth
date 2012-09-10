@@ -332,10 +332,11 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
     // Manage Form File tree view
     d->ui->formView->setActions(0);
     d->ui->formView->setCommands(QStringList()
-                                 << Constants::A_ADDEPISODE
-                                 << Constants::A_VALIDATEEPISODE
+//                                 << Constants::A_ADDEPISODE
+//                                 << Constants::A_VALIDATEEPISODE
                                  << Constants::A_ADDFORM
-                                 << Constants::A_PRINTFORM);
+//                                 << Constants::A_PRINTFORM
+                                 );
     d->ui->formView->addContexts(contexts());
     d->ui->formView->setDeselectable(false);
     d->ui->formView->disconnectActionsToDefaultSlots();
