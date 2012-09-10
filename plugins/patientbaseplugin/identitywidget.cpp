@@ -242,9 +242,9 @@ bool IdentityWidget::hasPhoto() const
 
 
 /**
-  \brief Create an Identity viewer with the specific \e mode of edition.
-  You must specify the PatientModel to use
-  \sa IdentityWidget::EditMode, IdentityWidget::setCurrentPatientModel
+ * \brief Create an Identity viewer with the specific \e mode of edition.
+ * You must specify the PatientModel to use
+ * \sa IdentityWidget::EditMode, IdentityWidget::setCurrentPatientModel
 */
 IdentityWidget::IdentityWidget(QWidget *parent, EditMode mode) :
     QWidget(parent),

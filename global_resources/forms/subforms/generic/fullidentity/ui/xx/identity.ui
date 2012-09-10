@@ -15,7 +15,14 @@
   </property>
   <layout class="QGridLayout" name="gridLayout_3">
    <item row="0" column="0">
-    <layout class="QVBoxLayout" name="identityLayout"/>
+    <layout class="QVBoxLayout" name="identityLayout">
+     <property name="spacing">
+      <number>0</number>
+     </property>
+     <property name="margin">
+      <number>0</number>
+     </property>
+    </layout>
    </item>
    <item row="2" column="0">
     <widget class="QGroupBox" name="contactGroup">

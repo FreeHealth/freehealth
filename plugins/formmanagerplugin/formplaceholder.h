@@ -96,6 +96,11 @@ private Q_SLOTS:
     bool saveCurrentEditingEpisode();
     void addForm();
     void printCurrentItem();
+    void validateEpisode();
+    void removeEpisode();
+    void takeScreenShotEpisode();
+
+//protected Q_SLOTS:
 
 protected:
     void changeEvent(QEvent *event);

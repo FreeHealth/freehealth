@@ -709,12 +709,19 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
     ui->datePayment->setDisplayFormat(tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR));
     ui->saveAndQuitButton->hide();
     ui->quitButton->hide();
+    ui->nameLabel->hide();
+    ui->nameEdit->hide();
     if (rManager.isMedintuxArg())
     {
         ui->saveAndQuitButton->show();
         ui->quitButton->show();
         setAttribute(Qt::WA_DeleteOnClose);
     }
+    if (rManager.isFreaccountIndependant())
+    {
+    	  ui->nameLabel->show();
+    	  ui->nameEdit->show();
+        }
     if (WarnDebugMessage)
         qWarning() << __FILE__ << QString::number(__LINE__) << "ReceiptViewer" ;
     ui->amountsView->setShowGrid(false);
@@ -1270,6 +1277,10 @@ void ReceiptViewer::save()
         {
             patientName = manager.getFullName();
         }
+        if (manager.isFreaccountIndependant())
+        {
+        	  patientName = ui->nameEdit->text();
+            }
         /* if (ui->freeTextCheckBox->isChecked())
     {
         FreeText freeTextDialog(this);

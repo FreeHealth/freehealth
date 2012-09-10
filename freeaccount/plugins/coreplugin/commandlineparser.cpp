@@ -97,6 +97,7 @@ public:
     CommandLinePrivate()
     {
         params.insert(Core::Constants::CL_MedinTux,          "--medintux");
+        params.insert(Core::Constants::CL_Independant,       "--independant");
         params.insert(Core::Constants::CL_Test,              "--test");
         params.insert(Core::Constants::CL_ReceiptsCreator,   "--receipts-creator");
         params.insert(Core::Constants::CL_EMR_Name,          "--emr-name");
@@ -147,6 +148,7 @@ public:
             switch (params.key(k,-1))
             {
             case Core::Constants::CL_MedinTux :          value.insert(Core::Constants::CL_MedinTux, true); break;
+            case Core::Constants::CL_Independant :       value.insert(Core::Constants::CL_Independant, true); break;
             case Core::Constants::CL_Test :              value.insert(Core::Constants::CL_Test, true); break;
             case Core::Constants::CL_ReceiptsCreator :   value.insert(Core::Constants::CL_ReceiptsCreator, true); break;
             case Core::Constants::CL_EMR_Name :          value.insert(Core::Constants::CL_EMR_Name, a.mid(a.indexOf("=")+1).remove("\"")); break;
