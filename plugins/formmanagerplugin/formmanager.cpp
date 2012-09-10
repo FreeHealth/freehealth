@@ -600,7 +600,7 @@ FormActionHandler::FormActionHandler(QObject *parent) :
 
     a = aAddForm = new QAction(this);
     a->setObjectName("aAddForm");
-    a->setIcon(th->icon(Core::Constants::ICONFORMS));
+    a->setIcon(th->icon(Core::Constants::ICONFORMS_ADD));
     cmd = am->registerAction(a, Constants::A_ADDFORM, formContext);
     cmd->setTranslations(Constants::ADDFORM_TEXT, Constants::ADDFORM_TEXT, Constants::FORM_TR_CONTEXT);
 //    cmenu->addAction(cmd, Core::Constants::G_EDIT_LIST);
