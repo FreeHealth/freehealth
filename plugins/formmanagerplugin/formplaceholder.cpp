@@ -64,8 +64,8 @@
 #include <utils/global.h>
 #include <utils/widgets/minisplitter.h>
 #include <extensionsystem/pluginmanager.h>
-
-#include <extensionsystem/pluginmanager.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_filepathxml.h>
 
 #include <QTreeView>
 #include <QTreeWidgetItem>
@@ -78,15 +78,16 @@
 #include <QPainter>
 #include <QEvent>
 #include <QItemSelectionModel>
+#include <QToolBar>
+#include <QFileDialog>
 
 // Test
 #include <QTextBrowser>
 
-
-
 #include <QDebug>
 
 using namespace Form;
+using namespace Trans::ConstantTranslations;
 
 static inline ExtensionSystem::PluginManager *pluginManager() { return ExtensionSystem::PluginManager::instance(); }
 static inline Form::FormManager *formManager() { return Form::FormManager::instance(); }
@@ -150,6 +151,10 @@ public:
             _formMain(0),
             _formTreeModel(0),
             _delegate(0),
+            _episodeToolBar(0),
+            aValidateEpisode(0),
+            aRemoveEpisode(0),
+            aTakeScreenShot(0),
             q(parent)
     {
     }
@@ -157,6 +162,40 @@ public:
     ~FormPlaceHolderPrivate()
     {
         delete ui;
+    }
+
+    void createEpisodeToolBar()
+    {
+        _episodeToolBar = new QToolBar(q);
+        Core::Command *cmd = actionManager()->command(Constants::A_ADDEPISODE);
+        QObject::connect(cmd->action(), SIGNAL(triggered()), q, SLOT(newEpisode()));
+        _episodeToolBar->addAction(cmd->action());
+
+        cmd = actionManager()->command(Constants::A_PRINTFORM);
+        QObject::connect(cmd->action(), SIGNAL(triggered()), q, SLOT(printCurrentItem()));
+        _episodeToolBar->addAction(cmd->action());
+
+        cmd = actionManager()->command(Core::Constants::A_FILE_SAVE);
+        QObject::connect(cmd->action(), SIGNAL(triggered()), q, SLOT(saveCurrentEditingEpisode()));
+        _episodeToolBar->addAction(cmd->action());
+
+        QAction *a = aValidateEpisode = new QAction(q);
+        a->setIcon(theme()->icon(Core::Constants::ICONVALIDATELIGHT));
+        QObject::connect(a, SIGNAL(triggered()), q, SLOT(validateEpisode()));
+
+        a = aRemoveEpisode = new QAction(q);
+        a->setIcon(theme()->icon(Core::Constants::ICONREMOVE));
+        QObject::connect(a, SIGNAL(triggered()), q, SLOT(removeEpisode()));
+
+        a = aTakeScreenShot = new QAction(q);
+        a->setIcon(theme()->icon(Core::Constants::ICONTAKESCREENSHOT));
+        QObject::connect(a, SIGNAL(triggered()), q, SLOT(takeScreenShotEpisode()));
+
+        _episodeToolBar->addAction(aValidateEpisode);
+        _episodeToolBar->addAction(aRemoveEpisode);
+        _episodeToolBar->addAction(aTakeScreenShot);
+
+        ui->toolbarLayout->addWidget(_episodeToolBar);
     }
 
     bool isAutosaveOn()
@@ -198,7 +237,8 @@ public:
     FormMain *_formMain;
     FormTreeModel *_formTreeModel;
     FormItemDelegate *_delegate;
-
+    QToolBar *_episodeToolBar;
+    QAction *aValidateEpisode, *aRemoveEpisode, *aTakeScreenShot;
     QHash<int, QString> m_StackId_FormUuid;
 
 private:
@@ -282,6 +322,7 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
     layout()->setSpacing(0);
     d->ui->verticalLayout_2->setMargin(0);
     d->ui->verticalLayout_2->setSpacing(0);
+    d->createEpisodeToolBar();
 
     d->_delegate = new Internal::FormItemDelegate(d->ui->formView);
     d->ui->formDataMapper->initialize();
@@ -533,17 +574,17 @@ void FormPlaceHolder::addForm()
     if (!isVisible())
         return;
 
-    d->saveCurrentEditingEpisode();
+//    d->saveCurrentEditingEpisode();
 
     // open the form editor dialog
-    FormEditorDialog dlg(d->_formTreeModel, FormEditorDialog::DefaultMode, this);
-    if (dlg.exec()==QDialog::Accepted) {
+//    FormEditorDialog dlg(d->_formTreeModel, FormEditorDialog::DefaultMode, this);
+//    if (dlg.exec()==QDialog::Accepted) {
         // refresh stack widget
 //        d->populateStackLayout();
         // activate last episode synthesis
 //        d->ui->formView->setCurrentIndex(d->_episodeModel->index(0,0));
 //        showLastEpisodeSynthesis();
-    }
+//    }
 }
 
 /** Print the current editing episode */
@@ -612,6 +653,45 @@ void FormPlaceHolder::printCurrentItem()
 
     // print
     p->print(htmlToPrint, Core::IDocumentPrinter::Papers_Generic_User, false);
+}
+
+void FormPlaceHolder::validateEpisode()
+{
+    // message box
+    bool yes = Utils::yesNoMessageBox(tr("Validate the current episode"),
+                                      tr("When you validate an episode, you prevent all subsequent amendments. "
+                                         "The episode will be shown but will be kept unchanged.\n"
+                                         "Do you really want to validate the current episode?"));
+    if (!yes)
+        return;
+
+}
+
+void FormPlaceHolder::removeEpisode()
+{
+    // message box
+    bool yes = Utils::yesNoMessageBox(tr("Remove the current episode"),
+                                      tr("You can not completely destroy an episode, "
+                                         "but you can remove it from the views.\n"
+                                         "The episode will not be shown anymore, but will still be "
+                                         "included in the database.\n"
+                                         "Do you really want to remove the current episode?"));
+    if (!yes)
+        return;
+}
+
+void FormPlaceHolder::takeScreenShotEpisode()
+{
+    QPixmap pix = QPixmap::grabWidget(d->ui->formDataMapper);
+    QString fileName = QFileDialog::getSaveFileName(this, tkTr(Trans::Constants::SAVE_FILE),
+                                                    settings()->path(Core::ISettings::UserDocumentsPath),
+                                                    tr("Images (*.png)"));
+    if (!fileName.isEmpty()) {
+        QFileInfo info(fileName);
+        if (info.completeSuffix().isEmpty())
+            fileName.append(".png");
+        pix.save(fileName);
+    }
 }
 
 void FormPlaceHolder::changeEvent(QEvent *event)
