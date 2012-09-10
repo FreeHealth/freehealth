@@ -167,6 +167,8 @@ public:
     void createEpisodeToolBar()
     {
         _episodeToolBar = new QToolBar(q);
+        _episodeToolBar->setIconSize(QSize(16,16));
+
         Core::Command *cmd = actionManager()->command(Constants::A_ADDEPISODE);
         QObject::connect(cmd->action(), SIGNAL(triggered()), q, SLOT(newEpisode()));
         _episodeToolBar->addAction(cmd->action());
@@ -180,7 +182,7 @@ public:
         _episodeToolBar->addAction(cmd->action());
 
         QAction *a = aValidateEpisode = new QAction(q);
-        a->setIcon(theme()->icon(Core::Constants::ICONVALIDATELIGHT));
+        a->setIcon(theme()->icon(Core::Constants::ICONOK));
         QObject::connect(a, SIGNAL(triggered()), q, SLOT(validateEpisode()));
 
         a = aRemoveEpisode = new QAction(q);
@@ -697,6 +699,12 @@ void FormPlaceHolder::takeScreenShotEpisode()
 void FormPlaceHolder::changeEvent(QEvent *event)
 {
     if (event->type()==QEvent::LanguageChange) {
+        if (d->aRemoveEpisode)
+            d->aRemoveEpisode->setText(tkTr(Trans::Constants::REMOVE_EPISODE));
+        if (d->aValidateEpisode)
+            d->aValidateEpisode->setText(tkTr(Trans::Constants::VALIDATE_EPISODE));
+        if (d->aTakeScreenShot)
+            d->aTakeScreenShot->setText(tkTr(Trans::Constants::TAKE_SCREENSHOT));
         // if showing patient synthesis or last episode -> retranslate by querying the model
 //        QTreeView *tree = d->ui->formView->treeView();
 //        if (tree->selectionModel()) {
