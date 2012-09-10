@@ -622,4 +622,12 @@ QString ReceiptsManager::getFullName()
     return patient()->data(Core::IPatient::FullName).toString();
 }
 
+bool ReceiptsManager::isFreaccountIndependant()
+{
+#ifdef FREEMEDFORMS
+    return false;
+#else
+    return commandLine()->value(Core::Constants::CL_Independant).toBool();
+#endif
+}
 
