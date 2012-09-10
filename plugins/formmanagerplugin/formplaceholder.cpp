@@ -356,14 +356,14 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
     d->ui->episodeView->setSelectionMode(QAbstractItemView::SingleSelection);
     d->ui->episodeView->setSelectionBehavior(QAbstractItemView::SelectRows);
 
-    Core::Command *cmd = actionManager()->command(Constants::A_ADDEPISODE);
-    connect(cmd->action(), SIGNAL(triggered()), this, SLOT(newEpisode()));
-    cmd = actionManager()->command(Constants::A_ADDFORM);
-    connect(cmd->action(), SIGNAL(triggered()), this, SLOT(addForm()));
-    cmd = actionManager()->command(Constants::A_PRINTFORM);
-    connect(cmd->action(), SIGNAL(triggered()), this, SLOT(printCurrentItem()));
-    cmd = actionManager()->command(Core::Constants::A_FILE_SAVE);
-    connect(cmd->action(), SIGNAL(triggered()), this, SLOT(saveCurrentEditingEpisode()));
+//    Core::Command *cmd = actionManager()->command(Constants::A_ADDEPISODE);
+//    connect(cmd->action(), SIGNAL(triggered()), this, SLOT(newEpisode()));
+//    cmd = actionManager()->command(Constants::A_ADDFORM);
+//    connect(cmd->action(), SIGNAL(triggered()), this, SLOT(addForm()));
+//    cmd = actionManager()->command(Constants::A_PRINTFORM);
+//    connect(cmd->action(), SIGNAL(triggered()), this, SLOT(printCurrentItem()));
+//    cmd = actionManager()->command(Core::Constants::A_FILE_SAVE);
+//    connect(cmd->action(), SIGNAL(triggered()), this, SLOT(saveCurrentEditingEpisode()));
 
     int width = size().width();
     int third = width/3;
