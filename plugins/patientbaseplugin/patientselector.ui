@@ -13,7 +13,7 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout">
+  <layout class="QGridLayout" name="gridLayout_2">
    <item row="0" column="0">
     <widget class="QLabel" name="label_2">
      <property name="text">
@@ -32,7 +32,7 @@
     </widget>
    </item>
    <item row="1" column="0" colspan="3">
-    <widget class="QSplitter" name="splitter">
+    <widget class="Utils::MiniSplitter" name="splitter">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
@@ -68,7 +68,38 @@
        <bool>false</bool>
       </attribute>
      </widget>
-     <widget class="Patients::IdentityWidget" name="identity" native="true"/>
+     <widget class="QScrollArea" name="scrollArea">
+      <property name="frameShape">
+       <enum>QFrame::NoFrame</enum>
+      </property>
+      <property name="verticalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOn</enum>
+      </property>
+      <property name="widgetResizable">
+       <bool>true</bool>
+      </property>
+      <widget class="QWidget" name="scrollAreaWidgetContents">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>361</width>
+         <height>76</height>
+        </rect>
+       </property>
+       <layout class="QGridLayout" name="gridLayout">
+        <property name="margin">
+         <number>0</number>
+        </property>
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <item row="0" column="0">
+         <widget class="Patients::IdentityWidget" name="identity" native="true"/>
+        </item>
+       </layout>
+      </widget>
+     </widget>
     </widget>
    </item>
   </layout>
@@ -83,6 +114,12 @@
    <class>Patients::IdentityWidget</class>
    <extends>QWidget</extends>
    <header location="global">patientbaseplugin/identitywidget.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>Utils::MiniSplitter</class>
+   <extends>QSplitter</extends>
+   <header location="global">utils/widgets/minisplitter.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
