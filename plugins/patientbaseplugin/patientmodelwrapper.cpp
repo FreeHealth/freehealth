@@ -98,7 +98,10 @@ QVariant PatientModelWrapper::data(const QModelIndex &index, int role) const
         return result;
 
     // or in the forms widgets
-    foreach(Form::FormMain *modeForms, formManager()->forms()) {
+    QList<Form::FormMain*> forms;
+    forms << formManager()->forms();
+    forms << formManager()->subFormsEmptyRoot();
+    foreach(Form::FormMain *modeForms, forms) {
         foreach(Form::FormMain *f, modeForms->flattenFormMainChildren()) {
             foreach(Form::FormItem *item, f->formItemChildren()) {
                 if (item->itemData()) {
