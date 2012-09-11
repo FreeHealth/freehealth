@@ -24,13 +24,6 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-/**
- * \file %ClassName:l%.%CppSourceSuffix:l%
- * \author %AuthorName%
- * \version 0.8.0
- * \date %CurrentDate%
-*/
-
 @if "%Doxygen%" == "true"
 @if "%Internal%" == "true"
 /*!

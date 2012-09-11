@@ -32,8 +32,9 @@
 #define %PluginNamespace:u%_%ClassName:u%_H
 @endif
 
+@if "%Exported%" == "true"
 #include <missing/plugin_exporter.h>
-
+@endif
 /**
  * \file %ClassName:l%.%CppHeaderSuffix:l%
  * \author %AuthorName%
