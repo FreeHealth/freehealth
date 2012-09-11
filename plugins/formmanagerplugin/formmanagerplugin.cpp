@@ -122,6 +122,7 @@ void FormManagerPlugin::extensionsInitialized()
     episodeBase();
     episodeBase()->initialize();
     FormManager::instance();
+    FormManager::instance()->loadPatientFile();
 
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 
@@ -142,7 +143,6 @@ void FormManagerPlugin::postCoreInitialization()
         FormManager::instance()->readPmhxCategories(uid);
         settings()->setDefaultForm("");
     }
-
 }
 
 ExtensionSystem::IPlugin::ShutdownFlag FormManagerPlugin::aboutToShutdown()

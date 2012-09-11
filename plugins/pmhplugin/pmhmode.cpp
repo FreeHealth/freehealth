@@ -360,6 +360,7 @@ PmhMode::PmhMode(QObject *parent) :
 
     m_Widget = new PmhModeWidget;
     setWidget(m_Widget);
+    onPatientChanged();
     connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onPatientChanged()));
 }
 

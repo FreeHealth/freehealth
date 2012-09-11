@@ -200,9 +200,12 @@ PatientSelector::~PatientSelector()
 void PatientSelector::initialize()
 {
     if (!d->m_Model->currentPatient().isValid()) {
-        QModelIndex id = d->m_Model->index(0,0);
+        QModelIndex index = d->m_Model->index(0,0);
+        d->m_Model->blockSignals(true);
+        d->m_Model->setCurrentPatient(index);
+        d->m_Model->blockSignals(false);
         d->ui->tableView->selectRow(0);
-        changeIdentity(id, QModelIndex());
+        changeIdentity(index, QModelIndex());
     } else {
         changeIdentity(d->m_Model->currentPatient(), QModelIndex());
     }

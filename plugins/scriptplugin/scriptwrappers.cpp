@@ -72,7 +72,7 @@ FormManagerScriptWrapper::FormManagerScriptWrapper(QObject *parent) :
     m_LogItemSearch(false)
 {
     connect(translators(), SIGNAL(languageChanged()), this, SIGNAL(languageChanged()));
-    recreateItemWrappers();
+//    recreateItemWrappers();
 }
 
 void FormManagerScriptWrapper::recreateItemWrappers()
@@ -83,7 +83,6 @@ void FormManagerScriptWrapper::recreateItemWrappers()
     foreach(Form::FormItem *main, formManager()->forms()) {
         const QList<Form::FormItem*> items = main->flattenFormItemChildren();
         for(int i=0; i < items.count(); ++i) {
-//            qWarning() << "LLLLLLL" << items.at(i)->uuid() << items.at(i)->objectName();
             FormItemScriptWrapper *w = new FormItemScriptWrapper(this);
             w->setFormItem(items.at(i));
             m_Items.insert(items.at(i)->uuid(), scriptManager()->addScriptObject(w));

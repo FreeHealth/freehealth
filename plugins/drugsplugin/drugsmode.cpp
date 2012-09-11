@@ -63,7 +63,7 @@ DrugsMode::DrugsMode(QObject *parent) :
 //    const QList<int> &context;
 //    setContext();
     setWidget(m_Holder);
-
+    getPatientForm();
     connect(formManager(), SIGNAL(patientFormsLoaded()), this, SLOT(getPatientForm()));
 }
 
@@ -80,7 +80,6 @@ QString DrugsMode::name() const
 
 void DrugsMode::getPatientForm()
 {
-//    qWarning() << Q_FUNC_INFO;
     Form::FormMain *root = formManager()->rootForm(Core::Constants::MODE_PATIENT_DRUGS);
     if (!root) {
         if (inPool)

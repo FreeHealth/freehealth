@@ -27,8 +27,18 @@
 
 /**
  * \class Form::FormManager
- * This class manages all aspect of the patient's forms.
+ * This class manages all aspect of the patient's forms. It loads the patient
+ * central form and all included forms using the Form::IFormIO objects. These forms
+ * are used to create the patient forms and integrate them in the UI.\n
+ *
+ * Form::FormManager also manages :
+ * - a cache system to fasten the form's access and construction ;
+ *
 */
+// - keeps duplicates of each forms to use in specific computation (statistics...).
+
+// TODO: correctly manages subforms (keep them in a list and in cache)
+// TODO: correctly manages subforms duplicates
 
 #include "formmanager.h"
 #include "iformitem.h"
@@ -180,8 +190,10 @@ public:
             LOG_ERROR_FOR(q, "No patient central form defined");
             return false;
         }
-        // load central root forms
-        m_RootForms = loadFormFile(absDirPath);
+
+        // load central root forms, create cache and duplicates
+        m_RootForms = loadFormFile(absDirPath); // also create the cache
+//        m_RootFormsDuplicates = loadFormFile(absDirPath, false); // force reloading of forms
 
         // load pmhx
         if (!m_RootForms.isEmpty()) {
@@ -281,7 +293,7 @@ public:
 
 public:
     QVector<Form::FormPage *> _formPages;
-    QList<Form::FormMain *> m_RootForms, m_SubFormsEmptyRoot;
+    QList<Form::FormMain *> m_RootForms, m_RootFormsDuplicates, m_SubFormsEmptyRoot, m_SubFormsEmptyRootDuplicates;
     QHash<Form::FormMain *, Form::FormMain *> _formParents; // keep the formMain parent in cache (K=form to reparent, V=emptyrootform)
     QHash<Form::FormMain *, EpisodeModel *> _episodeModels;
 

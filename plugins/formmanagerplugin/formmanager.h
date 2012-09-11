@@ -110,7 +110,6 @@ public:
     EpisodeModel *episodeModel(Form::FormMain *form);
     EpisodeModel *episodeModel(const QString &formUid);
 
-
 public Q_SLOTS:
     // Form management
     bool loadPatientFile();

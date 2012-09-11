@@ -56,8 +56,8 @@ static inline Core::ActionManager *actionManager()  { return Core::ICore::instan
 static inline Core::IMainWindow *mainWindow()  { return Core::ICore::instance()->mainWindow(); }
 
 /**
-  \class Form::Internal::FormManagerMode
-  Mode for the central form files (called "Patient files").
+ * \class Form::Internal::FormManagerMode
+ * Mode for the central form files (called "Patient files").
 */
 FormManagerMode::FormManagerMode(QObject *parent) :
     Core::BaseMode(parent),
@@ -77,6 +77,7 @@ FormManagerMode::FormManagerMode(QObject *parent) :
 //    const QList<int> &context;
 //    setContext();
     setWidget(m_Holder);
+    getPatientForm();
     connect(formManager(), SIGNAL(patientFormsLoaded()), this, SLOT(getPatientForm()));
 }
 
@@ -113,16 +114,3 @@ bool FormManagerMode::getPatientForm()
     m_Holder->setRootForm(root);
     return (root);
 }
-
-//bool FormManagerMode::eventFilter(QObject *obj, QEvent *event)
-//{
-//    qWarning() << obj << event->type();
-//    if (obj==m_Holder) {
-//        qWarning() << "GET HOLDER";
-//        if (event->type()==QEvent::Show) {
-//            qWarning() << "GET SHOW";
-//            mainWindow()->endProcessingSpinner();
-//        }
-//    }
-//    return QObject::eventFilter(obj, event);
-//}
