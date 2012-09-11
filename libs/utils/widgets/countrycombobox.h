@@ -30,6 +30,13 @@
 #include <utils/global_exporter.h>
 #include <QComboBox>
 
+/**
+ * \file countrycombobox.h
+ * \author Eric MAEKER
+ * \version 0.7.6
+ * \date 24 May 2012
+*/
+
 namespace Utils {
 
 class UTILS_EXPORT CountryComboBox : public QComboBox
