@@ -62,6 +62,8 @@ using namespace Patients;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
+static inline Form::FormManager *formManager() {return Form::FormManager::instance();}
+
 namespace {
 class SimpleIdentityWidget : public QWidget
 {
@@ -490,6 +492,56 @@ private:
     ContactViewerWidget *_contact;
 };
 
+class PatientModelIdentityWrapper
+{
+public:
+    PatientModelIdentityWrapper() :
+        _patientModel(0),
+        _identityForm(0),
+        _episodeModel(0),
+        _current(-1)
+    {
+    }
+
+    ~PatientModelIdentityWrapper()
+    {
+        if (_episodeModel)
+            delete _episodeModel;
+        _episodeModel = 0;
+    }
+
+    void setPatientModel(PatientModel *model) {_patientModel = model;}
+    void setIdentityForm(Form::FormMain *form)
+    {
+        _identityForm = form;
+        // create the episode model from the identity form
+//        if (_episodeModel)
+//            delete _episodeModel;
+//        _episodeModel = new Form::EpisodeModel(form);
+    }
+
+    void setCurrentPatient(const int row)
+    {
+        _current = row;
+//        _episodeModel->setCurrentPatient(_patientModel->index(_current, Core::IPatient::Uid).data().toString());
+    }
+
+    QVariant data(const int iPatientColumn) const
+    {
+        // get data from the patient model (value is extracted from database)
+        QVariant val = _patientModel->index(_current, iPatientColumn).data();
+        if (val.isValid())
+            return val;
+        // get data from the episode
+        return QVariant();
+    }
+
+private:
+    PatientModel *_patientModel;
+    Form::FormMain *_identityForm;
+    Form::EpisodeModel *_episodeModel;
+    int _current;
+};
 }  // end anonymous namespace
 
 namespace Patients {
@@ -504,8 +556,10 @@ public:
         m_AgeWidget(0),
         m_FullContactWidget(0),
         m_PatientModel(0),
+        _patientModelIdentityWrapper(0),
         q(parent)
     {
+        // Manage Ui
         viewUi = new Ui::IdentityViewer;
         viewUi->setupUi(q);
         m_IdentityDetails = new IdentityAndAgeDetailsWidget(q);
@@ -514,6 +568,9 @@ public:
         m_FullContactWidget = new FullContactViewerDetails(q);
         viewUi->identityDetails->setWidget(m_IdentityDetails);
         viewUi->addressDetails->setWidget(m_FullContactWidget);
+
+        // Manage Model
+        _patientModelIdentityWrapper = new PatientModelIdentityWrapper;
     }
     
     ~IdentityViewerWidgetPrivate()
@@ -521,6 +578,10 @@ public:
         if (viewUi) {
             delete viewUi;
             viewUi = 0;
+        }
+        if (_patientModelIdentityWrapper) {
+            delete _patientModelIdentityWrapper;
+            _patientModelIdentityWrapper = 0;
         }
     }
 
@@ -535,6 +596,8 @@ public:
 
     void populateReadOnlyWidget(const int row)
     {
+//        _patientModelIdentityWrapper->setCurrentPatientUuid(row);
+
         // photo
         const QPixmap &photo = m_PatientModel->index(row, Core::IPatient::Photo_64x64).data().value<QPixmap>();
         viewUi->photoLabel->setPixmap(photo);
@@ -590,6 +653,8 @@ public:
     Form::EpisodeModel *_episodeModel;
     PatientModel *m_PatientModel;
 
+    PatientModelIdentityWrapper *_patientModelIdentityWrapper;
+
 private:
     IdentityViewerWidget *q;
 };
@@ -598,6 +663,7 @@ private:
 
 /*! Constructor of the IdentityViewerWidget class */
 IdentityViewerWidget::IdentityViewerWidget(QWidget *parent) :
+    QWidget(parent),
     d(new IdentityViewerWidgetPrivate(this))
 {
     setObjectName("Patient::IdentityViewerWidget");
@@ -614,12 +680,14 @@ IdentityViewerWidget::~IdentityViewerWidget()
 /*! initializes the IdentityViewerWidget instance with default values */
 bool IdentityViewerWidget::initialize()
 {
+    return true;
 }
 
 /** \brief Define the model to use. */
 void IdentityViewerWidget::setCurrentPatientModel(Patients::PatientModel *model)
 {
     d->m_PatientModel = model;
+    d->_patientModelIdentityWrapper->setPatientModel(model);
 }
 
 /** \brief Return the actual PatientModel or 0 if it was not set. */
