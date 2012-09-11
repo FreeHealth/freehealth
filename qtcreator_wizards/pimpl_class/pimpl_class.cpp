@@ -47,6 +47,8 @@
 
 #include "%ClassName:l%.h"
 
+#include <QDebug>
+
 using namespace %PluginNamespace:c%;
 using namespace Internal;
 
