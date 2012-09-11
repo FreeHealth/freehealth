@@ -235,11 +235,12 @@ public:
 
     void updateEpisodeActions(const QModelIndex &index)
     {
-        const bool enabled = index.isValid();
-        aRemoveEpisode->setEnabled(enabled);
-        aValidateEpisode->setEnabled(enabled);
-        aSaveEpisode->setEnabled(enabled);
-        aPrintForm->setEnabled(enabled);
+        const bool valid = index.isValid();
+        const bool unique = _formTreeModel->isUniqueEpisode(index);
+        aRemoveEpisode->setEnabled(valid && !unique);
+        aValidateEpisode->setEnabled(valid);
+        aSaveEpisode->setEnabled(valid);
+        aPrintForm->setEnabled(valid);
     }
 
 public:
