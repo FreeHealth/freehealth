@@ -31,7 +31,8 @@ HEADERS = patientbaseplugin.h \
     patientlineeditcompletersearch.h \
     pixmapdelegate.h \
     pixmapbutton.h \
-    identityviewerwidget.h
+    identityviewerwidget.h \
+    patientmodelwrapper.h
 
 SOURCES = patientbaseplugin.cpp \
     patientbase.cpp \
@@ -46,7 +47,8 @@ SOURCES = patientbaseplugin.cpp \
     patientlineeditcompletersearch.cpp \
     pixmapdelegate.cpp \
     pixmapbutton.cpp \
-    identityviewerwidget.cpp
+    identityviewerwidget.cpp \
+    patientmodelwrapper.cpp
 
 FORMS += identitywidget.ui \
     patientselector.ui \

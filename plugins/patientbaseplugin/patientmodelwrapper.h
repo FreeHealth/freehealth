@@ -28,25 +28,20 @@
 #define PATIENTMODELWRAPPER_H
 
 #include <coreplugin/ipatient.h>
-#include <patientbaseplugin/patientbar.h>
 
 QT_BEGIN_NAMESPACE
 class QModelIndex;
 QT_END_NAMESPACE
 
-
 /**
  * \file patientmodelwrapper.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.5.0
- * \date 08 Feb 2011
+ * \author Eric MAEKER
+ * \version 0.8.0
+ * \date 12 Sept 2012
 */
 
 namespace Patients {
 class PatientModel;
-}
-
-namespace MainWin {
 namespace Internal {
 
 /** \brief PatientModel wrapper can be accessed using Core::ICore::instance()->patient() */
@@ -56,7 +51,7 @@ class PatientModelWrapper : public Core::IPatient
 public:
     PatientModelWrapper(Patients::PatientModel *model, QObject *parent = 0);
     ~PatientModelWrapper();
-    void init();
+    void initialize();
 
     // IPatient interface
     void clear() {}

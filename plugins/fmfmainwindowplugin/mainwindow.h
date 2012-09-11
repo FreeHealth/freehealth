@@ -42,9 +42,9 @@ QT_END_NAMESPACE
 
 /**
  * \file mainwindow.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.4.0
- * \date 01 May 2010
+ * \author Eric MAEKER
+ * \version 0.8.0
+ * \date 12 Sept 2012
 */
 
 namespace Form {
@@ -63,7 +63,6 @@ namespace MainWin {
 class MainWindow;
 
 namespace Internal {
-class PatientModelWrapper;
 
 class MainWindowUserListener : public UserPlugin::IUserListener
 {
@@ -149,7 +148,6 @@ public:
     int  m_TimerId;
     bool m_OpenLastOpenedForm;
     QByteArray windowState;
-    Internal::PatientModelWrapper *m_PatientModelWrapper;
     Internal::MainWindowUserListener *m_UserListener;
 };
 

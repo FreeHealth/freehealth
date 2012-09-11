@@ -25,7 +25,6 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "mainwindow.h"
-#include "patientmodelwrapper.h"
 
 #include <translationutils/constanttranslations.h>
 #include <utils/log.h>
@@ -141,7 +140,6 @@ MainWindow::MainWindow(QWidget *parent) :
     Core::IMainWindow(parent),
     m_modeStack(0),
     m_RecentPatients(0),
-    m_PatientModelWrapper(0),
     m_UserListener(0)
 {
     setObjectName("MainWindow");
@@ -252,10 +250,6 @@ void MainWindow::extensionsInitialized()
         settings()->setValue(Utils::Constants::S_LAST_CHECKUPDATE, QDate::currentDate());
     }
 
-//    // Create IPatient
-    m_PatientModelWrapper = new Internal::PatientModelWrapper(patientModel());
-    Core::ICore::instance()->setPatient(m_PatientModelWrapper);
-    m_PatientModelWrapper->init();
     m_modeStack->insertTopWidget(0, Patients::PatientBar::instance(this));
     m_modeStack->statusBar()->hide();
 
@@ -284,10 +278,6 @@ MainWindow::~MainWindow()
     // delete ui components
     delete m_modeStack;
     m_modeStack = 0;
-    if (m_PatientModelWrapper) {
-        delete m_PatientModelWrapper;
-        m_PatientModelWrapper = 0;
-    }
 }
 
 /** \brief Post core initialization of MainWindow. */
@@ -480,7 +470,7 @@ void MainWindow::aboutToShowRecentPatients()
 
     bool hasRecentFiles = false;
     const QStringList &uuids = m_RecentPatients->recentFiles();
-    const QHash<QString, QString> &names = Patients::PatientModel::patientName(uuids);
+    const QHash<QString, QString> &names = patient()->fullPatientName(uuids);
     for(int i = 0; i < uuids.count(); ++i) {
         hasRecentFiles = true;
         QAction *action = recentsMenu->menu()->addAction(names.value(uuids.at(i)));
@@ -515,6 +505,7 @@ void MainWindow::openRecentPatient()
         return;
 
     // get the QModelIndex corresponding to the uuid
+    // TODO: this should be extracted or managed using the Core::IPatient
     patientModel()->setFilter("", "", uuid, Patients::PatientModel::FilterOnUuid);
     QModelIndex index = patientModel()->index(0,0);
     patientModel()->setCurrentPatient(index);

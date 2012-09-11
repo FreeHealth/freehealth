@@ -25,13 +25,14 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 /**
- * \class MainWin::Internal::PatientModelWrapper
+ * \class Patients::Internal::PatientModelWrapper
  * Wrapper to the Patient::PatientModel for identity and wrapper to Form::FormItem that represent
  * a patient data.
  * \sa Core::IPatient
 */
 
 #include "patientmodelwrapper.h"
+#include "patientbar.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/ipatient.h>
@@ -45,7 +46,8 @@
 static inline Form::FormManager *formManager() {return Form::FormManager::instance();}
 static inline Core::IPatient *patient()  { return Core::ICore::instance()->patient(); }
 
-using namespace MainWin::Internal;
+using namespace Patients;
+using namespace Internal;
 
 PatientModelWrapper::PatientModelWrapper(Patients::PatientModel *model, QObject *parent) :
         Core::IPatient(parent), m_Model(model)
@@ -66,7 +68,7 @@ void PatientModelWrapper::onCurrentPatientChanged(const QString &)
 }
 
 /** \brief Initialize the model */
-void PatientModelWrapper::init()
+void PatientModelWrapper::initialize()
 {
 }
 

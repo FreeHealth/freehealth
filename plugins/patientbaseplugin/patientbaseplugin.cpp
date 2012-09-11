@@ -43,6 +43,7 @@
 #include "patientsearchmode.h"
 #include "patientbasepreferencespage.h"
 #include "patientmodel.h"
+#include "patientmodelwrapper.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/iuser.h>
@@ -72,9 +73,12 @@ static inline Core::ICommandLine *commandLine() {return Core::ICore::instance()-
 static inline Patients::Internal::PatientBase *patientBase() {return Patients::Internal::PatientBase::instance();}
 static inline Core::ModeManager *modeManager() { return Core::ICore::instance()->modeManager(); }
 
+static inline Patients::PatientModel *patientModel() {return Patients::PatientModel::activeModel();}
+
 
 PatientBasePlugin::PatientBasePlugin() :
-        m_Mode(0), prefpage(0)
+    m_Mode(0), prefpage(0),
+    m_PatientModelWrapper(0)
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating PatientBasePlugin";
@@ -151,6 +155,11 @@ bool PatientBasePlugin::initialize(const QStringList &arguments, QString *errorS
     // add mode patient search
     m_Mode = new PatientSearchMode(this);
     addObject(m_Mode);
+
+    // Create IPatient
+    m_PatientModelWrapper = new Internal::PatientModelWrapper(patientModel());
+    Core::ICore::instance()->setPatient(m_PatientModelWrapper);
+    m_PatientModelWrapper->initialize();
 
     return true;
 }
