@@ -155,16 +155,6 @@ PatientSelector::PatientSelector(QWidget *parent, const FieldsToShow fields) :
 {
     d->ui->setupUi(this);
     d->ui->searchLine->setDelayedSignals(true);
-//    layout()->setMargin(0);
-
-    // datetime delegate
-    d->ui->tableView->setItemDelegateForColumn(Core::IPatient::DateOfBirth, new Utils::DateTimeDelegate(this, true));
-
-    if (fields == None) {
-        d->m_Fields = FieldsToShow(settings()->value(Constants::S_SELECTOR_FIELDSTOSHOW, Default).toInt());
-    } else {
-        d->m_Fields = fields;
-    }
 
     // Get the active model
     if (!PatientModel::activeModel()) {
@@ -175,6 +165,9 @@ PatientSelector::PatientSelector(QWidget *parent, const FieldsToShow fields) :
         setPatientModel(PatientModel::activeModel());
     }
 
+    // datetime delegate
+    d->ui->tableView->setItemDelegateForColumn(Core::IPatient::DateOfBirth, new Utils::DateTimeDelegate(this, true));
+
     d->createSearchToolButtons();
 
     // Some connections
@@ -184,7 +177,12 @@ PatientSelector::PatientSelector(QWidget *parent, const FieldsToShow fields) :
     connect(d->ui->tableView, SIGNAL(activated(QModelIndex)), this, SLOT(onPatientSelected(QModelIndex)));
 
     updatePatientActions(QModelIndex());
-//    d->ui->identity->setCurrentIndex(QModelIndex());
+
+    if (fields == None) {
+        d->m_Fields = FieldsToShow(settings()->value(Constants::S_SELECTOR_FIELDSTOSHOW, Default).toInt());
+    } else {
+        d->m_Fields = fields;
+    }
 }
 
 PatientSelector::~PatientSelector()
@@ -199,6 +197,8 @@ PatientSelector::~PatientSelector()
 /** \brief Initialize view and actions, select the first available patient. */
 void PatientSelector::initialize()
 {
+//    layout()->setMargin(0);
+
     if (!d->m_Model->currentPatient().isValid()) {
         QModelIndex index = d->m_Model->index(0,0);
         d->m_Model->blockSignals(true);

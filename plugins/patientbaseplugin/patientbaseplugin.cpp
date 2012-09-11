@@ -92,6 +92,10 @@ PatientBasePlugin::PatientBasePlugin() :
 
     // create the base
     new Internal::PatientBase(this);
+
+    // Create IPatient
+    m_PatientModelWrapper = new Internal::PatientModelWrapper(this);
+    Core::ICore::instance()->setPatient(m_PatientModelWrapper);
 }
 
 PatientBasePlugin::~PatientBasePlugin()
@@ -127,6 +131,11 @@ bool PatientBasePlugin::initialize(const QStringList &arguments, QString *errorS
     if (!patientBase()->initialize())
         return false;
 
+    // create singleton model
+    PatientModel *model = new PatientModel(this);
+    PatientModel::setActiveModel(model);
+    m_PatientModelWrapper->initialize(model);
+
     if (commandLine()->value(Core::ICommandLine::CreateVirtuals).toBool()) {
         // Populate with some virtual patients
         QString path = settings()->path(Core::ISettings::BigPixmapPath) + QDir::separator();
@@ -152,15 +161,6 @@ bool PatientBasePlugin::initialize(const QStringList &arguments, QString *errorS
     // create patient widget manager instance
     PatientWidgetManager::instance();
 
-    // add mode patient search
-    m_Mode = new PatientSearchMode(this);
-    addObject(m_Mode);
-
-    // Create IPatient
-    m_PatientModelWrapper = new Internal::PatientModelWrapper(patientModel());
-    Core::ICore::instance()->setPatient(m_PatientModelWrapper);
-    m_PatientModelWrapper->initialize();
-
     return true;
 }
 
@@ -174,6 +174,11 @@ void PatientBasePlugin::extensionsInitialized()
     prefpage->checkSettingsValidity();
     settings()->sync();
 
+    // add mode patient search
+    m_Mode = new PatientSearchMode(this);
+    m_Mode->postCoreInitialization();
+    addObject(m_Mode);
+
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
 }
 
@@ -181,6 +186,7 @@ void PatientBasePlugin::postCoreInitialization()
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << Q_FUNC_INFO;
+
     PatientModel::activeModel()->refreshModel();
     PatientWidgetManager::instance()->postCoreInitialization();
 }

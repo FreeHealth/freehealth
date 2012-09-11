@@ -102,6 +102,9 @@ bool FormManagerPlugin::initialize(const QStringList &arguments, QString *errorS
 
     messageSplash(tr("Initializing form manager plugin..."));
 
+    // Create the FormManager singleton
+    new FormManager(this);
+
     return true;
 }
 
@@ -119,10 +122,7 @@ void FormManagerPlugin::extensionsInitialized()
     messageSplash(tr("Initializing form manager plugin..."));
 
     // Initialize patient base and manager
-    episodeBase();
     episodeBase()->initialize();
-    FormManager::instance();
-    FormManager::instance()->loadPatientFile();
 
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 
@@ -130,12 +130,15 @@ void FormManagerPlugin::extensionsInitialized()
 
     // Add mode
     mode = new FormManagerMode(this);
+    FormManager::instance()->loadPatientFile();
 }
 
 void FormManagerPlugin::postCoreInitialization()
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << Q_FUNC_INFO;
+
+
     // Check FirstRun Default Form
     const QString &uid = settings()->defaultForm();
     if (!uid.isEmpty()) {

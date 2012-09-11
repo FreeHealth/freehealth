@@ -197,9 +197,11 @@ public:
 
         // load central root forms, create cache and duplicates
         m_RootForms = loadFormFile(absDirPath); // also create the cache
-        if (ManageDuplicates)
+        if (ManageDuplicates) {
+            qDeleteAll(m_RootFormsDuplicates);
+            m_RootFormsDuplicates.clear();
             m_RootFormsDuplicates = loadFormFile(absDirPath, false); // force reloading of forms
-
+        }
         // load pmhx
         if (!m_RootForms.isEmpty()) {
             m_RootForms.at(0)->reader()->loadPmhCategories(absDirPath);
@@ -450,9 +452,6 @@ bool FormManager::loadPatientFile()
     // load subforms
     d->loadSubForms();
 
-//    qDeleteAll(d->m_RootForms);
-//    d->m_RootForms.clear();
-
     return true;
 }
 
@@ -497,6 +496,7 @@ Form::FormMain *FormManager::identityRootForm() const
                 return form;
         }
     }
+    LOG_ERROR("No identity form found");
     return 0;
 }
 
@@ -512,9 +512,6 @@ Form::FormMain *FormManager::identityRootFormDuplicate() const
     QList<Form::FormMain *> forms;
     forms << d->m_RootFormsDuplicates;
     forms << d->m_SubFormsEmptyRootDuplicates;
-
-    qWarning() << "IDENTITY FORM" << forms.count();
-
     for(int i=0; i < forms.count(); ++i) {
         FormMain *root = forms.at(i);
         if (root->spec()->value(FormItemSpec::Spec_IsIdentityForm).toBool())
@@ -524,6 +521,7 @@ Form::FormMain *FormManager::identityRootFormDuplicate() const
                 return form;
         }
     }
+    LOG_ERROR("No identity form duplicate found");
     return 0;
 }
 
