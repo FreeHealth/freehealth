@@ -43,17 +43,17 @@
 
 #include <patientbaseplugin/patientmodel.h>
 
+#include <utils/global.h>
+
 static inline Form::FormManager *formManager() {return Form::FormManager::instance();}
 static inline Core::IPatient *patient()  { return Core::ICore::instance()->patient(); }
 
 using namespace Patients;
 using namespace Internal;
 
-PatientModelWrapper::PatientModelWrapper(Patients::PatientModel *model, QObject *parent) :
-        Core::IPatient(parent), m_Model(model)
+PatientModelWrapper::PatientModelWrapper(QObject *parent) :
+        Core::IPatient(parent), m_Model(0)
 {
-    connect(model, SIGNAL(patientChanged(QString)), this, SLOT(onCurrentPatientChanged(QString)));
-    connect(model, SIGNAL(patientCreated(QString)), this, SIGNAL(patientCreated(QString)));
 }
 
 PatientModelWrapper::~PatientModelWrapper()
@@ -68,8 +68,12 @@ void PatientModelWrapper::onCurrentPatientChanged(const QString &)
 }
 
 /** \brief Initialize the model */
-void PatientModelWrapper::initialize()
+void PatientModelWrapper::initialize(Patients::PatientModel *model)
 {
+    m_Model = model;
+    connect(model, SIGNAL(patientChanged(QString)), this, SLOT(onCurrentPatientChanged(QString)));
+    connect(model, SIGNAL(patientCreated(QString)), this, SIGNAL(patientCreated(QString)));
+    Utils::linkSignalsFromFirstModelToSecondModel(model, this, true);
 }
 
 /** \brief Return the QModelIndex of the current patient. The index is parented with the Patient::PatientModel model. */

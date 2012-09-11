@@ -49,9 +49,9 @@ class PatientModelWrapper : public Core::IPatient
 {
     Q_OBJECT
 public:
-    PatientModelWrapper(Patients::PatientModel *model, QObject *parent = 0);
+    PatientModelWrapper(QObject *parent = 0);
     ~PatientModelWrapper();
-    void initialize();
+    void initialize(Patients::PatientModel *model);
 
     // IPatient interface
     void clear() {}
