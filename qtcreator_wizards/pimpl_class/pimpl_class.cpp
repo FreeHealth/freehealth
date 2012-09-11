@@ -78,7 +78,7 @@ public:
     {
     }
 
-    %ClassName:~c%Private()
+    ~%ClassName:c%Private()
     {
     }
 
