@@ -155,6 +155,7 @@ PatientSelector::PatientSelector(QWidget *parent, const FieldsToShow fields) :
 {
     d->ui->setupUi(this);
     d->ui->searchLine->setDelayedSignals(true);
+//    layout()->setMargin(0);
 
     // datetime delegate
     d->ui->tableView->setItemDelegateForColumn(Core::IPatient::DateOfBirth, new Utils::DateTimeDelegate(this, true));
