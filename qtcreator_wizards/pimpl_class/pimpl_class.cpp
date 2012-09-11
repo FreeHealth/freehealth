@@ -78,7 +78,8 @@ private:
 @if "%Doxygen%" == "true"
 /*! Constructor of the %ClassName:c% class */
 @endif
-%ClassName:c%::%ClassName:c%()
+%ClassName:c%::%ClassName:c%() :
+    d(new %ClassName:c%Private(this))
 {
 }
 
@@ -87,6 +88,9 @@ private:
 @endif
 %ClassName:c%::~%ClassName:c%()
 {
+    if (d)
+        delete d;
+    d = 0;
 }
 
 @if "%Doxygen%" == "true"
