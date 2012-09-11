@@ -232,6 +232,7 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
     cmd = actionManager()->registerAction(a, Core::Constants::A_LIST_REMOVE, ctx);
     cmd->setTranslations(Trans::Constants::LISTREMOVE_TEXT);
     menu->addAction(cmd, DrugsWidget::Constants::G_PLUGINS_DRUGS);
+    a->setEnabled(false);
     connect(a, SIGNAL(triggered()), this, SLOT(removeItem()));
 
     a = aDown = new QAction(this);
@@ -239,6 +240,7 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
     cmd = actionManager()->registerAction(a, Core::Constants::A_LIST_MOVEDOWN, ctx);
     cmd->setTranslations(Trans::Constants::LISTMOVEDOWN_TEXT);
     menu->addAction(cmd, DrugsWidget::Constants::G_PLUGINS_DRUGS);
+    a->setEnabled(false);
     connect(a, SIGNAL(triggered()), this, SLOT(moveDown()));
 
     a = aUp = new QAction(this);
@@ -246,6 +248,7 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
     cmd = actionManager()->registerAction(a, Core::Constants::A_LIST_MOVEUP, ctx);
     cmd->setTranslations(Trans::Constants::LISTMOVEUP_TEXT);
     menu->addAction(cmd, DrugsWidget::Constants::G_PLUGINS_DRUGS);
+    a->setEnabled(false);
     connect(a, SIGNAL(triggered()), this, SLOT(moveUp()));
 
     a = aSort = new QAction(this);
@@ -253,6 +256,7 @@ DrugsActionHandler::DrugsActionHandler(QObject *parent) :
     cmd = actionManager()->registerAction(a, Core::Constants::A_LIST_SORT, ctx);
     cmd->setTranslations(Trans::Constants::LISTSORT_TEXT);
     menu->addAction(cmd, DrugsWidget::Constants::G_PLUGINS_DRUGS);
+    a->setEnabled(false);
     connect(a, SIGNAL(triggered()), this, SLOT(sortDrugs()));
 
     a = aViewInteractions = new QAction(this);
@@ -516,8 +520,13 @@ void DrugsActionHandler::setCurrentView(DrugsCentralWidget *view)
 
 void DrugsActionHandler::listViewItemChanged()
 {
-    aUp->setEnabled(canMoveUp());
-    aDown->setEnabled(canMoveDown());
+    const bool valid = m_CurrentView && m_CurrentView->prescriptionListView()->currentIndex().isValid();
+
+    aUp->setEnabled(valid && canMoveUp());
+    aDown->setEnabled(valid && canMoveDown());
+    aRemoveRow->setEnabled(valid);
+    aSort->setEnabled(valid);
+
 }
 
 void DrugsActionHandler::drugsModelChanged()
@@ -557,11 +566,11 @@ void DrugsActionHandler::toggleDrugSelector()
     }
 }
 
-bool DrugsActionHandler::canMoveUp()
+bool DrugsActionHandler::canMoveUp() const
 {
     if (!m_CurrentView)
         return false;
-    QModelIndex idx = m_CurrentView->prescriptionListView()->currentIndex();
+    const QModelIndex idx = m_CurrentView->prescriptionListView()->currentIndex();
     if (!idx.isValid())
         return false;
     if (idx.row() >= 1)
@@ -569,7 +578,7 @@ bool DrugsActionHandler::canMoveUp()
     return false;
 }
 
-bool DrugsActionHandler::canMoveDown()
+bool DrugsActionHandler::canMoveDown() const
 {
     if (!m_CurrentView)
         return false;

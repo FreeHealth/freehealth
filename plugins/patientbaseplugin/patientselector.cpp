@@ -305,6 +305,10 @@ void PatientSelector::changeIdentity(const QModelIndex &current, const QModelInd
     updatePatientActions(current);
 }
 
+/*!
+ * \brief Updates (enables/disables) the corresponding QActions for the given patient
+ * \param index QModelIndex of a valid patient
+ */
 void PatientSelector::updatePatientActions(const QModelIndex &index)
 {
     const bool enabled = index.isValid();

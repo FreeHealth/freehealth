@@ -308,6 +308,7 @@ void FormDataWidgetMapper::setCurrentForm(Form::FormMain *form)
 
 void FormDataWidgetMapper::setCurrentEpisode(const QVariant &uid)
 {
+    Q_UNUSED(uid)
 }
 
 void FormDataWidgetMapper::setCurrentEpisode(const QModelIndex &index)

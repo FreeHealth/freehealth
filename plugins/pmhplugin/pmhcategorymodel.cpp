@@ -275,7 +275,7 @@ public:
         return _rootItem;
     }
 
-    void episodeModelToTreeItem(Form::FormMain *form, TreeItem *parentItem, Form::EpisodeModel *model, const QModelIndex &index = QModelIndex())
+    void episodeModelToTreeItem(Form::FormMain */*form*/, TreeItem */*parentItem*/, Form::EpisodeModel */*model*/, const QModelIndex &/*index = QModelIndex()*/)
     {
         // TODO: manage FormManager
 //        for(int i = 0; i < model->rowCount(index); ++i) {

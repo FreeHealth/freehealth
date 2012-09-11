@@ -237,9 +237,11 @@ public:
     void updateEpisodeActions(const QModelIndex &index)
     {
         const bool enabled = index.isValid();
-        aRemoveEpisode->setEnabled(enabled);
+        const bool unique = _formTreeModel->isUniqueEpisode(index);
+        aRemoveEpisode->setEnabled(enabled && !unique);
         if (enabled) {
-            EpisodeModel *model = qobject_cast<EpisodeModel*>(ui->episodeView->model());
+            const EpisodeModel *model = qobject_cast<EpisodeModel*>(ui->episodeView->model());
+            Q_ASSERT(model);
             aValidateEpisode->setEnabled(!model->isEpisodeValidated(index));
         }
         aSaveEpisode->setEnabled(enabled);

@@ -118,8 +118,8 @@ private Q_SLOTS:
     void copyPrescriptionItem();
 
 private:
-    bool canMoveUp();
-    bool canMoveDown();
+    bool canMoveUp() const;
+    bool canMoveDown() const;
     void updateActions();
 
 protected:
