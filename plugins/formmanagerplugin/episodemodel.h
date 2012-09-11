@@ -92,7 +92,6 @@ class FORM_EXPORT EpisodeModel : public QAbstractListModel
 protected:
     EpisodeModel(Form::FormMain *rootEmptyForm, QObject *parent = 0);
     bool initialize();
-    void setCurrentPatient(const QString &uuid);
 
 public:
     enum DataRepresentation {
@@ -113,6 +112,7 @@ public:
     };
     virtual ~EpisodeModel();
     QString formUid() const;
+    void setCurrentPatient(const QString &uuid);
 
     Qt::ItemFlags flags(const QModelIndex &index) const;
     void fetchMore(const QModelIndex &parent);
@@ -139,7 +139,7 @@ public:
 
 public Q_SLOTS:
     // EXPERIMENTAL
-    bool populateFormWithEpisode(EpisodeModel *episodeModel, const QModelIndex &episode, bool feedPatientModel);
+    bool populateFormWithEpisodeContent(const QModelIndex &episode, bool feedPatientModel);
     // END EXPERIMENTAL
     bool submit();
 

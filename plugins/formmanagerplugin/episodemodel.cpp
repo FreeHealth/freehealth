@@ -55,6 +55,7 @@
 #include <formmanagerplugin/iformitem.h>
 #include <formmanagerplugin/iformitemspec.h>
 #include <formmanagerplugin/iformitemdata.h>
+#include <formmanagerplugin/iformwidgetfactory.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -362,6 +363,10 @@ bool EpisodeModel::initialize()
     return true;
 }
 
+/**
+ * Define the patient uuid to use for the filter. By default, the Form::EpisodeModel always filter the
+ * current patient episodes. In many cases, you do not need to change this behavior.
+ */
 void EpisodeModel::setCurrentPatient(const QString &uuid)
 {
     d->updateFilter(uuid);
@@ -670,61 +675,61 @@ bool EpisodeModel::isEpisodeValidated(const QModelIndex &index) const
 }
 
 // EXPERIMENTAL
-bool EpisodeModel::populateFormWithEpisode(EpisodeModel *episodeModel, const QModelIndex &episode, bool feedPatientModel)
+bool EpisodeModel::populateFormWithEpisodeContent(const QModelIndex &episode, bool feedPatientModel)
 {
-//    QTime chrono;
-//    if (WarnLogChronos)
-//        chrono.start();
+    QTime chrono;
+    if (WarnLogChronos)
+        chrono.start();
 
-//    d->_formMain->clear();
-////    d->_formMain->formWidget()->setEnabled(false);
+    d->_formMain->clear();
+    d->_formMain->formWidget()->setEnabled(false);
 
-//    const QString &xml = d->getEpisodeContent(episode);
-//    QHash<QString, FormItem *> items;
-//    QHash<QString, QString> datas;
-//    if (!xml.isEmpty()) {
-//        // read the xml'd content
-//        if (!Utils::readXml(xml, Form::Constants::XML_FORM_GENERAL_TAG, datas, false)) {
-//            QModelIndex uid = _episodeModel->index(index.row(), EpisodeModel::Uuid);
-//            LOG_ERROR(QString("Error while reading episode content (%1)").arg(_episodeModel->data(uid).toString()));
-//            return;
-//        }
+    const QString &xml = d->getEpisodeContent(episode);
+    QHash<QString, FormItem *> items;
+    QHash<QString, QString> datas;
+    if (!xml.isEmpty()) {
+        // read the xml'd content
+        if (!Utils::readXml(xml, Form::Constants::XML_FORM_GENERAL_TAG, datas, false)) {
+            QModelIndex uid = index(episode.row(), EpisodeModel::Uuid);
+            LOG_ERROR(QString("Error while reading episode content (%1)").arg(data(uid).toString()));
+            return false;
+        }
 
-//        // put datas into the FormItems of the form
-//        foreach(FormItem *it, _formMain->flattenFormItemChildren()) {
-//            items.insert(it->uuid(), it);
-//        }
-//    }
+        // put datas into the FormItems of the form
+        foreach(FormItem *it, d->_formMain->flattenFormItemChildren()) {
+            items.insert(it->uuid(), it);
+        }
+    }
 
-//    // Populate the FormMain item data (username, userdate, label)
-//    QModelIndex userName = index(index.row(), EpisodeModel::UserCreatorName);
-//    QModelIndex userDate = index(index.row(), EpisodeModel::UserDate);
-//    QModelIndex label = index(index.row(), EpisodeModel::Label);
-//    d->_formMain->itemData()->setData(IFormItemData::ID_EpisodeDate, data(userDate));
-//    d->_formMain->itemData()->setData(IFormItemData::ID_EpisodeLabel, data(label));
-//    d->_formMain->itemData()->setData(IFormItemData::ID_UserName, data(userName));
-//    d->_formMain->itemData()->setStorableData(false); // equal: _formMain->itemData()->setModified(false)
+    // Populate the FormMain item data (username, userdate, label)
+    QModelIndex userName = index(episode.row(), EpisodeModel::UserCreatorName);
+    QModelIndex userDate = index(episode.row(), EpisodeModel::UserDate);
+    QModelIndex label = index(episode.row(), EpisodeModel::Label);
+    d->_formMain->itemData()->setData(IFormItemData::ID_EpisodeDate, data(userDate));
+    d->_formMain->itemData()->setData(IFormItemData::ID_EpisodeLabel, data(label));
+    d->_formMain->itemData()->setData(IFormItemData::ID_UserName, data(userName));
+    d->_formMain->itemData()->setStorableData(false); // equal: _formMain->itemData()->setModified(false)
 
-//    // Populate FormItem data and the patientmodel
-//    foreach(FormItem *it, items.values()) {
-//        if (!it) {
-//            LOG_ERROR("populateFormWithEpisode :: ERROR: no item: " + items.key(it));
-//            continue;
-//        }
-//        if (!it->itemData())
-//            continue;
+    // Populate FormItem data and the patientmodel
+    foreach(FormItem *it, items.values()) {
+        if (!it) {
+            LOG_ERROR("populateFormWithEpisode :: ERROR: no item: " + items.key(it));
+            continue;
+        }
+        if (!it->itemData())
+            continue;
 
-//        it->itemData()->setStorableData(datas.value(it->uuid()));
-//        if (feedPatientModel && it->patientDataRepresentation() >= 0)
-//                patient()->setValue(it->patientDataRepresentation(), it->itemData()->data(it->patientDataRepresentation(), IFormItemData::PatientModelRole));
-//    }
+        it->itemData()->setStorableData(datas.value(it->uuid()));
+        if (feedPatientModel && it->patientDataRepresentation() >= 0)
+                patient()->setValue(it->patientDataRepresentation(), it->itemData()->data(it->patientDataRepresentation(), IFormItemData::PatientModelRole));
+    }
 
-////    d->_formMain->formWidget()->setEnabled(true);
+    d->_formMain->formWidget()->setEnabled(true);
 
-//    // TODO: if episode is validated ==> read-only
+    // TODO: if episode is validated ==> read-only
 
-//    if (WarnLogChronos)
-//        Utils::Log::logTimeElapsed(chrono, q->objectName(), "populateFormWithEpisode");
+    if (WarnLogChronos)
+        Utils::Log::logTimeElapsed(chrono, objectName(), "populateFormWithEpisode");
     return true;
 }
 // END EXPERIMENTAL
