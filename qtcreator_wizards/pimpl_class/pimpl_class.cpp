@@ -73,7 +73,14 @@ namespace Internal {
 class %ClassName:c%Private
 {
 public:
-    %ClassName:c%Private(%ClassName:c% *parent) : q(parent) {}
+    %ClassName:c%Private(%ClassName:c% *parent) :
+      q(parent)
+    {
+    }
+
+    %ClassName:~c%Private()
+    {
+    }
 
 private:
     %ClassName:c% *q;
