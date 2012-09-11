@@ -56,6 +56,12 @@
             <fielddescription xml:lang="de">Doxygen-Dokumentation erzeugen</fielddescription>
             <fielddescription xml:lang="fr">Cr&#233;er la documentation doxygen</fielddescription>
         </field>
+        <field name="Translations">
+            <fieldcontrol class="QCheckBox" defaultvalue="true" />
+            <fielddescription>Include translation utils</fielddescription>
+            <fielddescription xml:lang="de">Include translation utils</fielddescription>
+            <fielddescription xml:lang="fr">Inclure la librairie de traduction</fielddescription>
+        </field>
 
 
     </fields>

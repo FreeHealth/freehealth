@@ -47,10 +47,17 @@
 
 #include "%ClassName:l%.h"
 
+@if "%Translations%" == "true"
+#include <translationutils/constants.h>
+@endif
+
 #include <QDebug>
 
 using namespace %PluginNamespace:c%;
 using namespace Internal;
+@if "%Translations%" == "true"
+using namespace Trans::ConstantTranslations;
+@endif
 
 @if "%PIMPL%" == "true"
 namespace %PluginNamespace:c% {
