@@ -381,6 +381,8 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
     int height = size().height();
     third = height/5;
     d->ui->verticalSplitter->setSizes(QList<int>() << third << height-third);
+
+    connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(clearAll()));
 }
 
 FormPlaceHolder::~FormPlaceHolder()
@@ -432,6 +434,12 @@ void FormPlaceHolder::setRootForm(Form::FormMain *rootForm)
         QModelIndex index = d->_formTreeModel->index(0,0);
         d->ui->formView->selectionModel()->select(index, QItemSelectionModel::Rows | QItemSelectionModel::SelectCurrent);
     }
+}
+
+void FormPlaceHolder::clearAll()
+{
+    if (d->_formMain)
+        d->_formMain->clear();
 }
 
 // Used for the delegate
@@ -535,6 +543,8 @@ void FormPlaceHolder::episodeChanged(const QModelIndex &current, const QModelInd
     qWarning() << "FormPlaceHolder::EpisodeChanged" << current << previous;
     if (previous.isValid())
         d->saveCurrentEditingEpisode();
+//    if (!current.isValid())
+//        return;
     d->ui->formDataMapper->setCurrentEpisode(current);
     d->updateEpisodeActions(current);
 }

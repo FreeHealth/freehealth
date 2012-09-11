@@ -81,6 +81,7 @@ public:
     void setRootForm(Form::FormMain *rootForm);
 
 public Q_SLOTS:
+    void clearAll();
     void setCurrentForm(Form::FormMain *form);
     void setCurrentForm(const QString &formUid);
     void setCurrentEditingItem(const QModelIndex &index);
