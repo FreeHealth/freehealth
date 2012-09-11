@@ -452,12 +452,6 @@ void FormPlaceHolder::handleClicked(const QModelIndex &index)
     }
 }
 
-void FormPlaceHolder::addBottomWidget(QWidget *bottom)
-{
-    // TODO: here addBottomWidget
-//    d->m_GeneralLayout->addWidget(bottom, d->m_GeneralLayout->rowCount(), 0, 0, d->m_GeneralLayout->columnCount());
-}
-
 void FormPlaceHolder::showLastEpisodeSynthesis()
 {
     qWarning() << "showMastEpisode";
