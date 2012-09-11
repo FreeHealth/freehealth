@@ -84,8 +84,10 @@ public:
     void setPatientModel(PatientModel *m);
     void setFieldsToShow(const FieldsToShow fields);
 
+
 public Q_SLOTS:
     void setSelectedPatient(const QModelIndex &index);
+    void updatePatientActions(const QModelIndex &index);
 
 //Q_SIGNALS:
 //    void patientSelected(const QString &uuid);

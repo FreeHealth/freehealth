@@ -177,6 +177,7 @@ PatientSelector::PatientSelector(QWidget *parent, const FieldsToShow fields) :
     connect(d->ui->tableView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(changeIdentity(QModelIndex,QModelIndex)));
     connect(d->ui->tableView, SIGNAL(activated(QModelIndex)), this, SLOT(onPatientSelected(QModelIndex)));
 
+    updatePatientActions(QModelIndex());
     d->ui->identity->setCurrentIndex(QModelIndex());
 }
 
@@ -280,6 +281,7 @@ void PatientSelector::setFieldsToShow(const FieldsToShow fields)
 void PatientSelector::setSelectedPatient(const QModelIndex &index)
 {
     d->ui->tableView->selectRow(index.row());
+    updatePatientActions(index);
 }
 
 /** \brief Update the IdentityWidget with the new current identity. */
@@ -287,6 +289,15 @@ void PatientSelector::changeIdentity(const QModelIndex &current, const QModelInd
 {
     Q_UNUSED(previous);
     d->ui->identity->setCurrentIndex(current);
+    updatePatientActions(current);
+}
+
+void PatientSelector::updatePatientActions(const QModelIndex &index)
+{
+    const bool enabled = index.isValid();
+
+    actionManager()->command(Core::Constants::A_PATIENT_VIEWIDENTITY)->action()->setEnabled(enabled);
+    actionManager()->command(Core::Constants::A_PATIENT_REMOVE)->action()->setEnabled(enabled);
 }
 
 /** \brief Refresh the search filter of the Patient::PatientModel */
