@@ -79,7 +79,6 @@ public:
     ~FormPlaceHolder();
 
     void setRootForm(Form::FormMain *rootForm);
-    void addBottomWidget(QWidget *bottom);
 
 public Q_SLOTS:
     void setCurrentForm(Form::FormMain *form);

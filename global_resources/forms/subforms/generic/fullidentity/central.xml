@@ -29,18 +29,20 @@
         Ajout du numéro de téléphone mobile&lt;br />
         Bouton 'envoyer un courriel' connecté&lt;br />
         N'affiche pas l'entête du formulaire&lt;br />
+        Défini le formulaire comme formulaire d'identité dans l'application&lt;br />
         </text>
         <text lang="xx">
         Adding the mobile phone number&lt;br />
         'Send mail' button is now connected&lt;br />
         Hide the form header&lt;br />
+        Define this form as the application identity form&lt;br />
         </text>
       </updateversion>
     </updateinfo>
 
   </formdescription>
 
-  <MedForm name="Subs::Tools::Identity" uifilename="./ui/xx/identity.ui">
+  <MedForm name="Subs::Tools::Identity" uifilename="./ui/xx/identity.ui" isidentity="true">
     <label lang="xx">Identity</label>
     <label lang="fr">Identité</label>
     <options>unique;UseFormNameAsNameSpace;HideHeaderOnUniqueEpisode</options>

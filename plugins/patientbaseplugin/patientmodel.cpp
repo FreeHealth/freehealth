@@ -391,7 +391,7 @@ QVariant PatientModel::data(const QModelIndex &index, int role) const
             QModelIndex idx = d->m_SqlPatient->index(index.row(), Constants::IDENTITY_DOB);
             QDate dob = d->m_SqlPatient->data(idx).toDate();
             if (role==Qt::DisplayRole) {
-                return QLocale().toString(dob, tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR));
+                return dob;
             } else if (role==Qt::ToolTipRole) {
                 return QString("%1; %2").arg(QLocale().toString(dob, QLocale().dateFormat(QLocale::LongFormat))).arg(MedicalUtils::readableAge(dob));
             }

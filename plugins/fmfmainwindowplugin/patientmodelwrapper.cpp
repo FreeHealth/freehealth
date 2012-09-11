@@ -25,9 +25,10 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 /**
-   \class MainWin::Internal::PatientModelWrapper
-   Wrapper to the Patient::PatientModel for identity and wrapper to Form::FormItem that represent
-   a patient data.
+ * \class MainWin::Internal::PatientModelWrapper
+ * Wrapper to the Patient::PatientModel for identity and wrapper to Form::FormItem that represent
+ * a patient data.
+ * \sa Core::IPatient
 */
 
 #include "patientmodelwrapper.h"

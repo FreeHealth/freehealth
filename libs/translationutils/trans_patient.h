@@ -60,9 +60,12 @@ const char* const TELS              = QT_TRANSLATE_NOOP("tkConstants", "Tels");
 const char* const MOBILEPHONE       = QT_TRANSLATE_NOOP("tkConstants", "Mobile phone");
 
 const char* const DATE_OF_BIRTH               = QT_TRANSLATE_NOOP("tkConstants", "Date of birth");
+const char* const DATE_OF_BIRTH_1             = QT_TRANSLATE_NOOP("tkConstants", "Date of birth: %1");
 const char* const DATE_OF_DEATH               = QT_TRANSLATE_NOOP("tkConstants", "Date of death");
 const char* const AGE                         = QT_TRANSLATE_NOOP("tkConstants", "Age");
+const char* const AGE_1                       = QT_TRANSLATE_NOOP("tkConstants", "Age: %1");
 const char* const AGE_IN_YEARS                = QT_TRANSLATE_NOOP("tkConstants", "Age in years");
+const char* const AGE_1_DOB_2                 = QT_TRANSLATE_NOOP("tkConstants", "Age: %1; DOB: %2");
 
 const char* const WEIGHT                      = QT_TRANSLATE_NOOP("tkConstants", "Weight");
 const char* const HEIGHT                      = QT_TRANSLATE_NOOP("tkConstants", "Height");

@@ -660,6 +660,12 @@ bool EpisodeModel::validateEpisode(const QModelIndex &index)
     return ok;
 }
 
+/** Return true if the episode \e index is user validated */
+bool EpisodeModel::isEpisodeValidated(const QModelIndex &index) const
+{
+    return d->isEpisodeValidated(index);
+}
+
 /** Save the whole model. \sa isDirty() */
 bool EpisodeModel::submit()
 {

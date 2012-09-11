@@ -126,6 +126,7 @@ public:
     bool isDirty() const;
 
     bool validateEpisode(const QModelIndex &index);
+    bool isEpisodeValidated(const QModelIndex &index) const;
 
 public Q_SLOTS:
     bool submit();

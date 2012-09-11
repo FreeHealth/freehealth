@@ -338,7 +338,7 @@ void PrescriptionViewer::changeDuration()
         senderTag.clear();
     }
 
-    // create the pop menu
+    // create the popup menu
     QMenu *root = new QMenu(this);
     QStringList subs = QStringList()
                        << Trans::Constants::DAY_S
@@ -362,7 +362,7 @@ void PrescriptionViewer::changeDuration()
     root->popup(pos);
 }
 
-/** \brief Changes all drugs duration according to the triggered action. \sa PrescriptionViewer::changeDuration(). */
+/*! \brief Changes all drugs duration according to the triggered action. \sa PrescriptionViewer::changeDuration(). */
 void PrescriptionViewer::changeDurationTo()
 {
     QAction *a = qobject_cast<QAction*>(sender());
