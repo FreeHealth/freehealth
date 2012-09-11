@@ -63,6 +63,7 @@
 #include <utils/log.h>
 #include <utils/global.h>
 #include <utils/widgets/minisplitter.h>
+#include <utils/widgets/datetimedelegate.h>
 #include <extensionsystem/pluginmanager.h>
 #include <translationutils/constants.h>
 #include <translationutils/trans_filepathxml.h>
@@ -364,6 +365,7 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
     d->ui->episodeView->setFrameStyle(QFrame::NoFrame);
     d->ui->episodeView->setSelectionMode(QAbstractItemView::SingleSelection);
     d->ui->episodeView->setSelectionBehavior(QAbstractItemView::SelectRows);
+    d->ui->episodeView->setItemDelegateForColumn(EpisodeModel::UserDate, new Utils::DateTimeDelegate(this, true));
 
     int width = size().width();
     int third = width/3;
