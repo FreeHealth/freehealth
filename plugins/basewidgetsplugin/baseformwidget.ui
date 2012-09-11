@@ -155,6 +155,11 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>dateTimeEdit</tabstop>
+  <tabstop>lineEdit</tabstop>
+  <tabstop>toolButton</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
