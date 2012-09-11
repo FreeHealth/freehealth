@@ -44,20 +44,21 @@
 #include <coreplugin/ipatient.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/constants_icons.h>
-
-#include <extensionsystem/pluginmanager.h>
 #include <coreplugin/iphotoprovider.h>
+
 #include <zipcodesplugin/zipcodescompleters.h>
 
 #include <utils/global.h>
 #include <utils/widgets/uppercasevalidator.h>
 #include <translationutils/constants.h>
+#include <translationutils/trans_patient.h>
+#include <extensionsystem/pluginmanager.h>
 
 #include <QDataWidgetMapper>
 #include <QDir>
 #include <QFileDialog>
 #include <QDateEdit>
-
+#include <QTextBrowser>
 #include <QDebug>
 
 #include <pixmapdelegate.h>
@@ -70,8 +71,6 @@ static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 static inline Patients::Internal::PatientBase *patientBase() {return Patients::Internal::PatientBase::instance();}
 
 //TODO: Users can add pages in the identity widget using the XMLForm --> create a <Form> named \e Identity
-//TODO: Create a viewUi for the readonly mode (more compact)
-
 
 namespace Patients {
 namespace Internal {
@@ -129,19 +128,180 @@ public:
     }
 };
 
+class AgeViewerWidget : public QWidget
+{
+public:
+    AgeViewerWidget(QWidget *parent) : QWidget(parent)
+    {
+        QFormLayout *grid = new QFormLayout(this);
+        setLayout(grid);
+        _age = new QLabel(this);
+        _ageLabel = new QLabel(this);
+        _dob = new QLabel(this);
+        _dobLabel = new QLabel(this);
+        _dod = new QLabel(this);
+        _dodLabel = new QLabel(this);
+
+        QFont bold;
+        bold.setBold(true);
+        _ageLabel->setFont(bold);
+        _dobLabel->setFont(bold);
+        _dodLabel->setFont(bold);
+
+        grid->addRow(_ageLabel, _age);
+        grid->addRow(_dobLabel, _dob);
+        grid->addRow(_dodLabel, _dod);
+
+        retranslate();
+    }
+
+    void clear()
+    {
+        _age->clear();
+        _dob->clear();
+        _dod->clear();
+        _dod->setVisible(false);
+        _dodLabel->setVisible(false);
+    }
+
+    void setAge(const QString &age)
+    {
+        _age->setText(age);
+    }
+
+    void setDateOfBirth(const QString &date)
+    {
+        _dob->setText(date);
+    }
+
+    void setDateOfDeath(const QString &date)
+    {
+        if (!date.isEmpty()) {
+            _dod->setText(date);
+            _dod->setVisible(true);
+            _dodLabel->setVisible(true);
+        }
+    }
+
+    void retranslate()
+    {
+        _ageLabel->setText(tkTr(Trans::Constants::AGE));
+        _dobLabel->setText(tkTr(Trans::Constants::DATE_OF_BIRTH));
+        _dodLabel->setText(tkTr(Trans::Constants::DATE_OF_DEATH));
+    }
+
+    void changeEvent(QEvent *e)
+    {
+        if (e->type()==QEvent::LanguageChange)
+            retranslate();
+        QWidget::changeEvent(e);
+    }
+
+private:
+    QLabel *_age, *_ageLabel, *_dob, *_dobLabel, *_dodLabel, *_dod;
+};
+
+class ContactViewerWidget : public QWidget
+{
+public:
+    ContactViewerWidget(QWidget *parent) : QWidget(parent)
+    {
+        QFormLayout *grid = new QFormLayout(this);
+        setLayout(grid);
+        _addressLabel = new QLabel(this);
+        _cityLabel = new QLabel(this);
+        _zipLabel = new QLabel(this);
+        _countryLabel = new QLabel(this);
+        _address = new QLabel(this);
+        _city = new QLabel(this);
+        _zip = new QLabel(this);
+        _country = new QLabel(this);
+
+        QFont bold;
+        bold.setBold(true);
+        _addressLabel->setFont(bold);
+        _cityLabel->setFont(bold);
+        _zipLabel->setFont(bold);
+        _countryLabel->setFont(bold);
+
+        grid->addRow(_addressLabel, _address);
+        grid->addRow(_cityLabel, _city);
+        grid->addRow(_zipLabel, _zip);
+        grid->addRow(_countryLabel, _country);
+
+        retranslate();
+    }
+
+    void clear()
+    {
+        _address->clear();
+        _city->clear();
+        _zip->clear();
+        _country->clear();
+    }
+
+    void setAddress(const QString &txt)
+    {
+        _address->setText(txt);
+    }
+
+    void setCity(const QString &txt)
+    {
+        _city->setText(txt);
+    }
+
+    void setZipCode(const QString &txt)
+    {
+        _zip->setText(txt);
+    }
+
+    void setCountry(const QString &txt)
+    {
+        _country->setText(txt);
+    }
+
+    void retranslate()
+    {
+        _addressLabel->setText(tkTr(Trans::Constants::ADDRESS));
+        _cityLabel->setText(tkTr(Trans::Constants::CITY));
+        _zipLabel->setText(tkTr(Trans::Constants::ZIPCODE));
+        _countryLabel->setText(tkTr(Trans::Constants::COUNTRY));
+    }
+
+    void changeEvent(QEvent *e)
+    {
+        if (e->type()==QEvent::LanguageChange)
+            retranslate();
+        QWidget::changeEvent(e);
+    }
+
+private:
+    QLabel *_addressLabel, *_cityLabel, *_zipLabel, *_countryLabel;
+    QLabel *_address, *_city, *_zip, *_country;
+
+};
+
 
 class IdentityWidgetPrivate
 {
 public:
     IdentityWidgetPrivate(IdentityWidget *parent, IdentityWidget::EditMode mode) :
-        editUi(0), viewUi(0), m_Mapper(0), m_EditMode(mode), zipCompleter(0),
+        editUi(0), viewUi(0),
+        m_Mapper(0), m_EditMode(mode),
+        zipCompleter(0),
         m_hasRealPhoto(false),
+        m_AgeWidget(0),
+        m_ContactWidget(0),
         q(parent)
     {
         switch (mode) {
         case IdentityWidget::ReadOnlyMode: {
             viewUi = new Ui::IdentityViewer;
             viewUi->setupUi(q);
+            m_AgeWidget = new AgeViewerWidget(q);
+            m_ContactWidget = new ContactViewerWidget(q);
+            viewUi->ageDetails->setWidget(m_AgeWidget);
+            viewUi->addressDetails->setWidget(m_ContactWidget);
             break;
         }
         case IdentityWidget::ReadWriteMode: {
@@ -218,6 +378,49 @@ public:
         }
     }
 
+    void clearReadOnlyWidget()
+    {
+        Q_ASSERT(viewUi);
+        viewUi->name->clear();
+        viewUi->photoLabel->clear();
+        viewUi->ageDOB->clear();
+        viewUi->sex->clear();
+        m_AgeWidget->clear();
+        m_ContactWidget->clear();
+    }
+
+    void populateReadOnlyWidget(const int row)
+    {
+        // name && gender
+        const QIcon &icon = m_PatientModel->index(row, Core::IPatient::IconizedGender).data().value<QIcon>();
+        viewUi->sex->setPixmap(icon.pixmap(QSize(16,16)));
+        const QString &name = m_PatientModel->index(row, Core::IPatient::FullName).data().toString();
+        viewUi->name->setText(name);
+
+        // photo
+        const QPixmap &photo = m_PatientModel->index(row, Core::IPatient::Photo_64x64).data().value<QPixmap>();
+        viewUi->photoLabel->setPixmap(photo);
+
+        // age && dob
+        const QString &age = m_PatientModel->index(row, Core::IPatient::Age).data().toString();
+        QString dob = QLocale().toString(m_PatientModel->index(row, Core::IPatient::DateOfBirth).data().toDate(), QLocale::LongFormat);
+        viewUi->ageDetails->setSummaryText(age);
+        m_AgeWidget->setAge(age);
+        m_AgeWidget->setDateOfBirth(dob);
+        if (m_PatientModel->index(row, Core::IPatient::DateOfDeath).data().isValid()) {
+            QString dod = QLocale().toString(m_PatientModel->index(row, Core::IPatient::DateOfDeath).data().toDate(), QLocale::LongFormat);
+            m_AgeWidget->setDateOfDeath(dod);
+        }
+
+        // address
+        // TODO: add a preference -> what to show in summarytext: mobile phone? address? tels? email?
+        viewUi->addressDetails->setSummaryText(m_PatientModel->index(row, Core::IPatient::FullAddress).data().toString());
+        m_ContactWidget->setAddress(m_PatientModel->index(row, Core::IPatient::Street).data().toString());
+        m_ContactWidget->setCity(m_PatientModel->index(row, Core::IPatient::City).data().toString());
+        m_ContactWidget->setZipCode(m_PatientModel->index(row, Core::IPatient::ZipCode).data().toString());
+        m_ContactWidget->setCountry(m_PatientModel->index(row, Core::IPatient::Country).data().toString());
+    }
+
 public:
     Ui::IdentityWidget *editUi;
     Ui::IdentityViewer *viewUi;
@@ -227,6 +430,8 @@ public:
     ZipCodes::ZipCountryCompleters *zipCompleter;
     QPixmap m_Photo;
     bool m_hasRealPhoto;
+    AgeViewerWidget *m_AgeWidget;
+    ContactViewerWidget *m_ContactWidget;
 
 private:
     IdentityWidget *q;
@@ -277,42 +482,20 @@ void IdentityWidget::setCurrentIndex(const QModelIndex &patientIndex)
 {
     switch (d->m_EditMode) {
     case ReadWriteMode:
+    {
         Q_ASSERT(d->m_Mapper);
         d->m_Mapper->setCurrentModelIndex(patientIndex);
         d->zipCompleter->checkData();
-//        updateGenderImage();
-        break;
-
-    case ReadOnlyMode:
-        //read only mode, no QDataWidgetMapper needed
-
-        d->viewUi->name->clear();
-        d->viewUi->photoLabel->clear();
-        d->viewUi->ageDOB->clear();
-        d->viewUi->sex->clear();
-        d->viewUi->fullAdress1->clear();
-        d->viewUi->fullAdress2->clear();
-        const QString &name = d->m_PatientModel->index(patientIndex.row(), Core::IPatient::FullName).data().toString();
-        d->viewUi->name->setText(name);
-
-        const QPixmap &photo = d->m_PatientModel->index(patientIndex.row(), Core::IPatient::Photo_64x64).data().value<QPixmap>();
-        d->viewUi->photoLabel->setPixmap(photo);
-//        updateGenderImage();
-
-        const QString &age = d->m_PatientModel->index(patientIndex.row(), Core::IPatient::Age).data().toString();
-        const QString &dob = d->m_PatientModel->index(patientIndex.row(), Core::IPatient::DateOfBirth).data().toDate().toString(QLocale().dateFormat(QLocale::LongFormat));
-        if (!age.isEmpty() && !dob.isEmpty())
-            d->viewUi->ageDOB->setText(tr("%1; born on %2").arg(age, dob));
-        const QIcon &icon = d->m_PatientModel->index(patientIndex.row(), Core::IPatient::IconizedGender).data().value<QIcon>();
-        d->viewUi->sex->setPixmap(icon.pixmap(QSize(64,64)));
-        d->viewUi->fullAdress1->setText(d->m_PatientModel->index(patientIndex.row(), Core::IPatient::Street).data().toString());
-        //:%1 = City, %2 is ZipCode, %3 = Country; Rearrange parameters according to your country defaults. Try to avoid delimiter chars as they will be shown when fields are empty!
-        d->viewUi->fullAdress2->setText(QString("%2 %1<br/>%3").arg(
-                                            d->m_PatientModel->index(patientIndex.row(), Core::IPatient::City).data().toString(),
-                                            d->m_PatientModel->index(patientIndex.row(), Core::IPatient::ZipCode).data().toString(),
-                                            d->m_PatientModel->index(patientIndex.row(), Core::IPatient::Country).data().toString()));
         break;
     }
+    case ReadOnlyMode:
+    {
+        //read only mode, no QDataWidgetMapper needed
+        d->clearReadOnlyWidget();
+        d->populateReadOnlyWidget(patientIndex.row());
+        break;
+    }
+    }  // switch (d->m_EditMode)
 }
 
 /** \brief Test the validity of the "actually shown" identity. */

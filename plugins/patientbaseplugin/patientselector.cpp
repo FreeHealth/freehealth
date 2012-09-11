@@ -48,6 +48,7 @@
 #include <coreplugin/constants_menus.h>
 
 #include <utils/global.h>
+#include <utils/widgets/datetimedelegate.h>
 #include <translationutils/constanttranslations.h>
 
 #include <QToolButton>
@@ -149,10 +150,14 @@ private:
 
 /** \brief Create a PatientSelector with \e fields to show. \sa PatientSelector::FieldsToShow */
 PatientSelector::PatientSelector(QWidget *parent, const FieldsToShow fields) :
-        QWidget(parent), d(new Internal::PatientSelectorPrivate(this))
+    QWidget(parent),
+    d(new Internal::PatientSelectorPrivate(this))
 {
     d->ui->setupUi(this);
     d->ui->searchLine->setDelayedSignals(true);
+
+    // datetime delegate
+    d->ui->tableView->setItemDelegateForColumn(Core::IPatient::DateOfBirth, new Utils::DateTimeDelegate(this, true));
 
     if (fields == None) {
         d->m_Fields = FieldsToShow(settings()->value(Constants::S_SELECTOR_FIELDSTOSHOW, Default).toInt());
