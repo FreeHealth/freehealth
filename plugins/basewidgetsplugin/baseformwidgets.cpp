@@ -550,7 +550,13 @@ void BaseFormData::clear()
 
 bool BaseFormData::isModified() const
 {
-    return m_Modified;
+    if (m_Modified)
+        return true;
+    foreach(int id, m_OriginalData.keys()) {
+        if (data(id) != m_OriginalData.value(id))
+            return true;
+    }
+    return false;
 }
 
 bool BaseFormData::setData(const int ref, const QVariant &data, const int role)
@@ -599,6 +605,7 @@ QVariant BaseFormData::data(const int ref, const int role) const
 void BaseFormData::setStorableData(const QVariant &modified)
 {
     m_Modified = modified.toBool();
+    m_OriginalData = m_Data;
 }
 
 /** Use as bool storableData() == bool isModified() */
