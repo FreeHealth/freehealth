@@ -28,43 +28,46 @@
 #define DATETIMEDELEGATE_H
 
 #include <utils/global_exporter.h>
-
-#include <QItemDelegate>
-#include <QWidget>
-#include <QObject>
-#include <QModelIndex>
-#include <QStyleOptionViewItem>
-#include <QSize>
-#include <QDateTime>
+#include <QStyledItemDelegate>
 #include <QDate>
+#include <QTime>
+
+/**
+ * \file datetimedelegate.h
+ * \author Eric MAEKER
+ * \version 0.8.0
+ * \date 12 Sept 2012
+*/
 
 namespace Utils {
 
-class UTILS_EXPORT DateTimeDelegate : public QItemDelegate
- {
-     Q_OBJECT
- public:
-     DateTimeDelegate(QObject *parent = 0, bool dateOnly = false);
+class UTILS_EXPORT DateTimeDelegate : public QStyledItemDelegate
+{
+    Q_OBJECT
+public:
+    DateTimeDelegate(QObject *parent = 0, bool dateOnly = false);
 
-     void setDateRange(const QDateTime &min, const QDateTime &max);
-     void setDateRange(const QDate &min, const QDate &max);
-     void setDateOnly(bool state);
+    void setDateRange(const QDateTime &min, const QDateTime &max);
+    void setDateRange(const QDate &min, const QDate &max);
+    void setDateOnly(bool state);
 
-     QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option,
-                           const QModelIndex &index) const;
+    QString displayText(const QVariant &value, const QLocale &locale) const;
 
-     void setEditorData(QWidget *editor, const QModelIndex &index) const;
-     void setModelData(QWidget *editor, QAbstractItemModel *model,
-                       const QModelIndex &index) const;
+    QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option,
+                          const QModelIndex &index) const;
 
-     void updateEditorGeometry(QWidget *editor,
-         const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    void setEditorData(QWidget *editor, const QModelIndex &index) const;
+    void setModelData(QWidget *editor, QAbstractItemModel *model,
+                      const QModelIndex &index) const;
 
- private:
-     bool m_IsDateOnly;
-     QTime m_MaxTime, m_MinTime;
-     QDate m_MaxDate, m_MinDate;
- };
+    void updateEditorGeometry(QWidget *editor,
+                              const QStyleOptionViewItem &option, const QModelIndex &index) const;
+
+private:
+    bool m_IsDateOnly;
+    QTime m_MaxTime, m_MinTime;
+    QDate m_MaxDate, m_MinDate;
+};
 
 
 } // end namespace Utils
