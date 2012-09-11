@@ -105,6 +105,99 @@
  * version of the form, label, tooltip, license...).\n
  * You should never delete a Form::FormItemSpec pointer outside the internal part of the Form plugin.
  */
+
+/** \enum Form::FormItemSpec::SpecData
+ * Use this enum to populate or get data from/to the object.
+ * \sa Form::FormItemSpec::setValue(), Form::FormItemSpec::value()
+ */
+
+/** \var Form::FormItemSpec::Spec_Uuid
+ * Unique persistent in time UUID of the item.
+ */
+
+/** \var Form::FormItemSpec::Spec_Author
+ * Name of the author(s).
+ */
+
+/** \var Form::FormItemSpec::Spec_License
+ * License type (abbreviation).
+ */
+
+/** \var Form::FormItemSpec::Spec_Category
+ * Translatable category of the item.
+ */
+
+/** \var Form::FormItemSpec::Spec_CreationDate
+ * Date of creation.
+ */
+
+/** \var Form::FormItemSpec::Spec_LastModified
+ * Date of last modification.
+ */
+
+/** \var Form::FormItemSpec::Spec_Version
+ * Version of the item.
+ */
+
+/** \var Form::FormItemSpec::Spec_Description
+ * Translatable description of the item (usually HTML long description).
+ */
+
+/** \var Form::FormItemSpec::Spec_Bibliography
+ * Translatable bibliography of the item (non-interpreted string).
+ */
+
+/** \var Form::FormItemSpec::Spec_Label
+ * Translatable label of the item.
+ */
+
+/** \var Form::FormItemSpec::Spec_Priority
+ * Priority of the item (usually an integer).\n
+ * For eg, used to place Form::FormPage in the mainwindow tabbar.
+ */
+
+/** \var Form::FormItemSpec::Spec_Plugin
+ * Name of the Form::IFormWidget plugin used to create the widget.
+ */
+
+/** \var Form::FormItemSpec::Spec_UiFileContent
+ * Content of the QtUi file to use for the widget generation. Uses QtUiLoader.\n
+ * \sa Form::IFormWidget, Form::IFormWidgetFactory
+ */
+
+/** \var Form::FormItemSpec::Spec_UiLabel
+ * Used during the widget generation, define the Qt UI label to use.\n
+ * Only used with a Qt UI file (Form::FormItemSpec::Spec_UiFileContent).
+ * \sa Form::IFormWidget, Form::IFormWidgetFactory
+ */
+
+/** \var Form::FormItemSpec::Spec_UiWidget
+ * Used during widget generation, define the Qt widget to use. \n
+ * Only used with a Qt UI file (Form::FormItemSpec::Spec_UiFileContent).
+ * \sa Form::IFormWidget, Form::IFormWidgetFactory
+ */
+
+/** \var Form::FormItemSpec::Spec_UiInsertIntoLayout
+ * Used during widget generation, define the layout where to insert the widget. \n
+ * Only used with a Qt UI file (Form::FormItemSpec::Spec_UiFileContent).
+ * \sa Form::IFormWidget, Form::IFormWidgetFactory
+ */
+
+/** \var Form::FormItemSpec::Spec_IconFileName
+ * Translatable icon file name (can contain path tag).
+ * \sa Core::Constants::TAG_APPLICATION_THEME_PATH
+ */
+
+/** \var Form::FormItemSpec::Spec_Tooltip
+ * Translatable tooltip of the item.
+ */
+
+/** \var Form::FormItemSpec::Spec_IsIdentityForm
+ * Boolean value. By default, set to false.\n
+ * Only set for Form::FormMain. \n
+ * Is true if the form owns the identity information/widgets.
+ */
+
 // TODO: change Form::FormItemSpec pointers to references
 
 
@@ -549,7 +642,7 @@ FormPage::FormPage(QObject *parent):
     languageChanged();
 
     connect(formManager(), SIGNAL(patientFormsLoaded()), this, SLOT(getPatientForm()));
-    qWarning() << "FormPage" << objectName() << spec()->value(Form::FormItemSpec::Spec_Priority).toInt();
+//    qWarning() << "FormPage" << objectName() << spec()->value(Form::FormItemSpec::Spec_Priority).toInt();
 }
 
 FormPage::~FormPage()
@@ -576,11 +669,10 @@ void FormPage::getPatientForm()
 
 void FormPage::languageChanged()
 {
-    qWarning() << "FormPage language changed" << uuid() << spec()->value(Form::FormItemSpec::Spec_Priority).toInt();
+//    qWarning() << "FormPage language changed" << uuid() << spec()->value(Form::FormItemSpec::Spec_Priority).toInt();
     _mode->setName(spec()->label());
     QString icon = spec()->iconFileName();
     icon.replace(Core::Constants::TAG_APPLICATION_THEME_PATH, settings()->path(Core::ISettings::BigPixmapPath));
-    qWarning() << icon;
     _mode->setIcon(QIcon(icon));
     _mode->setPriority(spec()->value(Form::FormItemSpec::Spec_Priority).toInt());
     // TODO: move the extradata inside the spec to have a fully translated extra-values
@@ -767,6 +859,7 @@ public:
 FormItemSpec::FormItemSpec() :
     d(new Form::Internal::FormItemSpecPrivate)
 {
+    setValue(Spec_IsIdentityForm, false);
 }
 
 FormItemSpec::~FormItemSpec()

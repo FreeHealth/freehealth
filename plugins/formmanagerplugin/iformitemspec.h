@@ -50,7 +50,7 @@ QT_END_NAMESPACE
  * \file iformitem.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.8.0
- * \date 04 Sept 2012
+ * \date 11 Sept 2012
 */
 
 namespace Form {
@@ -61,7 +61,7 @@ class FormItemSpecPrivate;
 class FORM_EXPORT FormItemSpec
 {
 public:
-    enum {
+    enum SpecData {
         Spec_Uuid = 0,
         Spec_Author,
         Spec_License,
@@ -79,7 +79,8 @@ public:
         Spec_UiWidget,
         Spec_UiInsertIntoLayout,
         Spec_IconFileName,
-        Spec_Tooltip
+        Spec_Tooltip,
+        Spec_IsIdentityForm
     };
     FormItemSpec();
     ~FormItemSpec();
