@@ -237,7 +237,10 @@ public:
     {
         const bool enabled = index.isValid();
         aRemoveEpisode->setEnabled(enabled);
-        aValidateEpisode->setEnabled(enabled);
+        if (enabled) {
+            EpisodeModel *model = qobject_cast<EpisodeModel*>(ui->episodeView->model());
+            aValidateEpisode->setEnabled(!model->isEpisodeValidated(index));
+        }
         aSaveEpisode->setEnabled(enabled);
         aPrintForm->setEnabled(enabled);
     }
@@ -340,10 +343,7 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
     // Manage Form File tree view
     d->ui->formView->setActions(0);
     d->ui->formView->setCommands(QStringList()
-//                                 << Constants::A_ADDEPISODE
-//                                 << Constants::A_VALIDATEEPISODE
                                  << Constants::A_ADDFORM
-//                                 << Constants::A_PRINTFORM
                                  );
     d->ui->formView->addContexts(contexts());
     d->ui->formView->setDeselectable(false);
@@ -364,15 +364,6 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
     d->ui->episodeView->setFrameStyle(QFrame::NoFrame);
     d->ui->episodeView->setSelectionMode(QAbstractItemView::SingleSelection);
     d->ui->episodeView->setSelectionBehavior(QAbstractItemView::SelectRows);
-
-//    Core::Command *cmd = actionManager()->command(Constants::A_ADDEPISODE);
-//    connect(cmd->action(), SIGNAL(triggered()), this, SLOT(newEpisode()));
-//    cmd = actionManager()->command(Constants::A_ADDFORM);
-//    connect(cmd->action(), SIGNAL(triggered()), this, SLOT(addForm()));
-//    cmd = actionManager()->command(Constants::A_PRINTFORM);
-//    connect(cmd->action(), SIGNAL(triggered()), this, SLOT(printCurrentItem()));
-//    cmd = actionManager()->command(Core::Constants::A_FILE_SAVE);
-//    connect(cmd->action(), SIGNAL(triggered()), this, SLOT(saveCurrentEditingEpisode()));
 
     int width = size().width();
     int third = width/3;
