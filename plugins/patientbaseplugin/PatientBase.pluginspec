@@ -7,8 +7,8 @@
     <url>http://www.freemedforms.com/</url>
     <dependencyList>
         <dependency name="Core" version="0.0.1"/>
-        <dependency name="UserManager" version="0.0.1"/>
         <dependency name="ListView" version="0.0.1"/>
         <dependency name="ZipCodes" version="0.0.1"/>
+        <dependency name="FormManager" version="0.0.1"/>
     </dependencyList>
 </plugin>

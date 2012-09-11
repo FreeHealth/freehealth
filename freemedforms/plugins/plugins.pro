@@ -173,6 +173,7 @@ patientbase.subdir   = ../../plugins/patientbaseplugin
 patientbase.depends += core
 patientbase.depends += listview
 patientbase.depends += zipcodes
+patientbase.depends += formmanager
 with-alerts { patientbase.depends += alerts }
 
 # manage non free content
