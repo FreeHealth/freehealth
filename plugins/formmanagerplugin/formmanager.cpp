@@ -88,7 +88,11 @@
 #include <QApplication>
 #include <QPixmap>
 
+#include <QDebug>
+
 enum { WarnFormCreation = false };
+
+enum { ManageDuplicates = true };
 
 using namespace Form;
 using namespace Form::Internal;
@@ -136,7 +140,7 @@ public:
          return false;
     }
 
-    QList<Form::FormMain *> loadFormFile(const QString &formUid)
+    QList<Form::FormMain *> loadFormFile(const QString &formUid, bool useCache = true)
     {
         QList<Form::FormMain *> toReturn;
 
@@ -146,7 +150,7 @@ public:
         }
 
         // Check from cache (we suppose that the forms are reparented to their original empty root parent)
-        if (isFormLoaded(formUid)) {
+        if (useCache && isFormLoaded(formUid)) {
             QHashIterator<Form::FormMain *, Form::FormMain *> i(_formParents);
              while (i.hasNext()) {
                  i.next();
@@ -193,7 +197,8 @@ public:
 
         // load central root forms, create cache and duplicates
         m_RootForms = loadFormFile(absDirPath); // also create the cache
-//        m_RootFormsDuplicates = loadFormFile(absDirPath, false); // force reloading of forms
+        if (ManageDuplicates)
+            m_RootFormsDuplicates = loadFormFile(absDirPath, false); // force reloading of forms
 
         // load pmhx
         if (!m_RootForms.isEmpty()) {
@@ -228,7 +233,9 @@ public:
     {
         // read all sub-forms and emit signal if requiered
         QList<Form::FormMain*> subs = loadFormFile(insertionPoint.subFormUid());
-//        TODO: ???m_SubFormsEmptyRoot << subs;
+        if (ManageDuplicates)
+            m_SubFormsEmptyRootDuplicates << loadFormFile(insertionPoint.subFormUid(), false);
+
         if (insertionPoint.emitInsertionSignal())
             Q_EMIT q->subFormLoaded(insertionPoint.subFormUid());
 
@@ -309,9 +316,7 @@ FormManager *FormManager::m_Instance = 0;
 /** Unique instance of the Form::FormManager object */
 FormManager *FormManager::instance()
 {
-    if (!m_Instance) {
-        m_Instance = new FormManager(qApp);
-    }
+    Q_ASSERT(m_Instance);
     return m_Instance;
 }
 
@@ -327,6 +332,7 @@ FormManager::FormManager(QObject *parent) :
     connect(packManager(), SIGNAL(packInstalled(DataPack::Pack)), this, SLOT(packChanged(DataPack::Pack)));
     connect(packManager(), SIGNAL(packRemoved(DataPack::Pack)), this, SLOT(packChanged(DataPack::Pack)));
 //    connect(packManager(), SIGNAL(packUpdated(DataPack::Pack)), this, SLOT(packChanged(DataPack::Pack)));
+    m_Instance = this;
 }
 
 FormManager::~FormManager()
@@ -482,6 +488,33 @@ Form::FormMain *FormManager::identityRootForm() const
     QList<Form::FormMain *> forms;
     forms << d->m_RootForms;
     forms << d->m_SubFormsEmptyRoot;
+    for(int i=0; i < forms.count(); ++i) {
+        FormMain *root = forms.at(i);
+        if (root->spec()->value(FormItemSpec::Spec_IsIdentityForm).toBool())
+            return root;
+        foreach(FormMain *form, root->flattenFormMainChildren()) {
+            if (form->spec()->value(FormItemSpec::Spec_IsIdentityForm).toBool())
+                return form;
+        }
+    }
+    return 0;
+}
+
+/**
+ * Extract from the patient file form the empty root form corresponding to the identity form
+ * or 0 if no form matches request.
+*/
+Form::FormMain *FormManager::identityRootFormDuplicate() const
+{
+    if (!ManageDuplicates)
+        return 0;
+
+    QList<Form::FormMain *> forms;
+    forms << d->m_RootFormsDuplicates;
+    forms << d->m_SubFormsEmptyRootDuplicates;
+
+    qWarning() << "IDENTITY FORM" << forms.count();
+
     for(int i=0; i < forms.count(); ++i) {
         FormMain *root = forms.at(i);
         if (root->spec()->value(FormItemSpec::Spec_IsIdentityForm).toBool())

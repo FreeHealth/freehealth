@@ -60,7 +60,9 @@ class FormTreeModel;
 class EpisodeModel;
 
 namespace Internal {
+class FormManagerPlugin;
 class FormManagerPrivate;
+
 class FormActionHandler : public QObject
 {
     Q_OBJECT
@@ -86,7 +88,9 @@ class FORM_EXPORT FormManager : public Internal::FormActionHandler
 {
     Q_OBJECT
     friend class Form::Internal::FormManagerPrivate;
+    friend class Form::Internal::FormManagerPlugin;
 
+protected:
     FormManager(QObject *parent = 0);
 
 public:
@@ -102,6 +106,7 @@ public:
     QList<FormMain *> subFormsEmptyRoot() const;
     Form::FormMain *rootForm(const char *modeUniqueName) const;
     Form::FormMain *identityRootForm() const;
+    Form::FormMain *identityRootFormDuplicate() const;
     QList<Form::FormMain *> loadFormFile(const QString &formUid);
     QPixmap getScreenshot(const QString &formUid, const QString &fileName);
 
