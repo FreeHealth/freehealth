@@ -44,6 +44,13 @@ QT_END_NAMESPACE
  * \date 10 Sept 2012
 */
 
+// friend class only
+namespace Patients {
+namespace Internal {
+class IdentityViewerWidget;
+}
+}
+
 namespace Form {
 class FormMain;
 class EpisodeModel;
@@ -80,10 +87,12 @@ class FORM_EXPORT EpisodeModel : public QAbstractListModel
 {
     Q_OBJECT
     friend class Form::FormManager;
+    friend class Patients::Internal::IdentityViewerWidget;
 
 protected:
     EpisodeModel(Form::FormMain *rootEmptyForm, QObject *parent = 0);
     bool initialize();
+    void setCurrentPatient(const QString &uuid);
 
 public:
     enum DataRepresentation {
@@ -118,7 +127,7 @@ public:
     QVariant headerData(int section, Qt::Orientation orientation,
                                 int role = Qt::DisplayRole) const;
 
-    bool insertRows(int row, int count, const QModelIndex &parent= QModelIndex());
+    bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
     bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
 
     void setReadOnly(const bool state);
@@ -129,6 +138,9 @@ public:
     bool isEpisodeValidated(const QModelIndex &index) const;
 
 public Q_SLOTS:
+    // EXPERIMENTAL
+    bool populateFormWithEpisode(EpisodeModel *episodeModel, const QModelIndex &episode, bool feedPatientModel);
+    // END EXPERIMENTAL
     bool submit();
 
 Q_SIGNALS:

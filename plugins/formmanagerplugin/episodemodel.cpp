@@ -168,15 +168,16 @@ public:
         _validationCache.clear();
     }
 
-    void updateFilter()
+    void updateFilter(const QString &patientUid)
     {
         _xmlContentCache.clear();
         // Filter valid episodes
         QHash<int, QString> where;
         where.insert(Constants::EPISODES_ISVALID, "=1");
-        where.insert(Constants::EPISODES_PATIENT_UID, QString("='%1'").arg(patient()->uuid()));
+        where.insert(Constants::EPISODES_PATIENT_UID, QString("='%1'").arg(patientUid));
         where.insert(Constants::EPISODES_FORM_PAGE_UID, QString("='%1'").arg(_formMain->uuid()));
         _sqlModel->setFilter(episodeBase()->getWhereClause(Constants::Table_EPISODES, where).remove("WHERE"));
+        _sqlModel->setSort(Constants::EPISODES_USERDATE, Qt::AscendingOrder);
         _sqlModel->select();
     }
 
@@ -335,18 +336,6 @@ EpisodeModel::EpisodeModel(FormMain *rootEmptyForm, QObject *parent) :
     onCoreDatabaseServerChanged();
 }
 
-/** Initialize the model */
-bool EpisodeModel::initialize()
-{
-    onUserChanged();
-    onPatientChanged();
-
-    connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
-    connect(user(), SIGNAL(userChanged()), this, SLOT(onUserChanged()));
-    connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onPatientChanged()));
-    return true;
-}
-
 EpisodeModel::~EpisodeModel()
 {
     if (d->m_CoreListener) {
@@ -359,6 +348,23 @@ EpisodeModel::~EpisodeModel()
         delete d;
         d=0;
     }
+}
+
+/** Initialize the model */
+bool EpisodeModel::initialize()
+{
+    onUserChanged();
+    onPatientChanged();
+
+    connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
+    connect(user(), SIGNAL(userChanged()), this, SLOT(onUserChanged()));
+    connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onPatientChanged()));
+    return true;
+}
+
+void EpisodeModel::setCurrentPatient(const QString &uuid)
+{
+    d->updateFilter(uuid);
 }
 
 /** Return the current form unique identifier linked to this model */
@@ -380,7 +386,7 @@ void EpisodeModel::onCoreDatabaseServerChanged()
     d->_sqlModel->setTable(episodeBase()->table(Constants::Table_EPISODES));
     Utils::linkSignalsFromFirstModelToSecondModel(d->_sqlModel, this, false);
     connect(d->_sqlModel, SIGNAL(primeInsert(int,QSqlRecord&)), this, SLOT(populateNewRowWithDefault(int, QSqlRecord&)));
-    d->updateFilter();
+    d->updateFilter(patient()->uuid());
 }
 
 /** Reacts on user changes. */
@@ -391,7 +397,7 @@ void EpisodeModel::onUserChanged()
 /** Reacts on patient changes. */
 void EpisodeModel::onPatientChanged()
 {
-    d->updateFilter();
+    d->updateFilter(patient()->uuid());
     d->_sqlModel->select();
     d->checkModelContent();
 }
@@ -662,6 +668,66 @@ bool EpisodeModel::isEpisodeValidated(const QModelIndex &index) const
 {
     return d->isEpisodeValidated(index);
 }
+
+// EXPERIMENTAL
+bool EpisodeModel::populateFormWithEpisode(EpisodeModel *episodeModel, const QModelIndex &episode, bool feedPatientModel)
+{
+//    QTime chrono;
+//    if (WarnLogChronos)
+//        chrono.start();
+
+//    d->_formMain->clear();
+////    d->_formMain->formWidget()->setEnabled(false);
+
+//    const QString &xml = d->getEpisodeContent(episode);
+//    QHash<QString, FormItem *> items;
+//    QHash<QString, QString> datas;
+//    if (!xml.isEmpty()) {
+//        // read the xml'd content
+//        if (!Utils::readXml(xml, Form::Constants::XML_FORM_GENERAL_TAG, datas, false)) {
+//            QModelIndex uid = _episodeModel->index(index.row(), EpisodeModel::Uuid);
+//            LOG_ERROR(QString("Error while reading episode content (%1)").arg(_episodeModel->data(uid).toString()));
+//            return;
+//        }
+
+//        // put datas into the FormItems of the form
+//        foreach(FormItem *it, _formMain->flattenFormItemChildren()) {
+//            items.insert(it->uuid(), it);
+//        }
+//    }
+
+//    // Populate the FormMain item data (username, userdate, label)
+//    QModelIndex userName = index(index.row(), EpisodeModel::UserCreatorName);
+//    QModelIndex userDate = index(index.row(), EpisodeModel::UserDate);
+//    QModelIndex label = index(index.row(), EpisodeModel::Label);
+//    d->_formMain->itemData()->setData(IFormItemData::ID_EpisodeDate, data(userDate));
+//    d->_formMain->itemData()->setData(IFormItemData::ID_EpisodeLabel, data(label));
+//    d->_formMain->itemData()->setData(IFormItemData::ID_UserName, data(userName));
+//    d->_formMain->itemData()->setStorableData(false); // equal: _formMain->itemData()->setModified(false)
+
+//    // Populate FormItem data and the patientmodel
+//    foreach(FormItem *it, items.values()) {
+//        if (!it) {
+//            LOG_ERROR("populateFormWithEpisode :: ERROR: no item: " + items.key(it));
+//            continue;
+//        }
+//        if (!it->itemData())
+//            continue;
+
+//        it->itemData()->setStorableData(datas.value(it->uuid()));
+//        if (feedPatientModel && it->patientDataRepresentation() >= 0)
+//                patient()->setValue(it->patientDataRepresentation(), it->itemData()->data(it->patientDataRepresentation(), IFormItemData::PatientModelRole));
+//    }
+
+////    d->_formMain->formWidget()->setEnabled(true);
+
+//    // TODO: if episode is validated ==> read-only
+
+//    if (WarnLogChronos)
+//        Utils::Log::logTimeElapsed(chrono, q->objectName(), "populateFormWithEpisode");
+    return true;
+}
+// END EXPERIMENTAL
 
 /** Save the whole model. \sa isDirty() */
 bool EpisodeModel::submit()
