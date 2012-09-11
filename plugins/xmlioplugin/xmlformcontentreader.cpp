@@ -402,7 +402,6 @@ bool XmlFormContentReader::loadForm(const XmlFormName &form, Form::FormMain *roo
     doc = m_DomDocFormCache[form.absFileName];
     QDomElement root = doc->firstChildElement(Constants::TAG_MAINXMLTAG);
     QDomElement newForm = root.firstChildElement(Constants::TAG_NEW_FORM);
-    QDomElement newMode = root.firstChildElement(Constants::TAG_NEW_PAGE);
     QDomElement addFile = root.firstChildElement(Constants::TAG_ADDFILE);
 
     // in case of no rootForm is passed --> XML must start with a file inclusion or a newform tag
@@ -619,6 +618,16 @@ bool XmlFormContentReader::createElement(Form::FormItem *item, QDomElement &elem
 
             if (element.hasAttribute(Constants::ATTRIB_TYPE))
                 item->spec()->setValue(Form::FormItemSpec::Spec_Plugin, element.attribute(Constants::ATTRIB_TYPE), Trans::Constants::ALL_LANGUAGE);
+
+            if (element.hasAttribute(Constants::ATTRIB_ISIDENTITYFORM)) {
+                const QString &att = element.attribute(Constants::ATTRIB_ISIDENTITYFORM);
+                bool isIdentity =
+                        att.compare("yes", Qt::CaseInsensitive)==0 |
+                        att.compare("true", Qt::CaseInsensitive)==0 |
+                        att=="1";
+                item->spec()->setValue(Form::FormItemSpec::Spec_IsIdentityForm, isIdentity, Trans::Constants::ALL_LANGUAGE);
+            }
+
 
             if (element.hasAttribute(Constants::ATTRIB_UIFILE)) {
                 QString content = base()->getFormContent(form.uid, XmlIOBase::UiFile, element.attribute(Constants::ATTRIB_UIFILE));
