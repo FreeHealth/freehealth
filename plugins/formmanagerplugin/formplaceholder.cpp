@@ -153,6 +153,7 @@ public:
             _formTreeModel(0),
             _delegate(0),
             _episodeToolBar(0),
+            aNewEpisode(0),
             aValidateEpisode(0),
             aRemoveEpisode(0),
             aTakeScreenShot(0),
@@ -171,6 +172,7 @@ public:
         _episodeToolBar->setIconSize(QSize(16,16));
 
         Core::Command *cmd = actionManager()->command(Constants::A_ADDEPISODE);
+        aNewEpisode = cmd->action();
         QObject::connect(cmd->action(), SIGNAL(triggered()), q, SLOT(newEpisode()));
         _episodeToolBar->addAction(cmd->action());
 
@@ -180,12 +182,14 @@ public:
         aRemoveEpisode->setEnabled(false);
         _episodeToolBar->addAction(aRemoveEpisode);
 
+        _episodeToolBar->addSeparator();
         a = aValidateEpisode = new QAction(q);
         a->setIcon(theme()->icon(Core::Constants::ICONOK));
         QObject::connect(a, SIGNAL(triggered()), q, SLOT(validateEpisode()));
         aValidateEpisode->setEnabled(false);
         _episodeToolBar->addAction(aValidateEpisode);
 
+        _episodeToolBar->addSeparator();
         a = aSaveEpisode = actionManager()->command(Core::Constants::A_FILE_SAVE)->action();
         QObject::connect(a, SIGNAL(triggered()), q, SLOT(saveCurrentEditingEpisode()));
         a->setEnabled(false);
@@ -239,6 +243,7 @@ public:
         const bool enabled = index.isValid();
         const bool unique = _formTreeModel->isUniqueEpisode(index);
         aRemoveEpisode->setEnabled(enabled && !unique);
+        aNewEpisode->setEnabled(enabled && !unique);
         if (enabled) {
             const EpisodeModel *model = qobject_cast<EpisodeModel*>(ui->episodeView->model());
             Q_ASSERT(model);
@@ -254,7 +259,7 @@ public:
     FormTreeModel *_formTreeModel;
     FormItemDelegate *_delegate;
     QToolBar *_episodeToolBar;
-    QAction *aValidateEpisode, *aRemoveEpisode, *aTakeScreenShot, *aSaveEpisode, *aPrintForm;
+    QAction *aNewEpisode, *aValidateEpisode, *aRemoveEpisode, *aTakeScreenShot, *aSaveEpisode, *aPrintForm;
     QHash<int, QString> m_StackId_FormUuid;
 
 private:
