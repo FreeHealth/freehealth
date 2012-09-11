@@ -95,7 +95,7 @@
          <number>0</number>
         </property>
         <item row="0" column="0">
-         <widget class="Patients::IdentityWidget" name="identity" native="true"/>
+         <widget class="Patients::Internal::IdentityViewerWidget" name="identity" native="true"/>
         </item>
        </layout>
       </widget>
@@ -111,9 +111,9 @@
    <header location="global">utils/widgets/qbuttonlineedit.h</header>
   </customwidget>
   <customwidget>
-   <class>Patients::IdentityWidget</class>
+   <class>Patients::Internal::IdentityViewerWidget</class>
    <extends>QWidget</extends>
-   <header location="global">patientbaseplugin/identitywidget.h</header>
+   <header location="global">patientbaseplugin/identityviewerwidget.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>

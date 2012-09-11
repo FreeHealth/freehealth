@@ -78,7 +78,7 @@ public:
     PatientSelector(QWidget *parent = 0, const FieldsToShow fields = None);
     ~PatientSelector();
 
-    void init();
+    void initialize();
 
     void setSearchMode(const int search);
     void setPatientModel(PatientModel *m);

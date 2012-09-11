@@ -105,7 +105,7 @@ void PatientWidgetManager::postCoreInitialization()
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << Q_FUNC_INFO;
-    m_CurrentView->init();
+    m_CurrentView->initialize();
 }
 
 PatientSelector *PatientWidgetManager::selector() const

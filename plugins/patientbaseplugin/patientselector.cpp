@@ -184,7 +184,7 @@ PatientSelector::PatientSelector(QWidget *parent, const FieldsToShow fields) :
     connect(d->ui->tableView, SIGNAL(activated(QModelIndex)), this, SLOT(onPatientSelected(QModelIndex)));
 
     updatePatientActions(QModelIndex());
-    d->ui->identity->setCurrentIndex(QModelIndex());
+//    d->ui->identity->setCurrentIndex(QModelIndex());
 }
 
 PatientSelector::~PatientSelector()
@@ -196,9 +196,16 @@ PatientSelector::~PatientSelector()
     }
 }
 
-/** \brief Initialize view and actions. */
-void PatientSelector::init()
+/** \brief Initialize view and actions, select the first available patient. */
+void PatientSelector::initialize()
 {
+    if (!d->m_Model->currentPatient().isValid()) {
+        QModelIndex id = d->m_Model->index(0,0);
+        d->ui->tableView->selectRow(0);
+        changeIdentity(id, QModelIndex());
+    } else {
+        changeIdentity(d->m_Model->currentPatient(), QModelIndex());
+    }
 }
 
 void PatientSelector::updateNavigationButton()
@@ -229,7 +236,7 @@ void PatientSelector::setPatientModel(PatientModel *m)
 {
     Q_ASSERT(m);
     d->m_Model = m;
-    d->ui->tableView->setModel(m);
+    d->ui->tableView->setModel(d->m_Model);
     setFieldsToShow(d->m_Fields);
 
     d->ui->tableView->horizontalHeader()->setStretchLastSection(false);
@@ -245,7 +252,7 @@ void PatientSelector::setPatientModel(PatientModel *m)
 
     d->ui->numberOfPatients->setText(QString::number(m->numberOfFilteredPatients()));
     d->ui->identity->setCurrentPatientModel(m);
-    connect(m, SIGNAL(patientChanged(QModelIndex)), this, SLOT(setSelectedPatient(QModelIndex)));
+    connect(d->m_Model, SIGNAL(patientChanged(QModelIndex)), this, SLOT(setSelectedPatient(QModelIndex)));
 }
 
 /** \brief Define the fields to show using the FieldsToShow flag */
