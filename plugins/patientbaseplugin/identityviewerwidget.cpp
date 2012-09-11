@@ -44,6 +44,7 @@
 #include <formmanagerplugin/formmanager.h>
 #include <formmanagerplugin/episodemodel.h>
 #include <formmanagerplugin/iformitem.h>
+#include <formmanagerplugin/iformitemdata.h>
 
 #include <coreplugin/ipatient.h>
 
@@ -514,25 +515,44 @@ public:
     void setIdentityForm(Form::FormMain *form)
     {
         _identityForm = form;
+    }
+
+    void setEpisodeModel(Form::EpisodeModel *model)
+    {
         // create the episode model from the identity form
-//        if (_episodeModel)
-//            delete _episodeModel;
-//        _episodeModel = new Form::EpisodeModel(form);
+        if (_episodeModel) {
+            delete _episodeModel;
+            _episodeModel = 0;
+        }
+        _episodeModel = model;
     }
 
     void setCurrentPatient(const int row)
     {
         _current = row;
-//        _episodeModel->setCurrentPatient(_patientModel->index(_current, Core::IPatient::Uid).data().toString());
+        if (_episodeModel) {
+            _episodeModel->setCurrentPatient(_patientModel->index(_current, Core::IPatient::Uid).data().toString());
+            _episodeModel->populateFormWithEpisodeContent(_episodeModel->index(0,0), false);
+        }
     }
 
     QVariant data(const int iPatientColumn) const
     {
+        qWarning() << "DATA" << iPatientColumn << _episodeModel << _identityForm;
         // get data from the patient model (value is extracted from database)
         QVariant val = _patientModel->index(_current, iPatientColumn).data();
         if (val.isValid())
             return val;
+
         // get data from the episode
+        if (_episodeModel) {
+            // ask the form item data
+            foreach(Form::FormItem *item, _identityForm->flattenFormItemChildren()) {
+                if (item->itemData() && item->patientDataRepresentation() == iPatientColumn) {
+                    return item->itemData()->data(item->patientDataRepresentation(), Form::IFormItemData::PatientModelRole);
+                }
+            }
+        }
         return QVariant();
     }
 
@@ -596,7 +616,7 @@ public:
 
     void populateReadOnlyWidget(const int row)
     {
-//        _patientModelIdentityWrapper->setCurrentPatientUuid(row);
+        _patientModelIdentityWrapper->setCurrentPatient(row);
 
         // photo
         const QPixmap &photo = m_PatientModel->index(row, Core::IPatient::Photo_64x64).data().value<QPixmap>();
@@ -632,14 +652,14 @@ public:
         // TODO: add a preference -> what to show in summarytext: mobile phone? address? tels? email?
         viewUi->addressDetails->setSummaryText(m_PatientModel->index(row, Core::IPatient::FullAddress).data().toString());
         m_FullContactWidget->clear();
-        m_FullContactWidget->address()->setAddress(m_PatientModel->index(row, Core::IPatient::Street).data().toString());
-        m_FullContactWidget->address()->setCity(m_PatientModel->index(row, Core::IPatient::City).data().toString());
-        m_FullContactWidget->address()->setZipCode(m_PatientModel->index(row, Core::IPatient::ZipCode).data().toString());
-        m_FullContactWidget->address()->setCountry(m_PatientModel->index(row, Core::IPatient::Country).data().toString());
-        m_FullContactWidget->contact()->setTels(m_PatientModel->index(row, Core::IPatient::Tels).data().toString());
-        m_FullContactWidget->contact()->setFax(m_PatientModel->index(row, Core::IPatient::Faxes).data().toString());
-        m_FullContactWidget->contact()->setMail(m_PatientModel->index(row, Core::IPatient::Mails).data().toString());
-        m_FullContactWidget->contact()->setMobile(m_PatientModel->index(row, Core::IPatient::MobilePhone).data().toString());
+        m_FullContactWidget->address()->setAddress(_patientModelIdentityWrapper->data(Core::IPatient::Street).toString());
+        m_FullContactWidget->address()->setCity(_patientModelIdentityWrapper->data(Core::IPatient::City).toString());
+        m_FullContactWidget->address()->setZipCode(_patientModelIdentityWrapper->data(Core::IPatient::ZipCode).toString());
+        m_FullContactWidget->address()->setCountry(_patientModelIdentityWrapper->data(Core::IPatient::Country).toString());
+        m_FullContactWidget->contact()->setTels(_patientModelIdentityWrapper->data(Core::IPatient::Tels).toString());
+        m_FullContactWidget->contact()->setFax(_patientModelIdentityWrapper->data(Core::IPatient::Faxes).toString());
+        m_FullContactWidget->contact()->setMail(_patientModelIdentityWrapper->data(Core::IPatient::Mails).toString());
+        m_FullContactWidget->contact()->setMobile(_patientModelIdentityWrapper->data(Core::IPatient::MobilePhone).toString());
     }
 
 public:
@@ -688,6 +708,14 @@ void IdentityViewerWidget::setCurrentPatientModel(Patients::PatientModel *model)
 {
     d->m_PatientModel = model;
     d->_patientModelIdentityWrapper->setPatientModel(model);
+    Form::FormMain *form = formManager()->identityRootFormDuplicate();
+    if (form) {
+        d->_patientModelIdentityWrapper->setIdentityForm(form);
+        d->_patientModelIdentityWrapper->setEpisodeModel(new Form::EpisodeModel(form, this));
+    } else {
+        d->_patientModelIdentityWrapper->setIdentityForm(0);
+        d->_patientModelIdentityWrapper->setEpisodeModel(0);
+    }
 }
 
 /** \brief Return the actual PatientModel or 0 if it was not set. */
