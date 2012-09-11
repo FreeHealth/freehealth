@@ -42,7 +42,7 @@ QT_END_NAMESPACE
  * \file formmanager.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.8.0
- * \date 28 Aug 2012
+ * \date 12 Sept 2012
 */
 
 namespace DataPack {
@@ -100,7 +100,8 @@ public:
     FormMain *form(const QString &formUid) const;
     QList<FormMain *> forms() const;
     QList<FormMain *> subFormsEmptyRoot() const;
-    Form::FormMain *rootForm(const char *modeUniqueName);
+    Form::FormMain *rootForm(const char *modeUniqueName) const;
+    Form::FormMain *identityRootForm() const;
     QList<Form::FormMain *> loadFormFile(const QString &formUid);
     QPixmap getScreenshot(const QString &formUid, const QString &fileName);
 

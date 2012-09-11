@@ -449,13 +449,34 @@ bool FormManager::readPmhxCategories(const QString &formUuidOrAbsPath)
  * or 0 if no form matches the \e modeUniqueName.
  * \sa loadPatientFile()
 */
-Form::FormMain *FormManager::rootForm(const char *modeUniqueName)
+Form::FormMain *FormManager::rootForm(const char *modeUniqueName) const
 {
     // get all root form from the plugin manager
     for(int i=0; i < d->m_RootForms.count(); ++i) {
         FormMain *root = d->m_RootForms.at(i);
         if (root->modeUniqueName().compare(QString(modeUniqueName), Qt::CaseInsensitive)==0) {
             return root;
+        }
+    }
+    return 0;
+}
+
+/**
+ * Extract from the patient file form the empty root form corresponding to the identity form
+ * or 0 if no form matches request.
+*/
+Form::FormMain *FormManager::identityRootForm() const
+{
+    QList<Form::FormMain *> forms;
+    forms << d->m_RootForms;
+    forms << d->m_SubFormsEmptyRoot;
+    for(int i=0; i < forms.count(); ++i) {
+        FormMain *root = forms.at(i);
+        if (root->spec()->value(FormItemSpec::Spec_IsIdentityForm).toBool())
+            return root;
+        foreach(FormMain *form, root->flattenFormMainChildren()) {
+            if (form->spec()->value(FormItemSpec::Spec_IsIdentityForm).toBool())
+                return form;
         }
     }
     return 0;
