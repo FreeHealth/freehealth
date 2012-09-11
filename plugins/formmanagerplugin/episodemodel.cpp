@@ -523,9 +523,6 @@ bool EpisodeModel::setData(const QModelIndex &index, const QVariant &value, int 
         }
         case Icon: sqlColumn = Constants::EPISODES_ISVALID; break;
         }
-
-        qWarning() << "SETDATA" << episodeBase()->fieldName(Constants::Table_EPISODES, sqlColumn) << value;
-
         if (sqlColumn!=-1) {
             QModelIndex sqlIndex = d->_sqlModel->index(index.row(), sqlColumn);
             bool ok = d->_sqlModel->setData(sqlIndex, value, role);
