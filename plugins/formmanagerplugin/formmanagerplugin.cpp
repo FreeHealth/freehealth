@@ -130,7 +130,9 @@ void FormManagerPlugin::extensionsInitialized()
 
     // Add mode
     mode = new FormManagerMode(this);
-    FormManager::instance()->loadPatientFile();
+//    FormManager::instance()->blockSignals(true);
+//    FormManager::instance()->loadPatientFile();
+//    FormManager::instance()->blockSignals(false);
 }
 
 void FormManagerPlugin::postCoreInitialization()
@@ -146,6 +148,9 @@ void FormManagerPlugin::postCoreInitialization()
         FormManager::instance()->readPmhxCategories(uid);
         settings()->setDefaultForm("");
     }
+
+    // reload patient file just to emit patientFormsLoaded
+    FormManager::instance()->loadPatientFile();
 }
 
 ExtensionSystem::IPlugin::ShutdownFlag FormManagerPlugin::aboutToShutdown()
