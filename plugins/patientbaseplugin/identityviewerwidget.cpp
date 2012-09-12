@@ -536,6 +536,12 @@ public:
     void setIdentityForm(Form::FormMain *form)
     {
         _identityForm = form;
+        // Create a cache to speed up the wrapper
+        foreach(Form::FormItem *item, _identityForm->flattenFormItemChildren()) {
+            if (item->itemData() && item->patientDataRepresentation() != -1) {
+                _formItemWithData.insert(item->patientDataRepresentation(), item);
+            }
+        }
     }
 
     void setEpisodeModel(Form::EpisodeModel *model)
@@ -546,11 +552,14 @@ public:
             _episodeModel = 0;
         }
         _episodeModel = model;
+        if (_episodeModel)
+            _episodeModel->setUseFormContentCache(false);
     }
 
     void setCurrentPatient(const int row)
     {
         _current = row;
+        // Populate the form duplicate with the episode content
         if (_episodeModel) {
             _episodeModel->setCurrentPatient(_patientModel->index(_current, Core::IPatient::Uid).data().toString());
             _episodeModel->populateFormWithEpisodeContent(_episodeModel->index(0,0), false);
@@ -559,27 +568,16 @@ public:
 
     QVariant data(const int iPatientColumn) const
     {
-        qWarning() << "DATA" << iPatientColumn;
         // get data from the patient model (value is extracted from database)
         QVariant val = _patientModel->data(_patientModel->index(_current, iPatientColumn));
-        qWarning() << val;
         if (val.isValid() && !val.toString().isEmpty())
             return val;
 
         // get data from the episode
         if (_episodeModel) {
-            qWarning() << "    SEARCHING EPISODE" << iPatientColumn;
-            // ask the form item data
-            foreach(Form::FormItem *item, _identityForm->flattenFormItemChildren()) {
-                qWarning() << "          item patientRepr"
-                           << item->patientDataRepresentation()
-                           << patient()->enumToString(Core::IPatient::PatientDataRepresentation(item->patientDataRepresentation()))
-                           << item->uuid();
-                if (item->itemData() && item->patientDataRepresentation() == iPatientColumn) {
-                    qWarning() << "            Found" << item->uuid() << item->itemData()->data(0) << item->itemData()->data(item->patientDataRepresentation(), Form::IFormItemData::PatientModelRole);
-                    return item->itemData()->data(item->patientDataRepresentation(), Form::IFormItemData::PatientModelRole);
-                }
-            }
+            Form::FormItem *item = _formItemWithData.value(iPatientColumn, 0);
+            if (item)
+                return item->itemData()->data(item->patientDataRepresentation(), Form::IFormItemData::PatientModelRole);
         }
         return QVariant();
     }
@@ -588,6 +586,7 @@ private:
     PatientModel *_patientModel;
     Form::FormMain *_identityForm;
     Form::EpisodeModel *_episodeModel;
+    QHash<int, Form::FormItem *> _formItemWithData;
     int _current;
 };
 }  // end anonymous namespace
@@ -721,7 +720,6 @@ IdentityViewerWidget::IdentityViewerWidget(QWidget *parent) :
     d(new IdentityViewerWidgetPrivate(this))
 {
     setObjectName("Patient::IdentityViewerWidget");
-    getPatientForms();
     connect(formManager(), SIGNAL(patientFormsLoaded()), this, SLOT(getPatientForms()));
 }
 
