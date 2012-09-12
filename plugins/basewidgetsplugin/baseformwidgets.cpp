@@ -590,13 +590,12 @@ bool BaseFormData::setData(const int ref, const QVariant &data, const int role)
 
 QVariant BaseFormData::data(const int ref, const int role) const
 {
-    // TODO: code here : IFormItemData should have a submit method
-    if (role!=Qt::DisplayRole)
-        return false;
-    switch (ref) {
-    case ID_EpisodeDate: return m_Form->m_EpisodeDate->dateTime();
-    case ID_EpisodeLabel: return m_Form->m_EpisodeLabel->text();
-    case ID_UserName: return m_Data.value(ID_UserName);
+    if (role==Qt::DisplayRole || role==Form::IFormItemData::PatientModelRole) {
+        switch (ref) {
+        case ID_EpisodeDate: return m_Form->m_EpisodeDate->dateTime();
+        case ID_EpisodeLabel: return m_Form->m_EpisodeLabel->text();
+        case ID_UserName: return m_Data.value(ID_UserName);
+        }
     }
     return QVariant();
 }
@@ -1308,7 +1307,7 @@ QVariant BaseRadioData::data(const int ref, const int role) const
 //        qWarning() << "Radio -> DATA" << selectedUid << id << vals;
         if (id < vals.count() && id >= 0)
             return vals.at(id);
-    } else if (role==Qt::DisplayRole) {
+    } else if (role==Qt::DisplayRole || role==Form::IFormItemData::PatientModelRole) {
         foreach(QRadioButton *but, m_Radio->m_RadioList) {
             if (but->isChecked()) {
                 return but->text();
@@ -1528,7 +1527,7 @@ bool BaseSimpleTextData::setData(const int ref, const QVariant &data, const int 
 QVariant BaseSimpleTextData::data(const int ref, const int role) const
 {
     Q_UNUSED(ref);
-    if (role==Qt::DisplayRole) {
+    if (role==Qt::DisplayRole || role==Form::IFormItemData::PatientModelRole) {
         if (m_Text->m_Line)
             return m_Text->m_Line->text();
         else if (m_Text->m_Text)
@@ -1794,7 +1793,7 @@ QVariant BaseListData::data(const int ref, const int role) const
 //        if (id < vals.count() && id >= 0)
 //            return vals.at(id);
 //    } else
-    if (role==Qt::DisplayRole) {
+    if (role==Qt::DisplayRole || role==Form::IFormItemData::PatientModelRole) {
         QStringList selected;
         QItemSelectionModel *selModel = m_List->m_List->selectionModel();
         if (!selModel->hasSelection())
@@ -1986,7 +1985,7 @@ QVariant BaseComboData::data(const int ref, const int role) const
             return parentItem()->valueReferences()->values(Form::FormItemValues::Value_Uuid).at(id);
 
     }
-    if (role==Qt::DisplayRole) {
+    if (role==Qt::DisplayRole || role==Form::IFormItemData::PatientModelRole) {
         return m_Combo->m_Combo->currentText();
     }
     if (role==Form::IFormItemData::CalculationsRole) {
