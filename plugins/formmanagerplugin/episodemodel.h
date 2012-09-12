@@ -95,7 +95,8 @@ protected:
 
 public:
     enum DataRepresentation {
-        UserDate = 0,
+        ValidationStateIcon = 0,
+        UserDate,
         Label,
         IsValid,
         CreationDate,

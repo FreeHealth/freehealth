@@ -434,10 +434,17 @@ QVariant EpisodeModel::data(const QModelIndex &index, int role) const
     {
         int sqlColumn;
         switch (index.column()) {
+        case ValidationStateIcon:
+        {
+            // Scale down the icons to 12x12 or 10x10
+            if (d->isEpisodeValidated(index))
+                return theme()->icon(Core::Constants::ICONLOCK_BLACKWHITE).pixmap(12,12);
+            return theme()->icon(Core::Constants::ICONUNLOCK_BLACKWHITE).pixmap(12,12);
+        }
+        case UserDate:  sqlColumn = Constants::EPISODES_USERDATE; break;
         case Label: sqlColumn = Constants::EPISODES_LABEL; break;
         case IsValid:  sqlColumn = Constants::EPISODES_ISVALID; break;
         case CreationDate:  sqlColumn = Constants::EPISODES_DATEOFCREATION; break;
-        case UserDate:  sqlColumn = Constants::EPISODES_USERDATE; break;
         case UserCreatorName:
         {
             QString userUid = d->_sqlModel->data(d->_sqlModel->index(index.row(), Constants::EPISODES_USERCREATOR)).toString();
@@ -483,16 +490,6 @@ QVariant EpisodeModel::data(const QModelIndex &index, int role) const
     case Qt::DecorationRole :
     {
         switch (index.column()) {
-        case UserDate:
-        {
-            // TODO: add a preference (show/hide episode validation icon in episode view)
-            // or use a specific delegate
-
-            // Scale down the icons to 12x12 or 10x10
-            if (d->isEpisodeValidated(index))
-                return theme()->icon(Core::Constants::ICONLOCK_BLACKWHITE).pixmap(12,12);
-            return theme()->icon(Core::Constants::ICONUNLOCK_BLACKWHITE).pixmap(12,12);
-        }
         case FormLabel:
         {
             if (!d->_formMain)
