@@ -366,7 +366,7 @@ FormPage *FormManager::createFormPage(const QString &uuid)
     return p;
 }
 
-/** Return the form (Form::FormMain*) wiht the uuid \e formUid or return zero. This function checks the central and all loaded subforms */
+/** Return the form (Form::FormMain*) with the uuid \e formUid or return zero. This function checks the central and all loaded subforms */
 FormMain *FormManager::form(const QString &formUid) const
 {
     for(int i=0; i < d->m_RootForms.count(); ++i) {
