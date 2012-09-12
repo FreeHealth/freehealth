@@ -7,7 +7,7 @@
     <!-- Non translatable values -->
     <authors>Eric Maeker, MD</authors>
     <version>test</version>
-    <fmfv>0.7.0</fmfv>
+    <fmfv>0.8.0</fmfv>
     <cdate>2012-01-01</cdate>
     <lmdate>2012-02-26</lmdate>
     <icon>__theme__/identity.png</icon>
@@ -30,12 +30,14 @@
         Bouton 'envoyer un courriel' connecté&lt;br />
         N'affiche pas l'entête du formulaire&lt;br />
         Défini le formulaire comme formulaire d'identité dans l'application&lt;br />
+        Ajout des données professionnelles&lt;br />
         </text>
         <text lang="xx">
         Adding the mobile phone number&lt;br />
         'Send mail' button is now connected&lt;br />
         Hide the form header&lt;br />
         Define this form as the application identity form&lt;br />
+        Adding professional data&lt;br />
         </text>
       </updateversion>
     </updateinfo>
@@ -68,6 +70,7 @@
         <label lang="xx">Social insurance number</label>
         <label lang="fr">Numéro de sécurité sociale</label>
         <options>DontPrintEmptyValues</options>
+        <patientdata>patient::socialnumber</patientdata>
       </Item>
 
       <Item type="check" name="FrGroup::IsNSSOwner">
@@ -154,6 +157,39 @@
         <label lang="fr">Envoyer un SMS</label>
         <icon>__theme__/iphone.png</icon>
       </Item>
+
+    </Item>
+
+    <Item type="group" name="ProfGroup">
+        <uilink widget="profGroup"/>
+        <label lang="xx">Profession</label>
+        <label lang="fr">Profession</label>
+        <column>1</column>
+        <options>DontPrintEmptyValues</options>
+
+        <Item type="shorttext" name="ProfGroup::Profession">
+          <uilink label="profLabel" widget="profEdit"/>
+          <label lang="xx">Current profession</label>
+          <label lang="fr">Profession actuelle</label>
+          <options>DontPrintEmptyValues</options>
+          <patientdata>patient::profession</patientdata>
+        </Item>
+
+        <Item type="shorttext" name="ProfGroup::ProfessionSite">
+          <uilink label="profSiteLabel" widget="profSiteEdit"/>
+          <label lang="xx">Site</label>
+          <label lang="fr">Site</label>
+          <options>DontPrintEmptyValues</options>
+          <patientdata>patient::professionsite</patientdata>
+        </Item>
+
+        <Item type="shorttext" name="ProfGroup::ProfessionTels">
+          <uilink label="profTelsLabel" widget="profTelsEdit"/>
+          <label lang="xx">Professional tel</label>
+          <label lang="fr">Téléphone professionel</label>
+          <options>DontPrintEmptyValues</options>
+          <patientdata>patient::professionaltels</patientdata>
+        </Item>
 
     </Item>
 
