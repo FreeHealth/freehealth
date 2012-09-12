@@ -58,6 +58,12 @@
 #include <QFormLayout>
 
 #include <QDebug>
+// For debugging purpose
+#include <coreplugin/icore.h>
+#include <coreplugin/ipatient.h>
+static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
+// End debug
+
 
 using namespace Patients;
 using namespace Internal;
@@ -214,6 +220,8 @@ public:
         _dod->clear();
         _dod->setVisible(false);
         _dodLabel->setVisible(false);
+        _nss->clear();
+        _prof->clear();
     }
 
     void setAge(const QString &age)
@@ -421,7 +429,6 @@ public:
         _fax->clear();
         _mail->clear();
         _mobile->clear();
-        _tels->clear();
     }
 
     void setTels(const QString &txt)
@@ -552,18 +559,22 @@ public:
 
     QVariant data(const int iPatientColumn) const
     {
-        qWarning() << "DATA" << iPatientColumn << _episodeModel << _identityForm;
+        qWarning() << "DATA" << iPatientColumn;
         // get data from the patient model (value is extracted from database)
-        QVariant val = _patientModel->index(_current, iPatientColumn).data();
-        if (val.isValid())
+        QVariant val = _patientModel->data(_patientModel->index(_current, iPatientColumn));
+        qWarning() << val;
+        if (val.isValid() && !val.toString().isEmpty())
             return val;
 
         // get data from the episode
         if (_episodeModel) {
-            qWarning() << "    SEARCHING EPISODE" << _episodeModel->rowCount();
+            qWarning() << "    SEARCHING EPISODE" << iPatientColumn;
             // ask the form item data
             foreach(Form::FormItem *item, _identityForm->flattenFormItemChildren()) {
-                qWarning() << "          item patientRepr" << item->patientDataRepresentation();
+                qWarning() << "          item patientRepr"
+                           << item->patientDataRepresentation()
+                           << patient()->enumToString(Core::IPatient::PatientDataRepresentation(item->patientDataRepresentation()))
+                           << item->uuid();
                 if (item->itemData() && item->patientDataRepresentation() == iPatientColumn) {
                     qWarning() << "            Found" << item->uuid() << item->itemData()->data(0) << item->itemData()->data(item->patientDataRepresentation(), Form::IFormItemData::PatientModelRole);
                     return item->itemData()->data(item->patientDataRepresentation(), Form::IFormItemData::PatientModelRole);
