@@ -187,6 +187,8 @@ public:
         _dodLabel = new QLabel(this);
         _prof = new QLabel(this);
         _profLabel = new QLabel(this);
+        _nss = new QLabel(this);
+        _nssLabel = new QLabel(this);
 
         QFont bold;
         bold.setBold(true);
@@ -194,10 +196,12 @@ public:
         _dobLabel->setFont(bold);
         _dodLabel->setFont(bold);
         _profLabel->setFont(bold);
+        _nssLabel->setFont(bold);
 
         grid->addRow(_ageLabel, _age);
         grid->addRow(_dobLabel, _dob);
         grid->addRow(_dodLabel, _dod);
+        grid->addRow(_nssLabel, _nss);
         grid->addRow(_profLabel, _prof);
 
         retranslate();
@@ -239,11 +243,20 @@ public:
             _prof->setText(txt);
     }
 
+    void setSocialNumber(const QString &txt)
+    {
+        if (txt.isEmpty())
+            _nss->setText("--");
+        else
+            _nss->setText(txt);
+    }
+
     void retranslate()
     {
         _ageLabel->setText(tkTr(Trans::Constants::AGE));
         _dobLabel->setText(tkTr(Trans::Constants::DATE_OF_BIRTH));
         _dodLabel->setText(tkTr(Trans::Constants::DATE_OF_DEATH));
+        _nssLabel->setText(tkTr(Trans::Constants::SOCIAL_NUMBER));
         _profLabel->setText(tkTr(Trans::Constants::PROFESSION));
     }
 
@@ -257,6 +270,7 @@ public:
 private:
     QLabel *_age, *_ageLabel, *_dob, *_dobLabel, *_dodLabel, *_dod;
     QLabel *_prof, *_profLabel;
+    QLabel *_nss, *_nssLabel;
 };
 
 class IdentityAndAgeDetailsWidget : public QWidget
@@ -546,9 +560,12 @@ public:
 
         // get data from the episode
         if (_episodeModel) {
+            qWarning() << "    SEARCHING EPISODE" << _episodeModel->rowCount();
             // ask the form item data
             foreach(Form::FormItem *item, _identityForm->flattenFormItemChildren()) {
+                qWarning() << "          item patientRepr" << item->patientDataRepresentation();
                 if (item->itemData() && item->patientDataRepresentation() == iPatientColumn) {
+                    qWarning() << "            Found" << item->uuid() << item->itemData()->data(0) << item->itemData()->data(item->patientDataRepresentation(), Form::IFormItemData::PatientModelRole);
                     return item->itemData()->data(item->patientDataRepresentation(), Form::IFormItemData::PatientModelRole);
                 }
             }
@@ -622,7 +639,7 @@ public:
         const QPixmap &photo = m_PatientModel->index(row, Core::IPatient::Photo_64x64).data().value<QPixmap>();
         viewUi->photoLabel->setPixmap(photo);
 
-        // name && gender
+        // name / gender
         const QIcon &icon = m_PatientModel->index(row, Core::IPatient::IconizedGender).data().value<QIcon>();
         const QString &name = m_PatientModel->index(row, Core::IPatient::FullName).data().toString();
         viewUi->identityDetails->setIcon(icon);
@@ -634,15 +651,21 @@ public:
         m_IdentityWidget->setGender(m_PatientModel->index(row, Core::IPatient::Gender).data().toString());
         m_IdentityWidget->setTitle(m_PatientModel->index(row, Core::IPatient::Title).data().toString());
 
-        // age / dob / dod / prof
+        // age / dob / dod / prof / nss
         const QString &age = m_PatientModel->index(row, Core::IPatient::Age).data().toString();
         QString dob = QLocale().toString(m_PatientModel->index(row, Core::IPatient::DateOfBirth).data().toDate(), QLocale::LongFormat);
-        QString prof = m_PatientModel->index(row, Core::IPatient::Profession).data().toString();
         viewUi->identityDetails->setSummaryText(QString("%1 - %2").arg(name).arg(age));
         m_AgeWidget->clear();
         m_AgeWidget->setAge(age);
         m_AgeWidget->setDateOfBirth(dob);
-        m_AgeWidget->setProfession(prof);
+        m_AgeWidget->setProfession(_patientModelIdentityWrapper->data(Core::IPatient::Profession).toString());
+        QStringList nss;
+        nss << _patientModelIdentityWrapper->data(Core::IPatient::SocialNumber).toString()
+            << _patientModelIdentityWrapper->data(Core::IPatient::SocialNumber2).toString()
+            << _patientModelIdentityWrapper->data(Core::IPatient::SocialNumber3).toString()
+            << _patientModelIdentityWrapper->data(Core::IPatient::SocialNumber4).toString();
+        nss.removeAll("");
+        m_AgeWidget->setSocialNumber(nss.join("; "));
         if (m_PatientModel->index(row, Core::IPatient::DateOfDeath).data().isValid()) {
             QString dod = QLocale().toString(m_PatientModel->index(row, Core::IPatient::DateOfDeath).data().toDate(), QLocale::LongFormat);
             m_AgeWidget->setDateOfDeath(dod);
@@ -687,6 +710,8 @@ IdentityViewerWidget::IdentityViewerWidget(QWidget *parent) :
     d(new IdentityViewerWidgetPrivate(this))
 {
     setObjectName("Patient::IdentityViewerWidget");
+    getPatientForms();
+    connect(formManager(), SIGNAL(patientFormsLoaded()), this, SLOT(getPatientForms()));
 }
 
 /*! Destructor of the IdentityViewerWidget class */
@@ -703,11 +728,8 @@ bool IdentityViewerWidget::initialize()
     return true;
 }
 
-/** \brief Define the model to use. */
-void IdentityViewerWidget::setCurrentPatientModel(Patients::PatientModel *model)
+void IdentityViewerWidget::getPatientForms()
 {
-    d->m_PatientModel = model;
-    d->_patientModelIdentityWrapper->setPatientModel(model);
     Form::FormMain *form = formManager()->identityRootFormDuplicate();
     if (form) {
         d->_patientModelIdentityWrapper->setIdentityForm(form);
@@ -716,6 +738,13 @@ void IdentityViewerWidget::setCurrentPatientModel(Patients::PatientModel *model)
         d->_patientModelIdentityWrapper->setIdentityForm(0);
         d->_patientModelIdentityWrapper->setEpisodeModel(0);
     }
+}
+
+/** \brief Define the model to use. */
+void IdentityViewerWidget::setCurrentPatientModel(Patients::PatientModel *model)
+{
+    d->m_PatientModel = model;
+    d->_patientModelIdentityWrapper->setPatientModel(model);
 }
 
 /** \brief Return the actual PatientModel or 0 if it was not set. */

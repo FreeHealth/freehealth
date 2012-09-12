@@ -57,6 +57,9 @@ public:
 
 //Q_SIGNALS:
     
+private Q_SLOTS:
+    void getPatientForms();
+
 public Q_SLOTS:
     void setCurrentPatientModel(Patients::PatientModel *model);
     void setCurrentIndex(const QModelIndex &patientIndex);
