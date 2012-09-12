@@ -195,7 +195,7 @@
     </spacer>
    </item>
    <item row="3" column="0">
-    <widget class="QGroupBox" name="groupBox">
+    <widget class="QGroupBox" name="profGroup">
      <property name="title">
       <string>Prof</string>
      </property>
