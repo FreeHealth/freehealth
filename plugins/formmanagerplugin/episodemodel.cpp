@@ -243,8 +243,9 @@ public:
     void checkModelContent()
     {
         if (_formMain->episodePossibilities() == Form::FormMain::UniqueEpisode) {
-            if (_sqlModel->rowCount() < 1)
-                _sqlModel->insertRow(0);
+            if (_sqlModel->rowCount() < 1) {
+                q->insertRow(0);
+            }
         } else if (_formMain->episodePossibilities() == Form::FormMain::NoEpisode) {
             if (_sqlModel->rowCount() > 0)
                 LOG_ERROR_FOR(q, QString("NoEpisode Form (%1) with episodes?").arg(_formMain->uuid()));
