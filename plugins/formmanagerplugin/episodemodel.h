@@ -114,6 +114,7 @@ public:
     virtual ~EpisodeModel();
     QString formUid() const;
     void setCurrentPatient(const QString &uuid);
+    void setUseFormContentCache(bool useCache);
 
     Qt::ItemFlags flags(const QModelIndex &index) const;
     void fetchMore(const QModelIndex &parent);

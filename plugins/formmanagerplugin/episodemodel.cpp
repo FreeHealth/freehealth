@@ -158,6 +158,7 @@ public:
     EpisodeModelPrivate(EpisodeModel *parent) :
         _formMain(0),
         _readOnly(false),
+        _useCache(true),
         _sqlModel(0),
         q(parent)
     {
@@ -169,9 +170,13 @@ public:
         _validationCache.clear();
     }
 
-    void updateFilter(const QString &patientUid)
+    void clearCache()
     {
         _xmlContentCache.clear();
+    }
+
+    void updateFilter(const QString &patientUid)
+    {
         // Filter valid episodes
         QHash<int, QString> where;
         where.insert(Constants::EPISODES_ISVALID, "=1");
@@ -184,6 +189,8 @@ public:
 
     bool isEpisodeContentInCache(const QModelIndex &index)
     {
+        if (!_useCache)
+            return false;
         QModelIndex id = _sqlModel->index(index.row(), Constants::EPISODES_ID);
         return (_xmlContentCache.keys().contains(_sqlModel->data(id).toInt()));
     }
@@ -205,7 +212,9 @@ public:
         if (isEpisodeContentInCache(index))
             return getEpisodeContentFormCache(index);
         QModelIndex id = _sqlModel->index(index.row(), Constants::EPISODES_ID);
-        return episodeBase()->getEpisodeContent(_sqlModel->data(id));
+        QString xml = episodeBase()->getEpisodeContent(_sqlModel->data(id));
+        storeEpisodeContentInCache(id, xml);
+        return xml;
     }
 
     bool isEpisodeValidated(const QModelIndex &index)
@@ -300,7 +309,7 @@ public:
 
 public:
     FormMain *_formMain;
-    bool _readOnly;
+    bool _readOnly, _useCache;
     EpisodeModelCoreListener *m_CoreListener;
     EpisodeModelPatientListener *m_PatientListener;
     QSqlTableModel *_sqlModel;
@@ -372,6 +381,11 @@ void EpisodeModel::setCurrentPatient(const QString &uuid)
     d->updateFilter(uuid);
 }
 
+void EpisodeModel::setUseFormContentCache(bool useCache)
+{
+    d->_useCache = useCache;
+}
+
 /** Return the current form unique identifier linked to this model */
 QString EpisodeModel::formUid() const
 {
@@ -402,6 +416,7 @@ void EpisodeModel::onUserChanged()
 /** Reacts on patient changes. */
 void EpisodeModel::onPatientChanged()
 {
+    d->clearCache();
     d->updateFilter(patient()->uuid());
     d->_sqlModel->select();
     d->checkModelContent();
@@ -674,6 +689,9 @@ bool EpisodeModel::isEpisodeValidated(const QModelIndex &index) const
 // EXPERIMENTAL
 bool EpisodeModel::populateFormWithEpisodeContent(const QModelIndex &episode, bool feedPatientModel)
 {
+    qWarning() << "EpisodeModel::POPULATE" << episode << d->_sqlModel->rowCount();
+    qWarning() << d->_sqlModel->index(episode.row(), Constants::EPISODES_ID).data().toString();
+
     QTime chrono;
     if (WarnLogChronos)
         chrono.start();
@@ -682,6 +700,9 @@ bool EpisodeModel::populateFormWithEpisodeContent(const QModelIndex &episode, bo
     d->_formMain->formWidget()->setEnabled(false);
 
     const QString &xml = d->getEpisodeContent(episode);
+
+    qWarning() << xml;
+
     QHash<QString, FormItem *> items;
     QHash<QString, QString> datas;
     if (!xml.isEmpty()) {
