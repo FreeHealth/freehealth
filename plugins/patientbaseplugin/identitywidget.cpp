@@ -162,6 +162,11 @@ public:
 //            q->connect(editUi->genderCombo, SIGNAL(currentIndexChanged(int)), q, SLOT(updateGenderImage()));
             break;
         }
+        case IdentityWidget::ReadOnlyMode: {
+            break;
+        }
+        default:
+            break;
         }
     }
 
@@ -268,6 +273,7 @@ void IdentityWidget::setCurrentIndex(const QModelIndex &patientIndex)
         d->zipCompleter->checkData();
         break;
     }
+    default: break;
     }  // switch (d->m_EditMode)
 }
 
@@ -403,6 +409,7 @@ QPixmap IdentityWidget::currentPhoto() const
     case ReadWriteMode:
         photo = d->m_hasRealPhoto ? d->editUi->photoButton->pixmap() : QPixmap();
         break;
+    default: break;
     }
     return photo;
 }
