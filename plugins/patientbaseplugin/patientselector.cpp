@@ -174,7 +174,7 @@ PatientSelector::PatientSelector(QWidget *parent, const FieldsToShow fields) :
     connect(d->m_NavigationToolButton->menu(), SIGNAL(aboutToShow()), this, SLOT(updateNavigationButton()));
     connect(d->ui->searchLine, SIGNAL(textChanged(QString)), this, SLOT(refreshFilter(QString)));
     connect(d->ui->tableView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(changeIdentity(QModelIndex,QModelIndex)));
-    connect(d->ui->tableView, SIGNAL(activated(QModelIndex)), this, SLOT(onPatientSelected(QModelIndex)));
+    connect(d->ui->tableView, SIGNAL(activated(QModelIndex)), this, SLOT(onPatientActivated(QModelIndex)));
 
     updatePatientActions(QModelIndex());
 
@@ -338,7 +338,7 @@ void PatientSelector::refreshFilter(const QString &)
 }
 
 /** \brief Slot activated when the user select a patient from the selector. \sa setSelectedPatient()*/
-void PatientSelector::onPatientSelected(const QModelIndex &index)
+void PatientSelector::onPatientActivated(const QModelIndex &index)
 {
     if (index==d->m_Model->currentPatient())
         return;
