@@ -240,16 +240,25 @@ public:
 
     void updateEpisodeActions(const QModelIndex &index)
     {
+        const EpisodeModel *model = qobject_cast<EpisodeModel*>(ui->episodeView->model());
         const bool enabled = index.isValid();
         const bool unique = _formTreeModel->isUniqueEpisode(index);
+        const bool modelHasOneRowAtLeast = model->rowCount()>=1;
+
+        aSaveEpisode->setEnabled(enabled);
         aRemoveEpisode->setEnabled(enabled && !unique);
-        aNewEpisode->setEnabled(enabled && !unique);
         if (enabled) {
-            const EpisodeModel *model = qobject_cast<EpisodeModel*>(ui->episodeView->model());
             Q_ASSERT(model);
             aValidateEpisode->setEnabled(!model->isEpisodeValidated(index));
+            if (unique)
+                aNewEpisode->setEnabled(enabled && !modelHasOneRowAtLeast);
+            else
+                aNewEpisode->setEnabled(enabled);
+        } else {
+            aValidateEpisode->setEnabled(enabled);
+            aSaveEpisode->setEnabled(enabled);
+            aNewEpisode->setEnabled(enabled);
         }
-        aSaveEpisode->setEnabled(enabled);
         aPrintForm->setEnabled(enabled);
     }
 
