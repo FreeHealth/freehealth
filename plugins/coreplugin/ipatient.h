@@ -47,9 +47,11 @@ class IToken;
 
 class CORE_EXPORT IPatient : public QAbstractListModel
 {
-        Q_OBJECT
+    Q_OBJECT
+    Q_ENUMS(PatientDataRepresentation)
+
 public:
-    enum DataRepresentation {
+    enum PatientDataRepresentation {
         Id = 0,
 
         // Identity
@@ -90,6 +92,7 @@ public:
         MobilePhone,
         Faxes,
         ProfessionalTels,
+        ProfessionalSite,
 
         // Social numbers
         SocialNumber,
@@ -161,6 +164,8 @@ public:
 
     virtual QHash<QString, QString> fullPatientName(const QString &uuid) const {Q_UNUSED(uuid); return QHash<QString, QString>();}
     virtual QHash<QString, QString> fullPatientName(const QStringList &uuids) const {Q_UNUSED(uuids); return QHash<QString, QString>();}
+
+    QString enumToString(PatientDataRepresentation data);
 
 Q_SIGNALS:
     void currentPatientChanged();
