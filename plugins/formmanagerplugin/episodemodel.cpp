@@ -264,17 +264,17 @@ public:
 
 //        foreach(Form::FormMain *form, m_FormItems.keys()) {
 ////            if (andFeedPatientModel) {
-////                bool hasPatientDatas = false;
+////                bool hasPatientData = false;
 ////                // test all children FormItem for patientDataRepresentation
 ////                foreach(Form::FormItem *item, form->flattenFormItemChildren()) {
-////                    if (item->itemDatas()) {
+////                    if (item->itemData()) {
 ////                        if (item->patientDataRepresentation()!=-1) {
-////                            hasPatientDatas = true;
+////                            hasPatientData = true;
 ////                            break;
 ////                        }
 ////                    }
 ////                }
-////                if (!hasPatientDatas)
+////                if (!hasPatientData)
 ////                    continue;
 ////            }
 
@@ -690,8 +690,9 @@ bool EpisodeModel::isEpisodeValidated(const QModelIndex &index) const
 // EXPERIMENTAL
 bool EpisodeModel::populateFormWithEpisodeContent(const QModelIndex &episode, bool feedPatientModel)
 {
-    qWarning() << "EpisodeModel::POPULATE" << episode << d->_sqlModel->rowCount();
-    qWarning() << d->_sqlModel->index(episode.row(), Constants::EPISODES_ID).data().toString();
+//    qWarning() << "EpisodeModel::POPULATE" << episode << d->_sqlModel->rowCount();
+//    qWarning() << "  patient filtered" << d->_sqlModel->filter();
+//    qWarning() << "  episodeId" << d->_sqlModel->index(episode.row(), Constants::EPISODES_ID).data().toString();
 
     QTime chrono;
     if (WarnLogChronos)
@@ -702,19 +703,19 @@ bool EpisodeModel::populateFormWithEpisodeContent(const QModelIndex &episode, bo
 
     const QString &xml = d->getEpisodeContent(episode);
 
-    qWarning() << xml;
+//    qWarning() << xml;
 
     QHash<QString, FormItem *> items;
-    QHash<QString, QString> datas;
+    QHash<QString, QString> _data;
     if (!xml.isEmpty()) {
         // read the xml'd content
-        if (!Utils::readXml(xml, Form::Constants::XML_FORM_GENERAL_TAG, datas, false)) {
+        if (!Utils::readXml(xml, Form::Constants::XML_FORM_GENERAL_TAG, _data, false)) {
             QModelIndex uid = index(episode.row(), EpisodeModel::Uuid);
             LOG_ERROR(QString("Error while reading episode content (%1)").arg(data(uid).toString()));
             return false;
         }
 
-        // put datas into the FormItems of the form
+        // put data into the FormItems of the form
         foreach(FormItem *it, d->_formMain->flattenFormItemChildren()) {
             items.insert(it->uuid(), it);
         }
@@ -724,9 +725,9 @@ bool EpisodeModel::populateFormWithEpisodeContent(const QModelIndex &episode, bo
     QModelIndex userName = index(episode.row(), EpisodeModel::UserCreatorName);
     QModelIndex userDate = index(episode.row(), EpisodeModel::UserDate);
     QModelIndex label = index(episode.row(), EpisodeModel::Label);
-    d->_formMain->itemData()->setData(IFormItemData::ID_EpisodeDate, data(userDate));
-    d->_formMain->itemData()->setData(IFormItemData::ID_EpisodeLabel, data(label));
-    d->_formMain->itemData()->setData(IFormItemData::ID_UserName, data(userName));
+    d->_formMain->itemData()->setData(IFormItemData::ID_EpisodeDate, this->data(userDate));
+    d->_formMain->itemData()->setData(IFormItemData::ID_EpisodeLabel, this->data(label));
+    d->_formMain->itemData()->setData(IFormItemData::ID_UserName, this->data(userName));
     d->_formMain->itemData()->setStorableData(false); // equal: _formMain->itemData()->setModified(false)
 
     // Populate FormItem data and the patientmodel
@@ -738,7 +739,7 @@ bool EpisodeModel::populateFormWithEpisodeContent(const QModelIndex &episode, bo
         if (!it->itemData())
             continue;
 
-        it->itemData()->setStorableData(datas.value(it->uuid()));
+        it->itemData()->setStorableData(_data.value(it->uuid(), QString()));
         if (feedPatientModel && it->patientDataRepresentation() >= 0)
                 patient()->setValue(it->patientDataRepresentation(), it->itemData()->data(it->patientDataRepresentation(), IFormItemData::PatientModelRole));
     }
