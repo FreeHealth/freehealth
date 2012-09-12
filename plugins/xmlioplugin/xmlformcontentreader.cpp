@@ -147,6 +147,16 @@ XmlFormContentReader::XmlFormContentReader() :
    m_PatientDatas.insert(Constants::TAG_DATAPATIENT_FAX, Core::IPatient::Faxes);
    m_PatientDatas.insert(Constants::TAG_DATAPATIENT_TELS, Core::IPatient::Tels);
    m_PatientDatas.insert(Constants::TAG_DATAPATIENT_MOBILETEL, Core::IPatient::MobilePhone);
+
+   m_PatientDatas.insert(Constants::TAG_DATAPATIENT_SOCIALNUMBER1, Core::IPatient::Tels);
+   m_PatientDatas.insert(Constants::TAG_DATAPATIENT_SOCIALNUMBER2, Core::IPatient::Tels);
+   m_PatientDatas.insert(Constants::TAG_DATAPATIENT_SOCIALNUMBER3, Core::IPatient::Tels);
+   m_PatientDatas.insert(Constants::TAG_DATAPATIENT_SOCIALNUMBER4, Core::IPatient::Tels);
+
+   m_PatientDatas.insert(Constants::TAG_DATAPATIENT_PROFESSION, Core::IPatient::Profession);
+   m_PatientDatas.insert(Constants::TAG_DATAPATIENT_PROFESSIONSITE, Core::IPatient::ProfessionSite);
+   m_PatientDatas.insert(Constants::TAG_DATAPATIENT_PROFESSIONSITE, Core::IPatient::ProfessionalTels);
+
 }
 
 XmlFormContentReader::~XmlFormContentReader()

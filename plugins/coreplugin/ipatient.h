@@ -62,7 +62,7 @@ public:
         TitleIndex,
         FullName,
         BirthName,
-        SecondName,  // 10
+        SecondName,           // 10
         Firstname,
         Gender,
         GenderIndex,
@@ -72,7 +72,8 @@ public:
         Age,
         YearsOld,
         MaritalStatus,
-        Profession,  // 20
+        Profession,           // 20
+        ProfessionSite,
         DateOfDeath,
         Photo_32x32,
         Photo_64x64,
@@ -84,21 +85,28 @@ public:
         Country,
         AddressNote,
         FullAddress,
-        Mails,
-        Tels,  // 30
+        Mails,             // 30
+        Tels,
         MobilePhone,
         Faxes,
+        ProfessionalTels,
+
+        // Social numbers
+        SocialNumber,
+        SocialNumber2,
+        SocialNumber3,
+        SocialNumber4,
 
         // Biometrics
         Weight,
         WeightUnit,
         Height,
-        HeightUnit,
+        HeightUnit,         // 40
         BMI,
         Creatinine,
         CreatinineUnit,
         CreatinClearance,
-        CreatinClearanceUnit,  // 40
+        CreatinClearanceUnit,
 
         // Drugs and diseases
         // Allergies
