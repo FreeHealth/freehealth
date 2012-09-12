@@ -319,6 +319,8 @@ void PatientModel::setCurrentPatient(const QModelIndex &index)
         return;
     }
 
+    // Call all extensions that provide listeners to patient change: the extensions can now do things like
+    // save data BEFORE the patient is changed.
     QList<Core::IPatientListener *> listeners = pluginManager()->getObjects<Core::IPatientListener>();
     for(int i = 0; i < listeners.count(); ++i) {
         if (!listeners.at(i)->currentPatientAboutToChange()) {
