@@ -450,13 +450,6 @@ QVariant EpisodeModel::data(const QModelIndex &index, int role) const
     {
         int sqlColumn;
         switch (index.column()) {
-        case ValidationStateIcon:
-        {
-            // Scale down the icons to 12x12 or 10x10
-            if (d->isEpisodeValidated(index))
-                return theme()->icon(Core::Constants::ICONLOCK_BLACKWHITE).pixmap(12,12);
-            return theme()->icon(Core::Constants::ICONUNLOCK_BLACKWHITE).pixmap(12,12);
-        }
         case UserDate:  sqlColumn = Constants::EPISODES_USERDATE; break;
         case Label: sqlColumn = Constants::EPISODES_LABEL; break;
         case IsValid:  sqlColumn = Constants::EPISODES_ISVALID; break;
@@ -506,6 +499,13 @@ QVariant EpisodeModel::data(const QModelIndex &index, int role) const
     case Qt::DecorationRole :
     {
         switch (index.column()) {
+        case ValidationStateIcon:
+        {
+            // Scale down the icons to 12x12 or 10x10
+            if (d->isEpisodeValidated(index))
+                return theme()->icon(Core::Constants::ICONLOCK_BLACKWHITE).pixmap(12,12);
+            return theme()->icon(Core::Constants::ICONUNLOCK_BLACKWHITE).pixmap(12,12);
+        }
         case FormLabel:
         {
             if (!d->_formMain)
@@ -515,6 +515,12 @@ QVariant EpisodeModel::data(const QModelIndex &index, int role) const
             return QIcon(iconFile);
         }
         }  // switch (index.column())
+    }
+    case Qt::SizeHintRole :
+    {
+        switch (index.column()) {
+        case ValidationStateIcon: return QSize(22, 22);
+        }
     }
     }  // switch (role)
     return QVariant();
