@@ -27,9 +27,12 @@
 
 /**
  * \class %PluginName%::Internal::%PluginName%ContextualWidget
- * \brief Simplify the creation of contextualized widget for the %PluginName% plugin.
- * You can add context identificators to the widget by using the addContexts() member.\n
- * The context object is automatically removed from the context manager in its dtor
+ * \brief Contextualized widget for the %PluginName% plugin.
+ *
+ * This contextualized widget has access to all actions that are added in the particular context of
+ * %PluginName% (e.g. %PluginName%::Constants::C_%PluginName:U%).\n
+ * You can add context identificators to the widget by using the addContexts() method.
+ * The context object is automatically removed from the context manager in its destructor
  * (no special code needed).
  * \sa Core::IContext, Core::ContextManager, Core::ICore::contextManager()
  */
