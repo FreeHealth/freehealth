@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/***************************************************************************
+ *  The FreeMedForms project is a set of free, open source medical         *
+ *  applications.                                                          *
+ *  (C) 2008-2012 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
+ *  All rights reserved.                                                   *
+ *                                                                         *
+ *  This program is free software: you can redistribute it and/or modify   *
+ *  it under the terms of the GNU General Public License as published by   *
+ *  the Free Software Foundation, either version 3 of the License, or      *
+ *  (at your option) any later version.                                    *
+ *                                                                         *
+ *  This program is distributed in the hope that it will be useful,        *
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
+ *  GNU General Public License for more details.                           *
+ *                                                                         *
+ *  You should have received a copy of the GNU General Public License      *
+ *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  If not, see <http://www.gnu.org/licenses/>.                            *
+ ***************************************************************************/
+-->
+<wizard category="B.FMFClasses" id="A.ContextualWidget" kind="class" version="1">
+    <displayname>Contextual widget</displayname>
+    <displayname xml:lang="de">Contextual widget</displayname>
+    <displayname xml:lang="de">Widget contextuel</displayname>
+    <icon>../shared/preferences-system.png</icon>
+    <description>Simplify the creation of contextualized widget for plugins. See also Core::ContextManager.</description>
+    <displaycategory>FreeMedForms</displaycategory>
+    <files>
+        <file openeditor="true" source="contextualwidget.cpp" target="%PluginName:l%contextualwidget.%CppSourceSuffix%" />
+        <file openeditor="true" source="contextualwidget.h" target="%PluginName:l%contextualwidget.%CppHeaderSuffix%" />
+    </files>
+
+    <fieldpagetitle>Contextual widget parameters</fieldpagetitle>
+    <fields>
+        <field name="PluginName">
+            <fieldcontrol class="QComboBox" combochoices="Account,AccountDB,Agenda,Alert,BaseWidgets,Category,Core,DataPackPlugin,DrugInteractions,DrugsDB,DrugsWidget,Editor,Empty,Form,Gir,ICD,MainWin,PMH,PadTools,Patients,Print,SaveRestore,Script,Templates,UserPlugin,Views,Webcam,XmlForms,ZipCodes" defaultindex="-1" />
+            <fielddescription>Plugin:</fielddescription>
+            <fielddescription xml:lang="de">Plugin:</fielddescription>
+            <fielddescription xml:lang="fr">Greffon :</fielddescription>
+        </field>
+        <field name="Author">
+            <fieldcontrol class="QLineEdit" defaulttext="" />
+            <fielddescription>Author:</fielddescription>
+            <fielddescription xml:lang="de">Autor:</fielddescription>
+        </field>
+        <field name="AuthorEmail">
+            <fieldcontrol class="QLineEdit" defaulttext=""/>
+            <fielddescription>Author email:</fielddescription>
+            <fielddescription xml:lang="de">Emailadresse des Autors:</fielddescription>
+        </field>
+    </fields>
+</wizard>
