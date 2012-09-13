@@ -19,8 +19,8 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developpers:                                                     *
- *       Eric MAEKER <>                             *
+ *   Main Developers:                                                      *
+ *       Eric MAEKER <eric.maeker@gmail.com>                               *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
@@ -51,11 +51,11 @@ FormContextualWidget::FormContextualWidget(QWidget *parent) :
     m_Context(0)
 {
     Core::UniqueIDManager *uid = Core::ICore::instance()->uniqueIDManager();
-    
+
     // Create the context object
     m_Context = new Internal::FormContext(this);
 //    m_Context->setContext(QList<int>() << uid->uniqueIdentifier(Constants::C_FORM_PLUGINS));
-    
+
     // Send it to the contextual manager
     contextManager()->addContextObject(m_Context);
 }

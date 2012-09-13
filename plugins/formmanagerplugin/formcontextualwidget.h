@@ -19,7 +19,7 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developpers:                                                     *
+ *   Main Developers:                                                      *
  *       Eric MAEKER <eric.maeker@gmail.com>                               *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
@@ -45,11 +45,11 @@ class FormContext;
 class FormContextualWidget : public QWidget
 {
     Q_OBJECT
-    
+
 public:
     explicit FormContextualWidget(QWidget *parent = 0);
     ~FormContextualWidget();
-    
+
     void addContexts(const QList<int> &contexts);
     QList<int> contexts() const;
 
