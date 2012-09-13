@@ -15,6 +15,7 @@ filesToUpdate = {
     #"formitem": ???,
     "pimpl_class": "PluginNamespace",
     "preferencespage": "PluginName",
+    "contextualwidget": "PluginName"
     }
 
 #---------------------- DONT CHANGE ANYTHING BELOW THIS LINE! -----------------------

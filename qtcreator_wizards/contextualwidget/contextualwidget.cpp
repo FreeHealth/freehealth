@@ -28,7 +28,7 @@
 /**
  * \class %PluginName%::Internal::%PluginName%ContextualWidget
  * \brief Simplify the creation of contextualized widget for the %PluginName% plugin.
- * You can add context identifiants to the widget by using the addContexts() member.\n
+ * You can add context identificators to the widget by using the addContexts() member.\n
  * The context object is automatically removed from the context manager in its dtor
  * (no special code needed).
  * \sa Core::IContext, Core::ContextManager, Core::ICore::contextManager()
@@ -41,7 +41,7 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/uniqueidmanager.h>
 
-using namespace %PluginName:c%;
+using namespace %PluginName%;
 using namespace Internal;
 
 static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }

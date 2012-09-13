@@ -23,10 +23,11 @@
 -->
 <wizard category="B.FMFClasses" id="A.ContextualWidget" kind="class" version="1">
     <displayname>Contextual widget</displayname>
-    <displayname xml:lang="de">Contextual widget</displayname>
-    <displayname xml:lang="de">Widget contextuel</displayname>
+    <displayname xml:lang="de">Kontextualisiertes Widget</displayname>
+    <displayname xml:lang="fr">Widget contextuel</displayname>
     <icon>../shared/preferences-system.png</icon>
     <description>Simplify the creation of contextualized widget for plugins. See also Core::ContextManager.</description>
+    <description xml:lang="de">Vereinfacht die Erstellung eines kontextualisierten Widgets für Plugins. Siehe auch Core::ContextManager</description>
     <displaycategory>FreeMedForms</displaycategory>
     <files>
         <file openeditor="true" source="contextualwidget.cpp" target="%PluginName:l%contextualwidget.%CppSourceSuffix%" />
@@ -34,17 +35,19 @@
     </files>
 
     <fieldpagetitle>Contextual widget parameters</fieldpagetitle>
+    <fieldpagetitle xml:lang="de">Parameter des kontextualisierten Widgets</fieldpagetitle>
     <fields>
         <field name="PluginName">
             <fieldcontrol class="QComboBox" combochoices="Account,AccountDB,Agenda,Alert,BaseWidgets,Category,Core,DataPackPlugin,DrugInteractions,DrugsDB,DrugsWidget,Editor,Empty,Form,Gir,ICD,MainWin,PMH,PadTools,Patients,Print,SaveRestore,Script,Templates,UserPlugin,Views,Webcam,XmlForms,ZipCodes" defaultindex="-1" />
             <fielddescription>Plugin:</fielddescription>
             <fielddescription xml:lang="de">Plugin:</fielddescription>
-            <fielddescription xml:lang="fr">Greffon :</fielddescription>
+            <fielddescription xml:lang="fr">Greffon:</fielddescription>
         </field>
         <field name="Author">
             <fieldcontrol class="QLineEdit" defaulttext="" />
             <fielddescription>Author:</fielddescription>
             <fielddescription xml:lang="de">Autor:</fielddescription>
+            <fielddescription xml:lang="fr">Auteur:</fielddescription>
         </field>
         <field name="AuthorEmail">
             <fieldcontrol class="QLineEdit" defaulttext=""/>
