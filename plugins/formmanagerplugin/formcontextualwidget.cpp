@@ -19,61 +19,43 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Main Developpers:                                                     *
+ *       Eric MAEKER <>                             *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
+
 /**
- \class Form::FormContextualWidget
- \brief Simplify the creation of contextualized widget for the FormManager plugin.
- Contextualized contexts have access to all actions that are added in the particular context of
- Form (Form::Constants::C_FORM). You can add contexts to the widget by using the addContexts() member.\n
- The Form::FormContextualWidget are automatically removed from the context manager (no special code needed).
-*/
+ * \class Form::Internal::FormContextualWidget
+ * \brief Simplify the creation of contextualized widget for the Form plugin.
+ * You can add context identifiants to the widget by using the addContexts() member.\n
+ * The context object is automatically removed from the context manager in its dtor
+ * (no special code needed).
+ * \sa Core::IContext, Core::ContextManager, Core::ICore::contextManager()
+ */
 
 #include "formcontextualwidget.h"
-#include "constants_db.h"
+//#include "constants.h"
 
 #include <coreplugin/contextmanager/contextmanager.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/uniqueidmanager.h>
 
 using namespace Form;
+using namespace Internal;
 
 static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
 
-
-namespace Form {
-namespace Internal {
-
-class FormContext : public Core::IContext
-{
-public:
-    FormContext(FormContextualWidget *w) : Core::IContext(w), wgt(w) { setObjectName("FormContext"); }
-    void setContext(QList<int> c) { ctx = c; }
-    void addContext(QList<int> c) { ctx.append(c); }
-    QList<int> context() const { return ctx; }
-    QWidget *widget() { return wgt; }
-
-private:
-    FormContextualWidget *wgt;
-    QList<int> ctx;
-};
-
-}  // End namespace Internal
-}  // End namespace Form
-
-
-
 FormContextualWidget::FormContextualWidget(QWidget *parent) :
-    QWidget(parent), m_Context(0)
+    QWidget(parent),
+    m_Context(0)
 {
     Core::UniqueIDManager *uid = Core::ICore::instance()->uniqueIDManager();
-
+    
     // Create the context object
     m_Context = new Internal::FormContext(this);
-    m_Context->setContext(QList<int>() << uid->uniqueIdentifier(Constants::C_FORM_PLUGINS));
-
+//    m_Context->setContext(QList<int>() << uid->uniqueIdentifier(Constants::C_FORM_PLUGINS));
+    
     // Send it to the contextual manager
     contextManager()->addContextObject(m_Context);
 }
