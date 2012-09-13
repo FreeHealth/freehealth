@@ -69,7 +69,7 @@ public:
 }  // End namespace Internal
 
 
-class FORM_EXPORT FormPlaceHolder : public Form::FormContextualWidget
+class FORM_EXPORT FormPlaceHolder : public Internal::FormContextualWidget
 {
     Q_OBJECT
     friend class FormManager;
