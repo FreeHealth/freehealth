@@ -1,3 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/***************************************************************************
+ *  The FreeMedForms project is a set of free, open source medical         *
+ *  applications.                                                          *
+ *  (C) 2008-2012 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
+ *  All rights reserved.                                                   *
+ *                                                                         *
+ *  This program is free software: you can redistribute it and/or modify   *
+ *  it under the terms of the GNU General Public License as published by   *
+ *  the Free Software Foundation, either version 3 of the License, or      *
+ *  (at your option) any later version.                                    *
+ *                                                                         *
+ *  This program is distributed in the hope that it will be useful,        *
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
+ *  GNU General Public License for more details.                           *
+ *                                                                         *
+ *  You should have received a copy of the GNU General Public License      *
+ *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  If not, see <http://www.gnu.org/licenses/>.                            *
+ ***************************************************************************/
+-->
 <wizard category="B.FMFClasses" id="A.PreferencesPage" kind="class" version="1">
     <displayname>Settings Page</displayname>
     <displayname xml:lang="de">Einstellungen-Seite</displayname>
@@ -23,17 +46,20 @@
             <fieldcontrol class="QLineEdit" defaulttext="" />
             <fielddescription>Author:</fielddescription>
             <fielddescription xml:lang="de">Autor:</fielddescription>
+            <fielddescription xml:lang="fr">Auteur :</fielddescription>
         </field>
         <field name="AuthorEmail">
             <fieldcontrol class="QLineEdit" defaulttext="" validator="^[a-z0-9_.@]?$" />
             <fielddescription>Author email:</fielddescription>
             <fielddescription xml:lang="de">Emailadresse des Autors:</fielddescription>
+            <fielddescription xml:lang="fr">Adresse émail de l'auteur:</fielddescription>
         </field>
     </fields>
     <validationrules>
         <validationrule condition="&quot;%PluginName:l%&quot;.indexOf(&quot;plugin&quot;) != -1">
-            <message>The plugin name may not contain "plugin". Please remove the suffix "plugin".</message>
+            <message>The plugin name may not contain "plugin".</message>
             <message xml:lang="de">Der Name des Plugins darf nicht "plugin" enthalten, bitte diesen Wortteil entfernen.</message>
+            <message xml:lang="fr">Le nom du greffon ne doit pas contenir "plugin".</message>
         </validationrule>
     </validationrules>
 </wizard>

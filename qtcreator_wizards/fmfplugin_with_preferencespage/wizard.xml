@@ -60,6 +60,7 @@ leave room for the Qt 4 target page.
             <fieldcontrol class="QLineEdit" validator="^[a-zA-Z0-9_]+$"
                           defaulttext="%ProjectName:c%" />
             <fielddescription>Plugin name (without "plugin"):</fielddescription>
+            <fielddescription xml:lang="fr">Nom du greffon (sans le mot "plugin"):</fielddescription>
             <fielddescription xml:lang="de">Name des Plugins (ohne "plugin"):</fielddescription>
         </field>
         <field mandatory="true" name="Author">
@@ -81,12 +82,14 @@ leave room for the Qt 4 target page.
                           defaulttext="FreeMedForms" />
             <fielddescription>Vendor name:</fielddescription>
             <fielddescription xml:lang="de">Anbieter:</fielddescription>
+            <fielddescription xml:lang="fr">Nom du vendeur :</fielddescription>
         </field>
         <field name="License">
             <fieldcontrol class="QTextEdit"
                           defaulttext="GNU General Public License version 3" />
             <fielddescription>License:</fielddescription>
             <fielddescription xml:lang="de">Lizenz</fielddescription>
+            <fielddescription xml:lang="fr">Licence</fielddescription>
         </field>
         <field name="Description">
             <fieldcontrol class="QTextEdit"
@@ -97,7 +100,7 @@ leave room for the Qt 4 target page.
             <fieldcontrol class="QLineEdit"
                           defaulttext="http://www.freemedforms.com" />
             <fielddescription>URL:</fielddescription>
-            <fielddescription xml:lang="fr">URL:</fielddescription>
+            <fielddescription xml:lang="fr">URL :</fielddescription>
             <fielddescription xml:lang="de">URL:</fielddescription>
         </field>
 <!--
