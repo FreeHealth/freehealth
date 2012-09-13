@@ -158,6 +158,7 @@ public:
     EpisodeModelPrivate(EpisodeModel *parent) :
         _formMain(0),
         _readOnly(false),
+        _useCache(true),
         _sqlModel(0),
         q(parent)
     {
@@ -169,9 +170,13 @@ public:
         _validationCache.clear();
     }
 
-    void updateFilter(const QString &patientUid)
+    void clearCache()
     {
         _xmlContentCache.clear();
+    }
+
+    void updateFilter(const QString &patientUid)
+    {
         // Filter valid episodes
         QHash<int, QString> where;
         where.insert(Constants::EPISODES_ISVALID, "=1");
@@ -184,6 +189,8 @@ public:
 
     bool isEpisodeContentInCache(const QModelIndex &index)
     {
+        if (!_useCache)
+            return false;
         QModelIndex id = _sqlModel->index(index.row(), Constants::EPISODES_ID);
         return (_xmlContentCache.keys().contains(_sqlModel->data(id).toInt()));
     }
@@ -205,7 +212,9 @@ public:
         if (isEpisodeContentInCache(index))
             return getEpisodeContentFormCache(index);
         QModelIndex id = _sqlModel->index(index.row(), Constants::EPISODES_ID);
-        return episodeBase()->getEpisodeContent(_sqlModel->data(id));
+        QString xml = episodeBase()->getEpisodeContent(_sqlModel->data(id));
+        storeEpisodeContentInCache(id, xml);
+        return xml;
     }
 
     bool isEpisodeValidated(const QModelIndex &index)
@@ -234,8 +243,9 @@ public:
     void checkModelContent()
     {
         if (_formMain->episodePossibilities() == Form::FormMain::UniqueEpisode) {
-            if (_sqlModel->rowCount() < 1)
-                _sqlModel->insertRow(0);
+            if (_sqlModel->rowCount() < 1) {
+                q->insertRow(0);
+            }
         } else if (_formMain->episodePossibilities() == Form::FormMain::NoEpisode) {
             if (_sqlModel->rowCount() > 0)
                 LOG_ERROR_FOR(q, QString("NoEpisode Form (%1) with episodes?").arg(_formMain->uuid()));
@@ -254,17 +264,17 @@ public:
 
 //        foreach(Form::FormMain *form, m_FormItems.keys()) {
 ////            if (andFeedPatientModel) {
-////                bool hasPatientDatas = false;
+////                bool hasPatientData = false;
 ////                // test all children FormItem for patientDataRepresentation
 ////                foreach(Form::FormItem *item, form->flattenFormItemChildren()) {
-////                    if (item->itemDatas()) {
+////                    if (item->itemData()) {
 ////                        if (item->patientDataRepresentation()!=-1) {
-////                            hasPatientDatas = true;
+////                            hasPatientData = true;
 ////                            break;
 ////                        }
 ////                    }
 ////                }
-////                if (!hasPatientDatas)
+////                if (!hasPatientData)
 ////                    continue;
 ////            }
 
@@ -300,7 +310,7 @@ public:
 
 public:
     FormMain *_formMain;
-    bool _readOnly;
+    bool _readOnly, _useCache;
     EpisodeModelCoreListener *m_CoreListener;
     EpisodeModelPatientListener *m_PatientListener;
     QSqlTableModel *_sqlModel;
@@ -372,6 +382,11 @@ void EpisodeModel::setCurrentPatient(const QString &uuid)
     d->updateFilter(uuid);
 }
 
+void EpisodeModel::setUseFormContentCache(bool useCache)
+{
+    d->_useCache = useCache;
+}
+
 /** Return the current form unique identifier linked to this model */
 QString EpisodeModel::formUid() const
 {
@@ -402,6 +417,7 @@ void EpisodeModel::onUserChanged()
 /** Reacts on patient changes. */
 void EpisodeModel::onPatientChanged()
 {
+    d->clearCache();
     d->updateFilter(patient()->uuid());
     d->_sqlModel->select();
     d->checkModelContent();
@@ -434,10 +450,10 @@ QVariant EpisodeModel::data(const QModelIndex &index, int role) const
     {
         int sqlColumn;
         switch (index.column()) {
+        case UserDate:  sqlColumn = Constants::EPISODES_USERDATE; break;
         case Label: sqlColumn = Constants::EPISODES_LABEL; break;
         case IsValid:  sqlColumn = Constants::EPISODES_ISVALID; break;
         case CreationDate:  sqlColumn = Constants::EPISODES_DATEOFCREATION; break;
-        case UserDate:  sqlColumn = Constants::EPISODES_USERDATE; break;
         case UserCreatorName:
         {
             QString userUid = d->_sqlModel->data(d->_sqlModel->index(index.row(), Constants::EPISODES_USERCREATOR)).toString();
@@ -483,11 +499,8 @@ QVariant EpisodeModel::data(const QModelIndex &index, int role) const
     case Qt::DecorationRole :
     {
         switch (index.column()) {
-        case UserDate:
+        case ValidationStateIcon:
         {
-            // TODO: add a preference (show/hide episode validation icon in episode view)
-            // or use a specific delegate
-
             // Scale down the icons to 12x12 or 10x10
             if (d->isEpisodeValidated(index))
                 return theme()->icon(Core::Constants::ICONLOCK_BLACKWHITE).pixmap(12,12);
@@ -502,6 +515,12 @@ QVariant EpisodeModel::data(const QModelIndex &index, int role) const
             return QIcon(iconFile);
         }
         }  // switch (index.column())
+    }
+    case Qt::SizeHintRole :
+    {
+        switch (index.column()) {
+        case ValidationStateIcon: return QSize(22, 22);
+        }
     }
     }  // switch (role)
     return QVariant();
@@ -677,6 +696,10 @@ bool EpisodeModel::isEpisodeValidated(const QModelIndex &index) const
 // EXPERIMENTAL
 bool EpisodeModel::populateFormWithEpisodeContent(const QModelIndex &episode, bool feedPatientModel)
 {
+//    qWarning() << "EpisodeModel::POPULATE" << episode << d->_sqlModel->rowCount();
+//    qWarning() << "  patient filtered" << d->_sqlModel->filter();
+//    qWarning() << "  episodeId" << d->_sqlModel->index(episode.row(), Constants::EPISODES_ID).data().toString();
+
     QTime chrono;
     if (WarnLogChronos)
         chrono.start();
@@ -685,17 +708,20 @@ bool EpisodeModel::populateFormWithEpisodeContent(const QModelIndex &episode, bo
     d->_formMain->formWidget()->setEnabled(false);
 
     const QString &xml = d->getEpisodeContent(episode);
+
+//    qWarning() << xml;
+
     QHash<QString, FormItem *> items;
-    QHash<QString, QString> datas;
+    QHash<QString, QString> _data;
     if (!xml.isEmpty()) {
         // read the xml'd content
-        if (!Utils::readXml(xml, Form::Constants::XML_FORM_GENERAL_TAG, datas, false)) {
+        if (!Utils::readXml(xml, Form::Constants::XML_FORM_GENERAL_TAG, _data, false)) {
             QModelIndex uid = index(episode.row(), EpisodeModel::Uuid);
             LOG_ERROR(QString("Error while reading episode content (%1)").arg(data(uid).toString()));
             return false;
         }
 
-        // put datas into the FormItems of the form
+        // put data into the FormItems of the form
         foreach(FormItem *it, d->_formMain->flattenFormItemChildren()) {
             items.insert(it->uuid(), it);
         }
@@ -705,9 +731,9 @@ bool EpisodeModel::populateFormWithEpisodeContent(const QModelIndex &episode, bo
     QModelIndex userName = index(episode.row(), EpisodeModel::UserCreatorName);
     QModelIndex userDate = index(episode.row(), EpisodeModel::UserDate);
     QModelIndex label = index(episode.row(), EpisodeModel::Label);
-    d->_formMain->itemData()->setData(IFormItemData::ID_EpisodeDate, data(userDate));
-    d->_formMain->itemData()->setData(IFormItemData::ID_EpisodeLabel, data(label));
-    d->_formMain->itemData()->setData(IFormItemData::ID_UserName, data(userName));
+    d->_formMain->itemData()->setData(IFormItemData::ID_EpisodeDate, this->data(userDate));
+    d->_formMain->itemData()->setData(IFormItemData::ID_EpisodeLabel, this->data(label));
+    d->_formMain->itemData()->setData(IFormItemData::ID_UserName, this->data(userName));
     d->_formMain->itemData()->setStorableData(false); // equal: _formMain->itemData()->setModified(false)
 
     // Populate FormItem data and the patientmodel
@@ -719,7 +745,7 @@ bool EpisodeModel::populateFormWithEpisodeContent(const QModelIndex &episode, bo
         if (!it->itemData())
             continue;
 
-        it->itemData()->setStorableData(datas.value(it->uuid()));
+        it->itemData()->setStorableData(_data.value(it->uuid(), QString()));
         if (feedPatientModel && it->patientDataRepresentation() >= 0)
                 patient()->setValue(it->patientDataRepresentation(), it->itemData()->data(it->patientDataRepresentation(), IFormItemData::PatientModelRole));
     }

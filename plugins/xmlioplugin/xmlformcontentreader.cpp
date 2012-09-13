@@ -58,8 +58,8 @@
 #include <QFileInfo>
 #include <QDomDocument>
 #include <QDomElement>
-#include <QtScript/QScriptEngine>
-#include <QtScript/QScriptSyntaxCheckResult>
+#include <QScriptEngine>
+#include <QScriptSyntaxCheckResult>
 
 #include <QDebug>
 
@@ -70,6 +70,7 @@ using namespace Trans::ConstantTranslations;
 inline static Form::FormManager *formManager() { return Form::FormManager::instance(); }
 inline static ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
+static inline Core::IPatient *patient()  { return Core::ICore::instance()->patient(); }
 static inline Category::CategoryCore *categoryCore() {return  Category::CategoryCore::instance();}
 static inline PMH::PmhCore *pmhCore() {return PMH::PmhCore::instance();}
 static inline Internal::XmlFormContentReader *reader() {return Internal::XmlFormContentReader::instance();}
@@ -134,19 +135,10 @@ XmlFormContentReader::XmlFormContentReader() :
    m_SpecsTypes.insert(Constants::TAG_SPEC_PRIORITY, Form::FormItemSpec::Spec_Priority);
 
    m_PatientDatas.clear();
-   m_PatientDatas.insert(Constants::TAG_DATAPATIENT_DRUGSALLERGIES, Core::IPatient::DrugsAtcAllergies);
-   m_PatientDatas.insert(Constants::TAG_DATAPATIENT_DRUGSCHRONIC, Core::IPatient::DrugsChronicTherapeutics);
-   m_PatientDatas.insert(Constants::TAG_DATAPATIENT_WEIGHT, Core::IPatient::Weight);
-   m_PatientDatas.insert(Constants::TAG_DATAPATIENT_WEIGHTUNIT, Core::IPatient::WeightUnit);
-   m_PatientDatas.insert(Constants::TAG_DATAPATIENT_HEIGHT, Core::IPatient::Height);
-   m_PatientDatas.insert(Constants::TAG_DATAPATIENT_HEIGHTUNIT, Core::IPatient::HeightUnit);
-   m_PatientDatas.insert(Constants::TAG_DATAPATIENT_CREAT, Core::IPatient::Creatinine);
-   m_PatientDatas.insert(Constants::TAG_DATAPATIENT_CREATUNIT, Core::IPatient::CreatinineUnit);
-
-   m_PatientDatas.insert(Constants::TAG_DATAPATIENT_EMAIL, Core::IPatient::Mails);
-   m_PatientDatas.insert(Constants::TAG_DATAPATIENT_FAX, Core::IPatient::Faxes);
-   m_PatientDatas.insert(Constants::TAG_DATAPATIENT_TELS, Core::IPatient::Tels);
-   m_PatientDatas.insert(Constants::TAG_DATAPATIENT_MOBILETEL, Core::IPatient::MobilePhone);
+   // use the Core::IPatient::enumToString()
+   for(int i=0; i< Core::IPatient::NumberOfColumns; ++i) {
+       m_PatientDatas.insert(patient()->enumToString(Core::IPatient::PatientDataRepresentation(i)).toLower(), i);
+   }
 }
 
 XmlFormContentReader::~XmlFormContentReader()
@@ -518,7 +510,7 @@ bool XmlFormContentReader::loadElement(Form::FormItem *item, QDomElement &rootEl
 
         // Patient Data Representation ?
         if (element.tagName().compare(Constants::TAG_DATAPATIENT, Qt::CaseInsensitive)==0) {
-            i = m_PatientDatas.value(element.text(), -1);
+            i = m_PatientDatas.value(element.text().toLower(), -1);
             if (i != -1) {
                 item->setPatientDataRepresentation(i);
             }
@@ -588,7 +580,7 @@ bool XmlFormContentReader::createElement(Form::FormItem *item, QDomElement &elem
                 child->spec()->setValue(Form::FormItemSpec::Spec_Plugin, element.attribute(Constants::ATTRIB_TYPE), Trans::Constants::ALL_LANGUAGE);
 
             if (element.hasAttribute(Constants::ATTRIB_PATIENTREPRESENTATION)) {
-                int i = m_PatientDatas.value(element.attribute(Constants::ATTRIB_PATIENTREPRESENTATION), -1);
+                int i = m_PatientDatas.value(element.attribute(Constants::ATTRIB_PATIENTREPRESENTATION).toLower(), -1);
                 if (i != -1) {
                     child->setPatientDataRepresentation(i);
                 }

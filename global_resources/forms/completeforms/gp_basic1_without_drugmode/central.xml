@@ -6,10 +6,10 @@
   <formdescription>
     <!-- Non translatable values -->
     <authors>Eric Maeker, MD</authors>
-    <version>0.7.2</version>
-    <fmfv>0.7.2</fmfv>
+    <version>0.8.0</version>
+    <fmfv>0.8.0</fmfv>
+    <lmdate>2012-09-12</lmdate>
     <cdate>2011-03-15</cdate>
-    <lmdate>2012-05-12</lmdate>
     <icon>generalpractitioner.png</icon>
     <weblink></weblink>
     <bibliography/>
@@ -23,6 +23,10 @@
     <specialties lang="fr">Médecine générale</specialties>
     <specialties lang="xx">General practice</specialties>
     <updateinfo>
+    <updateversion from="0.7.2" to="0.8.0">
+      <text lang="fr">Compatibilité avec FreeMedForms 0.8.0.</text>
+      <text lang="en">Compatibility with FreeMedForms 0.8.0.</text>
+    </updateversion>
     <updateversion from="0.7.0" to="0.7.2">
       <text lang="fr">Faute de frappe dans les catégories des antécédents&lt;br />Ajout des identifiants aux catégories des antécédents.</text>
       <text lang="en">Typo in PHMx categories&lt;br />Adding uuid to PMHx categories.</text>
@@ -66,7 +70,7 @@
         <label lang="xx">Long-term medication</label>
         <label lang="fr">Traitement chronique</label>
         <options>DontPrintEmptyValues</options>
-        <patientdata>drugs::chronic</patientdata>
+        <patientdata>DrugsChronicTherapeutics</patientdata>
       </Item>
       <Item name="GP::Basic::Drugs::Chronic::Comment" type="texteditor">
         <label lang="xx">Comments</label>
@@ -83,7 +87,7 @@
         <label lang="xx">Known drug allergies</label>
         <label lang="fr">Allergies médicamenteuses connues</label>
         <options>hideselector;nointeractionchecking;DontPrintEmptyValues</options>
-        <patientdata>drugs::allergies</patientdata>
+        <patientdata>DrugsAtcAllergies</patientdata>
       </Item>
       <Item name="GP::Basic::Drugs::Allergies::Comment" type="texteditor">
         <label lang="xx">Comments</label>

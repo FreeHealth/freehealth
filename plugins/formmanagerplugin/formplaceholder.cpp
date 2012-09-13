@@ -240,16 +240,25 @@ public:
 
     void updateEpisodeActions(const QModelIndex &index)
     {
+        const EpisodeModel *model = qobject_cast<EpisodeModel*>(ui->episodeView->model());
         const bool enabled = index.isValid();
         const bool unique = _formTreeModel->isUniqueEpisode(index);
+        const bool modelHasOneRowAtLeast = model->rowCount()>=1;
+
+        aSaveEpisode->setEnabled(enabled);
         aRemoveEpisode->setEnabled(enabled && !unique);
-        aNewEpisode->setEnabled(enabled && !unique);
         if (enabled) {
-            const EpisodeModel *model = qobject_cast<EpisodeModel*>(ui->episodeView->model());
             Q_ASSERT(model);
             aValidateEpisode->setEnabled(!model->isEpisodeValidated(index));
+            if (unique)
+                aNewEpisode->setEnabled(enabled && !modelHasOneRowAtLeast);
+            else
+                aNewEpisode->setEnabled(enabled);
+        } else {
+            aValidateEpisode->setEnabled(enabled);
+            aSaveEpisode->setEnabled(enabled);
+            aNewEpisode->setEnabled(enabled);
         }
-        aSaveEpisode->setEnabled(enabled);
         aPrintForm->setEnabled(enabled);
     }
 
@@ -494,10 +503,11 @@ void FormPlaceHolder::setCurrentForm(Form::FormMain *form)
     d->ui->episodeView->setModel(episodeModel);
     for(int i=0; i < EpisodeModel::MaxData; ++i)
         d->ui->episodeView->hideColumn(i);
-    d->ui->episodeView->showColumn(EpisodeModel::Label);
-//    d->ui->episodeView->showColumn(EpisodeModel::FormLabel);
-    d->ui->episodeView->showColumn(EpisodeModel::UserCreatorName);
+    d->ui->episodeView->showColumn(EpisodeModel::ValidationStateIcon);
     d->ui->episodeView->showColumn(EpisodeModel::UserDate);
+    d->ui->episodeView->showColumn(EpisodeModel::Label);
+    d->ui->episodeView->showColumn(EpisodeModel::UserCreatorName);
+    //    d->ui->episodeView->showColumn(EpisodeModel::Uuid);
 
     // Unique épisode || no episode -> hide episodeview
     if (form->episodePossibilities()==FormMain::UniqueEpisode || form->episodePossibilities()==FormMain::NoEpisode) {
@@ -506,6 +516,8 @@ void FormPlaceHolder::setCurrentForm(Form::FormMain *form)
         d->setEpisodeViewVisibility(true);
     }
 
+    d->ui->episodeView->horizontalHeader()->setResizeMode(EpisodeModel::ValidationStateIcon, QHeaderView::ResizeToContents);
+//    d->ui->episodeView->horizontalHeader()->resizeSection(EpisodeModel::ValidationStateIcon, 22);
     d->ui->episodeView->horizontalHeader()->setResizeMode(EpisodeModel::UserDate, QHeaderView::ResizeToContents);
     d->ui->episodeView->horizontalHeader()->setResizeMode(EpisodeModel::Label, QHeaderView::Stretch);
     d->ui->episodeView->horizontalHeader()->setResizeMode(EpisodeModel::UserCreatorName, QHeaderView::ResizeToContents);
