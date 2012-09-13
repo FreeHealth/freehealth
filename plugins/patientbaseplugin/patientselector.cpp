@@ -342,16 +342,17 @@ void PatientSelector::refreshFilter(const QString &)
 /** \brief Slot activated when the user select a patient from the selector. \sa setSelectedPatient()*/
 void PatientSelector::onPatientActivated(const QModelIndex &index)
 {
-    if (index == d->m_Model->currentPatient()) {
+    if (d->m_Model && index == d->m_Model->currentPatient()) {
         modeManager()->activateMode(Core::Constants::MODE_PATIENT_FILE);
         return;
     }
+
     mainWindow()->startProcessingSpinner();
     // Inform Core::IPatient model wrapper
-    if (!d->m_Model)
-        PatientModel::activeModel()->setCurrentPatient(index);
-    else
+    if (d->m_Model)
         d->m_Model->setCurrentPatient(index);
+    else
+        PatientModel::activeModel()->setCurrentPatient(index);
 }
 
 bool PatientSelector::event(QEvent *event)
