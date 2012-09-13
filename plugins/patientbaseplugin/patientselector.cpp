@@ -46,6 +46,7 @@
 #include <coreplugin/imainwindow.h>
 #include <coreplugin/constants_icons.h>
 #include <coreplugin/constants_menus.h>
+#include <coreplugin/modemanager/modemanager.h>
 
 #include <utils/global.h>
 #include <utils/widgets/datetimedelegate.h>
@@ -62,6 +63,7 @@ static inline Core::ISettings *settings() {return Core::ICore::instance()->setti
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 static inline Core::IMainWindow *mainWindow() {return Core::ICore::instance()->mainWindow();}
 static inline Core::ActionManager *actionManager() { return Core::ICore::instance()->actionManager(); }
+static inline Core::ModeManager *modeManager() {return Core::ICore::instance()->modeManager();}
 
 namespace Patients {
 namespace Internal {
@@ -340,9 +342,10 @@ void PatientSelector::refreshFilter(const QString &)
 /** \brief Slot activated when the user select a patient from the selector. \sa setSelectedPatient()*/
 void PatientSelector::onPatientActivated(const QModelIndex &index)
 {
-    if (index==d->m_Model->currentPatient())
+    if (index == d->m_Model->currentPatient()) {
+        modeManager()->activateMode(Core::Constants::MODE_PATIENT_FILE);
         return;
-
+    }
     mainWindow()->startProcessingSpinner();
     // Inform Core::IPatient model wrapper
     if (!d->m_Model)
