@@ -251,9 +251,9 @@ public:
             Q_ASSERT(model);
             aValidateEpisode->setEnabled(!model->isEpisodeValidated(index));
             if (unique)
-                aNewEpisode->setEnabled(enabled && !modelHasOneRowAtLeast);
+                aNewEpisode->setEnabled(!modelHasOneRowAtLeast);
             else
-                aNewEpisode->setEnabled(enabled);
+                aNewEpisode->setEnabled(true);
         } else {
             aValidateEpisode->setEnabled(enabled);
             aSaveEpisode->setEnabled(enabled);
