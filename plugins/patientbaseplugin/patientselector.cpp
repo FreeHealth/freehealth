@@ -339,7 +339,7 @@ void PatientSelector::refreshFilter(const QString &)
     d->ui->numberOfPatients->setText(QString::number(d->m_Model->numberOfFilteredPatients()));
 }
 
-/** \brief Slot activated when the user select a patient from the selector. \sa setSelectedPatient()*/
+/** \brief Slot activated when the user selects a patient from the selector. \sa setSelectedPatient()*/
 void PatientSelector::onPatientActivated(const QModelIndex &index)
 {
     if (d->m_Model && index == d->m_Model->currentPatient()) {
