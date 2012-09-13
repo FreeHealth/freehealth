@@ -53,6 +53,7 @@
             <fieldcontrol class="QLineEdit" defaulttext=""/>
             <fielddescription>Author email:</fielddescription>
             <fielddescription xml:lang="de">Emailadresse des Autors:</fielddescription>
+            <fielddescription xml:lang="fr">Adresse émail de l'auteur:</fielddescription>
         </field>
     </fields>
 </wizard>

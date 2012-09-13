@@ -82,7 +82,7 @@ leave room for the Qt 4 target page.
                           defaulttext="FreeMedForms" />
             <fielddescription>Vendor name:</fielddescription>
             <fielddescription xml:lang="de">Anbieter:</fielddescription>
-            <fielddescription xml:lang="fr">Nom du vendeur :</fielddescription>
+            <fielddescription xml:lang="fr">Nom du vendeur:</fielddescription>
         </field>
         <field name="License">
             <fieldcontrol class="QTextEdit"
@@ -100,7 +100,7 @@ leave room for the Qt 4 target page.
             <fieldcontrol class="QLineEdit"
                           defaulttext="http://www.freemedforms.com" />
             <fielddescription>URL:</fielddescription>
-            <fielddescription xml:lang="fr">URL :</fielddescription>
+            <fielddescription xml:lang="fr">URL:</fielddescription>
             <fielddescription xml:lang="de">URL:</fielddescription>
         </field>
 <!--

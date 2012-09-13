@@ -72,7 +72,7 @@ leave room for the Qt 4 target page.
                           defaulttext="email@example.com" />
             <fielddescription>Author email address:</fielddescription>
             <fielddescription xml:lang="de">Emailadresse des Autors:</fielddescription>
-            <fielddescription xml:lang="fr">Adresse courriel de l'auteur :</fielddescription>
+            <fielddescription xml:lang="fr">Adresse courriel de l'auteur:</fielddescription>
         </field>
         <field mandatory="true" name="VendorName">
             <fieldcontrol class="QLineEdit" validator="^[a-zA-Z0-9_]+$"

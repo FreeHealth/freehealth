@@ -18,7 +18,7 @@
             <fieldcontrol class="QLineEdit" defaulttext="MyClass" validator="^[a-zA-Z0-9_]+$" />
             <fielddescription>Name:</fielddescription>
             <fielddescription xml:lang="de">Name:</fielddescription>
-            <fielddescription xml:lang="de">Nom :</fielddescription>
+            <fielddescription xml:lang="fr">Nom:</fielddescription>
         </field>
         <field name="AuthorName">
             <fieldcontrol class="QLineEdit" defaulttext="" />
@@ -31,7 +31,7 @@
             <fieldcontrol class="QComboBox" combochoices="Account,AccountDB,Agenda,Alert,BaseWidgets,Category,Core,DataPackPlugin,DrugInteractions,DrugsDB,DrugsWidget,Editor,Empty,Form,Gir,ICD,MainWin,PMH,PadTools,Patients,Print,SaveRestore,Script,Templates,UserPlugin,Views,Webcam,XmlForms,ZipCodes" defaultindex="-1" />
             <fielddescription>Plugin namespace:</fielddescription>
             <fielddescription xml:lang="de">Namensraum des Plugins:</fielddescription>
-            <fielddescription xml:lang="fr">Espace de nommage du greffon :</fielddescription>
+            <fielddescription xml:lang="fr">Espace de nommage du greffon:</fielddescription>
         </field>
         <field name="Internal">
             <fieldcontrol class="QCheckBox" />
