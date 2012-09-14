@@ -65,6 +65,73 @@
  * - \e parent as QWidget parent
  */
 
+/**
+ * \class Form::IFormWidget
+ * \brief Represent a form item graphical element uable in any UI.
+ *
+ * Life cycle:
+ * The widgets are only created by the Form::IFormWidgetFactory objects using the
+ * Form::IFormWidgetFactory::createWidget(). The widgets are parented, so deletion is automatically
+ * done when the parent widget is deleted. The form widget must be linked to a Form::FormItem.
+ *
+ * Content of the widget:
+ * When created, the widget can contain a label and the form widget. The label is populated by the
+ * Form::FormItemSpec content. You can create it using createLabel().\n
+ * The widget can be a container (like a QGroupBox), see isContainer().You can easily include
+ * another Form::IFormWidget using the addWidgetToContainer().
+ *
+ * Translation of the content:
+ * You can use the retranslate() function to translate your UI. This function is called when needed. You
+ * don't have to worry about QEvent::LanguageChange.
+ *
+ * Data exportation:
+ * The form widget owns the HTML data transformation mecanism. (This can be improved.)
+ */
+
+/**
+ * \fn void Form::IFormWidget::addWidgetToContainer(IFormWidget *)
+ * Add a new form widget in the container.
+ */
+
+/**
+ * \fn bool Form::IFormWidget::isContainer() const
+ * Return true if the widget is a container. If is container, the widget can receive new widgets
+ * from the addWidgetToContainer().
+ */
+
+/**
+ * \fn void Form::IFormWidget::createLabel(const QString &text, Qt::Alignment horizAlign)
+ * Automatically create the label, using the Form::FormItem spec definition.
+ */
+
+/**
+ * \fn QBoxLayout *Form::IFormWidget::getBoxLayout(const int labelOption, const QString &text, QWidget *parent)
+ */
+
+/**
+ * \fn void Form::IFormWidget::setFormItem(Form::FormItem *link)
+ * Define the Form::FormItem linked to this object.
+ */
+
+/**
+ * \fn Form::FormItem *Form::IFormWidget::formItem()
+ * Return the Form::FormItem linked to this object.
+ */
+
+/**
+ * \fn QString Form::IFormWidget::printableHtml(bool withValues = true) const
+ * Return the content of the form widget transformed to HTML. The HTML output should contain
+ * the form widget current value if \e withValues is set to true. Otherwise, the HTML output
+ * should keep an empty space for users to print and feel values on the paper.
+ * If the form widget is a container, it should manage all its children HTML output.
+ */
+
+/**
+ * \fn void Form::IFormWidget::retranslate()
+ * Called anytime the widget needs to be translated.
+ */
+
+
 #include <QLocale>
 #include <QEvent>
 #include <QBoxLayout>
