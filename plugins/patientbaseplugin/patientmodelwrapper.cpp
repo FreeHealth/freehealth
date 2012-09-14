@@ -62,6 +62,16 @@ PatientModelWrapper::~PatientModelWrapper()
     Core::ICore::instance()->setPatient(0);
 }
 
+/*!
+ * \brief Reemits underlying model signals to the public.
+ *
+ * This slot is connected to the underlying model's PatientModel::patientChanged(QString) signal
+ * and just emits the main patient change signals IPatient::currentPatientChanged() and
+ * IPatient::currentPatientChanged(QModelIndex).
+ * These are the signals that all plugins can use, because they can access IPatient and connect to it's signals.
+ *
+ * \sa IPatient::currentPatientChanged(), \sa IPatient::currentPatientChanged(QModelIndex)
+ */
 void PatientModelWrapper::onCurrentPatientChanged(const QString &)
 {
     Q_EMIT currentPatientChanged();
