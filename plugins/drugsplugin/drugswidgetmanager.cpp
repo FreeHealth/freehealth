@@ -48,7 +48,11 @@
 
 #include <utils/log.h>
 #include <utils/global.h>
-#include <translationutils/constanttranslations.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_menu.h>
+#include <translationutils/trans_drugs.h>
+#include <translationutils/trans_editor.h>
+#include <translationutils/trans_datetime.h>
 #include <extensionsystem/pluginmanager.h>
 
 #include <QDockWidget>
@@ -59,7 +63,8 @@
 
 using namespace DrugsWidget::Constants;
 using namespace DrugsWidget;
-using namespace DrugsWidget::Internal;
+using namespace DrugsWidget;
+using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
 static inline Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
