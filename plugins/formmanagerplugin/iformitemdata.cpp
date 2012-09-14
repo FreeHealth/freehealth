@@ -27,3 +27,76 @@
 
 // Documentation only file
 
+/**
+ * \class Form::IFormItemData
+ */
+
+
+/**
+ * \enum Form::IFormItemData::ReferenceRepresentation
+ */
+
+/**
+ * \var Form::IFormItemData::ID_EpisodeDate 
+ */
+
+/**
+ * \var Form::IFormItemData::ID_EpisodeLabel 
+ */
+
+/**
+ * \var Form::IFormItemData::ID_UserName 
+ */
+
+/**
+ * \var Form::IFormItemData::ID_CurrentUuid 
+ */
+
+/**
+ * \enum Form::IFormItemData::RoleRepresentation 
+ */
+
+/**
+ * \var Form::IFormItemData::PrintRole  
+ */
+
+/**
+ * \var Form::IFormItemData::PatientModelRole, 
+ */
+
+/**
+ * \var Form::IFormItemData::CalculationsRole 
+ */
+
+/**
+ * \fn void Form::IFormItemData::clear()
+ */
+ 
+/**
+ * \fn Form::FormItem *Form::IFormItemData::parentItem()
+ */
+
+/**
+ * \fn bool Form::IFormItemData::isModified()
+ */
+
+/**
+ * \fn bool Form::IFormItemData::setData(const int ref, const QVariant &data, const int role = Qt::EditRole)
+ */
+
+/**
+ * \fn QVariant Form::IFormItemData::data(const int ref, const int role = Qt::DisplayRole) const
+ */
+
+/**
+ * \fn void Form::IFormItemData::setStorableData(const QVariant &data)
+ */
+
+/**
+ * \fn QVariant Form::IFormItemData::storableData() const
+ */
+
+/**
+ * \fn void Form::IFormItemData::dataChanged(const int ref)
+ */
+
