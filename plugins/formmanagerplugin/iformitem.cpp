@@ -37,7 +37,7 @@
  *   - these data are fully translatable and can be used in any form model/view/controller
  * - one Form::FormItemScripts book of JavaScript of the item
  * - one Form::FormItemValues book of different types of values of the item
- * - you can set its Form::IFormItemData for the database access
+ * - you can set its Form::IFormItemData for the database access and widget data management
  * - you can set its Form::IFormWidget for a more specialized graphical user interface
  *
  * In your own Form::IFormIO engine, you may want to create children of item, you can use:
