@@ -719,9 +719,9 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
     }
     if (rManager.isFreaccountIndependant())
     {
-    	  ui->nameLabel->show();
-    	  ui->nameEdit->show();
-        }
+        ui->nameLabel->show();
+        ui->nameEdit->show();
+    }
     if (WarnDebugMessage)
         qWarning() << __FILE__ << QString::number(__LINE__) << "ReceiptViewer" ;
     ui->amountsView->setShowGrid(false);
@@ -1279,8 +1279,8 @@ void ReceiptViewer::save()
         }
         if (manager.isFreaccountIndependant())
         {
-        	  patientName = ui->nameEdit->text();
-            }
+            patientName = ui->nameEdit->text();
+        }
         /* if (ui->freeTextCheckBox->isChecked())
     {
         FreeText freeTextDialog(this);
