@@ -39,6 +39,7 @@ HEADERS = formmanagerplugin.h \
 SOURCES = formmanagerplugin.cpp \
     formmanager.cpp \
     iformitem.cpp \
+    iformitemdata.cpp \
     iformwidgetfactory.cpp \
     formmanagermode.cpp \
     formplaceholder.cpp \
