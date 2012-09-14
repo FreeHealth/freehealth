@@ -309,9 +309,15 @@ void PatientModel::onCoreDatabaseServerChanged()
 }
 
 /**
-  \brief Set the current patient according to its QModelIndex \e index.
-  A signal \e patientChanged() is emitted when setting a new current patient.
-  \sa Core::IPatient::currentPatientChanged()
+  * \brief Sets the index to the given patient QModelIndex.
+  *
+  * Before changing to the new patient, the plugin extension Core::IPatientListener->currentPatientAboutToChange()
+  * is called to enable plugins to e.g. save data before changing to the new patient.
+  *
+  * Two new signals \e patientChanged() and patientChanged(QModelIndex) are emitted when the new current patient
+  * is set. If the new patient is the current one, no signals are emitted.
+  *
+  * \sa Core::IPatient::currentPatientChanged()
  */
 void PatientModel::setCurrentPatient(const QModelIndex &index)
 {
