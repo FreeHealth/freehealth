@@ -90,7 +90,9 @@ void FormEditorDialog::on_addForm_clicked()
 {
     QString insertTo;
     if (!ui->treeView->selectionModel()->hasSelection()) {
-        bool yes = Utils::yesNoMessageBox(tr("Insert as root form?"), tr("You did not selected a form, do you want to add the sub-form as root form?"));
+        bool yes = Utils::yesNoMessageBox(tr("Insert as root form?"),
+                                          tr("You did not selected a form, "
+                                             "do you want to add the sub-form as root form?"));
         if (yes)
             insertTo = Constants::ROOT_FORM_TAG;
         else
