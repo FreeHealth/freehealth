@@ -41,23 +41,23 @@
  * - isInitialized() must return the initialization state
  */
 
-/*
+/**
  * \fn virtual QStringList Form::IFormWidgetFactory::providedWidgets() const = 0;
  * Retun the list of available form widget plugin names (like "identity", "form"...)
  */
 
-/*
+/**
  * \fn virtual bool Form::IFormWidgetFactory::isContainer( const int idInStringList ) const = 0;
  * Return true of the form widget plugin is a container. \e idInStringList is the index of the plugin
  * in the providedWidget() list.
  */
 
-/*
+/**
  * \fn bool Form::IFormWidgetFactory::isContainer(const QString &name)
  * Same as above with the form widget plugin name \e name.
  */
 
-/*
+/**
  * \fn virtual Form::IFormWidget *Form::IFormWidgetFactory::createWidget(const QString &name, Form::FormItem *linkedObject, QWidget *parent = 0) = 0;
  * Create the Form::IFormWidget pointer using:
  * - \e name as form widget plugin name (name must be include in the providedWidgets()
