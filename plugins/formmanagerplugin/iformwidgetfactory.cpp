@@ -28,10 +28,42 @@
 #include "iformitem.h"
 
 /**
- * \class IFormWidgetFactory
- * This class is an interface for the form's widget. Object need to be created by plugins and added to
- * the plugins manager objects pool.
-*/
+ * \class Form::IFormWidgetFactory
+ * \brief Interface for the form's widget creation.
+ * The factory allow user to create specific Form::IFormWidget according to their 'plugin'
+ * name. Factories must be send in the plugins manager objects pool.\n
+ * Factory owns form widget plugin that are described by the providedWidgets().\n
+ * You can only use the factories in your Form::IFormIO form loader.
+ *
+ * Initialization of the object are done throught:
+ * - initialize(const QStringList &arguments, QString *errorString) first
+ * - extensionInitialized() when all dependencies are initialized
+ * - isInitialized() must return the initialization state
+ */
+
+/*
+ * \fn virtual QStringList Form::IFormWidgetFactory::providedWidgets() const = 0;
+ * Retun the list of available form widget plugin names (like "identity", "form"...)
+ */
+
+/*
+ * \fn virtual bool Form::IFormWidgetFactory::isContainer( const int idInStringList ) const = 0;
+ * Return true of the form widget plugin is a container. \e idInStringList is the index of the plugin
+ * in the providedWidget() list.
+ */
+
+/*
+ * \fn bool Form::IFormWidgetFactory::isContainer(const QString &name)
+ * Same as above with the form widget plugin name \e name.
+ */
+
+/*
+ * \fn virtual Form::IFormWidget *Form::IFormWidgetFactory::createWidget(const QString &name, Form::FormItem *linkedObject, QWidget *parent = 0) = 0;
+ * Create the Form::IFormWidget pointer using:
+ * - \e name as form widget plugin name (name must be include in the providedWidgets()
+ * - the Form::FormItem \e linkedObject as item object
+ * - \e parent as QWidget parent
+ */
 
 #include <QLocale>
 #include <QEvent>
