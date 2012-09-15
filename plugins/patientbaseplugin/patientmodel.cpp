@@ -314,7 +314,7 @@ void PatientModel::onCoreDatabaseServerChanged()
   * Before changing to the new patient, the plugin extension Core::IPatientListener->currentPatientAboutToChange()
   * is called to enable plugins to e.g. save data before changing to the new patient.
   *
-  * Two new signals \e patientChanged() and patientChanged(QModelIndex) are emitted when the new current patient
+  * Two new signals \e currentPatientChanged() and currentPatientChanged(QModelIndex) are emitted when the new current patient
   * is set. If the new patient is the current one, no signals are emitted.
   *
   * \sa Core::IPatient::currentPatientChanged()
@@ -336,8 +336,8 @@ void PatientModel::setCurrentPatient(const QModelIndex &index)
 
     m_CurrentPatient = index;
     LOG("setCurrentPatient: " + this->index(index.row(), Core::IPatient::Uid).data().toString());
-    Q_EMIT patientChanged(this->index(index.row(), Core::IPatient::Uid).data().toString());
-    Q_EMIT patientChanged(index);
+    Q_EMIT currentPatientChanged(this->index(index.row(), Core::IPatient::Uid).data().toString());
+    Q_EMIT currentPatientChanged(index);
 }
 
 int PatientModel::rowCount(const QModelIndex &) const

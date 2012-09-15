@@ -494,7 +494,7 @@ private:
 PmhCategoryModel::PmhCategoryModel(QObject *parent) :
         Category::ICategoryModelHelper(parent), d(new Internal::PmhCategoryModelPrivate(this))
 {
-    connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(patientChanged()));
+    connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onCurrentPatientChanged()));
     connect(translators(), SIGNAL(languageChanged()), this, SLOT(retranslate()));
 }
 
@@ -1244,7 +1244,7 @@ QString PmhCategoryModel::synthesis(const QModelIndex &parent) const
 }
 
 /** Update the model when the current patient changes. */
-void PmhCategoryModel::patientChanged()
+void PmhCategoryModel::onCurrentPatientChanged()
 {
     qDeleteAll(d->_pmh);
     d->_pmh.clear();

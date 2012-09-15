@@ -482,7 +482,7 @@ public:
      QString printableHtml(bool withValues = true) const;
 
  private Q_SLOTS:
-     void onPatientChanged();
+     void onCurrentPatientChanged();
 
 public Q_SLOTS:
      void retranslate();

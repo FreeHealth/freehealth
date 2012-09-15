@@ -206,7 +206,7 @@ PmhActionHandler::PmhActionHandler(QObject *parent) :
     contextManager()->updateContext();
     actionManager()->retranslateMenusAndActions();
 
-    connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(patientChanged()));
+    connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onCurrentPatientChanged()));
 }
 
 void PmhActionHandler::setCurrentView(PmhContextualWidget *view)
@@ -246,10 +246,10 @@ void PmhActionHandler::updateActions()
 {
 }
 
-void PmhActionHandler::patientChanged()
+void PmhActionHandler::onCurrentPatientChanged()
 {
     if (aAddPmh->isEnabled()) {
-        disconnect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(patientChanged()));
+        disconnect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onCurrentPatientChanged()));
     }
     aAddPmh->setEnabled(true);
 }

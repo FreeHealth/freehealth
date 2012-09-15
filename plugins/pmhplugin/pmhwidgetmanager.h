@@ -54,7 +54,7 @@ public:
     void setCurrentView(PmhContextualWidget *view);
 
 private Q_SLOTS:
-    void patientChanged();
+    void onCurrentPatientChanged();
     void showPmhDatabaseInformation();
     void categoryManager();
 

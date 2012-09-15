@@ -2054,8 +2054,8 @@ BaseDate::BaseDate(Form::FormItem *formItem, QWidget *parent) :
     if (options.contains(::DATE_NOW, Qt::CaseInsensitive))
         m_Date->setDateTime(QDateTime::currentDateTime());
     if (options.contains(::DATE_PATIENTLIMITS, Qt::CaseInsensitive)) {
-        connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onPatientChanged()));
-        onPatientChanged();
+        connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onCurrentPatientChanged()));
+        onCurrentPatientChanged();
     }
 
     // create FormItemData
@@ -2070,7 +2070,7 @@ BaseDate::~BaseDate()
 {
 }
 
-void BaseDate::onPatientChanged()
+void BaseDate::onCurrentPatientChanged()
 {
     if (!patient()->data(Core::IPatient::DateOfBirth).isNull()) {
         m_Date->setMinimumDate(patient()->data(Core::IPatient::DateOfBirth).toDate());

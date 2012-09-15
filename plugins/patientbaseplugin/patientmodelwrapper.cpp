@@ -65,7 +65,7 @@ PatientModelWrapper::~PatientModelWrapper()
 /*!
  * \brief Reemits underlying model signals to the public.
  *
- * This slot is connected to the underlying model's PatientModel::patientChanged(QString) signal
+ * This slot is connected to the underlying model's PatientModel::currentPatientChanged(QString) signal
  * and just emits the main patient change signals IPatient::currentPatientChanged() and
  * IPatient::currentPatientChanged(QModelIndex).
  * These are the signals that all plugins can use, because they can access IPatient and connect to it's signals.
@@ -81,8 +81,8 @@ void PatientModelWrapper::onCurrentPatientChanged(const QString &)
 void PatientModelWrapper::initialize(Patients::PatientModel *model)
 {
     m_Model = model;
-    connect(model, SIGNAL(patientChanged(QString)), this, SLOT(onCurrentPatientChanged(QString)));
-    connect(model, SIGNAL(patientCreated(QString)), this, SIGNAL(patientCreated(QString)));
+    connect(model, SIGNAL(currentPatientChanged(QString)), this, SLOT(onCurrentPatientChanged(QString)));
+    connect(model, SIGNAL(currentPatientChanged(QString)), this, SIGNAL(patientCreated(QString)));
     Utils::linkSignalsFromFirstModelToSecondModel(model, this, true);
 }
 
