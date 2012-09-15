@@ -96,6 +96,7 @@ namespace Constants {
 
     // Some UI constants
     const char * const C_FORM_PLUGINS = "cFormPlugin";
+    const char * const M_PLUGIN_FORM  = "mFormPlugin";
 
     const char * const A_ADDEPISODE = "aForms.AddEpisode";
     const char * const A_VALIDATEEPISODE = "aForms.ValidateEpisode";
@@ -103,6 +104,8 @@ namespace Constants {
     const char * const A_PRINTFORM = "aForm.PrintForm";
     const char * const A_SHOWPATIENTSYNTHESIS = "aForm.PatientSynth";
     const char * const A_SHOWPATIENTLASTEPISODES = "aForm.PatientLastEpisodes";
+    const char * const A_DATABASE_INFORMATION = "aForm.DatabaseInformation";
+
     const char * const PATIENTLASTEPISODES_UUID = "PatientLastEpisodes";
     const char * const PATIENTSYNTHESIS_UUID = "PatientSynthesis";
 
