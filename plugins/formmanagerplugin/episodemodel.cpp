@@ -365,11 +365,11 @@ EpisodeModel::~EpisodeModel()
 bool EpisodeModel::initialize()
 {
     onUserChanged();
-    onPatientChanged();
+    onCurrentPatientChanged();
 
     connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
     connect(user(), SIGNAL(userChanged()), this, SLOT(onUserChanged()));
-    connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onPatientChanged()));
+    connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onCurrentPatientChanged()));
     return true;
 }
 
@@ -415,7 +415,7 @@ void EpisodeModel::onUserChanged()
 }
 
 /** Reacts on patient changes. */
-void EpisodeModel::onPatientChanged()
+void EpisodeModel::onCurrentPatientChanged()
 {
     d->clearCache();
     d->updateFilter(patient()->uuid());

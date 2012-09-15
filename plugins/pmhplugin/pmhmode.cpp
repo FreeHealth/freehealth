@@ -360,8 +360,8 @@ PmhMode::PmhMode(QObject *parent) :
 
     m_Widget = new PmhModeWidget;
     setWidget(m_Widget);
-    onPatientChanged();
-    connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onPatientChanged()));
+    onCurrentPatientChanged();
+    connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onCurrentPatientChanged()));
 }
 
 PmhMode::~PmhMode()
@@ -376,7 +376,7 @@ QString PmhMode::name() const
     return tkTr(Trans::Constants::PMHX);
 }
 
-void PmhMode::onPatientChanged()
+void PmhMode::onCurrentPatientChanged()
 {
     if (!m_inPluginManager) {
         pluginManager()->addObject(this);

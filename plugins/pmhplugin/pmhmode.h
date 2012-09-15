@@ -95,7 +95,7 @@ public:
     QString name() const;
 
 private Q_SLOTS:
-    void onPatientChanged();
+    void onCurrentPatientChanged();
 
 private:
     QWidget *m_Widget;
