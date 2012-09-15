@@ -38,21 +38,26 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/constants_menus.h>
+#include <coreplugin/constants_icons.h>
 #include <coreplugin/contextmanager/contextmanager.h>
 #include <coreplugin/actionmanager/actionmanager.h>
 #include <coreplugin/uniqueidmanager.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_menu.h>
 
 #include <QDialog>
 #include <QGridLayout>
 #include <QTreeWidget>
+#include <QHeaderView>
 
 #include <QDebug>
 
 using namespace %PluginName%;
 using namespace Internal;
+using namespace Trans::ConstantTranslations;
 
 static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
 static inline Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
@@ -133,7 +138,7 @@ void %PluginName%ContextualWidgetManager::updateContext(Core::IContext *object)
     // Create the plugin specific menu
     Core::ActionContainer *menu = actionManager()->actionContainer(%PluginName%::Constants::M_PLUGIN_%PluginName:u%);
     if (!menu) {
-        menu = actionManager()->createMenu(%PluginName%::Constants::M_PLUGINS_%PluginName:u%);
+        menu = actionManager()->createMenu(%PluginName%::Constants::M_PLUGIN_%PluginName:u%);
 //        menu->appendGroup(%PluginName%::Constants::G_PLUGINS_VIEWS);
 //        menu->appendGroup(%PluginName%::Constants::G_PLUGINS_MODES);
 //        menu->appendGroup(%PluginName%::Constants::G_PLUGINS_SEARCH);
@@ -155,7 +160,7 @@ void %PluginName%ContextualWidgetManager::updateContext(Core::IContext *object)
     a->setIcon(theme()->icon(Core::Constants::ICONCLEAR));
     cmd = actionManager()->registerAction(a, Core::Constants::A_LIST_CLEAR, ctx);
     cmd->setTranslations(Trans::Constants::LISTCLEAR_TEXT);
-    menu->addAction(cmd, %PluginName%::Constants::G_PLUGINS_DRUGS);
+    menu->addAction(cmd, Core::Constants::G_DEFAULT_ONE);
     connect(a, SIGNAL(triggered()), this, SLOT(clear()));
 
     // Databases information
