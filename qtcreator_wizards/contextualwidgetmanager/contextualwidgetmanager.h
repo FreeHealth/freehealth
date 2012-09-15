@@ -75,7 +75,7 @@ private Q_SLOTS:
     void clear();
     void showDatabaseInformation();
 
-private:
+private Q_SLOTS:
     void updateActions();
 
 protected:
