@@ -33,10 +33,6 @@ namespace Constants {
 
 // Drugs
 const char* const DRUGS_DATABASE                = QT_TRANSLATE_NOOP("tkConstants", "Drugs database");
-const char* const DRUGS_DATABASE_INFORMATION   = QT_TRANSLATE_NOOP("tkConstants", "Drugs database information");
-const char* const DOSAGES_DATABASE_INFORMATION   = QT_TRANSLATE_NOOP("tkConstants", "Protocols database information");
-const char* const INTERACTIONS_DATABASE_INFORMATION   = QT_TRANSLATE_NOOP("tkConstants", "Interactions database information");
-const char* const PMH_DATABASE_INFORMATION     = QT_TRANSLATE_NOOP("tkConstants", "Past medical history database information");
 const char* const INTERACTIONS_DATABASE         = QT_TRANSLATE_NOOP("tkConstants", "Interactions database");
 const char* const DRUGS                         = QT_TRANSLATE_NOOP("tkConstants", "Drugs");
 const char* const PROTOCOLS                     = QT_TRANSLATE_NOOP("tkConstants", "Protocols");
