@@ -99,7 +99,7 @@ private:
 @else
 %PluginNamespace:c%::%ClassName:c% *%PluginNamespace:c%::%ClassName:c%::_instance = 0;
 
-%PluginNamespace:c%::%ClassName:c% &instance() // static
+%PluginNamespace:c%::%ClassName:c% &%PluginNamespace:c%::%ClassName:c%::instance() // static
 @endif
 {
     Q_ASSERT(_instance);
