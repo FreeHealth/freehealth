@@ -24,8 +24,8 @@
  *   Contributors:                                                         *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef %PluginName:u%_INTERNAL_%PluginName:u%CONTEXTUALWIDGET_H
-#define %PluginName:u%_INTERNAL_%PluginName:u%CONTEXTUALWIDGET_H
+#ifndef %PluginName:u%_INTERNAL_%PluginName:u%CONTEXTUALWIDGETMANAGER_H
+#define %PluginName:u%_INTERNAL_%PluginName:u%CONTEXTUALWIDGETMANAGER_H
 
 #include <coreplugin/contextmanager/icontext.h>
 #include <QObject>
@@ -88,4 +88,4 @@ protected:
 } // namespace Internal
 } // namespace %PluginName%
 
-#endif // %PluginName:u%_INTERNAL_%PluginName:u%CONTEXTUALWIDGET_H
+#endif // %PluginName:u%_INTERNAL_%PluginName:u%CONTEXTUALWIDGETMANAGER_H
