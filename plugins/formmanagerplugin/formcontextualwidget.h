@@ -35,7 +35,7 @@
  * \file formcontextualwidget.h
  * \author Eric MAEKER
  * \version 0.8.0
- * \date
+ * \date 16 Sept 2012
 */
 
 namespace Form {
