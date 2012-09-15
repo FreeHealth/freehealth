@@ -29,6 +29,7 @@
 
 #include <coreplugin/contextmanager/icontext.h>
 #include <QObject>
+#include <QPointer>
 
 /**
  * \file %PluginName:l%contextualwidget.h
@@ -54,6 +55,8 @@ public:
     explicit %PluginName%ContextualWidgetManager(QObject *parent = 0);
     ~%PluginName%ContextualWidgetManager();
 
+    %PluginName%ContextualWidget *currentView() const;
+
 private Q_SLOTS:
     void updateContext(Core::IContext *object);
 };
@@ -70,14 +73,14 @@ public:
 
 private Q_SLOTS:
     void clear();
-//    void showDatabaseInformation();
+    void showDatabaseInformation();
 
 private:
     void updateActions();
 
 protected:
     QAction *aClear;
-//    QAction *aShowDatabaseInformation;
+    QAction *aShowDatabaseInformation;
 
     QPointer<%PluginName%ContextualWidget> m_CurrentView;
 };

@@ -32,6 +32,7 @@
  */
 
 #include "%PluginName:l%contextualwidgetmanager.h"
+#include "%PluginName:l%contextualwidget.h"
 #include "constants.h"
 
 #include <coreplugin/icore.h>
@@ -54,6 +55,7 @@ using namespace %PluginName%;
 using namespace Internal;
 
 static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
+static inline Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
 static inline Core::ITheme *theme() { return Core::ICore::instance()->theme(); }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -67,6 +69,11 @@ static inline Core::ITheme *theme() { return Core::ICore::instance()->theme(); }
     setObjectName("%PluginName%ContextualWidgetManager");
 }
 
+/**
+ * Slot called when the Core::ContextManager context changed.
+ * If the context is a %PluginName%::%PluginName%ContextualWidget the action handler current view is updated.
+ * \sa %PluginName%::Internal::%PluginName%ActionHandler
+ */
 void %PluginName%ContextualWidgetManager::updateContext(Core::IContext *object)
 {
     //    qWarning() << "%PluginName%ContextualWidgetManager::updateContext(Core::IContext *object)";
@@ -101,7 +108,7 @@ void %PluginName%ContextualWidgetManager::updateContext(Core::IContext *object)
     }
 }
 
-%PluginName%ContextualWidget *%PluginName%ContextualWidget::currentView() const
+%PluginName%ContextualWidget *%PluginName%ContextualWidgetManager::currentView() const
 {
     return %PluginName%ActionHandler::m_CurrentView;
 }
@@ -126,13 +133,13 @@ void %PluginName%ContextualWidgetManager::updateContext(Core::IContext *object)
     // Create the plugin specific menu
     Core::ActionContainer *menu = actionManager()->actionContainer(%PluginName%::Constants::M_PLUGIN_%PluginName:u%);
     if (!menu) {
-        menu = actionManager()->createMenu(DrugsWidget::Constants::M_PLUGINS_%PluginName:u%);
-//        menu->appendGroup(DrugsWidget::Constants::G_PLUGINS_VIEWS);
-//        menu->appendGroup(DrugsWidget::Constants::G_PLUGINS_MODES);
-//        menu->appendGroup(DrugsWidget::Constants::G_PLUGINS_SEARCH);
-//        menu->appendGroup(DrugsWidget::Constants::G_PLUGINS_DRUGS);
-//        menu->appendGroup(DrugsWidget::Constants::G_PLUGINS_INTERACTIONS);
-//        menu->setTranslations(DrugsWidget::Constants::DRUGSMENU_TEXT);
+        menu = actionManager()->createMenu(%PluginName%::Constants::M_PLUGINS_%PluginName:u%);
+//        menu->appendGroup(%PluginName%::Constants::G_PLUGINS_VIEWS);
+//        menu->appendGroup(%PluginName%::Constants::G_PLUGINS_MODES);
+//        menu->appendGroup(%PluginName%::Constants::G_PLUGINS_SEARCH);
+//        menu->appendGroup(%PluginName%::Constants::G_PLUGINS_DRUGS);
+//        menu->appendGroup(%PluginName%::Constants::G_PLUGINS_INTERACTIONS);
+//        menu->setTranslations(%PluginName%::Constants::DRUGSMENU_TEXT);
 
     // Add the menu to the menubar or to the plugin menu
 #ifndef FREEMEDFORMS
