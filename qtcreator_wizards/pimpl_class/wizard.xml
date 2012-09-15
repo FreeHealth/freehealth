@@ -45,6 +45,12 @@
             <fielddescription xml:lang="de">Private Implementation erzeugen (PIMPL-Idiom, "Opaque pointer")</fielddescription>
             <fielddescription xml:lang="fr">Impl&#233;mentation priv&#233;e (Opaque pointer)</fielddescription>
         </field>
+        <field name="Singleton">
+            <fieldcontrol class="QCheckBox" defaultvalue="true" />
+            <fielddescription>Create a singleton</fielddescription>
+            <fielddescription xml:lang="de">Create a singleton</fielddescription>
+            <fielddescription xml:lang="fr">Créer un singleton</fielddescription>
+        </field>
         <field name="Exported">
             <fieldcontrol class="QCheckBox" />
             <fielddescription>Export class</fielddescription>
