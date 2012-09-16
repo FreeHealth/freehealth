@@ -28,6 +28,8 @@
 #define FORM_INTERNAL_FORMCONTEXTUALWIDGETMANAGER_H
 
 #include <coreplugin/contextmanager/icontext.h>
+#include <formmanagerplugin/formcontextualwidget.h>
+
 #include <QObject>
 #include <QPointer>
 
@@ -44,7 +46,6 @@ class IContext;
 
 namespace Form {
 namespace Internal {
-class FormContextualWidget;
 
 class FormActionHandler : public QObject
 {
@@ -56,8 +57,9 @@ public:
     void setCurrentView(FormContextualWidget *view);
     
 private Q_SLOTS:
-    void clear();
-    void onAddEpisodeRequested();
+    void onClearRequested();
+    void onSaveEpisodeRequested();
+    void onCreateEpisodeRequested();
     void onValidateEpisodeRequested();
     void onRemoveEpisodeRequested();
     void onTakeScreenshotRequested();
@@ -67,11 +69,12 @@ private Q_SLOTS:
     
 private Q_SLOTS:
     void updateActions();
+    void onActionEnabledStateUpdated(Form::Internal::FormContextualWidget::WidgetAction action);
     
 protected:
     QAction *aClear;
     QAction *aShowDatabaseInformation;
-    QAction *aAddEpisode, *aValidateEpisode, *aRemoveEpisode;
+    QAction *aCreateEpisode, *aValidateEpisode, *aRemoveEpisode, *aSaveEpisode;
     QAction *aTakeScreenshot;
     QAction *aAddForm;
     QAction *aPrintForm;

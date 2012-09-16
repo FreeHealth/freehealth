@@ -389,6 +389,54 @@ FormPlaceHolder::~FormPlaceHolder()
     }
 }
 
+/** Return the enabled state of an action. \sa Form::Internal::FormActionHandler */
+bool FormPlaceHolder::enableAction(WidgetAction action) const
+{
+    switch (action) {
+    case Action_Clear:
+        // Clear only if a form && an episode are selected
+        return d->ui->episodeView->selectionModel()->hasSelection() && d->ui->formView->selectionModel()->hasSelection();
+    case Action_CreateEpisode:
+        // Create episode only if a form && an episode are selected
+        return d->ui->episodeView->selectionModel()->hasSelection() && d->ui->formView->selectionModel()->hasSelection();
+    case Action_ValidateCurrentEpisode:
+    {
+        // Validate episode only if
+        // - an episode is selected
+        // - && episode not already validated
+        // - && form is not unique episode
+        const EpisodeModel *model = qobject_cast<EpisodeModel*>(d->ui->episodeView->model());
+        QModelIndex current = d->ui->episodeView->selectionModel()->currentIndex();
+        const bool unique = d->_formTreeModel->isUniqueEpisode(current);
+        return (d->ui->episodeView->selectionModel()->hasSelection()
+                && model->isEpisodeValidated(current)
+                && !unique);
+    }
+    case Action_SaveCurrentEpisode:
+        // Save episode only if
+        // - an episode is selected
+        return (d->ui->episodeView->selectionModel()->hasSelection());
+    case Action_RemoveCurrentEpisode:
+        // Save episode only if
+        // - an episode is selected
+        return (d->ui->episodeView->selectionModel()->hasSelection());
+    case Action_TakeScreenShot:
+        // Take screenshot only if
+        // - an episode is selected
+        return (d->ui->episodeView->selectionModel()->hasSelection());
+    case Action_AddForm:
+        // Add form always enabled
+        return true;
+    case Action_PrintCurrentFormEpisode:
+        // Validate episode only if
+        // - an episode is selected
+        // - || a form is selected
+        return (d->ui->episodeView->selectionModel()->hasSelection()
+                || d->ui->formView->selectionModel()->hasSelection());
+    }  // end switch
+    return false;
+}
+
 /**
  * Define the Form::FormMain root item to use for the creation of the patient files.
  * This object will manage deletion of the root item and its children.
@@ -456,7 +504,7 @@ void FormPlaceHolder::handleClicked(const QModelIndex &index)
     setCurrentEditingItem(index);
     if (index.column() == FormTreeModel::EmptyColumn1) { // the funky button
         if (!d->_formTreeModel->isNoEpisode(index))
-            addEpisode();
+            createEpisode();
 
         // work around a bug in itemviews where the delegate wouldn't get the QStyle::State_MouseOver
         QPoint cursorPos = QCursor::pos();
@@ -469,7 +517,7 @@ void FormPlaceHolder::handleClicked(const QModelIndex &index)
 
 void FormPlaceHolder::showLastEpisodeSynthesis()
 {
-    qWarning() << "showMastEpisode";
+    qWarning() << "showLastEpisodeSynthesis";
     setCurrentForm(Constants::PATIENTLASTEPISODES_UUID);
 }
 
@@ -545,7 +593,7 @@ void FormPlaceHolder::setCurrentEditingItem(const QModelIndex &index)
  * Connected to Form::Internal::FormActionHandler
  * \sa Form::EpisodeModel::insertRow()
  */
-bool FormPlaceHolder::addEpisode()
+bool FormPlaceHolder::createEpisode()
 {
     if (!d->ui->formView->selectionModel())
         return false;

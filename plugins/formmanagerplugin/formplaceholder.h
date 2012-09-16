@@ -78,6 +78,7 @@ public:
     FormPlaceHolder(QWidget *parent = 0);
     ~FormPlaceHolder();
 
+    bool enableAction(WidgetAction action) const;
     void setRootForm(Form::FormMain *rootForm);
 
 public Q_SLOTS:
@@ -87,7 +88,7 @@ public Q_SLOTS:
     void setCurrentEditingItem(const QModelIndex &index);
 
 protected Q_SLOTS:
-    bool addEpisode();
+    bool createEpisode();
     bool validateCurrentEpisode();
     bool saveCurrentEpisode();
     bool removeCurrentEpisode();

@@ -51,22 +51,43 @@ class FormContextualWidget : public QWidget
     friend class Form::Internal::FormContextualWidgetManager;
 
 public:
+    enum WidgetAction {
+        Action_Clear = 0,
+        Action_CreateEpisode,
+        Action_ValidateCurrentEpisode,
+        Action_SaveCurrentEpisode,
+        Action_RemoveCurrentEpisode,
+        Action_TakeScreenShot,
+        Action_AddForm,
+        Action_PrintCurrentFormEpisode
+    };
+
     explicit FormContextualWidget(QWidget *parent = 0);
     ~FormContextualWidget();
 
     void addContexts(const QList<int> &contexts);
     QList<int> contexts() const;
 
+    /** Return true if the \e action must be enabled, or false if it must be disabled. */
+    virtual bool enableAction(WidgetAction action) const = 0;
+
 protected Q_SLOTS:
     // slots connected to the formactionhandler instance
     virtual bool clear() = 0;
-    virtual bool addEpisode() = 0;
+    virtual bool createEpisode() = 0;
     virtual bool validateCurrentEpisode() = 0;
     virtual bool saveCurrentEpisode() = 0;
     virtual bool removeCurrentEpisode() = 0;
     virtual bool takeScreenshotOfCurrentEpisode() = 0;
     virtual bool addForm() = 0;
     virtual bool printFormOrEpisode() = 0;
+
+Q_SIGNALS:
+    /** Emit this signal when you need the action handler to update one action enabled state. */
+    void actionEnabledStateChanged(Form::Internal::FormContextualWidget::WidgetAction action);
+
+    /** Emit this signal when you need the action handler to update all action enabled state. */
+    void actionsEnabledStateChanged();
 
 private:
     FormContext *m_Context;

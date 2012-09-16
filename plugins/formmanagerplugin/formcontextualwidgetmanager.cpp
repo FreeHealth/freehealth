@@ -172,7 +172,7 @@ FormActionHandler::FormActionHandler(QObject *parent) :
     QObject(parent),
     aClear(0),
     aShowDatabaseInformation(0),
-    aAddEpisode(0), aValidateEpisode(0), aRemoveEpisode(0),
+    aCreateEpisode(0), aValidateEpisode(0), aRemoveEpisode(0), aSaveEpisode(0),
     aTakeScreenshot(0),
     aAddForm(0),
     aPrintForm(0),
@@ -210,15 +210,19 @@ FormActionHandler::FormActionHandler(QObject *parent) :
     // Create local actions
     // Example: register existing Core actions
     aClear = registerAction(Core::Constants::A_LIST_CLEAR, ctx, this);
-    connect(aClear, SIGNAL(triggered()), this, SLOT(clear()));
+    connect(aClear, SIGNAL(triggered()), this, SLOT(onClearRequested()));
     
-    a = aAddEpisode = new QAction(this);
-    a->setObjectName("aAddEpisode");
-    a->setIcon(theme()->icon(Core::Constants::ICONADD));
-    cmd = actionManager()->registerAction(a, Constants::A_ADDEPISODE, ctx);
-    cmd->setTranslations(Constants::ADDEPISODE_TEXT, Constants::ADDEPISODE_TEXT, Constants::FORM_TR_CONTEXT);
-//    cmenu->addAction(cmd, Core::Constants::G_EDIT_LIST);
-//    connect(aAddEpisode, SIGNAL(triggered()), this, SLOT(onAddEpisodeRequested()));
+    aSaveEpisode = registerAction(Core::Constants::A_FILE_SAVE, ctx, this);
+    connect(aSaveEpisode, SIGNAL(triggered()), this, SLOT(onSaveEpisodeRequested()));
+
+    aCreateEpisode = createAction(this, "aCreateEpisode", Core::Constants::ICONADD,
+                                  Constants::A_ADDEPISODE,
+                                  ctx,
+                                  Constants::ADDEPISODE_TEXT, Constants::FORM_TR_CONTEXT,
+                                  cmd,
+                                  0, "",
+                                  QKeySequence::UnknownKey, false);
+    connect(aCreateEpisode, SIGNAL(triggered()), this, SLOT(onCreateEpisodeRequested()));
 
     a = aValidateEpisode = new QAction(this);
     a->setObjectName("aValidateEpisode");
@@ -226,7 +230,7 @@ FormActionHandler::FormActionHandler(QObject *parent) :
     cmd = actionManager()->registerAction(a, Constants::A_VALIDATEEPISODE, ctx);
     cmd->setTranslations(Constants::VALIDATEEPISODE_TEXT, Constants::VALIDATEEPISODE_TEXT, Constants::FORM_TR_CONTEXT);
 //    cmenu->addAction(cmd, Core::Constants::G_EDIT_LIST);
-//    connect(aValidateEpisode, SIGNAL(triggered()), this, SLOT(onValidateEpisodeRequested()));
+    connect(aValidateEpisode, SIGNAL(triggered()), this, SLOT(onValidateEpisodeRequested()));
 
     aRemoveEpisode = createAction(this, "aRemoveEpisode", Core::Constants::ICONREMOVE,
                                   Constants::A_REMOVEEPISODE,
@@ -235,7 +239,7 @@ FormActionHandler::FormActionHandler(QObject *parent) :
                                   cmd,
                                   0, "",
                                   QKeySequence::UnknownKey, false);
-    //    connect(aRemoveEpisode, SIGNAL(triggered()), this, SLOT(onRemoveEpisodeRequested()));
+    connect(aRemoveEpisode, SIGNAL(triggered()), this, SLOT(onRemoveEpisodeRequested()));
 
     aTakeScreenshot = createAction(this, "aTakeScreenshot", Core::Constants::ICONTAKESCREENSHOT,
                                    Constants::A_TAKESCREENSHOT,
@@ -244,7 +248,7 @@ FormActionHandler::FormActionHandler(QObject *parent) :
                                    cmd,
                                    0, "",
                                    QKeySequence::UnknownKey, false);
-    //    connect(aTakeScreenshot, SIGNAL(triggered()), this, SLOT(onTakeScreenshotRequested()));
+    connect(aTakeScreenshot, SIGNAL(triggered()), this, SLOT(onTakeScreenshotRequested()));
 
     a = aAddForm = new QAction(this);
     a->setObjectName("aAddForm");
@@ -252,7 +256,7 @@ FormActionHandler::FormActionHandler(QObject *parent) :
     cmd = actionManager()->registerAction(a, Constants::A_ADDFORM, ctx);
     cmd->setTranslations(Constants::ADDFORM_TEXT, Constants::ADDFORM_TEXT, Constants::FORM_TR_CONTEXT);
 //    cmenu->addAction(cmd, Core::Constants::G_EDIT_LIST);
-//    connect(aAddForm, SIGNAL(triggered()), this, SLOT(onAddFormRequested()));
+    connect(aAddForm, SIGNAL(triggered()), this, SLOT(onAddFormRequested()));
 
     aPrintForm = registerAction(Core::Constants::A_FILE_PRINT, ctx, this);
     connect(aPrintForm, SIGNAL(triggered()), this, SLOT(onPrintFormRequested()));
@@ -297,14 +301,8 @@ void FormActionHandler::setCurrentView(FormContextualWidget *view)
     m_CurrentView = view;
     
     // connect new view
-    //    DrugsDB::DrugsModel::setActiveModel(view->currentDrugsModel());
-    //    m_CurrentView->createConnections();
-    //    connect(m_CurrentView->prescriptionListView()->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
-    //            this, SLOT(listViewItemChanged()));
-    //    connect(m_CurrentView->currentDrugsModel(), SIGNAL(numberOfRowsChanged()),
-    //            this, SLOT(drugsModelChanged()));
-    //    m_CurrentView->drugSelector()->connectFilter();
-    
+    connect(m_CurrentView, SIGNAL(actionsEnabledStateChanged()), this, SLOT(updateActions()));
+    connect(m_CurrentView, SIGNAL(actionEnabledStateChanged(Form::Internal::FormContextualWidget::Action)), this, SLOT(onActionEnabledStateUpdated(Form::Internal::FormContextualWidget::WidgetAction)));
     // update actions according to the current view
     updateActions();
 }
@@ -312,17 +310,50 @@ void FormActionHandler::setCurrentView(FormContextualWidget *view)
 void FormActionHandler::updateActions()
 {
     // Proceed actions dis/enableing
+    onActionEnabledStateUpdated(Form::Internal::FormContextualWidget::Action_Clear);
+    onActionEnabledStateUpdated(Form::Internal::FormContextualWidget::Action_CreateEpisode);
+    onActionEnabledStateUpdated(Form::Internal::FormContextualWidget::Action_ValidateCurrentEpisode);
+    onActionEnabledStateUpdated(Form::Internal::FormContextualWidget::Action_SaveCurrentEpisode);
+    onActionEnabledStateUpdated(Form::Internal::FormContextualWidget::Action_RemoveCurrentEpisode);
+    onActionEnabledStateUpdated(Form::Internal::FormContextualWidget::Action_TakeScreenShot);
+    onActionEnabledStateUpdated(Form::Internal::FormContextualWidget::Action_AddForm);
+    onActionEnabledStateUpdated(Form::Internal::FormContextualWidget::Action_PrintCurrentFormEpisode);
+}
+
+void FormActionHandler::onActionEnabledStateUpdated(Form::Internal::FormContextualWidget::WidgetAction action)
+{
+    if (m_CurrentView) {
+        QAction *a = 0;
+        switch (action) {
+        case Form::Internal::FormContextualWidget::Action_Clear: a = aClear; break;
+        case Form::Internal::FormContextualWidget::Action_CreateEpisode: a = aCreateEpisode; break;
+        case Form::Internal::FormContextualWidget::Action_ValidateCurrentEpisode: a = aValidateEpisode; break;
+        case Form::Internal::FormContextualWidget::Action_SaveCurrentEpisode: a = aSaveEpisode; break;
+        case Form::Internal::FormContextualWidget::Action_RemoveCurrentEpisode: a = aRemoveEpisode; break;
+        case Form::Internal::FormContextualWidget::Action_TakeScreenShot: a = aTakeScreenshot; break;
+        case Form::Internal::FormContextualWidget::Action_AddForm: a = aAddForm; break;
+        case Form::Internal::FormContextualWidget::Action_PrintCurrentFormEpisode: a = aPrintForm; break;
+        }  // end switch
+        a->setEnabled(m_CurrentView->enableAction(action));
+    }
 }
 
 // Eg of action interacting with the currentview
-void FormActionHandler::clear()
+void FormActionHandler::onClearRequested()
 {
     if (m_CurrentView) {
 //        m_CurrentView->clear();
     }
 }
 
-void FormActionHandler::onAddEpisodeRequested()
+void FormActionHandler::onSaveEpisodeRequested()
+{
+    if (m_CurrentView) {
+//        m_CurrentView->clear();
+    }
+}
+
+void FormActionHandler::onCreateEpisodeRequested()
 {
     if (m_CurrentView) {
 //        m_CurrentView->clear();
