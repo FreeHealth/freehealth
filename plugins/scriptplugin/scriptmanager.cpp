@@ -191,7 +191,7 @@ QScriptValue ScriptManager::addScriptObject(QObject *object)
 
 void ScriptManager::onAllFormsLoaded()
 {
-    // Is equivalent to onPatientChanged (because all forms are reloaded when patient changed)
+    // Is equivalent to onCurrentPatientChanged (because all forms are reloaded when patient changed)
     forms->recreateItemWrappers();
 
     // Execute RootForm all OnLoad scripts

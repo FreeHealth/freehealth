@@ -257,7 +257,7 @@ void PatientSelector::setPatientModel(PatientModel *m)
 
     d->ui->numberOfPatients->setText(QString::number(m->numberOfFilteredPatients()));
     d->ui->identity->setCurrentPatientModel(m);
-    connect(d->m_Model, SIGNAL(patientChanged(QModelIndex)), this, SLOT(setSelectedPatient(QModelIndex)));
+    connect(d->m_Model, SIGNAL(currentPatientChanged(QModelIndex)), this, SLOT(setSelectedPatient(QModelIndex)));
 }
 
 /** \brief Define the fields to show using the FieldsToShow flag */

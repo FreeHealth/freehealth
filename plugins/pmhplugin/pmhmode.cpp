@@ -162,7 +162,7 @@ PmhModeWidget::PmhModeWidget(QWidget *parent) :
             this, SLOT(pmhModelRowsInserted(QModelIndex,int,int)));
     connect(ui->buttonBox, SIGNAL(clicked(QAbstractButton*)), this, SLOT(onButtonClicked(QAbstractButton*)));
 
-    connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onPatientChanged()));
+    connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onCurrentPatientChanged()));
 }
 
 PmhModeWidget::~PmhModeWidget()
@@ -297,7 +297,7 @@ void PmhModeWidget::removeItem()
         catModel()->removeRow(item.row(), item.parent());
 }
 
-void PmhModeWidget::onPatientChanged()
+void PmhModeWidget::onCurrentPatientChanged()
 {
     ui->treeView->expandAll();
     for(int i = 0; i < ui->stackedWidget->count(); ++i) {
@@ -360,8 +360,8 @@ PmhMode::PmhMode(QObject *parent) :
 
     m_Widget = new PmhModeWidget;
     setWidget(m_Widget);
-    onPatientChanged();
-    connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onPatientChanged()));
+    onCurrentPatientChanged();
+    connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onCurrentPatientChanged()));
 }
 
 PmhMode::~PmhMode()
@@ -376,7 +376,7 @@ QString PmhMode::name() const
     return tkTr(Trans::Constants::PMHX);
 }
 
-void PmhMode::onPatientChanged()
+void PmhMode::onCurrentPatientChanged()
 {
     if (!m_inPluginManager) {
         pluginManager()->addObject(this);

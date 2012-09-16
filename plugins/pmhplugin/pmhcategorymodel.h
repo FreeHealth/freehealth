@@ -122,7 +122,7 @@ public:
 
 public Q_SLOTS:
     // Connections to Core::IPatient
-    void patientChanged();
+    void onCurrentPatientChanged();
 
 private Q_SLOTS:
     void updateCategoryLabel(const Category::CategoryItem *category);

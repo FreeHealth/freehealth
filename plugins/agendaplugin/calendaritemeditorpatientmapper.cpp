@@ -175,7 +175,7 @@ CalendarItemEditorPatientMapperWidget::CalendarItemEditorPatientMapperWidget(QWi
 
     connect(ui->searchPatient, SIGNAL(selectedPatient(QString,QString)), this, SLOT(onPatientSelected(QString,QString)));
     connect(aUseCurrentPatient, SIGNAL(triggered()), this, SLOT(addCurrentPatient()));
-    connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(patientChanged()));
+    connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onCurrentPatientChanged()));
 }
 
 CalendarItemEditorPatientMapperWidget::~CalendarItemEditorPatientMapperWidget()
@@ -249,9 +249,9 @@ void CalendarItemEditorPatientMapperWidget::onPatientCreated(const QString &uid)
     ui->searchPatient->clear();
 }
 
-void CalendarItemEditorPatientMapperWidget::patientChanged()
+void CalendarItemEditorPatientMapperWidget::onCurrentPatientChanged()
 {
-    disconnect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(patientChanged()));
+    disconnect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onCurrentPatientChanged()));
     ui->createPatientToolButton->addAction(aUseCurrentPatient);
 }
 
