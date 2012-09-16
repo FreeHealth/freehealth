@@ -58,7 +58,7 @@ using namespace Trans::ConstantTranslations;
 using namespace ExtensionSystem;
 using namespace Core;
 
-inline static Core::IDocumentPrinter *printer() {return ExtensionSystem::PluginManager::instance()->getObject<Core::IDocumentPrinter>();}
+static inline Core::IDocumentPrinter *printer() {return ExtensionSystem::PluginManager::instance()->getObject<Core::IDocumentPrinter>();}
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 
 ControlReceipts::ControlReceipts(QWidget * parent):QWidget(parent),ui(new Ui::ControlReceiptsWidget)

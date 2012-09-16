@@ -54,11 +54,11 @@
 using namespace Print::Internal;
 using namespace Trans::ConstantTranslations;
 
-inline static Core::ISettings *settings() {return Core::ICore::instance()->settings();}
+static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
-inline static Core::IPatient *patient() {return Core::ICore::instance()->patient();}
-inline static Core::IUser *user() {return Core::ICore::instance()->user();}
-inline static Core::IDocumentPrinter *docPrinter() {return ExtensionSystem::PluginManager::instance()->getObject<Core::IDocumentPrinter>();}
+static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
+static inline Core::IUser *user() {return Core::ICore::instance()->user();}
+static inline Core::IDocumentPrinter *docPrinter() {return ExtensionSystem::PluginManager::instance()->getObject<Core::IDocumentPrinter>();}
 
 
 PrintDialog::PrintDialog(QWidget *parent) :

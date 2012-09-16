@@ -59,9 +59,9 @@
 
 using namespace Print::Internal;
 
-inline static Core::IUser *user() {return Core::ICore::instance()->user();}
-inline static Core::IPatient *patient() {return Core::ICore::instance()->patient();}
-inline static Core::ISettings *settings() {return Core::ICore::instance()->settings();}
+static inline Core::IUser *user() {return Core::ICore::instance()->user();}
+static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
+static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 
 DocumentPrinter::DocumentPrinter(QObject *parent) :
         Core::IDocumentPrinter(parent)

@@ -56,7 +56,7 @@ const QString controlKey6 = "299082B234349";  // clé 29
 using namespace BaseWidgets;
 using namespace Internal;
 
-inline static QLabel *findLabel(Form::FormItem *item)
+static inline QLabel *findLabel(Form::FormItem *item)
 {
     QLabel *l = 0;
     // Find label

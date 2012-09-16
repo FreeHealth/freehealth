@@ -59,7 +59,7 @@ using namespace PMH;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
-inline static Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
+static inline Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
 static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
 static inline Core::IMainWindow *mainWindow() { return Core::ICore::instance()->mainWindow(); }
 static inline PMH::PmhCore *pmhCore() { return PMH::PmhCore::instance(); }

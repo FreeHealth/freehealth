@@ -35,13 +35,13 @@ using namespace BaseWidgets;
 
 static inline Core::IScriptManager *scriptManager() {return Core::ICore::instance()->scriptManager();}
 
-inline static void executeOnValueChangedScript(Form::FormItem *item)
+static inline void executeOnValueChangedScript(Form::FormItem *item)
 {
     if (!item->scripts()->onValueChangedScript().isEmpty())
         scriptManager()->evaluate(item->scripts()->onValueChangedScript());
 }
 
-inline static QLabel *findLabel(Form::FormItem *item)
+static inline QLabel *findLabel(Form::FormItem *item)
 {
     QLabel *l = 0;
     // Find label

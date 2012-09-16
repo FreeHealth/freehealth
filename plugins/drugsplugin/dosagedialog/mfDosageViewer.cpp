@@ -71,8 +71,8 @@ using namespace DrugsWidget::Constants;
 using namespace DrugsWidget::Internal;
 using namespace Trans::ConstantTranslations;
 
-inline static DrugsDB::DrugsModel *drugModel() { return DrugsWidget::DrugsWidgetManager::instance()->currentDrugsModel(); }
-inline static Core::ITheme *theme() {return Core::ICore::instance()->theme();}
+static inline DrugsDB::DrugsModel *drugModel() { return DrugsWidget::DrugsWidgetManager::instance()->currentDrugsModel(); }
+static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 static inline DrugsDB::DrugsBase &drugsBase() {return DrugsDB::DrugBaseCore::instance().drugsBase();}
 

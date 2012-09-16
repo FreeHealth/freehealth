@@ -136,7 +136,7 @@ namespace {
     const char * const  NOT_PRINTABLE        = "notprintable";
 }
 
-inline static Form::IFormWidget::LabelOptions labelAlignement(Form::FormItem *item, Form::IFormWidget::LabelOptions defaultValue = Form::IFormWidget::Label_OnLeft)
+static inline Form::IFormWidget::LabelOptions labelAlignement(Form::FormItem *item, Form::IFormWidget::LabelOptions defaultValue = Form::IFormWidget::Label_OnLeft)
 {
     const QStringList &o = item->getOptions();
     if (o.contains(::LABEL_ALIGN_TOP, Qt::CaseInsensitive))
@@ -146,14 +146,14 @@ inline static Form::IFormWidget::LabelOptions labelAlignement(Form::FormItem *it
     return defaultValue;
 }
 
-inline static QStringList getCountries(Form::FormItem *item)
+static inline QStringList getCountries(Form::FormItem *item)
 {
     if (!item->extraData().value(::EXTRAS_COUNTRY).isEmpty())
         return item->extraData().value(::EXTRAS_COUNTRY).split(";");
     return QStringList();
 }
 
-inline static int getNumberOfColumns(Form::FormItem *item, int defaultValue = 1)
+static inline int getNumberOfColumns(Form::FormItem *item, int defaultValue = 1)
 {
     if (!item->extraData().value(::EXTRAS_KEY_COLUMN).isEmpty())
         return item->extraData().value(::EXTRAS_KEY_COLUMN).toInt();
@@ -161,42 +161,42 @@ inline static int getNumberOfColumns(Form::FormItem *item, int defaultValue = 1)
         return defaultValue;
 }
 
-inline static int isCompactView(Form::FormItem *item, bool defaultValue = false)
+static inline int isCompactView(Form::FormItem *item, bool defaultValue = false)
 {
     if (item->getOptions().contains(::EXTRAS_COMPACT_VIEW, Qt::CaseInsensitive))
         return true;
     return defaultValue;
 }
 
-inline static int isGroupCheckable(Form::FormItem *item, bool defaultValue = false)
+static inline int isGroupCheckable(Form::FormItem *item, bool defaultValue = false)
 {
     if (item->getOptions().contains(::EXTRAS_GROUP_CHECKABLE, Qt::CaseInsensitive))
         return true;
     return defaultValue;
 }
 
-inline static int isGroupCollapsible(Form::FormItem *item, bool defaultValue = false)
+static inline int isGroupCollapsible(Form::FormItem *item, bool defaultValue = false)
 {
     if (item->getOptions().contains(::EXTRAS_GROUP_COLLAPSIBLE, Qt::CaseInsensitive))
         return true;
     return defaultValue;
 }
 
-inline static int isGroupExpanded(Form::FormItem *item, bool defaultValue = false)
+static inline int isGroupExpanded(Form::FormItem *item, bool defaultValue = false)
 {
     if (item->getOptions().contains(::EXTRAS_GROUP_EXPANDED, Qt::CaseInsensitive))
         return true;
     return defaultValue;
 }
 
-inline static int isGroupChecked(Form::FormItem *item, bool defaultValue = false)
+static inline int isGroupChecked(Form::FormItem *item, bool defaultValue = false)
 {
     if (item->getOptions().contains(::EXTRAS_GROUP_CHECKED, Qt::CaseInsensitive))
         return true;
     return defaultValue;
 }
 
-inline static int isRadioHorizontalAlign(Form::FormItem *item, bool defaultValue = true)
+static inline int isRadioHorizontalAlign(Form::FormItem *item, bool defaultValue = true)
 {
     if (item->getOptions().contains(::EXTRAS_ALIGN_HORIZONTAL, Qt::CaseInsensitive))
         return true;
@@ -205,7 +205,7 @@ inline static int isRadioHorizontalAlign(Form::FormItem *item, bool defaultValue
     return defaultValue;
 }
 
-inline static QString getDateFormat(Form::FormItem *item, const QString & defaultValue = "dd MM yyyy")
+static inline QString getDateFormat(Form::FormItem *item, const QString & defaultValue = "dd MM yyyy")
 {
     if (!item->extraData().value(::DATE_EXTRAS_KEY).isEmpty()) {
         return item->extraData().value(::DATE_EXTRAS_KEY);
@@ -213,23 +213,23 @@ inline static QString getDateFormat(Form::FormItem *item, const QString & defaul
     return defaultValue;
 }
 
-inline static bool dontPrintEmptyValues(Form::FormItem *item)
+static inline bool dontPrintEmptyValues(Form::FormItem *item)
 {
     return item->getOptions().contains(::DONTPRINTEMPTYVALUES, Qt::CaseInsensitive);
 }
 
-inline static bool hideHeaderOnUniqueEpisode(Form::FormItem *item)
+static inline bool hideHeaderOnUniqueEpisode(Form::FormItem *item)
 {
     return item->getOptions().contains(::HIDEHEADERONUNIQUEEPISODE, Qt::CaseInsensitive);
 }
 
-inline static void executeOnValueChangedScript(Form::FormItem *item)
+static inline void executeOnValueChangedScript(Form::FormItem *item)
 {
     if (!item->scripts()->onValueChangedScript().isEmpty())
         scriptManager()->evaluate(item->scripts()->onValueChangedScript());
 }
 
-inline static QLabel *findLabel(Form::FormItem *item)
+static inline QLabel *findLabel(Form::FormItem *item)
 {
     QLabel *l = 0;
     // Find label

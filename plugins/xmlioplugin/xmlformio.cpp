@@ -65,7 +65,7 @@ using namespace Trans::ConstantTranslations;
 ///////////////////////////////////////  Inline static functions  //////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-inline static ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
+static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline Category::CategoryCore *categoryCore() {return  Category::CategoryCore::instance();}
 static inline PMH::PmhCore *pmhCore() {return PMH::PmhCore::instance();}

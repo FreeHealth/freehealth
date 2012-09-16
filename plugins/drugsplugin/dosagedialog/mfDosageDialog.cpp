@@ -49,7 +49,7 @@
 using namespace DrugsWidget::Constants;
 using namespace DrugsWidget::Internal;
 
-inline static DrugsDB::DrugsModel *drugModel() { return DrugsWidget::DrugsWidgetManager::instance()->currentDrugsModel(); }
+static inline DrugsDB::DrugsModel *drugModel() { return DrugsWidget::DrugsWidgetManager::instance()->currentDrugsModel(); }
 
 namespace DrugsWidget {
 namespace Internal {

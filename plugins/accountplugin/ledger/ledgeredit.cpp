@@ -50,7 +50,7 @@ using namespace ExtensionSystem;
 using namespace Core;
 using namespace Core::Constants;
 
-inline static Core::IDocumentPrinter *printer()
+static inline Core::IDocumentPrinter *printer()
 {
     return ExtensionSystem::PluginManager::instance()->getObject<Core::IDocumentPrinter>();
 }

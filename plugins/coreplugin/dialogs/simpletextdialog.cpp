@@ -57,10 +57,10 @@
 using namespace Core;
 using namespace Trans::ConstantTranslations;
 
-inline static Core::ITheme *theme() {return Core::ICore::instance()->theme();}
-inline static Core::ISettings *settings() {return Core::ICore::instance()->settings();}
-inline static Core::IUser *user() {return Core::ICore::instance()->user();}
-inline static Core::IDocumentPrinter *printer() {return ExtensionSystem::PluginManager::instance()->getObject<Core::IDocumentPrinter>();}
+static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
+static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
+static inline Core::IUser *user() {return Core::ICore::instance()->user();}
+static inline Core::IDocumentPrinter *printer() {return ExtensionSystem::PluginManager::instance()->getObject<Core::IDocumentPrinter>();}
 
 SimpleTextDialog::SimpleTextDialog(const QString &title, const QString &zoomSettingKey, QWidget *parent) :
     QDialog(parent),

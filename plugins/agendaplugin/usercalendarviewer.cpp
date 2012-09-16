@@ -67,8 +67,8 @@ static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 static inline Agenda::Internal::AgendaBase &base() {return Agenda::AgendaCore::instance().agendaBase();}
 static inline Agenda::AgendaCore &agendaCore() {return Agenda::AgendaCore::instance();}
-inline static Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
-inline static Core::ITheme *theme() {return Core::ICore::instance()->theme();}
+static inline Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
+static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 
 namespace {
     const int S_NUMBEROFAVAILABILITIESTOSHOW = 10;
