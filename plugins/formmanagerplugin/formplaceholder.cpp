@@ -228,6 +228,7 @@ public:
 
     void updateEpisodeActions(const QModelIndex &index)
     {
+        // TODO: Code action update
 //        const EpisodeModel *model = qobject_cast<EpisodeModel*>(ui->episodeView->model());
 //        const bool enabled = index.isValid();
 //        const bool unique = _formTreeModel->isUniqueEpisode(index);
@@ -683,10 +684,10 @@ bool FormPlaceHolder::addForm()
 bool FormPlaceHolder::printFormOrEpisode()
 {
     //    qWarning() << Q_FUNC_INFO;
-        if (!d->ui->formView->selectionModel())
-            return false;
+    if (!d->ui->formView->selectionModel())
+        return false;
 
-        // get the current index
+    // get the current index
     //    QTreeView *tree = d->ui->formView->treeView();
     //    QModelIndex index = tree->rootIndex();
     //    if (tree->selectionModel()->hasSelection())
@@ -715,36 +716,37 @@ bool FormPlaceHolder::printFormOrEpisode()
     //        }
     //    }
 
-        Form::FormMain *formMain = d->_formTreeModel->formForIndex(d->ui->formView->currentIndex());
-        if (!formMain)
-            return false;
+    Form::FormMain *formMain = d->_formTreeModel->formForIndex(d->ui->formView->currentIndex());
+    if (!formMain)
+        return false;
 
-        QString htmlToPrint;
-        QString title;
-        htmlToPrint = "<html><body>" + formMain->printableHtml(true) + "</body></html>";
-        title = formMain->spec()->label();
+    QString htmlToPrint;
+    QString title;
+    htmlToPrint = "<html><body>" + formMain->printableHtml(true) + "</body></html>";
+    title = formMain->spec()->label();
 
-        if (htmlToPrint.isEmpty())
-            return false;
+    if (htmlToPrint.isEmpty())
+        return false;
 
-        Core::IDocumentPrinter *p = printer();
-        if (!p) {
-            LOG_ERROR("No IDocumentPrinter found");
-            return false;
-        }
-        p->clearTokens();
-        QHash<QString, QVariant> tokens;
+    Core::IDocumentPrinter *p = printer();
+    if (!p) {
+        LOG_ERROR("No IDocumentPrinter found");
+        return false;
+    }
+    p->clearTokens();
+    QHash<QString, QVariant> tokens;
 
-        tokens.insert(Core::Constants::TOKEN_DOCUMENTTITLE, title);
+    tokens.insert(Core::Constants::TOKEN_DOCUMENTTITLE, title);
     //    // create a token for each FormItem of the FormMain
     //    foreach(FormItem *item, formMain->flattenFormItemChildren()) {
     //        if (item->itemDatas())
     //            tokens.insert(item->uuid(), item->itemDatas()->data(0, Form::IFormItemData::ID_Printable));
     //    }
-        p->addTokens(Core::IDocumentPrinter::Tokens_Global, tokens);
+    p->addTokens(Core::IDocumentPrinter::Tokens_Global, tokens);
 
-        // print
-        p->print(htmlToPrint, Core::IDocumentPrinter::Papers_Generic_User, false);
+    // print
+    p->print(htmlToPrint, Core::IDocumentPrinter::Papers_Generic_User, false);
+    return true;
 }
 
 void FormPlaceHolder::episodeChanged(const QModelIndex &current, const QModelIndex &previous)
