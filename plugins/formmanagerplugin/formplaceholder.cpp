@@ -469,15 +469,13 @@ void FormPlaceHolder::setRootForm(Form::FormMain *rootForm)
     tree->header()->resizeSection(FormTreeModel::EmptyColumn1, 16);
     tree->expandAll();
 
-//    Core::Command *cmd = actionManager()->command(Constants::A_SHOWPATIENTLASTEPISODES);
-//    connect(cmd->action(), SIGNAL(triggered()), this, SLOT(showLastEpisodeSynthesis()));
-
     // Select the first available form in the tree model
     if (rootForm->firstLevelFormMainChildren().count() > 0) {
         setCurrentForm(rootForm->firstLevelFormMainChildren().at(0));
         QModelIndex index = d->_formTreeModel->index(0,0);
         d->ui->formView->selectionModel()->select(index, QItemSelectionModel::Rows | QItemSelectionModel::SelectCurrent);
     }
+    Q_EMIT actionsEnabledStateChanged();
 }
 
 /** Clear the form content. The current episode (if one was selected) is not submitted to the model. */
@@ -502,6 +500,7 @@ void FormPlaceHolder::handlePressed(const QModelIndex &index)
 void FormPlaceHolder::handleClicked(const QModelIndex &index)
 {
     setCurrentEditingItem(index);
+    Q_EMIT actionsEnabledStateChanged();
     if (index.column() == FormTreeModel::EmptyColumn1) { // the funky button
         if (!d->_formTreeModel->isNoEpisode(index))
             createEpisode();
@@ -566,6 +565,7 @@ void FormPlaceHolder::setCurrentForm(Form::FormMain *form)
         if (episodeModel)
             episodeChanged(episodeModel->index(0,0), QModelIndex());
     }
+    Q_EMIT actionsEnabledStateChanged();
 }
 
 /**
