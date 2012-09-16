@@ -35,7 +35,7 @@
  */
 
 #include "formcontextualwidget.h"
-//#include "constants.h"
+#include "constants_db.h"
 
 #include <coreplugin/contextmanager/contextmanager.h>
 #include <coreplugin/icore.h>
@@ -54,7 +54,7 @@ FormContextualWidget::FormContextualWidget(QWidget *parent) :
 
     // Create the context object
     m_Context = new Internal::FormContext(this);
-//    m_Context->setContext(QList<int>() << uid->uniqueIdentifier(Constants::C_FORM_PLUGINS));
+    m_Context->setContext(QList<int>() << uid->uniqueIdentifier(Constants::C_FORM_PLUGINS));
 
     // Send it to the contextual manager
     contextManager()->addContextObject(m_Context);
