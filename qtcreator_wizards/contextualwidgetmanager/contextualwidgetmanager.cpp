@@ -114,6 +114,10 @@ static inline QAction *createAction(QObject *parent, const QString &name, const 
     setObjectName("%PluginName%ContextualWidgetManager");
 }
 
+%PluginName%ContextualWidgetManager::~%PluginName%ContextualWidgetManager()
+{
+}
+
 /**
  * Slot called when the Core::ContextManager context changed.
  * If the context is a %PluginName%::%PluginName%ContextualWidget the action handler current view is updated.
