@@ -47,6 +47,7 @@
 #include <utils/global.h>
 #include <translationutils/constants.h>
 #include <translationutils/trans_menu.h>
+#include <translationutils/trans_database.h>
 
 #include <QDialog>
 #include <QGridLayout>
@@ -62,6 +63,45 @@ using namespace Trans::ConstantTranslations;
 static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
 static inline Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
 static inline Core::ITheme *theme() { return Core::ICore::instance()->theme(); }
+
+// Register an existing Core action
+static QAction *registerAction(const QString &id, const QList<int> &ctx, QObject *parent)
+{
+    QAction *a = new QAction(parent);
+    Core::Command *cmd = Core::ICore::instance()->actionManager()->registerAction(a, id, ctx);
+    Q_UNUSED(cmd);
+    return a;
+}
+
+// Create an action
+static inline QAction *createAction(QObject *parent, const QString &name, const QString &icon,
+                                    const QString &actionName,
+                                    const QList<int> &context,
+                                    const QString &trans, const QString &transContext,
+                                    Core::Command *cmd,
+                                    Core::ActionContainer *menu,
+                                    const QString &group,
+                                    QKeySequence::StandardKey key = QKeySequence::UnknownKey,
+                                    bool checkable = false)
+{
+    QAction *a = new QAction(parent);
+    a->setObjectName(name);
+    if (!icon.isEmpty())
+        a->setIcon(theme()->icon(icon));
+    if (checkable) {
+        a->setCheckable(true);
+        a->setChecked(false);
+    }
+    cmd = actionManager()->registerAction(a, actionName, context);
+    if (!transContext.isEmpty())
+        cmd->setTranslations(trans, trans, transContext);
+    else
+        cmd->setTranslations(trans); // use the Trans::Constants tr context (automatic)
+    if (key != QKeySequence::UnknownKey)
+        cmd->setDefaultKeySequence(key);
+    menu->addAction(cmd, group);
+    return a;
+}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////      MANAGER      ///////////////////////////////////////////////
@@ -134,6 +174,7 @@ void %PluginName%ContextualWidgetManager::updateContext(Core::IContext *object)
     QAction *a = 0;
     Core::Command *cmd = 0;
     QList<int> ctx = QList<int>() << uid->uniqueIdentifier(%PluginName%::Constants::C_%PluginName:u%_PLUGINS);
+    QList<int> allContexts = QList<int>() << uid->uniqueIdentifier(Form::Constants::C_FORM_PLUGINS) << Core::Constants::C_GLOBAL_ID;
 
     // Create the plugin specific menu
     Core::ActionContainer *menu = actionManager()->actionContainer(%PluginName%::Constants::M_PLUGIN_%PluginName:u%);
@@ -155,28 +196,33 @@ void %PluginName%ContextualWidgetManager::updateContext(Core::IContext *object)
     }
     Q_ASSERT(menu);
 
-    // Create local actions
-    a = aClear = new QAction(this);
-    a->setIcon(theme()->icon(Core::Constants::ICONCLEAR));
-    cmd = actionManager()->registerAction(a, Core::Constants::A_LIST_CLEAR, ctx);
-    cmd->setTranslations(Trans::Constants::LISTCLEAR_TEXT);
-    menu->addAction(cmd, Core::Constants::G_DEFAULT_ONE);
+    // Example: register an existing Core action
+    aClear = registerAction(Core::Constants::A_LIST_CLEAR, ctx, this);
     connect(a, SIGNAL(triggered()), this, SLOT(clear()));
 
-    // Databases information
+//    a = aClear = new QAction(this);
+//    a->setObjectName("%PluginName%.aClear");
+//    a->setIcon(theme()->icon(Core::Constants::ICONCLEAR));
+//    cmd = actionManager()->registerAction(a, Core::Constants::A_LIST_CLEAR, ctx);
+//    cmd->setTranslations(Trans::Constants::LISTCLEAR_TEXT);
+//    menu->addAction(cmd, Core::Constants::G_DEFAULT_ONE);
+//    connect(a, SIGNAL(triggered()), this, SLOT(clear()));
+
+    // Example: register your own actions: db info in the help menu
     Core::ActionContainer *hmenu = actionManager()->actionContainer(Core::Constants::M_HELP_DATABASES);
-    a = aShowDatabaseInformation = new QAction(this);
-    a->setIcon(theme()->icon(Core::Constants::ICONHELP));
-    cmd = actionManager()->registerAction(a, %PluginName%::Constants::A_DATABASE_INFORMATION, QList<int>() << Core::Constants::C_GLOBAL_ID);
-    cmd->setTranslations(Trans::Constants::%PluginName:u%_DATABASE_INFORMATION);
-    cmd->retranslate();
-    if (hmenu) {
-        hmenu->addAction(cmd, Core::Constants::G_HELP_DATABASES);
-    }
+    aShowDatabaseInformation = createAction(this, "aShowDatabaseInformation", Core::Constants::ICONHELP,
+                                            Constants::A_SHOWPATIENTLASTEPISODES,
+                                            allContexts,
+                                            Trans::Constants::%PluginName:u%_DATABASE_INFORMATION, "",
+                                            cmd,
+                                            hmenu, Core::Constants::G_HELP_DATABASES,
+                                            QKeySequence::UnknownKey, false);
+    aShowDatabaseInformation->setEnabled(false);
     connect(aShowDatabaseInformation,SIGNAL(triggered()), this, SLOT(showDatabaseInformation()));
 
     contextManager()->updateContext();
     actionManager()->retranslateMenusAndActions();
+//    connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(updateActions()));
 }
 
 void %PluginName%ActionHandler::setCurrentView(%PluginName%ContextualWidget *view)
