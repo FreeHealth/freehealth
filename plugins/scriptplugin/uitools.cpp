@@ -26,6 +26,7 @@
 #include "uitools.h"
 #include "scriptwrappers.h"
 
+#include <formmanagerplugin/formcore.h>
 #include <formmanagerplugin/iformitem.h>
 #include <formmanagerplugin/iformio.h>
 #include <formmanagerplugin/formmanager.h>
@@ -45,7 +46,7 @@
 using namespace Script;
 using namespace Internal;
 
-static inline Form::FormManager *formManager() { return Form::FormManager::instance(); }
+static inline Form::FormManager &formManager() {return Form::FormCore::instance().formManager();}
 
 UiTools::UiTools(QObject *parent) :
     QObject(parent)
@@ -184,7 +185,7 @@ QStringList UiTools::selectedItems(QWidget *widget)
 
 void UiTools::showScreenshot(const QString &formUid, const QString &fileName) const
 {
-    QPixmap pix = formManager()->getScreenshot(formUid, fileName);
+    QPixmap pix = formManager().getScreenshot(formUid, fileName);
     Utils::ImageViewer viewer;
     viewer.setPixmap(pix);
     viewer.exec();

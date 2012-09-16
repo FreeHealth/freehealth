@@ -35,6 +35,7 @@
  */
 
 #include "formdatawidgetmapper.h"
+#include <formmanagerplugin/formcore.h>
 #include <formmanagerplugin/formmanager.h>
 #include <formmanagerplugin/iformitem.h>
 #include <formmanagerplugin/iformitemdata.h>
@@ -59,7 +60,7 @@ using namespace Internal;
 
 enum {WarnLogChronos=true};
 
-static inline Form::FormManager *formManager() { return Form::FormManager::instance(); }
+static inline Form::FormManager &formManager() {return Form::FormCore::instance().formManager();}
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 
@@ -141,7 +142,7 @@ public:
         if (_episodeModel) {
             _episodeModel = 0;
         }
-        _episodeModel = formManager()->episodeModel(rootForm);
+        _episodeModel = formManager().episodeModel(rootForm);
     }
 
     QString getCurrentXmlEpisode()
@@ -239,7 +240,7 @@ bool FormDataWidgetMapper::isDirty() const
 
 void FormDataWidgetMapper::setCurrentForm(const QString &formUid)
 {
-    setCurrentForm(formManager()->form(formUid));
+    setCurrentForm(formManager().form(formUid));
 }
 
 void FormDataWidgetMapper::setCurrentForm(Form::FormMain *form)
@@ -261,6 +262,11 @@ void FormDataWidgetMapper::setCurrentEpisode(const QVariant &uid)
 void FormDataWidgetMapper::setCurrentEpisode(const QModelIndex &index)
 {
     d->setCurrentEpisode(index);
+}
+
+QPixmap FormDataWidgetMapper::screenshot()
+{
+    return QPixmap::grabWidget(d->_stack->currentWidget());
 }
 
 bool FormDataWidgetMapper::submit()

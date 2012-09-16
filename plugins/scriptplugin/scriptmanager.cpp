@@ -31,6 +31,7 @@
 
 #include <coreplugin/icore.h>
 
+#include <formmanagerplugin/formcore.h>
 #include <formmanagerplugin/formmanager.h>
 #include <formmanagerplugin/iformitem.h>
 
@@ -41,7 +42,7 @@
 using namespace Script;
 using namespace Internal;
 
-static inline Form::FormManager *formManager() {return Form::FormManager::instance();}
+static inline Form::FormManager &formManager() {return Form::FormCore::instance().formManager();}
 
 namespace {
 const char * const SCRIPT_NAMESPACE =
@@ -160,8 +161,8 @@ ScriptManager::ScriptManager(QObject *parent) :
     Core::ICore::instance()->setScriptManager(this);
 
     // Connect to formmanager
-    connect(formManager(), SIGNAL(patientFormsLoaded()), this, SLOT(onAllFormsLoaded()));
-    connect(formManager(), SIGNAL(subFormLoaded(QString)), this, SLOT(onSubFormLoaded(QString)));
+    connect(&formManager(), SIGNAL(patientFormsLoaded()), this, SLOT(onAllFormsLoaded()));
+    connect(&formManager(), SIGNAL(subFormLoaded(QString)), this, SLOT(onSubFormLoaded(QString)));
 }
 
 QScriptValue ScriptManager::evaluate(const QString &script)
@@ -195,7 +196,7 @@ void ScriptManager::onAllFormsLoaded()
     forms->recreateItemWrappers();
 
     // Execute RootForm all OnLoad scripts
-    foreach(Form::FormMain *main, formManager()->forms()) {
+    foreach(Form::FormMain *main, formManager().forms()) {
         evaluate(main->scripts()->onLoadScript());
         QList<Form::FormMain *> children = main->flattenFormMainChildren();
         foreach(Form::FormMain *mainChild, children) {
@@ -206,7 +207,7 @@ void ScriptManager::onAllFormsLoaded()
         }
     }
     // Execute empty root SubForms OnLoad scripts
-    foreach(Form::FormMain *main, formManager()->subFormsEmptyRoot()) {
+    foreach(Form::FormMain *main, formManager().subFormsEmptyRoot()) {
         evaluate(main->scripts()->onLoadScript());
     }
 }
@@ -217,7 +218,7 @@ void ScriptManager::onSubFormLoaded(const QString &subFormUuid)
     forms->updateSubFormItemWrappers(subFormUuid);
 
     // Execute onload scripts of subform items only
-    foreach(Form::FormMain *main, formManager()->subFormsEmptyRoot()) {
+    foreach(Form::FormMain *main, formManager().subFormsEmptyRoot()) {
         if (main->uuid()!=subFormUuid)
             continue;
 

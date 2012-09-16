@@ -37,6 +37,7 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/ipatient.h>
 
+#include <formmanagerplugin/formcore.h>
 #include <formmanagerplugin/formmanager.h>
 #include <formmanagerplugin/iformitem.h>
 #include <formmanagerplugin/iformitemdata.h>
@@ -45,7 +46,7 @@
 
 #include <utils/global.h>
 
-static inline Form::FormManager *formManager() {return Form::FormManager::instance();}
+static inline Form::FormManager &formManager() {return Form::FormCore::instance().formManager();}
 static inline Core::IPatient *patient()  { return Core::ICore::instance()->patient(); }
 
 using namespace Patients;
@@ -113,8 +114,8 @@ QVariant PatientModelWrapper::data(const QModelIndex &index, int role) const
 
     // or in the forms widgets
     QList<Form::FormMain*> forms;
-    forms << formManager()->forms();
-    forms << formManager()->subFormsEmptyRoot();
+    forms << formManager().forms();
+    forms << formManager().subFormsEmptyRoot();
     foreach(Form::FormMain *modeForms, forms) {
         foreach(Form::FormMain *f, modeForms->flattenFormMainChildren()) {
             foreach(Form::FormItem *item, f->formItemChildren()) {

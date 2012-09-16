@@ -41,6 +41,7 @@
 
 #include <patientbaseplugin/patientmodel.h>
 
+#include <formmanagerplugin/formcore.h>
 #include <formmanagerplugin/formmanager.h>
 #include <formmanagerplugin/episodemodel.h>
 #include <formmanagerplugin/iformitem.h>
@@ -69,7 +70,7 @@ using namespace Patients;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
-static inline Form::FormManager *formManager() {return Form::FormManager::instance();}
+static inline Form::FormManager &formManager() {return Form::FormCore::instance().formManager();}
 
 namespace {
 class SimpleIdentityWidget : public QWidget
@@ -720,7 +721,7 @@ IdentityViewerWidget::IdentityViewerWidget(QWidget *parent) :
     d(new IdentityViewerWidgetPrivate(this))
 {
     setObjectName("Patient::IdentityViewerWidget");
-    connect(formManager(), SIGNAL(patientFormsLoaded()), this, SLOT(getPatientForms()));
+    connect(&formManager(), SIGNAL(patientFormsLoaded()), this, SLOT(getPatientForms()));
 }
 
 /*! Destructor of the IdentityViewerWidget class */
@@ -739,7 +740,7 @@ bool IdentityViewerWidget::initialize()
 
 void IdentityViewerWidget::getPatientForms()
 {
-    Form::FormMain *form = formManager()->identityRootFormDuplicate();
+    Form::FormMain *form = formManager().identityRootFormDuplicate();
     if (form) {
         d->_patientModelIdentityWrapper->setIdentityForm(form);
         d->_patientModelIdentityWrapper->setEpisodeModel(new Form::EpisodeModel(form, this));

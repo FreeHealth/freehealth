@@ -46,6 +46,7 @@
 #include <coreplugin/translators.h>
 #include <coreplugin/constants_icons.h>
 
+#include <formmanagerplugin/formcore.h>
 #include <formmanagerplugin/iformitem.h>
 #include <formmanagerplugin/formmanager.h>
 #include <formmanagerplugin/episodemodel.h>
@@ -74,7 +75,7 @@ static inline QString currentUserUuid() {return Core::ICore::instance()->user()-
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 static inline Core::Translators *translators() {return Core::ICore::instance()->translators();}
-static inline Form::FormManager *formManager() { return Form::FormManager::instance(); }
+static inline Form::FormManager &formManager() {return Form::FormCore::instance().formManager();}
 static inline Category::CategoryCore *categoryCore() {return Category::CategoryCore::instance();}
 
 namespace {
@@ -310,7 +311,7 @@ public:
             addFile = addFile.firstChildElement("file");
             if (!addFile.isNull()) {
                 // Load the form
-                QList<Form::FormMain*> forms = formManager()->loadFormFile(addFile.text());
+                QList<Form::FormMain*> forms = formManager().loadFormFile(addFile.text());
                 if (!forms.isEmpty()) {
                     // Create the EpisodeModel with the form
 //                    Form::EpisodeModel *model = new Form::EpisodeModel(forms.at(0), q);

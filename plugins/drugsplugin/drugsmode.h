@@ -47,7 +47,7 @@ public:
     QString name() const;
 
 public Q_SLOTS:
-    void getPatientForm();
+    void onPatientFormsLoaded();
 
 private:
     bool inPool;

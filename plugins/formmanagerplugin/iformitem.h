@@ -185,7 +185,7 @@ public:
     void specLoaded();
 
 private Q_SLOTS:
-    void getPatientForm();
+    void onPatientFormsLoaded();
 
 private:
     Core::BaseMode *_mode;

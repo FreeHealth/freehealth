@@ -34,21 +34,20 @@ QT_END_NAMESPACE
 
 /**
  * \file formeditordialog.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.7.6
- * \date 23 May 2012
+ * \author Eric MAEKER
+ * \version 0.8.0
+ * \date 01 Sept 2012
 */
 
 namespace Form {
 class FormTreeModel;
 namespace Ui {
-    class FormEditorDialog;
+class FormEditorDialog;
 }
 
 class FormEditorDialog : public QDialog
 {
     Q_OBJECT
-
 public:
     enum EditionMode {
         ViewOnly      = 0x000,

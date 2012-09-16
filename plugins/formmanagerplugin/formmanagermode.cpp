@@ -25,6 +25,7 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "formmanagermode.h"
+#include "formcore.h"
 #include "formplaceholder.h"
 #include "iformitem.h"
 #include "iformio.h"
@@ -49,7 +50,7 @@ using namespace Form;
 using namespace Internal;
 
 static inline ExtensionSystem::PluginManager *pluginManager() { return ExtensionSystem::PluginManager::instance(); }
-static inline Form::FormManager *formManager() {return Form::FormManager::instance();}
+static inline Form::FormManager &formManager() {return Form::FormCore::instance().formManager();}
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline Core::ModeManager *modeManager()  { return Core::ICore::instance()->modeManager(); }
 static inline Core::ActionManager *actionManager()  { return Core::ICore::instance()->actionManager(); }
@@ -77,8 +78,8 @@ FormManagerMode::FormManagerMode(QObject *parent) :
 //    const QList<int> &context;
 //    setContext();
     setWidget(m_Holder);
-    getPatientForm();
-    connect(formManager(), SIGNAL(patientFormsLoaded()), this, SLOT(getPatientForm()));
+    onPatientFormsLoaded();
+    connect(&formManager(), SIGNAL(patientFormsLoaded()), this, SLOT(onPatientFormsLoaded()));
 }
 
 FormManagerMode::~FormManagerMode()
@@ -98,13 +99,13 @@ QString FormManagerMode::name() const
   \brief Get the patient form from the episode database, send the load signal with the form absPath and load it.
   \sa Core::ICore::loadPatientForms()
 */
-bool FormManagerMode::getPatientForm()
+bool FormManagerMode::onPatientFormsLoaded()
 {
     if (!m_inPluginManager) {
         pluginManager()->addObject(this);
         m_inPluginManager = true;
     }
-    Form::FormMain *root = formManager()->rootForm(Core::Constants::MODE_PATIENT_FILE);
+    Form::FormMain *root = formManager().rootForm(Core::Constants::MODE_PATIENT_FILE);
     m_Holder->setRootForm(root);
     return (root);
 }

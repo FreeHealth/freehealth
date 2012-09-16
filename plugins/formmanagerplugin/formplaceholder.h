@@ -81,24 +81,25 @@ public:
     void setRootForm(Form::FormMain *rootForm);
 
 public Q_SLOTS:
-    void clearAll();
+    bool clear();
     void setCurrentForm(Form::FormMain *form);
     void setCurrentForm(const QString &formUid);
     void setCurrentEditingItem(const QModelIndex &index);
+
+protected Q_SLOTS:
+    bool addEpisode();
+    bool validateCurrentEpisode();
+    bool saveCurrentEpisode();
+    bool removeCurrentEpisode();
+    bool takeScreenshotOfCurrentEpisode();
+    bool addForm();
+    bool printFormOrEpisode();
 
 private Q_SLOTS:
     void episodeChanged(const QModelIndex &current, const QModelIndex &previous);
     void handlePressed(const QModelIndex &index);
     void handleClicked(const QModelIndex &index);
-
     void showLastEpisodeSynthesis();
-    bool newEpisode();
-    bool saveCurrentEditingEpisode();
-    void addForm();
-    void printCurrentItem();
-    void validateEpisode();
-    void removeEpisode();
-    void takeScreenShotEpisode();
 
 //protected Q_SLOTS:
 

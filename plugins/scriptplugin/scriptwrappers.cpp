@@ -31,6 +31,7 @@
 #include <coreplugin/iscriptmanager.h>
 #include <coreplugin/translators.h>
 
+#include <formmanagerplugin/formcore.h>
 #include <formmanagerplugin/formmanager.h>
 #include <formmanagerplugin/iformitem.h>
 #include <formmanagerplugin/iformitemdata.h>
@@ -44,13 +45,13 @@
 using namespace Script;
 using namespace Internal;
 
-static inline Form::FormManager *formManager() { return Form::FormManager::instance(); }
+static inline Form::FormManager &formManager() {return Form::FormCore::instance().formManager();}
 static inline Core::IScriptManager *scriptManager() { return Core::ICore::instance()->scriptManager(); }
 static inline Core::Translators *translators() { return Core::ICore::instance()->translators(); }
 
 //static Form::FormItem *getFormItem(const QString &ns, const QString &uuid)
 //{
-//    foreach(Form::FormMain *main, formManager()->forms()) {
+//    foreach(Form::FormMain *main, formManager().forms()) {
 //        if (main->uuid().startsWith(ns)) {
 //            QList<Form::FormItem *> items = main->flattenFormItemChildren();
 //            for(int i=0; i < items.count(); ++i) {
@@ -80,7 +81,7 @@ void FormManagerScriptWrapper::recreateItemWrappers()
     qDeleteAll(m_Wrappers);
     m_Wrappers.clear();
     m_Items.clear();
-    foreach(Form::FormItem *main, formManager()->forms()) {
+    foreach(Form::FormItem *main, formManager().forms()) {
         const QList<Form::FormItem*> items = main->flattenFormItemChildren();
         for(int i=0; i < items.count(); ++i) {
             FormItemScriptWrapper *w = new FormItemScriptWrapper(this);
@@ -93,7 +94,7 @@ void FormManagerScriptWrapper::recreateItemWrappers()
 
 void FormManagerScriptWrapper::updateSubFormItemWrappers(const QString &uuid)
 {
-    const QList<Form::FormMain*> &list = formManager()->subFormsEmptyRoot();
+    const QList<Form::FormMain*> &list = formManager().subFormsEmptyRoot();
     const QStringList &uuids = m_Items.keys();
     foreach(Form::FormItem *main, list) { // all subForms roots
         if (main->uuid()!=uuid)
@@ -121,7 +122,7 @@ QString FormManagerScriptWrapper::currentLanguage() const
 
 bool FormManagerScriptWrapper::areLoaded() const
 {
-    return (formManager()->forms().count()>0);
+    return (formManager().forms().count()>0);
 }
 
 void FormManagerScriptWrapper::usingNamespace(const QString &ns) const

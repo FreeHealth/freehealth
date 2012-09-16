@@ -38,6 +38,7 @@
 #include <utils/global.h>
 #include <translationutils/constants.h>
 #include <translationutils/trans_database.h>
+#include <translationutils/trans_menu.h>
 
 #include <coreplugin/constants_icons.h>
 #include <coreplugin/constants_menus.h>

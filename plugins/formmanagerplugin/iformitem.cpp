@@ -215,6 +215,7 @@
 // TODO: change Form::FormItemValues pointers to references distributed by the Form::FormManager? like getValues(Form::FormMainIndex &index, const ValueType &type)?
 
 #include "iformitem.h"
+#include "formcore.h"
 #include "formplaceholder.h"
 
 #include <coreplugin/icore.h>
@@ -245,10 +246,10 @@
 using namespace Form;
 using namespace Form::Internal;
 
-inline static ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
-inline static Form::FormManager *formManager() { return Form::FormManager::instance(); }
-inline static Core::UniqueIDManager *uuidManager() {return Core::ICore::instance()->uniqueIDManager();}
-inline static Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
+static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
+static inline Form::FormManager &formManager() {return Form::FormCore::instance().formManager();}
+static inline Core::UniqueIDManager *uuidManager() {return Core::ICore::instance()->uniqueIDManager();}
+static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 
 #ifdef DEBUG
 enum {WarnFormCreation=false};
@@ -641,7 +642,7 @@ FormPage::FormPage(QObject *parent):
     _mode->setWidget(_placeHolder);
     languageChanged();
 
-    connect(formManager(), SIGNAL(patientFormsLoaded()), this, SLOT(getPatientForm()));
+    connect(&formManager(), SIGNAL(patientFormsLoaded()), this, SLOT(onPatientFormsLoaded()));
 //    qWarning() << "FormPage" << objectName() << spec()->value(Form::FormItemSpec::Spec_Priority).toInt();
 }
 
@@ -651,9 +652,9 @@ FormPage::~FormPage()
         pluginManager()->removeObject(_mode);
 }
 
-void FormPage::getPatientForm()
+void FormPage::onPatientFormsLoaded()
 {
-    Form::FormMain *root = formManager()->rootForm(spec()->uuid().toUtf8());
+    Form::FormMain *root = formManager().rootForm(spec()->uuid().toUtf8());
     _mode->setPriority(spec()->value(Form::FormItemSpec::Spec_Priority).toInt());
     if (!root) {
         if (_inPool)
@@ -782,7 +783,7 @@ void FormMain::createDebugPage()
     ExtensionSystem::PluginManager::instance()->addObject(m_DebugPage);
 }
 
-inline static void itemToTree(FormItem *item, QTreeWidgetItem *tree)
+static inline void itemToTree(FormItem *item, QTreeWidgetItem *tree)
 {
     QTreeWidgetItem *i = new QTreeWidgetItem(tree, QStringList() << item->spec()->pluginName() << item->spec()->label());
     QFont bold;

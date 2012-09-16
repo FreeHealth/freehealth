@@ -28,6 +28,7 @@
 #define FORM_INTERNAL_FORMDATAWIDGETMAPPER_H
 
 #include <QWidget>
+#include <QPixmap>
 QT_BEGIN_NAMESPACE
 class QModelIndex;
 QT_END_NAMESPACE
@@ -62,6 +63,8 @@ public Q_SLOTS:
 
     void setCurrentEpisode(const QVariant &uid);
     void setCurrentEpisode(const QModelIndex &index);
+
+    QPixmap screenshot();
 
     bool submit();
 

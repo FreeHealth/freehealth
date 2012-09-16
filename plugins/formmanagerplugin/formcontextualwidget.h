@@ -41,10 +41,14 @@
 namespace Form {
 namespace Internal {
 class FormContext;
+class FormActionHandler;
+class FormContextualWidgetManager;
 
 class FormContextualWidget : public QWidget
 {
     Q_OBJECT
+    friend class Form::Internal::FormActionHandler;
+    friend class Form::Internal::FormContextualWidgetManager;
 
 public:
     explicit FormContextualWidget(QWidget *parent = 0);
@@ -52,6 +56,17 @@ public:
 
     void addContexts(const QList<int> &contexts);
     QList<int> contexts() const;
+
+protected Q_SLOTS:
+    // slots connected to the formactionhandler instance
+    virtual bool clear() = 0;
+    virtual bool addEpisode() = 0;
+    virtual bool validateCurrentEpisode() = 0;
+    virtual bool saveCurrentEpisode() = 0;
+    virtual bool removeCurrentEpisode() = 0;
+    virtual bool takeScreenshotOfCurrentEpisode() = 0;
+    virtual bool addForm() = 0;
+    virtual bool printFormOrEpisode() = 0;
 
 private:
     FormContext *m_Context;

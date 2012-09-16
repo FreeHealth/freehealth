@@ -41,6 +41,7 @@
 #include <coreplugin/isettings.h>
 #include <coreplugin/constants_tokensandsettings.h>
 
+#include <formmanagerplugin/formcore.h>
 #include <formmanagerplugin/iformitem.h>
 #include <formmanagerplugin/iformwidgetfactory.h>
 #include <formmanagerplugin/iformio.h>
@@ -67,8 +68,8 @@ using namespace XmlForms;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
-inline static Form::FormManager *formManager() { return Form::FormManager::instance(); }
-inline static ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
+static inline Form::FormManager &formManager() {return Form::FormCore::instance().formManager();}
+static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline Core::IPatient *patient()  { return Core::ICore::instance()->patient(); }
 static inline Category::CategoryCore *categoryCore() {return  Category::CategoryCore::instance();}
@@ -645,7 +646,7 @@ bool XmlFormContentReader::createElement(Form::FormItem *item, QDomElement &elem
         if (uuid.isEmpty())
             LOG_ERROR_FOR("XMLIO", "No uuid specified for the FormPage");
 
-        Form::FormPage *page = formManager()->createFormPage(uuid);
+        Form::FormPage *page = formManager().createFormPage(uuid);
         if (item) {
             item = page;
             loadElement(item, element, form);

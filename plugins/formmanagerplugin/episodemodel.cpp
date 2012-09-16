@@ -92,7 +92,8 @@ using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
 static inline Form::Internal::EpisodeBase *episodeBase() {return Form::Internal::EpisodeBase::instance();}
-//static inline Form::FormManager *formManager() { return Form::FormManager::instance(); }
+//#include <formmanagerplugin/formcore.h>
+//static inline Form::FormManager &formManager() {return Form::FormCore::instance().formManager();}
 
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}

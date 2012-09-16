@@ -50,6 +50,7 @@
 #include <coreplugin/iuser.h>
 #include <coreplugin/theme.h>
 
+#include <formmanagerplugin/formcore.h>
 #include <formmanagerplugin/iformio.h>
 #include <formmanagerplugin/iformitem.h>
 #include <formmanagerplugin/iformwidgetfactory.h>
@@ -101,7 +102,7 @@ static inline Core::IPatient *patient() {return Core::ICore::instance()->patient
 
 static inline ExtensionSystem::PluginManager *pluginManager() { return ExtensionSystem::PluginManager::instance(); }
 
-static inline Form::FormManager *formManager() {return Form::FormManager::instance();}
+static inline Form::FormManager &formManager() {return Form::FormCore::instance().formManager();}
 
 static inline Patients::PatientModel *patientModel() {return Patients::PatientModel::activeModel();}
 
@@ -324,7 +325,7 @@ void MainWindow::onCurrentUserChanged()
 void MainWindow::onCurrentPatientChanged()
 {
     // Activate Patient files mode
-    formManager()->activateMode();
+    formManager().activateMode();
 
     // Store the uuids of the patient in the recent manager
     const QString &uuid = patient()->uuid();
@@ -405,7 +406,7 @@ bool MainWindow::loadFile(const QString &absDirPath)
 
     // Get the PatientFile FormMain empty root from FormManager
 //    Form::FormMain *root = 0;
-//    if (root = formManager()->loadFile(filename, list)) {
+//    if (root = formManager().loadFile(filename, list)) {
 //        fileManager()->setCurrentFile(filename);
 //    } else {
 //        return false;

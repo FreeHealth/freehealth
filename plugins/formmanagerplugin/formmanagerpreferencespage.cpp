@@ -25,6 +25,7 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "formmanagerpreferencespage.h"
+#include "formcore.h"
 #include "formfilesselectorwidget.h"
 #include "episodebase.h"
 #include "iformio.h"
@@ -51,7 +52,7 @@ using namespace Trans::ConstantTranslations;
 
 static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
 static inline Form::Internal::EpisodeBase *episodeBase() {return Form::Internal::EpisodeBase::instance();}
-static inline Form::FormManager *formManager() {return Form::FormManager::instance();}
+static inline Form::FormManager &formManager() {return Form::FormCore::instance().formManager();}
 
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -134,7 +135,7 @@ void FormPreferencesFileSelectorWidget::saveFormToBase()
         return;
     Form::FormIODescription *descr = ui->selector->selectedForms().at(0);
     episodeBase()->setGenericPatientFormFile(descr->data(Form::FormIODescription::UuidOrAbsPath).toString());
-    formManager()->readPmhxCategories(descr->data(Form::FormIODescription::UuidOrAbsPath).toString());
+    formManager().readPmhxCategories(descr->data(Form::FormIODescription::UuidOrAbsPath).toString());
 }
 
 void FormPreferencesFileSelectorWidget::saveToSettings(Core::ISettings *)

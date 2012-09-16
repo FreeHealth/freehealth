@@ -50,6 +50,7 @@ class Pack;
 }
 
 namespace Form {
+class FormCore;
 class FormPage;
 class FormMain;
 class FormItem;
@@ -63,32 +64,32 @@ namespace Internal {
 class FormManagerPlugin;
 class FormManagerPrivate;
 
-class FormActionHandler : public QObject
-{
-    Q_OBJECT
-public:
-    FormActionHandler(QObject *parent = 0);
-    ~FormActionHandler();
+//class FormActionHandler : public QObject
+//{
+//    Q_OBJECT
+//public:
+//    FormActionHandler(QObject *parent = 0);
+//    ~FormActionHandler();
 
-private Q_SLOTS:
-    void showPatientLastEpisode();
-    void updateActions();
+//private Q_SLOTS:
+//    void showPatientLastEpisode();
+//    void updateActions();
 
-private:
-    QAction *aAddEpisode;
-    QAction *aValidateEpisode;
-    QAction *aAddForm;
-    QAction *aPrintForm;
-    QAction *aShowPatientSynthesis;
-    QAction *aShowPatientLastEpisode;
-};
+//private:
+//    QAction *aAddEpisode;
+//    QAction *aValidateEpisode;
+//    QAction *aAddForm;
+//    QAction *aPrintForm;
+//    QAction *aShowPatientSynthesis;
+//    QAction *aShowPatientLastEpisode;
+//};
 }
 
-class FORM_EXPORT FormManager : public Internal::FormActionHandler
+class FORM_EXPORT FormManager : public QObject//Internal::FormActionHandler
 {
     Q_OBJECT
+    friend class Form::FormCore;
     friend class Form::Internal::FormManagerPrivate;
-    friend class Form::Internal::FormManagerPlugin;
 
 protected:
     FormManager(QObject *parent = 0);
@@ -96,6 +97,7 @@ protected:
 public:
     static FormManager *instance();
     ~FormManager();
+    bool initialize();
 
     void activateMode();
 
@@ -135,7 +137,6 @@ private Q_SLOTS:
 
 private:
     Internal::FormManagerPrivate *d;
-    static FormManager *m_Instance;
 };
 
 } // End Form

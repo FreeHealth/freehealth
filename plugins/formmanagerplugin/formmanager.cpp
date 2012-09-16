@@ -312,29 +312,12 @@ private:
 } // namespace Internal
 } // namespace Form
 
-
-FormManager *FormManager::m_Instance = 0;
-
-/** Unique instance of the Form::FormManager object */
-FormManager *FormManager::instance()
-{
-    Q_ASSERT(m_Instance);
-    return m_Instance;
-}
-
+/** Ctor of the Form::FormManager. Does nothing. The singleton is owned by the Form::FormCore object */
 FormManager::FormManager(QObject *parent) :
-        FormActionHandler(parent),
-        d(new Form::Internal::FormManagerPrivate(this))
+    QObject(parent),//FormActionHandler(parent),
+    d(new Form::Internal::FormManagerPrivate(this))
 {
     setObjectName("FormManager");
-
-//    connect(Core::ICore::instance(), SIGNAL(coreAboutToClose()), this, SLOT(coreAboutToClose()));
-    connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(loadPatientFile()));
-
-    connect(packManager(), SIGNAL(packInstalled(DataPack::Pack)), this, SLOT(packChanged(DataPack::Pack)));
-    connect(packManager(), SIGNAL(packRemoved(DataPack::Pack)), this, SLOT(packChanged(DataPack::Pack)));
-//    connect(packManager(), SIGNAL(packUpdated(DataPack::Pack)), this, SLOT(packChanged(DataPack::Pack)));
-    m_Instance = this;
 }
 
 FormManager::~FormManager()
@@ -343,6 +326,18 @@ FormManager::~FormManager()
         delete d;
         d = 0;
     }
+}
+
+/** Initialize the object (called when all plugins are initialized) \sa Form::FormCore::initialize() */
+bool FormManager::initialize()
+{
+    //    connect(Core::ICore::instance(), SIGNAL(coreAboutToClose()), this, SLOT(coreAboutToClose()));
+    connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(loadPatientFile()));
+
+    connect(packManager(), SIGNAL(packInstalled(DataPack::Pack)), this, SLOT(packChanged(DataPack::Pack)));
+    connect(packManager(), SIGNAL(packRemoved(DataPack::Pack)), this, SLOT(packChanged(DataPack::Pack)));
+    //    connect(packManager(), SIGNAL(packUpdated(DataPack::Pack)), this, SLOT(packChanged(DataPack::Pack)));
+    return true;
 }
 
 /**  Activate the Form Mode in the main window. */
@@ -619,102 +614,4 @@ void FormManager::packChanged(const DataPack::Pack &pack)
     // Force patient files reloading
     if (!patient()->uuid().isEmpty())
         loadPatientFile();
-}
-
-FormActionHandler::FormActionHandler(QObject *parent) :
-    QObject(parent),
-    aAddEpisode(0),
-    aValidateEpisode(0),
-    aAddForm(0),
-    aPrintForm(0),
-    aShowPatientLastEpisode(0)
-{
-    Core::ActionManager *am = actionManager();
-    Core::UniqueIDManager *uid = Core::ICore::instance()->uniqueIDManager();
-    Core::ITheme *th = Core::ICore::instance()->theme();
-    QList<int> formContext = QList<int>() << uid->uniqueIdentifier(Constants::C_FORM_PLUGINS);
-    QList<int> globalcontext = QList<int>() << Core::Constants::C_GLOBAL_ID;
-
-    // Form's Contextual Menu
-//    Core::ActionContainer *editMenu = am->actionContainer(Core::Constants::M_EDIT);
-//    Core::ActionContainer *cmenu = am->actionContainer(Core::Constants::M_EDIT_LIST);
-//    if (!cmenu) {
-//        cmenu = am->createMenu(Core::Constants::M_EDIT_LIST);
-//        cmenu->appendGroup(Core::Constants::G_EDIT_LIST);
-//        cmenu->setTranslations(Trans::Constants::M_EDIT_LIST_TEXT);
-//        if (editMenu)
-//            editMenu->addMenu(cmenu, Core::Constants::G_EDIT_LIST);
-//    }
-
-    QAction *a = aAddEpisode = new QAction(this);
-    a->setObjectName("aAddEpisode");
-    a->setIcon(th->icon(Core::Constants::ICONADD));
-    Core::Command *cmd = am->registerAction(a, Constants::A_ADDEPISODE, formContext);
-    cmd->setTranslations(Constants::ADDEPISODE_TEXT, Constants::ADDEPISODE_TEXT, Constants::FORM_TR_CONTEXT);
-//    cmenu->addAction(cmd, Core::Constants::G_EDIT_LIST);
-//    connect(a, SIGNAL(triggered()), this, SLOT(addItem()));
-
-    a = aValidateEpisode = new QAction(this);
-    a->setObjectName("aValidateEpisode");
-    a->setIcon(th->icon(Core::Constants::ICONVALIDATEDARK));
-    cmd = am->registerAction(a, Constants::A_VALIDATEEPISODE, formContext);
-    cmd->setTranslations(Constants::VALIDATEEPISODE_TEXT, Constants::VALIDATEEPISODE_TEXT, Constants::FORM_TR_CONTEXT);
-//    cmenu->addAction(cmd, Core::Constants::G_EDIT_LIST);
-//    connect(a, SIGNAL(triggered()), this, SLOT(addItem()));
-
-    a = aAddForm = new QAction(this);
-    a->setObjectName("aAddForm");
-    a->setIcon(th->icon(Core::Constants::ICONFORMS_ADD));
-    cmd = am->registerAction(a, Constants::A_ADDFORM, formContext);
-    cmd->setTranslations(Constants::ADDFORM_TEXT, Constants::ADDFORM_TEXT, Constants::FORM_TR_CONTEXT);
-//    cmenu->addAction(cmd, Core::Constants::G_EDIT_LIST);
-//    connect(a, SIGNAL(triggered()), this, SLOT(addItem()));
-
-    a = aPrintForm = new QAction(this);
-    a->setObjectName("aPrintForm");
-    a->setIcon(th->icon(Core::Constants::ICONPRINT));
-    cmd = am->registerAction(a, Constants::A_PRINTFORM, formContext);
-    cmd->setTranslations(Constants::PRINTFORM_TEXT, Constants::PRINTFORM_TEXT, Constants::FORM_TR_CONTEXT);
-//    cmenu->addAction(cmd, Core::Constants::G_EDIT_LIST);
-//    connect(a, SIGNAL(triggered()), this, SLOT(addItem()));
-
-    a = aShowPatientSynthesis = new QAction(this);
-    a->setEnabled(false);
-    a->setObjectName("aShowPatientSynthesis");
-    a->setIcon(th->icon(Core::Constants::ICONPATIENTSYNTHESIS, Core::ITheme::MediumIcon));
-    cmd = am->registerAction(a, Constants::A_SHOWPATIENTSYNTHESIS, globalcontext);
-    cmd->setTranslations(Constants::SHOWPATIENTSYNTHESIS_TEXT, Constants::SHOWPATIENTSYNTHESIS_TEXT, Constants::FORM_TR_CONTEXT);
-    Core::ActionContainer *menu = actionManager()->actionContainer(Core::Constants::M_PATIENTS);
-    if (menu)
-        menu->addAction(cmd, Patients::Constants::G_PATIENTS_INFORMATION);
-//    connect(cmd->action(), SIGNAL(triggered()), this, SLOT(showPatientSynthesis()));
-
-    a = aShowPatientLastEpisode = new QAction(this);
-    a->setEnabled(false);
-    a->setObjectName("aShowPatientLastEpisode");
-    a->setIcon(th->icon(Core::Constants::ICONPATIENTSYNTHESIS, Core::ITheme::MediumIcon));
-    cmd = am->registerAction(a, Constants::A_SHOWPATIENTLASTEPISODES, globalcontext);
-    cmd->setTranslations(Constants::SHOWPATIENTLASTEPISODES_TEXT, Constants::SHOWPATIENTLASTEPISODES_TEXT, Constants::FORM_TR_CONTEXT);
-    if (menu)
-        menu->addAction(cmd, Patients::Constants::G_PATIENTS_INFORMATION);
-    connect(cmd->action(), SIGNAL(triggered()), this, SLOT(showPatientLastEpisode()));
-
-    contextManager()->updateContext();
-    connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(updateActions()));
-}
-
-FormActionHandler::~FormActionHandler()
-{
-}
-
-void FormActionHandler::showPatientLastEpisode()
-{
-    FormManager::instance()->activateMode();
-}
-
-void FormActionHandler::updateActions()
-{
-    aShowPatientLastEpisode->setEnabled(true);
-    // TODO: remove when patient synthesis will be available
-    aShowPatientSynthesis->setEnabled(false);
 }
