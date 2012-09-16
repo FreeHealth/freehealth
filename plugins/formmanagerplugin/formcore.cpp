@@ -98,6 +98,7 @@ FormCore::FormCore(QObject *parent) :
     _instance = this;
     d->_formManager = new FormManager(this);
 //    d->_episodeManager = new EpisodeManager(this);
+    // TODO: add episodeBase in the core
 }
 
 /*! Destructor of the FormCore class */
