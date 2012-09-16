@@ -230,6 +230,7 @@ void %PluginName%ContextualWidgetManager::updateContext(Core::IContext *object)
 //    connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(updateActions()));
 }
 
+/** Define the current view, update and connect actions */
 void %PluginName%ActionHandler::setCurrentView(%PluginName%ContextualWidget *view)
 {
     Q_ASSERT(view);
