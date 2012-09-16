@@ -96,6 +96,7 @@ protected Q_SLOTS:
     bool printFormOrEpisode();
 
 private Q_SLOTS:
+    void onCurrentPatientChanged();
     void episodeChanged(const QModelIndex &current, const QModelIndex &previous);
     void handlePressed(const QModelIndex &index);
     void handleClicked(const QModelIndex &index);

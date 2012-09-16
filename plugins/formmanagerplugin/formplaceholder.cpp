@@ -378,7 +378,7 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
     third = height/5;
     d->ui->verticalSplitter->setSizes(QList<int>() << third << height-third);
 
-    connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(clearAll()));
+    connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onCurrentPatientChanged()));
 }
 
 FormPlaceHolder::~FormPlaceHolder()
@@ -747,6 +747,11 @@ bool FormPlaceHolder::printFormOrEpisode()
     // print
     p->print(htmlToPrint, Core::IDocumentPrinter::Papers_Generic_User, false);
     return true;
+}
+
+void FormPlaceHolder::onCurrentPatientChanged()
+{
+    clear();
 }
 
 void FormPlaceHolder::episodeChanged(const QModelIndex &current, const QModelIndex &previous)
