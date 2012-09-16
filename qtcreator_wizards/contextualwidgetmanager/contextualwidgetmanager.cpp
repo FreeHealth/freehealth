@@ -99,7 +99,8 @@ static inline QAction *createAction(QObject *parent, const QString &name, const 
         cmd->setTranslations(trans); // use the Trans::Constants tr context (automatic)
     if (key != QKeySequence::UnknownKey)
         cmd->setDefaultKeySequence(key);
-    menu->addAction(cmd, group);
+    if (menu)
+        menu->addAction(cmd, group);
     return a;
 }
 
