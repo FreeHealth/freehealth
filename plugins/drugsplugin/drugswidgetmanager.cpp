@@ -49,6 +49,7 @@
 #include <utils/log.h>
 #include <utils/global.h>
 #include <translationutils/constants.h>
+#include <translationutils/trans_database.h>
 #include <translationutils/trans_menu.h>
 #include <translationutils/trans_drugs.h>
 #include <translationutils/trans_editor.h>
