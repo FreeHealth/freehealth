@@ -302,7 +302,7 @@ void FormActionHandler::setCurrentView(FormContextualWidget *view)
     
     // connect new view
     connect(m_CurrentView, SIGNAL(actionsEnabledStateChanged()), this, SLOT(updateActions()));
-    connect(m_CurrentView, SIGNAL(actionEnabledStateChanged(Form::Internal::FormContextualWidget::Action)), this, SLOT(onActionEnabledStateUpdated(Form::Internal::FormContextualWidget::WidgetAction)));
+    connect(m_CurrentView, SIGNAL(actionEnabledStateChanged(Form::Internal::FormContextualWidget::WidgetAction)), this, SLOT(onActionEnabledStateUpdated(Form::Internal::FormContextualWidget::WidgetAction)));
     // update actions according to the current view
     updateActions();
 }
@@ -342,56 +342,57 @@ void FormActionHandler::onActionEnabledStateUpdated(Form::Internal::FormContextu
 void FormActionHandler::onClearRequested()
 {
     if (m_CurrentView) {
-//        m_CurrentView->clear();
+        m_CurrentView->clear();
     }
 }
 
 void FormActionHandler::onSaveEpisodeRequested()
 {
+    qWarning() << "FormActionHandler::onSaveEpisodeRequested" << m_CurrentView;
     if (m_CurrentView) {
-//        m_CurrentView->clear();
+        m_CurrentView->saveCurrentEpisode();
     }
 }
 
 void FormActionHandler::onCreateEpisodeRequested()
 {
     if (m_CurrentView) {
-//        m_CurrentView->clear();
+        m_CurrentView->createEpisode();
     }
 }
 
 void FormActionHandler::onValidateEpisodeRequested()
 {
     if (m_CurrentView) {
-//        m_CurrentView->clear();
+        m_CurrentView->validateCurrentEpisode();
     }
 }
 
 void FormActionHandler::onRemoveEpisodeRequested()
 {
     if (m_CurrentView) {
-//        m_CurrentView->clear();
+        m_CurrentView->removeCurrentEpisode();
     }
 }
 
 void FormActionHandler::onTakeScreenshotRequested()
 {
     if (m_CurrentView) {
-//        m_CurrentView->clear();
+        m_CurrentView->takeScreenshotOfCurrentEpisode();
     }
 }
 
 void FormActionHandler::onAddFormRequested()
 {
     if (m_CurrentView) {
-//        m_CurrentView->clear();
+        m_CurrentView->addForm();
     }
 }
 
 void FormActionHandler::onPrintFormRequested()
 {
     if (m_CurrentView) {
-//        m_CurrentView->clear();
+        m_CurrentView->printFormOrEpisode();
     }
 }
 
