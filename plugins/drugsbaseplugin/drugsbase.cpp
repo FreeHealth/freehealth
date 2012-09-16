@@ -319,8 +319,8 @@ public:
                 route->setSystemicDatabaseTag(query.value(Constants::ROUTES_SYSTEMIC).toString());
                 route->setRouteId(query.value(Constants::ROUTES_RID).toInt());
                 QHash<QString, QString> labels = getAllLabels(query.value(Constants::ROUTES_MASTERLID).toInt());
-                foreach(const QString &lang, labels) {
-                    route->setLabel(lang, labels.value(lang));
+                foreach(const QString &lang, labels.keys()) {
+                    route->setLabel(labels.value(lang), lang);
                 }
             }
         } else {
