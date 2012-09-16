@@ -47,7 +47,7 @@
 using namespace DrugsWidget::Internal;
 using namespace DrugsWidget::Constants;
 
-inline static DrugsDB::DrugsModel *drugModel() { return DrugsWidget::DrugsWidgetManager::instance()->currentDrugsModel(); }
+static inline DrugsDB::DrugsModel *drugModel() { return DrugsWidget::DrugsWidgetManager::instance()->currentDrugsModel(); }
 //static inline DrugsDB::InteractionManager &interactionManager() {return DrugsDB::DrugBaseCore::instance().interactionManager();}
 
 DrugInfo::DrugInfo(const QVariant &drugUid,  QWidget *parent)
