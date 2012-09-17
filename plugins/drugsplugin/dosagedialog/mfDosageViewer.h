@@ -69,7 +69,7 @@ public Q_SLOTS:
     void changeCurrentRow(const QModelIndex &current, const QModelIndex &previous); 
 
 Q_SIGNALS:
-    void protocolDataschanged();
+    void protocolDataChanged();
 
 private:
     void resizeEvent(QResizeEvent * event);

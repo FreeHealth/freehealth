@@ -481,7 +481,7 @@ void DosageViewer::setDosageModel(DrugsDB::Internal::DosageModel *model)
     }
 
     // Connect Widgets data modifications to dataChanged signal
-    connect(d->m_DosageModel,SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SIGNAL(protocolDataschanged()));
+    connect(d->m_DosageModel,SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SIGNAL(protocolDataChanged()));
 }
 
 /** \brief Destructor */
