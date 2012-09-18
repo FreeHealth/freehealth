@@ -36,6 +36,8 @@
 #include <translationutils/constants.h>
 #include <translationutils/trans_drugs.h>
 
+#include <QDebug>
+
 using namespace DrugsDB;
 using namespace Trans::ConstantTranslations;
 
@@ -122,10 +124,9 @@ QVariant PrescriptionToken::value() const
             }
             break;
         }
-        default: _model->data(_model->index(_row, _ref));
         }  // switch (_ref)
     }
-    return QVariant();
+    return _model->data(_model->index(_row, _ref));;
 }
 
 #endif  // ifdef WITH_PAD

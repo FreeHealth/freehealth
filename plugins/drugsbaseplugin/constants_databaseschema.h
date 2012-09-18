@@ -27,7 +27,6 @@
 #ifndef DRUGSDB_CONSTANTS_DATABASESCHEMA_H
 #define DRUGSDB_CONSTANTS_DATABASESCHEMA_H
 
-
 /**
  * \file constants_databaseschema.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
