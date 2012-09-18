@@ -146,7 +146,7 @@ bool FrenchZipCodesStep::process()
 
 bool FrenchZipCodesStep::unzipFiles()
 {
-    Q_EMIT progressLabelChanged(tr("French zip codes database creation: unziping files..."));
+    Q_EMIT progressLabelChanged(tr("French zip codes database creation: unzipping files..."));
     Q_EMIT progressRangeChanged(0, 1);
     Q_EMIT progress(0);
 

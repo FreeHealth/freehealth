@@ -201,7 +201,7 @@ bool BeDrugDatatabaseStep::process()
 
 bool BeDrugDatatabaseStep::unzipFiles()
 {
-    Q_EMIT progressLabelChanged(tr("Unziping raw source files"));
+    Q_EMIT progressLabelChanged(tr("Unzipping raw source files"));
     Q_EMIT progressRangeChanged(0, 2);
     Q_EMIT progress(0);
 

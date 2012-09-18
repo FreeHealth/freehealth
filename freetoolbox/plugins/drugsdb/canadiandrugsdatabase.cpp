@@ -144,7 +144,7 @@ bool CaDrugDatatabaseStep::process()
 
 bool CaDrugDatatabaseStep::unzipFiles()
 {
-    Q_EMIT progressLabelChanged(tr("Canadian database creation : unziping files..."));
+    Q_EMIT progressLabelChanged(tr("Canadian database creation: unzipping files..."));
     Q_EMIT progressRangeChanged(0, 1);
     Q_EMIT progress(0);
 
