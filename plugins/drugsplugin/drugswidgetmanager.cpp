@@ -787,6 +787,7 @@ void DrugsActionHandler::resetPrescriptionSentenceToDefault()
     doc.setHtml(content);
     settings()->setValue(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_PLAIN, doc.toPlainText());
 #else
+    //TODO use the bundled file oldstyle_..._lang.html
     settings()->setValue(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_HTML,
                          QCoreApplication::translate(
                                  Constants::DRUGCONSTANTS_TR_CONTEXT,
