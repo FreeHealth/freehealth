@@ -46,12 +46,12 @@
     <message>
         <location filename="../../libs/calendar/dayview/dayrangebody.cpp" line="652"/>
         <source>modify</source>
-        <translation type="unfinished">modifier</translation>
+        <translation>modifier</translation>
     </message>
     <message>
         <location filename="../../libs/calendar/dayview/dayrangebody.cpp" line="654"/>
         <source>remove</source>
-        <translation type="unfinished">retirer</translation>
+        <translation>retirer</translation>
     </message>
 </context>
 <context>
@@ -59,12 +59,12 @@
     <message>
         <location filename="../../libs/calendar/dayview/dayrangeheader.cpp" line="382"/>
         <source>modify</source>
-        <translation type="unfinished">modifier</translation>
+        <translation>modifier</translation>
     </message>
     <message>
         <location filename="../../libs/calendar/dayview/dayrangeheader.cpp" line="384"/>
         <source>remove</source>
-        <translation type="unfinished">retirer</translation>
+        <translation>retirer</translation>
     </message>
 </context>
 <context>
@@ -72,7 +72,7 @@
     <message>
         <location filename="../../libs/calendar/dayview/day_widget.cpp" line="75"/>
         <source>(untitled)</source>
-        <translation type="unfinished">(sans titre)</translation>
+        <translation>(sans titre)</translation>
     </message>
 </context>
 <context>
@@ -80,7 +80,7 @@
     <message>
         <location filename="../../libs/calendar/dayview/hour_range_widget.cpp" line="101"/>
         <source>(untitled)</source>
-        <translation type="unfinished">(sans titre)</translation>
+        <translation>(sans titre)</translation>
     </message>
 </context>
 <context>
@@ -191,12 +191,12 @@
     <message>
         <location filename="../../libs/calendar/monthview/month_view.cpp" line="114"/>
         <source>d MMM</source>
-        <translation type="unfinished">d MMM</translation>
+        <translation>d MMM</translation>
     </message>
     <message>
         <location filename="../../libs/calendar/monthview/month_view.cpp" line="116"/>
         <source>d</source>
-        <translation type="unfinished">d</translation>
+        <translation>d</translation>
     </message>
 </context>
 <context>

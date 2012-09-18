@@ -567,11 +567,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Trying to create %1
-Place: %2</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Unable to open database %1 - Error: %2</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2236,6 +2231,47 @@ Text Align Justify shortcut key : Mac specific</extracomment>
     </message>
     <message>
         <source>Save and restore</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Validate episode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Trying to create %1 
+Place: %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Forms and episodes database information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Refill %1 time(s)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove episode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Date of birth: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Age: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Age: %1; DOB: %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Social number</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Profession</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

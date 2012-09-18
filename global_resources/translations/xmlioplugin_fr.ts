@@ -35,27 +35,27 @@ Erreur : %2</translation>
         <translation>Pas de nom de formulaire</translation>
     </message>
     <message>
-        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="466"/>
+        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="469"/>
         <source>Form: </source>
         <translation>Formulaire : </translation>
     </message>
     <message>
-        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="467"/>
+        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="470"/>
         <source>New version: %1</source>
         <translation>Nouvelle version : %1</translation>
     </message>
     <message>
-        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="468"/>
+        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="471"/>
         <source>Database version: %1</source>
         <translation>Version en base de données : %1</translation>
     </message>
     <message>
-        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="483"/>
+        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="486"/>
         <source>Form update detected.</source>
         <translation>Mise à jour de formulaire détectée.</translation>
     </message>
     <message>
-        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="484"/>
+        <location filename="../../plugins/xmlioplugin/xmlformio.cpp" line="487"/>
         <source>A form update has been detected. Do you want to update the forms?</source>
         <translation>Une mise à jour de formulaire a été détectée. Voulez-vous mettre à jour les formulaires ?</translation>
     </message>

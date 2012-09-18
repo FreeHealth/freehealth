@@ -41,7 +41,7 @@
     <message>
         <location filename="../../libs/datapackutils/widgets/addserverdialog.cpp" line="129"/>
         <source>Select datapack local path</source>
-        <translation type="unfinished"></translation>
+        <translation>Sélectionnez le chemin des paquets de données locaux</translation>
     </message>
 </context>
 <context>
@@ -74,7 +74,7 @@
     <message>
         <location filename="../../libs/datapackutils/widgets/addserverdialog.ui" line="72"/>
         <source>Select</source>
-        <translation type="unfinished"></translation>
+        <translation>Sélectionnez</translation>
     </message>
     <message>
         <location filename="../../libs/datapackutils/widgets/addserverdialog.ui" line="85"/>
@@ -347,7 +347,7 @@
     <message>
         <location filename="../../libs/datapackutils/widgets/serverpackeditor.ui" line="127"/>
         <source>Servername</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
