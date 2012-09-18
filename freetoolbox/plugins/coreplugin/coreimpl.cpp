@@ -19,8 +19,8 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developper : Eric MAEKER, <eric.maeker@gmail.com>                *
- *   Contributors :                                                        *
+ *   Main Developper: Eric MAEKER, <eric.maeker@gmail.com>                 *
+ *   Contributors:                                                         *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "coreimpl.h"
@@ -203,8 +203,8 @@ bool CoreImpl::initialize(const QStringList &arguments, QString *errorString)
 #endif
         // update some preferences ?
         bool yes = Utils::yesNoMessageBox(
-                QCoreApplication::translate("Core", "You are updating FreeToolBox, do you want to update your personnal preferences ?"),
-                QCoreApplication::translate("Core", "With the new version some preferences should be outdated. Answering yes will allow FreeToolBox to update your personnal preferences."));
+                QCoreApplication::translate("Core", "You are updating FreeToolBox, do you want to update your personnal preferences?"),
+                    QCoreApplication::translate("Core", "With the new version some preferences will eventually be outdated.<br/> Answering 'yes' will allow FreeToolBox to update your personal preferences."));
         if (yes) {
             m_UpdatePreferences = true;
         }
