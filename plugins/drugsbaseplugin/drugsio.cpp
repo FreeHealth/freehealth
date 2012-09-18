@@ -1059,20 +1059,21 @@ QString DrugsIO::getDrugPrescription(DrugsDB::DrugsModel *model, const int drugR
     // Refill
     // FIXME: correcty manages plurial translations
     QVariant refill = drug->prescriptionValue(Constants::Prescription::Refill);
-    if (!refill.isNull() && !refill.isEmpty()) {
-    if (refill.toInt() > 1) {
-        QString tmp = tkTr(Trans::Constants::REFILL_1_TIMES).arg(v.toInt());
-        tmp = tmp.remove("(").remove(")");
-        tokens_value["REFILL"] = tmp;
-    } else if (refill.toInt() == 1) {
-        QString tmp = tkTr(Trans::Constants::REFILL_1_TIMES).arg(v.toInt());
-        int begin = tmp.indexOf("(");
-        if (begin > 0) {
-            int end = tmp.indexOf(")", begin);
-            if (end)
-                tmp = tmp.remove(begin, end-begin);
+    if (!refill.isNull() && !refill.isNull()) {
+        if (refill.toInt() > 1) {
+            QString tmp = tkTr(Trans::Constants::REFILL_1_TIMES).arg(refill.toInt());
+            tmp = tmp.remove("(").remove(")");
+            tokens_value["REFILL"] = tmp;
+        } else if (refill.toInt() == 1) {
+            QString tmp = tkTr(Trans::Constants::REFILL_1_TIMES).arg(refill.toInt());
+            int begin = tmp.indexOf("(");
+            if (begin > 0) {
+                int end = tmp.indexOf(")", begin);
+                if (end)
+                    tmp = tmp.remove(begin, end-begin);
+            }
+            tokens_value["REFILL"] = tmp;
         }
-        tokens_value["REFILL"] = tmp;
     }
 
     Utils::replaceTokens(tmp, tokens_value);
