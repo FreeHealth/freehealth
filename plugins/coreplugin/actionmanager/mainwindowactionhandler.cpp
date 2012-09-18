@@ -55,6 +55,8 @@
 #include <coreplugin/dialogs/helpdialog.h>
 #include <coreplugin/dialogs/settingsdialog.h>
 
+#include <utils/log.h>
+
 #include <QAction>
 //#include <QToolBar>
 //#include <QMenuBar>
@@ -544,6 +546,20 @@ void MainWindowActionHandler::createFileMenu()
     ActionContainer *recentmenu = actionManager()->createMenu(Constants::M_FILE_RECENTFILES);
     recentmenu->setTranslations(Trans::Constants::M_FILE_RECENTFILES_TEXT);
     filemenu->addMenu(recentmenu,Constants::G_FILE_RECENTS);
+}
+
+/** \brief Create the File > New sub menu. Must firstly create the file menu. */
+void MainWindowActionHandler::createFileNewSubMenu()
+{
+    ActionContainer *filemenu = actionManager()->actionContainer(Constants::M_FILE);
+    if (!filemenu) {
+        LOG_ERROR("You must create the file menu first");
+        return;
+    }
+    ActionContainer *newmenu = actionManager()->createMenu(Constants::M_FILE_NEW);
+    newmenu->setTranslations(Trans::Constants::FILENEW_TEXT);
+    filemenu->addMenu(newmenu, Constants::G_FILE_NEW);
+    newmenu->appendGroup(Constants::G_FILE_NEW);
 }
 
 void MainWindowActionHandler::createTemplatesMenu()
