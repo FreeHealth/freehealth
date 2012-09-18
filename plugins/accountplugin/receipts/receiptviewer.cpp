@@ -90,9 +90,9 @@ namespace InternalAmount {
 
 class AmountModel : public QAbstractTableModel
 {
-    // TODO: missing Q_OBJECT macro --> no sig/slot here  PLUS  MERGE the other amountmodel.h
-    // may be that's the buggy Object::connect: No such signal QObject::dataChanged(QModelIndex,QModelIndex) at the end of the app ??
+    // TODO: MERGE accountbaseplugin/amountmodel.h
 
+    Q_OBJECT
 public:
     enum ColumnRepresentation {
         Col_Cash = 0,
