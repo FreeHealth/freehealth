@@ -38,8 +38,8 @@
 /**
  * \file userbase.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.7.6
- * \date 28 Jun 2012
+ * \version 0.7.8
+ * \date 17 Sept 2012
 */
 
 namespace UserPlugin {
@@ -79,6 +79,7 @@ public:
                        );
     bool checkDatabaseVersion();
     bool isNewlyCreated() const;
+    QString getCurrentVersion();
 
     bool createDefaultUser();
     bool createVirtualUser(const QString &uid, const QString &name, const QString &firstName, int title, int gender,
@@ -114,6 +115,8 @@ public:
     // Linkers
     int getMaxLinkId();
     bool updateMaxLinkId(const int max);
+
+    void toTreeWidget(QTreeWidget *tree);
 
 private:
     // privates retreivers
