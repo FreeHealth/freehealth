@@ -112,7 +112,7 @@ void BelgishDrugsDatabase::on_startJobs_clicked()
 
     if (ui->unzip->isChecked()) {
         if (m_Step->unzipFiles())
-            if (m_Step->prepareDatas())
+            if (m_Step->prepareData())
                 ui->unzip->setText(ui->unzip->text() + " CORRECTLY DONE");
     }
     if (ui->createDb->isChecked()) {
@@ -191,7 +191,7 @@ bool BeDrugDatatabaseStep::downloadFiles(QProgressBar *bar)
 bool BeDrugDatatabaseStep::process()
 {
     unzipFiles();
-    prepareDatas();
+    prepareData();
     createDatabase();
     populateDatabase();
     linkMolecules();
@@ -226,7 +226,7 @@ bool BeDrugDatatabaseStep::unzipFiles()
     return true;
 }
 
-bool BeDrugDatatabaseStep::prepareDatas()
+bool BeDrugDatatabaseStep::prepareData()
 {
     Q_EMIT progressLabelChanged(tr("Preparing raw source files"));
 
