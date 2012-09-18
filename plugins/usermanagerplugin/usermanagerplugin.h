@@ -66,10 +66,14 @@ private Q_SLOTS:
     void createUser();
     void changeCurrentUser();
     void updateActions();
+    void showUserManager();
+    void showDatabaseInformation();
 
 private:
     QAction *aCreateUser;
     QAction *aChangeUser;
+    QAction *aUserManager;
+    QAction *aAboutDatabase;
 
     FirstRun_UserCreation *m_FirstCreation;
 

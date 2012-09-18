@@ -45,6 +45,7 @@ const char* const INTOLERANCE_TO_1              = QT_TRANSLATE_NOOP("tkConstants
 const char* const NO_ALLERGIES_INTOLERANCES     = QT_TRANSLATE_NOOP("tkConstants", "No known allergies / intolerances");
 const char* const KNOWN_ALLERGIES               = QT_TRANSLATE_NOOP("tkConstants", "Known allergies");
 const char* const KNOWN_INTOLERANCES            = QT_TRANSLATE_NOOP("tkConstants", "Known intolerances");
+const char* const REFILL_1_TIMES                = QT_TRANSLATE_NOOP("tkConstants", "Refill %1 time(s)");
 
 // Drugs Interactions
 const char* const INTERACTION                   = QT_TRANSLATE_NOOP("tkConstants", "Interaction");

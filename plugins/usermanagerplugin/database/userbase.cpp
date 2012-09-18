@@ -75,6 +75,7 @@
 #include <QDir>
 #include <QLocale>
 #include <QDateTime>
+#include <QTreeWidgetItem>
 
 enum { WarnUserPreferences = false };
 
@@ -247,6 +248,24 @@ bool UserBase::isInitialized() const
 bool UserBase::isNewlyCreated() const
 {
     return m_IsNewlyCreated;
+}
+
+/** Return the current version of the database */
+QString UserBase::getCurrentVersion()
+{
+    QSqlDatabase DB = QSqlDatabase::database(Constants::USER_DB_CONNECTION);
+    if (!connectDatabase(DB, __LINE__)) {
+        return QString::null;
+    }
+    DB.transaction();
+    QSqlQuery query(DB);
+
+    if (query.exec(select(Constants::Table_INFORMATION, Constants::INFO_VERSION))) {
+        if (query.next())
+            return query.value(0).toString();
+    }
+    DB.commit();
+    return QString::null;
 }
 
 /** Return true if the userbase is the last version (database is updated by this member if needed) */
@@ -1512,6 +1531,36 @@ bool UserBase::updateMaxLinkId(const int max)
     }
     DB.commit();
     return true;
+}
+
+void UserBase::toTreeWidget(QTreeWidget *tree)
+{
+    Database::toTreeWidget(tree);
+    if (!tree)
+        return;
+    QFont bold;
+    bold.setBold(true);
+
+    // Some more information
+    QTreeWidgetItem *db = new QTreeWidgetItem(tree, QStringList() << "Specific information");
+    db->setFont(0, bold);
+
+    QHash<int, QString> where;
+    where.insert(Constants::USER_VALIDITY, QString("=1"));
+    new QTreeWidgetItem(db, QStringList() << "Number of valid users" << QString::number(count(Constants::Table_USERS, Constants::USER_ID, getWhereClause(Constants::Table_USERS, where))));
+    where.clear();
+    where.insert(Constants::USER_ISVIRTUAL, QString("=1"));
+    new QTreeWidgetItem(db, QStringList() << "Number of virtual users" << QString::number(count(Constants::Table_USERS, Constants::USER_ID, getWhereClause(Constants::Table_USERS, where))));
+    new QTreeWidgetItem(db, QStringList() << "Database version" << getCurrentVersion());
+    if (isInitialized()) {
+        new QTreeWidgetItem(db, QStringList() << "Database" << "initialized");
+    } else {
+        new QTreeWidgetItem(db, QStringList() << "Database" << "not initialized");
+    }
+
+    tree->expandAll();
+    tree->resizeColumnToContents(0);
+    tree->resizeColumnToContents(1);
 }
 
 void UserBase::onCoreDatabaseServerChanged()

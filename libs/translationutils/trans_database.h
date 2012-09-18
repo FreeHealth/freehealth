@@ -53,6 +53,7 @@ const char* const DOSAGES_DATABASE_INFORMATION        = QT_TRANSLATE_NOOP("tkCon
 const char* const INTERACTIONS_DATABASE_INFORMATION   = QT_TRANSLATE_NOOP("tkConstants", "Interactions database information");
 const char* const PMH_DATABASE_INFORMATION            = QT_TRANSLATE_NOOP("tkConstants", "Past medical history database information");
 const char* const FORM_DATABASE_INFORMATION           = QT_TRANSLATE_NOOP("tkConstants", "Forms and episodes database information");
+const char* const USER_DATABASE_INFORMATION           = QT_TRANSLATE_NOOP("tkConstants", "Users database information");
 
 } // end Constants
 } // end TranslationUtils

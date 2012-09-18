@@ -922,7 +922,7 @@ Using Url: %1
         <translation>Fichier Formulaire FreeMedForms (*.xml)</translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/ipatient.cpp" line="57"/>
+        <location filename="../../plugins/coreplugin/ipatient.cpp" line="59"/>
         <source>This token namespace contains all patient&apos;s related tokens.
 It does include the form&apos;s extracted token (when forms use &apos;patientDataRepresentation&apos;),
 but does not contains all other form items.</source>

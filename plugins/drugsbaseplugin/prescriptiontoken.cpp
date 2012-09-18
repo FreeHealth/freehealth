@@ -34,11 +34,14 @@
 #include <coreplugin/constants_tokensandsettings.h>
 
 #include <translationutils/constants.h>
+#include <translationutils/trans_drugs.h>
+
+#include <QDebug>
 
 using namespace DrugsDB;
 using namespace Trans::ConstantTranslations;
 
-DrugsDB::DrugsModel *PrescriptionToken::_model = 0;
+QPointer<DrugsDB::DrugsModel> PrescriptionToken::_model = 0;
 int PrescriptionToken::_row = 0;
 
 PrescriptionToken::PrescriptionToken(const QString &name, const int ref) :
@@ -81,21 +84,49 @@ QVariant PrescriptionToken::value() const
         if (!v.isValid() || v.isNull())
             return QVariant();
         return mealTime(v.toInt());
-    } else if (_ref==Prescription::IntakesIntervalSchemeIndex) {
-        const QVariant &v = _model->data(_model->index(_row, _ref));
-        if (!v.isValid() || v.isNull())
-            return QVariant();
-        return period(v.toInt());
-    } else if (_ref==Prescription::IntakesIntervalOfTime) {
-        const QVariant &v = _model->data(_model->index(_row, _ref));
-        if (!v.isValid() || v.isNull())
-            return QVariant();
-        if (v.toInt() <= 0)
-            return QVariant();
-        return v;
-
+    } else {
+        switch (_ref) {
+        case Prescription::IntakesIntervalSchemeIndex:
+        {
+            const QVariant &v = _model->data(_model->index(_row, _ref));
+            if (!v.isValid() || v.isNull())
+                return QVariant();
+            return period(v.toInt());
+        }
+        case Prescription::IntakesIntervalOfTime:
+        {
+            const QVariant &v = _model->data(_model->index(_row, _ref));
+            if (!v.isValid() || v.isNull())
+                return QVariant();
+            if (v.toInt() <= 0)
+                return QVariant();
+            return v;
+        }
+        case Prescription::Refill:
+        {
+            const QVariant &v = _model->data(_model->index(_row, _ref));
+            if (!v.isValid() || v.isNull() || v.toInt() < 1)
+                return QVariant();
+            // FIXME: correcty manages plurial translations
+            if (v.toInt() > 1) {
+                QString tmp = tkTr(Trans::Constants::REFILL_1_TIMES).arg(v.toInt());
+                tmp = tmp.remove("(").remove(")");
+                return tmp;
+            } else {
+                QString tmp = tkTr(Trans::Constants::REFILL_1_TIMES).arg(v.toInt());
+                int begin = tmp.indexOf("(");
+                if (begin > 0) {
+                    int end = tmp.indexOf(")", begin);
+                    if (end)
+                        tmp = tmp.remove(begin, end-begin);
+                }
+                return tmp;
+            }
+            break;
+        }
+        }  // switch (_ref)
     }
-    return _model->data(_model->index(_row, _ref));
+    return _model->data(_model->index(_row, _ref));;
 }
 
 #endif  // ifdef WITH_PAD

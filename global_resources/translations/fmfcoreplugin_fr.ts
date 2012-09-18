@@ -48,12 +48,12 @@ Veuillez vérfier que l&apos;hôte contient bien une configuration serveur de Fr
     <message>
         <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="374"/>
         <source>Connecting databases</source>
-        <translation type="unfinished"></translation>
+        <translation>Connection aux bases de données</translation>
     </message>
     <message>
         <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="374"/>
         <source>Please wait</source>
-        <translation type="unfinished"></translation>
+        <translation>Veuillez patienter</translation>
     </message>
 </context>
 <context>
@@ -99,12 +99,12 @@ Veuillez vérfier que l&apos;hôte contient bien une configuration serveur de Fr
     <message>
         <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="589"/>
         <source>Preparing databases</source>
-        <translation type="unfinished"></translation>
+        <translation>Préparation des bases de données</translation>
     </message>
     <message>
         <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="590"/>
         <source>Preparing databases. Please wait...</source>
-        <translation type="unfinished"></translation>
+        <translation>Préparation des bases de données. Veuillez patienter...</translation>
     </message>
 </context>
 <context>
@@ -242,7 +242,7 @@ Veuillez vérfier que l&apos;hôte contient bien une configuration serveur de Fr
     <message>
         <location filename="../../plugins/coreplugin/dialogs/commonaboutpages.h" line="43"/>
         <source>Build information</source>
-        <translation type="unfinished"></translation>
+        <translation>Information de compilation</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/commonaboutpages.h" line="44"/>
@@ -334,7 +334,7 @@ Url : %1
     <message>
         <location filename="../../plugins/coreplugin/dialogs/commonaboutpages.h" line="58"/>
         <source>License</source>
-        <translation type="unfinished"></translation>
+        <translation>Licence</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/commonaboutpages.h" line="59"/>
@@ -497,12 +497,12 @@ Url : %1
     <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="804"/>
         <source>Found a configuration file next to the binary. Reading file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Fichier de configuration trouvé à côté du binaire. Fichier en cours de lecture.</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="827"/>
         <source>File does not exists and can not be created: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Le fichier n&apos;existe pas et ne peut pas être créé : %1</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/settings.cpp" line="854"/>
@@ -848,7 +848,7 @@ Url : %1
     <message>
         <location filename="../../plugins/coreplugin/dialogs/commonaboutpages.h" line="73"/>
         <source>Team</source>
-        <translation type="unfinished"></translation>
+        <translation>Équipe</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/dialogs/commonaboutpages.h" line="74"/>
@@ -928,14 +928,15 @@ Url : %1
     <message>
         <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="432"/>
         <source>Missing files.</source>
-        <translation type="unfinished"></translation>
+        <translation>Fichiers manquants.</translation>
     </message>
     <message>
         <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="433"/>
         <source>The configuration script is missing. You can not configure the server without this script.
 
 &lt;b&gt;Please contact the developement team.&lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Le script de configuration est manquant. Vous ne pouvez pas configurer votre serveur sans ce fichier.
+&lt;b&gt;Veuillez contacter l&apos;équipe de développement.&lt;/b&gt;</translation>
     </message>
     <message>
         <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="471"/>
@@ -962,13 +963,14 @@ Veuillez contacter votre administrateur réseau.</translation>
     <message>
         <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="505"/>
         <source>An error occured...</source>
-        <translation type="unfinished"></translation>
+        <translation>Une erreur est survenue...</translation>
     </message>
     <message>
         <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="506"/>
         <source>An error occured when trying to execute the script configuration script.
 Please check out the log files and contact your administrator.</source>
-        <translation type="unfinished"></translation>
+        <translation>Une erreur est survenue lors de la tentative d&apos;exécution du script de configuration.
+Veuillez vérifier les fichiers journaux et contacter votre administrateur.</translation>
     </message>
     <message>
         <location filename="../../plugins/fmfcoreplugin/appconfigwizard.cpp" line="511"/>
@@ -1072,16 +1074,16 @@ Please check out the log files and contact your administrator.</source>
         <translation>Fichier Formulaire FreeMedForms (*.xml)</translation>
     </message>
     <message>
-        <location filename="../../plugins/coreplugin/ipatient.cpp" line="57"/>
+        <location filename="../../plugins/coreplugin/ipatient.cpp" line="59"/>
         <source>This token namespace contains all patient&apos;s related tokens.
 It does include the form&apos;s extracted token (when forms use &apos;patientDataRepresentation&apos;),
 but does not contains all other form items.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ce nom d&apos;espace d&apos;étiquette contient toutes les informations relatives aux patients.</translation>
     </message>
     <message>
         <location filename="../../plugins/coreplugin/iuser.cpp" line="56"/>
         <source>This token namespace contains all user&apos;s related tokens.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ce nom d&apos;espace d&apos;étiquette contient toutes les informations relatives aux utilisateurs.</translation>
     </message>
 </context>
 </TS>

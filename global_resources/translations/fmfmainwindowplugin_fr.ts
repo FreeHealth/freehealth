@@ -78,12 +78,12 @@
 <context>
     <name>MainWin::MainWindow</name>
     <message>
-        <location filename="../../plugins/fmfmainwindowplugin/mainwindow.cpp" line="148"/>
+        <location filename="../../plugins/fmfmainwindowplugin/mainwindow.cpp" line="147"/>
         <source>Creating Main Window</source>
         <translation>Création de la fenêtre principale</translation>
     </message>
     <message>
-        <location filename="../../plugins/fmfmainwindowplugin/mainwindow.cpp" line="402"/>
+        <location filename="../../plugins/fmfmainwindowplugin/mainwindow.cpp" line="393"/>
         <source>Choose a patient file directory</source>
         <translation>Sélectionnez un répertoire</translation>
     </message>

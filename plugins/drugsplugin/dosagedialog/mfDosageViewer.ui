@@ -96,7 +96,7 @@
       <bool>true</bool>
      </property>
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="tabBasics">
       <attribute name="title">
@@ -319,13 +319,6 @@
           <property name="spacing">
            <number>5</number>
           </property>
-          <item row="0" column="0">
-           <widget class="QCheckBox" name="fromToDurationCheck">
-            <property name="text">
-             <string>Range x to y</string>
-            </property>
-           </widget>
-          </item>
           <item row="1" column="0">
            <layout class="QHBoxLayout" name="horizontalLayout_6">
             <item>
@@ -407,6 +400,47 @@
             </item>
            </layout>
           </item>
+          <item row="0" column="0">
+           <widget class="QCheckBox" name="fromToDurationCheck">
+            <property name="text">
+             <string>Range x to y</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <layout class="QHBoxLayout" name="horizontalLayout_9">
+            <item>
+             <widget class="QLabel" name="refillLabel">
+              <property name="text">
+               <string>Refill</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSpinBox" name="refillSpin"/>
+            </item>
+            <item>
+             <widget class="QLabel" name="refillTimesLabel">
+              <property name="text">
+               <string>times</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_2">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
          </layout>
         </widget>
        </item>
@@ -454,6 +488,72 @@
        <property name="spacing">
         <number>5</number>
        </property>
+       <item row="3" column="3">
+        <widget class="QGroupBox" name="groupBox_11">
+         <property name="title">
+          <string>Meal time relation</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_19">
+          <item row="0" column="0">
+           <widget class="QComboBox" name="mealTimeCombo"/>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="2" column="3">
+        <widget class="QGroupBox" name="groupBox_10">
+         <property name="title">
+          <string>Min interval between intakes</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_18">
+          <item row="0" column="0">
+           <layout class="QHBoxLayout" name="horizontalLayout">
+            <item>
+             <widget class="QSpinBox" name="minIntervalIntakesSpin"/>
+            </item>
+            <item>
+             <widget class="QComboBox" name="intervalTimeSchemeCombo">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>16777215</width>
+                <height>16777215</height>
+               </size>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="1" column="0" rowspan="5" colspan="2">
+        <widget class="DrugsWidget::Internal::DailySchemeViewer" name="dailyScheme" native="true"/>
+       </item>
+       <item row="1" column="2">
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
        <item row="1" column="3">
         <widget class="QTableWidget" name="hourlyTableWidget">
          <property name="sizePolicy">
@@ -677,72 +777,6 @@
           </size>
          </property>
         </spacer>
-       </item>
-       <item row="1" column="2">
-        <spacer name="horizontalSpacer">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="1" column="0" rowspan="5" colspan="2">
-        <widget class="DrugsWidget::Internal::DailySchemeViewer" name="dailyScheme" native="true"/>
-       </item>
-       <item row="2" column="3">
-        <widget class="QGroupBox" name="groupBox_10">
-         <property name="title">
-          <string>Min interval between intakes</string>
-         </property>
-         <layout class="QGridLayout" name="gridLayout_18">
-          <item row="0" column="0">
-           <layout class="QHBoxLayout" name="horizontalLayout">
-            <item>
-             <widget class="QSpinBox" name="minIntervalIntakesSpin"/>
-            </item>
-            <item>
-             <widget class="QComboBox" name="intervalTimeSchemeCombo">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="minimumSize">
-               <size>
-                <width>0</width>
-                <height>0</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>16777215</width>
-                <height>16777215</height>
-               </size>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="3" column="3">
-        <widget class="QGroupBox" name="groupBox_11">
-         <property name="title">
-          <string>Meal time relation</string>
-         </property>
-         <layout class="QGridLayout" name="gridLayout_19">
-          <item row="0" column="0">
-           <widget class="QComboBox" name="mealTimeCombo"/>
-          </item>
-         </layout>
-        </widget>
        </item>
       </layout>
      </widget>

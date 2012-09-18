@@ -43,6 +43,7 @@ const char * const  MENUBAR              = "menuBar";           /*!< \brief Defa
 const char * const  M_GENERAL            = "menuGeneral";          /*!< \brief Default menu File object name  \ingroup constants_actionmanager */
 const char * const  M_GENERAL_NEW        = "menuGeneral.New";
 const char * const  M_FILE               = "menuFile";          /*!< \brief Default menu File object name  \ingroup constants_actionmanager */
+const char * const  M_FILE_NEW           = "menuFile.New";          /*!< \brief Default menu File object name  \ingroup constants_actionmanager */
 const char * const  M_FILE_RECENTFILES   = "menuFile.recents";  /*!< \brief Default menu File object name  \ingroup constants_actionmanager */
 const char * const  M_TEMPLATES          = "menuTemplates";          /*!< \brief Default menu Edit object name  \ingroup constants_actionmanager */
 const char * const  M_EDIT               = "mEdit";          /*!< \brief Default menu Edit object name  \ingroup constants_actionmanager */

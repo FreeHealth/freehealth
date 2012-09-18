@@ -26,14 +26,12 @@
  ***************************************************************************/
 
 /**
-  \class DrugsWidget::DosageCreator
-  \brief Dialog for dosage creation / edition / modification. A dosage is a standard set of data that will be used to help
-  doctors when prescribing a drug.
-  If you want to create a new dosage, you must create a new row onto the model BEFORE.
-  If you want to edit or modify a dosage, you must inform the dialog of the row and the CIS of the drug.
-  \ingroup freediams drugswidget
+ * \class DrugsWidget::DosageCreator
+ * \brief Dialog for dosage creation / edition / modification. A dosage is a standard set of data that will be used to help
+ * doctors when prescribing a drug.
+ * If you want to create a new dosage, you must create a new row onto the model BEFORE.
+ * If you want to edit or modify a dosage, you must inform the dialog of the row and the CIS of the drug.
 */
-
 
 #include "mfDosageCreatorDialog.h"
 
@@ -81,10 +79,7 @@ static inline DrugsDB::DrugsBase &drugsBase() {return DrugsDB::DrugBaseCore::ins
 namespace DrugsWidget {
 namespace Internal {
 
-/**
-  \brief Private part of DosageDialog
-  \internal
-*/
+/** \brief Private part of DosageDialog */
 class DosageCreatorDialogPrivate
 {
 public:
@@ -229,12 +224,11 @@ private:
 */
 DosageCreatorDialog::DosageCreatorDialog(QWidget *parent, DrugsDB::Internal::DosageModel *dosageModel)
     : QDialog(parent),
-    d(0)
+    d(new DosageCreatorDialogPrivate(this))
 {
     using namespace DrugsDB::Constants;
     // some initializations
     setObjectName("DosageCreatorDialog");
-    d = new DosageCreatorDialogPrivate(this);
     d->m_DosageModel = dosageModel;
 
     // Ui initialization

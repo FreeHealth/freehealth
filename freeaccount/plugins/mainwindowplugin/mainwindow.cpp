@@ -122,6 +122,7 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
     Q_UNUSED(errorString);
     // create menus
     createFileMenu();
+    createFileNewSubMenu();
     Core::ActionContainer *fmenu = actionManager()->createMenu(Core::Constants::M_FILE_RECENTFILES);
     connect(fmenu->menu(), SIGNAL(aboutToShow()),this, SLOT(aboutToShowRecentFiles()));
     createEditMenu();
@@ -131,7 +132,6 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
 
     Core::MainWindowActions actions;
     actions.setFileActions(
-            Core::MainWindowActions::A_FileNew  |
             Core::MainWindowActions::A_FileOpen |
             Core::MainWindowActions::A_FileSave |
             Core::MainWindowActions::A_FileSaveAs |

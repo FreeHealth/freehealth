@@ -6,17 +6,17 @@
     <message>
         <location filename="../../plugins/alertplugin/alertcore.cpp" line="286"/>
         <source>Registering alert pack: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Enregistrement du paquet d&apos;alertes : %1</translation>
     </message>
     <message>
         <location filename="../../plugins/alertplugin/alertcore.cpp" line="296"/>
         <source>No alert pack description</source>
-        <translation type="unfinished"></translation>
+        <translation>Pas de description du paquet d&apos;alertes</translation>
     </message>
     <message>
         <location filename="../../plugins/alertplugin/alertcore.cpp" line="672"/>
         <source>Unable to register AlertPack. Path: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible d&apos;enregistrer le paquet d&apos;alerte. Chemin : %1</translation>
     </message>
 </context>
 <context>
@@ -24,23 +24,23 @@
     <message>
         <location filename="../../plugins/alertplugin/alertitem.cpp" line="771"/>
         <source>Started on: %1&lt;br /&gt;Cycling every: %2&lt;br /&gt;Expires on: %3</source>
-        <translation type="unfinished"></translation>
+        <translation>Démarrée le : %1&lt;br /&gt;Itération : %2&lt;br /&gt;Expire le : %3</translation>
     </message>
     <message>
         <location filename="../../plugins/alertplugin/alertitem.cpp" line="776"/>
         <source>Started on: %1&lt;br /&gt;Expires on: %2</source>
-        <translation type="unfinished"></translation>
+        <translation>Démarrée le : %1&lt;br /&gt;Expire le : %2</translation>
     </message>
     <message>
         <location filename="../../plugins/alertplugin/alertitem.cpp" line="962"/>
         <location filename="../../plugins/alertplugin/alertitem.cpp" line="968"/>
         <source>Alert validation.</source>
-        <translation type="unfinished"></translation>
+        <translation>Validation d&apos;alerte.</translation>
     </message>
     <message>
         <location filename="../../plugins/alertplugin/alertitem.cpp" line="963"/>
         <source>You are about to validate this alert:&lt;br /&gt;&lt;b&gt;%1&lt;/b&gt;&lt;br /&gt;&lt;br /&gt;Do you really want to validate this alert ?</source>
-        <translation type="unfinished"></translation>
+        <translation>Vous êtes sur le point de valider cette alerte :&lt;br /&gt;&lt;b&gt;%1&lt;/b&gt;&lt;br /&gt;&lt;br /&gt;Voulez-vous réellement valider cette alerte .?</translation>
     </message>
 </context>
 <context>
@@ -48,12 +48,12 @@
     <message>
         <location filename="../../plugins/alertplugin/alertitemeditordialog.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/alertplugin/alertitemeditordialog.ui" line="26"/>
         <source>Alert editor</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -61,17 +61,17 @@
     <message>
         <location filename="../../plugins/alertplugin/alertitemeditorwidget.cpp" line="107"/>
         <source>Application notification</source>
-        <translation type="unfinished"></translation>
+        <translation>Notification d&apos;application</translation>
     </message>
     <message>
         <location filename="../../plugins/alertplugin/alertitemeditorwidget.cpp" line="108"/>
         <source>Patient bar notification</source>
-        <translation type="unfinished"></translation>
+        <translation>Notification pour la barre patient</translation>
     </message>
     <message>
         <location filename="../../plugins/alertplugin/alertitemeditorwidget.cpp" line="109"/>
         <source>Status bar notification</source>
-        <translation type="unfinished"></translation>
+        <translation>Notification pour la barre de status</translation>
     </message>
 </context>
 <context>
@@ -79,12 +79,12 @@
     <message>
         <location filename="../../plugins/alertplugin/alertitemtimingeditorwidget.cpp" line="67"/>
         <source>Not cycling</source>
-        <translation type="unfinished"></translation>
+        <translation>Non-itérative</translation>
     </message>
     <message>
         <location filename="../../plugins/alertplugin/alertitemtimingeditorwidget.cpp" line="68"/>
         <source>Cycle every</source>
-        <translation type="unfinished"></translation>
+        <translation>Itération chaque</translation>
     </message>
 </context>
 <context>
@@ -92,12 +92,12 @@
     <message>
         <location filename="../../plugins/alertplugin/alertitem.cpp" line="1542"/>
         <source>Check alert validity</source>
-        <translation type="unfinished"></translation>
+        <translation>Vérification de la validité de l&apos;alerte</translation>
     </message>
     <message>
         <location filename="../../plugins/alertplugin/alertitem.cpp" line="1543"/>
         <source>Compute cycling starting date</source>
-        <translation type="unfinished"></translation>
+        <translation>Calcul la date de démarrage de la prochaine itération</translation>
     </message>
     <message>
         <location filename="../../plugins/alertplugin/alertitem.cpp" line="1544"/>
@@ -155,7 +155,7 @@
     <message>
         <location filename="../../plugins/alertplugin/blockingalertdialog.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -163,17 +163,17 @@
     <message>
         <location filename="../../plugins/alertplugin/blockingalertdialogoverridingcomment.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/alertplugin/blockingalertdialogoverridingcomment.ui" line="29"/>
         <source>You must explain why you override this dialog.</source>
-        <translation type="unfinished"></translation>
+        <translation>Vous devez expliquer pourquoi vous avez outrepasser ce dialogue.</translation>
     </message>
     <message>
         <location filename="../../plugins/alertplugin/blockingalertdialogoverridingcomment.ui" line="52"/>
         <source>Validate this comment</source>
-        <translation type="unfinished"></translation>
+        <translation>Valider le commentaire</translation>
     </message>
 </context>
 <context>
@@ -181,72 +181,72 @@
     <message>
         <location filename="../../plugins/alertplugin/alertitemeditorwidget.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/alertplugin/alertitemeditorwidget.ui" line="23"/>
         <source>General information</source>
-        <translation type="unfinished"></translation>
+        <translation>Informations générales</translation>
     </message>
     <message>
         <location filename="../../plugins/alertplugin/alertitemeditorwidget.ui" line="32"/>
         <source>Description</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/alertplugin/alertitemeditorwidget.ui" line="39"/>
         <source>Category</source>
-        <translation type="unfinished"></translation>
+        <translation>Catégorie</translation>
     </message>
     <message>
         <location filename="../../plugins/alertplugin/alertitemeditorwidget.ui" line="52"/>
         <source>Label</source>
-        <translation type="unfinished"></translation>
+        <translation>Libellé</translation>
     </message>
     <message>
         <location filename="../../plugins/alertplugin/alertitemeditorwidget.ui" line="59"/>
         <source>Icon</source>
-        <translation type="unfinished"></translation>
+        <translation>Icône</translation>
     </message>
     <message>
         <location filename="../../plugins/alertplugin/alertitemeditorwidget.ui" line="76"/>
         <source>Type</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/alertplugin/alertitemeditorwidget.ui" line="82"/>
         <source>Priority</source>
-        <translation type="unfinished"></translation>
+        <translation>Piorité</translation>
     </message>
     <message>
         <location filename="../../plugins/alertplugin/alertitemeditorwidget.ui" line="92"/>
         <source>View type</source>
-        <translation type="unfinished"></translation>
+        <translation>Type de visualisation</translation>
     </message>
     <message>
         <location filename="../../plugins/alertplugin/alertitemeditorwidget.ui" line="102"/>
         <source>Content type</source>
-        <translation type="unfinished"></translation>
+        <translation>Type de contenu</translation>
     </message>
     <message>
         <location filename="../../plugins/alertplugin/alertitemeditorwidget.ui" line="115"/>
         <source>override requires user comment</source>
-        <translation type="unfinished"></translation>
+        <translation>Nécessite un commentaire pour outrepasser</translation>
     </message>
     <message>
         <location filename="../../plugins/alertplugin/alertitemeditorwidget.ui" line="122"/>
         <source>User override</source>
-        <translation type="unfinished"></translation>
+        <translation>Outrepasser</translation>
     </message>
     <message>
         <location filename="../../plugins/alertplugin/alertitemeditorwidget.ui" line="129"/>
         <source>Related to</source>
-        <translation type="unfinished"></translation>
+        <translation>Liée à</translation>
     </message>
     <message>
         <location filename="../../plugins/alertplugin/alertitemeditorwidget.ui" line="140"/>
         <source>Timing</source>
-        <translation type="unfinished"></translation>
+        <translation>Programmation</translation>
     </message>
     <message>
         <location filename="../../plugins/alertplugin/alertitemeditorwidget.ui" line="150"/>
@@ -270,7 +270,7 @@
     <message>
         <location filename="../../plugins/alertplugin/alertitemscripteditor.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -278,27 +278,27 @@
     <message>
         <location filename="../../plugins/alertplugin/alertitemtimingeditorwidget.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../../plugins/alertplugin/alertitemtimingeditorwidget.ui" line="23"/>
         <source>Date of alert</source>
-        <translation type="unfinished"></translation>
+        <translation>Date de l&apos;alerte</translation>
     </message>
     <message>
         <location filename="../../plugins/alertplugin/alertitemtimingeditorwidget.ui" line="75"/>
         <source>Expiration</source>
-        <translation type="unfinished"></translation>
+        <translation>Expiration</translation>
     </message>
     <message>
         <location filename="../../plugins/alertplugin/alertitemtimingeditorwidget.ui" line="132"/>
         <source>Never expires</source>
-        <translation type="unfinished"></translation>
+        <translation>N&apos;expire jamais</translation>
     </message>
     <message>
         <location filename="../../plugins/alertplugin/alertitemtimingeditorwidget.ui" line="186"/>
         <source>times</source>
-        <translation type="unfinished"></translation>
+        <translation>fois</translation>
     </message>
 </context>
 <context>
@@ -306,7 +306,7 @@
     <message>
         <location filename="../../plugins/alertplugin/alertplugin.cpp" line="109"/>
         <source>Initializing AlertPlugin...</source>
-        <translation type="unfinished"></translation>
+        <translation>Initialisation du greffon alertes...</translation>
     </message>
 </context>
 <context>
@@ -314,7 +314,7 @@
     <message>
         <location filename="../../plugins/alertplugin/alertpreferences.ui" line="14"/>
         <source>Form</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -323,33 +323,34 @@
         <location filename="../../plugins/alertplugin/nonblockingalertwidgets.cpp" line="144"/>
         <location filename="../../plugins/alertplugin/nonblockingalertwidgets.cpp" line="270"/>
         <source>No category</source>
-        <translation type="unfinished"></translation>
+        <translation>Pas de catégorie</translation>
     </message>
     <message>
         <location filename="../../plugins/alertplugin/nonblockingalertwidgets.cpp" line="233"/>
         <source>Override alert</source>
-        <translation type="unfinished"></translation>
+        <translation>Outrepasser l&apos;alerte</translation>
     </message>
     <message>
         <location filename="../../plugins/alertplugin/nonblockingalertwidgets.cpp" line="234"/>
         <source>Do you really want to override this alert ?</source>
-        <translation type="unfinished"></translation>
+        <translation>Voulez-vous réellement outrepasser l&apos;alerte ?</translation>
     </message>
     <message>
         <location filename="../../plugins/alertplugin/nonblockingalertwidgets.cpp" line="235"/>
         <source>By overriding an alert, you report your disagreement with the alert. The alert will no longer be presented.
 It is sometimes necessary to clarify your arguments.</source>
-        <translation type="unfinished"></translation>
+        <translation>En outrepassant cette alerte, vous notifiez votre désaccord avec l&apos;alerte. Cette alerte ne vous sera plus présentée.
+Il est parfois nécessaire de clarifier vos arguments.</translation>
     </message>
     <message>
         <location filename="../../plugins/alertplugin/nonblockingalertwidgets.cpp" line="242"/>
         <source>Explain why you override this alert</source>
-        <translation type="unfinished"></translation>
+        <translation>Expliquez pourquoi vous avez outrepassé cette alerte</translation>
     </message>
     <message>
         <location filename="../../plugins/alertplugin/nonblockingalertwidgets.cpp" line="243"/>
         <source>Override comment</source>
-        <translation type="unfinished"></translation>
+        <translation>Commentaire</translation>
     </message>
 </context>
 </TS>

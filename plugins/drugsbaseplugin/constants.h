@@ -366,6 +366,7 @@ namespace Prescription
         SpecifyForm,
         SpecifyPresentation,
         IsALD,
+        Refill,
         ToHtml,
         MaxParam
     };
@@ -457,6 +458,7 @@ namespace Constants {
         ModificationDate,       /*!< \brief Modification date --> date */
         Transmitted,            /*!< \brief Sera utilisé pour récupérer via internet les dosages référencés en local. date */
         Route,                  /*!< \brief Outside SQL */
+        Refill,                  /*!< \brief Outside SQL */
         MaxParam                /*!< \brief Nombre maximum de colonnes du modèle (et de la table SQL) */
     };
 

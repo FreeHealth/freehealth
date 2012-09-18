@@ -138,6 +138,7 @@ private:
     QVariant m_UID;
     QSet<int> m_DirtyRows;
     QSet<int> m_DirtyInnLkRows;
+    QHash<int, int> _refills;
     mutable QString m_Route;
 };
 

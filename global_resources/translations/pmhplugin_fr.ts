@@ -266,8 +266,8 @@
 <context>
     <name>PMH::PmhCategoryModel</name>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhcategorymodel.cpp" line="1225"/>
-        <location filename="../../plugins/pmhplugin/pmhcategorymodel.cpp" line="1235"/>
+        <location filename="../../plugins/pmhplugin/pmhcategorymodel.cpp" line="1226"/>
+        <location filename="../../plugins/pmhplugin/pmhcategorymodel.cpp" line="1236"/>
         <source>Patient PMHx synthesis</source>
         <translation>Synthèse des ATCD du patient</translation>
     </message>
