@@ -36,8 +36,8 @@
 #include <QVariant>
 
 /**
- * \file protocolscore.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
+ * \file protocolsbase.h
+ * \author Eric MAEKER
  * \version 0.6.4
  * \date 26 Feb 2012
 */

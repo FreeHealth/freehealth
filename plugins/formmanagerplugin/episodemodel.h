@@ -140,9 +140,7 @@ public:
     bool isEpisodeValidated(const QModelIndex &index) const;
 
 public Q_SLOTS:
-    // EXPERIMENTAL
     bool populateFormWithEpisodeContent(const QModelIndex &episode, bool feedPatientModel);
-    // END EXPERIMENTAL
     bool submit();
 
 Q_SIGNALS:

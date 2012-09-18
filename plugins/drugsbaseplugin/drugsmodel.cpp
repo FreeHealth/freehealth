@@ -929,141 +929,19 @@ void DrugsModel::checkInteractions()
     reset();
 }
 
+/** \brief Transform a prescription (one drug) to a readable output.
+ * Item is translated to HTML using the token manager and
+ * the drug posologic sentence passed as param (\e mask). If the \e mask is
+ * empty, a new one is extracted from the user settings (drug posologic sentence plaintext or HTML). \n
+ * You can choose to output an HTML string or a plain text string \e toHtml.\n
+ * \sa DrugDB::DrugsIO::getDrugPrescription()
+ */
 QString DrugsModel::getFullPrescription(const IDrug *drug, bool toHtml, const QString &mask)
 {
     if (d->_posologicSentence.contains(drug))
         return d->_posologicSentence.value(drug);
     QString result;
-#ifdef WITH_PAD
     result = drugsIo().getDrugPrescription(this, d->m_DrugsList.indexOf((IDrug*)drug), toHtml, mask);
-#else
-    QString tmp;
-    if (mask.isEmpty()) {
-        if (!toHtml)
-            tmp = settings()->value(Constants::S_PRESCRIPTIONFORMATTING_PLAIN).toString();
-        else
-            tmp = settings()->value(Constants::S_PRESCRIPTIONFORMATTING_HTML).toString();
-    }
-    else
-        tmp = mask;
-
-    // Insert here __all__ tokens to the hash
-    QHash<QString, QString> tokens_value;
-    tokens_value.insert("DRUG", "");
-    tokens_value.insert("Q_FROM", "");
-    tokens_value.insert("Q_TO", "");
-    tokens_value.insert("Q_SCHEME", "");
-    tokens_value.insert("DAILY_SCHEME", "");
-    tokens_value.insert("REPEATED_DAILY_SCHEME", "");
-    tokens_value.insert("DISTRIBUTED_DAILY_SCHEME", "");
-    tokens_value.insert("PERIOD", "");
-    tokens_value.insert("PERIOD_SCHEME", "");
-    tokens_value.insert("ROUTE", "");
-    tokens_value.insert("D_FROM", "");
-    tokens_value.insert("D_TO", "");
-    tokens_value.insert("D_SCHEME", "");
-    tokens_value.insert("MEAL", "");
-    tokens_value.insert("NOTE", "");
-    tokens_value.insert("MIN_INTERVAL", "");
-    tokens_value.insert("MIN_INTERVAL_SCHEME", "");
-
-    // Manage Textual drugs only
-    if (drug->prescriptionValue(Constants::Prescription::IsTextualOnly).toBool()) {
-        if (toHtml) {
-            tokens_value["DRUG"] = drug->brandName().replace("\n","<br />");
-            tokens_value["NOTE"] = drug->prescriptionValue(Constants::Prescription::Note).toString().replace("\n","<br />");
-        } else {
-            tokens_value["DRUG"] = drug->brandName();
-            tokens_value["NOTE"] = drug->prescriptionValue(Constants::Prescription::Note).toString();
-        }
-        Utils::replaceTokens(tmp, tokens_value);
-        return tmp;
-    }
-
-    // Manage full prescriptions
-    if (drug->prescriptionValue(Constants::Prescription::IsINNPrescription).toBool()) {
-        tokens_value["DRUG"] = drug->innComposition() + " [" + tkTr(Trans::Constants::INN) + "]";
-    } else {
-        tokens_value["DRUG"] =  drug->brandName();
-    }
-
-    if (drug->prescriptionValue(Constants::Prescription::IntakesFrom).toDouble()) {
-        tokens_value["Q_FROM"] = QString::number(drug->prescriptionValue(Constants::Prescription::IntakesFrom).toDouble());
-        if (drug->prescriptionValue(Constants::Prescription::IntakesUsesFromTo).toBool())
-            tokens_value["Q_TO"] = QString::number(drug->prescriptionValue(Constants::Prescription::IntakesTo).toDouble());
-
-        tokens_value["Q_SCHEME"] = drug->prescriptionValue(Constants::Prescription::IntakesScheme).toString();
-    } else {
-        tokens_value["Q_FROM"] = tokens_value["Q_TO"] = tokens_value["Q_SCHEME"] = "";
-    }
-
-    // Manage Daily Scheme See DailySchemeModel::setSerializedContent
-    DrugsDB::DailySchemeModel *day = new DrugsDB::DailySchemeModel;
-    day->setSerializedContent(drug->prescriptionValue(Constants::Prescription::SerializedDailyScheme).toString());
-    tokens_value["REPEATED_DAILY_SCHEME"] = day->humanReadableRepeatedDailyScheme();
-    tokens_value["DISTRIBUTED_DAILY_SCHEME"] = day->humanReadableDistributedDailyScheme();
-    delete day;
-    if (tokens_value.value("REPEATED_DAILY_SCHEME").isEmpty()) {
-        tokens_value["DAILY_SCHEME"] = tokens_value.value("DISTRIBUTED_DAILY_SCHEME");
-    } else {
-        tokens_value["DAILY_SCHEME"] = tokens_value.value("REPEATED_DAILY_SCHEME");
-    }
-
-    // Duration
-    if (drug->prescriptionValue(Constants::Prescription::DurationFrom).toDouble()) {
-        tokens_value["D_FROM"] = QString::number(drug->prescriptionValue(Constants::Prescription::DurationFrom).toDouble());
-        if (drug->prescriptionValue(Constants::Prescription::DurationUsesFromTo).toBool())
-            tokens_value["D_TO"] = QString::number(drug->prescriptionValue(Constants::Prescription::DurationTo).toDouble());
-
-        // Manage plurial form
-        tokens_value["PERIOD_SCHEME"] = drug->prescriptionValue(Constants::Prescription::PeriodScheme).toString();
-        tokens_value["D_SCHEME"] = drug->prescriptionValue(Constants::Prescription::DurationScheme).toString();
-        int max = qMax(drug->prescriptionValue(Constants::Prescription::DurationFrom).toDouble(), drug->prescriptionValue(Constants::Prescription::DurationTo).toDouble());
-        if (periods().contains(tokens_value["D_SCHEME"])) {
-            tokens_value["D_SCHEME"] = periodPlurialForm(periods().indexOf(tokens_value["D_SCHEME"]), max, tokens_value["D_SCHEME"]);
-        }
-        max = drug->prescriptionValue(Constants::Prescription::Period).toDouble();
-        if (max==1 && QLocale().name().left(2)=="fr")
-            ++max;
-        if (periods().contains(tokens_value["PERIOD_SCHEME"])) {
-            tokens_value["PERIOD_SCHEME"] = periodPlurialForm(periods().indexOf(tokens_value["PERIOD_SCHEME"]), max, tokens_value["PERIOD_SCHEME"]);
-        }
-    } else {
-        tokens_value["PERIOD_SCHEME"] = tokens_value["D_FROM"] = tokens_value["D_TO"] = tokens_value["D_SCHEME"] = "";
-    }
-
-    tokens_value["MEAL"] = Trans::ConstantTranslations::mealTime(drug->prescriptionValue(Constants::Prescription::MealTimeSchemeIndex).toInt());
-    QString tmp2 = drug->prescriptionValue(Constants::Prescription::Period).toString();
-
-    // TODO: provide a better management of 'EACH DAY__S__' here .. \sa Translation::periodPlurialForm()
-    // Period management of 'EACH DAY__S'
-    if (tmp2 == "1") {
-        tmp2.clear();
-    }
-    tokens_value["PERIOD"] = tmp2;
-
-    if (toHtml) {
-        tokens_value["NOTE"] = drug->prescriptionValue(Constants::Prescription::Note).toString().replace("\n","<br />");
-    } else {
-        tokens_value["NOTE"] = drug->prescriptionValue(Constants::Prescription::Note).toString();
-    }
-
-    // Min interval
-    const QVariant &interval = drug->prescriptionValue(Constants::Prescription::IntakesIntervalOfTime);
-    const QVariant &intervalScheme = drug->prescriptionValue(Constants::Prescription::IntakesIntervalSchemeIndex);
-    if ((!interval.isNull() && !intervalScheme.isNull()) &&
-        interval.toInt() > 0) {
-        tokens_value["MIN_INTERVAL"] = interval.toString() + " " + periodPlurialForm(intervalScheme.toInt(), interval.toInt());
-    }
-
-    // Route
-    tokens_value["ROUTE"] = drug->prescriptionValue(Constants::Prescription::Route).toString();
-
-    Utils::replaceTokens(tmp, tokens_value);
-    if (toHtml)
-        tmp = Utils::toHtmlAccent(tmp);
-    result = tmp;
-#endif
     d->_posologicSentence.insert(drug, result);
     return result;
 }
