@@ -33,6 +33,7 @@
 
 #include "formcontextualwidgetmanager.h"
 #include "formcontextualwidget.h"
+#include "episodebase.h"
 #include "constants_db.h"
 
 #include <coreplugin/icore.h>
@@ -65,6 +66,7 @@ static inline Core::ContextManager *contextManager() { return Core::ICore::insta
 static inline Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
 static inline Core::ITheme *theme() { return Core::ICore::instance()->theme(); }
 static inline Core::IPatient *patient() { return Core::ICore::instance()->patient(); }
+static inline Form::Internal::EpisodeBase *episodeBase() { return Form::Internal::EpisodeBase::instance(); }
 
 // Register an existing Core action
 static QAction *registerAction(const QString &id, const QList<int> &ctx, QObject *parent)
@@ -402,6 +404,7 @@ void FormActionHandler::showDatabaseInformation()
     QGridLayout lay(&dlg);
     QTreeWidget tree(&dlg);
     tree.setColumnCount(2);
+    episodeBase()->toTreeWidget(&tree);
     tree.header()->hide();
     lay.addWidget(&tree);
     Utils::resizeAndCenter(&dlg);
