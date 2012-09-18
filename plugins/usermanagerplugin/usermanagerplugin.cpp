@@ -410,6 +410,7 @@ void UserManagerPlugin::showUserManager()
 {
     qWarning() << "USERMANAGER";
     UserManagerDialog dlg(Core::ICore::instance()->mainWindow());
+    dlg.initialize();
     dlg.exec();
 }
 #endif
