@@ -244,12 +244,12 @@ void DrugPosologicSentenceWithPadPreferencesWidget::saveToSettings(Core::ISettin
     else
         s = sets;
 
-    QString tmp = _writer->outputToHtml();
+    QString tmp = _writer->rawSourceToHtml();
     tmp = Utils::toHtmlAccent(tmp);
     int cutBegin = tmp.indexOf("<p ");
     int cutEnd = tmp.indexOf("</body>");
     s->setValue(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_HTML, tmp.mid(cutBegin, cutEnd-cutBegin));
-    s->setValue(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_PLAIN, _writer->outputToPlainText());
+    s->setValue(DrugsDB::Constants::S_PRESCRIPTIONFORMATTING_PLAIN, _writer->rawSourceToPlainText());
 }
 
 void DrugPosologicSentenceWithPadPreferencesWidget::changeEvent(QEvent *e)
