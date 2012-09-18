@@ -30,12 +30,13 @@
 #ifdef WITH_PAD
 #include <drugsbaseplugin/drugsbase_exporter.h>
 #include <coreplugin/ipadtools.h>
+#include <QPointer>
 
 /**
  * \file prescriptiontoken.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.8.0
- * \date 15 Aug 2012
+ * \date 18 Sept 2012
 */
 
 namespace DrugsDB {
@@ -54,7 +55,7 @@ public:
     QVariant value() const;
 
 private:
-    static DrugsDB::DrugsModel *_model;
+    static QPointer<DrugsDB::DrugsModel> _model;
     static int _row;
     int _ref;
     bool _isRepeatedDailyScheme, _isDistributedDailyScheme, _isMeal;
