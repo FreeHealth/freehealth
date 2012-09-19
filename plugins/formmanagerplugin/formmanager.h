@@ -63,29 +63,9 @@ class EpisodeModel;
 namespace Internal {
 class FormManagerPlugin;
 class FormManagerPrivate;
+}  // namespace Internal
 
-//class FormActionHandler : public QObject
-//{
-//    Q_OBJECT
-//public:
-//    FormActionHandler(QObject *parent = 0);
-//    ~FormActionHandler();
-
-//private Q_SLOTS:
-//    void showPatientLastEpisode();
-//    void updateActions();
-
-//private:
-//    QAction *aAddEpisode;
-//    QAction *aValidateEpisode;
-//    QAction *aAddForm;
-//    QAction *aPrintForm;
-//    QAction *aShowPatientSynthesis;
-//    QAction *aShowPatientLastEpisode;
-//};
-}
-
-class FORM_EXPORT FormManager : public QObject//Internal::FormActionHandler
+class FORM_EXPORT FormManager : public QObject
 {
     Q_OBJECT
     friend class Form::FormCore;
