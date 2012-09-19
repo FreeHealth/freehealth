@@ -33,7 +33,6 @@
 using namespace PMH;
 using namespace Internal;
 
-
 PmhCore *PmhCore::m_Instance = 0;
 
 PmhCore *PmhCore::instance(QObject *parent)
@@ -53,7 +52,9 @@ namespace Internal {
 class PmhCorePrivate
 {
 public:
-    PmhCorePrivate() : m_PmhCategoryModel(0)
+    PmhCorePrivate() :
+        m_PmhCategoryModel(0),
+        m_PmhWidgetManager(0)
     {
     }
 
@@ -66,6 +67,7 @@ public:
 
 public:
     PmhCategoryModel *m_PmhCategoryModel;
+    PmhWidgetManager *m_PmhWidgetManager;
 };
 
 }
@@ -76,7 +78,7 @@ PmhCore::PmhCore(QObject *parent) :
     QObject(parent), d(new PmhCorePrivate)
 {
     d->m_PmhCategoryModel = new PmhCategoryModel(this);
-    PmhWidgetManager::instance(this);
+    d->m_PmhWidgetManager = new PmhWidgetManager(this);
 }
 
 PmhCore::~PmhCore()
