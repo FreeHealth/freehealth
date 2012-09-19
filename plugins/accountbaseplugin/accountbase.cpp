@@ -750,26 +750,27 @@ AccountData *AccountBase::getAccountByUid(const QString &uid)
     where.insert(Constants::ACCOUNT_UID, QString("=%1").arg(uid));
     QString req = select(Constants::Table_Account, where);
     DB.transaction();
-    QSqlQuery q(req,DB);
-    if (q.isActive()) {
-        if (q.next()) {
+    QSqlQuery query(req,DB);
+    if (query.isActive()) {
+        if (query.next()) {
             AccountData *data = new AccountData();
-            for(int i = 0 ; i < Constants::ACCOUNT_MaxParam; ++i) {
-                data->setDataFromDb(i, q.value(i));
+            // ref is a data representation of enum AccountDB::Constants::TableAcc_Fields
+            for(int ref = 0 ; ref < Constants::ACCOUNT_MaxParam; ++ref) {
+                data->setDataFromDb(ref, query.value(ref));
             }
-            q.finish();
+            query.finish();
             DB.commit();
             return data;
         } else {
             LOG_ERROR("No account with an UID like " + uid);
-            q.finish();
+            query.finish();
             DB.rollback();
             return 0;
         }
     } else {
         LOG_ERROR("No account with an UID like " + uid);
-        LOG_QUERY_ERROR(q);
-        q.finish();
+        LOG_QUERY_ERROR(query);
+        query.finish();
         DB.rollback();
         return 0;
     }
