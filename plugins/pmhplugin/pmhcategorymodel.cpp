@@ -26,9 +26,9 @@
  ***************************************************************************/
 
 /**
-   \class PMH::PmhCategoryModel
-   General model for the categorized PMHx.
-   Unique instance is available in the PMH::PmhCore.
+ * \class PMH::PmhCategoryModel
+ *  General model for the categorized PMHx.
+ *  Its unique instance is available in the PMH::PmhCore.
  */
 
 #include "pmhcategorymodel.h"
@@ -223,9 +223,7 @@ namespace {
         Form::FormMain *m_Form;
         Form::EpisodeModel *m_EpisodeModel;
     };
-
 }
-
 
 namespace PMH {
 namespace Internal {
@@ -276,9 +274,13 @@ public:
         return _rootItem;
     }
 
-    void episodeModelToTreeItem(Form::FormMain */*form*/, TreeItem */*parentItem*/, Form::EpisodeModel */*model*/, const QModelIndex &/*index = QModelIndex()*/)
+    void episodeModelToTreeItem(Form::FormMain *form, TreeItem *parentItem, Form::EpisodeModel *model, const QModelIndex &index = QModelIndex())
     {
         // TODO: manage FormManager
+        Q_UNSUED(form);
+        Q_UNSUED(parentItem);
+        Q_UNSUED(model);
+        Q_UNSUED(index);
 //        for(int i = 0; i < model->rowCount(index); ++i) {
 //            QModelIndex idx = model->index(i, Form::EpisodeModel::Label, index);
 //            // Do not include the episodes
