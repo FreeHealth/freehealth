@@ -43,31 +43,38 @@ namespace Internal {
 class AccountDataPrivate;
 }
 
-
+/*!
+ * \brief The AccountData class holds the data that is used by the \sa AccountDB::AmountModel.
+ *
+ *
+ */
 class ACCOUNTBASE_EXPORT AccountData
 {
     friend class AccountDB::AccountBase;
 
 public:
+    /*! \enum AccountDb::DataRepresentationforValue
+     * Data representation values that are used in various functions within AccountData.
+     */
     enum DataRepresentationforValue {
         Id = 0,
-        Uid,
-        UserUid,
-        PatientUid,
-        PatientFullName,
+        Uid,                    /*!< Unique ID of the amount value */
+        UserUid,                /*!< Unique ID of the current user that saved this amount*/
+        PatientUid,             /*!< Unique ID of the patient, defined in \sa IPatient::uuid() */
+        PatientFullName,        /*!< Full name of the patient */
         SiteId,
-        InsuranceId,
-        Date,  // there must be more types of dates
+        InsuranceId,            /*!< ID of the insurance (if payment is \e insurance */
+        Date,                   // TODO: there must be more types of dates
         MedicalProcedureHtml,
-        Comment,
+        Comment,                /*!< A general comment */
 
         // Amounts
-        Cash,
-        Cheque,
-        Visa,
-        Insurance,
-        Other,
-        DueAmount,
+        Cash,                   /*!< cash values */
+        Cheque,                 /*!< Cheque */
+        Visa,                   /*!< Visa */  //TODO: use a more generic "credit card" approach
+        Insurance,              /*!< insurance settlement */
+        Other,                  /*!< other payment, not listed */
+        DueAmount,              /*!< Amount of due */
         DueBy,
 
         // Validity and time memory
@@ -85,7 +92,7 @@ public:
      AmountModel *amountModel() const;
 
 protected:
-    void setDataFromDb(const int field, const QVariant &value);
+    void setDataFromDb(const int ref, const QVariant &value);
 
 private:
     Internal::AccountDataPrivate *d;
