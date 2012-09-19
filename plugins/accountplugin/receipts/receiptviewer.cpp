@@ -92,7 +92,7 @@ class AmountModel : public QAbstractTableModel
 {
     // TODO: MERGE accountbaseplugin/amountmodel.h
 
-    Q_OBJECT
+//    Q_OBJECT
 public:
     enum ColumnRepresentation {
         Col_Cash = 0,
