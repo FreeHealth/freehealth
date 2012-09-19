@@ -8,7 +8,6 @@
 */
 
 #include "pmhcontextualwidget.h"
-#include "pmhwidgetmanager.h"
 #include "constants.h"
 
 #include <coreplugin/contextmanager/contextmanager.h>

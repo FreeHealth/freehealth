@@ -324,9 +324,9 @@ void DosageCreatorDialog::keyPressEvent(QKeyEvent *e)
 void DosageCreatorDialog::updateSettings()
 {
     if (settings()->value(Constants::S_PROTOCOLCREATOR_AUTOCHANGE).toBool())
-        connect(dosageViewer, SIGNAL(protocolDataschanged()), this, SLOT(protocolDataChanged()));
+        connect(dosageViewer, SIGNAL(protocolDataChanged()), this, SLOT(onProtocolDataChanged()));
     else
-        disconnect(dosageViewer, SIGNAL(protocolDataschanged()), this, SLOT(protocolDataChanged()));
+        disconnect(dosageViewer, SIGNAL(protocolDataChanged()), this, SLOT(onProtocolDataChanged()));
 
     const QString &defButton = settings()->value(Constants::S_PROTOCOLCREATOR_DEFAULTBUTTON).toString();
     validateButton->setDefaultAction(d->prescribe);
@@ -340,7 +340,7 @@ void DosageCreatorDialog::updateSettings()
         validateButton->setDefaultAction(d->test);
 }
 
-void DosageCreatorDialog::protocolDataChanged()
+void DosageCreatorDialog::onProtocolDataChanged()
 {
     // Set window modified
     const QString &winTitle = windowTitle();
