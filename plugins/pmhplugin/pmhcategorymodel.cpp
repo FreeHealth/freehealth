@@ -49,6 +49,7 @@
 #include <formmanagerplugin/formcore.h>
 #include <formmanagerplugin/iformitem.h>
 #include <formmanagerplugin/formmanager.h>
+#include <formmanagerplugin/formtreemodel.h>
 #include <formmanagerplugin/episodemodel.h>
 
 #include <categoryplugin/categorycore.h>
@@ -104,8 +105,6 @@ namespace {
             m_Label.clear();
             qDeleteAll(m_Children);
             m_Children.clear();
-//            delete m_Form;
-//            delete m_EpisodeModel;
             m_Pmh=0;
             m_Cat=0;
             m_Parent=0;
@@ -274,26 +273,19 @@ public:
         return _rootItem;
     }
 
-    void episodeModelToTreeItem(Form::FormMain *form, TreeItem *parentItem, Form::EpisodeModel *model, const QModelIndex &index = QModelIndex())
+    void formModelToTreeItem(Form::FormMain *form, TreeItem *parentItem, Form::FormTreeModel *model, const QModelIndex &index = QModelIndex())
     {
         // TODO: manage FormManager
-        Q_UNSUED(form);
-        Q_UNSUED(parentItem);
-        Q_UNSUED(model);
-        Q_UNSUED(index);
-//        for(int i = 0; i < model->rowCount(index); ++i) {
-//            QModelIndex idx = model->index(i, Form::EpisodeModel::Label, index);
-//            // Do not include the episodes
-//            if (!model->isForm(idx))
-//                continue;
+        for(int i = 0; i < model->rowCount(index); ++i) {
+            QModelIndex idx = model->index(i, Form::FormTreeModel::Label, index);
 //            if (model->isLastEpisodeIndex(idx))
 //                continue;
-//            TreeItem *newItem = new TreeItem(parentItem);
-//            newItem->setLabel(idx.data().toString());
-//            newItem->setForm(model->formForIndex(idx), model);
-//            // Read all its children
-//            episodeModelToTreeItem(form, newItem, model, idx);
-//        }
+            TreeItem *newItem = new TreeItem(parentItem);
+            newItem->setLabel(model->data(idx).toString());
+            newItem->setForm(model->formForIndex(idx), formManager().episodeModel(form->uuid()));
+            // Read all its children
+            formModelToTreeItem(form, newItem, model, idx);
+        }
     }
 
     void categoryToItem(Category::CategoryItem *cat, TreeItem *item)
@@ -315,11 +307,11 @@ public:
                 // Load the form
                 QList<Form::FormMain*> forms = formManager().loadFormFile(addFile.text());
                 if (!forms.isEmpty()) {
-                    // Create the EpisodeModel with the form
-//                    Form::EpisodeModel *model = new Form::EpisodeModel(forms.at(0), q);
-//                    model->init(false);
-//                    // Translate all modelindex to TreeItem
-//                    episodeModelToTreeItem(forms.at(0), item, model);
+                    // Create the FormTreeModel with the form
+                    Form::FormTreeModel *model = new Form::FormTreeModel(forms.at(0), q);
+                    model->initialize();
+                    // Translate all modelindex to TreeItem
+                    formModelToTreeItem(forms.at(0), item, model);
                 }
             }
         }
