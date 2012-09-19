@@ -87,7 +87,7 @@ QVariant AccountData::value(const int ref) const
     return d->m_DbData.value(ref);
 }
 
-/*! saves the given \e value into the storage, using \e ref as key */
+/*! Saves the given \e value into the storage, using \e ref as key */
 bool AccountData::setValue(const int ref, const QVariant &value)
 {
     if (ref >= Max_Params || ref < 0)
@@ -102,13 +102,13 @@ bool AccountData::setValue(const int ref, const QVariant &value)
 
 }
 
-/*! returns NULL per default */
+/*! Returns the \sa AmountModel that this object belongs to. Not implemented, NULL per default */
 AmountModel *AccountData::amountModel() const
 {
     return 0;
 }
 
-/** \brief sets given \e value by a constants representation instead of the AccountData's.
+/** \brief Sets given \e value by a constants representation instead of the AccountData's.
  *
  * This member should only be used by AccountBase.
  * \param ref is a representation of AccountDB::Constants::TableAcc_Fields.

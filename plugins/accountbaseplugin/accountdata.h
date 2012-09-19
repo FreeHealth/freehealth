@@ -69,11 +69,11 @@ public:
         Comment,                /*!< A general comment */
 
         // Amounts
-        Cash,                   /*!< cash values */
+        Cash,                   /*!< Cash values */
         Cheque,                 /*!< Cheque */
-        Visa,                   /*!< Visa */  //TODO: use a more generic "credit card" approach
-        Insurance,              /*!< insurance settlement */
-        Other,                  /*!< other payment, not listed */
+        Visa,                   /*!< Credit Card */  //TODO: use a more generic "credit card" approach
+        Insurance,              /*!< Insurance settlement */
+        Other,                  /*!< Other payment, not listed */
         DueAmount,              /*!< Amount of due */
         DueBy,
 
