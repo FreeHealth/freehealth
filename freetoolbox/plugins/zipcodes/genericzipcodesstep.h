@@ -33,7 +33,7 @@
 QT_BEGIN_NAMESPACE
 class QNetworkReply;
 class QProgressBar;
-class QListWidget;
+class QStandardItemModel;
 QT_END_NAMESPACE
 
 
@@ -58,7 +58,9 @@ public:
 
     bool downloadSelectedCountryInfo();
 
-    void setAvailableCountriesWidget(QListWidget *widget);
+    QStandardItemModel* availableCountriesModel() { return m_availableCountriesModel; }
+    QStandardItemModel* selectedCountriesModel() { return m_selectedCountriesModel; }
+
     bool createDatabaseScheme();
     bool populateDatabase();
 
@@ -75,8 +77,8 @@ protected Q_SLOTS:
 private:
     QStringList m_Errors;
     bool m_WithProgress;
-    QListWidget *m_availableCountriesWidget;
-    QListWidget *selectedCountriesModel;
+    QStandardItemModel *m_availableCountriesModel;
+    QStandardItemModel *m_selectedCountriesModel;
 };
 } // end ZipCodes
 #endif // GENERICZIPCODESSTEP_H

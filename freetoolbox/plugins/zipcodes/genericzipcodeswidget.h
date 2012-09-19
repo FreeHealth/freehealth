@@ -46,13 +46,12 @@ public:
     ~GenericZipCodesWidget();
 
 protected Q_SLOTS:
-    void on_startJob_clicked();
     void on_downloadButton_clicked();
     void downloadFinished();
 
-    void selectCountry(QListWidgetItem *item);
+    void selectCountry(const QModelIndex &index);
     void selectCountries();
-    void deselectCountry(QListWidgetItem *item);
+    void deselectCountry(const QModelIndex &index);
     void deselectCountries();
     void updateActions();
     void updateSelections();
@@ -60,6 +59,8 @@ protected Q_SLOTS:
 private:
     Ui::GenericZipCodesWidget *ui;
     GenericZipCodesStep *m_Step;
+    QStandardItemModel *m_availableCountriesModel;
+    QStandardItemModel *m_selectedCountriesModel;
 };
 
 } // end ZipCodes

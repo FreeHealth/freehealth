@@ -50,7 +50,6 @@
 #include <QStandardItemModel>
 
 #include <QDebug>
-#include <QListWidget>
 
 using namespace ZipCodes;
 
@@ -94,19 +93,14 @@ static inline QString sqlImportFileAbsPath()
 GenericZipCodesStep::GenericZipCodesStep(QObject *parent) :
     Core::IFullReleaseStep(parent),
     m_WithProgress(false),
-    m_availableCountriesWidget(0)
+    m_availableCountriesModel(new QStandardItemModel()),
+    m_selectedCountriesModel(new QStandardItemModel())
 {
     setObjectName("GenericZipCodesStep");
 }
 
 GenericZipCodesStep::~GenericZipCodesStep()
 {
-}
-
-/*! Sets the model that should be filled with the values from GeoNames.org */
-void GenericZipCodesStep::setAvailableCountriesWidget(QListWidget *widget)
-{
-    m_availableCountriesWidget = widget;
 }
 
 /*! Downloads the list of available countries. */
@@ -273,17 +267,13 @@ void GenericZipCodesStep::on_availableCountriesDownloaded(QNetworkReply *reply)
             qDebug() << country << countryIso3166Code;
 
 
-            if (m_availableCountriesWidget) {
-                QListWidgetItem *item = new QListWidgetItem(
-                            QIcon(QString("%1/%2.png").arg(flagPath, countryIso3166Code)),
-                            QLocale::countryToString(country));
-//                item->setData(Qt::DisplayRole, country);
-                m_availableCountriesWidget->addItem(item);
-                success = true;
-            }
+            QStandardItem *item = new QStandardItem(
+                        QIcon(QString("%1/%2.png").arg(flagPath, countryIso3166Code)),
+                        QLocale::countryToString(country));
+            item->setData(Qt::DisplayRole, country); //BUG: ? maybe overrides text?
+            m_availableCountriesModel->appendRow(item);
+            success = true;
         }
-        if (m_availableCountriesWidget)
-            m_availableCountriesWidget->sortItems();
         Q_EMIT countryListDownloaded(success);
     }
 }
