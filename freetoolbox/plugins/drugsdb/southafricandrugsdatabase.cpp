@@ -150,7 +150,7 @@ bool ZaDrugDatatabaseStep::downloadFiles(QProgressBar *bar)
     manager = new QNetworkAccessManager(this);
     connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(replyFinished(QNetworkReply*)));
 
-    Q_EMIT progressLabelChanged(tr("South African database extraction : reading indexes"));
+    Q_EMIT progressLabelChanged(tr("South African database extraction: reading indexes"));
     Q_EMIT progressRangeChanged(0, 26);
     Q_EMIT progress(0);
 
@@ -214,7 +214,7 @@ void ZaDrugDatatabaseStep::replyFinished(QNetworkReply *reply)
             done = true;
             m_nbOfDowloads = m_Drug_Link.count();
 
-            Q_EMIT progressLabelChanged(tr("South African database extraction : reading drugs page"));
+            Q_EMIT progressLabelChanged(tr("South African database extraction: reading drugs page"));
             Q_EMIT progressRangeChanged(0, m_nbOfDowloads);
             Q_EMIT progress(0);
 
@@ -251,7 +251,7 @@ bool ZaDrugDatatabaseStep::prepareDatas()
 {
     m_Drug_Link.clear();
 
-    Q_EMIT progressLabelChanged(tr("South African database extraction : parsing drugs page"));
+    Q_EMIT progressLabelChanged(tr("South African database extraction: parsing drugs page"));
     Q_EMIT progressRangeChanged(0, 26);
     Q_EMIT progress(0);
 

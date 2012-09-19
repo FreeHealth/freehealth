@@ -33,6 +33,7 @@
 QT_BEGIN_NAMESPACE
 class QNetworkReply;
 class QProgressBar;
+class QListWidget;
 QT_END_NAMESPACE
 
 
@@ -49,31 +50,33 @@ public:
     QString id() const {return "GenericZipCodesStep";}
     Steps stepNumber() const {return Core::IFullReleaseStep::ZipCodes;}
 
-    bool createDir();
-    bool cleanFiles();
-    void setCountryCombo(Utils::CountryComboBox* combo);
+    bool createDir() { return true; }
+    bool cleanFiles() { return true; }
     bool downloadFiles(QProgressBar *bar = 0);
     bool process();
     QString processMessage() const { return tr("Generic zip codes database creation"); }
 
-    bool unzipFiles();
-    bool prepareData();
-    bool createDatabase();
+    bool downloadSelectedCountryInfo();
+
+    void setAvailableCountriesWidget(QListWidget *widget);
+    bool createDatabaseScheme();
     bool populateDatabase();
 
+    QStringList errors() const {return m_Errors;}
+
 Q_SIGNALS:
+    void availableCountriesListDownloaded();
     void countryListDownloaded(bool);
 
 protected Q_SLOTS:
     void slotSetProgress(qint64 bytesReceived, qint64 bytesTotal);
-    void slotRequestFinished(QNetworkReply *reply);
-
-    QStringList errors() const {return m_Errors;}
+    void on_availableCountriesDownloaded(QNetworkReply *reply);
 
 private:
     QStringList m_Errors;
     bool m_WithProgress;
-    Utils::CountryComboBox* m_countryCombo;
+    QListWidget *m_availableCountriesWidget;
+    QListWidget *selectedCountriesModel;
 };
 } // end ZipCodes
 #endif // GENERICZIPCODESSTEP_H

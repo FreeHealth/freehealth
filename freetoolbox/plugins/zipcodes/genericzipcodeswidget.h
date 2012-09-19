@@ -29,6 +29,10 @@
 #include <QtGui/QWidget>
 #include "genericzipcodesstep.h"
 
+QT_BEGIN_NAMESPACE
+class QListWidgetItem;
+QT_END_NAMESPACE
+
 namespace ZipCodes {
 namespace Ui {
 class GenericZipCodesWidget;
@@ -41,10 +45,17 @@ public:
     GenericZipCodesWidget(QWidget *parent = 0);
     ~GenericZipCodesWidget();
 
-private Q_SLOTS:
+protected Q_SLOTS:
     void on_startJob_clicked();
     void on_downloadButton_clicked();
     void downloadFinished();
+
+    void selectCountry(QListWidgetItem *item);
+    void selectCountries();
+    void deselectCountry(QListWidgetItem *item);
+    void deselectCountries();
+    void updateActions();
+    void updateSelections();
 
 private:
     Ui::GenericZipCodesWidget *ui;
