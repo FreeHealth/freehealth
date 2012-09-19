@@ -737,6 +737,11 @@ bool AccountBase::createDatabase(const QString &connectionName ,
     return true;
 }
 
+/*!
+ * \brief Queries the database to find an account with the given \uid.
+ * \return A pointer to a newly created \sa AccountData object, filled with
+ * all fields of this database record.
+ */
 AccountData *AccountBase::getAccountByUid(const QString &uid)
 {
     QSqlDatabase DB = QSqlDatabase::database(Constants::DB_ACCOUNTANCY);
