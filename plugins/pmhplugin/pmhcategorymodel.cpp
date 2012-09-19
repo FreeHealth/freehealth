@@ -282,7 +282,7 @@ public:
 //                continue;
             TreeItem *newItem = new TreeItem(parentItem);
             newItem->setLabel(model->data(idx).toString());
-            newItem->setForm(model->formForIndex(idx), formManager().episodeModel(form->uuid()));
+            newItem->setForm(model->formForIndex(idx), formManager().episodeModel(form));
             // Read all its children
             formModelToTreeItem(form, newItem, model, idx);
         }
