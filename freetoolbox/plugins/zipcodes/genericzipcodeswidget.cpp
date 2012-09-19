@@ -26,11 +26,14 @@
 #include "genericzipcodeswidget.h"
 #include "ui_genericzipcodeswidget.h"
 
+#include <utils/global.h>
 #include <extensionsystem/pluginmanager.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/constants.h>
 #include <coreplugin/isettings.h>
+
+#include <QStandardItemModel>
 
 using namespace ZipCodes;
 
@@ -38,6 +41,7 @@ namespace {
 static inline ExtensionSystem::PluginManager* pluginManager() {return ExtensionSystem::PluginManager::instance();}
 static inline Core::ITheme* theme() { return Core::ICore::instance()->theme(); }
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
+const QString flagPath = settings()->path(Core::ISettings::SmallPixmapPath) + "/flags/";
 }
 
 GenericZipCodesWidget::GenericZipCodesWidget(QWidget *parent) :
@@ -46,15 +50,37 @@ GenericZipCodesWidget::GenericZipCodesWidget(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->downloadButton->setIcon(theme()->icon(Core::Constants::ICONSOFTWAREUPDATEAVAILABLE));
-    ui->availCountriesCombo->setFlagPath(settings()->path(Core::ISettings::SmallPixmapPath) + "/flags/");
 
     m_Step = new GenericZipCodesStep(this);
-    m_Step->setCountryCombo(ui->availCountriesCombo);
+    QStandardItemModel *availableCountriesModel = new QStandardItemModel(this);
+    m_Step->setAvailableCountriesWidget(ui->availableCountriesListWidget);
+
     m_Step->createDir();
     pluginManager()->addObject(m_Step);
 
+    ui->toolButtonAddCountry->setIcon(theme()->icon(Core::Constants::ICONADD));
+    ui->toolButtonRemoveCountry->setIcon(theme()->icon(Core::Constants::ICONREMOVE));
+
     // after downloading the countries list, enable/disable the widgets according to download success
-    connect(m_Step, SIGNAL(countryListDownloaded(bool)), ui->localeDataGroupBox, SLOT(setEnabled(bool)));
+    connect(m_Step, SIGNAL(countryListDownloaded(bool)),
+            ui->localeDataGroupBox, SLOT(setEnabled(bool)));
+
+    connect(ui->availableCountriesListWidget, SIGNAL(itemActivated(QListWidgetItem*)),
+            this, SLOT(selectCountry(QListWidgetItem*)));
+    connect(ui->availableCountriesListWidget, SIGNAL(itemClicked(QListWidgetItem*)),
+            this, SLOT(updateSelections()));
+
+    connect(ui->selectedCountriesListWidget, SIGNAL(itemActivated(QListWidgetItem*)),
+            this, SLOT(deselectCountry(QListWidgetItem*)));
+    connect(ui->selectedCountriesListWidget, SIGNAL(itemClicked(QListWidgetItem*)),
+            this, SLOT(updateSelections()));
+
+    connect(ui->toolButtonAddCountry, SIGNAL(clicked()), this, SLOT(selectCountries()));
+    connect(ui->toolButtonRemoveCountry, SIGNAL(clicked()), this, SLOT(deselectCountries()));
+    // update actions after selection changes
+    connect(ui->availableCountriesListWidget, SIGNAL(clicked(QModelIndex)), this, SLOT(updateActions()));
+    connect(ui->selectedCountriesListWidget, SIGNAL(clicked(QModelIndex)), this, SLOT(updateActions()));
+    updateActions();
 }
 
 GenericZipCodesWidget::~GenericZipCodesWidget()
@@ -77,9 +103,63 @@ void GenericZipCodesWidget::downloadFinished()
 {
 //    ui->downloadButton->setText(tr("Download terminated"));
     ui->downloadButton->setEnabled(true);
-//    ui->progressBar->setValue(100);
+    ui->availableCountriesListWidget->sortItems();
+    //    ui->progressBar->setValue(100);
 }
 
+void GenericZipCodesWidget::selectCountry(QListWidgetItem *item)
+{
+    if (!item)
+        return;
+    // takeitem() does not delete *item, so pointer is still available afterwords
+    ui->availableCountriesListWidget->takeItem(ui->availableCountriesListWidget->row(item));
+    ui->selectedCountriesListWidget->addItem(item);
+    ui->selectedCountriesListWidget->sortItems();
+    updateActions();
+    ui->createPackageButton->setEnabled(true);
+}
+
+void GenericZipCodesWidget::selectCountries()
+{
+    foreach(QListWidgetItem *item, ui->availableCountriesListWidget->selectedItems()) {
+        selectCountry(item);
+    }
+}
+
+void GenericZipCodesWidget::deselectCountry(QListWidgetItem *item)
+{
+    if (!item)
+        return;
+    // takeitem() does not delete *item, so pointer is still available afterwords
+    ui->selectedCountriesListWidget->takeItem(ui->selectedCountriesListWidget->row(item));
+    ui->availableCountriesListWidget->addItem(item);
+    ui->availableCountriesListWidget->sortItems();
+    updateActions();
+    ui->createPackageButton->setEnabled(ui->selectedCountriesListWidget->count() > 0);
+}
+
+void GenericZipCodesWidget::deselectCountries()
+{
+    foreach(QListWidgetItem *item, ui->selectedCountriesListWidget->selectedItems()) {
+        deselectCountry(item);
+    }
+}
+
+void GenericZipCodesWidget::updateActions()
+{
+    ui->toolButtonAddCountry->setEnabled(!ui->availableCountriesListWidget->selectedItems().isEmpty());
+    ui->toolButtonRemoveCountry->setEnabled(!ui->selectedCountriesListWidget->selectedItems().isEmpty());
+}
+
+void GenericZipCodesWidget::updateSelections()
+{
+    if (sender() == ui->availableCountriesListWidget) {
+        ui->selectedCountriesListWidget->clearSelection();
+    } else if (sender() == ui->selectedCountriesListWidget) {
+        ui->availableCountriesListWidget->clearSelection();
+    }
+
+}
 
 void GenericZipCodesWidget::on_startJob_clicked()
 {
