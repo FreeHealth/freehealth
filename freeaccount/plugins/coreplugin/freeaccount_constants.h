@@ -49,6 +49,7 @@ namespace Constants {
 enum FreeAccountCommandLine {
     CL_MedinTux = 0,
     CL_Independant,
+    CL_Movements,
     CL_Test,
     CL_ReceiptsCreator,
     CL_EMR_Name,
