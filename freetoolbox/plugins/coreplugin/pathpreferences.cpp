@@ -64,7 +64,7 @@ QString PathPreferencesPage::category() const { return tkTr(Trans::Constants::GE
 void PathPreferencesPage::resetToDefaults()
 {
     m_Widget->writeDefaultSettings(settings());
-    m_Widget->setDatasToUi();
+    m_Widget->setDataToUi();
 }
 
 void PathPreferencesPage::applyChanges()
@@ -84,7 +84,7 @@ void PathPreferencesPage::checkSettingsValidity()
     defaultvalues.insert(Constants::S_FILEOUTPUT_PATH, QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation) + QDir::separator() + appName);
     defaultvalues.insert(Constants::S_DBOUTPUT_PATH, QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation) + QDir::separator() + appName);
     defaultvalues.insert(Constants::S_TMP_PATH, QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation) + QDir::separator() + appName + "/tmp");
-    defaultvalues.insert(Constants::S_SVNFILES_PATH, QString());
+    defaultvalues.insert(Constants::S_GITFILES_PATH, QString());
 
     foreach(const QString &k, defaultvalues.keys()) {
         if (settings()->value(k).isNull())
@@ -120,7 +120,7 @@ PathPreferencesWidget::PathPreferencesWidget(QWidget *parent) :
     ui(new Internal::Ui::PathPreferencesWidget)
 {
     ui->setupUi(this);
-    setDatasToUi();
+    setDataToUi();
 }
 
 PathPreferencesWidget::~PathPreferencesWidget()
@@ -129,7 +129,7 @@ PathPreferencesWidget::~PathPreferencesWidget()
     ui = 0;
 }
 
-void PathPreferencesWidget::setDatasToUi()
+void PathPreferencesWidget::setDataToUi()
 {
     QString s;
     s = settings()->value(Constants::S_DBOUTPUT_PATH).toString();
@@ -150,9 +150,9 @@ void PathPreferencesWidget::setDatasToUi()
     ui->tmppath->setInitialBrowsePathBackup(s);
     ui->tmppath->setPath(s);
 
-    s = settings()->value(Constants::S_SVNFILES_PATH).toString();
-    ui->svnlabel->setText(tr("Select the SVN checkout path"));
-    ui->svnpath->setPromptDialogTitle(tr("Select the SVN checkout path"));
+    s = settings()->value(Constants::S_GITFILES_PATH).toString();
+    ui->svnlabel->setText(tr("Select the GIT checkout path"));
+    ui->svnpath->setPromptDialogTitle(tr("Select the GIT checkout path"));
     ui->svnpath->setInitialBrowsePathBackup(s);
     ui->svnpath->setPath(s);
 }
@@ -173,7 +173,7 @@ void PathPreferencesWidget::writeDefaultSettings(Core::ISettings *s)
     set->setValue(Constants::S_FILEOUTPUT_PATH, QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation) + QDir::separator() + appName);
     set->setValue(Constants::S_DBOUTPUT_PATH, QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation) + QDir::separator() + appName);
     set->setValue(Constants::S_TMP_PATH, QDesktopServices::storageLocation(QDesktopServices::DocumentsLocation) + QDir::separator() + appName + "/tmp");
-    set->setValue(Constants::S_SVNFILES_PATH, QString());
+    set->setValue(Constants::S_GITFILES_PATH, QString());
     set->sync();
 }
 
@@ -187,7 +187,7 @@ void PathPreferencesWidget::saveToSettings(Core::ISettings *s)
     set->setValue(Constants::S_FILEOUTPUT_PATH, ui->filepath->path());
     set->setValue(Constants::S_DBOUTPUT_PATH, ui->dbpath->path());
     set->setValue(Constants::S_TMP_PATH, ui->tmppath->path());
-    set->setValue(Constants::S_SVNFILES_PATH, ui->svnpath->path());
+    set->setValue(Constants::S_GITFILES_PATH, ui->svnpath->path());
 
     set->sync();
 }

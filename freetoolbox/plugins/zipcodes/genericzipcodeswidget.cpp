@@ -117,7 +117,6 @@ void GenericZipCodesWidget::selectCountry(const QModelIndex &index)
         return;
     QStandardItem *item = m_availableCountriesModel->itemFromIndex(index)->clone();
     m_availableCountriesModel->removeRow(index.row());
-    Q_ASSERT(item);
     m_selectedCountriesModel->appendRow(item);
     m_selectedCountriesModel->sort(1); // sort by names, not by internal numbers
     updateActions();

@@ -75,13 +75,13 @@ static inline QString workingPath()     {
 static inline QString sqlMasterFileAbsPath() {
     return QDir::cleanPath(
                 settings()->value(
-                    Core::Constants::S_SVNFILES_PATH).toString() +
+                    Core::Constants::S_GITFILES_PATH).toString() +
                 "/global_resources/sql/zipcodes/zipcodes.sql");
 }
 
 static inline QString sqlImportFileAbsPath()
 {
-        return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() +
+        return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString() +
                                "/global_resources/sql/zipcodes/zipcodes-fr-import.sql");
 }
 
@@ -118,7 +118,7 @@ bool GenericZipCodesStep::downloadFiles(QProgressBar *bar)
 
     /*QNetworkReply* reply =*/ netAccessManager->get(request);
 //    connect(reply, SIGNAL(downloadProgress(qint64,qint64)), this, SLOT(slotSetProgress(qint64,qint64)));
-    connect(netAccessManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(on_availableCountriesDownloaded(QNetworkReply*)));
+    connect(netAccessManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(onAvailableCountriesDownloaded(QNetworkReply*)));
     connect(netAccessManager, SIGNAL(finished(QNetworkReply*)), netAccessManager, SLOT(deleteLater()));
 
     return true;
@@ -222,7 +222,7 @@ void GenericZipCodesStep::slotSetProgress(qint64 bytesReceived, qint64 bytesTota
 }
 
 /*! \brief Called when downloading of countries from GeoNames is finished. */
-void GenericZipCodesStep::on_availableCountriesDownloaded(QNetworkReply *reply)
+void GenericZipCodesStep::onAvailableCountriesDownloaded(QNetworkReply *reply)
 {
     if (reply->error() > 0) {
         qDebug() << reply->errorString();
@@ -270,7 +270,7 @@ void GenericZipCodesStep::on_availableCountriesDownloaded(QNetworkReply *reply)
             QStandardItem *item = new QStandardItem(
                         QIcon(QString("%1/%2.png").arg(flagPath, countryIso3166Code)),
                         QLocale::countryToString(country));
-            item->setData(Qt::DisplayRole, country); //BUG: ? maybe overrides text?
+//            item->setData(Qt::DisplayRole, country); //BUG: ? maybe overrides text?
             m_availableCountriesModel->appendRow(item);
             success = true;
         }

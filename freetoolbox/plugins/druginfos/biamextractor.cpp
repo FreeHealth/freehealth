@@ -73,7 +73,7 @@ static inline Core::ISettings *settings()  { return Core::ICore::instance()->set
 static inline QString workingPath()     {return QDir::cleanPath(settings()->value(Core::Constants::S_TMP_PATH).toString() + "/BIAM/") + QDir::separator();}
 static inline QString databaseAbsPath() {return QDir::cleanPath(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString() + "/drugs/druginfos-fr_FR.db");}
 
-static inline QString drugInfosDatabaseSqlSchema() {return settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + QString(Core::Constants::FILE_DRUGINFOS_DATABASE_SCHEME);}
+static inline QString drugInfosDatabaseSqlSchema() {return settings()->value(Core::Constants::S_GITFILES_PATH).toString() + QString(Core::Constants::FILE_DRUGINFOS_DATABASE_SCHEME);}
 
 using namespace DrugInfos;
 using namespace Trans::ConstantTranslations;

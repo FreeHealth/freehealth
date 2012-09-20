@@ -59,8 +59,8 @@
 #include <quazip/quazip/quazipfile.h>
 
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
-static inline QString masterDatabaseSqlSchema() {return settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + QString(Core::Constants::FILE_MASTER_DATABASE_SCHEME);}
-static inline QString routesCsvAbsFile() {return settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + QString(Core::Constants::FILE_DRUGS_ROUTES);}
+static inline QString masterDatabaseSqlSchema() {return settings()->value(Core::Constants::S_GITFILES_PATH).toString() + QString(Core::Constants::FILE_MASTER_DATABASE_SCHEME);}
+static inline QString routesCsvAbsFile() {return settings()->value(Core::Constants::S_GITFILES_PATH).toString() + QString(Core::Constants::FILE_DRUGS_ROUTES);}
 
 namespace Core {
 namespace Tools {

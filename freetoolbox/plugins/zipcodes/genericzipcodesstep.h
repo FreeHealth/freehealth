@@ -72,7 +72,7 @@ Q_SIGNALS:
 
 protected Q_SLOTS:
     void slotSetProgress(qint64 bytesReceived, qint64 bytesTotal);
-    void on_availableCountriesDownloaded(QNetworkReply *reply);
+    void onAvailableCountriesDownloaded(QNetworkReply *reply);
 
 private:
     QStringList m_Errors;

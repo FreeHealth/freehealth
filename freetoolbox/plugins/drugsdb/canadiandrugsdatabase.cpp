@@ -63,8 +63,8 @@ static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionS
 static inline QString workingPath()     {return QDir::cleanPath(settings()->value(Core::Constants::S_TMP_PATH).toString() + "/CanadianRawSources")  + QDir::separator();}
 static inline QString databaseAbsPath()  {return Core::Tools::drugsDatabaseAbsFileName();}
 
-static inline QString databaseDescriptionFile() {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + "/global_resources/sql/drugdb/ca/description.xml");}
-static inline QString databaseFinalizationScript() {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + "/global_resources/sql/drugdb/ca/canadian_db_finalize.sql");}
+static inline QString databaseDescriptionFile() {return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString() + "/global_resources/sql/drugdb/ca/description.xml");}
+static inline QString databaseFinalizationScript() {return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString() + "/global_resources/sql/drugdb/ca/canadian_db_finalize.sql");}
 
 CanadianDrugsDatabasePage::CanadianDrugsDatabasePage(QObject *parent) :
         Core::IToolPage(parent)

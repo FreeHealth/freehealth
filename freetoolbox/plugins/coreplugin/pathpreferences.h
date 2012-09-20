@@ -59,7 +59,7 @@ public:
     PathPreferencesWidget(QWidget *parent = 0);
     ~PathPreferencesWidget();
 
-    void setDatasToUi();
+    void setDataToUi();
     static void writeDefaultSettings(Core::ISettings *s = 0);
 
 public Q_SLOTS:

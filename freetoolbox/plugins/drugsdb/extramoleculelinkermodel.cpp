@@ -71,7 +71,7 @@ static inline Core::ISettings *settings()  { return Core::ICore::instance()->set
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 
 static inline QString workingPath()         {return QDir::cleanPath(settings()->value(Core::Constants::S_TMP_PATH).toString() + "/MolLinker/") + QDir::separator();}
-static inline QString linkerXmlFile()       {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + Core::Constants::MOL_LINK_FILENAME);}
+static inline QString linkerXmlFile()       {return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString() + Core::Constants::MOL_LINK_FILENAME);}
 
 
 namespace DrugsDbCreator {

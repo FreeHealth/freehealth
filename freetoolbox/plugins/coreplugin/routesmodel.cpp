@@ -40,7 +40,7 @@
 using namespace Core;
 
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
-static inline QString routesCsvAbsFile() {return settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + QString(Core::Constants::FILE_DRUGS_ROUTES);}
+static inline QString routesCsvAbsFile() {return settings()->value(Core::Constants::S_GITFILES_PATH).toString() + QString(Core::Constants::FILE_DRUGS_ROUTES);}
 
 namespace {
 const int ALL_IV_ID = 100001;

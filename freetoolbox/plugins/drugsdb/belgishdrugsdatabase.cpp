@@ -67,9 +67,9 @@ static inline QString workingPath()     {return QDir::cleanPath(settings()->valu
 static inline QString databaseAbsPath()  {return Core::Tools::drugsDatabaseAbsFileName();}
 static inline QString tmpDatabaseAbsPath() {return QDir::cleanPath(workingPath() + "/drugs-be.db");}
 
-static inline QString dumpFileAbsPath()     {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + "/global_resources/sql/drugdb/be/dump.zip");}
+static inline QString dumpFileAbsPath()     {return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString() + "/global_resources/sql/drugdb/be/dump.zip");}
 
-static inline QString databaseFinalizationScript() {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + "/global_resources/sql/drugdb/be/be_db_finalize.sql");}
+static inline QString databaseFinalizationScript() {return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString() + "/global_resources/sql/drugdb/be/be_db_finalize.sql");}
 
 QString BeDrugsDatabasePage::category() const
 {

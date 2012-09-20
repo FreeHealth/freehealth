@@ -214,8 +214,8 @@ void MainWindow::postCoreInitialization()
     show();
     preparePages();
 
-    const QString &path = settings()->value(Constants::S_SVNFILES_PATH).toString();
-    if (path.isEmpty() || !QDir(settings()->value(Constants::S_SVNFILES_PATH).toString()).exists()) {
+    const QString &path = settings()->value(Constants::S_GITFILES_PATH).toString();
+    if (path.isEmpty() || !QDir(settings()->value(Constants::S_GITFILES_PATH).toString()).exists()) {
         Utils::warningMessageBox(tr("Wrong path settings."), tr("You will be redirected to the preferences pages. "
                                                                 "Please set the correct path, then restart the application."));
         applicationPreferences();

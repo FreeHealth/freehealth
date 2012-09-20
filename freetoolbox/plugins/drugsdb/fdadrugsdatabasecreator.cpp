@@ -80,7 +80,7 @@ static inline QString databaseAbsPath()  {return Core::Tools::drugsDatabaseAbsFi
 static inline QString freeDatabaseAbsPath()  {return Core::Tools::drugsDatabaseAbsFileName("free_fda");}
 static inline QString fullFdaDatabaseAbsPath()  {return Core::Tools::drugsDatabaseAbsFileName("full_fda");}
 
-static inline QString databaseDescriptionFile() {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + "/global_resources/sql/drugdb/us/description.xml");}
+static inline QString databaseDescriptionFile() {return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString() + "/global_resources/sql/drugdb/us/description.xml");}
 
 
 FdaDrugsDatabasePage::FdaDrugsDatabasePage(QObject *parent) :
