@@ -160,20 +160,27 @@ bool MainWindow::initialize(const QStringList &, QString *)
     connectConfigurationActions();
     connectHelpActions();
 
-    QAction *a = 0;
     Core::Command *cmd = 0;
     QList<int> globalcontext = QList<int>() << Core::Constants::C_GLOBAL_ID;
 
     Core::ActionContainer *menu = actionManager()->actionContainer(Core::Constants::M_FILE);
 
     // Create local actions
-    a = new QAction(this);
-    a->setObjectName("FTB_CreateFullRelease");
-    a->setIcon(theme()->icon(Constants::ICONPROCESS, ITheme::MediumIcon));
-    cmd = actionManager()->registerAction(a, "FTB_CreateFullRelease", globalcontext);
+    QAction *createFullRelease = new QAction(this);
+    createFullRelease->setObjectName("FTB_CreateFullRelease");
+    createFullRelease->setIcon(theme()->icon(Constants::ICONPROCESS, ITheme::MediumIcon));
+    cmd = actionManager()->registerAction(createFullRelease, "FTB_CreateFullRelease", globalcontext);
     cmd->setTranslations(Constants::CREATEFULLRELEASE_TEXT, Constants::CREATEFULLRELEASE_TEXT, Constants::FREETOOLBOX_TR_CONTEXT);
     menu->addAction(cmd, Core::Constants::G_FILE_NEW);
-    connect(a, SIGNAL(triggered()), this, SLOT(createFullRelease()));
+    connect(createFullRelease, SIGNAL(triggered()), this, SLOT(createFullRelease()));
+
+    QAction *openPreferences = new QAction(this);
+    openPreferences->setObjectName("FTB_Preferences");
+    openPreferences->setIcon(theme()->icon(Constants::ICONPREFERENCES, ITheme::MediumIcon));
+    cmd = actionManager()->registerAction(openPreferences, "FTB_Preferences", globalcontext);
+    cmd->setTranslations("Application Preferences", "Open the preferences dialog", Constants::FREETOOLBOX_TR_CONTEXT);
+    menu->addAction(cmd, Core::Constants::G_PREFERENCES);
+    connect(openPreferences, SIGNAL(triggered()), this, SLOT(applicationPreferences()));
 
     // Create General pages
     m_FullReleasePage = new FullReleasePage(this);
@@ -182,7 +189,8 @@ bool MainWindow::initialize(const QStringList &, QString *)
     ui->setupUi(this);
     ui->centralWidget->layout()->setMargin(0);
     setMenuBar(actionManager()->actionContainer(Constants::MENUBAR)->menuBar());
-    ui->mainToolBar->insertAction(0, a);
+    ui->mainToolBar->insertAction(0, createFullRelease);
+    ui->mainToolBar->insertAction(0, openPreferences);
 
     ui->splitter->setCollapsible(1, false);
     ui->pageTree->header()->setVisible(false);

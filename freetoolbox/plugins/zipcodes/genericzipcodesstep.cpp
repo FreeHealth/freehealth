@@ -270,7 +270,7 @@ void GenericZipCodesStep::onAvailableCountriesDownloaded(QNetworkReply *reply)
             QStandardItem *item = new QStandardItem(
                         QIcon(QString("%1/%2.png").arg(flagPath, countryIso3166Code)),
                         QLocale::countryToString(country));
-//            item->setData(Qt::DisplayRole, country); //BUG: ? maybe overrides text?
+            item->setData(Qt::UserRole, country);
             m_availableCountriesModel->appendRow(item);
             success = true;
         }
