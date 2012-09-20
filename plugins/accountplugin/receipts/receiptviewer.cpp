@@ -88,7 +88,7 @@ static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); 
 
 namespace InternalAmount {
 
-class AmountModel : public QAbstractTableModel
+class DisplayModel : public QAbstractTableModel
 {
     // TODO: missing Q_OBJECT macro --> no sig/slot here  PLUS  MERGE the other amountmodel.h
     // may be that's the buggy Object::connect: No such signal QObject::dataChanged(QModelIndex,QModelIndex) at the end of the app ??
@@ -108,7 +108,7 @@ public:
         Col_Count
     };
 
-    AmountModel(QObject *parent = 0) : QAbstractTableModel(parent)
+    DisplayModel(QObject *parent = 0) : QAbstractTableModel(parent)
     {
         m_listsOfValuesbyRows = new QVector<QList<QVariant> >;
     }
@@ -627,7 +627,7 @@ void treeViewsActions::changeEvent(QEvent *e) {
 ///LISTVIEW
 ///////////////////////////////////////////////////////////////
 
-ChosenListView::ChosenListView(QObject * parent, InternalAmount::AmountModel *amountModel) {
+ChosenListView::ChosenListView(QObject * parent, InternalAmount::DisplayModel *amountModel) {
     setObjectName("ChosenListView");
     m_parent = parent;
     m_deleteInReturnedList = new QAction(tr("Delete this item"),parent);
@@ -703,7 +703,7 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
     m_kilometers = 0.00 ;
     m_distanceRuleValue = 0.00;
     m_insuranceUid = 0;
-    m_model = new InternalAmount::AmountModel(this);
+    m_model = new InternalAmount::DisplayModel(this);
     ui->setupUi(this);
     ui->dateExecution->setDisplayFormat(tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR));
     ui->datePayment->setDisplayFormat(tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR));
@@ -751,9 +751,9 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
     ui->amountsView->setItemDelegateForColumn(Banking, new Utils::SpinBoxDelegate(this,0.00,100000.00,true));
     ui->amountsView->setItemDelegateForColumn(Other, new Utils::SpinBoxDelegate(this,0.00,100000.00,true));
     ui->amountsView->setItemDelegateForColumn(Due, new Utils::SpinBoxDelegate(this,0.00,100000.00,true));
-    ui->amountsView->setColumnHidden(InternalAmount::AmountModel::Col_Debtor,true);
-    ui->amountsView->setColumnHidden(InternalAmount::AmountModel::Col_Site,true);
-    ui->amountsView->setColumnHidden(InternalAmount::AmountModel::Col_DistRule,true);
+    ui->amountsView->setColumnHidden(InternalAmount::DisplayModel::Col_Debtor,true);
+    ui->amountsView->setColumnHidden(InternalAmount::DisplayModel::Col_Site,true);
+    ui->amountsView->setColumnHidden(InternalAmount::DisplayModel::Col_DistRule,true);
 
     ui->amountsView->resizeRowsToContents();
     ui->amountsView->resizeColumnsToContents();
@@ -1190,10 +1190,10 @@ void ReceiptViewer::fillModel(QHash<QString,QString> &hashOfValues,
                        << "unable to insert row = "+QString::number(row) ;
         }
         QModelIndex indexValue = m_model->index(rowOfAmountModel, typeOfPayment);
-        QModelIndex indexDebtor = m_model->index(rowOfAmountModel, InternalAmount::AmountModel::Col_Debtor);
-        QModelIndex indexSite = m_model->index(rowOfAmountModel, InternalAmount::AmountModel::Col_Site);
-        QModelIndex indexDistrules = m_model->index(rowOfAmountModel, InternalAmount::AmountModel::Col_DistRule);
-        QModelIndex indexAct = m_model->index(rowOfAmountModel, InternalAmount::AmountModel::Col_Act);
+        QModelIndex indexDebtor = m_model->index(rowOfAmountModel, InternalAmount::DisplayModel::Col_Debtor);
+        QModelIndex indexSite = m_model->index(rowOfAmountModel, InternalAmount::DisplayModel::Col_Site);
+        QModelIndex indexDistrules = m_model->index(rowOfAmountModel, InternalAmount::DisplayModel::Col_DistRule);
+        QModelIndex indexAct = m_model->index(rowOfAmountModel, InternalAmount::DisplayModel::Col_Act);
         //header vertical is debtor
         m_model->setHeaderData(rowOfAmountModel,Qt::Vertical,debtor,Qt::EditRole);
         if (!m_model->setData(indexValue, value, Qt::EditRole))
@@ -1236,17 +1236,17 @@ void ReceiptViewer::save()
     }
     for (int row = 0; row < m_model->rowCount(QModelIndex()); row += 1)
     {
-        double cash = m_model->data(m_model->index(row,InternalAmount::AmountModel::Col_Cash)).toDouble();
-        double cheque = m_model->data(m_model->index(row,InternalAmount::AmountModel::Col_Cheque)).toDouble();
-        double visa = m_model->data(m_model->index(row,InternalAmount::AmountModel::Col_Visa)).toDouble();
-        double banking = m_model->data(m_model->index(row,InternalAmount::AmountModel::Col_Banking)).toDouble();
-        double other = m_model->data(m_model->index(row,InternalAmount::AmountModel::Col_Other)).toDouble();
-        double due = m_model->data(m_model->index(row,InternalAmount::AmountModel::Col_Due)).toDouble();
-        QVariant insurance = m_model->data(m_model->index(row,InternalAmount::AmountModel::Col_Debtor));
+        double cash = m_model->data(m_model->index(row,InternalAmount::DisplayModel::Col_Cash)).toDouble();
+        double cheque = m_model->data(m_model->index(row,InternalAmount::DisplayModel::Col_Cheque)).toDouble();
+        double visa = m_model->data(m_model->index(row,InternalAmount::DisplayModel::Col_Visa)).toDouble();
+        double banking = m_model->data(m_model->index(row,InternalAmount::DisplayModel::Col_Banking)).toDouble();
+        double other = m_model->data(m_model->index(row,InternalAmount::DisplayModel::Col_Other)).toDouble();
+        double due = m_model->data(m_model->index(row,InternalAmount::DisplayModel::Col_Due)).toDouble();
+        QVariant insurance = m_model->data(m_model->index(row,InternalAmount::DisplayModel::Col_Debtor));
         QVariant insuranceUid = rIO.getInsuranceUidFromInsurance(insurance.toString());
-        QVariant site = m_model->data(m_model->index(row,InternalAmount::AmountModel::Col_Site));
+        QVariant site = m_model->data(m_model->index(row,InternalAmount::DisplayModel::Col_Site));
         QVariant siteUid = rIO.getSiteUidFromSite(site.toString());
-        QVariant act = m_model->data(m_model->index(row,InternalAmount::AmountModel::Col_Act));
+        QVariant act = m_model->data(m_model->index(row,InternalAmount::DisplayModel::Col_Act));
 
         if (WarnDebugMessage)
             qDebug() << __FILE__ << QString::number(__LINE__) << " values =" << QString::number(cash)+ " "

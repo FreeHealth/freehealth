@@ -55,7 +55,7 @@ namespace Ui {
 }
 
 namespace InternalAmount {
-class AmountModel;
+class DisplayModel;
 }  // End namespace Internal
 
 /*enum Rows {
@@ -112,9 +112,9 @@ private:
 class ChosenListView: public QListView{
     Q_OBJECT
     public:
-        ChosenListView(QObject *parent ,InternalAmount::AmountModel *amountModel);
+        ChosenListView(QObject *parent ,InternalAmount::DisplayModel *amountModel);
         ~ChosenListView();
-        InternalAmount::AmountModel * m_amountModel;
+        InternalAmount::DisplayModel * m_amountModel;
     protected:
     void mouseReleaseEvent(QMouseEvent *event);
     private Q_SLOTS:
@@ -180,7 +180,7 @@ private:
     // TODO: create a pimpl
     Ui::ReceiptViewer *ui;
     QStringListModel *m_modelReturnedList;
-    InternalAmount::AmountModel *m_model;
+    InternalAmount::DisplayModel *m_model;
     ControlReceipts * m_control;
     QVariant m_siteUid;
     QVariant m_insuranceUid;
