@@ -448,7 +448,7 @@ void DrugRoute::setLabel(const QString &label, const QString &lang)
 {
     QString l = lang;
     if (lang.isEmpty()) {
-        l = QLocale().name().left(2);
+        l = Trans::Constants::ALL_LANGUAGE;
     }
     d->m_Labels.insert(l, label);
 }

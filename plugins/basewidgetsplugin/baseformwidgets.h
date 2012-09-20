@@ -137,7 +137,7 @@ public:
 private:
     Form::FormItem *m_FormItem;
     BaseForm *m_Form;
-    QHash<int, QVariant> m_Data;
+    QHash<int, QVariant> m_Data, m_OriginalData;
     bool m_Modified;
 };
 
@@ -482,7 +482,7 @@ public:
      QString printableHtml(bool withValues = true) const;
 
  private Q_SLOTS:
-     void onPatientChanged();
+     void onCurrentPatientChanged();
 
 public Q_SLOTS:
      void retranslate();

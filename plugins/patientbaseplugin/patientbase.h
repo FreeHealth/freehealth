@@ -44,8 +44,6 @@
  * \date 06 Aug 2011
 */
 
-/** \todo create a sqlite db in memory to improve speed ? */
-
 namespace Patients {
 namespace Internal {
 class PatientBasePlugin;

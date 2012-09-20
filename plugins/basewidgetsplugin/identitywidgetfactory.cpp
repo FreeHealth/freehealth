@@ -44,7 +44,7 @@ using namespace Trans::ConstantTranslations;
 
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 
-inline static QStringList getOptions(Form::FormItem *item)
+static inline QStringList getOptions(Form::FormItem *item)
 {
     QStringList l;
     l = item->extraData().value("options").split(";", QString::SkipEmptyParts);
@@ -95,7 +95,7 @@ Form::IFormWidget *IdentityWidgetFactory::createWidget(const QString &name, Form
 }
 
 
-inline static int getNumberOfColumns(Form::FormItem *item, int defaultValue = 1)
+static inline int getNumberOfColumns(Form::FormItem *item, int defaultValue = 1)
 {
     if (!item->extraData().value("column").isEmpty())
         return item->extraData().value("column").toInt();

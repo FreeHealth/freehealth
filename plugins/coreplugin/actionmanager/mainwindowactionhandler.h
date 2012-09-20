@@ -62,6 +62,7 @@ public:
     Core::ActionContainer *menubarContainer(bool createIfNotExist = false);
 
     void createFileMenu();
+    void createFileNewSubMenu();
     void connectFileActions();
 
     void createPatientMenu();

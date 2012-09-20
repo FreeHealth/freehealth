@@ -64,8 +64,9 @@ HEADERS += global_exporter.h \
     widgets/periodselectortoolbutton.h \
     widgets/birthdayedit.h \
     datevalidator.h \
-    widgets/fadewidgethack.h
-#    widgets/dialogbuttonbox.h
+    widgets/fadewidgethack.h \
+    widgets/detailswidget.h \
+    widgets/detailsbutton.h
 
 SOURCES += global.cpp \
     database.cpp \
@@ -115,8 +116,9 @@ SOURCES += global.cpp \
     widgets/periodselectortoolbutton.cpp \
     widgets/birthdayedit.cpp \
     datevalidator.cpp \
-    widgets/fadewidgethack.cpp
-#    widgets/dialogbuttonbox.cpp
+    widgets/fadewidgethack.cpp \
+    widgets/detailswidget.cpp \
+    widgets/detailsbutton.cpp
 
 macx {
     OBJECTIVE_SOURCES += iconbadgealert.mm

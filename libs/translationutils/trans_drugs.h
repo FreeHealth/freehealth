@@ -33,10 +33,6 @@ namespace Constants {
 
 // Drugs
 const char* const DRUGS_DATABASE                = QT_TRANSLATE_NOOP("tkConstants", "Drugs database");
-const char* const DRUGS_DATABASE_INFORMATION   = QT_TRANSLATE_NOOP("tkConstants", "Drugs database information");
-const char* const DOSAGES_DATABASE_INFORMATION   = QT_TRANSLATE_NOOP("tkConstants", "Protocols database information");
-const char* const INTERACTIONS_DATABASE_INFORMATION   = QT_TRANSLATE_NOOP("tkConstants", "Interactions database information");
-const char* const PMH_DATABASE_INFORMATION     = QT_TRANSLATE_NOOP("tkConstants", "Past medical history database information");
 const char* const INTERACTIONS_DATABASE         = QT_TRANSLATE_NOOP("tkConstants", "Interactions database");
 const char* const DRUGS                         = QT_TRANSLATE_NOOP("tkConstants", "Drugs");
 const char* const PROTOCOLS                     = QT_TRANSLATE_NOOP("tkConstants", "Protocols");
@@ -49,6 +45,7 @@ const char* const INTOLERANCE_TO_1              = QT_TRANSLATE_NOOP("tkConstants
 const char* const NO_ALLERGIES_INTOLERANCES     = QT_TRANSLATE_NOOP("tkConstants", "No known allergies / intolerances");
 const char* const KNOWN_ALLERGIES               = QT_TRANSLATE_NOOP("tkConstants", "Known allergies");
 const char* const KNOWN_INTOLERANCES            = QT_TRANSLATE_NOOP("tkConstants", "Known intolerances");
+const char* const REFILL_1_TIMES                = QT_TRANSLATE_NOOP("tkConstants", "Refill %1 time(s)");
 
 // Drugs Interactions
 const char* const INTERACTION                   = QT_TRANSLATE_NOOP("tkConstants", "Interaction");

@@ -50,6 +50,7 @@ const char* const TELEPHONE                         = QT_TRANSLATE_NOOP("tkConst
 const char* const FAX                               = QT_TRANSLATE_NOOP("tkConstants", "Fax");
 const char* const MAIL                              = QT_TRANSLATE_NOOP("tkConstants", "E-Mail");
 const char* const PROFESSIONAL                      = QT_TRANSLATE_NOOP("tkConstants", "Professional");
+const char* const PROFESSION                        = QT_TRANSLATE_NOOP("tkConstants", "Profession");
 const char* const SPECIALTIES                       = QT_TRANSLATE_NOOP("tkConstants", "Specialties");
 const char* const IDENTIFIANTS                      = QT_TRANSLATE_NOOP("tkConstants", "Identifiants");
 const char* const QUALIFICATIONS                    = QT_TRANSLATE_NOOP("tkConstants", "Qualifications");

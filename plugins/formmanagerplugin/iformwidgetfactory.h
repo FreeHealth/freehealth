@@ -29,13 +29,13 @@
 
 #include <formmanagerplugin/formmanager_exporter.h>
 
-#include <QtCore/QObject>
-#include <QtCore/QString>
-#include <QtCore/QStringList>
-#include <QtGui/QWidget>
-#include <QtGui/QFrame>
-#include <QtGui/QBoxLayout>
-#include <QtGui/QLabel>
+#include <QObject>
+#include <QString>
+#include <QStringList>
+#include <QWidget>
+#include <QFrame>
+#include <QBoxLayout>
+#include <QLabel>
 
 /**
  * \file iformwidgetfactory.h
@@ -49,7 +49,6 @@ namespace Form {
 class IFormWidget;
 class FormItem;
 
-// This part is very close to QDesignerCustomWidgetInterface so the translation should be easier
 class FORM_EXPORT IFormWidgetFactory : public QObject
 {
     Q_OBJECT

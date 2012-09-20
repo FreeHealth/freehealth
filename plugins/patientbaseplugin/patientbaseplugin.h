@@ -42,6 +42,7 @@ namespace Patients {
 namespace Internal {
 class PatientBasePreferencesPage;
 class PatientSearchMode;
+class PatientModelWrapper;
 
 class PatientBasePlugin : public ExtensionSystem::IPlugin
 {
@@ -60,6 +61,7 @@ private Q_SLOTS:
 private:
     Internal::PatientSearchMode *m_Mode;
     Internal::PatientBasePreferencesPage *prefpage;
+    Internal::PatientModelWrapper *m_PatientModelWrapper;
 };
 
 }  // namespace Internal

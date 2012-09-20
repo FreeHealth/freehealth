@@ -70,7 +70,7 @@ static inline DrugsDB::DrugsBase &drugsBase() {return DrugsDB::DrugBaseCore::ins
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 static inline Core::ActionManager *actionManager() { return Core::ICore::instance()->actionManager(); }
-inline static DrugsDB::DrugsModel *drugModel() { return DrugsWidget::DrugsWidgetManager::instance()->currentDrugsModel(); }
+static inline DrugsDB::DrugsModel *drugModel() { return DrugsWidget::DrugsWidgetManager::instance()->currentDrugsModel(); }
 static inline Core::IMainWindow *mainWindow() {return Core::ICore::instance()->mainWindow();}
 
 namespace DrugsWidget {

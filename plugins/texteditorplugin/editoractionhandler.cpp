@@ -60,7 +60,6 @@ static inline Core::ActionManager *actionManager() { return Core::ICore::instanc
 static inline Core::ITheme *theme() { return Core::ICore::instance()->theme(); }
 static inline Core::IDocumentPrinter *printer() {return ExtensionSystem::PluginManager::instance()->getObject<Core::IDocumentPrinter>();}
 
-
 static QAction *registerAction(const QString &id, const QList<int> &ctx, QObject *parent)
 {
     QAction *a = new QAction(parent);
@@ -240,7 +239,7 @@ void EditorActionHandler::createActions()
 
     // Print
     if (!actionManager()->command(Core::Constants::A_FILE_PRINT)) {
-        aPrint = createAction(this, "aPrinte", ICONPRINT, A_FILE_PRINT, allContexts, FILEPRINT_TEXT, cmd, m_EditMenu, G_FILE_PRINT, QKeySequence::Print);
+        aPrint = createAction(this, "aPrint", ICONPRINT, A_FILE_PRINT, allContexts, FILEPRINT_TEXT, cmd, m_EditMenu, G_FILE_PRINT, QKeySequence::Print);
         aPrint->setEnabled(false);
     } else {
         aPrint = registerAction(Core::Constants::A_FILE_PRINT, allContexts, this);

@@ -25,6 +25,7 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "formmanagermode.h"
+#include "formcore.h"
 #include "formplaceholder.h"
 #include "iformitem.h"
 #include "iformio.h"
@@ -49,15 +50,15 @@ using namespace Form;
 using namespace Internal;
 
 static inline ExtensionSystem::PluginManager *pluginManager() { return ExtensionSystem::PluginManager::instance(); }
-static inline Form::FormManager *formManager() {return Form::FormManager::instance();}
+static inline Form::FormManager &formManager() {return Form::FormCore::instance().formManager();}
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline Core::ModeManager *modeManager()  { return Core::ICore::instance()->modeManager(); }
 static inline Core::ActionManager *actionManager()  { return Core::ICore::instance()->actionManager(); }
 static inline Core::IMainWindow *mainWindow()  { return Core::ICore::instance()->mainWindow(); }
 
 /**
-  \class Form::Internal::FormManagerMode
-  Mode for the central form files (called "Patient files").
+ * \class Form::Internal::FormManagerMode
+ * Mode for the central form files (called "Patient files").
 */
 FormManagerMode::FormManagerMode(QObject *parent) :
     Core::BaseMode(parent),
@@ -77,7 +78,8 @@ FormManagerMode::FormManagerMode(QObject *parent) :
 //    const QList<int> &context;
 //    setContext();
     setWidget(m_Holder);
-    connect(formManager(), SIGNAL(patientFormsLoaded()), this, SLOT(getPatientForm()));
+    onPatientFormsLoaded();
+    connect(&formManager(), SIGNAL(patientFormsLoaded()), this, SLOT(onPatientFormsLoaded()));
 }
 
 FormManagerMode::~FormManagerMode()
@@ -97,32 +99,13 @@ QString FormManagerMode::name() const
   \brief Get the patient form from the episode database, send the load signal with the form absPath and load it.
   \sa Core::ICore::loadPatientForms()
 */
-bool FormManagerMode::getPatientForm()
+bool FormManagerMode::onPatientFormsLoaded()
 {
     if (!m_inPluginManager) {
         pluginManager()->addObject(this);
         m_inPluginManager = true;
     }
-    // TODO: code here : add patient synthesis action in fancy action bar
-//    if (!m_actionInBar) {
-//        Core::Command *cmd = actionManager()->command(Constants::A_SHOWPATIENTSYNTHESIS);
-//        modeManager()->addAction(cmd, 100);
-//        m_actionInBar = true;
-//    }
-    Form::FormMain *root = formManager()->rootForm(Core::Constants::MODE_PATIENT_FILE);
+    Form::FormMain *root = formManager().rootForm(Core::Constants::MODE_PATIENT_FILE);
     m_Holder->setRootForm(root);
     return (root);
 }
-
-//bool FormManagerMode::eventFilter(QObject *obj, QEvent *event)
-//{
-//    qWarning() << obj << event->type();
-//    if (obj==m_Holder) {
-//        qWarning() << "GET HOLDER";
-//        if (event->type()==QEvent::Show) {
-//            qWarning() << "GET SHOW";
-//            mainWindow()->endProcessingSpinner();
-//        }
-//    }
-//    return QObject::eventFilter(obj, event);
-//}

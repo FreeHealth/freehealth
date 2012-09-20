@@ -41,6 +41,7 @@
 #include <coreplugin/isettings.h>
 #include <coreplugin/constants_tokensandsettings.h>
 
+#include <formmanagerplugin/formcore.h>
 #include <formmanagerplugin/iformitem.h>
 #include <formmanagerplugin/iformwidgetfactory.h>
 #include <formmanagerplugin/iformio.h>
@@ -58,8 +59,8 @@
 #include <QFileInfo>
 #include <QDomDocument>
 #include <QDomElement>
-#include <QtScript/QScriptEngine>
-#include <QtScript/QScriptSyntaxCheckResult>
+#include <QScriptEngine>
+#include <QScriptSyntaxCheckResult>
 
 #include <QDebug>
 
@@ -67,9 +68,10 @@ using namespace XmlForms;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
-inline static Form::FormManager *formManager() { return Form::FormManager::instance(); }
-inline static ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
+static inline Form::FormManager &formManager() {return Form::FormCore::instance().formManager();}
+static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
+static inline Core::IPatient *patient()  { return Core::ICore::instance()->patient(); }
 static inline Category::CategoryCore *categoryCore() {return  Category::CategoryCore::instance();}
 static inline PMH::PmhCore *pmhCore() {return PMH::PmhCore::instance();}
 static inline Internal::XmlFormContentReader *reader() {return Internal::XmlFormContentReader::instance();}
@@ -134,19 +136,10 @@ XmlFormContentReader::XmlFormContentReader() :
    m_SpecsTypes.insert(Constants::TAG_SPEC_PRIORITY, Form::FormItemSpec::Spec_Priority);
 
    m_PatientDatas.clear();
-   m_PatientDatas.insert(Constants::TAG_DATAPATIENT_DRUGSALLERGIES, Core::IPatient::DrugsAtcAllergies);
-   m_PatientDatas.insert(Constants::TAG_DATAPATIENT_DRUGSCHRONIC, Core::IPatient::DrugsChronicTherapeutics);
-   m_PatientDatas.insert(Constants::TAG_DATAPATIENT_WEIGHT, Core::IPatient::Weight);
-   m_PatientDatas.insert(Constants::TAG_DATAPATIENT_WEIGHTUNIT, Core::IPatient::WeightUnit);
-   m_PatientDatas.insert(Constants::TAG_DATAPATIENT_HEIGHT, Core::IPatient::Height);
-   m_PatientDatas.insert(Constants::TAG_DATAPATIENT_HEIGHTUNIT, Core::IPatient::HeightUnit);
-   m_PatientDatas.insert(Constants::TAG_DATAPATIENT_CREAT, Core::IPatient::Creatinine);
-   m_PatientDatas.insert(Constants::TAG_DATAPATIENT_CREATUNIT, Core::IPatient::CreatinineUnit);
-
-   m_PatientDatas.insert(Constants::TAG_DATAPATIENT_EMAIL, Core::IPatient::Mails);
-   m_PatientDatas.insert(Constants::TAG_DATAPATIENT_FAX, Core::IPatient::Faxes);
-   m_PatientDatas.insert(Constants::TAG_DATAPATIENT_TELS, Core::IPatient::Tels);
-   m_PatientDatas.insert(Constants::TAG_DATAPATIENT_MOBILETEL, Core::IPatient::MobilePhone);
+   // use the Core::IPatient::enumToString()
+   for(int i=0; i< Core::IPatient::NumberOfColumns; ++i) {
+       m_PatientDatas.insert(patient()->enumToString(Core::IPatient::PatientDataRepresentation(i)).toLower(), i);
+   }
 }
 
 XmlFormContentReader::~XmlFormContentReader()
@@ -402,7 +395,6 @@ bool XmlFormContentReader::loadForm(const XmlFormName &form, Form::FormMain *roo
     doc = m_DomDocFormCache[form.absFileName];
     QDomElement root = doc->firstChildElement(Constants::TAG_MAINXMLTAG);
     QDomElement newForm = root.firstChildElement(Constants::TAG_NEW_FORM);
-    QDomElement newMode = root.firstChildElement(Constants::TAG_NEW_PAGE);
     QDomElement addFile = root.firstChildElement(Constants::TAG_ADDFILE);
 
     // in case of no rootForm is passed --> XML must start with a file inclusion or a newform tag
@@ -519,7 +511,7 @@ bool XmlFormContentReader::loadElement(Form::FormItem *item, QDomElement &rootEl
 
         // Patient Data Representation ?
         if (element.tagName().compare(Constants::TAG_DATAPATIENT, Qt::CaseInsensitive)==0) {
-            i = m_PatientDatas.value(element.text(), -1);
+            i = m_PatientDatas.value(element.text().toLower(), -1);
             if (i != -1) {
                 item->setPatientDataRepresentation(i);
             }
@@ -589,7 +581,7 @@ bool XmlFormContentReader::createElement(Form::FormItem *item, QDomElement &elem
                 child->spec()->setValue(Form::FormItemSpec::Spec_Plugin, element.attribute(Constants::ATTRIB_TYPE), Trans::Constants::ALL_LANGUAGE);
 
             if (element.hasAttribute(Constants::ATTRIB_PATIENTREPRESENTATION)) {
-                int i = m_PatientDatas.value(element.attribute(Constants::ATTRIB_PATIENTREPRESENTATION), -1);
+                int i = m_PatientDatas.value(element.attribute(Constants::ATTRIB_PATIENTREPRESENTATION).toLower(), -1);
                 if (i != -1) {
                     child->setPatientDataRepresentation(i);
                 }
@@ -620,6 +612,16 @@ bool XmlFormContentReader::createElement(Form::FormItem *item, QDomElement &elem
             if (element.hasAttribute(Constants::ATTRIB_TYPE))
                 item->spec()->setValue(Form::FormItemSpec::Spec_Plugin, element.attribute(Constants::ATTRIB_TYPE), Trans::Constants::ALL_LANGUAGE);
 
+            if (element.hasAttribute(Constants::ATTRIB_ISIDENTITYFORM)) {
+                const QString &att = element.attribute(Constants::ATTRIB_ISIDENTITYFORM);
+                bool isIdentity =
+                        att.compare("yes", Qt::CaseInsensitive)==0 |
+                        att.compare("true", Qt::CaseInsensitive)==0 |
+                        att=="1";
+                item->spec()->setValue(Form::FormItemSpec::Spec_IsIdentityForm, isIdentity, Trans::Constants::ALL_LANGUAGE);
+            }
+
+
             if (element.hasAttribute(Constants::ATTRIB_UIFILE)) {
                 QString content = base()->getFormContent(form.uid, XmlIOBase::UiFile, element.attribute(Constants::ATTRIB_UIFILE));
                 item->spec()->setValue(Form::FormItemSpec::Spec_UiFileContent, content, Trans::Constants::ALL_LANGUAGE);
@@ -644,7 +646,7 @@ bool XmlFormContentReader::createElement(Form::FormItem *item, QDomElement &elem
         if (uuid.isEmpty())
             LOG_ERROR_FOR("XMLIO", "No uuid specified for the FormPage");
 
-        Form::FormPage *page = formManager()->createFormPage(uuid);
+        Form::FormPage *page = formManager().createFormPage(uuid);
         if (item) {
             item = page;
             loadElement(item, element, form);

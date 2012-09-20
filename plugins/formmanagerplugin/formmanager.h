@@ -42,7 +42,7 @@ QT_END_NAMESPACE
  * \file formmanager.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.8.0
- * \date 28 Aug 2012
+ * \date 12 Sept 2012
 */
 
 namespace DataPack {
@@ -50,6 +50,7 @@ class Pack;
 }
 
 namespace Form {
+class FormCore;
 class FormPage;
 class FormMain;
 class FormItem;
@@ -60,38 +61,23 @@ class FormTreeModel;
 class EpisodeModel;
 
 namespace Internal {
+class FormManagerPlugin;
 class FormManagerPrivate;
-class FormActionHandler : public QObject
+}  // namespace Internal
+
+class FORM_EXPORT FormManager : public QObject
 {
     Q_OBJECT
-public:
-    FormActionHandler(QObject *parent = 0);
-    ~FormActionHandler();
-
-private Q_SLOTS:
-    void showPatientLastEpisode();
-    void updateActions();
-
-private:
-    QAction *aAddEpisode;
-    QAction *aValidateEpisode;
-    QAction *aAddForm;
-    QAction *aPrintForm;
-    QAction *aShowPatientSynthesis;
-    QAction *aShowPatientLastEpisode;
-};
-}
-
-class FORM_EXPORT FormManager : public Internal::FormActionHandler
-{
-    Q_OBJECT
+    friend class Form::FormCore;
     friend class Form::Internal::FormManagerPrivate;
 
+protected:
     FormManager(QObject *parent = 0);
 
 public:
     static FormManager *instance();
     ~FormManager();
+    bool initialize();
 
     void activateMode();
 
@@ -100,7 +86,9 @@ public:
     FormMain *form(const QString &formUid) const;
     QList<FormMain *> forms() const;
     QList<FormMain *> subFormsEmptyRoot() const;
-    Form::FormMain *rootForm(const char *modeUniqueName);
+    Form::FormMain *rootForm(const char *modeUniqueName) const;
+    Form::FormMain *identityRootForm() const;
+    Form::FormMain *identityRootFormDuplicate() const;
     QList<Form::FormMain *> loadFormFile(const QString &formUid);
     QPixmap getScreenshot(const QString &formUid, const QString &fileName);
 
@@ -108,7 +96,6 @@ public:
 //    FormTreeModel *formTreeModel(const char* modeUniqueName);
     EpisodeModel *episodeModel(Form::FormMain *form);
     EpisodeModel *episodeModel(const QString &formUid);
-
 
 public Q_SLOTS:
     // Form management
@@ -130,7 +117,6 @@ private Q_SLOTS:
 
 private:
     Internal::FormManagerPrivate *d;
-    static FormManager *m_Instance;
 };
 
 } // End Form

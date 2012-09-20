@@ -83,9 +83,9 @@ static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionS
 static inline QString workingPath()     {return QDir::cleanPath(settings()->value(Core::Constants::S_TMP_PATH).toString() + "/ZARawSources/") + QDir::separator();}
 static inline QString databaseAbsPath()  {return Core::Tools::drugsDatabaseAbsFileName();}
 
-static inline QString databaseDescriptionFile() {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + "/global_resources/sql/drugdb/za/description.xml");}
-static inline QString databaseFinalizationScript() {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + "/global_resources/sql/drugdb/za/za_db_finalize.sql");}
-static inline QString uidFile() {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + "/global_resources/sql/drugdb/za/za_uids.csv");}
+static inline QString databaseDescriptionFile() {return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString() + "/global_resources/sql/drugdb/za/description.xml");}
+static inline QString databaseFinalizationScript() {return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString() + "/global_resources/sql/drugdb/za/za_db_finalize.sql");}
+static inline QString uidFile() {return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString() + "/global_resources/sql/drugdb/za/za_uids.csv");}
 
 SouthAfricanDrugsDatabasePage::SouthAfricanDrugsDatabasePage(QObject *parent) :
     IToolPage(parent)
@@ -150,7 +150,7 @@ bool ZaDrugDatatabaseStep::downloadFiles(QProgressBar *bar)
     manager = new QNetworkAccessManager(this);
     connect(manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(replyFinished(QNetworkReply*)));
 
-    Q_EMIT progressLabelChanged(tr("South African database extraction : reading indexes"));
+    Q_EMIT progressLabelChanged(tr("South African database extraction: reading indexes"));
     Q_EMIT progressRangeChanged(0, 26);
     Q_EMIT progress(0);
 
@@ -214,7 +214,7 @@ void ZaDrugDatatabaseStep::replyFinished(QNetworkReply *reply)
             done = true;
             m_nbOfDowloads = m_Drug_Link.count();
 
-            Q_EMIT progressLabelChanged(tr("South African database extraction : reading drugs page"));
+            Q_EMIT progressLabelChanged(tr("South African database extraction: reading drugs page"));
             Q_EMIT progressRangeChanged(0, m_nbOfDowloads);
             Q_EMIT progress(0);
 
@@ -251,7 +251,7 @@ bool ZaDrugDatatabaseStep::prepareDatas()
 {
     m_Drug_Link.clear();
 
-    Q_EMIT progressLabelChanged(tr("South African database extraction : parsing drugs page"));
+    Q_EMIT progressLabelChanged(tr("South African database extraction: parsing drugs page"));
     Q_EMIT progressRangeChanged(0, 26);
     Q_EMIT progress(0);
 

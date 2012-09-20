@@ -90,7 +90,7 @@ private:
     void updateDrugsPrecautionsModel() const;
 
 private Q_SLOTS:
-    void patientChanged();
+    void onCurrentPatientChanged();
     void refreshDrugsPrecautions(const QModelIndex &topleft, const QModelIndex &bottomright);
 
 private:

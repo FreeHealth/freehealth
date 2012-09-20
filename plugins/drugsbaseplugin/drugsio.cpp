@@ -26,9 +26,11 @@
  ***************************************************************************/
 
 /**
-  \class DrugsIO
-  \brief Manages the IO operations for the dosages and prescriptions
-  \ingroup freediams drugswidget
+ * \class DrugsIO
+ * \brief Manages the IO operations for the dosages and prescriptions
+ * Read/Write prescription from/to XML files.\n
+ * Create prints and print preview of prescriptions.\n
+ * Manages drugs tokens.
 */
 
 #include "drugsio.h"
@@ -145,6 +147,7 @@ namespace {
     const char *const XML_PRESCRIPTION_SPECIFYFORM         = "SpecifyForm";
     const char *const XML_PRESCRIPTION_SPECIFYPRESCENTATION= "SpecifyPresentation";
     const char *const XML_PRESCRIPTION_ISALD               = "IsAld";
+    const char *const XML_PRESCRIPTION_REFILL              = "Refill";
     const char *const XML_PRESCRIPTION_TOHTML              = "Html";
 
     const char *const XML_EXTRADATAS_TAG                   = "ExtraDatas";
@@ -200,6 +203,7 @@ public:
             m_PrescriptionXmlTags.insert(Prescription::SpecifyForm, XML_PRESCRIPTION_SPECIFYFORM);
             m_PrescriptionXmlTags.insert(Prescription::SpecifyPresentation, XML_PRESCRIPTION_SPECIFYPRESCENTATION);
             m_PrescriptionXmlTags.insert(Prescription::IsALD, XML_PRESCRIPTION_ISALD);
+            m_PrescriptionXmlTags.insert(Prescription::Refill, XML_PRESCRIPTION_REFILL);
             m_PrescriptionXmlTags.insert(Prescription::ToHtml, XML_PRESCRIPTION_TOHTML);
             m_PrescriptionXmlTags.insert(Drug::Denomination, XML_DRUG_DENOMINATION);
             m_PrescriptionXmlTags.insert(Drug::UidName, XML_DRUG_UUID_NAME);
@@ -259,6 +263,9 @@ public:
 //        t->setUntranslatedHumanReadableName(Trans::Constants::);
         _tokens << t;
         t = new PrescriptionToken(Core::Constants::TOKEN_PRESC_MEAL, Prescription::MealTimeSchemeIndex);
+//        t->setUntranslatedHumanReadableName(Trans::Constants::);
+        _tokens << t;
+        t = new PrescriptionToken(Core::Constants::TOKEN_PRESC_REFILL, Prescription::Refill);
 //        t->setUntranslatedHumanReadableName(Trans::Constants::);
         _tokens << t;
         t = new PrescriptionToken(Core::Constants::TOKEN_PRESC_NOTE, Prescription::Note);
@@ -367,6 +374,7 @@ public:
                 << Prescription::SpecifyForm
                 << Prescription::SpecifyPresentation
                 << Prescription::IsALD
+                << Prescription::Refill
                 ;
 
         // Process each prescribed drugs
@@ -628,7 +636,8 @@ bool DrugsIO::isSendingDosage()
 }
 
 /**
-  \brief Transfert a XML'd prescription to the model
+ * \brief Populate a DrugsDB::DrugsModel using the XML prescription content \e xmlContent with the options \e loader.
+ * You can add to or replace the actual prescription using the enumerator DrugsIO::Loader \e loader.\n
  */
 bool DrugsIO::prescriptionFromXml(DrugsDB::DrugsModel *m, const QString &xmlContent, Loader loader)
 {
@@ -729,11 +738,10 @@ bool DrugsIO::prescriptionFromXml(DrugsDB::DrugsModel *m, const QString &xmlCont
 }
 
 /**
-  \brief Load a Prescription file and assumed the transmission to the DrugsModel
-  You can add to or replace the actual prescription using the enumerator DrugsIO::Loader \e loader.\n
-  The \e extraData receives the extracted extra data from the loaded prescription file.
-  \sa savePrescription()
-  \todo manage xml document version
+ * \brief Load a prescription file \e fileName to the DrugsDB::DrugsModel \e m.
+ * You can add to or replace the actual prescription using the enumerator DrugsIO::Loader \e loader.\n
+ * The \e extraData receives the extracted extra data from the loaded prescription file.
+ * \sa savePrescription()
 */
 bool DrugsIO::loadPrescription(DrugsDB::DrugsModel *m, const QString &fileName, QHash<QString,QString> &extraData, Loader loader )
 {
@@ -746,11 +754,10 @@ bool DrugsIO::loadPrescription(DrugsDB::DrugsModel *m, const QString &fileName, 
 }
 
 /**
-  \brief Load a Prescription file and assumed the transmission to the DrugsModel.
-  You can add to or replace the actual prescription using the enumerator DrugsIO::Loader \e loader.\n
-  The \e xmlExtraData receives the extracted extra data from the loaded prescription file.
-  \sa savePrescription()
-  \todo manage xml document version
+ * \brief Load a prescription file \e fileName to the DrugsDB::DrugsModel \e m.
+ * You can add to or replace the actual prescription using the enumerator DrugsIO::Loader \e loader.\n
+ * The \e xmlExtraData receives the extracted extra data from the loaded prescription file.
+ * \sa savePrescription()
 */
 bool DrugsIO::loadPrescription(DrugsDB::DrugsModel *m, const QString &fileName, QString &xmlExtraData, Loader loader )
 {
@@ -791,9 +798,11 @@ bool DrugsIO::loadPrescription(DrugsDB::DrugsModel *m, const QString &fileName, 
 }
 
 /**
-  \brief Transform prescription to readable Html.
-  Prescription is automatically sorted.\n
-  The XML encoded prescription is added inside the HTML code.\n
+ * \brief Transform prescription to a readable HTML output.
+ * All items of the prescription are translated to HTML using the token manager and
+ * the HTML drug posologic sentence in the user settings.\n
+ * Prescription is automatically sorted.\n
+ * The XML encoded prescription is added inside the HTML code.\n
 */
 QString DrugsIO::prescriptionToHtml(DrugsDB::DrugsModel *m, const QString &xmlExtraData, int version)
 {
@@ -920,6 +929,13 @@ QString DrugsIO::prescriptionToHtml(DrugsDB::DrugsModel *m, const QString &xmlEx
     return toReturn;
 }
 
+/**
+ * \brief Transform a prescription row (one drug) to a readable output.
+ * Item is translated to HTML using the token manager and
+ * the drug posologic sentence passed as param (\e mask). If the \e mask is
+ * empty, a new one is extracted from the user settings (drug posologic sentence plaintext or HTML). \n
+ * You can choose to output an HTML string or a plain text string \e toHtml.\n
+*/
 QString DrugsIO::getDrugPrescription(DrugsDB::DrugsModel *model, const int drugRow, bool toHtml, const QString &mask)
 {
     QString tmp;
@@ -1011,9 +1027,11 @@ QString DrugsIO::getDrugPrescription(DrugsDB::DrugsModel *model, const int drugR
         tokens_value["PERIOD_SCHEME"] = tokens_value["D_FROM"] = tokens_value["D_TO"] = tokens_value["D_SCHEME"] = "";
     }
 
+    // Meal
     tokens_value["MEAL"] = Trans::ConstantTranslations::mealTime(drug->prescriptionValue(Constants::Prescription::MealTimeSchemeIndex).toInt());
     QString tmp2 = drug->prescriptionValue(Constants::Prescription::Period).toString();
 
+    // Period && note
     // TODO: provide a better management of 'EACH DAY__S__' here .. \sa Translation::periodPlurialForm()
     // Period management of 'EACH DAY__S'
     if (tmp2 == "1") {
@@ -1038,6 +1056,26 @@ QString DrugsIO::getDrugPrescription(DrugsDB::DrugsModel *model, const int drugR
     // Route
     tokens_value["ROUTE"] = drug->prescriptionValue(Constants::Prescription::Route).toString();
 
+    // Refill
+    // FIXME: correcty manages plurial translations
+    QVariant refill = drug->prescriptionValue(Constants::Prescription::Refill);
+    if (!refill.isNull() && !refill.isNull()) {
+        if (refill.toInt() > 1) {
+            QString tmp = tkTr(Trans::Constants::REFILL_1_TIMES).arg(refill.toInt());
+            tmp = tmp.remove("(").remove(")");
+            tokens_value["REFILL"] = tmp;
+        } else if (refill.toInt() == 1) {
+            QString tmp = tkTr(Trans::Constants::REFILL_1_TIMES).arg(refill.toInt());
+            int begin = tmp.indexOf("(");
+            if (begin > 0) {
+                int end = tmp.indexOf(")", begin);
+                if (end)
+                    tmp = tmp.remove(begin, end-begin);
+            }
+            tokens_value["REFILL"] = tmp;
+        }
+    }
+
     Utils::replaceTokens(tmp, tokens_value);
     if (toHtml)
         tmp = Utils::toHtmlAccent(tmp);
@@ -1046,7 +1084,7 @@ QString DrugsIO::getDrugPrescription(DrugsDB::DrugsModel *model, const int drugR
 }
 
 /**
-  \brief Transforms the DrugsModel's prescription into a XML encoded string.
+ * \brief Transforms a prescription from a DrugsDB::DrugsModel to and XML prescription content, with or without extra-xml content \e xmlExtraData.
 */
 QString DrugsIO::prescriptionToXml(DrugsDB::DrugsModel *m, const QString &xmlExtraData)
 {
@@ -1082,155 +1120,12 @@ QString DrugsIO::prescriptionToXml(DrugsDB::DrugsModel *m, const QString &xmlExt
         d->drugPrescriptionToXml(drug, doc, fullPres);
     }
     return doc.toString(2);
-
-//    QString xmldPrescription;
-//    QList<int> keysToSave;
-//    if (m->isSelectionOnlyMode()) {
-//        keysToSave
-//                << Drug::Denomination
-//                << Drug::Inns
-//                << Drug::ATC
-//                << Drug::InnsATCcodes
-//                << Drug::Form
-//                << Drug::Route
-//                << Drug::GlobalStrength
-//                << Prescription::Pack_UID
-//                ;
-//    } else {
-//        keysToSave
-//                << Drug::Denomination
-////                << Drug::AvailableForms
-////                << Drug::AvailableRoutes
-//                << Drug::Form
-//                << Drug::Route
-//                << Drug::GlobalStrength
-//                << Prescription::IsTextualOnly
-//                << Prescription::UsedDosage
-//                << Prescription::Pack_UID
-//                << Prescription::OnlyForTest
-//                << Prescription::IntakesFrom
-//                << Prescription::IntakesTo
-//                << Prescription::IntakesScheme
-//                << Prescription::IntakesUsesFromTo
-//                << Prescription::IntakesFullString
-//                << Prescription::DurationFrom
-//                << Prescription::DurationTo
-//                << Prescription::DurationScheme
-//                << Prescription::DurationUsesFromTo
-//                << Prescription::Period
-//                << Prescription::PeriodScheme
-//                << Prescription::RouteId
-//                << Prescription::SerializedDailyScheme
-//                << Prescription::MealTimeSchemeIndex
-//                << Prescription::IntakesIntervalOfTime
-//                << Prescription::IntakesIntervalScheme
-//                << Prescription::Note
-//                << Prescription::IsINNPrescription
-//                << Prescription::SpecifyForm
-//                << Prescription::SpecifyPresentation
-//                << Prescription::IsALD
-//                ;
-//    }
-//    QHash<QString, QString> forXml;
-//    int i;
-//    IDrug *drug = 0;
-
-//    // Process each prescribed drugs
-//    for(i=0; i < m->rowCount() ; ++i) {
-//        // TODO: code here UIDs
-//        forXml.insert(XML_PRESCRIPTION_UID, m->index(i, Drug::UIDs).data().toStringList().join(";").remove(";;"));
-//        if (m->index(i, Prescription::OnlyForTest).data().toBool()) {
-//            forXml.insert(instance()->d->xmlTagForPrescriptionRow(Prescription::OnlyForTest), "true");
-//            forXml.insert(instance()->d->xmlTagForPrescriptionRow(Drug::Denomination), m->index(i, Drug::Denomination).data().toString());
-//            forXml.insert(instance()->d->xmlTagForPrescriptionRow(Drug::Form), m->index(i, Drug::Form).data().toString());
-//            forXml.insert(instance()->d->xmlTagForPrescriptionRow(Drug::Route), m->index(i, Drug::Route).data().toString());
-//            forXml.insert(instance()->d->xmlTagForPrescriptionRow(Drug::GlobalStrength), m->index(i, Drug::GlobalStrength).data().toString());
-//        } else {
-//            foreach(int k, keysToSave) {
-//                if (m->index(i, k).data().type() == QVariant::StringList) {
-//                    forXml.insert(instance()->d->xmlTagForPrescriptionRow(k), m->index(i, k).data().toStringList().join(";"));
-//                } else {
-//                    forXml.insert(instance()->d->xmlTagForPrescriptionRow(k), m->index(i, k).data().toString());
-//                }
-//            }
-//        }
-//        if (m->index(i, Prescription::IsTextualOnly).data().toBool()) {
-//            forXml.insert(XML_PRESCRIPTION_TEXTUALDRUGNAME,
-//                          m->index(i, Drug::Denomination).data().toString());
-//        }
-//        xmldPrescription += Utils::createXml(XML_PRESCRIPTION_MAINTAG, forXml);
-//        forXml.clear();
-
-//        // Insert composition
-//        drug = m->getDrug(m->index(i, Drug::DrugId).data());
-////        Q_ASSERT(drug);
-//        if (drug) {
-//            // Process drugs composition
-//            QString tmp = drug->compositionToXml();
-//            int index = xmldPrescription.lastIndexOf(XML_PRESCRIPTION_MAINTAG) - 2;
-//            xmldPrescription.insert(index, tmp);
-//        }
-
-//    }
-
-//    // Add full prescription tag and version
-//    xmldPrescription.prepend(QString("<%1 %2=\"%3\">\n")
-//                             .arg(XML_FULLPRESCRIPTION_TAG)
-//                             .arg(XML_VERSION).arg(VersionUpdater::instance()->lastXmlIOVersion()));
-
-//    // Close Full prescription
-//    xmldPrescription.append(QString("</%1>\n").arg(XML_FULLPRESCRIPTION_TAG));
-
-//    // Add drugsBase information
-//    QString dbName;
-//    QString dbInfoAttribs;
-//    if (drugsBase().actualDatabaseInformation()) {
-//        dbName = drugsBase().actualDatabaseInformation()->identifiant;
-//        QString t = drugsBase().actualDatabaseInformation()->version;
-//        dbInfoAttribs += QString("version=\"%1\" ").arg(t.replace("\"","'"));
-//        t = drugsBase().actualDatabaseInformation()->compatVersion;
-//        dbInfoAttribs += QString("compatWithFreeDiamsVersion=\"%1\" ").arg(t.replace("\"","'"));
-//        t = drugsBase().actualDatabaseInformation()->complementaryWebsite;
-//        dbInfoAttribs += QString("complementaryWebSite=\"%1\" ").arg(t.replace("\"","'"));
-//        dbInfoAttribs += QString("date=\"%1\" ").arg(drugsBase().actualDatabaseInformation()->date.toString(Qt::ISODate));
-//        t = drugsBase().actualDatabaseInformation()->provider;
-//        dbInfoAttribs += QString("provider=\"%1\" ").arg(t.replace("\"","'"));
-//        t = drugsBase().actualDatabaseInformation()->weblink;
-//        dbInfoAttribs += QString("webLink=\"%1\" ").arg(t.replace("\"","'"));
-//        t = drugsBase().actualDatabaseInformation()->packUidName;
-//        dbInfoAttribs += QString("packUidName=\"%1\" ").arg(t.replace("\"","'"));
-//        t = drugsBase().actualDatabaseInformation()->drugsUidName;
-//        dbInfoAttribs += QString("drugUidName=\"%1\" ").arg(t.replace("\"","'"));
-//    } else {
-//        dbName = Constants::DB_DEFAULT_IDENTIFIANT;
-//    }
-//    xmldPrescription.prepend(QString("<%1 %2>%3</%1>\n")
-//                             .arg(XML_DRUGS_DATABASE_NAME)
-//                             .arg(dbInfoAttribs)
-//                             .arg(dbName));
-
-//    // Add the date of generation
-//    xmldPrescription.prepend(QString("<%1>%2</%1>\n").arg(XML_DATEOFGENERATION_TAG).arg(QDateTime::currentDateTime().toString(Qt::ISODate)));
-
-//    // Add the main root node and extraData
-//    xmldPrescription.prepend(QString("<%1>\n").arg(XML_ROOT_TAG));
-//    xmldPrescription.append(xmlExtraData);
-//    xmldPrescription.append(QString("</%1>\n").arg(XML_ROOT_TAG));
-
-//    // Add the version and the FullPrescription tags
-//    xmldPrescription.prepend(QString("%1\n").arg(XML_HEADER));
-
-//    // Beautifying the XML
-//    QDomDocument root;
-//    root.setContent(xmldPrescription);
-
-//    return root.toString(2);
 }
 
 /**
-  \brief Save the DrugsModel's prescription into a XML file.
-  You can add \e extraData to the xml. \e extraData must be xml'd.\n
-  If \e toFileName is empty, user is prompted to select a filename.
+ * \brief Save the Drugs::DrugsModel's prescription into a XML file.
+ * You can add \e extraData to the xml. \e extraData must be xml'd.\n
+ * If \e toFileName is empty, user is prompted to select a filename.
 */
 bool DrugsIO::savePrescription(DrugsDB::DrugsModel *model, const QHash<QString,QString> &extraData, const QString &toFileName)
 {
@@ -1249,9 +1144,9 @@ bool DrugsIO::savePrescription(DrugsDB::DrugsModel *model, const QHash<QString,Q
 }
 
 /**
-  \brief Save the DrugsModel's prescription into a XML file.
-  You can add \e extraXmlDatas to the xml. \e extraDatas must be xml'd.\n
-  If \e toFileName is empty, user is prompted to select a filename.
+ * \brief Save the DrugsModel's prescription into a XML file.
+ * You can add \e extraXmlDatas to the xml. \e extraDatas must be xml'd.\n
+ * If \e toFileName is empty, user is prompted to select a filename.
 */
 bool DrugsIO::savePrescription(DrugsDB::DrugsModel *model, const QString &extraXmlDatas, const QString &toFileName)
 {
@@ -1271,6 +1166,7 @@ bool DrugsIO::savePrescription(DrugsDB::DrugsModel *model, const QString &extraX
         return Utils::saveStringToFile(xmldPrescription, toFileName, Utils::Overwrite, Utils::DontWarnUser);
 }
 
+/** \brief Print the prescription from the DrugsDB::DrugsModel \e model */
 bool DrugsIO::printPrescription(DrugsDB::DrugsModel *model)
 {
     Core::IDocumentPrinter *p = printer();
@@ -1285,6 +1181,7 @@ bool DrugsIO::printPrescription(DrugsDB::DrugsModel *model)
                     settings()->value(Constants::S_PRINTDUPLICATAS).toBool());
 }
 
+/** \brief Creates a print preview dialog with the prescription from the DrugsDB::DrugsModel \e model */
 void DrugsIO::prescriptionPreview(DrugsDB::DrugsModel *model)
 {
     Core::IDocumentPrinter *p = printer();
@@ -1302,8 +1199,8 @@ void DrugsIO::prescriptionPreview(DrugsDB::DrugsModel *model)
 }
 
 /**
-  \brief For drag and drop functionnalities, defines the mimeTypes of DrugsIO.
-  \sa DrugsDB::DrugsModel::mimeType()
+ * \brief For drag and drop functionnalities, defines the mimeTypes of DrugsIO.
+ * \sa DrugsDB::DrugsModel::mimeType()
 */
 QStringList DrugsIO::prescriptionMimeTypes()
 {

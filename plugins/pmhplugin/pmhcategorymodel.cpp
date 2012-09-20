@@ -26,9 +26,9 @@
  ***************************************************************************/
 
 /**
-   \class PMH::PmhCategoryModel
-   General model for the categorized PMHx.
-   Unique instance is available in the PMH::PmhCore.
+ * \class PMH::PmhCategoryModel
+ *  General model for the categorized PMHx.
+ *  Its unique instance is available in the PMH::PmhCore.
  */
 
 #include "pmhcategorymodel.h"
@@ -46,8 +46,10 @@
 #include <coreplugin/translators.h>
 #include <coreplugin/constants_icons.h>
 
+#include <formmanagerplugin/formcore.h>
 #include <formmanagerplugin/iformitem.h>
 #include <formmanagerplugin/formmanager.h>
+#include <formmanagerplugin/formtreemodel.h>
 #include <formmanagerplugin/episodemodel.h>
 
 #include <categoryplugin/categorycore.h>
@@ -74,7 +76,7 @@ static inline QString currentUserUuid() {return Core::ICore::instance()->user()-
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 static inline Core::Translators *translators() {return Core::ICore::instance()->translators();}
-static inline Form::FormManager *formManager() { return Form::FormManager::instance(); }
+static inline Form::FormManager &formManager() {return Form::FormCore::instance().formManager();}
 static inline Category::CategoryCore *categoryCore() {return Category::CategoryCore::instance();}
 
 namespace {
@@ -103,8 +105,6 @@ namespace {
             m_Label.clear();
             qDeleteAll(m_Children);
             m_Children.clear();
-//            delete m_Form;
-//            delete m_EpisodeModel;
             m_Pmh=0;
             m_Cat=0;
             m_Parent=0;
@@ -222,9 +222,7 @@ namespace {
         Form::FormMain *m_Form;
         Form::EpisodeModel *m_EpisodeModel;
     };
-
 }
-
 
 namespace PMH {
 namespace Internal {
@@ -275,22 +273,19 @@ public:
         return _rootItem;
     }
 
-    void episodeModelToTreeItem(Form::FormMain *form, TreeItem *parentItem, Form::EpisodeModel *model, const QModelIndex &index = QModelIndex())
+    void formModelToTreeItem(Form::FormMain *form, TreeItem *parentItem, Form::FormTreeModel *model, const QModelIndex &index = QModelIndex())
     {
         // TODO: manage FormManager
-//        for(int i = 0; i < model->rowCount(index); ++i) {
-//            QModelIndex idx = model->index(i, Form::EpisodeModel::Label, index);
-//            // Do not include the episodes
-//            if (!model->isForm(idx))
-//                continue;
+        for(int i = 0; i < model->rowCount(index); ++i) {
+            QModelIndex idx = model->index(i, Form::FormTreeModel::Label, index);
 //            if (model->isLastEpisodeIndex(idx))
 //                continue;
-//            TreeItem *newItem = new TreeItem(parentItem);
-//            newItem->setLabel(idx.data().toString());
-//            newItem->setForm(model->formForIndex(idx), model);
-//            // Read all its children
-//            episodeModelToTreeItem(form, newItem, model, idx);
-//        }
+            TreeItem *newItem = new TreeItem(parentItem);
+            newItem->setLabel(model->data(idx).toString());
+            newItem->setForm(model->formForIndex(idx), formManager().episodeModel(form));
+            // Read all its children
+            formModelToTreeItem(form, newItem, model, idx);
+        }
     }
 
     void categoryToItem(Category::CategoryItem *cat, TreeItem *item)
@@ -310,13 +305,13 @@ public:
             addFile = addFile.firstChildElement("file");
             if (!addFile.isNull()) {
                 // Load the form
-                QList<Form::FormMain*> forms = formManager()->loadFormFile(addFile.text());
+                QList<Form::FormMain*> forms = formManager().loadFormFile(addFile.text());
                 if (!forms.isEmpty()) {
-                    // Create the EpisodeModel with the form
-//                    Form::EpisodeModel *model = new Form::EpisodeModel(forms.at(0), q);
-//                    model->init(false);
-//                    // Translate all modelindex to TreeItem
-//                    episodeModelToTreeItem(forms.at(0), item, model);
+                    // Create the FormTreeModel with the form
+                    Form::FormTreeModel *model = new Form::FormTreeModel(forms.at(0), q);
+                    model->initialize();
+                    // Translate all modelindex to TreeItem
+                    formModelToTreeItem(forms.at(0), item, model);
                 }
             }
         }
@@ -494,7 +489,7 @@ private:
 PmhCategoryModel::PmhCategoryModel(QObject *parent) :
         Category::ICategoryModelHelper(parent), d(new Internal::PmhCategoryModelPrivate(this))
 {
-    connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(patientChanged()));
+    connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onCurrentPatientChanged()));
     connect(translators(), SIGNAL(languageChanged()), this, SLOT(retranslate()));
 }
 
@@ -1244,7 +1239,7 @@ QString PmhCategoryModel::synthesis(const QModelIndex &parent) const
 }
 
 /** Update the model when the current patient changes. */
-void PmhCategoryModel::patientChanged()
+void PmhCategoryModel::onCurrentPatientChanged()
 {
     qDeleteAll(d->_pmh);
     d->_pmh.clear();

@@ -54,7 +54,7 @@ static inline Core::IMainWindow *mainwindow() {return Core::ICore::instance()->m
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 
 static inline QString workingPath()     {return QDir::cleanPath(settings()->value(Core::Constants::S_TMP_PATH).toString() + "/ZARawSources/") + QDir::separator();}
-static inline QString atcCsvFile()      {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + QString(Core::Constants::ATC_FILENAME));}
+static inline QString atcCsvFile()      {return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString() + QString(Core::Constants::ATC_FILENAME));}
 
 AtcModel *AtcModel::m_Instance = 0;
 

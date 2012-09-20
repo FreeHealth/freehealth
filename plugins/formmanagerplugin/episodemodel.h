@@ -41,8 +41,15 @@ QT_END_NAMESPACE
  * \file episodemodel.h
  * \author Eric MAEKER
  * \version 0.8.0
- * \date 01 Sept 2012
+ * \date 10 Sept 2012
 */
+
+// friend class only
+namespace Patients {
+namespace Internal {
+class IdentityViewerWidget;
+}
+}
 
 namespace Form {
 class FormMain;
@@ -80,6 +87,7 @@ class FORM_EXPORT EpisodeModel : public QAbstractListModel
 {
     Q_OBJECT
     friend class Form::FormManager;
+    friend class Patients::Internal::IdentityViewerWidget;
 
 protected:
     EpisodeModel(Form::FormMain *rootEmptyForm, QObject *parent = 0);
@@ -87,7 +95,8 @@ protected:
 
 public:
     enum DataRepresentation {
-        UserDate = 0,
+        ValidationStateIcon = 0,
+        UserDate,
         Label,
         IsValid,
         CreationDate,
@@ -104,6 +113,8 @@ public:
     };
     virtual ~EpisodeModel();
     QString formUid() const;
+    void setCurrentPatient(const QString &uuid);
+    void setUseFormContentCache(bool useCache);
 
     Qt::ItemFlags flags(const QModelIndex &index) const;
     void fetchMore(const QModelIndex &parent);
@@ -118,14 +129,18 @@ public:
     QVariant headerData(int section, Qt::Orientation orientation,
                                 int role = Qt::DisplayRole) const;
 
-    bool insertRows(int row, int count, const QModelIndex &parent= QModelIndex());
+    bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
     bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
 
     void setReadOnly(const bool state);
     bool isReadOnly() const;
     bool isDirty() const;
 
+    bool validateEpisode(const QModelIndex &index);
+    bool isEpisodeValidated(const QModelIndex &index) const;
+
 public Q_SLOTS:
+    bool populateFormWithEpisodeContent(const QModelIndex &episode, bool feedPatientModel);
     bool submit();
 
 Q_SIGNALS:
@@ -139,7 +154,7 @@ Q_SIGNALS:
 
 private Q_SLOTS:
     void onUserChanged();
-    void onPatientChanged();
+    void onCurrentPatientChanged();
     void populateNewRowWithDefault(int row, QSqlRecord &record);
 
 public Q_SLOTS:

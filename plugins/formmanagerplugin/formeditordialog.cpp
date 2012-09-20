@@ -31,6 +31,7 @@
 
 
 #include "formeditordialog.h"
+#include "formcore.h"
 #include "formtreemodel.h"
 #include "constants_db.h"
 #include "episodebase.h"
@@ -52,9 +53,8 @@
 using namespace Form;
 static inline Form::Internal::EpisodeBase *episodeBase() { return Form::Internal::EpisodeBase::instance(); }
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
-static inline Form::FormManager *formManager() {return Form::FormManager::instance();}
+static inline Form::FormManager &formManager() {return Form::FormCore::instance().formManager();}
 static inline Core::IMainWindow *mainWindow() {return Core::ICore::instance()->mainWindow();}
-
 
 // TODO test with the new FormModel
 FormEditorDialog::FormEditorDialog(FormTreeModel *model, EditionModes mode, QWidget *parent) :
@@ -90,7 +90,9 @@ void FormEditorDialog::on_addForm_clicked()
 {
     QString insertTo;
     if (!ui->treeView->selectionModel()->hasSelection()) {
-        bool yes = Utils::yesNoMessageBox(tr("Insert as root form?"), tr("You did not selected a form, do you want to add the sub-form as root form?"));
+        bool yes = Utils::yesNoMessageBox(tr("Insert as root form?"),
+                                          tr("You did not selected a form, "
+                                             "do you want to add the sub-form as root form?"));
         if (yes)
             insertTo = Constants::ROOT_FORM_TAG;
         else
@@ -112,7 +114,7 @@ void FormEditorDialog::on_addForm_clicked()
         SubFormInsertionPoint point(insertTo, insert->data(Form::FormIODescription::UuidOrAbsPath).toString());
         point.setEmitInsertionSignal(true); // inform everyone of the newly added subform
         insertions << point;
-        formManager()->insertSubForm(point);
+        formManager().insertSubForm(point);
     }
     episodeBase()->addSubForms(insertions);
 

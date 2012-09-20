@@ -51,7 +51,7 @@
   #include <extensionsystem/pluginmanager.h>
 
   // Get the IDocumentPrinter object from objects pool
-  inline static Core::IDocumentPrinter *printer() {return ExtensionSystem::PluginManager::instance()->getObject<Core::IDocumentPrinter>();}
+  static inline Core::IDocumentPrinter *printer() {return ExtensionSystem::PluginManager::instance()->getObject<Core::IDocumentPrinter>();}
 
   // Your print function
   void print(const QString &html)

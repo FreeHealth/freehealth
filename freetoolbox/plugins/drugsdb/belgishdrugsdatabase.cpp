@@ -67,9 +67,9 @@ static inline QString workingPath()     {return QDir::cleanPath(settings()->valu
 static inline QString databaseAbsPath()  {return Core::Tools::drugsDatabaseAbsFileName();}
 static inline QString tmpDatabaseAbsPath() {return QDir::cleanPath(workingPath() + "/drugs-be.db");}
 
-static inline QString dumpFileAbsPath()     {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + "/global_resources/sql/drugdb/be/dump.zip");}
+static inline QString dumpFileAbsPath()     {return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString() + "/global_resources/sql/drugdb/be/dump.zip");}
 
-static inline QString databaseFinalizationScript() {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + "/global_resources/sql/drugdb/be/be_db_finalize.sql");}
+static inline QString databaseFinalizationScript() {return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString() + "/global_resources/sql/drugdb/be/be_db_finalize.sql");}
 
 QString BeDrugsDatabasePage::category() const
 {
@@ -112,7 +112,7 @@ void BelgishDrugsDatabase::on_startJobs_clicked()
 
     if (ui->unzip->isChecked()) {
         if (m_Step->unzipFiles())
-            if (m_Step->prepareDatas())
+            if (m_Step->prepareData())
                 ui->unzip->setText(ui->unzip->text() + " CORRECTLY DONE");
     }
     if (ui->createDb->isChecked()) {
@@ -191,7 +191,7 @@ bool BeDrugDatatabaseStep::downloadFiles(QProgressBar *bar)
 bool BeDrugDatatabaseStep::process()
 {
     unzipFiles();
-    prepareDatas();
+    prepareData();
     createDatabase();
     populateDatabase();
     linkMolecules();
@@ -201,7 +201,7 @@ bool BeDrugDatatabaseStep::process()
 
 bool BeDrugDatatabaseStep::unzipFiles()
 {
-    Q_EMIT progressLabelChanged(tr("Unziping raw source files"));
+    Q_EMIT progressLabelChanged(tr("Unzipping raw source files"));
     Q_EMIT progressRangeChanged(0, 2);
     Q_EMIT progress(0);
 
@@ -226,7 +226,7 @@ bool BeDrugDatatabaseStep::unzipFiles()
     return true;
 }
 
-bool BeDrugDatatabaseStep::prepareDatas()
+bool BeDrugDatatabaseStep::prepareData()
 {
     Q_EMIT progressLabelChanged(tr("Preparing raw source files"));
 

@@ -26,11 +26,14 @@
 #include "genericzipcodeswidget.h"
 #include "ui_genericzipcodeswidget.h"
 
+#include <utils/global.h>
 #include <extensionsystem/pluginmanager.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/constants.h>
 #include <coreplugin/isettings.h>
+
+#include <QStandardItemModel>
 
 using namespace ZipCodes;
 
@@ -38,6 +41,7 @@ namespace {
 static inline ExtensionSystem::PluginManager* pluginManager() {return ExtensionSystem::PluginManager::instance();}
 static inline Core::ITheme* theme() { return Core::ICore::instance()->theme(); }
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
+const QString flagPath = settings()->path(Core::ISettings::SmallPixmapPath) + "/flags/";
 }
 
 GenericZipCodesWidget::GenericZipCodesWidget(QWidget *parent) :
@@ -46,15 +50,41 @@ GenericZipCodesWidget::GenericZipCodesWidget(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->downloadButton->setIcon(theme()->icon(Core::Constants::ICONSOFTWAREUPDATEAVAILABLE));
-    ui->availCountriesCombo->setFlagPath(settings()->path(Core::ISettings::SmallPixmapPath) + "/flags/");
+    ui->toolButtonAddCountry->setIcon(theme()->icon(Core::Constants::ICONADD));
+    ui->toolButtonRemoveCountry->setIcon(theme()->icon(Core::Constants::ICONREMOVE));
 
     m_Step = new GenericZipCodesStep(this);
-    m_Step->setCountryCombo(ui->availCountriesCombo);
     m_Step->createDir();
     pluginManager()->addObject(m_Step);
 
+    // provide convenience pointers for fast access to the model data of the step object
+    m_availableCountriesModel = m_Step->availableCountriesModel();
+    ui->availableCountriesListView->setModel(m_availableCountriesModel);
+
+    m_selectedCountriesModel = m_Step->selectedCountriesModel();
+    ui->selectedCountriesListView->setModel(m_selectedCountriesModel);
+
     // after downloading the countries list, enable/disable the widgets according to download success
-    connect(m_Step, SIGNAL(countryListDownloaded(bool)), ui->localeDataGroupBox, SLOT(setEnabled(bool)));
+    connect(m_Step, SIGNAL(countryListDownloaded(bool)),
+            ui->localeDataGroupBox, SLOT(setEnabled(bool)));
+
+    // actions on item activation
+    connect(ui->availableCountriesListView, SIGNAL(activated(QModelIndex)),
+            this, SLOT(selectCountry(QModelIndex)));
+    connect(ui->availableCountriesListView, SIGNAL(clicked(QModelIndex)),
+            ui->selectedCountriesListView, SLOT(clearSelection()));
+
+    connect(ui->selectedCountriesListView, SIGNAL(activated(QModelIndex)),
+            this, SLOT(deselectCountry(QModelIndex)));
+    connect(ui->selectedCountriesListView, SIGNAL(clicked(QModelIndex)),
+            ui->availableCountriesListView, SLOT(clearSelection()));
+
+    connect(ui->toolButtonAddCountry, SIGNAL(clicked()), this, SLOT(selectCountries()));
+    connect(ui->toolButtonRemoveCountry, SIGNAL(clicked()), this, SLOT(deselectCountries()));
+    // update actions after selection changes
+    connect(ui->availableCountriesListView, SIGNAL(clicked(QModelIndex)), this, SLOT(updateActions()));
+    connect(ui->selectedCountriesListView, SIGNAL(clicked(QModelIndex)), this, SLOT(updateActions()));
+    updateActions();
 }
 
 GenericZipCodesWidget::~GenericZipCodesWidget()
@@ -77,19 +107,61 @@ void GenericZipCodesWidget::downloadFinished()
 {
 //    ui->downloadButton->setText(tr("Download terminated"));
     ui->downloadButton->setEnabled(true);
-//    ui->progressBar->setValue(100);
+    m_availableCountriesModel->sort(1); // sort by names, not by internal numbers
+    //    ui->progressBar->setValue(100);
 }
 
-
-void GenericZipCodesWidget::on_startJob_clicked()
+void GenericZipCodesWidget::selectCountry(const QModelIndex &index)
 {
-//    m_Step->createDir();
-//    m_Step->cleanFiles();
-//    m_Step->downloadFiles();
-    m_Step->process();
-
-//    m_Step->processMessage();
-
-//    m_Step->postProcessDownload();
+    if (!index.isValid())
+        return;
+    QStandardItem *item = m_availableCountriesModel->itemFromIndex(index)->clone();
+    m_availableCountriesModel->removeRow(index.row());
+    m_selectedCountriesModel->appendRow(item);
+    m_selectedCountriesModel->sort(1); // sort by names, not by internal numbers
+    updateActions();
+    ui->createPackageButton->setEnabled(true);
 }
+
+void GenericZipCodesWidget::selectCountries()
+{
+    QItemSelectionModel *selectionModel = ui->availableCountriesListView->selectionModel();
+    if(!selectionModel)
+        return;
+    foreach(const QModelIndex index, selectionModel->selectedIndexes()) {
+        selectCountry(index);
+    }
+}
+
+void GenericZipCodesWidget::deselectCountry(const QModelIndex &index)
+{
+    if (!index.isValid())
+        return;
+    QStandardItem *item = m_selectedCountriesModel->itemFromIndex(index)->clone();
+    m_selectedCountriesModel->removeRow(index.row());
+    m_availableCountriesModel->appendRow(item);
+    m_availableCountriesModel->sort(1);
+    updateActions();
+    ui->createPackageButton->setEnabled(m_selectedCountriesModel->rowCount() > 0);
+}
+
+void GenericZipCodesWidget::deselectCountries()
+{
+    QItemSelectionModel *selectionModel = ui->selectedCountriesListView->selectionModel();
+    if(!selectionModel)
+        return;
+    foreach(const QModelIndex index, selectionModel->selectedIndexes()) {
+        deselectCountry(index);
+    }
+}
+
+void GenericZipCodesWidget::updateActions()
+{
+    QItemSelectionModel *model = ui->availableCountriesListView->selectionModel();
+    ui->toolButtonAddCountry->setEnabled(model && model->hasSelection());
+
+    model = ui->selectedCountriesListView->selectionModel();
+    ui->toolButtonRemoveCountry->setEnabled(model && model->hasSelection());
+}
+
 

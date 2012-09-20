@@ -38,12 +38,8 @@
 
   A \b "prescription" is the when and how you prescribe a selected drug.\n
   database(DB_DOSAGES_NAME) should be defined BEFORE instance()
-
-  \todo Create a specific user's right for dosage creation/edition/modification/deletion +++.
-  \todo Get user's right throught Core::IUser
-
-  \ingroup freediams drugswidget
 */
+//TODO: Create a specific user's right for dosage creation/edition/modification/deletion +++. (Get user's right throught Core::IUser)
 
 
 #include "dosagemodel.h"
@@ -82,8 +78,6 @@ enum Warn { WarnDebuggingData = false };
 
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 
-
-
 namespace mfDosageModelConstants {
     const char *const XML_DOSAGE_MAINTAG            = "DOSAGE";
     const char* const DIRTYROW_BACKGROUNDCOLOR      = "yellow";
@@ -104,7 +98,6 @@ static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 QStringList DosageModel::m_ScoredTabletScheme = QStringList();
 QStringList DosageModel::m_PreDeterminedForms = QStringList();
 QString     DosageModel::m_ActualLangage = "";
-
 
 //--------------------------------------------------------------------------------------------------------
 //----------------------------------------- Managing Translations ----------------------------------------
@@ -199,6 +192,68 @@ DosageModel::DosageModel(DrugsDB::DrugsModel *parent)
     }
 }
 
+//int DosageModel::modelColumnToSqlColumn(const QModelIndex &modelIndex)
+//{
+//    switch (modelIndex.column()) {
+//    case Id: sqlCol = ; break;
+//    case Uuid: sqlCol = ; break;
+//    case DrugsDatabaseIdentifiant: sqlCol = ; break;
+//    case INN_LK: sqlCol = ; break;
+//    case InnLinkedDosage: sqlCol = ; break;
+//    case DrugUid_LK: sqlCol = ; break;
+//    case CIP_LK: sqlCol = ; break;
+//    case Label: sqlCol = ; break;
+
+//    case IntakesFrom: sqlCol = ; break;
+//    case IntakesTo: sqlCol = ; break;
+//    case IntakesUsesFromTo: sqlCol = ; break;
+//    case IntakesScheme: sqlCol = ; break;
+//    case IntakesIntervalOfTime: sqlCol = ; break;
+//    case IntakesIntervalScheme: sqlCol = ; break;
+//    case RouteId: sqlCol = ; break;
+
+//    case DurationFrom: sqlCol = ; break;
+//    case DurationTo: sqlCol = ; break;
+//    case DurationUsesFromTo: sqlCol = ; break;
+//    case DurationScheme: sqlCol = ; break;
+
+//    case Period: sqlCol = ; break;
+//    case PeriodScheme: sqlCol = ; break;
+//    case AdministrationScheme: sqlCol = ; break;
+//    case SerializedDailyScheme: sqlCol = ; break;
+//    case MealScheme: sqlCol = ; break;
+//    case IsALD: sqlCol = ; break;
+//    case TypeOfTreatment: sqlCol = ; break;
+
+//    case MinAge: sqlCol = ; break;
+//    case MaxAge: sqlCol = ; break;
+//    case MinAgeReferenceIndex: sqlCol = ; break;
+//    case MaxAgeReferenceIndex: sqlCol = ; break;
+//    case MinWeight: sqlCol = ; break;
+//    case SexLimitedIndex: sqlCol = ; break;
+//    case MinClearance: sqlCol = ; break;
+//    case MaxClearance: sqlCol = ; break;
+//    case PregnancyLimitsFlag: sqlCol = ; break;
+//    case BreastFeedingLimitsIndex: sqlCol = ; break;
+//    case PhysiologicalLimitsFlag: sqlCol = ; break;
+
+//    case Note: sqlCol = ; break;
+
+//    case CIM10Links: sqlCol = ; break;
+//    case CIM10LimitsLinks: sqlCol = ; break;
+//    case EDRCLinks: sqlCol = ; break;
+
+//    case Extras: sqlCol = ; break;
+//    case UserValidatorName: sqlCol = ; break;
+//    case CreationDate: sqlCol = ; break;
+//    case ModificationDate: sqlCol = ; break;
+//    case Transmitted: sqlCol = ; break;
+//    case Route: sqlCol = ; break;
+
+//    }
+//    return 0;
+//}
+
 /** \brief Defines data for the dosage. Database is only updated when calling submitAll(). */
 bool DosageModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
@@ -230,7 +285,11 @@ bool DosageModel::setData(const QModelIndex &index, const QVariant &value, int r
 //            warn();
 //        }
 
-        if (index.column()==Dosages::Constants::Route) {
+        if (index.column()==Dosages::Constants::Refill) {
+            // TODO: include refills in the protocol database
+            _refills.insert(index.row(), value.toInt());
+            qWarning() << "SETREFILL" << _refills;
+        } else if (index.column()==Dosages::Constants::Route) {
 //            qWarning() << "DOSAGE -> setData Route" << value.toString();
             m_Route = value.toString();
             // Find the routeId
@@ -295,7 +354,10 @@ QVariant DosageModel::data(const QModelIndex & item, int role) const
     case Qt::DisplayRole:
     case Qt::EditRole:
         {
-            if (item.column() == Dosages::Constants::Route) {
+            if (item.column() == Dosages::Constants::Refill) {
+                // TODO: include refills in the protocol database
+                return _refills.value(item.row(), 0);
+            } else if (item.column() == Dosages::Constants::Route) {
 //                qWarning() << "DOSAGE data Route" << m_Route;
                 if (m_Route.isEmpty()) {
                     // get routeId
@@ -544,6 +606,7 @@ void DosageModel::toPrescription(const int row)
     prescr_dosage.insert(Constants::Prescription::SerializedDailyScheme,Dosages::Constants::SerializedDailyScheme);
     prescr_dosage.insert(Constants::Prescription::MealTimeSchemeIndex,  Dosages::Constants::MealScheme);
     prescr_dosage.insert(Constants::Prescription::IsALD,                Dosages::Constants::IsALD);
+    prescr_dosage.insert(Constants::Prescription::Refill,               Dosages::Constants::Refill);
     foreach(const int i, prescr_dosage.keys()) {
         m_DrugsModel->setDrugData(m_UID, i, data(index(row, prescr_dosage.value(i))));
     }

@@ -70,9 +70,9 @@ static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); 
 static inline QString workingPath()        {return QDir::cleanPath(settings()->value(Core::Constants::S_TMP_PATH).toString() + "/AfssapsIntegratorSources/") + QDir::separator();}
 //static inline QString iamDatabaseAbsPath() {return QDir::cleanPath(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString() + Core::Constants::IAM_DATABASE_FILENAME);}
 
-static inline QString afssapsMolLinkFile() {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + Core::Constants::AFSSAPS_MOLECULE_LINK_FILENAME);}
-static inline QString afssapsTreeXmlFile() {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + Core::Constants::AFSSAPS_CLASSTREE_FILENAME);}
-static inline QString afssapsIamXmlFile()  {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + Core::Constants::AFSSAPS_INTERACTIONS_FILENAME);}
+static inline QString afssapsMolLinkFile() {return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString() + Core::Constants::AFSSAPS_MOLECULE_LINK_FILENAME);}
+static inline QString afssapsTreeXmlFile() {return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString() + Core::Constants::AFSSAPS_CLASSTREE_FILENAME);}
+static inline QString afssapsIamXmlFile()  {return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString() + Core::Constants::AFSSAPS_INTERACTIONS_FILENAME);}
 
 
 

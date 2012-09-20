@@ -36,7 +36,9 @@
 
 #include <utils/log.h>
 #include <utils/global.h>
-#include <translationutils/constanttranslations.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_database.h>
+#include <translationutils/trans_menu.h>
 
 #include <coreplugin/constants_icons.h>
 #include <coreplugin/constants_menus.h>
@@ -58,7 +60,7 @@ using namespace PMH;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
-inline static Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
+static inline Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
 static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
 static inline Core::IMainWindow *mainWindow() { return Core::ICore::instance()->mainWindow(); }
 static inline PMH::PmhCore *pmhCore() { return PMH::PmhCore::instance(); }
@@ -68,16 +70,8 @@ static inline Core::IPatient *patient() {return Core::ICore::instance()->patient
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////      MANAGER      ///////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
-PmhWidgetManager *PmhWidgetManager::m_Instance = 0;
-
-PmhWidgetManager *PmhWidgetManager::instance(QObject *parent)
-{
-    if (!m_Instance)
-        m_Instance = new PmhWidgetManager(parent);
-    return m_Instance;
-}
-
-PmhWidgetManager::PmhWidgetManager(QObject *parent) : PmhActionHandler(parent)
+PmhWidgetManager::PmhWidgetManager(QObject *parent) :
+    PmhActionHandler(parent)
 {
     connect(Core::ICore::instance()->contextManager(), SIGNAL(contextChanged(Core::IContext*)),
             this, SLOT(updateContext(Core::IContext*)));
@@ -206,7 +200,7 @@ PmhActionHandler::PmhActionHandler(QObject *parent) :
     contextManager()->updateContext();
     actionManager()->retranslateMenusAndActions();
 
-    connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(patientChanged()));
+    connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onCurrentPatientChanged()));
 }
 
 void PmhActionHandler::setCurrentView(PmhContextualWidget *view)
@@ -216,29 +210,7 @@ void PmhActionHandler::setCurrentView(PmhContextualWidget *view)
         LOG_ERROR("setCurrentView: no view");
         return;
     }
-    //    qWarning() << "PmhActionHandler::setCurrentView(DrugsCentralWidget *view)";
-
-    // disconnect old view
-//    if (m_CurrentView) {
-//        if (view == m_CurrentView.data())
-//            return;
-//        m_CurrentView->disconnect();
-//        disconnect(m_CurrentView->prescriptionListView()->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
-//                   this, SLOT(listViewItemChanged()));
-//        disconnect(m_CurrentView->currentDrugsModel(), SIGNAL(numberOfRowsChanged()),
-//                   this, SLOT(drugsModelChanged()));
-//        m_CurrentView->drugSelector()->disconnectFilter();
-//    }
     m_CurrentView = view;
-
-//    DrugsDB::DrugsModel::setActiveModel(view->currentDrugsModel());
-//    // reconnect some actions
-//    m_CurrentView->createConnections();
-//    connect(m_CurrentView->prescriptionListView()->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
-//            this, SLOT(listViewItemChanged()));
-//    connect(m_CurrentView->currentDrugsModel(), SIGNAL(numberOfRowsChanged()),
-//            this, SLOT(drugsModelChanged()));
-//    m_CurrentView->drugSelector()->connectFilter();
     updateActions();
 }
 
@@ -246,10 +218,11 @@ void PmhActionHandler::updateActions()
 {
 }
 
-void PmhActionHandler::patientChanged()
+void PmhActionHandler::onCurrentPatientChanged()
 {
+    // enable addpmh action only once when the first patient is activated
     if (aAddPmh->isEnabled()) {
-        disconnect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(patientChanged()));
+        disconnect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onCurrentPatientChanged()));
     }
     aAddPmh->setEnabled(true);
 }

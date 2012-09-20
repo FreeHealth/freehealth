@@ -33,9 +33,8 @@
   If you want to edit or modify a dosage, you must inform the widget of the row and the CIS of the drug.\n
 
   Please always call done() when the dialog including the DosageViewer is done.
-
-  \ingroup freediams drugswidget
 */
+// TODO: update documentation
 
 #include "mfDosageViewer.h"
 
@@ -71,8 +70,8 @@ using namespace DrugsWidget::Constants;
 using namespace DrugsWidget::Internal;
 using namespace Trans::ConstantTranslations;
 
-inline static DrugsDB::DrugsModel *drugModel() { return DrugsWidget::DrugsWidgetManager::instance()->currentDrugsModel(); }
-inline static Core::ITheme *theme() {return Core::ICore::instance()->theme();}
+static inline DrugsDB::DrugsModel *drugModel() { return DrugsWidget::DrugsWidgetManager::instance()->currentDrugsModel(); }
+static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 static inline DrugsDB::DrugsBase &drugsBase() {return DrugsDB::DrugBaseCore::instance().drugsBase();}
 
@@ -80,10 +79,6 @@ static inline DrugsDB::DrugsBase &drugsBase() {return DrugsDB::DrugBaseCore::ins
 namespace DrugsWidget {
 namespace Internal {
 
-/**
-  \brief Private part
-  \internal
-*/
 class DosageViewerPrivate
 {
 public:
@@ -124,6 +119,7 @@ public:
             m_Mapper->addMapping(q->durationFromSpin, Prescription::DurationFrom);
             m_Mapper->addMapping(q->durationToSpin, Prescription::DurationTo);
             m_Mapper->addMapping(q->durationCombo, Prescription::DurationScheme, "currentText");
+            m_Mapper->addMapping(q->refillSpin, Prescription::Refill, "value");
 
             m_Mapper->addMapping(q->minIntervalIntakesSpin, Prescription::IntakesIntervalOfTime, "value");
             m_Mapper->addMapping(q->intervalTimeSchemeCombo, Prescription::IntakesIntervalSchemeIndex, "currentIndex");
@@ -162,6 +158,7 @@ public:
             m_Mapper->addMapping(q->durationFromSpin, Dosages::Constants::DurationFrom);
             m_Mapper->addMapping(q->durationToSpin, Dosages::Constants::DurationTo);
             m_Mapper->addMapping(q->durationCombo, Dosages::Constants::DurationScheme, "currentText");
+            m_Mapper->addMapping(q->refillSpin, Dosages::Constants::Refill, "value");
 
             m_Mapper->addMapping(q->minIntervalIntakesSpin, Dosages::Constants::IntakesIntervalOfTime, "value");
             m_Mapper->addMapping(q->intervalTimeSchemeCombo, Dosages::Constants::IntakesIntervalScheme, "currentIndex");
@@ -481,7 +478,7 @@ void DosageViewer::setDosageModel(DrugsDB::Internal::DosageModel *model)
     }
 
     // Connect Widgets data modifications to dataChanged signal
-    connect(d->m_DosageModel,SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SIGNAL(protocolDataschanged()));
+    connect(d->m_DosageModel,SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SIGNAL(protocolDataChanged()));
 }
 
 /** \brief Destructor */

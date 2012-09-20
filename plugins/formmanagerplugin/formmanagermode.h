@@ -53,7 +53,7 @@ public:
     QString name() const;
 
 private Q_SLOTS:
-    bool getPatientForm();
+    bool onPatientFormsLoaded();
 
 private:
 //    bool eventFilter(QObject *obj, QEvent *event);

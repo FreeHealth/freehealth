@@ -71,7 +71,7 @@ enum ProvidedWidget {
 
 }  // End namespace Anonymous
 
-inline static Form::IFormWidget::LabelOptions labelAlignement(Form::FormItem *item, Form::IFormWidget::LabelOptions defaultValue = Form::IFormWidget::Label_OnLeft)
+static inline Form::IFormWidget::LabelOptions labelAlignement(Form::FormItem *item, Form::IFormWidget::LabelOptions defaultValue = Form::IFormWidget::Label_OnLeft)
 {
     const QStringList &o = item->getOptions();
     if (o.contains(::LABEL_ALIGN_TOP, Qt::CaseInsensitive))
@@ -81,12 +81,12 @@ inline static Form::IFormWidget::LabelOptions labelAlignement(Form::FormItem *it
     return defaultValue;
 }
 
-inline static bool dontPrintEmptyValues(Form::FormItem *item)
+static inline bool dontPrintEmptyValues(Form::FormItem *item)
 {
     return item->getOptions().contains(::DONTPRINTEMPTYVALUES, Qt::CaseInsensitive);
 }
 
-inline static QLabel *findLabel(Form::FormItem *item)
+static inline QLabel *findLabel(Form::FormItem *item)
 {
     QLabel *l = 0;
     // Find label

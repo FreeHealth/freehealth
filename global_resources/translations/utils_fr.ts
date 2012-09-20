@@ -262,6 +262,14 @@
     </message>
 </context>
 <context>
+    <name>Utils::DetailsButton</name>
+    <message>
+        <location filename="../../libs/utils/widgets/detailsbutton.cpp" line="46"/>
+        <source>Details</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Utils::FileNameValidatingLineEdit</name>
     <message>
         <location filename="../../libs/utils/widgets/filenamevalidatinglineedit.cpp" line="95"/>

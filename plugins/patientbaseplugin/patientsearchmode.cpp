@@ -68,21 +68,28 @@ static inline Core::ActionManager *actionManager() { return Core::ICore::instanc
 static inline Core::ITheme *theme() { return Core::ICore::instance()->theme(); }
 
 PatientSearchMode::PatientSearchMode(QObject *parent) :
-        Core::IMode(parent), m_Selector(0)
+    Core::IMode(parent),
+    m_Selector(0)
 {
-    m_Selector = new PatientSelector;
-    m_Selector->setFieldsToShow(PatientSelector::Title | PatientSelector::BirthName | PatientSelector::SecondName | PatientSelector::FirstName | PatientSelector::DateOfBirth | PatientSelector::FullAdress);
-    PatientWidgetManager::instance()->setCurrentView(m_Selector);
+    // Add the new patient action in the mode manager
     Core::Command *cmd = actionManager()->command(Core::Constants::A_PATIENT_NEW);
     modeManager()->addAction(cmd, Core::Constants::P_MODE_PATIENT_SEARCH);
+
+    // create the mode widget
+    m_Selector = new PatientSelector;
+    PatientWidgetManager::instance()->setCurrentView(m_Selector);
+    m_Selector->setFieldsToShow(PatientSelector::Title | PatientSelector::BirthName | PatientSelector::SecondName | PatientSelector::FirstName | PatientSelector::DateOfBirth | PatientSelector::FullAdress);
+    m_Selector->initialize();
 }
 
 PatientSearchMode::~PatientSearchMode()
 {
-    if (m_Selector) {
+    if (m_Selector)
         delete m_Selector;
-        m_Selector = 0;
-    }
+}
+
+void PatientSearchMode::postCoreInitialization()
+{
 }
 
 QString PatientSearchMode::name() const

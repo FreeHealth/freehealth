@@ -26,14 +26,12 @@
  ***************************************************************************/
 
 /**
-  \class DrugsWidget::DosageCreator
-  \brief Dialog for dosage creation / edition / modification. A dosage is a standard set of data that will be used to help
-  doctors when prescribing a drug.
-  If you want to create a new dosage, you must create a new row onto the model BEFORE.
-  If you want to edit or modify a dosage, you must inform the dialog of the row and the CIS of the drug.
-  \ingroup freediams drugswidget
+ * \class DrugsWidget::DosageCreator
+ * \brief Dialog for dosage creation / edition / modification. A dosage is a standard set of data that will be used to help
+ * doctors when prescribing a drug.
+ * If you want to create a new dosage, you must create a new row onto the model BEFORE.
+ * If you want to edit or modify a dosage, you must inform the dialog of the row and the CIS of the drug.
 */
-
 
 #include "mfDosageCreatorDialog.h"
 
@@ -72,7 +70,7 @@ using namespace DrugsWidget::Constants;
 using namespace DrugsWidget::Internal;
 using namespace Trans::ConstantTranslations;
 
-inline static DrugsDB::DrugsModel *drugModel() { return DrugsWidget::DrugsWidgetManager::instance()->currentDrugsModel(); }
+static inline DrugsDB::DrugsModel *drugModel() { return DrugsWidget::DrugsWidgetManager::instance()->currentDrugsModel(); }
 static inline DrugsDB::Internal::DrugSearchEngine *searchEngine()  { return DrugsDB::Internal::DrugSearchEngine::instance(); }
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
@@ -81,10 +79,7 @@ static inline DrugsDB::DrugsBase &drugsBase() {return DrugsDB::DrugBaseCore::ins
 namespace DrugsWidget {
 namespace Internal {
 
-/**
-  \brief Private part of DosageDialog
-  \internal
-*/
+/** \brief Private part of DosageDialog */
 class DosageCreatorDialogPrivate
 {
 public:
@@ -229,12 +224,11 @@ private:
 */
 DosageCreatorDialog::DosageCreatorDialog(QWidget *parent, DrugsDB::Internal::DosageModel *dosageModel)
     : QDialog(parent),
-    d(0)
+    d(new DosageCreatorDialogPrivate(this))
 {
     using namespace DrugsDB::Constants;
     // some initializations
     setObjectName("DosageCreatorDialog");
-    d = new DosageCreatorDialogPrivate(this);
     d->m_DosageModel = dosageModel;
 
     // Ui initialization
@@ -330,9 +324,9 @@ void DosageCreatorDialog::keyPressEvent(QKeyEvent *e)
 void DosageCreatorDialog::updateSettings()
 {
     if (settings()->value(Constants::S_PROTOCOLCREATOR_AUTOCHANGE).toBool())
-        connect(dosageViewer, SIGNAL(protocolDataschanged()), this, SLOT(protocolDataChanged()));
+        connect(dosageViewer, SIGNAL(protocolDataChanged()), this, SLOT(onProtocolDataChanged()));
     else
-        disconnect(dosageViewer, SIGNAL(protocolDataschanged()), this, SLOT(protocolDataChanged()));
+        disconnect(dosageViewer, SIGNAL(protocolDataChanged()), this, SLOT(onProtocolDataChanged()));
 
     const QString &defButton = settings()->value(Constants::S_PROTOCOLCREATOR_DEFAULTBUTTON).toString();
     validateButton->setDefaultAction(d->prescribe);
@@ -346,7 +340,7 @@ void DosageCreatorDialog::updateSettings()
         validateButton->setDefaultAction(d->test);
 }
 
-void DosageCreatorDialog::protocolDataChanged()
+void DosageCreatorDialog::onProtocolDataChanged()
 {
     // Set window modified
     const QString &winTitle = windowTitle();

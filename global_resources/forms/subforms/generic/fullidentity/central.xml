@@ -7,9 +7,9 @@
     <!-- Non translatable values -->
     <authors>Eric Maeker, MD</authors>
     <version>test</version>
-    <fmfv>0.7.0</fmfv>
+    <fmfv>0.8.0</fmfv>
     <cdate>2012-01-01</cdate>
-    <lmdate>2012-02-26</lmdate>
+    <lmdate>2012-09-12</lmdate>
     <icon>__theme__/identity.png</icon>
     <weblink></weblink>
     <bibliography/>
@@ -29,18 +29,22 @@
         Ajout du numéro de téléphone mobile&lt;br />
         Bouton 'envoyer un courriel' connecté&lt;br />
         N'affiche pas l'entête du formulaire&lt;br />
+        Défini le formulaire comme formulaire d'identité dans l'application&lt;br />
+        Ajout des données professionnelles&lt;br />
         </text>
-        <text lang="en">
+        <text lang="xx">
         Adding the mobile phone number&lt;br />
         'Send mail' button is now connected&lt;br />
         Hide the form header&lt;br />
+        Define this form as the application identity form&lt;br />
+        Adding professional data&lt;br />
         </text>
       </updateversion>
     </updateinfo>
 
   </formdescription>
 
-  <MedForm name="Subs::Tools::Identity" uifilename="./ui/xx/identity.ui">
+  <MedForm name="Subs::Tools::Identity" uifilename="./ui/xx/identity.ui" isidentity="true">
     <label lang="xx">Identity</label>
     <label lang="fr">Identité</label>
     <options>unique;UseFormNameAsNameSpace;HideHeaderOnUniqueEpisode</options>
@@ -66,6 +70,7 @@
         <label lang="xx">Social insurance number</label>
         <label lang="fr">Numéro de sécurité sociale</label>
         <options>DontPrintEmptyValues</options>
+        <patientdata>SocialNumber</patientdata>
       </Item>
 
       <Item type="check" name="FrGroup::IsNSSOwner">
@@ -98,7 +103,7 @@
         <tooltip lang="xx">Semicolon separated list</tooltip>
         <tooltip lang="fr">Liste séparée par un point-virgule</tooltip>
         <options>DontPrintEmptyValues</options>
-        <patientdata>patient::tels</patientdata>
+        <patientdata>Tels</patientdata>
       </Item>
 
       <Item type="shorttext" name="ContactGroup::MobileTel">
@@ -108,7 +113,7 @@
         <tooltip lang="xx">Inform the mobile phone number</tooltip>
         <tooltip lang="fr">Renseignez le numéro de téléphone mobile</tooltip>
         <options>DontPrintEmptyValues</options>
-        <patientdata>patient::mobiletel</patientdata>
+        <patientdata>MobilePhone</patientdata>
       </Item>
 
       <Item type="shorttext" name="ContactGroup::Fax">
@@ -116,7 +121,7 @@
         <label lang="xx">Fax number</label>
         <label lang="fr">Numéro de fax</label>
         <options>DontPrintEmptyValues</options>
-        <patientdata>patient::fax</patientdata>
+        <patientdata>Faxes</patientdata>
       </Item>
 
       <Item type="shorttext" name="ContactGroup::Mail">
@@ -126,7 +131,7 @@
         <tooltip lang="xx">Semicolon separated list</tooltip>
         <tooltip lang="fr">Liste séparée par un point-virgule</tooltip>
         <options>DontPrintEmptyValues</options>
-        <patientdata>patient::email</patientdata>
+        <patientdata>Mails</patientdata>
       </Item>
 
       <Item type="button" name="ContactGroup::SendMailButton">
@@ -152,6 +157,39 @@
         <label lang="fr">Envoyer un SMS</label>
         <icon>__theme__/iphone.png</icon>
       </Item>
+
+    </Item>
+
+    <Item type="group" name="ProfGroup">
+        <uilink widget="profGroup"/>
+        <label lang="xx">Profession</label>
+        <label lang="fr">Profession</label>
+        <column>1</column>
+        <options>DontPrintEmptyValues</options>
+
+        <Item type="shorttext" name="ProfGroup::Profession">
+          <uilink label="profLabel" widget="profEdit"/>
+          <label lang="xx">Current profession</label>
+          <label lang="fr">Profession actuelle</label>
+          <options>DontPrintEmptyValues</options>
+          <patientdata>Profession</patientdata>
+        </Item>
+
+        <Item type="shorttext" name="ProfGroup::ProfessionSite">
+          <uilink label="profSiteLabel" widget="profSiteEdit"/>
+          <label lang="xx">Site</label>
+          <label lang="fr">Site</label>
+          <options>DontPrintEmptyValues</options>
+          <patientdata>ProfessionalSite</patientdata>
+        </Item>
+
+        <Item type="shorttext" name="ProfGroup::ProfessionTels">
+          <uilink label="profTelsLabel" widget="profTelsEdit"/>
+          <label lang="xx">Professional tel</label>
+          <label lang="fr">Téléphone professionel</label>
+          <options>DontPrintEmptyValues</options>
+          <patientdata>ProfessionalTels</patientdata>
+        </Item>
 
     </Item>
 

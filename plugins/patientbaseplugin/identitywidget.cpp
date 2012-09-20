@@ -26,17 +26,18 @@
  ***************************************************************************/
 
 /**
-  \class Patients::IdentityWidget
-  \brief Presents the identity of a patient.
+ * \class Patients::IdentityWidget
+ * \brief Identity editor.
+ * This widget allow user to edit the identity of a patient.
 */
 
 #include "identitywidget.h"
 #include "patientmodel.h"
 #include "patientbase.h"
 #include "constants_db.h"
+#include "pixmapdelegate.h"
 
 #include "ui_identitywidget.h"
-#include "ui_identityviewer.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
@@ -44,13 +45,13 @@
 #include <coreplugin/ipatient.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/constants_icons.h>
-
-#include <extensionsystem/pluginmanager.h>
 #include <coreplugin/iphotoprovider.h>
+
 #include <zipcodesplugin/zipcodescompleters.h>
 
 #include <utils/global.h>
 #include <utils/widgets/uppercasevalidator.h>
+#include <extensionsystem/pluginmanager.h>
 #include <translationutils/constants.h>
 
 #include <QDataWidgetMapper>
@@ -60,8 +61,6 @@
 
 #include <QDebug>
 
-#include <pixmapdelegate.h>
-
 using namespace Patients;
 using namespace Trans::ConstantTranslations;
 
@@ -70,8 +69,6 @@ static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 static inline Patients::Internal::PatientBase *patientBase() {return Patients::Internal::PatientBase::instance();}
 
 //TODO: Users can add pages in the identity widget using the XMLForm --> create a <Form> named \e Identity
-//TODO: Create a viewUi for the readonly mode (more compact)
-
 
 namespace Patients {
 namespace Internal {
@@ -129,21 +126,17 @@ public:
     }
 };
 
-
 class IdentityWidgetPrivate
 {
 public:
     IdentityWidgetPrivate(IdentityWidget *parent, IdentityWidget::EditMode mode) :
-        editUi(0), viewUi(0), m_Mapper(0), m_EditMode(mode), zipCompleter(0),
+        editUi(0),
+        m_Mapper(0), m_EditMode(mode),
+        zipCompleter(0),
         m_hasRealPhoto(false),
         q(parent)
     {
         switch (mode) {
-        case IdentityWidget::ReadOnlyMode: {
-            viewUi = new Ui::IdentityViewer;
-            viewUi->setupUi(q);
-            break;
-        }
         case IdentityWidget::ReadWriteMode: {
             editUi = new Ui::IdentityWidget;
             editUi->setupUi(q);
@@ -169,6 +162,11 @@ public:
 //            q->connect(editUi->genderCombo, SIGNAL(currentIndexChanged(int)), q, SLOT(updateGenderImage()));
             break;
         }
+        case IdentityWidget::ReadOnlyMode: {
+            break;
+        }
+        default:
+            break;
         }
     }
 
@@ -181,10 +179,6 @@ public:
         if (editUi) {
             delete editUi;
             editUi = 0;
-        }
-        if (viewUi) {
-            delete viewUi;
-            viewUi = 0;
         }
     }
 
@@ -218,9 +212,9 @@ public:
         }
     }
 
+
 public:
     Ui::IdentityWidget *editUi;
-    Ui::IdentityViewer *viewUi;
     FMFWidgetMapper *m_Mapper;
     Patients::PatientModel *m_PatientModel;
     IdentityWidget::EditMode m_EditMode;
@@ -234,12 +228,6 @@ private:
 
 }  // namespace Internal
 }  // namespace Patients
-
-bool IdentityWidget::hasPhoto() const
-{
-    return d->m_hasRealPhoto;
-}
-
 
 /**
  * \brief Create an Identity viewer with the specific \e mode of edition.
@@ -255,7 +243,9 @@ IdentityWidget::IdentityWidget(QWidget *parent, EditMode mode) :
 
 IdentityWidget::~IdentityWidget()
 {
-    delete d;
+    if (d)
+        delete d;
+    d = 0;
 }
 
 /** \brief Define the model to use. */
@@ -277,42 +267,14 @@ void IdentityWidget::setCurrentIndex(const QModelIndex &patientIndex)
 {
     switch (d->m_EditMode) {
     case ReadWriteMode:
+    {
         Q_ASSERT(d->m_Mapper);
         d->m_Mapper->setCurrentModelIndex(patientIndex);
         d->zipCompleter->checkData();
-//        updateGenderImage();
-        break;
-
-    case ReadOnlyMode:
-        //read only mode, no QDataWidgetMapper needed
-
-        d->viewUi->name->clear();
-        d->viewUi->photoLabel->clear();
-        d->viewUi->ageDOB->clear();
-        d->viewUi->sex->clear();
-        d->viewUi->fullAdress1->clear();
-        d->viewUi->fullAdress2->clear();
-        const QString &name = d->m_PatientModel->index(patientIndex.row(), Core::IPatient::FullName).data().toString();
-        d->viewUi->name->setText(name);
-
-        const QPixmap &photo = d->m_PatientModel->index(patientIndex.row(), Core::IPatient::Photo_64x64).data().value<QPixmap>();
-        d->viewUi->photoLabel->setPixmap(photo);
-//        updateGenderImage();
-
-        const QString &age = d->m_PatientModel->index(patientIndex.row(), Core::IPatient::Age).data().toString();
-        const QString &dob = d->m_PatientModel->index(patientIndex.row(), Core::IPatient::DateOfBirth).data().toDate().toString(QLocale().dateFormat(QLocale::LongFormat));
-        if (!age.isEmpty() && !dob.isEmpty())
-            d->viewUi->ageDOB->setText(tr("%1; born on %2").arg(age, dob));
-        const QIcon &icon = d->m_PatientModel->index(patientIndex.row(), Core::IPatient::IconizedGender).data().value<QIcon>();
-        d->viewUi->sex->setPixmap(icon.pixmap(QSize(64,64)));
-        d->viewUi->fullAdress1->setText(d->m_PatientModel->index(patientIndex.row(), Core::IPatient::Street).data().toString());
-        //:%1 = City, %2 is ZipCode, %3 = Country; Rearrange parameters according to your country defaults. Try to avoid delimiter chars as they will be shown when fields are empty!
-        d->viewUi->fullAdress2->setText(QString("%2 %1<br/>%3").arg(
-                                            d->m_PatientModel->index(patientIndex.row(), Core::IPatient::City).data().toString(),
-                                            d->m_PatientModel->index(patientIndex.row(), Core::IPatient::ZipCode).data().toString(),
-                                            d->m_PatientModel->index(patientIndex.row(), Core::IPatient::Country).data().toString()));
         break;
     }
+    default: break;
+    }  // switch (d->m_EditMode)
 }
 
 /** \brief Test the validity of the "actually shown" identity. */
@@ -447,11 +409,14 @@ QPixmap IdentityWidget::currentPhoto() const
     case ReadWriteMode:
         photo = d->m_hasRealPhoto ? d->editUi->photoButton->pixmap() : QPixmap();
         break;
-    case ReadOnlyMode:
-        photo = d->m_hasRealPhoto ? *d->viewUi->photoLabel->pixmap() : QPixmap();
-        break;
+    default: break;
     }
     return photo;
+}
+
+bool IdentityWidget::hasPhoto() const
+{
+    return d->m_hasRealPhoto;
 }
 
 /** \brief Submit the Identity to the model and the database if in ReadWriteMode. */

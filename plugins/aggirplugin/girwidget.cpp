@@ -95,7 +95,7 @@ void GirUi::girCalculated(const int gir)
     m_ui->girLineEdit->setText(QString::number(gir));
 }
 
-inline static void allRadioOn(const QString &s, QWidget *parent)
+static inline void allRadioOn(const QString &s, QWidget *parent)
 {
     foreach(QRadioButton *r, parent->findChildren<QRadioButton*>()) {
         if (r->text().compare(s,Qt::CaseInsensitive)==0)
@@ -124,7 +124,7 @@ void GirUi::on_cButton_clicked()
     updateGirString(0);
 }
 
-inline static int calculateGirScore(const QString &s)
+static inline int calculateGirScore(const QString &s)
 {
     MedicalUtils::AGGIR::OldGirScore score;
     score.setValues(s[0], s[1], s.mid(2,2), s.mid(4,3), s.mid(7,2), s.mid(9,2),s[11], s[12]);

@@ -39,6 +39,12 @@
 
 namespace Core {
 
+/*!
+ * \brief The IPatientListener class provides an interface for a listener to patient events.
+ *
+ * Currently only the currentPatientAboutToChange() method is available.
+ * \sa Patients::PatientModel
+ */
 class CORE_EXPORT IPatientListener : public QObject
 {
     Q_OBJECT
@@ -46,6 +52,7 @@ public:
     IPatientListener(QObject *parent) : QObject(parent) {}
     virtual ~IPatientListener() {}
 
+    /*! This method is called \b before the patient is changed. The listener can now do last things like saving data. */
     virtual bool currentPatientAboutToChange() {return true;}
 };
 

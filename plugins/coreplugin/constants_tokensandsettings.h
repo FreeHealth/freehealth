@@ -161,6 +161,7 @@ const char * const  TOKEN_PRESC_DISTRIB_DAILYSCHEME  = "Prescription.Protocol.Da
 const char * const  TOKEN_PRESC_REPEATED_DAILYSCHEME = "Prescription.Protocol.DailyScheme.Repeated";
 const char * const  TOKEN_PRESC_MININTERVAL_VALUE    = "Prescription.Protocol.Quantity.MinInterval.Value";
 const char * const  TOKEN_PRESC_MININTERVAL_SCHEME   = "Prescription.Protocol.Quantity.MinInterval.Scheme";
+const char * const  TOKEN_PRESC_REFILL               = "Prescription.Protocol.Refill";
 const char * const  TOKEN_PRESC_NOTE                 = "Prescription.Protocol.Note";
 #endif
 

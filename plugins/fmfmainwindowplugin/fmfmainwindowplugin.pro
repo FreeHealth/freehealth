@@ -12,14 +12,12 @@ HEADERS = mainwindowplugin.h \
     mainwindow.h \
     mainwindowpreferences.h \
     virtualdatabasepreferences.h \
-    patientmodelwrapper.h \
     #documentprinter.h
 
 SOURCES = mainwindowplugin.cpp \
     mainwindow.cpp \
     mainwindowpreferences.cpp \
     virtualdatabasepreferences.cpp \
-    patientmodelwrapper.cpp \
     #documentprinter.cpp
 
 FORMS = virtualbasepage.ui

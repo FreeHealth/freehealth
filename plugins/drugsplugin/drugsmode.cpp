@@ -27,6 +27,7 @@
 #include "drugsmode.h"
 
 #include <formmanagerplugin/formplaceholder.h>
+#include <formmanagerplugin/formcore.h>
 #include <formmanagerplugin/formmanager.h>
 
 #include <coreplugin/icore.h>
@@ -46,7 +47,7 @@ using namespace Trans::ConstantTranslations;
 
 static inline ExtensionSystem::PluginManager *pluginManager() { return ExtensionSystem::PluginManager::instance(); }
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
-static inline Form::FormManager *formManager() {return Form::FormManager::instance();}
+static inline Form::FormManager &formManager() {return Form::FormCore::instance().formManager();}
 
 DrugsMode::DrugsMode(QObject *parent) :
         Core::BaseMode(parent),
@@ -63,8 +64,8 @@ DrugsMode::DrugsMode(QObject *parent) :
 //    const QList<int> &context;
 //    setContext();
     setWidget(m_Holder);
-
-    connect(formManager(), SIGNAL(patientFormsLoaded()), this, SLOT(getPatientForm()));
+    onPatientFormsLoaded();
+    connect(&formManager(), SIGNAL(patientFormsLoaded()), this, SLOT(onPatientFormsLoaded()));
 }
 
 DrugsMode::~DrugsMode()
@@ -78,10 +79,9 @@ QString DrugsMode::name() const
     return tkTr(Trans::Constants::DRUGS);
 }
 
-void DrugsMode::getPatientForm()
+void DrugsMode::onPatientFormsLoaded()
 {
-//    qWarning() << Q_FUNC_INFO;
-    Form::FormMain *root = formManager()->rootForm(Core::Constants::MODE_PATIENT_DRUGS);
+    Form::FormMain *root = formManager().rootForm(Core::Constants::MODE_PATIENT_DRUGS);
     if (!root) {
         if (inPool)
             pluginManager()->removeObject(this);

@@ -47,9 +47,11 @@ class IToken;
 
 class CORE_EXPORT IPatient : public QAbstractListModel
 {
-        Q_OBJECT
+    Q_OBJECT
+    Q_ENUMS(PatientDataRepresentation)
+
 public:
-    enum DataRepresentation {
+    enum PatientDataRepresentation {
         Id = 0,
 
         // Identity
@@ -62,7 +64,7 @@ public:
         TitleIndex,
         FullName,
         BirthName,
-        SecondName,  // 10
+        SecondName,           // 10
         Firstname,
         Gender,
         GenderIndex,
@@ -72,7 +74,8 @@ public:
         Age,
         YearsOld,
         MaritalStatus,
-        Profession,  // 20
+        Profession,           // 20
+        ProfessionSite,
         DateOfDeath,
         Photo_32x32,
         Photo_64x64,
@@ -84,21 +87,29 @@ public:
         Country,
         AddressNote,
         FullAddress,
-        Mails,
-        Tels,  // 30
+        Mails,             // 30
+        Tels,
         MobilePhone,
         Faxes,
+        ProfessionalTels,
+        ProfessionalSite,
+
+        // Social numbers
+        SocialNumber,
+        SocialNumber2,
+        SocialNumber3,
+        SocialNumber4,
 
         // Biometrics
         Weight,
         WeightUnit,
         Height,
-        HeightUnit,
+        HeightUnit,         // 40
         BMI,
         Creatinine,
         CreatinineUnit,
         CreatinClearance,
-        CreatinClearanceUnit,  // 40
+        CreatinClearanceUnit,
 
         // Drugs and diseases
         // Allergies
@@ -153,6 +164,8 @@ public:
 
     virtual QHash<QString, QString> fullPatientName(const QString &uuid) const {Q_UNUSED(uuid); return QHash<QString, QString>();}
     virtual QHash<QString, QString> fullPatientName(const QStringList &uuids) const {Q_UNUSED(uuids); return QHash<QString, QString>();}
+
+    QString enumToString(PatientDataRepresentation data);
 
 Q_SIGNALS:
     void currentPatientChanged();

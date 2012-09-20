@@ -25,32 +25,36 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 /**
-   \class MainWin::Internal::PatientModelWrapper
-   Wrapper to the Patient::PatientModel for identity and wrapper to Form::FormItem that represent
-   a patient data.
+ * \class Patients::Internal::PatientModelWrapper
+ * Wrapper to the Patient::PatientModel for identity and wrapper to Form::FormItem that represent
+ * a patient data.
+ * \sa Core::IPatient
 */
 
 #include "patientmodelwrapper.h"
+#include "patientbar.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/ipatient.h>
 
+#include <formmanagerplugin/formcore.h>
 #include <formmanagerplugin/formmanager.h>
 #include <formmanagerplugin/iformitem.h>
 #include <formmanagerplugin/iformitemdata.h>
 
 #include <patientbaseplugin/patientmodel.h>
 
-static inline Form::FormManager *formManager() {return Form::FormManager::instance();}
+#include <utils/global.h>
+
+static inline Form::FormManager &formManager() {return Form::FormCore::instance().formManager();}
 static inline Core::IPatient *patient()  { return Core::ICore::instance()->patient(); }
 
-using namespace MainWin::Internal;
+using namespace Patients;
+using namespace Internal;
 
-PatientModelWrapper::PatientModelWrapper(Patients::PatientModel *model, QObject *parent) :
-        Core::IPatient(parent), m_Model(model)
+PatientModelWrapper::PatientModelWrapper(QObject *parent) :
+        Core::IPatient(parent), m_Model(0)
 {
-    connect(model, SIGNAL(patientChanged(QString)), this, SLOT(onCurrentPatientChanged(QString)));
-    connect(model, SIGNAL(patientCreated(QString)), this, SIGNAL(patientCreated(QString)));
 }
 
 PatientModelWrapper::~PatientModelWrapper()
@@ -59,14 +63,28 @@ PatientModelWrapper::~PatientModelWrapper()
     Core::ICore::instance()->setPatient(0);
 }
 
+/*!
+ * \brief Reemits underlying model signals to the public.
+ *
+ * This slot is connected to the underlying model's PatientModel::currentPatientChanged(QString) signal
+ * and just emits the main patient change signals IPatient::currentPatientChanged() and
+ * IPatient::currentPatientChanged(QModelIndex).
+ * These are the signals that all plugins can use, because they can access IPatient and connect to it's signals.
+ *
+ * \sa IPatient::currentPatientChanged(), \sa IPatient::currentPatientChanged(QModelIndex)
+ */
 void PatientModelWrapper::onCurrentPatientChanged(const QString &)
 {
     Q_EMIT currentPatientChanged();
 }
 
 /** \brief Initialize the model */
-void PatientModelWrapper::init()
+void PatientModelWrapper::initialize(Patients::PatientModel *model)
 {
+    m_Model = model;
+    connect(model, SIGNAL(currentPatientChanged(QString)), this, SLOT(onCurrentPatientChanged(QString)));
+    connect(model, SIGNAL(currentPatientChanged(QString)), this, SIGNAL(patientCreated(QString)));
+    Utils::linkSignalsFromFirstModelToSecondModel(model, this, true);
 }
 
 /** \brief Return the QModelIndex of the current patient. The index is parented with the Patient::PatientModel model. */
@@ -95,7 +113,10 @@ QVariant PatientModelWrapper::data(const QModelIndex &index, int role) const
         return result;
 
     // or in the forms widgets
-    foreach(Form::FormMain *modeForms, formManager()->forms()) {
+    QList<Form::FormMain*> forms;
+    forms << formManager().forms();
+    forms << formManager().subFormsEmptyRoot();
+    foreach(Form::FormMain *modeForms, forms) {
         foreach(Form::FormMain *f, modeForms->flattenFormMainChildren()) {
             foreach(Form::FormItem *item, f->formItemChildren()) {
                 if (item->itemData()) {

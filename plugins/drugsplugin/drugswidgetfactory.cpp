@@ -88,12 +88,12 @@ static inline DrugsDB::DrugsIO &drugsIo() {return DrugsDB::DrugBaseCore::instanc
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 
-inline static bool dontPrintEmptyValues(Form::FormItem *item)
+static inline bool dontPrintEmptyValues(Form::FormItem *item)
 {
     return item->getOptions().contains(::DONTPRINTEMPTYVALUES, Qt::CaseInsensitive);
 }
 
-inline static bool addChronicButton(Form::FormItem *item)
+static inline bool addChronicButton(Form::FormItem *item)
 {
     return item->getOptions().contains(::ADDCHRONICTHERAPY, Qt::CaseInsensitive);
 }

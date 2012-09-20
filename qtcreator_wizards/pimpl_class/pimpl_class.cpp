@@ -24,13 +24,6 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-/**
- * \file %ClassName:l%.%CppSourceSuffix:l%
- * \author %AuthorName%
- * \version 0.8.0
- * \date %CurrentDate%
-*/
-
 @if "%Doxygen%" == "true"
 @if "%Internal%" == "true"
 /*!
@@ -51,11 +44,19 @@
 @endif
 @endif
 
-
 #include "%ClassName:l%.h"
+
+@if "%Translations%" == "true"
+#include <translationutils/constants.h>
+@endif
+
+#include <QDebug>
 
 using namespace %PluginNamespace:c%;
 using namespace Internal;
+@if "%Translations%" == "true"
+using namespace Trans::ConstantTranslations;
+@endif
 
 @if "%PIMPL%" == "true"
 namespace %PluginNamespace:c% {
@@ -71,7 +72,17 @@ namespace Internal {
 class %ClassName:c%Private
 {
 public:
-    %ClassName:c%Private(%ClassName:c% *parent) : q(parent) {}
+    %ClassName:c%Private(%ClassName:c% *parent) :
+      q(parent)
+    {
+    }
+
+    ~%ClassName:c%Private()
+    {
+    }
+
+public:
+    // Put your data here
 
 private:
     %ClassName:c% *q;
@@ -80,22 +91,57 @@ private:
 } // end namespace %PluginNamespace:c%
 @endif
 
-@if "%Doxygen%" == "true"
-/*! Constructor of the %ClassName:c% class */
+@if "%Singleton%" == "true"
+@if "%Internal%" == "true"
+%PluginNamespace:c%::Internal::%ClassName:c% *%PluginNamespace:c%::Internal::%ClassName:c%::_instance = 0;
+
+%PluginNamespace:c%::Internal::%ClassName:c% &instance() // static
+@else
+%PluginNamespace:c%::%ClassName:c% *%PluginNamespace:c%::%ClassName:c%::_instance = 0;
+
+%PluginNamespace:c%::%ClassName:c% &%PluginNamespace:c%::%ClassName:c%::instance() // static
 @endif
-%ClassName:c%::%ClassName:c%()
 {
+    Q_ASSERT(_instance);
+    return *_instance;
+}
+
+@endif
+@if "%Doxygen%" == "true"
+@if "%Internal%" == "true"
+/*! Constructor of the %PluginNamespace%::Internal::%ClassName:c% class */
+@else
+/*! Constructor of the %PluginNamespace%::%ClassName:c% class */
+@endif
+@endif
+%ClassName:c%::%ClassName:c%(QObject *parent) :
+    QObject(parent),
+    d(new %ClassName:c%Private(this))
+{
+@if "%Singleton%" == "true"
+    _instance = this;
+@endif
 }
 
 @if "%Doxygen%" == "true"
-/*! Destructor of the %ClassName:c% class */
+@if "%Internal%" == "true"
+/*! Destructor of the %PluginNamespace%::Internal::%ClassName:c% class */
+@else
+/*! Destructor of the %PluginNamespace%::%ClassName:c% class */
+@endif
 @endif
 %ClassName:c%::~%ClassName:c%()
 {
+@if "%Singleton%" == "true"
+    _instance = 0;
+@endif
+    if (d)
+        delete d;
+    d = 0;
 }
 
 @if "%Doxygen%" == "true"
-/*! initializes the %ClassName:c% instance with default values */
+/*! Initializes the object with the default values. Return true if initialization was completed. */
 @endif
 bool %ClassName:c%::initialize()
 {

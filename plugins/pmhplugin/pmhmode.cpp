@@ -29,6 +29,12 @@
   \brief Core::IMode to show in the MainWindow for the PMHx plugin.
 */
 
+/**
+ * \class PMH::Internal::PmhModeWidget
+ * Widget use in the PMH::Internal::PmhMode. Presents a pmhx category tree view and a central widget
+ * with a PMH::Internal::PmhViewer and/or a Form::FormPlaceHolder.
+ */
+
 #include "pmhmode.h"
 #include "pmhmodel.h"
 #include "pmhcore.h"
@@ -61,7 +67,6 @@
 #include <QScrollBar>
 
 #include "ui_pmhmodewidget.h"
-
 
 using namespace PMH;
 using namespace Internal;
@@ -156,13 +161,15 @@ PmhModeWidget::PmhModeWidget(QWidget *parent) :
     cmd = actionManager()->command(Constants::A_PMH_NEW);
     connect(cmd->action(), SIGNAL(triggered()), this, SLOT(createPmh()));
 
-    connect(ui->treeView->selectionModel(), SIGNAL(currentChanged (QModelIndex, QModelIndex)),
+    connect(ui->treeView->selectionModel(), SIGNAL(currentChanged(QModelIndex, QModelIndex)),
             this, SLOT(currentChanged(QModelIndex, QModelIndex)));
+
     connect(ui->treeView->model(), SIGNAL(rowsInserted(QModelIndex,int,int)),
             this, SLOT(pmhModelRowsInserted(QModelIndex,int,int)));
+
     connect(ui->buttonBox, SIGNAL(clicked(QAbstractButton*)), this, SLOT(onButtonClicked(QAbstractButton*)));
 
-    connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onPatientChanged()));
+    connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onCurrentPatientChanged()));
 }
 
 PmhModeWidget::~PmhModeWidget()
@@ -170,6 +177,7 @@ PmhModeWidget::~PmhModeWidget()
     delete ui;
 }
 
+/** Return the current selected category id in the category view */
 int PmhModeWidget::currentSelectedCategory() const
 {
     if (!ui->treeView->selectionModel()->hasSelection())
@@ -185,7 +193,7 @@ int PmhModeWidget::currentSelectedCategory() const
     return -1;
 }
 
-
+/** Reacts on the currentChanged signal of the category tree view */
 void PmhModeWidget::currentChanged(const QModelIndex &current, const QModelIndex &previous)
 {
     Q_UNUSED(previous);
@@ -265,6 +273,7 @@ void PmhModeWidget::onButtonClicked(QAbstractButton *button)
     }
 }
 
+/** Create a new category in the PMHx using the Category::CategoryDialog */
 void PmhModeWidget::createCategory()
 {
     Category::CategoryDialog dlg(this);
@@ -297,8 +306,10 @@ void PmhModeWidget::removeItem()
         catModel()->removeRow(item.row(), item.parent());
 }
 
-void PmhModeWidget::onPatientChanged()
+/** When a new patient is selected, select the synthesis item and re-expand the category view */
+void PmhModeWidget::onCurrentPatientChanged()
 {
+    ui->treeView->selectionModel()->select(catModel()->index(0,0), QItemSelectionModel::SelectCurrent);
     ui->treeView->expandAll();
     for(int i = 0; i < ui->stackedWidget->count(); ++i) {
         // Remove all form's widgets
@@ -310,6 +321,7 @@ void PmhModeWidget::onPatientChanged()
     m_FormUid_StackId.clear();
 }
 
+/** Create a new PMHx using the PMH::PmhCreatorDialog */
 void PmhModeWidget::createPmh()
 {
     PmhCreatorDialog dlg(this);
@@ -323,6 +335,7 @@ void PmhModeWidget::createPmh()
     dlg.exec();
 }
 
+/** When a PMHx is added to the PmhCategoryModel re-expand all items of the category view */
 void PmhModeWidget::pmhModelRowsInserted(const QModelIndex &parent, int start, int end)
 {
     ui->treeView->expand(parent);
@@ -360,7 +373,8 @@ PmhMode::PmhMode(QObject *parent) :
 
     m_Widget = new PmhModeWidget;
     setWidget(m_Widget);
-    connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onPatientChanged()));
+    onCurrentPatientChanged();
+    connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onCurrentPatientChanged()));
 }
 
 PmhMode::~PmhMode()
@@ -375,7 +389,7 @@ QString PmhMode::name() const
     return tkTr(Trans::Constants::PMHX);
 }
 
-void PmhMode::onPatientChanged()
+void PmhMode::onCurrentPatientChanged()
 {
     if (!m_inPluginManager) {
         pluginManager()->addObject(this);

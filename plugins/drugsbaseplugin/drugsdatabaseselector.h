@@ -24,8 +24,8 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef DRUGSDATABASESELECTOR_H
-#define DRUGSDATABASESELECTOR_H
+#ifndef DRUGSDB_DRUGSDATABASESELECTOR_H
+#define DRUGSDB_DRUGSDATABASESELECTOR_H
 
 #include <drugsbaseplugin/drugsbase_exporter.h>
 
@@ -109,10 +109,6 @@ private:
 DRUGSBASE_EXPORT QDebug operator<<(QDebug dbg, const DrugsDB::DatabaseInfos &c);
 DRUGSBASE_EXPORT QDebug operator<<(QDebug dbg, const DrugsDB::DatabaseInfos *c);
 
-
 }  // End namespace DrugsDB
 
-
-
-
-#endif // DRUGSDATABASESELECTOR_H
+#endif // DRUGSDB_DRUGSDATABASESELECTOR_H

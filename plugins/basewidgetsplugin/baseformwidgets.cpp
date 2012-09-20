@@ -136,7 +136,7 @@ namespace {
     const char * const  NOT_PRINTABLE        = "notprintable";
 }
 
-inline static Form::IFormWidget::LabelOptions labelAlignement(Form::FormItem *item, Form::IFormWidget::LabelOptions defaultValue = Form::IFormWidget::Label_OnLeft)
+static inline Form::IFormWidget::LabelOptions labelAlignement(Form::FormItem *item, Form::IFormWidget::LabelOptions defaultValue = Form::IFormWidget::Label_OnLeft)
 {
     const QStringList &o = item->getOptions();
     if (o.contains(::LABEL_ALIGN_TOP, Qt::CaseInsensitive))
@@ -146,14 +146,14 @@ inline static Form::IFormWidget::LabelOptions labelAlignement(Form::FormItem *it
     return defaultValue;
 }
 
-inline static QStringList getCountries(Form::FormItem *item)
+static inline QStringList getCountries(Form::FormItem *item)
 {
     if (!item->extraData().value(::EXTRAS_COUNTRY).isEmpty())
         return item->extraData().value(::EXTRAS_COUNTRY).split(";");
     return QStringList();
 }
 
-inline static int getNumberOfColumns(Form::FormItem *item, int defaultValue = 1)
+static inline int getNumberOfColumns(Form::FormItem *item, int defaultValue = 1)
 {
     if (!item->extraData().value(::EXTRAS_KEY_COLUMN).isEmpty())
         return item->extraData().value(::EXTRAS_KEY_COLUMN).toInt();
@@ -161,42 +161,42 @@ inline static int getNumberOfColumns(Form::FormItem *item, int defaultValue = 1)
         return defaultValue;
 }
 
-inline static int isCompactView(Form::FormItem *item, bool defaultValue = false)
+static inline int isCompactView(Form::FormItem *item, bool defaultValue = false)
 {
     if (item->getOptions().contains(::EXTRAS_COMPACT_VIEW, Qt::CaseInsensitive))
         return true;
     return defaultValue;
 }
 
-inline static int isGroupCheckable(Form::FormItem *item, bool defaultValue = false)
+static inline int isGroupCheckable(Form::FormItem *item, bool defaultValue = false)
 {
     if (item->getOptions().contains(::EXTRAS_GROUP_CHECKABLE, Qt::CaseInsensitive))
         return true;
     return defaultValue;
 }
 
-inline static int isGroupCollapsible(Form::FormItem *item, bool defaultValue = false)
+static inline int isGroupCollapsible(Form::FormItem *item, bool defaultValue = false)
 {
     if (item->getOptions().contains(::EXTRAS_GROUP_COLLAPSIBLE, Qt::CaseInsensitive))
         return true;
     return defaultValue;
 }
 
-inline static int isGroupExpanded(Form::FormItem *item, bool defaultValue = false)
+static inline int isGroupExpanded(Form::FormItem *item, bool defaultValue = false)
 {
     if (item->getOptions().contains(::EXTRAS_GROUP_EXPANDED, Qt::CaseInsensitive))
         return true;
     return defaultValue;
 }
 
-inline static int isGroupChecked(Form::FormItem *item, bool defaultValue = false)
+static inline int isGroupChecked(Form::FormItem *item, bool defaultValue = false)
 {
     if (item->getOptions().contains(::EXTRAS_GROUP_CHECKED, Qt::CaseInsensitive))
         return true;
     return defaultValue;
 }
 
-inline static int isRadioHorizontalAlign(Form::FormItem *item, bool defaultValue = true)
+static inline int isRadioHorizontalAlign(Form::FormItem *item, bool defaultValue = true)
 {
     if (item->getOptions().contains(::EXTRAS_ALIGN_HORIZONTAL, Qt::CaseInsensitive))
         return true;
@@ -205,7 +205,7 @@ inline static int isRadioHorizontalAlign(Form::FormItem *item, bool defaultValue
     return defaultValue;
 }
 
-inline static QString getDateFormat(Form::FormItem *item, const QString & defaultValue = "dd MM yyyy")
+static inline QString getDateFormat(Form::FormItem *item, const QString & defaultValue = "dd MM yyyy")
 {
     if (!item->extraData().value(::DATE_EXTRAS_KEY).isEmpty()) {
         return item->extraData().value(::DATE_EXTRAS_KEY);
@@ -213,23 +213,23 @@ inline static QString getDateFormat(Form::FormItem *item, const QString & defaul
     return defaultValue;
 }
 
-inline static bool dontPrintEmptyValues(Form::FormItem *item)
+static inline bool dontPrintEmptyValues(Form::FormItem *item)
 {
     return item->getOptions().contains(::DONTPRINTEMPTYVALUES, Qt::CaseInsensitive);
 }
 
-inline static bool hideHeaderOnUniqueEpisode(Form::FormItem *item)
+static inline bool hideHeaderOnUniqueEpisode(Form::FormItem *item)
 {
     return item->getOptions().contains(::HIDEHEADERONUNIQUEEPISODE, Qt::CaseInsensitive);
 }
 
-inline static void executeOnValueChangedScript(Form::FormItem *item)
+static inline void executeOnValueChangedScript(Form::FormItem *item)
 {
     if (!item->scripts()->onValueChangedScript().isEmpty())
         scriptManager()->evaluate(item->scripts()->onValueChangedScript());
 }
 
-inline static QLabel *findLabel(Form::FormItem *item)
+static inline QLabel *findLabel(Form::FormItem *item)
 {
     QLabel *l = 0;
     // Find label
@@ -432,8 +432,8 @@ void BaseForm::addWidgetToContainer(IFormWidget * widget)
         return;
     col = (i % numberColumns);
     row = (i / numberColumns);
-    qWarning() << "ADDING to" << m_FormItem->uuid() << "widget" << widget->formItem()->uuid()
-               << "i" << i << "col" << col << "row" << row;
+//    qWarning() << "ADDING to" << m_FormItem->uuid() << "widget" << widget->formItem()->uuid()
+//               << "i" << i << "col" << col << "row" << row;
     m_ContainerLayout->addWidget(widget , row, col);
     i++;
 }
@@ -523,13 +523,9 @@ void BaseForm::triggered(QAction *action)
                                                         settings()->path(Core::ISettings::UserDocumentsPath),
                                                         tr("Images (*.png)"));
         if (!fileName.isEmpty()) {
-
-            /** \badcode this is a dirty hack to workaround a Qt "bug" that
-              makes it impossible to add a default suffix with the
-              static function getSaveFileName() */
-            if (fileName.right(4) != ".png") {
+            QFileInfo info(fileName);
+            if (info.completeSuffix().isEmpty())
                 fileName.append(".png");
-            }
             pix.save(fileName);
         }
     }
@@ -554,7 +550,13 @@ void BaseFormData::clear()
 
 bool BaseFormData::isModified() const
 {
-    return m_Modified;
+    if (m_Modified)
+        return true;
+    foreach(int id, m_OriginalData.keys()) {
+        if (data(id) != m_OriginalData.value(id))
+            return true;
+    }
+    return false;
 }
 
 bool BaseFormData::setData(const int ref, const QVariant &data, const int role)
@@ -588,13 +590,12 @@ bool BaseFormData::setData(const int ref, const QVariant &data, const int role)
 
 QVariant BaseFormData::data(const int ref, const int role) const
 {
-    // TODO: code here : IFormItemData should have a submit method
-    if (role!=Qt::DisplayRole)
-        return false;
-    switch (ref) {
-    case ID_EpisodeDate: return m_Form->m_EpisodeDate->dateTime();
-    case ID_EpisodeLabel: return m_Form->m_EpisodeLabel->text();
-    case ID_UserName: return m_Data.value(ID_UserName);
+    if (role==Qt::DisplayRole || role==Form::IFormItemData::PatientModelRole) {
+        switch (ref) {
+        case ID_EpisodeDate: return m_Form->m_EpisodeDate->dateTime();
+        case ID_EpisodeLabel: return m_Form->m_EpisodeLabel->text();
+        case ID_UserName: return m_Data.value(ID_UserName);
+        }
     }
     return QVariant();
 }
@@ -603,6 +604,7 @@ QVariant BaseFormData::data(const int ref, const int role) const
 void BaseFormData::setStorableData(const QVariant &modified)
 {
     m_Modified = modified.toBool();
+    m_OriginalData = m_Data;
 }
 
 /** Use as bool storableData() == bool isModified() */
@@ -1305,7 +1307,7 @@ QVariant BaseRadioData::data(const int ref, const int role) const
 //        qWarning() << "Radio -> DATA" << selectedUid << id << vals;
         if (id < vals.count() && id >= 0)
             return vals.at(id);
-    } else if (role==Qt::DisplayRole) {
+    } else if (role==Qt::DisplayRole || role==Form::IFormItemData::PatientModelRole) {
         foreach(QRadioButton *but, m_Radio->m_RadioList) {
             if (but->isChecked()) {
                 return but->text();
@@ -1525,7 +1527,7 @@ bool BaseSimpleTextData::setData(const int ref, const QVariant &data, const int 
 QVariant BaseSimpleTextData::data(const int ref, const int role) const
 {
     Q_UNUSED(ref);
-    if (role==Qt::DisplayRole) {
+    if (role==Qt::DisplayRole || role==Form::IFormItemData::PatientModelRole) {
         if (m_Text->m_Line)
             return m_Text->m_Line->text();
         else if (m_Text->m_Text)
@@ -1791,7 +1793,7 @@ QVariant BaseListData::data(const int ref, const int role) const
 //        if (id < vals.count() && id >= 0)
 //            return vals.at(id);
 //    } else
-    if (role==Qt::DisplayRole) {
+    if (role==Qt::DisplayRole || role==Form::IFormItemData::PatientModelRole) {
         QStringList selected;
         QItemSelectionModel *selModel = m_List->m_List->selectionModel();
         if (!selModel->hasSelection())
@@ -1983,7 +1985,7 @@ QVariant BaseComboData::data(const int ref, const int role) const
             return parentItem()->valueReferences()->values(Form::FormItemValues::Value_Uuid).at(id);
 
     }
-    if (role==Qt::DisplayRole) {
+    if (role==Qt::DisplayRole || role==Form::IFormItemData::PatientModelRole) {
         return m_Combo->m_Combo->currentText();
     }
     if (role==Form::IFormItemData::CalculationsRole) {
@@ -2052,8 +2054,8 @@ BaseDate::BaseDate(Form::FormItem *formItem, QWidget *parent) :
     if (options.contains(::DATE_NOW, Qt::CaseInsensitive))
         m_Date->setDateTime(QDateTime::currentDateTime());
     if (options.contains(::DATE_PATIENTLIMITS, Qt::CaseInsensitive)) {
-        connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onPatientChanged()));
-        onPatientChanged();
+        connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onCurrentPatientChanged()));
+        onCurrentPatientChanged();
     }
 
     // create FormItemData
@@ -2068,7 +2070,7 @@ BaseDate::~BaseDate()
 {
 }
 
-void BaseDate::onPatientChanged()
+void BaseDate::onCurrentPatientChanged()
 {
     if (!patient()->data(Core::IPatient::DateOfBirth).isNull()) {
         m_Date->setMinimumDate(patient()->data(Core::IPatient::DateOfBirth).toDate());

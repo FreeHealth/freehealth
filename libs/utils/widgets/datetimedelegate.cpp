@@ -24,11 +24,19 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
+/**
+ * \class Utils::DateTimeDelegate
+ * Can be used inside your view to edit datetime values. \n
+ * Automatically handles a QDate/QDateTime editor on edition,
+ * show translated date/date time in the view in display mode (using
+ * the locale and the translation constants).
+ * \sa Trans::Constants::DATE_FOR_EDITOR, Trans::Constants::DATETIME_FOR_EDITOR
+ */
+
 #include "datetimedelegate.h"
 
 #include <translationutils/constants.h>
 
-#include <QDate>
 #include <QDateTime>
 #include <QDateEdit>
 #include <QDateTimeEdit>
@@ -39,7 +47,7 @@ using namespace Utils;
 using namespace Trans::ConstantTranslations;
 
 DateTimeDelegate::DateTimeDelegate(QObject *parent, bool dateOnly) :
-        QItemDelegate(parent), m_IsDateOnly(dateOnly)
+        QStyledItemDelegate(parent), m_IsDateOnly(dateOnly)
 {
     m_MinDate = QDate::currentDate().addYears(-100);
     m_MaxDate = QDate::currentDate().addYears(100);
@@ -71,10 +79,18 @@ void DateTimeDelegate::setDateOnly(bool state)
     m_IsDateOnly = state;
 }
 
+QString DateTimeDelegate::displayText(const QVariant &value, const QLocale &locale) const
+{
+    if (m_IsDateOnly)
+        return locale.toString(value.toDate(), tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR));
+    return locale.toString(value.toDateTime(), tkTr(Trans::Constants::DATETIMEFORMAT_FOR_EDITOR));
+}
+
 QWidget *DateTimeDelegate::createEditor(QWidget *parent,
                                        const QStyleOptionViewItem &/* option */,
                                        const QModelIndex &index) const
 {
+    // TODO: use the BirthDayEdit editor
     if (m_IsDateOnly) {
         QDateEdit *editor = new QDateEdit(parent);
         editor->setMinimumDate(m_MinDate);
@@ -87,7 +103,7 @@ QWidget *DateTimeDelegate::createEditor(QWidget *parent,
         QDateTimeEdit *editor = new QDateTimeEdit(parent);
         editor->setMinimumDateTime(QDateTime(m_MinDate, m_MinTime));
         editor->setMaximumDateTime(QDateTime(m_MaxDate, m_MaxTime));
-        editor->setDisplayFormat(tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR));
+        editor->setDisplayFormat(tkTr(Trans::Constants::DATETIMEFORMAT_FOR_EDITOR));
         editor->setDateTime(index.data().toDateTime());
         return editor;
     }

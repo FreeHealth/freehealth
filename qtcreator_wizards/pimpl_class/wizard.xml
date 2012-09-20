@@ -1,3 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/***************************************************************************
+ *  The FreeMedForms project is a set of free, open source medical         *
+ *  applications.                                                          *
+ *  (C) 2008-2012 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
+ *  All rights reserved.                                                   *
+ *                                                                         *
+ *  This program is free software: you can redistribute it and/or modify   *
+ *  it under the terms of the GNU General Public License as published by   *
+ *  the Free Software Foundation, either version 3 of the License, or      *
+ *  (at your option) any later version.                                    *
+ *                                                                         *
+ *  This program is distributed in the hope that it will be useful,        *
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
+ *  GNU General Public License for more details.                           *
+ *                                                                         *
+ *  You should have received a copy of the GNU General Public License      *
+ *  along with this program (COPYING.FREEMEDFORMS file).                   *
+ *  If not, see <http://www.gnu.org/licenses/>.                            *
+ ***************************************************************************/
+-->
 <wizard category="B.FMFClasses" id="P.PimplClass" kind="class" version="1">
     <displayname>C++ class with optional PIMPL</displayname>
     <displayname xml:lang="de">C++-Klasse mit optionaler PIMPL</displayname>;
@@ -18,6 +41,7 @@
             <fieldcontrol class="QLineEdit" defaulttext="MyClass" validator="^[a-zA-Z0-9_]+$" />
             <fielddescription>Name:</fielddescription>
             <fielddescription xml:lang="de">Name:</fielddescription>
+            <fielddescription xml:lang="fr">Nom:</fielddescription>
         </field>
         <field name="AuthorName">
             <fieldcontrol class="QLineEdit" defaulttext="" />
@@ -30,7 +54,7 @@
             <fieldcontrol class="QComboBox" combochoices="Account,AccountDB,Agenda,Alert,BaseWidgets,Category,Core,DataPackPlugin,DrugInteractions,DrugsDB,DrugsWidget,Editor,Empty,Form,Gir,ICD,MainWin,PMH,PadTools,Patients,Print,SaveRestore,Script,Templates,UserPlugin,Views,Webcam,XmlForms,ZipCodes" defaultindex="-1" />
             <fielddescription>Plugin namespace:</fielddescription>
             <fielddescription xml:lang="de">Namensraum des Plugins:</fielddescription>
-            <fielddescription xml:lang="fr">Espace de nommage du plugin</fielddescription>
+            <fielddescription xml:lang="fr">Espace de nommage du greffon:</fielddescription>
         </field>
         <field name="Internal">
             <fieldcontrol class="QCheckBox" />
@@ -44,6 +68,12 @@
             <fielddescription xml:lang="de">Private Implementation erzeugen (PIMPL-Idiom, "Opaque pointer")</fielddescription>
             <fielddescription xml:lang="fr">Impl&#233;mentation priv&#233;e (Opaque pointer)</fielddescription>
         </field>
+        <field name="Singleton">
+            <fieldcontrol class="QCheckBox" defaultvalue="true" />
+            <fielddescription>Create a singleton</fielddescription>
+            <fielddescription xml:lang="de">Create a singleton</fielddescription>
+            <fielddescription xml:lang="fr">Créer un singleton</fielddescription>
+        </field>
         <field name="Exported">
             <fieldcontrol class="QCheckBox" />
             <fielddescription>Export class</fielddescription>
@@ -55,6 +85,12 @@
             <fielddescription>Add Doxygen documentation</fielddescription>
             <fielddescription xml:lang="de">Doxygen-Dokumentation erzeugen</fielddescription>
             <fielddescription xml:lang="fr">Cr&#233;er la documentation doxygen</fielddescription>
+        </field>
+        <field name="Translations">
+            <fieldcontrol class="QCheckBox" defaultvalue="true" />
+            <fielddescription>Include translation utils</fielddescription>
+            <fielddescription xml:lang="de">Include translation utils</fielddescription>
+            <fielddescription xml:lang="fr">Inclure la librairie de traduction</fielddescription>
         </field>
 
 

@@ -309,9 +309,15 @@ void PatientModel::onCoreDatabaseServerChanged()
 }
 
 /**
-  \brief Set the current patient according to its QModelIndex \e index.
-  A signal \e patientChanged() is emitted when setting a new current patient.
-  \sa Core::IPatient::currentPatientChanged()
+  * \brief Sets the index to the given patient QModelIndex.
+  *
+  * Before changing to the new patient, the plugin extension Core::IPatientListener->currentPatientAboutToChange()
+  * is called to enable plugins to e.g. save data before changing to the new patient.
+  *
+  * Two new signals \e currentPatientChanged() and currentPatientChanged(QModelIndex) are emitted when the new current patient
+  * is set. If the new patient is the current one, no signals are emitted.
+  *
+  * \sa Core::IPatient::currentPatientChanged()
  */
 void PatientModel::setCurrentPatient(const QModelIndex &index)
 {
@@ -319,6 +325,8 @@ void PatientModel::setCurrentPatient(const QModelIndex &index)
         return;
     }
 
+    // Call all extensions that provide listeners to patient change: the extensions can now do things like
+    // save data BEFORE the patient is changed.
     QList<Core::IPatientListener *> listeners = pluginManager()->getObjects<Core::IPatientListener>();
     for(int i = 0; i < listeners.count(); ++i) {
         if (!listeners.at(i)->currentPatientAboutToChange()) {
@@ -328,8 +336,8 @@ void PatientModel::setCurrentPatient(const QModelIndex &index)
 
     m_CurrentPatient = index;
     LOG("setCurrentPatient: " + this->index(index.row(), Core::IPatient::Uid).data().toString());
-    Q_EMIT patientChanged(this->index(index.row(), Core::IPatient::Uid).data().toString());
-    Q_EMIT patientChanged(index);
+    Q_EMIT currentPatientChanged(this->index(index.row(), Core::IPatient::Uid).data().toString());
+    Q_EMIT currentPatientChanged(index);
 }
 
 int PatientModel::rowCount(const QModelIndex &) const
@@ -391,7 +399,7 @@ QVariant PatientModel::data(const QModelIndex &index, int role) const
             QModelIndex idx = d->m_SqlPatient->index(index.row(), Constants::IDENTITY_DOB);
             QDate dob = d->m_SqlPatient->data(idx).toDate();
             if (role==Qt::DisplayRole) {
-                return QLocale().toString(dob, tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR));
+                return dob;
             } else if (role==Qt::ToolTipRole) {
                 return QString("%1; %2").arg(QLocale().toString(dob, QLocale().dateFormat(QLocale::LongFormat))).arg(MedicalUtils::readableAge(dob));
             }

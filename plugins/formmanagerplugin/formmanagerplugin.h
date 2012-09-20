@@ -35,10 +35,11 @@
  * \file formmanagerplugin.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.8.0
- * \date 25 July 2012
+ * \date 17 Sept 2012
 */
 
 namespace Form {
+class FormCore;
 namespace Internal {
 class FormManagerMode;
 class FirstRunFormManagerConfigPage;
@@ -60,7 +61,8 @@ private Q_SLOTS:
     void postCoreInitialization();
 
 private:
-    FormManagerMode *mode;
+    FormCore *_core;
+    FormManagerMode *_mode;
     Internal::FirstRunFormManagerConfigPage *m_FirstRun;
     Internal::FormPreferencesFileSelectorPage *m_PrefPageSelector;
     Internal::FormPreferencesPage *m_PrefPage;

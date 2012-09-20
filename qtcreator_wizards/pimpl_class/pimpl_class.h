@@ -32,14 +32,16 @@
 #define %PluginNamespace:u%_%ClassName:u%_H
 @endif
 
-#include <missing/plugin_exporter.h>
+@if "%Exported%" == "true"
+#include <missing/%PluginNamespace:l%_exporter.h>
+@endif
+#include <QObject>
 
 /**
  * \file %ClassName:l%.%CppHeaderSuffix:l%
  * \author %AuthorName%
  * \version 0.8.0
  * \date %CurrentDate%
- * \time %CurrentTime%
 */
 namespace %PluginNamespace:c% {
 namespace Internal {
@@ -51,14 +53,21 @@ class %ClassName:c%Private;
 @endif
 
 @if "%Exported%" == "true"
-class %PluginNamespace:u%_EXPORT %ClassName:c%
+class %PluginNamespace:u%_EXPORT %ClassName:c% : public QObject
 @else
-class %ClassName:c%
+class %ClassName:c% : public QObject
 @endif
 {
     Q_OBJECT
+@if "%Singleton%" == "true"
+protected:
+    explicit %ClassName:c%(QObject *parent = 0);
 public:
-    explicit %ClassName:c%();
+    static %ClassName:c% &instance();
+@else
+public:
+    explicit %ClassName:c%(QObject *parent = 0);
+@endif
     ~%ClassName:c%();
 
     bool initialize();
@@ -70,6 +79,9 @@ public Q_SLOTS:
 @if "%PIMPL%" == "true"
 private:
     Internal::%ClassName:c%Private *d;
+@endif
+@if "%Singleton%" == "true"
+    static %ClassName:c% *_instance;
 @endif
 };
 

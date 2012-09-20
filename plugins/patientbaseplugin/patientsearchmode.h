@@ -59,6 +59,8 @@ public:
 
     bool isPatientBarVisible() const {return false;}
 
+    void postCoreInitialization();
+
 private:
     PatientSelector *m_Selector;
 };

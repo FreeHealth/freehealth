@@ -64,10 +64,10 @@ static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionS
 
 static inline QString workingPath()     {return QDir::cleanPath(settings()->value(Core::Constants::S_TMP_PATH).toString() + "/PtRawSources/");}
 static inline QString databaseAbsPath()  {return Core::Tools::drugsDatabaseAbsFileName();}
-static inline QString rawCsvAbsFile() {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + "/global_resources/sql/drugdb/pt/lista_infomed.csv.xls");}
+static inline QString rawCsvAbsFile() {return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString() + "/global_resources/sql/drugdb/pt/lista_infomed.csv.xls");}
 
-static inline QString databaseFinalizationScript() {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + "/global_resources/sql/drugdb/pt/pt_db_finalize.sql");}
-static inline QString uidFile() {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + "/global_resources/sql/drugdb/pt/pt_uids.csv");}
+static inline QString databaseFinalizationScript() {return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString() + "/global_resources/sql/drugdb/pt/pt_db_finalize.sql");}
+static inline QString uidFile() {return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString() + "/global_resources/sql/drugdb/pt/pt_uids.csv");}
 
 
 QWidget *PtDrugsDatabasePage::createPage(QWidget *parent)

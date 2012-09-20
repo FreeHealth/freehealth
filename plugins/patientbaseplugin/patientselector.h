@@ -78,14 +78,16 @@ public:
     PatientSelector(QWidget *parent = 0, const FieldsToShow fields = None);
     ~PatientSelector();
 
-    void init();
+    void initialize();
 
     void setSearchMode(const int search);
     void setPatientModel(PatientModel *m);
     void setFieldsToShow(const FieldsToShow fields);
 
+
 public Q_SLOTS:
     void setSelectedPatient(const QModelIndex &index);
+    void updatePatientActions(const QModelIndex &index);
 
 //Q_SIGNALS:
 //    void patientSelected(const QString &uuid);
@@ -95,7 +97,7 @@ private Q_SLOTS:
     void updateNavigationButton();
     void changeIdentity(const QModelIndex &current, const QModelIndex &previous);
     void refreshFilter(const QString &);
-    void onPatientSelected(const QModelIndex &index);
+    void onPatientActivated(const QModelIndex &index);
 
 protected:
 //    void changeEvent(QEvent *e);

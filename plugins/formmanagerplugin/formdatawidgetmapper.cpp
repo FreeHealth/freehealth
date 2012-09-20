@@ -35,6 +35,7 @@
  */
 
 #include "formdatawidgetmapper.h"
+#include <formmanagerplugin/formcore.h>
 #include <formmanagerplugin/formmanager.h>
 #include <formmanagerplugin/iformitem.h>
 #include <formmanagerplugin/iformitemdata.h>
@@ -59,7 +60,7 @@ using namespace Internal;
 
 enum {WarnLogChronos=true};
 
-static inline Form::FormManager *formManager() { return Form::FormManager::instance(); }
+static inline Form::FormManager &formManager() {return Form::FormCore::instance().formManager();}
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 
@@ -141,7 +142,7 @@ public:
         if (_episodeModel) {
             _episodeModel = 0;
         }
-        _episodeModel = formManager()->episodeModel(rootForm);
+        _episodeModel = formManager().episodeModel(rootForm);
     }
 
     QString getCurrentXmlEpisode()
@@ -175,67 +176,17 @@ public:
         }
         _currentEpisode = index;
 
-        if (!index.isValid())
+        if (!index.isValid()) {
+            LOG_ERROR_FOR(q, "Invalid index when setting current episode. Episode not read.");
             return;
+        }
 
         // show the form widgets
         int stackIndex;
         (_formMain) ? stackIndex = _stackId_FormUuid.key(_formMain->uuid()) : stackIndex = 0;
         _stack->setCurrentIndex(stackIndex);
 
-        QTime chrono;
-        if (WarnLogChronos)
-            chrono.start();
-
-        _formMain->clear();
-        _formMain->formWidget()->setEnabled(false);
-
-        QModelIndex xmlIndex = _episodeModel->index(index.row(), EpisodeModel::XmlContent);
-        const QString &xml = _episodeModel->data(xmlIndex).toString();
-
-        QHash<QString, FormItem *> items;
-        QHash<QString, QString> datas;
-        if (!xml.isEmpty()) {
-            // read the xml'd content
-            if (!Utils::readXml(xml, Form::Constants::XML_FORM_GENERAL_TAG, datas, false)) {
-                QModelIndex uid = _episodeModel->index(index.row(), EpisodeModel::Uuid);
-                LOG_ERROR_FOR(q, QString("Error while reading episode content (%1)").arg(_episodeModel->data(uid).toString()));
-                return;
-            }
-
-            // put datas into the FormItems of the form
-            foreach(FormItem *it, _formMain->flattenFormItemChildren()) {
-                items.insert(it->uuid(), it);
-            }
-        }
-
-        // Populate the FormMain item data (username, userdate, label)
-        QModelIndex userName = _episodeModel->index(index.row(), EpisodeModel::UserCreatorName);
-        QModelIndex userDate = _episodeModel->index(index.row(), EpisodeModel::UserDate);
-        QModelIndex label = _episodeModel->index(index.row(), EpisodeModel::Label);
-        _formMain->itemData()->setData(IFormItemData::ID_EpisodeDate, _episodeModel->data(userDate));
-        _formMain->itemData()->setData(IFormItemData::ID_EpisodeLabel, _episodeModel->data(label));
-        _formMain->itemData()->setData(IFormItemData::ID_UserName, _episodeModel->data(userName));
-        _formMain->itemData()->setStorableData(false); // equal: _formMain->itemData()->setModified(false)
-
-        // Populate FormItem data and the patientmodel
-        foreach(FormItem *it, items.values()) {
-            if (!it) {
-                LOG_ERROR_FOR(q, "activateForm :: ERROR: no item: " + items.key(it));
-                continue;
-            }
-            if (!it->itemData())
-                continue;
-
-            it->itemData()->setStorableData(datas.value(it->uuid()));
-//            if (feedPatientModel && it->patientDataRepresentation() >= 0)
-            if (it->patientDataRepresentation() >= 0)
-                    patient()->setValue(it->patientDataRepresentation(), it->itemData()->data(it->patientDataRepresentation(), IFormItemData::PatientModelRole));
-        }
-
-        _formMain->formWidget()->setEnabled(true);
-        if (WarnLogChronos)
-            Utils::Log::logTimeElapsed(chrono, q->objectName(), "feedFormWithEpisodeContent");
+        _episodeModel->populateFormWithEpisodeContent(index, true);
     }
 
 public:
@@ -289,7 +240,7 @@ bool FormDataWidgetMapper::isDirty() const
 
 void FormDataWidgetMapper::setCurrentForm(const QString &formUid)
 {
-    setCurrentForm(formManager()->form(formUid));
+    setCurrentForm(formManager().form(formUid));
 }
 
 void FormDataWidgetMapper::setCurrentForm(Form::FormMain *form)
@@ -297,7 +248,6 @@ void FormDataWidgetMapper::setCurrentForm(Form::FormMain *form)
     d->clearStackLayout();
     if (!form)
         return;
-    qWarning() << "FormDataWidgetMapper::setCurrentForm" << form->uuid();
     d->populateStack(form);
     d->useEpisodeModel(form);
     if (d->_formMain->itemData())
@@ -306,21 +256,27 @@ void FormDataWidgetMapper::setCurrentForm(Form::FormMain *form)
 
 void FormDataWidgetMapper::setCurrentEpisode(const QVariant &uid)
 {
+    Q_UNUSED(uid)
 }
 
 void FormDataWidgetMapper::setCurrentEpisode(const QModelIndex &index)
 {
-    WARN_FUNC;
     d->setCurrentEpisode(index);
+}
+
+QPixmap FormDataWidgetMapper::screenshot()
+{
+    return QPixmap::grabWidget(d->_stack->currentWidget());
 }
 
 bool FormDataWidgetMapper::submit()
 {
-    qWarning() << "FormDataWidgetMapper::submit";
     const QString &xml = d->getCurrentXmlEpisode();
     QModelIndex xmlIndex = d->_episodeModel->index(d->_currentEpisode.row(), EpisodeModel::XmlContent);
-    if (!d->_episodeModel->setData(xmlIndex, xml))
+    if (!d->_episodeModel->setData(xmlIndex, xml)) {
+        LOG_ERROR("Unable to save the episode XML content");
         return false;
+    }
 
     QModelIndex userName = d->_episodeModel->index(d->_currentEpisode.row(), EpisodeModel::UserCreatorName);
     QModelIndex userDate = d->_episodeModel->index(d->_currentEpisode.row(), EpisodeModel::UserDate);
@@ -330,7 +286,6 @@ bool FormDataWidgetMapper::submit()
     d->_episodeModel->setData(userName, d->_formMain->itemData()->data(IFormItemData::ID_UserName));
     d->_episodeModel->setData(userDate, d->_formMain->itemData()->data(IFormItemData::ID_EpisodeDate));
 
-    return true;
-//    return d->_episodeModel->submit();
+    return d->_episodeModel->submit();
 }
 

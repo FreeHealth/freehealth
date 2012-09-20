@@ -37,10 +37,11 @@
  * \file pmhwidgetmanager.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.8.0
- * \date 25 July 2012
+ * \date 19 Sept 2012
 */
 
 namespace PMH {
+class PmhCore;
 class PmhContextualWidget;
 namespace Internal {
 
@@ -54,7 +55,7 @@ public:
     void setCurrentView(PmhContextualWidget *view);
 
 private Q_SLOTS:
-    void patientChanged();
+    void onCurrentPatientChanged();
     void showPmhDatabaseInformation();
     void categoryManager();
 
@@ -70,25 +71,22 @@ protected:
     QPointer<PmhContextualWidget> m_CurrentView;
 };
 
-}  // End namespace Internal
-
-class PmhWidgetManager : private Internal::PmhActionHandler
+class PmhWidgetManager : private PmhActionHandler
 {
     Q_OBJECT
+    friend class PMH::PmhCore;
+
+protected:
+    PmhWidgetManager(QObject *parent = 0);
+
 public:
-    static PmhWidgetManager *instance(QObject *parent = 0);
     PmhContextualWidget *currentView() const;
 
 private Q_SLOTS:
     void updateContext(Core::IContext *object);
-
-private:
-    PmhWidgetManager(QObject *parent = 0);
-    static PmhWidgetManager *m_Instance;
 };
 
-
+}  // End namespace Internal
 }  // End namespace PMH
-
 
 #endif // PMHWIDGETMANAGER_H

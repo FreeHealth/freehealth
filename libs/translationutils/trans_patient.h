@@ -60,9 +60,12 @@ const char* const TELS              = QT_TRANSLATE_NOOP("tkConstants", "Tels");
 const char* const MOBILEPHONE       = QT_TRANSLATE_NOOP("tkConstants", "Mobile phone");
 
 const char* const DATE_OF_BIRTH               = QT_TRANSLATE_NOOP("tkConstants", "Date of birth");
+const char* const DATE_OF_BIRTH_1             = QT_TRANSLATE_NOOP("tkConstants", "Date of birth: %1");
 const char* const DATE_OF_DEATH               = QT_TRANSLATE_NOOP("tkConstants", "Date of death");
 const char* const AGE                         = QT_TRANSLATE_NOOP("tkConstants", "Age");
+const char* const AGE_1                       = QT_TRANSLATE_NOOP("tkConstants", "Age: %1");
 const char* const AGE_IN_YEARS                = QT_TRANSLATE_NOOP("tkConstants", "Age in years");
+const char* const AGE_1_DOB_2                 = QT_TRANSLATE_NOOP("tkConstants", "Age: %1; DOB: %2");
 
 const char* const WEIGHT                      = QT_TRANSLATE_NOOP("tkConstants", "Weight");
 const char* const HEIGHT                      = QT_TRANSLATE_NOOP("tkConstants", "Height");
@@ -78,6 +81,8 @@ const char* const PATIENT_INFORMATION         = QT_TRANSLATE_NOOP("tkConstants",
 const char* const PATIENT_DATABASE            = QT_TRANSLATE_NOOP("tkConstants", "Patient database");
 const char* const CLEAR_PATIENT_INFOS         = QT_TRANSLATE_NOOP("tkConstants", "Clear patient's information");
 const char* const TOGGLE_PATIENT_INFORMATION  = QT_TRANSLATE_NOOP("tkConstants", "Toggle patient's information");
+
+const char* const SOCIAL_NUMBER               = QT_TRANSLATE_NOOP("tkConstants", "Social number");
 
 const char* const PATIENT_SYNTHESIS           = QT_TRANSLATE_NOOP("tkConstants", "Patient synthesis");
 

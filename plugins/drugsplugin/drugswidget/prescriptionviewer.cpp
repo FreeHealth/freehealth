@@ -137,14 +137,7 @@ void PrescriptionViewer::createActionsAndToolbar()
             << Core::Constants::A_FILE_PRINTPREVIEW
             << DrugsWidget::Constants::A_PRINT_PRESCRIPTION;
 #endif
-
-    foreach(const QString &s, actionsToAdd) {
-        cmd = actionManager()->command(s);
-        if (cmd)
-            m_ToolBar->addAction(cmd->action());
-    }
-
-    actionsToAdd.clear();
+    actionsToAdd << "--";
     actionsToAdd
             << Core::Constants::A_LIST_CLEAR
             << Core::Constants::A_LIST_REMOVE
@@ -152,15 +145,7 @@ void PrescriptionViewer::createActionsAndToolbar()
             << Core::Constants::A_LIST_MOVEUP
             << Core::Constants::A_LIST_SORT
             ;
-    m_ToolBar->addSeparator();
-    foreach(const QString &s, actionsToAdd) {
-        cmd = actionManager()->command(s);
-        if (cmd)
-            m_ToolBar->addAction(cmd->action());
-    }
-    m_ToolBar->addSeparator();
-
-    actionsToAdd.clear();
+    actionsToAdd << "--";
     actionsToAdd
             << DrugsWidget::Constants::A_TOGGLE_TESTINGDRUGS
             << DrugsWidget::Constants::A_VIEW_INTERACTIONS
@@ -168,13 +153,14 @@ void PrescriptionViewer::createActionsAndToolbar()
             << DrugsWidget::Constants::A_SHOWDRUGPRECAUTIONS;
 
     foreach(const QString &s, actionsToAdd) {
-        cmd = actionManager()->command(s);
-        if (cmd) {
-            m_ToolBar->addAction(cmd->action());
+        if (s=="--") {
             m_ToolBar->addSeparator();
+            continue;
         }
+        cmd = actionManager()->command(s);
+        if (cmd)
+            m_ToolBar->addAction(cmd->action());
     }
-
     m_ToolBar->setFocusPolicy(Qt::ClickFocus);
 }
 
@@ -338,7 +324,7 @@ void PrescriptionViewer::changeDuration()
         senderTag.clear();
     }
 
-    // create the pop menu
+    // create the popup menu
     QMenu *root = new QMenu(this);
     QStringList subs = QStringList()
                        << Trans::Constants::DAY_S
@@ -362,7 +348,7 @@ void PrescriptionViewer::changeDuration()
     root->popup(pos);
 }
 
-/** \brief Changes all drugs duration according to the triggered action. \sa PrescriptionViewer::changeDuration(). */
+/*! \brief Changes all drugs duration according to the triggered action. \sa PrescriptionViewer::changeDuration(). */
 void PrescriptionViewer::changeDurationTo()
 {
     QAction *a = qobject_cast<QAction*>(sender());

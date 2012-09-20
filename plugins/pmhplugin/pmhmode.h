@@ -70,7 +70,7 @@ private Q_SLOTS:
     void onButtonClicked(QAbstractButton *button);
     void createCategory();
     void removeItem();
-    void onPatientChanged();
+    void onCurrentPatientChanged();
     void createPmh();
     void pmhModelRowsInserted(const QModelIndex &parent, int start, int end);
 
@@ -95,7 +95,7 @@ public:
     QString name() const;
 
 private Q_SLOTS:
-    void onPatientChanged();
+    void onCurrentPatientChanged();
 
 private:
     QWidget *m_Widget;

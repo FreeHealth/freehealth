@@ -47,6 +47,8 @@
 #include <translationutils/trans_current.h>
 #include <translationutils/trans_menu.h>
 
+#include <QMetaEnum>
+
 using namespace Core;
 
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
@@ -253,3 +255,11 @@ void IPatient::replaceTokens(QString &stringWillBeModified)
     Utils::replaceToken(stringWillBeModified, Constants::TOKEN_PATIENTTITLE,      data(IPatient::Title).toString() );
 }
 // END
+
+/** Return the readable name of the Core::IPatient::PatientDataRepresentation enumerator index. */
+QString IPatient::enumToString(PatientDataRepresentation data)
+{
+    int index = metaObject()->indexOfEnumerator("PatientDataRepresentation");
+    QMetaEnum metaEnum = metaObject()->enumerator(index);
+    return metaEnum.valueToKey(data);
+}

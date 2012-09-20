@@ -19,77 +19,59 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Main developers :                                                     *
+ *       Eric MAEKER <eric.maeker@gmail.com>                               *
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef PATIENTMODELWRAPPER_H
-#define PATIENTMODELWRAPPER_H
+#ifndef FORM_FORMCORE_H
+#define FORM_FORMCORE_H
 
-#include <coreplugin/ipatient.h>
-#include <patientbaseplugin/patientbar.h>
-
-QT_BEGIN_NAMESPACE
-class QModelIndex;
-QT_END_NAMESPACE
-
+#include <formmanagerplugin/formmanager_exporter.h>
+#include <QObject>
 
 /**
- * \file patientmodelwrapper.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.5.0
- * \date 08 Feb 2011
+ * \file formcore.h
+ * \author Eric MAEKER
+ * \version 0.8.0
+ * \date 16 Sept 2012
 */
 
-namespace Patients {
-class PatientModel;
-}
-
-namespace MainWin {
+namespace Form {
+class FormManager;
+//class EpisodeManager;
 namespace Internal {
+class FormManagerPlugin;
+class FormCorePrivate;
+}  // namespace Internal
 
-/** \brief PatientModel wrapper can be accessed using Core::ICore::instance()->patient() */
-class PatientModelWrapper : public Core::IPatient
+class FORM_EXPORT FormCore : public QObject
 {
     Q_OBJECT
+    friend class Form::Internal::FormManagerPlugin;
+    explicit FormCore(QObject *parent = 0);
+
 public:
-    PatientModelWrapper(Patients::PatientModel *model, QObject *parent = 0);
-    ~PatientModelWrapper();
-    void init();
+    static FormCore &instance();
+    ~FormCore();
+    
+    bool initialize();
+    
+    Form::FormManager &formManager() const;
+//    Form::EpisodeManager &episodeManager() const;
 
-    // IPatient interface
-    void clear() {}
-    bool has(const int ref) const {return (ref>=0 && ref<Core::IPatient::NumberOfColumns);}
-    QModelIndex currentPatientIndex() const;
-
-    virtual QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-    virtual QVariant data(int column) const;
-
-    /** \deprecated **/
-    virtual bool setValue(int ref, const QVariant &value); // TODO: remove this and use setData instead
-    virtual bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
-
-    //TODO: Is this needed in freemedforms?
-    QString toXml() const {return QString();}
-    bool fromXml(const QString &) {return true;}
-
-    virtual void hidePatientBar();
-    virtual void showPatientBar();
-    virtual bool isPatientBarVisible() const;
-
-    virtual QHash<QString, QString> fullPatientName(const QString &uuid) const;
-    virtual QHash<QString, QString> fullPatientName(const QStringList &uuids) const;
-
-private Q_SLOTS:
-    void onCurrentPatientChanged(const QString &);
-    void patientDataChanged(const QModelIndex &index);
-
+Q_SIGNALS:
+    
+public Q_SLOTS:
+    void activatePatientFileCentralMode();
+    
 private:
-    Patients::PatientModel *m_Model;
+    Internal::FormCorePrivate *d;
+    static FormCore *_instance;
 };
 
-}  // End namespace Internal
-}  // End namespace MainWin
+} // namespace Form
 
-#endif // PATIENTMODELWRAPPER_H
+#endif  // FORM_FORMCORE_H
+

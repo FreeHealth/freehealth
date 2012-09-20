@@ -57,8 +57,8 @@ using namespace Internal;
 
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
-inline static ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
-inline static QList<Form::IFormIO*> refreshIOPlugs() {return pluginManager()->getObjects<Form::IFormIO>();}
+static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
+static inline QList<Form::IFormIO*> refreshIOPlugs() {return pluginManager()->getObjects<Form::IFormIO>();}
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 
 

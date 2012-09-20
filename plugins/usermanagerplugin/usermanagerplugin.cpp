@@ -45,6 +45,7 @@
 #include "currentuserpreferencespage.h"
 #include "userfistrunpage.h"
 #include "usermanagermode.h"
+#include "database/userbase.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
@@ -64,9 +65,12 @@
 
 #include <extensionsystem/pluginmanager.h>
 
-#include <QtCore/QtPlugin>
+#include <QtPlugin>
 #include <QApplication>
 #include <QProgressDialog>
+#include <QTreeWidget>
+#include <QGridLayout>
+
 #include <QDebug>
 
 using namespace UserPlugin::Internal;
@@ -79,12 +83,15 @@ static inline Core::ContextManager *contextManager() { return Core::ICore::insta
 static inline Core::ModeManager *modeManager() { return Core::ICore::instance()->modeManager(); }
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 static inline Core::ICommandLine *commandLine() {return Core::ICore::instance()->commandLine();}
+static inline UserPlugin::Internal::UserBase *userBase() {return UserPlugin::Internal::UserBase::instance();}
 
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline void messageSplash(const QString &s) {theme()->messageSplashScreen(s); }
 
 UserManagerPlugin::UserManagerPlugin() :
     aCreateUser(0), aChangeUser(0),
+    aUserManager(0),
+    aAboutDatabase(0),
     m_FirstCreation(new FirstRun_UserCreation(this)),
     m_Mode(0)
 {
@@ -192,7 +199,7 @@ void UserManagerPlugin::extensionsInitialized()
     // add UserManager toogler action to plugin menu
 #ifndef FREEMEDFORMS
     const char * const menuId = Core::Constants::M_FILE;
-    const char * const menuNewId = Core::Constants::M_FILE;
+    const char * const menuNewId = Core::Constants::M_FILE_NEW;
     const char * const groupUsers = Core::Constants::G_FILE_OTHER;
     const char * const groupNew =  Core::Constants::G_FILE_NEW;
 #else
@@ -207,9 +214,8 @@ void UserManagerPlugin::extensionsInitialized()
     if (!menu)
         return;
     Core::ActionContainer *newmenu = actionManager()->actionContainer(menuNewId);
-    Q_ASSERT(newmenu);
     if (!newmenu)
-        return;
+        newmenu = menu;
 
     QList<int> ctx = QList<int>() << Core::Constants::C_GLOBAL_ID;
     QAction *a = 0;
@@ -238,6 +244,31 @@ void UserManagerPlugin::extensionsInitialized()
     menu->addAction(cmd, groupUsers);
     cmd->retranslate();
     connect(aChangeUser, SIGNAL(triggered()), this, SLOT(changeCurrentUser()));
+
+#ifdef FREEACCOUNT
+    a = aUserManager = new QAction(this);
+    a->setObjectName("aUserManager");
+    a->setIcon(QIcon(Core::Constants::ICONUSERMANAGER));
+    cmd = actionManager()->registerAction(aUserManager, "aUserManager", ctx);
+    Q_ASSERT(cmd);
+    cmd->setTranslations(Trans::Constants::USERMANAGER_TEXT);
+    menu->addAction(cmd, groupUsers);
+    cmd->retranslate();
+    connect(aUserManager, SIGNAL(triggered()), this, SLOT(showUserManager()));
+#endif
+
+    Core::ActionContainer *hmenu = actionManager()->actionContainer(Core::Constants::M_HELP_DATABASES);
+    if (hmenu) {
+        a = aAboutDatabase = new QAction(this);
+        a->setObjectName("aAboutDatabase");
+        a->setIcon(QIcon(Core::Constants::ICONHELP));
+        cmd = actionManager()->registerAction(aAboutDatabase, "aAboutDatabase", ctx);
+        Q_ASSERT(cmd);
+        cmd->setTranslations(Trans::Constants::USER_DATABASE_INFORMATION);
+        hmenu->addAction(cmd, Core::Constants::G_HELP_DATABASES);
+        cmd->retranslate();
+        connect(aAboutDatabase, SIGNAL(triggered()), this, SLOT(showDatabaseInformation()));
+    }
 
     updateActions();
 
@@ -366,6 +397,35 @@ void UserManagerPlugin::updateActions()
                 aCreateUser->setEnabled(false);
         }
     }
+}
+
+#ifdef FREEMEDFORMS
+void UserManagerPlugin::showUserManager()
+{
+    // FreeMedForms uses its own User Mode to show the usermanager
+}
+#else
+#include "widgets/usermanager.h"
+void UserManagerPlugin::showUserManager()
+{
+    qWarning() << "USERMANAGER";
+    UserManagerDialog dlg(Core::ICore::instance()->mainWindow());
+    dlg.initialize();
+    dlg.exec();
+}
+#endif
+
+void UserManagerPlugin::showDatabaseInformation()
+{
+    QDialog dlg(qApp->activeWindow(), Qt::Window | Qt::CustomizeWindowHint | Qt::WindowSystemMenuHint | Qt::WindowCloseButtonHint | Qt::WindowMinMaxButtonsHint);
+    QGridLayout lay(&dlg);
+    QTreeWidget tree(&dlg);
+    tree.setColumnCount(2);
+    userBase()->toTreeWidget(&tree);
+    tree.header()->hide();
+    lay.addWidget(&tree);
+    Utils::resizeAndCenter(&dlg);
+    dlg.exec();
 }
 
 ExtensionSystem::IPlugin::ShutdownFlag UserManagerPlugin::aboutToShutdown()

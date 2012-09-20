@@ -39,7 +39,7 @@ static inline ICD::IcdDatabase *icdBase() {return ICD::IcdDatabase::instance();}
 static inline QString workingPath()        {return QDir::cleanPath(settings()->value(Core::Constants::S_TMP_PATH).toString() + "/IcgGroupLinkerSources/") + QDir::separator();}
 //static inline QString iamDatabaseAbsPath() {return QDir::cleanPath(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString() + Core::Constants::IAM_DATABASE_FILENAME);}
 
-static inline QString icdGroupLinkerFile() {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + Core::Constants::ICD_GROUP_LINKER_FILENAME);}
+static inline QString icdGroupLinkerFile() {return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString() + Core::Constants::ICD_GROUP_LINKER_FILENAME);}
 
 QWidget *IcdGroupLinkerPage::createPage(QWidget *parent)
 {

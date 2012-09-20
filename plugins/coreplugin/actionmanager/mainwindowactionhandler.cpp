@@ -55,13 +55,15 @@
 #include <coreplugin/dialogs/helpdialog.h>
 #include <coreplugin/dialogs/settingsdialog.h>
 
+#include <utils/log.h>
+
 #include <QAction>
-#include <QToolBar>
-#include <QMenuBar>
-#include <QWidget>
-#include <QDebug>
-#include <QKeySequence>
-#include <QLocale>
+//#include <QToolBar>
+//#include <QMenuBar>
+//#include <QWidget>
+//#include <QDebug>
+//#include <QKeySequence>
+//#include <QLocale>
 #include <QStatusBar>
 #include <QLabel>
 #include <QDesktopServices>
@@ -178,7 +180,7 @@ void MainWindowActionHandler::createGeneralActions(const int actions)
         cmd->setTranslations(Trans::Constants::FILENEW_TEXT);
         newmenu->addAction(cmd, Constants::G_GENERAL_NEW);
     }
-    
+
     // Open Action
     if (actions & Core::MainWindowActions::A_FileOpen) {
         // Create action
@@ -546,6 +548,20 @@ void MainWindowActionHandler::createFileMenu()
     filemenu->addMenu(recentmenu,Constants::G_FILE_RECENTS);
 }
 
+/** \brief Create the File > New sub menu. Must firstly create the file menu. */
+void MainWindowActionHandler::createFileNewSubMenu()
+{
+    ActionContainer *filemenu = actionManager()->actionContainer(Constants::M_FILE);
+    if (!filemenu) {
+        LOG_ERROR("You must create the file menu first");
+        return;
+    }
+    ActionContainer *newmenu = actionManager()->createMenu(Constants::M_FILE_NEW);
+    newmenu->setTranslations(Trans::Constants::FILENEW_TEXT);
+    filemenu->addMenu(newmenu, Constants::G_FILE_NEW);
+    newmenu->appendGroup(Constants::G_FILE_NEW);
+}
+
 void MainWindowActionHandler::createTemplatesMenu()
 {
     ActionContainer *menubar = menubarContainer();
@@ -628,6 +644,7 @@ void MainWindowActionHandler::createPluginsMenu()
     menubar->addMenu(confmenu, Constants::G_PLUGINS);
     confmenu->setTranslations(Trans::Constants::M_PLUGINS_TEXT);
     confmenu->appendGroup(Constants::G_PLUGINS_USERMANAGER);
+    confmenu->appendGroup(Constants::G_PLUGINS_FORM);
     confmenu->appendGroup(Constants::G_PLUGINS_DRUGS);
     confmenu->appendGroup(Constants::G_PLUGINS_CALENDAR);
     confmenu->appendGroup(Constants::G_PLUGINS_ACCOUNT);

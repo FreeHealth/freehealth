@@ -1,7 +1,9 @@
 include( ../coreplugin/coreplugin.pri )
+include( ../formmanagerplugin/formmanagerplugin.pri )
 include( ../listviewplugin/listviewplugin.pri )
 include( ../zipcodesplugin/zipcodesplugin.pri )
 with-alerts:include( ../alertplugin/alertplugin.pri )
+
 include( $${SOURCES_LIBS_PATH}/extensionsystem.pri )
 include( $${SOURCES_LIBS_PATH}/translationutils.pri )
 include( $${SOURCES_LIBS_PATH}/utils.pri )

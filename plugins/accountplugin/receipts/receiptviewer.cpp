@@ -90,9 +90,9 @@ namespace InternalAmount {
 
 class DisplayModel : public QAbstractTableModel
 {
-    // TODO: missing Q_OBJECT macro --> no sig/slot here  PLUS  MERGE the other amountmodel.h
-    // may be that's the buggy Object::connect: No such signal QObject::dataChanged(QModelIndex,QModelIndex) at the end of the app ??
+    // TODO: MERGE accountbaseplugin/amountmodel.h
 
+//    Q_OBJECT
 public:
     enum ColumnRepresentation {
         Col_Cash = 0,
@@ -719,9 +719,9 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
     }
     if (rManager.isFreaccountIndependant())
     {
-    	  ui->nameLabel->show();
-    	  ui->nameEdit->show();
-        }
+        ui->nameLabel->show();
+        ui->nameEdit->show();
+    }
     if (WarnDebugMessage)
         qWarning() << __FILE__ << QString::number(__LINE__) << "ReceiptViewer" ;
     ui->amountsView->setShowGrid(false);
@@ -1279,8 +1279,8 @@ void ReceiptViewer::save()
         }
         if (manager.isFreaccountIndependant())
         {
-        	  patientName = ui->nameEdit->text();
-            }
+            patientName = ui->nameEdit->text();
+        }
         /* if (ui->freeTextCheckBox->isChecked())
     {
         FreeText freeTextDialog(this);

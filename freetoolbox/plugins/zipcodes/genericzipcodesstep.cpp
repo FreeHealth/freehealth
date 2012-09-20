@@ -47,6 +47,7 @@
 #include <QDebug>
 #include <QDomDocument>
 #include <QtXml>
+#include <QStandardItemModel>
 
 #include <QDebug>
 
@@ -54,75 +55,60 @@ using namespace ZipCodes;
 
 namespace {
 const char* const  DB_NAME     = "ZIPCODES";
-const char* const  Generic_URL  = "http://www.galichon.com/codesgeo/data/insee.zip";
 
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 
-static inline QString databaseAbsPath() {return QDir::cleanPath(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString() + "/zipcodes/zipcodes.db");}
-static inline QString workingPath()     {return QDir::cleanPath(settings()->value(Core::Constants::S_TMP_PATH).toString() + "/ZipCodes/") + QDir::separator();}
+static inline QString databaseAbsPath() {
+    return QDir::cleanPath(
+                settings()->value(
+                    Core::Constants::S_DBOUTPUT_PATH).toString() +
+                "/zipcodes/zipcodes.db");
+}
 
-static inline QString csvFileAbsPath()         {return workingPath() + "/insee.csv";}
-static inline QString sqlMasterFileAbsPath()   {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + "/global_resources/sql/zipcodes/zipcodes.sql");}
+static inline QString workingPath()     {
+    return QDir::cleanPath(
+                settings()->value(
+                    Core::Constants::S_TMP_PATH).toString() +
+                "/ZipCodes/") + QDir::separator();
+}
+
+static inline QString sqlMasterFileAbsPath() {
+    return QDir::cleanPath(
+                settings()->value(
+                    Core::Constants::S_GITFILES_PATH).toString() +
+                "/global_resources/sql/zipcodes/zipcodes.sql");
+}
 
 static inline QString sqlImportFileAbsPath()
 {
-        return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() +
+        return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString() +
                                "/global_resources/sql/zipcodes/zipcodes-fr-import.sql");
 }
 
 } // end namespace
 
+
+// ########################## GenericZipCodesStep ##########################
+
 GenericZipCodesStep::GenericZipCodesStep(QObject *parent) :
     Core::IFullReleaseStep(parent),
     m_WithProgress(false),
-    m_countryCombo(0)
+    m_availableCountriesModel(new QStandardItemModel()),
+    m_selectedCountriesModel(new QStandardItemModel())
 {
     setObjectName("GenericZipCodesStep");
-    createDir();
 }
 
 GenericZipCodesStep::~GenericZipCodesStep()
 {
 }
 
-bool GenericZipCodesStep::createDir()
-{
-    // Create the wortking path
-    if (!QDir().mkpath(workingPath()))
-        LOG_ERROR("Unable to create ZipCodes Working Path: " + workingPath());
-    else
-        LOG("Tmp dir created");
-
-    // Create database output dir
-    const QString &dbpath = QFileInfo(databaseAbsPath()).absolutePath();
-    if (!QDir().exists(dbpath)) {
-        if (!QDir().mkpath(dbpath)) {
-            LOG_ERROR("Unable to create ZipCodes database output path: " + dbpath);
-            return false;
-        }
-        LOG("ZipCodes database output dir created");
-    }
-    return true;
-}
-
-bool GenericZipCodesStep::cleanFiles()
-{
-    QFile(databaseAbsPath()).remove();
-    return true;
-}
-
-/*! sets CountryComboBox that is filled with the values from GeoNames.org */
-void GenericZipCodesStep::setCountryCombo(Utils::CountryComboBox *combo)
-{
-    m_countryCombo = combo;
-}
-
+/*! Downloads the list of available countries. */
 bool GenericZipCodesStep::downloadFiles(QProgressBar *bar)
 {
     Q_UNUSED(bar);
 
     //TODO: what to do if download fails? set timeout!
-
     QNetworkAccessManager *netAccessManager = new QNetworkAccessManager(this);
 
 //    get list of countries that GeoNames has informations for
@@ -132,64 +118,23 @@ bool GenericZipCodesStep::downloadFiles(QProgressBar *bar)
 
     /*QNetworkReply* reply =*/ netAccessManager->get(request);
 //    connect(reply, SIGNAL(downloadProgress(qint64,qint64)), this, SLOT(slotSetProgress(qint64,qint64)));
-    connect(netAccessManager, SIGNAL(finished(QNetworkReply*)), this, SIGNAL(downloadFinished()));
-    connect(netAccessManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(slotRequestFinished(QNetworkReply*)));
+    connect(netAccessManager, SIGNAL(finished(QNetworkReply*)), this, SLOT(onAvailableCountriesDownloaded(QNetworkReply*)));
     connect(netAccessManager, SIGNAL(finished(QNetworkReply*)), netAccessManager, SLOT(deleteLater()));
 
     return true;
+
 }
 
 bool GenericZipCodesStep::process()
 {
-    unzipFiles();
-    prepareData();
-    createDatabase();
+    createDatabaseScheme();
     populateDatabase();
     Q_EMIT processFinished();
     return true;
 }
 
-bool GenericZipCodesStep::unzipFiles()
-{
-    Q_EMIT progressLabelChanged(tr("Generic zip codes database creation : unziping files..."));
-    Q_EMIT progressRangeChanged(0, 1);
-    Q_EMIT progress(0);
 
-    // check file
-    QString fileName = workingPath() + QDir::separator() + QFileInfo(Generic_URL).fileName();
-    if (!QFile(fileName).exists()) {
-        LOG_ERROR(QString("No files founded. Please download files."));
-        return false;
-    }
-
-    LOG(QString("Starting unzipping Generic Zip Codes file %1").arg(fileName));
-
-    // unzip downloaded using QProcess
-    if (!QuaZipTools::unzipFile(fileName, workingPath()))
-        return false;
-
-    return true;
-}
-
-bool GenericZipCodesStep::prepareData()
-{
-    LOG(tr("Preparing raw source files"));
-    Q_EMIT progressLabelChanged(tr("Preparing raw source files"));
-
-    if (!QFile(csvFileAbsPath()).exists()) {
-        Utils::warningMessageBox(tr("No source file found"), tr("Contact dev team."));
-        return false;
-    }
-//    // correcting wrong chars
-//    QString content = Utils::readTextFile(csvFileAbsPath(), "ISO-8859-1");
-//    qWarning() << content;
-//    content.remove("†");
-//    Utils::saveStringToFile(content, csvFileAbsPath());
-
-    return true;
-}
-
-bool GenericZipCodesStep::createDatabase()
+bool GenericZipCodesStep::createDatabaseScheme()
 {
     LOG(tr("Creating Generic zipcodes database"));
     Q_EMIT progressLabelChanged(tr("Creating Generic zipcodes database"));
@@ -225,15 +170,15 @@ bool GenericZipCodesStep::populateDatabase()
     Q_EMIT progress(0);
 
     // import the raw source in memory
-    createDatabase();
+
     QSqlDatabase db = QSqlDatabase::database(DB_NAME);
 
     if (!db.tables().contains("ZIPS_IMPORT")) {
         Utils::Database::executeSqlFile(DB_NAME, sqlImportFileAbsPath());
     }
 
-    if (!Utils::Database::importCsvToDatabase(DB_NAME, csvFileAbsPath(), "ZIPS_IMPORT", ";", true))
-        return false;
+//    if (!Utils::Database::importCsvToDatabase(DB_NAME, csvFileAbsPath(), "ZIPS_IMPORT", ";", true))
+//        return false;
 
     Q_EMIT progressLabelChanged(tr("Reading raw sources..."));
     Q_EMIT progress(1);
@@ -270,14 +215,14 @@ bool GenericZipCodesStep::populateDatabase()
 
 void GenericZipCodesStep::slotSetProgress(qint64 bytesReceived, qint64 bytesTotal)
 {
+    Q_UNUSED(bytesReceived)
+    Q_UNUSED(bytesTotal)
+
     //TODO: implementation
 }
 
-/*! \brief fills the combo with values.
- *
- * Called when NetworkRequest of Country info list is finished
- */
-void GenericZipCodesStep::slotRequestFinished(QNetworkReply *reply)
+/*! \brief Called when downloading of countries from GeoNames is finished. */
+void GenericZipCodesStep::onAvailableCountriesDownloaded(QNetworkReply *reply)
 {
     if (reply->error() > 0) {
         qDebug() << reply->errorString();
@@ -313,22 +258,22 @@ void GenericZipCodesStep::slotRequestFinished(QNetworkReply *reply)
             // transform ISO3166 to QLocale::Country
             country = Utils::countryIsoToCountry(countryIso3166Code);
             if (country == QLocale::AnyCountry) {
+                // error: just skip this unknown country
                 qWarning() << "Country conversion error: country" << countryIso3166Code << "has no Qt equivalent.";
                 continue;
             }
             // transform ISO-3166-1 2 char countryCode to Qt's internal integer country codes
             countryIsoMap.insert(country, countryIso3166Code);
             qDebug() << country << countryIso3166Code;
-            if (m_countryCombo) {
-                m_countryCombo->addItem(QIcon(QString("%1/%2.png").arg(flagPath, countryIso3166Code)),
-                                        QLocale::countryToString(country),
-                                        country);
-                success = true;
-            }
+
+
+            QStandardItem *item = new QStandardItem(
+                        QIcon(QString("%1/%2.png").arg(flagPath, countryIso3166Code)),
+                        QLocale::countryToString(country));
+//            item->setData(Qt::DisplayRole, country); //BUG: ? maybe overrides text?
+            m_availableCountriesModel->appendRow(item);
+            success = true;
         }
-
-
-
         Q_EMIT countryListDownloaded(success);
     }
 }

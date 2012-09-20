@@ -43,6 +43,7 @@
 #include "patientsearchmode.h"
 #include "patientbasepreferencespage.h"
 #include "patientmodel.h"
+#include "patientmodelwrapper.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/iuser.h>
@@ -72,9 +73,12 @@ static inline Core::ICommandLine *commandLine() {return Core::ICore::instance()-
 static inline Patients::Internal::PatientBase *patientBase() {return Patients::Internal::PatientBase::instance();}
 static inline Core::ModeManager *modeManager() { return Core::ICore::instance()->modeManager(); }
 
+static inline Patients::PatientModel *patientModel() {return Patients::PatientModel::activeModel();}
+
 
 PatientBasePlugin::PatientBasePlugin() :
-        m_Mode(0), prefpage(0)
+    m_Mode(0), prefpage(0),
+    m_PatientModelWrapper(0)
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating PatientBasePlugin";
@@ -88,6 +92,10 @@ PatientBasePlugin::PatientBasePlugin() :
 
     // create the base
     new Internal::PatientBase(this);
+
+    // Create IPatient
+    m_PatientModelWrapper = new Internal::PatientModelWrapper(this);
+    Core::ICore::instance()->setPatient(m_PatientModelWrapper);
 }
 
 PatientBasePlugin::~PatientBasePlugin()
@@ -123,6 +131,11 @@ bool PatientBasePlugin::initialize(const QStringList &arguments, QString *errorS
     if (!patientBase()->initialize())
         return false;
 
+    // create singleton model
+    PatientModel *model = new PatientModel(this);
+    PatientModel::setActiveModel(model);
+    m_PatientModelWrapper->initialize(model);
+
     if (commandLine()->value(Core::ICommandLine::CreateVirtuals).toBool()) {
         // Populate with some virtual patients
         QString path = settings()->path(Core::ISettings::BigPixmapPath) + QDir::separator();
@@ -148,10 +161,6 @@ bool PatientBasePlugin::initialize(const QStringList &arguments, QString *errorS
     // create patient widget manager instance
     PatientWidgetManager::instance();
 
-    // add mode patient search
-    m_Mode = new PatientSearchMode(this);
-    addObject(m_Mode);
-
     return true;
 }
 
@@ -165,6 +174,11 @@ void PatientBasePlugin::extensionsInitialized()
     prefpage->checkSettingsValidity();
     settings()->sync();
 
+    // add mode patient search
+    m_Mode = new PatientSearchMode(this);
+    m_Mode->postCoreInitialization();
+    addObject(m_Mode);
+
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
 }
 
@@ -172,6 +186,7 @@ void PatientBasePlugin::postCoreInitialization()
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << Q_FUNC_INFO;
+
     PatientModel::activeModel()->refreshModel();
     PatientWidgetManager::instance()->postCoreInitialization();
 }

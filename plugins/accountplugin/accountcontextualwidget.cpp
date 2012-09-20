@@ -31,12 +31,13 @@
  ***************************************************************************/
 
 /**
- \class Account::AccountContextualWidget
- \brief Simplify the creation of contextualized widget for the Account plugin.
- Contextualized contexts have access to all actions that are added in the particular context of
- Account (Account::Constants::C_ACCOUNT). You can add contexts to the widget by using the addContexts() member.\n
- The Account::AccountContextualWidget are automatically removed from the context manager (no special code needed).
-*/
+ * \class Account::AccountContextualWidget
+ * \brief Contextualized widget for the Account plugin.
+ *
+ * This contextualized widget has access to all actions that are added in the particular context of
+ * Account (Account::Constants::C_ACCOUNT). You can add contexts to the widget by using the addContexts() member.\n
+ * The Account::AccountContextualWidget are automatically removed from the context manager (no special code needed).
+ */
 
 #include "accountcontextualwidget.h"
 #include "accountwidgetmanager.h"

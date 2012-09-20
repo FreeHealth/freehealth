@@ -90,7 +90,7 @@ namespace Constants {
     const char* const S_FILEOUTPUT_PATH  = "Path/FileOutput";
     const char* const S_DBOUTPUT_PATH    = "Path/DatabaseOutput";
     const char* const S_TMP_PATH         = "Path/Temporary";
-    const char* const S_SVNFILES_PATH    = "Path/ToSvnCheckout";
+    const char* const S_GITFILES_PATH    = "Path/ToSvnCheckout";
 
 }  //  End namespace Constants
 

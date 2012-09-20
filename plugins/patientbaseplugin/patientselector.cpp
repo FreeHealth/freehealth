@@ -46,8 +46,10 @@
 #include <coreplugin/imainwindow.h>
 #include <coreplugin/constants_icons.h>
 #include <coreplugin/constants_menus.h>
+#include <coreplugin/modemanager/modemanager.h>
 
 #include <utils/global.h>
+#include <utils/widgets/datetimedelegate.h>
 #include <translationutils/constanttranslations.h>
 
 #include <QToolButton>
@@ -61,6 +63,7 @@ static inline Core::ISettings *settings() {return Core::ICore::instance()->setti
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 static inline Core::IMainWindow *mainWindow() {return Core::ICore::instance()->mainWindow();}
 static inline Core::ActionManager *actionManager() { return Core::ICore::instance()->actionManager(); }
+static inline Core::ModeManager *modeManager() {return Core::ICore::instance()->modeManager();}
 
 namespace Patients {
 namespace Internal {
@@ -149,16 +152,11 @@ private:
 
 /** \brief Create a PatientSelector with \e fields to show. \sa PatientSelector::FieldsToShow */
 PatientSelector::PatientSelector(QWidget *parent, const FieldsToShow fields) :
-        QWidget(parent), d(new Internal::PatientSelectorPrivate(this))
+    QWidget(parent),
+    d(new Internal::PatientSelectorPrivate(this))
 {
     d->ui->setupUi(this);
     d->ui->searchLine->setDelayedSignals(true);
-
-    if (fields == None) {
-        d->m_Fields = FieldsToShow(settings()->value(Constants::S_SELECTOR_FIELDSTOSHOW, Default).toInt());
-    } else {
-        d->m_Fields = fields;
-    }
 
     // Get the active model
     if (!PatientModel::activeModel()) {
@@ -169,15 +167,24 @@ PatientSelector::PatientSelector(QWidget *parent, const FieldsToShow fields) :
         setPatientModel(PatientModel::activeModel());
     }
 
+    // datetime delegate
+    d->ui->tableView->setItemDelegateForColumn(Core::IPatient::DateOfBirth, new Utils::DateTimeDelegate(this, true));
+
     d->createSearchToolButtons();
 
     // Some connections
     connect(d->m_NavigationToolButton->menu(), SIGNAL(aboutToShow()), this, SLOT(updateNavigationButton()));
     connect(d->ui->searchLine, SIGNAL(textChanged(QString)), this, SLOT(refreshFilter(QString)));
     connect(d->ui->tableView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(changeIdentity(QModelIndex,QModelIndex)));
-    connect(d->ui->tableView, SIGNAL(activated(QModelIndex)), this, SLOT(onPatientSelected(QModelIndex)));
+    connect(d->ui->tableView, SIGNAL(activated(QModelIndex)), this, SLOT(onPatientActivated(QModelIndex)));
 
-    d->ui->identity->setCurrentIndex(QModelIndex());
+    updatePatientActions(QModelIndex());
+
+    if (fields == None) {
+        d->m_Fields = FieldsToShow(settings()->value(Constants::S_SELECTOR_FIELDSTOSHOW, Default).toInt());
+    } else {
+        d->m_Fields = fields;
+    }
 }
 
 PatientSelector::~PatientSelector()
@@ -189,9 +196,21 @@ PatientSelector::~PatientSelector()
     }
 }
 
-/** \brief Initialize view and actions. */
-void PatientSelector::init()
+/** \brief Initialize view and actions, select the first available patient. */
+void PatientSelector::initialize()
 {
+//    layout()->setMargin(0);
+
+    if (!d->m_Model->currentPatient().isValid()) {
+        QModelIndex index = d->m_Model->index(0,0);
+        d->m_Model->blockSignals(true);
+        d->m_Model->setCurrentPatient(index);
+        d->m_Model->blockSignals(false);
+        d->ui->tableView->selectRow(0);
+        changeIdentity(index, QModelIndex());
+    } else {
+        changeIdentity(d->m_Model->currentPatient(), QModelIndex());
+    }
 }
 
 void PatientSelector::updateNavigationButton()
@@ -222,7 +241,7 @@ void PatientSelector::setPatientModel(PatientModel *m)
 {
     Q_ASSERT(m);
     d->m_Model = m;
-    d->ui->tableView->setModel(m);
+    d->ui->tableView->setModel(d->m_Model);
     setFieldsToShow(d->m_Fields);
 
     d->ui->tableView->horizontalHeader()->setStretchLastSection(false);
@@ -238,7 +257,7 @@ void PatientSelector::setPatientModel(PatientModel *m)
 
     d->ui->numberOfPatients->setText(QString::number(m->numberOfFilteredPatients()));
     d->ui->identity->setCurrentPatientModel(m);
-    connect(m, SIGNAL(patientChanged(QModelIndex)), this, SLOT(setSelectedPatient(QModelIndex)));
+    connect(d->m_Model, SIGNAL(currentPatientChanged(QModelIndex)), this, SLOT(setSelectedPatient(QModelIndex)));
 }
 
 /** \brief Define the fields to show using the FieldsToShow flag */
@@ -280,6 +299,7 @@ void PatientSelector::setFieldsToShow(const FieldsToShow fields)
 void PatientSelector::setSelectedPatient(const QModelIndex &index)
 {
     d->ui->tableView->selectRow(index.row());
+    updatePatientActions(index);
 }
 
 /** \brief Update the IdentityWidget with the new current identity. */
@@ -287,6 +307,19 @@ void PatientSelector::changeIdentity(const QModelIndex &current, const QModelInd
 {
     Q_UNUSED(previous);
     d->ui->identity->setCurrentIndex(current);
+    updatePatientActions(current);
+}
+
+/*!
+ * \brief Updates (enables/disables) the corresponding QActions for the given patient
+ * \param index QModelIndex of a valid patient
+ */
+void PatientSelector::updatePatientActions(const QModelIndex &index)
+{
+    const bool enabled = index.isValid();
+
+    actionManager()->command(Core::Constants::A_PATIENT_VIEWIDENTITY)->action()->setEnabled(enabled);
+    actionManager()->command(Core::Constants::A_PATIENT_REMOVE)->action()->setEnabled(enabled);
 }
 
 /** \brief Refresh the search filter of the Patient::PatientModel */
@@ -306,18 +339,20 @@ void PatientSelector::refreshFilter(const QString &)
     d->ui->numberOfPatients->setText(QString::number(d->m_Model->numberOfFilteredPatients()));
 }
 
-/** \brief Slot activated when the user select a patient from the selector. \sa setSelectedPatient()*/
-void PatientSelector::onPatientSelected(const QModelIndex &index)
+/** \brief Slot activated when the user selects a patient from the selector. \sa setSelectedPatient()*/
+void PatientSelector::onPatientActivated(const QModelIndex &index)
 {
-    if (index==d->m_Model->currentPatient())
+    if (d->m_Model && index == d->m_Model->currentPatient()) {
+        modeManager()->activateMode(Core::Constants::MODE_PATIENT_FILE);
         return;
+    }
 
     mainWindow()->startProcessingSpinner();
     // Inform Core::IPatient model wrapper
-    if (!d->m_Model)
-        PatientModel::activeModel()->setCurrentPatient(index);
-    else
+    if (d->m_Model)
         d->m_Model->setCurrentPatient(index);
+    else
+        PatientModel::activeModel()->setCurrentPatient(index);
 }
 
 bool PatientSelector::event(QEvent *event)

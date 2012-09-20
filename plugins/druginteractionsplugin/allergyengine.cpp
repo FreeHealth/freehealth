@@ -468,7 +468,7 @@ struct PimSource {
 };
 
 namespace DrugsDB {
-namespace Internal {    
+namespace Internal {
 
 class DrugAllergyEnginePrivate
 {
@@ -498,7 +498,7 @@ DrugAllergyEngine::~DrugAllergyEngine()
 bool DrugAllergyEngine::init()
 {
     m_IsActive = settings()->value(Constants::S_ACTIVATED_INTERACTION_ENGINES).toStringList().contains(Constants::ALLERGY_ENGINE_UID);
-    connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(patientChanged()));
+    connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onCurrentPatientChanged()));
     connect(patient(), SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(refreshDrugsPrecautions(QModelIndex,QModelIndex)));
     return true;
 }
@@ -734,7 +734,7 @@ void DrugAllergyEngine::check(const int typeOfInteraction, const QString &uid, c
     }
 }
 
-void DrugAllergyEngine::patientChanged()
+void DrugAllergyEngine::onCurrentPatientChanged()
 {
     m_Interactions.clear();
     m_DoTests.clear();

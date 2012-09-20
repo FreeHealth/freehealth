@@ -66,7 +66,7 @@ static inline Core::ISettings *settings()  { return Core::ICore::instance()->set
 static inline QString workingPath()     {return QDir::cleanPath(settings()->value(Core::Constants::S_TMP_PATH).toString() + "/Icd10RawSources/") + QDir::separator();}
 static inline QString databaseAbsPath() {return QDir::cleanPath(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString() + "/icd10/icd10.db");}
 
-static inline QString databaseCreationScript()  {return QDir::cleanPath(settings()->value(Core::Constants::S_SVNFILES_PATH).toString() + "/global_resources/sql/icd10/icd10.sql");}
+static inline QString databaseCreationScript()  {return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString() + "/global_resources/sql/icd10/icd10.sql");}
 
 
 

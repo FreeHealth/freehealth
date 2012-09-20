@@ -69,7 +69,7 @@ public:
 }  // End namespace Internal
 
 
-class FORM_EXPORT FormPlaceHolder : public Form::FormContextualWidget
+class FORM_EXPORT FormPlaceHolder : public Internal::FormContextualWidget
 {
     Q_OBJECT
     friend class FormManager;
@@ -78,24 +78,32 @@ public:
     FormPlaceHolder(QWidget *parent = 0);
     ~FormPlaceHolder();
 
+    bool enableAction(WidgetAction action) const;
     void setRootForm(Form::FormMain *rootForm);
-    void addBottomWidget(QWidget *bottom);
 
 public Q_SLOTS:
+    bool clear();
     void setCurrentForm(Form::FormMain *form);
     void setCurrentForm(const QString &formUid);
     void setCurrentEditingItem(const QModelIndex &index);
 
+protected Q_SLOTS:
+    bool createEpisode();
+    bool validateCurrentEpisode();
+    bool saveCurrentEpisode();
+    bool removeCurrentEpisode();
+    bool takeScreenshotOfCurrentEpisode();
+    bool addForm();
+    bool printFormOrEpisode();
+
 private Q_SLOTS:
+    void onCurrentPatientChanged();
     void episodeChanged(const QModelIndex &current, const QModelIndex &previous);
     void handlePressed(const QModelIndex &index);
     void handleClicked(const QModelIndex &index);
-
     void showLastEpisodeSynthesis();
-    bool newEpisode();
-    bool saveCurrentEditingEpisode();
-    void addForm();
-    void printCurrentItem();
+
+//protected Q_SLOTS:
 
 protected:
     void changeEvent(QEvent *event);
