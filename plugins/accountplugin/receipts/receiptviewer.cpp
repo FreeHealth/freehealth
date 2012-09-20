@@ -84,51 +84,34 @@ static inline Core::IPatient *patient() { return Core::ICore::instance()->patien
 static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 
+using namespace InternalAmount;
 
-
-namespace InternalAmount {
-
-class DisplayModel : public QAbstractTableModel
+DisplayModel::DisplayModel(QObject *parent) : QAbstractTableModel(parent)
 {
-    // TODO: MERGE accountbaseplugin/amountmodel.h
-
-//    Q_OBJECT
-public:
-    enum ColumnRepresentation {
-        Col_Cash = 0,
-        Col_Cheque,  // Devise monétaire
-        Col_Visa,
-        Col_Banking,
-        Col_Other,
-        Col_Due,
-        Col_Debtor,
-        Col_Site,
-        Col_DistRule,
-        Col_Act,
-        Col_Count
-    };
-
-    DisplayModel(QObject *parent = 0) : QAbstractTableModel(parent)
-    {
         m_listsOfValuesbyRows = new QVector<QList<QVariant> >;
-    }
+}
 
-    int rowCount(const QModelIndex &parent ) const {
+DisplayModel::~DisplayModel(){}
+
+int DisplayModel::rowCount(const QModelIndex &parent ) const 
+{
         Q_UNUSED(parent);
         return m_listsOfValuesbyRows->size();
-    }
+}
 
-    int columnCount(const QModelIndex &parent = QModelIndex()) const {
+int DisplayModel::columnCount(const QModelIndex &parent) const 
+{
         Q_UNUSED(parent);
         return int(Col_Count);
-    }
+}
 
-    QModelIndex index ( int row, int column, const QModelIndex & parent = QModelIndex() ) const
-    {
+QModelIndex DisplayModel::index ( int row, int column, const QModelIndex & parent) const
+{
         return QAbstractTableModel::index(row,column,parent);
-    }
+}
 
-    bool insertRows( int position, int count, const QModelIndex & parent = QModelIndex() ){
+bool DisplayModel::insertRows( int position, int count, const QModelIndex & parent)
+{
         beginInsertRows(parent, position, position+count-1);
         for (int row=0; row < count; row++) {
 
@@ -145,9 +128,10 @@ public:
         endInsertRows();
         return true;
 
-    }
+}
 
-    bool removeRows(int position, int count, const QModelIndex & parent = QModelIndex()){
+bool DisplayModel::removeRows(int position, int count, const QModelIndex & parent)
+{
         Q_UNUSED(parent);
         beginRemoveRows(parent, position, position+count-1);
         int rows = m_listsOfValuesbyRows->size();
@@ -158,16 +142,16 @@ public:
         }
         endRemoveRows();
         return true;
-    }
+}
 
-    bool submit(){
+bool DisplayModel::submit()
+{
         return QAbstractTableModel::submit();
-    }
+}
 
 
-    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const
-    {
-
+QVariant DisplayModel::data(const QModelIndex &index, int role) const
+{
         QVariant data;
         if (!index.isValid()) {
             if (WarnDebugMessage)
@@ -182,10 +166,10 @@ public:
             data = valuesListByRow[index.column()];
         }
         return data;
-    }
+}
 
-    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole)
-    {
+bool DisplayModel::setData(const QModelIndex &index, const QVariant &value, int role)
+{
         bool ret = true;
         if (!index.isValid()) {
             if (WarnDebugMessage)
@@ -239,10 +223,10 @@ public:
             ret = true;
         }
         return ret;
-    }
+}
 
-    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const
-    {
+QVariant DisplayModel::headerData(int section, Qt::Orientation orientation, int role) const
+{
         if (role==Qt::DisplayRole) {
             if (orientation==Qt::Horizontal) {
                 switch (section) {
@@ -265,12 +249,10 @@ public:
         }
 
         return QVariant();
+}
 
-
-    }
-
-    bool setHeaderData( int section, Qt::Orientation orientation, const QVariant & value, int role = Qt::EditRole )
-    {
+bool DisplayModel::setHeaderData( int section, Qt::Orientation orientation, const QVariant & value, int role)
+{
         if (role == Qt::EditRole||role == Qt::DisplayRole) {
             if (orientation == Qt::Vertical) {
                 m_headersRows.insert(section,value.toString());
@@ -286,14 +268,15 @@ public:
 
         Q_EMIT QAbstractTableModel::headerDataChanged(orientation, section, section) ;
         return true;
-    }
+}
 
-    QSqlError lastError(){
+QSqlError DisplayModel::lastError()
+{
         return lastError();
-    }
+}
 
-    Qt::ItemFlags flags(const QModelIndex &index) const
-    {
+Qt::ItemFlags DisplayModel::flags(const QModelIndex &index) const
+{
         if (   index.column()==Col_Cash
                || index.column()==Col_Cheque
                || index.column()==Col_Visa
@@ -308,18 +291,7 @@ public:
         } else {
             return Qt::ItemIsEnabled | Qt::ItemIsSelectable;
         }
-    }
-
-
-private:
-    QVector<QList<QVariant> > *m_listsOfValuesbyRows;
-    QStringList m_headersRows;
-    QStringList m_headersColumns;
-    int m_rows ;
-
-};
-}  // End namespace Internal
-
+}
 
 //////////////////////////////////////////////////////////////////////////
 /////////////treeview/////////////////////////////////////////////////////

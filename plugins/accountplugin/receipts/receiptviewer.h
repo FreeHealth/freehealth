@@ -55,16 +55,47 @@ namespace Ui {
 }
 
 namespace InternalAmount {
-class DisplayModel;
-}  // End namespace Internal
 
-/*enum Rows {
-        PREFERENTIAL_VALUE = 0,
-        THESAURUS,
-        VALUES,
-        ROUND_TRIP,
-        rows_MaxParam
-        };*/
+class DisplayModel : public QAbstractTableModel
+{
+  Q_OBJECT
+  public:
+    enum ColumnRepresentation {
+        Col_Cash = 0,
+        Col_Cheque,  // Devise monétaire
+        Col_Visa,
+        Col_Banking,
+        Col_Other,
+        Col_Due,
+        Col_Debtor,
+        Col_Site,
+        Col_DistRule,
+        Col_Act,
+        Col_Count
+    };
+    DisplayModel(QObject *parent = 0) ;
+    ~DisplayModel();
+
+    int rowCount(const QModelIndex &parent ) const;
+    int columnCount(const QModelIndex &parent = QModelIndex()) const;
+    QModelIndex index ( int row, int column, const QModelIndex & parent = QModelIndex() ) const;
+    bool insertRows( int position, int count, const QModelIndex & parent = QModelIndex() );
+    bool removeRows(int position, int count, const QModelIndex & parent = QModelIndex());
+    bool submit();
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
+    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const;
+    bool setHeaderData( int section, Qt::Orientation orientation, const QVariant & value, int role = Qt::EditRole );
+    QSqlError lastError();
+    Qt::ItemFlags flags(const QModelIndex &index) const;
+
+  private:
+    QVector<QList<QVariant> > *m_listsOfValuesbyRows;
+    QStringList m_headersRows;
+    QStringList m_headersColumns;
+    int m_rows ;
+};
+}  // End namespace Internal
 
 
 class treeViewsActions: public QTreeView
