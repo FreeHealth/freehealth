@@ -72,12 +72,12 @@ GenericZipCodesWidget::GenericZipCodesWidget(QWidget *parent) :
     connect(ui->availableCountriesListView, SIGNAL(activated(QModelIndex)),
             this, SLOT(selectCountry(QModelIndex)));
     connect(ui->availableCountriesListView, SIGNAL(clicked(QModelIndex)),
-            this, SLOT(updateSelections()));
+            ui->selectedCountriesListView, SLOT(clearSelection()));
 
     connect(ui->selectedCountriesListView, SIGNAL(activated(QModelIndex)),
             this, SLOT(deselectCountry(QModelIndex)));
     connect(ui->selectedCountriesListView, SIGNAL(clicked(QModelIndex)),
-            this, SLOT(updateSelections()));
+            ui->availableCountriesListView, SLOT(clearSelection()));
 
     connect(ui->toolButtonAddCountry, SIGNAL(clicked()), this, SLOT(selectCountries()));
     connect(ui->toolButtonRemoveCountry, SIGNAL(clicked()), this, SLOT(deselectCountries()));
@@ -117,6 +117,7 @@ void GenericZipCodesWidget::selectCountry(const QModelIndex &index)
         return;
     QStandardItem *item = m_availableCountriesModel->itemFromIndex(index)->clone();
     m_availableCountriesModel->removeRow(index.row());
+    Q_ASSERT(item);
     m_selectedCountriesModel->appendRow(item);
     m_selectedCountriesModel->sort(1); // sort by names, not by internal numbers
     updateActions();
@@ -164,13 +165,4 @@ void GenericZipCodesWidget::updateActions()
     ui->toolButtonRemoveCountry->setEnabled(model && model->hasSelection());
 }
 
-void GenericZipCodesWidget::updateSelections()
-{
-    if (sender() == ui->availableCountriesListView) {
-        ui->selectedCountriesListView->clearSelection();
-    } else if (sender() == ui->selectedCountriesListView) {
-        ui->availableCountriesListView->clearSelection();
-    }
-
-}
 
