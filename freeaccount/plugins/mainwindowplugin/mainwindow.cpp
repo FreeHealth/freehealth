@@ -57,6 +57,8 @@
 #include <accountplugin/accountview.h>
 
 #include <accountplugin/receipts/receiptviewer.h>
+#include <accountplugin/movements/movementsviewer.h>
+#include <accountplugin/receipts/preferredreceipts.h>
 
 #include <extensionsystem/pluginerrorview.h>
 #include <extensionsystem/pluginview.h>
@@ -227,11 +229,25 @@ void MainWindow::extensionsInitialized()
 
 
     // Here we set the UI according to the commandline parser
-    if (commandLine()->value(Core::Constants::CL_ReceiptsCreator).toBool()) {
+    if (commandLine()->value(Core::Constants::CL_ReceiptsCreator).toBool()) 
+    {
         setCentralWidget(new ReceiptViewer(this));
         if (WarnLogMessage)
             LOG("receiptGUI initialized");
-    } else {
+    } 
+    else if (commandLine()->value(Core::Constants::CL_PreferedReceipts).toBool())
+    {
+        setCentralWidget(new PreferredReceipts(this));
+        if (WarnLogMessage)
+            LOG("prefered receipts GUI initialized");    	  
+        }
+    else if (commandLine()->value(Core::Constants::CL_Movements).toBool())
+    {
+        setCentralWidget(new MovementsViewer(this));
+        if (WarnLogMessage)
+            LOG("movements GUI initialized");    	  
+        }    
+    else {
         setCentralWidget(new ReceiptViewer(this));
     }
 
