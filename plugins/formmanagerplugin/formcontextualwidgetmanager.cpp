@@ -139,26 +139,49 @@ void FormContextualWidgetManager::updateContext(Core::IContext *object)
         if (!object) {
             if (!m_CurrentView)
                 return;
-            
-            //            m_CurrentView = 0;  // keep trace of the last active view (we need it in dialogs)
+            m_CurrentView = 0;
             break;
         }
         view = qobject_cast<FormContextualWidget *>(object->widget());
         if (!view) {
+            checkParentWidgets(object->widget());
             if (!m_CurrentView)
                 return;
-            
-            //            m_CurrentView = 0;   // keep trace of the last active view (we need it in dialogs)
+            m_CurrentView = 0;
             break;
         }
         
         if (view == m_CurrentView) {
             return;
         }
-        
     } while (false);
     if (view) {
         FormActionHandler::setCurrentView(view);
+    }
+}
+
+/**
+ * Check parent widgets for form context. If a form contextual widget is found in the
+ * parents, add the form contextual id to context manager.
+ */
+void FormContextualWidgetManager::checkParentWidgets(QWidget *widget)
+{
+//    WARN_FUNC;
+//    qWarning() << widget;
+    Core::UniqueIDManager *uid = Core::ICore::instance()->uniqueIDManager();
+    int contextId = uid->uniqueIdentifier(Constants::C_FORM_PLUGINS);
+    if (contextManager()->hasContext(contextId))
+        contextManager()->removeAdditionalContext(contextId);
+    if (!widget)
+        return;
+    QWidget *parent = widget->parentWidget();
+    while (parent) {
+        Core::IContext *context = contextManager()->contextObject(parent);
+        if (context && context->context().contains(contextId)) {
+            contextManager()->addAdditionalContext(contextId);
+            return;
+        }
+        parent = parent->parentWidget();
     }
 }
 
@@ -336,7 +359,7 @@ void FormActionHandler::onActionEnabledStateUpdated(Form::Internal::FormContextu
         case Form::Internal::FormContextualWidget::Action_AddForm: a = aAddForm; break;
         case Form::Internal::FormContextualWidget::Action_PrintCurrentFormEpisode: a = aPrintForm; break;
         }  // end switch
-        a->setEnabled(m_CurrentView->enableAction(action));
+        a->setEnabled(m_CurrentView->enabledActionState(action));
     }
 }
 

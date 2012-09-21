@@ -98,6 +98,8 @@ public:
     {
         params.insert(Core::Constants::CL_MedinTux,          "--medintux");
         params.insert(Core::Constants::CL_Independant,       "--independant");
+        params.insert(Core::Constants::CL_Movements,         "--movements");
+        params.insert(Core::Constants::CL_PreferedReceipts,  "--prefered-receipts");
         params.insert(Core::Constants::CL_Test,              "--test");
         params.insert(Core::Constants::CL_ReceiptsCreator,   "--receipts-creator");
         params.insert(Core::Constants::CL_EMR_Name,          "--emr-name");
@@ -149,6 +151,8 @@ public:
             {
             case Core::Constants::CL_MedinTux :          value.insert(Core::Constants::CL_MedinTux, true); break;
             case Core::Constants::CL_Independant :       value.insert(Core::Constants::CL_Independant, true); break;
+            case Core::Constants::CL_Movements :         value.insert(Core::Constants::CL_Movements, true); break;
+            case Core::Constants::CL_PreferedReceipts :  value.insert(Core::Constants::CL_PreferedReceipts, true); break;
             case Core::Constants::CL_Test :              value.insert(Core::Constants::CL_Test, true); break;
             case Core::Constants::CL_ReceiptsCreator :   value.insert(Core::Constants::CL_ReceiptsCreator, true); break;
             case Core::Constants::CL_EMR_Name :          value.insert(Core::Constants::CL_EMR_Name, a.mid(a.indexOf("=")+1).remove("\"")); break;
@@ -279,6 +283,7 @@ public:
 //            <ICD10 value="J11.0;A22;Z23"/>
 //        </Patient>
         QDomElement element = rootElement.firstChildElement();
+
         while (!element.isNull()) {
             if (element.tagName() == Internal::Constants::XML_PATIENT_IDENTITY) {
                 value.insert(Core::Constants::CL_PatientName, element.attribute(Internal::Constants::XML_ATTRIB_LASTNAMES));
