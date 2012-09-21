@@ -48,6 +48,7 @@ class FormTreeModel;
 
 namespace Internal {
 class FormPlaceHolderPrivate;
+class FormContextualWidgetManager;
 
 class FormItemDelegate : public QStyledItemDelegate
 {
@@ -73,12 +74,12 @@ class FORM_EXPORT FormPlaceHolder : public Internal::FormContextualWidget
 {
     Q_OBJECT
     friend class FormManager;
+    friend class Form::Internal::FormContextualWidgetManager;
 
 public:
     FormPlaceHolder(QWidget *parent = 0);
     ~FormPlaceHolder();
 
-    bool enableAction(WidgetAction action) const;
     void setRootForm(Form::FormMain *rootForm);
 
 public Q_SLOTS:
@@ -86,6 +87,9 @@ public Q_SLOTS:
     void setCurrentForm(Form::FormMain *form);
     void setCurrentForm(const QString &formUid);
     void setCurrentEditingItem(const QModelIndex &index);
+
+protected:
+    bool enabledActionState(WidgetAction action) const;
 
 protected Q_SLOTS:
     bool createEpisode();

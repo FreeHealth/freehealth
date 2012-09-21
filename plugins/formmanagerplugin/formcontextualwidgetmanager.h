@@ -93,6 +93,7 @@ public:
     FormContextualWidget *currentView() const;
 
 private Q_SLOTS:
+    void checkParentWidgets(QWidget *widget);
     void updateContext(Core::IContext *object);
 };
 

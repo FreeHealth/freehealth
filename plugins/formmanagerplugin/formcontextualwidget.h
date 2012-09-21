@@ -68,8 +68,9 @@ public:
     void addContexts(const QList<int> &contexts);
     QList<int> contexts() const;
 
+protected:
     /** Return true if the \e action must be enabled, or false if it must be disabled. */
-    virtual bool enableAction(WidgetAction action) const = 0;
+    virtual bool enabledActionState(WidgetAction action) const = 0;
 
 protected Q_SLOTS:
     // slots connected to the formactionhandler instance
