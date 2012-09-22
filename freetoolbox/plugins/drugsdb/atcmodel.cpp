@@ -169,7 +169,7 @@ public:
             else
                 item->setData(AtcModel::ATC_FrenchLabel, tmp);
             tmp = vals.at(3);
-            tmp.remove("\"").toUpper();
+            tmp = tmp.remove("\"").toUpper();
             if (tmp.isEmpty())
                 item->setData(AtcModel::ATC_DeutschLabel, en);
             else
