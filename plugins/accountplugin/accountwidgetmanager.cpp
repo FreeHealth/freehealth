@@ -95,6 +95,7 @@ AccountWidgetManager::AccountWidgetManager(QObject *parent) :
 
 void AccountWidgetManager::updateContext(Core::IContext *object, const Core::Context &additionalContexts)
 {
+    Q_UNUSED(additionalContexts);
 //    qWarning() << "AccountManager::updateContext(Core::IContext *object)";
 //    if (object)
 //        qWarning() << "AccountManager::updateContext(Core::IContext *object)" << object->widget();
