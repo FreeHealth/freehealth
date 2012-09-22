@@ -45,9 +45,11 @@
 #include <datapackutils/iservermanager.h>
 #include <datapackutils/widgets/serverpackeditor.h>
 
-#include <QtCore/QtPlugin>
+#include <QtPlugin>
 #include <QDialog>
 #include <QHBoxLayout>
+#include <QAction>
+
 #include <QDebug>
 
 using namespace DataPackPlugin;
@@ -191,8 +193,7 @@ void DataPackPluginIPlugin::postCoreInitialization()
     // Add pack manager action to "Preferences" menu
     QAction *a = 0;
     Core::Command *cmd = 0;
-
-    QList<int> context = QList<int>() << Core::Constants::C_GLOBAL_ID;
+    Core::Context context(Core::Constants::C_GLOBAL);
 
     Core::ActionContainer *menu = actionManager()->actionContainer(Core::Constants::M_CONFIGURATION);
     if (menu) {
@@ -200,9 +201,9 @@ void DataPackPluginIPlugin::postCoreInitialization()
         a = new QAction(this);
         a->setObjectName("aTogglePackManager");
         a->setIcon(theme()->icon(Constants::I_TOGGLEPACKMANAGER));
-        cmd = actionManager()->registerAction(a, Constants::A_TOGGLE_PACKMANAGER, context);
+        cmd = actionManager()->registerAction(a, Core::Id(Constants::A_TOGGLE_PACKMANAGER), context);
         cmd->setTranslations(Constants::TOGGLEPACKMANAGER_TEXT, Constants::TOGGLEPACKMANAGER_TEXT, Constants::DATAPACKCONSTANTS_TR_CONTEXT);
-        menu->addAction(cmd, Core::Constants::G_PREFERENCES);
+        menu->addAction(cmd, Core::Id(Core::Constants::G_PREFERENCES));
         connect(a, SIGNAL(triggered()), this, SLOT(togglePackManager()));
     }
 

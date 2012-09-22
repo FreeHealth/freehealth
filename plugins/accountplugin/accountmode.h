@@ -32,14 +32,14 @@
 #ifndef ACCOUNTMODE_H
 #define ACCOUNTMODE_H
 
-#include <coreplugin/modemanager/basemode.h>
+#include <coreplugin/modemanager/imode.h>
 
 #include <QStackedWidget>
 
 namespace Account {
 namespace Internal {
 
-class AccountMode : public Core::BaseMode
+class AccountMode : public Core::IMode
 {
     Q_OBJECT
 public:
@@ -47,8 +47,6 @@ public:
     ~AccountMode();
     void setCentralWidget(QWidget *widget);
     
-    QString name() const;
-
 public Q_SLOTS:
     void showAddReceipts();
     void showReceipts();

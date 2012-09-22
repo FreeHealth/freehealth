@@ -41,7 +41,7 @@
 #include <coreplugin/constants_icons.h>
 #include <coreplugin/contextmanager/contextmanager.h>
 #include <coreplugin/actionmanager/actionmanager.h>
-#include <coreplugin/uniqueidmanager.h>
+#include <coreplugin/actionmanager/actioncontainer.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -65,10 +65,10 @@ static inline Core::ActionManager *actionManager() {return Core::ICore::instance
 static inline Core::ITheme *theme() { return Core::ICore::instance()->theme(); }
 
 // Register an existing Core action
-static QAction *registerAction(const QString &id, const QList<int> &ctx, QObject *parent)
+static QAction *registerAction(const QString &id, const Core::Context &ctx, QObject *parent)
 {
     QAction *a = new QAction(parent);
-    Core::Command *cmd = Core::ICore::instance()->actionManager()->registerAction(a, id, ctx);
+    Core::Command *cmd = Core::ICore::instance()->actionManager()->registerAction(a, Core::Id(id), ctx);
     Q_UNUSED(cmd);
     return a;
 }
@@ -76,7 +76,7 @@ static QAction *registerAction(const QString &id, const QList<int> &ctx, QObject
 // Create an action
 static inline QAction *createAction(QObject *parent, const QString &name, const QString &icon,
                                     const QString &actionName,
-                                    const QList<int> &context,
+                                    const Core::Context &context,
                                     const QString &trans, const QString &transContext,
                                     Core::Command *cmd,
                                     Core::ActionContainer *menu,
@@ -92,15 +92,15 @@ static inline QAction *createAction(QObject *parent, const QString &name, const 
         a->setCheckable(true);
         a->setChecked(false);
     }
-    cmd = actionManager()->registerAction(a, actionName, context);
+    cmd = actionManager()->registerAction(a, Core::Id(actionName), context);
     if (!transContext.isEmpty())
         cmd->setTranslations(trans, trans, transContext);
     else
-        cmd->setTranslations(trans); // use the Trans::Constants tr context (automatic)
+        cmd->setTranslations(trans, trans); // use the Trans::Constants tr context (automatic)
     if (key != QKeySequence::UnknownKey)
         cmd->setDefaultKeySequence(key);
     if (menu)
-        menu->addAction(cmd, group);
+        menu->addAction(cmd, Core::Id(group));
     return a;
 }
 
@@ -110,8 +110,8 @@ static inline QAction *createAction(QObject *parent, const QString &name, const 
 %PluginName%ContextualWidgetManager::%PluginName%ContextualWidgetManager(QObject *parent) :
     %PluginName%ActionHandler(parent)
 {
-    connect(Core::ICore::instance()->contextManager(), SIGNAL(contextChanged(Core::IContext*)),
-            this, SLOT(updateContext(Core::IContext*)));
+    connect(Core::ICore::instance()->contextManager(), SIGNAL(contextChanged(Core::IContext*,Core::Context)),
+            this, SLOT(updateContext(Core::IContext*,Core::Context)));
     setObjectName("%PluginName%ContextualWidgetManager");
 }
 
@@ -124,8 +124,9 @@ static inline QAction *createAction(QObject *parent, const QString &name, const 
  * If the context is a %PluginName%::%PluginName%ContextualWidget the action handler current view is updated.
  * \sa %PluginName%::Internal::%PluginName%ActionHandler
  */
-void %PluginName%ContextualWidgetManager::updateContext(Core::IContext *object)
+void %PluginName%ContextualWidgetManager::updateContext(Core::IContext *object, const Core::Context &additionalContexts)
 {
+    Q_UNUSED(additionalContexts);
     //    qWarning() << "%PluginName%ContextualWidgetManager::updateContext(Core::IContext *object)";
     //    if (object)
     //        qWarning() << "%PluginName%ContextualWidgetManager::updateContext(Core::IContext *object)" << object->widget();

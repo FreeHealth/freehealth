@@ -36,7 +36,6 @@
 #include <coreplugin/isettings.h>
 #include <coreplugin/contextmanager/contextmanager.h>
 #include <coreplugin/actionmanager/actionmanager.h>
-#include <coreplugin/uniqueidmanager.h>
 #include <coreplugin/itoolpage.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/translators.h>
@@ -45,6 +44,7 @@
 #include <coreplugin/actionmanager/mainwindowactions.h>
 #include <coreplugin/actionmanager/mainwindowactionhandler.h>
 #include <coreplugin/actionmanager/actionmanager.h>
+#include <coreplugin/actionmanager/actioncontainer.h>
 #include <coreplugin/contextmanager/contextmanager.h>
 #include <coreplugin/dialogs/plugindialog.h>
 #include <coreplugin/dialogs/settingsdialog.h>
@@ -162,17 +162,17 @@ bool MainWindow::initialize(const QStringList &, QString *)
 
     QAction *a = 0;
     Core::Command *cmd = 0;
-    QList<int> globalcontext = QList<int>() << Core::Constants::C_GLOBAL_ID;
+    Core::Context globalcontext(Core::Constants::C_GLOBAL);
 
-    Core::ActionContainer *menu = actionManager()->actionContainer(Core::Constants::M_FILE);
+    Core::ActionContainer *menu = actionManager()->actionContainer(Core::Id(Core::Constants::M_FILE));
 
     // Create local actions
     a = new QAction(this);
     a->setObjectName("FTB_CreateFullRelease");
     a->setIcon(theme()->icon(Constants::ICONPROCESS, ITheme::MediumIcon));
-    cmd = actionManager()->registerAction(a, "FTB_CreateFullRelease", globalcontext);
+    cmd = actionManager()->registerAction(a, Core::Id("FTB_CreateFullRelease"), globalcontext);
     cmd->setTranslations(Constants::CREATEFULLRELEASE_TEXT, Constants::CREATEFULLRELEASE_TEXT, Constants::FREETOOLBOX_TR_CONTEXT);
-    menu->addAction(cmd, Core::Constants::G_FILE_NEW);
+    menu->addAction(cmd, Core::Id(Core::Constants::G_FILE_NEW));
     connect(a, SIGNAL(triggered()), this, SLOT(createFullRelease()));
 
     // Create General pages
@@ -181,7 +181,7 @@ bool MainWindow::initialize(const QStringList &, QString *)
     ui = new Ui::MainWindow;
     ui->setupUi(this);
     ui->centralWidget->layout()->setMargin(0);
-    setMenuBar(actionManager()->actionContainer(Constants::MENUBAR)->menuBar());
+    setMenuBar(actionManager()->actionContainer(Core::Id(Constants::MENUBAR))->menuBar());
     ui->mainToolBar->insertAction(0, a);
 
     ui->splitter->setCollapsible(1, false);

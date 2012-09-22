@@ -48,16 +48,16 @@ public:
     void addContext(int uid)
     {
         if (!m_Context.contains(uid))
-            m_Context.append(uid);
+            m_Context.add(uid);
     }
-    void clearContext() { m_Context.clear(); }
+//    void clearContext() { m_Context.clear(); }
 
-    QList<int> context() const { return m_Context; }
+    Core::Context context() const { return m_Context; }
     QWidget *widget()          { return w; }
 
 private:
     TextEditor *w;
-    QList<int> m_Context;
+    Core::Context m_Context;
 };
 
 }  // End Internal

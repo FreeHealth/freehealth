@@ -2,60 +2,72 @@
 **
 ** This file is part of Qt Creator
 **
-** Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+** Copyright (c) 2012 Nokia Corporation and/or its subsidiary(-ies).
 **
 ** Contact: Nokia Corporation (qt-info@nokia.com)
 **
-** Commercial Usage
-**
-** Licensees holding valid Qt Commercial licenses may use this file in
-** accordance with the Qt Commercial License Agreement provided with the
-** Software or, alternatively, in accordance with the terms contained in
-** a written agreement between you and Nokia.
 **
 ** GNU Lesser General Public License Usage
 **
-** Alternatively, this file may be used under the terms of the GNU Lesser
-** General Public License version 2.1 as published by the Free Software
-** Foundation and appearing in the file LICENSE.LGPL included in the
-** packaging of this file.  Please review the following information to
-** ensure the GNU Lesser General Public License version 2.1 requirements
-** will be met: http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
+** This file may be used under the terms of the GNU Lesser General Public
+** License version 2.1 as published by the Free Software Foundation and
+** appearing in the file LICENSE.LGPL included in the packaging of this file.
+** Please review the following information to ensure the GNU Lesser General
+** Public License version 2.1 requirements will be met:
+** http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
 **
-** If you are unsure which license is appropriate for your use, please
-** contact the sales department at http://www.qtsoftware.com/contact.
+** In addition, as a special exception, Nokia gives you certain additional
+** rights. These rights are described in the Nokia Qt LGPL Exception
+** version 1.1, included in the file LGPL_EXCEPTION.txt in this package.
+**
+** Other Usage
+**
+** Alternatively, this file may be used in accordance with the terms and
+** conditions contained in a signed written agreement between you and Nokia.
+**
+** If you have questions regarding the use of this file, please contact
+** Nokia at qt-info@nokia.com.
 **
 **************************************************************************/
+
 #ifndef ACTIONCONTAINER_P_H
 #define ACTIONCONTAINER_P_H
 
-#include "actioncontainer.h"
 #include "actionmanager_p.h"
-#include "command.h"
 
-#include <coreplugin/constants_trans.h>
-#include <coreplugin/uniqueidmanager.h>
-
-#include <QCoreApplication>
+#include <coreplugin/actionmanager/actioncontainer.h>
+#include <coreplugin/actionmanager/command.h>
 
 namespace Core {
 namespace Internal {
 
+struct Group
+{
+    Group(const Id &id) : id(id) {}
+    Id id;
+    QList<QObject *> items; // Command * or ActionContainer *
+};
+
 class ActionContainerPrivate : public Core::ActionContainer
 {
+    Q_OBJECT
+
 public:
-    ActionContainerPrivate(int id);
-    virtual ~ActionContainerPrivate() {}
+    ActionContainerPrivate(Id id);
+    ~ActionContainerPrivate() {}
 
-    void setEmptyAction(EmptyAction ea);
-    bool hasEmptyAction(EmptyAction ea) const;
+    void setOnAllDisabledBehavior(OnAllDisabledBehavior behavior);
+    ActionContainer::OnAllDisabledBehavior onAllDisabledBehavior() const;
 
-    QAction *insertLocation(const QString &group) const;
-    void appendGroup(const QString &group);
-    void addAction(Command *action, const QString &group = QString());
-    void addMenu(ActionContainer *menu, const QString &group = QString());
+    QAction *insertLocation(const Id &groupId) const;
+    void appendGroup(const Id &id);
+    void insertGroup(const Id &before, const Id &groupId);
+    void addAction(Command *action, const Id &group = Id());
+    void addMenu(ActionContainer *menu, const Id &group = Id());
+    void addMenu(ActionContainer *before, ActionContainer *menu, const Id &group = Id());
+    virtual void clear();
 
-    int id() const;
+    Id id() const;
 
     QMenu *menu() const;
     QMenuBar *menuBar() const;
@@ -63,91 +75,77 @@ public:
     virtual void insertAction(QAction *before, QAction *action) = 0;
     virtual void insertMenu(QAction *before, QMenu *menu) = 0;
 
-    QList<Command *> commands() const { return m_commands; }
-    QList<ActionContainer *> subContainers() const { return m_subContainers; }
+    virtual void removeAction(QAction *action) = 0;
+    virtual void removeMenu(QMenu *menu) = 0;
 
-    void setTranslations(const QString &unTrTitle, const QString &trContext = QString::null)
-    {
-        m_unTrTitle = unTrTitle;
-        if (trContext.isEmpty())
-            m_TrContext = Constants::TK_CONSTANTS_CONTEXT;
-        else
-            m_TrContext=trContext;
-    }
-    virtual void retranslate()
-    {
-        foreach(Command *c, m_commands)
-            c->retranslate();
-    }
-
+    virtual bool updateInternal() = 0;
 
 protected:
     bool canAddAction(Command *action) const;
     bool canAddMenu(ActionContainer *menu) const;
     virtual bool canBeAddedToMenu() const = 0;
 
-    void addAction(Command *action, int pos, bool setpos);
-    void addMenu(ActionContainer *menu, int pos, bool setpos);
+    // groupId --> list of Command* and ActionContainer*
+    QList<Group> m_groups;
 
-protected:
-    QString m_unTrTitle, m_TrContext;
+private slots:
+    void scheduleUpdate();
+    void update();
+    void itemDestroyed();
 
 private:
-    QAction *beforeAction(int pos, int *prevKey) const;
-    int calcPosition(int pos, int prevKey) const;
+    QList<Group>::const_iterator findGroup(const Id &groupId) const;
+    QAction *insertLocation(QList<Group>::const_iterator group) const;
 
-    QList<int> m_groups;
-    int m_data;
-    int m_id;
-    QMap<int, int> m_posmap;
-    QList<ActionContainer *> m_subContainers;
-    QList<Command *> m_commands;
+    OnAllDisabledBehavior m_onAllDisabledBehavior;
+    Id m_id;
+    bool m_updateRequested;
 };
 
 class MenuActionContainer : public ActionContainerPrivate
 {
 public:
-    MenuActionContainer(int id);
+    explicit MenuActionContainer(Id id);
 
     void setMenu(QMenu *menu);
     QMenu *menu() const;
 
-    void setLocation(const CommandLocation &location);
-    CommandLocation location() const;
-
     void insertAction(QAction *before, QAction *action);
     void insertMenu(QAction *before, QMenu *menu);
-    bool update();
 
-    void retranslate()
-    {
-        if (m_menu)
-            m_menu->setTitle(QCoreApplication::translate(m_TrContext.toAscii(), m_unTrTitle.toAscii()));
-    }
+    void removeAction(QAction *action);
+    void removeMenu(QMenu *menu);
+
+    void retranslate();
 
 protected:
     bool canBeAddedToMenu() const;
+    bool updateInternal();
+
 private:
     QMenu *m_menu;
-    CommandLocation m_location;
 };
 
 class MenuBarActionContainer : public ActionContainerPrivate
 {
 public:
-    MenuBarActionContainer(int id);
+    explicit MenuBarActionContainer(Id id);
 
     void setMenuBar(QMenuBar *menuBar);
     QMenuBar *menuBar() const;
 
     void insertAction(QAction *before, QAction *action);
     void insertMenu(QAction *before, QMenu *menu);
-    bool update();
 
-    void retranslate() {}
+    void removeAction(QAction *action);
+    void removeMenu(QMenu *menu);
+
+//    void retranslate();
 
 protected:
     bool canBeAddedToMenu() const;
+    bool updateInternal();
+
 private:
     QMenuBar *m_menuBar;
 };

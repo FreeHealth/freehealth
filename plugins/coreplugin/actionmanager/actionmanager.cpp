@@ -2,45 +2,52 @@
 **
 ** This file is part of Qt Creator
 **
-** Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+** Copyright (c) 2012 Nokia Corporation and/or its subsidiary(-ies).
 **
 ** Contact: Nokia Corporation (qt-info@nokia.com)
 **
-** Commercial Usage
-**
-** Licensees holding valid Qt Commercial licenses may use this file in
-** accordance with the Qt Commercial License Agreement provided with the
-** Software or, alternatively, in accordance with the terms contained in
-** a written agreement between you and Nokia.
 **
 ** GNU Lesser General Public License Usage
 **
-** Alternatively, this file may be used under the terms of the GNU Lesser
-** General Public License version 2.1 as published by the Free Software
-** Foundation and appearing in the file LICENSE.LGPL included in the
-** packaging of this file.  Please review the following information to
-** ensure the GNU Lesser General Public License version 2.1 requirements
-** will be met: http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
+** This file may be used under the terms of the GNU Lesser General Public
+** License version 2.1 as published by the Free Software Foundation and
+** appearing in the file LICENSE.LGPL included in the packaging of this file.
+** Please review the following information to ensure the GNU Lesser General
+** Public License version 2.1 requirements will be met:
+** http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
 **
-** If you are unsure which license is appropriate for your use, please
-** contact the sales department at http://www.qtsoftware.com/contact.
+** In addition, as a special exception, Nokia gives you certain additional
+** rights. These rights are described in the Nokia Qt LGPL Exception
+** version 1.1, included in the file LGPL_EXCEPTION.txt in this package.
+**
+** Other Usage
+**
+** Alternatively, this file may be used in accordance with the terms and
+** conditions contained in a signed written agreement between you and Nokia.
+**
+** If you have questions regarding the use of this file, please contact
+** Nokia at qt-info@nokia.com.
 **
 **************************************************************************/
 
 #include "actionmanager_p.h"
-//#include "mainwindow.h"
 #include "actioncontainer_p.h"
 #include "command_p.h"
+#include <coreplugin/id.h>
 
-#include <coreplugin/uniqueidmanager.h>
-#include <coreplugin/constants_menus.h>
+#include <coreplugin/constants.h>
+#include <coreplugin/imainwindow.h>
+#include <coreplugin/icore.h>
+#include <utils/qtcassert.h>
 
-#include <QtCore/QDebug>
-#include <QtCore/QSettings>
-#include <QtGui/QMenu>
-#include <QtGui/QAction>
-#include <QtGui/QShortcut>
-#include <QtGui/QMenuBar>
+#include <QDebug>
+#include <QSettings>
+#include <QDesktopWidget>
+#include <QLabel>
+#include <QMenu>
+#include <QAction>
+#include <QShortcut>
+#include <QMenuBar>
 
 namespace {
     enum { warnAboutFindFailures = 0 };
@@ -57,7 +64,7 @@ namespace {
     You get the only implementation of this class from the core interface
     ICore::actionManager() method, e.g.
     \code
-        Core::ICore::instance()->actionManager()
+        Core::ICore::actionManager()
     \endcode
 
     The main reasons for the need of this class is to provide a central place where the user
@@ -92,11 +99,11 @@ namespace {
     To register a globally active action "My Action"
     put the following in your plugin's IPlugin::initialize method:
     \code
-        Core::ActionManager *am = Core::ICore::instance()->actionManager();
+        Core::ActionManager *am = Core::ICore::actionManager();
         QAction *myAction = new QAction(tr("My Action"), this);
         Core::Command *cmd = am->registerAction(myAction,
                                                  "myplugin.myaction",
-                                                 QList<int>() << C_GLOBAL_ID);
+                                                 Core::Context(C_GLOBAL));
         cmd->setDefaultKeySequence(QKeySequence(tr("Ctrl+Alt+u")));
         connect(myAction, SIGNAL(triggered()), this, SLOT(performMyAction()));
     \endcode
@@ -114,7 +121,7 @@ namespace {
     To do this, you register your action via the
     registerAction methods, get the action container for a specific ID (like specified in
     the Core::Constants namespace) with a call of
-    actionContainer(const QString&) and add your command to this container.
+    actionContainer(const Id&) and add your command to this container.
 
     Following the example adding "My Action" to the "Tools" menu would be done by
     \code
@@ -140,7 +147,7 @@ namespace {
 */
 
 /*!
-    \fn ActionContainer *ActionManager::createMenu(const QString &id)
+    \fn ActionContainer *ActionManager::createMenu(const Id &id)
     \brief Creates a new menu with the given string \a id.
 
     Returns a new ActionContainer that you can use to get the QMenu instance
@@ -151,7 +158,7 @@ namespace {
 */
 
 /*!
-    \fn ActionContainer *ActionManager::createMenuBar(const QString &id)
+    \fn ActionContainer *ActionManager::createMenuBar(const Id &id)
     \brief Creates a new menu bar with the given string \a id.
 
     Returns a new ActionContainer that you can use to get the QMenuBar instance
@@ -160,18 +167,20 @@ namespace {
 */
 
 /*!
-    \fn Command *ActionManager::registerAction(QAction *action, const QString &id, const QList<int> &context)
+    \fn Command *ActionManager::registerAction(QAction *action, const Id &id, const Context &context, bool scriptable)
     \brief Makes an \a action known to the system under the specified string \a id.
 
     Returns a command object that represents the action in the application and is
-    owned by the ActionManager. You can registered several actions with the
+    owned by the ActionManager. You can register several actions with the
     same \a id as long as the \a context is different. In this case
     a trigger of the actual action is forwarded to the registered QAction
     for the currently active context.
+    A scriptable action can be called from a script without the need for the user
+    to interact with it.
 */
 
 /*!
-    \fn Command *ActionManager::registerShortcut(QShortcut *shortcut, const QString &id, const QList<int> &context)
+    \fn Command *ActionManager::registerShortcut(QShortcut *shortcut, const Id &id, const Context &context, bool scriptable)
     \brief Makes a \a shortcut known to the system under the specified string \a id.
 
     Returns a command object that represents the shortcut in the application and is
@@ -179,10 +188,12 @@ namespace {
     same \a id as long as the \a context is different. In this case
     a trigger of the actual shortcut is forwarded to the registered QShortcut
     for the currently active context.
+    A scriptable shortcut can be called from a script without the need for the user
+    to interact with it.
 */
 
 /*!
-    \fn Command *ActionManager::command(const QString &id) const
+    \fn Command *ActionManager::command(const Id &id) const
     \brief Returns the Command object that is known to the system
     under the given string \a id.
 
@@ -190,13 +201,24 @@ namespace {
 */
 
 /*!
-    \fn ActionContainer *ActionManager::actionContainer(const QString &id) const
+    \fn ActionContainer *ActionManager::actionContainer(const Id &id) const
     \brief Returns the IActionContainter object that is know to the system
     under the given string \a id.
 
     \sa ActionManager::createMenu()
     \sa ActionManager::createMenuBar()
 */
+
+/*!
+    \fn Command *ActionManager::unregisterAction(QAction *action, const Id &id)
+    \brief Removes the knowledge about an \a action under the specified string \a id.
+
+    Usually you do not need to unregister actions. The only valid use case for unregistering
+    actions, is for actions that represent user definable actions, like for the custom Locator
+    filters. If the user removes such an action, it also has to be unregistered from the action manager,
+    to make it disappear from shortcut settings etc.
+*/
+
 /*!
     \fn ActionManager::ActionManager(QObject *parent)
     \internal
@@ -217,22 +239,22 @@ ActionManagerPrivate* ActionManagerPrivate::m_instance = 0;
     \internal
 */
 
-ActionManagerPrivate::ActionManagerPrivate(QMainWindow *mainWnd)
+ActionManagerPrivate::ActionManagerPrivate(IMainWindow *mainWnd)
   : ActionManager(mainWnd),
-    m_mainWnd(mainWnd)
+    m_mainWnd(mainWnd),
+    m_presentationLabel(0)
 {
-    UniqueIDManager *uidmgr = UniqueIDManager::instance();
-    m_defaultGroups << uidmgr->uniqueIdentifier(Constants::G_DEFAULT_ONE);
-    m_defaultGroups << uidmgr->uniqueIdentifier(Constants::G_DEFAULT_TWO);
-    m_defaultGroups << uidmgr->uniqueIdentifier(Constants::G_DEFAULT_THREE);
+    m_presentationLabelTimer.setInterval(1000);
     m_instance = this;
-
 }
 
 ActionManagerPrivate::~ActionManagerPrivate()
 {
-    qDeleteAll(m_idCmdMap.values());
+    // first delete containers to avoid them reacting to command deletion
+    foreach (ActionContainerPrivate *container, m_idContainerMap)
+        disconnect(container, SIGNAL(destroyed()), this, SLOT(containerDestroyed()));
     qDeleteAll(m_idContainerMap.values());
+    qDeleteAll(m_idCmdMap.values());
 }
 
 ActionManagerPrivate *ActionManagerPrivate::instance()
@@ -240,19 +262,13 @@ ActionManagerPrivate *ActionManagerPrivate::instance()
     return m_instance;
 }
 
-QList<int> ActionManagerPrivate::defaultGroups() const
+QList<Command *> ActionManagerPrivate::commands() const
 {
-    return m_defaultGroups;
-}
-
-QList<CommandPrivate *> ActionManagerPrivate::commands() const
-{
-    return m_idCmdMap.values();
-}
-
-QList<ActionContainerPrivate *> ActionManagerPrivate::containers() const
-{
-    return m_idContainerMap.values();
+    // transform list of CommandPrivate into list of Command
+    QList<Command *> result;
+    foreach (Command *cmd, m_idCmdMap.values())
+        result << cmd;
+    return result;
 }
 
 bool ActionManagerPrivate::hasContext(int context) const
@@ -260,7 +276,15 @@ bool ActionManagerPrivate::hasContext(int context) const
     return m_context.contains(context);
 }
 
-void ActionManagerPrivate::setContext(const QList<int> &context)
+QDebug operator<<(QDebug in, const Context &context)
+{
+    in << "CONTEXT: ";
+    foreach (int c, context)
+        in << "   " << c << Id::fromUniqueIdentifier(c).toString();
+    return in;
+}
+
+void ActionManagerPrivate::setContext(const Context &context)
 {
     // here are possibilities for speed optimization if necessary:
     // let commands (de-)register themselves for contexts
@@ -269,221 +293,225 @@ void ActionManagerPrivate::setContext(const QList<int> &context)
     const IdCmdMap::const_iterator cmdcend = m_idCmdMap.constEnd();
     for (IdCmdMap::const_iterator it = m_idCmdMap.constBegin(); it != cmdcend; ++it)
         it.value()->setCurrentContext(m_context);
-
-    const IdContainerMap::const_iterator acend = m_idContainerMap.constEnd();
-    for (IdContainerMap::const_iterator it = m_idContainerMap.constBegin(); it != acend; ++it)
-        it.value()->update();
 }
 
-bool ActionManagerPrivate::hasContext(QList<int> context) const
+bool ActionManagerPrivate::hasContext(const Context &context) const
 {
-    for (int i=0; i<m_context.count(); ++i) {
+    for (int i = 0; i < m_context.size(); ++i) {
         if (context.contains(m_context.at(i)))
             return true;
     }
     return false;
 }
 
-ActionContainer *ActionManagerPrivate::createMenu(const QString &id)
+ActionContainer *ActionManagerPrivate::createMenu(const Id &id)
 {
-    const int uid = UniqueIDManager::instance()->uniqueIdentifier(id);
-    const IdContainerMap::const_iterator it = m_idContainerMap.constFind(uid);
+    const IdContainerMap::const_iterator it = m_idContainerMap.constFind(id);
     if (it !=  m_idContainerMap.constEnd())
         return it.value();
 
     QMenu *m = new QMenu(m_mainWnd);
-    m->setObjectName(id);
+    m->setObjectName(QLatin1String(id.name()));
 
-    MenuActionContainer *mc = new MenuActionContainer(uid);
+    MenuActionContainer *mc = new MenuActionContainer(id);
     mc->setMenu(m);
 
-    m_idContainerMap.insert(uid, mc);
+    m_idContainerMap.insert(id, mc);
+    connect(mc, SIGNAL(destroyed()), this, SLOT(containerDestroyed()));
 
     return mc;
 }
 
-ActionContainer *ActionManagerPrivate::createMenuBar(const QString &id)
+ActionContainer *ActionManagerPrivate::createMenuBar(const Id &id)
 {
-    const int uid = UniqueIDManager::instance()->uniqueIdentifier(id);
-    const IdContainerMap::const_iterator it = m_idContainerMap.constFind(uid);
+    const IdContainerMap::const_iterator it = m_idContainerMap.constFind(id);
     if (it !=  m_idContainerMap.constEnd())
         return it.value();
 
     QMenuBar *mb = new QMenuBar; // No parent (System menu bar on Mac OS X)
-    mb->setObjectName(id);
+    mb->setObjectName(id.toString());
 
-    MenuBarActionContainer *mbc = new MenuBarActionContainer(uid);
+    MenuBarActionContainer *mbc = new MenuBarActionContainer(id);
     mbc->setMenuBar(mb);
 
-    m_idContainerMap.insert(uid, mbc);
+    m_idContainerMap.insert(id, mbc);
+    connect(mbc, SIGNAL(destroyed()), this, SLOT(containerDestroyed()));
 
     return mbc;
 }
 
-Command *ActionManagerPrivate::registerAction(QAction *action, const QString &id, const QList<int> &context)
+void ActionManagerPrivate::containerDestroyed()
 {
-    OverrideableAction *a = 0;
-    Command *c = registerOverridableAction(action, id, false);
-    a = static_cast<OverrideableAction *>(c);
-    if (a)
-        a->addOverrideAction(action, context);
+    ActionContainerPrivate *container = static_cast<ActionContainerPrivate *>(sender());
+    m_idContainerMap.remove(m_idContainerMap.key(container));
+}
+
+void ActionManagerPrivate::actionTriggered()
+{
+    QAction *action = qobject_cast<QAction *>(QObject::sender());
+    if (action)
+        showShortcutPopup(action->shortcut().toString());
+}
+
+void ActionManagerPrivate::shortcutTriggered()
+{
+    QShortcut *sc = qobject_cast<QShortcut *>(QObject::sender());
+    if (sc)
+        showShortcutPopup(sc->key().toString());
+}
+
+void ActionManagerPrivate::showShortcutPopup(const QString &shortcut)
+{
+    if (shortcut.isEmpty() || !isPresentationModeEnabled())
+        return;
+
+    m_presentationLabel->setText(shortcut);
+    m_presentationLabel->adjustSize();
+
+    QPoint p = m_mainWnd->mapToGlobal(m_mainWnd->rect().center() - m_presentationLabel->rect().center());
+    m_presentationLabel->move(p);
+
+    m_presentationLabel->show();
+    m_presentationLabel->raise();
+    m_presentationLabelTimer.start();
+}
+
+Command *ActionManagerPrivate::registerAction(QAction *action, const Id &id, const Context &context, bool scriptable)
+{
+    Action *a = overridableAction(id);
+    if (a) {
+        a->addOverrideAction(action, context, scriptable);
+        emit commandListChanged();
+        emit commandAdded(id.toString());
+    }
     return a;
 }
 
-Command *ActionManagerPrivate::registerOverridableAction(QAction *action, const QString &id, bool checkUnique)
+Action *ActionManagerPrivate::overridableAction(const Id &id)
 {
-    OverrideableAction *a = 0;
-    const int uid = UniqueIDManager::instance()->uniqueIdentifier(id);
-    if (CommandPrivate *c = m_idCmdMap.value(uid, 0)) {
-        a = qobject_cast<OverrideableAction *>(c);
+    Action *a = 0;
+    if (CommandPrivate *c = m_idCmdMap.value(id, 0)) {
+        a = qobject_cast<Action *>(c);
         if (!a) {
-            qWarning() << "registerAction: id" << id << "is registered with a different command type.";
-            return c;
+            qWarning() << "registerAction: id" << id.name()
+                       << "is registered with a different command type.";
+            return 0;
         }
     } else {
-        a = new OverrideableAction(uid);
-        m_idCmdMap.insert(uid, a);
-    }
+        a = new Action(id);
+        m_idCmdMap.insert(id, a);
+        m_mainWnd->addAction(a->action());
+        a->action()->setObjectName(id.toString());
+        a->action()->setShortcutContext(Qt::ApplicationShortcut);
+        a->setCurrentContext(m_context);
 
-    if (!a->action()) {
-        QAction *baseAction = new QAction(m_mainWnd);
-        baseAction->setObjectName(id);
-        baseAction->setEnabled(false);
-        baseAction->setCheckable(action->isCheckable());
-        baseAction->setChecked(action->isChecked());
-        baseAction->setIcon(action->icon());
-        baseAction->setIconText(action->iconText());
-        baseAction->setText(action->text());
-        baseAction->setToolTip(action->toolTip());
-        baseAction->setStatusTip(action->statusTip());
-        baseAction->setWhatsThis(action->whatsThis());
-        baseAction->setSeparator(action->isSeparator());
-        baseAction->setShortcutContext(Qt::ApplicationShortcut);
-        baseAction->setParent(m_mainWnd);
-        baseAction->setMenuRole(action->menuRole());
-#ifdef Q_WS_MAC
-        baseAction->setIconVisibleInMenu(false);
-#endif
-        a->setAction(baseAction);
-        m_mainWnd->addAction(baseAction);
-        a->setKeySequence(a->keySequence());
-        a->setDefaultKeySequence(QKeySequence());
-    } else  if (checkUnique) {
-        qWarning() << "registerOverridableAction: id" << id << "is already registered.";
+        if (isPresentationModeEnabled())
+            connect(a->action(), SIGNAL(triggered()), this, SLOT(actionTriggered()));
     }
 
     return a;
 }
 
-Command *ActionManagerPrivate::registerShortcut(QShortcut *shortcut, const QString &id, const QList<int> &context)
+void ActionManagerPrivate::unregisterAction(QAction *action, const Id &id)
+{
+    Action *a = 0;
+    CommandPrivate *c = m_idCmdMap.value(id, 0);
+    QTC_ASSERT(c, return);
+    a = qobject_cast<Action *>(c);
+    if (!a) {
+        qWarning() << "unregisterAction: id" << id.name()
+                   << "is registered with a different command type.";
+        return;
+    }
+    a->removeOverrideAction(action);
+    if (a->isEmpty()) {
+        // clean up
+        // ActionContainers listen to the commands' destroyed signals
+        m_mainWnd->removeAction(a->action());
+        delete a->action();
+        m_idCmdMap.remove(id);
+        delete a;
+    }
+    emit commandListChanged();
+}
+
+Command *ActionManagerPrivate::registerShortcut(QShortcut *shortcut, const Id &id, const Context &context, bool scriptable)
 {
     Shortcut *sc = 0;
-    int uid = UniqueIDManager::instance()->uniqueIdentifier(id);
-    if (CommandPrivate *c = m_idCmdMap.value(uid, 0)) {
+    if (CommandPrivate *c = m_idCmdMap.value(id, 0)) {
         sc = qobject_cast<Shortcut *>(c);
         if (!sc) {
-            qWarning() << "registerShortcut: id" << id << "is registered with a different command type.";
+            qWarning() << "registerShortcut: id" << id.name()
+                       << "is registered with a different command type.";
             return c;
         }
     } else {
-        sc = new Shortcut(uid);
-        m_idCmdMap.insert(uid, sc);
+        sc = new Shortcut(id);
+        m_idCmdMap.insert(id, sc);
     }
 
     if (sc->shortcut()) {
-        qWarning() << "registerShortcut: action already registered (id" << id << ".";
+        qWarning() << "registerShortcut: action already registered, id" << id.name() << ".";
         return sc;
     }
 
     if (!hasContext(context))
         shortcut->setEnabled(false);
-    shortcut->setObjectName(id);
+    shortcut->setObjectName(id.toString());
     shortcut->setParent(m_mainWnd);
     sc->setShortcut(shortcut);
+    sc->setScriptable(scriptable);
 
     if (context.isEmpty())
-        sc->setContext(QList<int>() << 0);
+        sc->setContext(Context(0));
     else
         sc->setContext(context);
 
-    sc->setKeySequence(shortcut->key());
-    sc->setDefaultKeySequence(QKeySequence());
+    emit commandListChanged();
+    emit commandAdded(id.toString());
 
+    if (isPresentationModeEnabled())
+        connect(sc->shortcut(), SIGNAL(activated()), this, SLOT(shortcutTriggered()));
     return sc;
 }
 
-Command *ActionManagerPrivate::command(const QString &id) const
+Command *ActionManagerPrivate::command(const Id &id) const
 {
-    const int uid = UniqueIDManager::instance()->uniqueIdentifier(id);
-    const IdCmdMap::const_iterator it = m_idCmdMap.constFind(uid);
+    const IdCmdMap::const_iterator it = m_idCmdMap.constFind(id);
     if (it == m_idCmdMap.constEnd()) {
         if (warnAboutFindFailures)
-            qWarning() << "ActionManagerPrivate::command(): failed to find: " << id << '/' << uid;
+            qWarning() << "ActionManagerPrivate::command(): failed to find :"
+                       << id.name();
         return 0;
     }
     return it.value();
 }
 
-ActionContainer *ActionManagerPrivate::actionContainer(const QString &id) const
+ActionContainer *ActionManagerPrivate::actionContainer(const Id &id) const
 {
-    const int uid = UniqueIDManager::instance()->uniqueIdentifier(id);
-//    foreach(const int i, m_idContainerMap.keys()) {
-//        qWarning() << UniqueIDManager::instance()->stringForUniqueIdentifier(i);
-//    }
-
-    const IdContainerMap::const_iterator it = m_idContainerMap.constFind(uid);
+    const IdContainerMap::const_iterator it = m_idContainerMap.constFind(id);
     if (it == m_idContainerMap.constEnd()) {
         if (warnAboutFindFailures)
-            qWarning() << "ActionManagerPrivate::actionContainer(): failed to find: " << id << '/' << uid;
+            qWarning() << "ActionManagerPrivate::actionContainer(): failed to find :"
+                       << id.name();
         return 0;
     }
     return it.value();
 }
 
-Command *ActionManagerPrivate::command(int uid) const
-{
-    const IdCmdMap::const_iterator it = m_idCmdMap.constFind(uid);
-    if (it == m_idCmdMap.constEnd()) {
-        if (warnAboutFindFailures)
-            qWarning() << "ActionManagerPrivate::command(): failed to find: " <<  UniqueIDManager::instance()->stringForUniqueIdentifier(uid) << '/' << uid;
-        return 0;
-    }
-    return it.value();
-}
-
-ActionContainer *ActionManagerPrivate::actionContainer(int uid) const
-{
-    const IdContainerMap::const_iterator it = m_idContainerMap.constFind(uid);
-    if (it == m_idContainerMap.constEnd()) {
-        if (warnAboutFindFailures)
-            qWarning() << "ActionManagerPrivate::actionContainer(): failed to find: " << UniqueIDManager::instance()->stringForUniqueIdentifier(uid) << uid;
-        return 0;
-    }
-    return it.value();
-}
-
-void ActionManagerPrivate::retranslateMenusAndActions()
-{
-    foreach( CommandPrivate *c, m_idCmdMap.values())
-        c->retranslate();
-    foreach( ActionContainerPrivate *c, m_idContainerMap.values())
-        c->retranslate();
-}
-
-//static const char *settingsGroup = "KeyBindings";
-//static const char *idKey = "ID";
-//static const char *sequenceKey = "Keysequence";
+static const char settingsGroup[] = "KeyBindings";
+static const char idKey[] = "ID";
+static const char sequenceKey[] = "Keysequence";
 
 void ActionManagerPrivate::initialize()
 {
-//    QSettings *settings = m_mainWnd->settings();
+//    QSettings *settings = Core::ICore::instance()->settings();
 //    const int shortcuts = settings->beginReadArray(QLatin1String(settingsGroup));
-//    for (int i=0; i<shortcuts; ++i) {
+//    for (int i = 0; i < shortcuts; ++i) {
 //        settings->setArrayIndex(i);
-//        const QString sid = settings->value(QLatin1String(idKey)).toString();
 //        const QKeySequence key(settings->value(QLatin1String(sequenceKey)).toString());
-//        const int id = UniqueIDManager::instance()->uniqueIdentifier(sid);
-//
+//        const Id id = Id(settings->value(QLatin1String(idKey)).toString());
+
 //        Command *cmd = command(id);
 //        if (cmd)
 //            cmd->setKeySequence(key);
@@ -491,24 +519,92 @@ void ActionManagerPrivate::initialize()
 //    settings->endArray();
 }
 
-void ActionManagerPrivate::saveSettings(QSettings */*settings*/)
+void ActionManagerPrivate::saveSettings(QSettings *settings)
 {
+    Q_UNUSED(settings);
 //    settings->beginWriteArray(QLatin1String(settingsGroup));
 //    int count = 0;
-//
+
 //    const IdCmdMap::const_iterator cmdcend = m_idCmdMap.constEnd();
 //    for (IdCmdMap::const_iterator j = m_idCmdMap.constBegin(); j != cmdcend; ++j) {
-//        const int id = j.key();
+//        const Id id = j.key();
 //        CommandPrivate *cmd = j.value();
 //        QKeySequence key = cmd->keySequence();
 //        if (key != cmd->defaultKeySequence()) {
-//            const QString sid = UniqueIDManager::instance()->stringForUniqueIdentifier(id);
 //            settings->setArrayIndex(count);
-//            settings->setValue(QLatin1String(idKey), sid);
+//            settings->setValue(QLatin1String(idKey), id.toString());
 //            settings->setValue(QLatin1String(sequenceKey), key.toString());
 //            count++;
 //        }
 //    }
-//
+
 //    settings->endArray();
+}
+
+void ActionManagerPrivate::unregisterShortcut(const Core::Id &id)
+{
+    Shortcut *sc = 0;
+    CommandPrivate *c = m_idCmdMap.value(id, 0);
+    QTC_ASSERT(c, return);
+    sc = qobject_cast<Shortcut *>(c);
+    if (!sc) {
+        qWarning() << "unregisterShortcut: id" << id.name()
+                   << "is registered with a different command type.";
+        return;
+    }
+    delete sc->shortcut();
+    m_idCmdMap.remove(id);
+    delete sc;
+    emit commandListChanged();
+}
+
+void ActionManagerPrivate::setPresentationModeEnabled(bool enabled)
+{
+    if (enabled == isPresentationModeEnabled())
+        return;
+
+    // Signal/slots to commands:
+    foreach (Command *c, commands()) {
+        if (c->action()) {
+            if (enabled)
+                connect(c->action(), SIGNAL(triggered()), this, SLOT(actionTriggered()));
+            else
+                disconnect(c->action(), SIGNAL(triggered()), this, SLOT(actionTriggered()));
+        }
+        if (c->shortcut()) {
+            if (enabled)
+                connect(c->shortcut(), SIGNAL(activated()), this, SLOT(shortcutTriggered()));
+            else
+                disconnect(c->shortcut(), SIGNAL(activated()), this, SLOT(shortcutTriggered()));
+        }
+    }
+
+    // The label for the shortcuts:
+    if (!m_presentationLabel) {
+        m_presentationLabel = new QLabel(0, Qt::ToolTip | Qt::WindowStaysOnTopHint);
+        QFont font = m_presentationLabel->font();
+        font.setPixelSize(45);
+        m_presentationLabel->setFont(font);
+        m_presentationLabel->setAlignment(Qt::AlignCenter);
+        m_presentationLabel->setMargin(5);
+
+        connect(&m_presentationLabelTimer, SIGNAL(timeout()), m_presentationLabel, SLOT(hide()));
+    } else {
+        m_presentationLabelTimer.stop();
+        delete m_presentationLabel;
+        m_presentationLabel = 0;
+    }
+}
+
+bool ActionManagerPrivate::isPresentationModeEnabled()
+{
+    return m_presentationLabel;
+}
+
+void ActionManagerPrivate::retranslateMenusAndActions()
+{
+    foreach(CommandPrivate *c, m_idCmdMap.values())
+        c->retranslate();
+    foreach(ActionContainerPrivate *c, m_idContainerMap.values())
+        c->retranslate();
 }

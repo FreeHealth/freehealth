@@ -27,6 +27,8 @@
 #ifndef CORE_CONTEXTMANAGER_H
 #define CORE_CONTEXTMANAGER_H
 
+// Adapted from QtCreator 2.5.2 coreplugin/mainwindow
+
 #include <coreplugin/core_exporter.h>
 #include <coreplugin/contextmanager/icontext.h>
 
@@ -34,10 +36,9 @@
 
 /**
  * \file contextmanager.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.4.0
- * \date 25 Apr 2010
- * \brief adaptation of QtCreator MainWindow -> context management
+ * \author Eric MAEKER
+ * \version 0.8.0
+ * \date 20 Sept 2012
 */
 
 namespace Core {
@@ -46,12 +47,17 @@ class CORE_EXPORT ContextManager : public QObject
 {
     Q_OBJECT
 public:
+    ContextManager(QObject *parent = 0) : QObject(parent) {}
+    virtual ~ContextManager() {}
+
     virtual IContext *contextObject(QWidget *widget) = 0;
     virtual void addContextObject(IContext *context) = 0;
+    virtual void updateContextObject(IContext *context) = 0;
     virtual void removeContextObject(IContext *context) = 0;
     virtual void resetContext() = 0;
 
     virtual IContext *currentContextObject() const = 0;
+    virtual void updateAdditionalContexts(const Context &remove, const Context &add) = 0;
     virtual void addAdditionalContext(int context) = 0;
     virtual void removeAdditionalContext(int context) = 0;
     virtual bool hasContext(int context) const = 0;
@@ -60,7 +66,7 @@ public:
 
 Q_SIGNALS:
     void contextAboutToChange(Core::IContext *context);
-    void contextChanged(Core::IContext *context);
+    void contextChanged(Core::IContext *context, const Core::Context &additionalContexts);
 };
 
 } // End Core

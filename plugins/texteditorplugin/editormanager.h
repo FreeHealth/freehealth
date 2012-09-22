@@ -49,7 +49,7 @@ public:
     virtual ~EditorManager();
 
 private Q_SLOTS:
-    void updateContext(Core::IContext *context );
+    void updateContext(Core::IContext *object, const Core::Context &additionalContexts);
 
 private:
     EditorManager(QObject *parent = 0);

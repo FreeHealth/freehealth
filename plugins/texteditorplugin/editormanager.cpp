@@ -60,16 +60,17 @@ EditorManager::EditorManager(QObject *parent) :
     if (!parent)
         this->setParent(qApp);
     setObjectName("TextEditorManager");
-    connect(Core::ICore::instance()->contextManager(),SIGNAL(contextChanged(Core::IContext*)),
-            this, SLOT(updateContext(Core::IContext*)));
+    connect(Core::ICore::instance()->contextManager(), SIGNAL(contextChanged(Core::IContext*,Core::Context)),
+            this, SLOT(updateContext(Core::IContext*,Core::Context)));
 }
 
 EditorManager::~EditorManager()
 {
 }
 
-void EditorManager::updateContext(Core::IContext *object)
+void EditorManager::updateContext(Core::IContext *object, const Core::Context &additionalContexts)
 {
+    Q_UNUSED(additionalContexts);
     TextEditor *editor = 0;
     do {
         if (!object) {

@@ -38,25 +38,45 @@
 #include <coreplugin/core_exporter.h>
 #include <coreplugin/contextmanager/icontext.h>
 
-QT_BEGIN_NAMESPACE
-class QIcon;
-QT_END_NAMESPACE
+#include <QIcon>
 
 namespace Core {
 
 class CORE_EXPORT IMode : public IContext
 {
     Q_OBJECT
+    Q_PROPERTY(bool enabled READ isEnabled WRITE setEnabled)
+
 public:
-    IMode(QObject *parent = 0) : IContext(parent) {}
-    virtual ~IMode() {}
+    IMode(QObject *parent = 0);
 
-    virtual QString name() const = 0;
-    virtual QIcon icon() const = 0;
-    virtual int priority() const = 0;
-    virtual const char *uniqueModeName() const = 0;
+    QString displayName() const { return m_displayName; }
+    QIcon icon() const { return m_icon; }
+    int priority() const { return m_priority; }
+    QString id() const { return m_id; }
+    QString type() const { return m_type; }
+    bool isEnabled() const;
+    bool patientBarVisibility() const {return m_isPatientBarVisible;}
 
-    virtual bool isPatientBarVisible() const = 0;
+    void setEnabled(bool enabled);
+    void setDisplayName(const QString &displayName) { m_displayName = displayName; }
+    void setIcon(const QIcon &icon) { m_icon = icon; }
+    void setPriority(int priority) { m_priority = priority; }
+    void setId(const QString &id) { m_id = id; }
+    void setType(const QString &type) { m_type = type; }
+
+    void setPatientBarVisibility(bool visible) {m_isPatientBarVisible=visible;}
+
+Q_SIGNALS:
+    void enabledStateChanged(bool enabled);
+
+private:
+    QString m_displayName;
+    QIcon m_icon;
+    int m_priority;
+    QString m_id;
+    QString m_type;
+    bool m_isEnabled, m_isPatientBarVisible;
 };
 
 } // namespace Core

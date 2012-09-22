@@ -43,7 +43,7 @@
 #include <coreplugin/constants_icons.h>
 #include <coreplugin/contextmanager/contextmanager.h>
 #include <coreplugin/actionmanager/actionmanager.h>
-#include <coreplugin/uniqueidmanager.h>
+#include <coreplugin/actionmanager/actioncontainer.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -55,6 +55,7 @@
 #include <QGridLayout>
 #include <QTreeWidget>
 #include <QHeaderView>
+#include <QAction>
 
 #include <QDebug>
 
@@ -69,10 +70,10 @@ static inline Core::IPatient *patient() { return Core::ICore::instance()->patien
 static inline Form::Internal::EpisodeBase *episodeBase() { return Form::Internal::EpisodeBase::instance(); }
 
 // Register an existing Core action
-static QAction *registerAction(const QString &id, const QList<int> &ctx, QObject *parent)
+static QAction *registerAction(const QString &id, const Core::Context &ctx, QObject *parent)
 {
     QAction *a = new QAction(parent);
-    Core::Command *cmd = Core::ICore::instance()->actionManager()->registerAction(a, id, ctx);
+    Core::Command *cmd = Core::ICore::instance()->actionManager()->registerAction(a, Core::Id(id), ctx);
     Q_UNUSED(cmd);
     return a;
 }
@@ -80,7 +81,7 @@ static QAction *registerAction(const QString &id, const QList<int> &ctx, QObject
 // Create an action
 static inline QAction *createAction(QObject *parent, const QString &name, const QString &icon,
                                     const QString &actionName,
-                                    const QList<int> &context,
+                                    const Core::Context &context,
                                     const QString &trans, const QString &transContext,
                                     Core::Command *cmd,
                                     Core::ActionContainer *menu,
@@ -96,15 +97,15 @@ static inline QAction *createAction(QObject *parent, const QString &name, const 
         a->setCheckable(true);
         a->setChecked(false);
     }
-    cmd = actionManager()->registerAction(a, actionName, context);
+    cmd = actionManager()->registerAction(a, Core::Id(actionName), context);
     if (!transContext.isEmpty())
         cmd->setTranslations(trans, trans, transContext);
     else
-        cmd->setTranslations(trans); // use the Trans::Constants tr context (automatic)
+        cmd->setTranslations(trans, trans); // use the Trans::Constants tr context (automatic)
     if (key != QKeySequence::UnknownKey)
         cmd->setDefaultKeySequence(key);
     if (menu)
-        menu->addAction(cmd, group);
+        menu->addAction(cmd, Core::Id(group));
     return a;
 }
 
@@ -114,8 +115,8 @@ static inline QAction *createAction(QObject *parent, const QString &name, const 
 FormContextualWidgetManager::FormContextualWidgetManager(QObject *parent) :
     FormActionHandler(parent)
 {
-    connect(Core::ICore::instance()->contextManager(), SIGNAL(contextChanged(Core::IContext*)),
-            this, SLOT(updateContext(Core::IContext*)));
+    connect(Core::ICore::instance()->contextManager(), SIGNAL(contextChanged(Core::IContext*,Core::Context)),
+            this, SLOT(updateContext(Core::IContext*,Core::Context)));
     setObjectName("FormContextualWidgetManager");
 }
 
@@ -128,60 +129,38 @@ FormContextualWidgetManager::~FormContextualWidgetManager()
  * If the context is a Form::FormContextualWidget the action handler current view is updated.
  * \sa Form::FormActionHandler
  */
-void FormContextualWidgetManager::updateContext(Core::IContext *object)
+void FormContextualWidgetManager::updateContext(Core::IContext *object, const Core::Context &additionalContexts)
 {
-    //    qWarning() << "FormContextualWidgetManager::updateContext(Core::IContext *object)";
-    //    if (object)
-    //        qWarning() << "FormContextualWidgetManager::updateContext(Core::IContext *object)" << object->widget();
+    Q_UNUSED(additionalContexts);
+    qWarning() << "FormContextualWidgetManager::updateContext(Core::IContext *object)" << object;
+    if (object)
+        qWarning() << "FormContextualWidgetManager::updateContext(Core::IContext *object)" << object->widget();
     
     FormContextualWidget *view = 0;
     do {
         if (!object) {
             if (!m_CurrentView)
                 return;
-            m_CurrentView = 0;
+            
+            //            m_CurrentView = 0;  // keep trace of the last active view (we need it in dialogs)
             break;
         }
         view = qobject_cast<FormContextualWidget *>(object->widget());
         if (!view) {
-            checkParentWidgets(object->widget());
             if (!m_CurrentView)
                 return;
-            m_CurrentView = 0;
+            
+            //            m_CurrentView = 0;   // keep trace of the last active view (we need it in dialogs)
             break;
         }
         
         if (view == m_CurrentView) {
             return;
         }
+        
     } while (false);
     if (view) {
         FormActionHandler::setCurrentView(view);
-    }
-}
-
-/**
- * Check parent widgets for form context. If a form contextual widget is found in the
- * parents, add the form contextual id to context manager.
- */
-void FormContextualWidgetManager::checkParentWidgets(QWidget *widget)
-{
-//    WARN_FUNC;
-//    qWarning() << widget;
-    Core::UniqueIDManager *uid = Core::ICore::instance()->uniqueIDManager();
-    int contextId = uid->uniqueIdentifier(Constants::C_FORM_PLUGINS);
-    if (contextManager()->hasContext(contextId))
-        contextManager()->removeAdditionalContext(contextId);
-    if (!widget)
-        return;
-    QWidget *parent = widget->parentWidget();
-    while (parent) {
-        Core::IContext *context = contextManager()->contextObject(parent);
-        if (context && context->context().contains(contextId)) {
-            contextManager()->addAdditionalContext(contextId);
-            return;
-        }
-        parent = parent->parentWidget();
     }
 }
 
@@ -205,29 +184,27 @@ FormActionHandler::FormActionHandler(QObject *parent) :
 {
     setObjectName("FormActionHandler");
     
-    Core::UniqueIDManager *uid = Core::ICore::instance()->uniqueIDManager();
-    
     QAction *a = 0;
     Core::Command *cmd = 0;
-    QList<int> ctx = QList<int>() << uid->uniqueIdentifier(Form::Constants::C_FORM_PLUGINS);
-    QList<int> allContexts = QList<int>() << uid->uniqueIdentifier(Form::Constants::C_FORM_PLUGINS) << Core::Constants::C_GLOBAL_ID;
+    Core::Context ctx(Form::Constants::C_FORM_PLUGINS);
+    Core::Context allContexts(Form::Constants::C_FORM_PLUGINS, Core::Constants::C_GLOBAL);
 
     // Create the plugin specific menu
-    Core::ActionContainer *menu = actionManager()->actionContainer(Form::Constants::M_PLUGIN_FORM);
+    Core::ActionContainer *menu = actionManager()->actionContainer(Core::Id(Form::Constants::M_PLUGIN_FORM));
     if (!menu) {
         menu = actionManager()->createMenu(Form::Constants::M_PLUGIN_FORM);
-        //        menu->appendGroup(Form::Constants::G_PLUGINS_VIEWS);
-        //        menu->appendGroup(Form::Constants::G_PLUGINS_MODES);
-        //        menu->appendGroup(Form::Constants::G_PLUGINS_SEARCH);
-        //        menu->appendGroup(Form::Constants::G_PLUGINS_DRUGS);
-        //        menu->appendGroup(Form::Constants::G_PLUGINS_INTERACTIONS);
+        //        menu->appendGroup(Core::Id(Form::Constants::G_PLUGINS_VIEWS));
+        //        menu->appendGroup(Core::Id(Form::Constants::G_PLUGINS_MODES));
+        //        menu->appendGroup(Core::Id(Form::Constants::G_PLUGINS_SEARCH));
+        //        menu->appendGroup(Core::Id(Form::Constants::G_PLUGINS_DRUGS));
+        //        menu->appendGroup(Core::Id(Form::Constants::G_PLUGINS_INTERACTIONS));
         //        menu->setTranslations(Form::Constants::DRUGSMENU_TEXT);
         
         // Add the menu to the menubar or to the plugin menu
 #ifndef FREEMEDFORMS
-        actionManager()->actionContainer(Core::Constants::M_PLUGINS)->addMenu(menu, Core::Constants::G_PLUGINS_FORM);
+        actionManager()->actionContainer(Core::Id(Core::Constants::M_PLUGINS))->addMenu(menu, Core::Constants::G_PLUGINS_FORM);
 #else
-        actionManager()->actionContainer(Core::Constants::MENUBAR)->addMenu(menu, Core::Constants::G_PLUGINS);
+        actionManager()->actionContainer(Core::Id(Core::Constants::MENUBAR))->addMenu(menu, Core::Constants::G_PLUGINS);
 #endif
     }
     Q_ASSERT(menu);
@@ -359,7 +336,7 @@ void FormActionHandler::onActionEnabledStateUpdated(Form::Internal::FormContextu
         case Form::Internal::FormContextualWidget::Action_AddForm: a = aAddForm; break;
         case Form::Internal::FormContextualWidget::Action_PrintCurrentFormEpisode: a = aPrintForm; break;
         }  // end switch
-        a->setEnabled(m_CurrentView->enabledActionState(action));
+        a->setEnabled(m_CurrentView->enableAction(action));
     }
 }
 

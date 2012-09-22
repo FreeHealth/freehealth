@@ -96,7 +96,7 @@ public:
                 ;
 
         foreach(const QString &s, actionsToAdd) {
-            cmd = actionManager()->command(s);
+            cmd = actionManager()->command(Core::Id(s));
             if (cmd)
                 m_ToolBar->addAction(cmd->action());
         }
@@ -108,7 +108,7 @@ public:
                 ;
         m_ToolBar->addSeparator();
         foreach(const QString &s, actionsToAdd) {
-            cmd = actionManager()->command(s);
+            cmd = actionManager()->command(Core::Id(s));
             if (cmd)
                 m_ToolBar->addAction(cmd->action());
         }

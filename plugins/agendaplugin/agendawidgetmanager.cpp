@@ -39,7 +39,7 @@
 #include <coreplugin/ipatient.h>
 #include <coreplugin/contextmanager/contextmanager.h>
 #include <coreplugin/actionmanager/actionmanager.h>
-#include <coreplugin/uniqueidmanager.h>
+#include <coreplugin/actionmanager/actioncontainer.h>
 
 #include <QDialog>
 #include <QGridLayout>
@@ -55,6 +55,7 @@ static inline Core::ActionManager *actionManager() {return Core::ICore::instance
 static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
+static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////      MANAGER      ///////////////////////////////////////////////
@@ -68,14 +69,15 @@ AgendaWidgetManager *AgendaWidgetManager::instance()
     return m_Instance;
 }
 
-AgendaWidgetManager::AgendaWidgetManager(QObject *parent) : AgendaActionHandler(parent)
+AgendaWidgetManager::AgendaWidgetManager(QObject *parent) :
+    AgendaActionHandler(parent)
 {
-    connect(Core::ICore::instance()->contextManager(), SIGNAL(contextChanged(Core::IContext*)),
-            this, SLOT(updateContext(Core::IContext*)));
+    connect(Core::ICore::instance()->contextManager(), SIGNAL(contextChanged(Core::IContext*,Core::Context)),
+            this, SLOT(updateContext(Core::IContext*,Core::Context)));
     setObjectName("AgendaWidgetManager");
 }
 
-void AgendaWidgetManager::updateContext(Core::IContext *object)
+void AgendaWidgetManager::updateContext(Core::IContext *object, const Core::Context &additionalContexts)
 {
     Q_UNUSED(object);
     //    qWarning() << "DrugsManager::updateContext(Core::IContext *object)";
@@ -128,15 +130,10 @@ AgendaActionHandler::AgendaActionHandler(QObject *parent) :
         m_CurrentView(0)
 {
     setObjectName("AgendaActionHandler");
-//    Utils::Log::addMessage(this, "Instance created");
-
-    Core::UniqueIDManager *uid = Core::ICore::instance()->uniqueIDManager();
-    Core::ITheme *th = Core::ICore::instance()->theme();
-
     QAction *a = 0;
     Core::Command *cmd = 0;
-    QList<int> ctx = QList<int>() << uid->uniqueIdentifier(Agenda::Constants::C_AGENDA_PLUGIN);
-    QList<int> globalcontext = QList<int>() << Core::Constants::C_GLOBAL_ID;
+    Core::Context ctx(Agenda::Constants::C_AGENDA_PLUGIN);
+    Core::Context globalcontext(Core::Constants::C_GLOBAL);
 
 //    Core::ActionContainer *menu = actionManager()->actionContainer(Constants::M_PLUGINS_AGENDA);
 //    if (!menu) {
@@ -151,7 +148,7 @@ AgendaActionHandler::AgendaActionHandler(QObject *parent) :
 
     // Create local actions
 //    a = aClear = new QAction(this);
-//    a->setIcon(th->icon(Core::Constants::ICONCLEAR));
+//    a->setIcon(theme()->icon(Core::Constants::ICONCLEAR));
 //    cmd = actionManager()->registerAction(a, Core::Constants::A_LIST_CLEAR, ctx);
 //    cmd->setTranslations(Trans::Constants::LISTCLEAR_TEXT);
 //    menu->addAction(cmd, Constants::G_AGENDA_EDIT);
@@ -172,7 +169,7 @@ AgendaActionHandler::AgendaActionHandler(QObject *parent) :
 //    a = aSearchCommercial = new QAction(this);
 //    a->setCheckable(true);
 //    a->setChecked(m==Constants::SearchCommercial);
-//    a->setIcon(th->icon(DrugsDB::Constants::I_SEARCHCOMMERCIAL));
+//    a->setIcon(theme()->icon(DrugsDB::Constants::I_SEARCHCOMMERCIAL));
 //    cmd = actionManager()->registerAction(a, DrugsWidget::Constants::A_SEARCH_COMMERCIAL, ctx);
 //    cmd->setTranslations(DrugsWidget::Constants::SEARCHCOMMERCIAL_TEXT, "", DRUGCONSTANTS_TR_CONTEXT);
 //    cmd->setAttribute(Core::Command::CA_UpdateText);
@@ -182,7 +179,7 @@ AgendaActionHandler::AgendaActionHandler(QObject *parent) :
 //    a = aSearchMolecules = new QAction(this);
 //    a->setCheckable(true);
 //    a->setChecked(m==Constants::SearchMolecules);
-//    a->setIcon(th->icon(DrugsDB::Constants::I_SEARCHMOLS));
+//    a->setIcon(theme()->icon(DrugsDB::Constants::I_SEARCHMOLS));
 //    cmd = actionManager()->registerAction(a, DrugsWidget::Constants::A_SEARCH_MOLECULES, ctx);
 //    cmd->setTranslations(DrugsWidget::Constants::SEARCHMOLECULES_TEXT, "", DRUGCONSTANTS_TR_CONTEXT);
 //    cmd->setAttribute(Core::Command::CA_UpdateText);
@@ -192,7 +189,7 @@ AgendaActionHandler::AgendaActionHandler(QObject *parent) :
 //    a = aSearchInn = new QAction(this);
 //    a->setCheckable(true);
 //    a->setChecked(m==Constants::SearchInn);
-//    a->setIcon(th->icon(DrugsDB::Constants::I_SEARCHINN));
+//    a->setIcon(theme()->icon(DrugsDB::Constants::I_SEARCHINN));
 //    cmd = actionManager()->registerAction(a, DrugsWidget::Constants::A_SEARCH_INN, ctx);
 //    cmd->setTranslations(DrugsWidget::Constants::SEARCHINN_TEXT, "", DRUGCONSTANTS_TR_CONTEXT);
 //    cmd->setAttribute(Core::Command::CA_UpdateText);
@@ -204,32 +201,32 @@ AgendaActionHandler::AgendaActionHandler(QObject *parent) :
     Core::ActionContainer *fmenu = actionManager()->actionContainer(Core::Constants::M_GENERAL_NEW);
     a = aNewEvent = new QAction(this);
     QIcon icon;
-    icon.addFile(th->iconFullPath(Constants::I_NEW_AGENDAEVENT, Core::ITheme::SmallIcon), QSize(16, 16));
-    icon.addFile(th->iconFullPath(Constants::I_NEW_AGENDAEVENT, Core::ITheme::MediumIcon), QSize(32, 32));
+    icon.addFile(theme()->iconFullPath(Constants::I_NEW_AGENDAEVENT, Core::ITheme::SmallIcon), QSize(16, 16));
+    icon.addFile(theme()->iconFullPath(Constants::I_NEW_AGENDAEVENT, Core::ITheme::MediumIcon), QSize(32, 32));
     a->setIcon(icon);
-    cmd = actionManager()->registerAction(a, Constants::A_NEW_AGENDAEVENT, globalcontext);
+    cmd = actionManager()->registerAction(a, Core::Id(Constants::A_NEW_AGENDAEVENT), globalcontext);
     cmd->setTranslations(Trans::Constants::AGENDA_EVENT, Trans::Constants::AGENDA_EVENT);
 //    cmd->setKeySequence(QKeySequence::Print);
     cmd->retranslate();
     if (fmenu) {
-        fmenu->addAction(cmd, Core::Constants::G_GENERAL_NEW);
+        fmenu->addAction(cmd, Core::Id(Core::Constants::G_GENERAL_NEW));
     }
 //    connect(aNewEvent,SIGNAL(triggered()), this, SLOT(newEvent()));
 
     a = aPrintSelection = new QAction(this);
-    a->setIcon(th->icon(Core::Constants::ICONPRINT));
+    a->setIcon(theme()->icon(Core::Constants::ICONPRINT));
     //    a->setShortcut(tkTr(Trans::Constants::K_PRINT_PRESCRIPTION));
-    cmd = actionManager()->registerAction(a, Constants::A_PRINT_SELECTION, ctx);
+    cmd = actionManager()->registerAction(a, Core::Id(Constants::A_PRINT_SELECTION), ctx);
     cmd->setTranslations(Constants::PRINTSELECTION_TEXT, Constants::PRINTSELECTION_TEXT, AGENDA_TR_CONTEXT);
 //    cmd->setKeySequence(tkTr(Trans::Constants::K_PRINT_PRESCRIPTION));
     cmd->retranslate();
 //    if (fmenu) {
-//        fmenu->addAction(cmd, Core::Constants::G_FILE_PRINT);
+//        fmenu->addAction(cmd, Core::Id(Core::Constants::G_FILE_PRINT));
 //    }
     connect(aPrintSelection,SIGNAL(triggered()), this, SLOT(printSelection()));
 
 //    a = aPrintPreview = new QAction(this);
-//    a->setIcon(th->icon(Core::Constants::ICONPRINTPREVIEW));
+//    a->setIcon(theme()->icon(Core::Constants::ICONPRINTPREVIEW));
 //    //    a->setShortcut(tkTr(Trans::Constants::K_PRINT_PRESCRIPTION));
 //    cmd = actionManager()->registerAction(a, Core::Constants::A_FILE_PRINTPREVIEW, ctx);
 //    cmd->setTranslations(Trans::Constants::PRINTPREVIEW_TEXT, Trans::Constants::PRINTPREVIEW_TEXT);
@@ -241,14 +238,14 @@ AgendaActionHandler::AgendaActionHandler(QObject *parent) :
 
 
     // Databases information
-    Core::ActionContainer *hmenu = actionManager()->actionContainer(Core::Constants::M_HELP_DATABASES);
+    Core::ActionContainer *hmenu = actionManager()->actionContainer(Core::Id(Core::Constants::M_HELP_DATABASES));
     a = aAgendaDatabaseInformation = new QAction(this);
-    a->setIcon(th->icon(Core::Constants::ICONHELP));
-    cmd = actionManager()->registerAction(a, Constants::A_AGENDADATABASE_INFORMATION, globalcontext);
+    a->setIcon(theme()->icon(Core::Constants::ICONHELP));
+    cmd = actionManager()->registerAction(a, Core::Id(Constants::A_AGENDADATABASE_INFORMATION), globalcontext);
     cmd->setTranslations(Trans::Constants::AGENDA_DATABASE_INFORMATION);
     cmd->retranslate();
     if (hmenu) {
-        hmenu->addAction(cmd, Core::Constants::G_HELP_DATABASES);
+        hmenu->addAction(cmd, Core::Id(Core::Constants::G_HELP_DATABASES));
     }
     connect(aAgendaDatabaseInformation,SIGNAL(triggered()), this, SLOT(showAgendaDatabaseInformation()));
 

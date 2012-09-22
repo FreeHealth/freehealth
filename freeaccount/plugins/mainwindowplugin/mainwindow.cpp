@@ -46,6 +46,7 @@
 #include <coreplugin/actionmanager/mainwindowactions.h>
 #include <coreplugin/actionmanager/mainwindowactionhandler.h>
 #include <coreplugin/actionmanager/actionmanager.h>
+#include <coreplugin/actionmanager/actioncontainer.h>
 #include <coreplugin/contextmanager/contextmanager.h>
 #include <coreplugin/dialogs/plugindialog.h>
 #include <coreplugin/dialogs/settingsdialog.h>
@@ -78,6 +79,7 @@
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
 #include <QDockWidget>
+#include <QMenu>
 
 using namespace MainWin;
 using namespace MainWin::Internal;

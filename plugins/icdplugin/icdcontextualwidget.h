@@ -51,8 +51,6 @@ public:
     IcdContextualWidget(QWidget *parent = 0);
     virtual ~IcdContextualWidget();
 
-    void addContexts(const QList<int> &contexts);
-
 private:
     Internal::IcdContext *m_Context;
 };

@@ -35,73 +35,58 @@
 #ifndef MODEMANAGER_H
 #define MODEMANAGER_H
 
-#include <QtCore/QObject>
-#include <QtCore/QList>
-#include <QtCore/QMap>
-#include <QtCore/QVector>
-
+#include <QObject>
 #include <coreplugin/core_exporter.h>
 #include <coreplugin/imainwindow.h>
 
 QT_BEGIN_NAMESPACE
-class QSignalMapper;
-class QMenu;
+class QAction;
 QT_END_NAMESPACE
 
 namespace Utils {
 class FancyTabWidget;
-class FancyActionBar;
 }
 
 namespace Core {
-class Command;
 class IMode;
-class IMainWindow;
 
 class CORE_EXPORT ModeManager : public QObject
 {
     Q_OBJECT
 
 public:
-    ModeManager(IMainWindow *mainWindow);
+    explicit ModeManager(Core::IMainWindow *mainWindow);
+    virtual ~ModeManager();
 
-    void init(Utils::FancyTabWidget *modeStack);
-    static ModeManager *instance() { return m_instance; }
+    static void init(Utils::FancyTabWidget *modeStack);
+    static ModeManager *instance();
 
-    IMode* currentMode() const;
-    IMode* mode(const QString &id) const;
+    static IMode *currentMode();
+    static IMode *mode(const QString &id);
 
-    void addAction(Command *command, int priority, QMenu *menu = 0);
-    void addWidget(QWidget *widget);
+    static void addAction(QAction *action, int priority);
+    static void addProjectSelector(QAction *action);
+    static void addWidget(QWidget *widget);
 
-Q_SIGNALS:
+    static void activateModeType(const QString &type);
+    static void setModeBarHidden(bool hidden);
+    static void activateMode(const QString &id);
+    static void setFocusToCurrentMode();
+
+signals:
     void currentModeAboutToChange(Core::IMode *mode);
-    void currentModeChanged(Core::IMode *mode);
 
-public Q_SLOTS:
-    void activateMode(const QString &id);
-    void setFocusToCurrentMode();
+    // the default argument '=0' is important for connects without the oldMode argument.
+    void currentModeChanged(Core::IMode *mode, Core::IMode *oldMode = 0);
 
-private Q_SLOTS:
+private slots:
+    void slotActivateMode(const QString &id);
     void objectAdded(QObject *obj);
     void aboutToRemoveObject(QObject *obj);
     void currentTabAboutToChange(int index);
     void currentTabChanged(int index);
     void updateModeToolTip();
-    void languageChanged();
-
-private:
-    int indexOf(const QString &id) const;
-
-    static ModeManager *m_instance;
-    IMainWindow *m_mainWindow;
-    Utils::FancyTabWidget *m_modeStack;
-    Utils::FancyActionBar *m_actionBar;
-    QMap<Command*, int> m_actions;
-    QVector<IMode*> m_modes;
-    QVector<Command*> m_modeShortcuts;
-    QSignalMapper *m_signalMapper;
-    QList<int> m_addedContexts;
+    void enabledStateChanged();
 };
 
 } // namespace Core

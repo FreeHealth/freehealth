@@ -39,7 +39,6 @@
 
 #include <coreplugin/contextmanager/contextmanager.h>
 #include <coreplugin/icore.h>
-#include <coreplugin/uniqueidmanager.h>
 
 using namespace Form;
 using namespace Internal;
@@ -50,11 +49,9 @@ FormContextualWidget::FormContextualWidget(QWidget *parent) :
     QWidget(parent),
     m_Context(0)
 {
-    Core::UniqueIDManager *uid = Core::ICore::instance()->uniqueIDManager();
-
     // Create the context object
     m_Context = new Internal::FormContext(this);
-    m_Context->setContext(QList<int>() << uid->uniqueIdentifier(Constants::C_FORM_PLUGINS));
+    m_Context->setContext(Core::Context(Constants::C_FORM_PLUGINS));
 
     // Send it to the contextual manager
     contextManager()->addContextObject(m_Context);
@@ -66,12 +63,7 @@ FormContextualWidget::~FormContextualWidget()
     contextManager()->removeContextObject(m_Context);
 }
 
-void FormContextualWidget::addContexts(const QList<int> &contexts)
+Core::IContext *FormContextualWidget::context() const
 {
-    m_Context->addContext(contexts);
-}
-
-QList<int> FormContextualWidget::contexts() const
-{
-    return m_Context->context();
+    return m_Context;
 }

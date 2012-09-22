@@ -42,8 +42,8 @@
 #include <coreplugin/isettings.h>
 
 #include <coreplugin/actionmanager/actionmanager.h>
+#include <coreplugin/actionmanager/actioncontainer.h>
 #include <coreplugin/contextmanager/contextmanager.h>
-#include <coreplugin/uniqueidmanager.h>
 
 #include <translationutils/constanttranslations.h>
 #include <utils/log.h>
@@ -51,11 +51,11 @@
 
 #include <extensionsystem/pluginmanager.h>
 
-#include <QObject>
 #include <QWidget>
 #include <QToolBar>
 #include <QSpacerItem>
 #include <QTreeWidget>
+#include <QMenu>
 
 #include <QDebug>
 
@@ -66,7 +66,6 @@ using namespace Trans::ConstantTranslations;
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline Core::ActionManager *actionManager() { return Core::ICore::instance()->actionManager(); }
-static inline Core::UniqueIDManager *uid() {return Core::ICore::instance()->uniqueIDManager();}
 static inline Core::ContextManager *contextManager() {return Core::ICore::instance()->contextManager();}
 static inline Templates::TemplatesCore &templateCore() {return Templates::TemplatesCore::instance();}
 static inline Templates::Internal::TemplateBase *templateBase() {return templateCore().templateBase();}
@@ -75,14 +74,14 @@ namespace
 {
 static inline QAction *registerAction(const QString &objName, Core::ActionContainer *menu, const QString &iconName,
                                       const QString &actionName, const QString &group, const QString &tr,
-                                      const QList<int> &context, QObject *parent)
+                                      const Core::Context &context, QObject *parent)
 {
     QAction *toReturn = new QAction(parent);
     toReturn->setObjectName(objName);
     toReturn->setIcon(theme()->icon(iconName));
-    Core::Command *cmd = actionManager()->registerAction(toReturn, actionName, context);
+    Core::Command *cmd = actionManager()->registerAction(toReturn, Core::Id(actionName), context);
     cmd->setTranslations(tr);
-    menu->addAction(cmd, group);
+    menu->addAction(cmd, Core::Id(group));
     return toReturn;
 }
 
@@ -92,19 +91,19 @@ const char* const C_BASIC_REMOVE       = "context.TemplatesView.Remove";
 const char* const C_BASIC_SAVE         = "context.TemplatesView.Save";
 const char* const C_BASIC_PRINT        = "context.TemplatesView.Print";
 const char* const C_BASIC_LOCK         = "context.TemplatesView.Lock";
-}
+}  // namespace Anonymous
 
 /////////////////////////////////////////////////////////////////////////// List View Manager
 TemplatesViewManager::TemplatesViewManager(QObject *parent) :
     TemplatesViewActionHandler(parent)
 {
-    if (contextManager())
-        connect(contextManager(), SIGNAL(contextChanged(Core::IContext*)),
-            this, SLOT(updateContext(Core::IContext*)));
+    connect(Core::ICore::instance()->contextManager(), SIGNAL(contextChanged(Core::IContext*,Core::Context)),
+            this, SLOT(updateContext(Core::IContext*,Core::Context)));
 }
 
-void TemplatesViewManager::updateContext(Core::IContext *object)
+void TemplatesViewManager::updateContext(Core::IContext *object, const Core::Context &additionalContexts)
 {
+    Q_UNUSED(additionalContexts);
 //    qWarning() << "*** TemplatesViewManager::updateContext ***";
 //    if (object)
 //        qWarning() << object;
@@ -154,20 +153,20 @@ TemplatesViewActionHandler::TemplatesViewActionHandler(QObject *parent) :
     if (!actionManager())
         return;
 
-    QList<int> editContext = QList<int>() << uid()->uniqueIdentifier(::C_BASIC_EDIT);
-    QList<int> lockContext = QList<int>() << uid()->uniqueIdentifier(::C_BASIC_LOCK);
-    QList<int> addContext = QList<int>() << uid()->uniqueIdentifier(::C_BASIC_ADD);
-    QList<int> removeContext = QList<int>() << uid()->uniqueIdentifier(::C_BASIC_REMOVE);
-    QList<int> saveContext = QList<int>() << uid()->uniqueIdentifier(::C_BASIC_SAVE);
-    QList<int> printContext = QList<int>() << uid()->uniqueIdentifier(::C_BASIC_PRINT);
+    Core::Context editContext(::C_BASIC_EDIT);
+    Core::Context lockContext(::C_BASIC_LOCK);
+    Core::Context addContext(::C_BASIC_ADD);
+    Core::Context removeContext(::C_BASIC_REMOVE);
+    Core::Context saveContext(::C_BASIC_SAVE);
+    Core::Context printContext(::C_BASIC_PRINT);
 
     // Edit Menu and Contextual Menu
     Core::ActionContainer *editMenu = actionManager()->actionContainer(Core::Constants::M_EDIT);
     Core::ActionContainer *cmenu = actionManager()->actionContainer(Core::Constants::M_EDIT_TEMPLATES);
     if (!cmenu) {
         cmenu = actionManager()->createMenu(Core::Constants::M_EDIT_TEMPLATES);
-        cmenu->appendGroup(Core::Constants::G_EDIT_TEMPLATES);
-        cmenu->appendGroup(Core::Constants::G_EDIT_CATEGORIES);
+        cmenu->appendGroup(Core::Id(Core::Constants::G_EDIT_TEMPLATES));
+        cmenu->appendGroup(Core::Id(Core::Constants::G_EDIT_CATEGORIES));
         cmenu->setTranslations(Trans::Constants::M_EDIT_TEMPLATES_TEXT);
         if (editMenu)
             editMenu->addMenu(cmenu, Core::Constants::G_EDIT_TEMPLATES);
@@ -217,7 +216,7 @@ TemplatesViewActionHandler::TemplatesViewActionHandler(QObject *parent) :
                                         Core::Constants::A_TEMPLATE_DATABASEINFORMATION,
                                         Core::Constants::G_HELP_DATABASES,
                                         Trans::Constants::TEMPLATES_DATABASE_INFORMATION_TEXT,
-                                        QList<int>() << Core::Constants::C_GLOBAL_ID, this);
+                                        Core::Context(Core::Constants::C_GLOBAL), this);
         connect(aDatabaseInfos, SIGNAL(triggered()), this, SLOT(databaseInformation()));
 //        contextManager()->updateContext();
     }
@@ -389,28 +388,29 @@ public:
 
     void manageContexts(Templates::TemplatesView::EditModes editModes)
     {
-        m_Context->clearContext();
-        m_Context->addContext(Core::Constants::C_GLOBAL_ID);
+        Core::Context context(Core::Constants::C_GLOBAL);
         if (editModes==0) {
             this->m_ToolBar->hide();
+            m_Context->setContext(context);
             return;
         }
         if (editModes & Templates::TemplatesView::Save)
-            m_Context->addContext(uid()->uniqueIdentifier(::C_BASIC_SAVE));
+            context.add(::C_BASIC_SAVE);
         if (editModes & Templates::TemplatesView::Add)
-            m_Context->addContext(uid()->uniqueIdentifier(::C_BASIC_ADD));
+            context.add(::C_BASIC_ADD);
         if (editModes & Templates::TemplatesView::Remove)
-            m_Context->addContext(uid()->uniqueIdentifier(::C_BASIC_REMOVE));
+            context.add(::C_BASIC_REMOVE);
         if (editModes & Templates::TemplatesView::Edit) {
-            m_Context->addContext(uid()->uniqueIdentifier(::C_BASIC_EDIT));
+            context.add(::C_BASIC_EDIT);
             m_ui->categoryTreeView->setEditTriggers(QAbstractItemView::DoubleClicked | QAbstractItemView::EditKeyPressed);
         } else {
             m_ui->categoryTreeView->setEditTriggers(QAbstractItemView::NoEditTriggers);
         }
         if (editModes & Templates::TemplatesView::Print)
-            m_Context->addContext(uid()->uniqueIdentifier(::C_BASIC_PRINT));
+            context.add(::C_BASIC_PRINT);
         if (editModes & Templates::TemplatesView::LockUnlock)
-            m_Context->addContext(uid()->uniqueIdentifier(::C_BASIC_LOCK));
+            context.add(::C_BASIC_LOCK);
+        m_Context->setContext(context);
     }
 
 public Q_SLOTS:
@@ -418,10 +418,10 @@ public Q_SLOTS:
     {
         QMenu *menu = new QMenu(tkTr(Trans::Constants::TEMPLATES), q);
         QList<QAction *> list;
-        list    << actionManager()->command(Core::Constants::A_TEMPLATE_ADD)->action()
-                << actionManager()->command(Core::Constants::A_TEMPLATE_REMOVE)->action()
-                << actionManager()->command(Core::Constants::A_TEMPLATE_EDIT)->action()
-                << actionManager()->command(Core::Constants::A_TEMPLATE_PRINT)->action();
+        list    << actionManager()->command(Core::Id(Core::Constants::A_TEMPLATE_ADD))->action()
+                << actionManager()->command(Core::Id(Core::Constants::A_TEMPLATE_REMOVE))->action()
+                << actionManager()->command(Core::Id(Core::Constants::A_TEMPLATE_EDIT))->action()
+                << actionManager()->command(Core::Id(Core::Constants::A_TEMPLATE_PRINT))->action();
         bool returnMenu = false;
         foreach(QAction *action, list) {
             if (action->isEnabled()) {

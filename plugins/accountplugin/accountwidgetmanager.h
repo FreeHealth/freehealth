@@ -42,13 +42,14 @@
 /**
  * \file accountwidgetmanager.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.5.0
- * \date 03 Mar 2011
+ * \version 0.8.0
+ * \date 22 Sept 2012
  * \internal
 */
 
 namespace Core {
 class IContext;
+class Context;
 }
 
 namespace Account {
@@ -105,7 +106,7 @@ public:
     Account::AccountContextualWidget *currentView() const;
 
 private Q_SLOTS:
-    void updateContext(Core::IContext *object);
+    void updateContext(Core::IContext *object, const Core::Context &additionalContexts);
 
 private:
     AccountWidgetManager(QObject *parent = 0);

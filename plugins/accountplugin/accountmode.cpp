@@ -71,12 +71,12 @@ AccountMode::~AccountMode()
 }
 
 AccountMode::AccountMode(QObject *parent) :
-    Core::BaseMode(parent)
+    Core::IMode(parent)
 {
-//    setName(tr("Accountancy"));
+    setDisplayName(tr("Accountancy"));
     setIcon(theme()->icon(Core::Constants::ICONACCOUNTMODE, Core::ITheme::BigIcon));
     setPriority(Core::Constants::P_MODE_ACCOUNT);
-    setUniqueModeName(Core::Constants::MODE_ACCOUNT);
+    setId(Core::Constants::MODE_ACCOUNT);
     setPatientBarVisibility(true);
 
 //    const QList<int> &context;
@@ -86,14 +86,6 @@ AccountMode::AccountMode(QObject *parent) :
 
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
     connect(modeManager(), SIGNAL(currentModeChanged(Core::IMode*)), this, SLOT(modeActivated(Core::IMode*)));
-
-    // TODO: connect actions from the account menu
-    // TODO: connect patient changed and refresh views?
-}
-
-QString AccountMode::name() const
-{
-    return tr("Accountancy");
 }
 
 void AccountMode::setCentralWidget(QWidget *widget)

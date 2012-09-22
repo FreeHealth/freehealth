@@ -31,7 +31,8 @@
 
 /**
  * \class PMH::Internal::PmhModeWidget
- * Widget use in the PMH::Internal::PmhMode. Presents a pmhx category tree view and a central widget
+ * Widget used in the PMH::Internal::PmhMode.
+ * Presents a pmhx category tree view and a central widget
  * with a PMH::Internal::PmhViewer and/or a Form::FormPlaceHolder.
  */
 
@@ -122,7 +123,9 @@ const char * const TREEVIEW_SHEET =
 }
 
 PmhModeWidget::PmhModeWidget(QWidget *parent) :
-        PmhContextualWidget(parent), ui(new Ui::PmhModeWidget), m_EditButton(0)
+        PmhContextualWidget(parent),
+        ui(new Ui::PmhModeWidget),
+        m_EditButton(0)
 {
     ui->setupUi(this);
     ui->pmhViewer->setEditMode(PmhViewer::ReadOnlyMode);
@@ -134,7 +137,7 @@ PmhModeWidget::PmhModeWidget(QWidget *parent) :
                               << Constants::A_PMH_NEW
                               << Constants::A_PMH_REMOVE
                               << Constants::A_PMH_CATEGORYMANAGER);
-    ui->treeView->addContexts(contexts());
+    ui->treeView->addContext(Core::Context(Constants::C_PMH_PLUGINS));
     ui->treeView->setModel(catModel());
     ui->treeView->header()->hide();
     ui->treeView->setStyleSheet(::TREEVIEW_SHEET);
@@ -357,15 +360,14 @@ void PmhModeWidget::changeEvent(QEvent *e)
     }
 }
 
-
 PmhMode::PmhMode(QObject *parent) :
-    Core::BaseMode(parent),
+    Core::IMode(parent),
     m_inPluginManager(false)
 {
-    setName(tkTr(Trans::Constants::PMHX));
+    setDisplayName(tkTr(Trans::Constants::PMHX));
     setIcon(theme()->icon(Core::Constants::ICONPATIENTHISTORY, Core::ITheme::BigIcon));
     setPriority(Core::Constants::P_MODE_PATIENT_HISTORY);
-    setUniqueModeName(Core::Constants::MODE_PATIENT_HISTORY);
+    setId(Core::Constants::MODE_PATIENT_HISTORY);
     setPatientBarVisibility(true);
 
 //    const QList<int> &context;

@@ -139,7 +139,7 @@ void PrescriptionViewer::createActionsAndToolbar()
 #endif
     actionsToAdd << "--";
     actionsToAdd
-            << Core::Constants::A_LIST_CLEAR
+            << DrugsWidget::Constants::A_CLEAR_PRESCRIPTION
             << Core::Constants::A_LIST_REMOVE
             << Core::Constants::A_LIST_MOVEDOWN
             << Core::Constants::A_LIST_MOVEUP
@@ -157,7 +157,7 @@ void PrescriptionViewer::createActionsAndToolbar()
             m_ToolBar->addSeparator();
             continue;
         }
-        cmd = actionManager()->command(s);
+        cmd = actionManager()->command(Core::Id(s));
         if (cmd)
             m_ToolBar->addAction(cmd->action());
     }
@@ -181,7 +181,7 @@ void PrescriptionViewer::on_listView_customContextMenuRequested(const QPoint &)
 
     Core::Command *cmd = 0;
     foreach(const QString &s, actionsToAdd) {
-        cmd = actionManager()->command(s);
+        cmd = actionManager()->command(Core::Id(s));
         pop->addAction(cmd->action());
     }
     pop->exec(QCursor::pos());

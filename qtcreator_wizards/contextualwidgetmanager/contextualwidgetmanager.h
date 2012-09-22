@@ -58,7 +58,7 @@ public:
     %PluginName%ContextualWidget *currentView() const;
 
 private Q_SLOTS:
-    void updateContext(Core::IContext *object);
+    void updateContext(Core::IContext *object, const Core::Context &additionalContexts);
 };
 
 

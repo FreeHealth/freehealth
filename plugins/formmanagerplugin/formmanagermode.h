@@ -27,7 +27,7 @@
 #ifndef FORMMANAGERMODE_H
 #define FORMMANAGERMODE_H
 
-#include <coreplugin/modemanager/basemode.h>
+#include <coreplugin/modemanager/imode.h>
 
 #include <QObject>
 
@@ -43,7 +43,7 @@ namespace Form {
 class FormPlaceHolder;
 namespace Internal {
 
-class FormManagerMode : public Core::BaseMode
+class FormManagerMode : public Core::IMode
 {
     Q_OBJECT
 public:

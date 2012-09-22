@@ -35,7 +35,6 @@
 #include <coreplugin/actionmanager/actionmanager.h>
 #include <coreplugin/contextmanager/contextmanager.h>
 #include <coreplugin/contextmanager/contextmanager_p.h>
-#include <coreplugin/uniqueidmanager.h>
 #include <coreplugin/filemanager.h>
 #include <coreplugin/ipatient.h>
 #include <coreplugin/iuser.h>
@@ -80,7 +79,6 @@ CoreImpl::CoreImpl(QObject *parent) :
         m_MainWindow(0),
         m_ActionManager(0),
         m_ContextManager(0),
-        m_UID(new UniqueIDManager),
         m_PadTools(0)
 {
     setObjectName("Core");
@@ -162,13 +160,11 @@ CoreImpl::CoreImpl(QObject *parent) :
 
 CoreImpl::~CoreImpl()
 {
-    delete m_UID;
     delete m_CommandLine;
 }
 
 ActionManager *CoreImpl::actionManager() const { return m_ActionManager; }
 ContextManager *CoreImpl::contextManager() const { return m_ContextManager; }
-UniqueIDManager *CoreImpl::uniqueIDManager() const { return m_UID; }
 ITheme *CoreImpl::theme() const { return m_Theme; }
 Translators *CoreImpl::translators() const { return m_Translators; }
 ISettings *CoreImpl::settings() const { return m_Settings; }

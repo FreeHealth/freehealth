@@ -52,11 +52,11 @@
 
 #include <coreplugin/contextmanager/contextmanager.h>
 #include <coreplugin/actionmanager/actionmanager.h>
+#include <coreplugin/actionmanager/actioncontainer.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/iuser.h>
 #include <coreplugin/ipatient.h>
-#include <coreplugin/uniqueidmanager.h>
 #include <coreplugin/constants_menus.h>
 #include <coreplugin/isettings.h>
 
@@ -194,52 +194,41 @@ public:
         m_ToolBar->clear();
         QStringList actions;
 
-        // IO Actions
+        // Actions
         if (m_Type & TextEditor::WithIO) {
             actions << Core::Constants::A_EDITOR_FILEOPEN
                     << Core::Constants::A_EDITOR_FILESAVE
                     << Core::Constants::A_EDITOR_FILEPRINT
+                    << "--"
                     ;
-            foreach(const QString &a, actions) {
-                Core::Command *cmd = am->command(a);
-                if (cmd)
-                    m_ToolBar->addAction(cmd->action());
-            }
-            m_ToolBar->addSeparator();
         }
 
-        Core::Command *cmd = am->command(Core::Constants::A_FILE_PRINT);
-        if (cmd) {
-            m_ToolBar->addAction(cmd->action());
-            m_ToolBar->addSeparator();
-        }
+        actions << Core::Constants::A_FILE_PRINT
+                << "--";
 
-        actions.clear();
         if (m_Type & TextEditor::Clipboard) {
-            actions
-                    << Core::Constants::A_EDIT_COPY
+            actions << Core::Constants::A_EDIT_COPY
                     << Core::Constants::A_EDIT_PASTE
                     << Core::Constants::A_EDIT_CUT
-                       ;
-            foreach(const QString &a, actions) {
-                Core::Command *cmd = am->command(a);
-                if (cmd)
-                    m_ToolBar->addAction(cmd->action());
-            }
-            m_ToolBar->addSeparator();
+                    << "--"
+                    ;
         }
 
-        actions.clear();
         actions << Core::Constants::A_EDIT_UNDO
                 << Core::Constants::A_EDIT_REDO
+                << "--"
                 ;
         foreach(const QString &a, actions) {
-            Core::Command *cmd = am->command(a);
+            if (a=="--") {
+                m_ToolBar->addSeparator();
+                continue;
+            }
+            Core::Command *cmd = am->command(Core::Id(a));
             if (cmd)
                 m_ToolBar->addAction(cmd->action());
         }
-        m_ToolBar->addSeparator();
 
+        // Menu contents
         QAction *previous = 0;
         actions.clear();
         if (m_Type & TextEditor::CharFormat) {
@@ -253,7 +242,7 @@ public:
         }
 
         foreach(const QString &m, actions) {
-            Core::ActionContainer *ac = am->actionContainer(m);
+            Core::ActionContainer *ac = am->actionContainer(Core::Id(m));
             if (ac) {
                 foreach (QAction *action, ac->menu()->actions()) {
                     if (previous) {
@@ -354,27 +343,25 @@ void TextEditor::setTextControl(ITextControl *control)
 void TextEditor::setTypes(Types type)
 {
     d->m_Type = type;
-    d->m_Context->clearContext();
-    Core::UniqueIDManager *uid = Core::ICore::instance()->uniqueIDManager();
-    d->m_Context->addContext(uid->uniqueIdentifier(Core::Constants::C_EDITOR_BASIC));
+    Core::Context context(Core::Constants::C_EDITOR_BASIC);
     if (type & TextEditor::CharFormat) {
-        d->m_Context->addContext(uid->uniqueIdentifier(Core::Constants::C_EDITOR_CHAR_FORMAT));
+        context.add(Core::Constants::C_EDITOR_CHAR_FORMAT);
     }
     if (type & TextEditor::ParagraphFormat) {
-        d->m_Context->addContext(uid->uniqueIdentifier(Core::Constants::C_EDITOR_PARAGRAPH));
+        context.add(Core::Constants::C_EDITOR_PARAGRAPH);
     }
     if (type & TextEditor::Clipboard) {
-        d->m_Context->addContext(uid->uniqueIdentifier(Core::Constants::C_EDITOR_CLIPBOARD));
+        context.add(Core::Constants::C_EDITOR_CLIPBOARD);
     }
 
     if (type & TextEditor::WithTables) {
-        d->m_Context->addContext(uid->uniqueIdentifier(Core::Constants::C_EDITOR_TABLE));
+        context.add(Core::Constants::C_EDITOR_TABLE);
     }
     if (type & TextEditor::WithIO) {
-        d->m_Context->addContext(uid->uniqueIdentifier(Core::Constants::C_EDITOR_IO));
+        context.add(Core::Constants::C_EDITOR_IO);
     }
     if (type & TextEditor::WithTextCompleter) {
-        d->m_Context->addContext(uid->uniqueIdentifier(Core::Constants::C_EDITOR_ADDTEXT));
+        context.add(Core::Constants::C_EDITOR_ADDTEXT);
     }
     // update toolbar
     d->populateToolbar();
@@ -396,7 +383,7 @@ QMenu *TextEditor::getContextMenu()
     Core::Command *cmd = 0;
     QStringList actions;
 
-    cmd = am->command(Core::Constants::A_EDITOR_TOOGLETOOLBAR);
+    cmd = am->command(Core::Id(Core::Constants::A_EDITOR_TOOGLETOOLBAR));
     if (cmd) {
         mc->addAction(cmd->action());
         mc->addSeparator();
@@ -410,7 +397,7 @@ QMenu *TextEditor::getContextMenu()
                 << Core::Constants::A_EDITOR_ADDPATIENTNAME
                 ;
         foreach(const QString &a, actions) {
-            cmd = am->command(a);
+            cmd = am->command(Core::Id(a));
             if (cmd)
                 m->addAction(cmd->action());
         }
@@ -430,7 +417,7 @@ QMenu *TextEditor::getContextMenu()
                 << Core::Constants::A_FILE_PRINTPREVIEW
                 ;
         foreach(const QString &a, actions) {
-            cmd = am->command(a);
+            cmd = am->command(Core::Id(a));
             if (cmd)
                 m->addAction(cmd->action());
         }
@@ -445,7 +432,7 @@ QMenu *TextEditor::getContextMenu()
             << Core::Constants::A_EDIT_CUT
             ;
     foreach(const QString &a, actions) {
-        Core::Command *cmd = am->command(a);
+        Core::Command *cmd = am->command(Core::Id(a));
         if (cmd)
             medit->addAction(cmd->action());
     }
@@ -456,7 +443,7 @@ QMenu *TextEditor::getContextMenu()
             << Core::Constants::A_EDIT_REDO
             ;
     foreach(const QString &a, actions) {
-        Core::Command *cmd = am->command(a);
+        Core::Command *cmd = am->command(Core::Id(a));
         if (cmd)
             medit->addAction(cmd->action());
     }
@@ -475,7 +462,7 @@ QMenu *TextEditor::getContextMenu()
     }
 
     foreach(const QString &m, actions) {
-        Core::ActionContainer *ac = am->actionContainer(m);
+        Core::ActionContainer *ac = am->actionContainer(Core::Id(m));
         if (ac) {
             QMenu *menu = new QMenu(this);
             menu->setTitle(ac->menu()->title());

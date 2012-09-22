@@ -66,7 +66,9 @@ HEADERS += global_exporter.h \
     datevalidator.h \
     widgets/fadewidgethack.h \
     widgets/detailswidget.h \
-    widgets/detailsbutton.h
+    widgets/detailsbutton.h \
+    proxyaction.h \
+    stringutils.h
 
 SOURCES += global.cpp \
     database.cpp \
@@ -118,7 +120,9 @@ SOURCES += global.cpp \
     datevalidator.cpp \
     widgets/fadewidgethack.cpp \
     widgets/detailswidget.cpp \
-    widgets/detailsbutton.cpp
+    widgets/detailsbutton.cpp \
+    proxyaction.cpp \
+    stringutils.cpp
 
 macx {
     OBJECTIVE_SOURCES += iconbadgealert.mm

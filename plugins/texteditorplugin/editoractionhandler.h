@@ -33,25 +33,24 @@
 #define EDITORACTIONHANDLER_H
 
 #include <texteditorplugin/texteditor_exporter.h>
+#include <coreplugin/contextmanager/icontext.h>
 
 #include <QObject>
 #include <QAction>
 #include <QActionGroup>
 #include <QPointer>
 #include <QTextCharFormat>
-#include <QList>
-
 
 /**
  * \file editoractionhandler.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.6.0
- * \date 22 Sept 2011
+ * \version 0.8.0
+ * \date 22 Sept 2012
 */
-
 
 namespace Core {
 class ActionContainer;
+class Context;
 }
 
 namespace Editor {
@@ -170,7 +169,7 @@ private:
     Core::ActionContainer *m_TableMenu;
     Core::ActionContainer *m_AddTextMenu;
 
-    QList<int> charContext, paragraphContext, clipboardContext, basicContext, ioContext, tableContext, textAdderContext, allContexts;
+    Core::Context charContext, paragraphContext, clipboardContext, basicContext, ioContext, tableContext, textAdderContext, allContexts;
 
 private:
     void createContexts();
@@ -181,7 +180,6 @@ private:
 protected:
     uint m_optionalActions;
     QPointer<TextEditor> m_CurrentEditor;
-    QList<int> m_contextId;
     bool m_initialized;
 };
 

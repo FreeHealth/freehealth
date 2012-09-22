@@ -44,8 +44,8 @@ class UpdateChecker;
 }
 
 namespace Core {
-    class MainWindowActions;
-    class ActionContainer;
+class MainWindowActions;
+class ActionContainer;
 
 namespace Internal {
 

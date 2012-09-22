@@ -65,12 +65,10 @@ public:
     explicit FormContextualWidget(QWidget *parent = 0);
     ~FormContextualWidget();
 
-    void addContexts(const QList<int> &contexts);
-    QList<int> contexts() const;
+    Core::IContext *context() const;
 
-protected:
     /** Return true if the \e action must be enabled, or false if it must be disabled. */
-    virtual bool enabledActionState(WidgetAction action) const = 0;
+    virtual bool enableAction(WidgetAction action) const = 0;
 
 protected Q_SLOTS:
     // slots connected to the formactionhandler instance
@@ -99,19 +97,11 @@ class FormContext : public Core::IContext
     Q_OBJECT
 public:
     FormContext(FormContextualWidget *w) :
-        Core::IContext(w), wgt(w)
+        Core::IContext(w)
     {
         setObjectName("FormContext");
+        setWidget(w);
     }
-
-    void setContext(QList<int> c) { ctx = c; }
-    void addContext(QList<int> c) { ctx.append(c); }
-    QList<int> context() const { return ctx; }
-    QWidget *widget() { return wgt; }
-
-private:
-    FormContextualWidget *wgt;
-    QList<int> ctx;
 };
 
 } // namespace Internal

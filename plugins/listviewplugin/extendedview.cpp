@@ -33,7 +33,6 @@
 
 #include <coreplugin/actionmanager/actionmanager.h>
 #include <coreplugin/contextmanager/contextmanager.h>
-#include <coreplugin/uniqueidmanager.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/constants_menus.h>
@@ -187,7 +186,7 @@ void ExtendedView::setCommands(const QStringList &commandsUid)
 {
     d->m_Actions = 0;
     foreach(const QString &uid, commandsUid) {
-        Core::Command *cmd = actionManager()->command(uid);
+        Core::Command *cmd = actionManager()->command(Core::Id(uid));
         if (cmd)
             d->m_ToolBar->addAction(cmd->action());
     }

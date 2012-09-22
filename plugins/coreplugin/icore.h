@@ -52,7 +52,6 @@ class UpdateChecker;
 namespace Core {
 class ActionManager;
 class ContextManager;
-class UniqueIDManager;
 class Translators;
 class ITheme;
 class ISettings;
@@ -87,7 +86,6 @@ public:
     // Action manager, ContextManager, ModeManager, FileManager
     virtual ActionManager *actionManager() const = 0;
     virtual ContextManager *contextManager() const = 0;
-    virtual UniqueIDManager *uniqueIDManager() const = 0;
     virtual ModeManager *modeManager() const {return 0;}
     virtual FileManager *fileManager() const = 0;
 

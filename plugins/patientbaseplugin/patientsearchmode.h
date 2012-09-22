@@ -49,16 +49,6 @@ public:
     PatientSearchMode(QObject *parent);
     ~PatientSearchMode();
 
-    // IMode
-    QString name() const;
-    QIcon icon() const;
-    int priority() const;
-    QWidget* widget();
-    const char* uniqueModeName() const;
-    QList<int> context() const;
-
-    bool isPatientBarVisible() const {return false;}
-
     void postCoreInitialization();
 
 private:

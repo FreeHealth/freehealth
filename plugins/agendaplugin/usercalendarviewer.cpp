@@ -58,6 +58,7 @@
 #include <QStandardItemModel>
 #include <QStandardItem>
 #include <QHash>
+#include <QMenu>
 
 using namespace Agenda;
 using namespace Internal;

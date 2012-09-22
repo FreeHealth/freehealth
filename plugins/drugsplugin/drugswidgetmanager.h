@@ -54,15 +54,11 @@ namespace Internal {
 class DrugsContext : public Core::IContext
 {
 public:
-    DrugsContext(DrugsCentralWidget *w) : Core::IContext(w), wgt(w) { setObjectName("DrugsContext"); }
-
-    void setContext(QList<int> c) { ctx = c; }
-
-    QList<int> context() const { return ctx; }
-    QWidget *widget() { return wgt; }
-private:
-    DrugsCentralWidget *wgt;
-    QList<int> ctx;
+    DrugsContext(DrugsCentralWidget *w) : Core::IContext(w)
+    {
+        setObjectName("DrugsContext");
+        setWidget(w);
+    }
 };
 
 class DRUGS_EXPORT DrugsActionHandler : public QObject
@@ -178,7 +174,7 @@ public:
     DrugsDB::DrugsModel              *currentDrugsModel() const { return DrugsDB::DrugsModel::activeModel(); }
 
 private Q_SLOTS:
-    void updateContext(Core::IContext *object);
+    void updateContext(Core::IContext *object, const Core::Context &additionalContexts);
 
 private:
     DrugsWidgetManager(QObject *parent = 0);

@@ -179,16 +179,15 @@ void FancyTreeView::setButtonActions(const ButtonActions &actions, bool connectT
 {
     QAction *a = 0;
     Core::Command *cmd = 0;
-    QList<int> globalContext = QList<int>() << Core::Constants::C_GLOBAL_ID;
-
+    Core::Context globalContext(Core::Constants::C_GLOBAL);
     if (actions & FTV_SaveModel) {
         a = d->aSave = new QAction(ui->button);
         a->setObjectName("FancyTreeView.aSave");
         a->setIcon(theme()->icon(Core::Constants::ICONSAVE));
         a->setIconVisibleInMenu(true);
-        cmd = actionManager()->registerAction(a, Constants::A_SAVE_MODEL, globalContext);
+        cmd = actionManager()->registerAction(a, Core::Id(Constants::A_SAVE_MODEL), globalContext);
         cmd->setTranslations(Trans::Constants::FILESAVE_TEXT);
-        //        cmenu->addAction(cmd, Core::Constants::G_EDIT_LIST);
+        //        cmenu->addAction(cmd, Core::Id(Core::Constants::G_EDIT_LIST));
         if (connectToDefault)
             connect(a, SIGNAL(triggered()), this, SLOT(save()));
         connect(a, SIGNAL(triggered()), this, SIGNAL(saveRequested()));
@@ -201,9 +200,9 @@ void FancyTreeView::setButtonActions(const ButtonActions &actions, bool connectT
         a->setObjectName("FancyTreeView.aAddRow");
         a->setIcon(theme()->icon(Core::Constants::ICONADD));
         a->setIconVisibleInMenu(true);
-        cmd = actionManager()->registerAction(a, Constants::A_CREATE_NEW, globalContext);
+        cmd = actionManager()->registerAction(a, Core::Id(Constants::A_CREATE_NEW), globalContext);
         cmd->setTranslations(Trans::Constants::LISTADD_TEXT);
-        //        cmenu->addAction(cmd, Core::Constants::G_EDIT_LIST);
+        //        cmenu->addAction(cmd, Core::Id(Core::Constants::G_EDIT_LIST));
         if (connectToDefault)
             connect(a, SIGNAL(triggered()), this, SLOT(addItem()));
         connect(a, SIGNAL(triggered()), this, SIGNAL(addItemRequested()));
@@ -215,9 +214,9 @@ void FancyTreeView::setButtonActions(const ButtonActions &actions, bool connectT
         a->setIcon(theme()->icon(Core::Constants::ICONREMOVE));
         a->setIconVisibleInMenu(true);
         a->setText("Remove");
-        cmd = actionManager()->registerAction(a, Constants::A_REMOVE_ITEM, globalContext);
+        cmd = actionManager()->registerAction(a, Core::Id(Constants::A_REMOVE_ITEM), globalContext);
         cmd->setTranslations(Trans::Constants::LISTREMOVE_TEXT);
-        //        cmenu->addAction(cmd, Core::Constants::G_EDIT_LIST);
+        //        cmenu->addAction(cmd, Core::Id(Core::Constants::G_EDIT_LIST));
         if (connectToDefault)
             connect(a, SIGNAL(triggered()), this, SLOT(removeItem()));
         connect(a, SIGNAL(triggered()), this, SIGNAL(removeItemRequested()));
@@ -225,13 +224,13 @@ void FancyTreeView::setButtonActions(const ButtonActions &actions, bool connectT
     }
 
     if (d->aSave)
-        ui->button->setDefaultAction(actionManager()->command(Constants::A_SAVE_MODEL)->action());
+        ui->button->setDefaultAction(actionManager()->command(Core::Id(Constants::A_SAVE_MODEL))->action());
     else if (d->aAddRow)
-        ui->button->setDefaultAction(actionManager()->command(Constants::A_CREATE_NEW)->action());
+        ui->button->setDefaultAction(actionManager()->command(Core::Id(Constants::A_CREATE_NEW))->action());
     else if (d->aRemoveRow)
-        ui->button->setDefaultAction(actionManager()->command(Constants::A_REMOVE_ITEM)->action());
+        ui->button->setDefaultAction(actionManager()->command(Core::Id(Constants::A_REMOVE_ITEM))->action());
     else if (d->aRevert)
-        ui->button->setDefaultAction(actionManager()->command(Constants::A_REMOVE_ITEM)->action());
+        ui->button->setDefaultAction(actionManager()->command(Core::Id(Constants::A_REMOVE_ITEM))->action());
 }
 
 /** \brief Returns the search line edit used in the view. */

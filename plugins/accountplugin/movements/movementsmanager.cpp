@@ -91,12 +91,3 @@ bool MovementsManager::isMedintuxArg()
     return commandLine()->value(Core::Constants::CL_MedinTux).toBool();
 #endif
 }
-
-bool MovementsManager::isFreaccountIndependant()
-{
-#ifdef FREEMEDFORMS
-    return false;
-#else
-    return commandLine()->value(Core::Constants::CL_Independant).toBool();
-#endif
-}
