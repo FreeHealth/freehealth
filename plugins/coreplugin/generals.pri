@@ -6,7 +6,6 @@ HEADERS += $${PWD}/core_exporter.h \
     $${PWD}/constants_menus.h \
     $${PWD}/constants_tokensandsettings.h \
     $${PWD}/constants_trans.h \
-    $${PWD}/uniqueidmanager.h \
     $${PWD}/icore.h \
     $${PWD}/icorelistener.h \
     $${PWD}/itheme.h \
@@ -30,9 +29,10 @@ HEADERS += $${PWD}/core_exporter.h \
     $${PWD}/ipatientlistener.h \
     $${PWD}/igenericpage.h \
     $${PWD}/iscriptmanager.h \
-    $${PWD}/constants_colors.h
+    $${PWD}/constants_colors.h \
+    $${PWD}/id.h \
 
-SOURCES += $${PWD}/uniqueidmanager.cpp \
+SOURCES += \
     $${PWD}/icore.cpp \
     $${PWD}/theme.cpp \
     $${PWD}/translators.cpp \
@@ -43,5 +43,5 @@ SOURCES += $${PWD}/uniqueidmanager.cpp \
     $${PWD}/iuser.cpp \
     $${PWD}/idocumentprinter.cpp \
     $${PWD}/ipadtools.cpp \
-    $${PWD}/igenericpage.cpp
-
+    $${PWD}/igenericpage.cpp \
+    $${PWD}/id.cpp \

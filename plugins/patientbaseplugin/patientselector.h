@@ -28,7 +28,6 @@
 #define PATIENTSELECTOR_H
 
 #include <patientbaseplugin/patientbase_exporter.h>
-#include <coreplugin/modemanager/basemode.h>
 
 #include <QWidget>
 #include <QModelIndex>

@@ -43,7 +43,6 @@
 
 #include <coreplugin/actionmanager/actionmanager.h>
 #include <coreplugin/contextmanager/contextmanager.h>
-#include <coreplugin/uniqueidmanager.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/constants_menus.h>
@@ -91,12 +90,14 @@ public:
 
     void calculateContext()
     {
-        m_Context->clearContext();
+        Core::Context context;
         if (m_Actions & Constants::MoveUpDown)
-            m_Context->addContext(Core::ICore::instance()->uniqueIDManager()->uniqueIdentifier(Constants::C_BASIC_MOVE));
+            context.add(Constants::C_BASIC_MOVE);
 
         if (m_Actions & Constants::AddRemove)
-            m_Context->addContext(Core::ICore::instance()->uniqueIDManager()->uniqueIdentifier(Constants::C_BASIC_ADDREMOVE));
+            context.add(Constants::C_BASIC_ADDREMOVE);
+
+        m_Context->setContext(context);
     }
 
 public:
@@ -170,16 +171,11 @@ void ListView::setCommands(const QStringList &commandsUid)
     d->m_ExtView->setCommands(commandsUid);
 }
 
-void ListView::addContext(const int id)
+void ListView::addContext(const Core::Context &context)
 {
-    d->m_Context->addContext(id);
-}
-
-void ListView::addContexts(const QList<int> &id)
-{
-    for(int i = 0; i < id.count(); ++i) {
-        d->m_Context->addContext(id.at(i));
-    }
+    Core::Context current = d->m_Context->context();
+    current.add(context);
+    d->m_Context->setContext(current);
 }
 
 void ListView::hideButtons() const

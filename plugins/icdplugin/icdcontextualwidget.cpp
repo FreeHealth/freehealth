@@ -37,12 +37,10 @@
 
 #include <coreplugin/contextmanager/contextmanager.h>
 #include <coreplugin/icore.h>
-#include <coreplugin/uniqueidmanager.h>
 
 using namespace ICD;
 
 static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
-
 
 namespace ICD {
 namespace Internal {
@@ -50,15 +48,11 @@ namespace Internal {
 class IcdContext : public Core::IContext
 {
 public:
-    IcdContext(IcdContextualWidget *w) : Core::IContext(w), wgt(w) { setObjectName("IcdContext"); }
-    void setContext(QList<int> c) { ctx = c; }
-    void addContext(QList<int> c) { ctx.append(c); }
-    QList<int> context() const { return ctx; }
-    QWidget *widget() { return wgt; }
-
-private:
-    IcdContextualWidget *wgt;
-    QList<int> ctx;
+    IcdContext(IcdContextualWidget *w) : Core::IContext(w)
+    {
+        setObjectName("IcdContext");
+        setWidget(w);
+    }
 };
 
 }  // End namespace Internal
@@ -69,11 +63,8 @@ private:
 IcdContextualWidget::IcdContextualWidget(QWidget *parent) :
     QWidget(parent), m_Context(0)
 {
-    Core::UniqueIDManager *uid = Core::ICore::instance()->uniqueIDManager();
-
-    // Create the context object
     m_Context = new Internal::IcdContext(this);
-    m_Context->setContext(QList<int>() << uid->uniqueIdentifier(Constants::C_ICD_PLUGINS));
+    m_Context->setContext(Core::Context(Constants::C_ICD_PLUGINS));
 
     // Send it to the contextual manager
     contextManager()->addContextObject(m_Context);
@@ -83,9 +74,4 @@ IcdContextualWidget::~IcdContextualWidget()
 {
     // Remove contextual object
     contextManager()->removeContextObject(m_Context);
-}
-
-void IcdContextualWidget::addContexts(const QList<int> &contexts)
-{
-    m_Context->addContext(contexts);
 }

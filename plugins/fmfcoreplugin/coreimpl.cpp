@@ -37,7 +37,6 @@
 #include <coreplugin/actionmanager/actionmanager.h>
 #include <coreplugin/contextmanager/contextmanager.h>
 #include <coreplugin/contextmanager/contextmanager_p.h>
-#include <coreplugin/uniqueidmanager.h>
 #include <coreplugin/filemanager.h>
 #include <coreplugin/modemanager/modemanager.h>
 #include <coreplugin/constants_icons.h>
@@ -141,7 +140,6 @@ CoreImpl::CoreImpl(QObject *parent) :
 //    m_ContextManager = new ContextManagerPrivate(m_MainWindow);
     m_FileManager = new FileManager(this);
     m_UpdateChecker = new Utils::UpdateChecker(this);
-    m_UID = new UniqueIDManager();
     if (logChrono)
         Utils::Log::logTimeElapsed(chrono, "Core", "managers");
 
@@ -161,8 +159,6 @@ CoreImpl::CoreImpl(QObject *parent) :
 CoreImpl::~CoreImpl()
 {
     Q_EMIT coreAboutToClose();
-    if (m_UID)
-        delete m_UID;
     if (m_CommandLine)
         delete m_CommandLine;
     if (m_ModeManager)
@@ -187,7 +183,6 @@ void CoreImpl::setMainWindow(IMainWindow *win)
 
 ActionManager *CoreImpl::actionManager() const { return m_ActionManager; }
 ContextManager *CoreImpl::contextManager() const { return m_ContextManager; }
-UniqueIDManager *CoreImpl::uniqueIDManager() const { return m_UID; }
 ITheme *CoreImpl::theme() const { return m_Theme; }
 Translators *CoreImpl::translators() const { return m_Translators; }
 ISettings *CoreImpl::settings() const{ return m_Settings; }

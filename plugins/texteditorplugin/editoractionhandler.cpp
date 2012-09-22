@@ -33,8 +33,8 @@
 
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
-#include <coreplugin/uniqueidmanager.h>
 #include <coreplugin/actionmanager/actionmanager.h>
+#include <coreplugin/actionmanager/actioncontainer.h>
 #include <coreplugin/constants_tokensandsettings.h>
 #include <coreplugin/constants_menus.h>
 #include <coreplugin/constants_icons.h>
@@ -50,27 +50,25 @@
 
 #include <QDebug>
 
-
 using namespace Editor;
-using namespace Editor::Internal;
+using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
-static inline Core::UniqueIDManager *uid() { return Core::ICore::instance()->uniqueIDManager(); }
 static inline Core::ActionManager *actionManager() { return Core::ICore::instance()->actionManager(); }
 static inline Core::ITheme *theme() { return Core::ICore::instance()->theme(); }
 static inline Core::IDocumentPrinter *printer() {return ExtensionSystem::PluginManager::instance()->getObject<Core::IDocumentPrinter>();}
 
-static QAction *registerAction(const QString &id, const QList<int> &ctx, QObject *parent)
+static QAction *registerAction(const QString &id, const Core::Context &ctx, QObject *parent)
 {
     QAction *a = new QAction(parent);
-    Core::Command *cmd = Core::ICore::instance()->actionManager()->registerAction(a, id, ctx);
+    Core::Command *cmd = Core::ICore::instance()->actionManager()->registerAction(a, Core::Id(id), ctx);
     Q_UNUSED(cmd);
     return a;
 }
 
 static inline QAction *createAction(QObject *parent, const QString &name, const QString &icon,
                                     const QString &actionName,
-                                    const QList<int> &context, const QString &trans,
+                                    const Core::Context &context, const QString &trans,
                                     Core::Command *cmd,
                                     Core::ActionContainer *menu,
                                     const QString &group,
@@ -85,17 +83,17 @@ static inline QAction *createAction(QObject *parent, const QString &name, const 
         a->setCheckable(true);
         a->setChecked(false);
     }
-    cmd = actionManager()->registerAction(a, actionName, context);
-    cmd->setTranslations(trans);
+    cmd = actionManager()->registerAction(a, Core::Id(actionName), context);
+    cmd->setTranslations(trans, trans); // use the Trans::Constants tr context (automatic)
     if (key != QKeySequence::UnknownKey)
         cmd->setDefaultKeySequence(key);
-    menu->addAction(cmd, group);
+    menu->addAction(cmd, Core::Id(group));
     return a;
 }
 
 static inline QAction *createAction(QObject *parent, const QString &name, const QString &icon,
                                     const QString &actionName,
-                                    const QList<int> &context, const QString &trans,
+                                    const Core::Context &context, const QString &trans,
                                     Core::Command *cmd,
                                     Core::ActionContainer *menu,
                                     const QString &group,
@@ -110,11 +108,11 @@ static inline QAction *createAction(QObject *parent, const QString &name, const 
         a->setCheckable(true);
         a->setChecked(false);
     }
-    cmd = actionManager()->registerAction(a, actionName, context);
-    cmd->setTranslations(trans);
+    cmd = actionManager()->registerAction(a, Core::Id(actionName), context);
+    cmd->setTranslations(trans, trans); // use the Trans::Constants tr context (automatic)
     if (!key.isEmpty())
         cmd->setDefaultKeySequence(QKeySequence::fromString(tkTr(key.toAscii())));
-    menu->addAction(cmd, group);
+    menu->addAction(cmd, Core::Id(group));
     return a;
 }
 
@@ -148,21 +146,34 @@ EditorActionHandler::~EditorActionHandler()
 
 void EditorActionHandler::createContexts()
 {
-    charContext = QList<int>() << uid()->uniqueIdentifier(Core::Constants::C_EDITOR_CHAR_FORMAT);
-    paragraphContext = QList<int>() << uid()->uniqueIdentifier(Core::Constants::C_EDITOR_PARAGRAPH);
-    clipboardContext = QList<int>() << uid()->uniqueIdentifier(Core::Constants::C_EDITOR_CLIPBOARD);
-    basicContext = QList<int>() << uid()->uniqueIdentifier(Core::Constants::C_EDITOR_BASIC) << charContext << paragraphContext << clipboardContext;
-    ioContext = QList<int>() << uid()->uniqueIdentifier(Core::Constants::C_EDITOR_IO);
-    tableContext = QList<int>() << uid()->uniqueIdentifier(Core::Constants::C_EDITOR_TABLE);
-    textAdderContext = QList<int>() << uid()->uniqueIdentifier(Core::Constants::C_EDITOR_ADDTEXT);
-    allContexts = QList<int>() << basicContext << ioContext << tableContext;
+//    charContext = QList<int>() << uid()->uniqueIdentifier(Core::Constants::C_EDITOR_CHAR_FORMAT);
+//    paragraphContext = QList<int>() << uid()->uniqueIdentifier(Core::Constants::C_EDITOR_PARAGRAPH);
+//    clipboardContext = QList<int>() << uid()->uniqueIdentifier(Core::Constants::C_EDITOR_CLIPBOARD);
+//    basicContext = QList<int>() << uid()->uniqueIdentifier(Core::Constants::C_EDITOR_BASIC) << charContext << paragraphContext << clipboardContext;
+//    ioContext = QList<int>() << uid()->uniqueIdentifier(Core::Constants::C_EDITOR_IO);
+//    tableContext = QList<int>() << uid()->uniqueIdentifier(Core::Constants::C_EDITOR_TABLE);
+//    textAdderContext = QList<int>() << uid()->uniqueIdentifier(Core::Constants::C_EDITOR_ADDTEXT);
+//    allContexts = QList<int>() << basicContext << ioContext << tableContext;
+    charContext = Core::Context(Core::Constants::C_EDITOR_CHAR_FORMAT);
+    paragraphContext = Core::Context(Core::Constants::C_EDITOR_PARAGRAPH);
+    clipboardContext = Core::Context(Core::Constants::C_EDITOR_CLIPBOARD);
+    basicContext = Core::Context(Core::Constants::C_EDITOR_BASIC);
+    basicContext.add(charContext);
+    basicContext.add(paragraphContext);
+    basicContext.add(clipboardContext);
+    ioContext = Core::Context(Core::Constants::C_EDITOR_IO);
+    tableContext = Core::Context(Core::Constants::C_EDITOR_TABLE);
+    textAdderContext = Core::Context(Core::Constants::C_EDITOR_ADDTEXT);
+    allContexts.add(basicContext);
+    allContexts.add(ioContext);
+    allContexts.add(tableContext);
 }
 
 void EditorActionHandler::createMenus()
 {
     // Editor's Contextual Menu
     m_ContextualMenu = actionManager()->createMenu(Core::Constants::M_EDITOR_CONTEXT);
-    m_ContextualMenu->appendGroup(Core::Constants::G_EDITOR_CONTEXT);
+    m_ContextualMenu->appendGroup(Core::Id(Core::Constants::G_EDITOR_CONTEXT));
     m_ContextualMenu->setTranslations(Trans::Constants::EDITORMENU_TEXT);
 
     // Menu structure -- rootMenu is menubar if exists otherwise it is a specific editor's menu Core::Constants::M_EDITOR
@@ -186,11 +197,11 @@ void EditorActionHandler::createMenus()
         m_FormatMenu = actionManager()->createMenu(Core::Constants::M_FORMAT);
         rootMenu->addMenu(m_FormatMenu, Core::Constants::G_FORMAT);
         m_FormatMenu->setTranslations(Trans::Constants::M_FORMAT_TEXT);
-        m_FormatMenu->appendGroup(Core::Constants::G_FORMAT_FONT);
-        m_FormatMenu->appendGroup(Core::Constants::G_FORMAT_PARAGRAPH);
-        m_FormatMenu->appendGroup(Core::Constants::G_FORMAT_TABLE);
-        m_FormatMenu->appendGroup(Core::Constants::G_FORMAT_IMAGE);
-        m_FormatMenu->appendGroup(Core::Constants::G_FORMAT_OTHER);
+        m_FormatMenu->appendGroup(Core::Id(Core::Constants::G_FORMAT_FONT));
+        m_FormatMenu->appendGroup(Core::Id(Core::Constants::G_FORMAT_PARAGRAPH));
+        m_FormatMenu->appendGroup(Core::Id(Core::Constants::G_FORMAT_TABLE));
+        m_FormatMenu->appendGroup(Core::Id(Core::Constants::G_FORMAT_IMAGE));
+        m_FormatMenu->appendGroup(Core::Id(Core::Constants::G_FORMAT_OTHER));
     }
 
     m_FontMenu = actionManager()->actionContainer(Core::Constants::M_FORMAT_FONT);
@@ -198,9 +209,9 @@ void EditorActionHandler::createMenus()
         m_FontMenu = actionManager()->createMenu(Core::Constants::M_FORMAT_FONT);
         m_FormatMenu->addMenu(m_FontMenu, Core::Constants::G_FORMAT_FONT);
         m_FontMenu->setTranslations(Trans::Constants::M_FORMAT_FONT_TEXT);
-        m_FontMenu->appendGroup(Core::Constants::G_FORMAT_FONT_BASE);
-        m_FontMenu->appendGroup(Core::Constants::G_FORMAT_FONT_SIZE);
-        m_FontMenu->appendGroup(Core::Constants::G_FORMAT_FONT_EXTRAS);
+        m_FontMenu->appendGroup(Core::Id(Core::Constants::G_FORMAT_FONT_BASE));
+        m_FontMenu->appendGroup(Core::Id(Core::Constants::G_FORMAT_FONT_SIZE));
+        m_FontMenu->appendGroup(Core::Id(Core::Constants::G_FORMAT_FONT_EXTRAS));
     }
 
     m_ParagraphMenu = actionManager()->actionContainer(Core::Constants::M_FORMAT_PARAGRAPH);
@@ -208,7 +219,7 @@ void EditorActionHandler::createMenus()
         m_ParagraphMenu = actionManager()->createMenu(Core::Constants::M_FORMAT_PARAGRAPH);
         m_FormatMenu->addMenu(m_ParagraphMenu, Core::Constants::G_FORMAT_PARAGRAPH);
         m_ParagraphMenu->setTranslations(Trans::Constants::M_FORMAT_PARAGRAPH_TEXT);
-        m_ParagraphMenu->appendGroup(Core::Constants::G_FORMAT_PARAGRAPH);
+        m_ParagraphMenu->appendGroup(Core::Id(Core::Constants::G_FORMAT_PARAGRAPH));
     }
 
     m_TableMenu = actionManager()->actionContainer(Core::Constants::M_FORMAT_TABLE);
@@ -216,7 +227,7 @@ void EditorActionHandler::createMenus()
         m_TableMenu = actionManager()->createMenu(Core::Constants::M_FORMAT_TABLE);
         m_FormatMenu->addMenu(m_TableMenu, Core::Constants::G_FORMAT_TABLE);
         m_TableMenu->setTranslations(Trans::Constants::M_FORMAT_TABLE_TEXT);
-        m_TableMenu->appendGroup(Core::Constants::G_FORMAT_TABLE);
+        m_TableMenu->appendGroup(Core::Id(Core::Constants::G_FORMAT_TABLE));
 //        m_TableMenu->setEmptyAction(ActionContainer::EA_Hide);
     }
 

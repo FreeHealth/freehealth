@@ -220,8 +220,7 @@
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
-#include <coreplugin/uniqueidmanager.h>
-#include <coreplugin/modemanager/basemode.h>
+#include <coreplugin/modemanager/imode.h>
 #include <coreplugin/constants_tokensandsettings.h>
 
 #include <formmanagerplugin/formmanager.h>
@@ -248,7 +247,6 @@ using namespace Form::Internal;
 
 static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 static inline Form::FormManager &formManager() {return Form::FormCore::instance().formManager();}
-static inline Core::UniqueIDManager *uuidManager() {return Core::ICore::instance()->uniqueIDManager();}
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 
 #ifdef DEBUG
@@ -624,7 +622,7 @@ void FormItem::languageChanged()
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 FormPage::FormPage(QObject *parent):
     Form::FormItem(parent),
-    _mode(new Core::BaseMode(this)),
+    _mode(new Core::IMode(this)),
     _placeHolder(0),
     _inPool(false)
 {
@@ -637,7 +635,7 @@ FormPage::FormPage(QObject *parent):
     _placeHolder->setObjectName("BaseWidget::Mode::FormPlaceHolder");
 
     if (spec())
-        _mode->setUniqueModeName(spec()->uuid().toUtf8());
+        _mode->setId(spec()->uuid().toUtf8());
     _mode->setPatientBarVisibility(true);
     _mode->setWidget(_placeHolder);
     languageChanged();
@@ -671,7 +669,7 @@ void FormPage::onPatientFormsLoaded()
 void FormPage::languageChanged()
 {
 //    qWarning() << "FormPage language changed" << uuid() << spec()->value(Form::FormItemSpec::Spec_Priority).toInt();
-    _mode->setName(spec()->label());
+    _mode->setDisplayName(spec()->label());
     QString icon = spec()->iconFileName();
     icon.replace(Core::Constants::TAG_APPLICATION_THEME_PATH, settings()->path(Core::ISettings::BigPixmapPath));
     _mode->setIcon(QIcon(icon));

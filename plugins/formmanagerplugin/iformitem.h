@@ -53,11 +53,11 @@ QT_END_NAMESPACE
  * \file iformitem.h
  * \author Eric MAEKER
  * \version 0.8.0
- * \date 04 Sept 2012
+ * \date 22 Sept 2012
 */
 
 namespace Core {
-class BaseMode;
+class IMode;
 }
 
 namespace Form {
@@ -188,7 +188,7 @@ private Q_SLOTS:
     void onPatientFormsLoaded();
 
 private:
-    Core::BaseMode *_mode;
+    Core::IMode *_mode;
     Form::FormPlaceHolder *_placeHolder;
     bool _inPool;
 };

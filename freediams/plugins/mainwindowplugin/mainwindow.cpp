@@ -30,6 +30,7 @@
 #include <coreplugin/actionmanager/mainwindowactions.h>
 #include <coreplugin/actionmanager/mainwindowactionhandler.h>
 #include <coreplugin/actionmanager/actionmanager.h>
+#include <coreplugin/actionmanager/actioncontainer.h>
 #include <coreplugin/contextmanager/contextmanager.h>
 #include <coreplugin/dialogs/plugindialog.h>
 #include <coreplugin/dialogs/helpdialog.h>
@@ -84,6 +85,7 @@
 #include <QDockWidget>
 #include <QDataWidgetMapper>
 #include <QStandardItemModel>
+#include <QMenu>
 
 using namespace MainWin;
 using namespace MainWin::Internal;
@@ -283,16 +285,17 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
     // Create prescription menu
     Core::ActionContainer *pmenu = actionManager()->actionContainer(DrugsWidget::Constants::M_PLUGINS_DRUGS);
     if (!pmenu) {
-        pmenu = actionManager()->createMenu(DrugsWidget::Constants::M_PLUGINS_DRUGS);
-        pmenu->appendGroup(DrugsWidget::Constants::G_PLUGINS_VIEWS);
-        pmenu->appendGroup(DrugsWidget::Constants::G_PLUGINS_MODES);
-        pmenu->appendGroup(DrugsWidget::Constants::G_PLUGINS_SEARCH);
-        pmenu->appendGroup(DrugsWidget::Constants::G_PLUGINS_DRUGS);
-        pmenu->appendGroup(DrugsWidget::Constants::G_PLUGINS_INTERACTIONS);
-        pmenu->setTranslations(DrugsWidget::Constants::DRUGSMENU_TEXT, DrugsWidget::Constants::DRUGCONSTANTS_TR_CONTEXT);
+        using namespace DrugsWidget::Constants;
+        pmenu = actionManager()->createMenu(M_PLUGINS_DRUGS);
+        pmenu->appendGroup(Core::Id(G_PLUGINS_VIEWS));
+        pmenu->appendGroup(Core::Id(G_PLUGINS_MODES));
+        pmenu->appendGroup(Core::Id(G_PLUGINS_SEARCH));
+        pmenu->appendGroup(Core::Id(G_PLUGINS_DRUGS));
+        pmenu->appendGroup(Core::Id(G_PLUGINS_INTERACTIONS));
+        pmenu->setTranslations(DRUGSMENU_TEXT, DRUGCONSTANTS_TR_CONTEXT);
     }
     Q_ASSERT(pmenu);
-    actionManager()->actionContainer(Core::Constants::MENUBAR)->addMenu(pmenu, Core::Constants::G_PLUGINS);
+    actionManager()->actionContainer(Core::Id(Core::Constants::MENUBAR))->addMenu(pmenu, Core::Id(Core::Constants::G_PLUGINS));
 
     createTemplatesMenu();
     createConfigurationMenu();
@@ -329,11 +332,11 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
     // aClearPatient
     aClearPatient->setObjectName("aClearPatient");
     aClearPatient->setIcon(theme()->icon(Core::Constants::ICONCLEAR));
-    Core::Command *cmd = actionManager()->registerAction(aClearPatient, "aClearPatient", QList<int>() << Core::Constants::C_GLOBAL_ID);
+    Core::Command *cmd = actionManager()->registerAction(aClearPatient, Core::Id("aClearPatient"), Core::Context(Core::Constants::C_GLOBAL));
     cmd->setTranslations(tkTr(Trans::Constants::CLEAR_PATIENT_INFOS));
     cmd->setDefaultKeySequence(QKeySequence(Qt::Key_C + Qt::CTRL + Qt::SHIFT));
-    Core::ActionContainer *menu = actionManager()->actionContainer(Core::Constants::M_FILE);
-    menu->addAction(cmd, Core::Constants::G_FILE_NEW);
+    Core::ActionContainer *menu = actionManager()->actionContainer(Core::Id(Core::Constants::M_FILE));
+    menu->addAction(cmd, Core::Id(Core::Constants::G_FILE_NEW));
     connect(aClearPatient, SIGNAL(triggered()), this, SLOT(clearPatientInfos()));
 
     return true;

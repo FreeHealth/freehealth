@@ -61,14 +61,14 @@ static inline Core::IMainWindow *mainWindow()  { return Core::ICore::instance()-
  * Mode for the central form files (called "Patient files").
 */
 FormManagerMode::FormManagerMode(QObject *parent) :
-    Core::BaseMode(parent),
+    Core::IMode(parent),
     m_inPluginManager(false),
     m_actionInBar(false)
 {
-    setName(tr("Patients Files"));
+    setDisplayName(tr("Patients Files"));
     setIcon(theme()->icon(Core::Constants::ICONPATIENTFILES, Core::ITheme::BigIcon));
     setPriority(Core::Constants::P_MODE_PATIENT_FILE);
-    setUniqueModeName(Core::Constants::MODE_PATIENT_FILE);
+    setId(Core::Constants::MODE_PATIENT_FILE);
     setPatientBarVisibility(true);
 
     m_Holder = new FormPlaceHolder;
@@ -87,7 +87,7 @@ FormManagerMode::~FormManagerMode()
     if (m_inPluginManager) {
         pluginManager()->removeObject(this);
     }
-    // m_Holder is deleted by Core::BaseMode
+    // m_Holder is deleted by Core::IMode
 }
 
 QString FormManagerMode::name() const

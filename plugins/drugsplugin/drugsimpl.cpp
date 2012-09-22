@@ -3,12 +3,10 @@
 #include "isettings.h"
 #include "theme.h"
 #include "translators.h"
-#include "maininterface/mainwindow.h"
 #include "actionmanager/actionmanager_p.h"
 #include "actionmanager/actionmanager.h"
 #include "contextmanager/contextmanager.h"
 #include "contextmanager/contextmanager_p.h"
-#include "uniqueidmanager.h"
 #include <coreplugin/ipadtools.h>
 
 
@@ -39,7 +37,6 @@ CoreImpl::CoreImpl(QObject *parent) :
     ICore(parent),
     m_PadTools(0)
 {
-    m_UID = new UniqueIDManager();
     m_Settings = new SettingsPrivate(this);
     m_Theme = new ThemePrivate(this);
     m_Theme->setThemeRootPath(m_Settings->path(ISettings::ThemeRootPath));
@@ -67,7 +64,6 @@ CoreImpl::CoreImpl(QObject *parent) :
 CoreImpl::~CoreImpl()
 {
     delete m_MainWindow;
-    delete m_UID;
 }
 //QStringList CoreImpl::showNewItemDialog(const QString &title,
 //                                        const QList<IWizard *> &wizards,
@@ -89,11 +85,6 @@ ActionManager *CoreImpl::actionManager() const
 ContextManager *CoreImpl::contextManager() const
 {
     return m_ContextManager;
-}
-
-UniqueIDManager *CoreImpl::uniqueIDManager() const
-{
-    return m_UID;
 }
 
 ITheme *CoreImpl::theme() const

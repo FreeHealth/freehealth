@@ -30,7 +30,8 @@
 
 #include <utils/log.h>
 #include <utils/global.h>
-#include <translationutils/constanttranslations.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_menu.h>
 
 #include <coreplugin/constants_icons.h>
 #include <coreplugin/constants_menus.h>
@@ -39,7 +40,7 @@
 #include <coreplugin/itheme.h>
 #include <coreplugin/contextmanager/contextmanager.h>
 #include <coreplugin/actionmanager/actionmanager.h>
-#include <coreplugin/uniqueidmanager.h>
+#include <coreplugin/actionmanager/actioncontainer.h>
 
 #include <QGridLayout>
 #include <QDialog>
@@ -67,13 +68,13 @@ IcdWidgetManager *IcdWidgetManager::instance()
 
 IcdWidgetManager::IcdWidgetManager(QObject *parent) : IcdActionHandler(parent)
 {
-    connect(Core::ICore::instance()->contextManager(), SIGNAL(contextChanged(Core::IContext*)),
-            this, SLOT(updateContext(Core::IContext*)));
+    connect(Core::ICore::instance()->contextManager(), SIGNAL(contextChanged(Core::IContext*,Core::Context)),
+            this, SLOT(updateContext(Core::IContext*,Core::Context)));
     setObjectName("IcdWidgetManager");
 //    Utils::Log::addMessage(this, "Instance created");
 }
 
-void IcdWidgetManager::updateContext(Core::IContext *object)
+void IcdWidgetManager::updateContext(Core::IContext *object, const Core::Context &additionalContexts)
 {
     IcdCentralWidget *view = 0;
     do {
@@ -125,15 +126,11 @@ IcdActionHandler::IcdActionHandler(QObject *parent) :
         m_CurrentView(0)
 {
     setObjectName("IcdActionHandler");
-//    Utils::Log::addMessage(this, "Instance created");
-
-    Core::UniqueIDManager *uid = Core::ICore::instance()->uniqueIDManager();
     Core::ITheme *th = Core::ICore::instance()->theme();
-
     QAction *a = 0;
     Core::Command *cmd = 0;
-    QList<int> ctx = QList<int>() << uid->uniqueIdentifier(ICD::Constants::C_ICD_PLUGINS);
-    QList<int> globalcontext = QList<int>() << Core::Constants::C_GLOBAL_ID;
+    Core::Context ctx(ICD::Constants::C_ICD_PLUGINS);
+    Core::Context globalcontext(Core::Constants::C_GLOBAL);
 
 //    Core::ActionContainer *menu = actionManager()->actionContainer(Constants::M_PLUGINS_ICD);
 //    if (!menu) {
@@ -149,34 +146,34 @@ IcdActionHandler::IcdActionHandler(QObject *parent) :
 //#endif
 
     // Create ICD10 database
-    Core::ActionContainer *hmenu = actionManager()->actionContainer(Core::Constants::M_HELP_DATABASES);
+    Core::ActionContainer *hmenu = actionManager()->actionContainer(Core::Id(Core::Constants::M_HELP_DATABASES));
     if (!Utils::isReleaseCompilation()) {
         a = aRecreateDatabase = new QAction(this);
         a->setObjectName("aRecreateDatabase");
-        cmd = actionManager()->registerAction(a, Constants::A_RECREATE_ICD_DB, QList<int>() << Core::Constants::C_GLOBAL_ID);
+        cmd = actionManager()->registerAction(a, Core::Id(Constants::A_RECREATE_ICD_DB), globalcontext);
         cmd->setTranslations(Constants::RECREATE_DATABASE_TEXT, Constants::RECREATE_DATABASE_TEXT, Constants::ICDCONSTANTS_TR_CONTEXT);
-        hmenu->addAction(cmd, Core::Constants::G_HELP_DATABASES);
+        hmenu->addAction(cmd, Core::Id(Core::Constants::G_HELP_DATABASES));
         connect(a, SIGNAL(triggered()), this, SLOT(recreateDatabase()));
     }
 
     // Show Databases information
     a = aShowDatabaseInformation = new QAction(this);
     a->setIcon(th->icon(Core::Constants::ICONHELP));
-    cmd = actionManager()->registerAction(a, Constants::A_DATABASE_INFOS, QList<int>() << Core::Constants::C_GLOBAL_ID);
+    cmd = actionManager()->registerAction(a, Core::Id(Constants::A_DATABASE_INFOS), globalcontext);
     cmd->setTranslations(Constants::DATABASE_INFOS_TEXT, Constants::DATABASE_INFOS_TEXT, Constants::ICDCONSTANTS_TR_CONTEXT);
     cmd->retranslate();
-    hmenu->addAction(cmd, Core::Constants::G_HELP_DATABASES);
+    hmenu->addAction(cmd, Core::Id(Core::Constants::G_HELP_DATABASES));
     connect(aShowDatabaseInformation,SIGNAL(triggered()), this, SLOT(showDatabaseInformation()));
 
     // Search method menu
-    Core::ActionContainer *searchmenu = actionManager()->actionContainer(Constants::M_ICD_SEARCH);
+    Core::ActionContainer *searchmenu = actionManager()->actionContainer(Core::Id(Constants::M_ICD_SEARCH));
     if (!searchmenu) {
         searchmenu = actionManager()->createMenu(Constants::M_ICD_SEARCH);
-        searchmenu->appendGroup(Constants::G_ICD_SEARCH);
+        searchmenu->appendGroup(Core::Id(Constants::G_ICD_SEARCH));
         searchmenu->setTranslations(Constants::SEARCHMENU_TEXT, Constants::ICDCONSTANTS_TR_CONTEXT);
 #ifndef FREETOOLBOX
-        Core::ActionContainer *menu = actionManager()->actionContainer(Core::Constants::M_EDIT);
-        menu->addMenu(searchmenu, Core::Constants::G_EDIT_FIND);
+        Core::ActionContainer *menu = actionManager()->actionContainer(Core::Id(Core::Constants::M_EDIT));
+        menu->addMenu(searchmenu, Core::Id(Core::Constants::G_EDIT_FIND));
 #endif
     }
     Q_ASSERT(searchmenu);
@@ -186,18 +183,18 @@ IcdActionHandler::IcdActionHandler(QObject *parent) :
     a->setCheckable(true);
     a->setChecked(false);
     a->setIcon(th->icon(Constants::I_SEARCH_LABEL));
-    cmd = actionManager()->registerAction(a, Constants::A_SEARCH_LABEL, ctx);
+    cmd = actionManager()->registerAction(a, Core::Id(Constants::A_SEARCH_LABEL), ctx);
     cmd->setTranslations(Constants::SEARCHLABEL_TEXT, Constants::SEARCHLABEL_TEXT, Constants::ICDCONSTANTS_TR_CONTEXT);
-    searchmenu->addAction(cmd, Constants::G_ICD_SEARCH);
+    searchmenu->addAction(cmd, Core::Id(Constants::G_ICD_SEARCH));
     gSearchMethod->addAction(a);
 
     a = aSearchByCode = new QAction(this);
     a->setCheckable(true);
     a->setChecked(false);
     a->setIcon(th->icon(Constants::I_SEARCH_CODE));
-    cmd = actionManager()->registerAction(a, Constants::A_SEARCH_CODE, ctx);
+    cmd = actionManager()->registerAction(a, Core::Id(Constants::A_SEARCH_CODE), ctx);
     cmd->setTranslations(Constants::SEARCHCODE_TEXT, Constants::SEARCHCODE_TEXT, Constants::ICDCONSTANTS_TR_CONTEXT);
-    searchmenu->addAction(cmd, Constants::G_ICD_SEARCH);
+    searchmenu->addAction(cmd, Core::Id(Constants::G_ICD_SEARCH));
     gSearchMethod->addAction(a);
     connect(gSearchMethod,SIGNAL(triggered(QAction*)),this,SLOT(searchActionChanged(QAction*)));
 
@@ -205,12 +202,12 @@ IcdActionHandler::IcdActionHandler(QObject *parent) :
     Core::ActionContainer *modesmenu = actionManager()->actionContainer(Constants::M_ICD_MODES);
     if (!modesmenu) {
         modesmenu = actionManager()->createMenu(Constants::M_ICD_MODES);
-        modesmenu->appendGroup(Constants::G_ICD_SELECTORMODE);
-        modesmenu->appendGroup(Constants::G_ICD_COLLECTIONMODE);
+        modesmenu->appendGroup(Core::Id(Constants::G_ICD_SELECTORMODE));
+        modesmenu->appendGroup(Core::Id(Constants::G_ICD_COLLECTIONMODE));
         modesmenu->setTranslations(Constants::MODESMENU_TEXT, Constants::ICDCONSTANTS_TR_CONTEXT);
 #ifndef FREETOOLBOX
         Core::ActionContainer *menu = actionManager()->actionContainer(Core::Constants::M_EDIT);
-        menu->addMenu(modesmenu, Core::Constants::G_EDIT_OTHER);
+        menu->addMenu(modesmenu, Core::Id(Core::Constants::G_EDIT_OTHER));
 #endif
     }
     Q_ASSERT(modesmenu);
@@ -220,36 +217,36 @@ IcdActionHandler::IcdActionHandler(QObject *parent) :
     a->setObjectName("aSelectorSimpleMode");
     a->setCheckable(true);
     a->setChecked(false);
-    cmd = actionManager()->registerAction(a, Constants::A_SELECTOR_SIMPLEMODE, ctx);
+    cmd = actionManager()->registerAction(a, Core::Id(Constants::A_SELECTOR_SIMPLEMODE), ctx);
     cmd->setTranslations(Constants::SELECTORSIMPLEMODE_TEXT, Constants::SELECTORSIMPLEMODE_TEXT, Constants::ICDCONSTANTS_TR_CONTEXT);
-    modesmenu->addAction(cmd, Constants::G_ICD_SELECTORMODE);
+    modesmenu->addAction(cmd, Core::Id(Constants::G_ICD_SELECTORMODE));
     gModes->addAction(a);
 
     a = aSelectorFullMode = new QAction(this);
     a->setObjectName("aSelectorFullMode");
     a->setCheckable(true);
     a->setChecked(false);
-    cmd = actionManager()->registerAction(a, Constants::A_SELECTOR_FULLMODE, ctx);
+    cmd = actionManager()->registerAction(a, Core::Id(Constants::A_SELECTOR_FULLMODE), ctx);
     cmd->setTranslations(Constants::SELECTORFULLMODE_TEXT, Constants::SELECTORFULLMODE_TEXT, Constants::ICDCONSTANTS_TR_CONTEXT);
-    modesmenu->addAction(cmd, Constants::G_ICD_SELECTORMODE);
+    modesmenu->addAction(cmd, Core::Id(Constants::G_ICD_SELECTORMODE));
     gModes->addAction(a);
 
     a = aCollectionModelSimpleMode = new QAction(this);
     a->setObjectName("aCollectionModelSimpleMode");
     a->setCheckable(true);
     a->setChecked(false);
-    cmd = actionManager()->registerAction(a, Constants::A_COLLECTION_SIMPLEMODE, ctx);
+    cmd = actionManager()->registerAction(a, Core::Id(Constants::A_COLLECTION_SIMPLEMODE), ctx);
     cmd->setTranslations(Constants::COLLECTIONSIMPLEMODE_TEXT, Constants::COLLECTIONSIMPLEMODE_TEXT, Constants::ICDCONSTANTS_TR_CONTEXT);
-    modesmenu->addAction(cmd, Constants::G_ICD_COLLECTIONMODE);
+    modesmenu->addAction(cmd, Core::Id(Constants::G_ICD_COLLECTIONMODE));
     gModes->addAction(a);
 
     a = aCollectionModelFullMode = new QAction(this);
     a->setObjectName("aCollectionModelFullMode");
     a->setCheckable(true);
     a->setChecked(false);
-    cmd = actionManager()->registerAction(a, Constants::A_COLLECTION_FULLMODE, ctx);
+    cmd = actionManager()->registerAction(a, Core::Id(Constants::A_COLLECTION_FULLMODE), ctx);
     cmd->setTranslations(Constants::COLLECTIONFULLMODE_TEXT, Constants::COLLECTIONFULLMODE_TEXT, Constants::ICDCONSTANTS_TR_CONTEXT);
-    modesmenu->addAction(cmd, Constants::G_ICD_COLLECTIONMODE);
+    modesmenu->addAction(cmd, Core::Id(Constants::G_ICD_COLLECTIONMODE));
     gModes->addAction(a);
     connect(gModes, SIGNAL(triggered(QAction*)), this, SLOT(modeActionChanged(QAction*)));
 
@@ -257,21 +254,21 @@ IcdActionHandler::IcdActionHandler(QObject *parent) :
     a = aToggleSelector = new QAction(this);
     a->setObjectName("aToggleSelector");
     a->setIcon(th->icon(Constants::I_TOGGLEICDSELECTOR));
-    cmd = actionManager()->registerAction(a, Constants::A_TOGGLE_ICDSELECTOR, ctx);
+    cmd = actionManager()->registerAction(a, Core::Id(Constants::A_TOGGLE_ICDSELECTOR), ctx);
     cmd->setTranslations(Constants::TOGGLEICDSELECTOR_TEXT, Constants::TOGGLEICDSELECTOR_TEXT, Constants::ICDCONSTANTS_TR_CONTEXT);
-//    menu->addAction(cmd, DrugsWidget::Constants::G_PLUGINS_VIEWS);
+//    menu->addAction(cmd, Core::Id(DrugsWidget::Constants::G_PLUGINS_VIEWS));
     connect(a, SIGNAL(triggered()), this, SLOT(toggleSelector()));
 
     a = aClear = new QAction(this);
     a->setIcon(th->icon(Core::Constants::ICONCLEAR));
-    cmd = actionManager()->registerAction(a, Core::Constants::A_LIST_CLEAR, ctx);
+    cmd = actionManager()->registerAction(a, Core::Id(Core::Constants::A_LIST_CLEAR), ctx);
     cmd->setTranslations(Trans::Constants::LISTCLEAR_TEXT);
 //    menu->addAction(cmd, DrugsWidget::Constants::G_PLUGINS_DRUGS);
     connect(a, SIGNAL(triggered()), this, SLOT(clear()));
 
     a = aRemoveRow = new QAction(this);
     a->setIcon(th->icon(Core::Constants::ICONREMOVE));
-    cmd = actionManager()->registerAction(a, Core::Constants::A_LIST_REMOVE, ctx);
+    cmd = actionManager()->registerAction(a, Core::Id(Core::Constants::A_LIST_REMOVE), ctx);
     cmd->setTranslations(Trans::Constants::LISTREMOVE_TEXT);
 //    menu->addAction(cmd, DrugsWidget::Constants::G_PLUGINS_DRUGS);
     connect(a, SIGNAL(triggered()), this, SLOT(removeItem()));

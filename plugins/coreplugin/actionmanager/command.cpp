@@ -2,44 +2,55 @@
 **
 ** This file is part of Qt Creator
 **
-** Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+** Copyright (c) 2012 Nokia Corporation and/or its subsidiary(-ies).
 **
 ** Contact: Nokia Corporation (qt-info@nokia.com)
 **
-** Commercial Usage
-**
-** Licensees holding valid Qt Commercial licenses may use this file in
-** accordance with the Qt Commercial License Agreement provided with the
-** Software or, alternatively, in accordance with the terms contained in
-** a written agreement between you and Nokia.
 **
 ** GNU Lesser General Public License Usage
 **
-** Alternatively, this file may be used under the terms of the GNU Lesser
-** General Public License version 2.1 as published by the Free Software
-** Foundation and appearing in the file LICENSE.LGPL included in the
-** packaging of this file.  Please review the following information to
-** ensure the GNU Lesser General Public License version 2.1 requirements
-** will be met: http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
+** This file may be used under the terms of the GNU Lesser General Public
+** License version 2.1 as published by the Free Software Foundation and
+** appearing in the file LICENSE.LGPL included in the packaging of this file.
+** Please review the following information to ensure the GNU Lesser General
+** Public License version 2.1 requirements will be met:
+** http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
 **
-** If you are unsure which license is appropriate for your use, please
-** contact the sales department at http://www.qtsoftware.com/contact.
+** In addition, as a special exception, Nokia gives you certain additional
+** rights. These rights are described in the Nokia Qt LGPL Exception
+** version 1.1, included in the file LGPL_EXCEPTION.txt in this package.
+**
+** Other Usage
+**
+** Alternatively, this file may be used in accordance with the terms and
+** conditions contained in a signed written agreement between you and Nokia.
+**
+** If you have questions regarding the use of this file, please contact
+** Nokia at qt-info@nokia.com.
 **
 **************************************************************************/
 
-#include <QtCore/QDebug>
-#include <QtGui/QAction>
-#include <QtGui/QShortcut>
-#include <QCoreApplication>
-
 #include "command_p.h"
+#include <coreplugin/contextmanager/icontext.h>
+#include <coreplugin/icore.h>
+#include <coreplugin/id.h>
+
+#include <translationutils/constants.h>
+
+#include <QDebug>
+#include <QTextStream>
+
+#include <QAction>
+#include <QShortcut>
+#include <QMainWindow>
+#include <QCoreApplication>
 
 /*!
     \class Core::Command
     \mainclass
 
     \brief The class Command represents an action like a menu item, tool button, or shortcut.
-    You don't create Command objects directly, instead use ActionManager::registerAction()
+    You don't create Command objects directly, instead use \l{ActionManager::registerAction()}
     to register an action and retrieve a Command. The Command object represents the user visible
     action and its properties. If multiple actions are registered with the same ID (but
     different contexts) the returned Command is the shared one between these actions.
@@ -53,11 +64,11 @@
     The user visible action is updated to represent the state of the active action (if any).
     For performance reasons only the enabled and visible state are considered by default though.
     You can tell a Command to also update the actions icon and text by setting the
-    corresponding Command::CommandAttribute.
+    corresponding \l{Command::CommandAttribute}{attribute}.
 
     If there is no active action, the default behavior of the visible action is to be disabled.
     You can change that behavior to make the visible action hide instead via the Command's
-    Command::CommandAttribute.
+    \l{Command::CommandAttribute}{attributes}.
 */
 
 /*!
@@ -73,7 +84,7 @@
     \value CA_Hide
         When there is no active action, hide the user "visible" action, instead of just
         disabling it.
-    \value CA_NonConfigureable
+    \value CA_NonConfigurable
         Flag to indicate that the keyboard shortcut of this Command should not be
         configurable by the user.
 */
@@ -109,7 +120,7 @@
 */
 
 /*!
-    \fn void Command::setDefaultText(const QString &text)
+    \fn void Command::setDescription(const QString &text)
     Set the \a text that is used to represent the Command in the
     keyboard shortcut settings dialog. If you don't set this,
     the current text from the user visible action is taken (which
@@ -117,9 +128,9 @@
 */
 
 /*!
-    \fn QString Command::defaultText() const
+    \fn QString Command::description() const
     Returns the text that is used to present this Command to the user.
-    \sa setDefaultText()
+    \sa setDescription()
 */
 
 /*!
@@ -182,10 +193,24 @@
 */
 
 /*!
+    \fn bool Command::isScriptable() const
+    Returns if the Command is scriptable. A scriptable command can be called
+    from a script without the need for the user to interact with it.
+*/
+
+/*!
+    \fn bool Command::isScriptable(const Context &) const
+    Returns if the Command is scriptable for the given context.
+    A scriptable command can be called from a script without the need for the user to
+    interact with it.
+*/
+
+/*!
     \fn Command::~Command()
     \internal
 */
 
+using namespace Core;
 using namespace Core::Internal;
 
 /*!
@@ -193,13 +218,15 @@ using namespace Core::Internal;
     \internal
 */
 
-CommandPrivate::CommandPrivate(int id)
-    : m_attributes(0), m_id(id)
+CommandPrivate::CommandPrivate(Id id)
+    : m_attributes(0), m_id(id), m_isKeyInitialized(false)
 {
 }
 
 void CommandPrivate::setDefaultKeySequence(const QKeySequence &key)
 {
+    if (!m_isKeyInitialized)
+        setKeySequence(key);
     m_defaultKey = key;
 }
 
@@ -208,17 +235,34 @@ QKeySequence CommandPrivate::defaultKeySequence() const
     return m_defaultKey;
 }
 
-void CommandPrivate::setDefaultText(const QString &text)
+void CommandPrivate::setKeySequence(const QKeySequence &key)
+{
+    Q_UNUSED(key)
+    m_isKeyInitialized = true;
+}
+
+void CommandPrivate::setDescription(const QString &text)
 {
     m_defaultText = text;
 }
 
-QString CommandPrivate::defaultText() const
+QString CommandPrivate::description() const
 {
-    return m_defaultText;
+    if (!m_defaultText.isEmpty())
+        return m_defaultText;
+    if (action()) {
+        QString text = action()->text();
+        text.remove(QRegExp(QLatin1String("&(?!&)")));
+        if (!text.isEmpty())
+            return text;
+    } else if (shortcut()) {
+        if (!shortcut()->whatsThis().isEmpty())
+            return shortcut()->whatsThis();
+    }
+    return id().toString();
 }
 
-int CommandPrivate::id() const
+Id CommandPrivate::id() const
 {
     return m_id;
 }
@@ -231,6 +275,11 @@ QAction *CommandPrivate::action() const
 QShortcut *CommandPrivate::shortcut() const
 {
     return 0;
+}
+
+Core::Context CommandPrivate::context() const
+{
+    return m_context;
 }
 
 void CommandPrivate::setAttribute(CommandAttribute attr)
@@ -250,8 +299,7 @@ bool CommandPrivate::hasAttribute(CommandAttribute attr) const
 
 QString CommandPrivate::stringWithAppendedShortcut(const QString &str) const
 {
-    return QString("%1 <span style=\"color: gray; font-size: small\">%2</span>").arg(str).arg(
-            keySequence().toString(QKeySequence::NativeText));
+    return Utils::ProxyAction::stringWithAppendedShortcut(str, keySequence());
 }
 
 // ---------- Shortcut ------------
@@ -261,19 +309,9 @@ QString CommandPrivate::stringWithAppendedShortcut(const QString &str) const
     \internal
 */
 
-Shortcut::Shortcut(int id)
-    : CommandPrivate(id), m_shortcut(0)
-{
-
-}
-
-QString Shortcut::name() const
-{
-    if (!m_shortcut)
-        return QString();
-
-    return m_shortcut->whatsThis();
-}
+Shortcut::Shortcut(Id id)
+    : CommandPrivate(id), m_shortcut(0), m_scriptable(false)
+{}
 
 void Shortcut::setShortcut(QShortcut *shortcut)
 {
@@ -285,24 +323,19 @@ QShortcut *Shortcut::shortcut() const
     return m_shortcut;
 }
 
-void Shortcut::setContext(const QList<int> &context)
+void Shortcut::setContext(const Core::Context &context)
 {
     m_context = context;
 }
 
-QList<int> Shortcut::context() const
+Core::Context Shortcut::context() const
 {
     return m_context;
 }
 
-void Shortcut::setDefaultKeySequence(const QKeySequence &key)
-{
-    setKeySequence(key);
-    CommandPrivate::setDefaultKeySequence(key);
-}
-
 void Shortcut::setKeySequence(const QKeySequence &key)
 {
+    CommandPrivate::setKeySequence(key);
     m_shortcut->setKey(key);
     emit keySequenceChanged();
 }
@@ -312,31 +345,42 @@ QKeySequence Shortcut::keySequence() const
     return m_shortcut->key();
 }
 
-void Shortcut::setDefaultText(const QString &text)
-{
-    m_defaultText = text;
-}
-
-QString Shortcut::defaultText() const
-{
-    return m_defaultText;
-}
-
-bool Shortcut::setCurrentContext(const QList<int> &context)
+void Shortcut::setCurrentContext(const Core::Context &context)
 {
     foreach (int ctxt, m_context) {
         if (context.contains(ctxt)) {
-            m_shortcut->setEnabled(true);
-            return true;
+            if (!m_shortcut->isEnabled()) {
+                m_shortcut->setEnabled(true);
+                emit activeStateChanged();
+            }
+            return;
         }
     }
-    m_shortcut->setEnabled(false);
-    return false;
+    if (m_shortcut->isEnabled()) {
+        m_shortcut->setEnabled(false);
+        emit activeStateChanged();
+    }
+    return;
 }
 
 bool Shortcut::isActive() const
 {
     return m_shortcut->isEnabled();
+}
+
+bool Shortcut::isScriptable() const
+{
+    return m_scriptable;
+}
+
+bool Shortcut::isScriptable(const Core::Context &) const
+{
+    return m_scriptable;
+}
+
+void Shortcut::setScriptable(bool value)
+{
+    m_scriptable = value;
 }
 
 // ---------- Action ------------
@@ -345,27 +389,14 @@ bool Shortcut::isActive() const
   \class Action
   \internal
 */
-Action::Action(int id)
-    : CommandPrivate(id), m_action(0)
+Action::Action(Id id)
+    : CommandPrivate(id),
+    m_action(new Utils::ProxyAction(this)),
+    m_active(false),
+    m_contextInitialized(false)
 {
-
-}
-
-QString Action::name() const
-{
-    if (!m_action)
-        return QString();
-
-    return m_action->text();
-}
-
-void Action::setAction(QAction *action)
-{
-    m_action = action;
-    if (m_action) {
-        m_action->setParent(this);
-        m_toolTip = m_action->toolTip();
-    }
+    m_action->setShortcutVisibleInToolTip(true);
+    connect(m_action, SIGNAL(changed()), this, SLOT(updateActiveState()));
 }
 
 QAction *Action::action() const
@@ -373,35 +404,11 @@ QAction *Action::action() const
     return m_action;
 }
 
-void Action::setLocations(const QList<CommandLocation> &locations)
-{
-    m_locations = locations;
-}
-
-QList<CommandLocation> Action::locations() const
-{
-    return m_locations;
-}
-
-void Action::setDefaultKeySequence(const QKeySequence &key)
-{
-    setKeySequence(key);
-    CommandPrivate::setDefaultKeySequence(key);
-}
-
 void Action::setKeySequence(const QKeySequence &key)
 {
+    CommandPrivate::setKeySequence(key);
     m_action->setShortcut(key);
-    updateToolTipWithKeySequence();
     emit keySequenceChanged();
-}
-
-void Action::updateToolTipWithKeySequence()
-{
-    if (m_action->shortcut().isEmpty())
-        m_action->setToolTip(m_toolTip);
-    else
-        m_action->setToolTip(stringWithAppendedShortcut(m_toolTip));
 }
 
 QKeySequence Action::keySequence() const
@@ -409,129 +416,162 @@ QKeySequence Action::keySequence() const
     return m_action->shortcut();
 }
 
-// ---------- OverrideableAction ------------
-
-/*!
-    \class OverrideableAction
-    \internal
-*/
-
-OverrideableAction::OverrideableAction(int id)
-    : Action(id), m_currentAction(0), m_active(false),
-    m_contextInitialized(false)
-{
-}
-
-//void OverrideableAction::setAction(QAction *action)
-//{
-//    Action::setAction(action);
-//}
-
-bool OverrideableAction::setCurrentContext(const QList<int> &context)
+void Action::setCurrentContext(const Core::Context &context)
 {
     m_context = context;
 
-    QAction *oldAction = m_currentAction;
-    m_currentAction = 0;
+    QAction *currentAction = 0;
     for (int i = 0; i < m_context.size(); ++i) {
         if (QAction *a = m_contextActionMap.value(m_context.at(i), 0)) {
-            m_currentAction = a;
+            currentAction = a;
             break;
         }
     }
 
-    if (m_currentAction == oldAction && m_contextInitialized)
-        return true;
-    m_contextInitialized = true;
-
-    if (oldAction) {
-        disconnect(oldAction, SIGNAL(changed()), this, SLOT(actionChanged()));
-        disconnect(m_action, SIGNAL(triggered(bool)), oldAction, SIGNAL(triggered(bool)));
-        disconnect(m_action, SIGNAL(toggled(bool)), oldAction, SLOT(setChecked(bool)));
-    }
-    if (m_currentAction) {
-        connect(m_currentAction, SIGNAL(changed()), this, SLOT(actionChanged()));
-        // we want to avoid the toggling semantic on slot trigger(), so we just connect the signals
-        connect(m_action, SIGNAL(triggered(bool)), m_currentAction, SIGNAL(triggered(bool)));
-        // we need to update the checked state, so we connect to setChecked slot, which also fires a toggled signal
-        connect(m_action, SIGNAL(toggled(bool)), m_currentAction, SLOT(setChecked(bool)));
-        actionChanged();
-        m_active = true;
-        return true;
-    }
-    if (hasAttribute(CA_Hide))
-        m_action->setVisible(false);
-    m_action->setEnabled(false);
-    m_active = false;
-    return false;
+    m_action->setAction(currentAction);
+    updateActiveState();
 }
 
-void OverrideableAction::addOverrideAction(QAction *action, const QList<int> &context)
+void Action::updateActiveState()
 {
+    setActive(m_action->isEnabled() && m_action->isVisible() && !m_action->isSeparator());
+}
+
+static QString msgActionWarning(QAction *newAction, int k, QAction *oldAction)
+{
+    QString msg;
+    QTextStream str(&msg);
+    str << "addOverrideAction " << newAction->objectName() << '/' << newAction->text()
+         << ": Action ";
+    if (oldAction)
+        str << oldAction->objectName() << '/' << oldAction->text();
+    str << " is already registered for context " << k << ' '
+        << Core::Id::fromUniqueIdentifier(k).toString()
+        << '.';
+    return msg;
+}
+
+void Action::addOverrideAction(QAction *action, const Core::Context &context, bool scriptable)
+{
+#ifdef Q_OS_MAC
+    action->setIconVisibleInMenu(false);
+#endif
+    if (isEmpty())
+        m_action->initialize(action);
     if (context.isEmpty()) {
         m_contextActionMap.insert(0, action);
     } else {
-        for (int i=0; i<context.size(); ++i) {
+        for (int i = 0; i < context.size(); ++i) {
             int k = context.at(i);
             if (m_contextActionMap.contains(k))
-                if (!action->objectName().startsWith("Sep."))
-                    qWarning() << QString("addOverrideAction: action already registered for context when registering '%1' // '%2'").arg(action->text()).arg(action->objectName());
+                qWarning("%s", qPrintable(msgActionWarning(action, k, m_contextActionMap.value(k, 0))));
             m_contextActionMap.insert(k, action);
         }
     }
+    m_scriptableMap[action] = scriptable;
+    setCurrentContext(m_context);
 }
 
-void OverrideableAction::actionChanged()
+void Action::removeOverrideAction(QAction *action)
 {
-//    qWarning() << "Action changed" << m_action << m_currentAction;
-
-    if (hasAttribute(CA_UpdateIcon)) {
-        m_action->setIcon(m_currentAction->icon());
-        m_action->setIconText(m_currentAction->iconText());
+    QMutableMapIterator<int, QPointer<QAction> > it(m_contextActionMap);
+    while (it.hasNext()) {
+        it.next();
+        if (it.value() == 0) {
+            it.remove();
+        } else if (it.value() == action) {
+            it.remove();
+        }
     }
-    if (hasAttribute(CA_UpdateText)) {
-        m_action->setText(m_currentAction->text());
-        m_toolTip = m_currentAction->toolTip();
-        updateToolTipWithKeySequence();
-        m_action->setStatusTip(m_currentAction->statusTip());
-        m_action->setWhatsThis(m_currentAction->whatsThis());
-    }
-
-    bool block = m_action->blockSignals(true);
-    m_action->setCheckable(m_currentAction->isCheckable());
-    m_action->setChecked(m_currentAction->isChecked());
-    m_action->blockSignals(block);
-
-    m_action->setEnabled(m_currentAction->isEnabled());
-    m_action->setVisible(m_currentAction->isVisible());
+    setCurrentContext(m_context);
 }
 
-bool OverrideableAction::isActive() const
+bool Action::isActive() const
 {
     return m_active;
 }
 
-void OverrideableAction::retranslate()
+void Action::setActive(bool state)
+{
+    if (state != m_active) {
+        m_active = state;
+        emit activeStateChanged();
+    }
+}
+
+bool Action::isEmpty() const
+{
+    return m_contextActionMap.isEmpty();
+}
+
+bool Action::isScriptable() const
+{
+    return m_scriptableMap.values().contains(true);
+}
+
+bool Action::isScriptable(const Core::Context &context) const
+{
+    if (context == m_context && m_scriptableMap.contains(m_action->action()))
+        return m_scriptableMap.value(m_action->action());
+
+    for (int i = 0; i < context.size(); ++i) {
+        if (QAction *a = m_contextActionMap.value(context.at(i), 0)) {
+            if (m_scriptableMap.contains(a) && m_scriptableMap.value(a))
+                return true;
+        }
+    }
+    return false;
+}
+
+void Action::setAttribute(CommandAttribute attr)
+{
+    CommandPrivate::setAttribute(attr);
+    switch (attr) {
+    case Core::Command::CA_Hide:
+        m_action->setAttribute(Utils::ProxyAction::Hide);
+        break;
+    case Core::Command::CA_UpdateText:
+        m_action->setAttribute(Utils::ProxyAction::UpdateText);
+        break;
+    case Core::Command::CA_UpdateIcon:
+        m_action->setAttribute(Utils::ProxyAction::UpdateIcon);
+        break;
+    case Core::Command::CA_NonConfigurable:
+        break;
+    }
+}
+
+void Action::removeAttribute(CommandAttribute attr)
+{
+    CommandPrivate::removeAttribute(attr);
+    switch (attr) {
+    case Core::Command::CA_Hide:
+        m_action->removeAttribute(Utils::ProxyAction::Hide);
+        break;
+    case Core::Command::CA_UpdateText:
+        m_action->removeAttribute(Utils::ProxyAction::UpdateText);
+        break;
+    case Core::Command::CA_UpdateIcon:
+        m_action->removeAttribute(Utils::ProxyAction::UpdateIcon);
+        break;
+    case Core::Command::CA_NonConfigurable:
+        break;
+    }
+}
+
+void Action::retranslate()
 {
     QAction *a;
-    if (m_currentAction) {
-        a = m_currentAction;
-        bool block = a->blockSignals(true);
-        if (!m_unTrText.isEmpty())
-            a->setText(QCoreApplication::translate(m_TrContext.toAscii(), m_unTrText.toAscii()));
-        if (!m_unTrTooltip.isEmpty())
-            a->setToolTip(stringWithAppendedShortcut(QCoreApplication::translate(m_TrContext.toAscii(), m_unTrTooltip.toAscii())));
-        else
-            a->setToolTip(stringWithAppendedShortcut(a->text()));
-        a->blockSignals(block);
-    }
     if (m_action) {
         a = m_action;
+        QString context = m_trContext;
+        if (context.isEmpty())
+            context = Trans::Constants::CONSTANTS_TR_CONTEXT;
         bool block = a->blockSignals(true);
-        if (!m_unTrText.isEmpty())
-            a->setText(QCoreApplication::translate(m_TrContext.toAscii(), m_unTrText.toAscii()));
-        if (!m_unTrTooltip.isEmpty())
-            a->setToolTip(stringWithAppendedShortcut(QCoreApplication::translate(m_TrContext.toAscii(), m_unTrTooltip.toAscii())));
+        if (!m_trLabel.isEmpty())
+            a->setText(QCoreApplication::translate(context.toAscii(), m_trLabel.toAscii()));
+        if (!m_trTooltip.isEmpty())
+            a->setToolTip(stringWithAppendedShortcut(QCoreApplication::translate(context.toAscii(), m_trTooltip.toAscii())));
         else
             a->setToolTip(stringWithAppendedShortcut(a->text()));
         a->blockSignals(block);

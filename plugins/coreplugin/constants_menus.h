@@ -318,7 +318,6 @@ const int          P_MODE_ACCOUNT         = 200;
 
 // Contexts
 const char* const   C_GLOBAL             = "context.global";
-const int           C_GLOBAL_ID          = 0;
 const char* const   C_EDITOR_BASIC       = "context.Editor";
 const char* const   C_EDITOR_CHAR_FORMAT = "context.Editor.char";
 const char* const   C_EDITOR_PARAGRAPH   = "context.Editor.paragraph";

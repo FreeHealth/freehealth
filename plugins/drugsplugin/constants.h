@@ -52,6 +52,7 @@ namespace Constants {
     const char * const  C_DRUGS_PLUGINS         =  "DrugsPlugins.cDrugs";
     const char * const  C_DRUGS_SEARCH          =  "DrugsPlugins.cSearch";
 
+    const char* const   A_CLEAR_PRESCRIPTION     = "a.Drugs.ClearPrescription";
     const char* const   A_SAVE_PRESCRIPTION     = "a.Drugs.SavePrescription";
     const char* const   A_SAVEAS_PRESCRIPTION   = "a.Drugs.SaveAsPrescription";
     const char* const   A_TOGGLE_DRUGSELECTOR   = "a.Drugs.ToggleDrugSelector";
@@ -75,6 +76,7 @@ namespace Constants {
 
 
     const char* const   DRUGSMENU_TEXT          = QT_TRANSLATE_NOOP("mfDrugsConstants", "Prescription");
+    const char* const   CLEARPRESCRIPTION_TEXT = QT_TRANSLATE_NOOP("mfDrugsConstants", "Clear prescription");
     const char* const   TOGGLEDRUGSELECTOR_TEXT = QT_TRANSLATE_NOOP("mfDrugsConstants", "Toggle drug selector");
     const char* const   SEARCHCOMMERCIAL_TEXT   = QT_TRANSLATE_NOOP("mfDrugsConstants", "Search by commercial name");
     const char* const   SEARCHINN_TEXT          = QT_TRANSLATE_NOOP("mfDrugsConstants", "Search by INN");

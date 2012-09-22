@@ -36,8 +36,8 @@
 #include <utils/log.h>
 
 #include <coreplugin/actionmanager/actionmanager.h>
+#include <coreplugin/actionmanager/actioncontainer.h>
 #include <coreplugin/contextmanager/contextmanager.h>
-#include <coreplugin/uniqueidmanager.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/constants_menus.h>
@@ -77,12 +77,13 @@ ViewManager *ViewManager::instance(QObject *parent)
 
 ViewManager::ViewManager(QObject *parent) : ViewActionHandler(parent)
 {
-    connect(contextManager(), SIGNAL(contextChanged(Core::IContext*)),
-            this, SLOT(updateContext(Core::IContext*)));
+    connect(contextManager(), SIGNAL(contextChanged(Core::IContext*,Core::Context)),
+            this, SLOT(updateContext(Core::IContext*, Core::Context)));
 }
 
-void ViewManager::updateContext(Core::IContext *object)
+void ViewManager::updateContext(Core::IContext *object, const Core::Context &additionalContexts)
 {
+    Q_UNUSED(additionalContexts);
 //    if (object)
 //        qWarning() << "context" << object << object->context() << m_CurrentView;
     IView *view = 0;
@@ -129,13 +130,12 @@ ViewActionHandler::ViewActionHandler(QObject *parent) :
         m_CurrentView(0)
 {
     Core::ActionManager *am = Core::ICore::instance()->actionManager();
-    Core::UniqueIDManager *uid = Core::ICore::instance()->uniqueIDManager();
     Core::ITheme *th = Core::ICore::instance()->theme();
-    QList<int> basicContext = QList<int>() << uid->uniqueIdentifier(Constants::C_BASIC);
-    QList<int> addContext = QList<int>() << uid->uniqueIdentifier(Constants::C_BASIC_ADDREMOVE);
-    QList<int> moveContext = QList<int>() << uid->uniqueIdentifier(Constants::C_BASIC_MOVE);
+    Core::Context basicContext(Constants::C_BASIC);
+    Core::Context addContext(Constants::C_BASIC_ADDREMOVE);
+    Core::Context moveContext(Constants::C_BASIC_MOVE);
 
-//    QList<int> allContexts;
+//    Core::Context allContexts;
 //    allContexts << basicContext << addContext << moveContext;
 //    // register already existing menu actions
 //    aUndo = registerAction(Core::Constants::A_EDIT_UNDO,  allContexts, this);
@@ -149,7 +149,7 @@ ViewActionHandler::ViewActionHandler(QObject *parent) :
     Core::ActionContainer *cmenu = am->actionContainer(Core::Constants::M_EDIT_LIST);
     if (!cmenu) {
         cmenu = am->createMenu(Core::Constants::M_EDIT_LIST);
-        cmenu->appendGroup(Core::Constants::G_EDIT_LIST);
+        cmenu->appendGroup(Core::Id(Core::Constants::G_EDIT_LIST));
         cmenu->setTranslations(Trans::Constants::M_EDIT_LIST_TEXT);
         if (editMenu)
             editMenu->addMenu(cmenu, Core::Constants::G_EDIT_LIST);
@@ -158,33 +158,33 @@ ViewActionHandler::ViewActionHandler(QObject *parent) :
     QAction *a = aAddRow = new QAction(this);
     a->setObjectName("ListView.aAddRow");
     a->setIcon(th->icon(Core::Constants::ICONADD));
-    Core::Command *cmd = am->registerAction(a, Core::Constants::A_LIST_ADD, addContext);
+    Core::Command *cmd = am->registerAction(a, Core::Id(Core::Constants::A_LIST_ADD), addContext);
     cmd->setTranslations(Trans::Constants::LISTADD_TEXT);
-    cmenu->addAction(cmd, Core::Constants::G_EDIT_LIST);
+    cmenu->addAction(cmd, Core::Id(Core::Constants::G_EDIT_LIST));
     connect(a, SIGNAL(triggered()), this, SLOT(addItem()));
 
     a = aRemoveRow = new QAction(this);
     a->setObjectName("ListView.aRemoveRow");
     a->setIcon(th->icon(Core::Constants::ICONREMOVE));
-    cmd = am->registerAction(a, Core::Constants::A_LIST_REMOVE, addContext);
+    cmd = am->registerAction(a, Core::Id(Core::Constants::A_LIST_REMOVE), addContext);
     cmd->setTranslations(Trans::Constants::LISTREMOVE_TEXT);
-    cmenu->addAction(cmd, Core::Constants::G_EDIT_LIST);
+    cmenu->addAction(cmd, Core::Id(Core::Constants::G_EDIT_LIST));
     connect(a, SIGNAL(triggered()), this, SLOT(removeItem()));
 
     a = aDown = new QAction(this);
     a->setObjectName("ListView.aDown");
     a->setIcon(th->icon(Core::Constants::ICONMOVEDOWN));
-    cmd = am->registerAction(a, Core::Constants::A_LIST_MOVEDOWN, moveContext);
+    cmd = am->registerAction(a, Core::Id(Core::Constants::A_LIST_MOVEDOWN), moveContext);
     cmd->setTranslations(Trans::Constants::LISTMOVEDOWN_TEXT);
-    cmenu->addAction(cmd, Core::Constants::G_EDIT_LIST);
+    cmenu->addAction(cmd, Core::Id(Core::Constants::G_EDIT_LIST));
     connect(a, SIGNAL(triggered()), this, SLOT(moveDown()));
 
     a = aUp = new QAction(this);
     a->setObjectName("ListView.aUp");
     a->setIcon(th->icon(Core::Constants::ICONMOVEUP));
-    cmd = am->registerAction(a, Core::Constants::A_LIST_MOVEUP, moveContext);
+    cmd = am->registerAction(a, Core::Id(Core::Constants::A_LIST_MOVEUP), moveContext);
     cmd->setTranslations(Trans::Constants::LISTMOVEUP_TEXT);
-    cmenu->addAction(cmd, Core::Constants::G_EDIT_LIST);
+    cmenu->addAction(cmd, Core::Id(Core::Constants::G_EDIT_LIST));
     connect(a, SIGNAL(triggered()), this, SLOT(moveUp()));
 
 }

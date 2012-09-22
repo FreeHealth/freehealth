@@ -43,13 +43,13 @@
 #include <coreplugin/constants_icons.h>
 #include <coreplugin/ipadtools.h>
 #include <coreplugin/itheme.h>
-#include <coreplugin/uniqueidmanager.h>
 #include <coreplugin/actionmanager/actionmanager.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
 
 #include <QTimer>
+#include <QToolBar>
 
 #include "ui_padwriter.h"
 
@@ -58,7 +58,6 @@
 using namespace PadTools;
 using namespace Internal;
 
-static inline Core::UniqueIDManager *uid() { return Core::ICore::instance()->uniqueIDManager(); }
 static inline Core::ActionManager *actionManager() { return Core::ICore::instance()->actionManager(); }
 static inline Core::ITheme *theme() { return Core::ICore::instance()->theme(); }
 static inline Core::ISettings *settings() { return Core::ICore::instance()->settings(); }
@@ -88,7 +87,7 @@ public:
     void createActions(QToolButton *button)
     {
         // Add options action
-        QList<int> context = QList<int>() << Core::Constants::C_GLOBAL_ID;
+        Core::Context context(Core::Constants::C_GLOBAL);
         QAction *a;
         Core::Command *cmd;
 
@@ -97,7 +96,7 @@ public:
     //    a->setIcon(theme()->icon(icon));
         a->setCheckable(true);
         a->setChecked(false);
-        cmd = actionManager()->registerAction(a, a->objectName(), context);
+        cmd = actionManager()->registerAction(a, Core::Id(a->objectName()), context);
         cmd->setTranslations(Constants::FIND_CURSOR_IN_RESULT, Constants::FIND_CURSOR_IN_RESULT, Constants::PADWRITER_TRANS_CONTEXT);
         button->addAction(cmd->action());
 
@@ -106,7 +105,7 @@ public:
     //    a->setIcon(theme()->icon(icon));
         a->setCheckable(true);
         a->setChecked(false);
-        cmd = actionManager()->registerAction(a, a->objectName(), context);
+        cmd = actionManager()->registerAction(a, Core::Id(a->objectName()), context);
         cmd->setTranslations(Constants::AUTO_UPDATE_RESULT, Constants::AUTO_UPDATE_RESULT, Constants::PADWRITER_TRANS_CONTEXT);
         button->addAction(cmd->action());
 
@@ -115,7 +114,7 @@ public:
     //    a->setIcon(theme()->icon(icon));
         a->setCheckable(true);
         a->setChecked(false);
-        cmd = actionManager()->registerAction(a, a->objectName(), context);
+        cmd = actionManager()->registerAction(a, Core::Id(a->objectName()), context);
         cmd->setTranslations(Constants::SET_TEST_VALUE_TO_TOKENS, Constants::SET_TEST_VALUE_TO_TOKENS, Constants::PADWRITER_TRANS_CONTEXT);
         button->addAction(cmd->action());
 

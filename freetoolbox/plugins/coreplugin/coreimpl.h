@@ -31,11 +31,10 @@
 
 /**
  * \file coreimpl.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.4.0
- * \date 10 Oct 2010
+ * \author Eric MAEKER
+ * \version 0.8.0
+ * \date 22 Sept 2012
 */
-
 
 namespace Core {
     class Patient;
@@ -64,7 +63,6 @@ public:
 
     ActionManager *actionManager() const;
     ContextManager *contextManager() const;
-    UniqueIDManager *uniqueIDManager() const;
 
     ITheme *theme() const;
     Translators *translators() const;
@@ -102,7 +100,6 @@ private:
     IMainWindow *m_MainWindow;
     ActionManagerPrivate *m_ActionManager;
     ContextManagerPrivate *m_ContextManager;
-    UniqueIDManager *m_UID;
     ThemePrivate *m_Theme;
     Translators *m_Translators;
     SettingsPrivate *m_Settings;

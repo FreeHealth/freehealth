@@ -50,7 +50,7 @@
 #include <coreplugin/imainwindow.h>
 #include <coreplugin/contextmanager/contextmanager.h>
 #include <coreplugin/actionmanager/actionmanager.h>
-#include <coreplugin/uniqueidmanager.h>
+#include <coreplugin/actionmanager/actioncontainer.h>
 #include <coreplugin/modemanager/modemanager.h>
 #include <coreplugin/modemanager/imode.h>
 
@@ -66,6 +66,7 @@ static inline Core::ActionManager *actionManager() {return Core::ICore::instance
 static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
 static inline Core::IMainWindow *mainWindow() { return Core::ICore::instance()->mainWindow(); }
 static inline Core::ModeManager *modeManager() {return Core::ICore::instance()->modeManager();}
+static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////      MANAGER      ///////////////////////////////////////////////
@@ -84,15 +85,15 @@ AccountWidgetManager::~AccountWidgetManager()
 }
 
 
-AccountWidgetManager::AccountWidgetManager(QObject *parent) : AccountActionHandler(parent)
+AccountWidgetManager::AccountWidgetManager(QObject *parent) :
+    AccountActionHandler(parent)
 {
-    connect(Core::ICore::instance()->contextManager(), SIGNAL(contextChanged(Core::IContext*)),
-            this, SLOT(updateContext(Core::IContext*)));
+    connect(Core::ICore::instance()->contextManager(), SIGNAL(contextChanged(Core::IContext*,Core::Context)),
+            this, SLOT(updateContext(Core::IContext*,Core::Context)));
     setObjectName("AccountWidgetManager");
-    LOG("Instance created");
 }
 
-void AccountWidgetManager::updateContext(Core::IContext *object)
+void AccountWidgetManager::updateContext(Core::IContext *object, const Core::Context &additionalContexts)
 {
 //    qWarning() << "AccountManager::updateContext(Core::IContext *object)";
 //    if (object)
@@ -146,83 +147,79 @@ AccountActionHandler::AccountActionHandler(QObject *parent) :
 {
     setObjectName("AccountActionHandler");
     LOG("Instance created");
-
-    Core::UniqueIDManager *uid = Core::ICore::instance()->uniqueIDManager();
-    Core::ITheme *th = Core::ICore::instance()->theme();
-
     QAction *a = 0;
     Core::Command *cmd = 0;
-    QList<int> ctx = QList<int>() << uid->uniqueIdentifier(Account::Constants::C_ACCOUNT);
-    QList<int> global = QList<int>() << Core::Constants::C_GLOBAL_ID;
+    Core::Context ctx(Account::Constants::C_ACCOUNT);
+    Core::Context global(Core::Constants::C_GLOBAL);
 
-    Core::ActionContainer *menu = actionManager()->actionContainer(Account::Constants::M_PLUGINS_ACCOUNT);
+    Core::ActionContainer *menu = actionManager()->actionContainer(Core::Id(Account::Constants::M_PLUGINS_ACCOUNT));
     if (!menu) {
         menu = actionManager()->createMenu(Account::Constants::M_PLUGINS_ACCOUNT);
-        menu->appendGroup(Constants::G_ACCOUNT_APPS);
-        menu->appendGroup(Constants::G_ACCOUNT_SEARCH);
-        menu->appendGroup(Constants::G_ACCOUNT_MODES);
+        menu->appendGroup(Core::Id(Constants::G_ACCOUNT_APPS));
+        menu->appendGroup(Core::Id(Constants::G_ACCOUNT_SEARCH));
+        menu->appendGroup(Core::Id(Constants::G_ACCOUNT_MODES));
         menu->setTranslations(Account::Constants::ACCOUNTMENU_TEXT, Account::Constants::ACCOUNT_TR_CONTEXT);
     }
     Q_ASSERT(menu);
 #ifdef FREEACCOUNT
-    actionManager()->actionContainer(Core::Constants::MENUBAR)->addMenu(menu, Core::Constants::G_PLUGINS);
+    actionManager()->actionContainer(Core::Id(Core::Constants::MENUBAR))->addMenu(menu, Core::Id(Core::Constants::G_PLUGINS));
 #else
-    actionManager()->actionContainer(Core::Constants::M_PLUGINS)->addMenu(menu, Core::Constants::G_PLUGINS_ACCOUNT);
+    actionManager()->actionContainer(Core::Id(Core::Constants::M_PLUGINS))->addMenu(menu, Core::Id(Core::Constants::G_PLUGINS_ACCOUNT));
 #endif
 
     // Create local actions
     a = aAddReceipts = new QAction(this);
     a->setObjectName("aAddReceipts");
-    a->setIcon(th->icon(Core::Constants::ICONHELP));
-    cmd = actionManager()->registerAction(a, Constants::A_ADDRECEIPTS, global);
+    a->setIcon(theme()->icon(Core::Constants::ICONHELP));
+    cmd = actionManager()->registerAction(a, Core::Id(Constants::A_ADDRECEIPTS), global);
     cmd->setTranslations(Constants::ADD_RECEIPTS, Constants::ADD_RECEIPTS, Constants::ACCOUNT_TR_CONTEXT);
     cmd->setDefaultKeySequence(QKeySequence("Ctrl+r"));
-    menu->addAction(cmd, Constants::G_ACCOUNT_APPS);
+    menu->addAction(cmd, Core::Id(Constants::G_ACCOUNT_APPS));
     connect(a, SIGNAL(triggered()), this, SLOT(addReceipts()));
 
     a = aReceipts = new QAction(this);
     a->setObjectName("aReceipts");
-    a->setIcon(th->icon(Core::Constants::ICONHELP));
-    cmd = actionManager()->registerAction(a, Constants::A_RECEIPTS, global);
+    a->setIcon(theme()->icon(Core::Constants::ICONHELP));
+    cmd = actionManager()->registerAction(a, Core::Id(Constants::A_RECEIPTS), global);
     cmd->setTranslations(Constants::RECEIPTS, Constants::RECEIPTS, Constants::ACCOUNT_TR_CONTEXT);
     cmd->setDefaultKeySequence(QKeySequence("Shift+r"));
-    menu->addAction(cmd, Constants::G_ACCOUNT_APPS);
+    menu->addAction(cmd, Core::Id(Constants::G_ACCOUNT_APPS));
     connect(a, SIGNAL(triggered()), this, SLOT(receipts()));
 
     a = aLegder = new QAction(this);
     a->setObjectName("aLegder");
-    a->setIcon(th->icon(Core::Constants::ICONHELP));
-    cmd = actionManager()->registerAction(a, Constants::A_LEDGER, global);
+    a->setIcon(theme()->icon(Core::Constants::ICONHELP));
+    cmd = actionManager()->registerAction(a, Core::Id(Constants::A_LEDGER), global);
     cmd->setTranslations(Constants::LEDGER, Constants::LEDGER, Constants::ACCOUNT_TR_CONTEXT);
     cmd->setDefaultKeySequence(QKeySequence("Alt+l"));
-    menu->addAction(cmd, Constants::G_ACCOUNT_APPS);
+    menu->addAction(cmd, Core::Id(Constants::G_ACCOUNT_APPS));
     connect(a, SIGNAL(triggered()), this, SLOT(ledger()));
 
     a = aMovements = new QAction(this);
     a->setObjectName("aMovements");
-    a->setIcon(th->icon(Core::Constants::ICONHELP));
-    cmd = actionManager()->registerAction(a, Constants::A_MOVEMENTS, global);
+    a->setIcon(theme()->icon(Core::Constants::ICONHELP));
+    cmd = actionManager()->registerAction(a, Core::Id(Constants::A_MOVEMENTS), global);
     cmd->setTranslations(Constants::MOVEMENTS, Constants::MOVEMENTS, Constants::ACCOUNT_TR_CONTEXT);
     cmd->setDefaultKeySequence(QKeySequence("Ctrl+m"));
-    menu->addAction(cmd, Constants::G_ACCOUNT_APPS);
+    menu->addAction(cmd, Core::Id(Constants::G_ACCOUNT_APPS));
     connect(a, SIGNAL(triggered()), this, SLOT(movements()));
 
     a = aAssets = new QAction(this);
     a->setObjectName("aAssets");
-    a->setIcon(th->icon(Core::Constants::ICONHELP));
-    cmd = actionManager()->registerAction(a, Constants::A_ASSETS, global);
+    a->setIcon(theme()->icon(Core::Constants::ICONHELP));
+    cmd = actionManager()->registerAction(a, Core::Id(Constants::A_ASSETS), global);
     cmd->setTranslations(Constants::ASSETS, Constants::ASSETS, Constants::ACCOUNT_TR_CONTEXT);
     cmd->setDefaultKeySequence(QKeySequence("Alt+z"));
-    menu->addAction(cmd, Constants::G_ACCOUNT_APPS);
+    menu->addAction(cmd, Core::Id(Constants::G_ACCOUNT_APPS));
     connect(a, SIGNAL(triggered()), this, SLOT(assets()));
 
     a = aAccount = new QAction(this);
     a->setObjectName("aAccount");
-    a->setIcon(th->icon(Core::Constants::ICONHELP));
-    cmd = actionManager()->registerAction(a, Constants::A_ACCOUNT, global);
+    a->setIcon(theme()->icon(Core::Constants::ICONHELP));
+    cmd = actionManager()->registerAction(a, Core::Id(Constants::A_ACCOUNT), global);
     cmd->setTranslations(Constants::ACCOUNT, Constants::ACCOUNT, Constants::ACCOUNT_TR_CONTEXT);
     cmd->setDefaultKeySequence(QKeySequence("Alt+A"));
-    menu->addAction(cmd, Constants::G_ACCOUNT_APPS);
+    menu->addAction(cmd, Core::Id(Constants::G_ACCOUNT_APPS));
     connect(a, SIGNAL(triggered()), this, SLOT(account()));
 
     contextManager()->updateContext();

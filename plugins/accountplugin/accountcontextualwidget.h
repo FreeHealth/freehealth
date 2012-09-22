@@ -56,9 +56,6 @@ public:
     AccountContextualWidget(QWidget *parent = 0);
     virtual ~AccountContextualWidget();
 
-    void addContexts(const QList<int> &contexts);
-    QList<int> contexts() const;
-
 private:
     Internal::AccountContext *m_Context;
 };

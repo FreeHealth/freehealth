@@ -2,39 +2,46 @@
 **
 ** This file is part of Qt Creator
 **
-** Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+** Copyright (c) 2012 Nokia Corporation and/or its subsidiary(-ies).
 **
 ** Contact: Nokia Corporation (qt-info@nokia.com)
 **
-** Commercial Usage
-**
-** Licensees holding valid Qt Commercial licenses may use this file in
-** accordance with the Qt Commercial License Agreement provided with the
-** Software or, alternatively, in accordance with the terms contained in
-** a written agreement between you and Nokia.
 **
 ** GNU Lesser General Public License Usage
 **
-** Alternatively, this file may be used under the terms of the GNU Lesser
-** General Public License version 2.1 as published by the Free Software
-** Foundation and appearing in the file LICENSE.LGPL included in the
-** packaging of this file.  Please review the following information to
-** ensure the GNU Lesser General Public License version 2.1 requirements
-** will be met: http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
+** This file may be used under the terms of the GNU Lesser General Public
+** License version 2.1 as published by the Free Software Foundation and
+** appearing in the file LICENSE.LGPL included in the packaging of this file.
+** Please review the following information to ensure the GNU Lesser General
+** Public License version 2.1 requirements will be met:
+** http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
 **
-** If you are unsure which license is appropriate for your use, please
-** contact the sales department at http://www.qtsoftware.com/contact.
+** In addition, as a special exception, Nokia gives you certain additional
+** rights. These rights are described in the Nokia Qt LGPL Exception
+** version 1.1, included in the file LGPL_EXCEPTION.txt in this package.
+**
+** Other Usage
+**
+** Alternatively, this file may be used in accordance with the terms and
+** conditions contained in a signed written agreement between you and Nokia.
+**
+** If you have questions regarding the use of this file, please contact
+** Nokia at qt-info@nokia.com.
 **
 **************************************************************************/
 
 #ifndef ACTIONCONTAINER_H
 #define ACTIONCONTAINER_H
 
-#include <QtCore/QObject>
-#include <QtGui/QMenu>
-#include <QtGui/QToolBar>
-#include <QtGui/QMenuBar>
-#include <QtGui/QAction>
+#include "coreplugin/id.h"
+
+#include <QObject>
+
+QT_BEGIN_NAMESPACE
+class QMenu;
+class QMenuBar;
+class QAction;
+QT_END_NAMESPACE
 
 namespace Core {
 
@@ -42,32 +49,40 @@ class Command;
 
 class ActionContainer : public QObject
 {
+    Q_OBJECT
+
 public:
-    enum EmptyAction {
-        EA_Mask             = 0xFF00,
-        EA_None             = 0x0100,
-        EA_Hide             = 0x0200,
-        EA_Disable          = 0x0300
+    enum OnAllDisabledBehavior {
+        Disable,
+        Hide,
+        Show
     };
 
-    virtual void setEmptyAction(EmptyAction ea) = 0;
+    virtual void setOnAllDisabledBehavior(OnAllDisabledBehavior behavior) = 0;
+    virtual ActionContainer::OnAllDisabledBehavior onAllDisabledBehavior() const = 0;
 
-    virtual int id() const = 0;
+    virtual Id id() const = 0;
 
     virtual QMenu *menu() const = 0;
     virtual QMenuBar *menuBar() const = 0;
 
-    virtual QAction *insertLocation(const QString &group) const = 0;
-    virtual void appendGroup(const QString &group) = 0;
-    virtual void addAction(Core::Command *action, const QString &group = QString()) = 0;
-    virtual void addMenu(Core::ActionContainer *menu, const QString &group = QString()) = 0;
+    virtual QAction *insertLocation(const Id &group) const = 0;
+    virtual void appendGroup(const Id &group) = 0;
+    virtual void insertGroup(const Id &before, const Id &group) = 0;
+    virtual void addAction(Command *action, const Id &group = Id()) = 0;
+    virtual void addMenu(ActionContainer *menu, const Id &group = Id()) = 0;
+    virtual void addMenu(ActionContainer *before, ActionContainer *menu, const Id &group = Id()) = 0;
 
-    virtual bool update() = 0;
+    // This clears this menu and submenus from all actions and submenus.
+    // It does not destroy the submenus and commands, just removes them from their parents.
+    virtual void clear() = 0;
 
-    virtual void setTranslations(const QString &unTrTitle, const QString &trContext = QString::null) = 0;
-    virtual void retranslate() = 0;
+    virtual void setTranslations(const QString &trLabel, const QString &trContext = QString::null) {m_trLabel = trLabel; m_trContext = trContext;}
 
-    virtual ~ActionContainer() {}
+    virtual void retranslate() {}
+
+protected:
+    QString m_trContext, m_trLabel;
 };
 
 } // namespace Core

@@ -25,15 +25,10 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 /**
- * \class Form::FormPlaceHolder
- * Widget containing the a form tree view, an episode view and a
- * form widget. The episode view and the form widget (of course) are linked
- * to the currently selected form.
- *
- * Create and initialize the widget:
- * In order to include the placeholder in your view, you must firstly define the
- * Form::FormTreeModel to use using setFormTreeModel() and then you optionnally
- * set the current form with setCurrentForm().
+  \class Form::FormPlaceHolder
+  Widget containing the Episode treeView and the forms in a QStackedLayout
+  When an episode is activated by the user, the formViewer is set to the corresponding form
+  and episode data. Data are automatically saved (without any user intervention).
 */
 
 #include "formplaceholder.h"
@@ -194,7 +189,7 @@ public:
                 _episodeToolBar->addSeparator();
                 continue;
             }
-            cmd = actionManager()->command(action);
+            cmd = actionManager()->command(Core::Id(action));
             _episodeToolBar->addAction(cmd->action());
         }
 
@@ -354,7 +349,7 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
     d->ui->formView->setCommands(QStringList()
                                  << Constants::A_ADDFORM
                                  );
-    d->ui->formView->addContexts(contexts());
+    d->ui->formView->addContext(context()->context());
     d->ui->formView->setDeselectable(false);
     d->ui->formView->disconnectActionsToDefaultSlots();
     d->ui->formView->treeView()->viewport()->setAttribute(Qt::WA_Hover);
@@ -395,18 +390,15 @@ FormPlaceHolder::~FormPlaceHolder()
 }
 
 /** Return the enabled state of an action. \sa Form::Internal::FormActionHandler */
-bool FormPlaceHolder::enabledActionState(WidgetAction action) const
+bool FormPlaceHolder::enableAction(WidgetAction action) const
 {
-    qWarning() << "ENABLE STATE ACTION" << action;
     switch (action) {
     case Action_Clear:
         // Clear only if a form && an episode are selected
-        return d->ui->episodeView->selectionModel()->hasSelection()
-                && d->ui->formView->selectionModel()->hasSelection();
+        return d->ui->episodeView->selectionModel()->hasSelection() && d->ui->formView->selectionModel()->hasSelection();
     case Action_CreateEpisode:
         // Create episode only if a form && an episode are selected
-        return d->ui->episodeView->selectionModel()->hasSelection()
-                && d->ui->formView->selectionModel()->hasSelection();
+        return d->ui->episodeView->selectionModel()->hasSelection() && d->ui->formView->selectionModel()->hasSelection();
     case Action_ValidateCurrentEpisode:
     {
         // Validate episode only if
@@ -805,7 +797,6 @@ bool FormPlaceHolder::printFormOrEpisode()
     return true;
 }
 
-/** On patient changed, clear the view */
 void FormPlaceHolder::onCurrentPatientChanged()
 {
     clear();

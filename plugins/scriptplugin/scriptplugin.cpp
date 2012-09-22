@@ -112,7 +112,7 @@ void ScriptPlugin::postCoreInitialization()
 //    Q_ASSERT(menu);
 //    if (!menu)
 //        return;
-//    QList<int> ctx = QList<int>() << Core::Constants::C_GLOBAL_ID;
+//    QList<int> ctx = QList<int>() << Core::Constants::C_GLOBAL;
 
 //    // renew script test
 //    QAction *a = new QAction(this);

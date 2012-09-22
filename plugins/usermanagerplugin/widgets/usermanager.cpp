@@ -46,7 +46,6 @@
 
 #include <coreplugin/contextmanager/icontext.h>
 #include <coreplugin/contextmanager/contextmanager.h>
-#include <coreplugin/uniqueidmanager.h>
 #include <coreplugin/constants_icons.h>
 #include <coreplugin/constants_menus.h>
 
@@ -92,19 +91,13 @@ namespace Internal {
 class UserManagerContext : public Core::IContext
 {
 public:
-    UserManagerContext(QWidget *parent) : Core::IContext(parent), wgt(parent)
+    UserManagerContext(QWidget *parent) : Core::IContext(parent)
     {
         setObjectName("UserManagerContext");
-        ctx << Core::ICore::instance()->uniqueIDManager()->uniqueIdentifier(Core::Constants::C_USERMANAGER);
+        setWidget(parent);
+        m_context = Core::Context(Core::Constants::C_USERMANAGER);
     }
     ~UserManagerContext() {}
-
-    QList<int> context() const {return ctx;}
-    QWidget *widget() {return wgt;}
-
-private:
-    QWidget *wgt;
-    QList<int> ctx;
 };
 
 }  // End  Internal

@@ -1,10 +1,10 @@
 <RCC>
-    <qresource prefix="/fancyactionbar" >
-        <file>images/fancytoolbutton.svg</file>
+    <qresource prefix="/fancyactionbar">
         <file>images/mode_Debug.png</file>
         <file>images/mode_Edit.png</file>
         <file>images/mode_Output.png</file>
         <file>images/mode_Project.png</file>
         <file>images/mode_Reference.png</file>
+        <file>images/mode_Design.png</file>
     </qresource>
 </RCC>

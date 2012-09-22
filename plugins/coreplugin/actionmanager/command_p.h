@@ -2,43 +2,49 @@
 **
 ** This file is part of Qt Creator
 **
-** Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+** Copyright (c) 2012 Nokia Corporation and/or its subsidiary(-ies).
 **
 ** Contact: Nokia Corporation (qt-info@nokia.com)
 **
-** Commercial Usage
-**
-** Licensees holding valid Qt Commercial licenses may use this file in
-** accordance with the Qt Commercial License Agreement provided with the
-** Software or, alternatively, in accordance with the terms contained in
-** a written agreement between you and Nokia.
 **
 ** GNU Lesser General Public License Usage
 **
-** Alternatively, this file may be used under the terms of the GNU Lesser
-** General Public License version 2.1 as published by the Free Software
-** Foundation and appearing in the file LICENSE.LGPL included in the
-** packaging of this file.  Please review the following information to
-** ensure the GNU Lesser General Public License version 2.1 requirements
-** will be met: http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
+** This file may be used under the terms of the GNU Lesser General Public
+** License version 2.1 as published by the Free Software Foundation and
+** appearing in the file LICENSE.LGPL included in the packaging of this file.
+** Please review the following information to ensure the GNU Lesser General
+** Public License version 2.1 requirements will be met:
+** http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
 **
-** If you are unsure which license is appropriate for your use, please
-** contact the sales department at http://www.qtsoftware.com/contact.
+** In addition, as a special exception, Nokia gives you certain additional
+** rights. These rights are described in the Nokia Qt LGPL Exception
+** version 1.1, included in the file LGPL_EXCEPTION.txt in this package.
+**
+** Other Usage
+**
+** Alternatively, this file may be used in accordance with the terms and
+** conditions contained in a signed written agreement between you and Nokia.
+**
+** If you have questions regarding the use of this file, please contact
+** Nokia at qt-info@nokia.com.
 **
 **************************************************************************/
+
 #ifndef COMMAND_P_H
 #define COMMAND_P_H
 
 #include "command.h"
-#include "actionmanager_p.h"
-#include <coreplugin/constants_trans.h>
 
-#include <QtCore/QList>
-#include <QtCore/QMultiMap>
-#include <QtCore/QPointer>
-#include <QtGui/QKeySequence>
+#include <coreplugin/id.h>
+#include <coreplugin/contextmanager/icontext.h>
 
-#include <QDebug>
+#include <utils/proxyaction.h>
+
+#include <QList>
+#include <QMultiMap>
+#include <QPointer>
+#include <QMap>
+#include <QKeySequence>
 
 namespace Core {
 namespace Internal {
@@ -47,137 +53,104 @@ class CommandPrivate : public Core::Command
 {
     Q_OBJECT
 public:
-    CommandPrivate(int id);
+    CommandPrivate(Id id);
     virtual ~CommandPrivate() {}
-
-    virtual QString name() const = 0;
 
     void setDefaultKeySequence(const QKeySequence &key);
     QKeySequence defaultKeySequence() const;
 
-    void setDefaultText(const QString &text);
-    QString defaultText() const;
+    void setKeySequence(const QKeySequence &key);
 
-    int id() const;
+    void setDescription(const QString &text);
+    QString description() const;
+
+    Id id() const;
 
     QAction *action() const;
     QShortcut *shortcut() const;
+    Context context() const;
+
 
     void setAttribute(CommandAttribute attr);
     void removeAttribute(CommandAttribute attr);
     bool hasAttribute(CommandAttribute attr) const;
 
-    virtual bool setCurrentContext(const QList<int> &context) = 0;
+    virtual void setCurrentContext(const Context &context) = 0;
 
     QString stringWithAppendedShortcut(const QString &str) const;
 
-    virtual void retranslate() = 0;
-    void setTranslations(const QString &unTrText,
-                         const QString &unTrTooltip = QString::null ,
-                         const QString &trContext = QString::null )
-    {
-        m_unTrText = unTrText;
-        if (unTrTooltip.isEmpty())
-            m_unTrTooltip = unTrText;
-        else
-            m_unTrTooltip = unTrTooltip;
-        if (trContext.isEmpty())
-            m_TrContext = Constants::TK_CONSTANTS_CONTEXT;
-        else
-            m_TrContext = trContext;
-    }
-
 protected:
-    QString m_category;
-    int m_attributes;
-    int m_id;
+    Context m_context;
+    CommandAttributes m_attributes;
+    Id m_id;
     QKeySequence m_defaultKey;
     QString m_defaultText;
-    QString m_unTrText;
-    QString m_unTrTooltip;
-    QString m_TrContext;
+    bool m_isKeyInitialized;
 };
 
 class Shortcut : public CommandPrivate
 {
     Q_OBJECT
 public:
-    Shortcut(int id);
+    Shortcut(Id id);
 
-    QString name() const;
-
-    void setDefaultKeySequence(const QKeySequence &key);
     void setKeySequence(const QKeySequence &key);
     QKeySequence keySequence() const;
-
-    virtual void setDefaultText(const QString &key);
-    virtual QString defaultText() const;
 
     void setShortcut(QShortcut *shortcut);
     QShortcut *shortcut() const;
 
-    void setContext(const QList<int> &context);
-    QList<int> context() const;
-    bool setCurrentContext(const QList<int> &context);
+    void setContext(const Context &context);
+    Context context() const;
+    void setCurrentContext(const Context &context);
 
     bool isActive() const;
 
-    void retranslate() {}
+    bool isScriptable() const;
+    bool isScriptable(const Context &) const;
+    void setScriptable(bool value);
 
 private:
-    QList<int> m_context;
     QShortcut *m_shortcut;
-    QString m_defaultText;
+    bool m_scriptable;
 };
 
 class Action : public CommandPrivate
 {
     Q_OBJECT
 public:
-    Action(int id);
+    Action(Id id);
 
-    QString name() const;
-
-    void setDefaultKeySequence(const QKeySequence &key);
     void setKeySequence(const QKeySequence &key);
     QKeySequence keySequence() const;
 
-    virtual void setAction(QAction *action);
     QAction *action() const;
 
-    void setLocations(const QList<CommandLocation> &locations);
-    QList<CommandLocation> locations() const;
-
-    virtual void retranslate() { qWarning() << "action translate" ; }
-
-protected:
-    void updateToolTipWithKeySequence();
-    
-    QAction *m_action;
-    QList<CommandLocation> m_locations;
-    QString m_toolTip;
-};
-
-class OverrideableAction : public Action
-{
-    Q_OBJECT
-
-public:
-    OverrideableAction(int id);
-
-//    void setAction(QAction *action);
-    bool setCurrentContext(const QList<int> &context);
-    void addOverrideAction(QAction *action, const QList<int> &context);
+    void setCurrentContext(const Context &context);
     bool isActive() const;
+    void addOverrideAction(QAction *action, const Context &context, bool scriptable);
+    void removeOverrideAction(QAction *action);
+    bool isEmpty() const;
+
+    bool isScriptable() const;
+    bool isScriptable(const Context &context) const;
+
+    void setAttribute(CommandAttribute attr);
+    void removeAttribute(CommandAttribute attr);
+
     void retranslate();
 
-private Q_SLOTS:
-    void actionChanged();
+private slots:
+    void updateActiveState();
 
 private:
-    QPointer<QAction> m_currentAction;
-    QList<int> m_context;
+    void setActive(bool state);
+
+    Utils::ProxyAction *m_action;
+    QString m_toolTip;
+
     QMap<int, QPointer<QAction> > m_contextActionMap;
+    QMap<QAction*, bool> m_scriptableMap;
     bool m_active;
     bool m_contextInitialized;
 };

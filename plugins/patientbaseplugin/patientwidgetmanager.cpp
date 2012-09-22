@@ -31,7 +31,9 @@
 
 #include <utils/log.h>
 #include <utils/global.h>
-#include <translationutils/constanttranslations.h>
+#include <translationutils/constants.h>
+#include <translationutils/trans_patient.h>
+#include <translationutils/trans_menu.h>
 
 #include <coreplugin/constants_icons.h>
 #include <coreplugin/constants_menus.h>
@@ -40,7 +42,7 @@
 #include <coreplugin/itheme.h>
 #include <coreplugin/contextmanager/contextmanager.h>
 #include <coreplugin/actionmanager/actionmanager.h>
-#include <coreplugin/uniqueidmanager.h>
+#include <coreplugin/actionmanager/actioncontainer.h>
 
 #include <QDialog>
 #include <QWidget>
@@ -70,12 +72,12 @@ PatientWidgetManager *PatientWidgetManager::instance()
 
 PatientWidgetManager::PatientWidgetManager(QObject *parent) : PatientActionHandler(parent)
 {
-    connect(Core::ICore::instance()->contextManager(), SIGNAL(contextChanged(Core::IContext*)),
-            this, SLOT(updateContext(Core::IContext*)));
+    connect(Core::ICore::instance()->contextManager(), SIGNAL(contextChanged(Core::IContext*,Core::Context)),
+            this, SLOT(updateContext(Core::IContext*,Core::Context)));
     setObjectName("PatientWidgetManager");
 }
 
-void PatientWidgetManager::updateContext(Core::IContext *object)
+void PatientWidgetManager::updateContext(Core::IContext *object, const Core::Context &additionalContexts)
 {
     PatientSelector *view = 0;
     do {
@@ -135,16 +137,15 @@ PatientActionHandler::PatientActionHandler(QObject *parent) :
 {
     setObjectName("PatientActionHandler");
 
-    Core::UniqueIDManager *uid = Core::ICore::instance()->uniqueIDManager();
     Core::ITheme *th = Core::ICore::instance()->theme();
 
     QAction *a = 0;
     Core::Command *cmd = 0;
-    QList<int> ctx = QList<int>() << uid->uniqueIdentifier(Patients::Constants::C_PATIENTS);
-    QList<int> searchcontext = QList<int>() << uid->uniqueIdentifier(Patients::Constants::C_PATIENTS_SEARCH) << Core::Constants::C_GLOBAL_ID;
-    QList<int> globalcontext = QList<int>() << Core::Constants::C_GLOBAL_ID;
+    Core::Context ctx(Patients::Constants::C_PATIENTS);
+    Core::Context searchcontext(Patients::Constants::C_PATIENTS_SEARCH, Core::Constants::C_GLOBAL);
+    Core::Context globalcontext(Core::Constants::C_GLOBAL);
 
-    Core::ActionContainer *menu = actionManager()->actionContainer(Core::Constants::M_PATIENTS);
+    Core::ActionContainer *menu = actionManager()->actionContainer(Core::Id(Core::Constants::M_PATIENTS));
     if (!menu) {
         Utils::warningMessageBox(tr("Fatal Error"), tr("%1: Unable to retreive patients menu.").arg(objectName()));
         return;
@@ -153,21 +154,21 @@ PatientActionHandler::PatientActionHandler(QObject *parent) :
     if (!menu)
         return;
 
-    menu->appendGroup(Constants::G_PATIENTS);
-    menu->appendGroup(Constants::G_PATIENTS_NEW);
-    menu->appendGroup(Constants::G_PATIENTS_SEARCH);
-    menu->appendGroup(Constants::G_PATIENTS_HISTORY);
-    menu->appendGroup(Constants::G_PATIENTS_INFORMATION);
+    menu->appendGroup(Core::Id(Constants::G_PATIENTS));
+    menu->appendGroup(Core::Id(Constants::G_PATIENTS_NEW));
+    menu->appendGroup(Core::Id(Constants::G_PATIENTS_SEARCH));
+    menu->appendGroup(Core::Id(Constants::G_PATIENTS_HISTORY));
+    menu->appendGroup(Core::Id(Constants::G_PATIENTS_INFORMATION));
 
 //    actionManager()->actionContainer(Core::Constants::M_PATIENTS)->addMenu(menu, Core::Constants::G_PATIENTS);
 
     // Search method menu
-    Core::ActionContainer *searchmenu = actionManager()->actionContainer(Constants::M_PATIENTS_SEARCH);
+    Core::ActionContainer *searchmenu = actionManager()->actionContainer(Core::Id(Constants::M_PATIENTS_SEARCH));
     if (!searchmenu) {
         searchmenu = actionManager()->createMenu(Constants::M_PATIENTS_SEARCH);
-        searchmenu->appendGroup(Constants::G_PATIENTS_SEARCH);
+        searchmenu->appendGroup(Core::Id(Constants::G_PATIENTS_SEARCH));
         searchmenu->setTranslations(Trans::Constants::SEARCHMENU_TEXT);
-        menu->addMenu(searchmenu, Constants::G_PATIENTS_SEARCH);
+        menu->addMenu(searchmenu, Core::Id(Constants::G_PATIENTS_SEARCH));
     }
     Q_ASSERT(searchmenu);
 
@@ -178,9 +179,9 @@ PatientActionHandler::PatientActionHandler(QObject *parent) :
     a->setCheckable(true);
     a->setChecked(false);
     a->setIcon(th->icon(Core::Constants::ICONSEARCH));
-    cmd = actionManager()->registerAction(a, Constants::A_SEARCH_PATIENTS_BY_NAME, searchcontext);
+    cmd = actionManager()->registerAction(a, Core::Id(Constants::A_SEARCH_PATIENTS_BY_NAME), searchcontext);
     cmd->setTranslations(Constants::SEARCHBYNAME_TEXT, Constants::SEARCHBYNAME_TOOLTIP, Constants::TRANS_CONTEXT);
-    searchmenu->addAction(cmd, Constants::G_PATIENTS_SEARCH);
+    searchmenu->addAction(cmd, Core::Id(Constants::G_PATIENTS_SEARCH));
     gSearchMethod->addAction(a);
 
     a = aSearchFirstname = new QAction(this);
@@ -188,9 +189,9 @@ PatientActionHandler::PatientActionHandler(QObject *parent) :
     a->setCheckable(true);
     a->setChecked(false);
     a->setIcon(th->icon(Core::Constants::ICONSEARCH));
-    cmd = actionManager()->registerAction(a, Constants::A_SEARCH_PATIENTS_BY_FIRSTNAME, searchcontext);
+    cmd = actionManager()->registerAction(a, Core::Id(Constants::A_SEARCH_PATIENTS_BY_FIRSTNAME), searchcontext);
     cmd->setTranslations(Constants::SEARCHBYFIRSTNAME_TEXT, Constants::SEARCHBYFIRSTNAME_TOOLTIP, Constants::TRANS_CONTEXT);
-    searchmenu->addAction(cmd, Constants::G_PATIENTS_SEARCH);
+    searchmenu->addAction(cmd, Core::Id(Constants::G_PATIENTS_SEARCH));
     gSearchMethod->addAction(a);
 
     a = aSearchNameFirstname = new QAction(this);
@@ -198,9 +199,9 @@ PatientActionHandler::PatientActionHandler(QObject *parent) :
     a->setCheckable(true);
     a->setChecked(false);
     a->setIcon(th->icon(Core::Constants::ICONSEARCH));
-    cmd = actionManager()->registerAction(a, Constants::A_SEARCH_PATIENTS_BY_NAMEFIRSTNAME, searchcontext);
+    cmd = actionManager()->registerAction(a, Core::Id(Constants::A_SEARCH_PATIENTS_BY_NAMEFIRSTNAME), searchcontext);
     cmd->setTranslations(Constants::SEARCHBYNAMEFIRSTNAME_TEXT, Constants::SEARCHBYNAMEFIRSTNAME_TOOLTIP, Constants::TRANS_CONTEXT);
-    searchmenu->addAction(cmd, Constants::G_PATIENTS_SEARCH);
+    searchmenu->addAction(cmd, Core::Id(Constants::G_PATIENTS_SEARCH));
     gSearchMethod->addAction(a);
 
     a = aSearchDob = new QAction(this);
@@ -208,13 +209,12 @@ PatientActionHandler::PatientActionHandler(QObject *parent) :
     a->setCheckable(true);
     a->setChecked(false);
     a->setIcon(th->icon(Core::Constants::ICONSEARCH));
-    cmd = actionManager()->registerAction(a, Constants::A_SEARCH_PATIENTS_BY_DOB, searchcontext);
+    cmd = actionManager()->registerAction(a, Core::Id(Constants::A_SEARCH_PATIENTS_BY_DOB), searchcontext);
     cmd->setTranslations(Constants::SEARCHBYDOB_TEXT, Constants::SEARCHBYDOB_TOOLTIP, Constants::TRANS_CONTEXT);
-    searchmenu->addAction(cmd, Constants::G_PATIENTS_SEARCH);
+    searchmenu->addAction(cmd, Core::Id(Constants::G_PATIENTS_SEARCH));
     gSearchMethod->addAction(a);
 
     connect(gSearchMethod, SIGNAL(triggered(QAction*)), this, SLOT(searchActionChanged(QAction*)));
-
 
 //    a = aViewPatientInformation = new QAction(this);
 //    a->setObjectName("aViewPatientInformation");
@@ -225,17 +225,17 @@ PatientActionHandler::PatientActionHandler(QObject *parent) :
 ////    connect(a, SIGNAL(triggered()), this, SLOT(clear()));
 
     // Databases information
-    Core::ActionContainer *hmenu = actionManager()->actionContainer(Core::Constants::M_HELP_DATABASES);
+    Core::ActionContainer *hmenu = actionManager()->actionContainer(Core::Id(Core::Constants::M_HELP_DATABASES));
     if (!hmenu)
         return;
 
     a = aShowPatientDatabaseInformation = new QAction(this);
     a->setObjectName("aShowPatientDatabaseInformation");
     a->setIcon(th->icon(Core::Constants::ICONHELP));
-    cmd = actionManager()->registerAction(a, Constants::A_VIEWPATIENTDATABASE_INFOS, globalcontext);
+    cmd = actionManager()->registerAction(a, Core::Id(Constants::A_VIEWPATIENTDATABASE_INFOS), globalcontext);
     cmd->setTranslations(Trans::Constants::PATIENT_DATABASE);
     cmd->retranslate();
-    hmenu->addAction(cmd, Core::Constants::G_HELP_DATABASES);
+    hmenu->addAction(cmd, Core::Id(Core::Constants::G_HELP_DATABASES));
 
     connect(aShowPatientDatabaseInformation,SIGNAL(triggered()), this, SLOT(showPatientDatabaseInformation()));
 

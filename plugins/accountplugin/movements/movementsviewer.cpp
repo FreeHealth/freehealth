@@ -70,7 +70,7 @@ MovementsViewer::MovementsViewer(QWidget * parent) :
     ui->dateEdit->setDisplayFormat(tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR));
     ui->quitButton->hide();
     MovementsManager rManager;
-    if (rManager.isMedintuxArg()||rManager.isFreaccountIndependant())
+    if (rManager.isMedintuxArg())
     {
         ui->quitButton->show();
         setAttribute(Qt::WA_DeleteOnClose);

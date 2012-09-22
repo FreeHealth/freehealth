@@ -40,9 +40,13 @@
 /**
  * \file listview.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
- * \version 0.7.1
- * \date 06 Apr 2012
+ * \version 0.8.0
+ * \date 22 Sept 2012
 */
+
+namespace Core {
+class Context;
+}
 
 namespace Views {
 namespace Internal {
@@ -65,8 +69,7 @@ public:
 
     void setActions(Views::Constants::AvailableActions actions);
     void setCommands(const QStringList &commandsUid);
-    void addContext(const int id);
-    void addContexts(const QList<int> &id);
+    void addContext(const Core::Context &context);
 
     void hideButtons() const;
     void showButtons();

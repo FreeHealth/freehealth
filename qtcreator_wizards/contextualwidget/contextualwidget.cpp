@@ -42,7 +42,6 @@
 
 #include <coreplugin/contextmanager/contextmanager.h>
 #include <coreplugin/icore.h>
-#include <coreplugin/uniqueidmanager.h>
 
 using namespace %PluginName%;
 using namespace Internal;
@@ -53,11 +52,10 @@ static inline Core::ContextManager *contextManager() { return Core::ICore::insta
     QWidget(parent),
     m_Context(0)
 {
-    Core::UniqueIDManager *uid = Core::ICore::instance()->uniqueIDManager();
-
+    Core::Context context(Constants::C_%PluginName:u%_PLUGINS);
     // Create the context object
     m_Context = new Internal::%PluginName%Context(this);
-    m_Context->setContext(QList<int>() << uid->uniqueIdentifier(Constants::C_%PluginName:u%_PLUGINS));
+    m_Context->setContext(context);
 
     // Send it to the contextual manager
     contextManager()->addContextObject(m_Context);

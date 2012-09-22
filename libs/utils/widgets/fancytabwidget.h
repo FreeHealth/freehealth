@@ -2,28 +2,31 @@
 **
 ** This file is part of Qt Creator
 **
-** Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+** Copyright (c) 2012 Nokia Corporation and/or its subsidiary(-ies).
 **
 ** Contact: Nokia Corporation (qt-info@nokia.com)
 **
-** Commercial Usage
-**
-** Licensees holding valid Qt Commercial licenses may use this file in
-** accordance with the Qt Commercial License Agreement provided with the
-** Software or, alternatively, in accordance with the terms contained in
-** a written agreement between you and Nokia.
 **
 ** GNU Lesser General Public License Usage
 **
-** Alternatively, this file may be used under the terms of the GNU Lesser
-** General Public License version 2.1 as published by the Free Software
-** Foundation and appearing in the file LICENSE.LGPL included in the
-** packaging of this file.  Please review the following information to
-** ensure the GNU Lesser General Public License version 2.1 requirements
-** will be met: http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
+** This file may be used under the terms of the GNU Lesser General Public
+** License version 2.1 as published by the Free Software Foundation and
+** appearing in the file LICENSE.LGPL included in the packaging of this file.
+** Please review the following information to ensure the GNU Lesser General
+** Public License version 2.1 requirements will be met:
+** http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
 **
-** If you are unsure which license is appropriate for your use, please
-** contact the sales department at http://qt.nokia.com/contact.
+** In addition, as a special exception, Nokia gives you certain additional
+** rights. These rights are described in the Nokia Qt LGPL Exception
+** version 1.1, included in the file LGPL_EXCEPTION.txt in this package.
+**
+** Other Usage
+**
+** Alternatively, this file may be used in accordance with the terms and
+** conditions contained in a signed written agreement between you and Nokia.
+**
+** If you have questions regarding the use of this file, please contact
+** Nokia at qt-info@nokia.com.
 **
 **************************************************************************/
 
@@ -31,12 +34,11 @@
 #define FANCYTABWIDGET_H
 
 #include <utils/global_exporter.h>
+#include <QIcon>
+#include <QWidget>
 
-#include <QPushButton>
-#include <QTabBar>
-#include <QStyleOptionTabV2>
-#include <QTimeLine>
-#include <QPointer>
+#include <QTimer>
+#include <QPropertyAnimation>
 
 QT_BEGIN_NAMESPACE
 class QPainter;
@@ -46,15 +48,34 @@ class QVBoxLayout;
 QT_END_NAMESPACE
 
 namespace Utils {
-class FaderWidget;
-
 namespace Internal {
 
-    struct FancyTab {
-        QIcon icon;
-        QString text;
-        QString toolTip;
-    };
+class FancyTab : public QObject
+{
+    Q_OBJECT
+
+    Q_PROPERTY(float fader READ fader WRITE setFader)
+public:
+    FancyTab(QWidget *tabbar) : enabled(false), tabbar(tabbar), m_fader(0) {
+        animator.setPropertyName("fader");
+        animator.setTargetObject(this);
+    }
+    float fader() { return m_fader; }
+    void setFader(float value);
+
+    void fadeIn();
+    void fadeOut();
+
+    QIcon icon;
+    QString text;
+    QString toolTip;
+    bool enabled;
+
+private:
+    QPropertyAnimation animator;
+    QWidget *tabbar;
+    float m_fader;
+};
 
 class FancyTabBar : public QWidget
 {
@@ -72,54 +93,55 @@ public:
     void mouseMoveEvent(QMouseEvent *);
     void enterEvent(QEvent *);
     void leaveEvent(QEvent *);
+    bool validIndex(int index) const { return index >= 0 && index < m_tabs.count(); }
 
     QSize sizeHint() const;
     QSize minimumSizeHint() const;
 
+    void setTabEnabled(int index, bool enable);
+    bool isTabEnabled(int index) const;
+
     void insertTab(int index, const QIcon &icon, const QString &label) {
-        FancyTab tab;
-        tab.icon = icon;
-        tab.text = label;
+        FancyTab *tab = new FancyTab(this);
+        tab->icon = icon;
+        tab->text = label;
         m_tabs.insert(index, tab);
     }
+    void setEnabled(int index, bool enabled);
     void removeTab(int index) {
-        m_tabs.removeAt(index);
+        FancyTab *tab = m_tabs.takeAt(index);
+        delete tab;
     }
     void setCurrentIndex(int index);
     int currentIndex() const { return m_currentIndex; }
 
-    void setTabToolTip(int index, QString toolTip) { m_tabs[index].toolTip = toolTip; }
-    QString tabToolTip(int index) const { return m_tabs.at(index).toolTip; }
+    void setTabToolTip(int index, QString toolTip) { m_tabs[index]->toolTip = toolTip; }
+    QString tabToolTip(int index) const { return m_tabs.at(index)->toolTip; }
 
-    void setTabText(int index, const QString &text);
-    QString tabText(int index) const { return m_tabs.at(index).text; }
-
-    QIcon tabIcon(int index) const {return m_tabs.at(index).icon; }
+    QIcon tabIcon(int index) const { return m_tabs.at(index)->icon; }
+    QString tabText(int index) const { return m_tabs.at(index)->text; }
     int count() const {return m_tabs.count(); }
     QRect tabRect(int index) const;
 
-
-Q_SIGNALS:
+signals:
     void currentChanged(int);
 
-public Q_SLOTS:
-    void updateHover();
+public slots:
+    void emitCurrentIndex();
 
 private:
     static const int m_rounding;
     static const int m_textPadding;
-    QTimeLine m_hoverControl;
     QRect m_hoverRect;
     int m_hoverIndex;
     int m_currentIndex;
-    QList<FancyTab> m_tabs;
-
+    QList<FancyTab*> m_tabs;
+    QTimer m_triggerTimer;
     QSize tabSizeHint(bool minimum = false) const;
 
 };
 
-} // namespace Internal
-
+}  // namespace Internal
 
 class UTILS_EXPORT FancyTabWidget : public QWidget
 {
@@ -128,36 +150,33 @@ class UTILS_EXPORT FancyTabWidget : public QWidget
 public:
     FancyTabWidget(QWidget *parent = 0);
 
-    void setFadeInDuration(const int duration) {m_fadeInDuration = duration;}
-    void setFadeOutDuration(const int duration) {m_fadeInDuration = duration;}
-
     void insertTab(int index, QWidget *tab, const QIcon &icon, const QString &label);
     void removeTab(int index);
     void setBackgroundBrush(const QBrush &brush);
     void addCornerWidget(QWidget *widget);
     void insertCornerWidget(int pos, QWidget *widget);
-    void insertTopWidget(int pos, QWidget *widget);
     int cornerWidgetCount() const;
+    void insertTopWidget(QWidget *widget);
     void setTabToolTip(int index, const QString &toolTip);
-    void updateTabLabel(int index, const QString &label);
 
     void paintEvent(QPaintEvent *event);
 
     int currentIndex() const;
     QStatusBar *statusBar() const;
 
-Q_SIGNALS:
+    void setTabEnabled(int index, bool enable);
+    bool isTabEnabled(int index) const;
+
+signals:
     void currentAboutToShow(int index);
     void currentChanged(int index);
 
-public Q_SLOTS:
+public slots:
     void setCurrentIndex(int index);
+    void setSelectionWidgetHidden(bool hidden);
 
-private Q_SLOTS:
+private slots:
     void showWidget(int index);
-    void fadeInCurrentIndex();
-    void fadeInDone();
-    void emitCurrentChanged();
 
 private:
     Internal::FancyTabBar *m_tabBar;
@@ -166,10 +185,8 @@ private:
     QWidget *m_selectionWidget;
     QStatusBar *m_statusBar;
     QVBoxLayout *m_centralLayout;
-    int m_requestedIndex, m_fadeInDuration, m_fadeOutDuration;
-    QPointer<FaderWidget> _fader;
 };
 
-} // namespace Core
+} // namespace Utils
 
 #endif // FANCYTABWIDGET_H

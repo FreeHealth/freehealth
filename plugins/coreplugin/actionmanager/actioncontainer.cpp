@@ -2,28 +2,31 @@
 **
 ** This file is part of Qt Creator
 **
-** Copyright (c) 2009 Nokia Corporation and/or its subsidiary(-ies).
+** Copyright (c) 2012 Nokia Corporation and/or its subsidiary(-ies).
 **
 ** Contact: Nokia Corporation (qt-info@nokia.com)
 **
-** Commercial Usage
-**
-** Licensees holding valid Qt Commercial licenses may use this file in
-** accordance with the Qt Commercial License Agreement provided with the
-** Software or, alternatively, in accordance with the terms contained in
-** a written agreement between you and Nokia.
 **
 ** GNU Lesser General Public License Usage
 **
-** Alternatively, this file may be used under the terms of the GNU Lesser
-** General Public License version 2.1 as published by the Free Software
-** Foundation and appearing in the file LICENSE.LGPL included in the
-** packaging of this file.  Please review the following information to
-** ensure the GNU Lesser General Public License version 2.1 requirements
-** will be met: http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
+** This file may be used under the terms of the GNU Lesser General Public
+** License version 2.1 as published by the Free Software Foundation and
+** appearing in the file LICENSE.LGPL included in the packaging of this file.
+** Please review the following information to ensure the GNU Lesser General
+** Public License version 2.1 requirements will be met:
+** http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html.
 **
-** If you are unsure which license is appropriate for your use, please
-** contact the sales department at http://www.qtsoftware.com/contact.
+** In addition, as a special exception, Nokia gives you certain additional
+** rights. These rights are described in the Nokia Qt LGPL Exception
+** version 1.1, included in the file LGPL_EXCEPTION.txt in this package.
+**
+** Other Usage
+**
+** Alternatively, this file may be used in accordance with the terms and
+** conditions contained in a signed written agreement between you and Nokia.
+**
+** If you have questions regarding the use of this file, please contact
+** Nokia at qt-info@nokia.com.
 **
 **************************************************************************/
 
@@ -32,13 +35,17 @@
 
 #include "command_p.h"
 
-#include <coreplugin/constants_menus.h>
-#include <coreplugin/uniqueidmanager.h>
+#include <coreplugin/constants.h>
+#include <coreplugin/id.h>
 
-#include <QtCore/QDebug>
-#include <QtGui/QAction>
-#include <QtGui/QToolBar>
-#include <QtGui/QMenuBar>
+#include <utils/qtcassert.h>
+#include <translationutils/constants.h>
+
+#include <QDebug>
+#include <QTimer>
+#include <QAction>
+#include <QMenuBar>
+#include <QCoreApplication>
 
 Q_DECLARE_METATYPE(Core::Internal::MenuActionContainer*)
 
@@ -65,26 +72,37 @@ using namespace Core::Internal;
 
     You can define if the menu represented by this action container should automatically disable
     or hide whenever it only contains disabled items and submenus by setting the corresponding
-    \l{ActionContainer::setEmptyAction()}{EmptyAction}.
+    \l{ActionContainer::setOnAllDisabledBehavior()}{OnAllDisabledBehavior}. The default is
+    ActionContainer::Disable for menus, and ActionContainer::Show for menu bars.
 */
 
 /*!
-    \enum ActionContainer::EmptyAction
+    \enum ActionContainer::OnAllDisabledBehavior
     Defines what happens when the represented menu is empty or contains only disabled/invisible items.
-    \omitvalue EA_Mask
-    \value EA_None
-        The menu will still be visible and active.
-    \value EA_Disable
+    \value Disable
         The menu will be visible but disabled.
-    \value EA_Hide
+    \value Hide
         The menu will not be visible until the state of the subitems change.
+    \value Show
+        The menu will still be visible and active.
 */
 
 /*!
-    \fn ActionContainer::setEmptyAction(EmptyAction disableOrHide)
-    Defines if the menu represented by this action container should automatically \a disableOrHide
+    \fn ActionContainer::setOnAllDisabledBehavior(OnAllDisabledBehavior behavior)
+    Defines the \a behavior of the menu represented by this action container for the case
     whenever it only contains disabled items and submenus.
-    \sa ActionContainer::EmptyAction
+    The default is ActionContainer::Disable for menus, and ActionContainer::Show for menu bars.
+    \sa ActionContainer::OnAllDisabledBehavior
+    \sa ActionContainer::onAllDisabledBehavior()
+*/
+
+/*!
+    \fn ActionContainer::onAllDisabledBehavior() const
+    Returns the \a behavior of the menu represented by this action container for the case
+    whenever it only contains disabled items and submenus.
+    The default is ActionContainer::Disable for menus, and ActionContainer::Show for menu bars.
+    \sa ActionContainer::OnAllDisabledBehavior
+    \sa ActionContainer::setOnAllDisabledBehavior()
 */
 
 /*!
@@ -105,7 +123,7 @@ using namespace Core::Internal;
 */
 
 /*!
-    \fn QAction *ActionContainer::insertLocation(const QString &group) const
+    \fn QAction *ActionContainer::insertLocation(const Core::Id &group) const
     Returns an action representing the \a group,
     that could be used with \c{QWidget::insertAction}.
 */
@@ -120,7 +138,7 @@ using namespace Core::Internal;
 */
 
 /*!
-    \fn void ActionContainer::addAction(Core::Command *action, const QString &group)
+    \fn void ActionContainer::addAction(Core::Command *action, const Core::Id &group)
     Add the \a action as a menu item to this action container. The action is added as the
     last item of the specified \a group.
     \sa appendGroup()
@@ -128,16 +146,11 @@ using namespace Core::Internal;
 */
 
 /*!
-    \fn void ActionContainer::addMenu(Core::ActionContainer *menu, const QString &group)
+    \fn void ActionContainer::addMenu(Core::ActionContainer *menu, const Core::Id &group)
     Add the \a menu as a submenu to this action container. The menu is added as the
     last item of the specified \a group.
     \sa appendGroup()
     \sa addAction()
-*/
-
-/*!
-    \fn bool ActionContainer::update()
-    \internal
 */
 
 /*!
@@ -152,78 +165,169 @@ using namespace Core::Internal;
     \internal
 */
 
-ActionContainerPrivate::ActionContainerPrivate(int id)
-    : m_data(0), m_id(id)
+ActionContainerPrivate::ActionContainerPrivate(Id id)
+    : m_onAllDisabledBehavior(Disable), m_id(id), m_updateRequested(false)
 {
-
+    appendGroup(Constants::G_DEFAULT_ONE);
+    appendGroup(Constants::G_DEFAULT_TWO);
+    appendGroup(Constants::G_DEFAULT_THREE);
+    scheduleUpdate();
 }
 
-void ActionContainerPrivate::setEmptyAction(EmptyAction ea)
+void ActionContainerPrivate::setOnAllDisabledBehavior(OnAllDisabledBehavior behavior)
 {
-    m_data = ((m_data & ~EA_Mask) | ea);
+    m_onAllDisabledBehavior = behavior;
 }
 
-bool ActionContainerPrivate::hasEmptyAction(EmptyAction ea) const
+ActionContainer::OnAllDisabledBehavior ActionContainerPrivate::onAllDisabledBehavior() const
 {
-    return (m_data & EA_Mask) == ea;
+    return m_onAllDisabledBehavior;
 }
 
-void ActionContainerPrivate::appendGroup(const QString &group)
+void ActionContainerPrivate::appendGroup(const Id &groupId)
 {
-    int gid = UniqueIDManager::instance()->uniqueIdentifier(group);
-    m_groups << gid;
-
-    // Add separator
-    ActionManagerPrivate *am = ActionManagerPrivate::instance();
-    QAction *sep = new QAction(this);
-    sep->setSeparator(true);
-    sep->setObjectName(QLatin1String("Sep.")+group);
-    Command *cmd = am->registerAction(sep, sep->objectName(), QList<int>() << Constants::C_GLOBAL_ID);
-    addAction(cmd, group);
+    m_groups.append(Group(groupId));
 }
 
-QAction *ActionContainerPrivate::insertLocation(const QString &group) const
+void ActionContainerPrivate::insertGroup(const Id &before, const Id &groupId)
 {
-    int grpid = UniqueIDManager::instance()->uniqueIdentifier(group);
-    int prevKey = 0;
-    int pos = ((grpid << 16) | 0xFFFF);
-    return beforeAction(pos, &prevKey);
+    QList<Group>::iterator it = m_groups.begin();
+    while (it != m_groups.end()) {
+        if (it->id == before) {
+            m_groups.insert(it, Group(groupId));
+            break;
+        }
+        ++it;
+    }
 }
 
-void ActionContainerPrivate::addAction(Command *action, const QString &group)
+QList<Group>::const_iterator ActionContainerPrivate::findGroup(const Id &groupId) const
 {
-    if (!canAddAction(action))
+    QList<Group>::const_iterator it = m_groups.constBegin();
+    while (it != m_groups.constEnd()) {
+        if (it->id == groupId)
+            break;
+        ++it;
+    }
+    return it;
+}
+
+
+QAction *ActionContainerPrivate::insertLocation(const Id &groupId) const
+{
+    QList<Group>::const_iterator it = findGroup(groupId);
+    QTC_ASSERT(it != m_groups.constEnd(), return 0);
+    return insertLocation(it);
+}
+
+QAction *ActionContainerPrivate::insertLocation(QList<Group>::const_iterator group) const
+{
+    if (group == m_groups.constEnd())
+        return 0;
+    ++group;
+    while (group != m_groups.constEnd()) {
+        if (!group->items.isEmpty()) {
+            QObject *item = group->items.first();
+            if (Command *cmd = qobject_cast<Command *>(item)) {
+                return cmd->action();
+            } else if (ActionContainer *container = qobject_cast<ActionContainer *>(item)) {
+                if (container->menu())
+                    return container->menu()->menuAction();
+            }
+            QTC_ASSERT(false, return 0);
+        }
+        ++group;
+    }
+    return 0;
+}
+
+void ActionContainerPrivate::addAction(Command *command, const Id &groupId)
+{
+    if (!canAddAction(command))
         return;
 
-    ActionManagerPrivate *am = ActionManagerPrivate::instance();
-    UniqueIDManager *idmanager = UniqueIDManager::instance();
-    int grpid = idmanager->uniqueIdentifier(Constants::G_DEFAULT_TWO);
-    if (!group.isEmpty())
-        grpid = idmanager->uniqueIdentifier(group);
-    if (!m_groups.contains(grpid) && !am->defaultGroups().contains(grpid))
-        qWarning() << "*** addAction(): Unknown group: " << group;
-    int pos = ((grpid << 16) | 0xFFFF);
-    addAction(action, pos, true);
+    const Id actualGroupId = groupId.isValid() ? groupId : Id(Constants::G_DEFAULT_TWO);
+    QList<Group>::const_iterator groupIt = findGroup(actualGroupId);
+    QTC_ASSERT(groupIt != m_groups.constEnd(), qDebug() << "Can't find group"
+               << groupId.name() << "in container" << id().name(); return);
+    QAction *beforeAction = insertLocation(groupIt);
+    m_groups[groupIt-m_groups.constBegin()].items.append(command);
+
+    connect(command, SIGNAL(activeStateChanged()), this, SLOT(scheduleUpdate()));
+    connect(command, SIGNAL(destroyed()), this, SLOT(itemDestroyed()));
+    insertAction(beforeAction, command->action());
+    scheduleUpdate();
 }
 
-void ActionContainerPrivate::addMenu(ActionContainer *menu, const QString &group)
+void ActionContainerPrivate::addMenu(ActionContainer *menu, const Id &groupId)
 {
-    ActionContainerPrivate *container = static_cast<ActionContainerPrivate *>(menu);
-    if (!container->canBeAddedToMenu())
+    ActionContainerPrivate *containerPrivate = static_cast<ActionContainerPrivate *>(menu);
+    if (!containerPrivate->canBeAddedToMenu())
         return;
 
-    ActionManagerPrivate *am = ActionManagerPrivate::instance();
-    UniqueIDManager *idmanager = UniqueIDManager::instance();
-    int grpid = idmanager->uniqueIdentifier(Constants::G_DEFAULT_TWO);
-    if (!group.isEmpty())
-        grpid = idmanager->uniqueIdentifier(group);
-    if (!m_groups.contains(grpid) && !am->defaultGroups().contains(grpid))
-        qWarning() << "*** addMenu(): Unknown group: " << group;
-    int pos = ((grpid << 16) | 0xFFFF);
-    addMenu(menu, pos, true);
+    MenuActionContainer *container = static_cast<MenuActionContainer *>(containerPrivate);
+    const Id actualGroupId = groupId.isValid() ? groupId : Id(Constants::G_DEFAULT_TWO);
+    QList<Group>::const_iterator groupIt = findGroup(actualGroupId);
+    QTC_ASSERT(groupIt != m_groups.constEnd(), return);
+    QAction *beforeAction = insertLocation(groupIt);
+    m_groups[groupIt-m_groups.constBegin()].items.append(menu);
+
+    connect(menu, SIGNAL(destroyed()), this, SLOT(itemDestroyed()));
+    insertMenu(beforeAction, container->menu());
+    scheduleUpdate();
 }
 
-int ActionContainerPrivate::id() const
+void ActionContainerPrivate::addMenu(ActionContainer *before, ActionContainer *menu, const Id &groupId)
+{
+    ActionContainerPrivate *containerPrivate = static_cast<ActionContainerPrivate *>(menu);
+    if (!containerPrivate->canBeAddedToMenu())
+        return;
+
+    MenuActionContainer *container = static_cast<MenuActionContainer *>(containerPrivate);
+    const Id actualGroupId = groupId.isValid() ? groupId : Id(Constants::G_DEFAULT_TWO);
+    QList<Group>::const_iterator groupIt = findGroup(actualGroupId);
+    QTC_ASSERT(groupIt != m_groups.constEnd(), return);
+    QAction *beforeAction = before->menu()->menuAction();
+    m_groups[groupIt-m_groups.constBegin()].items.append(menu);
+
+    connect(menu, SIGNAL(destroyed()), this, SLOT(itemDestroyed()));
+    insertMenu(beforeAction, container->menu());
+    scheduleUpdate();
+}
+
+void ActionContainerPrivate::clear()
+{
+    QMutableListIterator<Group> it(m_groups);
+    while (it.hasNext()) {
+        Group &group = it.next();
+        foreach (QObject *item, group.items) {
+            if (Command *command = qobject_cast<Command *>(item)) {
+                removeAction(command->action());
+                disconnect(command, SIGNAL(activeStateChanged()), this, SLOT(scheduleUpdate()));
+                disconnect(command, SIGNAL(destroyed()), this, SLOT(itemDestroyed()));
+            } else if (ActionContainer *container = qobject_cast<ActionContainer *>(item)) {
+                container->clear();
+                disconnect(container, SIGNAL(destroyed()), this, SLOT(itemDestroyed()));
+                removeMenu(container->menu());
+            }
+        }
+        group.items.clear();
+    }
+    scheduleUpdate();
+}
+
+void ActionContainerPrivate::itemDestroyed()
+{
+    QObject *obj = sender();
+    QMutableListIterator<Group> it(m_groups);
+    while (it.hasNext()) {
+        Group &group = it.next();
+        if (group.items.removeAll(obj) > 0)
+            break;
+    }
+}
+
+Id ActionContainerPrivate::id() const
 {
     return m_id;
 }
@@ -240,93 +344,21 @@ QMenuBar *ActionContainerPrivate::menuBar() const
 
 bool ActionContainerPrivate::canAddAction(Command *action) const
 {
-    return (action->action() != 0);
+    return action && action->action();
 }
 
-void ActionContainerPrivate::addAction(Command *action, int pos, bool setpos)
+void ActionContainerPrivate::scheduleUpdate()
 {
-    Action *a = static_cast<Action *>(action);
-
-    int prevKey = 0;
-    QAction *ba = beforeAction(pos, &prevKey);
-
-    if (setpos) {
-        pos = calcPosition(pos, prevKey);
-        CommandLocation loc;
-        loc.m_container = m_id;
-        loc.m_position = pos;
-        QList<CommandLocation> locs = a->locations();
-        locs.append(loc);
-        a->setLocations(locs);
-    }
-
-    m_commands.append(action);
-    m_posmap.insert(pos, action->id());
-    insertAction(ba, a->action());
+    if (m_updateRequested)
+        return;
+    m_updateRequested = true;
+    QTimer::singleShot(0, this, SLOT(update()));
 }
 
-void ActionContainerPrivate::addMenu(ActionContainer *menu, int pos, bool setpos)
+void ActionContainerPrivate::update()
 {
-    MenuActionContainer *mc = static_cast<MenuActionContainer *>(menu);
-
-    int prevKey = 0;
-    QAction *ba = beforeAction(pos, &prevKey);
-
-    if (setpos) {
-        pos = calcPosition(pos, prevKey);
-        CommandLocation loc;
-        loc.m_container = m_id;
-        loc.m_position = pos;
-        mc->setLocation(loc);
-    }
-
-    m_subContainers.append(menu);
-    m_posmap.insert(pos, menu->id());
-    insertMenu(ba, mc->menu());
-}
-
-QAction *ActionContainerPrivate::beforeAction(int pos, int *prevKey) const
-{
-    ActionManagerPrivate *am = ActionManagerPrivate::instance();
-
-    int baId = -1;
-
-    (*prevKey) = -1;
-
-    QMap<int, int>::const_iterator i = m_posmap.constBegin();
-    while (i != m_posmap.constEnd()) {
-        if (i.key() > pos) {
-            baId = i.value();
-            break;
-        }
-        (*prevKey) = i.key();
-        ++i;
-    }
-
-    if (baId == -1)
-        return 0;
-
-    if (Command *cmd = am->command(baId))
-        return cmd->action();
-    if (ActionContainer *container = am->actionContainer(baId))
-        if (QMenu *menu = container->menu())
-            return menu->menuAction();
-
-    return 0;
-}
-
-int ActionContainerPrivate::calcPosition(int pos, int prevKey) const
-{
-    int grp = (pos & 0xFFFF0000);
-    if (prevKey == -1)
-        return grp;
-
-    int prevgrp = (prevKey & 0xFFFF0000);
-
-    if (grp != prevgrp)
-        return grp;
-
-    return grp + (prevKey & 0xFFFF) + 10;
+    updateInternal();
+    m_updateRequested = false;
 }
 
 // ---------- MenuActionContainer ------------
@@ -336,20 +368,15 @@ int ActionContainerPrivate::calcPosition(int pos, int prevKey) const
     \internal
 */
 
-MenuActionContainer::MenuActionContainer(int id)
+MenuActionContainer::MenuActionContainer(Id id)
     : ActionContainerPrivate(id), m_menu(0)
 {
-    setEmptyAction(EA_Disable);
+    setOnAllDisabledBehavior(Disable);
 }
 
 void MenuActionContainer::setMenu(QMenu *menu)
 {
     m_menu = menu;
-
-    QVariant v;
-    qVariantSetValue<MenuActionContainer*>(v, this);
-
-    m_menu->menuAction()->setData(v);
 }
 
 QMenu *MenuActionContainer::menu() const
@@ -367,46 +394,97 @@ void MenuActionContainer::insertMenu(QAction *before, QMenu *menu)
     m_menu->insertMenu(before, menu);
 }
 
-void MenuActionContainer::setLocation(const CommandLocation &location)
+void MenuActionContainer::removeAction(QAction *action)
 {
-    m_location = location;
+    m_menu->removeAction(action);
 }
 
-CommandLocation MenuActionContainer::location() const
+void MenuActionContainer::removeMenu(QMenu *menu)
 {
-    return m_location;
+    m_menu->removeAction(menu->menuAction());
 }
 
-bool MenuActionContainer::update()
+void MenuActionContainer::retranslate()
 {
-    if (hasEmptyAction(EA_None))
+    if (m_menu) {
+        if (m_trContext.isEmpty())
+            m_menu->setTitle(QCoreApplication::translate(Trans::Constants::CONSTANTS_TR_CONTEXT, m_trLabel.toAscii()));
+        else
+            m_menu->setTitle(QCoreApplication::translate(m_trContext.toAscii(), m_trLabel.toAscii()));
+    }
+}
+
+#ifdef Q_OS_MAC
+static bool menuInMenuBar(const QMenu *menu)
+{
+    foreach (const QWidget *widget, menu->menuAction()->associatedWidgets()) {
+        if (qobject_cast<const QMenuBar *>(widget))
+            return true;
+    }
+    return false;
+}
+#endif
+
+bool MenuActionContainer::updateInternal()
+{
+    if (onAllDisabledBehavior() == Show)
         return true;
 
-    bool hasitems = false;
+#ifdef Q_OS_MAC
+    // work around QTBUG-25544 which makes menus in the menu bar stay at their enabled state at startup
+    // (so menus that are disabled at startup would stay disabled)
+    if (menuInMenuBar(m_menu))
+        return true;
+#endif
 
-    foreach (ActionContainer *container, subContainers()) {
-        if (container == this) {
-            qWarning() << Q_FUNC_INFO << "container" << (this->menu() ? this->menu()->title() : "") <<  "contains itself as subcontainer";
-            continue;
+    bool hasitems = false;
+    QList<QAction *> actions = m_menu->actions();
+
+    QListIterator<Group> it(m_groups);
+    while (it.hasNext()) {
+        const Group &group = it.next();
+        foreach (QObject *item, group.items) {
+            if (ActionContainerPrivate *container = qobject_cast<ActionContainerPrivate*>(item)) {
+                actions.removeAll(container->menu()->menuAction());
+                if (container == this) {
+                    QByteArray warning = Q_FUNC_INFO + QByteArray(" container '");
+                    if (this->menu())
+                        warning += this->menu()->title().toLocal8Bit();
+                    warning += "' contains itself as subcontainer";
+                    qWarning("%s", warning.constData());
+                    continue;
+                }
+                if (container->updateInternal()) {
+                    hasitems = true;
+                    break;
+                }
+            } else if (Command *command = qobject_cast<Command *>(item)) {
+                actions.removeAll(command->action());
+                if (command->isActive()) {
+                    hasitems = true;
+                    break;
+                }
+            } else {
+                QTC_ASSERT(false, continue);
+            }
         }
-        if (container->update()) {
-            hasitems = true;
+        if (hasitems)
             break;
-        }
     }
     if (!hasitems) {
-        foreach (Command *command, commands()) {
-            if (command->isActive()) {
+        // look if there were actions added that we don't control and check if they are enabled
+        foreach (const QAction *action, actions) {
+            if (!action->isSeparator() && action->isEnabled()) {
                 hasitems = true;
                 break;
             }
         }
     }
 
-    if (hasEmptyAction(EA_Hide))
-        m_menu->setVisible(hasitems);
-    else if (hasEmptyAction(EA_Disable))
-        m_menu->setEnabled(hasitems);
+    if (onAllDisabledBehavior() == Hide)
+        m_menu->menuAction()->setVisible(hasitems);
+    else if (onAllDisabledBehavior() == Disable)
+        m_menu->menuAction()->setEnabled(hasitems);
 
     return hasitems;
 }
@@ -424,10 +502,10 @@ bool MenuActionContainer::canBeAddedToMenu() const
     \internal
 */
 
-MenuBarActionContainer::MenuBarActionContainer(int id)
+MenuBarActionContainer::MenuBarActionContainer(Id id)
     : ActionContainerPrivate(id), m_menuBar(0)
 {
-    setEmptyAction(EA_None);
+    setOnAllDisabledBehavior(Show);
 }
 
 void MenuBarActionContainer::setMenuBar(QMenuBar *menuBar)
@@ -450,9 +528,19 @@ void MenuBarActionContainer::insertMenu(QAction *before, QMenu *menu)
     m_menuBar->insertMenu(before, menu);
 }
 
-bool MenuBarActionContainer::update()
+void MenuBarActionContainer::removeAction(QAction *action)
 {
-    if (hasEmptyAction(EA_None))
+    m_menuBar->removeAction(action);
+}
+
+void MenuBarActionContainer::removeMenu(QMenu *menu)
+{
+    m_menuBar->removeAction(menu->menuAction());
+}
+
+bool MenuBarActionContainer::updateInternal()
+{
+    if (onAllDisabledBehavior() == Show)
         return true;
 
     bool hasitems = false;
@@ -464,9 +552,9 @@ bool MenuBarActionContainer::update()
         }
     }
 
-    if (hasEmptyAction(EA_Hide))
+    if (onAllDisabledBehavior() == Hide)
         m_menuBar->setVisible(hasitems);
-    else if (hasEmptyAction(EA_Disable))
+    else if (onAllDisabledBehavior() == Disable)
         m_menuBar->setEnabled(hasitems);
 
     return hasitems;
@@ -477,3 +565,12 @@ bool MenuBarActionContainer::canBeAddedToMenu() const
     return false;
 }
 
+//void MenuBarActionContainer::retranslate()
+//{
+//    if (m_menuBar) {
+//        if (m_trContext.isEmpty())
+//            m_menuBar->setTitle(QCoreApplication::translate(Trans::Constants::CONSTANTS_TR_CONTEXT, m_trLabel.toAscii()));
+//        else
+//            m_menuBar->setTitle(QCoreApplication::translate(m_trContext.toAscii(), m_trLabel.toAscii()));
+//    }
+//}

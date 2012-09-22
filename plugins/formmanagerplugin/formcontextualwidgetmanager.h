@@ -93,8 +93,7 @@ public:
     FormContextualWidget *currentView() const;
 
 private Q_SLOTS:
-    void checkParentWidgets(QWidget *widget);
-    void updateContext(Core::IContext *object);
+    void updateContext(Core::IContext *object, const Core::Context &additionalContexts);
 };
 
 } // namespace Internal

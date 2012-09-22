@@ -35,113 +35,153 @@
 #include <utils/widgets/fancytabwidget.h>
 #include <utils/widgets/fancyactionbar.h>
 
+#include <coreplugin/icore.h>
+#include <coreplugin/imainwindow.h>
+
 #include <aggregation/aggregate.h>
 
 #include <coreplugin/actionmanager/actionmanager.h>
 #include <coreplugin/actionmanager/command.h>
-#include <coreplugin/constants_menus.h>
+#include <coreplugin/constants.h>
 #include <coreplugin/modemanager/imode.h>
 #include <coreplugin/contextmanager/contextmanager.h>
-#include <coreplugin/icore.h>
-#include <coreplugin/ipatient.h>
-#include <coreplugin/isettings.h>
-#include <coreplugin/translators.h>
+#include <coreplugin/id.h>
 
 #include <extensionsystem/pluginmanager.h>
 
-#include <QObject>
+#include <utils/qtcassert.h>
+
 #include <QDebug>
+#include <QList>
+#include <QMap>
+#include <QVector>
+
 #include <QSignalMapper>
 #include <QShortcut>
-
 #include <QAction>
-#include <QTabWidget>
-#include <QVBoxLayout>
 
-using namespace Core;
-using namespace Core::Internal;
-
-static inline Core::ActionManager *actionManager() { return Core::ICore::instance()->actionManager(); }
 static inline Core::ContextManager *contextManager() { return Core::ICore::instance()->contextManager(); }
-static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
-static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
-static inline Core::Translators *translators() {return Core::ICore::instance()->translators();}
+static inline Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
 
-ModeManager *ModeManager::m_instance = 0;
+namespace Core {
 
-ModeManager::ModeManager(IMainWindow *mainWindow) :
-    m_mainWindow(mainWindow),
-    m_modeStack(0),
-    m_signalMapper(new QSignalMapper(this))
+/*!
+    \class Core::ModeManager
+
+    The mode manager handles everything related to the instances of Core::IMode
+    that were added to the plugin manager's object pool as well as their
+    buttons and the tool bar with the round buttons in the lower left
+    corner of Qt Creator.
+*/
+
+struct ModeManagerPrivate
 {
-    m_instance = this;
-}
+    IMainWindow *m_mainWindow;
+    Utils::FancyTabWidget *m_modeStack;
+    Utils::FancyActionBar *m_actionBar;
+    QMap<QAction*, int> m_actions;
+    QVector<IMode*> m_modes;
+    QVector<Command*> m_modeShortcuts;
+    QSignalMapper *m_signalMapper;
+    Context m_addedContexts;
+    int m_oldCurrent;
+};
 
-void ModeManager::init(Utils::FancyTabWidget *modeStack)
+static ModeManagerPrivate *d;
+static ModeManager *m_instance = 0;
+
+static int indexOf(const QString &id)
 {
-    m_modeStack = modeStack;
-    m_actionBar = new Utils::FancyActionBar(modeStack);
-    m_actionBar->setSvgIconPath(settings()->path(Core::ISettings::SvgPixmapPath));
-    m_modeStack->addCornerWidget(m_actionBar);
-
-    connect(m_modeStack, SIGNAL(currentAboutToShow(int)), SLOT(currentTabAboutToChange(int)));
-    connect(m_modeStack, SIGNAL(currentChanged(int)), SLOT(currentTabChanged(int)));
-    connect(m_signalMapper, SIGNAL(mapped(QString)), this, SLOT(activateMode(QString)));
-
-    QObject::connect(ExtensionSystem::PluginManager::instance(), SIGNAL(objectAdded(QObject*)),
-                     this, SLOT(objectAdded(QObject*)));
-    QObject::connect(ExtensionSystem::PluginManager::instance(), SIGNAL(aboutToRemoveObject(QObject*)),
-                     this, SLOT(aboutToRemoveObject(QObject*)));
-
-    connect(translators(), SIGNAL(languageChanged()), this, SLOT(languageChanged()));
-}
-
-void ModeManager::addWidget(QWidget *widget)
-{
-    // We want the actionbar to stay on the bottom
-    // so m_modeStack->cornerWidgetCount() -1 inserts it at the position immediately above
-    // the actionbar
-    m_modeStack->insertCornerWidget(m_modeStack->cornerWidgetCount() -1, widget);
-}
-
-IMode *ModeManager::currentMode() const
-{
-    return m_modes.at(m_modeStack->currentIndex());
-}
-
-int ModeManager::indexOf(const QString &id) const
-{
-    for (int i = 0; i < m_modes.count(); ++i) {
-        if (m_modes.at(i)->uniqueModeName() == id)
+    for (int i = 0; i < d->m_modes.count(); ++i) {
+        if (d->m_modes.at(i)->id() == id)
             return i;
     }
     qDebug() << "Warning, no such mode:" << id;
     return -1;
 }
 
-IMode *ModeManager::mode(const QString &id) const
+ModeManager::ModeManager(Core::IMainWindow *mainWindow)
+{
+    m_instance = this;
+    d = new ModeManagerPrivate();
+    d->m_mainWindow = mainWindow;
+}
+
+void ModeManager::init(Utils::FancyTabWidget *modeStack)
+{
+
+    d->m_signalMapper = new QSignalMapper(m_instance);
+    d->m_oldCurrent = -1;
+    d->m_modeStack = modeStack;
+    d->m_actionBar = new Utils::FancyActionBar(modeStack);
+    d->m_modeStack->addCornerWidget(d->m_actionBar);
+
+    QObject::connect(d->m_modeStack, SIGNAL(currentAboutToShow(int)),m_instance,  SLOT(currentTabAboutToChange(int)));
+    QObject::connect(d->m_modeStack, SIGNAL(currentChanged(int)),m_instance,  SLOT(currentTabChanged(int)));
+    QObject::connect(d->m_signalMapper, SIGNAL(mapped(QString)), m_instance, SLOT(slotActivateMode(QString)));
+
+    QObject::connect(ExtensionSystem::PluginManager::instance(), SIGNAL(objectAdded(QObject*)),
+                     m_instance, SLOT(objectAdded(QObject*)));
+    QObject::connect(ExtensionSystem::PluginManager::instance(), SIGNAL(aboutToRemoveObject(QObject*)),
+                     m_instance, SLOT(aboutToRemoveObject(QObject*)));
+}
+
+ModeManager::~ModeManager()
+{
+    delete d;
+    d = 0;
+    m_instance = 0;
+}
+
+void ModeManager::addWidget(QWidget *widget)
+{
+    // We want the actionbar to stay on the bottom
+    // so d->m_modeStack->cornerWidgetCount() -1 inserts it at the position immediately above
+    // the actionbar
+    d->m_modeStack->insertCornerWidget(d->m_modeStack->cornerWidgetCount() -1, widget);
+}
+
+IMode *ModeManager::currentMode()
+{
+    int currentIndex = d->m_modeStack->currentIndex();
+    if (currentIndex < 0)
+        return 0;
+    return d->m_modes.at(currentIndex);
+}
+
+IMode *ModeManager::mode(const QString &id)
 {
     const int index = indexOf(id);
     if (index >= 0)
-        return m_modes.at(index);
+        return d->m_modes.at(index);
     return 0;
+}
+
+void ModeManager::activateModeType(const QString &type)
+{
+    if (currentMode() && currentMode()->type() == type)
+        return;
+    int index = -1;
+    for (int i = 0; i < d->m_modes.count(); ++i) {
+        if (d->m_modes.at(i)->type() == type) {
+            index = i;
+            break;
+        }
+    }
+    if (index != -1)
+        d->m_modeStack->setCurrentIndex(index);
+}
+
+void ModeManager::slotActivateMode(const QString &id)
+{
+    m_instance->activateMode(id);
 }
 
 void ModeManager::activateMode(const QString &id)
 {
     const int index = indexOf(id);
-    if (index >= 0) {
-        // modify PatientBar visibility
-        if (patient()) {
-            IMode *mode = m_modes.at(index);
-            if (mode->isPatientBarVisible())
-                patient()->showPatientBar();
-            else
-                patient()->hidePatientBar();
-        }
-
-        m_modeStack->setCurrentIndex(index);
-    }
+    if (index >= 0)
+        d->m_modeStack->setCurrentIndex(index);
 }
 
 void ModeManager::objectAdded(QObject *obj)
@@ -154,46 +194,73 @@ void ModeManager::objectAdded(QObject *obj)
 
     // Count the number of modes with a higher priority
     int index = 0;
-    foreach (const IMode *m, m_modes)
+    foreach (const IMode *m, d->m_modes)
         if (m->priority() > mode->priority())
             ++index;
 
-    m_modes.insert(index, mode);
-    m_modeStack->insertTab(index, mode->widget(), mode->icon(), mode->name());
+    d->m_modes.insert(index, mode);
+    d->m_modeStack->insertTab(index, mode->widget(), mode->icon(), mode->displayName());
+    d->m_modeStack->setTabEnabled(index, mode->isEnabled());
 
     // Register mode shortcut
     ActionManager *am = actionManager();
-    const QString shortcutId = QLatin1String("QtCreator.Mode.") + mode->uniqueModeName();
-    QShortcut *shortcut = new QShortcut(m_mainWindow);
-    shortcut->setWhatsThis(tr("Switch to %1 mode").arg(mode->name()));
-    Command *cmd = am->registerShortcut(shortcut, shortcutId, QList<int>() << Constants::C_GLOBAL_ID);
+    const Id shortcutId(QLatin1String("QtCreator.Mode.") + mode->id());
+    QShortcut *shortcut = new QShortcut(d->m_mainWindow);
+    shortcut->setWhatsThis(tr("Switch to <b>%1</b> mode").arg(mode->displayName()));
+    Command *cmd = am->registerShortcut(shortcut, shortcutId, Context(Constants::C_GLOBAL));
 
-    m_modeShortcuts.insert(index, cmd);
+    d->m_modeShortcuts.insert(index, cmd);
     connect(cmd, SIGNAL(keySequenceChanged()), this, SLOT(updateModeToolTip()));
-    for (int i = 0; i < m_modeShortcuts.size(); ++i) {
-        Command *currentCmd = m_modeShortcuts.at(i);
+    for (int i = 0; i < d->m_modeShortcuts.size(); ++i) {
+        Command *currentCmd = d->m_modeShortcuts.at(i);
+        // we need this hack with currentlyHasDefaultSequence
+        // because we call setDefaultShortcut multiple times on the same cmd
+        // and still expect the current shortcut to change with it
         bool currentlyHasDefaultSequence = (currentCmd->keySequence()
                                             == currentCmd->defaultKeySequence());
-#ifdef Q_WS_MAC
-        currentCmd->setDefaultKeySequence(QKeySequence(QString("Meta+%1").arg(i+1)));
+#ifdef Q_OS_MAC
+        currentCmd->setDefaultKeySequence(QKeySequence(QString::fromLatin1("Meta+%1").arg(i+1)));
 #else
-        currentCmd->setDefaultKeySequence(QKeySequence(QString("Ctrl+%1").arg(i+1)));
+        currentCmd->setDefaultKeySequence(QKeySequence(QString::fromLatin1("Ctrl+%1").arg(i+1)));
 #endif
         if (currentlyHasDefaultSequence)
             currentCmd->setKeySequence(currentCmd->defaultKeySequence());
     }
 
-    m_signalMapper->setMapping(shortcut, mode->uniqueModeName());
-    connect(shortcut, SIGNAL(activated()), m_signalMapper, SLOT(map()));
+    d->m_signalMapper->setMapping(shortcut, mode->id());
+    connect(shortcut, SIGNAL(activated()), d->m_signalMapper, SLOT(map()));
+    connect(mode, SIGNAL(enabledStateChanged(bool)),
+            this, SLOT(enabledStateChanged()));
 }
 
 void ModeManager::updateModeToolTip()
 {
     Command *cmd = qobject_cast<Command *>(sender());
     if (cmd) {
-        int index = m_modeShortcuts.indexOf(cmd);
+        int index = d->m_modeShortcuts.indexOf(cmd);
         if (index != -1)
-            m_modeStack->setTabToolTip(index, cmd->stringWithAppendedShortcut(cmd->shortcut()->whatsThis()));
+            d->m_modeStack->setTabToolTip(index, cmd->stringWithAppendedShortcut(cmd->shortcut()->whatsThis()));
+    }
+}
+
+void ModeManager::enabledStateChanged()
+{
+    IMode *mode = qobject_cast<IMode *>(sender());
+    QTC_ASSERT(mode, return);
+    int index = d->m_modes.indexOf(mode);
+    QTC_ASSERT(index >= 0, return);
+    d->m_modeStack->setTabEnabled(index, mode->isEnabled());
+
+    // Make sure we leave any disabled mode to prevent possible crashes:
+    if (mode == currentMode() && !mode->isEnabled()) {
+        // This assumes that there is always at least one enabled mode.
+        for (int i = 0; i < d->m_modes.count(); ++i) {
+            if (d->m_modes.at(i) != mode &&
+                d->m_modes.at(i)->isEnabled()) {
+                activateMode(d->m_modes.at(i)->id());
+                break;
+            }
+        }
     }
 }
 
@@ -203,42 +270,40 @@ void ModeManager::aboutToRemoveObject(QObject *obj)
     if (!mode)
         return;
 
-    const int index = m_modes.indexOf(mode);
-    m_modes.remove(index);
-    m_modeShortcuts.remove(index);
-    m_modeStack->removeTab(index);
+    const int index = d->m_modes.indexOf(mode);
+    d->m_modes.remove(index);
+    d->m_modeShortcuts.remove(index);
+    d->m_modeStack->removeTab(index);
 
     contextManager()->removeContextObject(mode);
 }
 
-void ModeManager::addAction(Command *command, int priority, QMenu *menu)
+void ModeManager::addAction(QAction *action, int priority)
 {
-    m_actions.insert(command, priority);
+    d->m_actions.insert(action, priority);
 
     // Count the number of commands with a higher priority
     int index = 0;
-    foreach (int p, m_actions.values())
+    foreach (int p, d->m_actions) {
         if (p > priority)
             ++index;
+    }
 
-    m_actionBar->insertAction(index, command->action(), menu);
+    d->m_actionBar->insertAction(index, action);
+}
+
+void ModeManager::addProjectSelector(QAction *action)
+{
+    d->m_actionBar->addProjectSelector(action);
+    d->m_actions.insert(0, INT_MAX);
 }
 
 void ModeManager::currentTabAboutToChange(int index)
 {
     if (index >= 0) {
-        IMode *mode = m_modes.at(index);
+        IMode *mode = d->m_modes.at(index);
         if (mode)
             emit currentModeAboutToChange(mode);
-
-        // modify PatientBar visibility
-        if (patient()) {
-            if (mode->isPatientBarVisible())
-                patient()->showPatientBar();
-            else
-                patient()->hidePatientBar();
-        }
-
     }
 }
 
@@ -246,29 +311,26 @@ void ModeManager::currentTabChanged(int index)
 {
     // Tab index changes to -1 when there is no tab left.
     if (index >= 0) {
-        IMode *mode = m_modes.at(index);
+        IMode *mode = d->m_modes.at(index);
 
         // FIXME: This hardcoded context update is required for the Debug and Edit modes, since
         // they use the editor widget, which is already a context widget so the main window won't
         // go further up the parent tree to find the mode context.
-//        ICore *core = ICore::instance();
-        foreach (const int context, m_addedContexts)
-            contextManager()->removeAdditionalContext(context);
+        contextManager()->updateAdditionalContexts(d->m_addedContexts, mode->context());
+        d->m_addedContexts = mode->context();
 
-        m_addedContexts = mode->context();
-        foreach (const int context, m_addedContexts)
-            contextManager()->addAdditionalContext(context);
-        emit currentModeChanged(mode);
-        contextManager()->updateContext();
+        IMode *oldMode = 0;
+        if (d->m_oldCurrent >= 0)
+            oldMode = d->m_modes.at(d->m_oldCurrent);
+        d->m_oldCurrent = index;
+        emit currentModeChanged(mode, oldMode);
     }
 }
 
 void ModeManager::setFocusToCurrentMode()
 {
     IMode *mode = currentMode();
-    Q_ASSERT(mode);
-    if (!mode)
-        return;
+    QTC_ASSERT(mode, return);
     QWidget *widget = mode->widget();
     if (widget) {
         QWidget *focusWidget = widget->focusWidget();
@@ -279,13 +341,14 @@ void ModeManager::setFocusToCurrentMode()
     }
 }
 
-void ModeManager::languageChanged()
+void ModeManager::setModeBarHidden(bool hidden)
 {
-//    qWarning() << Q_FUNC_INFO;
-    for(int i = 0; i<m_modes.count(); ++i) {
-//        qWarning() << i << m_modes.at(i)->name();
-        m_modeStack->updateTabLabel(i, m_modes.at(i)->name());
-//        m_modeStack->setTabToolTip(i, cmd->stringWithAppendedShortcut(cmd->shortcut()->whatsThis()));
-    }
-    m_modeStack->repaint();
+    d->m_modeStack->setSelectionWidgetHidden(hidden);
 }
+
+ModeManager *ModeManager::instance()
+{
+    return m_instance;
+}
+
+} // namespace Core

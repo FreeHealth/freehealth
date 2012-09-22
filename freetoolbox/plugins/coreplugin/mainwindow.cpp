@@ -36,7 +36,6 @@
 #include <coreplugin/isettings.h>
 #include <coreplugin/contextmanager/contextmanager.h>
 #include <coreplugin/actionmanager/actionmanager.h>
-#include <coreplugin/uniqueidmanager.h>
 #include <coreplugin/itoolpage.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/translators.h>
@@ -45,6 +44,7 @@
 #include <coreplugin/actionmanager/mainwindowactions.h>
 #include <coreplugin/actionmanager/mainwindowactionhandler.h>
 #include <coreplugin/actionmanager/actionmanager.h>
+#include <coreplugin/actionmanager/actioncontainer.h>
 #include <coreplugin/contextmanager/contextmanager.h>
 #include <coreplugin/dialogs/plugindialog.h>
 #include <coreplugin/dialogs/settingsdialog.h>
@@ -161,26 +161,26 @@ bool MainWindow::initialize(const QStringList &, QString *)
     connectHelpActions();
 
     Core::Command *cmd = 0;
-    QList<int> globalcontext = QList<int>() << Core::Constants::C_GLOBAL_ID;
+    Core::Context globalcontext(Core::Constants::C_GLOBAL);
 
-    Core::ActionContainer *menu = actionManager()->actionContainer(Core::Constants::M_FILE);
+    Core::ActionContainer *menu = actionManager()->actionContainer(Core::Id(Core::Constants::M_FILE));
 
     // Create local actions
-    QAction *createFullRelease = new QAction(this);
-    createFullRelease->setObjectName("FTB_CreateFullRelease");
-    createFullRelease->setIcon(theme()->icon(Constants::ICONPROCESS, ITheme::MediumIcon));
-    cmd = actionManager()->registerAction(createFullRelease, "FTB_CreateFullRelease", globalcontext);
-    cmd->setTranslations(Constants::CREATEFULLRELEASE_TEXT, Constants::CREATEFULLRELEASE_TEXT, Constants::FREETOOLBOX_TR_CONTEXT);
-    menu->addAction(cmd, Core::Constants::G_FILE_NEW);
-    connect(createFullRelease, SIGNAL(triggered()), this, SLOT(createFullRelease()));
-
     QAction *openPreferences = new QAction(this);
     openPreferences->setObjectName("FTB_Preferences");
     openPreferences->setIcon(theme()->icon(Constants::ICONPREFERENCES, ITheme::MediumIcon));
-    cmd = actionManager()->registerAction(openPreferences, "FTB_Preferences", globalcontext);
-    cmd->setTranslations("Application Preferences", "Open the preferences dialog", Constants::FREETOOLBOX_TR_CONTEXT);
-    menu->addAction(cmd, Core::Constants::G_PREFERENCES);
+    cmd = actionManager()->registerAction(openPreferences, Core::Id("FTB_Preferences"), globalcontext);
+    cmd->setTranslations(Trans::Constants::PREFERENCES_TEXT);
+    menu->addAction(cmd, Core::Id(Core::Constants::G_PREFERENCES));
     connect(openPreferences, SIGNAL(triggered()), this, SLOT(applicationPreferences()));
+
+    a = new QAction(this);
+    a->setObjectName("FTB_CreateFullRelease");
+    a->setIcon(theme()->icon(Constants::ICONPROCESS, ITheme::MediumIcon));
+    cmd = actionManager()->registerAction(a, Core::Id("FTB_CreateFullRelease"), globalcontext);
+    cmd->setTranslations(Constants::CREATEFULLRELEASE_TEXT, Constants::CREATEFULLRELEASE_TEXT, Constants::FREETOOLBOX_TR_CONTEXT);
+    menu->addAction(cmd, Core::Id(Core::Constants::G_FILE_NEW));
+    connect(a, SIGNAL(triggered()), this, SLOT(createFullRelease()));
 
     // Create General pages
     m_FullReleasePage = new FullReleasePage(this);
@@ -188,8 +188,8 @@ bool MainWindow::initialize(const QStringList &, QString *)
     ui = new Ui::MainWindow;
     ui->setupUi(this);
     ui->centralWidget->layout()->setMargin(0);
-    setMenuBar(actionManager()->actionContainer(Constants::MENUBAR)->menuBar());
-    ui->mainToolBar->insertAction(0, createFullRelease);
+    setMenuBar(actionManager()->actionContainer(Core::Id(Constants::MENUBAR))->menuBar());
+    ui->mainToolBar->insertAction(0, a);
     ui->mainToolBar->insertAction(0, openPreferences);
 
     ui->splitter->setCollapsible(1, false);

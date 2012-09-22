@@ -50,7 +50,6 @@
 
 #include <coreplugin/icore.h>
 #include <coreplugin/theme.h>
-#include <coreplugin/uniqueidmanager.h>
 #include <coreplugin/modemanager/modemanager.h>
 #include <coreplugin/actionmanager/actionmanager.h>
 #include <coreplugin/contextmanager/contextmanager.h>
@@ -71,15 +70,23 @@ PatientSearchMode::PatientSearchMode(QObject *parent) :
     Core::IMode(parent),
     m_Selector(0)
 {
+    setDisplayName(tkTr(Trans::Constants::PATIENTS));
+    setIcon(theme()->icon(Core::Constants::ICONPATIENTS, Core::ITheme::BigIcon));
+    setPriority(Core::Constants::P_MODE_PATIENT_SEARCH);
+    setId(Core::Constants::MODE_PATIENT_SEARCH);
+    Core::Context context(Constants::C_PATIENTS, Constants::C_PATIENTS_SEARCH);
+    setContext(context);
+
     // Add the new patient action in the mode manager
     Core::Command *cmd = actionManager()->command(Core::Constants::A_PATIENT_NEW);
-    modeManager()->addAction(cmd, Core::Constants::P_MODE_PATIENT_SEARCH);
+    modeManager()->addAction(cmd->action(), Core::Constants::P_MODE_PATIENT_SEARCH);
 
     // create the mode widget
     m_Selector = new PatientSelector;
     PatientWidgetManager::instance()->setCurrentView(m_Selector);
     m_Selector->setFieldsToShow(PatientSelector::Title | PatientSelector::BirthName | PatientSelector::SecondName | PatientSelector::FirstName | PatientSelector::DateOfBirth | PatientSelector::FullAdress);
     m_Selector->initialize();
+    setWidget(m_Selector);
 }
 
 PatientSearchMode::~PatientSearchMode()
@@ -91,38 +98,3 @@ PatientSearchMode::~PatientSearchMode()
 void PatientSearchMode::postCoreInitialization()
 {
 }
-
-QString PatientSearchMode::name() const
-{
-    return tkTr(Trans::Constants::PATIENTS);
-}
-
-QIcon PatientSearchMode::icon() const
-{
-    return theme()->icon(Core::Constants::ICONPATIENTS, Core::ITheme::BigIcon);
-}
-
-int PatientSearchMode::priority() const
-{
-    return Core::Constants::P_MODE_PATIENT_SEARCH;
-}
-
-QWidget* PatientSearchMode::widget()
-{
-    return m_Selector;
-}
-
-const char* PatientSearchMode::uniqueModeName() const
-{
-    return Core::Constants::MODE_PATIENT_SEARCH;
-}
-
-QList<int> PatientSearchMode::context() const
-{
-    Core::UniqueIDManager *uid = Core::ICore::instance()->uniqueIDManager();
-    static QList<int> contexts = QList<int>() <<
-                                 uid->uniqueIdentifier(Constants::C_PATIENTS) <<
-                                 uid->uniqueIdentifier(Constants::C_PATIENTS_SEARCH);
-    return contexts;
-}
-

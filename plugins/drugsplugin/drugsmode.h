@@ -27,7 +27,7 @@
 #ifndef DRUGSMODE_H
 #define DRUGSMODE_H
 
-#include <coreplugin/modemanager/basemode.h>
+#include <coreplugin/modemanager/imode.h>
 
 namespace Form {
 class FormPlaceHolder;
@@ -36,15 +36,13 @@ class FormPlaceHolder;
 namespace DrugsWidget {
 namespace Internal {
 
-class DrugsMode : public Core::BaseMode
+class DrugsMode : public Core::IMode
 {
     Q_OBJECT
 
 public:
     explicit DrugsMode(QObject *parent = 0);
     ~DrugsMode();
-
-    QString name() const;
 
 public Q_SLOTS:
     void onPatientFormsLoaded();

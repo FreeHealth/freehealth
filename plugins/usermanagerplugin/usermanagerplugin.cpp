@@ -56,6 +56,7 @@
 #include <coreplugin/icommandline.h>
 #include <coreplugin/modemanager/modemanager.h>
 #include <coreplugin/actionmanager/actionmanager.h>
+#include <coreplugin/actionmanager/actioncontainer.h>
 #include <coreplugin/contextmanager/contextmanager.h>
 
 #include <translationutils/constanttranslations.h>
@@ -217,7 +218,7 @@ void UserManagerPlugin::extensionsInitialized()
     if (!newmenu)
         newmenu = menu;
 
-    QList<int> ctx = QList<int>() << Core::Constants::C_GLOBAL_ID;
+    Core::Context ctx(Core::Constants::C_GLOBAL);
     QAction *a = 0;
     Core::Command *cmd = 0;
 
@@ -226,11 +227,11 @@ void UserManagerPlugin::extensionsInitialized()
     a = aCreateUser = new QAction(this);
     a->setObjectName("aCreateUser");
     a->setIcon(QIcon(Core::Constants::ICONNEWUSER));
-    cmd = actionManager()->registerAction(aCreateUser, Core::Constants::A_CREATEUSER, ctx);
+    cmd = actionManager()->registerAction(aCreateUser, Core::Id(Core::Constants::A_CREATEUSER), ctx);
     Q_ASSERT(cmd);
     cmd->setDefaultKeySequence(QKeySequence(Qt::CTRL + Qt::SHIFT + Qt::Key_U));
     cmd->setTranslations(Trans::Constants::USER);
-    newmenu->addAction(cmd, groupNew);
+    newmenu->addAction(cmd, Core::Id(groupNew));
     cmd->retranslate();
     connect(aCreateUser, SIGNAL(triggered()), this, SLOT(createUser()));
 
@@ -238,10 +239,10 @@ void UserManagerPlugin::extensionsInitialized()
     a = aChangeUser = new QAction(this);
     a->setObjectName("aChangeUser");
     a->setIcon(QIcon(Core::Constants::ICONUSER));
-    cmd = actionManager()->registerAction(aChangeUser, "aChangeCurrentUser", ctx);
+    cmd = actionManager()->registerAction(aChangeUser, Core::Id("aChangeCurrentUser"), ctx);
     Q_ASSERT(cmd);
     cmd->setTranslations(Trans::Constants::CHANGE_USER);
-    menu->addAction(cmd, groupUsers);
+    menu->addAction(cmd, Core::Id(groupUsers));
     cmd->retranslate();
     connect(aChangeUser, SIGNAL(triggered()), this, SLOT(changeCurrentUser()));
 
@@ -249,23 +250,23 @@ void UserManagerPlugin::extensionsInitialized()
     a = aUserManager = new QAction(this);
     a->setObjectName("aUserManager");
     a->setIcon(QIcon(Core::Constants::ICONUSERMANAGER));
-    cmd = actionManager()->registerAction(aUserManager, "aUserManager", ctx);
+    cmd = actionManager()->registerAction(aUserManager, Core::Id("aUserManager"), ctx);
     Q_ASSERT(cmd);
     cmd->setTranslations(Trans::Constants::USERMANAGER_TEXT);
-    menu->addAction(cmd, groupUsers);
+    menu->addAction(cmd, Core::Id(groupUsers));
     cmd->retranslate();
     connect(aUserManager, SIGNAL(triggered()), this, SLOT(showUserManager()));
 #endif
 
-    Core::ActionContainer *hmenu = actionManager()->actionContainer(Core::Constants::M_HELP_DATABASES);
+    Core::ActionContainer *hmenu = actionManager()->actionContainer(Core::Id(Core::Constants::M_HELP_DATABASES));
     if (hmenu) {
         a = aAboutDatabase = new QAction(this);
         a->setObjectName("aAboutDatabase");
         a->setIcon(QIcon(Core::Constants::ICONHELP));
-        cmd = actionManager()->registerAction(aAboutDatabase, "aAboutDatabase", ctx);
+        cmd = actionManager()->registerAction(aAboutDatabase, Core::Id("aAboutDatabase"), ctx);
         Q_ASSERT(cmd);
         cmd->setTranslations(Trans::Constants::USER_DATABASE_INFORMATION);
-        hmenu->addAction(cmd, Core::Constants::G_HELP_DATABASES);
+        hmenu->addAction(cmd, Core::Id(Core::Constants::G_HELP_DATABASES));
         cmd->retranslate();
         connect(aAboutDatabase, SIGNAL(triggered()), this, SLOT(showDatabaseInformation()));
     }

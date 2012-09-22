@@ -31,14 +31,14 @@
 #ifndef USERMANAGERMODE_H
 #define USERMANAGERMODE_H
 
-#include <coreplugin/modemanager/basemode.h>
+#include <coreplugin/modemanager/imode.h>
 
 #include <QtCore/QObject>
 
 namespace UserPlugin {
 namespace Internal {
 
-class UserManagerMode : public Core::BaseMode
+class UserManagerMode : public Core::IMode
 {
     Q_OBJECT
 public:

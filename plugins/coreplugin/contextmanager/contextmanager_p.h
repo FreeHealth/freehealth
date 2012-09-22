@@ -36,6 +36,12 @@
 
 #include <coreplugin/contextmanager/icontext.h>
 
+/**
+ * \file contextmanager.h
+ * \author Eric MAEKER
+ * \version 0.8.0
+ * \date 20 Sept 2012
+*/
 
 namespace Core {
 namespace Internal {
@@ -54,6 +60,7 @@ public:
 
     IContext *currentContextObject() const;
     void addAdditionalContext(int context);
+    void updateAdditionalContexts(const Context &remove, const Context &add);
     void removeAdditionalContext(int context);
     bool hasContext(int context) const;
 
@@ -66,8 +73,8 @@ private:
     void updateContextObject(IContext *context);
 
 private:
-    QList<int> m_globalContext;
-    QList<int> m_additionalContexts;
+    Context m_globalContext;
+    Context m_additionalContexts;
     IContext *m_activeContext;
     QMap<QWidget *, IContext *> m_contextWidgets;
     QMainWindow *m_mainWindow;

@@ -49,12 +49,11 @@
 #include <coreplugin/ipatient.h>
 #include <coreplugin/contextmanager/contextmanager.h>
 #include <coreplugin/actionmanager/actionmanager.h>
-#include <coreplugin/uniqueidmanager.h>
+#include <coreplugin/actionmanager/actioncontainer.h>
 
 #include <QGridLayout>
 #include <QTreeWidget>
 #include <QHeaderView>
-
 
 using namespace PMH;
 using namespace Internal;
@@ -73,12 +72,12 @@ static inline Core::IPatient *patient() {return Core::ICore::instance()->patient
 PmhWidgetManager::PmhWidgetManager(QObject *parent) :
     PmhActionHandler(parent)
 {
-    connect(Core::ICore::instance()->contextManager(), SIGNAL(contextChanged(Core::IContext*)),
-            this, SLOT(updateContext(Core::IContext*)));
+    connect(Core::ICore::instance()->contextManager(), SIGNAL(contextChanged(Core::IContext*,Core::Context)),
+            this, SLOT(updateContext(Core::IContext*,Core::Context)));
     setObjectName("PmhWidgetManager");
 }
 
-void PmhWidgetManager::updateContext(Core::IContext *object)
+void PmhWidgetManager::updateContext(Core::IContext *object, const Core::Context &additionalContexts)
 {
     PmhContextualWidget *view = 0;
     do {
@@ -125,17 +124,14 @@ PmhActionHandler::PmhActionHandler(QObject *parent) :
         m_CurrentView(0)
 {
     setObjectName("PmhActionHandler");
-
-    Core::UniqueIDManager *uid = Core::ICore::instance()->uniqueIDManager();
     Core::ITheme *th = Core::ICore::instance()->theme();
-
     QAction *a = 0;
     Core::Command *cmd = 0;
-    QList<int> ctx = QList<int>() << uid->uniqueIdentifier(Constants::C_PMH_PLUGINS);
-    QList<int> globalcontext = QList<int>() << Core::Constants::C_GLOBAL_ID;
+    Core::Context ctx(Constants::C_PMH_PLUGINS);
+    Core::Context globalcontext(Core::Constants::C_GLOBAL);
 
-    Core::ActionContainer *menu = actionManager()->actionContainer(Core::Constants::M_PATIENTS);
-    Core::ActionContainer *newmenu = actionManager()->actionContainer(Core::Constants::M_GENERAL_NEW);
+    Core::ActionContainer *menu = actionManager()->actionContainer(Core::Id(Core::Constants::M_PATIENTS));
+    Core::ActionContainer *newmenu = actionManager()->actionContainer(Core::Id(Core::Constants::M_GENERAL_NEW));
     Core::ActionContainer *pmhMenu = actionManager()->createMenu(Constants::M_PMH);
     Q_ASSERT(menu);
     if (!menu) {
@@ -143,10 +139,10 @@ PmhActionHandler::PmhActionHandler(QObject *parent) :
         return;
     } else {
 //        menu->appendGroup(Core::Constants::G_PATIENTS_NAVIGATION);
-        pmhMenu->appendGroup(Constants::G_PMH_NEW);
-        pmhMenu->appendGroup(Constants::G_PMH_EDITION);
+        pmhMenu->appendGroup(Core::Id(Constants::G_PMH_NEW));
+        pmhMenu->appendGroup(Core::Id(Constants::G_PMH_EDITION));
         pmhMenu->setTranslations(Trans::Constants::PMHMENU_TEXT);
-        menu->addMenu(pmhMenu, Core::Constants::G_PATIENTS);
+        menu->addMenu(pmhMenu, Core::Id(Core::Constants::G_PATIENTS));
     }
 
     // Create local actions
@@ -154,46 +150,46 @@ PmhActionHandler::PmhActionHandler(QObject *parent) :
     aAddPmh->setEnabled(false);
     a->setObjectName("aAddPmh");
     a->setIcon(th->icon(Core::Constants::ICONADD));
-    cmd = actionManager()->registerAction(a, Constants::A_PMH_NEW, globalcontext);
+    cmd = actionManager()->registerAction(a, Core::Id(Constants::A_PMH_NEW), globalcontext);
     cmd->setTranslations(Constants::CREATEPMH_TEXT, Constants::CREATEPMH_TEXT, Constants::PMHCONSTANTS_TR_CONTEXT);
-    pmhMenu->addAction(cmd, Constants::G_PMH_NEW);
+    pmhMenu->addAction(cmd, Core::Id(Constants::G_PMH_NEW));
     if (newmenu)
-        newmenu->addAction(cmd, Core::Constants::G_GENERAL_NEW);
+        newmenu->addAction(cmd, Core::Id(Core::Constants::G_GENERAL_NEW));
 //    connect(a, SIGNAL(triggered()), this, SLOT(createPmh()));
 
     a = aRemovePmh= new QAction(this);
     a->setObjectName("aRemovePmh");
     a->setIcon(th->icon(Core::Constants::ICONREMOVE));
-    cmd = actionManager()->registerAction(a, Constants::A_PMH_REMOVE, ctx);
+    cmd = actionManager()->registerAction(a, Core::Id(Constants::A_PMH_REMOVE), ctx);
     cmd->setTranslations(Constants::REMOVEPMH_TEXT, Constants::REMOVEPMH_TEXT, Constants::PMHCONSTANTS_TR_CONTEXT);
-    pmhMenu->addAction(cmd, Constants::G_PMH_NEW);
+    pmhMenu->addAction(cmd, Core::Id(Constants::G_PMH_NEW));
 //    connect(a, SIGNAL(triggered()), this, SLOT(createPmh()));
 
     a = aAddCat = new QAction(this);
     a->setObjectName("aAddCat");
     a->setIcon(th->icon(Core::Constants::ICONCATEGORY_ADD));
-    cmd = actionManager()->registerAction(a, Constants::A_PMH_NEWCATEGORY, ctx);
+    cmd = actionManager()->registerAction(a, Core::Id(Constants::A_PMH_NEWCATEGORY), ctx);
     cmd->setTranslations(Constants::CREATECATEGORY_TEXT, Constants::CREATECATEGORY_TEXT, Constants::PMHCONSTANTS_TR_CONTEXT);
-    pmhMenu->addAction(cmd, Constants::G_PMH_NEW);
+    pmhMenu->addAction(cmd, Core::Id(Constants::G_PMH_NEW));
 //    connect(a, SIGNAL(triggered()), this, SLOT(createPmh()));
 
     a = aCategoryManager= new QAction(this);
     a->setObjectName("aCategoryManager");
     a->setIcon(th->icon(Core::Constants::ICONCATEGORY_MANAGER));
-    cmd = actionManager()->registerAction(a, Constants::A_PMH_CATEGORYMANAGER, globalcontext);
+    cmd = actionManager()->registerAction(a, Core::Id(Constants::A_PMH_CATEGORYMANAGER), globalcontext);
     cmd->setTranslations(Constants::CATEGORYMANAGER_TEXT, Constants::CATEGORYMANAGER_TEXT, Constants::PMHCONSTANTS_TR_CONTEXT);
-    pmhMenu->addAction(cmd, Constants::G_PMH_EDITION);
+    pmhMenu->addAction(cmd, Core::Id(Constants::G_PMH_EDITION));
     connect(a, SIGNAL(triggered()), this, SLOT(categoryManager()));
 
-    Core::ActionContainer *hmenu = actionManager()->actionContainer(Core::Constants::M_HELP_DATABASES);
+    Core::ActionContainer *hmenu = actionManager()->actionContainer(Core::Id(Core::Constants::M_HELP_DATABASES));
     a = aPmhDatabaseInformation = new QAction(this);
     a->setObjectName("aPmhDatabaseInformation");
     a->setIcon(th->icon(Core::Constants::ICONHELP));
-    cmd = actionManager()->registerAction(a, Constants::A_PMH_SHOWDBINFOS, globalcontext);
+    cmd = actionManager()->registerAction(a, Core::Id(Constants::A_PMH_SHOWDBINFOS), globalcontext);
     cmd->setTranslations(Trans::Constants::PMH_DATABASE_INFORMATION);
     cmd->retranslate();
     if (hmenu) {
-        hmenu->addAction(cmd, Core::Constants::G_HELP_DATABASES);
+        hmenu->addAction(cmd, Core::Id(Core::Constants::G_HELP_DATABASES));
     }
     connect(aPmhDatabaseInformation, SIGNAL(triggered()), this, SLOT(showPmhDatabaseInformation()));
 

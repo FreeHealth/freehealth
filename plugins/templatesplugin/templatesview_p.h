@@ -34,7 +34,6 @@
 
 #include <QObject>
 #include <QPointer>
-#include <QDebug>
 
 namespace Templates {
 class TemplatesCore;
@@ -43,24 +42,11 @@ namespace Internal {
 class TemplatesViewContext : public Core::IContext
 {
 public:
-    TemplatesViewContext(Templates::TemplatesView *parent) : Core::IContext(parent), w(parent)
+    TemplatesViewContext(Templates::TemplatesView *parent) : Core::IContext(parent)
     {
         setObjectName("TemplatesViewContext");
+        setWidget(parent);
     }
-
-    void addContext(int uid)
-    {
-        if (!m_Context.contains(uid))
-            m_Context.append(uid);
-    }
-    void clearContext() { m_Context.clear(); }
-
-    QList<int> context() const { return m_Context; }
-    QWidget *widget()          { return w; }
-
-private:
-    Templates::TemplatesView *w;
-    QList<int> m_Context;
 };
 
 class TemplatesViewActionHandler : public QObject
@@ -112,7 +98,7 @@ public:
     ~TemplatesViewManager() {}
 
 private Q_SLOTS:
-    void updateContext(Core::IContext *object);
+    void updateContext(Core::IContext *object, const Core::Context &additionalContexts);
 };
 
 }  // End namespace Internal

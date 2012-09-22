@@ -50,19 +50,17 @@ static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); 
 static inline Form::FormManager &formManager() {return Form::FormCore::instance().formManager();}
 
 DrugsMode::DrugsMode(QObject *parent) :
-        Core::BaseMode(parent),
+        Core::IMode(parent),
         inPool(false),
         m_Holder(0)
 {
     m_Holder = new Form::FormPlaceHolder;
     m_Holder->setObjectName("DrugsFormPlaceHolder");
-    setName(tkTr(Trans::Constants::DRUGS));
+    setDisplayName(tkTr(Trans::Constants::DRUGS));
     setIcon(theme()->icon(Core::Constants::ICONDRUGMODE, Core::ITheme::BigIcon));
     setPriority(Core::Constants::P_MODE_PATIENT_DRUGS);
-    setUniqueModeName(Core::Constants::MODE_PATIENT_DRUGS);
+    setId(Core::Constants::MODE_PATIENT_DRUGS);
     setPatientBarVisibility(true);
-//    const QList<int> &context;
-//    setContext();
     setWidget(m_Holder);
     onPatientFormsLoaded();
     connect(&formManager(), SIGNAL(patientFormsLoaded()), this, SLOT(onPatientFormsLoaded()));
@@ -72,11 +70,6 @@ DrugsMode::~DrugsMode()
 {
     if (inPool)
         pluginManager()->removeObject(this);
-}
-
-QString DrugsMode::name() const
-{
-    return tkTr(Trans::Constants::DRUGS);
 }
 
 void DrugsMode::onPatientFormsLoaded()

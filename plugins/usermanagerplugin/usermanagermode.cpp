@@ -58,12 +58,12 @@ static inline Core::IPatient *patient()  { return Core::ICore::instance()->patie
 static inline Core::ModeManager *modeManager()  { return Core::ICore::instance()->modeManager(); }
 
 UserManagerMode::UserManagerMode(QObject *parent) :
-        Core::BaseMode(parent), inPool(false)
+    Core::IMode(parent), inPool(false)
 {
-    setName(tkTr(Trans::Constants::USERS));
+    setDisplayName(tkTr(Trans::Constants::USERS));
     setIcon(theme()->icon(Core::Constants::ICONUSERMANAGER, Core::ITheme::MediumIcon));
     setPriority(Core::Constants::P_MODE_USERMANAGER);
-    setUniqueModeName(Core::Constants::MODE_USERMANAGER);
+    setId(Core::Constants::MODE_USERMANAGER);
     setPatientBarVisibility(false);
 
     UserManagerWidget *w = new UserManagerWidget;

@@ -111,7 +111,7 @@ protected:
 
 
 private Q_SLOTS:
-    void updateContext(Core::IContext *object);
+    void updateContext(Core::IContext *object, const Core::Context &additionalContexts);
 
 private:
     IcdWidgetManager(QObject *parent = 0);

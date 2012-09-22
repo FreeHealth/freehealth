@@ -50,6 +50,7 @@
 
 #include <utils/log.h>
 #include <utils/global.h>
+#include <utils/stylehelper.h>
 #include <extensionsystem/pluginmanager.h>
 
 #include <QDataWidgetMapper>
@@ -203,26 +204,13 @@ void PatientBar::patientDataChanged(const QModelIndex &top, const QModelIndex &b
 
 void PatientBar::paintEvent(QPaintEvent *e)
 {
-    QPainter p(this);
-
+    QPainter painter(this);
     QRect rect = this->rect();
-
-    QColor background = QColor(settings()->value(Constants::S_PATIENTBARCOLOR, Qt::white).toString());
-    background.setAlpha(50);
-
-    QLinearGradient gr(QPoint(rect.center().x(), 0), QPoint(rect.center().x(), rect.bottom()));
-    gr.setColorAt(0, Qt::white);
-    gr.setColorAt(0.3, QColor(250, 250, 250));
-    gr.setColorAt(0.7, QColor(230, 230, 230));
-
-    p.fillRect(rect, gr);
-    p.fillRect(rect, background);
-
-    p.setPen(QColor(200, 200, 200));
-    p.drawLine(rect.topLeft(), rect.topRight());
-    p.setPen(QColor(150, 160, 200));
-    p.drawLine(rect.bottomLeft(), rect.bottomRight());
-
+    Utils::StyleHelper::horizontalGradient(&painter, rect, rect, true);
+    painter.setPen(QColor(200, 200, 200));
+    painter.drawLine(rect.topLeft(), rect.topRight());
+    painter.setPen(QColor(150, 160, 200));
+    painter.drawLine(rect.bottomLeft(), rect.bottomRight());
     QWidget::paintEvent(e);
 }
 

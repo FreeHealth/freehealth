@@ -106,7 +106,7 @@ public:
     QWidget *currentView() const;
 
 private Q_SLOTS:
-    void updateContext(Core::IContext *object);
+    void updateContext(Core::IContext *object, const Core::Context &additionalContexts);
 
 private:
     AgendaWidgetManager(QObject *parent = 0);

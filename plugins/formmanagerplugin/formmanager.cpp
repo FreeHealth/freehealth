@@ -57,7 +57,6 @@
 #include <coreplugin/ipatient.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/iscriptmanager.h>
-#include <coreplugin/uniqueidmanager.h>
 #include <coreplugin/constants_menus.h>
 #include <coreplugin/constants_icons.h>
 #include <coreplugin/constants_tokensandsettings.h>

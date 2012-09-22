@@ -53,7 +53,6 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/itheme.h>
-#include <coreplugin/uniqueidmanager.h>
 #include <coreplugin/actionmanager/actionmanager.h>
 #include <coreplugin/contextmanager/contextmanager.h>
 #include <coreplugin/iuser.h>
@@ -67,7 +66,6 @@ using namespace DrugsWidget;
 
 static inline DrugsDB::DrugsModel *drugModel() { return DrugsDB::DrugsModel::activeModel(); }
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
-static inline Core::UniqueIDManager *uid() {return Core::ICore::instance()->uniqueIDManager();}
 static inline Core::ContextManager *contextManager() {return Core::ICore::instance()->contextManager();}
 static inline Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
@@ -98,7 +96,7 @@ bool DrugsCentralWidget::initialize(bool hideSelector)
 
     // create context
     m_Context = new Internal::DrugsContext(this);
-    m_Context->setContext(QList<int>() << uid()->uniqueIdentifier(Constants::C_DRUGS_PLUGINS));
+    m_Context->setContext(Core::Context(Constants::C_DRUGS_PLUGINS));
     contextManager()->addContextObject(m_Context);
 
     // create model view for selected drugs list

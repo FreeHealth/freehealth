@@ -28,7 +28,7 @@
 #ifndef AGENDAMODE_H
 #define AGENDAMODE_H
 
-#include <coreplugin/modemanager/basemode.h>
+#include <coreplugin/modemanager/imode.h>
 
 #include <QStackedWidget>
 #include <QModelIndex>
@@ -46,18 +46,19 @@ class UserCalendarModel;
 namespace Internal {
 class UserCalendarViewer;
 
-class AgendaMode : public Core::BaseMode
+class AgendaMode : public Core::IMode
 {
     Q_OBJECT
 public:
     explicit AgendaMode(QObject *parent = 0);
 
-    QString name() const;
-
 private Q_SLOTS:
     void postCoreInitialization();
     void userChanged();
     void rowsChanged(const QModelIndex &parent, int start, int end);
+
+private:
+    void updateEnableState();
 
 private:
     QStackedWidget *m_Stack;

@@ -49,9 +49,6 @@ public:
     PmhContextualWidget(QWidget *parent = 0);
     virtual ~PmhContextualWidget();
 
-    void addContexts(const QList<int> &contexts);
-    QList<int> contexts() const;
-
 private:
     Internal::PmhContext *m_Context;
 };

@@ -25,10 +25,11 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 /**
-  \class Patients::PatientSelector
-  \brief Selector Widget for the recorded patients.
-  Allow user to search and select patient from the complete database.
-*/
+ * \class Patients::PatientSelector
+ * \brief Selector Widget for the recorded patients.
+ * Allow user to search and select patient from the complete database.
+ * \sa Patient::PatientModel
+ */
 
 #include "patientselector.h"
 #include "patientmodel.h"
@@ -42,6 +43,7 @@
 #include <coreplugin/isettings.h>
 #include <coreplugin/itheme.h>
 #include <coreplugin/actionmanager/actionmanager.h>
+#include <coreplugin/actionmanager/actioncontainer.h>
 #include <coreplugin/ipatient.h>
 #include <coreplugin/imainwindow.h>
 #include <coreplugin/constants_icons.h>
@@ -53,6 +55,7 @@
 #include <translationutils/constanttranslations.h>
 
 #include <QToolButton>
+#include <QMenu>
 
 #include <QDebug>
 
@@ -98,7 +101,7 @@ public:
 
         QList<QAction *> actionList;
         foreach(const QString &a, actions) {
-            cmd = actionManager()->command(a);
+            cmd = actionManager()->command(Core::Id(a));
             m_SearchToolButton->addAction(cmd->action());
             actionList << cmd->action();
         }

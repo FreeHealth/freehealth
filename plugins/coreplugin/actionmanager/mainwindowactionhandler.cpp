@@ -136,28 +136,27 @@ void MainWindowActionHandler::createGeneralMenu()
     ActionContainer *menu = actionManager()->createMenu(Constants::M_GENERAL);
     menubar->addMenu(menu, Constants::G_GENERAL);
     menu->setTranslations(Trans::Constants::GENERAL);
-    menu->appendGroup(Constants::G_GENERAL_FILE);
-    menu->appendGroup(Constants::G_GENERAL_RECENTS);
-    menu->appendGroup(Constants::G_GENERAL_EDIT);
-    menu->appendGroup(Constants::G_GENERAL_PATIENTS);
-    menu->appendGroup(Constants::G_GENERAL_USERS);
-    menu->appendGroup(Constants::G_GENERAL_PRINT);
-    menu->appendGroup(Constants::G_GENERAL_CONFIG);
-    menu->appendGroup(Constants::G_GENERAL_HELP);
-    menu->appendGroup(Constants::G_GENERAL_OTHERS);
-    menu->appendGroup(Constants::G_GENERAL_EXIT);
+    menu->appendGroup(Id(Constants::G_GENERAL_FILE));
+    menu->appendGroup(Id(Constants::G_GENERAL_RECENTS));
+    menu->appendGroup(Id(Constants::G_GENERAL_EDIT));
+    menu->appendGroup(Id(Constants::G_GENERAL_PATIENTS));
+    menu->appendGroup(Id(Constants::G_GENERAL_USERS));
+    menu->appendGroup(Id(Constants::G_GENERAL_PRINT));
+    menu->appendGroup(Id(Constants::G_GENERAL_CONFIG));
+    menu->appendGroup(Id(Constants::G_GENERAL_HELP));
+    menu->appendGroup(Id(Constants::G_GENERAL_OTHERS));
+    menu->appendGroup(Id(Constants::G_GENERAL_EXIT));
     ActionContainer *newmenu = actionManager()->createMenu(Constants::M_GENERAL_NEW);
     newmenu->setTranslations(Trans::Constants::FILENEW_TEXT);
     menu->addMenu(newmenu, Constants::G_GENERAL_FILE);
-    newmenu->appendGroup(Constants::G_GENERAL_NEW);
+    newmenu->appendGroup(Id(Constants::G_GENERAL_NEW));
 }
 
 void MainWindowActionHandler::createGeneralActions(const int actions)
 {
     if (!actions)
         return;
-
-    QList<int> ctx = QList<int>() << Constants::C_GLOBAL_ID;
+    Core::Context ctx(Constants::C_GLOBAL);
     ActionContainer *menu = actionManager()->actionContainer(Constants::M_GENERAL);
     Q_ASSERT(menu);
     if (!menu)
@@ -169,7 +168,8 @@ void MainWindowActionHandler::createGeneralActions(const int actions)
 
     QAction *a = 0;
     Command *cmd = 0;
-    QString group = Constants::G_GENERAL_FILE;
+//    QString group = Constants::G_GENERAL_FILE;
+    Id group(Constants::G_GENERAL_FILE);
 
     // New File Action
     if (actions & Core::MainWindowActions::A_FileNew) {
@@ -524,7 +524,7 @@ Core::ActionContainer *MainWindowActionHandler::menubarContainer(bool createIfNo
     return mb;
 }
 
-/** \brief Menu is created in the global context \sa Constants::C_GLOBAL_ID. Menu bar is automaticcaly created if necessary. */
+/** \brief Menu is created in the global context \sa Constants::C_GLOBAL. Menu bar is automaticcaly created if necessary. */
 void MainWindowActionHandler::createFileMenu()
 {
     // creates menu bar
@@ -534,15 +534,15 @@ void MainWindowActionHandler::createFileMenu()
     ActionContainer *filemenu = actionManager()->createMenu(Constants::M_FILE);
     menubar->addMenu(filemenu, Constants::G_FILE);
     filemenu->setTranslations(Trans::Constants::M_FILE_TEXT);
-    filemenu->appendGroup(Constants::G_FILE_NEW);
-    filemenu->appendGroup(Constants::G_FILE_OPEN);
-    filemenu->appendGroup(Constants::G_FILE_RECENTS);
-    filemenu->appendGroup(Constants::G_FILE_PROJECT);
-    filemenu->appendGroup(Constants::G_FILE_SAVE);
-    filemenu->appendGroup(Constants::G_FILE_PRINT);
-    filemenu->appendGroup(Constants::G_FILE_OTHER);
-    filemenu->appendGroup(Constants::G_FILE_CLOSE);
-    filemenu->appendGroup(Constants::G_FILE_EXIT);
+    filemenu->appendGroup(Id(Constants::G_FILE_NEW));
+    filemenu->appendGroup(Id(Constants::G_FILE_OPEN));
+    filemenu->appendGroup(Id(Constants::G_FILE_RECENTS));
+    filemenu->appendGroup(Id(Constants::G_FILE_PROJECT));
+    filemenu->appendGroup(Id(Constants::G_FILE_SAVE));
+    filemenu->appendGroup(Id(Constants::G_FILE_PRINT));
+    filemenu->appendGroup(Id(Constants::G_FILE_OTHER));
+    filemenu->appendGroup(Id(Constants::G_FILE_CLOSE));
+    filemenu->appendGroup(Id(Constants::G_FILE_EXIT));
     ActionContainer *recentmenu = actionManager()->createMenu(Constants::M_FILE_RECENTFILES);
     recentmenu->setTranslations(Trans::Constants::M_FILE_RECENTFILES_TEXT);
     filemenu->addMenu(recentmenu,Constants::G_FILE_RECENTS);
@@ -559,7 +559,7 @@ void MainWindowActionHandler::createFileNewSubMenu()
     ActionContainer *newmenu = actionManager()->createMenu(Constants::M_FILE_NEW);
     newmenu->setTranslations(Trans::Constants::FILENEW_TEXT);
     filemenu->addMenu(newmenu, Constants::G_FILE_NEW);
-    newmenu->appendGroup(Constants::G_FILE_NEW);
+    newmenu->appendGroup(Id(Constants::G_FILE_NEW));
 }
 
 void MainWindowActionHandler::createTemplatesMenu()
@@ -571,14 +571,14 @@ void MainWindowActionHandler::createTemplatesMenu()
     ActionContainer *menu = actionManager()->createMenu(Constants::M_TEMPLATES);
     menubar->addMenu(menu, Constants::G_TEMPLATES);
     menu->setTranslations(Trans::Constants::TEMPLATES);
-    menu->appendGroup(Constants::G_TEMPLATES);
-    menu->appendGroup(Constants::G_TEMPLATES_NEW);
-    menu->appendGroup(Constants::G_TEMPLATES_MANAGER);
-    menu->appendGroup(Constants::G_TEMPLATES_EXTRAS);
-    menu->appendGroup(Constants::G_TEMPLATES_OTHERS);
+    menu->appendGroup(Id(Constants::G_TEMPLATES));
+    menu->appendGroup(Id(Constants::G_TEMPLATES_NEW));
+    menu->appendGroup(Id(Constants::G_TEMPLATES_MANAGER));
+    menu->appendGroup(Id(Constants::G_TEMPLATES_EXTRAS));
+    menu->appendGroup(Id(Constants::G_TEMPLATES_OTHERS));
 }
 
-/** \brief Menu is created in the global context \sa Constants::C_GLOBAL_ID.*/
+/** \brief Menu is created in the global context \sa Constants::C_GLOBAL.*/
 void MainWindowActionHandler::createEditMenu()
 {
     ActionContainer *menubar = menubarContainer();
@@ -588,18 +588,18 @@ void MainWindowActionHandler::createEditMenu()
     ActionContainer *editmenu = actionManager()->createMenu(Constants::M_EDIT);
     menubar->addMenu(editmenu, Constants::G_EDIT);
     editmenu->setTranslations(Trans::Constants::M_EDIT_TEXT);
-    editmenu->appendGroup(Constants::G_EDIT);
-    editmenu->appendGroup(Constants::G_EDIT_UNDOREDO);
-    editmenu->appendGroup(Constants::G_EDIT_COPYPASTE);
-    editmenu->appendGroup(Constants::G_EDIT_SELECT);
-    editmenu->appendGroup(Constants::G_EDIT_LIST);
-    editmenu->appendGroup(Constants::G_EDIT_ADVANCED);
-    editmenu->appendGroup(Constants::G_EDIT_FIND);
-    editmenu->appendGroup(Constants::G_EDIT_EDITOR);
-    editmenu->appendGroup(Constants::G_EDIT_OTHER);
+    editmenu->appendGroup(Id(Constants::G_EDIT));
+    editmenu->appendGroup(Id(Constants::G_EDIT_UNDOREDO));
+    editmenu->appendGroup(Id(Constants::G_EDIT_COPYPASTE));
+    editmenu->appendGroup(Id(Constants::G_EDIT_SELECT));
+    editmenu->appendGroup(Id(Constants::G_EDIT_LIST));
+    editmenu->appendGroup(Id(Constants::G_EDIT_ADVANCED));
+    editmenu->appendGroup(Id(Constants::G_EDIT_FIND));
+    editmenu->appendGroup(Id(Constants::G_EDIT_EDITOR));
+    editmenu->appendGroup(Id(Constants::G_EDIT_OTHER));
 }
 
-/** \brief Menu is created in the global context \sa Constants::C_GLOBAL_ID.*/
+/** \brief Menu is created in the global context \sa Constants::C_GLOBAL.*/
 void MainWindowActionHandler::createPatientMenu()
 {
     ActionContainer *menubar = menubarContainer();
@@ -618,7 +618,7 @@ void MainWindowActionHandler::createPatientMenu()
     menu->addMenu(historyMenu, Constants::G_PATIENT_NAVIGATION);
 }
 
-/** \brief Menu is created in the global context \sa Constants::C_GLOBAL_ID.*/
+/** \brief Menu is created in the global context \sa Constants::C_GLOBAL.*/
 void MainWindowActionHandler::createFormatMenu()
 {
     ActionContainer *menubar = menubarContainer();
@@ -627,11 +627,11 @@ void MainWindowActionHandler::createFormatMenu()
     ActionContainer *formatmenu = actionManager()->createMenu(Constants::M_FORMAT);
     menubar->addMenu(formatmenu, Constants::G_FORMAT);
     formatmenu->setTranslations(Trans::Constants::M_FORMAT_TEXT);
-    formatmenu->appendGroup(Constants::G_FORMAT_FONT);
-    formatmenu->appendGroup(Constants::G_FORMAT_PARAGRAPH);
-    formatmenu->appendGroup(Constants::G_FORMAT_TABLE);
-    formatmenu->appendGroup(Constants::G_FORMAT_IMAGE);
-    formatmenu->appendGroup(Constants::G_FORMAT_OTHER);
+    formatmenu->appendGroup(Id(Constants::G_FORMAT_FONT));
+    formatmenu->appendGroup(Id(Constants::G_FORMAT_PARAGRAPH));
+    formatmenu->appendGroup(Id(Constants::G_FORMAT_TABLE));
+    formatmenu->appendGroup(Id(Constants::G_FORMAT_IMAGE));
+    formatmenu->appendGroup(Id(Constants::G_FORMAT_OTHER));
 }
 
 void MainWindowActionHandler::createPluginsMenu()
@@ -643,15 +643,15 @@ void MainWindowActionHandler::createPluginsMenu()
     //    confmenu->setEmptyAction(ActionContainer::EA_Hide);
     menubar->addMenu(confmenu, Constants::G_PLUGINS);
     confmenu->setTranslations(Trans::Constants::M_PLUGINS_TEXT);
-    confmenu->appendGroup(Constants::G_PLUGINS_USERMANAGER);
-    confmenu->appendGroup(Constants::G_PLUGINS_FORM);
-    confmenu->appendGroup(Constants::G_PLUGINS_DRUGS);
-    confmenu->appendGroup(Constants::G_PLUGINS_CALENDAR);
-    confmenu->appendGroup(Constants::G_PLUGINS_ACCOUNT);
-    confmenu->appendGroup(Constants::G_PLUGINS_OTHERS);
+    confmenu->appendGroup(Id(Constants::G_PLUGINS_USERMANAGER));
+    confmenu->appendGroup(Id(Constants::G_PLUGINS_FORM));
+    confmenu->appendGroup(Id(Constants::G_PLUGINS_DRUGS));
+    confmenu->appendGroup(Id(Constants::G_PLUGINS_CALENDAR));
+    confmenu->appendGroup(Id(Constants::G_PLUGINS_ACCOUNT));
+    confmenu->appendGroup(Id(Constants::G_PLUGINS_OTHERS));
 }
 
-/** \brief Menu is created in the global context \sa Constants::C_GLOBAL_ID.*/
+/** \brief Menu is created in the global context \sa Constants::C_GLOBAL.*/
 void MainWindowActionHandler::createConfigurationMenu()
 {
     ActionContainer *menubar = menubarContainer(true);
@@ -661,13 +661,13 @@ void MainWindowActionHandler::createConfigurationMenu()
     //    confmenu->setEmptyAction(ActionContainer::EA_Hide);
     menubar->addMenu(confmenu, Constants::G_CONFIGURATION);
     confmenu->setTranslations(Trans::Constants::M_CONFIGURATION_TEXT);
-    confmenu->appendGroup(Constants::G_APP_CONFIGURATION);
-    confmenu->appendGroup(Constants::G_TOOLBARS);
-    confmenu->appendGroup(Constants::G_LANGUAGES);
-    confmenu->appendGroup(Constants::G_PREFERENCES);
+    confmenu->appendGroup(Id(Constants::G_APP_CONFIGURATION));
+    confmenu->appendGroup(Id(Constants::G_TOOLBARS));
+    confmenu->appendGroup(Id(Constants::G_LANGUAGES));
+    confmenu->appendGroup(Id(Constants::G_PREFERENCES));
 }
 
-/** \brief Menu is created in the global context \sa Constants::C_GLOBAL_ID.*/
+/** \brief Menu is created in the global context \sa Constants::C_GLOBAL.*/
 void MainWindowActionHandler::createHelpMenu()
 {
     ActionContainer *menubar = menubarContainer(true);
@@ -676,20 +676,20 @@ void MainWindowActionHandler::createHelpMenu()
     ActionContainer *m = actionManager()->createMenu(Constants::M_HELP);
     menubar->addMenu(m, Constants::G_HELP);
     m->setTranslations(Trans::Constants::M_ABOUT_TEXT);
-    m->appendGroup(Constants::G_HELP_HELP);
-    m->appendGroup(Constants::G_HELP_ABOUT);
-    m->appendGroup(Constants::G_HELP_DATABASES);
-    m->appendGroup(Constants::G_HELP_OTHER);
-    m->appendGroup(Constants::G_UPDATE);
-    m->appendGroup(Constants::G_HELP_DEBUG);
+    m->appendGroup(Id(Constants::G_HELP_HELP));
+    m->appendGroup(Id(Constants::G_HELP_ABOUT));
+    m->appendGroup(Id(Constants::G_HELP_DATABASES));
+    m->appendGroup(Id(Constants::G_HELP_OTHER));
+    m->appendGroup(Id(Constants::G_UPDATE));
+    m->appendGroup(Id(Constants::G_HELP_DEBUG));
 
     ActionContainer *mdb = actionManager()->createMenu(Constants::M_HELP_DATABASES);
     m->addMenu(mdb, Constants::G_HELP_DATABASES);
-    mdb->appendGroup(Constants::G_HELP_DATABASES);
+    mdb->appendGroup(Id(Constants::G_HELP_DATABASES));
     mdb->setTranslations(Trans::Constants::ABOUTDATABASES_TEXT);
 }
 
-/** \brief Menu is created in the global context \sa Constants::C_GLOBAL_ID.*/
+/** \brief Menu is created in the global context \sa Constants::C_GLOBAL.*/
 void MainWindowActionHandler::createUpdateMenu()
 {
     ActionContainer *menubar = menubarContainer(true);
@@ -699,18 +699,19 @@ void MainWindowActionHandler::createUpdateMenu()
     ActionContainer *upmenu = actionManager()->createMenu(Constants::M_UPDATE);
     menubar->addMenu(upmenu, Constants::G_UPDATE);
     upmenu->setTranslations(Trans::Constants::M_UPDATE_TEXT);
-    upmenu->appendGroup(Constants::G_UPDATE_AVAILABLE);
-    upmenu->appendGroup(Constants::G_UPDATE_TODATE);
-    upmenu->appendGroup(Constants::G_UPDATE_OTHER);
+    upmenu->appendGroup(Id(Constants::G_UPDATE_AVAILABLE));
+    upmenu->appendGroup(Id(Constants::G_UPDATE_TODATE));
+    upmenu->appendGroup(Id(Constants::G_UPDATE_OTHER));
 }
 
-/** \brief Actions are created in the global context \sa Constants::C_GLOBAL_ID */
+/** \brief Actions are created in the global context \sa Constants::C_GLOBAL */
 void MainWindowActionHandler::createFileActions(int actions)
 {
     if (!actions)
         return;
 
-    QList<int> ctx = QList<int>() << Constants::C_GLOBAL_ID;
+//    QList<int> ctx = QList<int>() << Constants::C_GLOBAL;
+    Core::Context ctx(Constants::C_GLOBAL);
     ActionContainer *mfile = actionManager()->actionContainer(Constants::M_FILE);
     mfile->setTranslations(Trans::Constants::M_FILE_TEXT);
     Q_ASSERT(mfile);
@@ -728,7 +729,7 @@ void MainWindowActionHandler::createFileActions(int actions)
         cmd->setDefaultKeySequence(QKeySequence::New);
         cmd->setTranslations(Trans::Constants::FILENEW_TEXT);
 //        cmd->setAttribute(Command::CA_UpdateText);
-        mfile->addAction(cmd, Constants::G_FILE_NEW);
+        mfile->addAction(cmd, Id(Constants::G_FILE_NEW));
     }
 
     // Open Action
@@ -740,7 +741,7 @@ void MainWindowActionHandler::createFileActions(int actions)
         cmd->setDefaultKeySequence(QKeySequence::Open);
         cmd->setTranslations(Trans::Constants::FILEOPEN_TEXT );
 //        cmd->setAttribute(Command::CA_UpdateText);
-        mfile->addAction(cmd, Constants::G_FILE_OPEN);
+        mfile->addAction(cmd, Id(Constants::G_FILE_OPEN));
     }
 
     // Save Action
@@ -751,7 +752,7 @@ void MainWindowActionHandler::createFileActions(int actions)
         cmd->setDefaultKeySequence(QKeySequence::Save);
         cmd->setTranslations(Trans::Constants::FILESAVE_TEXT );
 //        cmd->setAttribute(Command::CA_UpdateText);
-        mfile->addAction(cmd, Constants::G_FILE_SAVE);
+        mfile->addAction(cmd, Id(Constants::G_FILE_SAVE));
     }
 
     // SaveAs Action
@@ -766,7 +767,7 @@ void MainWindowActionHandler::createFileActions(int actions)
 #endif
         cmd->setTranslations(Trans::Constants::FILESAVEAS_TEXT );
 //        cmd->setAttribute(Command::CA_UpdateText);
-        mfile->addAction(cmd, Constants::G_FILE_SAVE);
+        mfile->addAction(cmd, Id(Constants::G_FILE_SAVE));
     }
 
     // Print Action
@@ -776,7 +777,7 @@ void MainWindowActionHandler::createFileActions(int actions)
         cmd = actionManager()->registerAction(a, Constants::A_FILE_PRINT, ctx);
         cmd->setDefaultKeySequence(QKeySequence::Print);
         cmd->setTranslations(Trans::Constants::FILEPRINT_TEXT );
-        mfile->addAction(cmd, Constants::G_FILE_PRINT);
+        mfile->addAction(cmd, Id(Constants::G_FILE_PRINT));
     }
 
     // Print Preview
@@ -786,7 +787,7 @@ void MainWindowActionHandler::createFileActions(int actions)
         cmd = actionManager()->registerAction(a, Constants::A_FILE_PRINTPREVIEW, ctx);
 //        cmd->setDefaultKeySequence(QKeySequence::Print);
         cmd->setTranslations(Trans::Constants::PRINTPREVIEW_TEXT );
-        mfile->addAction(cmd, Constants::G_FILE_PRINT);
+        mfile->addAction(cmd, Id(Constants::G_FILE_PRINT));
     }
 
     // Quit Action
@@ -796,7 +797,7 @@ void MainWindowActionHandler::createFileActions(int actions)
         cmd = actionManager()->registerAction(a, Constants::A_FILE_EXIT, ctx);
         cmd->setTranslations(Trans::Constants::FILEEXIT_TEXT );
         cmd->action()->setMenuRole(QAction::QuitRole);
-        mfile->addAction(cmd, Constants::G_FILE_EXIT);
+        mfile->addAction(cmd, Id(Constants::G_FILE_EXIT));
         connect(aQuit, SIGNAL(triggered()), this, SLOT(close()));
     }
 }
@@ -828,7 +829,8 @@ void MainWindowActionHandler::connectFileActions()
 
 void MainWindowActionHandler::createEditActions()
 {
-    QList<int> ctx = QList<int>() << Constants::C_GLOBAL_ID;
+//    QList<int> ctx = QList<int>() << Constants::C_GLOBAL;
+    Core::Context ctx(Constants::C_GLOBAL);
     ActionContainer *medit = actionManager()->actionContainer(Constants::M_EDIT);
     Q_ASSERT(medit);
     if (!medit)
@@ -842,7 +844,7 @@ void MainWindowActionHandler::createEditActions()
     cmd->setDefaultKeySequence(QKeySequence::Undo);
     //    cmd->setAttribute(Command::CA_UpdateText);
     cmd->setTranslations(Trans::Constants::EDITUNDO_TEXT);
-    medit->addAction(cmd, Constants::G_EDIT_UNDOREDO);
+    medit->addAction(cmd, Id(Constants::G_EDIT_UNDOREDO));
     a->setEnabled(false);
 
     // Redo Action
@@ -853,7 +855,7 @@ void MainWindowActionHandler::createEditActions()
     cmd->setDefaultKeySequence(QKeySequence::Redo);
     //    cmd->setAttribute(Command::CA_UpdateText);
     cmd->setTranslations(Trans::Constants::EDITREDO_TEXT);
-    medit->addAction(cmd, Constants::G_EDIT_UNDOREDO);
+    medit->addAction(cmd, Id(Constants::G_EDIT_UNDOREDO));
     a->setEnabled(false);
 
     // Cut Action
@@ -863,7 +865,7 @@ void MainWindowActionHandler::createEditActions()
     cmd = actionManager()->registerAction(a, Constants::A_EDIT_CUT, ctx);
     cmd->setDefaultKeySequence(QKeySequence::Cut);
     cmd->setTranslations(Trans::Constants::EDITCUT_TEXT );
-    medit->addAction(cmd, Constants::G_EDIT_COPYPASTE);
+    medit->addAction(cmd, Id(Constants::G_EDIT_COPYPASTE));
     a->setEnabled(false);
 
     // Copy Action
@@ -873,7 +875,7 @@ void MainWindowActionHandler::createEditActions()
     cmd = actionManager()->registerAction(a, Constants::A_EDIT_COPY, ctx);
     cmd->setDefaultKeySequence(QKeySequence::Copy);
     cmd->setTranslations(Trans::Constants::EDITCOPY_TEXT );
-    medit->addAction(cmd, Constants::G_EDIT_COPYPASTE);
+    medit->addAction(cmd, Id(Constants::G_EDIT_COPYPASTE));
     a->setEnabled(false);
 
     // Paste Action
@@ -883,7 +885,7 @@ void MainWindowActionHandler::createEditActions()
     cmd = actionManager()->registerAction(a, Constants::A_EDIT_PASTE, ctx);
     cmd->setDefaultKeySequence(QKeySequence::Paste);
     cmd->setTranslations(Trans::Constants::EDITPASTE_TEXT );
-    medit->addAction(cmd, Constants::G_EDIT_COPYPASTE);
+    medit->addAction(cmd, Id(Constants::G_EDIT_COPYPASTE));
     a->setEnabled(false);
 
     // SelectAll Action
@@ -893,7 +895,7 @@ void MainWindowActionHandler::createEditActions()
     cmd = actionManager()->registerAction(a, Constants::A_EDIT_SELECTALL, ctx);
     cmd->setDefaultKeySequence(QKeySequence::SelectAll);
     cmd->setTranslations(Trans::Constants::EDITSELECTALL_TEXT );
-    medit->addAction(cmd, Constants::G_EDIT_COPYPASTE);
+    medit->addAction(cmd, Id(Constants::G_EDIT_COPYPASTE));
     a->setEnabled(false);
 
     // Search Action
@@ -903,7 +905,7 @@ void MainWindowActionHandler::createEditActions()
     cmd = actionManager()->registerAction(a, Constants::A_EDIT_SEARCH, ctx);
     cmd->setDefaultKeySequence(QKeySequence::Find);
     cmd->setTranslations(Trans::Constants::SEARCHMENU_TEXT);
-    medit->addAction(cmd, Constants::G_EDIT_FIND);
+    medit->addAction(cmd, Id(Constants::G_EDIT_FIND));
     a->setEnabled(false);
 }
 
@@ -919,7 +921,7 @@ void MainWindowActionHandler::connectEditActions()
 //    if (aSearch) {}
 }
 
-/** \brief Actions are created in the global context \sa Constants::C_GLOBAL_ID */
+/** \brief Actions are created in the global context \sa Constants::C_GLOBAL */
 void MainWindowActionHandler::createPatientsActions(int actions)
 {
     // TODO: Patients actions should be exploded into different menus or in a single menu ?
@@ -928,7 +930,8 @@ void MainWindowActionHandler::createPatientsActions(int actions)
 
     QAction *a = 0;
     Command *cmd = 0;
-    QList<int> ctx = QList<int>() << Constants::C_GLOBAL_ID;
+//    QList<int> ctx = QList<int>() << Constants::C_GLOBAL;
+    Core::Context ctx(Constants::C_GLOBAL);
     ActionContainer *menu = actionManager()->actionContainer(Constants::M_PATIENTS);
     Q_ASSERT(menu);
     if (!menu)
@@ -941,7 +944,7 @@ void MainWindowActionHandler::createPatientsActions(int actions)
         cmd = actionManager()->registerAction(a, Constants::A_PATIENT_NEW, ctx);
         cmd->setDefaultKeySequence(Qt::CTRL + Qt::Key_N);
         cmd->setTranslations(Trans::Constants::PATIENTNEW_TEXT);
-        menu->addAction(cmd, Constants::G_PATIENTS);
+        menu->addAction(cmd, Id(Constants::G_PATIENTS));
     }
     if (actions & Core::MainWindowActions::A_Patients_ViewIdentity) {
         a = aPatientViewIdentity = new QAction(this);
@@ -949,7 +952,7 @@ void MainWindowActionHandler::createPatientsActions(int actions)
         a->setIcon(theme()->icon(Constants::ICONPATIENT));
         cmd = actionManager()->registerAction(a, Constants::A_PATIENT_VIEWIDENTITY, ctx);
         cmd->setTranslations(Trans::Constants::PATIENTVIEWIDENTITY_TEXT);
-        menu->addAction(cmd, Constants::G_PATIENTS);
+        menu->addAction(cmd, Id(Constants::G_PATIENTS));
     }
     if (actions & Core::MainWindowActions::A_Patients_Remove) {
         a = aPatientRemove = new QAction(this);
@@ -957,7 +960,7 @@ void MainWindowActionHandler::createPatientsActions(int actions)
         a->setIcon(theme()->icon(Constants::ICONPATIENT));
         cmd = actionManager()->registerAction(a, Constants::A_PATIENT_REMOVE, ctx);
         cmd->setTranslations(Trans::Constants::PATIENTREMOVE_TEXT);
-        menu->addAction(cmd, Constants::G_PATIENTS);
+        menu->addAction(cmd, Id(Constants::G_PATIENTS));
     }
 }
 
@@ -979,7 +982,8 @@ void MainWindowActionHandler::createConfigurationActions(int actions)
 
     QAction *a = 0;
     Command *cmd = 0;
-    QList<int> ctx = QList<int>() << Constants::C_GLOBAL_ID;
+//    QList<int> ctx = QList<int>() << Constants::C_GLOBAL;
+    Core::Context ctx(Constants::C_GLOBAL);
     ActionContainer *menu = actionManager()->actionContainer(Constants::M_CONFIGURATION);
     Q_ASSERT(menu);
     if (!menu)
@@ -992,7 +996,7 @@ void MainWindowActionHandler::createConfigurationActions(int actions)
         a->setMenuRole(QAction::NoRole);
         cmd = actionManager()->registerAction(a, Constants::A_APPCONFIGURATOR, ctx);
         cmd->setTranslations(Trans::Constants::APPCONFIGURATOR_TEXT);
-        menu->addAction(cmd, Constants::G_APP_CONFIGURATION);
+        menu->addAction(cmd, Id(Constants::G_APP_CONFIGURATION));
     }
     if (actions & Core::MainWindowActions::A_AppPreferences) {
         a = aAppPrefs = new QAction(this);
@@ -1001,7 +1005,7 @@ void MainWindowActionHandler::createConfigurationActions(int actions)
         a->setMenuRole(QAction::PreferencesRole);
         cmd = actionManager()->registerAction(a, Constants::A_PREFERENCES, ctx);
         cmd->setTranslations(Trans::Constants::PREFERENCES_TEXT);
-        menu->addAction(cmd, Constants::G_APP_CONFIGURATION);
+        menu->addAction(cmd, Id(Constants::G_APP_CONFIGURATION));
     }
     if (actions & Core::MainWindowActions::A_PluginsPreferences) {
         a = aPlugsPrefs = new QAction(this);
@@ -1010,7 +1014,7 @@ void MainWindowActionHandler::createConfigurationActions(int actions)
         cmd = actionManager()->registerAction(a, Constants::A_PLUGINS_PREFERENCES, ctx);
         cmd->setDefaultKeySequence(QKeySequence::SelectAll);
         cmd->setTranslations(Trans::Constants::PLUGINS_CATEGORY);
-        menu->addAction(cmd, Constants::G_APP_CONFIGURATION);
+        menu->addAction(cmd, Id(Constants::G_APP_CONFIGURATION));
     }
     if (actions & Core::MainWindowActions::A_ConfigureMedinTux) {
         a = aMedinTux = new QAction(this);
@@ -1018,7 +1022,7 @@ void MainWindowActionHandler::createConfigurationActions(int actions)
         a->setIcon(theme()->icon(Constants::ICONMEDINTUX));
         cmd = actionManager()->registerAction(a, Constants::A_CONFIGURE_MEDINTUX, ctx);
         cmd->setTranslations(Trans::Constants::CONFIGMEDINTUX_TEXT);
-        menu->addAction(cmd, Constants::G_PREFERENCES);
+        menu->addAction(cmd, Id(Constants::G_PREFERENCES));
     }
     if (actions & Core::MainWindowActions::A_LanguageChange) {
         aLanguageGroup = new QActionGroup(this);
@@ -1027,7 +1031,7 @@ void MainWindowActionHandler::createConfigurationActions(int actions)
         Q_ASSERT(menuconf);
         ActionContainer *lmenu = actionManager()->createMenu(Constants::M_LANGUAGES);
         menuconf->addMenu(lmenu, Constants::G_LANGUAGES);
-        lmenu->appendGroup(Constants::G_LANGUAGES);
+        lmenu->appendGroup(Id(Constants::G_LANGUAGES));
         lmenu->setTranslations(Trans::Constants::M_LANGUAGES_TEXT);
 
         // populate with actions
@@ -1042,8 +1046,8 @@ void MainWindowActionHandler::createConfigurationActions(int actions)
             action->setObjectName(loc);
             action->setData(loc);
             action->setCheckable(true);
-            cmd = actionManager()->registerAction(action, loc, ctx);
-            lmenu->addAction(cmd, Constants::G_LANGUAGES);
+            cmd = actionManager()->registerAction(action, Id(loc), ctx);
+            lmenu->addAction(cmd, Id(Constants::G_LANGUAGES));
             aLanguageGroup->addAction(action);
             if (loc == lang) {
                 action->setChecked(true);
@@ -1086,7 +1090,8 @@ void MainWindowActionHandler::createHelpActions(int actions)
 
     QAction *a = 0;
     Command *cmd = 0;
-    QList<int> ctx = QList<int>() << Constants::C_GLOBAL_ID;
+//    QList<int> ctx = QList<int>() << Constants::C_GLOBAL;
+    Core::Context ctx(Constants::C_GLOBAL);
     ActionContainer *menu = actionManager()->actionContainer(Constants::M_HELP);
     Q_ASSERT(menu);
     if (!menu)
@@ -1096,54 +1101,54 @@ void MainWindowActionHandler::createHelpActions(int actions)
         a = aAppAbout = new QAction(this);
         a->setIcon(theme()->icon(Constants::ICONABOUT));
         a->setMenuRole(QAction::AboutRole);
-        cmd = actionManager()->registerAction(a, Constants::A_ABOUT, ctx);
+        cmd = actionManager()->registerAction(a, Id(Constants::A_ABOUT), ctx);
         cmd->setTranslations(Trans::Constants::ABOUT_TEXT);
-        menu->addAction(cmd, Constants::G_HELP_ABOUT);
+        menu->addAction(cmd, Id(Constants::G_HELP_ABOUT));
     }
     if (actions & Core::MainWindowActions::A_AppGoToWebSite) {
         a = aAppGoToWebSite = new QAction(this);
         a->setIcon(theme()->icon(Constants::ICONINTERNET));
-        cmd = actionManager()->registerAction(a, Constants::A_APPWEBSITE, ctx);
+        cmd = actionManager()->registerAction(a, Id(Constants::A_APPWEBSITE), ctx);
         cmd->setTranslations(Trans::Constants::WEBSITE_TEXT);
-        menu->addAction(cmd, Constants::G_HELP_ABOUT);
+        menu->addAction(cmd, Id(Constants::G_HELP_ABOUT));
     }
     if (actions & Core::MainWindowActions::A_PluginsAbout) {
         a = aPlugsAbout = new QAction(this);
         a->setIcon(theme()->icon(Constants::ICONHELP));
-        cmd = actionManager()->registerAction(a, Constants::A_ABOUTPLUGINS, ctx);
+        cmd = actionManager()->registerAction(a, Id(Constants::A_ABOUTPLUGINS), ctx);
         cmd->setTranslations(Trans::Constants::ABOUTPLUGINS_TEXT);
-        menu->addAction(cmd, Constants::G_HELP_ABOUT);
+        menu->addAction(cmd, Id(Constants::G_HELP_ABOUT));
     }
     if (actions & Core::MainWindowActions::A_AppHelp) {
         a = aAppHelp = new QAction(this);
         a->setIcon(theme()->icon(Constants::ICONHELP));
-        cmd = actionManager()->registerAction(a, Constants::A_APPLICATIONHELP, ctx);
+        cmd = actionManager()->registerAction(a, Id(Constants::A_APPLICATIONHELP), ctx);
         cmd->setDefaultKeySequence(QKeySequence::HelpContents);
         cmd->setTranslations(Trans::Constants::HELP_TEXT);
-        menu->addAction(cmd, Constants::G_HELP_HELP);
+        menu->addAction(cmd, Id(Constants::G_HELP_HELP));
     }
     if (actions & Core::MainWindowActions::A_QtAbout) {
         a = aQtAbout = new QAction(this);
         a->setIcon(theme()->icon(Constants::ICONABOUT));
         a->setMenuRole(QAction::AboutQtRole);
-        cmd = actionManager()->registerAction(a, Constants::A_ABOUTQT, ctx);
+        cmd = actionManager()->registerAction(a, Id(Constants::A_ABOUTQT), ctx);
         cmd->setTranslations(Trans::Constants::ABOUTQT_TEXT);
-        menu->addAction(cmd, Constants::G_HELP_ABOUT);
+        menu->addAction(cmd, Id(Constants::G_HELP_ABOUT));
     }
     if (actions & Core::MainWindowActions::A_DebugDialog) {
         a = aDebugDialog = new QAction(this);
         a->setIcon(theme()->icon(Constants::ICONHELP));
-        cmd = actionManager()->registerAction(a, Constants::A_DEBUGHELPER, ctx);
+        cmd = actionManager()->registerAction(a, Id(Constants::A_DEBUGHELPER), ctx);
         cmd->setTranslations(Trans::Constants::DEBUGHELPER_TEXT);
-        menu->addAction(cmd, Constants::G_HELP_DEBUG);
+        menu->addAction(cmd, Id(Constants::G_HELP_DEBUG));
     }
 
     if (actions & Core::MainWindowActions::A_CheckUpdate) {
         a = aCheckUpdate = new QAction(this);
         a->setIcon(theme()->icon(Constants::ICONSOFTWAREUPDATEAVAILABLE));
-        cmd = actionManager()->registerAction(a, Constants::A_CHECKUPDATE, ctx);
+        cmd = actionManager()->registerAction(a, Id(Constants::A_CHECKUPDATE), ctx);
         cmd->setTranslations(Trans::Constants::CHECKUPDATE);
-        menu->addAction(cmd, Constants::G_UPDATE);
+        menu->addAction(cmd, Id(Constants::G_UPDATE));
     }
 
     //    if (actions & Core::MainWindowActions::A_FormsAbout) {
@@ -1151,7 +1156,7 @@ void MainWindowActionHandler::createHelpActions(int actions)
     //        a->setIcon(theme()->icon(Constants::ICONHELP));
     //        cmd = actionManager()->registerAction(a, Constants::A_DEBUGHELPER, ctx);
     //        cmd->setTranslations( Constants::DEBUGHELPER_TEXT );
-    //        menu->addAction(cmd, Constants::G_HELP_DEBUG);
+    //        menu->addAction(cmd, Id(Constants::G_HELP_DEBUG));
     //    }
 
 }
@@ -1188,7 +1193,8 @@ void MainWindowActionHandler::createTemplatesActions(int actions)
 
     QAction *a = 0;
     Command *cmd = 0;
-    QList<int> ctx = QList<int>() << Constants::C_GLOBAL_ID;
+//    QList<int> ctx = QList<int>() << Constants::C_GLOBAL;
+    Core::Context ctx(Constants::C_GLOBAL);
     ActionContainer *menu = actionManager()->actionContainer(Constants::M_TEMPLATES);
     Q_ASSERT(menu);
     if (!menu)
@@ -1197,24 +1203,24 @@ void MainWindowActionHandler::createTemplatesActions(int actions)
     if (actions & Core::MainWindowActions::A_Templates_New) {
         a = new QAction(this);
         a->setIcon(theme()->icon(Core::Constants::ICONTEMPLATES));
-        cmd = actionManager()->registerAction(a, Constants::A_TEMPLATE_CREATE, ctx);
+        cmd = actionManager()->registerAction(a, Id(Constants::A_TEMPLATE_CREATE), ctx);
         cmd->setTranslations(Trans::Constants::CREATETEMPLATE_TEXT);
-        menu->addAction(cmd, Constants::G_TEMPLATES_NEW);
+        menu->addAction(cmd, Id(Constants::G_TEMPLATES_NEW));
     }
     if (actions & Core::MainWindowActions::A_Templates_Manager) {
 //        a = new QAction(this);
 //        a->setIcon(theme()->icon(Constants::ICONABOUT));
 //        a->setMenuRole(QAction::AboutRole);
-//        cmd = actionManager()->registerAction(a, Constants::A_ABOUT, ctx);
+//        cmd = actionManager()->registerAction(a, Id(Constants::A_ABOUT), ctx);
 //        cmd->setTranslations(Trans::Constants::ABOUT_TEXT);
 //        menu->addAction(cmd, Constants::G_HELP_ABOUT);
     }
     if (actions & Core::MainWindowActions::A_Templates_ToogleViewer) {
         a = new QAction(this);
         a->setIcon(theme()->icon(Constants::ICONTEMPLATES));
-        cmd = actionManager()->registerAction(a, Constants::A_TEMPLATE_TOGGLEVIEW, ctx);
+        cmd = actionManager()->registerAction(a, Id(Constants::A_TEMPLATE_TOGGLEVIEW), ctx);
         cmd->setTranslations(Trans::Constants::TEMPLATES_TOGGLEVIEW_TEXT);
-        menu->addAction(cmd, Constants::G_TEMPLATES_EXTRAS);
+        menu->addAction(cmd, Id(Constants::G_TEMPLATES_EXTRAS));
     }
 }
 
@@ -1290,16 +1296,17 @@ bool MainWindowActionHandler::updateFound()
         menu = actionManager()->actionContainer(Constants::M_UPDATE);
         menu->retranslate();
     }
-    QList<int> ctx = QList<int>() << Constants::C_GLOBAL_ID;
+    //    QList<int> ctx = QList<int>() << Constants::C_GLOBAL;
+        Core::Context ctx(Constants::C_GLOBAL);
     Q_ASSERT(menu);
     if (!menu)
         return false;
 
     QAction *a = aUpdateAvailable = new QAction(this);
     a->setIcon(theme()->icon(Constants::ICONSOFTWAREUPDATEAVAILABLE));
-    Command *cmd = actionManager()->registerAction(a, Constants::A_VIEWUPDATE, ctx);
+    Command *cmd = actionManager()->registerAction(a, Id(Constants::A_VIEWUPDATE), ctx);
     cmd->setTranslations(Trans::Constants::VIEWUPDATE_TEXT);
-    menu->addAction(cmd, Constants::G_UPDATE_AVAILABLE);
+    menu->addAction(cmd, Id(Constants::G_UPDATE_AVAILABLE));
     cmd->retranslate();
     Core::ICore::instance()->contextManager()->updateContext();
     if (up)

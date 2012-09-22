@@ -27,7 +27,7 @@
 #ifndef PMHMODE_H
 #define PMHMODE_H
 
-#include <coreplugin/modemanager/basemode.h>
+#include <coreplugin/modemanager/imode.h>
 #include <pmhplugin/pmhcontextualwidget.h>
 
 #include <QObject>
@@ -85,7 +85,7 @@ private:
     QHash<QString, int> m_FormUid_StackId;
 };
 
-class PmhMode : public Core::BaseMode
+class PmhMode : public Core::IMode
 {
     Q_OBJECT
 public:

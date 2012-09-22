@@ -51,27 +51,13 @@ namespace Internal {
 class ViewContext : public Core::IContext
 {
 public:
-    ViewContext(IView *parent) : Core::IContext(parent), w(parent)
+    ViewContext(IView *parent) : Core::IContext(parent)
     {
         setObjectName("IViewContext");
+        setWidget(parent);
     }
 
-    void addContext(int uid)
-    {
-        if (!m_Context.contains(uid))
-            m_Context.append(uid);
-    }
-    void clearContext() { m_Context.clear(); }
-
-    QList<int> context() const { return m_Context; }
-    QWidget *widget()          { return w; }
-
-private:
-    IView *w;
-    QList<int> m_Context;
 };
-
-
 
 class ViewActionHandler : public QObject
 {
@@ -105,8 +91,7 @@ protected:
     QPointer<IView> m_CurrentView;
 };
 
-
-
+// TODO: remove singleton and move the initialization in the IPlugin implementation
 class ViewManager : public ViewActionHandler
 {
     Q_OBJECT
@@ -115,7 +100,7 @@ public:
     ~ViewManager() {}
 
 private Q_SLOTS:
-    void updateContext(Core::IContext *object);
+    void updateContext(Core::IContext *object, const Core::Context &additionalContexts);
 
 private:
     ViewManager(QObject *parent = 0);

@@ -29,6 +29,7 @@
 #include <translationutils/constanttranslations.h>
 #include <utils/log.h>
 #include <utils/global.h>
+#include <utils/stylehelper.h>
 #include <utils/updatechecker.h>
 #include <utils/widgets/fancyactionbar.h>
 #include <utils/widgets/fancytabwidget.h>
@@ -44,6 +45,7 @@
 #include <coreplugin/actionmanager/mainwindowactions.h>
 #include <coreplugin/actionmanager/mainwindowactionhandler.h>
 #include <coreplugin/actionmanager/actionmanager.h>
+#include <coreplugin/actionmanager/actioncontainer.h>
 #include <coreplugin/contextmanager/contextmanager.h>
 #include <coreplugin/dialogs/settingsdialog.h>
 #include <coreplugin/ipatient.h>
@@ -81,7 +83,7 @@
 #include <QHBoxLayout>
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
-
+#include <QMenu>
 
 using namespace MainWin;
 using namespace MainWin::Internal;
@@ -172,7 +174,7 @@ void MainWindow::init()
 //    connect(fmenu->menu(), SIGNAL(aboutToShow()),this, SLOT(aboutToShowRecentFiles()));
     Core::ActionContainer *pmenu = actionManager()->actionContainer(Core::Constants::M_PATIENTS);
     Q_ASSERT(pmenu);
-    connect(pmenu->menu(), SIGNAL(aboutToShow()),this, SLOT(aboutToShowRecentPatients()));
+    connect(pmenu->menu(), SIGNAL(aboutToShow()), this, SLOT(aboutToShowRecentPatients()));
 
     Core::MainWindowActions actions;
 
@@ -251,7 +253,7 @@ void MainWindow::extensionsInitialized()
         settings()->setValue(Utils::Constants::S_LAST_CHECKUPDATE, QDate::currentDate());
     }
 
-    m_modeStack->insertTopWidget(0, Patients::PatientBar::instance(this));
+    m_modeStack->insertTopWidget(Patients::PatientBar::instance(this));
     m_modeStack->statusBar()->hide();
 
     setCentralWidget(m_modeStack);
@@ -527,6 +529,7 @@ void MainWindow::readSettings()
     // Main Widget settings
     m_HelpTextShow = settings()->value(Core::Constants::S_SHOWHELPTEXT, true).toBool();
 
+    Utils::StyleHelper::setBaseColor(Utils::StyleHelper::DEFAULT_BASE_COLOR);
     // Notify
 //    statusBar()->showMessage(tkTr(Trans::Constants::SETTINGS_RECOVERED), 2000);
 }
