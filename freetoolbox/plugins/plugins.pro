@@ -36,6 +36,7 @@ icd10db.depends += icd
 icd.subdir = icdplugin
 icd.depends += core
 icd.depends += listview
+icd.depends += datapack
 
 zip.subdir = zipcodes
 zip.depends += core
