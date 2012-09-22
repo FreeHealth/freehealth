@@ -582,7 +582,7 @@ thirdPage()
 fourthPage()
 {
     SPEC=`echo ${CONFIG##*;}`
-    RET=$($ZENITY_NO_SIZE --title "$ZENITY_TITLE" --text "Please enter the spec file to use" --entry --entry-text "$SPEC")
+    RET=$($ZENITY_NO_SIZE --title "$ZENITY_TITLE" --text "Optional: Please enter a spec file, if you want to use one:\n(If not, just leave empty)" --entry --entry-text "$SPEC")
 }
 
 saveConfig()
