@@ -138,7 +138,7 @@ bool GenericZipCodesStep::createDatabaseScheme()
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", DB_NAME);
     db.setDatabaseName(databaseAbsPath());
     if (!db.open()) {
-        LOG_ERROR("Unable to connect database in memory.");
+        LOG_ERROR("Unable to open database.");
         return false;
     }
 
@@ -156,7 +156,7 @@ bool GenericZipCodesStep::createDatabaseScheme()
 
 bool GenericZipCodesStep::populateDatabase()
 {
-    if (!Core::Tools::connectDatabase(::DB_NAME, databaseAbsPath()))
+    if (!Core::Tools::connectDatabase(DB_NAME, databaseAbsPath()))
         return false;
 
     Q_EMIT progressLabelChanged(tr("Reading raw sources..."));
@@ -180,7 +180,7 @@ bool GenericZipCodesStep::populateDatabase()
     // create the new database
     QString req;
 
-    // remove alread recorded Generic codes
+    // remove alread recorded codes for that country
     req = "DELETE FROM `ZIPS` WHERE `ZIPS`.`COUNTRY`='fr';";
     Utils::Database::executeSQL(req, db);
 
@@ -270,5 +270,15 @@ void GenericZipCodesStep::onAvailableCountriesDownloaded(QNetworkReply *reply)
             success = true;
         }
         Q_EMIT countryListDownloaded(success);
+
+        // find default system country and add it to the selected list
+        QList<QStandardItem*> items = m_availableCountriesModel->findItems(
+                    QLocale::countryToString(QLocale::system().country()));
+        if (!items.isEmpty()) {
+            QStandardItem *defaultCountry = items.first()->clone();
+            m_availableCountriesModel->removeRow(defaultCountry->index().row());
+            m_selectedCountriesModel->appendRow(defaultCountry);
+            m_selectedCountriesModel->sort(0);
+        }
     }
 }
