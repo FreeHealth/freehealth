@@ -1611,7 +1611,7 @@ QString Database::fieldEquality(const int tableRef1, const int fieldRef1, const 
 
 /**
  * \brief returns amount if database records matching given filter
- * 
+ *
  * Executes a COUNT SQL command on the table \e tableref, field \e fieldref
  * with the filter \e filter. Filter should not contain the "WHERE" keyword.
  * Creates its own transaction.
@@ -1682,7 +1682,7 @@ QVariant Database::max(const int &tableref, const int &fieldref, const QString &
 
 /**
  * Return a MAX SQL command with grouping on the table \e tableref, field \e fieldref,
- * grouped by field \e groupBy with the filter \e filter. 
+ * grouped by field \e groupBy with the filter \e filter.
  * Filter should not contain the "WHERE" keyword.
  * Creates its own transaction.
 */
@@ -1719,7 +1719,7 @@ QVariant Database::max(const int &tableref, const int &fieldref, const int &grou
 
 /**
  * Return a MIN SQL command with grouping on the table \e tableref, field \e fieldref,
- * grouped by field \e groupBy with the filter \e filter. 
+ * grouped by field \e groupBy with the filter \e filter.
  * Filter should not contain the "WHERE" keyword.
  * Creates its own transaction.
 */
@@ -2246,7 +2246,7 @@ bool Database::executeSqlFile(const QString &connectionName, const QString &file
 }
 
 /**
- * Import a CSV structured file \e fielName into a database \e connectionName,
+ * Import a CSV structured file \e fileName into a database \e connectionName,
  * table \e table, using the speficied \e separator, and \e ingoreFirstLine or not.\n
  * Creates a transaction on the database.
 */
