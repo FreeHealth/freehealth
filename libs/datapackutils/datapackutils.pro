@@ -1,6 +1,6 @@
 # toolkit library project file
 TEMPLATE        = lib
-TARGET          = DataPack
+TARGET          = DataPackUtils
 
 # The version number is defined by the scripts/source.sh script, keep this line unchanged
 # NOT USED
@@ -8,7 +8,7 @@ TARGET          = DataPack
 
 # include config file
 include(../libsworkbench.pri)
-include(../datapack_dependencies.pri)
+include(../datapackutils_dependencies.pri)
 
 DEFINES *= DATAPACKUTILS_LIBRARY
 

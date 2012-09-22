@@ -1,7 +1,7 @@
-include(listviewplugin_dependencies.pri)
+include(datapackplugin_dependencies.pri)
 CONFIG( debug, debug|release ) {
-    unix:LIBS    *= -lListView_debug
-    win32:LIBS   *= -lListView_d
+    unix:LIBS    *= -lDataPack_debug
+    win32:LIBS   *= -lDataPack_d
 } else {
-    LIBS  *= -lListView
+    LIBS  *= -lDataPack
 }
