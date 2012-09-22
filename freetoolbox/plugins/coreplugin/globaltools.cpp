@@ -265,6 +265,7 @@ DrugsDB::Internal::DrugBaseEssentials *drugBase()
 /** Return the drugs database full path, for a specific country or for all countries if no \e country is specified. */
 QString drugsDatabaseAbsFileName(const QString &country)
 {
+    Q_UNUSED(country);
 //    QString path = QString("%1/%2/%3")
 //            .arg(settings()->value(Core::Constants::S_DBOUTPUT_PATH).toString())
 //            .arg(Core::Constants::MASTER_DATABASE_NAME)

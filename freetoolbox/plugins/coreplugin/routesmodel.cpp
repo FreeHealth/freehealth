@@ -120,7 +120,7 @@ void RoutesModel::clear()
     setCheckedRouteIds(QList<int>());
 }
 
-int RoutesModel::rowCount(const QModelIndex &parent) const
+int RoutesModel::rowCount(const QModelIndex &) const
 {
     return m_Routes.count();
 }

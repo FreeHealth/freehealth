@@ -99,7 +99,8 @@ QWidget *FrenchDrugsDatabasePage::createPage(QWidget *parent)
 
 
 FrDrugDatatabaseStep::FrDrugDatatabaseStep(QObject *parent) :
-        m_WithProgress(false)
+    Core::IFullReleaseStep(parent),
+    m_WithProgress(false)
 {
     setObjectName("FrDrugDatatabaseStep");
 }
