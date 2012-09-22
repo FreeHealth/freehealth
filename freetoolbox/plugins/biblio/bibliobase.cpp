@@ -174,7 +174,7 @@ QString BiblioBase::getXmlForPMID(const QString &pmid)
         if (!database().open()) {
             LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_OPEN_DATABASE_1_ERROR_2)
                       .arg(database().connectionName()).arg(database().lastError().text()));
-            return false;
+            return QString();
         }
     }
     QHash<int, QString> where;
