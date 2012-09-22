@@ -50,11 +50,8 @@ protected Q_SLOTS:
     void downloadFinished();
 
     void selectCountry(const QModelIndex &index);
-    void selectCountries();
     void deselectCountry(const QModelIndex &index);
-    void deselectCountries();
     void updateActions();
-
 private:
     Ui::GenericZipCodesWidget *ui;
     GenericZipCodesStep *m_Step;

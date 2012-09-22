@@ -132,7 +132,7 @@ p, li { white-space: pre-wrap; }
            <set>QAbstractItemView::NoEditTriggers</set>
           </property>
           <property name="selectionMode">
-           <enum>QAbstractItemView::ExtendedSelection</enum>
+           <enum>QAbstractItemView::SingleSelection</enum>
           </property>
           <property name="selectionBehavior">
            <enum>QAbstractItemView::SelectRows</enum>
@@ -148,7 +148,7 @@ p, li { white-space: pre-wrap; }
            <set>QAbstractItemView::NoEditTriggers</set>
           </property>
           <property name="selectionMode">
-           <enum>QAbstractItemView::ExtendedSelection</enum>
+           <enum>QAbstractItemView::SingleSelection</enum>
           </property>
           <property name="selectionBehavior">
            <enum>QAbstractItemView::SelectRows</enum>
