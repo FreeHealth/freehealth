@@ -1,7 +1,7 @@
 include(datapackplugin_dependencies.pri)
 CONFIG( debug, debug|release ) {
-    unix:LIBS    *= -lDataPack_debug
-    win32:LIBS   *= -lDataPack_d
+    unix:LIBS    *= -lDataPackPlugin_debug
+    win32:LIBS   *= -lDataPackPlugin_d
 } else {
-    LIBS  *= -lDataPack
+    LIBS  *= -lDataPackPlugin
 }
