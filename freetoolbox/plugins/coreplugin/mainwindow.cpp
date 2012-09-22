@@ -166,21 +166,21 @@ bool MainWindow::initialize(const QStringList &, QString *)
     Core::ActionContainer *menu = actionManager()->actionContainer(Core::Id(Core::Constants::M_FILE));
 
     // Create local actions
-    QAction *openPreferences = new QAction(this);
-    openPreferences->setObjectName("FTB_Preferences");
-    openPreferences->setIcon(theme()->icon(Constants::ICONPREFERENCES, ITheme::MediumIcon));
-    cmd = actionManager()->registerAction(openPreferences, Core::Id("FTB_Preferences"), globalcontext);
+    QAction *a_openPreferences = new QAction(this);
+    a_openPreferences->setObjectName("FTB_Preferences");
+    a_openPreferences->setIcon(theme()->icon(Constants::ICONPREFERENCES, ITheme::MediumIcon));
+    cmd = actionManager()->registerAction(a_openPreferences, Core::Id("FTB_Preferences"), globalcontext);
     cmd->setTranslations(Trans::Constants::PREFERENCES_TEXT);
     menu->addAction(cmd, Core::Id(Core::Constants::G_PREFERENCES));
-    connect(openPreferences, SIGNAL(triggered()), this, SLOT(applicationPreferences()));
+    connect(a_openPreferences, SIGNAL(triggered()), this, SLOT(applicationPreferences()));
 
-    a = new QAction(this);
-    a->setObjectName("FTB_CreateFullRelease");
-    a->setIcon(theme()->icon(Constants::ICONPROCESS, ITheme::MediumIcon));
-    cmd = actionManager()->registerAction(a, Core::Id("FTB_CreateFullRelease"), globalcontext);
+    QAction *a_CreateFullRelease = new QAction(this);
+    a_CreateFullRelease->setObjectName("FTB_CreateFullRelease");
+    a_CreateFullRelease->setIcon(theme()->icon(Constants::ICONPROCESS, ITheme::MediumIcon));
+    cmd = actionManager()->registerAction(a_CreateFullRelease, Core::Id("FTB_CreateFullRelease"), globalcontext);
     cmd->setTranslations(Constants::CREATEFULLRELEASE_TEXT, Constants::CREATEFULLRELEASE_TEXT, Constants::FREETOOLBOX_TR_CONTEXT);
     menu->addAction(cmd, Core::Id(Core::Constants::G_FILE_NEW));
-    connect(a, SIGNAL(triggered()), this, SLOT(createFullRelease()));
+    connect(a_CreateFullRelease, SIGNAL(triggered()), this, SLOT(createFullRelease()));
 
     // Create General pages
     m_FullReleasePage = new FullReleasePage(this);
@@ -189,8 +189,8 @@ bool MainWindow::initialize(const QStringList &, QString *)
     ui->setupUi(this);
     ui->centralWidget->layout()->setMargin(0);
     setMenuBar(actionManager()->actionContainer(Core::Id(Constants::MENUBAR))->menuBar());
-    ui->mainToolBar->insertAction(0, a);
-    ui->mainToolBar->insertAction(0, openPreferences);
+    ui->mainToolBar->insertAction(0, a_CreateFullRelease);
+    ui->mainToolBar->insertAction(0, a_openPreferences);
 
     ui->splitter->setCollapsible(1, false);
     ui->pageTree->header()->setVisible(false);
