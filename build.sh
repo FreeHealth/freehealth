@@ -5,7 +5,7 @@
 # This script helps on the compilation on unices machines
 #
 
-SCRIPT_VERSION=1.0-1342081307  # see date "+%s"
+SCRIPT_VERSION=1.1-1348434279  # see date "+%s"
 
 DEBUG_BUILD_COMMANDS=0  # set to 1 to only debug commands (no commands are executed)
 
@@ -197,12 +197,12 @@ qmakeCommand()
         QMAKE_CONFIG="$QMAKE_CONFIG CONFIG+=\"$EXTRAPLUGS\""
     fi
 
-    echo "* qmake $BUNDLE_NAME.pro -r $QMAKE_CONFIG $SPEC LOWERED_APPNAME=$BUNDLE_NAME"
-    echo "# qmake $BUNDLE_NAME.pro -r $QMAKE_CONFIG $SPEC LOWERED_APPNAME=$BUNDLE_NAME" >> $LOG_FILE
+    echo "* qmake $BUNDLE_NAME.pro -r $QMAKE_CONFIG $SPEC"
+    echo "# qmake $BUNDLE_NAME.pro -r $QMAKE_CONFIG $SPEC" >> $LOG_FILE
     if [[  "$DEBUG_BUILD_COMMANDS" == 1 ]]; then
-        echo "# qmake $BUNDLE_NAME.pro -r\n$QMAKE_CONFIG\n$SPEC\nLOWERED_APPNAME=$BUNDLE_NAME" ; sleep 5
+        echo "# qmake $BUNDLE_NAME.pro -r\n$QMAKE_CONFIG\n$SPEC" ; sleep 5
     else
-        MAKE_STEP=`qmake $BUNDLE_NAME.pro -r $QMAKE_CONFIG $SPEC LOWERED_APPNAME=$BUNDLE_NAME`
+        MAKE_STEP=`qmake $BUNDLE_NAME.pro -r $QMAKE_CONFIG $SPEC`
         MAKE_STEP=$?
         if [[ ! $MAKE_STEP == 0 ]]; then
             echo "* ERROR: qmake step wrong ***"

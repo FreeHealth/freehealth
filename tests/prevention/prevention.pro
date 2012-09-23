@@ -1,5 +1,5 @@
 TEMPLATE = subdirs
 
-SUBDIRS = libs plugins appsrc
+SUBDIRS = appnamedefine libs plugins appsrc
 
 CONFIG += ordered

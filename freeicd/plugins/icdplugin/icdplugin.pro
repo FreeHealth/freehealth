@@ -2,14 +2,8 @@ TEMPLATE        = lib
 TARGET          = ICD
 
 DEFINES += ICD_LIBRARY
-FREEICD = 1
 
-BUILD_PATH_POSTFIXE = FreeICD
-
-include(../../../plugins/fmf_plugins.pri)
-include( icdplugin_dependencies.pri )
-
-include($${SOURCES_PLUGINS_PATH}/icdplugin/icdplugin_sources.pri)
+include(../../../plugins/icdplugin/icdplugin_sources.pri)
 
 DEPENDPATH += ../
 

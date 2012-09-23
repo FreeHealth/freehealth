@@ -4,3 +4,4 @@ contains(QT_VERSION, ^4\\.[0-6]\\..*) {
     error("Use at least Qt 4.7.")
 }
 include($${PWD}/catchspec.pri)
+

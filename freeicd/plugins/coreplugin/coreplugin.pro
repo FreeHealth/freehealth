@@ -1,11 +1,6 @@
 TEMPLATE = lib
 TARGET = Core
 
-DEFINES += FREEICD
-FREEICD = 1
-
-BUILD_PATH_POSTFIXE = FreeICD
-
 include(../../../plugins/coreplugin/common_core.pri)
 
 

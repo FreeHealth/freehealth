@@ -2,10 +2,6 @@ TEMPLATE = lib
 TARGET = MainWindow
 
 DEFINES += FREEICD_MAINWIN_LIBRARY
-FREEICD = 1
-
-BUILD_PATH_POSTFIXE = FreeICD
-
 include( ../../../plugins/fmf_plugins.pri)
 include( mainwindowplugin_dependencies.pri )
 

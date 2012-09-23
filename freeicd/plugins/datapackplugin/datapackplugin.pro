@@ -1,11 +1,6 @@
 TEMPLATE        = lib
 TARGET          = DataPackPlugin
 
-DEFINES += FREEDIAMS
-FREEDIAMS = 1
-
-BUILD_PATH_POSTFIXE = FreeDiams
-
 INCLUDEPATH += ../
 DEPENDPATH += ../
 

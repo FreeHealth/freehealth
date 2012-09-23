@@ -3,9 +3,6 @@ TARGET = MainWindow
 
 DEFINES *= FACCOUNT_MAINWIN_LIBRARY
 
-with-pad:DEFINES+=WITH_PAD
-BUILD_PATH_POSTFIXE = FreeAccount
-
 include(../../../plugins/fmf_plugins.pri)
 include(mainwindowplugin_dependencies.pri)
 
