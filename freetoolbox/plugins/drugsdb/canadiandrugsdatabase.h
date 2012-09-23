@@ -72,7 +72,7 @@ public:
     QString processMessage() const {return tr("Canadian drugs database creation");}
 
     bool unzipFiles();
-    bool prepareDatas();
+    bool prepareData();
     bool createDatabase();
     bool populateDatabase();
     bool linkDrugsRoutes();

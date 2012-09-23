@@ -135,7 +135,7 @@ bool CaDrugDatatabaseStep::downloadFiles(QProgressBar *bar)
 bool CaDrugDatatabaseStep::process()
 {
     unzipFiles();
-    prepareDatas();
+    prepareData();
     createDatabase();
     populateDatabase();
     linkMolecules();
@@ -181,7 +181,7 @@ bool CaDrugDatatabaseStep::unzipFiles()
     return true;
 }
 
-bool CaDrugDatatabaseStep::prepareDatas()
+bool CaDrugDatatabaseStep::prepareData()
 {
     return true;
 }
@@ -672,7 +672,7 @@ void CanadianDrugsDatabaseWidget::on_startJobs_clicked()
             ui->unzip->setText(ui->unzip->text() + " CORRECTLY DONE");
     }
     if (ui->prepare->isChecked()) {
-        if (m_Step->prepareDatas())
+        if (m_Step->prepareData())
             ui->prepare->setText(ui->prepare->text() + " CORRECTLY DONE");
     }
     if (ui->createDb->isChecked()) {
