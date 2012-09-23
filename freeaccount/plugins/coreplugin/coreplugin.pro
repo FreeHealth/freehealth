@@ -1,9 +1,5 @@
 TEMPLATE = lib
 TARGET = Core
-PACKAGE_VERSION = 0.0.2
-
-with-pad:DEFINES+=WITH_PAD
-BUILD_PATH_POSTFIXE = FreeAccount
 
 include(../../../plugins/coreplugin/common_core.pri)
 include(coreplugin_dependencies.pri)

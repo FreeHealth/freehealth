@@ -2,7 +2,9 @@
 isEmpty(TARGET) {
     error("config.pri: You must provide a TARGET")
 }
-# lowered appname must be specified in the qmake command line
+
+# lowered appname must be specified
+include(compiling.pri)
 isEmpty(LOWERED_APPNAME) {
     error(Missing LOWERED_APPNAME in qmake command line. Eg: qmake -r freediams.pro LOWERED_APPNAME=freediams)
 }

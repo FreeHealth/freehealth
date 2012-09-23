@@ -1,6 +1,7 @@
 DEFINES += ICD_LIBRARY
 
-include(icdplugin_dependencies.pri)
+include($${PWD}/../fmf_plugins.pri)
+include($${PWD}/icdplugin_dependencies.pri)
 
 HEADERS += $${PWD}/icdplugin.h \
     $${PWD}/icd_exporter.h \

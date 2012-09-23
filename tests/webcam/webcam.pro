@@ -1,5 +1,5 @@
 TEMPLATE = subdirs
 
-SUBDIRS = libs plugins webcam-src
+SUBDIRS = appnamedefine libs plugins webcam-src
 
 CONFIG += ordered

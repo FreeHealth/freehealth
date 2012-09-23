@@ -2,10 +2,6 @@ TEMPLATE        = lib
 TARGET          = PMH
 
 DEFINES += PMH_LIBRARY
-DEFINES += FREEMEDFORMS
-with-pad { DEFINES += WITH_PAD }
-
-BUILD_PATH_POSTFIXE = FreeMedForms
 
 include(../fmf_plugins.pri)
 include(pmhplugin_dependencies.pri)

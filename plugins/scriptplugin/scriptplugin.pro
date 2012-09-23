@@ -2,9 +2,6 @@ TEMPLATE        = lib
 TARGET          = Script
 
 DEFINES += SCRIPT_LIBRARY
-DEFINES += FREEMEDFORMS
-
-BUILD_PATH_POSTFIXE = FreeMedForms
 
 include(../fmf_plugins.pri)
 include( scriptplugin_dependencies.pri )

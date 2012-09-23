@@ -7,7 +7,6 @@ TARGET = Alert
 
 message(Building Alert plugin)
 DEFINES += ALERT_LIBRARY
-with-pad { DEFINES += WITH_PAD }
 
 QT *= sql
 
