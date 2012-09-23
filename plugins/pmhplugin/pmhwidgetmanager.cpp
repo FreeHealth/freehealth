@@ -79,6 +79,7 @@ PmhWidgetManager::PmhWidgetManager(QObject *parent) :
 
 void PmhWidgetManager::updateContext(Core::IContext *object, const Core::Context &additionalContexts)
 {
+    Q_UNUSED(additionalContexts)
     PmhContextualWidget *view = 0;
     do {
         if (!object) {
