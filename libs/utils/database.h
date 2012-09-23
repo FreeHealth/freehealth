@@ -211,7 +211,7 @@ public:
 
     };
     /** \brief Enumerate the values of fields got by Sqlite PRAGMA command */
-    enum PragmaValues 
+    enum PragmaValues
     {
         Cid_PragmaValue = 0,
         Name_PragmaValue ,
@@ -221,7 +221,7 @@ public:
         Pk_PragmaValue ,
         PragmaValues_MaxParam
         };
-    
+
     Q_DECLARE_FLAGS(Grants, Grant)
 
     enum WhereClauseType {
@@ -347,12 +347,12 @@ public:
 
     virtual bool createTable(const int &tableref) const;
     virtual bool createTables() const;
-    
+
     virtual bool alterTableForNewField(const int tableRef, const int newFieldRef,const int TypeOfField, const QString & nullOption);
 
     static bool executeSQL(const QStringList &list, QSqlDatabase &DB);
     static bool executeSQL(const QString &req, QSqlDatabase &DB);
-    static bool executeSqlFile(const QString &connectionName, const QString &fileName, QProgressDialog *dlg = 0, QString *error = 0);
+    static bool executeSqlFile(const QString &connectionName, const QString &fileName, QString *error = 0);
     static bool importCsvToDatabase(const QString &connectionName, const QString &fileName, const QString &table, const QString &separator = QString(";"), bool ignoreFirstLine = false);
     virtual void toTreeWidget(QTreeWidget *tree);
 

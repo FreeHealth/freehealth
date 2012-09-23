@@ -500,7 +500,7 @@ bool ServerConfigPage::validatePage()
             } else {
                 LOG("Executing server configuration SQL script");
                 QString error;
-                if (!Utils::Database::executeSqlFile("__APP_CONNECTION_TESTER", serverConfigurationSqlScript(), 0, &error)) {
+                if (!Utils::Database::executeSqlFile("__APP_CONNECTION_TESTER", serverConfigurationSqlScript(), &error)) {
                     LOG_ERROR("Server configuration script not processed");
                     Utils::warningMessageBox(tr("An error occured..."),
                                              tr("An error occured when trying to execute the script configuration script.\n"
