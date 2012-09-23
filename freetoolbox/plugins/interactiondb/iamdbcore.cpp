@@ -22,5 +22,6 @@ bool IAMDbCore::init()
 
 bool IAMDbCore::populateDatabaseWithInteractions(const QString &connection)
 {
+    Q_UNUSED(connection)
     return true;
 }
