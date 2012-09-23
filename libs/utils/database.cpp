@@ -1611,7 +1611,7 @@ QString Database::fieldEquality(const int tableRef1, const int fieldRef1, const 
 
 /**
  * \brief returns amount if database records matching given filter
- * 
+ *
  * Executes a COUNT SQL command on the table \e tableref, field \e fieldref
  * with the filter \e filter. Filter should not contain the "WHERE" keyword.
  * Creates its own transaction.
@@ -1682,7 +1682,7 @@ QVariant Database::max(const int &tableref, const int &fieldref, const QString &
 
 /**
  * Return a MAX SQL command with grouping on the table \e tableref, field \e fieldref,
- * grouped by field \e groupBy with the filter \e filter. 
+ * grouped by field \e groupBy with the filter \e filter.
  * Filter should not contain the "WHERE" keyword.
  * Creates its own transaction.
 */
@@ -1719,7 +1719,7 @@ QVariant Database::max(const int &tableref, const int &fieldref, const int &grou
 
 /**
  * Return a MIN SQL command with grouping on the table \e tableref, field \e fieldref,
- * grouped by field \e groupBy with the filter \e filter. 
+ * grouped by field \e groupBy with the filter \e filter.
  * Filter should not contain the "WHERE" keyword.
  * Creates its own transaction.
 */
@@ -2121,8 +2121,25 @@ bool Database::executeSQL(const QStringList &list, QSqlDatabase &DB)
     DB.transaction();
     QSqlQuery query(DB);
     foreach(const QString &r, list) {
+
+        //ignore empty lines
         if (r.isEmpty())
             continue;
+
+        // ignore comments starting with "--"
+        if (r.startsWith("--")) {
+            continue;
+        }
+
+        // No SQLite extra commands
+        if (r.startsWith("."))
+            continue;
+
+        // No BEGIN, No COMMIT
+        if (r.startsWith("BEGIN", Qt::CaseInsensitive)
+                || r.startsWith("COMMIT", Qt::CaseInsensitive))
+            continue;
+
         if (!query.exec(r)) {
             LOG_QUERY_ERROR_FOR("Database", query);
             query.finish();
@@ -2147,7 +2164,7 @@ bool Database::executeSQL(const QString &req, QSqlDatabase & DB)
     if (!connectedDatabase(DB, __LINE__))
         return false;
     // TODO: manage ; inside "" or ''
-    QStringList list = req.split(";\n", QString::SkipEmptyParts);
+    QStringList list = req.trimmed().split(";\n", QString::SkipEmptyParts);
     return executeSQL(list, DB);
 }
 
@@ -2157,7 +2174,7 @@ bool Database::executeSQL(const QString &req, QSqlDatabase & DB)
  * All SQL commands must end with a \e ; followed by a linefeed. \n
  * Creates a transaction on the database \e DB.
 */
-bool Database::executeSqlFile(const QString &connectionName, const QString &fileName, QProgressDialog *dlg, QString *error)
+bool Database::executeSqlFile(const QString &connectionName, const QString &fileName, QString *error)
 {
     if (error)
         error->clear();
@@ -2187,66 +2204,11 @@ bool Database::executeSqlFile(const QString &connectionName, const QString &file
 
     // execute all sql queries
     QString req = QString::fromUtf8(file.readAll());
-    req.replace("\n\n", "\n");
-    req.replace("\n\n", "\n");
-    req.replace("\n\n", "\n");
-    req.replace("\n\n", "\n");
-    req.replace("\n\n", "\n");
-
-    QStringList list = req.split("\n");
-    QStringList queries;
-    // Reconstruct req : removes comments
-    foreach(const QString &s, list) {
-        if (s.startsWith("--")) {
-            continue;
-        }
-        req += s + "\n";
-        if (s.endsWith(";")) {
-            queries.append(req);
-            req.clear();
-        }
-    }
-
-    // Execute queries
-    if (dlg)
-        dlg->setRange(0, queries.count());
-
-    QSqlQuery query(DB);
-    foreach(const QString &sql, queries) {
-        QString _req = sql.simplified();
-        // Do not processed empty strings
-        if (_req.isEmpty())
-            continue;
-
-        // No SQLite extra commands
-        if (_req.startsWith("."))
-            continue;
-
-        // No BEGIN, No COMMIT
-        if (_req.startsWith("BEGIN", Qt::CaseInsensitive)
-                || _req.startsWith("COMMIT", Qt::CaseInsensitive))
-            continue;
-
-        if (!query.exec(sql)) {
-            LOG_QUERY_ERROR_FOR("Database", query);
-            if (error)
-                error->append("Query error: " + DB.lastError().text());
-            qWarning() << DB.database() << DB.hostName() << DB.userName() << DB.isOpenError();
-            query.finish();
-            DB.rollback();
-            return false;
-        }
-        query.finish();
-
-        if (dlg)
-            dlg->setValue(dlg->value()+1);
-    }
-    DB.commit();
-    return true;
+    return executeSQL(req,DB);
 }
 
 /**
- * Import a CSV structured file \e fielName into a database \e connectionName,
+ * Import a CSV structured file \e fileName into a database \e connectionName,
  * table \e table, using the speficied \e separator, and \e ingoreFirstLine or not.\n
  * Creates a transaction on the database.
 */
