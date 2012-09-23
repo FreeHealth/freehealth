@@ -24,6 +24,14 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
+/**
+ * \class Patients::Internal::PatientBarAlertPlaceHolder
+ * Manage patient non-blocking alerts. This widget is included in the
+ * Patients::PatientBar widget and is accessible in all Core::IMode that
+ * shows the patient bar.
+ * \sa Alert::AlertPlaceHolderWidget, Alert plugin
+ */
+
 #include "patientbaralertplaceholder.h"
 
 using namespace Patients;
@@ -39,11 +47,12 @@ PatientBarAlertPlaceHolder::PatientBarAlertPlaceHolder(QObject *parent) :
     setDrawBackgroundUsingAlertPriority(false);
     setAutoSaveOnValidationOrOverriding(true);
     setAutoSaveOnEditing(true);
+    setObjectName("Patients::Internal::PatientBarAlertPlaceHolder");
 }
 
 QString PatientBarAlertPlaceHolder::uuid() const
 {
-    return "Patients::Internal::PatientBarAlertPlaceHolder";
+    return objectName();
 }
 
 QString PatientBarAlertPlaceHolder::name(const QString &lang) const
