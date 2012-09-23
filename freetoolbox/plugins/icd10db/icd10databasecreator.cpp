@@ -121,7 +121,7 @@ bool Icd10DatabaseWidget::on_startCreation_clicked()
     DB = QSqlDatabase::addDatabase("QSQLITE", ICD10_DATABASE_NAME);
     if (!QDir(pathOrHostName).exists())
         if (!QDir().mkpath(pathOrHostName))
-            tkTr(Trans::Constants::_1_ISNOT_AVAILABLE_CANNOTBE_CREATED).arg(pathOrHostName);
+            LOG(tkTr(Trans::Constants::_1_ISNOT_AVAILABLE_CANNOTBE_CREATED).arg(pathOrHostName));
     // Delete already existing database
     if (QFileInfo(absFileName).exists()) {
         QFile(absFileName).remove();
