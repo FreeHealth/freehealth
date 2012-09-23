@@ -53,7 +53,7 @@ public:
 //    void clearContext() { m_Context.clear(); }
 
     Core::Context context() const { return m_Context; }
-    QWidget *widget()          { return w; }
+    QWidget *widget() const  { return w; }
 
 private:
     TextEditor *w;
