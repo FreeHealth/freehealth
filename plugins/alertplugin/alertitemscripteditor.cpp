@@ -26,10 +26,10 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 /**
-  \class Alert::Internal::AlertItemScriptEditor
-  Allow user to edit the Alert::AlertItem scripts. Modifications are not
-  automatically submitted, you must call submit() before retrieving scripts
-  with scripts().
+ * \class Alert::Internal::AlertItemScriptEditor
+ * Allow user to edit the Alert::AlertItem scripts (Alert::AlertScript).
+ * Modifications are not automatically submitted, you must call submit()
+ * before retrieving scripts with scripts().
 */
 
 #include "alertitemscripteditor.h"

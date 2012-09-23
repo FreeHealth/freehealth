@@ -25,6 +25,14 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
+/**
+ * \class Alert::Internal::AlertScriptManager
+ * Internal script management for alerts. Connected to the Core::IScriptManager to allow interactions
+ * with patient/user data and all registered object in the central script manager.
+ * Allow interaction with alerts inside a script: alert can be accessed in read/write mode.
+ * \sa Alert::Internal::AlertItemScriptWrapper, Alert::AlertScript::ScriptType
+ */
+
 #include "alertscriptmanager.h"
 
 #include <coreplugin/icore.h>
@@ -55,7 +63,7 @@ AlertScriptManager::AlertScriptManager(QObject *parent) :
 /**
  * Executes the script \e scriptType from the AlertItem \e item and return the value of the script.
  * The script can modify the AlertItem.
- * \sa AlertScript::ScriptType
+ * \sa Alert::AlertScript::ScriptType
  */
 QVariant AlertScriptManager::execute(AlertItem &item, const int scriptType)
 {

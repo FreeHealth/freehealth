@@ -25,6 +25,68 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
+/**
+ * \class Alert::AlertItem
+ * Represent an alert.
+ */
+
+/**
+ * \enum Alert::AlertItem::ViewType
+ * Define the type of presentation of the alert.
+ */
+
+/**
+ * \var Alert::AlertItem::BlockingAlert
+ * A blocking alert must be validated by the user. They are presented in a 'blocking' dialog. The user
+ * must validate/cancel the dialog to pursue its actions.
+ */
+
+/**
+ * \var Alert::AlertItem::NonBlockingAlert
+ * Non-blocking alerts are alerts that are presented to the user without requiering a validation.
+ * For eg, they can be QToolButton, QLabel, QIcon (in views)...
+ * \sa Alert::IAlertPlaceHolder
+*/
+
+/**
+ * \enum Alert::AlertItem::ContentType
+ * Descrive the content of an alert.
+ */
+
+/**
+ * \var Alert::AlertItem::ApplicationNotification
+ * Alert is related to the application
+ */
+
+/**
+ * \var Alert::AlertItem::PatientCondition
+ * Alert is related to the patient condition (like allergies, DDI, PIM, diseases, prevention alerts...)
+ */
+
+/**
+ * \var Alert::AlertItem::UserNotification
+ * Alert is related to the user (like 'You have mails', 'My notes'...).
+ */
+
+/**
+ * \enum Alert::AlertItem::Priority
+ * Descrive the priority of an alert.
+ * In blocking dialogs, alerts are presented sorted by their priority.
+ */
+
+/**
+ * \var Alert::AlertItem::High
+ * Alert priority is high
+ */
+/**
+ * \var Alert::AlertItem::Medium
+ * Alert priority is medium
+ */
+/**
+ * \var Alert::AlertItem::Low
+ * Alert priority is low
+ */
+
 #include "alertitem.h"
 #include "alertcore.h"
 #include "alertpackdescription.h"
@@ -403,16 +465,19 @@ void AlertItem::setPackUid(const QString &uid) const
     d->_packUid = uid;
 }
 
+/** Return the crypted password of the item. */
 QString AlertItem::cryptedPassword() const
 {
     return d->_pass;
 }
 
+/** Define the crypted password of the item. */
 void AlertItem::setCryptedPassword(const QString &pass)
 {
     d->_pass = pass;
 }
 
+/** Return the translated label of the item. */
 QString AlertItem::label(const QString &lang) const
 {
     Internal::AlertValueBook *v = d->getLanguage(lang);
@@ -427,6 +492,7 @@ QString AlertItem::label(const QString &lang) const
     return v->_label;
 }
 
+/** Return the translated tooltip of the item. */
 QString AlertItem::toolTip(const QString &lang) const
 {
     Internal::AlertValueBook *v = d->getLanguage(lang);
@@ -441,6 +507,7 @@ QString AlertItem::toolTip(const QString &lang) const
     return v->_toolTip;
 }
 
+/** Return the translated category label of the item. */
 QString AlertItem::category(const QString &lang) const
 {
     Internal::AlertValueBook *v = d->getLanguage(lang);
@@ -455,6 +522,7 @@ QString AlertItem::category(const QString &lang) const
     return v->_category;
 }
 
+/** Return the translated description of the item. */
 QString AlertItem::description(const QString &lang) const
 {
     Internal::AlertValueBook *v = d->getLanguage(lang);
@@ -469,6 +537,7 @@ QString AlertItem::description(const QString &lang) const
     return v->_descr;
 }
 
+/** Return the translated comment of the item. */
 QString AlertItem::comment(const QString &lang) const
 {
     Internal::AlertValueBook *v = d->getLanguage(lang);
@@ -482,7 +551,6 @@ QString AlertItem::comment(const QString &lang) const
      }
      return v->_comment;
 }
-
 
 void AlertItem::setLabel(const QString &txt, const QString &lang)
 {
@@ -549,6 +617,7 @@ void AlertItem::setComment(const QString &txt, const QString &lang)
     v->_comment = txt;
 }
 
+/** Return all the languages of the item. */
 QStringList AlertItem::availableLanguages() const
 {
     return d->languages();
@@ -596,6 +665,7 @@ bool AlertItem::mustBeRead() const
     return d->_mustBeRead;
 }
 
+/** Return true is the alert can be reminded later */
 bool AlertItem::isRemindLaterAllowed() const
 {
     return d->_remindAllowed;
