@@ -615,9 +615,9 @@ bool XmlFormContentReader::createElement(Form::FormItem *item, QDomElement &elem
             if (element.hasAttribute(Constants::ATTRIB_ISIDENTITYFORM)) {
                 const QString &att = element.attribute(Constants::ATTRIB_ISIDENTITYFORM);
                 bool isIdentity =
-                        att.compare("yes", Qt::CaseInsensitive)==0 |
-                        att.compare("true", Qt::CaseInsensitive)==0 |
-                        att=="1";
+                        (att.compare("yes", Qt::CaseInsensitive) == 0) ||
+                        (att.compare("true", Qt::CaseInsensitive) == 0) ||
+                        att == "1";
                 item->spec()->setValue(Form::FormItemSpec::Spec_IsIdentityForm, isIdentity, Trans::Constants::ALL_LANGUAGE);
             }
 
