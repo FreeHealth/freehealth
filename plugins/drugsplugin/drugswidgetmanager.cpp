@@ -136,6 +136,7 @@ DrugsWidgetManager::DrugsWidgetManager(QObject *parent) :
 
 void DrugsWidgetManager::updateContext(Core::IContext *object, const Core::Context &additionalContexts)
 {
+    Q_UNUSED(additionalContexts);
     //    qWarning() << "DrugsManager::updateContext(Core::IContext *object)";
     //    if (object)
     //        qWarning() << "DrugsManager::updateContext(Core::IContext *object)" << object->widget();
