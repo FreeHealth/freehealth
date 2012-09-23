@@ -59,30 +59,24 @@ const char* const  DB_NAME     = "ZIPCODES";
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 
 static inline QString databaseAbsPath() {
-    return QDir::cleanPath(
-                settings()->value(
-                    Core::Constants::S_DBOUTPUT_PATH).toString() +
-                "/zipcodes/zipcodes.db");
+    return QDir::cleanPath(settings()->value(
+                               Core::Constants::S_DBOUTPUT_PATH).toString() +"/zipcodes/zipcodes.db");
 }
 
-static inline QString workingPath()     {
-    return QDir::cleanPath(
-                settings()->value(
-                    Core::Constants::S_TMP_PATH).toString() +
-                "/ZipCodes/") + QDir::separator();
+static inline QString workingPath() {
+    return QDir::cleanPath(settings()->value(
+                               Core::Constants::S_TMP_PATH).toString() + "/ZipCodes/") + QDir::separator();
 }
 
 static inline QString sqlMasterFileAbsPath() {
-    return QDir::cleanPath(
-                settings()->value(
-                    Core::Constants::S_GITFILES_PATH).toString() +
-                "/global_resources/sql/zipcodes/zipcodes.sql");
+    return QDir::cleanPath(settings()->value(
+                               Core::Constants::S_GITFILES_PATH).toString() + "/global_resources/sql/zipcodes/zipcodes.sql");
 }
 
 static inline QString sqlImportFileAbsPath()
 {
-        return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString() +
-                               "/global_resources/sql/zipcodes/zipcodes-fr-import.sql");
+    return QDir::cleanPath(settings()->value(Core::Constants::S_GITFILES_PATH).toString() +
+                           "/global_resources/sql/zipcodes/zipcodes-fr-import.sql");
 }
 
 } // end namespace
@@ -237,6 +231,7 @@ void GenericZipCodesStep::onAvailableCountriesDownloaded(QNetworkReply *reply)
         QLocale::Country country;
         bool success = false;
         QString flagPath = Core::ICore::instance()->settings()->path(Core::ISettings::SmallPixmapPath) + "/flags/";
+        LOG(flagPath);
 
         src.setData(reply->readAll());
         doc.setContent(src.data());
@@ -270,7 +265,7 @@ void GenericZipCodesStep::onAvailableCountriesDownloaded(QNetworkReply *reply)
             QStandardItem *item = new QStandardItem(
                         QIcon(QString("%1/%2.png").arg(flagPath, countryIso3166Code)),
                         QLocale::countryToString(country));
-            item->setData(Qt::UserRole, country);
+//            item->setData(Qt::UserRole, country);
             m_availableCountriesModel->appendRow(item);
             success = true;
         }

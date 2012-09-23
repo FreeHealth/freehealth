@@ -101,7 +101,8 @@ QWidget *FdaDrugsDatabasePage::createPage(QWidget *parent)
 
 
 FdaDrugDatatabaseStep::FdaDrugDatatabaseStep(QObject *parent) :
-        m_WithProgress(false)
+    Core::IFullReleaseStep(parent),
+    m_WithProgress(false)
 {
     setObjectName("FdaDrugDatatabaseStep");
 }

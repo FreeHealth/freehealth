@@ -1,5 +1,5 @@
 TEMPLATE = lib
-TARGET = DataPack
+TARGET = DataPackPlugin
 
 DEFINES += FREETOOLBOX
 FREETOOLBOX = 1
@@ -22,4 +22,4 @@ HEADERS  += \
     datapackplugin.h
 
 
-OTHER_FILES += DataPack.pluginspec
+OTHER_FILES += DataPackPlugin.pluginspec

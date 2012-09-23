@@ -84,7 +84,8 @@ QWidget *CanadianDrugsDatabasePage::createPage(QWidget *parent)
 
 
 CaDrugDatatabaseStep::CaDrugDatatabaseStep(QObject *parent) :
-        m_WithProgress(false)
+    Core::IFullReleaseStep(parent),
+    m_WithProgress(false)
 {
     setObjectName("CaDrugDatatabaseStep");
 }

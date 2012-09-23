@@ -116,8 +116,7 @@ void LedgerEdit::showLedger()
 {
     m_myThread->dateChosen(m_date);
     m_myThread->nameChecked(ui->nameChecked->isChecked());
-    if (m_myThread->isRunning());
-    {
+    if (m_myThread->isRunning()) {
         m_myThread->terminate();
         if (WarnDebugMessage)
             qDebug() << __FILE__ << QString::number(__LINE__) << " in  m_myThread->terminate"   ;

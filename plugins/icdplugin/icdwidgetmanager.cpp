@@ -76,6 +76,7 @@ IcdWidgetManager::IcdWidgetManager(QObject *parent) : IcdActionHandler(parent)
 
 void IcdWidgetManager::updateContext(Core::IContext *object, const Core::Context &additionalContexts)
 {
+    Q_UNUSED(additionalContexts);
     IcdCentralWidget *view = 0;
     do {
         if (!object) {

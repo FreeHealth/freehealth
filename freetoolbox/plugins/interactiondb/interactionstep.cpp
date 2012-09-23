@@ -89,14 +89,14 @@ InteractionStep::InteractionStep(QObject *parent) :
 bool InteractionStep::createDir()
 {
     if (!QDir().mkpath(workingPath()))
-        LOG_ERROR("Unable to create interactions Working Path :" + workingPath());
+        LOG_ERROR("Unable to create interactions Working Path:" + workingPath());
     else
         LOG("Tmp dir created");
     // Create database output dir
     const QString &dbpath = QFileInfo(databaseAbsPath()).absolutePath();
     if (!QDir().exists(dbpath)) {
         if (!QDir().mkpath(dbpath))
-            LOG_ERROR("Unable to create interactions database output path :" + dbpath);
+            LOG_ERROR("Unable to create interactions database output path:" + dbpath);
         else
             LOG("Drugs database output dir created");
     }
