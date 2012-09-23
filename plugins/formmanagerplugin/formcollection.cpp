@@ -56,11 +56,11 @@ public:
         q(parent)
     {
     }
-    
+
     ~FormCollectionPrivate()
     {
     }
-    
+
 public:
     QList<Form::FormMain *> _emptyRootForms;
 
@@ -88,5 +88,6 @@ FormCollection::~FormCollection()
 /*! Initializes the object with the default values. Return true if initialization was completed. */
 bool FormCollection::initialize()
 {
+    return true;
 }
 
