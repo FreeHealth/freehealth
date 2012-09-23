@@ -135,13 +135,13 @@ void FormContextualWidgetManager::updateContext(Core::IContext *object, const Co
     qWarning() << "FormContextualWidgetManager::updateContext(Core::IContext *object)" << object;
     if (object)
         qWarning() << "FormContextualWidgetManager::updateContext(Core::IContext *object)" << object->widget();
-    
+
     FormContextualWidget *view = 0;
     do {
         if (!object) {
             if (!m_CurrentView)
                 return;
-            
+
             //            m_CurrentView = 0;  // keep trace of the last active view (we need it in dialogs)
             break;
         }
@@ -149,15 +149,15 @@ void FormContextualWidgetManager::updateContext(Core::IContext *object, const Co
         if (!view) {
             if (!m_CurrentView)
                 return;
-            
+
             //            m_CurrentView = 0;   // keep trace of the last active view (we need it in dialogs)
             break;
         }
-        
+
         if (view == m_CurrentView) {
             return;
         }
-        
+
     } while (false);
     if (view) {
         FormActionHandler::setCurrentView(view);
@@ -183,7 +183,7 @@ FormActionHandler::FormActionHandler(QObject *parent) :
     m_CurrentView(0)
 {
     setObjectName("FormActionHandler");
-    
+
     QAction *a = 0;
     Core::Command *cmd = 0;
     Core::Context ctx(Form::Constants::C_FORM_PLUGINS);
@@ -199,7 +199,7 @@ FormActionHandler::FormActionHandler(QObject *parent) :
         //        menu->appendGroup(Core::Id(Form::Constants::G_PLUGINS_DRUGS));
         //        menu->appendGroup(Core::Id(Form::Constants::G_PLUGINS_INTERACTIONS));
         //        menu->setTranslations(Form::Constants::DRUGSMENU_TEXT);
-        
+
         // Add the menu to the menubar or to the plugin menu
 #ifndef FREEMEDFORMS
         actionManager()->actionContainer(Core::Id(Core::Constants::M_PLUGINS))->addMenu(menu, Core::Constants::G_PLUGINS_FORM);
@@ -208,12 +208,12 @@ FormActionHandler::FormActionHandler(QObject *parent) :
 #endif
     }
     Q_ASSERT(menu);
-    
+
     // Create local actions
     // Example: register existing Core actions
     aClear = registerAction(Core::Constants::A_LIST_CLEAR, ctx, this);
     connect(aClear, SIGNAL(triggered()), this, SLOT(onClearRequested()));
-    
+
     aSaveEpisode = registerAction(Core::Constants::A_FILE_SAVE, ctx, this);
     connect(aSaveEpisode, SIGNAL(triggered()), this, SLOT(onSaveEpisodeRequested()));
 
@@ -274,7 +274,7 @@ FormActionHandler::FormActionHandler(QObject *parent) :
                                             QKeySequence::UnknownKey, false);
     aShowDatabaseInformation->setEnabled(false);
     connect(aShowDatabaseInformation,SIGNAL(triggered()), this, SLOT(showDatabaseInformation()));
-    
+
     contextManager()->updateContext();
     actionManager()->retranslateMenusAndActions();
     connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(updateActions()));
@@ -288,7 +288,7 @@ void FormActionHandler::setCurrentView(FormContextualWidget *view)
         LOG_ERROR("setCurrentView: no view");
         return;
     }
-    
+
     // disconnect old view
     if (m_CurrentView) {
         //        if (view == m_CurrentView.data())
@@ -301,7 +301,7 @@ void FormActionHandler::setCurrentView(FormContextualWidget *view)
         //        m_CurrentView->drugSelector()->disconnectFilter();
     }
     m_CurrentView = view;
-    
+
     // connect new view
     connect(m_CurrentView, SIGNAL(actionsEnabledStateChanged()), this, SLOT(updateActions()));
     connect(m_CurrentView, SIGNAL(actionEnabledStateChanged(Form::Internal::FormContextualWidget::WidgetAction)), this, SLOT(onActionEnabledStateUpdated(Form::Internal::FormContextualWidget::WidgetAction)));
@@ -336,7 +336,8 @@ void FormActionHandler::onActionEnabledStateUpdated(Form::Internal::FormContextu
         case Form::Internal::FormContextualWidget::Action_AddForm: a = aAddForm; break;
         case Form::Internal::FormContextualWidget::Action_PrintCurrentFormEpisode: a = aPrintForm; break;
         }  // end switch
-        a->setEnabled(m_CurrentView->enableAction(action));
+        if(a)
+            a->setEnabled(m_CurrentView->enableAction(action));
     }
 }
 
