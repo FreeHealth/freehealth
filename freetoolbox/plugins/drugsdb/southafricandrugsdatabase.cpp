@@ -316,7 +316,7 @@ bool ZaDrugDatatabaseStep::createDatabase()
     QMultiHash<QString, QVariant> labels;
     labels.insert("fr","Base de données thérapeutique Sud Africaine");
     labels.insert("en","South African therapeutic database");
-    labels.insert("de","South African therapeutischen database");
+    labels.insert("de","Südafrikanische Therapeutische Datenbank");
 
     if (Core::Tools::createNewDrugsSource(Core::Constants::MASTER_DATABASE_NAME, ZA_DRUGS_DATABASE_NAME, labels) == -1) {
         LOG_ERROR("Unable to create the French drugs sources");

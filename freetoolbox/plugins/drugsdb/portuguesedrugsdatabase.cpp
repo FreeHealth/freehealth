@@ -240,7 +240,7 @@ bool PtDrugDatatabaseStep::createDatabase()
     QMultiHash<QString, QVariant> labels;
     labels.insert("fr","Base de données thérapeutique du portugaise");
     labels.insert("en","Portuguese therapeutic database");
-    labels.insert("de","Portugiesisch therapeutischen database");
+    labels.insert("de","Portugiesische Therapeutische Datenbank");
 
     if (Core::Tools::createNewDrugsSource(Core::Constants::MASTER_DATABASE_NAME, PT_DRUGS_DATABASE_NAME, labels) == -1) {
         LOG_ERROR("Unable to create the PT drugs sources");

@@ -303,7 +303,7 @@ bool BeDrugDatatabaseStep::createDatabase()
     QMultiHash<QString, QVariant> labels;
     labels.insert("fr","Base de données thérapeutique belge");
     labels.insert("en","Belgium therapeutic database");
-    labels.insert("de","Belgien therapeutischen database");
+    labels.insert("de","Belgische Therapeutische Datenbank");
 
     if (Core::Tools::createNewDrugsSource(Core::Constants::MASTER_DATABASE_NAME, BE_DRUGS_DATABASE_NAME, labels) == -1) {
         LOG_ERROR("Unable to create the BE drugs sources");

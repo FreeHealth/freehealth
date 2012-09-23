@@ -203,7 +203,7 @@ bool FrDrugDatatabaseStep::createDatabase()
     QMultiHash<QString, QVariant> labels;
     labels.insert("fr","Base de données thérapeutique française");
     labels.insert("en","French therapeutic database");
-    labels.insert("de","Französisch therapeutischen database");
+    labels.insert("de","Französische Therapeutische Datenbank");
 
     if (Core::Tools::createNewDrugsSource(Core::Constants::MASTER_DATABASE_NAME, FR_DRUGS_DATABASE_NAME, labels) == -1) {
         LOG_ERROR("Unable to create the French drugs sources");
