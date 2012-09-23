@@ -57,3 +57,4 @@ global_resources/datapacks/tmp/*
 scripts/freemedforms-*
 scripts/Linux/ppa*
 
+buildspecs/compiling.pri
