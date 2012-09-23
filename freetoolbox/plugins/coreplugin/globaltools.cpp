@@ -19,8 +19,8 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developper : Eric MAEKER, MD <eric.maeker@gmail.com>             *
- *   Contributors :                                                        *
+ *   Main Developper: Eric MAEKER, MD <eric.maeker@gmail.com>              *
+ *   Contributors:                                                         *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
@@ -130,7 +130,7 @@ bool executeProcess(const QString &proc)
     QProcess process;
     process.start(proc, QIODevice::ReadOnly);
 
-    LOG_FOR("Tools", QString("Executing process : %1").arg(proc));
+    LOG_FOR("Tools", QString("Executing process: %1").arg(proc));
 
     if (!process.waitForStarted())
         LOG_ERROR_FOR("Tools", QString("Process %1 can not start").arg(proc.left(20)));
@@ -140,25 +140,25 @@ bool executeProcess(const QString &proc)
 
     QString error = process.readAllStandardError();
     if (!error.isEmpty()) {
-        LOG_ERROR_FOR("Tools", QString("ERROR : %1").arg(proc));
-        LOG_ERROR_FOR("Tools", QString("ERROR : %1").arg(error));
+        LOG_ERROR_FOR("Tools", QString("ERROR: %1").arg(proc));
+        LOG_ERROR_FOR("Tools", QString("ERROR: %1").arg(error));
         return false;
     }
-    LOG_FOR("Tools", QString("Process done : %1, output : %2").arg(proc.left(20)).arg(QString(process.readAllStandardOutput())));
+    LOG_FOR("Tools", QString("Process done: %1, output: %2").arg(proc.left(20)).arg(QString(process.readAllStandardOutput())));
     return true;
 }
 
 bool executeSqlFile(const QString &connectionName, const QString &fileName, QProgressDialog *dlg)
 {
     if (!QFile::exists(fileName)) {
-        LOG_ERROR_FOR("Tools", QString("ERROR: missing database schema file : %1.").arg(fileName));
+        LOG_ERROR_FOR("Tools", QString("ERROR: missing database schema file: %1.").arg(fileName));
         return false;
     }
 
     // execute all sql queries
     QString req = Utils::readTextFile(fileName);
     if (req.isEmpty()) {
-        LOG_ERROR_FOR("Tools", "File is empty : " + fileName);
+        LOG_ERROR_FOR("Tools", "File is empty: " + fileName);
         return false;
     }
 
@@ -181,7 +181,7 @@ bool executeSqlFile(const QString &connectionName, const QString &fileName, QPro
 
     req.clear();
     QStringList queries;
-    // Reconstruct req : removes comments
+    // Reconstruct req: removes comments
     foreach(const QString &s, list) {
         if (s.startsWith("--")) {
             LOG_FOR("Tools", s);
@@ -219,7 +219,7 @@ bool executeSqlFile(const QString &connectionName, const QString &fileName, QPro
 
         QSqlQuery query(sql, DB);
         if (!query.isActive()) {
-            LOG_ERROR_FOR("Tools", QString("SQL ERROR : %1 \"%2\"").arg(query.lastError().text(), sql));
+            LOG_ERROR_FOR("Tools", QString("SQL ERROR: %1 \"%2\"").arg(query.lastError().text(), sql));
 //            DB.rollback();
             return false;
         } else {
@@ -246,9 +246,9 @@ bool executeSqlQuery(const QString &sql, const QString &dbName, const QString &f
     QSqlQuery query(sql, DB);
     if (!query.isActive()) {
         if (file.isEmpty())
-            LOG_ERROR_FOR("Tools", "Query Error : " + sql + " // " + query.lastError().text());
+            LOG_ERROR_FOR("Tools", "Query Error: " + sql + " // " + query.lastError().text());
         else
-            Utils::Log::addError("Tools", "Query Error : " + sql + " // " + query.lastError().text(), file, line);
+            Utils::Log::addError("Tools", "Query Error: " + sql + " // " + query.lastError().text(), file, line);
         return false;
     }
     return true;
@@ -284,7 +284,7 @@ QString databaseOutputPath()
 bool connectDatabase(const QString &connection, const QString &fileName)
 {
     if (!QSqlDatabase::isDriverAvailable("QSQLITE")) {
-        LOG_ERROR_FOR("Tools", QString("ERROR : SQLite driver is not available"));
+        LOG_ERROR_FOR("Tools", QString("ERROR: SQLite driver is not available"));
         return false;
     }
     QSqlDatabase DB;
@@ -299,10 +299,10 @@ bool connectDatabase(const QString &connection, const QString &fileName)
             DB.setDatabaseName(fileName);
 
         if (!DB.open()) {
-            LOG_ERROR_FOR("Tools", QString("ERROR : %1 // %2").arg(DB.lastError().text()).arg(fileName));
+            LOG_ERROR_FOR("Tools", QString("ERROR: %1 // %2").arg(DB.lastError().text()).arg(fileName));
             return false;
         } else {
-            LOG_FOR("Tools", QString("Connection to database created : %1 %2")
+            LOG_FOR("Tools", QString("Connection to database created: %1 %2")
                     .arg(DB.connectionName(), DB.databaseName()));
         }
         if (connection==Constants::MASTER_DATABASE_NAME)
@@ -803,7 +803,7 @@ bool addInteraction(const QString &connection, const QStringList &atc1, const QS
     }
     // Check errors
     if (!ia_ids.count()) {
-        LOG_ERROR_FOR("Tools", QString("Interaction not added : %1   //  %2").arg(atc1.join(",")).arg(atc2.join(",")));
+        LOG_ERROR_FOR("Tools", QString("Interaction not added: %1   //  %2").arg(atc1.join(",")).arg(atc2.join(",")));
         return false;
     }
     // Add labels
