@@ -25,6 +25,12 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
+/**
+ * \class Alert::AlertPlaceHolderWidget
+ * This widget is a toolbar showing registered non-blocking alerts.
+ * \sa Alert::IAlertPlaceHolder
+ */
+
 #include "alertplaceholderwidget.h"
 #include "alertitem.h"
 #include "alertcore.h"

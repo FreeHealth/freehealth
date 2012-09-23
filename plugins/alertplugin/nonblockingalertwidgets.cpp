@@ -75,11 +75,13 @@ static QIcon getIcon(const AlertItem &item)
 
 
 /**
-  \class Alert::NonBlockingAlertLabel
-  Create a QToolButton for any static view type Alert::AlertItem. The alert can be:
-    - validated
-    - edited
-  using the menu of this button.
+ * \class Alert::NonBlockingAlertLabel
+ * Create a generic QToolButton for non-blocking alerts. The alert can be:
+ * - validated
+ * - edited
+ * - overridden
+ * - "reminded later"
+ * using the menu of this button.
 */
 NonBlockingAlertToolButton::NonBlockingAlertToolButton(QWidget *parent) :
     QToolButton(parent),
@@ -162,22 +164,33 @@ void NonBlockingAlertToolButton::setAlertItem(const AlertItem &item)
     _item = item;
 }
 
+/**
+ * If set to true, draw the button background color using the priority of the alert (low, medium, high)
+ * otherwise use the default QToolButton background
+*/
 void NonBlockingAlertToolButton::setDrawBackgroundUsingAlertPriority(bool useAlertPriority)
 {
     _drawBackgroundUsingAlertPriority = useAlertPriority;
     refreshStyleSheet();
 }
 
+/**
+ * If set to true, automatically save the alert when the user validate or override it
+*/
 void NonBlockingAlertToolButton::setAutoSaveOnValidationOrOverriding(bool autosave)
 {
     _autoSave = autosave;
 }
 
+/**
+ * If set to true, automatically save the alert when the user edit the alert
+*/
 void NonBlockingAlertToolButton::setAutoSaveOnEditing(bool autosave)
 {
     _autoSaveOnEdit = autosave;
 }
 
+/** \internal */
 void NonBlockingAlertToolButton::refreshStyleSheet()
 {
     if (_drawBackgroundUsingAlertPriority)
@@ -188,6 +201,10 @@ void NonBlockingAlertToolButton::refreshStyleSheet()
         setStyleSheet("");
 }
 
+/**
+ * \internal
+ * Validate the alert
+ */
 void NonBlockingAlertToolButton::validateAlert()
 {
     QVariant validate = alertCore()->execute(_item, AlertScript::OnAboutToValidate);
@@ -199,6 +216,10 @@ void NonBlockingAlertToolButton::validateAlert()
     }
 }
 
+/**
+ * \internal
+ * Edit the alert
+ */
 void NonBlockingAlertToolButton::editAlert()
 {
     // TODO: add a script onAboutToEdit
@@ -215,6 +236,10 @@ void NonBlockingAlertToolButton::editAlert()
     }
 }
 
+/**
+ * \internal
+ * Remind the alert
+ */
 void NonBlockingAlertToolButton::remindAlert()
 {
     if (!_item.isRemindLaterAllowed())
@@ -226,6 +251,10 @@ void NonBlockingAlertToolButton::remindAlert()
     }
 }
 
+/**
+ * \internal
+ * Override the alert. If required, ask user for a comment
+ */
 void NonBlockingAlertToolButton::overrideAlert()
 {
     // TODO: improve the dialog by creating a specific AlertOverridingConfirmationDialog
@@ -259,6 +288,9 @@ void NonBlockingAlertToolButton::overrideAlert()
     }
 }
 
+/**
+ * \internal
+ */
 void NonBlockingAlertToolButton::retranslateUi()
 {
     aValidate->setText(tkTr(Trans::Constants::VALIDATE));
@@ -298,9 +330,10 @@ void NonBlockingAlertToolButton::hideEvent(QHideEvent *event)
 }
 
 /**
-  \class Alert::NonBlockingAlertLabel
-  Create a QLabel for any static view type Alert::AlertItem. The QLabel will only present the icon
-  of the alert and its label/category as tooltip. It is a 16x16 sized QLabel.
+ * \class Alert::NonBlockingAlertLabel
+ * Create a QLabel for any static view type Alert::AlertItem. The QLabel will only present the icon
+ * of the alert and its label/category as tooltip. User will not be able to interact with the alert item.
+ * It is a 16x16 sized QLabel.
 */
 NonBlockingAlertLabel::NonBlockingAlertLabel(QWidget *parent) :
     QLabel(parent)
@@ -309,7 +342,7 @@ NonBlockingAlertLabel::NonBlockingAlertLabel(QWidget *parent) :
     setMinimumSize(QSize(16,16));
 }
 
-/** Define the Alert::AlertItem to use for this button. */
+/** Define the Alert::AlertItem to use for this label. */
 void NonBlockingAlertLabel::setAlertItem(const AlertItem &item)
 {
     setPixmap(getIcon(item).pixmap(16,16));

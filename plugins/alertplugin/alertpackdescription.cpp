@@ -25,13 +25,17 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
+/**
+ * \class Alert::AlertPackDescription
+ * The Alert Pack description is a DataPack::Pack::PackDescription with some additional info.
+*/
+
 #include "alertpackdescription.h"
 
 using namespace Alert;
 
 // TODO: add Extra-XML management
 
-/** The Alert Pack description is the DataPack::Pack::PackDescription with some additional info. */
 AlertPackDescription::AlertPackDescription() :
     Utils::GenericDescription("PackDescription")
 {

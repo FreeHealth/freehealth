@@ -79,6 +79,7 @@ PatientWidgetManager::PatientWidgetManager(QObject *parent) : PatientActionHandl
 
 void PatientWidgetManager::updateContext(Core::IContext *object, const Core::Context &additionalContexts)
 {
+    Q_UNUSED(additionalContexts);
     PatientSelector *view = 0;
     do {
         if (!object) {

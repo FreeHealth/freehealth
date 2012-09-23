@@ -25,13 +25,15 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 /**
-  \class Patients::PatientBar
-  \brief The Patient bar is the bar surrounding all view when a patient is selected.
-  It contains:
-  - a brief resume of the patient's identity
-  - a specific place where PatientsActions are presented
-  \todo The PatientBar is created by the MainWindow and added to Modes manually. Make the patientBar available for everyone in IPatient ?
-  \sa Patients::PatientAction
+ * \class Patients::PatientBar
+ * \brief The Patient bar is the bar surrounding all view when a patient is selected.
+ * It contains:
+ * - a brief resume of the patient's identity
+ * - an Alert::IAlertPlaceHolder for patient non-blocking alerts (if compiled with the 'with-alert' config tag)
+ * - a specific place where PatientsActions are presented (not yet implemented)
+ * The whole application owns a unique instance of the patient bar. This singleton is accessible
+ * throught the Core::IPatient interface.
+ * \sa Patients::PatientAction, Patients::Internal::PatientBarAlertPlaceHolder, Core::IPatient::showPatientBar(), Core::IPatient::hidePatientBar(), Core::IPatient::isPatientBarVisible()
 */
 
 #include "patientbar.h"
@@ -145,6 +147,7 @@ PatientBar *PatientBar::instance(QWidget *parent)
     return m_Instance;
 }
 
+/** ctor of the widget, uses the single Patients::PatientModel::activeModel() or create it */
 PatientBar::PatientBar(QWidget *parent) :
     QWidget(parent),
     d(new Internal::PatientBarPrivate(this))
@@ -159,11 +162,13 @@ PatientBar::PatientBar(QWidget *parent) :
     connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onCurrentPatientChanged()));
 }
 
+/** dtor */
 PatientBar::~PatientBar()
 {
     d->removeAlertManager();
 }
 
+/** Define the Patients::PatientModel to use. By default the Patients::PatientModel::activeModel() is used */
 void PatientBar::setPatientModel(PatientModel *model)
 {
     if (d->m_Model)
@@ -174,6 +179,7 @@ void PatientBar::setPatientModel(PatientModel *model)
     d->m_Mapper->setModel(model);
 }
 
+/** Set the current patient index */
 void PatientBar::setCurrentIndex(const QModelIndex &index)
 {
     if (d->m_Index)
@@ -187,11 +193,13 @@ void PatientBar::setCurrentIndex(const QModelIndex &index)
     d->m_Mapper->setCurrentModelIndex(index);
 }
 
+/** Set the current patient index when patient changed */
 void PatientBar::onCurrentPatientChanged()
 {
     setCurrentIndex(d->m_Model->currentPatient());
 }
 
+/** Update the view when a data of the patient model is changed */
 void PatientBar::patientDataChanged(const QModelIndex &top, const QModelIndex &bottom)
 {
     if (IN_RANGE(Core::IPatient::DateOfBirth, top.column(), bottom.column())) {
@@ -202,6 +210,7 @@ void PatientBar::patientDataChanged(const QModelIndex &top, const QModelIndex &b
     }
 }
 
+/** Paint the bar using the Utils::StyleHelper */
 void PatientBar::paintEvent(QPaintEvent *e)
 {
     QPainter painter(this);

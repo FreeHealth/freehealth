@@ -25,6 +25,11 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
+/**
+ * \class Alert::AlertItemTimingEditorWidget
+ * A timing editor widget (start, end, cycling info...) for alert items.
+ */
+
 #include "alertitemtimingeditorwidget.h"
 #include "alertitem.h"
 #include "ui_alertitemtimingeditorwidget.h"

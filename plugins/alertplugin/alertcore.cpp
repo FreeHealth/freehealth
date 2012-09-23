@@ -25,6 +25,12 @@
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
+/**
+ * \class Alert::AlertCore
+ * Central object of the Alert plugin. Manages all singleton objects, alert access,
+ * database control...
+ */
+
 #include "alertcore.h"
 #include "alertbase.h"
 #include "alertitem.h"
@@ -75,6 +81,7 @@ static inline DataPack::IPackManager *packManager() { return dataPackCore().pack
 
 AlertCore *AlertCore::_instance = 0;
 
+/** Return the instance of the object */
 AlertCore *AlertCore::instance()
 {
     Q_ASSERT(_instance);
@@ -419,11 +426,16 @@ void AlertCore::postCoreInitialization()
         connect(user(), SIGNAL(userChanged()), this, SLOT(checkUserAlerts()));
 }
 
+/**
+ * Execute the alert script and return the script execution value (Eg '2' for a '1+1' script)
+ * \sa Alert::AlertScript, Alert::Internal::AlertScriptManager
+ */
 QVariant AlertCore::execute(AlertItem &item, const int scriptType)
 {
     return d->_alertScriptManager->execute(item, scriptType);
 }
 
+/** For tests only */
 void Internal::AlertCorePrivate::makeTests()
 {
     // TESTS
