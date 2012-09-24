@@ -25,10 +25,24 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 /**
-  \class Form::FormPlaceHolder
-  Widget containing the Episode treeView and the forms in a QStackedLayout
-  When an episode is activated by the user, the formViewer is set to the corresponding form
-  and episode data. Data are automatically saved (without any user intervention).
+ * \class Form::FormPlaceHolder
+ * Widget containing the Episode treeView and the forms in a QStackedLayout
+ * When an episode is activated by the user, the formViewer is set to the corresponding form
+ * and episode data. Data are automatically saved (without any user intervention).
+ *
+ * +--------------+-----------------------------------------+
+ * | FormTreeView |  Episode ToolBar                        |
+ * |              |             EpisodeListView             |
+ * |              |                                         |
+ * |              +-----------------------------------------|
+ * |              |                                         |
+ * |              |           FormDataWidgetMapper          |
+ * |              |                                         |
+ * |              |                                         |
+ * |              |                                         |
+ * |              |                                         |
+ * +--------------+-----------------------------------------+
+ *
 */
 
 #include "formplaceholder.h"
@@ -151,7 +165,8 @@ class FormPlaceHolderPrivate
 public:
     FormPlaceHolderPrivate(FormPlaceHolder *parent) :
         ui(new Ui::FormPlaceHolder),
-            _formMain(0),
+            _rootForm(0),
+            _currentEditingForm(0),
             _formTreeModel(0),
             _delegate(0),
             _episodeToolBar(0),
@@ -226,9 +241,56 @@ public:
         ui->episodeView->setVisible(visible);
     }
 
+    void setCurrentForm(Form::FormMain *form)
+    {
+        if (form==_currentEditingForm)
+            return;
+        _currentEditingForm = form;
+        if (form)
+            qWarning() << "FormPlaceHolder::setCurrentForm" << form->uuid();
+        else
+            qWarning() << "FormPlaceHolder::setCurrentForm (0x0)";
+
+        if (ui->episodeView->selectionModel())
+            QObject::disconnect(ui->episodeView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), q, SLOT(episodeChanged(QModelIndex, QModelIndex)));
+
+        ui->formDataMapper->setCurrentForm(_currentEditingForm);
+        EpisodeModel *episodeModel = formManager().episodeModel(_currentEditingForm);
+        ui->episodeView->setModel(episodeModel);
+        for(int i=0; i < EpisodeModel::MaxData; ++i)
+            ui->episodeView->hideColumn(i);
+        ui->episodeView->showColumn(EpisodeModel::ValidationStateIcon);
+        ui->episodeView->showColumn(EpisodeModel::UserDate);
+        ui->episodeView->showColumn(EpisodeModel::Label);
+        ui->episodeView->showColumn(EpisodeModel::UserCreatorName);
+        //    ui->episodeView->showColumn(EpisodeModel::Uuid);
+
+        // Unique épisode || no episode -> hide episodeview
+        if (_currentEditingForm->episodePossibilities()==FormMain::UniqueEpisode || _currentEditingForm->episodePossibilities()==FormMain::NoEpisode) {
+            setEpisodeViewVisibility(false);
+        } else {
+            setEpisodeViewVisibility(true);
+        }
+
+        ui->episodeView->horizontalHeader()->setResizeMode(EpisodeModel::ValidationStateIcon, QHeaderView::ResizeToContents);
+    //    ui->episodeView->horizontalHeader()->resizeSection(EpisodeModel::ValidationStateIcon, 22);
+        ui->episodeView->horizontalHeader()->setResizeMode(EpisodeModel::UserDate, QHeaderView::ResizeToContents);
+        ui->episodeView->horizontalHeader()->setResizeMode(EpisodeModel::Label, QHeaderView::Stretch);
+        ui->episodeView->horizontalHeader()->setResizeMode(EpisodeModel::UserCreatorName, QHeaderView::ResizeToContents);
+        ui->episodeView->horizontalHeader()->hide();
+
+        QObject::connect(ui->episodeView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), q, SLOT(episodeChanged(QModelIndex, QModelIndex)));
+        if (!ui->episodeView->selectionModel()->hasSelection()) {
+            ui->episodeView->selectRow(0);
+            if (episodeModel)
+                q->episodeChanged(episodeModel->index(0,0), QModelIndex());
+        }
+        Q_EMIT q->actionsEnabledStateChanged();
+    }
+
 public:
     Ui::FormPlaceHolder *ui;
-    FormMain *_formMain;
+    FormMain *_rootForm, *_currentEditingForm;
     FormTreeModel *_formTreeModel;
     FormItemDelegate *_delegate;
     QToolBar *_episodeToolBar;
@@ -420,12 +482,14 @@ void FormPlaceHolder::setRootForm(Form::FormMain *rootForm)
 {
     if (!rootForm)
         return;
-    d->_formMain = rootForm;
+    if (d->_rootForm==rootForm)
+        return;
+    d->_rootForm = rootForm;
 
     // Manage Form tree view / model
     if (d->_formTreeModel)
         delete d->_formTreeModel;
-    d->_formTreeModel = new FormTreeModel(rootForm, this);
+    d->_formTreeModel = new FormTreeModel(d->_rootForm, this);
     d->_formTreeModel->initialize();
     d->ui->formView->setModel(d->_formTreeModel);
     d->_delegate->setFormTreeModel(d->_formTreeModel);
@@ -446,7 +510,7 @@ void FormPlaceHolder::setRootForm(Form::FormMain *rootForm)
 
     // Select the first available form in the tree model
     if (rootForm->firstLevelFormMainChildren().count() > 0) {
-        setCurrentForm(rootForm->firstLevelFormMainChildren().at(0));
+        d->setCurrentForm(d->_rootForm->firstLevelFormMainChildren().at(0));
         QModelIndex index = d->_formTreeModel->index(0,0);
         d->ui->formView->selectionModel()->select(index, QItemSelectionModel::Rows | QItemSelectionModel::SelectCurrent);
     }
@@ -456,8 +520,9 @@ void FormPlaceHolder::setRootForm(Form::FormMain *rootForm)
 /** Clear the form content. The current episode (if one was selected) is not submitted to the model. */
 bool FormPlaceHolder::clear()
 {
-    if (d->_formMain)
-        d->_formMain->clear();
+    if (d->_currentEditingForm)
+        d->_currentEditingForm->clear();
+    Q_EMIT actionsEnabledStateChanged();
     return true;
 }
 
@@ -474,7 +539,7 @@ void FormPlaceHolder::handlePressed(const QModelIndex &index)
 // Used for the delegate
 void FormPlaceHolder::handleClicked(const QModelIndex &index)
 {
-    setCurrentEditingItem(index);
+    setCurrentEditingFormItem(index);
     Q_EMIT actionsEnabledStateChanged();
     if (index.column() == FormTreeModel::EmptyColumn1) { // the funky button
         if (!d->_formTreeModel->isNoEpisode(index))
@@ -489,77 +554,15 @@ void FormPlaceHolder::handleClicked(const QModelIndex &index)
     }
 }
 
-void FormPlaceHolder::showLastEpisodeSynthesis()
-{
-    qWarning() << "showLastEpisodeSynthesis";
-    setCurrentForm(Constants::PATIENTLASTEPISODES_UUID);
-}
-
-/**
- * Define the current editing form.
- * \sa setCurrentEditingItem()
- */
-void FormPlaceHolder::setCurrentForm(Form::FormMain *form)
-{
-    if (form)
-        qWarning() << "FormPlaceHolder::setCurrentForm" << form->uuid();
-    else
-        qWarning() << "FormPlaceHolder::setCurrentForm (0x0)";
-
-    if (d->ui->episodeView->selectionModel())
-        disconnect(d->ui->episodeView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(episodeChanged(QModelIndex, QModelIndex)));
-
-    d->ui->formDataMapper->setCurrentForm(form);
-    EpisodeModel *episodeModel = formManager().episodeModel(form);
-    d->ui->episodeView->setModel(episodeModel);
-    for(int i=0; i < EpisodeModel::MaxData; ++i)
-        d->ui->episodeView->hideColumn(i);
-    d->ui->episodeView->showColumn(EpisodeModel::ValidationStateIcon);
-    d->ui->episodeView->showColumn(EpisodeModel::UserDate);
-    d->ui->episodeView->showColumn(EpisodeModel::Label);
-    d->ui->episodeView->showColumn(EpisodeModel::UserCreatorName);
-    //    d->ui->episodeView->showColumn(EpisodeModel::Uuid);
-
-    // Unique épisode || no episode -> hide episodeview
-    if (form->episodePossibilities()==FormMain::UniqueEpisode || form->episodePossibilities()==FormMain::NoEpisode) {
-        d->setEpisodeViewVisibility(false);
-    } else {
-        d->setEpisodeViewVisibility(true);
-    }
-
-    d->ui->episodeView->horizontalHeader()->setResizeMode(EpisodeModel::ValidationStateIcon, QHeaderView::ResizeToContents);
-//    d->ui->episodeView->horizontalHeader()->resizeSection(EpisodeModel::ValidationStateIcon, 22);
-    d->ui->episodeView->horizontalHeader()->setResizeMode(EpisodeModel::UserDate, QHeaderView::ResizeToContents);
-    d->ui->episodeView->horizontalHeader()->setResizeMode(EpisodeModel::Label, QHeaderView::Stretch);
-    d->ui->episodeView->horizontalHeader()->setResizeMode(EpisodeModel::UserCreatorName, QHeaderView::ResizeToContents);
-    d->ui->episodeView->horizontalHeader()->hide();
-
-    connect(d->ui->episodeView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(episodeChanged(QModelIndex, QModelIndex)));
-    if (!d->ui->episodeView->selectionModel()->hasSelection()) {
-        d->ui->episodeView->selectRow(0);
-        if (episodeModel)
-            episodeChanged(episodeModel->index(0,0), QModelIndex());
-    }
-    Q_EMIT actionsEnabledStateChanged();
-}
-
-/**
- * Define the current editing form.
- * \sa setCurrentEditingItem()
- */
-void FormPlaceHolder::setCurrentForm(const QString &formUid)
-{
-    setCurrentForm(formManager().form(formUid));
-}
-
 /**
  * When using a FormTreeModel you can set the current for with this.
  * \sa setCurrentForm()
  */
-void FormPlaceHolder::setCurrentEditingItem(const QModelIndex &index)
+void FormPlaceHolder::setCurrentEditingFormItem(const QModelIndex &index)
 {
     Form::FormMain *form = d->_formTreeModel->formForIndex(index);
-    setCurrentForm(form);
+    if (form!=d->_currentEditingForm)
+        d->setCurrentForm(form);
 }
 
 /**
@@ -581,7 +584,7 @@ bool FormPlaceHolder::createEpisode()
         return false;
     if (d->_formTreeModel->isUniqueEpisode(index))
         return false;
-    setCurrentEditingItem(index);
+    setCurrentEditingFormItem(index);
 
     // create a new episode the selected form and its children
     Form::FormMain *form = d->_formTreeModel->formForIndex(index);
