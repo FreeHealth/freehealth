@@ -183,7 +183,7 @@ public:
 
         // show the form widgets
         int stackIndex;
-        (_formMain) ? stackIndex = _stackId_FormUuid.key(_formMain->uuid()) : stackIndex = 0;
+        stackIndex = _formMain ? _stackId_FormUuid.key(_formMain->uuid()) : 0;
         _stack->setCurrentIndex(stackIndex);
 
         _episodeModel->populateFormWithEpisodeContent(index, true);
