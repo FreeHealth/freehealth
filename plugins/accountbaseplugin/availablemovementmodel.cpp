@@ -39,9 +39,9 @@
 #include <QSqlTableModel>
 
 using namespace AccountDB;
-
 using namespace Trans::ConstantTranslations;
 
+static inline AccountDB::AccountBase *accountBase() {return AccountDB::AccountBase::instance();}
 
 namespace AccountDB {
 namespace Internal {
@@ -50,7 +50,6 @@ class AvailableMovementModelPrivate
 public:
     AvailableMovementModelPrivate(AvailableMovementModel *parent) : m_SqlTable(0), q(parent)
     {
-        m_SqlTable = new QSqlTableModel(q,QSqlDatabase::database(Constants::DB_ACCOUNTANCY));
     }
 
     ~AvailableMovementModelPrivate () {}
@@ -68,9 +67,11 @@ private:
 
 
 AvailableMovementModel::AvailableMovementModel(QObject *parent) :
-        QAbstractTableModel(parent), d(new Internal::AvailableMovementModelPrivate(this))
+    QAbstractTableModel(parent),
+    d(new Internal::AvailableMovementModelPrivate(this))
 {
-    d->m_SqlTable->setTable(AccountBase::instance()->table(Constants::Table_AvailableMovement));
+    d->m_SqlTable = new QSqlTableModel(this, accountBase()->database());
+    d->m_SqlTable->setTable(accountBase()->table(Constants::Table_AvailableMovement));
     d->m_SqlTable->setEditStrategy(QSqlTableModel::OnFieldChange);
     //    d->m_SqlTable->setFilter( user );
     d->m_SqlTable->select();
