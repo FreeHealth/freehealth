@@ -333,6 +333,7 @@ BaseForm::BaseForm(Form::FormItem *formItem, QWidget *parent) :
     setObjectName("BaseForm");
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
 
+    // add a header with date, episode name and screenshot button - every episode has this
     QWidget *header = new QWidget(this);
     m_Header = new Ui::BaseFormWidget;
     m_Header->setupUi(header);
@@ -367,8 +368,9 @@ BaseForm::BaseForm(Form::FormItem *formItem, QWidget *parent) :
         // Manage options
         Form::FormMain *form = qobject_cast<Form::FormMain*>(formItem);
         if (form) {
-            if (!(form->episodePossibilities()==Form::FormMain::UniqueEpisode && hideHeaderOnUniqueEpisode(formItem))) {
-                mainLayout->addWidget(header);
+            mainLayout->addWidget(header);
+            if (!(form->episodePossibilities() == Form::FormMain::UniqueEpisode && hideHeaderOnUniqueEpisode(formItem))) {
+                header->show();
             } else {
                 header->hide();
             }
@@ -391,9 +393,10 @@ BaseForm::BaseForm(Form::FormItem *formItem, QWidget *parent) :
         // Manage options
         Form::FormMain *form = qobject_cast<Form::FormMain*>(formItem);
         if (form) {
-            if (!(form->episodePossibilities()==Form::FormMain::UniqueEpisode && hideHeaderOnUniqueEpisode(formItem))) {
-                m_ContainerLayout->addWidget(header, 0, 0, 1, numberColumns);
+            m_ContainerLayout->addWidget(header, 0, 0, 1, numberColumns);
+            if (!(form->episodePossibilities() == Form::FormMain::UniqueEpisode && hideHeaderOnUniqueEpisode(formItem))) {
                 i = numberColumns * 2;
+                header->show();
             } else {
                 header->hide();
             }
