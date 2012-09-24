@@ -756,7 +756,7 @@ ReceiptViewer::ReceiptViewer(QWidget *parent) :
     ui->goToControlButton->setIcon(theme()->icon(Core::Constants::ICONNEXT));
     ui->goToControlButton->setShortcut(QKeySequence::Forward);
     ui->goToControlButton->setToolTip(QKeySequence(QKeySequence::Forward).toString());
-    //---------------------------------------------------------------------
+
     m_actionTreeView = new treeViewsActions(this);
     m_vbox = new QVBoxLayout;
     m_vbox->addWidget(m_actionTreeView);

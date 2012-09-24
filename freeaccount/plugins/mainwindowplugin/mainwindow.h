@@ -70,7 +70,6 @@ public:
     void readSettings();
     void writeSettings();
     void createStatusBar();
-    bool savePrescription(const QString &fileName = QString::null);
     void changeFontTo(const QFont &font);
 
 
