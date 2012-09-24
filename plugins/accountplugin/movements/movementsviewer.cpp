@@ -75,6 +75,7 @@ MovementsViewer::MovementsViewer(QWidget * parent) :
         ui->quitButton->show();
         setAttribute(Qt::WA_DeleteOnClose);
         }
+
     //instanciate
     m_valid = 0; //bill not received
     ui->valueDoubleSpinBox->setRange(0.00,999999999999999.00);
@@ -86,8 +87,8 @@ MovementsViewer::MovementsViewer(QWidget * parent) :
     fillBankComboBox();
     ui->valAndRecButton->setShortcut(QKeySequence::InsertParagraphSeparator);
     if(!showMovements())
-    Utils::warningMessageBox( tr("Unable to show movements correctly."), tr("Contact the development team."),
-    QString(), QString() );
+        Utils::warningMessageBox(tr("Unable to show movements correctly."), tr("Contact the development team."));
+
     //icons and shortcuts
     ui->quitButton->setIcon(theme()->icon(Core::Constants::ICONQUIT));
     ui->quitButton->setShortcut(QKeySequence::Quit);
@@ -109,7 +110,6 @@ MovementsViewer::MovementsViewer(QWidget * parent) :
     ui->recordButton->setShortcut(QKeySequence::Save);
     ui->recordButton->setToolTip(QKeySequence(QKeySequence::Save).toString()); 
 
-    
     connect(ui->quitButton,SIGNAL(pressed()),this,SLOT(quitFreeaccout()));
     connect(ui->recordButton,SIGNAL(pressed()),this,SLOT(recordMovement()));
     connect(ui->deleteButton,SIGNAL(pressed()),this,SLOT(deleteMovement()));

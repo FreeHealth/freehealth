@@ -43,7 +43,6 @@
  * \date 29 Jun 2012
 */
 
-
 namespace AccountDB {
 class AccountData;
 
