@@ -97,7 +97,6 @@ public:
         setWidget(parent);
         m_context = Core::Context(Core::Constants::C_USERMANAGER);
     }
-    ~UserManagerContext() {}
 };
 
 }  // End  Internal

@@ -38,6 +38,7 @@
 #include <coreplugin/icore.h>
 
 #include <QApplication>
+#include <QDebug>
 
 using namespace Editor;
 using namespace Editor::Internal;
@@ -53,7 +54,7 @@ EditorManager *EditorManager::instance(QObject *parent)
     }
     return m_Instance;
 }
-
+// TODO: move instance in plugin interface
 EditorManager::EditorManager(QObject *parent) :
         EditorActionHandler(parent)
 {

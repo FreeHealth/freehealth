@@ -250,11 +250,13 @@ void PadWriter::setHtmlSource(const QString &html)
 
 void PadWriter::filterTokenPool(const QString &tokenNamespace)
 {
+    Q_UNUSED(tokenNamespace)
     // TODO: here
 }
 
 void PadWriter::filterTokenPool(const QStringList &tokenNamespaces)
 {
+    Q_UNUSED(tokenNamespaces)
     // TODO: here
 }
 

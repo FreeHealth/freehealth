@@ -132,9 +132,9 @@ FormContextualWidgetManager::~FormContextualWidgetManager()
 void FormContextualWidgetManager::updateContext(Core::IContext *object, const Core::Context &additionalContexts)
 {
     Q_UNUSED(additionalContexts);
-    qWarning() << "FormContextualWidgetManager::updateContext(Core::IContext *object)" << object;
-    if (object)
-        qWarning() << "FormContextualWidgetManager::updateContext(Core::IContext *object)" << object->widget();
+//    qWarning() << "FormContextualWidgetManager::updateContext(Core::IContext *object)" << object;
+//    if (object)
+//        qWarning() << "FormContextualWidgetManager::updateContext(Core::IContext *object)" << object->widget();
 
     FormContextualWidget *view = 0;
     do {

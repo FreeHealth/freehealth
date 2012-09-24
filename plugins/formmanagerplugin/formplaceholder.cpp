@@ -226,31 +226,6 @@ public:
         ui->episodeView->setVisible(visible);
     }
 
-    void updateEpisodeActions(const QModelIndex &index)
-    {
-        // TODO: Code action update
-//        const EpisodeModel *model = qobject_cast<EpisodeModel*>(ui->episodeView->model());
-//        const bool enabled = index.isValid();
-//        const bool unique = _formTreeModel->isUniqueEpisode(index);
-//        const bool modelHasOneRowAtLeast = model->rowCount()>=1;
-
-//        aSaveEpisode->setEnabled(enabled);
-//        aRemoveEpisode->setEnabled(enabled && !unique);
-//        if (enabled) {
-//            Q_ASSERT(model);
-//            aValidateEpisode->setEnabled(!model->isEpisodeValidated(index));
-//            if (unique)
-//                aNewEpisode->setEnabled(!modelHasOneRowAtLeast);
-//            else
-//                aNewEpisode->setEnabled(true);
-//        } else {
-//            aValidateEpisode->setEnabled(enabled);
-//            aSaveEpisode->setEnabled(enabled);
-//            aNewEpisode->setEnabled(enabled);
-//        }
-//        aPrintForm->setEnabled(enabled);
-    }
-
 public:
     Ui::FormPlaceHolder *ui;
     FormMain *_formMain;
@@ -811,7 +786,7 @@ void FormPlaceHolder::episodeChanged(const QModelIndex &current, const QModelInd
 //    if (!current.isValid())
 //        return;
     d->ui->formDataMapper->setCurrentEpisode(current);
-    d->updateEpisodeActions(current);
+    // TODO: emit new epsiodeIndex && EpsiodeModel
 }
 
 void FormPlaceHolder::changeEvent(QEvent *event)
