@@ -50,14 +50,8 @@ namespace Internal {
 //class AgendaContext : public Core::IContext
 //{
 //public:
-//    AgendaContext(DrugsCentralWidget *w) : Core::IContext(w), wgt(w) { setObjectName("AgendaContext"); }
-//    void setContext(QList<int> c) { ctx = c; }
-//    QList<int> context() const { return ctx; }
-//    QWidget *widget() { return wgt; }
-
-//private:
-//    QWidget *wgt;
-//    QList<int> ctx;
+//    AgendaContext(DrugsCentralWidget *w) : Core::IContext(w)
+//    { setObjectName("AgendaContext"); setWidget(w); }
 //};
 
 class AGENDA_EXPORT AgendaActionHandler : public QObject
