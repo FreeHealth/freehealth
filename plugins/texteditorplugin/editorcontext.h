@@ -40,24 +40,11 @@ namespace Internal {
 class EditorContext : public Core::IContext
 {
 public:
-    EditorContext(TextEditor *parent) : Core::IContext(parent), w(parent)
+    EditorContext(TextEditor *parent) : Core::IContext(parent)
     {
         setObjectName("EditorContext");
+        setWidget(parent);
     }
-
-    void addContext(int uid)
-    {
-        if (!m_Context.contains(uid))
-            m_Context.add(uid);
-    }
-//    void clearContext() { m_Context.clear(); }
-
-    Core::Context context() const { return m_Context; }
-    QWidget *widget() const  { return w; }
-
-private:
-    TextEditor *w;
-    Core::Context m_Context;
 };
 
 }  // End Internal

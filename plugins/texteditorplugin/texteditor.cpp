@@ -297,7 +297,7 @@ TextEditor::TextEditor(QWidget *parent, Types type) :
 
     // instanciate private part
     d = new TextEditorPrivate(this, type);
-    // instanciate editor manager
+    // TODO: remove this: instanciate editor manager
     EditorManager::instance();
 
     // create ToolBar
@@ -363,6 +363,7 @@ void TextEditor::setTypes(Types type)
     if (type & TextEditor::WithTextCompleter) {
         context.add(Core::Constants::C_EDITOR_ADDTEXT);
     }
+    d->m_Context->setContext(context);
     // update toolbar
     d->populateToolbar();
     Core::ICore::instance()->contextManager()->updateContext();
