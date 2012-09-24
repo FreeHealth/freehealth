@@ -779,7 +779,7 @@ void FormPlaceHolder::onCurrentPatientChanged()
 
 void FormPlaceHolder::episodeChanged(const QModelIndex &current, const QModelIndex &previous)
 {
-    qWarning() << "FormPlaceHolder::EpisodeChanged current" << current.isValid() << "previous" << previous.isValid();
+    qWarning() << "FormPlaceHolder::episodeChanged: current valid:" << current.isValid() << "previous valid:" << previous.isValid();
     // Autosave is problematic when patient changed
 //    if (previous.isValid())
 //        d->saveCurrentEditingEpisode();
