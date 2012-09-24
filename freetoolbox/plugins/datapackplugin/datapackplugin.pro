@@ -1,11 +1,6 @@
 TEMPLATE = lib
 TARGET = DataPackPlugin
 
-DEFINES += FREETOOLBOX
-FREETOOLBOX = 1
-
-BUILD_PATH_POSTFIXE = FreeToolBox
-
 include(../../../plugins/fmf_plugins.pri)
 include(datapack_dependencies.pri)
 
@@ -20,6 +15,5 @@ SOURCES += \
 
 HEADERS  += \
     datapackplugin.h
-
 
 OTHER_FILES += DataPackPlugin.pluginspec

@@ -39,12 +39,9 @@ SOURCES += $${PWD}/icdplugin.cpp \
     $${PWD}/icdsearchmodel.cpp \
     $${PWD}/icdcollectiondialog.cpp
 
-
-
 FORMS += $${PWD}/icdviewer.ui \
     $${PWD}/icdcodeselector.ui \
     $${PWD}/icdcentralwidget.ui
-
 
 TRANSLATIONS += $${SOURCES_TRANSLATIONS_PATH}/icdplugin_fr.ts \
                 $${SOURCES_TRANSLATIONS_PATH}/icdplugin_de.ts \

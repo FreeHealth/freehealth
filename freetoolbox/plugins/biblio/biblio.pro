@@ -1,11 +1,6 @@
 TEMPLATE = lib
 TARGET = Biblio
 
-DEFINES += FREETOOLBOX
-FREETOOLBOX = 1
-
-BUILD_PATH_POSTFIXE = FreeToolBox
-
 include(../../../plugins/fmf_plugins.pri)
 include(biblio_dependencies.pri)
 

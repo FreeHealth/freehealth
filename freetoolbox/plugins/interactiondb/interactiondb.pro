@@ -1,11 +1,6 @@
 TEMPLATE = lib
 TARGET = InteractionDB
 
-DEFINES += FREETOOLBOX
-FREETOOLBOX = 1
-
-BUILD_PATH_POSTFIXE = FreeToolBox
-
 include(../../../plugins/fmf_plugins.pri)
 include(interactiondb_dependencies.pri)
 

@@ -1,11 +1,6 @@
 TEMPLATE = lib
 TARGET = Icd10DB
 
-DEFINES += FREETOOLBOX
-FREETOOLBOX = 1
-
-BUILD_PATH_POSTFIXE = FreeToolBox
-
 include(../../../plugins/fmf_plugins.pri)
 include(icd10db_dependencies.pri)
 
