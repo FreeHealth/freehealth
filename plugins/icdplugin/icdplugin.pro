@@ -1,5 +1,5 @@
-TEMPLATE        = lib
-TARGET          = ICD
+TEMPLATE = lib
+TARGET = ICD
 
 include(icdplugin_sources.pri)
 
