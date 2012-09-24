@@ -167,21 +167,10 @@ bool MainWindow::initialize(const QStringList &arguments, QString *errorString)
 
 void MainWindow::extensionsInitialized()
 {
-    // Update countdown to dosage transmission
-    int count = settings()->value(Internal::SETTINGS_COUNTDOWN,0).toInt();
-    ++count;
-//    if ((count==30) || (commandLine()->value(Core::Internal::CommandLine::CL_TransmitDosage).toBool())) {
-//        messageSplash(tr("Transmitting posologies..."));
-//        settings()->setValue(Internal::SETTINGS_COUNTDOWN,0);
-//        transmitDosage();
-//    } else {
-        settings()->setValue(Internal::SETTINGS_COUNTDOWN,count);
-//    }
-
-        // Creating MainWindow interface
-        m_ui = new Internal::Ui::MainWindow();
-        m_ui->setupUi(this);
-        setWindowTitle(qApp->applicationName() + " - " + qApp->applicationVersion());
+    // Creating MainWindow interface
+    m_ui = new Internal::Ui::MainWindow();
+    m_ui->setupUi(this);
+    setWindowTitle(qApp->applicationName() + " - " + qApp->applicationVersion());
 
     // Disable some actions when starting as medintux plugin
     if (commandLine()->value(Core::Constants::CL_MedinTux).toBool()) {
@@ -229,30 +218,6 @@ void MainWindow::extensionsInitialized()
         settings()->setValue(Utils::Constants::S_LAST_CHECKUPDATE, QDate::currentDate());
     }
 
-
-    // Here we set the UI according to the commandline parser
-    if (commandLine()->value(Core::Constants::CL_ReceiptsCreator).toBool()) 
-    {
-        setCentralWidget(new ReceiptViewer(this));
-        if (WarnLogMessage)
-            LOG("receiptGUI initialized");
-    } 
-    else if (commandLine()->value(Core::Constants::CL_PreferedReceipts).toBool())
-    {
-        setCentralWidget(new PreferredReceipts(this));
-        if (WarnLogMessage)
-            LOG("prefered receipts GUI initialized");    	  
-        }
-    else if (commandLine()->value(Core::Constants::CL_Movements).toBool())
-    {
-        setCentralWidget(new MovementsViewer(this));
-        if (WarnLogMessage)
-            LOG("movements GUI initialized");    	  
-        }    
-    else {
-        setCentralWidget(new ReceiptViewer(this));
-    }
-
     userChanged();
 
     createDockWindows();
@@ -276,6 +241,31 @@ void MainWindow::postCoreOpened()
         qWarning() << "MainWindow::postCoreOpened()";
 
     finishSplash(this);
+
+    // Here we set the UI according to the commandline parser
+    if (commandLine()->value(Core::Constants::CL_ReceiptsCreator).toBool())
+    {
+        setCentralWidget(new ReceiptViewer(this));
+        if (WarnLogMessage)
+            LOG("receiptGUI initialized");
+    }
+    else if (commandLine()->value(Core::Constants::CL_PreferedReceipts).toBool())
+    {
+        setCentralWidget(new PreferredReceipts(this));
+        if (WarnLogMessage)
+            LOG("prefered receipts GUI initialized");
+        }
+    else if (commandLine()->value(Core::Constants::CL_Movements).toBool())
+    {
+        setCentralWidget(new MovementsViewer(this));
+        if (WarnLogMessage)
+            LOG("movements GUI initialized");
+        }
+    else {
+        setCentralWidget(new ReceiptViewer(this));
+    }
+
+
     actionManager()->retranslateMenusAndActions();
     contextManager()->updateContext();
     raise();
@@ -284,7 +274,7 @@ void MainWindow::postCoreOpened()
 
 /**
   \brief Refresh the ui data refering to the patient
-  \sa Core::Internal::CoreImpl::instance()->patient(), diPatient
+  \sa Core::Internal::CoreImpl::instance()->patient()
 */
 void MainWindow::refreshPatient()
 {
@@ -416,10 +406,7 @@ bool MainWindow::newFile()
     return true;
 }
 
-/**
-  \brief Open the preferences dialog
-  \sa mfDrugsPreferences
-*/
+/** Open the preferences dialog */
 bool MainWindow::applicationPreferences()
 {
     Core::SettingsDialog dlg(this);
@@ -427,19 +414,12 @@ bool MainWindow::applicationPreferences()
     return true;
 }
 
-/** \brief Change the font of the viewing widget */
 void MainWindow::changeFontTo(const QFont &font)
 {
     Q_UNUSED(font);
-//    m_ui->m_CentralWidget->changeFontTo(font);
-//    m_ui->patientName->setFont(font);
 }
 
 
-/**
-  \brief Prints the prescription using the header, footer and watermark.
-  \sa tkPrinter
-*/
 bool MainWindow::print()
 {
 //    return m_ui->m_CentralWidget->printPrescription();
@@ -461,37 +441,14 @@ bool MainWindow::configureMedintux()
 
 bool MainWindow::saveAsFile()
 {
-    return savePrescription();
+    return true;
 }
 
 bool MainWindow::saveFile()
 {
-    return savePrescription();
-}
-
-/** Saves a prescription. If fileName is empty, user is ask about a file name. */
-bool MainWindow::savePrescription(const QString &fileName)
-{
-    Q_UNUSED(fileName);
-    // TODO: code here */
-//    QString xmlExtra = patient()->toXml();
-//    if (commandLine()->value(Core::Internal::CommandLine::CL_EMR_Name).isValid()) {
-//        xmlExtra.append(QString("<EMR name=\"%1\"").arg(commandLine()->value(Core::Internal::CommandLine::CL_EMR_Name).toString()));
-//        if (commandLine()->value(Core::Internal::CommandLine::CL_EMR_Name).isValid()) {
-//            xmlExtra.append(QString(" uid=\"%1\"").arg(commandLine()->value(Core::Internal::CommandLine::CL_EMR_Uid).toString()));
-//        }
-//        xmlExtra.append("/>");
-//    }
-//    qWarning() << xmlExtra;
-//    return DrugsDB::DrugsIO::savePrescription(drugModel(), xmlExtra, fileName);
     return true;
 }
 
-/**
-  \brief Opens a prescription saved using savePrescription().
-  \sa savePrescription()
-  \sa DrugsIO
-*/
 bool MainWindow::openFile()
 {
 //    QString f = QFileDialog::getOpenFileName(this,
@@ -542,58 +499,3 @@ void MainWindow::createDockWindows()
 //    menu->addAction(dock->toggleViewAction());
 }
 
-
-///** \brief Always keep uptodate patient's datas */
-//void MainWindow::on_patientName_textChanged(const QString &text)
-//{
-//    patient()->setValue(Core::Patient::Name, text);
-//}
-//
-///** \brief Always keep uptodate patient's datas */
-//void MainWindow::on_patientSurname_textChanged(const QString &text)
-//{
-//    patient()->setValue(Core::Patient::Surname, text);
-//}
-//
-///** \brief Always keep uptodate patient's datas */
-//void MainWindow::on_sexCombo_currentIndexChanged(const QString &text)
-//{
-//    patient()->setValue(Core::Patient::Gender, text);
-//    refreshPatient();
-//}
-//
-///** \brief Always keep uptodate patient's datas */
-//void MainWindow::on_patientWeight_valueChanged(const QString &text)
-//{
-//    patient()->setValue(Core::Patient::Weight, text);
-//    refreshPatient();
-//}
-//
-///** \brief Always keep uptodate patient's datas */
-//void MainWindow::on_patientSize_valueChanged(const QString & text)
-//{
-//    patient()->setValue(Core::Patient::Height, text);
-//    refreshPatient();
-//}
-//
-///** \brief Always keep uptodate patient's datas */
-//void MainWindow::on_patientClCr_valueChanged(const QString & text)
-//{
-//    patient()->setValue(Core::Patient::CreatinClearance, text);
-//    refreshPatient();
-//}
-//
-///** \brief Always keep uptodate patient's datas */
-//void MainWindow::on_patientCreatinin_valueChanged(const QString & text)
-//{
-//    patient()->setValue(Core::Patient::Creatinine, text);
-//    refreshPatient();
-//}
-//
-///** \brief Always keep uptodate patient's datas */
-//void MainWindow::on_listOfAllergies_textChanged(const QString &text)
-//{
-//    // TODO: manage allergies */
-//    patient()->setValue(Core::Patient::DrugsAtcAllergies, text);
-//    refreshPatient();
-//}
