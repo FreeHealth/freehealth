@@ -20,6 +20,9 @@ global_resources/textfiles/freediamstest/prescription-0.6.2-witherror.xml
 build.conf
 build_*.log
 
+buildspecs/compiling.pri
+
+
 # bin files
 build/*
 bin/*
@@ -57,4 +60,3 @@ global_resources/datapacks/tmp/*
 scripts/freemedforms-*
 scripts/Linux/ppa*
 
-buildspecs/compiling.pri
