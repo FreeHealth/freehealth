@@ -236,8 +236,14 @@ public:
         return ui->formDataMapper->submit();
     }
 
-    void setEpisodeViewVisibility(bool visible)
+    void checkCurrentEpisodeViewVisibility()
     {
+        // Assuming the _currentEditingForm is defined and the episodeView model is set
+        bool visible = true;
+        // Unique épisode || no episode -> hide episodeview
+        if (_currentEditingForm->episodePossibilities()==FormMain::UniqueEpisode
+                || _currentEditingForm->episodePossibilities()==FormMain::NoEpisode)
+            visible = false;
         ui->episodeView->setVisible(visible);
     }
 
@@ -255,6 +261,7 @@ public:
             QObject::disconnect(ui->episodeView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), q, SLOT(episodeChanged(QModelIndex, QModelIndex)));
 
         ui->formDataMapper->setCurrentForm(_currentEditingForm);
+
         EpisodeModel *episodeModel = formManager().episodeModel(_currentEditingForm);
         ui->episodeView->setModel(episodeModel);
         for(int i=0; i < EpisodeModel::MaxData; ++i)
@@ -263,29 +270,42 @@ public:
         ui->episodeView->showColumn(EpisodeModel::UserDate);
         ui->episodeView->showColumn(EpisodeModel::Label);
         ui->episodeView->showColumn(EpisodeModel::UserCreatorName);
-        //    ui->episodeView->showColumn(EpisodeModel::Uuid);
-
-        // Unique épisode || no episode -> hide episodeview
-        if (_currentEditingForm->episodePossibilities()==FormMain::UniqueEpisode || _currentEditingForm->episodePossibilities()==FormMain::NoEpisode) {
-            setEpisodeViewVisibility(false);
-        } else {
-            setEpisodeViewVisibility(true);
-        }
 
         ui->episodeView->horizontalHeader()->setResizeMode(EpisodeModel::ValidationStateIcon, QHeaderView::ResizeToContents);
-    //    ui->episodeView->horizontalHeader()->resizeSection(EpisodeModel::ValidationStateIcon, 22);
         ui->episodeView->horizontalHeader()->setResizeMode(EpisodeModel::UserDate, QHeaderView::ResizeToContents);
         ui->episodeView->horizontalHeader()->setResizeMode(EpisodeModel::Label, QHeaderView::Stretch);
         ui->episodeView->horizontalHeader()->setResizeMode(EpisodeModel::UserCreatorName, QHeaderView::ResizeToContents);
         ui->episodeView->horizontalHeader()->hide();
 
+        ui->episodeView->selectionModel()->clearSelection();
+        checkCurrentEpisodeViewVisibility();
+
         QObject::connect(ui->episodeView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), q, SLOT(episodeChanged(QModelIndex, QModelIndex)));
-        if (!ui->episodeView->selectionModel()->hasSelection()) {
-            ui->episodeView->selectRow(0);
-            if (episodeModel)
-                q->episodeChanged(episodeModel->index(0,0), QModelIndex());
-        }
         Q_EMIT q->actionsEnabledStateChanged();
+    }
+
+    void selectAndActivateFirstForm()
+    {
+        if (ui->formView->selectionModel() && ui->formView->selectionModel()->hasSelection())
+            return;
+        // Select the first available form in the tree model
+        if (_rootForm->firstLevelFormMainChildren().count() > 0) {
+            setCurrentForm(_rootForm->firstLevelFormMainChildren().at(0));
+            QModelIndex index = _formTreeModel->index(0,0);
+            ui->formView->selectionModel()->select(index, QItemSelectionModel::Rows | QItemSelectionModel::SelectCurrent);
+        }
+    }
+
+    void selectAndActivateFirstEpisode()
+    {
+        // Assuming the _currentEditingForm is defined and the episodeView model is set
+        ui->episodeView->selectRow(0);
+    }
+
+
+    QModelIndex currentEditingEpisodeIndex()
+    {
+        return ui->formDataMapper->currentEditingEpisodeIndex();
     }
 
 public:
@@ -508,12 +528,7 @@ void FormPlaceHolder::setRootForm(Form::FormMain *rootForm)
     tree->header()->resizeSection(FormTreeModel::EmptyColumn1, 16);
     tree->expandAll();
 
-    // Select the first available form in the tree model
-    if (rootForm->firstLevelFormMainChildren().count() > 0) {
-        d->setCurrentForm(d->_rootForm->firstLevelFormMainChildren().at(0));
-        QModelIndex index = d->_formTreeModel->index(0,0);
-        d->ui->formView->selectionModel()->select(index, QItemSelectionModel::Rows | QItemSelectionModel::SelectCurrent);
-    }
+    d->selectAndActivateFirstForm();
     Q_EMIT actionsEnabledStateChanged();
 }
 
@@ -561,8 +576,10 @@ void FormPlaceHolder::handleClicked(const QModelIndex &index)
 void FormPlaceHolder::setCurrentEditingFormItem(const QModelIndex &index)
 {
     Form::FormMain *form = d->_formTreeModel->formForIndex(index);
-    if (form!=d->_currentEditingForm)
+    if (form!=d->_currentEditingForm) {
         d->setCurrentForm(form);
+        d->selectAndActivateFirstEpisode();
+    }
 }
 
 /**
@@ -777,19 +794,23 @@ bool FormPlaceHolder::printFormOrEpisode()
 
 void FormPlaceHolder::onCurrentPatientChanged()
 {
+    // reset the ui
     clear();
+    d->ui->episodeView->selectionModel()->clearSelection();
+    d->ui->formView->selectionModel()->clearSelection();
 }
 
 void FormPlaceHolder::episodeChanged(const QModelIndex &current, const QModelIndex &previous)
 {
     qWarning() << "FormPlaceHolder::episodeChanged: current valid:" << current.isValid() << "previous valid:" << previous.isValid();
     // Autosave is problematic when patient changed
-//    if (previous.isValid())
-//        d->saveCurrentEditingEpisode();
-//    if (!current.isValid())
-//        return;
-    d->ui->formDataMapper->setCurrentEpisode(current);
-    // TODO: emit new epsiodeIndex && EpsiodeModel
+    if (previous.isValid())
+        d->saveCurrentEditingEpisode();
+    clear();
+    if (current.isValid()) {
+        d->ui->formDataMapper->setCurrentEpisode(current);
+    }
+    Q_EMIT actionsEnabledStateChanged();
 }
 
 void FormPlaceHolder::changeEvent(QEvent *event)
@@ -806,4 +827,12 @@ void FormPlaceHolder::changeEvent(QEvent *event)
 //        }
     }
     QWidget::changeEvent(event);
+}
+
+void FormPlaceHolder::showEvent(QShowEvent *event)
+{
+    d->selectAndActivateFirstForm();
+    // if the currentEditingForm is defined && the episode view model is set
+    d->selectAndActivateFirstEpisode();
+    QWidget::showEvent(event);
 }
