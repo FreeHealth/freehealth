@@ -694,13 +694,8 @@ bool EpisodeModel::isEpisodeValidated(const QModelIndex &index) const
     return d->isEpisodeValidated(index);
 }
 
-// EXPERIMENTAL
 bool EpisodeModel::populateFormWithEpisodeContent(const QModelIndex &episode, bool feedPatientModel)
 {
-//    qWarning() << "EpisodeModel::POPULATE" << episode << d->_sqlModel->rowCount();
-//    qWarning() << "  patient filtered" << d->_sqlModel->filter();
-//    qWarning() << "  episodeId" << d->_sqlModel->index(episode.row(), Constants::EPISODES_ID).data().toString();
-
     QTime chrono;
     if (WarnLogChronos)
         chrono.start();
@@ -759,7 +754,6 @@ bool EpisodeModel::populateFormWithEpisodeContent(const QModelIndex &episode, bo
         Utils::Log::logTimeElapsed(chrono, objectName(), "populateFormWithEpisode");
     return true;
 }
-// END EXPERIMENTAL
 
 /** Save the whole model. \sa isDirty() */
 bool EpisodeModel::submit()
@@ -768,7 +762,8 @@ bool EpisodeModel::submit()
     if (patient()->uuid().isEmpty())
         return false;
 
-    return d->_sqlModel->submit();
+    bool ok = d->_sqlModel->submit();
+    return ok;
 }
 
 /** Return the HTML formatted synthesis of all the last recorded episodes for each forms in the model. */
