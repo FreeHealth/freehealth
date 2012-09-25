@@ -103,6 +103,7 @@ private Q_SLOTS:
 
 private:
     void changeEvent(QEvent *event);
+    void showEvent(QShowEvent *event);
 
 private:
     Internal::FormPlaceHolderPrivate *d;
