@@ -24,12 +24,12 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef IFORMITEMDATA_H
-#define IFORMITEMDATA_H
+#ifndef FORM_IFORMITEMDATA_H
+#define FORM_IFORMITEMDATA_H
 
 #include <formmanagerplugin/formmanager_exporter.h>
 
-#include <QtCore/QVariant>
+#include <QVariant>
 
 namespace Form {
 class FormItem;
@@ -58,6 +58,7 @@ public:
 
     virtual Form::FormItem *parentItem() const = 0;
     virtual bool isModified() const = 0;
+//    virtual bool setModified(bool modified) = 0;
 
     // ref makes references to patient's data -> Core::IPatient
     virtual bool setData(const int ref, const QVariant &data, const int role = Qt::EditRole) = 0;
@@ -74,4 +75,4 @@ Q_SIGNALS:
 
 //Q_DECLARE_METATYPE(Form::IFormItemData*);
 
-#endif // IFORMITEMDATA_H
+#endif // FORM_IFORMITEMDATA_H
