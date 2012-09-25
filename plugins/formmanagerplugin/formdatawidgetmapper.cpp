@@ -202,6 +202,7 @@ private:
 }  // namespace Internal
 }  // namespace Form
 
+/** Create the widget mapper using the parent widget \e parent */
 FormDataWidgetMapper::FormDataWidgetMapper(QWidget *parent) :
     QWidget(parent),
     d(new FormDataWidgetMapperPrivate(this))
@@ -213,11 +214,17 @@ FormDataWidgetMapper::~FormDataWidgetMapper()
 {
 }
 
+/** Initialize the datamapper. Must be called before you set the Form::FormMain. */
 bool FormDataWidgetMapper::initialize()
 {
     return true;
 }
 
+/**
+ * Return true if the current content of the mapper is dirty.
+ * Asks each Form::FormItemData of the current editing Form::FormMain for their modification state.
+ * \sa Form::FormItemData::isModified
+ */
 bool FormDataWidgetMapper::isDirty() const
 {
     if (!d->_formMain)
@@ -238,11 +245,19 @@ bool FormDataWidgetMapper::isDirty() const
     return false;
 }
 
+/** Return true if the current content of the mapper is dirty */
+QModelIndex FormDataWidgetMapper::currentEditingEpisodeIndex() const
+{
+    return d->_currentEpisode;
+}
+
+/** Define the Form::FormMain to use in the mapper. */
 void FormDataWidgetMapper::setCurrentForm(const QString &formUid)
 {
     setCurrentForm(formManager().form(formUid));
 }
 
+/** Define the Form::FormMain to use in the mapper. */
 void FormDataWidgetMapper::setCurrentForm(Form::FormMain *form)
 {
     d->clearStackLayout();
@@ -254,21 +269,19 @@ void FormDataWidgetMapper::setCurrentForm(Form::FormMain *form)
         d->_formMain->itemData()->setStorableData(false);  // equal == form->setModified(false);
 }
 
-void FormDataWidgetMapper::setCurrentEpisode(const QVariant &uid)
-{
-    Q_UNUSED(uid)
-}
-
+/** Define the current episode index to use in the mapper. */
 void FormDataWidgetMapper::setCurrentEpisode(const QModelIndex &index)
 {
     d->setCurrentEpisode(index);
 }
 
+/** Take a screenshot of the current editing form widget (populated with the episode index values). */
 QPixmap FormDataWidgetMapper::screenshot()
 {
     return QPixmap::grabWidget(d->_stack->currentWidget());
 }
 
+/** Submit modifications (form header && form content) to the corresponding Form::EpisodeModel. */
 bool FormDataWidgetMapper::submit()
 {
     const QString &xml = d->getCurrentXmlEpisode();

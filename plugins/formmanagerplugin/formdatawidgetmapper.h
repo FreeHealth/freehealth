@@ -55,13 +55,13 @@ public:
 
     bool isDirty() const;
 
+    QModelIndex currentEditingEpisodeIndex() const;
+
 Q_SIGNALS:
     
 public Q_SLOTS:
     void setCurrentForm(const QString &formUid);
     void setCurrentForm(FormMain *form);
-
-    void setCurrentEpisode(const QVariant &uid);
     void setCurrentEpisode(const QModelIndex &index);
 
     QPixmap screenshot();
