@@ -32,7 +32,7 @@
 
 #include "styledbar.h"
 
-#include "stylehelper.h"
+//#include "stylehelper.h"
 
 #include <QVariant>
 #include <QPainter>
