@@ -69,9 +69,7 @@ createLogFile()
 {
     LOG_FILE="./build_`date "+%s"`.log"
     echo "* Creating build log: $LOG_FILE"
-    if [[ -f $LOG_FILE ]]; then
-         rm $LOG_FILE
-    fi
+    rm -rf $LOG_FILE
     touch $LOG_FILE
     echo "Log file created on: `date "+%Y.%m.%d %H:%M %N"`" > $LOG_FILE
 }
@@ -129,11 +127,11 @@ makeClean()
     echo "# Cleaning build path" ; sleep 1
     if [[ "$CLEAN" == "y" ]]; then
         echo "* Cleaning build path"
-        echo "# rm -R $SCRIPT_PATH/bin/$BUNDLE_NAME &&\nrm -R $SCRIPT_PATH/build"; >> $LOG_FILE
+        echo "# rm -rf $SCRIPT_PATH/bin/$BUNDLE_NAME &&\nrm -rf $SCRIPT_PATH/build"; >> $LOG_FILE
         if [[  "$DEBUG_BUILD_COMMANDS" == 1 ]]; then
-            echo "# rm -R $SCRIPT_PATH/bin/$BUNDLE_NAME &&\nrm -R $SCRIPT_PATH/build"; sleep 5
+            echo "# rm -rf $SCRIPT_PATH/bin/$BUNDLE_NAME &&\nrm -rf $SCRIPT_PATH/build"; sleep 5
         else
-            MAKE_STEP=`rm -R $SCRIPT_PATH/bin/$BUNDLE_NAME && rm -R $SCRIPT_PATH/build >> $LOG_FILE`
+            MAKE_STEP=`rm -rf $SCRIPT_PATH/bin/$BUNDLE_NAME && rm -rf $SCRIPT_PATH/build >> $LOG_FILE`
             MAKE_STEP=$?
             if [[ ! $MAKE_STEP == 0 ]]; then
                 return 123
