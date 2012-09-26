@@ -804,8 +804,12 @@ void FormPlaceHolder::onCurrentPatientChanged()
 {
     // reset the ui
     clear();
-    d->ui->episodeView->selectionModel()->clearSelection();
-    d->ui->formView->selectionModel()->clearSelection();
+    QItemSelectionModel *model = d->ui->episodeView->selectionModel();
+    if (model)
+        model->clearSelection();
+    model = d->ui->formView->selectionModel();
+    if (model)
+        model->clearSelection();
 }
 
 void FormPlaceHolder::episodeChanged(const QModelIndex &current, const QModelIndex &previous)
