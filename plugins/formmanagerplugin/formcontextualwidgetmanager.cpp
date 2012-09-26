@@ -109,11 +109,24 @@ static inline QAction *createAction(QObject *parent, const QString &name, const 
     return a;
 }
 
+static FormContextualWidget *parentFormWidget(QWidget  *widget)
+{
+    QWidget *parent = widget->parentWidget();
+    while (parent) {
+        FormContextualWidget *w = qobject_cast<FormContextualWidget *>(parent);
+        if (w)
+            return w;
+        parent = parent->parentWidget();
+    }
+    return 0;
+}
+
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////      MANAGER      ///////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 FormContextualWidgetManager::FormContextualWidgetManager(QObject *parent) :
-    FormActionHandler(parent)
+    FormActionHandler(parent),
+    _contextObject(0)
 {
     connect(Core::ICore::instance()->contextManager(), SIGNAL(contextChanged(Core::IContext*,Core::Context)),
             this, SLOT(updateContext(Core::IContext*,Core::Context)));
@@ -131,25 +144,37 @@ FormContextualWidgetManager::~FormContextualWidgetManager()
  */
 void FormContextualWidgetManager::updateContext(Core::IContext *object, const Core::Context &additionalContexts)
 {
-    Q_UNUSED(additionalContexts);
-//    qWarning() << "FormContextualWidgetManager::updateContext(Core::IContext *object)" << object;
-//    if (object)
-//        qWarning() << "FormContextualWidgetManager::updateContext(Core::IContext *object)" << object->widget();
+    if (_contextObject==object)
+        return;
+    _contextObject = object;
+    qWarning() << "FormContextualWidgetManager::updateContext(Core::IContext *object)" << object;
+    if (object)
+        qWarning() << "FormContextualWidgetManager::updateContext(Core::IContext *object)" << object->widget();
 
     FormContextualWidget *view = 0;
     do {
         if (!object) {
             if (!m_CurrentView)
                 return;
-
             //            m_CurrentView = 0;  // keep trace of the last active view (we need it in dialogs)
             break;
         }
         view = qobject_cast<FormContextualWidget *>(object->widget());
         if (!view) {
+            // if widget is inside a FormContextualWidget add the form context
+            view = parentFormWidget(object->widget());
+            Core::Context empty;
+            Core::Context form(Constants::C_FORM_PLUGINS);
+            if (!additionalContexts.contains(Constants::C_FORM_PLUGINS)) {
+                if (view) {
+                    contextManager()->updateAdditionalContexts(empty, form);
+                    break;
+                }
+            } else {
+                contextManager()->updateAdditionalContexts(form, empty);
+            }
             if (!m_CurrentView)
                 return;
-
             //            m_CurrentView = 0;   // keep trace of the last active view (we need it in dialogs)
             break;
         }
@@ -162,11 +187,7 @@ void FormContextualWidgetManager::updateContext(Core::IContext *object, const Co
     if (view) {
         FormActionHandler::setCurrentView(view);
     }
-}
-
-FormContextualWidget *FormContextualWidgetManager::currentView() const
-{
-    return FormActionHandler::m_CurrentView;
+    _contextObject = 0;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -283,6 +304,7 @@ FormActionHandler::FormActionHandler(QObject *parent) :
 /** Define the current view, update and connect actions */
 void FormActionHandler::setCurrentView(FormContextualWidget *view)
 {
+    qWarning() << "SET VIEW" << view;
     Q_ASSERT(view);
     if (!view) { // this should never be the case
         LOG_ERROR("setCurrentView: no view");

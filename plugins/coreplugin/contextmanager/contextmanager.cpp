@@ -24,6 +24,60 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
+/**
+ * \class Core::ContextManager
+ * Manages contexts.
+ * \sa Core::Context
+ */
+
+/*!
+    \fn IContext *Core::ContextManager::currentContextObject() const
+    \brief Returns the context object of the current main context.
+
+    \sa Core::ContextManager::updateAdditionalContexts()
+    \sa Core::ContextManager::addContextObject()
+*/
+
+/*!
+    \fn void Core::ContextManager::updateAdditionalContexts(const Context &remove, const Context &add)
+    \brief Change the currently active additional contexts.
+
+    Removes the list of additional contexts specified by \a remove and adds the
+    list of additional contexts specified by \a add.
+
+    \sa Core::ContextManager::hasContext()
+*/
+
+/*!
+    \fn bool Core::ContextManager::hasContext(int context) const
+    \brief Returns if the given \a context is currently one of the active contexts.
+
+    \sa Core::ContextManager::updateAdditionalContexts()
+    \sa Core::ContextManager::addContextObject()
+*/
+
+/*!
+    \fn void Core::ContextManager::addContextObject(IContext *context)
+    \brief Registers an additional \a context object.
+
+    After registration this context object gets automatically the
+    current context object whenever its widget gets focus.
+
+    \sa Core::ContextManager::removeContextObject()
+    \sa Core::ContextManager::updateAdditionalContexts()
+    \sa Core::ContextManager::currentContextObject()
+*/
+
+/*!
+    \fn void Core::ContextManager::removeContextObject(IContext *context)
+    \brief Unregisters a \a context object from the list of know contexts.
+
+    \sa Core::ContextManager::addContextObject()
+    \sa Core::ContextManager::updateAdditionalContexts()
+    \sa Core::ContextManager::currentContextObject()
+}
+*/
+
 #include "contextmanager_p.h"
 
 #include <coreplugin/constants_menus.h>
@@ -67,7 +121,6 @@ IContext *ContextManagerPrivate::contextObject(QWidget *widget)
     return m_contextWidgets.value(widget);
 }
 
-/** Register a Core::IContext object in the manager */
 void ContextManagerPrivate::addContextObject(IContext *context)
 {
     if (!context)
@@ -79,7 +132,6 @@ void ContextManagerPrivate::addContextObject(IContext *context)
     m_contextWidgets.insert(widget, context);
 }
 
-/** Remove a Core::IContext object in the manager */
 void ContextManagerPrivate::removeContextObject(IContext *context)
 {
     if (!context)
@@ -145,7 +197,6 @@ void ContextManagerPrivate::addAdditionalContext(int context)
         m_additionalContexts.prepend(context);
 }
 
-/** Update the additional contexts */
 void ContextManagerPrivate::updateAdditionalContexts(const Context &remove, const Context &add)
 {
     foreach (const int context, remove) {
@@ -168,7 +219,6 @@ void ContextManagerPrivate::updateAdditionalContexts(const Context &remove, cons
     updateContext();
 }
 
-/** Removes a specific context id \e context */
 void ContextManagerPrivate::removeAdditionalContext(int context)
 {
     if (context == 0)
@@ -186,15 +236,11 @@ static ActionManagerPrivate *actionManagerPrivate()
     return amp;
 }
 
-/** Return true if the context manager owns a context \e context */
 bool ContextManagerPrivate::hasContext(int context) const
 {
     return actionManagerPrivate()->hasContext(context);
 }
 
-/**
- * \internal
- * Update the current context, and tell the Core::ActionManager which contexts to use */
 void ContextManagerPrivate::updateContext()
 {
     Context contexts;
@@ -215,10 +261,6 @@ void ContextManagerPrivate::updateContext()
     Q_EMIT contextChanged(m_activeContext, m_additionalContexts);
 }
 
-/**
- * \internal
- * Update the current context object
- */
 void ContextManagerPrivate::updateContextObject(IContext *context)
 {
     if (context == m_activeContext)

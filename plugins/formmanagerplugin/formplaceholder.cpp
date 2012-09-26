@@ -51,6 +51,7 @@
 #include "constants_db.h"
 #include "formeditordialog.h"
 #include "formtreemodel.h"
+#include "formdatawidgetmapper.h"
 
 #include "ui_formplaceholder.h"
 
@@ -221,6 +222,7 @@ public:
         // Something to save?
         if (!ui->formDataMapper->isDirty())
             return true;
+
         // Autosave or ask user?
         if (!isAutosaveOn()) {
             // Ask user
@@ -233,7 +235,13 @@ public:
             if (!save)
                 return false;
         }
-        return ui->formDataMapper->submit();
+        bool ok = ui->formDataMapper->submit();
+
+        // re-populate the current episode (reset all formitemdata content)
+        ui->episodeView->selectRow(ui->formDataMapper->currentEditingEpisodeIndex().row());
+        EpisodeModel *episodeModel = formManager().episodeModel(_currentEditingForm);
+        episodeModel->populateFormWithEpisodeContent(ui->formDataMapper->currentEditingEpisodeIndex(), true);
+        return ok;
     }
 
     void checkCurrentEpisodeViewVisibility()

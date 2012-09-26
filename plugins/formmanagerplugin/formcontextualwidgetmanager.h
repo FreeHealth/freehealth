@@ -90,10 +90,11 @@ public:
     explicit FormContextualWidgetManager(QObject *parent = 0);
     ~FormContextualWidgetManager();
 
-    FormContextualWidget *currentView() const;
-
 private Q_SLOTS:
     void updateContext(Core::IContext *object, const Core::Context &additionalContexts);
+
+private:
+    QPointer<Core::IContext> _contextObject;
 };
 
 } // namespace Internal
