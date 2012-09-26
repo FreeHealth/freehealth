@@ -121,10 +121,10 @@ void DataPackCore::init()
     d->m_PackManager->init(d->m_Engines);
 }
 
-/** Test the internet connection and return the state of availability of it. This is just a wrapper of the Utils::testInternetConnexion(). */
-bool DataPackCore::isInternetConnexionAvailable()
+/** Test the internet connection and return the state of availability of it. This is just a wrapper of the Utils::testInternetConnection(). */
+bool DataPackCore::isInternetConnectionAvailable()
 {
-    return !Utils::testInternetConnexion().isEmpty();
+    return !Utils::testInternetConnection().isEmpty();
 }
 
 /** Untill application can not fully detect the system proxy, you have to define the proxy to use in all the internet access done by the DataPack lib. */
