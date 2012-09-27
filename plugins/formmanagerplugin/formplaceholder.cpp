@@ -814,14 +814,14 @@ bool FormPlaceHolder::addForm()
 //    d->saveCurrentEditingEpisode();
 
     // open the form editor dialog
-//    FormEditorDialog dlg(d->_formTreeModel, FormEditorDialog::DefaultMode, this);
-//    if (dlg.exec()==QDialog::Accepted) {
+    FormEditorDialog dlg(d->_formTreeModel, FormEditorDialog::DefaultMode, this);
+    if (dlg.exec()==QDialog::Accepted) {
         // refresh stack widget
 //        d->populateStackLayout();
         // activate last episode synthesis
 //        d->ui->formView->setCurrentIndex(d->_episodeModel->index(0,0));
 //        showLastEpisodeSynthesis();
-//    }
+    }
     Q_EMIT actionsEnabledStateChanged();
     return true;
 }
