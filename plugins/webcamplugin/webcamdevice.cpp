@@ -19,38 +19,52 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developer: Christian A. Reiter <christian.a.reiter@gmail.com>    *
+ *   Main developers: Eric MAEKER, <eric.maeker@gmail.com>                 *
  *   Contributors:                                                         *
  *       NAME <MAIL@ADDRESS.COM>                                           *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef WEBCAMPHOTOPROVIDER_H
-#define WEBCAMPHOTOPROVIDER_H
+/*!
+ * \class Webcam::WebcamDevice
+ * \brief short description of class
+ *
+ * Long description of class
+ * \sa Webcam::
+ */
 
-class WebcamDevice;
+#include "webcamdevice.h"
 
-#include <QObject>
-#include <QPixmap>
+#include <translationutils/constants.h>
 
-#include <coreplugin/iphotoprovider.h>
+#include <QDebug>
 
-namespace Webcam {
+using namespace Webcam;
+using namespace Trans::ConstantTranslations;
 
-class WebcamPhotoProvider : public Core::IPhotoProvider
+/*!
+ * \class Webcam::WebcamDevicePrivate
+ * \brief Private implementation of the Webcam::WebcamDevice class.
+ *
+ * documentation here
+ */
+
+/*! Constructor of the Webcam::WebcamDevice class */
+WebcamDevice::WebcamDevice(QObject *parent) :
+    QObject(parent)
 {
-    Q_OBJECT
-public:
-    explicit WebcamPhotoProvider();
-    ~WebcamPhotoProvider();
+}
 
-    QString name();
-    QPixmap recievePhoto();
-    bool isEnabled();
-    bool isActive();
-    int priority();
-private:
-    WebcamDevice m_webcam;
-};
+/*! Destructor of the Webcam::WebcamDevice class */
+WebcamDevice::~WebcamDevice()
+{
+}
 
-} // end Webcam
+/*! Initializes the object with the default values. Return true if initialization was completed. */
+bool WebcamDevice::initialize()
+{
+}
 
-#endif // WEBCAMPHOTOPROVIDER_H
+bool WebcamDevice::isActive()
+{
+}
+

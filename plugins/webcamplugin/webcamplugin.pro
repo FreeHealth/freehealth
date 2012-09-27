@@ -21,14 +21,16 @@ HEADERS = \
     webcamphotoprovider.h \
     opencvwidget.h \
     webcamdialog.h \
-    webcampreferences.h
+    webcampreferences.h \
+    webcamdevice.h
 
 SOURCES += \
     webcamplugin.cpp \
     webcamphotoprovider.cpp \
     opencvwidget.cpp \
     webcamdialog.cpp \
-    webcampreferences.cpp
+    webcampreferences.cpp \
+    webcamdevice.cpp
 
 FORMS += \
     webcamdialog.ui \

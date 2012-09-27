@@ -26,6 +26,12 @@
 #include "webcamphotoprovider.h"
 //#include "webcamdialog.h"
 #include "webcamdialog.h"
+#include "webcamconstants.h"
+#include "webcamdevice.h"
+
+#include <coreplugin/isettings.h>
+
+static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 
 using namespace Webcam;
 
@@ -36,10 +42,17 @@ WebcamPhotoProvider::WebcamPhotoProvider()
 WebcamPhotoProvider::~WebcamPhotoProvider()
 {}
 
+QString WebcamPhotoProvider::name()
+{
+    //TODO: return webcam vendor/model name
+    return tr("Webcam");
+}
+
+
 /*!
  * \brief returns Photo that is captured by the selected webcam.
  *
- * All of the code is in this function, there is no async calling, because
+ * All of the code is in this function, there is no threaded execution, because
  * the dialog should be modal and no other functions should be possible
  * meanwhile.
  */
@@ -51,4 +64,20 @@ QPixmap WebcamPhotoProvider::recievePhoto()
     }
     return dialog.photo();
 }
+
+bool WebcamPhotoProvider::isEnabled()
+{
+    return isActive() && settings()->value(Constants::S_WEBCAM_ENABLED).toBool();
+}
+
+bool WebcamPhotoProvider::isActive()
+{
+    return m_webcam && m_webcam->isActive();
+}
+
+int WebcamPhotoProvider::priority()
+{
+    return 70;
+}
+
 

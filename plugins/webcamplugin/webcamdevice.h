@@ -19,38 +19,46 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developer: Christian A. Reiter <christian.a.reiter@gmail.com>    *
- *   Contributors:                                                         *
+ *   Main developers : Christian A. Reiter <christian.a.reiter@gmail.com>
+ *   Contributors :                                                        *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef WEBCAMPHOTOPROVIDER_H
-#define WEBCAMPHOTOPROVIDER_H
-
-class WebcamDevice;
+#ifndef WEBCAM_WEBCAMDEVICE_H
+#define WEBCAM_WEBCAMDEVICE_H
 
 #include <QObject>
-#include <QPixmap>
 
-#include <coreplugin/iphotoprovider.h>
-
+/**
+ * \file webcamdevice.h
+ * \author Christian A. Reiter <christian.a.reiter@gmail.com>
+ * \version 0.8.0
+ * \date 2012-09-27
+*/
 namespace Webcam {
 
-class WebcamPhotoProvider : public Core::IPhotoProvider
+class WebcamDevice : public QObject
 {
     Q_OBJECT
 public:
-    explicit WebcamPhotoProvider();
-    ~WebcamPhotoProvider();
+    explicit WebcamDevice(QObject *parent = 0);
+    ~WebcamDevice();
 
-    QString name();
-    QPixmap recievePhoto();
-    bool isEnabled();
+    int deviceNumber();
+    bool initialize();
     bool isActive();
-    int priority();
+
+Q_SIGNALS:
+    void attached();
+    void detached();
+
+public Q_SLOTS:
+
 private:
-    WebcamDevice m_webcam;
+    cv::VideoCapture m_capture;
 };
 
-} // end Webcam
+} // namespace Webcam
 
-#endif // WEBCAMPHOTOPROVIDER_H
+#endif  // WEBCAM_WEBCAMDEVICE_H
+

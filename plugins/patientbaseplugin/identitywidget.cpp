@@ -60,6 +60,7 @@
 #include <QDateEdit>
 
 #include <QDebug>
+#include <QMenu>
 
 using namespace Patients;
 using namespace Trans::ConstantTranslations;
@@ -160,6 +161,20 @@ public:
 
             q->connect(editUi->photoButton, SIGNAL(clicked()), q, SLOT(photoButton_clicked()));
 //            q->connect(editUi->genderCombo, SIGNAL(currentIndexChanged(int)), q, SLOT(updateGenderImage()));
+
+            QMenu *contextMenu = new QMenu(q);
+            editUi->photoButton->setContextMenuPolicy(Qt::ActionsContextMenu);
+
+            QList<Core::IPhotoProvider *> photoProviderList = ExtensionSystem::PluginManager::instance()->getObjects<Core::IPhotoProvider>();
+
+            if (!photoProviderList.isEmpty()) {
+                // sort the PhotoProviders by their priority property
+                qSort(photoProviderList.begin(), photoProviderList.end());
+                foreach(Core::IPhotoProvider *provider, photoProviderList) {
+                    QAction *photoAction = new QAction(provider->name(), q);
+                    editUi->photoButton->addAction(photoAction);
+                }
+            }
             break;
         }
         case IdentityWidget::ReadOnlyMode: {
