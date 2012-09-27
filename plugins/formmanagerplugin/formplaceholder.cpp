@@ -344,8 +344,15 @@ public:
         ui->episodeView->horizontalHeader()->setResizeMode(EpisodeModel::Label, QHeaderView::Stretch);
         ui->episodeView->horizontalHeader()->setResizeMode(EpisodeModel::UserCreatorName, QHeaderView::ResizeToContents);
         QFont small;
-        small.setPointSize(small.pointSize() - 2);
+        small.setPointSize(small.pointSize() - 4);
         ui->episodeView->horizontalHeader()->setFont(small);
+        ui->episodeView->horizontalHeader()->setStyleSheet("QHeaderView::section {"
+//                                                           "background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1,"
+//                                                           "                                  stop:0 #eeeeee, stop: 0.5 #e0e0e0,"
+//                                                           "                                  stop: 0.6 #dadada, stop:1 #f2f2f2);"
+                                                           "padding: 2px;"
+//                                                           "border: 1px solid black;"
+                                                           "}");
 
         ui->episodeView->selectionModel()->clearSelection();
         checkCurrentEpisodeViewVisibility();
@@ -568,7 +575,7 @@ bool FormPlaceHolder::enableAction(WidgetAction action) const
         // - && form is not unique episode
         bool unique = d->_currentEditingForm->isUniqueEpisode();
         return (d->ui->episodeView->selectionModel()->hasSelection()
-                && d->_currentEpisodeModel->isEpisodeValidated(d->currentEditingEpisodeIndex())
+                && !d->_currentEpisodeModel->isEpisodeValidated(d->currentEditingEpisodeIndex())
                 && !unique);
     }
     case Action_SaveCurrentEpisode:
