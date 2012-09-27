@@ -38,6 +38,7 @@ const char* const TYPE                               = QT_TRANSLATE_NOOP("tkCons
 const char* const STATUS                             = QT_TRANSLATE_NOOP("tkConstants", "Status");
 const char* const ICD10                              = QT_TRANSLATE_NOOP("tkConstants", "ICD10");
 const char* const NOW                                = QT_TRANSLATE_NOOP("tkConstants", "now");
+const char* const PRIORITY                           = QT_TRANSLATE_NOOP("tkConstants", "Priority");
 const char* const LOW                                = QT_TRANSLATE_NOOP("tkConstants", "low");
 const char* const MEDIUM                             = QT_TRANSLATE_NOOP("tkConstants", "medium");
 const char* const HIGH                               = QT_TRANSLATE_NOOP("tkConstants", "high");
