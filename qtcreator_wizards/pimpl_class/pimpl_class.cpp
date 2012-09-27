@@ -122,7 +122,7 @@ private:
     d(new %ClassName:c%Private(this))
 @else
     QObject(parent)
-@ensif
+@endif
 {
 @if "%Singleton%" == "true"
     _instance = this;
