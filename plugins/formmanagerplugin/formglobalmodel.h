@@ -59,6 +59,7 @@ public:
     }
 
     virtual bool isModified() const {return false;}
+    void setModified(bool modified) {Q_UNUSED(modified);}
 
     virtual void setData(const QVariant &data)  { m_data = data;}
     virtual QVariant data() const { return m_data; }

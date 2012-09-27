@@ -519,6 +519,12 @@ bool AustrianSocialNumberFormData::isModified() const
     return m_OriginalValue != m_Widget->number();
 }
 
+void AustrianSocialNumberFormData::setModified(bool modified)
+{
+    if (!modified)
+        m_OriginalValue == m_Widget->number();
+}
+
 bool AustrianSocialNumberFormData::setData(const int ref, const QVariant &data, const int role)
 {
     Q_UNUSED(ref);

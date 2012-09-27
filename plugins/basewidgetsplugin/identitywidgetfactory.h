@@ -100,6 +100,7 @@ public:
 
     Form::FormItem *parentItem() const {return m_FormItem;}
     bool isModified() const;
+    void setModified(bool modified);
 
     // Use setData/Data for episode data
     bool setData(const int ref, const QVariant &data, const int role) {Q_UNUSED(ref); Q_UNUSED(data); Q_UNUSED(role); return true;}

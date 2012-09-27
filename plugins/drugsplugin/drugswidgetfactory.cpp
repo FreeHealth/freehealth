@@ -274,6 +274,11 @@ bool DrugsWidgetData::isModified() const
     return m_Widget->m_PrescriptionModel->isModified();
 }
 
+void DrugsWidgetData::setModified(bool modified)
+{
+    m_Widget->m_PrescriptionModel->setModified(modified);
+}
+
 bool DrugsWidgetData::setData(const int ref, const QVariant &data, const int role)
 {
     Q_UNUSED(ref);
