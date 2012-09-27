@@ -468,8 +468,13 @@ void UserCalendarViewer::updateCalendarData(const QModelIndex &top, const QModel
 
 void UserCalendarViewer::onSwitchToPatientClicked()
 {
+    //TODO: how to obtain current patient?
+    // a calendar item has only "getPeopleNames", there can be more than one
+    // AND there is no method like "itemAt" in the viewer!
+
 //    Patients::PatientModel::activeModel()->setCurrentPatient(
-//                d->m_CalendarItemModel->getPeopleNames();
+//                d->m_CalendarItemModel->getPeopleNames(
+//                    d->m_CalendarItemModel->getItemByUid());
 //                );
 //    modeManager()->activateMode(Core::Constants::MODE_PATIENT_FILE);
 }
