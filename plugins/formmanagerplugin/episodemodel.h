@@ -70,7 +70,7 @@ protected:
 public:
     enum DataRepresentation {
         ValidationStateIcon = 0,
-        UserDate,
+        UserTimeStamp,
         Label,
         IsValid,
         CreationDate,

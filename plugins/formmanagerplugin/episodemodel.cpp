@@ -386,7 +386,7 @@ QVariant EpisodeModel::data(const QModelIndex &index, int role) const
     {
         int sqlColumn;
         switch (index.column()) {
-        case UserDate:  sqlColumn = Constants::EPISODES_USERDATE; break;
+        case UserTimeStamp:  sqlColumn = Constants::EPISODES_USERDATE; break;
         case Label: sqlColumn = Constants::EPISODES_LABEL; break;
         case IsValid:  sqlColumn = Constants::EPISODES_ISVALID; break;
         case CreationDate:  sqlColumn = Constants::EPISODES_DATEOFCREATION; break;
@@ -477,7 +477,7 @@ bool EpisodeModel::setData(const QModelIndex &index, const QVariant &value, int 
         case Label: sqlColumn = Constants::EPISODES_LABEL; break;
         case IsValid: sqlColumn = Constants::EPISODES_ISVALID; break;
         case CreationDate: sqlColumn = Constants::EPISODES_DATEOFCREATION; break;
-        case UserDate: sqlColumn = Constants::EPISODES_USERDATE; break;
+        case UserTimeStamp: sqlColumn = Constants::EPISODES_USERDATE; break;
             //            case Summary:  sqlColumn = Constants::EPISODES_; break;
         case XmlContent:
         {
@@ -525,7 +525,7 @@ QVariant EpisodeModel::headerData(int section, Qt::Orientation orientation, int 
         return d->_sqlModel->headerData(section, orientation, role);
 
     switch (section) {
-    case UserDate: return tkTr(Trans::Constants::DATE);
+    case UserTimeStamp: return tkTr(Trans::Constants::TIMESTAMP);
     case Label: return tkTr(Trans::Constants::LABEL);
     case Uuid: return tkTr(Trans::Constants::UNIQUE_IDENTIFIER);
     case IsValid: return tkTr(Trans::Constants::ISVALID);
@@ -680,7 +680,7 @@ bool EpisodeModel::populateFormWithEpisodeContent(const QModelIndex &episode, bo
 
     // Populate the FormMain item data (username, userdate, label)
     QModelIndex userName = index(episode.row(), EpisodeModel::UserCreatorName);
-    QModelIndex userDate = index(episode.row(), EpisodeModel::UserDate);
+    QModelIndex userDate = index(episode.row(), EpisodeModel::UserTimeStamp);
     QModelIndex label = index(episode.row(), EpisodeModel::Label);
     d->_formMain->itemData()->setData(IFormItemData::ID_EpisodeDate, this->data(userDate));
     d->_formMain->itemData()->setData(IFormItemData::ID_EpisodeLabel, this->data(label));
