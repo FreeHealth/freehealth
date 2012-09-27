@@ -38,6 +38,7 @@ const char* const TYPE                               = QT_TRANSLATE_NOOP("tkCons
 const char* const STATUS                             = QT_TRANSLATE_NOOP("tkConstants", "Status");
 const char* const ICD10                              = QT_TRANSLATE_NOOP("tkConstants", "ICD10");
 const char* const NOW                                = QT_TRANSLATE_NOOP("tkConstants", "now");
+const char* const PRIORITY                           = QT_TRANSLATE_NOOP("tkConstants", "Priority");
 const char* const LOW                                = QT_TRANSLATE_NOOP("tkConstants", "low");
 const char* const MEDIUM                             = QT_TRANSLATE_NOOP("tkConstants", "medium");
 const char* const HIGH                               = QT_TRANSLATE_NOOP("tkConstants", "high");
@@ -105,6 +106,7 @@ const char* const CREATION_DATE                 = QT_TRANSLATE_NOOP("tkConstants
 const char* const DATE                          = QT_TRANSLATE_NOOP("tkConstants", "Date");
 const char* const CREATED_BY_1                  = QT_TRANSLATE_NOOP("tkConstants", "Created by: %1");
 const char* const ON_THE_1                      = QT_TRANSLATE_NOOP("tkConstants", "On the: %1");
+const char* const TIMESTAMP                     = QT_TRANSLATE_NOOP("tkConstants", "Timestamp");
 
 // Settings related messages
 const char* const SETTINGS_RECOVERED                = QT_TRANSLATE_NOOP("tkConstants", "Settings recovered" );

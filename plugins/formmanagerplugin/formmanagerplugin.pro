@@ -59,7 +59,8 @@ SOURCES = formmanagerplugin.cpp \
     formdatawidgetmapper.cpp \
     formcore.cpp \
     formcollection.cpp \
-    formcontextualwidgetmanager.cpp
+    formcontextualwidgetmanager.cpp \
+    subforminsertpoint.cpp
 
 OTHER_FILES = FormManager.pluginspec
 

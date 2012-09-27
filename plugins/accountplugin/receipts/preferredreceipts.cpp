@@ -105,7 +105,7 @@ void PreferredReceipts::insertpreferredValuesIntoAccount(){
           qWarning() << __FILE__ << QString::number(__LINE__) << " Patient Name";
         }
     //medintux
-    if (manager.isMedintuxArg())
+    if (manager.isMedintuxArg()||manager.isFreaccountIndependant())
     {
         patientName = manager.getFullName();
         }
@@ -187,7 +187,7 @@ void PreferredReceipts::showChoiceDialog(){
           delete choice;
         }
     ReceiptsManager manager;
-    if (manager.isMedintuxArg())
+    if (manager.isMedintuxArg()||manager.isFreaccountIndependant())
     {
         QApplication::closeAllWindows();
     }

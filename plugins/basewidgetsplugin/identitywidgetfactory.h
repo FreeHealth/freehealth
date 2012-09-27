@@ -96,7 +96,7 @@ public:
     ~IdentityWidgetData() {}
 
     void setIdentityFormWiget(IdentityFormWidget *widget) {m_Widget = widget; clear();}
-    void clear() {}
+    void clear();
 
     Form::FormItem *parentItem() const {return m_FormItem;}
     bool isModified() const;
@@ -107,7 +107,7 @@ public:
     QVariant data(const int ref, const int role) const {Q_UNUSED(role); Q_UNUSED(ref); return QVariant();}
 
     // No storable data for forms
-    void setStorableData(const QVariant &) {}
+    void setStorableData(const QVariant &value);
     QVariant storableData() const;
 
 private:

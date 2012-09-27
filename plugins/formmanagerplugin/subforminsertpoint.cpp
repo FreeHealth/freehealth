@@ -24,64 +24,27 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef SUBFORMINSERTIONPOINT_H
-#define SUBFORMINSERTIONPOINT_H
+#include "subforminsertionpoint.h"
 
-#include <formmanagerplugin/formmanager_exporter.h>
+#include <QDebug>
 
-#include <QString>
-
-/**
- * \file subforminsertionpoint.h
- * \author Eric MAEKER
- * \version 0.7.6
- * \date 27 Sept 2012
-*/
-
-namespace Form {
-// TODO: should be internal and not exported
-
-class FORM_EXPORT SubFormInsertionPoint
+QDebug operator<<(QDebug dbg, const Form::SubFormInsertionPoint &c)
 {
-public:
-    SubFormInsertionPoint(const QString &receiverUid, const QString &addUid) :
-            m_ReceiverFormUid(receiverUid),
-            m_AddFormUid(addUid),
-            m_AppendToForm(false),
-            m_AddAsChild(true),
-            m_EmitInsertionSignal(false)
-    {}
+    dbg.nospace() << QString("SubFormInsertionPoint(subForm: %1; receiver: %2; asChild: %3; append: %4")
+                     .arg(c.subFormUid())
+                     .arg(c.receiverUid())
+                     .arg(c.addAsChild())
+                     .arg(c.appendToForm())
+                     ;
+    return dbg.space();
+}
 
-    SubFormInsertionPoint() :
-            m_AppendToForm(false),
-            m_AddAsChild(true),
-            m_EmitInsertionSignal(false)
-    {}
+QDebug operator<<(QDebug dbg, const Form::SubFormInsertionPoint *c)
+{
+    if (!c) {
+        dbg.nospace() << "SubFormInsertionPoint(0x0)";
+        return dbg.space();
+    }
+    return operator<<(dbg, *c);
+}
 
-    ~SubFormInsertionPoint() {}
-
-    void setReceiverUid(const QString &uid) {m_ReceiverFormUid = uid;}
-    void setSubFormUid(const QString &uid) {m_AddFormUid = uid;}
-    void setAppendToForm(bool append) {m_AppendToForm = append;}
-    void setAddAsChild(bool asChild) {m_AddAsChild = asChild;}
-    void setEmitInsertionSignal(bool emitSignal) {m_EmitInsertionSignal = emitSignal;}
-
-    QString subFormUid() const {return m_AddFormUid;}
-    QString receiverUid() const {return m_ReceiverFormUid;}
-    bool appendToForm() const {return m_AppendToForm;}
-    bool addAsChild() const {return m_AddAsChild;}
-    bool emitInsertionSignal() const {return m_EmitInsertionSignal;}
-
-private:
-    QString m_ReceiverFormUid, m_AddFormUid;
-    bool m_AppendToForm;
-    bool m_AddAsChild;
-    bool m_EmitInsertionSignal;
-};
-
-}  // end namespace Form
-
-QDebug operator<<(QDebug dbg, const Form::SubFormInsertionPoint &c);
-QDebug operator<<(QDebug dbg, const Form::SubFormInsertionPoint *c);
-
-#endif // SUBFORMINSERTIONPOINT_H

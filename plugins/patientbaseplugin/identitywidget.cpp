@@ -341,7 +341,7 @@ bool IdentityWidget::isModified() const
 {
     if (d->m_EditMode==ReadOnlyMode)
         return false;
-    //TODO: return right value
+    // TODO: return right value
     return d->m_Mapper->isDirty();
 }
 
@@ -400,7 +400,6 @@ QString IdentityWidget::currentGender() const
     }
     return QString();
 }
-
 
 /** Return the current editing value */
 QDate IdentityWidget::currentDateOfBirth() const

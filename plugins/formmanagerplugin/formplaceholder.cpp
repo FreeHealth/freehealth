@@ -98,6 +98,7 @@
 #include <QItemSelectionModel>
 #include <QToolBar>
 #include <QFileDialog>
+#include <QSortFilterProxyModel>
 
 // Test
 #include <QTextBrowser>
@@ -161,6 +162,55 @@ const char * const TREEVIEW_SHEET =
 namespace Form {
 namespace Internal {
 
+FormPlaceHolderCoreListener::FormPlaceHolderCoreListener(FormPlaceHolder *parent) :
+        Core::ICoreListener(parent),
+        _formPlaceHolder(parent)
+{
+    Q_ASSERT(parent);
+}
+FormPlaceHolderCoreListener::~FormPlaceHolderCoreListener() {}
+
+bool FormPlaceHolderCoreListener::coreAboutToClose()
+{
+//        qWarning() << Q_FUNC_INFO;
+    if (_formPlaceHolder->isDirty())
+        return _formPlaceHolder->saveCurrentEpisode();
+    return true;
+}
+
+FormPlaceHolderPatientListener::FormPlaceHolderPatientListener(FormPlaceHolder *parent) :
+        Core::IPatientListener(parent),
+        _formPlaceHolder(parent)
+{
+    Q_ASSERT(parent);
+}
+FormPlaceHolderPatientListener::~FormPlaceHolderPatientListener() {}
+
+bool FormPlaceHolderPatientListener::currentPatientAboutToChange()
+{
+//        qWarning() << Q_FUNC_INFO;
+    if (_formPlaceHolder->isDirty())
+        return _formPlaceHolder->saveCurrentEpisode();
+    return true;
+}
+
+
+//EpisodeModelUserListener::EpisodeModelUserListener(FormPlaceHolder *parent) :
+//    UserPlugin::IUserListener(parent)
+//{
+//    Q_ASSERT(parent);
+//}
+//EpisodeModelUserListener::~EpisodeModelUserListener() {}
+
+//bool EpisodeModelUserListener::userAboutToChange()
+//{
+//    qWarning() << Q_FUNC_INFO;
+//    m_EpisodeModel->submit();
+//    return true;
+//}
+//bool EpisodeModelUserListener::currentUserAboutToDisconnect() {return true;}
+
+
 class FormPlaceHolderPrivate
 {
 public:
@@ -171,6 +221,10 @@ public:
             _formTreeModel(0),
             _delegate(0),
             _episodeToolBar(0),
+            _coreListener(0),
+            _patientListener(0),
+            _proxyModel(0),
+            _currentEpisodeModel(0),
             q(parent)
     {
     }
@@ -265,20 +319,40 @@ public:
 
         ui->formDataMapper->setCurrentForm(_currentEditingForm);
 
-        EpisodeModel *episodeModel = formManager().episodeModel(_currentEditingForm);
-        ui->episodeView->setModel(episodeModel);
+        _currentEpisodeModel = formManager().episodeModel(_currentEditingForm);
+
+        if (_proxyModel)
+            delete _proxyModel;
+        _proxyModel = new QSortFilterProxyModel(q);
+        _proxyModel->setSourceModel(_currentEpisodeModel);
+
+        ui->episodeView->setModel(_proxyModel);
+        ui->episodeView->setSortingEnabled(true);
+        // TODO: add a settings to recall the sorting
+
         for(int i=0; i < EpisodeModel::MaxData; ++i)
             ui->episodeView->hideColumn(i);
         ui->episodeView->showColumn(EpisodeModel::ValidationStateIcon);
-        ui->episodeView->showColumn(EpisodeModel::UserDate);
+        ui->episodeView->showColumn(EpisodeModel::PriorityIcon);
+        ui->episodeView->showColumn(EpisodeModel::UserTimeStamp);
         ui->episodeView->showColumn(EpisodeModel::Label);
         ui->episodeView->showColumn(EpisodeModel::UserCreatorName);
 
         ui->episodeView->horizontalHeader()->setResizeMode(EpisodeModel::ValidationStateIcon, QHeaderView::ResizeToContents);
-        ui->episodeView->horizontalHeader()->setResizeMode(EpisodeModel::UserDate, QHeaderView::ResizeToContents);
+        ui->episodeView->horizontalHeader()->setResizeMode(EpisodeModel::PriorityIcon, QHeaderView::ResizeToContents);
+        ui->episodeView->horizontalHeader()->setResizeMode(EpisodeModel::UserTimeStamp, QHeaderView::ResizeToContents);
         ui->episodeView->horizontalHeader()->setResizeMode(EpisodeModel::Label, QHeaderView::Stretch);
         ui->episodeView->horizontalHeader()->setResizeMode(EpisodeModel::UserCreatorName, QHeaderView::ResizeToContents);
-        ui->episodeView->horizontalHeader()->hide();
+        QFont small;
+        small.setPointSize(small.pointSize() - 4);
+        ui->episodeView->horizontalHeader()->setFont(small);
+        ui->episodeView->horizontalHeader()->setStyleSheet("QHeaderView::section {"
+//                                                           "background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1,"
+//                                                           "                                  stop:0 #eeeeee, stop: 0.5 #e0e0e0,"
+//                                                           "                                  stop: 0.6 #dadada, stop:1 #f2f2f2);"
+                                                           "padding: 2px;"
+//                                                           "border: 1px solid black;"
+                                                           "}");
 
         ui->episodeView->selectionModel()->clearSelection();
         checkCurrentEpisodeViewVisibility();
@@ -302,8 +376,14 @@ public:
     void selectAndActivateFirstEpisode()
     {
         // Assuming the _currentEditingForm is defined and the episodeView model is set
-        if (!ui->episodeView->selectionModel()->hasSelection())
-            ui->episodeView->selectRow(0);
+        if (!ui->episodeView->selectionModel()->hasSelection()) {
+            if (ui->episodeView->model()->rowCount() > 0) {
+                ui->episodeView->selectRow(0);
+                ui->formDataMapper->setFormWidgetEnabled(true);
+            } else {
+                ui->formDataMapper->setFormWidgetEnabled(false);
+            }
+        }
     }
 
     QModelIndex currentEditingEpisodeIndex()
@@ -318,6 +398,10 @@ public:
     FormItemDelegate *_delegate;
     QToolBar *_episodeToolBar;
     QHash<int, QString> m_StackId_FormUuid;
+    Internal::FormPlaceHolderCoreListener *_coreListener;
+    Internal::FormPlaceHolderPatientListener *_patientListener;
+    QSortFilterProxyModel *_proxyModel;
+    EpisodeModel *_currentEpisodeModel;
 
 private:
     FormPlaceHolder *q;
@@ -428,7 +512,7 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
     d->ui->episodeView->setFrameStyle(QFrame::NoFrame);
     d->ui->episodeView->setSelectionMode(QAbstractItemView::SingleSelection);
     d->ui->episodeView->setSelectionBehavior(QAbstractItemView::SelectRows);
-    d->ui->episodeView->setItemDelegateForColumn(EpisodeModel::UserDate, new Utils::DateTimeDelegate(this, true));
+    d->ui->episodeView->setItemDelegateForColumn(EpisodeModel::UserTimeStamp, new Utils::DateTimeDelegate(this, false));
 
     int width = size().width();
     int third = width/3;
@@ -439,10 +523,27 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
     d->ui->verticalSplitter->setSizes(QList<int>() << third << height-third);
 
     connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onCurrentPatientChanged()));
+
+    // Autosave feature
+    // -> Core Listener
+    d->_coreListener = new Internal::FormPlaceHolderCoreListener(this);
+    pluginManager()->addObject(d->_coreListener);
+
+    // -> Patient change listener
+    d->_patientListener = new Internal::FormPlaceHolderPatientListener(this);
+    pluginManager()->addObject(d->_patientListener);
+
+    // TODO: add a User Listener in FormPlaceHolder
 }
 
 FormPlaceHolder::~FormPlaceHolder()
 {
+    if (d->_coreListener) {
+        pluginManager()->removeObject(d->_coreListener);
+    }
+    if (d->_patientListener) {
+        pluginManager()->removeObject(d->_patientListener);
+    }
     if (d) {
         delete d;
         d = 0;
@@ -472,11 +573,9 @@ bool FormPlaceHolder::enableAction(WidgetAction action) const
         // - an episode is selected
         // - && episode not already validated
         // - && form is not unique episode
-        const EpisodeModel *model = qobject_cast<EpisodeModel*>(d->ui->episodeView->model());
-        QModelIndex current = d->ui->episodeView->selectionModel()->currentIndex();
         bool unique = d->_currentEditingForm->isUniqueEpisode();
         return (d->ui->episodeView->selectionModel()->hasSelection()
-                && model->isEpisodeValidated(current)
+                && !d->_currentEpisodeModel->isEpisodeValidated(d->currentEditingEpisodeIndex())
                 && !unique);
     }
     case Action_SaveCurrentEpisode:
@@ -488,10 +587,10 @@ bool FormPlaceHolder::enableAction(WidgetAction action) const
         // Save episode only if
         // - form is multi episode
         // - an episode is selected
-        const EpisodeModel *model = qobject_cast<EpisodeModel*>(d->ui->episodeView->model());
-        bool modelPopulated = (model->rowCount() > 0);
+        bool modelPopulated = (d->_currentEpisodeModel->rowCount() > 0);
         bool multiEpisode = d->_currentEditingForm->isMultiEpisode();
-        return (multiEpisode && modelPopulated && d->ui->episodeView->selectionModel()->hasSelection());
+        return (multiEpisode && modelPopulated
+                && d->ui->episodeView->selectionModel()->hasSelection());
     }
     case Action_TakeScreenShot:
         // Take screenshot only if
@@ -561,7 +660,7 @@ bool FormPlaceHolder::clear()
 void FormPlaceHolder::handlePressed(const QModelIndex &index)
 {
     if (index.column() == FormTreeModel::Label) {
-//        d->_episodeModel->activateEpisode(index);
+//        d->_currentEpisodeModel->activateEpisode(index);
     } else if (index.column() == FormTreeModel::EmptyColumn1) {
         d->_delegate->pressedIndex = index;
     }
@@ -621,16 +720,16 @@ bool FormPlaceHolder::createEpisode()
     setCurrentEditingFormItem(index);
 
     // create a new episode the selected form and its children
-    Form::FormMain *form = d->_formTreeModel->formForIndex(index);
-    EpisodeModel *model = formManager().episodeModel(form);
-    if (!model->insertRow(0)) {
+    if (!d->_currentEpisodeModel->insertRow(0)) {
         LOG_ERROR("Unable to create new episode");
         return false;
     }
 
     // activate the newly created main episode
-    d->ui->episodeView->selectRow(model->rowCount() - 1);
-    d->ui->formDataMapper->setCurrentEpisode(model->index(model->rowCount() - 1, EpisodeModel::Label));
+    QModelIndex source = d->_currentEpisodeModel->index(d->_currentEpisodeModel->rowCount() - 1, EpisodeModel::Label);
+    QModelIndex proxy = d->_proxyModel->mapFromSource(source);
+    d->ui->episodeView->selectRow(proxy.row());
+    d->ui->formDataMapper->setCurrentEpisode(source);
 
     Q_EMIT actionsEnabledStateChanged();
     return true;
@@ -656,11 +755,9 @@ bool FormPlaceHolder::validateCurrentEpisode()
         return false;
 
     // get the episodeModel corresponding to the currently selected form
-    Form::FormMain *form = d->_formTreeModel->formForIndex(d->ui->formView->selectionModel()->currentIndex());
-    EpisodeModel *model = formManager().episodeModel(form);
-    if (!model)
+    if (!d->_currentEpisodeModel)
         return false;
-    bool ok = model->validateEpisode(d->ui->episodeView->currentIndex());
+    bool ok = d->_currentEpisodeModel->validateEpisode(d->currentEditingEpisodeIndex());
     Q_EMIT actionsEnabledStateChanged();
     return ok;
 }
@@ -701,9 +798,9 @@ bool FormPlaceHolder::removeCurrentEpisode()
                                          "Do you really want to remove the current episode?"));
     if (!yes)
         return false;
-    // TODO: code removeEpisode
+    bool ok = d->_currentEpisodeModel->removeEpisode(d->currentEditingEpisodeIndex());
     Q_EMIT actionsEnabledStateChanged();
-    return true;
+    return ok;
 }
 
 /**
@@ -736,14 +833,14 @@ bool FormPlaceHolder::addForm()
 //    d->saveCurrentEditingEpisode();
 
     // open the form editor dialog
-//    FormEditorDialog dlg(d->_formTreeModel, FormEditorDialog::DefaultMode, this);
-//    if (dlg.exec()==QDialog::Accepted) {
+    FormEditorDialog dlg(d->_formTreeModel, FormEditorDialog::DefaultMode, this);
+    if (dlg.exec()==QDialog::Accepted) {
         // refresh stack widget
 //        d->populateStackLayout();
         // activate last episode synthesis
-//        d->ui->formView->setCurrentIndex(d->_episodeModel->index(0,0));
+//        d->ui->formView->setCurrentIndex(d->_currentEpisodeModel->index(0,0));
 //        showLastEpisodeSynthesis();
-//    }
+    }
     Q_EMIT actionsEnabledStateChanged();
     return true;
 }
@@ -754,36 +851,6 @@ bool FormPlaceHolder::printFormOrEpisode()
     //    qWarning() << Q_FUNC_INFO;
     if (!d->ui->formView->selectionModel())
         return false;
-
-    // get the current index
-    //    QTreeView *tree = d->ui->formView->treeView();
-    //    QModelIndex index = tree->rootIndex();
-    //    if (tree->selectionModel()->hasSelection())
-    //        index = tree->selectionModel()->selectedIndexes().at(0);
-    //    QModelIndex form = index;
-    //    while (!d->_episodeModel->isForm(form)) {
-    //        form = form.parent();
-    //    }
-    //    if (!form.isValid())
-    //        return;
-
-
-    //    QModelIndex formUid = d->_episodeModel->index(form.row(), Form::FormTreeModel::FormUuid, form.parent());
-    //    if (formUid.data().toString()==Constants::PATIENTLASTEPISODES_UUID) {
-    //        // Print patient synthesis
-    //        htmlToPrint = d->_episodeModel->lastEpisodesSynthesis();
-    //        title = QApplication::translate(Constants::FORM_TR_CONTEXT, Constants::PATIENTLASTEPISODES_TEXT);
-    //    } else {
-    //        // Print episode
-    //        if (d->_episodeModel->isEpisode(index))
-    //            setCurrentEpisode(index);
-    //        Form::FormMain *formMain = d->_episodeModel->formForIndex(form);
-    //        if (formMain) {
-    //                htmlToPrint = "<html><body>" + formMain->printableHtml(d->_episodeModel->isEpisode(index)) + "</body></html>";
-    //                title = formMain->spec()->label();
-    //        }
-    //    }
-
     Form::FormMain *formMain = d->_formTreeModel->formForIndex(d->ui->formView->currentIndex());
     if (!formMain)
         return false;
@@ -834,13 +901,25 @@ void FormPlaceHolder::episodeChanged(const QModelIndex &current, const QModelInd
 {
     qWarning() << QString("FormPlaceHolder::episodeChanged: current(valid:%1) ; previous(valid:%2)").arg(current.isValid()).arg(previous.isValid());
     // Autosave is problematic when patient changed
-    if (previous.isValid())
+    QModelIndex sourceCurrent = d->_proxyModel->mapToSource(current);
+    QModelIndex sourcePrevious = d->_proxyModel->mapToSource(previous);
+    if (sourcePrevious.isValid())
         d->saveCurrentEditingEpisode();
     clear();
-    if (current.isValid()) {
-        d->ui->formDataMapper->setCurrentEpisode(current);
+    if (sourceCurrent.isValid()) {
+        d->ui->formDataMapper->setCurrentEpisode(sourceCurrent);
     }
     Q_EMIT actionsEnabledStateChanged();
+}
+
+/** Return true is the Form::Internal::FormDataWidgetMapper included in the view is dirty */
+bool FormPlaceHolder::isDirty() const
+{
+    if (d->_rootForm
+            && d->_currentEditingForm
+            && d->ui->formDataMapper->currentEditingEpisodeIndex().isValid())
+        return d->ui->formDataMapper->isDirty();
+    return false;
 }
 
 void FormPlaceHolder::changeEvent(QEvent *event)
@@ -850,7 +929,7 @@ void FormPlaceHolder::changeEvent(QEvent *event)
 //        QTreeView *tree = d->ui->formView->treeView();
 //        if (tree->selectionModel()) {
 //            QModelIndex index = tree->selectionModel()->currentIndex();
-//            const QString &formUuid = d->_episodeModel->index(index.row(), FormTreeModel::FormUuid, index.parent()).data().toString();
+//            const QString &formUuid = d->_currentEpisodeModel->index(index.row(), FormTreeModel::FormUuid, index.parent()).data().toString();
 //            if (formUuid==Constants::PATIENTLASTEPISODES_UUID) {
 //                setCurrentForm(formUuid);
 //            }

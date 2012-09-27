@@ -58,7 +58,7 @@
 using namespace Form;
 using namespace Internal;
 
-enum {WarnLogChronos=true};
+enum {WarnLogChronos=true, WarnDirty=true};
 
 static inline Form::FormManager &formManager() {return Form::FormCore::instance().formManager();}
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
@@ -232,13 +232,15 @@ bool FormDataWidgetMapper::isDirty() const
 
     // form isModified() ?
     if (d->_formMain->itemData() && d->_formMain->itemData()->isModified()) {
-//        qWarning() << "FormDataWidgetMapper::isDirty" << d->_formMain->uuid() << d->_formMain->itemData()->isModified();
+        if (WarnDirty)
+            qWarning() << "FormDataWidgetMapper::isDirty" << d->_formMain->uuid() << d->_formMain->itemData()->isModified();
         return true;
     }
     // ask all current form item data
     foreach(FormItem *it, d->_formMain->flattenFormItemChildren()) {
         if (it->itemData() && it->itemData()->isModified()) {
-//            qWarning() << "FormDataWidgetMapper::isDirty" << it->uuid() << it->itemData()->isModified();
+            if (WarnDirty)
+                qWarning() << "FormDataWidgetMapper::isDirty" << it->uuid() << it->itemData()->isModified();
             return true;
         }
     }
@@ -276,6 +278,12 @@ void FormDataWidgetMapper::setCurrentEpisode(const QModelIndex &index)
     d->setCurrentEpisode(index);
 }
 
+/** Enable or disable the Form::FormMain Form::IFormItemWidget */
+void FormDataWidgetMapper::setFormWidgetEnabled(bool enabled)
+{
+    d->_formMain->formWidget()->setEnabled(enabled);
+}
+
 /** Take a screenshot of the current editing form widget (populated with the episode index values). */
 QPixmap FormDataWidgetMapper::screenshot()
 {
@@ -293,7 +301,7 @@ bool FormDataWidgetMapper::submit()
     }
 
     QModelIndex userName = d->_episodeModel->index(d->_currentEpisode.row(), EpisodeModel::UserCreatorName);
-    QModelIndex userDate = d->_episodeModel->index(d->_currentEpisode.row(), EpisodeModel::UserDate);
+    QModelIndex userDate = d->_episodeModel->index(d->_currentEpisode.row(), EpisodeModel::UserTimeStamp);
     QModelIndex label = d->_episodeModel->index(d->_currentEpisode.row(), EpisodeModel::Label);
 
     d->_episodeModel->setData(label, d->_formMain->itemData()->data(IFormItemData::ID_EpisodeLabel));

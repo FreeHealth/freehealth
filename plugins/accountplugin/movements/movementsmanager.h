@@ -61,6 +61,7 @@ class ACCOUNT_EXPORT MovementsManager : public QObject
 
         double getCalculatedValue(double value,double percentage);
         bool isMedintuxArg();
+        bool isFreaccountIndependant();
     
 };
 

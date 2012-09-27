@@ -100,6 +100,11 @@ const char * const  ICONCRITICAL =     "critical.png";
 const char * const  ICONWARNING =      "warning.png";
 const char * const  ICONINFORMATION =  "information.png";
 
+// Priority
+const char * const  ICONPRIORITY_HIGH   = "priority_high.png";
+const char * const  ICONPRIORITY_MEDIUM = "priority_medium.png";
+const char * const  ICONPRIORITY_LOW    = "priority_low.png";
+
 // menu Navigation
 const char * const  ICONNEXT =         "next.png";
 const char * const  ICONPREVIOUS =     "previous.png";
