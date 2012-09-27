@@ -105,6 +105,7 @@ const char* const CREATION_DATE                 = QT_TRANSLATE_NOOP("tkConstants
 const char* const DATE                          = QT_TRANSLATE_NOOP("tkConstants", "Date");
 const char* const CREATED_BY_1                  = QT_TRANSLATE_NOOP("tkConstants", "Created by: %1");
 const char* const ON_THE_1                      = QT_TRANSLATE_NOOP("tkConstants", "On the: %1");
+const char* const TIMESTAMP                     = QT_TRANSLATE_NOOP("tkConstants", "Timestamp");
 
 // Settings related messages
 const char* const SETTINGS_RECOVERED                = QT_TRANSLATE_NOOP("tkConstants", "Settings recovered" );
