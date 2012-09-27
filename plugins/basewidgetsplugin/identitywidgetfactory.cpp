@@ -245,6 +245,7 @@ bool IdentityWidgetData::isModified() const
 
 void IdentityWidgetData::setModified(bool modified)
 {
+    Q_UNUSED(modified);
     // TODO: code here: HOW ??
 }
 
