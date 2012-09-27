@@ -601,32 +601,19 @@ void DayRangeBody::mouseMoveEvent(QMouseEvent *event)
                 secondsDifference = limit;
         }
 
-        // THIS CODE IS NEVER EXECUTED - we are in MouseMode_Resize mode!!!!
-//        if (d_body->m_mouseMode == DayRangeBodyPrivate::MouseMode_Move) {
-//            beginning = d_body->m_pressItem.beginning().addSecs(secondsDifference);
-//            beginning.setDate(mousePosDateTime.date());
-//        } else {
-            // now set the new time borders
-            if (d_body->m_mouseMode == DayRangeBodyPrivate::MouseMode_ResizeBottom){
-                beginning = d_body->m_pressedCalItem.beginning();
-                ending = d_body->m_pressedCalItem.ending().addSecs(secondsDifference);
-            }
-            else if (d_body->m_mouseMode == DayRangeBodyPrivate::MouseMode_ResizeTop){
-                beginning = d_body->m_pressedCalItem.beginning().addSecs(secondsDifference);
-                ending = d_body->m_pressedCalItem.ending();
-            }
-//        }
+        // now set the new time borders
+        if (d_body->m_mouseMode == DayRangeBodyPrivate::MouseMode_ResizeBottom){
+            beginning = d_body->m_pressedCalItem.beginning();
+            ending = d_body->m_pressedCalItem.ending().addSecs(secondsDifference);
+        }
+        else if (d_body->m_mouseMode == DayRangeBodyPrivate::MouseMode_ResizeTop){
+            beginning = d_body->m_pressedCalItem.beginning().addSecs(secondsDifference);
+            ending = d_body->m_pressedCalItem.ending();
+        }
 
-        // THIS CODE IS NEVER EXECUTED - we are in MouseMode_Resize mode!!!!
-//        if (d_body->m_mouseMode == DayRangeBodyPrivate::MouseMode_Move) {
-//            ending.setDate(mousePosDateTime.date());
-//            d_body->m_pressItemWidget->setBeginDateTime(beginning);
-//        } else {
+        if (ending <= beginning)
+            ending = beginning.addSecs(1800);
 
-            if (ending <= beginning)
-                ending = beginning.addSecs(1800);
-
-//        }
         d_body->m_pressedItemWidget->setEndDateTime(ending);
         rect = d_body->getTimeIntervalRect(beginning.date().dayOfWeek(), beginning.time(), ending.time());
         d_body->m_pressedItemWidget->move(rect.x(), rect.y());
