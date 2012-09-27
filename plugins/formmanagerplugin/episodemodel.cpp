@@ -468,6 +468,7 @@ QVariant EpisodeModel::data(const QModelIndex &index, int role) const
     {
         switch (index.column()) {
         case ValidationStateIcon: return QSize(22, 22);
+        case PriorityIcon: return QSize(22, 22);
         }
     }
     }  // switch (role)
