@@ -877,6 +877,30 @@ bool EpisodeBase::saveEpisodeValidation(EpisodeValidationData *validation)
     return true;
 }
 
+/** Remove the episode from the database. The episode is marked as non-valid (IsValid field) */
+bool EpisodeBase::removeEpisode(const QVariant &uid)
+{
+    QSqlDatabase DB = QSqlDatabase::database(DB_NAME);
+    if (!connectDatabase(DB, __LINE__))
+        return false;
+    using namespace Constants;
+    QHash<int, QString> where;
+    where.insert(EPISODES_ID, QString("='%1'").arg(uid.toString()));
+    DB.transaction();
+    QSqlQuery query(DB);
+    query.prepare(prepareUpdateQuery(Table_EPISODES, EPISODES_ISVALID, where));
+    query.bindValue(0, "0");
+    if (!query.exec()) {
+        LOG_QUERY_ERROR(query);
+        query.finish();
+        DB.rollback();
+        return false;
+    }
+    query.finish();
+    DB.commit();
+    return true;
+}
+
 /** Return all recorded episodes form the database according to the Form::Internal::EpisodeBaseQuery \e baseQuery. Episodes are sorted by UserDate. */
 QList<EpisodeData *> EpisodeBase::getEpisodes(const EpisodeBaseQuery &baseQuery)
 {

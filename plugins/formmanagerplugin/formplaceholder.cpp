@@ -777,9 +777,11 @@ bool FormPlaceHolder::removeCurrentEpisode()
                                          "Do you really want to remove the current episode?"));
     if (!yes)
         return false;
-    // TODO: code removeEpisode
+    EpisodeModel *model = qobject_cast<EpisodeModel*>(d->ui->episodeView->model());
+    QModelIndex current = d->ui->episodeView->selectionModel()->currentIndex();
+    bool ok = model->removeEpisode(current);
     Q_EMIT actionsEnabledStateChanged();
-    return true;
+    return ok;
 }
 
 /**
