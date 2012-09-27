@@ -554,6 +554,8 @@ QVariant EpisodeModel::headerData(int section, Qt::Orientation orientation, int 
         return d->_sqlModel->headerData(section, orientation, role);
 
     switch (section) {
+    case ValidationStateIcon: return "V";
+    case PriorityIcon: return "P";
     case UserTimeStamp: return tkTr(Trans::Constants::TIMESTAMP);
     case Label: return tkTr(Trans::Constants::LABEL);
     case Uuid: return tkTr(Trans::Constants::UNIQUE_IDENTIFIER);
