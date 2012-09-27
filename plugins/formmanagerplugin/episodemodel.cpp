@@ -61,6 +61,7 @@
 #include <utils/global.h>
 #include <translationutils/constants.h>
 #include <translationutils/trans_current.h>
+
 #include <extensionsystem/pluginmanager.h>
 
 #include <QSqlTableModel>
@@ -397,7 +398,7 @@ QVariant EpisodeModel::data(const QModelIndex &index, int role) const
                 return tkTr(Trans::Constants::YOU);
             return user()->fullNameOfUser(userUid);
         }
-//        case Summary:  sqlColumn = Constants::EPISODES_ISVALID; break;
+        case Priority: sqlColumn = Constants::EPISODES_PRIORITY; break;
         case XmlContent:  return d->getEpisodeContent(index); break;
         case Icon: sqlColumn = Constants::EPISODES_ISVALID; break;
         case Uuid: sqlColumn = Constants::EPISODES_ID; break;
@@ -442,6 +443,17 @@ QVariant EpisodeModel::data(const QModelIndex &index, int role) const
                 return theme()->icon(Core::Constants::ICONLOCK_BLACKWHITE).pixmap(12,12);
             return theme()->icon(Core::Constants::ICONUNLOCK_BLACKWHITE).pixmap(12,12);
         }
+        case PriorityIcon:
+        {
+            // Scale down the icons to 12x12 or 10x10
+            int priority = d->_sqlModel->data(d->_sqlModel->index(index.row(), Constants::EPISODES_PRIORITY)).toInt();
+            switch (priority) {
+            case High: return theme()->icon(Core::Constants::ICONPRIORITY_HIGH).pixmap(12,12);
+            case Medium: return theme()->icon(Core::Constants::ICONPRIORITY_MEDIUM).pixmap(12,12);
+            case Low: return theme()->icon(Core::Constants::ICONPRIORITY_LOW).pixmap(12,12);
+            }
+            break;
+        }
         case FormLabel:
         {
             if (!d->_formMain)
@@ -478,7 +490,7 @@ bool EpisodeModel::setData(const QModelIndex &index, const QVariant &value, int 
         case IsValid: sqlColumn = Constants::EPISODES_ISVALID; break;
         case CreationDate: sqlColumn = Constants::EPISODES_DATEOFCREATION; break;
         case UserTimeStamp: sqlColumn = Constants::EPISODES_USERDATE; break;
-            //            case Summary:  sqlColumn = Constants::EPISODES_; break;
+        case Priority: sqlColumn = Constants::EPISODES_PRIORITY; break;
         case XmlContent:
         {
             QModelIndex id = d->_sqlModel->index(index.row(), Constants::EPISODES_ID);
@@ -533,6 +545,7 @@ QVariant EpisodeModel::headerData(int section, Qt::Orientation orientation, int 
     case UserCreatorName: return tkTr(Trans::Constants::AUTHOR);
     case XmlContent: return tr("Xml content");
     case Icon: return tkTr(Trans::Constants::ICON);
+    case Priority: return tkTr(Trans::Constants::PRIORITY);
     case EmptyColumn1: return QString();
     case EmptyColumn2: return QString();
     default: break;
@@ -568,6 +581,7 @@ void EpisodeModel::populateNewRowWithDefault(int row, QSqlRecord &record)
     record.setValue(Constants::EPISODES_PATIENT_UID, patient()->uuid());
     record.setValue(Constants::EPISODES_DATEOFCREATION, QDateTime::currentDateTime());
     record.setValue(Constants::EPISODES_ISVALID, 1);
+    record.setValue(Constants::EPISODES_PRIORITY, Medium);
 }
 
 /** Invalidate an episode. The episode will stay in database but will not be show in the view (unless you ask for invalid episode not to be filtered). */

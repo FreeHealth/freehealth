@@ -70,11 +70,12 @@ protected:
 public:
     enum DataRepresentation {
         ValidationStateIcon = 0,
+        PriorityIcon,
         UserTimeStamp,
         Label,
         IsValid,
         CreationDate,
-//        Summary,
+        Priority,
         UserCreatorName,
         XmlContent,
         Icon,
@@ -85,6 +86,13 @@ public:
         EmptyColumn2,
         MaxData
     };
+
+    enum Priority {
+        High = 0,
+        Medium,
+        Low
+    };
+
     virtual ~EpisodeModel();
     QString formUid() const;
     void setCurrentPatient(const QString &uuid);
