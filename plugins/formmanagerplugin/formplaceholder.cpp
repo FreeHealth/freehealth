@@ -161,6 +161,55 @@ const char * const TREEVIEW_SHEET =
 namespace Form {
 namespace Internal {
 
+FormPlaceHolderCoreListener::FormPlaceHolderCoreListener(FormPlaceHolder *parent) :
+        Core::ICoreListener(parent),
+        _formPlaceHolder(parent)
+{
+    Q_ASSERT(parent);
+}
+FormPlaceHolderCoreListener::~FormPlaceHolderCoreListener() {}
+
+bool FormPlaceHolderCoreListener::coreAboutToClose()
+{
+//        qWarning() << Q_FUNC_INFO;
+    if (_formPlaceHolder->isDirty())
+        return _formPlaceHolder->saveCurrentEpisode();
+    return true;
+}
+
+FormPlaceHolderPatientListener::FormPlaceHolderPatientListener(FormPlaceHolder *parent) :
+        Core::IPatientListener(parent),
+        _formPlaceHolder(parent)
+{
+    Q_ASSERT(parent);
+}
+FormPlaceHolderPatientListener::~FormPlaceHolderPatientListener() {}
+
+bool FormPlaceHolderPatientListener::currentPatientAboutToChange()
+{
+//        qWarning() << Q_FUNC_INFO;
+    if (_formPlaceHolder->isDirty())
+        return _formPlaceHolder->saveCurrentEpisode();
+    return true;
+}
+
+
+//EpisodeModelUserListener::EpisodeModelUserListener(FormPlaceHolder *parent) :
+//    UserPlugin::IUserListener(parent)
+//{
+//    Q_ASSERT(parent);
+//}
+//EpisodeModelUserListener::~EpisodeModelUserListener() {}
+
+//bool EpisodeModelUserListener::userAboutToChange()
+//{
+//    qWarning() << Q_FUNC_INFO;
+//    m_EpisodeModel->submit();
+//    return true;
+//}
+//bool EpisodeModelUserListener::currentUserAboutToDisconnect() {return true;}
+
+
 class FormPlaceHolderPrivate
 {
 public:
@@ -171,6 +220,8 @@ public:
             _formTreeModel(0),
             _delegate(0),
             _episodeToolBar(0),
+            _coreListener(0),
+            _patientListener(0),
             q(parent)
     {
     }
@@ -302,8 +353,14 @@ public:
     void selectAndActivateFirstEpisode()
     {
         // Assuming the _currentEditingForm is defined and the episodeView model is set
-        if (!ui->episodeView->selectionModel()->hasSelection())
-            ui->episodeView->selectRow(0);
+        if (!ui->episodeView->selectionModel()->hasSelection()) {
+            if (ui->episodeView->model()->rowCount() > 0) {
+                ui->episodeView->selectRow(0);
+                ui->formDataMapper->setFormWidgetEnabled(true);
+            } else {
+                ui->formDataMapper->setFormWidgetEnabled(false);
+            }
+        }
     }
 
     QModelIndex currentEditingEpisodeIndex()
@@ -318,6 +375,8 @@ public:
     FormItemDelegate *_delegate;
     QToolBar *_episodeToolBar;
     QHash<int, QString> m_StackId_FormUuid;
+    Internal::FormPlaceHolderCoreListener *_coreListener;
+    Internal::FormPlaceHolderPatientListener *_patientListener;
 
 private:
     FormPlaceHolder *q;
@@ -439,10 +498,27 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
     d->ui->verticalSplitter->setSizes(QList<int>() << third << height-third);
 
     connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onCurrentPatientChanged()));
+
+    // Autosave feature
+    // -> Core Listener
+    d->_coreListener = new Internal::FormPlaceHolderCoreListener(this);
+    pluginManager()->addObject(d->_coreListener);
+
+    // -> Patient change listener
+    d->_patientListener = new Internal::FormPlaceHolderPatientListener(this);
+    pluginManager()->addObject(d->_patientListener);
+
+    // TODO: add a User Listener in FormPlaceHolder
 }
 
 FormPlaceHolder::~FormPlaceHolder()
 {
+    if (d->_coreListener) {
+        pluginManager()->removeObject(d->_coreListener);
+    }
+    if (d->_patientListener) {
+        pluginManager()->removeObject(d->_patientListener);
+    }
     if (d) {
         delete d;
         d = 0;
@@ -841,6 +917,16 @@ void FormPlaceHolder::episodeChanged(const QModelIndex &current, const QModelInd
         d->ui->formDataMapper->setCurrentEpisode(current);
     }
     Q_EMIT actionsEnabledStateChanged();
+}
+
+/** Return true is the Form::Internal::FormDataWidgetMapper included in the view is dirty */
+bool FormPlaceHolder::isDirty() const
+{
+    if (d->_rootForm
+            && d->_currentEditingForm
+            && d->ui->formDataMapper->currentEditingEpisodeIndex().isValid())
+        return d->ui->formDataMapper->isDirty();
+    return false;
 }
 
 void FormPlaceHolder::changeEvent(QEvent *event)
