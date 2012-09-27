@@ -25,23 +25,17 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 @if "%Doxygen%" == "true"
+/*!
 @if "%Internal%" == "true"
-/*!
  * \class %PluginNamespace:c%::Internal::%ClassName:c%
- * \brief short description of class
- *
- * Long description of class
- * \sa %PluginNamespace:c%::
- */
 @else
-/*!
  * \class %PluginNamespace:c%::%ClassName:c%
+@endif
  * \brief short description of class
  *
  * Long description of class
  * \sa %PluginNamespace:c%::
  */
-@endif
 @endif
 
 #include "%ClassName:l%.h"
@@ -53,17 +47,25 @@
 #include <QDebug>
 
 using namespace %PluginNamespace:c%;
+@if "%Internal%" == "true"
 using namespace Internal;
+@endif
 @if "%Translations%" == "true"
 using namespace Trans::ConstantTranslations;
 @endif
 
 @if "%PIMPL%" == "true"
 namespace %PluginNamespace:c% {
+@if "%Internal%" == "true"
 namespace Internal {
+@endif
 @if "%Doxygen%" == "true"
 /*!
+@if "%Internal%" == "true"
  * \class %PluginNamespace:c%::Internal::%ClassName:c%Private
+@else
+ * \class %PluginNamespace:c%::%ClassName:c%Private
+@endif
  * \brief Private implementation of the %PluginNamespace:c%::%ClassName:c% class.
  *
  * documentation here
@@ -115,8 +117,12 @@ private:
 @endif
 @endif
 %ClassName:c%::%ClassName:c%(QObject *parent) :
+@if "%PIMPL%" == "true"
     QObject(parent),
     d(new %ClassName:c%Private(this))
+@else
+    QObject(parent)
+@ensif
 {
 @if "%Singleton%" == "true"
     _instance = this;
@@ -135,9 +141,11 @@ private:
 @if "%Singleton%" == "true"
     _instance = 0;
 @endif
+@if "%PIMPL%" == "true"
     if (d)
         delete d;
     d = 0;
+@endif
 }
 
 @if "%Doxygen%" == "true"

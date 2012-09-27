@@ -44,12 +44,14 @@
  * \date %CurrentDate%
 */
 namespace %PluginNamespace:c% {
+@if "%Internal%" == "true"
 namespace Internal {
+@endif
 @if  "%PIMPL%" == "true"
 class %ClassName:c%Private;
-@if "%Internal%" == "false"
-}  // namespace Internal
 @endif
+@if "%Internal%" == "true"
+}  // namespace Internal
 @endif
 
 @if "%Exported%" == "true"
@@ -78,16 +80,17 @@ public Q_SLOTS:
 
 @if "%PIMPL%" == "true"
 private:
+@if "%Internal%" == "true"
     Internal::%ClassName:c%Private *d;
+@else
+    %ClassName:c%Private *d;
+@endif
 @endif
 @if "%Singleton%" == "true"
     static %ClassName:c% *_instance;
 @endif
 };
 
-@if "%Internal%" == "true"
-} // namespace Internal
-@endif
 } // namespace %PluginNamespace:c%
 
 @if "%Internal%" == "true"
