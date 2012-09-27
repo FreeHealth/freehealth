@@ -40,18 +40,22 @@
 #include "usercalendarmodel.h"
 #include "agendacore.h"
 
+#include <coreplugin/modemanager/modemanager.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/iuser.h>
 #include <coreplugin/ipatient.h>
 #include <coreplugin/itheme.h>
+#include <coreplugin/constants_menus.h>
 #include <coreplugin/constants_icons.h>
 #include <coreplugin/actionmanager/actionmanager.h>
+#include <patientbaseplugin/patientmodel.h>
 
 #include <calendar/modelanditem/basic_item_edition_dialog.h>
 #include <utils/log.h>
 #include <translationutils/constants.h>
 #include <translationutils/trans_agenda.h>
 #include <translationutils/trans_datetime.h>
+
 
 #include "ui_usercalendarviewer.h"
 
@@ -70,6 +74,7 @@ static inline Agenda::Internal::AgendaBase &base() {return Agenda::AgendaCore::i
 static inline Agenda::AgendaCore &agendaCore() {return Agenda::AgendaCore::instance();}
 static inline Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
+static inline Core::ModeManager *modeManager() {return Core::ICore::instance()->modeManager();}
 
 namespace {
     const int S_NUMBEROFAVAILABILITIESTOSHOW = 10;
@@ -463,8 +468,10 @@ void UserCalendarViewer::updateCalendarData(const QModelIndex &top, const QModel
 
 void UserCalendarViewer::onSwitchToPatientClicked()
 {
-    // TODO
-//    patient()->setCurrentPatient();
+//    Patients::PatientModel::activeModel()->setCurrentPatient(
+//                d->m_CalendarItemModel->getPeopleNames();
+//                );
+//    modeManager()->activateMode(Core::Constants::MODE_PATIENT_FILE);
 }
 
 void UserCalendarViewer::onEditAppointementClicked()
