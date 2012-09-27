@@ -233,6 +233,11 @@ QString IdentityFormWidget::printableHtml(bool withValues) const
     return QString();
 }
 
+void IdentityWidgetData::clear()
+{
+    // Nothing to do here
+}
+
 bool IdentityWidgetData::isModified() const
 {
     return m_Widget->m_Identity->isModified();
@@ -243,7 +248,14 @@ void IdentityWidgetData::setModified(bool modified)
     // TODO: code here: HOW ??
 }
 
+void IdentityWidgetData::setStorableData(const QVariant &value)
+{
+    Q_UNUSED(value);
+    // Nothing to do here
+}
+
 QVariant IdentityWidgetData::storableData() const
 {
-    m_Widget->m_Identity->submit(); return QVariant();
+    m_Widget->m_Identity->submit();
+    return QVariant();
 }
