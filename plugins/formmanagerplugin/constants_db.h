@@ -32,7 +32,7 @@ namespace Constants {
 
     const char * const  DB_NAME            = "episodes";
     const char * const  DB_FILENAME        = "episodes.db";
-    const char * const  DB_ACTUALVERSION   = "0.1";
+    const char * const  DB_ACTUALVERSION   = "0.2";
 
     // Tables
     enum Tables {
@@ -55,6 +55,7 @@ namespace Constants {
         EPISODES_USERDATE,
         EPISODES_DATEOFCREATION,
         EPISODES_USERCREATOR,
+        EPISODES_PRIORITY,
         EPISODES_MaxParam
     };
 
