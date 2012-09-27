@@ -527,8 +527,8 @@ void DayRangeBody::mouseMoveEvent(QMouseEvent *event)
         QWidget::mouseMoveEvent(event);
         return;
     }
-    
-    
+
+
     QDateTime mousePosDateTime = d_body->quantized(d_body->getDateTime(event->pos()));
     QRect rect;
     int secondsDifference, limit;
@@ -552,6 +552,7 @@ void DayRangeBody::mouseMoveEvent(QMouseEvent *event)
         mimeData->setData(calendarMimeType(), d_body->m_pressedCalItem.uid().toUtf8());
         drag->setMimeData(mimeData);
 
+        d_body->m_pressedItemWidget->hide();
         QPixmap pixmap(d_body->m_pressedItemWidget->size());
         QPainter painter(&pixmap);
         painter.setOpacity(0.3);
@@ -575,26 +576,26 @@ void DayRangeBody::mouseMoveEvent(QMouseEvent *event)
             qWarning() << "   previousDateTime" << d_body->m_previousDateTime;
         }
         d_body->m_pressedItemWidget->setInMotion(true);
-        
+
          // seconds to add - if mouse is above, value is negative
         secondsDifference = d_body->m_pressDateTime.time().secsTo(mousePosDateTime.time());
-        
+
         if (event->pos().y() > d_body->m_pressPos.y()) {  // mouse moved down
-            
+
             // define a time at the end of the day
             QDateTime endOfDay = d_body->m_pressedCalItem.ending().addDays(1);
             endOfDay.setTime(QTime(0, 0));
-            
+
             // seconds difference from appointment end to end of day
             limit = d_body->m_pressedCalItem.ending().secsTo(endOfDay);
             if (secondsDifference > limit)
                 secondsDifference = limit;
-        
+
         } else { // mouse moved up
             // define a time at beginning of the day
             QDateTime beginningOfDay = d_body->m_pressedCalItem.beginning();
             beginningOfDay.setTime(QTime(0, 0));
-            
+
             limit = d_body->m_pressedCalItem.beginning().secsTo(beginningOfDay);
             if (secondsDifference < limit)
                 secondsDifference = limit;
@@ -612,19 +613,19 @@ void DayRangeBody::mouseMoveEvent(QMouseEvent *event)
             }
             else if (d_body->m_mouseMode == DayRangeBodyPrivate::MouseMode_ResizeTop){
                 beginning = d_body->m_pressedCalItem.beginning().addSecs(secondsDifference);
-                ending = d_body->m_pressedCalItem.ending();        
+                ending = d_body->m_pressedCalItem.ending();
             }
 //        }
-                
+
         // THIS CODE IS NEVER EXECUTED - we are in MouseMode_Resize mode!!!!
 //        if (d_body->m_mouseMode == DayRangeBodyPrivate::MouseMode_Move) {
 //            ending.setDate(mousePosDateTime.date());
 //            d_body->m_pressItemWidget->setBeginDateTime(beginning);
 //        } else {
-            
+
             if (ending <= beginning)
                 ending = beginning.addSecs(1800);
-            
+
 //        }
         d_body->m_pressedItemWidget->setEndDateTime(ending);
         rect = d_body->getTimeIntervalRect(beginning.date().dayOfWeek(), beginning.time(), ending.time());
@@ -677,7 +678,6 @@ void DayRangeBody::mouseReleaseEvent(QMouseEvent *event)
         qWarning() << "DayBody::mouseReleased" << d_body->m_pressedCalItem.uid() << d_body->m_pressedCalItem.beginning() << d_body->m_pressedCalItem.ending();
         qWarning() << "   pressed DateTime" << d_body->m_previousDateTime;
     }
-
 }
 
 void DayRangeBody::mouseDoubleClickEvent(QMouseEvent *event)
