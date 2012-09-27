@@ -562,6 +562,16 @@ bool BaseFormData::isModified() const
     return false;
 }
 
+void BaseFormData::setModified(bool modified)
+{
+    m_Modified = modified;
+    if (!modified) {
+        foreach(int id, m_OriginalData.keys()) {
+            m_OriginalData.insert(id, data(id));
+        }
+    }
+}
+
 bool BaseFormData::setData(const int ref, const QVariant &data, const int role)
 {
 //    qWarning() << "Form::setData" << ref << data << role;
@@ -843,6 +853,14 @@ bool BaseGroupData::isModified() const
     return false;
 }
 
+void BaseGroupData::setModified(bool modified)
+{
+    if (!modified) {
+        if (isGroupCollapsible(m_FormItem, false) || isGroupCheckable(m_FormItem, false))
+            m_OriginalValue_isChecked = m_BaseGroup->m_Group->isChecked();
+    }
+}
+
 bool BaseGroupData::setData(const int ref, const QVariant &data, const int role)
 {
     Q_UNUSED(ref);
@@ -1002,6 +1020,12 @@ void BaseCheckData::clear()
 bool BaseCheckData::isModified() const
 {
     return m_OriginalValue != m_Check->checkState();
+}
+
+void BaseCheckData::setModified(bool modified)
+{
+    if (!modified)
+        m_OriginalValue = m_Check->checkState();
 }
 
 bool BaseCheckData::setData(const int ref, const QVariant &data, const int role)
@@ -1280,6 +1304,18 @@ bool BaseRadioData::isModified() const
     return true;
 }
 
+void BaseRadioData::setModified(bool modified)
+{
+    if (!modified) {
+        foreach(QRadioButton *but, m_Radio->m_RadioList) {
+            if (but->isChecked()) {
+                m_OriginalValue = but->property("id").toString();
+                return;
+            }
+        }
+    }
+}
+
 bool BaseRadioData::setData(const int ref, const QVariant &data, const int role)
 {
     Q_UNUSED(ref);
@@ -1509,6 +1545,16 @@ bool BaseSimpleTextData::isModified() const
     else if (m_Text->m_Text)
         return m_OriginalValue != m_Text->m_Text->toPlainText();
     return true;
+}
+
+void BaseSimpleTextData::setModified(bool modified)
+{
+    if (!modified) {
+        if (m_Text->m_Line)
+            m_OriginalValue = m_Text->m_Line->text();
+        else if (m_Text->m_Text)
+            m_OriginalValue = m_Text->m_Text->toPlainText();
+    }
 }
 
 bool BaseSimpleTextData::setData(const int ref, const QVariant &data, const int role)
@@ -1771,6 +1817,12 @@ bool BaseListData::isModified() const
     return actual != m_OriginalValue;
 }
 
+void BaseListData::setModified(bool modified)
+{
+    if (!modified)
+        m_OriginalValue = storableData().toStringList();
+}
+
 bool BaseListData::setData(const int ref, const QVariant &data, const int role)
 {
     Q_UNUSED(ref);
@@ -1968,6 +2020,12 @@ bool BaseComboData::isModified() const
     return m_OriginalValue != m_Combo->m_Combo->currentIndex();
 }
 
+void BaseComboData::setModified(bool modified)
+{
+    if (!modified)
+        m_OriginalValue = m_Combo->m_Combo->currentIndex();
+}
+
 bool BaseComboData::setData(const int ref, const QVariant &data, const int role)
 {
     if (role!=Qt::EditRole)
@@ -2160,6 +2218,12 @@ void BaseDateData::clear()
 bool BaseDateData::isModified() const
 {
     return m_OriginalValue != m_Date->m_Date->dateTime().toString(Qt::ISODate);
+}
+
+void BaseDateData::setModified(bool modified)
+{
+    if (!modified)
+        m_OriginalValue = m_Date->m_Date->dateTime().toString(Qt::ISODate);
 }
 
 bool BaseDateData::setData(const int ref, const QVariant &data, const int role)
@@ -2357,6 +2421,12 @@ void BaseSpinData::clear()
 bool BaseSpinData::isModified() const
 {
     return m_OriginalValue != storableData().toDouble();
+}
+
+void BaseSpinData::setModified(bool modified)
+{
+    if (!modified)
+        m_OriginalValue = storableData().toDouble();
 }
 
 bool BaseSpinData::setData(const int ref, const QVariant &data, const int role)

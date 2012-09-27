@@ -125,6 +125,7 @@ public:
 
     Form::FormItem *parentItem() const {return m_FormItem;}
     bool isModified() const;
+    void setModified(bool modified);
 
     // Use setData/Data for episode data
     bool setData(const int ref, const QVariant &data, const int role = Qt::EditRole);
@@ -187,6 +188,7 @@ public:
 
     Form::FormItem *parentItem() const {return m_FormItem;}
     bool isModified() const;
+    void setModified(bool modified);
 
     bool setData(const int ref, const QVariant &data, const int role = Qt::EditRole);
     QVariant data(const int ref, const int role = Qt::DisplayRole) const;
@@ -238,6 +240,7 @@ public:
 
     Form::FormItem *parentItem() const {return m_FormItem;}
     bool isModified() const;
+    void setModified(bool modified);
 
     bool setData(const int ref, const QVariant &data, const int role = Qt::EditRole);
     QVariant data(const int ref, const int role = Qt::DisplayRole) const;
@@ -289,6 +292,7 @@ public:
 
     Form::FormItem *parentItem() const {return m_FormItem;}
     bool isModified() const;
+    void setModified(bool modified);
 
     bool setData(const int ref, const QVariant &data, const int role = Qt::EditRole);
     QVariant data(const int ref, const int role = Qt::DisplayRole) const;
@@ -338,6 +342,7 @@ public:
 
     Form::FormItem *parentItem() const {return m_FormItem;}
     bool isModified() const;
+    void setModified(bool modified);
 
     bool setData(const int ref, const QVariant &data, const int role = Qt::EditRole);
     QVariant data(const int ref, const int role = Qt::DisplayRole) const;
@@ -404,6 +409,7 @@ public:
 
     Form::FormItem *parentItem() const {return m_FormItem;}
     bool isModified() const;
+    void setModified(bool modified);
 
     bool setData(const int ref, const QVariant &data, const int role = Qt::EditRole);
     QVariant data(const int ref, const int role = Qt::DisplayRole) const;
@@ -453,6 +459,7 @@ public:
 
     Form::FormItem *parentItem() const {return m_FormItem;}
     bool isModified() const;
+    void setModified(bool modified);
 
     bool setData(const int ref, const QVariant &data, const int role = Qt::EditRole);
     QVariant data(const int ref, const int role = Qt::DisplayRole) const;
@@ -505,6 +512,7 @@ public:
 
     Form::FormItem *parentItem() const {return m_FormItem;}
     bool isModified() const;
+    void setModified(bool modified);
 
     bool setData(const int ref, const QVariant &data, const int role = Qt::EditRole);
     QVariant data(const int ref, const int role = Qt::DisplayRole) const;
@@ -553,6 +561,7 @@ public:
 
     Form::FormItem *parentItem() const {return m_FormItem;}
     bool isModified() const;
+    void setModified(bool modified);
 
     bool setData(const int ref, const QVariant &data, const int role = Qt::EditRole);
     QVariant data(const int ref, const int role = Qt::DisplayRole) const;

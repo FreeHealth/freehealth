@@ -170,6 +170,12 @@ bool IcdFormData::isModified() const
     return m_OriginalValue != storableData().toString();
 }
 
+void IcdFormData::setModified(bool modified)
+{
+    if (!modified)
+        m_OriginalValue = storableData().toString();
+}
+
 bool IcdFormData::setData(const int ref, const QVariant &data, const int role)
 {
     Q_UNUSED(ref);

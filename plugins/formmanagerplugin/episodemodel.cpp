@@ -317,6 +317,7 @@ public:
     QSqlTableModel *_sqlModel;
     QHash<int, QString> _xmlContentCache;
     QMultiHash<int, EpisodeValidationData *> _validationCache;
+    QModelIndexList _dirtyIndexes;
 
 private:
     EpisodeModel *q;
@@ -536,6 +537,7 @@ bool EpisodeModel::setData(const QModelIndex &index, const QVariant &value, int 
         return false;
 
     if ((role==Qt::EditRole) || (role==Qt::DisplayRole)) {
+        d->_dirtyIndexes << index;
         int sqlColumn = -1;
         switch (index.column()) {
         case Label: sqlColumn = Constants::EPISODES_LABEL; break;
@@ -662,12 +664,10 @@ bool EpisodeModel::isReadOnly() const
     return d->_readOnly;
 }
 
-/** Return true if the model has unsaved data (NOT CODED) */
+/** Return true if the model has unsaved data */
 bool EpisodeModel::isDirty() const
 {
-    // TODO: code here
-    return false;
-//    return d->_sqlModel->isDirty();
+    return d->_dirtyIndexes.count() > 0;
 }
 
 /** Validate an episode using the current user and the current date time. */
@@ -694,6 +694,14 @@ bool EpisodeModel::isEpisodeValidated(const QModelIndex &index) const
     return d->isEpisodeValidated(index);
 }
 
+/**
+ * Populate the Form::IFormItemData of the parent Form::FormMain pointer
+ * with the content of the episode.
+ * If \e feedPatientModel is set to true and if the Form::IFormItemData has a
+ * patient data representation, patient model will be automatically populated
+ * with the value of the item data.
+ * \sa Form::IFormItemData, Form::FormItem::patientDataRepresentation()
+ */
 bool EpisodeModel::populateFormWithEpisodeContent(const QModelIndex &episode, bool feedPatientModel)
 {
     QTime chrono;
@@ -730,7 +738,7 @@ bool EpisodeModel::populateFormWithEpisodeContent(const QModelIndex &episode, bo
     d->_formMain->itemData()->setData(IFormItemData::ID_EpisodeDate, this->data(userDate));
     d->_formMain->itemData()->setData(IFormItemData::ID_EpisodeLabel, this->data(label));
     d->_formMain->itemData()->setData(IFormItemData::ID_UserName, this->data(userName));
-    d->_formMain->itemData()->setStorableData(false); // equal: _formMain->itemData()->setModified(false)
+    d->_formMain->itemData()->setModified(false);
 
     // Populate FormItem data and the patientmodel
     foreach(FormItem *it, items.values()) {
@@ -762,7 +770,21 @@ bool EpisodeModel::submit()
     if (patient()->uuid().isEmpty())
         return false;
 
+    // Signal all dirty indexes
+    foreach(const QModelIndex &index, d->_dirtyIndexes)
+        Q_EMIT dataChanged(index, index);
+    d->_dirtyIndexes.clear();
+
+    // Submit the internal model (block the reset signal emitted when submitting the model)
+    d->_sqlModel->blockSignals(true);
     bool ok = d->_sqlModel->submit();
+
+    // Set all formitemdata to a non-modified state
+    foreach(FormItem *it, d->_formMain->flattenFormItemChildren()) {
+        if (it->itemData())
+            it->itemData()->setModified(false);
+    }
+    d->_sqlModel->blockSignals(false);
     return ok;
 }
 

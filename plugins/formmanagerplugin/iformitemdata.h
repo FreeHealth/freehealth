@@ -58,7 +58,7 @@ public:
 
     virtual Form::FormItem *parentItem() const = 0;
     virtual bool isModified() const = 0;
-//    virtual bool setModified(bool modified) = 0;
+    virtual void setModified(bool modified) = 0;
 
     // ref makes references to patient's data -> Core::IPatient
     virtual bool setData(const int ref, const QVariant &data, const int role = Qt::EditRole) = 0;

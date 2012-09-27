@@ -120,6 +120,13 @@
 /**
  * \fn bool Form::IFormItemData::isModified()
  * Return true if the data content is modified (usually when the form widget was edited).
+ * \sa setModified(), Form::EpisodeModel::submit(), Form::Internal::FormDataWidgetMapper::isDirty()
+ */
+
+/**
+ * \fn void Form::IFormItemData::setModified(bool modified)
+ * Set the modified state of the item data.
+ * \sa isModified(), Form::EpisodeModel::submit()
  */
 
 /**
