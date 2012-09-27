@@ -333,15 +333,19 @@ public:
         for(int i=0; i < EpisodeModel::MaxData; ++i)
             ui->episodeView->hideColumn(i);
         ui->episodeView->showColumn(EpisodeModel::ValidationStateIcon);
+        ui->episodeView->showColumn(EpisodeModel::PriorityIcon);
         ui->episodeView->showColumn(EpisodeModel::UserTimeStamp);
         ui->episodeView->showColumn(EpisodeModel::Label);
         ui->episodeView->showColumn(EpisodeModel::UserCreatorName);
 
         ui->episodeView->horizontalHeader()->setResizeMode(EpisodeModel::ValidationStateIcon, QHeaderView::ResizeToContents);
+        ui->episodeView->horizontalHeader()->setResizeMode(EpisodeModel::PriorityIcon, QHeaderView::ResizeToContents);
         ui->episodeView->horizontalHeader()->setResizeMode(EpisodeModel::UserTimeStamp, QHeaderView::ResizeToContents);
         ui->episodeView->horizontalHeader()->setResizeMode(EpisodeModel::Label, QHeaderView::Stretch);
         ui->episodeView->horizontalHeader()->setResizeMode(EpisodeModel::UserCreatorName, QHeaderView::ResizeToContents);
-//        ui->episodeView->horizontalHeader()->hide();
+        QFont small;
+        small.setPointSize(small.pointSize() - 2);
+        ui->episodeView->horizontalHeader()->setFont(small);
 
         ui->episodeView->selectionModel()->clearSelection();
         checkCurrentEpisodeViewVisibility();
@@ -715,8 +719,10 @@ bool FormPlaceHolder::createEpisode()
     }
 
     // activate the newly created main episode
-    d->ui->episodeView->selectRow(d->_currentEpisodeModel->rowCount() - 1);
-    d->ui->formDataMapper->setCurrentEpisode(d->_currentEpisodeModel->index(d->_currentEpisodeModel->rowCount() - 1, EpisodeModel::Label));
+    QModelIndex source = d->_currentEpisodeModel->index(d->_currentEpisodeModel->rowCount() - 1, EpisodeModel::Label);
+    QModelIndex proxy = d->_proxyModel->mapFromSource(source);
+    d->ui->episodeView->selectRow(proxy.row());
+    d->ui->formDataMapper->setCurrentEpisode(source);
 
     Q_EMIT actionsEnabledStateChanged();
     return true;
@@ -744,7 +750,7 @@ bool FormPlaceHolder::validateCurrentEpisode()
     // get the episodeModel corresponding to the currently selected form
     if (!d->_currentEpisodeModel)
         return false;
-    bool ok = d->_currentEpisodeModel->validateEpisode(d->ui->episodeView->currentIndex());
+    bool ok = d->_currentEpisodeModel->validateEpisode(d->currentEditingEpisodeIndex());
     Q_EMIT actionsEnabledStateChanged();
     return ok;
 }
@@ -888,11 +894,13 @@ void FormPlaceHolder::episodeChanged(const QModelIndex &current, const QModelInd
 {
     qWarning() << QString("FormPlaceHolder::episodeChanged: current(valid:%1) ; previous(valid:%2)").arg(current.isValid()).arg(previous.isValid());
     // Autosave is problematic when patient changed
-    if (previous.isValid())
+    QModelIndex sourceCurrent = d->_proxyModel->mapToSource(current);
+    QModelIndex sourcePrevious = d->_proxyModel->mapToSource(previous);
+    if (sourcePrevious.isValid())
         d->saveCurrentEditingEpisode();
     clear();
-    if (current.isValid()) {
-        d->ui->formDataMapper->setCurrentEpisode(current);
+    if (sourceCurrent.isValid()) {
+        d->ui->formDataMapper->setCurrentEpisode(sourceCurrent);
     }
     Q_EMIT actionsEnabledStateChanged();
 }
