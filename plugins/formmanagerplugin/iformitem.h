@@ -231,6 +231,9 @@ public:
 
     virtual void setEpisodePossibilities(const int i) {m_Episode = i;}
     virtual int episodePossibilities() const {return m_Episode;}
+    bool isUniqueEpisode() const {return m_Episode == UniqueEpisode;}
+    bool isNoEpisode() const {return m_Episode == NoEpisode;}
+    bool isMultiEpisode() const {return m_Episode == MultiEpisode;}
 
     QString printableHtml(bool withValues = true) const;
 

@@ -302,7 +302,8 @@ public:
     void selectAndActivateFirstEpisode()
     {
         // Assuming the _currentEditingForm is defined and the episodeView model is set
-        ui->episodeView->selectRow(0);
+        if (!ui->episodeView->selectionModel()->hasSelection())
+            ui->episodeView->selectRow(0);
     }
 
     QModelIndex currentEditingEpisodeIndex()
@@ -454,10 +455,17 @@ bool FormPlaceHolder::enableAction(WidgetAction action) const
     switch (action) {
     case Action_Clear:
         // Clear only if a form && an episode are selected
-        return d->ui->episodeView->selectionModel()->hasSelection() && d->ui->formView->selectionModel()->hasSelection();
+        return d->ui->episodeView->selectionModel()->hasSelection()
+                && d->ui->formView->selectionModel()->hasSelection();
     case Action_CreateEpisode:
-        // Create episode only if a form && an episode are selected
-        return d->ui->episodeView->selectionModel()->hasSelection() && d->ui->formView->selectionModel()->hasSelection();
+    {
+        // No form
+        if (!d->_currentEditingForm)
+            return false;
+        // Only available for multi episode forms
+        bool multiEpisode = d->_currentEditingForm->isMultiEpisode();
+        return multiEpisode;
+    }
     case Action_ValidateCurrentEpisode:
     {
         // Validate episode only if
@@ -466,7 +474,7 @@ bool FormPlaceHolder::enableAction(WidgetAction action) const
         // - && form is not unique episode
         const EpisodeModel *model = qobject_cast<EpisodeModel*>(d->ui->episodeView->model());
         QModelIndex current = d->ui->episodeView->selectionModel()->currentIndex();
-        const bool unique = d->_formTreeModel->isUniqueEpisode(current);
+        bool unique = d->_currentEditingForm->isUniqueEpisode();
         return (d->ui->episodeView->selectionModel()->hasSelection()
                 && model->isEpisodeValidated(current)
                 && !unique);
@@ -476,9 +484,15 @@ bool FormPlaceHolder::enableAction(WidgetAction action) const
         // - an episode is selected
         return (d->ui->episodeView->selectionModel()->hasSelection());
     case Action_RemoveCurrentEpisode:
+    {
         // Save episode only if
+        // - form is multi episode
         // - an episode is selected
-        return (d->ui->episodeView->selectionModel()->hasSelection());
+        const EpisodeModel *model = qobject_cast<EpisodeModel*>(d->ui->episodeView->model());
+        bool modelPopulated = (model->rowCount() > 0);
+        bool multiEpisode = d->_currentEditingForm->isMultiEpisode();
+        return (multiEpisode && modelPopulated && d->ui->episodeView->selectionModel()->hasSelection());
+    }
     case Action_TakeScreenShot:
         // Take screenshot only if
         // - an episode is selected
@@ -581,6 +595,7 @@ void FormPlaceHolder::setCurrentEditingFormItem(const QModelIndex &index)
     if (form!=d->_currentEditingForm) {
         d->setCurrentForm(form);
         d->selectAndActivateFirstEpisode();
+        Q_EMIT actionsEnabledStateChanged();
     }
 }
 
@@ -616,6 +631,8 @@ bool FormPlaceHolder::createEpisode()
     // activate the newly created main episode
     d->ui->episodeView->selectRow(model->rowCount() - 1);
     d->ui->formDataMapper->setCurrentEpisode(model->index(model->rowCount() - 1, EpisodeModel::Label));
+
+    Q_EMIT actionsEnabledStateChanged();
     return true;
 }
 
@@ -643,7 +660,9 @@ bool FormPlaceHolder::validateCurrentEpisode()
     EpisodeModel *model = formManager().episodeModel(form);
     if (!model)
         return false;
-    return model->validateEpisode(d->ui->episodeView->currentIndex());
+    bool ok = model->validateEpisode(d->ui->episodeView->currentIndex());
+    Q_EMIT actionsEnabledStateChanged();
+    return ok;
 }
 
 /**
@@ -660,7 +679,9 @@ bool FormPlaceHolder::validateCurrentEpisode()
 bool FormPlaceHolder::saveCurrentEpisode()
 {
     qWarning() << "FormPlaceHolder::saveCurrentEpisode";
-    return d->saveCurrentEditingEpisode();
+    bool ok = d->saveCurrentEditingEpisode();
+    Q_EMIT actionsEnabledStateChanged();
+    return ok;
 }
 
 /**
@@ -681,6 +702,7 @@ bool FormPlaceHolder::removeCurrentEpisode()
     if (!yes)
         return false;
     // TODO: code removeEpisode
+    Q_EMIT actionsEnabledStateChanged();
     return true;
 }
 
@@ -722,6 +744,7 @@ bool FormPlaceHolder::addForm()
 //        d->ui->formView->setCurrentIndex(d->_episodeModel->index(0,0));
 //        showLastEpisodeSynthesis();
 //    }
+    Q_EMIT actionsEnabledStateChanged();
     return true;
 }
 
@@ -804,6 +827,7 @@ void FormPlaceHolder::onCurrentPatientChanged()
     model = d->ui->formView->selectionModel();
     if (model)
         model->clearSelection();
+    Q_EMIT actionsEnabledStateChanged();
 }
 
 void FormPlaceHolder::episodeChanged(const QModelIndex &current, const QModelIndex &previous)
@@ -838,7 +862,10 @@ void FormPlaceHolder::changeEvent(QEvent *event)
 void FormPlaceHolder::showEvent(QShowEvent *event)
 {
     d->selectAndActivateFirstForm();
-    // if the currentEditingForm is defined && the episode view model is set
     d->selectAndActivateFirstEpisode();
+    // make sure that the context is updated to the form context
+    d->ui->formDataMapper->setFocus();
+    // then update actions
+    Q_EMIT actionsEnabledStateChanged();
     QWidget::showEvent(event);
 }
