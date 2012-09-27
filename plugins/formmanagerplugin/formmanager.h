@@ -100,6 +100,7 @@ public:
 public Q_SLOTS:
     // Form management
     bool loadPatientFile();
+    bool onCurrentPatientChanged();
     bool insertSubForm(const SubFormInsertionPoint &insertionPoint);
 
     // PMHx categories of forms management

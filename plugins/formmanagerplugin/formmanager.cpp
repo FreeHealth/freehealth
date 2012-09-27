@@ -217,16 +217,16 @@ public:
         // TODO: ???   d->m_SubFormsEmptyRoot.clear();
         // get sub-forms from database
         const QVector<SubFormInsertionPoint> &subs = episodeBase()->getSubFormFiles();
-        if (subs.isEmpty()) {
+        if (subs.isEmpty())
             return true;
-        }
 
         bool ok = true;
         for(int i = 0; i < subs.count(); ++i) {
-            if (!insertSubForm(subs.at(i)))
+            if (!insertSubForm(subs.at(i))) {
+                LOG_ERROR_FOR(q, "Unable to insert sub-form: " + subs.at(i).subFormUid());
                 ok = false;
+            }
         }
-
         return ok;
     }
 
@@ -244,7 +244,7 @@ public:
         const QString &insertIntoUuid = insertionPoint.receiverUid();
         for(int i=0; i < subs.count(); ++i) {
             FormMain *sub = subs.at(i);
-    //        qWarning() << "insert" << sub->uuid() << "to" << insertIntoUuid;
+            qWarning() << "insert" << sub;
             if (insertIntoUuid == Constants::ROOT_FORM_TAG) {
                 // insert into its mode root form
                 FormMain *rootMode = q->rootForm(sub->modeUniqueName().toAscii());
@@ -265,7 +265,7 @@ public:
                 for(int k=0; k < children.count(); ++k) {
                     FormMain *child = children.at(k);
                     if (child->uuid()==insertIntoUuid) {
-    //                    qWarning() << "inserting subForm"<< insertionPoint.subFormUid() << "to" << insertionPoint.receiverUid();
+                        qWarning() << "inserting subForm"<< insertionPoint;
                         foreach(Form::FormMain *form, sub->firstLevelFormMainChildren()) {
                             form->setParent(child);
                         }
@@ -331,7 +331,7 @@ FormManager::~FormManager()
 bool FormManager::initialize()
 {
     //    connect(Core::ICore::instance(), SIGNAL(coreAboutToClose()), this, SLOT(coreAboutToClose()));
-    connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(loadPatientFile()));
+    connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onCurrentPatientChanged()));
 
     connect(packManager(), SIGNAL(packInstalled(DataPack::Pack)), this, SLOT(packChanged(DataPack::Pack)));
     connect(packManager(), SIGNAL(packRemoved(DataPack::Pack)), this, SLOT(packChanged(DataPack::Pack)));
@@ -424,6 +424,11 @@ bool FormManager::insertSubForm(const SubFormInsertionPoint &insertionPoint)
 
 /** Load the generic patient file (and included subforms) and emit patientFormsLoaded() when finished. */
 bool FormManager::loadPatientFile()
+{
+    return onCurrentPatientChanged();
+}
+
+bool FormManager::onCurrentPatientChanged()
 {
     // Patient root form already loaded ?
     if (d->m_RootForms.isEmpty()) {
