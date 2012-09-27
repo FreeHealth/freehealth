@@ -68,7 +68,7 @@ void NextAvailabiliyStepViewer::setAvailabilities(const QList<QRect> &_avs)
     update();
 }
 
-void NextAvailabiliyStepViewer::setAppointements(const QList<QRect> &_aps)
+void NextAvailabiliyStepViewer::setAppointments(const QList<QRect> &_aps)
 {
     aps = _aps;
     update();
@@ -125,7 +125,7 @@ void NextAvailabiliyStepViewer::paintEvent(QPaintEvent *)
     }
     pen.setStyle(Qt::SolidLine);
 
-    // Draw appointements
+    // Draw appointemnts
     pen.setColor(QColor("black"));
     painter.setPen(pen);
     for(int i = 0; i < aps.count(); ++i) {
@@ -273,20 +273,20 @@ void NextAvailabiliyManager::setAvaibilitiesToRect(const QList<QRect> &_avs)
 
 
 
-/** Return the next available appointements by searching for
+/** Return the next available appointments by searching for
   - \e startSearch date time,
   - a duration of \e duration minutes
   - for the agenda \e calendar
-  - limiting search to \e numberOfDates appointements
+  - limiting search to \e numberOfDates appointments
 */
 QList<QDateTime> NextAvailabiliyManager::nextAvailableTime(const QDateTime &startSearch,
                                                            const int durationInMinutes,
                                                            const int calendarDurationInMinutes,
-                                                           const QRect &nextAppointement,
+                                                           const QRect &nextAppointment,
                                                            const int numberOfDates)
 {
     QList<QDateTime> toReturn;
-    m_ReachedNextAppointement = false;
+    m_ReachedNextAppointment = false;
     m_NeedLaterThan = QDateTime();
 
     // Some checkings
@@ -294,11 +294,11 @@ QList<QDateTime> NextAvailabiliyManager::nextAvailableTime(const QDateTime &star
         return toReturn;
     if (numberOfDates <= 0)
         return toReturn;
-    if ((!nextAppointement.isNull()) && (rectToDateStart(nextAppointement) < startSearch)) {
+    if ((!nextAppointment.isNull()) && (rectToDateStart(nextAppointment) < startSearch)) {
         if (WarnDebugs)
-            qWarning() << "NextApp < StartSearch" << rectToDateStart(nextAppointement) << startSearch;
-        m_ReachedNextAppointement = true;
-        QDateTime nextEnd = rectToDateEnd(nextAppointement);
+            qWarning() << "NextApp < StartSearch" << rectToDateStart(nextAppointment) << startSearch;
+        m_ReachedNextAppointment = true;
+        QDateTime nextEnd = rectToDateEnd(nextAppointment);
         if (nextEnd > startSearch)
             m_NeedLaterThan = nextEnd;//, calendarDurationInMinutes;
         else
@@ -311,7 +311,7 @@ QList<QDateTime> NextAvailabiliyManager::nextAvailableTime(const QDateTime &star
     start = Utils::roundDateTime(startSearch, calendarDurationInMinutes);
 
     if (WarnDebugs)
-        qWarning() << "-------------------\nSTART" << start << "nextApp" << rectToDateStart(nextAppointement);
+        qWarning() << "-------------------\nSTART" << start << "nextApp" << rectToDateStart(nextAppointment);
 
     // get the first event and make tests
 
@@ -330,13 +330,13 @@ QList<QDateTime> NextAvailabiliyManager::nextAvailableTime(const QDateTime &star
         QRect testDate = dateToRect(start, durationInMinutes);
 
         if (WarnDebugs)
-            qWarning() << "TEST" << testDate.intersect(nextAppointement).height();
+            qWarning() << "TEST" << testDate.intersect(nextAppointment).height();
 
-        // rect does not intersect the next recorded appointement ? -> go next appointement
-        while ((testDate.intersect(nextAppointement).height() < 1) || nextAppointement.isNull()) {
+        // rect does not intersect the next recorded appointment ? -> go next appointment
+        while ((testDate.intersect(nextAppointment).height() < 1) || nextAppointment.isNull()) {
 
             if (WarnDebugs)
-                qWarning() << "---\ntest" << testDate << "next" << nextAppointement << testDate.intersect(nextAppointement).height() << "topTest" << (nextAppointement.top() <= testDate.top());
+                qWarning() << "---\ntest" << testDate << "next" << nextAppointment << testDate.intersect(nextAppointment).height() << "topTest" << (nextAppointment.top() <= testDate.top());
 
             if (nbFound == numberOfDates) {
                 return toReturn;
@@ -362,9 +362,9 @@ QList<QDateTime> NextAvailabiliyManager::nextAvailableTime(const QDateTime &star
                 start = start.addSecs(minutesToNextAvail*60);// + testDate.height()*60);
                 if (WarnDebugs)
                     qWarning() << "minToAv" << minutesToNextAvail << start << dateToRect(start, durationInMinutes);
-                // did we go after the next appointement ? -> require new appointement
-                if (!nextAppointement.isNull()) {
-                    QDateTime nextStart = rectToDateStart(nextAppointement);
+                // did we go after the next appointment ? -> require new appointment
+                if (!nextAppointment.isNull()) {
+                    QDateTime nextStart = rectToDateStart(nextAppointment);
                     if (start > nextStart) {
                         if (WarnDebugs)
                             qWarning() << "start" << start << "nextApp" << nextStart;
@@ -375,9 +375,9 @@ QList<QDateTime> NextAvailabiliyManager::nextAvailableTime(const QDateTime &star
             }
         }
 
-        // requiere next appointement
-        m_ReachedNextAppointement = true;
-        QDateTime nextAppEnd = rectToDateEnd(nextAppointement);
+        // requiere next appointment
+        m_ReachedNextAppointment = true;
+        QDateTime nextAppEnd = rectToDateEnd(nextAppointment);
         if (nextAppEnd > start)
             m_NeedLaterThan = nextAppEnd;
         else

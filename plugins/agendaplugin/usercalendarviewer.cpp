@@ -29,7 +29,7 @@
   Is a Agenda::UserCalendar widget viewer for FreeMedForms used in the Agenda mode.
   This widget presents:
   - a left bar with some usercalendar information, plus automated next availabilities calculation
-  - a central Calendar::CalendarViewer for users to edit appointements
+  - a central Calendar::CalendarViewer for users to edit appointments
 */
 
 #include "usercalendarviewer.h"
@@ -127,8 +127,8 @@ public:
             m_ItemContextMenu->addAction(aPrintItem);
             ui->calendarViewer->setContextMenuForItems(m_ItemContextMenu);
             QObject::connect(aSwitchToPatient, SIGNAL(triggered()), q, SLOT(onSwitchToPatientClicked()));
-            QObject::connect(aEditItem, SIGNAL(triggered()), q, SLOT(onEditAppointementClicked()));
-            QObject::connect(aPrintItem, SIGNAL(triggered()), q, SLOT(onPrintAppointementClicked()));
+            QObject::connect(aEditItem, SIGNAL(triggered()), q, SLOT(onEditAppointmentClicked()));
+            QObject::connect(aPrintItem, SIGNAL(triggered()), q, SLOT(onPrintAppointmentClicked()));
         }
     }
 
@@ -474,12 +474,12 @@ void UserCalendarViewer::onSwitchToPatientClicked()
 //    modeManager()->activateMode(Core::Constants::MODE_PATIENT_FILE);
 }
 
-void UserCalendarViewer::onEditAppointementClicked()
+void UserCalendarViewer::onEditAppointmentClicked()
 {
     // TODO
 }
 
-void UserCalendarViewer::onPrintAppointementClicked()
+void UserCalendarViewer::onPrintAppointmentClicked()
 {
     // TODO
 }
@@ -509,9 +509,9 @@ bool UserCalendarViewer::event(QEvent *e)
         if (d->aSwitchToPatient)
             d->aSwitchToPatient->setText(tr("Switch to patient"));
         if (d->aEditItem)
-            d->aEditItem->setText(tr("Edit appointement"));
+            d->aEditItem->setText(tr("Edit appointment"));
         if (d->aPrintItem)
-                d->aPrintItem->setText(tr("Print appointement"));
+                d->aPrintItem->setText(tr("Print appointment"));
 
         break;
     }
