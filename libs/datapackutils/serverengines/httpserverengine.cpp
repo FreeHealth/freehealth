@@ -95,7 +95,7 @@ HttpServerEngine::HttpServerEngine(QObject *parent)  :
 {
     setObjectName("HttpServerEngine");
     m_NetworkAccessManager = new QNetworkAccessManager(this);
-//    const QString &id = Utils::testInternetConnexion();
+//    const QString &id = Utils::testInternetConnection();
 //    if (!id.isEmpty()) {
 //        LOG("Internet connection is enabled.");
 //        bool proxy = false;
@@ -134,7 +134,7 @@ HttpServerEngine::~HttpServerEngine()
 
 bool HttpServerEngine::managesServer(const Server &server)
 {
-    if (core().isInternetConnexionAvailable())
+    if (core().isInternetConnectionAvailable())
         return server.nativeUrl().startsWith("http://");
     return false;
 }
@@ -152,8 +152,8 @@ int HttpServerEngine::downloadQueueCount() const
 bool HttpServerEngine::startDownloadQueue()
 {
     // Internet connection available ?
-    if (!core().isInternetConnexionAvailable()) {
-        LOG_ERROR("No internet connexion available.");
+    if (!core().isInternetConnectionAvailable()) {
+        LOG_ERROR("No internet connection available.");
         return false;
     }
     // Use a proxy ?

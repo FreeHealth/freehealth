@@ -47,10 +47,14 @@ public:
 
 protected Q_SLOTS:
     void on_downloadButton_clicked();
-    void downloadFinished();
+    void on_createPackageButton_clicked();
+    void onDownloadFinished();
+    void onProcessFinished();
 
     void selectCountry(const QModelIndex &index);
+    void selectCountry();
     void deselectCountry(const QModelIndex &index);
+    void deselectCountry();
     void updateActions();
 private:
     Ui::GenericZipCodesWidget *ui;
