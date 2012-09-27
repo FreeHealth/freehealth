@@ -106,53 +106,6 @@ static inline ExtensionSystem::PluginManager *pluginManager() { return Extension
 namespace Form {
 namespace Internal {
 
-    EpisodeModelCoreListener::EpisodeModelCoreListener(Form::EpisodeModel *parent) :
-            Core::ICoreListener(parent)
-    {
-        Q_ASSERT(parent);
-        m_EpisodeModel = parent;
-    }
-    EpisodeModelCoreListener::~EpisodeModelCoreListener() {}
-
-    bool EpisodeModelCoreListener::coreAboutToClose()
-    {
-//        qWarning() << Q_FUNC_INFO;
-        m_EpisodeModel->submit();
-        return true;
-    }
-
-    EpisodeModelPatientListener::EpisodeModelPatientListener(Form::EpisodeModel *parent) :
-            Core::IPatientListener(parent)
-    {
-        Q_ASSERT(parent);
-        m_EpisodeModel = parent;
-    }
-    EpisodeModelPatientListener::~EpisodeModelPatientListener() {}
-
-    bool EpisodeModelPatientListener::currentPatientAboutToChange()
-    {
-//        qWarning() << Q_FUNC_INFO;
-        m_EpisodeModel->submit();
-        return true;
-    }
-
-
-//    EpisodeModelUserListener::EpisodeModelUserListener(Form::EpisodeModel *parent) :
-//            UserPlugin::IUserListener(parent)
-//    {
-//        Q_ASSERT(parent);
-//        m_EpisodeModel = parent;
-//    }
-//    EpisodeModelUserListener::~EpisodeModelUserListener() {}
-
-//    bool EpisodeModelUserListener::userAboutToChange()
-//    {
-//        qWarning() << Q_FUNC_INFO;
-//        m_EpisodeModel->submit();
-//        return true;
-//    }
-//    bool EpisodeModelUserListener::currentUserAboutToDisconnect() {return true;}
-
 class EpisodeModelPrivate
 {
 public:
@@ -312,8 +265,6 @@ public:
 public:
     FormMain *_formMain;
     bool _readOnly, _useCache;
-    EpisodeModelCoreListener *m_CoreListener;
-    EpisodeModelPatientListener *m_PatientListener;
     QSqlTableModel *_sqlModel;
     QHash<int, QString> _xmlContentCache;
     QMultiHash<int, EpisodeValidationData *> _validationCache;
@@ -334,29 +285,12 @@ EpisodeModel::EpisodeModel(FormMain *rootEmptyForm, QObject *parent) :
     setObjectName("Form::EpisodeModel");
     d->_formMain = rootEmptyForm;
 
-    // Autosave feature
-    // -> Core Listener
-    d->m_CoreListener = new Internal::EpisodeModelCoreListener(this);
-    pluginManager()->addObject(d->m_CoreListener);
-
-    // -> User Listener
-
-    // -> Patient change listener
-    d->m_PatientListener = new Internal::EpisodeModelPatientListener(this);
-    pluginManager()->addObject(d->m_PatientListener);
-
     // Create the SQL Model
     onCoreDatabaseServerChanged();
 }
 
 EpisodeModel::~EpisodeModel()
 {
-    if (d->m_CoreListener) {
-        pluginManager()->removeObject(d->m_CoreListener);
-    }
-    if (d->m_PatientListener) {
-        pluginManager()->removeObject(d->m_PatientListener);
-    }
     if (d) {
         delete d;
         d=0;
