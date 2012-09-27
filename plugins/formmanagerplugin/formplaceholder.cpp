@@ -862,8 +862,10 @@ void FormPlaceHolder::changeEvent(QEvent *event)
 void FormPlaceHolder::showEvent(QShowEvent *event)
 {
     d->selectAndActivateFirstForm();
-    // if the currentEditingForm is defined && the episode view model is set
     d->selectAndActivateFirstEpisode();
+    // make sure that the context is updated to the form context
+    d->ui->formDataMapper->setFocus();
+    // then update actions
     Q_EMIT actionsEnabledStateChanged();
     QWidget::showEvent(event);
 }
