@@ -385,7 +385,7 @@ QVariant EpisodeModel::data(const QModelIndex &index, int role) const
     case Qt::EditRole :
     case Qt::DisplayRole :
     {
-        int sqlColumn;
+        int sqlColumn = -1;
         switch (index.column()) {
         case UserTimeStamp:  sqlColumn = Constants::EPISODES_USERDATE; break;
         case Label: sqlColumn = Constants::EPISODES_LABEL; break;
@@ -398,12 +398,18 @@ QVariant EpisodeModel::data(const QModelIndex &index, int role) const
                 return tkTr(Trans::Constants::YOU);
             return user()->fullNameOfUser(userUid);
         }
-        case Priority: sqlColumn = Constants::EPISODES_PRIORITY; break;
+//        case Priority: sqlColumn = Constants::EPISODES_PRIORITY; break;
         case XmlContent:  return d->getEpisodeContent(index); break;
         case Icon: sqlColumn = Constants::EPISODES_ISVALID; break;
         case Uuid: sqlColumn = Constants::EPISODES_ID; break;
-        case FormUuid: if (d->_formMain) return d->_formMain->uuid(); else return QString();
-        case FormLabel: if (d->_formMain) return d->_formMain->spec()->label();
+        case FormUuid:
+            if (d->_formMain)
+                return d->_formMain->uuid();
+            break;
+        case FormLabel:
+            if (d->_formMain)
+                return d->_formMain->spec()->label();
+            break;
         }  // switch (column)
 
         if (sqlColumn!=-1) {
@@ -421,17 +427,25 @@ QVariant EpisodeModel::data(const QModelIndex &index, int role) const
         QString uDate = QLocale().toString(userDate, settings()->value(Constants::S_EPISODEMODEL_SHORTDATEFORMAT, tkTr(Trans::Constants::DATEFORMAT_FOR_MODEL)).toString());
         QString label = d->_sqlModel->data(d->_sqlModel->index(index.row(), Constants::EPISODES_LABEL)).toString();
         QString userUid = d->_sqlModel->data(d->_sqlModel->index(index.row(), Constants::EPISODES_USERCREATOR)).toString();
+        int priority = d->_sqlModel->data(d->_sqlModel->index(index.row(), Constants::EPISODES_PRIORITY)).toInt();
+        QString icon;
+        switch (priority) {
+        case High: icon = theme()->iconFullPath(Core::Constants::ICONPRIORITY_HIGH); break;
+        case Medium: icon = theme()->iconFullPath(Core::Constants::ICONPRIORITY_MEDIUM); break;
+        case Low: icon = theme()->iconFullPath(Core::Constants::ICONPRIORITY_LOW); break;
+        }
         if (userUid == user()->uuid())
             userUid = tkTr(Trans::Constants::YOU);
         else
             userUid = user()->fullNameOfUser(userUid);
 
-        return QString("<p align=\"right\">%1&nbsp;-&nbsp;%2<br />"
+        return QString("<p align=\"right\"><img src=\"%5\">%1&nbsp;-&nbsp;%2<br />"
                        "<span style=\"color:gray;font-size:9pt\">%3<br />%4</span></p>")
                 .arg(uDate.replace(" ", "&nbsp;"))
                 .arg(label.replace(" ", "&nbsp;"))
                 .arg(tkTr(Trans::Constants::CREATED_BY_1).arg(userUid))
-                .arg(tkTr(Trans::Constants::ON_THE_1).arg(cDate));
+                .arg(tkTr(Trans::Constants::ON_THE_1).arg(cDate))
+                .arg(icon);
     }
     case Qt::DecorationRole :
     {
@@ -440,17 +454,17 @@ QVariant EpisodeModel::data(const QModelIndex &index, int role) const
         {
             // Scale down the icons to 12x12 or 10x10
             if (d->isEpisodeValidated(index))
-                return theme()->icon(Core::Constants::ICONLOCK_BLACKWHITE).pixmap(12,12);
-            return theme()->icon(Core::Constants::ICONUNLOCK_BLACKWHITE).pixmap(12,12);
+                return theme()->icon(Core::Constants::ICONLOCK_BLACKWHITE);//.pixmap(12,12);
+            return theme()->icon(Core::Constants::ICONUNLOCK_BLACKWHITE);//.pixmap(12,12);
         }
         case PriorityIcon:
         {
             // Scale down the icons to 12x12 or 10x10
             int priority = d->_sqlModel->data(d->_sqlModel->index(index.row(), Constants::EPISODES_PRIORITY)).toInt();
             switch (priority) {
-            case High: return theme()->icon(Core::Constants::ICONPRIORITY_HIGH).pixmap(12,12);
-            case Medium: return theme()->icon(Core::Constants::ICONPRIORITY_MEDIUM).pixmap(12,12);
-            case Low: return theme()->icon(Core::Constants::ICONPRIORITY_LOW).pixmap(12,12);
+            case High: return theme()->icon(Core::Constants::ICONPRIORITY_HIGH);//.pixmap(12,12);
+            case Medium: return theme()->icon(Core::Constants::ICONPRIORITY_MEDIUM);//.pixmap(12,12);
+            case Low: return theme()->icon(Core::Constants::ICONPRIORITY_LOW);//.pixmap(12,12);
             }
             break;
         }
@@ -463,6 +477,7 @@ QVariant EpisodeModel::data(const QModelIndex &index, int role) const
             return QIcon(iconFile);
         }
         }  // switch (index.column())
+        break;
     }
     case Qt::SizeHintRole :
     {
@@ -470,6 +485,7 @@ QVariant EpisodeModel::data(const QModelIndex &index, int role) const
         case ValidationStateIcon: return QSize(22, 22);
         case PriorityIcon: return QSize(22, 22);
         }
+        break;
     }
     }  // switch (role)
     return QVariant();
