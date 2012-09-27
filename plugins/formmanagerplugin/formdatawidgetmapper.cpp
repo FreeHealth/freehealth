@@ -230,18 +230,19 @@ bool FormDataWidgetMapper::isDirty() const
     if (!d->_formMain)
         return false;
 
-    // form isModified() (using storableData)
+    // form isModified() ?
     if (d->_formMain->itemData() && d->_formMain->itemData()->isModified()) {
-        qWarning() << "FormDataWidgetMapper::isDirty" << d->_formMain->uuid() << d->_formMain->itemData()->isModified();
+//        qWarning() << "FormDataWidgetMapper::isDirty" << d->_formMain->uuid() << d->_formMain->itemData()->isModified();
         return true;
     }
     // ask all current form item data
     foreach(FormItem *it, d->_formMain->flattenFormItemChildren()) {
         if (it->itemData() && it->itemData()->isModified()) {
-            qWarning() << "FormDataWidgetMapper::isDirty" << it->uuid() << it->itemData()->isModified();
+//            qWarning() << "FormDataWidgetMapper::isDirty" << it->uuid() << it->itemData()->isModified();
             return true;
         }
     }
+//    qWarning() << "FormDataWidgetMapper::isDirty false" << "Form:" << d->_formMain->uuid();
     return false;
 }
 
@@ -266,7 +267,7 @@ void FormDataWidgetMapper::setCurrentForm(Form::FormMain *form)
     d->populateStack(form);
     d->useEpisodeModel(form);
     if (d->_formMain->itemData())
-        d->_formMain->itemData()->setStorableData(false);  // equal == form->setModified(false);
+        d->_formMain->itemData()->setModified(false);
 }
 
 /** Define the current episode index to use in the mapper. */

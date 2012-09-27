@@ -131,12 +131,13 @@ private:
 class GirItemData : public Form::IFormItemData
 {
 public:
-    explicit GirItemData(Form::FormItem *parent) : Form::IFormItemData(), m_Parent(parent), m_GirWidget(0) {}
+    explicit GirItemData(Form::FormItem *parent);
     virtual ~GirItemData() {}
     virtual Form::FormItem *parentItem() const {return m_Parent;}
 
-    bool isModified() const;
     void clear();
+    bool isModified() const;
+    void setModified(bool modified);
 
     void setGirWidget(GirWidget *widget) {m_GirWidget = widget;}
 
@@ -150,6 +151,7 @@ private:
     Form::FormItem *m_Parent;
     QString m_OriginalValue;
     GirWidget *m_GirWidget;
+    bool m_modified;
 };
 
 } // End Internal

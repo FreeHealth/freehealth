@@ -237,6 +237,12 @@ bool TextEditorData::isModified() const
     return m_OriginalValue != m_Editor->textEdit()->toHtml();
 }
 
+void TextEditorData::setModified(bool modified)
+{
+    if (!modified)
+        m_OriginalValue = m_Editor->textEdit()->toHtml();
+}
+
 bool TextEditorData::setData(const int ref, const QVariant &data, const int role)
 {
     Q_UNUSED(ref);

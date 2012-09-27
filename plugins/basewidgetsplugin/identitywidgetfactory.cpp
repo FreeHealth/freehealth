@@ -238,6 +238,11 @@ bool IdentityWidgetData::isModified() const
     return m_Widget->m_Identity->isModified();
 }
 
+void IdentityWidgetData::setModified(bool modified)
+{
+    // TODO: code here: HOW ??
+}
+
 QVariant IdentityWidgetData::storableData() const
 {
     m_Widget->m_Identity->submit(); return QVariant();

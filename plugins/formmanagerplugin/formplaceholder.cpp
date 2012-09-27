@@ -236,11 +236,6 @@ public:
                 return false;
         }
         bool ok = ui->formDataMapper->submit();
-
-        // re-populate the current episode (reset all formitemdata content)
-        ui->episodeView->selectRow(ui->formDataMapper->currentEditingEpisodeIndex().row());
-        EpisodeModel *episodeModel = formManager().episodeModel(_currentEditingForm);
-        episodeModel->populateFormWithEpisodeContent(ui->formDataMapper->currentEditingEpisodeIndex(), true);
         return ok;
     }
 
@@ -309,7 +304,6 @@ public:
         // Assuming the _currentEditingForm is defined and the episodeView model is set
         ui->episodeView->selectRow(0);
     }
-
 
     QModelIndex currentEditingEpisodeIndex()
     {
@@ -814,7 +808,7 @@ void FormPlaceHolder::onCurrentPatientChanged()
 
 void FormPlaceHolder::episodeChanged(const QModelIndex &current, const QModelIndex &previous)
 {
-    qWarning() << "FormPlaceHolder::episodeChanged: current valid:" << current.isValid() << "previous valid:" << previous.isValid();
+    qWarning() << QString("FormPlaceHolder::episodeChanged: current(valid:%1) ; previous(valid:%2)").arg(current.isValid()).arg(previous.isValid());
     // Autosave is problematic when patient changed
     if (previous.isValid())
         d->saveCurrentEditingEpisode();

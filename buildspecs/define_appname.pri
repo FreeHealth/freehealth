@@ -8,12 +8,18 @@ isEmpty(CAMELCASE_APPNAME) {
 LOW_APPNAME=$$lower($${CAMELCASE_APPNAME})
 UP_APPNAME=$$upper($${CAMELCASE_APPNAME})
 
-PROJECT_APPNAME_FILE=$${PWD}/compiling.pri.in
-#OUT_FILE=$${PWD}/compiling.pri
-#exists($${OUT_FILE}) {
-#    removeold.input = OUT_FILE
-#    removeold.commands = $${QMAKE_DEL_FILE} $${OUT_FILE}
-#    removeold.output = OUT_FILE
-##    QMAKE_EXTRA_COMPILERS += removeold
+COMPIL_VAR=$${PWD}/compiling.pri
+COMPIL_VAR_IN=$${COMPIL_VAR}.in
+#exists($${COMPIL_VAR}) {
+#    removeold.input = COMPIL_VAR
+#    removeold.commands = $${QMAKE_DEL_FILE} $${QMAKE_FILE_IN}
+#    removeold.output = COMPIL_VAR
+#    removeold.name = RM_COMPILVARS
+#    removeold.CONFIG += no_link
+#    removeold.variable_out = PRE_TARGETDEPS
+#    QMAKE_PRE_LINK += removeold
+##    QMAKE_PRE_LINK += $${QMAKE_DEL_FILE} $${COMPIL_VAR}
+##    QMAKE_EXTRA_COMPILERS += $${QMAKE_DEL_FILE} $${COMPIL_VAR}
+#    message($${QMAKE_DEL_FILE} $${COMPIL_VAR})
 #}
-QMAKE_SUBSTITUTES+=$${PROJECT_APPNAME_FILE}
+QMAKE_SUBSTITUTES+=$${COMPIL_VAR_IN}
