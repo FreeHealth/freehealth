@@ -10,11 +10,12 @@ OBJECTS_DIR = o
 UI_DIR = ui
 DEPENDPATH += .
 INCLUDEPATH += .
-
-include( ../plugins/accountbaseplugin/accountbaseplugin.pri )
+INCLUDEPATH += /home/pmddeb/freemedforms_pmd_git/freemedforms/bin/freeaccount/plugins
+LIBS+=-lAccountBase_debug
 
 # Input
-HEADERS += rapidtofreeio.h rapidtofreeviewer.h
-SOURCES += main.cpp rapidtofreeio.cpp rapidtofreeviewer.cpp
-FORMS += rapidtofree.ui
+HEADERS += rapidtofreeio.h rapidtofreeviewer.h connect.h
+SOURCES += main.cpp rapidtofreeio.cpp rapidtofreeviewer.cpp connect.cpp
+FORMS += rapidtofree.ui connexiondialog.ui
+
 QT += sql

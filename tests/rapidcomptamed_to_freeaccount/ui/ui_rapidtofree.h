@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'rapidtofree.ui'
 **
-** Created: Fri Sep 21 13:47:47 2012
+** Created: Fri Sep 28 21:13:12 2012
 **      by: Qt User Interface Compiler version 4.8.2
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!

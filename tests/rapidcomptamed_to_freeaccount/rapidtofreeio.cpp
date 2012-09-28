@@ -1,5 +1,5 @@
 #include "rapidtofreeio.h"
-#include <accountplugin/accountbase.h>
+#include <../../plugins/accountbaseplugin/accountbase.h>
 
 
 RapidToFreeIO::RapidToFreeIO(QObject * parent)
@@ -24,10 +24,10 @@ bool RapidToFreeIO::connectToRapidComptamed()
     ConnectionDialog * c = new ConnectionDialog(this);
     if (c->exec()==QDialog::Accepted)
     {    	      
-        dbRapidCompta.setHostName(host);
-        dbRapidCompta.setDatabaseName(Constants::DB_CCAM);
-        dbRapidCompta.setUserName(log);
-        dbRapidCompta.setPassword(pass);
+        dbRapidCompta.setHostName(c->host());
+        dbRapidCompta.setDatabaseName("RapidComptamed");
+        dbRapidCompta.setUserName(c->login());
+        dbRapidCompta.setPassword(c->password());
        if (!dbRapidCompta.isOpen() && !dbRapidCompta.open())
        {
     	    qWarning() << __FILE__ << QString::number(__LINE__) << dbRapidCompta.lastError().text() ;

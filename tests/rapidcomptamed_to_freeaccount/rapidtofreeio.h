@@ -9,6 +9,7 @@ class RapidToFreeIO:public QObject
 	public:
 		RapidToFreeIO (QObject * parent = 0);
 		virtual ~RapidToFreeIO ();
+		bool initialiseBases();
 
 	private:
 		bool connectToRapidComptamed();
