@@ -57,7 +57,7 @@ public:
 
     /*! \brief Returns the active state of the provider.
      *
-     * \e true means that there is "physically" an e.g. connected webcam. */
+     * \e true means that there is "physically" an e.g. connected webcam attached. */
     virtual bool isActive() const = 0;
 
     /*! \brief Returns the enabled state of the provider. This can be changed in e.g. user settings. */
