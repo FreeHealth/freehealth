@@ -50,7 +50,7 @@ showHelp()
     echo "        3. Compile application"
     echo "        4. Install application"
     echo "  -i  with 'linux integrated' configuration (release mode only) same as -ri"
-    echo "  -w  build the webcam plugin (require libopencv-dev)"
+    echo "  -w  build the webcam plugin (requires libopencv-dev)"
     echo "  -a  build the alert plugin"
     echo "  -j  Parallel compilation (number of jobs: equivalent to make -jX)"
     echo "  -t  Create translations"
@@ -183,7 +183,7 @@ qmakeCommand()
 {
     # zenity progress feature
     echo "30"; sleep 1
-    echo "# Preparing the build:\nrunning qmake" ; sleep 1
+    echo -e "# Preparing the build:\nrunning qmake" ; sleep 1
     EXTRAPLUGS=""
     if [[ "$WEBCAM" == "y" ]]; then
         EXTRAPLUGS="with-webcam"
