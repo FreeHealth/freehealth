@@ -49,7 +49,7 @@ using namespace Trans::ConstantTranslations;
  */
 
 /*! Constructor of the Webcam::WebcamDevice class */
-WebcamDevice::WebcamDevice(QObject *parent) :
+WebcamDevice::WebcamDevice(int device, QObject *parent) :
     QObject(parent)
 {
 }

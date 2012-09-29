@@ -34,21 +34,28 @@ class WebcamDevice;
 #include <coreplugin/iphotoprovider.h>
 
 namespace Webcam {
-
+/*!
+ * \brief The WebcamPhotoProvider class
+ *
+ * It implements the Core::IPhotoProvider interface. For every Webcam that is detected there should be one WebcamPhotoProvider.
+ */
 class WebcamPhotoProvider : public Core::IPhotoProvider
 {
     Q_OBJECT
 public:
-    explicit WebcamPhotoProvider();
+    explicit WebcamPhotoProvider(int device);
     ~WebcamPhotoProvider();
 
-    QString name();
-    QPixmap recievePhoto();
-    bool isEnabled();
-    bool isActive();
-    int priority();
+    QString name() const;
+    bool isEnabled() const;
+    bool isActive() const;
+    int priority() const;
+
+public Q_SLOTS:
+    void startReceivingPhoto();
+
 private:
-    WebcamDevice m_webcam;
+    int m_device;
 };
 
 } // end Webcam

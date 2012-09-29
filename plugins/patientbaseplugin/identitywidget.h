@@ -28,6 +28,7 @@
 #define IDENTITYWIDGET_H
 
 #include <patientbaseplugin/patientbase_exporter.h>
+#include <coreplugin/iphotoprovider.h>
 
 #include <QWidget>
 #include <QModelIndex>
@@ -38,6 +39,7 @@ class PatientModel;
 namespace Internal {
 class IdentityWidgetPrivate;
 }
+
 
 class PATIENT_EXPORT IdentityWidget : public QWidget
 {
@@ -79,8 +81,7 @@ protected:
 
 protected Q_SLOTS:
     void photoButton_clicked();
-//    void setDefaultGenderPhoto();
-//    void updateGenderImage();
+    void setPhoto(QPixmap &photo);
 
 private:
     Internal::IdentityWidgetPrivate *d;

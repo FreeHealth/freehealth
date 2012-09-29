@@ -23,6 +23,9 @@
  *   Contributors:                                                         *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
+
+#include <opencv2/highgui/highgui.hpp>
+
 #include "webcamplugin.h"
 #include "webcamconstants.h"
 #include "webcamphotoprovider.h"
@@ -66,7 +69,7 @@ WebcamPlugin::WebcamPlugin() :
         qWarning() << "creating Webcam";
     
     // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("webcam"); 
+    Core::ICore::instance()->translators()->addNewTranslator("webcam");
     
     // Add here the Core::IFirstConfigurationPage objects to the pluginmanager object pool
     
@@ -75,8 +78,6 @@ WebcamPlugin::WebcamPlugin() :
     // And included in the QObject pool
     addObject(m_prefPage);
     
-    m_webcamProvider = new WebcamPhotoProvider();
-
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
     connect(Core::ICore::instance(), SIGNAL(coreAboutToClose()), this, SLOT(coreAboutToClose()));
 }
@@ -97,14 +98,16 @@ bool WebcamPlugin::initialize(const QStringList &arguments, QString *errorString
     if (Utils::Log::warnPluginsCreation()) {
         qDebug() << "WebcamPlugin::initialize";
     }
-    
+
+
     // Register objects in the plugin manager's object pool
     // Load settings
     // Add actions to menus
     // connect to other plugins' signals
     // "In the initialize method, a plugin can be sure that the plugins it
     //  depends on have initialized their members."
-    
+
+
     // FreeMedForms:
     // Initialize database here
     // Initialize the drugs engines
@@ -112,8 +115,16 @@ bool WebcamPlugin::initialize(const QStringList &arguments, QString *errorString
     
     // No user is logged in until here
     
+    detectDevices();
 
-    ExtensionSystem::PluginManager::instance()->addObject(m_webcamProvider);
+    // loop through found webcams and add them to the object pool
+    if (!m_availableProvidersMap.isEmpty()) {
+        QMapIterator<int, WebcamPhotoProvider*> it(m_availableProvidersMap);
+        while(it.hasNext()) {
+            it.next();
+            ExtensionSystem::PluginManager::instance()->addObject(it.value());
+        }
+    }
 
     //    Core::ActionManager *am = Core::ICore::instance()->actionManager();
     //
@@ -177,17 +188,39 @@ ExtensionSystem::IPlugin::ShutdownFlag WebcamPlugin::aboutToShutdown()
     // Disconnect from signals that are not needed during shutdown
     // Hide UI (if you add UI that is not in the main window directly)
     // Remove preferences pages to plugins manager object pool
-    if(m_webcamProvider) {
-        removeObject(m_webcamProvider);
-        delete m_webcamProvider;
-        m_webcamProvider = 0;
+    QMapIterator<int, WebcamPhotoProvider*> it(m_availableProvidersMap);
+    while(it.hasNext()) {
+        it.next();
+        WebcamPhotoProvider *p = it.value();
+        removeObject(p);
+        delete p;
     }
+    m_availableProvidersMap.clear();
+
     if (m_prefPage) {
         removeObject(m_prefPage);
         delete(m_prefPage);
         m_prefPage = 0;
     }
     return SynchronousShutdown;
+}
+
+void WebcamPlugin::detectDevices()
+{
+    m_availableProvidersMap.clear();
+
+    for(int device = 0; device<10; device++)
+    {
+        cv::VideoCapture cap(device);
+        cv::Mat frame;
+        if (cap.isOpened()) {
+            cap.read(frame);
+            if(!frame.empty()) {
+                WebcamPhotoProvider *provider = new WebcamPhotoProvider(device);
+                m_availableProvidersMap.insert(device, provider);
+            }
+        }
+    }
 }
 
 // void WebcamPlugin::triggerAction()

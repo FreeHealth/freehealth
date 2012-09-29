@@ -32,6 +32,8 @@
 
 #include <extensionsystem/iplugin.h>
 
+#include <QMap>
+
 /**
  * \file webcamplugin.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
@@ -53,9 +55,10 @@ public:
     ShutdownFlag aboutToShutdown();
 
 private:
-    WebcamPhotoProvider *m_webcamProvider;
+    void detectDevices();
     Internal::WebcamPreferencesPage *m_prefPage;
-    
+    QMap<int, WebcamPhotoProvider*> m_availableProvidersMap;
+
 private Q_SLOTS:
     void postCoreInitialization();
     void coreAboutToClose();

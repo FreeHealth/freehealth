@@ -35,13 +35,18 @@
  * \version 0.8.0
  * \date 2012-09-27
 */
+
+namespace cv {
+class VideoCapture;
+}
+
 namespace Webcam {
 
 class WebcamDevice : public QObject
 {
     Q_OBJECT
 public:
-    explicit WebcamDevice(QObject *parent = 0);
+    explicit WebcamDevice(int device, QObject *parent = 0);
     ~WebcamDevice();
 
     int deviceNumber();
@@ -55,7 +60,7 @@ Q_SIGNALS:
 public Q_SLOTS:
 
 private:
-    cv::VideoCapture m_capture;
+    cv::VideoCapture * m_capture;
 };
 
 } // namespace Webcam

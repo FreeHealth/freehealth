@@ -45,20 +45,23 @@ class PixmapButton : public QPushButton
 {
     Q_OBJECT
     Q_PROPERTY(QPixmap pixmap READ pixmap WRITE setPixmap)
-
+//    Q_PROPERTY(QAction defaultAction READ defaultAction() WRITE setDefaultAction)
 public:
     explicit PixmapButton(QWidget* parent = 0);
     QPixmap pixmap() const;
+    void setDefaultAction(QAction *action);
+    QAction* defaultAction() const;
 
 Q_SIGNALS:
 
 public Q_SLOTS:
-    void setPixmap(const QPixmap&);
+    void setPixmap(const QPixmap& pixmap);
     void clearPixmap();
 
 private:
     QPixmap m_pixmap;
-    QAction* m_actionDeletePhoto;
+    QAction* m_deletePhotoAction;
+    QAction *m_defaultAction;
 };
 
 } // end Patients

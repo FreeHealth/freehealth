@@ -40,16 +40,17 @@ using namespace Patients;
  */
 PixmapButton::PixmapButton(QWidget *parent) :
     QPushButton(parent),
-    m_pixmap(QPixmap())
+    m_pixmap(QPixmap()),
+    m_deletePhotoAction(0),
+    m_defaultAction(0)
 {
     setContextMenuPolicy(Qt::ActionsContextMenu);
 
-    m_actionDeletePhoto = new QAction(Core::ICore::instance()->theme()->icon(Core::Constants::ICONREMOVE),
+    m_deletePhotoAction = new QAction(Core::ICore::instance()->theme()->icon(Core::Constants::ICONREMOVE),
                                       tr("Delete photo"), this);
-    connect(m_actionDeletePhoto, SIGNAL(triggered()),this, SLOT(clearPixmap()));
-    addAction(m_actionDeletePhoto);
-    m_actionDeletePhoto->setEnabled(false);
-
+    connect(m_deletePhotoAction, SIGNAL(triggered()),this, SLOT(clearPixmap()));
+    addAction(m_deletePhotoAction);
+    m_deletePhotoAction->setEnabled(false);
 }
 
 QPixmap PixmapButton::pixmap() const
@@ -57,11 +58,34 @@ QPixmap PixmapButton::pixmap() const
     return m_pixmap;
 }
 
+void PixmapButton::setDefaultAction(QAction *action)
+{
+    // don't accept the deleteaction as default!
+    if (action == m_deletePhotoAction)
+        return;
+
+    // if there is only one action in the list, choose this, regarding what the given action is (e.g. NULL)
+    if (actions().count() == 1) {
+        m_defaultAction = actions().first();
+        return;
+    }
+
+    // only set default action if it is already in action list.
+    // this prevents setting actions that are from another widget.
+    if (actions().contains(action))
+        m_defaultAction = action;
+}
+
+QAction *PixmapButton::defaultAction() const
+{
+    return m_defaultAction;
+}
+
 void PixmapButton::setPixmap(const QPixmap& pixmap)
 {
     setIcon(QIcon(pixmap));
     m_pixmap = pixmap;
-    m_actionDeletePhoto->setEnabled(!pixmap.isNull());
+    m_deletePhotoAction->setEnabled(!pixmap.isNull());
 }
 
 void PixmapButton::clearPixmap()

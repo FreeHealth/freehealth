@@ -52,24 +52,29 @@ public:
      * This could be the vendor and model name of a webcam, or another identifier. */
     virtual QString name() const = 0;
 
-    /*! Returns a photo as a Pixmap. In case or errors return a QPixmap() */
-    virtual QPixmap recievePhoto() = 0;
-
     /*! \brief Returns the active state of the provider.
      *
-     * \e true means that there is "physically" an e.g. connected webcam attached. */
+     * \e true means that there is "physically" an e.g. connected webcam attached. \false means, there is no picture
+     * source available/connected or it is not ready to use in ase or errors e.g. */
     virtual bool isActive() const = 0;
 
-    /*! \brief Returns the enabled state of the provider. This can be changed in e.g. user settings. */
+    /*! \brief Returns the enabled state of the provider. This can be changed in user settings. */
     virtual bool isEnabled() const = 0;
 
     /*! \brief Returns the priority which is used to order a provider list.
      *
      * 0 means no priority, 100 means absolute priority. Feel free to choose any value in between. */
-    virtual uint priority() const = 0;
+    virtual int priority() const = 0;
 
     /*! \brief This function is implemented because of sorting capabilities of the IPhotoProvider. It cannot be overloaded. */
     bool operator<(const IPhotoProvider *other) { return this->priority() < other->priority(); }
+
+public Q_SLOTS:
+    void startReceivingPhoto();
+
+Q_SIGNALS:
+    /*! Emitted when a photo is selected by the user. In case of errors \photo is an invalid QPixmap(). */
+    void photoReady(QPixmap &photo);
 };
 
 } // end namespace Core

@@ -59,11 +59,13 @@ class WebcamDialog : public QDialog
     Q_OBJECT
 public:
     explicit WebcamDialog(QWidget *parent = 0);
+    explicit WebcamDialog(int device, QWidget *parent = 0);
     ~WebcamDialog();
 
     QPixmap photo() const;
 
 private Q_SLOTS:
+    void setDevice(int device);
     void updatefreezeButton(bool aFreeze);
     void autoFaceShot(const QPixmap &pix);
     void faceShotActivated(const QModelIndex &index);
@@ -76,6 +78,7 @@ private:
     QPushButton *m_freezeButton;
     QPixmap _pixmap;
     QStandardItemModel *m_imageModel;
+    int m_device;
 };
 
 }  // namespace WebCam

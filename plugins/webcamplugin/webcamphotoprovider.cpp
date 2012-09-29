@@ -29,23 +29,26 @@
 #include "webcamconstants.h"
 #include "webcamdevice.h"
 
+
 #include <coreplugin/isettings.h>
+#include <coreplugin/icore.h>
 
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 
 using namespace Webcam;
 
-WebcamPhotoProvider::WebcamPhotoProvider()
+WebcamPhotoProvider::WebcamPhotoProvider(int device)
 {
+    m_device = device;
 }
 
 WebcamPhotoProvider::~WebcamPhotoProvider()
 {}
 
-QString WebcamPhotoProvider::name()
+QString WebcamPhotoProvider::name() const
 {
     //TODO: return webcam vendor/model name
-    return tr("Webcam");
+    return tr("Webcam device %1").arg(m_device);
 }
 
 
@@ -56,26 +59,28 @@ QString WebcamPhotoProvider::name()
  * the dialog should be modal and no other functions should be possible
  * meanwhile.
  */
-QPixmap WebcamPhotoProvider::recievePhoto()
+void  WebcamPhotoProvider::startReceivingPhoto()
 {
+    qDebug("Starting webcam dialog");
     WebcamDialog dialog;
+    QPixmap photo;
     if(dialog.exec() != QDialog::Accepted) {
-        return QPixmap();
+        photo = dialog.photo();
     }
-    return dialog.photo();
+    Q_EMIT photoReady(photo);
 }
 
-bool WebcamPhotoProvider::isEnabled()
+bool WebcamPhotoProvider::isEnabled() const
 {
-    return isActive() && settings()->value(Constants::S_WEBCAM_ENABLED).toBool();
+    return isActive() ;//&& settings()->value(Constants::S_WEBCAM_ENABLED).toBool();
 }
 
-bool WebcamPhotoProvider::isActive()
+bool WebcamPhotoProvider::isActive() const
 {
-    return m_webcam && m_webcam->isActive();
+    return false;
 }
 
-int WebcamPhotoProvider::priority()
+int WebcamPhotoProvider::priority() const
 {
     return 70;
 }
