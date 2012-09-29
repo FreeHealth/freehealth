@@ -156,4 +156,5 @@ private:
 @endif
 bool %ClassName:c%::initialize()
 {
+    return true;
 }
