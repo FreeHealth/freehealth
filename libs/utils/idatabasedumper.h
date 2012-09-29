@@ -42,7 +42,7 @@ class IDatabaseDumper : public QObject
     Q_OBJECT
 public:
     IDatabaseDumper(QObject *parent = 0) : QObject(parent) {}
-    ~IDatabaseDumper() {}
+    virtual ~IDatabaseDumper() {}
 
     virtual bool dumpDatabaseToFile(const QString &file, bool zip = true) = 0;
     virtual bool restoreDatabaseFromFile(const QString &file) = 0;
