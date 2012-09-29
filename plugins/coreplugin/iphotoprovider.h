@@ -76,12 +76,13 @@ public:
     /*! \brief This function is implemented because of sorting capabilities of the IPhotoProvider. It cannot be overloaded. */
     bool operator<(const IPhotoProvider *other) { return this->priority() < other->priority(); }
 
-public Q_SLOTS:
-    void startReceivingPhoto();
-
 Q_SIGNALS:
     /*! Emitted when a photo is selected by the user. In case of errors \photo is an invalid QPixmap(). */
     void photoReady(QPixmap &photo);
+
+public Q_SLOTS:
+    void startReceivingPhoto();
+
 };
 
 } // end namespace Core

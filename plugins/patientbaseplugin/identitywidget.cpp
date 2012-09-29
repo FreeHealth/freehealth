@@ -492,7 +492,7 @@ void IdentityWidget::changeEvent(QEvent *e)
     }
 }
 
-/** \brief Patient's Photograph selector. */
+/** \brief Triggers the default action of the photo button. */
 void IdentityWidget::photoButton_clicked()
 {
     if (d->m_EditMode != ReadWriteMode)
@@ -501,20 +501,6 @@ void IdentityWidget::photoButton_clicked()
     if (action)
         action->trigger();
 }
-
-/* deprecated!!
-     else {   // if no plugins installed/active, fall back to default behaviour
-
-        QString fileName = QFileDialog::getOpenFileName(this, tr("Choose a photo"),
-                                                        QDir::homePath(),
-                                                        "Image (*.png *.jpg *.gif *.tiff)");
-        if (fileName.isEmpty()) {
-            return;
-        }
-        photo.load(fileName);
-    }
-    */
-
 
 void IdentityWidget::setPhoto(QPixmap &photo)
 {

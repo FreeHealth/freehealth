@@ -19,50 +19,43 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main Developer: Christian A. Reiter <christian.a.reiter@gmail.com>    *
- *   Contributors:                                                         *
+ *   Main developers : Christian A. Reiter <christian.a.reiter@gmail.com>
+ *   Contributors :                                                        *
+ *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef WEBCAMPHOTOPROVIDER_H
-#define WEBCAMPHOTOPROVIDER_H
-
-class WebcamDevice;
-
-#include <QObject>
-#include <QPixmap>
+#ifndef PATIENTS_FILEPHOTOPROVIDER_H
+#define PATIENTS_FILEPHOTOPROVIDER_H
 
 #include <coreplugin/iphotoprovider.h>
 
-namespace Webcam {
-/*!
- * \brief The WebcamPhotoProvider class
- *
- * It implements the Core::IPhotoProvider interface. For every Webcam that is detected there should be one WebcamPhotoProvider.
- */
-class WebcamPhotoProvider : public Core::IPhotoProvider
+/**
+ * \file filephotoprovider.h
+ * \author Christian A. Reiter <christian.a.reiter@gmail.com>
+ * \version 0.8.0
+ * \date 2012-09-29
+*/
+namespace Patients {
+
+class FilePhotoProvider : public Core::IPhotoProvider
 {
     Q_OBJECT
 public:
-    explicit WebcamPhotoProvider(int device, QObject *parent = 0);
-    ~WebcamPhotoProvider();
+    explicit FilePhotoProvider(QObject *parent);
+    ~FilePhotoProvider();
 
     QString id() const;
-    int device() const;
     QString name() const;
     bool isEnabled() const;
     bool isActive() const;
     int priority() const;
 
-    static QMap<int, WebcamPhotoProvider*> getProviders();
-
 public Q_SLOTS:
     void startReceivingPhoto();
 
-private:
-    int m_device;
-    static QMap<int, WebcamPhotoProvider*> m_webcamsPool;
 };
 
-} // end Webcam
+} // namespace Patients
 
-#endif // WEBCAMPHOTOPROVIDER_H
+#endif  // PATIENTS_FILEPHOTOPROVIDER_H
+

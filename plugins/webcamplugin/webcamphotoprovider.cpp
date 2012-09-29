@@ -41,7 +41,8 @@ using namespace Webcam;
 QMap<int, WebcamPhotoProvider*> WebcamPhotoProvider::m_webcamsPool = QMap<int, WebcamPhotoProvider*>();
 
 /*! Initializes the Provider with the device number and adds it to the pool */
-WebcamPhotoProvider::WebcamPhotoProvider(int device)
+WebcamPhotoProvider::WebcamPhotoProvider(int device, QObject *parent) :
+    IPhotoProvider(parent)
 {
     m_device = device;
     m_webcamsPool[device] = this;
