@@ -54,15 +54,15 @@ public:
     void extensionsInitialized();
     ShutdownFlag aboutToShutdown();
 
-private:
-    void detectDevices();
-    Internal::WebcamPreferencesPage *m_prefPage;
-    QMap<int, WebcamPhotoProvider*> m_availableProvidersMap;
-
 private Q_SLOTS:
     void postCoreInitialization();
     void coreAboutToClose();
     //    void triggerAction();
+
+private:
+    void detectDevices();
+
+    Internal::WebcamPreferencesPage *m_prefPage;
 };
 
 } // namespace Webcam

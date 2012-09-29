@@ -116,13 +116,15 @@ bool WebcamPlugin::initialize(const QStringList &arguments, QString *errorString
     // No user is logged in until here
     
     detectDevices();
+    QMap<int, WebcamPhotoProvider*> webcamList = WebcamPhotoProvider::getProviders();
 
     // loop through found webcams and add them to the object pool
-    if (!m_availableProvidersMap.isEmpty()) {
-        QMapIterator<int, WebcamPhotoProvider*> it(m_availableProvidersMap);
+    if (!webcamList.isEmpty()) {
+        QMapIterator<int, WebcamPhotoProvider*> it(webcamList);
         while(it.hasNext()) {
             it.next();
-            ExtensionSystem::PluginManager::instance()->addObject(it.value());
+            WebcamPhotoProvider *provider = it.value();
+            ExtensionSystem::PluginManager::instance()->addObject(provider);
         }
     }
 
@@ -188,14 +190,13 @@ ExtensionSystem::IPlugin::ShutdownFlag WebcamPlugin::aboutToShutdown()
     // Disconnect from signals that are not needed during shutdown
     // Hide UI (if you add UI that is not in the main window directly)
     // Remove preferences pages to plugins manager object pool
-    QMapIterator<int, WebcamPhotoProvider*> it(m_availableProvidersMap);
+    QMapIterator<int, WebcamPhotoProvider*> it(WebcamPhotoProvider::getProviders());
     while(it.hasNext()) {
         it.next();
         WebcamPhotoProvider *p = it.value();
         removeObject(p);
         delete p;
     }
-    m_availableProvidersMap.clear();
 
     if (m_prefPage) {
         removeObject(m_prefPage);
@@ -207,7 +208,6 @@ ExtensionSystem::IPlugin::ShutdownFlag WebcamPlugin::aboutToShutdown()
 
 void WebcamPlugin::detectDevices()
 {
-    m_availableProvidersMap.clear();
 
     for(int device = 0; device<10; device++)
     {
@@ -216,8 +216,9 @@ void WebcamPlugin::detectDevices()
         if (cap.isOpened()) {
             cap.read(frame);
             if(!frame.empty()) {
-                WebcamPhotoProvider *provider = new WebcamPhotoProvider(device);
-                m_availableProvidersMap.insert(device, provider);
+                // add WebcamPhotoProvider object to the static list of providers
+                if (!WebcamPhotoProvider::getProviders().contains(device))
+                    new WebcamPhotoProvider(device);
             }
         }
     }

@@ -46,16 +46,21 @@ public:
     explicit WebcamPhotoProvider(int device);
     ~WebcamPhotoProvider();
 
+    QString id() const;
+    int device() const;
     QString name() const;
     bool isEnabled() const;
     bool isActive() const;
     int priority() const;
+
+    static QMap<int, WebcamPhotoProvider*> getProviders();
 
 public Q_SLOTS:
     void startReceivingPhoto();
 
 private:
     int m_device;
+    static QMap<int, WebcamPhotoProvider*> m_webcamsPool;
 };
 
 } // end Webcam

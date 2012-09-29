@@ -59,7 +59,6 @@ class WebcamDialog : public QDialog
     Q_OBJECT
 public:
     explicit WebcamDialog(QWidget *parent = 0);
-    explicit WebcamDialog(int device, QWidget *parent = 0);
     ~WebcamDialog();
 
     QPixmap photo() const;

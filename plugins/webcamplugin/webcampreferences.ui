@@ -19,7 +19,7 @@
      <item>
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>Camera &amp;device:</string>
+        <string>Use camera &amp;device:</string>
        </property>
        <property name="buddy">
         <cstring>devicesCombo</cstring>
@@ -85,7 +85,7 @@
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="QComboBox" name="comboBox"/>
+       <widget class="QComboBox" name="fpsCombo"/>
       </item>
       <item row="2" column="0">
        <widget class="QLabel" name="label_3">

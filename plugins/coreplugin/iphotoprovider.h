@@ -47,6 +47,13 @@ public:
     explicit IPhotoProvider(QObject *parent = 0) : QObject(parent) {}
     virtual ~IPhotoProvider() {}
 
+    /*! \brief Returns an unique identifier for this photo source like "webcam0" or "file".
+     *
+     * This id is used to save it in settings and identify this source later, under other circumstances like
+     * changed/plugged out webcams, etc.
+     */
+    virtual QString id() const = 0;
+
     /*! \brief Returns a translated name for this provider.
      *
      * This could be the vendor and model name of a webcam, or another identifier. */

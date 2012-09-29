@@ -182,7 +182,14 @@ public:
                     q->connect(photoAction, SIGNAL(triggered()), provider, SLOT(startReceivingPhoto()));
                     editUi->photoButton->addAction(photoAction);
                 }
-                //TODO: editUi->setDefaultAction( from settings!!!
+
+            } else {
+                // no IPhotoProvider plugin available!
+
+                // buggy: the photo saving does not work ATM!
+
+//                if (editUi->photoButton->pixmap().isNull())
+//                    editUi->photoButton->setDisabled(true);
             }
             break;
         }

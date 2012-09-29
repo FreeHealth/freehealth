@@ -54,7 +54,9 @@ static inline Core::ISettings *settings() { return Core::ICore::instance()->sett
 
 PatientBasePreferencesPage::PatientBasePreferencesPage(QObject *parent) :
         IOptionsPage(parent), m_Widget(0)
-{ setObjectName("PatientBasePreferencesPage"); }
+{
+    setObjectName("PatientBasePreferencesPage");
+}
 
 PatientBasePreferencesPage::~PatientBasePreferencesPage()
 {
@@ -62,10 +64,22 @@ PatientBasePreferencesPage::~PatientBasePreferencesPage()
     m_Widget = 0;
 }
 
-QString PatientBasePreferencesPage::id() const { return objectName(); }
-QString PatientBasePreferencesPage::name() const { return tkTr(Trans::Constants::PATIENTS); }
-QString PatientBasePreferencesPage::category() const { return tkTr(Trans::Constants::PATIENT_DATABASE); }
-QString PatientBasePreferencesPage::title() const {return tr("Patient database preferences");}
+QString PatientBasePreferencesPage::id() const {
+    return objectName();
+}
+
+QString PatientBasePreferencesPage::name() const {
+    return tkTr(Trans::Constants::PATIENTS);
+}
+
+QString PatientBasePreferencesPage::category() const {
+    return tkTr(Trans::Constants::PATIENT_DATABASE);
+}
+
+QString PatientBasePreferencesPage::title() const {
+    return tr("Patient database preferences");
+}
+
 int PatientBasePreferencesPage::sortIndex() const
 {
     return 10;
@@ -129,6 +143,11 @@ void PatientBasePreferencesWidget::setDataToUi()
     ui->selectNewlyCreatedBox->setChecked(settings()->value(Core::Constants::S_PATIENTCHANGEONCREATION).toBool());
     ui->genderColor->setChecked(settings()->value(Constants::S_SELECTOR_USEGENDERCOLORS).toBool());
     ui->patientBarColor->setColor(QColor(settings()->value(Constants::S_PATIENTBARCOLOR).toString()));
+
+    // find the id of the photo source in the combo box items
+    const int photoSourceIndex = ui->comboDefaultPhotoSource->findData(
+                settings()->value(Constants::S_DEFAULTPHOTOSOURCE).toString());
+    ui->comboDefaultPhotoSource->setCurrentIndex(photoSourceIndex);
 }
 
 void PatientBasePreferencesWidget::saveToSettings(Core::ISettings *sets)
@@ -142,6 +161,10 @@ void PatientBasePreferencesWidget::saveToSettings(Core::ISettings *sets)
     s->setValue(Core::Constants::S_PATIENTCHANGEONCREATION, ui->selectNewlyCreatedBox->isChecked());
     s->setValue(Constants::S_SELECTOR_USEGENDERCOLORS, ui->genderColor->isChecked());
     s->setValue(Constants::S_PATIENTBARCOLOR, ui->patientBarColor->color());
+
+    const QString photoSourceId = ui->comboDefaultPhotoSource->itemData(
+                ui->comboDefaultPhotoSource->currentIndex()).toString();
+    s->setValue(Constants::S_DEFAULTPHOTOSOURCE, photoSourceId);
 }
 
 void PatientBasePreferencesWidget::writeDefaultSettings(Core::ISettings *s)
@@ -151,6 +174,7 @@ void PatientBasePreferencesWidget::writeDefaultSettings(Core::ISettings *s)
     s->setValue(Constants::S_SELECTOR_USEGENDERCOLORS, true);
     s->setValue(Constants::S_PATIENTBARCOLOR, Qt::white);
     s->setValue(Core::Constants::S_PATIENTCHANGEONCREATION, true);
+    s->setValue(Constants::S_DEFAULTPHOTOSOURCE, -1);
     s->sync();
 }
 
