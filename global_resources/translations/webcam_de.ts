@@ -114,25 +114,33 @@
     </message>
     <message>
         <location filename="../../plugins/webcamplugin/webcamdialog.cpp" line="66"/>
-        <location filename="../../plugins/webcamplugin/webcamdialog.cpp" line="116"/>
+        <location filename="../../plugins/webcamplugin/webcamdialog.cpp" line="128"/>
         <source>Stop</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/webcamplugin/webcamdialog.cpp" line="113"/>
+        <location filename="../../plugins/webcamplugin/webcamdialog.cpp" line="125"/>
         <source>Continue</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/webcamplugin/webcamdialog.cpp" line="127"/>
+        <location filename="../../plugins/webcamplugin/webcamdialog.cpp" line="139"/>
         <source>Photo %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Webcam::WebcamPhotoProvider</name>
+    <message>
+        <location filename="../../plugins/webcamplugin/webcamphotoprovider.cpp" line="51"/>
+        <source>Webcam device %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>Webcam::WebcamPlugin</name>
     <message>
-        <location filename="../../plugins/webcamplugin/webcamplugin.cpp" line="155"/>
+        <location filename="../../plugins/webcamplugin/webcamplugin.cpp" line="166"/>
         <source>Initializing Webcam...</source>
         <translation type="unfinished"></translation>
     </message>

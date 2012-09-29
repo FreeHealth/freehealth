@@ -44,12 +44,12 @@
 <context>
     <name>Calendar::Internal::DayRangeBody</name>
     <message>
-        <location filename="../../libs/calendar/dayview/dayrangebody.cpp" line="652"/>
+        <location filename="../../libs/calendar/dayview/dayrangebody.cpp" line="640"/>
         <source>modify</source>
         <translation type="unfinished">verändern</translation>
     </message>
     <message>
-        <location filename="../../libs/calendar/dayview/dayrangebody.cpp" line="654"/>
+        <location filename="../../libs/calendar/dayview/dayrangebody.cpp" line="642"/>
         <source>remove</source>
         <translation type="unfinished">entfernen</translation>
     </message>
