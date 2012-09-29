@@ -21,7 +21,7 @@
 /***************************************************************************
  *   Main Developpers:                                                     *
  *       %Author% <%AuthorEmail%>                             *
- *   Contributors :                                                        *
+ *   Contributors:                                                         *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 #include "%PluginName:l%preferences.h"
@@ -94,13 +94,14 @@ void %PluginName:c%PreferencesWidget::changeEvent(QEvent *e)
 /* ----------------------  Preferences Page ---------------------- */
 
 /*!
- * \class %PluginName:c%PreferencesPage
+ * \class %PluginName:c%::%PluginName:c%PreferencesPage
  * \brief Generic FreeMedForms preferences page for %PluginName:c% plugin.
  *
- * A %PluginName:c%PreferencesPage creates a page in the FMF settings dialog, it is listed in
- * the category returned by \sa category().
- *
- * All you have to do is to load this preferences page in the constructor if the %PluginName:c% plugin.
+ *  The page is listed in the settings dialog under the category returned by \sa category().
+ */
+
+/*
+ * All you have to do is to load this preferences page in the constructor in the %PluginName:c% plugin.
  * Do this like this:
  * \code
  * %PluginName:c%Plugin::%PluginName:c%Plugin():
