@@ -26,7 +26,7 @@
  ***************************************************************************/
 @if "%Doxygen%" == "true"
 /*!
-@if "%Internal%" == "true"
+@if "%InternalNamespace%" == "true"
  * \class %PluginNamespace:c%::Internal::%ClassName:c%
 @else
  * \class %PluginNamespace:c%::%ClassName:c%
@@ -47,7 +47,7 @@
 #include <QDebug>
 
 using namespace %PluginNamespace:c%;
-@if "%Internal%" == "true"
+@if "%InternalNamespace%" == "true"
 using namespace Internal;
 @endif
 @if "%Translations%" == "true"
@@ -56,12 +56,12 @@ using namespace Trans::ConstantTranslations;
 
 @if "%PIMPL%" == "true"
 namespace %PluginNamespace:c% {
-@if "%Internal%" == "true"
+@if "%InternalNamespace%" == "true"
 namespace Internal {
 @endif
 @if "%Doxygen%" == "true"
 /*!
-@if "%Internal%" == "true"
+@if "%InternalNamespace%" == "true"
  * \class %PluginNamespace:c%::Internal::%ClassName:c%Private
 @else
  * \class %PluginNamespace:c%::%ClassName:c%Private
@@ -89,12 +89,15 @@ public:
 private:
     %ClassName:c% *q;
 };
+
+@if "%InternalNamespace%" == "true"
 }  // namespace Internal
+@endif
 } // end namespace %PluginNamespace:c%
 @endif
 
 @if "%Singleton%" == "true"
-@if "%Internal%" == "true"
+@if "%InternalNamespace%" == "true"
 %PluginNamespace:c%::Internal::%ClassName:c% *%PluginNamespace:c%::Internal::%ClassName:c%::_instance = 0;
 
 %PluginNamespace:c%::Internal::%ClassName:c% &instance() // static
@@ -110,7 +113,7 @@ private:
 
 @endif
 @if "%Doxygen%" == "true"
-@if "%Internal%" == "true"
+@if "%InternalNamespace%" == "true"
 /*! Constructor of the %PluginNamespace%::Internal::%ClassName:c% class */
 @else
 /*! Constructor of the %PluginNamespace%::%ClassName:c% class */
@@ -130,7 +133,7 @@ private:
 }
 
 @if "%Doxygen%" == "true"
-@if "%Internal%" == "true"
+@if "%InternalNamespace%" == "true"
 /*! Destructor of the %PluginNamespace%::Internal::%ClassName:c% class */
 @else
 /*! Destructor of the %PluginNamespace%::%ClassName:c% class */

@@ -23,12 +23,12 @@
 -->
 <wizard category="B.FMFClasses" id="A.ContextualWidgetManager" kind="class" version="1">
     <displayname>Contextual widget manager</displayname>
-    <displayname xml:lang="de"></displayname>
+    <displayname xml:lang="de">Manager von Kontextualisierten Widgets</displayname>
     <displayname xml:lang="fr">Gestionnaire de widgets contextuels</displayname>
     <icon>../shared/preferences-system.png</icon>
     <description>Manager of contextual widgets, and action handler.</description>
     <description xml:lang="fr">Gestionnaire de widgets contextuels et d'actions.</description>
-    <description xml:lang="de"></description>
+    <description xml:lang="de">Manager von Kontextualisierten Widgets, und dazugehöriger ActionHandler</description>
     <displaycategory>FreeMedForms</displaycategory>
     <files>
         <file openeditor="true" source="contextualwidgetmanager.cpp" target="%PluginName:l%contextualwidgetmanager.%CppSourceSuffix%" />
@@ -37,7 +37,7 @@
 
     <fieldpagetitle>Manager parameters</fieldpagetitle>
     <fieldpagetitle xml:lang="fr">Paramètres du gestionnaire</fieldpagetitle>
-    <fieldpagetitle xml:lang="de"></fieldpagetitle>
+    <fieldpagetitle xml:lang="de">Manager-Parameter</fieldpagetitle>
     <fields>
         <field name="PluginName">
             <fieldcontrol class="QComboBox" combochoices="Account,AccountDB,Agenda,Alert,BaseWidgets,Category,Core,DataPackPlugin,DrugInteractions,DrugsDB,DrugsWidget,Editor,Empty,Form,Gir,ICD,MainWin,PMH,PadTools,Patients,Print,SaveRestore,Script,Templates,UserPlugin,Views,Webcam,XmlForms,ZipCodes" defaultindex="-1" />
