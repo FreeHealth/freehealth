@@ -1,25 +1,66 @@
 #!/bin/sh
-for i in $( ls plugins );
-do
-echo
-echo "********* Updating translation for FreeMedForms plugin : "$i
-echo
-echo `lupdate plugins/$i/*plugin.pro -no-obsolete`
+# ****************************************************************************
+#  *  The FreeMedForms project is a set of free, open source medical         *
+#  *  applications.                                                          *
+#  *  (C) 2008-2012 by Eric MAEKER, MD (France) <eric.maeker@gmail.com>      *
+#  *  All rights reserved.                                                   *
+#  *                                                                         *
+#  *  This program is free software: you can redistribute it and/or modify   *
+#  *  it under the terms of the GNU General Public License as published by   *
+#  *  the Free Software Foundation, either version 3 of the License, or      *
+#  *  (at your option) any later version.                                    *
+#  *                                                                         *
+#  *  This program is distributed in the hope that it will be useful,        *
+#  *  but WITHOUT ANY WARRANTY; without even the implied warranty of         *
+#  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the          *
+#  *  GNU General Public License for more details.                           *
+#  *                                                                         *
+#  *  You should have received a copy of the GNU General Public License      *
+#  *  along with this program (COPYING.FREEMEDFORMS file).                   *
+#  *  If not, see <http://www.gnu.org/licenses/>.                            *
+#  ***************************************************************************
+# /***************************************************************************
+#  *   Main developers: Eric MAEKER, <eric.maeker@gmail.com>                 *
+#  *   Contributors:                                                         *
+#  *       Christian A. Reiter <christian.a.reiter@gmail.com                 *
+#  *       NAME <MAIL@ADDRESS.COM>                                           *
+#  ***************************************************************************
+
+
+# this script redirects the output from the error console to stdout
+# so that the whole output can be filtered via e.g. grep
+
+
+# define colors for highlighting
+WHITE="\033[1;37m"
+NO_COLOUR="\033[0m"
+
+
+
+for i in $( ls plugins ); do
+    if [ -f plugins/$i/*plugin.pro ]; then
+        echo
+        echo "$WHITE********* Updating translation for FreeMedForms plugin: $i$NO_COLOUR"
+        echo
+        lupdate plugins/$i/*plugin.pro -no-obsolete  2>&1
+    fi
 done
 
-for i in $( ls freediams/plugins );
-do
-echo
-echo "********* Updating translation for FreeDiams plugin : "$i
-echo
-echo `lupdate freediams/plugins/$i/*.pro -no-obsolete`
+for i in $( ls freediams/plugins ); do
+    if [ -f plugins/$i/*plugin.pro ]; then
+        echo
+        echo "$WHITE********* Updating translation for FreeDiams plugin: $i$NO_COLOUR"
+        echo
+        lupdate freediams/plugins/$i/*.pro -no-obsolete  2>&1
+    fi
 done
 
-for i in $( ls libs );
-do
-echo
-echo "********* Updating translation for libs : "$i
-echo
-echo `lupdate libs/$i/*.pro -no-obsolete`
+for i in $( ls libs ); do
+    if [ -f plugins/$i/*plugin.pro ]; then
+        echo
+        echo "$WHITE********* Updating translation for libs: $i$NO_COLOUR"
+        echo
+        lupdate libs/$i/*.pro -no-obsolete  2>&1
+    fi
 done
 
