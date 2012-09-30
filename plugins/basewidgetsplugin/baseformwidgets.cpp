@@ -327,28 +327,33 @@ BaseForm::BaseForm(Form::FormItem *formItem, QWidget *parent) :
     Form::IFormWidget(formItem, parent),
     m_ContainerLayout(0),
     i(0), row(0), col(0), numberColumns(1),
-    m_Header(0),
-    aScreenshot(0)
+    ui(0),
+    aScreenshot(0),
+    aHigh(0), aMedium(0), aLow(0),
+    m_PriorityButton(new QToolButton(this))
 {
     setObjectName("BaseForm");
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
 
     // add a header with date, episode name and screenshot button - every episode has this
     QWidget *header = new QWidget(this);
-    m_Header = new Ui::BaseFormWidget;
-    m_Header->setupUi(header);
+    ui = new Ui::BaseFormWidget;
+    ui->setupUi(header);
 
-    m_EpisodeDate = m_Header->dateTimeEdit;
+    m_EpisodeDate = ui->dateTimeEdit;
     m_EpisodeDate->setDisplayFormat(tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR));
 
     m_EpisodeDate->setEnabled(false);
     m_EpisodeDate->setCalendarPopup(true);
 
-    m_EpisodeLabel = m_Header->lineEdit;
+    m_EpisodeLabel = ui->lineEdit;
     m_EpisodeLabel->setEnabled(false);
-    m_Header->label->setText(m_FormItem->spec()->label());
+    m_PriorityButton->setToolButtonStyle(Qt::ToolButtonIconOnly);
+    m_PriorityButton->setPopupMode(QToolButton::InstantPopup);
+    ui->lineEdit->setLeftButton(m_PriorityButton);
+    ui->label->setText(m_FormItem->spec()->label());
 
-    m_Header->toolButton->hide();
+    ui->toolButton->hide();
 
     // create main widget
     QWidget *mainWidget = 0;
@@ -402,6 +407,7 @@ BaseForm::BaseForm(Form::FormItem *formItem, QWidget *parent) :
 
     mainLayout->addWidget(mainWidget);
     mainLayout->addStretch();
+    createActions();
 
     // create itemdata
     BaseFormData *baseFormData = new BaseFormData(formItem);
@@ -413,13 +419,59 @@ BaseForm::BaseForm(Form::FormItem *formItem, QWidget *parent) :
 
 BaseForm::~BaseForm()
 {
-    if (m_Header) {
-        delete m_Header;
-        m_Header = 0;
+    if (ui) {
+        delete ui;
+        ui = 0;
     }
 }
 
-void BaseForm::addWidgetToContainer(IFormWidget * widget)
+/** Create the priority actions and populate the priority toolbutton */
+void BaseForm::createActions()
+{
+    QAction *a;
+    a = aHigh = new QAction(this);
+    a->setIcon(theme()->icon(Core::Constants::ICONPRIORITY_HIGH));
+    a = aMedium = new QAction(this);
+    a->setIcon(theme()->icon(Core::Constants::ICONPRIORITY_MEDIUM));
+    a = aLow = new QAction(this);
+    a->setIcon(theme()->icon(Core::Constants::ICONPRIORITY_LOW));
+    m_PriorityButton->addAction(aHigh);
+    m_PriorityButton->addAction(aMedium);
+    m_PriorityButton->addAction(aLow);
+    m_PriorityButton->setDefaultAction(aLow);
+//    connect(m_PriorityButton, SIGNAL(triggered(QAction*)), this, SLOT(priorityActionTriggered(QAction*)));
+}
+
+/** Return current priority according to the Form::EpisodeModel::Priority enum */
+int BaseForm::currentPriority() const
+{
+    QAction *a = m_PriorityButton->defaultAction();
+    if (a == aHigh)
+        return 0;
+    if (a == aMedium)
+        return 1;
+    if (a == aLow)
+        return 2;
+    return 2;
+}
+
+/** Set the priority according to the Form::EpisodeModel::Priority enum */
+void BaseForm::setCurrentPriority(const int priority)
+{
+    switch (priority) {
+    case 0: // HIGH
+        m_PriorityButton->setDefaultAction(aHigh);
+        break;
+    case 1: // MEDIUM
+        m_PriorityButton->setDefaultAction(aMedium);
+        break;
+    case 2: // LOW
+        m_PriorityButton->setDefaultAction(aLow);
+        break;
+    }
+}
+
+void BaseForm::addWidgetToContainer(IFormWidget *widget)
 {
     if (!widget)
         return;
@@ -505,11 +557,17 @@ QString BaseForm::printableHtml(bool withValues) const
 
 void BaseForm::retranslate()
 {
-    if (m_Header)
-        m_Header->label->setText(m_FormItem->spec()->label());
+    if (ui)
+        ui->label->setText(m_FormItem->spec()->label());
     if (aScreenshot) {
         aScreenshot->setText(tkTr(Trans::Constants::TAKE_SCREENSHOT));
         aScreenshot->setToolTip(tkTr(Trans::Constants::TAKE_SCREENSHOT));
+    }
+    if (aHigh) {
+        aHigh->setText(Utils::firstLetterUpperCase(tkTr(Trans::Constants::HIGH)));
+        aMedium->setText(Utils::firstLetterUpperCase(tkTr(Trans::Constants::MEDIUM)));
+        aLow->setText(Utils::firstLetterUpperCase(tkTr(Trans::Constants::LOW)));
+        m_PriorityButton->setToolTip(tkTr(Trans::Constants::PRIORITY));
     }
 }
 
@@ -535,7 +593,7 @@ bool BaseFormData::isModified() const
     if (m_Modified)
         return true;
     QList<int> keys;
-    keys << ID_UserName << ID_EpisodeLabel << ID_EpisodeDate;
+    keys << ID_UserName << ID_EpisodeLabel << ID_EpisodeDate << ID_Priority;
     foreach(int id, keys) {
         if (data(id) != m_OriginalData.value(id))
             return true;
@@ -548,7 +606,7 @@ void BaseFormData::setModified(bool modified)
     m_Modified = modified;
     if (!modified) {
         QList<int> keys;
-        keys << ID_UserName << ID_EpisodeLabel << ID_EpisodeDate;
+        keys << ID_UserName << ID_EpisodeLabel << ID_EpisodeDate << ID_Priority;
         foreach(int id, keys) {
             m_OriginalData.insert(id, data(id));
         }
@@ -572,6 +630,9 @@ bool BaseFormData::setData(const int ref, const QVariant &data, const int role)
         m_Form->m_EpisodeLabel->setText(m_Data.value(ref).toString());
         m_Form->m_EpisodeLabel->setEnabled(true);
         break;
+    case ID_Priority:
+        m_Form->setCurrentPriority(data.toInt());
+        break;
     }
     m_Form->m_EpisodeDate->setToolTip(QString("<p align=\"right\">%1&nbsp;-&nbsp;%2<br /><span style=\"color:gray;font-size:9pt\">%3</span></p>")
                                       .arg(QLocale().toString(m_Data.value(ID_EpisodeDate).toDateTime(), QLocale::LongFormat).replace(" ","&nbsp;"))
@@ -591,6 +652,7 @@ QVariant BaseFormData::data(const int ref, const int role) const
         case ID_EpisodeDate: return m_Form->m_EpisodeDate->dateTime();
         case ID_EpisodeLabel: return m_Form->m_EpisodeLabel->text();
         case ID_UserName: return m_Data.value(ID_UserName);
+        case ID_Priority: return m_Form->currentPriority();
         }
     }
     return QVariant();

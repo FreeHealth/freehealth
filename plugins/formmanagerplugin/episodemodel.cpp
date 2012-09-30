@@ -398,7 +398,7 @@ QVariant EpisodeModel::data(const QModelIndex &index, int role) const
                 return tkTr(Trans::Constants::YOU);
             return user()->fullNameOfUser(userUid);
         }
-//        case Priority: sqlColumn = Constants::EPISODES_PRIORITY; break;
+        case Priority: sqlColumn = Constants::EPISODES_PRIORITY; break;
         case XmlContent:  return d->getEpisodeContent(index); break;
         case Icon: sqlColumn = Constants::EPISODES_ISVALID; break;
         case Uuid: sqlColumn = Constants::EPISODES_ID; break;
@@ -524,6 +524,8 @@ bool EpisodeModel::setData(const QModelIndex &index, const QVariant &value, int 
             bool ok = d->_sqlModel->setData(sqlIndex, value, role);
             if (ok)
                 Q_EMIT dataChanged(index, index);
+            if (index.column()==Priority)
+                Q_EMIT dataChanged(this->index(index.row(), int(PriorityIcon)), this->index(index.row(), int(PriorityIcon)));
             return ok;
         }
     }
@@ -715,9 +717,11 @@ bool EpisodeModel::populateFormWithEpisodeContent(const QModelIndex &episode, bo
     QModelIndex userName = index(episode.row(), EpisodeModel::UserCreatorName);
     QModelIndex userDate = index(episode.row(), EpisodeModel::UserTimeStamp);
     QModelIndex label = index(episode.row(), EpisodeModel::Label);
+    QModelIndex prior = index(episode.row(), EpisodeModel::Priority);
     d->_formMain->itemData()->setData(IFormItemData::ID_EpisodeDate, this->data(userDate));
     d->_formMain->itemData()->setData(IFormItemData::ID_EpisodeLabel, this->data(label));
     d->_formMain->itemData()->setData(IFormItemData::ID_UserName, this->data(userName));
+    d->_formMain->itemData()->setData(IFormItemData::ID_Priority, this->data(prior));
     d->_formMain->itemData()->setModified(false);
 
     // Populate FormItem data and the patientmodel

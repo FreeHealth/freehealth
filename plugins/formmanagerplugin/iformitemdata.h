@@ -42,6 +42,7 @@ public:
         ID_EpisodeDate = 0, // used by BaseFormData to set episode date
         ID_EpisodeLabel,        // used by BaseFormData to set episode label
         ID_UserName,            // used by BaseFormData to set episode label
+        ID_Priority,            // used by BaseFormData to set episode label
         ID_CurrentUuid
     };
 
