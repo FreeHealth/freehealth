@@ -70,6 +70,11 @@ QString FilePhotoProvider::name() const
     return "file";
 }
 
+QString FilePhotoProvider::displayText() const
+{
+    return "Choose from file...";
+}
+
 /*! Returns always true */
 bool FilePhotoProvider::isEnabled() const
 {

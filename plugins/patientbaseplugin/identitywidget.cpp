@@ -172,7 +172,7 @@ public:
                 QAction *photoAction;
                 foreach(Core::IPhotoProvider *provider, photoProviderList) {
                     //: which IPhotoProvider to get picture from: from URL, from Webcam, from ...
-                    photoAction = new QAction(q->tr("from %1").arg(provider->name()), q);
+                    photoAction = new QAction(provider->displayText(), q);
                     q->connect(photoAction, SIGNAL(triggered()), provider, SLOT(startReceivingPhoto()));
                     editUi->photoButton->addAction(photoAction);
                 }

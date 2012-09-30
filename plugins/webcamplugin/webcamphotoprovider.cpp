@@ -83,6 +83,10 @@ QString WebcamPhotoProvider::name() const
     return tr("Webcam device %1").arg(m_device);
 }
 
+QString WebcamPhotoProvider::displayText() const
+{
+    return QString("Take photo with %1...").arg(name());
+}
 
 /*!
  * \brief Opens the webcam dialog and emits photoReady() when finished.

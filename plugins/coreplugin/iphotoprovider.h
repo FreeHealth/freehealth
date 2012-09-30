@@ -59,6 +59,13 @@ public:
      * This could be the vendor and model name of a webcam, or another identifier. */
     virtual QString name() const = 0;
 
+    /*! \brief Returns a QString containing a text for including in a QAction.
+     *
+     * This text is very different from plugin to plugin and must be set for each one
+     * individually, like "choose from file" or "take photo from internal webcam".
+     */
+    virtual QString displayText() const = 0;
+
     /*! \brief Returns the active state of the provider.
      *
      * \e true means that there is "physically" an e.g. connected webcam attached. \false means, there is no picture

@@ -49,6 +49,7 @@ public:
     QString id() const;
     int device() const;
     QString name() const;
+    QString displayText() const;
     bool isEnabled() const;
     bool isActive() const;
     int priority() const;
