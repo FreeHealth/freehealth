@@ -327,8 +327,6 @@ public:
         _proxyModel->setSourceModel(_currentEpisodeModel);
 
         ui->episodeView->setModel(_proxyModel);
-        ui->episodeView->setSortingEnabled(true);
-        // TODO: add a settings to recall the sorting
 
         for(int i=0; i < EpisodeModel::MaxData; ++i)
             ui->episodeView->hideColumn(i);
@@ -355,6 +353,11 @@ public:
                                                            "}");
 
         ui->episodeView->selectionModel()->clearSelection();
+
+        ui->episodeView->sortByColumn(settings()->value(Constants::S_EPISODEVIEW_SORTEDCOLUMN, EpisodeModel::UserTimeStamp).toInt(),
+                                      Qt::SortOrder(settings()->value(Constants::S_EPISODEVIEW_SORTORDER, Qt::DescendingOrder).toInt()));
+        ui->episodeView->setSortingEnabled(true);
+
         checkCurrentEpisodeViewVisibility();
 
         QObject::connect(ui->episodeView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), q, SLOT(episodeChanged(QModelIndex, QModelIndex)));
@@ -534,6 +537,8 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
     pluginManager()->addObject(d->_patientListener);
 
     // TODO: add a User Listener in FormPlaceHolder
+
+    connect(d->ui->episodeView->horizontalHeader(), SIGNAL(sortIndicatorChanged(int,Qt::SortOrder)), this, SLOT(saveSortOrderToSettings(int,Qt::SortOrder)));
 }
 
 FormPlaceHolder::~FormPlaceHolder()
@@ -548,6 +553,12 @@ FormPlaceHolder::~FormPlaceHolder()
         delete d;
         d = 0;
     }
+}
+
+void FormPlaceHolder::saveSortOrderToSettings(int col, Qt::SortOrder sort)
+{
+    settings()->setValue(Constants::S_EPISODEVIEW_SORTEDCOLUMN, col);
+    settings()->setValue(Constants::S_EPISODEVIEW_SORTORDER, sort);
 }
 
 /** Return the enabled state of an action. \sa Form::Internal::FormActionHandler */
@@ -946,5 +957,12 @@ void FormPlaceHolder::showEvent(QShowEvent *event)
     d->ui->formDataMapper->setFocus();
     // then update actions
     Q_EMIT actionsEnabledStateChanged();
+
+    // Update sort order according to the current settings
+    if (d->_proxyModel->sortColumn() != settings()->value(Constants::S_EPISODEVIEW_SORTEDCOLUMN).toInt()
+            || d->_proxyModel->sortOrder() != Qt::SortOrder(settings()->value(Constants::S_EPISODEVIEW_SORTORDER).toInt())) {
+        d->ui->episodeView->sortByColumn(settings()->value(Constants::S_EPISODEVIEW_SORTEDCOLUMN, EpisodeModel::UserTimeStamp).toInt(),
+                                      Qt::SortOrder(settings()->value(Constants::S_EPISODEVIEW_SORTORDER, Qt::DescendingOrder).toInt()));
+    }
     QWidget::showEvent(event);
 }
