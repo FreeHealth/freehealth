@@ -163,19 +163,13 @@ public:
             q->connect(editUi->photoButton, SIGNAL(clicked()), q, SLOT(photoButton_clicked()));
             //            q->connect(editUi->genderCombo, SIGNAL(currentIndexChanged(int)), q, SLOT(updateGenderImage()));
 
-            editUi->photoButton->setContextMenuPolicy(Qt::ActionsContextMenu);
-
             QList<Core::IPhotoProvider *> photoProviderList = pluginManager()->getObjects<Core::IPhotoProvider>();
 
             if (!photoProviderList.isEmpty()) {
                 // sort the PhotoProviders by their priority property - this is done by the IPhotoProvider::operator< and qSort()
                 qSort(photoProviderList.begin(), photoProviderList.end());
 
-                // add a separator to the actions menu
-                QAction *photoAction = new QAction(q);
-                photoAction->setSeparator(true);
-                editUi->photoButton->addAction(photoAction);
-
+                QAction *photoAction;
                 foreach(Core::IPhotoProvider *provider, photoProviderList) {
                     //: which IPhotoProvider to get picture from: from URL, from Webcam, from ...
                     photoAction = new QAction(q->tr("from %1").arg(provider->name()), q);
@@ -254,6 +248,7 @@ public:
     bool m_hasRealPhoto;
 
 private:
+    QAction *m_deletePhotoAction;
     IdentityWidget *q;
 };
 

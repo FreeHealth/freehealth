@@ -27,7 +27,7 @@
 #ifndef PIXMAPBUTTON_H
 #define PIXMAPBUTTON_H
 
-#include <QPushButton>
+#include <QToolButton>
 
 namespace Patients {
 /*!
@@ -41,11 +41,11 @@ namespace Patients {
  * It also provides a \e pixmap property for easy interacting with a QDataWidgetMapper.
  *
  */
-class PixmapButton : public QPushButton
+class PixmapButton : public QToolButton
 {
     Q_OBJECT
     Q_PROPERTY(QPixmap pixmap READ pixmap WRITE setPixmap)
-//    Q_PROPERTY(QAction defaultAction READ defaultAction() WRITE setDefaultAction)
+
 public:
     explicit PixmapButton(QWidget* parent = 0);
     QPixmap pixmap() const;
@@ -61,6 +61,7 @@ public Q_SLOTS:
 private:
     QPixmap m_pixmap;
     QAction* m_deletePhotoAction;
+    QAction *m_separator;
     QAction *m_defaultAction;
 };
 

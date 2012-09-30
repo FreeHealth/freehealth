@@ -33,24 +33,31 @@
 using namespace Patients;
 
 /*!
- * \brief PixmapButton::PixmapButton
- * \param parent Parent of the Button, reached through to QPushButton.
+ * \brief Default constructor of the PixmapButton class.
+ * \param parent parent of the button, reached through to QToolButton.
  *
  * Just calls the QPushButton constructor and initializes the internal Pixmap.
  */
 PixmapButton::PixmapButton(QWidget *parent) :
-    QPushButton(parent),
+    QToolButton(parent),
     m_pixmap(QPixmap()),
     m_deletePhotoAction(0),
+    m_separator(0),
     m_defaultAction(0)
 {
     setContextMenuPolicy(Qt::ActionsContextMenu);
 
+    // add a delete function to the actions menu
     m_deletePhotoAction = new QAction(Core::ICore::instance()->theme()->icon(Core::Constants::ICONREMOVE),
                                       tr("Delete photo"), this);
     connect(m_deletePhotoAction, SIGNAL(triggered()),this, SLOT(clearPixmap()));
     addAction(m_deletePhotoAction);
     m_deletePhotoAction->setEnabled(false);
+
+    // add a separator to the actions menu
+    m_separator = new QAction(this);
+    m_separator->setSeparator(true);
+    addAction(m_separator);
 }
 
 QPixmap PixmapButton::pixmap() const
@@ -63,9 +70,12 @@ void PixmapButton::setDefaultAction(QAction *action)
     // don't accept the deleteaction as default!
     if (action == m_deletePhotoAction)
         return;
+    if (action == m_separator)  // eh, nearly impossible, are we paranoid?
+        return;
 
-    // if there is only one action in the list, choose this, regarding what the given action is (e.g. NULL)
-    if (actions().count() == 1) {
+    // if there is only one action in the list (+separator +delete = 3), choose this one,
+    // no matter what the given action is (e.g. NULL)
+    if (actions().count() == 3) {
         m_defaultAction = actions().first();
         return;
     }
@@ -91,4 +101,5 @@ void PixmapButton::setPixmap(const QPixmap& pixmap)
 void PixmapButton::clearPixmap()
 {
     setPixmap(QPixmap());
+    m_deletePhotoAction->setEnabled(false);
 }
