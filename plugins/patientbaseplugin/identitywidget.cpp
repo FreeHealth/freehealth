@@ -175,6 +175,7 @@ public:
                     //: which IPhotoProvider to get picture from: from URL, from Webcam, from ...
                     photoAction = new QAction(provider->displayText(), q);
                     q->connect(photoAction, SIGNAL(triggered()), provider, SLOT(startReceivingPhoto()));
+                    q->connect(provider, SIGNAL(photoReady(QPixmap)), editUi->photoButton, SLOT(setPixmap(QPixmap)));
                     photoAction->setData(provider->id());
                     editUi->photoButton->addAction(photoAction);
                 }

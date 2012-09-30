@@ -85,7 +85,7 @@ public:
 
 Q_SIGNALS:
     /*! Emitted when a photo is selected by the user. In case of errors \photo is an invalid QPixmap(). */
-    void photoReady(QPixmap &photo);
+    void photoReady(const QPixmap &photo);
 
 public Q_SLOTS:
     virtual void startReceivingPhoto() = 0;
