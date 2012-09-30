@@ -12,9 +12,12 @@ class RapidToFreeViewer:public QWidget,public Ui::RapidToFreeWidget
 	public:
 		RapidToFreeViewer (QObject * parent = 0);
 		virtual ~RapidToFreeViewer ();
+		
+        protected slots:
+                void getAndSetDatas();
 
 	private:
-		/* data */
+	      QStringList rapidcomptamedUsers();
 };
 
 #endif
