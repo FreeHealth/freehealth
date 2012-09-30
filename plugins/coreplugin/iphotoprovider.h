@@ -88,7 +88,7 @@ Q_SIGNALS:
     void photoReady(QPixmap &photo);
 
 public Q_SLOTS:
-    void startReceivingPhoto();
+    virtual void startReceivingPhoto() = 0;
 
 };
 
