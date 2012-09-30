@@ -195,15 +195,20 @@ ExtensionSystem::IPlugin::ShutdownFlag WebcamPlugin::aboutToShutdown()
 void WebcamPlugin::detectDevices()
 {
 
-    for(int device = 0; device<10; device++) {
-        cv::VideoCapture cap(device);
+    for(int deviceId = 0; deviceId<10; deviceId++) {
+        cv::VideoCapture cap(deviceId);
         cv::Mat frame;
         if (cap.isOpened()) {
             cap.read(frame);
             if (!frame.empty()) {
                 // add WebcamPhotoProvider object to the static list of providers
-                if (!WebcamPhotoProvider::getProviders().contains(device))
-                    addAutoReleasedObject(new WebcamPhotoProvider(device, this));
+                bool alreadyThere = false;
+                foreach(WebcamPhotoProvider *provider, WebcamPhotoProvider::getProviders()) {
+                    if (provider->deviceId() == deviceId)
+                        alreadyThere = true;
+                }
+                if (!alreadyThere)
+                    addAutoReleasedObject(new WebcamPhotoProvider(deviceId, this));
             }
         }
     }

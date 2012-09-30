@@ -65,7 +65,7 @@ QString WebcamPhotoProvider::id() const
  * Returns the OpenCV device number for the webcam device
  * \sa id(), name()
  */
-int WebcamPhotoProvider::device() const
+int WebcamPhotoProvider::deviceId() const
 {
     return m_deviceId;
 }
