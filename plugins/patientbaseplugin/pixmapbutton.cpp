@@ -29,8 +29,11 @@
 #include <coreplugin/itheme.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/constants.h>
+#include <coreplugin/itheme.h>
 
 using namespace Patients;
+
+static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 
 /*!
  * \brief Default constructor of the PixmapButton class.
@@ -91,6 +94,11 @@ QAction *PixmapButton::defaultAction() const
     return m_defaultAction;
 }
 
+QAction *PixmapButton::deletePhotoAction() const
+{
+    return m_deletePhotoAction;
+}
+
 void PixmapButton::setPixmap(const QPixmap& pixmap)
 {
     setIcon(QIcon(pixmap));
@@ -102,4 +110,23 @@ void PixmapButton::clearPixmap()
 {
     setPixmap(QPixmap());
     m_deletePhotoAction->setEnabled(false);
+}
+
+void PixmapButton::setGenderImage(int genderIndex)
+{
+        // check if there is a has a real pixmap
+        // if there is a pixmap, DON'T change the photo!
+        if (m_pixmap.isNull()) {
+            // if null, set default gendered icon
+            QIcon icon;
+            switch (genderIndex) {
+            case 0:  icon = QIcon(QPixmap(theme()->iconFullPath(Core::Constants::ICONMALE, Core::ITheme::BigIcon))); break;
+            case 1:  icon = QIcon(QPixmap(theme()->iconFullPath(Core::Constants::ICONFEMALE, Core::ITheme::BigIcon))); break;
+            case 2:  icon = QIcon(QPixmap(theme()->iconFullPath(Core::Constants::ICONHERMAPHRODISM , Core::ITheme::BigIcon))); break;
+            default: icon = QIcon();
+            }
+            //    set an empty underlying pixmap, but set the displayed button icon to the default placeholder icon
+            setPixmap(QPixmap());
+            setIcon(icon);
+        }
 }

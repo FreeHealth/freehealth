@@ -75,6 +75,8 @@ public:
 public Q_SLOTS:
     void setCurrentIndex(const QModelIndex &patientIndex);
     bool submit();
+    void updateGenderImage(int genderIndex);
+    void updateGenderImage();
 
 protected:
     void changeEvent(QEvent *e);

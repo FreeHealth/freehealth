@@ -189,6 +189,8 @@ public:
 //                if (editUi->photoButton->pixmap().isNull())
 //                    editUi->photoButton->setDisabled(true);
             }
+            q->connect(editUi->genderCombo, SIGNAL(currentIndexChanged(int)), q, SLOT(updateGenderImage(int)));
+            q->connect(editUi->photoButton->deletePhotoAction(), SIGNAL(triggered()), q, SLOT(updateGenderImage()));
             break;
         }
         case IdentityWidget::ReadOnlyMode: {
@@ -427,6 +429,7 @@ QString IdentityWidget::currentGender() const
 
     if (genderIndex > 0 && genderIndex < genders().count())
         return genders()[genderIndex];
+
     return QString();
 }
 
@@ -450,7 +453,7 @@ QPixmap IdentityWidget::currentPhoto() const
 
     switch (d->m_EditMode) {
     case ReadWriteMode:
-        photo = d->m_hasRealPhoto ? d->editUi->photoButton->pixmap() : QPixmap();
+        photo = hasPhoto() ? d->editUi->photoButton->pixmap() : QPixmap();
         break;
     default: break;
     }
@@ -459,7 +462,8 @@ QPixmap IdentityWidget::currentPhoto() const
 
 bool IdentityWidget::hasPhoto() const
 {
-    return d->m_hasRealPhoto;
+    Q_ASSERT(d->editUi);
+    return (!d->editUi->photoButton->pixmap().isNull());
 }
 
 /** \brief Submit the Identity to the model and the database if in ReadWriteMode. */
@@ -471,26 +475,20 @@ bool IdentityWidget::submit()
     return false;
 }
 
-//void IdentityWidget::updateGenderImage()
-//{
-//    switch(d->m_EditMode) {
-//    case ReadWriteMode:
-//        Q_ASSERT(d->m_Mapper);
+void IdentityWidget::updateGenderImage()
+{
+    updateGenderImage(d->editUi->genderCombo->currentIndex());
+}
 
-//        // check if photoButton has a real pixmap ATM
-//        if (d->editUi->photoButton->pixmap().isNull()) {
-
-//            // if not, set default gendered icon
-//            setDefaultGenderPhoto();
-//        }
-//        break;
-//    case ReadOnlyMode:
-//        if (!d->viewUi->photoLabel->pixmap()) {
-//            setDefaultGenderPhoto();
-//        }
-//    }
-
-//}
+void IdentityWidget::updateGenderImage(int genderIndex)
+{
+    switch(d->m_EditMode) {
+    case ReadWriteMode:
+        d->editUi->photoButton->setGenderImage(genderIndex);
+        break;
+    default: break;
+    }
+}
 
 void IdentityWidget::changeEvent(QEvent *e)
 {
@@ -521,42 +519,9 @@ void IdentityWidget::setPhoto(QPixmap &photo)
         return;
 
     if (!photo.isNull()) {
-        d->m_hasRealPhoto = true;
-
         // resize pixmap to 64x64
         photo = photo.scaled(QSize(64,64), Qt::KeepAspectRatio, Qt::SmoothTransformation);
         d->editUi->photoButton->setPixmap(photo);
-    } else {
-        d->m_hasRealPhoto = false;
     }
 }
-
-///*!
-// * \brief Sets a default gender pixmap as photo, regardless if there is already a photo.
-// */
-//void IdentityWidget::setDefaultGenderPhoto()
-//{
-////    const QModelIndex patientIndex = d->m_PatientModel->currentPatient();
-////    if (patientIndex != QModelIndex()) {
-////        if (d->m_PatientModel->index(patientIndex.row(), Core::IPatient::Photo_64x64) != QModelIndex())
-////            // no photo was saved yet in database!
-////            return;
-////    }
-
-//    // get current gender from genderCombo (NOT from database, only Widget here!)
-//    const QString gender = currentGender();
-
-//    QIcon icon;
-//    if (gender == "F") {
-//        icon = QIcon(QPixmap(theme()->iconFullPath(Core::Constants::ICONFEMALE, Core::ITheme::BigIcon)));
-//    } else if (gender == "H") {
-//        icon = QIcon(QPixmap(theme()->iconFullPath(Core::Constants::ICONHERMAPHRODISM , Core::ITheme::BigIcon)));
-//    } else  if (gender == "M") {
-//        icon = QIcon(QPixmap(theme()->iconFullPath(Core::Constants::ICONMALE, Core::ITheme::BigIcon)));
-//    } else
-//        icon = QIcon();
-//    //    set an empty underlying pixmap, but set the displayed button icon to the default placeholder icon
-//    d->editUi->photoButton->setPixmap(QPixmap());
-//    d->editUi->photoButton->setIcon(icon);
-//}
 
