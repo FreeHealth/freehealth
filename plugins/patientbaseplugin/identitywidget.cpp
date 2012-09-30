@@ -287,7 +287,7 @@ IdentityWidget::~IdentityWidget()
 }
 
 /** \brief Define the model to use. */
-void IdentityWidget::setCurrentPatientModel(Patients::PatientModel *model)
+void IdentityWidget::setPatientModel(Patients::PatientModel *model)
 {
     d->m_PatientModel = model;
     if (d->m_EditMode == ReadWriteMode)
@@ -323,24 +323,28 @@ bool IdentityWidget::isIdentityValid() const
         Utils::warningMessageBox(tr("You must specify a birthname."),
                                  tr("You can not create a patient without a birthname"),
                                  "", tr("No birthname"));
+        d->editUi->birthName->setFocus();
         return false;
     }
     if (d->editUi->firstname->text().isEmpty()) {
         Utils::warningMessageBox(tr("You must specify a first name."),
                                  tr("You can not create a patient without a first name"),
                                  "", tr("No firstname"));
+        d->editUi->firstname->setFocus();
         return false;
     }
     if (d->editUi->dob->date().isNull()) {
         Utils::warningMessageBox(tr("You must specify a date of birth."),
                                  tr("You can not create a patient without a date of birth"),
                                  "", tr("No date of birth"));
+        d->editUi->dob->setFocus();
         return false;
     }
-    if (d->editUi->genderCombo->currentIndex() < 0) {
+    if (d->editUi->genderCombo->currentIndex() == -1) {
         Utils::warningMessageBox(tr("You must specify a gender."),
                                  tr("You can not create a patient without a gender"),
                                  "", tr("No gender"));
+        d->editUi->genderCombo->setFocus();
         return false;
     }
     return true;
@@ -352,10 +356,16 @@ bool IdentityWidget::isIdentityAlreadyInDatabase() const
     Q_ASSERT(d->m_EditMode == ReadWriteMode); //FIXME!
 
     // check database for double entries
-    QString where = QString("`%1`='%2' AND ").arg(patientBase()->fieldName(Constants::Table_IDENT, Constants::IDENTITY_BIRTHNAME), d->editUi->birthName->text());
+    QString where = QString("`%1`='%2' AND ").
+            arg(patientBase()->fieldName(Constants::Table_IDENT, Constants::IDENTITY_BIRTHNAME),
+                d->editUi->birthName->text());
     if (!d->editUi->secondName->text().isEmpty())
-        where += QString("`%1`='%2' AND ").arg(patientBase()->fieldName(Constants::Table_IDENT, Constants::IDENTITY_SECONDNAME), d->editUi->secondName->text());
-    where += QString("`%1`='%2'").arg(patientBase()->fieldName(Constants::Table_IDENT, Constants::IDENTITY_FIRSTNAME), d->editUi->firstname->text());
+        where += QString("`%1`='%2' AND ").
+                arg(patientBase()->fieldName(Constants::Table_IDENT, Constants::IDENTITY_SECONDNAME),
+                    d->editUi->secondName->text());
+    where += QString("`%1`='%2'").
+            arg(patientBase()->fieldName(Constants::Table_IDENT, Constants::IDENTITY_FIRSTNAME),
+                d->editUi->firstname->text());
     return (patientBase()->count(Constants::Table_IDENT, Constants::IDENTITY_BIRTHNAME, where)>0);
 }
 
@@ -413,14 +423,10 @@ QString IdentityWidget::currentGender() const
     }
     case ReadWriteMode:
         genderIndex = d->editUi->genderCombo->currentIndex();
-        break;
     }
 
-    switch (genderIndex) {
-    case 0: return "M";
-    case 1: return "F";
-    case 2: return "H";
-    }
+    if (genderIndex > 0 && genderIndex < genders().count())
+        return genders()[genderIndex];
     return QString();
 }
 
@@ -520,6 +526,8 @@ void IdentityWidget::setPhoto(QPixmap &photo)
         // resize pixmap to 64x64
         photo = photo.scaled(QSize(64,64), Qt::KeepAspectRatio, Qt::SmoothTransformation);
         d->editUi->photoButton->setPixmap(photo);
+    } else {
+        d->m_hasRealPhoto = false;
     }
 }
 
