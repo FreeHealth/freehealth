@@ -373,6 +373,12 @@ void ZipCountryCompleters::checkData()
     if (!m_Model->countryAvailable(m_Country->currentIndex()+1)) {
         m_ZipButton->setIcon(theme()->icon(Core::Constants::ICONHELP));
         m_CityButton->setIcon(theme()->icon(Core::Constants::ICONHELP));
+        //: %1 is a country
+        m_ZipButton->setToolTip(tr("Autocompletion of zipcodes for %1 not available").
+                                arg(QLocale::countryToString(m_Country->currentCountry())));
+        //: %1 is a country
+        m_CityButton->setToolTip(tr("Autocompletion of cities for %1 not available").
+                                 arg(QLocale::countryToString(m_Country->currentCountry())));
         return;
     }
 
