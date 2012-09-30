@@ -307,7 +307,7 @@ FormActionHandler::FormActionHandler(QObject *parent) :
 /** Define the current view, update and connect actions */
 void FormActionHandler::setCurrentView(FormContextualWidget *view)
 {
-    qWarning() << "SET VIEW" << view << "hasContext" << contextManager()->hasContext(Core::Id(Constants::C_FORM_PLUGINS).uniqueIdentifier());
+//    qWarning() << "SET VIEW" << view << "hasContext" << contextManager()->hasContext(Core::Id(Constants::C_FORM_PLUGINS).uniqueIdentifier());
     Q_ASSERT(view);
     if (!view) { // this should never be the case
         LOG_ERROR("setCurrentView: no view");
