@@ -146,6 +146,7 @@ public:
 
     QIcon iconizedGender(const QModelIndex &index)
     {
+        //TODO: put this in a separate method/class, there is much duplication of gender (de)referencing in FMF
         const QString &g = m_SqlPatient->data(m_SqlPatient->index(index.row(), Constants::IDENTITY_GENDER)).toString();
         if (g=="M") {
             return theme()->icon(Core::Constants::ICONMALE);
@@ -385,6 +386,7 @@ QVariant PatientModel::data(const QModelIndex &index, int role) const
         case IPatient::Gender:        col = Constants::IDENTITY_GENDER;            break;
         case IPatient::GenderIndex:
             {
+            //TODO: put this in a separate method/class, there is much duplication of gender (de)referencing in FMF
                 const QString &g = d->m_SqlPatient->index(index.row(), Constants::IDENTITY_GENDER).data().toString();
                 if (g=="M")
                     return 0;
