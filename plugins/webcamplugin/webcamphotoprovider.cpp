@@ -116,7 +116,7 @@ bool WebcamPhotoProvider::isActive() const
 
 int WebcamPhotoProvider::priority() const
 {
-    return 70;
+    return 10;
 }
 
 /*!

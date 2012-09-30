@@ -87,10 +87,10 @@ bool FilePhotoProvider::isActive() const
     return true;
 }
 
-/*! Returns a low priority (1) to be listed at last position. */
+/*! Returns a low priority to be listed at last/fallback position. */
 int FilePhotoProvider::priority() const
 {
-    return 1;
+    return 100;
 }
 
 void FilePhotoProvider::startReceivingPhoto()

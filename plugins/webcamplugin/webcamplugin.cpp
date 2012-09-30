@@ -124,7 +124,7 @@ bool WebcamPlugin::initialize(const QStringList &arguments, QString *errorString
         while(it.hasNext()) {
             it.next();
             WebcamPhotoProvider *provider = it.value();
-            ExtensionSystem::PluginManager::instance()->addObject(provider);
+            addObject(provider);
         }
     }
 
