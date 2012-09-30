@@ -63,7 +63,7 @@ SettingsDialog::SettingsDialog(QWidget *parent, const QString &categoryId, const
     m_ui->setupUi(this);
     m_ui->buttonBox->button(QDialogButtonBox::Ok)->setDefault(true);
     m_ui->buttonBox->button(QDialogButtonBox::Apply)->setToolTip(tr("Apply all changes (all pages)"));
-    m_ui->buttonBox->button(QDialogButtonBox::RestoreDefaults)->setToolTip(tr("Reset to default the current page"));
+    m_ui->buttonBox->button(QDialogButtonBox::RestoreDefaults)->setToolTip(tr("Reset the current page to defaults"));
 
     connect(m_ui->buttonBox->button(QDialogButtonBox::Apply), SIGNAL(clicked()), this, SLOT(apply()));
     connect(m_ui->buttonBox->button(QDialogButtonBox::Help), SIGNAL(clicked()), this, SLOT(showHelp()));
