@@ -65,7 +65,7 @@ QString WebcamPhotoProvider::id() const
  * Returns the OpenCV device number for the webcam device
  * \sa id(), name()
  */
-int WebcamPhotoProvider::device() const
+int WebcamPhotoProvider::deviceId() const
 {
     return m_deviceId;
 }
@@ -114,16 +114,18 @@ bool WebcamPhotoProvider::isActive() const
     return false;
 }
 
+/*! Returns a high priority, webcams should be listed first. */
 int WebcamPhotoProvider::priority() const
 {
-    return 70;
+    return 10;
 }
 
 /*!
  * Returns the list of the currently existing WebcamPhotoProviders.
- * This member just ask the plugin manager object pools.
+ * This member just asks the plugin manager object pool.
+ * \sa PluginManager::addObject(), PluginManager::removeObject(), PluginManager::getObjects(),
  */
-QList<WebcamPhotoProvider *> WebcamPhotoProvider::getProviders()
+QList<WebcamPhotoProvider *> WebcamPhotoProvider::getProviders() //static
 {
     QList<WebcamPhotoProvider*> objects = pluginManager()->getObjects<WebcamPhotoProvider>();
     return objects;

@@ -43,11 +43,11 @@ class WebcamPhotoProvider : public Core::IPhotoProvider
 {
     Q_OBJECT
 public:
-    explicit WebcamPhotoProvider(int device, QObject *parent = 0);
+    explicit WebcamPhotoProvider(int deviceId, QObject *parent = 0);
     ~WebcamPhotoProvider();
 
     QString id() const;
-    int device() const;
+    int deviceId() const;
     QString name() const;
     QString displayText() const;
     bool isEnabled() const;
