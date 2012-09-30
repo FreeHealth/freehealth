@@ -28,15 +28,16 @@
 #include "constants_settings.h"
 #include "constants_db.h"
 #include "patientselector.h"
+#include "ui_patientbasepreferencespage.h"
 
 #include <utils/log.h>
 #include <translationutils/constanttranslations.h>
-
+#include <extensionsystem/pluginmanager.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/constants_tokensandsettings.h>
+#include <coreplugin/iphotoprovider.h>
 
-#include "ui_patientbasepreferencespage.h"
 
 #include <QSqlDatabase>
 #include <QSqlQuery>
@@ -130,6 +131,7 @@ PatientBasePreferencesWidget::PatientBasePreferencesWidget(QWidget *parent) :
     ui = new Ui::PatientBasePreferencesWidget;
     setObjectName("PatientBasePreferencesWidget");
     ui->setupUi(this);
+    populatePhotoProviderCombo();
     setDataToUi();
 }
 
@@ -162,6 +164,7 @@ void PatientBasePreferencesWidget::saveToSettings(Core::ISettings *sets)
     s->setValue(Constants::S_SELECTOR_USEGENDERCOLORS, ui->genderColor->isChecked());
     s->setValue(Constants::S_PATIENTBARCOLOR, ui->patientBarColor->color());
 
+    // save the id of the provider to identify it the next time.
     const QString photoSourceId = ui->comboDefaultPhotoSource->itemData(
                 ui->comboDefaultPhotoSource->currentIndex()).toString();
     s->setValue(Constants::S_DEFAULTPHOTOSOURCE, photoSourceId);
@@ -174,9 +177,28 @@ void PatientBasePreferencesWidget::writeDefaultSettings(Core::ISettings *s)
     s->setValue(Constants::S_SELECTOR_USEGENDERCOLORS, true);
     s->setValue(Constants::S_PATIENTBARCOLOR, Qt::white);
     s->setValue(Core::Constants::S_PATIENTCHANGEONCREATION, true);
-    s->setValue(Constants::S_DEFAULTPHOTOSOURCE, -1);
+
+    QList<Core::IPhotoProvider*> providerList = ExtensionSystem::PluginManager::instance()->getObjects<Core::IPhotoProvider>();
+    qSort(providerList);
+    qDebug() << providerList;
+    if (providerList.isEmpty())
+        s->setValue(Constants::S_DEFAULTPHOTOSOURCE, "");
+    else
+        s->setValue(Constants::S_DEFAULTPHOTOSOURCE, providerList.first()->id());
     s->sync();
 }
+
+void PatientBasePreferencesWidget::populatePhotoProviderCombo()
+{
+    QList<Core::IPhotoProvider*> providerList = ExtensionSystem::PluginManager::instance()->getObjects<Core::IPhotoProvider>();
+    qSort(providerList);
+    ui->comboDefaultPhotoSource->clear();
+    foreach(Core::IPhotoProvider *provider, providerList) {
+        ui->comboDefaultPhotoSource->addItem(provider->displayText(), QVariant(provider->id()));
+    }
+    ui->comboDefaultPhotoSource->setEnabled(!providerList.isEmpty());
+}
+
 
 void PatientBasePreferencesWidget::changeEvent(QEvent *e)
 {
