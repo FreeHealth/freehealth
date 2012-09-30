@@ -214,11 +214,9 @@ QWidget *WebcamPreferencesPage::createPage(QWidget *parent)
     if (m_Widget)
         delete m_Widget;
     m_Widget = new WebcamPreferencesWidget(parent);
-    QMapIterator<int, WebcamPhotoProvider*> it(WebcamPhotoProvider::getProviders());
-    while (it.hasNext()) {
-        it.next();
-        m_Widget->addWebcamProvider(it.value());
-    }
+    QList<WebcamPhotoProvider*> webcams = WebcamPhotoProvider::getProviders();
+    foreach(WebcamPhotoProvider *webcam, webcams)
+        m_Widget->addWebcamProvider(webcam);
     return m_Widget;
 }
 
