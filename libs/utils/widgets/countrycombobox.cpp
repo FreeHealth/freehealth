@@ -38,6 +38,7 @@ using namespace Utils;
 CountryComboBox::CountryComboBox(QWidget *parent) :
     QComboBox(parent)
 {
+    connect(this, SIGNAL(currentIndexChanged(int)), this, SLOT(on_currentIndexChanged(int)));
 }
 
 void CountryComboBox::setFlagPath(const QString &absPath)
@@ -86,4 +87,10 @@ void CountryComboBox::setCurrentIsoCountry(const QString &isoCode)
 void CountryComboBox::setCurrentCountry(QLocale::Country country)
 {
     setCurrentIndex(findData(QVariant(country)));
+}
+
+
+void CountryComboBox::on_currentIndexChanged(int index)
+{
+    Q_EMIT currentCountryChanged(QLocale::Country(itemData(index).toInt()));
 }

@@ -262,9 +262,13 @@ void ZipCountryCompleters::createModel()
 /** Define the QComboBox to use as country selector. The combo will be automatically populated and its current index will be set to the current QLocale::Country */
 void ZipCountryCompleters::setCountryComboBox(Utils::CountryComboBox *box)
 {
+    // if there was an old countryCombo, remove it's currentIndexChanged connection to here
+    if (m_countryCombo)
+        disconnect(m_countryCombo, SIGNAL(currentCountryChanged(QLocale::Country)), this, SLOT(setCountryFilter(QLocale::Country)));
+
     m_countryCombo = box;
-    connect(box, SIGNAL(currentIndexChanged(int)), this, SLOT(setCountryFilter(int)));
-    setCountryFilter(m_countryCombo->currentIndex());
+    connect(m_countryCombo, SIGNAL(currentCountryChanged(QLocale::Country)), this, SLOT(setCountryFilter(QLocale::Country)));
+    setCountryFilter(m_countryCombo->currentCountry());
 }
 
 /** Define the QLineEdit to use as city name editor */
@@ -311,8 +315,6 @@ void ZipCountryCompleters::setZipLineEdit(Utils::QButtonLineEdit *zip)
     m_ZipButton = new QToolButton(m_zipEdit);
     m_ZipButton->setIcon(theme()->icon(Core::Constants::ICONOK));
     m_zipEdit->setLeftButton(m_ZipButton);
-    //    m_ZipButton->setToolTip("please enter ZIP"); // remove?
-
     m_zipEdit->installEventFilter(this);
 }
 
@@ -334,14 +336,13 @@ void ZipCountryCompleters::indexActivated(const QModelIndex &index)
     checkData();
 }
 
-void ZipCountryCompleters::setCountryFilter(const int index)
+void ZipCountryCompleters::setCountryFilter(const QLocale::Country country)
 {
-    Q_UNUSED(index);
     if (!m_countryCombo)
         return;
     if (!m_Model)
         return;
-    m_Model->setCountryIsoFilter(m_countryCombo->currentIsoCountry());
+    m_Model->setCountryIsoFilter(Utils::countryToIso(country));
     checkData();
 }
 
