@@ -45,6 +45,7 @@
 #include "patientmodel.h"
 #include "patientmodelwrapper.h"
 #include "filephotoprovider.h"
+#include "urlphotoprovider.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/iuser.h>
@@ -165,6 +166,8 @@ bool PatientBasePlugin::initialize(const QStringList &arguments, QString *errorS
     FilePhotoProvider *filePhotoProvider = new FilePhotoProvider(this);
     addAutoReleasedObject(filePhotoProvider);
 
+    UrlPhotoProvider *urlPhotoProvider = new UrlPhotoProvider(this);
+    addAutoReleasedObject(urlPhotoProvider);
     return true;
 }
 
