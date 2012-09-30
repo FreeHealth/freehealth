@@ -439,6 +439,9 @@ void Action::updateActiveState()
 
 static QString msgActionWarning(QAction *newAction, int k, QAction *oldAction)
 {
+    Q_ASSERT(newAction);
+    Q_ASSERT(oldAction);
+
     QString msg;
     QTextStream str(&msg);
     str << "addOverrideAction " << newAction->objectName() << '/' << newAction->text()

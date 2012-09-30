@@ -42,7 +42,7 @@ class UserCalendar;
 class AgendaCore;
 
 namespace Internal {
-class Appointement;
+class Appointment;
 }
 
 class AGENDA_EXPORT CalendarItemModel : public Calendar::AbstractCalendarModel
@@ -88,18 +88,18 @@ public Q_SLOTS:
 
 
 private:
-    Calendar::CalendarItem toCalendarItem(Internal::Appointement *item) const;
+    Calendar::CalendarItem toCalendarItem(Internal::Appointment *item) const;
     void setItemByUid(const QString &uid, const Calendar::CalendarItem &item);
-    int searchForIntersectedItem(const QList<Internal::Appointement *> &list, const QDate &from, const QDate &to, int first, int last) const;
-    int getInsertionIndex(bool begin, const QDateTime &dateTime, const QList<Internal::Appointement*> &list, int first, int last) const;
-    Internal::Appointement *getItemPointerByUid(const int uid) const;
+    int searchForIntersectedItem(const QList<Internal::Appointment *> &list, const QDate &from, const QDate &to, int first, int last) const;
+    int getInsertionIndex(bool begin, const QDateTime &dateTime, const QList<Internal::Appointment*> &list, int first, int last) const;
+    Internal::Appointment *getItemPointerByUid(const int uid) const;
     int createUid() const;
     void getItemFromDatabase(const QDate &from, const QDate &to, const int calendarId) const;
-    void getPeopleNames(Internal::Appointement *appointement) const;
+    void getPeopleNames(Internal::Appointment *appointment) const;
 
 private:
-    mutable QList<Internal::Appointement *> m_sortedByBeginList;
-    mutable QList<Internal::Appointement *> m_sortedByEndList;
+    mutable QList<Internal::Appointment *> m_sortedByBeginList;
+    mutable QList<Internal::Appointment *> m_sortedByEndList;
     mutable QVector<QDate> m_RetrievedDates;
     QVariant m_CalendarUid;
 };

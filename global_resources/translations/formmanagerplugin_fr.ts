@@ -4,12 +4,12 @@
 <context>
     <name>Form::EpisodeModel</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="598"/>
+        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="565"/>
         <source>Xml content</source>
         <translation>Contenu XML</translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="628"/>
+        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="596"/>
         <source>New episode</source>
         <translation>Nouvel épisode</translation>
     </message>
@@ -68,7 +68,7 @@
 <context>
     <name>Form::FormMain</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/iformitem.cpp" line="802"/>
+        <location filename="../../plugins/formmanagerplugin/iformitem.cpp" line="800"/>
         <source>Form: </source>
         <translation>Formulaire : </translation>
     </message>
@@ -76,7 +76,7 @@
 <context>
     <name>Form::FormMainDebugPage</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/iformitem.cpp" line="966"/>
+        <location filename="../../plugins/formmanagerplugin/iformitem.cpp" line="964"/>
         <source>Forms: </source>
         <translation>Formuaires : </translation>
     </message>
@@ -84,40 +84,40 @@
 <context>
     <name>Form::FormPlaceHolder</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="212"/>
+        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="283"/>
         <source>Save episode?</source>
         <translation>Sauvegarder l&apos;épisode ?</translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="214"/>
+        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="285"/>
         <source>The actual episode has been modified. Do you want to save changes in your database?
 Answering &apos;No&apos; will cause definitve data lose.</source>
         <translation>L&apos;épisode actuel a été modifié. Voulez-vous sauvegardé les modifications dans la base de données ? Répondre &quot;non&quot; provoquera des pertes de données irrémédiables.</translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="217"/>
+        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="288"/>
         <source>Save episode</source>
         <translation>Sauvegarder l&apos;épisode</translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="637"/>
+        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="750"/>
         <source>Validate the current episode</source>
         <translation>Valider l&apos;épisode courant</translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="638"/>
+        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="751"/>
         <source>When you validate an episode, you prevent all subsequent amendments. The episode will be shown but will be kept unchanged.
 Do you really want to validate the current episode?</source>
         <translation>Lorsque vous validez un épisode, vous empêchez toutes modifications ultérieures. L&apos;épisode sera présenté et gardé inchangé.
 Voulez-vous réllement valider cette épisode ?</translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="678"/>
+        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="793"/>
         <source>Remove the current episode</source>
         <translation>Supprimer l&apos;épisode courant</translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="679"/>
+        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="794"/>
         <source>You can not completely destroy an episode, but you can remove it from the views.
 The episode will not be shown anymore, but will still be included in the database.
 Do you really want to remove the current episode?</source>
@@ -126,9 +126,17 @@ L&apos;épisode ne sera plus visible bien que toujours présent dans la base de 
 Voulez-vous réellement supprimer cet épisode ?</translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="699"/>
+        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="815"/>
         <source>Images (*.png)</source>
         <translation></translation>
+    </message>
+</context>
+<context>
+    <name>Form::Internal::EpisodeBase</name>
+    <message>
+        <location filename="../../plugins/formmanagerplugin/episodebase.cpp" line="221"/>
+        <source>Unable to update the database schema</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -377,47 +385,47 @@ Voulez-vous réellement supprimer cet épisode ?</translation>
         <translation>Captures d&apos;écran disponible.</translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="116"/>
+        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="117"/>
         <source>Add Episode</source>
         <translation>Ajouter un épisode</translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="117"/>
+        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="118"/>
         <source>Validate Episode</source>
         <translation>Valider un épisode</translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="118"/>
+        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="119"/>
         <source>Add Form</source>
         <translation>Ajouter un formulaire</translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="119"/>
+        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="120"/>
         <source>Print Form</source>
         <translation>Imprimer le formulaire</translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="120"/>
+        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="121"/>
         <source>Show patients&apos; synthesis</source>
         <translation>Montrer la synthèse du patient</translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="121"/>
+        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="122"/>
         <source>Show patients&apos; last episodes</source>
         <translation>Montrer le dernier épisode du patient</translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="122"/>
+        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="123"/>
         <source>Patients&apos; last episodes</source>
         <translation>Derniers épisodes pour la patient</translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="124"/>
+        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="125"/>
         <source>Forms font</source>
         <translation>Polices pour les formulaires</translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="125"/>
+        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="126"/>
         <source>Episodes font</source>
         <translation>Polices pour les épisodes</translation>
     </message>

@@ -75,8 +75,8 @@ private Q_SLOTS:
     void userChanged();
     void updateCalendarData(const QModelIndex &top, const QModelIndex &bottom);
     void onSwitchToPatientClicked();
-    void onEditAppointementClicked();
-    void onPrintAppointementClicked();
+    void onEditAppointmentClicked();
+    void onPrintAppointmentClicked();
 
 protected:
     void clear();

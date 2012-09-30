@@ -26,29 +26,108 @@
 #include "webcamphotoprovider.h"
 //#include "webcamdialog.h"
 #include "webcamdialog.h"
+#include "webcamconstants.h"
+
+
+#include <coreplugin/isettings.h>
+#include <coreplugin/icore.h>
+
+#include <QDebug>
+
+static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 
 using namespace Webcam;
 
-WebcamPhotoProvider::WebcamPhotoProvider()
+QMap<int, WebcamPhotoProvider*> WebcamPhotoProvider::m_webcamsPool = QMap<int, WebcamPhotoProvider*>();
+
+/*! Initializes the Provider with the device number and adds it to the pool */
+WebcamPhotoProvider::WebcamPhotoProvider(int device, QObject *parent) :
+    IPhotoProvider(parent)
 {
+    m_device = device;
+    m_webcamsPool[device] = this;
 }
 
+/*! Deletes this Provider from the pool */
 WebcamPhotoProvider::~WebcamPhotoProvider()
-{}
+{
+    if (WebcamPhotoProvider::getProviders().remove(this->device()) == 0)
+        qWarning() << QString("WebcamPhotoProvider: error removing device %1").arg(device());
+}
 
 /*!
- * \brief returns Photo that is captured by the selected webcam.
- *
- * All of the code is in this function, there is no async calling, because
- * the dialog should be modal and no other functions should be possible
- * meanwhile.
+ * Returns an machine readable uid name for the webcam device
+ * \sa name(), device()
  */
-QPixmap WebcamPhotoProvider::recievePhoto()
+QString WebcamPhotoProvider::id() const
+{
+    return QString("webcam%1").arg(m_device);
+}
+
+/*!
+ * Returns the OpenCV device number for the webcam device
+ * \sa id(), name()
+ */
+int WebcamPhotoProvider::device() const
+{
+    return m_device;
+}
+
+/*!
+ * Returns a human readable name for the webcam device
+ * \sa id(), device()
+ */
+QString WebcamPhotoProvider::name() const
+{
+    //TODO: return webcam vendor/model name
+    return tr("Webcam device %1").arg(m_device);
+}
+
+QString WebcamPhotoProvider::displayText() const
+{
+    return QString("Take photo with %1...").arg(name());
+}
+
+/*!
+ * \brief Opens the webcam dialog and emits photoReady() when finished.
+ *
+ * When no photo was selected, then emitted pixmap is an empty QPixmap().
+ *\sa photoReady()
+ */
+void  WebcamPhotoProvider::startReceivingPhoto()
 {
     WebcamDialog dialog;
+    QPixmap photo;
     if(dialog.exec() != QDialog::Accepted) {
-        return QPixmap();
+        photo = dialog.photo();
     }
-    return dialog.photo();
+    Q_EMIT photoReady(photo);
 }
+
+bool WebcamPhotoProvider::isEnabled() const
+{
+    return isActive() ;//&& settings()->value(Constants::S_WEBCAM_ENABLED).toBool();
+}
+
+bool WebcamPhotoProvider::isActive() const
+{
+    return false;
+}
+
+int WebcamPhotoProvider::priority() const
+{
+    return 70;
+}
+
+/*!
+ * \brief Returns the list of WebcamPhotoProviders that are created
+ *
+ * The \e key of the QMap (\e int) is the OpenCV device number, and the \value is a
+ * pointer to a WebcamPhotoProvider.
+ */
+QMap<int, WebcamPhotoProvider *> WebcamPhotoProvider::getProviders()
+{
+    return m_webcamsPool;
+}
+
 

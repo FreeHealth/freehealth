@@ -40,28 +40,28 @@
 <context>
     <name>Core</name>
     <message>
+        <location filename="../../freediams/plugins/coreplugin/coreimpl.cpp" line="161"/>
         <location filename="../../freediams/plugins/coreplugin/coreimpl.cpp" line="163"/>
-        <location filename="../../freediams/plugins/coreplugin/coreimpl.cpp" line="165"/>
         <source>Core intialization finished...</source>
         <translation>Kern Initialisierung beendet...</translation>
     </message>
     <message>
-        <location filename="../../freediams/plugins/coreplugin/coreimpl.cpp" line="221"/>
+        <location filename="../../freediams/plugins/coreplugin/coreimpl.cpp" line="217"/>
         <source>You are running FreeDiams for the first time. You need to approve the licence terms.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freediams/plugins/coreplugin/coreimpl.cpp" line="224"/>
+        <location filename="../../freediams/plugins/coreplugin/coreimpl.cpp" line="220"/>
         <source>You are running a new version of FreeDiams, you need to renew the licence agreement.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freediams/plugins/coreplugin/coreimpl.cpp" line="234"/>
+        <location filename="../../freediams/plugins/coreplugin/coreimpl.cpp" line="230"/>
         <source>You are updating FreeDiams, do you want to update your personnal preferences ?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../freediams/plugins/coreplugin/coreimpl.cpp" line="235"/>
+        <location filename="../../freediams/plugins/coreplugin/coreimpl.cpp" line="231"/>
         <source>With the new version some preferences should be outdated. Answering yes will allow FreeDiams to update your personnal preferences.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -764,8 +764,8 @@ Using Url: %1
 <context>
     <name>Core::ModeManager</name>
     <message>
-        <location filename="../../plugins/coreplugin/modemanager/modemanager.cpp" line="168"/>
-        <source>Switch to %1 mode</source>
+        <location filename="../../plugins/coreplugin/modemanager/modemanager.cpp" line="209"/>
+        <source>Switch to &lt;b&gt;%1&lt;/b&gt; mode</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

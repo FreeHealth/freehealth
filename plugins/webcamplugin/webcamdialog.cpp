@@ -89,6 +89,8 @@ WebcamDialog::WebcamDialog(QWidget *parent) :
     connect(ui->openCVWidget, SIGNAL(imageReady(bool)), button, SLOT(setEnabled(bool)));
     connect(ui->openCVWidget, SIGNAL(autoFaceShot(QPixmap)), this, SLOT(autoFaceShot(QPixmap)));
 }
+
+
 /*! Default destructor, deletes the UI */
 WebcamDialog::~WebcamDialog()
 {
@@ -101,6 +103,11 @@ QPixmap WebcamDialog::photo() const
     if (_pixmap.isNull())
         return ui->openCVWidget->pixmap()->copy(ui->openCVWidget->frame());
     return _pixmap;
+}
+
+void WebcamDialog::setDevice(int device)
+{
+    m_device = device;
 }
 
 /*!

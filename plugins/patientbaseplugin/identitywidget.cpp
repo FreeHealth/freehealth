@@ -46,6 +46,7 @@
 #include <coreplugin/itheme.h>
 #include <coreplugin/constants_icons.h>
 #include <coreplugin/iphotoprovider.h>
+#include <patientbaseplugin/constants_settings.h>
 
 #include <zipcodesplugin/zipcodescompleters.h>
 
@@ -60,6 +61,7 @@
 #include <QDateEdit>
 
 #include <QDebug>
+#include <QMenu>
 
 using namespace Patients;
 using namespace Trans::ConstantTranslations;
@@ -67,6 +69,7 @@ using namespace Trans::ConstantTranslations;
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 static inline Patients::Internal::PatientBase *patientBase() {return Patients::Internal::PatientBase::instance();}
+static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 
 //TODO: Users can add pages in the identity widget using the XMLForm --> create a <Form> named \e Identity
 
@@ -100,7 +103,7 @@ public:
                 QByteArray p = mappedPropertyName(mapWidget);
                 QModelIndex idx = model()->index(currentIndex(), i);
 
-//                qDebug() << mapWidget->objectName() << "DB:" << idx.data(Qt::EditRole) << "- Widget value:" << mapWidget->property(p);
+                //                qDebug() << mapWidget->objectName() << "DB:" << idx.data(Qt::EditRole) << "- Widget value:" << mapWidget->property(p);
 
                 QVariant data = idx.data(Qt::EditRole);
                 //                qDebug(mapWidget->metaObject()->className());
@@ -159,7 +162,32 @@ public:
             zipCompleter->setCountryComboBox(editUi->country);
 
             q->connect(editUi->photoButton, SIGNAL(clicked()), q, SLOT(photoButton_clicked()));
-//            q->connect(editUi->genderCombo, SIGNAL(currentIndexChanged(int)), q, SLOT(updateGenderImage()));
+            //            q->connect(editUi->genderCombo, SIGNAL(currentIndexChanged(int)), q, SLOT(updateGenderImage()));
+
+            QList<Core::IPhotoProvider *> photoProviderList = pluginManager()->getObjects<Core::IPhotoProvider>();
+
+            if (!photoProviderList.isEmpty()) {
+                // sort the PhotoProviders by their priority property - this is done by the IPhotoProvider::operator< and qSort()
+                qSort(photoProviderList);
+
+                QAction *photoAction;
+                foreach(Core::IPhotoProvider *provider, photoProviderList) {
+                    //: which IPhotoProvider to get picture from: from URL, from Webcam, from ...
+                    photoAction = new QAction(provider->displayText(), q);
+                    q->connect(photoAction, SIGNAL(triggered()), provider, SLOT(startReceivingPhoto()));
+                    photoAction->setData(provider->id());
+                    editUi->photoButton->addAction(photoAction);
+                }
+                updateDefaultPhotoAction();
+
+            } else {
+                // no IPhotoProvider plugin available!
+
+                // buggy: the photo saving does not work ATM!
+
+//                if (editUi->photoButton->pixmap().isNull())
+//                    editUi->photoButton->setDisabled(true);
+            }
             break;
         }
         case IdentityWidget::ReadOnlyMode: {
@@ -179,6 +207,14 @@ public:
         if (editUi) {
             delete editUi;
             editUi = 0;
+        }
+    }
+
+    void updateDefaultPhotoAction() {
+        QString defaultId = settings()->value(Patients::Constants::S_DEFAULTPHOTOSOURCE).toString();
+        foreach(QAction *action, editUi->photoButton->actions()) {
+            if (action->data().toString() == defaultId)
+                editUi->photoButton->setDefaultAction(action);
         }
     }
 
@@ -223,6 +259,7 @@ public:
     bool m_hasRealPhoto;
 
 private:
+    QAction *m_deletePhotoAction;
     IdentityWidget *q;
 };
 
@@ -365,7 +402,7 @@ QString IdentityWidget::currentGender() const
     switch (d->m_EditMode) {
 
     case ReadOnlyMode: {
-//        we must query the model here because the viewUi doesn't provide a good input here.
+        //        we must query the model here because the viewUi doesn't provide a good input here.
         const QModelIndex index = d->m_PatientModel->currentPatient();
         if (!index.isValid())
             return QString();
@@ -461,51 +498,28 @@ void IdentityWidget::changeEvent(QEvent *e)
     }
 }
 
-/** \brief Patient's Photograph selector. */
+/** \brief Triggers the default action of the photo button. */
 void IdentityWidget::photoButton_clicked()
 {
     if (d->m_EditMode != ReadWriteMode)
         return;
+    QAction *action = d->editUi->photoButton->defaultAction();
+    if (action)
+        action->trigger();
+}
 
-    QPixmap photo;
-
-    // TODO: right click: menu -> "delete photo" (or how to do better?)
-    // TODO: if a photo is already there -> ask user what to do
-
-    // get a list of plugin implementations that provide a photo
-    QList<Core::IPhotoProvider *> photoProviders = ExtensionSystem::PluginManager::instance()->getObjects<Core::IPhotoProvider>();
-
-    if (!photoProviders.isEmpty()) { // call the plugin
-
-        // TODO: implement code to allow having more than one photoProvider plugins
-        // and configurations to select the default one.
-        // by now just get first plugin
-
-        Core::IPhotoProvider *photoProvider = photoProviders.first();
-        photo = photoProvider->recievePhoto();
-    } else {   // if no plugins installed/active, fall back to default behaviour
-
-        QString fileName = QFileDialog::getOpenFileName(this, tr("Choose a photo"),
-                                                        QDir::homePath(),
-                                                        "Image (*.png *.jpg *.gif *.tiff)");
-        if (fileName.isEmpty()) {
-            return;
-        }
-        photo.load(fileName);
-    }
-
-    if (photo.isNull()) {
-//        setDefaultGenderPhoto();
-        d->m_hasRealPhoto = false;
+void IdentityWidget::setPhoto(QPixmap &photo)
+{
+    if (d->m_EditMode != ReadWriteMode)
         return;
+
+    if (!photo.isNull()) {
+        d->m_hasRealPhoto = true;
+
+        // resize pixmap to 64x64
+        photo = photo.scaled(QSize(64,64), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        d->editUi->photoButton->setPixmap(photo);
     }
-
-    // resize pixmap
-    photo = photo.scaled(QSize(64,64), Qt::KeepAspectRatio, Qt::SmoothTransformation);
-    d->m_hasRealPhoto = true;
-
-    // change button pixmap
-    d->editUi->photoButton->setPixmap(photo);
 }
 
 ///*!

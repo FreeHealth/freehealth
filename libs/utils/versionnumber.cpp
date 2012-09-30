@@ -59,32 +59,42 @@ VersionNumber::VersionNumber(const QString &version) :
     int dotCount = version.count(".");
     int dot = 0;
     int nextDot = 0;
+    bool ok;
     if (dotCount<1) {
-        LOG_ERROR_FOR("VersionNumber", "No major version detected");
+        LOG_ERROR_FOR("VersionNumber", "Unknown/invalid version number detected: " + version);
     } else {
         dot = version.indexOf(".");
-        m_Major = version.left(dot).toInt();
+        m_Major = version.left(dot).toInt(&ok);
+        if (!ok)
+            LOG_ERROR_FOR("VersionNumber", "Invalid major version detected: " + version.left(dot));
         ++dot;
         nextDot = version.indexOf(".", dot);
-        m_Minor = version.mid(dot,nextDot-dot).toInt();
+        m_Minor = version.mid(dot,nextDot-dot).toInt(&ok);
+        if (!ok)
+            LOG_ERROR_FOR("VersionNumber", "Invalid minor version detected: "+ version.mid(dot,nextDot-dot));
         dot = nextDot + 1;
+        // get next non-digit character
         nextDot = version.indexOf(QRegExp("\\D"), dot);
         if (nextDot!=-1) {
-            m_Debug = version.mid(dot,nextDot-dot).toInt();
+            // there is a non-digit character in the string
+            m_Debug = version.mid(dot,nextDot-dot).toInt(&ok);
+            if (!ok)
+                LOG_ERROR_FOR("VersionNumber", "Invalid debug version detected: " + version.mid(dot,nextDot-dot));
         } else {
+            // only digits
             m_Debug = version.mid(dot).toInt();
             nextDot = dot;
         }
     }
-    if (version.contains("alpha", Qt::CaseInsensitive)) {
+    if (version.contains(QRegExp("alpha\\d*", Qt::CaseInsensitive))) {
         m_IsAlpha = true;
-        m_Alpha = version.mid(version.indexOf("alpha", Qt::CaseInsensitive) + 5).toInt();
-    } else if (version.contains("beta", Qt::CaseInsensitive)) {
+        m_Alpha = version.mid(version.indexOf(QRegExp("alpha\\d*", Qt::CaseInsensitive)) + 5).toInt(&ok);
+    } else if (version.contains(QRegExp("beta\\d*", Qt::CaseInsensitive))) {
         m_IsBeta = true;
-        m_Beta = version.mid(version.indexOf("beta", Qt::CaseInsensitive) + 4).toInt();
-    } else if (version.contains("rc", Qt::CaseInsensitive)) {
+        m_Beta = version.mid(version.indexOf(QRegExp("beta\\d*", Qt::CaseInsensitive)) + 4).toInt(&ok);
+    } else if (version.contains(QRegExp("rc\\d*", Qt::CaseInsensitive))) {
         m_IsRC = true;
-        m_RC = version.mid(version.indexOf("rc", Qt::CaseInsensitive) + 2).toInt();
+        m_RC = version.mid(version.indexOf(QRegExp("rc\\d*", Qt::CaseInsensitive)) + 2).toInt(&ok);
     }
 }
 

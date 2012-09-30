@@ -69,7 +69,6 @@
     <name>Agenda::Internal::AgendaMode</name>
     <message>
         <location filename="../../plugins/agendaplugin/agendamode.cpp" line="63"/>
-        <location filename="../../plugins/agendaplugin/agendamode.cpp" line="81"/>
         <source>Agenda</source>
         <translation>Agenda</translation>
     </message>
@@ -197,8 +196,8 @@
         <translation>Beschreibung</translation>
     </message>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendarviewer.cpp" line="386"/>
-        <location filename="../../plugins/agendaplugin/usercalendarviewer.cpp" line="452"/>
+        <location filename="../../plugins/agendaplugin/usercalendarviewer.cpp" line="392"/>
+        <location filename="../../plugins/agendaplugin/usercalendarviewer.cpp" line="458"/>
         <source>Set back to default: </source>
         <extracomment>default agenda duration time (in minutes)
 ----------
@@ -206,18 +205,18 @@ default agenda duration time (in minutes)</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendarviewer.cpp" line="502"/>
+        <location filename="../../plugins/agendaplugin/usercalendarviewer.cpp" line="515"/>
         <source>Switch to patient</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendarviewer.cpp" line="504"/>
-        <source>Edit appointement</source>
+        <location filename="../../plugins/agendaplugin/usercalendarviewer.cpp" line="517"/>
+        <source>Edit appointment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/agendaplugin/usercalendarviewer.cpp" line="506"/>
-        <source>Print appointement</source>
+        <location filename="../../plugins/agendaplugin/usercalendarviewer.cpp" line="519"/>
+        <source>Print appointment</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -257,8 +256,8 @@ default agenda duration time (in minutes)</extracomment>
     </message>
     <message>
         <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.ui" line="84"/>
-        <source>Default appointement duration</source>
-        <translation>Standard-Terminlänge</translation>
+        <source>Default appointment duration</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/agendaplugin/usercalendarwizardcreatorpage.ui" line="104"/>

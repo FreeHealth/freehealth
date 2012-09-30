@@ -45,7 +45,7 @@ const char* const TEAM_WEBMASTER = QT_TRANSLATE_NOOP("tkConstants", "Webmaster")
 const char* const TEAM_TRANSLATORS = QT_TRANSLATE_NOOP("tkConstants", "Translators");
 
 // Build related
-const char* const BUILD_INFORMATION = QT_TRANSLATE_NOOP("tkConstants", "Built information");
+const char* const BUILD_INFORMATION = QT_TRANSLATE_NOOP("tkConstants", "Build information");
 const char* const BUILD_VERSION_INFORMATION = QT_TRANSLATE_NOOP("tkConstants", "Version information");
 const char* const BUILD_DATE_TIME_1_2 = QT_TRANSLATE_NOOP("tkConstants", "Built on %1 at %2");
 const char* const BUILD_VERSION_1 = QT_TRANSLATE_NOOP("tkConstants", "Build version: %1");

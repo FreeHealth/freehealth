@@ -31,7 +31,7 @@
 
 /**
   \class Calendar::CalendarPeople
-  Simple structure to manage people associated with any type of agenda classes (Appointement, UserCalendar...).\n
+  Simple structure to manage people associated with any type of agenda classes (Appointment, UserCalendar...).\n
   The type of people is referenced in Calendar::AbstractItemModel::PeopleType.\n
   Inherite this class to add people management functionalities.
 */

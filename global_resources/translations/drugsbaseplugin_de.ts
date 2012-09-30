@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.0">
+<TS version="2.0" language="de_AT">
 <context>
     <name>DatabaseUpdater</name>
     <message>
@@ -52,7 +52,7 @@ Please verify your daily scheme prescriptions and relations to meal.</source>
     <message>
         <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1048"/>
         <source>No drug database source selected</source>
-        <translation type="unfinished"></translation>
+        <translation>Keine Quelle für Medikamentendatenbank ausgewählt</translation>
     </message>
     <message>
         <location filename="../../plugins/drugsbaseplugin/drugsbase.cpp" line="1050"/>
@@ -121,12 +121,12 @@ Line: %2, Column: %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="1094"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="1095"/>
         <source>Save test only drugs too?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="1095"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="1096"/>
         <source>Drugs added for testing only are actually hidden in this prescription.
 Do you want to add them to the file?</source>
         <translation type="unfinished"></translation>
@@ -137,13 +137,13 @@ Do you want to add them to the file?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="1097"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="1098"/>
         <source>Answering &apos;no&apos; will cause definitive lost of test only drugs when reloading this file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="1174"/>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="1189"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="1175"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="1190"/>
         <source>Drugs Prescription</source>
         <translation type="unfinished"></translation>
     </message>

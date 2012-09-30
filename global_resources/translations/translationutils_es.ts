@@ -2053,10 +2053,6 @@ Text Align Justify shortcut key : Mac specific</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Built information</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Version information</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2272,6 +2268,22 @@ Place: %2</source>
     </message>
     <message>
         <source>Profession</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Priority</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Timestamp</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Users database information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Build information</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

@@ -31,7 +31,7 @@
 #include "agendacore.h"
 
 // TEST
-#include "appointement.h"
+#include "appointment.h"
 #include "calendaritemmodel.h"
 #include "eventeditorwidget.h"
 #include <utils/randomizer.h>
@@ -158,7 +158,7 @@ void AgendaPlugin::extensionsInitialized()
                                           15, 0, 0, 0, true, false, "", "mccoy.png", peoples);
         if (!u)
             return;
-        createVirtualAppointements(u);
+        createVirtualAppointments(u);
 
         // Phlox calendar (no delegates)
         qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
@@ -167,7 +167,7 @@ void AgendaPlugin::extensionsInitialized()
                                           "Virtual calendar for the virtual user Phlox",
                                           10, 0, 0, 0, true, false, "", "phlox.png", peoples);
         if (u)
-            createVirtualAppointements(u);
+            createVirtualAppointments(u);
     }
 }
 
@@ -208,13 +208,13 @@ static QString patientUid(const int row)
 //    return QString();
 //}
 
-void AgendaPlugin::createVirtualAppointements(UserCalendar *calendar)
+void AgendaPlugin::createVirtualAppointments(UserCalendar *calendar)
 {
 //    QTime chr;
 //    chr.start();
 
     qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
-    QList<Appointement *> list;
+    QList<Appointment *> list;
     Utils::Randomizer r;
     r.setPathToFiles(settings()->path(Core::ISettings::BundleResourcesPath) + "/textfiles/");
     QDir pix(settings()->path(Core::ISettings::SmallPixmapPath));
@@ -229,7 +229,7 @@ void AgendaPlugin::createVirtualAppointements(UserCalendar *calendar)
 
     for(int i = 0; i < nbEvents; ++i) {
         qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
-        Appointement *ev = 0;
+        Appointment *ev = 0;
 
         // add a duration to last start date
         start.setTime(start.addSecs(60*defaultDuration*r.randomInt(0, 5)).time());
@@ -240,7 +240,7 @@ void AgendaPlugin::createVirtualAppointements(UserCalendar *calendar)
         }
         QDateTime end = start.addSecs(60*defaultDuration);
 
-        ev = new Appointement;
+        ev = new Appointment;
         ev->setData(Constants::Db_CalId, calendarId);
         ev->setData(Constants::Db_IsValid, 1);
         ev->setData(Constants::Db_IsVirtual, 1);
@@ -343,12 +343,12 @@ void AgendaPlugin::testDatabase()
     CalendarEventQuery q;
     q.setDateRangeForCurrentWeek();
     q.setCalendarId(ucal->data(Constants::Db_CalId).toInt());
-    QList<Appointement *> list = base().getCalendarEvents(q);
+    QList<Appointment *> list = base().getCalendarEvents(q);
     qWarning() << "Retreived" << list.count() << "events from the database for user" << ucal->data(Agenda::UserCalendar::UserOwnerUid).toString() << "dateRange" << q.dateStart().toString(Qt::ISODate)<< q.dateEnd().toString(Qt::ISODate) << "in" << chrono.elapsed() << "ms";
 
     qWarning() << "PatientBase count" << numberOfPatients();
 
-    Appointement *ev = 0;
+    Appointment *ev = 0;
     int maxStatus = Calendar::availableStatus().count() - 1;
     if (list.count()==0) {
         chrono.restart();
@@ -377,7 +377,7 @@ void AgendaPlugin::testDatabase()
             QDateTime end = start.addSecs(60*15);
             ucal = cals.at(r.randomInt(0, cals.count()-1));
 
-            ev = new Appointement;
+            ev = new Appointment;
             ev->setData(Constants::Db_CalId, ucal->data(Constants::Db_CalId));
             ev->setData(Constants::Db_IsValid, 1);
             ev->setData(Constants::Db_EvId, -1);

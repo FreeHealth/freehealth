@@ -27,10 +27,12 @@
 #ifndef WEBCAM_INTERNAL_WEBCAMPREFERENCES_H
 #define WEBCAM_INTERNAL_WEBCAMPREFERENCES_H
 
-#include <coreplugin/ioptionspage.h>
+#include "webcamphotoprovider.h"
 
+#include <coreplugin/ioptionspage.h>
 #include <QWidget>
 #include <QPointer>
+#include <QMap>
 
 /**
  * \file webcampreferences.h
@@ -61,6 +63,8 @@ public:
 
     static void writeDefaultSettings(Core::ISettings *s);
 
+    void addWebcamProvider(WebcamPhotoProvider *provider);
+
 public Q_SLOTS:
     void saveToSettings(Core::ISettings *s = 0);
 
@@ -70,7 +74,6 @@ private:
 
 private:
     Ui::WebcamPreferencesWidget *ui;
-    QList<int> m_availableDevices;
 };
 
 
@@ -98,7 +101,7 @@ public:
     QWidget *createPage(QWidget *parent = 0);
 
 private:
-    QPointer<Internal::WebcamPreferencesWidget> m_Widget;
+    Internal::WebcamPreferencesWidget *m_Widget;
 };
 
 

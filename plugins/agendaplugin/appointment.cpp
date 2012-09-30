@@ -24,7 +24,7 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#include "appointement.h"
+#include "appointment.h"
 #include "calendaritemmodel.h"
 
 #include <calendar/common.h>
@@ -33,7 +33,7 @@ using namespace Agenda;
 using namespace Internal;
 
 /** Constructs an invalid item */
-Appointement::Appointement() :
+Appointment::Appointment() :
     m_Modified(false),
     m_uid(-1)
 {
@@ -45,7 +45,7 @@ Appointement::Appointement() :
     m_Data.insert(Constants::Db_IsValid, false);
 }
 
-bool Appointement::isNull() const
+bool Appointment::isNull() const
 {
     if (m_Modified)
         return false;
@@ -60,19 +60,19 @@ bool Appointement::isNull() const
     return false;
 }
 
-bool Appointement::isValid() const
+bool Appointment::isValid() const
 {
     // TODO: code here
     return true;
 }
 
-QVariant Appointement::data(const int ref) const
+QVariant Appointment::data(const int ref) const
 {
     // TODO: retrieve data from the model
     return m_Data.value(ref, QVariant());
 }
 
-bool Appointement::setData(const int ref, const QVariant &value)
+bool Appointment::setData(const int ref, const QVariant &value)
 {
     // TODO: set data to the model
     m_Modified = true;
@@ -80,12 +80,12 @@ bool Appointement::setData(const int ref, const QVariant &value)
     return true;
 }
 
-QDateTime Appointement::beginning() const
+QDateTime Appointment::beginning() const
 {
     return data(CalendarItemModel::DateStart).toDateTime();
 }
 
-QDateTime Appointement::ending() const
+QDateTime Appointment::ending() const
 {
     return data(CalendarItemModel::DateEnd).toDateTime();
 }
@@ -96,13 +96,13 @@ QDateTime Appointement::ending() const
              * 0 if item intersects [firstDay, lastDay]
              * 1 if item is entirely after lastDay
 */
-int Appointement::intersects(const QDate &firstDay, const QDate &lastDay) const
+int Appointment::intersects(const QDate &firstDay, const QDate &lastDay) const
 {
     return Calendar::intersectsDays(beginning(), ending(), firstDay, lastDay);
 }
 
 
-bool Appointement::dateLessThan(const Appointement *item1, const Appointement *item2)
+bool Appointment::dateLessThan(const Appointment *item1, const Appointment *item2)
 {
     // at first compare with begin dates. If they're equals, compare by end dates.
     // at first, compare the beginnings
@@ -126,9 +126,9 @@ bool Appointement::dateLessThan(const Appointement *item1, const Appointement *i
     return false;
 }
 
-QDebug operator<<(QDebug dbg, const Agenda::Internal::Appointement &c)
+QDebug operator<<(QDebug dbg, const Agenda::Internal::Appointment &c)
 {
-    dbg.nospace() << "Appointement("
+    dbg.nospace() << "Appointment("
                   << c.beginning().toString(QLocale().dateTimeFormat(QLocale::ShortFormat))
                   << ", "
                   << c.ending().toString(QLocale().dateTimeFormat(QLocale::ShortFormat))
@@ -144,10 +144,10 @@ QDebug operator<<(QDebug dbg, const Agenda::Internal::Appointement &c)
     return dbg.space();
 }
 
-QDebug operator<<(QDebug dbg, const Agenda::Internal::Appointement *c)
+QDebug operator<<(QDebug dbg, const Agenda::Internal::Appointment *c)
 {
     if (!c) {
-        dbg.nospace() << "Appointement(0x0)";
+        dbg.nospace() << "Appointment(0x0)";
         return dbg.space();
     }
     return operator<<(dbg, *c);

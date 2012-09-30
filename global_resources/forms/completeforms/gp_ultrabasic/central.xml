@@ -16,20 +16,23 @@
 
     <!-- Translatable values -->
     <license>GPLv3</license>
-    <description lang="fr">Dossier médical ultra-simplifié</description>
     <description lang="xx">Generic ultra-simplified patient file</description>
+    <description lang="fr">Dossier médical ultra-simplifié</description>
+    <description lang="de">Allgemeine ultra-vereinfachte Krankenakte</description>
     <category lang="xx">General practice</category>
     <category lang="fr">Médecine générale</category>
-    <specialties lang="fr">Médecine générale</specialties>
+    <specialties lang="de">Allgemeinmedizin</specialties>
     <specialties lang="xx">General practice</specialties>
+    <specialties lang="fr">Médecine générale</specialties>
+    <specialties lang="de">Allgemeinmedizin</specialties>
     <updateinfo>
       <updateversion from="0.7.2" to="0.8.0">
+        <text lang="xx">Updating form to FreeMedForms 0.8.0.</text>
         <text lang="fr">Mise à jour de compatibilité à FreeMedForms 0.8.0.</text>
-        <text lang="en">Updating form to FreeMedForms 0.8.0.</text>
       </updateversion>
       <updateversion from="0.7.0" to="0.7.2">
+        <text lang="xx">Typo in PHMx categories&lt;br />Adding uuid to PMHx categories.</text>
         <text lang="fr">Faute de frappe dans les catégories des antécédents&lt;br />Ajout des identifiants aux catégories des antécédents.</text>
-        <text lang="en">Typo in PHMx categories&lt;br />Adding uuid to PMHx categories.</text>
       </updateversion>
     </updateinfo>
 
@@ -52,22 +55,26 @@
   <MedForm name="GP::Basic::Drugs">
     <label lang="xx">Drugs</label>
     <label lang="fr">Traitements</label>
+    <label lang="de">Medikamente</label>
     <icon>__theme__/drugs.png</icon>
     <options>DontPrintEmptyValues</options>
     <MedForm name="GP::Basic::Drugs::Chronic">
       <label lang="xx">Long-term medication</label>
       <label lang="fr">Traitement chronique</label>
+      <label lang="de">Dauermedikation</label>
       <icon>__theme__/drugs.png</icon>
       <options>DontPrintEmptyValues</options>
       <Item name="GP::Basic::Drugs::Chronic::Content" type="prescriptor">
         <label lang="xx">Long-term medication</label>
         <label lang="fr">Traitement chronique</label>
+        <label lang="de">Dauermedikation</label>
         <options>DontPrintEmptyValues</options>
         <patientdata>DrugsChronicTherapeutics</patientdata>
       </Item>
       <Item name="GP::Basic::Drugs::Chronic::Comment" type="texteditor">
         <label lang="xx">Comments</label>
         <label lang="fr">Remarques</label>
+        <label lang="de">Kommentare</label>
         <options>DontPrintEmptyValues</options>
       </Item>
     </MedForm>
@@ -79,12 +86,14 @@
       <Item name="GP::Basic::Drugs::Allergies::Content" type="drugselector">
         <label lang="xx">Known drug allergies</label>
         <label lang="fr">Allergies médicamenteuses connues</label>
+        <label lang="de">Bekannte Medikamentenallergien</label>
         <options>hideselector;nointeractionchecking;DontPrintEmptyValues</options>
         <patientdata>DrugsAtcAllergies</patientdata>
       </Item>
       <Item name="GP::Basic::Drugs::Allergies::Comment" type="texteditor">
         <label lang="xx">Comments</label>
-        <label lang="xx">Remarques</label>
+        <label lang="fr">Remarques</label>
+        <label lang="de">Kommentare</label>
         <options>DontPrintEmptyValues</options>
       </Item>
     </MedForm>
@@ -92,17 +101,20 @@
   </MedForm>
 
   <MedForm name="GP::Basic::Central">
-     <label lang="fr">Dossier central</label>
     <label lang="xx">Central file</label>
+    <label lang="fr">Dossier central</label>
+    <label lang="de">Zentrale Akte</label>
     <icon>__theme__/edit.png</icon>
     <options>DontPrintEmptyValues</options>
     <MedForm name="GP::Basic::Central::Observation">
       <label lang="xx">Examination</label>
       <label lang="fr">Observation</label>
+      <label lang="de">Untersuchung</label>
       <icon>__theme__/edit.png</icon>
       <Item name="GP::Basic::Central::Observation::Text" type="texteditor">
         <label lang="xx">Examination</label>
         <label lang="fr">Observation</label>
+        <label lang="de">Untersuchung</label>
         <options>FullEditor;DontPrintEmptyValues;expanded</options>
       </Item>
     </MedForm>
@@ -110,11 +122,13 @@
     <MedForm name="GP::Basic::Central::Correspondance">
       <label lang="xx">Correspondance</label>
       <label lang="fr">Correspondance</label>
+      <label lang="de">Korrespondenz</label>
       <icon>__theme__/edit.png</icon>
       <options>DontPrintEmptyValues</options>
       <Item name="GP::Basic::Central::Correspondance::Text" type="texteditor">
         <label lang="xx">Correspondance</label>
         <label lang="fr">Correspondance</label>
+        <label lang="de">Korrespondenz</label>
         <options>FullEditor;DontPrintEmptyValues;expanded</options>
       </Item>
     </MedForm>
@@ -129,11 +143,13 @@
     <MedForm name="GP::Basic::Prescr::Text">
       <label lang="xx">Textual prescriptions</label>
       <label lang="fr">Prescriptions textuelles</label>
+      <label lang="de">Verschreibungen</label>
       <icon>__theme__/edit.png</icon>
       <options>DontPrintEmptyValues</options>
       <Item type="texteditor" name="GP::Basic::Prescr::Text::Content">
         <label lang="xx">Textual prescription</label>
         <label lang="fr">Prescription textuelle</label>
+        <label lang="de">Verschreibung</label>
         <options>FullEditor;DontPrintEmptyValues</options>
       </Item>
     </MedForm>
@@ -142,11 +158,13 @@
     <MedForm name="GP::Basic::Prescr::Drugs">
       <label lang="xx">Drugs prescriptions</label>
       <label lang="fr">Prescriptions médicamenteuses</label>
+      <label lang="de">Medikamentöse Verschreibungen</label>
       <icon>__theme__/drugs.png</icon>
       <options>DontPrintEmptyValues</options>
       <Item type="prescriptor" name="GP::Basic::Prescr::Drugs::Content">
         <label lang="xx">Therapeutic prescription</label>
         <label lang="fr">Prescription médicamenteuse</label>
+        <label lang="de">Medikamentöse Verschreibung</label>
         <options>AddChronicTherapyButton;DontPrintEmptyValues</options>
       </Item>
     </MedForm>

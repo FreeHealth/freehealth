@@ -24,8 +24,8 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef APPOINTEMENT_H
-#define APPOINTEMENT_H
+#ifndef APPOINTMENT_H
+#define APPOINTMENT_H
 
 #include <agendaplugin/constants.h>
 #include <calendar/modelanditem/calendar_people.h>
@@ -37,7 +37,7 @@
 #include <QDateTime>
 
 /**
- * \file appointement.h
+ * \file appointment.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.6.0
  * \date 18 Sept 2011
@@ -46,11 +46,11 @@
 namespace Agenda {
 namespace Internal {
 
-class Appointement : public Calendar::CalendarPeople
+class Appointment : public Calendar::CalendarPeople
 {
 public:
     // Data representation is the same as the Calendar::AbstractCalendarModel
-    Appointement();
+    Appointment();
 
     virtual bool isValid() const;
     virtual bool isNull() const;
@@ -83,7 +83,7 @@ public:
     void setModelUid(const int uid) {m_uid = uid;}
     int modelUid() const {return m_uid;}
 
-    static bool dateLessThan(const Appointement *item1, const Appointement *item2);
+    static bool dateLessThan(const Appointment *item1, const Appointment *item2);
 
 private:
     QHash<int, QVariant> m_Data;
@@ -94,7 +94,7 @@ private:
 }  // End namespace Internal
 }  // End namespace Agenda
 
-QDebug operator<<(QDebug dbg, const Agenda::Internal::Appointement &c);
-QDebug operator<<(QDebug dbg, const Agenda::Internal::Appointement *c);
+QDebug operator<<(QDebug dbg, const Agenda::Internal::Appointment &c);
+QDebug operator<<(QDebug dbg, const Agenda::Internal::Appointment *c);
 
-#endif // APPOINTEMENT_H
+#endif // APPOINTMENT_H

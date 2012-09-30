@@ -128,12 +128,12 @@ Ligne : %2, colonne : %3</translation>
         <translation>Prescription XML correctement lu.</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="1094"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="1095"/>
         <source>Save test only drugs too?</source>
         <translation>Sauvagegarder les médicaments tests aussi ?</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="1095"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="1096"/>
         <source>Drugs added for testing only are actually hidden in this prescription.
 Do you want to add them to the file?</source>
         <translation>Des médicaments ajoutés à des fins de test d&apos;interaction sont actuellement cachés.
@@ -145,13 +145,13 @@ Voulez-vous les sauvegarder aussi ?</translation>
         <translation>Aucun nom de fichier donné pour l&apos;ouverture d&apos;une prescription</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="1097"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="1098"/>
         <source>Answering &apos;no&apos; will cause definitive lost of test only drugs when reloading this file.</source>
         <translation>Répondre &apos;non&apos; peut causer une perte définitive d&apos;informations des médicaments tests lors de la prochaine ouverture.</translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="1174"/>
-        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="1189"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="1175"/>
+        <location filename="../../plugins/drugsbaseplugin/drugsio.cpp" line="1190"/>
         <source>Drugs Prescription</source>
         <translation>Prescription Medicamenteuse</translation>
     </message>

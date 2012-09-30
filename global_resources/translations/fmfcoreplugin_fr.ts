@@ -258,8 +258,8 @@ Veuillez vérfier que l&apos;hôte contient bien une configuration serveur de Fr
 <context>
     <name>Core::Internal::CoreImpl</name>
     <message>
+        <location filename="../../plugins/fmfcoreplugin/coreimpl.cpp" line="150"/>
         <location filename="../../plugins/fmfcoreplugin/coreimpl.cpp" line="152"/>
-        <location filename="../../plugins/fmfcoreplugin/coreimpl.cpp" line="154"/>
         <source>Core intialization finished...</source>
         <translation>Initialisation du Core terminée...</translation>
     </message>
@@ -867,9 +867,9 @@ Url : %1
 <context>
     <name>Core::ModeManager</name>
     <message>
-        <location filename="../../plugins/coreplugin/modemanager/modemanager.cpp" line="168"/>
-        <source>Switch to %1 mode</source>
-        <translation>Passer au mode %1</translation>
+        <location filename="../../plugins/coreplugin/modemanager/modemanager.cpp" line="209"/>
+        <source>Switch to &lt;b&gt;%1&lt;/b&gt; mode</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

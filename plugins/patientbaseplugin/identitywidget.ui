@@ -230,12 +230,6 @@
             <height>50</height>
            </size>
           </property>
-          <property name="autoDefault">
-           <bool>false</bool>
-          </property>
-          <property name="default">
-           <bool>false</bool>
-          </property>
          </widget>
         </item>
         <item>
@@ -276,7 +270,7 @@
   </customwidget>
   <customwidget>
    <class>Patients::PixmapButton</class>
-   <extends>QPushButton</extends>
+   <extends>QToolButton</extends>
    <header location="global">pixmapbutton.h</header>
   </customwidget>
  </customwidgets>
