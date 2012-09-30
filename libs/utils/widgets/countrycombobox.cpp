@@ -51,49 +51,39 @@ void CountryComboBox::setFlagPath(const QString &absPath)
 void CountryComboBox::initialize()
 {
     // populate with available countries
-    int i=1;
-    QMap<QString, int> countries;
-    while (i < 246) {
-        const QString &c = QLocale::countryToString(QLocale::Country(i));
-        if (c.isEmpty())
+    for(int i = 1; i < 246; ++i) {
+        const QString &countryName = QLocale::countryToString(QLocale::Country(i));
+        if (countryName.isEmpty())
             return;
-        countries.insert(c, i);
-        ++i;
+        QString flag = Utils::countryToIso(QLocale::Country(i));
+        addItem(QIcon(QString("%1/%2.png").arg(m_FlagPath, flag)), countryName , QVariant(QLocale::Country(i)));
     }
-    QMapIterator<QString, int> it(countries);
-    while (it.hasNext()) {
-        it.next();
-        QString flag = Utils::countryToIso(QLocale::Country(it.value()));
-        addItem(QIcon(QString("%1/%2.png").arg(m_FlagPath, flag)), it.key(), it.value());
-    }
-    //BUG: why does QLocale().system() work here instead of the default QLocale()??
-    setCurrentIndex(QLocale().system().country()-1);
+    setCurrentCountry(QLocale::system().country());
 }
 
 QLocale::Country CountryComboBox::currentCountry() const
 {
-    return QLocale::Country(currentIndex()-1);
+    bool ok;
+    int country = itemData(currentIndex()).toInt(&ok);
+    return ok? QLocale::Country(country) : QLocale::AnyCountry;
 }
 
+/*! Returns an uppercase 2-char ISO name of the current selected country. */
 QString CountryComboBox::currentIsoCountry() const
 {
-    int country = itemData(currentIndex()).toInt();
-    return Utils::countryToIso(QLocale::Country(country)).toUpper();
+    bool ok;
+    int country = itemData(currentIndex()).toInt(&ok);
+    return ok? Utils::countryToIso(QLocale::Country(country)).toUpper() : QString();
 }
 
+/*! Set the Combobox index to the country specified by the given 2-char ISO code country */
 void CountryComboBox::setCurrentIsoCountry(const QString &isoCode)
 {
-    for(int i=0; i < count(); ++i) {
-        int country = itemData(i).toInt();
-        const QString &iso = Utils::countryToIso(QLocale::Country(country)).toUpper();
-        if (iso == isoCode.toUpper()) {
-            setCurrentIndex(i);
-            break;
-        }
-    }
+    setCurrentIndex(findData(QVariant(Utils::countryIsoToCountry(isoCode))));
 }
 
+/*! Set the Combobox index to the country specified by the given \e country */
 void CountryComboBox::setCurrentCountry(QLocale::Country country)
 {
-    setCurrentIndex(country+1);
+    setCurrentIndex(findData(QVariant(country)));
 }

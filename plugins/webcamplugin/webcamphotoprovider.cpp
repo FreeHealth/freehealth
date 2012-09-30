@@ -81,7 +81,7 @@ QString WebcamPhotoProvider::name() const
 }
 
 /*!
- * Return the translated text of the object
+ * Return the translatable text of the object
  */
 QString WebcamPhotoProvider::displayText() const
 {
@@ -98,9 +98,8 @@ void  WebcamPhotoProvider::startReceivingPhoto()
 {
     WebcamDialog dialog;
     QPixmap photo;
-    if(dialog.exec() != QDialog::Accepted) {
+    if(dialog.exec() == QDialog::Accepted)
         photo = dialog.photo();
-    }
     Q_EMIT photoReady(photo);
 }
 
