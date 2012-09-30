@@ -84,7 +84,7 @@ private:
 
 private:
     QImage m_image;
-    cv::VideoCapture m_camera;
+    cv::VideoCapture m_capture;
 //    CvCapture *m_camera;
     bool m_frozen;
     int m_timerId, m_updateFreq;
@@ -93,11 +93,10 @@ private:
     QPoint m_clickOrigin;
     QPoint m_rubberOrigin;
 
-    cv::CascadeClassifier _cascade;
-    cv::MemStorage _storage;
-    cv::Mat _frame;
-    QPixmap* _pixmap;
-    int m_counter, m_frames;
+    cv::CascadeClassifier m_cascade;
+    cv::MemStorage m_storage;
+    QPixmap* m_pixmap;
+    int m_frames;
 //    QList<IplImage *> m_imageList;
     QStandardItemModel *m_imageModel;
 };
