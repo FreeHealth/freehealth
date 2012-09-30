@@ -73,10 +73,10 @@ WebcamPlugin::WebcamPlugin() :
     
     // Add here the Core::IFirstConfigurationPage objects to the pluginmanager object pool
     
-    // All preferences pages must be created in this part (before user connection)
-    m_prefPage = new WebcamPreferencesPage(this);
-    // And included in the QObject pool
-    addObject(m_prefPage);
+//    // All preferences pages must be created in this part (before user connection)
+//    m_prefPage = new WebcamPreferencesPage(this);
+//    // And included in the QObject pool
+//    addObject(m_prefPage);
     
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
     connect(Core::ICore::instance(), SIGNAL(coreAboutToClose()), this, SLOT(coreAboutToClose()));
@@ -198,11 +198,11 @@ ExtensionSystem::IPlugin::ShutdownFlag WebcamPlugin::aboutToShutdown()
         delete p;
     }
 
-    if (m_prefPage) {
-        removeObject(m_prefPage);
-        delete(m_prefPage);
-        m_prefPage = 0;
-    }
+//    if (m_prefPage) {
+//        removeObject(m_prefPage);
+//        delete(m_prefPage);
+//        m_prefPage = 0;
+//    }
     return SynchronousShutdown;
 }
 
