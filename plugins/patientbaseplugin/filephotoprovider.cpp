@@ -72,7 +72,7 @@ QString FilePhotoProvider::name() const
 
 QString FilePhotoProvider::displayText() const
 {
-    return "Choose from file...";
+    return tr("Choose from file...");
 }
 
 /*! Returns always true */

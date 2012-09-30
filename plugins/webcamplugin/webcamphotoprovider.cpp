@@ -85,7 +85,7 @@ QString WebcamPhotoProvider::name() const
 
 QString WebcamPhotoProvider::displayText() const
 {
-    return QString("Take photo with %1...").arg(name());
+    return tr("Take photo with %1...").arg(name());
 }
 
 /*!
