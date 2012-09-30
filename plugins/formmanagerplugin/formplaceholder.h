@@ -134,9 +134,11 @@ protected:
     bool isDirty() const;
 
 private Q_SLOTS:
+    void saveSortOrderToSettings(int col, Qt::SortOrder sort);
     void onCurrentPatientChanged();
     void handlePressed(const QModelIndex &index);
     void handleClicked(const QModelIndex &index);
+    void updateFormCount();
 
 private:
     void changeEvent(QEvent *event);

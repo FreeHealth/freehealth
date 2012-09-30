@@ -85,6 +85,15 @@ public:
         return itemToForm(q->itemFromIndex(firstRow));
     }
 
+    QString formLabelWithEpisodeCount(Form::FormMain *form)
+    {
+        QString label = form->spec()->label();
+        int nb = episodeBase()->getNumberOfEpisodes(form->uuid());
+        if (nb>0)
+            label += QString(" (%1)").arg(nb);
+        return label;
+    }
+
     void createFormTree()
     {
         q->clear();
@@ -97,11 +106,7 @@ public:
 
         // create one item per form
         foreach(Form::FormMain *form, _rootForm->flattenFormMainChildren()) {
-
-            QString label = form->spec()->label();
-            int nb = episodeBase()->getNumberOfEpisodes(form->uuid());
-            if (nb>0)
-                label += QString(" (%1)").arg(nb);
+            QString label = formLabelWithEpisodeCount(form);
             QString iconFile = form->spec()->iconFileName();
             iconFile.replace(Core::Constants::TAG_APPLICATION_THEME_PATH, settings()->path(Core::ISettings::SmallPixmapPath));
             QStandardItem *item = new QStandardItem(QIcon(iconFile), label);
@@ -247,6 +252,20 @@ bool FormTreeModel::isNoEpisode(const QModelIndex &index) const
 Form::FormMain *FormTreeModel::formForIndex(const QModelIndex &index) const
 {
     return d->formForIndex(index);
+}
+
+/** Update the episode count of the form element corresponding to the \e index */
+bool FormTreeModel::updateFormCount(const QModelIndex &index)
+{
+    return updateFormCount(formForIndex(index));
+}
+
+/** Update the episode count of the form element \e form */
+bool FormTreeModel::updateFormCount(Form::FormMain *form)
+{
+    QStandardItem *item = d->formToItem(form);
+    item->setText(d->formLabelWithEpisodeCount(form));
+    return true;
 }
 
 /** Update the episode count of each form of the model. The number count is directly extracted from the episode database. */
