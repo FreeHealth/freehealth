@@ -74,6 +74,7 @@ public:
 
 private Q_SLOTS:
     bool updateFormCount();
+    void onSubFormLoaded(const QString &formUid);
 
 private:
     Internal::FormTreeModelPrivate *d;

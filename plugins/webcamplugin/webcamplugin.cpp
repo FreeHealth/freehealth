@@ -116,17 +116,6 @@ bool WebcamPlugin::initialize(const QStringList &arguments, QString *errorString
     // No user is logged in until here
     
     detectDevices();
-    QMap<int, WebcamPhotoProvider*> webcamList = WebcamPhotoProvider::getProviders();
-
-    // loop through found webcams and add them to the object pool
-    if (!webcamList.isEmpty()) {
-        QMapIterator<int, WebcamPhotoProvider*> it(webcamList);
-        while(it.hasNext()) {
-            it.next();
-            WebcamPhotoProvider *provider = it.value();
-            addObject(provider);
-        }
-    }
 
     //    Core::ActionManager *am = Core::ICore::instance()->actionManager();
     //
@@ -190,13 +179,6 @@ ExtensionSystem::IPlugin::ShutdownFlag WebcamPlugin::aboutToShutdown()
     // Disconnect from signals that are not needed during shutdown
     // Hide UI (if you add UI that is not in the main window directly)
     // Remove preferences pages to plugins manager object pool
-    QMapIterator<int, WebcamPhotoProvider*> it(WebcamPhotoProvider::getProviders());
-    while(it.hasNext()) {
-        it.next();
-        WebcamPhotoProvider *p = it.value();
-        removeObject(p);
-        delete p;
-    }
 
 //    if (m_prefPage) {
 //        removeObject(m_prefPage);
@@ -206,30 +188,26 @@ ExtensionSystem::IPlugin::ShutdownFlag WebcamPlugin::aboutToShutdown()
     return SynchronousShutdown;
 }
 
+/**
+ * Detect connected webcam and create a Core::IPhotoProvider object for each device found.
+ * Created objects are sent to the plugin manager object pool.
+ */
 void WebcamPlugin::detectDevices()
 {
 
-    for(int device = 0; device<10; device++)
-    {
+    for(int device = 0; device<10; device++) {
         cv::VideoCapture cap(device);
         cv::Mat frame;
         if (cap.isOpened()) {
             cap.read(frame);
-            if(!frame.empty()) {
+            if (!frame.empty()) {
                 // add WebcamPhotoProvider object to the static list of providers
                 if (!WebcamPhotoProvider::getProviders().contains(device))
-                    new WebcamPhotoProvider(device);
+                    addAutoReleasedObject(new WebcamPhotoProvider(device, this));
             }
         }
     }
 }
-
-// void WebcamPlugin::triggerAction()
-// {
-//     QMessageBox::information(Core::ICore::instance()->mainWindow(),
-//                              tr("Action triggered"),
-//                              tr("This is an action from Webcam."));
-// }
 
 void WebcamPlugin::coreAboutToClose()
 {

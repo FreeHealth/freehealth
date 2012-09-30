@@ -28,31 +28,28 @@
 #include "webcamdialog.h"
 #include "webcamconstants.h"
 
-
 #include <coreplugin/isettings.h>
 #include <coreplugin/icore.h>
+
+#include <extensionsystem/pluginmanager.h>
 
 #include <QDebug>
 
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
+static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 
 using namespace Webcam;
-
-QMap<int, WebcamPhotoProvider*> WebcamPhotoProvider::m_webcamsPool = QMap<int, WebcamPhotoProvider*>();
 
 /*! Initializes the Provider with the device number and adds it to the pool */
 WebcamPhotoProvider::WebcamPhotoProvider(int device, QObject *parent) :
     IPhotoProvider(parent)
 {
-    m_device = device;
-    m_webcamsPool[device] = this;
+    m_deviceId = device;
 }
 
 /*! Deletes this Provider from the pool */
 WebcamPhotoProvider::~WebcamPhotoProvider()
 {
-    if (WebcamPhotoProvider::getProviders().remove(this->device()) == 0)
-        qWarning() << QString("WebcamPhotoProvider: error removing device %1").arg(device());
 }
 
 /*!
@@ -61,7 +58,7 @@ WebcamPhotoProvider::~WebcamPhotoProvider()
  */
 QString WebcamPhotoProvider::id() const
 {
-    return QString("webcam%1").arg(m_device);
+    return QString("webcam%1").arg(m_deviceId);
 }
 
 /*!
@@ -70,7 +67,7 @@ QString WebcamPhotoProvider::id() const
  */
 int WebcamPhotoProvider::device() const
 {
-    return m_device;
+    return m_deviceId;
 }
 
 /*!
@@ -80,9 +77,12 @@ int WebcamPhotoProvider::device() const
 QString WebcamPhotoProvider::name() const
 {
     //TODO: return webcam vendor/model name
-    return tr("Webcam device %1").arg(m_device);
+    return tr("Webcam device %1").arg(m_deviceId);
 }
 
+/*!
+ * Return the translated text of the object
+ */
 QString WebcamPhotoProvider::displayText() const
 {
     return tr("Take photo with %1...").arg(name());
@@ -120,14 +120,13 @@ int WebcamPhotoProvider::priority() const
 }
 
 /*!
- * \brief Returns the list of WebcamPhotoProviders that are created
- *
- * The \e key of the QMap (\e int) is the OpenCV device number, and the \value is a
- * pointer to a WebcamPhotoProvider.
+ * Returns the list of the currently existing WebcamPhotoProviders.
+ * This member just ask the plugin manager object pools.
  */
-QMap<int, WebcamPhotoProvider *> WebcamPhotoProvider::getProviders()
+QList<WebcamPhotoProvider *> WebcamPhotoProvider::getProviders()
 {
-    return m_webcamsPool;
+    QList<WebcamPhotoProvider*> objects = pluginManager()->getObjects<WebcamPhotoProvider>();
+    return objects;
 }
 
 

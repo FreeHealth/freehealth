@@ -27,6 +27,8 @@
 #include "formtreemodel.h"
 #include "iformitem.h"
 #include "episodebase.h"
+//#include "formmanager.h"
+//#include "formcore.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/ipatient.h>
@@ -49,6 +51,7 @@ using namespace Trans::ConstantTranslations;
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline Form::Internal::EpisodeBase *episodeBase() {return Form::Internal::EpisodeBase::instance();}
+//static inline Form::FormManager &formManager() {return Form::FormCore::instance().formManager();}
 static inline Core::IPatient *patient()  { return Core::ICore::instance()->patient(); }
 
 namespace Form {
@@ -141,6 +144,7 @@ FormTreeModel::FormTreeModel(Form::FormMain *emptyRootForm, QObject *parent) :
     Q_ASSERT(emptyRootForm);
     setObjectName("Form::FormTreeModel");
     d->_rootForm = emptyRootForm;
+//    connect(&formManager(), SIGNAL(subFormLoaded(QString)), this, SLOT(onSubFormLoaded(QString)));
     connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(updateFormCount()));
 }
 
@@ -260,4 +264,11 @@ bool FormTreeModel::updateFormCount()
         item->setText(label);
     }
     return true;
+}
+
+void FormTreeModel::onSubFormLoaded(const QString &formUid)
+{
+    Q_UNUSED(formUid);
+//    d->createFormTree();
+//    reset();
 }

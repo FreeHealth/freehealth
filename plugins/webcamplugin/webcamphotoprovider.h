@@ -54,13 +54,13 @@ public:
     bool isActive() const;
     int priority() const;
 
-    static QMap<int, WebcamPhotoProvider*> getProviders();
+    static QList<WebcamPhotoProvider *> getProviders();
 
 public Q_SLOTS:
     void startReceivingPhoto();
 
 private:
-    int m_device;
+    int m_deviceId;
     static QMap<int, WebcamPhotoProvider*> m_webcamsPool;
 };
 
