@@ -75,12 +75,14 @@ QLocale::Country CountryComboBox::currentCountry() const
     return QLocale::Country(currentIndex()-1);
 }
 
+/*! Returns an uppercase 2-char ISO name of the current selected country. */
 QString CountryComboBox::currentIsoCountry() const
 {
     int country = itemData(currentIndex()).toInt();
     return Utils::countryToIso(QLocale::Country(country)).toUpper();
 }
 
+/*! Set the Combobox index to the country specified by the given 2-char ISO code country */
 void CountryComboBox::setCurrentIsoCountry(const QString &isoCode)
 {
     for(int i=0; i < count(); ++i) {
@@ -93,6 +95,7 @@ void CountryComboBox::setCurrentIsoCountry(const QString &isoCode)
     }
 }
 
+/*! Set the Combobox index to the country specified by the given \e country */
 void CountryComboBox::setCurrentCountry(QLocale::Country country)
 {
     setCurrentIndex(country+1);
