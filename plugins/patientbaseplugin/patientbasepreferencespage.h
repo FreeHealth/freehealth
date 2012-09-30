@@ -59,6 +59,7 @@ public:
     ~PatientBasePreferencesWidget();
 
     static void writeDefaultSettings(Core::ISettings *s);
+    void populatePhotoProviderCombo();
     void setDataToUi();
 
 public Q_SLOTS:

@@ -46,6 +46,7 @@
 #include <coreplugin/itheme.h>
 #include <coreplugin/constants_icons.h>
 #include <coreplugin/iphotoprovider.h>
+#include <patientbaseplugin/constants_settings.h>
 
 #include <zipcodesplugin/zipcodescompleters.h>
 
@@ -167,15 +168,17 @@ public:
 
             if (!photoProviderList.isEmpty()) {
                 // sort the PhotoProviders by their priority property - this is done by the IPhotoProvider::operator< and qSort()
-                qSort(photoProviderList.begin(), photoProviderList.end());
+                qSort(photoProviderList);
 
                 QAction *photoAction;
                 foreach(Core::IPhotoProvider *provider, photoProviderList) {
                     //: which IPhotoProvider to get picture from: from URL, from Webcam, from ...
                     photoAction = new QAction(provider->displayText(), q);
                     q->connect(photoAction, SIGNAL(triggered()), provider, SLOT(startReceivingPhoto()));
+                    photoAction->setData(provider->id());
                     editUi->photoButton->addAction(photoAction);
                 }
+                updateDefaultPhotoAction();
 
             } else {
                 // no IPhotoProvider plugin available!
@@ -204,6 +207,14 @@ public:
         if (editUi) {
             delete editUi;
             editUi = 0;
+        }
+    }
+
+    void updateDefaultPhotoAction() {
+        QString defaultId = settings()->value(Patients::Constants::S_DEFAULTPHOTOSOURCE).toString();
+        foreach(QAction *action, editUi->photoButton->actions()) {
+            if (action->data().toString() == defaultId)
+                editUi->photoButton->setDefaultAction(action);
         }
     }
 

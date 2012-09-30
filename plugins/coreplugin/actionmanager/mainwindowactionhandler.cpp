@@ -1007,15 +1007,6 @@ void MainWindowActionHandler::createConfigurationActions(int actions)
         cmd->setTranslations(Trans::Constants::PREFERENCES_TEXT);
         menu->addAction(cmd, Id(Constants::G_APP_CONFIGURATION));
     }
-    if (actions & Core::MainWindowActions::A_PluginsPreferences) {
-        a = aPlugsPrefs = new QAction(this);
-        a->setObjectName("aPlugsPrefs");
-        a->setIcon(theme()->icon(Constants::ICONPLUGIN));
-        cmd = actionManager()->registerAction(a, Constants::A_PLUGINS_PREFERENCES, ctx);
-        cmd->setDefaultKeySequence(QKeySequence::SelectAll);
-        cmd->setTranslations(Trans::Constants::PLUGINS_CATEGORY);
-        menu->addAction(cmd, Id(Constants::G_APP_CONFIGURATION));
-    }
     if (actions & Core::MainWindowActions::A_ConfigureMedinTux) {
         a = aMedinTux = new QAction(this);
         a->setObjectName("aMedinTux");
