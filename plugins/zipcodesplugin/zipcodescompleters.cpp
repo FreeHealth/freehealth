@@ -259,19 +259,15 @@ void ZipCountryCompleters::createModel()
     m_Model = new ZipCountryModel(this, db, m_DbAvailable);
 }
 
-/** Define the QComboBox to use as country selector. The combo will be automatically populated and its current index will be set to the current QLocale::Country */
+/*! Define the QComboBox to use as country selector. The combo will be automatically populated and its current index will be set to the current QLocale::Country */
 void ZipCountryCompleters::setCountryComboBox(Utils::CountryComboBox *box)
 {
-    // if there was an old countryCombo, remove it's currentIndexChanged connection to here
-    if (m_countryCombo)
-        disconnect(m_countryCombo, SIGNAL(currentCountryChanged(QLocale::Country)), this, SLOT(setCountryFilter(QLocale::Country)));
-
     m_countryCombo = box;
     connect(m_countryCombo, SIGNAL(currentCountryChanged(QLocale::Country)), this, SLOT(setCountryFilter(QLocale::Country)));
     setCountryFilter(m_countryCombo->currentCountry());
 }
 
-/** Define the QLineEdit to use as city name editor */
+/*! Define the QLineEdit to use as city name editor */
 void ZipCountryCompleters::setCityLineEdit(Utils::QButtonLineEdit *city)
 {
     m_cityEdit = city;
@@ -290,9 +286,7 @@ void ZipCountryCompleters::setCityLineEdit(Utils::QButtonLineEdit *city)
     // button
     m_CityButton = new QToolButton(m_cityEdit);
     m_CityButton->setIcon(theme()->icon(Core::Constants::ICONOK));
-    m_cityEdit->setLeftButton(m_CityButton);
-//    m_CityButton->setToolTip("City button");
-
+    m_cityEdit->setRightButton(m_CityButton);
     m_cityEdit->installEventFilter(this);
 }
 
@@ -314,11 +308,11 @@ void ZipCountryCompleters::setZipLineEdit(Utils::QButtonLineEdit *zip)
     // button
     m_ZipButton = new QToolButton(m_zipEdit);
     m_ZipButton->setIcon(theme()->icon(Core::Constants::ICONOK));
-    m_zipEdit->setLeftButton(m_ZipButton);
+    m_zipEdit->setRightButton(m_ZipButton);
     m_zipEdit->installEventFilter(this);
 }
 
-/** When user select a zip or a city this private slot is activated. It causes the line edit
+/*! When user selects a zip or a city this private slot is activated. It causes the line edit
     to be populated with the selected values.
 */
 void ZipCountryCompleters::indexActivated(const QModelIndex &index)
@@ -336,6 +330,7 @@ void ZipCountryCompleters::indexActivated(const QModelIndex &index)
     checkData();
 }
 
+/*! Sets the country filter \e country for the zip/city edits */
 void ZipCountryCompleters::setCountryFilter(const QLocale::Country country)
 {
     if (!m_countryCombo)
@@ -346,23 +341,25 @@ void ZipCountryCompleters::setCountryFilter(const QLocale::Country country)
     checkData();
 }
 
+/*! Sets a the new text new as filter for the zip completer */
 void ZipCountryCompleters::zipTextChanged()
 {
     m_Model->setZipCodeFilter(m_zipEdit->completer()->completionPrefix());
 }
 
+/*! Sets a the new text new as filter for the city completer */
 void ZipCountryCompleters::cityTextChanged()
 {
     m_Model->setCityFilter(m_cityEdit->completer()->completionPrefix());
 }
 
-/** Private slot used to check the validity of the country/city/zipcode association. */
+/*! Checks validity of country/city/zipcode associationand sets icons according to the current status */
 void ZipCountryCompleters::checkData()
 {
     if (!m_zipEdit || !m_cityEdit) {
         return;
     }
-    // country should never be empty
+    // countrycombo should never be empty
     if (!m_countryCombo) {
         m_ZipButton->setIcon(theme()->icon(Core::Constants::ICONCRITICAL));
         m_CityButton->setIcon(theme()->icon(Core::Constants::ICONCRITICAL));
@@ -370,7 +367,7 @@ void ZipCountryCompleters::checkData()
         m_CityButton->setToolTip(tr("No country selected"));
         return;
     }
-    // country zipcodes available
+    // zipcodes available for selected country
     if (!m_Model->countryAvailable(m_countryCombo->currentCountry())) {
         m_ZipButton->setIcon(theme()->icon(Core::Constants::ICONHELP));
         m_CityButton->setIcon(theme()->icon(Core::Constants::ICONHELP));
@@ -383,7 +380,6 @@ void ZipCountryCompleters::checkData()
         return;
     }
 
-    // zip/city empty -> can be calculated ?
     // zip && city not empty -> check the couple with the model
     if (!m_zipEdit->text().isEmpty() && !m_cityEdit->text().isEmpty()) {
         if (m_Model->coupleExists(m_zipEdit->text(), m_cityEdit->text())) {
@@ -397,6 +393,12 @@ void ZipCountryCompleters::checkData()
             m_ZipButton->setToolTip(tr("Wrong zip/city/country association"));
             m_CityButton->setToolTip(tr("Wrong zip/city/country association"));
         }
+    }
+    if (m_zipEdit->text().isEmpty() && m_cityEdit->text().isEmpty()) {
+        m_ZipButton->setIcon(theme()->icon(Core::Constants::ICONOK));
+        m_CityButton->setIcon(theme()->icon(Core::Constants::ICONOK));
+        m_ZipButton->setToolTip(tr("Zip/city/country information available"));
+        m_CityButton->setToolTip(tr("Zip/city/country information available"));
     }
 }
 
