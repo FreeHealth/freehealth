@@ -72,6 +72,10 @@ public:
     bool isMultiEpisode(const QModelIndex &index) const {return (!isUniqueEpisode(index) && !isNoEpisode(index));}
     Form::FormMain *formForIndex(const QModelIndex &index) const;
 
+public Q_SLOTS:
+    bool updateFormCount(const QModelIndex &index);
+    bool updateFormCount(Form::FormMain *form);
+
 private Q_SLOTS:
     bool updateFormCount();
     void onSubFormLoaded(const QString &formUid);

@@ -319,15 +319,23 @@ public:
 
         ui->formDataMapper->setCurrentForm(_currentEditingForm);
 
+        // connect rowChanged from episode model to formtreemodel
+        if (_currentEpisodeModel) {
+            QObject::disconnect(_currentEpisodeModel, SIGNAL(rowsInserted(QModelIndex,int,int)), q, SLOT(updateFormCount()));
+            QObject::disconnect(_currentEpisodeModel, SIGNAL(rowsRemoved(QModelIndex,int,int)), q, SLOT(updateFormCount()));
+        }
         _currentEpisodeModel = formManager().episodeModel(_currentEditingForm);
+        QObject::connect(_currentEpisodeModel, SIGNAL(rowsInserted(QModelIndex,int,int)), q, SLOT(updateFormCount()));
+        QObject::connect(_currentEpisodeModel, SIGNAL(rowsRemoved(QModelIndex,int,int)), q, SLOT(updateFormCount()));
 
+        // create the episodemodel proxymodel
         if (_proxyModel)
             delete _proxyModel;
         _proxyModel = new QSortFilterProxyModel(q);
         _proxyModel->setSourceModel(_currentEpisodeModel);
-
         ui->episodeView->setModel(_proxyModel);
 
+        // set the view columns
         for(int i=0; i < EpisodeModel::MaxData; ++i)
             ui->episodeView->hideColumn(i);
         ui->episodeView->showColumn(EpisodeModel::ValidationStateIcon);
@@ -335,7 +343,6 @@ public:
         ui->episodeView->showColumn(EpisodeModel::UserTimeStamp);
         ui->episodeView->showColumn(EpisodeModel::Label);
         ui->episodeView->showColumn(EpisodeModel::UserCreatorName);
-
         ui->episodeView->horizontalHeader()->setResizeMode(EpisodeModel::ValidationStateIcon, QHeaderView::ResizeToContents);
         ui->episodeView->horizontalHeader()->setResizeMode(EpisodeModel::PriorityIcon, QHeaderView::ResizeToContents);
         ui->episodeView->horizontalHeader()->setResizeMode(EpisodeModel::UserTimeStamp, QHeaderView::ResizeToContents);
@@ -354,6 +361,7 @@ public:
 
         ui->episodeView->selectionModel()->clearSelection();
 
+        // set the sort order & column to the view/proxymodel
         ui->episodeView->sortByColumn(settings()->value(Constants::S_EPISODEVIEW_SORTEDCOLUMN, EpisodeModel::UserTimeStamp).toInt(),
                                       Qt::SortOrder(settings()->value(Constants::S_EPISODEVIEW_SORTORDER, Qt::DescendingOrder).toInt()));
         ui->episodeView->setSortingEnabled(true);
@@ -693,6 +701,12 @@ void FormPlaceHolder::handleClicked(const QModelIndex &index)
         QMouseEvent e(QEvent::MouseMove, vp->mapFromGlobal(cursorPos), cursorPos, Qt::NoButton, 0, 0);
         QCoreApplication::sendEvent(vp, &e);
     }
+}
+
+/** Slot connect to the current episode model (row changed) to inform the formtreemodel of the episode row count changed */
+void FormPlaceHolder::updateFormCount()
+{
+    d->_formTreeModel->updateFormCount(d->_currentEditingForm);
 }
 
 /**
