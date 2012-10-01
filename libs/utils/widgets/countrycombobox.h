@@ -63,6 +63,8 @@ Q_SIGNALS:
 
 private:
     QString m_FlagPath;
+private Q_SLOTS:
+    void on_currentIndexChanged(int index);
 };
 
 }  // End namespace Utils

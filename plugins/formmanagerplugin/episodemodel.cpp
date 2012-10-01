@@ -61,6 +61,7 @@
 #include <utils/global.h>
 #include <translationutils/constants.h>
 #include <translationutils/trans_current.h>
+
 #include <extensionsystem/pluginmanager.h>
 
 #include <QSqlTableModel>
@@ -105,53 +106,6 @@ static inline ExtensionSystem::PluginManager *pluginManager() { return Extension
 
 namespace Form {
 namespace Internal {
-
-    EpisodeModelCoreListener::EpisodeModelCoreListener(Form::EpisodeModel *parent) :
-            Core::ICoreListener(parent)
-    {
-        Q_ASSERT(parent);
-        m_EpisodeModel = parent;
-    }
-    EpisodeModelCoreListener::~EpisodeModelCoreListener() {}
-
-    bool EpisodeModelCoreListener::coreAboutToClose()
-    {
-//        qWarning() << Q_FUNC_INFO;
-        m_EpisodeModel->submit();
-        return true;
-    }
-
-    EpisodeModelPatientListener::EpisodeModelPatientListener(Form::EpisodeModel *parent) :
-            Core::IPatientListener(parent)
-    {
-        Q_ASSERT(parent);
-        m_EpisodeModel = parent;
-    }
-    EpisodeModelPatientListener::~EpisodeModelPatientListener() {}
-
-    bool EpisodeModelPatientListener::currentPatientAboutToChange()
-    {
-//        qWarning() << Q_FUNC_INFO;
-        m_EpisodeModel->submit();
-        return true;
-    }
-
-
-//    EpisodeModelUserListener::EpisodeModelUserListener(Form::EpisodeModel *parent) :
-//            UserPlugin::IUserListener(parent)
-//    {
-//        Q_ASSERT(parent);
-//        m_EpisodeModel = parent;
-//    }
-//    EpisodeModelUserListener::~EpisodeModelUserListener() {}
-
-//    bool EpisodeModelUserListener::userAboutToChange()
-//    {
-//        qWarning() << Q_FUNC_INFO;
-//        m_EpisodeModel->submit();
-//        return true;
-//    }
-//    bool EpisodeModelUserListener::currentUserAboutToDisconnect() {return true;}
 
 class EpisodeModelPrivate
 {
@@ -312,11 +266,10 @@ public:
 public:
     FormMain *_formMain;
     bool _readOnly, _useCache;
-    EpisodeModelCoreListener *m_CoreListener;
-    EpisodeModelPatientListener *m_PatientListener;
     QSqlTableModel *_sqlModel;
     QHash<int, QString> _xmlContentCache;
     QMultiHash<int, EpisodeValidationData *> _validationCache;
+    QModelIndexList _dirtyIndexes;
 
 private:
     EpisodeModel *q;
@@ -333,29 +286,12 @@ EpisodeModel::EpisodeModel(FormMain *rootEmptyForm, QObject *parent) :
     setObjectName("Form::EpisodeModel");
     d->_formMain = rootEmptyForm;
 
-    // Autosave feature
-    // -> Core Listener
-    d->m_CoreListener = new Internal::EpisodeModelCoreListener(this);
-    pluginManager()->addObject(d->m_CoreListener);
-
-    // -> User Listener
-
-    // -> Patient change listener
-    d->m_PatientListener = new Internal::EpisodeModelPatientListener(this);
-    pluginManager()->addObject(d->m_PatientListener);
-
     // Create the SQL Model
     onCoreDatabaseServerChanged();
 }
 
 EpisodeModel::~EpisodeModel()
 {
-    if (d->m_CoreListener) {
-        pluginManager()->removeObject(d->m_CoreListener);
-    }
-    if (d->m_PatientListener) {
-        pluginManager()->removeObject(d->m_PatientListener);
-    }
     if (d) {
         delete d;
         d=0;
@@ -449,9 +385,9 @@ QVariant EpisodeModel::data(const QModelIndex &index, int role) const
     case Qt::EditRole :
     case Qt::DisplayRole :
     {
-        int sqlColumn;
+        int sqlColumn = -1;
         switch (index.column()) {
-        case UserDate:  sqlColumn = Constants::EPISODES_USERDATE; break;
+        case UserTimeStamp:  sqlColumn = Constants::EPISODES_USERDATE; break;
         case Label: sqlColumn = Constants::EPISODES_LABEL; break;
         case IsValid:  sqlColumn = Constants::EPISODES_ISVALID; break;
         case CreationDate:  sqlColumn = Constants::EPISODES_DATEOFCREATION; break;
@@ -462,12 +398,18 @@ QVariant EpisodeModel::data(const QModelIndex &index, int role) const
                 return tkTr(Trans::Constants::YOU);
             return user()->fullNameOfUser(userUid);
         }
-//        case Summary:  sqlColumn = Constants::EPISODES_ISVALID; break;
+        case Priority: sqlColumn = Constants::EPISODES_PRIORITY; break;
         case XmlContent:  return d->getEpisodeContent(index); break;
         case Icon: sqlColumn = Constants::EPISODES_ISVALID; break;
         case Uuid: sqlColumn = Constants::EPISODES_ID; break;
-        case FormUuid: if (d->_formMain) return d->_formMain->uuid(); else return QString();
-        case FormLabel: if (d->_formMain) return d->_formMain->spec()->label();
+        case FormUuid:
+            if (d->_formMain)
+                return d->_formMain->uuid();
+            break;
+        case FormLabel:
+            if (d->_formMain)
+                return d->_formMain->spec()->label();
+            break;
         }  // switch (column)
 
         if (sqlColumn!=-1) {
@@ -485,17 +427,25 @@ QVariant EpisodeModel::data(const QModelIndex &index, int role) const
         QString uDate = QLocale().toString(userDate, settings()->value(Constants::S_EPISODEMODEL_SHORTDATEFORMAT, tkTr(Trans::Constants::DATEFORMAT_FOR_MODEL)).toString());
         QString label = d->_sqlModel->data(d->_sqlModel->index(index.row(), Constants::EPISODES_LABEL)).toString();
         QString userUid = d->_sqlModel->data(d->_sqlModel->index(index.row(), Constants::EPISODES_USERCREATOR)).toString();
+        int priority = d->_sqlModel->data(d->_sqlModel->index(index.row(), Constants::EPISODES_PRIORITY)).toInt();
+        QString icon;
+        switch (priority) {
+        case High: icon = theme()->iconFullPath(Core::Constants::ICONPRIORITY_HIGH); break;
+        case Medium: icon = theme()->iconFullPath(Core::Constants::ICONPRIORITY_MEDIUM); break;
+        case Low: icon = theme()->iconFullPath(Core::Constants::ICONPRIORITY_LOW); break;
+        }
         if (userUid == user()->uuid())
             userUid = tkTr(Trans::Constants::YOU);
         else
             userUid = user()->fullNameOfUser(userUid);
 
-        return QString("<p align=\"right\">%1&nbsp;-&nbsp;%2<br />"
+        return QString("<p align=\"right\"><img src=\"%5\">%1&nbsp;-&nbsp;%2<br />"
                        "<span style=\"color:gray;font-size:9pt\">%3<br />%4</span></p>")
                 .arg(uDate.replace(" ", "&nbsp;"))
                 .arg(label.replace(" ", "&nbsp;"))
                 .arg(tkTr(Trans::Constants::CREATED_BY_1).arg(userUid))
-                .arg(tkTr(Trans::Constants::ON_THE_1).arg(cDate));
+                .arg(tkTr(Trans::Constants::ON_THE_1).arg(cDate))
+                .arg(icon);
     }
     case Qt::DecorationRole :
     {
@@ -504,8 +454,19 @@ QVariant EpisodeModel::data(const QModelIndex &index, int role) const
         {
             // Scale down the icons to 12x12 or 10x10
             if (d->isEpisodeValidated(index))
-                return theme()->icon(Core::Constants::ICONLOCK_BLACKWHITE).pixmap(12,12);
-            return theme()->icon(Core::Constants::ICONUNLOCK_BLACKWHITE).pixmap(12,12);
+                return theme()->icon(Core::Constants::ICONLOCK_BLACKWHITE);//.pixmap(12,12);
+            return theme()->icon(Core::Constants::ICONUNLOCK_BLACKWHITE);//.pixmap(12,12);
+        }
+        case PriorityIcon:
+        {
+            // Scale down the icons to 12x12 or 10x10
+            int priority = d->_sqlModel->data(d->_sqlModel->index(index.row(), Constants::EPISODES_PRIORITY)).toInt();
+            switch (priority) {
+            case High: return theme()->icon(Core::Constants::ICONPRIORITY_HIGH);//.pixmap(12,12);
+            case Medium: return theme()->icon(Core::Constants::ICONPRIORITY_MEDIUM);//.pixmap(12,12);
+            case Low: return theme()->icon(Core::Constants::ICONPRIORITY_LOW);//.pixmap(12,12);
+            }
+            break;
         }
         case FormLabel:
         {
@@ -516,12 +477,15 @@ QVariant EpisodeModel::data(const QModelIndex &index, int role) const
             return QIcon(iconFile);
         }
         }  // switch (index.column())
+        break;
     }
     case Qt::SizeHintRole :
     {
         switch (index.column()) {
         case ValidationStateIcon: return QSize(22, 22);
+        case PriorityIcon: return QSize(22, 22);
         }
+        break;
     }
     }  // switch (role)
     return QVariant();
@@ -536,13 +500,14 @@ bool EpisodeModel::setData(const QModelIndex &index, const QVariant &value, int 
         return false;
 
     if ((role==Qt::EditRole) || (role==Qt::DisplayRole)) {
+        d->_dirtyIndexes << index;
         int sqlColumn = -1;
         switch (index.column()) {
         case Label: sqlColumn = Constants::EPISODES_LABEL; break;
         case IsValid: sqlColumn = Constants::EPISODES_ISVALID; break;
         case CreationDate: sqlColumn = Constants::EPISODES_DATEOFCREATION; break;
-        case UserDate: sqlColumn = Constants::EPISODES_USERDATE; break;
-            //            case Summary:  sqlColumn = Constants::EPISODES_; break;
+        case UserTimeStamp: sqlColumn = Constants::EPISODES_USERDATE; break;
+        case Priority: sqlColumn = Constants::EPISODES_PRIORITY; break;
         case XmlContent:
         {
             QModelIndex id = d->_sqlModel->index(index.row(), Constants::EPISODES_ID);
@@ -559,6 +524,8 @@ bool EpisodeModel::setData(const QModelIndex &index, const QVariant &value, int 
             bool ok = d->_sqlModel->setData(sqlIndex, value, role);
             if (ok)
                 Q_EMIT dataChanged(index, index);
+            if (index.column()==Priority)
+                Q_EMIT dataChanged(this->index(index.row(), int(PriorityIcon)), this->index(index.row(), int(PriorityIcon)));
             return ok;
         }
     }
@@ -589,7 +556,9 @@ QVariant EpisodeModel::headerData(int section, Qt::Orientation orientation, int 
         return d->_sqlModel->headerData(section, orientation, role);
 
     switch (section) {
-    case UserDate: return tkTr(Trans::Constants::DATE);
+    case ValidationStateIcon: return "V";
+    case PriorityIcon: return "P";
+    case UserTimeStamp: return tkTr(Trans::Constants::TIMESTAMP);
     case Label: return tkTr(Trans::Constants::LABEL);
     case Uuid: return tkTr(Trans::Constants::UNIQUE_IDENTIFIER);
     case IsValid: return tkTr(Trans::Constants::ISVALID);
@@ -597,6 +566,7 @@ QVariant EpisodeModel::headerData(int section, Qt::Orientation orientation, int 
     case UserCreatorName: return tkTr(Trans::Constants::AUTHOR);
     case XmlContent: return tr("Xml content");
     case Icon: return tkTr(Trans::Constants::ICON);
+    case Priority: return tkTr(Trans::Constants::PRIORITY);
     case EmptyColumn1: return QString();
     case EmptyColumn2: return QString();
     default: break;
@@ -632,6 +602,7 @@ void EpisodeModel::populateNewRowWithDefault(int row, QSqlRecord &record)
     record.setValue(Constants::EPISODES_PATIENT_UID, patient()->uuid());
     record.setValue(Constants::EPISODES_DATEOFCREATION, QDateTime::currentDateTime());
     record.setValue(Constants::EPISODES_ISVALID, 1);
+    record.setValue(Constants::EPISODES_PRIORITY, Medium);
 }
 
 /** Invalidate an episode. The episode will stay in database but will not be show in the view (unless you ask for invalid episode not to be filtered). */
@@ -662,12 +633,10 @@ bool EpisodeModel::isReadOnly() const
     return d->_readOnly;
 }
 
-/** Return true if the model has unsaved data (NOT CODED) */
+/** Return true if the model has unsaved data */
 bool EpisodeModel::isDirty() const
 {
-    // TODO: code here
-    return false;
-//    return d->_sqlModel->isDirty();
+    return d->_dirtyIndexes.count() > 0;
 }
 
 /** Validate an episode using the current user and the current date time. */
@@ -694,6 +663,27 @@ bool EpisodeModel::isEpisodeValidated(const QModelIndex &index) const
     return d->isEpisodeValidated(index);
 }
 
+/** Remove the episode \e index, and return the error state */
+bool EpisodeModel::removeEpisode(const QModelIndex &index)
+{
+    if (!index.isValid())
+        return false;
+    QModelIndex uidIndex = d->_sqlModel->index(index.row(), Constants::EPISODES_ID);
+    const QVariant &uid = d->_sqlModel->data(uidIndex);
+    bool ok = episodeBase()->removeEpisode(uid);
+    // TODO: add a trace in the episode db
+    removeRow(index.row());
+    return ok;
+}
+
+/**
+ * Populate the Form::IFormItemData of the parent Form::FormMain pointer
+ * with the content of the episode.
+ * If \e feedPatientModel is set to true and if the Form::IFormItemData has a
+ * patient data representation, patient model will be automatically populated
+ * with the value of the item data.
+ * \sa Form::IFormItemData, Form::FormItem::patientDataRepresentation()
+ */
 bool EpisodeModel::populateFormWithEpisodeContent(const QModelIndex &episode, bool feedPatientModel)
 {
     QTime chrono;
@@ -725,12 +715,14 @@ bool EpisodeModel::populateFormWithEpisodeContent(const QModelIndex &episode, bo
 
     // Populate the FormMain item data (username, userdate, label)
     QModelIndex userName = index(episode.row(), EpisodeModel::UserCreatorName);
-    QModelIndex userDate = index(episode.row(), EpisodeModel::UserDate);
+    QModelIndex userDate = index(episode.row(), EpisodeModel::UserTimeStamp);
     QModelIndex label = index(episode.row(), EpisodeModel::Label);
+    QModelIndex prior = index(episode.row(), EpisodeModel::Priority);
     d->_formMain->itemData()->setData(IFormItemData::ID_EpisodeDate, this->data(userDate));
     d->_formMain->itemData()->setData(IFormItemData::ID_EpisodeLabel, this->data(label));
     d->_formMain->itemData()->setData(IFormItemData::ID_UserName, this->data(userName));
-    d->_formMain->itemData()->setStorableData(false); // equal: _formMain->itemData()->setModified(false)
+    d->_formMain->itemData()->setData(IFormItemData::ID_Priority, this->data(prior));
+    d->_formMain->itemData()->setModified(false);
 
     // Populate FormItem data and the patientmodel
     foreach(FormItem *it, items.values()) {
@@ -762,7 +754,21 @@ bool EpisodeModel::submit()
     if (patient()->uuid().isEmpty())
         return false;
 
+    // Signal all dirty indexes
+    foreach(const QModelIndex &index, d->_dirtyIndexes)
+        Q_EMIT dataChanged(index, index);
+    d->_dirtyIndexes.clear();
+
+    // Submit the internal model (block the reset signal emitted when submitting the model)
+    d->_sqlModel->blockSignals(true);
     bool ok = d->_sqlModel->submit();
+
+    // Set all formitemdata to a non-modified state
+    foreach(FormItem *it, d->_formMain->flattenFormItemChildren()) {
+        if (it->itemData())
+            it->itemData()->setModified(false);
+    }
+    d->_sqlModel->blockSignals(false);
     return ok;
 }
 

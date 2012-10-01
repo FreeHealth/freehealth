@@ -44,7 +44,7 @@
 
 #include "agendabase.h"
 #include "constants.h"
-#include "appointement.h"
+#include "appointment.h"
 #include "calendaritemmodel.h"
 #include "nextavailabiliystepviewer.h"
 #include "usercalendar.h"
@@ -974,9 +974,9 @@ bool AgendaBase::saveUserCalendar(Agenda::UserCalendar *calendar)
 }
 
 /** Retrieve all events from database according to the Agenda::CalendarEventQuery \e calQuery. */
-QList<Appointement *> AgendaBase::getCalendarEvents(const CalendarEventQuery &calQuery)
+QList<Appointment *> AgendaBase::getCalendarEvents(const CalendarEventQuery &calQuery)
 {
-    QList<Appointement *> toReturn;
+    QList<Appointment *> toReturn;
     QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
     if (!connectDatabase(DB, __LINE__)) {
         return toReturn;
@@ -989,13 +989,13 @@ QList<Appointement *> AgendaBase::getCalendarEvents(const CalendarEventQuery &ca
     conds << Utils::Field(Constants::Table_CALENDAR, Constants::CAL_ISVALID, "=1");
     conds << Utils::Field(Constants::Table_EVENTS, Constants::EVENT_ISVALID, "=1");
     QString order;
-    // get a specific appointement ?
-    if (!calQuery.appointementId().isNull()) {
-        if (calQuery.appointementId().toInt() == -1)
+    // get a specific appointment ?
+    if (!calQuery.appointmentId().isNull()) {
+        if (calQuery.appointmentId().toInt() == -1)
             return toReturn;
-        conds << Utils::Field(Constants::Table_EVENTS, Constants::EVENT_ID, QString("='%1'").arg(calQuery.appointementId().toString()));
+        conds << Utils::Field(Constants::Table_EVENTS, Constants::EVENT_ID, QString("='%1'").arg(calQuery.appointmentId().toString()));
     } else {
-        // TODO: add virtual appointement filtering
+        // TODO: add virtual appointment filtering
         // Date conditions
         if (calQuery.hasDateRange()) {
             // TODO: code here: better management of dates in filters
@@ -1047,7 +1047,7 @@ QList<Appointement *> AgendaBase::getCalendarEvents(const CalendarEventQuery &ca
     QSqlQuery query(DB);
     if (query.exec(req)) {
         while (query.next()) {
-            Appointement *ev = new Appointement;
+            Appointment *ev = new Appointment;
             ev->setData(Constants::Db_EvId, query.value(Constants::EVENT_ID));
             ev->setData(Constants::Db_CalId, query.value(Constants::EVENT_CAL_ID));
             ev->setData(Constants::Db_ComId, query.value(Constants::EVENT_COMMON_ID));
@@ -1072,7 +1072,7 @@ QList<Appointement *> AgendaBase::getCalendarEvents(const CalendarEventQuery &ca
     // Get common data
     QHash<int, QString> where;
     for(int i = 0; i < toReturn.count(); ++i) {
-        Appointement *ev = toReturn.at(i);
+        Appointment *ev = toReturn.at(i);
         where.insert(Constants::COMMON_ID, "=" + ev->data(Constants::Db_EvId).toString());
         req = select(Constants::Table_COMMON, where);
         if (query.exec(req)) {
@@ -1102,7 +1102,7 @@ QList<Appointement *> AgendaBase::getCalendarEvents(const CalendarEventQuery &ca
         query.finish();
 
         // Get peoples
-        getRelatedPeoples(RelatedToAppointement, ev->eventId(), ev);
+        getRelatedPeoples(RelatedToAppointment, ev->eventId(), ev);
     }
 
 //    getPatientNames(toReturn);
@@ -1111,7 +1111,7 @@ QList<Appointement *> AgendaBase::getCalendarEvents(const CalendarEventQuery &ca
 }
 
 /** Save or update the common part of events and set the commonId() in the event */
-bool AgendaBase::saveCommonEvent(Appointement *event)
+bool AgendaBase::saveCommonEvent(Appointment *event)
 {
     QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
     if (!connectDatabase(DB, __LINE__)) {
@@ -1303,8 +1303,8 @@ bool AgendaBase::getRelatedPeoples(RelatedEventFor relatedTo, const int eventOrC
     return true;
 }
 
-/** Retrieve the patients name for the specified list of Appointements \e items */
-bool AgendaBase::getPatientNames(const QList<Appointement *> &items)
+/** Retrieve the patients name for the specified list of Appointments \e items */
+bool AgendaBase::getPatientNames(const QList<Appointment *> &items)
 {
     // get all patient uids
     QStringList uids;
@@ -1328,10 +1328,10 @@ bool AgendaBase::getPatientNames(const QList<Appointement *> &items)
     return true;
 }
 
-/** Retrieve the patients name for the specified Appointement \e item */
-bool AgendaBase::getPatientNames(Appointement *item)
+/** Retrieve the patients name for the specified Appointment \e item */
+bool AgendaBase::getPatientNames(Appointment *item)
 {
-    return getPatientNames(QList<Appointement *>() << item);
+    return getPatientNames(QList<Appointment *>() << item);
 }
 
 /** Create a virtual UserCalendar and return it. Pointer must be deleted. */
@@ -1384,7 +1384,7 @@ Agenda::UserCalendar *AgendaBase::createVirtualUserCalendar(const QString &owner
 }
 
 /** Save or update a Calendar::CalendarItem to the agenda database */
-bool AgendaBase::saveNonCyclingEvent(Appointement *event)
+bool AgendaBase::saveNonCyclingEvent(Appointment *event)
 {
 //    WARN_FUNC << event->eventId();
     if (!event->isModified())
@@ -1422,7 +1422,7 @@ bool AgendaBase::saveNonCyclingEvent(Appointement *event)
 
         event->setModified(false);
 
-        if (!saveRelatedPeoples(RelatedToAppointement, event->eventId(), event)) {
+        if (!saveRelatedPeoples(RelatedToAppointment, event->eventId(), event)) {
             DB.rollback();
             return false;
         }
@@ -1462,7 +1462,7 @@ bool AgendaBase::saveNonCyclingEvent(Appointement *event)
         }
         query.finish();
 
-        if (!saveRelatedPeoples(RelatedToAppointement, event->eventId(), event)) {
+        if (!saveRelatedPeoples(RelatedToAppointment, event->eventId(), event)) {
             DB.rollback();
             return false;
         }
@@ -1472,12 +1472,12 @@ bool AgendaBase::saveNonCyclingEvent(Appointement *event)
 }
 
 /** Save or update events in the database, when saved events are set to non modified. Return false in case of an error. */
-bool AgendaBase::saveCalendarEvents(const QList<Appointement *> &events)
+bool AgendaBase::saveCalendarEvents(const QList<Appointment *> &events)
 {
     bool ok = true;
     for(int i = 0; i < events.count(); ++i) {
         qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
-        Appointement *ev = events.at(i);
+        Appointment *ev = events.at(i);
         if (!saveNonCyclingEvent(ev))
             ok = false;
     }
@@ -1485,18 +1485,18 @@ bool AgendaBase::saveCalendarEvents(const QList<Appointement *> &events)
 }
 
 /** Save or update one event in the database, when saved events are set to non modified. Return false in case of an error. */
-bool AgendaBase::saveCalendarEvent(Appointement *event)
+bool AgendaBase::saveCalendarEvent(Appointment *event)
 {
-    return saveCalendarEvents(QList<Appointement *>() << event);
+    return saveCalendarEvents(QList<Appointment *>() << event);
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-/** Return the next available appointements by searching for
+/** Return the next available appointments by searching for
   - \e startSearch date time,
   - a duration of \e duration minutes
   - for the agenda \e calendar
-  - limiting search to \e numberOfDates appointements
+  - limiting search to \e numberOfDates appointments
 */
 QList<QDateTime> AgendaBase::nextAvailableTime(const QDateTime &startSearch, const int durationInMinutes, const Agenda::UserCalendar &calendar, const int numberOfDates)
 {
@@ -1531,7 +1531,7 @@ QList<QDateTime> AgendaBase::nextAvailableTime(const QDateTime &startSearch, con
     get << Utils::Field(Table_EVENTS, EVENT_DATEEND);
     Utils::JoinList joins;
     // no joins
-    // TODO: code here : condition with the type/status of appointements
+    // TODO: code here : condition with the type/status of appointments
     Utils::FieldList conds;
     conds << Utils::Field(Table_EVENTS, EVENT_ISVALID, "=1");
     conds << Utils::Field(Table_EVENTS, EVENT_CAL_ID, QString("=%1").arg(calendar.data(Constants::Db_CalId).toString()));
@@ -1545,12 +1545,12 @@ QList<QDateTime> AgendaBase::nextAvailableTime(const QDateTime &startSearch, con
     // get the first event and make tests
     DB.transaction();
     QSqlQuery query(DB);
-    QRect nextAppointement;
+    QRect nextAppointment;
     if (query.exec(req+order+limit)) {
         if (query.next()) {
             currentStart = query.value(0).toDateTime();
             currentEnd = query.value(1).toDateTime();
-            nextAppointement = NextAvailabiliyManager::dateToRect(currentStart, currentEnd);
+            nextAppointment = NextAvailabiliyManager::dateToRect(currentStart, currentEnd);
         }
     } else {
         LOG_QUERY_ERROR(query);
@@ -1577,20 +1577,20 @@ QList<QDateTime> AgendaBase::nextAvailableTime(const QDateTime &startSearch, con
         --limitComputation;
         if (limitComputation <= 0)
             break;
-        QList<QDateTime> dates = m_Next->nextAvailableTime(start, durationInMinutes, defaultDuration, nextAppointement, numberOfDates-toReturn.count());
+        QList<QDateTime> dates = m_Next->nextAvailableTime(start, durationInMinutes, defaultDuration, nextAppointment, numberOfDates-toReturn.count());
         toReturn.append(dates);
 
-        if (m_Next->hasReachedNextAppointement()) {
-            start = m_Next->requestingNewAppointementLaterThan();
-            // Get next appointement
-            nextAppointement = QRect();
+        if (m_Next->hasReachedNextAppointment()) {
+            start = m_Next->requestingNewAppointmentLaterThan();
+            // Get next appointment
+            nextAppointment = QRect();
             conds.removeLast();
             conds << Utils::Field(Table_EVENTS, EVENT_DATESTART, QString(">= '%1'").arg(start.toString(Qt::ISODate)));
             if (query.exec(select(get, joins, conds)+order+limit)) {
                 if (query.next()) {
                     currentStart = query.value(0).toDateTime();
                     currentEnd = query.value(1).toDateTime();
-                    nextAppointement = NextAvailabiliyManager::dateToRect(currentStart, currentEnd);
+                    nextAppointment = NextAvailabiliyManager::dateToRect(currentStart, currentEnd);
                 }
             } else {
                 LOG_QUERY_ERROR(query);
@@ -1603,7 +1603,7 @@ QList<QDateTime> AgendaBase::nextAvailableTime(const QDateTime &startSearch, con
 
 
 
-//    QRect nextAppointement;
+//    QRect nextAppointemnt;
 
 //    int nbFound = 0;
 //    int durationInSeconds = durationInMinutes * 60;
@@ -1626,17 +1626,17 @@ QList<QDateTime> AgendaBase::nextAvailableTime(const QDateTime &startSearch, con
 
 //        QRect testDate = dateToRect(start, durationInMinutes);
 
-//        // rect does not intersect the next recorded appointement ? -> go next appointement
-//        while (testDate.intersect(nextAppointement).height() < 1) {
+//        // rect does not intersect the next recorded appointment ? -> go next appointment
+//        while (testDate.intersect(nextAppointment).height() < 1) {
 
 //            if (WarnNextAvailableTimeWarnings)
-//                qWarning() << "\ntest" << testDate << "next" << nextAppointement << testDate.intersect(nextAppointement).height();
+//                qWarning() << "\ntest" << testDate << "next" << nextAppointment << testDate.intersect(nextAppointment).height();
 
 //            if (nbFound == numberOfDates) {
 //                DB.commit();
 //                return toReturn;
 //            }
-//            if (nextAppointement.top() <= testDate.top())
+//            if (nextAppointment.top() <= testDate.top())
 //                break;
 
 //            // rect in availabilities ?
@@ -1665,11 +1665,11 @@ QList<QDateTime> AgendaBase::nextAvailableTime(const QDateTime &startSearch, con
 //            }
 //        }
 
-//        // go at the end of nextAppointement and retry
+//        // go at the end of nextAppointment and retry
 
 //        // go next week ?
 
-////        // add before the currentDate (enough time or no appointement) ?
+////        // add before the currentDate (enough time or no appointment) ?
 ////        if (start.secsTo(currentStart) >= durationInSeconds || currentStart.isNull()) {
 ////            // does it feet the userCalendar availability ?
 ////            if (calendar.canBeAvailable(start, durationInMinutes)) {
@@ -1682,7 +1682,7 @@ QList<QDateTime> AgendaBase::nextAvailableTime(const QDateTime &startSearch, con
 ////            }
 ////        }
 
-//        // get next appointement
+//        // get next appointment
 //        //    remove the date from the SQL conditions
 //        start = currentEnd;
 //        conds.removeLast();
@@ -1691,9 +1691,9 @@ QList<QDateTime> AgendaBase::nextAvailableTime(const QDateTime &startSearch, con
 //            if (query.next()) {
 //                currentStart = query.value(0).toDateTime();
 //                currentEnd = query.value(1).toDateTime();
-//                nextAppointement = dateToRect(currentStart, currentEnd);
+//                nextAppointment = dateToRect(currentStart, currentEnd);
 //            } else {
-//                // no next appointement -> continue with usercalendar only
+//                // no next appointment -> continue with usercalendar only
 //                if (WarnNextAvailableTimeWarnings)
 //                    qWarning() <<  "no next";
 //                start = Utils::roundDateTime(start, calendar.data(UserCalendar::DefaultDuration).toInt());
@@ -1716,7 +1716,7 @@ QList<QDateTime> AgendaBase::nextAvailableTime(const QDateTime &startSearch, con
     return toReturn;
 }
 
-/** Return the next available appointement by searching for
+/** Return the next available appointment by searching for
   - \e startSearch date time,
   - a duration of \e duration minutes
   - for the agenda \e calendar

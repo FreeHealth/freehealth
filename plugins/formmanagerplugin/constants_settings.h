@@ -59,6 +59,9 @@ namespace Constants {
     const char * const S_EPISODELABELCONTENT = "EpisodeModel/episodeLabel";
     const char * const S_FOREGROUNDCOLORFORROOTS = "EpisodeModel/foregroundRoot";
 
+    const char * const S_EPISODEVIEW_SORTEDCOLUMN = "EpisodeModel/sortedColumn";
+    const char * const S_EPISODEVIEW_SORTORDER = "EpisodeModel/sortOrder";
+
     const char * const XML_FORM_GENERAL_TAG = "FormXmlContent";
 
     // Tokens

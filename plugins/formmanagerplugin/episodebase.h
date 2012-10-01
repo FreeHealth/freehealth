@@ -143,6 +143,7 @@ public:
     bool saveEpisode(const QList<EpisodeData *> &episode);
     bool saveEpisodeContent(const QVariant &uid, const QString &xml);
     bool saveEpisodeValidation(EpisodeValidationData *validation);
+    bool removeEpisode(const QVariant &uid);
 
     QList<EpisodeData *> getEpisodes(const EpisodeBaseQuery &query);
     bool getEpisodeContent(EpisodeData *episode);
@@ -159,6 +160,9 @@ private:
                           CreationOption createOption
                          );
     void populateWithDefaultValues();
+    bool setCurrentDatabaseVersion(const QString &version);
+    QString currentDatabaseVersion();
+    bool checkDatabaseVersion();
 
     // Episodes
     bool saveEpisodeValidations(Internal::EpisodeData *episode);

@@ -25,10 +25,9 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 /**
-  \class Form::FormEditorDialog
-  Dialog that allows users to add <b>sub-forms</b> to the current patient file
+ * \class Form::FormEditorDialog
+ * Dialog that allows users to add <b>sub-forms</b> to the current patient file
 */
-
 
 #include "formeditordialog.h"
 #include "formcore.h"
@@ -65,10 +64,11 @@ FormEditorDialog::FormEditorDialog(FormTreeModel *model, EditionModes mode, QWid
     Q_UNUSED(mode);
 
     ui->setupUi(this);
+    ui->formSelector->setIncludeLocalFles(true);
     ui->formSelector->setFormType(Form::FormFilesSelectorWidget::SubForms);
 
-    m_FormModel = model;
     ui->treeView->setModel(model);
+    ui->treeView->expandAll();
     ui->treeView->header()->hide();
     for(int i = 0; i< FormTreeModel::MaxData; ++i)
         ui->treeView->hideColumn(i);
@@ -98,9 +98,8 @@ void FormEditorDialog::on_addForm_clicked()
         else
             return;
     } else {
-//        QModelIndex idx = ui->treeView->selectionModel()->currentIndex();
-//        idx = proxyModel->mapToSource(idx);
-//        insertTo = m_FormModel->index(idx.row(), EpisodeModel::FormUuid, idx.parent()).data().toString();
+        QModelIndex idx = ui->treeView->selectionModel()->currentIndex();
+        insertTo = m_FormModel->data(m_FormModel->index(idx.row(), FormTreeModel::Uuid, idx.parent())).toString();
     }
 
     // Save to database
@@ -110,17 +109,12 @@ void FormEditorDialog::on_addForm_clicked()
     QVector<SubFormInsertionPoint> insertions;
     for(int i=0; i < selected.count(); ++i) {
         Form::FormIODescription *insert = selected.at(i);
-//        m_LastInsertedFormUid = ;
         SubFormInsertionPoint point(insertTo, insert->data(Form::FormIODescription::UuidOrAbsPath).toString());
         point.setEmitInsertionSignal(true); // inform everyone of the newly added subform
         insertions << point;
         formManager().insertSubForm(point);
     }
     episodeBase()->addSubForms(insertions);
-
-    // Re-create the patient form
-//    m_FormModel->refreshFormTree();
-
 }
 
 void FormEditorDialog::changeEvent(QEvent *e)

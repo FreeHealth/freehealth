@@ -40,7 +40,7 @@
 #include <coreplugin/translators.h>
 #include <coreplugin/itheme.h>
 
-#include <QtCore/QtPlugin>
+#include <QtPlugin>
 #include <QDebug>
 
 using namespace AccountDB;

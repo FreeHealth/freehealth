@@ -76,17 +76,17 @@ public:
 
     QVariant data(const QModelIndex &index, int role) const;
 
-    bool countryAvailable(const int country) const;
+    bool countryAvailable(const QLocale::Country country) const;
     bool coupleExists(const QString &zip, const QString &city) const;
 
 public Q_SLOTS:
-    void filterCity(const QString &name);
-    void filterZipCode(const QString &zipCode);
-    void filterCountry(const QString &country);
+    void setCityFilter(const QString &city);
+    void setZipCodeFilter(const QString &zipCode);
+    void setCountryIsoFilter(const QString &country);
 
 private:
     QSqlDatabase db;
-    QString m_Zip,m_City, m_Country;
+    QString m_Zip,m_City, m_countryIso;
     bool m_DbAvailable;
 };
 }  // End namespace Internal
@@ -106,7 +106,7 @@ public:
 
 private Q_SLOTS:
     void indexActivated(const QModelIndex &index);
-    void filterCountry(const int index);
+    void setCountryFilter(const QLocale::Country country);
     void zipTextChanged();
     void cityTextChanged();
     void packChanged(const DataPack::Pack &pack);
@@ -116,8 +116,8 @@ private:
     bool eventFilter(QObject *, QEvent *);
 
 private:
-    Utils::QButtonLineEdit *m_City, *m_Zip;
-    Utils::CountryComboBox *m_Country;
+    Utils::QButtonLineEdit *m_cityEdit, *m_zipEdit;
+    Utils::CountryComboBox *m_countryCombo;
     Internal::ZipCountryModel *m_Model;
     QAbstractItemView *m_View;
     QToolButton *m_ZipButton, *m_CityButton;

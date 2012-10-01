@@ -130,6 +130,7 @@ EpisodeBase::EpisodeBase(QObject *parent) :
     addField(Table_EPISODES, EPISODES_USERDATE, "USERDATE", FieldIsDate);
     addField(Table_EPISODES, EPISODES_DATEOFCREATION, "DATECREATION", FieldIsDate);
     addField(Table_EPISODES, EPISODES_USERCREATOR, "CREATOR", FieldIsUUID);
+    addField(Table_EPISODES, EPISODES_PRIORITY, "PRIOR", FieldIsInteger, "1"); // Medium
     addIndex(Table_EPISODES, EPISODES_ID);
     addIndex(Table_EPISODES, EPISODES_PATIENT_UID);
     addIndex(Table_EPISODES, EPISODES_FORM_PAGE_UID);
@@ -216,7 +217,10 @@ bool EpisodeBase::initialize()
         LOG(tkTr(Trans::Constants::CONNECTED_TO_DATABASE_1_DRIVER_2).arg(database().connectionName()).arg(database().driverName()));
     }
 
-    //    d->checkDatabaseVersion();
+    if (!checkDatabaseVersion()) {
+        LOG_ERROR(tr("Unable to update the database schema"));
+        return false;
+    }
 
     if (!checkDatabaseScheme()) {
         LOG_ERROR(tkTr(Trans::Constants::DATABASE_1_SCHEMA_ERROR).arg(DB_NAME));
@@ -309,18 +313,7 @@ bool EpisodeBase::createDatabase(const QString &connectionName , const QString &
     }
 
     // Add version number
-    DB.transaction();
-    QSqlQuery query(DB);
-    query.prepare(prepareInsertQuery(Table_VERSION));
-    query.bindValue(VERSION_TEXT, DB_ACTUALVERSION);
-    if (!query.exec()) {
-        LOG_QUERY_ERROR(query);
-        query.finish();
-        DB.rollback();
-        return false;
-    }
-    DB.commit();
-
+    setCurrentDatabaseVersion(Constants::DB_ACTUALVERSION);
     populateWithDefaultValues();
 
     return true;
@@ -331,6 +324,61 @@ void EpisodeBase::populateWithDefaultValues()
 {
     // set default patient FormFile
     setGenericPatientFormFile(QString("%1/%2").arg(Core::Constants::TAG_APPLICATION_COMPLETEFORMS_PATH).arg(Core::Constants::S_DEF_PATIENTFORMS_FILENAME));
+}
+
+bool EpisodeBase::setCurrentDatabaseVersion(const QString &version)
+{
+    QSqlDatabase DB = QSqlDatabase::database(DB_NAME);
+    if (!connectDatabase(DB, __LINE__))
+        return false;
+    DB.transaction();
+    QSqlQuery query(DB);
+    query.prepare(prepareInsertQuery(Table_VERSION));
+    query.bindValue(VERSION_TEXT, version);
+    if (!query.exec()) {
+        LOG_QUERY_ERROR(query);
+        query.finish();
+        DB.rollback();
+        return false;
+    }
+    query.finish();
+    DB.commit();
+    return true;
+}
+
+QString EpisodeBase::currentDatabaseVersion()
+{
+    QSqlDatabase DB = QSqlDatabase::database(DB_NAME);
+    if (!connectDatabase(DB, __LINE__))
+        return QString::null;
+    DB.transaction();
+    QString version;
+    QSqlQuery query(DB);
+    if (query.exec(select(Constants::Table_VERSION, Constants::VERSION_TEXT))) {
+        if (query.next()) {
+            version = query.value(0).toString();
+        }
+    } else {
+        LOG_QUERY_ERROR(query);
+        query.finish();
+        DB.rollback();
+        return QString::null;
+    }
+    query.finish();
+    DB.commit();
+    return version;
+}
+
+bool EpisodeBase::checkDatabaseVersion()
+{
+    QString currentVersion = currentDatabaseVersion();
+    // Updates from 0.1
+    if (currentVersion == "0.1") {
+        if (!alterTableForNewField(Constants::Table_EPISODES, Constants::EPISODES_PRIORITY))
+            return false;
+    }
+    // Update the database version
+    return setCurrentDatabaseVersion(Constants::DB_ACTUALVERSION);
 }
 
 void EpisodeBase::onCoreDatabaseServerChanged()
@@ -357,9 +405,8 @@ void EpisodeBase::onCoreFirstRunCreationRequested()
 bool EpisodeBase::setGenericPatientFormFile(const QString &absPathOrUid)
 {
     QSqlDatabase DB = QSqlDatabase::database(DB_NAME);
-    if (!connectDatabase(DB, __LINE__)) {
+    if (!connectDatabase(DB, __LINE__))
         return false;
-    }
     DB.transaction();
     QHash<int, QString> where;
     where.insert(FORM_GENERIC, QString("IS NOT NULL"));
@@ -772,7 +819,7 @@ bool EpisodeBase::saveEpisode(const QList<EpisodeData *> &episodes)
 /** Save the raw XML episode content. Does not manage modification traces. */
 bool EpisodeBase::saveEpisodeContent(const QVariant &uid, const QString &xml)
 {
-    qWarning() << "SAVE EPISODE CONTENT" << uid << xml;
+    qWarning() << "saveEpisodeContent";
     if (!uid.isValid())
         return false;
     if (uid.toInt() < 0)
@@ -871,6 +918,30 @@ bool EpisodeBase::saveEpisodeValidation(EpisodeValidationData *validation)
             validation->setData(EpisodeValidationData::ValidationId, query.lastInsertId());
             validation->setModified(false);
         }
+    }
+    query.finish();
+    DB.commit();
+    return true;
+}
+
+/** Remove the episode from the database. The episode is marked as non-valid (IsValid field) */
+bool EpisodeBase::removeEpisode(const QVariant &uid)
+{
+    QSqlDatabase DB = QSqlDatabase::database(DB_NAME);
+    if (!connectDatabase(DB, __LINE__))
+        return false;
+    using namespace Constants;
+    QHash<int, QString> where;
+    where.insert(EPISODES_ID, QString("='%1'").arg(uid.toString()));
+    DB.transaction();
+    QSqlQuery query(DB);
+    query.prepare(prepareUpdateQuery(Table_EPISODES, EPISODES_ISVALID, where));
+    query.bindValue(0, "0");
+    if (!query.exec()) {
+        LOG_QUERY_ERROR(query);
+        query.finish();
+        DB.rollback();
+        return false;
     }
     query.finish();
     DB.commit();

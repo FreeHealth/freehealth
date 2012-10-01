@@ -26,29 +26,108 @@
 #include "webcamphotoprovider.h"
 //#include "webcamdialog.h"
 #include "webcamdialog.h"
+#include "webcamconstants.h"
+
+#include <coreplugin/isettings.h>
+#include <coreplugin/icore.h>
+
+#include <extensionsystem/pluginmanager.h>
+
+#include <QDebug>
+
+static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
+static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionSystem::PluginManager::instance();}
 
 using namespace Webcam;
 
-WebcamPhotoProvider::WebcamPhotoProvider()
+/*! Initializes the Provider with the device number and adds it to the pool */
+WebcamPhotoProvider::WebcamPhotoProvider(int device, QObject *parent) :
+    IPhotoProvider(parent)
 {
+    m_deviceId = device;
 }
 
+/*! Deletes this Provider from the pool */
 WebcamPhotoProvider::~WebcamPhotoProvider()
-{}
+{
+}
 
 /*!
- * \brief returns Photo that is captured by the selected webcam.
- *
- * All of the code is in this function, there is no async calling, because
- * the dialog should be modal and no other functions should be possible
- * meanwhile.
+ * Returns an machine readable uid name for the webcam device
+ * \sa name(), device()
  */
-QPixmap WebcamPhotoProvider::recievePhoto()
+QString WebcamPhotoProvider::id() const
+{
+    return QString("webcam%1").arg(m_deviceId);
+}
+
+/*!
+ * Returns the OpenCV device number for the webcam device
+ * \sa id(), name()
+ */
+int WebcamPhotoProvider::deviceId() const
+{
+    return m_deviceId;
+}
+
+/*!
+ * Returns a human readable name for the webcam device
+ * \sa id(), device()
+ */
+QString WebcamPhotoProvider::name() const
+{
+    //TODO: return webcam vendor/model name
+    return tr("Webcam device %1").arg(m_deviceId);
+}
+
+/*!
+ * Return the translatable text of the object
+ */
+QString WebcamPhotoProvider::displayText() const
+{
+    return tr("Take photo with %1...").arg(name());
+}
+
+/*!
+ * \brief Opens the webcam dialog and emits photoReady() when finished.
+ *
+ * When no photo was selected, then emitted pixmap is an empty QPixmap().
+ *\sa photoReady()
+ */
+void  WebcamPhotoProvider::startReceivingPhoto()
 {
     WebcamDialog dialog;
-    if(dialog.exec() != QDialog::Accepted) {
-        return QPixmap();
-    }
-    return dialog.photo();
+    QPixmap photo;
+    if(dialog.exec() == QDialog::Accepted)
+        photo = dialog.photo();
+    Q_EMIT photoReady(photo);
 }
+
+bool WebcamPhotoProvider::isEnabled() const
+{
+    return isActive() ;//&& settings()->value(Constants::S_WEBCAM_ENABLED).toBool();
+}
+
+bool WebcamPhotoProvider::isActive() const
+{
+    return false;
+}
+
+/*! Returns a high priority, webcams should be listed first. */
+int WebcamPhotoProvider::priority() const
+{
+    return 10;
+}
+
+/*!
+ * Returns the list of the currently existing WebcamPhotoProviders.
+ * This member just asks the plugin manager object pool.
+ * \sa PluginManager::addObject(), PluginManager::removeObject(), PluginManager::getObjects(),
+ */
+QList<WebcamPhotoProvider *> WebcamPhotoProvider::getProviders() //static
+{
+    QList<WebcamPhotoProvider*> objects = pluginManager()->getObjects<WebcamPhotoProvider>();
+    return objects;
+}
+
 

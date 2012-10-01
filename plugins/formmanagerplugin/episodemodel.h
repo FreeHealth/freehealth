@@ -29,9 +29,6 @@
 
 #include <formmanagerplugin/formmanager_exporter.h>
 
-#include <coreplugin/icorelistener.h>
-#include <coreplugin/ipatientlistener.h>
-
 #include <QAbstractListModel>
 QT_BEGIN_NAMESPACE
 class QSqlRecord;
@@ -58,29 +55,6 @@ class FormManager;
 
 namespace Internal {
 class EpisodeModelPrivate;
-
-class EpisodeModelCoreListener : public Core::ICoreListener
-{
-    Q_OBJECT
-public:
-    EpisodeModelCoreListener(Form::EpisodeModel *parent);
-    ~EpisodeModelCoreListener();
-    bool coreAboutToClose();
-private:
-    Form::EpisodeModel *m_EpisodeModel;
-};
-
-class EpisodeModelPatientListener : public Core::IPatientListener
-{
-    Q_OBJECT
-public:
-    EpisodeModelPatientListener(Form::EpisodeModel *parent);
-    ~EpisodeModelPatientListener();
-    bool currentPatientAboutToChange();
-private:
-    Form::EpisodeModel *m_EpisodeModel;
-};
-
 }  // namespace Internal
 
 class FORM_EXPORT EpisodeModel : public QAbstractListModel
@@ -96,11 +70,12 @@ protected:
 public:
     enum DataRepresentation {
         ValidationStateIcon = 0,
-        UserDate,
+        PriorityIcon,
+        UserTimeStamp,
         Label,
         IsValid,
         CreationDate,
-//        Summary,
+        Priority,
         UserCreatorName,
         XmlContent,
         Icon,
@@ -111,6 +86,13 @@ public:
         EmptyColumn2,
         MaxData
     };
+
+    enum Priority {
+        High = 0,
+        Medium,
+        Low
+    };
+
     virtual ~EpisodeModel();
     QString formUid() const;
     void setCurrentPatient(const QString &uuid);
@@ -138,6 +120,8 @@ public:
 
     bool validateEpisode(const QModelIndex &index);
     bool isEpisodeValidated(const QModelIndex &index) const;
+
+    bool removeEpisode(const QModelIndex &index);
 
 public Q_SLOTS:
     bool populateFormWithEpisodeContent(const QModelIndex &episode, bool feedPatientModel);

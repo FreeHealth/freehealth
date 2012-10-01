@@ -45,6 +45,7 @@
 QT_BEGIN_NAMESPACE
 class QGroupBox;
 class QButtonGroup;
+class QToolButton;
 class QGridLayout;
 class QCheckBox;
 class QRadioButton;
@@ -92,6 +93,10 @@ public:
     BaseForm(Form::FormItem *linkedObject, QWidget *parent = 0);
     ~BaseForm();
 
+    void createActions();
+    int currentPriority() const;
+    void setCurrentPriority(const int priority);
+
     void addWidgetToContainer(Form::IFormWidget *widget);
     bool isContainer() const {return true;}  // Always return true even if using QtUiFiles
 
@@ -100,7 +105,6 @@ public:
 
 public Q_SLOTS:
     void retranslate();
-    void triggered(QAction *action);
 
 public:
     QDateTimeEdit *m_EpisodeDate;
@@ -109,8 +113,9 @@ public:
 private:
     QGridLayout *m_ContainerLayout;
     int i, row, col, numberColumns;
-    Ui::BaseFormWidget *m_Header;
-    QAction *aScreenshot;
+    Ui::BaseFormWidget *ui;
+    QAction *aScreenshot, *aHigh, *aMedium, *aLow;
+    QToolButton *m_PriorityButton;
 };
 
 // Used to pass episode date, label, user...
@@ -125,6 +130,7 @@ public:
 
     Form::FormItem *parentItem() const {return m_FormItem;}
     bool isModified() const;
+    void setModified(bool modified);
 
     // Use setData/Data for episode data
     bool setData(const int ref, const QVariant &data, const int role = Qt::EditRole);
@@ -187,6 +193,7 @@ public:
 
     Form::FormItem *parentItem() const {return m_FormItem;}
     bool isModified() const;
+    void setModified(bool modified);
 
     bool setData(const int ref, const QVariant &data, const int role = Qt::EditRole);
     QVariant data(const int ref, const int role = Qt::DisplayRole) const;
@@ -238,6 +245,7 @@ public:
 
     Form::FormItem *parentItem() const {return m_FormItem;}
     bool isModified() const;
+    void setModified(bool modified);
 
     bool setData(const int ref, const QVariant &data, const int role = Qt::EditRole);
     QVariant data(const int ref, const int role = Qt::DisplayRole) const;
@@ -289,6 +297,7 @@ public:
 
     Form::FormItem *parentItem() const {return m_FormItem;}
     bool isModified() const;
+    void setModified(bool modified);
 
     bool setData(const int ref, const QVariant &data, const int role = Qt::EditRole);
     QVariant data(const int ref, const int role = Qt::DisplayRole) const;
@@ -338,6 +347,7 @@ public:
 
     Form::FormItem *parentItem() const {return m_FormItem;}
     bool isModified() const;
+    void setModified(bool modified);
 
     bool setData(const int ref, const QVariant &data, const int role = Qt::EditRole);
     QVariant data(const int ref, const int role = Qt::DisplayRole) const;
@@ -404,6 +414,7 @@ public:
 
     Form::FormItem *parentItem() const {return m_FormItem;}
     bool isModified() const;
+    void setModified(bool modified);
 
     bool setData(const int ref, const QVariant &data, const int role = Qt::EditRole);
     QVariant data(const int ref, const int role = Qt::DisplayRole) const;
@@ -453,6 +464,7 @@ public:
 
     Form::FormItem *parentItem() const {return m_FormItem;}
     bool isModified() const;
+    void setModified(bool modified);
 
     bool setData(const int ref, const QVariant &data, const int role = Qt::EditRole);
     QVariant data(const int ref, const int role = Qt::DisplayRole) const;
@@ -505,6 +517,7 @@ public:
 
     Form::FormItem *parentItem() const {return m_FormItem;}
     bool isModified() const;
+    void setModified(bool modified);
 
     bool setData(const int ref, const QVariant &data, const int role = Qt::EditRole);
     QVariant data(const int ref, const int role = Qt::DisplayRole) const;
@@ -553,6 +566,7 @@ public:
 
     Form::FormItem *parentItem() const {return m_FormItem;}
     bool isModified() const;
+    void setModified(bool modified);
 
     bool setData(const int ref, const QVariant &data, const int role = Qt::EditRole);
     QVariant data(const int ref, const int role = Qt::DisplayRole) const;

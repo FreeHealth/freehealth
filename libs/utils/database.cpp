@@ -2088,6 +2088,15 @@ bool Database::alterTableForNewField(const int tableRef, const int newFieldRef, 
             defaultSql = QString("DEFAULT %1").arg(nullOption);
         else if (driver()==SQLite)
             defaultSql = QString("DEFAULT %1").arg(nullOption);
+    } else {
+        const QString &defaultValue = d_database->m_DefaultFieldValue.value(d_database->index(tableRef, newFieldRef));
+        if (!defaultValue.isEmpty()) {
+            // TODO: manage NULL, numbers, string (that needs to be escaped)
+            if (driver()==MySQL)
+                defaultSql = QString("DEFAULT %1").arg(defaultValue);
+            else if (driver()==SQLite)
+                defaultSql = QString("DEFAULT %1").arg(defaultValue);
+        }
     }
 
     QString type = d_database->getTypeOfField(d_database->index(tableRef, newFieldRef));
@@ -2095,6 +2104,9 @@ bool Database::alterTableForNewField(const int tableRef, const int newFieldRef, 
     req = QString("ALTER TABLE `%1`"
                   "  ADD `%2` %3 %4;")
             .arg(table(tableRef), fieldName(tableRef, newFieldRef), type, defaultSql);
+
+    if (WarnSqlCommands)
+        qWarning() << req;
 
     DB.transaction();
     QSqlQuery query(DB);

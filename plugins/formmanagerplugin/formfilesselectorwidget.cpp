@@ -262,6 +262,7 @@ void FormFilesSelectorWidget::expandAllItems() const
  * The form selector asks Form::IFormIO engines for forms. You can require only
  * forms from database and include local files. By default, local files are not
  * included in the form selector.
+ * If you set this value you must redefine the FormType using setFormType().
  */
 void FormFilesSelectorWidget::setIncludeLocalFles(bool includeLocal)
 {

@@ -31,7 +31,15 @@
 
 #include <QString>
 
+/**
+ * \file subforminsertionpoint.h
+ * \author Eric MAEKER
+ * \version 0.8.0
+ * \date 01 Oct 2012
+*/
+
 namespace Form {
+class FormMain;
 // TODO: should be internal and not exported
 
 class FORM_EXPORT SubFormInsertionPoint
@@ -39,7 +47,7 @@ class FORM_EXPORT SubFormInsertionPoint
 public:
     SubFormInsertionPoint(const QString &receiverUid, const QString &addUid) :
             m_ReceiverFormUid(receiverUid),
-            m_AddFormUid(addUid),
+            m_SubFormUid(addUid),
             m_AppendToForm(false),
             m_AddAsChild(true),
             m_EmitInsertionSignal(false)
@@ -54,24 +62,30 @@ public:
     ~SubFormInsertionPoint() {}
 
     void setReceiverUid(const QString &uid) {m_ReceiverFormUid = uid;}
-    void setSubFormUid(const QString &uid) {m_AddFormUid = uid;}
+    void setSubFormUid(const QString &uid) {m_SubFormUid = uid;}
+    void setEmptyRootSubForm(Form::FormMain *emptyRootSubForm) {m_emptyRootSubForm = emptyRootSubForm;}
     void setAppendToForm(bool append) {m_AppendToForm = append;}
     void setAddAsChild(bool asChild) {m_AddAsChild = asChild;}
     void setEmitInsertionSignal(bool emitSignal) {m_EmitInsertionSignal = emitSignal;}
 
-    QString subFormUid() const {return m_AddFormUid;}
+    Form::FormMain *emptyRootSubForm() const {return m_emptyRootSubForm;}
+    QString subFormUid() const {return m_SubFormUid;}
     QString receiverUid() const {return m_ReceiverFormUid;}
     bool appendToForm() const {return m_AppendToForm;}
     bool addAsChild() const {return m_AddAsChild;}
     bool emitInsertionSignal() const {return m_EmitInsertionSignal;}
 
 private:
-    QString m_ReceiverFormUid, m_AddFormUid;
+    QString m_ReceiverFormUid, m_SubFormUid;
+    Form::FormMain *m_emptyRootSubForm;
     bool m_AppendToForm;
     bool m_AddAsChild;
     bool m_EmitInsertionSignal;
 };
 
 }  // end namespace Form
+
+QDebug operator<<(QDebug dbg, const Form::SubFormInsertionPoint &c);
+QDebug operator<<(QDebug dbg, const Form::SubFormInsertionPoint *c);
 
 #endif // SUBFORMINSERTIONPOINT_H

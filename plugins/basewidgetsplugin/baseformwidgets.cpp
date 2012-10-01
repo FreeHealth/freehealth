@@ -327,33 +327,33 @@ BaseForm::BaseForm(Form::FormItem *formItem, QWidget *parent) :
     Form::IFormWidget(formItem, parent),
     m_ContainerLayout(0),
     i(0), row(0), col(0), numberColumns(1),
-    m_Header(0),
-    aScreenshot(0)
+    ui(0),
+    aScreenshot(0),
+    aHigh(0), aMedium(0), aLow(0),
+    m_PriorityButton(new QToolButton(this))
 {
     setObjectName("BaseForm");
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
 
     // add a header with date, episode name and screenshot button - every episode has this
     QWidget *header = new QWidget(this);
-    m_Header = new Ui::BaseFormWidget;
-    m_Header->setupUi(header);
+    ui = new Ui::BaseFormWidget;
+    ui->setupUi(header);
 
-    m_EpisodeDate = m_Header->dateTimeEdit;
+    m_EpisodeDate = ui->dateTimeEdit;
     m_EpisodeDate->setDisplayFormat(tkTr(Trans::Constants::DATEFORMAT_FOR_EDITOR));
 
     m_EpisodeDate->setEnabled(false);
     m_EpisodeDate->setCalendarPopup(true);
 
-    m_EpisodeLabel = m_Header->lineEdit;
+    m_EpisodeLabel = ui->lineEdit;
     m_EpisodeLabel->setEnabled(false);
-    m_Header->label->setText(m_FormItem->spec()->label());
+    m_PriorityButton->setToolButtonStyle(Qt::ToolButtonIconOnly);
+    m_PriorityButton->setPopupMode(QToolButton::InstantPopup);
+    ui->lineEdit->setLeftButton(m_PriorityButton);
+    ui->label->setText(m_FormItem->spec()->label());
 
-    aScreenshot = new QAction(this);
-    aScreenshot->setIcon(theme()->icon(Core::Constants::ICONTAKESCREENSHOT));
-    m_Header->toolButton->addAction(aScreenshot);
-    connect(m_Header->toolButton, SIGNAL(triggered(QAction*)), this, SLOT(triggered(QAction*)));
-    m_Header->toolButton->setDefaultAction(aScreenshot);
-    m_Header->toolButton->setFocusPolicy(Qt::ClickFocus);
+    ui->toolButton->hide();
 
     // create main widget
     QWidget *mainWidget = 0;
@@ -407,6 +407,7 @@ BaseForm::BaseForm(Form::FormItem *formItem, QWidget *parent) :
 
     mainLayout->addWidget(mainWidget);
     mainLayout->addStretch();
+    createActions();
 
     // create itemdata
     BaseFormData *baseFormData = new BaseFormData(formItem);
@@ -418,13 +419,59 @@ BaseForm::BaseForm(Form::FormItem *formItem, QWidget *parent) :
 
 BaseForm::~BaseForm()
 {
-    if (m_Header) {
-        delete m_Header;
-        m_Header = 0;
+    if (ui) {
+        delete ui;
+        ui = 0;
     }
 }
 
-void BaseForm::addWidgetToContainer(IFormWidget * widget)
+/** Create the priority actions and populate the priority toolbutton */
+void BaseForm::createActions()
+{
+    QAction *a;
+    a = aHigh = new QAction(this);
+    a->setIcon(theme()->icon(Core::Constants::ICONPRIORITY_HIGH));
+    a = aMedium = new QAction(this);
+    a->setIcon(theme()->icon(Core::Constants::ICONPRIORITY_MEDIUM));
+    a = aLow = new QAction(this);
+    a->setIcon(theme()->icon(Core::Constants::ICONPRIORITY_LOW));
+    m_PriorityButton->addAction(aHigh);
+    m_PriorityButton->addAction(aMedium);
+    m_PriorityButton->addAction(aLow);
+    m_PriorityButton->setDefaultAction(aLow);
+//    connect(m_PriorityButton, SIGNAL(triggered(QAction*)), this, SLOT(priorityActionTriggered(QAction*)));
+}
+
+/** Return current priority according to the Form::EpisodeModel::Priority enum */
+int BaseForm::currentPriority() const
+{
+    QAction *a = m_PriorityButton->defaultAction();
+    if (a == aHigh)
+        return 0;
+    if (a == aMedium)
+        return 1;
+    if (a == aLow)
+        return 2;
+    return 2;
+}
+
+/** Set the priority according to the Form::EpisodeModel::Priority enum */
+void BaseForm::setCurrentPriority(const int priority)
+{
+    switch (priority) {
+    case 0: // HIGH
+        m_PriorityButton->setDefaultAction(aHigh);
+        break;
+    case 1: // MEDIUM
+        m_PriorityButton->setDefaultAction(aMedium);
+        break;
+    case 2: // LOW
+        m_PriorityButton->setDefaultAction(aLow);
+        break;
+    }
+}
+
+void BaseForm::addWidgetToContainer(IFormWidget *widget)
 {
     if (!widget)
         return;
@@ -510,27 +557,17 @@ QString BaseForm::printableHtml(bool withValues) const
 
 void BaseForm::retranslate()
 {
-    if (m_Header)
-        m_Header->label->setText(m_FormItem->spec()->label());
+    if (ui)
+        ui->label->setText(m_FormItem->spec()->label());
     if (aScreenshot) {
         aScreenshot->setText(tkTr(Trans::Constants::TAKE_SCREENSHOT));
         aScreenshot->setToolTip(tkTr(Trans::Constants::TAKE_SCREENSHOT));
     }
-}
-
-void BaseForm::triggered(QAction *action)
-{
-    if (action==aScreenshot) {
-        QPixmap pix = QPixmap::grabWidget(this);
-        QString fileName = QFileDialog::getSaveFileName(this, tkTr(Trans::Constants::SAVE_FILE),
-                                                        settings()->path(Core::ISettings::UserDocumentsPath),
-                                                        tr("Images (*.png)"));
-        if (!fileName.isEmpty()) {
-            QFileInfo info(fileName);
-            if (info.completeSuffix().isEmpty())
-                fileName.append(".png");
-            pix.save(fileName);
-        }
+    if (aHigh) {
+        aHigh->setText(Utils::firstLetterUpperCase(tkTr(Trans::Constants::HIGH)));
+        aMedium->setText(Utils::firstLetterUpperCase(tkTr(Trans::Constants::MEDIUM)));
+        aLow->setText(Utils::firstLetterUpperCase(tkTr(Trans::Constants::LOW)));
+        m_PriorityButton->setToolTip(tkTr(Trans::Constants::PRIORITY));
     }
 }
 
@@ -555,11 +592,25 @@ bool BaseFormData::isModified() const
 {
     if (m_Modified)
         return true;
-    foreach(int id, m_OriginalData.keys()) {
+    QList<int> keys;
+    keys << ID_UserName << ID_EpisodeLabel << ID_EpisodeDate << ID_Priority;
+    foreach(int id, keys) {
         if (data(id) != m_OriginalData.value(id))
             return true;
     }
     return false;
+}
+
+void BaseFormData::setModified(bool modified)
+{
+    m_Modified = modified;
+    if (!modified) {
+        QList<int> keys;
+        keys << ID_UserName << ID_EpisodeLabel << ID_EpisodeDate << ID_Priority;
+        foreach(int id, keys) {
+            m_OriginalData.insert(id, data(id));
+        }
+    }
 }
 
 bool BaseFormData::setData(const int ref, const QVariant &data, const int role)
@@ -578,6 +629,9 @@ bool BaseFormData::setData(const int ref, const QVariant &data, const int role)
     case ID_EpisodeLabel:
         m_Form->m_EpisodeLabel->setText(m_Data.value(ref).toString());
         m_Form->m_EpisodeLabel->setEnabled(true);
+        break;
+    case ID_Priority:
+        m_Form->setCurrentPriority(data.toInt());
         break;
     }
     m_Form->m_EpisodeDate->setToolTip(QString("<p align=\"right\">%1&nbsp;-&nbsp;%2<br /><span style=\"color:gray;font-size:9pt\">%3</span></p>")
@@ -598,6 +652,7 @@ QVariant BaseFormData::data(const int ref, const int role) const
         case ID_EpisodeDate: return m_Form->m_EpisodeDate->dateTime();
         case ID_EpisodeLabel: return m_Form->m_EpisodeLabel->text();
         case ID_UserName: return m_Data.value(ID_UserName);
+        case ID_Priority: return m_Form->currentPriority();
         }
     }
     return QVariant();
@@ -843,6 +898,14 @@ bool BaseGroupData::isModified() const
     return false;
 }
 
+void BaseGroupData::setModified(bool modified)
+{
+    if (!modified) {
+        if (isGroupCollapsible(m_FormItem, false) || isGroupCheckable(m_FormItem, false))
+            m_OriginalValue_isChecked = m_BaseGroup->m_Group->isChecked();
+    }
+}
+
 bool BaseGroupData::setData(const int ref, const QVariant &data, const int role)
 {
     Q_UNUSED(ref);
@@ -1002,6 +1065,12 @@ void BaseCheckData::clear()
 bool BaseCheckData::isModified() const
 {
     return m_OriginalValue != m_Check->checkState();
+}
+
+void BaseCheckData::setModified(bool modified)
+{
+    if (!modified)
+        m_OriginalValue = m_Check->checkState();
 }
 
 bool BaseCheckData::setData(const int ref, const QVariant &data, const int role)
@@ -1280,6 +1349,18 @@ bool BaseRadioData::isModified() const
     return true;
 }
 
+void BaseRadioData::setModified(bool modified)
+{
+    if (!modified) {
+        foreach(QRadioButton *but, m_Radio->m_RadioList) {
+            if (but->isChecked()) {
+                m_OriginalValue = but->property("id").toString();
+                return;
+            }
+        }
+    }
+}
+
 bool BaseRadioData::setData(const int ref, const QVariant &data, const int role)
 {
     Q_UNUSED(ref);
@@ -1509,6 +1590,16 @@ bool BaseSimpleTextData::isModified() const
     else if (m_Text->m_Text)
         return m_OriginalValue != m_Text->m_Text->toPlainText();
     return true;
+}
+
+void BaseSimpleTextData::setModified(bool modified)
+{
+    if (!modified) {
+        if (m_Text->m_Line)
+            m_OriginalValue = m_Text->m_Line->text();
+        else if (m_Text->m_Text)
+            m_OriginalValue = m_Text->m_Text->toPlainText();
+    }
 }
 
 bool BaseSimpleTextData::setData(const int ref, const QVariant &data, const int role)
@@ -1771,6 +1862,12 @@ bool BaseListData::isModified() const
     return actual != m_OriginalValue;
 }
 
+void BaseListData::setModified(bool modified)
+{
+    if (!modified)
+        m_OriginalValue = storableData().toStringList();
+}
+
 bool BaseListData::setData(const int ref, const QVariant &data, const int role)
 {
     Q_UNUSED(ref);
@@ -1968,6 +2065,12 @@ bool BaseComboData::isModified() const
     return m_OriginalValue != m_Combo->m_Combo->currentIndex();
 }
 
+void BaseComboData::setModified(bool modified)
+{
+    if (!modified)
+        m_OriginalValue = m_Combo->m_Combo->currentIndex();
+}
+
 bool BaseComboData::setData(const int ref, const QVariant &data, const int role)
 {
     if (role!=Qt::EditRole)
@@ -2160,6 +2263,12 @@ void BaseDateData::clear()
 bool BaseDateData::isModified() const
 {
     return m_OriginalValue != m_Date->m_Date->dateTime().toString(Qt::ISODate);
+}
+
+void BaseDateData::setModified(bool modified)
+{
+    if (!modified)
+        m_OriginalValue = m_Date->m_Date->dateTime().toString(Qt::ISODate);
 }
 
 bool BaseDateData::setData(const int ref, const QVariant &data, const int role)
@@ -2357,6 +2466,12 @@ void BaseSpinData::clear()
 bool BaseSpinData::isModified() const
 {
     return m_OriginalValue != storableData().toDouble();
+}
+
+void BaseSpinData::setModified(bool modified)
+{
+    if (!modified)
+        m_OriginalValue = storableData().toDouble();
 }
 
 bool BaseSpinData::setData(const int ref, const QVariant &data, const int role)

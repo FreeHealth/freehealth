@@ -38,6 +38,8 @@ const char * const MENU_ID = "Webcam.Menu";
 const char * const ICON_WEBCAM_FREEZE = "record.png";
 const char * const ICON_WEBCAM_RETRY = "retry.png";
 
+// Settings
+const char * const  S_DATEFORMAT           = "Webcam/Enabled";
 
 } // namespace Webcam
 } // namespace Constants

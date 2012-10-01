@@ -29,7 +29,7 @@
   Is a Agenda::UserCalendar widget viewer for FreeMedForms used in the Agenda mode.
   This widget presents:
   - a left bar with some usercalendar information, plus automated next availabilities calculation
-  - a central Calendar::CalendarViewer for users to edit appointements
+  - a central Calendar::CalendarViewer for users to edit appointments
 */
 
 #include "usercalendarviewer.h"
@@ -40,18 +40,22 @@
 #include "usercalendarmodel.h"
 #include "agendacore.h"
 
+#include <coreplugin/modemanager/modemanager.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/iuser.h>
 #include <coreplugin/ipatient.h>
 #include <coreplugin/itheme.h>
+#include <coreplugin/constants_menus.h>
 #include <coreplugin/constants_icons.h>
 #include <coreplugin/actionmanager/actionmanager.h>
+#include <patientbaseplugin/patientmodel.h>
 
 #include <calendar/modelanditem/basic_item_edition_dialog.h>
 #include <utils/log.h>
 #include <translationutils/constants.h>
 #include <translationutils/trans_agenda.h>
 #include <translationutils/trans_datetime.h>
+
 
 #include "ui_usercalendarviewer.h"
 
@@ -70,6 +74,7 @@ static inline Agenda::Internal::AgendaBase &base() {return Agenda::AgendaCore::i
 static inline Agenda::AgendaCore &agendaCore() {return Agenda::AgendaCore::instance();}
 static inline Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
+static inline Core::ModeManager *modeManager() {return Core::ICore::instance()->modeManager();}
 
 namespace {
     const int S_NUMBEROFAVAILABILITIESTOSHOW = 10;
@@ -122,8 +127,8 @@ public:
             m_ItemContextMenu->addAction(aPrintItem);
             ui->calendarViewer->setContextMenuForItems(m_ItemContextMenu);
             QObject::connect(aSwitchToPatient, SIGNAL(triggered()), q, SLOT(onSwitchToPatientClicked()));
-            QObject::connect(aEditItem, SIGNAL(triggered()), q, SLOT(onEditAppointementClicked()));
-            QObject::connect(aPrintItem, SIGNAL(triggered()), q, SLOT(onPrintAppointementClicked()));
+            QObject::connect(aEditItem, SIGNAL(triggered()), q, SLOT(onEditAppointmentClicked()));
+            QObject::connect(aPrintItem, SIGNAL(triggered()), q, SLOT(onPrintAppointmentClicked()));
         }
     }
 
@@ -463,16 +468,23 @@ void UserCalendarViewer::updateCalendarData(const QModelIndex &top, const QModel
 
 void UserCalendarViewer::onSwitchToPatientClicked()
 {
-    // TODO
-//    patient()->setCurrentPatient();
+    //TODO: how to obtain current patient?
+    // a calendar item has only "getPeopleNames", there can be more than one
+    // AND there is no method like "itemAt" in the viewer!
+
+//    Patients::PatientModel::activeModel()->setCurrentPatient(
+//                d->m_CalendarItemModel->getPeopleNames(
+//                    d->m_CalendarItemModel->getItemByUid());
+//                );
+//    modeManager()->activateMode(Core::Constants::MODE_PATIENT_FILE);
 }
 
-void UserCalendarViewer::onEditAppointementClicked()
+void UserCalendarViewer::onEditAppointmentClicked()
 {
     // TODO
 }
 
-void UserCalendarViewer::onPrintAppointementClicked()
+void UserCalendarViewer::onPrintAppointmentClicked()
 {
     // TODO
 }
@@ -502,9 +514,9 @@ bool UserCalendarViewer::event(QEvent *e)
         if (d->aSwitchToPatient)
             d->aSwitchToPatient->setText(tr("Switch to patient"));
         if (d->aEditItem)
-            d->aEditItem->setText(tr("Edit appointement"));
+            d->aEditItem->setText(tr("Edit appointment"));
         if (d->aPrintItem)
-                d->aPrintItem->setText(tr("Print appointement"));
+                d->aPrintItem->setText(tr("Print appointment"));
 
         break;
     }

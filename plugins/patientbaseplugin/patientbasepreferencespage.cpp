@@ -28,15 +28,16 @@
 #include "constants_settings.h"
 #include "constants_db.h"
 #include "patientselector.h"
+#include "ui_patientbasepreferencespage.h"
 
 #include <utils/log.h>
 #include <translationutils/constanttranslations.h>
-
+#include <extensionsystem/pluginmanager.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/constants_tokensandsettings.h>
+#include <coreplugin/iphotoprovider.h>
 
-#include "ui_patientbasepreferencespage.h"
 
 #include <QSqlDatabase>
 #include <QSqlQuery>
@@ -54,7 +55,9 @@ static inline Core::ISettings *settings() { return Core::ICore::instance()->sett
 
 PatientBasePreferencesPage::PatientBasePreferencesPage(QObject *parent) :
         IOptionsPage(parent), m_Widget(0)
-{ setObjectName("PatientBasePreferencesPage"); }
+{
+    setObjectName("PatientBasePreferencesPage");
+}
 
 PatientBasePreferencesPage::~PatientBasePreferencesPage()
 {
@@ -62,10 +65,22 @@ PatientBasePreferencesPage::~PatientBasePreferencesPage()
     m_Widget = 0;
 }
 
-QString PatientBasePreferencesPage::id() const { return objectName(); }
-QString PatientBasePreferencesPage::name() const { return tkTr(Trans::Constants::PATIENTS); }
-QString PatientBasePreferencesPage::category() const { return tkTr(Trans::Constants::PATIENT_DATABASE); }
-QString PatientBasePreferencesPage::title() const {return tr("Patient database preferences");}
+QString PatientBasePreferencesPage::id() const {
+    return objectName();
+}
+
+QString PatientBasePreferencesPage::name() const {
+    return tkTr(Trans::Constants::PATIENTS);
+}
+
+QString PatientBasePreferencesPage::category() const {
+    return tkTr(Trans::Constants::PATIENT_DATABASE);
+}
+
+QString PatientBasePreferencesPage::title() const {
+    return tr("Patient database preferences");
+}
+
 int PatientBasePreferencesPage::sortIndex() const
 {
     return 10;
@@ -116,6 +131,7 @@ PatientBasePreferencesWidget::PatientBasePreferencesWidget(QWidget *parent) :
     ui = new Ui::PatientBasePreferencesWidget;
     setObjectName("PatientBasePreferencesWidget");
     ui->setupUi(this);
+    populatePhotoProviderCombo();
     setDataToUi();
 }
 
@@ -129,6 +145,11 @@ void PatientBasePreferencesWidget::setDataToUi()
     ui->selectNewlyCreatedBox->setChecked(settings()->value(Core::Constants::S_PATIENTCHANGEONCREATION).toBool());
     ui->genderColor->setChecked(settings()->value(Constants::S_SELECTOR_USEGENDERCOLORS).toBool());
     ui->patientBarColor->setColor(QColor(settings()->value(Constants::S_PATIENTBARCOLOR).toString()));
+
+    // find the id of the photo source in the combo box items
+    const int photoSourceIndex = ui->comboDefaultPhotoSource->findData(
+                settings()->value(Constants::S_DEFAULTPHOTOSOURCE).toString());
+    ui->comboDefaultPhotoSource->setCurrentIndex(photoSourceIndex);
 }
 
 void PatientBasePreferencesWidget::saveToSettings(Core::ISettings *sets)
@@ -142,6 +163,11 @@ void PatientBasePreferencesWidget::saveToSettings(Core::ISettings *sets)
     s->setValue(Core::Constants::S_PATIENTCHANGEONCREATION, ui->selectNewlyCreatedBox->isChecked());
     s->setValue(Constants::S_SELECTOR_USEGENDERCOLORS, ui->genderColor->isChecked());
     s->setValue(Constants::S_PATIENTBARCOLOR, ui->patientBarColor->color());
+
+    // save the id of the provider to identify it the next time.
+    const QString photoSourceId = ui->comboDefaultPhotoSource->itemData(
+                ui->comboDefaultPhotoSource->currentIndex()).toString();
+    s->setValue(Constants::S_DEFAULTPHOTOSOURCE, photoSourceId);
 }
 
 void PatientBasePreferencesWidget::writeDefaultSettings(Core::ISettings *s)
@@ -151,8 +177,28 @@ void PatientBasePreferencesWidget::writeDefaultSettings(Core::ISettings *s)
     s->setValue(Constants::S_SELECTOR_USEGENDERCOLORS, true);
     s->setValue(Constants::S_PATIENTBARCOLOR, Qt::white);
     s->setValue(Core::Constants::S_PATIENTCHANGEONCREATION, true);
+
+    QList<Core::IPhotoProvider*> providerList = ExtensionSystem::PluginManager::instance()->getObjects<Core::IPhotoProvider>();
+    qSort(providerList);
+    qDebug() << providerList;
+    if (providerList.isEmpty())
+        s->setValue(Constants::S_DEFAULTPHOTOSOURCE, "");
+    else
+        s->setValue(Constants::S_DEFAULTPHOTOSOURCE, providerList.first()->id());
     s->sync();
 }
+
+void PatientBasePreferencesWidget::populatePhotoProviderCombo()
+{
+    QList<Core::IPhotoProvider*> providerList = ExtensionSystem::PluginManager::instance()->getObjects<Core::IPhotoProvider>();
+    qSort(providerList);
+    ui->comboDefaultPhotoSource->clear();
+    foreach(Core::IPhotoProvider *provider, providerList) {
+        ui->comboDefaultPhotoSource->addItem(provider->displayText(), QVariant(provider->id()));
+    }
+    ui->comboDefaultPhotoSource->setEnabled(!providerList.isEmpty());
+}
+
 
 void PatientBasePreferencesWidget::changeEvent(QEvent *e)
 {

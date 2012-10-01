@@ -29,12 +29,13 @@
 
 #include <translationutils/constants.h>
 #include <translationutils/trans_current.h>
-
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
+#include <coreplugin/constants.h>
+
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
-
+#include <extensionsystem/pluginmanager.h>
 
 using namespace Webcam;
 using namespace Internal;
@@ -66,21 +67,6 @@ WebcamPreferencesWidget::WebcamPreferencesWidget(QWidget *parent) :
     ui(new Ui::WebcamPreferencesWidget)
 {
     ui->setupUi(this);
-    m_availableDevices.clear();
-
-    cv::VideoCapture *testCapture;
-    for( int deviceNumber = 8; deviceNumber > 0; --deviceNumber)
-    {
-        testCapture = new cv::VideoCapture(deviceNumber);
-        if (!testCapture)
-            continue;
-        m_availableDevices.prepend(deviceNumber);
-        delete testCapture;
-    }
-    QList<int>::Iterator iter;
-    for( iter = m_availableDevices.begin(); iter != m_availableDevices.end(); ++iter) {
-        ui->devicesCombo->addItem(QString::number(*iter), *iter);
-    }
 }
 
 WebcamPreferencesWidget::~WebcamPreferencesWidget()
@@ -97,6 +83,7 @@ void WebcamPreferencesWidget::setDataToUi()
 /*! Saves the settings in the ui to the settings data model. */
 void WebcamPreferencesWidget::saveToSettings(Core::ISettings *sets)
 {
+    Q_UNUSED(sets)
     // if no sets given as param, take default interface
 //    Core::ISettings *s = sets? sets : settings();
 }
@@ -106,6 +93,14 @@ void WebcamPreferencesWidget::writeDefaultSettings(Core::ISettings *s)
 {
     Q_UNUSED(s);
     //    LOG_FOR(tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("WebcamPreferencesWidget"));
+}
+
+void WebcamPreferencesWidget::addWebcamProvider(WebcamPhotoProvider *provider)
+{
+    if (!provider)
+        return;
+    ui->devicesCombo->addItem(provider->name(), QVariant(provider->id()));
+//    m_availableDevices[provider->device()] = provider;
 }
 
 /*! Retranslates the ui widgets to the changed language. */
@@ -127,22 +122,11 @@ void WebcamPreferencesWidget::changeEvent(QEvent *e)
 
 /* ----------------------  Preferences Page ---------------------- */
 /*!
- * \class WebcamPreferencesPage
- * \brief Generic FreeMedForms preferences page for %PluginName:c% plugin.
+ * \class Webcam::WebcamPreferencesPage
+ * \brief Generic FreeMedForms preferences page for the Webcam plugin.
  *
  * A WebcamPreferencesPage creates a page in the FMF settings dialog, it is listed in
  * the category returned by \sa category().
- *
- * All you have to do is to load this preferences page in the constructor if the %PluginName:c% plugin.
- * Do this like this:
- * \code
- * WebcamPlugin::WebcamPlugin():
- *     ExtensionSystem::IPlugin()
- * {
- *     _prefPage = new WebcamPreferencesPage(this);
- *     addObject(_prefPage);
- * }
- * \endcode
  */
 
 /*! Creates a new preferences page with a given parent. */
@@ -186,6 +170,9 @@ int WebcamPreferencesPage::sortIndex() const
 /*! Resets the whole preferences page to the default settings of the settings data model. */
 void WebcamPreferencesPage::resetToDefaults()
 {
+    if (!m_Widget) {
+        return;
+    }
     m_Widget->writeDefaultSettings(settings());
     m_Widget->setDataToUi();
 }
@@ -202,8 +189,9 @@ void WebcamPreferencesPage::applyChanges()
 void WebcamPreferencesPage::finish()
 {
     delete m_Widget;
+    m_Widget = 0;
 }
-#include <coreplugin/constants.h>
+
 /*! \brief Checks if the entered settings are valid.
  *
  * Overloads the interface method. For each empty value the default settings value is written.
@@ -226,8 +214,13 @@ QWidget *WebcamPreferencesPage::createPage(QWidget *parent)
     if (m_Widget)
         delete m_Widget;
     m_Widget = new WebcamPreferencesWidget(parent);
+    QList<WebcamPhotoProvider*> webcams = WebcamPhotoProvider::getProviders();
+    foreach(WebcamPhotoProvider *webcam, webcams)
+        m_Widget->addWebcamProvider(webcam);
     return m_Widget;
 }
+
+
 
 
 

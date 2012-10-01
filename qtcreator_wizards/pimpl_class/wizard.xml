@@ -56,7 +56,7 @@
             <fielddescription xml:lang="de">Namensraum des Plugins:</fielddescription>
             <fielddescription xml:lang="fr">Espace de nommage du greffon:</fielddescription>
         </field>
-        <field name="Internal">
+        <field name="InternalNamespace">
             <fieldcontrol class="QCheckBox" />
             <fielddescription>Additional "Internal" namespace</fielddescription>
             <fielddescription xml:lang="de">Zus&#228;tzlicher "Internal"-Namensraum</fielddescription>
@@ -69,7 +69,7 @@
             <fielddescription xml:lang="fr">Impl&#233;mentation priv&#233;e (Opaque pointer)</fielddescription>
         </field>
         <field name="Singleton">
-            <fieldcontrol class="QCheckBox" defaultvalue="true" />
+            <fieldcontrol class="QCheckBox" />
             <fielddescription>Create a singleton</fielddescription>
             <fielddescription xml:lang="de">Create a singleton</fielddescription>
             <fielddescription xml:lang="fr">Créer un singleton</fielddescription>

@@ -56,7 +56,7 @@ public:
     void testDatabase();
 
 private:
-    void createVirtualAppointements(UserCalendar *calendar);
+    void createVirtualAppointments(UserCalendar *calendar);
 
 
     AgendaCore *m_Core;

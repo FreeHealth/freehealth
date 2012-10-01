@@ -220,14 +220,28 @@ QString GirWidget::printableHtml(bool withValues) const
 //--------------------------------------------------------------------------------------------------------
 //-------------------------------------------- GirItemData -----------------------------------------------
 //--------------------------------------------------------------------------------------------------------
+GirItemData::GirItemData(Form::FormItem *parent) :
+    Form::IFormItemData(),
+    m_Parent(parent),
+    m_GirWidget(0),
+    m_modified(false)
+{}
+
+void GirItemData::clear()
+{
+    m_GirWidget->clearModel();
+}
+
 bool GirItemData::isModified() const
 {
     return m_OriginalValue != storableData().toString();
 }
 
-void GirItemData::clear()
+void GirItemData::setModified(bool modified)
 {
-    m_GirWidget->clearModel();
+    m_modified = modified;
+    if (!modified)
+        m_OriginalValue = storableData().toString();
 }
 
 bool GirItemData::setData(const int ref, const QVariant &data, const int role)
@@ -253,6 +267,7 @@ void GirItemData::setStorableData(const QVariant &data)
 //    }
     m_OriginalValue = data.toString();
     m_GirWidget->setStringfiedGirScore(m_OriginalValue);
+    m_modified = false;
 }
 
 QVariant GirItemData::storableData() const

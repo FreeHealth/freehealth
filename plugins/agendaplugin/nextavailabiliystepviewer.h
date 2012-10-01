@@ -46,7 +46,7 @@ public:
     ~NextAvailabiliyStepViewer();
 
     void setAvailabilities(const QList<QRect> &avs);
-    void setAppointements(const QList<QRect> &avs);
+    void setAppointments(const QList<QRect> &avs);
 
     void addFoundFreeTime(const QList<QRect> &free);
 
@@ -68,7 +68,7 @@ private:
 class NextAvailabiliyManager
 {
 public:
-    NextAvailabiliyManager() : m_ReachedNextAppointement(false) {}
+    NextAvailabiliyManager() : m_ReachedNextAppointment(false) {}
     ~NextAvailabiliyManager() {}
 
     static bool rectLessThan(const QRect &r1, const QRect &r2);
@@ -85,15 +85,15 @@ public:
     QList<QDateTime> nextAvailableTime(const QDateTime &startSearch,
                                        const int durationInMinutes,
                                        const int calendarDurationInMinutes,
-                                       const QRect &nextAppointement,
+                                       const QRect &nextAppointment,
                                        const int numberOfDates);
 
-    bool hasReachedNextAppointement() const {return m_ReachedNextAppointement;}
-    QDateTime requestingNewAppointementLaterThan() const {return m_NeedLaterThan;}
+    bool hasReachedNextAppointment() const {return m_ReachedNextAppointment;}
+    QDateTime requestingNewAppointmentLaterThan() const {return m_NeedLaterThan;}
 
 private:
     QList<QRect> avs;
-    bool m_ReachedNextAppointement;
+    bool m_ReachedNextAppointment;
     QDateTime m_NeedLaterThan;
 };
 

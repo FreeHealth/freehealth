@@ -1086,12 +1086,12 @@ Do you want to send them?</source>
 <context>
     <name>DrugsWidget::Internal::DrugsActionHandler</name>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidgetmanager.cpp" line="714"/>
+        <location filename="../../plugins/drugsplugin/drugswidgetmanager.cpp" line="776"/>
         <source>Prescription is not empty. Clear it?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/drugswidgetmanager.cpp" line="715"/>
+        <location filename="../../plugins/drugsplugin/drugswidgetmanager.cpp" line="777"/>
         <source>You select another editing mode than the actual one. Changing of mode during edition may cause prescription lose.
 Do you really want to change the editing mode?</source>
         <translation type="unfinished"></translation>
@@ -1362,87 +1362,92 @@ Do you really want to change the editing mode?</source>
 <context>
     <name>mfDrugsConstants</name>
     <message>
-        <location filename="../../plugins/drugsplugin/constants.h" line="77"/>
+        <location filename="../../plugins/drugsplugin/constants.h" line="78"/>
         <source>Prescription</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/drugsplugin/constants.h" line="78"/>
-        <source>Toggle drug selector</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../plugins/drugsplugin/constants.h" line="79"/>
-        <source>Search by commercial name</source>
+        <source>Clear prescription</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/constants.h" line="80"/>
-        <source>Search by INN</source>
+        <source>Toggle drug selector</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/constants.h" line="81"/>
-        <source>Search by molecules</source>
+        <source>Search by commercial name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/constants.h" line="82"/>
-        <source>Edition modes</source>
+        <source>Search by INN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/constants.h" line="83"/>
-        <source>Full prescriber</source>
+        <source>Search by molecules</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/constants.h" line="84"/>
-        <source>Select only</source>
+        <source>Edition modes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/constants.h" line="85"/>
-        <source>Print prescription</source>
+        <source>Full prescriber</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/constants.h" line="86"/>
-        <source>Toggle testing drugs</source>
+        <source>Select only</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/constants.h" line="87"/>
-        <source>Open protocol dialog</source>
+        <source>Print prescription</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/constants.h" line="88"/>
-        <source>Open posologic sentence preferences</source>
+        <source>Toggle testing drugs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/constants.h" line="89"/>
-        <source>Reset the prescription sentence to the default one</source>
+        <source>Open protocol dialog</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/constants.h" line="90"/>
-        <source>Show drug precautions</source>
+        <source>Open posologic sentence preferences</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/constants.h" line="91"/>
-        <source>Drug precautions</source>
+        <source>Reset the prescription sentence to the default one</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/constants.h" line="92"/>
-        <source>Copy prescription item to clipboard</source>
+        <source>Show drug precautions</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../plugins/drugsplugin/constants.h" line="93"/>
+        <source>Drug precautions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsplugin/constants.h" line="94"/>
+        <source>Copy prescription item to clipboard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../plugins/drugsplugin/constants.h" line="95"/>
         <source>Add long-term medications</source>
         <translation type="unfinished"></translation>
     </message>

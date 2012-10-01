@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>448</width>
-    <height>249</height>
+    <height>207</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -35,7 +35,14 @@
         </widget>
        </item>
        <item row="0" column="1">
-        <widget class="QTextEdit" name="address"/>
+        <widget class="QTextEdit" name="address">
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>80</height>
+          </size>
+         </property>
+        </widget>
        </item>
        <item row="1" column="0">
         <widget class="QLabel" name="label_3">
@@ -150,7 +157,7 @@
   <customwidget>
    <class>Utils::QButtonLineEdit</class>
    <extends>QLineEdit</extends>
-   <header>utils/widgets/qbuttonlineedit.h</header>
+   <header location="global">utils/widgets/qbuttonlineedit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

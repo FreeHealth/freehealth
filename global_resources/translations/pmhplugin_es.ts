@@ -82,12 +82,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhmode.cpp" line="294"/>
+        <location filename="../../plugins/pmhplugin/pmhmode.cpp" line="306"/>
         <source>Remove PMHx</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhmode.cpp" line="295"/>
+        <location filename="../../plugins/pmhplugin/pmhmode.cpp" line="307"/>
         <source>Do you really want to remove the PMHx called &lt;br /&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;b&gt;%1&lt;/b&gt;?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -266,8 +266,8 @@
 <context>
     <name>PMH::PmhCategoryModel</name>
     <message>
-        <location filename="../../plugins/pmhplugin/pmhcategorymodel.cpp" line="1226"/>
-        <location filename="../../plugins/pmhplugin/pmhcategorymodel.cpp" line="1236"/>
+        <location filename="../../plugins/pmhplugin/pmhcategorymodel.cpp" line="1220"/>
+        <location filename="../../plugins/pmhplugin/pmhcategorymodel.cpp" line="1230"/>
         <source>Patient PMHx synthesis</source>
         <translation type="unfinished"></translation>
     </message>

@@ -4,12 +4,12 @@
 <context>
     <name>Form::EpisodeModel</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="598"/>
+        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="565"/>
         <source>Xml content</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="628"/>
+        <location filename="../../plugins/formmanagerplugin/episodemodel.cpp" line="596"/>
         <source>New episode</source>
         <translation type="unfinished"></translation>
     </message>
@@ -68,7 +68,7 @@
 <context>
     <name>Form::FormMain</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/iformitem.cpp" line="802"/>
+        <location filename="../../plugins/formmanagerplugin/iformitem.cpp" line="800"/>
         <source>Form: </source>
         <translation type="unfinished"></translation>
     </message>
@@ -76,7 +76,7 @@
 <context>
     <name>Form::FormMainDebugPage</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/iformitem.cpp" line="966"/>
+        <location filename="../../plugins/formmanagerplugin/iformitem.cpp" line="964"/>
         <source>Forms: </source>
         <translation type="unfinished"></translation>
     </message>
@@ -84,47 +84,55 @@
 <context>
     <name>Form::FormPlaceHolder</name>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="212"/>
+        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="283"/>
         <source>Save episode?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="214"/>
+        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="285"/>
         <source>The actual episode has been modified. Do you want to save changes in your database?
 Answering &apos;No&apos; will cause definitve data lose.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="217"/>
+        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="288"/>
         <source>Save episode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="637"/>
+        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="750"/>
         <source>Validate the current episode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="638"/>
+        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="751"/>
         <source>When you validate an episode, you prevent all subsequent amendments. The episode will be shown but will be kept unchanged.
 Do you really want to validate the current episode?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="678"/>
+        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="793"/>
         <source>Remove the current episode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="679"/>
+        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="794"/>
         <source>You can not completely destroy an episode, but you can remove it from the views.
 The episode will not be shown anymore, but will still be included in the database.
 Do you really want to remove the current episode?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="699"/>
+        <location filename="../../plugins/formmanagerplugin/formplaceholder.cpp" line="815"/>
         <source>Images (*.png)</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>Form::Internal::EpisodeBase</name>
+    <message>
+        <location filename="../../plugins/formmanagerplugin/episodebase.cpp" line="221"/>
+        <source>Unable to update the database schema</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -374,47 +382,47 @@ Do you really want to remove the current episode?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="116"/>
+        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="117"/>
         <source>Add Episode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="117"/>
+        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="118"/>
         <source>Validate Episode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="118"/>
+        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="119"/>
         <source>Add Form</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="119"/>
+        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="120"/>
         <source>Print Form</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="120"/>
+        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="121"/>
         <source>Show patients&apos; synthesis</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="121"/>
+        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="122"/>
         <source>Show patients&apos; last episodes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="122"/>
+        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="123"/>
         <source>Patients&apos; last episodes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="124"/>
+        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="125"/>
         <source>Forms font</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="125"/>
+        <location filename="../../plugins/formmanagerplugin/constants_db.h" line="126"/>
         <source>Episodes font</source>
         <translation type="unfinished"></translation>
     </message>

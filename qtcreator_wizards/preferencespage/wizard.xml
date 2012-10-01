@@ -55,14 +55,4 @@
             <fielddescription xml:lang="fr">Adresse émail de l'auteur:</fielddescription>
         </field>
     </fields>
-    <validationrules>
-        <validationrule condition="&quot;%PluginName:l%&quot;.indexOf(&quot;plugin&quot;) != -1">
-            <!-- this validation is not really needed as the user cannot enter values directly,
-            but just select from a QComboBox now.
-            Feel free to remove it or keep it for educational purposes -->
-            <message>The plugin name may not contain "plugin".</message>
-            <message xml:lang="de">Der Name des Plugins darf nicht "plugin" enthalten.</message>
-            <message xml:lang="fr">Le nom du greffon ne doit pas contenir "plugin".</message>
-        </validationrule>
-    </validationrules>
 </wizard>

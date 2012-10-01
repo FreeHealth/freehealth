@@ -64,6 +64,7 @@ public:
     QPixmap photo() const;
 
 private Q_SLOTS:
+    void setDevice(int device);
     void updatefreezeButton(bool aFreeze);
     void autoFaceShot(const QPixmap &pix);
     void faceShotActivated(const QModelIndex &index);
@@ -76,6 +77,7 @@ private:
     QPushButton *m_freezeButton;
     QPixmap _pixmap;
     QStandardItemModel *m_imageModel;
+    int m_device;
 };
 
 }  // namespace WebCam

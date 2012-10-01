@@ -26,22 +26,42 @@
 #ifndef WEBCAMPHOTOPROVIDER_H
 #define WEBCAMPHOTOPROVIDER_H
 
+class WebcamDevice;
+
 #include <QObject>
 #include <QPixmap>
 
 #include <coreplugin/iphotoprovider.h>
 
 namespace Webcam {
-
+/*!
+ * \brief The WebcamPhotoProvider class
+ *
+ * It implements the Core::IPhotoProvider interface. For every Webcam that is detected there should be one WebcamPhotoProvider.
+ */
 class WebcamPhotoProvider : public Core::IPhotoProvider
 {
     Q_OBJECT
 public:
-    explicit WebcamPhotoProvider();
+    explicit WebcamPhotoProvider(int deviceId, QObject *parent = 0);
     ~WebcamPhotoProvider();
 
-    QPixmap recievePhoto();
-    
+    QString id() const;
+    int deviceId() const;
+    QString name() const;
+    QString displayText() const;
+    bool isEnabled() const;
+    bool isActive() const;
+    int priority() const;
+
+    static QList<WebcamPhotoProvider *> getProviders();
+
+public Q_SLOTS:
+    void startReceivingPhoto();
+
+private:
+    int m_deviceId;
+    static QMap<int, WebcamPhotoProvider*> m_webcamsPool;
 };
 
 } // end Webcam

@@ -14,7 +14,7 @@ HEADERS = agendaplugin.h agenda_exporter.h \
     agendamode.h \
     calendaritemmodel.h \
     calendaritemeditorpatientmapper.h \
-    appointement.h \
+    appointment.h \
     usercalendar.h \
     usercalendareditor.h \
     usercalendarpageforuserviewer.h \
@@ -34,7 +34,7 @@ SOURCES = agendaplugin.cpp \
     agendamode.cpp \
     calendaritemmodel.cpp \
     calendaritemeditorpatientmapper.cpp \
-    appointement.cpp \
+    appointment.cpp \
     usercalendar.cpp \
     usercalendareditor.cpp \
     usercalendarpageforuserviewer.cpp \
