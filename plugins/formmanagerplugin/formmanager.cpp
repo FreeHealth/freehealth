@@ -232,6 +232,7 @@ public:
 
     bool insertSubForm(const SubFormInsertionPoint &insertionPoint)
     {
+        qWarning() << "INSERT" << insertionPoint;
         // read all sub-forms and emit signal if requiered
         QList<Form::FormMain*> subs = loadFormFile(insertionPoint.subFormUid());
         if (ManageDuplicates)
@@ -244,7 +245,6 @@ public:
         const QString &insertIntoUuid = insertionPoint.receiverUid();
         for(int i=0; i < subs.count(); ++i) {
             FormMain *sub = subs.at(i);
-            qWarning() << "insert" << sub;
             if (insertIntoUuid == Constants::ROOT_FORM_TAG) {
                 // insert into its mode root form
                 FormMain *rootMode = q->rootForm(sub->modeUniqueName().toAscii());
@@ -303,7 +303,6 @@ public:
     QVector<Form::FormPage *> _formPages;
     QList<Form::FormMain *> m_RootForms, m_RootFormsDuplicates, m_SubFormsEmptyRoot, m_SubFormsEmptyRootDuplicates;
     QHash<Form::FormMain *, Form::FormMain *> _formParents; // keep the formMain parent in cache (K=form to reparent, V=emptyrootform)
-    QHash<Form::FormMain *, EpisodeModel *> _episodeModels;
 
 private:
     FormManager *q;
@@ -337,12 +336,6 @@ bool FormManager::initialize()
     connect(packManager(), SIGNAL(packRemoved(DataPack::Pack)), this, SLOT(packChanged(DataPack::Pack)));
     //    connect(packManager(), SIGNAL(packUpdated(DataPack::Pack)), this, SLOT(packChanged(DataPack::Pack)));
     return true;
-}
-
-/**  Activate the Form Mode in the main window. */
-void FormManager::activateMode()
-{
-    modeManager()->activateMode(Core::Constants::MODE_PATIENT_FILE);
 }
 
 /** Create a Form::FormPage with the specified \e uuid. There are no uuid duplicates. */
@@ -451,6 +444,7 @@ bool FormManager::onCurrentPatientChanged()
     // load subforms
     d->loadSubForms();
 
+    Q_EMIT patientFormsLoaded();
     return true;
 }
 
@@ -552,37 +546,6 @@ QPixmap FormManager::getScreenshot(const QString &formUid, const QString &fileNa
 //FormTreeModel *FormManager::formTreeModel(const char* modeUniqueName)
 //{
 //}
-
-/**
- * Return the unique Form::EpisodeModel linked to the patient form \e form.
- * Return zero if the form is not null.
- */
-EpisodeModel *FormManager::episodeModel(Form::FormMain *form)
-{
-    if (!form)
-        return 0;
-
-    // Not in cache ?
-    if (!d->_episodeModels.value(form, 0)) {
-        // Create the model
-        EpisodeModel *model = new EpisodeModel(form, this);
-        model->initialize();
-        d->_episodeModels.insert(form, model);
-        // TODO connect rowCountChanged from episode to formtreemodel -> recompute the form label count
-        return model;
-    }
-    return d->_episodeModels.value(form);
-}
-
-/**
- * Return the unique Form::EpisodeModel linked to the patient form identified by \e formUid.
- * Return zero if the form \e formUid is not available.
- */
-EpisodeModel *FormManager::episodeModel(const QString &formUid)
-{
-    return episodeModel(form(formUid));
-}
-
 
 ///** Execute all OnLoad scripts of the \e emptyRootForm */
 //void FormManager::executeOnloadScript(Form::FormMain *emptyRootForm)

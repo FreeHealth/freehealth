@@ -35,12 +35,12 @@
  * \file formcore.h
  * \author Eric MAEKER
  * \version 0.8.0
- * \date 16 Sept 2012
+ * \date 01 Oct 2012
 */
 
 namespace Form {
 class FormManager;
-//class EpisodeManager;
+class EpisodeManager;
 namespace Internal {
 class FormManagerPlugin;
 class FormCorePrivate;
@@ -59,7 +59,7 @@ public:
     bool initialize();
     
     Form::FormManager &formManager() const;
-//    Form::EpisodeManager &episodeManager() const;
+    Form::EpisodeManager &episodeManager() const;
 
 Q_SIGNALS:
     

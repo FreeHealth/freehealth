@@ -49,6 +49,7 @@
 #include <formmanagerplugin/formcore.h>
 #include <formmanagerplugin/iformitem.h>
 #include <formmanagerplugin/formmanager.h>
+#include <formmanagerplugin/episodemanager.h>
 #include <formmanagerplugin/formtreemodel.h>
 #include <formmanagerplugin/episodemodel.h>
 
@@ -77,6 +78,7 @@ static inline Core::ISettings *settings() {return Core::ICore::instance()->setti
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 static inline Core::Translators *translators() {return Core::ICore::instance()->translators();}
 static inline Form::FormManager &formManager() {return Form::FormCore::instance().formManager();}
+static inline Form::EpisodeManager &episodeManager() {return Form::FormCore::instance().episodeManager();}
 static inline Category::CategoryCore *categoryCore() {return Category::CategoryCore::instance();}
 
 namespace {
@@ -282,7 +284,7 @@ public:
 //                continue;
             TreeItem *newItem = new TreeItem(parentItem);
             newItem->setLabel(model->data(idx).toString());
-            newItem->setForm(model->formForIndex(idx), formManager().episodeModel(form));
+            newItem->setForm(model->formForIndex(idx), episodeManager().episodeModel(form));
             // Read all its children
             formModelToTreeItem(form, newItem, model, idx);
         }

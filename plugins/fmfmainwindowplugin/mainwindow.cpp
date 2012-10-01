@@ -56,7 +56,6 @@
 #include <formmanagerplugin/iformio.h>
 #include <formmanagerplugin/iformitem.h>
 #include <formmanagerplugin/iformwidgetfactory.h>
-#include <formmanagerplugin/formmanager.h>
 #include <formmanagerplugin/formplaceholder.h>
 #include <formmanagerplugin/episodemodel.h>
 
@@ -104,7 +103,7 @@ static inline Core::IPatient *patient() {return Core::ICore::instance()->patient
 
 static inline ExtensionSystem::PluginManager *pluginManager() { return ExtensionSystem::PluginManager::instance(); }
 
-static inline Form::FormManager &formManager() {return Form::FormCore::instance().formManager();}
+static inline Form::FormCore &formCore() {return Form::FormCore::instance();}
 
 static inline Patients::PatientModel *patientModel() {return Patients::PatientModel::activeModel();}
 
@@ -327,7 +326,7 @@ void MainWindow::onCurrentUserChanged()
 void MainWindow::onCurrentPatientChanged()
 {
     // Activate Patient files mode
-    formManager().activateMode();
+    formCore().activatePatientFileCentralMode();
 
     // Store the uuids of the patient in the recent manager
     const QString &uuid = patient()->uuid();

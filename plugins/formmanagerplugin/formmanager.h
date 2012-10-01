@@ -79,8 +79,6 @@ public:
     ~FormManager();
     bool initialize();
 
-    void activateMode();
-
     // Form management (load, save)
     FormPage *createFormPage(const QString &uuid);
     FormMain *form(const QString &formUid) const;
@@ -94,8 +92,6 @@ public:
 
     // Models management
 //    FormTreeModel *formTreeModel(const char* modeUniqueName);
-    EpisodeModel *episodeModel(Form::FormMain *form);
-    EpisodeModel *episodeModel(const QString &formUid);
 
 public Q_SLOTS:
     // Form management

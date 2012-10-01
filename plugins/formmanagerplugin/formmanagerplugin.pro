@@ -37,7 +37,8 @@ HEADERS = formmanagerplugin.h \
     formdatawidgetmapper.h \
     formcore.h \
     formcollection.h \
-    formcontextualwidgetmanager.h
+    formcontextualwidgetmanager.h \
+    episodemanager.h
 
 SOURCES = formmanagerplugin.cpp \
     formmanager.cpp \
@@ -60,7 +61,8 @@ SOURCES = formmanagerplugin.cpp \
     formcore.cpp \
     formcollection.cpp \
     formcontextualwidgetmanager.cpp \
-    subforminsertpoint.cpp
+    subforminsertpoint.cpp \
+    episodemanager.cpp
 
 OTHER_FILES = FormManager.pluginspec
 
