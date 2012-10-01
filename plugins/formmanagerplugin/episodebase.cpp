@@ -490,11 +490,11 @@ QVector<Form::SubFormInsertionPoint> EpisodeBase::getSubFormFiles()
     if (!connectDatabase(DB, __LINE__)) {
         return toReturn;
     }
-    DB.transaction();
     QHash<int, QString> where;
     where.insert(FORM_GENERIC, QString("IS NULL"));
     where.insert(FORM_VALID, QString("=1"));
     where.insert(FORM_PATIENTUID, QString("='%1'").arg(patient()->uuid()));
+    DB.transaction();
     QSqlQuery query(DB);
     QString req = select(Table_FORM, QList<int>()
                          << FORM_SUBFORMUID
@@ -543,8 +543,8 @@ bool EpisodeBase::addSubForms(const QVector<SubFormInsertionPoint> &insertions)
         query.bindValue(FORM_PATIENTUID, patient()->uuid());
         query.bindValue(FORM_SUBFORMUID, insertions.at(i).subFormUid());
         query.bindValue(FORM_INSERTIONPOINT, insertions.at(i).receiverUid());
-        query.bindValue(FORM_INSERTASCHILD, insertions.at(i).addAsChild());
-        query.bindValue(FORM_APPEND, insertions.at(i).appendToForm());
+        query.bindValue(FORM_INSERTASCHILD, int(insertions.at(i).addAsChild()));
+        query.bindValue(FORM_APPEND, int(insertions.at(i).appendToForm()));
         query.bindValue(FORM_USER_RESTRICTION_ID, QVariant());
         if (!query.exec()) {
             LOG_QUERY_ERROR(query);

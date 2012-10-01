@@ -37,6 +37,7 @@
 #include "formdatawidgetmapper.h"
 #include <formmanagerplugin/formcore.h>
 #include <formmanagerplugin/formmanager.h>
+#include <formmanagerplugin/episodemanager.h>
 #include <formmanagerplugin/iformitem.h>
 #include <formmanagerplugin/iformitemdata.h>
 #include <formmanagerplugin/iformwidgetfactory.h>
@@ -58,9 +59,10 @@
 using namespace Form;
 using namespace Internal;
 
-enum {WarnLogChronos=true, WarnDirty=true};
+enum { WarnLogChronos=false, WarnDirty=false };
 
 static inline Form::FormManager &formManager() {return Form::FormCore::instance().formManager();}
+static inline Form::EpisodeManager &episodeManager() {return Form::FormCore::instance().episodeManager();}
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 
@@ -142,7 +144,7 @@ public:
         if (_episodeModel) {
             _episodeModel = 0;
         }
-        _episodeModel = formManager().episodeModel(rootForm);
+        _episodeModel = episodeManager().episodeModel(rootForm);
     }
 
     QString getCurrentXmlEpisode()

@@ -19,103 +19,48 @@
  *  If not, see <http://www.gnu.org/licenses/>.                            *
  ***************************************************************************/
 /***************************************************************************
- *   Main developers : Eric MAEKER, <eric.maeker@gmail.com>                *
+ *   Main developers : Eric MAEKER
  *   Contributors :                                                        *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef FORMMANAGER_H
-#define FORMMANAGER_H
+#ifndef FORM_INTERNAL_EPISODEMANAGER_H
+#define FORM_INTERNAL_EPISODEMANAGER_H
 
 #include <formmanagerplugin/formmanager_exporter.h>
 #include <QObject>
-QT_BEGIN_NAMESPACE
-class QTreeWidget;
-class QTreeWidgetItem;
-class QWidget;
-class QStackedLayout;
-class QAction;
-class QPixmap;
-QT_END_NAMESPACE
 
 /**
- * \file formmanager.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
+ * \file episodemanager.h
+ * \author Eric MAEKER
  * \version 0.8.0
- * \date 12 Sept 2012
+ * \date 01 Oct 2012
 */
 
-namespace DataPack {
-class Pack;
-}
-
 namespace Form {
-class FormCore;
-class FormPage;
-class FormMain;
-class FormItem;
-class IFormIO;
-class FormPlaceHolder;
-class SubFormInsertionPoint;
-class FormTreeModel;
 class EpisodeModel;
-
+class FormMain;
 namespace Internal {
-class FormManagerPlugin;
-class FormManagerPrivate;
-}  // namespace Internal
+class EpisodeManagerPrivate;
+} // namespace Internal
 
-class FORM_EXPORT FormManager : public QObject
+class FORM_EXPORT EpisodeManager : public QObject
 {
     Q_OBJECT
-    friend class Form::FormCore;
-    friend class Form::Internal::FormManagerPrivate;
-
-protected:
-    FormManager(QObject *parent = 0);
-
 public:
-    static FormManager *instance();
-    ~FormManager();
+    explicit EpisodeManager(QObject *parent = 0);
+    ~EpisodeManager();
+    
     bool initialize();
-
-    // Form management (load, save)
-    FormPage *createFormPage(const QString &uuid);
-    FormMain *form(const QString &formUid) const;
-    QList<FormMain *> forms() const;
-    QList<FormMain *> subFormsEmptyRoot() const;
-    Form::FormMain *rootForm(const char *modeUniqueName) const;
-    Form::FormMain *identityRootForm() const;
-    Form::FormMain *identityRootFormDuplicate() const;
-    QList<Form::FormMain *> loadFormFile(const QString &formUid);
-    QPixmap getScreenshot(const QString &formUid, const QString &fileName);
-
-    // Models management
-//    FormTreeModel *formTreeModel(const char* modeUniqueName);
-
-public Q_SLOTS:
-    // Form management
-    bool loadPatientFile();
-    bool onCurrentPatientChanged();
-    bool insertSubForm(const SubFormInsertionPoint &insertionPoint);
-
-    // PMHx categories of forms management
-    bool readPmhxCategories(const QString &formUuidOrAbsPath);
-
-Q_SIGNALS:
-    void patientFormsLoaded();
-    void subFormLoaded(const QString &uuid);
-
-private Q_SLOTS:
-    void packChanged(const DataPack::Pack &pack);
-
-//private:
-//    void executeOnloadScript(Form::FormMain *emptyRootForm);
-
+    
+    EpisodeModel *episodeModel(Form::FormMain *form);
+    EpisodeModel *episodeModel(const QString &formUid);
+    
 private:
-    Internal::FormManagerPrivate *d;
+    Internal::EpisodeManagerPrivate *d;
 };
 
-} // End Form
+} // namespace Form
 
-#endif  // FORMMANAGER_H
+#endif // FORM_INTERNAL_EPISODEMANAGER_H
+

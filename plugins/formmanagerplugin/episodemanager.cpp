@@ -25,24 +25,15 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 /*!
- * \class Form::FormCore
- * \brief This object is the single Core of the Form plugin.
- * You can access to any unique object of the Form plugin here:
- * - the Form::FormManager: manages forms
- * - the Form::EpisodeManager: manages episodes (content of a form)
- * And some useful functions like activateCentralPatientFileMode().
- *
- * \sa Form::FormManager, Form::EpisodeManager
+ * \class Form::Internal::EpisodeManager
+ * Manages all Form::EpisodeModel
+ * \sa Form::EpisodeModel
  */
 
+#include "episodemanager.h"
+#include "episodemodel.h"
 #include "formcore.h"
 #include "formmanager.h"
-#include "episodemanager.h"
-#include "formcontextualwidgetmanager.h"
-
-#include <coreplugin/icore.h>
-#include <coreplugin/modemanager/modemanager.h>
-#include <coreplugin/constants_menus.h>
 
 #include <translationutils/constants.h>
 
@@ -52,90 +43,78 @@ using namespace Form;
 using namespace Internal;
 using namespace Trans::ConstantTranslations;
 
-static inline Core::ModeManager *modeManager() { return Core::ICore::instance()->modeManager(); }
+static inline Form::FormManager &formManager() {return Form::FormCore::instance().formManager();}
 
 namespace Form {
 namespace Internal {
-/*!
- * \class Form::Internal::FormCorePrivate
- * \brief Private implementation of the Form::FormCore class.
- */
-class FormCorePrivate
+class EpisodeManagerPrivate
 {
 public:
-    FormCorePrivate(FormCore *parent) :
-        _formManager(0),
-        _episodeManager(0),
-        _widgetManager(0),
+    EpisodeManagerPrivate(EpisodeManager *parent) :
         q(parent)
     {
     }
     
-    ~FormCorePrivate()
+    ~EpisodeManagerPrivate()
     {
     }
-
-public:
-    FormManager *_formManager;
-    EpisodeManager *_episodeManager;
-    FormContextualWidgetManager *_widgetManager;
     
+public:
+    QHash<Form::FormMain *, EpisodeModel *> _episodeModels;
+
 private:
-    FormCore *q;
+    EpisodeManager *q;
 };
 }  // namespace Internal
 } // end namespace Form
 
-Form::FormCore *Form::FormCore::_instance = 0;
-
-Form::FormCore &Form::FormCore::instance() // static
-{
-    Q_ASSERT(_instance);
-    return *_instance;
-}
-
-/*! Constructor of the FormCore class */
-FormCore::FormCore(QObject *parent) :
+/*! Constructor of the Form::Internal::EpisodeManager class */
+EpisodeManager::EpisodeManager(QObject *parent) :
     QObject(parent),
-    d(new FormCorePrivate(this))
+    d(new EpisodeManagerPrivate(this))
 {
-    _instance = this;
-    d->_formManager = new FormManager(this);
-    d->_episodeManager = new EpisodeManager(this);
-    // TODO: add episodeBase in the core
 }
 
-/*! Destructor of the FormCore class */
-FormCore::~FormCore()
+/*! Destructor of the Form::Internal::EpisodeManager class */
+EpisodeManager::~EpisodeManager()
 {
-    _instance = 0;
     if (d)
         delete d;
     d = 0;
 }
 
 /*! Initializes the object with the default values. Return true if initialization was completed. */
-bool FormCore::initialize()
+bool EpisodeManager::initialize()
 {
-    d->_formManager->initialize();
-    d->_episodeManager->initialize();
-    d->_widgetManager = new Internal::FormContextualWidgetManager(this);
     return true;
 }
 
-/** Return the unique instance of the Form::FormManager */
-Form::FormManager &FormCore::formManager() const
+/**
+ * Return the unique Form::EpisodeModel linked to the patient form \e form.
+ * Return zero if the form is not null.
+ */
+EpisodeModel *EpisodeManager::episodeModel(Form::FormMain *form)
 {
-    return *d->_formManager;
+    if (!form)
+        return 0;
+
+    // Not in cache ?
+    if (!d->_episodeModels.value(form, 0)) {
+        // Create the model
+        EpisodeModel *model = new EpisodeModel(form, this);
+        model->initialize();
+        d->_episodeModels.insert(form, model);
+        return model;
+    }
+    return d->_episodeModels.value(form);
 }
 
-/** Return the unique instance of the Form::EpisodeManager */
-Form::EpisodeManager &FormCore::episodeManager() const
+/**
+ * Return the unique Form::EpisodeModel linked to the patient form identified by \e formUid.
+ * Return zero if the form \e formUid is not available.
+ */
+EpisodeModel *EpisodeManager::episodeModel(const QString &formUid)
 {
-    return *d->_episodeManager;
+    return episodeModel(formManager().form(formUid));
 }
 
-void FormCore::activatePatientFileCentralMode()
-{
-    modeManager()->activateMode(Core::Constants::MODE_PATIENT_FILE);
-}

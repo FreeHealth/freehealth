@@ -1034,8 +1034,11 @@ void BaseCheck::retranslate()
 
 ////////////////////////////////////////// ItemData /////////////////////////////////////////////
 BaseCheckData::BaseCheckData(Form::FormItem *item) :
-        m_FormItem(item), m_Check(0)
-{}
+    m_FormItem(item),
+    m_Check(0),
+    m_OriginalValue(Qt::Unchecked)
+{
+}
 
 BaseCheckData::~BaseCheckData()
 {}
@@ -2034,7 +2037,9 @@ void BaseCombo::retranslate()
 
 ////////////////////////////////////////// ItemData /////////////////////////////////////////////
 BaseComboData::BaseComboData(Form::FormItem *item) :
-        m_FormItem(item), m_Combo(0)
+    m_FormItem(item),
+    m_Combo(0),
+    m_OriginalValue(-1)
 {
 }
 
