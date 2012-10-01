@@ -503,6 +503,7 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
     d->ui->formView->setActions(0);
     d->ui->formView->setCommands(QStringList()
                                  << Constants::A_ADDFORM
+                                 << Constants::A_REMOVEFORM
                                  );
     d->ui->formView->addContext(context()->context());
     d->ui->formView->setDeselectable(false);
@@ -617,6 +618,9 @@ bool FormPlaceHolder::enableAction(WidgetAction action) const
         return (d->ui->episodeView->selectionModel()->hasSelection());
     case Action_AddForm:
         // Add form always enabled
+        return true;
+    case Action_RemoveSub:
+        // TODO code me
         return true;
     case Action_PrintCurrentFormEpisode:
         // Validate episode only if
@@ -868,6 +872,12 @@ bool FormPlaceHolder::addForm()
     }
     Q_EMIT actionsEnabledStateChanged();
     return true;
+}
+
+/** If the currently selected form is a sub-form, remove it */
+bool FormPlaceHolder::removeSubForm()
+{
+    // TODO: code me
 }
 
 /** Print the current editing episode. Return false in case of error. Connected to Form::Internal::FormActionHandler */

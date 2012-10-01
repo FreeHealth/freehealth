@@ -59,6 +59,7 @@ public:
         Action_RemoveCurrentEpisode,
         Action_TakeScreenShot,
         Action_AddForm,
+        Action_RemoveSub,
         Action_PrintCurrentFormEpisode
     };
 
@@ -79,6 +80,7 @@ protected Q_SLOTS:
     virtual bool removeCurrentEpisode() = 0;
     virtual bool takeScreenshotOfCurrentEpisode() = 0;
     virtual bool addForm() = 0;
+    virtual bool removeSubForm() = 0;
     virtual bool printFormOrEpisode() = 0;
 
 Q_SIGNALS:

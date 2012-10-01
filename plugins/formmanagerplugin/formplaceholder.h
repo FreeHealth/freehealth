@@ -127,6 +127,7 @@ protected Q_SLOTS:
     bool removeCurrentEpisode();
     bool takeScreenshotOfCurrentEpisode();
     bool addForm();
+    bool removeSubForm();
     bool printFormOrEpisode();
     void episodeChanged(const QModelIndex &current, const QModelIndex &previous);
 

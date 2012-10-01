@@ -254,6 +254,13 @@ Form::FormMain *FormTreeModel::formForIndex(const QModelIndex &index) const
     return d->formForIndex(index);
 }
 
+/** Add a subform to the model according the \e insertionPoint */
+bool FormTreeModel::addSubForm(const SubFormInsertionPoint &insertionPoint)
+{
+    // TODO code me
+    return true;
+}
+
 /** Update the episode count of the form element corresponding to the \e index */
 bool FormTreeModel::updateFormCount(const QModelIndex &index)
 {

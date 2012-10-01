@@ -35,11 +35,13 @@
  * \file formtreemodel.h
  * \author Eric MAEKER <eric.maeker@gmail.com>
  * \version 0.8.0
- * \date 26 Aug 2012
+ * \date 01 Oct 2012
 */
 
 namespace Form {
 class FormMain;
+class SubFormInsertionPoint;
+
 namespace Internal {
 class FormTreeModelPrivate;
 }
@@ -71,6 +73,8 @@ public:
     bool isNoEpisode(const QModelIndex &index) const;
     bool isMultiEpisode(const QModelIndex &index) const {return (!isUniqueEpisode(index) && !isNoEpisode(index));}
     Form::FormMain *formForIndex(const QModelIndex &index) const;
+
+    bool addSubForm(const Form::SubFormInsertionPoint &insertionPoint);
 
 public Q_SLOTS:
     bool updateFormCount(const QModelIndex &index);

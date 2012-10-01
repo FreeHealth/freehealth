@@ -64,6 +64,7 @@ private Q_SLOTS:
     void onRemoveEpisodeRequested();
     void onTakeScreenshotRequested();
     void onAddFormRequested();
+    void onRemoveFormRequested();
     void onPrintFormRequested();
     void showDatabaseInformation();
     
@@ -77,6 +78,7 @@ protected:
     QAction *aCreateEpisode, *aValidateEpisode, *aRemoveEpisode, *aSaveEpisode;
     QAction *aTakeScreenshot;
     QAction *aAddForm;
+    QAction *aRemoveSubForm;
     QAction *aPrintForm;
     
     QPointer<FormContextualWidget> m_CurrentView;

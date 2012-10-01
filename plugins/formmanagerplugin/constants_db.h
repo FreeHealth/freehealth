@@ -103,6 +103,7 @@ namespace Constants {
     const char * const A_VALIDATEEPISODE = "aForms.ValidateEpisode";
     const char * const A_REMOVEEPISODE = "aForms.RemoveEpisode";
     const char * const A_ADDFORM = "aForm.AddForm";
+    const char * const A_REMOVEFORM = "aForm.RemoveForm";
     const char * const A_TAKESCREENSHOT = "aForm.TakeScreenshot";
 
 //    const char * const A_PRINTFORM = "aForm.PrintForm";
@@ -117,6 +118,7 @@ namespace Constants {
     const char * const ADDEPISODE_TEXT = QT_TRANSLATE_NOOP("Forms", "Add Episode");
     const char * const VALIDATEEPISODE_TEXT = QT_TRANSLATE_NOOP("Forms", "Validate Episode");
     const char * const ADDFORM_TEXT = QT_TRANSLATE_NOOP("Forms", "Add Form");
+    const char * const REMOVEFORM_TEXT = QT_TRANSLATE_NOOP("Forms", "Remove Form");
     const char * const PRINTFORM_TEXT = QT_TRANSLATE_NOOP("Forms", "Print Form");
     const char * const SHOWPATIENTSYNTHESIS_TEXT = QT_TRANSLATE_NOOP("Forms", "Show patients' synthesis");
     const char * const SHOWPATIENTLASTEPISODES_TEXT = QT_TRANSLATE_NOOP("Forms", "Show patients' last episodes");
