@@ -49,11 +49,21 @@ public:
     CalendarItemWidget(QWidget *parent = 0, const QString &uid = QString::null, AbstractCalendarModel *model = 0);
 
     const QString &uid() const { return m_uid; }
+
+    /*! Returns the beginning of the item */
     const QDateTime &beginDateTime() const { return m_beginDateTime; }
+
     void setBeginDateTime(const QDateTime &dateTime);
+
+    /*! Returns the ending of the item */
     const QDateTime &endDateTime() const { return m_endDateTime; }
+
     void setEndDateTime(const QDateTime &dateTime);
+
+    /*! Returns the seconds of the item from beginning to it's end */
     int durationInSeconds() const {return m_beginDateTime.secsTo(m_endDateTime);}
+
+    /*! Returns the internally used AbstractCalendarModel */
     AbstractCalendarModel *model() const { return m_model; }
 
 private:
