@@ -77,6 +77,7 @@ private Q_SLOTS:
     void onSwitchToPatientClicked();
     void onEditAppointmentClicked();
     void onPrintAppointmentClicked();
+    void onDeleteAppointmentClicked();
 
 protected:
     void clear();

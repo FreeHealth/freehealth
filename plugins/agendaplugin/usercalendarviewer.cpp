@@ -90,7 +90,7 @@ public:
         m_CalendarItemModel(0),
         m_ItemContextMenu(0),
         m_UserCalendarModel(agendaCore().userCalendarModel(user()->uuid())),
-        aSwitchToPatient(0), aEditItem(0), aPrintItem(0),
+        aSwitchToPatient(0), aEditItem(0), aPrintItem(0), aDeleteItem(0),
         m_AvailModel(0),
         q(parent)
     {
@@ -122,13 +122,18 @@ public:
             aSwitchToPatient = new QAction(q);
             aEditItem = new QAction(q);
             aPrintItem = new QAction(q);
+            aDeleteItem = new QAction(q);
+
             m_ItemContextMenu->addAction(aSwitchToPatient);
             m_ItemContextMenu->addAction(aEditItem);
             m_ItemContextMenu->addAction(aPrintItem);
+            m_ItemContextMenu->addAction(aDeleteItem);
+
             ui->calendarViewer->setContextMenuForItems(m_ItemContextMenu);
             QObject::connect(aSwitchToPatient, SIGNAL(triggered()), q, SLOT(onSwitchToPatientClicked()));
             QObject::connect(aEditItem, SIGNAL(triggered()), q, SLOT(onEditAppointmentClicked()));
             QObject::connect(aPrintItem, SIGNAL(triggered()), q, SLOT(onPrintAppointmentClicked()));
+            QObject::connect(aDeleteItem, SIGNAL(triggered()), q, SLOT(onDeleteAppointmentClicked()));
         }
     }
 
@@ -140,7 +145,7 @@ public:
     QHash<QString, int> m_UidToListIndex;
     bool scrollOnShow;
 
-    QAction *aToday, *aTomorrow, *aNextWeek, *aNextMonth, *aSwitchToPatient, *aEditItem, *aPrintItem;
+    QAction *aToday, *aTomorrow, *aNextWeek, *aNextMonth, *aSwitchToPatient, *aEditItem, *aPrintItem, *aDeleteItem;
     QStandardItemModel *m_AvailModel;
 
 private:
@@ -494,6 +499,10 @@ void UserCalendarViewer::onPrintAppointmentClicked()
     // TODO
 }
 
+void UserCalendarViewer::onDeleteAppointmentClicked()
+{
+}
+
 bool UserCalendarViewer::event(QEvent *e)
 {
     switch (e->type()) {
@@ -522,6 +531,8 @@ bool UserCalendarViewer::event(QEvent *e)
             d->aEditItem->setText(tr("Edit appointment"));
         if (d->aPrintItem)
                 d->aPrintItem->setText(tr("Print appointment"));
+        if (d->aDeleteItem)
+                d->aDeleteItem->setText(tr("Delete appointment"));
 
         break;
     }
