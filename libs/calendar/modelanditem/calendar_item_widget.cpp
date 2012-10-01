@@ -41,6 +41,7 @@ CalendarItemWidget::CalendarItemWidget(QWidget *parent, const QString &uid, Abst
 {
 }
 
+/*! Sets the beginning of the item to the given \e dateTime */
 void CalendarItemWidget::setBeginDateTime(const QDateTime &dateTime)
 {
     if (m_beginDateTime == dateTime)
@@ -50,6 +51,7 @@ void CalendarItemWidget::setBeginDateTime(const QDateTime &dateTime)
     update();
 }
 
+/*! Sets the end of the item to the given \e dateTime */
 void CalendarItemWidget::setEndDateTime(const QDateTime &dateTime)
 {
     if (m_endDateTime == dateTime)
