@@ -568,13 +568,11 @@ bool PatientModel::setData(const QModelIndex &index, const QVariant &value, int 
         {
             col = Constants::IDENTITY_GENDER;
             QString g;
-            bool ok;
-            int i = value.toInt(&ok);
-            if (!ok || i < 0 || i > genders().count()) {
-                LOG_ERROR("Unknown genderIndex" + QString::number(i));
-                return false;
+            switch (value.toInt()) {
+            case 0: g = "M"; break;
+            case 1: g = "F"; break;
+            case 2: g = "H"; break;
             }
-            g = genders()[i];
 
             // value not changed ? -> return
             if (d->m_SqlPatient->index(index.row(), Constants::IDENTITY_GENDER).data().toString() == g)
