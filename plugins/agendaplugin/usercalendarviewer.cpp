@@ -289,7 +289,7 @@ void UserCalendarViewer::quickDateSelection(QAction *a)
     if (a==d->aTomorrow)
         d->ui->startDate->setDate(QDate::currentDate().addDays(1));
     if (a==d->aNextWeek)
-        d->ui->startDate->setDate(QDate::currentDate().addDays(QDate::currentDate().dayOfWeek() - 7));
+        d->ui->startDate->setDate(QDate::currentDate().addDays(8 - QDate::currentDate().dayOfWeek()));
     if (a==d->aNextMonth)
         d->ui->startDate->setDate(QDate(QDate::currentDate().year(), QDate::currentDate().month(), 1).addMonths(1));
     onStartDateChanged(d->ui->startDate->date());
@@ -520,9 +520,9 @@ bool UserCalendarViewer::event(QEvent *e)
         d->aToday->setToolTip(d->aToday->text());
         d->aTomorrow->setText(tkTr(Trans::Constants::TOMORROW));
         d->aTomorrow->setToolTip(d->aTomorrow->text());
-        d->aNextWeek->setText(tkTr(Trans::Constants::NEXT_WEEK));
+        d->aNextWeek->setText(tr("Beginning of next week"));
         d->aNextWeek->setToolTip(d->aNextWeek->text());
-        d->aNextMonth->setText(tkTr(Trans::Constants::NEXT_MONTH));
+        d->aNextMonth->setText(tr("Beginning of next month"));
         d->aNextMonth->setToolTip(d->aNextMonth->text());
 
         if (d->aSwitchToPatient)
