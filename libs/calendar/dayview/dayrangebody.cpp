@@ -555,7 +555,9 @@ void DayRangeBody::mouseMoveEvent(QMouseEvent *event)
         d_body->m_pressedItemWidget->hide();
         QPixmap pixmap(d_body->m_pressedItemWidget->size());
         QPainter painter(&pixmap);
-        painter.setOpacity(0.3);
+
+        // painting with opacity seems to be buggy, at least under Linux/KDE
+//        painter.setOpacity(0.3);
 
         d_body->m_pressedItemWidget->render(&painter);
         drag->setPixmap(pixmap);
@@ -604,16 +606,23 @@ void DayRangeBody::mouseMoveEvent(QMouseEvent *event)
         // now set the new time borders
         if (d_body->m_mouseMode == DayRangeBodyPrivate::MouseMode_ResizeBottom){
             beginning = d_body->m_pressedCalItem.beginning();
+            qDebug() << "beginning after resize:" << beginning;
+            qDebug() << "ending before:" << ending;
             ending = d_body->m_pressedCalItem.ending().addSecs(secondsDifference);
+            qDebug() << "ending after resize:" << ending;
         }
         else if (d_body->m_mouseMode == DayRangeBodyPrivate::MouseMode_ResizeTop){
             beginning = d_body->m_pressedCalItem.beginning().addSecs(secondsDifference);
+            qDebug() << "beginning after resize:" << beginning;
+            qDebug() << "ending before:" << ending;
             ending = d_body->m_pressedCalItem.ending();
+            qDebug() << "ending after resize:" << ending;
         }
 
         if (ending <= beginning)
             ending = beginning.addSecs(1800);
 
+        d_body->m_pressedItemWidget->setBeginDateTime(beginning);
         d_body->m_pressedItemWidget->setEndDateTime(ending);
         rect = d_body->getTimeIntervalRect(beginning.date().dayOfWeek(), beginning.time(), ending.time());
         d_body->m_pressedItemWidget->move(rect.x(), rect.y());
