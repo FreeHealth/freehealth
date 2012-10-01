@@ -604,23 +604,39 @@ void DayRangeBody::mouseMoveEvent(QMouseEvent *event)
         }
 
         // now set the new time borders
+
+        // There is hardly a doctor's appointment across day boundaries
+        // this helps us not having to create code that deals with rendering two
+        // parts and cutting the item in two (or three, if across 3 days... oh my god...)
+
         if (d_body->m_mouseMode == DayRangeBodyPrivate::MouseMode_ResizeBottom){
             beginning = d_body->m_pressedCalItem.beginning();
-            qDebug() << "beginning after resize:" << beginning;
-            qDebug() << "ending before:" << ending;
             ending = d_body->m_pressedCalItem.ending().addSecs(secondsDifference);
-            qDebug() << "ending after resize:" << ending;
+            if (ending <= beginning)
+                ending = beginning.addSecs(1800);
+
+            // resized across day boundaries? Then crop item!
+            if (ending.date() > beginning.date()) {
+                ending.setDate(beginning.date());
+                ending.setTime(QTime(23,59));
+            }
+
         }
         else if (d_body->m_mouseMode == DayRangeBodyPrivate::MouseMode_ResizeTop){
             beginning = d_body->m_pressedCalItem.beginning().addSecs(secondsDifference);
-            qDebug() << "beginning after resize:" << beginning;
-            qDebug() << "ending before:" << ending;
             ending = d_body->m_pressedCalItem.ending();
-            qDebug() << "ending after resize:" << ending;
+            if (ending <= beginning)
+                ending = beginning.addSecs(1800);
+
+            // resized across day boundaries? Then crop item!
+            if (beginning.date() < ending.date()) {
+                beginning.setDate(ending.date());
+                beginning.setTime(QTime(0,0));
+            }
         }
 
-        if (ending <= beginning)
-            ending = beginning.addSecs(1800);
+
+
 
         d_body->m_pressedItemWidget->setBeginDateTime(beginning);
         d_body->m_pressedItemWidget->setEndDateTime(ending);
@@ -642,9 +658,12 @@ void DayRangeBody::mouseReleaseEvent(QMouseEvent *event)
     case DayRangeBodyPrivate::MouseMode_ResizeTop:
     case DayRangeBodyPrivate::MouseMode_ResizeBottom:
     {
+        Q_ASSERT(d_body->m_pressedItemWidget);
+
         if (!d_body->m_pressedItemWidget->inMotion() && event->button() == Qt::RightButton) {
             if (!itemContextMenu()) {
                 // display a default contextual menu
+                // DEPRECATED
                 QMenu menu;
                 QAction *modifyAction = menu.addAction(tr("modify"));
                 connect(modifyAction, SIGNAL(triggered()), this, SLOT(modifyPressItem()));
@@ -656,11 +675,9 @@ void DayRangeBody::mouseReleaseEvent(QMouseEvent *event)
                 itemContextMenu()->exec(event->globalPos());
             }
         } else {
-            int durationInSeconds = d_body->m_pressedItemWidget->durationInSeconds();
-            QDateTime end = d_body->m_pressedItemWidget->beginDateTime().addSecs(durationInSeconds);
             newItem = d_body->m_pressedCalItem;
             newItem.setBeginning(d_body->m_pressedItemWidget->beginDateTime());
-            newItem.setEnding(end);
+            newItem.setEnding(d_body->m_pressedItemWidget->endDateTime());
             model()->moveItem(d_body->m_pressedCalItem, newItem);
         }
         break;
