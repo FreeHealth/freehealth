@@ -60,6 +60,7 @@
 #include <formmanagerplugin/iformitem.h>
 #include <formmanagerplugin/iformitemdata.h>
 #include <formmanagerplugin/iformwidgetfactory.h>
+#include <formmanagerplugin/episodemanager.h>
 #include <formmanagerplugin/episodemodel.h>
 
 #include <coreplugin/icore.h>
@@ -110,6 +111,7 @@ using namespace Trans::ConstantTranslations;
 
 static inline ExtensionSystem::PluginManager *pluginManager() { return ExtensionSystem::PluginManager::instance(); }
 static inline Form::FormManager &formManager() {return Form::FormCore::instance().formManager();}
+static inline Form::EpisodeManager &episodeManager() {return Form::FormCore::instance().episodeManager();}
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline Core::IMainWindow *mainWindow()  { return Core::ICore::instance()->mainWindow(); }
@@ -324,7 +326,7 @@ public:
             QObject::disconnect(_currentEpisodeModel, SIGNAL(rowsInserted(QModelIndex,int,int)), q, SLOT(updateFormCount()));
             QObject::disconnect(_currentEpisodeModel, SIGNAL(rowsRemoved(QModelIndex,int,int)), q, SLOT(updateFormCount()));
         }
-        _currentEpisodeModel = formManager().episodeModel(_currentEditingForm);
+        _currentEpisodeModel = episodeManager().episodeModel(_currentEditingForm);
         QObject::connect(_currentEpisodeModel, SIGNAL(rowsInserted(QModelIndex,int,int)), q, SLOT(updateFormCount()));
         QObject::connect(_currentEpisodeModel, SIGNAL(rowsRemoved(QModelIndex,int,int)), q, SLOT(updateFormCount()));
 
@@ -564,12 +566,6 @@ FormPlaceHolder::~FormPlaceHolder()
     }
 }
 
-void FormPlaceHolder::saveSortOrderToSettings(int col, Qt::SortOrder sort)
-{
-    settings()->setValue(Constants::S_EPISODEVIEW_SORTEDCOLUMN, col);
-    settings()->setValue(Constants::S_EPISODEVIEW_SORTORDER, sort);
-}
-
 /** Return the enabled state of an action. \sa Form::Internal::FormActionHandler */
 bool FormPlaceHolder::enableAction(WidgetAction action) const
 {
@@ -645,28 +641,19 @@ void FormPlaceHolder::setRootForm(Form::FormMain *rootForm)
     d->_rootForm = rootForm;
 
     // Manage Form tree view / model
-    if (d->_formTreeModel)
+    if (d->_formTreeModel) {
+        disconnect(d->_formTreeModel, SIGNAL(modelReset()), this, SLOT(defineFormTreeView()));
         delete d->_formTreeModel;
+    }
     d->_formTreeModel = new FormTreeModel(d->_rootForm, this);
     d->_formTreeModel->initialize();
     d->ui->formView->setModel(d->_formTreeModel);
     d->_delegate->setFormTreeModel(d->_formTreeModel);
 
-    QTreeView *tree = d->ui->formView->treeView();
-    tree->setSelectionMode(QAbstractItemView::SingleSelection);
-    tree->setSelectionBehavior(QAbstractItemView::SelectRows);
-    for(int i=0; i < FormTreeModel::MaxData; ++i)
-        tree->setColumnHidden(i, true);
-    tree->setColumnHidden(FormTreeModel::Label, false);
-    tree->setColumnHidden(FormTreeModel::EmptyColumn1, false);
-    tree->header()->hide();
-    tree->header()->setStretchLastSection(false);
-    tree->header()->setResizeMode(FormTreeModel::Label, QHeaderView::Stretch);
-    tree->header()->setResizeMode(FormTreeModel::EmptyColumn1, QHeaderView::Fixed);
-    tree->header()->resizeSection(FormTreeModel::EmptyColumn1, 16);
-    tree->expandAll();
-
+    defineFormTreeView();
     d->selectAndActivateFirstForm();
+    connect(d->_formTreeModel, SIGNAL(modelReset()), this, SLOT(defineFormTreeView()));
+
     Q_EMIT actionsEnabledStateChanged();
 }
 
@@ -878,6 +865,7 @@ bool FormPlaceHolder::addForm()
 bool FormPlaceHolder::removeSubForm()
 {
     // TODO: code me
+    return true;
 }
 
 /** Print the current editing episode. Return false in case of error. Connected to Form::Internal::FormActionHandler */
@@ -919,6 +907,30 @@ bool FormPlaceHolder::printFormOrEpisode()
     return true;
 }
 
+/** Define the cols to show, their sizes... */
+void FormPlaceHolder::defineFormTreeView()
+{
+    QTreeView *tree = d->ui->formView->treeView();
+    tree->setSelectionMode(QAbstractItemView::SingleSelection);
+    tree->setSelectionBehavior(QAbstractItemView::SelectRows);
+    for(int i=0; i < FormTreeModel::MaxData; ++i)
+        tree->setColumnHidden(i, true);
+    tree->setColumnHidden(FormTreeModel::Label, false);
+    tree->setColumnHidden(FormTreeModel::EmptyColumn1, false);
+    tree->header()->hide();
+    tree->header()->setStretchLastSection(false);
+    tree->header()->setResizeMode(FormTreeModel::Label, QHeaderView::Stretch);
+    tree->header()->setResizeMode(FormTreeModel::EmptyColumn1, QHeaderView::Fixed);
+    tree->header()->resizeSection(FormTreeModel::EmptyColumn1, 16);
+    tree->expandAll();
+}
+
+void FormPlaceHolder::saveSortOrderToSettings(int col, Qt::SortOrder sort)
+{
+    settings()->setValue(Constants::S_EPISODEVIEW_SORTEDCOLUMN, col);
+    settings()->setValue(Constants::S_EPISODEVIEW_SORTORDER, sort);
+}
+
 void FormPlaceHolder::onCurrentPatientChanged()
 {
     // reset the ui
@@ -950,6 +962,7 @@ void FormPlaceHolder::episodeChanged(const QModelIndex &current, const QModelInd
 /** Return true is the Form::Internal::FormDataWidgetMapper included in the view is dirty */
 bool FormPlaceHolder::isDirty() const
 {
+    qWarning() << d->ui->formDataMapper->currentEditingEpisodeIndex();
     if (d->_rootForm
             && d->_currentEditingForm
             && d->ui->formDataMapper->currentEditingEpisodeIndex().isValid())
