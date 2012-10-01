@@ -240,6 +240,9 @@
             <height>50</height>
            </size>
           </property>
+          <property name="popupMode">
+           <enum>QToolButton::InstantPopup</enum>
+          </property>
          </widget>
         </item>
         <item>
@@ -264,14 +267,14 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>Views::CountryComboBox</class>
-   <extends>QComboBox</extends>
-   <header location="global">listviewplugin/countrycombobox.h</header>
-  </customwidget>
-  <customwidget>
    <class>Utils::QButtonLineEdit</class>
    <extends>QLineEdit</extends>
    <header location="global">utils/widgets/qbuttonlineedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>Views::CountryComboBox</class>
+   <extends>QComboBox</extends>
+   <header location="global">listviewplugin/countrycombobox.h</header>
   </customwidget>
   <customwidget>
    <class>Utils::BirthDayEdit</class>
