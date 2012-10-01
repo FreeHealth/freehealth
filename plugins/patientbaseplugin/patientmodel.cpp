@@ -146,6 +146,7 @@ public:
 
     QIcon iconizedGender(const QModelIndex &index)
     {
+        //TODO: put this in a separate method/class, there is much duplication of gender (de)referencing in FMF
         const QString &g = m_SqlPatient->data(m_SqlPatient->index(index.row(), Constants::IDENTITY_GENDER)).toString();
         if (g=="M") {
             return theme()->icon(Core::Constants::ICONMALE);
@@ -376,7 +377,7 @@ QVariant PatientModel::data(const QModelIndex &index, int role) const
         switch (index.column()) {
         case IPatient::UsersUidList:  break;
         case IPatient::GroupsUidList: break;
-        case IPatient::Id :           col = Constants::IDENTITY_ID;         break;
+        case IPatient::Id:            col = Constants::IDENTITY_ID;         break;
         case IPatient::Uid:           col = Constants::IDENTITY_UID;        break;
         case IPatient::FamilyUid:     col = Constants::IDENTITY_FAMILY_UID; break;
         case IPatient::BirthName:     col = Constants::IDENTITY_BIRTHNAME;       break;
@@ -385,6 +386,7 @@ QVariant PatientModel::data(const QModelIndex &index, int role) const
         case IPatient::Gender:        col = Constants::IDENTITY_GENDER;            break;
         case IPatient::GenderIndex:
             {
+            //TODO: put this in a separate method/class, there is much duplication of gender (de)referencing in FMF
                 const QString &g = d->m_SqlPatient->index(index.row(), Constants::IDENTITY_GENDER).data().toString();
                 if (g=="M")
                     return 0;
@@ -566,11 +568,14 @@ bool PatientModel::setData(const QModelIndex &index, const QVariant &value, int 
         {
             col = Constants::IDENTITY_GENDER;
             QString g;
-            switch (value.toInt()) {
-            case 0: g = "M"; break;
-            case 1: g = "F"; break;
-            case 2: g = "H"; break;
+            bool ok;
+            int i = value.toInt(&ok);
+            if (!ok || i < 0 || i > genders().count()) {
+                LOG_ERROR("Unknown genderIndex" + QString::number(i));
+                return false;
             }
+            g = genders()[i];
+
             // value not changed ? -> return
             if (d->m_SqlPatient->index(index.row(), Constants::IDENTITY_GENDER).data().toString() == g)
                 return true;
@@ -690,7 +695,7 @@ bool PatientModel::setData(const QModelIndex &index, const QVariant &value, int 
                 return true;
 
             // value changed -> save to database
-            bool ok = d->m_SqlPatient->setData(d->m_SqlPatient->index(index.row(), col), value, role);
+            const bool ok = d->m_SqlPatient->setData(d->m_SqlPatient->index(index.row(), col), value, role);
             if (!ok)
                 LOG_QUERY_ERROR(d->m_SqlPatient->query());
         }

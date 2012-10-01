@@ -176,6 +176,7 @@ UserCalendarViewer::UserCalendarViewer(QWidget *parent) :
     connect(d->ui->startDateSelector, SIGNAL(triggered(QAction*)), this, SLOT(quickDateSelection(QAction*)));
 
     d->ui->refreshAvailabilities->setIcon(theme()->icon(Core::Constants::ICONSOFTWAREUPDATEAVAILABLE));
+    d->ui->refreshAvailabilities->setToolTip(tr("Refresh Availabilities"));
     d->ui->calendarViewer->setDate(QDate::currentDate());
     d->ui->calendarViewer->setDayScaleHourDivider(2);
     d->ui->calendarViewer->setDayGranularity(5);
@@ -204,7 +205,7 @@ UserCalendarViewer::UserCalendarViewer(QWidget *parent) :
     connect(d->ui->availabilitiesView, SIGNAL(activated(QModelIndex)), this, SLOT(newEventAtAvailabity(QModelIndex)));
     connect(d->ui->availableAgendasCombo, SIGNAL(currentIndexChanged(int)), this, SLOT(on_availableAgendasCombo_activated(int)));
     connect(d->ui->refreshAvailabilities, SIGNAL(clicked()), this, SLOT(refreshAvailabilities()));
-    connect(d->ui->defaultDurationButton,SIGNAL(clicked()), this, SLOT(resetDefaultDuration()));
+    connect(d->ui->defaultDurationButton, SIGNAL(clicked()), this, SLOT(resetDefaultDuration()));
     connect(d->ui->startDate, SIGNAL(dateChanged(QDate)), this, SLOT(onStartDateChanged(QDate)));
     userChanged();
 
@@ -388,9 +389,11 @@ void UserCalendarViewer::on_availableAgendasCombo_activated(const int index)
         d->ui->calendarViewer->setDayScaleHourDivider(defaultDuration/60);
         d->ui->calendarViewer->setDayItemDefaultDuration(defaultDuration);
 
-        //: default agenda duration time (in minutes)
-        d->ui->defaultDurationButton->setToolTip(tr("Set back to default: ") +
-                                                 QString::number(defaultDuration) + " " + tkTr(Trans::Constants::MINUTES));
+        //: default agenda duration time, %1 = time, %2 = minutes (fixed)
+        d->ui->defaultDurationButton->setToolTip(tr("Set back to default: %1 %2").arg(
+                                                     QString::number(defaultDuration),
+                                                     tkTr(Trans::Constants::MINUTES)));
+        resetDefaultDuration();
         d->ui->description->setHtml(d->m_UserCalendarModel->index(index, UserCalendarModel::Description).data().toString());
     }
 //    d->populateCalendarWithCurrentWeek(d->m_UserCals.at(index));
@@ -399,7 +402,8 @@ void UserCalendarViewer::on_availableAgendasCombo_activated(const int index)
 void UserCalendarViewer::userChanged()
 {
     // Update ui
-    d->ui->userNameLabel->setText(user()->value(Core::IUser::FullName).toString());
+    //: e.g. Agendas of John Doe
+    d->ui->availableAgendasGroup->setTitle(tr("Agendas of %1").arg(user()->value(Core::IUser::FullName).toString()));
     if (d->m_UserCalendarModel) {
         disconnect(d->m_UserCalendarModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(updateCalendarData(QModelIndex,QModelIndex)));
     }
@@ -451,7 +455,8 @@ void UserCalendarViewer::updateCalendarData(const QModelIndex &top, const QModel
     Q_UNUSED(bottom);
     if (top.column()==UserCalendarModel::DefaultDuration) {
         // get default duration of given calendar
-        int defaultDuration = d->m_UserCalendarModel->index(top.row(), UserCalendarModel::DefaultDuration, top.parent()).data().toInt();
+        int defaultDuration = d->m_UserCalendarModel->index(top.row(),
+                                                            UserCalendarModel::DefaultDuration, top.parent()).data().toInt();
         d->ui->calendarViewer->setDayScaleHourDivider(defaultDuration/60);
         d->ui->calendarViewer->setDayItemDefaultDuration(defaultDuration);
         //: default agenda duration time (in minutes)

@@ -106,7 +106,7 @@ public:
 
 private Q_SLOTS:
     void indexActivated(const QModelIndex &index);
-    void setCountryFilter(const int index);
+    void setCountryFilter(const QLocale::Country country);
     void zipTextChanged();
     void cityTextChanged();
     void packChanged(const DataPack::Pack &pack);

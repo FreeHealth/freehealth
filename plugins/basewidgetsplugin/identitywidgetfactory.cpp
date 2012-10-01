@@ -125,7 +125,7 @@ IdentityFormWidget::IdentityFormWidget(Form::FormItem *formItem, QWidget *parent
         mode = Patients::IdentityWidget::ReadWriteMode;
 
     m_Identity = new Patients::IdentityWidget(this, mode);
-    m_Identity->setCurrentPatientModel(Patients::PatientModel::activeModel());
+    m_Identity->setPatientModel(Patients::PatientModel::activeModel());
 
     // QtUi Loaded ?
     const QString &layout = formItem->spec()->value(Form::FormItemSpec::Spec_UiInsertIntoLayout).toString();

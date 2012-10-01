@@ -203,6 +203,7 @@ FormActionHandler::FormActionHandler(QObject *parent) :
     aCreateEpisode(0), aValidateEpisode(0), aRemoveEpisode(0), aSaveEpisode(0),
     aTakeScreenshot(0),
     aAddForm(0),
+    aRemoveSubForm(0),
     aPrintForm(0),
     m_CurrentView(0)
 {
@@ -278,11 +279,19 @@ FormActionHandler::FormActionHandler(QObject *parent) :
 
     a = aAddForm = new QAction(this);
     a->setObjectName("aAddForm");
-    a->setIcon(theme()->icon(Core::Constants::ICONFORMS_ADD));
+    a->setIcon(theme()->icon(Core::Constants::ICONADD));
     cmd = actionManager()->registerAction(a, Constants::A_ADDFORM, ctx);
     cmd->setTranslations(Constants::ADDFORM_TEXT, Constants::ADDFORM_TEXT, Constants::FORM_TR_CONTEXT);
 //    cmenu->addAction(cmd, Core::Constants::G_EDIT_LIST);
     connect(aAddForm, SIGNAL(triggered()), this, SLOT(onAddFormRequested()));
+
+    a = aRemoveSubForm = new QAction(this);
+    a->setObjectName("aRemoveSubForm");
+    a->setIcon(theme()->icon(Core::Constants::ICONREMOVE));
+    cmd = actionManager()->registerAction(a, Constants::A_REMOVEFORM, ctx);
+    cmd->setTranslations(Constants::REMOVEFORM_TEXT, Constants::REMOVEFORM_TEXT, Constants::FORM_TR_CONTEXT);
+//    cmenu->addAction(cmd, Core::Constants::G_EDIT_LIST);
+    connect(aRemoveSubForm, SIGNAL(triggered()), this, SLOT(onRemoveFormRequested()));
 
     aPrintForm = registerAction(Core::Constants::A_FILE_PRINT, ctx, this);
     connect(aPrintForm, SIGNAL(triggered()), this, SLOT(onPrintFormRequested()));
@@ -408,6 +417,13 @@ void FormActionHandler::onAddFormRequested()
 {
     if (m_CurrentView) {
         m_CurrentView->addForm();
+    }
+}
+
+void FormActionHandler::onRemoveFormRequested()
+{
+    if (m_CurrentView) {
+        m_CurrentView->removeSubForm();
     }
 }
 

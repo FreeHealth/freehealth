@@ -51,12 +51,14 @@ public:
     QPixmap pixmap() const;
     void setDefaultAction(QAction *action);
     QAction* defaultAction() const;
+    QAction* deletePhotoAction() const;
 
 Q_SIGNALS:
 
 public Q_SLOTS:
     void setPixmap(const QPixmap& pixmap);
     void clearPixmap();
+    void setGenderImage(int genderIndex);
 
 private:
     QPixmap m_pixmap;
