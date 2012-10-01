@@ -266,7 +266,7 @@ void UserCalendarViewer::newEventAtAvailabity(const QModelIndex &index)
     if (dlg.exec() != QDialog::Accepted) {
         d->m_CalendarItemModel->removeItem(item.uid());
     }
-    recalculateAvailabilitiesWithDurationIndex((d->ui->availDurationCombo->currentIndex()+1)*5);
+    recalculateAvailabilitiesWithDurationIndex(d->ui->availDurationCombo->currentIndex());
 }
 
 void UserCalendarViewer::refreshAvailabilities()
