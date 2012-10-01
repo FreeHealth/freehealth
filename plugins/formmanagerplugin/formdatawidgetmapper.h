@@ -63,6 +63,7 @@ public Q_SLOTS:
     void setCurrentForm(const QString &formUid);
     void setCurrentForm(FormMain *form);
     void setCurrentEpisode(const QModelIndex &index);
+    void setFormWidgetEnabled(bool enabled);
 
     QPixmap screenshot();
 

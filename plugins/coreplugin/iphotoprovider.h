@@ -47,10 +47,50 @@ public:
     explicit IPhotoProvider(QObject *parent = 0) : QObject(parent) {}
     virtual ~IPhotoProvider() {}
 
-    /*! returns a photo as a Pixmap. In case or errors return a QPixmap() */
-    virtual QPixmap recievePhoto() = 0;
+    /*! \brief Returns an unique, machine readable identifier for this photo source like "webcam0" or "file".
+     *
+     * This id is used to save it in settings and identify this source later, under other circumstances like
+     * changed/plugged out webcams, etc.
+     */
+    virtual QString id() const = 0;
+
+    /*! \brief Returns a translated name for this provider.
+     *
+     * This could be the vendor and model name of a webcam, or another identifier. */
+    virtual QString name() const = 0;
+
+    /*! \brief Returns a QString containing a text for including in a QAction.
+     *
+     * This text is very different from plugin to plugin and must be set for each one
+     * individually, like "choose from file" or "take photo from internal webcam".
+     */
+    virtual QString displayText() const = 0;
+
+    /*! \brief Returns the active state of the provider.
+     *
+     * \e true means that there is "physically" an e.g. connected webcam attached. \false means, there is no picture
+     * source available/connected or it is not ready to use in ase or errors e.g. */
+    virtual bool isActive() const = 0;
+
+    /*! \brief Returns the enabled state of the provider. This can be changed in user settings. */
+    virtual bool isEnabled() const = 0;
+
+    /*! \brief Returns the priority which is used to order a provider list.
+     *
+     * 0 means no priority, 100 means absolute priority. Feel free to choose any value in between. */
+    virtual int priority() const = 0;
+
+    /*! \brief This function is implemented because of sorting capabilities of the IPhotoProvider. It cannot be overloaded. */
+    bool operator<(const IPhotoProvider *other) { return this->priority() < other->priority(); }
+
+Q_SIGNALS:
+    /*! Emitted when a photo is selected by the user. In case of errors \photo is an invalid QPixmap(). */
+    void photoReady(const QPixmap &photo);
+
+public Q_SLOTS:
+    virtual void startReceivingPhoto() = 0;
+
 };
 
 } // end namespace Core
-
 #endif // CORE_IPHOTOPROVIDER_H

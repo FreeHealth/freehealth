@@ -86,7 +86,17 @@
        </spacer>
       </item>
       <item row="0" column="1">
-       <widget class="QPlainTextEdit" name="street"/>
+       <widget class="QPlainTextEdit" name="street">
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>70</height>
+         </size>
+        </property>
+        <property name="tabChangesFocus">
+         <bool>true</bool>
+        </property>
+       </widget>
       </item>
      </layout>
     </widget>
@@ -230,12 +240,6 @@
             <height>50</height>
            </size>
           </property>
-          <property name="autoDefault">
-           <bool>false</bool>
-          </property>
-          <property name="default">
-           <bool>false</bool>
-          </property>
          </widget>
         </item>
         <item>
@@ -276,7 +280,7 @@
   </customwidget>
   <customwidget>
    <class>Patients::PixmapButton</class>
-   <extends>QPushButton</extends>
+   <extends>QToolButton</extends>
    <header location="global">pixmapbutton.h</header>
   </customwidget>
  </customwidgets>

@@ -31,6 +31,13 @@
 
 #include <QString>
 
+/**
+ * \file subforminsertionpoint.h
+ * \author Eric MAEKER
+ * \version 0.7.6
+ * \date 27 Sept 2012
+*/
+
 namespace Form {
 // TODO: should be internal and not exported
 
@@ -73,5 +80,8 @@ private:
 };
 
 }  // end namespace Form
+
+QDebug operator<<(QDebug dbg, const Form::SubFormInsertionPoint &c);
+QDebug operator<<(QDebug dbg, const Form::SubFormInsertionPoint *c);
 
 #endif // SUBFORMINSERTIONPOINT_H

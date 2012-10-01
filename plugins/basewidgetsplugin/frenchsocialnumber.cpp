@@ -558,6 +558,12 @@ bool FrenchSocialNumberFormData::isModified() const
     return m_OriginalValue != m_Widget->numberWithControlKey();
 }
 
+void FrenchSocialNumberFormData::setModified(bool modified)
+{
+    if (!modified)
+        m_OriginalValue = m_Widget->numberWithControlKey();
+}
+
 bool FrenchSocialNumberFormData::setData(const int ref, const QVariant &data, const int role)
 {
     qWarning() << "FrenchSocialNumberFormData::setData" << data << role << ref;

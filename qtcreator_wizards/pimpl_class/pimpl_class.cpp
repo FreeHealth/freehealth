@@ -25,23 +25,17 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
 @if "%Doxygen%" == "true"
-@if "%Internal%" == "true"
 /*!
+@if "%InternalNamespace%" == "true"
  * \class %PluginNamespace:c%::Internal::%ClassName:c%
- * \brief short description of class
- *
- * Long description of class
- * \sa %PluginNamespace:c%::
- */
 @else
-/*!
  * \class %PluginNamespace:c%::%ClassName:c%
+@endif
  * \brief short description of class
  *
  * Long description of class
  * \sa %PluginNamespace:c%::
  */
-@endif
 @endif
 
 #include "%ClassName:l%.h"
@@ -53,17 +47,25 @@
 #include <QDebug>
 
 using namespace %PluginNamespace:c%;
+@if "%InternalNamespace%" == "true"
 using namespace Internal;
+@endif
 @if "%Translations%" == "true"
 using namespace Trans::ConstantTranslations;
 @endif
 
 @if "%PIMPL%" == "true"
 namespace %PluginNamespace:c% {
+@if "%InternalNamespace%" == "true"
 namespace Internal {
+@endif
 @if "%Doxygen%" == "true"
 /*!
+@if "%InternalNamespace%" == "true"
  * \class %PluginNamespace:c%::Internal::%ClassName:c%Private
+@else
+ * \class %PluginNamespace:c%::%ClassName:c%Private
+@endif
  * \brief Private implementation of the %PluginNamespace:c%::%ClassName:c% class.
  *
  * documentation here
@@ -87,12 +89,15 @@ public:
 private:
     %ClassName:c% *q;
 };
+
+@if "%InternalNamespace%" == "true"
 }  // namespace Internal
+@endif
 } // end namespace %PluginNamespace:c%
 @endif
 
 @if "%Singleton%" == "true"
-@if "%Internal%" == "true"
+@if "%InternalNamespace%" == "true"
 %PluginNamespace:c%::Internal::%ClassName:c% *%PluginNamespace:c%::Internal::%ClassName:c%::_instance = 0;
 
 %PluginNamespace:c%::Internal::%ClassName:c% &instance() // static
@@ -108,15 +113,19 @@ private:
 
 @endif
 @if "%Doxygen%" == "true"
-@if "%Internal%" == "true"
+@if "%InternalNamespace%" == "true"
 /*! Constructor of the %PluginNamespace%::Internal::%ClassName:c% class */
 @else
 /*! Constructor of the %PluginNamespace%::%ClassName:c% class */
 @endif
 @endif
 %ClassName:c%::%ClassName:c%(QObject *parent) :
+@if "%PIMPL%" == "true"
     QObject(parent),
     d(new %ClassName:c%Private(this))
+@else
+    QObject(parent)
+@endif
 {
 @if "%Singleton%" == "true"
     _instance = this;
@@ -124,7 +133,7 @@ private:
 }
 
 @if "%Doxygen%" == "true"
-@if "%Internal%" == "true"
+@if "%InternalNamespace%" == "true"
 /*! Destructor of the %PluginNamespace%::Internal::%ClassName:c% class */
 @else
 /*! Destructor of the %PluginNamespace%::%ClassName:c% class */
@@ -135,9 +144,11 @@ private:
 @if "%Singleton%" == "true"
     _instance = 0;
 @endif
+@if "%PIMPL%" == "true"
     if (d)
         delete d;
     d = 0;
+@endif
 }
 
 @if "%Doxygen%" == "true"
@@ -145,4 +156,5 @@ private:
 @endif
 bool %ClassName:c%::initialize()
 {
+    return true;
 }

@@ -364,7 +364,7 @@ void MainWindow::userChanged()
     setWindowTitle(qApp->applicationName() + " - " + qApp->applicationVersion() + " // " + user()->value(Core::IUser::Uuid).toString());
 }
 
-void MainWindow::updateCheckerEnd()
+void MainWindow::updateCheckerEnd(bool)
 {
     delete statusBar();
 }

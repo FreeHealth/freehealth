@@ -75,6 +75,7 @@
       <Item name="GP::Basic::Drugs::Chronic::Comment" type="texteditor">
         <label lang="xx">Comments</label>
         <label lang="fr">Remarques</label>
+        <label lang="de">Kommentare</label>
         <options>DontPrintEmptyValues</options>
       </Item>
     </MedForm>
@@ -86,12 +87,14 @@
       <Item name="GP::Basic::Drugs::Allergies::Content" type="drugselector">
         <label lang="xx">Known drug allergies</label>
         <label lang="fr">Allergies médicamenteuses connues</label>
+        <label lang="de">Bekannte Medikamentenallergien</label>
         <options>hideselector;nointeractionchecking;DontPrintEmptyValues</options>
         <patientdata>DrugsAtcAllergies</patientdata>
       </Item>
       <Item name="GP::Basic::Drugs::Allergies::Comment" type="texteditor">
         <label lang="xx">Comments</label>
-        <label lang="xx">Remarques</label>
+        <label lang="fr">Remarques</label>
+        <label lang="de">Kommentare</label>
         <options>DontPrintEmptyValues</options>
       </Item>
     </MedForm>
@@ -103,21 +106,25 @@
     <Item name="GP::Basic::SOAP::S" type="texteditor">
       <label lang="xx">Subjective</label>
       <label lang="fr">Subjectif</label>
+      <label lang="de">Anamnese (subjektive)</label>
       <options>FullEditor;DontPrintEmptyValues</options>
     </Item>
     <Item name="GP::Basic::SOAP::O" type="texteditor">
       <label lang="xx">Objective</label>
       <label lang="fr">Objectif</label>
+      <label lang="de">Diagnostik (objective)</label>
       <options>FullEditor;DontPrintEmptyValues</options>
     </Item>
     <Item name="GP::Basic::SOAP::A" type="texteditor">
       <label lang="xx">Assessment</label>
       <label lang="fr">Appréciation clinique</label>
+      <label lang="de">Beurteilung + Diagnose (assessment)</label>
       <options>FullEditor;DontPrintEmptyValues</options>
     </Item>
     <Item name="GP::Basic::SOAP::P" type="texteditor">
       <label lang="xx">Plan</label>
       <label lang="fr">Prise en charge</label>
+      <label lang="de">Procedere (plan)</label>
       <options>FullEditor;DontPrintEmptyValues</options>
     </Item>
 
@@ -125,16 +132,19 @@
 
   <MedForm name="GP::Basic::Prescr">
     <label>Prescriptions</label>
+    <label lang="de">Verschreibungen</label>
     <icon>__theme__/edit.png</icon>
     <options>noepisode;DontPrintEmptyValues</options>
 
     <MedForm name="GP::Basic::Prescr::Text">
       <label lang="xx">Textual prescriptions</label>
       <label lang="fr">Prescriptions textuelles</label>
+      <label lang="de">Verschreibungen</label>
       <options>DontPrintEmptyValues</options>
       <Item type="texteditor" name="GP::Basic::Prescr::Text::Content">
         <label lang="xx">Textual prescription</label>
         <label lang="fr">Prescription textuelle</label>
+        <label lang="de">Verschreibung</label>
         <options>FullEditor;DontPrintEmptyValues</options>
       </Item>
     </MedForm>
@@ -143,11 +153,13 @@
     <MedForm name="GP::Basic::Prescr::Drugs">
       <label lang="xx">Drugs prescriptions</label>
       <label lang="fr">Prescriptions médicamenteuses</label>
+      <label lang="de">Medikamentöse Verschreibungen</label>
       <icon>__theme__/drugs.png</icon>
       <options>DontPrintEmptyValues</options>
       <Item type="prescriptor" name="GP::Basic::Prescr::Drugs::Content">
         <label lang="xx">Therapeutic prescription</label>
         <label lang="fr">Prescription médicamenteuse</label>
+        <label lang="de">Medikamentöse Verschreibung</label>
         <options>AddChronicTherapyButton;DontPrintEmptyValues</options>
       </Item>
     </MedForm>
@@ -157,9 +169,11 @@
   <MedForm name="GP::Basic::ICD10">
     <label lang="xx">ICD10 coding</label>
     <label lang="fr">Codes CIM10</label>
-    <Item type="icd" name="GP::Basic::ICD10::Content">
+    <label lang="de">CIM10-Kodierung</label>
+  <Item type="icd" name="GP::Basic::ICD10::Content">
       <label lang="xx">ICD10 coding</label>
       <label lang="fr">Codes CIM10</label>
+      <label lang="de">CIM10-Kodierung</label>
       <options>DontPrintEmptyValues</options>
     </Item>
   </MedForm>

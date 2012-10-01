@@ -118,7 +118,7 @@ IdentityPage::IdentityPage(QWidget *parent) :
     m_Model->insertRow(0);
     m_uuid = m_Model->index(0, Core::IPatient::Uid).data().toString();
 
-    m_Identity->setCurrentPatientModel(m_Model);
+    m_Identity->setPatientModel(m_Model);
     m_Identity->setCurrentIndex(m_Model->index(0,0));
 
     QGridLayout *layout = new QGridLayout;

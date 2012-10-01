@@ -255,8 +255,8 @@ Please check that this host contains a FreeMedForms server configuration.</sourc
 <context>
     <name>Core::Internal::CoreImpl</name>
     <message>
+        <location filename="../../plugins/fmfcoreplugin/coreimpl.cpp" line="150"/>
         <location filename="../../plugins/fmfcoreplugin/coreimpl.cpp" line="152"/>
-        <location filename="../../plugins/fmfcoreplugin/coreimpl.cpp" line="154"/>
         <source>Core intialization finished...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -860,8 +860,8 @@ Using Url: %1
 <context>
     <name>Core::ModeManager</name>
     <message>
-        <location filename="../../plugins/coreplugin/modemanager/modemanager.cpp" line="168"/>
-        <source>Switch to %1 mode</source>
+        <location filename="../../plugins/coreplugin/modemanager/modemanager.cpp" line="209"/>
+        <source>Switch to &lt;b&gt;%1&lt;/b&gt; mode</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

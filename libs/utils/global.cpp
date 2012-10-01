@@ -1685,21 +1685,21 @@ int replaceTokens(QString &textToAnalyse, const QHash<QString, QString> &tokens_
  * \sa QNetworkConfigurationManager::configurationFromIdentifier(const QString &identifier) const
  * \bug this function is inhibited due to a Qt bug on MacOs X 10.6 & others
 */
-QString testInternetConnexion()
+QString testInternetConnection()
 {
 //    QNetworkConfigurationManager mgr;
-//    LOG_FOR("Utils", QString("Testing internet connexion. ManagerIsOnline=%1").arg(mgr.isOnline()));
+//    LOG_FOR("Utils", QString("Testing internet connection. ManagerIsOnline=%1").arg(mgr.isOnline()));
 //    QList<QNetworkConfiguration> activeConfigs = mgr.allConfigurations(QNetworkConfiguration::Active);
 //    foreach(const QNetworkConfiguration &config, activeConfigs) {
 //        if (config.isValid() && config.type()==QNetworkConfiguration::InternetAccessPoint) {
 //            LOG_FOR("Utils", QString("%1 %2 (valid: %3)").arg(config.name()).arg(config.type()).arg(config.isValid()));
 //            if (mgr.isOnline()) {
-//                LOG_FOR("Utils", QString("Internet connexion found %1").arg(config.name()));
+//                LOG_FOR("Utils", QString("Internet connection found %1").arg(config.name()));
 //                return config.name();
 //            }
 //        }
 //    }
-//    LOG_FOR("Utils", QString("No internet connexion"));
+//    LOG_FOR("Utils", QString("No internet connection"));
     return QString("yes");
 }
 

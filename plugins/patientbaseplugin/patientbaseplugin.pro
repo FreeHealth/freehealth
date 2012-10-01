@@ -32,7 +32,10 @@ HEADERS = patientbaseplugin.h \
     pixmapdelegate.h \
     pixmapbutton.h \
     identityviewerwidget.h \
-    patientmodelwrapper.h
+    patientmodelwrapper.h \
+    filephotoprovider.h \
+    urlphotoprovider.h \
+    urlphotodialog.h
 
 SOURCES = patientbaseplugin.cpp \
     patientbase.cpp \
@@ -48,13 +51,17 @@ SOURCES = patientbaseplugin.cpp \
     pixmapdelegate.cpp \
     pixmapbutton.cpp \
     identityviewerwidget.cpp \
-    patientmodelwrapper.cpp
+    patientmodelwrapper.cpp \
+    filephotoprovider.cpp \
+    urlphotoprovider.cpp \
+    urlphotodialog.cpp
 
 FORMS += identitywidget.ui \
     patientselector.ui \
     patientbasepreferencespage.ui \
     patientbar.ui \
-    identityviewer.ui
+    identityviewer.ui \
+    urlphotodialog.ui
 
 with-alerts{
     HEADERS += with-alerts/patientbaralertplaceholder.h

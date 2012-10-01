@@ -1712,10 +1712,6 @@ Emplacement : %2</translation>
         <translation type="unfinished">Maître toile</translation>
     </message>
     <message>
-        <source>Built information</source>
-        <translation type="unfinished">Information de compilation</translation>
-    </message>
-    <message>
         <source>Build version: %1</source>
         <translation type="unfinished">Version compilée : %1</translation>
     </message>
@@ -2274,6 +2270,22 @@ Text Align Justify shortcut key : Mac specific</extracomment>
     </message>
     <message>
         <source>Profession</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Priority</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Timestamp</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Users database information</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Build information</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

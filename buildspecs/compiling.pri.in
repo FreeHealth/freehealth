@@ -1,4 +1,4 @@
-# This file is preprocess during the qmake pass
+# This file is preprocessed during the qmake pass
 # The pre-processing is done in the root project .pro file
 # see: define_appname.pri
 LOWERED_APPNAME=$${LOW_APPNAME}

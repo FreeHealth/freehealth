@@ -27,8 +27,10 @@
 #define GENERICZIPCODESSTEP_H
 
 #include <coreplugin/ifullreleasestep.h>
-#include <QStringList>
 #include <utils/widgets/countrycombobox.h>
+
+#include <QStringList>
+#include <QNetworkReply>
 
 QT_BEGIN_NAMESPACE
 class QNetworkReply;
@@ -38,6 +40,18 @@ QT_END_NAMESPACE
 
 
 namespace ZipCodes {
+
+struct PostalInfo {
+
+    explicit PostalInfo(const QString postalCode,
+                        const QString city,
+                        const QString country,
+                        const QString extraCode = QString());
+    QString postalCode;
+    QString city;
+    QString extraCode;
+    QString country;
+};
 
 class GenericZipCodesStep : public Core::IFullReleaseStep
 {
@@ -55,6 +69,7 @@ public:
     bool downloadFiles(QProgressBar *bar = 0);
     bool process();
     QString processMessage() const { return tr("Generic zip codes database creation"); }
+    bool postProcessDownload();
 
     bool downloadSelectedCountryInfo();
 
@@ -62,9 +77,14 @@ public:
     QStandardItemModel* selectedCountriesModel() { return m_selectedCountriesModel; }
 
     bool createDatabaseScheme();
+    bool startDownloadingSelectedCountryData();
     bool populateDatabase();
 
     QStringList errors() const {return m_Errors;}
+
+    void selectCountry(const QModelIndex &index);
+    void deselectCountry(const QModelIndex &index);
+
 
 Q_SIGNALS:
     void availableCountriesListDownloaded();
@@ -73,12 +93,17 @@ Q_SIGNALS:
 protected Q_SLOTS:
     void slotSetProgress(qint64 bytesReceived, qint64 bytesTotal);
     void onAvailableCountriesDownloaded(QNetworkReply *reply);
+    void onSelectedCountryDownloadFinished(QNetworkReply* reply);
 
 private:
     QStringList m_Errors;
     bool m_WithProgress;
     QStandardItemModel *m_availableCountriesModel;
     QStandardItemModel *m_selectedCountriesModel;
+    QLocale::Country m_selectedCountry;
+    QList<QString> m_selectedCountryList;
+    int m_selectedCountriesCounter;
+    QList<PostalInfo> m_postalList;
 };
 } // end ZipCodes
 #endif // GENERICZIPCODESSTEP_H

@@ -144,12 +144,11 @@ FormContextualWidgetManager::~FormContextualWidgetManager()
  */
 void FormContextualWidgetManager::updateContext(Core::IContext *object, const Core::Context &additionalContexts)
 {
+    Q_UNUSED(additionalContexts);
+//    qWarning() << "updateContext(Core::IContext *object)" << object << _contextObject;
     if (_contextObject==object)
         return;
     _contextObject = object;
-    qWarning() << "FormContextualWidgetManager::updateContext(Core::IContext *object)" << object;
-    if (object)
-        qWarning() << "FormContextualWidgetManager::updateContext(Core::IContext *object)" << object->widget();
 
     FormContextualWidget *view = 0;
     do {
@@ -163,15 +162,20 @@ void FormContextualWidgetManager::updateContext(Core::IContext *object, const Co
         if (!view) {
             // if widget is inside a FormContextualWidget add the form context
             view = parentFormWidget(object->widget());
-            Core::Context empty;
-            Core::Context form(Constants::C_FORM_PLUGINS);
-            if (!additionalContexts.contains(Constants::C_FORM_PLUGINS)) {
-                if (view) {
-                    contextManager()->updateAdditionalContexts(empty, form);
+            int formContextId = Core::Id(Constants::C_FORM_PLUGINS).uniqueIdentifier();
+            if (view) {
+                if (!contextManager()->hasContext(formContextId)) {
+                    //                    qWarning() << "    Adding context";
+                    contextManager()->updateAdditionalContexts(Core::Context(), Core::Context(Constants::C_FORM_PLUGINS));
                     break;
                 }
             } else {
-                contextManager()->updateAdditionalContexts(form, empty);
+                // !view
+                if (contextManager()->hasContext(formContextId)) {
+                    //                    qWarning() << "    Removing context";
+                    contextManager()->updateAdditionalContexts(Core::Context(Constants::C_FORM_PLUGINS), Core::Context());
+                    break;
+                }
             }
             if (!m_CurrentView)
                 return;
@@ -187,7 +191,6 @@ void FormContextualWidgetManager::updateContext(Core::IContext *object, const Co
     if (view) {
         FormActionHandler::setCurrentView(view);
     }
-    _contextObject = 0;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -304,7 +307,7 @@ FormActionHandler::FormActionHandler(QObject *parent) :
 /** Define the current view, update and connect actions */
 void FormActionHandler::setCurrentView(FormContextualWidget *view)
 {
-    qWarning() << "SET VIEW" << view;
+    qWarning() << "SET VIEW" << view << "hasContext" << contextManager()->hasContext(Core::Id(Constants::C_FORM_PLUGINS).uniqueIdentifier());
     Q_ASSERT(view);
     if (!view) { // this should never be the case
         LOG_ERROR("setCurrentView: no view");
@@ -313,14 +316,8 @@ void FormActionHandler::setCurrentView(FormContextualWidget *view)
 
     // disconnect old view
     if (m_CurrentView) {
-        //        if (view == m_CurrentView.data())
-        //            return;
-        //        m_CurrentView->disconnect();
-        //        disconnect(m_CurrentView->prescriptionListView()->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),
-        //                   this, SLOT(listViewItemChanged()));
-        //        disconnect(m_CurrentView->currentDrugsModel(), SIGNAL(numberOfRowsChanged()),
-        //                   this, SLOT(drugsModelChanged()));
-        //        m_CurrentView->drugSelector()->disconnectFilter();
+        disconnect(m_CurrentView, SIGNAL(actionsEnabledStateChanged()), this, SLOT(updateActions()));
+        disconnect(m_CurrentView, SIGNAL(actionEnabledStateChanged(Form::Internal::FormContextualWidget::WidgetAction)), this, SLOT(onActionEnabledStateUpdated(Form::Internal::FormContextualWidget::WidgetAction)));
     }
     m_CurrentView = view;
 

@@ -27,6 +27,8 @@
 #include "formtreemodel.h"
 #include "iformitem.h"
 #include "episodebase.h"
+//#include "formmanager.h"
+//#include "formcore.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/ipatient.h>
@@ -49,6 +51,7 @@ using namespace Trans::ConstantTranslations;
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline Form::Internal::EpisodeBase *episodeBase() {return Form::Internal::EpisodeBase::instance();}
+//static inline Form::FormManager &formManager() {return Form::FormCore::instance().formManager();}
 static inline Core::IPatient *patient()  { return Core::ICore::instance()->patient(); }
 
 namespace Form {
@@ -82,6 +85,15 @@ public:
         return itemToForm(q->itemFromIndex(firstRow));
     }
 
+    QString formLabelWithEpisodeCount(Form::FormMain *form)
+    {
+        QString label = form->spec()->label();
+        int nb = episodeBase()->getNumberOfEpisodes(form->uuid());
+        if (nb>0)
+            label += QString(" (%1)").arg(nb);
+        return label;
+    }
+
     void createFormTree()
     {
         q->clear();
@@ -94,11 +106,7 @@ public:
 
         // create one item per form
         foreach(Form::FormMain *form, _rootForm->flattenFormMainChildren()) {
-
-            QString label = form->spec()->label();
-            int nb = episodeBase()->getNumberOfEpisodes(form->uuid());
-            if (nb>0)
-                label += QString(" (%1)").arg(nb);
+            QString label = formLabelWithEpisodeCount(form);
             QString iconFile = form->spec()->iconFileName();
             iconFile.replace(Core::Constants::TAG_APPLICATION_THEME_PATH, settings()->path(Core::ISettings::SmallPixmapPath));
             QStandardItem *item = new QStandardItem(QIcon(iconFile), label);
@@ -141,6 +149,7 @@ FormTreeModel::FormTreeModel(Form::FormMain *emptyRootForm, QObject *parent) :
     Q_ASSERT(emptyRootForm);
     setObjectName("Form::FormTreeModel");
     d->_rootForm = emptyRootForm;
+//    connect(&formManager(), SIGNAL(subFormLoaded(QString)), this, SLOT(onSubFormLoaded(QString)));
     connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(updateFormCount()));
 }
 
@@ -245,6 +254,20 @@ Form::FormMain *FormTreeModel::formForIndex(const QModelIndex &index) const
     return d->formForIndex(index);
 }
 
+/** Update the episode count of the form element corresponding to the \e index */
+bool FormTreeModel::updateFormCount(const QModelIndex &index)
+{
+    return updateFormCount(formForIndex(index));
+}
+
+/** Update the episode count of the form element \e form */
+bool FormTreeModel::updateFormCount(Form::FormMain *form)
+{
+    QStandardItem *item = d->formToItem(form);
+    item->setText(d->formLabelWithEpisodeCount(form));
+    return true;
+}
+
 /** Update the episode count of each form of the model. The number count is directly extracted from the episode database. */
 bool FormTreeModel::updateFormCount()
 {
@@ -260,4 +283,11 @@ bool FormTreeModel::updateFormCount()
         item->setText(label);
     }
     return true;
+}
+
+void FormTreeModel::onSubFormLoaded(const QString &formUid)
+{
+    Q_UNUSED(formUid);
+//    d->createFormTree();
+//    reset();
 }

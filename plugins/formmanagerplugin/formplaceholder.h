@@ -29,6 +29,8 @@
 
 #include <formmanagerplugin/formmanager_exporter.h>
 #include <formmanagerplugin/formcontextualwidget.h>
+#include <coreplugin/icorelistener.h>
+#include <coreplugin/ipatientlistener.h>
 
 #include <QWidget>
 #include <QTreeView>
@@ -40,14 +42,44 @@ class QStackedLayout;
 class QModelIndex;
 QT_END_NAMESPACE
 
+/**
+ * \file formplaceholder.h
+ * \author Eric MAEKER
+ * \version 0.8.0
+ * \date 27 Sept 2012
+*/
+
 namespace Form {
 class EpisodeModel;
 class FormMain;
 class FormPlaceHolder;
 class FormTreeModel;
+class FormManager;
 
 namespace Internal {
 class FormPlaceHolderPrivate;
+
+class FormPlaceHolderCoreListener : public Core::ICoreListener
+{
+    Q_OBJECT
+public:
+    FormPlaceHolderCoreListener(FormPlaceHolder *parent);
+    ~FormPlaceHolderCoreListener();
+    bool coreAboutToClose();
+private:
+    FormPlaceHolder *_formPlaceHolder;
+};
+
+class FormPlaceHolderPatientListener : public Core::IPatientListener
+{
+    Q_OBJECT
+public:
+    FormPlaceHolderPatientListener(FormPlaceHolder *parent);
+    ~FormPlaceHolderPatientListener();
+    bool currentPatientAboutToChange();
+private:
+    FormPlaceHolder *_formPlaceHolder;
+};
 
 class FormItemDelegate : public QStyledItemDelegate
 {
@@ -72,8 +104,10 @@ public:
 class FORM_EXPORT FormPlaceHolder : public Internal::FormContextualWidget
 {
     Q_OBJECT
-    friend class FormManager;
+    friend class Form::FormManager;
     friend class Form::Internal::FormPlaceHolderPrivate;
+    friend class Form::Internal::FormPlaceHolderCoreListener;
+    friend class Form::Internal::FormPlaceHolderPatientListener;
 
 public:
     FormPlaceHolder(QWidget *parent = 0);
@@ -96,10 +130,15 @@ protected Q_SLOTS:
     bool printFormOrEpisode();
     void episodeChanged(const QModelIndex &current, const QModelIndex &previous);
 
+protected:
+    bool isDirty() const;
+
 private Q_SLOTS:
+    void saveSortOrderToSettings(int col, Qt::SortOrder sort);
     void onCurrentPatientChanged();
     void handlePressed(const QModelIndex &index);
     void handleClicked(const QModelIndex &index);
+    void updateFormCount();
 
 private:
     void changeEvent(QEvent *event);

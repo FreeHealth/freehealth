@@ -56,7 +56,7 @@ OpenCVWidget::OpenCVWidget(QWidget *parent) :
     m_updateFreq(defaultUpdateFrequency()),
     m_rubberBand(0),
     m_Mode(Create),
-    m_counter(0),
+    m_storage(MemStorage()),
     m_frames(0)
 {
     setObjectName("OpenCVWidget");
@@ -71,8 +71,8 @@ OpenCVWidget::OpenCVWidget(QWidget *parent) :
         dlg.setLabelText(tr("Acquiring webcam..."));
         dlg.show();
 
-        m_camera = VideoCapture(0);
-        if (!m_camera.isOpened()) {
+        m_capture = VideoCapture(0);
+        if (!m_capture.isOpened()) {
             //TODO: error handling!
         }
 //        m_camera = cvCreateCameraCapture(CV_CAP_ANY);
@@ -83,44 +83,44 @@ OpenCVWidget::OpenCVWidget(QWidget *parent) :
     if (WarnCameraProperties) {
         qWarning()
                 << "\nCV_CAP_PROP_POS_MSEC"
-                << m_camera.get(CV_CAP_PROP_POS_MSEC)
+                << m_capture.get(CV_CAP_PROP_POS_MSEC)
                 << "\nCV_CAP_PROP_POS_FRAMES"
-                << m_camera.get(CV_CAP_PROP_POS_FRAMES)
+                << m_capture.get(CV_CAP_PROP_POS_FRAMES)
                 << "\nCV_CAP_PROP_POS_AVI_RATIO"
-                << m_camera.get(CV_CAP_PROP_POS_AVI_RATIO)
+                << m_capture.get(CV_CAP_PROP_POS_AVI_RATIO)
                 << "\nCV_CAP_PROP_FRAME_WIDTH"
-                << m_camera.get(CV_CAP_PROP_FRAME_WIDTH)
+                << m_capture.get(CV_CAP_PROP_FRAME_WIDTH)
                 << "\nCV_CAP_PROP_FRAME_HEIGHT"
-                << m_camera.get(CV_CAP_PROP_FRAME_HEIGHT)
+                << m_capture.get(CV_CAP_PROP_FRAME_HEIGHT)
                 << "\nCV_CAP_PROP_FPS"
-                << m_camera.get(CV_CAP_PROP_FPS)
+                << m_capture.get(CV_CAP_PROP_FPS)
                 << "\nCV_CAP_PROP_FOURCC"
-                << m_camera.get(CV_CAP_PROP_FOURCC)
+                << m_capture.get(CV_CAP_PROP_FOURCC)
                 << "\nCV_CAP_PROP_FRAME_COUNT"
-                << m_camera.get(CV_CAP_PROP_FRAME_COUNT)
+                << m_capture.get(CV_CAP_PROP_FRAME_COUNT)
                 << "\nCV_CAP_PROP_FORMAT"
-                << m_camera.get(CV_CAP_PROP_FORMAT)
+                << m_capture.get(CV_CAP_PROP_FORMAT)
                 << "\nCV_CAP_PROP_MODE"
-                << m_camera.get(CV_CAP_PROP_MODE)
+                << m_capture.get(CV_CAP_PROP_MODE)
                 << "\nCV_CAP_PROP_BRIGHTNESS"
-                << m_camera.get(CV_CAP_PROP_BRIGHTNESS)
+                << m_capture.get(CV_CAP_PROP_BRIGHTNESS)
                 << "\nCV_CAP_PROP_CONTRAST"
-                << m_camera.get(CV_CAP_PROP_CONTRAST)
+                << m_capture.get(CV_CAP_PROP_CONTRAST)
                 << "\nCV_CAP_PROP_SATURATION"
-                << m_camera.get(CV_CAP_PROP_SATURATION)
+                << m_capture.get(CV_CAP_PROP_SATURATION)
                 << "\nCV_CAP_PROP_HUE"
-                << m_camera.get(CV_CAP_PROP_HUE)
+                << m_capture.get(CV_CAP_PROP_HUE)
                 << "\nCV_CAP_PROP_GAIN"
-                << m_camera.get(CV_CAP_PROP_GAIN)
+                << m_capture.get(CV_CAP_PROP_GAIN)
                 << "\nCV_CAP_PROP_EXPOSURE"
-                << m_camera.get(CV_CAP_PROP_EXPOSURE);
+                << m_capture.get(CV_CAP_PROP_EXPOSURE);
     }
 
 
     // face recognition initialisation
     QString filename = settings()->path(Core::ISettings::BundleResourcesPath) + "/textfiles/haarcascade_frontalface_alt2.xml";
-    _cascade.load(filename.toStdString());
-    _storage = MemStorage();
+    m_cascade.load(filename.toStdString());
+
 
     // create a model that contains the captured images
     // 8 images, 1 column (image)
@@ -134,8 +134,7 @@ OpenCVWidget::OpenCVWidget(QWidget *parent) :
  */
 OpenCVWidget::~OpenCVWidget()
 {
-//    cvReleaseHaarClassifierCascade(&_cascade);
-    m_camera.release();
+    m_capture.release();
 }
 
 /*!
@@ -146,44 +145,40 @@ void OpenCVWidget::timerEvent(QTimerEvent *event)
 {
     Q_UNUSED(event);
 
-    if (!m_camera.isOpened())
+    if (!m_capture.isOpened())
         return;
-
+    Mat frame;
     std::vector<Rect> faces;
+    m_capture >> frame;
+    if (!frame.empty()) {
 
-    if (m_camera.read(_frame)) {
-        if (!_frame.empty()) {
+        // now convert Mat image into a QImage
+        m_image = Mat2QImage(frame);
+        setPixmap(QPixmap::fromImage(m_image));
 
-            // now convert Mat image into a QImage
-            m_image = Mat2QImage(_frame);
-            setPixmap(QPixmap::fromImage(m_image));
+        // Find the face
+        ++m_frames; // count frames between last autoshot
+        // one shot every 1000ms
+        if (m_frames >= (1000/m_updateFreq)) {
+            m_frames = 0;  // reset frame counter
 
-            // Find the face
-            ++m_frames; // count frames between last autoshot
-            // one shot every 1000ms
-            if (m_frames >= (1000/m_updateFreq)) {
-                m_frames = 0;  // reset frame counter
+            m_cascade.detectMultiScale(frame, faces, 1.2, 2, 0|CV_HAAR_SCALE_IMAGE, Size(100, 100));
 
-                _cascade.detectMultiScale(_frame, faces, 1.1, 2, 0|CV_HAAR_SCALE_IMAGE, Size(30, 30));
+            // more than one faces are just ignored.
+            if (faces.size() != 1)
+                return;
 
-                // more than one faces are just ignored.
-                if (faces.size() != 1)
-                    return;
+            Rect tmpRect = faces.front();
+            QRect rect(tmpRect.x, tmpRect.y, tmpRect.width, tmpRect.height);
 
-                Rect tmpRect = faces.front();
-                QRect rect(tmpRect.x, tmpRect.y, tmpRect.width, tmpRect.height);
-
-                if (rect.isEmpty() || !rect.isValid() || rect.width() < 80) {
-                    return;
-                }
-                // If found -> get the QImage and cut the face
-                QImage face = m_image.copy(rect);
-                QPixmap pix(face.size());
-                pix = QPixmap::fromImage(face);
-                ++m_counter;
-                Q_EMIT autoFaceShot(pix);
+            if (rect.isEmpty() || !rect.isValid() || rect.width() < 80) {
+                return;
             }
-
+            // If found -> get the QImage and cut the face
+            QImage face = m_image.copy(rect);
+            QPixmap pix(face.size());
+            pix = QPixmap::fromImage(face);
+            Q_EMIT autoFaceShot(pix);
         }
     }
 }

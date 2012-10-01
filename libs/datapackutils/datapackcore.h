@@ -85,7 +85,7 @@ public:
     QString replacePathTag(const QString &path);
 
     // Configuration of internet connection
-    bool isInternetConnexionAvailable();
+    bool isInternetConnectionAvailable();
     void setNetworkProxy(const QNetworkProxy &proxy);
     const QNetworkProxy &networkProxy() const;
 

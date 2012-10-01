@@ -23,6 +23,9 @@
  *   Contributors:                                                         *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
+
+#include <opencv2/highgui/highgui.hpp>
+
 #include "webcamplugin.h"
 #include "webcamconstants.h"
 #include "webcamphotoprovider.h"
@@ -66,17 +69,15 @@ WebcamPlugin::WebcamPlugin() :
         qWarning() << "creating Webcam";
     
     // Add Translator to the Application
-    Core::ICore::instance()->translators()->addNewTranslator("webcam"); 
+    Core::ICore::instance()->translators()->addNewTranslator("webcam");
     
     // Add here the Core::IFirstConfigurationPage objects to the pluginmanager object pool
     
-    // All preferences pages must be created in this part (before user connection)
-    m_prefPage = new WebcamPreferencesPage(this);
-    // And included in the QObject pool
-    addObject(m_prefPage);
+//    // All preferences pages must be created in this part (before user connection)
+//    m_prefPage = new WebcamPreferencesPage(this);
+//    // And included in the QObject pool
+//    addObject(m_prefPage);
     
-    m_webcamProvider = new WebcamPhotoProvider();
-
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
     connect(Core::ICore::instance(), SIGNAL(coreAboutToClose()), this, SLOT(coreAboutToClose()));
 }
@@ -97,14 +98,16 @@ bool WebcamPlugin::initialize(const QStringList &arguments, QString *errorString
     if (Utils::Log::warnPluginsCreation()) {
         qDebug() << "WebcamPlugin::initialize";
     }
-    
+
+
     // Register objects in the plugin manager's object pool
     // Load settings
     // Add actions to menus
     // connect to other plugins' signals
     // "In the initialize method, a plugin can be sure that the plugins it
     //  depends on have initialized their members."
-    
+
+
     // FreeMedForms:
     // Initialize database here
     // Initialize the drugs engines
@@ -112,8 +115,7 @@ bool WebcamPlugin::initialize(const QStringList &arguments, QString *errorString
     
     // No user is logged in until here
     
-
-    ExtensionSystem::PluginManager::instance()->addObject(m_webcamProvider);
+    detectDevices();
 
     //    Core::ActionManager *am = Core::ICore::instance()->actionManager();
     //
@@ -177,25 +179,40 @@ ExtensionSystem::IPlugin::ShutdownFlag WebcamPlugin::aboutToShutdown()
     // Disconnect from signals that are not needed during shutdown
     // Hide UI (if you add UI that is not in the main window directly)
     // Remove preferences pages to plugins manager object pool
-    if(m_webcamProvider) {
-        removeObject(m_webcamProvider);
-        delete m_webcamProvider;
-        m_webcamProvider = 0;
-    }
-    if (m_prefPage) {
-        removeObject(m_prefPage);
-        delete(m_prefPage);
-        m_prefPage = 0;
-    }
+
+//    if (m_prefPage) {
+//        removeObject(m_prefPage);
+//        delete(m_prefPage);
+//        m_prefPage = 0;
+//    }
     return SynchronousShutdown;
 }
 
-// void WebcamPlugin::triggerAction()
-// {
-//     QMessageBox::information(Core::ICore::instance()->mainWindow(),
-//                              tr("Action triggered"),
-//                              tr("This is an action from Webcam."));
-// }
+/**
+ * Detect connected webcam and create a Core::IPhotoProvider object for each device found.
+ * Created objects are sent to the plugin manager object pool.
+ */
+void WebcamPlugin::detectDevices()
+{
+
+    for(int deviceId = 0; deviceId<10; deviceId++) {
+        cv::VideoCapture cap(deviceId);
+        cv::Mat frame;
+        if (cap.isOpened()) {
+            cap.read(frame);
+            if (!frame.empty()) {
+                // add WebcamPhotoProvider object to the static list of providers
+                bool alreadyThere = false;
+                foreach(WebcamPhotoProvider *provider, WebcamPhotoProvider::getProviders()) {
+                    if (provider->deviceId() == deviceId)
+                        alreadyThere = true;
+                }
+                if (!alreadyThere)
+                    addAutoReleasedObject(new WebcamPhotoProvider(deviceId, this));
+            }
+        }
+    }
+}
 
 void WebcamPlugin::coreAboutToClose()
 {

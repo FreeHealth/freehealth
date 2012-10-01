@@ -182,7 +182,7 @@ UTILS_EXPORT int replaceToken( QString &textToAnalyse, const QString &token, con
 UTILS_EXPORT int replaceTokens(QString &textToAnalyse, const QHash<QString, QString> &tokens_values);
 
 // Some network helpers
-UTILS_EXPORT QString testInternetConnexion();
+UTILS_EXPORT QString testInternetConnection();
 
 // Some database identifiers helpers
 UTILS_EXPORT QString cryptPassword(const QString &toCrypt);

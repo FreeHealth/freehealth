@@ -46,7 +46,7 @@
 namespace Agenda {
 class AgendaCore;
 namespace Internal {
-class Appointement;
+class Appointment;
 class NextAvailabiliyManager;
 
 class CalendarEventQuery
@@ -55,9 +55,9 @@ public:
     CalendarEventQuery();
     ~CalendarEventQuery();
 
-    /** Retreive a specific appointement, all other params are ignored */
-    void setAppointementId(const QVariant &id) {m_AppointementId=id;}
-    QVariant appointementId() const {return m_AppointementId;}
+    /** Retreive a specific appointment, all other params are ignored */
+    void setAppointmentId(const QVariant &id) {m_AppointmentId=id;}
+    QVariant appointmentId() const {return m_AppointmentId;}
 
     void setUserFilter(const QString &userUid);
     void setPatientFilter(const QStringList &limitToPatientUids);
@@ -96,7 +96,7 @@ public:
     int calendarId() const {if (m_CalIds.count()>=1) return m_CalIds.at(0); return -1;}
 
 private:
-    QVariant m_AppointementId;
+    QVariant m_AppointmentId;
     int m_Limit, m_StartItem;
     QDateTime m_DateStart, m_DateEnd;
     bool m_UseCurrentUser;
@@ -115,7 +115,7 @@ protected:
 public:
     enum RelatedEventFor {
         RelatedToCalendar = 0,
-        RelatedToAppointement
+        RelatedToAppointment
     };
 
     virtual ~AgendaBase();
@@ -142,15 +142,15 @@ public:
     QList<Agenda::UserCalendar *> getUserCalendars(const QString &userUuid = QString::null);
     bool saveUserCalendar(Agenda::UserCalendar *calendar);
 
-    QList<Appointement *> getCalendarEvents(const CalendarEventQuery &query);
-    bool saveCalendarEvents(const QList<Appointement *> &events);
-    bool saveCalendarEvent(Appointement *event);
+    QList<Appointment *> getCalendarEvents(const CalendarEventQuery &query);
+    bool saveCalendarEvents(const QList<Appointment *> &events);
+    bool saveCalendarEvent(Appointment *event);
 
     QList<QDateTime> nextAvailableTime(const QDateTime &startSearch, const int durationInMinutes, const Agenda::UserCalendar &calendar, const int numberOfDates);
     QDateTime nextAvailableTime(const QDateTime &startSearch, const int durationInMinutes, const Agenda::UserCalendar &calendar);
 
-    bool getPatientNames(const QList<Appointement *> &items);
-    bool getPatientNames(Appointement *item);
+    bool getPatientNames(const QList<Appointment *> &items);
+    bool getPatientNames(Appointment *item);
 
     UserCalendar *createVirtualUserCalendar(const QString &ownerUid, const QString &label, const QString &description,
                                    int defaultDurationInMinutes, int sortId,
@@ -161,8 +161,8 @@ public:
 private:
     bool saveCalendarAvailabilities(Agenda::UserCalendar *calendar);
     bool saveRelatedPeoples(RelatedEventFor relatedToCalendar, const int eventOrCalendarId, const Calendar::CalendarPeople *peopleClass);
-    bool saveCommonEvent(Appointement *event);
-    bool saveNonCyclingEvent(Appointement *event);
+    bool saveCommonEvent(Appointment *event);
+    bool saveNonCyclingEvent(Appointment *event);
     bool getRelatedPeoples(RelatedEventFor relatedTo, const int eventOrCalendarId, Calendar::CalendarPeople *event);
 
 private:
