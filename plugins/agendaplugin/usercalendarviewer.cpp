@@ -399,7 +399,8 @@ void UserCalendarViewer::on_availableAgendasCombo_activated(const int index)
 void UserCalendarViewer::userChanged()
 {
     // Update ui
-    d->ui->userNameLabel->setText(user()->value(Core::IUser::FullName).toString());
+    //: e.g. Agendas of John Doe
+    d->ui->availableAgendasGroup->setTitle(tr("Agendas of %1").arg(user()->value(Core::IUser::FullName).toString()));
     if (d->m_UserCalendarModel) {
         disconnect(d->m_UserCalendarModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(updateCalendarData(QModelIndex,QModelIndex)));
     }
