@@ -537,10 +537,12 @@ public:
     void setIdentityForm(Form::FormMain *form)
     {
         _identityForm = form;
-        // Create a cache to speed up the wrapper
-        foreach(Form::FormItem *item, _identityForm->flattenFormItemChildren()) {
-            if (item->itemData() && item->patientDataRepresentation() != -1) {
-                _formItemWithData.insert(item->patientDataRepresentation(), item);
+        if (form) {
+            // Create a cache to speed up the wrapper
+            foreach(Form::FormItem *item, _identityForm->flattenFormItemChildren()) {
+                if (item->itemData() && item->patientDataRepresentation() != -1) {
+                    _formItemWithData.insert(item->patientDataRepresentation(), item);
+                }
             }
         }
     }
