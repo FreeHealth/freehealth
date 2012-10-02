@@ -310,7 +310,7 @@ FormActionHandler::FormActionHandler(QObject *parent) :
 
     contextManager()->updateContext();
     actionManager()->retranslateMenusAndActions();
-    connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(updateActions()));
+//    connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(updateActions())); // That's done internally in the FormPlaceHolder
 }
 
 /** Define the current view, update and connect actions */
