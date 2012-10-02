@@ -4,15 +4,15 @@
 #include "ui_connexiondialog.h"
 #include <QtSql>
 
-class ConnectionDialog:public QDialog,public Ui::ConnectionDialog
+class ConnectionDialog: public QDialog, public Ui::ConnexionDialog
 {
     Q_OBJECT
-    public:
-        ConnectionDialog(QObject * parent = 0);
-        ~ConnectionDialog();
-    	QString host();
-    	QString login();
-    	QString password();   
+public:
+    ConnectionDialog(QObject * parent = 0);
+    ~ConnectionDialog();
+    QString host();
+    QString login();
+    QString password();
 
 };
 

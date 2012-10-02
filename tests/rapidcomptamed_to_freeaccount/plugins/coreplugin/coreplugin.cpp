@@ -74,7 +74,7 @@ void CorePlugin::extensionsInitialized()
         qWarning() << "CorePlugin::extensionsInitialized";
     m_CoreImpl->extensionsInitialized();
     // add about pages
-    addAutoReleasedObject(new AppAboutPage(this));
+//    addAutoReleasedObject(new AppAboutPage(this));
     addAutoReleasedObject(new TeamAboutPage(this));
     addAutoReleasedObject(new LicenseAboutPage(this));
     addAutoReleasedObject(new BuildAboutPage(this));

@@ -47,6 +47,7 @@ public:
     void extensionsInitialized();
     ShutdownFlag aboutToShutdown();
 
+public Q_SLOTS:
     void postCoreInitialization();
 
 };

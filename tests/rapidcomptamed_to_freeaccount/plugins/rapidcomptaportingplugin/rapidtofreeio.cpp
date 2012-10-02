@@ -1,7 +1,9 @@
 #include "rapidtofreeio.h"
-#include <../../plugins/accountbaseplugin/accountbase.h>
+#include "connect.h"
+#include <accountbaseplugin/accountbase.h>
+#include <QSqlQuery>
 
-enum Warn{WarnDebugMessage = true};
+enum Warn {WarnDebugMessage = true};
 
 RapidToFreeIO::RapidToFreeIO(QObject * parent)
 {
@@ -14,14 +16,12 @@ RapidToFreeIO::~RapidToFreeIO(){}
 
 bool RapidToFreeIO::initialiseBases()
 {
-    	
-    	AccountBase::instance()->initialize();
-    	if (!connectToRapidComptamed())
-    	{
-    		  qWarning() << __FILE__ << QString::number(__LINE__) << "unable to connect to rapidcomptamed" ;
-    	          return false;
-    	    }
-    	return true;
+    //    	AccountBase::instance()->initialize();
+    if (!connectToRapidComptamed()) {
+        qWarning() << __FILE__ << QString::number(__LINE__) << "unable to connect to rapidcomptamed" ;
+        return false;
+    }
+    return true;
 }
 
 bool RapidToFreeIO::connectToRapidComptamed()
@@ -29,18 +29,18 @@ bool RapidToFreeIO::connectToRapidComptamed()
     m_dbRapidCompta = QSqlDatabase::addDatabase("QMYSQL", "comptabilite");
     ConnectionDialog * c = new ConnectionDialog(this);
     if (c->exec()==QDialog::Accepted)
-    {    	      
+    {
         m_dbRapidCompta.setHostName(c->host());
         m_dbRapidCompta.setDatabaseName("comptabilite");
         m_dbRapidCompta.setUserName(c->login());
         m_dbRapidCompta.setPassword(c->password());
         if (!m_dbRapidCompta.isOpen() && !m_dbRapidCompta.open())
         {
-    	    qWarning() << __FILE__ << QString::number(__LINE__) << m_dbRapidCompta.lastError().text() ;
-    	    return false;
+            qWarning() << __FILE__ << QString::number(__LINE__) << m_dbRapidCompta.lastError().text() ;
+            return false;
         }
         return true;
-        }
+    }
     return false;
 }
 
@@ -48,54 +48,54 @@ bool RapidToFreeIO::getAndSetAccount()
 {
     m_dbAccount = QSqlDatabase::database("account");
     int lastId = 0;
-    QSqQuery queryLastId(m_dbAccount);
+    QSqlQuery queryLastId(m_dbAccount);
     QString reqLastId = QString("SELECT %1 FROM %2").arg("ACCOUNT_ID","account");
     while (queryLastId.next())
     {
-    	int id = queryLastId.value(0).toInt();
-    	if (id>lastId)
-    	{
-    		  lastId = id;
-    	    }
+        int id = queryLastId.value(0).toInt();
+        if (id>lastId)
+        {
+            lastId = id;
         }
+    }
     if (WarnDebugMessage)
         qDebug() << __FILE__ << QString::number(__LINE__) << " last account id =" << QString::number(lastId) ;
-    QSqQuery queryHono(m_dbRapidCompta);
+    QSqlQuery queryHono(m_dbRapidCompta);
     QString req = QString("SELECT %1 FROM %2").arg(m_honorairesFields,"honoraires");
     if (!queryHono.exec(req))
     {
-    	  qWarning() << __FILE__ << QString::number(__LINE__) << queryHono.lastError().text() ;
-    	  return false;
-    	  
-        }
+        qWarning() << __FILE__ << QString::number(__LINE__) << queryHono.lastError().text() ;
+        return false;
+
+    }
     while (queryHono.next())
     {
-    	 QString id_hono=queryHono.value(RAPID_ID_HONO).toString();
-         QString id_usr=queryHono.value(RAPID_ID_USR).toString();
-         QString id_drtux_usr=queryHono.value(RAPID_ID_DRTUX_USR).toString();
-         QString patient=queryHono.value(RAPID_PATIENT).toString();
-         QString id_site=queryHono.value(RAPID_ID_SITE).toString();
-         QString id_payeurs=queryHono.value(RAPID_ID_PAYEURS).toString();
-         QString guid=queryHono.value(RAPID_GUID).toString();
-         QString praticien=queryHono.value(RAPID_PRATICIEN).toString();
-         QString date=queryHono.value(RAPID_DATE).toString();
-         QString acte=queryHono.value(RAPID_ACTE).toString();
-         QString acteclair=queryHono.value(RAPID_ACTECLAIR).toString();
-         QString remarque=queryHono.value(RAPID_REMARQUE).toString();
-         QString esp=queryHono.value(RAPID_ESP).toString();
-         QString chq=queryHono.value(RAPID_CHQ).toString();
-         QString cb=queryHono.value(RAPID_CB).toString();
-         QString vir=queryHono.value(RAPID_VIR).toString();
-         QString daf=queryHono.value(RAPID_DAF).toString();
-         QString autre=queryHono.value(RAPID_AUTRE).toString();
-         QString du=queryHono.value(RAPID_DU).toString();
-         QString du_par=queryHono.value(RAPID_DU_PAR).toString();
-         QString valide=queryHono.value(RAPID_VALIDE).toString();
-         QString tracabilite=queryHono.value(RAPID_TRACABILITE).toString();
-         
-         
-        }
-    return true;  
+        QString id_hono=queryHono.value(RAPID_ID_HONO).toString();
+        QString id_usr=queryHono.value(RAPID_ID_USR).toString();
+        QString id_drtux_usr=queryHono.value(RAPID_ID_DRTUX_USR).toString();
+        QString patient=queryHono.value(RAPID_PATIENT).toString();
+        QString id_site=queryHono.value(RAPID_ID_SITE).toString();
+        QString id_payeurs=queryHono.value(RAPID_ID_PAYEURS).toString();
+        QString guid=queryHono.value(RAPID_GUID).toString();
+        QString praticien=queryHono.value(RAPID_PRATICIEN).toString();
+        QString date=queryHono.value(RAPID_DATE).toString();
+        QString acte=queryHono.value(RAPID_ACTE).toString();
+        QString acteclair=queryHono.value(RAPID_ACTECLAIR).toString();
+        QString remarque=queryHono.value(RAPID_REMARQUE).toString();
+        QString esp=queryHono.value(RAPID_ESP).toString();
+        QString chq=queryHono.value(RAPID_CHQ).toString();
+        QString cb=queryHono.value(RAPID_CB).toString();
+        QString vir=queryHono.value(RAPID_VIR).toString();
+        QString daf=queryHono.value(RAPID_DAF).toString();
+        QString autre=queryHono.value(RAPID_AUTRE).toString();
+        QString du=queryHono.value(RAPID_DU).toString();
+        QString du_par=queryHono.value(RAPID_DU_PAR).toString();
+        QString valide=queryHono.value(RAPID_VALIDE).toString();
+        QString tracabilite=queryHono.value(RAPID_TRACABILITE).toString();
+
+
+    }
+    return true;
 }
 
 void RapidToFreeIO::fillHashOfAccount()
@@ -164,24 +164,24 @@ void RapidToFreeIO::linkTableHonoAndAccount()
     m_hashLink.insert(VISA,RAPID_CB);
     m_hashLink.insert(BANKING,RAPID_VIR);
     m_hashLink.insert(OTHER,RAPID_AUTRE);
-    m_hashLink.insert(DU,RAPID_DU);
-    m_hashLink.insert(DUE_BY,RAPID_DU_PAR);    
+    //    m_hashLink.insert(DU,RAPID_DU);
+    m_hashLink.insert(DUE_BY,RAPID_DU_PAR);
 }
 
 QStringList RapidToFreeIO::getListOfRapidcomptamedUsers()
 {
     QStringList listOfUsers;
-    QSqQuery qUsers(m_dbRapidCompta);
+    QSqlQuery qUsers(m_dbRapidCompta);
     QString req = QString("SELECT login FROM utilisateurs");
     if (!qUsers.exec(req))
     {
-    	  qWarning() << __FILE__ << QString::number(__LINE__) << qUsers.lastError().text() ;
-        }
+        qWarning() << __FILE__ << QString::number(__LINE__) << qUsers.lastError().text() ;
+    }
     while (qUsers.next())
     {
-    	listOfUsers << qUsers.value(0).toString();
-        }
-     return listOfUsers;   
+        listOfUsers << qUsers.value(0).toString();
+    }
+    return listOfUsers;
 }
 
 

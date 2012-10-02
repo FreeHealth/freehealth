@@ -1,14 +1,16 @@
 TEMPLATE = app
-TARGET = prevention
+macx:win32:TARGET = $$quote(RapidComptaPorting)
+else:TARGET = $$quote(rapidcomptaporting)
+
+include(../../../buildspecs/config.pri)
 
 QT += xml network core gui
 
-include(../../../buildspecs/config.pri)
-include(../../../libs/utils.pri)
-include(../../../libs/translationutils.pri)
-include(../../../libs/aggregation.pri)
-include(../../../libs/extensionsystem.pri)
-include(../../../libs/rpath.pri)
+# include libs
+include( $${SOURCES_LIBS_PATH}/extensionsystem.pri )
+include( $${SOURCES_LIBS_PATH}/translationutils.pri )
+include( $${SOURCES_LIBS_PATH}/utils.pri )
+include( $${SOURCES_LIBS_PATH}/rpath.pri )
 
-SOURCES = main.cpp \
+SOURCES = main.cpp
 
