@@ -333,6 +333,14 @@ bool EpisodeBase::setCurrentDatabaseVersion(const QString &version)
         return false;
     DB.transaction();
     QSqlQuery query(DB);
+    query.prepare(prepareDeleteQuery(Table_VERSION));
+    if (!query.exec()) {
+        LOG_QUERY_ERROR(query);
+        query.finish();
+        DB.rollback();
+        return false;
+    }
+    query.finish();
     query.prepare(prepareInsertQuery(Table_VERSION));
     query.bindValue(VERSION_TEXT, version);
     if (!query.exec()) {
@@ -376,6 +384,9 @@ bool EpisodeBase::checkDatabaseVersion()
     if (currentVersion == "0.1") {
         if (!alterTableForNewField(Constants::Table_EPISODES, Constants::EPISODES_PRIORITY))
             return false;
+        LOG(tr("Episode database updated from version %1 to version: %2")
+            .arg("0.1")
+            .arg(Constants::DB_ACTUALVERSION));
     }
     // Update the database version
     return setCurrentDatabaseVersion(Constants::DB_ACTUALVERSION);
