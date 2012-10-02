@@ -48,6 +48,8 @@
 #include "episodemodel.h"
 #include "constants_db.h"
 #include "subforminsertionpoint.h"
+#include "formcollection.h"
+#include "formtreemodel.h"
 
 #include <formmanagerplugin/iformwidgetfactory.h>
 #include <formmanagerplugin/iformitemdata.h>
@@ -116,75 +118,108 @@ namespace Internal {
 class FormManagerPrivate
 {
 public:
+    enum FormType {
+        CompleteForms,
+        ModeForms,
+        SubForms
+    };
+
     FormManagerPrivate(FormManager *parent) :
         q(parent)
     {}
 
     ~FormManagerPrivate()
     {
-        qDeleteAll(m_RootForms);
-        m_RootForms.clear();
-        _formParents.clear();
-        // EpisodeModel are deleted by QObject mecanism
+        // FormTreeModel are deleted by QObject mecanism
+        qDeleteAll(_centralFormCollection);
+        qDeleteAll(_subFormCollection);
+        // TODO: segfaulting on deletion
+//        qDeleteAll(_centralFormDuplicateCollection);
+//        qDeleteAll(_subFormDuplicateCollection);
     }
 
-    bool isFormLoaded(QString formUid)
+    const FormCollection &extractFormCollectionFrom(const QVector<FormCollection *> &collections, FormType type, const QString &uid)
     {
-        QHashIterator<Form::FormMain *, Form::FormMain *> i(_formParents);
-         while (i.hasNext()) {
-             i.next();
-             if (i.value()->uuid() == formUid)
-                 return true;
-         }
-         return false;
+        for(int i=0; i < collections.count(); ++i) {
+            FormCollection *coll = collections.at(i);
+            if (type == CompleteForms && coll->type()==FormCollection::CompleteForm && coll->formUid() == uid) {
+                return *coll;
+            } else if (type == ModeForms && coll->type()==FormCollection::CompleteForm && coll->modeUid() == uid) {
+                return *coll;
+            } else if (type == SubForms && coll->type()==FormCollection::SubForm && coll->formUid() == uid) {
+                return *coll;
+            }
+        }
+        return _nullFormCollection;
     }
 
-    QList<Form::FormMain *> loadFormFile(const QString &formUid, bool useCache = true)
+    bool isCollectionLoaded(const QString &uid, FormType type)
     {
-        QList<Form::FormMain *> toReturn;
+        if (type==CompleteForms)
+            return !extractFormCollectionFrom(_centralFormCollection, type, uid).isNull();
+        return !extractFormCollectionFrom(_subFormCollection, type, uid).isNull();
+    }
 
-        if (formUid.isEmpty()) {
-            LOG_ERROR_FOR(q, "No formUid to load...");
-            return toReturn;
+    void createModeFormCollections(const QList<Form::FormMain *> &list, FormType type, bool isDuplicate)
+    {
+        foreach(Form::FormMain *form, list) {
+            // Check if a collection with the mode is already existing
+            FormCollection *collection = new FormCollection;
+            collection->setEmptyRootForms(QList<Form::FormMain *>() << form);
+            collection->setDuplicates(isDuplicate);
+            if (type==CompleteForms) {
+                collection->setType(FormCollection::CompleteForm);
+                if (isDuplicate)
+                    _centralFormDuplicateCollection << collection;
+                else
+                    _centralFormCollection << collection;
+            } else {
+                collection->setType(FormCollection::SubForm);
+                if (isDuplicate)
+                    _subFormDuplicateCollection << collection;
+                else
+                    _subFormCollection << collection;
+            }
+        }
+    }
+
+    // Loads a form and create its collection, creates duplicates too
+    bool loadFormCollection(const QString &uid, FormType type)
+    {
+        if (uid.isEmpty()) {
+            LOG_ERROR_FOR(q, "No uid to load...");
+            return false;
         }
 
-        // Check from cache (we suppose that the forms are reparented to their original empty root parent)
-        if (useCache && isFormLoaded(formUid)) {
-            QHashIterator<Form::FormMain *, Form::FormMain *> i(_formParents);
-             while (i.hasNext()) {
-                 i.next();
-                 if (i.value()->uuid() == formUid)
-                     toReturn << i.value();
-             }
-            return toReturn;
-        }
-
+        // Check from cache
+        if (isCollectionLoaded(uid, type))
+            return true;
 
         // Not in cache -> ask IFormIO plugins
         QList<Form::IFormIO *> list = pluginManager()->getObjects<Form::IFormIO>();
         if (list.isEmpty()) {
             LOG_ERROR_FOR(q, "No IFormIO loaded...");
-            return toReturn;
+            return false;
         }
 
-        // Load root forms
+        // Load forms
         foreach(Form::IFormIO *io, list) {
-            if (io->canReadForms(formUid)) {
-                QList<Form::FormMain *> list = io->loadAllRootForms(formUid);
-                // Keep trace of form parents (first QObject of the rootForm)
-                for(int i=0; i < list.count(); ++i) {
-                    Form::FormMain *rootForm = list.at(i);
-                    foreach(Form::FormMain *form, rootForm->firstLevelFormMainChildren()) {
-                        _formParents.insert(form, rootForm);
-                    }
-                }
-                toReturn << list;
+            if (io->canReadForms(uid)) {
+                // Create the main collection
+                QList<Form::FormMain *> list = io->loadAllRootForms(uid);
+                createModeFormCollections(list, type, false);
+                list.clear();
+
+                // Create its duplicate
+                list = io->loadAllRootForms(uid);
+                createModeFormCollections(list, type, true);
+                return true;
             }
         }
-        return toReturn;
+        return false;
     }
 
-    bool getRootForm()
+    bool getMainFormCollection()
     {
         // get form general form absPath from episodeBase
         QString absDirPath = episodeBase()->getGenericFormFile();
@@ -195,80 +230,63 @@ public:
         }
 
         // load central root forms, create cache and duplicates
-        m_RootForms = loadFormFile(absDirPath); // also create the cache
-        if (ManageDuplicates) {
-            qDeleteAll(m_RootFormsDuplicates);
-            m_RootFormsDuplicates.clear();
-            m_RootFormsDuplicates = loadFormFile(absDirPath, false); // force reloading of forms
+        if (!loadFormCollection(absDirPath, CompleteForms)) {
+            LOG_ERROR_FOR(q, "Unable to load main form: " + absDirPath);
+            return false;
         }
+        const FormCollection &main = extractFormCollectionFrom(_centralFormCollection, CompleteForms, absDirPath);
+        if (main.isNull()) {
+            LOG_ERROR_FOR(q, "Unable to load main form: " + absDirPath);
+            return false;
+        }
+
         // load pmhx
-        if (!m_RootForms.isEmpty()) {
-            m_RootForms.at(0)->reader()->loadPmhCategories(absDirPath);
+        if (main.emptyRootForms().count() > 0) {
+            main.emptyRootForms().at(0)->reader()->loadPmhCategories(absDirPath);
             return true;
         }
         return false;
     }
 
-    /**
-     * Load all requiered subforms and insert them according to data extracted from the episode database.
-     */
-    bool loadSubForms()
+    bool loadPatientSubForms()
     {
-        // TODO: ???   d->m_SubFormsEmptyRoot.clear();
         // get sub-forms from database
         const QVector<SubFormInsertionPoint> &subs = episodeBase()->getSubFormFiles();
+
+        qWarning() << "SUB" << subs;
+
         if (subs.isEmpty())
             return true;
 
-        bool ok = true;
-        for(int i = 0; i < subs.count(); ++i) {
-            if (!insertSubForm(subs.at(i))) {
-                LOG_ERROR_FOR(q, "Unable to insert sub-form: " + subs.at(i).subFormUid());
-                ok = false;
-            }
-        }
-        return ok;
-    }
+        // clear all FormTreeModel from subForms
+        foreach(FormTreeModel *model, _formTreeModels.values())
+            model->clearSubForms();
 
-    bool insertSubForm(const SubFormInsertionPoint &insertionPoint)
-    {
-        qWarning() << "INSERT" << insertionPoint;
-        // read all sub-forms and emit signal if requiered
-        QList<Form::FormMain*> subs = loadFormFile(insertionPoint.subFormUid());
-        if (ManageDuplicates)
-            m_SubFormsEmptyRootDuplicates << loadFormFile(insertionPoint.subFormUid(), false);
-
-        if (insertionPoint.emitInsertionSignal())
-            Q_EMIT q->subFormLoaded(insertionPoint.subFormUid());
-
-        // insert sub-forms to the forms tree
-        const QString &insertIntoUuid = insertionPoint.receiverUid();
+        // Repopulate FormTreeModel with subforms
         for(int i=0; i < subs.count(); ++i) {
-            FormMain *sub = subs.at(i);
-            if (insertIntoUuid == Constants::ROOT_FORM_TAG) {
-                // insert into its mode root form
-                FormMain *rootMode = q->rootForm(sub->modeUniqueName().toAscii());
-                if (!rootMode) {
-                    LOG_ERROR_FOR(q, "Unable to find the mode root form: " + sub->modeUniqueName());
-                    continue;
-                }
-                foreach(Form::FormMain *form, sub->firstLevelFormMainChildren())
-                    form->setParent(rootMode);
+            const SubFormInsertionPoint &sub = subs.at(0);
+
+            // Load subform
+            if (!loadFormCollection(sub.subFormUid(), SubForms)) {
+                LOG_ERROR_FOR(q, "Unable to load subform: " + sub.subFormUid());
+                return false;
             }
 
-            // find point of insertion
-            QList<Form::FormMain *> allForms = q->forms();
-            for(int j=0; j < allForms.count(); ++j) {
-                FormMain *parent = allForms.at(j);
-                // search inside flatten children
-                QList<Form::FormMain *> children = parent->flattenFormMainChildren();
-                for(int k=0; k < children.count(); ++k) {
-                    FormMain *child = children.at(k);
-                    if (child->uuid()==insertIntoUuid) {
-                        qWarning() << "inserting subForm"<< insertionPoint;
-                        foreach(Form::FormMain *form, sub->firstLevelFormMainChildren()) {
-                            form->setParent(child);
-                        }
+            // Find all FormTreeModel with the formUid && populate them
+            if (sub.receiverUid() == Constants::ROOT_FORM_TAG) {
+                // Add to the central mode
+                FormTreeModel *model = getFormTreeModel(Core::Constants::MODE_PATIENT_FILE, ModeForms);
+                qWarning() << model;
+                if (model)
+                    model->addSubForm(sub);
+            } else {
+                foreach(FormCollection *collection, _centralFormCollection) {
+                    if (collection->formUid() == sub.receiverUid()) {
+                        // update the formtreemodel
+                        FormTreeModel *model = getFormTreeModel(collection->formUid(), collection->type()==FormCollection::CompleteForm ? CompleteForms : SubForms );
+                        qWarning() << model;
+                        if (model)
+                            model->addSubForm(sub);
                         break;
                     }
                 }
@@ -299,7 +317,54 @@ public:
         return true;
     }
 
+    FormTreeModel *getFormTreeModel(const QString &uid, FormType type)
+    {
+        FormTreeModel *model = _formTreeModels.value(uid, 0);
+        if (!model) {
+            // Not already available -> create it (&& load form if needed)
+            if (type == ModeForms) {
+                const FormCollection &collection = extractFormCollectionFrom(_centralFormCollection, type, uid);
+                if (collection.isNull()) {
+                    LOG_ERROR_FOR(q, "unable to create formtreemodel");
+                    return 0;
+                } else {
+                    model = new FormTreeModel(collection, q);
+                }
+            } else if (type == CompleteForms) {
+                const FormCollection &collection = extractFormCollectionFrom(_centralFormCollection, type, uid);
+                if (collection.isNull()) {
+                    // Load the form
+                    if (!loadFormCollection(uid, type)) {
+                        LOG_ERROR_FOR(q, "unable to create formtreemodel");
+                        return 0;
+                    }
+                    model = new FormTreeModel(extractFormCollectionFrom(_centralFormCollection, type, uid), q);
+                } else {
+                    model = new FormTreeModel(collection, q);
+                }
+            } else {
+                const FormCollection &collection = extractFormCollectionFrom(_subFormCollection, type, uid);
+                if (collection.isNull()) {
+                    // Load the form
+                    if (!loadFormCollection(uid, type)) {
+                        LOG_ERROR_FOR(q, "unable to create formtreemodel");
+                        return 0;
+                    }
+                    model = new FormTreeModel(extractFormCollectionFrom(_subFormCollection, type, uid), q);
+                } else {
+                    model = new FormTreeModel(collection, q);
+                }
+            }
+            _formTreeModels.insert(uid, model);
+        }
+        return model;
+    }
+
 public:
+    QVector<FormCollection *> _centralFormCollection, _centralFormDuplicateCollection, _subFormCollection, _subFormDuplicateCollection;
+    FormCollection _nullFormCollection;
+    QHash<QString, FormTreeModel *> _formTreeModels;
+    // OLD
     QVector<Form::FormPage *> _formPages;
     QList<Form::FormMain *> m_RootForms, m_RootFormsDuplicates, m_SubFormsEmptyRoot, m_SubFormsEmptyRootDuplicates;
     QHash<Form::FormMain *, Form::FormMain *> _formParents; // keep the formMain parent in cache (K=form to reparent, V=emptyrootform)
@@ -338,6 +403,54 @@ bool FormManager::initialize()
     return true;
 }
 
+/** Return the Form::FormCollection to use for the mode uid \e modeUid */
+const FormCollection &FormManager::centralFormCollection(const QString &modeUId) const
+{
+    return d->extractFormCollectionFrom(d->_centralFormCollection, FormManagerPrivate::ModeForms, modeUId);
+}
+
+/** Return the Form::FormCollection corresponding to the subform \e subFormUid */
+const FormCollection &FormManager::subFormCollection(const QString &subFormUid) const
+{
+    return d->extractFormCollectionFrom(d->_subFormCollection, FormManagerPrivate::SubForms, subFormUid);
+}
+
+/**
+ * Return the duplicate Form::FormCollection to use for the mode uid \e modeUid.
+ * Duplicate collection can be used to make computation without perturbing the user experience and the ui.
+ */
+const FormCollection &FormManager::centralFormDuplicateCollection(const QString &modeUId) const
+{
+    return d->extractFormCollectionFrom(d->_centralFormDuplicateCollection, FormManagerPrivate::ModeForms, modeUId);
+}
+
+/**
+ * Return the Form::FormCollection corresponding to the subform \e subFormUid
+ * Duplicate collection can be used to make computation without perturbing the user experience and the ui.
+ */
+const FormCollection &FormManager::subFormDuplicateCollection(const QString &subFormUid) const
+{
+    return d->extractFormCollectionFrom(d->_subFormDuplicateCollection, FormManagerPrivate::SubForms, subFormUid);
+}
+
+/** Return the Form::FormTreeModel corresponding to the mode \e modeUid */
+FormTreeModel *FormManager::formTreeModelForMode(const QString &modeUid)
+{
+    return d->getFormTreeModel(modeUid, FormManagerPrivate::ModeForms);
+}
+
+/** Return the Form::FormTreeModel corresponding to the complete form uid \e formUid */
+FormTreeModel *FormManager::formTreeModelForCompleteForm(const QString &formUid)
+{
+    return d->getFormTreeModel(formUid, FormManagerPrivate::CompleteForms);
+}
+
+/** Return the Form::FormTreeModel corresponding to the subForm \e surFormUid */
+FormTreeModel *FormManager::formTreeModelForSubForm(const QString &subFormUid)
+{
+    return d->getFormTreeModel(subFormUid, FormManagerPrivate::SubForms);
+}
+
 /** Create a Form::FormPage with the specified \e uuid. There are no uuid duplicates. */
 FormPage *FormManager::createFormPage(const QString &uuid)
 {
@@ -356,19 +469,9 @@ FormPage *FormManager::createFormPage(const QString &uuid)
 /** Return the form (Form::FormMain*) with the uuid \e formUid or return zero. This function checks the central and all loaded subforms */
 FormMain *FormManager::form(const QString &formUid) const
 {
-    for(int i=0; i < d->m_RootForms.count(); ++i) {
-        Form::FormMain *form = d->m_RootForms.at(i);
-        if (form->uuid()==formUid)
-            return form;
-        const QList<Form::FormMain*> &children = form->flattenFormMainChildren();
-        for(int j=0; j < children.count(); ++j) {
-            Form::FormMain *test = children.at(j);
-            if (test->uuid()==formUid)
-                return test;
-        }
-    }
-    for(int i=0; i < d->m_SubFormsEmptyRoot.count(); ++i) {
-        Form::FormMain *form = d->m_SubFormsEmptyRoot.at(i);
+    const QList<FormMain*> &roots = allEmptyRootForms();
+    for(int i=0; i < roots.count(); ++i) {
+        Form::FormMain *form = roots.at(i);
         if (form->uuid()==formUid)
             return form;
         const QList<Form::FormMain*> &children = form->flattenFormMainChildren();
@@ -382,28 +485,17 @@ FormMain *FormManager::form(const QString &formUid) const
 }
 
 /**
- * Return all available empty root forms for the current patient.
- * \sa Form::FormManager::subFormsEmptyRoot(), Form::FormMain
+ * Return all available empty root forms (complete or subforms) for the current patient.
+ * \sa Form::FormMain
  */
-QList<FormMain *> FormManager::forms() const
+QList<FormMain *> FormManager::allEmptyRootForms() const
 {
-    return d->m_RootForms;
-}
-
-/**  Return all available empty root sub-forms for the current patient. \sa Form::FormMain */
-QList<FormMain *> FormManager::subFormsEmptyRoot() const
-{
-    return d->m_SubFormsEmptyRoot;
-}
-
-/**
- * Return the empty root forms loaded from the \e formUid by the Forms::IFormIO objects. \n
- * All these forms are stored in the plugin manager object pool and can be accessed using
- * Forms::FormManager::forms().
- */
-QList<Form::FormMain *> FormManager::loadFormFile(const QString &formUid)
-{
-    return d->loadFormFile(formUid);
+    QList<FormMain*> roots;
+    foreach(FormCollection *collection, d->_centralFormCollection)
+        roots << collection->emptyRootForms();
+    foreach(FormCollection *collection, d->_subFormCollection)
+        roots << collection->emptyRootForms();
+    return roots;
 }
 
 /**
@@ -412,7 +504,7 @@ QList<Form::FormMain *> FormManager::loadFormFile(const QString &formUid)
  */
 bool FormManager::insertSubForm(const SubFormInsertionPoint &insertionPoint)
 {
-    return d->insertSubForm(insertionPoint);
+//    return d->insertSubForm(insertionPoint);
 }
 
 /** Load the generic patient file (and included subforms) and emit patientFormsLoaded() when finished. */
@@ -423,26 +515,20 @@ bool FormManager::loadPatientFile()
 
 bool FormManager::onCurrentPatientChanged()
 {
-    // Patient root form already loaded ?
-    if (d->m_RootForms.isEmpty()) {
-        if (d->getRootForm()) {
-            LOG("Central patient file loaded");
-            Q_EMIT patientFormsLoaded();
-        } else {
-            LOG_ERROR("Unable to load central patient file");
-            return false;
-        }
+    if (d->getMainFormCollection()) {
+        LOG("Central patient file loaded");
     } else {
-        // Remove subforms from the root form (just reparent all forms to their initial empty root)
-        QHashIterator<Form::FormMain *, Form::FormMain *> i(d->_formParents);
-         while (i.hasNext()) {
-             i.next();
-             i.key()->setParent(i.value());
-         }
+        LOG_ERROR("Unable to load central patient file");
+        return false;
+    }
+
+    // reinitialize all formtreemodels
+    foreach(FormTreeModel *model, d->_formTreeModels.values()) {
+        model->initialize();
     }
 
     // load subforms
-    d->loadSubForms();
+    d->loadPatientSubForms();
 
     Q_EMIT patientFormsLoaded();
     return true;
@@ -461,9 +547,9 @@ bool FormManager::readPmhxCategories(const QString &formUuidOrAbsPath)
 */
 Form::FormMain *FormManager::rootForm(const char *modeUniqueName) const
 {
-    // get all root form from the plugin manager
-    for(int i=0; i < d->m_RootForms.count(); ++i) {
-        FormMain *root = d->m_RootForms.at(i);
+    const QList<FormMain*> &roots = allEmptyRootForms();
+    for(int i=0; i < roots.count(); ++i) {
+        FormMain *root = roots.at(i);
         if (root->modeUniqueName().compare(QString(modeUniqueName), Qt::CaseInsensitive)==0) {
             return root;
         }
@@ -477,17 +563,15 @@ Form::FormMain *FormManager::rootForm(const char *modeUniqueName) const
 */
 Form::FormMain *FormManager::identityRootForm() const
 {
-    QList<Form::FormMain *> forms;
-    forms << d->m_RootForms;
-    forms << d->m_SubFormsEmptyRoot;
-    for(int i=0; i < forms.count(); ++i) {
-        FormMain *root = forms.at(i);
-        if (root->spec()->value(FormItemSpec::Spec_IsIdentityForm).toBool())
-            return root;
-        foreach(FormMain *form, root->flattenFormMainChildren()) {
-            if (form->spec()->value(FormItemSpec::Spec_IsIdentityForm).toBool())
-                return form;
-        }
+    foreach(FormCollection *collection, d->_centralFormCollection) {
+        FormMain *identity = collection->identityForm();
+        if (identity)
+            return identity;
+    }
+    foreach(FormCollection *collection, d->_subFormCollection) {
+        FormMain *identity = collection->identityForm();
+        if (identity)
+            return identity;
     }
     LOG_ERROR("No identity form found");
     return 0;
@@ -499,20 +583,15 @@ Form::FormMain *FormManager::identityRootForm() const
 */
 Form::FormMain *FormManager::identityRootFormDuplicate() const
 {
-    if (!ManageDuplicates)
-        return 0;
-
-    QList<Form::FormMain *> forms;
-    forms << d->m_RootFormsDuplicates;
-    forms << d->m_SubFormsEmptyRootDuplicates;
-    for(int i=0; i < forms.count(); ++i) {
-        FormMain *root = forms.at(i);
-        if (root->spec()->value(FormItemSpec::Spec_IsIdentityForm).toBool())
-            return root;
-        foreach(FormMain *form, root->flattenFormMainChildren()) {
-            if (form->spec()->value(FormItemSpec::Spec_IsIdentityForm).toBool())
-                return form;
-        }
+    foreach(FormCollection *collection, d->_centralFormDuplicateCollection) {
+        FormMain *identity = collection->identityForm();
+        if (identity)
+            return identity;
+    }
+    foreach(FormCollection *collection, d->_subFormDuplicateCollection) {
+        FormMain *identity = collection->identityForm();
+        if (identity)
+            return identity;
     }
     LOG_ERROR("No identity form duplicate found");
     return 0;
@@ -542,10 +621,6 @@ QPixmap FormManager::getScreenshot(const QString &formUid, const QString &fileNa
     }
     return pix;
 }
-
-//FormTreeModel *FormManager::formTreeModel(const char* modeUniqueName)
-//{
-//}
 
 ///** Execute all OnLoad scripts of the \e emptyRootForm */
 //void FormManager::executeOnloadScript(Form::FormMain *emptyRootForm)

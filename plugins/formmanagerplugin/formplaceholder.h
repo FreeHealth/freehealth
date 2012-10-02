@@ -114,7 +114,7 @@ public:
     ~FormPlaceHolder();
 
     bool enableAction(WidgetAction action) const;
-    void setRootForm(Form::FormMain *rootForm);
+    void setFormTreeModel(FormTreeModel *model);
 
 public Q_SLOTS:
     bool clear();

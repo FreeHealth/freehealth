@@ -652,9 +652,9 @@ FormPage::~FormPage()
 
 void FormPage::onPatientFormsLoaded()
 {
-    Form::FormMain *root = formManager().rootForm(spec()->uuid().toUtf8());
+    Form::FormTreeModel *model = formManager().formTreeModelForMode(spec()->uuid());
     _mode->setPriority(spec()->value(Form::FormItemSpec::Spec_Priority).toInt());
-    if (!root) {
+    if (!model) {
         if (_inPool)
             pluginManager()->removeObject(_mode);
         _inPool = false;
@@ -663,7 +663,7 @@ void FormPage::onPatientFormsLoaded()
             pluginManager()->addObject(_mode);
         _inPool = true;
     }
-    _placeHolder->setRootForm(root);
+    _placeHolder->setFormTreeModel(model);
 }
 
 void FormPage::languageChanged()

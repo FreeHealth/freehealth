@@ -41,14 +41,21 @@
 namespace Form {
 class FormMain;
 class SubFormInsertionPoint;
+class FormCollection;
 
 namespace Internal {
 class FormTreeModelPrivate;
+class FormManagerPrivate;
 }
 
 class FORM_EXPORT FormTreeModel : public QStandardItemModel
 {
     Q_OBJECT
+    friend class Form::Internal::FormManagerPrivate;
+
+protected:
+    explicit FormTreeModel(const FormCollection &collection, QObject *parent = 0);
+
 public:
     enum DataRepresentation {
         Label = 0,
@@ -58,14 +65,13 @@ public:
         MaxData
     };
 
-    explicit FormTreeModel(Form::FormMain *emptyRootForm, QObject *parent = 0);
+//    explicit FormTreeModel(Form::FormMain *emptyRootForm, QObject *parent = 0);
     ~FormTreeModel();
 
     void initialize();
     void refreshFormTree();
 
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-//    bool setData(const QModelIndex &index, const QVariant &value, int role = Qt::EditRole);
 
     Qt::ItemFlags flags(const QModelIndex &index) const;
 
@@ -74,6 +80,7 @@ public:
     bool isMultiEpisode(const QModelIndex &index) const {return (!isUniqueEpisode(index) && !isNoEpisode(index));}
     Form::FormMain *formForIndex(const QModelIndex &index) const;
 
+    void clearSubForms();
     bool addSubForm(const Form::SubFormInsertionPoint &insertionPoint);
 
 public Q_SLOTS:
@@ -82,7 +89,7 @@ public Q_SLOTS:
 
 private Q_SLOTS:
     bool updateFormCount();
-    void onSubFormLoaded(const QString &formUid);
+    void onPatientFormsLoaded();
 
 private:
     Internal::FormTreeModelPrivate *d;

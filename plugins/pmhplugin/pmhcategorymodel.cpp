@@ -297,26 +297,26 @@ public:
         _categoryToItem.insert(cat, item);
 
         // Category has forms ?
-        const QString &xml = cat->data(Category::CategoryItem::ExtraXml).toString();
-        if (!xml.isEmpty()) {
-            // TODO: improve this +++ this should be part of the XmlFormIO plugin
-            // Check the addfile tag
-            QDomDocument doc;
-            doc.setContent(xml);
-            QDomElement addFile = doc.documentElement();
-            addFile = addFile.firstChildElement("file");
-            if (!addFile.isNull()) {
-                // Load the form
-                QList<Form::FormMain*> forms = formManager().loadFormFile(addFile.text());
-                if (!forms.isEmpty()) {
-                    // Create the FormTreeModel with the form
-                    Form::FormTreeModel *model = new Form::FormTreeModel(forms.at(0), q);
-                    model->initialize();
-                    // Translate all modelindex to TreeItem
-                    formModelToTreeItem(forms.at(0), item, model);
-                }
-            }
-        }
+//        const QString &xml = cat->data(Category::CategoryItem::ExtraXml).toString();
+//        if (!xml.isEmpty()) {
+//            // TODO: improve this +++ this should be part of the XmlFormIO plugin
+//            // Check the addfile tag
+//            QDomDocument doc;
+//            doc.setContent(xml);
+//            QDomElement addFile = doc.documentElement();
+//            addFile = addFile.firstChildElement("file");
+//            if (!addFile.isNull()) {
+//                // Load the form
+//                if (!formManager().loadSubForm(addFile.text()))
+//                    LOG_ERROR("Unable to load PMHx category subForm");
+//                if (!forms.isEmpty()) {
+//                    // Create the FormTreeModel with the form
+//                    Form::FormTreeModel *model = formManager().formTreeModelForSubForm(addFile.text());
+//                    // Translate all modelindex to TreeItem
+//                    formModelToTreeItem(forms.at(0), item, model);
+//                }
+//            }
+//        }
 
         // Create all children categories
         foreach(Category::CategoryItem *c, cat->children()) {

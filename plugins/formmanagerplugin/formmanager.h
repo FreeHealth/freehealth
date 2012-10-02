@@ -59,6 +59,7 @@ class FormPlaceHolder;
 class SubFormInsertionPoint;
 class FormTreeModel;
 class EpisodeModel;
+class FormCollection;
 
 namespace Internal {
 class FormManagerPlugin;
@@ -79,15 +80,30 @@ public:
     ~FormManager();
     bool initialize();
 
-    // Form management (load, save)
-    FormPage *createFormPage(const QString &uuid);
+//    // Form loading
+//    QList<Form::FormMain *> loadFormFile(const QString &formUid);
+
+    // Form collections
+    const FormCollection &centralFormCollection(const QString &modeUId) const;
+    const FormCollection &subFormCollection(const QString &subFormUid) const;
+
+    const FormCollection &centralFormDuplicateCollection(const QString &modeUId) const;
+    const FormCollection &subFormDuplicateCollection(const QString &subFormUid) const;
+
+    // Form pointers and models
     FormMain *form(const QString &formUid) const;
-    QList<FormMain *> forms() const;
-    QList<FormMain *> subFormsEmptyRoot() const;
+    QList<FormMain *> allEmptyRootForms() const;
+    FormTreeModel *formTreeModelForMode(const QString &modeUid);
+    FormTreeModel *formTreeModelForCompleteForm(const QString &formUid);
+    FormTreeModel *formTreeModelForSubForm(const QString &subFormUid);
+
+    // Mode page creation
+    FormPage *createFormPage(const QString &uuid);
+
+
     Form::FormMain *rootForm(const char *modeUniqueName) const;
     Form::FormMain *identityRootForm() const;
     Form::FormMain *identityRootFormDuplicate() const;
-    QList<Form::FormMain *> loadFormFile(const QString &formUid);
     QPixmap getScreenshot(const QString &formUid, const QString &fileName);
 
     // Models management
