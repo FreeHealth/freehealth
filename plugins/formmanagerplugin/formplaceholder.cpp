@@ -306,11 +306,16 @@ public:
         ui->episodeView->setVisible(visible);
     }
 
+    void clearFormContents()
+    {
+        _formTreeModel->clearFormContents();
+    }
+
     void setCurrentForm(const QModelIndex &index)
     {
-        qWarning() << "SETCURRENTFORM";
         if (index==_currentEditingForm)
             return;
+        clearFormContents();
         _currentEditingForm = index;
 
         if (ui->episodeView->selectionModel())
@@ -324,9 +329,6 @@ public:
             QObject::disconnect(_currentEpisodeModel, SIGNAL(rowsRemoved(QModelIndex,int,int)), q, SLOT(updateFormCount()));
         }
         _currentEpisodeModel = episodeManager().episodeModel(_formTreeModel->formForIndex(_currentEditingForm));
-
-        qWarning() << "CURRENT EPISODEMODEL" << _currentEpisodeModel << _formTreeModel->formForIndex(_currentEditingForm);
-
         QObject::connect(_currentEpisodeModel, SIGNAL(rowsInserted(QModelIndex,int,int)), q, SLOT(updateFormCount()));
         QObject::connect(_currentEpisodeModel, SIGNAL(rowsRemoved(QModelIndex,int,int)), q, SLOT(updateFormCount()));
 
@@ -573,7 +575,6 @@ bool FormPlaceHolder::enableAction(WidgetAction action) const
 {
     if (!d->_formTreeModel || !d->_currentEpisodeModel)
         return false;
-
     switch (action) {
     case Action_Clear:
         // Clear only if a form && an episode are selected
@@ -633,43 +634,36 @@ bool FormPlaceHolder::enableAction(WidgetAction action) const
     return false;
 }
 
-//void FormPlaceHolder::setRootFormCollection(const FormCollection &collection)
-//{
-//}
-
 /**
  * Define the Form::FormMain root item to use for the creation of the patient files.
  * This object will manage deletion of the root item and its children.
  */
 void FormPlaceHolder::setFormTreeModel(FormTreeModel *model)
 {
-    qWarning() << "SETFORMTREEMODEL" << model;
     if (!model)
         return;
     if (d->_formTreeModel==model)
         return;
     // Manage Form tree view / model
     if (d->_formTreeModel) {
-        disconnect(d->_formTreeModel, SIGNAL(modelReset()), this, SLOT(defineFormTreeView()));
+        disconnect(d->_formTreeModel, SIGNAL(modelReset()), this, SLOT(onFormTreeModelReset()));
     }
     d->_formTreeModel = model;
 
     d->ui->formView->setModel(d->_formTreeModel);
     d->_delegate->setFormTreeModel(d->_formTreeModel);
 
-    defineFormTreeView();
-    d->selectAndActivateFirstForm();
-    connect(d->_formTreeModel, SIGNAL(modelReset()), this, SLOT(defineFormTreeView()));
+    onFormTreeModelReset();
+    connect(d->_formTreeModel, SIGNAL(modelReset()), this, SLOT(onFormTreeModelReset()));
     Q_EMIT actionsEnabledStateChanged();
 }
 
 /** Clear the form content. The current episode (if one was selected) is not submitted to the model. */
 bool FormPlaceHolder::clear()
 {
-    // TODO: add a clear(index) function to FormTreeModel
-//    if (d->_currentEditingForm)
-//        d->_currentEditingForm->clear();
-    Q_EMIT actionsEnabledStateChanged();
+    d->clearFormContents();
+//    d->_currentEditingForm = QModelIndex();
+//    Q_EMIT actionsEnabledStateChanged();
     return true;
 }
 
@@ -704,7 +698,8 @@ void FormPlaceHolder::handleClicked(const QModelIndex &index)
 /** Slot connect to the current episode model (row changed) to inform the formtreemodel of the episode row count changed */
 void FormPlaceHolder::updateFormCount()
 {
-    d->_formTreeModel->updateFormCount(d->_currentEditingForm);
+//    qWarning() << d->_currentEditingForm;
+//    d->_formTreeModel->updateFormCount(d->_currentEditingForm);
 }
 
 /**
@@ -713,10 +708,11 @@ void FormPlaceHolder::updateFormCount()
  */
 void FormPlaceHolder::setCurrentEditingFormItem(const QModelIndex &index)
 {
-    qWarning() << "SETCURRENTFORM" << index << d->_currentEditingForm;
+    qWarning()<< "SET CURRENT FORM" << d->_currentEditingForm << index;
     if (index != d->_currentEditingForm) {
         d->setCurrentForm(index);
         d->selectAndActivateFirstEpisode();
+        qWarning()<< "SET CURRENT FORM" << d->_currentEditingForm;
         Q_EMIT actionsEnabledStateChanged();
     }
 }
@@ -754,6 +750,7 @@ bool FormPlaceHolder::createEpisode()
     d->ui->episodeView->selectRow(proxy.row());
     d->ui->formDataMapper->setCurrentEpisode(source);
 
+    d->_formTreeModel->updateFormCount(d->_currentEditingForm);
     Q_EMIT actionsEnabledStateChanged();
     return true;
 }
@@ -798,7 +795,6 @@ bool FormPlaceHolder::validateCurrentEpisode()
  */
 bool FormPlaceHolder::saveCurrentEpisode()
 {
-    qWarning() << "FormPlaceHolder::saveCurrentEpisode";
     bool ok = d->saveCurrentEditingEpisode();
     Q_EMIT actionsEnabledStateChanged();
     return ok;
@@ -822,6 +818,7 @@ bool FormPlaceHolder::removeCurrentEpisode()
     if (!yes)
         return false;
     bool ok = d->_currentEpisodeModel->removeEpisode(d->currentEditingEpisodeIndex());
+    d->_formTreeModel->updateFormCount(d->_currentEditingForm);
     Q_EMIT actionsEnabledStateChanged();
     return ok;
 }
@@ -878,7 +875,6 @@ bool FormPlaceHolder::removeSubForm()
 /** Print the current editing episode. Return false in case of error. Connected to Form::Internal::FormActionHandler */
 bool FormPlaceHolder::printFormOrEpisode()
 {
-    //    qWarning() << Q_FUNC_INFO;
     if (!d->ui->formView->selectionModel())
         return false;
     Form::FormMain *formMain = d->_formTreeModel->formForIndex(d->ui->formView->currentIndex());
@@ -915,8 +911,9 @@ bool FormPlaceHolder::printFormOrEpisode()
 }
 
 /** Define the cols to show, their sizes... */
-void FormPlaceHolder::defineFormTreeView()
+void FormPlaceHolder::onFormTreeModelReset()
 {
+    d->_currentEditingForm = QModelIndex();
     QTreeView *tree = d->ui->formView->treeView();
     tree->setSelectionMode(QAbstractItemView::SingleSelection);
     tree->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -930,6 +927,7 @@ void FormPlaceHolder::defineFormTreeView()
     tree->header()->setResizeMode(FormTreeModel::EmptyColumn1, QHeaderView::Fixed);
     tree->header()->resizeSection(FormTreeModel::EmptyColumn1, 16);
     tree->expandAll();
+    d->selectAndActivateFirstForm();
 }
 
 void FormPlaceHolder::saveSortOrderToSettings(int col, Qt::SortOrder sort)
@@ -953,7 +951,7 @@ void FormPlaceHolder::onCurrentPatientChanged()
 
 void FormPlaceHolder::episodeChanged(const QModelIndex &current, const QModelIndex &previous)
 {
-    qWarning() << QString("FormPlaceHolder::episodeChanged: current(valid:%1) ; previous(valid:%2)").arg(current.isValid()).arg(previous.isValid());
+//    qWarning() << QString("FormPlaceHolder::episodeChanged: current(valid:%1) ; previous(valid:%2)").arg(current.isValid()).arg(previous.isValid());
     // Autosave is problematic when patient changed
     QModelIndex sourceCurrent = d->_proxyModel->mapToSource(current);
     QModelIndex sourcePrevious = d->_proxyModel->mapToSource(previous);

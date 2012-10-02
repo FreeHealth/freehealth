@@ -135,7 +135,7 @@ protected:
     bool isDirty() const;
 
 private Q_SLOTS:
-    void defineFormTreeView();
+    void onFormTreeModelReset();
     void saveSortOrderToSettings(int col, Qt::SortOrder sort);
     void onCurrentPatientChanged();
     void handlePressed(const QModelIndex &index);
