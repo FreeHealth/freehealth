@@ -63,9 +63,9 @@ class FormTreeModelPrivate
 {
 public:
     FormTreeModelPrivate(FormTreeModel *parent) :
-        _rootForm(0),
         q(parent)
-    {}
+    {
+    }
 
     void linkFormAndItem(Form::FormMain *form, QStandardItem *item)
     {
@@ -194,8 +194,20 @@ public:
         return true;
     }
 
+    /** Update the episode count of the form element \e form */
+    bool updateFormCount(Form::FormMain *form)
+    {
+        if (!form)
+            return false;
+        QStandardItem *item = formToItem(form);
+        if (!item)
+            return false;
+        item->setText(formLabelWithEpisodeCount(form));
+        item->setToolTip(item->text());
+        return true;
+    }
+
 public:
-    Form::FormMain *_rootForm;
     QList<Form::FormMain *> _rootForms;
     QHash<QStandardItem *, Form::FormMain *> _formToItem;
 
@@ -209,7 +221,7 @@ FormTreeModel::FormTreeModel(const FormCollection &collection, QObject *parent) 
     QStandardItemModel(parent),
     d(new Internal::FormTreeModelPrivate(this))
 {
-    setObjectName("Form::FormTreeModel::" + collection.formUid());
+    setObjectName("Form::FormTreeModel::" + collection.formUid() + collection.modeUid());
     d->_rootForms = collection.emptyRootForms();
 //    connect(&formManager(), SIGNAL(patientFormsLoaded()), this, SLOT(onPatientFormsLoaded()));
 }
@@ -338,28 +350,30 @@ bool FormTreeModel::addSubForm(const SubFormInsertionPoint &insertionPoint)
     return ok;
 }
 
+/** Clear the content of all the model's forms */
+bool FormTreeModel::clearFormContents()
+{
+    for(int i=0; i < d->_rootForms.count(); ++i) {
+        Form::FormMain *form = d->_rootForms.at(i);
+        form->clear();
+    }
+    return true;
+}
+
 /** Update the episode count of the form element corresponding to the \e index */
 bool FormTreeModel::updateFormCount(const QModelIndex &index)
 {
-    return updateFormCount(formForIndex(index));
-}
-
-/** Update the episode count of the form element \e form */
-bool FormTreeModel::updateFormCount(Form::FormMain *form)
-{
-    QStandardItem *item = d->formToItem(form);
-    if (!item)
-        return false;
-    item->setText(d->formLabelWithEpisodeCount(form));
-    item->setToolTip(item->text());
-    return true;
+    if (index.isValid())
+        return d->updateFormCount(formForIndex(index));
+    return false;
 }
 
 /** Update the episode count of each form of the model. The number count is directly extracted from the episode database. */
 bool FormTreeModel::updateFormCount()
 {
     foreach(Form::FormMain *form, d->_formToItem.values())
-        updateFormCount(form);
+        if (!d->updateFormCount(form))
+            return false;
     return true;
 }
 

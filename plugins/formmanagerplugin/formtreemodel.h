@@ -84,8 +84,8 @@ public:
     bool addSubForm(const Form::SubFormInsertionPoint &insertionPoint);
 
 public Q_SLOTS:
+    bool clearFormContents();
     bool updateFormCount(const QModelIndex &index);
-    bool updateFormCount(Form::FormMain *form);
 
 private Q_SLOTS:
     bool updateFormCount();
