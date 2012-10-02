@@ -524,7 +524,7 @@ bool FormManager::onCurrentPatientChanged()
 
     // reinitialize all formtreemodels
     foreach(FormTreeModel *model, d->_formTreeModels.values()) {
-        model->initialize();
+        model->refreshFormTree();
     }
 
     // load subforms
