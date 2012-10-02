@@ -30,6 +30,8 @@
  *      NAME <MAIL@ADDRESS.COM>                                            *
  ***************************************************************************/
 #include "rapidcomptaportingplugin.h"
+#include "rapidtofreeviewer.h"
+#include "rapidtofreeio.h"
 
 #include <utils/log.h>
 
@@ -105,6 +107,13 @@ ExtensionSystem::IPlugin::ShutdownFlag RapidPortPlugin::aboutToShutdown()
 
 void RapidPortPlugin::postCoreInitialization()
 {
+    RapidToFreeIO * rIO = new RapidToFreeIO;
+    if (!rIO->initialiseBases())
+    {
+        qWarning() << __FILE__ << QString::number(__LINE__) << "unable to connect to databases" ;
+    }
+    RapidToFreeViewer *viewer = new RapidToFreeViewer;
+    viewer->show();
 }
 
 Q_EXPORT_PLUGIN(RapidPortPlugin)

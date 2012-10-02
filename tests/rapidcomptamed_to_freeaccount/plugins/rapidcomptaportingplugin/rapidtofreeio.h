@@ -4,7 +4,6 @@
 #include <QObject>
 #include <QHash>
 
-namespace RapidToFreeNamespace{
 class RapidToFreeIO:public QObject
 {
 	public:
@@ -78,7 +77,6 @@ class RapidToFreeIO:public QObject
 		QHash<int,QString> m_hashHono;
 		QHash<int,int> m_hashLink;
 		
-};
 };
 
 #endif
