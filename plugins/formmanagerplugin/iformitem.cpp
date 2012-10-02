@@ -756,6 +756,8 @@ void FormMain::languageChanged()
 /** Clear the form and all its items. This should set the items to their default value. */
 void FormMain::clear()
 {
+    if (itemData())
+        itemData()->clear();
     foreach(FormItem *it, this->flattenFormItemChildren()) {
         if (it->itemData())
             it->itemData()->clear();
