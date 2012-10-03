@@ -144,6 +144,7 @@ private Q_SLOTS:
 
 private:
     void changeEvent(QEvent *event);
+    void hideEvent(QHideEvent *event);
     void showEvent(QShowEvent *event);
 
 private:

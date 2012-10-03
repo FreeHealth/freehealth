@@ -990,6 +990,14 @@ void FormPlaceHolder::changeEvent(QEvent *event)
     QWidget::changeEvent(event);
 }
 
+void FormPlaceHolder::hideEvent(QHideEvent *event)
+{
+    // autosave feature
+    if (isVisible()) // mandatory or segfault when widget is removed from the tabwidget
+        d->saveCurrentEditingEpisode();
+    QWidget::hideEvent(event);
+}
+
 void FormPlaceHolder::showEvent(QShowEvent *event)
 {
     d->selectAndActivateFirstForm();
