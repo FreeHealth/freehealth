@@ -1212,6 +1212,7 @@ QString PmhCategoryModel::indexToHtml(const QModelIndex &index, int indent) cons
     return html;
 }
 
+/** Return the synthesis of the whole model of a specific category \e index */
 QString PmhCategoryModel::synthesis(const QModelIndex &parent) const
 {
     if (parent==QModelIndex() || isSynthesis(parent)) {
@@ -1263,6 +1264,7 @@ void PmhCategoryModel::onCurrentPatientChanged()
     reset();
 }
 
+/** Update the category label (retranslate for eg) */
 void PmhCategoryModel::updateCategoryLabel(const Category::CategoryItem *category)
 {
     QModelIndex cat = indexForCategory(category);
