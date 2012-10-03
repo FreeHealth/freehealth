@@ -713,7 +713,7 @@ void EndConfigPage::retranslate()
                    "If you have any question, you can ask them to "
                    "the mailing list."));
     if (lblDb)
-        lblDb->setText(tr("You can clean and recreate all your databases. Select the option above. If you select the clean option, all databases will be erased with <b>definitive data lose</b>."));
+        lblDb->setText(tr("You can clean and recreate all your databases. Select the option above. If you select the clean option, all databases will be erased with <b>definitive data loss</b>."));
     int current = 0;
     if (comboDb) {
         current = comboDb->currentIndex();

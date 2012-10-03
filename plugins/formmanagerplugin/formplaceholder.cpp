@@ -284,7 +284,7 @@ public:
                                                                        "Save episode?"),
                                                QApplication::translate("Form::FormPlaceHolder",
                                                                        "The actual episode has been modified. Do you want to save changes in your database?\n"
-                                                                       "Answering 'No' will cause definitve data lose."),
+                                                                       "Answering 'No' will cause definitve data loss."),
                                                "", QApplication::translate("Form::FormPlaceHolder", "Save episode"));
             if (!save)
                 return false;
