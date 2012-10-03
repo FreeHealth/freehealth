@@ -667,7 +667,10 @@ public:
         // age / dob / dod / prof / nss
         const QString &age = m_PatientModel->index(row, Core::IPatient::Age).data().toString();
         QString dob = QLocale().toString(m_PatientModel->index(row, Core::IPatient::DateOfBirth).data().toDate(), QLocale::LongFormat);
-        viewUi->identityDetails->setSummaryText(QString("%1 - %2").arg(name).arg(age));
+        if (!name.isEmpty())
+            viewUi->identityDetails->setSummaryText(QString("%1 - %2").arg(name).arg(age));
+        else
+            viewUi->identityDetails->setSummaryText("");
         m_AgeWidget->clear();
         m_AgeWidget->setAge(age);
         m_AgeWidget->setDateOfBirth(dob);
