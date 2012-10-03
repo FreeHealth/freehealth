@@ -308,7 +308,8 @@ public:
 
     void clearFormContents()
     {
-        _formTreeModel->clearFormContents();
+        if (_formTreeModel)
+            _formTreeModel->clearFormContents();
     }
 
     void setCurrentForm(const QModelIndex &index)

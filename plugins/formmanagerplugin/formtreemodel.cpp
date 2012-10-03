@@ -353,8 +353,7 @@ bool FormTreeModel::addSubForm(const SubFormInsertionPoint &insertionPoint)
 /** Clear the content of all the model's forms */
 bool FormTreeModel::clearFormContents()
 {
-    for(int i=0; i < d->_rootForms.count(); ++i) {
-        Form::FormMain *form = d->_rootForms.at(i);
+    foreach(Form::FormMain *form, d->_rootForms) {
         form->clear();
     }
     return true;
