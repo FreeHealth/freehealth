@@ -1009,10 +1009,12 @@ void FormPlaceHolder::showEvent(QShowEvent *event)
     Q_EMIT actionsEnabledStateChanged();
 
     // Update sort order according to the current settings
-    if (d->_proxyModel->sortColumn() != settings()->value(Constants::S_EPISODEVIEW_SORTEDCOLUMN).toInt()
-            || d->_proxyModel->sortOrder() != Qt::SortOrder(settings()->value(Constants::S_EPISODEVIEW_SORTORDER).toInt())) {
-        d->ui->episodeView->sortByColumn(settings()->value(Constants::S_EPISODEVIEW_SORTEDCOLUMN, EpisodeModel::UserTimeStamp).toInt(),
-                                      Qt::SortOrder(settings()->value(Constants::S_EPISODEVIEW_SORTORDER, Qt::DescendingOrder).toInt()));
+    if (d->_proxyModel) {
+        if (d->_proxyModel->sortColumn() != settings()->value(Constants::S_EPISODEVIEW_SORTEDCOLUMN).toInt()
+                || d->_proxyModel->sortOrder() != Qt::SortOrder(settings()->value(Constants::S_EPISODEVIEW_SORTORDER).toInt())) {
+            d->ui->episodeView->sortByColumn(settings()->value(Constants::S_EPISODEVIEW_SORTEDCOLUMN, EpisodeModel::UserTimeStamp).toInt(),
+                                             Qt::SortOrder(settings()->value(Constants::S_EPISODEVIEW_SORTORDER, Qt::DescendingOrder).toInt()));
+        }
     }
     QWidget::showEvent(event);
 }
