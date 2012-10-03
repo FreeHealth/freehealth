@@ -109,7 +109,7 @@ public:
     QModelIndex indexForCategory(const Category::CategoryItem *category) const;
 
     Form::FormMain *formForIndex(const QModelIndex &item) const;
-    bool activateFormEpisode(const QModelIndex &formIndex);
+    bool activateFormEpisode(const QModelIndex &formIndex) const;
 
     void addCategory(Category::CategoryItem *category, int row, const QModelIndex &parentCategory);
     void updateCategory(Category::CategoryItem *category);

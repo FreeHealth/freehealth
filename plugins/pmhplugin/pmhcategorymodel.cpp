@@ -1065,7 +1065,11 @@ Form::FormMain *PmhCategoryModel::formForIndex(const QModelIndex &item) const
     return 0;
 }
 
-bool PmhCategoryModel::activateFormEpisode(const QModelIndex &formIndex)
+/**
+ * Activate the last episode of the form \e formIndex
+ * \sa Form::EpisodeModel::populateFormWithEpisodeContent()
+ */
+bool PmhCategoryModel::activateFormEpisode(const QModelIndex &formIndex) const
 {
     if (!formIndex.isValid())
         return false;
@@ -1194,9 +1198,16 @@ QString PmhCategoryModel::indexToHtml(const QModelIndex &index, int indent) cons
             id += "&nbsp;&nbsp;";
         html += QString("•&nbsp;%1<br />").arg(index.data(Qt::ToolTipRole).toString().replace("<br />","; "));
     } else if (isForm(index)) {
+        // populate form
+        activateFormEpisode(index);
+        // get the synthesis
         html = QString("<p style=\"margin:0px 0px 0px %1px\">%2<br />")
                 .arg(indent*10)
                 .arg(formForIndex(index)->printableHtml());
+        // clear form
+        Form::FormMain *form = formForIndex(index);
+        if (form)
+            form->clear();
     }
     return html;
 }
