@@ -222,6 +222,14 @@ bool FormDataWidgetMapper::initialize()
     return true;
 }
 
+/** Clear the current form content */
+void FormDataWidgetMapper::clear()
+{
+    if (!d->_formMain)
+        return;
+    d->_formMain->clear();
+}
+
 /**
  * Return true if the current content of the mapper is dirty.
  * Asks each Form::FormItemData of the current editing Form::FormMain for their modification state.
@@ -272,6 +280,12 @@ void FormDataWidgetMapper::setCurrentForm(Form::FormMain *form)
     d->useEpisodeModel(form);
     if (d->_formMain->itemData())
         d->_formMain->itemData()->setModified(false);
+}
+
+/** Use the last recorded episode as current episode */
+void FormDataWidgetMapper::setLastEpisodeAsCurrent()
+{
+    setCurrentEpisode(d->_episodeModel->index(0,0));
 }
 
 /** Define the current episode index to use in the mapper. */
