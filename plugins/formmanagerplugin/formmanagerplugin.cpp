@@ -150,6 +150,7 @@ void FormManagerPlugin::postCoreInitialization()
     }
 
     // reload patient file just to emit patientFormsLoaded
+    formManager().readPmhxCategories("");
     formManager().loadPatientFile();
 }
 
