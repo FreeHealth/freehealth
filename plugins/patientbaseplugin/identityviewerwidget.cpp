@@ -214,7 +214,7 @@ public:
         retranslate();
     }
 
-    void clear()
+    void clearAll()
     {
         _age->clear();
         _dob->clear();
@@ -640,7 +640,7 @@ public:
         Q_ASSERT(viewUi);
         viewUi->photoLabel->clear();
         m_IdentityWidget->clear();
-        m_AgeWidget->clear();
+        m_AgeWidget->clearAll();
         m_FullContactWidget->clear();
     }
 
@@ -671,7 +671,7 @@ public:
             viewUi->identityDetails->setSummaryText(QString("%1 - %2").arg(name).arg(age));
         else
             viewUi->identityDetails->setSummaryText("");
-        m_AgeWidget->clear();
+        m_AgeWidget->clearAll();
         m_AgeWidget->setAge(age);
         m_AgeWidget->setDateOfBirth(dob);
         m_AgeWidget->setProfession(_patientModelIdentityWrapper->data(Core::IPatient::Profession).toString());
