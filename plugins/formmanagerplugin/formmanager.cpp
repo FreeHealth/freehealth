@@ -253,7 +253,7 @@ public:
         // get sub-forms from database
         const QVector<SubFormInsertionPoint> &subs = episodeBase()->getSubFormFiles();
 
-        qWarning() << "SUB" << subs;
+//        qWarning() << "SUB" << subs;
 
         if (subs.isEmpty())
             return true;
@@ -276,7 +276,7 @@ public:
             if (sub.receiverUid() == Constants::ROOT_FORM_TAG) {
                 // Add to the central mode
                 FormTreeModel *model = getFormTreeModel(Core::Constants::MODE_PATIENT_FILE, ModeForms);
-                qWarning() << model;
+//                qWarning() << model;
                 if (model)
                     model->addSubForm(sub);
             } else {
@@ -284,7 +284,7 @@ public:
                     if (collection->formUid() == sub.receiverUid()) {
                         // update the formtreemodel
                         FormTreeModel *model = getFormTreeModel(collection->formUid(), collection->type()==FormCollection::CompleteForm ? CompleteForms : SubForms );
-                        qWarning() << model;
+//                        qWarning() << model;
                         if (model)
                             model->addSubForm(sub);
                         break;
@@ -297,6 +297,7 @@ public:
 
     bool readPmhxCategories(const QString &formUuidOrAbsPath)
     {
+        qWarning() << "readPmhxCategories";
         Q_UNUSED(formUuidOrAbsPath);
         // TODO: code here why don't we use the \e formUuidOrAbsPath param?
         // get all form readers (IFormIO)
