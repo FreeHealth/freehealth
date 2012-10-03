@@ -132,6 +132,7 @@ PmhModeWidget::PmhModeWidget(QWidget *parent) :
     ui->treeViewLayout->setMargin(0);
     layout()->setMargin(0);
 
+    ui->formDataMapper->initialize();
     ui->treeView->setActions(0);
     ui->treeView->setCommands(QStringList()
                               << Constants::A_PMH_NEW
@@ -199,13 +200,21 @@ int PmhModeWidget::currentSelectedCategory() const
 /** Reacts on the currentChanged signal of the category tree view */
 void PmhModeWidget::currentChanged(const QModelIndex &current, const QModelIndex &previous)
 {
-    Q_UNUSED(previous);
+    // Auto-saved form content
+    if (previous.isValid()) {
+        if (catModel()->isForm(previous)) {
+            if (ui->formDataMapper->isDirty())
+                ui->formDataMapper->submit();
+            ui->formDataMapper->clear();
+        }
+    }
     if (!current.isValid())
         return;
-
     // No active patient ?
     if (patient()->uuid().isEmpty())
         return;
+
+    ui->formDataMapper->setCurrentForm(0);
 
     if (catModel()->isSynthesis(current)) {
         ui->pmhSynthesisBrowser->setHtml(catModel()->synthesis());
@@ -216,20 +225,9 @@ void PmhModeWidget::currentChanged(const QModelIndex &current, const QModelIndex
     } else if (catModel()->isForm(current)) {
         // Show the form's widget
         const QString &formUid = catModel()->index(current.row(), PmhCategoryModel::Id, current.parent()).data().toString();
-        if (m_FormUid_StackId.keys().contains(formUid)) {
-            ui->stackedWidget->setCurrentIndex(m_FormUid_StackId.value(formUid));
-        } else {
-            // Create the stack id
-            int id = m_FormUid_StackId.count() + 1;
-            m_FormUid_StackId.insert(formUid, id);
-            // Insert the form widget into the stack at specified id
-            ui->stackedWidget->insertWidget(id, catModel()->formForIndex(current)->formWidget());
-            ui->stackedWidget->setCurrentIndex(id);
-        }
-
-        // Activate the last episode of the form
-        catModel()->activateFormEpisode(current);
-
+        ui->stackedWidget->setCurrentWidget(ui->formPage);
+        ui->formDataMapper->setCurrentForm(formUid);
+        ui->formDataMapper->setLastEpisodeAsCurrent();
     } else if (catModel()->isPmhx(current)) {
         ui->stackedWidget->setCurrentWidget(ui->pageEditor);
         ui->pmhViewer->setPmhData(catModel()->pmhDataforIndex(current));
@@ -312,16 +310,12 @@ void PmhModeWidget::removeItem()
 /** When a new patient is selected, select the synthesis item and re-expand the category view */
 void PmhModeWidget::onCurrentPatientChanged()
 {
+    // Auto-saved form content
+    if (ui->formDataMapper->isDirty())
+        ui->formDataMapper->submit();
+    ui->formDataMapper->clear();
     ui->treeView->selectionModel()->select(catModel()->index(0,0), QItemSelectionModel::SelectCurrent);
     ui->treeView->expandAll();
-    for(int i = 0; i < ui->stackedWidget->count(); ++i) {
-        // Remove all form's widgets
-        QWidget *w = ui->stackedWidget->widget(i);
-        if (w == ui->pageEditor || w == ui->pageSynthesis)
-            continue;
-        ui->stackedWidget->removeWidget(w);
-    }
-    m_FormUid_StackId.clear();
 }
 
 /** Create a new PMHx using the PMH::PmhCreatorDialog */
@@ -345,6 +339,14 @@ void PmhModeWidget::pmhModelRowsInserted(const QModelIndex &parent, int start, i
     for(int i=start; i != end+1; ++i) {
         ui->treeView->expand(catModel()->index(i, PmhCategoryModel::Label, parent));
     }
+}
+
+void PmhModeWidget::hideEvent(QHideEvent *event)
+{
+    // Auto-saved form content
+    if (isVisible() && ui->formDataMapper->isDirty())
+        ui->formDataMapper->submit();
+    QWidget::hideEvent(event);
 }
 
 void PmhModeWidget::changeEvent(QEvent *e)
