@@ -707,11 +707,13 @@ void FormPlaceHolder::updateFormCount()
  */
 void FormPlaceHolder::setCurrentEditingFormItem(const QModelIndex &index)
 {
-    qWarning()<< "SET CURRENT FORM" << d->_currentEditingForm << index;
+//    qWarning()<< "SET CURRENT FORM" << d->_currentEditingForm << index;
     if (index != d->_currentEditingForm) {
+        // autosave feature
+        d->saveCurrentEditingEpisode();
         d->setCurrentForm(index);
         d->selectAndActivateFirstEpisode();
-        qWarning()<< "SET CURRENT FORM" << d->_currentEditingForm;
+//        qWarning()<< "SET CURRENT FORM" << d->_currentEditingForm;
         Q_EMIT actionsEnabledStateChanged();
     }
 }

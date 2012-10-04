@@ -43,12 +43,13 @@ QT_END_NAMESPACE
  * \file calendar_widget.h
  * \author Guillaume Denry, Eric Maeker
  * \version 0.8.0
- * \date 12 Aug 2011
+ * \date 04 Oct 2012
 */
 
 namespace Calendar {
 struct CalendarWidgetPrivate;
 class AbstractCalendarModel;
+class CalendarItem;
 
 class CALENDAR_EXPORT CalendarWidget : public QWidget
 {
@@ -79,6 +80,8 @@ public:
     int dayItemDefaultDuration() const;
     int dayScaleHourDivider() const;
     int hourHeight() const;
+
+    Calendar::CalendarItem getContextualCalendarItem() const;
 
 public Q_SLOTS:
     void setDayGranularity(int minutes);

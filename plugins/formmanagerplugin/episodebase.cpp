@@ -341,6 +341,7 @@ bool EpisodeBase::setCurrentDatabaseVersion(const QString &version)
         return false;
     }
     query.finish();
+    DB.commit();
     query.prepare(prepareInsertQuery(Table_VERSION));
     query.bindValue(VERSION_TEXT, version);
     if (!query.exec()) {

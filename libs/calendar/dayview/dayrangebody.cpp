@@ -307,6 +307,7 @@ public:
     QPoint m_pressPos;
     HourRangeWidget *m_pressedItemWidget;
     CalendarItem m_pressedCalItem;
+    CalendarItem m_contextualCalItem;
     MouseMode m_mouseMode;
     int m_granularity;
     int m_itemDefaultDuration;
@@ -395,6 +396,12 @@ void DayRangeBody::setHourHeight(int value)
 QSize DayRangeBody::sizeHint() const
 {
     return QSize(0, 24 * d_body->m_hourHeight);
+}
+
+/** Return the clicked calendar item when requesting the contextual menu */
+CalendarItem DayRangeBody::getContextualCalendarItem() const
+{
+    return d_body->m_contextualCalItem;
 }
 
 void DayRangeBody::paintBody(QPainter *painter, const QRect &visibleRect)
@@ -494,6 +501,7 @@ void DayRangeBody::mousePressEvent(QMouseEvent *event) {
     d_body->m_pressDateTime = d_body->quantized(d_body->getDateTime(event->pos()));
     d_body->m_previousDateTime = d_body->m_pressDateTime;
     d_body->m_pressPos = event->pos();
+    d_body->m_contextualCalItem = CalendarItem();
 
     // item under mouse?
     d_body->m_pressedItemWidget = qobject_cast<HourRangeWidget*>(childAt(event->pos()));
@@ -527,7 +535,6 @@ void DayRangeBody::mouseMoveEvent(QMouseEvent *event)
         QWidget::mouseMoveEvent(event);
         return;
     }
-
 
     QDateTime mousePosDateTime = d_body->quantized(d_body->getDateTime(event->pos()));
     QRect rect;
@@ -635,9 +642,6 @@ void DayRangeBody::mouseMoveEvent(QMouseEvent *event)
             }
         }
 
-
-
-
         d_body->m_pressedItemWidget->setBeginDateTime(beginning);
         d_body->m_pressedItemWidget->setEndDateTime(ending);
         rect = d_body->getTimeIntervalRect(beginning.date().dayOfWeek(), beginning.time(), ending.time());
@@ -661,9 +665,9 @@ void DayRangeBody::mouseReleaseEvent(QMouseEvent *event)
         Q_ASSERT(d_body->m_pressedItemWidget);
 
         if (!d_body->m_pressedItemWidget->inMotion() && event->button() == Qt::RightButton) {
+            // can be overloaded using the setContextMenuForItems()
             if (!itemContextMenu()) {
                 // display a default contextual menu
-                // DEPRECATED
                 QMenu menu;
                 QAction *modifyAction = menu.addAction(tr("modify"));
                 connect(modifyAction, SIGNAL(triggered()), this, SLOT(modifyPressItem()));
@@ -672,6 +676,7 @@ void DayRangeBody::mouseReleaseEvent(QMouseEvent *event)
                 menu.exec(event->globalPos());
             } else {
                 // use the specified menu
+                d_body->m_contextualCalItem = d_body->m_pressedCalItem;
                 itemContextMenu()->exec(event->globalPos());
             }
         } else {

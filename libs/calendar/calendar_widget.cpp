@@ -252,14 +252,30 @@ void CalendarWidget::setHourHeight(int pixels) {
         qobject_cast<DayRangeBody*>(m_d->m_body)->setHourHeight(pixels);
 }
 
+/**
+ * Define the QMenu to use as contextual menu on calendar items.
+ * You can get the calendar item clicked when requesting the contextual menu
+ * using the getContextCalendarItem()
+ */
 void CalendarWidget::setContextMenuForItems(QMenu *menu)
 {
     m_d->_contextMenu = menu;
-    if (qobject_cast<DayRangeBody*>(m_d->m_body))
-        qobject_cast<DayRangeBody*>(m_d->m_body)->setContextMenuForItems(menu);
+    DayRangeBody *body = qobject_cast<DayRangeBody*>(m_d->m_body);
+    if (body)
+        body->setContextMenuForItems(menu);
 }
 
-void CalendarWidget::scrollToTime(const QTime &time) {
+/** Return the clicked calendar item when requesting the contextual menu */
+Calendar::CalendarItem CalendarWidget::getContextualCalendarItem() const
+{
+    DayRangeBody *body = qobject_cast<DayRangeBody*>(m_d->m_body);
+    if (body)
+        return body->getContextualCalendarItem();
+    return CalendarItem();
+}
+
+void CalendarWidget::scrollToTime(const QTime &time)
+{
     int y = (time.hour()-1)*m_d->m_hourHeight;
     m_d->m_scrollArea->verticalScrollBar()->setValue(y);
 }

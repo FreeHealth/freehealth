@@ -56,7 +56,6 @@
 #include <translationutils/trans_agenda.h>
 #include <translationutils/trans_datetime.h>
 
-
 #include "ui_usercalendarviewer.h"
 
 #include <QStandardItemModel>
@@ -75,6 +74,7 @@ static inline Agenda::AgendaCore &agendaCore() {return Agenda::AgendaCore::insta
 static inline Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 static inline Core::ModeManager *modeManager() {return Core::ICore::instance()->modeManager();}
+static inline Patients::PatientModel *patientModel() {return Patients::PatientModel::activeModel();}
 
 namespace {
     const int S_NUMBEROFAVAILABILITIESTOSHOW = 10;
@@ -126,7 +126,8 @@ public:
 
             m_ItemContextMenu->addAction(aSwitchToPatient);
             m_ItemContextMenu->addAction(aEditItem);
-            m_ItemContextMenu->addAction(aPrintItem);
+            // TODO: re add the print appointement action
+//            m_ItemContextMenu->addAction(aPrintItem);
             m_ItemContextMenu->addAction(aDeleteItem);
 
             ui->calendarViewer->setContextMenuForItems(m_ItemContextMenu);
@@ -275,7 +276,8 @@ void UserCalendarViewer::refreshAvailabilities()
 }
 
 /** Resets the duration in the ComboBox to the default duration set in the Agenda config. */
-void UserCalendarViewer::resetDefaultDuration() {
+void UserCalendarViewer::resetDefaultDuration()
+{
     int currentCalendarIndex = d->ui->availableAgendasCombo->currentIndex();
 
     QModelIndex index = d->m_UserCalendarModel->index(currentCalendarIndex, UserCalendarModel::DefaultDuration);
@@ -454,7 +456,6 @@ void UserCalendarViewer::userChanged()
     }
 }
 
-
 void UserCalendarViewer::updateCalendarData(const QModelIndex &top, const QModelIndex &bottom)
 {
     Q_UNUSED(bottom);
@@ -476,31 +477,47 @@ void UserCalendarViewer::updateCalendarData(const QModelIndex &top, const QModel
     }
 }
 
+/** Reacts to the user selected action in the contextual menu */
 void UserCalendarViewer::onSwitchToPatientClicked()
 {
-    //TODO: how to obtain current patient?
-    // a calendar item has only "getPeopleNames", there can be more than one
-    // AND there is no method like "itemAt" in the viewer!
+    // Get the clicked calendar item
+    Calendar::CalendarItem item = d->ui->calendarViewer->getContextualCalendarItem();
 
-//    Patients::PatientModel::activeModel()->setCurrentPatient(
-//                d->m_CalendarItemModel->getPeopleNames(
-//                    d->m_CalendarItemModel->getItemByUid());
-//                );
-//    modeManager()->activateMode(Core::Constants::MODE_PATIENT_FILE);
+    // Find the first patient of the appointement
+    QList<Calendar::People> people = d->m_CalendarItemModel->peopleList(item);
+    foreach(const Calendar::People &guest, people) {
+        if (guest.type == Calendar::People::PeopleAttendee) {
+            patientModel()->setFilter("", "", guest.uid, Patients::PatientModel::FilterOnUuid);
+            patientModel()->setCurrentPatient(patientModel()->index(0,0));
+            break;
+        }
+    }
 }
 
+/** Reacts to the user selected action in the contextual menu */
 void UserCalendarViewer::onEditAppointmentClicked()
 {
-    // TODO
+    // Get the clicked calendar item
+    Calendar::CalendarItem item = d->ui->calendarViewer->getContextualCalendarItem();
+
+    // Starts the editor dialog
+    Calendar::BasicItemEditorDialog dialog(d->m_CalendarItemModel, this);
+    dialog.init(item);
+    dialog.exec();
 }
 
+/** Reacts to the user selected action in the contextual menu */
 void UserCalendarViewer::onPrintAppointmentClicked()
 {
     // TODO
 }
 
+/** Reacts to the user selected action in the contextual menu */
 void UserCalendarViewer::onDeleteAppointmentClicked()
 {
+    // Get the clicked calendar item
+    Calendar::CalendarItem item = d->ui->calendarViewer->getContextualCalendarItem();
+    d->m_CalendarItemModel->removeItem(item.uid());
 }
 
 bool UserCalendarViewer::event(QEvent *e)

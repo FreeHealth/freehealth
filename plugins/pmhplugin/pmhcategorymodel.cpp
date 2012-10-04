@@ -1212,6 +1212,11 @@ QString PmhCategoryModel::indexToHtml(const QModelIndex &index, int indent) cons
     return html;
 }
 
+void PmhCategoryModel::refreshSynthesis()
+{
+    d->_htmlSynthesis.clear();
+}
+
 /** Return the synthesis of the whole model of a specific category \e index */
 QString PmhCategoryModel::synthesis(const QModelIndex &parent) const
 {

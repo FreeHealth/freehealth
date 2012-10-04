@@ -126,10 +126,9 @@ void FormManagerPlugin::extensionsInitialized()
 
     // Initialize patient base and manager
     episodeBase()->initialize();
+    formManager().checkFormUpdates();
 
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
-
-//    m_PrefPage->checkSettingsValidity();
 
     // Add mode
     _mode = new FormManagerMode(this);
