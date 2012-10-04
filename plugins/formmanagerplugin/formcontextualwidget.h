@@ -53,14 +53,14 @@ class FormContextualWidget : public QWidget
 public:
     enum WidgetAction {
         Action_Clear = 0,
-        Action_CreateEpisode,
-        Action_ValidateCurrentEpisode,
-        Action_SaveCurrentEpisode,
-        Action_RemoveCurrentEpisode,
-        Action_TakeScreenShot,
-        Action_AddForm,
-        Action_RemoveSub,
-        Action_PrintCurrentFormEpisode
+        Action_CreateEpisode, /*!< Create new episode */
+        Action_ValidateCurrentEpisode, /*!< "Sign" currently selected episode, so that it can't be changed any more */
+        Action_SaveCurrentEpisode, /*!< Save currently selected episode to database */
+        Action_RemoveCurrentEpisode, /*!< Remove currently selected episode */
+        Action_TakeScreenShot, /*!< Take a screenshot of the current form */
+        Action_AddForm, /*!< Add Form to treeview */
+        Action_RemoveSub, /*!< Remove Form and all subforms from treeview */
+        Action_PrintCurrentFormEpisode /*!< Print currently selected episode */
     };
 
     explicit FormContextualWidget(QWidget *parent = 0);
