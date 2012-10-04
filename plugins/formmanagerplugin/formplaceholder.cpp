@@ -969,6 +969,10 @@ void FormPlaceHolder::episodeChanged(const QModelIndex &current, const QModelInd
     clear();
     if (sourceCurrent.isValid()) {
         d->ui->formDataMapper->setCurrentEpisode(sourceCurrent);
+        d->ui->formDataMapper->setEnabled(true);
+    } else {
+        d->ui->formDataMapper->clear();
+        d->ui->formDataMapper->setEnabled(false);
     }
     Q_EMIT actionsEnabledStateChanged();
 }
