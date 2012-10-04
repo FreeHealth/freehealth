@@ -56,7 +56,7 @@
             <fielddescription xml:lang="de">Namensraum des Plugins:</fielddescription>
             <fielddescription xml:lang="fr">Espace de nommage du greffon:</fielddescription>
         </field>
-        <field name="InternalNamespace">
+        <field name="Internal">
             <fieldcontrol class="QCheckBox" />
             <fielddescription>Additional "Internal" namespace</fielddescription>
             <fielddescription xml:lang="de">Zus&#228;tzlicher "Internal"-Namensraum</fielddescription>
