@@ -4,47 +4,47 @@
 <context>
     <name>PadTools::Internal::PadWriter</name>
     <message>
-        <source>Form</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>Raw source</source>
-        <translation>Source</translation>
+        <translation type="unfinished">Source</translation>
     </message>
     <message>
         <source>Errors</source>
-        <translation>Erreurs</translation>
+        <translation type="unfinished">Erreurs</translation>
     </message>
     <message>
         <source>View errors</source>
-        <translation>Voir les erreurs</translation>
-    </message>
-    <message>
-        <source>Options</source>
-        <translation></translation>
+        <translation type="unfinished">Voir les erreurs</translation>
     </message>
     <message>
         <source>Scenari</source>
-        <translation>Scénari</translation>
+        <translation type="unfinished">Scénari</translation>
     </message>
     <message>
         <source>raw to output</source>
-        <translation>Source vers sortie</translation>
+        <translation type="unfinished">Source vers sortie</translation>
     </message>
     <message>
         <source>output to raw</source>
-        <translation>Sortie vers source</translation>
+        <translation type="unfinished">Sortie vers source</translation>
     </message>
     <message>
         <source>Find cursor</source>
-        <translation>Trouver le curseur</translation>
+        <translation type="unfinished">Trouver le curseur</translation>
     </message>
     <message>
-        <source>RAW</source>
+        <source>Form</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <source>OUTPUT</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Options</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>RAW</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -70,16 +70,24 @@
 <context>
     <name>PadTools::TokenEditorWidget</name>
     <message>
-        <source>Form</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Token</source>
-        <translation>Étiquette</translation>
+        <translation type="unfinished">Étiquette</translation>
     </message>
     <message>
         <source>Current value</source>
-        <translation>Valeur courante</translation>
+        <translation type="unfinished">Valeur courante</translation>
+    </message>
+    <message>
+        <source>Before</source>
+        <translation type="unfinished">Avant</translation>
+    </message>
+    <message>
+        <source>After</source>
+        <translation type="unfinished">Après</translation>
+    </message>
+    <message>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Text value</source>
@@ -90,20 +98,16 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Before</source>
-        <translation>Avant</translation>
-    </message>
-    <message>
-        <source>After</source>
-        <translation>Après</translation>
-    </message>
-    <message>
         <source>Conditional texts</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>PadWriter</name>
+    <message>
+        <source>Find cursor</source>
+        <translation type="unfinished">Trouver le curseur</translation>
+    </message>
     <message>
         <source>Follow cursor in result output</source>
         <translation type="unfinished"></translation>
@@ -117,8 +121,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Find cursor</source>
-        <translation type="unfinished">Trouver le curseur</translation>
+        <source>Inside conditional before text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Inside conditional after text</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <source>Before the token</source>
@@ -130,14 +138,6 @@
     </message>
     <message>
         <source>Nested token</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Inside conditional before text</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Inside conditional after text</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

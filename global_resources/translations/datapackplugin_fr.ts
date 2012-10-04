@@ -4,40 +4,34 @@
 <context>
     <name>DataPackPlug</name>
     <message>
-        <location filename="../../plugins/datapackplugin/constants.h" line="34"/>
         <source>Data pack manager</source>
-        <translation>Gestionnaire des paquets de données</translation>
+        <translation type="unfinished">Gestionnaire des paquets de données</translation>
     </message>
 </context>
 <context>
     <name>DataPackPlugin::Internal::DataPackPluginIPlugin</name>
     <message>
-        <location filename="../../plugins/datapackplugin/datapackplugin.cpp" line="119"/>
         <source>Initializing DataPackPlugin...</source>
-        <translation>Initialisation du gestionnaire des paquets de données...</translation>
+        <translation type="unfinished">Initialisation du gestionnaire des paquets de données...</translation>
     </message>
     <message>
-        <location filename="../../plugins/datapackplugin/datapackplugin.cpp" line="153"/>
         <source>Trying to set the default datapack servers using file %1</source>
-        <translation>Essaie de définir les serveurs par défaut avec le fichier %1</translation>
+        <translation type="unfinished">Essaie de définir les serveurs par défaut avec le fichier %1</translation>
     </message>
     <message>
-        <location filename="../../plugins/datapackplugin/datapackplugin.cpp" line="166"/>
         <source>Unable to add default server %1 (%2)</source>
-        <translation>Impossible d&apos;ajouter le serveur par défaut %1 (%2)</translation>
+        <translation type="unfinished">Impossible d&apos;ajouter le serveur par défaut %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../../plugins/datapackplugin/datapackplugin.cpp" line="168"/>
         <source>Adding default server %1 (%2)</source>
-        <translation>Ajout du serveur par défaut %1 (%2)</translation>
+        <translation type="unfinished">Ajout du serveur par défaut %1 (%2)</translation>
     </message>
 </context>
 <context>
     <name>DataPackPlugin::Internal::DataPackPreference</name>
     <message>
-        <location filename="../../plugins/datapackplugin/datapackpreference.ui" line="14"/>
         <source>Form</source>
-        <translation></translation>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>
