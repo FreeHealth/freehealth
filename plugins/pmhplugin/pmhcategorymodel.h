@@ -118,6 +118,7 @@ public:
 
     // Patient synthesis
     QString indexToHtml(const QModelIndex &index, int indent = 0) const;
+    void refreshSynthesis();
     QString synthesis(const QModelIndex &parent = QModelIndex()) const;
 
 public Q_SLOTS:
