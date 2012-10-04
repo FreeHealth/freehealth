@@ -70,10 +70,12 @@ class FORM_EXPORT FormManager : public QObject
 {
     Q_OBJECT
     friend class Form::FormCore;
+    friend class Form::Internal::FormManagerPlugin;
     friend class Form::Internal::FormManagerPrivate;
 
 protected:
     FormManager(QObject *parent = 0);
+    void checkFormUpdates();
 
 public:
     static FormManager *instance();

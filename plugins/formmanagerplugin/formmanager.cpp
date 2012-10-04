@@ -88,6 +88,7 @@
 #include <QMap>
 #include <QApplication>
 #include <QPixmap>
+#include <QProgressDialog>
 
 #include <QDebug>
 
@@ -506,6 +507,7 @@ QList<FormMain *> FormManager::allEmptyRootForms() const
 bool FormManager::insertSubForm(const SubFormInsertionPoint &insertionPoint)
 {
 //    return d->insertSubForm(insertionPoint);
+    return true;
 }
 
 /** Load the generic patient file (and included subforms) and emit patientFormsLoaded() when finished. */
@@ -635,6 +637,24 @@ QPixmap FormManager::getScreenshot(const QString &formUid, const QString &fileNa
 //        }
 //    }
 //}
+
+void FormManager::checkFormUpdates()
+{
+    // get all form readers (IFormIO)
+    QList<Form::IFormIO *> list = pluginManager()->getObjects<Form::IFormIO>();
+    if (list.isEmpty()) {
+        LOG_ERROR("No IFormIO loaded...");
+        return;
+    }
+
+//    QProgressDialog dlg(qApp->activeWindow());
+//    dlg.setModal(true);
+//    dlg.exec();
+    // Check form update
+    foreach(Form::IFormIO *io, list) {
+        io->checkForUpdates();
+    }
+}
 
 void FormManager::packChanged(const DataPack::Pack &pack)
 {
