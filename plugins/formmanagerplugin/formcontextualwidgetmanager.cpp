@@ -363,6 +363,7 @@ void FormActionHandler::onActionEnabledStateUpdated(Form::Internal::FormContextu
         case Form::Internal::FormContextualWidget::Action_TakeScreenShot: a = aTakeScreenshot; break;
         case Form::Internal::FormContextualWidget::Action_AddForm: a = aAddForm; break;
         case Form::Internal::FormContextualWidget::Action_PrintCurrentFormEpisode: a = aPrintForm; break;
+        case Form::Internal::FormContextualWidget::Action_RemoveSub: a = aRemoveSubForm; break;
         }  // end switch
         if(a)
             a->setEnabled(m_CurrentView->enableAction(action));

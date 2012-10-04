@@ -105,6 +105,7 @@
 #include <QTextBrowser>
 
 #include <QDebug>
+#include <subforminsertionpoint.h>
 
 using namespace Form;
 using namespace Trans::ConstantTranslations;
@@ -623,14 +624,11 @@ bool FormPlaceHolder::enableAction(WidgetAction action) const
         // Add form always enabled
         return true;
     case Action_RemoveSub:
-        // TODO code me
-        return true;
+        // TODO this is not enough: add some more checks before making deletion possible
+        return d->ui->formView->selectionModel()->hasSelection();
     case Action_PrintCurrentFormEpisode:
-        // Validate episode only if
-        // - an episode is selected
-        // - || a form is selected
-        return (d->ui->episodeView->selectionModel()->hasSelection()
-                || d->ui->formView->selectionModel()->hasSelection());
+        // Print episode only if an episode is selected
+        return d->ui->episodeView->selectionModel()->hasSelection();
     }  // end switch
     return false;
 }
@@ -869,7 +867,15 @@ bool FormPlaceHolder::addForm()
 /** If the currently selected form is a sub-form, remove it */
 bool FormPlaceHolder::removeSubForm()
 {
+    if (!d->ui->formView->selectionModel())
+        return false;
+    Form::FormMain *formMain = d->_formTreeModel->formForIndex(d->ui->formView->currentIndex());
+    if (!formMain)
+        return false;
+    const SubFormInsertionPoint ip;
+    d->_formTreeModel->addSubForm(ip);
     // TODO: code me
+
     return true;
 }
 
