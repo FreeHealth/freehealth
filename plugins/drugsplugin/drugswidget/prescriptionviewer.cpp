@@ -287,7 +287,7 @@ void PrescriptionViewer::showDosageDialog(const QModelIndex &item)
         dlg.changeRow(drugUid, row);
         dlg.exec();
     }
-    // This is used to force listView to redraw all rows with the good height is user changes note or whatever
+    // This is used to force listView to redraw all rows with the good height if user changes note or whatever
     listView->setViewMode(QListView::ListMode);
 }
 
