@@ -473,7 +473,7 @@ void FrenchSocialNumber::populateWithPatientData()
 }
 
 
-////////////////////////////////////////// FormItem /////////////////////////////////////////////
+////////////////////////////////////////// FormWidget /////////////////////////////////////////////
 FrenchSocialNumberFormWidget::FrenchSocialNumberFormWidget(Form::FormItem *formItem, QWidget *parent) :
     Form::IFormWidget(formItem,parent), m_NSS(0)
 {
