@@ -382,7 +382,7 @@ public:
 
     QString categoryForTreeWiget() const {return QString("Value References");}
 public:
-    bool m_Optionnal;
+    bool m_optional;
 };
 }  // End Internal
 }  // End Form
@@ -459,14 +459,14 @@ QVariant FormItemValues::defaultValue(const QString &lang) const
 //    return d->m_SelectedValue;
 //}
 
-bool FormItemValues::isOptionnal() const
+bool FormItemValues::isOptional() const
 {
-    return d->m_Optionnal;
+    return d->m_optional;
 }
 
-void FormItemValues::setOptionnal(bool state)
+void FormItemValues::setOptional(bool state)
 {
-    d->m_Optionnal = state;
+    d->m_optional = state;
 }
 
 /** \brief Returns a QStringList of values asked sorted by id number. \e typeOfValue represents the enumerator. */
