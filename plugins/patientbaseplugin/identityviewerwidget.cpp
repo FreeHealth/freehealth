@@ -569,6 +569,13 @@ public:
         }
     }
 
+    /*!
+     * \brief Returns patient data with given \e column from current patient.
+     *
+     * This function first queries the PatientModel, if there is found a value, it is returned.
+     * If not, it searches for the column in the episode data and returns a valid value.
+     * If nothing is found, a QVariant() is returned.
+     */
     QVariant data(const int iPatientColumn) const
     {
         // get data from the patient model (value is extracted from database)
