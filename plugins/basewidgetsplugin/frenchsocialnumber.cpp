@@ -522,11 +522,11 @@ QString FrenchSocialNumberFormWidget::printableHtml(bool withValues) const
 
     QString content;
     if (!withValues) {
-        content += QString("%1&nbsp;:&nbsp;%2")
+        content += QString("%1:&nbsp;%2")
                 .arg(m_FormItem->spec()->label())
                 .arg(m_NSS->emptyHtmlMask());
     } else {
-        content += QString("%1&nbsp;:&nbsp;%2")
+        content += QString("%1:&nbsp;%2")
                 .arg(m_FormItem->spec()->label())
                 .arg(m_NSS->toHtml());
     }
