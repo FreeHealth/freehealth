@@ -24,6 +24,11 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
+/**
+ * \class Form::FormTreeModel
+ * Model for forms. Get your model from Form::FormManager::formTreeModel()
+ */
+
 #include "formtreemodel.h"
 #include "iformitem.h"
 #include "episodebase.h"
@@ -209,6 +214,7 @@ public:
 
 public:
     QList<Form::FormMain *> _rootForms;
+    QString _modeUid;
     QHash<QStandardItem *, Form::FormMain *> _formToItem;
 
 private:
@@ -223,18 +229,9 @@ FormTreeModel::FormTreeModel(const FormCollection &collection, QObject *parent) 
 {
     setObjectName("Form::FormTreeModel::" + collection.formUid() + collection.modeUid());
     d->_rootForms = collection.emptyRootForms();
+    d->_modeUid = collection.modeUid();
 //    connect(&formManager(), SIGNAL(patientFormsLoaded()), this, SLOT(onPatientFormsLoaded()));
 }
-
-//FormTreeModel::FormTreeModel(Form::FormMain *emptyRootForm, QObject *parent) :
-//    QStandardItemModel(parent),
-//    d(new Internal::FormTreeModelPrivate(this))
-//{
-//    Q_ASSERT(emptyRootForm);
-//    setObjectName("Form::FormTreeModel");
-//    d->_rootForm = emptyRootForm;
-//    connect(&formManager(), SIGNAL(patientFormsLoaded()), this, SLOT(onPatientFormsLoaded()));
-//}
 
 FormTreeModel::~FormTreeModel()
 {
