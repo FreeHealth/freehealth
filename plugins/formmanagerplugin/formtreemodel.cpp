@@ -306,6 +306,12 @@ Qt::ItemFlags FormTreeModel::flags(const QModelIndex &index) const
     return Qt::ItemIsSelectable | Qt::ItemIsEnabled;
 }
 
+/** Return the mode uid associated with the model */
+const QString &FormTreeModel::modeUid() const
+{
+    return d->_modeUid;
+}
+
 /** Return true if the \e index only owns one unique episode. It is supposed that the \e index points to a form */
 bool FormTreeModel::isUniqueEpisode(const QModelIndex &index) const
 {

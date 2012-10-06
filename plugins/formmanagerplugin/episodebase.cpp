@@ -502,17 +502,22 @@ QVector<Form::SubFormInsertionPoint> EpisodeBase::getSubFormFiles()
     if (!connectDatabase(DB, __LINE__)) {
         return toReturn;
     }
-    QHash<int, QString> where;
-    where.insert(FORM_GENERIC, QString("IS NULL"));
-    where.insert(FORM_VALID, QString("=1"));
-    where.insert(FORM_PATIENTUID, QString("='%1'").arg(patient()->uuid()));
+    Utils::FieldList where;
+    where.append(Utils::Field(Table_FORM, FORM_PATIENTUID, QString("='%1'").arg(patient()->uuid())));
+    where.append(Utils::Field(Table_FORM, FORM_PATIENTUID, QString("IS NULL")));
+    QString whereClause = getWhereClause(where, Utils::Database::OR);
+    where.clear();
+    where.append(Utils::Field(Table_FORM, FORM_GENERIC, QString("IS NULL")));
+    where.append(Utils::Field(Table_FORM, FORM_VALID, QString("=1")));
+    whereClause = QString("(%1) AND (%2)").arg(whereClause).arg(getWhereClause(where, Utils::Database::AND));
+
     DB.transaction();
     QSqlQuery query(DB);
     QString req = select(Table_FORM, QList<int>()
                          << FORM_SUBFORMUID
                          << FORM_INSERTIONPOINT
                          << FORM_INSERTASCHILD
-                         << FORM_APPEND, where);
+                         << FORM_APPEND) + " WHERE " + whereClause;
     if (query.exec(req)) {
         while (query.next()) {
             QString insertUid = query.value(1).toString();
@@ -541,22 +546,24 @@ QVector<Form::SubFormInsertionPoint> EpisodeBase::getSubFormFiles()
 bool EpisodeBase::addSubForms(const QVector<SubFormInsertionPoint> &insertions)
 {
     QSqlDatabase DB = QSqlDatabase::database(DB_NAME);
-    if (!connectDatabase(DB, __LINE__)) {
+    if (!connectDatabase(DB, __LINE__))
         return false;
-    }
     DB.transaction();
-    // save
     QSqlQuery query(DB);
     for(int i = 0; i < insertions.count(); ++i) {
+        const SubFormInsertionPoint &ip = insertions.at(i);
         query.prepare(prepareInsertQuery(Table_FORM));
         query.bindValue(FORM_ID, QVariant());
         query.bindValue(FORM_VALID, 1);
         query.bindValue(FORM_GENERIC, QVariant());
-        query.bindValue(FORM_PATIENTUID, patient()->uuid());
-        query.bindValue(FORM_SUBFORMUID, insertions.at(i).subFormUid());
-        query.bindValue(FORM_INSERTIONPOINT, insertions.at(i).receiverUid());
-        query.bindValue(FORM_INSERTASCHILD, int(insertions.at(i).addAsChild()));
-        query.bindValue(FORM_APPEND, int(insertions.at(i).appendToForm()));
+        if (ip.isForAllPatients())
+            query.bindValue(FORM_PATIENTUID, QVariant());
+        else
+            query.bindValue(FORM_PATIENTUID, patient()->uuid());
+        query.bindValue(FORM_SUBFORMUID, ip.subFormUid());
+        query.bindValue(FORM_INSERTIONPOINT, ip.receiverUidForDatabase());
+        query.bindValue(FORM_INSERTASCHILD, int(ip.addAsChild()));
+        query.bindValue(FORM_APPEND, int(ip.appendToForm()));
         query.bindValue(FORM_USER_RESTRICTION_ID, QVariant());
         if (!query.exec()) {
             LOG_QUERY_ERROR(query);

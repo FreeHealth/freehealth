@@ -59,7 +59,7 @@
 using namespace Form;
 using namespace Internal;
 
-enum { WarnLogChronos=false, WarnDirty=false };
+enum { WarnLogChronos=false, WarnDirty=true };
 
 static inline Form::FormManager &formManager() {return Form::FormCore::instance().formManager();}
 static inline Form::EpisodeManager &episodeManager() {return Form::FormCore::instance().episodeManager();}
@@ -254,7 +254,8 @@ bool FormDataWidgetMapper::isDirty() const
             return true;
         }
     }
-//    qWarning() << "FormDataWidgetMapper::isDirty false" << "Form:" << d->_formMain->uuid();
+    if (WarnDirty)
+        qWarning() << "FormDataWidgetMapper::isDirty false" << "Form:" << d->_formMain->uuid();
     return false;
 }
 
