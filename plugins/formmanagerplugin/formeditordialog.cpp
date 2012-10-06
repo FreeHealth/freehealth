@@ -33,10 +33,12 @@
 #include "formcore.h"
 #include "formtreemodel.h"
 #include "constants_db.h"
+#include "constants_settings.h"
 #include "episodebase.h"
 #include "subforminsertionpoint.h"
 #include "formmanager.h"
 #include "iformio.h"
+#include "formviewdelegate.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
@@ -55,11 +57,10 @@ static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); 
 static inline Form::FormManager &formManager() {return Form::FormCore::instance().formManager();}
 static inline Core::IMainWindow *mainWindow() {return Core::ICore::instance()->mainWindow();}
 
-// TODO test with the new FormModel
 FormEditorDialog::FormEditorDialog(FormTreeModel *model, EditionModes mode, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::FormEditorDialog),
-    m_FormModel(model)
+    _formTreeModel(model)
 {
     Q_UNUSED(mode);
 
@@ -73,6 +74,10 @@ FormEditorDialog::FormEditorDialog(FormTreeModel *model, EditionModes mode, QWid
     for(int i = 0; i< FormTreeModel::MaxData; ++i)
         ui->treeView->hideColumn(i);
     ui->treeView->showColumn(FormTreeModel::Label);
+    ui->treeView->setAlternatingRowColors(true);
+    ui->treeView->setStyleSheet(Constants::FORMTREEVIEW_SHEET);
+    _delegate = new Internal::FormViewDelegate(ui->treeView);
+    ui->treeView->setItemDelegate(_delegate);
     ui->stackedWidget->setCurrentWidget(ui->formAdder);
 
     setWindowTitle(tr("Form Editor"));
@@ -99,7 +104,7 @@ void FormEditorDialog::on_addForm_clicked()
             return;
     } else {
         QModelIndex idx = ui->treeView->selectionModel()->currentIndex();
-        insertTo = m_FormModel->data(m_FormModel->index(idx.row(), FormTreeModel::Uuid, idx.parent())).toString();
+        insertTo = _formTreeModel->data(_formTreeModel->index(idx.row(), FormTreeModel::Uuid, idx.parent())).toString();
     }
 
     // Save to database

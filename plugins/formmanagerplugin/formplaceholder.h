@@ -34,7 +34,6 @@
 
 #include <QWidget>
 #include <QTreeView>
-#include <QStyledItemDelegate>
 
 QT_BEGIN_NAMESPACE
 class  QTreeWidgetItem;
@@ -81,23 +80,6 @@ private:
     FormPlaceHolder *_formPlaceHolder;
 };
 
-class FormItemDelegate : public QStyledItemDelegate
-{
-    Q_OBJECT
-public:
-    FormItemDelegate(QObject *parent = 0);
-    void setFormTreeModel(FormTreeModel *model);
-
-    void paint(QPainter *painter, const QStyleOptionViewItem &option,
-               const QModelIndex &index) const;
-
-    QSize sizeHint(const QStyleOptionViewItem &option,
-                   const QModelIndex &index) const;
-
-public:
-    mutable QModelIndex pressedIndex;
-    FormTreeModel *_formTreeModel;
-};
 }  // End namespace Internal
 
 

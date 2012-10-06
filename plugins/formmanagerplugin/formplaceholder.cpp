@@ -52,6 +52,7 @@
 #include "formeditordialog.h"
 #include "formtreemodel.h"
 #include "formdatawidgetmapper.h"
+#include "formviewdelegate.h"
 
 #include "ui_formplaceholder.h"
 
@@ -119,48 +120,6 @@ static inline Core::IMainWindow *mainWindow()  { return Core::ICore::instance()-
 static inline Core::IPatient *patient()  { return Core::ICore::instance()->patient(); }
 static inline Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
 static inline Core::IDocumentPrinter *printer() {return ExtensionSystem::PluginManager::instance()->getObject<Core::IDocumentPrinter>();}
-
-namespace {
-const char * const TREEVIEW_SHEET =
-        " QTreeView {"
-        "    show-decoration-selected: 1;"
-        "}"
-
-        "QTreeView::item {"
-//        "    border: 0px;"
-        "    background: base;"
-//        "    border-top-color: transparent;"
-//        "    border-bottom-color: transparent;"
-        "}"
-
-        "QTreeView::item:hover {"
-        "    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #e7effd, stop: 1 #cbdaf1);"
-//        "    border: 0px solid #bfcde4;"
-        "}"
-
-//        "QTreeView::branch:hover {"
-//        "    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #e7effd, stop: 1 #cbdaf1);"
-//        "    border: 0px solid #bfcde4;"
-//        "}"
-
-//        "QTreeView::item:selected {"
-//        "    border: 0px solid #567dbc;"
-//        "}"
-
-        "QTreeView::item:selected {"
-        "    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #6ea1f1, stop: 1 #567dbc);"
-        "}"
-
-        "QTreeView::branch:selected {"
-        "    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #6ea1f1, stop: 1 #567dbc);"
-        "}"
-
-//        "QTreeView::item:selected:!active {"
-//        "    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #6b9be8, stop: 1 #577fbf);"
-//        "}"
-        ;
-
-}
 
 namespace Form {
 namespace Internal {
@@ -414,7 +373,7 @@ public:
     Ui::FormPlaceHolder *ui;
     QModelIndex _currentEditingForm;
     FormTreeModel *_formTreeModel;
-    FormItemDelegate *_delegate;
+    FormViewDelegate *_delegate;
     QToolBar *_episodeToolBar;
     QHash<int, QString> m_StackId_FormUuid;
     Internal::FormPlaceHolderCoreListener *_coreListener;
@@ -425,70 +384,6 @@ public:
 private:
     FormPlaceHolder *q;
 };
-
-FormItemDelegate::FormItemDelegate(QObject *parent) :
-    QStyledItemDelegate(parent),
-    _formTreeModel(0)
-{
-}
-
-void FormItemDelegate::setFormTreeModel(FormTreeModel *model)
-{
-    _formTreeModel = model;
-}
-
-QSize FormItemDelegate::sizeHint(const QStyleOptionViewItem &option,const QModelIndex &index) const
-{
-    const bool topLevel = !index.parent().isValid();
-    if (topLevel) {
-        return QStyledItemDelegate::sizeHint(option, index) + QSize(10,10);
-    }
-    return QStyledItemDelegate::sizeHint(option, index);
-}
-
-void FormItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
-           const QModelIndex &index) const
-{
-    // Add the fancy button
-    if (option.state & QStyle::State_MouseOver) {
-        if ((QApplication::mouseButtons() & Qt::LeftButton) == 0)
-            pressedIndex = QModelIndex();
-        QBrush brush = option.palette.alternateBase();
-        if (index == pressedIndex)
-            brush = option.palette.dark();
-        painter->fillRect(option.rect, brush);
-    }
-
-    QStyledItemDelegate::paint(painter, option, index);
-
-    // Draw fancy button
-    if (index.column()==FormTreeModel::EmptyColumn1 &&
-            (option.state & QStyle::State_MouseOver)) {
-        QIcon icon;
-        if (option.state & QStyle::State_Selected) {
-            // test the form to be unique or multiple episode
-            if (_formTreeModel->isUniqueEpisode(index))
-                return;
-            if (_formTreeModel->isNoEpisode(index))
-                return;
-            icon = theme()->icon(Core::Constants::ICONADDLIGHT);
-        } else {
-            // test the form to be unique or multiple episode
-            if (_formTreeModel->isUniqueEpisode(index))
-                return;
-            if (_formTreeModel->isNoEpisode(index))
-                return;
-            icon = theme()->icon(Core::Constants::ICONADDDARK);
-        }
-
-        QRect iconRect(option.rect.right() - option.rect.height(),
-                       option.rect.top(),
-                       option.rect.height(),
-                       option.rect.height());
-
-        icon.paint(painter, iconRect, Qt::AlignRight | Qt::AlignVCenter);
-    }
-}
 
 }  // namespace Internal
 }  // namespace Form
@@ -504,7 +399,7 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
     d->ui->verticalLayout_2->setSpacing(0);
     d->createEpisodeToolBar();
 
-    d->_delegate = new Internal::FormItemDelegate(d->ui->formView);
+    d->_delegate = new Internal::FormViewDelegate(d->ui->formView);
     d->ui->formDataMapper->initialize();
 
     // Manage Form File tree view
@@ -523,7 +418,7 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
     d->ui->formView->treeView()->setSelectionMode(QAbstractItemView::SingleSelection);
     d->ui->formView->treeView()->setSelectionBehavior(QAbstractItemView::SelectRows);
     d->ui->formView->treeView()->setAlternatingRowColors(settings()->value(Constants::S_USEALTERNATEROWCOLOR).toBool());
-    d->ui->formView->treeView()->setStyleSheet(::TREEVIEW_SHEET);
+    d->ui->formView->treeView()->setStyleSheet(Constants::FORMTREEVIEW_SHEET);
 
     connect(d->ui->formView, SIGNAL(clicked(QModelIndex)), this, SLOT(handleClicked(QModelIndex)));
     connect(d->ui->formView, SIGNAL(pressed(QModelIndex)), this, SLOT(handlePressed(QModelIndex)));

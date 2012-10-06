@@ -41,6 +41,9 @@ QT_END_NAMESPACE
 
 namespace Form {
 class FormTreeModel;
+namespace Internal {
+class FormViewDelegate;
+}
 namespace Ui {
 class FormEditorDialog;
 }
@@ -71,7 +74,8 @@ private Q_SLOTS:
 
 private:
     Ui::FormEditorDialog *ui;
-    Form::FormTreeModel *m_FormModel;
+    Form::FormTreeModel *_formTreeModel;
+    Internal::FormViewDelegate *_delegate;
 //    QString m_LastInsertedFormUid;
 };
 
