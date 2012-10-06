@@ -46,12 +46,13 @@ class FORM_EXPORT SubFormInsertionPoint
 {
 public:
     SubFormInsertionPoint(const QString &receiverUid, const QString &addUid) :
-            m_ReceiverFormUid(receiverUid),
             m_SubFormUid(addUid),
             m_AppendToForm(false),
             m_AddAsChild(true),
             m_EmitInsertionSignal(false)
-    {}
+    {
+        setReceiverUid(receiverUid);
+    }
 
     SubFormInsertionPoint() :
             m_AppendToForm(false),
@@ -61,7 +62,7 @@ public:
 
     ~SubFormInsertionPoint() {}
 
-    void setReceiverUid(const QString &uid) {m_ReceiverFormUid = uid;}
+    void setReceiverUid(const QString &uid);
     void setSubFormUid(const QString &uid) {m_SubFormUid = uid;}
     void setEmptyRootSubForm(Form::FormMain *emptyRootSubForm) {m_emptyRootSubForm = emptyRootSubForm;}
     void setAppendToForm(bool append) {m_AppendToForm = append;}
@@ -69,14 +70,15 @@ public:
     void setEmitInsertionSignal(bool emitSignal) {m_EmitInsertionSignal = emitSignal;}
 
     Form::FormMain *emptyRootSubForm() const {return m_emptyRootSubForm;}
-    QString subFormUid() const {return m_SubFormUid;}
-    QString receiverUid() const {return m_ReceiverFormUid;}
+    const QString &subFormUid() const {return m_SubFormUid;}
+    const QString &receiverUid() const {return m_ReceiverFormUid;}
+    const QString &modeUid() const {return m_ModeUid;}
     bool appendToForm() const {return m_AppendToForm;}
     bool addAsChild() const {return m_AddAsChild;}
     bool emitInsertionSignal() const {return m_EmitInsertionSignal;}
 
 private:
-    QString m_ReceiverFormUid, m_SubFormUid;
+    QString m_ReceiverFormUid, m_SubFormUid, m_ModeUid;
     Form::FormMain *m_emptyRootSubForm;
     bool m_AppendToForm;
     bool m_AddAsChild;
