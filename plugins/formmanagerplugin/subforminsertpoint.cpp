@@ -26,6 +26,7 @@
  ***************************************************************************/
 #include "subforminsertionpoint.h"
 
+#include <QStringList>
 #include <QDebug>
 
 using namespace Form;
