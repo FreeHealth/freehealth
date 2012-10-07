@@ -777,29 +777,38 @@ bool FormPlaceHolder::removeSubForm()
     if (!d->ui->formView->selectionModel())
         return false;
 
-    QModelIndex index = d->_formTreeModel->index(d->ui->formView->selectionModel()->currentIndex().row(), FormTreeModel::Label, d->ui->formView->selectionModel()->currentIndex().parent());
-    QString episodeMsg = "<span style=\"font-weight:bold; color:red\">All recorded episode will be removed as well.</span><br /><br />";
+    QModelIndex current = d->ui->formView->selectionModel()->currentIndex();
+    QModelIndex indexLabel = d->_formTreeModel->index(current.row(), FormTreeModel::Label, current.parent());
+    QModelIndex indexUid = d->_formTreeModel->index(current.row(), FormTreeModel::Uuid, current.parent());
+    QModelIndex parent = d->_formTreeModel->index(indexUid.parent().row(), FormTreeModel::Uuid, indexUid.parent().parent());
+    EpisodeModel *episodeModel = episodeManager().episodeModel(d->_formTreeModel->formForIndex(indexUid));
+    QString episodeMsg;
+    if (episodeModel->rowCount() > 0)
+        episodeMsg = "<span style=\"font-weight:bold; color:darkred\">All recorded episode will be removed as well.</span><br /><br />";
+
     // message box
     bool yes = Utils::yesNoMessageBox(tr("Remove the current form"),
                                       tr("Trying to remove the sub-form:"
                                          "<br />&nbsp;&nbsp;&nbsp;<b>%1</b>.<br /><br />"
                                          "%2"
                                          "This modification will only affect the current patient:"
-                                         "<br />&nbsp;&nbsp;&nbsp;<b>%3</b>.<br />"
+                                         "<br />&nbsp;&nbsp;&nbsp;<b>%3</b>.<br /><br />"
                                          "Do you really want to remove the current sub-form?")
-                                      .arg(d->_formTreeModel->data(index).toString().replace(" ", "&nbsp;"))
+                                      .arg(d->_formTreeModel->data(indexLabel).toString().replace(" ", "&nbsp;"))
                                       .arg(episodeMsg)
                                       .arg(patient()->data(Core::IPatient::FullName).toString().replace(" ", "&nbsp;")));
     if (!yes)
         return false;
 
-//    Form::FormMain *formMain = d->_formTreeModel->formForIndex(d->ui->formView->currentIndex());
-//    if (!formMain)
-//        return false;
-//    const SubFormInsertionPoint ip;
-//    d->_formTreeModel->addSubForm(ip);
-    // TODO: code me
+    // remove episodes
+    if (!episodeModel->removeAllEpisodes()) {
+        LOG_ERROR("Unable to remove all episodes");
+        return false;
+    }
 
+    // remove sub-form
+    SubFormRemoval remove(d->_formTreeModel->modeUid(), d->_formTreeModel->data(parent).toString(), d->_formTreeModel->data(indexUid).toString());
+    formManager().removeSubForm(remove);
     return true;
 }
 

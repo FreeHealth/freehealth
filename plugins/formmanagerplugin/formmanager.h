@@ -40,9 +40,9 @@ QT_END_NAMESPACE
 
 /**
  * \file formmanager.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
+ * \author Eric MAEKER
  * \version 0.8.0
- * \date 12 Sept 2012
+ * \date 06 Oct 2012
 */
 
 namespace DataPack {
@@ -57,6 +57,7 @@ class FormItem;
 class IFormIO;
 class FormPlaceHolder;
 class SubFormInsertionPoint;
+class SubFormRemoval;
 class FormTreeModel;
 class EpisodeModel;
 class FormCollection;
@@ -102,20 +103,18 @@ public:
     // Mode page creation
     FormPage *createFormPage(const QString &uuid);
 
-
+    // Form pointers && extra
     Form::FormMain *rootForm(const char *modeUniqueName) const;
     Form::FormMain *identityRootForm() const;
     Form::FormMain *identityRootFormDuplicate() const;
     QPixmap getScreenshot(const QString &formUid, const QString &fileName);
-
-    // Models management
-//    FormTreeModel *formTreeModel(const char* modeUniqueName);
 
 public Q_SLOTS:
     // Form management
     bool loadPatientFile();
     bool onCurrentPatientChanged();
     bool insertSubForm(const SubFormInsertionPoint &insertionPoint);
+    bool removeSubForm(const SubFormRemoval &subFormRemoval);
 
     // PMHx categories of forms management
     bool readPmhxCategories(const QString &formUuidOrAbsPath);

@@ -251,7 +251,6 @@ public:
 
     bool insertSubFormInModels(const SubFormInsertionPoint &insertionPoint)
     {
-        qWarning() << "\n\nSUB\n" << insertionPoint;
         if (!insertionPoint.isValid())
             return false;
         // Load subform
@@ -260,6 +259,7 @@ public:
             return false;
         }
 
+        // TODO : improve this code and manage modeuid
         // Find all FormTreeModel with the formUid && populate them
         if (insertionPoint.receiverUid() == Constants::ROOT_FORM_TAG) {
             // Add to the central mode
@@ -267,7 +267,6 @@ public:
             if (mode.isEmpty())
                 mode = Core::Constants::MODE_PATIENT_FILE;
             FormTreeModel *model = getFormTreeModel(mode, ModeForms);
-//                qWarning() << model;
             if (model)
                 model->addSubForm(insertionPoint);
         } else {
@@ -275,13 +274,40 @@ public:
                 if (collection->formUid() == insertionPoint.receiverUid()) {
                     // update the formtreemodel
                     FormTreeModel *model = getFormTreeModel(collection->formUid(), collection->type()==FormCollection::CompleteForm ? CompleteForms : SubForms );
-//                        qWarning() << model;
                     if (model)
                         model->addSubForm(insertionPoint);
                     break;
                 }
             }
         }
+        return true;
+    }
+
+    bool removeSubFormFromModels(const SubFormRemoval &remove)
+    {
+        if (!insertionPoint.isValid())
+            return false;
+
+//        // Find all FormTreeModel with the formUid && populate them
+//        if (insertionPoint.receiverUid() == Constants::ROOT_FORM_TAG) {
+//            // Add to the central mode
+//            QString mode = insertionPoint.modeUid();
+//            if (mode.isEmpty())
+//                mode = Core::Constants::MODE_PATIENT_FILE;
+//            FormTreeModel *model = getFormTreeModel(mode, ModeForms);
+//            if (model)
+//                model->addSubForm(insertionPoint);
+//        } else {
+//            foreach(FormCollection *collection, _centralFormCollection) {
+//                if (collection->formUid() == insertionPoint.receiverUid()) {
+//                    // update the formtreemodel
+//                    FormTreeModel *model = getFormTreeModel(collection->formUid(), collection->type()==FormCollection::CompleteForm ? CompleteForms : SubForms );
+//                    if (model)
+//                        model->addSubForm(insertionPoint);
+//                    break;
+//                }
+//            }
+//        }
         return true;
     }
 
@@ -518,6 +544,13 @@ QList<FormMain *> FormManager::allEmptyRootForms() const
 bool FormManager::insertSubForm(const SubFormInsertionPoint &insertionPoint)
 {
     return d->insertSubFormInModels(insertionPoint);
+}
+
+/** Remove a sub-form according to the \e subFormRemoval value */
+bool FormManager::removeSubForm(const SubFormRemoval &subFormRemoval)
+{
+    qWarning() << subFormRemoval.modeUid() << subFormRemoval.receiverUid() << subFormRemoval.subFormUid();
+    return true;
 }
 
 /** Load the generic patient file (and included subforms) and emit patientFormsLoaded() when finished. */

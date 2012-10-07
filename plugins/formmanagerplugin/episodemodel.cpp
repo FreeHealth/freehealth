@@ -630,7 +630,8 @@ bool EpisodeModel::removeAllEpisodes()
 {
     bool ok = episodeBase()->removeAllEpisodeForForm(d->_formMain->uuid(), patient()->uuid());
     if (ok)
-        reset();
+        d->updateFilter(patient()->uuid());
+//        d->_sqlModel->reset();
     return ok;
 }
 
