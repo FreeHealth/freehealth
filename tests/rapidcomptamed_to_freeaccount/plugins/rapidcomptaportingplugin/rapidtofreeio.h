@@ -38,7 +38,7 @@ private:
         RAPID_DU_PAR,
         RAPID_VALIDE,
         RAPID_TRACABILITE,
-        RapidFiels_MaxParam
+        RapidFields_MaxParam
     };
     enum AccountFields
     {
@@ -72,6 +72,9 @@ private:
     void fillHashOfAccount();
     void fillHashHono();
     void linkTableHonoAndAccount();
+    bool insertIntoAccount(QList<QVariant> listOfRapidDatas);
+    bool insertIntoFieldOfAccount(QVariant data, int id, int field);
+    int getAccountLastId();
     QSqlDatabase m_dbRapidCompta;
     QSqlDatabase m_dbAccount;
     QHash<int,QString> m_hashAccount;
