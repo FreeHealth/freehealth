@@ -62,6 +62,10 @@ static inline Form::Internal::EpisodeBase *episodeBase() {return Form::Internal:
 static inline Form::FormManager &formManager() {return Form::FormCore::instance().formManager();}
 static inline Core::IPatient *patient()  { return Core::ICore::instance()->patient(); }
 
+namespace {
+const int SUBFORM_TAG_ROLE = Qt::UserRole + 1;
+}
+
 namespace Form {
 namespace Internal {
 class FormTreeModelPrivate
@@ -109,7 +113,7 @@ public:
         return QIcon(iconFile);
     }
 
-    void createItems(const QList<Form::FormMain *> &emptyrootforms)
+    void createItems(const QList<Form::FormMain *> &emptyrootforms, bool tagAsSubForm = false)
     {
         QFont bold;
         bold.setBold(true);
@@ -119,6 +123,8 @@ public:
                 QStandardItem *item = new QStandardItem(formIcon(form), formLabelWithEpisodeCount(form));
                 item->setFont(bold);
                 linkFormAndItem(form, item);
+                if (tagAsSubForm)
+                    item->setData(true, ::SUBFORM_TAG_ROLE);
             }
         }
     }
@@ -193,7 +199,7 @@ public:
 
         if (!receiver)
             return false;
-        createItems(forms);
+        createItems(forms, true);
         reparentItems(forms, receiver);
 
         return true;
@@ -343,6 +349,15 @@ Form::FormMain *FormTreeModel::formForIndex(const QModelIndex &index) const
 /** Remove all subForms from the model */
 void FormTreeModel::clearSubForms()
 {
+    QList<QStandardItem *> items = d->_formToItem.keys();
+    foreach(QStandardItem *item, items) {
+        if (item->data(::SUBFORM_TAG_ROLE).toBool()) {
+            d->_formToItem.remove(item);
+            // remove row from model
+            QModelIndex index = indexFromItem(item);
+            removeRow(index.row(), index.parent());
+        }
+    }
 }
 
 /** Add a subform to the model according the \e insertionPoint */
@@ -351,6 +366,17 @@ bool FormTreeModel::addSubForm(const SubFormInsertionPoint &insertionPoint)
     bool ok = d->addSubForm(insertionPoint);
     reset();
     return ok;
+}
+
+/** Return true if the \e index points to a root-subform */
+bool FormTreeModel::isIncludedRootSubForm(const QModelIndex &index) const
+{
+    QStandardItem *item = itemFromIndex(index);
+    qWarning() << "isIncludedRootSubForm" << item;
+    if (!item)
+        return false;
+    qWarning() << "isIncludedRootSubForm" << item->data(::SUBFORM_TAG_ROLE);
+    return item->data(::SUBFORM_TAG_ROLE).toBool();
 }
 
 /** Clear the content of all the model's forms */

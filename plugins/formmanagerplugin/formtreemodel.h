@@ -75,14 +75,17 @@ public:
 
     Qt::ItemFlags flags(const QModelIndex &index) const;
 
+    // Form information
     const QString &modeUid() const;
     bool isUniqueEpisode(const QModelIndex &index) const;
     bool isNoEpisode(const QModelIndex &index) const;
     bool isMultiEpisode(const QModelIndex &index) const {return (!isUniqueEpisode(index) && !isNoEpisode(index));}
     Form::FormMain *formForIndex(const QModelIndex &index) const;
 
+    // Subform management
     void clearSubForms();
     bool addSubForm(const Form::SubFormInsertionPoint &insertionPoint);
+    bool isIncludedRootSubForm(const QModelIndex &index) const;
 
 public Q_SLOTS:
     bool clearFormContents();
