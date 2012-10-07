@@ -3,6 +3,8 @@
 #include <accountbaseplugin/accountbase.h>
 #include <QSqlQuery>
 
+using namespace AccountDB;
+
 enum Warn {WarnDebugMessage = true};
 
 RapidToFreeIO::RapidToFreeIO(QObject * parent)
@@ -16,7 +18,7 @@ RapidToFreeIO::~RapidToFreeIO(){}
 
 bool RapidToFreeIO::initialiseBases()
 {
-    //    	AccountBase::instance()->initialize();
+    AccountBase::instance()->initialize();
     if (!connectToRapidComptamed()) {
         qWarning() << __FILE__ << QString::number(__LINE__) << "unable to connect to rapidcomptamed" ;
         return false;
@@ -46,20 +48,6 @@ bool RapidToFreeIO::connectToRapidComptamed()
 
 bool RapidToFreeIO::getAndSetAccount()
 {
-    m_dbAccount = QSqlDatabase::database("account");
-    int lastId = 0;
-    QSqlQuery queryLastId(m_dbAccount);
-    QString reqLastId = QString("SELECT %1 FROM %2").arg("ACCOUNT_ID","account");
-    while (queryLastId.next())
-    {
-        int id = queryLastId.value(0).toInt();
-        if (id>lastId)
-        {
-            lastId = id;
-        }
-    }
-    if (WarnDebugMessage)
-        qDebug() << __FILE__ << QString::number(__LINE__) << " last account id =" << QString::number(lastId) ;
     QSqlQuery queryHono(m_dbRapidCompta);
     QString req = QString("SELECT %1 FROM %2").arg(m_honorairesFields,"honoraires");
     if (!queryHono.exec(req))
@@ -68,9 +56,10 @@ bool RapidToFreeIO::getAndSetAccount()
         return false;
 
     }
+    int lineCounter = 0;
     while (queryHono.next())
     {
-        QString id_hono=queryHono.value(RAPID_ID_HONO).toString();
+        /*QString id_hono=queryHono.value(RAPID_ID_HONO).toString();
         QString id_usr=queryHono.value(RAPID_ID_USR).toString();
         QString id_drtux_usr=queryHono.value(RAPID_ID_DRTUX_USR).toString();
         QString patient=queryHono.value(RAPID_PATIENT).toString();
@@ -91,9 +80,20 @@ bool RapidToFreeIO::getAndSetAccount()
         QString du=queryHono.value(RAPID_DU).toString();
         QString du_par=queryHono.value(RAPID_DU_PAR).toString();
         QString valide=queryHono.value(RAPID_VALIDE).toString();
-        QString tracabilite=queryHono.value(RAPID_TRACABILITE).toString();
-
-
+        QString tracabilite=queryHono.value(RAPID_TRACABILITE).toString();*/
+        
+        ++lineCounter;
+        QList<QVariant> rapidFieldsList;
+        for (int RapidEnum = 0; RapidEnum < RapidFields_MaxParam; ++RapidEnum)
+        {
+        	  rapidFieldsList << queryHono.value(RapidEnum);
+            }
+        if (!insertIntoAccount(rapidFieldsList))
+        {
+        	  qWarning() << __FILE__ << QString::number(__LINE__) 
+        	             << "unable to insert datas into account at line : "
+        	             << QString::number(lineCounter) ;
+            }
     }
     return true;
 }
@@ -184,5 +184,112 @@ QStringList RapidToFreeIO::getListOfRapidcomptamedUsers()
     return listOfUsers;
 }
 
+int RapidToFreeIO::getAccountLastId()
+{
+    m_dbAccount = QSqlDatabase::database("account");
+    int lastId = 0;
+    QSqlQuery queryLastId(m_dbAccount);
+    QString reqLastId = QString("SELECT %1 FROM %2").arg("ACCOUNT_ID","account");
+    while (queryLastId.next())
+    {
+        int id = queryLastId.value(0).toInt();
+        if (id>lastId)
+        {
+            lastId = id;
+        }
+    }
+    if (WarnDebugMessage)
+        qDebug() << __FILE__ << QString::number(__LINE__) << " last account id =" << QString::number(lastId) ;
+    return lastId;
+}
 
+
+bool RapidToFreeIO::insertIntoAccount(QList<QVariant> listOfRapidDatas)
+{
+    for (int accountFieldNbr = 0; accountFieldNbr < AccountFields_MaxParam; ++accountFieldNbr)
+    {
+    	  int accountId = 0;
+    	  switch(accountFieldNbr){
+    	      case ACCOUNT_ID :
+    	          accountId = getAccountLastId() +1;
+    	          if (!insertIntoFieldOfAccount(accountId,-1,ACCOUNT_ID))
+    	          {
+    	          	  qWarning() << __FILE__ << QString::number(__LINE__) << "unable to insert " 
+    	          	  << listOfRapidDatas.at(ACCOUNT_ID).toString() << " in account";
+    	          	  return false;
+    	              }
+    	          break;
+    	      default :
+    	          QVariant data = listOfRapidDatas.at(accountFieldNbr);
+    	          if (!insertIntoFieldOfAccount(data,accountId,accountFieldNbr))
+    	          {
+    	          	  qWarning() << __FILE__ << QString::number(__LINE__) << "unable to insert " 
+    	          	  << data.toString() << " in account";
+    	          	  return false;
+    	              }
+    	          break;    
+    	      }    	      
+        }
+    return true;
+}
+
+bool RapidToFreeIO::insertIntoFieldOfAccount(QVariant data, int id, int field)
+{
+   
+    QSqlQuery query(m_dbAccount);
+    if (id == -1)
+    {
+    	  QString datas = "?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?";     
+          //fieldName = fieldName(AccountDB::Constants::Table_Account,AccountDB::Constants::ACCOUNT_ID);
+          QStringList itemsFieldsList;
+          itemsFieldsList = m_hashAccount.values();
+          QString itemsFields = itemsFieldsList.join(",");
+          query.prepare(QString("INSERT INTO %1 (%2) VALUES(%3)").arg("account",itemsFields,datas));
+          for (int i = 0; i < AccountFields_MaxParam; ++i)
+          {
+          	  switch(i){
+          	      case ACCOUNT_ID :
+          	          query.bindValue(i,data);
+          	          break;
+          	      case ACCOUNT_UID : case USER_UID :
+          	          query.bindValue(i,"{00000000-0000-0000-0000-000000000000}}");
+          	          break;
+          	      case PATIENT_UID : case PATIENT_NAME : case  SITE_ID : case INSURANCE_ID :
+          	          query.bindValue(i,0000000000);
+          	          break;
+          	      case DATE :
+          	          query.bindValue(i,"2000-01-01");
+          	          break;
+          	      case MP_TXT : case MP_XML : case COMMENT : case DUE_BY :
+          	          query.bindValue(i,"NULL");
+          	          break;
+          	      case VALID : case BLOB :
+          	          query.bindValue(i,0);
+          	          break;
+          	      case CASH : case CHEQUE : case VISA : case BANKING : case OTHER : case DU :
+          	          query.bindValue(i,0.0);
+          	          break;
+          	      default :
+          	          break;    
+          	      }
+          	  
+          	      
+              }
+    	  
+    	      
+    	  if (!query.exec())
+    	  {
+    	  	  qWarning() << __FILE__ << QString::number(__LINE__) << query.lastError().text() ;
+    	  	  return false;
+    	  	  
+    	      }
+        }
+    else
+    {
+        /*QString fieldName = fieldName(AccountDB::Constants::Table_Account,field);    	  
+        QString req = QString("UPDATE %1 (%2) VALUES(%3) WHERE %4 = '%5'")//TO FIX
+             .arg("account",fieldName,data,"ACCOUNT_ID");*/
+        }
+    return true;
+}
 
