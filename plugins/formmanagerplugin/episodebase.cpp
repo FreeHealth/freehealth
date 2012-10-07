@@ -967,6 +967,35 @@ bool EpisodeBase::removeEpisode(const QVariant &uid)
     return true;
 }
 
+/** Remove all the recorded episode for the form \e formUid and for the patient \e patientUid in the database */
+bool EpisodeBase::removeAllEpisodeForForm(const QVariant &formUid, const QString &patientUid)
+{
+    if (!formUid.isValid())
+        return false;
+    if (patientUid.isEmpty())
+        return false;
+    QSqlDatabase DB = QSqlDatabase::database(DB_NAME);
+    if (!connectDatabase(DB, __LINE__))
+        return false;
+    using namespace Constants;
+    QHash<int, QString> where;
+    where.insert(EPISODES_FORM_PAGE_UID, QString("='%1'").arg(formUid.toString()));
+    where.insert(EPISODES_PATIENT_UID, QString("='%1'").arg(patientUid));
+    DB.transaction();
+    QSqlQuery query(DB);
+    query.prepare(prepareUpdateQuery(Table_EPISODES, EPISODES_ISVALID, where));
+    query.bindValue(0, "0");
+    if (!query.exec()) {
+        LOG_QUERY_ERROR(query);
+        query.finish();
+        DB.rollback();
+        return false;
+    }
+    query.finish();
+    DB.commit();
+    return true;
+}
+
 /** Return all recorded episodes form the database according to the Form::Internal::EpisodeBaseQuery \e baseQuery. Episodes are sorted by UserDate. */
 QList<EpisodeData *> EpisodeBase::getEpisodes(const EpisodeBaseQuery &baseQuery)
 {
