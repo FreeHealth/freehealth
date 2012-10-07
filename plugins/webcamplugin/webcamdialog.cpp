@@ -100,6 +100,7 @@ WebcamDialog::~WebcamDialog()
 /*! Returns the current or choosen pixmap */
 QPixmap WebcamDialog::photo() const
 {
+    qWarning() << "GERT PHOTO" << _pixmap.rect();
     if (_pixmap.isNull())
         return ui->openCVWidget->pixmap()->copy(ui->openCVWidget->frame());
     return _pixmap;
@@ -145,7 +146,8 @@ void WebcamDialog::faceShotActivated(const QModelIndex &index)
         return;
 
     // set internal pixmap to return later
-    _pixmap = m_imageModel->data(index).value<QPixmap>();
+    QIcon icon = m_imageModel->data(index, Qt::DecorationRole).value<QIcon>();
+    _pixmap = icon.pixmap(QSize(150,150));
     accept();
     return;
 }
