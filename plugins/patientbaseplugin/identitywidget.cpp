@@ -511,18 +511,3 @@ void IdentityWidget::photoButton_clicked()
         action->trigger();
 }
 
-//void IdentityWidget::setPhoto(QPixmap &photo)
-//{
-//    if (d->m_EditMode != ReadWriteMode)
-//        return;
-
-//    if (!photo.isNull()) {
-//        // resize pixmap to 64x64
-//        photo = photo.scaled(QSize(64,64), Qt::KeepAspectRatio, Qt::SmoothTransformation);
-//        d->editUi->photoButton->setPixmap(photo);
-//    } else {
-//        // there is no photo, use a default one.
-//        updateGenderImage(d->editUi->genderCombo->currentIndex());
-//    }
-//}
-
