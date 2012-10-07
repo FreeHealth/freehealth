@@ -100,7 +100,6 @@ WebcamDialog::~WebcamDialog()
 /*! Returns the current or choosen pixmap */
 QPixmap WebcamDialog::photo() const
 {
-    qWarning() << "GERT PHOTO" << _pixmap.rect();
     if (_pixmap.isNull())
         return ui->openCVWidget->pixmap()->copy(ui->openCVWidget->frame());
     return _pixmap;
