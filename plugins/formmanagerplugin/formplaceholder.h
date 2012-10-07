@@ -102,6 +102,7 @@ public Q_SLOTS:
     bool clear();
 
 protected Q_SLOTS:
+    void currentSelectedFormChanged(const QModelIndex &current, const QModelIndex &previous);
     void setCurrentEditingFormItem(const QModelIndex &index);
     bool createEpisode();
     bool validateCurrentEpisode();

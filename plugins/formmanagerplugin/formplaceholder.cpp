@@ -520,7 +520,8 @@ bool FormPlaceHolder::enableAction(WidgetAction action) const
         return true;
     case Action_RemoveSub:
         // TODO this is not enough: add some more checks before making deletion possible
-        return d->ui->formView->selectionModel()->hasSelection();
+        return d->ui->formView->selectionModel()->hasSelection()
+                && d->_formTreeModel->isIncludedRootSubForm(d->ui->formView->currentIndex());
     case Action_PrintCurrentFormEpisode:
         // Print episode only if an episode is selected
         return d->ui->episodeView->selectionModel()->hasSelection();
@@ -540,6 +541,7 @@ void FormPlaceHolder::setFormTreeModel(FormTreeModel *model)
         return;
     // Manage Form tree view / model
     if (d->_formTreeModel) {
+        disconnect(d->ui->formView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(currentSelectedFormChanged(QModelIndex, QModelIndex)));
         disconnect(d->_formTreeModel, SIGNAL(modelReset()), this, SLOT(onFormTreeModelReset()));
     }
     d->_formTreeModel = model;
@@ -549,6 +551,7 @@ void FormPlaceHolder::setFormTreeModel(FormTreeModel *model)
 
     onFormTreeModelReset();
     connect(d->_formTreeModel, SIGNAL(modelReset()), this, SLOT(onFormTreeModelReset()));
+    connect(d->ui->formView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(currentSelectedFormChanged(QModelIndex, QModelIndex)));
     Q_EMIT actionsEnabledStateChanged();
 }
 
@@ -594,6 +597,14 @@ void FormPlaceHolder::updateFormCount()
 {
 //    qWarning() << d->_currentEditingForm;
 //    d->_formTreeModel->updateFormCount(d->_currentEditingForm);
+}
+
+/** Update actions on current form selection changed */
+void FormPlaceHolder::currentSelectedFormChanged(const QModelIndex &current, const QModelIndex &previous)
+{
+    Q_UNUSED(current);
+    Q_UNUSED(previous);
+    Q_EMIT actionEnabledStateChanged(Action_RemoveSub);
 }
 
 /**
