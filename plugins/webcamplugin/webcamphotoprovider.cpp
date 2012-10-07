@@ -98,9 +98,10 @@ void  WebcamPhotoProvider::startReceivingPhoto()
 {
     WebcamDialog dialog;
     QPixmap photo;
-    if(dialog.exec() == QDialog::Accepted)
+    if(dialog.exec() == QDialog::Accepted) {
         photo = dialog.photo();
-    Q_EMIT photoReady(photo);
+        Q_EMIT photoReady(photo);
+    }
 }
 
 bool WebcamPhotoProvider::isEnabled() const
