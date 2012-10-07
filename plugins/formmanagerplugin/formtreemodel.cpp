@@ -174,8 +174,6 @@ public:
 
     bool addSubForm(const SubFormInsertionPoint &insertionPoint)
     {
-        qWarning()<< "ADDSUBFORM" << q->objectName() << insertionPoint;
-
         QList<Form::FormMain *> forms = formManager().subFormCollection(insertionPoint.subFormUid()).emptyRootForms();
 
         // check if receiver is in the model
@@ -194,8 +192,6 @@ public:
                 }
             }
         }
-
-        qWarning() << "RECEIVER" << receiver << forms.count();
 
         if (!receiver)
             return false;
