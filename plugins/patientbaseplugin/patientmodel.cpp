@@ -205,15 +205,8 @@ public:
         QString patientUid = m_SqlPatient->index(index.row(), Constants::IDENTITY_UID).data().toString();
 
         where.insert(Constants::PHOTO_PATIENT_UID, QString("='%1'").arg(patientUid));
-        if (patientBase()->count(Constants::Table_PATIENT_PHOTO, Constants::PHOTO_PATIENT_UID, patientBase()->getWhereClause(Constants::Table_PATIENT_PHOTO, where)) == 0) {
-            QModelIndex genderIndex = q->index(index.row(), Core::IPatient::Gender);
-            const QString &gender = q->data(genderIndex).toString();
-            if (gender == "M")
-                return QPixmap(*_defaultMalePhoto);
-            else if (gender == "F")
-                return QPixmap(*_defaultFemalePhoto);
-            else if (gender == "H")
-                return QPixmap(*_defaultHermaphrodismPhoto);
+        if (patientBase()->count(Constants::Table_PATIENT_PHOTO, Constants::PHOTO_PATIENT_UID,
+                                 patientBase()->getWhereClause(Constants::Table_PATIENT_PHOTO, where)) == 0) {
             return QPixmap();
         }
 

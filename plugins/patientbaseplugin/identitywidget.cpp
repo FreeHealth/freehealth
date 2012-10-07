@@ -35,7 +35,6 @@
 #include "patientmodel.h"
 #include "patientbase.h"
 #include "constants_db.h"
-#include "pixmapdelegate.h"
 
 #include "ui_identitywidget.h"
 
@@ -231,7 +230,6 @@ public:
             m_Mapper = new FMFWidgetMapper(q);
             m_Mapper->setSubmitPolicy(FMFWidgetMapper::ManualSubmit);
             m_Mapper->setModel(m_PatientModel);
-            m_Mapper->setItemDelegate(new PixmapDelegate(q));
             m_Mapper->addMapping(editUi->birthName, Core::IPatient::BirthName, "text");
             m_Mapper->addMapping(editUi->secondName, Core::IPatient::SecondName, "text");
             m_Mapper->addMapping(editUi->firstname, Core::IPatient::Firstname, "text");
@@ -513,15 +511,18 @@ void IdentityWidget::photoButton_clicked()
         action->trigger();
 }
 
-void IdentityWidget::setPhoto(QPixmap &photo)
-{
-    if (d->m_EditMode != ReadWriteMode)
-        return;
+//void IdentityWidget::setPhoto(QPixmap &photo)
+//{
+//    if (d->m_EditMode != ReadWriteMode)
+//        return;
 
-    if (!photo.isNull()) {
-        // resize pixmap to 64x64
-        photo = photo.scaled(QSize(64,64), Qt::KeepAspectRatio, Qt::SmoothTransformation);
-        d->editUi->photoButton->setPixmap(photo);
-    }
-}
+//    if (!photo.isNull()) {
+//        // resize pixmap to 64x64
+//        photo = photo.scaled(QSize(64,64), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+//        d->editUi->photoButton->setPixmap(photo);
+//    } else {
+//        // there is no photo, use a default one.
+//        updateGenderImage(d->editUi->genderCombo->currentIndex());
+//    }
+//}
 

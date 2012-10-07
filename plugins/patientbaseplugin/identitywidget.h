@@ -83,7 +83,7 @@ protected:
 
 protected Q_SLOTS:
     void photoButton_clicked();
-    void setPhoto(QPixmap &photo);
+//    void setPhoto(QPixmap &photo);
 
 private:
     Internal::IdentityWidgetPrivate *d;
