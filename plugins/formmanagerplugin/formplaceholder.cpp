@@ -519,7 +519,6 @@ bool FormPlaceHolder::enableAction(WidgetAction action) const
         // Add form always enabled
         return true;
     case Action_RemoveSub:
-        // TODO this is not enough: add some more checks before making deletion possible
         return d->ui->formView->selectionModel()->hasSelection()
                 && d->_formTreeModel->isIncludedRootSubForm(d->ui->formView->currentIndex());
     case Action_PrintCurrentFormEpisode:
@@ -777,11 +776,28 @@ bool FormPlaceHolder::removeSubForm()
 {
     if (!d->ui->formView->selectionModel())
         return false;
-    Form::FormMain *formMain = d->_formTreeModel->formForIndex(d->ui->formView->currentIndex());
-    if (!formMain)
+
+    QModelIndex index = d->_formTreeModel->index(d->ui->formView->selectionModel()->currentIndex().row(), FormTreeModel::Label, d->ui->formView->selectionModel()->currentIndex().parent());
+    QString episodeMsg = "<span style=\"font-weight:bold; color:red\">All recorded episode will be removed as well.</span><br /><br />";
+    // message box
+    bool yes = Utils::yesNoMessageBox(tr("Remove the current form"),
+                                      tr("Trying to remove the sub-form:"
+                                         "<br />&nbsp;&nbsp;&nbsp;<b>%1</b>.<br /><br />"
+                                         "%2"
+                                         "This modification will only affect the current patient:"
+                                         "<br />&nbsp;&nbsp;&nbsp;<b>%3</b>.<br />"
+                                         "Do you really want to remove the current sub-form?")
+                                      .arg(d->_formTreeModel->data(index).toString().replace(" ", "&nbsp;"))
+                                      .arg(episodeMsg)
+                                      .arg(patient()->data(Core::IPatient::FullName).toString().replace(" ", "&nbsp;")));
+    if (!yes)
         return false;
-    const SubFormInsertionPoint ip;
-    d->_formTreeModel->addSubForm(ip);
+
+//    Form::FormMain *formMain = d->_formTreeModel->formForIndex(d->ui->formView->currentIndex());
+//    if (!formMain)
+//        return false;
+//    const SubFormInsertionPoint ip;
+//    d->_formTreeModel->addSubForm(ip);
     // TODO: code me
 
     return true;
