@@ -31,7 +31,7 @@
 
 using namespace Form;
 
-void SubFormInsertionPoint::setReceiverUid(const QString &uid)
+void SubFormPoint::setReceiverUid(const QString &uid)
 {
     if (uid.contains("@[]@")) {
         QStringList uids = uid.split("@[]@", QString::KeepEmptyParts);
@@ -46,10 +46,10 @@ void SubFormInsertionPoint::setReceiverUid(const QString &uid)
 
 const QString &SubFormInsertionPoint::receiverUidForDatabase() const
 {
-    if (m_ModeUid.isEmpty())
-        m_DbReceiver = m_ReceiverFormUid;
+    if (modeUid().isEmpty())
+        m_DbReceiver = receiverUid();
     else
-        m_DbReceiver = m_ReceiverFormUid + "@[]@" + m_ModeUid;
+        m_DbReceiver = receiverUid() + "@[]@" + modeUid();
     return m_DbReceiver;
 }
 

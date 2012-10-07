@@ -45,76 +45,97 @@ class EpisodeBase;
 class FormMain;
 // TODO: should be internal and not exported
 
-class FORM_EXPORT SubFormInsertionPoint
+class FORM_EXPORT SubFormPoint
+{
+public:
+    SubFormPoint(const QString &modeReceiverUid, const QString &formReceiverUid, const QString &addUid) :
+        m_ModeUid(modeReceiverUid),
+        m_ReceiverFormUid(formReceiverUid),
+        m_SubFormUid(addUid),
+        m_AllPatients(false)
+    {}
+    SubFormPoint() : m_AllPatients(false) {}
+    virtual ~SubFormPoint() {}
+
+    bool isValid() const {return (!m_SubFormUid.isEmpty() && !m_ReceiverFormUid.isEmpty());}
+
+    void setReceiverUid(const QString &uid);
+    void setModeUid(const QString &uid) {m_ModeUid = uid;}
+    void setSubFormUid(const QString &uid) {m_SubFormUid = uid;}
+    void setForAllPatient(bool allPatients) {m_AllPatients = allPatients;}
+
+    const QString &subFormUid() const {return m_SubFormUid;}
+    const QString &receiverUid() const {return m_ReceiverFormUid;}
+    const QString &modeUid() const {return m_ModeUid;}
+    bool isForAllPatients() const {return m_AllPatients;}
+
+private:
+    QString m_ModeUid, m_ReceiverFormUid, m_SubFormUid;
+    bool m_AllPatients;
+};
+
+class FORM_EXPORT SubFormInsertionPoint : public SubFormPoint
 {
     friend class Form::Internal::EpisodeBase;
 
 public:
     SubFormInsertionPoint(const QString &modeReceiverUid, const QString &formReceiverUid, const QString &addUid) :
-        m_ModeUid(modeReceiverUid),
-        m_ReceiverFormUid(formReceiverUid),
-        m_SubFormUid(addUid),
+        SubFormPoint(modeReceiverUid, formReceiverUid, addUid),
         m_AppendToForm(false),
         m_AddAsChild(true),
-        m_EmitInsertionSignal(false),
-        m_AllPatients(false)
+        m_EmitInsertionSignal(false)
     {
     }
 
     SubFormInsertionPoint(const QString &receiverUid, const QString &addUid) :
-        m_SubFormUid(addUid),
+        SubFormPoint(),
         m_AppendToForm(false),
         m_AddAsChild(true),
-        m_EmitInsertionSignal(false),
-        m_AllPatients(false)
+        m_EmitInsertionSignal(false)
     {
         setReceiverUid(receiverUid);
+        setSubFormUid(addUid);
     }
 
     SubFormInsertionPoint() :
+        SubFormPoint(),
         m_AppendToForm(false),
         m_AddAsChild(true),
-        m_EmitInsertionSignal(false),
-        m_AllPatients(false)
+        m_EmitInsertionSignal(false)
     {}
 
     ~SubFormInsertionPoint() {}
 
-    void setReceiverUid(const QString &uid);
-    void setModeUid(const QString &uid) {m_ModeUid = uid;}
-    void setSubFormUid(const QString &uid) {m_SubFormUid = uid;}
     void setEmptyRootSubForm(Form::FormMain *emptyRootSubForm) {m_emptyRootSubForm = emptyRootSubForm;}
     void setAppendToForm(bool append) {m_AppendToForm = append;}
     void setAddAsChild(bool asChild) {m_AddAsChild = asChild;}
     void setEmitInsertionSignal(bool emitSignal) {m_EmitInsertionSignal = emitSignal;}
-    void setForAllPatient(bool allPatients) {m_AllPatients = allPatients;}
-
-    bool isValid() const
-    {
-        return (!m_SubFormUid.isEmpty()
-                && !m_ReceiverFormUid.isEmpty());
-    }
 
     Form::FormMain *emptyRootSubForm() const {return m_emptyRootSubForm;}
-    const QString &subFormUid() const {return m_SubFormUid;}
-    const QString &receiverUid() const {return m_ReceiverFormUid;}
-    const QString &modeUid() const {return m_ModeUid;}
     bool appendToForm() const {return m_AppendToForm;}
     bool addAsChild() const {return m_AddAsChild;}
     bool emitInsertionSignal() const {return m_EmitInsertionSignal;}
-    bool isForAllPatients() const {return m_AllPatients;}
 
 protected:
     const QString &receiverUidForDatabase() const;
 
 private:
-    QString m_ModeUid, m_ReceiverFormUid, m_SubFormUid;
     mutable QString m_DbReceiver;
     Form::FormMain *m_emptyRootSubForm;
     bool m_AppendToForm;
     bool m_AddAsChild;
     bool m_EmitInsertionSignal;
-    bool m_AllPatients;
+};
+
+class FORM_EXPORT SubFormRemoval : public SubFormPoint
+{
+    friend class Form::Internal::EpisodeBase;
+public:
+    SubFormRemoval(const QString &modeReceiverUid, const QString &formReceiverUid, const QString &addUid) :
+        SubFormPoint(modeReceiverUid, formReceiverUid, addUid)
+    {
+    }
+    ~SubFormRemoval() {}
 };
 
 }  // end namespace Form
