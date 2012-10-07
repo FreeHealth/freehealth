@@ -285,7 +285,7 @@ public:
 
     bool removeSubFormFromModels(const SubFormRemoval &remove)
     {
-        if (!insertionPoint.isValid())
+        if (!remove.isValid())
             return false;
 
 //        // Find all FormTreeModel with the formUid && populate them
