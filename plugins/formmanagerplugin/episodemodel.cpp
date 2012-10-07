@@ -625,6 +625,15 @@ bool EpisodeModel::removeRows(int row, int count, const QModelIndex &parent)
     return true;
 }
 
+/** Remove all the recorded episode in the model/base */
+bool EpisodeModel::removeAllEpisodes()
+{
+    bool ok = episodeBase()->removeAllEpisodeForForm(d->_formMain->uuid(), patient()->uuid());
+    if (ok)
+        reset();
+    return ok;
+}
+
 /** Define the whole model read mode */
 void EpisodeModel::setReadOnly(const bool state)
 {

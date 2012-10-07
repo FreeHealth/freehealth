@@ -112,6 +112,7 @@ public:
 
     bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
     bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
+    bool removeAllEpisodes();
 
     void setReadOnly(const bool state);
     bool isReadOnly() const;
