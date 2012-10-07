@@ -109,90 +109,71 @@
 /** \enum Form::FormItemSpec::SpecData
  * Use this enum to populate or get data from/to the object.
  * \sa Form::FormItemSpec::setValue(), Form::FormItemSpec::value()
- */
-
-/** \var Form::FormItemSpec::Spec_Uuid
+ *
+ * \var Form::FormItemSpec::Spec_Uuid
  * Unique persistent in time UUID of the item.
- */
-
-/** \var Form::FormItemSpec::Spec_Author
+ *
+ * \var Form::FormItemSpec::Spec_Author
  * Name of the author(s).
- */
-
-/** \var Form::FormItemSpec::Spec_License
+ *
+ * \var Form::FormItemSpec::Spec_License
  * License type (abbreviation).
- */
-
-/** \var Form::FormItemSpec::Spec_Category
+ *
+ * \var Form::FormItemSpec::Spec_Category
  * Translatable category of the item.
- */
-
-/** \var Form::FormItemSpec::Spec_CreationDate
+ *
+ * \var Form::FormItemSpec::Spec_CreationDate
  * Date of creation.
- */
-
-/** \var Form::FormItemSpec::Spec_LastModified
+ *
+ * \var Form::FormItemSpec::Spec_LastModified
  * Date of last modification.
- */
-
-/** \var Form::FormItemSpec::Spec_Version
+ *
+ * \var Form::FormItemSpec::Spec_Version
  * Version of the item.
- */
-
-/** \var Form::FormItemSpec::Spec_Description
+ *
+ * \var Form::FormItemSpec::Spec_Description
  * Translatable description of the item (usually HTML long description).
- */
-
-/** \var Form::FormItemSpec::Spec_Bibliography
+ *
+ * \var Form::FormItemSpec::Spec_Bibliography
  * Translatable bibliography of the item (non-interpreted string).
- */
-
-/** \var Form::FormItemSpec::Spec_Label
+ *
+ * \var Form::FormItemSpec::Spec_Label
  * Translatable label of the item.
- */
-
-/** \var Form::FormItemSpec::Spec_Priority
+ *
+ * \var Form::FormItemSpec::Spec_Priority
  * Priority of the item (usually an integer).\n
  * For eg, used to place Form::FormPage in the mainwindow tabbar.
- */
-
-/** \var Form::FormItemSpec::Spec_Plugin
+ *
+ * \var Form::FormItemSpec::Spec_Plugin
  * Name of the Form::IFormWidget plugin used to create the widget.
- */
-
-/** \var Form::FormItemSpec::Spec_UiFileContent
+ *
+ * \var Form::FormItemSpec::Spec_UiFileContent
  * Content of the QtUi file to use for the widget generation. Uses QtUiLoader.\n
  * \sa Form::IFormWidget, Form::IFormWidgetFactory
- */
-
-/** \var Form::FormItemSpec::Spec_UiLabel
+ *
+ * \var Form::FormItemSpec::Spec_UiLabel
  * Used during the widget generation, define the Qt UI label to use.\n
  * Only used with a Qt UI file (Form::FormItemSpec::Spec_UiFileContent).
  * \sa Form::IFormWidget, Form::IFormWidgetFactory
- */
-
-/** \var Form::FormItemSpec::Spec_UiWidget
+ *
+ * \var Form::FormItemSpec::Spec_UiWidget
  * Used during widget generation, define the Qt widget to use. \n
  * Only used with a Qt UI file (Form::FormItemSpec::Spec_UiFileContent).
  * \sa Form::IFormWidget, Form::IFormWidgetFactory
- */
-
-/** \var Form::FormItemSpec::Spec_UiInsertIntoLayout
+ *
+ * \var Form::FormItemSpec::Spec_UiInsertIntoLayout
  * Used during widget generation, define the layout where to insert the widget. \n
  * Only used with a Qt UI file (Form::FormItemSpec::Spec_UiFileContent).
  * \sa Form::IFormWidget, Form::IFormWidgetFactory
- */
-
-/** \var Form::FormItemSpec::Spec_IconFileName
+ *
+ * \var Form::FormItemSpec::Spec_IconFileName
  * Translatable icon file name (can contain path tag).
  * \sa Core::Constants::TAG_APPLICATION_THEME_PATH
- */
-
-/** \var Form::FormItemSpec::Spec_Tooltip
+ *
+ * \var Form::FormItemSpec::Spec_Tooltip
  * Translatable tooltip of the item.
- */
-
-/** \var Form::FormItemSpec::Spec_IsIdentityForm
+ *
+ * \var Form::FormItemSpec::Spec_IsIdentityForm
  * Boolean value. By default, set to false.\n
  * Only set for Form::FormMain. \n
  * Is true if the form owns the identity information/widgets.
@@ -401,7 +382,7 @@ public:
 
     QString categoryForTreeWiget() const {return QString("Value References");}
 public:
-    bool m_Optionnal;
+    bool m_optional;
 };
 }  // End Internal
 }  // End Form
@@ -478,14 +459,14 @@ QVariant FormItemValues::defaultValue(const QString &lang) const
 //    return d->m_SelectedValue;
 //}
 
-bool FormItemValues::isOptionnal() const
+bool FormItemValues::isOptional() const
 {
-    return d->m_Optionnal;
+    return d->m_optional;
 }
 
-void FormItemValues::setOptionnal(bool state)
+void FormItemValues::setOptional(bool state)
 {
-    d->m_Optionnal = state;
+    d->m_optional = state;
 }
 
 /** \brief Returns a QStringList of values asked sorted by id number. \e typeOfValue represents the enumerator. */
@@ -756,6 +737,8 @@ void FormMain::languageChanged()
 /** Clear the form and all its items. This should set the items to their default value. */
 void FormMain::clear()
 {
+    if (itemData())
+        itemData()->clear();
     foreach(FormItem *it, this->flattenFormItemChildren()) {
         if (it->itemData())
             it->itemData()->clear();

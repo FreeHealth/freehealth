@@ -97,13 +97,27 @@
         <property name="spacing">
          <number>0</number>
         </property>
+        <item row="3" column="0">
+         <widget class="QPushButton" name="addForm">
+          <property name="text">
+           <string>Add this form</string>
+          </property>
+         </widget>
+        </item>
         <item row="0" column="0">
          <widget class="Form::FormFilesSelectorWidget" name="formSelector" native="true"/>
         </item>
         <item row="1" column="0">
-         <widget class="QPushButton" name="addForm">
+         <widget class="QRadioButton" name="currentPatient">
           <property name="text">
-           <string>Add this form</string>
+           <string>For the current patient only</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QRadioButton" name="allPatients">
+          <property name="text">
+           <string>For all patients</string>
           </property>
          </widget>
         </item>

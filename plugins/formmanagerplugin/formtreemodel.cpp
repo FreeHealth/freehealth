@@ -24,6 +24,11 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
+/**
+ * \class Form::FormTreeModel
+ * Model for forms. Get your model from Form::FormManager::formTreeModel()
+ */
+
 #include "formtreemodel.h"
 #include "iformitem.h"
 #include "episodebase.h"
@@ -63,9 +68,9 @@ class FormTreeModelPrivate
 {
 public:
     FormTreeModelPrivate(FormTreeModel *parent) :
-        _rootForm(0),
         q(parent)
-    {}
+    {
+    }
 
     void linkFormAndItem(Form::FormMain *form, QStandardItem *item)
     {
@@ -194,9 +199,22 @@ public:
         return true;
     }
 
+    /** Update the episode count of the form element \e form */
+    bool updateFormCount(Form::FormMain *form)
+    {
+        if (!form)
+            return false;
+        QStandardItem *item = formToItem(form);
+        if (!item)
+            return false;
+        item->setText(formLabelWithEpisodeCount(form));
+        item->setToolTip(item->text());
+        return true;
+    }
+
 public:
-    Form::FormMain *_rootForm;
     QList<Form::FormMain *> _rootForms;
+    QString _modeUid;
     QHash<QStandardItem *, Form::FormMain *> _formToItem;
 
 private:
@@ -209,20 +227,11 @@ FormTreeModel::FormTreeModel(const FormCollection &collection, QObject *parent) 
     QStandardItemModel(parent),
     d(new Internal::FormTreeModelPrivate(this))
 {
-    setObjectName("Form::FormTreeModel::" + collection.formUid());
+    setObjectName("Form::FormTreeModel::" + collection.formUid() + collection.modeUid());
     d->_rootForms = collection.emptyRootForms();
+    d->_modeUid = collection.modeUid();
 //    connect(&formManager(), SIGNAL(patientFormsLoaded()), this, SLOT(onPatientFormsLoaded()));
 }
-
-//FormTreeModel::FormTreeModel(Form::FormMain *emptyRootForm, QObject *parent) :
-//    QStandardItemModel(parent),
-//    d(new Internal::FormTreeModelPrivate(this))
-//{
-//    Q_ASSERT(emptyRootForm);
-//    setObjectName("Form::FormTreeModel");
-//    d->_rootForm = emptyRootForm;
-//    connect(&formManager(), SIGNAL(patientFormsLoaded()), this, SLOT(onPatientFormsLoaded()));
-//}
 
 FormTreeModel::~FormTreeModel()
 {
@@ -297,6 +306,12 @@ Qt::ItemFlags FormTreeModel::flags(const QModelIndex &index) const
     return Qt::ItemIsSelectable | Qt::ItemIsEnabled;
 }
 
+/** Return the mode uid associated with the model */
+const QString &FormTreeModel::modeUid() const
+{
+    return d->_modeUid;
+}
+
 /** Return true if the \e index only owns one unique episode. It is supposed that the \e index points to a form */
 bool FormTreeModel::isUniqueEpisode(const QModelIndex &index) const
 {
@@ -338,28 +353,29 @@ bool FormTreeModel::addSubForm(const SubFormInsertionPoint &insertionPoint)
     return ok;
 }
 
+/** Clear the content of all the model's forms */
+bool FormTreeModel::clearFormContents()
+{
+    foreach(Form::FormMain *form, d->_rootForms) {
+        form->clear();
+    }
+    return true;
+}
+
 /** Update the episode count of the form element corresponding to the \e index */
 bool FormTreeModel::updateFormCount(const QModelIndex &index)
 {
-    return updateFormCount(formForIndex(index));
-}
-
-/** Update the episode count of the form element \e form */
-bool FormTreeModel::updateFormCount(Form::FormMain *form)
-{
-    QStandardItem *item = d->formToItem(form);
-    if (!item)
-        return false;
-    item->setText(d->formLabelWithEpisodeCount(form));
-    item->setToolTip(item->text());
-    return true;
+    if (index.isValid())
+        return d->updateFormCount(formForIndex(index));
+    return false;
 }
 
 /** Update the episode count of each form of the model. The number count is directly extracted from the episode database. */
 bool FormTreeModel::updateFormCount()
 {
     foreach(Form::FormMain *form, d->_formToItem.values())
-        updateFormCount(form);
+        if (!d->updateFormCount(form))
+            return false;
     return true;
 }
 

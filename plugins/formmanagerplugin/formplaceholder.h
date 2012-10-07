@@ -34,7 +34,6 @@
 
 #include <QWidget>
 #include <QTreeView>
-#include <QStyledItemDelegate>
 
 QT_BEGIN_NAMESPACE
 class  QTreeWidgetItem;
@@ -81,23 +80,6 @@ private:
     FormPlaceHolder *_formPlaceHolder;
 };
 
-class FormItemDelegate : public QStyledItemDelegate
-{
-    Q_OBJECT
-public:
-    FormItemDelegate(QObject *parent = 0);
-    void setFormTreeModel(FormTreeModel *model);
-
-    void paint(QPainter *painter, const QStyleOptionViewItem &option,
-               const QModelIndex &index) const;
-
-    QSize sizeHint(const QStyleOptionViewItem &option,
-                   const QModelIndex &index) const;
-
-public:
-    mutable QModelIndex pressedIndex;
-    FormTreeModel *_formTreeModel;
-};
 }  // End namespace Internal
 
 
@@ -135,7 +117,7 @@ protected:
     bool isDirty() const;
 
 private Q_SLOTS:
-    void defineFormTreeView();
+    void onFormTreeModelReset();
     void saveSortOrderToSettings(int col, Qt::SortOrder sort);
     void onCurrentPatientChanged();
     void handlePressed(const QModelIndex &index);
@@ -144,6 +126,7 @@ private Q_SLOTS:
 
 private:
     void changeEvent(QEvent *event);
+    void hideEvent(QHideEvent *event);
     void showEvent(QShowEvent *event);
 
 private:

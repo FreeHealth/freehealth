@@ -4,65 +4,42 @@
 <context>
     <name>MainWin::Internal::MainWindow</name>
     <message>
-        <location filename="../../freeaccount/plugins/mainwindowplugin/mainwindow.ui" line="20"/>
         <source>Patient Firstname</source>
-        <translation>Primer nombre del paciente</translation>
+        <translation type="obsolete">Primer nombre del paciente</translation>
     </message>
     <message>
-        <location filename="../../freeaccount/plugins/mainwindowplugin/mainwindow.ui" line="30"/>
         <source>Surname</source>
-        <translation>Apellido</translation>
+        <translation type="obsolete">Apellido</translation>
     </message>
 </context>
 <context>
     <name>MainWin::Internal::MainWindowPreferencesWidget</name>
     <message>
-        <location filename="../../freeaccount/plugins/mainwindowplugin/mainwindowpreferenceswidget.ui" line="14"/>
-        <source>Form</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../freeaccount/plugins/mainwindowplugin/mainwindowpreferenceswidget.ui" line="20"/>
-        <source>Update checking</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../freeaccount/plugins/mainwindowplugin/mainwindowpreferenceswidget.ui" line="28"/>
         <source>At startup</source>
-        <translation>Al inicio</translation>
+        <translation type="obsolete">Al inicio</translation>
     </message>
     <message>
-        <location filename="../../freeaccount/plugins/mainwindowplugin/mainwindowpreferenceswidget.ui" line="33"/>
         <source>Each weeks</source>
-        <translation>Una vez por semana</translation>
+        <translation type="obsolete">Una vez por semana</translation>
     </message>
     <message>
-        <location filename="../../freeaccount/plugins/mainwindowplugin/mainwindowpreferenceswidget.ui" line="38"/>
         <source>Each months</source>
-        <translation>Una vez por mes</translation>
+        <translation type="obsolete">Una vez por mes</translation>
     </message>
     <message>
-        <location filename="../../freeaccount/plugins/mainwindowplugin/mainwindowpreferenceswidget.ui" line="43"/>
         <source>Each quarters</source>
-        <translation>Trimestralmente</translation>
+        <translation type="obsolete">Trimestralmente</translation>
     </message>
     <message>
-        <location filename="../../freeaccount/plugins/mainwindowplugin/mainwindowpreferenceswidget.ui" line="48"/>
         <source>Never (on user&apos;s demand)</source>
-        <translation>Nunca (manualmente)</translation>
+        <translation type="obsolete">Nunca (manualmente)</translation>
     </message>
 </context>
 <context>
     <name>MainWin::MainWindow</name>
     <message>
-        <location filename="../../freeaccount/plugins/mainwindowplugin/mainwindow.cpp" line="120"/>
         <source>Creating Main Window</source>
-        <translation>Creando ventana principal</translation>
-    </message>
-    <message>
-        <location filename="../../freeaccount/plugins/mainwindowplugin/mainwindow.cpp" line="185"/>
-        <source>Reading exchange file...</source>
-        <translation type="unfinished"></translation>
+        <translation type="obsolete">Creando ventana principal</translation>
     </message>
 </context>
 </TS>

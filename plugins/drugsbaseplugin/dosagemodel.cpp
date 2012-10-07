@@ -286,11 +286,8 @@ bool DosageModel::setData(const QModelIndex &index, const QVariant &value, int r
 //        }
 
         if (index.column()==Dosages::Constants::Refill) {
-            // TODO: include refills in the protocol database
             _refills.insert(index.row(), value.toInt());
-            qWarning() << "SETREFILL" << _refills;
         } else if (index.column()==Dosages::Constants::Route) {
-//            qWarning() << "DOSAGE -> setData Route" << value.toString();
             m_Route = value.toString();
             // Find the routeId
             IDrug *drug = m_DrugsModel->getDrug(m_UID);

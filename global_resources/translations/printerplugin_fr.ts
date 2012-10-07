@@ -4,205 +4,168 @@
 <context>
     <name>Print</name>
     <message>
-        <location filename="../../plugins/printerplugin/documentprinter.cpp" line="163"/>
         <source>Made with %1.</source>
-        <translation>Réalisé avec %1.</translation>
+        <translation type="unfinished">Réalisé avec %1.</translation>
     </message>
 </context>
 <context>
     <name>Print::Internal::PrintDialog</name>
     <message>
-        <location filename="../../plugins/printerplugin/printdialog.ui" line="23"/>
         <source>Print</source>
-        <translation>Impression</translation>
+        <translation type="unfinished">Impression</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printdialog.ui" line="108"/>
         <source>First page</source>
-        <translation>Première page</translation>
+        <translation type="unfinished">Première page</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printdialog.ui" line="136"/>
         <source>Previous page</source>
-        <translation>Page précédente</translation>
+        <translation type="unfinished">Page précédente</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printdialog.ui" line="158"/>
         <source># of ##</source>
-        <translation># de ##</translation>
+        <translation type="unfinished"># de ##</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printdialog.ui" line="180"/>
         <source>Next page</source>
-        <translation>Page suivante</translation>
+        <translation type="unfinished">Page suivante</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printdialog.ui" line="208"/>
         <source>Last page</source>
-        <translation>Dernière page</translation>
+        <translation type="unfinished">Dernière page</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printdialog.ui" line="291"/>
         <source>Sorted</source>
-        <translation>Triées</translation>
+        <translation type="unfinished">Triées</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printdialog.ui" line="392"/>
         <source>All</source>
-        <translation>Toutes</translation>
+        <translation type="unfinished">Toutes</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printdialog.ui" line="356"/>
         <source>From</source>
-        <translation>De</translation>
+        <translation type="unfinished">De</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printdialog.ui" line="376"/>
         <source>to</source>
-        <translation>à</translation>
+        <translation type="unfinished">à</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printdialog.ui" line="320"/>
         <source>Print with duplicates</source>
-        <translation>Imprimer les duplicatas</translation>
+        <translation type="unfinished">Imprimer les duplicatas</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printdialog.ui" line="233"/>
+        <source>Two pages per sheet</source>
+        <translation type="unfinished">Deux pages par feuilles</translation>
+    </message>
+    <message>
+        <source>Create a PDF copy in the cache directory</source>
+        <translation type="unfinished">Crée une copie PDF dans le répertoire cache</translation>
+    </message>
+    <message>
+        <source>Save File</source>
+        <translation type="unfinished">Sauvegarder le fichier</translation>
+    </message>
+    <message>
+        <source>PDF file (*.pdf)</source>
+        <translation type="unfinished">Fichier PDF (*.pdf)</translation>
+    </message>
+    <message>
         <source>Printer:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printdialog.ui" line="253"/>
         <source>Presets:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printdialog.ui" line="273"/>
         <source>Copies:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printdialog.ui" line="301"/>
         <source>Recto verso</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printdialog.ui" line="310"/>
         <source>Pages:</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/printerplugin/printdialog.ui" line="327"/>
-        <source>Two pages per sheet</source>
-        <translation>Deux pages par feuilles</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/printerplugin/printdialog.ui" line="334"/>
-        <source>Create a PDF copy in the cache directory</source>
-        <translation>Crée une copie PDF dans le répertoire cache</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/printerplugin/printdialog.cpp" line="261"/>
-        <source>Save File</source>
-        <translation>Sauvegarder le fichier</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/printerplugin/printdialog.cpp" line="263"/>
-        <source>PDF file (*.pdf)</source>
-        <translation>Fichier PDF (*.pdf)</translation>
     </message>
 </context>
 <context>
     <name>Print::Internal::PrinterPreferences</name>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreferences.ui" line="14"/>
         <source>Printing preferences</source>
-        <translation>Préférences d&apos;impression</translation>
+        <translation type="unfinished">Préférences d&apos;impression</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreferences.ui" line="20"/>
         <source>Default printer</source>
-        <translation>Imprimante par défaut</translation>
+        <translation type="unfinished">Imprimante par défaut</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreferences.ui" line="80"/>
+        <source>Default printing options</source>
+        <translation type="unfinished">Optionpar défaut pour l&apos;impression</translation>
+    </message>
+    <message>
+        <source>Draft</source>
+        <translation type="unfinished">Brouillon</translation>
+    </message>
+    <message>
+        <source>Normal</source>
+        <translation type="unfinished">Normale</translation>
+    </message>
+    <message>
+        <source>High</source>
+        <translation type="unfinished">Haute</translation>
+    </message>
+    <message>
+        <source>Color</source>
+        <translation type="unfinished">Couleur</translation>
+    </message>
+    <message>
+        <source>Gray scale</source>
+        <translation type="unfinished">Niveaux de gris</translation>
+    </message>
+    <message>
+        <source>Always print two pages per paper</source>
+        <translation type="unfinished">Toujours imprimer deux pages par feuilles</translation>
+    </message>
+    <message>
+        <source>Automated copy</source>
+        <translation type="unfinished">Copies automatiques</translation>
+    </message>
+    <message>
+        <source>Always keep a PDF copy in</source>
+        <translation type="unfinished">Toujours garder un exemplaire PDF dans</translation>
+    </message>
+    <message>
         <source>...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreferences.ui" line="103"/>
-        <source>Default printing options</source>
-        <translation>Optionpar défaut pour l&apos;impression</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/printerplugin/printerpreferences.ui" line="142"/>
-        <source>Draft</source>
-        <translation>Brouillon</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/printerplugin/printerpreferences.ui" line="147"/>
-        <source>Normal</source>
-        <translation>Normale</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/printerplugin/printerpreferences.ui" line="152"/>
-        <source>High</source>
-        <translation>Haute</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/printerplugin/printerpreferences.ui" line="118"/>
-        <source>Color</source>
-        <translation>Couleur</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/printerplugin/printerpreferences.ui" line="109"/>
         <source>Color mode:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreferences.ui" line="125"/>
-        <source>Gray scale</source>
-        <translation>Niveaux de gris</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/printerplugin/printerpreferences.ui" line="134"/>
         <source>Resolution:</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/printerplugin/printerpreferences.ui" line="160"/>
-        <source>Always print two pages per paper</source>
-        <translation>Toujours imprimer deux pages par feuilles</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/printerplugin/printerpreferences.ui" line="48"/>
-        <source>Automated copy</source>
-        <translation>Copies automatiques</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/printerplugin/printerpreferences.ui" line="57"/>
-        <source>Always keep a PDF copy in</source>
-        <translation>Toujours garder un exemplaire PDF dans</translation>
     </message>
 </context>
 <context>
     <name>Print::Internal::PrinterPreferencesPage</name>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="62"/>
         <source>Printer preferences</source>
-        <translation>Préférences de l&apos;impression</translation>
+        <translation type="unfinished">Préférences de l&apos;impression</translation>
     </message>
 </context>
 <context>
     <name>Print::Internal::PrinterPreferencesWidget</name>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="124"/>
         <source>WARNING !
 No configurated printer found on your system.
 Printing and print preview should not work at all.
 Please configure a printer.
 Refer to your operating system documentation.</source>
-        <translation>ATTENTION !
+        <translation type="unfinished">ATTENTION !
 Aucune imprimante de configurer dans votre système.
 L&apos;impression et la prévisualisation de l&apos;impression ne 
 fonctionneront pas.
@@ -210,62 +173,51 @@ Veuillez configurer une imprimante.
 Référez-vous à la documentation de votre système d&apos;exploitation.</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="152"/>
+        <source>Always ask user for the printer</source>
+        <translation type="unfinished">Toujours demander à l&apos;utilisateur</translation>
+    </message>
+    <message>
+        <source>Select a directory</source>
+        <translation type="unfinished">Sélectionnez un répertoire</translation>
+    </message>
+    <message>
         <source>Always use system default printer</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="156"/>
-        <source>Always ask user for the printer</source>
-        <translation>Toujours demander à l&apos;utilisateur</translation>
-    </message>
-    <message>
-        <location filename="../../plugins/printerplugin/printerpreferences.cpp" line="227"/>
-        <source>Select a directory</source>
-        <translation>Sélectionnez un répertoire</translation>
     </message>
 </context>
 <context>
     <name>Print::Internal::PrinterPreviewerPrivate</name>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreviewer_p.ui" line="14"/>
-        <source>Form</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/printerplugin/printerpreviewer_p.ui" line="78"/>
         <source>preview</source>
-        <translation>prévisualisation</translation>
+        <translation type="unfinished">prévisualisation</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreviewer_p.ui" line="63"/>
         <source>Show page</source>
-        <translation>Voir la page</translation>
+        <translation type="unfinished">Voir la page</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreviewer_p.ui" line="36"/>
         <source>Show Duplicates</source>
-        <translation>Montrer les duplicatas</translation>
+        <translation type="unfinished">Montrer les duplicatas</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreviewer_p.ui" line="46"/>
         <source>If it&apos;s checked the preview will update at each changes of text.
  This can be heavy CPU consuming.</source>
-        <translation>Si la case est cochée alors la prévisualisation se mettra à jour à chaque changement du texte.
+        <translation type="unfinished">Si la case est cochée alors la prévisualisation se mettra à jour à chaque changement du texte.
  Ceci peut provoquer une utilisation intensive du processeur.</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreviewer_p.ui" line="50"/>
         <source>Automatic update</source>
-        <translation>Mise à jour automatique</translation>
+        <translation type="unfinished">Mise à jour automatique</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreviewer_p.ui" line="90"/>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Update</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printerpreviewer_p.ui" line="118"/>
         <source>Preview</source>
         <translation type="unfinished"></translation>
     </message>
@@ -273,47 +225,38 @@ Référez-vous à la documentation de votre système d&apos;exploitation.</trans
 <context>
     <name>Print::Printer</name>
     <message>
-        <location filename="../../plugins/printerplugin/printer.h" line="81"/>
         <source>Each Pages</source>
-        <translation>Toutes les pages</translation>
+        <translation type="unfinished">Toutes les pages</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printer.h" line="82"/>
         <source>First page only</source>
-        <translation>Première page seulement</translation>
+        <translation type="unfinished">Première page seulement</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printer.h" line="83"/>
         <source>Second page only</source>
-        <translation>Seconde page seulement</translation>
+        <translation type="unfinished">Seconde page seulement</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printer.h" line="84"/>
         <source>Last page only</source>
-        <translation>Dernière page seulement</translation>
+        <translation type="unfinished">Dernière page seulement</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printer.h" line="85"/>
         <source>All pages but first</source>
-        <translation>Toutes les pages sauf la première</translation>
+        <translation type="unfinished">Toutes les pages sauf la première</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printer.h" line="86"/>
         <source>Odd pages</source>
-        <translation>Pages impairs</translation>
+        <translation type="unfinished">Pages impairs</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printer.h" line="87"/>
         <source>Even pages</source>
-        <translation>Pages pairs</translation>
+        <translation type="unfinished">Pages pairs</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printer.h" line="88"/>
         <source>Duplicatas only</source>
-        <translation>Duplicatas seulement</translation>
+        <translation type="unfinished">Duplicatas seulement</translation>
     </message>
     <message>
-        <location filename="../../plugins/printerplugin/printer.cpp" line="821"/>
         <source>Print document</source>
         <translation type="unfinished"></translation>
     </message>
@@ -321,9 +264,8 @@ Référez-vous à la documentation de votre système d&apos;exploitation.</trans
 <context>
     <name>tkPrinter</name>
     <message>
-        <location filename="../../plugins/printerplugin/printer.cpp" line="649"/>
         <source>No content to preview (simpleDraw).</source>
-        <translation>Pas de contenu à prévisualiser (simpleDraw).</translation>
+        <translation type="unfinished">Pas de contenu à prévisualiser (simpleDraw).</translation>
     </message>
 </context>
 </TS>

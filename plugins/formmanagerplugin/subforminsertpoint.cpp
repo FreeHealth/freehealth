@@ -26,12 +26,38 @@
  ***************************************************************************/
 #include "subforminsertionpoint.h"
 
+#include <QStringList>
 #include <QDebug>
+
+using namespace Form;
+
+void SubFormInsertionPoint::setReceiverUid(const QString &uid)
+{
+    if (uid.contains("@[]@")) {
+        QStringList uids = uid.split("@[]@", QString::KeepEmptyParts);
+        if (uids.count() == 2) {
+            m_ReceiverFormUid = uids.at(0);
+            m_ModeUid = uids.at(1);
+        }
+    } else {
+        m_ReceiverFormUid = uid;
+    }
+}
+
+const QString &SubFormInsertionPoint::receiverUidForDatabase() const
+{
+    if (m_ModeUid.isEmpty())
+        m_DbReceiver = m_ReceiverFormUid;
+    else
+        m_DbReceiver = m_ReceiverFormUid + "@[]@" + m_ModeUid;
+    return m_DbReceiver;
+}
 
 QDebug operator<<(QDebug dbg, const Form::SubFormInsertionPoint &c)
 {
-    dbg.nospace() << QString("SubFormInsertionPoint(subForm: %1; receiver: %2; asChild: %3; append: %4")
+    dbg.nospace() << QString("SubFormInsertionPoint(subForm: %1; receiverMode: %2; receiverForm: %3; asChild: %4; append: %5")
                      .arg(c.subFormUid())
+                     .arg(c.modeUid())
                      .arg(c.receiverUid())
                      .arg(c.addAsChild())
                      .arg(c.appendToForm())

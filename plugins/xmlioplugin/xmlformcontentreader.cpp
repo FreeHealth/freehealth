@@ -520,11 +520,11 @@ bool XmlFormContentReader::loadElement(Form::FormItem *item, QDomElement &rootEl
         }
 
     //             // optional?
-//            if (element.hasAttribute(Constants::ATTRIB_OPTIONNAL)) {
-//                if (element.attribute(Constants::ATTRIB_OPTIONNAL).compare("true",Qt::CaseInsensitive)==0)
-//                    item->valueReferences()->setOptionnal(true);
+//            if (element.hasAttribute(Constants::ATTRIB_OPTIONAL)) {
+//                if (element.attribute(Constants::ATTRIB_OPTIONAL).compare("true",Qt::CaseInsensitive)==0)
+//                    item->valueReferences()->setOptional(true);
 //                else
-//                    item->valueReferences()->setOptionnal(false);
+//                    item->valueReferences()->setOptional(false);
 
         // Add a form file ?
         if (element.tagName().compare(Constants::TAG_ADDFILE, Qt::CaseInsensitive)==0) {

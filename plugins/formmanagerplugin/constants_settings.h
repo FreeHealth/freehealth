@@ -69,6 +69,47 @@ namespace Constants {
     const char * const T_SMALLDATE = "SMALL_DATE";
     const char * const T_FULLDATE = "FULL_DATE";
 
+    // Style sheets
+    const char * const FORMTREEVIEW_SHEET =
+            " QTreeView {"
+            "    show-decoration-selected: 1;"
+            "}"
+
+            "QTreeView::item {"
+    //        "    border: 0px;"
+            "    background: base;"
+    //        "    border-top-color: transparent;"
+    //        "    border-bottom-color: transparent;"
+            "}"
+
+            "QTreeView::item:hover {"
+            "    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #e7effd, stop: 1 #cbdaf1);"
+    //        "    border: 0px solid #bfcde4;"
+            "}"
+
+    //        "QTreeView::branch:hover {"
+    //        "    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #e7effd, stop: 1 #cbdaf1);"
+    //        "    border: 0px solid #bfcde4;"
+    //        "}"
+
+    //        "QTreeView::item:selected {"
+    //        "    border: 0px solid #567dbc;"
+    //        "}"
+
+            "QTreeView::item:selected {"
+            "    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #6ea1f1, stop: 1 #567dbc);"
+            "}"
+
+            "QTreeView::branch:selected {"
+            "    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #6ea1f1, stop: 1 #567dbc);"
+            "}"
+
+    //        "QTreeView::item:selected:!active {"
+    //        "    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #6b9be8, stop: 1 #577fbf);"
+    //        "}"
+            ;
+
+
 }  // End namespace Form::Constants
 }  // End namespace Form
 

@@ -97,7 +97,6 @@ void XmlFormIOPlugin::extensionsInitialized()
 
     // initialize database
     Internal::XmlIOBase::instance()->initialize();
-    m_FormIo->checkDatabaseFormFileForUpdates();
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
 }
 

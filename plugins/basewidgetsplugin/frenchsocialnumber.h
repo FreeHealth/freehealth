@@ -100,7 +100,7 @@ class FrenchSocialNumberFormWidget: public Form::IFormWidget
 {
     Q_OBJECT
 public:
-    FrenchSocialNumberFormWidget(Form::FormItem *linkedObject, QWidget *parent = 0);
+    FrenchSocialNumberFormWidget(Form::FormItem *formItem, QWidget *parent = 0);
     ~FrenchSocialNumberFormWidget();
 
     QString printableHtml(bool withValues = true) const;

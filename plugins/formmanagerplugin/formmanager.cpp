@@ -88,6 +88,7 @@
 #include <QMap>
 #include <QApplication>
 #include <QPixmap>
+#include <QProgressDialog>
 
 #include <QDebug>
 
@@ -248,12 +249,48 @@ public:
         return false;
     }
 
+    bool insertSubFormInModels(const SubFormInsertionPoint &insertionPoint)
+    {
+        qWarning() << "\n\nSUB\n" << insertionPoint;
+        if (!insertionPoint.isValid())
+            return false;
+        // Load subform
+        if (!loadFormCollection(insertionPoint.subFormUid(), SubForms)) {
+            LOG_ERROR_FOR(q, "Unable to load subform: " + insertionPoint.subFormUid());
+            return false;
+        }
+
+        // Find all FormTreeModel with the formUid && populate them
+        if (insertionPoint.receiverUid() == Constants::ROOT_FORM_TAG) {
+            // Add to the central mode
+            QString mode = insertionPoint.modeUid();
+            if (mode.isEmpty())
+                mode = Core::Constants::MODE_PATIENT_FILE;
+            FormTreeModel *model = getFormTreeModel(mode, ModeForms);
+//                qWarning() << model;
+            if (model)
+                model->addSubForm(insertionPoint);
+        } else {
+            foreach(FormCollection *collection, _centralFormCollection) {
+                if (collection->formUid() == insertionPoint.receiverUid()) {
+                    // update the formtreemodel
+                    FormTreeModel *model = getFormTreeModel(collection->formUid(), collection->type()==FormCollection::CompleteForm ? CompleteForms : SubForms );
+//                        qWarning() << model;
+                    if (model)
+                        model->addSubForm(insertionPoint);
+                    break;
+                }
+            }
+        }
+        return true;
+    }
+
     bool loadPatientSubForms()
     {
         // get sub-forms from database
         const QVector<SubFormInsertionPoint> &subs = episodeBase()->getSubFormFiles();
 
-        qWarning() << "SUB" << subs;
+//        qWarning() << "SUB" << subs;
 
         if (subs.isEmpty())
             return true;
@@ -264,39 +301,15 @@ public:
 
         // Repopulate FormTreeModel with subforms
         for(int i=0; i < subs.count(); ++i) {
-            const SubFormInsertionPoint &sub = subs.at(0);
-
-            // Load subform
-            if (!loadFormCollection(sub.subFormUid(), SubForms)) {
-                LOG_ERROR_FOR(q, "Unable to load subform: " + sub.subFormUid());
-                return false;
-            }
-
-            // Find all FormTreeModel with the formUid && populate them
-            if (sub.receiverUid() == Constants::ROOT_FORM_TAG) {
-                // Add to the central mode
-                FormTreeModel *model = getFormTreeModel(Core::Constants::MODE_PATIENT_FILE, ModeForms);
-                qWarning() << model;
-                if (model)
-                    model->addSubForm(sub);
-            } else {
-                foreach(FormCollection *collection, _centralFormCollection) {
-                    if (collection->formUid() == sub.receiverUid()) {
-                        // update the formtreemodel
-                        FormTreeModel *model = getFormTreeModel(collection->formUid(), collection->type()==FormCollection::CompleteForm ? CompleteForms : SubForms );
-                        qWarning() << model;
-                        if (model)
-                            model->addSubForm(sub);
-                        break;
-                    }
-                }
-            }
+            const SubFormInsertionPoint &sub = subs.at(i);
+            insertSubFormInModels(sub);
         }
         return true;
     }
 
     bool readPmhxCategories(const QString &formUuidOrAbsPath)
     {
+        qWarning() << "readPmhxCategories";
         Q_UNUSED(formUuidOrAbsPath);
         // TODO: code here why don't we use the \e formUuidOrAbsPath param?
         // get all form readers (IFormIO)
@@ -504,7 +517,7 @@ QList<FormMain *> FormManager::allEmptyRootForms() const
  */
 bool FormManager::insertSubForm(const SubFormInsertionPoint &insertionPoint)
 {
-//    return d->insertSubForm(insertionPoint);
+    return d->insertSubFormInModels(insertionPoint);
 }
 
 /** Load the generic patient file (and included subforms) and emit patientFormsLoaded() when finished. */
@@ -524,7 +537,7 @@ bool FormManager::onCurrentPatientChanged()
 
     // reinitialize all formtreemodels
     foreach(FormTreeModel *model, d->_formTreeModels.values()) {
-        model->initialize();
+        model->refreshFormTree();
     }
 
     // load subforms
@@ -634,6 +647,24 @@ QPixmap FormManager::getScreenshot(const QString &formUid, const QString &fileNa
 //        }
 //    }
 //}
+
+void FormManager::checkFormUpdates()
+{
+    // get all form readers (IFormIO)
+    QList<Form::IFormIO *> list = pluginManager()->getObjects<Form::IFormIO>();
+    if (list.isEmpty()) {
+        LOG_ERROR("No IFormIO loaded...");
+        return;
+    }
+
+//    QProgressDialog dlg(qApp->activeWindow());
+//    dlg.setModal(true);
+//    dlg.exec();
+    // Check form update
+    foreach(Form::IFormIO *io, list) {
+        io->checkForUpdates();
+    }
+}
 
 void FormManager::packChanged(const DataPack::Pack &pack)
 {

@@ -209,6 +209,7 @@ void DrugsCentralWidget::onSelectorDrugSelected(const QVariant &drugId)
         if (dlg.exec()==QDialog::Rejected) {
             m_CurrentDrugModel->removeLastInsertedDrug();
         } else {
+            m_CurrentDrugModel->setModified(true);
             // Start dynamicAlert (ProcessTime == AfterPrescription)
 //            query.processTime = DrugsDB::DrugInteractionInformationQuery::AfterPrescription;
 //            result = DynamicAlert::executeDynamicAlert(query, this);

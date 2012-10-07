@@ -59,7 +59,7 @@
 using namespace Form;
 using namespace Internal;
 
-enum { WarnLogChronos=false, WarnDirty=false };
+enum { WarnLogChronos=false, WarnDirty=true };
 
 static inline Form::FormManager &formManager() {return Form::FormCore::instance().formManager();}
 static inline Form::EpisodeManager &episodeManager() {return Form::FormCore::instance().episodeManager();}
@@ -222,6 +222,14 @@ bool FormDataWidgetMapper::initialize()
     return true;
 }
 
+/** Clear the current form content */
+void FormDataWidgetMapper::clear()
+{
+    if (!d->_formMain)
+        return;
+    d->_formMain->clear();
+}
+
 /**
  * Return true if the current content of the mapper is dirty.
  * Asks each Form::FormItemData of the current editing Form::FormMain for their modification state.
@@ -246,7 +254,8 @@ bool FormDataWidgetMapper::isDirty() const
             return true;
         }
     }
-//    qWarning() << "FormDataWidgetMapper::isDirty false" << "Form:" << d->_formMain->uuid();
+    if (WarnDirty)
+        qWarning() << "FormDataWidgetMapper::isDirty false" << "Form:" << d->_formMain->uuid();
     return false;
 }
 
@@ -272,6 +281,12 @@ void FormDataWidgetMapper::setCurrentForm(Form::FormMain *form)
     d->useEpisodeModel(form);
     if (d->_formMain->itemData())
         d->_formMain->itemData()->setModified(false);
+}
+
+/** Use the last recorded episode as current episode */
+void FormDataWidgetMapper::setLastEpisodeAsCurrent()
+{
+    setCurrentEpisode(d->_episodeModel->index(0,0));
 }
 
 /** Define the current episode index to use in the mapper. */

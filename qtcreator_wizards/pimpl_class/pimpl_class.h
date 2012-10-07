@@ -24,7 +24,7 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-@if "%InternalNamespace%" == "true"
+@if "%Internal%" == "true"
 #ifndef %PluginNamespace:u%_INTERNAL_%ClassName:u%_H
 #define %PluginNamespace:u%_INTERNAL_%ClassName:u%_H
 @else
@@ -44,14 +44,14 @@
  * \date %CurrentDate%
 */
 namespace %PluginNamespace:c% {
-@if "%InternalNamespace%" == "true"
+@if "%Internal%" == "true"
 namespace Internal {
 @endif
 @if  "%PIMPL%" == "true"
 class %ClassName:c%Private;
 @endif
-@if "%InternalNamespace%" == "true"
-}  // namespace Internal
+@if "%Internal%" == "true"
+}
 @endif
 
 @if "%Exported%" == "true"
@@ -80,8 +80,10 @@ public Q_SLOTS:
 
 @if "%PIMPL%" == "true"
 private:
-@if "%InternalNamespace%" == "true"
+@if "%Internal%" == "true"
     Internal::%ClassName:c%Private *d;
+@else
+    %ClassName:c%Private *d;
 @endif
 @endif
 @if "%Singleton%" == "true"
@@ -91,7 +93,7 @@ private:
 
 } // namespace %PluginNamespace:c%
 
-@if "%InternalNamespace%" == "true"
+@if "%Internal%" == "true"
 #endif // %PluginNamespace:u%_INTERNAL_%ClassName:u%_H
 @else
 #endif  // %PluginNamespace:u%_%ClassName:u%_H

@@ -34,7 +34,7 @@
  * \file dayrangebody.h
  * \author Guillaume Denry, Eric Maeker
  * \version 0.8.0
- * \date 26 July 2012
+ * \date 04 Oct 2012
 */
 
 namespace Calendar {
@@ -65,6 +65,7 @@ public:
     void setHourHeight(int value);
 
     virtual QSize sizeHint() const;
+    CalendarItem getContextualCalendarItem() const;
 
 protected:
     virtual void paintBody(QPainter *painter, const QRect &visibleRect);

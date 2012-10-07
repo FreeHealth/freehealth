@@ -23,7 +23,7 @@
   \brief This class is a message sender over the web.
   It works with PHP scripts that are available on the FreeMedForms server.\n
   You can set the type of message you want to send using the enumerator MessageSender::typeOfMessage and setTypeOfMessage().\n
-  You must set the message using setMessage(), optionnally set the user using setUser(), and the post the message using postMessage().\n
+  You must set the message using setMessage(), optionally set the user using setUser(), and post the message using postMessage().\n
   Get the sending state using isSending().\n
   <b>The object should not be destructed during the sending process.</b>
 */

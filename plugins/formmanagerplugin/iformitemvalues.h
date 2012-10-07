@@ -83,8 +83,8 @@ public:
     void setDefaultValue(const QVariant &val, const QString &lang = QString::null);
     QVariant defaultValue(const QString &lang = QString::null) const;
 
-    bool isOptionnal() const;
-    void setOptionnal(bool state);
+    bool isOptional() const;
+    void setOptional(bool state);
 
     QStringList values(const int typeOfValues) const;
 

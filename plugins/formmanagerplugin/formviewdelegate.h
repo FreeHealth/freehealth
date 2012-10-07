@@ -24,55 +24,45 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef FORM_INTERNAL_FORMDATAWIDGETMAPPER_H
-#define FORM_INTERNAL_FORMDATAWIDGETMAPPER_H
+#ifndef FORM_INTERNAL_FORMVIEWDELEGATE_H
+#define FORM_INTERNAL_FORMVIEWDELEGATE_H
 
-#include <formmanagerplugin/formmanager_exporter.h>
-#include <QWidget>
-#include <QPixmap>
+#include <QStyledItemDelegate>
+
 QT_BEGIN_NAMESPACE
 class QModelIndex;
 QT_END_NAMESPACE
 
 /**
- * \file formdatawidgetmapper.h
+ * \file formviewdelegate.h
  * \author Eric MAEKER
  * \version 0.8.0
- * \date 30 Aug 2012
+ * \date 06 Oct 2012
 */
 
 namespace Form {
-class FormMain;
+class FormTreeModel;
 namespace Internal {
-class FormDataWidgetMapperPrivate;
-} // namespace Internal
 
-class FORM_EXPORT FormDataWidgetMapper : public QWidget
+class FormViewDelegate : public QStyledItemDelegate
 {
     Q_OBJECT
 public:
-    explicit FormDataWidgetMapper(QWidget *parent = 0);
-    ~FormDataWidgetMapper();
-    bool initialize();
-    void clear();
-    bool isDirty() const;
-    QModelIndex currentEditingEpisodeIndex() const;
+    FormViewDelegate(QObject *parent = 0);
+    void setFormTreeModel(FormTreeModel *model);
 
-public Q_SLOTS:
-    void setCurrentForm(const QString &formUid);
-    void setCurrentForm(FormMain *form);
-    void setLastEpisodeAsCurrent();
-    void setCurrentEpisode(const QModelIndex &index);
-    void setFormWidgetEnabled(bool enabled);
+    void paint(QPainter *painter, const QStyleOptionViewItem &option,
+               const QModelIndex &index) const;
 
-    QPixmap screenshot();
+    QSize sizeHint(const QStyleOptionViewItem &option,
+                   const QModelIndex &index) const;
 
-    bool submit();
-
-private:
-    Internal::FormDataWidgetMapperPrivate *d;
+public:
+    mutable QModelIndex pressedIndex;
+    FormTreeModel *_formTreeModel;
 };
 
+} // namespace Internal
 } // namespace Form
 
-#endif // FORM_INTERNAL_FORMDATAWIDGETMAPPER_H
+#endif // FORM_INTERNAL_FORMVIEWDELEGATE_H

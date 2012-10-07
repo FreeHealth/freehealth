@@ -8,27 +8,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Raw source</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Errors</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>View errors</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Options</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Scenari</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>raw to output</source>
+        <source>OUTPUT</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -36,7 +16,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Find cursor</source>
+        <source>Options</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -44,7 +24,27 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>OUTPUT</source>
+        <source>raw to output</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Raw source</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Scenari</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Find cursor</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>View errors</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Errors</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -90,6 +90,10 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <source>Conditional texts</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <source>Before</source>
         <translation type="unfinished"></translation>
     </message>
@@ -97,15 +101,15 @@
         <source>After</source>
         <translation type="unfinished"></translation>
     </message>
-    <message>
-        <source>Conditional texts</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>PadWriter</name>
     <message>
         <source>Follow cursor in result output</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Find cursor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -117,7 +121,11 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Find cursor</source>
+        <source>Inside conditional before text</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Inside conditional after text</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -130,14 +138,6 @@
     </message>
     <message>
         <source>Nested token</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Inside conditional before text</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Inside conditional after text</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

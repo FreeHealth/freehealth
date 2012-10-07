@@ -52,6 +52,7 @@
 #include "formeditordialog.h"
 #include "formtreemodel.h"
 #include "formdatawidgetmapper.h"
+#include "formviewdelegate.h"
 
 #include "ui_formplaceholder.h"
 
@@ -105,6 +106,7 @@
 #include <QTextBrowser>
 
 #include <QDebug>
+#include <subforminsertionpoint.h>
 
 using namespace Form;
 using namespace Trans::ConstantTranslations;
@@ -118,48 +120,6 @@ static inline Core::IMainWindow *mainWindow()  { return Core::ICore::instance()-
 static inline Core::IPatient *patient()  { return Core::ICore::instance()->patient(); }
 static inline Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
 static inline Core::IDocumentPrinter *printer() {return ExtensionSystem::PluginManager::instance()->getObject<Core::IDocumentPrinter>();}
-
-namespace {
-const char * const TREEVIEW_SHEET =
-        " QTreeView {"
-        "    show-decoration-selected: 1;"
-        "}"
-
-        "QTreeView::item {"
-//        "    border: 0px;"
-        "    background: base;"
-//        "    border-top-color: transparent;"
-//        "    border-bottom-color: transparent;"
-        "}"
-
-        "QTreeView::item:hover {"
-        "    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #e7effd, stop: 1 #cbdaf1);"
-//        "    border: 0px solid #bfcde4;"
-        "}"
-
-//        "QTreeView::branch:hover {"
-//        "    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #e7effd, stop: 1 #cbdaf1);"
-//        "    border: 0px solid #bfcde4;"
-//        "}"
-
-//        "QTreeView::item:selected {"
-//        "    border: 0px solid #567dbc;"
-//        "}"
-
-        "QTreeView::item:selected {"
-        "    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #6ea1f1, stop: 1 #567dbc);"
-        "}"
-
-        "QTreeView::branch:selected {"
-        "    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #6ea1f1, stop: 1 #567dbc);"
-        "}"
-
-//        "QTreeView::item:selected:!active {"
-//        "    background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #6b9be8, stop: 1 #577fbf);"
-//        "}"
-        ;
-
-}
 
 namespace Form {
 namespace Internal {
@@ -284,7 +244,7 @@ public:
                                                                        "Save episode?"),
                                                QApplication::translate("Form::FormPlaceHolder",
                                                                        "The actual episode has been modified. Do you want to save changes in your database?\n"
-                                                                       "Answering 'No' will cause definitve data lose."),
+                                                                       "Answering 'No' will cause definitve data loss."),
                                                "", QApplication::translate("Form::FormPlaceHolder", "Save episode"));
             if (!save)
                 return false;
@@ -306,11 +266,17 @@ public:
         ui->episodeView->setVisible(visible);
     }
 
+    void clearFormContents()
+    {
+        if (_formTreeModel)
+            _formTreeModel->clearFormContents();
+    }
+
     void setCurrentForm(const QModelIndex &index)
     {
-        qWarning() << "SETCURRENTFORM";
         if (index==_currentEditingForm)
             return;
+        clearFormContents();
         _currentEditingForm = index;
 
         if (ui->episodeView->selectionModel())
@@ -324,9 +290,6 @@ public:
             QObject::disconnect(_currentEpisodeModel, SIGNAL(rowsRemoved(QModelIndex,int,int)), q, SLOT(updateFormCount()));
         }
         _currentEpisodeModel = episodeManager().episodeModel(_formTreeModel->formForIndex(_currentEditingForm));
-
-        qWarning() << "CURRENT EPISODEMODEL" << _currentEpisodeModel << _formTreeModel->formForIndex(_currentEditingForm);
-
         QObject::connect(_currentEpisodeModel, SIGNAL(rowsInserted(QModelIndex,int,int)), q, SLOT(updateFormCount()));
         QObject::connect(_currentEpisodeModel, SIGNAL(rowsRemoved(QModelIndex,int,int)), q, SLOT(updateFormCount()));
 
@@ -410,7 +373,7 @@ public:
     Ui::FormPlaceHolder *ui;
     QModelIndex _currentEditingForm;
     FormTreeModel *_formTreeModel;
-    FormItemDelegate *_delegate;
+    FormViewDelegate *_delegate;
     QToolBar *_episodeToolBar;
     QHash<int, QString> m_StackId_FormUuid;
     Internal::FormPlaceHolderCoreListener *_coreListener;
@@ -421,70 +384,6 @@ public:
 private:
     FormPlaceHolder *q;
 };
-
-FormItemDelegate::FormItemDelegate(QObject *parent) :
-    QStyledItemDelegate(parent),
-    _formTreeModel(0)
-{
-}
-
-void FormItemDelegate::setFormTreeModel(FormTreeModel *model)
-{
-    _formTreeModel = model;
-}
-
-QSize FormItemDelegate::sizeHint(const QStyleOptionViewItem &option,const QModelIndex &index) const
-{
-    const bool topLevel = !index.parent().isValid();
-    if (topLevel) {
-        return QStyledItemDelegate::sizeHint(option, index) + QSize(10,10);
-    }
-    return QStyledItemDelegate::sizeHint(option, index);
-}
-
-void FormItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option,
-           const QModelIndex &index) const
-{
-    // Add the fancy button
-    if (option.state & QStyle::State_MouseOver) {
-        if ((QApplication::mouseButtons() & Qt::LeftButton) == 0)
-            pressedIndex = QModelIndex();
-        QBrush brush = option.palette.alternateBase();
-        if (index == pressedIndex)
-            brush = option.palette.dark();
-        painter->fillRect(option.rect, brush);
-    }
-
-    QStyledItemDelegate::paint(painter, option, index);
-
-    // Draw fancy button
-    if (index.column()==FormTreeModel::EmptyColumn1 &&
-            (option.state & QStyle::State_MouseOver)) {
-        QIcon icon;
-        if (option.state & QStyle::State_Selected) {
-            // test the form to be unique or multiple episode
-            if (_formTreeModel->isUniqueEpisode(index))
-                return;
-            if (_formTreeModel->isNoEpisode(index))
-                return;
-            icon = theme()->icon(Core::Constants::ICONADDLIGHT);
-        } else {
-            // test the form to be unique or multiple episode
-            if (_formTreeModel->isUniqueEpisode(index))
-                return;
-            if (_formTreeModel->isNoEpisode(index))
-                return;
-            icon = theme()->icon(Core::Constants::ICONADDDARK);
-        }
-
-        QRect iconRect(option.rect.right() - option.rect.height(),
-                       option.rect.top(),
-                       option.rect.height(),
-                       option.rect.height());
-
-        icon.paint(painter, iconRect, Qt::AlignRight | Qt::AlignVCenter);
-    }
-}
 
 }  // namespace Internal
 }  // namespace Form
@@ -500,7 +399,7 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
     d->ui->verticalLayout_2->setSpacing(0);
     d->createEpisodeToolBar();
 
-    d->_delegate = new Internal::FormItemDelegate(d->ui->formView);
+    d->_delegate = new Internal::FormViewDelegate(d->ui->formView);
     d->ui->formDataMapper->initialize();
 
     // Manage Form File tree view
@@ -519,7 +418,7 @@ FormPlaceHolder::FormPlaceHolder(QWidget *parent) :
     d->ui->formView->treeView()->setSelectionMode(QAbstractItemView::SingleSelection);
     d->ui->formView->treeView()->setSelectionBehavior(QAbstractItemView::SelectRows);
     d->ui->formView->treeView()->setAlternatingRowColors(settings()->value(Constants::S_USEALTERNATEROWCOLOR).toBool());
-    d->ui->formView->treeView()->setStyleSheet(::TREEVIEW_SHEET);
+    d->ui->formView->treeView()->setStyleSheet(Constants::FORMTREEVIEW_SHEET);
 
     connect(d->ui->formView, SIGNAL(clicked(QModelIndex)), this, SLOT(handleClicked(QModelIndex)));
     connect(d->ui->formView, SIGNAL(pressed(QModelIndex)), this, SLOT(handlePressed(QModelIndex)));
@@ -573,7 +472,6 @@ bool FormPlaceHolder::enableAction(WidgetAction action) const
 {
     if (!d->_formTreeModel || !d->_currentEpisodeModel)
         return false;
-
     switch (action) {
     case Action_Clear:
         // Clear only if a form && an episode are selected
@@ -621,21 +519,14 @@ bool FormPlaceHolder::enableAction(WidgetAction action) const
         // Add form always enabled
         return true;
     case Action_RemoveSub:
-        // TODO code me
-        return true;
+        // TODO this is not enough: add some more checks before making deletion possible
+        return d->ui->formView->selectionModel()->hasSelection();
     case Action_PrintCurrentFormEpisode:
-        // Validate episode only if
-        // - an episode is selected
-        // - || a form is selected
-        return (d->ui->episodeView->selectionModel()->hasSelection()
-                || d->ui->formView->selectionModel()->hasSelection());
+        // Print episode only if an episode is selected
+        return d->ui->episodeView->selectionModel()->hasSelection();
     }  // end switch
     return false;
 }
-
-//void FormPlaceHolder::setRootFormCollection(const FormCollection &collection)
-//{
-//}
 
 /**
  * Define the Form::FormMain root item to use for the creation of the patient files.
@@ -643,33 +534,30 @@ bool FormPlaceHolder::enableAction(WidgetAction action) const
  */
 void FormPlaceHolder::setFormTreeModel(FormTreeModel *model)
 {
-    qWarning() << "SETFORMTREEMODEL" << model;
     if (!model)
         return;
     if (d->_formTreeModel==model)
         return;
     // Manage Form tree view / model
     if (d->_formTreeModel) {
-        disconnect(d->_formTreeModel, SIGNAL(modelReset()), this, SLOT(defineFormTreeView()));
+        disconnect(d->_formTreeModel, SIGNAL(modelReset()), this, SLOT(onFormTreeModelReset()));
     }
     d->_formTreeModel = model;
 
     d->ui->formView->setModel(d->_formTreeModel);
     d->_delegate->setFormTreeModel(d->_formTreeModel);
 
-    defineFormTreeView();
-    d->selectAndActivateFirstForm();
-    connect(d->_formTreeModel, SIGNAL(modelReset()), this, SLOT(defineFormTreeView()));
+    onFormTreeModelReset();
+    connect(d->_formTreeModel, SIGNAL(modelReset()), this, SLOT(onFormTreeModelReset()));
     Q_EMIT actionsEnabledStateChanged();
 }
 
 /** Clear the form content. The current episode (if one was selected) is not submitted to the model. */
 bool FormPlaceHolder::clear()
 {
-    // TODO: add a clear(index) function to FormTreeModel
-//    if (d->_currentEditingForm)
-//        d->_currentEditingForm->clear();
-    Q_EMIT actionsEnabledStateChanged();
+    d->clearFormContents();
+//    d->_currentEditingForm = QModelIndex();
+//    Q_EMIT actionsEnabledStateChanged();
     return true;
 }
 
@@ -704,7 +592,8 @@ void FormPlaceHolder::handleClicked(const QModelIndex &index)
 /** Slot connect to the current episode model (row changed) to inform the formtreemodel of the episode row count changed */
 void FormPlaceHolder::updateFormCount()
 {
-    d->_formTreeModel->updateFormCount(d->_currentEditingForm);
+//    qWarning() << d->_currentEditingForm;
+//    d->_formTreeModel->updateFormCount(d->_currentEditingForm);
 }
 
 /**
@@ -713,10 +602,13 @@ void FormPlaceHolder::updateFormCount()
  */
 void FormPlaceHolder::setCurrentEditingFormItem(const QModelIndex &index)
 {
-    qWarning() << "SETCURRENTFORM" << index << d->_currentEditingForm;
+//    qWarning()<< "SET CURRENT FORM" << d->_currentEditingForm << index;
     if (index != d->_currentEditingForm) {
+        // autosave feature
+        d->saveCurrentEditingEpisode();
         d->setCurrentForm(index);
         d->selectAndActivateFirstEpisode();
+//        qWarning()<< "SET CURRENT FORM" << d->_currentEditingForm;
         Q_EMIT actionsEnabledStateChanged();
     }
 }
@@ -754,6 +646,7 @@ bool FormPlaceHolder::createEpisode()
     d->ui->episodeView->selectRow(proxy.row());
     d->ui->formDataMapper->setCurrentEpisode(source);
 
+    d->_formTreeModel->updateFormCount(d->_currentEditingForm);
     Q_EMIT actionsEnabledStateChanged();
     return true;
 }
@@ -798,7 +691,6 @@ bool FormPlaceHolder::validateCurrentEpisode()
  */
 bool FormPlaceHolder::saveCurrentEpisode()
 {
-    qWarning() << "FormPlaceHolder::saveCurrentEpisode";
     bool ok = d->saveCurrentEditingEpisode();
     Q_EMIT actionsEnabledStateChanged();
     return ok;
@@ -822,6 +714,7 @@ bool FormPlaceHolder::removeCurrentEpisode()
     if (!yes)
         return false;
     bool ok = d->_currentEpisodeModel->removeEpisode(d->currentEditingEpisodeIndex());
+    d->_formTreeModel->updateFormCount(d->_currentEditingForm);
     Q_EMIT actionsEnabledStateChanged();
     return ok;
 }
@@ -871,14 +764,21 @@ bool FormPlaceHolder::addForm()
 /** If the currently selected form is a sub-form, remove it */
 bool FormPlaceHolder::removeSubForm()
 {
+    if (!d->ui->formView->selectionModel())
+        return false;
+    Form::FormMain *formMain = d->_formTreeModel->formForIndex(d->ui->formView->currentIndex());
+    if (!formMain)
+        return false;
+    const SubFormInsertionPoint ip;
+    d->_formTreeModel->addSubForm(ip);
     // TODO: code me
+
     return true;
 }
 
 /** Print the current editing episode. Return false in case of error. Connected to Form::Internal::FormActionHandler */
 bool FormPlaceHolder::printFormOrEpisode()
 {
-    //    qWarning() << Q_FUNC_INFO;
     if (!d->ui->formView->selectionModel())
         return false;
     Form::FormMain *formMain = d->_formTreeModel->formForIndex(d->ui->formView->currentIndex());
@@ -915,8 +815,9 @@ bool FormPlaceHolder::printFormOrEpisode()
 }
 
 /** Define the cols to show, their sizes... */
-void FormPlaceHolder::defineFormTreeView()
+void FormPlaceHolder::onFormTreeModelReset()
 {
+    d->_currentEditingForm = QModelIndex();
     QTreeView *tree = d->ui->formView->treeView();
     tree->setSelectionMode(QAbstractItemView::SingleSelection);
     tree->setSelectionBehavior(QAbstractItemView::SelectRows);
@@ -930,6 +831,7 @@ void FormPlaceHolder::defineFormTreeView()
     tree->header()->setResizeMode(FormTreeModel::EmptyColumn1, QHeaderView::Fixed);
     tree->header()->resizeSection(FormTreeModel::EmptyColumn1, 16);
     tree->expandAll();
+    d->selectAndActivateFirstForm();
 }
 
 void FormPlaceHolder::saveSortOrderToSettings(int col, Qt::SortOrder sort)
@@ -953,7 +855,7 @@ void FormPlaceHolder::onCurrentPatientChanged()
 
 void FormPlaceHolder::episodeChanged(const QModelIndex &current, const QModelIndex &previous)
 {
-    qWarning() << QString("FormPlaceHolder::episodeChanged: current(valid:%1) ; previous(valid:%2)").arg(current.isValid()).arg(previous.isValid());
+//    qWarning() << QString("FormPlaceHolder::episodeChanged: current(valid:%1) ; previous(valid:%2)").arg(current.isValid()).arg(previous.isValid());
     // Autosave is problematic when patient changed
     QModelIndex sourceCurrent = d->_proxyModel->mapToSource(current);
     QModelIndex sourcePrevious = d->_proxyModel->mapToSource(previous);
@@ -962,6 +864,10 @@ void FormPlaceHolder::episodeChanged(const QModelIndex &current, const QModelInd
     clear();
     if (sourceCurrent.isValid()) {
         d->ui->formDataMapper->setCurrentEpisode(sourceCurrent);
+        d->ui->formDataMapper->setEnabled(true);
+    } else {
+        d->ui->formDataMapper->clear();
+        d->ui->formDataMapper->setEnabled(false);
     }
     Q_EMIT actionsEnabledStateChanged();
 }
@@ -992,6 +898,14 @@ void FormPlaceHolder::changeEvent(QEvent *event)
     QWidget::changeEvent(event);
 }
 
+void FormPlaceHolder::hideEvent(QHideEvent *event)
+{
+    // autosave feature
+    if (isVisible()) // mandatory or segfault when widget is removed from the tabwidget
+        d->saveCurrentEditingEpisode();
+    QWidget::hideEvent(event);
+}
+
 void FormPlaceHolder::showEvent(QShowEvent *event)
 {
     d->selectAndActivateFirstForm();
@@ -1002,10 +916,12 @@ void FormPlaceHolder::showEvent(QShowEvent *event)
     Q_EMIT actionsEnabledStateChanged();
 
     // Update sort order according to the current settings
-    if (d->_proxyModel->sortColumn() != settings()->value(Constants::S_EPISODEVIEW_SORTEDCOLUMN).toInt()
-            || d->_proxyModel->sortOrder() != Qt::SortOrder(settings()->value(Constants::S_EPISODEVIEW_SORTORDER).toInt())) {
-        d->ui->episodeView->sortByColumn(settings()->value(Constants::S_EPISODEVIEW_SORTEDCOLUMN, EpisodeModel::UserTimeStamp).toInt(),
-                                      Qt::SortOrder(settings()->value(Constants::S_EPISODEVIEW_SORTORDER, Qt::DescendingOrder).toInt()));
+    if (d->_proxyModel) {
+        if (d->_proxyModel->sortColumn() != settings()->value(Constants::S_EPISODEVIEW_SORTEDCOLUMN).toInt()
+                || d->_proxyModel->sortOrder() != Qt::SortOrder(settings()->value(Constants::S_EPISODEVIEW_SORTORDER).toInt())) {
+            d->ui->episodeView->sortByColumn(settings()->value(Constants::S_EPISODEVIEW_SORTEDCOLUMN, EpisodeModel::UserTimeStamp).toInt(),
+                                             Qt::SortOrder(settings()->value(Constants::S_EPISODEVIEW_SORTORDER, Qt::DescendingOrder).toInt()));
+        }
     }
     QWidget::showEvent(event);
 }

@@ -482,15 +482,17 @@ bool DrugsBase::refreshDrugsBase()
 
     d->m_ActualDBInfos = getDrugSourceInformation(drugSource);
     if (!d->m_ActualDBInfos) {
-//        Utils::warningMessageBox(tr("Drug database source does not exist."),
-//                                 tr("Switching to the default drugs database source."));
         d->m_ActualDBInfos = getDrugSourceInformation(DrugsDB::Constants::DB_DEFAULT_IDENTIFIANT);
         if (!d->m_ActualDBInfos) {
             // get the first available from the database
             d->m_ActualDBInfos = getDrugSourceInformation();
-            LOG(QString("%1 %2")
-                .arg(tr("Switching to the default drugs database source."))
-                .arg(d->m_ActualDBInfos->identifier));
+            if (d->m_ActualDBInfos) {
+                LOG(QString("%1 %2")
+                    .arg(tr("Switching to the default drugs database source."))
+                    .arg(d->m_ActualDBInfos->identifier));
+            } else {
+                LOG_ERROR(tr("No drug source detected."));
+            }
         }
         d->m_IsDefaultDB = true;
     }

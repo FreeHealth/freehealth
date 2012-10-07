@@ -4,9 +4,8 @@
 <context>
     <name>Webcam::WebcamPlugin</name>
     <message>
-        <location filename="../../plugins/webcamplugin/webcamplugin.cpp" line="116"/>
         <source>Initializing webcamplugin...</source>
-        <translation>Iniciando webcam...</translation>
+        <translation type="obsolete">Iniciando webcam...</translation>
     </message>
 </context>
 </TS>
