@@ -372,10 +372,10 @@ bool FormTreeModel::addSubForm(const SubFormInsertionPoint &insertionPoint)
 bool FormTreeModel::isIncludedRootSubForm(const QModelIndex &index) const
 {
     QStandardItem *item = itemFromIndex(index);
-    qWarning() << "isIncludedRootSubForm" << item;
+//    qWarning() << "isIncludedRootSubForm" << item;
     if (!item)
         return false;
-    qWarning() << "isIncludedRootSubForm" << item->data(::SUBFORM_TAG_ROLE);
+//    qWarning() << "isIncludedRootSubForm" << item->data(::SUBFORM_TAG_ROLE);
     return item->data(::SUBFORM_TAG_ROLE).toBool();
 }
 
