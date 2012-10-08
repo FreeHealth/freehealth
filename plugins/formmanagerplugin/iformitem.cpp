@@ -57,11 +57,12 @@
  */
 // TODO: change Form::FormItem pointers to references distributed by the Form::FormManager? like getItem(Form::FormMainIndex &index, const QString &uid)?
 
-// TODO - Display options and printing??
-// TODO - Rights options / authorized users
-// TODO - Rule base
-// TODO - 1 QWidget history
-// TODO - add a checkValueIntegrity() method, based on the rules of the item to verify its accuracy
+// TODO: - Display options and printing??
+// TODO: - Rights options / authorized users
+// TODO: - Rule base
+// TODO: - 1 QWidget history
+// TODO: - add a checkValueIntegrity() method, based on the rules of the item to verify its accuracy
+// TODO: move multiple inline void findChildren(FormItem *item) to member function of FormItem class, as qFindChildren is deprecated
 
 /**
  * \class Form::FormPage
