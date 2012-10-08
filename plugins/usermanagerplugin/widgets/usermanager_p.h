@@ -81,7 +81,7 @@ Q_SIGNALS:
 
 private:
     Ui::UserManagerWidget *ui;
-    bool m_CanModify, m_CanCreate, m_CanViewAllUsers, m_CanViewRestrictedDatas, m_CanDelete;
+    bool m_CanModify, m_CanCreate, m_CanViewAllUsers, m_CanViewRestrictedData, m_CanDelete;
     int m_EditingRow;
     int m_SearchBy;
     QToolBar *m_ToolBar;

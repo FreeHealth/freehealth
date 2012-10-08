@@ -1145,16 +1145,16 @@ bool DrugsIO::savePrescription(DrugsDB::DrugsModel *model, const QHash<QString,Q
 
 /**
  * \brief Save the DrugsModel's prescription into a XML file.
- * You can add \e extraXmlDatas to the xml. \e extraDatas must be xml'd.\n
+ * You can add \e extraXmlData to the xml. \e extraData must be xml'd.\n
  * If \e toFileName is empty, user is prompted to select a filename.
 */
-bool DrugsIO::savePrescription(DrugsDB::DrugsModel *model, const QString &extraXmlDatas, const QString &toFileName)
+bool DrugsIO::savePrescription(DrugsDB::DrugsModel *model, const QString &extraData, const QString &toFileName)
 {
     Q_ASSERT(model);
     QString extra;
-    if (!extraXmlDatas.isEmpty()) {
+    if (!extraData.isEmpty()) {
         extra.append(QString("\n<%1>\n").arg(XML_EXTRADATAS_TAG));
-        extra.append(extraXmlDatas);
+        extra.append(extraData);
         extra.append(QString("\n</%1>\n").arg(XML_EXTRADATAS_TAG));
     }
     QString xmldPrescription = prescriptionToXml(model, extra);

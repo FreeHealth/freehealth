@@ -69,7 +69,7 @@
 #include <QSqlTableModel>
 #include <QSqlRecord>
 
-enum { base64MimeDatas = true  };
+enum { base64MimeData = true  };
 
 #ifdef DEBUG
 enum {

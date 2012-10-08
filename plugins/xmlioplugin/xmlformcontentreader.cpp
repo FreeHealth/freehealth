@@ -135,10 +135,10 @@ XmlFormContentReader::XmlFormContentReader() :
    m_SpecsTypes.insert(Constants::TAG_SPEC_TOOLTIP, Form::FormItemSpec::Spec_Tooltip);
    m_SpecsTypes.insert(Constants::TAG_SPEC_PRIORITY, Form::FormItemSpec::Spec_Priority);
 
-   m_PatientDatas.clear();
+   m_PatientData.clear();
    // use the Core::IPatient::enumToString()
    for(int i=0; i< Core::IPatient::NumberOfColumns; ++i) {
-       m_PatientDatas.insert(patient()->enumToString(Core::IPatient::PatientDataRepresentation(i)).toLower(), i);
+       m_PatientData.insert(patient()->enumToString(Core::IPatient::PatientDataRepresentation(i)).toLower(), i);
    }
 }
 
@@ -511,7 +511,7 @@ bool XmlFormContentReader::loadElement(Form::FormItem *item, QDomElement &rootEl
 
         // Patient Data Representation ?
         if (element.tagName().compare(Constants::TAG_DATAPATIENT, Qt::CaseInsensitive)==0) {
-            i = m_PatientDatas.value(element.text().toLower(), -1);
+            i = m_PatientData.value(element.text().toLower(), -1);
             if (i != -1) {
                 item->setPatientDataRepresentation(i);
             }
@@ -555,7 +555,7 @@ bool XmlFormContentReader::loadElement(Form::FormItem *item, QDomElement &rootEl
 
         // All others add them in extraData
         item->addExtraData(element.tagName(), element.text());
-//        qWarning() << "°°°°°°°°°°°°°° XML adding other tag" << element.tagName() << element.text() << item->extraDatas();
+//        qWarning() << "°°°°°°°°°°°°°° XML adding other tag" << element.tagName() << element.text() << item->extraData();
 
         element = element.nextSiblingElement();
     }
@@ -581,7 +581,7 @@ bool XmlFormContentReader::createElement(Form::FormItem *item, QDomElement &elem
                 child->spec()->setValue(Form::FormItemSpec::Spec_Plugin, element.attribute(Constants::ATTRIB_TYPE), Trans::Constants::ALL_LANGUAGE);
 
             if (element.hasAttribute(Constants::ATTRIB_PATIENTREPRESENTATION)) {
-                int i = m_PatientDatas.value(element.attribute(Constants::ATTRIB_PATIENTREPRESENTATION).toLower(), -1);
+                int i = m_PatientData.value(element.attribute(Constants::ATTRIB_PATIENTREPRESENTATION).toLower(), -1);
                 if (i != -1) {
                     child->setPatientDataRepresentation(i);
                 }

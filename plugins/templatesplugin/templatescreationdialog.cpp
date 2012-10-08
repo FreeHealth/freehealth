@@ -71,7 +71,7 @@ void TemplatesCreationDialog::done(int r)
         if (!model->insertRow(row, parent)) {
             return;
         }
-        // model --> setDatas
+        // model --> setData
         model->setData(model->index(row, Constants::Data_IsTemplate, parent), true);
         QString tmp = ui->nameLineEdit->text();
         if (tmp.isEmpty())

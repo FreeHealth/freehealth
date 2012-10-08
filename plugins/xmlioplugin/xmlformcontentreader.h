@@ -118,7 +118,7 @@ private:
     QHash<QString, int> m_ScriptsTypes;
     QHash<QString, int> m_ValuesTypes;
     QHash<QString, int> m_SpecsTypes;
-    QHash<QString, int> m_PatientDatas;
+    QHash<QString, int> m_PatientData;
 };
 
 }  // End namespace Internal

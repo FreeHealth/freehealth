@@ -840,8 +840,8 @@ bool FormPlaceHolder::printFormOrEpisode()
     tokens.insert(Core::Constants::TOKEN_DOCUMENTTITLE, title);
     //    // create a token for each FormItem of the FormMain
     //    foreach(FormItem *item, formMain->flattenFormItemChildren()) {
-    //        if (item->itemDatas())
-    //            tokens.insert(item->uuid(), item->itemDatas()->data(0, Form::IFormItemData::ID_Printable));
+    //        if (item->itemData())
+    //            tokens.insert(item->uuid(), item->itemData()->data(0, Form::IFormItemData::ID_Printable));
     //    }
     p->addTokens(Core::IDocumentPrinter::Tokens_Global, tokens);
 

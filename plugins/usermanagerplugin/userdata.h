@@ -281,9 +281,9 @@ protected:
     void setCryptedPassword(const QVariant &val);
 
     // getters for database
-    bool hasModifiedDynamicDatasToStore() const;
+    bool hasModifiedDynamicDataToStore() const;
     bool hasModifiedRightsToStore() const;
-    QList<UserDynamicData*> modifiedDynamicDatas() const;
+    QList<UserDynamicData*> modifiedDynamicData() const;
     QStringList modifiedRoles() const;
     QString clearPassword() const;
 

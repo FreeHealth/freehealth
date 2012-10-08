@@ -62,7 +62,7 @@
   \todo Add a UUID to templates and categories
   \todo Add user filter, MimeType filter
   \todo Don't get the contents of templates to memory
-  \todo Remove the static data. instead use a new member getDatas() to be called after setCategoryOnly(bool)
+  \todo Remove the static data. instead use a new member getData() to be called after setCategoryOnly(bool)
   \todo Detect corrupted templates database --> ask user what to do
   \todo Add a coreListener --> save templates database before closing application
   \todo Manage transmission date
@@ -72,7 +72,7 @@
 using namespace Templates;
 using namespace Trans::ConstantTranslations;
 
-enum { base64MimeDatas = true  };
+enum { base64MimeData = true  };
 
 #ifdef DEBUG
 enum {
@@ -289,7 +289,7 @@ public:
                 m_Tree = 0;
                 m_RootItem = 0;
             }
-            m_ModelDatasRetreived = false;
+            m_ModelDataRetreived = false;
         }
     }
 
@@ -356,7 +356,7 @@ public:
 
     void setupModelData()
     {
-        if (m_ModelDatasRetreived)
+        if (m_ModelDataRetreived)
             return;
 
         if (m_RootItem) {
@@ -460,13 +460,13 @@ public:
         }
         sortItems();
 
-        m_ModelDatasRetreived = true;
+        m_ModelDataRetreived = true;
     }
 
-    void saveModelDatas(const QModelIndex &start = QModelIndex())
+    void saveModelData(const QModelIndex &start = QModelIndex())
     {
         if (WarnDatabaseSaving)
-            qWarning() << "saveModelDatas: " << start.data().toString();
+            qWarning() << "saveModelData: " << start.data().toString();
 
         QSqlDatabase DB = QSqlDatabase::database(Constants::DB_TEMPLATES_NAME);
         if (!DB.isOpen()) {
@@ -604,7 +604,7 @@ public:
 
         // save all its children
         for(int i = 0; i < q->rowCount(start); ++i) {
-            saveModelDatas(q->index(i, 0, start));
+            saveModelData(q->index(i, 0, start));
         }
     }
 
@@ -771,14 +771,14 @@ public:
     bool m_ShowOnlyCategories;
     bool m_ReadOnly;
     static TreeItem *m_Tree;
-    static bool m_ModelDatasRetreived;
+    static bool m_ModelDataRetreived;
     static QSet<TemplatesModelPrivate *> m_Handles;
     static QHash<int, TreeItem *> m_IdToCategory;
     static QVector<int> m_TemplatesToDelete, m_CategoriesToDelete;
 };
 
 TreeItem *TemplatesModelPrivate::m_Tree = 0;
-bool TemplatesModelPrivate::m_ModelDatasRetreived = false;
+bool TemplatesModelPrivate::m_ModelDataRetreived = false;
 QSet<TemplatesModelPrivate *> TemplatesModelPrivate::m_Handles;
 QHash<int, TreeItem *> TemplatesModelPrivate::m_IdToCategory;
 QVector<int> TemplatesModelPrivate::m_TemplatesToDelete;
@@ -812,7 +812,7 @@ TemplatesModel::~TemplatesModel()
 
 void TemplatesModel::onCoreDatabaseServerChanged()
 {
-    d->m_ModelDatasRetreived = false;
+    d->m_ModelDataRetreived = false;
     d->setupModelData();
     reset();
 }
@@ -1030,7 +1030,7 @@ bool TemplatesModel::insertTemplate(const Templates::ITemplate *t)
         return false;
     // insertRow in parentIndex
     QModelIndex parentIndex = d->findIndex(parent->id());
-    // setDatas of newly created row
+    // setData of newly created row
 //    Internal::TreeItem *parentItem = d->getItem(item)->parent();
 //    // TODO: manage user
 //    Internal::TreeItem *newItem = new Internal::TreeItem(t.data(),parentItem);
@@ -1189,7 +1189,7 @@ bool TemplatesModel::dropMimeData(const QMimeData *data, Qt::DropAction action, 
         }
     }
 
-//    d->saveModelDatas();
+//    d->saveModelData();
 
     return true;
 }
@@ -1282,7 +1282,7 @@ bool TemplatesModel::submit()
     if (d->m_ReadOnly)
         return false;
 
-    d->saveModelDatas();
+    d->saveModelData();
     d->deleteRowsInDatabase();
     return true;
 }

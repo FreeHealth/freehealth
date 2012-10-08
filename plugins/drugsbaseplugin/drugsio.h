@@ -75,15 +75,15 @@ public:
     bool isSendingDosage();
     bool prescriptionFromXml(DrugsDB::DrugsModel *model, const QString &xml, Loader loader = ReplacePrescription);
 
-    bool loadPrescription(DrugsDB::DrugsModel *model, const QString &fileName, QHash<QString,QString> &extraDatas, Loader loader = ReplacePrescription);
+    bool loadPrescription(DrugsDB::DrugsModel *model, const QString &fileName, QHash<QString,QString> &extraData, Loader loader = ReplacePrescription);
     bool loadPrescription(DrugsDB::DrugsModel *model, const QString &fileName, Loader loader = ReplacePrescription);
     bool loadPrescription(DrugsDB::DrugsModel *model, const QString &fileName, QString &xmlExtraData, Loader loader = ReplacePrescription);
 
-    bool savePrescription(DrugsDB::DrugsModel *model, const QHash<QString,QString> &extraDatas, const QString &toFileName = QString::null);
-    bool savePrescription(DrugsDB::DrugsModel *model, const QString &extraDatas, const QString &toFileName = QString::null);
+    bool savePrescription(DrugsDB::DrugsModel *model, const QHash<QString,QString> &extraData, const QString &toFileName = QString::null);
+    bool savePrescription(DrugsDB::DrugsModel *model, const QString &extraData, const QString &toFileName = QString::null);
 
     QString prescriptionToXml(DrugsDB::DrugsModel *model, const QString &xmlExtraData = QString::null);
-    QString prescriptionToHtml(DrugsDB::DrugsModel *model, const QString &xmlExtraDatas = QString::null, int version = MedinTuxVersion);
+    QString prescriptionToHtml(DrugsDB::DrugsModel *model, const QString &xmlExtraData = QString::null, int version = MedinTuxVersion);
     QString getDrugPrescription(DrugsDB::DrugsModel *model, const int drugRow, bool toHtml = false, const QString &mask = QString::null);
 
     bool printPrescription(DrugsDB::DrugsModel *model); //,

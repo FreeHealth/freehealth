@@ -1143,7 +1143,7 @@ bool UserModel::setPaper(const QString &uuid, const int ref, Print::TextDocument
         return false;
     user->setExtraDocument(extra, ref);
     user->setModified(true);
-//    foreach(const Internal::UserDynamicData* data, user->modifiedDynamicDatas())
+//    foreach(const Internal::UserDynamicData* data, user->modifiedDynamicData())
 //        qWarning() << data->name() << data->isDirty();
 //    qWarning();
     return true;
@@ -1474,7 +1474,7 @@ void UserModel::updateUserPreferences()
         if (user) {
             user->setPreferences(settings()->userSettings());
             userBase()->saveUserPreferences(user->uuid(), settings()->userSettings());
-            if (user->hasModifiedDynamicDatasToStore()) {
+            if (user->hasModifiedDynamicDataToStore()) {
                 // save papers ?
                 userBase()->savePapers(user);
             }

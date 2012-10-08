@@ -1061,8 +1061,8 @@ bool UserBase::saveUser(UserData *user)
 
         // update dynamic data
         qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
-        if (user->hasModifiedDynamicDatasToStore()) {
-            const QList<UserDynamicData*> &dataToUpdate = user->modifiedDynamicDatas();
+        if (user->hasModifiedDynamicDataToStore()) {
+            const QList<UserDynamicData*> &dataToUpdate = user->modifiedDynamicData();
             foreach(UserDynamicData *dyn, dataToUpdate) {
                 //                qWarning() << "SAVE UDD TO BASE" ;
                 //                dyn->warn();
@@ -1167,8 +1167,8 @@ bool UserBase::saveUser(UserData *user)
 
         // add dynamic data
         qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
-        if (user->hasModifiedDynamicDatasToStore()) {
-            const QList<UserDynamicData *> &dataToUpdate = user->modifiedDynamicDatas();
+        if (user->hasModifiedDynamicDataToStore()) {
+            const QList<UserDynamicData *> &dataToUpdate = user->modifiedDynamicData();
             foreach(UserDynamicData *dyn, dataToUpdate) {
                 query.prepare(prepareInsertQuery(Table_DATA));
                 query.bindValue(DATAS_ID, QVariant());
@@ -1340,7 +1340,7 @@ bool UserBase::savePapers(UserData *user)
     if (!user->isModified())
         return true;
 
-    if (!user->hasModifiedDynamicDatasToStore())
+    if (!user->hasModifiedDynamicDataToStore())
         return true;
 
     QSqlDatabase DB = QSqlDatabase::database(Constants::USER_DB_CONNECTION);
@@ -1359,7 +1359,7 @@ bool UserBase::savePapers(UserData *user)
     papersId.append(USER_DATA_PRESCRIPTIONFOOTER);
     papersId.append(USER_DATA_PRESCRIPTIONWATERMARK);
 
-    const QList<UserDynamicData*> &dataToUpdate = user->modifiedDynamicDatas();
+    const QList<UserDynamicData*> &dataToUpdate = user->modifiedDynamicData();
     DB.transaction();
     QSqlQuery query(DB);
     foreach(UserDynamicData *dyn, dataToUpdate) {

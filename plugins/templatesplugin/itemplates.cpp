@@ -36,7 +36,7 @@
 #include <QHash>
 #include <QVariant>
 
-enum { base64MimeDatas = true };
+enum { base64MimeData = true };
 
 using namespace Templates;
 
@@ -56,7 +56,7 @@ using namespace Templates;
 ////            qWarning() << QString().fill(' ', indent) + "  " + e.tagName() + ": " + e.text().mid(14, e.text().indexOf(")#", 14) - 14) << e.childNodes().count();
 //            // Manage templates
 //            if (e.tagName().compare("Template", Qt::CaseInsensitive) == 0) {
-//                QHash<int, QVariant> data = Utils::Serializer::toVariantHash(e.attribute("content"), base64MimeDatas);
+//                QHash<int, QVariant> data = Utils::Serializer::toVariantHash(e.attribute("content"), base64MimeData);
 ////                qWarning() << e.attribute("content");
 ////                qWarning() << data;
 //                data.insert(TemplatesModel::Data_ParentId, model->index(parent.row(), TemplatesModel::Data_Id, parent.parent()).data());
@@ -98,12 +98,12 @@ bool ITemplate::fromMimeData(QMimeData *)
 
 QString ITemplate::serialize()
 {
-    return Utils::Serializer::toString(m_Data, base64MimeDatas);
+    return Utils::Serializer::toString(m_Data, base64MimeData);
 }
 
 bool ITemplate::deserialize(const QString &serialized)
 {
     m_Data.clear();
-    m_Data = Utils::Serializer::toVariantHash(serialized, base64MimeDatas);
+    m_Data = Utils::Serializer::toVariantHash(serialized, base64MimeData);
     return true;
 }

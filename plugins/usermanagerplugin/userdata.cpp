@@ -49,8 +49,8 @@
   - setValue() and value() for the USERS table,
   - addDynamicDataFromDatabase() and dynamicDataValue() for the DATA table,
   - addRightsFromDatabase() and rightsValue() for the RIGHTS table,
-  - hasModifiedDynamicDatasToStore(), hasModifiedRightsToStore inform UserBase of needed changes,
-  - modifiedDynamicDatas(), modifiedRoles() inform UserBase of the dynamic data and rights to save to base.
+  - hasModifiedDynamicDataToStore(), hasModifiedRightsToStore inform UserBase of needed changes,
+  - modifiedDynamicData(), modifiedRoles() inform UserBase of the dynamic data and rights to save to base.
 
   Some members are reserved for users interactions. Theses members are mainly assessed by the UserModel.
   - setDynamicData() can be used for creating a new dynamic data or change the value of the dynamic data,
@@ -447,21 +447,21 @@ public:
 //    /** \brief Logs the last changed date of a dynamic data to now. Mark user as non null and modified. */
 //    void logLastChangeDate(const char *name)
 //    {
-//        m_DataName_Datas[name].insert(DATAS_LASTCHANGE, QDateTime::currentDateTime());
+//        m_DataName_Data[name].insert(DATAS_LASTCHANGE, QDateTime::currentDateTime());
 //        m_IsNull = false;
 //        m_Modified = true;
 //        // store modified dynamic data changed into a list to limit database access
-//        if (!m_ModifiedDynamicDatas.contains(name))
-//            m_ModifiedDynamicDatas << name;
+//        if (!m_ModifiedDynamicData.contains(name))
+//            m_ModifiedDynamicData << name;
 //    }
 
 //    /** \brief When add or set dynamic data to user, if it is a known extra document (tkTextDocumentExtra), this part manages its creation into the cache. */
 //    void createExtraDoc(const char*name, const QVariant &val, bool logDate)
 //    {
 //        m_Docs.insert(documentNameToIndex(name), tkTextDocumentExtra::fromXml(val.toString()));
-//        if (!m_DataName_Datas.contains(name)) {
-//            m_DataName_Datas[name].insert(DATAS_DATANAME, name);
-//            m_DataName_Datas[name].insert(DATAS_ID, -1);
+//        if (!m_DataName_Data.contains(name)) {
+//            m_DataName_Data[name].insert(DATAS_DATANAME, name);
+//            m_DataName_Data[name].insert(DATAS_ID, -1);
 //        }
 //        if (logDate)
 //            logLastChangeDate(name);
@@ -471,11 +471,11 @@ public:
 public:
     QHash< int, QHash<int, QVariant > >       m_Table_Field_Value;
     QHash< QString, QHash<int, QVariant >  >  m_Role_Rights;
-//    QHash< QString, QHash< int, QVariant > >  m_DataName_Datas;
+//    QHash< QString, QHash< int, QVariant > >  m_DataName_Data;
     bool  m_Modifiable, m_Modified,  m_IsNull, m_IsCurrent;
     QSet< QString > m_ModifiedRoles;
     QHash<QString, UserDynamicData*> m_DynamicData;
-    bool m_HasModifiedDynamicDatas;
+    bool m_HasModifiedDynamicData;
     QList<int> m_LkIds;
     int m_PersonalLkId;
     QString m_LkIdsToString, m_ClearPassword;
@@ -573,7 +573,7 @@ void UserData::setModified(bool state)
 {
     d->m_Modified = state;
     if (!state) {
-        foreach(UserDynamicData *data, this->modifiedDynamicDatas()) {
+        foreach(UserDynamicData *data, this->modifiedDynamicData()) {
             data->setDirty(false);
         }
         d->m_ModifiedRoles.clear();
@@ -585,7 +585,7 @@ bool UserData::isModified() const
 {
     if (d->m_Modified)
         return true;
-    if (hasModifiedDynamicDatasToStore())
+    if (hasModifiedDynamicDataToStore())
         return true;
     if (hasModifiedRightsToStore())
         return true;
@@ -779,7 +779,7 @@ void UserData::setDynamicDataValue(const char *name, const QVariant &val, UserDy
     UserDynamicData *data = d->m_DynamicData[name];
     data->setValue(val);
 
-//    qWarning() << d->m_DynamicDatas;
+//    qWarning() << d->m_DynamicData;
 }
 
 /**
@@ -918,14 +918,14 @@ bool UserData::hasRight(const char *name, const int rightToTest) const
 //    return true;
 //}
 
-/** \brief Return true if there are modifications to save in the dynamicDatas. */
-bool UserData::hasModifiedDynamicDatasToStore() const
+/** \brief Return true if there are modifications to save in the dynamicData. */
+bool UserData::hasModifiedDynamicDataToStore() const
 {
-    return modifiedDynamicDatas().count();
+    return modifiedDynamicData().count();
 }
 
-/** \brief Return the list of modified dynamicDatas'. The returned pointer SHOULD NOT BE deleted. */
-QList<UserDynamicData*> UserData::modifiedDynamicDatas() const
+/** \brief Return the list of modified dynamicData. The returned pointer \b should \b not \b be \b deleted. */
+QList<UserDynamicData*> UserData::modifiedDynamicData() const
 {
     QList<UserDynamicData*> list;
     foreach(UserDynamicData *dyn, d->m_DynamicData.values()) {
@@ -1076,7 +1076,7 @@ QStringList UserData::warnText() const
     list << tmp;
     tmp.clear();
 
-    const QList<UserDynamicData*> &dynList = modifiedDynamicDatas();
+    const QList<UserDynamicData*> &dynList = modifiedDynamicData();
 
     foreach(const UserDynamicData *dyn, d->m_DynamicData.values()) {
         tmp += "\nDATA: " + dyn->name() + "\n";
@@ -1103,7 +1103,7 @@ QStringList UserData::warnText() const
     tmp += QString("%1 = %2\n").arg("m_Modifiable").arg(isModifiable());
     tmp += QString("%1 = %2\n").arg("m_Modified").arg(isModified());
     tmp += QString("%1 = %2\n").arg("m_IsNull").arg(d->m_IsNull);
-    tmp += QString("%1 = %2\n").arg("hasModifiedDynamicDatas").arg(hasModifiedDynamicDatasToStore());
+    tmp += QString("%1 = %2\n").arg("hasModifiedDynamicDatas").arg(hasModifiedDynamicDataToStore());
     tmp += "modifiedDynamicDatas = ";
     foreach(UserDynamicData *dyn, dynList)
              tmp += dyn->name() + "; ";
