@@ -263,10 +263,10 @@ bool RapidToFreeIO::insertIntoFieldOfAccount(QVariant data, int id, int field)
           	      case MP_TXT : case MP_XML : case COMMENT : case DUE_BY :
           	          query.bindValue(i,"NULL");
           	          break;
-          	      case VALID : case BLOB :
+          	      case VALID : case TRACE :
           	          query.bindValue(i,0);
           	          break;
-          	      case CASH : case CHEQUE : case VISA : case BANKING : case OTHER : case DU :
+          	      case CASH : case CHEQUE : case VISA : case BANKING : case OTHER : case DUE :
           	          query.bindValue(i,0.0);
           	          break;
           	      default :
@@ -274,8 +274,7 @@ bool RapidToFreeIO::insertIntoFieldOfAccount(QVariant data, int id, int field)
           	      }
           	  
           	      
-              }
-    	  
+              } 
     	      
     	  if (!query.exec())
     	  {
@@ -286,9 +285,16 @@ bool RapidToFreeIO::insertIntoFieldOfAccount(QVariant data, int id, int field)
         }
     else
     {
-        /*QString fieldName = fieldName(AccountDB::Constants::Table_Account,field);    	  
-        QString req = QString("UPDATE %1 (%2) VALUES(%3) WHERE %4 = '%5'")//TO FIX
-             .arg("account",fieldName,data,"ACCOUNT_ID");*/
+        QString fieldName = m_hashAccount.value(field)  ;
+        query.prepare(QString("UPDATE %1  SET %2 = '%3' WHERE %4 = '%5'").arg("account",fieldName,"?","ACCOUNT_ID",QString::number(id)));
+        query.bindValue(0,data);
+        if (!query.exec())
+        {
+        	  qWarning() << __FILE__ << QString::number(__LINE__) << query.lastError().text() ;
+        	  return false;
+        	  
+            }	  
+        
         }
     return true;
 }
