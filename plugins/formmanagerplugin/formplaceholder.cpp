@@ -911,8 +911,9 @@ void FormPlaceHolder::episodeChanged(const QModelIndex &current, const QModelInd
 /** Return true is the Form::Internal::FormDataWidgetMapper included in the view is dirty */
 bool FormPlaceHolder::isDirty() const
 {
+//    qWarning() << "FormPlaceHolder::isDirty" << d->_formTreeModel << d->_currentEditingForm.isValid() << d->ui->formDataMapper->currentEditingEpisodeIndex().isValid();
     if (d->_formTreeModel
-            && !d->_currentEditingForm.isValid()
+            && d->_currentEditingForm.isValid()
             && d->ui->formDataMapper->currentEditingEpisodeIndex().isValid())
         return d->ui->formDataMapper->isDirty();
     return false;
@@ -936,6 +937,8 @@ void FormPlaceHolder::changeEvent(QEvent *event)
 
 void FormPlaceHolder::hideEvent(QHideEvent *event)
 {
+//    qWarning() << "FormPlaceHolder::hideEvent" << isVisible();
+    // TODO: this is not working as it does
     // autosave feature
     if (isVisible()) // mandatory or segfault when widget is removed from the tabwidget
         d->saveCurrentEditingEpisode();
