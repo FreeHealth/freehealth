@@ -39,13 +39,15 @@
 #include <QPushButton>
 #include <QDialogButtonBox>
 
+#include <QDebug>
+
 using namespace Utils;
 using namespace Trans::ConstantTranslations;
 
 // TODO: add gesture for the resize mode and Alt(or Ctrl)+mousewheel to zoom in/out
 
 ImageViewer::ImageViewer(QWidget *parent) :
-    QDialog(parent), m_CurrentIndex(-1)
+    QDialog(parent), mPreviousButton(0), mNextButton(0), m_CurrentIndex(-1)
 {
     setObjectName("ImageViewer");
     imageLabel = new QLabel;
@@ -63,10 +65,10 @@ ImageViewer::ImageViewer(QWidget *parent) :
     //    QAbstractButton *zin = m_ButBox->addButton(tkTr(Trans::Constants::ZOOMIN_TEXT).remove("&"), QDialogButtonBox::ActionRole);
     //    QAbstractButton *zout = m_ButBox->addButton(tkTr(Trans::Constants::ZOOMOUT_TEXT).remove("&"), QDialogButtonBox::ActionRole);
 
-    QAbstractButton *previous = m_ButBox->addButton(tkTr(Trans::Constants::PREVIOUS_TEXT).remove("&"), QDialogButtonBox::ActionRole);
-    QAbstractButton *next = m_ButBox->addButton(tkTr(Trans::Constants::NEXT_TEXT).remove("&"), QDialogButtonBox::ActionRole);
+    mPreviousButton = m_ButBox->addButton(tkTr(Trans::Constants::PREVIOUS_TEXT).remove("&"), QDialogButtonBox::ActionRole);
+    mNextButton = m_ButBox->addButton(tkTr(Trans::Constants::NEXT_TEXT).remove("&"), QDialogButtonBox::ActionRole);
 //    QAbstractButton *full = m_ButBox->addButton(tkTr(Trans::Constants::FULLSCREEN_TEXT).remove("&"), QDialogButtonBox::ActionRole);
-    QAbstractButton *close = m_ButBox->addButton(QDialogButtonBox::Close);
+    QPushButton *close = m_ButBox->addButton(QDialogButtonBox::Close);
 
     QVBoxLayout *l = new QVBoxLayout(this);
     setLayout(l);
@@ -76,8 +78,8 @@ ImageViewer::ImageViewer(QWidget *parent) :
     //    connect(zin, SIGNAL(clicked()), this, SLOT(zoomIn()));
     //    connect(zout, SIGNAL(clicked()), this, SLOT(zoomOut()));
 
-    connect(next, SIGNAL(clicked()), this, SLOT(next()));
-    connect(previous, SIGNAL(clicked()), this, SLOT(previous()));
+    connect(mNextButton, SIGNAL(clicked()), this, SLOT(next()));
+    connect(mPreviousButton, SIGNAL(clicked()), this, SLOT(previous()));
     connect(close, SIGNAL(clicked()), this, SLOT(accept()));
 //    connect(full, SIGNAL(clicked()), this, SLOT(toggleFullScreen()));
 
@@ -91,14 +93,15 @@ void ImageViewer::setPixmap(const QPixmap &pixmap)
 
 void ImageViewer::setPixmaps(const QList<QPixmap> &pixmaps)
 {
-    if (pixmaps.count()==0)
+    if (pixmaps.isEmpty())
         return;
     m_pixmaps = pixmaps;
-    imageLabel->setPixmap(pixmaps.at(0));
+    imageLabel->setPixmap(pixmaps.first());
     normalSize();
     fitToWindow();
     m_CurrentIndex = 0;
     Utils::resizeAndCenter(this);
+    updateButtons();
 }
 
 void ImageViewer::showPixmapFile(const QString &absFilePath)
@@ -173,4 +176,12 @@ void ImageViewer::adjustScrollBar(QScrollBar *scrollBar, double factor)
 void ImageViewer::toggleFullScreen()
 {
     Utils::setFullScreen(this, true);
+}
+
+void ImageViewer::updateButtons()
+{
+    if (mPreviousButton)
+        mPreviousButton->setEnabled(m_CurrentIndex > 1);
+    if (mNextButton)
+        mNextButton->setEnabled(m_CurrentIndex < m_pixmaps.count()-1);
 }
