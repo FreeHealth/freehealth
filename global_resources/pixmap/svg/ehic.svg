@@ -1,0 +1,490 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="800"
+   height="800"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.3.1 r9886"
+   sodipodi:docname="ehic.svg"
+   inkscape:export-filename="/home/christian/src/freemedforms/global_resources/pixmap/ehic.png"
+   inkscape:export-xdpi="16.27"
+   inkscape:export-ydpi="16.27">
+  <title
+     id="title3026">European Health Insurance Card icon</title>
+  <defs
+     id="defs4">
+    <linearGradient
+       id="linearGradient5829">
+      <stop
+         id="stop5831"
+         offset="0"
+         style="stop-color:#ffffff;stop-opacity:1;" />
+      <stop
+         id="stop5833"
+         offset="1"
+         style="stop-color:#ffffff;stop-opacity:0.78846157;" />
+    </linearGradient>
+    <linearGradient
+       id="linearGradient3845">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="0"
+         id="stop3847" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:0.82211536;"
+         offset="1"
+         id="stop3849" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3845"
+       id="linearGradient4382"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(1.2148581,0,0,1.169338,-34.293044,-139.6527)"
+       x1="435.86578"
+       y1="642.87164"
+       x2="531.26172"
+       y2="642.87164" />
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient5829"
+       id="linearGradient5837"
+       x1="346.46375"
+       y1="488.11374"
+       x2="499.03098"
+       y2="671.96149"
+       gradientUnits="userSpaceOnUse" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.35"
+     inkscape:cx="-743.08679"
+     inkscape:cy="363.23453"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:snap-global="true"
+     inkscape:snap-bbox="false"
+     inkscape:snap-center="false"
+     inkscape:snap-object-midpoints="false"
+     inkscape:snap-midpoints="false"
+     inkscape:snap-smooth-nodes="false"
+     inkscape:object-nodes="false"
+     inkscape:snap-nodes="false"
+     inkscape:snap-grids="true"
+     inkscape:snap-to-guides="false"
+     inkscape:object-paths="true"
+     inkscape:window-width="1228"
+     inkscape:window-height="683"
+     inkscape:window-x="82"
+     inkscape:window-y="28"
+     inkscape:window-maximized="0" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>European Health Insurance Card icon</dc:title>
+        <dc:date>2012-10-10</dc:date>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Christian A. Reiter</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:rights>
+          <cc:Agent>
+            <dc:title>GPL</dc:title>
+          </cc:Agent>
+        </dc:rights>
+        <dc:language>English</dc:language>
+        <cc:license
+           rdf:resource="http://www.gnu.org/licenses/gpl.html" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Ebene 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     style="display:inline"
+     transform="translate(0,-252.36218)">
+    <rect
+       ry="31.095753"
+       y="280.6123"
+       x="45.374958"
+       height="446.42914"
+       width="708.17584"
+       id="rect3891"
+       style="opacity:1;fill:#000076;fill-opacity:1;stroke:none" />
+    <path
+       inkscape:connector-curvature="0"
+       id="path3893"
+       d="m 481.14847,280.61469 0,149.63872 -248.17273,0 0,238.03337 248.17273,0 0,58.4669 0.60743,0 60.13547,0 110.09652,0 34.12992,0 33.75028,0 c 18.69438,0 33.75027,-14.49176 33.75027,-32.48567 l 0,-381.16765 c 0,-17.99391 -15.05589,-32.48567 -33.75027,-32.48567 l -27.60006,0 -40.28014,0 -170.83942,0 z"
+       style="opacity:0.46464645999999998;fill:url(#linearGradient4382);fill-opacity:1;stroke:none" />
+    <rect
+       y="394.88654"
+       x="397.98532"
+       height="29.460819"
+       width="77.619896"
+       id="rect3895"
+       style="opacity:0.35016839;fill:#ffffff;fill-opacity:1;stroke:none" />
+    <rect
+       style="opacity:0.35016839;fill:#ffffff;fill-opacity:1;stroke:none"
+       id="rect3897"
+       width="33.364346"
+       height="31.131302"
+       x="587.15607"
+       y="358.97113" />
+    <path
+       transform="matrix(0.7624606,0,0,0.7338916,219.92806,45.054426)"
+       inkscape:transform-center-y="-0.81589356"
+       d="m 505.35715,371.96282 4.00095,8.10682 8.9464,1.29999 -6.47367,6.31027 1.52822,8.91026 -8.0019,-4.20685 -8.00191,4.20685 1.52823,-8.91026 -6.47368,-6.31027 8.9464,-1.29999 z"
+       inkscape:randomized="0"
+       inkscape:rounded="0"
+       inkscape:flatsided="false"
+       sodipodi:arg2="-0.9424778"
+       sodipodi:arg1="-1.5707963"
+       sodipodi:r2="6.806828"
+       sodipodi:r1="13.613656"
+       sodipodi:cy="385.57648"
+       sodipodi:cx="505.35715"
+       sodipodi:sides="5"
+       id="path3901"
+       style="opacity:0.35016839;fill:#ffffff;fill-opacity:1;stroke:none"
+       sodipodi:type="star" />
+    <path
+       sodipodi:type="star"
+       style="opacity:0.35016839;fill:#ffffff;fill-opacity:1;stroke:none"
+       id="path3903"
+       sodipodi:sides="5"
+       sodipodi:cx="505.35715"
+       sodipodi:cy="385.57648"
+       sodipodi:r1="13.613656"
+       sodipodi:r2="6.806828"
+       sodipodi:arg1="-1.5707963"
+       sodipodi:arg2="-0.9424778"
+       inkscape:flatsided="false"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="m 505.35715,371.96282 4.00095,8.10682 8.9464,1.29999 -6.47367,6.31027 1.52822,8.91026 -8.0019,-4.20685 -8.00191,4.20685 1.52823,-8.91026 -6.47368,-6.31027 8.9464,-1.29999 z"
+       inkscape:transform-center-y="-0.81589356"
+       transform="matrix(0.7624606,0,0,0.7338916,194.32927,50.17028)" />
+    <path
+       transform="matrix(0.7624606,0,0,0.7338916,177.19109,67.71035)"
+       inkscape:transform-center-y="-0.81589356"
+       d="m 505.35715,371.96282 4.00095,8.10682 8.9464,1.29999 -6.47367,6.31027 1.52822,8.91026 -8.0019,-4.20685 -8.00191,4.20685 1.52823,-8.91026 -6.47368,-6.31027 8.9464,-1.29999 z"
+       inkscape:randomized="0"
+       inkscape:rounded="0"
+       inkscape:flatsided="false"
+       sodipodi:arg2="-0.9424778"
+       sodipodi:arg1="-1.5707963"
+       sodipodi:r2="6.806828"
+       sodipodi:r1="13.613656"
+       sodipodi:cy="385.57648"
+       sodipodi:cx="505.35715"
+       sodipodi:sides="5"
+       id="path3905"
+       style="opacity:0.35016839;fill:#ffffff;fill-opacity:1;stroke:none"
+       sodipodi:type="star" />
+    <path
+       sodipodi:type="star"
+       style="opacity:0.35016839;fill:#ffffff;fill-opacity:1;stroke:none"
+       id="path3907"
+       sodipodi:sides="5"
+       sodipodi:cx="505.35715"
+       sodipodi:cy="385.57648"
+       sodipodi:r1="13.613656"
+       sodipodi:r2="6.806828"
+       sodipodi:arg1="-1.5707963"
+       sodipodi:arg2="-0.9424778"
+       inkscape:flatsided="false"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="m 505.35715,371.96282 4.00095,8.10682 8.9464,1.29999 -6.47367,6.31027 1.52822,8.91026 -8.0019,-4.20685 -8.00191,4.20685 1.52823,-8.91026 -6.47368,-6.31027 8.9464,-1.29999 z"
+       inkscape:transform-center-y="-0.81589356"
+       transform="matrix(0.7624606,0,0,0.7338916,170.24904,93.185209)" />
+    <path
+       transform="matrix(0.7624606,0,0,0.7338916,177.08262,115.52791)"
+       inkscape:transform-center-y="-0.81589356"
+       d="m 505.35715,371.96282 4.00095,8.10682 8.9464,1.29999 -6.47367,6.31027 1.52822,8.91026 -8.0019,-4.20685 -8.00191,4.20685 1.52823,-8.91026 -6.47368,-6.31027 8.9464,-1.29999 z"
+       inkscape:randomized="0"
+       inkscape:rounded="0"
+       inkscape:flatsided="false"
+       sodipodi:arg2="-0.9424778"
+       sodipodi:arg1="-1.5707963"
+       sodipodi:r2="6.806828"
+       sodipodi:r1="13.613656"
+       sodipodi:cy="385.57648"
+       sodipodi:cx="505.35715"
+       sodipodi:sides="5"
+       id="path3909"
+       style="opacity:0.35016839;fill:#ffffff;fill-opacity:1;stroke:none"
+       sodipodi:type="star" />
+    <path
+       sodipodi:type="star"
+       style="opacity:0.35016839;fill:#ffffff;fill-opacity:1;stroke:none"
+       id="path3911"
+       sodipodi:sides="5"
+       sodipodi:cx="505.35715"
+       sodipodi:cy="385.57648"
+       sodipodi:r1="13.613656"
+       sodipodi:r2="6.806828"
+       sodipodi:arg1="-1.5707963"
+       sodipodi:arg2="-0.9424778"
+       inkscape:flatsided="false"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="m 505.35715,371.96282 4.00095,8.10682 8.9464,1.29999 -6.47367,6.31027 1.52822,8.91026 -8.0019,-4.20685 -8.00191,4.20685 1.52823,-8.91026 -6.47368,-6.31027 8.9464,-1.29999 z"
+       inkscape:transform-center-y="-0.81589356"
+       transform="matrix(0.7624606,0,0,0.7338916,194.22079,132.54596)" />
+    <path
+       transform="matrix(0.7624606,0,0,0.7338916,219.71111,141.00277)"
+       inkscape:transform-center-y="-0.81589356"
+       d="m 505.35715,371.96282 4.00095,8.10682 8.9464,1.29999 -6.47367,6.31027 1.52822,8.91026 -8.0019,-4.20685 -8.00191,4.20685 1.52823,-8.91026 -6.47368,-6.31027 8.9464,-1.29999 z"
+       inkscape:randomized="0"
+       inkscape:rounded="0"
+       inkscape:flatsided="false"
+       sodipodi:arg2="-0.9424778"
+       sodipodi:arg1="-1.5707963"
+       sodipodi:r2="6.806828"
+       sodipodi:r1="13.613656"
+       sodipodi:cy="385.57648"
+       sodipodi:cx="505.35715"
+       sodipodi:sides="5"
+       id="path3913"
+       style="opacity:0.35016839;fill:#ffffff;fill-opacity:1;stroke:none"
+       sodipodi:type="star" />
+    <path
+       sodipodi:type="star"
+       style="opacity:0.35016839;fill:#ffffff;fill-opacity:1;stroke:none"
+       id="path3915"
+       sodipodi:sides="5"
+       sodipodi:cx="505.35715"
+       sodipodi:cy="385.57648"
+       sodipodi:r1="13.613656"
+       sodipodi:r2="6.806828"
+       sodipodi:arg1="-1.5707963"
+       sodipodi:arg2="-0.9424778"
+       inkscape:flatsided="false"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="m 505.35715,371.96282 4.00095,8.10682 8.9464,1.29999 -6.47367,6.31027 1.52822,8.91026 -8.0019,-4.20685 -8.00191,4.20685 1.52823,-8.91026 -6.47368,-6.31027 8.9464,-1.29999 z"
+       inkscape:transform-center-y="-0.81589356"
+       transform="matrix(0.7624606,0,0,0.7338916,244.22521,132.23274)" />
+    <path
+       transform="matrix(0.7624606,0,0,0.7338916,261.58032,115.84112)"
+       inkscape:transform-center-y="-0.81589356"
+       d="m 505.35715,371.96282 4.00095,8.10682 8.9464,1.29999 -6.47367,6.31027 1.52822,8.91026 -8.0019,-4.20685 -8.00191,4.20685 1.52823,-8.91026 -6.47368,-6.31027 8.9464,-1.29999 z"
+       inkscape:randomized="0"
+       inkscape:rounded="0"
+       inkscape:flatsided="false"
+       sodipodi:arg2="-0.9424778"
+       sodipodi:arg1="-1.5707963"
+       sodipodi:r2="6.806828"
+       sodipodi:r1="13.613656"
+       sodipodi:cy="385.57648"
+       sodipodi:cx="505.35715"
+       sodipodi:sides="5"
+       id="path3917"
+       style="opacity:0.35016839;fill:#ffffff;fill-opacity:1;stroke:none"
+       sodipodi:type="star" />
+    <path
+       sodipodi:type="star"
+       style="opacity:0.35016839;fill:#ffffff;fill-opacity:1;stroke:none"
+       id="path3919"
+       sodipodi:sides="5"
+       sodipodi:cx="505.35715"
+       sodipodi:cy="385.57648"
+       sodipodi:r1="13.613656"
+       sodipodi:r2="6.806828"
+       sodipodi:arg1="-1.5707963"
+       sodipodi:arg2="-0.9424778"
+       inkscape:flatsided="false"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="m 505.35715,371.96282 4.00095,8.10682 8.9464,1.29999 -6.47367,6.31027 1.52822,8.91026 -8.0019,-4.20685 -8.00191,4.20685 1.52823,-8.91026 -6.47368,-6.31027 8.9464,-1.29999 z"
+       inkscape:transform-center-y="-0.81589356"
+       transform="matrix(0.7624606,0,0,0.7338916,268.63084,92.871978)" />
+    <path
+       transform="matrix(0.7624606,0,0,0.7338916,261.68879,67.605928)"
+       inkscape:transform-center-y="-0.81589356"
+       d="m 505.35715,371.96282 4.00095,8.10682 8.9464,1.29999 -6.47367,6.31027 1.52822,8.91026 -8.0019,-4.20685 -8.00191,4.20685 1.52823,-8.91026 -6.47368,-6.31027 8.9464,-1.29999 z"
+       inkscape:randomized="0"
+       inkscape:rounded="0"
+       inkscape:flatsided="false"
+       sodipodi:arg2="-0.9424778"
+       sodipodi:arg1="-1.5707963"
+       sodipodi:r2="6.806828"
+       sodipodi:r1="13.613656"
+       sodipodi:cy="385.57648"
+       sodipodi:cx="505.35715"
+       sodipodi:sides="5"
+       id="path3921"
+       style="opacity:0.35016839;fill:#ffffff;fill-opacity:1;stroke:none"
+       sodipodi:type="star" />
+    <path
+       sodipodi:type="star"
+       style="opacity:0.35016839;fill:#ffffff;fill-opacity:1;stroke:none"
+       id="path3923"
+       sodipodi:sides="5"
+       sodipodi:cx="505.35715"
+       sodipodi:cy="385.57648"
+       sodipodi:r1="13.613656"
+       sodipodi:r2="6.806828"
+       sodipodi:arg1="-1.5707963"
+       sodipodi:arg2="-0.9424778"
+       inkscape:flatsided="false"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="m 505.35715,371.96282 4.00095,8.10682 8.9464,1.29999 -6.47367,6.31027 1.52822,8.91026 -8.0019,-4.20685 -8.00191,4.20685 1.52823,-8.91026 -6.47368,-6.31027 8.9464,-1.29999 z"
+       inkscape:transform-center-y="-0.81589356"
+       transform="matrix(0.7624606,0,0,0.7338916,244.55061,50.065858)" />
+    <text
+       transform="scale(0.88151132,1.1344154)"
+       sodipodi:linespacing="125%"
+       id="text3925"
+       y="337.79312"
+       x="669.3869"
+       style="font-size:23.41657448px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       xml:space="preserve"><tspan
+         y="337.79312"
+         x="669.3869"
+         id="tspan3927"
+         sodipodi:role="line">AA</tspan></text>
+    <rect
+       ry="0"
+       y="448.33627"
+       x="245.01862"
+       height="30.711454"
+       width="464.05988"
+       id="rect3929"
+       style="opacity:0.57575755;fill:#ffffff;fill-opacity:1;stroke:none" />
+    <rect
+       style="opacity:0.57575755;fill:#ffffff;fill-opacity:1;stroke:none"
+       id="rect3931"
+       width="464.05988"
+       height="30.711454"
+       x="245.01862"
+       y="492.04105"
+       ry="0" />
+    <rect
+       ry="0"
+       y="536.92706"
+       x="245.01862"
+       height="30.711454"
+       width="464.05988"
+       id="rect3933"
+       style="opacity:0.57575755;fill:#ffffff;fill-opacity:1;stroke:none" />
+    <rect
+       style="opacity:0.57575755;fill:#ffffff;fill-opacity:1;stroke:none"
+       id="rect3935"
+       width="464.05988"
+       height="30.711454"
+       x="245.01862"
+       y="581.37012"
+       ry="0" />
+    <rect
+       ry="0"
+       y="626.1084"
+       x="245.01862"
+       height="30.711454"
+       width="464.05988"
+       id="rect3937"
+       style="opacity:0.57575755;fill:#ffffff;fill-opacity:1;stroke:none" />
+    <text
+       transform="scale(0.9529445,1.0493791)"
+       sodipodi:linespacing="125%"
+       id="text3939"
+       y="322.47089"
+       x="109.25502"
+       style="font-size:18.56195068px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;font-family:Sans"
+       xml:space="preserve"><tspan
+         y="322.47089"
+         x="109.25502"
+         id="tspan3941"
+         sodipodi:role="line">EUROPEAN HEALTH INSURANCE CARD</tspan></text>
+    <path
+       style="opacity:0.13468011999999999;fill:url(#linearGradient5837);fill-opacity:1;stroke:none"
+       d="M 753.55148,305.75463 C 660.6705,315.69665 561.39215,340.13915 461.41492,380.01685 285.95633,450.00167 140.44691,554.68854 45.438275,668.50273 l 0,27.1286 c 0,17.40046 14.410027,31.41011 32.307766,31.41011 l 643.535649,0 c 17.89773,0 32.30775,-14.00965 32.30775,-31.41011 l 0,-388.10504 c 0,-0.5941 -0.005,-1.18589 -0.0379,-1.77166 z"
+       id="rect2996"
+       inkscape:connector-curvature="0" />
+    <text
+       xml:space="preserve"
+       style="font-size:19.80487823px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="250.61285"
+       y="479.86758"
+       id="text4150"
+       sodipodi:linespacing="125%"
+       transform="scale(1.0192782,0.9810864)"><tspan
+         sodipodi:role="line"
+         id="tspan4152"
+         x="250.61285"
+         y="479.86758">FreeMedForms</tspan></text>
+    <text
+       sodipodi:linespacing="125%"
+       id="text4154"
+       y="662.05505"
+       x="252.31554"
+       style="font-size:19.80487823px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       xml:space="preserve"
+       transform="scale(1.0192782,0.9810864)"><tspan
+         y="662.05505"
+         x="252.31554"
+         id="tspan4156"
+         sodipodi:role="line">123456789</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:19.80487823px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="609.87976"
+       y="660.35236"
+       id="text4158"
+       sodipodi:linespacing="125%"
+       transform="scale(1.0192782,0.9810864)"><tspan
+         sodipodi:role="line"
+         x="609.87976"
+         y="660.35236"
+         id="tspan4162">123456</tspan></text>
+    <text
+       sodipodi:linespacing="125%"
+       id="text4166"
+       y="569.25867"
+       x="573.27197"
+       style="font-size:19.80487823px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       xml:space="preserve"
+       transform="scale(1.0192782,0.9810864)"><tspan
+         id="tspan4168"
+         y="569.25867"
+         x="573.27197"
+         sodipodi:role="line">12/34/5678</tspan></text>
+    <text
+       sodipodi:linespacing="125%"
+       id="text4170"
+       y="523.28607"
+       x="251.03854"
+       style="font-size:19.80487823px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       xml:space="preserve"
+       transform="scale(1.0192782,0.9810864)"><tspan
+         y="523.28607"
+         x="251.03854"
+         id="tspan4172"
+         sodipodi:role="line">http://www.freemedforms.com</tspan></text>
+  </g>
+</svg>
