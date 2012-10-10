@@ -27,10 +27,10 @@
 
 /*!
  * \class Patients::Internal::IdentityViewerWidget
- * \brief The identity viewer make the coagulum between the Patients::PatientModel data and the patient form's data.
+ * \brief The identity viewer makes the coagulum between the Patients::PatientModel data and the patient form's data.
  *
- * The viewer is not dependent of the Core::IPatient. It manages it's own mecanism
- * to get the correct information about patient between what is extracted from the
+ * The viewer is not dependent on the Core::IPatient. It manages it's own mechanism
+ * to get the correct information about the patient between what is extracted from the
  * patient model and what is extracted form the patient form's data.
  *
  * \sa Form::FormItemSpec::Spec_IsIdentityForm, Form::FormManager::identityRootForm(), Core::IPatient, Core::ICore::patient()
