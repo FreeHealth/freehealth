@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE FreeMedForms>
-
 <FreeMedForms>
-
   <formdescription>
     <!-- Non translatable values -->
     <authors>Fredman, MD; Eric Maeker, MD</authors>
@@ -10,19 +8,18 @@
     <fmfv>0.7.0</fmfv>
     <cdate>2011-12-11</cdate>
     <icon>psychiatry.png</icon>
-    <weblink></weblink>
+    <weblink/>
     <bibliography pmid="7440521">Hamilton M. Rating depressive patients. J Clin Psychiatry. 1980 Dec;41(12 Pt 2):21-4.</bibliography>
-
     <!-- Translatable values -->
     <license>GPLv3</license>
+    <description lang="xx">Hamilton Rating Scale for Depression</description>
     <description lang="fr">Échelle de dépression de Hamilton</description>
-    <description lang="en">Hamilton Rating Scale for Depression</description>
-    <description lang="de">Hamilton-Skala</description>
-    <category lang="en">Psychiatry</category>
+    <description lang="de">Hamilton-Skala für Depression</description>
+    <category lang="xx">Psychiatry</category>
     <category lang="fr">Psychiatrie</category>
     <category lang="de">Psychiatrie</category>
-    <specialties lang="fr">Psychiatrie</specialties>
     <specialties lang="xx">Psychiatry</specialties>
+    <specialties lang="fr">Psychiatrie</specialties>
     <specialties lang="de">Psychiatrie</specialties>
 
   </formdescription>
@@ -48,11 +45,11 @@
         <possible id="2" lang="fr">Ces états sont signalés rapportés spontanément</possible>
         <possible id="3" lang="fr">Ces états sont communiqués de manière non verbale (par exemple par l'expression faciale, l'attitude, la voix et la tendance à sangloter).</possible>
         <possible id="4" lang="fr">La personne ne rapporte que ces états dans sa communication verbale spontanée et non verbale.</possible>
-        <possible id="0" lang="en">Absent</possible>
-        <possible id="1" lang="en">These feeling states indicated only on questioning</possible>
-        <possible id="2" lang="en">These feeling states spontaneously reported verbally</possible>
-        <possible id="3" lang="en">Communicates feeling states non-verbally —i.e., through facial expression, posture, voice, and tendency to weep</possible>
-        <possible id="4" lang="en">Patient reports VIRTUALLY ONLY these feeling states in his spontaneous verbal and non- verbal communication</possible>
+        <possible id="0" lang="xx">Absent</possible>
+        <possible id="1" lang="xx">These feeling states indicated only on questioning</possible>
+        <possible id="2" lang="xx">These feeling states spontaneously reported verbally</possible>
+        <possible id="3" lang="xx">Communicates feeling states non-verbally —i.e., through facial expression, posture, voice, and tendency to weep</possible>
+        <possible id="4" lang="xx">Patient reports VIRTUALLY ONLY these feeling states in his spontaneous verbal and non- verbal communication</possible>
         <numerical id="0">0</numerical>
         <numerical id="1">1</numerical>
         <numerical id="2">2</numerical>
@@ -76,10 +73,10 @@
         <possible id="2" lang="fr">Idées de culpabilité ou rumination sur des erreurs passées ou des actes condamnables</possible>
         <possible id="3" lang="fr">La maladie actuelle est une punition. Idées délirantes de culpabilité</possible>
         <possible id="4" lang="fr">Entend des voix qui l'accusent ou la dénoncent; a des hallucinations visuelles menaçantes</possible>
-        <possible id="1" lang="en">Self reproach, feels he has let people down</possible>
-        <possible id="2" lang="en">Ideas of guilt or rumination over past errors or sinful deeds</possible>
-        <possible id="3" lang="en">Present illness is a punishment. Delusions of guilt</possible>
-        <possible id="4" lang="en">Hears accusatory or denunciatory voices and/or experiences threatening visual hallucinations</possible>
+        <possible id="1" lang="xx">Self reproach, feels he has let people down</possible>
+        <possible id="2" lang="xx">Ideas of guilt or rumination over past errors or sinful deeds</possible>
+        <possible id="3" lang="xx">Present illness is a punishment. Delusions of guilt</possible>
+        <possible id="4" lang="xx">Hears accusatory or denunciatory voices and/or experiences threatening visual hallucinations</possible>
         <numerical id="0">0</numerical>
         <numerical id="1">1</numerical>
         <numerical id="2">2</numerical>
@@ -103,11 +100,11 @@
         <possible id="2" lang="fr">Souhaite être morte ou a des pensées de mort</possible>
         <possible id="3" lang="fr">Idées ou geste suicidaire</possible>
         <possible id="4" lang="fr">Tentatives de suicide</possible>
-        <possible id="0" lang="en">Absent</possible>
-        <possible id="1" lang="en">Feels life is not worth living</possible>
-        <possible id="2" lang="en">Wishes he were dead or any thoughts of possible death to self</possible>
-        <possible id="3" lang="en">Suicidal ideas or gesture</possible>
-        <possible id="4" lang="en">Attempts at suicide (any serious attempt rates 4)</possible>
+        <possible id="0" lang="xx">Absent</possible>
+        <possible id="1" lang="xx">Feels life is not worth living</possible>
+        <possible id="2" lang="xx">Wishes he were dead or any thoughts of possible death to self</possible>
+        <possible id="3" lang="xx">Suicidal ideas or gesture</possible>
+        <possible id="4" lang="xx">Attempts at suicide (any serious attempt rates 4)</possible>
         <numerical id="0">0</numerical>
         <numerical id="1">1</numerical>
         <numerical id="2">2</numerical>
@@ -127,9 +124,9 @@
         <possible id="0" lang="fr">Pas de difficulté à s'endormir</possible>
         <possible id="1" lang="fr">Difficulté occasionnelle à s'endormir (c'est-à-dire plus d'une demi-heure)</possible>
         <possible id="2" lang="fr">Difficulté quotidienne à s'endormir</possible>
-        <possible id="0" lang="en">No difficulty falling asleep</possible>
-        <possible id="1" lang="en">Complains of occasional difficulty falling asleep—i.e., more than 1/2 hour</possible>
-        <possible id="2" lang="en">Complains of nightly difficulty falling asleep</possible>
+        <possible id="0" lang="xx">No difficulty falling asleep</possible>
+        <possible id="1" lang="xx">Complains of occasional difficulty falling asleep—i.e., more than 1/2 hour</possible>
+        <possible id="2" lang="xx">Complains of nightly difficulty falling asleep</possible>
         <numerical id="0">0</numerical>
         <numerical id="1">1</numerical>
         <numerical id="2">2</numerical>
@@ -147,9 +144,9 @@
         <possible id="0" lang="fr">Pas de difficulté</possible>
         <possible id="1" lang="fr">La personne est agitée et facilement dérangée durant la nuit</possible>
         <possible id="2" lang="fr">Réveils pendant la nuit</possible>
-        <possible id="0" lang="en">No difficulty</possible>
-        <possible id="1" lang="en">Patient complains of being restless and disturbed during the night</possible>
-        <possible id="2" lang="en">Waking during the night—any getting out of bed rates 2 (except for purposes of voiding)</possible>
+        <possible id="0" lang="xx">No difficulty</possible>
+        <possible id="1" lang="xx">Patient complains of being restless and disturbed during the night</possible>
+        <possible id="2" lang="xx">Waking during the night — any getting out of bed rates 2 (except for purposes of voiding)</possible>
         <numerical id="0">0</numerical>
         <numerical id="1">1</numerical>
         <numerical id="2">2</numerical>
@@ -167,9 +164,9 @@
         <possible id="0" lang="fr">Pas de difficulté</possible>
         <possible id="1" lang="fr">La personne se réveille de très bonne heure mais se rendort</possible>
         <possible id="2" lang="fr">Incapable de se rendormir si elle se réveille</possible>
-        <possible id="0" lang="en">No difficulty</possible>
-        <possible id="1" lang="en">Waking in early hours of the morning but goes back to sleep</possible>
-        <possible id="2" lang="en">Unable to fall asleep again if he gets out of bed</possible>
+        <possible id="0" lang="xx">No difficulty</possible>
+        <possible id="1" lang="xx">Waking in early hours of the morning but goes back to sleep</possible>
+        <possible id="2" lang="xx">Unable to fall asleep again if he gets out of bed</possible>
         <numerical id="0">0</numerical>
         <numerical id="1">1</numerical>
         <numerical id="2">2</numerical>
@@ -191,11 +188,11 @@
         <possible id="2" lang="fr">Désintérêt pour les activités, travail ou loisir, rapporté directement par la personne, ou indirectement par une attitude apathique, indécise et hésitante (elle sent qu'elle doit se forcer)</possible>
         <possible id="3" lang="fr">Diminution du temps réel consacré à des activités, diminution de productivité</possible>
         <possible id="4" lang="fr">Arrêt de travail en raison de la présente maladie.</possible>
-        <possible id="0" lang="en">No difficulty</possible>
-        <possible id="1" lang="en">Thoughts and feelings of incapacity, fatigue or weakness related to activities; work or hobbies</possible>
-        <possible id="2" lang="en"> Loss of interest in activity; hobbies or work—either directly reported by patient, or indirect in listlessness, indecision and vacillation (feels he has to push self to work or activities)</possible>
-        <possible id="3" lang="en">Decrease in actual time spent in activities or decrease in productivity</possible>
-        <possible id="4" lang="en">Stopped working because of present illness</possible>
+        <possible id="0" lang="xx">No difficulty</possible>
+        <possible id="1" lang="xx">Thoughts and feelings of incapacity, fatigue or weakness related to activities; work or hobbies</possible>
+        <possible id="2" lang="xx">Loss of interest in activity; hobbies or work—either directly reported by patient, or indirect in listlessness, indecision and vacillation (feels he has to push self to work or activities)</possible>
+        <possible id="3" lang="xx">Decrease in actual time spent in activities or decrease in productivity</possible>
+        <possible id="4" lang="xx">Stopped working because of present illness</possible>
         <numerical id="0">0</numerical>
         <numerical id="1">1</numerical>
         <numerical id="2">2</numerical>
@@ -219,11 +216,11 @@
         <possible id="2" lang="fr">Ralentissement manifeste lors de l'entrevue</possible>
         <possible id="3" lang="fr">Entrevue difficile</possible>
         <possible id="4" lang="fr">Etat de stupeur</possible>
-        <possible id="0" lang="en">Normal speech and thought</possible>
-        <possible id="1" lang="en">Slight retardation at interview</possible>
-        <possible id="2" lang="en">Obvious retardation at interview</possible>
-        <possible id="3" lang="en">Interview difficult</possible>
-        <possible id="4" lang="en">Complete stupor</possible>
+        <possible id="0" lang="xx">Normal speech and thought</possible>
+        <possible id="1" lang="xx">Slight retardation at interview</possible>
+        <possible id="2" lang="xx">Obvious retardation at interview</possible>
+        <possible id="3" lang="xx">Interview difficult</possible>
+        <possible id="4" lang="xx">Complete stupor</possible>
         <numerical id="0">0</numerical>
         <numerical id="1">1</numerical>
         <numerical id="2">2</numerical>
@@ -247,11 +244,11 @@
         <possible id="2" lang="fr">Joue avec ses mains, ses cheveux...</possible>
         <possible id="3" lang="fr">Bouge, ne peut rester assis tranquille</possible>
         <possible id="4" lang="fr">Se tord les mains, se ronge les ongles, s'arrache les cheveux, se mord les lèvres</possible>
-        <possible id="0" lang="en">None</possible>
-        <possible id="1" lang="en">Fidgetiness</possible>
-        <possible id="2" lang="en">Playing with hands, hair, etc.</possible>
-        <possible id="3" lang="en">Moving about, can’t sit still</possible>
-        <possible id="4" lang="en">Hand wringing, nail biting, hair-pulling, biting of lips</possible>
+        <possible id="0" lang="xx">None</possible>
+        <possible id="1" lang="xx">Fidgetiness</possible>
+        <possible id="2" lang="xx">Playing with hands, hair, etc.</possible>
+        <possible id="3" lang="xx">Moving about, can’t sit still</possible>
+        <possible id="4" lang="xx">Hand wringing, nail biting, hair-pulling, biting of lips</possible>
         <numerical id="0">0</numerical>
         <numerical id="1">1</numerical>
         <numerical id="2">2</numerical>
@@ -275,11 +272,11 @@
         <possible id="2" lang="fr">S'inquiète pour des problèmes mineurs</possible>
         <possible id="3" lang="fr">Appréhension apparente dans l'expression faciale et le discours</possible>
         <possible id="4" lang="fr">Peurs exprimées sans être questionnée</possible>
-        <possible id="0" lang="en">No difficulty</possible>
-        <possible id="1" lang="en">Subjective tension and irritability</possible>
-        <possible id="2" lang="en">Worrying about minor matters</possible>
-        <possible id="3" lang="en">Apprehensive attitude apparent in face or speech</possible>
-        <possible id="4" lang="en">Fears expressed without questioning</possible>
+        <possible id="0" lang="xx">No difficulty</possible>
+        <possible id="1" lang="xx">Subjective tension and irritability</possible>
+        <possible id="2" lang="xx">Worrying about minor matters</possible>
+        <possible id="3" lang="xx">Apprehensive attitude apparent in face or speech</possible>
+        <possible id="4" lang="xx">Fears expressed without questioning</possible>
         <numerical id="0">0</numerical>
         <numerical id="1">1</numerical>
         <numerical id="2">2</numerical>
@@ -303,11 +300,11 @@
         <possible id="2" lang="fr">Symptômes modérés</possible>
         <possible id="3" lang="fr">Symptômes sévères</possible>
         <possible id="4" lang="fr">Symptômes invalidants</possible>
-        <possible id="0" lang="en">Absent</possible>
-        <possible id="1" lang="en">Mild</possible>
-        <possible id="2" lang="en">Moderate</possible>
-        <possible id="3" lang="en">Severe</possible>
-        <possible id="4" lang="en">Incapacitating</possible>
+        <possible id="0" lang="xx">Absent</possible>
+        <possible id="1" lang="xx">Mild</possible>
+        <possible id="2" lang="xx">Moderate</possible>
+        <possible id="3" lang="xx">Severe</possible>
+        <possible id="4" lang="xx">Incapacitating</possible>
         <numerical id="0">0</numerical>
         <numerical id="1">1</numerical>
         <numerical id="2">2</numerical>
@@ -327,9 +324,9 @@
         <possible id="0" lang="fr">Aucun symptôme</possible>
         <possible id="1" lang="fr">Perte d'appétit, mais mange à peu près normalement sans s'y être incitée</possible>
         <possible id="2" lang="fr">Réduction marquée de l'appétit et de la prise de nourriture. La personne a de la difficulté à manger sans être incitée par d'autres</possible>
-        <possible id="0" lang="en">None</possible>
-        <possible id="1" lang="en">Loss of appetite but eating without encouragement from others. Food intake  about normal</possible>
-        <possible id="2" lang="en">Difficulty eating without urging from others. Marked reduction of appetite and  food intake</possible>
+        <possible id="0" lang="xx">None</possible>
+        <possible id="1" lang="xx">Loss of appetite but eating without encouragement from others. Food intake  about normal</possible>
+        <possible id="2" lang="xx">Difficulty eating without urging from others. Marked reduction of appetite and  food intake</possible>
         <numerical id="0">0</numerical>
         <numerical id="1">1</numerical>
         <numerical id="2">2</numerical>
@@ -347,9 +344,9 @@
         <possible id="0" lang="fr">Aucun</possible>
         <possible id="1" lang="fr">Lourdeur dans les membres, le dos ou la tête. Maux de dos, de tête, douleurs musculaires. Perte d'énergie et fatigabilité.</possible>
         <possible id="2" lang="fr">Un de ces symptômes est très marqué</possible>
-        <possible id="0" lang="en">None</possible>
-        <possible id="1" lang="en">Heaviness in limbs, back or head. Backaches, headache, muscle aches. Loss of energ and fatigability</possible>
-        <possible id="2" lang="en">Any clear-cut symptom rates 2</possible>
+        <possible id="0" lang="xx">None</possible>
+        <possible id="1" lang="xx">Heaviness in limbs, back or head. Backaches, headache, muscle aches. Loss of energ and fatigability</possible>
+        <possible id="2" lang="xx">Any clear-cut symptom rates 2</possible>
         <numerical id="0">0</numerical>
         <numerical id="1">1</numerical>
         <numerical id="2">2</numerical>
@@ -367,9 +364,9 @@
         <possible id="0" lang="fr">Absents</possible>
         <possible id="1" lang="fr">Légers</possible>
         <possible id="2" lang="fr">Sévères</possible>
-        <possible id="0" lang="en">None</possible>
-        <possible id="1" lang="en">Mild</possible>
-        <possible id="2" lang="en">Severe</possible>
+        <possible id="0" lang="xx">None</possible>
+        <possible id="1" lang="xx">Mild</possible>
+        <possible id="2" lang="xx">Severe</possible>
         <numerical id="0">0</numerical>
         <numerical id="1">1</numerical>
         <numerical id="2">2</numerical>
@@ -391,11 +388,11 @@
         <possible id="2" lang="fr">Préoccupations concernant sa santé</possible>
         <possible id="3" lang="fr">Plaintes fréquentes, demande de l'aide, ...</possible>
         <possible id="4" lang="fr">Idées délirantes hypochondriaques</possible>
-        <possible id="0" lang="en">Not present</possible>
-        <possible id="1" lang="en">Self-absorption (bodily)</possible>
-        <possible id="2" lang="en">Preoccupation with health</possible>
-        <possible id="3" lang="en">Frequent complaints, requests for help, etc.</possible>
-        <possible id="4" lang="en">Hypochondriacal delusions</possible>
+        <possible id="0" lang="xx">Not present</possible>
+        <possible id="1" lang="xx">Self-absorption (bodily)</possible>
+        <possible id="2" lang="xx">Preoccupation with health</possible>
+        <possible id="3" lang="xx">Frequent complaints, requests for help, etc.</possible>
+        <possible id="4" lang="xx">Hypochondriacal delusions</possible>
         <numerical id="0">0</numerical>
         <numerical id="1">1</numerical>
         <numerical id="2">2</numerical>
@@ -416,10 +413,10 @@
         <possible id="0" lang="fr">Pas de perte de poids</possible>
         <possible id="1" lang="fr">Perte de poids probable associée à la présente maladie</possible>
         <possible id="2" lang="fr">Perte de poids certaine selon la personne</possible>
-        <possible id="0" lang="en">No weight loss</possible>
-        <possible id="1" lang="en">Probably weight loss associated with present illness</possible>
-        <possible id="2" lang="en">Deﬁnite (according to patient) weight loss</possible>
-        <possible id="3" lang="en">Not assessed</possible>
+        <possible id="0" lang="xx">No weight loss</possible>
+        <possible id="1" lang="xx">Probably weight loss associated with present illness</possible>
+        <possible id="2" lang="xx">Deﬁnite (according to patient) weight loss</possible>
+        <possible id="3" lang="xx">Not assessed</possible>
         <numerical id="0">0</numerical>
         <numerical id="1">1</numerical>
         <numerical id="2">2</numerical>
@@ -438,9 +435,9 @@
         <possible id="0" lang="fr">Reconnaît être déprimée et malade</possible>
         <possible id="1" lang="fr">Reconnaît être malade mais attribue la maladie à une mauvaise alimentation, le climat, le surmenage, un virus, le besoin de repos...</possible>
         <possible id="2" lang="fr">Nie être malade</possible>
-        <possible id="0" lang="en">Acknowledges being depressed and ill</possible>
-        <possible id="1" lang="en">Acknowledges illness but attributes cause to bad food, climate, overwork, virus, need for rest, etc.</possible>
-        <possible id="2" lang="en">Denies being ill at all</possible>
+        <possible id="0" lang="xx">Acknowledges being depressed and ill</possible>
+        <possible id="1" lang="xx">Acknowledges illness but attributes cause to bad food, climate, overwork, virus, need for rest, etc.</possible>
+        <possible id="2" lang="xx">Denies being ill at all</possible>
         <numerical id="0">0</numerical>
         <numerical id="1">1</numerical>
         <numerical id="2">2</numerical>
@@ -449,7 +446,7 @@
 
     <Item name="Help" type="helptext">
       <label lang="fr">&lt;b&gt;Les questions suivantes permettent de juger du type de la depression et ne modifie pas le score global&lt;/b&gt;</label>
-      <label lang="en">&lt;b&gt;The following questions enable to classify the type of deprssion and don not modify the patient's score&lt;/b&gt;</label>
+      <label lang="xx">&lt;b&gt;The following questions enable to classify the type of deprssion and don not modify the patient's score&lt;/b&gt;</label>
     </Item>
 
     <Item name="diurnal" type="group">
@@ -460,7 +457,7 @@
 
       <Item type="radio" name="diurnal::morning">
         <label lang="fr">A. Noter si les symptômes sont plus marqués dans la matinée ou la soirée. Si Pas de variation diurne, noter Aucune</label>
-        <label lang="en">A. Note whether symptoms are worse in morning or evening. If NO diurnal variation, mark none</label>
+        <label lang="xx">A. Note whether symptoms are worse in morning or evening. If NO diurnal variation, mark none</label>
         <options>vertical;DontPrintEmptyValues</options>
         <value>
           <uuid id="0">morning0</uuid>
@@ -469,9 +466,9 @@
           <possible id="0" lang="fr">Aucune</possible>
           <possible id="1" lang="fr">Symptômes agravés durant la matinée</possible>
           <possible id="2" lang="fr">Symptômes agravés durant l'après midi</possible>
-          <possible id="0" lang="en">No variation</possible>
-          <possible id="1" lang="en">Worse in A.M.</possible>
-          <possible id="2" lang="en">Worse in P.M.</possible>
+          <possible id="0" lang="xx">No variation</possible>
+          <possible id="1" lang="xx">Worse in A.M.</possible>
+          <possible id="2" lang="xx">Worse in P.M.</possible>
           <numerical id="0">0</numerical>
           <numerical id="1">0</numerical>
           <numerical id="2">0</numerical>
@@ -480,7 +477,7 @@
 
       <Item type="radio" name="diurnal::severity">
         <label lang="fr">B. Quand il y a variation diurne, indiquer la sévérité de la variation. Indiquer Aucune s'il n'y a pas de variation</label>
-        <label lang="en">B. When present, mark the severity of the variation. Mark “None” if NO variation</label>
+        <label lang="xx">B. When present, mark the severity of the variation. Mark “None” if NO variation</label>
         <options>vertical;DontPrintEmptyValues</options>
         <value>
           <uuid id="0">severity0</uuid>
@@ -489,9 +486,9 @@
           <possible id="0" lang="fr">Aucune</possible>
           <possible id="1" lang="fr">Modérée</possible>
           <possible id="2" lang="fr">Importante</possible>
-          <possible id="0" lang="en">None</possible>
-          <possible id="1" lang="en">Mild</possible>
-          <possible id="2" lang="en">Severe</possible>
+          <possible id="0" lang="xx">None</possible>
+          <possible id="1" lang="xx">Mild</possible>
+          <possible id="2" lang="xx">Severe</possible>
           <numerical id="0">0</numerical>
           <numerical id="1">0</numerical>
           <numerical id="2">0</numerical>
@@ -514,11 +511,11 @@
         <possible id="2" lang="fr">Moyenne</possible>
         <possible id="3" lang="fr">Grave</possible>
         <possible id="4" lang="fr">Entraînant une incapacité fonctionnelle</possible>
-        <possible id="0" lang="en">Absent</possible>
-        <possible id="1" lang="en">Mild</possible>
-        <possible id="2" lang="en">Moderate</possible>
-        <possible id="3" lang="en">Severe</possible>
-        <possible id="4" lang="en">Incapacitating</possible>
+        <possible id="0" lang="xx">Absent</possible>
+        <possible id="1" lang="xx">Mild</possible>
+        <possible id="2" lang="xx">Moderate</possible>
+        <possible id="3" lang="xx">Severe</possible>
+        <possible id="4" lang="xx">Incapacitating</possible>
         <numerical id="0">0</numerical>
         <numerical id="1">0</numerical>
         <numerical id="2">0</numerical>
@@ -540,10 +537,10 @@
         <possible id="1" lang="fr">Soupçonneux </possible>
         <possible id="2" lang="fr">Idées de référencee</possible>
         <possible id="3" lang="fr">Idées délirantes de référence et de persécutionn</possible>
-        <possible id="0" lang="en">None</possible>
-        <possible id="1" lang="en">Suspicious</possible>
-        <possible id="2" lang="en">Ideas of reference</possible>
-        <possible id="3" lang="en">Delusions of reference and persecution</possible>
+        <possible id="0" lang="xx">None</possible>
+        <possible id="1" lang="xx">Suspicious</possible>
+        <possible id="2" lang="xx">Ideas of reference</possible>
+        <possible id="3" lang="xx">Delusions of reference and persecution</possible>
         <numerical id="0">0</numerical>
         <numerical id="1">0</numerical>
         <numerical id="2">0</numerical>
@@ -562,9 +559,9 @@
         <possible id="0" lang="fr">Absents</possible>
         <possible id="1" lang="fr">Légers </possible>
         <possible id="2" lang="fr">Graves</possible>
-        <possible id="0" lang="en">Absent</possible>
-        <possible id="1" lang="en">Mild</possible>
-        <possible id="2" lang="en">Severe</possible>
+        <possible id="0" lang="xx">Absent</possible>
+        <possible id="1" lang="xx">Mild</possible>
+        <possible id="2" lang="xx">Severe</possible>
         <numerical id="0">0</numerical>
         <numerical id="1">0</numerical>
         <numerical id="2">0</numerical>

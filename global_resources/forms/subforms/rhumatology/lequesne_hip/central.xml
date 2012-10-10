@@ -4,7 +4,7 @@
   <formdescription>
     <!-- Non translatable values -->
     <authors>Fredman, MD; Eric Maeker, MD</authors>
-    <version>0.7.0</version>
+    <version>0.7.1</version>
     <fmfv>0.7.0</fmfv>
     <cdate>2011-12-17</cdate>
     <icon>rhumatology.png</icon>
@@ -14,7 +14,7 @@
     <license>GPLv3</license>
     <description lang="fr">Indice algo-fonctionnel de Lequesne pour la hanche</description>
     <description lang="xx">Algofunctional index of Lequesne for hip osteoarthritis</description>
-    <description lang="de">Lequesne-Index (Hüflte)</description>
+    <description lang="de">Lequesne-Index (Hüfte)</description>
     <category lang="xx">Rhumatology</category>
     <category lang="fr">Rhumatologie</category>
     <category lang="de">Rheumatologie</category>

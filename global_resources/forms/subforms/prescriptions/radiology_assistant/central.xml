@@ -12,8 +12,8 @@
     <weblink>http://www.freemedforms.com</weblink>
     <!-- Translatable values -->
     <license>GPLv3</license>
-    <description lang="fr">Assistant à la prescription d'examens de radiologie</description>
     <description lang="xx">Radiographs prescription assistant</description>
+    <description lang="fr">Assistant à la prescription d'examens de radiologie</description>
     <category lang="xx">Radiology</category>
     <category lang="fr">Radiologie</category>
   </formdescription>

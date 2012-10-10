@@ -110,7 +110,7 @@
         <item row="1" column="0">
          <widget class="QRadioButton" name="currentPatient">
           <property name="text">
-           <string>For the current patient only</string>
+           <string>For current patient only</string>
           </property>
          </widget>
         </item>

@@ -61,6 +61,7 @@ static inline ExtensionSystem::PluginManager *pluginManager() {return ExtensionS
 static inline QList<Form::IFormIO*> refreshIOPlugs() {return pluginManager()->getObjects<Form::IFormIO>();}
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 
+const int IndexRole = Qt::UserRole+1;
 
 namespace Form {
 namespace Internal {
@@ -170,7 +171,7 @@ public:
                 catItem = categories.value(cat);
             }
             QStandardItem *item = new QStandardItem(descr->data(FormIODescription::ShortDescription).toString());
-            item->setData(i, Qt::UserRole+1);
+            item->setData(i, IndexRole);
             catItem->appendRow(item);
             // highlight ?
             if (!m_HightlightUuid.isEmpty()) {
@@ -220,12 +221,12 @@ FormFilesSelectorWidget::FormFilesSelectorWidget(QWidget *parent, const FormType
 
     // prepare the first model = category tree model
     d->aByCategory->trigger();
-    d->ui->treeView->setModel(d->m_TreeModel);
-    d->ui->treeView->header()->hide();
+    d->ui->formsTreeView->setModel(d->m_TreeModel);
+    d->ui->formsTreeView->header()->hide();
 
     // connect actions, buttons...
-    connect(d->ui->treeView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),this, SLOT(onDescriptionSelected(QModelIndex,QModelIndex)));
-    connect(d->ui->screenshots, SIGNAL(clicked()), this, SLOT(showScreenShot()));
+    connect(d->ui->formsTreeView->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)),this, SLOT(onDescriptionSelected(QModelIndex,QModelIndex)));
+    connect(d->ui->screenshotsButton, SIGNAL(clicked()), this, SLOT(showScreenShot()));
 }
 
 FormFilesSelectorWidget::~FormFilesSelectorWidget()
@@ -248,14 +249,14 @@ void FormFilesSelectorWidget::setSelectionType(SelectionType type)
 {
     if (d->m_SelType==type)
         return;
-    d->ui->treeView->clearSelection();
-    d->ui->treeView->setSelectionMode(QAbstractItemView::SelectionMode(type));
+    d->ui->formsTreeView->clearSelection();
+    d->ui->formsTreeView->setSelectionMode(QAbstractItemView::SelectionMode(type));
 }
 
 /** Selector presents form in a tree view, you can expand all its item using this function. */
 void FormFilesSelectorWidget::expandAllItems() const
 {
-    d->ui->treeView->expandAll();
+    d->ui->formsTreeView->expandAll();
 }
 
 /**
@@ -273,11 +274,11 @@ void FormFilesSelectorWidget::setIncludeLocalFles(bool includeLocal)
 QList<Form::FormIODescription *> FormFilesSelectorWidget::selectedForms() const
 {
     QList<Form::FormIODescription *> toReturn;
-    QItemSelectionModel *model = d->ui->treeView->selectionModel();
+    QItemSelectionModel *model = d->ui->formsTreeView->selectionModel();
     if (!model->hasSelection())
         return toReturn;
     foreach(const QModelIndex &index, model->selectedIndexes()) {
-        int id = index.data(Qt::UserRole+1).toInt();
+        int id = index.data(IndexRole).toInt();
         if (id >= 0 && id < d->m_FormDescr.count()) {
             Form::FormIODescription *descr = d->m_FormDescr.at(id);
             toReturn << descr;
@@ -301,11 +302,11 @@ void FormFilesSelectorWidget::onDescriptionSelected(const QModelIndex &index, co
         return;
     }
     // get the FormIODescription
-    int id = d->ui->treeView->currentIndex().data(Qt::UserRole+1).toInt();
+    int id = d->ui->formsTreeView->currentIndex().data(IndexRole).toInt();
     if (id >= 0 && id < d->m_FormDescr.count()) {
         Form::FormIODescription *descr = d->m_FormDescr.at(id);
 //        descr->toTreeWidget(d->ui->treeWidget);
-        d->ui->screenshots->setEnabled(descr->hasScreenShots());
+        d->ui->screenshotsButton->setEnabled(descr->hasScreenShots());
         d->ui->textBrowser->setHtml(descr->toHtml());
     } else {
         d->ui->textBrowser->clear();
@@ -333,7 +334,7 @@ void FormFilesSelectorWidget::onFilterSelected()
 void FormFilesSelectorWidget::showScreenShot()
 {
     // Get screenshots from FormIOReader
-    int id = d->ui->treeView->currentIndex().data(Qt::UserRole+1).toInt();
+    int id = d->ui->formsTreeView->currentIndex().data(IndexRole).toInt();
     if (id >= 0 && id < d->m_FormDescr.count()) {
         Form::FormIODescription *descr = d->m_FormDescr.at(id);
         // Create ImageViewer dialog
