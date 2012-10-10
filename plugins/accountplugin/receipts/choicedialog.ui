@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>456</width>
-    <height>421</height>
+    <height>446</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,57 +16,6 @@
   <layout class="QGridLayout" name="gridLayout_4">
    <item row="0" column="0">
     <layout class="QGridLayout" name="gridLayout_3">
-     <item row="0" column="2">
-      <widget class="QGroupBox" name="percentGroupBox">
-       <property name="title">
-        <string>Percentages</string>
-       </property>
-       <layout class="QGridLayout" name="gridLayout_6">
-        <item row="0" column="0">
-         <layout class="QGridLayout" name="gridLayout_2">
-          <item row="0" column="0">
-           <widget class="QPushButton" name="plusConstButton">
-            <property name="text">
-             <string>++</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QPushButton" name="plusButton">
-            <property name="text">
-             <string>+</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0">
-           <widget class="QDoubleSpinBox" name="percentDoubleSpinBox">
-            <property name="maximumSize">
-             <size>
-              <width>90</width>
-              <height>16777215</height>
-             </size>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="0">
-           <widget class="QPushButton" name="lessButton">
-            <property name="text">
-             <string>-</string>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="0">
-           <widget class="QPushButton" name="lessConstButton">
-            <property name="text">
-             <string>--</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-       </layout>
-      </widget>
-     </item>
      <item row="0" column="0" rowspan="4">
       <widget class="QGroupBox" name="paramsGroupBox">
        <property name="title">
@@ -129,14 +78,81 @@
        </layout>
       </widget>
      </item>
-     <item row="2" column="2">
-      <widget class="QLabel" name="label">
-       <property name="text">
-        <string>TextLabel</string>
+     <item row="0" column="2">
+      <widget class="QGroupBox" name="percentGroupBox">
+       <property name="title">
+        <string>Percentages</string>
        </property>
+       <layout class="QGridLayout" name="gridLayout_6">
+        <item row="0" column="0">
+         <layout class="QGridLayout" name="gridLayout_2">
+          <item row="0" column="0">
+           <widget class="QPushButton" name="plusConstButton">
+            <property name="text">
+             <string>++</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QPushButton" name="plusButton">
+            <property name="text">
+             <string>+</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QDoubleSpinBox" name="percentDoubleSpinBox">
+            <property name="maximumSize">
+             <size>
+              <width>90</width>
+              <height>16777215</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QPushButton" name="lessButton">
+            <property name="text">
+             <string>-</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0">
+           <widget class="QPushButton" name="lessConstButton">
+            <property name="text">
+             <string>--</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
       </widget>
      </item>
      <item row="1" column="1" colspan="2">
+      <widget class="QGroupBox" name="freePayerBox">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>50</height>
+        </size>
+       </property>
+       <property name="title">
+        <string>Free payer</string>
+       </property>
+       <widget class="QLineEdit" name="payerEdit">
+        <property name="geometry">
+         <rect>
+          <x>10</x>
+          <y>20</y>
+          <width>231</width>
+          <height>20</height>
+         </rect>
+        </property>
+       </widget>
+      </widget>
+     </item>
+     <item row="2" column="1" colspan="2">
       <widget class="QGroupBox" name="freeBox">
        <property name="minimumSize">
         <size>
@@ -195,36 +211,7 @@
        </widget>
       </widget>
      </item>
-     <item row="4" column="1">
-      <widget class="QPushButton" name="quitButton">
-       <property name="minimumSize">
-        <size>
-         <width>0</width>
-         <height>50</height>
-        </size>
-       </property>
-       <property name="text">
-        <string>&amp;Quit and cancel</string>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="2">
-      <widget class="QPushButton" name="okButton">
-       <property name="minimumSize">
-        <size>
-         <width>0</width>
-         <height>50</height>
-        </size>
-       </property>
-       <property name="text">
-        <string>Choose and &amp;Ok</string>
-       </property>
-       <property name="default">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="1">
+     <item row="3" column="1">
       <widget class="QGroupBox" name="distanceGroupBox">
        <property name="title">
         <string>Round Trip</string>
@@ -235,6 +222,46 @@
         </item>
        </layout>
       </widget>
+     </item>
+     <item row="3" column="2">
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>TextLabel</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1" colspan="2">
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QPushButton" name="quitButton">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>50</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>&amp;Quit and cancel</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="okButton">
+         <property name="minimumSize">
+          <size>
+           <width>0</width>
+           <height>50</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Choose and &amp;Ok</string>
+         </property>
+         <property name="default">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
     </layout>
    </item>

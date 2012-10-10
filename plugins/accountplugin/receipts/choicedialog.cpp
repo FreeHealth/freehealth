@@ -618,3 +618,9 @@ QString ChoiceDialog::getFreeValue()
 {
     return QString::number(ui->freeValueSpinBox->value());
 }
+
+QString ChoiceDialog::getFreePayer()
+{
+    return ui->payerEdit->text();
+}
+

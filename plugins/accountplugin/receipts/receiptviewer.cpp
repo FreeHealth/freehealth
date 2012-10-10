@@ -1091,12 +1091,16 @@ void ReceiptViewer::actionsOfTreeView(const QModelIndex & index) {
             for (int i = 0; i < model->rowCount(); ++i) {
                 QHash<QString,QString> hashOfValues;
                 const QString userUuid = m_userUuid;
+                m_freePayer = QString();
+                m_freePayer = choice.getFreePayer();
                 typeOfPayment = model->data(model->index(i,choice.TYPE_OF_CHOICE),Qt::DisplayRole).toInt();
+                
                 if (WarnDebugMessage)
                     qDebug() << __FILE__ << QString::number(__LINE__) << " typeOfPayment =" << QString::number(typeOfPayment) ;
 
                 percentage = model->data(model->index(i,choice.PERCENTAGE),Qt::DisplayRole).toDouble();
-                debtor = model->data(model->index(i,choice.DEBTOR),Qt::DisplayRole);
+               	debtor = model->data(model->index(i,choice.DEBTOR),Qt::DisplayRole);              
+                
                 if (WarnDebugMessage)
                     qDebug() << __FILE__ << QString::number(__LINE__) << " debtor =" << debtor.toString() ;
                 site = model->data(model->index(i,choice.SITE),Qt::DisplayRole);
@@ -1230,7 +1234,6 @@ void ReceiptViewer::save()
                      << "site uid = "+siteUid.toString()
                      << "insurance uid = "+insuranceUid.toString()
                      << "act = "+act.toString();
-        ;
         QString patientUid = patient()->uuid();
         if (WarnDebugMessage)
             qDebug() << __FILE__ << QString::number(__LINE__) << " patientUid =" << patientUid ;
@@ -1253,6 +1256,10 @@ void ReceiptViewer::save()
         {
             patientName = ui->nameEdit->text();
         }
+        if (!m_freePayer.isEmpty())
+        {
+        	patientName = m_freePayer;
+            }
         /* if (ui->freeTextCheckBox->isChecked())
     {
         FreeText freeTextDialog(this);
@@ -1287,6 +1294,7 @@ void ReceiptViewer::save()
             Utils::warningMessageBox(tr("Error inserting into AccountModel!"), tkTr(Trans::Constants::CONTACT_DEV_TEAM));
         }
     }
+    m_freePayer = QString();
     clearAll(true);
 }
 

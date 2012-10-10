@@ -219,6 +219,7 @@ private:
     double m_distanceRuleValue;
     QString m_distanceRuleType;
     QStringList m_listOfValues;
+    QString m_freePayer;
     //QMenu * m_returnedListMenu;
 
     //QFile m_fileFirstTime;

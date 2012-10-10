@@ -12,7 +12,6 @@ class FreeText:public QDialog, public Ui::FreeTextDialog
         FreeText(QWidget * parent = 0);
         ~FreeText();
         QString getFreeText();
-
 };
 
 #endif

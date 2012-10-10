@@ -14,3 +14,5 @@ QString FreeText::getFreeText()
     freeText = freeTextEdit->text();
     return freeText;
 }
+
+

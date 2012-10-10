@@ -110,6 +110,7 @@ public:
   //free value and text
   QString getFreeText();
   QString getFreeValue();
+  QString getFreePayer();
 private Q_SLOTS:
   void value(double val);
   void valueUp();
