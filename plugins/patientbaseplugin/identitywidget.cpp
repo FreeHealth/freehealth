@@ -313,6 +313,7 @@ void IdentityWidget::setCurrentIndex(const QModelIndex &patientIndex)
     }
     default: break;
     }  // switch (d->m_EditMode)
+    updateGenderImage();
 }
 
 /** \brief Test the validity of the "actually shown" identity. */
