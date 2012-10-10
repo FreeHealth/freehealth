@@ -663,7 +663,7 @@ public:
         //TODO: install a "Gender" enum, see http://code.google.com/p/freemedforms/issues/detail?id=184
 
         QString genderString =  m_PatientModel->index(row, Core::IPatient::Gender).data().toString();
-        qDebug() << "Gender:" << genderString;
+//        qDebug() << "Gender:" << genderString;
 
         // photo
         const QPixmap &photo = m_PatientModel->index(row, Core::IPatient::Photo_64x64).data().value<QPixmap>();
