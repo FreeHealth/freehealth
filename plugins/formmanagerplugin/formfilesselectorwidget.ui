@@ -55,6 +55,13 @@
        </property>
       </spacer>
      </item>
+     <item>
+      <widget class="QPushButton" name="screenshotsButton">
+       <property name="text">
+        <string>Screenshots</string>
+       </property>
+      </widget>
+     </item>
     </layout>
    </item>
    <item>
@@ -65,27 +72,6 @@
         <set>QAbstractItemView::NoEditTriggers</set>
        </property>
       </widget>
-     </item>
-     <item>
-      <layout class="QVBoxLayout" name="verticalLayout_2">
-       <item>
-        <widget class="QLabel" name="screenshotLabel">
-         <property name="text">
-          <string>Screenshot</string>
-         </property>
-         <property name="alignment">
-          <set>Qt::AlignCenter</set>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="screenshotsButton">
-         <property name="text">
-          <string>Screenshots</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
      </item>
     </layout>
    </item>
