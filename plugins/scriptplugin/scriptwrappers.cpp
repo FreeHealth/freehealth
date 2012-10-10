@@ -157,10 +157,10 @@ FormItemScriptWrapper::FormItemScriptWrapper(QObject *parent) :
 
 FormItemScriptWrapper::~FormItemScriptWrapper()
 {
-    if (m_Item)
-        qWarning() << "~FormItemScriptWrapper" << m_Item->uuid();
-    else
-        qWarning() << "~FormItemScriptWrapper 0x0 ???";
+//    if (m_Item)
+//        qWarning() << "~FormItemScriptWrapper" << m_Item->uuid();
+//    else
+//        qWarning() << "~FormItemScriptWrapper 0x0 ???";
 }
 
 void FormItemScriptWrapper::setFormItem(Form::FormItem *item)
