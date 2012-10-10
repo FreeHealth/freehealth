@@ -15,22 +15,22 @@
 
     <!-- Translatable values -->
     <license>GPLv3</license>
-    <description lang="fr">Facteurs de risque cardio-vasculaires</description>
     <description lang="xx">Cardiovascular risk factors</description>
+    <description lang="fr">Facteurs de risque cardio-vasculaires</description>
     <category lang="xx">Cardiology</category>
     <category lang="fr">Cardiologie</category>
-    <tooltip lang="fr"></tooltip>
     <tooltip lang="xx"></tooltip>
+    <tooltip lang="fr"></tooltip>
     <htmldescription lang="fr"></htmldescription>
     <htmldescription lang="xx"></htmldescription>
-    <specialties lang="fr">Cardiologie</specialties>
     <specialties lang="xx">Cardiology</specialties>
+    <specialties lang="fr">Cardiologie</specialties>
 
   </formdescription>
 
   <MedForm name="Subs::Cardiology::RiskFactors">
-    <label lang="fr">Facteurs de risque cardio-vasculaire</label>
     <label lang="xx">Cardiovascular risk factors</label>
+    <label lang="fr">Facteurs de risque cardio-vasculaire</label>
     <options>compact;UseFormNameAsNameSpace</options>
 
 <!--
