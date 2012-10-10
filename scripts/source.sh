@@ -40,7 +40,6 @@ echo "  -h  Show this help"
 echo
 }
 
-
 cd $SCRIPT_PATH"/.."
 
 # remove executable flags to doc files
@@ -149,6 +148,7 @@ plugins/accountbaseplugin \
 plugins/accountplugin \
 plugins/agendaplugin \
 plugins/aggirplugin \
+plugins/alertplugin \
 plugins/basewidgetsplugin \
 plugins/categoryplugin \
 plugins/coreplugin \
@@ -172,6 +172,7 @@ plugins/templatesplugin \
 plugins/texteditorplugin \
 plugins/usermanagerplugin \
 plugins/xmlioplugin \
+plugins/webcamplugin \
 plugins/zipcodesplugin \
 "
 
