@@ -82,7 +82,7 @@ namespace.module('com.freemedforms.cardiology.framingham.score', function (expor
                          return 115 + (systCombo.currentIndex * 10);
                      }
 
-                                         function enableDependAge() {
+                     function enableDependAge() {
                          var age =  freemedforms.patient.yearsOld;
                          if (age < 20 || age >= 80 ) {
                          cholCombo.enabled = false;
@@ -302,14 +302,14 @@ namespace.module('com.freemedforms.cardiology.framingham.score', function (expor
 
 
                          // DEBUG
-                         print("age:" + age + "; " +
-                               "chol:"+ chol + "; " +
-                               "hdl:"+ hdl + "; " +
-                               "tobacco:"+ tobacco + "; " +
-                               "bp:"+ bp + "; " +
-                               "bp_treated:"+ bp_treated + "; " +
-                               "score:"+ score + "; " +
-                               "riskscore:"+ riskscore);
+//                         print("age:" + age + "; " +
+//                               "chol:"+ chol + "; " +
+//                               "hdl:"+ hdl + "; " +
+//                               "tobacco:"+ tobacco + "; " +
+//                               "bp:"+ bp + "; " +
+//                               "bp_treated:"+ bp_treated + "; " +
+//                               "score:"+ score + "; " +
+//                               "riskscore:"+ riskscore);
                          return riskscore;
                      }
 

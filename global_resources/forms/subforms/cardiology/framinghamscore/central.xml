@@ -5,7 +5,7 @@
   <formdescription>
     <!-- Non translatable values -->
     <authors>Eric Maeker, MD; Fredman, MD</authors>
-    <version>0.7.0</version>
+    <version>0.7.1</version>
     <fmfv>0.7.0</fmfv>
     <cdate>2012-01-10</cdate>
     <lmdate>2012-02-26</lmdate>
@@ -37,6 +37,13 @@
         the next 10 years. The score is designed for adults aged 20 and older who do not have
         heart disease or diabetes.
     </htmldescription>
+
+    <updateinfo>
+      <updateversion from="0.7.0" to="0.7.1">
+        <text lang="fr">Amélioration du script de calcul du score</text>
+        <text lang="xx">Updating the score script</text>
+      </updateversion>
+    </updateinfo>
 
  </formdescription>
 
