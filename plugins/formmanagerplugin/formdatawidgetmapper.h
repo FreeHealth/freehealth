@@ -27,6 +27,7 @@
 #ifndef FORM_INTERNAL_FORMDATAWIDGETMAPPER_H
 #define FORM_INTERNAL_FORMDATAWIDGETMAPPER_H
 
+#include <formmanagerplugin/formmanager_exporter.h>
 #include <QWidget>
 #include <QPixmap>
 QT_BEGIN_NAMESPACE
@@ -44,24 +45,23 @@ namespace Form {
 class FormMain;
 namespace Internal {
 class FormDataWidgetMapperPrivate;
+} // namespace Internal
 
-class FormDataWidgetMapper : public QWidget
+class FORM_EXPORT FormDataWidgetMapper : public QWidget
 {
     Q_OBJECT
 public:
     explicit FormDataWidgetMapper(QWidget *parent = 0);
     ~FormDataWidgetMapper();
     bool initialize();
-
+    void clear();
     bool isDirty() const;
-
     QModelIndex currentEditingEpisodeIndex() const;
 
-Q_SIGNALS:
-    
 public Q_SLOTS:
     void setCurrentForm(const QString &formUid);
     void setCurrentForm(FormMain *form);
+    void setLastEpisodeAsCurrent();
     void setCurrentEpisode(const QModelIndex &index);
     void setFormWidgetEnabled(bool enabled);
 
@@ -69,13 +69,10 @@ public Q_SLOTS:
 
     bool submit();
 
-private Q_SLOTS:
-
 private:
-    FormDataWidgetMapperPrivate *d;
+    Internal::FormDataWidgetMapperPrivate *d;
 };
 
-} // namespace Internal
 } // namespace Form
 
 #endif // FORM_INTERNAL_FORMDATAWIDGETMAPPER_H

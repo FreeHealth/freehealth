@@ -105,7 +105,7 @@ bool FormManagerMode::onPatientFormsLoaded()
         pluginManager()->addObject(this);
         m_inPluginManager = true;
     }
-    Form::FormMain *root = formManager().rootForm(Core::Constants::MODE_PATIENT_FILE);
-    m_Holder->setRootForm(root);
-    return (root);
+    Form::FormTreeModel *model = formManager().formTreeModelForMode(Core::Constants::MODE_PATIENT_FILE);
+    m_Holder->setFormTreeModel(model);
+    return (model);
 }

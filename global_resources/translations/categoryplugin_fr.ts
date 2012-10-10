@@ -4,65 +4,54 @@
 <context>
     <name>Category::CategoryDialog</name>
     <message>
-        <location filename="../../plugins/categoryplugin/categorydialog.cpp" line="110"/>
         <source>Category manager</source>
-        <translation>Gestionnaire de catégories</translation>
+        <translation type="unfinished">Gestionnaire de catégories</translation>
     </message>
 </context>
 <context>
     <name>Category::Internal::CategoryBase</name>
     <message>
-        <location filename="../../plugins/categoryplugin/categorybase.cpp" line="237"/>
         <source>Please contact dev team.</source>
-        <translation>Veuillez contacter l&apos;équipe de développement.</translation>
+        <translation type="unfinished">Veuillez contacter l&apos;équipe de développement.</translation>
     </message>
 </context>
 <context>
     <name>Category::Internal::CategoryDialog</name>
     <message>
-        <location filename="../../plugins/categoryplugin/categorydialog.ui" line="14"/>
-        <source>Form</source>
-        <translation></translation>
-    </message>
-    <message>
-        <location filename="../../plugins/categoryplugin/categorydialog.ui" line="26"/>
         <source>Category manager</source>
-        <translation>Gestionnaire de catégories</translation>
+        <translation type="unfinished">Gestionnaire de catégories</translation>
     </message>
     <message>
-        <location filename="../../plugins/categoryplugin/categorydialog.ui" line="43"/>
         <source>Categories</source>
-        <translation>Catégories</translation>
+        <translation type="unfinished">Catégories</translation>
     </message>
     <message>
-        <location filename="../../plugins/categoryplugin/categorydialog.ui" line="65"/>
         <source>Labels</source>
-        <translation>Libellés</translation>
+        <translation type="unfinished">Libellés</translation>
     </message>
     <message>
-        <location filename="../../plugins/categoryplugin/categorydialog.ui" line="90"/>
         <source>Extras</source>
-        <translation>Extras</translation>
+        <translation type="unfinished">Extras</translation>
     </message>
     <message>
-        <location filename="../../plugins/categoryplugin/categorydialog.ui" line="96"/>
         <source>Protect with a password</source>
-        <translation>Protéger la catégorie avec un mot de passe</translation>
+        <translation type="unfinished">Protéger la catégorie avec un mot de passe</translation>
     </message>
     <message>
-        <location filename="../../plugins/categoryplugin/categorydialog.ui" line="103"/>
         <source>Password</source>
-        <translation>Mot de passe</translation>
+        <translation type="unfinished">Mot de passe</translation>
     </message>
     <message>
-        <location filename="../../plugins/categoryplugin/categorydialog.ui" line="113"/>
         <source>Confirm</source>
-        <translation>Confirmation</translation>
+        <translation type="unfinished">Confirmation</translation>
     </message>
     <message>
-        <location filename="../../plugins/categoryplugin/categorydialog.ui" line="123"/>
         <source>Themed icon</source>
-        <translation>Icône du thème</translation>
+        <translation type="unfinished">Icône du thème</translation>
+    </message>
+    <message>
+        <source>Form</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

@@ -70,8 +70,14 @@
 #include <QHash>
 #include <QSqlTableModel>
 
-enum { WarnAllProcesses = false, WarnUserConnection = true };
 
+// ******************************************************************************************************
+// * WARNING, ENABLING ONE OF THOSE SWITCHES LEADS TO PRINTING THE CLEARTEXT PASSWORD ON THE CONSOLE!   *
+// * THIS ISIS A SECURITY ISSUE, ONLY DO THIS IN DEBUG MODE!                                            *
+// *                                                                                                    *
+enum { WarnAllProcesses = false, WarnUserConnection = true };  //                                       *
+// *                                                                                                    *
+// ******************************************************************************************************
 
 using namespace UserPlugin;
 using namespace UserPlugin::Constants;
@@ -480,6 +486,8 @@ void UserModel::onCoreDatabaseServerChanged()
 bool UserModel::setCurrentUser(const QString &clearLog, const QString &clearPassword, bool refreshCache, bool checkPrefValidity)
 {
     if (WarnAllProcesses || WarnUserConnection)
+        // WARNING, PRINTING THE CLEARTEXT PASSWORD IS A SECURITY ISSUE
+        // ONLY DO THIS IN DEBUG MODE!
         qWarning() << Q_FUNC_INFO << clearLog << clearPassword;
     d->checkNullUser();
 

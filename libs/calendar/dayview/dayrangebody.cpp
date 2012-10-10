@@ -307,6 +307,7 @@ public:
     QPoint m_pressPos;
     HourRangeWidget *m_pressedItemWidget;
     CalendarItem m_pressedCalItem;
+    CalendarItem m_contextualCalItem;
     MouseMode m_mouseMode;
     int m_granularity;
     int m_itemDefaultDuration;
@@ -395,6 +396,12 @@ void DayRangeBody::setHourHeight(int value)
 QSize DayRangeBody::sizeHint() const
 {
     return QSize(0, 24 * d_body->m_hourHeight);
+}
+
+/** Return the clicked calendar item when requesting the contextual menu */
+CalendarItem DayRangeBody::getContextualCalendarItem() const
+{
+    return d_body->m_contextualCalItem;
 }
 
 void DayRangeBody::paintBody(QPainter *painter, const QRect &visibleRect)
@@ -494,6 +501,7 @@ void DayRangeBody::mousePressEvent(QMouseEvent *event) {
     d_body->m_pressDateTime = d_body->quantized(d_body->getDateTime(event->pos()));
     d_body->m_previousDateTime = d_body->m_pressDateTime;
     d_body->m_pressPos = event->pos();
+    d_body->m_contextualCalItem = CalendarItem();
 
     // item under mouse?
     d_body->m_pressedItemWidget = qobject_cast<HourRangeWidget*>(childAt(event->pos()));
@@ -528,7 +536,6 @@ void DayRangeBody::mouseMoveEvent(QMouseEvent *event)
         return;
     }
 
-
     QDateTime mousePosDateTime = d_body->quantized(d_body->getDateTime(event->pos()));
     QRect rect;
     int secondsDifference, limit;
@@ -555,7 +562,9 @@ void DayRangeBody::mouseMoveEvent(QMouseEvent *event)
         d_body->m_pressedItemWidget->hide();
         QPixmap pixmap(d_body->m_pressedItemWidget->size());
         QPainter painter(&pixmap);
-        painter.setOpacity(0.3);
+
+        // painting with opacity seems to be buggy, at least under Linux/KDE
+//        painter.setOpacity(0.3);
 
         d_body->m_pressedItemWidget->render(&painter);
         drag->setPixmap(pixmap);
@@ -602,18 +611,38 @@ void DayRangeBody::mouseMoveEvent(QMouseEvent *event)
         }
 
         // now set the new time borders
+
+        // There is hardly a doctor's appointment across day boundaries
+        // this helps us not having to create code that deals with rendering two
+        // parts and cutting the item in two (or three, if across 3 days... oh my god...)
+
         if (d_body->m_mouseMode == DayRangeBodyPrivate::MouseMode_ResizeBottom){
             beginning = d_body->m_pressedCalItem.beginning();
             ending = d_body->m_pressedCalItem.ending().addSecs(secondsDifference);
+            if (ending <= beginning)
+                ending = beginning.addSecs(1800);
+
+            // resized across day boundaries? Then crop item!
+            if (ending.date() > beginning.date()) {
+                ending.setDate(beginning.date());
+                ending.setTime(QTime(23,59));
+            }
+
         }
         else if (d_body->m_mouseMode == DayRangeBodyPrivate::MouseMode_ResizeTop){
             beginning = d_body->m_pressedCalItem.beginning().addSecs(secondsDifference);
             ending = d_body->m_pressedCalItem.ending();
+            if (ending <= beginning)
+                ending = beginning.addSecs(1800);
+
+            // resized across day boundaries? Then crop item!
+            if (beginning.date() < ending.date()) {
+                beginning.setDate(ending.date());
+                beginning.setTime(QTime(0,0));
+            }
         }
 
-        if (ending <= beginning)
-            ending = beginning.addSecs(1800);
-
+        d_body->m_pressedItemWidget->setBeginDateTime(beginning);
         d_body->m_pressedItemWidget->setEndDateTime(ending);
         rect = d_body->getTimeIntervalRect(beginning.date().dayOfWeek(), beginning.time(), ending.time());
         d_body->m_pressedItemWidget->move(rect.x(), rect.y());
@@ -633,7 +662,10 @@ void DayRangeBody::mouseReleaseEvent(QMouseEvent *event)
     case DayRangeBodyPrivate::MouseMode_ResizeTop:
     case DayRangeBodyPrivate::MouseMode_ResizeBottom:
     {
+        Q_ASSERT(d_body->m_pressedItemWidget);
+
         if (!d_body->m_pressedItemWidget->inMotion() && event->button() == Qt::RightButton) {
+            // can be overloaded using the setContextMenuForItems()
             if (!itemContextMenu()) {
                 // display a default contextual menu
                 QMenu menu;
@@ -644,14 +676,13 @@ void DayRangeBody::mouseReleaseEvent(QMouseEvent *event)
                 menu.exec(event->globalPos());
             } else {
                 // use the specified menu
+                d_body->m_contextualCalItem = d_body->m_pressedCalItem;
                 itemContextMenu()->exec(event->globalPos());
             }
         } else {
-            int durationInSeconds = d_body->m_pressedItemWidget->durationInSeconds();
-            QDateTime end = d_body->m_pressedItemWidget->beginDateTime().addSecs(durationInSeconds);
             newItem = d_body->m_pressedCalItem;
             newItem.setBeginning(d_body->m_pressedItemWidget->beginDateTime());
-            newItem.setEnding(end);
+            newItem.setEnding(d_body->m_pressedItemWidget->endDateTime());
             model()->moveItem(d_body->m_pressedCalItem, newItem);
         }
         break;

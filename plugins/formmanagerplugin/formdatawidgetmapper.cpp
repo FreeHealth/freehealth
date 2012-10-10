@@ -37,6 +37,7 @@
 #include "formdatawidgetmapper.h"
 #include <formmanagerplugin/formcore.h>
 #include <formmanagerplugin/formmanager.h>
+#include <formmanagerplugin/episodemanager.h>
 #include <formmanagerplugin/iformitem.h>
 #include <formmanagerplugin/iformitemdata.h>
 #include <formmanagerplugin/iformwidgetfactory.h>
@@ -58,9 +59,10 @@
 using namespace Form;
 using namespace Internal;
 
-enum {WarnLogChronos=true, WarnDirty=true};
+enum { WarnLogChronos=false, WarnDirty=true };
 
 static inline Form::FormManager &formManager() {return Form::FormCore::instance().formManager();}
+static inline Form::EpisodeManager &episodeManager() {return Form::FormCore::instance().episodeManager();}
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
 
@@ -142,7 +144,7 @@ public:
         if (_episodeModel) {
             _episodeModel = 0;
         }
-        _episodeModel = formManager().episodeModel(rootForm);
+        _episodeModel = episodeManager().episodeModel(rootForm);
     }
 
     QString getCurrentXmlEpisode()
@@ -220,6 +222,14 @@ bool FormDataWidgetMapper::initialize()
     return true;
 }
 
+/** Clear the current form content */
+void FormDataWidgetMapper::clear()
+{
+    if (!d->_formMain)
+        return;
+    d->_formMain->clear();
+}
+
 /**
  * Return true if the current content of the mapper is dirty.
  * Asks each Form::FormItemData of the current editing Form::FormMain for their modification state.
@@ -244,7 +254,8 @@ bool FormDataWidgetMapper::isDirty() const
             return true;
         }
     }
-//    qWarning() << "FormDataWidgetMapper::isDirty false" << "Form:" << d->_formMain->uuid();
+    if (WarnDirty)
+        qWarning() << "FormDataWidgetMapper::isDirty false" << "Form:" << d->_formMain->uuid();
     return false;
 }
 
@@ -270,6 +281,12 @@ void FormDataWidgetMapper::setCurrentForm(Form::FormMain *form)
     d->useEpisodeModel(form);
     if (d->_formMain->itemData())
         d->_formMain->itemData()->setModified(false);
+}
+
+/** Use the last recorded episode as current episode */
+void FormDataWidgetMapper::setLastEpisodeAsCurrent()
+{
+    setCurrentEpisode(d->_episodeModel->index(0,0));
 }
 
 /** Define the current episode index to use in the mapper. */

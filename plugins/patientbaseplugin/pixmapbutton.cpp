@@ -114,19 +114,19 @@ void PixmapButton::clearPixmap()
 
 void PixmapButton::setGenderImage(int genderIndex)
 {
-        // check if there is a has a real pixmap
-        // if there is a pixmap, DON'T change the photo!
-        if (m_pixmap.isNull()) {
-            // if null, set default gendered icon
-            QIcon icon;
-            switch (genderIndex) {
-            case 0:  icon = QIcon(QPixmap(theme()->iconFullPath(Core::Constants::ICONMALE, Core::ITheme::BigIcon))); break;
-            case 1:  icon = QIcon(QPixmap(theme()->iconFullPath(Core::Constants::ICONFEMALE, Core::ITheme::BigIcon))); break;
-            case 2:  icon = QIcon(QPixmap(theme()->iconFullPath(Core::Constants::ICONHERMAPHRODISM , Core::ITheme::BigIcon))); break;
-            default: icon = QIcon();
-            }
-            //    set an empty underlying pixmap, but set the displayed button icon to the default placeholder icon
-            setPixmap(QPixmap());
-            setIcon(icon);
+    // check if there is a has a real pixmap
+    // if there is a pixmap, DON'T change the photo!
+    if (m_pixmap.isNull()) {
+        // if null, set default gendered icon
+        QIcon icon;
+        switch (genderIndex) {
+        case 0:  icon = QIcon(QPixmap(theme()->iconFullPath(Core::Constants::ICONMALE, Core::ITheme::BigIcon))); break;
+        case 1:  icon = QIcon(QPixmap(theme()->iconFullPath(Core::Constants::ICONFEMALE, Core::ITheme::BigIcon))); break;
+        case 2:  icon = QIcon(QPixmap(theme()->iconFullPath(Core::Constants::ICONHERMAPHRODISM , Core::ITheme::BigIcon))); break;
+        default: icon = QIcon();
         }
+        //    set an empty underlying pixmap, but set the displayed button icon to the default placeholder icon
+        setPixmap(QPixmap());
+        setIcon(icon);
+    }
 }

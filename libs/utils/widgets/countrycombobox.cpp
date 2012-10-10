@@ -53,13 +53,29 @@ void CountryComboBox::initialize()
 {
     // populate with available countries
     for(int i = 1; i < 246; ++i) {
-        const QString &countryName = QLocale::countryToString(QLocale::Country(i));
-        if (countryName.isEmpty())
-            return;
-        QString flag = Utils::countryToIso(QLocale::Country(i));
-        addItem(QIcon(QString("%1/%2.png").arg(m_FlagPath, flag)), countryName , QVariant(QLocale::Country(i)));
+        addCountry(QLocale::Country(i));
     }
     setCurrentCountry(QLocale::system().country());
+}
+
+void CountryComboBox::addCountry(QLocale::Country country)
+{
+    if (country == QLocale::AnyCountry)
+        return;
+    const QString &countryName = QLocale::countryToString(country);
+    if (countryName.isEmpty())
+        return;
+    QString flag = Utils::countryToIso(country);
+    addItem(QIcon(QString("%1/%2.png").arg(m_FlagPath, flag)), countryName, QVariant(country));
+
+}
+
+void CountryComboBox::removeCountry(QLocale::Country country)
+{
+    int index = findData(QVariant(country));
+    if (index == -1)
+        return;
+    removeItem(index);
 }
 
 QLocale::Country CountryComboBox::currentCountry() const

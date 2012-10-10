@@ -95,6 +95,8 @@ public:
         ProfessionalSite,
 
         // Social numbers
+        //TODO: this is HIGHLY France specific.
+        // a more generic approach should be used!
         SocialNumber,
         SocialNumber2,
         SocialNumber3,

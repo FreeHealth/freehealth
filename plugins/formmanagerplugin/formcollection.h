@@ -39,27 +39,47 @@
 
 namespace Form {
 class FormManager;
+class FormMain;
 namespace Internal {
 class FormCollectionPrivate;
+class FormManagerPrivate;
 }  // namespace Internal
 
-class FORM_EXPORT FormCollection : public QObject
+class FORM_EXPORT FormCollection //: public QObject
 {
-    Q_OBJECT
+//    Q_OBJECT
     friend class Form::FormManager;
+    friend class Form::Internal::FormManagerPrivate;
+
+public:
+    enum CollectionType {
+        CompleteForm,
+        SubForm
+    };
 
 protected:
-    explicit FormCollection(QObject *parent = 0);
+    explicit FormCollection();//(QObject *parent = 0);
+    bool initialize();
+    void setDuplicates(bool isDuplicates);
+    void setType(CollectionType type);
+    void setEmptyRootForms(const QList<Form::FormMain *> &emptyRootForms);
+    void addEmptyRootForm(Form::FormMain * emptyRootForm);
 
 public:
     ~FormCollection();
-    
-    bool initialize();
-    
-Q_SIGNALS:
-    
-public Q_SLOTS:
-    
+
+    bool isNull() const;
+    bool isDuplicates() const;
+    QString formUid() const;
+    QString modeUid() const;
+    CollectionType type() const;
+    const QList<Form::FormMain *> &emptyRootForms() const;
+
+    bool containsFormUid(const QString &formUid) const;
+    bool containsIdentityForm() const;
+    Form::FormMain *identityForm() const;
+    Form::FormMain *form(const QString &formUid) const;
+
 private:
     Internal::FormCollectionPrivate *d;
 };

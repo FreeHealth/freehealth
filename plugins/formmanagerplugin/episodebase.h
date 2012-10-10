@@ -144,6 +144,7 @@ public:
     bool saveEpisodeContent(const QVariant &uid, const QString &xml);
     bool saveEpisodeValidation(EpisodeValidationData *validation);
     bool removeEpisode(const QVariant &uid);
+    bool removeAllEpisodeForForm(const QVariant &formUid, const QString &patientUid);
 
     QList<EpisodeData *> getEpisodes(const EpisodeBaseQuery &query);
     bool getEpisodeContent(EpisodeData *episode);

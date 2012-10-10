@@ -49,6 +49,8 @@ public:
     explicit CountryComboBox(QWidget *parent = 0);
     void setFlagPath(const QString &absPath);
     virtual void initialize();
+    virtual void addCountry(QLocale::Country country);
+    virtual void removeCountry(QLocale::Country country);
 
     QLocale::Country currentCountry() const;
     QString currentIsoCountry() const;

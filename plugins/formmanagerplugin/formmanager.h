@@ -40,9 +40,9 @@ QT_END_NAMESPACE
 
 /**
  * \file formmanager.h
- * \author Eric MAEKER <eric.maeker@gmail.com>
+ * \author Eric MAEKER
  * \version 0.8.0
- * \date 12 Sept 2012
+ * \date 06 Oct 2012
 */
 
 namespace DataPack {
@@ -57,8 +57,10 @@ class FormItem;
 class IFormIO;
 class FormPlaceHolder;
 class SubFormInsertionPoint;
+class SubFormRemoval;
 class FormTreeModel;
 class EpisodeModel;
+class FormCollection;
 
 namespace Internal {
 class FormManagerPlugin;
@@ -69,39 +71,50 @@ class FORM_EXPORT FormManager : public QObject
 {
     Q_OBJECT
     friend class Form::FormCore;
+    friend class Form::Internal::FormManagerPlugin;
     friend class Form::Internal::FormManagerPrivate;
 
 protected:
     FormManager(QObject *parent = 0);
+    void checkFormUpdates();
 
 public:
     static FormManager *instance();
     ~FormManager();
     bool initialize();
 
-    void activateMode();
+//    // Form loading
+//    QList<Form::FormMain *> loadFormFile(const QString &formUid);
 
-    // Form management (load, save)
-    FormPage *createFormPage(const QString &uuid);
+    // Form collections
+    const FormCollection &centralFormCollection(const QString &modeUId) const;
+    const FormCollection &subFormCollection(const QString &subFormUid) const;
+
+    const FormCollection &centralFormDuplicateCollection(const QString &modeUId) const;
+    const FormCollection &subFormDuplicateCollection(const QString &subFormUid) const;
+
+    // Form pointers and models
     FormMain *form(const QString &formUid) const;
-    QList<FormMain *> forms() const;
-    QList<FormMain *> subFormsEmptyRoot() const;
+    QList<FormMain *> allEmptyRootForms() const;
+    FormTreeModel *formTreeModelForMode(const QString &modeUid);
+    FormTreeModel *formTreeModelForCompleteForm(const QString &formUid);
+    FormTreeModel *formTreeModelForSubForm(const QString &subFormUid);
+
+    // Mode page creation
+    FormPage *createFormPage(const QString &uuid);
+
+    // Form pointers && extra
     Form::FormMain *rootForm(const char *modeUniqueName) const;
     Form::FormMain *identityRootForm() const;
     Form::FormMain *identityRootFormDuplicate() const;
-    QList<Form::FormMain *> loadFormFile(const QString &formUid);
     QPixmap getScreenshot(const QString &formUid, const QString &fileName);
-
-    // Models management
-//    FormTreeModel *formTreeModel(const char* modeUniqueName);
-    EpisodeModel *episodeModel(Form::FormMain *form);
-    EpisodeModel *episodeModel(const QString &formUid);
 
 public Q_SLOTS:
     // Form management
     bool loadPatientFile();
     bool onCurrentPatientChanged();
     bool insertSubForm(const SubFormInsertionPoint &insertionPoint);
+    bool removeSubForm(const SubFormRemoval &subFormRemoval);
 
     // PMHx categories of forms management
     bool readPmhxCategories(const QString &formUuidOrAbsPath);

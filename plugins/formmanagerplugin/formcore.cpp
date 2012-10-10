@@ -37,6 +37,7 @@
 
 #include "formcore.h"
 #include "formmanager.h"
+#include "episodemanager.h"
 #include "formcontextualwidgetmanager.h"
 
 #include <coreplugin/icore.h>
@@ -63,6 +64,9 @@ class FormCorePrivate
 {
 public:
     FormCorePrivate(FormCore *parent) :
+        _formManager(0),
+        _episodeManager(0),
+        _widgetManager(0),
         q(parent)
     {
     }
@@ -73,7 +77,7 @@ public:
 
 public:
     FormManager *_formManager;
-//    EpisodeManager *_episodeManager;
+    EpisodeManager *_episodeManager;
     FormContextualWidgetManager *_widgetManager;
     
 private:
@@ -97,7 +101,7 @@ FormCore::FormCore(QObject *parent) :
 {
     _instance = this;
     d->_formManager = new FormManager(this);
-//    d->_episodeManager = new EpisodeManager(this);
+    d->_episodeManager = new EpisodeManager(this);
     // TODO: add episodeBase in the core
 }
 
@@ -114,20 +118,22 @@ FormCore::~FormCore()
 bool FormCore::initialize()
 {
     d->_formManager->initialize();
-//    d->_episodeManager->initialize();
+    d->_episodeManager->initialize();
     d->_widgetManager = new Internal::FormContextualWidgetManager(this);
     return true;
 }
 
+/** Return the unique instance of the Form::FormManager */
 Form::FormManager &FormCore::formManager() const
 {
     return *d->_formManager;
 }
 
-//Form::EpisodeManager &FormCore::episodeManager() const
-//{
-//    return d->_episodeManager;
-//}
+/** Return the unique instance of the Form::EpisodeManager */
+Form::EpisodeManager &FormCore::episodeManager() const
+{
+    return *d->_episodeManager;
+}
 
 void FormCore::activatePatientFileCentralMode()
 {

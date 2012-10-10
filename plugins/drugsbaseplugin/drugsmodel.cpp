@@ -147,7 +147,6 @@ public:
         if (column == Constants::Drug::Denomination) {
             if (textualdrug) {
                 textualdrug->setDenomination(value.toString());
-                m_IsDirty = true;
                 _posologicSentence.remove(drug);
                 return true;
             } else {
@@ -158,14 +157,12 @@ public:
             return false;
         if (column == Constants::Prescription::Note) {
             drug->setPrescriptionValue(column, value.toString().replace("[","{").replace("]","}"));
-            m_IsDirty = true;
         } else {
 //            // Avoid modification of IsTextualOnly tag on TextualDrugs
 //            if (textualdrug && column==Constants::Prescription::IsTextualOnly) {
 //                return false;
 //            }
             drug->setPrescriptionValue(column, value);
-            m_IsDirty = true;
         }
         _posologicSentence.remove(drug);
         return true;
@@ -455,9 +452,11 @@ bool DrugsModel::setData(const QModelIndex &index, const QVariant &value, int ro
         return false;
     IDrug *drug = d->m_DrugsList.at(row);
     if (d->setDrugData(drug, index.column(), value)) {
+        d->m_IsDirty = true;
         Q_EMIT dataChanged(index, index);
+        return true;
     }
-    return true;
+    return false;
 }
 
 /**
@@ -471,6 +470,7 @@ bool DrugsModel::setDrugData(const QVariant &drugId, const int column, const QVa
     if (!drug)
         return false;
     if (d->setDrugData(drug, column, value)) {
+        d->m_IsDirty = true;
         QModelIndex index = this->index(d->m_DrugsList.indexOf(drug), column);
         Q_EMIT dataChanged(index, index);
         return true;
@@ -480,13 +480,15 @@ bool DrugsModel::setDrugData(const QVariant &drugId, const int column, const QVa
 
 bool DrugsModel::submit()
 {
-    return QAbstractTableModel::submit();
+    bool ok = QAbstractTableModel::submit();
+    return ok;
 }
 
 /** Reset the model */
 void DrugsModel::resetModel()
 {
     d->_posologicSentence.clear();
+    d->m_IsDirty = false;
     reset();
 }
 
@@ -675,6 +677,7 @@ int DrugsModel::addDrugs(const QVector<IDrug *> &drugs, bool automaticInteractio
     d->m_InteractionQuery->setDrugsList(d->m_DrugsList.toVector());
     if (automaticInteractionChecking)
         checkInteractions();
+    d->m_IsDirty = true;
     return drugs.count();
 }
 
@@ -853,14 +856,6 @@ bool DrugsModel::isModified() const
 /** Returns the dosage model for the selected drug */
 Internal::DosageModel *DrugsModel::dosageModel(const QVariant &drugId)
 {
-//    if (! d->m_DosageModelList.keys().contains(uid)) {
-//        d->m_DosageModelList.insert(uid, new Internal::DosageModel(this));
-//        d->m_DosageModelList[uid]->setDrugUID(uid);
-//    } else if (! d->m_DosageModelList.value(uid)) {
-//        d->m_DosageModelList.insert(uid, new Internal::DosageModel(this));
-//        d->m_DosageModelList[uid]->setDrugUID(uid);
-//    }
-//    return d->m_DosageModelList.value(uid);
     Internal::DosageModel *m = new Internal::DosageModel(this);
     m->setDrugId(drugId);
     return m;
@@ -927,6 +922,7 @@ void DrugsModel::checkInteractions()
         delete d->m_InteractionResult;
     d->m_InteractionResult = interactionManager().checkInteractions(*d->m_InteractionQuery, this);
     reset();
+    d->m_IsDirty = true;
 }
 
 /** \brief Transform a prescription (one drug) to a readable output.
@@ -998,7 +994,7 @@ bool DrugsModel::dropMimeData(const QMimeData *data, Qt::DropAction action, int 
         // add content to model
         drugsIo().prescriptionFromXml(this, model->index(idx.row(), Templates::Constants::Data_Content, idx.parent()).data().toString(), DrugsDB::DrugsIO::AppendPrescription);
     }
-
+    d->m_IsDirty = true;
     // never move templates but copy them
     if (action == Qt::MoveAction)
         return false;

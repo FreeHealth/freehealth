@@ -196,7 +196,7 @@ void ScriptManager::onAllFormsLoaded()
     forms->recreateItemWrappers();
 
     // Execute RootForm all OnLoad scripts
-    foreach(Form::FormMain *main, formManager().forms()) {
+    foreach(Form::FormMain *main, formManager().allEmptyRootForms()) {
         evaluate(main->scripts()->onLoadScript());
         QList<Form::FormMain *> children = main->flattenFormMainChildren();
         foreach(Form::FormMain *mainChild, children) {
@@ -205,30 +205,26 @@ void ScriptManager::onAllFormsLoaded()
                 evaluate(item->scripts()->onLoadScript());
             }
         }
-    }
-    // Execute empty root SubForms OnLoad scripts
-    foreach(Form::FormMain *main, formManager().subFormsEmptyRoot()) {
-        evaluate(main->scripts()->onLoadScript());
     }
 }
 
 void ScriptManager::onSubFormLoaded(const QString &subFormUuid)
 {
-    // Update wrapper items
-    forms->updateSubFormItemWrappers(subFormUuid);
+//    // Update wrapper items
+//    forms->updateSubFormItemWrappers(subFormUuid);
 
-    // Execute onload scripts of subform items only
-    foreach(Form::FormMain *main, formManager().subFormsEmptyRoot()) {
-        if (main->uuid()!=subFormUuid)
-            continue;
+//    // Execute onload scripts of subform items only
+//    foreach(Form::FormMain *main, formManager().subFormsEmptyRoot()) {
+//        if (main->uuid()!=subFormUuid)
+//            continue;
 
-        evaluate(main->scripts()->onLoadScript());
-        QList<Form::FormMain *> children = main->flattenFormMainChildren();
-        foreach(Form::FormMain *mainChild, children) {
-            evaluate(mainChild->scripts()->onLoadScript());
-            foreach(Form::FormItem *item, mainChild->flattenFormItemChildren()) {
-                evaluate(item->scripts()->onLoadScript());
-            }
-        }
-    }
+//        evaluate(main->scripts()->onLoadScript());
+//        QList<Form::FormMain *> children = main->flattenFormMainChildren();
+//        foreach(Form::FormMain *mainChild, children) {
+//            evaluate(mainChild->scripts()->onLoadScript());
+//            foreach(Form::FormItem *item, mainChild->flattenFormItemChildren()) {
+//                evaluate(item->scripts()->onLoadScript());
+//            }
+//        }
+//    }
 }

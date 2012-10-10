@@ -46,12 +46,7 @@
 #include <coreplugin/actionmanager/command.h>
 #include <coreplugin/actionmanager/actioncontainer.h>
 
-#include <QtGui/QAction>
-#include <QtGui/QMessageBox>
-#include <QtGui/QMainWindow>
-#include <QtGui/QMenu>
-
-#include <QtCore/QtPlugin>
+#include <QtPlugin>
 #include <QDebug>
 
 using namespace Webcam;

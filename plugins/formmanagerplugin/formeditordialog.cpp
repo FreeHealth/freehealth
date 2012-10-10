@@ -33,10 +33,12 @@
 #include "formcore.h"
 #include "formtreemodel.h"
 #include "constants_db.h"
+#include "constants_settings.h"
 #include "episodebase.h"
 #include "subforminsertionpoint.h"
 #include "formmanager.h"
 #include "iformio.h"
+#include "formviewdelegate.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/itheme.h>
@@ -55,11 +57,10 @@ static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); 
 static inline Form::FormManager &formManager() {return Form::FormCore::instance().formManager();}
 static inline Core::IMainWindow *mainWindow() {return Core::ICore::instance()->mainWindow();}
 
-// TODO test with the new FormModel
 FormEditorDialog::FormEditorDialog(FormTreeModel *model, EditionModes mode, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::FormEditorDialog),
-    m_FormModel(model)
+    _formTreeModel(model)
 {
     Q_UNUSED(mode);
 
@@ -73,7 +74,12 @@ FormEditorDialog::FormEditorDialog(FormTreeModel *model, EditionModes mode, QWid
     for(int i = 0; i< FormTreeModel::MaxData; ++i)
         ui->treeView->hideColumn(i);
     ui->treeView->showColumn(FormTreeModel::Label);
+    ui->treeView->setAlternatingRowColors(true);
+    ui->treeView->setStyleSheet(Constants::FORMTREEVIEW_SHEET);
+    _delegate = new Internal::FormViewDelegate(ui->treeView);
+    ui->treeView->setItemDelegate(_delegate);
     ui->stackedWidget->setCurrentWidget(ui->formAdder);
+    ui->currentPatient->setChecked(true);
 
     setWindowTitle(tr("Form Editor"));
     setWindowIcon(theme()->icon(Core::Constants::ICONFORMS));
@@ -93,13 +99,12 @@ void FormEditorDialog::on_addForm_clicked()
         bool yes = Utils::yesNoMessageBox(tr("Insert as root form?"),
                                           tr("You did not selected a form, "
                                              "do you want to add the sub-form as root form?"));
-        if (yes)
-            insertTo = Constants::ROOT_FORM_TAG;
-        else
+        if (!yes)
             return;
+        insertTo = Constants::ROOT_FORM_TAG;
     } else {
         QModelIndex idx = ui->treeView->selectionModel()->currentIndex();
-        insertTo = m_FormModel->data(m_FormModel->index(idx.row(), FormTreeModel::Uuid, idx.parent())).toString();
+        insertTo = _formTreeModel->data(_formTreeModel->index(idx.row(), FormTreeModel::Uuid, idx.parent())).toString();
     }
 
     // Save to database
@@ -109,8 +114,9 @@ void FormEditorDialog::on_addForm_clicked()
     QVector<SubFormInsertionPoint> insertions;
     for(int i=0; i < selected.count(); ++i) {
         Form::FormIODescription *insert = selected.at(i);
-        SubFormInsertionPoint point(insertTo, insert->data(Form::FormIODescription::UuidOrAbsPath).toString());
+        SubFormInsertionPoint point(_formTreeModel->modeUid(), insertTo, insert->data(Form::FormIODescription::UuidOrAbsPath).toString());
         point.setEmitInsertionSignal(true); // inform everyone of the newly added subform
+        point.setForAllPatient(ui->allPatients->isChecked());
         insertions << point;
         formManager().insertSubForm(point);
     }

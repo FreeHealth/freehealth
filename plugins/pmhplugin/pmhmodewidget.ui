@@ -56,7 +56,7 @@
         <item row="0" column="0">
          <widget class="QStackedWidget" name="stackedWidget">
           <property name="currentIndex">
-           <number>0</number>
+           <number>2</number>
           </property>
           <widget class="QWidget" name="pageSynthesis">
            <layout class="QGridLayout" name="gridLayout_3">
@@ -85,6 +85,16 @@
             </item>
            </layout>
           </widget>
+          <widget class="QWidget" name="formPage">
+           <layout class="QGridLayout" name="gridLayout_5">
+            <property name="margin">
+             <number>0</number>
+            </property>
+            <item row="0" column="0">
+             <widget class="Form::FormDataWidgetMapper" name="formDataMapper" native="true"/>
+            </item>
+           </layout>
+          </widget>
          </widget>
         </item>
        </layout>
@@ -96,15 +106,21 @@
  </widget>
  <customwidgets>
   <customwidget>
+   <class>Views::TreeView</class>
+   <extends>QTreeView</extends>
+   <header location="global">listviewplugin/treeview.h</header>
+  </customwidget>
+  <customwidget>
    <class>Utils::MiniSplitter</class>
    <extends>QSplitter</extends>
    <header location="global">utils/widgets/minisplitter.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>Views::TreeView</class>
-   <extends>QTreeView</extends>
-   <header location="global">listviewplugin/treeview.h</header>
+   <class>Form::FormDataWidgetMapper</class>
+   <extends>QWidget</extends>
+   <header location="global">formmanagerplugin/formdatawidgetmapper.h</header>
+   <container>1</container>
   </customwidget>
   <customwidget>
    <class>PMH::PmhViewer</class>

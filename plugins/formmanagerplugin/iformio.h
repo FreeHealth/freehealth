@@ -107,22 +107,6 @@ private:
     bool m_ForceFile, m_AllForms, m_AllDescr, m_GetShots;
 };
 
-//class FORM_EXPORT FormIOResult
-//{
-//public:
-//    FormIOResult(const FormIOQuery &query);
-//    virtual ~FormIOResult();
-
-//    QString originalFormUuid() const;
-
-//    QList<Form::FormMain *> rootForms() const {return m_RootForms;}
-//    void setRootForms(const QList<Form::FormMain *> &list) const {m_RootForms=list;}
-
-//private:
-//    FormIOQuery m_Query;
-//    QList<Form::FormMain *> m_RootForms;
-//};
-
 }
 Q_DECLARE_OPERATORS_FOR_FLAGS(Form::FormIOQuery::TypesOfForm)
 

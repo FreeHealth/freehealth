@@ -273,9 +273,8 @@ QVector<CategoryItem *> CategoryBase::getCategories(const QString &mime, const Q
     QVector<CategoryItem *> cats;
     QMultiHash<CategoryItem *, QString> childrenUuid;
     QSqlDatabase DB = QSqlDatabase::database(Constants::DB_NAME);
-    if (!connectDatabase(DB, __LINE__)) {
+    if (!connectDatabase(DB, __LINE__))
         return cats;
-    }
 
     QString req;
     DB.transaction();

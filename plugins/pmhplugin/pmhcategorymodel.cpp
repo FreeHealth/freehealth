@@ -49,6 +49,7 @@
 #include <formmanagerplugin/formcore.h>
 #include <formmanagerplugin/iformitem.h>
 #include <formmanagerplugin/formmanager.h>
+#include <formmanagerplugin/episodemanager.h>
 #include <formmanagerplugin/formtreemodel.h>
 #include <formmanagerplugin/episodemodel.h>
 
@@ -77,6 +78,7 @@ static inline Core::ISettings *settings() {return Core::ICore::instance()->setti
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 static inline Core::Translators *translators() {return Core::ICore::instance()->translators();}
 static inline Form::FormManager &formManager() {return Form::FormCore::instance().formManager();}
+static inline Form::EpisodeManager &episodeManager() {return Form::FormCore::instance().episodeManager();}
 static inline Category::CategoryCore *categoryCore() {return Category::CategoryCore::instance();}
 
 namespace {
@@ -275,14 +277,13 @@ public:
 
     void formModelToTreeItem(Form::FormMain *form, TreeItem *parentItem, Form::FormTreeModel *model, const QModelIndex &index = QModelIndex())
     {
-        // TODO: manage FormManager
         for(int i = 0; i < model->rowCount(index); ++i) {
             QModelIndex idx = model->index(i, Form::FormTreeModel::Label, index);
 //            if (model->isLastEpisodeIndex(idx))
 //                continue;
             TreeItem *newItem = new TreeItem(parentItem);
             newItem->setLabel(model->data(idx).toString());
-            newItem->setForm(model->formForIndex(idx), formManager().episodeModel(form));
+            newItem->setForm(model->formForIndex(idx), episodeManager().episodeModel(form));
             // Read all its children
             formModelToTreeItem(form, newItem, model, idx);
         }
@@ -304,15 +305,10 @@ public:
             QDomElement addFile = doc.documentElement();
             addFile = addFile.firstChildElement("file");
             if (!addFile.isNull()) {
-                // Load the form
-                QList<Form::FormMain*> forms = formManager().loadFormFile(addFile.text());
-                if (!forms.isEmpty()) {
-                    // Create the FormTreeModel with the form
-                    Form::FormTreeModel *model = new Form::FormTreeModel(forms.at(0), q);
-                    model->initialize();
-                    // Translate all modelindex to TreeItem
-                    formModelToTreeItem(forms.at(0), item, model);
-                }
+                // Get the FormTreeModel with the form
+                Form::FormTreeModel *model = formManager().formTreeModelForSubForm(addFile.text());
+                // Translate all modelindex to TreeItem
+                formModelToTreeItem(model->formForIndex(model->index(0,0)), item, model);
             }
         }
 
@@ -424,7 +420,6 @@ public:
 
     void getCategories(bool getFromDatabase = false)
     {
-        QVector<Category::CategoryItem *> cats;
         if (getFromDatabase) {
             qDeleteAll(_categoryTree);
             _categoryTree.clear();
@@ -443,7 +438,6 @@ public:
             _categoryTree << _synthesis;
             _categoryTree << base()->getPmhCategory(_rootUid);
         }
-
         // Recreate the category tree
         foreach(Category::CategoryItem *cat, _categoryTree) { ///base()->createCategoryTree(_categoryTree)) {
             _rootItem->pmhCategory()->addChild(cat);
@@ -1071,33 +1065,32 @@ Form::FormMain *PmhCategoryModel::formForIndex(const QModelIndex &item) const
     return 0;
 }
 
-bool PmhCategoryModel::activateFormEpisode(const QModelIndex &formIndex)
+/**
+ * Activate the last episode of the form \e formIndex
+ * \sa Form::EpisodeModel::populateFormWithEpisodeContent()
+ */
+bool PmhCategoryModel::activateFormEpisode(const QModelIndex &formIndex) const
 {
     if (!formIndex.isValid())
         return false;
 
-//    TreeItem *it = d->getItem(formIndex);
-//    if (!it)
-//        return false;
-//    if (!it->isForm())
-//        return false;
+    TreeItem *it = d->getItem(formIndex);
+    if (!it)
+        return false;
+    if (!it->isForm())
+        return false;
 
-//    // get the Form::FormMain index
-//    Form::EpisodeModel *model = it->episodeModel();
-//    if (!model)
-//        return false;
-//    QModelIndex idx = model->indexForForm(it->form()->uuid());
-//    if (!idx.isValid())
-//        return false;
+    // get the Form::FormMain index
+    Form::EpisodeModel *model = it->episodeModel();
+    if (!model)
+        return false;
 
-//    if (!model->hasChildren(idx)) {
-//        // Create the unique episode
-//        model->insertRow(0, idx);
-//    }
+    if (model->rowCount() == 0) {
+        // Create the unique episode
+        model->insertRow(0);
+    }
 
-//    model->activateEpisode(model->index(0, 0, idx), model->index(idx.row(), Form::EpisodeModel::FormUuid, idx.parent()).data().toString());
-
-    return true;
+    return model->populateFormWithEpisodeContent(model->index(0, 0), true);
 }
 
 /**
@@ -1205,13 +1198,26 @@ QString PmhCategoryModel::indexToHtml(const QModelIndex &index, int indent) cons
             id += "&nbsp;&nbsp;";
         html += QString("•&nbsp;%1<br />").arg(index.data(Qt::ToolTipRole).toString().replace("<br />","; "));
     } else if (isForm(index)) {
+        // populate form
+        activateFormEpisode(index);
+        // get the synthesis
         html = QString("<p style=\"margin:0px 0px 0px %1px\">%2<br />")
                 .arg(indent*10)
                 .arg(formForIndex(index)->printableHtml());
+        // clear form
+        Form::FormMain *form = formForIndex(index);
+        if (form)
+            form->clear();
     }
     return html;
 }
 
+void PmhCategoryModel::refreshSynthesis()
+{
+    d->_htmlSynthesis.clear();
+}
+
+/** Return the synthesis of the whole model of a specific category \e index */
 QString PmhCategoryModel::synthesis(const QModelIndex &parent) const
 {
     if (parent==QModelIndex() || isSynthesis(parent)) {
@@ -1263,6 +1269,7 @@ void PmhCategoryModel::onCurrentPatientChanged()
     reset();
 }
 
+/** Update the category label (retranslate for eg) */
 void PmhCategoryModel::updateCategoryLabel(const Category::CategoryItem *category)
 {
     QModelIndex cat = indexForCategory(category);

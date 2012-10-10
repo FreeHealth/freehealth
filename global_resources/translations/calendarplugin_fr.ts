@@ -4,54 +4,43 @@
 <context>
     <name>Calendar::CalendarNavbar</name>
     <message>
-        <location filename="../../plugins/calendarplugin/calendar_navbar.cpp" line="19"/>
         <source>Today</source>
-        <translation>Aujourd&apos;hui</translation>
+        <translation type="obsolete">Aujourd&apos;hui</translation>
     </message>
     <message>
-        <location filename="../../plugins/calendarplugin/calendar_navbar.cpp" line="27"/>
         <source>Day</source>
-        <translation>Jour</translation>
+        <translation type="obsolete">Jour</translation>
     </message>
     <message>
-        <location filename="../../plugins/calendarplugin/calendar_navbar.cpp" line="28"/>
         <source>Week</source>
-        <translation>Semaine</translation>
+        <translation type="obsolete">Semaine</translation>
     </message>
     <message>
-        <location filename="../../plugins/calendarplugin/calendar_navbar.cpp" line="29"/>
         <source>Month</source>
-        <translation>Mois</translation>
+        <translation type="obsolete">Mois</translation>
     </message>
     <message>
-        <location filename="../../plugins/calendarplugin/calendar_navbar.cpp" line="133"/>
-        <location filename="../../plugins/calendarplugin/calendar_navbar.cpp" line="135"/>
-        <location filename="../../plugins/calendarplugin/calendar_navbar.cpp" line="137"/>
         <source>d MMM yyyy</source>
-        <translation>dd MMM yyyy</translation>
+        <translation type="obsolete">dd MMM yyyy</translation>
     </message>
     <message>
-        <location filename="../../plugins/calendarplugin/calendar_navbar.cpp" line="135"/>
         <source>d MMM</source>
-        <translation>dd MMM</translation>
+        <translation type="obsolete">dd MMM</translation>
     </message>
     <message>
-        <location filename="../../plugins/calendarplugin/calendar_navbar.cpp" line="137"/>
         <source>d</source>
-        <translation>dd</translation>
+        <translation type="obsolete">dd</translation>
     </message>
 </context>
 <context>
     <name>Calendar::MonthView</name>
     <message>
-        <location filename="../../plugins/calendarplugin/month_view.cpp" line="107"/>
         <source>d MMM</source>
-        <translation>dd MMM</translation>
+        <translation type="obsolete">dd MMM</translation>
     </message>
     <message>
-        <location filename="../../plugins/calendarplugin/month_view.cpp" line="109"/>
         <source>d</source>
-        <translation>dd</translation>
+        <translation type="obsolete">dd</translation>
     </message>
 </context>
 </TS>

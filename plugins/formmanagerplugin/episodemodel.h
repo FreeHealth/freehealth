@@ -38,7 +38,7 @@ QT_END_NAMESPACE
  * \file episodemodel.h
  * \author Eric MAEKER
  * \version 0.8.0
- * \date 10 Sept 2012
+ * \date 01 Oct 2012
 */
 
 // friend class only
@@ -50,8 +50,7 @@ class IdentityViewerWidget;
 
 namespace Form {
 class FormMain;
-class EpisodeModel;
-class FormManager;
+class EpisodeManager;
 
 namespace Internal {
 class EpisodeModelPrivate;
@@ -60,7 +59,7 @@ class EpisodeModelPrivate;
 class FORM_EXPORT EpisodeModel : public QAbstractListModel
 {
     Q_OBJECT
-    friend class Form::FormManager;
+    friend class Form::EpisodeManager;
     friend class Patients::Internal::IdentityViewerWidget;
 
 protected:
@@ -113,6 +112,7 @@ public:
 
     bool insertRows(int row, int count, const QModelIndex &parent = QModelIndex());
     bool removeRows(int row, int count, const QModelIndex &parent = QModelIndex());
+    bool removeAllEpisodes();
 
     void setReadOnly(const bool state);
     bool isReadOnly() const;

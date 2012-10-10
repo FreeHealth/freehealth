@@ -37,6 +37,8 @@
 #include "constants_db.h"
 #include "constants_settings.h"
 #include "episodedata.h"
+#include "formcore.h"
+#include "formmanager.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/ipatient.h>
@@ -98,6 +100,7 @@ static inline Form::Internal::EpisodeBase *episodeBase() {return Form::Internal:
 
 static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
+static inline Form::FormManager &formManager() {return Form::FormCore::instance().formManager();}
 
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
@@ -306,7 +309,8 @@ bool EpisodeModel::initialize()
 
     connect(Core::ICore::instance(), SIGNAL(databaseServerChanged()), this, SLOT(onCoreDatabaseServerChanged()));
     connect(user(), SIGNAL(userChanged()), this, SLOT(onUserChanged()));
-    connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onCurrentPatientChanged()));
+//    connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onCurrentPatientChanged()));
+    connect(&formManager(), SIGNAL(patientFormsLoaded()), this, SLOT(onCurrentPatientChanged()));
     return true;
 }
 
@@ -619,6 +623,16 @@ bool EpisodeModel::removeRows(int row, int count, const QModelIndex &parent)
     d->_sqlModel->blockSignals(false);
     endRemoveRows();
     return true;
+}
+
+/** Remove all the recorded episode in the model/base */
+bool EpisodeModel::removeAllEpisodes()
+{
+    bool ok = episodeBase()->removeAllEpisodeForForm(d->_formMain->uuid(), patient()->uuid());
+    if (ok)
+        d->updateFilter(patient()->uuid());
+//        d->_sqlModel->reset();
+    return ok;
 }
 
 /** Define the whole model read mode */

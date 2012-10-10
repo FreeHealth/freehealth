@@ -170,11 +170,14 @@ void OpenCVWidget::timerEvent(QTimerEvent *event)
 
             Rect tmpRect = faces.front();
             QRect rect(tmpRect.x, tmpRect.y, tmpRect.width, tmpRect.height);
-
             if (rect.isEmpty() || !rect.isValid() || rect.width() < 80) {
                 return;
             }
             // If found -> get the QImage and cut the face
+            QPoint center = rect.center();
+            rect.setWidth(rect.width() * 1.40);
+            rect.setHeight(rect.height() * 1.40);
+            rect.moveCenter(center);
             QImage face = m_image.copy(rect);
             QPixmap pix(face.size());
             pix = QPixmap::fromImage(face);

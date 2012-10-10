@@ -793,7 +793,7 @@ bool DrugsIO::loadPrescription(DrugsDB::DrugsModel *m, const QString &fileName, 
         return true;
     }
     xmlExtraData = xml.mid( begin, end - begin);
-    m->reset();
+    m->resetModel();
     return true;
 }
 

@@ -22,34 +22,9 @@
      <widget class="QWidget" name="layoutWidget">
       <layout class="QVBoxLayout" name="leftVerticalLayout">
        <item>
-        <widget class="QGroupBox" name="groupBox">
+        <widget class="QGroupBox" name="availableAgendasGroup">
          <property name="title">
-          <string>You are</string>
-         </property>
-         <layout class="QGridLayout" name="gridLayout">
-          <item row="0" column="0">
-           <widget class="QLabel" name="userNameLabel">
-            <property name="font">
-             <font>
-              <weight>75</weight>
-              <bold>true</bold>
-             </font>
-            </property>
-            <property name="toolTip">
-             <string notr="true"/>
-            </property>
-            <property name="wordWrap">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item>
-        <widget class="QGroupBox" name="groupBox_2">
-         <property name="title">
-          <string>Your agendas</string>
+          <string notr="true">Agendas of Joh Doe</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_2">
           <item row="0" column="0">
@@ -142,15 +117,6 @@
                 </item>
                 <item>
                  <widget class="QDateEdit" name="startDate">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <property name="displayFormat">
-                   <string notr="true">dd/MM/yy</string>
-                  </property>
                   <property name="calendarPopup">
                    <bool>true</bool>
                   </property>
@@ -169,7 +135,7 @@
                    </sizepolicy>
                   </property>
                   <property name="text">
-                   <string>Duration</string>
+                   <string>Duration:</string>
                   </property>
                  </widget>
                 </item>
@@ -205,6 +171,13 @@
                </layout>
               </item>
              </layout>
+            </widget>
+           </item>
+           <item row="1" column="0" colspan="4">
+            <widget class="QLabel" name="label">
+             <property name="text">
+              <string>Available appointments:</string>
+             </property>
             </widget>
            </item>
           </layout>

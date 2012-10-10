@@ -51,7 +51,7 @@ static inline Core::Translators *translators() { return Core::ICore::instance()-
 
 //static Form::FormItem *getFormItem(const QString &ns, const QString &uuid)
 //{
-//    foreach(Form::FormMain *main, formManager().forms()) {
+//    foreach(Form::FormMain *main, formManager().allEmptyRootForms()) {
 //        if (main->uuid().startsWith(ns)) {
 //            QList<Form::FormItem *> items = main->flattenFormItemChildren();
 //            for(int i=0; i < items.count(); ++i) {
@@ -81,7 +81,7 @@ void FormManagerScriptWrapper::recreateItemWrappers()
     qDeleteAll(m_Wrappers);
     m_Wrappers.clear();
     m_Items.clear();
-    foreach(Form::FormItem *main, formManager().forms()) {
+    foreach(Form::FormItem *main, formManager().allEmptyRootForms()) {
         const QList<Form::FormItem*> items = main->flattenFormItemChildren();
         for(int i=0; i < items.count(); ++i) {
             FormItemScriptWrapper *w = new FormItemScriptWrapper(this);
@@ -94,25 +94,25 @@ void FormManagerScriptWrapper::recreateItemWrappers()
 
 void FormManagerScriptWrapper::updateSubFormItemWrappers(const QString &uuid)
 {
-    const QList<Form::FormMain*> &list = formManager().subFormsEmptyRoot();
-    const QStringList &uuids = m_Items.keys();
-    foreach(Form::FormItem *main, list) { // all subForms roots
-        if (main->uuid()!=uuid)
-            continue;
+//    const QList<Form::FormMain*> &list = formManager().subFormsEmptyRoot();
+//    const QStringList &uuids = m_Items.keys();
+//    foreach(Form::FormItem *main, list) { // all subForms roots
+//        if (main->uuid()!=uuid)
+//            continue;
 
-        foreach(Form::FormItem *item, main->flattenFormItemChildren()) {
-            if (uuids.contains(item->uuid())) {
-                // Remove item
-//                delete m_Items[item->uuid()];
-                m_Items.remove(item->uuid());
-            }
-            // Create && insert item
-            FormItemScriptWrapper *w = new FormItemScriptWrapper(this);
-            m_Wrappers << w;
-            w->setFormItem(item);
-            m_Items.insert(item->uuid(), scriptManager()->addScriptObject(w));
-        }
-    }
+//        foreach(Form::FormItem *item, main->flattenFormItemChildren()) {
+//            if (uuids.contains(item->uuid())) {
+//                // Remove item
+////                delete m_Items[item->uuid()];
+//                m_Items.remove(item->uuid());
+//            }
+//            // Create && insert item
+//            FormItemScriptWrapper *w = new FormItemScriptWrapper(this);
+//            m_Wrappers << w;
+//            w->setFormItem(item);
+//            m_Items.insert(item->uuid(), scriptManager()->addScriptObject(w));
+//        }
+//    }
 }
 
 QString FormManagerScriptWrapper::currentLanguage() const
@@ -122,7 +122,7 @@ QString FormManagerScriptWrapper::currentLanguage() const
 
 bool FormManagerScriptWrapper::areLoaded() const
 {
-    return (formManager().forms().count()>0);
+    return (formManager().allEmptyRootForms().count()>0);
 }
 
 void FormManagerScriptWrapper::usingNamespace(const QString &ns) const

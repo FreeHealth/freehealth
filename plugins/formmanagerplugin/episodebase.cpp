@@ -333,6 +333,15 @@ bool EpisodeBase::setCurrentDatabaseVersion(const QString &version)
         return false;
     DB.transaction();
     QSqlQuery query(DB);
+    query.prepare(prepareDeleteQuery(Table_VERSION));
+    if (!query.exec()) {
+        LOG_QUERY_ERROR(query);
+        query.finish();
+        DB.rollback();
+        return false;
+    }
+    query.finish();
+    DB.commit();
     query.prepare(prepareInsertQuery(Table_VERSION));
     query.bindValue(VERSION_TEXT, version);
     if (!query.exec()) {
@@ -376,6 +385,9 @@ bool EpisodeBase::checkDatabaseVersion()
     if (currentVersion == "0.1") {
         if (!alterTableForNewField(Constants::Table_EPISODES, Constants::EPISODES_PRIORITY))
             return false;
+        LOG(tr("Episode database updated from version %1 to version: %2")
+            .arg("0.1")
+            .arg(Constants::DB_ACTUALVERSION));
     }
     // Update the database version
     return setCurrentDatabaseVersion(Constants::DB_ACTUALVERSION);
@@ -490,17 +502,22 @@ QVector<Form::SubFormInsertionPoint> EpisodeBase::getSubFormFiles()
     if (!connectDatabase(DB, __LINE__)) {
         return toReturn;
     }
+    Utils::FieldList where;
+    where.append(Utils::Field(Table_FORM, FORM_PATIENTUID, QString("='%1'").arg(patient()->uuid())));
+    where.append(Utils::Field(Table_FORM, FORM_PATIENTUID, QString("IS NULL")));
+    QString whereClause = getWhereClause(where, Utils::Database::OR);
+    where.clear();
+    where.append(Utils::Field(Table_FORM, FORM_GENERIC, QString("IS NULL")));
+    where.append(Utils::Field(Table_FORM, FORM_VALID, QString("=1")));
+    whereClause = QString("(%1) AND (%2)").arg(whereClause).arg(getWhereClause(where, Utils::Database::AND));
+
     DB.transaction();
-    QHash<int, QString> where;
-    where.insert(FORM_GENERIC, QString("IS NULL"));
-    where.insert(FORM_VALID, QString("=1"));
-    where.insert(FORM_PATIENTUID, QString("='%1'").arg(patient()->uuid()));
     QSqlQuery query(DB);
     QString req = select(Table_FORM, QList<int>()
                          << FORM_SUBFORMUID
                          << FORM_INSERTIONPOINT
                          << FORM_INSERTASCHILD
-                         << FORM_APPEND, where);
+                         << FORM_APPEND) + " WHERE " + whereClause;
     if (query.exec(req)) {
         while (query.next()) {
             QString insertUid = query.value(1).toString();
@@ -529,22 +546,24 @@ QVector<Form::SubFormInsertionPoint> EpisodeBase::getSubFormFiles()
 bool EpisodeBase::addSubForms(const QVector<SubFormInsertionPoint> &insertions)
 {
     QSqlDatabase DB = QSqlDatabase::database(DB_NAME);
-    if (!connectDatabase(DB, __LINE__)) {
+    if (!connectDatabase(DB, __LINE__))
         return false;
-    }
     DB.transaction();
-    // save
     QSqlQuery query(DB);
     for(int i = 0; i < insertions.count(); ++i) {
+        const SubFormInsertionPoint &ip = insertions.at(i);
         query.prepare(prepareInsertQuery(Table_FORM));
         query.bindValue(FORM_ID, QVariant());
         query.bindValue(FORM_VALID, 1);
         query.bindValue(FORM_GENERIC, QVariant());
-        query.bindValue(FORM_PATIENTUID, patient()->uuid());
-        query.bindValue(FORM_SUBFORMUID, insertions.at(i).subFormUid());
-        query.bindValue(FORM_INSERTIONPOINT, insertions.at(i).receiverUid());
-        query.bindValue(FORM_INSERTASCHILD, insertions.at(i).addAsChild());
-        query.bindValue(FORM_APPEND, insertions.at(i).appendToForm());
+        if (ip.isForAllPatients())
+            query.bindValue(FORM_PATIENTUID, QVariant());
+        else
+            query.bindValue(FORM_PATIENTUID, patient()->uuid());
+        query.bindValue(FORM_SUBFORMUID, ip.subFormUid());
+        query.bindValue(FORM_INSERTIONPOINT, ip.receiverUidForDatabase());
+        query.bindValue(FORM_INSERTASCHILD, int(ip.addAsChild()));
+        query.bindValue(FORM_APPEND, int(ip.appendToForm()));
         query.bindValue(FORM_USER_RESTRICTION_ID, QVariant());
         if (!query.exec()) {
             LOG_QUERY_ERROR(query);
@@ -933,6 +952,35 @@ bool EpisodeBase::removeEpisode(const QVariant &uid)
     using namespace Constants;
     QHash<int, QString> where;
     where.insert(EPISODES_ID, QString("='%1'").arg(uid.toString()));
+    DB.transaction();
+    QSqlQuery query(DB);
+    query.prepare(prepareUpdateQuery(Table_EPISODES, EPISODES_ISVALID, where));
+    query.bindValue(0, "0");
+    if (!query.exec()) {
+        LOG_QUERY_ERROR(query);
+        query.finish();
+        DB.rollback();
+        return false;
+    }
+    query.finish();
+    DB.commit();
+    return true;
+}
+
+/** Remove all the recorded episode for the form \e formUid and for the patient \e patientUid in the database */
+bool EpisodeBase::removeAllEpisodeForForm(const QVariant &formUid, const QString &patientUid)
+{
+    if (!formUid.isValid())
+        return false;
+    if (patientUid.isEmpty())
+        return false;
+    QSqlDatabase DB = QSqlDatabase::database(DB_NAME);
+    if (!connectDatabase(DB, __LINE__))
+        return false;
+    using namespace Constants;
+    QHash<int, QString> where;
+    where.insert(EPISODES_FORM_PAGE_UID, QString("='%1'").arg(formUid.toString()));
+    where.insert(EPISODES_PATIENT_UID, QString("='%1'").arg(patientUid));
     DB.transaction();
     QSqlQuery query(DB);
     query.prepare(prepareUpdateQuery(Table_EPISODES, EPISODES_ISVALID, where));

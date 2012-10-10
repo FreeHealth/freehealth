@@ -74,8 +74,8 @@ DrugsMode::~DrugsMode()
 
 void DrugsMode::onPatientFormsLoaded()
 {
-    Form::FormMain *root = formManager().rootForm(Core::Constants::MODE_PATIENT_DRUGS);
-    if (!root) {
+    Form::FormTreeModel *model = formManager().formTreeModelForMode(Core::Constants::MODE_PATIENT_DRUGS);
+    if (!model) {
         if (inPool)
             pluginManager()->removeObject(this);
         inPool = false;
@@ -84,5 +84,5 @@ void DrugsMode::onPatientFormsLoaded()
             pluginManager()->addObject(this);
         inPool = true;
     }
-    m_Holder->setRootForm(root);
+    m_Holder->setFormTreeModel(model);
 }

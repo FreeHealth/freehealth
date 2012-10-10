@@ -56,7 +56,6 @@
 #include <translationutils/trans_agenda.h>
 #include <translationutils/trans_datetime.h>
 
-
 #include "ui_usercalendarviewer.h"
 
 #include <QStandardItemModel>
@@ -75,6 +74,7 @@ static inline Agenda::AgendaCore &agendaCore() {return Agenda::AgendaCore::insta
 static inline Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
 static inline Core::ModeManager *modeManager() {return Core::ICore::instance()->modeManager();}
+static inline Patients::PatientModel *patientModel() {return Patients::PatientModel::activeModel();}
 
 namespace {
     const int S_NUMBEROFAVAILABILITIESTOSHOW = 10;
@@ -90,7 +90,7 @@ public:
         m_CalendarItemModel(0),
         m_ItemContextMenu(0),
         m_UserCalendarModel(agendaCore().userCalendarModel(user()->uuid())),
-        aSwitchToPatient(0), aEditItem(0), aPrintItem(0),
+        aSwitchToPatient(0), aEditItem(0), aPrintItem(0), aDeleteItem(0),
         m_AvailModel(0),
         q(parent)
     {
@@ -122,13 +122,19 @@ public:
             aSwitchToPatient = new QAction(q);
             aEditItem = new QAction(q);
             aPrintItem = new QAction(q);
+            aDeleteItem = new QAction(q);
+
             m_ItemContextMenu->addAction(aSwitchToPatient);
             m_ItemContextMenu->addAction(aEditItem);
-            m_ItemContextMenu->addAction(aPrintItem);
+            // TODO: re add the print appointement action
+//            m_ItemContextMenu->addAction(aPrintItem);
+            m_ItemContextMenu->addAction(aDeleteItem);
+
             ui->calendarViewer->setContextMenuForItems(m_ItemContextMenu);
             QObject::connect(aSwitchToPatient, SIGNAL(triggered()), q, SLOT(onSwitchToPatientClicked()));
             QObject::connect(aEditItem, SIGNAL(triggered()), q, SLOT(onEditAppointmentClicked()));
             QObject::connect(aPrintItem, SIGNAL(triggered()), q, SLOT(onPrintAppointmentClicked()));
+            QObject::connect(aDeleteItem, SIGNAL(triggered()), q, SLOT(onDeleteAppointmentClicked()));
         }
     }
 
@@ -140,7 +146,7 @@ public:
     QHash<QString, int> m_UidToListIndex;
     bool scrollOnShow;
 
-    QAction *aToday, *aTomorrow, *aNextWeek, *aNextMonth, *aSwitchToPatient, *aEditItem, *aPrintItem;
+    QAction *aToday, *aTomorrow, *aNextWeek, *aNextMonth, *aSwitchToPatient, *aEditItem, *aPrintItem, *aDeleteItem;
     QStandardItemModel *m_AvailModel;
 
 private:
@@ -176,6 +182,7 @@ UserCalendarViewer::UserCalendarViewer(QWidget *parent) :
     connect(d->ui->startDateSelector, SIGNAL(triggered(QAction*)), this, SLOT(quickDateSelection(QAction*)));
 
     d->ui->refreshAvailabilities->setIcon(theme()->icon(Core::Constants::ICONSOFTWAREUPDATEAVAILABLE));
+    d->ui->refreshAvailabilities->setToolTip(tr("Refresh Availabilities"));
     d->ui->calendarViewer->setDate(QDate::currentDate());
     d->ui->calendarViewer->setDayScaleHourDivider(2);
     d->ui->calendarViewer->setDayGranularity(5);
@@ -204,7 +211,7 @@ UserCalendarViewer::UserCalendarViewer(QWidget *parent) :
     connect(d->ui->availabilitiesView, SIGNAL(activated(QModelIndex)), this, SLOT(newEventAtAvailabity(QModelIndex)));
     connect(d->ui->availableAgendasCombo, SIGNAL(currentIndexChanged(int)), this, SLOT(on_availableAgendasCombo_activated(int)));
     connect(d->ui->refreshAvailabilities, SIGNAL(clicked()), this, SLOT(refreshAvailabilities()));
-    connect(d->ui->defaultDurationButton,SIGNAL(clicked()), this, SLOT(resetDefaultDuration()));
+    connect(d->ui->defaultDurationButton, SIGNAL(clicked()), this, SLOT(resetDefaultDuration()));
     connect(d->ui->startDate, SIGNAL(dateChanged(QDate)), this, SLOT(onStartDateChanged(QDate)));
     userChanged();
 
@@ -260,7 +267,7 @@ void UserCalendarViewer::newEventAtAvailabity(const QModelIndex &index)
     if (dlg.exec() != QDialog::Accepted) {
         d->m_CalendarItemModel->removeItem(item.uid());
     }
-    recalculateAvailabilitiesWithDurationIndex((d->ui->availDurationCombo->currentIndex()+1)*5);
+    recalculateAvailabilitiesWithDurationIndex(d->ui->availDurationCombo->currentIndex());
 }
 
 void UserCalendarViewer::refreshAvailabilities()
@@ -269,7 +276,8 @@ void UserCalendarViewer::refreshAvailabilities()
 }
 
 /** Resets the duration in the ComboBox to the default duration set in the Agenda config. */
-void UserCalendarViewer::resetDefaultDuration() {
+void UserCalendarViewer::resetDefaultDuration()
+{
     int currentCalendarIndex = d->ui->availableAgendasCombo->currentIndex();
 
     QModelIndex index = d->m_UserCalendarModel->index(currentCalendarIndex, UserCalendarModel::DefaultDuration);
@@ -283,7 +291,7 @@ void UserCalendarViewer::quickDateSelection(QAction *a)
     if (a==d->aTomorrow)
         d->ui->startDate->setDate(QDate::currentDate().addDays(1));
     if (a==d->aNextWeek)
-        d->ui->startDate->setDate(QDate::currentDate().addDays(QDate::currentDate().dayOfWeek() - 7));
+        d->ui->startDate->setDate(QDate::currentDate().addDays(8 - QDate::currentDate().dayOfWeek()));
     if (a==d->aNextMonth)
         d->ui->startDate->setDate(QDate(QDate::currentDate().year(), QDate::currentDate().month(), 1).addMonths(1));
     onStartDateChanged(d->ui->startDate->date());
@@ -388,9 +396,11 @@ void UserCalendarViewer::on_availableAgendasCombo_activated(const int index)
         d->ui->calendarViewer->setDayScaleHourDivider(defaultDuration/60);
         d->ui->calendarViewer->setDayItemDefaultDuration(defaultDuration);
 
-        //: default agenda duration time (in minutes)
-        d->ui->defaultDurationButton->setToolTip(tr("Set back to default: ") +
-                                                 QString::number(defaultDuration) + " " + tkTr(Trans::Constants::MINUTES));
+        //: default agenda duration time, %1 = time, %2 = minutes (fixed)
+        d->ui->defaultDurationButton->setToolTip(tr("Set back to default: %1 %2").arg(
+                                                     QString::number(defaultDuration),
+                                                     tkTr(Trans::Constants::MINUTES)));
+        resetDefaultDuration();
         d->ui->description->setHtml(d->m_UserCalendarModel->index(index, UserCalendarModel::Description).data().toString());
     }
 //    d->populateCalendarWithCurrentWeek(d->m_UserCals.at(index));
@@ -399,7 +409,8 @@ void UserCalendarViewer::on_availableAgendasCombo_activated(const int index)
 void UserCalendarViewer::userChanged()
 {
     // Update ui
-    d->ui->userNameLabel->setText(user()->value(Core::IUser::FullName).toString());
+    //: e.g. Agendas of John Doe
+    d->ui->availableAgendasGroup->setTitle(tr("Agendas of %1").arg(user()->value(Core::IUser::FullName).toString()));
     if (d->m_UserCalendarModel) {
         disconnect(d->m_UserCalendarModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(updateCalendarData(QModelIndex,QModelIndex)));
     }
@@ -445,13 +456,13 @@ void UserCalendarViewer::userChanged()
     }
 }
 
-
 void UserCalendarViewer::updateCalendarData(const QModelIndex &top, const QModelIndex &bottom)
 {
     Q_UNUSED(bottom);
     if (top.column()==UserCalendarModel::DefaultDuration) {
         // get default duration of given calendar
-        int defaultDuration = d->m_UserCalendarModel->index(top.row(), UserCalendarModel::DefaultDuration, top.parent()).data().toInt();
+        int defaultDuration = d->m_UserCalendarModel->index(top.row(),
+                                                            UserCalendarModel::DefaultDuration, top.parent()).data().toInt();
         d->ui->calendarViewer->setDayScaleHourDivider(defaultDuration/60);
         d->ui->calendarViewer->setDayItemDefaultDuration(defaultDuration);
         //: default agenda duration time (in minutes)
@@ -466,27 +477,47 @@ void UserCalendarViewer::updateCalendarData(const QModelIndex &top, const QModel
     }
 }
 
+/** Reacts to the user selected action in the contextual menu */
 void UserCalendarViewer::onSwitchToPatientClicked()
 {
-    //TODO: how to obtain current patient?
-    // a calendar item has only "getPeopleNames", there can be more than one
-    // AND there is no method like "itemAt" in the viewer!
+    // Get the clicked calendar item
+    Calendar::CalendarItem item = d->ui->calendarViewer->getContextualCalendarItem();
 
-//    Patients::PatientModel::activeModel()->setCurrentPatient(
-//                d->m_CalendarItemModel->getPeopleNames(
-//                    d->m_CalendarItemModel->getItemByUid());
-//                );
-//    modeManager()->activateMode(Core::Constants::MODE_PATIENT_FILE);
+    // Find the first patient of the appointement
+    QList<Calendar::People> people = d->m_CalendarItemModel->peopleList(item);
+    foreach(const Calendar::People &guest, people) {
+        if (guest.type == Calendar::People::PeopleAttendee) {
+            patientModel()->setFilter("", "", guest.uid, Patients::PatientModel::FilterOnUuid);
+            patientModel()->setCurrentPatient(patientModel()->index(0,0));
+            break;
+        }
+    }
 }
 
+/** Reacts to the user selected action in the contextual menu */
 void UserCalendarViewer::onEditAppointmentClicked()
 {
-    // TODO
+    // Get the clicked calendar item
+    Calendar::CalendarItem item = d->ui->calendarViewer->getContextualCalendarItem();
+
+    // Starts the editor dialog
+    Calendar::BasicItemEditorDialog dialog(d->m_CalendarItemModel, this);
+    dialog.init(item);
+    dialog.exec();
 }
 
+/** Reacts to the user selected action in the contextual menu */
 void UserCalendarViewer::onPrintAppointmentClicked()
 {
     // TODO
+}
+
+/** Reacts to the user selected action in the contextual menu */
+void UserCalendarViewer::onDeleteAppointmentClicked()
+{
+    // Get the clicked calendar item
+    Calendar::CalendarItem item = d->ui->calendarViewer->getContextualCalendarItem();
+    d->m_CalendarItemModel->removeItem(item.uid());
 }
 
 bool UserCalendarViewer::event(QEvent *e)
@@ -506,9 +537,9 @@ bool UserCalendarViewer::event(QEvent *e)
         d->aToday->setToolTip(d->aToday->text());
         d->aTomorrow->setText(tkTr(Trans::Constants::TOMORROW));
         d->aTomorrow->setToolTip(d->aTomorrow->text());
-        d->aNextWeek->setText(tkTr(Trans::Constants::NEXT_WEEK));
+        d->aNextWeek->setText(tr("Beginning of next week"));
         d->aNextWeek->setToolTip(d->aNextWeek->text());
-        d->aNextMonth->setText(tkTr(Trans::Constants::NEXT_MONTH));
+        d->aNextMonth->setText(tr("Beginning of next month"));
         d->aNextMonth->setToolTip(d->aNextMonth->text());
 
         if (d->aSwitchToPatient)
@@ -517,6 +548,8 @@ bool UserCalendarViewer::event(QEvent *e)
             d->aEditItem->setText(tr("Edit appointment"));
         if (d->aPrintItem)
                 d->aPrintItem->setText(tr("Print appointment"));
+        if (d->aDeleteItem)
+                d->aDeleteItem->setText(tr("Delete appointment"));
 
         break;
     }

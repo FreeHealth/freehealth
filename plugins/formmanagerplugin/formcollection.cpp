@@ -28,7 +28,8 @@
  * \class Form::FormCollection
  * \brief Holds a book of forms (a specific mode, the central form, duplicates or not...).
  * The form books are created and managed by the Form::FormManager object. Books contain
- * all forms available for a specific mode.
+ * all forms available for a specific mode. This object is responsible of the life of
+ * the registered Form::FormMain pointers. Every Form::FormMain pointers are deleted here.
  * \sa Form::FormManager
  */
 
@@ -45,14 +46,12 @@ using namespace Trans::ConstantTranslations;
 
 namespace Form {
 namespace Internal {
-/*!
- * \class Form::Internal::FormCollectionPrivate
- * \brief Private implementation of the Form::FormCollection class.
- */
 class FormCollectionPrivate
 {
 public:
     FormCollectionPrivate(FormCollection *parent) :
+        _isDuplicates(false),
+        _type(FormCollection::CompleteForm),
         q(parent)
     {
     }
@@ -62,7 +61,10 @@ public:
     }
 
 public:
+    bool _isDuplicates;
+    QString _modeUid, _formUid;
     QList<Form::FormMain *> _emptyRootForms;
+    FormCollection::CollectionType _type;
 
 private:
     FormCollection *q;
@@ -71,8 +73,8 @@ private:
 } // end namespace Form
 
 /*! Constructor of the Form::FormCollection class */
-FormCollection::FormCollection(QObject *parent) :
-    QObject(parent),
+FormCollection::FormCollection() : //(QObject *parent) :
+//    QObject(parent),
     d(new FormCollectionPrivate(this))
 {
 }
@@ -80,6 +82,8 @@ FormCollection::FormCollection(QObject *parent) :
 /*! Destructor of the Form::FormCollection class */
 FormCollection::~FormCollection()
 {
+    qDeleteAll(d->_emptyRootForms);
+    d->_emptyRootForms.clear();
     if (d)
         delete d;
     d = 0;
@@ -91,3 +95,97 @@ bool FormCollection::initialize()
     return true;
 }
 
+void FormCollection::setDuplicates(bool isDuplicates)
+{
+    d->_isDuplicates = isDuplicates;
+}
+
+void FormCollection::setType(CollectionType type)
+{
+    d->_type = type;
+}
+
+bool FormCollection::isNull() const
+{
+    return d->_modeUid.isEmpty() && d->_formUid.isEmpty() && d->_emptyRootForms.isEmpty();
+}
+
+bool FormCollection::isDuplicates() const
+{
+    return d->_isDuplicates;
+}
+
+QString FormCollection::formUid() const
+{
+    return d->_formUid;
+}
+
+QString FormCollection::modeUid() const
+{
+    return d->_modeUid;
+}
+
+FormCollection::CollectionType FormCollection::type() const
+{
+    return d->_type;
+}
+
+void FormCollection::setEmptyRootForms(const QList<Form::FormMain *> &emptyRootForms)
+{
+    d->_emptyRootForms = emptyRootForms;
+    // extract the formuid
+    if (emptyRootForms.count()) {
+        d->_formUid = emptyRootForms.at(0)->uuid();
+        d->_modeUid = emptyRootForms.at(0)->modeUniqueName();
+    }
+}
+
+void FormCollection::addEmptyRootForm(Form::FormMain *emptyRootForm)
+{
+    d->_emptyRootForms << emptyRootForm;
+}
+
+const QList<FormMain *> &FormCollection::emptyRootForms() const
+{
+    return d->_emptyRootForms;
+}
+
+bool FormCollection::containsFormUid(const QString &formUid) const
+{
+    return (form(formUid)!=0);
+}
+
+bool FormCollection::containsIdentityForm() const
+{
+    return (identityForm()!=0);
+}
+
+Form::FormMain *FormCollection::identityForm() const
+{
+    for(int i=0; i < d->_emptyRootForms.count(); ++i) {
+        FormMain *root = d->_emptyRootForms.at(i);
+        if (root->spec()->value(FormItemSpec::Spec_IsIdentityForm).toBool())
+            return root;
+        foreach(FormMain *form, root->flattenFormMainChildren()) {
+            if (form->spec()->value(FormItemSpec::Spec_IsIdentityForm).toBool())
+                return form;
+        }
+    }
+    return 0;
+}
+
+Form::FormMain *FormCollection::form(const QString &formUid) const
+{
+    for(int i=0; i < d->_emptyRootForms.count(); ++i) {
+        Form::FormMain *form = d->_emptyRootForms.at(i);
+        if (form->uuid()==formUid)
+            return form;
+        const QList<Form::FormMain*> &children = form->flattenFormMainChildren();
+        for(int j=0; j < children.count(); ++j) {
+            Form::FormMain *test = children.at(j);
+            if (test->uuid()==formUid)
+                return test;
+        }
+    }
+    return 0;
+}

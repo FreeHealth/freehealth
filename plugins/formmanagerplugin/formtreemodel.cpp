@@ -24,11 +24,19 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
+/**
+ * \class Form::FormTreeModel
+ * Model for forms. Get your model from Form::FormManager::formTreeModel()
+ */
+
 #include "formtreemodel.h"
 #include "iformitem.h"
 #include "episodebase.h"
-//#include "formmanager.h"
-//#include "formcore.h"
+#include "formmanager.h"
+#include "formcore.h"
+#include "formcollection.h"
+#include "subforminsertionpoint.h"
+#include "constants_db.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/ipatient.h>
@@ -51,8 +59,12 @@ using namespace Trans::ConstantTranslations;
 static inline Core::ITheme *theme()  { return Core::ICore::instance()->theme(); }
 static inline Core::ISettings *settings()  { return Core::ICore::instance()->settings(); }
 static inline Form::Internal::EpisodeBase *episodeBase() {return Form::Internal::EpisodeBase::instance();}
-//static inline Form::FormManager &formManager() {return Form::FormCore::instance().formManager();}
+static inline Form::FormManager &formManager() {return Form::FormCore::instance().formManager();}
 static inline Core::IPatient *patient()  { return Core::ICore::instance()->patient(); }
+
+namespace {
+const int SUBFORM_TAG_ROLE = Qt::UserRole + 1;
+}
 
 namespace Form {
 namespace Internal {
@@ -60,9 +72,9 @@ class FormTreeModelPrivate
 {
 public:
     FormTreeModelPrivate(FormTreeModel *parent) :
-        _rootForm(0),
         q(parent)
-    {}
+    {
+    }
 
     void linkFormAndItem(Form::FormMain *form, QStandardItem *item)
     {
@@ -94,46 +106,117 @@ public:
         return label;
     }
 
-    void createFormTree()
+    QIcon formIcon(Form::FormMain *form)
     {
-        q->clear();
+        QString iconFile = form->spec()->iconFileName();
+        iconFile.replace(Core::Constants::TAG_APPLICATION_THEME_PATH, settings()->path(Core::ISettings::SmallPixmapPath));
+        return QIcon(iconFile);
+    }
 
-        // getting Forms
-        if (WarnFormRetreiving)
-            LOG_FOR(q, "Generating FormTreeModel");
+    void createItems(const QList<Form::FormMain *> &emptyrootforms, bool tagAsSubForm = false)
+    {
         QFont bold;
         bold.setBold(true);
-
-        // create one item per form
-        foreach(Form::FormMain *form, _rootForm->flattenFormMainChildren()) {
-            QString label = formLabelWithEpisodeCount(form);
-            QString iconFile = form->spec()->iconFileName();
-            iconFile.replace(Core::Constants::TAG_APPLICATION_THEME_PATH, settings()->path(Core::ISettings::SmallPixmapPath));
-            QStandardItem *item = new QStandardItem(QIcon(iconFile), label);
-            item->setFont(bold);
-            linkFormAndItem(form, item);
-        }
-
-        // reparent items
-        foreach(Form::FormMain *form, _rootForm->flattenFormMainChildren()) {
-            QStandardItem *item = formToItem(form);
-            QStandardItem *parent = 0;
-            if (form->formParent() == _rootForm) {
-                parent = q->invisibleRootItem();
-            } else {
-                parent = formToItem(form->formParent());
+        for(int i=0; i<emptyrootforms.count(); ++i) {
+            Form::FormMain *root = emptyrootforms.at(i);
+            foreach(Form::FormMain *form, root->flattenFormMainChildren()) {
+                QStandardItem *item = new QStandardItem(formIcon(form), formLabelWithEpisodeCount(form));
+                item->setFont(bold);
+                linkFormAndItem(form, item);
+                if (tagAsSubForm)
+                    item->setData(true, ::SUBFORM_TAG_ROLE);
             }
-            QStandardItem *itemUuid = new QStandardItem(form->uuid());
-            QStandardItem *itemEmpty1 = new QStandardItem;
-            QStandardItem *itemEmpty2 = new QStandardItem;
-            QList<QStandardItem*> cols;
-            cols << item << itemUuid << itemEmpty1 << itemEmpty2;
-            parent->appendRow(cols);
         }
     }
 
+    void reparentItems(const QList<Form::FormMain *> &emptyrootforms, QStandardItem *defaultRootParent = 0)
+    {
+        if (!defaultRootParent)
+            defaultRootParent = q->invisibleRootItem();
+        for(int i=0; i < emptyrootforms.count(); ++i) {
+            Form::FormMain *root = emptyrootforms.at(i);
+            foreach(Form::FormMain *form, root->flattenFormMainChildren()) {
+                QStandardItem *item = formToItem(form);
+                QStandardItem *parent = 0;
+                if (form->formParent() == root) {
+                    parent = q->invisibleRootItem();
+                } else {
+                    parent = formToItem(form->formParent());
+                }
+                QStandardItem *itemUuid = new QStandardItem(form->uuid());
+                QStandardItem *itemEmpty1 = new QStandardItem;
+                QStandardItem *itemEmpty2 = new QStandardItem;
+                QList<QStandardItem*> cols;
+                cols << item << itemUuid << itemEmpty1 << itemEmpty2;
+                //            qWarning() << parent << cols << form->uuid() << form->formParent();
+                parent->appendRow(cols);
+            }
+        }
+    }
+
+    void createFormTree()
+    {
+        _formToItem.clear();
+        q->clear();
+
+        // getting Forms
+        if (WarnFormRetreiving) {
+            LOG_FOR(q, QString("Generating FormTreeModel: %1 empty root form(s)").arg(_rootForms.count()));
+            for(int i = 0; i <_rootForms.count(); ++i) {
+                LOG_FOR(q, QString("    - mode: %1; children: %2")
+                        .arg(_rootForms.at(i)->modeUniqueName())
+                        .arg(_rootForms.at(i)->firstLevelFormMainChildren().count()));
+            }
+        }
+        createItems(_rootForms);
+        reparentItems(_rootForms);
+    }
+
+    bool addSubForm(const SubFormInsertionPoint &insertionPoint)
+    {
+        QList<Form::FormMain *> forms = formManager().subFormCollection(insertionPoint.subFormUid()).emptyRootForms();
+
+        // check if receiver is in the model
+        QStandardItem *receiver = 0;
+        if (insertionPoint.receiverUid() == Constants::ROOT_FORM_TAG) {
+            receiver = q->invisibleRootItem();
+            qWarning() << "  --> Receiver == invisiblerootitem" << q->invisibleRootItem();
+        } else {
+            for(int i=0; i< forms.count(); ++i) {
+                Form::FormMain *root = forms.at(i);
+                foreach(Form::FormMain *form, root->flattenFormMainChildren()) {
+                    if (form->uuid() == insertionPoint.receiverUid()) {
+                        receiver = formToItem(form);
+                        break;
+                    }
+                }
+            }
+        }
+
+        if (!receiver)
+            return false;
+        createItems(forms, true);
+        reparentItems(forms, receiver);
+
+        return true;
+    }
+
+    /** Update the episode count of the form element \e form */
+    bool updateFormCount(Form::FormMain *form)
+    {
+        if (!form)
+            return false;
+        QStandardItem *item = formToItem(form);
+        if (!item)
+            return false;
+        item->setText(formLabelWithEpisodeCount(form));
+        item->setToolTip(item->text());
+        return true;
+    }
+
 public:
-    Form::FormMain *_rootForm;
+    QList<Form::FormMain *> _rootForms;
+    QString _modeUid;
     QHash<QStandardItem *, Form::FormMain *> _formToItem;
 
 private:
@@ -142,15 +225,14 @@ private:
 }  // namespace Internal
 }  // namespace Form
 
-FormTreeModel::FormTreeModel(Form::FormMain *emptyRootForm, QObject *parent) :
+FormTreeModel::FormTreeModel(const FormCollection &collection, QObject *parent) :
     QStandardItemModel(parent),
     d(new Internal::FormTreeModelPrivate(this))
 {
-    Q_ASSERT(emptyRootForm);
-    setObjectName("Form::FormTreeModel");
-    d->_rootForm = emptyRootForm;
-//    connect(&formManager(), SIGNAL(subFormLoaded(QString)), this, SLOT(onSubFormLoaded(QString)));
-    connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(updateFormCount()));
+    setObjectName("Form::FormTreeModel::" + collection.formUid() + collection.modeUid());
+    d->_rootForms = collection.emptyRootForms();
+    d->_modeUid = collection.modeUid();
+//    connect(&formManager(), SIGNAL(patientFormsLoaded()), this, SLOT(onPatientFormsLoaded()));
 }
 
 FormTreeModel::~FormTreeModel()
@@ -226,6 +308,12 @@ Qt::ItemFlags FormTreeModel::flags(const QModelIndex &index) const
     return Qt::ItemIsSelectable | Qt::ItemIsEnabled;
 }
 
+/** Return the mode uid associated with the model */
+const QString &FormTreeModel::modeUid() const
+{
+    return d->_modeUid;
+}
+
 /** Return true if the \e index only owns one unique episode. It is supposed that the \e index points to a form */
 bool FormTreeModel::isUniqueEpisode(const QModelIndex &index) const
 {
@@ -254,47 +342,67 @@ Form::FormMain *FormTreeModel::formForIndex(const QModelIndex &index) const
     return d->formForIndex(index);
 }
 
+/** Remove all subForms from the model */
+void FormTreeModel::clearSubForms()
+{
+    QList<QStandardItem *> items = d->_formToItem.keys();
+    foreach(QStandardItem *item, items) {
+        if (item->data(::SUBFORM_TAG_ROLE).toBool()) {
+            d->_formToItem.remove(item);
+            // remove row from model
+            QModelIndex index = indexFromItem(item);
+            removeRow(index.row(), index.parent());
+        }
+    }
+}
+
 /** Add a subform to the model according the \e insertionPoint */
 bool FormTreeModel::addSubForm(const SubFormInsertionPoint &insertionPoint)
 {
-    // TODO code me
+    bool ok = d->addSubForm(insertionPoint);
+    reset();
+    return ok;
+}
+
+/** Return true if the \e index points to a root-subform */
+bool FormTreeModel::isIncludedRootSubForm(const QModelIndex &index) const
+{
+    QStandardItem *item = itemFromIndex(index);
+//    qWarning() << "isIncludedRootSubForm" << item;
+    if (!item)
+        return false;
+//    qWarning() << "isIncludedRootSubForm" << item->data(::SUBFORM_TAG_ROLE);
+    return item->data(::SUBFORM_TAG_ROLE).toBool();
+}
+
+/** Clear the content of all the model's forms */
+bool FormTreeModel::clearFormContents()
+{
+    foreach(Form::FormMain *form, d->_rootForms) {
+        form->clear();
+    }
     return true;
 }
 
 /** Update the episode count of the form element corresponding to the \e index */
 bool FormTreeModel::updateFormCount(const QModelIndex &index)
 {
-    return updateFormCount(formForIndex(index));
-}
-
-/** Update the episode count of the form element \e form */
-bool FormTreeModel::updateFormCount(Form::FormMain *form)
-{
-    QStandardItem *item = d->formToItem(form);
-    item->setText(d->formLabelWithEpisodeCount(form));
-    return true;
+    if (index.isValid())
+        return d->updateFormCount(formForIndex(index));
+    return false;
 }
 
 /** Update the episode count of each form of the model. The number count is directly extracted from the episode database. */
 bool FormTreeModel::updateFormCount()
 {
-    QHashIterator<QStandardItem *, Form::FormMain *> i(d->_formToItem);
-    while (i.hasNext()) {
-        i.next();
-        QStandardItem *item = i.key();
-        Form::FormMain *form = i.value();
-        QString label = form->spec()->label();
-        int nb = episodeBase()->getNumberOfEpisodes(form->uuid());
-        if (nb>0)
-            label += QString(" (%1)").arg(nb);
-        item->setText(label);
-    }
+    foreach(Form::FormMain *form, d->_formToItem.values())
+        if (!d->updateFormCount(form))
+            return false;
     return true;
 }
 
-void FormTreeModel::onSubFormLoaded(const QString &formUid)
+void FormTreeModel::onPatientFormsLoaded()
 {
-    Q_UNUSED(formUid);
-//    d->createFormTree();
-//    reset();
+    d->createFormTree();
+    reset();
 }

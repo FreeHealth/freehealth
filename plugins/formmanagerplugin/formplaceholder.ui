@@ -38,7 +38,7 @@
           <enum>Qt::Vertical</enum>
          </property>
          <widget class="QTableView" name="episodeView"/>
-         <widget class="Form::Internal::FormDataWidgetMapper" name="formDataMapper" native="true">
+         <widget class="Form::FormDataWidgetMapper" name="formDataMapper" native="true">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
             <horstretch>0</horstretch>
@@ -67,9 +67,9 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>Form::Internal::FormDataWidgetMapper</class>
+   <class>Form::FormDataWidgetMapper</class>
    <extends>QWidget</extends>
-   <header>formdatawidgetmapper.h</header>
+   <header location="global">formmanagerplugin/formdatawidgetmapper.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

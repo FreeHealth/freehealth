@@ -214,7 +214,7 @@ public:
         retranslate();
     }
 
-    void clear()
+    void clearAll()
     {
         _age->clear();
         _dob->clear();
@@ -537,10 +537,12 @@ public:
     void setIdentityForm(Form::FormMain *form)
     {
         _identityForm = form;
-        // Create a cache to speed up the wrapper
-        foreach(Form::FormItem *item, _identityForm->flattenFormItemChildren()) {
-            if (item->itemData() && item->patientDataRepresentation() != -1) {
-                _formItemWithData.insert(item->patientDataRepresentation(), item);
+        if (form) {
+            // Create a cache to speed up the wrapper
+            foreach(Form::FormItem *item, _identityForm->flattenFormItemChildren()) {
+                if (item->itemData() && item->patientDataRepresentation() != -1) {
+                    _formItemWithData.insert(item->patientDataRepresentation(), item);
+                }
             }
         }
     }
@@ -567,6 +569,13 @@ public:
         }
     }
 
+    /*!
+     * \brief Returns patient data with given \e column from current patient.
+     *
+     * This function first queries the PatientModel, if there is found a value, it is returned.
+     * If not, it searches for the column in the episode data and returns a valid value.
+     * If nothing is found, a QVariant() is returned.
+     */
     QVariant data(const int iPatientColumn) const
     {
         // get data from the patient model (value is extracted from database)
@@ -638,7 +647,7 @@ public:
         Q_ASSERT(viewUi);
         viewUi->photoLabel->clear();
         m_IdentityWidget->clear();
-        m_AgeWidget->clear();
+        m_AgeWidget->clearAll();
         m_FullContactWidget->clear();
     }
 
@@ -665,8 +674,11 @@ public:
         // age / dob / dod / prof / nss
         const QString &age = m_PatientModel->index(row, Core::IPatient::Age).data().toString();
         QString dob = QLocale().toString(m_PatientModel->index(row, Core::IPatient::DateOfBirth).data().toDate(), QLocale::LongFormat);
-        viewUi->identityDetails->setSummaryText(QString("%1 - %2").arg(name).arg(age));
-        m_AgeWidget->clear();
+        if (!name.isEmpty())
+            viewUi->identityDetails->setSummaryText(QString("%1 - %2").arg(name).arg(age));
+        else
+            viewUi->identityDetails->setSummaryText("");
+        m_AgeWidget->clearAll();
         m_AgeWidget->setAge(age);
         m_AgeWidget->setDateOfBirth(dob);
         m_AgeWidget->setProfession(_patientModelIdentityWrapper->data(Core::IPatient::Profession).toString());

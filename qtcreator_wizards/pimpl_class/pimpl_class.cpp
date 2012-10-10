@@ -26,7 +26,7 @@
  ***************************************************************************/
 @if "%Doxygen%" == "true"
 /*!
-@if "%InternalNamespace%" == "true"
+@if "%Internal%" == "true"
  * \class %PluginNamespace:c%::Internal::%ClassName:c%
 @else
  * \class %PluginNamespace:c%::%ClassName:c%
@@ -42,12 +42,12 @@
 
 @if "%Translations%" == "true"
 #include <translationutils/constants.h>
-@endif
 
+@endif
 #include <QDebug>
 
 using namespace %PluginNamespace:c%;
-@if "%InternalNamespace%" == "true"
+@if "%Internal%" == "true"
 using namespace Internal;
 @endif
 @if "%Translations%" == "true"
@@ -56,12 +56,12 @@ using namespace Trans::ConstantTranslations;
 
 @if "%PIMPL%" == "true"
 namespace %PluginNamespace:c% {
-@if "%InternalNamespace%" == "true"
+@if "%Internal%" == "true"
 namespace Internal {
 @endif
 @if "%Doxygen%" == "true"
 /*!
-@if "%InternalNamespace%" == "true"
+@if "%Internal%" == "true"
  * \class %PluginNamespace:c%::Internal::%ClassName:c%Private
 @else
  * \class %PluginNamespace:c%::%ClassName:c%Private
@@ -90,14 +90,14 @@ private:
     %ClassName:c% *q;
 };
 
-@if "%InternalNamespace%" == "true"
+@if "%Internal%" == "true"
 }  // namespace Internal
 @endif
 } // end namespace %PluginNamespace:c%
 @endif
 
 @if "%Singleton%" == "true"
-@if "%InternalNamespace%" == "true"
+@if "%Internal%" == "true"
 %PluginNamespace:c%::Internal::%ClassName:c% *%PluginNamespace:c%::Internal::%ClassName:c%::_instance = 0;
 
 %PluginNamespace:c%::Internal::%ClassName:c% &instance() // static
@@ -113,7 +113,7 @@ private:
 
 @endif
 @if "%Doxygen%" == "true"
-@if "%InternalNamespace%" == "true"
+@if "%Internal%" == "true"
 /*! Constructor of the %PluginNamespace%::Internal::%ClassName:c% class */
 @else
 /*! Constructor of the %PluginNamespace%::%ClassName:c% class */
@@ -133,7 +133,7 @@ private:
 }
 
 @if "%Doxygen%" == "true"
-@if "%InternalNamespace%" == "true"
+@if "%Internal%" == "true"
 /*! Destructor of the %PluginNamespace%::Internal::%ClassName:c% class */
 @else
 /*! Destructor of the %PluginNamespace%::%ClassName:c% class */

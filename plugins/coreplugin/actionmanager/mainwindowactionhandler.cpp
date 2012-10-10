@@ -217,7 +217,7 @@ void MainWindowActionHandler::createGeneralActions(const int actions)
         menu->addAction(cmd, group);
     }
 
-    group = Constants::G_GENERAL_PRINT;
+    group = Id(Constants::G_GENERAL_PRINT);
 
     // Print Action
     if (actions & Core::MainWindowActions::A_FilePrint) {
@@ -239,7 +239,7 @@ void MainWindowActionHandler::createGeneralActions(const int actions)
         menu->addAction(cmd, group);
     }
 
-    group = Constants::G_GENERAL_EXIT;
+    group = Id(Constants::G_GENERAL_EXIT);
 
     // Quit Action
     if (actions & Core::MainWindowActions::A_FileQuit) {
@@ -248,11 +248,13 @@ void MainWindowActionHandler::createGeneralActions(const int actions)
         cmd = actionManager()->registerAction(a, Constants::A_FILE_EXIT, ctx);
         cmd->setTranslations(Trans::Constants::FILEEXIT_TEXT );
         cmd->setDefaultKeySequence(QKeySequence::Quit);
+#ifdef Q_OS_MAC
         cmd->action()->setMenuRole(QAction::QuitRole);
+#endif
         menu->addAction(cmd, group);
     }
 
-//    group = Constants::G_GENERAL_EDIT;
+//    group = Id(Constants::G_GENERAL_EDIT);
 //
 //    // Undo Action
 //    if (actions & Core::MainWindowActions::A_) {
@@ -317,7 +319,7 @@ void MainWindowActionHandler::createGeneralActions(const int actions)
 //    menu->addAction(cmd, group);
 //    a->setEnabled(false);
 
-    group = Constants::G_GENERAL_PATIENTS;
+    group = Id(Constants::G_GENERAL_PATIENTS);
 
     // Patient's new
     if (actions & Core::MainWindowActions::A_Patients_New) {
@@ -351,13 +353,12 @@ void MainWindowActionHandler::createGeneralActions(const int actions)
         menu->addAction(cmd, group);
     }
 
-    group = Constants::G_GENERAL_CONFIG;
+    group = Id(Constants::G_GENERAL_CONFIG);
 
     // Configuration
     if (actions & Core::MainWindowActions::A_AppConfigurator) {
         a = aGeneralAppConfigurator = new QAction(this);
         a->setObjectName("aGeneralAppConfigurator");
-        a->setMenuRole(QAction::NoRole);
         a->setIcon(theme()->icon(Constants::ICONPREFERENCES));
         cmd = actionManager()->registerAction(a, Constants::A_APPCONFIGURATOR, ctx);
         cmd->setTranslations(Trans::Constants::APPCONFIGURATOR_TEXT);
@@ -367,9 +368,12 @@ void MainWindowActionHandler::createGeneralActions(const int actions)
         a = aGeneralAppPrefs = new QAction(this);
         a->setObjectName("aGeneralAppPrefs");
         a->setIcon(theme()->icon(Constants::ICONPREFERENCES));
-        a->setMenuRole(QAction::PreferencesRole);
         cmd = actionManager()->registerAction(a, Constants::A_PREFERENCES, ctx);
         cmd->setTranslations(Trans::Constants::PREFERENCES_TEXT);
+#ifdef Q_OS_MAC
+        cmd->setDefaultKeySequence(QKeySequence(tr("Ctrl+,")));
+        cmd->action()->setMenuRole(QAction::PreferencesRole);
+#endif
         menu->addAction(cmd, group);
     }
     if (actions & Core::MainWindowActions::A_PluginsPreferences) {
@@ -390,7 +394,7 @@ void MainWindowActionHandler::createGeneralActions(const int actions)
         menu->addAction(cmd, group);
     }
 
-    group = Constants::G_GENERAL_HELP;
+    group = Id(Constants::G_GENERAL_HELP);
 
     // Help menu
     if (actions & Core::MainWindowActions::A_AppAbout) {
@@ -404,6 +408,7 @@ void MainWindowActionHandler::createGeneralActions(const int actions)
     if (actions & Core::MainWindowActions::A_PluginsAbout) {
         a = aGeneralPlugsAbout = new QAction(this);
         a->setIcon(theme()->icon(Constants::ICONPLUGIN));
+        a->setMenuRole(QAction::AboutRole);
         cmd = actionManager()->registerAction(a, Constants::A_ABOUTPLUGINS, ctx);
         cmd->setTranslations(Trans::Constants::ABOUTPLUGINS_TEXT);
         menu->addAction(cmd, group);
@@ -993,7 +998,6 @@ void MainWindowActionHandler::createConfigurationActions(int actions)
         a = aAppConfigurator = new QAction(this);
         a->setObjectName("aAppConfigurator");
         a->setIcon(theme()->icon(Constants::ICONPREFERENCES));
-        a->setMenuRole(QAction::NoRole);
         cmd = actionManager()->registerAction(a, Constants::A_APPCONFIGURATOR, ctx);
         cmd->setTranslations(Trans::Constants::APPCONFIGURATOR_TEXT);
         menu->addAction(cmd, Id(Constants::G_APP_CONFIGURATION));
@@ -1002,9 +1006,12 @@ void MainWindowActionHandler::createConfigurationActions(int actions)
         a = aAppPrefs = new QAction(this);
         a->setObjectName("aAppPrefs");
         a->setIcon(theme()->icon(Constants::ICONPREFERENCES));
-        a->setMenuRole(QAction::PreferencesRole);
         cmd = actionManager()->registerAction(a, Constants::A_PREFERENCES, ctx);
         cmd->setTranslations(Trans::Constants::PREFERENCES_TEXT);
+#ifdef Q_OS_MAC
+        cmd->setDefaultKeySequence(QKeySequence(tr("Ctrl+,")));
+        cmd->action()->setMenuRole(QAction::PreferencesRole);
+#endif
         menu->addAction(cmd, Id(Constants::G_APP_CONFIGURATION));
     }
     if (actions & Core::MainWindowActions::A_ConfigureMedinTux) {
@@ -1091,9 +1098,11 @@ void MainWindowActionHandler::createHelpActions(int actions)
     if (actions & Core::MainWindowActions::A_AppAbout) {
         a = aAppAbout = new QAction(this);
         a->setIcon(theme()->icon(Constants::ICONABOUT));
-        a->setMenuRole(QAction::AboutRole);
         cmd = actionManager()->registerAction(a, Id(Constants::A_ABOUT), ctx);
         cmd->setTranslations(Trans::Constants::ABOUT_TEXT);
+#ifdef Q_OS_MAC
+        cmd->action()->setMenuRole(QAction::AboutRole);
+#endif
         menu->addAction(cmd, Id(Constants::G_HELP_ABOUT));
     }
     if (actions & Core::MainWindowActions::A_AppGoToWebSite) {
@@ -1121,9 +1130,11 @@ void MainWindowActionHandler::createHelpActions(int actions)
     if (actions & Core::MainWindowActions::A_QtAbout) {
         a = aQtAbout = new QAction(this);
         a->setIcon(theme()->icon(Constants::ICONABOUT));
-        a->setMenuRole(QAction::AboutQtRole);
         cmd = actionManager()->registerAction(a, Id(Constants::A_ABOUTQT), ctx);
         cmd->setTranslations(Trans::Constants::ABOUTQT_TEXT);
+#ifdef Q_OS_MAC
+        cmd->action()->setMenuRole(QAction::AboutQtRole);
+#endif
         menu->addAction(cmd, Id(Constants::G_HELP_ABOUT));
     }
     if (actions & Core::MainWindowActions::A_DebugDialog) {
