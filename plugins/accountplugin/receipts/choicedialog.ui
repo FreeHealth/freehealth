@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>435</width>
+    <width>456</width>
     <height>421</height>
    </rect>
   </property>
@@ -140,7 +140,7 @@
       <widget class="QGroupBox" name="freeBox">
        <property name="minimumSize">
         <size>
-         <width>0</width>
+         <width>270</width>
          <height>75</height>
         </size>
        </property>
@@ -165,7 +165,14 @@
           </widget>
          </item>
          <item row="1" column="0">
-          <widget class="QLineEdit" name="freeEdit"/>
+          <widget class="QLineEdit" name="freeEdit">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+          </widget>
          </item>
          <item row="1" column="1">
           <widget class="QDoubleSpinBox" name="freeValueSpinBox">
