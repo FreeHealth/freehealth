@@ -48,6 +48,10 @@
 #include <formmanagerplugin/iformitemdata.h>
 
 #include <coreplugin/ipatient.h>
+#include <coreplugin/icore.h>
+#include <coreplugin/ipatient.h>
+#include <coreplugin/itheme.h>
+#include <coreplugin/constants_icons.h>
 
 #include <translationutils/constants.h>
 #include <translationutils/trans_patient.h>
@@ -58,12 +62,13 @@
 
 #include <QFormLayout>
 
+
 #include <QDebug>
-// For debugging purpose
-#include <coreplugin/icore.h>
-#include <coreplugin/ipatient.h>
+
 static inline Core::IPatient *patient() {return Core::ICore::instance()->patient();}
-// End debug
+static inline Core::ITheme *theme() { return Core::ICore::instance()->theme(); }
+
+
 
 
 using namespace Patients;
@@ -655,9 +660,31 @@ public:
     {
         _patientModelIdentityWrapper->setCurrentPatient(row);
 
+        //TODO: install a "Gender" enum, see http://code.google.com/p/freemedforms/issues/detail?id=184
+
+        QString genderString =  m_PatientModel->index(row, Core::IPatient::Gender).data().toString();
+        qDebug() << "Gender:" << genderString;
+
         // photo
         const QPixmap &photo = m_PatientModel->index(row, Core::IPatient::Photo_64x64).data().value<QPixmap>();
-        viewUi->photoLabel->setPixmap(photo);
+        QIcon genderIcon;
+        if (!photo.isNull())
+            viewUi->photoLabel->setPixmap(photo);
+        else {
+            //TODO: install a "Gender" enum, see http://code.google.com/p/freemedforms/issues/detail?id=184
+            //no Photo in database, now set default gender picture
+            if (genderString == "M")
+                genderIcon = QIcon(QPixmap(theme()->iconFullPath(Core::Constants::ICONMALE, Core::ITheme::BigIcon)));
+            else if (genderString == "F")
+                genderIcon = QIcon(QPixmap(theme()->iconFullPath(Core::Constants::ICONFEMALE, Core::ITheme::BigIcon)));
+            else if (genderString == "H")
+                genderIcon = QIcon(QPixmap(theme()->iconFullPath(Core::Constants::ICONHERMAPHRODISM , Core::ITheme::BigIcon)));
+            else
+                genderIcon = QIcon();
+
+
+            viewUi->photoLabel->setPixmap(genderIcon.pixmap(QSize(64,64)));
+        }
 
         // name / gender
         const QIcon &icon = m_PatientModel->index(row, Core::IPatient::IconizedGender).data().value<QIcon>();
