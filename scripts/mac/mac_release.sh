@@ -54,8 +54,8 @@ else
 fi
 
 MAC_SCRIPTS_PATH=$SCRIPT_PATH
-SOURCES_PATH=$SCRIPT_PATH"../"
-PACKAGES_PATH=$SCRIPT_PATH"../packages"
+SOURCES_PATH=$SCRIPT_PATH"../../"
+PACKAGES_PATH=$SOURCES_PATH"/packages"
 # get version number from the project file
 VERSION=`cat $SOURCES_PATH$PROJECT/buildspecs/projectversion.pri | grep "PACKAGE_VERSION" -m 1 | cut -d = -s -f2 | tr -d ' '`
 
@@ -110,7 +110,7 @@ buildApp()
   #####################################
   echo "*** Cleaning build path..."
   cd $SOURCES_PATH
-  rm -R ./bin/$PROJECT/plugins
+  rm -R ./bin/$PROJECT/
 
   #rm -R build
   #rm -R bin
@@ -246,7 +246,7 @@ createDmg()
    # clean old dmg and create new one
    echo "*** Creating DMG archive..."
    rm *.dmg
-   MAKE_STEP=`$MAC_SCRIPTS_PATH/release_dmg.sh -a $BUNDLE_NAME -p ./ -s 150 -f $MAC_SCRIPTS_PATH/../`
+   MAKE_STEP=`$MAC_SCRIPTS_PATH/release_dmg.sh -a $BUNDLE_NAME -p ./ -s 150 -f $SOURCES_PATH`
    MAKE_STEP=$?
    if [ ! $MAKE_STEP = 0 ]; then
      echo "*** Error: DMG creation step wrong ***"
