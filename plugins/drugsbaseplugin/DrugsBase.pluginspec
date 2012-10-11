@@ -3,7 +3,7 @@
     <copyright>(C) 2008-2012 by Eric MAEKER, MD</copyright>
     <license>GPLv3</license>
     <category>Drug manager</category>
-    <description>The plugin does nothing. It's only an infra-structure to ease creation of new plugins.</description>
+    <description>The plugin does nothing itself. It is only an infrastructure to ease creation of new plugins.</description>
     <url>http://www.freemedforms.com/</url>
     <dependencyList>
        <dependency name="Core" version="0.0.1"/>

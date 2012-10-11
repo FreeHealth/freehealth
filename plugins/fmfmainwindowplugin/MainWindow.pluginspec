@@ -3,7 +3,7 @@
     <copyright>(C) 2008-2012 by Eric MAEKER, MD</copyright>
     <license>GPLv3</license>
     <category>FreeMedForms</category>
-    <description>Main window of FreeMedForms</description>
+    <description>Main window of FreeMedForms.</description>
     <url>http://www.freemedforms.com/</url>
     <dependencyList>
         <dependency name="Core" version="0.0.1"/>

@@ -3,7 +3,7 @@
     <copyright>(C) 2008-2012 by Eric MAEKER, MD</copyright>
     <license>GPLv3</license>
     <category>Form widget</category>
-    <description>The basic widgets available for the form edition. This is a FreeMedForms plugin.</description>
+    <description>Provides basic widgets that are available for form creation and editing.</description>
     <url>http://www.freemedforms.com/</url>
     <dependencyList>
         <dependency name="Core" version="0.0.1"/>
