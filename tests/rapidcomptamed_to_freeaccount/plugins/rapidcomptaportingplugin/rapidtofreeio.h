@@ -7,11 +7,13 @@
 
 class RapidToFreeIO: public QObject
 {
+Q_OBJECT
 public:
     RapidToFreeIO (QObject * parent = 0);
     virtual ~RapidToFreeIO ();
     bool initialiseBases();
     QStringList getListOfRapidcomptamedUsers();
+    bool getAndSetAccount();
 
 private:
     enum HonoFields
@@ -68,7 +70,6 @@ private:
 
 private:
     bool connectToRapidComptamed();
-    bool getAndSetAccount();
     void fillHashOfAccount();
     void fillHashHono();
     void linkTableHonoAndAccount();

@@ -2,6 +2,8 @@ TEMPLATE = lib
 TARGET = Core
 
 include(../../../../plugins/coreplugin/common_core.pri)
+#include($${PWD}/../rapidcomptaportingplugin/rapidcomptaportingplugin.pro)
+
 
 
 INCLUDEPATH += ../

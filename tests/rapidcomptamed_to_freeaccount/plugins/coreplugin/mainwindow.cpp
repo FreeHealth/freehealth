@@ -27,6 +27,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+#include <rapidcomptaportingplugin/rapidtofreeviewer.h>
+
 #include <utils/global.h>
 
 #include <QDebug>
@@ -37,7 +39,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
     qWarning();
-
+    setCentralWidget(new RapidToFreeViewer);
     resize(900,600);
 }
 

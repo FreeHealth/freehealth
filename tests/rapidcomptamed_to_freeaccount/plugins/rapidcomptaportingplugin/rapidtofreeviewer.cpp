@@ -13,7 +13,8 @@ RapidToFreeViewer::~RapidToFreeViewer(){}
 
 void RapidToFreeViewer::getAndSetDatas()
 {
-    
+    RapidToFreeIO io;
+    io.getAndSetAccount();
 }
 
 QStringList RapidToFreeViewer::rapidcomptamedUsers()

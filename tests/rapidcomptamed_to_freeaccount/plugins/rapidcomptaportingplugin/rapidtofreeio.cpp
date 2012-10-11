@@ -12,12 +12,14 @@ RapidToFreeIO::RapidToFreeIO(QObject * parent)
     m_honorairesFields = "id_hono,id_usr,id_drtux_usr,patient,id_site,id_payeurs,GUID,praticien,date,acte,acteclair,remarque,esp,chq,cb,vir,daf,autre,du,du_par,valide,tracabilite";
     fillHashOfAccount();
     fillHashHono();
+    linkTableHonoAndAccount();
 }
 
 RapidToFreeIO::~RapidToFreeIO(){}
 
 bool RapidToFreeIO::initialiseBases()
 {
+
     AccountBase::instance()->initialize();
     if (!connectToRapidComptamed()) {
         qWarning() << __FILE__ << QString::number(__LINE__) << "unable to connect to rapidcomptamed" ;
@@ -48,7 +50,8 @@ bool RapidToFreeIO::connectToRapidComptamed()
 
 bool RapidToFreeIO::getAndSetAccount()
 {
-    QSqlQuery queryHono(m_dbRapidCompta);
+    QSqlDatabase dbRapid = QSqlDatabase::database("comptabilite");
+    QSqlQuery queryHono(dbRapid);
     QString req = QString("SELECT %1 FROM %2").arg(m_honorairesFields,"honoraires");
     if (!queryHono.exec(req))
     {
@@ -171,7 +174,8 @@ void RapidToFreeIO::linkTableHonoAndAccount()
 QStringList RapidToFreeIO::getListOfRapidcomptamedUsers()
 {
     QStringList listOfUsers;
-    QSqlQuery qUsers(m_dbRapidCompta);
+    QSqlDatabase dbRapid = QSqlDatabase::database("comptabilite");
+    QSqlQuery qUsers(dbRapid);
     QString req = QString("SELECT login FROM utilisateurs");
     if (!qUsers.exec(req))
     {
@@ -186,7 +190,6 @@ QStringList RapidToFreeIO::getListOfRapidcomptamedUsers()
 
 int RapidToFreeIO::getAccountLastId()
 {
-    m_dbAccount = QSqlDatabase::database("account");
     int lastId = 0;
     QSqlQuery queryLastId(m_dbAccount);
     QString reqLastId = QString("SELECT %1 FROM %2").arg("ACCOUNT_ID","account");
@@ -206,6 +209,7 @@ int RapidToFreeIO::getAccountLastId()
 
 bool RapidToFreeIO::insertIntoAccount(QList<QVariant> listOfRapidDatas)
 {
+    m_dbAccount = QSqlDatabase::database("account");
     for (int accountFieldNbr = 0; accountFieldNbr < AccountFields_MaxParam; ++accountFieldNbr)
     {
     	  int accountId = 0;
