@@ -98,11 +98,11 @@ QWidget *PluginAboutPage::createPage(QWidget *parent)
     new QTreeWidgetItem(i, QStringList() << tkTr(Trans::Constants::VERSION) + " " + m_Spec->version() );
     new QTreeWidgetItem( i, QStringList() << tkTr(Trans::Constants::BUILD_DATE_TIME_1_2).arg(__DATE__, __TIME__));
     if (Utils::isDebugWithoutInstallCompilation()) {
-        new QTreeWidgetItem( i, QStringList() << tkTr(Trans::Constants::BUILD_DEBUG) + "no install");
+        new QTreeWidgetItem( i, QStringList() << tkTr(Trans::Constants::BUILD_DEBUG) + " - no install");
     } else {
         new QTreeWidgetItem( i, QStringList() << tkTr(Trans::Constants::BUILD_RELEASE) );
     }
-    new QTreeWidgetItem(i, QStringList() << m_Spec->license() );
+    new QTreeWidgetItem(i, QStringList() << "License: " + m_Spec->license());
     tree->expandAll();
 
     // populate textbrowser

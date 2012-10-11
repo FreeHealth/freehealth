@@ -70,13 +70,13 @@ QWidget *BuildAboutPage::createPage(QWidget *parent)
     tree->clear();
     QFont f;
     f.setBold(true);
-    QTreeWidgetItem *compilItem = new QTreeWidgetItem( tree, QStringList() << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_INFORMATION) );
-    compilItem->setFont(0,f);
-    new QTreeWidgetItem( compilItem, QStringList() << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_DATE_TIME_1_2).arg(__DATE__, __TIME__));
+    QTreeWidgetItem *compileItem = new QTreeWidgetItem( tree, QStringList() << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_INFORMATION) );
+    compileItem->setFont(0,f);
+    new QTreeWidgetItem( compileItem, QStringList() << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_DATE_TIME_1_2).arg(__DATE__, __TIME__));
     if (Utils::isDebugWithoutInstallCompilation()) {
-        new QTreeWidgetItem( compilItem, QStringList() << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_DEBUG) + " - no install");
+        new QTreeWidgetItem( compileItem, QStringList() << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_DEBUG) + " - no install");
     } else {
-        new QTreeWidgetItem( compilItem, QStringList() << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_RELEASE) );
+        new QTreeWidgetItem( compileItem, QStringList() << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_RELEASE) );
     }
 
     QTreeWidgetItem *versionItem = new QTreeWidgetItem( tree, QStringList() << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_VERSION_INFORMATION) );

@@ -39,11 +39,10 @@ static const char *ABOUT_TEXT = QT_TRANSLATE_NOOP("AboutDialog",
         "<p align=center><b>Welcome to FreeMedForms</b><br />"
         "(C) 2008-%1 by Eric MAEKER, MD</p>"
         "<p align=left>"
-//        "This application is an early alpha release. This means that a lot of "
-//        "features are not yet implemented or may not work and that you may experiment bugs.<br />"
-        "This software is release without any warranty and only for test purposal.<br />"
-        "Please refer to web site for more information.<br />"
-        "<a href=\"%2\">Web site</a>"
+//        "This application is an early alpha release. This means that some "
+//        "features are not yet implemented or may not work perfectly and that you may experience some bugs.<br/>"
+        "This software is released without any warranty and only for testing purposal.<br/>"
+        "Please refer to our <a href=\"%2\">web site</a> for more information.<br />"
         "</p>"
         );
 

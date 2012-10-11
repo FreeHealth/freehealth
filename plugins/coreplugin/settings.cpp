@@ -972,22 +972,22 @@ QTreeWidget* SettingsPrivate::getTreeWidget(QWidget *parent) const
 #endif
 
     // add compilation information
-    QTreeWidgetItem * compilItem = new QTreeWidgetItem(tree, QStringList() << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_INFORMATION));
-    compilItem->setFont(0,bold);
-    new QTreeWidgetItem(compilItem, QStringList() << tr("Compilation Date") << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_DATE_TIME_1_2).arg(__DATE__, __TIME__));
-    new QTreeWidgetItem(compilItem, QStringList() << tr("Compile Qt version") << QString("%1").arg(QT_VERSION_STR));
-    new QTreeWidgetItem(compilItem, QStringList() << tr("Actual Qt version") << QString("%1").arg(qVersion()));
-    new QTreeWidgetItem(compilItem, QStringList() << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_VERSION_1).arg("") << qApp->applicationVersion());
+    QTreeWidgetItem * compileItem = new QTreeWidgetItem(tree, QStringList() << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_INFORMATION));
+    compileItem->setFont(0,bold);
+    new QTreeWidgetItem(compileItem, QStringList() << tr("Compilation Date") << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_DATE_TIME_1_2).arg(__DATE__, __TIME__));
+    new QTreeWidgetItem(compileItem, QStringList() << tr("Compile Qt version") << QString("%1").arg(QT_VERSION_STR));
+    new QTreeWidgetItem(compileItem, QStringList() << tr("Actual Qt version") << QString("%1").arg(qVersion()));
+    new QTreeWidgetItem(compileItem, QStringList() << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_VERSION_1).arg("") << qApp->applicationVersion());
     if (Utils::isReleaseCompilation()) {
-        new QTreeWidgetItem(compilItem, QStringList() << tr("Compile mode") << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_RELEASE));
+        new QTreeWidgetItem(compileItem, QStringList() << tr("Compile mode") << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_RELEASE));
     } else {
         if (Utils::isDebugWithoutInstallCompilation()) {
-            new QTreeWidgetItem(compilItem, QStringList() << tr("Compile mode") << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_DEBUG) + " (no install)");
+            new QTreeWidgetItem(compileItem, QStringList() << tr("Compile mode") << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_DEBUG) + " - no install");
         } else {
-            new QTreeWidgetItem(compilItem, QStringList() << tr("Compile mode") << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_DEBUG));
+            new QTreeWidgetItem(compileItem, QStringList() << tr("Compile mode") << Trans::ConstantTranslations::tkTr(Trans::Constants::BUILD_DEBUG));
         }
     }
-    new QTreeWidgetItem(compilItem, QStringList() << tr("GIT revision") << QString(GIT_REVISION_HASH));
+    new QTreeWidgetItem(compileItem, QStringList() << tr("GIT revision") << QString(GIT_REVISION_HASH));
 
 
     // add paths

@@ -1,7 +1,7 @@
 <plugin name="Agenda" version="0.0.1" compatVersion="0.0.1">
     <vendor>FreeMedForms</vendor>
     <copyright>(C) 2008-2012 Eric Maeker, MD</copyright>
-    <license>Released the GPLv3 license.</license>
+    <license>GPLv3</license>
     <category>Agenda</category>
     <description>The agenda plugin.</description>
     <url>http://www.freemedforms.com</url>

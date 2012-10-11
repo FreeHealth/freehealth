@@ -1,7 +1,7 @@
 <plugin name="ZipCodes" version="0.0.1" compatVersion="0.0.1">
     <vendor>FreeMedForms</vendor>
     <copyright>(C) 2008-2012 Eric Maeker, MD</copyright>
-    <license>Released the GPLv3 license.</license>
+    <license>GPLv3</license>
     <category>Patient data</category>
     <description>Zip codes analyzer and auto-completer plugin.</description>
     <url>http://www.freemedforms.com</url>
