@@ -286,7 +286,7 @@ void ExtendedView::removeItem()
         // Now delete row
         int row = idx.row();
         if (!view->model()->removeRow(row, idx.parent())) {
-            Utils::Log::addError("ExtendedView", QString("Can not remove row %1 to the model %2")
+            Utils::Log::addError("ExtendedView", QString("Can not remove row %1 from the model %2")
                              .arg(row)
                              .arg(view->model()->objectName()),
                              __FILE__, __LINE__);
