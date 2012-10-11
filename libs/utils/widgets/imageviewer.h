@@ -59,6 +59,7 @@ private Q_SLOTS:
     void next();
     void previous();
     void toggleFullScreen();
+    void updateButtons();
 
 private:
     void scaleImage(double factor);
@@ -68,6 +69,7 @@ private:
     QScrollArea *scrollArea;
     int scaleFactor;
     QDialogButtonBox *m_ButBox;
+    QPushButton *mPreviousButton, *mNextButton;
     QList<QPixmap> m_pixmaps;
     int m_CurrentIndex;
 };

@@ -1,32 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE FreeMedForms>
-
 <FreeMedForms>
-
   <formdescription>
     <!-- Non translatable values -->
     <authors>Maxime Fiandino</authors>
-    <version>0.7.0</version>
+    <version>0.7.2</version>
     <fmfv>0.7.0</fmfv>
     <cdate>2011-12-11</cdate>
     <icon>midwifery.png</icon>
     <weblink></weblink>
     <bibliography pmid="7440521"></bibliography>
-
     <!-- Translatable values -->
     <license>GPLv3</license>
+    <description lang="xx">Pregnant visit</description>
     <description lang="fr">Visite de surveillance de grossesse</description>
-    <description lang="en">Pregnant visit</description>
-    <category lang="en">Midwifery</category>
+
+    <category lang="xx">Midwifery</category>
     <category lang="fr">Sage-femme</category>
-    <specialties lang="fr">Sage-Femme</specialties>
+
     <specialties lang="xx">Midwifery</specialties>
+    <specialties lang="fr">Sage-Femme</specialties>
+
 
   </formdescription>
 
   <MedForm name="Subs::Midwifery::Visit::Pregnant" uifilename="./ui/xx/pregnancyfollowup.ui">
-    <label lang="fr">Visite de surveillance de grossesse</label>
     <label lang="xx">Pregnant visit</label>
+    <label lang="fr">Visite de surveillance de grossesse</label>
     <options>DontPrintEmptyValues;UseFormNameAsNameSpace</options>
 
     <Item type="group" name="GeneralGroup">
