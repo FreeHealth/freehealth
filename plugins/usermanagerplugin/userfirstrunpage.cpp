@@ -24,7 +24,7 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#include "userfistrunpage.h"
+#include "userfirstrunpage.h"
 #include "widgets/useridentifier.h"
 #include "widgets/usermanager.h"
 #include "widgets/userwizard.h"

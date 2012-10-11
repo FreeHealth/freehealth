@@ -10,7 +10,7 @@ HEADERS += $${PWD}/usermanagerplugin.h \
     $${PWD}/usermanager_exporter.h \
     $${PWD}/iuserlistener.h \
     $${PWD}/currentuserpreferencespage.h \
-    $${PWD}/userfistrunpage.h \
+    $${PWD}/userfirstrunpage.h \
     $${PWD}/usermanagermode.h \
     $${PWD}/widgets/iuserviewerpage.h \
     $${PWD}/widgets/defautuserviewerpages.h \
@@ -19,7 +19,7 @@ HEADERS += $${PWD}/usermanagerplugin.h \
 
 SOURCES += $${PWD}/usermanagerplugin.cpp \
     $${PWD}/currentuserpreferencespage.cpp \
-    $${PWD}/userfistrunpage.cpp \
+    $${PWD}/userfirstrunpage.cpp \
     $${PWD}/usermanagermode.cpp \
     $${PWD}/widgets/iuserviewerpage.cpp \
     $${PWD}/widgets/defautuserviewerpages.cpp \
