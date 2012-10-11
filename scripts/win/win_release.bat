@@ -12,7 +12,7 @@ REM #
 REM # After the compilation, you will find the installer in the source root dir
 
 REM # Go to source root dir
-cd ..
+cd ../..
 
 REM # Create translations
 cd global_resources/translations
