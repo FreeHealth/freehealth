@@ -30,6 +30,10 @@ REM # Copy MySQL lib into the package dir
 copy e:\MySQL\bin\libmySQL.dll ..\packages\win\%1\libmySQL.dll
 copy e:\MySQL\bin\libmySQL.dll ..\packages\win\%1\plugins\libmySQL.dll
 
+REM # Copy OpenCV lib into the package dir
+REM # copy e:\MySQL\bin\libmySQL.dll ..\packages\win\%1\libmySQL.dll
+REM # copy e:\MySQL\bin\libmySQL.dll ..\packages\win\%1\plugins\libmySQL.dll
+
 REM # Create the installer
 C:\Progra~1\InnoSe~1\iscc.exe "e:\freemedforms-__version__/global_resources/package_helpers/%1.iss"
 
