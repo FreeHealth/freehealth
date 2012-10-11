@@ -312,8 +312,8 @@ bool UserManagerWidget::initialize()
     connect(aToggleSearchView, SIGNAL(toggled(bool)), this, SLOT(toggleSearchView(bool)));
 
     // connect tableView selector
-    connect(ui->userTableView, SIGNAL(activated(const QModelIndex &)),
-             this, SLOT(onUserActivated(const QModelIndex &)));
+    connect(ui->userTableView, SIGNAL(clicked(QModelIndex)),
+             this, SLOT(onUserClicked(const QModelIndex &)));
 
     // connect search line edit
     connect(ui->searchLineEdit, SIGNAL(textChanged(const QString &)), this, SLOT(onSearchRequested()));
@@ -426,7 +426,7 @@ void UserManagerWidget::onCreateUserRequested()
         }
     } else {
         ui->userTableView->selectRow(createdRow);
-        onUserActivated(index);
+        onUserClicked(index);
     }
 }
 
@@ -480,7 +480,7 @@ void UserManagerWidget::toggleSearchView(bool checked)
     }
 }
 
-void UserManagerWidget::onUserActivated(const QModelIndex &index)
+void UserManagerWidget::onUserClicked(const QModelIndex &index)
 {
     ui->userViewer->changeUserTo(index.row());
     ui->userViewer->setEnabled(true);
