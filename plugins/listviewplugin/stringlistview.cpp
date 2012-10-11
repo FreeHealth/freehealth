@@ -58,7 +58,7 @@ StringListView::~StringListView()
 
 QVariant StringListView::getStringList() const
 {
-    QStringListModel *model = static_cast<QStringListModel*>(this->model());
+    QStringListModel *model = qobject_cast<QStringListModel*>(this->model());
     if (model) {
         return model->stringList();
     }
@@ -67,16 +67,16 @@ QVariant StringListView::getStringList() const
 
 void StringListView::setStringList(const QVariant &list)
 {
-    QStringListModel *model = static_cast<QStringListModel*>(this->model());
+    QStringListModel *model = qobject_cast<QStringListModel*>(this->model());
     if (model)
         model->setStringList(list.toStringList());
 }
 
 QVariant StringListView::getCheckedStringList() const
 {
-    Q_ASSERT_X( static_cast<StringListModel*>(this->model()), "StringListView::getCheckedStringList()",
+    Q_ASSERT_X( qobject_cast<StringListModel*>(this->model()), "StringListView::getCheckedStringList()",
                 "This member can only be used if the model is a tkStringListModel.");
-    StringListModel *m = static_cast<StringListModel*>(this->model());
+    StringListModel *m = qobject_cast<StringListModel*>(this->model());
     if (!m)
         return QVariant();
     return m->getCheckedItems();
@@ -84,9 +84,9 @@ QVariant StringListView::getCheckedStringList() const
 
 void StringListView::setCheckedStringList(const QVariant &list)
 {
-    Q_ASSERT_X( static_cast<StringListModel*>(this->model()), "StringListView::setCheckedStringList()",
+    Q_ASSERT_X( qobject_cast<StringListModel*>(this->model()), "StringListView::setCheckedStringList()",
                 "This member can only be used if the model is a tkStringListModel.");
-    StringListModel * m = static_cast<StringListModel*>(this->model());
+    StringListModel * m = qobject_cast<StringListModel*>(this->model());
     if (!m)
         return ;
     m->setCheckedItems(list.toStringList());
@@ -94,7 +94,7 @@ void StringListView::setCheckedStringList(const QVariant &list)
 
 void StringListView::setItemsCheckable(bool state)
 {
-    StringListModel *m = static_cast<StringListModel*>(this->model());
+    StringListModel *m = qobject_cast<StringListModel*>(this->model());
     if (m)
         m->setCheckable(state);
 }
