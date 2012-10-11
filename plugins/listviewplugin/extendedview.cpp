@@ -193,7 +193,7 @@ void ExtendedView::setCommands(const QStringList &commandsUid)
     d->m_ToolBar->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
 }
 
-void ExtendedView::disconnectActionsToDefaultSlots()
+void ExtendedView::disconnectActionsFromDefaultSlots()
 {
     d->m_DefaultSlots = false;
 }
