@@ -108,10 +108,12 @@ ExtensionSystem::IPlugin::ShutdownFlag RapidPortPlugin::aboutToShutdown()
 void RapidPortPlugin::postCoreInitialization()
 {
     RapidToFreeIO * rIO = new RapidToFreeIO;
+    qDebug() << __FILE__ << QString::number(__LINE__) << " 1 "   ;
     if (!rIO->initialiseBases())
     {
         qWarning() << __FILE__ << QString::number(__LINE__) << "unable to connect to databases" ;
     }
+    qDebug() << __FILE__ << QString::number(__LINE__) << " 2 "   ;
     RapidToFreeViewer *viewer = new RapidToFreeViewer;
     viewer->show();
 }
