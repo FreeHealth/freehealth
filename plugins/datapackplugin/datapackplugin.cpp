@@ -76,8 +76,8 @@ DataPackPluginIPlugin::DataPackPluginIPlugin()
     // Add here the Core::IFirstConfigurationPage objects to the pluginmanager object pool
 
     // All preferences pages must be created in this part (before user connection)
-    m_prefPage = new Internal::DataPackPreferencePage(this);
-    addObject(m_prefPage);
+//    m_prefPage = new Internal::DataPackPreferencePage(this);
+//    addObject(m_prefPage);
 
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
     connect(Core::ICore::instance(), SIGNAL(coreAboutToClose()), this, SLOT(coreAboutToClose()));
@@ -283,7 +283,6 @@ ExtensionSystem::IPlugin::ShutdownFlag DataPackPluginIPlugin::aboutToShutdown()
     QByteArray s = QByteArray(core.serverManager()->xmlConfiguration().toUtf8()).toBase64();
     settings()->setValue("datapack/server/config", s);
 #endif
-
 
     return SynchronousShutdown;
 }
