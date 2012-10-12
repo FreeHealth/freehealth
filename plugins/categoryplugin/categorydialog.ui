@@ -93,34 +93,63 @@
       <item row="0" column="0" colspan="2">
        <widget class="QCheckBox" name="passBox">
         <property name="text">
-         <string>Protect with a password</string>
+         <string>Protect with a &amp;password</string>
         </property>
        </widget>
       </item>
       <item row="1" column="0">
        <widget class="QLabel" name="label_2">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="text">
-         <string>Password</string>
+         <string>Pass&amp;word</string>
+        </property>
+        <property name="buddy">
+         <cstring>password</cstring>
         </property>
        </widget>
       </item>
       <item row="1" column="1">
-       <widget class="QLineEdit" name="password"/>
+       <widget class="QLineEdit" name="password">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="echoMode">
+         <enum>QLineEdit::Password</enum>
+        </property>
+       </widget>
       </item>
       <item row="2" column="0">
        <widget class="QLabel" name="label_3">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
         <property name="text">
-         <string>Confirm</string>
+         <string>&amp;Confirm</string>
+        </property>
+        <property name="buddy">
+         <cstring>passwordConfirm</cstring>
         </property>
        </widget>
       </item>
       <item row="2" column="1">
-       <widget class="QLineEdit" name="passwordConfirm"/>
+       <widget class="QLineEdit" name="passwordConfirm">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="echoMode">
+         <enum>QLineEdit::Password</enum>
+        </property>
+       </widget>
       </item>
       <item row="3" column="0">
        <widget class="QLabel" name="label_4">
         <property name="text">
-         <string>Themed icon</string>
+         <string>Themed &amp;icon</string>
+        </property>
+        <property name="buddy">
+         <cstring>themedIcon</cstring>
         </property>
        </widget>
       </item>
@@ -152,5 +181,70 @@
   </customwidget>
  </customwidgets>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>passBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>label_2</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>345</x>
+     <y>312</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>316</x>
+     <y>337</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>passBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>password</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>418</x>
+     <y>313</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>418</x>
+     <y>333</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>passBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>label_3</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>339</x>
+     <y>313</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>335</x>
+     <y>369</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>passBox</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>passwordConfirm</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>443</x>
+     <y>314</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>444</x>
+     <y>361</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>
