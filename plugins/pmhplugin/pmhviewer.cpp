@@ -218,8 +218,7 @@ void PmhViewer::setShowPatientInformation(bool show)
 {
     if (show) {
         d->ui->patientGroup->show();
-        QString text = "<b>"+ patient()->data(Core::IPatient::Title).toString();;
-        text += " " + patient()->data(Core::IPatient::FullName).toString();
+        QString text = "<b>"+ patient()->data(Core::IPatient::FullName).toString();
         text += ", " + patient()->data(Core::IPatient::Age).toString();
         text += "</b>";
         d->ui->patientInfos->setText(text);

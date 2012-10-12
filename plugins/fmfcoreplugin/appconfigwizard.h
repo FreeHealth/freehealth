@@ -51,6 +51,9 @@ namespace Utils {
 
 namespace Core {
 class ServerPreferencesWidget;
+namespace Internal {
+class ProxyPreferencesWidget;
+}
 
 class AppConfigWizard : public QWizard
 {
@@ -83,6 +86,24 @@ private:
     QLabel *langLabel, *typeLabel;
     Utils::LanguageComboBox *combo;
     QComboBox *installCombo;
+    mutable bool _proxyDectectionDone, _proxyDetected;
+};
+
+class ProxyPage: public QWizardPage
+{
+    Q_OBJECT
+public:
+    ProxyPage(QWidget *parent = 0);
+
+    bool validatePage();
+    int nextId() const;
+
+private:
+    void changeEvent(QEvent *e);
+    void retranslate();
+
+private:
+    Core::Internal::ProxyPreferencesWidget *_proxyWidget;
 };
 
 class ServerConfigPage: public QWizardPage

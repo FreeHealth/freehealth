@@ -22,7 +22,7 @@ REM # Go to application source tree
 cd ../../%1
 
 REM # Compil application && install it
-qmake.exe %1.pro -r -spec win32-g++ CONFIG+=release LOWERED_APPNAME=%1 CONFIG-=debug_and_release
+qmake.exe %1.pro -r -spec win32-g++ CONFIG+=release CONFIG-=debug_and_release
 mingw32-make.exe -w
 mingw32-make.exe install
 

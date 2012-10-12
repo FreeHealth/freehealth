@@ -36,6 +36,7 @@
 #include <coreplugin/iuser.h>
 #include <coreplugin/dialogs/serverpreferenceswidget.h>
 #include <fmfcoreplugin/commandlineparser.h>
+#include <coreplugin/dialogs/networkpreferences.h>
 
 #include <utils/log.h>
 #include <utils/global.h>
@@ -59,6 +60,8 @@
 #include <QProgressBar>
 #include <QTimer>
 #include <QProgressDialog>
+#include <QNetworkProxyQuery>
+#include <QNetworkProxy>
 
 using namespace Core;
 using namespace Trans::ConstantTranslations;
@@ -78,12 +81,22 @@ namespace {
 //    wizard->button(QWizard::BackButton)->setEnabled(false);
 //}
 
+    const char* const FIELD_TYPEOFINSTALL = "typeOfInstall";
+
     class CoreFirstRunPage : public Core::IFirstConfigurationPage
     {
     public:
         CoreFirstRunPage(QObject *parent) : IFirstConfigurationPage(parent) {}
         int id() const {return IFirstConfigurationPage::FirstPage;}
         QWizardPage *createPage(QWidget *parent) {return new CoreConfigPage(parent);}
+    };
+
+    class ProxyFirstRunPage : public Core::IFirstConfigurationPage
+    {
+    public:
+        ProxyFirstRunPage(QObject *parent) : IFirstConfigurationPage(parent) {}
+        int id() const {return IFirstConfigurationPage::ProxyConfig;}
+        QWizardPage *createPage(QWidget *parent) {return new ProxyPage(parent);}
     };
 
     class CoreFirstRunDatabaseCreationPage : public Core::IFirstConfigurationPage
@@ -125,6 +138,7 @@ AppConfigWizard::AppConfigWizard(QWidget *parent) :
     // create pages
     QList<IFirstConfigurationPage *> pages = pluginManager()->getObjects<IFirstConfigurationPage>();
     pages << new ::CoreFirstRunPage(this);
+    pages << new ::ProxyFirstRunPage(this);
     pages << new ::CoreServerConfigPage(this);
     pages << new ::CoreClientConfigPage(this);
     pages << new ::CoreFirstRunDatabaseCreationPage(this);
@@ -180,8 +194,10 @@ void AppConfigWizard::resizeEvent(QResizeEvent *event)
 ////////////////////////////////////////  CoreConfigPage  /////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 CoreConfigPage::CoreConfigPage(QWidget *parent) :
-        QWizardPage(parent)//, m_Wizard(parent)
+    QWizardPage(parent),
+    _proxyDectectionDone(false), _proxyDetected(false)
 {
+    setObjectName("FirstRun::CoreConfigPage");
     langLabel = new QLabel(this);
     langLabel->setWordWrap(true);
 
@@ -193,7 +209,6 @@ CoreConfigPage::CoreConfigPage(QWidget *parent) :
     combo->setDisplayMode(Utils::LanguageComboBox::AvailableTranslations);
     combo->setTranslationsPath(settings()->path(Core::ISettings::TranslationsPath));
     combo->setFlagsIconPath(settings()->path(Core::ISettings::SmallPixmapPath));
-    // TODO: connection here to retranslate (changeEvent())...
     connect(combo, SIGNAL(currentLanguageChanged(QLocale::Language)), Core::Translators::instance(), SLOT(changeLanguage(QLocale::Language)));
     combo->setCurrentLanguage(QLocale().language());
 
@@ -209,6 +224,8 @@ CoreConfigPage::CoreConfigPage(QWidget *parent) :
     layout->addWidget(typeLabel, 10, 0, 1, 2);
     layout->addWidget(installCombo, 11, 1);
     setLayout(layout);
+
+    registerField(::FIELD_TYPEOFINSTALL, installCombo, "currentIndex");
 }
 
 void CoreConfigPage::retranslate()
@@ -235,6 +252,7 @@ void CoreConfigPage::retranslate()
 
 bool CoreConfigPage::validatePage()
 {
+    setField(::FIELD_TYPEOFINSTALL, installCombo->currentIndex());
     switch (installCombo->currentIndex()) {
     case 0: // SQLite
     {
@@ -257,6 +275,24 @@ bool CoreConfigPage::validatePage()
 
 int CoreConfigPage::nextId() const
 {
+    // If a proxy is found -> ProxyPage
+    if (!_proxyDectectionDone) {
+        _proxyDectectionDone = true;
+        LOG("Trying to find system proxy.");
+        QNetworkProxyQuery npq(QUrl("http://www.google.com"));
+        QList<QNetworkProxy> listOfProxies = QNetworkProxyFactory::systemProxyForQuery(npq);
+        foreach(const QNetworkProxy &p, listOfProxies) {
+            if (p.type()==QNetworkProxy::HttpProxy && !p.hostName().isEmpty()) {
+                LOG("Proxy detected: " + p.hostName());
+                _proxyDetected = true;
+            }
+        }
+    }
+
+    if (_proxyDetected)
+        return Core::IFirstConfigurationPage::ProxyConfig;
+
+    // Fallback to install procedure
     switch (installCombo->currentIndex())
     {
     case 0: // No server
@@ -280,6 +316,66 @@ void CoreConfigPage::changeEvent(QEvent *e)
         break;
     }
 }
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////  ProxyPage  ///////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////
+ProxyPage::ProxyPage(QWidget *parent) :
+        QWizardPage(parent)
+{
+    _proxyWidget = new Internal::ProxyPreferencesWidget(this);
+    _proxyWidget->autoDetectProxy();
+
+    retranslate();
+
+    QVBoxLayout *layout = new QVBoxLayout(this);
+    layout->setMargin(0);
+    layout->setSpacing(0);
+    layout->addWidget(_proxyWidget);
+    setLayout(layout);
+}
+
+void ProxyPage::retranslate()
+{
+    setTitle(tr("Proxy definition"));
+    setSubTitle(tr("%1 has detected a network proxy on your computer. \n"
+                   "Please check and validate the proxy settings.")
+                .arg(qApp->applicationName()));
+}
+
+bool ProxyPage::validatePage()
+{
+    _proxyWidget->saveToSettings();
+    return true;
+}
+
+int ProxyPage::nextId() const
+{
+    switch (field(::FIELD_TYPEOFINSTALL).toInt())
+    {
+    case 0: // No server
+        return Core::IFirstConfigurationPage::DatabaseCreationPage;
+    case 1: // Network as client
+        return Core::IFirstConfigurationPage::ServerClientConfig;
+    case 2: // Network as server
+        return Core::IFirstConfigurationPage::ServerConfig;
+    }
+    return Core::IFirstConfigurationPage::FirstPage;
+}
+
+void ProxyPage::changeEvent(QEvent *e)
+{
+    QWidget::changeEvent(e);
+    switch (e->type()) {
+    case QEvent::LanguageChange:
+        retranslate();
+        break;
+    default:
+        break;
+    }
+}
+
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////  ClientConfigPage  ////////////////////////////////////////
