@@ -133,7 +133,7 @@ public:
         }
 
         if (m_Language==QLocale().name().left(2)) {
-            qWarning() << "atc tree not rebuilded";
+//            qWarning() << "atc tree not rebuilded";
             return;
         }
         // ATC tree is available for en, fr and de
