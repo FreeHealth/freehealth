@@ -505,7 +505,7 @@ void UserLastPage::initializePage()
     QTreeWidgetItem *general = new QTreeWidgetItem(tree, QStringList() << tkTr(Trans::Constants::GENERAL));
     general->setFont(0, bold);
     new QTreeWidgetItem(general, QStringList() << tkTr(Trans::Constants::LOGIN) << field("Login").toString());
-    new QTreeWidgetItem(general, QStringList() << tkTr(Trans::Constants::PASSWORD) << tr("%1 chars").arg(field("Password").toString().count()));
+    new QTreeWidgetItem(general, QStringList() << tkTr(Trans::Constants::PASSWORD) << QString(field("Password").toString().count(), QLatin1Char('*')));
     new QTreeWidgetItem(general, QStringList() << tkTr(Trans::Constants::TITLE) << titles().at(field("Title").toInt()));
     new QTreeWidgetItem(general, QStringList() << tkTr(Trans::Constants::NAME) << field("Name").toString() + " " + field("SecondName").toString() + " " + field("Firstname").toString());
     new QTreeWidgetItem(general, QStringList() << tkTr(Trans::Constants::GENDER) << genders().at(field("Gender").toInt()));

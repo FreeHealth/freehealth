@@ -160,7 +160,7 @@ void TreeView::addContext(const Core::Context &context)
 
 void TreeView::disconnectActionsToDefaultSlots()
 {
-    d->m_ExtView->disconnectActionsToDefaultSlots();
+    d->m_ExtView->disconnectActionsFromDefaultSlots();
 }
 
 void TreeView::hideButtons() const

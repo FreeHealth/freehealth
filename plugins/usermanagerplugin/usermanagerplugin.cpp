@@ -43,7 +43,7 @@
 #include "widgets/useridentifier.h"
 #include "widgets/userwizard.h"
 #include "currentuserpreferencespage.h"
-#include "userfistrunpage.h"
+#include "userfirstrunpage.h"
 #include "usermanagermode.h"
 #include "database/userbase.h"
 

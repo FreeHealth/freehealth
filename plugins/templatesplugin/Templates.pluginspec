@@ -3,7 +3,7 @@
     <copyright>(C) 2008-2012 by Eric MAEKER, MD</copyright>
     <license>GPLv3</license>
     <category>Templates manager</category>
-    <description>This plugin manages user's templates.</description>
+    <description>Manages user templates.</description>
     <url>http://www.freemedforms.com/</url>
     <dependencyList>
         <dependency name="Core" version="0.0.1"/>

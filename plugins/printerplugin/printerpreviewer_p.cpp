@@ -408,10 +408,11 @@ void PrinterPreviewerPrivate::changeEvent(QEvent *e)
 
 void PrinterPreviewerPrivate::on_automaticUpdateCheck_stateChanged(int checkstate)
 {
-    if (checkstate==Qt::Unchecked) {
+    if (checkstate == Qt::Unchecked) {
         m_AutoCheck=false;
     } else {
         m_AutoCheck=true;
+        on_updatePreviewButton_clicked();
     }
     connectPreview(m_EditorHeader);
     connectPreview(m_EditorFooter);

@@ -95,7 +95,7 @@ public:
     void setActions(Constants::AvailableActions actions);
     void setCommands(const QStringList &commandsUid);
 
-    void disconnectActionsToDefaultSlots();
+    void disconnectActionsFromDefaultSlots();
 
     void hideButtons() const;
     void showButtons();

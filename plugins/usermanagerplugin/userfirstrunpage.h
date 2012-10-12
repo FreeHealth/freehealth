@@ -24,8 +24,8 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef USERFISTRUNPAGE_H
-#define USERFISTRUNPAGE_H
+#ifndef USERFIRSTRUNPAGE_H
+#define USERFIRSTRUNPAGE_H
 
 #include <coreplugin/ifirstconfigurationpage.h>
 
@@ -73,4 +73,4 @@ public:
 }  // End namespace UserPlugin
 
 
-#endif // USERFISTRUNPAGE_H
+#endif // USERFIRSTRUNPAGE_H
