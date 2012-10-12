@@ -404,19 +404,19 @@ void AlertCore::postCoreInitialization()
     if (Utils::Log::warnPluginsCreation())
         qWarning() << Q_FUNC_INFO;
 
-    QDateTime start = QDateTime::currentDateTime().addSecs(-60*60*24);
-    QDateTime expiration = QDateTime::currentDateTime().addSecs(60*60*24);
-    AlertItem item5;
-    item5.setUuid(Utils::Database::createUid());
-    item5.setLabel("Simple basic Blocking alert test (item5)");
-    item5.setCategory("Test");
-    item5.setDescription("Aoutch this is a Blocking alert !");
-    item5.setViewType(AlertItem::BlockingAlert);
-    item5.setRemindLaterAllowed(true);
-    item5.setOverrideRequiresUserComment(true);
-    item5.addRelation(AlertRelation(AlertRelation::RelatedToAllPatients));
-    item5.addTiming(AlertTiming(start, expiration));
-    d->_alertBase->saveAlertItem(item5);
+//    QDateTime start = QDateTime::currentDateTime().addSecs(-60*60*24);
+//    QDateTime expiration = QDateTime::currentDateTime().addSecs(60*60*24);
+//    AlertItem item5;
+//    item5.setUuid(Utils::Database::createUid());
+//    item5.setLabel("Simple basic Blocking alert test (item5)");
+//    item5.setCategory("Test");
+//    item5.setDescription("Aoutch this is a Blocking alert !");
+//    item5.setViewType(AlertItem::BlockingAlert);
+//    item5.setRemindLaterAllowed(true);
+//    item5.setOverrideRequiresUserComment(true);
+//    item5.addRelation(AlertRelation(AlertRelation::RelatedToAllPatients));
+//    item5.addTiming(AlertTiming(start, expiration));
+//    d->_alertBase->saveAlertItem(item5);
 
     if (WithTests)
         d->makeTests();
