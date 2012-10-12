@@ -63,7 +63,8 @@ static inline Core::ContextManager *contextManager() { return Core::ICore::insta
 static inline void messageSplash(const QString &s) {theme()->messageSplashScreen(s); }
 static inline QString defaultServerFile() {return settings()->path(Core::ISettings::DataPackApplicationPath) + "/defaultservers.txt";}
 
-DataPackPluginIPlugin::DataPackPluginIPlugin()
+DataPackPluginIPlugin::DataPackPluginIPlugin() :
+    m_prefPage(0)
 {
     setObjectName("DataPackPlugin");
     if (Utils::Log::warnPluginsCreation())
