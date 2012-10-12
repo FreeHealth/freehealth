@@ -12,7 +12,7 @@ REM #
 REM # After the compilation, you will find the installer in the source root dir
 
 REM # Go to source root dir
-cd ..
+cd ../..
 
 REM # Create translations
 cd global_resources/translations
@@ -29,6 +29,10 @@ mingw32-make.exe install
 REM # Copy MySQL lib into the package dir
 copy e:\MySQL\bin\libmySQL.dll ..\packages\win\%1\libmySQL.dll
 copy e:\MySQL\bin\libmySQL.dll ..\packages\win\%1\plugins\libmySQL.dll
+
+REM # Copy OpenCV lib into the package dir
+REM # copy e:\MySQL\bin\libmySQL.dll ..\packages\win\%1\libmySQL.dll
+REM # copy e:\MySQL\bin\libmySQL.dll ..\packages\win\%1\plugins\libmySQL.dll
 
 REM # Create the installer
 C:\Progra~1\InnoSe~1\iscc.exe "e:\freemedforms-__version__/global_resources/package_helpers/%1.iss"
