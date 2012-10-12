@@ -50,6 +50,7 @@ class CORE_EXPORT IFirstConfigurationPage : public QObject
 public:
     enum Pages {
         FirstPage = 0,
+        ProxyConfig,
         ServerClientConfig,
         ServerConfig,
         UserDbConnection,
