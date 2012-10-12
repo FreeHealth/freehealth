@@ -58,6 +58,7 @@ ProxyPreferencesWidget::ProxyPreferencesWidget(QWidget *parent) :
     ui->setupUi(this);
     ui->proxyUserName->setIcon(theme()->icon(Core::Constants::ICONEYES));
     ui->proxyUserPassword->setIcon(theme()->icon(Core::Constants::ICONEYES));
+    ui->proxyUserPassword->toogleEchoMode();
     setDataToUi();
     connect(ui->autoDetect, SIGNAL(clicked()), this, SLOT(autoDetectProxy()));
 }
@@ -197,17 +198,6 @@ void ProxyPreferencesPage::checkSettingsValidity()
     } else {
         QNetworkProxy::setApplicationProxy(QNetworkProxy::NoProxy);
     }
-//    QHash<QString, QVariant> defaultvalues;
-//    defaultvalues.insert(Core::Constants::S_ALWAYS_SAVE_WITHOUT_PROMPTING, true);
-//    defaultvalues.insert(Utils::Constants::S_CHECKUPDATE, Trans::Constants::CheckUpdate_AtStartup);
-//    defaultvalues.insert(Core::Constants::S_ALLOW_VIRTUAL_DATA, true);
-//    defaultvalues.insert("Dialogs/Settings/LastPage", id());
-//    defaultvalues.insert("Dialogs/Settings/LastCategory", category());
-
-//    foreach(const QString &k, defaultvalues.keys()) {
-//        if (settings()->value(k) == QVariant())
-//            settings()->setValue(k, defaultvalues.value(k));
-//    }
 }
 
 QWidget *ProxyPreferencesPage::createPage(QWidget *parent)
