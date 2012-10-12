@@ -24,7 +24,7 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#include "defautuserviewerpages.h"
+#include "defaultuserviewerpages.h"
 #include "userpassworddialog.h"
 #include <usermanagerplugin/usermodel.h>
 
