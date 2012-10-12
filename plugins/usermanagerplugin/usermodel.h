@@ -110,7 +110,7 @@ public:
     bool hasCurrentUser() const;
     QModelIndex currentUserIndex() const;
 
-    bool hasUserToSave();
+    bool isDirty();
 
     virtual void forceReset();
     virtual void clear();
