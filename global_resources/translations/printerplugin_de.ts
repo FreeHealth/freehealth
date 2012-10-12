@@ -225,19 +225,19 @@ Dies kann eine starke CPU Belastung sein.</translation>
     </message>
     <message>
         <source>First page only</source>
-        <translation type="unfinished">Nur die erste Seite</translation>
+        <translation type="unfinished">Nur erste Seite</translation>
     </message>
     <message>
         <source>Second page only</source>
-        <translation type="unfinished">Nur die zweite Seite</translation>
+        <translation type="unfinished">Nur zweite Seite</translation>
     </message>
     <message>
         <source>Last page only</source>
-        <translation type="unfinished">Nur die letzte Seite</translation>
+        <translation type="unfinished">Nur letzte Seite</translation>
     </message>
     <message>
         <source>All pages but first</source>
-        <translation type="unfinished">Alle Seiten aber zuerst</translation>
+        <translation type="unfinished">Alle Seiten außer erster</translation>
     </message>
     <message>
         <source>Odd pages</source>
@@ -248,7 +248,7 @@ Dies kann eine starke CPU Belastung sein.</translation>
         <translation type="unfinished">Gerade Seiten</translation>
     </message>
     <message>
-        <source>Duplicatas only</source>
+        <source>Duplicates only</source>
         <translation type="unfinished">Nur Duplikate</translation>
     </message>
     <message>

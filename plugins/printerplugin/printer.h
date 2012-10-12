@@ -73,26 +73,26 @@ public:
         ButFirstPage,
         OddPages,  // pages impaires
         EvenPages,  // pages paires
-        DuplicataOnly
+        DuplicatesOnly
     };
     static QStringList presencesAvailable()
     {
         return QStringList()
-                << tr("Each Pages")
+                << tr("Each Pages")  //FIXME: shouln't this be "All pages", or "ON each page"? This seems to be bad English.
                 << tr("First page only")
                 << tr("Second page only")
                 << tr("Last page only")
                 << tr("All pages but first")
                 << tr("Odd pages")
                 << tr("Even pages")
-                << tr("Duplicatas only");
+                << tr("Duplicates only");
     }
 
     enum Priority {
         First = 0,
         Second,
         Third,
-        Quater
+        Fourth
     };
 
     /** \brief Class instanciation.

@@ -308,7 +308,7 @@ public:
     /** \brief Return true if the document must be added at page \e page assuming that document as a Presence like \e presence. */
     bool presenceIsRequiredAtPage(const int page, const int presence)
     {
-        if ((presence == Printer::DuplicataOnly) && (m_PrintingDuplicata))
+        if ((presence == Printer::DuplicatesOnly) && (m_PrintingDuplicata))
             return true;
         if (presence == Printer::EachPages)
             return true;
