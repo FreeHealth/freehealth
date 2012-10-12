@@ -11,6 +11,23 @@
 
 QT_VERSION=4.8.1
 ACTUAL_PATH=`pwd`
+DEFAULT_WORKING_PATH=~/Downloads
+# Get scripts names and paths
+SCRIPT_NAME=`basename $0`
+if [ "`echo $0 | cut -c1`" = "/" ]; then
+  SCRIPT_PATH=`dirname $0`
+else
+  SCRIPT_PATH=`pwd`/`echo $0 | sed -e s/$SCRIPT_NAME//`
+fi
+
+showHelp()
+{
+    echo $SCRIPT_NAME" builds the Qt MySQL plugins for MacOS."
+    echo "Usage : $SCRIPT_NAME -w /working/path/"
+    echo "Options :"
+    echo " -w  Define the working path (by default: ~/Downloads"
+    echo " -h  show this help"
+}
 
 # This script assumes that MySQL is installed with header files
 # Get it from : http://dev.mysql.com/downloads/mysql/
@@ -20,18 +37,31 @@ ACTUAL_PATH=`pwd`
 MYSQL_SOURCES=/usr/local/mysql/include
 MYSQL_LIB=/usr/local/mysql/lib
 
+while getopts "w:h" option
+do
+#echo "(-- option:$option  $OPTIND - '$OPTARG' --)"
+    case $option in
+        h) showHelp
+            exit 0
+        ;;
+        w) DEFAULT_WORKING_PATH=$OPTARG;
+        ;;
+    esac
+done
+
+
 # Download Qt sources
 # curl http://get.qt.nokia.com/qt/source/qt-everywhere-opensource-src-4.6.2.tar.gz -o ~/Downloads/qt-everywhere-opensource-src-4.6.2.tar.gz -s
 echo "Checking/Downloading Qt sources : ~/Downloads/qt-everywhere-opensource-src-$QT_VERSION.tar.gz"
-TARGZ_FILE=~/Downloads/qt-everywhere-opensource-src-$QT_VERSION.tar.gz
+TARGZ_FILE=$DEFAULT_WORKING_PATH/qt-everywhere-opensource-src-$QT_VERSION.tar.gz
 if [ ! -e $TARGZ_FILE ] ; then
-    echo "Download Qt sources"
+    echo "Downloading Qt sources"
     curl http://get.qt.nokia.com/qt/source/qt-everywhere-opensource-src-$QT_VERSION.tar.gz -o $TARGZ_FILE
 fi
 
 # Unzip package into a temporary dir
 # tar xzvf ~/Downloads/qt-everywhere-opensource-src-$QT_VERSION.tar.gz -C ~/Downloads/qt-src-tmp
-TMP_DIR=~/Downloads/qt-src-tmp
+TMP_DIR=$DEFAULT_WORKING_PATH/qt-src-tmp
 echo "Unzipping Qt sources in temporary path : $TMP_DIR"
 if [ ! -e $TMP_DIR ] ; then
     echo "Creating temporary path : $TMP_DIR"
