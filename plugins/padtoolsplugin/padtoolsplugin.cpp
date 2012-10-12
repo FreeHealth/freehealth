@@ -45,7 +45,7 @@
 #include <coreplugin/imainwindow.h>
 #include <coreplugin/translators.h>
 
-#include <QtCore/QtPlugin>
+#include <QtPlugin>
 #include <QDebug>
 
 using namespace PadTools;
@@ -85,6 +85,8 @@ PadToolsPlugin::PadToolsPlugin() :
 
 PadToolsPlugin::~PadToolsPlugin()
 {
+    if (Utils::Log::warnPluginsCreation())
+        WARN_FUNC;
     Core::ICore::instance()->setPadTools(0);
 }
 
