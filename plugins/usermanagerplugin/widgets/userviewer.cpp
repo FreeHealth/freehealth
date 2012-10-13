@@ -37,7 +37,7 @@
 
 #include "userviewer.h"
 #include "iuserviewerpage.h"
-#include "defautuserviewerpages.h"
+#include "defaultuserviewerpages.h"
 #include <usermanagerplugin/usermodel.h>
 
 #include <coreplugin/icore.h>
