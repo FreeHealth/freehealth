@@ -253,7 +253,7 @@ Référez-vous à la documentation de votre système d&apos;exploitation.</trans
         <translation type="unfinished">Pages pairs</translation>
     </message>
     <message>
-        <source>Duplicatas only</source>
+        <source>Duplicates only</source>
         <translation type="unfinished">Duplicatas seulement</translation>
     </message>
     <message>

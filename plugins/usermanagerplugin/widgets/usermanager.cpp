@@ -331,7 +331,7 @@ UserManagerWidget::~UserManagerWidget()
 
 bool UserManagerWidget::canCloseParent()
 {
-    if (UserModel::instance()->hasUserToSave()) {
+    if (UserModel::instance()->isDirty()) {
         int ret = Utils::withButtonsMessageBox(tr("You've modified the users list."), tr("Do you want to save your changes?"), "",
                                          QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel,
                                          QMessageBox::Save, windowTitle());

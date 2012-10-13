@@ -251,7 +251,7 @@ Refer to your operating system documentation.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Duplicatas only</source>
+        <source>Duplicates only</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

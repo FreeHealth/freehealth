@@ -1162,7 +1162,7 @@ Print::TextDocumentExtra *UserModel::paper(const int row, const int ref)
 }
 
 /** Returns true if model has dirty rows that need to be saved into database. */
-bool UserModel::hasUserToSave()
+bool UserModel::isDirty()
 {
     if (WarnAllProcesses)
         qWarning() << Q_FUNC_INFO;

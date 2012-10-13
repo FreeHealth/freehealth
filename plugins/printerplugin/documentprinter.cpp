@@ -167,7 +167,7 @@ void DocumentPrinter::prepareFooter(Print::Printer *p, const int papers) const
 void DocumentPrinter::prepareWatermark(Print::Printer *p, const int papers) const
 {
     int align = Qt::AlignCenter;
-    int presence = Printer::DuplicataOnly;
+    int presence = Printer::DuplicatesOnly;
     QString html;
     if (user()) {
 #ifdef FREEDIAMS

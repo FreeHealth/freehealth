@@ -13,7 +13,7 @@ HEADERS += $${PWD}/usermanagerplugin.h \
     $${PWD}/userfirstrunpage.h \
     $${PWD}/usermanagermode.h \
     $${PWD}/widgets/iuserviewerpage.h \
-    $${PWD}/widgets/defautuserviewerpages.h \
+    $${PWD}/widgets/defaultuserviewerpages.h \
     $${PWD}/iuserwizardpage.h \
     $${PWD}/widgets/useridentityandloginpage.h
 
@@ -22,7 +22,7 @@ SOURCES += $${PWD}/usermanagerplugin.cpp \
     $${PWD}/userfirstrunpage.cpp \
     $${PWD}/usermanagermode.cpp \
     $${PWD}/widgets/iuserviewerpage.cpp \
-    $${PWD}/widgets/defautuserviewerpages.cpp \
+    $${PWD}/widgets/defaultuserviewerpages.cpp \
     $${PWD}/widgets/useridentityandloginpage.cpp
 
 

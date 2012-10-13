@@ -94,7 +94,7 @@ void DrugsUserWidget::writeDefaultSettings(Core::ISettings *s)
 //    qWarning() << "---------> writedefaults";
     Utils::Log::addMessage("DrugsUserWidget", tkTr(Trans::Constants::CREATING_DEFAULT_SETTINGS_FOR_1).arg("DrugsWidget"));
     s->setValue(S_CONFIGURED, true);
-    s->setValue(DrugsDB::Constants::S_WATERMARKPRESENCE, Print::Printer::DuplicataOnly);
+    s->setValue(DrugsDB::Constants::S_WATERMARKPRESENCE, Print::Printer::DuplicatesOnly);
     s->setValue(DrugsDB::Constants::S_WATERMARKALIGNEMENT, Qt::AlignCenter);
     s->setValue(DrugsDB::Constants::S_WATERMARK_HTML, DrugsDB::Constants::S_DEF_WATEMARKHTML);
     s->setValue(DrugsDB::Constants::S_USERHEADER, DrugsDB::Constants::S_DEF_USERHEADER);
@@ -149,7 +149,7 @@ void DrugsUserOptionsPage::applyChanges()
 void DrugsUserOptionsPage::checkSettingsValidity()
 {
     QHash<QString, QVariant> defaultvalues;
-    defaultvalues.insert(DrugsDB::Constants::S_WATERMARKPRESENCE, Print::Printer::DuplicataOnly);
+    defaultvalues.insert(DrugsDB::Constants::S_WATERMARKPRESENCE, Print::Printer::DuplicatesOnly);
     defaultvalues.insert(DrugsDB::Constants::S_WATERMARKALIGNEMENT, Qt::AlignCenter);
     defaultvalues.insert(DrugsDB::Constants::S_WATERMARK_HTML, DrugsDB::Constants::S_DEF_WATEMARKHTML);
     defaultvalues.insert(DrugsDB::Constants::S_USERHEADER, DrugsDB::Constants::S_DEF_USERHEADER);

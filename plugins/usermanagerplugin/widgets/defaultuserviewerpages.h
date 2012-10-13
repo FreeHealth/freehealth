@@ -24,8 +24,8 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef DefaultUSERVIEWERPAGES_H
-#define DefaultUSERVIEWERPAGES_H
+#ifndef DEFAULTUSERVIEWERPAGES_H
+#define DEFAULTUSERVIEWERPAGES_H
 
 #include <usermanagerplugin/widgets/iuserviewerpage.h>
 
@@ -347,4 +347,4 @@ private:
 }  // End namespace Internal
 }  // End namespace UserPlugin
 
-#endif // DefaultUSERVIEWERPAGES_H
+#endif // DEFAULTUSERVIEWERPAGES_H
