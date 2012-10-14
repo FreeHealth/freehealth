@@ -1023,11 +1023,9 @@ void BaseCheck::retranslate()
         if (m_FormItem->getOptions().contains("labelastooltip", Qt::CaseInsensitive)) {
             tip = m_FormItem->spec()->label();
         } else {
-            tip = m_FormItem->spec()->value(Form::FormItemSpec::Spec_Tooltip).toString();
+            tip = m_FormItem->spec()->tooltip();
         }
         m_Check->setToolTip(tip);
-
-        // Get label
         m_Check->setText(m_FormItem->spec()->label());
     }
 }
@@ -1308,6 +1306,7 @@ void BaseRadio::retranslate()
             i++;
         }
     }
+    // TODO manage formitem spec tooltip for each button
 }
 
 void BaseRadio::buttonClicked(QAbstractButton *radio)
@@ -1565,6 +1564,10 @@ void BaseSimpleText::retranslate()
 {
     if (m_Label)
         m_Label->setText(m_FormItem->spec()->label());
+    if (m_Line)
+        m_Line->setToolTip(m_FormItem->spec()->tooltip());
+    if (m_Text)
+        m_Text->setToolTip(m_FormItem->spec()->tooltip());
 }
 
 ////////////////////////////////////////// ItemData /////////////////////////////////////////////
@@ -1710,8 +1713,10 @@ QString BaseHelpText::printableHtml(bool withValues) const
 
 void BaseHelpText::retranslate()
 {
-    if (m_Label)
+    if (m_Label) {
         m_Label->setText(m_FormItem->spec()->label());
+        m_Label->setToolTip(m_FormItem->spec()->tooltip());
+    }
 }
 
 //--------------------------------------------------------------------------------------------------------
@@ -1817,6 +1822,7 @@ void BaseList::retranslate()
         foreach(const QModelIndex &i, indexes) {
             m_List->selectionModel()->select(i, QItemSelectionModel::Select);
         }
+        m_List->setToolTip(m_FormItem->spec()->tooltip());
     }
 }
 
@@ -2032,6 +2038,7 @@ void BaseCombo::retranslate()
         m_Combo->clear();
         m_Combo->addItems(list);
         m_Combo->setCurrentIndex(id);
+        m_Combo->setToolTip(m_FormItem->spec()->tooltip());
     }
 }
 
@@ -2239,6 +2246,8 @@ void BaseDate::retranslate()
 {
     if (m_Label)
         m_Label->setText(m_FormItem->spec()->label());
+    if (m_Date)
+        m_Date->setToolTip(m_FormItem->spec()->tooltip());
 }
 
 ////////////////////////////////////////// ItemData /////////////////////////////////////////////
@@ -2334,7 +2343,11 @@ BaseSpin::BaseSpin(Form::FormItem *formItem, QWidget *parent, bool doubleSpin) :
                 m_Spin = dbl;
                 connect(dbl, SIGNAL(valueChanged(double)), data, SLOT(onValueChanged()));
             } else {
-                LOG_ERROR("Using the QtUiLinkage, item not found in the ui: " + formItem->uuid());
+                LOG_ERROR(QString("Using the QtUiLinkage, "
+                                  "QDoubleSpinBox not found in the ui: %1 - %2")
+                          .arg(widget)
+                          .arg(formItem->uuid())
+                          );
                 // To avoid segfaulting create a fake spinbox
                 m_Spin = new QDoubleSpinBox(this);
             }
@@ -2342,14 +2355,18 @@ BaseSpin::BaseSpin(Form::FormItem *formItem, QWidget *parent, bool doubleSpin) :
             QSpinBox *dbl = qFindChild<QSpinBox*>(formItem->parentFormMain()->formWidget(), widget);
             if (dbl) {
                 m_Spin = dbl;
-                connect(dbl, SIGNAL(valueChanged(double)), data, SLOT(onValueChanged()));
+                connect(dbl, SIGNAL(valueChanged(int)), data, SLOT(onValueChanged()));
             } else {
-                LOG_ERROR("Using the QtUiLinkage, item not found in the ui: " + formItem->uuid());
+                LOG_ERROR(QString("Using the QtUiLinkage, "
+                                  "QSpinBox not found in the ui: %1 - %2")
+                          .arg(widget)
+                          .arg(formItem->uuid())
+                          );
                 // To avoid segfaulting create a fake spinbox
                 m_Spin = new QSpinBox(this);
             }
         }
-        m_Spin->setToolTip(m_FormItem->spec()->label());
+        m_Spin->setToolTip(m_FormItem->spec()->tooltip());
         // Find label
         m_Label = findLabel(formItem);
     } else {
@@ -2438,7 +2455,7 @@ QString BaseSpin::printableHtml(bool withValues) const
 void BaseSpin::retranslate()
 {
     if (m_Spin)
-        m_Spin->setToolTip(m_FormItem->spec()->label());
+        m_Spin->setToolTip(m_FormItem->spec()->tooltip());
     if (m_Label)
         m_Label->setText(m_FormItem->spec()->label());
 }
@@ -2597,6 +2614,8 @@ void BaseButton::buttonClicked()
 
 void BaseButton::retranslate()
 {
-    if (m_Button)
+    if (m_Button) {
         m_Button->setText(m_FormItem->spec()->label());
+        m_Button->setToolTip(m_FormItem->spec()->tooltip());
+    }
 }

@@ -39,7 +39,7 @@ const char *const CHANGE_PASSWORD                           = QT_TRANSLATE_NOOP(
 const char *const LOGIN                                     = QT_TRANSLATE_NOOP("tkConstants", "Login");
 const char *const PASSWORD                                  = QT_TRANSLATE_NOOP("tkConstants", "Password");
 
-const char* const CONNECTED_TO_DATABASE_1_DRIVER_2          = QT_TRANSLATE_NOOP("tkConstants", "Connected to database '%1'' with driver '%2'");
+const char* const CONNECTED_TO_DATABASE_1_DRIVER_2          = QT_TRANSLATE_NOOP("tkConstants", "Connected to database '%1' with driver '%2'");
 const char* const TRYING_TO_CREATE_1_PLACE_2                = QT_TRANSLATE_NOOP("tkConstants", "Trying to create %1 \nPlace: %2");
 const char* const UNABLE_TO_OPEN_DATABASE_1_ERROR_2         = QT_TRANSLATE_NOOP("tkConstants", "Unable to open database %1 - Error: %2");
 const char* const UNABLE_TO_SAVE_DATA_IN_DATABASE_1         = QT_TRANSLATE_NOOP("tkConstants", "Unable to save data in database %1.");

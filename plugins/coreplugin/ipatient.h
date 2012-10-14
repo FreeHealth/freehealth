@@ -103,6 +103,8 @@ public:
         SocialNumber4,
 
         // Biometrics
+        SystolicBloodPressure,
+        DiastolicBloodPressure,
         Weight,
         WeightUnit,
         Height,

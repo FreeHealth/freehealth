@@ -98,6 +98,7 @@ public:
     bool createItemWidget(Form::FormItem *item, QWidget *parent = 0);
     bool createFormWidget(Form::FormMain *form);
     bool createWidgets(const Form::FormMain *rootForm);
+    bool setTabOrder(Form::FormMain *rootForm, const QDomElement &root);
 
     // PMHx categories
     bool loadPmhCategories(const QString &uuidOrAbsPath);
