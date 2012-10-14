@@ -323,7 +323,7 @@ TextEditor::~TextEditor()
 {
     // unreg context
     // FIXME: manage a segfault with freepad when updating context.
-//    Core::ICore::instance()->contextManager()->removeContextObject(d->m_Context);
+    Core::ICore::instance()->contextManager()->removeContextObject(d->m_Context);
     if (d) {
         delete d;
         d=0;
