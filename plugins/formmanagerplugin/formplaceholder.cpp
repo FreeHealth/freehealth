@@ -911,6 +911,7 @@ void FormPlaceHolder::episodeChanged(const QModelIndex &current, const QModelInd
         d->ui->formDataMapper->clear();
         d->ui->formDataMapper->setEnabled(false);
     }
+//    warnPatient();
     Q_EMIT actionsEnabledStateChanged();
 }
 
