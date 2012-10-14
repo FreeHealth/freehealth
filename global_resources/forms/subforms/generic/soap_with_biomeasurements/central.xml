@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE FreeMedForms>
+
+<FreeMedForms>
+
+  <formdescription>
+    <!-- Non translatable values -->
+    <authors>Eric Maeker, MD</authors>
+    <version>test</version>
+    <fmfv>0.8.0</fmfv>
+    <cdate>2012-10-13</cdate>
+    <lmdate>2012-09-12</lmdate>
+    <icon>__theme__/soap.png</icon>
+    <weblink></weblink>
+    <bibliography/>
+
+    <!-- Translatable values -->
+    <license>GPLv3</license>
+    <description lang="fr">POMR</description>
+    <description lang="xx">SOAP</description>
+    <category lang="xx">Generic tools</category>
+    <category lang="fr">Outils généraux</category>
+    <specialties lang="fr">Outils</specialties>
+    <specialties lang="xx">Tools</specialties>
+
+    <updateinfo>
+      <updateversion from="" to="0.8.0">
+        <text lang="fr">Première version</text>
+        <text lang="xx">First version</text>
+      </updateversion>
+    </updateinfo>
+
+  </formdescription>
+
+  <file type="script" name="onload">./scripts/xx/script.js</file>
+
+  <MedForm name="Subs::Tools::SOAP::WithBio" uifilename="./ui/xx/soapbio.ui">
+    <label lang="xx">SOAP</label>
+    <label lang="fr">POMR</label>
+    <options>UseFormNameAsNameSpace</options>
+    <icon>__theme__/soap.png</icon>
+
+    <Item type="group" name="SubjectiveGroup">
+      <uilink widget="sGroup"/>
+      <label lang="xx">Subjective</label>
+      <label lang="fr">Subjectif (plainte du patient)</label>
+      <options>DontPrintEmptyValues</options>
+
+        <Item type="texteditor" name="SubjectiveGroup::Subjective">
+          <uilink label="" widget="" layout="sLayout"/>
+          <options>DontPrintEmptyValues</options>
+        </Item>
+
+    </Item>
+
+    <Item type="group" name="ObjectiveGroup">
+      <uilink widget="oGroup"/>
+      <label lang="xx">Objective</label>
+      <label lang="fr">Objectif (examen clinique)</label>
+      <options>DontPrintEmptyValues</options>
+
+        <Item type="texteditor" name="ObjectiveGroup::Objective">
+          <uilink label="" widget="" layout="oLayout"/>
+          <tooltip lang="xx">Objective: your physical examination</tooltip>
+          <tooltip lang="fr">Objectif: votre examen clinique</tooltip>
+          <options>DontPrintEmptyValues</options>
+        </Item>
+
+        <Item type="helptext" name="ObjectiveGroup::BloodPressure::UiLabel">
+          <uilink label="" widget="bpLabel" layout=""/>
+          <label lang="xx">BP (mmHg)</label>
+          <label lang="fr">TA (mmHg)</label>
+          <tooltip lang="xx">Blood pressure (mmHg)</tooltip>
+          <tooltip lang="fr">Tension artérielle (mmHg)</tooltip>
+          <options>DontPrintEmptyValues</options>
+        </Item>
+
+        <Item type="spin" name="ObjectiveGroup::BloodPressure::Syst">
+          <uilink label="" widget="bpSyst" layout=""/>
+          <tooltip lang="xx">Systolic</tooltip>
+          <tooltip lang="fr">Systolique</tooltip>
+          <options>DontPrintEmptyValues</options>
+          <patientdata>SystolicBloodPressure</patientdata>
+        </Item>
+
+        <Item type="spin" name="ObjectiveGroup::BloodPressure::Diast">
+          <uilink label="" widget="bpDiast" layout=""/>
+          <tooltip lang="xx">Diastolic</tooltip>
+          <tooltip lang="fr">Diastolique</tooltip>
+          <options>DontPrintEmptyValues</options>
+          <patientdata>DiastolicBloodPressure</patientdata>
+        </Item>
+
+        <Item type="helptext" name="ObjectiveGroup::BloodPressure::Pulse">
+          <uilink label="" widget="bpPulse" layout=""/>
+          <tooltip lang="xx">Pulse pressure</tooltip>
+          <tooltip lang="fr">Différentielle</tooltip>
+          <options>DontPrintEmptyValues</options>
+        </Item>
+
+        <Item type="doublespin" name="ObjectiveGroup::Weight::Value">
+          <uilink label="wLabel" widget="weight" layout=""/>
+          <label lang="xx">Weight</label>
+          <label lang="fr">Poids</label>
+          <tooltip lang="xx">Weight</tooltip>
+          <tooltip lang="fr">Poids</tooltip>
+          <options>DontPrintEmptyValues</options>
+          <patientdata>Weight</patientdata>
+        </Item>
+
+        <Item type="combo" name="ObjectiveGroup::Weight::Unit">
+          <uilink label="" widget="weightUnit" layout=""/>
+          <tooltip lang="xx">Weight unit measurement</tooltip>
+          <tooltip lang="fr">Unité de mesure du poids</tooltip>
+          <options>DontPrintEmptyValues</options>
+          <patientdata>WeightUnit</patientdata>
+        </Item>
+
+        <Item type="doublespin" name="ObjectiveGroup::Height::Value">
+          <uilink label="hLabel" widget="height" layout=""/>
+          <label lang="xx">Height</label>
+          <label lang="fr">Taille</label>
+          <tooltip lang="xx">Height</tooltip>
+          <tooltip lang="fr">Taille</tooltip>
+          <options>DontPrintEmptyValues</options>
+          <patientdata>Height</patientdata>
+        </Item>
+
+        <Item type="combo" name="ObjectiveGroup::Height::Unit">
+          <uilink label="" widget="heightUnit" layout=""/>
+          <tooltip lang="xx">Height unit measurement</tooltip>
+          <tooltip lang="fr">Unité de mesure de la taille</tooltip>
+          <options>DontPrintEmptyValues</options>
+          <patientdata>HeightUnit</patientdata>
+        </Item>
+
+        <Item type="helptext" name="BMILabel">
+          <uilink widget="bmiLabel"/>
+          <label lang="xx">BMI</label>
+          <label lang="fr">IMC</label>
+          <tooltip lang="xx">Body Mass Index (kg/m2)&lt;br />BMI=Height (cm) / (Weight (kg) ^2)</tooltip>
+          <tooltip lang="fr">Index de masse corporelle (kg/m2)&lt;br />BMI=Taille (cm) / (Poids (kg) ^2)</tooltip>
+          <options>DontPrintEmptyValues</options>
+        </Item>
+
+    </Item>
+
+    <Item type="group" name="AssessmentPlanGroup">
+      <uilink widget="apGroup"/>
+      <label lang="xx">Assessment and plan</label>
+      <label lang="fr">Analyse et prise en charge</label>
+      <options>DontPrintEmptyValues</options>
+
+        <Item type="texteditor" name="AssessmentPlanGroup::Assessment">
+          <uilink label="" widget="" layout="aLayout"/>
+          <options>DontPrintEmptyValues</options>
+          <tooltip lang="xx">Assessment</tooltip>
+          <tooltip lang="fr">Analyse</tooltip>
+        </Item>
+
+        <Item type="texteditor" name="AssessmentPlanGroup::Plan">
+          <uilink label="" widget="" layout="pLayout"/>
+          <tooltip lang="xx">Plan</tooltip>
+          <tooltip lang="fr">Prise en charge</tooltip>
+          <options>DontPrintEmptyValues</options>
+        </Item>
+
+    </Item>
+
+    <tabstops ns="Subs::Tools::SOAP::WithBio">
+     <tabstop>SubjectiveGroup::Subjective</tabstop>
+     <tabstop>ObjectiveGroup::BloodPressure::Syst</tabstop>
+     <tabstop>ObjectiveGroup::BloodPressure::Diast</tabstop>
+     <tabstop>ObjectiveGroup::Weight::Value</tabstop>
+     <tabstop>ObjectiveGroup::Height::Value</tabstop>
+     <tabstop>ObjectiveGroup::Weight::Unit</tabstop>
+     <tabstop>ObjectiveGroup::Height::Unit</tabstop>
+     <tabstop>ObjectiveGroup::Objective</tabstop>
+     <tabstop>AssessmentPlanGroup::Assessment</tabstop>
+     <tabstop>AssessmentPlanGroup::Plan</tabstop>
+    </tabstops>
+
+  </MedForm>
+
+</FreeMedForms>
