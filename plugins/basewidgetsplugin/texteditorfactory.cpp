@@ -216,6 +216,8 @@ void TextEditorForm::retranslate()
 {
     if (m_Label)
         m_Label->setText(m_FormItem->spec()->label());
+    if (m_Text)
+        m_Text->setToolTip(m_FormItem->spec()->tooltip());
 }
 
 ////////////////////////////////////////// ItemData /////////////////////////////////////////////

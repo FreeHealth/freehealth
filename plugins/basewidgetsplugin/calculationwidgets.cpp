@@ -268,6 +268,8 @@ void SumWidget::retranslate()
 {
     if (m_Label)
         m_Label->setText(m_FormItem->spec()->label());
+    if (line)
+        line->setToolTip(m_FormItem->spec()->tooltip());
 }
 
 void SumWidget::connectFormItems()
@@ -474,6 +476,10 @@ void ScriptWidget::retranslate()
 {
     if (m_Label)
         m_Label->setText(m_FormItem->spec()->label());
+    if (line)
+        line->setToolTip(m_FormItem->spec()->tooltip());
+    if (m_Editor)
+        m_Editor->setToolTip(m_FormItem->spec()->tooltip());
 }
 
 void ScriptWidget::connectFormItems()

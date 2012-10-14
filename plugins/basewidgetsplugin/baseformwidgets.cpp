@@ -1023,11 +1023,9 @@ void BaseCheck::retranslate()
         if (m_FormItem->getOptions().contains("labelastooltip", Qt::CaseInsensitive)) {
             tip = m_FormItem->spec()->label();
         } else {
-            tip = m_FormItem->spec()->value(Form::FormItemSpec::Spec_Tooltip).toString();
+            tip = m_FormItem->spec()->tooltip();
         }
         m_Check->setToolTip(tip);
-
-        // Get label
         m_Check->setText(m_FormItem->spec()->label());
     }
 }
