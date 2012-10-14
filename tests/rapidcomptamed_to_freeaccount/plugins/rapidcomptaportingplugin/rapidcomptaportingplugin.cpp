@@ -34,12 +34,14 @@
 #include "rapidtofreeio.h"
 
 #include <utils/log.h>
+#include <utils/global.h>
 
 #include <coreplugin/dialogs/pluginaboutpage.h>
 #include <coreplugin/icore.h>
 #include <coreplugin/iuser.h>
 #include <coreplugin/translators.h>
 #include <coreplugin/itheme.h>
+#include <coreplugin/imainwindow.h>
 
 #include <QtPlugin>
 #include <QDebug>
@@ -109,13 +111,14 @@ void RapidPortPlugin::postCoreInitialization()
 {
     RapidToFreeIO * rIO = new RapidToFreeIO;
     qDebug() << __FILE__ << QString::number(__LINE__) << " 1 "   ;
-    if (!rIO->initialiseBases())
-    {
+    if (!rIO->initialiseBases()) {
         qWarning() << __FILE__ << QString::number(__LINE__) << "unable to connect to databases" ;
     }
     qDebug() << __FILE__ << QString::number(__LINE__) << " 2 "   ;
-    RapidToFreeViewer *viewer = new RapidToFreeViewer;
-    viewer->show();
+    Core::IMainWindow *mainWin = Core::ICore::instance()->mainWindow();
+    RapidToFreeViewer *viewer = new RapidToFreeViewer(mainWin);
+    mainWin->setCentralWidget(viewer);
+    Utils::resizeAndCenter(mainWin);
 }
 
 Q_EXPORT_PLUGIN(RapidPortPlugin)

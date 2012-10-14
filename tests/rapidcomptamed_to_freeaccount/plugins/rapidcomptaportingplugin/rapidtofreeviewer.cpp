@@ -1,7 +1,8 @@
 #include "rapidtofreeviewer.h"
 #include "rapidtofreeio.h"
 
-RapidToFreeViewer::RapidToFreeViewer(QObject * parent)
+RapidToFreeViewer::RapidToFreeViewer(QWidget *parent) :
+    QWidget(parent)
 {
     setupUi(this);
     rapidUserComboBox->addItems(rapidcomptamedUsers());

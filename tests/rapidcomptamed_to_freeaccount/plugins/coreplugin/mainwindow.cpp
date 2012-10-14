@@ -27,25 +27,17 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
-#include <rapidcomptaportingplugin/rapidtofreeviewer.h>
-
 #include <utils/global.h>
 
 #include <QDebug>
 
 MainWindow::MainWindow(QWidget *parent) :
-    Core::IMainWindow(parent),
-    ui(new Ui::MainWindow)
+    Core::IMainWindow(parent)
 {
-    ui->setupUi(this);
-    qWarning();
-    setCentralWidget(new RapidToFreeViewer);
-    resize(900,600);
 }
 
 MainWindow::~MainWindow()
 {
-    delete ui;
 }
 
 bool MainWindow::initialize(const QStringList &arguments, QString *errorString)

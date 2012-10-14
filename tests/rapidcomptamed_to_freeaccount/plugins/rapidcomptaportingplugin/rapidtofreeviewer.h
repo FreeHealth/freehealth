@@ -10,7 +10,7 @@ class RapidToFreeViewer:public QWidget,public Ui::RapidToFreeWidget
 {
     Q_OBJECT
 public:
-    RapidToFreeViewer (QObject * parent = 0);
+    RapidToFreeViewer (QWidget * parent = 0);
     virtual ~RapidToFreeViewer ();
 
 protected slots:
