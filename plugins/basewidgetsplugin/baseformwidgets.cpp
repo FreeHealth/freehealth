@@ -2334,7 +2334,11 @@ BaseSpin::BaseSpin(Form::FormItem *formItem, QWidget *parent, bool doubleSpin) :
                 m_Spin = dbl;
                 connect(dbl, SIGNAL(valueChanged(double)), data, SLOT(onValueChanged()));
             } else {
-                LOG_ERROR("Using the QtUiLinkage, item not found in the ui: " + formItem->uuid());
+                LOG_ERROR(QString("Using the QtUiLinkage, "
+                                  "QDoubleSpinBox not found in the ui: %1 - %2")
+                          .arg(widget)
+                          .arg(formItem->uuid())
+                          );
                 // To avoid segfaulting create a fake spinbox
                 m_Spin = new QDoubleSpinBox(this);
             }
@@ -2342,9 +2346,13 @@ BaseSpin::BaseSpin(Form::FormItem *formItem, QWidget *parent, bool doubleSpin) :
             QSpinBox *dbl = qFindChild<QSpinBox*>(formItem->parentFormMain()->formWidget(), widget);
             if (dbl) {
                 m_Spin = dbl;
-                connect(dbl, SIGNAL(valueChanged(double)), data, SLOT(onValueChanged()));
+                connect(dbl, SIGNAL(valueChanged(int)), data, SLOT(onValueChanged()));
             } else {
-                LOG_ERROR("Using the QtUiLinkage, item not found in the ui: " + formItem->uuid());
+                LOG_ERROR(QString("Using the QtUiLinkage, "
+                                  "QSpinBox not found in the ui: %1 - %2")
+                          .arg(widget)
+                          .arg(formItem->uuid())
+                          );
                 // To avoid segfaulting create a fake spinbox
                 m_Spin = new QSpinBox(this);
             }
