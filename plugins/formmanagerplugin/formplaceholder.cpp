@@ -121,6 +121,13 @@ static inline Core::IPatient *patient()  { return Core::ICore::instance()->patie
 static inline Core::ActionManager *actionManager() {return Core::ICore::instance()->actionManager();}
 static inline Core::IDocumentPrinter *printer() {return ExtensionSystem::PluginManager::instance()->getObject<Core::IDocumentPrinter>();}
 
+//static void warnPatient()
+//{
+//    for(int i=0; i < Core::IPatient::NumberOfColumns; ++i) {
+//        qWarning() << patient()->enumToString(Core::IPatient::PatientDataRepresentation(i)) << patient()->data(i);
+//    }
+//}
+
 namespace Form {
 namespace Internal {
 
@@ -155,7 +162,6 @@ bool FormPlaceHolderPatientListener::currentPatientAboutToChange()
         return _formPlaceHolder->saveCurrentEpisode();
     return true;
 }
-
 
 //EpisodeModelUserListener::EpisodeModelUserListener(FormPlaceHolder *parent) :
 //    UserPlugin::IUserListener(parent)
