@@ -153,7 +153,7 @@ UserManager::~UserManager()
   \todo Search user by city, search by name & firstname,
 */
 UserManagerDialog::UserManagerDialog(QWidget * parent) :
-        QDialog(parent)
+    QDialog(parent)
 {
     Q_ASSERT_X(UserModel::instance()->hasCurrentUser(), "UserManagerDialog", "NO CURRENT USER");
     if (!UserModel::instance()->hasCurrentUser())
