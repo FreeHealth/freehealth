@@ -403,18 +403,18 @@ bool XmlFormContentReader::loadForm(const XmlFormName &form, Form::FormMain *roo
             warnXmlReadError(m_Mute, form.uid, tkTr(Trans::Constants::XML_WRONG_ROOT_TAG_1_2).arg(root.tagName()).arg(Constants::TAG_NEW_FORM));
             return false;
         }
-//        rootForm = createNewForm(newForm, m_ActualForm);
     }
     m_ActualForm = rootForm;
 
     if (!loadElement(rootForm, root, form)) {
-        LOG_ERROR_FOR("XmlFormContentReader", "Unable to load form " + form.uid);
+        LOG_ERROR_FOR("XmlFormContentReader", "Unable to load form: " + form.uid);
         return false;
     }
 
 //    rootForm->createDebugPage();
     qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
-    createWidgets(rootForm);
+//    createWidgets(rootForm);
+//    if (!setTabOrder(rootForm, ))
 
     // Manage uuid equivalence
     QMultiHash<QString, QString> oldToNew = readUuidEquivalence(doc);
@@ -621,13 +621,22 @@ bool XmlFormContentReader::createElement(Form::FormItem *item, QDomElement &elem
                 item->spec()->setValue(Form::FormItemSpec::Spec_IsIdentityForm, isIdentity, Trans::Constants::ALL_LANGUAGE);
             }
 
-
             if (element.hasAttribute(Constants::ATTRIB_UIFILE)) {
                 QString content = base()->getFormContent(form.uid, XmlIOBase::UiFile, element.attribute(Constants::ATTRIB_UIFILE));
                 item->spec()->setValue(Form::FormItemSpec::Spec_UiFileContent, content, Trans::Constants::ALL_LANGUAGE);
             }
 
+            // load all sub-items
             loadElement(item, element, form);
+
+            // when the form is loaded -> create the formWidgets
+            createFormWidget(m_ActualForm);
+
+            // then set the taborder
+            if (!setTabOrder(m_ActualForm, element)) {
+                LOG_ERROR_FOR("XmlFormContentReader", "Unable to set tabsorder: " + form.uid);
+            }
+
             // read specific form's data
             m_ActualForm = oldRootForm;
             return true;
@@ -784,6 +793,7 @@ bool XmlFormContentReader::addFile(const QDomElement &element, const XmlFormName
     return true;
 }
 
+/** Create a formitemwidget for the \e item with the specified \e parent */
 bool XmlFormContentReader::createItemWidget(Form::FormItem *item, QWidget *parent)
 {
 //    qWarning() << Q_FUNC_INFO;
@@ -828,6 +838,7 @@ bool XmlFormContentReader::createItemWidget(Form::FormItem *item, QWidget *paren
     return true;
 }
 
+/** Create the formitemwidget for a main form (and also its children) */
 bool XmlFormContentReader::createFormWidget(Form::FormMain *form)
 {
     if (!createItemWidget(form, 0))
@@ -835,12 +846,49 @@ bool XmlFormContentReader::createFormWidget(Form::FormMain *form)
     return true;
 }
 
+/** Create all the formitemwidgets for a main form */
 bool XmlFormContentReader::createWidgets(const Form::FormMain *rootForm)
 {
     // foreach FormMain children
     foreach(Form::FormMain *form, rootForm->flattenFormMainChildren()) {
         // create the form
         createFormWidget(form);
+    }
+    return true;
+}
+
+bool XmlFormContentReader::setTabOrder(Form::FormMain *rootForm, const QDomElement &root)
+{
+    QDomElement tabs = root.firstChildElement(Constants::TAG_TABSTOPS);
+    if (tabs.isNull())
+        return true;
+//    qWarning() << "SETABS" << rootForm->uuid();
+//    QString ns = root.attribute("ns");
+//    if (!ns.isEmpty())
+//        ns.append("::");
+    const QList<Form::FormItem *> &items = rootForm->flattenFormItemChildren();
+    QWidget *first = 0;
+    QWidget *second = 0;
+    QDomElement element = tabs.firstChildElement(Constants::TAG_TABSTOP);
+    while (!element.isNull()) {
+        const QString &widgetName = element.text();
+//        qWarning() << "Tab" << widgetName;
+        foreach(Form::FormItem *item, items) {
+            if (item->uuid().endsWith(widgetName)) {
+                // get it
+                if (!first) {
+                    first = item->formWidget();
+                } else {
+                    second = item->formWidget();
+//                    qWarning() << "  setTabOrder" << first << second;
+                    QWidget::setTabOrder(first, second);
+                    first = second;
+                    second = 0;
+                }
+                break;
+            }
+        }
+        element = element.nextSiblingElement(Constants::TAG_TABSTOP);
     }
     return true;
 }

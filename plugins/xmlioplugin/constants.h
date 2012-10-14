@@ -87,6 +87,8 @@ const char* const TAG_PMHX_CATEGORIES = "PMHx";
 const char* const TAG_CATEGORY     = "Category";
 const char* const TAG_ADDFILE      = "file";
 const char* const TAG_NAME         = "name";
+const char* const TAG_TABSTOPS     = "tabstops";
+const char* const TAG_TABSTOP      = "tabstop";
 
 const char* const TAG_UUID_EQUIVALENCE_MAIN = "fieldequivalence";
 const char* const TAG_UUID_EQUIVALENCE_ITEM = "equivalent";
