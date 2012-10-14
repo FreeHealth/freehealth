@@ -150,6 +150,7 @@ SitesWidget::SitesWidget(QWidget *parent) :
     m_Model = new AccountDB::WorkingPlacesModel(this);
     // TODO:  m_Model->setUserUuid();
     m_siteUidLabel = new QSpinBox(this);
+    ui->horizontalLayout->insertWidget(0, m_siteUidLabel);
     //m_siteUidLabel->setText("NULL");
     m_siteUidLabel->setValue(11111);
     if (Utils::isReleaseCompilation())
