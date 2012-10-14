@@ -27,7 +27,8 @@
 /**
  * \class Patients::PatientSelector
  * \brief Selector Widget for the recorded patients.
- * Allow user to search and select patient from the complete database.
+ * Allow user to search and select patient from the complete database. \n
+ * Automatically removes the search filter on user changed to null.
  * \sa Patient::PatientModel
  */
 
@@ -42,6 +43,7 @@
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
 #include <coreplugin/itheme.h>
+#include <coreplugin/iuser.h>
 #include <coreplugin/actionmanager/actionmanager.h>
 #include <coreplugin/actionmanager/actioncontainer.h>
 #include <coreplugin/ipatient.h>
@@ -64,6 +66,7 @@ using namespace Trans::ConstantTranslations;
 
 static inline Core::ISettings *settings() {return Core::ICore::instance()->settings();}
 static inline Core::ITheme *theme() {return Core::ICore::instance()->theme();}
+static inline Core::IUser *user() {return Core::ICore::instance()->user();}
 static inline Core::IMainWindow *mainWindow() {return Core::ICore::instance()->mainWindow();}
 static inline Core::ActionManager *actionManager() { return Core::ICore::instance()->actionManager(); }
 static inline Core::ModeManager *modeManager() {return Core::ICore::instance()->modeManager();}
@@ -188,6 +191,7 @@ PatientSelector::PatientSelector(QWidget *parent, const FieldsToShow fields) :
     } else {
         d->m_Fields = fields;
     }
+    connect(user(), SIGNAL(userChanged()), this, SLOT(onUserChanged()));
 }
 
 PatientSelector::~PatientSelector()
@@ -202,8 +206,6 @@ PatientSelector::~PatientSelector()
 /** \brief Initialize view and actions, select the first available patient. */
 void PatientSelector::initialize()
 {
-//    layout()->setMargin(0);
-
     if (!d->m_Model->currentPatient().isValid()) {
         QModelIndex index = d->m_Model->index(0,0);
         d->m_Model->blockSignals(true);
@@ -356,6 +358,19 @@ void PatientSelector::onPatientActivated(const QModelIndex &index)
         d->m_Model->setCurrentPatient(index);
     else
         PatientModel::activeModel()->setCurrentPatient(index);
+}
+
+/** Update the view on user changed */
+void PatientSelector::onUserChanged()
+{
+    // TODO: reconnect user specific patient list (using the Practionner LKID)
+    // reset the search filter
+    d->ui->searchLine->clear();
+
+    refreshFilter("");
+
+    // re-initialize the view
+    initialize();
 }
 
 bool PatientSelector::event(QEvent *event)
