@@ -46,6 +46,7 @@
 #include "userfirstrunpage.h"
 #include "usermanagermode.h"
 #include "database/userbase.h"
+#include "widgets/usermanager.h"
 
 #include <coreplugin/icore.h>
 #include <coreplugin/isettings.h>
@@ -73,6 +74,8 @@
 #include <QGridLayout>
 
 #include <QDebug>
+
+enum { WithUserMode = false };
 
 using namespace UserPlugin::Internal;
 using namespace Trans::ConstantTranslations;
@@ -198,16 +201,16 @@ void UserManagerPlugin::extensionsInitialized()
     addAutoReleasedObject(new UserPlugin::CurrentUserPreferencesPage(this));
 
     // add UserManager toogler action to plugin menu
-#ifndef FREEMEDFORMS
-    const char * const menuId = Core::Constants::M_FILE;
-    const char * const menuNewId = Core::Constants::M_FILE_NEW;
-    const char * const groupUsers = Core::Constants::G_FILE_OTHER;
-    const char * const groupNew =  Core::Constants::G_FILE_NEW;
-#else
+#ifdef FREEMEDFORMS
     const char * const menuId = Core::Constants::M_GENERAL;
     const char * const menuNewId = Core::Constants::M_GENERAL_NEW;
     const char * const groupUsers = Core::Constants::G_GENERAL_USERS;
     const char * const groupNew = Core::Constants::G_GENERAL_NEW;
+#else
+    const char * const menuId = Core::Constants::M_FILE;
+    const char * const menuNewId = Core::Constants::M_FILE_NEW;
+    const char * const groupUsers = Core::Constants::G_FILE_OTHER;
+    const char * const groupNew =  Core::Constants::G_FILE_NEW;
 #endif
 
     Core::ActionContainer *menu = actionManager()->actionContainer(menuId);
@@ -246,7 +249,6 @@ void UserManagerPlugin::extensionsInitialized()
     cmd->retranslate();
     connect(aChangeUser, SIGNAL(triggered()), this, SLOT(changeCurrentUser()));
 
-#ifdef FREEACCOUNT
     a = aUserManager = new QAction(this);
     a->setObjectName("aUserManager");
     a->setIcon(QIcon(Core::Constants::ICONUSERMANAGER));
@@ -256,7 +258,6 @@ void UserManagerPlugin::extensionsInitialized()
     menu->addAction(cmd, Core::Id(groupUsers));
     cmd->retranslate();
     connect(aUserManager, SIGNAL(triggered()), this, SLOT(showUserManager()));
-#endif
 
     Core::ActionContainer *hmenu = actionManager()->actionContainer(Core::Id(Core::Constants::M_HELP_DATABASES));
     if (hmenu) {
@@ -274,7 +275,8 @@ void UserManagerPlugin::extensionsInitialized()
     updateActions();
 
     // create the mode
-    m_Mode = new Internal::UserManagerMode(this);
+    if (WithUserMode)
+        m_Mode = new Internal::UserManagerMode(this);
 
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
 }
@@ -387,7 +389,7 @@ void UserManagerPlugin::updateActions()
 {
     if (user()) {
         Core::IUser::UserRights umRights(user()->value(Core::IUser::ManagerRights).toInt());
-//        Core::IUser::UserRights adminRights(user()->value(Core::IUser::AdministrativeRights));
+        aUserManager->setEnabled(umRights & Core::IUser::AllRights);
         if ((umRights & Core::IUser::AllRights) ||
             (umRights & Core::IUser::ReadAll)) {
             aCreateUser->setEnabled(true);
@@ -400,21 +402,13 @@ void UserManagerPlugin::updateActions()
     }
 }
 
-#ifdef FREEMEDFORMS
 void UserManagerPlugin::showUserManager()
 {
-    // FreeMedForms uses its own User Mode to show the usermanager
-}
-#else
-#include "widgets/usermanager.h"
-void UserManagerPlugin::showUserManager()
-{
-    qWarning() << "USERMANAGER";
     UserManagerDialog dlg(Core::ICore::instance()->mainWindow());
+    dlg.setModal(true);
     dlg.initialize();
     dlg.exec();
 }
-#endif
 
 void UserManagerPlugin::showDatabaseInformation()
 {
