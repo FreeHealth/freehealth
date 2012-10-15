@@ -43,6 +43,8 @@ public:
     QString category(const QString &lang = QString::null) const;
     QString description(const QString &lang = QString::null) const;
 
+    Alert::AlertItem getDefaultEmptyAlert() const;
+
 };
 
 }  // namespace Internal

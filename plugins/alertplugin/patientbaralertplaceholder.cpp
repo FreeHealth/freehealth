@@ -72,3 +72,15 @@ QString PatientBarAlertPlaceHolder::description(const QString &lang) const
     Q_UNUSED(lang);
     return tr("Placeholder for patient related non-blocking alerts.");
 }
+
+Alert::AlertItem PatientBarAlertPlaceHolder::getDefaultEmptyAlert() const
+{
+    AlertItem item;
+    item.setValidity(true);
+    item.setEditable(true);
+    item.setCreationDate(QDateTime::currentDateTime());
+    item.setContentType(AlertItem::PatientCondition);
+    item.setViewType(AlertItem::NonBlockingAlert);
+    item.addTiming(AlertTiming(QDateTime(QDate::currentDate(), QTime(0,0,0)), QDateTime(QDate::currentDate(), QTime(23, 59, 59)).addYears(1)));
+    return item;
+}
