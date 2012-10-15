@@ -29,7 +29,7 @@
  * \brief The Patient bar is the bar surrounding all view when a patient is selected.
  * It contains:
  * - a brief resume of the patient's identity
- * - an Alert::IAlertPlaceHolder for patient non-blocking alerts (if compiled with the 'with-alert' config tag)
+ * - a bottom place holder to add various widget (like alert place holders)
  * - a specific place where PatientsActions are presented (not yet implemented)
  * The whole application owns a unique instance of the patient bar. This singleton is accessible
  * throught the Core::IPatient interface.
@@ -39,10 +39,6 @@
 #include "patientbar.h"
 #include "patientmodel.h"
 #include "constants_settings.h"
-
-#ifdef WITH_ALERTS
-#   include "with-alerts/patientbaralertplaceholder.h"
-#endif
 
 #include "ui_patientbar.h"
 
@@ -106,32 +102,11 @@ public:
         ui->photo->clear();
     }
 
-    void createAlertManager()
-    {
-    #ifdef WITH_ALERTS
-        LOG_FOR(q, "Creating patient alert placeholder");
-        _alertPlaceHolder = new PatientBarAlertPlaceHolder(q);
-        pluginManager()->addObject(_alertPlaceHolder);
-        ui->alertLayout->addWidget(_alertPlaceHolder->createWidget(q));
-    #endif
-    }
-
-    void removeAlertManager()
-    {
-    #ifdef WITH_ALERTS
-        pluginManager()->removeObject(_alertPlaceHolder);
-    #endif
-    }
-
-
 public:
     Ui::PatientBar *ui;
     PatientModel *m_Model;
     QDataWidgetMapper *m_Mapper;
     QPersistentModelIndex *m_Index;
-#ifdef WITH_ALERTS
-    PatientBarAlertPlaceHolder *_alertPlaceHolder;
-#endif
 
 private:
     PatientBar *q;
@@ -158,14 +133,12 @@ PatientBar::PatientBar(QWidget *parent) :
         PatientModel::setActiveModel(new PatientModel(qApp));
     }
     setPatientModel(PatientModel::activeModel());
-    d->createAlertManager();
     connect(patient(), SIGNAL(currentPatientChanged()), this, SLOT(onCurrentPatientChanged()));
 }
 
 /** dtor */
 PatientBar::~PatientBar()
 {
-    d->removeAlertManager();
 }
 
 /** Define the Patients::PatientModel to use. By default the Patients::PatientModel::activeModel() is used */
@@ -177,6 +150,12 @@ void PatientBar::setPatientModel(PatientModel *model)
     connect(model, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(patientDataChanged(QModelIndex, QModelIndex)));
     d->setUi();
     d->m_Mapper->setModel(model);
+}
+
+/** Add a widget at the bottom of the patient bar */
+void PatientBar::addBottomWidget(QWidget *widget)
+{
+    d->ui->bottomLayout->addWidget(widget);
 }
 
 /** Set the current patient index */

@@ -24,28 +24,51 @@
  *       NAME <MAIL@ADDRESS.COM>                                           *
  *       NAME <MAIL@ADDRESS.COM>                                           *
  ***************************************************************************/
-#ifndef PATIENTS_PATIENTBARALERTPLACEHOLDER_H
-#define PATIENTS_PATIENTBARALERTPLACEHOLDER_H
+/**
+ * \class Alert::Internal::PatientBarAlertPlaceHolder
+ * Manage patient non-blocking alerts. This widget is included in the
+ * Patients::PatientBar widget and is accessible in all Core::IMode that
+ * shows the patient bar.
+ * \sa Alert::AlertPlaceHolderWidget, Patients::PatientBar, Alert plugin
+ */
 
-#include <alertplugin/alertplaceholderwidget.h>
+#include "patientbaralertplaceholder.h"
 
-namespace Patients {
-namespace Internal {
+using namespace Alert;
+using namespace Internal;
 
-class PatientBarAlertPlaceHolder : public Alert::AlertPlaceHolderWidget
+PatientBarAlertPlaceHolder::PatientBarAlertPlaceHolder(QObject *parent) :
+    Alert::AlertPlaceHolderWidget(parent)
 {
-    Q_OBJECT
-public:
-    explicit PatientBarAlertPlaceHolder(QObject *parent = 0);
+    setIconSize(QSize(16,16));
+    setMargin(0);
+    setSpacing(2);
+    setBorderSize(0);
+    setDrawBackgroundUsingAlertPriority(false);
+    setAutoSaveOnValidationOrOverriding(true);
+    setAutoSaveOnEditing(true);
+    setObjectName("Patients::Internal::PatientBarAlertPlaceHolder");
+}
 
-    QString uuid() const;
-    QString name(const QString &lang = QString::null) const;
-    QString category(const QString &lang = QString::null) const;
-    QString description(const QString &lang = QString::null) const;
+QString PatientBarAlertPlaceHolder::uuid() const
+{
+    return objectName();
+}
 
-};
+QString PatientBarAlertPlaceHolder::name(const QString &lang) const
+{
+    Q_UNUSED(lang);
+    return tr("Patient non-blocking alerts");
+}
 
-}  // namespace Internal
-}  // namespace Patients
+QString PatientBarAlertPlaceHolder::category(const QString &lang) const
+{
+    Q_UNUSED(lang);
+    return tr("Patient alerts");
+}
 
-#endif // PATIENTS_PATIENTBARALERTPLACEHOLDER_H
+QString PatientBarAlertPlaceHolder::description(const QString &lang) const
+{
+    Q_UNUSED(lang);
+    return tr("Placeholder for patient related non-blocking alerts.");
+}

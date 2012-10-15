@@ -40,6 +40,7 @@
 namespace Alert {
 namespace Internal {
 class AlertPreferencesPage;
+class PatientBarAlertPlaceHolder;
 
 class AlertPlugin : public ExtensionSystem::IPlugin
 {
@@ -58,6 +59,7 @@ private Q_SLOTS:
 
 private:
     AlertPreferencesPage *_prefPage;
+    PatientBarAlertPlaceHolder *_patientPlaceHolder;
 };
 
 }  // End namespace Internal

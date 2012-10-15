@@ -160,6 +160,7 @@ with-alerts {
     SUBDIRS += alerts
     alerts.subdir = ../../plugins/alertplugin
     alerts.depends += core
+    alerts.depends += patientbase
 }
 
 with-pad {
@@ -174,7 +175,6 @@ patientbase.depends += core
 patientbase.depends += listview
 patientbase.depends += zipcodes
 patientbase.depends += formmanager
-with-alerts { patientbase.depends += alerts }
 
 # manage non free content
 #include(../buildspecs/config.pri)

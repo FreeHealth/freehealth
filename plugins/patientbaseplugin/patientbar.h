@@ -49,6 +49,7 @@ public:
     ~PatientBar();
 
     void setPatientModel(PatientModel *model);
+    void addBottomWidget(QWidget *widget);
 
 public Q_SLOTS:
     void setCurrentIndex(const QModelIndex &index);
