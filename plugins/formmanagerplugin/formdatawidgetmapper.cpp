@@ -304,7 +304,9 @@ void FormDataWidgetMapper::setFormWidgetEnabled(bool enabled)
 /** Take a screenshot of the current editing form widget (populated with the episode index values). */
 QPixmap FormDataWidgetMapper::screenshot()
 {
-    return QPixmap::grabWidget(d->_stack->currentWidget());
+    QScrollArea *area = qobject_cast<QScrollArea*>(d->_stack->currentWidget());
+    QWidget *widget = area->widget();
+    return QPixmap::grabWidget(widget);
 }
 
 /** Submit modifications (form header && form content) to the corresponding Form::EpisodeModel. */

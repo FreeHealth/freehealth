@@ -28,11 +28,6 @@
 #define MAINWINDOW_H
 
 #include <coreplugin/imainwindow.h>
-#include <QNetworkReply>
-
-namespace Ui {
-    class MainWindow;
-}
 
 class MainWindow : public Core::IMainWindow
 {
@@ -44,8 +39,6 @@ public:
     bool initialize(const QStringList &arguments, QString *errorString);
     void extensionsInitialized();
 
-private:
-    Ui::MainWindow *ui;
 };
 
 #endif // MAINWINDOW_H

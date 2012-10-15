@@ -23,6 +23,4 @@ SOURCES += coreimpl.cpp \
     mainwindow.cpp \
     fakescriptmanager.cpp
 
-FORMS += mainwindow.ui
-
 OTHER_FILES += Core.pluginspec
