@@ -29,9 +29,9 @@
 #include "hour_range_widget.h"
 #include "hour_range_node.h"
 #include "hourwidget.h"
-#include "hourmark.h"
 #include "day_widget.h"
 #include "day_node.h"
+#include <calendar/hourmark.h>
 #include <calendar/common.h>
 #include <calendar/modelanditem/abstract_calendar_model.h>
 #include <calendar/modelanditem/basic_item_edition_dialog.h>
