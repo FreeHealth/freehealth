@@ -283,14 +283,27 @@ void AlertPlaceHolderWidget::addNewAlertButton()
     _widget->addSeparator();
 }
 
+/**
+ * When the slot called createAlert is called,
+ * the alert editor dialog is populated on the basis of this default alert item.
+ * You can define your own default options.
+ */
+Alert::AlertItem AlertPlaceHolderWidget::getDefaultEmptyAlert() const
+{
+    AlertItem item;
+    item.setValidity(true);
+    item.setEditable(true);
+    item.setCreationDate(QDateTime::currentDateTime());
+    item.addTiming(AlertTiming(QDateTime(QDate::currentDate(), QTime(0,0,0)), QDateTime(QDate::currentDate(), QTime(0,0,0)).addYears(1)));
+    return item;
+}
+
+/** Slot called when the user click on the 'New alert' button. This slot can be overloaded. */
 void AlertPlaceHolderWidget::createAlert()
 {
     AlertItemEditorDialog dlg;
     dlg.setEditableParams(AlertItemEditorDialog::FullDescription | AlertItemEditorDialog::Types | AlertItemEditorDialog::Timing | AlertItemEditorDialog::Scripts);
-    AlertItem item;
-    item.setValidity(true);
-    item.setCreationDate(QDateTime::currentDateTime());
-    item.addTiming(AlertTiming(QDateTime(QDate::currentDate(), QTime(0,0,0)), QDateTime(QDate::currentDate(), QTime(0,0,0)).addYears(1)));
+    AlertItem item = getDefaultEmptyAlert();
     dlg.setAlertItem(item);
     if (dlg.exec()==QDialog::Accepted) {
          if (!dlg.submit(item)) {

@@ -38,20 +38,20 @@
         <translation type="unfinished">Extras</translation>
     </message>
     <message>
-        <source>Protect with a password</source>
-        <translation type="unfinished">mit einem Passwort schützen</translation>
+        <source>Protect with a &amp;password</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Password</source>
-        <translation type="unfinished">Passwort</translation>
+        <source>Pass&amp;word</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Confirm</source>
-        <translation type="unfinished">Bestätigen</translation>
+        <source>&amp;Confirm</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Themed icon</source>
-        <translation type="unfinished">Thema-Symbol</translation>
+        <source>Themed &amp;icon</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

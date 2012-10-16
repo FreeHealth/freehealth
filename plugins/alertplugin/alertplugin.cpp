@@ -27,6 +27,7 @@
 #include "alertcore.h"
 #include "alertitem.h"
 #include "alertpreferences.h"
+#include "patientbaralertplaceholder.h"
 
 #include <utils/log.h>
 
@@ -37,7 +38,9 @@
 #include <coreplugin/iuser.h>
 #include <coreplugin/translators.h>
 
-#include <QtCore/QtPlugin>
+#include <patientbaseplugin/patientbar.h>
+
+#include <QtPlugin>
 #include <QDebug>
 
 using namespace Alert;
@@ -49,7 +52,8 @@ static inline void messageSplash(const QString &s) {theme()->messageSplashScreen
 
 AlertPlugin::AlertPlugin() :
     ExtensionSystem::IPlugin(),
-    _prefPage(0)
+    _prefPage(0),
+    _patientPlaceHolder(0)
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating AlertPlugin";
@@ -101,10 +105,10 @@ void AlertPlugin::extensionsInitialized()
     // If you want to stop the plugin initialization if there are no identified user
     // Just uncomment the following code
     // no user -> end
-//    if (!user())
-//        return;
-//    if (user()->uuid().isEmpty())
-//        return;
+    if (!user())
+        return;
+    if (user()->uuid().isEmpty())
+        return;
 
     messageSplash(tr("Initializing AlertPlugin..."));
 
@@ -112,6 +116,12 @@ void AlertPlugin::extensionsInitialized()
     AlertCore::instance()->initialize();
 
     // Add here the DataPackPlugin::IDataPackListener objects to the pluginmanager object pool
+
+    // Add the patientalertplaceholder
+    LOG("Creating patient alert placeholder");
+    _patientPlaceHolder = new PatientBarAlertPlaceHolder(this);
+    addObject(_patientPlaceHolder);
+    Patients::PatientBar::instance()->addBottomWidget(_patientPlaceHolder->createWidget(Patients::PatientBar::instance()));
 
     addAutoReleasedObject(new Core::PluginAboutPage(pluginSpec(), this));
     connect(Core::ICore::instance(), SIGNAL(coreOpened()), this, SLOT(postCoreInitialization()));
@@ -143,6 +153,8 @@ ExtensionSystem::IPlugin::ShutdownFlag AlertPlugin::aboutToShutdown()
     // Remove preferences pages to plugins manager object pool
     if (_prefPage)
         removeObject(_prefPage);
+    if (_patientPlaceHolder)
+        removeObject(_patientPlaceHolder);
     return SynchronousShutdown;
 }
 

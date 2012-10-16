@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE FreeMedForms>
 <FreeMedForms>
+
   <formdescription>
+
     <!-- Non translatable values -->
     <authors>Eric Maeker, MD</authors>
-    <version>0.7.0</version>
+    <version>0.8.0</version>
     <fmfv>0.7.0</fmfv>
     <cdate>2011-12-19</cdate>
     <lmdate>2012-01-01</lmdate>
@@ -16,6 +18,18 @@
     <description lang="fr">Assistant à la prescription d'examens de radiologie</description>
     <category lang="xx">Radiology</category>
     <category lang="fr">Radiologie</category>
+
+    <updateinfo>
+      <updateversion from="0.7.0" to="0.8.0">
+        <text lang="fr">
+        Amélioration de l'impression des épisodes
+        </text>
+        <text lang="xx">
+        Improving episode printing
+        </text>
+      </updateversion>
+    </updateinfo>
+
   </formdescription>
 
   <file type="script" name="onload">./scripts/xx/onload.js</file>
@@ -30,6 +44,7 @@
         <uilink label="" widget="selectGroupBox" layout=""/>
         <label lang="xx">Create your prescription</label>
         <label lang="fr">Créer votre prescription</label>
+        <options>DontPrintEmptyValues</options>
       </Item>
 
       <Item type="button" name="AddToEditor">

@@ -499,12 +499,6 @@ Do you want to save them?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Preferred:
-yes = 1
-no = 0</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Minimum
 kilometers</source>
         <translation type="unfinished"></translation>
@@ -547,6 +541,12 @@ Do you want to save them?</source>
     </message>
     <message>
         <source>An error occured during distancerules saving. Data are corrupted.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Preferred: 
+yes = 1
+no = 0</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -1295,6 +1295,10 @@ Otherwise result will be wrong !</source>
     </message>
     <message>
         <source>No item</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Free payer</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

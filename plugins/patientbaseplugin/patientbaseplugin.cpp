@@ -57,7 +57,7 @@
 
 #include <utils/log.h>
 
-#include <QtCore/QtPlugin>
+#include <QtPlugin>
 #include <QDir>
 #include <QProgressDialog>
 
@@ -76,7 +76,6 @@ static inline Patients::Internal::PatientBase *patientBase() {return Patients::I
 static inline Core::ModeManager *modeManager() { return Core::ICore::instance()->modeManager(); }
 
 static inline Patients::PatientModel *patientModel() {return Patients::PatientModel::activeModel();}
-
 
 PatientBasePlugin::PatientBasePlugin() :
     m_Mode(0), prefpage(0),

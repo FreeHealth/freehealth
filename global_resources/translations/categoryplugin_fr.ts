@@ -34,23 +34,23 @@
         <translation type="unfinished">Extras</translation>
     </message>
     <message>
-        <source>Protect with a password</source>
-        <translation type="unfinished">Protéger la catégorie avec un mot de passe</translation>
-    </message>
-    <message>
-        <source>Password</source>
-        <translation type="unfinished">Mot de passe</translation>
-    </message>
-    <message>
-        <source>Confirm</source>
-        <translation type="unfinished">Confirmation</translation>
-    </message>
-    <message>
-        <source>Themed icon</source>
-        <translation type="unfinished">Icône du thème</translation>
-    </message>
-    <message>
         <source>Form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Protect with a &amp;password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pass&amp;word</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Confirm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Themed &amp;icon</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

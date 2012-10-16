@@ -5,57 +5,57 @@
     <name>Account</name>
     <message>
         <source>Account</source>
-        <translation type="unfinished">Comptabilité</translation>
+        <translation>Comptabilité</translation>
     </message>
     <message>
         <source>Receipts</source>
-        <translation type="unfinished">Recettes</translation>
+        <translation>Recettes</translation>
     </message>
     <message>
         <source>Add receipts</source>
-        <translation type="unfinished">Ajouter des recettes</translation>
+        <translation>Ajouter des recettes</translation>
     </message>
     <message>
         <source>Account book</source>
-        <translation type="unfinished">Livre de comptabilité</translation>
+        <translation>Livre de comptabilité</translation>
     </message>
     <message>
         <source>Revenues</source>
-        <translation type="unfinished">Revenus</translation>
+        <translation>Revenus</translation>
     </message>
     <message>
         <source>Expenses</source>
-        <translation type="unfinished">Dépense</translation>
+        <translation>Dépense</translation>
     </message>
     <message>
         <source>Ledger</source>
-        <translation type="unfinished">Grand Livre</translation>
+        <translation>Grand Livre</translation>
     </message>
     <message>
         <source>Assets</source>
-        <translation type="unfinished">Immobilisations</translation>
+        <translation>Immobilisations</translation>
     </message>
     <message>
         <source>Movements</source>
-        <translation type="unfinished">Mouvements</translation>
+        <translation>Mouvements</translation>
     </message>
     <message>
         <source>AccountView</source>
-        <translation type="unfinished">Voir la comptabilité</translation>
+        <translation>Voir la comptabilité</translation>
     </message>
 </context>
 <context>
     <name>Account::AccountPlugin</name>
     <message>
         <source>Initializing accountancy plugin...</source>
-        <translation type="unfinished">Initialisation du plugin de comptabilité...</translation>
+        <translation>Initialisation du plugin de comptabilité...</translation>
     </message>
 </context>
 <context>
     <name>Account::AccountView</name>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nom</translation>
+        <translation>Nom</translation>
     </message>
     <message>
         <source>Site id</source>
@@ -63,122 +63,122 @@
     </message>
     <message>
         <source>Date</source>
-        <translation type="unfinished">Date</translation>
+        <translation>Date</translation>
     </message>
     <message>
         <source>Act</source>
-        <translation type="unfinished">Acte</translation>
+        <translation>Acte</translation>
     </message>
     <message>
         <source>Comment</source>
-        <translation type="unfinished">Commentaire</translation>
+        <translation>Commentaire</translation>
     </message>
     <message>
         <source>Cash</source>
-        <translation type="unfinished">Espèce</translation>
+        <translation>Espèces</translation>
     </message>
     <message>
         <source>Check</source>
-        <translation type="unfinished">Chèques</translation>
+        <translation>Chèques</translation>
     </message>
     <message>
         <source>Credit Card</source>
-        <translation type="unfinished">Carte bancaire</translation>
+        <translation>Carte bancaire</translation>
     </message>
     <message>
         <source>Banking</source>
-        <translation type="unfinished">Virement</translation>
+        <translation>Virement</translation>
     </message>
     <message>
         <source>Other</source>
-        <translation type="unfinished">Autre</translation>
+        <translation>Autre</translation>
     </message>
     <message>
         <source>Due</source>
-        <translation type="unfinished">Du</translation>
+        <translation>Du</translation>
     </message>
     <message>
         <source>Due by</source>
-        <translation type="unfinished">Du par</translation>
+        <translation>Du par</translation>
     </message>
     <message>
         <source>Sum</source>
-        <translation type="unfinished"></translation>
+        <translation>Somme</translation>
     </message>
     <message>
         <source>Please select a line to delete</source>
-        <translation type="unfinished"></translation>
+        <translation>Veuillez sélectionner une ligne à supprimer</translation>
     </message>
     <message>
         <source>Line deleted</source>
-        <translation type="unfinished"></translation>
+        <translation>Ligne supprimée</translation>
     </message>
 </context>
 <context>
     <name>Account::Internal::AccountDatabaseDefautsWidget</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Formulaire</translation>
+        <translation>Formulaire</translation>
     </message>
     <message>
         <source>Available defaults</source>
-        <translation type="unfinished">Valeurs par défaut</translation>
+        <translation>Valeurs par défaut</translation>
     </message>
     <message>
         <source>Medical procedure</source>
-        <translation type="unfinished">Recettes médicales types</translation>
+        <translation>Recettes médicales types</translation>
     </message>
     <message>
         <source>Available Movements</source>
-        <translation type="unfinished">Mouvements disponibles</translation>
+        <translation>Mouvements disponibles</translation>
     </message>
     <message>
         <source>Assets rates</source>
-        <translation type="unfinished">Taux d&apos;immobilisation</translation>
+        <translation>Taux d&apos;immobilisation</translation>
     </message>
     <message>
         <source>Distance rules</source>
-        <translation type="unfinished">Règles de distance</translation>
+        <translation>Règles de distance</translation>
     </message>
     <message>
         <source>Insurance</source>
-        <translation type="unfinished">Assurances</translation>
+        <translation>Assurances</translation>
     </message>
     <message>
         <source>Others</source>
-        <translation type="unfinished">Autres</translation>
+        <translation>Autres</translation>
     </message>
     <message>
         <source>Create defaults</source>
-        <translation type="unfinished">Créer les valeurs par défaut</translation>
+        <translation>Créer les valeurs par défaut</translation>
     </message>
     <message>
         <source>Load datapack</source>
-        <translation type="unfinished">Chargement du paquet de données</translation>
+        <translation>Chargement du paquet de données</translation>
     </message>
     <message>
         <source>Medical procedure defaults can not be included.</source>
-        <translation type="unfinished">Les valeurs par défaut des recettes-type ne peuvent pas être incluses dans la base de donnée.</translation>
+        <translation>Les valeurs par défaut des recettes-type ne peuvent pas être incluses dans la base de donnée.</translation>
     </message>
     <message>
         <source>Assets Rates defaults can not be included.</source>
-        <translation type="unfinished">Les valeurs par défaut des taux d&apos;immobilisation ne peuvent pas êtres enregistrées.</translation>
+        <translation>Les valeurs par défaut des taux d&apos;immobilisation ne peuvent pas êtres enregistrées.</translation>
     </message>
     <message>
         <source>Movements defaults can not be included.</source>
-        <translation type="unfinished">Les valeurs par défaut de mouvements ne peuvent pas être intégrées.</translation>
+        <translation>Les valeurs par défaut de mouvements ne peuvent pas être intégrées.</translation>
     </message>
     <message>
         <source>Distance rules defaults can not be included.</source>
-        <translation type="unfinished">Les valeurs par défaut des règles de distance ne peuvent pas être intégrées.</translation>
+        <translation>Les valeurs par défaut des règles de distance ne peuvent pas être intégrées.</translation>
     </message>
     <message>
         <source>Insurance defaults can not be included.</source>
-        <translation type="unfinished">Les valeurs par défaut d&apos;assurances ne peuvent pas être intégrées.</translation>
+        <translation>Les valeurs par défaut d&apos;assurances ne peuvent pas être intégrées.</translation>
     </message>
     <message>
         <source>Defaults have been created.</source>
-        <translation type="unfinished">Les valeurs par défaut ont été créées.</translation>
+        <translation>Les valeurs par défaut ont été créées.</translation>
     </message>
     <message>
         <source>Medical procedure minimal defaults can not be included.</source>
@@ -234,60 +234,60 @@ Then parametrize your user, sites, bank and so on.</source>
     <name>Account::Internal::AccountUserWidget</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Formulaire</translation>
+        <translation>Formulaire</translation>
     </message>
 </context>
 <context>
     <name>Account::Internal::AssetsRatesWidget</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Formulaire</translation>
+        <translation>Formulaire</translation>
     </message>
     <message>
         <source>Name</source>
-        <translation type="unfinished">Nom</translation>
+        <translation>Nom</translation>
     </message>
     <message>
         <source>uuid</source>
-        <translation type="unfinished">uuid</translation>
+        <translation>uuid</translation>
     </message>
     <message>
         <source>Name of rate</source>
-        <translation type="unfinished">Nom du taux</translation>
+        <translation>Nom du taux</translation>
     </message>
     <message>
         <source>Period</source>
-        <translation type="unfinished">Période</translation>
+        <translation>Période</translation>
     </message>
     <message>
         <source>years</source>
-        <translation type="unfinished">années</translation>
+        <translation>années</translation>
     </message>
     <message>
         <source>Rate</source>
-        <translation type="unfinished">Taux</translation>
+        <translation>Taux</translation>
     </message>
     <message>
         <source>Date</source>
-        <translation type="unfinished">Date</translation>
+        <translation>Date</translation>
     </message>
     <message>
         <source>Save changes?</source>
-        <translation type="unfinished">Sauvegarder les modifications ?</translation>
+        <translation>Sauvegarder les modifications ?</translation>
     </message>
     <message>
         <source>You make changes into the assetsrates table.
 Do you want to save them?</source>
-        <translation type="unfinished">Vous avez effectuer des modifications dans la table des taux d&apos;immobilisation.
+        <translation>Vous avez effectuer des modifications dans la table des taux d&apos;immobilisation.
 Voulez-vous les sauvegarder ?</translation>
     </message>
     <message>
         <source>assetsrates</source>
-        <translation type="unfinished">taux d&apos;immobilisation</translation>
+        <translation>taux d&apos;immobilisation</translation>
     </message>
     <message>
         <source>Can not submit assetsrates to your personnal database.</source>
-        <translation type="unfinished">Ne peut pas soumettre les taux d&apos;immobilisation dans votre base personnelle.</translation>
+        <translation>Ne peut pas sauvegarder les taux d&apos;immobilisation dans votre base personnelle.</translation>
     </message>
     <message>
         <source>between</source>
@@ -325,69 +325,69 @@ p, li { white-space: pre-wrap; }
     <name>Account::Internal::AvailableMovementWidget</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Formulaire</translation>
+        <translation>Formulaire</translation>
     </message>
     <message>
         <source>Account details</source>
-        <translation type="unfinished">Détails de comptabilité</translation>
+        <translation>Détails de comptabilité</translation>
     </message>
     <message>
         <source>Type</source>
-        <translation type="unfinished">Type</translation>
+        <translation>Type</translation>
     </message>
     <message>
         <source>Tax deductibility</source>
-        <translation type="unfinished">Déductibilité de la valeur</translation>
+        <translation>Déductibilité de la valeur</translation>
     </message>
     <message>
         <source>Code</source>
-        <translation type="unfinished">Code</translation>
+        <translation>Code</translation>
     </message>
     <message>
         <source>Comment</source>
-        <translation type="unfinished">Commentaire</translation>
+        <translation>Commentaire</translation>
     </message>
     <message>
         <source>Label</source>
-        <translation type="unfinished">Dénomination</translation>
+        <translation>Dénomination</translation>
     </message>
     <message>
         <source>Parent movement</source>
-        <translation type="unfinished">Mouvement parent</translation>
+        <translation>Mouvement parent</translation>
     </message>
     <message>
         <source>Available movement</source>
-        <translation type="unfinished">Mouvement disponible</translation>
+        <translation>Mouvement disponible</translation>
     </message>
     <message>
         <source>Add</source>
-        <translation type="unfinished">Ajouter</translation>
+        <translation>Ajouter</translation>
     </message>
     <message>
         <source>Less</source>
-        <translation type="unfinished">Retrancher</translation>
+        <translation>Retrancher</translation>
     </message>
     <message>
         <source>Receipts</source>
-        <translation type="unfinished">Recettes</translation>
+        <translation>Recettes</translation>
     </message>
     <message>
         <source>Save changes?</source>
-        <translation type="unfinished">Sauvegarder les modifications ?</translation>
+        <translation>Sauvegarder les modifications ?</translation>
     </message>
     <message>
         <source>You make changes into available movements.
 Do you want to save them?</source>
-        <translation type="unfinished">Vous avez effectuer des modifications dans la table des mouvements disponibles.
+        <translation>Vous avez effectuer des modifications dans la table des mouvements disponibles.
 Voulez-vous les sauvegarder ?</translation>
     </message>
     <message>
         <source>available_movement</source>
-        <translation type="unfinished">mouvements disponibles</translation>
+        <translation>mouvements disponibles</translation>
     </message>
     <message>
         <source>Can not submit available movements to your personnal database.</source>
-        <translation type="unfinished">Impossible d&apos;intégrer les mouvements disponibles dans votre base de données.</translation>
+        <translation>Impossible d&apos;intégrer les mouvements disponibles dans votre base de données.</translation>
     </message>
     <message>
         <source>An error occured during available movements saving. Data are corrupted.</source>
@@ -398,61 +398,61 @@ Voulez-vous les sauvegarder ?</translation>
     <name>Account::Internal::BankDetailsWidget</name>
     <message>
         <source>Form</source>
-        <translation type="unfinished">Formulaire</translation>
+        <translation>Formulaire</translation>
     </message>
     <message>
         <source>Bank details</source>
-        <translation type="unfinished">Description du compte bancaire</translation>
+        <translation>Description du compte bancaire</translation>
     </message>
     <message>
         <source>Owner</source>
-        <translation type="unfinished">Possesseur</translation>
+        <translation>Possesseur</translation>
     </message>
     <message>
         <source>IBAN</source>
-        <translation type="unfinished">IBAN</translation>
+        <translation>IBAN</translation>
     </message>
     <message>
         <source>Bank account number</source>
-        <translation type="unfinished">code bancaire</translation>
+        <translation>Code bancaire</translation>
     </message>
     <message>
         <source>Balance</source>
-        <translation type="unfinished">Balance</translation>
+        <translation>Balance</translation>
     </message>
     <message>
         <source>on</source>
-        <translation type="unfinished">au</translation>
+        <translation>au</translation>
     </message>
     <message>
         <source>uid</source>
-        <translation type="unfinished">uid</translation>
+        <translation>uid</translation>
     </message>
     <message>
         <source>Label</source>
-        <translation type="unfinished">Dénomination</translation>
+        <translation>Dénomination</translation>
     </message>
     <message>
         <source>Owner address</source>
-        <translation type="unfinished">Adresse du propriétaire</translation>
+        <translation>Adresse du propriétaire</translation>
     </message>
     <message>
         <source>Available bank account</source>
-        <translation type="unfinished">Comptes disponibles</translation>
+        <translation>Comptes disponibles</translation>
     </message>
     <message>
         <source>Save changes?</source>
-        <translation type="unfinished">Sauvegardes les modifications ?</translation>
+        <translation>Sauvegardes les modifications ?</translation>
     </message>
     <message>
         <source>You make changes into the bank account details.
 Do you want to save them?</source>
-        <translation type="unfinished">Vous avez fait des modifications dans les détails bancaires.
+        <translation>Vous avez fait des modifications dans les détails bancaires.
 Voulez-vous les sauvegarder ?</translation>
     </message>
     <message>
         <source>bank account details</source>
-        <translation type="unfinished">Détails du compte</translation>
+        <translation>Détails du compte</translation>
     </message>
     <message>
         <source>Can not submit bank account details to your personnal database.</source>
@@ -460,11 +460,11 @@ Voulez-vous les sauvegarder ?</translation>
     </message>
     <message>
         <source>cash box</source>
-        <translation type="unfinished">Caisse</translation>
+        <translation>Caisse</translation>
     </message>
     <message>
         <source>Your cash till</source>
-        <translation type="unfinished">Votre caisse</translation>
+        <translation>Votre caisse</translation>
     </message>
     <message>
         <source>User UUID</source>
@@ -1306,6 +1306,10 @@ Autrement le résultat sera faux!</translation>
     </message>
     <message>
         <source>No item</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Free payer</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2166,11 +2170,11 @@ et la choisir comme préférée.</translation>
     <name>xmlCategoriesParser</name>
     <message>
         <source>%1 does not exist.</source>
-        <translation type="unfinished">%1 n&apos;existe pas.</translation>
+        <translation>%1 n&apos;existe pas.</translation>
     </message>
     <message>
         <source>xmlEchangeFile.xml not found.</source>
-        <translation type="unfinished">xmlEchangeFile.xml non trouvé.</translation>
+        <translation>xmlEchangeFile.xml non trouvé.</translation>
     </message>
     <message>
         <source>xmlEchangeFile.xml cannot be parsed.</source>

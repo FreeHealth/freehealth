@@ -75,8 +75,10 @@ public:
     bool containsAlertUuid(const QString &alertUid);
     bool removeAlertUuid(const QString &alertUid);
 
-private Q_SLOTS:
-    void createAlert();
+    virtual Alert::AlertItem getDefaultEmptyAlert() const;
+
+protected Q_SLOTS:
+    virtual void createAlert();
 
 private:
     void addNewAlertButton();

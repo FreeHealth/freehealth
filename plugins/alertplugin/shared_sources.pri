@@ -29,7 +29,8 @@ HEADERS += \
     $${PWD}/alertscriptmanager.h \
     $${PWD}/alertitemscripteditor.h \
     $${PWD}/alertpackdescription.h \
-    $${PWD}/alertpreferences.h
+    $${PWD}/alertpreferences.h \
+    $${PWD}/patientbaralertplaceholder.h
 
 SOURCES += \
     $${PWD}/alertplugin.cpp \
@@ -46,7 +47,8 @@ SOURCES += \
     $${PWD}/alertscriptmanager.cpp \
     $${PWD}/alertitemscripteditor.cpp \
     $${PWD}/alertpackdescription.cpp \
-    $${PWD}/alertpreferences.cpp
+    $${PWD}/alertpreferences.cpp \
+    $${PWD}/patientbaralertplaceholder.cpp
 
 FORMS += \
     $${PWD}/alertitemeditorwidget.ui \

@@ -261,6 +261,21 @@
     </message>
 </context>
 <context>
+    <name>Alert::Internal::PatientBarAlertPlaceHolder</name>
+    <message>
+        <source>Patient non-blocking alerts</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Patient alerts</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Placeholder for patient related non-blocking alerts.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
     <name>Alert::NonBlockingAlertToolButton</name>
     <message>
         <source>No category</source>
