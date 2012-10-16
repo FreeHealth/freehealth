@@ -27,7 +27,8 @@ buildspecs/compiling.pri
 build/*
 bin/*
 packages/*
-Makefile
+Makefile*
+object_script.*
 *.o
 moc_*
 
