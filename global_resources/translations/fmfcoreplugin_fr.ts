@@ -4,8 +4,8 @@
 <context>
     <name>AboutDialog</name>
     <message>
-        <source>&lt;p align=center&gt;&lt;b&gt;Welcome to FreeMedForms&lt;/b&gt;&lt;br /&gt;(C) 2008-%1 by Eric MAEKER, MD&lt;/p&gt;&lt;p align=left&gt;This software is release without any warranty and only for test purposal.&lt;br /&gt;Please refer to web site for more information.&lt;br /&gt;&lt;a href=&quot;%2&quot;&gt;Web site&lt;/a&gt;&lt;/p&gt;</source>
-        <translation type="unfinished">&lt;p align=center&gt;&lt;b&gt;Bienvenue au projet FreeMedForms&lt;/b&gt;&lt;br /&gt;(C) 2008-%1 Eric MAEKER, MD&lt;/p&gt;&lt;p align=left&gt;Ce logiciele est distribué sans aucune garantie et uniquement pour tests.&lt;br /&gt;Veuillez vous référer au site internet pour plus d&apos;informations.&lt;br /&gt;&lt;a href=&quot;%2&quot;&gt;Site internet&lt;/a&gt;&lt;/p&gt;</translation>
+        <source>&lt;p align=center&gt;&lt;b&gt;Welcome to FreeMedForms&lt;/b&gt;&lt;br /&gt;(C) 2008-%1 by Eric MAEKER, MD&lt;/p&gt;&lt;p align=left&gt;This software is released without any warranty and only for testing purposal.&lt;br/&gt;Please refer to our &lt;a href=&quot;%2&quot;&gt;web site&lt;/a&gt; for more information.&lt;br /&gt;&lt;/p&gt;</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -162,11 +162,11 @@ Veuillez vérfier que l&apos;hôte contient bien une configuration serveur de Fr
 <context>
     <name>Core::Internal::AppAboutPage</name>
     <message>
-        <source>1. General</source>
-        <translation type="unfinished">1. Général</translation>
+        <source>Application</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Application</source>
+        <source>General</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -725,6 +725,18 @@ Url : %1
     <message>
         <source>Plugin Errors of %1</source>
         <translation type="unfinished">Détail des erreurs du plugin %1</translation>
+    </message>
+</context>
+<context>
+    <name>Core::ProxyPage</name>
+    <message>
+        <source>Proxy definition</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>%1 has detected a network proxy on your computer. 
+Please check and validate the proxy settings.</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

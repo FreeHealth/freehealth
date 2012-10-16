@@ -22,18 +22,6 @@
         <translation type="unfinished">Categorias</translation>
     </message>
     <message>
-        <source>Protect with a password</source>
-        <translation type="unfinished">Protejer con una contraseña</translation>
-    </message>
-    <message>
-        <source>Password</source>
-        <translation type="unfinished">Contraseña</translation>
-    </message>
-    <message>
-        <source>Confirm</source>
-        <translation type="unfinished">Confirmar</translation>
-    </message>
-    <message>
         <source>Form</source>
         <translation type="unfinished"></translation>
     </message>
@@ -50,7 +38,19 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>Themed icon</source>
+        <source>Protect with a &amp;password</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Pass&amp;word</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Confirm</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Themed &amp;icon</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

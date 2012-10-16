@@ -5,96 +5,96 @@
     <name>Account</name>
     <message>
         <source>Account book</source>
-        <translation type="unfinished">Livre des comptes</translation>
+        <translation>Livre des comptes</translation>
     </message>
     <message>
         <source>Revenues</source>
-        <translation type="unfinished">Revenus</translation>
+        <translation>Revenus</translation>
     </message>
     <message>
         <source>Expenses</source>
-        <translation type="unfinished">Dépenses</translation>
+        <translation>Dépenses</translation>
     </message>
     <message>
         <source>Cash</source>
-        <translation type="unfinished">Cash</translation>
+        <translation>Espèces</translation>
     </message>
     <message>
         <source>Cheques</source>
-        <translation type="unfinished">Chèques</translation>
+        <translation>Chèques</translation>
     </message>
     <message>
         <source>Money</source>
-        <translation type="unfinished">Espèce</translation>
+        <translation>Espèce</translation>
     </message>
     <message>
         <source>Due</source>
-        <translation type="unfinished">Due</translation>
+        <translation>Due</translation>
     </message>
     <message>
         <source>Insurance</source>
-        <translation type="unfinished">Assurance</translation>
+        <translation>Assurance</translation>
     </message>
     <message>
         <source>Other</source>
-        <translation type="unfinished">Autre</translation>
+        <translation>Autre</translation>
     </message>
     <message>
         <source>VISA</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
     <name>AccountDB::ActsModel</name>
     <message>
         <source>Comments</source>
-        <translation type="unfinished">Commentaires</translation>
+        <translation>Commentaires</translation>
     </message>
     <message>
         <source>Date</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
     <name>AccountDB::AmountModel</name>
     <message>
         <source>Visa</source>
-        <translation type="unfinished">VISA</translation>
+        <translation>VISA</translation>
     </message>
     <message>
         <source>Cheque</source>
-        <translation type="unfinished">Chèque</translation>
+        <translation>Chèque</translation>
     </message>
     <message>
         <source>Banking</source>
-        <translation type="unfinished">Encaissement</translation>
+        <translation>Encaissement</translation>
     </message>
     <message>
         <source>Other</source>
-        <translation type="unfinished">Autre</translation>
+        <translation>Autre</translation>
     </message>
     <message>
         <source>Due</source>
-        <translation type="unfinished">Du</translation>
+        <translation>Du</translation>
     </message>
     <message>
         <source>Value</source>
-        <translation type="unfinished">Valeur</translation>
+        <translation>Valeur</translation>
     </message>
     <message>
         <source>Currency</source>
-        <translation type="unfinished">Devise</translation>
+        <translation>Devise</translation>
     </message>
     <message>
         <source>Cash</source>
-        <translation type="unfinished">Cash</translation>
+        <translation>Espèces</translation>
     </message>
 </context>
 <context>
     <name>AccountDB::Internal::AccountBasePlugin</name>
     <message>
         <source>Initializing accountancy plugin...</source>
-        <translation type="unfinished">Initialisation du plugin de comptabilité (base de données)...</translation>
+        <translation>Initialisation du plugin de comptabilité (base de données)...</translation>
     </message>
 </context>
 </TS>

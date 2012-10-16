@@ -38,6 +38,14 @@
         <source>Dialog</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>For current patient only</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>For all patients</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Form::FormFilesSelectorWidget</name>
@@ -107,6 +115,14 @@ Answering &apos;No&apos; will cause definitve data loss.</source>
     </message>
     <message>
         <source>Images (*.png)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Remove the current form</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Trying to remove the sub-form:&lt;br /&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;b&gt;%1&lt;/b&gt;.&lt;br /&gt;&lt;br /&gt;%2This modification will only affect the current patient:&lt;br /&gt;&amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;b&gt;%3&lt;/b&gt;.&lt;br /&gt;&lt;br /&gt;Do you really want to remove the current sub-form?</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

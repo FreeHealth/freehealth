@@ -769,10 +769,6 @@ L&apos;application va s&apos;arrêter.</translation>
         <translation type="unfinished">L&apos;utilisateur suivant va être créé.</translation>
     </message>
     <message>
-        <source>%1 chars</source>
-        <translation type="unfinished">%1 caractères</translation>
-    </message>
-    <message>
         <source>Contact</source>
         <translation type="unfinished">Contact</translation>
     </message>

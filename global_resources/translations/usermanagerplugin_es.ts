@@ -772,10 +772,6 @@ Application will stop.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <source>%1 chars</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <source>Country</source>
         <translation type="unfinished"></translation>
     </message>
