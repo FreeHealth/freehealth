@@ -65,13 +65,13 @@ private:
 }
 
 
-
+/*! Creates a WorkingPlacesModel, initialized is with QSqlTableModel::OnManualSubmit, and fetches the data. */
 WorkingPlacesModel::WorkingPlacesModel(QObject *parent) :
     QSqlTableModel(parent, QSqlDatabase::database(Constants::DB_ACCOUNTANCY)),
     d(new Internal::WorkingPlacesModelPrivate(this))
 {
     setTable(AccountBase::instance()->table(Constants::Table_Sites));
-    setEditStrategy(QSqlTableModel::OnFieldChange);
+    setEditStrategy(QSqlTableModel::OnManualSubmit);
     select();
 }
 

@@ -55,7 +55,7 @@
 #include <QRegExp>
 #include <QLocale>
 
-enum { WarnDebugMessage = false };
+enum { WarnDebugMessage = true };
 
 using namespace Account;
 using namespace Account::Internal;
@@ -130,8 +130,6 @@ SitesWidget::SitesWidget(QWidget *parent) :
     ui = new Ui::SitesWidget;
     ui->setupUi(this);
     ui->tabWidget->setCurrentIndex(0);
-    ui->addButton->setIcon(theme()->icon(Core::Constants::ICONADD));
-    ui->deleteButton->setIcon(theme()->icon(Core::Constants::ICONREMOVE));
 
     // Manage user
     m_user_uid = user()->uuid();
@@ -149,23 +147,15 @@ SitesWidget::SitesWidget(QWidget *parent) :
     // Create mapper
     m_Model = new AccountDB::WorkingPlacesModel(this);
     // TODO:  m_Model->setUserUuid();
-    m_siteUidLabel = new QSpinBox(this);
-    ui->horizontalLayout->insertWidget(0, m_siteUidLabel);
-    //m_siteUidLabel->setText("NULL");
-    m_siteUidLabel->setValue(11111);
-    if (Utils::isReleaseCompilation())
-            m_siteUidLabel->hide();
     m_Mapper = new QDataWidgetMapper(this);
     m_Mapper->setSubmitPolicy(QDataWidgetMapper::AutoSubmit);
     m_Mapper->setModel(m_Model);
     m_Mapper->setCurrentModelIndex(QModelIndex());
     //m_Mapper->addMapping(ui->mpIDLabel, AccountDB::Constants::SITE_ID, "ID");
-    m_Mapper->addMapping(m_siteUidLabel,AccountDB::Constants::SITES_UID);// AccountDB::Constants::SITES_UID);
     m_Mapper->addMapping(ui->nameEdit, AccountDB::Constants::SITES_NAME);
-    //m_Mapper->addMapping(ui->wpComboBox, AccountDB::Constants::SITES_NAME);
     m_Mapper->addMapping(ui->adressEdit, AccountDB::Constants::SITES_ADRESS);
-    m_Mapper->addMapping(ui->cityEdit, AccountDB::Constants::SITES_CITY,"text");
-    m_Mapper->addMapping(ui->zip, AccountDB::Constants::SITES_ZIPCODE,"currentText");
+    m_Mapper->addMapping(ui->cityEdit, AccountDB::Constants::SITES_CITY, "text");
+    m_Mapper->addMapping(ui->zip, AccountDB::Constants::SITES_ZIPCODE, "text");
     m_Mapper->addMapping(ui->countryComboBox, AccountDB::Constants::SITES_COUNTRY,"currentIsoCountry");
 
     m_Mapper->addMapping(ui->phoneEdit, AccountDB::Constants::SITES_TEL);
@@ -174,11 +164,18 @@ SitesWidget::SitesWidget(QWidget *parent) :
 
     m_Mapper->addMapping(ui->contactEdit, AccountDB::Constants::SITES_CONTACT);
     m_Mapper->toFirst();
-    ui->wpComboBox->setModel(m_Model);
-    ui->wpComboBox->setModelColumn(AccountDB::Constants::SITES_NAME);
-    //hash of towns and zipcode
 
+    ui->addRemoveCombo->setModel(m_Model);
+    ui->addRemoveCombo->setModelColumn(AccountDB::Constants::SITES_NAME);
+    ui->addRemoveCombo->setLabel(tr("&Working places:"));
+
+    //hash of towns and zipcode
+    connect(ui->nameEdit, SIGNAL(textEdited(QString)), ui->addRemoveCombo, SLOT(setEditText(QString)));
+    connect(ui->addRemoveCombo, SIGNAL(itemAdded(QModelIndex)), ui->nameEdit, SLOT(setFocus()));
+    connect(ui->addRemoveCombo, SIGNAL(currentIndexChanged(int)), this, SLOT(updateUi()));
+    connect(ui->addRemoveCombo, SIGNAL(currentIndexChanged(int)), m_Mapper, SLOT(setCurrentIndex(int)));
     setDataToUi();
+    updateUi();
 }
 
 SitesWidget::~SitesWidget()
@@ -210,20 +207,20 @@ SitesWidget::~SitesWidget()
 void SitesWidget::setDataToUi()
 {
     if (WarnDebugMessage)
-        qDebug() << __FILE__ << QString::number(__LINE__) << "index row  =" << QString::number(ui->wpComboBox->currentIndex());
-    m_Mapper->setCurrentIndex(ui->wpComboBox->currentIndex());
+        qDebug() << __FILE__ << QString::number(__LINE__) << "index row  =" << QString::number(ui->addRemoveCombo->currentIndex());
+    m_Mapper->setCurrentIndex(ui->addRemoveCombo->currentIndex());
 }
 
 void SitesWidget::saveModel()
 {
     if (WarnDebugMessage)
         qDebug() << __FILE__ << QString::number(__LINE__) << " currentIndex =" << QString::number(m_Mapper->currentIndex());
-    if (m_Model->isDirty()) {
+    if (m_Model->isDirty(m_Model->index(m_Mapper->currentIndex(),0))) {
         bool yes = Utils::yesNoMessageBox(tr("Save changes?"),
                                           tr("You make changes into the sites table.\n"
                                              "Do you want to save them?"));
         if (yes) {
-           if (!m_Model->submit()) {
+           if (!m_Model->submitAll()) {
                 LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_SAVE_DATA_IN_DATABASE_1).
                                                    arg(tr("sites")));
             }
@@ -236,47 +233,21 @@ void SitesWidget::saveModel()
         qDebug() << __FILE__ << QString::number(__LINE__) << " site error =" << m_Model->lastError().text();
 }
 
-void SitesWidget::on_wpComboBox_currentIndexChanged(int index)
+void SitesWidget::on_addRemoveCombo_currentIndexChanged(int index)
 {
     Q_UNUSED(index);
     //saveModel();
-    m_Mapper->setCurrentIndex(ui->wpComboBox->currentIndex());
-}
-
-void SitesWidget::on_addButton_clicked()
-{
-    if (WarnDebugMessage)
-        qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount1 =" << QString::number(m_Model->rowCount());
-    if (!m_Model->insertRow(m_Model->rowCount()))
-        LOG_ERROR("Unable to add row");
-    if (WarnDebugMessage)
-        qDebug() << __FILE__ << QString::number(__LINE__) << " rowCount2 =" << QString::number(m_Model->rowCount());
-    ui->wpComboBox->setCurrentIndex(m_Model->rowCount()-1);
-    m_siteUidLabel->setValue(calcSitesUid());
-    m_siteUidLabel->setFocus();
-    if (WarnDebugMessage) {
-        qDebug() << __FILE__ << QString::number(__LINE__) << " m_siteUidLabel =" << m_siteUidLabel->text();
-        qDebug() << __FILE__ << QString::number(__LINE__) << " currentIndex =" << QString::number(m_Mapper->currentIndex());
-    }
-}
-
-void SitesWidget::on_deleteButton_clicked()
-{
-    if (!m_Model->removeRow(ui->wpComboBox->currentIndex())) {
-          LOG_ERROR("Unable to remove row");
-    }
-    ui->wpComboBox->setCurrentIndex(m_Model->rowCount() - 1);
+    m_Mapper->setCurrentIndex(ui->addRemoveCombo->currentIndex());
 }
 
 void SitesWidget::saveToSettings(Core::ISettings *sets)
 {
     Q_UNUSED(sets);
-    if (!m_Model->submit()) {
+    if (!m_Model->submitAll()) {
         LOG_ERROR(tkTr(Trans::Constants::UNABLE_TO_SAVE_DATA_IN_DATABASE_1).arg(tr("sites")));
-        Utils::warningMessageBox(tr("Can not submit sites to your personnal database."),
+        Utils::warningMessageBox(tr("Cannot submit sites to your personal database."),
                                  tr("An error occured during sites saving. Data are corrupted."));
     }
-    connect(ui->nameEdit, SIGNAL(textEdited(const QString &)), ui->wpComboBox, SLOT(setEditText(const QString &)));
     update();
 }
 
@@ -293,8 +264,6 @@ void SitesWidget::changeEvent(QEvent *e)
     switch (e->type()) {
     case QEvent::LanguageChange:
         ui->retranslateUi(this);
-        ui->addButton->setToolTip(tkTr(Trans::Constants::FILENEW_TEXT));
-        ui->deleteButton->setToolTip(tkTr(Trans::Constants::REMOVE_TEXT));
 //        int s = defaultCombo->currentIndex();
 //        defaultCombo->clear();
 //        defaultCombo->addItem(tkTr(Trans::Constants::NO));
@@ -374,17 +343,8 @@ void SitesWidget::changeEvent(QEvent *e)
 //    return list;
 //}
 
-int SitesWidget::calcSitesUid()
+
+void SitesWidget::updateUi()
 {
-    QModelIndex index = m_Model->index(m_Model->rowCount()-2,AccountDB::Constants::SITES_UID);
-    if (!index.isValid()) {
-        qWarning() << __FILE__ << QString::number(__LINE__) << "index is not valid" ;
-    }
-    int siteUidBefore = m_Model->data(index,Qt::DisplayRole).toInt();
-    if (WarnDebugMessage)
-        qDebug() << __FILE__ << QString::number(__LINE__) << " siteUidBefore =" << QString::number(siteUidBefore) ;
-    int siteUid =  siteUidBefore + 1;
-    if (WarnDebugMessage)
-        qDebug() << __FILE__ << QString::number(__LINE__) << " siteUid =" << QString::number(siteUid);
-    return siteUid;
+    ui->tabWidget->setEnabled(ui->addRemoveCombo->currentIndex() != -1);
 }
