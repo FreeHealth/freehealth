@@ -56,7 +56,7 @@
 
 #include "basic_item_edition_dialog.h"
 #include "calendar_item.h"
-#include "icalendaritemdatawidget.h"
+#include <calendar/icalendaritemdatawidget.h>
 #include "abstract_calendar_model.h"
 
 #include <extensionsystem/pluginmanager.h>

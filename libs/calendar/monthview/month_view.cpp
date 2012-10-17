@@ -27,9 +27,9 @@
  ***************************************************************************/
 #include <QPainter>
 
-#include "common.h"
 #include "month_view.h"
 #include "month_day_widget.h"
+#include <calendar/common.h>
 
 using namespace Calendar;
 using namespace Internal;

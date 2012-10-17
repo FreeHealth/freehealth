@@ -22,10 +22,10 @@ defineTest(minQtVersion) {
     return(false)
 }
 
-!minQtVersion(4, 7, 4) {
-    message("Cannot build FreeMedForms with Qt version $${QT_VERSION}.")
-    error("Use at least Qt 4.7.4.")
-}
+#!minQtVersion(4, 7, 4) {
+#    message("Cannot build FreeMedForms with Qt version $${QT_VERSION}.")
+#    error("Use at least Qt 4.7.4.")
+#}
 
 include($${PWD}/catchspec.pri)
 

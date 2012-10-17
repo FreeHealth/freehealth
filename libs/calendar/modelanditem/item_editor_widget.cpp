@@ -35,8 +35,8 @@
 #include "item_editor_widget.h"
 #include "calendar_item.h"
 #include "abstract_calendar_model.h"
-#include "icalendaritemdatawidget.h"
-#include "common.h"
+#include <calendar/icalendaritemdatawidget.h>
+#include <calendar/common.h>
 
 #include <translationutils/constants.h>
 #include <translationutils/trans_datetime.h>

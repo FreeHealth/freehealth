@@ -28,7 +28,7 @@
 #ifndef LIBCALENDAR_DAYRANGEHEADER_H
 #define LIBCALENDAR_DAYRANGEHEADER_H
 
-#include "view.h"
+#include <calendar/view.h>
 
 /**
  * \file dayrangeheader.h

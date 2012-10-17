@@ -31,9 +31,9 @@
   Calendar::AbstractCalendarModel. It acts the same way as QModelIndex.
 */
 
-#include "common.h"
 #include "calendar_item.h"
 #include "abstract_calendar_model.h"
+#include <calendar/common.h>
 
 #include <QDebug>
 
