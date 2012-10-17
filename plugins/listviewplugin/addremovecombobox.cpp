@@ -108,6 +108,7 @@ void AddRemoveComboBox::addItem()
 
     // set the ComboBox to that row
     mCombo->setCurrentIndex(model->rowCount()-1);
+    mRemoveButton->setEnabled(true);
 
     //inform other widgets of successfully added item
     Q_EMIT itemAdded(model->index(model->rowCount()-1, 0));
@@ -121,7 +122,7 @@ void AddRemoveComboBox::addItem()
 void AddRemoveComboBox::removeItem()
 {
     QAbstractItemModel *model = mCombo->model();
-    if (model->rowCount() = 0)
+    if (model->rowCount() == 0)
         return;
 
     if (!model->removeRow(mCombo->currentIndex())) {
@@ -130,10 +131,11 @@ void AddRemoveComboBox::removeItem()
     // check if there are any items left afterwords
     const bool enabled = (model->rowCount() > 0);
     mRemoveButton->setEnabled(enabled);
-    mCombo->setCurrentIndex(mCombo->count() - 1);
+//    mCombo->setCurrentIndex(mCombo->count() - 1);
 
     // inform other widgets of change
     Q_EMIT itemRemoved();
+
 }
 
 /*! Updates the visual state of the UI: enables/disables widgets etc. */
@@ -142,6 +144,7 @@ void AddRemoveComboBox::updateUi()
     mRemoveButton->setEnabled(mCombo->currentIndex() != -1);
 }
 
+/*! Reimplemented event handler to handle state changes. Used for language change. */
 void AddRemoveComboBox::changeEvent(QEvent *e)
 {
     QWidget::changeEvent(e);
@@ -155,7 +158,7 @@ void AddRemoveComboBox::changeEvent(QEvent *e)
     }
 }
 
-/*! Sets the visible text of the ComboBox */
+/*! Sets the visible text of the actual item in the QComboBox. */
 void AddRemoveComboBox::setEditText(const QString &text)
 {
     mCombo->setEditText(text);
