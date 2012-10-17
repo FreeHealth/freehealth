@@ -27,6 +27,7 @@
 #ifndef PERIODSELECTORTOOLBUTTON_H
 #define PERIODSELECTORTOOLBUTTON_H
 
+#include <utils/global_exporter.h>
 #include <QToolButton>
 
 namespace Utils {
@@ -34,7 +35,7 @@ namespace Internal {
 class PeriodSelectorToolButtonPrivate;
 }  // namespace Internal
 
-class PeriodSelectorToolButton : public QToolButton
+class UTILS_EXPORT PeriodSelectorToolButton : public QToolButton
 {
     Q_OBJECT
 public:
