@@ -19,25 +19,32 @@ class AddRemoveComboBox : public QWidget
 
 public:
     explicit AddRemoveComboBox(QWidget *parent = 0);
-    explicit AddRemoveComboBox(const QString &labelText, QGroupBox *box, QWidget *parent = 0);
+    explicit AddRemoveComboBox(const QString &labelText, QWidget *parent = 0);
     void initialize();
     ~AddRemoveComboBox();
 
     void setLabel(const QString &text);
 
+    /*! Sets the internal model of the ComboBox. */
     inline void setModel(QAbstractItemModel *model) { Q_ASSERT(mCombo); mCombo->setModel(model); }
+
+    /*! Sets the model column that is shown in the ComboBox. */
     inline void setModelColumn(int column) { Q_ASSERT(mCombo); mCombo->setModelColumn(column); }
+
+    /*! returns the currentIndex() of the ComboBox model. */
     inline int currentIndex() const { Q_ASSERT(mCombo); return  mCombo->currentIndex(); }
+
+    /*! sets the currentIndex() of the ComboBox model. */
     inline void setCurrentIndex(int index) { Q_ASSERT(mCombo); mCombo->setCurrentIndex(index); }
 
     void changeEvent(QEvent *e);
 
 Q_SIGNALS:
-    void aboutToAddItem();
-    void itemAdded(const QModelIndex &index);
-    void aboutToRemoveItem(const QModelIndex &index);
-    void itemRemoved();
-    void currentIndexChanged(int index);
+    void aboutToAddItem();                              ///< emitted before Item add
+    void itemAdded(const QModelIndex &index);           ///< item is successfully added
+    void aboutToRemoveItem(const QModelIndex &index);   ///< emitted before Item removal
+    void itemRemoved();                                 ///< the Item is removed
+    void currentIndexChanged(int index);                ///< change the current index
 
 
 public Q_SLOTS:
@@ -47,6 +54,7 @@ public Q_SLOTS:
     void removeItem();
 
 private Q_SLOTS:
+    void updateUi();
 
 private:
     QLabel *mLabel;

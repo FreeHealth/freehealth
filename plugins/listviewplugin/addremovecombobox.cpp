@@ -19,6 +19,17 @@ using namespace Trans::ConstantTranslations;
 
 static inline Core::ITheme *theme() { return Core::ICore::instance()->theme(); }
 
+/*!
+ * \class Views::AddRemoveComboBox
+ * \brief This class provides a QComboBox with a label and a +/- button to add/remove items.
+ *
+ * The widget can be used instead of a QComboBox. Just set the model via setModel(), and connect to the events
+ * for easy interactions with the UI around. Set the Model column via setModelColumn()
+ *
+
+
+
+/*! Default constructor */
 AddRemoveComboBox::AddRemoveComboBox(QWidget *parent) :
     QWidget(parent)
 {
@@ -26,13 +37,18 @@ AddRemoveComboBox::AddRemoveComboBox(QWidget *parent) :
     initialize();
 }
 
-AddRemoveComboBox::AddRemoveComboBox(const QString &labelText, QGroupBox *box, QWidget *parent) :
+/*! \brief Constructor with a given \e labelText
+ *
+ * Per default the label is placed on the left side of the ComboBox.
+ */
+AddRemoveComboBox::AddRemoveComboBox(const QString &labelText, QWidget *parent) :
     QWidget(parent)
 {
     mLabel = new QLabel(labelText);
     initialize();
 }
 
+/*! Does all the work for the constructor: button creating, signal/slot connections. */
 void AddRemoveComboBox::initialize()
 {
     QHBoxLayout *layout = new QHBoxLayout();
@@ -61,18 +77,26 @@ void AddRemoveComboBox::initialize()
     connect(mAddButton, SIGNAL(clicked()), this, SLOT(addItem()));
     connect(mRemoveButton, SIGNAL(clicked()), this, SLOT(removeItem()));
     connect(mCombo, SIGNAL(currentIndexChanged(int)), this, SIGNAL(currentIndexChanged(int)));
+    connect(mCombo, SIGNAL(currentIndexChanged(int)), this, SLOT(updateUi()));
 }
 
+/*! Default destructor*/
 AddRemoveComboBox::~AddRemoveComboBox()
 {
 }
 
+/*! Sets the label on the left of the QComboBox. */
 void AddRemoveComboBox::setLabel(const QString &text)
 {
     Q_ASSERT(mLabel);
     mLabel->setText(text);
 }
 
+/*! \brief Appends a new item to the ComboBox' model.
+ *
+ * After successfully inserting the item, the itemAdded(int) signal is emitted.
+ * \sa removeItem, itemAdded, itemRemoved
+ */
 void AddRemoveComboBox::addItem()
 {
     QAbstractItemModel *model = mCombo->model();
@@ -89,17 +113,33 @@ void AddRemoveComboBox::addItem()
     Q_EMIT itemAdded(model->index(model->rowCount()-1, 0));
 }
 
+/*! \brief Removes the currentItem from the combobox model
+ *
+ * After succesful removal, the itemRemoved() signal is emitted.
+ * \sa addItem, itemAdded, itemRemoved
+ */
 void AddRemoveComboBox::removeItem()
 {
     QAbstractItemModel *model = mCombo->model();
+    if (model->rowCount() = 0)
+        return;
+
     if (!model->removeRow(mCombo->currentIndex())) {
           LOG_ERROR("Unable to remove row " + QString::number(mCombo->currentIndex()));
     }
-    const bool enabled = (mCombo->count() > 0);
-    mCombo->setCurrentIndex(mCombo->count() - 1);
+    // check if there are any items left afterwords
+    const bool enabled = (model->rowCount() > 0);
     mRemoveButton->setEnabled(enabled);
+    mCombo->setCurrentIndex(mCombo->count() - 1);
 
+    // inform other widgets of change
     Q_EMIT itemRemoved();
+}
+
+/*! Updates the visual state of the UI: enables/disables widgets etc. */
+void AddRemoveComboBox::updateUi()
+{
+    mRemoveButton->setEnabled(mCombo->currentIndex() != -1);
 }
 
 void AddRemoveComboBox::changeEvent(QEvent *e)
@@ -115,6 +155,7 @@ void AddRemoveComboBox::changeEvent(QEvent *e)
     }
 }
 
+/*! Sets the visible text of the ComboBox */
 void AddRemoveComboBox::setEditText(const QString &text)
 {
     mCombo->setEditText(text);
