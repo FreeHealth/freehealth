@@ -161,6 +161,8 @@ with-alerts {
     alerts.subdir = ../../plugins/alertplugin
     alerts.depends += core
     alerts.depends += patientbase
+
+    xmlio.depends += alerts
 }
 
 with-pad {
