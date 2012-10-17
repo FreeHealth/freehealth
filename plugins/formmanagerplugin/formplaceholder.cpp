@@ -106,7 +106,7 @@
 #include <QTextBrowser>
 
 #include <QDebug>
-#include <subforminsertionpoint.h>
+#include "subforminsertionpoint.h"
 
 using namespace Form;
 using namespace Trans::ConstantTranslations;
