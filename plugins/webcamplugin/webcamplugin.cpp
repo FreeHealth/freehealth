@@ -62,7 +62,8 @@ WebcamPlugin::WebcamPlugin() :
 {
     if (Utils::Log::warnPluginsCreation())
         qWarning() << "creating Webcam";
-    
+    setObjectName("WebcamPlugin");
+
     // Add Translator to the Application
     Core::ICore::instance()->translators()->addNewTranslator("webcam");
     
