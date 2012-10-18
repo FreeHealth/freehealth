@@ -253,6 +253,12 @@ void SitesWidget::saveToSettings(Core::ISettings *sets)
     update();
 }
 
+void SitesWidget::on_wpComboBox_currentIndexChanged(int index)
+{
+    // ALWAYS IMPLEMENT SLOTS OTHERWISE COMPILATION WILL FAIL ON MAC AND WIN32
+    Q_UNUSED(index);
+}
+
 void SitesWidget::writeDefaultSettings(Core::ISettings *s)
 {
     Q_UNUSED(s);
