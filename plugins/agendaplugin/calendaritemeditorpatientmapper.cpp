@@ -230,6 +230,10 @@ bool CalendarItemEditorPatientMapperWidget::submitToItem(const Calendar::Calenda
 
 void CalendarItemEditorPatientMapperWidget::onPatientSelected(const QString &name, const QString &uid)
 {
+    Calendar::People person(Calendar::People::PeopleAttendee, name, uid);
+    if (m_PeopleModel->contains(person))
+        return;
+
     if (name.isEmpty()) {
         QHash<QString, QString> name = patient()->fullPatientName(QStringList() << uid);
         addPatientRow(name.value(uid), uid);

@@ -52,7 +52,7 @@ struct CALENDAR_EXPORT People {
         PeopleCount
     };
 
-    People(const int _type, const QString &_name, const QString &_uid) :
+    People(const TypeOfPeople _type, const QString &_name, const QString &_uid) :
             uid(_uid), name(_name), type(_type) {}
     People() : type(PeopleAttendee) {}
 
@@ -118,6 +118,7 @@ public:
     void removePeople(const QString &uid);
     void setPeopleList(const QList<Calendar::People> &list);
     QList<Calendar::People> peopleList() const;
+    bool contains(Calendar::People &person) const;
 
 private:
     QString typeToString(const int type) const;
