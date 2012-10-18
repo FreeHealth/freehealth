@@ -232,6 +232,7 @@ FormTreeModel::FormTreeModel(const FormCollection &collection, QObject *parent) 
     setObjectName("Form::FormTreeModel::" + collection.formUid() + collection.modeUid());
     d->_rootForms = collection.emptyRootForms();
     d->_modeUid = collection.modeUid();
+    setColumnCount(MaxData);
 //    connect(&formManager(), SIGNAL(patientFormsLoaded()), this, SLOT(onPatientFormsLoaded()));
 }
 
