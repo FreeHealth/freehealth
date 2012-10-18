@@ -261,19 +261,19 @@ PatientLineEditCompleterSearch::PatientLineEditCompleterSearch(QWidget *parent) 
     setCompleter(m_Completer);
     setValidator(m_Completer->validator());
 
-    connect(this, SIGNAL(textChanged(QString)), this, SLOT(textChanged(QString)));
-    connect(m_Completer, SIGNAL(activated(QModelIndex)), this, SLOT(patientSelected(QModelIndex)));
+    connect(this, SIGNAL(onTextChanged(QString)), this, SLOT(onTextChanged(QString)));
+    connect(m_Completer, SIGNAL(activated(QModelIndex)), this, SLOT(onPatientSelected(QModelIndex)));
 }
 
 PatientLineEditCompleterSearch::~PatientLineEditCompleterSearch()
 {
 }
 
-void PatientLineEditCompleterSearch::textChanged(const QString &newText)
+void PatientLineEditCompleterSearch::onTextChanged(const QString &newText)
 {
     int diff = newText.size() - m_LastSearch.size();
     if (diff > 1 || diff < -1) {
-        // more than one char difference ?
+        // more than one char difference?
         // do not change lastsearch
         return;
     }
@@ -289,10 +289,10 @@ void PatientLineEditCompleterSearch::cancelSearch()
     m_Completer->complete(cr); // popup it up!
 }
 
-void PatientLineEditCompleterSearch::patientSelected(const QModelIndex &index)
+void PatientLineEditCompleterSearch::onPatientSelected(const QModelIndex &index)
 {
     QString uid = m_Completer->model()->index(index.row(), PatientBaseCompleter::Uid, index.parent()).data().toString();
-    Q_EMIT selectedPatient(index.data().toString(), uid);
+    Q_EMIT patientSelected(index.data().toString(), uid);
 }
 
 //void PatientLineEditCompleterSearch::keyPressEvent(QKeyEvent *event)

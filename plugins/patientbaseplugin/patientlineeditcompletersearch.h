@@ -72,12 +72,12 @@ public:
     ~PatientLineEditCompleterSearch();
 
 Q_SIGNALS:
-    void selectedPatient(const QString &uid, const QString &fullName);
+    void patientSelected(const QString &uid, const QString &fullName);
 
 private Q_SLOTS:
-    void textChanged(const QString &newText);
+    void onTextChanged(const QString &newText);
     void cancelSearch();
-    void patientSelected(const QModelIndex &index);
+    void onPatientSelected(const QModelIndex &index);
 
 //private:
 //    void keyPressEvent(QKeyEvent *event);
