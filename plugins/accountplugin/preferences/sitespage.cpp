@@ -215,6 +215,8 @@ void SitesWidget::saveModel()
 {
     if (WarnDebugMessage)
         qDebug() << __FILE__ << QString::number(__LINE__) << " currentIndex =" << QString::number(m_Mapper->currentIndex());
+
+    // FIXME: here you should have to check all cols isDirty state of the row
     if (m_Model->isDirty(m_Model->index(m_Mapper->currentIndex(),0))) {
         bool yes = Utils::yesNoMessageBox(tr("Save changes?"),
                                           tr("You make changes into the sites table.\n"
