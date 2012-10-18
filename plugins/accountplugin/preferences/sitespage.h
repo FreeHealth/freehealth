@@ -78,21 +78,22 @@ public:
 
     static void writeDefaultSettings( Core::ISettings *s );
 
+    void on_addRemoveCombo_currentIndexChanged(int index);
+
 public Q_SLOTS:
     void saveToSettings(Core::ISettings *s = 0);
     void on_wpComboBox_currentIndexChanged(int index);
-    void on_addButton_clicked();
-    void on_deleteButton_clicked();
+
+private Q_SLOTS:
+    void updateUi();
 
 private:
     void changeEvent(QEvent *e);
     void saveModel();
-    int calcSitesUid();
 
 private:
     Ui::SitesWidget *ui;
     AccountDB::WorkingPlacesModel *m_Model;
-    QSpinBox *m_siteUidLabel;
     QDataWidgetMapper *m_Mapper;
     QString m_user_uid;
     QString m_user_fullName;

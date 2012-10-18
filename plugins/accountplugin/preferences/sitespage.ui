@@ -14,65 +14,6 @@
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
-    <layout class="QHBoxLayout" name="horizontalLayout">
-     <item>
-      <widget class="QLabel" name="label_2">
-       <property name="text">
-        <string>Working places</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QComboBox" name="wpComboBox">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-         <horstretch>100</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="addButton">
-       <property name="minimumSize">
-        <size>
-         <width>22</width>
-         <height>22</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>22</width>
-         <height>22</height>
-        </size>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="deleteButton">
-       <property name="minimumSize">
-        <size>
-         <width>22</width>
-         <height>22</height>
-        </size>
-       </property>
-       <property name="maximumSize">
-        <size>
-         <width>22</width>
-         <height>22</height>
-        </size>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
    <item row="2" column="0">
     <spacer name="verticalSpacer">
      <property name="orientation">
@@ -88,6 +29,9 @@
    </item>
    <item row="1" column="0">
     <widget class="QTabWidget" name="tabWidget">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="currentIndex">
       <number>0</number>
      </property>
@@ -264,6 +208,9 @@
      </widget>
     </widget>
    </item>
+   <item row="0" column="0">
+    <widget class="Views::AddRemoveComboBox" name="addRemoveCombo" native="true"/>
+   </item>
   </layout>
  </widget>
  <customwidgets>
@@ -275,7 +222,13 @@
   <customwidget>
    <class>Utils::QButtonLineEdit</class>
    <extends>QLineEdit</extends>
-   <header>utils/widgets/qbuttonlineedit.h</header>
+   <header location="global">utils/widgets/qbuttonlineedit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>Views::AddRemoveComboBox</class>
+   <extends>QWidget</extends>
+   <header location="global">listviewplugin/addremovecombobox.h</header>
+   <container>1</container>
   </customwidget>
  </customwidgets>
  <resources/>
