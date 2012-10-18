@@ -197,7 +197,7 @@ public:
             return false;
         createItems(forms, true);
         reparentItems(forms, receiver);
-
+        q->setColumnCount(FormTreeModel::MaxData);
         return true;
     }
 
@@ -232,6 +232,7 @@ FormTreeModel::FormTreeModel(const FormCollection &collection, QObject *parent) 
     setObjectName("Form::FormTreeModel::" + collection.formUid() + collection.modeUid());
     d->_rootForms = collection.emptyRootForms();
     d->_modeUid = collection.modeUid();
+    setColumnCount(MaxData);
 //    connect(&formManager(), SIGNAL(patientFormsLoaded()), this, SLOT(onPatientFormsLoaded()));
 }
 
@@ -245,11 +246,13 @@ FormTreeModel::~FormTreeModel()
 void FormTreeModel::initialize()
 {
     d->createFormTree();
+    setColumnCount(MaxData);
 }
 
 void FormTreeModel::refreshFormTree()
 {
     d->createFormTree();
+    setColumnCount(MaxData);
     reset();
 }
 
@@ -404,5 +407,6 @@ bool FormTreeModel::updateFormCount()
 void FormTreeModel::onPatientFormsLoaded()
 {
     d->createFormTree();
+    setColumnCount(MaxData);
     reset();
 }
