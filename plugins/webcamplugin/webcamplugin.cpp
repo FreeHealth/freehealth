@@ -189,13 +189,14 @@ ExtensionSystem::IPlugin::ShutdownFlag WebcamPlugin::aboutToShutdown()
  */
 void WebcamPlugin::detectDevices()
 {
-
+    int nbDevice = 0;
     for(int deviceId = 0; deviceId<10; deviceId++) {
         cv::VideoCapture cap(deviceId);
         cv::Mat frame;
         if (cap.isOpened()) {
             cap.read(frame);
             if (!frame.empty()) {
+                ++nbDevice;
                 // add WebcamPhotoProvider object to the static list of providers
                 bool alreadyThere = false;
                 foreach(WebcamPhotoProvider *provider, WebcamPhotoProvider::getProviders()) {
@@ -207,6 +208,7 @@ void WebcamPlugin::detectDevices()
             }
         }
     }
+    LOG(QString(("Found %1 webcam device").arg(nbDevice));
 }
 
 void WebcamPlugin::coreAboutToClose()
