@@ -197,7 +197,7 @@ public:
             return false;
         createItems(forms, true);
         reparentItems(forms, receiver);
-
+        q->setColumnCount(FormTreeModel::MaxData);
         return true;
     }
 
@@ -246,11 +246,13 @@ FormTreeModel::~FormTreeModel()
 void FormTreeModel::initialize()
 {
     d->createFormTree();
+    setColumnCount(MaxData);
 }
 
 void FormTreeModel::refreshFormTree()
 {
     d->createFormTree();
+    setColumnCount(MaxData);
     reset();
 }
 
@@ -405,5 +407,6 @@ bool FormTreeModel::updateFormCount()
 void FormTreeModel::onPatientFormsLoaded()
 {
     d->createFormTree();
+    setColumnCount(MaxData);
     reset();
 }

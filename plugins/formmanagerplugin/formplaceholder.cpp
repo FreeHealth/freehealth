@@ -859,11 +859,15 @@ bool FormPlaceHolder::printFormOrEpisode()
 /** Define the cols to show, their sizes... */
 void FormPlaceHolder::onFormTreeModelReset()
 {
+    // Avoid a QHeaderView assert on resizeColumn
+    if (d->_formTreeModel->columnCount()==0)
+        return;
+
     d->_currentEditingForm = QModelIndex();
     QTreeView *tree = d->ui->formView->treeView();
     tree->setSelectionMode(QAbstractItemView::SingleSelection);
     tree->setSelectionBehavior(QAbstractItemView::SelectRows);
-    for(int i=0; i < FormTreeModel::MaxData; ++i)
+    for(int i=0; i < d->_formTreeModel->columnCount(); ++i)
         tree->setColumnHidden(i, true);
     tree->setColumnHidden(FormTreeModel::Label, false);
     tree->setColumnHidden(FormTreeModel::EmptyColumn1, false);
