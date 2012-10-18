@@ -44,7 +44,7 @@ QT_END_NAMESPACE
 */
 
 namespace Views {
-class AddRemoveComboBox : public QWidget
+class LISTVIEW_EXPORT AddRemoveComboBox : public QWidget
 {
     Q_OBJECT
 
